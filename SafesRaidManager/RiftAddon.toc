@@ -1,0 +1,26 @@
+Identifier = "SafesRaidManager"
+
+Name = "Safe's Raid Manager"
+NameShort = "LibSRM"
+
+Description = "Library to manage and monitor Raid members."
+
+Author = "Paul Snart"
+Website = "http://twitter.com/#!/psnart"
+Email = "snarty@gmail.com"
+
+Version = "1.0.0"
+
+Environment = "1.5"
+
+RunOnStartup = {
+	"SafesRaidManager.lua",
+}
+
+Embed = {
+	LibUnitChange,
+}
+
+Dependencies = {
+	LibUnitChange = {"required", "before"},
+}
