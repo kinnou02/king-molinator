@@ -117,7 +117,8 @@ local KM_FBDefY = LocY -- Centered
 local KM_BossHPWidth = nil -- To be filled in later, size of King and Prince individual HP bars
 local KM_Hammerknell = {
 	Header = nil,
-	Murdantix = nil
+	Murdantix = nil,
+	Matron = nil,
 }
 
 -- Unit Variables
@@ -292,7 +293,7 @@ local function SBM_InitOptions()
 			if self.LastHeader.LastChild then
 			
 			else
-				Header.Frame:SetPoint("TOP", self.LastHeader, "BOTTOM")
+				Header.Frame:SetPoint("TOP", self.LastHeader.Frame, "BOTTOM")
 				Header.Frame:SetPoint("LEFT", self, "LEFT")
 				self.LastHeader = Header
 			end
@@ -319,7 +320,7 @@ local function SBM_InitOptions()
 			Header.LastChild = Child
 			Child.Frame:SetPoint("TOP", Header.Frame, "BOTTOM")
 		else
-			Child.Frame:SetPoint("TOP", Header.LastChild, "BOTTOM")
+			Child.Frame:SetPoint("TOP", Header.LastChild.Frame, "BOTTOM")
 			Header.LastChild = Child
 		end
 	end
@@ -1259,6 +1260,7 @@ local function KM_Start()
 	SBM_InitOptions()
 	KM_Hammerknell.Header = SBM_MainWin.Menu:CreateHeader("Hammerknell", KM_ToggleEnabled, true)
 	KM_Hammerknell.Murdantix = SBM_MainWin.Menu:CreateEncounter("Murdantix", KM_ToggleEnabled, false, KM_Hammerknell.Header)
+	KM_Hammerknell.Matron = SBM_MainWin.Menu:CreateEncounter("Matron Zamira", KM_ToggleEnabled, false, KM_Hammerknell.Header)
 end
 
 local function KM_Hide()
