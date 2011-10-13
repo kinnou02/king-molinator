@@ -1,0 +1,49 @@
+v0.1.0
+* German localization should be working again.
+* Added a cast bar for Prince Dollin below the monitor (when visible).
+* Added a cast bar for King Molinar above the monitor (when visible).
+* Added command /kmprincebar
+* Added command /kmkingbar
+* The monitor should no longer trigger in HK Chronicles.
+----
+v0.0.9
+* Fixed lock/unlock messages to the client.
+----
+v0.0.8
+* Increased polling rate of the monitor slightly.
+* Percentage calculations tweaked further.
+* New Command: /kmautoreset (Experimental)
+* New Command: /kmsize (toggles monitor size between normal/compact)
+* New Command: /kmhelp (lists all commands in game)
+* Added a compact version of the monitor (see /kmsize)
+* Added auto reset when the bosses die.
+* Added experimental auto reset condition checking for wipes/resets. (See /kmautoreset)
+----
+v0.0.7
+* Added first instance of the monitor auto-showing on encounter start.
+* Increased the polling rate of the monitor for further accuracy improvements.
+----
+v0.0.6 Beta
+* Added German client support.
+* Added French client support.
+* Adjusted percentage accuracy again.
+* Changed the styling of the HP bars for each boss slightly.
+* Added New command, /kmreset, which will reset the monitor only, not your display.
+----
+v0.0.5 Beta
+* Fixed Saved Variables not initializing correctly with older versions previously installed. (Error 301)
+----
+v0.0.4 Beta
+* Tested in Chronicles tonight, removed all the chat spam errors that could appear.
+* Uploaded the right version of the file. 0.0.2, and 0.0.3 were never actually uploaded. Hence no one ever actually seeing the fixes.
+----
+v0.0.3 Beta
+* Took another look at the chat spam errors. Having to test this blind, so apologies.
+----
+v0.0.2 Beta
+* Now saves both the locked and hidden states.
+* Rounding issues with the percentages being -1 to their actual values.
+* Removed errors being posted to chat during deaths.
+----
+v0.0.1 Beta
+* Initial Release
