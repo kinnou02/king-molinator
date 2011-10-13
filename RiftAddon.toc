@@ -17,8 +17,8 @@ RunOnStartup = {
 }
 
 Embed = {
-	["King-Molinator/SafesRaidManager"] = true,
-	["King-Molinator/LibUnitChange"] = true,
+	SafesRaidManager = true,
+	LibUnitChange = true
 }
 
 SavedVariables = {
@@ -30,3 +30,7 @@ Dependencies = {
 	SafesRaidManager = {"required", "before"},
 	LibUnitChange = {"required", "before"},
 }
+-- X-Curse-Packaged-Version: r8
+-- X-Curse-Project-Name: King Molinator
+-- X-Curse-Project-ID: king-molinator
+-- X-Curse-Repository-ID: rift/king-molinator/mainline
