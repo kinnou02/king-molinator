@@ -117,6 +117,7 @@ local KM_FBDefY = LocY -- Centered
 local KM_BossHPWidth = nil -- To be filled in later, size of King and Prince individual HP bars
 local KM_HK = {
 	Header = {},
+	Name = "Hammerknell",
 	Murdantix = {
 		MenuItem = nil,
 		Enabled = false,
