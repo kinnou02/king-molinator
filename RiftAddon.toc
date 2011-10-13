@@ -1,0 +1,32 @@
+﻿Identifier = "KingMolinator"
+
+Name = "King Molinator"
+
+Description = "Monitors the HP percentage gap between King Molinar and Prince Dollin"
+
+Author = "Paul Snart"
+Website = "http://twitter.com/#!/psnart"
+Email = "snarty@gmail.com"
+
+Version = "0.1.1"
+
+Environment = "1.5"
+
+RunOnStartup = {
+	"KingMolinator.lua",
+}
+
+Embed = {
+	["King-Molinator/SafesRaidManager"] = true,
+	["King-Molinator/LibUnitChange"] = true,
+}
+
+SavedVariables = {
+	KingMol_Main = "account",
+	SBM_GlobalOptions = "account",
+}
+
+Dependencies = {
+	SafesRaidManager = {"required", "before"},
+	LibUnitChange = {"required", "before"},
+}
