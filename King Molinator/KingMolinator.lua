@@ -115,10 +115,31 @@ local KM_StopWidth = (KM_FBWidth - KM_SafeWidth - (KM_DangerWidth * 2)) * 0.5
 local KM_FBDefX = LocX -- Centered
 local KM_FBDefY = LocY -- Centered
 local KM_BossHPWidth = nil -- To be filled in later, size of King and Prince individual HP bars
-local KM_Hammerknell = {
-	Header = nil,
-	Murdantix = nil,
-	Matron = nil,
+local KM_HK = {
+	Header = {},
+	Murdantix = {
+		MenuItem = nil,
+		Enabled = false,
+		Handler = nil,
+		Options = nil,
+		Name = "Murdantix"
+},
+	Matron = {},
+	Sicaron = {},
+	Zilas = {},
+	Prime = {},
+	Grugonim = {},
+	KingMolinar = {
+		MenuItem = nil,
+		Enabled = true,
+		Handler = nil,
+		Options = nil,
+		Name = "King Molinar"
+},
+	Estrode = {},
+	Inwar = {},
+	Garau = {},
+	Akylios = {},
 }
 
 -- Unit Variables
@@ -262,12 +283,12 @@ local function SBM_InitOptions()
 		end
 	end
 	
-	MenuWidth = math.floor(ContentW * 0.25)
-	OptionsWidth = math.ceil(ContentW * 0.75)
+	MenuWidth = math.floor(ContentW * 0.25)-10
+	OptionsWidth = math.ceil(ContentW * 0.75)-10
 	SBM_MainWin.Menu = UI.CreateFrame("Frame", "SBM Menu Frame", SBM_MainWin.Content)
 	SBM_MainWin.Menu:SetWidth(MenuWidth)
 	SBM_MainWin.Menu:SetHeight(ContentH)
-	SBM_MainWin.Menu:SetPoint("TOPLEFT", SBM_MainWin.Content, "TOPLEFT")
+	SBM_MainWin.Menu:SetPoint("TOPLEFT", SBM_MainWin.Content, "TOPLEFT",5, 5)
 	SBM_MainWin.Menu.Headers = {}
 	SBM_MainWin.Menu.LastHeader = nil
 	function SBM_MainWin.Menu:CreateHeader(Text, Hook, Default)
@@ -277,6 +298,7 @@ local function SBM_InitOptions()
 		Header.Frame:SetWidth(self:GetWidth())
 		Header.Check = SBM_MainWin:CallCheck(Header.Frame)
 		Header.Check:SetPoint("CENTERLEFT", Header.Frame, "CENTERLEFT", 4, 0)
+		Header.Check:SetChecked(Default)
 		Header.Text = SBM_MainWin:CallText(Header.Frame)
 		Header.Text:SetWidth(Header.Frame:GetWidth() - Header.Check:GetWidth())
 		Header.Text:SetText(Text)
@@ -308,6 +330,7 @@ local function SBM_InitOptions()
 		Child.Frame:SetPoint("RIGHT", self, "RIGHT")
 		Child.Check = SBM_MainWin:CallCheck(Child.Frame)
 		Child.Check:SetPoint("CENTERLEFT", Child.Frame, "CENTERLEFT", 4, 0)
+		Child.Check:SetChecked(Default)
 		Child.Text = SBM_MainWin:CallText(Child.Frame)
 		Child.Text:SetWidth(Child.Frame:GetWidth() - Child.Check:GetWidth())
 		Child.Text:SetText(Text)
@@ -1258,9 +1281,18 @@ local function KM_Start()
 	table.insert(Event.Combat.Death, {SBM_Death, "KingMolinator", "Event"})
 	table.insert(Event.Unit.Castbar, {SBM_CastBar, "KingMolinator", "Cast Bar Event"})
 	SBM_InitOptions()
-	KM_Hammerknell.Header = SBM_MainWin.Menu:CreateHeader("Hammerknell", KM_ToggleEnabled, true)
-	KM_Hammerknell.Murdantix = SBM_MainWin.Menu:CreateEncounter("Murdantix", KM_ToggleEnabled, false, KM_Hammerknell.Header)
-	KM_Hammerknell.Matron = SBM_MainWin.Menu:CreateEncounter("Matron Zamira", KM_ToggleEnabled, false, KM_Hammerknell.Header)
+	KM_HK.Header = SBM_MainWin.Menu:CreateHeader("Hammerknell", KM_ToggleEnabled, true)
+	KM_HK.Murdantix.MenuItem = SBM_MainWin.Menu:CreateEncounter(KM_HK.Murdantix.Name, KM_ToggleEnabled, false, KM_HK.Header)
+	KM_HK.Matron.MenuItem = SBM_MainWin.Menu:CreateEncounter("Matron Zamira", KM_ToggleEnabled, false, KM_HK.Header)
+	KM_HK.Sicaron.MenuItem = SBM_MainWin.Menu:CreateEncounter("Sicaron", KM_ToggleEnabled, false, KM_HK.Header)
+	KM_HK.Zilas.MenuItem = SBM_MainWin.Menu:CreateEncounter("Soulrender Zilas", KM_ToggleEnabled, false, KM_HK.Header)
+	KM_HK.Prime.MenuItem = SBM_MainWin.Menu:CreateEncounter("Vladmal Prime", KM_ToggleEnabled, false, KM_HK.Header)
+	KM_HK.Grugonim.MenuItem = SBM_MainWin.Menu:CreateEncounter("Grugonim", KM_ToggleEnabled, false, KM_HK.Header)
+	KM_HK.KingMolinar.MenuItem = SBM_MainWin.Menu:CreateEncounter(KM_HK.KingMolinar.Name, KM_ToggleEnabled, true, KM_HK.Header)
+	KM_HK.Estrode.MenuItem = SBM_MainWin.Menu:CreateEncounter("Estrode", KM_ToggleEnabled, false, KM_HK.Header)
+	KM_HK.Garau.MenuItem = SBM_MainWin.Menu:CreateEncounter("Inquisitor Garau", KM_ToggleEnabled, false, KM_HK.Header)
+	KM_HK.Inwar.MenuItem = SBM_MainWin.Menu:CreateEncounter("Inwar Darktide", KM_ToggleEnabled, false, KM_HK.Header)
+	KM_HK.Akylios.MenuItem = SBM_MainWin.Menu:CreateEncounter("Akylios", KM_ToggleEnabled, false, KM_HK.Header)
 end
 
 local function KM_Hide()
