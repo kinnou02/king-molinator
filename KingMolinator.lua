@@ -11,7 +11,7 @@ SBM_Options.Frame = {
 }
 
 local function KM_LoadVars()
-	if not SBM_GlobalOptions then
+	if not SBM_GlobalOptions.Frame then
 		SBM_GlobalOptions = SBM_Options
 	else
 		SBM_Options = SBM_GlobalOptions
