@@ -2,19 +2,19 @@
 -- Written By Paul Snart
 
 KingMol_Main = {}
-SBM_GlobalOptions = {}
+KBM_GlobalOptions = {}
 
-local SBM_Options = {}
-SBM_Options.Frame = {
+local KBM_Options = {}
+KBM_Options.Frame = {
 	x = nil,
 	y = nil,
 }
 
 local function KM_LoadVars()
-	if not SBM_GlobalOptions.Frame then
-		SBM_GlobalOptions = SBM_Options
+	if not KBM_GlobalOptions.Frame then
+		KBM_GlobalOptions = KBM_Options
 	else
-		SBM_Options = SBM_GlobalOptions
+		KBM_Options = KBM_GlobalOptions
 	end
 	if not KingMol_Main then
 		KingMol_Main = {
@@ -45,35 +45,35 @@ local function KM_LoadVars()
 end
 
 local function KM_SaveVars()
-	SBM_GlobalOptions = SBM_Options
+	KBM_GlobalOptions = KBM_Options
 end
 
-local function SBM_ToAbilityID(num)
+local function KBM_ToAbilityID(num)
 	return string.format("a%016X", num)
 end
 
-local SBM_Lang = Inspect.System.Language()
-local SBM_Boss = {}
-local SBM_BossID = {}
-local SBM_Encounter = false
-local SBM_CurrentHook = nil
-local SBM_CurrentCBHook = nil
-local SBM_CurrentBoss = ""
-local SBM_PlayerID = nil
-local SBM_TestIsCasting = false
-local SBM_TestAbility = nil
+local KBM_Lang = Inspect.System.Language()
+local KBM_Boss = {}
+local KBM_BossID = {}
+local KBM_Encounter = false
+local KBM_CurrentHook = nil
+local KBM_CurrentCBHook = nil
+local KBM_CurrentBoss = ""
+local KBM_PlayerID = nil
+local KBM_TestIsCasting = false
+local KBM_TestAbility = nil
 
-local SBM_HeldTime = Inspect.Time.Real()
-local SBM_StartTime = 0
-local SBM_TimeElapsed = 0
+local KBM_HeldTime = Inspect.Time.Real()
+local KBM_StartTime = 0
+local KBM_TimeElapsed = 0
 
 -- Addon Primary Context
 local KM_Context = UI.CreateContext("KM_Context")
-local SBM_Context = KM_Context
+local KBM_Context = KM_Context
 local KM_Name = "King Molinator"
 
 -- Addon SBM Primary Frames
-local SBM_MainWin = {
+local KBM_MainWin = {
 	Handle = {},
 	Border = {},
 	Content = {},
@@ -100,9 +100,9 @@ local KM_KingCastIcon = nil
 local KM_AbilityWatch = {}
 local KM_KingCastText = nil
 local KM_PrinceCastText = nil
-KM_AbilityWatch[SBM_ToAbilityID(414115046)] = {
+KM_AbilityWatch[KBM_ToAbilityID(414115046)] = {
 	Watch = true,
-	ID = SBM_ToAbilityID(414115046),
+	ID = KBM_ToAbilityID(414115046),
 }
 
 -- Frame Defaults
@@ -187,19 +187,19 @@ KM_TimeVisual.Seconds = 0
 KM_TimeVisual.Minutes = 0
 KM_TimeVisual.Hours = 0
 
-local function SBM_InitOptions()
-	SBM_MainWin = UI.CreateFrame("RiftWindow", "Safe's Boss Mods", SBM_Context)
-	SBM_MainWin:SetController("border")
-	SBM_MainWin:SetWidth(750)
-	SBM_MainWin:SetHeight(550)
-	SBM_MainWin:SetTitle("KM Boss Mods: Options")
+local function KBM_InitOptions()
+	KBM_MainWin = UI.CreateFrame("RiftWindow", "Safe's Boss Mods", KBM_Context)
+	KBM_MainWin:SetController("border")
+	KBM_MainWin:SetWidth(750)
+	KBM_MainWin:SetHeight(550)
+	KBM_MainWin:SetTitle("KM Boss Mods: Options")
 	
-	SBM_MainWin.FrameStore = {}
-	SBM_MainWin.CheckStore = {}
-	SBM_MainWin.SlideStore = {}
-	SBM_MainWin.TextfStore = {}
+	KBM_MainWin.FrameStore = {}
+	KBM_MainWin.CheckStore = {}
+	KBM_MainWin.SlideStore = {}
+	KBM_MainWin.TextfStore = {}
 	
-	function SBM_MainWin:CallFrame(parent)
+	function KBM_MainWin:CallFrame(parent)
 		local frame = nil
 		if #self.FrameStore == 0 then
 			return UI.CreateFrame("Frame", "Frame Store", parent)
@@ -211,7 +211,7 @@ local function SBM_InitOptions()
 		end
 	end
 	
-	function SBM_MainWin:CallCheck(parent)
+	function KBM_MainWin:CallCheck(parent)
 		local Checkbox = nil
 		if #self.CheckStore == 0 then
 			return UI.CreateFrame("RiftCheckbox", "Check Store", parent)
@@ -224,7 +224,7 @@ local function SBM_InitOptions()
 		end
 	end
 	
-	function SBM_MainWin:CallText(parent)
+	function KBM_MainWin:CallText(parent)
 		local Textbox = nil
 		if #self.TextfStore == 0 then
 			return UI.CreateFrame("Text", "Textf Store", parent)
@@ -236,28 +236,28 @@ local function SBM_InitOptions()
 		end
 	end
 	
-	if not SBM_Options.Frame.x then
-		SBM_MainWin:SetPoint("CENTER", UIParent, "CENTER")
+	if not KBM_Options.Frame.x then
+		KBM_MainWin:SetPoint("CENTER", UIParent, "CENTER")
 	else
-		SBM_MainWin:SetPoint("TOPLEFT", UIParent, "TOPLEFT", SBM_Options.Frame.x, SBM_Options.Frame.y)
+		KBM_MainWin:SetPoint("TOPLEFT", UIParent, "TOPLEFT", KBM_Options.Frame.x, KBM_Options.Frame.y)
 	end
 	
-	SBM_MainWin.Border = SBM_MainWin:GetBorder()
-	SBM_MainWin.Content = SBM_MainWin:GetContent()
+	KBM_MainWin.Border = KBM_MainWin:GetBorder()
+	KBM_MainWin.Content = KBM_MainWin:GetContent()
 
-	BorderX = SBM_MainWin.Border:GetLeft()
-	BorderY = SBM_MainWin.Border:GetTop()
-	ContentX = SBM_MainWin.Content:GetLeft()
-	ContentY = SBM_MainWin.Content:GetTop()
-	ContentW = SBM_MainWin.Content:GetWidth()
-	ContentH = SBM_MainWin.Content:GetHeight()
+	BorderX = KBM_MainWin.Border:GetLeft()
+	BorderY = KBM_MainWin.Border:GetTop()
+	ContentX = KBM_MainWin.Content:GetLeft()
+	ContentY = KBM_MainWin.Content:GetTop()
+	ContentW = KBM_MainWin.Content:GetWidth()
+	ContentH = KBM_MainWin.Content:GetHeight()
 	
-	SBM_MainWin.Handle = UI.CreateFrame("Frame", "SBM Window Handle", SBM_MainWin)
-	SBM_MainWin.Handle:SetPoint("TOPLEFT", SBM_MainWin, "TOPLEFT")
-	SBM_MainWin.Handle:SetWidth(SBM_MainWin.Border:GetWidth())
-	SBM_MainWin.Handle:SetHeight(ContentY-BorderY)
-	SBM_MainWin.Handle.parent = SBM_MainWin.Handle:GetParent()
-	function SBM_MainWin.Handle.Event:LeftDown()
+	KBM_MainWin.Handle = UI.CreateFrame("Frame", "SBM Window Handle", KBM_MainWin)
+	KBM_MainWin.Handle:SetPoint("TOPLEFT", KBM_MainWin, "TOPLEFT")
+	KBM_MainWin.Handle:SetWidth(KBM_MainWin.Border:GetWidth())
+	KBM_MainWin.Handle:SetHeight(ContentY-BorderY)
+	KBM_MainWin.Handle.parent = KBM_MainWin.Handle:GetParent()
+	function KBM_MainWin.Handle.Event:LeftDown()
 		local cMouse = Inspect.Mouse()
 		local holdx = self.parent:GetLeft()
 		local holdy = self.parent:GetTop()
@@ -271,36 +271,36 @@ local function SBM_InitOptions()
 		self.parent:SetHeight(holdh)
 		self.parent:SetPoint("TOPLEFT", UIParent, "TOPLEFT", holdx, holdy)
 	end
-	function SBM_MainWin.Handle.Event:MouseMove(newX, newY)
+	function KBM_MainWin.Handle.Event:MouseMove(newX, newY)
 		if self.MouseDown then
 			self.parent:SetPoint("TOPLEFT", UIParent, "TOPLEFT", newX - self.OffsetX, newY - self.OffsetY)
 		end
 	end
-	function SBM_MainWin.Handle.Event:LeftUp()
+	function KBM_MainWin.Handle.Event:LeftUp()
 		if self.MouseDown then
 			self.MouseDown = false
-			SBM_Options.Frame.x = self:GetLeft()
-			SBM_Options.Frame.y = self:GetTop()
+			KBM_Options.Frame.x = self:GetLeft()
+			KBM_Options.Frame.y = self:GetTop()
 		end
 	end
 	
 	MenuWidth = math.floor(ContentW * 0.25)-10
 	OptionsWidth = math.ceil(ContentW * 0.75)-10
-	SBM_MainWin.Menu = UI.CreateFrame("Frame", "SBM Menu Frame", SBM_MainWin.Content)
-	SBM_MainWin.Menu:SetWidth(MenuWidth)
-	SBM_MainWin.Menu:SetHeight(ContentH)
-	SBM_MainWin.Menu:SetPoint("TOPLEFT", SBM_MainWin.Content, "TOPLEFT",5, 5)
-	SBM_MainWin.Menu.Headers = {}
-	SBM_MainWin.Menu.LastHeader = nil
-	function SBM_MainWin.Menu:CreateHeader(Text, Hook, Default)
+	KBM_MainWin.Menu = UI.CreateFrame("Frame", "SBM Menu Frame", KBM_MainWin.Content)
+	KBM_MainWin.Menu:SetWidth(MenuWidth)
+	KBM_MainWin.Menu:SetHeight(ContentH)
+	KBM_MainWin.Menu:SetPoint("TOPLEFT", KBM_MainWin.Content, "TOPLEFT",5, 5)
+	KBM_MainWin.Menu.Headers = {}
+	KBM_MainWin.Menu.LastHeader = nil
+	function KBM_MainWin.Menu:CreateHeader(Text, Hook, Default)
 		Header = {}
 		Header.Children = {}
-		Header.Frame = SBM_MainWin:CallFrame(self)
+		Header.Frame = KBM_MainWin:CallFrame(self)
 		Header.Frame:SetWidth(self:GetWidth())
-		Header.Check = SBM_MainWin:CallCheck(Header.Frame)
+		Header.Check = KBM_MainWin:CallCheck(Header.Frame)
 		Header.Check:SetPoint("CENTERLEFT", Header.Frame, "CENTERLEFT", 4, 0)
 		Header.Check:SetChecked(Default)
-		Header.Text = SBM_MainWin:CallText(Header.Frame)
+		Header.Text = KBM_MainWin:CallText(Header.Frame)
 		Header.Text:SetWidth(Header.Frame:GetWidth() - Header.Check:GetWidth())
 		Header.Text:SetText(Text)
 		Header.Text:SetFontSize(16)
@@ -324,15 +324,15 @@ local function SBM_InitOptions()
 		Header.LastChild = nil
 		return Header
 	end
-	function SBM_MainWin.Menu:CreateEncounter(Text, Hook, Default, Header)
+	function KBM_MainWin.Menu:CreateEncounter(Text, Hook, Default, Header)
 		Child = {}
-		Child.Frame = SBM_MainWin:CallFrame(self)
+		Child.Frame = KBM_MainWin:CallFrame(self)
 		Child.Frame:SetWidth(self:GetWidth()-Header.Check:GetWidth())
 		Child.Frame:SetPoint("RIGHT", self, "RIGHT")
-		Child.Check = SBM_MainWin:CallCheck(Child.Frame)
+		Child.Check = KBM_MainWin:CallCheck(Child.Frame)
 		Child.Check:SetPoint("CENTERLEFT", Child.Frame, "CENTERLEFT", 4, 0)
 		Child.Check:SetChecked(Default)
-		Child.Text = SBM_MainWin:CallText(Child.Frame)
+		Child.Text = KBM_MainWin:CallText(Child.Frame)
 		Child.Text:SetWidth(Child.Frame:GetWidth() - Child.Check:GetWidth())
 		Child.Text:SetText(Text)
 		Child.Text:SetFontSize(13)
@@ -347,27 +347,46 @@ local function SBM_InitOptions()
 			Child.Frame:SetPoint("TOP", Header.LastChild.Frame, "BOTTOM")
 			Header.LastChild = Child
 		end
+		function Child:Enabled(bool)
+			self.Check:SetEnabled(bool)
+			if bool then
+				self.Text:SetFontColor(1,1,1)
+			else
+				self.Text:SetFontColor(0.5,0.5,0.5)
+			end
+		end
+		return Child
 	end
 	
-	--SBM_MenuFrame:SetBackgroundColor(1,0,0,0.4)
+	--KBM_MenuFrame:SetBackgroundColor(1,0,0,0.4)
+	KBM_MainWin.SplitFrame = UI.CreateFrame("Frame", "KBM Splitter", KBM_MainWin.Content)
+	KBM_MainWin.SplitFrame:SetWidth(10)
+	KBM_MainWin.SplitFrame:SetHeight(ContentH)
+	KBM_MainWin.SplitFrame:SetPoint("LEFT", KBM_MainWin.Menu, "RIGHT")
+	KBM_MainWin.SplitFrame:SetPoint("TOP", KBM_MainWin.Content, "TOP")
+	KBM_MainWin.SplitHandle = UI.CreateFrame("Frame", "KBM Splitter Handle", KBM_MainWin.SplitFrame)
+	KBM_MainWin.SplitHandle:SetWidth(5)
+	KBM_MainWin.SplitHandle:SetHeight(ContentH)
+	KBM_MainWin.SplitHandle:SetPoint("CENTER", KBM_MainWin.SplitFrame, "CENTER")
+	KBM_MainWin.SplitHandle:SetBackgroundColor(1,1,1,0.5)
 	
-	SBM_MainWin.Options = UI.CreateFrame("Frame", "SBM Options Frame", SBM_MainWin.Content)
-	SBM_MainWin.Options:SetWidth(OptionsWidth)
-	SBM_MainWin.Options:SetHeight(ContentH)
-	SBM_MainWin.Options:SetPoint("TOPLEFT", SBM_MainWin.Menu, "TOPRIGHT")
-	--SBM_OptionsFrame:SetBackgroundColor(0,1,0,0.4)
+	KBM_MainWin.Options = UI.CreateFrame("Frame", "KBM Options Frame", KBM_MainWin.Content)
+	KBM_MainWin.Options:SetWidth(OptionsWidth)
+	KBM_MainWin.Options:SetHeight(ContentH)
+	KBM_MainWin.Options:SetPoint("TOPLEFT", KBM_MainWin.Menu, "TOPRIGHT")
+	--KBM_OptionsFrame:SetBackgroundColor(0,1,0,0.4)
 	
 end
 
-local function SBM_Options()
-	if SBM_MainWin:GetVisible() then
-		SBM_MainWin:SetVisible(false)
+local function KBM_Options()
+	if KBM_MainWin:GetVisible() then
+		KBM_MainWin:SetVisible(false)
 	else
-		SBM_MainWin:SetVisible(true)
+		KBM_MainWin:SetVisible(true)
 	end
 end
 
-local function SBM_Dummy(units)
+local function KBM_Dummy(units)
 end
 
 local function KM_UnitHPCheck(unitDetails, unitID)
@@ -384,7 +403,7 @@ local function KM_UnitHPCheck(unitDetails, unitID)
 					KM_KingID = unitID
 					if not KM_EncounterRunning then
 						KM_EncounterRunning = true
-						SBM_Encounter = false
+						KBM_Encounter = false
 					end
 					KM_StartTime = Inspect.Time.Real()
 					KM_HeldTime = KM_StartTime
@@ -408,7 +427,7 @@ local function KM_UnitHPCheck(unitDetails, unitID)
 					--print("Activating Dollin")
 					if not KM_EncounterRunning then
 						KM_EncounterRunning = true
-						SBM_Encounter = false
+						KBM_Encounter = false
 					end
 					KM_StartTime = Inspect.Time.Real()
 					KM_HeldTime = KM_StartTime
@@ -430,13 +449,13 @@ end
 
 local function ROF_UnitHPCheck()
 	
-	if SBM_Encounter then
-		uDetails = Inspect.Unit.Detail(SBM_CurrentBoss)
+	if KBM_Encounter then
+		uDetails = Inspect.Unit.Detail(KBM_CurrentBoss)
 		if not uDetails then
-			SBM_Encounter = false
-			SBM_BossID[SBM_CurrentBoss] = nil
-			SBM_CurrentBoss = nil
-			SBM_CurrentHook = nil
+			KBM_Encounter = false
+			KBM_BossID[KBM_CurrentBoss] = nil
+			KBM_CurrentBoss = nil
+			KBM_CurrentHook = nil
 			--print("Encounter Ended")
 		else -- Continue to manage the encounter.
 		
@@ -445,15 +464,15 @@ local function ROF_UnitHPCheck()
 	
 end
 
-local function SBM_Death(info)
+local function KBM_Death(info)
 	
-	if SBM_Encounter then
+	if KBM_Encounter then
 		local UnitID = info.target
 		if UnitID then
 			local uDetails = Inspect.Unit.Detail(UnitID)
 			if uDetails then
 				if not uDetails.player then
-					if SBM_BossID[UnitID] then
+					if KBM_BossID[UnitID] then
 						-- The Boss, or one of the bosses has died.
 					end
 				end
@@ -464,21 +483,21 @@ local function SBM_Death(info)
 end
 
 local function KM_Reset()
-	SBM_Encounter = false
+	KBM_Encounter = false
 	KM_EncounterRunning = false
 	if KM_KingID then
-		SBM_BossID[KM_KingID] = nil
+		KBM_BossID[KM_KingID] = nil
 	end
 	KM_KingID = nil
 	if KM_PrinceID then
-		SBM_BossID[KM_PrinceID] = nil
+		KBM_BossID[KM_PrinceID] = nil
 	end
 	KM_PrinceID = nil
 	KM_KingDPSTable = {}
 	KM_PrinceDPSTable = {}
-	SBM_CurrentBoss = ""
-	SBM_CurrentHook = nil
-	SBM_CurrentCBHook = nil
+	KBM_CurrentBoss = ""
+	KBM_CurrentHook = nil
+	KBM_CurrentCBHook = nil
 	KM_KingHPBar:SetWidth(KM_BossHPWidth)
 	KM_PrinceHPBar:SetWidth(KM_BossHPWidth)
 	KM_StatusBar:SetPoint("CENTER", KM_FrameBase, "CENTER")
@@ -512,62 +531,62 @@ local function KM_Reset()
 	print("Monitor reset.")
 end
 
-local function SBM_UnitHPCheck(units)
-	if not SBM_Encounter then -- check for bosses for an encounter start
+local function KBM_UnitHPCheck(units)
+	if not KBM_Encounter then -- check for bosses for an encounter start
 
 		local uDetails = {}
 		for UnitID, Specifier in pairs(units) do
 			local uDetails = Inspect.Unit.Detail(UnitID)
 			if uDetails then
-				if not SBM_BossID[UnitID] then
-					if SBM_Boss[uDetails.name] then
+				if not KBM_BossID[UnitID] then
+					if KBM_Boss[uDetails.name] then
 						--print("Boss seen (adding): "..UnitID.." ("..uDetails.name..") ")
 						--if uDetails.level == "??" then
-							SBM_BossID[UnitID] = {}
-							SBM_BossID[UnitID].name = uDetails.name
-							SBM_BossID[UnitID].monitor = true
-							SBM_BossID[UnitID].hook = SBM_Boss[uDetails.name].DPSHook
-							SBM_BossID[UnitID].CBHook = SBM_Boss[uDetails.name].CBHook
+							KBM_BossID[UnitID] = {}
+							KBM_BossID[UnitID].name = uDetails.name
+							KBM_BossID[UnitID].monitor = true
+							KBM_BossID[UnitID].hook = KBM_Boss[uDetails.name].DPSHook
+							KBM_BossID[UnitID].CBHook = KBM_Boss[uDetails.name].CBHook
 							if uDetails.health > 0 then
-								SBM_BossID[UnitID].dead = false
-								SBM_Encounter = true
-								SBM_CurrentHook = SBM_BossID[UnitID].hook
-								SBM_CurrentBoss = UnitID
-								SBM_CurrentHook(uDetails, UnitID)
-								SBM_CurrentCBHook = SBM_BossID[UnitID].CBHook
+								KBM_BossID[UnitID].dead = false
+								KBM_Encounter = true
+								KBM_CurrentHook = KBM_BossID[UnitID].hook
+								KBM_CurrentBoss = UnitID
+								KBM_CurrentHook(uDetails, UnitID)
+								KBM_CurrentCBHook = KBM_BossID[UnitID].CBHook
 							else
-								SBM_BossID[UnitID].dead = true
+								KBM_BossID[UnitID].dead = true
 								--print("Boss has been killed: Removing")
-								SBM_BossID[UnitID] = nil
+								KBM_BossID[UnitID] = nil
 							end
 						--end
 					else
 						--print("Unit is not a boss: "..UnitID.." ("..uDetails.name..")")
 					end
 				else
-					--print("Boss already seen. Redirecting "..SBM_BossID[UnitID].name)
-					--SBM_BossID[UnitID].hook()
+					--print("Boss already seen. Redirecting "..KBM_BossID[UnitID].name)
+					--KBM_BossID[UnitID].hook()
 				end
 			else
 				--print(UnitID.." (n/a)")
 			end
 		end
 	else
-		if SBM_CurrentHook then
-			--SBM_CurrentHook()
+		if KBM_CurrentHook then
+			--KBM_CurrentHook()
 		else
-			--SBM_Encounter = false
+			--KBM_Encounter = false
 			--print("Encounter ended")
 		end
 	end
 end
 
-local function SBM_UnitRemoved(units)
+local function KBM_UnitRemoved(units)
 	--[[local uDetails = {}]]
-	if SBM_Encounter then
+	if KBM_Encounter then
 		if KingMol_Main.AutoReset then
 			for UnitID, Specifier in pairs(units) do
-				if SBM_BossID[UnitID] then
+				if KBM_BossID[UnitID] then
 					if KM_KingID == UnitID then
 						KM_KingUnavail = true
 					elseif KM_PrinceID == UnitID then
@@ -697,7 +716,7 @@ end
 local function KM_HPChangeCheck(units)
 end
 
-local function SBM_UnitAvailable(units)
+local function KBM_UnitAvailable(units)
 end
 
 local function KM_UpdateBaseVars(callType)
@@ -1018,15 +1037,15 @@ local function KM_BuildDisplay()
 	
 end
 
-local function SBM_Timer()
+local function KBM_Timer()
 	local current = Inspect.Time.Real()
 	
-	if (current - SBM_HeldTime) >= 1 then
-		SBM_HeldTime = SBM_HeldTime + 1
-		if SBM_Encounter then
-			SBM_TimeElapsed = SBM_HeldTime - SBM_StartTime
-			if SBM_CurrentHook then
-				SBM_CurrentHook()
+	if (current - KBM_HeldTime) >= 1 then
+		KBM_HeldTime = KBM_HeldTime + 1
+		if KBM_Encounter then
+			KBM_TimeElapsed = KBM_HeldTime - KBM_StartTime
+			if KBM_CurrentHook then
+				KBM_CurrentHook()
 			end
 		end
 	end
@@ -1139,7 +1158,7 @@ local function KM_ManagePrinceCasts(Visible)
 end
 
 local function KM_UpdateTestBar()
-	bDetails = Inspect.Unit.Castbar(SBM_PlayerID)
+	bDetails = Inspect.Unit.Castbar(KBM_PlayerID)
 	if bDetails then
 		if bDetails.ability then
 			aDetails = Inspect.Ability.Detail(bDetails.ability)
@@ -1158,15 +1177,15 @@ end
 local function KM_ManageTestCasts(Visible)
 	if Visible then
 		--print("Cast Start")
-		bDetails = Inspect.Unit.Castbar(SBM_PlayerID)
+		bDetails = Inspect.Unit.Castbar(KBM_PlayerID)
 		if bDetails then
 			if bDetails.ability then
 				local aDetails = Inspect.Ability.Detail(bDetails.ability)
 				if aDetails then
 					KM_KingCastIcon:SetTexture("Rift", aDetails.icon)
 					KM_KingCastIcon:SetVisible(true)
-					SBM_TestAbility = bDetails.ability
-					SBM_TestIsCasting = true
+					KBM_TestAbility = bDetails.ability
+					KBM_TestIsCasting = true
 					KM_KingCastbar:SetVisible(true)
 				else
 					
@@ -1179,7 +1198,7 @@ local function KM_ManageTestCasts(Visible)
 		KM_KingCastIcon:SetVisible(false)
 		KM_KingCastProgress:SetWidth(0)
 		KM_KingCastText:SetText("")
-		SBM_TestIsCasting = false
+		KBM_TestIsCasting = false
 		--print("Cast Stopped")
 	end
 end
@@ -1197,7 +1216,7 @@ local function KM_CastBar(units)
 				KM_ManagePrinceCasts(Visible)
 				--processed = processed + 1
 			end
-		--elseif UnitID == SBM_PlayerID then
+		--elseif UnitID == KBM_PlayerID then
 		--	KM_ManageTestCasts(Visible)
 		end
 		if processed == 2 then
@@ -1206,11 +1225,11 @@ local function KM_CastBar(units)
 	end
 end
 
-local function SBM_CastBar(units)
-	--print("SBM_CastBar Event Handled")
-	if SBM_Encounter then
-		if SBM_CurrentCBHook then
-			SBM_CurrentCBHook(units)
+local function KBM_CastBar(units)
+	--print("KBM_CastBar Event Handled")
+	if KBM_Encounter then
+		if KBM_CurrentCBHook then
+			KBM_CurrentCBHook(units)
 		end
 	--else
 		-- Testing Only!
@@ -1274,26 +1293,36 @@ local function KM_Start()
 	print("please type /kmhelp for a list of commands.")
 	KM_FBDefX = KingMol_Main.LocX
 	KM_FBDefY = KingMol_Main.LocY
-	--table.insert(Event.Unit.Available, {SBM_UnitAvailable, "KingMolinator", "Event"})	
-	table.insert(Event.Unit.Detail.Health, {SBM_UnitHPCheck, "KingMolinator", "Event"})
-	table.insert(Event.Unit.Unavailable, {SBM_UnitRemoved, "KingMolinator", "Event"})
+	--table.insert(Event.Unit.Available, {KBM_UnitAvailable, "KingMolinator", "Event"})	
+	table.insert(Event.Unit.Detail.Health, {KBM_UnitHPCheck, "KingMolinator", "Event"})
+	table.insert(Event.Unit.Unavailable, {KBM_UnitRemoved, "KingMolinator", "Event"})
 	table.insert(Event.System.Update.Begin, {KM_Timer, "KingMolinator", "Event"}) -- Actual run-time timer.
-	--table.insert(Event.System.Update.Begin, {SBM_Timer, "KingMolinator", "Event"}) 
-	table.insert(Event.Combat.Death, {SBM_Death, "KingMolinator", "Event"})
-	table.insert(Event.Unit.Castbar, {SBM_CastBar, "KingMolinator", "Cast Bar Event"})
-	SBM_InitOptions()
-	KM_HK.Header = SBM_MainWin.Menu:CreateHeader("Hammerknell", KM_ToggleEnabled, true)
-	KM_HK.Murdantix.MenuItem = SBM_MainWin.Menu:CreateEncounter(KM_HK.Murdantix.Name, KM_ToggleEnabled, false, KM_HK.Header)
-	KM_HK.Matron.MenuItem = SBM_MainWin.Menu:CreateEncounter("Matron Zamira", KM_ToggleEnabled, false, KM_HK.Header)
-	KM_HK.Sicaron.MenuItem = SBM_MainWin.Menu:CreateEncounter("Sicaron", KM_ToggleEnabled, false, KM_HK.Header)
-	KM_HK.Zilas.MenuItem = SBM_MainWin.Menu:CreateEncounter("Soulrender Zilas", KM_ToggleEnabled, false, KM_HK.Header)
-	KM_HK.Prime.MenuItem = SBM_MainWin.Menu:CreateEncounter("Vladmal Prime", KM_ToggleEnabled, false, KM_HK.Header)
-	KM_HK.Grugonim.MenuItem = SBM_MainWin.Menu:CreateEncounter("Grugonim", KM_ToggleEnabled, false, KM_HK.Header)
-	KM_HK.KingMolinar.MenuItem = SBM_MainWin.Menu:CreateEncounter(KM_HK.KingMolinar.Name, KM_ToggleEnabled, true, KM_HK.Header)
-	KM_HK.Estrode.MenuItem = SBM_MainWin.Menu:CreateEncounter("Estrode", KM_ToggleEnabled, false, KM_HK.Header)
-	KM_HK.Garau.MenuItem = SBM_MainWin.Menu:CreateEncounter("Inquisitor Garau", KM_ToggleEnabled, false, KM_HK.Header)
-	KM_HK.Inwar.MenuItem = SBM_MainWin.Menu:CreateEncounter("Inwar Darktide", KM_ToggleEnabled, false, KM_HK.Header)
-	KM_HK.Akylios.MenuItem = SBM_MainWin.Menu:CreateEncounter("Akylios", KM_ToggleEnabled, false, KM_HK.Header)
+	--table.insert(Event.System.Update.Begin, {KBM_Timer, "KingMolinator", "Event"}) 
+	table.insert(Event.Combat.Death, {KBM_Death, "KingMolinator", "Event"})
+	table.insert(Event.Unit.Castbar, {KBM_CastBar, "KingMolinator", "Cast Bar Event"})
+	KBM_InitOptions()
+	KM_HK.Header = KBM_MainWin.Menu:CreateHeader("Hammerknell", KM_ToggleEnabled, true)
+	KM_HK.Murdantix.MenuItem = KBM_MainWin.Menu:CreateEncounter(KM_HK.Murdantix.Name, KM_ToggleEnabled, false, KM_HK.Header)
+	KM_HK.Murdantix.MenuItem:Enabled(false)
+	KM_HK.Matron.MenuItem = KBM_MainWin.Menu:CreateEncounter("Matron Zamira", KM_ToggleEnabled, false, KM_HK.Header)
+	KM_HK.Matron.MenuItem:Enabled(false)
+	KM_HK.Sicaron.MenuItem = KBM_MainWin.Menu:CreateEncounter("Sicaron", KM_ToggleEnabled, false, KM_HK.Header)
+	KM_HK.Sicaron.MenuItem:Enabled(false)
+	KM_HK.Zilas.MenuItem = KBM_MainWin.Menu:CreateEncounter("Soulrender Zilas", KM_ToggleEnabled, false, KM_HK.Header)
+	KM_HK.Zilas.MenuItem:Enabled(false)
+	KM_HK.Prime.MenuItem = KBM_MainWin.Menu:CreateEncounter("Vladmal Prime", KM_ToggleEnabled, false, KM_HK.Header)
+	KM_HK.Prime.MenuItem:Enabled(false)
+	KM_HK.Grugonim.MenuItem = KBM_MainWin.Menu:CreateEncounter("Grugonim", KM_ToggleEnabled, false, KM_HK.Header)
+	KM_HK.Grugonim.MenuItem:Enabled(false)
+	KM_HK.KingMolinar.MenuItem = KBM_MainWin.Menu:CreateEncounter(KM_HK.KingMolinar.Name, KM_ToggleEnabled, true, KM_HK.Header)
+	KM_HK.Estrode.MenuItem = KBM_MainWin.Menu:CreateEncounter("Estrode", KM_ToggleEnabled, false, KM_HK.Header)
+	KM_HK.Estrode.MenuItem:Enabled(false)
+	KM_HK.Garau.MenuItem = KBM_MainWin.Menu:CreateEncounter("Inquisitor Garau", KM_ToggleEnabled, false, KM_HK.Header)
+	KM_HK.Garau.MenuItem:Enabled(false)
+	KM_HK.Inwar.MenuItem = KBM_MainWin.Menu:CreateEncounter("Inwar Darktide", KM_ToggleEnabled, false, KM_HK.Header)
+	KM_HK.Inwar.MenuItem:Enabled(false)
+	KM_HK.Akylios.MenuItem = KBM_MainWin.Menu:CreateEncounter("Akylios", KM_ToggleEnabled, false, KM_HK.Header)
+	KM_HK.Akylios.MenuItem:Enabled(false)
 end
 
 local function KM_Hide()
@@ -1340,7 +1369,7 @@ end
 
 local function KM_WaitReady(unitID)
 	KM_Start()
-	SBM_PlayerID = unitID
+	KBM_PlayerID = unitID
 	if not KM_DisplayReady then
 		KM_DisplayReady = true
 		KM_BuildDisplay()
@@ -1384,7 +1413,7 @@ end
 
 -- Safes Boss Mods
 -- Boss List (For encounter start monitoring)
---SBM_Boss["Trickster Maelow"] = ROF_UnitHPCheck
+--KBM_Boss["Trickster Maelow"] = ROF_UnitHPCheck
 
 -- King Link Vars
 local KM_ModDetails = {
@@ -1392,14 +1421,14 @@ local KM_ModDetails = {
 		CBHook = KM_CastBar,
 }
 
-if SBM_Lang == "German" then
+if KBM_Lang == "German" then
 	KM_KingName = "Runenkönig Molinar"
 	KM_PrinceName = "Prinz Dollin"
-elseif SBM_Lang == "French" then
+elseif KBM_Lang == "French" then
 	KM_KingName = "Roi runique Molinar"
 end
-SBM_Boss[KM_PrinceName] = KM_ModDetails
-SBM_Boss[KM_KingName] = KM_ModDetails
+KBM_Boss[KM_PrinceName] = KM_ModDetails
+KBM_Boss[KM_KingName] = KM_ModDetails
 
 table.insert(Event.Addon.SavedVariables.Load.End, {KM_LoadVars, "KingMolinator", "Event"})
 table.insert(Event.Addon.SavedVariables.Save.Begin, {KM_SaveVars, "KingMolinator", "Event"})
@@ -1414,4 +1443,4 @@ table.insert(Command.Slash.Register("kmhelp"), {KM_Help, "KingMolinator", "KM He
 table.insert(Command.Slash.Register("kmautoreset"), {KM_AutoReset, "KingMolinator", "KM Auto Reset Toggle"})
 table.insert(Command.Slash.Register("kmkingbar"), {KM_ToggleKing, "KingMolinator", "KM Toggle King Bar"})
 table.insert(Command.Slash.Register("kmprincebar"), {KM_TogglePrince, "KingMolinator", "KM Toggle Prince Bar"})
-table.insert(Command.Slash.Register("sbmoptions"), {SBM_Options, "KingMolinator", "KM Open Options"})
+table.insert(Command.Slash.Register("sbmoptions"), {KBM_Options, "KingMolinator", "KM Open Options"})

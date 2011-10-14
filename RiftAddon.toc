@@ -14,6 +14,7 @@ Environment = "1.5"
 
 RunOnStartup = {
 	"KingMolinator.lua",
+	"Hammerknell/HKHeader.lua",
 }
 
 Embed = {
@@ -23,7 +24,7 @@ Embed = {
 
 SavedVariables = {
 	KingMol_Main = "account",
-	SBM_GlobalOptions = "account",
+	KBM_GlobalOptions = "account",
 }
 
 Dependencies = {
