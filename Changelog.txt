@@ -1,3 +1,6 @@
+v0.2.1
+* Fixed bugged SavedVariables.
+----
 v0.2.0
 * Overhauled main framework.
 * Enabled King and Princes bars as both always visible.

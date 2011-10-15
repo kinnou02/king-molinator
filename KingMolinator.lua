@@ -49,6 +49,12 @@ local function KM_LoadVars()
 	if KingMol_Main.Locked == nil then
 		KingMol_Main.Locked = false
 	end
+	if KingMol_Main.Hidden == nil then
+		KingMol_Main.Hidden = true
+	end
+	if KingMol_Main.Compact == nil then
+		KingMol_Main.Compact = false
+	end
 end
 
 local function KM_SaveVars()
