@@ -1,3 +1,12 @@
+v0.2.0
+* Overhauled main framework.
+* Enabled King and Princes bars as both always visible.
+* Removed most slash commands in favor of the new GUI Options.
+* Added GUI Options screen. (use /kbmoptions)
+* Added Start of Boss Mods plug-in framework for more encounters.
+* Changed Addon file layout to be self-contained.
+* Started work on splitting King's encounter as a plug-in.
+----
 v0.1.0
 * German localization should be working again.
 * Added a cast bar for Prince Dollin below the monitor (when visible).

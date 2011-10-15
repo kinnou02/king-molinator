@@ -28,6 +28,7 @@ local function KM_LoadVars()
 			AutoReset = true,
 			PrinceBar = false,
 			KingBar = false,
+			Enabled = true,
 		}
 	end
 	if not KingMol_Main.SampleDPS then
@@ -41,6 +42,12 @@ local function KM_LoadVars()
 	end
 	if KingMol_Main.KingBar == nil then
 		KingMol_Main.KingBar = true
+	end
+	if KingMol_Main.Enabled == nil then
+		KingMol_Main.Enabled = true
+	end
+	if KingMol_Main.Locked == nil then
+		KingMol_Main.Locked = false
 	end
 end
 
@@ -135,7 +142,8 @@ local KM_HK = {
 		Enabled = true,
 		Handler = nil,
 		Options = nil,
-		Name = "King Molinar"
+		Name = "King Molinar",
+		ID = "KingMolinar"
 },
 	Estrode = {},
 	Inwar = {},
@@ -189,6 +197,7 @@ KM_TimeVisual.Hours = 0
 
 local function KBM_InitOptions()
 	KBM_MainWin = UI.CreateFrame("RiftWindow", "Safe's Boss Mods", KBM_Context)
+	KBM_MainWin:SetVisible(false)
 	KBM_MainWin:SetController("border")
 	KBM_MainWin:SetWidth(750)
 	KBM_MainWin:SetHeight(550)
@@ -202,38 +211,47 @@ local function KBM_InitOptions()
 	function KBM_MainWin:CallFrame(parent)
 		local frame = nil
 		if #self.FrameStore == 0 then
-			return UI.CreateFrame("Frame", "Frame Store", parent)
+			frame = UI.CreateFrame("Frame", "Frame Store", parent)
+			function frame:Remove()
+				table.insert(KBM_MainWin.FrameStore, self)
+			end
 		else
 			frame = table.remove(self.FrameStore)
 			frame:ClearAll()
 			frame:SetParent(parent)
-			return frame
 		end
+		return frame
 	end
 	
 	function KBM_MainWin:CallCheck(parent)
 		local Checkbox = nil
 		if #self.CheckStore == 0 then
-			return UI.CreateFrame("RiftCheckbox", "Check Store", parent)
+			Checkbox = UI.CreateFrame("RiftCheckbox", "Check Store", parent)
+			function Checkbox:Remove()
+			
+			end
 		else
 			Checkbox = table.remove(self.CheckStore)
 			Checkbox:ClearAll()
 			Checkbox:ResizeToDefault()
 			Checkbox:SetParent(parent)
-			return CheckBox
 		end
+		return Checkbox
 	end
 	
 	function KBM_MainWin:CallText(parent)
 		local Textbox = nil
 		if #self.TextfStore == 0 then
-			return UI.CreateFrame("Text", "Textf Store", parent)
+			Textfbox = UI.CreateFrame("Text", "Textf Store", parent)
+			function Textfbox:Remove()
+			
+			end
 		else
 			Textfbox = table.remove(self.TextfStore)
 			Textfbox:ClearAll()
 			Textfbox:SetParent(parent)
-			return Textfbox
 		end
+		return Textfbox
 	end
 	
 	if not KBM_Options.Frame.x then
@@ -285,13 +303,38 @@ local function KBM_InitOptions()
 	end
 	
 	MenuWidth = math.floor(ContentW * 0.25)-10
-	OptionsWidth = math.ceil(ContentW * 0.75)-10
+
 	KBM_MainWin.Menu = UI.CreateFrame("Frame", "SBM Menu Frame", KBM_MainWin.Content)
 	KBM_MainWin.Menu:SetWidth(MenuWidth)
 	KBM_MainWin.Menu:SetHeight(ContentH)
 	KBM_MainWin.Menu:SetPoint("TOPLEFT", KBM_MainWin.Content, "TOPLEFT",5, 5)
 	KBM_MainWin.Menu.Headers = {}
 	KBM_MainWin.Menu.LastHeader = nil
+	
+	KBM_MainWin.SplitFrame = UI.CreateFrame("Frame", "KBM Splitter", KBM_MainWin.Content)
+	KBM_MainWin.SplitFrame:SetWidth(14)
+	KBM_MainWin.SplitFrame:SetHeight(ContentH)
+	KBM_MainWin.SplitFrame:SetPoint("LEFT", KBM_MainWin.Menu, "RIGHT")
+	KBM_MainWin.SplitFrame:SetPoint("TOP", KBM_MainWin.Content, "TOP")
+	KBM_MainWin.SplitHandle = UI.CreateFrame("Frame", "KBM Splitter Handle", KBM_MainWin.SplitFrame)
+	KBM_MainWin.SplitHandle:SetWidth(5)
+	KBM_MainWin.SplitHandle:SetHeight(ContentH)
+	KBM_MainWin.SplitHandle:SetPoint("CENTER", KBM_MainWin.SplitFrame, "CENTER")
+	KBM_MainWin.SplitHandle:SetBackgroundColor(1,1,1,0.5)
+
+	OptionsWidth = ContentW - KBM_MainWin.Menu:GetWidth() - KBM_MainWin.SplitFrame:GetWidth() - 10
+	KBM_MainWin.Options = UI.CreateFrame("Frame", "KBM Options Frame", KBM_MainWin.Content)
+	KBM_MainWin.Options:SetWidth(OptionsWidth)
+	KBM_MainWin.Options:SetHeight(ContentH)
+	KBM_MainWin.Options:SetPoint("TOPLEFT", KBM_MainWin.SplitFrame, "TOPRIGHT")
+	
+	KBM_MainWin.Options.Close = UI.CreateFrame("RiftButton", "Close Options", KBM_MainWin.Options)
+	KBM_MainWin.Options.Close:SetPoint("BOTTOMRIGHT", KBM_MainWin.Options, "BOTTOMRIGHT")
+	KBM_MainWin.Options.Close:SetText("Close")
+	function KBM_MainWin.Options.Close.Event:LeftPress()
+		KBM_MainWin:SetVisible(false)
+	end
+
 	function KBM_MainWin.Menu:CreateHeader(Text, Hook, Default)
 		Header = {}
 		Header.Children = {}
@@ -324,7 +367,7 @@ local function KBM_InitOptions()
 		Header.LastChild = nil
 		return Header
 	end
-	function KBM_MainWin.Menu:CreateEncounter(Text, Hook, Default, Header)
+	function KBM_MainWin.Menu:CreateEncounter(Text, Link, Default, Header)
 		Child = {}
 		Child.Frame = KBM_MainWin:CallFrame(self)
 		Child.Frame:SetWidth(self:GetWidth()-Header.Check:GetWidth())
@@ -355,27 +398,125 @@ local function KBM_InitOptions()
 				self.Text:SetFontColor(0.5,0.5,0.5)
 			end
 		end
+		Child.Link = Link
+		Child.Options = {}
+		Child.Options.List = {}
+		Child.Options.Child = Child
+		Child.Header = Header
+		Child.Options.Title = {}
+		Child.Options.LastItem = nil
+		function Child.Options:SetTitle()
+			local Title = KBM_MainWin:CallFrame(KBM_MainWin.Content)
+			Title:SetWidth(KBM_MainWin.Options:GetWidth())
+			Title:SetPoint("TOPLEFT", KBM_MainWin.Options, "TOPLEFT")
+			Title:SetBackgroundColor(0,0,0,0.25)
+			Title.HeadText = KBM_MainWin:CallText(Title)
+			Title.HeadText:SetText(self.Child.Header.Text:GetText())
+			Title.HeadText:SetFontColor(0.85,0.65,0.0)
+			Title.HeadText:SetFontSize(18)
+			Title.HeadText:SetPoint("TOPRIGHT", Title, "TOPRIGHT")
+			Title.HeadText:ResizeToText()
+			Title.SubText = KBM_MainWin:CallText(Title)
+			Title.SubText:SetText(self.Child.Text:GetText())
+			Title.SubText:SetFontSize(18)
+			Title.SubText:SetPoint("BOTTOMLEFT", Title, "BOTTOMLEFT")
+			Title.SubText:ResizeToText()
+			Title.Separator = KBM_MainWin:CallFrame(KBM_MainWin.Content)
+			Title.Separator:SetWidth(Title:GetWidth())
+			Title.Separator:SetHeight(10)
+			Title.Separator:SetPoint("TOPLEFT", Title, "BOTTOMLEFT")
+			self.LastItem = Title.Separator
+			self.Title = Title
+			function Title:Remove()
+			
+			end
+		end
+		function Child.Options:AddSpacer(Size)
+			if not Size then
+				Size = 10
+			end
+			local Spacer = KBM_MainWin:CallFrame(KBM_MainWin.Content)
+			if self.LastItem.LastChild then
+				Spacer:SetPoint("TOP", self.LastItem.LastChild, "BOTTOM")
+				Spacer:SetPoint("LEFT", KBM_MainWin.Options, "LEFT")
+			else
+				Spacer:SetPoint("TOPLEFT", self.LastItem, "BOTTOMLEFT")
+			end
+			Spacer:SetWidth(KBM_MainWin.Content:GetWidth())
+			Spacer:SetHeight(Size)
+			self.LastItem = Spacer
+			table.insert(self.List, Spacer)
+			function Spacer:Remove()
+			
+			end
+		end
+		function Child.Options:AddHeader(Text, Callback, Default)
+			local Header = KBM_MainWin:CallFrame(KBM_MainWin.Content)
+			if self.LastItem.LastChild then
+				Header:SetPoint("TOP", self.LastItem, "BOTTOM")
+				Header:SetPoint("LEFT", KBM_MainWin.Options, "LEFT")
+			else
+				Header:SetPoint("TOPLEFT", self.LastItem, "BOTTOMLEFT")
+			end
+			Header.Check = KBM_MainWin:CallCheck(Header)
+			Header.Check:SetPoint("CENTERLEFT", Header, "CENTERLEFT")
+			Header.Check:SetChecked(Default)
+			Header.Text = KBM_MainWin:CallText(Header)
+			Header.Text:SetText(Text)
+			Header.Text:SetFontColor(0.85,0.65,0)
+			Header.Text:SetFontSize(16)
+			Header.Text:ResizeToText()
+			Header.Text:SetPoint("CENTERLEFT", Header.Check, "CENTERRIGHT")
+			Header:SetHeight(Header.Text:GetHeight())
+			Header.Children = {}
+			Header.LastChild = Header
+			Header.Check.Callback = Callback
+			self.LastItem = Header
+			table.insert(self.List, Header)
+			function Header:AddCheck(Text, Callback, Default)
+				local CheckFrame = KBM_MainWin:CallFrame(KBM_MainWin.Content)
+				if self.LastChild == self then
+					CheckFrame:SetPoint("LEFT", self.Check, "RIGHT")
+					CheckFrame:SetPoint("TOP", self, "BOTTOM")
+				else
+					CheckFrame:SetPoint("TOPLEFT", self.LastChild, "BOTTOMLEFT")
+				end
+				CheckFrame:SetWidth(KBM_MainWin.Content:GetWidth())
+				CheckFrame.Check = KBM_MainWin:CallCheck(CheckFrame)
+				CheckFrame.Check:SetPoint("CENTERLEFT", CheckFrame, "CENTERLEFT")
+				CheckFrame.Check:SetChecked(Default)
+				CheckFrame.Text = KBM_MainWin:CallText(CheckFrame)
+				CheckFrame.Text:SetText(Text)
+				CheckFrame.Text:SetFontSize(14)
+				CheckFrame.Text:SetPoint("CENTERLEFT", CheckFrame.Check, "CENTERRIGHT")
+				CheckFrame.Text:ResizeToText()
+				CheckFrame:SetHeight(CheckFrame.Text:GetHeight())
+				CheckFrame.Check.Callback = Callback
+				self.LastChild = CheckFrame
+				table.insert(self.Children, CheckFrame)
+				function CheckFrame:Revove()
+				
+				end
+				function CheckFrame.Check.Event:CheckboxChange()
+					self:Callback(self:GetChecked())
+				end
+			end
+			function Header:Remove()
+			
+			end
+			function Header.Check.Event:CheckboxChange()
+				self:Callback(self:GetChecked())
+			end
+			return Header
+		end
+		function Child.Options:AddCheck(Text)
+		end
+		function Child.Options:ClearPage()
+		
+		end
 		return Child
 	end
-	
-	--KBM_MenuFrame:SetBackgroundColor(1,0,0,0.4)
-	KBM_MainWin.SplitFrame = UI.CreateFrame("Frame", "KBM Splitter", KBM_MainWin.Content)
-	KBM_MainWin.SplitFrame:SetWidth(10)
-	KBM_MainWin.SplitFrame:SetHeight(ContentH)
-	KBM_MainWin.SplitFrame:SetPoint("LEFT", KBM_MainWin.Menu, "RIGHT")
-	KBM_MainWin.SplitFrame:SetPoint("TOP", KBM_MainWin.Content, "TOP")
-	KBM_MainWin.SplitHandle = UI.CreateFrame("Frame", "KBM Splitter Handle", KBM_MainWin.SplitFrame)
-	KBM_MainWin.SplitHandle:SetWidth(5)
-	KBM_MainWin.SplitHandle:SetHeight(ContentH)
-	KBM_MainWin.SplitHandle:SetPoint("CENTER", KBM_MainWin.SplitFrame, "CENTER")
-	KBM_MainWin.SplitHandle:SetBackgroundColor(1,1,1,0.5)
-	
-	KBM_MainWin.Options = UI.CreateFrame("Frame", "KBM Options Frame", KBM_MainWin.Content)
-	KBM_MainWin.Options:SetWidth(OptionsWidth)
-	KBM_MainWin.Options:SetHeight(ContentH)
-	KBM_MainWin.Options:SetPoint("TOPLEFT", KBM_MainWin.Menu, "TOPRIGHT")
-	--KBM_OptionsFrame:SetBackgroundColor(0,1,0,0.4)
-	
+			
 end
 
 local function KBM_Options()
@@ -1287,10 +1428,68 @@ local function KM_ToggleEnabled(result)
 	
 end
 
+function KM_HK.KingMolinar:Options()
+	function self:Hidden(bool)
+		self.Setting = bool
+		KingMol_Main.Hidden = bool
+		if bool then
+			KM_FrameBase:SetVisible(false)
+		else
+			KM_FrameBase:SetVisible(true)
+		end
+	end
+	function self:Compact(bool)
+		self.Setting = bool
+		KingMol_Main.Compact = bool
+		if not KingMol_Main.Compact then
+			KM_SetNormal()
+		else
+			KM_SetCompact()
+		end
+	end
+	function self:Locked(bool)
+		self.Setting = bool
+		KingMol_Main.Locked = bool
+		if bool then
+			KM_DragFrame:SetVisible(false)
+		else
+			KM_DragFrame:SetVisible(true)
+		end
+	end
+	function self:KingEnabled(bool)
+		self.Setting = bool
+		KingMol_Main.KingBar = bool
+	end
+	function self:PrinceEnabled(bool)
+		self.Setting = bool
+		KingMol_Main.PrinceBar = bool
+	end
+	function self:MonitorEnabled(bool)
+		self.Setting = bool
+		if bool then
+			--print("Monitor is now Enabled")
+		else
+			--print("Monitor is now Disabled")
+		end
+	end
+	local Options = self.MenuItem.Options
+	Options:SetTitle()
+	self.Monitor = Options:AddHeader("Percentage Monitor", self.MonitorEnabled, KingMol_Main.Enabled)
+	self.Monitor.Check:SetEnabled(false) -- Temporarily disabled.
+	self.Monitor:AddCheck("Hidden until encounter starts.", self.Hidden, KingMol_Main.Hidden)
+	self.Monitor:AddCheck("Compact Mode", self.Compact, KingMol_Main.Compact)
+	self.Monitor:AddCheck("Locked in place", self.Locked, KingMol_Main.Locked)
+	Options:AddSpacer()
+	self.KingBar = Options:AddHeader("King Molinar's castbar", self.KingEnabled, KingMol_Main.KingBar)
+	Options:AddSpacer()
+	self.PrinceBar = Options:AddHeader("Prince Dollin's castbar", self.PrinceEnabled, KingMol_Main.PrinceBar)
+end
+
 local function KM_Start()
 	--KM_BuildDisplay()
 	print("-- Welcome to King Molinator --")
-	print("please type /kmhelp for a list of commands.")
+	print("/kmhelp for a list of commands.")
+	print("/kbmoptions for options.")
 	KM_FBDefX = KingMol_Main.LocX
 	KM_FBDefY = KingMol_Main.LocY
 	--table.insert(Event.Unit.Available, {KBM_UnitAvailable, "KingMolinator", "Event"})	
@@ -1302,19 +1501,21 @@ local function KM_Start()
 	table.insert(Event.Unit.Castbar, {KBM_CastBar, "KingMolinator", "Cast Bar Event"})
 	KBM_InitOptions()
 	KM_HK.Header = KBM_MainWin.Menu:CreateHeader("Hammerknell", KM_ToggleEnabled, true)
-	KM_HK.Murdantix.MenuItem = KBM_MainWin.Menu:CreateEncounter(KM_HK.Murdantix.Name, KM_ToggleEnabled, false, KM_HK.Header)
+	KM_HK.Header.Check:SetEnabled(false)
+	KM_HK.Murdantix.MenuItem = KBM_MainWin.Menu:CreateEncounter(KM_HK.Murdantix.Name, nil, false, KM_HK.Header)
 	KM_HK.Murdantix.MenuItem:Enabled(false)
-	KM_HK.Matron.MenuItem = KBM_MainWin.Menu:CreateEncounter("Matron Zamira", KM_ToggleEnabled, false, KM_HK.Header)
+	KM_HK.Matron.MenuItem = KBM_MainWin.Menu:CreateEncounter("Matron Zamira", nil, false, KM_HK.Header)
 	KM_HK.Matron.MenuItem:Enabled(false)
-	KM_HK.Sicaron.MenuItem = KBM_MainWin.Menu:CreateEncounter("Sicaron", KM_ToggleEnabled, false, KM_HK.Header)
+	KM_HK.Sicaron.MenuItem = KBM_MainWin.Menu:CreateEncounter("Sicaron", nil, false, KM_HK.Header)
 	KM_HK.Sicaron.MenuItem:Enabled(false)
-	KM_HK.Zilas.MenuItem = KBM_MainWin.Menu:CreateEncounter("Soulrender Zilas", KM_ToggleEnabled, false, KM_HK.Header)
+	KM_HK.Zilas.MenuItem = KBM_MainWin.Menu:CreateEncounter("Soulrender Zilas", nil, false, KM_HK.Header)
 	KM_HK.Zilas.MenuItem:Enabled(false)
-	KM_HK.Prime.MenuItem = KBM_MainWin.Menu:CreateEncounter("Vladmal Prime", KM_ToggleEnabled, false, KM_HK.Header)
+	KM_HK.Prime.MenuItem = KBM_MainWin.Menu:CreateEncounter("Vladmal Prime", nil, false, KM_HK.Header)
 	KM_HK.Prime.MenuItem:Enabled(false)
-	KM_HK.Grugonim.MenuItem = KBM_MainWin.Menu:CreateEncounter("Grugonim", KM_ToggleEnabled, false, KM_HK.Header)
+	KM_HK.Grugonim.MenuItem = KBM_MainWin.Menu:CreateEncounter("Grugonim", nil, false, KM_HK.Header)
 	KM_HK.Grugonim.MenuItem:Enabled(false)
-	KM_HK.KingMolinar.MenuItem = KBM_MainWin.Menu:CreateEncounter(KM_HK.KingMolinar.Name, KM_ToggleEnabled, true, KM_HK.Header)
+	KM_HK.KingMolinar.MenuItem = KBM_MainWin.Menu:CreateEncounter(KM_HK.KingMolinar.Name, KM_HK.KingMolinar, true, KM_HK.Header)
+	KM_HK.KingMolinar.MenuItem.Check:SetEnabled(false)
 	KM_HK.Estrode.MenuItem = KBM_MainWin.Menu:CreateEncounter("Estrode", KM_ToggleEnabled, false, KM_HK.Header)
 	KM_HK.Estrode.MenuItem:Enabled(false)
 	KM_HK.Garau.MenuItem = KBM_MainWin.Menu:CreateEncounter("Inquisitor Garau", KM_ToggleEnabled, false, KM_HK.Header)
@@ -1323,9 +1524,11 @@ local function KM_Start()
 	KM_HK.Inwar.MenuItem:Enabled(false)
 	KM_HK.Akylios.MenuItem = KBM_MainWin.Menu:CreateEncounter("Akylios", KM_ToggleEnabled, false, KM_HK.Header)
 	KM_HK.Akylios.MenuItem:Enabled(false)
+	
+	KM_HK.KingMolinar:Options()
 end
 
-local function KM_Hide()
+--[[local function KM_Hide()
 	KM_FrameBase:SetVisible(false)
 	KingMol_Main.Hidden = true
 end
@@ -1365,7 +1568,7 @@ local function KM_TogglePrince()
 		KingMol_Main.PrinceBar = true
 		print(KM_PrinceName.."'s cast bar is now on.")
 	end
-end
+end]]
 
 local function KM_WaitReady(unitID)
 	KM_Start()
@@ -1399,15 +1602,16 @@ end
 
 local function KM_Help()
 	print("King Molinator in game slash commands")
-	print("/kmshow -- Shows the monitor permanently.")
-	print("/kmhide -- Only shows the monitor during the encounter.")
-	print("/kmlock -- Stops the monitor from being moved.")
-	print("/kmunclock -- Allows the monitor to be moved.")
-	print("/kmsize -- Toggles between normal and compact sizes.")
-	print("/kmprincebar -- Toggles Prince's cast bar on/off.")
-	print("/kmkingbar -- Toggles King's cast bar on/off.")
+	--print("/kmshow -- Shows the monitor permanently.")
+	--print("/kmhide -- Only shows the monitor during the encounter.")
+	--print("/kmlock -- Stops the monitor from being moved.")
+	--print("/kmunclock -- Allows the monitor to be moved.")
+	--print("/kmsize -- Toggles between normal and compact sizes.")
+	--print("/kmprincebar -- Toggles Prince's cast bar on/off.")
+	--print("/kmkingbar -- Toggles King's cast bar on/off.")
 	print("/kmautoreset -- Toggle on/off, if you wish the addon to calculate a wipe (experimental).")
 	print("/kmreset -- Resets the monitor's data, and recalculates.")
+	print("/kbmoptions -- Toggles the GUI Options screen.")
 	print("/kmhelp -- Displays what you're reading now :)")
 end
 
@@ -1433,14 +1637,14 @@ KBM_Boss[KM_KingName] = KM_ModDetails
 table.insert(Event.Addon.SavedVariables.Load.End, {KM_LoadVars, "KingMolinator", "Event"})
 table.insert(Event.Addon.SavedVariables.Save.Begin, {KM_SaveVars, "KingMolinator", "Event"})
 table.insert(Event.SafesRaidManager.Player.Ready, {KM_WaitReady, "KingMolinator", "Sync Wait"})
-table.insert(Command.Slash.Register("kmshow"), {KM_Show, "KingMolinator", "KM Show"})
-table.insert(Command.Slash.Register("kmhide"), {KM_Hide, "KingMolinator", "KM Hide"})
-table.insert(Command.Slash.Register("kmlock"), {KM_Lock, "KingMolinator", "KM Lock"})
-table.insert(Command.Slash.Register("kmunlock"), {KM_Unlock, "KingMolinator", "KM Unloack"})
+--table.insert(Command.Slash.Register("kmshow"), {KM_Show, "KingMolinator", "KM Show"})
+--table.insert(Command.Slash.Register("kmhide"), {KM_Hide, "KingMolinator", "KM Hide"})
+--table.insert(Command.Slash.Register("kmlock"), {KM_Lock, "KingMolinator", "KM Lock"})
+--table.insert(Command.Slash.Register("kmunlock"), {KM_Unlock, "KingMolinator", "KM Unloack"})
 table.insert(Command.Slash.Register("kmreset"), {KM_Reset, "KingMolinator", "KM Reset"})
-table.insert(Command.Slash.Register("kmsize"), {KM_SizeToggle, "KingMolinator", "KM Size Toggle"})
+--table.insert(Command.Slash.Register("kmsize"), {KM_SizeToggle, "KingMolinator", "KM Size Toggle"})
 table.insert(Command.Slash.Register("kmhelp"), {KM_Help, "KingMolinator", "KM Hekp"})
 table.insert(Command.Slash.Register("kmautoreset"), {KM_AutoReset, "KingMolinator", "KM Auto Reset Toggle"})
-table.insert(Command.Slash.Register("kmkingbar"), {KM_ToggleKing, "KingMolinator", "KM Toggle King Bar"})
-table.insert(Command.Slash.Register("kmprincebar"), {KM_TogglePrince, "KingMolinator", "KM Toggle Prince Bar"})
-table.insert(Command.Slash.Register("sbmoptions"), {KBM_Options, "KingMolinator", "KM Open Options"})
+--table.insert(Command.Slash.Register("kmkingbar"), {KM_ToggleKing, "KingMolinator", "KM Toggle King Bar"})
+--table.insert(Command.Slash.Register("kmprincebar"), {KM_TogglePrince, "KingMolinator", "KM Toggle Prince Bar"})
+table.insert(Command.Slash.Register("kbmoptions"), {KBM_Options, "KingMolinator", "KM Open Options"})
