@@ -2,19 +2,20 @@
 
 Name = "King Molinator"
 
-Description = "Monitors the HP percentage gap between King Molinar and Prince Dollin"
+Description = "Soon to be full Rift Boss Mods (Named - KM:Boss Mods)"
 
 Author = "Paul Snart"
 Website = "http://twitter.com/#!/psnart"
 Email = "snarty@gmail.com"
 
-Version = "0.2.1"
+Version = "0.2.2"
 
 Environment = "1.5"
 
 RunOnStartup = {
 	"KingMolinator.lua",
 	"Hammerknell/HKHeader.lua",
+	"Hammerknell/Molinar.lua",
 }
 
 Embed = {
@@ -23,7 +24,7 @@ Embed = {
 }
 
 SavedVariables = {
-	KingMol_Main = "account",
+	KM_Settings = "account",
 	KBM_GlobalOptions = "account",
 }
 
