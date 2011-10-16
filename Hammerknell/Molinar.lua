@@ -686,12 +686,18 @@ end
 function KM:UpdateKingCast()
 	local bDetails = Inspect.Unit.Castbar(self.KingID)
 	if bDetails then
-		bCastTime = bDetails.duration
-		bProgress = bDetails.remaining
-		self.KingCastProgress:SetWidth(self.KingCastbar:GetWidth() * (1-(bProgress/bCastTime)))
-		self.KingCastText:SetText(string.format("%0.01f", bProgress).." - "..bDetails.abilityName)
-		self.KingCastText:SetWidth(self.KingCastText:GetFullWidth())
-		self.KingCastText:SetHeight(self.KingCastText:GetFullHeight())
+		if bDetails.ability then
+			if KM.AbilityWatch[bDetails.ability] then
+				if KM.AbilityWatch[bDetails.ability].Watch then
+					bCastTime = bDetails.duration
+					bProgress = bDetails.remaining
+					self.KingCastProgress:SetWidth(self.KingCastbar:GetWidth() * (1-(bProgress/bCastTime)))
+					self.KingCastText:SetText(string.format("%0.01f", bProgress).." - "..bDetails.abilityName)
+					self.KingCastText:SetWidth(self.KingCastText:GetFullWidth())
+					self.KingCastText:SetHeight(self.KingCastText:GetFullHeight())
+				end
+			end
+		end
 	else
 		self.KingCastbar:SetVisible(false)
 		self.KingCastIcon:SetTexture("", "")
@@ -706,25 +712,22 @@ function KM:ManageKingCasts(Visible)
 	--if Visible then
 		local bDetails = Inspect.Unit.Castbar(self.KingID)
 		if bDetails then
-			--if self.AbilityWatch[bDetails.ability] then
-				--if self.AbilityWatch[bDetails.ability].Watching then
-				if bDetails.ability then
-					local aDetails = Inspect.Ability.Detail(bDetails.ability)
-					if aDetails then
-						self.KingCastIcon:SetTexture("Rift", aDetails.icon)
-						self.KingCastIcon:SetVisible(true)
-						self.KingCasting = true
-						self.KingCastbar:SetVisible(true)
-					else
-						self.KingCasting = true
-						self.KingCastbar:SetVisible(true)	
+			if bDetails.ability then
+				if self.AbilityWatch[bDetails.ability] then
+					if self.AbilityWatch[bDetails.ability].Watch then
+						local aDetails = Inspect.Ability.Detail(bDetails.ability)
+						if aDetails then
+							self.KingCastIcon:SetTexture("Rift", aDetails.icon)
+							self.KingCastIcon:SetVisible(true)
+							self.KingCasting = true
+							self.KingCastbar:SetVisible(true)
+						else
+							self.KingCasting = true
+							self.KingCastbar:SetVisible(true)	
+						end
 					end
-				else
-					self.KingCasting = true
-					self.KingCastbar:SetVisible(true)
 				end
-				--end
-			--end
+			end
 		end
 	--[[else
 		self.KingCastbar:SetVisible(false)
@@ -739,12 +742,18 @@ end
 function KM:UpdatePrinceCast()
 	local bDetails = Inspect.Unit.Castbar(self.PrinceID)
 	if bDetails then
-		bCastTime = bDetails.duration
-		bProgress = bDetails.remaining
-		self.PrinceCastProgress:SetWidth(self.PrinceCastbar:GetWidth() * (1-(bProgress/bCastTime)))
-		self.PrinceCastText:SetText(string.format("%0.01f", bProgress).." - "..bDetails.abilityName)
-		self.PrinceCastText:SetWidth(self.PrinceCastText:GetFullWidth())
-		self.PrinceCastText:SetHeight(self.PrinceCastText:GetFullHeight())
+		if bDetails.ability then
+			if KM.AbilityWatch[bDetails.ability] then
+				if KM.AbilityWatch[bDetails.ability].Watch then
+					bCastTime = bDetails.duration
+					bProgress = bDetails.remaining
+					self.PrinceCastProgress:SetWidth(self.PrinceCastbar:GetWidth() * (1-(bProgress/bCastTime)))
+					self.PrinceCastText:SetText(string.format("%0.01f", bProgress).." - "..bDetails.abilityName)
+					self.PrinceCastText:SetWidth(self.PrinceCastText:GetFullWidth())
+					self.PrinceCastText:SetHeight(self.PrinceCastText:GetFullHeight())
+				end
+			end
+		end
 	else
 		self.PrinceCastbar:SetVisible(false)
 		self.PrinceCastIcon:SetTexture("", "")
@@ -759,25 +768,22 @@ function KM:ManagePrinceCasts(Visible)
 	--if Visible then
 		local bDetails = Inspect.Unit.Castbar(self.PrinceID)
 		if bDetails then
-			--if self.AbilityWatch[bDetails.ability] then
-				--if self.AbilityWatch[bDetails.ability].Watching then
-				if bDetails.ability then
-					local aDetails = Inspect.Ability.Detail(bDetails.ability)
-					if aDetails then
-						self.PrinceCastIcon:SetTexture("Rift", aDetails.icon)
-						self.PrinceCastIcon:SetVisible(true)
-						self.PrinceCasting = true
-						self.PrinceCastbar:SetVisible(true)
-					else
-						self.PrinceCasting = true
-						self.PrinceCastbar:SetVisible(true)
+			if bDetails.ability then
+				if self.AbilityWatch[bDetails.ability] then
+					if self.AbilityWatch[bDetails.ability].Watch then
+						local aDetails = Inspect.Ability.Detail(bDetails.ability)
+						if aDetails then
+							self.PrinceCastIcon:SetTexture("Rift", aDetails.icon)
+							self.PrinceCastIcon:SetVisible(true)
+							self.PrinceCasting = true
+							self.PrinceCastbar:SetVisible(true)
+						else
+							self.PrinceCasting = true
+							self.PrinceCastbar:SetVisible(true)
+						end
 					end
-				else
-					self.PrinceCasting = true
-					self.PrinceCastbar:SetVisible(true)
 				end
-				--end
-			--end
+			end
 		end
 	--[[else
 		self.PrinceCastbar:SetVisible(false)
