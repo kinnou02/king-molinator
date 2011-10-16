@@ -25,8 +25,11 @@ end
 
 local function KBM_LoadVars(AddonID)
 	if AddonID == "KingMolinator" then
-		if KBM_GlobalOptions then
-			KBM.Options = KBM_GlobalOptions
+		--if KBM_GlobalOptions then
+		--	KBM.Options = KBM_GlobalOptions
+		--end
+		for Setting, Value in pairs(KBM_GlobalOptions) do
+			KBM.Options[Setting] = Value
 		end
 		for Mod in pairs(KBM_BossMod) do
 			KBM_BossMod[Mod]:LoadVars()
@@ -348,19 +351,27 @@ local function KBM_InitOptions()
 			else
 				Header:SetPoint("TOPLEFT", self.LastItem, "BOTTOMLEFT")
 			end
-			Header.Check = KBM_MainWin:CallCheck(Header)
-			Header.Check:SetPoint("CENTERLEFT", Header, "CENTERLEFT")
-			Header.Check:SetChecked(Default)
 			Header.Text = KBM_MainWin:CallText(Header)
 			Header.Text:SetText(Text)
 			Header.Text:SetFontColor(0.85,0.65,0)
 			Header.Text:SetFontSize(16)
 			Header.Text:ResizeToText()
+			Header.Check = KBM_MainWin:CallCheck(Header)
+			Header.Check:SetPoint("CENTERLEFT", Header, "CENTERLEFT")
+			if not Callback then
+				Header.Check:SetEnabled(false)
+				Header.Check:SetVisible(false)
+			else
+				Header.Check:SetChecked(Default)
+				Header.Check.Callback = Callback
+				function Header.Check.Event:CheckboxChange()
+					self:Callback(self:GetChecked())
+				end
+			end
 			Header.Text:SetPoint("CENTERLEFT", Header.Check, "CENTERRIGHT")
 			Header:SetHeight(Header.Text:GetHeight())
 			Header.Children = {}
 			Header.LastChild = Header
-			Header.Check.Callback = Callback
 			self.LastItem = Header
 			table.insert(self.List, Header)
 			function Header:AddCheck(Text, Callback, Default)
@@ -390,12 +401,10 @@ local function KBM_InitOptions()
 				function CheckFrame.Check.Event:CheckboxChange()
 					self:Callback(self:GetChecked())
 				end
+				return CheckFrame
 			end
 			function Header:Remove()
 			
-			end
-			function Header.Check.Event:CheckboxChange()
-				self:Callback(self:GetChecked())
 			end
 			return Header
 		end
@@ -683,11 +692,6 @@ local function KBM_WaitReady(unitID)
 	for Mod in pairs(KBM_BossMod) do
 		KBM_BossMod[Mod]:Start(KBM_MainWin)
 		KBM_BossMod[Mod]:AddBosses(KBM_Boss)
-	end
-	print("Current Boss List")
-	print("-----------------")
-	for BossName in pairs(KBM_Boss) do
-		print(BossName)
 	end
 	KBM_PlayerID = unitID
 	--print(KM_SwingMulti)

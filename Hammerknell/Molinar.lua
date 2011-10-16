@@ -44,10 +44,34 @@ KM.AbilityWatch = {}
 KM.KingCastText = nil
 KM.PrinceCastText = nil
 
-KM.AbilityWatch[KBM_ToAbilityID(414115046)] = {
-	Watch = true,
-	ID = KBM_ToAbilityID(414115046),
-}
+KM.Abilities = {}
+KM.Abilities["Terminate Life"] = KBM_ToAbilityID(414115046)
+KM.Abilities["Rend Life"] = KBM_ToAbilityID(651359498)
+KM.Abilities["Frightening Shout"] = KBM_ToAbilityID(234795144)
+KM.Abilities["Cursed Blows"] = KBM_ToAbilityID(104359418)
+KM.Abilities["Crushing Regret"] = KBM_ToAbilityID(977580176)
+KM.Abilities["Prince Consuming Essence"] = KBM_ToAbilityID(384526138)
+KM.Abilities["King Consuming Essence"] = KBM_ToAbilityID(2132063128)
+KM.Abilities["Forked Blast"] = KBM_ToAbilityID(1920920671)
+KM.Abilities["Runic Feedback"] = KBM_ToAbilityID(1531103847)
+
+function KM.AbilityWatch:Add(Ability, aHandler)
+	self[Ability] = {
+		Watch = true,
+		ID = Ability,
+		Handler = aHandler,
+	}
+end
+
+KM.AbilityWatch:Add(KM.Abilities['Terminate Life'])
+KM.AbilityWatch:Add(KM.Abilities['Rend Life'])
+KM.AbilityWatch:Add(KM.Abilities['Frightening Shout'])
+KM.AbilityWatch:Add(KM.Abilities['Cursed Blows'])
+KM.AbilityWatch:Add(KM.Abilities['Crushing Regret'])
+KM.AbilityWatch:Add(KM.Abilities['Prince Consuming Essence'])
+KM.AbilityWatch:Add(KM.Abilities['King Consuming Essence'])
+KM.AbilityWatch:Add(KM.Abilities['Forked Blast'])
+KM.AbilityWatch:Add(KM.Abilities['Runic Feedback'])
 
 -- Frame Defaults
 KM.FBWidth = 600
@@ -130,14 +154,23 @@ function KM:InitVars()
 		AutoReset = true,
 		PrinceBar = true,
 		KingBar = true,
-		Enabled = true
+		Enabled = true,
+		RendEnabled = true,
+		TerminateEnabled = true,
+		PCEssenceEnabled = true,
+		KCEssenceEnabled = true,
+		CursedEnabled = true,
+		FShoutEnabled = true,
+		RFeedbackEnabled = true,
+		CrushingEnabled = true,
+		FBlastEnabled = true,
 	}
 	KM_Settings = self.Settings
 end
 
 function KM:LoadVars()
-	if KM_Settings then
-		self.Settings = KM_Settings
+	for Setting, Value in pairs(KM_Settings) do
+		self.Settings[Setting] = Value
 	end
 end
 
@@ -856,7 +889,6 @@ end
 function KM.KingMolinar:Options()
 
 	function self:Hidden(bool)
-		self.Setting = bool
 		KM.Settings.Hidden = bool
 		if bool then
 			KM.FrameBase:SetVisible(false)
@@ -865,7 +897,6 @@ function KM.KingMolinar:Options()
 		end
 	end
 	function self:Compact(bool)
-		self.Setting = bool
 		KM.Settings.Compact = bool
 		if not KM.Settings.Compact then
 			KM:SetNormal()
@@ -874,7 +905,6 @@ function KM.KingMolinar:Options()
 		end
 	end
 	function self:Locked(bool)
-		self.Setting = bool
 		KM.Settings.Locked = bool
 		if bool then
 			KM.DragFrame:SetVisible(false)
@@ -883,12 +913,46 @@ function KM.KingMolinar:Options()
 		end
 	end
 	function self:KingEnabled(bool)
-		self.Setting = bool
 		KM.Settings.KingBar = bool
 	end
 	function self:PrinceEnabled(bool)
-		self.Setting = bool
 		KM.Settings.PrinceBar = bool
+	end
+	function self:RendEnabled(bool)
+		KM.Settings.RendEnabled = bool
+		KM.AbilityWatch[KM.Abilities['Rend Life']].Watch = bool
+	end
+	function self:TerminateEnabled(bool)
+		KM.Settings.TerminateEnabled = bool
+		KM.AbilityWatch[KM.Abilities['Terminate Life']].Watch = bool
+	end
+	function self:PCEssenceEnabled(bool)
+		KM.Settings.PCEssenceEnabled = bool
+		KM.AbilityWatch[KM.Abilities['Prince Consuming Essence']].Watch = bool
+	end
+	function self:KCEssenceEnabled(bool)
+		KM.Settings.KCEssenceEnabled = bool
+		KM.AbilityWatch[KM.Abilities['King Consuming Essence']].Watch = bool
+	end
+	function self:CursedEnabled(bool)
+		KM.Settings.CursedEnabled = bool
+		KM.AbilityWatch[KM.Abilities['Cursed Blows']].Watch = bool
+	end
+	function self:FShoutEnabled(bool)
+		KM.Settings.FShoutEnabled = bool
+		KM.AbilityWatch[KM.Abilities['Frightening Shout']].Watch = bool
+	end
+	function self:RFeedbackEnabled(bool)
+		KM.Settings.RFeedbackEnabled = bool
+		KM.AbilityWatch[KM.Abilities['Runic Feedback']].Watch = bool
+	end
+	function self:CrushingEnabled(bool)
+		KM.Settings.CrushingEnabled = bool
+		KM.AbilityWatch[KM.Abilities['Crushing Regret']].Watch = bool
+	end
+	function self:FBlastEnabled(bool)
+		KM.Settings.CrushingEnabled = bool
+		KM.AbilityWatch[KM.Abilities['Forked Blast']].Watch = bool
 	end
 	function self:MonitorEnabled(bool)
 		self.Setting = bool
@@ -900,15 +964,24 @@ function KM.KingMolinar:Options()
 	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
-	self.Monitor = Options:AddHeader("Percentage Monitor", self.MonitorEnabled, KM.Settings.Enabled)
+	self.Monitor = Options:AddHeader("Show Percentage Monitor", self.MonitorEnabled, KM.Settings.Enabled)
 	self.Monitor.Check:SetEnabled(false) -- Temporarily disabled.
 	self.Monitor:AddCheck("Hidden until encounter starts.", self.Hidden, KM.Settings.Hidden)
-	self.Monitor:AddCheck("Compact Mode", self.Compact, KM.Settings.Compact)
-	self.Monitor:AddCheck("Locked in place", self.Locked, KM.Settings.Locked)
+	self.Monitor:AddCheck("Compact Mode.", self.Compact, KM.Settings.Compact)
+	self.Monitor:AddCheck("Locked in place.", self.Locked, KM.Settings.Locked)
 	Options:AddSpacer()
-	self.KingBar = Options:AddHeader("King Molinar's castbar", self.KingEnabled, KM.Settings.KingBar)
+	self.KingMech = Options:AddHeader("Show King Molinar's cast-bar.", self.KingEnabled, KM.Settings.KingBar)
+	self.KingMech:AddCheck("Frightening Shout cast.", self.FShoutEnabled, KM.Settings.FShoutEnabled)
+	self.KingMech:AddCheck("Cursed Blows cast.", self.CursedEnabled, KM.Settings.CursedEnabled)
+	self.KingMech:AddCheck("Consuming Essence cast.", self.KCEssenceEnabled, KM.Settings.KCEssenceEnabled)
 	Options:AddSpacer()
-	self.PrinceBar = Options:AddHeader("Prince Dollin's castbar", self.PrinceEnabled, KM.Settings.PrinceBar)
+	self.PrinceMech = Options:AddHeader("Show Prince Dollin's cast-bar.", self.PrinceEnabled, KM.Settings.PrinceBar)
+	self.PrinceMech:AddCheck("Rend Life cast.", self.RendEnabled, KM.Settings.RendEnabled)
+	self.PrinceMech:AddCheck("Terminate Life cast.", self.TerminateEnabled, KM.Settings.TerminateEnabled)
+	self.PrinceMech:AddCheck("Crushing Regret cast.", self.CrushingEnabled, KM.Settings.CrushingEnabled)
+	self.PrinceMech:AddCheck("Consuming Essence cast.", self.PCEssenceEnabled, KM.Settings.PCEssenceEnabled)
+	self.PrinceMech:AddCheck("Runic Feedback cast.", self.RFeedbackEnabled, KM.Settings.RFeedbackEnabled)
+	self.PrinceMech:AddCheck("Forked Blast cast.", self.FBlastEnabled, KM.Settings.FBlastEnabled)
 end
 
 function KM:Start(KBM_MainWin)
