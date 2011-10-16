@@ -49,8 +49,8 @@ end
 
 KBM.Lang = Inspect.System.Language()
 local KBM_Boss = {}
-local KBM_BossID = {}
-local KBM_Encounter = false
+KBM.BossID = {}
+KBM.Encounter = false
 local KBM_CurrentHook = nil
 local KBM_CurrentCBHook = nil
 local KBM_CurrentBoss = ""
@@ -74,11 +74,11 @@ local KBM_MainWin = {
 	Content = {},
 }
 
-local KM_TimeVisual = {}
-KM_TimeVisual.String = "00"
-KM_TimeVisual.Seconds = 0
-KM_TimeVisual.Minutes = 0
-KM_TimeVisual.Hours = 0
+KBM.TimeVisual = {}
+KBM.TimeVisual.String = "00"
+KBM.TimeVisual.Seconds = 0
+KBM.TimeVisual.Minutes = 0
+KBM.TimeVisual.Hours = 0
 
 function KBM_RegisterMod(ModID, Mod)
 	KBM_BossMod[ModID] = Mod
@@ -422,11 +422,11 @@ end
 
 local function ROF_UnitHPCheck()
 	
-	if KBM_Encounter then
+	if KBM.Encounter then
 		uDetails = Inspect.Unit.Detail(KBM_CurrentBoss)
 		if not uDetails then
-			KBM_Encounter = false
-			KBM_BossID[KBM_CurrentBoss] = nil
+			KBM.Encounter = false
+			KBM.BossID[KBM_CurrentBoss] = nil
 			KBM_CurrentBoss = nil
 			KBM_CurrentHook = nil
 			KBM_CurrentMod = nil
@@ -440,13 +440,13 @@ end
 
 local function KBM_Death(info)
 	
-	if KBM_Encounter then
+	if KBM.Encounter then
 		local UnitID = info.target
 		if UnitID then
 			local uDetails = Inspect.Unit.Detail(UnitID)
 			if uDetails then
 				if not uDetails.player then
-					if KBM_BossID[UnitID] then
+					if KBM.BossID[UnitID] then
 						-- The Boss, or one of the bosses has died.
 					end
 				end
@@ -457,42 +457,43 @@ local function KBM_Death(info)
 end
 
 local function KBM_UnitHPCheck(units)
-	if not KBM_Encounter then -- check for bosses for an encounter start
+	if not KBM.Encounter then -- check for bosses for an encounter start
 
+		--print("Encounter Check")
 		local uDetails = {}
 		for UnitID, Specifier in pairs(units) do
 			local uDetails = Inspect.Unit.Detail(UnitID)
 			if uDetails then
-				if not KBM_BossID[UnitID] then
+				if not KBM.BossID[UnitID] then
 					if KBM_Boss[uDetails.name] then
 						--print("Boss seen (adding): "..UnitID.." ("..uDetails.name..") ")
 						--if uDetails.level == "??" then
-							KBM_BossID[UnitID] = {}
-							KBM_BossID[UnitID].name = uDetails.name
-							KBM_BossID[UnitID].monitor = true
-							KBM_BossID[UnitID].hook = KBM_Boss[uDetails.name].DPSHook
-							KBM_BossID[UnitID].CBHook = KBM_Boss[uDetails.name].CBHook
-							KBM_BossID[UnitID].Mod = KBM_Boss[uDetails.name].Mod
+							KBM.BossID[UnitID] = {}
+							KBM.BossID[UnitID].name = uDetails.name
+							KBM.BossID[UnitID].monitor = true
+							KBM.BossID[UnitID].hook = KBM_Boss[uDetails.name].DPSHook
+							KBM.BossID[UnitID].CBHook = KBM_Boss[uDetails.name].CBHook
+							KBM.BossID[UnitID].Mod = KBM_Boss[uDetails.name].Mod
 							if uDetails.health > 0 then
-								KBM_BossID[UnitID].dead = false
-								KBM_Encounter = true
-								KBM_CurrentHook = KBM_BossID[UnitID].hook
+								KBM.BossID[UnitID].dead = false
+								KBM.Encounter = true
+								KBM_CurrentHook = KBM.BossID[UnitID].hook
 								KBM_CurrentBoss = UnitID
 								KBM_CurrentHook(uDetails, UnitID)
-								KBM_CurrentCBHook = KBM_BossID[UnitID].CBHook
-								KBM_CurrentMod = KBM_BossID[UnitID].Mod
+								KBM_CurrentCBHook = KBM.BossID[UnitID].CBHook
+								KBM_CurrentMod = KBM.BossID[UnitID].Mod
 							else
-								KBM_BossID[UnitID].dead = true
+								KBM.BossID[UnitID].dead = true
 								--print("Boss has been killed: Removing")
-								KBM_BossID[UnitID] = nil
+								KBM.BossID[UnitID] = nil
 							end
 						--end
 					else
 						--print("Unit is not a boss: "..UnitID.." ("..uDetails.name..")")
 					end
 				else
-					--print("Boss already seen. Redirecting "..KBM_BossID[UnitID].name)
-					--KBM_BossID[UnitID].hook()
+					--print("Boss already seen. Redirecting "..KBM.BossID[UnitID].name)
+					--KBM.BossID[UnitID].hook()
 				end
 			else
 				--print(UnitID.." (n/a)")
@@ -502,7 +503,7 @@ local function KBM_UnitHPCheck(units)
 		if KBM_CurrentHook then
 			--KBM_CurrentHook()
 		else
-			--KBM_Encounter = false
+			--KBM.Encounter = false
 			--print("Encounter ended")
 		end
 	end
@@ -510,18 +511,12 @@ end
 
 local function KBM_UnitRemoved(units)
 	--[[local uDetails = {}]]
-	if KBM_Encounter then
+	if KBM.Encounter then
 		if KBM.Options.AutoReset then
 			for UnitID, Specifier in pairs(units) do
-				if KBM_BossID[UnitID] then
-					if KM_KingID == UnitID then
-						KM_KingUnavail = true
-					elseif KM_PrinceID == UnitID then
-						KM_PrinceUnavail = true
-					end
-					if KM_PrinceUnavail and KM_KingUnavail then
-						KM_Reset()
-						print("Encounter ended")
+				if KBM.BossID[UnitID] then
+					if KBM_CurrentMod then
+						KBM_CurrentMod:RemoveUnits(UnitID)
 					end
 				end
 			end
@@ -584,7 +579,7 @@ local function KBM_Timer()
 	
 	if (current - KBM_HeldTime) >= 1 then
 		KBM_HeldTime = KBM_HeldTime + 1
-		if KBM_Encounter then
+		if KBM.Encounter then
 			KBM_TimeElapsed = KBM_HeldTime - KBM_StartTime
 			if KBM_CurrentHook then
 				KBM_CurrentHook()
@@ -596,7 +591,7 @@ end
 
 local function KBM_CastBar(units)
 	--print("KBM_CastBar Event Handled")
-	if KBM_Encounter then
+	if KBM.Encounter then
 		if KBM_CurrentCBHook then
 			KBM_CurrentCBHook(units)
 		end
@@ -606,20 +601,20 @@ local function KBM_CastBar(units)
 	end
 end
 
-local function KBM_TimeToHours(Time)
-	KM_TimeVisual.String = "00"
+function KBM:TimeToHours(Time)
+	self.TimeVisual.String = "00"
 	if Time >= 60 then
-		KM_TimeVisual.Minutes = math.floor(Time / 60)
-		KM_TimeVisual.Seconds = Time - (KM_TimeVisual.Minutes * 60)
-		if KM_TimeVisual.Minutes >= 60 then
-			KM_TimeVisual.Hours = math.floor(KM_TimeVisual.Minutes / 60)
-			KM_TimeVisual.Minutes = KM_TimeVisual.Minutes - math.floor(KM_TimeVisual.Hours * 60)
+		self.TimeVisual.Minutes = math.floor(Time / 60)
+		self.TimeVisual.Seconds = Time - (self.TimeVisual.Minutes * 60)
+		if self.TimeVisual.Minutes >= 60 then
+			self.TimeVisual.Hours = math.floor(self.TimeVisual.Minutes / 60)
+			self.TimeVisual.Minutes = self.TimeVisual.Minutes - math.floor(self.TimeVisual.Hours * 60)
 		else
-			KM_TimeVisual.String = string.format("%02d:%02d", KM_TimeVisual.Minutes, KM_TimeVisual.Seconds)
+			self.TimeVisual.String = string.format("%02d:%02d", self.TimeVisual.Minutes, self.TimeVisual.Seconds)
 		end
 	else
-		KM_TimeVisual.Seconds = Time
-		KM_TimeVisual.String = string.format("%02d", KM_TimeVisual.Seconds)
+		self.TimeVisual.Seconds = Time
+		self.TimeVisual.String = string.format("%02d", self.TimeVisual.Seconds)
 	end
 end
 
@@ -689,6 +684,11 @@ local function KBM_WaitReady(unitID)
 		KBM_BossMod[Mod]:Start(KBM_MainWin)
 		KBM_BossMod[Mod]:AddBosses(KBM_Boss)
 	end
+	print("Current Boss List")
+	print("-----------------")
+	for BossName in pairs(KBM_Boss) do
+		print(BossName)
+	end
 	KBM_PlayerID = unitID
 	--print(KM_SwingMulti)
 end
@@ -729,7 +729,7 @@ local function KBM_Help()
 end
 
 local function KBM_Reset()
-	if KBM_Encounter then
+	if KBM.Encounter then
 		if KBM_CurrentMod then
 			KBM_CurrentMod:Reset()
 		end

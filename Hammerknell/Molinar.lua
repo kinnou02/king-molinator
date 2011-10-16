@@ -102,7 +102,7 @@ KM.ForecastSwing = 0
 KBM = KBM_RegisterMod("Molinar", KM)
 
 KM.ModDetails = {
-		DPSHook = function (units) KM:UnitHPCheck(units) end,
+		DPSHook = function (unitDetails, unitID) KM:UnitHPCheck(unitDetails, unitID) end,
 		CBHook = function (units) KM:CastBar(units) end,
 		Mod = KM,
 }
@@ -145,6 +145,18 @@ function KM:SaveVars()
 	KM_Settings = self.Settings
 end
 
+function KM:RemoveUnits(UnitID)
+	if self.KingID == UnitID then
+		self.KingUnavail = true
+	elseif self.PrinceID == UnitID then
+		self.PrinceUnavail = true
+	end
+	if self.PrinceUnavail and self.KingUnavail then
+		KM:Reset()
+		print("Encounter ended")
+	end
+end
+
 function KM:UnitHPCheck(unitDetails, unitID)
 	
 	if unitDetails and unitID then
@@ -159,7 +171,7 @@ function KM:UnitHPCheck(unitDetails, unitID)
 					self.KingID = unitID
 					if not self.EncounterRunning then
 						self.EncounterRunning = true
-						KBM_Encounter = false
+						KBM.Encounter = false
 					end
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
@@ -183,7 +195,7 @@ function KM:UnitHPCheck(unitDetails, unitID)
 					--print("Activating Dollin")
 					if not self.EncounterRunning then
 						self.EncounterRunning = true
-						KBM_Encounter = false
+						KBM.Encounter = false
 					end
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
@@ -204,14 +216,14 @@ function KM:UnitHPCheck(unitDetails, unitID)
 end
 
 function KM:Reset()
-	KBM_Encounter = false
+	KBM.Encounter = false
 	self.EncounterRunning = false
 	if self.KingID then
 		KBM.BossID[self.KingID] = nil
 	end
 	self.KingID = nil
 	if self.PrinceID then
-		KBM_BossID[self.PrinceID] = nil
+		KBM.BossID[self.PrinceID] = nil
 	end
 	self.PrinceID = nil
 	self.KingDPSTable = {}
@@ -317,12 +329,12 @@ function KM:DPSUpdate()
 			end
 		end
 		self.KingPerc = KingCurrentHP / self.KingHPMax
-		if #self.KingDPSTable >= KingMol_Main.SampleDPS then
+		if #self.KingDPSTable >= self.Settings.SampleDPS then
 			DumpDPS = table.remove(self.KingDPSTable, 1)
 			table.insert(self.KingDPSTable, KingDPS)
 			if not DumpDPS then DumpDPS = 0 end
 			self.KingSample = self.KingSample - DumpDPS + KingDPS
-			self.KingSampleDPS = self.KingSample / KingMol_Main.SampleDPS
+			self.KingSampleDPS = self.KingSample / self.Settings.SampleDPS
 		else
 			if self.TimeElapsed < 1 then self.TimeElapsed = 1 end
 			self.KingSampleDPS = self.PrinceSample / self.TimeElapsed
@@ -341,18 +353,18 @@ function KM:DPSUpdate()
 			end
 		end
 		self.PrincePerc = PrinceCurrentHP / self.PrinceHPMax
-		if #self.PrinceDPSTable >= KingMol_Main.SampleDPS then
+		if #self.PrinceDPSTable >= self.Settings.SampleDPS then
 			DumpDPS = table.remove(self.PrinceDPSTable, 1)
 			table.insert(self.PrinceDPSTable, PrinceDPS)
 			if not DumpDPS then DumpDPS = 0 end
 			self.PrinceSample = self.PrinceSample - DumpDPS + PrinceDPS
-			self.PrinceSampleDPS = self.PrinceSample / KingMol_Main.SampleDPS
+			self.PrinceSampleDPS = self.PrinceSample / self.Settings.SampleDPS
 		else
 			if self.TimeElapsed < 1 then self.TimeElapsed = 1 end
 			self.PrinceSampleDPS = self.PrinceSample / self.TimeElapsed
 			table.insert(self.PrinceDPSTable, PrinceDPS)
 		end
-		self.CheckTrends()
+		self:CheckTrends()
 		if PrinceCurrentHP == 0 and KingCurrentHP == 0 then
 			self:Reset()
 		end
@@ -819,15 +831,15 @@ function KM:Timer()
 		local udiff = (current - self.UpdateTime)
 		if diff >= 1 then
 			self.TimeElapsed = self.TimeElapsed + math.floor(diff)
-			self.TimeToHours(self.TimeElapsed)
-			self.DPSUpdate()
+			KBM:TimeToHours(self.TimeElapsed)
+			self:DPSUpdate()
 			self.HeldTime = current - (diff - math.floor(diff))
 			self.UpdateTime = current
 		elseif udiff > 0.15 then
-			self.CheckTrends()
+			self:CheckTrends()
 			self.UpdateTime = current
 		end
-		if self.Settins.PrinceBar then
+		if self.Settings.PrinceBar then
 			if self.PrinceID then
 				self:UpdatePrinceCast()
 			end
