@@ -476,7 +476,7 @@ local function KBM_UnitHPCheck(units)
 				if not KBM.BossID[UnitID] then
 					if KBM_Boss[uDetails.name] then
 						--print("Boss seen (adding): "..UnitID.." ("..uDetails.name..") ")
-						--if uDetails.level == "??" then
+						if uDetails.level == KBM_Boss[uDetails.name].Level then
 							KBM.BossID[UnitID] = {}
 							KBM.BossID[UnitID].name = uDetails.name
 							KBM.BossID[UnitID].monitor = true
@@ -496,7 +496,7 @@ local function KBM_UnitHPCheck(units)
 								--print("Boss has been killed: Removing")
 								KBM.BossID[UnitID] = nil
 							end
-						--end
+						end
 					else
 						--print("Unit is not a boss: "..UnitID.." ("..uDetails.name..")")
 					end
@@ -736,6 +736,10 @@ local function KBM_Reset()
 	if KBM.Encounter then
 		if KBM_CurrentMod then
 			KBM_CurrentMod:Reset()
+			KBM_CurrentMod = nil
+			KBM_CurrentCBHook = nil
+			KBM_CurrentHook = nil
+			KBM_CurrentBoss = ""
 		end
 	else
 		print("No encounter to reset.")

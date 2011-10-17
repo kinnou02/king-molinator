@@ -47,6 +47,7 @@ KM.PrinceCastText = nil
 KM.Abilities = {}
 KM.Abilities["Terminate Life"] = KBM_ToAbilityID(414115046)
 KM.Abilities["Rend Life"] = KBM_ToAbilityID(651359498)
+--KM.Abilities["Rend Life"] = KBM_ToAbilityID(1837656323) -- Chronicles Filter Test
 KM.Abilities["Frightening Shout"] = KBM_ToAbilityID(234795144)
 KM.Abilities["Cursed Blows"] = KBM_ToAbilityID(104359418)
 KM.Abilities["Crushing Regret"] = KBM_ToAbilityID(977580176)
@@ -129,6 +130,7 @@ KM.ModDetails = {
 		DPSHook = function (unitDetails, unitID) KM:UnitHPCheck(unitDetails, unitID) end,
 		CBHook = function (units) KM:CastBar(units) end,
 		Mod = KM,
+		Level = "??",
 }
 
 function KM:AddBosses(KBM_Boss)
@@ -172,6 +174,15 @@ function KM:LoadVars()
 	for Setting, Value in pairs(KM_Settings) do
 		self.Settings[Setting] = Value
 	end
+	KM.AbilityWatch[KM.Abilities['Rend Life']].Watch = self.Settings.RendEnabled
+	KM.AbilityWatch[KM.Abilities['Terminate Life']].Watch = self.Settings.TerminateEnabled
+	KM.AbilityWatch[KM.Abilities['Prince Consuming Essence']].Watch = self.Settings.PCEssenceEnabled
+	KM.AbilityWatch[KM.Abilities['King Consuming Essence']].Watch = self.Settings.KCEssenceEnabled
+	KM.AbilityWatch[KM.Abilities['Runic Feedback']].Watch = self.Settings.RFeedbackEnabled
+	KM.AbilityWatch[KM.Abilities['Crushing Regret']].Watch = self.Settings.CrushingEnabled
+	KM.AbilityWatch[KM.Abilities['Forked Blast']].Watch = self.Settings.FBlastEnabled
+	KM.AbilityWatch[KM.Abilities['Frightening Shout']].Watch = self.Settings.FShoutEnabled
+	KM.AbilityWatch[KM.Abilities['Cursed Blows']].Watch = self.Settings.CursedEnabled
 end
 
 function KM:SaveVars()
@@ -261,9 +272,6 @@ function KM:Reset()
 	self.PrinceID = nil
 	self.KingDPSTable = {}
 	self.PrinceDPSTable = {}
-	KBM_CurrentBoss = ""
-	KBM_CurrentHook = nil
-	KBM_CurrentCBHook = nil
 	self.KingHPBar:SetWidth(self.BossHPWidth)
 	self.PrinceHPBar:SetWidth(self.BossHPWidth)
 	self.StatusBar:SetPoint("CENTER", self.FrameBase, "CENTER")

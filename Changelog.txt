@@ -1,3 +1,21 @@
+v0.2.2
+* First Instance of the Encounter being a plug-in mod.
+* Added Cast filtering for both King Molinar and Prince Dollin.
+* Added the following Cast filters.
+** Rend Life.
+** Terminate Life.
+** Crushing Regret.
+** Consuming Essense (King Molinar.)
+** Consuming Essense (Prince Dollin.)
+** Forked Blast.
+** Runic Feedback.
+** Frightening Shout.
+** Cursed Blows.
+* Added Cast Filtering Options.
+* Once again removed Chronicles triggering the HK Mod.
+* All commands are now /kbm not /km
+* Autoreset enabled by default, and still a slash command only (/kbmautoreset).
+----
 v0.2.1
 * Fixed bugged SavedVariables.
 ----
