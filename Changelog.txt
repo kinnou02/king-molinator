@@ -1,3 +1,10 @@
+v0.2.3
+* Note: Early release to hopefully catch inconsistency with abilities.
+* Fix should be in place for better Cast bar filtering.
+* Added the ability to select options via the description.
+* More backend changes to the plug-in system.
+* Improved options page functionality.
+----
 v0.2.2
 * First Instance of the Encounter being a plug-in mod.
 * Added Cast filtering for both King Molinar and Prince Dollin.

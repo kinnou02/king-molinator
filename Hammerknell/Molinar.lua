@@ -20,6 +20,7 @@ local KM = {
 		Name = "King Molinar",
 		ID = "KingMolinar",
 	},
+	Instance = "Hammerknell",
 }
 
 -- Addon Variables
@@ -45,26 +46,31 @@ KM.KingCastText = nil
 KM.PrinceCastText = nil
 
 KM.Abilities = {}
-KM.Abilities["Terminate Life"] = KBM_ToAbilityID(414115046)
+--[[KM.Abilities["Terminate Life"] = KBM_ToAbilityID(414115046)
 KM.Abilities["Rend Life"] = KBM_ToAbilityID(651359498)
---KM.Abilities["Rend Life"] = KBM_ToAbilityID(1837656323) -- Chronicles Filter Test
 KM.Abilities["Frightening Shout"] = KBM_ToAbilityID(234795144)
 KM.Abilities["Cursed Blows"] = KBM_ToAbilityID(104359418)
 KM.Abilities["Crushing Regret"] = KBM_ToAbilityID(977580176)
 KM.Abilities["Prince Consuming Essence"] = KBM_ToAbilityID(384526138)
 KM.Abilities["King Consuming Essence"] = KBM_ToAbilityID(2132063128)
 KM.Abilities["Forked Blast"] = KBM_ToAbilityID(1920920671)
-KM.Abilities["Runic Feedback"] = KBM_ToAbilityID(1531103847)
+KM.Abilities["Runic Feedback"] = KBM_ToAbilityID(1531103847)]]
+
+-- Chronicles Tests
+KM.Abilities["Rend Life"] = KBM_ToAbilityID(1837656323)
+KM.Abilities["Cursed Blows"] = KBM_ToAbilityID(1787214608)
+KM.Abilities["Frightening Shout"] = KBM_ToAbilityID(1281641310)
 
 function KM.AbilityWatch:Add(Ability, aHandler)
 	self[Ability] = {
-		Watch = true,
+		PrinceWatch = true,
+		KingWatch = true,
 		ID = Ability,
-		Handler = aHandler,
+		Handler = nil,
 	}
 end
 
-KM.AbilityWatch:Add(KM.Abilities['Terminate Life'])
+--[[KM.AbilityWatch:Add(KM.Abilities['Terminate Life'])
 KM.AbilityWatch:Add(KM.Abilities['Rend Life'])
 KM.AbilityWatch:Add(KM.Abilities['Frightening Shout'])
 KM.AbilityWatch:Add(KM.Abilities['Cursed Blows'])
@@ -72,7 +78,22 @@ KM.AbilityWatch:Add(KM.Abilities['Crushing Regret'])
 KM.AbilityWatch:Add(KM.Abilities['Prince Consuming Essence'])
 KM.AbilityWatch:Add(KM.Abilities['King Consuming Essence'])
 KM.AbilityWatch:Add(KM.Abilities['Forked Blast'])
-KM.AbilityWatch:Add(KM.Abilities['Runic Feedback'])
+KM.AbilityWatch:Add(KM.Abilities['Runic Feedback'])]]
+
+KM.AbilityWatch:Add("Terminate Life")
+KM.AbilityWatch:Add("Rend Life")
+KM.AbilityWatch:Add("Frightening Shout")
+KM.AbilityWatch:Add("Cursed Blows")
+KM.AbilityWatch:Add("Crushing Regret")
+KM.AbilityWatch:Add("Consuming Essence")
+KM.AbilityWatch:Add("Forked Blast")
+KM.AbilityWatch:Add("Runic Feedback")
+
+-- Chronicles Tests
+--KM.AbilityWatch:Add(KM.Abilities['cRend Life'])
+--KM.AbilityWatch:Add(KM.Abilities['cCursed Blows'])
+--KM.AbilityWatch:Add(KM.Abilities['cFrightening Shout'])
+
 
 -- Frame Defaults
 KM.FBWidth = 600
@@ -124,13 +145,14 @@ KM.DisplayReady = false
 KM.CurrentSwing = 0
 KM.ForecastSwing = 0
 
-KBM = KBM_RegisterMod("Molinar", KM)
+local KBM = KBM_RegisterMod("Molinar", KM)
 
 KM.ModDetails = {
 		DPSHook = function (unitDetails, unitID) KM:UnitHPCheck(unitDetails, unitID) end,
 		CBHook = function (units) KM:CastBar(units) end,
 		Mod = KM,
 		Level = "??",
+		Active = false,
 }
 
 function KM:AddBosses(KBM_Boss)
@@ -174,15 +196,15 @@ function KM:LoadVars()
 	for Setting, Value in pairs(KM_Settings) do
 		self.Settings[Setting] = Value
 	end
-	KM.AbilityWatch[KM.Abilities['Rend Life']].Watch = self.Settings.RendEnabled
-	KM.AbilityWatch[KM.Abilities['Terminate Life']].Watch = self.Settings.TerminateEnabled
-	KM.AbilityWatch[KM.Abilities['Prince Consuming Essence']].Watch = self.Settings.PCEssenceEnabled
-	KM.AbilityWatch[KM.Abilities['King Consuming Essence']].Watch = self.Settings.KCEssenceEnabled
-	KM.AbilityWatch[KM.Abilities['Runic Feedback']].Watch = self.Settings.RFeedbackEnabled
-	KM.AbilityWatch[KM.Abilities['Crushing Regret']].Watch = self.Settings.CrushingEnabled
-	KM.AbilityWatch[KM.Abilities['Forked Blast']].Watch = self.Settings.FBlastEnabled
-	KM.AbilityWatch[KM.Abilities['Frightening Shout']].Watch = self.Settings.FShoutEnabled
-	KM.AbilityWatch[KM.Abilities['Cursed Blows']].Watch = self.Settings.CursedEnabled
+	KM.AbilityWatch['Rend Life'].PrinceWatch = self.Settings.RendEnabled
+	KM.AbilityWatch['Terminate Life'].PrinceWatch = self.Settings.TerminateEnabled
+	KM.AbilityWatch['Consuming Essence'].PrinceWatch = self.Settings.PCEssenceEnabled
+	KM.AbilityWatch['Consuming Essence'].KingWatch = self.Settings.KCEssenceEnabled
+	KM.AbilityWatch['Runic Feedback'].PrinceWatch = self.Settings.RFeedbackEnabled
+	KM.AbilityWatch['Crushing Regret'].PrinceWatch = self.Settings.CrushingEnabled
+	KM.AbilityWatch['Forked Blast'].PrinceWatch = self.Settings.FBlastEnabled
+	KM.AbilityWatch['Frightening Shout'].KingWatch = self.Settings.FShoutEnabled
+	KM.AbilityWatch['Cursed Blows'].KingWatch = self.Settings.CursedEnabled
 end
 
 function KM:SaveVars()
@@ -370,15 +392,16 @@ function KM:DPSUpdate()
 			end
 		end
 		self.KingPerc = KingCurrentHP / self.KingHPMax
-		if #self.KingDPSTable >= self.Settings.SampleDPS then
+		dpsheld = #self.KingDPSTable
+		if dpsheld >= self.Settings.SampleDPS then
 			DumpDPS = table.remove(self.KingDPSTable, 1)
 			table.insert(self.KingDPSTable, KingDPS)
 			if not DumpDPS then DumpDPS = 0 end
 			self.KingSample = self.KingSample - DumpDPS + KingDPS
 			self.KingSampleDPS = self.KingSample / self.Settings.SampleDPS
 		else
-			if self.TimeElapsed < 1 then self.TimeElapsed = 1 end
-			self.KingSampleDPS = self.PrinceSample / self.TimeElapsed
+			if dpsheld == 0 then dpsheld = 1 end
+			self.KingSampleDPS = self.PrinceSample / dpsheld
 			table.insert(self.KingDPSTable, KingDPS)
 		end
 		local PrinceCurrentHP = self.PrinceLastHP
@@ -394,15 +417,16 @@ function KM:DPSUpdate()
 			end
 		end
 		self.PrincePerc = PrinceCurrentHP / self.PrinceHPMax
-		if #self.PrinceDPSTable >= self.Settings.SampleDPS then
+		dpsheld = #self.PrinceDPSTable
+		if dpsheld > self.Settings.SampleDPS then
 			DumpDPS = table.remove(self.PrinceDPSTable, 1)
 			table.insert(self.PrinceDPSTable, PrinceDPS)
 			if not DumpDPS then DumpDPS = 0 end
 			self.PrinceSample = self.PrinceSample - DumpDPS + PrinceDPS
 			self.PrinceSampleDPS = self.PrinceSample / self.Settings.SampleDPS
 		else
-			if self.TimeElapsed < 1 then self.TimeElapsed = 1 end
-			self.PrinceSampleDPS = self.PrinceSample / self.TimeElapsed
+			if dpsheld == 0 then dpsheld = 1 end
+			self.PrinceSampleDPS = self.PrinceSample / dpsheld
 			table.insert(self.PrinceDPSTable, PrinceDPS)
 		end
 		self:CheckTrends()
@@ -675,7 +699,7 @@ function KM:BuildDisplay()
 end
 
 function KM.UpdateBaseVars(callType)
-	Utility.Serialize.Inline(self)
+	--Utility.Serialize.Inline(self)
 	if callType == "start" then
 		KM.KingCastbar:SetVisible(true)
 		KM.PrinceCastbar:SetVisible(true)
@@ -692,11 +716,13 @@ function KM.UpdateBaseVars(callType)
 end
 
 function KM:UpdateKingCast()
+	--print("King Update ID: "..self.KingID)
 	local bDetails = Inspect.Unit.Castbar(self.KingID)
 	if bDetails then
-		if bDetails.ability then
-			if KM.AbilityWatch[bDetails.ability] then
-				if KM.AbilityWatch[bDetails.ability].Watch then
+		--print("Cast in progress: "..tostring(bDetails.ability).." -- "..tostring(bDetails.abilityName))
+		if bDetails.abilityName then
+			if KM.AbilityWatch[bDetails.abilityName] then
+				if KM.AbilityWatch[bDetails.abilityName].KingWatch then
 					bCastTime = bDetails.duration
 					bProgress = bDetails.remaining
 					self.KingCastProgress:SetWidth(self.KingCastbar:GetWidth() * (1-(bProgress/bCastTime)))
@@ -720,19 +746,19 @@ function KM:ManageKingCasts(Visible)
 	--if Visible then
 		local bDetails = Inspect.Unit.Castbar(self.KingID)
 		if bDetails then
-			if bDetails.ability then
-				if self.AbilityWatch[bDetails.ability] then
-					if self.AbilityWatch[bDetails.ability].Watch then
-						local aDetails = Inspect.Ability.Detail(bDetails.ability)
+			if bDetails.abilityName then
+				if self.AbilityWatch[bDetails.abilityName] then
+					if self.AbilityWatch[bDetails.abilityName].KingWatch then
+						--[[local aDetails = Inspect.Ability.Detail(bDetails.ability)
 						if aDetails then
 							self.KingCastIcon:SetTexture("Rift", aDetails.icon)
 							self.KingCastIcon:SetVisible(true)
 							self.KingCasting = true
 							self.KingCastbar:SetVisible(true)
-						else
-							self.KingCasting = true
-							self.KingCastbar:SetVisible(true)	
-						end
+						else]]
+						self.KingCasting = true
+						self.KingCastbar:SetVisible(true)	
+						--end
 					end
 				end
 			end
@@ -750,9 +776,9 @@ end
 function KM:UpdatePrinceCast()
 	local bDetails = Inspect.Unit.Castbar(self.PrinceID)
 	if bDetails then
-		if bDetails.ability then
-			if KM.AbilityWatch[bDetails.ability] then
-				if KM.AbilityWatch[bDetails.ability].Watch then
+		if bDetails.abilityName then
+			if KM.AbilityWatch[bDetails.abilityName] then
+				if KM.AbilityWatch[bDetails.abilityName].PrinceWatch then
 					bCastTime = bDetails.duration
 					bProgress = bDetails.remaining
 					self.PrinceCastProgress:SetWidth(self.PrinceCastbar:GetWidth() * (1-(bProgress/bCastTime)))
@@ -776,19 +802,19 @@ function KM:ManagePrinceCasts(Visible)
 	--if Visible then
 		local bDetails = Inspect.Unit.Castbar(self.PrinceID)
 		if bDetails then
-			if bDetails.ability then
-				if self.AbilityWatch[bDetails.ability] then
-					if self.AbilityWatch[bDetails.ability].Watch then
-						local aDetails = Inspect.Ability.Detail(bDetails.ability)
+			if bDetails.abilityName then
+				if self.AbilityWatch[bDetails.abilityName] then
+					if self.AbilityWatch[bDetails.abilityName].PrinceWatch then
+						--[[local aDetails = Inspect.Ability.Detail(bDetails.ability)
 						if aDetails then
 							self.PrinceCastIcon:SetTexture("Rift", aDetails.icon)
 							self.PrinceCastIcon:SetVisible(true)
 							self.PrinceCasting = true
 							self.PrinceCastbar:SetVisible(true)
-						else
+						else]]
 							self.PrinceCasting = true
 							self.PrinceCastbar:SetVisible(true)
-						end
+						--end
 					end
 				end
 			end
@@ -871,16 +897,11 @@ function KM:CastBar(units)
 	end
 end
 
-function KM:Timer()
+function KM:Timer(current, diff)
 	if self.EncounterRunning then
-		local current = Inspect.Time.Real()
-		local diff = (current - self.HeldTime)
-		local udiff = (current - self.UpdateTime)
+		local udiff = current - self.UpdateTime
 		if diff >= 1 then
-			self.TimeElapsed = self.TimeElapsed + math.floor(diff)
-			KBM:TimeToHours(self.TimeElapsed)
 			self:DPSUpdate()
-			self.HeldTime = current - (diff - math.floor(diff))
 			self.UpdateTime = current
 		elseif udiff > 0.15 then
 			self:CheckTrends()
@@ -892,6 +913,7 @@ function KM:Timer()
 			end
 		end
 		if self.Settings.KingBar then
+			--print("check kingID")
 			if self.KingID then
 				self:UpdateKingCast()
 			end
@@ -934,42 +956,41 @@ function KM.KingMolinar:Options()
 	end
 	function self:RendEnabled(bool)
 		KM.Settings.RendEnabled = bool
-		KM.AbilityWatch[KM.Abilities['Rend Life']].Watch = bool
+		KM.AbilityWatch["Rend Life"].PrinceWatch = bool
 	end
 	function self:TerminateEnabled(bool)
 		KM.Settings.TerminateEnabled = bool
-		KM.AbilityWatch[KM.Abilities['Terminate Life']].Watch = bool
+		KM.AbilityWatch["Terminate Life"].PrinceWatch = bool
 	end
 	function self:PCEssenceEnabled(bool)
 		KM.Settings.PCEssenceEnabled = bool
-		KM.AbilityWatch[KM.Abilities['Prince Consuming Essence']].Watch = bool
+		KM.AbilityWatch["Consuming Essence"].PrinceWatch = bool
 	end
 	function self:KCEssenceEnabled(bool)
 		KM.Settings.KCEssenceEnabled = bool
-		KM.AbilityWatch[KM.Abilities['King Consuming Essence']].Watch = bool
+		KM.AbilityWatch["Consuming Essence"].KingWatch = bool
 	end
 	function self:CursedEnabled(bool)
 		KM.Settings.CursedEnabled = bool
-		KM.AbilityWatch[KM.Abilities['Cursed Blows']].Watch = bool
+		KM.AbilityWatch["Cursed Blows"].KingWatch = bool
 	end
 	function self:FShoutEnabled(bool)
 		KM.Settings.FShoutEnabled = bool
-		KM.AbilityWatch[KM.Abilities['Frightening Shout']].Watch = bool
+		KM.AbilityWatch["Frightening Shout"].KingWatch = bool
 	end
 	function self:RFeedbackEnabled(bool)
 		KM.Settings.RFeedbackEnabled = bool
-		KM.AbilityWatch[KM.Abilities['Runic Feedback']].Watch = bool
+		KM.AbilityWatch["Runic Feedback"].PrinceWatch = bool
 	end
 	function self:CrushingEnabled(bool)
 		KM.Settings.CrushingEnabled = bool
-		KM.AbilityWatch[KM.Abilities['Crushing Regret']].Watch = bool
+		KM.AbilityWatch["Crushing Regret"].PrinceWatch = bool
 	end
 	function self:FBlastEnabled(bool)
-		KM.Settings.CrushingEnabled = bool
-		KM.AbilityWatch[KM.Abilities['Forked Blast']].Watch = bool
+		KM.Settings.FBlastEnabled = bool
+		KM.AbilityWatch["Forked Blast"].PrinceWatch = bool
 	end
 	function self:MonitorEnabled(bool)
-		self.Setting = bool
 		if bool then
 			--print("Monitor is now Enabled")
 		else
@@ -1001,12 +1022,7 @@ end
 function KM:Start(KBM_MainWin)
 	self.FBDefX = self.Settings.LocX
 	self.FBDefY = self.Settings.LocY
-	table.insert(Event.System.Update.Begin, {function () self:Timer() end, "KingMolinator", "Event"}) -- Actual run-time timer.
-	KM.Header = KBM_MainWin.Menu:CreateHeader("Hammerknell", self.ToggleEnabled, true)
-	KM.Header.Check:SetEnabled(false)
-	--[[KM.Murdantix.MenuItem = KBM_MainWin.Menu:CreateEncounter(self.HK.Murdantix.Name, nil, false, KM_HK.Header)
-	KM.Murdantix.MenuItem:Enabled(false)
-	KM.Matron.MenuItem = KBM_MainWin.Menu:CreateEncounter("Matron Zamira", nil, false, KM_HK.Header)
+	--[[KM.Matron.MenuItem = KBM_MainWin.Menu:CreateEncounter("Matron Zamira", nil, false, KM_HK.Header)
 	KM.Matron.MenuItem:Enabled(false)
 	KM.Sicaron.MenuItem = KBM_MainWin.Menu:CreateEncounter("Sicaron", nil, false, KM_HK.Header)
 	KM.Sicaron.MenuItem:Enabled(false)
@@ -1016,6 +1032,7 @@ function KM:Start(KBM_MainWin)
 	KM.Prime.MenuItem:Enabled(false)
 	KM.Grugonim.MenuItem = KBM_MainWin.Menu:CreateEncounter("Grugonim", nil, false, KM_HK.Header)
 	KM.Grugonim.MenuItem:Enabled(false)]]
+	self.Header = KBM.HeaderList[self.Instance]
 	self.KingMolinar.MenuItem = KBM_MainWin.Menu:CreateEncounter(self.KingMolinar.Name, self.KingMolinar, true, self.Header)
 	self.KingMolinar.MenuItem.Check:SetEnabled(false)
 	--[[KM.Estrode.MenuItem = KBM_MainWin.Menu:CreateEncounter("Estrode", KM_ToggleEnabled, false, KM_HK.Header)

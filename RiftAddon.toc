@@ -1,6 +1,8 @@
 ﻿Identifier = "KingMolinator"
 
-Name = "King Molinator"
+Name = "King Molinator: Boss Mods"
+
+NameShort = "KM:Boss Mods"
 
 Description = "Soon to be full Rift Boss Mods (Named - KM:Boss Mods)"
 
@@ -8,7 +10,7 @@ Author = "Paul Snart"
 Website = "http://twitter.com/#!/psnart"
 Email = "snarty@gmail.com"
 
-Version = "0.2.2"
+Version = "0.2.3"
 
 Environment = "1.5"
 
@@ -25,6 +27,8 @@ Embed = {
 
 SavedVariables = {
 	KM_Settings = "account",
+	KBMMX_Settings = "account",
+	KBMHK_Settings = "account",
 	KBM_GlobalOptions = "account",
 }
 
