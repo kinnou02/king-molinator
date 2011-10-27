@@ -686,9 +686,7 @@ function KM:UpdateKingCast()
 	local bDetails = Inspect.Unit.Castbar(self.KingID)
 	if bDetails then
 		if bDetails.abilityName then
-			--print("(KING) Checking cast update: "..bDetails.abilityName)
 			if KM.King.CastFilters[bDetails.abilityName] and KM.Settings.KingBar then
-				--print("King Cast Found")
 				if KM.King.CastFilters[bDetails.abilityName].Enabled then
 					if not self.KingCasting then
 						self.KingCasting = true
@@ -755,10 +753,7 @@ function KM:UpdatePrinceCast()
 	local bDetails = Inspect.Unit.Castbar(self.PrinceID)
 	if bDetails then
 		if bDetails.abilityName then
-			--print("(PRINCE) Checking cast update: "..bDetails.abilityName)
-			--print("Table: "..tostring(self.Prince.CastFilters[bDetails.abilityName]))
 			if self.Prince.CastFilters[bDetails.abilityName] and self.Settings.PrinceBar then
-				--print("Prince Cast Found")
 				if self.Prince.CastFilters[bDetails.abilityName].Enabled then
 					if not self.PrinceCasting then
 						self.PrinceCasting = true
@@ -859,7 +854,6 @@ function KM:Timer(current, diff)
 			self:UpdateKingCast()
 		end
 	end
-	--self.UpdateTestBar()
 end
 
 function KM.KingMolinar:OptionsClose()
@@ -902,7 +896,6 @@ function KM.KingMolinar:Options()
 	function self:RendEnabled(bool)
 		KM.Settings.RendEnabled = bool
 		KM.Prince.CastFilters["Rend Life"].Enabled = bool
-		print("Rend Life changed to: "..tostring(bool))
 	end
 	function self:TerminateEnabled(bool)
 		KM.Settings.TerminateEnabled = bool
