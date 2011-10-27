@@ -1,7 +1,7 @@
 v0.3.0
 * Adjusted how an Encounter Starts / Ends. Should be more fluid.
-* Preperation work added for Notify type boss mechanic timers.
-* Preperation work added for Boss say mechanic timers.
+* Preparation work added for Notify type boss mechanic timers.
+* Preparation work added for Boss say mechanic timers.
 * Added first draft of Cascading Timer Mechanics
 * Added Option to show/hide Timer Anchor.
 * Added Option to Move/lock Timer Anchor.
