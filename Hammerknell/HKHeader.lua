@@ -9,7 +9,7 @@ local HK = {
 	Header = nil,
 	Enabled = true,
 	IsInstance = true,
-	MenuName = "Hammerknell",
+	Name = "Hammerknell",
 }
 
 local KBM = KBM_RegisterMod("Hammerknell", HK)
@@ -29,10 +29,10 @@ end
 function HK:SaveVars()
 end
 
-function HK:Start(KBM_MainWin)
+function HK:Start()
 	function self:Enabled(bool)
 	
 	end
-	HK.Header = KBM_MainWin.Menu:CreateHeader("Hammerknell", self.Enabled, true)
+	HK.Header = KBM.MainWin.Menu:CreateHeader(self.Name, self.Enabled, true)
 	HK.Header.Check:SetEnabled(false)
 end

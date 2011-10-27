@@ -1,3 +1,25 @@
+v0.3.0
+* Adjusted how an Encounter Starts / Ends. Should be more fluid.
+* Preperation work added for Notify type boss mechanic timers.
+* Preperation work added for Boss say mechanic timers.
+* Added first draft of Cascading Timer Mechanics
+* Added Option to show/hide Timer Anchor.
+* Added Option to Move/lock Timer Anchor.
+* Added Option to show/hide future Castbar Anchor.
+* Added Option to Move/lock future Castbar Anchor. 
+* Added Timers to Rune King Molinar and Prince Dollin
+* New Timer: (Prince Dollin) Runic Feedback
+* New Timer: (Prince Dollin) Consuming Essence
+* New Timer: (Prince Dollin) Terminate Life
+* New Timer: (King Molinar) Cursed Blows
+* New Timer: (King Molinar) Consuming Essence
+* Added Encounter: Murdantix
+* Added Timers for Murdantix
+* New Timer: (Murdantix) Mangling Crush
+* New Timer: (Murdantix) Ferocious Pound
+* Added Selective Timer Options for Murdantix
+* Note: Sizing of castbars, and Timers currently removed. They'll return.
+----
 v0.2.3
 * Note: Early release to hopefully catch inconsistency with abilities.
 * Fix should be in place for better Cast bar filtering.

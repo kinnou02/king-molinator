@@ -46,54 +46,6 @@ KM.KingCastText = nil
 KM.PrinceCastText = nil
 
 KM.Abilities = {}
---[[KM.Abilities["Terminate Life"] = KBM_ToAbilityID(414115046)
-KM.Abilities["Rend Life"] = KBM_ToAbilityID(651359498)
-KM.Abilities["Frightening Shout"] = KBM_ToAbilityID(234795144)
-KM.Abilities["Cursed Blows"] = KBM_ToAbilityID(104359418)
-KM.Abilities["Crushing Regret"] = KBM_ToAbilityID(977580176)
-KM.Abilities["Prince Consuming Essence"] = KBM_ToAbilityID(384526138)
-KM.Abilities["King Consuming Essence"] = KBM_ToAbilityID(2132063128)
-KM.Abilities["Forked Blast"] = KBM_ToAbilityID(1920920671)
-KM.Abilities["Runic Feedback"] = KBM_ToAbilityID(1531103847)]]
-
--- Chronicles Tests
-KM.Abilities["Rend Life"] = KBM_ToAbilityID(1837656323)
-KM.Abilities["Cursed Blows"] = KBM_ToAbilityID(1787214608)
-KM.Abilities["Frightening Shout"] = KBM_ToAbilityID(1281641310)
-
-function KM.AbilityWatch:Add(Ability, aHandler)
-	self[Ability] = {
-		PrinceWatch = true,
-		KingWatch = true,
-		ID = Ability,
-		Handler = nil,
-	}
-end
-
---[[KM.AbilityWatch:Add(KM.Abilities['Terminate Life'])
-KM.AbilityWatch:Add(KM.Abilities['Rend Life'])
-KM.AbilityWatch:Add(KM.Abilities['Frightening Shout'])
-KM.AbilityWatch:Add(KM.Abilities['Cursed Blows'])
-KM.AbilityWatch:Add(KM.Abilities['Crushing Regret'])
-KM.AbilityWatch:Add(KM.Abilities['Prince Consuming Essence'])
-KM.AbilityWatch:Add(KM.Abilities['King Consuming Essence'])
-KM.AbilityWatch:Add(KM.Abilities['Forked Blast'])
-KM.AbilityWatch:Add(KM.Abilities['Runic Feedback'])]]
-
-KM.AbilityWatch:Add("Terminate Life")
-KM.AbilityWatch:Add("Rend Life")
-KM.AbilityWatch:Add("Frightening Shout")
-KM.AbilityWatch:Add("Cursed Blows")
-KM.AbilityWatch:Add("Crushing Regret")
-KM.AbilityWatch:Add("Consuming Essence")
-KM.AbilityWatch:Add("Forked Blast")
-KM.AbilityWatch:Add("Runic Feedback")
-
--- Chronicles Tests
---KM.AbilityWatch:Add(KM.Abilities['cRend Life'])
---KM.AbilityWatch:Add(KM.Abilities['cCursed Blows'])
---KM.AbilityWatch:Add(KM.Abilities['cFrightening Shout'])
-
 
 -- Frame Defaults
 KM.FBWidth = 600
@@ -120,6 +72,7 @@ KM.KingSearchName = "Molinar"
 KM.KingDead = false
 KM.KingUnavail = false
 KM.KingCasting = false
+KM.KingLastCast = ""
 -- Prince Dollin
 KM.PrinceHPP = "100" -- Visual percentage
 KM.PrincePerc = 1 -- Decimal percentage holder.
@@ -133,6 +86,7 @@ KM.PrinceSearchName = "Dollin"
 KM.PrinceDead = false
 KM.PrinceUnavail = false
 KM.PrinceCasting = false
+KM.PrinceLastCast = ""
 -- State Variables
 KM.EncounterRunning = false
 KM.KingID = nil
@@ -147,23 +101,42 @@ KM.ForecastSwing = 0
 
 local KBM = KBM_RegisterMod("Molinar", KM)
 
-KM.ModDetails = {
-		DPSHook = function (unitDetails, unitID) KM:UnitHPCheck(unitDetails, unitID) end,
-		CBHook = function (units) KM:CastBar(units) end,
-		Mod = KM,
-		Level = "??",
-		Active = false,
+KM.Prince = {
+	Mod = KM,
+	Level = "??",
+	Active = false,
+	Name = "Prince Dollin",
+	Castbar = nil,
+	CastFilters = {},
+	Timers = {},
+	Dead = false,
+	Available = false,
+	UnitID = nil,
+}
+KM.King = {
+	Mod = KM,
+	Level = "??",
+	Active = false,
+	Name = "Rune King Molinar",
+	Castbar = nil,
+	CastFilters = {},
+	Timers = {},
+	Dead = false,
+	Available = false,
+	UnitID = nil,
 }
 
 function KM:AddBosses(KBM_Boss)
 	if KBM.Lang == "German" then
-		self.KingName = "Runenkönig Molinar"
-		self.PrinceName = "Prinz Dollin"
+		self.King.Name = "Runenkönig Molinar"
+		self.Prince.Name = "Prinz Dollin"
 	elseif KBM.Lang == "French" then
-		self.KingName = "Roi runique Molinar"
+		self.King.Name = "Roi runique Molinar"
 	end
-	KBM_Boss[self.PrinceName] = self.ModDetails
-	KBM_Boss[self.KingName] = self.ModDetails
+	self.Prince.Descript = self.King.Name.." & "..self.Prince.Name
+	self.King.Descript = self.Prince.Descript
+	KBM_Boss[self.Prince.Name] = self.Prince
+	KBM_Boss[self.King.Name] = self.King
 end
 
 function KM:InitVars()
@@ -194,17 +167,25 @@ end
 
 function KM:LoadVars()
 	for Setting, Value in pairs(KM_Settings) do
-		self.Settings[Setting] = Value
+		if type(KM_Settings[Setting]) == "table" then
+			if #KM_Settings[Setting] then
+				for tSetting, tValue in pairs(KM_Settings[Setting]) do
+					self.Settings[Setting][tSetting] = tValue
+				end
+			end
+		else
+			self.Settings[Setting] = Value	
+		end
 	end
-	KM.AbilityWatch['Rend Life'].PrinceWatch = self.Settings.RendEnabled
-	KM.AbilityWatch['Terminate Life'].PrinceWatch = self.Settings.TerminateEnabled
-	KM.AbilityWatch['Consuming Essence'].PrinceWatch = self.Settings.PCEssenceEnabled
-	KM.AbilityWatch['Consuming Essence'].KingWatch = self.Settings.KCEssenceEnabled
-	KM.AbilityWatch['Runic Feedback'].PrinceWatch = self.Settings.RFeedbackEnabled
-	KM.AbilityWatch['Crushing Regret'].PrinceWatch = self.Settings.CrushingEnabled
-	KM.AbilityWatch['Forked Blast'].PrinceWatch = self.Settings.FBlastEnabled
-	KM.AbilityWatch['Frightening Shout'].KingWatch = self.Settings.FShoutEnabled
-	KM.AbilityWatch['Cursed Blows'].KingWatch = self.Settings.CursedEnabled
+	KM.Prince.CastFilters["Rend Life"] = {Enabled = self.Settings.RendEnabled}
+	KM.Prince.CastFilters["Terminate Life"] = {Enabled = self.Settings.TerminateEnabled}
+	KM.Prince.CastFilters["Consuming Essence"] = {Enabled = self.Settings.PCEssenceEnabled}
+	KM.Prince.CastFilters["Runic Feedback"] = {Enabled = self.Settings.RFeedbackEnabled}
+	KM.Prince.CastFilters["Crushing Regret"] = {Enabled = self.Settings.CrushingEnabled}
+	KM.Prince.CastFilters["Forked Blast"] = {Enabled = self.Settings.FBlastEnabled}
+	KM.King.CastFilters["Frightening Shout"] = {Enabled = self.Settings.FShoutEnabled}
+	KM.King.CastFilters["Cursed Blows"] = {Enabled = self.Settings.CursedEnabled}
+	KM.King.CastFilters["Consuming Essence"] = {Enabled = self.Settings.KCEssenceEnabled}	
 end
 
 function KM:SaveVars()
@@ -218,22 +199,29 @@ function KM:RemoveUnits(UnitID)
 		self.PrinceUnavail = true
 	end
 	if self.PrinceUnavail and self.KingUnavail then
-		KM:Reset()
-		print("Encounter ended")
+		return true
 	end
+	return false
+end
+
+function KM:Death(UnitID)
+	if self.KingID == UnitID then
+		self.King.Dead = true
+	elseif self.PrinceID == UnitID then
+		self.Prince.Dead = true
+	end
+	if self.King.Dead and self.Prince.Dead then
+		return true
+	end
+	return false
 end
 
 function KM:UnitHPCheck(unitDetails, unitID)
 	
 	if unitDetails and unitID then
-		--print(unitDetails.name.." : "..tostring(unitID))
 		if unitDetails.player == nil then
-			if unitDetails.name == self.KingName then
-				--print("Checking Molinar")
-				if self.KingID then
-					--self.DPSUpdate()
-				else
-					--print("Activating Molinar")
+			if unitDetails.name == self.King.Name then
+				if not self.KingID then
 					self.KingID = unitID
 					if not self.EncounterRunning then
 						self.EncounterRunning = true
@@ -248,17 +236,10 @@ function KM:UnitHPCheck(unitDetails, unitID)
 					self.KingDead = false
 					self.KingUnavail = false
 					self.KingCasting = false
-					--print("King HP set: "..self.KingLastHP)
-					-- Temporary during testing
-					-- self.KingLastHP = self.KingHPA
 				end
-			elseif unitDetails.name == self.PrinceName then
-				--print("Checking Dollin")
-				if self.PrinceID then
-					--self.DPSUpdate()
-				else
+			elseif unitDetails.name == self.Prince.Name then
+				if not self.PrinceID then
 					self.PrinceID = unitID
-					--print("Activating Dollin")
 					if not self.EncounterRunning then
 						self.EncounterRunning = true
 						KBM.Encounter = false
@@ -272,9 +253,6 @@ function KM:UnitHPCheck(unitDetails, unitID)
 					self.PrinceDead = false
 					self.PrinceUnavail = false
 					self.PrinceCasting = false
-					--print("Prince HP set: "..self.PrinceLastHP)
-					-- Temporary during testing
-					--self.PrinceLastHP = self.PrinceHPA
 				end
 			end
 		end
@@ -323,7 +301,7 @@ function KM:Reset()
 	self.PrinceCastIcon:SetVisible(false)
 	self.PrinceCastProgress:SetWidth(0)
 	self.PrinceCastText:SetText("")
-	self.PrinceCasting = false	
+	self.PrinceCasting = false
 	print("Monitor reset.")
 end
 
@@ -374,8 +352,7 @@ end
 
 function KM:DPSUpdate()
 	
-	if self.KingID ~= nil and self.PrinceID ~= nil then
-		--print("DPS Update: Time Elapsed "..self.TimeVisual.String)
+	if self.KingID and self.PrinceID then
 		local DumpDPS = 0
 		local KingDetails = Inspect.Unit.Detail(self.KingID)
 		local PrinceDetails = Inspect.Unit.Detail(self.PrinceID)
@@ -385,7 +362,6 @@ function KM:DPSUpdate()
 			if KingDetails.health then
 				KingCurrentHP = KingDetails.health
 				KingDPS = self.KingLastHP - KingCurrentHP
-				--print(KingCurrentHP.."/"..self.KingHPMax)
 				self.KingLastHP = KingCurrentHP
 			else
 				KingCurrentHP = 0
@@ -410,7 +386,6 @@ function KM:DPSUpdate()
 			if PrinceDetails.health then
 				PrinceCurrentHP = PrinceDetails.health
 				PrinceDPS = self.PrinceLastHP - PrinceCurrentHP
-				--print(PrinceCurrentHP.."/"..self.PrinceHPMax)
 				self.PrinceLastHP = PrinceCurrentHP
 			else
 				PrinceCurrentHP = 0
@@ -430,13 +405,6 @@ function KM:DPSUpdate()
 			table.insert(self.PrinceDPSTable, PrinceDPS)
 		end
 		self:CheckTrends()
-		if PrinceCurrentHP == 0 and KingCurrentHP == 0 then
-			self:Reset()
-		end
-	else
-		--[[ print("Error: Could not locate King Molinar and/or Prince Dollin. Encounter Ending.")
-		self.EncounterRunning = false
-		--]]
 	end
 end
 
@@ -699,7 +667,6 @@ function KM:BuildDisplay()
 end
 
 function KM.UpdateBaseVars(callType)
-	--Utility.Serialize.Inline(self)
 	if callType == "start" then
 		KM.KingCastbar:SetVisible(true)
 		KM.PrinceCastbar:SetVisible(true)
@@ -716,19 +683,29 @@ function KM.UpdateBaseVars(callType)
 end
 
 function KM:UpdateKingCast()
-	--print("King Update ID: "..self.KingID)
 	local bDetails = Inspect.Unit.Castbar(self.KingID)
 	if bDetails then
-		--print("Cast in progress: "..tostring(bDetails.ability).." -- "..tostring(bDetails.abilityName))
 		if bDetails.abilityName then
-			if KM.AbilityWatch[bDetails.abilityName] then
-				if KM.AbilityWatch[bDetails.abilityName].KingWatch then
+			--print("(KING) Checking cast update: "..bDetails.abilityName)
+			if KM.King.CastFilters[bDetails.abilityName] and KM.Settings.KingBar then
+				--print("King Cast Found")
+				if KM.King.CastFilters[bDetails.abilityName].Enabled then
+					if not self.KingCasting then
+						self.KingCasting = true
+						self.KingCastbar:SetVisible(true)
+					end
 					bCastTime = bDetails.duration
 					bProgress = bDetails.remaining
 					self.KingCastProgress:SetWidth(self.KingCastbar:GetWidth() * (1-(bProgress/bCastTime)))
 					self.KingCastText:SetText(string.format("%0.01f", bProgress).." - "..bDetails.abilityName)
 					self.KingCastText:SetWidth(self.KingCastText:GetFullWidth())
 					self.KingCastText:SetHeight(self.KingCastText:GetFullHeight())
+				end
+			end
+			if self.KingLastCast ~= bDetails.abilityName then
+				self.KingLastCast = bDetails.abilityName
+				if self.King.Timers[bDetails.abilityName] then
+					self.King.Timers[bDetails.abilityName]:Start(Inspect.Time.Real())
 				end
 			end
 		end
@@ -738,24 +715,25 @@ function KM:UpdateKingCast()
 		self.KingCastIcon:SetVisible(false)
 		self.KingCastProgress:SetWidth(0)
 		self.KingCastText:SetText("")
-		self.KingCasting = false		
+		self.KingCasting = false
+		self.KingLastCast = ""
 	end
 end
 
 function KM:ManageKingCasts(Visible)
-	--if Visible then
+	--[[if Visible then
 		local bDetails = Inspect.Unit.Castbar(self.KingID)
 		if bDetails then
 			if bDetails.abilityName then
 				if self.AbilityWatch[bDetails.abilityName] then
 					if self.AbilityWatch[bDetails.abilityName].KingWatch then
-						--[[local aDetails = Inspect.Ability.Detail(bDetails.ability)
+						--local aDetails = Inspect.Ability.Detail(bDetails.ability)
 						if aDetails then
 							self.KingCastIcon:SetTexture("Rift", aDetails.icon)
 							self.KingCastIcon:SetVisible(true)
 							self.KingCasting = true
 							self.KingCastbar:SetVisible(true)
-						else]]
+						else
 						self.KingCasting = true
 						self.KingCastbar:SetVisible(true)	
 						--end
@@ -763,7 +741,7 @@ function KM:ManageKingCasts(Visible)
 				end
 			end
 		end
-	--[[else
+	else
 		self.KingCastbar:SetVisible(false)
 		self.KingCastIcon:SetTexture("", "")
 		self.KingCastIcon:SetVisible(false)
@@ -777,14 +755,27 @@ function KM:UpdatePrinceCast()
 	local bDetails = Inspect.Unit.Castbar(self.PrinceID)
 	if bDetails then
 		if bDetails.abilityName then
-			if KM.AbilityWatch[bDetails.abilityName] then
-				if KM.AbilityWatch[bDetails.abilityName].PrinceWatch then
+			--print("(PRINCE) Checking cast update: "..bDetails.abilityName)
+			--print("Table: "..tostring(self.Prince.CastFilters[bDetails.abilityName]))
+			if self.Prince.CastFilters[bDetails.abilityName] and self.Settings.PrinceBar then
+				--print("Prince Cast Found")
+				if self.Prince.CastFilters[bDetails.abilityName].Enabled then
+					if not self.PrinceCasting then
+						self.PrinceCasting = true
+						self.PrinceCastbar:SetVisible(true)
+					end
 					bCastTime = bDetails.duration
 					bProgress = bDetails.remaining
 					self.PrinceCastProgress:SetWidth(self.PrinceCastbar:GetWidth() * (1-(bProgress/bCastTime)))
 					self.PrinceCastText:SetText(string.format("%0.01f", bProgress).." - "..bDetails.abilityName)
 					self.PrinceCastText:SetWidth(self.PrinceCastText:GetFullWidth())
 					self.PrinceCastText:SetHeight(self.PrinceCastText:GetFullHeight())
+				end
+			end
+			if self.PrinceLastCast ~= bDetails.abilityName then
+				self.PrinceLastCast = bDetails.abilityName
+				if self.Prince.Timers[bDetails.abilityName] then
+					self.Prince.Timers[bDetails.abilityName]:Start(Inspect.Time.Real())
 				end
 			end
 		end
@@ -794,24 +785,25 @@ function KM:UpdatePrinceCast()
 		self.PrinceCastIcon:SetVisible(false)
 		self.PrinceCastProgress:SetWidth(0)
 		self.PrinceCastText:SetText("")
-		self.PrinceCasting = false		
+		self.PrinceCasting = false
+		self.PrinceLastCast = ""
 	end
 end
 
 function KM:ManagePrinceCasts(Visible)
-	--if Visible then
+	--[[if Visible then
 		local bDetails = Inspect.Unit.Castbar(self.PrinceID)
 		if bDetails then
 			if bDetails.abilityName then
 				if self.AbilityWatch[bDetails.abilityName] then
 					if self.AbilityWatch[bDetails.abilityName].PrinceWatch then
-						--[[local aDetails = Inspect.Ability.Detail(bDetails.ability)
+						--local aDetails = Inspect.Ability.Detail(bDetails.ability)
 						if aDetails then
 							self.PrinceCastIcon:SetTexture("Rift", aDetails.icon)
 							self.PrinceCastIcon:SetVisible(true)
 							self.PrinceCasting = true
 							self.PrinceCastbar:SetVisible(true)
-						else]]
+						else
 							self.PrinceCasting = true
 							self.PrinceCastbar:SetVisible(true)
 						--end
@@ -819,7 +811,7 @@ function KM:ManagePrinceCasts(Visible)
 				end
 			end
 		end
-	--[[else
+	--else
 		self.PrinceCastbar:SetVisible(false)
 		self.PrinceCastIcon:SetTexture("", "")
 		self.PrinceCastIcon:SetVisible(false)
@@ -829,54 +821,8 @@ function KM:ManagePrinceCasts(Visible)
 	end]]
 end
 
-function KM:UpdateTestBar()
-	bDetails = Inspect.Unit.Castbar(KBM_PlayerID)
-	if bDetails then
-		if bDetails.ability then
-			aDetails = Inspect.Ability.Detail(bDetails.ability)
-			if aDetails then
-				bCastTime = bDetails.duration
-				bProgress = bDetails.remaining
-				self.KingCastProgress:SetWidth(self.KingCastbar:GetWidth() * (1-(bProgress/bCastTime)))
-				self.KingCastText:SetText(string.format("%0.01f", bProgress).." - "..aDetails.name)
-				self.KingCastText:SetWidth(self.KingCastText:GetFullWidth())
-				self.KingCastText:SetHeight(self.KingCastText:GetFullHeight())
-			end
-		end
-	end
-end
-
-function KM:ManageTestCasts(Visible)
-	if Visible then
-		--print("Cast Start")
-		bDetails = Inspect.Unit.Castbar(KBM_PlayerID)
-		if bDetails then
-			if bDetails.ability then
-				local aDetails = Inspect.Ability.Detail(bDetails.ability)
-				if aDetails then
-					self.KingCastIcon:SetTexture("Rift", aDetails.icon)
-					self.KingCastIcon:SetVisible(true)
-					KBM_TestAbility = bDetails.ability
-					KBM_TestIsCasting = true
-					self.KingCastbar:SetVisible(true)
-				else
-					
-				end
-			end
-		end
-	else
-		self.KingCastbar:SetVisible(false)
-		self.KingCastIcon:SetTexture("", "")
-		self.KingCastIcon:SetVisible(false)
-		self.KingCastProgress:SetWidth(0)
-		self.KingCastText:SetText("")
-		KBM_TestIsCasting = false
-		--print("Cast Stopped")
-	end
-end
-
 function KM:CastBar(units)
-	local processed = 0
+	--[[local processed = 0
 	for UnitID, Visible in pairs(units) do
 		if UnitID == self.KingID then
 			if self.Settings.KingBar then
@@ -894,7 +840,7 @@ function KM:CastBar(units)
 		if processed == 2 then
 			return
 		end
-	end
+	end]]
 end
 
 function KM:Timer(current, diff)
@@ -902,28 +848,27 @@ function KM:Timer(current, diff)
 		local udiff = current - self.UpdateTime
 		if diff >= 1 then
 			self:DPSUpdate()
-			self.UpdateTime = current
-		elseif udiff > 0.15 then
+		elseif udiff > 0.095 then
 			self:CheckTrends()
 			self.UpdateTime = current
 		end
-		if self.Settings.PrinceBar then
-			if self.PrinceID then
-				self:UpdatePrinceCast()
-			end
+		if self.PrinceID then
+			self:UpdatePrinceCast()
 		end
-		if self.Settings.KingBar then
-			--print("check kingID")
-			if self.KingID then
-				self:UpdateKingCast()
-			end
+		if self.KingID then
+			self:UpdateKingCast()
 		end
 	end
 	--self.UpdateTestBar()
 end
 
-function KM.KingMolinar:Options()
+function KM.KingMolinar:OptionsClose()
+	self.Monitor = nil
+	self.KingMech = nil
+	self.PrinceMech = nil
+end
 
+function KM.KingMolinar:Options()
 	function self:Hidden(bool)
 		KM.Settings.Hidden = bool
 		if bool then
@@ -956,39 +901,40 @@ function KM.KingMolinar:Options()
 	end
 	function self:RendEnabled(bool)
 		KM.Settings.RendEnabled = bool
-		KM.AbilityWatch["Rend Life"].PrinceWatch = bool
+		KM.Prince.CastFilters["Rend Life"].Enabled = bool
+		print("Rend Life changed to: "..tostring(bool))
 	end
 	function self:TerminateEnabled(bool)
 		KM.Settings.TerminateEnabled = bool
-		KM.AbilityWatch["Terminate Life"].PrinceWatch = bool
+		KM.Prince.CastFilters["Terminate Life"].Enabled = bool
 	end
 	function self:PCEssenceEnabled(bool)
 		KM.Settings.PCEssenceEnabled = bool
-		KM.AbilityWatch["Consuming Essence"].PrinceWatch = bool
+		KM.Prince.CastFilters["Consuming Essence"].Enabled = bool
 	end
 	function self:KCEssenceEnabled(bool)
 		KM.Settings.KCEssenceEnabled = bool
-		KM.AbilityWatch["Consuming Essence"].KingWatch = bool
+		KM.King.CastFilters["Consuming Essence"].Enabled = bool
 	end
 	function self:CursedEnabled(bool)
 		KM.Settings.CursedEnabled = bool
-		KM.AbilityWatch["Cursed Blows"].KingWatch = bool
+		KM.King.CastFilters["Cursed Blows"].Enabled = bool
 	end
 	function self:FShoutEnabled(bool)
 		KM.Settings.FShoutEnabled = bool
-		KM.AbilityWatch["Frightening Shout"].KingWatch = bool
+		KM.King.CastFilters["Frightening Shout"].Enabled = bool
 	end
 	function self:RFeedbackEnabled(bool)
 		KM.Settings.RFeedbackEnabled = bool
-		KM.AbilityWatch["Runic Feedback"].PrinceWatch = bool
+		KM.Prince.CastFilters["Runic Feedback"].Enabled = bool
 	end
 	function self:CrushingEnabled(bool)
 		KM.Settings.CrushingEnabled = bool
-		KM.AbilityWatch["Crushing Regret"].PrinceWatch = bool
+		KM.Prince.CastFilters["Crushing Regret"].Enabled = bool
 	end
 	function self:FBlastEnabled(bool)
 		KM.Settings.FBlastEnabled = bool
-		KM.AbilityWatch["Forked Blast"].PrinceWatch = bool
+		KM.Prince.CastFilters["Forked Blast"].Enabled = bool
 	end
 	function self:MonitorEnabled(bool)
 		if bool then
@@ -999,52 +945,40 @@ function KM.KingMolinar:Options()
 	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
-	self.Monitor = Options:AddHeader("Show Percentage Monitor", self.MonitorEnabled, KM.Settings.Enabled)
-	self.Monitor.Check:SetEnabled(false) -- Temporarily disabled.
-	self.Monitor:AddCheck("Hidden until encounter starts.", self.Hidden, KM.Settings.Hidden)
-	self.Monitor:AddCheck("Compact Mode.", self.Compact, KM.Settings.Compact)
-	self.Monitor:AddCheck("Locked in place.", self.Locked, KM.Settings.Locked)
+	local Monitor = Options:AddHeader("Show Percentage Monitor", self.MonitorEnabled, KM.Settings.Enabled)
+	--self.Monitor.Check.Frame:SetEnabled(false) -- Temporarily disabled.
+	Monitor:AddCheck("Hidden until encounter starts.", self.Hidden, KM.Settings.Hidden)
+	Monitor:AddCheck("Compact Mode.", self.Compact, KM.Settings.Compact)
+	Monitor:AddCheck("Locked in place.", self.Locked, KM.Settings.Locked)
 	Options:AddSpacer()
-	self.KingMech = Options:AddHeader("Show King Molinar's cast-bar.", self.KingEnabled, KM.Settings.KingBar)
-	self.KingMech:AddCheck("Frightening Shout cast.", self.FShoutEnabled, KM.Settings.FShoutEnabled)
-	self.KingMech:AddCheck("Cursed Blows cast.", self.CursedEnabled, KM.Settings.CursedEnabled)
-	self.KingMech:AddCheck("Consuming Essence cast.", self.KCEssenceEnabled, KM.Settings.KCEssenceEnabled)
+	local KingMech = Options:AddHeader("Show King Molinar's cast-bar.", self.KingEnabled, KM.Settings.KingBar)
+	KingMech:AddCheck("Frightening Shout cast.", self.FShoutEnabled, KM.Settings.FShoutEnabled)
+	KingMech:AddCheck("Cursed Blows cast.", self.CursedEnabled, KM.Settings.CursedEnabled)
+	KingMech:AddCheck("Consuming Essence cast.", self.KCEssenceEnabled, KM.Settings.KCEssenceEnabled)
 	Options:AddSpacer()
-	self.PrinceMech = Options:AddHeader("Show Prince Dollin's cast-bar.", self.PrinceEnabled, KM.Settings.PrinceBar)
-	self.PrinceMech:AddCheck("Rend Life cast.", self.RendEnabled, KM.Settings.RendEnabled)
-	self.PrinceMech:AddCheck("Terminate Life cast.", self.TerminateEnabled, KM.Settings.TerminateEnabled)
-	self.PrinceMech:AddCheck("Crushing Regret cast.", self.CrushingEnabled, KM.Settings.CrushingEnabled)
-	self.PrinceMech:AddCheck("Consuming Essence cast.", self.PCEssenceEnabled, KM.Settings.PCEssenceEnabled)
-	self.PrinceMech:AddCheck("Runic Feedback cast.", self.RFeedbackEnabled, KM.Settings.RFeedbackEnabled)
-	self.PrinceMech:AddCheck("Forked Blast cast.", self.FBlastEnabled, KM.Settings.FBlastEnabled)
+	local PrinceMech = Options:AddHeader("Show Prince Dollin's cast-bar.", self.PrinceEnabled, KM.Settings.PrinceBar)
+	PrinceMech:AddCheck("Rend Life cast.", self.RendEnabled, KM.Settings.RendEnabled)
+	PrinceMech:AddCheck("Terminate Life cast.", self.TerminateEnabled, KM.Settings.TerminateEnabled)
+	PrinceMech:AddCheck("Crushing Regret cast.", self.CrushingEnabled, KM.Settings.CrushingEnabled)
+	PrinceMech:AddCheck("Consuming Essence cast.", self.PCEssenceEnabled, KM.Settings.PCEssenceEnabled)
+	PrinceMech:AddCheck("Runic Feedback cast.", self.RFeedbackEnabled, KM.Settings.RFeedbackEnabled)
+	PrinceMech:AddCheck("Forked Blast cast.", self.FBlastEnabled, KM.Settings.FBlastEnabled)
 end
 
-function KM:Start(KBM_MainWin)
+function KM:Start()
 	self.FBDefX = self.Settings.LocX
 	self.FBDefY = self.Settings.LocY
-	--[[KM.Matron.MenuItem = KBM_MainWin.Menu:CreateEncounter("Matron Zamira", nil, false, KM_HK.Header)
-	KM.Matron.MenuItem:Enabled(false)
-	KM.Sicaron.MenuItem = KBM_MainWin.Menu:CreateEncounter("Sicaron", nil, false, KM_HK.Header)
-	KM.Sicaron.MenuItem:Enabled(false)
-	KM.Zilas.MenuItem = KBM_MainWin.Menu:CreateEncounter("Soulrender Zilas", nil, false, KM_HK.Header)
-	KM.Zilas.MenuItem:Enabled(false)
-	KM.Prime.MenuItem = KBM_MainWin.Menu:CreateEncounter("Vladmal Prime", nil, false, KM_HK.Header)
-	KM.Prime.MenuItem:Enabled(false)
-	KM.Grugonim.MenuItem = KBM_MainWin.Menu:CreateEncounter("Grugonim", nil, false, KM_HK.Header)
-	KM.Grugonim.MenuItem:Enabled(false)]]
 	self.Header = KBM.HeaderList[self.Instance]
-	self.KingMolinar.MenuItem = KBM_MainWin.Menu:CreateEncounter(self.KingMolinar.Name, self.KingMolinar, true, self.Header)
+	self.KingMolinar.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.KingMolinar.Name, self.KingMolinar, true, self.Header)
 	self.KingMolinar.MenuItem.Check:SetEnabled(false)
-	--[[KM.Estrode.MenuItem = KBM_MainWin.Menu:CreateEncounter("Estrode", KM_ToggleEnabled, false, KM_HK.Header)
-	KM.Estrode.MenuItem:Enabled(false)
-	KM.Garau.MenuItem = KBM_MainWin.Menu:CreateEncounter("Inquisitor Garau", KM_ToggleEnabled, false, KM_HK.Header)
-	KM.Garau.MenuItem:Enabled(false)
-	KM.Inwar.MenuItem = KBM_MainWin.Menu:CreateEncounter("Inwar Darktide", KM_ToggleEnabled, false, KM_HK.Header)
-	KM.Inwar.MenuItem:Enabled(false)
-	KM.Akylios.MenuItem = KBM_MainWin.Menu:CreateEncounter("Akylios", KM_ToggleEnabled, false, KM_HK.Header)
-	KM.Akylios.MenuItem:Enabled(false)]]
 	
-	self.KingMolinar:Options()
+	KBM.MechTimer:Add("Cursed Blows", "cast", 55, self.King, true)
+	KBM.MechTimer:Add("Consuming Essence", "cast", 22, self.King, true, "(King) Consuming Essence")
+	KBM.MechTimer:Add("Terminate Life", "cast", 21, self.Prince, true)
+	KBM.MechTimer:Add("Consuming Essence", "cast", 22, self.Prince, true, "(Prince) Consuming Essence")
+	KBM.MechTimer:Add("Runic Feedback", "cast", 48, self.Prince, true)
+			
+	--self.KingMolinar:Options()
 	if not self.DisplayReady then
 		self.DisplayReady = true
 		self:BuildDisplay()

@@ -4,19 +4,21 @@ Name = "King Molinator: Boss Mods"
 
 NameShort = "KM:Boss Mods"
 
-Description = "Soon to be full Rift Boss Mods (Named - KM:Boss Mods)"
+Description = "Early development of a fully fledged Raid and Dungeon encounter alert system."
 
 Author = "Paul Snart"
 Website = "http://twitter.com/#!/psnart"
 Email = "snarty@gmail.com"
 
-Version = "0.2.3"
+Version = "0.3.0"
 
 Environment = "1.5"
 
 RunOnStartup = {
 	"KingMolinator.lua",
+	"KMOptions.lua",
 	"Hammerknell/HKHeader.lua",
+	"Hammerknell/Murdantix.lua",
 	"Hammerknell/Molinar.lua",
 }
 
