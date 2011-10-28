@@ -166,15 +166,17 @@ function KM:InitVars()
 end
 
 function KM:LoadVars()
-	for Setting, Value in pairs(KM_Settings) do
-		if type(KM_Settings[Setting]) == "table" then
-			if #KM_Settings[Setting] then
-				for tSetting, tValue in pairs(KM_Settings[Setting]) do
-					self.Settings[Setting][tSetting] = tValue
+	if type(KM_Settings) == "table" then
+		for Setting, Value in pairs(KM_Settings) do
+			if type(KM_Settings[Setting]) == "table" then
+				if #KM_Settings[Setting] then
+					for tSetting, tValue in pairs(KM_Settings[Setting]) do
+						self.Settings[Setting][tSetting] = tValue
+					end
 				end
+			else
+				self.Settings[Setting] = Value	
 			end
-		else
-			self.Settings[Setting] = Value	
 		end
 	end
 	KM.Prince.CastFilters["Rend Life"] = {Enabled = self.Settings.RendEnabled}

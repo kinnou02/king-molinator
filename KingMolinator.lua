@@ -68,15 +68,17 @@ end
 
 local function KBM_LoadVars(AddonID)
 	if AddonID == "KingMolinator" then
-		for Setting, Value in pairs(KBM_GlobalOptions) do
-			if type(KBM_GlobalOptions[Setting]) == "table" then
-				if #KBM_GlobalOptions[Setting] then
-					for tSetting, tValue in pairs(KBM_GlobalOptions[Setting]) do
-						KBM.Options[Setting][tSetting] = tValue
+		if type(KBM_GlobalOptions) == "table" then
+			for Setting, Value in pairs(KBM_GlobalOptions) do
+				if type(KBM_GlobalOptions[Setting]) == "table" then
+					if #KBM_GlobalOptions[Setting] then
+						for tSetting, tValue in pairs(KBM_GlobalOptions[Setting]) do
+							KBM.Options[Setting][tSetting] = tValue
+						end
 					end
+				else
+					KBM.Options[Setting] = Value	
 				end
-			else
-				KBM.Options[Setting] = Value	
 			end
 		end
 		for _, Mod in ipairs(KBM_BossMod) do
@@ -428,7 +430,7 @@ local function KBM_UnitHPCheck(info)
 			if not KBM.BossID[UnitID] then
 				if KBM_Boss[uDetails.name] then
 					--print("Boss seen (adding): "..UnitID.." ("..uDetails.name..") ")
-					--if uDetails.level == KBM_Boss[uDetails.name].Level then
+					if uDetails.level == KBM_Boss[uDetails.name].Level then
 						KBM.BossID[UnitID] = {}
 						KBM.BossID[UnitID].name = uDetails.name
 						KBM.BossID[UnitID].monitor = true
@@ -448,7 +450,7 @@ local function KBM_UnitHPCheck(info)
 							KBM.BossID[UnitID].dead = true
 							KBM.BossID[UnitID] = nil
 						end
-					--end
+					end
 				else
 					--print("Unit is not a boss: "..UnitID.." ("..uDetails.name..")")
 				end

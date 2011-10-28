@@ -63,15 +63,17 @@ function MX:InitVars()
 end
 
 function MX:LoadVars()
-	for Setting, Value in pairs(KBMMX_Settings) do
-		if type(KBMMX_Settings[Setting]) == "table" then
-			if #KBMMX_Settings[Setting] then
-				for tSetting, tValue in pairs(KBMMX_Settings[Setting]) do
-					self.Settings[Setting][tSetting] = tValue
+	if type(KBMMX_Settings) == "table" then
+		for Setting, Value in pairs(KBMMX_Settings) do
+			if type(KBMMX_Settings[Setting]) == "table" then
+				if #KBMMX_Settings[Setting] then
+					for tSetting, tValue in pairs(KBMMX_Settings[Setting]) do
+						self.Settings[Setting][tSetting] = tValue
+					end
 				end
+			else
+				self.Settings[Setting] = Value
 			end
-		else
-			self.Settings[Setting] = Value
 		end
 	end
 end

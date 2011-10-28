@@ -1,3 +1,6 @@
+v0.3.1
+* Fixed Variable initialization
+----
 v0.3.0
 * Adjusted how an Encounter Starts / Ends. Should be more fluid.
 * Preparation work added for Notify type boss mechanic timers.
