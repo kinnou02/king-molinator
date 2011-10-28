@@ -11,7 +11,6 @@ local MX = {
 	Bosses = {
 		["Murdantix"] = true,
 	},
-	ID = nil,
 	Murdantix = {
 		MenuItem = nil,
 		Enabled = true,
@@ -38,6 +37,7 @@ MX.Murd = {
 	Castbar = nil,
 	CastFilters = {},
 	Timers = {},
+	TimersRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
@@ -66,10 +66,8 @@ function MX:LoadVars()
 	if type(KBMMX_Settings) == "table" then
 		for Setting, Value in pairs(KBMMX_Settings) do
 			if type(KBMMX_Settings[Setting]) == "table" then
-				if #KBMMX_Settings[Setting] then
-					for tSetting, tValue in pairs(KBMMX_Settings[Setting]) do
-						self.Settings[Setting][tSetting] = tValue
-					end
+				for tSetting, tValue in pairs(KBMMX_Settings[Setting]) do
+					self.Settings[Setting][tSetting] = tValue
 				end
 			else
 				self.Settings[Setting] = Value
@@ -106,7 +104,7 @@ function MX:UnitHPCheck(unitDetails, unitID)
 	if unitDetails and unitID then
 		if not unitDetails.player then
 			if unitDetails.name == self.Murd.Name then
-				if not self.MurdID then
+				if not self.Murd.UnitID then
 					self.Murd.UnitID = unitID
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
@@ -115,6 +113,7 @@ function MX:UnitHPCheck(unitDetails, unitID)
 					self.Murd.Dead = false
 					self.Murd.Available = true
 					self.Murd.Casting = false
+					return self.Murd
 				end
 			end
 		end
@@ -123,10 +122,7 @@ end
 
 function MX:Reset()
 	self.EncounterRunning = false
-	if self.MurdID then
-		KBM.BossID[self.MurdID] = nil
-	end
-	self.MurdID = nil
+	self.Murd.UnitID = nil
 end
 
 function MX:Timer()
@@ -139,9 +135,11 @@ function MX.Murdantix:Options()
 	end
 	function self:MangleEnabled(bool)
 		MX.Settings.Timers.MangleEnabled = bool
+		MX.Murd.TimersRef.Mangling.Enabled = bool
 	end
 	function self:PoundEnabled(bool)
 		MX.Settings.Timers.PoundEnabled = bool
+		MX.Murd.TimersRef.Pound.Enabled = bool
 	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
@@ -154,6 +152,8 @@ function MX:Start()
 	self.Header = KBM.HeaderList[self.Instance]
 	self.Murdantix.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.Murdantix.Name, self.Murdantix, true, self.Header)
 	self.Murdantix.MenuItem.Check:SetEnabled(false)
-	KBM.MechTimer:Add("Mangling Crush", "damage", 12, self.Murd, false)
-	KBM.MechTimer:Add("Ferocious Pound", "damage", 35, self.Murd, false)
+	self.Murd.TimersRef.Mangling = KBM.MechTimer:Add("Mangling Crush", "damage", 12, self.Murd, false)
+	self.Murd.TimersRef.Mangling.Enabled = MX.Settings.MangleEnabled
+	self.Murd.TimersRef.Pound = KBM.MechTimer:Add("Ferocious Pound", "damage", 35, self.Murd, false)
+	self.Murd.TimersRef.Pound.Enabled = MX.Settings.PoundEnabled
 end

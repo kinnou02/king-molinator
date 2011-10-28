@@ -204,9 +204,7 @@ function KBM.InitOptions()
 		function Child.Event:LeftClick()
 			if self.Enabled then
 				if KBM.MainWin.CurrentPage ~= self.Options then
-					--KBM.MainWin.Options:SetVisible(false)
 					self.Link:Options()
-					--KBM.MainWin.Options:SetVisible(true)
 				end
 			end
 		end

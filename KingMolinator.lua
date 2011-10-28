@@ -40,7 +40,7 @@ local function KBM_DefineVars(AddonID)
 				Visible = false,
 				ScaleWidth = false,
 				ScaleHeight = false,
-				TextSize = 20,
+				TextSize = 16,
 				TextScale = false,
 			},
 			CastBar = {
@@ -48,9 +48,9 @@ local function KBM_DefineVars(AddonID)
 				y = nil,
 				w = 350,
 				h = 32,
-				Enabled = true,
+				Enabled = false,
 				Unlocked = false,
-				Visible = true,
+				Visible = false,
 				ScaleWidth = false,
 				wScale = 1,
 				hScale = 1,
@@ -71,10 +71,8 @@ local function KBM_LoadVars(AddonID)
 		if type(KBM_GlobalOptions) == "table" then
 			for Setting, Value in pairs(KBM_GlobalOptions) do
 				if type(KBM_GlobalOptions[Setting]) == "table" then
-					if #KBM_GlobalOptions[Setting] then
-						for tSetting, tValue in pairs(KBM_GlobalOptions[Setting]) do
-							KBM.Options[Setting][tSetting] = tValue
-						end
+					for tSetting, tValue in pairs(KBM_GlobalOptions[Setting]) do
+						KBM.Options[Setting][tSetting] = tValue
 					end
 				else
 					KBM.Options[Setting] = Value	
@@ -105,7 +103,7 @@ local KBM_Boss = {}
 KBM.BossID = {}
 KBM.Encounter = false
 KBM.HeaderList = {}
-local KBM_CurrentBoss = ""
+KBM.CurrentBoss = ""
 local KBM_CurrentMod = nil
 local KBM_PlayerID = nil
 local KBM_TestIsCasting = false
@@ -165,7 +163,9 @@ function KBM.MechTimer:Init()
 	self.LastTimer = nil
 	self.DamageTimers = {}
 	self.SayTimers = {}
+	self.NotifyTimers = {}
 	self.CastTimers = {}
+	self.BuffTimers = {}
 	self.CombatTimers = {}
 	self.Anchor = UI.CreateFrame("Frame", "Timer Anchor", KBM.Context)
 	self.Anchor:SetWidth(KBM.Options.MechTimer.w * KBM.Options.MechTimer.wScale)
@@ -201,7 +201,11 @@ function KBM.MechTimer:Add(iTrigger, iType, iTime, iBoss, iStart, iName)
 	local Timer = {}
 	Timer.Active = false
 	Timer.TimeStart = nil
-	Timer.Trigger = iTrigger
+	if type(iTrigger) == "table" then
+		Timer.Trigger = iName
+	else
+		Timer.Trigger = iTrigger
+	end
 	if not iName then
 		Timer.Name = iTrigger
 	else
@@ -212,58 +216,60 @@ function KBM.MechTimer:Add(iTrigger, iType, iTime, iBoss, iStart, iName)
 	Timer.Boss = iBoss
 	Timer.Enabled = true
 	function Timer:Start(CurrentTime)
-		if self.Active then
-			self.Active = false
-			table.insert(KBM.MechTimer.RemoveTimers, self)
-			table.insert(KBM.MechTimer.StartTimers, self)
-			return
-		end
-		local Anchor = KBM.MechTimer.Anchor
-		self.Background = KBM:CallFrame(KBM.Context)
-		self.Background:SetWidth(KBM.Options.MechTimer.w * KBM.Options.MechTimer.wScale)
-		self.Background:SetHeight(KBM.Options.MechTimer.h * KBM.Options.MechTimer.hScale)
-		self.Background:SetBackgroundColor(0,0,0,0.33)
-		self.TimeBar = KBM:CallFrame(self.Background)
-		self.TimeBar:SetWidth(KBM.Options.MechTimer.w * KBM.Options.MechTimer.wScale)
-		self.TimeBar:SetHeight(KBM.Options.MechTimer.h * KBM.Options.MechTimer.hScale)
-		self.TimeBar:SetPoint("TOPLEFT", self.Background, "TOPLEFT")
-		self.TimeBar:SetLayer(1)
-		self.TimeBar:SetBackgroundColor(0,0,1,0.33)
-		self.TimeStart = CurrentTime
-		self.Remaining = self.Time
-		self.CastInfo = KBM:CallText(self.Background, self.Trigger)
-		self.CastInfo:SetText(string.format(" %0.01f : ", self.Remaining)..self.Name)
-		self.CastInfo:SetFontSize(KBM.Options.MechTimer.TextSize)
-		self.CastInfo:SetPoint("CENTERLEFT", self.Background, "CENTERLEFT")
-		self.CastInfo:SetLayer(2)
-		self.CastInfo:ResizeToText()
-		self.CastInfo:SetFontColor(1,1,1)
-		if #KBM.MechTimer.ActiveTimers > 0 then
-			for i, cTimer in ipairs(KBM.MechTimer.ActiveTimers) do
-				if self.Remaining < cTimer.Remaining then
-					self.Active = true
-					if i == 1 then
-						self.Background:SetPoint("TOPLEFT", Anchor, "TOPLEFT")
-						cTimer.Background:SetPoint("TOPLEFT", self.Background, "BOTTOMLEFT", 0, 1)
-					else
-						self.Background:SetPoint("TOPLEFT", KBM.MechTimer.ActiveTimers[i-1].Background, "BOTTOMLEFT", 0, 1)
-						cTimer.Background:SetPoint("TOPLEFT", self.Background, "BOTTOMLEFT", 0, 1)
-					end
-					table.insert(KBM.MechTimer.ActiveTimers, i, self)
-					break
-				end
+		if self.Enabled then
+			if self.Active then
+				self.Active = false
+				table.insert(KBM.MechTimer.RemoveTimers, self)
+				table.insert(KBM.MechTimer.StartTimers, self)
+				return
 			end
-			if not self.Active then
-				self.Background:SetPoint("TOPLEFT", KBM.MechTimer.LastTimer.Background, "BOTTOMLEFT", 0, 1)
+			local Anchor = KBM.MechTimer.Anchor
+			self.Background = KBM:CallFrame(KBM.Context)
+			self.Background:SetWidth(KBM.Options.MechTimer.w * KBM.Options.MechTimer.wScale)
+			self.Background:SetHeight(KBM.Options.MechTimer.h * KBM.Options.MechTimer.hScale)
+			self.Background:SetBackgroundColor(0,0,0,0.33)
+			self.TimeBar = KBM:CallFrame(self.Background)
+			self.TimeBar:SetWidth(KBM.Options.MechTimer.w * KBM.Options.MechTimer.wScale)
+			self.TimeBar:SetHeight(KBM.Options.MechTimer.h * KBM.Options.MechTimer.hScale)
+			self.TimeBar:SetPoint("TOPLEFT", self.Background, "TOPLEFT")
+			self.TimeBar:SetLayer(1)
+			self.TimeBar:SetBackgroundColor(0,0,1,0.33)
+			self.TimeStart = CurrentTime
+			self.Remaining = self.Time
+			self.CastInfo = KBM:CallText(self.Background, self.Trigger)
+			self.CastInfo:SetText(string.format(" %0.01f : ", self.Remaining)..self.Name)
+			self.CastInfo:SetFontSize(KBM.Options.MechTimer.TextSize)
+			self.CastInfo:SetPoint("CENTERLEFT", self.Background, "CENTERLEFT")
+			self.CastInfo:SetLayer(2)
+			self.CastInfo:ResizeToText()
+			self.CastInfo:SetFontColor(1,1,1)
+			if #KBM.MechTimer.ActiveTimers > 0 then
+				for i, cTimer in ipairs(KBM.MechTimer.ActiveTimers) do
+					if self.Remaining < cTimer.Remaining then
+						self.Active = true
+						if i == 1 then
+							self.Background:SetPoint("TOPLEFT", Anchor, "TOPLEFT")
+							cTimer.Background:SetPoint("TOPLEFT", self.Background, "BOTTOMLEFT", 0, 1)
+						else
+							self.Background:SetPoint("TOPLEFT", KBM.MechTimer.ActiveTimers[i-1].Background, "BOTTOMLEFT", 0, 1)
+							cTimer.Background:SetPoint("TOPLEFT", self.Background, "BOTTOMLEFT", 0, 1)
+						end
+						table.insert(KBM.MechTimer.ActiveTimers, i, self)
+						break
+					end
+				end
+				if not self.Active then
+					self.Background:SetPoint("TOPLEFT", KBM.MechTimer.LastTimer.Background, "BOTTOMLEFT", 0, 1)
+					table.insert(KBM.MechTimer.ActiveTimers, self)
+					self.Active = true
+					KBM.MechTimer.LastTimer = self
+				end
+			else
+				self.Background:SetPoint("TOPLEFT", KBM.MechTimer.Anchor, "TOPLEFT")
 				table.insert(KBM.MechTimer.ActiveTimers, self)
 				self.Active = true
 				KBM.MechTimer.LastTimer = self
 			end
-		else
-			self.Background:SetPoint("TOPLEFT", KBM.MechTimer.Anchor, "TOPLEFT")
-			table.insert(KBM.MechTimer.ActiveTimers, self)
-			self.Active = true
-			KBM.MechTimer.LastTimer = self
 		end
 	end
 	function Timer:Stop()
@@ -302,18 +308,42 @@ function KBM.MechTimer:Add(iTrigger, iType, iTime, iBoss, iStart, iName)
 	end
 	if iType == "damage" then
 		self.DamageTimers[iTrigger] = Timer
+		iBoss.Timers[iTrigger] = Timer
 	elseif iType == "say" then
-		self.SayTimers[iTrigger] = Timer
+		if type(iTrigger) == "table" then
+			for sTrigger in pairs(iTrigger) do
+				self.SayTimers[sTrigger] = Timer
+				iBoss.Timers[sTrigger] = Timer
+			end
+		else
+			self.SayTimers[iTrigger] = Timer
+			iBoss.Timers[iTrigger] = Timer
+		end
 	elseif iType == "cast" then
 		self.CastTimers[iTrigger] = Timer
+		iBoss.Timers[iTrigger] = Timer
+	elseif iType == "notify" then
+		if type(iTrigger) == "table" then
+			for nTrigger in pairs(iTrigger) do
+				self.NotifyTimers[nTrigger] = Timer
+				iBoss.Timers[nTrigger] = Timer
+			end
+		else
+			self.NotifyTimers[iTrigger] = Timer
+			iBoss.Timers[iTrigger] = Timer
+		end
+	elseif iType == "buff" then
+		self.Bufftimers[iTrigger] = Timer
+		iBoss.Timers[iTrigger] = Timer
 	else -- iType == "Combat start"
 		self.CombatTimers[iTrigger] = Timer
+		iBoss.Timers[iTrigger] = Timer
 	end
-	iBoss.Timers[iTrigger] = Timer
 	if KBM.Testing then
 		--Timer:Start(Inspect.Time.Real())
 		table.insert(self.testTimerList, iTrigger)
 	end
+	return Timer
 end
 
 function KBM:CallFrame(parent)
@@ -420,60 +450,52 @@ end
 
 
 local function KBM_UnitHPCheck(info)
-	if not KBM.Encounter then -- check for bosses for an encounter start
 
-		--print("Encounter Check")
-		local uDetails = {}
-		local UnitID = info.target
-		local uDetails = Inspect.Unit.Detail(UnitID)
-		if uDetails then
-			if not KBM.BossID[UnitID] then
-				if KBM_Boss[uDetails.name] then
-					--print("Boss seen (adding): "..UnitID.." ("..uDetails.name..") ")
-					if uDetails.level == KBM_Boss[uDetails.name].Level then
-						KBM.BossID[UnitID] = {}
-						KBM.BossID[UnitID].name = uDetails.name
-						KBM.BossID[UnitID].monitor = true
-						KBM.BossID[UnitID].Mod = KBM_Boss[uDetails.name].Mod
-						if uDetails.health > 0 then
-							KBM.BossID[UnitID].dead = false
-							KBM.Encounter = true
-							KBM_CurrentBoss = UnitID
-							KBM_CurrentBossName = uDetails.Name
-							KBM_CurrentMod = KBM.BossID[UnitID].Mod
-							if not KBM_CurrentMod.EncounterRunning then
-								print("Encounter Started: "..KBM_Boss[uDetails.name].Descript)
-								print("Good luck!")
+	local uDetails = {}
+	local UnitID = info.target
+	local uDetails = Inspect.Unit.Detail(UnitID)
+	if uDetails then
+		if not KBM.BossID[UnitID] then
+			if KBM_Boss[uDetails.name] then
+				if info.caster then
+					bDetails = Inspect.Unit.Detail(info.caster)
+					if bDetails then
+						if bDetails.player then
+							if uDetails.level == KBM_Boss[uDetails.name].Level then
+								KBM.BossID[UnitID] = {}
+								KBM.BossID[UnitID].name = uDetails.name
+								KBM.BossID[UnitID].monitor = true
+								KBM.BossID[UnitID].Mod = KBM_Boss[uDetails.name].Mod
+								if uDetails.health > 0 then
+									KBM.BossID[UnitID].dead = false
+									KBM.Encounter = true
+									KBM.CurrentBoss = UnitID
+									KBM_CurrentBossName = uDetails.Name
+									KBM_CurrentMod = KBM.BossID[UnitID].Mod
+									if not KBM_CurrentMod.EncounterRunning then
+										print("Encounter Started: "..KBM_Boss[uDetails.name].Descript)
+										print("Good luck!")
+									end
+									KBM.BossID[UnitID].Boss = KBM_CurrentMod:UnitHPCheck(uDetails, UnitID)
+								else
+									KBM.BossID[UnitID].dead = true
+									KBM.BossID[UnitID] = nil
+								end
 							end
-							KBM_CurrentMod:UnitHPCheck(uDetails, UnitID)
-						else
-							KBM.BossID[UnitID].dead = true
-							KBM.BossID[UnitID] = nil
 						end
 					end
-				else
-					--print("Unit is not a boss: "..UnitID.." ("..uDetails.name..")")
 				end
-			else
-				--print("Boss already seen. Redirecting "..KBM.BossID[UnitID].name)
-				--KBM.BossID[UnitID].hook()
 			end
-		else
-			--print(UnitID.." (n/a)")
 		end
-	else
-		if #KBM.MechTimer.DamageTimers > 0 then
-			if KBM_CurrentMod then
-				if info.abilityName then
-					if KBM.MechTimer.DamageTimer[info.abilityName] then
-						if not KBM.MechTimer.DamageTimer[info.abilityName].Active then
-							KBM.MechTimer.DamageTimer[info.abilityName]:Start(Inspect.Time.Real())
-						end
+	end
+	if #KBM.MechTimer.DamageTimers > 0 then
+		if KBM_CurrentMod then
+			if info.abilityName then
+				if KBM.MechTimer.DamageTimer[info.abilityName] then
+					if not KBM.MechTimer.DamageTimer[info.abilityName].Active then
+						KBM.MechTimer.DamageTimer[info.abilityName]:Start(Inspect.Time.Real())
 					end
 				end
-			else
-				--KBM.Encounter = false
-				--print("Encounter ended")
 			end
 		end
 	end
@@ -714,18 +736,20 @@ function KBM:Timer()
 		-- for UnitID, CastCheck in pairs(KBM.CastBar.List) do
 			-- CastCheck:Update()
 		-- end
-		if #self.MechTimer.ActiveTimers > 0 then
-			for i, Timer in ipairs(self.MechTimer.ActiveTimers) do
-				table.insert(self.MechTimer.RemoveTimers)
-			end
-			if #self.MechTimer.RemoveTimers > 0 then
-				for i, Timer in ipairs(self.MechTimer.RemoveTimers) do
-					Timer:Stop()
+		if not KBM.Encounter then
+			if #self.MechTimer.ActiveTimers > 0 then
+				for i, Timer in ipairs(self.MechTimer.ActiveTimers) do
+					table.insert(self.MechTimer.RemoveTimers, Timer)
 				end
+				if #self.MechTimer.RemoveTimers > 0 then
+					for i, Timer in ipairs(self.MechTimer.RemoveTimers) do
+						Timer:Stop()
+					end
+				end
+				self.MechTimer.RemoveTimers = {}
+				self.MechTimer.ActiveTimers = {}
+				self.MechTimer.StartTimers = {}
 			end
-			self.MechTimer.RemoveTimers = {}
-			self.MechTimer.ActiveTimers = {}
-			self.MechTimer.StartTimers = {}
 		end
 	end
 		
@@ -769,7 +793,10 @@ local function KBM_Reset()
 		if KBM_CurrentMod then
 			KBM_CurrentMod:Reset()
 			KBM_CurrentMod = nil
-			KBM_CurrentBoss = ""
+			KBM.CurrentBoss = ""
+			KBM.BossID = {}
+			KBM_CurrentBossName = ""
+			KBM.Encounter = false
 		end
 	else
 		print("No encounter to reset.")
@@ -783,6 +810,7 @@ local function KBM_UnitRemoved(units)
 			for UnitID, Specifier in pairs(units) do
 				if KBM.BossID[UnitID] then
 					if KBM_CurrentMod then
+						KBM.BossID[UnitID] = nil
 						if KBM_CurrentMod:RemoveUnits(UnitID) then
 							print("Encounter Ended, possible wipe.")
 							KBM_Reset()
@@ -803,6 +831,7 @@ local function KBM_Death(info)
 			if uDetails then
 				if not uDetails.player then
 					if KBM.BossID[UnitID] then
+						KBM.BossID[UnitID] = nil
 						if KBM_CurrentMod:Death(UnitID) then
 							print("Encounter Victory")
 							print("Good job!")
@@ -815,7 +844,6 @@ local function KBM_Death(info)
 	end
 	
 end
-
 
 local function KBM_AutoReset()
 	if KBM.Options.AutoReset then
@@ -837,10 +865,36 @@ end
 
 function KBM.Notify(data)
 	--print(data.message)
+	if KBM.Encounter then
+		if data.message then
+			if KBM.CurrentBoss then
+				for BossID, BossLink in pairs(KBM.BossID) do
+					for Trigger, Timer in pairs(KBM.BossID[BossID].Boss.Timers) do
+						if string.find(data.message, Trigger, 1, true) then
+							Timer:Start(Inspect.Timer.Real())
+							break
+						end
+					end
+				end
+			end
+		end
+	end
 end
 
 function KBM.NPCChat(data)
 	--print(data.fromName..": "..data.message)
+	if KBM.Encounter then
+		if data.fromName then
+			if KBM.BossID[from] then
+				for Trigger, Timer in pairs(KBM.BossID[from].Boss.Timers) do
+					if string.find(data.message, Trigger, 1, true) then
+						Timer:Start(Inspect.Timer.Real())
+						break
+					end
+				end
+			end
+		end
+	end
 end
 
 function KBM.MenuOptions.MechTimers:Options()
@@ -899,7 +953,9 @@ function KBM.MenuOptions.MechTimers:Options()
 	Options:SetTitle()
 	
 	-- Timer Options
-	self.MechTimers = Options:AddHeader("Mechanic Timers", self.MechEnabled, KBM.Options.MechTimer.Enabled)
+	self.MechTimers = Options:AddHeader("Mechanic Timers", self.MechEnabled, true)
+	self.MechTimers.Check.Frame:SetEnabled(false)
+	KBM.Options.MechTimer.Enabled = true
 	self.MechTimers:AddCheck("Show Anchor (for positioning.)", self.ShowMechAnchor, KBM.Options.MechTimer.Visible)
 	self.MechTimers:AddCheck("Anchor unlocked.", self.LockMechAnchor, KBM.Options.MechTimer.Unlocked)
 	-- local Mechwidth = self.MechTimers:AddCheck("Width scaling.", self.MechScaleWidth, KBM.Options.MechTimer.ScaleWidth)
@@ -971,7 +1027,9 @@ function KBM.MenuOptions.CastBars:Options()
 	Options:SetTitle()
 
 	-- CastBar Options. 
-	self.CastBars = Options:AddHeader("Cast-bars", self.CastBarEnabled, KBM.Options.CastBar.Enabled)
+	self.CastBars = Options:AddHeader("Cast-bars", self.CastBarEnabled, false)
+	self.CastBars.Check.Frame:SetEnabled(false)
+	KBM.Options.CastBar.Enabled = false
 	self.CastBars:AddCheck("Show Anchor (for positioning.)", self.ShowCastAnchor, KBM.Options.CastBar.Visible)
 	self.CastBars:AddCheck("Anchor unlocked.", self.LockCastAnchor, KBM.Options.CastBar.Unlocked)
 	-- local sliderAppend = {

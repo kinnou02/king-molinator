@@ -1,3 +1,16 @@
+v0.3.2
+* More adjustments to the Encounter Start/End monitoring (Hopefully this time!).
+* Fixed an issue with Murdantix encounter locking out all other bosses.
+* Added the Inquisitor Garau encounter.
+* Added Inquisitor Garau Options page.
+* New Timer: (Garau) Blood Tide
+* New Timer: (Garau) Infused Crawlers
+* New Timer: (Garau) Arcane Porters
+* New Timer: (Garau) Arcane Essence
+* New Timer: (King Molinar) Incorporeal Revenants
+* Changed Saved Variables to handle version changes better, and future per-character settings.
+* [King Molinar] Increased polling rate of monitor for smoother updates.
+----
 v0.3.1
 * Fixed Variable initialization
 ----

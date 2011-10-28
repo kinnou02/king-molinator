@@ -169,10 +169,8 @@ function KM:LoadVars()
 	if type(KM_Settings) == "table" then
 		for Setting, Value in pairs(KM_Settings) do
 			if type(KM_Settings[Setting]) == "table" then
-				if #KM_Settings[Setting] then
-					for tSetting, tValue in pairs(KM_Settings[Setting]) do
-						self.Settings[Setting][tSetting] = tValue
-					end
+				for tSetting, tValue in pairs(KM_Settings[Setting]) do
+					self.Settings[Setting][tSetting] = tValue
 				end
 			else
 				self.Settings[Setting] = Value	
@@ -227,34 +225,34 @@ function KM:UnitHPCheck(unitDetails, unitID)
 					self.KingID = unitID
 					if not self.EncounterRunning then
 						self.EncounterRunning = true
-						KBM.Encounter = false
+						self.StartTime = Inspect.Time.Real()
+						self.HeldTime = self.StartTime
+						self.TimeElapsed = 0
 					end
-					self.StartTime = Inspect.Time.Real()
-					self.HeldTime = self.StartTime
-					self.TimeElapsed = 0
 					self.KingLastHP = unitDetails.healthMax
 					self.KingHPMax = self.KingLastHP
 					self.FrameBase:SetVisible(true)
-					self.KingDead = false
+					self.King.Dead = false
 					self.KingUnavail = false
 					self.KingCasting = false
+					return self.King
 				end
 			elseif unitDetails.name == self.Prince.Name then
 				if not self.PrinceID then
 					self.PrinceID = unitID
 					if not self.EncounterRunning then
 						self.EncounterRunning = true
-						KBM.Encounter = false
+						self.StartTime = Inspect.Time.Real()
+						self.HeldTime = self.StartTime
+						self.TimeElapsed = 0
 					end
-					self.StartTime = Inspect.Time.Real()
-					self.HeldTime = self.StartTime
-					self.TimeElapsed = 0
 					self.PrinceLastHP = unitDetails.healthMax
 					self.PrinceHPMax = self.PrinceLastHP
 					self.FrameBase:SetVisible(true)
-					self.PrinceDead = false
+					self.Prince.Dead = false
 					self.PrinceUnavail = false
 					self.PrinceCasting = false
+					return self.Prince
 				end
 			end
 		end
@@ -262,15 +260,7 @@ function KM:UnitHPCheck(unitDetails, unitID)
 end
 
 function KM:Reset()
-	KBM.Encounter = false
 	self.EncounterRunning = false
-	if self.KingID then
-		KBM.BossID[self.KingID] = nil
-	end
-	self.KingID = nil
-	if self.PrinceID then
-		KBM.BossID[self.PrinceID] = nil
-	end
 	self.PrinceID = nil
 	self.KingDPSTable = {}
 	self.PrinceDPSTable = {}
@@ -967,12 +957,13 @@ function KM:Start()
 	self.KingMolinar.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.KingMolinar.Name, self.KingMolinar, true, self.Header)
 	self.KingMolinar.MenuItem.Check:SetEnabled(false)
 	
-	KBM.MechTimer:Add("Cursed Blows", "cast", 55, self.King, true)
-	KBM.MechTimer:Add("Consuming Essence", "cast", 22, self.King, true, "(King) Consuming Essence")
-	KBM.MechTimer:Add("Terminate Life", "cast", 21, self.Prince, true)
-	KBM.MechTimer:Add("Consuming Essence", "cast", 22, self.Prince, true, "(Prince) Consuming Essence")
-	KBM.MechTimer:Add("Runic Feedback", "cast", 48, self.Prince, true)
-			
+	KBM.MechTimer:Add("Cursed Blows", "cast", 55, self.King, false)
+	KBM.MechTimer:Add("Consuming Essence", "cast", 22, self.King, false, "(King) Consuming Essence")
+	KBM.MechTimer:Add("Terminate Life", "cast", 21, self.Prince, false)
+	KBM.MechTimer:Add("Consuming Essence", "cast", 22, self.Prince, false, "(Prince) Consuming Essence")
+	KBM.MechTimer:Add("Runic Feedback", "cast", 48, self.Prince, false)
+	KBM.MechTimer:Add("Incorporeal Revenant begins to phase into this reality.", "notify", 82, self.King, false, "Incorporeal Revenant")
+	
 	--self.KingMolinar:Options()
 	if not self.DisplayReady then
 		self.DisplayReady = true
