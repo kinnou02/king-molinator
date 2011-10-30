@@ -509,15 +509,16 @@ function KBM.AttachDragFrame(parent, hook, name, layer)
 	if not name then name = "" end
 	if not layer then layer = 0 end
 	
-	local DragFrame = UI.CreateFrame("Frame", name.."_DragFrame", parent)
-	DragFrame:SetPoint("TOPLEFT", parent, "TOPLEFT")
-	DragFrame:SetPoint("BOTTOMRIGHT", parent, "BOTTOMRIGHT")
-	DragFrame.parent = parent
-	DragFrame.MouseDown = false
-	DragFrame:SetLayer(layer)
-	DragFrame.hook = hook
+	local Drag = {}
+	Drag.Frame = KBM:CallFrame(parent)
+	Drag.Frame:SetPoint("TOPLEFT", parent, "TOPLEFT")
+	Drag.Frame:SetPoint("BOTTOMRIGHT", parent, "BOTTOMRIGHT")
+	Drag.Frame.parent = parent
+	Drag.Frame.MouseDown = false
+	Drag.Frame:SetLayer(layer)
+	Drag.hook = hook
 	
-	function DragFrame.Event:LeftDown()
+	function Drag.Frame.Event:LeftDown()
 		self.MouseDown = true
 		mouseData = Inspect.Mouse()
 		self.MyStartX = self.parent:GetLeft()
@@ -533,22 +534,30 @@ function KBM.AttachDragFrame(parent, hook, name, layer)
 		self.parent:SetWidth(tempW)
 		self.parent:SetHeight(tempH)
 		self:SetBackgroundColor(0,0,0,0.5)
-		self.hook("start")
+		Drag.hook("start")
 	end
-	function DragFrame.Event:MouseMove(mouseX, mouseY)
+	function Drag.Frame.Event:MouseMove(mouseX, mouseY)
 		if self.MouseDown then
 			self.parent:SetPoint("TOPLEFT", UIParent, "TOPLEFT", (mouseX - self.StartX), (mouseY - self.StartY))
 		end
 	end
-	function DragFrame.Event:LeftUp()
+	function Drag.Frame.Event:LeftUp()
 		if self.MouseDown then
 			self.MouseDown = false
 			self:SetBackgroundColor(0,0,0,0)
-			self.hook("end")
+			Drag.hook("end")
 		end
 	end
+	function Drag.Frame:Remove()
+		self.Event.LeftDown = nil
+		self.Event.MouseMove = nil
+		self.Event.LeftUp = nil
+		Drag.hook = nil
+		self:sRemove()
+		self.Remove = nil
+	end
 	
-	return DragFrame
+	return Drag.Frame
 end
 
 function KBM.CastBar:Init()
@@ -583,54 +592,67 @@ function KBM.CastBar:Init()
 	self.Anchor.Text:SetFontSize(KBM.Options.CastBar.TextSize)
 	self.Anchor.Text:ResizeToText()
 	self.Anchor.Text:SetPoint("CENTER", self.Anchor, "CENTER")
-	self.Anchor.Drag = KBM.AttachDragFrame(self.Anchor, function(uType) self.Anchor:Update(uType) end, "CB Anchor Drag", 2)
+	self.Anchor.Drag = KBM.AttachDragFrame(self.Anchor, function(uType) self.Anchor:Update(uType) end , "CB Anchor Drag", 2)
 	self.Anchor:SetVisible(KBM.Options.CastBar.Visible)
 	self.Anchor.Drag:SetVisible(KBM.Options.CastBar.Unlocked)
 
 end
 
-function KBM.CastBar:Add(UnitID, Boss, Filters)
+function KBM.CastBar:Add(Mod, Boss, Filters, PointerObj)
 
 	local CastBar = {}
-	CastBar.UnitID = UnitID
+	CastBar.UnitID = nil
 	CastBar.Boss = Boss
 	CastBar.Filters = Filters
-	CastBar[UnitID] = CastBar
+	CastBar.Casting = false
+	CastBar.LastCast = nil
+	CastBar.Mod = Mod
+	CastBar.PointerObj = PointerObj
+	function CastBar:Position(uType)
+		if uType == "end" then
+			
+		end
+	end
+	function CastBar:Create()
+		self.Frame = KBM:CallFrame(KBM.Context)
+		self:SetWidth(KBM.Options.CastBar.w)
+		self:SetHeight(KBM.Options.CastBar.h)
+		self.Progress = KBM:CallFrame(self.Frame)
+		self.Progress:SetWidth(0)
+		self.Progress:SetHeight(Castbar:GetHeight())
+		self.Text = KBM:CallText(self.Frame)
+		self.Progress:SetLayer(1)
+		self.Text:SetLayer(2)
+		self.Text:SetPoint("CENTER", self.Frame, "CENTER")
+		if not self.PointerObj then
+			if not KBM.Options.CastBar.x then
+				self.Frame:SetPoint("CENTERX", UIParent, "CENTERX")
+			else
+				self.Frame:SetPoint("LEFT", UIParent, "LEFT", KBM.Options.CastBar.x, nil)
+			end
+			if not KBM.Options.CastBar.y then
+				self.Frame:SetPoint("CENTERY", UIParent, "CENTERY")
+			else
+				self.Frame:SetPoint("TOP", UIParent, "TOP", nil, KBM.Options.CastBar.y)
+			end
+		else
+			
+		end
+		self.Progress:SetPoint("TOPLEFT", self.Frame, "TOPLEFT")
+		self:SetBackgroundColor(0,0,0,0.3)
+		self.Progress:SetBackgroundColor(0.7,0,0,0.5)
+		self.Drag = AttachDragFrame(self.Frame, function(uType) self:Position(uType) end, self.Boss.Name.." Drag", 2)
+	end
+	function CastBar:Remove()
+		self.Text:sRemove()
+		self.Progress:sRemove()
+		self.Frame:sRemove()
+	end
+	CastBar[Boss.Name] = CastBar
 
 end
 
 function KBM.CastBar:Create(UnitID, Mod, Filters)
-	Castbar = UI.CreateFrame("Frame", "PrinceCastbar", KBM.Context)
-	Castbar.UnitID = UnitID
-	Castbar.Mod = Mod
-	Castbar.Filters = Filters
-	Castbar.LastCast = nil
-	Castbar.Enabled = true
-	Castbar:SetWidth(KBM.Options.CastBar.w)
-	Castbar:SetHeight(KBM.Options.CastBar.h)
-	Castbar.Progress = UI.CreateFrame("Frame", "PrinceCastProgress", Castbar)
-	Castbar.Progress:SetWidth(0)
-	Castbar.Progress:SetHeight(Castbar:GetHeight())
-	Castbar.Icon = UI.CreateFrame("Texture", "PrinceCastIcon", Castbar)
-	Castbar.Text = UI.CreateFrame("Text", "PrinceCastText", Castbar)
-	Castbar.Progress:SetLayer(1)
-	Castbar.Icon:SetLayer(2)
-	Castbar.Text:SetLayer(2)
-	Castbar.Text:SetPoint("CENTER", Castbar, "CENTER")
-	if not KBM.Options.CastBar.x then
-		Castbar:SetPoint("CENTERX", UIParent, "CENTERX")
-	else
-		Castbar:SetPoint("LEFT", UIParent, "LEFT", KBM.Options.CastBar.x, nil)
-	end
-	if not KBM.Options.CastBar.y then
-		Castbar:SetPoint("CENTERY", UIParent, "CENTERY")
-	else
-		Castbar:SetPoint("TOP", UIParent, "TOP", nil, KBM.Options.CastBar.y)
-	end
-	Castbar.Icon:SetPoint("TOPLEFT", UIParent, "BOTTOMLEFT")
-	Castbar.Progress:SetPoint("TOPLEFT", Castbar, "TOPLEFT")
-	Castbar:SetBackgroundColor(0,0,0,0.3)
-	Castbar.Progress:SetBackgroundColor(0.7,0,0,0.5)
 	function Castbar:Start()
 	
 	end
@@ -981,7 +1003,7 @@ function KBM.MenuOptions.CastBars:Options()
 		KBM.CastBar.Anchor:SetVisible(bool)
 	end
 	function self:LockCastAnchor(bool)
-		KBM.Options.CastBar.Locked = bool
+		KBM.Options.CastBar.Unlocked = bool
 		KBM.CastBar.Anchor.Drag:SetVisible(bool)
 	end
 	function self:CastScaleWidth(bool, Check)

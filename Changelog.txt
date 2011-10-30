@@ -1,3 +1,7 @@
+v0.3.3
+* Changed Tracking methods for King and Prince after Unit.Unavailable
+* Above possibly fixes cases where the monitor could lose track of HP.
+----
 v0.3.2
 * More adjustments to the Encounter Start/End monitoring (Hopefully this time!).
 * Fixed an issue with Murdantix encounter locking out all other bosses.

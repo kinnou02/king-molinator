@@ -5,20 +5,14 @@
 
 KBMGU_Settings = nil
 
-local GU_BName = "Inquisitor Garau"
-
 local GU = {
 	ModEnabled = true,
-	MenuName = GU_BName,
-	Bosses = {
-		[GU_BName] = true,
-	},
+	MenuName = "",
 	Garau = {
 		MenuItem = nil,
 		Enabled = true,
 		Handler = nil,
 		Options = nil,
-		Name = GU_BName,
 		ID = "Garau",
 	},
 	Instance = "Hammerknell",
@@ -27,15 +21,11 @@ local GU = {
 	PhaseList = {}
 }
 
-local KBM = KBM_RegisterMod("Garau", GU)
-
-GU.GarauName = GU_BName
-
 GU.Garau = {
 	Mod = GU,
 	Level = "??",
 	Active = false,
-	Name = GU_BName,
+	Name = "Inquisitor Garau",
 	Castbar = nil,
 	CastFilters = {},
 	Timers = {},
@@ -43,14 +33,22 @@ GU.Garau = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	Descript = GU_BName,
+	Descript = GU.Garau.Name,
 }
 
+local KBM = KBM_RegisterMod(GU.Garau.ID, GU)
+
+if KBM.Lang == "German" then
+elseif KBM.Lang == "French" then
+	GU.Garau.Name = "Inquisiteur Garau"
+end
+
 function GU:AddBosses(KBM_Boss)
-	if KBM.Lang == "German" then
-	elseif KBM.Lang == "French" then
-	end
 	KBM_Boss[self.Garau.Name] = self.Garau
+	self.Garau.MenuName = self.Garau.Name
+	self.Garau.Bosses = {
+		[self.Garau.Name] = true,
+	}
 end
 
 function GU:InitVars()

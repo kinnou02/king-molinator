@@ -99,8 +99,6 @@ KM.DisplayReady = false
 KM.CurrentSwing = 0
 KM.ForecastSwing = 0
 
-local KBM = KBM_RegisterMod("Molinar", KM)
-
 KM.Prince = {
 	Mod = KM,
 	Level = "??",
@@ -125,6 +123,8 @@ KM.King = {
 	Available = false,
 	UnitID = nil,
 }
+
+local KBM = KBM_RegisterMod("Molinar", KM)
 
 function KM:AddBosses(KBM_Boss)
 	if KBM.Lang == "German" then
@@ -195,8 +195,10 @@ end
 function KM:RemoveUnits(UnitID)
 	if self.KingID == UnitID then
 		self.KingUnavail = true
+		self.KingID = nil
 	elseif self.PrinceID == UnitID then
 		self.PrinceUnavail = true
+		self.PrinceID = nil
 	end
 	if self.PrinceUnavail and self.KingUnavail then
 		return true
@@ -230,13 +232,13 @@ function KM:UnitHPCheck(unitDetails, unitID)
 						self.TimeElapsed = 0
 					end
 					self.KingLastHP = unitDetails.healthMax
-					self.KingHPMax = self.KingLastHP
+					self.KingHPMax = unitDetails.healthMax
 					self.FrameBase:SetVisible(true)
 					self.King.Dead = false
-					self.KingUnavail = false
 					self.KingCasting = false
-					return self.King
 				end
+				self.KingUnavail = false
+				return self.King
 			elseif unitDetails.name == self.Prince.Name then
 				if not self.PrinceID then
 					self.PrinceID = unitID
@@ -247,13 +249,13 @@ function KM:UnitHPCheck(unitDetails, unitID)
 						self.TimeElapsed = 0
 					end
 					self.PrinceLastHP = unitDetails.healthMax
-					self.PrinceHPMax = self.PrinceLastHP
+					self.PrinceHPMax = unitDetails.healthMax
 					self.FrameBase:SetVisible(true)
 					self.Prince.Dead = false
-					self.PrinceUnavail = false
 					self.PrinceCasting = false
-					return self.Prince
 				end
+				self.PrinceUnavail = false
+				return self.Prince
 			end
 		end
 	end
@@ -302,7 +304,7 @@ function KM:CheckTrends()
 	
 	if self.KingID ~= nil and self.PrinceID ~= nil then
 		-- King Calc
-		local KingForecastHP = self.KingLastHP-(self.KingSampleDPS * 4)
+		local KingForecastHP = self.KingLastHP-(self.KingSampleDPS * 7)
 		local KingForecastP = KingForecastHP / self.KingHPMax
 		local KingMulti = self.KingPerc*100
 		local stupidKing = math.floor(KingMulti)
@@ -311,7 +313,7 @@ function KM:CheckTrends()
 		end
 		self.KingHPP = tostring(stupidKing).."%"
 		-- Prince Calc
-		local PrinceForecastHP = self.PrinceLastHP-(self.PrinceSampleDPS * 4)
+		local PrinceForecastHP = self.PrinceLastHP-(self.PrinceSampleDPS * 7)
 		local PrinceForecastP = PrinceForecastHP / self.PrinceHPMax
 		local PrinceMulti = self.PrincePerc*100
 		local stupidPrince = math.floor(PrinceMulti)
@@ -344,7 +346,7 @@ end
 
 function KM:DPSUpdate()
 	
-	if self.KingID and self.PrinceID then
+	if self.KingID ~= nil and self.PrinceID ~= nil then
 		local DumpDPS = 0
 		local KingDetails = Inspect.Unit.Detail(self.KingID)
 		local PrinceDetails = Inspect.Unit.Detail(self.PrinceID)
