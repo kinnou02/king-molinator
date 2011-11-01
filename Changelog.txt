@@ -1,3 +1,6 @@
+v0.3.5
+* Fixed: French Menu options.
+----
 v0.3.4
 * Fixed: King Molinar's data not resetting correctly after a wipe.
 * Change: Prince Dollin's cast bar now uses new Addon cast bar interface.
@@ -5,7 +8,7 @@ v0.3.4
 * Change: Further adjustments to Encounter monitoring.
 * Change: Notify type timers now link to an Encounter rather than a boss.
 * Change: Saved Variables improved again for version differences.
-* Added: Reduntant Saved Variables will now be removed automatically.
+* Added: Redundant Saved Variables will now be removed automatically.
 * Added: Internal encounter duration timers in preparation for OSD.
 * Added: Time taken message after encounter wipes/victories.
 * Added: French support for Murdantix Encounter.

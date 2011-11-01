@@ -4,6 +4,7 @@
 --
 
 KBMGU_Settings = nil
+local HK = KBMHK_Register()
 
 local GU = {
 	ModEnabled = true,
@@ -15,7 +16,7 @@ local GU = {
 		Options = nil,
 		ID = "Garau",
 	},
-	Instance = "Hammerknell",
+	Instance = HK.Name,
 	HasPhases = true,
 	PhaseType = "percentage",
 	PhaseList = {},

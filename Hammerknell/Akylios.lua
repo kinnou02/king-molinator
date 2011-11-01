@@ -4,6 +4,7 @@
 --
 
 KBMAK_Settings = nil
+HK = KBMHK_Register()
 
 local AK = {
 	ModEnabled = true,
@@ -14,7 +15,7 @@ local AK = {
 		Options = nil,
 		ID = "Akylios",
 	},
-	Instance = "Hammerknell",
+	Instance = HK.Name,
 	HasPhases = true,
 	PhaseType = "percentage",
 	PhaseList = {},

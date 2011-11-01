@@ -5,6 +5,8 @@
 
 KBMMX_Settings = nil
 
+local HK = KBMHK_Register()
+
 local MX = {
 	ModEnabled = true,
 	Bosses = {
@@ -18,7 +20,7 @@ local MX = {
 		Name = "Murdantix",
 		ID = "Murdantix",
 	},
-	Instance = "Hammerknell",
+	Instance = HK.Name,
 	HasPhases = true,
 	PhaseType = "percentage",
 	PhaseList = {},

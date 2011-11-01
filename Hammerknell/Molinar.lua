@@ -3,6 +3,7 @@
 -- Copyright 2011
 --
 KM_Settings = nil
+local HK = KBMHK_Register()
 
 local KM = {
 	ModEnabled = true,
@@ -19,7 +20,7 @@ local KM = {
 		Name = "King Molinar",
 		ID = "KingMolinar",
 	},
-	Instance = "Hammerknell",
+	Instance = HK.Name,
 	Timers = {},
 	Lang = {},
 }
