@@ -606,18 +606,9 @@ function KM:CastBars(units)
 end
 
 function KM.UpdateBaseVars(callType)
-	if callType == "start" then
-		KM.KingCastbar:SetVisible(true)
-		KM.PrinceCastbar:SetVisible(true)
-	elseif callType == "end" then
+	if callType == "end" then
 		KM.Settings.LocX = KM.FrameBase:GetLeft()
 		KM.Settings.LocY = KM.FrameBase:GetTop()
-		if not KM.KingCasting then
-			KM.KingCastbar:SetVisible(false)
-		end
-		if not KM.PrinceCasting then
-			KM.PrinceCastbar:SetVisible(false)
-		end
 	end
 end
 
