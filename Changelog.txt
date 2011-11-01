@@ -1,5 +1,6 @@
 v0.3.5
 * Fixed: French Menu options.
+* Fixed: New settings method now being used by King's Monitor.
 ----
 v0.3.4
 * Fixed: King Molinar's data not resetting correctly after a wipe.

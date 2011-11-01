@@ -507,12 +507,12 @@ end
 function KM:BuildDisplay()
 	self.FrameBase = UI.CreateFrame("Frame", "FrameBase", KBM.Context)
 	self.FrameBase:SetVisible(false)
-	if self.FBDefX == nil then
+	if not self.FBDefX then
 		self.FrameBase:SetPoint("CENTERX", UIParent, "CENTERX")
 	else
 		self.FrameBase:SetPoint("LEFT", UIParent, "LEFT", self.FBDefX, nil)
 	end
-	if self.FBDefY == nil then
+	if not self.FBDefY then
 		self.FrameBase:SetPoint("CENTERY", UIParent, "CENTERY")
 	else
 		self.FrameBase:SetPoint("TOP", UIParent, "TOP", nil, self.FBDefY)
