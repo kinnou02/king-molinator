@@ -1,4 +1,4 @@
-﻿-- Zilas Zamira Boss Mod for KM:Boss Mods
+﻿-- Soulrender Zilas Boss Mod for KM:Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --

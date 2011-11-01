@@ -3,13 +3,18 @@ v0.3.6
 * Added: Inquisitor Garau, French client support for Arcane Essence.
 * Added: Inquisitor Garau, partial French client support for Arcane Porters.
 * Added: Inquisitor Garau, partial French client support for Infused Crawlers.
-* Added: Soulrender Zilas boss encounter (template)
-* Added: Matron Zamira boss encounter (template)
-* Added: Vladmal Prime boss encounter
-* Added: Vladmal Prime's Ancient Flame timer
-* Added: Murdantix Demonic Blast timer
-* Added: Murdantix Soul Trauma timer
-* Fixed: Inquisitor Garau encounter reset
+* Added: Soulrender Zilas boss encounter (template).
+* Added: Matron Zamira boss encounter (template).
+* Added: Vladmal Prime boss encounter.
+* Added: Vladmal Prime's Ancient Flame timer.
+* Added: Murdantix Demonic Blast timer.
+* Added: Murdantix Soul Trauma timer.
+* Added: Murdantix castbar.
+* Added: Matron Zimara castbar.
+* Added: Soulrender Zilas castbar.
+* Added: Vladmal Prime castbar.
+* Added: Inquisitor Garau castbar.
+* Fixed: Inquisitor Garau encounter reset.
 ----
 v0.3.5
 * Fixed: French Menu options.
