@@ -18,7 +18,9 @@ local GU = {
 	Instance = "Hammerknell",
 	HasPhases = true,
 	PhaseType = "percentage",
-	PhaseList = {}
+	PhaseList = {},
+	Timers = {},
+	Lang = {},
 }
 
 GU.Garau = {
@@ -33,22 +35,22 @@ GU.Garau = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	Descript = GU.Garau.Name,
+	Descript = "Inquisitor Garau",
 }
 
 local KBM = KBM_RegisterMod(GU.Garau.ID, GU)
 
-if KBM.Lang == "German" then
-elseif KBM.Lang == "French" then
-	GU.Garau.Name = "Inquisiteur Garau"
-end
+KBM.Language:Add(GU.Garau.Name)
+KBM.Language[GU.Garau.Name]:SetFrench("Inquisiteur Garau")
+
+GU.Garau.Name = KBM.Language[GU.Garau.Name][KBM.Lang]
 
 function GU:AddBosses(KBM_Boss)
-	KBM_Boss[self.Garau.Name] = self.Garau
-	self.Garau.MenuName = self.Garau.Name
+	self.MenuName = self.Garau.Name
 	self.Garau.Bosses = {
 		[self.Garau.Name] = true,
 	}
+	KBM_Boss[self.Garau.Name] = self.Garau	
 end
 
 function GU:InitVars()
@@ -60,6 +62,11 @@ function GU:InitVars()
 			EssenceEnabled = true,
 			CrawlerEnabled = true,
 		},
+		CastBar =  {
+			x = false,
+			y = false,
+			Enabled = true,
+		},
 	}
 	KBMGU_Settings = self.Settings
 end
@@ -68,11 +75,17 @@ function GU:LoadVars()
 	if type(KBMGU_Settings) == "table" then
 		for Setting, Value in pairs(KBMGU_Settings) do
 			if type(KBMGU_Settings[Setting]) == "table" then
-				for tSetting, tValue in pairs(KBMGU_Settings[Setting]) do
-					self.Settings[Setting][tSetting] = tValue
+				if self.Settings[Setting] ~= nil then
+					for tSetting, tValue in pairs(KBMGU_Settings[Setting]) do
+						if self.Settings[Setting][tSetting] ~= nil then
+							self.Settings[Setting][tSetting] = tValue
+						end
+					end
 				end
 			else
-				self.Settings[Setting] = Value
+				if self.Settings[Setting] ~= nil then
+					self.Settings[Setting] = Value
+				end
 			end
 		end
 	end
@@ -115,6 +128,7 @@ function GU:UnitHPCheck(unitDetails, unitID)
 					self.Garau.Dead = false
 					self.Garau.Available = true
 					self.Garau.Casting = false
+					self.Garau.CastBar = KBM.CastBar:Add(self, self.Garau, self.Garau.CastFilters)
 					return self.Garau
 				end
 			end
@@ -163,15 +177,15 @@ end
 
 function GU:Start()
 	self.Header = KBM.HeaderList[self.Instance]
-	self.Garau.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.Garau.Name, self.Garau, true, self.Header)
+	self.Garau.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Garau, true, self.Header)
 	self.Garau.MenuItem.Check:SetEnabled(false)
-	self.Garau.TimersRef.Blood = KBM.MechTimer:Add("Blood Tide", "damage", 18.5, self.Garau, false)
+	self.Garau.TimersRef.Blood = KBM.MechTimer:Add("Blood Tide", "damage", 18, self.Garau, nil)
 	self.Garau.TimersRef.Blood.Enabled = self.Settings.Timers.BloodEnabled
 	self.Garau.TimersRef.Crawler = KBM.MechTimer:Add({["Bask in the power of Akylios!"] = true,
-					["Sacrifice your lives for Akylios!"] = true,}, "say", 30, self.Garau, false, "Infused Crawler")
+					["Sacrifice your lives for Akylios!"] = true,}, "say", 30, self.Garau, nil, "Infused Crawler")
 	self.Garau.TimersRef.Crawler.Enabled = self.Settings.Timers.CrawlerEnabled
-	self.Garau.TimersRef.Porter = KBM.MechTimer:Add("Power my creation!", "say", 45, self.Garau, false, "Arcane Porter")
+	self.Garau.TimersRef.Porter = KBM.MechTimer:Add("Power my creation!", "say", 45, self.Garau, nil, "Arcane Porter")
 	self.Garau.TimersRef.Porter.Enabled = self.Settings.Timers.PorterEnabled
-	self.Garau.TimersRef.Essence = KBM.MechTimer:Add("Inquisitor Garau siphons arcane essence from nearby enemies!", "notify", 18, self.Garau, false, "Arcane Essence")
+	self.Garau.TimersRef.Essence = KBM.MechTimer:Add("Inquisitor Garau siphons arcane essence from nearby enemies!", "notify", 18, self.Garau, nil, "Arcane Essence")
 	self.Garau.TimersRef.Essence.Enabled = self.Settings.Timers.EssenceEnabled
 end

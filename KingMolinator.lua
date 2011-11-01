@@ -25,12 +25,12 @@ local function KBM_DefineVars(AddonID)
 		KBM.Options = {
 			AutoReset = true,
 			Frame = {
-				x = nil,
-				y = nil,
+				x = false,
+				y = false,
 			},
 			MechTimer = {
-				x = nil,
-				y = nil,
+				x = false,
+				y = false,
 				w = 350,
 				h = 32,
 				wScale = 1,
@@ -44,8 +44,8 @@ local function KBM_DefineVars(AddonID)
 				TextScale = false,
 			},
 			CastBar = {
-				x = nil,
-				y = nil,
+				x = false,
+				y = false,
 				w = 350,
 				h = 32,
 				Enabled = false,
@@ -71,11 +71,17 @@ local function KBM_LoadVars(AddonID)
 		if type(KBM_GlobalOptions) == "table" then
 			for Setting, Value in pairs(KBM_GlobalOptions) do
 				if type(KBM_GlobalOptions[Setting]) == "table" then
-					for tSetting, tValue in pairs(KBM_GlobalOptions[Setting]) do
-						KBM.Options[Setting][tSetting] = tValue
+					if KBM.Options[Setting] ~= nil then
+						for tSetting, tValue in pairs(KBM_GlobalOptions[Setting]) do
+							if KBM.Options[Setting][tSetting] ~= nil then
+								KBM.Options[Setting][tSetting] = tValue
+							end
+						end
 					end
 				else
-					KBM.Options[Setting] = Value	
+					if KBM.Options[Setting] ~= nil then
+						KBM.Options[Setting] = Value
+					end
 				end
 			end
 		end
@@ -99,6 +105,7 @@ function KBM_ToAbilityID(num)
 end
 
 KBM.Lang = Inspect.System.Language()
+KBM.Language = {}
 local KBM_Boss = {}
 KBM.BossID = {}
 KBM.Encounter = false
@@ -133,15 +140,6 @@ KBM.TimeVisual.Seconds = 0
 KBM.TimeVisual.Minutes = 0
 KBM.TimeVisual.Hours = 0
 
-function KBM_RegisterApp()
-	return KBM
-end
-
-function KBM_RegisterMod(ModID, Mod)
-	table.insert(KBM_BossMod, Mod)
-	return KBM
-end
-
 KBM.FrameStore = {}
 KBM.CheckStore = {}
 KBM.SlideStore = {}
@@ -154,12 +152,30 @@ KBM.TotalSliders = 0
 KBM.MechTimer = {}
 KBM.MechTimer.testTimerList = {}
 
+function KBM.Language:Add(Phrase)
+	local SetPhrase = {}
+	SetPhrase.English = Phrase
+	SetPhrase.French = Phrase
+	SetPhrase.German = Phrase
+	SetPhrase.Russian = Phrase
+	SetPhrase.Korean = Phrase
+	function SetPhrase:SetFrench(frPhrase)
+		self.French = frPhrase
+	end
+	function SetPhrase:SetGerman(gePhrase)
+		self.German = gePhrase
+	end
+	KBM.Language[Phrase] = SetPhrase
+	return KBM.Language[Phrase]
+end
+
 function KBM.MechTimer:Init()
 	self.TimerList = {}
 	self.ActiveTimers = {}
 	self.RemoveTimers = {}
 	self.WaitTimers = {}
 	self.StartTimers = {}
+	self.RepeatTimers = {}
 	self.LastTimer = nil
 	self.DamageTimers = {}
 	self.SayTimers = {}
@@ -214,6 +230,7 @@ function KBM.MechTimer:Add(iTrigger, iType, iTime, iBoss, iStart, iName)
 	Timer.Type = iType
 	Timer.Time = iTime
 	Timer.Boss = iBoss
+	Timer.Delay = iStart
 	Timer.Enabled = true
 	function Timer:Start(CurrentTime)
 		if self.Enabled then
@@ -236,6 +253,9 @@ function KBM.MechTimer:Add(iTrigger, iType, iTime, iBoss, iStart, iName)
 			self.TimeBar:SetBackgroundColor(0,0,1,0.33)
 			self.TimeStart = CurrentTime
 			self.Remaining = self.Time
+			if self.Delay then
+				self.Time = Delay
+			end
 			self.CastInfo = KBM:CallText(self.Background, self.Trigger)
 			self.CastInfo:SetText(string.format(" %0.01f : ", self.Remaining)..self.Name)
 			self.CastInfo:SetFontSize(KBM.Options.MechTimer.TextSize)
@@ -292,6 +312,9 @@ function KBM.MechTimer:Add(iTrigger, iType, iTime, iBoss, iStart, iName)
 		self.CastInfo:sRemove()
 		self.TimeBar:sRemove()
 		self.Background:sRemove()
+		if self.iType == "repeat" then
+			table.insert(KBM.MechTimer.StartTimers, self)
+		end
 	end
 	function Timer:Update(CurrentTime)
 		if self.Active then
@@ -335,6 +358,9 @@ function KBM.MechTimer:Add(iTrigger, iType, iTime, iBoss, iStart, iName)
 	elseif iType == "buff" then
 		self.Bufftimers[iTrigger] = Timer
 		iBoss.Timers[iTrigger] = Timer
+	elseif iType == "repeat" then
+		self.RepeatTimers[iTrigger] = Timer
+		iBoss.Timers[iTrigger] = Timer
 	else -- iType == "Combat start"
 		self.CombatTimers[iTrigger] = Timer
 		iBoss.Timers[iTrigger] = Timer
@@ -352,9 +378,9 @@ function KBM:CallFrame(parent)
 		self.TotalFrames = self.TotalFrames + 1
 		frame = UI.CreateFrame("Frame", "Frame Store"..self.TotalFrames, parent)
 		function frame:sRemove()
-			self.Event.LeftClick = nil
-			self.Event.MouseIn = nil
-			self.Event.MouseOut = nil
+			for EventName, pFunction in pairs(self.Event) do
+				self.Event[EventName] = nil
+			end
 			self:SetParent(KBM.Context)
 			self:ClearAll()
 			self:SetVisible(false)
@@ -377,7 +403,9 @@ function KBM:CallCheck(parent)
 		self.TotalChecks = self.TotalChecks + 1
 		Checkbox = UI.CreateFrame("RiftCheckbox", "Check Store"..self.TotalChecks, parent)
 		function Checkbox:sRemove()
-			self.Event.CheckboxChange = nil
+			for EventName, pFunction in pairs(self.Event) do
+				self.Event[EventName] = nil
+			end
 			self:ClearAll()
 			self:SetParent(KBM.Context)
 			self:SetVisible(false)
@@ -400,6 +428,9 @@ function KBM:CallText(parent, debugInfo)
 		self.TotalTexts = self.TotalTexts + 1
 		Textfbox = UI.CreateFrame("Text", "Textf Store"..self.TotalTexts, parent)
 		function Textfbox:sRemove()
+			for EventName, pFunction in pairs(self.Event) do
+				self.Event[EventName] = nil
+			end
 			self:SetText("")
 			self:ClearAll()
 			self:SetParent(KBM.Context)
@@ -423,7 +454,9 @@ function KBM:CallSlider(parent)
 		self.TotalSliders = self.TotalSliders + 1
 		Slider = UI.CreateFrame("RiftSlider", "Slide Store"..self.TotalSliders, parent)
 		function Slider:sRemove()
-			self.Event.SliderChange = nil
+			for EventName, pFunction in pairs(self.Event) do
+				self.Event[EventName] = nil
+			end
 			self:SetParent(KBM.Context)
 			self:SetVisible(false)
 			self:ClearAll()
@@ -447,7 +480,6 @@ local function KBM_Options()
 		KBM.MainWin:SetVisible(true)
 	end
 end
-
 
 local function KBM_UnitHPCheck(info)
 
@@ -475,6 +507,8 @@ local function KBM_UnitHPCheck(info)
 									if not KBM_CurrentMod.EncounterRunning then
 										print("Encounter Started: "..KBM_Boss[uDetails.name].Descript)
 										print("Good luck!")
+										KBM.TimeElapsed = 0
+										KBM.StartTime = Inspect.Time.Real()
 									end
 									KBM.BossID[UnitID].Boss = KBM_CurrentMod:UnitHPCheck(uDetails, UnitID)
 								else
@@ -598,110 +632,135 @@ function KBM.CastBar:Init()
 
 end
 
-function KBM.CastBar:Add(Mod, Boss, Filters, PointerObj)
+function KBM.CastBar:Add(Mod, Boss, Enabled)
 
-	local CastBar = {}
-	CastBar.UnitID = nil
-	CastBar.Boss = Boss
-	CastBar.Filters = Filters
-	CastBar.Casting = false
-	CastBar.LastCast = nil
-	CastBar.Mod = Mod
-	CastBar.PointerObj = PointerObj
-	function CastBar:Position(uType)
+	local CastBarObj = {}
+	CastBarObj.UnitID = nil
+	CastBarObj.Boss = Boss
+	CastBarObj.Filters = Boss.CastFilters
+	CastBarObj.HasFilters = Boss.HasCastFilters
+	CastBarObj.Casting = false
+	CastBarObj.LastCast = nil
+	CastBarObj.Enabled = Enabled
+	CastBarObj.Mod = Mod
+	function CastBarObj:Position(uType)
 		if uType == "end" then
-			
+			self.Boss.Settings.CastBar.x = self.Frame.GetLeft() 
+			self.Boss.Settings.CastBar.y = self.Frame.GetRight()
 		end
 	end
-	function CastBar:Create()
+	function CastBarObj:Create(UnitID)
+		self.UnitID = UnitID
 		self.Frame = KBM:CallFrame(KBM.Context)
-		self:SetWidth(KBM.Options.CastBar.w)
-		self:SetHeight(KBM.Options.CastBar.h)
+		self.Frame:SetWidth(KBM.Options.CastBar.w)
+		self.Frame:SetHeight(KBM.Options.CastBar.h)
 		self.Progress = KBM:CallFrame(self.Frame)
 		self.Progress:SetWidth(0)
-		self.Progress:SetHeight(Castbar:GetHeight())
+		self.Progress:SetHeight(self.Frame:GetHeight())
 		self.Text = KBM:CallText(self.Frame)
 		self.Progress:SetLayer(1)
 		self.Text:SetLayer(2)
 		self.Text:SetPoint("CENTER", self.Frame, "CENTER")
-		if not self.PointerObj then
-			if not KBM.Options.CastBar.x then
-				self.Frame:SetPoint("CENTERX", UIParent, "CENTERX")
-			else
-				self.Frame:SetPoint("LEFT", UIParent, "LEFT", KBM.Options.CastBar.x, nil)
-			end
-			if not KBM.Options.CastBar.y then
-				self.Frame:SetPoint("CENTERY", UIParent, "CENTERY")
-			else
-				self.Frame:SetPoint("TOP", UIParent, "TOP", nil, KBM.Options.CastBar.y)
-			end
+		if not KBM.Options.CastBar.x then
+			self.Frame:SetPoint("CENTERX", UIParent, "CENTERX")
 		else
-			
+			self.Frame:SetPoint("LEFT", UIParent, "LEFT", KBM.Options.CastBar.x, nil)
+		end
+		if not KBM.Options.CastBar.y then
+			self.Frame:SetPoint("CENTERY", UIParent, "CENTERY")
+		else
+			self.Frame:SetPoint("TOP", UIParent, "TOP", nil, KBM.Options.CastBar.y)
 		end
 		self.Progress:SetPoint("TOPLEFT", self.Frame, "TOPLEFT")
-		self:SetBackgroundColor(0,0,0,0.3)
+		self.Frame:SetBackgroundColor(0,0,0,0.3)
 		self.Progress:SetBackgroundColor(0.7,0,0,0.5)
-		self.Drag = AttachDragFrame(self.Frame, function(uType) self:Position(uType) end, self.Boss.Name.." Drag", 2)
-	end
-	function CastBar:Remove()
-		self.Text:sRemove()
-		self.Progress:sRemove()
-		self.Frame:sRemove()
-	end
-	CastBar[Boss.Name] = CastBar
-
-end
-
-function KBM.CastBar:Create(UnitID, Mod, Filters)
-	function Castbar:Start()
-	
-	end
-	function Castbar:MoveUpdate(Type) 
-		if Type == "end" then
-			KBM.Options.CastBar.x = self:GetLeft()
-			KBM.Options.CastBar.y = self:GetTop()
+		self.Drag = KBM.AttachDragFrame(self.Frame, function(uType) self:Position(uType) end, self.Boss.Name.." Drag", 2)
+		self.Drag:SetVisible(false)
+		KBM.CastBar.ActiveCastBars[UnitID] = self
+		if Boss.PinCastBar then
+			Boss:PinCastBar()
 		end
 	end
-	function Castbar:Update()
+	function CastBarObj:Update()
 		bDetails = Inspect.Unit.Castbar(self.UnitID)
-		if bDetails then
+		if bDetails and self.Enabled then
 			if bDetails.abilityName then
-				if self.Filters[bDetails.abilityName].Enabled then
+				if self.HasFilters then
+					if self.Filters[bDetails.abilityName] then
+						if self.Filters[bDetails.abilityName].Enabled then
+							if not self.Casting then
+								self.Casting = true
+								self.Frame:SetVisible(true)
+							end
+							bCastTime = bDetails.duration
+							bProgress = bDetails.remaining						
+							self.Progress:SetWidth(self.Frame:GetWidth() * (1-(bProgress/bCastTime)))
+							self.Text:SetText(string.format("%0.01f", bProgress).." - "..bDetails.abilityName)
+							self.Text:ResizeToText()
+						end
+					end
+				else
 					if not self.Casting then
 						self.Casting = true
-						self:SetVisible(true)
+						self.Frame:SetVisible(true)
 					end
 					bCastTime = bDetails.duration
 					bProgress = bDetails.remaining						
-					self.Progress:SetWidth(self:GetWidth() * (1-(bProgress/bCastTime)))
+					self.Progress:SetWidth(self.Frame:GetWidth() * (1-(bProgress/bCastTime)))
 					self.Text:SetText(string.format("%0.01f", bProgress).." - "..bDetails.abilityName)
-					self.Text:ResizeToText()
+					self.Text:ResizeToText()	
 				end
 				if self.LastCast ~= bDetails.abilityName then
 					self.LastCast = bDetails.abilityName
 					if KBM.MechTimer.CastTimers[bDetails.abilityName] then
 						if KBM.MechTimer.CastTimers[bDetails.abilityName].Enabled then
-							KBM.MechTimer.CastTimers[bDetails.abilityName]:Start(Inpect.Time.Real())
+							KBM.MechTimer.CastTimers[bDetails.abilityName]:Start(Inspect.Time.Real())
 						end
 					end
 				end
 			else
 				self.Casting = false
-				self:SetVisible(false)
+				self.Frame:SetVisible(false)
 				self.LastCast = ""
 			end
 		else
 			self.Casting = false
-			self:SetVisible(false)
+			self.Frame:SetVisible(false)
 			self.LastCast = ""
 		end
 	end
-	function Castbar:Remove()
-		KBM.CastBar.List[self.UnitID] = nil
+	function CastBarObj:Remove()
+		KBM.CastBar.ActiveCastBars[self.UnitID] = nil
+		self.UnitID = nil
+		self.Text:sRemove()
+		self.Progress:sRemove()
+		self.Frame:sRemove()
+		self.Drag:Remove()
 	end
-	Castbar.Drag = KBM.AttachDragFrame(Castbar, function(data) Castbar:MoveUpdate(data) end, "CastBar Drag", 2)
-	self.List[UnitID] = Castbar
-	--Castbar:SetVisible(false)
+	self[Boss.Name] = CastBarObj
+	return self[Boss.Name]
+
+end
+
+function KBM.ConvertTime(Time)
+	local TimeString = "00"
+	local TimeSeconds = 0
+	local TimeMinutes = 0
+	local TimeHours = 0
+	if Time >= 60 then
+		TimeMinutes = math.floor(Time / 60)
+		TimeSeconds = Time - (TimeMinutes * 60)
+		if TimeMinutes >= 60 then
+			TimeHours = math.floor(TimeMinutes / 60)
+			TimeMinutes = TimeMinutes - (TimeHours * 60)
+			TimeString = string.format("%dh:%02dm:%02ds", TimeHours, TimeMinutes, TimeSeconds)
+		else
+			TimeString = string.format("%02dm:%02ds", TimeMinutes, TimeSeconds)
+		end
+	else
+		TimeString = string.format("%02ds", Time)
+	end
+	return TimeString
 end
 
 function KBM:Timer()
@@ -713,25 +772,12 @@ function KBM:Timer()
 			KBM_CurrentMod:Timer(current, diff)
 		end
 		if diff >= 1 then
-			self.TimeElapsed = self.TimeElapsed + math.floor(diff)
+			self.TimeElapsed = current - self.StartTime
 			self:TimeToHours(self.TimeElapsed)
 			self.HeldTime = current - (diff - math.floor(diff))
 			self.UpdateTime = current
-			if KBM.Testing then
-				local startRand = math.random(1, 100)
-				if startRand < 50 then
-					local TestTrigger = self.MechTimer.testTimerList[math.random(1, #self.MechTimer.testTimerList)]
-					--print("Random Choosen: "..TestTrigger)
-					if self.MechTimer.CastTimers[TestTrigger] then
-						self.MechTimer.CastTimers[TestTrigger]:Start(current)
-					end
-					if self.MechTimer.DamageTimers[TestTrigger] then
-						self.MechTimer.DamageTimers[TestTrigger]:Start(current)
-					end
-				end
-			end
 		end
-		if udiff >= 0.05 then
+		if udiff >= 0.025 then
 			if #self.MechTimer.ActiveTimers > 0 then
 				for i, Timer in ipairs(self.MechTimer.ActiveTimers) do
 					Timer:Update(current)
@@ -742,14 +788,14 @@ function KBM:Timer()
 					end
 					self.MechTimer.RemoveTimers = {}
 				end
-				if #self.MechTimer.StartTimers > 0 then
-					for i, Timer in ipairs(self.MechTimer.StartTimers) do
-						Timer:Start(current)
-					end
-					self.MechTimer.StartTimers = {}
-				end
 			end
-			for UnitID, CastCheck in pairs(KBM.CastBar.List) do
+			if #self.MechTimer.StartTimers > 0 then
+				for i, Timer in ipairs(self.MechTimer.StartTimers) do
+					Timer:Start(current)
+				end
+				self.MechTimer.StartTimers = {}
+			end
+			for UnitID, CastCheck in pairs(KBM.CastBar.ActiveCastBars) do
 				CastCheck:Update()
 			end
 			self.UpdateTime = current
@@ -819,6 +865,8 @@ local function KBM_Reset()
 			KBM.BossID = {}
 			KBM_CurrentBossName = ""
 			KBM.Encounter = false
+			KBM.TimeElapsed = 0
+			KBM.TimeStart = 0
 		end
 	else
 		print("No encounter to reset.")
@@ -830,12 +878,15 @@ local function KBM_UnitRemoved(units)
 	if KBM.Encounter then
 		if KBM.Options.AutoReset then
 			for UnitID, Specifier in pairs(units) do
-				if KBM.BossID[UnitID] then
-					if KBM_CurrentMod then
-						KBM.BossID[UnitID] = nil
-						if KBM_CurrentMod:RemoveUnits(UnitID) then
-							print("Encounter Ended, possible wipe.")
-							KBM_Reset()
+				if not Inspect.Unit.Detail(UnitID) then
+					if KBM.BossID[UnitID] then
+						if KBM_CurrentMod then
+							KBM.BossID[UnitID] = nil
+							if KBM_CurrentMod:RemoveUnits(UnitID) then
+								print("Encounter Ended, possible wipe.")
+								print("Time: "..KBM.ConvertTime(Inspect.Time.Real() - KBM.StartTime))
+								KBM_Reset()
+							end
 						end
 					end
 				end
@@ -856,7 +907,7 @@ local function KBM_Death(info)
 						KBM.BossID[UnitID] = nil
 						if KBM_CurrentMod:Death(UnitID) then
 							print("Encounter Victory")
-							print("Good job!")
+							print("Time: "..KBM.ConvertTime(Inspect.Time.Real() - KBM.StartTime))
 							KBM_Reset()
 						end
 					end
@@ -889,13 +940,11 @@ function KBM.Notify(data)
 	--print(data.message)
 	if KBM.Encounter then
 		if data.message then
-			if KBM.CurrentBoss then
-				for BossID, BossLink in pairs(KBM.BossID) do
-					for Trigger, Timer in pairs(KBM.BossID[BossID].Boss.Timers) do
-						if string.find(data.message, Trigger, 1, true) then
-							Timer:Start(Inspect.Timer.Real())
-							break
-						end
+			if KBM_CurrentMod then
+				for Trigger, Timer in pairs(KBM_CurrentMod.Timers) do
+					if string.find(data.message, Trigger, 1, true) then
+						Timer:Start(Inspect.Timer.Real())
+						break
 					end
 				end
 			end
@@ -980,7 +1029,8 @@ function KBM.MenuOptions.MechTimers:Options()
 	KBM.Options.MechTimer.Enabled = true
 	self.MechTimers:AddCheck("Show Anchor (for positioning.)", self.ShowMechAnchor, KBM.Options.MechTimer.Visible)
 	self.MechTimers:AddCheck("Anchor unlocked.", self.LockMechAnchor, KBM.Options.MechTimer.Unlocked)
-	-- local Mechwidth = self.MechTimers:AddCheck("Width scaling.", self.MechScaleWidth, KBM.Options.MechTimer.ScaleWidth)
+	-- self.MechTimers:AddCheck("Width scaling.", self.MechScaleWidth, KBM.Options.MechTimer.ScaleWidth)
+	-- self.MechTimers:AddCheck("Enable Width mouse wheel scaling.", self.MechWidthMouse, KBM.Options.MechTimer.WidthMouse)
 	-- local slider = self.MechTimers:AddSlider(50, 150, nil, (KBM.Options.MechTimer.wScale*100))
 	-- Mechwidth:LinkSlider(slider, self.MechwScaleChange)
 	-- local Mechheight = self.MechTimers:AddCheck("Height scaling.", self.MechScaleHeight, KBM.Options.MechTimer.ScaleHeight)
@@ -1054,20 +1104,9 @@ function KBM.MenuOptions.CastBars:Options()
 	KBM.Options.CastBar.Enabled = false
 	self.CastBars:AddCheck("Show Anchor (for positioning.)", self.ShowCastAnchor, KBM.Options.CastBar.Visible)
 	self.CastBars:AddCheck("Anchor unlocked.", self.LockCastAnchor, KBM.Options.CastBar.Unlocked)
-	-- local sliderAppend = {
-					-- Min = 50,
-					-- Max = 150, 
-					-- Width = nil, 
-					-- Default = (KBM.Options.CastBar.wScale*100),
-					-- Callback = self.CastwScaleChange,
-	-- }
-	-- self.CastBars:AddCheck("Width scaling.", self.CastScaleWidth, KBM.Options.CastBar.ScaleWidth, sliderAppend)
-	-- sliderAppend.Default = (KBM.Options.CastBar.hScale*100)
-	-- sliderAppend.Callback = self.CasthScaleChange
-	-- self.CastBars:AddCheck("Height scaling.", self.CastScaleHeight, KBM.Options.CastBar.ScaleHeight, sliderAppend)
+	-- self.CastBars:AddCheck("Width scaling.", self.CastScaleWidth, KBM.Options.CastBar.ScaleWidth)
+	-- self.CastBars:AddCheck("Height scaling.", self.CastScaleHeight, KBM.Options.CastBar.ScaleHeight)
 	-- self.CastBars:AddCheck("Text Size", self.CastTextSize, KBM.Options.CastBar.TextScale)
-	--slider = self.CastBars:AddSlider(12, 28, nil, KBM.Options.CastBar.TextSize)
-	--CastText:LinkSlider(slider, self.CastTextChange)
 
 end
 
@@ -1097,10 +1136,19 @@ end
 local function KBM_WaitReady(unitID)
 	KBM_Start()
 	for _, Mod in ipairs(KBM_BossMod) do
-		Mod:Start(KBM_MainWin)
 		Mod:AddBosses(KBM_Boss)
+		Mod:Start(KBM_MainWin)
 	end
 	KBM_PlayerID = unitID
+end
+
+function KBM_RegisterApp()
+	return KBM
+end
+
+function KBM_RegisterMod(ModID, Mod)
+	table.insert(KBM_BossMod, Mod)
+	return KBM
 end
 
 table.insert(Event.Addon.SavedVariables.Load.Begin, {KBM_DefineVars, "KingMolinator", "Pre Load"})

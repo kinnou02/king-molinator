@@ -7,7 +7,6 @@ KBMMX_Settings = nil
 
 local MX = {
 	ModEnabled = true,
-	MenuName = "Murdantix",
 	Bosses = {
 		["Murdantix"] = true,
 	},
@@ -22,12 +21,10 @@ local MX = {
 	Instance = "Hammerknell",
 	HasPhases = true,
 	PhaseType = "percentage",
-	PhaseList = {}
+	PhaseList = {},
+	Timers = {},
+	Lang = {},
 }
-
-local KBM = KBM_RegisterMod("Murdantix", MX)
-
-MX.MurdName = "Murdantix"
 
 MX.Murd = {
 	Mod = MX,
@@ -36,18 +33,28 @@ MX.Murd = {
 	Name = "Murdantix",
 	Castbar = nil,
 	CastFilters = {},
+	HasCastFilters = false,
 	Timers = {},
 	TimersRef = {},
+	Triggers = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
 	Descript = "Murdantix",
 }
 
+local KBM = KBM_RegisterMod("Murdantix", MX)
+
+KBM.Language:Add(MX.Murd.Name)
+
+-- Ability Dictionary
+MX.Lang.Mangling = KBM.Language:Add("Mangling Crush")
+MX.Lang.Mangling.French = "Traumatisme d'\195\162me"
+MX.Lang.Pound = KBM.Language:Add("Ferocious Pound")
+MX.Lang.Pound.French = "Attaque f\195\169roce"
+
 function MX:AddBosses(KBM_Boss)
-	if KBM.Lang == "German" then
-	elseif KBM.Lang == "French" then
-	end
+	self.MenuName = self.Murd.Name
 	KBM_Boss[self.Murd.Name] = self.Murd
 end
 
@@ -58,6 +65,11 @@ function MX:InitVars()
 			MangleEnabled = true,
 			PoundEnabled = true,
 		},
+		CastBar = {
+			Enabled = true,
+			x = false,
+			y = false,
+		},
 	}
 	KBMMX_Settings = self.Settings
 end
@@ -66,11 +78,17 @@ function MX:LoadVars()
 	if type(KBMMX_Settings) == "table" then
 		for Setting, Value in pairs(KBMMX_Settings) do
 			if type(KBMMX_Settings[Setting]) == "table" then
-				for tSetting, tValue in pairs(KBMMX_Settings[Setting]) do
-					self.Settings[Setting][tSetting] = tValue
+				if self.Settings[Setting] ~= nil then
+					for tSetting, tValue in pairs(KBMMX_Settings[Setting]) do
+						if self.Settings[Setting][tSetting] ~= nil then
+							self.Settings[Setting][tSetting] = tValue
+						end
+					end
 				end
 			else
-				self.Settings[Setting] = Value
+				if self.Settings[Setting] ~= nil then
+					self.Settings[Setting] = Value
+				end
 			end
 		end
 	end
@@ -80,7 +98,7 @@ function MX:SaveVars()
 	KBMMX_Settings = self.Settings
 end
 
-function MX:Castbar(units)
+function MX:Castbar()
 end
 
 function MX:RemoveUnits(UnitID)
@@ -111,10 +129,11 @@ function MX:UnitHPCheck(unitDetails, unitID)
 					self.HeldTime = self.StartTime
 					self.TimeElapsed = 0
 					self.Murd.Dead = false
-					self.Murd.Available = true
 					self.Murd.Casting = false
-					return self.Murd
+					self.Murd.CastBar:Create(unitID)
 				end
+				self.Murd.Available = true
+				return self.Murd
 			end
 		end
 	end
@@ -123,6 +142,7 @@ end
 function MX:Reset()
 	self.EncounterRunning = false
 	self.Murd.UnitID = nil
+	self.Murd.CastBar:Remove()
 end
 
 function MX:Timer()
@@ -144,16 +164,18 @@ function MX.Murdantix:Options()
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
 	local Timers = Options:AddHeader("Timers Enabled", self.TimersEnabled, MX.Settings.Timers.Enabled)
-	Timers:AddCheck("Mangling Crush", self.MangleEnabled, MX.Settings.Timers.MangleEnabled)
-	Timers:AddCheck("Ferocious Pound", self.PoundEnabled, MX.Settings.Timers.PoundEnabled)
+	Timers:AddCheck(KM.Lang.Mangling[KBM.Lang], self.MangleEnabled, MX.Settings.Timers.MangleEnabled)
+	Timers:AddCheck(KM.Lang.Pound[KBM.Lang], self.PoundEnabled, MX.Settings.Timers.PoundEnabled)
 end
 
 function MX:Start()
 	self.Header = KBM.HeaderList[self.Instance]
-	self.Murdantix.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.Murdantix.Name, self.Murdantix, true, self.Header)
+	self.Murdantix.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Murdantix, true, self.Header)
 	self.Murdantix.MenuItem.Check:SetEnabled(false)
-	self.Murd.TimersRef.Mangling = KBM.MechTimer:Add("Mangling Crush", "damage", 12, self.Murd, false)
-	self.Murd.TimersRef.Mangling.Enabled = MX.Settings.MangleEnabled
-	self.Murd.TimersRef.Pound = KBM.MechTimer:Add("Ferocious Pound", "damage", 35, self.Murd, false)
-	self.Murd.TimersRef.Pound.Enabled = MX.Settings.PoundEnabled
+	self.Murd.TimersRef.Mangling = KBM.MechTimer:Add(self.Lang.Mangling[KBM.Lang], "damage", 12, self.Murd)
+	self.Murd.TimersRef.Mangling.Enabled = MX.Settings.Timers.MangleEnabled
+	self.Murd.TimersRef.Pound = KBM.MechTimer:Add(self.Lang.Pound[KBM.Lang], "damage", 35, self.Murd)
+	self.Murd.TimersRef.Pound.Enabled = MX.Settings.Timers.PoundEnabled
+	
+	self.Murd.CastBar = KBM.CastBar:Add(self, self.Murd, true)
 end

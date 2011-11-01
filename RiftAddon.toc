@@ -10,7 +10,7 @@ Author = "Paul Snart"
 Website = "http://twitter.com/#!/psnart"
 Email = "snarty@gmail.com"
 
-Version = "0.3.3"
+Version = "0.3.4"
 
 Environment = "1.5"
 
@@ -21,6 +21,7 @@ RunOnStartup = {
 	"Hammerknell/Murdantix.lua",
 	"Hammerknell/Molinar.lua",
 	"Hammerknell/Garau.lua",
+	"HammerKnell/Akylios.lua",
 }
 
 Embed = {
@@ -30,6 +31,7 @@ Embed = {
 
 SavedVariables = {
 	KM_Settings = "account",
+	KBMAK_Settings = "account",
 	KBMGU_Settings = "account",
 	KBMMX_Settings = "account",
 	KBMHK_Settings = "account",

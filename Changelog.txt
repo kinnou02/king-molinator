@@ -1,3 +1,19 @@
+v0.3.4
+* Fixed: King Molinar's data not resetting correctly after a wipe.
+* Change: Prince Dollin's cast bar now uses new Addon cast bar interface.
+* Change: King Molinar's cast bar now uses new Addon cast bar interface.
+* Change: Further adjustments to Encounter monitoring.
+* Change: Notify type timers now link to an Encounter rather than a boss.
+* Change: Saved Variables improved again for version differences.
+* Added: Reduntant Saved Variables will now be removed automatically.
+* Added: Internal encounter duration timers in preparation for OSD.
+* Added: Time taken message after encounter wipes/victories.
+* Added: French support for Murdantix Encounter.
+* Added: New internal language dictionary interface.
+* Added: Akylios framework. *Encounter start/wipe for Phase 1 only. (test)
+* Added: Akylios Wave counter for Phase 1 only (test)
+* Added: New repeatable persistent timers.
+----
 v0.3.3
 * Changed Tracking methods for King and Prince after Unit.Unavailable
 * Above possibly fixes cases where the monitor could lose track of HP.

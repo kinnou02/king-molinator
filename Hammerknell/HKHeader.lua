@@ -14,10 +14,10 @@ local HK = {
 
 local KBM = KBM_RegisterMod("Hammerknell", HK)
 
+KBM.Language:Add(HK.Name)
+KBM.Language[HK.Name]:SetFrench("Forteresse de Glasmarteau")
+
 function HK:AddBosses(KBM_Boss)
-	if KBM.Lang == "German" then
-	elseif KBM.Lang == "French" then
-	end
 end
 
 function HK:InitVars()
@@ -33,6 +33,6 @@ function HK:Start()
 	function self:Enabled(bool)
 	
 	end
-	HK.Header = KBM.MainWin.Menu:CreateHeader(self.Name, self.Enabled, true)
+	HK.Header = KBM.MainWin.Menu:CreateHeader(KBM.Language[self.Name][KBM.Lang], self.Enabled, true)
 	HK.Header.Check:SetEnabled(false)
 end

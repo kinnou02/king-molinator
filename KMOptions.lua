@@ -57,7 +57,7 @@ function KBM.InitOptions()
 		end
 	end
 	
-	MenuWidth = math.floor(ContentW * 0.25)-10
+	MenuWidth = math.floor(ContentW * 0.30)-10
 
 	KBM.MainWin.Menu = UI.CreateFrame("Frame", "SBM Menu Frame", KBM.MainWin.Content)
 	KBM.MainWin.Menu:SetWidth(MenuWidth)
@@ -213,6 +213,7 @@ function KBM.InitOptions()
 			self.Title = nil
 			for _, Item in ipairs(self.List) do
 				Item:Remove()
+				Item = nil
 			end
 			self.List = {}
 		end
@@ -255,7 +256,6 @@ function KBM.InitOptions()
 				self.SubText.Frame:sRemove()
 				self.Separator.Frame:sRemove()
 				self.Frame:sRemove()
-				self = nil
 			end
 			self.Title = TitleObj
 		end
@@ -278,7 +278,6 @@ function KBM.InitOptions()
 			table.insert(self.List, SpacerObj)
 			function SpacerObj:Remove()
 				self.Frame:sRemove()
-				self = nil
 			end
 		end
 		function Child.Options:AddHeader(Text, Callback, Default)
@@ -402,6 +401,8 @@ function KBM.InitOptions()
 						-- SliderObj:Disable()
 					-- end
 					-- function SliderObj:Remove()
+						-- self.Enable = nil
+						-- self.Disable = nil
 						-- self.Text.Display:sRemove()
 						-- self.Text.Frame:sRemove()
 						-- self.Bar.Frame:sRemove()
@@ -445,7 +446,6 @@ function KBM.InitOptions()
 					self.Check.Frame:sRemove()
 					self.Text.Frame:sRemove()
 					self.Frame:sRemove()
-					self = nil
 				end
 				return CheckObj
 			end
@@ -454,10 +454,10 @@ function KBM.InitOptions()
 				self.Text.Frame:sRemove()
 				for _, Child in ipairs(self.Children) do
 					Child:Remove()
+					Child = nil
 				end
 				self.Children = {}
 				self.Frame:sRemove()
-				self = nil
 			end
 			return HeaderObj
 		end

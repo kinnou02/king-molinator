@@ -6,7 +6,6 @@ KM_Settings = nil
 
 local KM = {
 	ModEnabled = true,
-	MenuName = "King Molinar",
 	Bosses = {
 		["Rune King Molinar"] = true,
 		["Prince Dollin"] = true,
@@ -21,6 +20,8 @@ local KM = {
 		ID = "KingMolinar",
 	},
 	Instance = "Hammerknell",
+	Timers = {},
+	Lang = {},
 }
 
 -- Addon Variables
@@ -106,6 +107,7 @@ KM.Prince = {
 	Name = "Prince Dollin",
 	Castbar = nil,
 	CastFilters = {},
+	HasCastFilters = true,
 	Timers = {},
 	Dead = false,
 	Available = false,
@@ -118,6 +120,7 @@ KM.King = {
 	Name = "Rune King Molinar",
 	Castbar = nil,
 	CastFilters = {},
+	HasCastFilters = true,
 	Timers = {},
 	Dead = false,
 	Available = false,
@@ -126,13 +129,17 @@ KM.King = {
 
 local KBM = KBM_RegisterMod("Molinar", KM)
 
+KBM.Language:Add(KM.King.Name)
+KBM.Language:Add(KM.Prince.Name)
+KBM.Language[KM.King.Name]:SetGerman("Runenkönig Molinar")
+KBM.Language[KM.Prince.Name]:SetGerman("Prinz Dollin")
+KBM.Language[KM.King.Name]:SetFrench("Roi runique Molinar")
+
+KM.King.Name = KBM.Language[KM.King.Name][KBM.Lang]
+KM.Prince.Name = KBM.Language[KM.Prince.Name][KBM.Lang]
+
 function KM:AddBosses(KBM_Boss)
-	if KBM.Lang == "German" then
-		self.King.Name = "Runenkönig Molinar"
-		self.Prince.Name = "Prinz Dollin"
-	elseif KBM.Lang == "French" then
-		self.King.Name = "Roi runique Molinar"
-	end
+	self.MenuName = self.King.Name
 	self.Prince.Descript = self.King.Name.." & "..self.Prince.Name
 	self.King.Descript = self.Prince.Descript
 	KBM_Boss[self.Prince.Name] = self.Prince
@@ -141,8 +148,8 @@ end
 
 function KM:InitVars()
 	self.Settings = {
-		LocX = nil,
-		LocY = nil,
+		LocX = false,
+		LocY = false,
 		Size = 1,
 		SampleDPS = 4,
 		Hidden = false,
@@ -161,6 +168,8 @@ function KM:InitVars()
 		RFeedbackEnabled = true,
 		CrushingEnabled = true,
 		FBlastEnabled = true,
+		Timers = {
+		},
 	}
 	KM_Settings = self.Settings
 end
@@ -169,11 +178,17 @@ function KM:LoadVars()
 	if type(KM_Settings) == "table" then
 		for Setting, Value in pairs(KM_Settings) do
 			if type(KM_Settings[Setting]) == "table" then
-				for tSetting, tValue in pairs(KM_Settings[Setting]) do
-					self.Settings[Setting][tSetting] = tValue
+				if self.Settings[Setting] ~= nil then
+					for tSetting, tValue in pairs(KM_Settings[Setting]) do
+						if self.Settings[Setting][tSettins] ~= nil then
+							self.Settings[Setting][tSetting] = tValue
+						end
+					end
 				end
 			else
-				self.Settings[Setting] = Value	
+				if self.Settings[Setting] ~= nil then
+					self.Settings[Setting] = Value
+				end
 			end
 		end
 	end
@@ -195,10 +210,8 @@ end
 function KM:RemoveUnits(UnitID)
 	if self.KingID == UnitID then
 		self.KingUnavail = true
-		self.KingID = nil
 	elseif self.PrinceID == UnitID then
 		self.PrinceUnavail = true
-		self.PrinceID = nil
 	end
 	if self.PrinceUnavail and self.KingUnavail then
 		return true
@@ -224,7 +237,6 @@ function KM:UnitHPCheck(unitDetails, unitID)
 		if unitDetails.player == nil then
 			if unitDetails.name == self.King.Name then
 				if not self.KingID then
-					self.KingID = unitID
 					if not self.EncounterRunning then
 						self.EncounterRunning = true
 						self.StartTime = Inspect.Time.Real()
@@ -236,12 +248,13 @@ function KM:UnitHPCheck(unitDetails, unitID)
 					self.FrameBase:SetVisible(true)
 					self.King.Dead = false
 					self.KingCasting = false
+					self.King.CastBar:Create(unitID)
 				end
+				self.KingID = unitID
 				self.KingUnavail = false
 				return self.King
 			elseif unitDetails.name == self.Prince.Name then
 				if not self.PrinceID then
-					self.PrinceID = unitID
 					if not self.EncounterRunning then
 						self.EncounterRunning = true
 						self.StartTime = Inspect.Time.Real()
@@ -253,7 +266,9 @@ function KM:UnitHPCheck(unitDetails, unitID)
 					self.FrameBase:SetVisible(true)
 					self.Prince.Dead = false
 					self.PrinceCasting = false
+					self.Prince.CastBar:Create(unitID)
 				end
+				self.PrinceID = unitID
 				self.PrinceUnavail = false
 				return self.Prince
 			end
@@ -264,6 +279,7 @@ end
 function KM:Reset()
 	self.EncounterRunning = false
 	self.PrinceID = nil
+	self.KingID = nil
 	self.KingDPSTable = {}
 	self.PrinceDPSTable = {}
 	self.KingHPBar:SetWidth(self.BossHPWidth)
@@ -284,24 +300,13 @@ function KM:Reset()
 	if self.Settings.Hidden then
 		self.FrameBase:SetVisible(false)
 	end
-	self.KingCastbar:SetVisible(false)
-	self.KingCastIcon:SetTexture("", "")
-	self.KingCastIcon:SetVisible(false)
-	self.KingCastProgress:SetWidth(0)
-	self.KingCastText:SetText("")
-	self.KingCasting = false
-	self.PrinceCastbar:SetVisible(false)
-	self.PrinceCastIcon:SetTexture("", "")
-	self.PrinceCastIcon:SetVisible(false)
-	self.PrinceCastProgress:SetWidth(0)
-	self.PrinceCastText:SetText("")
-	self.PrinceCasting = false
+	self.King.CastBar:Remove()
+	self.Prince.CastBar:Remove()
 	print("Monitor reset.")
 end
 
 function KM:CheckTrends()
-	-- Adjust the Current and Trend bars accordingly.
-	
+	-- Adjust the Current and Trend bars accordingly.	
 	if self.KingID ~= nil and self.PrinceID ~= nil then
 		-- King Calc
 		local KingForecastHP = self.KingLastHP-(self.KingSampleDPS * 7)
@@ -409,24 +414,7 @@ function KM:SetNormal()
 	self.FrameBase:SetHeight(self.FBHeight)
 	self.FrameBase:SetWidth(self.FBWidth)
 	
-	self.IconSize = 36
-	
-	self.KingCastbar:SetWidth(self.FBWidth)
-	self.KingCastbar:SetHeight(self.IconSize)
-	self.KingCastIcon:SetWidth(self.IconSize)
-	self.KingCastIcon:SetHeight(self.IconSize)
-	self.KingCastProgress:SetHeight(self.IconSize)
-	self.KingCastProgress:SetWidth(0)
-	self.KingCastText:SetFontSize(20)
-	
-	self.PrinceCastbar:SetWidth(self.FBWidth)
-	self.PrinceCastbar:SetHeight(self.IconSize)
-	self.PrinceCastIcon:SetWidth(self.IconSize)
-	self.PrinceCastIcon:SetHeight(self.IconSize)
-	self.PrinceCastProgress:SetHeight(self.IconSize)
-	self.PrinceCastProgress:SetWidth(0)
-	self.PrinceCastText:SetFontSize(20)
-	
+	self.IconSize = 36	
 	self.KingText:SetWidth(self.KingText:GetFullWidth())
 	self.KingText:SetHeight(self.KingText:GetFullHeight())
 	
@@ -470,24 +458,7 @@ function KM:SetCompact()
 	self.FrameBase:SetHeight(self.FBHeight * 0.75)
 	self.FrameBase:SetWidth(self.FBWidth * 0.75)
 	
-	self.IconSize = 36 * 0.75
-	
-	self.KingCastbar:SetWidth((self.FBWidth * 0.75))
-	self.KingCastbar:SetHeight(self.IconSize)
-	self.KingCastIcon:SetWidth(self.IconSize)
-	self.KingCastIcon:SetHeight(self.IconSize)
-	self.KingCastProgress:SetHeight(self.IconSize)
-	self.KingCastProgress:SetWidth(0)
-	self.KingCastText:SetFontSize(16)
-	
-	self.PrinceCastbar:SetWidth((self.FBWidth * 0.75))
-	self.PrinceCastbar:SetHeight(self.IconSize)
-	self.PrinceCastIcon:SetWidth(self.IconSize)
-	self.PrinceCastIcon:SetHeight(self.IconSize)
-	self.PrinceCastProgress:SetHeight(self.IconSize)
-	self.PrinceCastProgress:SetWidth(0)
-	self.PrinceCastText:SetFontSize(16)
-	
+	self.IconSize = 36 * 0.75	
 	self.KingText:SetWidth(self.KingText:GetFullWidth())
 	self.KingText:SetHeight(self.KingText:GetFullHeight())
 	
@@ -547,37 +518,7 @@ function KM:BuildDisplay()
 	end
 	self.FrameBase:SetBackgroundColor(0,0,0,0.4)
 	self.FBLayer = self.FrameBase:GetLayer()
-	
-	self.KingCastbar = UI.CreateFrame("Frame", "KingCastbar", self.FrameBase)
-	self.KingCastProgress = UI.CreateFrame("Frame", "KingCastProgress", self.KingCastbar)
-	self.KingCastIcon = UI.CreateFrame("Texture", "KingCastIcon", self.FrameBase)
-	self.KingCastText = UI.CreateFrame("Text", "KingCastText", self.KingCastbar)
-	self.KingCastProgress:SetLayer(1)
-	self.KingCastIcon:SetLayer(2)
-	self.KingCastText:SetLayer(2)
-	self.KingCastText:SetPoint("CENTER", self.KingCastbar, "CENTER")
-	self.KingCastbar:SetPoint("BOTTOMRIGHT", self.FrameBase, "TOPRIGHT")
-	self.KingCastIcon:SetPoint("BOTTOMLEFT", self.FrameBase, "TOPLEFT")
-	self.KingCastProgress:SetPoint("TOPLEFT", self.KingCastbar, "TOPLEFT")
-	self.KingCastbar:SetBackgroundColor(0,0,0,0.3)
-	self.KingCastProgress:SetBackgroundColor(0.7,0,0,0.5)
-	self.KingCastbar:SetVisible(false)
-	
-	self.PrinceCastbar = UI.CreateFrame("Frame", "PrinceCastbar", self.FrameBase)
-	self.PrinceCastProgress = UI.CreateFrame("Frame", "PrinceCastProgress", self.PrinceCastbar)
-	self.PrinceCastIcon = UI.CreateFrame("Texture", "PrinceCastIcon", self.FrameBase)
-	self.PrinceCastText = UI.CreateFrame("Text", "PrinceCastText", self.PrinceCastbar)
-	self.PrinceCastProgress:SetLayer(1)
-	self.PrinceCastIcon:SetLayer(2)
-	self.PrinceCastText:SetLayer(2)
-	self.PrinceCastText:SetPoint("CENTER", self.PrinceCastbar, "CENTER")
-	self.PrinceCastbar:SetPoint("TOPRIGHT", self.FrameBase, "BOTTOMRIGHT")
-	self.PrinceCastIcon:SetPoint("TOPLEFT", self.FrameBase, "BOTTOMLEFT")
-	self.PrinceCastProgress:SetPoint("TOPLEFT", self.PrinceCastbar, "TOPLEFT")
-	self.PrinceCastbar:SetBackgroundColor(0,0,0,0.3)
-	self.PrinceCastProgress:SetBackgroundColor(0.7,0,0,0.5)
-	self.PrinceCastbar:SetVisible(false)
-	
+
 	self.KingText = UI.CreateFrame("Text", "KingText", self.FrameBase)
 	self.KingText:SetText(self.KingName)
 	self.KingText:SetPoint("TOPLEFT", self.FrameBase, "TOPLEFT", 1, 0)
@@ -660,6 +601,10 @@ function KM:BuildDisplay()
 	
 end
 
+function KM:CastBars(units)
+
+end
+
 function KM.UpdateBaseVars(callType)
 	if callType == "start" then
 		KM.KingCastbar:SetVisible(true)
@@ -676,160 +621,28 @@ function KM.UpdateBaseVars(callType)
 	end
 end
 
-function KM:UpdateKingCast()
-	local bDetails = Inspect.Unit.Castbar(self.KingID)
-	if bDetails then
-		if bDetails.abilityName then
-			if KM.King.CastFilters[bDetails.abilityName] and KM.Settings.KingBar then
-				if KM.King.CastFilters[bDetails.abilityName].Enabled then
-					if not self.KingCasting then
-						self.KingCasting = true
-						self.KingCastbar:SetVisible(true)
-					end
-					bCastTime = bDetails.duration
-					bProgress = bDetails.remaining
-					self.KingCastProgress:SetWidth(self.KingCastbar:GetWidth() * (1-(bProgress/bCastTime)))
-					self.KingCastText:SetText(string.format("%0.01f", bProgress).." - "..bDetails.abilityName)
-					self.KingCastText:SetWidth(self.KingCastText:GetFullWidth())
-					self.KingCastText:SetHeight(self.KingCastText:GetFullHeight())
-				end
-			end
-			if self.KingLastCast ~= bDetails.abilityName then
-				self.KingLastCast = bDetails.abilityName
-				if self.King.Timers[bDetails.abilityName] then
-					self.King.Timers[bDetails.abilityName]:Start(Inspect.Time.Real())
-				end
-			end
-		end
+function KM.Prince:PinCastBar()
+	self.CastBar.Frame:ClearAll()
+	self.CastBar.Frame:SetPoint("TOPLEFT", KM.FrameBase, "BOTTOMLEFT")
+	self.CastBar.Frame:SetPoint("TOPRIGHT", KM.FrameBase, "BOTTOMRIGHT")
+	self.CastBar.Frame:SetHeight(KM.IconSize)
+	if KM.Settings.Compact then
+		self.CastBar.Text:SetFontSize(16)
 	else
-		self.KingCastbar:SetVisible(false)
-		self.KingCastIcon:SetTexture("", "")
-		self.KingCastIcon:SetVisible(false)
-		self.KingCastProgress:SetWidth(0)
-		self.KingCastText:SetText("")
-		self.KingCasting = false
-		self.KingLastCast = ""
+		self.CastBar.Text:SetFontSize(20)
 	end
 end
 
-function KM:ManageKingCasts(Visible)
-	--[[if Visible then
-		local bDetails = Inspect.Unit.Castbar(self.KingID)
-		if bDetails then
-			if bDetails.abilityName then
-				if self.AbilityWatch[bDetails.abilityName] then
-					if self.AbilityWatch[bDetails.abilityName].KingWatch then
-						--local aDetails = Inspect.Ability.Detail(bDetails.ability)
-						if aDetails then
-							self.KingCastIcon:SetTexture("Rift", aDetails.icon)
-							self.KingCastIcon:SetVisible(true)
-							self.KingCasting = true
-							self.KingCastbar:SetVisible(true)
-						else
-						self.KingCasting = true
-						self.KingCastbar:SetVisible(true)	
-						--end
-					end
-				end
-			end
-		end
+function KM.King:PinCastBar()
+	self.CastBar.Frame:ClearAll()
+	self.CastBar.Frame:SetPoint("BOTTOMLEFT", KM.FrameBase, "TOPLEFT")
+	self.CastBar.Frame:SetPoint("BOTTOMRIGHT", KM.FrameBase, "TOPRIGHT")
+	self.CastBar.Frame:SetHeight(KM.IconSize)
+	if KM.Settings.Compact then
+		self.CastBar.Text:SetFontSize(16)
 	else
-		self.KingCastbar:SetVisible(false)
-		self.KingCastIcon:SetTexture("", "")
-		self.KingCastIcon:SetVisible(false)
-		self.KingCastProgress:SetWidth(0)
-		self.KingCastText:SetText("")
-		self.KingCasting = false	
-	end]]
-end
-
-function KM:UpdatePrinceCast()
-	local bDetails = Inspect.Unit.Castbar(self.PrinceID)
-	if bDetails then
-		if bDetails.abilityName then
-			if self.Prince.CastFilters[bDetails.abilityName] and self.Settings.PrinceBar then
-				if self.Prince.CastFilters[bDetails.abilityName].Enabled then
-					if not self.PrinceCasting then
-						self.PrinceCasting = true
-						self.PrinceCastbar:SetVisible(true)
-					end
-					bCastTime = bDetails.duration
-					bProgress = bDetails.remaining
-					self.PrinceCastProgress:SetWidth(self.PrinceCastbar:GetWidth() * (1-(bProgress/bCastTime)))
-					self.PrinceCastText:SetText(string.format("%0.01f", bProgress).." - "..bDetails.abilityName)
-					self.PrinceCastText:SetWidth(self.PrinceCastText:GetFullWidth())
-					self.PrinceCastText:SetHeight(self.PrinceCastText:GetFullHeight())
-				end
-			end
-			if self.PrinceLastCast ~= bDetails.abilityName then
-				self.PrinceLastCast = bDetails.abilityName
-				if self.Prince.Timers[bDetails.abilityName] then
-					self.Prince.Timers[bDetails.abilityName]:Start(Inspect.Time.Real())
-				end
-			end
-		end
-	else
-		self.PrinceCastbar:SetVisible(false)
-		self.PrinceCastIcon:SetTexture("", "")
-		self.PrinceCastIcon:SetVisible(false)
-		self.PrinceCastProgress:SetWidth(0)
-		self.PrinceCastText:SetText("")
-		self.PrinceCasting = false
-		self.PrinceLastCast = ""
+		self.CastBar.Text:SetFontSize(20)
 	end
-end
-
-function KM:ManagePrinceCasts(Visible)
-	--[[if Visible then
-		local bDetails = Inspect.Unit.Castbar(self.PrinceID)
-		if bDetails then
-			if bDetails.abilityName then
-				if self.AbilityWatch[bDetails.abilityName] then
-					if self.AbilityWatch[bDetails.abilityName].PrinceWatch then
-						--local aDetails = Inspect.Ability.Detail(bDetails.ability)
-						if aDetails then
-							self.PrinceCastIcon:SetTexture("Rift", aDetails.icon)
-							self.PrinceCastIcon:SetVisible(true)
-							self.PrinceCasting = true
-							self.PrinceCastbar:SetVisible(true)
-						else
-							self.PrinceCasting = true
-							self.PrinceCastbar:SetVisible(true)
-						--end
-					end
-				end
-			end
-		end
-	--else
-		self.PrinceCastbar:SetVisible(false)
-		self.PrinceCastIcon:SetTexture("", "")
-		self.PrinceCastIcon:SetVisible(false)
-		self.PrinceCastProgress:SetWidth(0)
-		self.PrinceCastText:SetText("")
-		self.PrinceCasting = false	
-	end]]
-end
-
-function KM:CastBar(units)
-	--[[local processed = 0
-	for UnitID, Visible in pairs(units) do
-		if UnitID == self.KingID then
-			if self.Settings.KingBar then
-				self:ManageKingCasts(Visible)
-				--processed = processed + 1
-			end
-		elseif UnitID == self.PrinceID then
-			if self.Settings.PrinceBar then
-				self:ManagePrinceCasts(Visible)
-				--processed = processed + 1
-			end
-		--elseif UnitID == KBM_PlayerID then
-		--	self.ManageTestCasts(Visible)
-		end
-		if processed == 2 then
-			return
-		end
-	end]]
 end
 
 function KM:Timer(current, diff)
@@ -840,12 +653,6 @@ function KM:Timer(current, diff)
 		elseif udiff > 0.095 then
 			self:CheckTrends()
 			self.UpdateTime = current
-		end
-		if self.PrinceID then
-			self:UpdatePrinceCast()
-		end
-		if self.KingID then
-			self:UpdateKingCast()
 		end
 	end
 end
@@ -883,9 +690,11 @@ function KM.KingMolinar:Options()
 	end
 	function self:KingEnabled(bool)
 		KM.Settings.KingBar = bool
+		KM.King.CastBar.Enabled = bool
 	end
 	function self:PrinceEnabled(bool)
 		KM.Settings.PrinceBar = bool
+		KM.Prince.CastBar.Enabled = bool
 	end
 	function self:RendEnabled(bool)
 		KM.Settings.RendEnabled = bool
@@ -956,15 +765,18 @@ function KM:Start()
 	self.FBDefX = self.Settings.LocX
 	self.FBDefY = self.Settings.LocY
 	self.Header = KBM.HeaderList[self.Instance]
-	self.KingMolinar.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.KingMolinar.Name, self.KingMolinar, true, self.Header)
+	self.KingMolinar.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.KingMolinar, true, self.Header)
 	self.KingMolinar.MenuItem.Check:SetEnabled(false)
 	
-	KBM.MechTimer:Add("Cursed Blows", "cast", 55, self.King, false)
-	KBM.MechTimer:Add("Consuming Essence", "cast", 22, self.King, false, "(King) Consuming Essence")
-	KBM.MechTimer:Add("Terminate Life", "cast", 21, self.Prince, false)
-	KBM.MechTimer:Add("Consuming Essence", "cast", 22, self.Prince, false, "(Prince) Consuming Essence")
-	KBM.MechTimer:Add("Runic Feedback", "cast", 48, self.Prince, false)
-	KBM.MechTimer:Add("Incorporeal Revenant begins to phase into this reality.", "notify", 82, self.King, false, "Incorporeal Revenant")
+	KBM.MechTimer:Add("Cursed Blows", "cast", 55, self.King, nil)
+	KBM.MechTimer:Add("Consuming Essence", "cast", 22, self.King, nil, "(King) Consuming Essence")
+	KBM.MechTimer:Add("Terminate Life", "cast", 21, self.Prince, nil)
+	KBM.MechTimer:Add("Consuming Essence", "cast", 22, self.Prince, nil, "(Prince) Consuming Essence")
+	KBM.MechTimer:Add("Runic Feedback", "cast", 48, self.Prince, nil)
+	KBM.MechTimer:Add("Incorporeal Revenant begins to phase into this reality.", "notify", 82, KM, nil, "Incorporeal Revenant")
+	
+	self.King.CastBar = KBM.CastBar:Add(self, self.King, self.King.PinCastBar, self.Settings.KingBar)
+	self.Prince.CastBar = KBM.CastBar:Add(self, self.Prince, self.Prince.PinCastBar, self.Settings.PrinceBar)
 	
 	--self.KingMolinar:Options()
 	if not self.DisplayReady then
