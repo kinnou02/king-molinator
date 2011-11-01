@@ -1,4 +1,4 @@
-﻿-- Murdantix Boss Mod for KM:Boss Mods
+﻿-- Akylios Boss Mod for KM:Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --
@@ -129,16 +129,16 @@ function AK:UnitHPCheck(unitDetails, unitID)
 		if not unitDetails.player then
 			if unitDetails.name == self.Jornaru.Name then
 				if not self.Jornaru.UnitID then
-					self.Jornaru.UnitID = unitID
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
 					self.TimeElapsed = 0
 					self.Jornaru.Dead = false
-					self.Jornaru.Available = true
 					self.Jornaru.Casting = false
-					return self.Jornaru
 				end
+				self.Jornaru.UnitID = unitID
+				self.Jornaru.Available = true
+				return self.Jornaru
 			end
 		end
 	end

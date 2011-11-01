@@ -1,4 +1,4 @@
-﻿-- Murdantix Boss Mod for KM:Boss Mods
+﻿-- Inquisitor Garau Boss Mod for KM:Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --
@@ -43,6 +43,16 @@ local KBM = KBM_RegisterMod(GU.Garau.ID, GU)
 
 KBM.Language:Add(GU.Garau.Name)
 KBM.Language[GU.Garau.Name]:SetFrench("Inquisiteur Garau")
+GU.Lang.PowerMy = KBM.Language:Add("Power my creation!")
+GU.Lang.PowerMy.French = "Alimentez ma cr\195\169ation*!"
+GU.Lang.ArcaneEMenu = KBM.Language:Add("Arcane Essence")
+GU.Lang.ArcaneEMenu.French = "Syphon d'essence"
+GU.Lang.ArcaneETrig = KBM.Language:Add("Inquisitor Garau siphons arcane essence from nearby enemies!")
+GU.Lang.ArcaneETrig.French = "Inquisiteur Garau siphonne l'essence occulte des ennemis \195\160 proximit\195\169 !"
+GU.Lang.BaskIn = KBM.Language:Add("Bask in the power of Akylios!")
+GU.Lang.BaskIn.French = "Savourez le pouvoir d'Akylios !"
+GU.Lang.Sacrifice = KBM.Language:Add("Sacrifice your lives for Akylios!")
+GU.Lang.Sacrifice.French = "Sacrifiez vos vies pour Akylios !"
 
 GU.Garau.Name = KBM.Language[GU.Garau.Name][KBM.Lang]
 
@@ -121,17 +131,17 @@ function GU:UnitHPCheck(unitDetails, unitID)
 		if not unitDetails.player then
 			if unitDetails.name == self.Garau.Name then
 				if not self.Garau.UnitID then
-					self.Garau.UnitID = unitID
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
 					self.TimeElapsed = 0
 					self.Garau.Dead = false
-					self.Garau.Available = true
 					self.Garau.Casting = false
-					self.Garau.CastBar = KBM.CastBar:Add(self, self.Garau, self.Garau.CastFilters)
-					return self.Garau
+					self.Garau.CastBar = KBM.CastBar:Create(unitID)
 				end
+				self.Garau.UnitID = unitID
+				self.Garau.Available = true
+				return self.Garau
 			end
 		end
 	end
@@ -139,7 +149,9 @@ end
 
 function GU:Reset()
 	self.EncounterRunning = false
+	self.Garau.Available = false
 	self.Garau.UnitID = nil
+	self.Garau.CastBar:Remove()
 end
 
 function GU:Timer()
@@ -172,7 +184,7 @@ function GU.Garau:Options()
 	Timers:AddCheck("Blood Tide", self.BloodEnabled, GU.Settings.Timers.BloodEnabled)
 	Timers:AddCheck("Infused Crawlers", self.CrawlerEnabled, GU.Settings.Timers.CrawlerEnabled)
 	Timers:AddCheck("Arcane Porter", self.PorterEnabled, GU.Settings.Timers.PorterEnabled)
-	Timers:AddCheck("Arcane Essence", self.EssenceEnabled, GU.Settings.Timers.EssenceEnabled)
+	Timers:AddCheck(GU.Lang.ArcaneEMenu[KBM.Lang], self.EssenceEnabled, GU.Settings.Timers.EssenceEnabled)
 	
 end
 
@@ -182,11 +194,13 @@ function GU:Start()
 	self.Garau.MenuItem.Check:SetEnabled(false)
 	self.Garau.TimersRef.Blood = KBM.MechTimer:Add("Blood Tide", "damage", 18, self.Garau, nil)
 	self.Garau.TimersRef.Blood.Enabled = self.Settings.Timers.BloodEnabled
-	self.Garau.TimersRef.Crawler = KBM.MechTimer:Add({["Bask in the power of Akylios!"] = true,
-					["Sacrifice your lives for Akylios!"] = true,}, "say", 30, self.Garau, nil, "Infused Crawler")
+	self.Garau.TimersRef.Crawler = KBM.MechTimer:Add({[self.Lang.BaskIn[KBM.Lang]] = true,
+					[self.Lang.Sacrifice[KBM.Lang]] = true,}, "say", 30, self.Garau, nil, "Infused Crawler")
 	self.Garau.TimersRef.Crawler.Enabled = self.Settings.Timers.CrawlerEnabled
-	self.Garau.TimersRef.Porter = KBM.MechTimer:Add("Power my creation!", "say", 45, self.Garau, nil, "Arcane Porter")
+	self.Garau.TimersRef.Porter = KBM.MechTimer:Add(self.Lang.PowerMy[KBM.Lang], "say", 45, self.Garau, nil, "Arcane Porter")
 	self.Garau.TimersRef.Porter.Enabled = self.Settings.Timers.PorterEnabled
-	self.Garau.TimersRef.Essence = KBM.MechTimer:Add("Inquisitor Garau siphons arcane essence from nearby enemies!", "notify", 18, self.Garau, nil, "Arcane Essence")
+	self.Garau.TimersRef.Essence = KBM.MechTimer:Add(GU.Lang.ArcaneETrig[KBM.Lang], "notify", 18, self.Garau, nil, GU.Lang.ArcaneEMenu[KBM.Lang])
 	self.Garau.TimersRef.Essence.Enabled = self.Settings.Timers.EssenceEnabled
+	
+	self.Garau.CastBar = KBM.CastBar:Add(self, self.Garau, true)
 end

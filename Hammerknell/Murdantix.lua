@@ -54,6 +54,8 @@ MX.Lang.Mangling = KBM.Language:Add("Mangling Crush")
 MX.Lang.Mangling.French = "Traumatisme d'\195\162me"
 MX.Lang.Pound = KBM.Language:Add("Ferocious Pound")
 MX.Lang.Pound.French = "Attaque f\195\169roce"
+MX.Lang.Blast = KBM.Language:Add("Demonic Blast")
+MX.Lang.Trauma = KBM.Language:Add("Soul Trauma")
 
 function MX:AddBosses(KBM_Boss)
 	self.MenuName = self.Murd.Name
@@ -66,6 +68,8 @@ function MX:InitVars()
 			Enabled = true,
 			MangleEnabled = true,
 			PoundEnabled = true,
+			BlastEnabled = true,
+			TraumaEnabled = true,
 		},
 		CastBar = {
 			Enabled = true,
@@ -125,7 +129,6 @@ function MX:UnitHPCheck(unitDetails, unitID)
 		if not unitDetails.player then
 			if unitDetails.name == self.Murd.Name then
 				if not self.Murd.UnitID then
-					self.Murd.UnitID = unitID
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
@@ -134,6 +137,7 @@ function MX:UnitHPCheck(unitDetails, unitID)
 					self.Murd.Casting = false
 					self.Murd.CastBar:Create(unitID)
 				end
+				self.Murd.UnitID = unitID
 				self.Murd.Available = true
 				return self.Murd
 			end
@@ -163,11 +167,21 @@ function MX.Murdantix:Options()
 		MX.Settings.Timers.PoundEnabled = bool
 		MX.Murd.TimersRef.Pound.Enabled = bool
 	end
+	function self:BlastEnabled(bool)
+		MX.Settings.Timers.BlastEnabled = bool
+		MX.Murd.TimersRef.Blast.Enabled = bool
+	end
+	function self:TraumaEnabled(bool)
+		MX.Settings.Timers.TraumaEnabled = bool
+		MX.Murd.TimersRef.Trauma.Enabled = bool
+	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
 	local Timers = Options:AddHeader("Timers Enabled", self.TimersEnabled, MX.Settings.Timers.Enabled)
 	Timers:AddCheck(MX.Lang.Mangling[KBM.Lang], self.MangleEnabled, MX.Settings.Timers.MangleEnabled)
 	Timers:AddCheck(MX.Lang.Pound[KBM.Lang], self.PoundEnabled, MX.Settings.Timers.PoundEnabled)
+	Timers:AddCheck(MX.Lang.Blast[KBM.Lang], self.BlastEnabled, MX.Settings.Timers.BlastEnabled)
+	Timers:AddCheck(MX.Lang.Trauma[KBM.Lang], self.TraumaEnabled, MX.Settings.Timers.TraumaEnabled)
 end
 
 function MX:Start()
@@ -178,6 +192,10 @@ function MX:Start()
 	self.Murd.TimersRef.Mangling.Enabled = MX.Settings.Timers.MangleEnabled
 	self.Murd.TimersRef.Pound = KBM.MechTimer:Add(self.Lang.Pound[KBM.Lang], "damage", 35, self.Murd)
 	self.Murd.TimersRef.Pound.Enabled = MX.Settings.Timers.PoundEnabled
+	self.Murd.TimersRef.Blast = KBM.MechTimer:Add(self.Lang.Blast[KBM.Lang], "cast", 17, self.Murd)
+	self.Murd.TimersRef.Blast.Enabled = MX.Settings.Timers.BlastEnabled
+	self.Murd.TimersRef.Trauma = KBM.MechTimer:Add(self.Lang.Trauma[KBM.Lang], "cast", 9, self.Murd)
+	self.Murd.TimersRef.Trauma.Enabled = MX.Settings.Timers.TraumaEnabled
 	
 	self.Murd.CastBar = KBM.CastBar:Add(self, self.Murd, true)
 end

@@ -1,4 +1,8 @@
-﻿KBM = KBM_RegisterApp()
+﻿-- KM Options System for KM:Boss Mods
+-- Written by Paul Snart
+-- Copyright 2011
+
+KBM = KBM_RegisterApp()
 
 function KBM.InitOptions()
 	KBM.MainWin = UI.CreateFrame("RiftWindow", "Safe's Boss Mods", KBM.Context)
