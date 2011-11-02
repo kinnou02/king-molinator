@@ -130,8 +130,8 @@ KM.King = {
 
 local KBM = KBM_RegisterMod("Molinar", KM)
 
-KBM.Language:Add(KM.King.Name)
-KBM.Language:Add(KM.Prince.Name)
+KM.Lang.Molinar = KBM.Language:Add(KM.King.Name)
+KM.Lang.Dollin = KBM.Language:Add(KM.Prince.Name)
 KBM.Language[KM.King.Name]:SetGerman("Runenkönig Molinar")
 KBM.Language[KM.Prince.Name]:SetGerman("Prinz Dollin")
 KBM.Language[KM.King.Name]:SetFrench("Roi runique Molinar")

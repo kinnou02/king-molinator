@@ -10,7 +10,7 @@ Author = "Paul Snart"
 Website = "http://twitter.com/#!/psnart"
 Email = "snarty@gmail.com"
 
-Version = "0.3.6"
+Version = "0.3.7"
 
 Environment = "1.5"
 
@@ -22,8 +22,12 @@ RunOnStartup = {
 	"Hammerknell/Matron.lua",
 	"Hammerknell/Zilas.lua",
 	"Hammerknell/Molinar.lua",
+	"Hammerknell/Sicaron.lua",
+	"Hammerknell/Estrode.lua",
 	"Hammerknell/Prime.lua",
+	"Hammerknell/Grugonim.lua",
 	"Hammerknell/Garau.lua",
+	"Hammerknell/Inwar.lua",
 	"Hammerknell/Akylios.lua",
 }
 
@@ -40,7 +44,11 @@ SavedVariables = {
 	KBMHK_Settings = "account",
 	KBMMZ_Settings = "account",
 	KBMSZ_Settings = "account",
+	KBMSN_Settings = "account",
 	KBMVP_Settings = "account",
+	KBMES_Settings = "account",
+	KBMGR_Settings = "account",
+	KBMID_Settings = "account",
 	KBM_GlobalOptions = "account",
 }
 

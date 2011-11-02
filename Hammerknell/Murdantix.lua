@@ -47,7 +47,7 @@ MX.Murd = {
 
 local KBM = KBM_RegisterMod("Murdantix", MX)
 
-KBM.Language:Add(MX.Murd.Name)
+MX.Lang.Murdantix = KBM.Language:Add(MX.Murd.Name)
 
 -- Ability Dictionary
 MX.Lang.Mangling = KBM.Language:Add("Mangling Crush")

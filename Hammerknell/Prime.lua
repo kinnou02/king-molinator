@@ -39,8 +39,8 @@ VP.Prime = {
 
 local KBM = KBM_RegisterMod(VP.Prime.ID, VP)
 
-VP.Lang.Prime = KBM.Language:Add("Vladmal Prime")
-VP.Lang.Flames = KBM.Language:Add("Acient Flames")
+VP.Lang.Prime = KBM.Language:Add(VP.Prime.Name)
+VP.Lang.Flames = KBM.Language:Add("Ancient Flames")
 
 VP.Prime.Name = VP.Lang.Prime[KBM.Lang]
 

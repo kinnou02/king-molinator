@@ -39,6 +39,8 @@ MZ.Matron = {
 
 local KBM = KBM_RegisterMod(MZ.Matron.ID, MZ)
 
+MZ.Lang.Matron = KBM.Language:Add(MZ.Matron.Name)
+
 function MZ:AddBosses(KBM_Boss)
 	self.Matron.Descript = self.Matron.Name
 	self.MenuName = self.Matron.Descript

@@ -53,6 +53,9 @@ AK.Akylios = {
 
 local KBM = KBM_RegisterMod(AK.Akylios.ID, AK)
 
+AK.Lang.Akylios = KBM.Language:Add(AK.Akylios.Name)
+AK.Lang.Jornaru = KBM.Language:Add(AK.Jornaru.Name)
+
 function AK:AddBosses(KBM_Boss)
 	self.Jornaru.Descript = "Akylios & Jornaru"
 	self.Akylios.Descript = self.Jornaru.Descript

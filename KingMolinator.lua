@@ -500,6 +500,7 @@ local function KBM_UnitHPCheck(info)
 								KBM.BossID[UnitID].Mod = KBM_Boss[uDetails.name].Mod
 								if uDetails.health > 0 then
 									KBM.BossID[UnitID].dead = false
+									KBM.BossID[UnitID].available = true
 									KBM.Encounter = true
 									KBM.CurrentBoss = UnitID
 									KBM_CurrentBossName = uDetails.Name

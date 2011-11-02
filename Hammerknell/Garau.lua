@@ -41,8 +41,8 @@ GU.Garau = {
 
 local KBM = KBM_RegisterMod(GU.Garau.ID, GU)
 
-KBM.Language:Add(GU.Garau.Name)
-KBM.Language[GU.Garau.Name]:SetFrench("Inquisiteur Garau")
+GU.Lang.Garau = KBM.Language:Add(GU.Garau.Name)
+GU.Lang.Garau.French = "Inquisiteur Garau"
 GU.Lang.PowerMy = KBM.Language:Add("Power my creation!")
 GU.Lang.PowerMy.French = "Alimentez ma cr\195\169ation*!"
 GU.Lang.ArcaneEMenu = KBM.Language:Add("Arcane Essence")

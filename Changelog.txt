@@ -1,3 +1,11 @@
+v0.3.7
+* Added: Grugonim boss encounter (template).
+* Added: Inwar Darktide boss encounter (template).
+* Added: Sicaron boss encounter (template).
+* Added: Estrode boss encounter (template).
+* Added: Added more translation templates to various bosses.
+* Fixed: Vladmir Prime Ancient Flames.
+----
 v0.3.6
 * Added: Inquisitor Garau, French client support.
 * Added: Inquisitor Garau, French client support for Arcane Essence.
