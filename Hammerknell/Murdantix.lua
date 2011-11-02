@@ -26,6 +26,7 @@ local MX = {
 	PhaseList = {},
 	Timers = {},
 	Lang = {},
+	TankSwap = true,
 }
 
 MX.Murd = {
@@ -136,6 +137,7 @@ function MX:UnitHPCheck(unitDetails, unitID)
 					self.Murd.Dead = false
 					self.Murd.Casting = false
 					self.Murd.CastBar:Create(unitID)
+					KBM.TankSwap:Start("Mangled")
 				end
 				self.Murd.UnitID = unitID
 				self.Murd.Available = true

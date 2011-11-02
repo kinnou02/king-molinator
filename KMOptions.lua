@@ -95,6 +95,9 @@ function KBM.InitOptions()
 	
 	function KBM.MainWin.Options.Close.Event:LeftPress()
 		KBM.MainWin:SetVisible(false)
+		if KBM.MainWin.CurrentPage.Link.Close then
+			KBM.MainWin.CurrentPage.Link:Close()
+		end
 	end
 
 	function KBM.MainWin.Menu:CreateHeader(Text, Hook, Default)
@@ -201,6 +204,7 @@ function KBM.InitOptions()
 		Child.Link = Link
 		Child.Options = {}
 		Child.Options.List = {}
+		Child.Options.Link = Link
 		Child.Options.Child = Child
 		Child.Header = Header
 		Child.Options.Title = {}
@@ -223,6 +227,9 @@ function KBM.InitOptions()
 		end
 		function Child.Options:SetTitle()
 			if KBM.MainWin.CurrentPage then
+				if KBM.MainWin.CurrentPage.Link.Close then
+					KBM.MainWin.CurrentPage.Link:Close()
+				end
 				KBM.MainWin.CurrentPage:Remove()
 				KBM.MainWin.CurrentPage = self
 			else

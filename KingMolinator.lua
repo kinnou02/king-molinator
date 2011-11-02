@@ -11,6 +11,7 @@ KBM.TestFilters = {}
 KBM.MenuOptions = {
 	MechTimers = {},
 	CastBars = {},
+	TankSwap = {},
 	Enabled = true,
 	Handler = nil,
 	Options = nil,
@@ -58,6 +59,21 @@ local function KBM_DefineVars(AddonID)
 				TextScale = false,
 				TextSize = 20,
 			},
+			TankSwap = {
+				x = false,
+				y = false,
+				w = 150,
+				h = 50,
+				wScale = 1,
+				hScale = 1,
+				ScaleWidth = false,
+				ScaleHeight = false,
+				TextScale = false,
+				TextSize = 16,
+				Enabled = true,
+				Visible = false,
+				Unlocked = false,
+			}
 		}
 		KBM_GlobalOptions = KBM.Options
 		for _, Mod in ipairs(KBM_BossMod) do
@@ -88,6 +104,8 @@ local function KBM_LoadVars(AddonID)
 		for _, Mod in ipairs(KBM_BossMod) do
 			Mod:LoadVars()
 		end
+		KBM.Options.TankSwap.h = 40
+		KBM.Options.TankSwap.TextSize = 14
 	end
 end
 
@@ -151,6 +169,9 @@ KBM.TotalSliders = 0
 
 KBM.MechTimer = {}
 KBM.MechTimer.testTimerList = {}
+
+KBM.TankSwap = {}
+KBM.TankSwap.Triggers = {}
 
 function KBM.Language:Add(Phrase)
 	local SetPhrase = {}
@@ -595,6 +616,193 @@ function KBM.AttachDragFrame(parent, hook, name, layer)
 	return Drag.Frame
 end
 
+function KBM.TankSwap:Init()
+	self.Tanks = {}
+	self.TankCount = 0
+	self.Active = false
+	self.DebuffID = nil
+	self.LastTank = nil
+	self.Test = false
+	
+	self.Anchor = UI.CreateFrame("Frame", "Tank-Swap Anchor", KBM.Context)
+	self.Anchor:SetWidth(KBM.Options.TankSwap.w * KBM.Options.TankSwap.wScale)
+	self.Anchor:SetHeight(KBM.Options.TankSwap.h * KBM.Options.TankSwap.hScale)
+	self.Anchor:SetBackgroundColor(0,0,0,0.33)
+	if KBM.Options.TankSwap.x then
+		self.Anchor:SetPoint("TOPLEFT", UIParent, "TOPLEFT", KBM.Options.TankSwap.x, KBM.Options.TankSwap.y)
+	else
+		self.Anchor:SetPoint("CENTER", UIParent, "CENTER")
+	end
+	function self.Anchor:Update(uType)
+		if uType == "end" then
+			KBM.Options.TankSwap.x = self:GetLeft()
+			KBM.Options.TankSwap.y = self:GetTop()
+		end
+	end
+	self.Anchor.Text = UI.CreateFrame("Text", "TankSwap info", self.Anchor)
+	self.Anchor.Text:SetText("Tank-Swap Anchor")
+	self.Anchor.Text:SetFontSize(KBM.Options.TankSwap.TextSize)
+	self.Anchor.Text:ResizeToText()
+	self.Anchor.Text:SetPoint("CENTER", self.Anchor, "CENTER")
+	self.Anchor.Drag = KBM.AttachDragFrame(self.Anchor, function(uType) self.Anchor:Update(uType) end, "TS Anchor Drag", 2)
+	self.Anchor:SetVisible(KBM.Options.TankSwap.Visible)
+	self.Anchor.Drag:SetVisible(KBM.Options.TankSwap.Unlocked)
+	function self:Add(UnitID, Test)
+		local TankObj = {}
+		TankObj.UnitID = UnitID
+		TankObj.Test = Test
+		self.Active = true
+		TankObj.Stacks = 0
+		TankObj.Remaining = 0
+		if Test then
+			TankObj.Name = Test
+			TankObj.UnitID = Test
+			self.Test = true
+		else
+			local uDetails = Inspect.Unit.Detail(UnitID)
+			if uDetails then
+				TankObj.Name = uDetails.name
+			end
+		end
+		TankObj.Frame = KBM:CallFrame(KBM.Context)
+		TankObj.Frame:SetLayer(1)
+		TankObj.Frame:SetHeight(KBM.Options.TankSwap.h)
+		TankObj.Frame:SetBackgroundColor(0,0,0,0.4)
+		if self.TankCount == 0 then
+			TankObj.Frame:SetPoint("TOPLEFT", self.Anchor, "TOPLEFT")
+			TankObj.Frame:SetPoint("TOPRIGHT", self.Anchor, "TOPRIGHT")
+		else
+			TankObj.Frame:SetPoint("TOPLEFT", self.LastTank.Frame, "BOTTOMLEFT", 0, 2)
+			TankObj.Frame:SetPoint("RIGHT", self.LastTank.Frame, "RIGHT")
+		end
+		TankObj.TankFrame = KBM:CallFrame(TankObj.Frame)
+		TankObj.TankFrame:SetPoint("TOPLEFT", TankObj.Frame, "TOPLEFT")
+		TankObj.TankFrame:SetPoint("BOTTOMLEFT", TankObj.Frame, "CENTERLEFT")
+		TankObj.TankHP = KBM:CallFrame(TankObj.TankFrame)
+		TankObj.TankHP:SetLayer(1)
+		TankObj.TankText = KBM:CallText(TankObj.TankFrame)
+		TankObj.TankText:SetLayer(2)
+		TankObj.TankText:SetText(TankObj.Name)
+		TankObj.TankText:SetFontSize(KBM.Options.TankSwap.TextSize)
+		TankObj.TankText:ResizeToText()
+		TankObj.TankText:SetPoint("CENTERLEFT", TankObj.TankFrame, "CENTERLEFT", 2, 0)
+		TankObj.DebuffFrame = KBM:CallFrame(TankObj.Frame)
+		TankObj.DebuffFrame:SetPoint("TOPRIGHT", TankObj.Frame, "TOPRIGHT")
+		TankObj.DebuffFrame:SetPoint("BOTTOMRIGHT", TankObj.Frame, "CENTERRIGHT")
+		TankObj.DebuffFrame:SetPoint("LEFT", TankObj.Frame, 0.8, nil)
+		TankObj.DebuffFrame:SetBackgroundColor(0.5,0,0,0.4)
+		TankObj.DebuffFrame:SetLayer(1)
+		TankObj.DebuffFrame.Text = KBM:CallText(TankObj.DebuffFrame)
+		TankObj.DebuffFrame.Text:SetFontSize(KBM.Options.TankSwap.TextSize)
+		TankObj.DebuffFrame.Text:SetLayer(2)
+		TankObj.DebuffFrame.Text:ResizeToText()
+		TankObj.DebuffFrame.Text:SetPoint("CENTER", TankObj.DebuffFrame, "CENTER")
+		TankObj.TankFrame:SetPoint("TOPRIGHT", TankObj.DebuffFrame, "TOPLEFT")
+		TankObj.TankHP:SetPoint("TOPLEFT", TankObj.TankFrame, "TOPLEFT")
+		TankObj.TankHP:SetPoint("BOTTOM", TankObj.TankFrame, "BOTTOM")
+		TankObj.TankHP:SetPoint("RIGHT", TankObj.TankFrame, 1, nil)
+		TankObj.DeCoolFrame = KBM:CallFrame(TankObj.Frame)
+		TankObj.DeCoolFrame:SetPoint("TOPLEFT", TankObj.TankFrame, "BOTTOMLEFT")
+		TankObj.DeCoolFrame:SetPoint("BOTTOM", TankObj.Frame, "BOTTOM")
+		TankObj.DeCoolFrame:SetPoint("RIGHT", TankObj.Frame, "RIGHT")
+		TankObj.DeCool = KBM:CallFrame(TankObj.DeCoolFrame)
+		TankObj.DeCool:SetPoint("TOPLEFT", TankObj.DeCoolFrame, "TOPLEFT")
+		TankObj.DeCool:SetPoint("BOTTOM", TankObj.DeCoolFrame, "BOTTOM")
+		TankObj.DeCool:SetPoint("RIGHT", TankObj.DeCoolFrame, 1, nil)
+		TankObj.DeCool:SetBackgroundColor(0,0,1,0.4)
+		TankObj.DeCool.Text = KBM:CallText(TankObj.DeCoolFrame)
+		TankObj.DeCool.Text:SetFontSize(KBM.Options.TankSwap.TextSize)
+		TankObj.DeCool.Text:ResizeToText()
+		TankObj.DeCool.Text:SetPoint("CENTER", TankObj.DeCoolFrame, "CENTER")
+		TankObj.DeCool.Text:SetLayer(2)
+		self.LastTank = TankObj
+		self.Tanks[TankObj.UnitID] = TankObj
+		self.TankCount = self.TankCount + 1
+		if self.Test then
+			TankObj.DebuffFrame.Text:SetText("2")
+			TankObj.DebuffFrame.Text:ResizeToText()
+			TankObj.DeCool.Text:SetText("99.9")
+			TankObj.DeCool.Text:ResizeToText()
+		end
+		return TankObj
+	end
+	function self:Start(DebuffName, DebuffID)
+		local Spec = ""
+		local UnitID = ""
+		local uDetails = nil
+		self.DebuffID = DebuffID
+		self.DebuffName = DebuffName
+		if LibSRM.Player.Grouped() then
+			for i = 1, 20 do
+				Spec, UnitID = LibSRM.Group.Inspect(i)
+				if UnitID then
+					uDetails = Inspect.Unit.Detail(UnitID)
+					if uDetails then
+						if uDetails.role == "tank" then
+							self:Add(UnitID)
+						end
+					end
+				end
+			end
+		end
+	end
+	function self:Update()
+		for UnitID, TankObj in pairs(self.Tanks) do
+			Buffs = Inspect.Buff.List(UnitID)
+			TankObj.Stacks = 0
+			TankObj.Remaining = 0
+			if Buffs then
+				for n, BuffID in ipairs(Buffs) do
+					bDetails = Inspect.Buff.Detail(BuffID)
+					if bDetails then
+						if bDetails.name == self.DebuffName then
+							if bDetails.stack then
+								TankObj.Stacks = bDetails.stack
+							end
+							if bDetails.remaining > 0 then
+								TankObj.Remaining = bDetails.remaining
+								TankObj.Duration = bDetails.duration
+							end
+							break
+						end
+					end
+				end
+			end
+			if TankObj.Stacks == 0 or TankObj.Remaining <= 0 then
+				TankObj.DeCoolFrame:SetVisible(false)
+				TankObj.DeCool:SetPoint("RIGHT", TankObj.DeCoolFrame, 1, nil)
+				TankObj.DebuffFrame.Text:SetVisible(false)
+			else
+				TankObj.DeCool.Text:SetText(string.format("%0.01f", TankObj.Remaining))
+				TankObj.DeCool:SetPoint("RIGHT", TankObj.DeCoolFrame, (TankObj.Remaing/TankObj.Duration), nil)
+				TankObj.DeCool.Text:ResizeToText()
+				TankObj.DeCoolFrame:SetVisible(true)
+				TankObj.DebuffFrame.Text:SetText(TankObj.Stacks)
+				TankObj.DebuffFrame.Text:ResizeToText()
+				TankObj.DebuffFrame.Text:SetVisible(true)
+			end
+		end
+	end
+	function self:Remove()
+		for UnitID, TankObj in pairs(self.Tanks) do
+			TankObj.DeCool.Text:sRemove()
+			TankObj.DebuffFrame.Text:sRemove()
+			TankObj.DeCool:sRemove()
+			TankObj.DeCoolFrame:sRemove()
+			TankObj.DebuffFrame:sRemove()
+			TankObj.TankText:sRemove()
+			TankObj.TankHP:sRemove()
+			TankObj.TankFrame:sRemove()
+			TankObj.Frame:sRemove()
+		end
+		self.Tanks = {}
+		self.LastTank = nil
+		self.TankCount = 0
+		self.Active = false
+		self.Test = false
+	end
+end
+
 function KBM.CastBar:Init()
 
 	self.CastBarList = {}
@@ -607,14 +815,9 @@ function KBM.CastBar:Init()
 	self.Anchor:SetHeight(KBM.Options.CastBar.h * KBM.Options.CastBar.hScale)
 	self.Anchor:SetBackgroundColor(0,0,0,0.33)
 	if KBM.Options.CastBar.x then
-		self.Anchor:SetPoint("LEFT", UIParent, "LEFT", KBM.Options.CastBar.x, nil)
+		self.Anchor:SetPoint("TOPLEFT", UIParent, "TOPLEFT", KBM.Options.CastBar.x, KBM.Options.CastBar.y)
 	else
-		self.Anchor:SetPoint("CENTERX", UIParent, "CENTERX")
-	end
-	if KBM.Options.CastBar.y then
-		self.Anchor:SetPoint("TOP", UIParent, "TOP", nil, KBM.Options.CastBar.y)
-	else
-		self.Anchor:SetPoint("CENTERY", UIParent, "CENTERY")
+		self.Anchor:SetPoint("CENTER", UIParent, "CENTER")
 	end
 	function self.Anchor:Update(uType)
 		if uType == "end" then
@@ -800,6 +1003,9 @@ function KBM:Timer()
 				CastCheck:Update()
 			end
 			self.UpdateTime = current
+			if KBM.TankSwap.Active then
+				KBM.TankSwap:Update()
+			end
 		end
 	else
 		-- for UnitID, CastCheck in pairs(KBM.CastBar.List) do
@@ -868,6 +1074,9 @@ local function KBM_Reset()
 			KBM.Encounter = false
 			KBM.TimeElapsed = 0
 			KBM.TimeStart = 0
+			if KBM.TankSwap.Active then
+				KBM.TankSwap:Remove()
+			end
 		end
 	else
 		print("No encounter to reset.")
@@ -1043,6 +1252,96 @@ function KBM.MenuOptions.MechTimers:Options()
 	
 end
 
+function KBM.MenuOptions.TankSwap:Close()
+	if KBM.TankSwap.Active then
+		if KBM.TankSwap.Test then
+			self.TestLink.Check.Frame:SetChecked(false)
+			KBM.TankSwap.Anchor:SetVisible(KBM.Options.TankSwap.Visible)
+		end
+	end
+end
+
+function KBM.MenuOptions.TankSwap:Options()
+
+	-- Castbar Callbacks
+	function self:Enabled(bool)
+		KBM.Options.TankSwap.Enabled = bool
+	end
+	function self:ShowAnchor(bool)
+		KBM.Options.TankSwap.Visible = bool
+		if not KBM.TankSwap.Active then
+			KBM.TankSwap.Anchor:SetVisible(bool)
+		end
+	end
+	function self:LockAnchor(bool)
+		KBM.Options.TankSwap.Unlocked = bool
+		KBM.TankSwap.Anchor.Drag:SetVisible(bool)
+	end
+	function self:ScaleWidth(bool, Check)
+		KBM.Options.TankSwap.ScaleWidth = bool
+		if not bool then
+			KBM.Options.TankSwap.wScale = 1
+			--Check.SliderObj.Bar.Frame:SetPosition(100)
+			KBM.TankSwap.Anchor:SetWidth(KBM.Options.TankSwap.w)
+		end
+	end
+	function self:wScaleChange(value)
+		KBM.Options.TankSwap.wScale = value * 0.01
+		KBM.TankSwap.Anchor:SetWidth(KBM.Options.TankSwap.w * KBM.Options.TankSwap.wScale)
+	end
+	function self:ScaleHeight(bool, Check)
+		KBM.Options.TankSwap.ScaleHeight = bool
+		if not bool then
+			KBM.Options.TankSwap.hScale = 1
+			--Check.SliderObj.Bar.Frame:SetPosition(100)
+			KBM.TankSwap.Anchor:SetHeight(KBM.Options.TankSwap.h)
+		end
+	end
+	function self:hScaleChange(value)
+		KBM.Options.TankSwap.hScale = value * 0.01
+		KBM.TankSwap.Anchor:SetHeight(KBM.Options.TankSwap.h * KBM.Options.TankSwap.hScale)
+	end
+	function self:TextSize(bool, Check)
+		KBM.Options.TankSwap.TextScale = bool
+		if not bool then
+			KBM.Options.TankSwap.TextSize = 16
+			--Check.Slider.Bar:SetPosition(KBM.Options.CastBar.TextSize)
+			KBM.TankSwap.Anchor.Text:SetFontSize(KBM.Options.TankSwap.TextSize)
+			KBM.TankSwap.Anchor.Text:ResizeToText()
+		end
+	end
+	function self:TextChange(value)
+		KBM.Options.TankSwap.TextSize = value
+		KBM.CastBar.Anchor.Text:SetFontSize(KBM.Options.TankSwap.TextSize)
+		KBM.CastBar.Anchor.Text:ResizeToText()
+	end
+	function self:ShowTest(bool)
+		if bool then
+			KBM.TankSwap:Add("Dummy", "Tank A")
+			KBM.TankSwap:Add("Dummy", "Tank B")
+			KBM.TankSwap:Add("Dummy", "Tank C")
+			KBM.TankSwap.Anchor:SetVisible(false)
+		else
+			KBM.TankSwap:Remove()
+			KBM.TankSwap.Anchor:SetVisible(KBM.Options.TankSwap.Visible)
+		end
+	end
+	Options = self.MenuItem.Options
+	Options:SetTitle()
+
+	-- Tank-Swap Options. 
+	self.TankSwap = Options:AddHeader("Tank-Swaps", self.Enabled, true)
+	self.TankSwap.Check.Frame:SetEnabled(false)
+	KBM.Options.TankSwap.Enabled = false
+	self.TankSwap:AddCheck("Show Anchor (for positioning.)", self.ShowAnchor, KBM.Options.TankSwap.Visible)
+	self.TankSwap:AddCheck("Anchor unlocked.", self.LockAnchor, KBM.Options.TankSwap.Unlocked)
+	self.TestLink = self.TankSwap:AddCheck("Show Test Tanks.", self.ShowTest, false)
+	-- self.CastBars:AddCheck("Width scaling.", self.CastScaleWidth, KBM.Options.CastBar.ScaleWidth)
+	-- self.CastBars:AddCheck("Height scaling.", self.CastScaleHeight, KBM.Options.CastBar.ScaleHeight)
+	-- self.CastBars:AddCheck("Text Size", self.CastTextSize, KBM.Options.CastBar.TextScale)
+
+end
+
 function KBM.MenuOptions.CastBars:Options()
 
 	-- Castbar Callbacks
@@ -1112,12 +1411,14 @@ function KBM.MenuOptions.CastBars:Options()
 end
 
 local function KBM_Start()
+	KBM.TankSwap:Init()
 	KBM.MechTimer:Init()
 	KBM.CastBar:Init()
 	KBM.InitOptions()
 	local Header = KBM.MainWin.Menu:CreateHeader("Options")
 	KBM.MenuOptions.MechTimers.MenuItem = KBM.MainWin.Menu:CreateEncounter("Timers", KBM.MenuOptions.MechTimers, true, Header)
 	KBM.MenuOptions.CastBars.MenuItem = KBM.MainWin.Menu:CreateEncounter("Cast-bars", KBM.MenuOptions.CastBars, true, Header)
+	KBM.MenuOptions.TankSwap.MenuItem = KBM.MainWin.Menu:CreateEncounter("Tank-Swaps", KBM.MenuOptions.TankSwap, true, Header)
 	table.insert(Command.Slash.Register("kbmreset"), {KBM_Reset, "KingMolinator", "KBM Reset"})
 	table.insert(Event.Chat.Notify, {KBM.Notify, "KingMolinator", "Notify Event"})
 	table.insert(Event.Chat.Npc, {KBM.NPCChat, "KingMolinator", "NPC Chat"}) 
