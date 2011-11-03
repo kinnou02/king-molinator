@@ -58,7 +58,7 @@ MX.Lang.Pound.French = "Attaque f\195\169roce"
 MX.Lang.Blast = KBM.Language:Add("Demonic Blast")
 MX.Lang.Blast.French = "Explosion d\195\169moniaque"
 MX.Lang.Trauma = KBM.Language:Add("Soul Trauma")
-MX.LAng.Trauma.French = "Traumatisme d'\195\162me"
+MX.Lang.Trauma.French = "Traumatisme d'\195\162me"
 
 function MX:AddBosses(KBM_Boss)
 	self.MenuName = self.Murd.Name
