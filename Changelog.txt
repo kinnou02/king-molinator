@@ -1,6 +1,7 @@
 v0.3.7
 * New: Tank-Swap Monitor (T-SM).
-* Added: Tank-Swap Monitor to Murdantix. (Experimental)
+* Added: Tank-Swap Monitor to Murdantix. (Experimental, but safe)
+* Added: Tank-Swap Monitor to Grugonim. (Experimental, but safe)
 * Added: Tank-Swap Options to GUI Options window.
 * Added: French Client support for Murdantix Soul Trauma.
 * Added: French Client support for Murdantix Demonic Blast.
