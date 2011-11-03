@@ -136,6 +136,21 @@ KBM.Language[KM.King.Name]:SetGerman("Runenkönig Molinar")
 KBM.Language[KM.Prince.Name]:SetGerman("Prinz Dollin")
 KBM.Language[KM.King.Name]:SetFrench("Roi runique Molinar")
 
+-- King's Options page Dictionary
+KM.Lang.Options = {}
+KM.Lang.Options.ShowMonitor = KBM.Language:Add("Show Percentage Monitor.")
+KM.Lang.Options.ShowMonitor.French = "Montrer Moninteur Pct."
+KM.Lang.Options.HiddenStart = KBM.Language:Add("Hidden until encounter start.")
+KM.Lang.Options.HiddenStart.French = "Cacher avant d\195\169but du combat."
+KM.Lang.Options.Compact = KBM.Language:Add("Compact Mode.")
+KM.Lang.Options.Compact.French = "Mode Compact."
+KM.Lang.Options.Locked = KBM.Language:Add("Locked in place.")
+KM.Lang.Options.Locked.French = "Fix\195\169 en place."
+KM.Lang.Options.ShowKingCast = KBM.Language:Add("Show King Molinar's cast-bar")
+KM.Lang.Options.ShowKingCast.French = "Montrer barres-cast Roi Molinar"
+KM.Lang.Options.ShowPrinceCast = KBM.Language:Add("Show Prince Dollin's cast-bar")
+KM.Lang.Options.ShowPrinceCast.French = "Montrer barres-cast Prince Dollin"
+
 KM.King.Name = KBM.Language[KM.King.Name][KBM.Lang]
 KM.Prince.Name = KBM.Language[KM.Prince.Name][KBM.Lang]
 
@@ -733,18 +748,18 @@ function KM.KingMolinar:Options()
 	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
-	local Monitor = Options:AddHeader("Show Percentage Monitor", self.MonitorEnabled, KM.Settings.Enabled)
+	local Monitor = Options:AddHeader(KM.Lang.Options.ShowMonitor[KBM.Lang], self.MonitorEnabled, KM.Settings.Enabled)
 	--self.Monitor.Check.Frame:SetEnabled(false) -- Temporarily disabled.
-	Monitor:AddCheck("Hidden until encounter starts.", self.Hidden, KM.Settings.Hidden)
-	Monitor:AddCheck("Compact Mode.", self.Compact, KM.Settings.Compact)
-	Monitor:AddCheck("Locked in place.", self.Locked, KM.Settings.Locked)
+	Monitor:AddCheck(KM.Lang.Options.HiddenStart[KBM.Lang], self.Hidden, KM.Settings.Hidden)
+	Monitor:AddCheck(KM.Lang.Options.Compact[KBM.Lang], self.Compact, KM.Settings.Compact)
+	Monitor:AddCheck(KM.Lang.Options.Locked[KBM.Lang], self.Locked, KM.Settings.Locked)
 	Options:AddSpacer()
-	local KingMech = Options:AddHeader("Show King Molinar's cast-bar.", self.KingEnabled, KM.Settings.KingBar)
+	local KingMech = Options:AddHeader(KM.Lang.Options.ShowKingCast[KBM.Lang], self.KingEnabled, KM.Settings.KingBar)
 	KingMech:AddCheck("Frightening Shout cast.", self.FShoutEnabled, KM.Settings.FShoutEnabled)
 	KingMech:AddCheck("Cursed Blows cast.", self.CursedEnabled, KM.Settings.CursedEnabled)
 	KingMech:AddCheck("Consuming Essence cast.", self.KCEssenceEnabled, KM.Settings.KCEssenceEnabled)
 	Options:AddSpacer()
-	local PrinceMech = Options:AddHeader("Show Prince Dollin's cast-bar.", self.PrinceEnabled, KM.Settings.PrinceBar)
+	local PrinceMech = Options:AddHeader(KM.Lang.Options.ShowPrinceCast[KBM.Lang], self.PrinceEnabled, KM.Settings.PrinceBar)
 	PrinceMech:AddCheck("Rend Life cast.", self.RendEnabled, KM.Settings.RendEnabled)
 	PrinceMech:AddCheck("Terminate Life cast.", self.TerminateEnabled, KM.Settings.TerminateEnabled)
 	PrinceMech:AddCheck("Crushing Regret cast.", self.CrushingEnabled, KM.Settings.CrushingEnabled)

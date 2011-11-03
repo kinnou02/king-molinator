@@ -1,3 +1,8 @@
+v0.3.8
+* Added: Further French translations to the Options Window.
+* Change: NPC Chat triggers now use the new "Notify" trigger method.
+* Fixed: Damage timers where not triggering correctly, if at all.
+----
 v0.3.7
 * New: Tank-Swap Monitor (T-SM).
 * Added: Tank-Swap Monitor to Murdantix. (Experimental, but safe)

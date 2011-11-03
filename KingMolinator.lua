@@ -190,6 +190,19 @@ function KBM.Language:Add(Phrase)
 	return KBM.Language[Phrase]
 end
 
+-- Main Addon Dictionary
+KBM.Language.Options = {}
+KBM.Language.Options.Castbar = KBM.Language:Add("Cast-bars.")
+KBM.Language.Options.Castbar.French = "Barres-cast."
+KBM.Language.Options.MechanicTimers = KBM.Language:Add("Mechanic Timers.")
+KBM.Language.Options.MechanicTimers.French = "M\195\169canisme Timers."
+KBM.Language.Options.TimersEnabled = KBM.Language:Add("Timers enabled.")
+KBM.Language.Options.TimersEnabled.French = "Timers activ\195\169."
+KBM.Language.Options.ShowAnchor = KBM.Language:Add("Show anchor (for positioning).")
+KBM.Language.Options.ShowAnchor.French = "Montrer ancrage (pour positionnement)."
+KBM.Language.Options.LockAnchor = KBM.Language:Add("Lock anchor.")
+KBM.Language.Options.LockAnchor.French = "Ancrage d\195\169bloqu\195\169."
+
 function KBM.MechTimer:Init()
 	self.TimerList = {}
 	self.ActiveTimers = {}
@@ -354,14 +367,20 @@ function KBM.MechTimer:Add(iTrigger, iType, iTime, iBoss, iStart, iName)
 		self.DamageTimers[iTrigger] = Timer
 		iBoss.Timers[iTrigger] = Timer
 	elseif iType == "say" then
+		self.SayTimers[iName] = {}
+		self.SayTimers[iName].Triggers = {}
+		self.SayTimers[iName].Timer = Timer
+		iBoss.Timers[iName] = {}
+		iBoss.Timers[iName].Triggers = {}
+		iBoss.Timers[iName].Timer = Timer
 		if type(iTrigger) == "table" then
 			for sTrigger in pairs(iTrigger) do
-				self.SayTimers[sTrigger] = Timer
-				iBoss.Timers[sTrigger] = Timer
+				table.insert(self.SayTimers[iName], sTrigger)
+				table.insert(iBoss.Timers[iName], sTrigger)
 			end
 		else
-			self.SayTimers[iTrigger] = Timer
-			iBoss.Timers[iTrigger] = Timer
+			table.insert(self.SayTimers[iName], iTrigger)
+			table.insert(iBoss.Timers[iName], iTrigger)
 		end
 	elseif iType == "cast" then
 		self.CastTimers[iTrigger] = Timer
@@ -520,7 +539,7 @@ local function KBM_UnitHPCheck(info)
 					bDetails = Inspect.Unit.Detail(info.caster)
 					if bDetails then
 						if bDetails.player then
-							if uDetails.level == KBM_Boss[uDetails.name].Level then
+							--if uDetails.level == KBM_Boss[uDetails.name].Level then
 								KBM.BossID[UnitID] = {}
 								KBM.BossID[UnitID].name = uDetails.name
 								KBM.BossID[UnitID].monitor = true
@@ -543,7 +562,7 @@ local function KBM_UnitHPCheck(info)
 									KBM.BossID[UnitID].dead = true
 									KBM.BossID[UnitID] = nil
 								end
-							end
+							--end
 						end
 					end
 				end
@@ -554,9 +573,9 @@ local function KBM_UnitHPCheck(info)
 		if KBM_CurrentMod then
 			if info.abilityName then
 				if KBM.MechTimer.DamageTimer[info.abilityName] then
-					--if not KBM.MechTimer.DamageTimer[info.abilityName].Active then
+					if KBM.MechTimer.DamageTimer[info.abilityName].Enabled then
 						KBM.MechTimer.DamageTimer[info.abilityName]:Start(Inspect.Time.Real())
-					--end
+					end
 				end
 			end
 		end
@@ -738,7 +757,8 @@ function KBM.TankSwap:Init()
 		local uDetails = nil
 		self.DebuffID = DebuffID
 		self.DebuffName = DebuffName
-		if LibSRM.Grouped() then
+		print("Grouped: "..tostring(LibSRM.Grouped()))
+		--if LibSRM.Grouped() then
 			for i = 1, 20 do
 				Spec, UnitID = LibSRM.Group.Inspect(i)
 				if UnitID then
@@ -750,7 +770,7 @@ function KBM.TankSwap:Init()
 					end
 				end
 			end
-		end
+		--end
 	end
 	function self:Update()
 		for UnitID, TankObj in pairs(self.Tanks) do
@@ -1177,12 +1197,21 @@ function KBM.Notify(data)
 end
 
 function KBM.NPCChat(data)
+	local match = false
 	if KBM.Encounter then
 		if data.fromName then
-			if KBM.BossID[from] then
-				for Trigger, Timer in pairs(KBM.BossID[from].Boss.Timers) do
-					if string.find(data.message, Trigger, 1, true) then
-						Timer:Start(Inspect.Timer.Real())
+			if KBM_Boss[fromName] then
+				for iName, Trigger in pairs(KBM_Boss[fromName].Timers) do
+					if Trigger == "table" then
+						for i, iTrigger in ipairs(Trigger.Triggers) do
+							if string.find(data.message, iTrigger, 1, true) then
+								Trigger.Timer:Start(Inspect.Timer.Real())
+								match = true
+								break
+							end
+						end
+					end
+					if match then
 						break
 					end
 				end
@@ -1247,11 +1276,11 @@ function KBM.MenuOptions.MechTimers:Options()
 	Options:SetTitle()
 	
 	-- Timer Options
-	self.MechTimers = Options:AddHeader("Mechanic Timers", self.MechEnabled, true)
+	self.MechTimers = Options:AddHeader(KBM.Language.Options.MechanicTimers[KBM.Lang], self.MechEnabled, true)
 	self.MechTimers.Check.Frame:SetEnabled(false)
 	KBM.Options.MechTimer.Enabled = true
-	self.MechTimers:AddCheck("Show Anchor (for positioning.)", self.ShowMechAnchor, KBM.Options.MechTimer.Visible)
-	self.MechTimers:AddCheck("Anchor unlocked.", self.LockMechAnchor, KBM.Options.MechTimer.Unlocked)
+	self.MechTimers:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowMechAnchor, KBM.Options.MechTimer.Visible)
+	self.MechTimers:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.LockMechAnchor, KBM.Options.MechTimer.Unlocked)
 	-- self.MechTimers:AddCheck("Width scaling.", self.MechScaleWidth, KBM.Options.MechTimer.ScaleWidth)
 	-- self.MechTimers:AddCheck("Enable Width mouse wheel scaling.", self.MechWidthMouse, KBM.Options.MechTimer.WidthMouse)
 	-- local slider = self.MechTimers:AddSlider(50, 150, nil, (KBM.Options.MechTimer.wScale*100))
@@ -1346,8 +1375,8 @@ function KBM.MenuOptions.TankSwap:Options()
 	self.TankSwap = Options:AddHeader("Tank-Swaps", self.Enabled, true)
 	self.TankSwap.Check.Frame:SetEnabled(false)
 	KBM.Options.TankSwap.Enabled = false
-	self.TankSwap:AddCheck("Show Anchor (for positioning.)", self.ShowAnchor, KBM.Options.TankSwap.Visible)
-	self.TankSwap:AddCheck("Anchor unlocked.", self.LockAnchor, KBM.Options.TankSwap.Unlocked)
+	self.TankSwap:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowAnchor, KBM.Options.TankSwap.Visible)
+	self.TankSwap:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.LockAnchor, KBM.Options.TankSwap.Unlocked)
 	self.TestLink = self.TankSwap:AddCheck("Show Test Tanks.", self.ShowTest, false)
 	-- self.CastBars:AddCheck("Width scaling.", self.CastScaleWidth, KBM.Options.CastBar.ScaleWidth)
 	-- self.CastBars:AddCheck("Height scaling.", self.CastScaleHeight, KBM.Options.CastBar.ScaleHeight)
@@ -1412,11 +1441,11 @@ function KBM.MenuOptions.CastBars:Options()
 	Options:SetTitle()
 
 	-- CastBar Options. 
-	self.CastBars = Options:AddHeader("Cast-bars", self.CastBarEnabled, false)
+	self.CastBars = Options:AddHeader(KBM.Language.Options.Castbar[KBM.Lang], self.CastBarEnabled, false)
 	self.CastBars.Check.Frame:SetEnabled(false)
 	KBM.Options.CastBar.Enabled = false
-	self.CastBars:AddCheck("Show Anchor (for positioning.)", self.ShowCastAnchor, KBM.Options.CastBar.Visible)
-	self.CastBars:AddCheck("Anchor unlocked.", self.LockCastAnchor, KBM.Options.CastBar.Unlocked)
+	self.CastBars:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowCastAnchor, KBM.Options.CastBar.Visible)
+	self.CastBars:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.LockCastAnchor, KBM.Options.CastBar.Unlocked)
 	-- self.CastBars:AddCheck("Width scaling.", self.CastScaleWidth, KBM.Options.CastBar.ScaleWidth)
 	-- self.CastBars:AddCheck("Height scaling.", self.CastScaleHeight, KBM.Options.CastBar.ScaleHeight)
 	-- self.CastBars:AddCheck("Text Size", self.CastTextSize, KBM.Options.CastBar.TextScale)
@@ -1428,11 +1457,10 @@ local function KBM_Start()
 	KBM.MechTimer:Init()
 	KBM.CastBar:Init()
 	KBM.InitOptions()
-	KBM.TankSwap:Start("Testing")
 	local Header = KBM.MainWin.Menu:CreateHeader("Options")
 	KBM.MenuOptions.MechTimers.MenuItem = KBM.MainWin.Menu:CreateEncounter("Timers", KBM.MenuOptions.MechTimers, true, Header)
-	KBM.MenuOptions.CastBars.MenuItem = KBM.MainWin.Menu:CreateEncounter("Cast-bars", KBM.MenuOptions.CastBars, true, Header)
-	KBM.MenuOptions.TankSwap.MenuItem = KBM.MainWin.Menu:CreateEncounter("Tank-Swaps", KBM.MenuOptions.TankSwap, true, Header)
+	KBM.MenuOptions.CastBars.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.Castbar[KBM.Lang], KBM.MenuOptions.CastBars, true, Header)
+	KBM.MenuOptions.TankSwap.MenuItem = KBM.MainWin.Menu:CreateEncounter("Tank Swaps", KBM.MenuOptions.TankSwap, true, Header)
 	table.insert(Command.Slash.Register("kbmreset"), {KBM_Reset, "KingMolinator", "KBM Reset"})
 	table.insert(Event.Chat.Notify, {KBM.Notify, "KingMolinator", "Notify Event"})
 	table.insert(Event.Chat.Npc, {KBM.NPCChat, "KingMolinator", "NPC Chat"}) 
