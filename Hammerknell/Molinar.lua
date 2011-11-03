@@ -139,7 +139,7 @@ KBM.Language[KM.King.Name]:SetFrench("Roi runique Molinar")
 -- King's Options page Dictionary
 KM.Lang.Options = {}
 KM.Lang.Options.ShowMonitor = KBM.Language:Add("Show Percentage Monitor.")
-KM.Lang.Options.ShowMonitor.French = "Montrer Moninteur Pct."
+KM.Lang.Options.ShowMonitor.French = "Montrer Moniteur Pct."
 KM.Lang.Options.HiddenStart = KBM.Language:Add("Hidden until encounter start.")
 KM.Lang.Options.HiddenStart.French = "Cacher avant d\195\169but du combat."
 KM.Lang.Options.Compact = KBM.Language:Add("Compact Mode.")
