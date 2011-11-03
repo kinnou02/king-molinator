@@ -1,14 +1,18 @@
 v0.3.7
 * New: Tank-Swap Monitor (T-SM).
-* Added: Tank-Swap Monitor to Murdantix.
-* Added: Tank-Swap Options to GUI Options window. 
+* Added: Tank-Swap Monitor to Murdantix. (Experimental)
+* Added: Tank-Swap Options to GUI Options window.
+* Added: French Client support for Murdantix Soul Trauma.
+* Added: French Client support for Murdantix Demonic Blast.
 * Added: Grugonim boss encounter (template).
 * Added: Inwar Darktide boss encounter (template).
 * Added: Sicaron boss encounter (template).
 * Added: Estrode boss encounter (template).
 * Added: Added more translation templates to various bosses.
+* Change: Murdantix Demonic Blast timer reduces by 1s
 * Fixed: Vladmir Prime Ancient Flames.
 * Fixed: Error messages for "Notify" type events.
+* Fixed: French Translation for Mangling Crush.
 ----
 v0.3.6
 * Added: Inquisitor Garau, French client support.

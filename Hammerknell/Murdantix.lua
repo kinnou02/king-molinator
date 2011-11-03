@@ -52,11 +52,13 @@ MX.Lang.Murdantix = KBM.Language:Add(MX.Murd.Name)
 
 -- Ability Dictionary
 MX.Lang.Mangling = KBM.Language:Add("Mangling Crush")
-MX.Lang.Mangling.French = "Traumatisme d'\195\162me"
+MX.Lang.Mangling.French = "Essorage"
 MX.Lang.Pound = KBM.Language:Add("Ferocious Pound")
 MX.Lang.Pound.French = "Attaque f\195\169roce"
 MX.Lang.Blast = KBM.Language:Add("Demonic Blast")
+MX.Lang.Blast.French = "Explosion d\195\169moniaque"
 MX.Lang.Trauma = KBM.Language:Add("Soul Trauma")
+MX.LAng.Trauma.French = "Traumatisme d'\195\162me"
 
 function MX:AddBosses(KBM_Boss)
 	self.MenuName = self.Murd.Name
@@ -194,7 +196,7 @@ function MX:Start()
 	self.Murd.TimersRef.Mangling.Enabled = MX.Settings.Timers.MangleEnabled
 	self.Murd.TimersRef.Pound = KBM.MechTimer:Add(self.Lang.Pound[KBM.Lang], "damage", 35, self.Murd)
 	self.Murd.TimersRef.Pound.Enabled = MX.Settings.Timers.PoundEnabled
-	self.Murd.TimersRef.Blast = KBM.MechTimer:Add(self.Lang.Blast[KBM.Lang], "cast", 17, self.Murd)
+	self.Murd.TimersRef.Blast = KBM.MechTimer:Add(self.Lang.Blast[KBM.Lang], "cast", 16, self.Murd)
 	self.Murd.TimersRef.Blast.Enabled = MX.Settings.Timers.BlastEnabled
 	self.Murd.TimersRef.Trauma = KBM.MechTimer:Add(self.Lang.Trauma[KBM.Lang], "cast", 9, self.Murd)
 	self.Murd.TimersRef.Trauma.Enabled = MX.Settings.Timers.TraumaEnabled
