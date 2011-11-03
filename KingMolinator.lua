@@ -367,14 +367,20 @@ function KBM.MechTimer:Add(iTrigger, iType, iTime, iBoss, iStart, iName)
 		self.CastTimers[iTrigger] = Timer
 		iBoss.Timers[iTrigger] = Timer
 	elseif iType == "notify" then
+		self.NotifyTimers[iName] = {}
+		self.NotifyTimers[iName].Triggers = {}
+		self.NotifyTimers[iName].Timer = Timer
+		iBoss.Timers[iName] = {}
+		iBoss.Timers[iName].Triggers = {}
+		iBoss.Timers[iName].Timer = Timer	
 		if type(iTrigger) == "table" then
 			for nTrigger in pairs(iTrigger) do
-				self.NotifyTimers[nTrigger] = Timer
-				iBoss.Timers[nTrigger] = Timer
+				table.insert(self.NotifyTimers[iName].Triggers, nTrigger)
+				table.insert(self.NotifyTimers[iName].Triggers, nTrigger)
 			end
 		else
-			self.NotifyTimers[iTrigger] = Timer
-			iBoss.Timers[iTrigger] = Timer
+			table.insert(self.NotifyTimers[iName].Triggers, iTrigger)
+			table.insert(self.NotifyTimers[iName].Triggers, iTrigger)
 		end
 	elseif iType == "buff" then
 		self.Bufftimers[iTrigger] = Timer
@@ -548,9 +554,9 @@ local function KBM_UnitHPCheck(info)
 		if KBM_CurrentMod then
 			if info.abilityName then
 				if KBM.MechTimer.DamageTimer[info.abilityName] then
-					if not KBM.MechTimer.DamageTimer[info.abilityName].Active then
+					--if not KBM.MechTimer.DamageTimer[info.abilityName].Active then
 						KBM.MechTimer.DamageTimer[info.abilityName]:Start(Inspect.Time.Real())
-					end
+					--end
 				end
 			end
 		end
@@ -732,7 +738,7 @@ function KBM.TankSwap:Init()
 		local uDetails = nil
 		self.DebuffID = DebuffID
 		self.DebuffName = DebuffName
-		if LibSRM.Player.Grouped() then
+		if LibSRM.Grouped() then
 			for i = 1, 20 do
 				Spec, UnitID = LibSRM.Group.Inspect(i)
 				if UnitID then
@@ -768,7 +774,7 @@ function KBM.TankSwap:Init()
 					end
 				end
 			end
-			if TankObj.Stacks == 0 or TankObj.Remaining <= 0 then
+			if TankObj.Remaining <= 0 then
 				TankObj.DeCoolFrame:SetVisible(false)
 				TankObj.DeCool:SetPoint("RIGHT", TankObj.DeCoolFrame, 1, nil)
 				TankObj.DebuffFrame.Text:SetVisible(false)
@@ -1147,13 +1153,21 @@ local function KBM_Help()
 end
 
 function KBM.Notify(data)
-	--print(data.message)
+	local match = false
 	if KBM.Encounter then
 		if data.message then
 			if KBM_CurrentMod then
-				for Trigger, Timer in pairs(KBM_CurrentMod.Timers) do
-					if string.find(data.message, Trigger, 1, true) then
-						Timer:Start(Inspect.Timer.Real())
+				for iName, Trigger in pairs(KBM_CurrentMod.Timers) do
+					if Trigger == "table" then
+						for i, iTrigger in ipairs(Trigger.Triggers) do
+							if string.find(data.message, iTrigger, 1, true) then
+								Trigger.Timer:Start(Inspect.Timer.Real())
+								match = true
+								break
+							end
+						end
+					end
+					if match then
 						break
 					end
 				end
@@ -1163,7 +1177,6 @@ function KBM.Notify(data)
 end
 
 function KBM.NPCChat(data)
-	--print(data.fromName..": "..data.message)
 	if KBM.Encounter then
 		if data.fromName then
 			if KBM.BossID[from] then
@@ -1415,6 +1428,7 @@ local function KBM_Start()
 	KBM.MechTimer:Init()
 	KBM.CastBar:Init()
 	KBM.InitOptions()
+	KBM.TankSwap:Start("Testing")
 	local Header = KBM.MainWin.Menu:CreateHeader("Options")
 	KBM.MenuOptions.MechTimers.MenuItem = KBM.MainWin.Menu:CreateEncounter("Timers", KBM.MenuOptions.MechTimers, true, Header)
 	KBM.MenuOptions.CastBars.MenuItem = KBM.MainWin.Menu:CreateEncounter("Cast-bars", KBM.MenuOptions.CastBars, true, Header)

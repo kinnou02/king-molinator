@@ -8,6 +8,7 @@ v0.3.7
 * Added: Estrode boss encounter (template).
 * Added: Added more translation templates to various bosses.
 * Fixed: Vladmir Prime Ancient Flames.
+* Fixed: Error messages for "Notify" type events.
 ----
 v0.3.6
 * Added: Inquisitor Garau, French client support.

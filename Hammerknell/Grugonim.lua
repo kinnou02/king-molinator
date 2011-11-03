@@ -122,6 +122,7 @@ function GR:UnitHPCheck(unitDetails, unitID)
 					self.Grugonim.Dead = false
 					self.Grugonim.Casting = false
 					self.Grugonim.CastBar:Create(unitID)
+					KBM.TankSwap:Start("Heart Stopping Toxin")
 				end
 				self.Grugonim.UnitID = unitID
 				self.Grugonim.Available = true
