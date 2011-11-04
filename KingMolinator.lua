@@ -226,7 +226,22 @@ KBM.Language.Options.TimersEnabled.French = "Timers activ\195\169."
 KBM.Language.Options.ShowAnchor = KBM.Language:Add("Show anchor (for positioning).")
 KBM.Language.Options.ShowAnchor.French = "Montrer ancrage (pour positionnement)."
 KBM.Language.Options.LockAnchor = KBM.Language:Add("Unlock anchor.")
-KBM.Language.Options.LockAnchor.French = "Ancrage d\195\169bloqu\195\169."
+KBM.Language.Options.LockAnchor.French = "D\195\169bloquer Ancrage."
+KBM.Language.Options.ShowTimer = KBM.Language:Add("Show Timer (for positioning).")
+KBM.Language.Options.ShowTimer.French = "Montrer Timer (pour positionnement)."
+KBM.Language.Options.LockTimer = KBM.Language:Add("Unlock Timer.")
+KBM.Language.Options.LockTimer.French = "D\195\169bloquer Timer."
+KBM.Language.Options.Timer = KBM.Language:Add("Encounter duration timer.")
+KBM.Language.Options.Timer.French = "Timer duration combat"
+KBM.Language.Options.Enrage = KBM.Language:Add("Enrage timer (if supported).")
+KBM.Language.Options.Enrage.French = "Timer d'Enrage (si support\195\169)."
+
+-- Timer Dictionary
+KBM.Language.Timers = {}
+KBM.Language.Timers.Time = KBM.Language:Add("Time:")
+KBM.Language.Timers.Time.French = "Dur\195\169e:"
+KBM.Language.Timers.Enrage = KBM.Language:Add("Enrage in:")
+KBM.Language.Timers.Enrage.French = "Enrage dans:"
 
 function KBM.MechTimer:Init()
 	self.TimerList = {}
@@ -613,13 +628,13 @@ function KBM.EncTimer:Init()
 	function self:Update(current)
 		local EnrageString = ""
 		if KBM.Options.EncTimer.Duration then
-			self.Frame.Text:SetText(KBM.ConvertTime(KBM.TimeElapsed))
+			self.Frame.Text:SetText(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
 			self.Frame.Text:ResizeToText()
 		end
 		if KBM.Options.EncTimer.Enrage then
 			if current < KBM.EnrageTime then
 				EnrageString = KBM.ConvertTime(KBM.EnrageTime - current)
-				self.Enrage.Text:SetText(EnrageString)
+				self.Enrage.Text:SetText(KBM.Language.Timers.Enrage[KBM.Lang].." "..EnrageString)
 				self.Enrage.Text:ResizeToText()
 				self.Enrage.Progress:SetPoint("RIGHT", self.Enrage.Frame, KBM.TimeElapsed/KBM_CurrentMod.Enrage, nil)
 			else
@@ -653,9 +668,9 @@ function KBM.EncTimer:Init()
 	end
 	function self:SetTest(bool)
 		if bool then
-			self.Enrage.Text:SetText("Enrage in: 00m:00s")
+			self.Enrage.Text:SetText(KBM.Language.Timers.Enrage[KBM.Lang].." 00m:00s")
 			self.Enrage.Text:ResizeToText()
-			self.Frame.Text:SetText("Time: 00m:00s")
+			self.Frame.Text:SetText(KBM.Language.Timers.Timer[KBM.Lang].." 00m:00s")
 			self.Frame.Text:ResizeToText()
 		end
 		self.Frame:SetVisible(bool)
@@ -1458,10 +1473,10 @@ function KBM.MenuOptions.Timers:Options()
 	-- Timer Options
 	self.Menu = {}
 	self.Menu.EncTimers = Options:AddHeader("Encounter Timers", self.EncTimersEnabled, true)
-	self.Menu.EncTimers:AddCheck("Show Timer (for positioning)", self.ShowEncTimer, KBM.Options.EncTimer.Visible)
-	self.Menu.EncTimers:AddCheck("Lock Timer", self.LockEncTimer, KBM.Options.EncTimer.Unlocked)
-	self.Menu.EncTimers:AddCheck("Encounter duration timer.", self.EncDuration, KBM.Options.EncTimer.Duration)
-	self.Menu.EncTimers:AddCheck("Enrage Timer (if supported)", self.EncEnrage, KBM.Options.EncTimer.Enrage)
+	self.Menu.EncTimers:AddCheck(KBM.Language.Options.ShowTimer[KBM.Lang], self.ShowEncTimer, KBM.Options.EncTimer.Visible)
+	self.Menu.EncTimers:AddCheck(KBM.Language.Options.LockTimer[KBM.Lang], self.LockEncTimer, KBM.Options.EncTimer.Unlocked)
+	self.Menu.EncTimers:AddCheck(KBM.Language.Options.Timer[KBM.Lang], self.EncDuration, KBM.Options.EncTimer.Duration)
+	self.Menu.EncTimers:AddCheck(KBM.Language.Options.Enrage[KBM.Lang], self.EncEnrage, KBM.Options.EncTimer.Enrage)
 	self.Menu.MechTimers = Options:AddHeader(KBM.Language.Options.MechanicTimers[KBM.Lang], self.MechEnabled, true)
 	self.Menu.MechTimers.Check.Frame:SetEnabled(false)
 	KBM.Options.MechTimer.Enabled = true
