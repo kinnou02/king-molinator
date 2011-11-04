@@ -225,7 +225,7 @@ KBM.Language.Options.TimersEnabled = KBM.Language:Add("Timers enabled.")
 KBM.Language.Options.TimersEnabled.French = "Timers activ\195\169."
 KBM.Language.Options.ShowAnchor = KBM.Language:Add("Show anchor (for positioning).")
 KBM.Language.Options.ShowAnchor.French = "Montrer ancrage (pour positionnement)."
-KBM.Language.Options.LockAnchor = KBM.Language:Add("Lock anchor.")
+KBM.Language.Options.LockAnchor = KBM.Language:Add("Unlock anchor.")
 KBM.Language.Options.LockAnchor.French = "Ancrage d\195\169bloqu\195\169."
 
 function KBM.MechTimer:Init()
