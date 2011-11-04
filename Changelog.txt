@@ -1,3 +1,7 @@
+v0.4.0
+* Change: Better looking, and size Options Button.
+* Added: New French translations to options window.
+----
 v0.3.9
 * New!: There's now a basic button for the options screen, Rift Style.
 * Note: The new button will be unlocked (right click to move) and centered.

@@ -245,7 +245,13 @@ KBM.Language.Options.Timer.French = "Timer duration combat"
 KBM.Language.Options.Enrage = KBM.Language:Add("Enrage timer (if supported).")
 KBM.Language.Options.Enrage.French = "Timer d'Enrage (si support\195\169)."
 KBM.Language.Options.Button = KBM.Language:Add("Options Button Visible.")
+KBM.Language.Options.Button.French = "Bouton Configurations Visible"
 KBM.Language.Options.LockButton = KBM.Language:Add("Unlock Button (right-click to move)")
+KBM.Language.Options.LockButton.French = "D\195\169bloquer Bouton (click-droit pour d\195\169placer)"
+KBM.Language.Options.Settings = KBM.Language:Add("Settings")
+KBM.Language.Options.Settings.French = "Configurations"
+KBM.Language.Options.Tank = KBM.Language:Add("Show Test Tanks")
+KBM.Language.Options.Tank.French = "Afficher Test Tanks"
 
 -- Timer Dictionary
 KBM.Language.Timers = {}
@@ -1621,7 +1627,7 @@ function KBM.MenuOptions.TankSwap:Options()
 	KBM.Options.TankSwap.Enabled = false
 	self.TankSwap:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowAnchor, KBM.Options.TankSwap.Visible)
 	self.TankSwap:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.LockAnchor, KBM.Options.TankSwap.Unlocked)
-	self.TestLink = self.TankSwap:AddCheck("Show Test Tanks.", self.ShowTest, false)
+	self.TestLink = self.TankSwap:AddCheck(KBM.Language.Options.Tank[KBM.Lang], self.ShowTest, false)
 	-- self.CastBars:AddCheck("Width scaling.", self.CastScaleWidth, KBM.Options.CastBar.ScaleWidth)
 	-- self.CastBars:AddCheck("Height scaling.", self.CastScaleHeight, KBM.Options.CastBar.ScaleHeight)
 	-- self.CastBars:AddCheck("Text Size", self.CastTextSize, KBM.Options.CastBar.TextScale)
@@ -1723,7 +1729,7 @@ local function KBM_Start()
 	KBM.EncTimer:Init()
 	KBM.InitOptions()
 	local Header = KBM.MainWin.Menu:CreateHeader("Options")
-	KBM.MenuOptions.Main.MenuItem = KBM.MainWin.Menu:CreateEncounter("Settings", KBM.MenuOptions.Main, nil, Header)
+	KBM.MenuOptions.Main.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.Settings[KBM.Lang], KBM.MenuOptions.Main, nil, Header)
 	KBM.MenuOptions.Timers.MenuItem = KBM.MainWin.Menu:CreateEncounter("Timers", KBM.MenuOptions.Timers, true, Header)
 	KBM.MenuOptions.CastBars.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.Castbar[KBM.Lang], KBM.MenuOptions.CastBars, true, Header)
 	KBM.MenuOptions.TankSwap.MenuItem = KBM.MainWin.Menu:CreateEncounter("Tank Swaps", KBM.MenuOptions.TankSwap, true, Header)
