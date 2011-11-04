@@ -21,6 +21,7 @@ local ES = {
 	PhaseList = {},
 	Timers = {},
 	Lang = {},
+	Enrage = 60 * 15,
 }
 
 ES.Estrode = {

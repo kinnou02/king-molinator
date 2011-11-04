@@ -22,6 +22,7 @@ local GU = {
 	PhaseList = {},
 	Timers = {},
 	Lang = {},
+	Enrage = 60 * 12,
 }
 
 GU.Garau = {

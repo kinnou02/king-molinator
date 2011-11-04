@@ -21,6 +21,7 @@ local SN = {
 	PhaseList = {},
 	Timers = {},
 	Lang = {},
+	Enrage = 60 * 12,
 }
 
 SN.Sicaron = {

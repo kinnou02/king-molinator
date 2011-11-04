@@ -9,7 +9,7 @@ local KBM = {}
 KBM.Testing = false
 KBM.TestFilters = {}
 KBM.MenuOptions = {
-	MechTimers = {},
+	Timers = {},
 	CastBars = {},
 	TankSwap = {},
 	Enabled = true,
@@ -28,6 +28,23 @@ local function KBM_DefineVars(AddonID)
 			Frame = {
 				x = false,
 				y = false,
+			},
+			EncTimer = {
+				x = false,
+				y = false,
+				w = 150,
+				h = 32,
+				wScale = 1,
+				hScale = 1,
+				Enabled = true,
+				Unlocked = false,
+				Visible = false,
+				ScaleWidth = false,
+				ScaleHeight = false,
+				TextSize = 16,
+				TextScale = false,
+				Enrage = true,
+				Duration = true,
 			},
 			MechTimer = {
 				x = false,
@@ -73,7 +90,9 @@ local function KBM_DefineVars(AddonID)
 				Enabled = true,
 				Visible = false,
 				Unlocked = false,
-			}
+			},
+			BestTimes = {
+			},
 		}
 		KBM_GlobalOptions = KBM.Options
 		for _, Mod in ipairs(KBM_BossMod) do
@@ -106,6 +125,8 @@ local function KBM_LoadVars(AddonID)
 		end
 		KBM.Options.TankSwap.h = 40
 		KBM.Options.TankSwap.TextSize = 14
+		KBM.Options.EncTimer.h = 25
+		KBM.Options.EncTimer.TextSize = 15
 	end
 end
 
@@ -136,6 +157,8 @@ local KBM_TestAbility = nil
 
 KBM.HeldTime = Inspect.Time.Real()
 KBM.StartTime = 0
+KBM.EnrageTime = 0
+KBM.EnrageTimer = 0
 KBM.TimeElapsed = 0
 KBM.UpdateTime = 0
 KBM.CastBar = {}
@@ -172,6 +195,8 @@ KBM.MechTimer.testTimerList = {}
 
 KBM.TankSwap = {}
 KBM.TankSwap.Triggers = {}
+
+KBM.EncTimer = {}
 
 function KBM.Language:Add(Phrase)
 	local SetPhrase = {}
@@ -251,6 +276,8 @@ function KBM.MechTimer:Add(iTrigger, iType, iTime, iBoss, iStart, iName)
 	local Timer = {}
 	Timer.Active = false
 	Timer.TimeStart = nil
+	Timer.Removing = false
+	Timer.Starting = false
 	if type(iTrigger) == "table" then
 		Timer.Trigger = iName
 	else
@@ -270,10 +297,18 @@ function KBM.MechTimer:Add(iTrigger, iType, iTime, iBoss, iStart, iName)
 		if self.Enabled then
 			if self.Active then
 				self.Active = false
-				table.insert(KBM.MechTimer.RemoveTimers, self)
+				if not self.Removing then
+					self.Removing = true
+					table.insert(KBM.MechTimer.RemoveTimers, self)
+				end
+				if self.Starting then
+					return
+				end
 				table.insert(KBM.MechTimer.StartTimers, self)
+				self.Starting = true
 				return
 			end
+			self.Starting = false
 			local Anchor = KBM.MechTimer.Anchor
 			self.Background = KBM:CallFrame(KBM.Context)
 			self.Background:SetWidth(KBM.Options.MechTimer.w * KBM.Options.MechTimer.wScale)
@@ -343,10 +378,18 @@ function KBM.MechTimer:Add(iTrigger, iType, iTime, iBoss, iStart, iName)
 			end
 		end
 		self.Active = false
+		self.Remaining = 0
+		self.TimeStart = 0
+		self.Removing = false
 		self.CastInfo:sRemove()
 		self.TimeBar:sRemove()
 		self.Background:sRemove()
 		if self.iType == "repeat" then
+			self.Starting = true
+			table.insert(KBM.MechTimer.StartTimers, self)
+		end
+		if KBM.Testing then
+			self.Starting = true
 			table.insert(KBM.MechTimer.StartTimers, self)
 		end
 	end
@@ -358,7 +401,8 @@ function KBM.MechTimer:Add(iTrigger, iType, iTime, iBoss, iStart, iName)
 			self.CastInfo:ResizeToText()
 			self.TimeBar:SetWidth(self.Background:GetWidth() * (self.Remaining/self.Time))
 			if self.Remaining <= 0 then
-				self.Active = false
+				self.Remaining = 0
+				self.Removing = true
 				table.insert(KBM.MechTimer.RemoveTimers, self)
 			end
 		end
@@ -412,7 +456,7 @@ function KBM.MechTimer:Add(iTrigger, iType, iTime, iBoss, iStart, iName)
 		iBoss.Timers[iTrigger] = Timer
 	end
 	if KBM.Testing then
-		--Timer:Start(Inspect.Time.Real())
+		Timer:Start(Inspect.Time.Real())
 		table.insert(self.testTimerList, iTrigger)
 	end
 	return Timer
@@ -527,6 +571,102 @@ local function KBM_Options()
 	end
 end
 
+function KBM.EncTimer:Init()
+	
+	self.TestMode = false
+	self.Frame = UI.CreateFrame("Frame", "Encounter Timer", KBM.Context)
+	self.Frame:SetWidth(KBM.Options.EncTimer.w)
+	self.Frame:SetHeight(KBM.Options.EncTimer.h)
+	if not KBM.Options.EncTimer.x then
+		self.Frame:SetPoint("CENTERTOP", UIParent, "CENTERTOP")
+	else
+		self.Frame:SetPoint("TOPLEFT", UIParent, "TOPLEFT", KBM.Options.EncTimer.x, KBM.Options.EncTimer.y)
+	end
+	self.Frame:SetBackgroundColor(0,0,0,0.33)
+	self.Frame.Text = UI.CreateFrame("Text", "Encounter Text", self.Frame)
+	self.Frame.Text:SetText("Time: 00m:00s")
+	self.Frame.Text:SetFontSize(KBM.Options.EncTimer.TextSize)
+	self.Frame.Text:ResizeToText()
+	self.Frame.Text:SetPoint("CENTER", self.Frame, "CENTER")
+	self.Enrage = {}
+	self.Enrage.Frame = UI.CreateFrame("Frame", "Enrage Timer", KBM.Context)
+	self.Enrage.Frame:SetPoint("TOPLEFT", self.Frame, "BOTTOMLEFT")
+	self.Enrage.Frame:SetPoint("RIGHT", self.Frame, "RIGHT")
+	self.Enrage.Frame:SetHeight(self.Frame:GetHeight())
+	self.Enrage.Frame:SetBackgroundColor(0,0,0,0.33)
+	self.Enrage.Text = UI.CreateFrame("Text", "Enrage Text", self.Enrage.Frame)
+	self.Enrage.Text:SetText("Enrage in: 00m:00s")
+	self.Enrage.Text:SetFontSize(KBM.Options.EncTimer.TextSize)
+	self.Enrage.Text:ResizeToText()
+	self.Enrage.Text:SetPoint("CENTER", self.Enrage.Frame, "CENTER")
+	self.Enrage.Progress = UI.CreateFrame("Frame", "Enrage Progress", self.Enrage.Frame)
+	self.Enrage.Progress:SetPoint("TOPLEFT", self.Enrage.Frame, "TOPLEFT")
+	self.Enrage.Progress:SetPoint("BOTTOM", self.Enrage.Frame, "BOTTOM")
+	self.Enrage.Progress:SetPoint("RIGHT", self.Enrage.Frame, 0, nil)
+	self.Enrage.Progress:SetBackgroundColor(0.9,0,0,0.33)
+	function self:UpdateMove(uType)
+		if uType == "end" then
+			KBM.Options.EncTimer.x = self.Frame:GetLeft()
+			KBM.Options.EncTimer.y = self.Frame:GetTop()
+		end
+	end
+	function self:Update(current)
+		local EnrageString = ""
+		if KBM.Options.EncTimer.Duration then
+			self.Frame.Text:SetText(KBM.ConvertTime(KBM.TimeElapsed))
+			self.Frame.Text:ResizeToText()
+		end
+		if KBM.Options.EncTimer.Enrage then
+			if current < KBM.EnrageTime then
+				EnrageString = KBM.ConvertTime(KBM.EnrageTime - current)
+				self.Enrage.Text:SetText(EnrageString)
+				self.Enrage.Text:ResizeToText()
+				self.Enrage.Progress:SetPoint("RIGHT", self.Enrage.Frame, KBM.TimeElapsed/KBM_CurrentMod.Enrage, nil)
+			else
+				self.Enrage.Text:SetText("!! Enraged !!")
+				self.Enrage.Text:ResizeToText()
+				self.Enrage.Progress:SetPoint("RIGHT", self.Enrage.Frame, "RIGHT")
+			end
+		end
+	end
+	function self:Start(Time)
+		if KBM.Options.EncTimer.Duration then
+			self.Frame:SetVisible(true)
+			self.Active = true
+		end
+		if KBM.Options.EncTimer.Enrage then
+			self.Enrage.Frame:SetVisible(true)
+			self.Enrage.Progress:SetPoint("RIGHT", self.Enrage.Frame, "LEFT")
+			self.Active = true
+		end
+		if self.Active then
+			self:Update(Time)
+		end
+	end
+	function self:TestUpdate()
+	
+	end
+	function self:End()
+		self.Active = false
+		self.Frame:SetVisible(false)
+		self.Enrage.Frame:SetVisible(false)
+	end
+	function self:SetTest(bool)
+		if bool then
+			self.Enrage.Text:SetText("Enrage in: 00m:00s")
+			self.Enrage.Text:ResizeToText()
+			self.Frame.Text:SetText("Time: 00m:00s")
+			self.Frame.Text:ResizeToText()
+		end
+		self.Frame:SetVisible(bool)
+		self.Enrange:SetVisible(bool)
+	end
+	self.Frame.Drag = KBM.AttachDragFrame(self.Frame, function (uType) self:UpdateMove(uType) end, "Enc Timer Drag", 2)
+	self.Frame:SetVisible(KBM.Options.EncTimer.Visible)
+	self.Enrage.Frame:SetVisible(KBM.Options.EncTimer.Visible)
+	self.Frame.Drag:SetVisible(KBM.Options.EncTimer.Unlocked)
+end
+
 local function KBM_UnitHPCheck(info)
 
 	local uDetails = {}
@@ -539,7 +679,7 @@ local function KBM_UnitHPCheck(info)
 					bDetails = Inspect.Unit.Detail(info.caster)
 					if bDetails then
 						if bDetails.player then
-							--if uDetails.level == KBM_Boss[uDetails.name].Level then
+							if uDetails.level == KBM_Boss[uDetails.name].Level then
 								KBM.BossID[UnitID] = {}
 								KBM.BossID[UnitID].name = uDetails.name
 								KBM.BossID[UnitID].monitor = true
@@ -556,13 +696,19 @@ local function KBM_UnitHPCheck(info)
 										print("Good luck!")
 										KBM.TimeElapsed = 0
 										KBM.StartTime = Inspect.Time.Real()
+										if KBM_CurrentMod.Enrage then
+											KBM.EnrageTime = KBM.StartTime + KBM_CurrentMod.Enrage
+										end
+										if KBM.Options.EncTimer.Enabled then
+											KBM.EncTimer:Start(KBM.StartTime)
+										end
 									end
 									KBM.BossID[UnitID].Boss = KBM_CurrentMod:UnitHPCheck(uDetails, UnitID)
 								else
 									KBM.BossID[UnitID].dead = true
 									KBM.BossID[UnitID] = nil
 								end
-							--end
+							end
 						end
 					end
 				end
@@ -574,7 +720,9 @@ local function KBM_UnitHPCheck(info)
 			if info.abilityName then
 				if KBM.MechTimer.DamageTimer[info.abilityName] then
 					if KBM.MechTimer.DamageTimer[info.abilityName].Enabled then
-						KBM.MechTimer.DamageTimer[info.abilityName]:Start(Inspect.Time.Real())
+						if KBM.MechTimer.DamageTimer[info.abilityName].Remaining < 2 then
+							KBM.MechTimer.DamageTimer[info.abilityName]:Start(Inspect.Time.Real())
+						end
 					end
 				end
 			end
@@ -757,8 +905,7 @@ function KBM.TankSwap:Init()
 		local uDetails = nil
 		self.DebuffID = DebuffID
 		self.DebuffName = DebuffName
-		print("Grouped: "..tostring(LibSRM.Grouped()))
-		--if LibSRM.Grouped() then
+		if LibSRM.Grouped() then
 			for i = 1, 20 do
 				Spec, UnitID = LibSRM.Group.Inspect(i)
 				if UnitID then
@@ -770,7 +917,7 @@ function KBM.TankSwap:Init()
 					end
 				end
 			end
-		--end
+		end
 	end
 	function self:Update()
 		for UnitID, TankObj in pairs(self.Tanks) do
@@ -1003,9 +1150,16 @@ function KBM:Timer()
 		end
 		if diff >= 1 then
 			self.TimeElapsed = current - self.StartTime
-			self:TimeToHours(self.TimeElapsed)
+			if KBM_CurrentMod.Enrage then
+				self.EnrageTimer = self.EnrageTime - current
+			end
+			--self:TimeToHours(self.TimeElapsed)
+			if self.Options.EncTimer.Enabled then
+				self.EncTimer:Update(current)
+			end
 			self.HeldTime = current - (diff - math.floor(diff))
 			self.UpdateTime = current
+			
 		end
 		if udiff >= 0.025 then
 			if #self.MechTimer.ActiveTimers > 0 then
@@ -1029,8 +1183,10 @@ function KBM:Timer()
 				CastCheck:Update()
 			end
 			self.UpdateTime = current
-			if KBM.TankSwap.Active then
-				KBM.TankSwap:Update()
+			if not KBM.TankSwap.Test then
+				if KBM.TankSwap.Active then
+					KBM.TankSwap:Update()
+				end
 			end
 		end
 	else
@@ -1100,6 +1256,11 @@ local function KBM_Reset()
 			KBM.Encounter = false
 			KBM.TimeElapsed = 0
 			KBM.TimeStart = 0
+			KBM.EnrageTime = 0
+			KBM.EnrageTimer = 0
+			if KBM.EncTimer.Active then
+				KBM.EncTimer:End()
+			end
 			if KBM.TankSwap.Active then
 				KBM.TankSwap:Remove()
 			end
@@ -1220,8 +1381,27 @@ function KBM.NPCChat(data)
 	end
 end
 
-function KBM.MenuOptions.MechTimers:Options()
+function KBM.MenuOptions.Timers:Options()
 	
+	-- Encounter Timers Callbacks
+	function self:EncTimersEnabled(bool)
+		KBM.Options.EncTimer.Enabled = bool
+	end
+	function self:ShowEncTimer(bool)
+		KBM.Options.EncTimer.Visible = bool
+		KBM.EncTimer.Frame:SetVisible(bool)
+		KBM.EncTimer.Enrage.Frame:SetVisible(bool)
+	end
+	function self:LockEncTimer(bool)
+		KBM.Options.EncTimer.Unlocked = bool
+		KBM.EncTimer.Frame.Drag:SetVisible(bool)
+	end
+	function self:EncDuration(bool)
+		KBM.Options.EncTimer.Duration = bool
+	end
+	function self:EncEnrage(bool)
+		KBM.Options.EncTimer.Enrage = bool
+	end
 	-- Timer Callbacks
 	function self:MechEnabled(bool)
 		KBM.Options.MechTimer.Enabled = bool
@@ -1276,11 +1456,17 @@ function KBM.MenuOptions.MechTimers:Options()
 	Options:SetTitle()
 	
 	-- Timer Options
-	self.MechTimers = Options:AddHeader(KBM.Language.Options.MechanicTimers[KBM.Lang], self.MechEnabled, true)
-	self.MechTimers.Check.Frame:SetEnabled(false)
+	self.Menu = {}
+	self.Menu.EncTimers = Options:AddHeader("Encounter Timers", self.EncTimersEnabled, true)
+	self.Menu.EncTimers:AddCheck("Show Timer (for positioning)", self.ShowEncTimer, KBM.Options.EncTimer.Visible)
+	self.Menu.EncTimers:AddCheck("Lock Timer", self.LockEncTimer, KBM.Options.EncTimer.Unlocked)
+	self.Menu.EncTimers:AddCheck("Encounter duration timer.", self.EncDuration, KBM.Options.EncTimer.Duration)
+	self.Menu.EncTimers:AddCheck("Enrage Timer (if supported)", self.EncEnrage, KBM.Options.EncTimer.Enrage)
+	self.Menu.MechTimers = Options:AddHeader(KBM.Language.Options.MechanicTimers[KBM.Lang], self.MechEnabled, true)
+	self.Menu.MechTimers.Check.Frame:SetEnabled(false)
 	KBM.Options.MechTimer.Enabled = true
-	self.MechTimers:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowMechAnchor, KBM.Options.MechTimer.Visible)
-	self.MechTimers:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.LockMechAnchor, KBM.Options.MechTimer.Unlocked)
+	self.Menu.MechTimers:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowMechAnchor, KBM.Options.MechTimer.Visible)
+	self.Menu.MechTimers:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.LockMechAnchor, KBM.Options.MechTimer.Unlocked)
 	-- self.MechTimers:AddCheck("Width scaling.", self.MechScaleWidth, KBM.Options.MechTimer.ScaleWidth)
 	-- self.MechTimers:AddCheck("Enable Width mouse wheel scaling.", self.MechWidthMouse, KBM.Options.MechTimer.WidthMouse)
 	-- local slider = self.MechTimers:AddSlider(50, 150, nil, (KBM.Options.MechTimer.wScale*100))
@@ -1456,9 +1642,10 @@ local function KBM_Start()
 	KBM.TankSwap:Init()
 	KBM.MechTimer:Init()
 	KBM.CastBar:Init()
+	KBM.EncTimer:Init()
 	KBM.InitOptions()
 	local Header = KBM.MainWin.Menu:CreateHeader("Options")
-	KBM.MenuOptions.MechTimers.MenuItem = KBM.MainWin.Menu:CreateEncounter("Timers", KBM.MenuOptions.MechTimers, true, Header)
+	KBM.MenuOptions.Timers.MenuItem = KBM.MainWin.Menu:CreateEncounter("Timers", KBM.MenuOptions.Timers, true, Header)
 	KBM.MenuOptions.CastBars.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.Castbar[KBM.Lang], KBM.MenuOptions.CastBars, true, Header)
 	KBM.MenuOptions.TankSwap.MenuItem = KBM.MainWin.Menu:CreateEncounter("Tank Swaps", KBM.MenuOptions.TankSwap, true, Header)
 	table.insert(Command.Slash.Register("kbmreset"), {KBM_Reset, "KingMolinator", "KBM Reset"})
@@ -1474,7 +1661,7 @@ local function KBM_Start()
 	table.insert(Command.Slash.Register("kbmoptions"), {KBM_Options, "KingMolinator", "KBM Open Options"})
 	print("/kbmhelp for a list of commands.")
 	print("/kbmoptions for options.")
-	KBM.MenuOptions.MechTimers:Options()
+	KBM.MenuOptions.Timers:Options()
 end
 
 local function KBM_WaitReady(unitID)

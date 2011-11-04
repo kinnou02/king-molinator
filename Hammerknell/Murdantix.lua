@@ -27,6 +27,7 @@ local MX = {
 	Timers = {},
 	Lang = {},
 	TankSwap = true,
+	Enrage = 60 * 10
 }
 
 MX.Murd = {
@@ -162,6 +163,12 @@ end
 function MX.Murdantix:Options()
 	function self:TimersEnabled(bool)
 		MX.Settings.Timers.Enabled = bool
+		MX.Murd.TimersRef.Enabled = bool
+		if bool then
+			MX.Murdantix.Menu.Header:EnableChildren()
+		else
+			MX.Murdantix.Menu.Header:DisableChildren()
+		end
 	end
 	function self:MangleEnabled(bool)
 		MX.Settings.Timers.MangleEnabled = bool
@@ -181,11 +188,12 @@ function MX.Murdantix:Options()
 	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
-	local Timers = Options:AddHeader("Timers Enabled", self.TimersEnabled, MX.Settings.Timers.Enabled)
-	Timers:AddCheck(MX.Lang.Mangling[KBM.Lang], self.MangleEnabled, MX.Settings.Timers.MangleEnabled)
-	Timers:AddCheck(MX.Lang.Pound[KBM.Lang], self.PoundEnabled, MX.Settings.Timers.PoundEnabled)
-	Timers:AddCheck(MX.Lang.Blast[KBM.Lang], self.BlastEnabled, MX.Settings.Timers.BlastEnabled)
-	Timers:AddCheck(MX.Lang.Trauma[KBM.Lang], self.TraumaEnabled, MX.Settings.Timers.TraumaEnabled)
+	self.Menu = {}
+	self.Menu.Header = Options:AddHeader("Timers Enabled", self.TimersEnabled, MX.Settings.Timers.Enabled)
+	self.Menu.Mangling = self.Menu.Header:AddCheck(MX.Lang.Mangling[KBM.Lang], self.MangleEnabled, MX.Settings.Timers.MangleEnabled)
+	self.Menu.Header:AddCheck(MX.Lang.Pound[KBM.Lang], self.PoundEnabled, MX.Settings.Timers.PoundEnabled)
+	self.Menu.Header:AddCheck(MX.Lang.Blast[KBM.Lang], self.BlastEnabled, MX.Settings.Timers.BlastEnabled)
+	self.Menu.Header:AddCheck(MX.Lang.Trauma[KBM.Lang], self.TraumaEnabled, MX.Settings.Timers.TraumaEnabled)
 end
 
 function MX:Start()

@@ -21,6 +21,7 @@ local VP = {
 	PhaseList = {},
 	Timers = {},
 	Lang = {},
+	Enrage = 60 * 11, 
 }
 
 VP.Prime = {

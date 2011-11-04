@@ -120,6 +120,7 @@ function MZ:UnitHPCheck(unitDetails, unitID)
 					self.Matron.Dead = false
 					self.Matron.Casting = false
 					self.Matron.CastBar:Create(unitID)
+					KBM.TankSwap:Start("Matron's Curse")
 				end
 				self.Matron.UnitID = unitID
 				self.Matron.Available = true

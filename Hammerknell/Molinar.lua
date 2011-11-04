@@ -23,6 +23,7 @@ local KM = {
 	Instance = HK.Name,
 	Timers = {},
 	Lang = {},
+	Enrage = 60 * 10,
 }
 
 -- Addon Variables
@@ -136,6 +137,25 @@ KBM.Language[KM.King.Name]:SetGerman("Runenkönig Molinar")
 KBM.Language[KM.Prince.Name]:SetGerman("Prinz Dollin")
 KBM.Language[KM.King.Name]:SetFrench("Roi runique Molinar")
 
+-- King and Princes Ability Dictionary
+KM.Lang.Ability = {}
+KM.Lang.Ability.Rend = KBM.Language:Add("Rend Life")
+KM.Lang.Ability.Rend.French = "D\195\169chire-Vie"
+KM.Lang.Ability.Terminate = KBM.Language:Add("Terminate Life")
+KM.Lang.Ability.Terminate.French = "Ach\195\168vement de Vie"
+KM.Lang.Ability.Consuming = KBM.Language:Add("Consuming Essence")
+KM.Lang.Ability.Consuming.French = "Combustion d'essence"
+KM.Lang.Ability.Runic = KBM.Language:Add("Runic Feedback")
+KM.Lang.Ability.Runic.French = "R\195\169action runique"
+KM.Lang.Ability.Crushing = KBM.Language:Add("Crushing Regret")
+KM.Lang.Ability.Crushing.French = "Blasph\195\168me infect"
+KM.Lang.Ability.Forked = KBM.Language:Add("Forked Blast")
+KM.Lang.Ability.Forked.French = "Explosion fourchue"
+KM.Lang.Ability.Shout = KBM.Language:Add("Frightening Shout")
+KM.Lang.Ability.Shout.French = "Flammes maudites"
+KM.Lang.Ability.Cursed = KBM.Language:Add("Cursed Blows")
+KM.Lang.Ability.Cursed.French = "Frappes maudites"
+
 -- King's Options page Dictionary
 KM.Lang.Options = {}
 KM.Lang.Options.ShowMonitor = KBM.Language:Add("Show Percentage Monitor.")
@@ -208,15 +228,15 @@ function KM:LoadVars()
 			end
 		end
 	end
-	KM.Prince.CastFilters["Rend Life"] = {Enabled = self.Settings.RendEnabled}
-	KM.Prince.CastFilters["Terminate Life"] = {Enabled = self.Settings.TerminateEnabled}
-	KM.Prince.CastFilters["Consuming Essence"] = {Enabled = self.Settings.PCEssenceEnabled}
-	KM.Prince.CastFilters["Runic Feedback"] = {Enabled = self.Settings.RFeedbackEnabled}
-	KM.Prince.CastFilters["Crushing Regret"] = {Enabled = self.Settings.CrushingEnabled}
-	KM.Prince.CastFilters["Forked Blast"] = {Enabled = self.Settings.FBlastEnabled}
-	KM.King.CastFilters["Frightening Shout"] = {Enabled = self.Settings.FShoutEnabled}
-	KM.King.CastFilters["Cursed Blows"] = {Enabled = self.Settings.CursedEnabled}
-	KM.King.CastFilters["Consuming Essence"] = {Enabled = self.Settings.KCEssenceEnabled}	
+	KM.Prince.CastFilters[KM.Lang.Ability.Rend[KBM.Lang]] = {Enabled = self.Settings.RendEnabled}
+	KM.Prince.CastFilters[KM.Lang.Ability.Terminate[KBM.Lang]] = {Enabled = self.Settings.TerminateEnabled}
+	KM.Prince.CastFilters[KM.Lang.Ability.Consuming[KBM.Lang]] = {Enabled = self.Settings.PCEssenceEnabled}
+	KM.Prince.CastFilters[KM.Lang.Ability.Runic[KBM.Lang]] = {Enabled = self.Settings.RFeedbackEnabled}
+	KM.Prince.CastFilters[KM.Lang.Ability.Crushing[KBM.Lang]] = {Enabled = self.Settings.CrushingEnabled}
+	KM.Prince.CastFilters[KM.Lang.Ability.Forked[KBM.Lang]] = {Enabled = self.Settings.FBlastEnabled}
+	KM.King.CastFilters[KM.Lang.Ability.Shout[KBM.Lang]] = {Enabled = self.Settings.FShoutEnabled}
+	KM.King.CastFilters[KM.Lang.Ability.Cursed[KBM.Lang]] = {Enabled = self.Settings.CursedEnabled}
+	KM.King.CastFilters[KM.Lang.Ability.Consuming[KBM.Lang]] = {Enabled = self.Settings.KCEssenceEnabled}	
 end
 
 function KM:SaveVars()
@@ -705,39 +725,39 @@ function KM.KingMolinar:Options()
 	end
 	function self:RendEnabled(bool)
 		KM.Settings.RendEnabled = bool
-		KM.Prince.CastFilters["Rend Life"].Enabled = bool
+		KM.Prince.CastFilters[KM.Lang.Ability.Rend[KBM.Lang]].Enabled = bool
 	end
 	function self:TerminateEnabled(bool)
 		KM.Settings.TerminateEnabled = bool
-		KM.Prince.CastFilters["Terminate Life"].Enabled = bool
+		KM.Prince.CastFilters[KM.Lang.Ability.Terminate[KBM.Lang]].Enabled = bool
 	end
 	function self:PCEssenceEnabled(bool)
 		KM.Settings.PCEssenceEnabled = bool
-		KM.Prince.CastFilters["Consuming Essence"].Enabled = bool
+		KM.Prince.CastFilters[KM.Lang.Ability.Consuming[KBM.Lang]].Enabled = bool
 	end
 	function self:KCEssenceEnabled(bool)
 		KM.Settings.KCEssenceEnabled = bool
-		KM.King.CastFilters["Consuming Essence"].Enabled = bool
+		KM.King.CastFilters[KM.Lang.Ability.Consuming[KBM.Lang]].Enabled = bool
 	end
 	function self:CursedEnabled(bool)
 		KM.Settings.CursedEnabled = bool
-		KM.King.CastFilters["Cursed Blows"].Enabled = bool
+		KM.King.CastFilters[KM.Lang.Ability.Cursed[KBM.Lang]].Enabled = bool
 	end
 	function self:FShoutEnabled(bool)
 		KM.Settings.FShoutEnabled = bool
-		KM.King.CastFilters["Frightening Shout"].Enabled = bool
+		KM.King.CastFilters[KM.Lang.Ability.Shout[KBM.Lang]].Enabled = bool
 	end
 	function self:RFeedbackEnabled(bool)
 		KM.Settings.RFeedbackEnabled = bool
-		KM.Prince.CastFilters["Runic Feedback"].Enabled = bool
+		KM.Prince.CastFilters[KM.Lang.Ability.Runic[KBM.Lang]].Enabled = bool
 	end
 	function self:CrushingEnabled(bool)
 		KM.Settings.CrushingEnabled = bool
-		KM.Prince.CastFilters["Crushing Regret"].Enabled = bool
+		KM.Prince.CastFilters[KM.Lang.Ability.Crushing[KBM.Lang]].Enabled = bool
 	end
 	function self:FBlastEnabled(bool)
 		KM.Settings.FBlastEnabled = bool
-		KM.Prince.CastFilters["Forked Blast"].Enabled = bool
+		KM.Prince.CastFilters[KM.Lang.Ability.Forked[KBM.Lang]].Enabled = bool
 	end
 	function self:MonitorEnabled(bool)
 		if bool then
@@ -755,17 +775,17 @@ function KM.KingMolinar:Options()
 	Monitor:AddCheck(KM.Lang.Options.Locked[KBM.Lang], self.Locked, KM.Settings.Locked)
 	Options:AddSpacer()
 	local KingMech = Options:AddHeader(KM.Lang.Options.ShowKingCast[KBM.Lang], self.KingEnabled, KM.Settings.KingBar)
-	KingMech:AddCheck("Frightening Shout cast.", self.FShoutEnabled, KM.Settings.FShoutEnabled)
-	KingMech:AddCheck("Cursed Blows cast.", self.CursedEnabled, KM.Settings.CursedEnabled)
-	KingMech:AddCheck("Consuming Essence cast.", self.KCEssenceEnabled, KM.Settings.KCEssenceEnabled)
+	KingMech:AddCheck(KM.Lang.Ability.Shout[KBM.Lang]..".", self.FShoutEnabled, KM.Settings.FShoutEnabled)
+	KingMech:AddCheck(KM.Lang.Ability.Cursed[KBM.Lang]..".", self.CursedEnabled, KM.Settings.CursedEnabled)
+	KingMech:AddCheck(KM.Lang.Ability.Consuming[KBM.Lang]..".", self.KCEssenceEnabled, KM.Settings.KCEssenceEnabled)
 	Options:AddSpacer()
 	local PrinceMech = Options:AddHeader(KM.Lang.Options.ShowPrinceCast[KBM.Lang], self.PrinceEnabled, KM.Settings.PrinceBar)
-	PrinceMech:AddCheck("Rend Life cast.", self.RendEnabled, KM.Settings.RendEnabled)
-	PrinceMech:AddCheck("Terminate Life cast.", self.TerminateEnabled, KM.Settings.TerminateEnabled)
-	PrinceMech:AddCheck("Crushing Regret cast.", self.CrushingEnabled, KM.Settings.CrushingEnabled)
-	PrinceMech:AddCheck("Consuming Essence cast.", self.PCEssenceEnabled, KM.Settings.PCEssenceEnabled)
-	PrinceMech:AddCheck("Runic Feedback cast.", self.RFeedbackEnabled, KM.Settings.RFeedbackEnabled)
-	PrinceMech:AddCheck("Forked Blast cast.", self.FBlastEnabled, KM.Settings.FBlastEnabled)
+	PrinceMech:AddCheck(KM.Lang.Ability.Rend[KBM.Lang]..".", self.RendEnabled, KM.Settings.RendEnabled)
+	PrinceMech:AddCheck(KM.Lang.Ability.Terminate[KBM.Lang]..".", self.TerminateEnabled, KM.Settings.TerminateEnabled)
+	PrinceMech:AddCheck(KM.Lang.Ability.Crushing[KBM.Lang]..".", self.CrushingEnabled, KM.Settings.CrushingEnabled)
+	PrinceMech:AddCheck(KM.Lang.Ability.Consuming[KBM.Lang]..".", self.PCEssenceEnabled, KM.Settings.PCEssenceEnabled)
+	PrinceMech:AddCheck(KM.Lang.Ability.Runic[KBM.Lang]..".", self.RFeedbackEnabled, KM.Settings.RFeedbackEnabled)
+	PrinceMech:AddCheck(KM.Lang.Ability.Forked[KBM.Lang]..".", self.FBlastEnabled, KM.Settings.FBlastEnabled)
 end
 
 function KM:Start()
@@ -775,11 +795,11 @@ function KM:Start()
 	self.KingMolinar.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.KingMolinar, true, self.Header)
 	self.KingMolinar.MenuItem.Check:SetEnabled(false)
 	
-	KBM.MechTimer:Add("Cursed Blows", "cast", 55, self.King, nil)
-	KBM.MechTimer:Add("Consuming Essence", "cast", 22, self.King, nil, "(King) Consuming Essence")
-	KBM.MechTimer:Add("Terminate Life", "cast", 21, self.Prince, nil)
-	KBM.MechTimer:Add("Consuming Essence", "cast", 22, self.Prince, nil, "(Prince) Consuming Essence")
-	KBM.MechTimer:Add("Runic Feedback", "cast", 48, self.Prince, nil)
+	KBM.MechTimer:Add(KM.Lang.Ability.Cursed[KBM.Lang], "cast", 55, self.King, nil)
+	KBM.MechTimer:Add(KM.Lang.Ability.Consuming[KBM.Lang], "cast", 22, self.King, nil, "(King) "..KM.Lang.Ability.Consuming[KBM.Lang])
+	KBM.MechTimer:Add(KM.Lang.Ability.Terminate[KBM.Lang], "cast", 21, self.Prince, nil)
+	KBM.MechTimer:Add(KM.Lang.Ability.Consuming[KBM.Lang], "cast", 22, self.Prince, nil, "(Prince) "..KM.Lang.Ability.Consuming[KBM.Lang])
+	KBM.MechTimer:Add(KM.Lang.Ability.Runic[KBM.Lang], "cast", 48, self.Prince, nil)
 	KBM.MechTimer:Add("Incorporeal Revenant begins to phase into this reality.", "notify", 82, KM, nil, "Incorporeal Revenant")
 	
 	self.King.CastBar = KBM.CastBar:Add(self, self.King, self.King.PinCastBar, self.Settings.KingBar)

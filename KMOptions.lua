@@ -295,7 +295,7 @@ function KBM.InitOptions()
 			local HeaderObj = {}
 			HeaderObj.Frame = KBM:CallFrame(KBM.MainWin.Options)
 			if self.LastItem.LastChild then
-				HeaderObj.Frame:SetPoint("TOP", self.LastItem.Frame, "BOTTOM")
+				HeaderObj.Frame:SetPoint("TOP", self.LastItem.LastChild.Frame, "BOTTOM")
 				HeaderObj.Frame:SetPoint("LEFT", KBM.MainWin.Options, "LEFT")
 			else
 				HeaderObj.Frame:SetPoint("TOPLEFT", self.LastItem.Frame, "BOTTOMLEFT")
@@ -317,8 +317,8 @@ function KBM.InitOptions()
 				HeaderObj.Check.Frame:SetChecked(Default)
 				HeaderObj.Check.Callback = Callback
 				function HeaderObj.Check.Frame.Event:CheckboxChange()
-					if HeaderObj.Callback then
-						HeaderObj:Callback(self:GetChecked())
+					if HeaderObj.Check.Callback then
+						HeaderObj.Check:Callback(self:GetChecked())
 					end
 				end
 			end
@@ -422,7 +422,6 @@ function KBM.InitOptions()
 					-- CheckObj.SliderObj = SliderObj
 					-- self.LastChild = SliderObj
 				-- else
-					self.LastChild = CheckObj
 				-- end
 				table.insert(self.Children, CheckObj)
 				function CheckObj.Check.Frame.Event:CheckboxChange()
@@ -449,6 +448,12 @@ function KBM.InitOptions()
 						end
 					end
 				end
+				function CheckObj:Enable()
+					self.Check.Frame:SetEnabled(true)
+				end
+				function CheckObj:Disable()
+					self.Check.Frame:SetEnabled(false)
+				end
 				function CheckObj:Remove()
 					if self.SliderObj then
 						self.SliderObj:Remove()
@@ -458,7 +463,14 @@ function KBM.InitOptions()
 					self.Text.Frame:sRemove()
 					self.Frame:sRemove()
 				end
+				self.LastChild = CheckObj
 				return CheckObj
+			end
+			function HeaderObj:EnableChildren()
+			
+			end
+			function HeaderObj:DisableChildren()
+			
 			end
 			function HeaderObj:Remove()
 				self.Check.Frame:sRemove()

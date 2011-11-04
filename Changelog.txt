@@ -1,4 +1,18 @@
 v0.3.8
+* New: Encounter Timer.
+* New: Hard Enrage Timer.
+* Added: French Translations to King Molinar casts
+* Added: French Translations to Prince Dollin casts.
+* Added: French Translations to King Molinar timers.
+* Added: French Translations to Prince Dollin timers.
+* Added: Murdantix Enrage Timer.
+* Added: Vladmal Prime Enrage Timer.
+* Added: Sicaron Enrage Timer.
+* Added: King Molinar and Prince Dollin Enrage Timer.
+* Added: Estrode Enrage Timer.
+* Added: Grugonim Enrage Timer.
+* Added: Inquisitor Garau Enrage Timer.
+* Added: T-SM support for Matron Zimara.
 * Added: Further French translations to the Options Window.
 * Change: NPC Chat triggers now use the new "Notify" trigger method.
 * Fixed: Damage timers where not triggering correctly, if at all.

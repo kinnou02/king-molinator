@@ -21,6 +21,7 @@ local GR = {
 	PhaseList = {},
 	Timers = {},
 	Lang = {},
+	Enrage = 60 * 13,
 }
 
 GR.Grugonim = {
