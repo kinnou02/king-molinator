@@ -1,4 +1,6 @@
 v0.3.9
+* New!: There's now a basic button for the options screen, Rift Style.
+* Note: The new button will be unlocked (right click to move) and centered.
 * Added: French Translations for Timer/Enrage Timer.
 * Added: French Translations for Timer/Enrage Timer Options.
 ----

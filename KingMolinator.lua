@@ -12,6 +12,7 @@ KBM.MenuOptions = {
 	Timers = {},
 	CastBars = {},
 	TankSwap = {},
+	Main = {},
 	Enabled = true,
 	Handler = nil,
 	Options = nil,
@@ -28,6 +29,12 @@ local function KBM_DefineVars(AddonID)
 			Frame = {
 				x = false,
 				y = false,
+			},
+			Button = {
+				x = false,
+				y = false,
+				Unlocked = true,
+				Visible = true,
 			},
 			EncTimer = {
 				x = false,
@@ -198,6 +205,8 @@ KBM.TankSwap.Triggers = {}
 
 KBM.EncTimer = {}
 
+KBM.Button = {}
+
 function KBM.Language:Add(Phrase)
 	local SetPhrase = {}
 	SetPhrase.English = Phrase
@@ -235,6 +244,8 @@ KBM.Language.Options.Timer = KBM.Language:Add("Encounter duration timer.")
 KBM.Language.Options.Timer.French = "Timer duration combat"
 KBM.Language.Options.Enrage = KBM.Language:Add("Enrage timer (if supported).")
 KBM.Language.Options.Enrage.French = "Timer d'Enrage (si support\195\169)."
+KBM.Language.Options.Button = KBM.Language:Add("Options Button Visible.")
+KBM.Language.Options.LockButton = KBM.Language:Add("Unlock Button (right-click to move)")
 
 -- Timer Dictionary
 KBM.Language.Timers = {}
@@ -583,6 +594,38 @@ local function KBM_Options()
 		KBM.MainWin:SetVisible(false)
 	else
 		KBM.MainWin:SetVisible(true)
+	end
+end
+
+function KBM.Button:Init()
+	KBM.Button.Texture = UI.CreateFrame("Texture", "Button Texture", KBM.Context)
+	KBM.Button.Texture:SetTexture("KingMolinator", "Media/Options_Button.png")
+	if not KBM.Options.Button.x then
+		KBM.Button.Texture:SetPoint("CENTER", UIParent, "CENTER")
+	else
+		KBM.Button.Texture:SetPoint("TOPLEFT", UIParent, "TOPLEFT", KBM.Options.Button.x, KBM.Options.Button.y)
+	end
+	KBM.Button.Texture:SetLayer(5)
+	function KBM.Button:UpdateMove(uType)
+		if uType == "end" then
+			KBM.Options.Button.x = self.Texture:GetLeft()
+			KBM.Options.Button.y = self.Texture:GetTop()
+		end	
+	end
+	function KBM.Button.Texture.Event.LeftClick()
+		KBM_Options()
+	end
+	KBM.Button.Drag = KBM.AttachDragFrame(KBM.Button.Texture, function (uType) self:UpdateMove(uType) end, "Button Drag", 6)
+	KBM.Button.Drag.Event.RightDown = KBM.Button.Drag.Event.LeftDown
+	KBM.Button.Drag.Event.RightUp = KBM.Button.Drag.Event.LeftUp
+	KBM.Button.Drag.Event.LeftDown = nil
+	KBM.Button.Drag.Event.LeftUp = nil
+	KBM.Button.Drag:SetMouseMasking("limited")
+	if not KBM.Options.Button.Unlocked then
+		KBM.Button.Drag:SetVisible(false)
+	end
+	if not KBM.Options.Button.Visible then
+		KBM.Button.Texture:SetVisible(false)
 	end
 end
 
@@ -1642,9 +1685,9 @@ function KBM.MenuOptions.CastBars:Options()
 	Options:SetTitle()
 
 	-- CastBar Options. 
-	self.CastBars = Options:AddHeader(KBM.Language.Options.Castbar[KBM.Lang], self.CastBarEnabled, false)
+	self.CastBars = Options:AddHeader(KBM.Language.Options.Castbar[KBM.Lang], self.CastBarEnabled, true)
 	self.CastBars.Check.Frame:SetEnabled(false)
-	KBM.Options.CastBar.Enabled = false
+	KBM.Options.CastBar.Enabled = true
 	self.CastBars:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowCastAnchor, KBM.Options.CastBar.Visible)
 	self.CastBars:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.LockCastAnchor, KBM.Options.CastBar.Unlocked)
 	-- self.CastBars:AddCheck("Width scaling.", self.CastScaleWidth, KBM.Options.CastBar.ScaleWidth)
@@ -1653,13 +1696,34 @@ function KBM.MenuOptions.CastBars:Options()
 
 end
 
+function KBM.MenuOptions.Main:Options()
+
+	function self:ButtonVisible(bool)
+		KBM.Options.Button.Visible = bool
+		KBM.Button.Texture:SetVisible(bool)
+	end
+	function self:LockButton(bool)
+		KBM.Options.Button.Unlocked = bool
+		KBM.Button.Drag:SetVisible(bool)
+	end
+
+	Options = self.MenuItem.Options
+	Options:SetTitle()
+
+	self.Button = Options:AddHeader(KBM.Language.Options.Button[KBM.Lang], self.ButtonVisible, KBM.Options.Button.Visible)
+	self.Button:AddCheck(KBM.Language.Options.LockButton[KBM.Lang], self.LockButton, KBM.Options.Button.Unlocked)
+	
+end
+
 local function KBM_Start()
+	KBM.Button:Init()
 	KBM.TankSwap:Init()
 	KBM.MechTimer:Init()
 	KBM.CastBar:Init()
 	KBM.EncTimer:Init()
 	KBM.InitOptions()
 	local Header = KBM.MainWin.Menu:CreateHeader("Options")
+	KBM.MenuOptions.Main.MenuItem = KBM.MainWin.Menu:CreateEncounter("Settings", KBM.MenuOptions.Main, nil, Header)
 	KBM.MenuOptions.Timers.MenuItem = KBM.MainWin.Menu:CreateEncounter("Timers", KBM.MenuOptions.Timers, true, Header)
 	KBM.MenuOptions.CastBars.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.Castbar[KBM.Lang], KBM.MenuOptions.CastBars, true, Header)
 	KBM.MenuOptions.TankSwap.MenuItem = KBM.MainWin.Menu:CreateEncounter("Tank Swaps", KBM.MenuOptions.TankSwap, true, Header)

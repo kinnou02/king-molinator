@@ -107,7 +107,7 @@ function KBM.InitOptions()
 		Header:SetWidth(self:GetWidth())
 		Header.Check = KBM:CallCheck(Header)
 		Header.Check:SetPoint("CENTERLEFT", Header, "CENTERLEFT", 4, 0)
-		if Hook then
+		if Hook ~= nil and Default ~= nil then
 			Header.Check:SetChecked(Default)
 		else
 			Header.Check:SetVisible(false)
@@ -149,7 +149,7 @@ function KBM.InitOptions()
 		function Header.Event:LeftClick()
 			if self.Enabled then
 				if self.Hook then
-				-- Go to options page
+					--self.Hook:Options()
 				end
 			end
 		end
@@ -165,8 +165,13 @@ function KBM.InitOptions()
 		Child.Enabled = true
 		Child.Check = KBM:CallCheck(Child)
 		Child.Check:SetPoint("CENTERLEFT", Child, "CENTERLEFT", 4, 0)
-		Child.Check:SetChecked(false)
-		Child.Check:SetChecked(Default)
+		if Default == nil then
+			Child.Check:SetChecked(false)
+			Child.Check:SetEnabled(false)
+			Child.Check:SetVisible(false)
+		else
+			Child.Check:SetChecked(Default)
+		end
 		Child.Text = KBM:CallText(Child)
 		Child.Text:SetWidth(Child:GetWidth() - Child.Check:GetWidth())
 		Child.Text:SetText(Text)
