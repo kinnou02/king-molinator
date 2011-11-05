@@ -42,6 +42,7 @@ local KBM = KBM_RegisterMod(VP.Prime.ID, VP)
 
 VP.Lang.Prime = KBM.Language:Add(VP.Prime.Name)
 VP.Lang.Flames = KBM.Language:Add("Ancient Flames")
+VP.Lang.Flames.French = "Flammes anciennes"
 
 VP.Prime.Name = VP.Lang.Prime[KBM.Lang]
 
