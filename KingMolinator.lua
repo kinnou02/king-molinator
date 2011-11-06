@@ -1218,7 +1218,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 					if KBM.MechTimer.CastTimers[bDetails.abilityName] then
 						if KBM.MechTimer.CastTimers[bDetails.abilityName][self.Boss.Name] then
 							if KBM.MechTimer.CastTimers[bDetails.abilityName][self.Boss.Name].Enabled then
-								KBM.MechTimer.CastTimers[bDetails.abilityName]:Start(Inspect.Time.Real())
+								KBM.MechTimer.CastTimers[bDetails.abilityName][self.Boss.Name]:Start(Inspect.Time.Real())
 							end
 						end
 					end
