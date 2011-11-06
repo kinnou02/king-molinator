@@ -5,6 +5,18 @@ v0.4.0
 * Added: New French translations to options window.
 * Added: King Molinar Timer filters.
 * Added: Prince Dollin Timer filters.
+* Added: River of Souls Instance (Template)
+* Added: ROS - Dark Foci (Template)
+* Added: ROS - Warmaster Galenir (Template)
+* Added: ROS - Plutonus the Immortal (Template)
+* Added: ROS - Herald Gaurath (Template)
+* Added: ROS - Alsbeth the Discordant (Template)
+* Added: Greenscale's Blight Instance (Template)
+* Added: GSB - Duke Letarues (Template)
+* Added: GSB - Infiltrator Johlen (Template)
+* Added: GSB - Oracle Aleria (Template)
+* Added: GSB - Prince Hylas (Template)
+* Added: GSB - Lord Greenscale (Template)
 ----
 v0.3.9
 * New!: There's now a basic button for the options screen, Rift Style.

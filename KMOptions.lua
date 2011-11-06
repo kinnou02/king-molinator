@@ -117,10 +117,10 @@ function KBM.Scroller:Create(Type, Size, Parent, Callback)
 	end
 	if Type == "H" then
 		ScrollerObj:SetWidth(Size)
-		ScrollerObj:SetHeight(15)
+		ScrollerObj:SetHeight(12)
 	else
 		ScrollerObj:SetHeight(Size)
-		ScrollerObj:SetWidth(15)
+		ScrollerObj:SetWidth(12)
 	end
 	ScrollerObj.Handle.Controller = ScrollerObj
 	return ScrollerObj
@@ -130,9 +130,10 @@ end
 function KBM.InitOptions()
 	KBM.MainWin = UI.CreateFrame("RiftWindow", "Safe's Boss Mods", KBM.Context)
 	KBM.MainWin.Options = {}
+	KBM.MainWin.MenuSize = 0
 	KBM.MainWin:SetVisible(false)
 	KBM.MainWin:SetController("border")
-	KBM.MainWin:SetWidth(700)
+	KBM.MainWin:SetWidth(730)
 	KBM.MainWin:SetHeight(550)
 	KBM.MainWin:SetTitle("KM Boss Mods: Options")
 				
@@ -185,9 +186,14 @@ function KBM.InitOptions()
 		end
 	end
 	
-	MenuWidth = math.floor(ContentW * 0.30)-10
+	MenuWidth = math.floor(ContentW * 0.31)-10
 	
-	KBM.MainWin.Menu = UI.CreateFrame("Mask", "SBM Menu Frame", KBM.MainWin.Content)
+	KBM.MainWin.Mask = UI.CreateFrame("Mask", "KBM Menu Mask", KBM.MainWin.Content)
+	
+	KBM.MainWin.Menu = UI.CreateFrame("Frame", "KBM Menu Frame", KBM.MainWin.Mask)
+	KBM.MainWin.Menu:SetMouseMasking("limited")
+	KBM.MainWin.Mask:SetPoint("TOPLEFT", KBM.MainWin.Menu, "TOPLEFT")
+	KBM.MainWin.Mask:SetPoint("BOTTOMRIGHT", KBM.MainWin.Menu, "BOTTOMRIGHT")
 	KBM.MainWin.Menu:SetWidth(MenuWidth)
 	KBM.MainWin.Menu:SetHeight(ContentH)
 	KBM.MainWin.Menu:SetPoint("TOPLEFT", KBM.MainWin.Content, "TOPLEFT",5, 5)
@@ -197,15 +203,30 @@ function KBM.InitOptions()
 	KBM.MainWin.SplitFrame = UI.CreateFrame("Frame", "KBM Splitter", KBM.MainWin.Content)
 	KBM.MainWin.SplitFrame:SetWidth(14)
 	KBM.MainWin.SplitFrame:SetHeight(ContentH)
-	KBM.MainWin.SplitFrame:SetPoint("LEFT", KBM.MainWin.Menu, "RIGHT")
+	KBM.MainWin.SplitFrame:SetPoint("LEFT", KBM.MainWin.Content, "LEFT", MenuWidth, nil)
 	KBM.MainWin.SplitFrame:SetPoint("TOP", KBM.MainWin.Content, "TOP")
 	KBM.MainWin.SplitHandle = UI.CreateFrame("Frame", "KBM Splitter Handle", KBM.MainWin.SplitFrame)
 	KBM.MainWin.SplitHandle:SetWidth(5)
 	KBM.MainWin.SplitHandle:SetHeight(ContentH)
 	KBM.MainWin.SplitHandle:SetPoint("CENTER", KBM.MainWin.SplitFrame, "CENTER")
-	KBM.MainWin.SplitHandle:SetBackgroundColor(1,1,1,0.5)
+	KBM.MainWin.SplitHandle:SetBackgroundColor(0.85,0.65,0,0.5)
 
+	function KBM.MainWin.Scrollback(value)
+		KBM.MainWin.FirstItem:SetPoint("TOP", KBM.MainWin.Menu, "TOP", nil, -value)
+	end	
+	KBM.MainWin.Scroller = KBM.Scroller:Create("V", KBM.MainWin.Menu:GetHeight(), KBM.MainWin.Content, KBM.MainWin.Scrollback)
+	KBM.MainWin.Scroller.Frame:SetPoint("TOPRIGHT", KBM.MainWin.SplitFrame, "TOPLEFT")
 	OptionsWidth = ContentW - KBM.MainWin.Menu:GetWidth() - KBM.MainWin.SplitFrame:GetWidth() - 10
+	KBM.MainWin.Menu:ClearWidth()
+	KBM.MainWin.Menu:SetPoint("TOPRIGHT", KBM.MainWin.Scroller.Frame, "TOPLEFT")
+
+	function KBM.MainWin.Menu.Event:WheelForward()
+		KBM.MainWin.Scroller:SetPosition(-20)
+	end
+	function KBM.MainWin.Menu.Event:WheelBack()
+		KBM.MainWin.Scroller:SetPosition(20)
+	end
+	
 	KBM.MainWin.Options.Mask = UI.CreateFrame("Mask", "KBM Options Mask", KBM.MainWin.Content)
 	KBM.MainWin.Options.Frame = UI.CreateFrame("Frame", "KBM Options Frame", KBM.MainWin.Options.Mask)
 	KBM.MainWin.Options.Mask:SetPoint("TOPLEFT", KBM.MainWin.Options.Frame, "TOPLEFT")
@@ -239,12 +260,19 @@ function KBM.InitOptions()
 	KBM.MainWin.Options.Scroller = KBM.Scroller:Create("V", KBM.MainWin.Options.Height, KBM.MainWin.Content, KBM.MainWin.Options.Scrollback)
 	KBM.MainWin.Options.Scroller.Frame:SetPoint("TOPRIGHT", KBM.MainWin.Options.Header, "BOTTOMRIGHT",0, 10)
 	KBM.MainWin.Options.Frame:SetPoint("RIGHT", KBM.MainWin.Options.Scroller.Frame, "LEFT")
+	KBM.MainWin.Options.Scroller.Frame:SetLayer(3)
+	KBM.MainWin.Options.Scroller.Handle:SetLayer(4)
 	
 	KBM.MainWin.Options.Close = UI.CreateFrame("RiftButton", "Close Options", KBM.MainWin.Options.Footer)
 	KBM.MainWin.Options.Close:SetPoint("BOTTOMRIGHT", KBM.MainWin.Options.Footer, "BOTTOMRIGHT")
 	KBM.MainWin.Options.Close:SetText("Close")
 	
 	KBM.MainWin.CurrentPage = nil
+	
+	function KBM.MainWin:AddSize(Frame)
+		self.MenuSize = self.MenuSize + Frame:GetHeight()
+		self.Scroller:SetRange(self.MenuSize, self.Scroller.Frame:GetHeight())
+	end
 	
 	function KBM.MainWin.Options.Frame.Event:WheelForward()
 		KBM.MainWin.Options.Scroller:SetPosition(-20)
@@ -288,7 +316,6 @@ function KBM.InitOptions()
 		Header.Enabled = true
 		table.insert(self.Headers, Header)
 		if not self.LastHeader then
-			self.LastHeader = Header
 			Header:SetPoint("TOPLEFT", self, "TOPLEFT")
 		else
 			if self.LastHeader.LastChild then
@@ -297,11 +324,11 @@ function KBM.InitOptions()
 			else
 				Header:SetPoint("TOP", self.LastHeader, "BOTTOM")
 				Header:SetPoint("LEFT", self, "LEFT")
-				self.LastHeader = Header
 			end
 		end
+		self.LastHeader = Header
 		function Header.Event:MouseIn()
-			if self.Enabled then
+			if self.Enabled and not KBM.MainWin.Scroller.Handle.MouseDown then
 				self:SetBackgroundColor(0,0,0,0.5)
 			end
 		end
@@ -317,8 +344,12 @@ function KBM.InitOptions()
 				end
 			end
 		end
-		Header.LastChild = nil
+		--Header.LastChild = nil
+		KBM.MainWin:AddSize(Header)
 		KBM.HeaderList[Text] = Header
+		if not KBM.MainWin.FirstItem then
+			KBM.MainWin.FirstItem = Header
+		end
 		return Header
 	end
 	function KBM.MainWin.Menu:CreateEncounter(Text, Link, Default, Header)
@@ -361,7 +392,7 @@ function KBM.InitOptions()
 			end
 		end
 		function Child.Event:MouseIn()
-			if self.Enabled then
+			if self.Enabled and not KBM.MainWin.Scroller.Handle.MouseDown then
 				self:SetBackgroundColor(0,0,0,0.5)
 			end
 		end
@@ -637,6 +668,8 @@ function KBM.InitOptions()
 		function Child.Options:ClearPage()
 		
 		end
+		Header.LastChild = Child
+		KBM.MainWin:AddSize(Child)
 		return Child
 	end
 			

@@ -29,6 +29,18 @@ RunOnStartup = {
 	"Hammerknell/Garau.lua",
 	"Hammerknell/Inwar.lua",
 	"Hammerknell/Akylios.lua",
+	"ROS/ROSHeader.lua",
+	"ROS/DarkFoci.lua",
+	"ROS/Galenir.lua",
+	"ROS/Plutonus.lua",
+	"ROS/Gaurath.lua",
+	"ROS/Alsbeth.lua",
+	"GSB/GSBHeader.lua",
+	"GSB/Letareus.lua",
+	"GSB/Johlen.lua",
+	"GSB/Aleria.lua",
+	"GSB/Hylas.lua",
+	"GSB/Greenscale.lua",
 }
 
 Embed = {
@@ -49,6 +61,18 @@ SavedVariables = {
 	KBMES_Settings = "account",
 	KBMGR_Settings = "account",
 	KBMID_Settings = "account",
+	KBMROS_Settings = "account",
+	KBMROSDF_Settings = "account",
+	KBMROSWG_Settings = "account",
+	KBMROSPI_Settings = "account",
+	KBMROSHG_Settings = "account",
+	KBMROSAD_Settings = "account",
+	KBMGSB_Settings = "account",
+	KBMGSBDL_Settings = "account",
+	KBMGSBIJ_Settings = "account",
+	KBMGSBOA_Settings = "account",
+	KBMGSBPH_Settings = "account",
+	KBMGSBLG_Settings = "account",
 	KBM_GlobalOptions = "account",
 }
 
