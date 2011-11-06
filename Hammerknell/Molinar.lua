@@ -168,6 +168,7 @@ KM.Lang.Ability.Cursed = KBM.Language:Add("Cursed Blows")
 KM.Lang.Ability.Cursed.French = "Frappes maudites"
 KM.Lang.Ability.Cursed.German = "Verfluchte Schläge"
 KM.Lang.Ability.Revenant = KBM.Language:Add("Incorporeal Revenant")
+KM.Lang.Ability.Revenant.French = "Revenant chim\195\169rique"
 KM.Lang.Ability.Revenant.German = "Unkörperlicher Wiedergänger"
 
 -- Notify Trigger Dictionary
