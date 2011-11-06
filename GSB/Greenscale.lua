@@ -21,7 +21,7 @@ local LG = {
 	PhaseList = {},
 	Timers = {},
 	Lang = {},
-	Enrage = 60 * 11, 
+	Enrage = 60 * 14.5, 
 }
 
 LG.Greenscale = {

@@ -21,7 +21,6 @@ local DL = {
 	PhaseList = {},
 	Timers = {},
 	Lang = {},
-	Enrage = 60 * 11, 
 }
 
 DL.Letareus = {

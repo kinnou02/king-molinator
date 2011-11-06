@@ -21,7 +21,7 @@ local HG = {
 	PhaseList = {},
 	Timers = {},
 	Lang = {},
-	Enrage = 60 * 11, 
+	Enrage = 60 * 9.5, 
 }
 
 HG.Gaurath = {

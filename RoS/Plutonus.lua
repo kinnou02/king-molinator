@@ -21,7 +21,6 @@ local PI = {
 	PhaseList = {},
 	Timers = {},
 	Lang = {},
-	Enrage = 60 * 11, 
 }
 
 PI.Plutonus = {

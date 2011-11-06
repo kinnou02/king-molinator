@@ -21,7 +21,6 @@ local PH = {
 	PhaseList = {},
 	Timers = {},
 	Lang = {},
-	Enrage = 60 * 11, 
 }
 
 PH.Hylas = {

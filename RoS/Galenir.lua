@@ -21,7 +21,7 @@ local WG = {
 	PhaseList = {},
 	Timers = {},
 	Lang = {},
-	Enrage = 60 * 11, 
+	Enrage = 60 * 5.5, 
 }
 
 WG.Galenir = {

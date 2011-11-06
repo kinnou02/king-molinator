@@ -21,7 +21,6 @@ local DF = {
 	PhaseList = {},
 	Timers = {},
 	Lang = {},
-	Enrage = 60 * 11, 
 }
 
 DF.Foci = {

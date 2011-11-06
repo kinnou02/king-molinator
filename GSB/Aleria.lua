@@ -21,7 +21,6 @@ local OA = {
 	PhaseList = {},
 	Timers = {},
 	Lang = {},
-	Enrage = 60 * 11, 
 }
 
 OA.Aleria = {

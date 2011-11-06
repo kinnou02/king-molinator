@@ -21,7 +21,6 @@ local IJ = {
 	PhaseList = {},
 	Timers = {},
 	Lang = {},
-	Enrage = 60 * 11, 
 }
 
 IJ.Johlen = {
