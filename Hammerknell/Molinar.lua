@@ -147,38 +147,57 @@ KBM.Language[KM.King.Name]:SetFrench("Roi runique Molinar")
 KM.Lang.Ability = {}
 KM.Lang.Ability.Rend = KBM.Language:Add("Rend Life")
 KM.Lang.Ability.Rend.French = "D\195\169chire-Vie"
+KM.Lang.Ability.Rend.German = "Leben entreißen"
 KM.Lang.Ability.Terminate = KBM.Language:Add("Terminate Life")
 KM.Lang.Ability.Terminate.French = "Ach\195\168vement de Vie"
+KM.Lang.Ability.Terminate.German = "Leben auslöschen"
 KM.Lang.Ability.Consuming = KBM.Language:Add("Consuming Essence")
 KM.Lang.Ability.Consuming.French = "Combustion d'essence"
+KM.Lang.Ability.Consuming.German = "Verschlingende Essenz"
 KM.Lang.Ability.Runic = KBM.Language:Add("Runic Feedback")
 KM.Lang.Ability.Runic.French = "R\195\169action runique"
+KM.Lang.Ability.Runic.German = "Runen-Resonanz"
 KM.Lang.Ability.Crushing = KBM.Language:Add("Crushing Regret")
 KM.Lang.Ability.Crushing.French = "Blasph\195\168me infect"
 KM.Lang.Ability.Forked = KBM.Language:Add("Forked Blast")
 KM.Lang.Ability.Forked.French = "Explosion fourchue"
 KM.Lang.Ability.Shout = KBM.Language:Add("Frightening Shout")
 KM.Lang.Ability.Shout.French = "Flammes maudites"
+KM.Lang.Ability.Shout.German = "Verängstigender Schrei"
 KM.Lang.Ability.Cursed = KBM.Language:Add("Cursed Blows")
 KM.Lang.Ability.Cursed.French = "Frappes maudites"
+KM.Lang.Ability.Cursed.German = "Verfluchte Schläge"
+KM.Lang.Ability.Revenant = KBM.Language:Add("Incorporeal Revenant")
+KM.Lang.Ability.Revenant.German = "Unkörperlicher Wiedergänger"
+
+-- Notify Trigger Dictionary
+KM.Lang.Notify = {}
+KM.Lang.Notify.Revenant = KBM.Language:Add("Incorporeal Revenant begins to phase into this reality.")
+KM.Lang.Notify.Revenant.German = "Unkörperlicher Wiedergänger beginnt, in diese Realität zu gleiten."
 
 -- King's Options page Dictionary
 KM.Lang.Options = {}
 KM.Lang.Options.ShowMonitor = KBM.Language:Add("Show Percentage Monitor.")
 KM.Lang.Options.ShowMonitor.French = "Montrer Moniteur Pct."
+KM.Lang.Options.ShowMonitor.German = "Prozent Monitor anzeigen."
 KM.Lang.Options.HiddenStart = KBM.Language:Add("Hidden until encounter start.")
 KM.Lang.Options.HiddenStart.French = "Cacher avant d\195\169but du combat."
+KM.Lang.Options.HiddenStart.German = "Verbergen bis zum Kampfbeginn."
 KM.Lang.Options.Compact = KBM.Language:Add("Compact Mode.")
 KM.Lang.Options.Compact.French = "Mode Compact."
+KM.Lang.Options.Compact.German = "Kompakte Anzeige."
 KM.Lang.Options.Locked = KBM.Language:Add("Locked in place.")
 KM.Lang.Options.Locked.French = "Fix\195\169 en place."
+KM.Lang.Options.Locked.German = "Anzeige festsetzen."
 KM.Lang.Options.ShowKingCast = KBM.Language:Add("Show King Molinar's cast-bar")
 KM.Lang.Options.ShowKingCast.French = "Montrer barres-cast Roi Molinar"
+KM.Lang.Options.ShowKingCast.German = "Zeige Zauberbalken von Runenkönig Molinar"
 KM.Lang.Options.ShowPrinceCast = KBM.Language:Add("Show Prince Dollin's cast-bar")
 KM.Lang.Options.ShowPrinceCast.French = "Montrer barres-cast Prince Dollin"
+KM.Lang.Options.ShowPrinceCast.German = "Zeige Zauberbalken von Prinz Dollin"
 
-KM.King.Name = KBM.Language[KM.King.Name][KBM.Lang]
-KM.Prince.Name = KBM.Language[KM.Prince.Name][KBM.Lang]
+KM.King.Name = KM.Lang.Molinar[KBM.Lang]
+KM.Prince.Name = KM.Lang.Dollin[KBM.Lang]
 
 function KM:AddBosses(KBM_Boss)
 	self.MenuName = self.King.Name
@@ -826,7 +845,7 @@ function KM.KingMolinar:Options()
 	local KingTimers = Options:AddHeader(KM.Lang.Molinar[KBM.Lang].." timers", self.KingTimers, KM.Settings.King.Timers)
 	KingTimers:AddCheck(KM.Lang.Ability.Cursed[KBM.Lang], self.KingCursed, KM.Settings.King.Cursed)
 	KingTimers:AddCheck(KM.Lang.Ability.Consuming[KBM.Lang], self.KingConsuming, KM.Settings.King.Consuming)
-	KingTimers:AddCheck("Incorporeal Revenant", self.KingRev, KM.Settings.King.Rev)
+	KingTimers:AddCheck(KM.Lang.Ability.Revenant[KBM.Lang], self.KingRev, KM.Settings.King.Rev)
 	Options:AddSpacer()
 	local PrinceTimers = Options:AddHeader(KM.Lang.Dollin[KBM.Lang].." timers", self.PrinceTimers, KM.Settings.Prince.Timers)
 	PrinceTimers:AddCheck(KM.Lang.Ability.Terminate[KBM.Lang], self.PrinceTerminate, KM.Settings.Prince.Terminate)
@@ -864,7 +883,7 @@ function KM:Start()
 	self.Prince.TimersRef.Consuming.Enabled = KM.Settings.Prince.Consuming
 	self.Prince.TimersRef.Runic = KBM.MechTimer:Add(KM.Lang.Ability.Runic[KBM.Lang], "cast", 48, self.Prince, nil)
 	self.Prince.TimersRef.Runic.Enabled = KM.Settings.Prince.Runic
-	self.King.TimersRef.Rev = KBM.MechTimer:Add("Incorporeal Revenant begins to phase into this reality.", "notify", 82, KM, nil, "Incorporeal Revenant")
+	self.King.TimersRef.Rev = KBM.MechTimer:Add(self.Lang.Notify.Revenant[KBM.Lang], "notify", 82, KM, nil, self.Lang.Ability.Revenant[KBM.Lang])
 	self.King.TimersRef.Rev.Enabled = KM.Settings.King.Rev
 	
 	self.King.CastBar = KBM.CastBar:Add(self, self.King, self.King.PinCastBar, self.Settings.KingBar)

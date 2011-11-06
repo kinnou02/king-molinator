@@ -1,3 +1,15 @@
+v0.4.1
+* Thanks to Dooc@Spross-Passage for German Translations
+* Thanks to Céres@Brisesol for French Translations
+* Added: German Translations for Options Window. 
+* Added: German Translation for Hammerknell Fortress.
+* Added: German Translations for the following bosses.
+** Murdantix's mechanics, abilities and options.
+** King Molinar's mechanics, abilities and options.
+** Matron Zamira encounter recognition.
+** Soulrender Zilas encounter recognition.
+** Inwar Darktide encounter recognition.
+----
 v0.4.0
 * New: Scroll bars added to Options Window.
 * Change: Better looking, and size Options Button.

@@ -55,12 +55,16 @@ MX.Lang.Murdantix = KBM.Language:Add(MX.Murd.Name)
 -- Ability Dictionary
 MX.Lang.Mangling = KBM.Language:Add("Mangling Crush")
 MX.Lang.Mangling.French = "Essorage"
+MX.Lang.Mangling.German = "Üble Blessur"
 MX.Lang.Pound = KBM.Language:Add("Ferocious Pound")
 MX.Lang.Pound.French = "Attaque f\195\169roce"
+MX.Lang.Pound.German = "Wildes Zuschlagen"
 MX.Lang.Blast = KBM.Language:Add("Demonic Blast")
 MX.Lang.Blast.French = "Explosion d\195\169moniaque"
+MX.Lang.Blast.German = "Dämonische Explosion"
 MX.Lang.Trauma = KBM.Language:Add("Soul Trauma")
 MX.Lang.Trauma.French = "Traumatisme d'\195\162me"
+MX.Lang.Trauma.German = "Seelentrauma"
 
 function MX:AddBosses(KBM_Boss)
 	self.MenuName = self.Murd.Name

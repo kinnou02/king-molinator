@@ -41,6 +41,9 @@ MZ.Matron = {
 local KBM = KBM_RegisterMod(MZ.Matron.ID, MZ)
 
 MZ.Lang.Matron = KBM.Language:Add(MZ.Matron.Name)
+MZ.Lang.Matron.German = "Matrone Zamira"
+
+MZ.Matron.Name = MZ.Lang.Matron[KBM.Lang]
 
 function MZ:AddBosses(KBM_Boss)
 	self.Matron.Descript = self.Matron.Name

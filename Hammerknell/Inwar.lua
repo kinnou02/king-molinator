@@ -40,6 +40,7 @@ ID.Inwar = {
 local KBM = KBM_RegisterMod(ID.Inwar.ID, ID)
 
 ID.Lang.Inwar = KBM.Language:Add(ID.Inwar.Name)
+ID.Lang.Inwar.German = "Inwar Dunkelflut"
 
 ID.Inwar.Name = ID.Lang.Inwar[KBM.Lang]
 

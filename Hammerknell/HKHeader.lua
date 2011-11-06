@@ -9,14 +9,14 @@ local HK = {
 	Header = nil,
 	Enabled = true,
 	IsInstance = true,
-	Name = "Hammerknell",
+	Name = "Hammerknell Fortress",
 }
 
 local KBM = KBM_RegisterMod("Hammerknell", HK)
 
 KBM.Language:Add(HK.Name)
 KBM.Language[HK.Name]:SetFrench("Glasmarteau")
-
+KBM.Language[HK.Name]:SetGerman("Festung Hammerhall")
 HK.Name = KBM.Language[HK.Name][KBM.Lang]
 
 function HK:AddBosses(KBM_Boss)

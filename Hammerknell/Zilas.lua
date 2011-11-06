@@ -41,6 +41,9 @@ SZ.Zilas = {
 local KBM = KBM_RegisterMod(SZ.Zilas.ID, SZ)
 
 SZ.Lang.Zilas = KBM.Language:Add(SZ.Zilas.Name)
+SZ.Lang.Zilas.German = "Seelenreißer Zilas"
+
+SZ.Zilas.Name = SZ.Lang.Zilas[KBM.Lang]
 
 function SZ:AddBosses(KBM_Boss)
 	self.Zilas.Descript = self.Zilas.Name
