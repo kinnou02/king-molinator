@@ -4,6 +4,7 @@
 * Added: French Translation for Incorporeal Revenant trigger.
 * Added: Estrode timer: Soul Capture.
 * Added: Estrode timer: Mind Control.
+* Added: T-SM Support to Warmaster Galenir. 
 * Change: Lord Greenscale's enrage timer.
 * Change: Alsbeth the Discordant's enrage timer.
 * Change: Herald Gaurath's enrage timer.

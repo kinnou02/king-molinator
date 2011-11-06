@@ -127,6 +127,7 @@ function WG:UnitHPCheck(unitDetails, unitID)
 					self.Galenir.Dead = false
 					self.Galenir.Casting = false
 					self.Galenir.CastBar:Create(unitID)
+					KBM.TankSwap:Start("Infecting Strike")
 				end
 				self.Galenir.UnitID = unitID
 				self.Galenir.Available = true
