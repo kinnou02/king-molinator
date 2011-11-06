@@ -43,6 +43,15 @@ local KBM = KBM_RegisterMod(ES.Estrode.ID, ES)
 
 ES.Lang.Estrode = KBM.Language:Add(ES.Estrode.Name)
 
+-- Ability Dictionary
+ES.Lang.Ability = {}
+ES.Lang.Ability.Soul = KBM.Language:Add("Soul Capture")
+ES.Lang.Ability.Mind = KBM.Language:Add("Mind Control")
+
+-- Speak Dictionary
+ES.Lang.Say = {}
+ES.Lang.Say.Mind = KBM.Language:Add("Mmmm, you look delectable.")
+
 ES.Estrode.Name = ES.Lang.Estrode[KBM.Lang]
 
 function ES:AddBosses(KBM_Boss)
@@ -58,6 +67,8 @@ function ES:InitVars()
 	self.Settings = {
 		Timers = {
 			Enabled = true,
+			Soul = true,
+			Mind = true,
 		},
 		CastBar = {
 			x = false,
@@ -147,10 +158,19 @@ end
 function ES.Estrode:Options()
 	function self:TimersEnabled(bool)
 	end
+	function self:SoulEnabled(bool)
+		ES.Settings.Timers.Soul = bool
+		ES.Estrode.TimersRef.Soul.Enabled = bool
+	end
+	function self:MindEnabled(bool)
+		ES.Settings.Timers.Mind = bool
+		ES.Estrode.TimersRef.Mind.Enabled = bool
+	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
 	local Timers = Options:AddHeader("Timers Enabled", self.TimersEnabled, ES.Settings.Timers.Enabled)
-	--Timers:AddCheck(ES.Lang.Flames[KBM.Lang], self.FlamesEnabled, ES.Settings.Timers.FlamesEnabled)	
+	Timers:AddCheck(ES.Lang.Ability.Soul[KBM.Lang], self.SoulEnabled, ES.Settings.Timers.Soul)
+	Timers:AddCheck(ES.Lang.Ability.Mind[KBM.Lang], self.MindEnabled, ES.Settings.Timers.Mind)
 	
 end
 
@@ -158,8 +178,10 @@ function ES:Start()
 	self.Header = KBM.HeaderList[self.Instance]
 	self.Estrode.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Estrode, true, self.Header)
 	self.Estrode.MenuItem.Check:SetEnabled(false)
-	--self.Estrode.TimersRef.Flames = KBM.MechTimer:Add(self.Lang.Flames[KBM.Lang], "cast", 30, self, nil)
-	--self.Estrode.TimersRef.Flames.Enabled = self.Settings.Timers.FlamesEnabled
+	self.Estrode.TimersRef.Soul = KBM.MechTimer:Add(self.Lang.Ability.Soul[KBM.Lang], "cast", 40, self.Estrode, nil)
+	self.Estrode.TimersRef.Soul.Enabled = self.Settings.Timers.Soul
+	self.Estrode.TimersRef.Mind = KBM.MechTimer:Add(self.Lang.Say.Mind[KBM.Lang], "say", 60, self.Estrode, nil, self.Lang.Ability.Mind[KBM.Lang])
+	self.Estrode.TimersRef.Mind.Enabled = self.Settings.Timers.Mind
 	
 	self.Estrode.CastBar = KBM.CastBar:Add(self, self.Estrode, true)
 end

@@ -173,6 +173,7 @@ KM.Lang.Ability.Revenant.German = "Unkörperlicher Wiedergänger"
 -- Notify Trigger Dictionary
 KM.Lang.Notify = {}
 KM.Lang.Notify.Revenant = KBM.Language:Add("Incorporeal Revenant begins to phase into this reality.")
+KM.Lang.Notify.Revenant.French = "Revenant chim\195\169rique commence \195\160 se mat\195\169rialiser dans cette réalit\195\169."
 KM.Lang.Notify.Revenant.German = "Unkörperlicher Wiedergänger beginnt, in diese Realität zu gleiten."
 
 -- King's Options page Dictionary

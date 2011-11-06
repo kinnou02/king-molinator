@@ -165,7 +165,7 @@ function VP:Start()
 	self.Header = KBM.HeaderList[self.Instance]
 	self.Prime.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Prime, true, self.Header)
 	self.Prime.MenuItem.Check:SetEnabled(false)
-	self.Prime.TimersRef.Flames = KBM.MechTimer:Add(self.Lang.Flames[KBM.Lang], "cast", 30, self, nil)
+	self.Prime.TimersRef.Flames = KBM.MechTimer:Add(self.Lang.Flames[KBM.Lang], "cast", 30, self.Prime, nil)
 	self.Prime.TimersRef.Flames.Enabled = self.Settings.Timers.FlamesEnabled
 	
 	self.Prime.CastBar = KBM.CastBar:Add(self, self.Prime, true)

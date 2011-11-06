@@ -1,6 +1,13 @@
+﻿v0.4.2
+* Fixed: Vladmal Prime's Ancient Flames timer.
+* Fixed: King Molinar's Consuming Essence now triggers correctly.
+* Added: French Translation for Incorporeal Revenant trigger.
+* Added: Estrode timer: Soul Capture.
+* Added: Estrode timer: Mind Control.
+----
 v0.4.1
 * Thanks to Dooc@Spross-Passage for German Translations
-* Thanks to C�res@Brisesol for French Translations
+* Thanks to Céres@Brisesol for French Translations
 * Added: German Translations for Options Window. 
 * Added: German Translation for Hammerknell Fortress.
 * Added: German Translations for the following bosses.

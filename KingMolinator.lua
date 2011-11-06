@@ -474,7 +474,12 @@ function KBM.MechTimer:Add(iTrigger, iType, iTime, iBoss, iStart, iName)
 			table.insert(iBoss.Timers[iName], iTrigger)
 		end
 	elseif iType == "cast" then
-		self.CastTimers[iTrigger] = Timer
+		if self.CastTimers[iTrigger] then
+			self.CastTimers[iTrigger][iBoss.Name] = Timer
+		else
+			self.CastTimers[iTrigger] = {}
+			self.CastTimers[iTrigger][iBoss.Name] = Timer
+		end
 		iBoss.Timers[iTrigger] = Timer
 	elseif iType == "notify" then
 		self.NotifyTimers[iName] = {}
@@ -1211,8 +1216,10 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 				if self.LastCast ~= bDetails.abilityName then
 					self.LastCast = bDetails.abilityName
 					if KBM.MechTimer.CastTimers[bDetails.abilityName] then
-						if KBM.MechTimer.CastTimers[bDetails.abilityName].Enabled then
-							KBM.MechTimer.CastTimers[bDetails.abilityName]:Start(Inspect.Time.Real())
+						if KBM.MechTimer.CastTimers[bDetails.abilityName][self.Boss.Name] then
+							if KBM.MechTimer.CastTimers[bDetails.abilityName][self.Boss.Name].Enabled then
+								KBM.MechTimer.CastTimers[bDetails.abilityName]:Start(Inspect.Time.Real())
+							end
 						end
 					end
 				end
