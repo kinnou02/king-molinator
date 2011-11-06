@@ -36,6 +36,7 @@ VP.Prime = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
+	TimeOut = 5,
 }
 
 local KBM = KBM_RegisterMod(VP.Prime.ID, VP)

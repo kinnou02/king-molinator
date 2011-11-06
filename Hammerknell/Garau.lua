@@ -38,6 +38,7 @@ GU.Garau = {
 	Available = false,
 	UnitID = nil,
 	Descript = "Inquisitor Garau",
+	TimeOut = 5,
 }
 
 local KBM = KBM_RegisterMod(GU.Garau.ID, GU)

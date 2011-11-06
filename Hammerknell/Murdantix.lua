@@ -27,7 +27,7 @@ local MX = {
 	Timers = {},
 	Lang = {},
 	TankSwap = true,
-	Enrage = 60 * 10
+	Enrage = 60 * 10,
 }
 
 MX.Murd = {
@@ -45,6 +45,7 @@ MX.Murd = {
 	Available = false,
 	UnitID = nil,
 	Descript = "Murdantix",
+	TimeOut = 5,
 }
 
 local KBM = KBM_RegisterMod("Murdantix", MX)

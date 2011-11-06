@@ -168,6 +168,7 @@ KBM.EnrageTime = 0
 KBM.EnrageTimer = 0
 KBM.TimeElapsed = 0
 KBM.UpdateTime = 0
+KBM.LastAction = 0
 KBM.CastBar = {}
 KBM.CastBar.List = {}
 
@@ -731,56 +732,89 @@ function KBM.EncTimer:Init()
 	self.Frame.Drag:SetVisible(KBM.Options.EncTimer.Unlocked)
 end
 
-local function KBM_UnitHPCheck(info)
-
-	local uDetails = {}
-	local UnitID = info.target
-	local uDetails = Inspect.Unit.Detail(UnitID)
-	if uDetails then
-		if not KBM.BossID[UnitID] then
+function KBM.CheckActiveBoss(uDetails, UnitID)
+	if not KBM.BossID[UnitID] then
+		if uDetails then
 			if KBM_Boss[uDetails.name] then
-				if info.caster then
-					bDetails = Inspect.Unit.Detail(info.caster)
-					if bDetails then
-						if bDetails.player then
-							if uDetails.level == KBM_Boss[uDetails.name].Level then
-								KBM.BossID[UnitID] = {}
-								KBM.BossID[UnitID].name = uDetails.name
-								KBM.BossID[UnitID].monitor = true
-								KBM.BossID[UnitID].Mod = KBM_Boss[uDetails.name].Mod
-								if uDetails.health > 0 then
-									KBM.BossID[UnitID].dead = false
-									KBM.BossID[UnitID].available = true
-									KBM.Encounter = true
-									KBM.CurrentBoss = UnitID
-									KBM_CurrentBossName = uDetails.Name
-									KBM_CurrentMod = KBM.BossID[UnitID].Mod
-									if not KBM_CurrentMod.EncounterRunning then
-										print("Encounter Started: "..KBM_Boss[uDetails.name].Descript)
-										print("Good luck!")
-										KBM.TimeElapsed = 0
-										KBM.StartTime = Inspect.Time.Real()
-										if KBM_CurrentMod.Enrage then
-											KBM.EnrageTime = KBM.StartTime + KBM_CurrentMod.Enrage
-										end
-										if KBM.Options.EncTimer.Enabled then
-											KBM.EncTimer:Start(KBM.StartTime)
-										end
-									end
-									KBM.BossID[UnitID].Boss = KBM_CurrentMod:UnitHPCheck(uDetails, UnitID)
-								else
-									KBM.BossID[UnitID].dead = true
-									KBM.BossID[UnitID] = nil
-								end
+				--if uDetails.level == KBM_Boss[uDetails.name].Level then
+					KBM.BossID[UnitID] = {}
+					KBM.BossID[UnitID].name = uDetails.name
+					KBM.BossID[UnitID].monitor = true
+					KBM.BossID[UnitID].Mod = KBM_Boss[uDetails.name].Mod
+					KBM.BossID[UnitID].IdleSince = false
+					if KBM_Boss[uDetails.name].TimeOut then
+						KBM.BossID[UnitID].TimeOut = KBM_Boss[uDetails.name].TimeOut
+					else
+						KBM.BossID[UnitID].TimeOut = 0
+					end
+					if uDetails.health > 0 then
+						KBM.BossID[UnitID].dead = false
+						KBM.BossID[UnitID].available = true
+						KBM.Encounter = true
+						KBM.CurrentBoss = UnitID
+						KBM_CurrentBossName = uDetails.Name
+						KBM_CurrentMod = KBM.BossID[UnitID].Mod
+						if not KBM_CurrentMod.EncounterRunning then
+							print("Encounter Started: "..KBM_Boss[uDetails.name].Descript)
+							print("Good luck!")
+							KBM.TimeElapsed = 0
+							KBM.StartTime = Inspect.Time.Real()
+							if KBM_CurrentMod.Enrage then
+								KBM.EnrageTime = KBM.StartTime + KBM_CurrentMod.Enrage
+							end
+							if KBM.Options.EncTimer.Enabled then
+								KBM.EncTimer:Start(KBM.StartTime)
 							end
 						end
-					end
-				end
+						KBM.BossID[UnitID].Boss = KBM_CurrentMod:UnitHPCheck(uDetails, UnitID)
+						
+					else
+						KBM.BossID[UnitID].dead = true
+						KBM.BossID[UnitID].available = true
+					end					
+				--end
+			end
+		end
+	else
+		if KBM.BossID[UnitID].IdleSince then
+			if uDetails then
+				KBM_CurrentMod:UnitHPCheck(uDetails, UnitID)
+				KBM.BossID[UnitID].IdleSince = false
+				KBM.BossID[UnitID].available = true
+			else
+				KBM.BossID[UnitID].IdleSince = Inspect.Time.Real()
 			end
 		end
 	end
-	if #KBM.MechTimer.DamageTimers > 0 then
-		if KBM_CurrentMod then
+end
+
+local function KBM_UnitHPCheck(info)
+
+	local tUnitID = info.target
+	local cUnitID = info.caster
+	local tDetails = Inspect.Unit.Detail(tUnitID)
+	local cDetails = Inspect.Unit.Detail(cUnitID)
+	if tDetails and cDetails then
+		if cDetails.player then
+			if not tDetails.player then
+				KBM.CheckActiveBoss(tDetails, tUnitID)
+			end
+		end
+		if tDetails.player then
+			if not cDetails.player then
+				KBM.CheckActiveBoss(cDetails, cUnitID)
+			end
+		end
+	elseif KBM.Encounter then
+		if KBM.BossID[tUnitID] then
+			KBM.CheckActiveBoss(tDetails, tUnitID)
+		end
+		if KBM.BossID[cUnitID] then
+			KBM.CheckActiveBoss(cDetails, cUnitID)
+		end
+	end
+	if KBM_CurrentMod then
+		if #KBM.MechTimer.DamageTimers > 0 then
 			if info.abilityName then
 				if KBM.MechTimer.DamageTimer[info.abilityName] then
 					if KBM.MechTimer.DamageTimer[info.abilityName].Enabled then
@@ -795,6 +829,15 @@ local function KBM_UnitHPCheck(info)
 end
 
 local function KBM_UnitAvailable(units)
+	if KBM.Encounter then
+		for UnitID, Specifier in pairs(units) do
+			if KBM.BossID[UnitID] then
+				if KBM.BossID[UnitID].IdleSince then
+					KBM.CheckActiveBoss(Inspect.Unit.Detail(UnitID), UnitID)
+				end
+			end
+		end
+	end
 end
 
 function KBM.AttachDragFrame(parent, hook, name, layer)
@@ -1183,6 +1226,31 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 
 end
 
+local function KBM_Reset()
+	if KBM.Encounter then
+		if KBM_CurrentMod then
+			KBM_CurrentMod:Reset()
+			KBM_CurrentMod = nil
+			KBM.CurrentBoss = ""
+			KBM.BossID = {}
+			KBM_CurrentBossName = ""
+			KBM.Encounter = false
+			KBM.TimeElapsed = 0
+			KBM.TimeStart = 0
+			KBM.EnrageTime = 0
+			KBM.EnrageTimer = 0
+			if KBM.EncTimer.Active then
+				KBM.EncTimer:End()
+			end
+			if KBM.TankSwap.Active then
+				KBM.TankSwap:Remove()
+			end
+		end
+	else
+		print("No encounter to reset.")
+	end
+end
+
 function KBM.ConvertTime(Time)
 	local TimeString = "00"
 	local TimeSeconds = 0
@@ -1204,6 +1272,22 @@ function KBM.ConvertTime(Time)
 	return TimeString
 end
 
+function KBM:CheckBossStates(current)
+	for UnitID, BossData in pairs(self.BossID) do
+		if not BossData.available then
+			if BossData.IdleSince then
+				if BossData.IdleSince + BossData.TimeOut <= current then
+					if KBM_CurrentMod:RemoveUnits(UnitID) then
+						print("Encounter Ended, possible wipe.")
+						print("Time: "..KBM.ConvertTime(BossData.IdleSince - KBM.StartTime))
+						KBM_Reset()
+					end			
+				end
+			end
+		end
+	end
+end
+
 function KBM:Timer()
 	if KBM.Encounter or KBM.Testing then
 		local current = Inspect.Time.Real()
@@ -1223,7 +1307,7 @@ function KBM:Timer()
 			end
 			self.HeldTime = current - (diff - math.floor(diff))
 			self.UpdateTime = current
-			
+			self:CheckBossStates(current)			
 		end
 		if udiff >= 0.025 then
 			if #self.MechTimer.ActiveTimers > 0 then
@@ -1309,46 +1393,15 @@ local function KM_ToggleEnabled(result)
 	
 end
 
-local function KBM_Reset()
-	if KBM.Encounter then
-		if KBM_CurrentMod then
-			KBM_CurrentMod:Reset()
-			KBM_CurrentMod = nil
-			KBM.CurrentBoss = ""
-			KBM.BossID = {}
-			KBM_CurrentBossName = ""
-			KBM.Encounter = false
-			KBM.TimeElapsed = 0
-			KBM.TimeStart = 0
-			KBM.EnrageTime = 0
-			KBM.EnrageTimer = 0
-			if KBM.EncTimer.Active then
-				KBM.EncTimer:End()
-			end
-			if KBM.TankSwap.Active then
-				KBM.TankSwap:Remove()
-			end
-		end
-	else
-		print("No encounter to reset.")
-	end
-end
-
 local function KBM_UnitRemoved(units)
 	--[[local uDetails = {}]]
 	if KBM.Encounter then
-		if KBM.Options.AutoReset then
-			for UnitID, Specifier in pairs(units) do
-				if not Inspect.Unit.Detail(UnitID) then
-					if KBM.BossID[UnitID] then
-						if KBM_CurrentMod then
-							KBM.BossID[UnitID] = nil
-							if KBM_CurrentMod:RemoveUnits(UnitID) then
-								print("Encounter Ended, possible wipe.")
-								print("Time: "..KBM.ConvertTime(Inspect.Time.Real() - KBM.StartTime))
-								KBM_Reset()
-							end
-						end
+		for UnitID, Specifier in pairs(units) do
+			if not Inspect.Unit.Detail(UnitID) then
+				if KBM.BossID[UnitID] then
+					if KBM_CurrentMod then
+						KBM.BossID[UnitID].available = false
+						KBM.BossID[UnitID].IdleSince = Inspect.Time.Real()
 					end
 				end
 			end
@@ -1736,10 +1789,11 @@ local function KBM_Start()
 	table.insert(Command.Slash.Register("kbmreset"), {KBM_Reset, "KingMolinator", "KBM Reset"})
 	table.insert(Event.Chat.Notify, {KBM.Notify, "KingMolinator", "Notify Event"})
 	table.insert(Event.Chat.Npc, {KBM.NPCChat, "KingMolinator", "NPC Chat"}) 
-	table.insert(Event.Combat.Damage, {KBM_UnitHPCheck, "KingMolinator", "Event"})
-	table.insert(Event.Unit.Unavailable, {KBM_UnitRemoved, "KingMolinator", "Event"})
-	table.insert(Event.System.Update.Begin, {function () KBM:Timer() end, "KingMolinator", "Event"}) 
-	table.insert(Event.Combat.Death, {KBM_Death, "KingMolinator", "Event"})
+	table.insert(Event.Combat.Damage, {KBM_UnitHPCheck, "KingMolinator", "Combat Damage"})
+	table.insert(Event.Unit.Unavailable, {KBM_UnitRemoved, "KingMolinator", "Unit Unavailable"})
+	table.insert(Event.Unit.Available, {KBM_UnitAvailable, "KingMolinator", "Unit Available"})
+	table.insert(Event.System.Update.Begin, {function () KBM:Timer() end, "KingMolinator", "System Update"}) 
+	table.insert(Event.Combat.Death, {KBM_Death, "KingMolinator", "Combat Death"})
 	table.insert(Event.Unit.Castbar, {KBM_CastBar, "KingMolinator", "Cast Bar Event"})
 	table.insert(Command.Slash.Register("kbmhelp"), {KBM_Help, "KingMolinator", "KBM Hekp"})
 	table.insert(Command.Slash.Register("kbmautoreset"), {KBM_AutoReset, "KingMolinator", "KBM Auto Reset Toggle"})

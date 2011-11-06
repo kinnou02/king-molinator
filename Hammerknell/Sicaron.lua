@@ -36,6 +36,7 @@ SN.Sicaron = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
+	TimeOut = 5,
 }
 
 local KBM = KBM_RegisterMod(SN.Sicaron.ID, SN)

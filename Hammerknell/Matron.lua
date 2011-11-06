@@ -35,6 +35,7 @@ MZ.Matron = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
+	TimeOut = 5,
 }
 
 local KBM = KBM_RegisterMod(MZ.Matron.ID, MZ)

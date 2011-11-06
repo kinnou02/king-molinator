@@ -3,9 +3,133 @@
 -- Copyright 2011
 
 KBM = KBM_RegisterApp()
+KBM.Scroller = {}
+
+function KBM.Scroller:Create(Type, Size, Parent, Callback)
+
+	local ScrollerObj = {}
+	ScrollerObj.Callback = Callback
+	ScrollerObj.Frame = KBM:CallFrame(Parent)
+	ScrollerObj.Frame:SetBackgroundColor(0,0,0,0.5)
+	ScrollerObj.Type = Type
+	ScrollerObj.Handle = KBM:CallFrame(ScrollerObj.Frame)
+	if Type == "H" then
+		
+	else
+		ScrollerObj.Handle:SetPoint("LEFT", ScrollerObj.Frame, "LEFT")
+		ScrollerObj.Handle:SetPoint("RIGHT", ScrollerObj.Frame, "RIGHT")
+		ScrollerObj.Handle:SetPoint("TOP", ScrollerObj.Frame, "TOP")
+	end
+	ScrollerObj.Handle:SetBackgroundColor(1,1,1,0.5)
+	ScrollerObj.Handle:SetLayer(2)
+	ScrollerObj.Handle:SetVisible(false)
+	ScrollerObj.Handle.In = false
+	ScrollerObj.Handle.MouseDown = false
+	ScrollerObj.Handle.StartY = 0
+	ScrollerObj.Handle.Position = 0
+	function ScrollerObj.Handle.Event:MouseIn()
+		if not self.MouseDown then
+			self:SetBackgroundColor(1,1,1,0.75)
+		end
+		self.In = true
+	end
+	function ScrollerObj.Handle.Event:MouseOut()
+		if not self.MouseDown then
+			self:SetBackgroundColor(1,1,1,0.5)
+		end
+		self.In = false
+	end
+	function ScrollerObj.Handle.Event:LeftDown()
+		self:SetBackgroundColor(1,1,1,0.25)
+		self.StartY = Inspect.Mouse().y
+		self.Position = self.Controller.Position
+		self.MouseDown = true
+	end
+	function ScrollerObj.Handle.Event:MouseMove(x,y)
+		if self.MouseDown then
+			local offsetY = y - self.StartY
+			self.Controller.Position = self.Position + offsetY
+			if self.Controller.Position < 0 then
+				self.Controller.Position = 0
+			end
+			if self.Controller.Position > (self.Controller.Size - self.Controller.Total) then
+				self.Controller.Position = self.Controller.Size - self.Controller.Total
+			end
+			self:SetPoint("TOP", self.Controller.Frame, "TOP", nil, self.Controller.Position)
+			if self.Controller.Callback then
+				self.Controller.Callback(self.Controller.Position)
+			end
+		end
+	end
+	function ScrollerObj.Handle.Event:LeftUp()
+		if self.In then
+			self:SetBackgroundColor(1,1,1,0.75)
+		else
+			self:SetBackgroundColor(1,1,1,0.5)
+		end
+		self.MouseDown = false
+	end
+	function ScrollerObj.Handle.Event:LeftUpoutside()
+		ScrollerObj.Handle.Event.LeftUp(self)
+	end
+	function ScrollerObj:UpdateHandle()
+		if self.Type == "H" then
+		
+		else
+			if self.Size - self.Total > self.Frame:GetHeight() then
+			
+			else
+				self.Handle:SetHeight(self.Total - (self.Size - self.Total))
+				self.Handle:SetPoint("TOP", self.Frame, "TOP")
+			end
+		end
+	end
+	function ScrollerObj:SetHeight(Height)
+		self.Frame:SetHeight(Height)
+	end
+	function ScrollerObj:SetWidth(Width)
+		self.Frame:SetWidth(Width)
+	end
+	function ScrollerObj:SetRange(Size, Total)
+		self.Size = Size
+		self.Total = Total
+		self.Position = 0
+		if Size < Total then
+			self.Handle:SetVisible(false)
+		else
+			self.Handle:SetVisible(true)
+			self:UpdateHandle()
+		end
+	end
+	function ScrollerObj:SetPosition(Value)
+		if self.Handle:GetVisible() then
+			self.Position = self.Position + Value
+			if self.Position < 0 then
+				self.Position = 0
+			elseif self.Position > (self.Size - self.Total) then
+				self.Position = self.Size - self.Total
+			end
+			self.Handle:SetPoint("TOP", self.Frame, "TOP", nil, self.Position)
+			if self.Callback then
+				self.Callback(self.Position)
+			end
+		end
+	end
+	if Type == "H" then
+		ScrollerObj:SetWidth(Size)
+		ScrollerObj:SetHeight(15)
+	else
+		ScrollerObj:SetHeight(Size)
+		ScrollerObj:SetWidth(15)
+	end
+	ScrollerObj.Handle.Controller = ScrollerObj
+	return ScrollerObj
+	
+end
 
 function KBM.InitOptions()
 	KBM.MainWin = UI.CreateFrame("RiftWindow", "Safe's Boss Mods", KBM.Context)
+	KBM.MainWin.Options = {}
 	KBM.MainWin:SetVisible(false)
 	KBM.MainWin:SetController("border")
 	KBM.MainWin:SetWidth(700)
@@ -62,8 +186,8 @@ function KBM.InitOptions()
 	end
 	
 	MenuWidth = math.floor(ContentW * 0.30)-10
-
-	KBM.MainWin.Menu = UI.CreateFrame("Frame", "SBM Menu Frame", KBM.MainWin.Content)
+	
+	KBM.MainWin.Menu = UI.CreateFrame("Mask", "SBM Menu Frame", KBM.MainWin.Content)
 	KBM.MainWin.Menu:SetWidth(MenuWidth)
 	KBM.MainWin.Menu:SetHeight(ContentH)
 	KBM.MainWin.Menu:SetPoint("TOPLEFT", KBM.MainWin.Content, "TOPLEFT",5, 5)
@@ -82,16 +206,56 @@ function KBM.InitOptions()
 	KBM.MainWin.SplitHandle:SetBackgroundColor(1,1,1,0.5)
 
 	OptionsWidth = ContentW - KBM.MainWin.Menu:GetWidth() - KBM.MainWin.SplitFrame:GetWidth() - 10
-	KBM.MainWin.Options = UI.CreateFrame("Frame", "KBM Options Frame", KBM.MainWin.Content)
-	KBM.MainWin.Options:SetWidth(OptionsWidth)
-	KBM.MainWin.Options:SetHeight(ContentH)
-	KBM.MainWin.Options:SetPoint("TOPLEFT", KBM.MainWin.SplitFrame, "TOPRIGHT")
+	KBM.MainWin.Options.Mask = UI.CreateFrame("Mask", "KBM Options Mask", KBM.MainWin.Content)
+	KBM.MainWin.Options.Frame = UI.CreateFrame("Frame", "KBM Options Frame", KBM.MainWin.Options.Mask)
+	KBM.MainWin.Options.Mask:SetPoint("TOPLEFT", KBM.MainWin.Options.Frame, "TOPLEFT")
+	KBM.MainWin.Options.Mask:SetPoint("BOTTOMRIGHT", KBM.MainWin.Options.Frame, "BOTTOMRIGHT")
+	KBM.MainWin.Options.PageSize = 0
+	KBM.MainWin.Options.Header = UI.CreateFrame("Frame", "KBM Options Header", KBM.MainWin.Content)
+	KBM.MainWin.Options.Header:SetWidth(OptionsWidth)
+	KBM.MainWin.Options.Header:SetHeight(40)
+	KBM.MainWin.Options.Header:SetBackgroundColor(0,0,0,0.25)
+	KBM.MainWin.Options.Header:SetPoint("TOPRIGHT", KBM.MainWin.Content, "TOPRIGHT", -5, 0)
+	KBM.MainWin.Options.HeadText = UI.CreateFrame("Text", "KBM Header Text", KBM.MainWin.Options.Header)
+	KBM.MainWin.Options.HeadText:SetPoint("TOPRIGHT", KBM.MainWin.Options.Header, "TOPRIGHT")
+	KBM.MainWin.Options.HeadText:SetFontColor(0.85,0.65,0.0)
+	KBM.MainWin.Options.HeadText:SetFontSize(18)
+	KBM.MainWin.Options.SubText = UI.CreateFrame("Text", "KBM SubText Text", KBM.MainWin.Options.Header)
+	KBM.MainWin.Options.SubText:SetPoint("BOTTOMLEFT", KBM.MainWin.Options.Header, "BOTTOMLEFT", 4, 0)
+	KBM.MainWin.Options.SubText:SetFontColor(1,1,1)
+	KBM.MainWin.Options.SubText:SetFontSize(18)
+	KBM.MainWin.Options.Footer = UI.CreateFrame("Frame", "KBM Options Footer", KBM.MainWin.Content)
+	KBM.MainWin.Options.Footer:SetWidth(OptionsWidth)
+	KBM.MainWin.Options.Footer:SetHeight(40)
+	KBM.MainWin.Options.Footer:SetBackgroundColor(0,0,0,0.25)
+	KBM.MainWin.Options.Footer:SetPoint("BOTTOMRIGHT", KBM.MainWin.Content, "BOTTOMRIGHT", -5, 0)
+	KBM.MainWin.Options.Frame:SetWidth(OptionsWidth)
+	KBM.MainWin.Options.Frame:SetPoint("TOPLEFT", KBM.MainWin.Options.Header, "BOTTOMLEFT", 0, 10)
+	KBM.MainWin.Options.Frame:SetPoint("BOTTOM", KBM.MainWin.Options.Footer, "TOP", nil, -10)
+	KBM.MainWin.Options.Height = KBM.MainWin.Options.Frame:GetHeight()
+	function KBM.MainWin.Options.Scrollback(value)
+		KBM.MainWin.Options.FirstItem.Frame:SetPoint("TOP", KBM.MainWin.Options.Frame, "TOP", nil, -value)
+	end
+	KBM.MainWin.Options.Scroller = KBM.Scroller:Create("V", KBM.MainWin.Options.Height, KBM.MainWin.Content, KBM.MainWin.Options.Scrollback)
+	KBM.MainWin.Options.Scroller.Frame:SetPoint("TOPRIGHT", KBM.MainWin.Options.Header, "BOTTOMRIGHT",0, 10)
+	KBM.MainWin.Options.Frame:SetPoint("RIGHT", KBM.MainWin.Options.Scroller.Frame, "LEFT")
 	
-	KBM.MainWin.Options.Close = UI.CreateFrame("RiftButton", "Close Options", KBM.MainWin.Options)
-	KBM.MainWin.Options.Close:SetPoint("BOTTOMRIGHT", KBM.MainWin.Options, "BOTTOMRIGHT")
+	KBM.MainWin.Options.Close = UI.CreateFrame("RiftButton", "Close Options", KBM.MainWin.Options.Footer)
+	KBM.MainWin.Options.Close:SetPoint("BOTTOMRIGHT", KBM.MainWin.Options.Footer, "BOTTOMRIGHT")
 	KBM.MainWin.Options.Close:SetText("Close")
 	
 	KBM.MainWin.CurrentPage = nil
+	
+	function KBM.MainWin.Options.Frame.Event:WheelForward()
+		KBM.MainWin.Options.Scroller:SetPosition(-20)
+	end
+	function KBM.MainWin.Options.Frame.Event:WheelBack()
+		KBM.MainWin.Options.Scroller:SetPosition(20)
+	end
+	
+	function KBM.MainWin.Options:AddSize(Frame)
+		self.PageSize = self.PageSize + Frame:GetHeight()
+	end
 	
 	function KBM.MainWin.Options.Close.Event:LeftPress()
 		KBM.MainWin:SetVisible(false)
@@ -217,13 +381,13 @@ function KBM.InitOptions()
 		function Child.Event:LeftClick()
 			if self.Enabled then
 				if KBM.MainWin.CurrentPage ~= self.Options then
+					KBM.MainWin.Options.PageSize = 0
 					self.Link:Options()
+					KBM.MainWin.Options.Scroller:SetRange(KBM.MainWin.Options.PageSize, KBM.MainWin.Options.Height)
 				end
 			end
 		end
 		function Child.Options:Remove()
-			self.Title:Remove()
-			self.Title = nil
 			for _, Item in ipairs(self.List) do
 				Item:Remove()
 				Item = nil
@@ -240,70 +404,47 @@ function KBM.InitOptions()
 			else
 				KBM.MainWin.CurrentPage = self
 			end
-			local TitleObj = {}
-			TitleObj.Frame = KBM:CallFrame(KBM.MainWin.Options)
-			TitleObj.Frame:SetPoint("TOPLEFT", KBM.MainWin.Options, "TOPLEFT")
-			TitleObj.Frame:SetWidth(KBM.MainWin.Options:GetWidth())
-			TitleObj.Frame:SetHeight(40)
-			TitleObj.Frame:SetBackgroundColor(0,0,0,0.25)
-			TitleObj.HeadText = {}
-			TitleObj.HeadText.Frame = KBM:CallText(TitleObj.Frame)
-			TitleObj.HeadText.Frame:SetPoint("TOPRIGHT", TitleObj.Frame, "TOPRIGHT")
-			TitleObj.HeadText.Frame:SetFontColor(0.85,0.65,0.0)
-			TitleObj.HeadText.Frame:SetFontSize(18)
-			TitleObj.HeadText.Frame:SetText(self.Child.Header.Text:GetText())
-			TitleObj.HeadText.Frame:ResizeToText()
-			TitleObj.SubText = {}
-			TitleObj.SubText.Frame = KBM:CallText(TitleObj.Frame)
-			TitleObj.SubText.Frame:SetPoint("BOTTOMLEFT", TitleObj.Frame, "BOTTOMLEFT", 4, 0)
-			TitleObj.SubText.Frame:SetFontColor(1,1,1)
-			TitleObj.SubText.Frame:SetFontSize(18)
-			TitleObj.SubText.Frame:SetText(self.Child.Text:GetText())
-			TitleObj.SubText.Frame:ResizeToText()
-			TitleObj.Separator = {}
-			TitleObj.Separator.Frame = KBM:CallFrame(KBM.MainWin.Options)
-			TitleObj.Separator.Frame:SetPoint("TOPLEFT", TitleObj.Frame, "BOTTOMLEFT")
-			TitleObj.Separator.Frame:SetWidth(TitleObj.Frame:GetWidth())
-			TitleObj.Separator.Frame:SetHeight(10)
-			TitleObj.Separator.Frame:SetBackgroundColor(0,0,0,0)
-			self.LastItem = TitleObj.Separator
-			function TitleObj:Remove()
-				self.HeadText.Frame:sRemove()
-				self.SubText.Frame:sRemove()
-				self.Separator.Frame:sRemove()
-				self.Frame:sRemove()
-			end
-			self.Title = TitleObj
+			KBM.MainWin.Options.HeadText:SetText(self.Child.Header.Text:GetText())
+			KBM.MainWin.Options.HeadText:ResizeToText()
+			KBM.MainWin.Options.SubText:SetText(self.Child.Text:GetText())
+			KBM.MainWin.Options.SubText:ResizeToText()
+			self.LastItem = nil
 		end
 		function Child.Options:AddSpacer(Size)
 			if not Size then
 				Size = 10
 			end
 			local SpacerObj = {}
-			SpacerObj.Frame = KBM:CallFrame(KBM.MainWin.Options)
+			SpacerObj.Frame = KBM:CallFrame(KBM.MainWin.Options.Frame)
 			SpacerObj.Frame:SetBackgroundColor(0,0,0,0)
 			if self.LastItem.LastChild then
 				SpacerObj.Frame:SetPoint("TOP", self.LastItem.LastChild.Frame, "BOTTOM")
-				SpacerObj.Frame:SetPoint("LEFT", KBM.MainWin.Options, "LEFT")
+				SpacerObj.Frame:SetPoint("LEFT", KBM.MainWin.Options.Frame, "LEFT")
 			else
 				SpacerObj.Frame:SetPoint("TOPLEFT", self.LastItem.Frame, "BOTTOMLEFT")
 			end
-			SpacerObj.Frame:SetWidth(KBM.MainWin.Options:GetWidth())
+			SpacerObj.Frame:SetWidth(KBM.MainWin.Options.Frame:GetWidth())
 			SpacerObj.Frame:SetHeight(Size)
 			self.LastItem = SpacerObj
 			table.insert(self.List, SpacerObj)
+			KBM.MainWin.Options:AddSize(SpacerObj.Frame)
 			function SpacerObj:Remove()
 				self.Frame:sRemove()
 			end
 		end
 		function Child.Options:AddHeader(Text, Callback, Default)
 			local HeaderObj = {}
-			HeaderObj.Frame = KBM:CallFrame(KBM.MainWin.Options)
-			if self.LastItem.LastChild then
-				HeaderObj.Frame:SetPoint("TOP", self.LastItem.LastChild.Frame, "BOTTOM")
-				HeaderObj.Frame:SetPoint("LEFT", KBM.MainWin.Options, "LEFT")
+			HeaderObj.Frame = KBM:CallFrame(KBM.MainWin.Options.Frame)
+			if self.LastItem then
+				if self.LastItem.LastChild then
+					HeaderObj.Frame:SetPoint("TOP", self.LastItem.LastChild.Frame, "BOTTOM")
+					HeaderObj.Frame:SetPoint("LEFT", KBM.MainWin.Options.Frame, "LEFT")
+				else
+					HeaderObj.Frame:SetPoint("TOPLEFT", self.LastItem.Frame, "BOTTOMLEFT")
+				end
 			else
-				HeaderObj.Frame:SetPoint("TOPLEFT", self.LastItem.Frame, "BOTTOMLEFT")
+				HeaderObj.Frame:SetPoint("TOPLEFT", KBM.MainWin.Options.Frame, "TOPLEFT")
+				KBM.MainWin.Options.FirstItem = HeaderObj
 			end
 			HeaderObj.Text = {}
 			HeaderObj.Text.Frame = KBM:CallText(HeaderObj.Frame)
@@ -330,6 +471,7 @@ function KBM.InitOptions()
 			HeaderObj.Text.Frame:SetPoint("CENTERLEFT", HeaderObj.Check.Frame, "CENTERRIGHT")
 			HeaderObj.Frame:SetWidth(HeaderObj.Text.Frame:GetWidth()+HeaderObj.Check.Frame:GetWidth())
 			HeaderObj.Frame:SetHeight(HeaderObj.Text.Frame:GetHeight())
+			KBM.MainWin.Options:AddSize(HeaderObj.Frame)
 			HeaderObj.Children = {}
 			HeaderObj.LastChild = HeaderObj
 			self.LastItem = HeaderObj
@@ -345,7 +487,7 @@ function KBM.InitOptions()
 			table.insert(self.List, HeaderObj)
 			function HeaderObj:AddCheck(Text, Callback, Default, Slider)
 				local CheckObj = {}
-				CheckObj.Frame = KBM:CallFrame(KBM.MainWin.Options)
+				CheckObj.Frame = KBM:CallFrame(KBM.MainWin.Options.Frame)
 				CheckObj.Frame:SetBackgroundColor(0,0,0,0)
 				if self.LastChild == self then
 					CheckObj.Frame:SetPoint("LEFT", self.Check.Frame, "RIGHT")
@@ -469,6 +611,7 @@ function KBM.InitOptions()
 					self.Frame:sRemove()
 				end
 				self.LastChild = CheckObj
+				KBM.MainWin.Options:AddSize(CheckObj.Frame)
 				return CheckObj
 			end
 			function HeaderObj:EnableChildren()

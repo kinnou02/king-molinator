@@ -2,7 +2,9 @@
 -- Written by Paul Snart
 -- Copyright 2011
 --
+
 KM_Settings = nil
+
 local HK = KBMHK_Register()
 
 local KM = {
@@ -111,9 +113,11 @@ KM.Prince = {
 	CastFilters = {},
 	HasCastFilters = true,
 	Timers = {},
+	TimersRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
+	TimeOut = 5,
 }
 KM.King = {
 	Mod = KM,
@@ -124,9 +128,11 @@ KM.King = {
 	CastFilters = {},
 	HasCastFilters = true,
 	Timers = {},
+	TimersRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
+	TimeOut = 5,
 }
 
 local KBM = KBM_RegisterMod("Molinar", KM)
@@ -193,6 +199,18 @@ function KM:InitVars()
 		Compact = false,
 		AutoReset = true,
 		PrinceBar = true,
+		King = {
+			Timers = true,
+			Cursed = true,
+			Consuming = true,
+			Rev = true,
+		},
+		Prince = {
+			Timers = true,
+			Terminate = true,
+			Consuming = true,
+			Runic = true,
+		},
 		KingBar = true,
 		Enabled = true,
 		RendEnabled = true,
@@ -216,7 +234,7 @@ function KM:LoadVars()
 			if type(KM_Settings[Setting]) == "table" then
 				if self.Settings[Setting] ~= nil then
 					for tSetting, tValue in pairs(KM_Settings[Setting]) do
-						if self.Settings[Setting][tSettins] ~= nil then
+						if self.Settings[Setting][tSetting] ~= nil then
 							self.Settings[Setting][tSetting] = tValue
 						end
 					end
@@ -236,7 +254,8 @@ function KM:LoadVars()
 	KM.Prince.CastFilters[KM.Lang.Ability.Forked[KBM.Lang]] = {Enabled = self.Settings.FBlastEnabled}
 	KM.King.CastFilters[KM.Lang.Ability.Shout[KBM.Lang]] = {Enabled = self.Settings.FShoutEnabled}
 	KM.King.CastFilters[KM.Lang.Ability.Cursed[KBM.Lang]] = {Enabled = self.Settings.CursedEnabled}
-	KM.King.CastFilters[KM.Lang.Ability.Consuming[KBM.Lang]] = {Enabled = self.Settings.KCEssenceEnabled}	
+	KM.King.CastFilters[KM.Lang.Ability.Consuming[KBM.Lang]] = {Enabled = self.Settings.KCEssenceEnabled}
+		
 end
 
 function KM:SaveVars()
@@ -766,6 +785,36 @@ function KM.KingMolinar:Options()
 			--print("Monitor is now Disabled")
 		end
 	end
+	function self:KingTimers(bool)
+		KM.Settings.King.Timers = bool
+	end
+	function self:KingCursed(bool)
+		KM.Settings.King.Cursed = bool
+		KM.King.TimersRef.Cursed.Enabled = bool
+	end
+	function self:KingConsuming(bool)
+		KM.Settings.King.Consuming = bool
+		KM.King.TimersRef.Consuming.Enabled = bool
+	end
+	function self:KingRev(bool)
+		KM.Settings.King.Rev = bool
+		KM.King.TimersRef.Rev.Enabled = bool
+	end
+	function self:PrinceTimers(bool)
+		KM.Settings.Prince.Timers = bool
+	end
+	function self:PrinceTerminate(bool)
+		KM.Settings.Prince.Terminate = bool
+		KM.Prince.TimersRef.Terminate = bool
+	end
+	function self:PrinceConsuming(bool)
+		KM.Settings.Prince.Consuming = bool
+		KM.Prince.TimersRef.Consuming.Enabled = bool
+	end
+	function self:PrinceRunic(bool)
+		KM.Settings.Prince.Runic = bool
+		KM.Prince.TimersRef.Runic.Enabled = bool
+	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
 	local Monitor = Options:AddHeader(KM.Lang.Options.ShowMonitor[KBM.Lang], self.MonitorEnabled, KM.Settings.Enabled)
@@ -773,6 +822,16 @@ function KM.KingMolinar:Options()
 	Monitor:AddCheck(KM.Lang.Options.HiddenStart[KBM.Lang], self.Hidden, KM.Settings.Hidden)
 	Monitor:AddCheck(KM.Lang.Options.Compact[KBM.Lang], self.Compact, KM.Settings.Compact)
 	Monitor:AddCheck(KM.Lang.Options.Locked[KBM.Lang], self.Locked, KM.Settings.Locked)
+	Options:AddSpacer()
+	local KingTimers = Options:AddHeader(KM.Lang.Molinar[KBM.Lang].." timers", self.KingTimers, KM.Settings.King.Timers)
+	KingTimers:AddCheck(KM.Lang.Ability.Cursed[KBM.Lang], self.KingCursed, KM.Settings.King.Cursed)
+	KingTimers:AddCheck(KM.Lang.Ability.Consuming[KBM.Lang], self.KingConsuming, KM.Settings.King.Consuming)
+	KingTimers:AddCheck("Incorporeal Revenant", self.KingRev, KM.Settings.King.Rev)
+	Options:AddSpacer()
+	local PrinceTimers = Options:AddHeader(KM.Lang.Dollin[KBM.Lang].." timers", self.PrinceTimers, KM.Settings.Prince.Timers)
+	PrinceTimers:AddCheck(KM.Lang.Ability.Terminate[KBM.Lang], self.PrinceTerminate, KM.Settings.Prince.Terminate)
+	PrinceTimers:AddCheck(KM.Lang.Ability.Consuming[KBM.Lang], self.PrinceConsuming, KM.Settings.Prince.Consuming)
+	PrinceTimers:AddCheck(KM.Lang.Ability.Runic[KBM.Lang], self.PrinceRunic, KM.Settings.Prince.Runic)
 	Options:AddSpacer()
 	local KingMech = Options:AddHeader(KM.Lang.Options.ShowKingCast[KBM.Lang], self.KingEnabled, KM.Settings.KingBar)
 	KingMech:AddCheck(KM.Lang.Ability.Shout[KBM.Lang]..".", self.FShoutEnabled, KM.Settings.FShoutEnabled)
@@ -795,12 +854,18 @@ function KM:Start()
 	self.KingMolinar.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.KingMolinar, true, self.Header)
 	self.KingMolinar.MenuItem.Check:SetEnabled(false)
 	
-	KBM.MechTimer:Add(KM.Lang.Ability.Cursed[KBM.Lang], "cast", 55, self.King, nil)
-	KBM.MechTimer:Add(KM.Lang.Ability.Consuming[KBM.Lang], "cast", 22, self.King, nil, "(King) "..KM.Lang.Ability.Consuming[KBM.Lang])
-	KBM.MechTimer:Add(KM.Lang.Ability.Terminate[KBM.Lang], "cast", 21, self.Prince, nil)
-	KBM.MechTimer:Add(KM.Lang.Ability.Consuming[KBM.Lang], "cast", 22, self.Prince, nil, "(Prince) "..KM.Lang.Ability.Consuming[KBM.Lang])
-	KBM.MechTimer:Add(KM.Lang.Ability.Runic[KBM.Lang], "cast", 48, self.Prince, nil)
-	KBM.MechTimer:Add("Incorporeal Revenant begins to phase into this reality.", "notify", 82, KM, nil, "Incorporeal Revenant")
+	self.King.TimersRef.Cursed = KBM.MechTimer:Add(KM.Lang.Ability.Cursed[KBM.Lang], "cast", 55, self.King)
+	self.King.TimersRef.Cursed.Enabled = KM.Settings.King.Cursed
+	self.King.TimersRef.Consuming = KBM.MechTimer:Add(KM.Lang.Ability.Consuming[KBM.Lang], "cast", 22, self.King, nil, "(King) "..KM.Lang.Ability.Consuming[KBM.Lang])
+	self.King.TimersRef.Consuming.Enabled = KM.Settings.King.Consuming
+	self.Prince.TimersRef.Terminate = KBM.MechTimer:Add(KM.Lang.Ability.Terminate[KBM.Lang], "cast", 21, self.Prince, nil)
+	self.Prince.TimersRef.Terminate.Enabled = KM.Settings.Prince.Terminate
+	self.Prince.TimersRef.Consuming = KBM.MechTimer:Add(KM.Lang.Ability.Consuming[KBM.Lang], "cast", 22, self.Prince, nil, "(Prince) "..KM.Lang.Ability.Consuming[KBM.Lang])
+	self.Prince.TimersRef.Consuming.Enabled = KM.Settings.Prince.Consuming
+	self.Prince.TimersRef.Runic = KBM.MechTimer:Add(KM.Lang.Ability.Runic[KBM.Lang], "cast", 48, self.Prince, nil)
+	self.Prince.TimersRef.Runic.Enabled = KM.Settings.Prince.Runic
+	self.King.TimersRef.Rev = KBM.MechTimer:Add("Incorporeal Revenant begins to phase into this reality.", "notify", 82, KM, nil, "Incorporeal Revenant")
+	self.King.TimersRef.Rev.Enabled = KM.Settings.King.Rev
 	
 	self.King.CastBar = KBM.CastBar:Add(self, self.King, self.King.PinCastBar, self.Settings.KingBar)
 	self.Prince.CastBar = KBM.CastBar:Add(self, self.Prince, self.Prince.PinCastBar, self.Settings.PrinceBar)
