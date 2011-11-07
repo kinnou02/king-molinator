@@ -1,6 +1,15 @@
 ﻿v0.4.3
 * Fixed: Akylios Phase 1 Wave timer. (No more Error spam).
 * Fixed: Enrage Timer no long shows "!! Enraged !!" when it has no enrage set.
+* Added: German Translations for:
+** More menu options.
+** Vladmal Prime's Ancient Flames.
+** Inquisitor Garau's Acrane Porters.
+** Inquisitor Garau's Arcane Essence.
+** Inquisitor Garau's Blood Tide.
+** Inquisitor Garau's Infused Crawlers.
+** Estrode's Soul Capture.
+** Estrode's Mind Control.
 ----
 v0.4.2
 * Fixed: Vladmal Prime's Ancient Flames timer.

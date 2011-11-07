@@ -46,11 +46,14 @@ ES.Lang.Estrode = KBM.Language:Add(ES.Estrode.Name)
 -- Ability Dictionary
 ES.Lang.Ability = {}
 ES.Lang.Ability.Soul = KBM.Language:Add("Soul Capture")
+ES.Lang.Ability.Soul.German = "Seelenfang"
 ES.Lang.Ability.Mind = KBM.Language:Add("Mind Control")
+ES.Lang.Ability.Mind.German = "Gedankenkontrolle"
 
 -- Speak Dictionary
 ES.Lang.Say = {}
 ES.Lang.Say.Mind = KBM.Language:Add("Mmmm, you look delectable.")
+ES.Lang.Say.Mind.German = "Hm, Ihr seht köstlich aus."
 
 ES.Estrode.Name = ES.Lang.Estrode[KBM.Lang]
 

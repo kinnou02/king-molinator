@@ -9,10 +9,6 @@ local HK = KBMHK_Register()
 
 local KM = {
 	ModEnabled = true,
-	Bosses = {
-		["Rune King Molinar"] = true,
-		["Prince Dollin"] = true,
-	},
 	ID = nil,
 	KingMolinar = {
 		MenuItem = nil,

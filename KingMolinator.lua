@@ -20,8 +20,6 @@ KBM.MenuOptions = {
 	ID = "Options",
 }
 
---math.randomseed(Inspect.Time.Real())
-
 local function KBM_DefineVars(AddonID)
 	if AddonID == "KingMolinator" then
 		KBM.Options = {
@@ -35,6 +33,14 @@ local function KBM_DefineVars(AddonID)
 				y = false,
 				Unlocked = true,
 				Visible = true,
+			},
+			Alert = {
+				Enabled = true,
+				ColorRed = 1,
+				ColorGreen = 0,
+				ColorBlue = 0,
+				Flash = true,
+				Notify = true,
 			},
 			EncTimer = {
 				x = false,
@@ -205,8 +211,8 @@ KBM.TankSwap = {}
 KBM.TankSwap.Triggers = {}
 
 KBM.EncTimer = {}
-
 KBM.Button = {}
+KBM.PhaseMonitor = {}
 
 function KBM.Language:Add(Phrase)
 	local SetPhrase = {}
@@ -226,46 +232,60 @@ function KBM.Language:Add(Phrase)
 end
 
 -- Main Addon Dictionary
+-- Cast-bar related
 KBM.Language.Options = {}
-KBM.Language.Options.Castbar = KBM.Language:Add("Cast-bars.")
-KBM.Language.Options.Castbar.French = "Barres-cast."
-KBM.Language.Options.Castbar.German = "Zauberbalken."
-KBM.Language.Options.MechanicTimers = KBM.Language:Add("Mechanic Timers.")
+KBM.Language.Options.Castbar = KBM.Language:Add("Cast-bars")
+KBM.Language.Options.Castbar.French = "Barres-cast"
+KBM.Language.Options.Castbar.German = "Zauberbalken"
+KBM.Language.Options.CastbarEnabled = KBM.Language:Add("Cast-bars enabled.")
+KBM.Language.Options.CastbarEnabled.French = "Barres-cast activ\195\169."
+KBM.Language.Options.CastbarEnabled.German = "Zauberbalken anzeigen."
+-- Timer Related
+KBM.Language.Options.EncTimers = KBM.Language:Add("Encounter Timers enabled.")
+KBM.Language.Options.MechanicTimers = KBM.Language:Add("Mechanic Timers enabled.")
 KBM.Language.Options.MechanicTimers.French = "Timers de M\195\169canisme."
-KBM.Language.Options.MechanicTimers.German = "Mechanik Timer"
+KBM.Language.Options.MechanicTimers.German = "Mechanik Timers."
 KBM.Language.Options.TimersEnabled = KBM.Language:Add("Timers enabled.")
 KBM.Language.Options.TimersEnabled.French = "Timers activ\195\169."
 KBM.Language.Options.TimersEnabled.German = "Timer anzeigen."
-KBM.Language.Options.ShowAnchor = KBM.Language:Add("Show anchor (for positioning).")
-KBM.Language.Options.ShowAnchor.French = "Montrer ancrage (pour positionnement)."
-KBM.Language.Options.ShowAnchor.German = "Zeige Anker (für Positionierung)."
-KBM.Language.Options.LockAnchor = KBM.Language:Add("Unlock anchor.")
-KBM.Language.Options.LockAnchor.French = "D\195\169bloquer Ancrage."
-KBM.Language.Options.LockAnchor.German = "Anker ist verschiebbar."
 KBM.Language.Options.ShowTimer = KBM.Language:Add("Show Timer (for positioning).")
 KBM.Language.Options.ShowTimer.French = "Montrer Timer (pour positionnement)."
 KBM.Language.Options.ShowTimer.German = "Zeige Timer (für Positionierung)."
 KBM.Language.Options.LockTimer = KBM.Language:Add("Unlock Timer.")
 KBM.Language.Options.LockTimer.French = "D\195\169bloquer Timer."
 KBM.Language.Options.LockTimer.German = "Timer ist verschiebbar."
-KBM.Language.Options.Timer = KBM.Language:Add("Encounter duration timer.")
-KBM.Language.Options.Timer.French = "Timer duration combat"
-KBM.Language.Options.Timer.German = "Kampfdauer Anzeige"
-KBM.Language.Options.Enrage = KBM.Language:Add("Enrage timer (if supported).")
+KBM.Language.Options.Timer = KBM.Language:Add("Encounter duration Timer.")
+KBM.Language.Options.Timer.French = "Timer duration combat."
+KBM.Language.Options.Timer.German = "Kampfdauer anzeige."
+KBM.Language.Options.Enrage = KBM.Language:Add("Enrage Timer (if supported).")
 KBM.Language.Options.Enrage.French = "Timer d'Enrage (si support\195\169)."
-KBM.Language.Options.Enrage.German = "Enrage Anzeige (wenn vorhanden)."
+KBM.Language.Options.Enrage.German = "Enrage Anzeige (wenn unterstützt)."
+-- Anchors
+KBM.Language.Options.ShowAnchor = KBM.Language:Add("Show anchor (for positioning).")
+KBM.Language.Options.ShowAnchor.French = "Montrer ancrage (pour positionnement)."
+KBM.Language.Options.ShowAnchor.German = "Zeige Anker (für Positionierung)."
+KBM.Language.Options.LockAnchor = KBM.Language:Add("Unlock anchor.")
+KBM.Language.Options.LockAnchor.French = "D\195\169bloquer Ancrage."
+KBM.Language.Options.LockAnchor.German = "Anker ist verschiebbar."
+-- Button Options
 KBM.Language.Options.Button = KBM.Language:Add("Options Button Visible.")
-KBM.Language.Options.Button.French = "Bouton Configurations Visible"
-KBM.Language.Options.Button.German = "Options-Schalter sichtbar"
-KBM.Language.Options.LockButton = KBM.Language:Add("Unlock Button (right-click to move)")
-KBM.Language.Options.LockButton.French = "D\195\169bloquer Bouton (click-droit pour d\195\169placer)"
-KBM.Language.Options.LockButton.German = "Schalter ist verschiebbar (Rechts-Klick zum verschieben)"
+KBM.Language.Options.Button.French = "Bouton Configurations Visible."
+KBM.Language.Options.Button.German = "Options-Schalter sichtbar."
+KBM.Language.Options.LockButton = KBM.Language:Add("Unlock Button (right-click to move).")
+KBM.Language.Options.LockButton.French = "D\195\169bloquer Bouton (click-droit pour d\195\169placer)."
+KBM.Language.Options.LockButton.German = "Schalter ist verschiebbar (Rechts-Klick zum verschieben)."
+-- Tank Swap related
+KBM.Language.Options.Tank = KBM.Language:Add("Show Test Tanks.")
+KBM.Language.Options.Tank.French = "Afficher Test Tanks."
+KBM.Language.Options.Tank.German = "Zeige Test-Tanks-Fenster."
+KBM.Language.Options.TankSwap = KBM.Language:Add("Tank-Swaps")
+KBM.Language.Options.TankSwap.German = "Tank Wechsel"
+KBM.Language.Options.TankSwapEnabled = KBM.Language:Add("Tank-Swaps enabled.")
+KBM.Language.Options.TankSwapEnabled.German = "Tank Wechsel anzeigen."
+-- Misc.
 KBM.Language.Options.Settings = KBM.Language:Add("Settings")
 KBM.Language.Options.Settings.French = "Configurations"
 KBM.Language.Options.Settings.German = "Einstellungen"
-KBM.Language.Options.Tank = KBM.Language:Add("Show Test Tanks")
-KBM.Language.Options.Tank.French = "Afficher Test Tanks"
-KBM.Language.Options.Tank.German = "Zeige Test Tanks"
 
 -- Timer Dictionary
 KBM.Language.Timers = {}
@@ -653,6 +673,13 @@ function KBM.Button:Init()
 	if not KBM.Options.Button.Visible then
 		KBM.Button.Texture:SetVisible(false)
 	end
+end
+
+function KBM.PhaseMonitor:Init()
+	
+	self.TestMode = false
+	self.Frame = UI.CreateFrame("Frame", "Phase Monitor", KBM.Context)
+	
 end
 
 function KBM.EncTimer:Init()
@@ -1599,7 +1626,7 @@ function KBM.MenuOptions.Timers:Options()
 	
 	-- Timer Options
 	self.Menu = {}
-	self.Menu.EncTimers = Options:AddHeader("Encounter Timers", self.EncTimersEnabled, true)
+	self.Menu.EncTimers = Options:AddHeader(KBM.Language.Options.EncTimers[KBM.Lang], self.EncTimersEnabled, true)
 	self.Menu.EncTimers:AddCheck(KBM.Language.Options.ShowTimer[KBM.Lang], self.ShowEncTimer, KBM.Options.EncTimer.Visible)
 	self.Menu.EncTimers:AddCheck(KBM.Language.Options.LockTimer[KBM.Lang], self.LockEncTimer, KBM.Options.EncTimer.Unlocked)
 	self.Menu.EncTimers:AddCheck(KBM.Language.Options.Timer[KBM.Lang], self.EncDuration, KBM.Options.EncTimer.Duration)
@@ -1700,7 +1727,7 @@ function KBM.MenuOptions.TankSwap:Options()
 	Options:SetTitle()
 
 	-- Tank-Swap Options. 
-	self.TankSwap = Options:AddHeader("Tank-Swaps", self.Enabled, true)
+	self.TankSwap = Options:AddHeader(KBM.Language.Options.TankSwapEnabled[KBM.Lang], self.Enabled, true)
 	self.TankSwap.Check.Frame:SetEnabled(false)
 	KBM.Options.TankSwap.Enabled = false
 	self.TankSwap:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowAnchor, KBM.Options.TankSwap.Visible)
@@ -1769,7 +1796,7 @@ function KBM.MenuOptions.CastBars:Options()
 	Options:SetTitle()
 
 	-- CastBar Options. 
-	self.CastBars = Options:AddHeader(KBM.Language.Options.Castbar[KBM.Lang], self.CastBarEnabled, true)
+	self.CastBars = Options:AddHeader(KBM.Language.Options.CastbarEnabled[KBM.Lang], self.CastBarEnabled, true)
 	self.CastBars.Check.Frame:SetEnabled(false)
 	KBM.Options.CastBar.Enabled = true
 	self.CastBars:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowCastAnchor, KBM.Options.CastBar.Visible)
@@ -1810,7 +1837,7 @@ local function KBM_Start()
 	KBM.MenuOptions.Main.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.Settings[KBM.Lang], KBM.MenuOptions.Main, nil, Header)
 	KBM.MenuOptions.Timers.MenuItem = KBM.MainWin.Menu:CreateEncounter("Timers", KBM.MenuOptions.Timers, true, Header)
 	KBM.MenuOptions.CastBars.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.Castbar[KBM.Lang], KBM.MenuOptions.CastBars, true, Header)
-	KBM.MenuOptions.TankSwap.MenuItem = KBM.MainWin.Menu:CreateEncounter("Tank Swaps", KBM.MenuOptions.TankSwap, true, Header)
+	KBM.MenuOptions.TankSwap.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.TankSwap[KBM.Lang], KBM.MenuOptions.TankSwap, true, Header)
 	table.insert(Command.Slash.Register("kbmreset"), {KBM_Reset, "KingMolinator", "KBM Reset"})
 	table.insert(Event.Chat.Notify, {KBM.Notify, "KingMolinator", "Notify Event"})
 	table.insert(Event.Chat.Npc, {KBM.NPCChat, "KingMolinator", "NPC Chat"}) 

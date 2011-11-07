@@ -45,16 +45,36 @@ local KBM = KBM_RegisterMod(GU.Garau.ID, GU)
 
 GU.Lang.Garau = KBM.Language:Add(GU.Garau.Name)
 GU.Lang.Garau.French = "Inquisiteur Garau"
-GU.Lang.PowerMy = KBM.Language:Add("Power my creation!")
-GU.Lang.PowerMy.French = "Alimentez ma cr\195\169ation*!"
-GU.Lang.ArcaneEMenu = KBM.Language:Add("Arcane Essence")
-GU.Lang.ArcaneEMenu.French = "Syphon d'essence"
-GU.Lang.ArcaneETrig = KBM.Language:Add("Inquisitor Garau siphons arcane essence from nearby enemies!")
-GU.Lang.ArcaneETrig.French = "Inquisiteur Garau siphonne l'essence occulte des ennemis \195\160 proximit\195\169 !"
-GU.Lang.BaskIn = KBM.Language:Add("Bask in the power of Akylios!")
-GU.Lang.BaskIn.French = "Savourez le pouvoir d'Akylios !"
-GU.Lang.Sacrifice = KBM.Language:Add("Sacrifice your lives for Akylios!")
-GU.Lang.Sacrifice.French = "Sacrifiez vos vies pour Akylios !"
+
+-- Ability Dictionary
+GU.Lang.Ability = {}
+GU.Lang.Ability.Arcane = KBM.Language:Add("Arcane Essence")
+GU.Lang.Ability.Arcane.French = "Syphon d'essence"
+GU.Lang.Ability.Arcane.German = "Essenzabsauger"
+GU.Lang.Ability.Blood = KBM.Language:Add("Blood Tide")
+GU.Lang.Ability.Blood.German = "Blutflut"
+
+-- Speak Dictionary
+GU.Lang.Say = {}
+GU.Lang.Say.Power = KBM.Language:Add("Power my creation!")
+GU.Lang.Say.Power.French = "Alimentez ma cr\195\169ation*!"
+GU.Lang.Say.Power.German = "Macht meiner Schöpfung!"
+GU.Lang.Say.Arcane = KBM.Language:Add("Inquisitor Garau siphons arcane essence from nearby enemies!")
+GU.Lang.Say.Arcane.French = "Inquisiteur Garau siphonne l'essence occulte des ennemis \195\160 proximit\195\169 !"
+GU.Lang.Say.Arcane.German = "Inquisitor Garau saugt von Feinden in der Nähe arkane Essenz ab!"
+GU.Lang.Say.Bask = KBM.Language:Add("Bask in the power of Akylios!")
+GU.Lang.Say.Bask.French = "Savourez le pouvoir d'Akylios !"
+GU.Lang.Say.Bask.German = "Preiset die Macht des Akylios!"
+GU.Lang.Say.Sacrifice = KBM.Language:Add("Sacrifice your lives for Akylios!")
+GU.Lang.Say.Sacrifice.French = "Sacrifiez vos vies pour Akylios !"
+GU.Lang.Say.Sacrifice.German = "Opfert Eure leben dem Akylios!"
+
+-- Unit Dictionary
+GU.Lang.Unit = {}
+GU.Lang.Unit.Porter = KBM.Language:Add("Arcane Porter")
+GU.Lang.Unit.Porter.German = "Arkane Torwache"
+GU.Lang.Unit.Crawler = KBM.Language:Add("Infused Crawler")
+GU.Lang.Unit.Crawler.German = "Durchdrungener Kriecher"
 
 GU.Garau.Name = KBM.Language[GU.Garau.Name][KBM.Lang]
 
@@ -182,11 +202,11 @@ function GU.Garau:Options()
 	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
-	local Timers = Options:AddHeader("Timers Enabled", self.TimersEnabled, GU.Settings.Timers.Enabled)
-	Timers:AddCheck("Blood Tide", self.BloodEnabled, GU.Settings.Timers.BloodEnabled)
-	Timers:AddCheck("Infused Crawlers", self.CrawlerEnabled, GU.Settings.Timers.CrawlerEnabled)
-	Timers:AddCheck("Arcane Porter", self.PorterEnabled, GU.Settings.Timers.PorterEnabled)
-	Timers:AddCheck(GU.Lang.ArcaneEMenu[KBM.Lang], self.EssenceEnabled, GU.Settings.Timers.EssenceEnabled)
+	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, GU.Settings.Timers.Enabled)
+	Timers:AddCheck(GU.Lang.Ability.Blood[KBM.Lang], self.BloodEnabled, GU.Settings.Timers.BloodEnabled)
+	Timers:AddCheck(GU.Lang.Unit.Crawler[KBM.Lang], self.CrawlerEnabled, GU.Settings.Timers.CrawlerEnabled)
+	Timers:AddCheck(GU.Lang.Unit.Porter[KBM.Lang], self.PorterEnabled, GU.Settings.Timers.PorterEnabled)
+	Timers:AddCheck(GU.Lang.Ability.Arcane[KBM.Lang], self.EssenceEnabled, GU.Settings.Timers.EssenceEnabled)
 	
 end
 
@@ -194,14 +214,14 @@ function GU:Start()
 	self.Header = KBM.HeaderList[self.Instance]
 	self.Garau.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Garau, true, self.Header)
 	self.Garau.MenuItem.Check:SetEnabled(false)
-	self.Garau.TimersRef.Blood = KBM.MechTimer:Add("Blood Tide", "damage", 18, self.Garau, nil)
+	self.Garau.TimersRef.Blood = KBM.MechTimer:Add(GU.Lang.Ability.Blood[KBM.Lang], "damage", 18, self.Garau, nil)
 	self.Garau.TimersRef.Blood.Enabled = self.Settings.Timers.BloodEnabled
-	self.Garau.TimersRef.Crawler = KBM.MechTimer:Add({[self.Lang.BaskIn[KBM.Lang]] = true,
-					[self.Lang.Sacrifice[KBM.Lang]] = true,}, "say", 30, self.Garau, nil, "Infused Crawler")
+	self.Garau.TimersRef.Crawler = KBM.MechTimer:Add({[self.Lang.Say.Bask[KBM.Lang]] = true,
+					[self.Lang.Say.Sacrifice[KBM.Lang]] = true,}, "say", 30, self.Garau, nil, GU.Lang.Unit.Crawler[KBM.Lang])
 	self.Garau.TimersRef.Crawler.Enabled = self.Settings.Timers.CrawlerEnabled
-	self.Garau.TimersRef.Porter = KBM.MechTimer:Add(self.Lang.PowerMy[KBM.Lang], "say", 45, self.Garau, nil, "Arcane Porter")
+	self.Garau.TimersRef.Porter = KBM.MechTimer:Add(GU.Lang.Say.Power[KBM.Lang], "say", 45, self.Garau, nil, GU.Lang.Unit.Porter[KBM.Lang])
 	self.Garau.TimersRef.Porter.Enabled = self.Settings.Timers.PorterEnabled
-	self.Garau.TimersRef.Essence = KBM.MechTimer:Add(GU.Lang.ArcaneETrig[KBM.Lang], "notify", 18, self.Garau, nil, GU.Lang.ArcaneEMenu[KBM.Lang])
+	self.Garau.TimersRef.Essence = KBM.MechTimer:Add(GU.Lang.Say.Arcane[KBM.Lang], "notify", 18, self.Garau, nil, GU.Lang.Ability.Arcane[KBM.Lang])
 	self.Garau.TimersRef.Essence.Enabled = self.Settings.Timers.EssenceEnabled
 	
 	self.Garau.CastBar = KBM.CastBar:Add(self, self.Garau, true)
