@@ -701,15 +701,17 @@ function KBM.EncTimer:Init()
 			self.Frame.Text:ResizeToText()
 		end
 		if KBM.Options.EncTimer.Enrage then
-			if current < KBM.EnrageTime then
-				EnrageString = KBM.ConvertTime(KBM.EnrageTime - current)
-				self.Enrage.Text:SetText(KBM.Language.Timers.Enrage[KBM.Lang].." "..EnrageString)
-				self.Enrage.Text:ResizeToText()
-				self.Enrage.Progress:SetPoint("RIGHT", self.Enrage.Frame, KBM.TimeElapsed/KBM_CurrentMod.Enrage, nil)
-			else
-				self.Enrage.Text:SetText("!! Enraged !!")
-				self.Enrage.Text:ResizeToText()
-				self.Enrage.Progress:SetPoint("RIGHT", self.Enrage.Frame, "RIGHT")
+			if KBM_CurrentMod.Enrage then
+				if current < KBM.EnrageTime then
+					EnrageString = KBM.ConvertTime(KBM.EnrageTime - current)
+					self.Enrage.Text:SetText(KBM.Language.Timers.Enrage[KBM.Lang].." "..EnrageString)
+					self.Enrage.Text:ResizeToText()
+					self.Enrage.Progress:SetPoint("RIGHT", self.Enrage.Frame, KBM.TimeElapsed/KBM_CurrentMod.Enrage, nil)
+				else
+					self.Enrage.Text:SetText("!! Enraged !!")
+					self.Enrage.Text:ResizeToText()
+					self.Enrage.Progress:SetPoint("RIGHT", self.Enrage.Frame, "RIGHT")
+				end
 			end
 		end
 	end
@@ -719,9 +721,11 @@ function KBM.EncTimer:Init()
 			self.Active = true
 		end
 		if KBM.Options.EncTimer.Enrage then
-			self.Enrage.Frame:SetVisible(true)
-			self.Enrage.Progress:SetPoint("RIGHT", self.Enrage.Frame, "LEFT")
-			self.Active = true
+			if KBM_CurrentMod.Enrage then
+				self.Enrage.Frame:SetVisible(true)
+				self.Enrage.Progress:SetPoint("RIGHT", self.Enrage.Frame, "LEFT")
+				self.Active = true
+			end
 		end
 		if self.Active then
 			self:Update(Time)

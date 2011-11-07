@@ -1,4 +1,8 @@
-﻿v0.4.2
+﻿v0.4.3
+* Fixed: Akylios Phase 1 Wave timer. (No more Error spam).
+* Fixed: Enrage Timer no long shows "!! Enraged !!" when it has no enrage set.
+----
+v0.4.2
 * Fixed: Vladmal Prime's Ancient Flames timer.
 * Fixed: King Molinar's Consuming Essence now triggers correctly.
 * Added: French Translation for Incorporeal Revenant trigger.
