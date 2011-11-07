@@ -431,7 +431,7 @@ function KBM.MechTimer:Add(iTrigger, iType, iTime, iBoss, iStart, iName)
 		self.CastInfo:sRemove()
 		self.TimeBar:sRemove()
 		self.Background:sRemove()
-		if self.iType == "repeat" then
+		if self.Type == "repeat" then
 			self.Starting = true
 			table.insert(KBM.MechTimer.StartTimers, self)
 		end

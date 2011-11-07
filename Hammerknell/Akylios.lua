@@ -138,7 +138,7 @@ function AK:UnitHPCheck(unitDetails, unitID)
 					self.TimeElapsed = 0
 					self.Jornaru.Dead = false
 					self.Jornaru.Casting = false
-					self.TimersRef.Wave:Start(Inspect.Time.Real())
+					self.Jornaru.TimersRef.Wave:Start(Inspect.Time.Real())
 				end
 				self.Jornaru.UnitID = unitID
 				self.Jornaru.Available = true
