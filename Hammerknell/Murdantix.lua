@@ -37,7 +37,7 @@ MX.Murd = {
 	HasCastFilters = false,
 	Timers = {},
 	TimersRef = {},
-	AlertRef = {},
+	AlertsRef = {},
 	Triggers = {},
 	Dead = false,
 	Available = false,
@@ -236,7 +236,7 @@ function MX:Start()
 	self.Murd.TimersRef.Trauma.Enabled = MX.Settings.Timers.TraumaEnabled
 	
 	-- Create Alerts
-	self.Murd.AlertRef.Trauma = KBM.Alert:Create(self.Lang.Trauma[KBM.Lang], 2, true)
+	self.Murd.AlertsRef.Trauma = KBM.Alert:Create(self.Lang.Trauma[KBM.Lang], 2, true)
 	
 	-- Assign Mechanics to Triggers
 	self.Murd.Triggers.Mangling = KBM.Trigger:Create(self.Lang.Mangling[KBM.Lang], "damage", self.Murd)
@@ -247,7 +247,7 @@ function MX:Start()
 	self.Murd.Triggers.Blast:AddTimer(self.Murd.TimersRef.Blast)
 	self.Murd.Triggers.Trauma = KBM.Trigger:Create(self.Lang.Trauma[KBM.Lang], "cast", self.Murd)
 	self.Murd.Triggers.Trauma:AddTimer(self.Murd.TimersRef.Trauma)
-	self.Murd.Triggers.Trauma:AddAlert(self.Murd.AlertRef.Trauma)
+	self.Murd.Triggers.Trauma:AddAlert(self.Murd.AlertsRef.Trauma)
 	
 	self.Murd.CastBar = KBM.CastBar:Add(self, self.Murd, true)
 end

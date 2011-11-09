@@ -490,12 +490,13 @@ function KBM.Trigger:Init()
 		TriggerObj.Stop = {}
 		TriggerObj.Hook = Hook
 		TriggerObj.Unit = Unit
+		TriggerObj.Type = Type
 		
 		function TriggerObj:AddTimer(TimerObj)
 			table.insert(self.Timers, TimerObj)
 		end
 		function TriggerObj:AddAlert(AlertObj, Player)
-			AlertObj.Player = Player
+			--AlertObj.Player = Player
 			table.insert(self.Alerts, AlertObj)
 		end
 		function TriggerObj:AddPhase(PhaseObj)
@@ -506,11 +507,24 @@ function KBM.Trigger:Init()
 		end
 		
 		function TriggerObj:Activate(Caster, Target)
-			for i, Timer in ipairs(self.Timers) do
-				Timer:Start(Inspect.Time.Real())
+			if self.Type == "damage" then
+				for i, Timer in ipairs(self.Timers) do
+					if Timer.Active then
+						if Timer.Remaining < 2 then
+							Timer:Start(Inspect.Time.Real())
+						end
+					else
+						Timer:Start(Inspect.Time.Real())
+					end
+				end
+			else
+				for i, Timer in ipairs(self.Timers) do
+					Timer:Start(Inspect.Time.Real())
+				end
 			end
-			for i, Alert in ipairs(self.Alerts) do
-				Alert:Start()
+			for i, AlertObj in ipairs(self.Alerts) do
+				print(AlertObj.Text)
+				KBM.Alert:Start(AlertObj, Inspect.Time.Real())
 			end
 			for i, Obj in ipairs(self.Stop) do
 				Obj:Stop()

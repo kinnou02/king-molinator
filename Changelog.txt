@@ -1,4 +1,9 @@
-﻿v0.4.4
+﻿v0.4.5
+* Fixed: Errors with Screen Alerts.
+* Fixed: Errors with Damage type triggers.
+* Added: King Molinar's Cursed Blows Screen Alerts.
+----
+v0.4.4
 * Fixed: Error Messages in Prince Hylas encounter.
 * New: First release of KM:Boss Mods alerts, Flashing borders and/or text display.
 * Change: Major overhaul of the Trigger engine allowing for greater flexibility.

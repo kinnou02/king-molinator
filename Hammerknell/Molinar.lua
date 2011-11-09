@@ -110,6 +110,7 @@ KM.Prince = {
 	HasCastFilters = true,
 	Timers = {},
 	TimersRef = {},
+	AlertsRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
@@ -126,6 +127,7 @@ KM.King = {
 	HasCastFilters = true,
 	Timers = {},
 	TimersRef = {},
+	AlertsRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
@@ -884,9 +886,13 @@ function KM:Start()
 	self.King.TimersRef.Rev = KBM.MechTimer:Add(self.Lang.Unit.Revenant[KBM.Lang], 82)
 	self.King.TimersRef.Rev.Enabled = KM.Settings.King.Rev
 	
+	-- Add King's Alerts
+	self.King.AlertsRef.Cursed = KBM.Alert:Create(KM.Lang.Ability.Cursed[KBM.Lang], 8, true)
+	
 	-- Assign King's Mechanics to Triggers
 	self.King.Triggers.Cursed = KBM.Trigger:Create(KM.Lang.Ability.Cursed[KBM.Lang], "cast", self.King)
 	self.King.Triggers.Cursed:AddTimer(self.King.TimersRef.Cursed)
+	self.King.Triggers.Cursed:AddAlert(self.King.AlertsRef.Cursed)
 	self.King.Triggers.Consuming = KBM.Trigger:Create(KM.Lang.Ability.Consuming[KBM.Lang], "cast", self.King)
 	self.King.Triggers.Consuming:AddTimer(self.King.TimersRef.Consuming)
 	self.King.Triggers.Rev = KBM.Trigger:Create(self.Lang.Notify.Revenant[KBM.Lang], "notify", self.King)
