@@ -13,7 +13,6 @@ local ES = {
 		Enabled = true,
 		Handler = nil,
 		Options = nil,
-		ID = "Estrode",
 	},
 	Instance = HK.Name,
 	HasPhases = true,
@@ -22,6 +21,7 @@ local ES = {
 	Timers = {},
 	Lang = {},
 	Enrage = 60 * 15,
+	ID = "Estrode",
 }
 
 ES.Estrode = {
@@ -37,6 +37,7 @@ ES.Estrode = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
+	Triggers = {},
 }
 
 local KBM = KBM_RegisterMod(ES.Estrode.ID, ES)
@@ -181,10 +182,18 @@ function ES:Start()
 	self.Header = KBM.HeaderList[self.Instance]
 	self.Estrode.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Estrode, true, self.Header)
 	self.Estrode.MenuItem.Check:SetEnabled(false)
-	self.Estrode.TimersRef.Soul = KBM.MechTimer:Add(self.Lang.Ability.Soul[KBM.Lang], "cast", 40, self.Estrode, nil)
+	
+	-- Create Timers
+	self.Estrode.TimersRef.Soul = KBM.MechTimer:Add(self.Lang.Ability.Soul[KBM.Lang], 40)
 	self.Estrode.TimersRef.Soul.Enabled = self.Settings.Timers.Soul
-	self.Estrode.TimersRef.Mind = KBM.MechTimer:Add(self.Lang.Say.Mind[KBM.Lang], "say", 60, self.Estrode, nil, self.Lang.Ability.Mind[KBM.Lang])
+	self.Estrode.TimersRef.Mind = KBM.MechTimer:Add(self.Lang.Ability.Mind[KBM.Lang], 60)
 	self.Estrode.TimersRef.Mind.Enabled = self.Settings.Timers.Mind
+	
+	-- Assign Mechanics to Triggers
+	self.Estrode.Triggers.Soul = KBM.Trigger:Create(self.Lang.Ability.Soul[KBM.Lang], "cast", self.Estrode)
+	self.Estrode.Triggers.Soul:AddTimer(self.Estrode.TimersRef.Soul)
+	self.Estrode.Triggers.Mind = KBM.Trigger:Create(self.Lang.Say.Mind[KBM.Lang], "say", self.Estrode)
+	self.Estrode.Triggers.Mind:AddTimer(self.Estrode.TimersRef.Mind)
 	
 	self.Estrode.CastBar = KBM.CastBar:Add(self, self.Estrode, true)
 end

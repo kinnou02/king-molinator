@@ -13,7 +13,6 @@ local SN = {
 		Enabled = true,
 		Handler = nil,
 		Options = nil,
-		ID = "Sicaron",
 	},
 	Instance = HK.Name,
 	HasPhases = true,
@@ -22,6 +21,7 @@ local SN = {
 	Timers = {},
 	Lang = {},
 	Enrage = 60 * 12,
+	ID = "Sicaron",
 }
 
 SN.Sicaron = {

@@ -16,12 +16,12 @@ local KM = {
 		Handler = nil,
 		Options = nil,
 		Name = "King Molinar",
-		ID = "KingMolinar",
 	},
 	Instance = HK.Name,
 	Timers = {},
 	Lang = {},
 	Enrage = 60 * 10,
+	ID = "KingMolinar",
 }
 
 -- Addon Variables
@@ -114,6 +114,7 @@ KM.Prince = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
+	Triggers = {},
 }
 KM.King = {
 	Mod = KM,
@@ -129,6 +130,7 @@ KM.King = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
+	Triggers = {},
 }
 
 local KBM = KBM_RegisterMod("Molinar", KM)
@@ -163,9 +165,12 @@ KM.Lang.Ability.Shout.German = "Verängstigender Schrei"
 KM.Lang.Ability.Cursed = KBM.Language:Add("Cursed Blows")
 KM.Lang.Ability.Cursed.French = "Frappes maudites"
 KM.Lang.Ability.Cursed.German = "Verfluchte Schläge"
-KM.Lang.Ability.Revenant = KBM.Language:Add("Incorporeal Revenant")
-KM.Lang.Ability.Revenant.French = "Revenant chim\195\169rique"
-KM.Lang.Ability.Revenant.German = "Unkörperlicher Wiedergänger"
+
+-- Units Dictionary
+KM.Lang.Unit = {}
+KM.Lang.Unit.Revenant = KBM.Language:Add("Incorporeal Revenant")
+KM.Lang.Unit.Revenant.French = "Revenant chim\195\169rique"
+KM.Lang.Unit.Revenant.German = "Unkörperlicher Wiedergänger"
 
 -- Notify Trigger Dictionary
 KM.Lang.Notify = {}
@@ -843,7 +848,7 @@ function KM.KingMolinar:Options()
 	local KingTimers = Options:AddHeader(KM.Lang.Molinar[KBM.Lang].." timers", self.KingTimers, KM.Settings.King.Timers)
 	KingTimers:AddCheck(KM.Lang.Ability.Cursed[KBM.Lang], self.KingCursed, KM.Settings.King.Cursed)
 	KingTimers:AddCheck(KM.Lang.Ability.Consuming[KBM.Lang], self.KingConsuming, KM.Settings.King.Consuming)
-	KingTimers:AddCheck(KM.Lang.Ability.Revenant[KBM.Lang], self.KingRev, KM.Settings.King.Rev)
+	KingTimers:AddCheck(KM.Lang.Unit.Revenant[KBM.Lang], self.KingRev, KM.Settings.King.Rev)
 	Options:AddSpacer()
 	local PrinceTimers = Options:AddHeader(KM.Lang.Dollin[KBM.Lang].." timers", self.PrinceTimers, KM.Settings.Prince.Timers)
 	PrinceTimers:AddCheck(KM.Lang.Ability.Terminate[KBM.Lang], self.PrinceTerminate, KM.Settings.Prince.Terminate)
@@ -871,18 +876,37 @@ function KM:Start()
 	self.KingMolinar.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.KingMolinar, true, self.Header)
 	self.KingMolinar.MenuItem.Check:SetEnabled(false)
 	
-	self.King.TimersRef.Cursed = KBM.MechTimer:Add(KM.Lang.Ability.Cursed[KBM.Lang], "cast", 55, self.King)
+	-- Add King's Timers
+	self.King.TimersRef.Cursed = KBM.MechTimer:Add(KM.Lang.Ability.Cursed[KBM.Lang], 55)
 	self.King.TimersRef.Cursed.Enabled = KM.Settings.King.Cursed
-	self.King.TimersRef.Consuming = KBM.MechTimer:Add(KM.Lang.Ability.Consuming[KBM.Lang], "cast", 22, self.King, nil, "(King) "..KM.Lang.Ability.Consuming[KBM.Lang])
+	self.King.TimersRef.Consuming = KBM.MechTimer:Add("(King) "..KM.Lang.Ability.Consuming[KBM.Lang], 22)
 	self.King.TimersRef.Consuming.Enabled = KM.Settings.King.Consuming
-	self.Prince.TimersRef.Terminate = KBM.MechTimer:Add(KM.Lang.Ability.Terminate[KBM.Lang], "cast", 21, self.Prince, nil)
-	self.Prince.TimersRef.Terminate.Enabled = KM.Settings.Prince.Terminate
-	self.Prince.TimersRef.Consuming = KBM.MechTimer:Add(KM.Lang.Ability.Consuming[KBM.Lang], "cast", 22, self.Prince, nil, "(Prince) "..KM.Lang.Ability.Consuming[KBM.Lang])
-	self.Prince.TimersRef.Consuming.Enabled = KM.Settings.Prince.Consuming
-	self.Prince.TimersRef.Runic = KBM.MechTimer:Add(KM.Lang.Ability.Runic[KBM.Lang], "cast", 48, self.Prince, nil)
-	self.Prince.TimersRef.Runic.Enabled = KM.Settings.Prince.Runic
-	self.King.TimersRef.Rev = KBM.MechTimer:Add(self.Lang.Notify.Revenant[KBM.Lang], "notify", 82, KM, nil, self.Lang.Ability.Revenant[KBM.Lang])
+	self.King.TimersRef.Rev = KBM.MechTimer:Add(self.Lang.Unit.Revenant[KBM.Lang], 82)
 	self.King.TimersRef.Rev.Enabled = KM.Settings.King.Rev
+	
+	-- Assign King's Mechanics to Triggers
+	self.King.Triggers.Cursed = KBM.Trigger:Create(KM.Lang.Ability.Cursed[KBM.Lang], "cast", self.King)
+	self.King.Triggers.Cursed:AddTimer(self.King.TimersRef.Cursed)
+	self.King.Triggers.Consuming = KBM.Trigger:Create(KM.Lang.Ability.Consuming[KBM.Lang], "cast", self.King)
+	self.King.Triggers.Consuming:AddTimer(self.King.TimersRef.Consuming)
+	self.King.Triggers.Rev = KBM.Trigger:Create(self.Lang.Notify.Revenant[KBM.Lang], "notify", self.King)
+	self.King.Triggers.Rev:AddTimer(self.King.TimersRef.Rev)
+	
+	-- Add Prince's Timers
+	self.Prince.TimersRef.Terminate = KBM.MechTimer:Add(KM.Lang.Ability.Terminate[KBM.Lang], 21)
+	self.Prince.TimersRef.Terminate.Enabled = KM.Settings.Prince.Terminate
+	self.Prince.TimersRef.Consuming = KBM.MechTimer:Add("(Prince) "..KM.Lang.Ability.Consuming[KBM.Lang], 22)
+	self.Prince.TimersRef.Consuming.Enabled = KM.Settings.Prince.Consuming
+	self.Prince.TimersRef.Runic = KBM.MechTimer:Add(KM.Lang.Ability.Runic[KBM.Lang], 48)
+	self.Prince.TimersRef.Runic.Enabled = KM.Settings.Prince.Runic
+	
+	-- Assign Prince's Mechanics to Triggers
+	self.Prince.Triggers.Terminate = KBM.Trigger:Create(KM.Lang.Ability.Terminate[KBM.Lang], "cast", self.Prince)
+	self.Prince.Triggers.Terminate:AddTimer(self.Prince.TimersRef.Terminate)
+	self.Prince.Triggers.Consuming = KBM.Trigger:Create(KM.Lang.Ability.Terminate[KBM.Lang], "cast", self.Prince)
+	self.Prince.Triggers.Consuming:AddTimer(self.Prince.TimersRef.Consuming)
+	self.Prince.Triggers.Runic = KBM.Trigger:Create(KM.Lang.Ability.Runic[KBM.Lang], "cast", self.Prince)
+	self.Prince.Triggers.Runic:AddTimer(self.Prince.TimersRef.Runic)
 	
 	self.King.CastBar = KBM.CastBar:Add(self, self.King, self.King.PinCastBar, self.Settings.KingBar)
 	self.Prince.CastBar = KBM.CastBar:Add(self, self.Prince, self.Prince.PinCastBar, self.Settings.PrinceBar)

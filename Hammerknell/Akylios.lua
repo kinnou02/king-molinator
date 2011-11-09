@@ -13,7 +13,6 @@ local AK = {
 		Enabled = true,
 		Handler = nil,
 		Options = nil,
-		ID = "Akylios",
 	},
 	Instance = HK.Name,
 	HasPhases = true,
@@ -21,6 +20,7 @@ local AK = {
 	PhaseList = {},
 	Timers = {},
 	Lang = {},
+	ID = "Akylios",
 }
 
 AK.Jornaru = {
@@ -35,6 +35,7 @@ AK.Jornaru = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
+	Triggers = {},
 }
 
 AK.Akylios = {
@@ -49,6 +50,7 @@ AK.Akylios = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
+	Triggers = {},
 }
 
 local KBM = KBM_RegisterMod(AK.Akylios.ID, AK)
@@ -175,6 +177,13 @@ function AK:Start()
 	self.Header = KBM.HeaderList[self.Instance]
 	self.Akylios.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Akylios, true, self.Header)
 	self.Akylios.MenuItem.Check:SetEnabled(false)
-	self.Jornaru.TimersRef.Wave = KBM.MechTimer:Add("Wave1", "repeat", 40, self, nil, "Tidal Wave")
+	
+	-- Create Timers
+	self.Jornaru.TimersRef.Wave = KBM.MechTimer:Add("Tidal Wave", 40, true)
 	self.Jornaru.TimersRef.Wave.Enable = self.Settings.Timers.WaveStartEnabled
+	
+	-- Assign Mechanics to Triggers
+	self.Jornaru.Triggers.Start = KBM.Trigger:Create("Enounter Start", "start", self.Jornaru)
+	self.Jornaru.Triggers.Start:AddTimer(self.Jornaru.TimersRef.Wave)
+	
 end

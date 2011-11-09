@@ -13,7 +13,6 @@ local VP = {
 		Enabled = true,
 		Handler = nil,
 		Options = nil,
-		ID = "Prime",
 	},
 	Instance = HK.Name,
 	HasPhases = true,
@@ -22,6 +21,7 @@ local VP = {
 	Timers = {},
 	Lang = {},
 	Enrage = 60 * 11, 
+	ID = "Prime",
 }
 
 VP.Prime = {
@@ -37,6 +37,7 @@ VP.Prime = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
+	Triggers = {},
 }
 
 local KBM = KBM_RegisterMod(VP.Prime.ID, VP)
@@ -166,8 +167,14 @@ function VP:Start()
 	self.Header = KBM.HeaderList[self.Instance]
 	self.Prime.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Prime, true, self.Header)
 	self.Prime.MenuItem.Check:SetEnabled(false)
-	self.Prime.TimersRef.Flames = KBM.MechTimer:Add(self.Lang.Flames[KBM.Lang], "cast", 30, self.Prime, nil)
+	
+	-- Add Timers
+	self.Prime.TimersRef.Flames = KBM.MechTimer:Add(self.Lang.Flames[KBM.Lang], 30)
 	self.Prime.TimersRef.Flames.Enabled = self.Settings.Timers.FlamesEnabled
+	
+	-- Add Mechanics to Triggers
+	self.Prime.Triggers.Flames = KBM.Trigger:Create(self.Lang.Flames[KBM.Lang], "cast", self.Prime)
+	self.Prime.Triggers.Flames:AddTimer(self.Prime.TimersRef.Flames)
 	
 	self.Prime.CastBar = KBM.CastBar:Add(self, self.Prime, true)
 end

@@ -14,7 +14,6 @@ local GU = {
 		Enabled = true,
 		Handler = nil,
 		Options = nil,
-		ID = "Garau",
 	},
 	Instance = HK.Name,
 	HasPhases = true,
@@ -23,6 +22,7 @@ local GU = {
 	Timers = {},
 	Lang = {},
 	Enrage = 60 * 12,
+	ID = "Garau",
 }
 
 GU.Garau = {
@@ -39,6 +39,7 @@ GU.Garau = {
 	UnitID = nil,
 	Descript = "Inquisitor Garau",
 	TimeOut = 5,
+	Triggers = {},
 }
 
 local KBM = KBM_RegisterMod(GU.Garau.ID, GU)
@@ -214,15 +215,28 @@ function GU:Start()
 	self.Header = KBM.HeaderList[self.Instance]
 	self.Garau.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Garau, true, self.Header)
 	self.Garau.MenuItem.Check:SetEnabled(false)
-	self.Garau.TimersRef.Blood = KBM.MechTimer:Add(GU.Lang.Ability.Blood[KBM.Lang], "damage", 18, self.Garau, nil)
+	
+	-- Create Timers
+	self.Garau.TimersRef.Blood = KBM.MechTimer:Add(GU.Lang.Ability.Blood[KBM.Lang], 18)
 	self.Garau.TimersRef.Blood.Enabled = self.Settings.Timers.BloodEnabled
-	self.Garau.TimersRef.Crawler = KBM.MechTimer:Add({[self.Lang.Say.Bask[KBM.Lang]] = true,
-					[self.Lang.Say.Sacrifice[KBM.Lang]] = true,}, "say", 30, self.Garau, nil, GU.Lang.Unit.Crawler[KBM.Lang])
+	self.Garau.TimersRef.Crawler = KBM.MechTimer:Add(self.Lang.Unit.Crawler[KBM.Lang], 30)
 	self.Garau.TimersRef.Crawler.Enabled = self.Settings.Timers.CrawlerEnabled
-	self.Garau.TimersRef.Porter = KBM.MechTimer:Add(GU.Lang.Say.Power[KBM.Lang], "say", 45, self.Garau, nil, GU.Lang.Unit.Porter[KBM.Lang])
+	self.Garau.TimersRef.Porter = KBM.MechTimer:Add(GU.Lang.Unit.Porter[KBM.Lang], 45)
 	self.Garau.TimersRef.Porter.Enabled = self.Settings.Timers.PorterEnabled
-	self.Garau.TimersRef.Essence = KBM.MechTimer:Add(GU.Lang.Say.Arcane[KBM.Lang], "notify", 18, self.Garau, nil, GU.Lang.Ability.Arcane[KBM.Lang])
+	self.Garau.TimersRef.Essence = KBM.MechTimer:Add(GU.Lang.Ability.Arcane[KBM.Lang], 18)
 	self.Garau.TimersRef.Essence.Enabled = self.Settings.Timers.EssenceEnabled
+	
+	-- Assign Mechanics to Triggers
+	self.Garau.Triggers.Blood = KBM.Trigger:Create(GU.Lang.Ability.Blood[KBM.Lang], "damage", self.Garau)
+	self.Garau.Triggers.Blood:AddTimer(self.Garau.TimersRef.Blood)
+	self.Garau.Triggers.CrawlerA = KBM.Trigger:Create(GU.Lang.Say.Bask[KBM.Lang], "say", self.Garau)
+	self.Garau.Triggers.CrawlerA:AddTimer(self.Garau.TimersRef.Crawler)
+	self.Garau.Triggers.CrawlerB = KBM.Trigger:Create(GU.Lang.Say.Sacrifice[KBM.Lang], "say", self.Garau)
+	self.Garau.Triggers.CrawlerB:AddTimer(self.Garau.TimersRef.Crawler)
+	self.Garau.Triggers.Porter = KBM.Trigger:Create(GU.Lang.Say.Power[KBM.Lang], "say", self.Garau)
+	self.Garau.Triggers.Porter:AddTimer(self.Garau.TimersRef.Porter)
+	self.Garau.Triggers.Essence = KBM.Trigger:Create(GU.Lang.Say.Arcane[KBM.Lang], "notify", self.Garau)
+	self.Garau.Triggers.Essence:AddTimer(self.Garau.TimersRef.Essence)
 	
 	self.Garau.CastBar = KBM.CastBar:Add(self, self.Garau, true)
 end

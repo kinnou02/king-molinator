@@ -4,7 +4,8 @@
 --
 
 KBMMZ_Settings = nil
-HK = KBMHK_Register()
+
+local HK = KBMHK_Register()
 
 local MZ = {
 	ModEnabled = true,
@@ -13,7 +14,6 @@ local MZ = {
 		Enabled = true,
 		Handler = nil,
 		Options = nil,
-		ID = "Matron",
 	},
 	Instance = HK.Name,
 	HasPhases = true,
@@ -21,6 +21,7 @@ local MZ = {
 	PhaseList = {},
 	Timers = {},
 	Lang = {},
+	ID = "Matron",
 }
 
 MZ.Matron = {
@@ -32,16 +33,23 @@ MZ.Matron = {
 	CastFilters = {},
 	Timers = {},
 	TimersRef = {},
+	AlertsRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
+	Triggers = {},
 }
 
 local KBM = KBM_RegisterMod(MZ.Matron.ID, MZ)
 
 MZ.Lang.Matron = KBM.Language:Add(MZ.Matron.Name)
 MZ.Lang.Matron.German = "Matrone Zamira"
+
+-- Ability Dictionary
+MZ.Lang.Ability = {}
+MZ.Lang.Ability.Concussion = KBM.Language:Add("Dark Concussion")
+MZ.Lang.Ability.Blast = KBM.Language:Add("Hideous Blast")
 
 MZ.Matron.Name = MZ.Lang.Matron[KBM.Lang]
 
@@ -58,6 +66,12 @@ function MZ:InitVars()
 	self.Settings = {
 		Timers = {
 			Enabled = true,
+			Concussion = true,
+		},
+		Alerts = {
+			Enabled = true,
+			Concussion = true,
+			Blast = true,
 		},
 		CastBar = {
 			x = false,
@@ -147,11 +161,30 @@ end
 
 function MZ.Matron:Options()
 	function self:TimersEnabled(bool)
+		MZ.Settings.Timers.Enabled = bool
+	end
+	function self:ConcussionTimer(bool)
+		MZ.Settings.Timers.Concussion = bool
+		MZ.Matron.TimersRef.Concussion.Enabled = bool
+	end
+	function self:AlertsEnabled(bool)
+		MZ.Settings.Alerts.Enabled = bool
+	end
+	function self:ConcussionAlert(bool)
+		MZ.Settings.Alerts.Concussion = bool
+		MZ.Matron.AlertsRef.Concussion.Enabled = bool
+	end
+	function self:BlastAlert(bool)
+		MZ.Settings.Alerts.Blast = bool
+		MZ.Matron.AlertsRef.Blast.Enabled = bool
 	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
-	local Timers = Options:AddHeader("Timers Enabled", self.TimersEnabled, MZ.Settings.Timers.Enabled)
-	--Timers:AddCheck("Tidal Wave (Phase 1)", self.WaveStartEnabled, MZ.Settings.Timers.WaveStartEnabled)	
+	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, MZ.Settings.Timers.Enabled)
+	Timers:AddCheck(MZ.Lang.Ability.Concussion[KBM.Lang], self.ConcussionTimer, MZ.Settings.Timers.Concussion)
+	local Alerts = Options:AddHeader(KBM.Language.Options.AlertEnabled[KBM.Lang], self.AlertsEnabled, MZ.Settings.Alerts.Enabled)
+	Alerts:AddCheck(MZ.Lang.Ability.Concussion[KBM.Lang], self.ConcussionAlert, MZ.Settings.Alerts.Concussion)
+	Alerts:AddCheck(MZ.Lang.Ability.Blast[KBM.Lang], self.BlastAlert, MZ.Settings.Alerts.Blast)
 	
 end
 
@@ -159,8 +192,19 @@ function MZ:Start()
 	self.Header = KBM.HeaderList[self.Instance]
 	self.Matron.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Matron, true, self.Header)
 	self.Matron.MenuItem.Check:SetEnabled(false)
-	--self.Jornaru.TimersRef.Wave = KBM.MechTimer:Add("Wave1", "repeat", 40, self, nil, "Tidal Wave")
-	--self.Jornaru.TimersRef.Wave.Enable = self.Settings.Timers.WaveStartEnabled
+		
+	-- Create Timers
+	self.Matron.TimersRef.Concussion = KBM.MechTimer:Add(self.Lang.Ability.Concussion[KBM.Lang], 15)
+	
+	-- Create Alerts
+	self.Matron.AlertsRef.Concussion = KBM.Alert:Create(self.Lang.Ability.Concussion[KBM.Lang], 3, true)
+	self.Matron.AlertsRef.Blast = KBM.Alert:Create(self.Lang.Ability.Blast[KBM.Lang], 2, true)
+	
+	-- Assign Mechanics to Triggers
+	self.Matron.Triggers.Concussion = KBM.Trigger:Create(self.Lang.Ability.Concussion[KBM.Lang], "cast", self.Matron)
+	self.Matron.Triggers.Concussion:AddTimer(self.Matron.TimersRef.Concussion)
+	self.Matron.Triggers.Concussion:AddAlert(self.Matron.AlertsRef.Concussion)
+	self.Matron.Triggers.Blast = KBM.Trigger:Create(self.Lang.Ability.Blast[KBM.Lang], "cast", self.Matron)
 	
 	self.Matron.CastBar = KBM.CastBar:Add(self, self.Matron, true)
 end

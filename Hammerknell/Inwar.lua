@@ -13,7 +13,6 @@ local ID = {
 		Enabled = true,
 		Handler = nil,
 		Options = nil,
-		ID = "Inwar",
 	},
 	Instance = HK.Name,
 	HasPhases = true,
@@ -21,6 +20,7 @@ local ID = {
 	PhaseList = {},
 	Timers = {},
 	Lang = {},
+	ID = "Inwar",
 }
 
 ID.Inwar = {

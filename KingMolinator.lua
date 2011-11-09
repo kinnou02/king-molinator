@@ -12,6 +12,7 @@ KBM.MenuOptions = {
 	Timers = {},
 	CastBars = {},
 	TankSwap = {},
+	Alerts = {},
 	Main = {},
 	Enabled = true,
 	Handler = nil,
@@ -36,11 +37,12 @@ local function KBM_DefineVars(AddonID)
 			},
 			Alert = {
 				Enabled = true,
-				ColorRed = 1,
-				ColorGreen = 0,
-				ColorBlue = 0,
 				Flash = true,
 				Notify = true,
+				Visible = false,
+				Unlocked = false,
+				x = false,
+				y = false,
 			},
 			EncTimer = {
 				x = false,
@@ -213,6 +215,8 @@ KBM.TankSwap.Triggers = {}
 KBM.EncTimer = {}
 KBM.Button = {}
 KBM.PhaseMonitor = {}
+KBM.Trigger = {}
+KBM.Alert = {}
 
 function KBM.Language:Add(Phrase)
 	local SetPhrase = {}
@@ -275,13 +279,18 @@ KBM.Language.Options.LockButton = KBM.Language:Add("Unlock Button (right-click t
 KBM.Language.Options.LockButton.French = "D\195\169bloquer Bouton (click-droit pour d\195\169placer)."
 KBM.Language.Options.LockButton.German = "Schalter ist verschiebbar (Rechts-Klick zum verschieben)."
 -- Tank Swap related
+KBM.Language.Options.TankSwap = KBM.Language:Add("Tank-Swaps")
+KBM.Language.Options.TankSwap.German = "Tank Wechsel"
 KBM.Language.Options.Tank = KBM.Language:Add("Show Test Tanks.")
 KBM.Language.Options.Tank.French = "Afficher Test Tanks."
 KBM.Language.Options.Tank.German = "Zeige Test-Tanks-Fenster."
-KBM.Language.Options.TankSwap = KBM.Language:Add("Tank-Swaps")
-KBM.Language.Options.TankSwap.German = "Tank Wechsel"
 KBM.Language.Options.TankSwapEnabled = KBM.Language:Add("Tank-Swaps enabled.")
 KBM.Language.Options.TankSwapEnabled.German = "Tank Wechsel anzeigen."
+-- Alert related
+KBM.Language.Options.Alert = KBM.Language:Add("Screen Alerts")
+KBM.Language.Options.AlertEnabled = KBM.Language:Add("Screen Alerts enabled.")
+KBM.Language.Options.AlertFlash = KBM.Language:Add("Screen flash enabled.")
+KBM.Language.Options.AlertText = KBM.Language:Add("Alert warning text enabled.")
 -- Misc.
 KBM.Language.Options.Settings = KBM.Language:Add("Settings")
 KBM.Language.Options.Settings.French = "Configurations"
@@ -299,16 +308,8 @@ function KBM.MechTimer:Init()
 	self.TimerList = {}
 	self.ActiveTimers = {}
 	self.RemoveTimers = {}
-	self.WaitTimers = {}
 	self.StartTimers = {}
-	self.RepeatTimers = {}
 	self.LastTimer = nil
-	self.DamageTimers = {}
-	self.SayTimers = {}
-	self.NotifyTimers = {}
-	self.CastTimers = {}
-	self.BuffTimers = {}
-	self.CombatTimers = {}
 	self.Anchor = UI.CreateFrame("Frame", "Timer Anchor", KBM.Context)
 	self.Anchor:SetWidth(KBM.Options.MechTimer.w * KBM.Options.MechTimer.wScale)
 	self.Anchor:SetHeight(KBM.Options.MechTimer.h * KBM.Options.MechTimer.hScale)
@@ -339,27 +340,17 @@ function KBM.MechTimer:Init()
 	self.Anchor.Drag:SetVisible(KBM.Options.MechTimer.Unlocked)
 end
 
-function KBM.MechTimer:Add(iTrigger, iType, iTime, iBoss, iStart, iName)
+function KBM.MechTimer:Add(Name, Duration, Repeat)
 	local Timer = {}
 	Timer.Active = false
 	Timer.TimeStart = nil
 	Timer.Removing = false
 	Timer.Starting = false
-	if type(iTrigger) == "table" then
-		Timer.Trigger = iName
-	else
-		Timer.Trigger = iTrigger
-	end
-	if not iName then
-		Timer.Name = iTrigger
-	else
-		Timer.Name = iName
-	end
-	Timer.Type = iType
-	Timer.Time = iTime
-	Timer.Boss = iBoss
+	Timer.Time = Duration
 	Timer.Delay = iStart
 	Timer.Enabled = true
+	Timer.Repeat = Repeat
+	Timer.Name = Name
 	function Timer:Start(CurrentTime)
 		if self.Enabled then
 			if self.Active then
@@ -451,11 +442,10 @@ function KBM.MechTimer:Add(iTrigger, iType, iTime, iBoss, iStart, iName)
 		self.CastInfo:sRemove()
 		self.TimeBar:sRemove()
 		self.Background:sRemove()
-		if self.Type == "repeat" then
+		if KBM.Testing then
 			self.Starting = true
 			table.insert(KBM.MechTimer.StartTimers, self)
-		end
-		if KBM.Testing then
+		elseif self.Repeat then
 			self.Starting = true
 			table.insert(KBM.MechTimer.StartTimers, self)
 		end
@@ -469,69 +459,113 @@ function KBM.MechTimer:Add(iTrigger, iType, iTime, iBoss, iStart, iName)
 			self.TimeBar:SetWidth(self.Background:GetWidth() * (self.Remaining/self.Time))
 			if self.Remaining <= 0 then
 				self.Remaining = 0
-				self.Removing = true
 				table.insert(KBM.MechTimer.RemoveTimers, self)
+				self.Removing = true
 			end
 		end
-	end
-	if iType == "damage" then
-		self.DamageTimers[iTrigger] = Timer
-		iBoss.Timers[iTrigger] = Timer
-	elseif iType == "say" then
-		self.SayTimers[iName] = {}
-		self.SayTimers[iName].Triggers = {}
-		self.SayTimers[iName].Timer = Timer
-		iBoss.Timers[iName] = {}
-		iBoss.Timers[iName].Triggers = {}
-		iBoss.Timers[iName].Timer = Timer
-		if type(iTrigger) == "table" then
-			for sTrigger in pairs(iTrigger) do
-				table.insert(self.SayTimers[iName], sTrigger)
-				table.insert(iBoss.Timers[iName], sTrigger)
-			end
-		else
-			table.insert(self.SayTimers[iName], iTrigger)
-			table.insert(iBoss.Timers[iName], iTrigger)
-		end
-	elseif iType == "cast" then
-		if self.CastTimers[iTrigger] then
-			self.CastTimers[iTrigger][iBoss.Name] = Timer
-		else
-			self.CastTimers[iTrigger] = {}
-			self.CastTimers[iTrigger][iBoss.Name] = Timer
-		end
-		iBoss.Timers[iTrigger] = Timer
-	elseif iType == "notify" then
-		self.NotifyTimers[iName] = {}
-		self.NotifyTimers[iName].Triggers = {}
-		self.NotifyTimers[iName].Timer = Timer
-		iBoss.Timers[iName] = {}
-		iBoss.Timers[iName].Triggers = {}
-		iBoss.Timers[iName].Timer = Timer	
-		if type(iTrigger) == "table" then
-			for nTrigger in pairs(iTrigger) do
-				table.insert(self.NotifyTimers[iName].Triggers, nTrigger)
-				table.insert(self.NotifyTimers[iName].Triggers, nTrigger)
-			end
-		else
-			table.insert(self.NotifyTimers[iName].Triggers, iTrigger)
-			table.insert(self.NotifyTimers[iName].Triggers, iTrigger)
-		end
-	elseif iType == "buff" then
-		self.Bufftimers[iTrigger] = Timer
-		iBoss.Timers[iTrigger] = Timer
-	elseif iType == "repeat" then
-		self.RepeatTimers[iTrigger] = Timer
-		iBoss.Timers[iTrigger] = Timer
-	else -- iType == "Combat start"
-		self.CombatTimers[iTrigger] = Timer
-		iBoss.Timers[iTrigger] = Timer
 	end
 	if KBM.Testing then
 		Timer:Start(Inspect.Time.Real())
 		table.insert(self.testTimerList, iTrigger)
 	end
 	return Timer
+end
+
+function KBM.Trigger:Init()
+
+	self.Notify = {}
+	self.Say = {}
+	self.Damage = {}
+	self.Cast = {}
+	self.Percent = {}
+	self.Combat = {}
+	self.Start = {}
+	self.Death = {}
+	self.Buff = {}
+
+	function self:Create(Trigger, Type, Unit, Hook)
+		TriggerObj = {}
+		TriggerObj.Timers = {}
+		TriggerObj.Alerts = {}
+		TriggerObj.Stop = {}
+		TriggerObj.Hook = Hook
+		TriggerObj.Unit = Unit
+		
+		function TriggerObj:AddTimer(TimerObj)
+			table.insert(self.Timers, TimerObj)
+		end
+		function TriggerObj:AddAlert(AlertObj, Player)
+			AlertObj.Player = Player
+			table.insert(self.Alerts, AlertObj)
+		end
+		function TriggerObj:AddPhase(PhaseObj)
+			self.Phase = PhaseObj 
+		end
+		function TriggerObj:AddStop(Object)
+			table.insert(self.Stop, Object)
+		end
+		
+		function TriggerObj:Activate(Caster, Target)
+			for i, Timer in ipairs(self.Timers) do
+				Timer:Start(Inspect.Time.Real())
+			end
+			for i, Alert in ipairs(self.Alerts) do
+				Alert:Start()
+			end
+			for i, Obj in ipairs(self.Stop) do
+				Obj:Stop()
+			end
+		end
+		
+		if Type == "notify" then
+			TriggerObj.Phrase = Trigger
+			if not self.Notify[Unit.Mod.ID] then
+				self.Notify[Unit.Mod.ID] = {}
+			end
+			table.insert(self.Notify[Unit.Mod.ID], TriggerObj)
+		elseif Type == "say" then
+			TriggerObj.Phrase = Trigger
+			if not self.Say[Unit.Mod.ID] then
+				self.Say[Unit.Mod.ID] = {}
+			end
+			table.insert(self.Say[Unit.Mod.ID], TriggerObj)
+		elseif Type == "damage" then
+			self.Damage[Trigger] = TriggerObj
+		elseif Type == "cast" then
+			if not self.Cast[Trigger] then
+				self.Cast[Trigger] = {}
+			end
+			self.Cast[Trigger][Unit.Name] = TriggerObj
+		elseif Type == "percent" then
+			TriggerObj.Percent = Trigger
+			self.Percent[Unit.Name] = TriggerObj
+		elseif Type == "combat" then
+			self.Combat[Trigger] = TriggerObj
+		elseif Type == "start" then
+			if not self.Start[Unit.Mod.ID] then
+				self.Start[Unit.Mod.ID] = {}
+			end
+			table.insert(self.Start[Unit.Mod.ID], TriggerObj)
+		elseif Type == "death" then
+			self.Death[Trigger] = TriggerObj
+		elseif Type == "buff" then
+			self.Buff[Trigger] = TriggerObj
+		end
+		
+		return TriggerObj
+	end
+	function self:Unload()
+		self.Notify = {}
+		self.Say = {}
+		self.Damage = {}
+		self.Cast = {}
+		self.Percent = {}
+		self.Combat = {}
+		self.Start = {}
+		self.Death = {}
+		self.Buff = {}
+	end
+
 end
 
 function KBM:CallFrame(parent)
@@ -800,20 +834,22 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 					if uDetails.health > 0 then
 						KBM.BossID[UnitID].dead = false
 						KBM.BossID[UnitID].available = true
-						KBM.Encounter = true
-						KBM.CurrentBoss = UnitID
-						KBM_CurrentBossName = uDetails.Name
-						KBM_CurrentMod = KBM.BossID[UnitID].Mod
-						if not KBM_CurrentMod.EncounterRunning then
-							print("Encounter Started: "..KBM_Boss[uDetails.name].Descript)
-							print("Good luck!")
-							KBM.TimeElapsed = 0
-							KBM.StartTime = Inspect.Time.Real()
-							if KBM_CurrentMod.Enrage then
-								KBM.EnrageTime = KBM.StartTime + KBM_CurrentMod.Enrage
-							end
-							if KBM.Options.EncTimer.Enabled then
-								KBM.EncTimer:Start(KBM.StartTime)
+						if not KBM.Encounter then
+							KBM.Encounter = true
+							KBM.CurrentBoss = UnitID
+							KBM_CurrentBossName = uDetails.Name
+							KBM_CurrentMod = KBM.BossID[UnitID].Mod
+							if not KBM_CurrentMod.EncounterRunning then
+								print("Encounter Started: "..KBM_Boss[uDetails.name].Descript)
+								print("Good luck!")
+								KBM.TimeElapsed = 0
+								KBM.StartTime = Inspect.Time.Real()
+								if KBM_CurrentMod.Enrage then
+									KBM.EnrageTime = KBM.StartTime + KBM_CurrentMod.Enrage
+								end
+								if KBM.Options.EncTimer.Enabled then
+									KBM.EncTimer:Start(KBM.StartTime)
+								end
 							end
 						end
 						KBM.BossID[UnitID].Boss = KBM_CurrentMod:UnitHPCheck(uDetails, UnitID)
@@ -863,15 +899,11 @@ local function KBM_UnitHPCheck(info)
 			KBM.CheckActiveBoss(cDetails, cUnitID)
 		end
 	end
-	if KBM_CurrentMod then
-		if #KBM.MechTimer.DamageTimers > 0 then
+	if KBM.Encounter then
+		if KBM_CurrentMod then
 			if info.abilityName then
-				if KBM.MechTimer.DamageTimer[info.abilityName] then
-					if KBM.MechTimer.DamageTimer[info.abilityName].Enabled then
-						if KBM.MechTimer.DamageTimer[info.abilityName].Remaining < 2 then
-							KBM.MechTimer.DamageTimer[info.abilityName]:Start(Inspect.Time.Real())
-						end
-					end
+				if KBM.Trigger.Damage[info.abilityName] then
+					KBM.Trigger.Damage[info.abilityName]:Activate()
 				end
 			end
 		end
@@ -1133,6 +1165,157 @@ function KBM.TankSwap:Init()
 	end
 end
 
+function KBM.Alert:Init()
+
+	self.List = {}
+	self.Anchor = UI.CreateFrame("Frame", "Alert Text Anchor", KBM.Context)
+	self.Anchor:SetBackgroundColor(0,0,0,0)
+	self.Text = UI.CreateFrame("Text", "Alert Text", self.Anchor)
+	self.Anchor:SetVisible(KBM.Options.Alert.Visible)
+	if KBM.Options.Alert.x then
+		self.Anchor:SetPoint("TOPLEFT", UIParent, "TOPLEFT", KBM.Options.Alert.x, KBM.Options.Alert.y)
+	else
+		self.Anchor:SetPoint("CENTERX", UIParent, "CENTERX")
+		self.Anchor:SetPoint("CENTERY", UIParent, nil, 0.25)
+	end
+	self.Text:SetFontSize(32)
+	self.Text:SetText(" Alert Anchor ")
+	self.Text:SetFontColor(1,1,1)
+	self.Text:ResizeToText()
+	self.Text:SetPoint("CENTER", self.Anchor, "CENTER")
+	self.Text:SetLayer(2)
+	self.Anchor:SetWidth(self.Text:GetWidth())
+	self.Anchor:SetHeight(self.Text:GetHeight())
+	self.Shadow = UI.CreateFrame("Text", "Alert Text Outline", self.Anchor)
+	self.Shadow:SetPoint("CENTER", self.Text, "CENTER", 2, 2)
+	self.Shadow:SetText(self.Text:GetText())
+	self.Shadow:SetFontSize(self.Text:GetFontSize())
+	self.Shadow:SetFontColor(0,0,0)
+	self.Shadow:ResizeToText()
+	self.Shadow:SetLayer(1)
+	self.Left = UI.CreateFrame("Texture", "Left Alert", KBM.Context)
+	self.Left:SetTexture("KingMolinator", "Media/Alert_Left_Red.png")
+	self.Left:SetPoint("TOPLEFT", UIParent, "TOPLEFT")
+	self.Left:SetPoint("BOTTOM", UIParent, "BOTTOM")
+	self.Left:SetVisible(false)
+	self.Right = UI.CreateFrame("Texture", "Right Alert", KBM.Context)
+	self.Right:SetTexture("KingMolinator", "Media/Alert_Right_Red.png")
+	self.Right:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT")
+	self.Right:SetPoint("BOTTOM", UIParent, "BOTTOM")
+	self.Right:SetVisible(false)
+	self.Enabled = true
+	self.Current = nil
+	self.StopTime = 0
+	self.Alpha = 1
+	self.Notify = KBM.Options.Alert.Notify
+	self.Flash = KBM.Options.Alert.Flash
+	self.Speed = 0.025
+	self.Direction = -self.Speed
+	self.Color = "red"
+	function self.Anchor:Update(uType)
+		if uType == "end" then
+			KBM.Options.Alert.x = self:GetLeft()
+			KBM.Options.Alert.y = self:GetTop()
+		end
+	end
+	self.Anchor.Drag = KBM.AttachDragFrame(self.Anchor, function(uType) self.Anchor:Update(uType) end, "Alert Anchor Drag", 2)
+	self.Anchor.Drag:SetLayer(3)
+	self.Anchor.Drag:SetVisible(KBM.Options.Alert.Unlocked)
+	
+	function self:Create(Text, Duration, Flash, Color)
+		AlertObj = {}
+		AlertObj.Duration = Duration
+		AlertObj.Flash = Flash
+		AlertObj.Color = Color
+		AlertObj.Text = Text
+		AlertObj.Enabled = false
+		
+		table.insert(self.List, AlertObj)
+		return AlertObj
+	end
+	function self:Start(AlertObj, CurrentTime)
+		if self.Current then
+			self.Current:Stop()
+		end
+		if KBM.Options.Alert.Enabled then
+			self.Current = AlertObj
+			if KBM.Options.Alert.Flash then
+				self.Left:SetAlpha(1)
+				self.Left:SetVisible(true)
+				self.Right:SetAlpha(1)
+				self.Right:SetVisible(true)
+				self.Direction = -self.Speed
+				self.Flash = AlertObj.Flash
+				self.Color = AlertObj.Color
+			end
+			if KBM.Options.Alert.Notify then
+				if AlertObj.Text then
+					self.Text:SetText(AlertObj.Text)
+					self.Shadow:SetText(AlertObj.Text)
+					self.Text:ResizeToText()
+					self.Shadow:ResizeToText()
+					self.Anchor:SetVisible(true)
+					self.Anchor:SetAlpha(1)
+				end
+			end
+			if AlertObj.Duration then
+				self.StopTime = CurrentTime + AlertObj.Duration
+			else
+				self.StopTime = false
+			end
+			self:Update(CurrentTime)
+		end
+	end
+	function self:Update(CurrentTime)
+		if self.Current.Stopping then
+			if self.Alpha <= 0.1 then
+				self:Stop()
+			else
+				self.Alpha = self.Alpha + self.Direction
+				if self.Flash then
+					self.Left:SetAlpha(self.Alpha)
+					self.Right:SetAlpha(self.Alpha)
+				end
+				if self.Notify then
+					self.Anchor:SetAlpha(self.Alpha)
+				end
+			end
+		else
+			if self.Flash then
+				self.Alpha = self.Alpha + self.Direction
+				if self.Alpha <= 0.2 then
+					self.Alpha = 0.2
+					self.Direction = self.Speed
+				elseif self.Alpha >= 1 then
+					self.Alpha = 1
+					self.Direction = -self.Speed
+				end
+				self.Left:SetAlpha(self.Alpha)
+				self.Right:SetAlpha(self.Alpha)
+			end
+			if self.StopTime then
+				if self.StopTime <= CurrentTime then
+					self.Direction = -self.Speed
+					self.Current.Stopping = true
+				end
+			end
+		end
+	end
+	function self:Stop()
+		self.Current.Stopping = false
+		self.Current = nil
+		self.StopTime = false
+		self.Left:SetVisible(false)
+		self.Right:SetVisible(false)
+		self.Anchor:SetVisible(false)
+		self.Text:SetText(" Alert Anchor ")
+		self.Shadow:SetText(" Alert Anchor ")
+		self.Text:ResizeToText()
+		self.Shadow:ResizeToText()
+	end
+	
+end
+
 function KBM.CastBar:Init()
 
 	self.CastBarList = {}
@@ -1246,11 +1429,9 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 				end
 				if self.LastCast ~= bDetails.abilityName then
 					self.LastCast = bDetails.abilityName
-					if KBM.MechTimer.CastTimers[bDetails.abilityName] then
-						if KBM.MechTimer.CastTimers[bDetails.abilityName][self.Boss.Name] then
-							if KBM.MechTimer.CastTimers[bDetails.abilityName][self.Boss.Name].Enabled then
-								KBM.MechTimer.CastTimers[bDetails.abilityName][self.Boss.Name]:Start(Inspect.Time.Real())
-							end
+					if KBM.Trigger.Cast[bDetails.abilityName] then
+						if KBM.Trigger.Cast[bDetails.abilityName][self.Boss.Name] then
+							KBM.Trigger.Cast[bDetails.abilityName][self.Boss.Name]:Activate()
 						end
 					end
 				end
@@ -1350,18 +1531,19 @@ function KBM:Timer()
 		end
 		if diff >= 1 then
 			self.TimeElapsed = current - self.StartTime
-			if KBM_CurrentMod.Enrage then
-				self.EnrageTimer = self.EnrageTime - current
-			end
-			--self:TimeToHours(self.TimeElapsed)
-			if self.Options.EncTimer.Enabled then
-				self.EncTimer:Update(current)
+			if not KBM.Testing then
+				if KBM_CurrentMod.Enrage then
+					self.EnrageTimer = self.EnrageTime - current
+				end
+				if self.Options.EncTimer.Enabled then
+					self.EncTimer:Update(current)
+				end
 			end
 			self.HeldTime = current - (diff - math.floor(diff))
 			self.UpdateTime = current
 			self:CheckBossStates(current)			
 		end
-		if udiff >= 0.025 then
+		if udiff >= 0.05 then
 			if #self.MechTimer.ActiveTimers > 0 then
 				for i, Timer in ipairs(self.MechTimer.ActiveTimers) do
 					Timer:Update(current)
@@ -1388,6 +1570,9 @@ function KBM:Timer()
 					KBM.TankSwap:Update()
 				end
 			end
+		end
+		if self.Alert.Current then
+			self.Alert:Update(Inspect.Time.Real())
 		end
 	else
 		-- for UnitID, CastCheck in pairs(KBM.CastBar.List) do
@@ -1503,22 +1688,15 @@ local function KBM_Help()
 end
 
 function KBM.Notify(data)
-	local match = false
 	if KBM.Encounter then
 		if data.message then
 			if KBM_CurrentMod then
-				for iName, Trigger in pairs(KBM_CurrentMod.Timers) do
-					if Trigger == "table" then
-						for i, iTrigger in ipairs(Trigger.Triggers) do
-							if string.find(data.message, iTrigger, 1, true) then
-								Trigger.Timer:Start(Inspect.Timer.Real())
-								match = true
-								break
-							end
+				if KBM.Trigger.Notify[KBM_CurrentMod.ID] then
+					for i, Trigger in ipairs(KBM.Trigger.Notify[KBM_CurrentMod.ID]) do
+						if string.find(data.message, Trigger.Phrase, 1, true) then
+							Trigger:Activate()
+							break
 						end
-					end
-					if match then
-						break
 					end
 				end
 			end
@@ -1530,19 +1708,16 @@ function KBM.NPCChat(data)
 	local match = false
 	if KBM.Encounter then
 		if data.fromName then
-			if KBM_Boss[fromName] then
-				for iName, Trigger in pairs(KBM_Boss[fromName].Timers) do
-					if Trigger == "table" then
-						for i, iTrigger in ipairs(Trigger.Triggers) do
-							if string.find(data.message, iTrigger, 1, true) then
-								Trigger.Timer:Start(Inspect.Timer.Real())
+			if KBM_CurrentMod then
+				if KBM.Trigger.Say[KBM_CurrentMod.ID] then
+					for i, Trigger in ipairs(KBM.Trigger.Say[KBM.CurrentMod.ID]) do
+						if Trigger.Unit.Name == data.fromName then
+							if string.find(data.message, Trigger.Phrase, 1, true) then
+								Trigger:Activate()
 								match = true
 								break
 							end
 						end
-					end
-					if match then
-						break
 					end
 				end
 			end
@@ -1807,6 +1982,40 @@ function KBM.MenuOptions.CastBars:Options()
 
 end
 
+function KBM.MenuOptions.Alerts:Options()
+
+	function self:AlertEnabled(bool)
+		KBM.Options.Alert.Enabled = bool
+	end
+	function self:ShowAnchor(bool)
+		KBM.Options.Alert.Visible = bool
+		KBM.Alert.Anchor:SetVisible(bool)
+		if bool then
+			KBM.Alert.Anchor:SetAlpha(1)
+		end
+	end
+	function self:LockAnchor(bool)
+		KBM.Options.Alert.Unlocked = bool
+		KBM.Alert.Anchor.Drag:SetVisible(bool)
+	end
+	function self:FlashEnabled(bool)
+		KBM.Options.Alert.Flash = bool
+	end
+	function self:TextEnabled(bool)
+		KBM.Options.Alert.Notify = bool
+	end
+	
+	Options = self.MenuItem.Options
+	Options:SetTitle()
+
+	self.Alert = Options:AddHeader(KBM.Language.Options.AlertEnabled[KBM.Lang], self.AlertEnabled, KBM.Options.Alert.Enabled)
+	self.Alert:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowAnchor, KBM.Options.Alert.Visible)
+	self.Alert:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.LockAnchor, KBM.Options.Alert.Unlocked)
+	self.Alert:AddCheck(KBM.Language.Options.AlertFlash[KBM.Lang], self.FlashEnabled, KBM.Options.Alert.Flash)
+	self.Alert:AddCheck(KBM.Language.Options.AlertText[KBM.Lang], self.TextEnabled, KBM.Options.Alert.Notify)
+	
+end
+
 function KBM.MenuOptions.Main:Options()
 
 	function self:ButtonVisible(bool)
@@ -1829,14 +2038,17 @@ end
 local function KBM_Start()
 	KBM.Button:Init()
 	KBM.TankSwap:Init()
+	KBM.Alert:Init()
 	KBM.MechTimer:Init()
 	KBM.CastBar:Init()
 	KBM.EncTimer:Init()
+	KBM.Trigger:Init()
 	KBM.InitOptions()
 	local Header = KBM.MainWin.Menu:CreateHeader("Options")
 	KBM.MenuOptions.Main.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.Settings[KBM.Lang], KBM.MenuOptions.Main, nil, Header)
 	KBM.MenuOptions.Timers.MenuItem = KBM.MainWin.Menu:CreateEncounter("Timers", KBM.MenuOptions.Timers, true, Header)
 	KBM.MenuOptions.CastBars.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.Castbar[KBM.Lang], KBM.MenuOptions.CastBars, true, Header)
+	KBM.MenuOptions.Alerts.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.Alert[KBM.Lang], KBM.MenuOptions.Alerts, true, Header)
 	KBM.MenuOptions.TankSwap.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.TankSwap[KBM.Lang], KBM.MenuOptions.TankSwap, true, Header)
 	table.insert(Command.Slash.Register("kbmreset"), {KBM_Reset, "KingMolinator", "KBM Reset"})
 	table.insert(Event.Chat.Notify, {KBM.Notify, "KingMolinator", "Notify Event"})

@@ -13,7 +13,6 @@ local GR = {
 		Enabled = true,
 		Handler = nil,
 		Options = nil,
-		ID = "Grugonim",
 	},
 	Instance = HK.Name,
 	HasPhases = true,
@@ -22,6 +21,7 @@ local GR = {
 	Timers = {},
 	Lang = {},
 	Enrage = 60 * 13,
+	ID = "Grugonim",
 }
 
 GR.Grugonim = {

@@ -13,7 +13,6 @@ local SZ = {
 		Enabled = true,
 		Handler = nil,
 		Options = nil,
-		ID = "Zilas",
 	},
 	Instance = HK.Name,
 	HasPhases = true,
@@ -21,6 +20,7 @@ local SZ = {
 	PhaseList = {},
 	Timers = {},
 	Lang = {},
+	ID = "Zilas",
 }
 
 SZ.Zilas = {
