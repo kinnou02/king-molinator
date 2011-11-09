@@ -1,4 +1,15 @@
-﻿v0.4.5
+﻿v0.4.6
+* Fixed: Rare case of idle bosses reporting errors after an encounter.
+* Fixed: Murdantix Mangling Crush (German Client)
+* Changed: King Molinar. Extended the screen alert for Cursed Blows by 1 second.
+* Added: Matron Zamira. German support for Tank-Swaps Matron's Curse.
+* Added: Matron Zamira. German support for Dark Concussion.
+* Added: Matron Zamira. German support for Hideous Blast.
+* Added: Matron Zamira. French support for Dark Concussion.
+* Added: German translation for new Screen Alert options.
+* Added: French translation for new Screen Alert options.
+----
+v0.4.5
 * Fixed: Errors with Screen Alerts.
 * Fixed: Errors with Damage type triggers.
 * Added: King Molinar's Cursed Blows Screen Alerts.

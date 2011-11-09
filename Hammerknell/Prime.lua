@@ -158,7 +158,7 @@ function VP.Prime:Options()
 	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
-	local Timers = Options:AddHeader("Timers Enabled", self.TimersEnabled, VP.Settings.Timers.Enabled)
+	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, VP.Settings.Timers.Enabled)
 	Timers:AddCheck(VP.Lang.Flames[KBM.Lang], self.FlamesEnabled, VP.Settings.Timers.FlamesEnabled)	
 	
 end

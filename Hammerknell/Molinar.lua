@@ -887,7 +887,7 @@ function KM:Start()
 	self.King.TimersRef.Rev.Enabled = KM.Settings.King.Rev
 	
 	-- Add King's Alerts
-	self.King.AlertsRef.Cursed = KBM.Alert:Create(KM.Lang.Ability.Cursed[KBM.Lang], 8, true)
+	self.King.AlertsRef.Cursed = KBM.Alert:Create(KM.Lang.Ability.Cursed[KBM.Lang], 9, true)
 	
 	-- Assign King's Mechanics to Triggers
 	self.King.Triggers.Cursed = KBM.Trigger:Create(KM.Lang.Ability.Cursed[KBM.Lang], "cast", self.King)

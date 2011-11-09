@@ -53,7 +53,7 @@ MX.Lang.Murdantix = KBM.Language:Add(MX.Murd.Name)
 -- Ability Dictionary
 MX.Lang.Mangling = KBM.Language:Add("Mangling Crush")
 MX.Lang.Mangling.French = "Essorage"
-MX.Lang.Mangling.German = "Üble Blessur"
+MX.Lang.Mangling.German = "Erdrückender Stoss"
 MX.Lang.Pound = KBM.Language:Add("Ferocious Pound")
 MX.Lang.Pound.French = "Attaque f\195\169roce"
 MX.Lang.Pound.German = "Wildes Zuschlagen"

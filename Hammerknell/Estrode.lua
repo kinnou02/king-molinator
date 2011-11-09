@@ -172,7 +172,7 @@ function ES.Estrode:Options()
 	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
-	local Timers = Options:AddHeader("Timers Enabled", self.TimersEnabled, ES.Settings.Timers.Enabled)
+	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, ES.Settings.Timers.Enabled)
 	Timers:AddCheck(ES.Lang.Ability.Soul[KBM.Lang], self.SoulEnabled, ES.Settings.Timers.Soul)
 	Timers:AddCheck(ES.Lang.Ability.Mind[KBM.Lang], self.MindEnabled, ES.Settings.Timers.Mind)
 	

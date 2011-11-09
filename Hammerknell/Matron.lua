@@ -49,7 +49,15 @@ MZ.Lang.Matron.German = "Matrone Zamira"
 -- Ability Dictionary
 MZ.Lang.Ability = {}
 MZ.Lang.Ability.Concussion = KBM.Language:Add("Dark Concussion")
+MZ.Lang.Ability.Concussion.German = "Dunkle Erschütterung"
+MZ.Lang.Ability.Concussion.French = "Concussion sombre"
 MZ.Lang.Ability.Blast = KBM.Language:Add("Hideous Blast")
+MZ.Lang.Ability.Blast.German = "Schrecklicher Schlag"
+
+-- Debuff Dictionary
+MZ.Lang.Debuff = {}
+MZ.Lang.Debuff.Curse = KBM.Language:Add("Matron's Curse")
+MZ.Lang.Debuff.Curse.German = "Matron's Fluch"
 
 MZ.Matron.Name = MZ.Lang.Matron[KBM.Lang]
 
@@ -138,7 +146,7 @@ function MZ:UnitHPCheck(unitDetails, unitID)
 					self.Matron.Dead = false
 					self.Matron.Casting = false
 					self.Matron.CastBar:Create(unitID)
-					KBM.TankSwap:Start("Matron's Curse")
+					KBM.TankSwap:Start(MZ.Lang.Debuff.Curse[KBM.Lang])
 				end
 				self.Matron.UnitID = unitID
 				self.Matron.Available = true

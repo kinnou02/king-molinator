@@ -159,6 +159,7 @@ function KBM_ToAbilityID(num)
 end
 
 KBM.Lang = Inspect.System.Language()
+KBM.Lang = "German"
 KBM.Language = {}
 local KBM_Boss = {}
 KBM.BossID = {}
@@ -288,9 +289,17 @@ KBM.Language.Options.TankSwapEnabled = KBM.Language:Add("Tank-Swaps enabled.")
 KBM.Language.Options.TankSwapEnabled.German = "Tank Wechsel anzeigen."
 -- Alert related
 KBM.Language.Options.Alert = KBM.Language:Add("Screen Alerts")
+KBM.Language.Options.Alert.German = "Alarmierungen"
+KBM.Language.Options.Alert.French = "Alerte \195\160 l'\195\169cran"
 KBM.Language.Options.AlertEnabled = KBM.Language:Add("Screen Alerts enabled.")
+KBM.Language.Options.AlertEnabled.German = "Bildschirm Alarmierungen aktiviert."
+KBM.Language.Options.AlertEnabled.French = "Alerte \195\160 l'\195\169cran activ\195\169."
 KBM.Language.Options.AlertFlash = KBM.Language:Add("Screen flash enabled.")
+KBM.Language.Options.AlertFlash.German = "Bildschirm-Rand Flackern aktiviert."
+KBM.Language.Options.AlertFlash.French = "Flash \195\169cran activ\195\169."
 KBM.Language.Options.AlertText = KBM.Language:Add("Alert warning text enabled.")
+KBM.Language.Options.AlertText.German = "Alarmierungs-Text aktiviert."
+KBM.Language.Options.AlertText.French = "Texte Avertissement Alerte activ\195\169 ."
 -- Misc.
 KBM.Language.Options.Settings = KBM.Language:Add("Settings")
 KBM.Language.Options.Settings.French = "Configurations"
@@ -496,7 +505,7 @@ function KBM.Trigger:Init()
 			table.insert(self.Timers, TimerObj)
 		end
 		function TriggerObj:AddAlert(AlertObj, Player)
-			--AlertObj.Player = Player
+			AlertObj.Player = Player
 			table.insert(self.Alerts, AlertObj)
 		end
 		function TriggerObj:AddPhase(PhaseObj)
@@ -510,7 +519,7 @@ function KBM.Trigger:Init()
 			if self.Type == "damage" then
 				for i, Timer in ipairs(self.Timers) do
 					if Timer.Active then
-						if Timer.Remaining < 2 then
+						if Timer.Remaining < 3 then
 							Timer:Start(Inspect.Time.Real())
 						end
 					else
@@ -523,7 +532,6 @@ function KBM.Trigger:Init()
 				end
 			end
 			for i, AlertObj in ipairs(self.Alerts) do
-				print(AlertObj.Text)
 				KBM.Alert:Start(AlertObj, Inspect.Time.Real())
 			end
 			for i, Obj in ipairs(self.Stop) do
@@ -834,7 +842,7 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 	if not KBM.BossID[UnitID] then
 		if uDetails then
 			if KBM_Boss[uDetails.name] then
-				--if uDetails.level == KBM_Boss[uDetails.name].Level then
+				if uDetails.level == KBM_Boss[uDetails.name].Level then
 					KBM.BossID[UnitID] = {}
 					KBM.BossID[UnitID].name = uDetails.name
 					KBM.BossID[UnitID].monitor = true
@@ -872,7 +880,7 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 						KBM.BossID[UnitID].dead = true
 						KBM.BossID[UnitID].available = true
 					end					
-				--end
+				end
 			end
 		end
 	else
@@ -1528,6 +1536,7 @@ function KBM:CheckBossStates(current)
 						print("Encounter Ended, possible wipe.")
 						print("Time: "..KBM.ConvertTime(BossData.IdleSince - KBM.StartTime))
 						KBM_Reset()
+						break
 					end			
 				end
 			end
