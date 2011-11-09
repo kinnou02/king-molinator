@@ -159,7 +159,6 @@ function KBM_ToAbilityID(num)
 end
 
 KBM.Lang = Inspect.System.Language()
-KBM.Lang = "German"
 KBM.Language = {}
 local KBM_Boss = {}
 KBM.BossID = {}
