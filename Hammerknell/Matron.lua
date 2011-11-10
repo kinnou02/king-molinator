@@ -55,6 +55,7 @@ MZ.Lang.Ability.Blast = KBM.Language:Add("Hideous Blast")
 MZ.Lang.Ability.Blast.German = "Schrecklicher Schlag"
 MZ.Lang.Ability.Blast.French = "Explosion atroce"
 MZ.Lang.Ability.Mark = KBM.Language:Add("Mark of Oblivion")
+MZ.Lang.Ability.Mark.German = "Zeichen der Vergessenheit"
 
 -- Debuff Dictionary
 MZ.Lang.Debuff = {}

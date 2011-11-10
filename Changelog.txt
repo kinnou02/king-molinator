@@ -3,8 +3,9 @@
 * Fixed: Matron Zamira's Hideous Blast alert.
 * Change: Minor adjustments to personal screen alerts engine.
 * Change: Anchors should now appear above the options window when visible.
-* Added: German Translation for Unholy Contract.
-* Added: German Translations for Tidal Waves.
+* Added: Sicaron: German Translation for Unholy Contract.
+* Added: Akylios: German Translations for Tidal Waves.
+* Added: Matron Zamira: German Translation for Mark of Oblivion.
 * Added: Matron Zamira's Mark of Oblivion Timer.
 * Added: Matron Zamira's Mark Of Oblivion personal screen alert (purple) ** experimental
 ----
