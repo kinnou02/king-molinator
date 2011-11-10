@@ -48,6 +48,7 @@ SN.Lang.Sicaron = KBM.Language:Add(SN.Sicaron.Name)
 -- Debuff Dictionary
 SN.Lang.Debuff = {}
 SN.Lang.Debuff.Contract = KBM.Language:Add("Unholy Contract")
+SN.Lang.Debuff.Contract.German = "Unheiliger Vertrag"
 
 SN.Sicaron.Name = SN.Lang.Sicaron[KBM.Lang]
 

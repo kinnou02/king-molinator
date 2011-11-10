@@ -1,4 +1,9 @@
-﻿v0.4.7
+﻿v0.4.8
+* Fixed: TankSwap options should now work as intended.
+* Added: German Translation for Unholy Contract.
+* Added: German Translations for Tidal Waves.
+----
+v0.4.7
 * New: Buff monitoring and triggers.
 * New: Screen alerts now seperated by color sets.
 * Fixed: Murdantix: Alert Timer option for Soul Trauma.

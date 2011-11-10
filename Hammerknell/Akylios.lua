@@ -58,6 +58,22 @@ local KBM = KBM_RegisterMod(AK.Akylios.ID, AK)
 AK.Lang.Akylios = KBM.Language:Add(AK.Akylios.Name)
 AK.Lang.Jornaru = KBM.Language:Add(AK.Jornaru.Name)
 
+-- Ability Dictionary.
+AK.Lang.Ability = {}
+
+-- Debuff Dictionary.
+AK.Lang.Debuff = {}
+
+-- Mechanic Dictionary.
+AK.Lang.Mechanic = {}
+AK.Lang.Mechanic.Wave = KBM.Language:Add("Tidal Wave")
+AK.Lang.Mechanic.Wave.German = "Flutwelle"
+
+-- Options Dictionary.
+AK.Lang.Options = {}
+AK.Lang.Options.Wave1 = KBM.Language:Add("Tidal Wave (Phase 1)")
+AK.Lang.Options.Wave4 = KBM.Language:Add("Tidal Wave (Phase 4)")
+
 function AK:AddBosses(KBM_Boss)
 	self.Jornaru.Descript = "Akylios & Jornaru"
 	self.Akylios.Descript = self.Jornaru.Descript
@@ -168,8 +184,8 @@ function AK.Akylios:Options()
 	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
-	local Timers = Options:AddHeader("Timers Enabled", self.TimersEnabled, AK.Settings.Timers.Enabled)
-	Timers:AddCheck("Tidal Wave (Phase 1)", self.WaveStartEnabled, AK.Settings.Timers.WaveStartEnabled)	
+	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, AK.Settings.Timers.Enabled)
+	Timers:AddCheck(AK.Lang.Options.Wave1[KBM.Lang], self.WaveStartEnabled, AK.Settings.Timers.WaveStartEnabled)	
 	
 end
 
@@ -179,11 +195,11 @@ function AK:Start()
 	self.Akylios.MenuItem.Check:SetEnabled(false)
 	
 	-- Create Timers
-	self.Jornaru.TimersRef.Wave = KBM.MechTimer:Add("Tidal Wave", 40, true)
+	self.Jornaru.TimersRef.Wave = KBM.MechTimer:Add(AK.Lang.Mechanic.Wave[KBM.Lang], 40, true)
 	self.Jornaru.TimersRef.Wave.Enable = self.Settings.Timers.WaveStartEnabled
 	
 	-- Assign Mechanics to Triggers
-	self.Jornaru.Triggers.Start = KBM.Trigger:Create("Enounter Start", "start", self.Jornaru)
+	self.Jornaru.Triggers.Start = KBM.Trigger:Create(AK.Lang.Mechanic.Wave[KBM.Lang], "start", self.Jornaru)
 	self.Jornaru.Triggers.Start:AddTimer(self.Jornaru.TimersRef.Wave)
 	
 end

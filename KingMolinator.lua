@@ -48,7 +48,7 @@ local function KBM_DefineVars(AddonID)
 				x = false,
 				y = false,
 				w = 150,
-				h = 32,
+				h = 25,
 				wScale = 1,
 				hScale = 1,
 				Enabled = true,
@@ -56,7 +56,7 @@ local function KBM_DefineVars(AddonID)
 				Visible = false,
 				ScaleWidth = false,
 				ScaleHeight = false,
-				TextSize = 16,
+				TextSize = 15,
 				TextScale = false,
 				Enrage = true,
 				Duration = true,
@@ -95,13 +95,13 @@ local function KBM_DefineVars(AddonID)
 				x = false,
 				y = false,
 				w = 150,
-				h = 50,
+				h = 40,
 				wScale = 1,
 				hScale = 1,
 				ScaleWidth = false,
 				ScaleHeight = false,
 				TextScale = false,
-				TextSize = 16,
+				TextSize = 14,
 				Enabled = true,
 				Visible = false,
 				Unlocked = false,
@@ -138,10 +138,6 @@ local function KBM_LoadVars(AddonID)
 		for _, Mod in ipairs(KBM_BossMod) do
 			Mod:LoadVars()
 		end
-		KBM.Options.TankSwap.h = 40
-		KBM.Options.TankSwap.TextSize = 14
-		KBM.Options.EncTimer.h = 25
-		KBM.Options.EncTimer.TextSize = 15
 	end
 end
 
@@ -1012,6 +1008,7 @@ function KBM.TankSwap:Init()
 	self.DebuffID = nil
 	self.LastTank = nil
 	self.Test = false
+	self.Enabled = KBM.Options.TankSwap.Enabled
 	
 	self.Anchor = UI.CreateFrame("Frame", "Tank-Swap Anchor", KBM.Context)
 	self.Anchor:SetWidth(KBM.Options.TankSwap.w * KBM.Options.TankSwap.wScale)
@@ -1116,19 +1113,21 @@ function KBM.TankSwap:Init()
 		return TankObj
 	end
 	function self:Start(DebuffName, DebuffID)
-		local Spec = ""
-		local UnitID = ""
-		local uDetails = nil
-		self.DebuffID = DebuffID
-		self.DebuffName = DebuffName
-		if LibSRM.Grouped() then
-			for i = 1, 20 do
-				Spec, UnitID = LibSRM.Group.Inspect(i)
-				if UnitID then
-					uDetails = Inspect.Unit.Detail(UnitID)
-					if uDetails then
-						if uDetails.role == "tank" then
-							self:Add(UnitID)
+		if self.Enabled then
+			local Spec = ""
+			local UnitID = ""
+			local uDetails = nil
+			self.DebuffID = DebuffID
+			self.DebuffName = DebuffName
+			if LibSRM.Grouped() then
+				for i = 1, 20 do
+					Spec, UnitID = LibSRM.Group.Inspect(i)
+					if UnitID then
+						uDetails = Inspect.Unit.Detail(UnitID)
+						if uDetails then
+							if uDetails.role == "tank" then
+								self:Add(UnitID)
+							end
 						end
 					end
 				end
@@ -1789,9 +1788,10 @@ function KBM:BuffMonitor(unitID, Buffs, Type)
 	end
 end
 
+-- Timer options.
 function KBM.MenuOptions.Timers:Options()
 	
-	-- Encounter Timers Callbacks
+	-- Encounter Timer callbacks.
 	function self:EncTimersEnabled(bool)
 		KBM.Options.EncTimer.Enabled = bool
 	end
@@ -1810,6 +1810,7 @@ function KBM.MenuOptions.Timers:Options()
 	function self:EncEnrage(bool)
 		KBM.Options.EncTimer.Enrage = bool
 	end
+	
 	-- Timer Callbacks
 	function self:MechEnabled(bool)
 		KBM.Options.MechTimer.Enabled = bool
@@ -1897,11 +1898,12 @@ function KBM.MenuOptions.TankSwap:Close()
 	end
 end
 
+-- Tank Swap Menu Handler
 function KBM.MenuOptions.TankSwap:Options()
 
-	-- Castbar Callbacks
 	function self:Enabled(bool)
 		KBM.Options.TankSwap.Enabled = bool
+		KBM.TankSwap.Enabled = bool
 	end
 	function self:ShowAnchor(bool)
 		KBM.Options.TankSwap.Visible = bool
@@ -1966,9 +1968,7 @@ function KBM.MenuOptions.TankSwap:Options()
 	Options:SetTitle()
 
 	-- Tank-Swap Options. 
-	self.TankSwap = Options:AddHeader(KBM.Language.Options.TankSwapEnabled[KBM.Lang], self.Enabled, true)
-	self.TankSwap.Check.Frame:SetEnabled(false)
-	KBM.Options.TankSwap.Enabled = false
+	self.TankSwap = Options:AddHeader(KBM.Language.Options.TankSwapEnabled[KBM.Lang], self.Enabled, KBM.Options.TankSwap.Enabled)
 	self.TankSwap:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowAnchor, KBM.Options.TankSwap.Visible)
 	self.TankSwap:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.LockAnchor, KBM.Options.TankSwap.Unlocked)
 	self.TestLink = self.TankSwap:AddCheck(KBM.Language.Options.Tank[KBM.Lang], self.ShowTest, false)
