@@ -225,14 +225,20 @@ function KM:InitVars()
 		PrinceBar = true,
 		King = {
 			Timers = true,
+			Alerts = true,
 			Cursed = true,
+			CursedAlert = true,
+			ConsumingAlert = true,
 			Consuming = true,
 			Rev = true,
 		},
 		Prince = {
 			Timers = true,
+			Alerts = true,
 			Terminate = true,
 			Consuming = true,
+			TerminateAlert = true,
+			ConsumingAlert = true,
 			Runic = true,
 		},
 		KingBar = true,
@@ -388,7 +394,7 @@ function KM:CheckTrends()
 	-- Adjust the Current and Trend bars accordingly.	
 	if self.KingID ~= nil and self.PrinceID ~= nil then
 		-- King Calc
-		local KingForecastHP = self.KingLastHP-(self.KingSampleDPS * 7)
+		local KingForecastHP = self.KingLastHP-(self.KingSampleDPS * 8)
 		local KingForecastP = KingForecastHP / self.KingHPMax
 		local KingMulti = self.KingPerc*100
 		local stupidKing = math.floor(KingMulti)
@@ -397,7 +403,7 @@ function KM:CheckTrends()
 		end
 		self.KingHPP = tostring(stupidKing).."%"
 		-- Prince Calc
-		local PrinceForecastHP = self.PrinceLastHP-(self.PrinceSampleDPS * 7)
+		local PrinceForecastHP = self.PrinceLastHP-(self.PrinceSampleDPS * 8)
 		local PrinceForecastP = PrinceForecastHP / self.PrinceHPMax
 		local PrinceMulti = self.PrincePerc*100
 		local stupidPrince = math.floor(PrinceMulti)
@@ -839,6 +845,30 @@ function KM.KingMolinar:Options()
 		KM.Settings.Prince.Runic = bool
 		KM.Prince.TimersRef.Runic.Enabled = bool
 	end
+	-- King Alert Settings
+	function self:KingAlerts(bool)
+		KM.Settings.King.Alerts = bool
+	end
+	function self:KingCursedAlert(bool)
+		KM.Settings.King.CursedAlert = bool
+		KM.King.AlertsRef.Cursed.Enabled = bool
+	end
+	function self:KingConsumingAlert(bool)
+		KM.Settings.King.ConsumingAlert = bool
+		KM.King.AlertsRef.Consuming.Enabled = bool
+	end
+	-- Prince Alert Settings
+	function self:PrinceAlerts(bool)
+		KM.Settings.Prince.Alerts = bool
+	end
+	function self:PrinceTerminateAlert(bool)
+		KM.Settings.Prince.TerminateAlert = bool
+		KM.Prince.AlertsRef.Terminate.Enabled = bool
+	end
+	function self:PrinceConsumingAlert(bool)
+		KM.Settings.Prince.ConsumingAlert = bool
+		KM.Prince.AlertsRef.Consuming.Enabled = bool
+	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
 	local Monitor = Options:AddHeader(KM.Lang.Options.ShowMonitor[KBM.Lang], self.MonitorEnabled, KM.Settings.Enabled)
@@ -846,16 +876,22 @@ function KM.KingMolinar:Options()
 	Monitor:AddCheck(KM.Lang.Options.HiddenStart[KBM.Lang], self.Hidden, KM.Settings.Hidden)
 	Monitor:AddCheck(KM.Lang.Options.Compact[KBM.Lang], self.Compact, KM.Settings.Compact)
 	Monitor:AddCheck(KM.Lang.Options.Locked[KBM.Lang], self.Locked, KM.Settings.Locked)
-	Options:AddSpacer()
-	local KingTimers = Options:AddHeader(KM.Lang.Molinar[KBM.Lang].." timers", self.KingTimers, KM.Settings.King.Timers)
+	Options:AddSpacer()	
+	local KingTimers = Options:AddHeader(KM.Lang.Molinar[KBM.Lang].." "..KBM.Language.Options.TimersEnabled[KBM.Lang], self.KingTimers, KM.Settings.King.Timers)
 	KingTimers:AddCheck(KM.Lang.Ability.Cursed[KBM.Lang], self.KingCursed, KM.Settings.King.Cursed)
 	KingTimers:AddCheck(KM.Lang.Ability.Consuming[KBM.Lang], self.KingConsuming, KM.Settings.King.Consuming)
 	KingTimers:AddCheck(KM.Lang.Unit.Revenant[KBM.Lang], self.KingRev, KM.Settings.King.Rev)
-	Options:AddSpacer()
-	local PrinceTimers = Options:AddHeader(KM.Lang.Dollin[KBM.Lang].." timers", self.PrinceTimers, KM.Settings.Prince.Timers)
+	local KingAlerts = Options:AddHeader(KM.Lang.Molinar[KBM.Lang].." "..KBM.Language.Options.AlertsEnabled[KBM.Lang], self.KingAlerts, KM.Settings.King.Alerts)
+	KingAlerts:AddCheck(KM.Lang.Ability.Cursed[KBM.Lang], self.KingCursedAlert, KM.Settings.King.CursedAlert)
+	KingAlerts:AddCheck(KM.Lang.Ability.Consuming[KBM.Lang], self.KingConsumingAlert, KM.Settings.King.ConsumingAlert)
+	Options:AddSpacer()	
+	local PrinceTimers = Options:AddHeader(KM.Lang.Dollin[KBM.Lang].." "..KBM.Language.Options.TimersEnabled[KBM.Lang], self.PrinceTimers, KM.Settings.Prince.Timers)
 	PrinceTimers:AddCheck(KM.Lang.Ability.Terminate[KBM.Lang], self.PrinceTerminate, KM.Settings.Prince.Terminate)
 	PrinceTimers:AddCheck(KM.Lang.Ability.Consuming[KBM.Lang], self.PrinceConsuming, KM.Settings.Prince.Consuming)
 	PrinceTimers:AddCheck(KM.Lang.Ability.Runic[KBM.Lang], self.PrinceRunic, KM.Settings.Prince.Runic)
+	local PrinceAlerts = Options:AddHeader(KM.Lang.Dollin[KBM.Lang].." "..KBM.Language.Options.AlertsEnabled[KBM.Lang], self.PrinceAlerts, KM.Settings.Prince.Alerts)
+	PrinceAlerts:AddCheck(KM.Lang.Ability.Terminate[KBM.Lang], self.PrinceTerminateAlert, KM.Settings.Prince.TerminateAlert)
+	PrinceAlerts:AddCheck(KM.Lang.Ability.Consuming[KBM.Lang], self.PrinceConsumingAlert, KM.Settings.Prince.ConsumingAlert)
 	Options:AddSpacer()
 	local KingMech = Options:AddHeader(KM.Lang.Options.ShowKingCast[KBM.Lang], self.KingEnabled, KM.Settings.KingBar)
 	KingMech:AddCheck(KM.Lang.Ability.Shout[KBM.Lang]..".", self.FShoutEnabled, KM.Settings.FShoutEnabled)
@@ -887,7 +923,8 @@ function KM:Start()
 	self.King.TimersRef.Rev.Enabled = KM.Settings.King.Rev
 	
 	-- Add King's Alerts
-	self.King.AlertsRef.Cursed = KBM.Alert:Create(KM.Lang.Ability.Cursed[KBM.Lang], 9, true)
+	self.King.AlertsRef.Cursed = KBM.Alert:Create(KM.Lang.Ability.Cursed[KBM.Lang], 9, true, nil, "red")
+	self.King.AlertsRef.Consuming = KBM.Alert:Create(KM.Lang.Ability.Consuming[KBM.Lang], 2, true, nil, "yellow")
 	
 	-- Assign King's Mechanics to Triggers
 	self.King.Triggers.Cursed = KBM.Trigger:Create(KM.Lang.Ability.Cursed[KBM.Lang], "cast", self.King)
@@ -895,6 +932,7 @@ function KM:Start()
 	self.King.Triggers.Cursed:AddAlert(self.King.AlertsRef.Cursed)
 	self.King.Triggers.Consuming = KBM.Trigger:Create(KM.Lang.Ability.Consuming[KBM.Lang], "cast", self.King)
 	self.King.Triggers.Consuming:AddTimer(self.King.TimersRef.Consuming)
+	self.King.Triggers.Consuming:AddAlert(self.King.AlertsRef.Consuming)
 	self.King.Triggers.Rev = KBM.Trigger:Create(self.Lang.Notify.Revenant[KBM.Lang], "notify", self.King)
 	self.King.Triggers.Rev:AddTimer(self.King.TimersRef.Rev)
 	
@@ -906,11 +944,17 @@ function KM:Start()
 	self.Prince.TimersRef.Runic = KBM.MechTimer:Add(KM.Lang.Ability.Runic[KBM.Lang], 48)
 	self.Prince.TimersRef.Runic.Enabled = KM.Settings.Prince.Runic
 	
+	-- Add Prince's Alerts
+	self.Prince.AlertsRef.Terminate = KBM.Alert:Create(KM.Lang.Ability.Terminate[KBM.Lang], 3, true, nil, "orange")
+	self.Prince.AlertsRef.Consuming = KBM.Alert:Create(KM.Lang.Ability.Consuming[KBM.Lang], 2, true, nil, "yellow")
+	
 	-- Assign Prince's Mechanics to Triggers
 	self.Prince.Triggers.Terminate = KBM.Trigger:Create(KM.Lang.Ability.Terminate[KBM.Lang], "cast", self.Prince)
 	self.Prince.Triggers.Terminate:AddTimer(self.Prince.TimersRef.Terminate)
+	self.Prince.Triggers.Terminate:AddAlert(self.Prince.AlertsRef.Terminate)
 	self.Prince.Triggers.Consuming = KBM.Trigger:Create(KM.Lang.Ability.Terminate[KBM.Lang], "cast", self.Prince)
 	self.Prince.Triggers.Consuming:AddTimer(self.Prince.TimersRef.Consuming)
+	self.Prince.Triggers.Consuming:AddAlert(self.Prince.AlertsRef.Consuming)
 	self.Prince.Triggers.Runic = KBM.Trigger:Create(KM.Lang.Ability.Runic[KBM.Lang], "cast", self.Prince)
 	self.Prince.Triggers.Runic:AddTimer(self.Prince.TimersRef.Runic)
 	

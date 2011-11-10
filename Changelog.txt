@@ -1,4 +1,20 @@
-﻿v0.4.6
+﻿v0.4.7
+* New: Buff monitoring and triggers.
+* New: Screen alerts now seperated by color sets.
+* Fixed: Murdantix: Alert Timer option for Soul Trauma.
+* Fixed: Say Type Triggers.
+* Fixed: Alerts not closing if the encounter ends.
+* Fixed: Tank-Swap Monitor was never actually triggering. Should be active now.
+* Fixed: Issues when filtering Casts (currently only King fight).
+* Added: Matron Zamira: French support for Hideous Blast.
+* Added: Matron Zamira: Hideous Blast Screen alert now yellow.
+* Added: Sicaron. Mechanic Timer for Unholy Contract.
+* Added: Sicaron. Personal screen alert for Unholy Contract. ** untested
+* Added: King Molinar. Screen Alert for Consuming Essence. (yellow)
+* Added: Prince Dollin. Screen Alert for Terminate Life. (orange)
+* Added: Prince Dollin. Screen Alert for Consuming Essence. (yellow)
+----
+v0.4.6
 * Fixed: Rare case of idle bosses reporting errors after an encounter.
 * Fixed: Murdantix Mangling Crush (German Client)
 * Changed: King Molinar. Extended the screen alert for Cursed Blows by 1 second.

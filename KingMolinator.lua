@@ -290,9 +290,9 @@ KBM.Language.Options.TankSwapEnabled.German = "Tank Wechsel anzeigen."
 KBM.Language.Options.Alert = KBM.Language:Add("Screen Alerts")
 KBM.Language.Options.Alert.German = "Alarmierungen"
 KBM.Language.Options.Alert.French = "Alerte \195\160 l'\195\169cran"
-KBM.Language.Options.AlertEnabled = KBM.Language:Add("Screen Alerts enabled.")
-KBM.Language.Options.AlertEnabled.German = "Bildschirm Alarmierungen aktiviert."
-KBM.Language.Options.AlertEnabled.French = "Alerte \195\160 l'\195\169cran activ\195\169."
+KBM.Language.Options.AlertsEnabled = KBM.Language:Add("Screen Alerts enabled.")
+KBM.Language.Options.AlertsEnabled.German = "Bildschirm Alarmierungen aktiviert."
+KBM.Language.Options.AlertsEnabled.French = "Alerte \195\160 l'\195\169cran activ\195\169."
 KBM.Language.Options.AlertFlash = KBM.Language:Add("Screen flash enabled.")
 KBM.Language.Options.AlertFlash.German = "Bildschirm-Rand Flackern aktiviert."
 KBM.Language.Options.AlertFlash.French = "Flash \195\169cran activ\195\169."
@@ -514,7 +514,7 @@ function KBM.Trigger:Init()
 			table.insert(self.Stop, Object)
 		end
 		
-		function TriggerObj:Activate(Caster, Target)
+		function TriggerObj:Activate(Caster, Target, Data)
 			if self.Type == "damage" then
 				for i, Timer in ipairs(self.Timers) do
 					if Timer.Active then
@@ -531,7 +531,13 @@ function KBM.Trigger:Init()
 				end
 			end
 			for i, AlertObj in ipairs(self.Alerts) do
-				KBM.Alert:Start(AlertObj, Inspect.Time.Real())
+				if AlertObj.Player then
+					if KBM_PlayerID == Target then
+						KBM.Alert:Start(AlertObj, Inspect.Time.Real(), Data)
+					end
+				else
+					KBM.Alert:Start(AlertObj, Inspect.Time.Real(), Data)
+				end
 			end
 			for i, Obj in ipairs(self.Stop) do
 				Obj:Stop()
@@ -1135,8 +1141,8 @@ function KBM.TankSwap:Init()
 			TankObj.Stacks = 0
 			TankObj.Remaining = 0
 			if Buffs then
-				for n, BuffID in ipairs(Buffs) do
-					bDetails = Inspect.Buff.Detail(BuffID)
+				for BuffID, bool in pairs(Buffs) do
+					bDetails = Inspect.Buff.Detail(UnitID, BuffID)
 					if bDetails then
 						if bDetails.name == self.DebuffName then
 							if bDetails.stack then
@@ -1157,7 +1163,7 @@ function KBM.TankSwap:Init()
 				TankObj.DebuffFrame.Text:SetVisible(false)
 			else
 				TankObj.DeCool.Text:SetText(string.format("%0.01f", TankObj.Remaining))
-				TankObj.DeCool:SetPoint("RIGHT", TankObj.DeCoolFrame, (TankObj.Remaing/TankObj.Duration), nil)
+				TankObj.DeCool:SetPoint("RIGHT", TankObj.DeCoolFrame, (TankObj.Remaining/TankObj.Duration), nil)
 				TankObj.DeCool.Text:ResizeToText()
 				TankObj.DeCoolFrame:SetVisible(true)
 				TankObj.DebuffFrame.Text:SetText(TankObj.Stacks)
@@ -1214,16 +1220,21 @@ function KBM.Alert:Init()
 	self.Anchor:SetWidth(self.Text:GetWidth())
 	self.Anchor:SetHeight(self.Text:GetHeight())
 	self.Anchor:SetVisible(KBM.Options.Alert.Visible)
-	self.Left = UI.CreateFrame("Texture", "Left Alert", KBM.Context)
-	self.Left:SetTexture("KingMolinator", "Media/Alert_Left_Red.png")
-	self.Left:SetPoint("TOPLEFT", UIParent, "TOPLEFT")
-	self.Left:SetPoint("BOTTOM", UIParent, "BOTTOM")
-	self.Left:SetVisible(false)
-	self.Right = UI.CreateFrame("Texture", "Right Alert", KBM.Context)
-	self.Right:SetTexture("KingMolinator", "Media/Alert_Right_Red.png")
-	self.Right:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT")
-	self.Right:SetPoint("BOTTOM", UIParent, "BOTTOM")
-	self.Right:SetVisible(false)
+	self.ColorList = {"red", "blue", "yellow", "orange", "purple"}
+	self.Left = {}
+	self.Right = {}
+	for _t, Color in ipairs(self.ColorList) do
+		self.Left[Color] = UI.CreateFrame("Texture", "Left Alert", KBM.Context)
+		self.Left[Color]:SetTexture("KingMolinator", "Media/Alert_Left_"..Color..".png")
+		self.Left[Color]:SetPoint("TOPLEFT", UIParent, "TOPLEFT")
+		self.Left[Color]:SetPoint("BOTTOM", UIParent, "BOTTOM")
+		self.Left[Color]:SetVisible(false)
+		self.Right[Color] = UI.CreateFrame("Texture", "Right Alert", KBM.Context)
+		self.Right[Color]:SetTexture("KingMolinator", "Media/Alert_Right_"..Color..".png")
+		self.Right[Color]:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT")
+		self.Right[Color]:SetPoint("BOTTOM", UIParent, "BOTTOM")
+		self.Right[Color]:SetVisible(false)
+	end
 	self.Enabled = true
 	self.Current = nil
 	self.StopTime = 0
@@ -1243,31 +1254,39 @@ function KBM.Alert:Init()
 	self.Anchor.Drag:SetLayer(3)
 	self.Anchor.Drag:SetVisible(KBM.Options.Alert.Unlocked)
 	
-	function self:Create(Text, Duration, Flash, Color)
+	function self:Create(Text, Duration, Flash, Countdown, Color)
 		AlertObj = {}
 		AlertObj.Duration = Duration
 		AlertObj.Flash = Flash
-		AlertObj.Color = Color
+		if not Color then
+			AlertObj.Color = self.Color
+		else
+			AlertObj.Color = Color
+		end
 		AlertObj.Text = Text
+		AlertObj.Countdown = Countdown
 		AlertObj.Enabled = false
 		
 		table.insert(self.List, AlertObj)
 		return AlertObj
 	end
-	function self:Start(AlertObj, CurrentTime)
+	function self:Start(AlertObj, CurrentTime, Duration)
 		if self.Current then
-			self.Current:Stop()
+			self:Stop()
 		end
 		if KBM.Options.Alert.Enabled then
+			if Duration then
+				self.Duration = Duration
+			end
 			self.Current = AlertObj
 			if KBM.Options.Alert.Flash then
-				self.Left:SetAlpha(1)
-				self.Left:SetVisible(true)
-				self.Right:SetAlpha(1)
-				self.Right:SetVisible(true)
+				self.Color = AlertObj.Color
+				self.Left[self.Color]:SetAlpha(1)
+				self.Left[self.Color]:SetVisible(true)
+				self.Right[self.Color]:SetAlpha(1)
+				self.Right[self.Color]:SetVisible(true)
 				self.Direction = -self.Speed
 				self.Flash = AlertObj.Flash
-				self.Color = AlertObj.Color
 			end
 			if KBM.Options.Alert.Notify then
 				if AlertObj.Text then
@@ -1294,8 +1313,8 @@ function KBM.Alert:Init()
 			else
 				self.Alpha = self.Alpha + self.Direction
 				if self.Flash then
-					self.Left:SetAlpha(self.Alpha)
-					self.Right:SetAlpha(self.Alpha)
+					self.Left[self.Color]:SetAlpha(self.Alpha)
+					self.Right[self.Color]:SetAlpha(self.Alpha)
 				end
 				if self.Notify then
 					self.Anchor:SetAlpha(self.Alpha)
@@ -1311,8 +1330,8 @@ function KBM.Alert:Init()
 					self.Alpha = 1
 					self.Direction = -self.Speed
 				end
-				self.Left:SetAlpha(self.Alpha)
-				self.Right:SetAlpha(self.Alpha)
+				self.Left[self.Color]:SetAlpha(self.Alpha)
+				self.Right[self.Color]:SetAlpha(self.Alpha)
 			end
 			if self.StopTime then
 				if self.StopTime <= CurrentTime then
@@ -1326,8 +1345,8 @@ function KBM.Alert:Init()
 		self.Current.Stopping = false
 		self.Current = nil
 		self.StopTime = false
-		self.Left:SetVisible(false)
-		self.Right:SetVisible(false)
+		self.Left[self.Color]:SetVisible(false)
+		self.Right[self.Color]:SetVisible(false)
 		self.Anchor:SetVisible(false)
 		self.Text:SetText(" Alert Anchor ")
 		self.Shadow:SetText(" Alert Anchor ")
@@ -1435,6 +1454,10 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 							self.Progress:SetWidth(self.Frame:GetWidth() * (1-(bProgress/bCastTime)))
 							self.Text:SetText(string.format("%0.01f", bProgress).." - "..bDetails.abilityName)
 							self.Text:ResizeToText()
+						else
+							self.Casting = false
+							self.Frame:SetVisible(false)
+							self.LastCast = ""		
 						end
 					end
 				else
@@ -1498,6 +1521,9 @@ local function KBM_Reset()
 			end
 			if KBM.TankSwap.Active then
 				KBM.TankSwap:Remove()
+			end
+			if KBM.Alert.Current then
+				KBM.Alert:Stop()
 			end
 		end
 	else
@@ -1732,7 +1758,7 @@ function KBM.NPCChat(data)
 		if data.fromName then
 			if KBM_CurrentMod then
 				if KBM.Trigger.Say[KBM_CurrentMod.ID] then
-					for i, Trigger in ipairs(KBM.Trigger.Say[KBM.CurrentMod.ID]) do
+					for i, Trigger in ipairs(KBM.Trigger.Say[KBM_CurrentMod.ID]) do
 						if Trigger.Unit.Name == data.fromName then
 							if string.find(data.message, Trigger.Phrase, 1, true) then
 								Trigger:Activate()
@@ -1740,6 +1766,22 @@ function KBM.NPCChat(data)
 								break
 							end
 						end
+					end
+				end
+			end
+		end
+	end
+end
+
+-- Used to manage Triggers and soon Tank-Swap managing.
+function KBM:BuffMonitor(unitID, Buffs, Type)
+	if unitID then
+		for buffID, bool in pairs(Buffs) do
+			bDetails = Inspect.Buff.Detail(unitID, buffID)
+			if bDetails then
+				if Type == "added" then
+					if KBM.Trigger.Buff[bDetails.name] then
+						KBM.Trigger.Buff[bDetails.name]:Activate(nil, unitID, bDetails.remaining)
 					end
 				end
 			end
@@ -2030,7 +2072,7 @@ function KBM.MenuOptions.Alerts:Options()
 	Options = self.MenuItem.Options
 	Options:SetTitle()
 
-	self.Alert = Options:AddHeader(KBM.Language.Options.AlertEnabled[KBM.Lang], self.AlertEnabled, KBM.Options.Alert.Enabled)
+	self.Alert = Options:AddHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], self.AlertEnabled, KBM.Options.Alert.Enabled)
 	self.Alert:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowAnchor, KBM.Options.Alert.Visible)
 	self.Alert:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.LockAnchor, KBM.Options.Alert.Unlocked)
 	self.Alert:AddCheck(KBM.Language.Options.AlertFlash[KBM.Lang], self.FlashEnabled, KBM.Options.Alert.Flash)
@@ -2074,7 +2116,9 @@ local function KBM_Start()
 	KBM.MenuOptions.TankSwap.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.TankSwap[KBM.Lang], KBM.MenuOptions.TankSwap, true, Header)
 	table.insert(Command.Slash.Register("kbmreset"), {KBM_Reset, "KingMolinator", "KBM Reset"})
 	table.insert(Event.Chat.Notify, {KBM.Notify, "KingMolinator", "Notify Event"})
-	table.insert(Event.Chat.Npc, {KBM.NPCChat, "KingMolinator", "NPC Chat"}) 
+	table.insert(Event.Chat.Npc, {KBM.NPCChat, "KingMolinator", "NPC Chat"})
+	table.insert(Event.Buff.Add, {function (unitID, Buffs) KBM:BuffMonitor(unitID, Buffs, "new") end, "KingMolinator", "Buff Monitor (Add)"})
+	table.insert(Event.Buff.Change, {function (unitID, Buffs) KBM:BuffMonitor(unitID, Buffs, "change") end, "KingMolinator", "Buff Monitor (change)"})
 	table.insert(Event.Combat.Damage, {KBM_UnitHPCheck, "KingMolinator", "Combat Damage"})
 	table.insert(Event.Unit.Unavailable, {KBM_UnitRemoved, "KingMolinator", "Unit Unavailable"})
 	table.insert(Event.Unit.Available, {KBM_UnitAvailable, "KingMolinator", "Unit Available"})

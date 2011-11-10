@@ -203,7 +203,7 @@ function MX.Murdantix:Options()
 	end
 	function self:TraumaAlert(bool)
 		MX.Settings.Alerts.Trauma = bool
-		MX.Murd.AlertRef.Trauma.Enabled = bool
+		MX.Murd.AlertsRef.Trauma.Enabled = bool
 	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
@@ -216,7 +216,7 @@ function MX.Murdantix:Options()
 	self.Menu.Header:AddCheck(MX.Lang.Blast[KBM.Lang], self.BlastEnabled, MX.Settings.Timers.BlastEnabled)
 	self.Menu.Header:AddCheck(MX.Lang.Trauma[KBM.Lang], self.TraumaEnabled, MX.Settings.Timers.TraumaEnabled)
 	-- Alerts Menu
-	self.Menu.Alerts = Options:AddHeader(KBM.Language.Options.AlertEnabled[KBM.Lang], self.AlertEnabled, MX.Settings.Alerts.Enabled)
+	self.Menu.Alerts = Options:AddHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], self.AlertEnabled, MX.Settings.Alerts.Enabled)
 	self.Menu.Alerts:AddCheck(MX.Lang.Trauma[KBM.Lang], self.TraumaAlert, MX.Settings.Alerts.Trauma)
 end
 
@@ -236,7 +236,7 @@ function MX:Start()
 	self.Murd.TimersRef.Trauma.Enabled = MX.Settings.Timers.TraumaEnabled
 	
 	-- Create Alerts
-	self.Murd.AlertsRef.Trauma = KBM.Alert:Create(self.Lang.Trauma[KBM.Lang], 2, true)
+	self.Murd.AlertsRef.Trauma = KBM.Alert:Create(self.Lang.Trauma[KBM.Lang], 2, true, nil, "yellow")
 	
 	-- Assign Mechanics to Triggers
 	self.Murd.Triggers.Mangling = KBM.Trigger:Create(self.Lang.Mangling[KBM.Lang], "damage", self.Murd)

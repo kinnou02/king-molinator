@@ -33,15 +33,21 @@ SN.Sicaron = {
 	CastFilters = {},
 	Timers = {},
 	TimersRef = {},
+	AlertsRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
+	Triggers = {},
 }
 
 local KBM = KBM_RegisterMod(SN.Sicaron.ID, SN)
 
 SN.Lang.Sicaron = KBM.Language:Add(SN.Sicaron.Name)
+
+-- Debuff Dictionary
+SN.Lang.Debuff = {}
+SN.Lang.Debuff.Contract = KBM.Language:Add("Unholy Contract")
 
 SN.Sicaron.Name = SN.Lang.Sicaron[KBM.Lang]
 
@@ -58,6 +64,11 @@ function SN:InitVars()
 	self.Settings = {
 		Timers = {
 			Enabled = true,
+			Contract = true,
+		},
+		Alerts = {
+			Enabled = true,
+			Contract = true,
 		},
 		CastBar = {
 			x = false,
@@ -145,12 +156,23 @@ function SN:Timer()
 end
 
 function SN.Sicaron:Options()
-	function self:TimersEnabled(bool)
+	function self:Timers(bool)
+	end
+	function self:Alerts(bool)
+	
+	end
+	function self:ContractTimer(bool)
+	
+	end
+	function self:ContractAlert(bool)
+	
 	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
-	local Timers = Options:AddHeader("Timers Enabled", self.TimersEnabled, SN.Settings.Timers.Enabled)
-	--Timers:AddCheck(SN.Lang.Flames[KBM.Lang], self.FlamesEnabled, SN.Settings.Timers.FlamesEnabled)	
+	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.Timers, SN.Settings.Timers.Enabled)
+	Timers:AddCheck(SN.Lang.Debuff.Contract[KBM.Lang], self.ContractTimer, SN.Settings.Timers.Contract)
+	local Alerts = Options:AddHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], self.Alerts, SN.Settings.Alerts.Enabled)
+	Alerts:AddCheck(SN.Lang.Debuff.Contract[KBM.Lang], self.ContractAlert, SN.Settings.Alerts.Contract)
 	
 end
 
@@ -158,8 +180,17 @@ function SN:Start()
 	self.Header = KBM.HeaderList[self.Instance]
 	self.Sicaron.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Sicaron, true, self.Header)
 	self.Sicaron.MenuItem.Check:SetEnabled(false)
-	--self.Sicaron.TimersRef.Flames = KBM.MechTimer:Add(self.Lang.Flames[KBM.Lang], "cast", 30, self, nil)
-	--self.Sicaron.TimersRef.Flames.Enabled = self.Settings.Timers.FlamesEnabled
+	-- Create Timers
+	self.Sicaron.TimersRef.Contract = KBM.MechTimer:Add(self.Lang.Debuff.Contract[KBM.Lang], 17)
+	self.Sicaron.TimersRef.Contract.Enabled = self.Settings.Timers.Contract
+	
+	-- Create Alerts
+	self.Sicaron.AlertsRef.Contract = KBM.Alert:Create(self.Lang.Debuff.Contract[KBM.Lang], 10, false, true)
+	
+	-- Assign Mechanics to Triggers
+	self.Sicaron.Triggers.Contract = KBM.Trigger:Create(self.Lang.Debuff.Contract[KBM.Lang], "buff", self.Sicaron)
+	self.Sicaron.Triggers.Contract:AddTimer(self.Sicaron.TimersRef.Contract)
+	self.Sicaron.Triggers.Contract:AddAlert(self.Sicaron.AlertsRef.Contract, true)
 	
 	self.Sicaron.CastBar = KBM.CastBar:Add(self, self.Sicaron, true)
 end

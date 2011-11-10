@@ -53,6 +53,7 @@ MZ.Lang.Ability.Concussion.German = "Dunkle Erschütterung"
 MZ.Lang.Ability.Concussion.French = "Concussion sombre"
 MZ.Lang.Ability.Blast = KBM.Language:Add("Hideous Blast")
 MZ.Lang.Ability.Blast.German = "Schrecklicher Schlag"
+MZ.Lang.Ability.Blast.French = "Explosion atroce"
 
 -- Debuff Dictionary
 MZ.Lang.Debuff = {}
@@ -190,7 +191,7 @@ function MZ.Matron:Options()
 	Options:SetTitle()
 	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, MZ.Settings.Timers.Enabled)
 	Timers:AddCheck(MZ.Lang.Ability.Concussion[KBM.Lang], self.ConcussionTimer, MZ.Settings.Timers.Concussion)
-	local Alerts = Options:AddHeader(KBM.Language.Options.AlertEnabled[KBM.Lang], self.AlertsEnabled, MZ.Settings.Alerts.Enabled)
+	local Alerts = Options:AddHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], self.AlertsEnabled, MZ.Settings.Alerts.Enabled)
 	Alerts:AddCheck(MZ.Lang.Ability.Concussion[KBM.Lang], self.ConcussionAlert, MZ.Settings.Alerts.Concussion)
 	Alerts:AddCheck(MZ.Lang.Ability.Blast[KBM.Lang], self.BlastAlert, MZ.Settings.Alerts.Blast)
 	
@@ -205,8 +206,8 @@ function MZ:Start()
 	self.Matron.TimersRef.Concussion = KBM.MechTimer:Add(self.Lang.Ability.Concussion[KBM.Lang], 15)
 	
 	-- Create Alerts
-	self.Matron.AlertsRef.Concussion = KBM.Alert:Create(self.Lang.Ability.Concussion[KBM.Lang], 3, true)
-	self.Matron.AlertsRef.Blast = KBM.Alert:Create(self.Lang.Ability.Blast[KBM.Lang], 2, true)
+	self.Matron.AlertsRef.Concussion = KBM.Alert:Create(self.Lang.Ability.Concussion[KBM.Lang], 3, true, nil, "red")
+	self.Matron.AlertsRef.Blast = KBM.Alert:Create(self.Lang.Ability.Blast[KBM.Lang], 2, true, nil, "yellow")
 	
 	-- Assign Mechanics to Triggers
 	self.Matron.Triggers.Concussion = KBM.Trigger:Create(self.Lang.Ability.Concussion[KBM.Lang], "cast", self.Matron)
