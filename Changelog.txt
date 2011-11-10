@@ -13,6 +13,7 @@
 * Added: King Molinar. Screen Alert for Consuming Essence. (yellow)
 * Added: Prince Dollin. Screen Alert for Terminate Life. (orange)
 * Added: Prince Dollin. Screen Alert for Consuming Essence. (yellow)
+* Added: Alert filters for Prince Dollin and King Molinar.
 ----
 v0.4.6
 * Fixed: Rare case of idle bosses reporting errors after an encounter.
