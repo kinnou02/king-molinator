@@ -315,6 +315,7 @@ function KBM.MechTimer:Init()
 	self.StartTimers = {}
 	self.LastTimer = nil
 	self.Anchor = UI.CreateFrame("Frame", "Timer Anchor", KBM.Context)
+	self.Anchor:SetLayer(5)
 	self.Anchor:SetWidth(KBM.Options.MechTimer.w * KBM.Options.MechTimer.wScale)
 	self.Anchor:SetHeight(KBM.Options.MechTimer.h * KBM.Options.MechTimer.hScale)
 	self.Anchor:SetBackgroundColor(0,0,0,0.33)
@@ -743,6 +744,7 @@ function KBM.EncTimer:Init()
 	
 	self.TestMode = false
 	self.Frame = UI.CreateFrame("Frame", "Encounter Timer", KBM.Context)
+	self.Frame:SetLayer(5)
 	self.Frame:SetWidth(KBM.Options.EncTimer.w)
 	self.Frame:SetHeight(KBM.Options.EncTimer.h)
 	if not KBM.Options.EncTimer.x then
@@ -1014,6 +1016,7 @@ function KBM.TankSwap:Init()
 	self.Anchor:SetWidth(KBM.Options.TankSwap.w * KBM.Options.TankSwap.wScale)
 	self.Anchor:SetHeight(KBM.Options.TankSwap.h * KBM.Options.TankSwap.hScale)
 	self.Anchor:SetBackgroundColor(0,0,0,0.33)
+	self.Anchor:SetLayer(5)
 	if KBM.Options.TankSwap.x then
 		self.Anchor:SetPoint("TOPLEFT", UIParent, "TOPLEFT", KBM.Options.TankSwap.x, KBM.Options.TankSwap.y)
 	else
@@ -1196,6 +1199,7 @@ function KBM.Alert:Init()
 	self.List = {}
 	self.Anchor = UI.CreateFrame("Frame", "Alert Text Anchor", KBM.Context)
 	self.Anchor:SetBackgroundColor(0,0,0,0)
+	self.Anchor:SetLayer(5)
 	if KBM.Options.Alert.x then
 		self.Anchor:SetPoint("TOPLEFT", UIParent, "TOPLEFT", KBM.Options.Alert.x, KBM.Options.Alert.y)
 	else

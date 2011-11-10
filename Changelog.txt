@@ -2,6 +2,7 @@
 * Fixed: TankSwap options should now work as intended.
 * Fixed: Matron Zamira's Hideous Blast alert.
 * Change: Minor adjustments to personal screen alerts engine.
+* Change: Anchors should now appear above the options window when visible.
 * Added: German Translation for Unholy Contract.
 * Added: German Translations for Tidal Waves.
 * Added: Matron Zamira's Mark of Oblivion Timer.
