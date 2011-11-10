@@ -186,7 +186,7 @@ function SN:Start()
 	self.Sicaron.TimersRef.Contract.Enabled = self.Settings.Timers.Contract
 	
 	-- Create Alerts
-	self.Sicaron.AlertsRef.Contract = KBM.Alert:Create(self.Lang.Debuff.Contract[KBM.Lang], 10, false, true)
+	self.Sicaron.AlertsRef.Contract = KBM.Alert:Create(self.Lang.Debuff.Contract[KBM.Lang], 10, false, true, "blue")
 	
 	-- Assign Mechanics to Triggers
 	self.Sicaron.Triggers.Contract = KBM.Trigger:Create(self.Lang.Debuff.Contract[KBM.Lang], "buff", self.Sicaron)

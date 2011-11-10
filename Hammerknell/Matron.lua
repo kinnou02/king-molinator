@@ -54,6 +54,7 @@ MZ.Lang.Ability.Concussion.French = "Concussion sombre"
 MZ.Lang.Ability.Blast = KBM.Language:Add("Hideous Blast")
 MZ.Lang.Ability.Blast.German = "Schrecklicher Schlag"
 MZ.Lang.Ability.Blast.French = "Explosion atroce"
+MZ.Lang.Ability.Mark = KBM.Language:Add("Mark of Oblivion")
 
 -- Debuff Dictionary
 MZ.Lang.Debuff = {}
@@ -76,11 +77,13 @@ function MZ:InitVars()
 		Timers = {
 			Enabled = true,
 			Concussion = true,
+			Mark = true,
 		},
 		Alerts = {
 			Enabled = true,
 			Concussion = true,
 			Blast = true,
+			Mark = true,
 		},
 		CastBar = {
 			x = false,
@@ -169,6 +172,7 @@ function MZ:Timer()
 end
 
 function MZ.Matron:Options()
+	-- Timer Options
 	function self:TimersEnabled(bool)
 		MZ.Settings.Timers.Enabled = bool
 	end
@@ -176,6 +180,11 @@ function MZ.Matron:Options()
 		MZ.Settings.Timers.Concussion = bool
 		MZ.Matron.TimersRef.Concussion.Enabled = bool
 	end
+	function self:MarkTimer(bool)
+		MZ.Settings.Timers.Mark = bool
+		MZ.Matron.TimersRef.Mark.Enabled = bool
+	end
+	-- Alert Options
 	function self:AlertsEnabled(bool)
 		MZ.Settings.Alerts.Enabled = bool
 	end
@@ -187,13 +196,19 @@ function MZ.Matron:Options()
 		MZ.Settings.Alerts.Blast = bool
 		MZ.Matron.AlertsRef.Blast.Enabled = bool
 	end
+	function self:MarkAlert(bool)
+		MZ.Settings.Alerts.Mark = bool
+		MZ.Matron.AlertsRef.MarkDamage.Enabled = bool
+	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
 	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, MZ.Settings.Timers.Enabled)
 	Timers:AddCheck(MZ.Lang.Ability.Concussion[KBM.Lang], self.ConcussionTimer, MZ.Settings.Timers.Concussion)
+	Timers:AddCheck(MZ.Lang.Ability.Mark[KBM.Lang], self.MarkTimer, MZ.Settings.Timers.Mark)
 	local Alerts = Options:AddHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], self.AlertsEnabled, MZ.Settings.Alerts.Enabled)
 	Alerts:AddCheck(MZ.Lang.Ability.Concussion[KBM.Lang], self.ConcussionAlert, MZ.Settings.Alerts.Concussion)
 	Alerts:AddCheck(MZ.Lang.Ability.Blast[KBM.Lang], self.BlastAlert, MZ.Settings.Alerts.Blast)
+	Alerts:AddCheck(MZ.Lang.Ability.Mark[KBM.Lang], self.MarkAlert, MZ.Settings.Alerts.Mark)
 	
 end
 
@@ -204,16 +219,23 @@ function MZ:Start()
 		
 	-- Create Timers
 	self.Matron.TimersRef.Concussion = KBM.MechTimer:Add(self.Lang.Ability.Concussion[KBM.Lang], 15)
+	self.Matron.TimersRef.Mark = KBM.MechTimer:Add(self.Lang.Ability.Mark[KBM.Lang], 24)
 	
 	-- Create Alerts
-	self.Matron.AlertsRef.Concussion = KBM.Alert:Create(self.Lang.Ability.Concussion[KBM.Lang], 3, true, nil, "red")
-	self.Matron.AlertsRef.Blast = KBM.Alert:Create(self.Lang.Ability.Blast[KBM.Lang], 2, true, nil, "yellow")
+	self.Matron.AlertsRef.Concussion = KBM.Alert:Create(self.Lang.Ability.Concussion[KBM.Lang], 3, true, false, "red")
+	self.Matron.AlertsRef.Blast = KBM.Alert:Create(self.Lang.Ability.Blast[KBM.Lang], 2, true, false, "yellow")
+	self.Matron.AlertsRef.MarkDamage = KBM.Alert:Create(self.Lang.Ability.Mark[KBM.Lang], 6, false, true, "purple")
 	
 	-- Assign Mechanics to Triggers
 	self.Matron.Triggers.Concussion = KBM.Trigger:Create(self.Lang.Ability.Concussion[KBM.Lang], "cast", self.Matron)
 	self.Matron.Triggers.Concussion:AddTimer(self.Matron.TimersRef.Concussion)
 	self.Matron.Triggers.Concussion:AddAlert(self.Matron.AlertsRef.Concussion)
 	self.Matron.Triggers.Blast = KBM.Trigger:Create(self.Lang.Ability.Blast[KBM.Lang], "cast", self.Matron)
+	self.Matron.Triggers.Blast:AddAlert(self.Matron.AlertsRef.Blast)
+	self.Matron.Triggers.Mark = KBM.Trigger:Create(self.Lang.Ability.Mark[KBM.Lang], "cast", self.Matron)
+	self.Matron.Triggers.Mark:AddTimer(self.Matron.TimersRef.Mark)
+	self.Matron.Triggers.MarkDamage = KBM.Trigger:Create(self.Lang.Ability.Mark[KBM.Lang], "damage", self.Matron)
+	self.Matron.Triggers.MarkDamage:AddAlert(self.Matron.AlertsRef.MarkDamage, true)
 	
 	self.Matron.CastBar = KBM.CastBar:Add(self, self.Matron, true)
 end

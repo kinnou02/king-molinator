@@ -149,7 +149,7 @@ function SZ.Zilas:Options()
 	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
-	local Timers = Options:AddHeader("Timers Enabled", self.TimersEnabled, SZ.Settings.Timers.Enabled)
+	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, SZ.Settings.Timers.Enabled)
 	--Timers:AddCheck("Tidal Wave (Phase 1)", self.WaveStartEnabled, SZ.Settings.Timers.WaveStartEnabled)	
 	
 end

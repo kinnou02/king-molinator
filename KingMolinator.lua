@@ -1255,6 +1255,7 @@ function KBM.Alert:Init()
 	
 	function self:Create(Text, Duration, Flash, Countdown, Color)
 		AlertObj = {}
+		AlertObj.DefDuration = Duration
 		AlertObj.Duration = Duration
 		AlertObj.Flash = Flash
 		if not Color then
@@ -1275,7 +1276,13 @@ function KBM.Alert:Init()
 		end
 		if KBM.Options.Alert.Enabled then
 			if Duration then
-				self.Duration = Duration
+				if not self.DefaultDuration then
+					self.Duration = Duration
+				end
+			else
+				if not self.DefaultDuration then
+					self.Duration = 2
+				end
 			end
 			self.Current = AlertObj
 			if KBM.Options.Alert.Flash then

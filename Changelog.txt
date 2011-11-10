@@ -1,7 +1,11 @@
 ﻿v0.4.8
 * Fixed: TankSwap options should now work as intended.
+* Fixed: Matron Zamira's Hideous Blast alert.
+* Change: Minor adjustments to personal screen alerts engine.
 * Added: German Translation for Unholy Contract.
 * Added: German Translations for Tidal Waves.
+* Added: Matron Zamira's Mark of Oblivion Timer.
+* Added: Matron Zamira's Mark Of Oblivion personal screen alert (purple) ** experimental
 ----
 v0.4.7
 * New: Buff monitoring and triggers.
@@ -14,7 +18,7 @@ v0.4.7
 * Added: Matron Zamira: French support for Hideous Blast.
 * Added: Matron Zamira: Hideous Blast Screen alert now yellow.
 * Added: Sicaron. Mechanic Timer for Unholy Contract.
-* Added: Sicaron. Personal screen alert for Unholy Contract. ** untested
+* Added: Sicaron. Personal screen alert for Unholy Contract. ** experimental
 * Added: King Molinar. Screen Alert for Consuming Essence. (yellow)
 * Added: Prince Dollin. Screen Alert for Terminate Life. (orange)
 * Added: Prince Dollin. Screen Alert for Consuming Essence. (yellow)
