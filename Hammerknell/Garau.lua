@@ -52,7 +52,7 @@ GU.Lang.Ability = {}
 GU.Lang.Ability.Arcane = KBM.Language:Add("Arcane Essence")
 GU.Lang.Ability.Arcane.French = "Syphon d'essence"
 GU.Lang.Ability.Arcane.German = "Essenzabsauger"
-GU.Lang.Ability.Blood = KBM.Language:Add("Blood Tide")
+GU.Lang.Ability.Blood = KBM.Language:Add("Bloodtide")
 GU.Lang.Ability.Blood.German = "Blutflut"
 
 -- Speak Dictionary
@@ -223,7 +223,7 @@ function GU:Start()
 	self.Garau.TimersRef.Crawler.Enabled = self.Settings.Timers.CrawlerEnabled
 	self.Garau.TimersRef.Porter = KBM.MechTimer:Add(GU.Lang.Unit.Porter[KBM.Lang], 45)
 	self.Garau.TimersRef.Porter.Enabled = self.Settings.Timers.PorterEnabled
-	self.Garau.TimersRef.Essence = KBM.MechTimer:Add(GU.Lang.Ability.Arcane[KBM.Lang], 18)
+	self.Garau.TimersRef.Essence = KBM.MechTimer:Add(GU.Lang.Ability.Arcane[KBM.Lang], 20)
 	self.Garau.TimersRef.Essence.Enabled = self.Settings.Timers.EssenceEnabled
 	
 	-- Assign Mechanics to Triggers

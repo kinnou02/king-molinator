@@ -21,6 +21,23 @@ KBM.MenuOptions = {
 	ID = "Options",
 }
 
+KBM.TestBoss = {
+	Mod = KBM,
+	Level = "??",
+	Active = false,
+	Name = "Safe",
+	Castbar = nil,
+	CastFilters = {},
+	Timers = {},
+	TimersRef = {},
+	Dead = false,
+	Available = false,
+	UnitID = nil,
+	Descript = "Test Boss",
+	TimeOut = 5,
+	Triggers = {},
+}
+
 local function KBM_DefineVars(AddonID)
 	if AddonID == "KingMolinator" then
 		KBM.Options = {
@@ -363,11 +380,10 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 					self.Removing = true
 					table.insert(KBM.MechTimer.RemoveTimers, self)
 				end
-				if self.Starting then
-					return
+				if not self.Starting then
+					table.insert(KBM.MechTimer.StartTimers, self)
+					self.Starting = true
 				end
-				table.insert(KBM.MechTimer.StartTimers, self)
-				self.Starting = true
 				return
 			end
 			self.Starting = false
@@ -412,8 +428,8 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 				if not self.Active then
 					self.Background:SetPoint("TOPLEFT", KBM.MechTimer.LastTimer.Background, "BOTTOMLEFT", 0, 1)
 					table.insert(KBM.MechTimer.ActiveTimers, self)
-					self.Active = true
 					KBM.MechTimer.LastTimer = self
+					self.Active = true
 				end
 			else
 				self.Background:SetPoint("TOPLEFT", KBM.MechTimer.Anchor, "TOPLEFT")
@@ -446,10 +462,10 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 		self.CastInfo:sRemove()
 		self.TimeBar:sRemove()
 		self.Background:sRemove()
-		if KBM.Testing then
-			self.Starting = true
-			table.insert(KBM.MechTimer.StartTimers, self)
-		elseif self.Repeat then
+		-- if KBM.Testing then
+			-- self.Starting = true
+			-- table.insert(KBM.MechTimer.StartTimers, self)
+		if self.Repeat then
 			self.Starting = true
 			table.insert(KBM.MechTimer.StartTimers, self)
 		end
@@ -468,15 +484,20 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 			end
 		end
 	end
-	if KBM.Testing then
-		Timer:Start(Inspect.Time.Real())
-		table.insert(self.testTimerList, iTrigger)
-	end
+	-- if KBM.Testing then
+		-- Timer:Start(Inspect.Time.Real())
+		-- table.insert(self.testTimerList, iTrigger)
+	-- end
 	return Timer
 end
 
 function KBM.Trigger:Init()
 
+	self.Queue = {}
+	self.Queue.Locked = false
+	self.Queue.Removing = false
+	self.Queue.List = {}
+	self.List = {}
 	self.Notify = {}
 	self.Say = {}
 	self.Damage = {}
@@ -487,6 +508,47 @@ function KBM.Trigger:Init()
 	self.Death = {}
 	self.Buff = {}
 
+	function self.Queue:Add(TriggerObj, Caster, Target, Duration)
+		if TriggerObj.Queued or self.Removing then
+			return
+		else
+			TriggerObj.Queued = true
+		end
+		repeat
+		until not self.Locked
+		self.Locked = true
+		table.insert(self.List, TriggerObj)
+		TriggerObj.Caster = Caster
+		TriggerObj.Target = Target
+		TriggerObj.Data = Data		
+		self.Locked = false
+	end
+	
+	function self.Queue:Activate()
+		if self.Removing then
+			return
+		end
+		repeat
+		until not self.Locked
+		self.Locked = true
+		for i, TriggerObj in ipairs(self.List) do
+			TriggerObj:Activate(TriggerObj.Caster, TriggerObj.Target, TriggerObj.Data)
+			TriggerObj.Queued = false
+		end
+		self.List = {}
+		self.Locked = false
+	end
+	
+	function self.Queue:Remove()
+		self.Removing = true
+		repeat
+		until not self.Locked
+		self.Locked = true
+		self.List = {}
+		self.Locked = false
+		self.Removing = false
+	end
+	
 	function self:Create(Trigger, Type, Unit, Hook)
 		TriggerObj = {}
 		TriggerObj.Timers = {}
@@ -495,6 +557,9 @@ function KBM.Trigger:Init()
 		TriggerObj.Hook = Hook
 		TriggerObj.Unit = Unit
 		TriggerObj.Type = Type
+		TriggerObj.Caster = nil
+		TriggerObj.Target = nil
+		TriggerObj.Queued = false
 		
 		function TriggerObj:AddTimer(TimerObj)
 			table.insert(self.Timers, TimerObj)
@@ -575,6 +640,7 @@ function KBM.Trigger:Init()
 			self.Buff[Trigger] = TriggerObj
 		end
 		
+		table.insert(self.List, TriggerObj)
 		return TriggerObj
 	end
 	function self:Unload()
@@ -927,7 +993,8 @@ local function KBM_UnitHPCheck(info)
 		if KBM_CurrentMod then
 			if info.abilityName then
 				if KBM.Trigger.Damage[info.abilityName] then
-					KBM.Trigger.Damage[info.abilityName]:Activate(cUnitID, tUnitID)
+					TriggerObj = KBM.Trigger.Damage[info.abilityName]
+					KBM.Trigger.Queue:Add(TriggerObj, cUnitID, tUnitID)
 				end
 			end
 		end
@@ -1493,7 +1560,8 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 					self.LastCast = bDetails.abilityName
 					if KBM.Trigger.Cast[bDetails.abilityName] then
 						if KBM.Trigger.Cast[bDetails.abilityName][self.Boss.Name] then
-							KBM.Trigger.Cast[bDetails.abilityName][self.Boss.Name]:Activate()
+							TriggerObj = KBM.Trigger.Cast[bDetails.abilityName][self.Boss.Name]
+							KBM.Trigger.Queue:Add(TriggerObj, nil, nil, bDetails.remaining)
 						end
 					end
 				end
@@ -1543,6 +1611,20 @@ local function KBM_Reset()
 			if KBM.Alert.Current then
 				KBM.Alert:Stop()
 			end
+			if #KBM.MechTimer.ActiveTimers > 0 then
+				for i, Timer in ipairs(KBM.MechTimer.ActiveTimers) do
+					table.insert(KBM.MechTimer.RemoveTimers, Timer)
+				end
+				if #KBM.MechTimer.RemoveTimers > 0 then
+					for i, Timer in ipairs(KBM.MechTimer.RemoveTimers) do
+						Timer:Stop()
+					end
+				end
+				KBM.MechTimer.RemoveTimers = {}
+				KBM.MechTimer.ActiveTimers = {}
+				KBM.MechTimer.StartTimers = {}
+			end
+			KBM.Trigger.Queue:Remove()
 		end
 	else
 		print("No encounter to reset.")
@@ -1588,7 +1670,7 @@ function KBM:CheckBossStates(current)
 end
 
 function KBM:Timer()
-	if KBM.Encounter or KBM.Testing then
+	if KBM.Encounter then
 		local current = Inspect.Time.Real()
 		local diff = (current - self.HeldTime)
 		local udiff = (current - self.UpdateTime)
@@ -1610,25 +1692,13 @@ function KBM:Timer()
 			self:CheckBossStates(current)			
 		end
 		if udiff >= 0.05 then
+			for UnitID, CastCheck in pairs(KBM.CastBar.ActiveCastBars) do
+				CastCheck:Update()
+			end
 			if #self.MechTimer.ActiveTimers > 0 then
 				for i, Timer in ipairs(self.MechTimer.ActiveTimers) do
 					Timer:Update(current)
 				end
-				if #self.MechTimer.RemoveTimers > 0 then
-					for i, Timer in ipairs(self.MechTimer.RemoveTimers) do
-						Timer:Stop()
-					end
-					self.MechTimer.RemoveTimers = {}
-				end
-			end
-			if #self.MechTimer.StartTimers > 0 then
-				for i, Timer in ipairs(self.MechTimer.StartTimers) do
-					Timer:Start(current)
-				end
-				self.MechTimer.StartTimers = {}
-			end
-			for UnitID, CastCheck in pairs(KBM.CastBar.ActiveCastBars) do
-				CastCheck:Update()
 			end
 			self.UpdateTime = current
 			if not KBM.TankSwap.Test then
@@ -1640,31 +1710,37 @@ function KBM:Timer()
 		if self.Alert.Current then
 			self.Alert:Update(Inspect.Time.Real())
 		end
+		self.Trigger.Queue:Activate()
+		if #self.MechTimer.RemoveTimers > 0 then
+			for i, Timer in ipairs(self.MechTimer.RemoveTimers) do
+				Timer:Stop()
+			end
+			self.MechTimer.RemoveTimers = {}
+		end
+		if #self.MechTimer.StartTimers > 0 then
+			for i, Timer in ipairs(self.MechTimer.StartTimers) do
+				Timer:Start(current)
+			end
+			self.MechTimer.StartTimers = {}
+		end
 	else
 		-- for UnitID, CastCheck in pairs(KBM.CastBar.List) do
 			-- CastCheck:Update()
 		-- end
 		if not KBM.Encounter then
-			if #self.MechTimer.ActiveTimers > 0 then
-				for i, Timer in ipairs(self.MechTimer.ActiveTimers) do
-					table.insert(self.MechTimer.RemoveTimers, Timer)
-				end
-				if #self.MechTimer.RemoveTimers > 0 then
-					for i, Timer in ipairs(self.MechTimer.RemoveTimers) do
-						Timer:Stop()
-					end
-				end
-				self.MechTimer.RemoveTimers = {}
-				self.MechTimer.ActiveTimers = {}
-				self.MechTimer.StartTimers = {}
-			end
 		end
 	end
-		
+	-- if KBM.Testing then
+		-- d = math.random(1,2000)
+		-- if d < 20 then
+			-- d = math.random(1, #KBM.Trigger.List)
+			-- KBM.Trigger.Queue:Add(KBM.Trigger.List[d], KBM_PlayerID, KBM_PlayerID, d)
+		-- end
+	-- end	
 end
 
 local function KBM_CastBar(units)
-	--print("KBM_CastBar Event Handled")
+
 	if KBM.Encounter then
 		if KBM_CurrentCBHook then
 			KBM_CurrentCBHook(units)
@@ -1697,7 +1773,7 @@ local function KM_ToggleEnabled(result)
 end
 
 local function KBM_UnitRemoved(units)
-	--[[local uDetails = {}]]
+
 	if KBM.Encounter then
 		for UnitID, Specifier in pairs(units) do
 			if not Inspect.Unit.Detail(UnitID) then
@@ -1710,6 +1786,7 @@ local function KBM_UnitRemoved(units)
 			end
 		end
 	end
+	
 end
 
 local function KBM_Death(info)
@@ -1736,18 +1813,17 @@ local function KBM_Death(info)
 end
 
 local function KBM_AutoReset()
-	if KBM.Options.AutoReset then
-		KBM.Options.AutoReset = false
-		print("Auto-Reset is now off.")
-	else
-		KBM.Options.AutoReset = true
-		print("Auto-Reset is now on (Experimental: Please report the accuracy of this.)")
-	end
+	-- if KBM.Options.AutoReset then
+		-- KBM.Options.AutoReset = false
+		-- print("Auto-Reset is now off.")
+	-- else
+		-- KBM.Options.AutoReset = true
+		-- print("Auto-Reset is now on (Experimental: Please report the accuracy of this.)")
+	-- end
 end
 
 local function KBM_Help()
 	print("King Molinator in game slash commands")
-	print("/kbmautoreset -- Toggle on/off, if you wish the addon to calculate a wipe (experimental).")
 	print("/kbmreset -- Resets the monitor's data, and recalculates.")
 	print("/kbmoptions -- Toggles the GUI Options screen.")
 	print("/kbmhelp -- Displays what you're reading now :)")
@@ -1758,9 +1834,9 @@ function KBM.Notify(data)
 		if data.message then
 			if KBM_CurrentMod then
 				if KBM.Trigger.Notify[KBM_CurrentMod.ID] then
-					for i, Trigger in ipairs(KBM.Trigger.Notify[KBM_CurrentMod.ID]) do
-						if string.find(data.message, Trigger.Phrase, 1, true) then
-							Trigger:Activate()
+					for i, TriggerObj in ipairs(KBM.Trigger.Notify[KBM_CurrentMod.ID]) do
+						if string.find(data.message, TriggerObj.Phrase, 1, true) then
+							KBM.Trigger.Queue:Add(TriggerObj)
 							break
 						end
 					end
@@ -1771,16 +1847,14 @@ function KBM.Notify(data)
 end
 
 function KBM.NPCChat(data)
-	local match = false
 	if KBM.Encounter then
 		if data.fromName then
 			if KBM_CurrentMod then
 				if KBM.Trigger.Say[KBM_CurrentMod.ID] then
-					for i, Trigger in ipairs(KBM.Trigger.Say[KBM_CurrentMod.ID]) do
-						if Trigger.Unit.Name == data.fromName then
-							if string.find(data.message, Trigger.Phrase, 1, true) then
-								Trigger:Activate()
-								match = true
+					for i, TriggerObj in ipairs(KBM.Trigger.Say[KBM_CurrentMod.ID]) do
+						if TriggerObj.Unit.Name == data.fromName then
+							if string.find(data.message, TriggerObj.Phrase, 1, true) then
+								KBM.Trigger.Queue:Add(TriggerObj)
 								break
 							end
 						end
@@ -1799,7 +1873,8 @@ function KBM:BuffMonitor(unitID, Buffs, Type)
 			if bDetails then
 				if Type == "added" then
 					if KBM.Trigger.Buff[bDetails.name] then
-						KBM.Trigger.Buff[bDetails.name]:Activate(nil, unitID, bDetails.remaining)
+						TriggerObj = KBM.Trigger.Buff[bDetails.name]
+						KBM.Trigger.Queue:Add(TriggerObj, nil, unitID, bDetails.remaining)
 					end
 				end
 			end
@@ -2159,6 +2234,16 @@ local function KBM_WaitReady(unitID)
 		Mod:Start(KBM_MainWin)
 	end
 	KBM_PlayerID = unitID
+	-- if KBM.Testing then
+		-- TestBar = KBM.CastBar:Add(KBM, KBM.TestBoss, true)
+		-- TestBar:Create(KBM_PlayerID)
+		-- for i, TriggerObj in ipairs(KBM.Trigger.List) do
+			-- TriggerObj:Activate()
+		-- end
+		-- TestTimer = KBM.MechTimer:Add("Summon Tank!", 30)
+		-- TestTrigger = KBM.Trigger:Create("Summon: Skeletal Knight", "cast", KBM.TestBoss)
+		-- TestTrigger:AddTimer(TestTimer)
+	-- end
 end
 
 function KBM_RegisterApp()
