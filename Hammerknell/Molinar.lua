@@ -330,7 +330,9 @@ function KM:UnitHPCheck(unitDetails, unitID)
 					end
 					self.KingLastHP = unitDetails.healthMax
 					self.KingHPMax = unitDetails.healthMax
-					self.FrameBase:SetVisible(true)
+					if self.Settings.Enabled then
+						self.FrameBase:SetVisible(true)
+					end
 					self.King.Dead = false
 					self.KingCasting = false
 					self.King.CastBar:Create(unitID)
@@ -348,7 +350,9 @@ function KM:UnitHPCheck(unitDetails, unitID)
 					end
 					self.PrinceLastHP = unitDetails.healthMax
 					self.PrinceHPMax = unitDetails.healthMax
-					self.FrameBase:SetVisible(true)
+					if self.Settings.Enabled then
+						self.FrameBase:SetVisible(true)
+					end
 					self.Prince.Dead = false
 					self.PrinceCasting = false
 					self.Prince.CastBar:Create(unitID)
@@ -809,11 +813,7 @@ function KM.KingMolinar:Options()
 		KM.Prince.CastFilters[KM.Lang.Ability.Forked[KBM.Lang]].Enabled = bool
 	end
 	function self:MonitorEnabled(bool)
-		if bool then
-			--print("Monitor is now Enabled")
-		else
-			--print("Monitor is now Disabled")
-		end
+		KM.Settings.Enabled = bool
 	end
 	function self:KingTimers(bool)
 		KM.Settings.King.Timers = bool

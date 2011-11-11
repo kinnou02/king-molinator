@@ -27,6 +27,7 @@ function KBM.Scroller:Create(Type, Size, Parent, Callback)
 	ScrollerObj.Handle.MouseDown = false
 	ScrollerObj.Handle.StartY = 0
 	ScrollerObj.Handle.Position = 0
+	ScrollerObj.Handle.Multiplier = 2.5
 	function ScrollerObj.Handle.Event:MouseIn()
 		if not self.MouseDown then
 			self:SetBackgroundColor(1,1,1,0.75)
@@ -52,12 +53,12 @@ function KBM.Scroller:Create(Type, Size, Parent, Callback)
 			if self.Controller.Position < 0 then
 				self.Controller.Position = 0
 			end
-			if self.Controller.Position > (self.Controller.Size - self.Controller.Total) then
-				self.Controller.Position = self.Controller.Size - self.Controller.Total
+			if self.Controller.Position > self.Controller.Range then
+				self.Controller.Position = self.Controller.Range
 			end
 			self:SetPoint("TOP", self.Controller.Frame, "TOP", nil, self.Controller.Position)
 			if self.Controller.Callback then
-				self.Controller.Callback(self.Controller.Position)
+				self.Controller.Callback(self.Controller.Position * self.Multiplier)
 			end
 		end
 	end
@@ -76,25 +77,28 @@ function KBM.Scroller:Create(Type, Size, Parent, Callback)
 		if self.Type == "H" then
 		
 		else
-			if self.Size - self.Total > self.Frame:GetHeight() then
+			if self.Range > self.Frame:GetHeight() then
 			
 			else
-				self.Handle:SetHeight(self.Total - (self.Size - self.Total))
+				self.Handle:SetHeight(self.Height - self.Range)
 				self.Handle:SetPoint("TOP", self.Frame, "TOP")
 			end
 		end
 	end
 	function ScrollerObj:SetHeight(Height)
+		self.Height = Height
 		self.Frame:SetHeight(Height)
 	end
 	function ScrollerObj:SetWidth(Width)
+		self.Width = Width
 		self.Frame:SetWidth(Width)
 	end
 	function ScrollerObj:SetRange(Size, Total)
 		self.Size = Size
 		self.Total = Total
+		self.Range = (Size - Total) / self.Handle.Multiplier
 		self.Position = 0
-		if Size < Total then
+		if self.Range < 0 then
 			self.Handle:SetVisible(false)
 		else
 			self.Handle:SetVisible(true)
@@ -103,15 +107,15 @@ function KBM.Scroller:Create(Type, Size, Parent, Callback)
 	end
 	function ScrollerObj:SetPosition(Value)
 		if self.Handle:GetVisible() then
-			self.Position = self.Position + Value
+			self.Position = self.Position + (Value / self.Handle.Multiplier)
 			if self.Position < 0 then
 				self.Position = 0
-			elseif self.Position > (self.Size - self.Total) then
-				self.Position = self.Size - self.Total
+			elseif self.Position > self.Range then
+				self.Position = self.Range
 			end
 			self.Handle:SetPoint("TOP", self.Frame, "TOP", nil, self.Position)
 			if self.Callback then
-				self.Callback(self.Position)
+				self.Callback(self.Position * self.Handle.Multiplier)
 			end
 		end
 	end

@@ -1450,36 +1450,37 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 	end
 	function CastBarObj:Update()
 		bDetails = Inspect.Unit.Castbar(self.UnitID)
-		if bDetails and self.Enabled then
+		if bDetails then
 			if bDetails.abilityName then
-				if self.HasFilters then
-					if self.Filters[bDetails.abilityName] then
-						if self.Filters[bDetails.abilityName].Enabled then
-							if not self.Casting then
-								self.Casting = true
-								self.Frame:SetVisible(true)
+				if self.Enabled then
+					if self.HasFilters then
+						if self.Filters[bDetails.abilityName] then
+							if self.Filters[bDetails.abilityName].Enabled then
+								if not self.Casting then
+									self.Casting = true
+									self.Frame:SetVisible(true)
+								end
+								bCastTime = bDetails.duration
+								bProgress = bDetails.remaining						
+								self.Progress:SetWidth(self.Frame:GetWidth() * (1-(bProgress/bCastTime)))
+								self.Text:SetText(string.format("%0.01f", bProgress).." - "..bDetails.abilityName)
+								self.Text:ResizeToText()
+							else
+								self.Casting = false
+								self.Frame:SetVisible(false)
 							end
-							bCastTime = bDetails.duration
-							bProgress = bDetails.remaining						
-							self.Progress:SetWidth(self.Frame:GetWidth() * (1-(bProgress/bCastTime)))
-							self.Text:SetText(string.format("%0.01f", bProgress).." - "..bDetails.abilityName)
-							self.Text:ResizeToText()
-						else
-							self.Casting = false
-							self.Frame:SetVisible(false)
-							self.LastCast = ""		
 						end
+					else
+						if not self.Casting then
+							self.Casting = true
+							self.Frame:SetVisible(true)
+						end
+						bCastTime = bDetails.duration
+						bProgress = bDetails.remaining						
+						self.Progress:SetWidth(self.Frame:GetWidth() * (1-(bProgress/bCastTime)))
+						self.Text:SetText(string.format("%0.01f", bProgress).." - "..bDetails.abilityName)
+						self.Text:ResizeToText()	
 					end
-				else
-					if not self.Casting then
-						self.Casting = true
-						self.Frame:SetVisible(true)
-					end
-					bCastTime = bDetails.duration
-					bProgress = bDetails.remaining						
-					self.Progress:SetWidth(self.Frame:GetWidth() * (1-(bProgress/bCastTime)))
-					self.Text:SetText(string.format("%0.01f", bProgress).." - "..bDetails.abilityName)
-					self.Text:ResizeToText()	
 				end
 				if self.LastCast ~= bDetails.abilityName then
 					self.LastCast = bDetails.abilityName
