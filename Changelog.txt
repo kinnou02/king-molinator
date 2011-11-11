@@ -2,6 +2,8 @@
 * Fixed: Tank-Swap error spam when there's no stack info.
 * Fixed: Person bubble for Matron, wasn't registering UnitID for the player.
 * Fixed: Garua error report at the start of the fight. Gone.
+* Fixed: Incorrect wording for Bloodtide trigger.
+* Added: Timer for Shadow Strike.
 * Change: Revised trigger system to hopefully iron some issues with event spams.
 * Change: Inquisitor Garau's Arcane Essence, increased timer by 2.
 * Notice: Personal Bubble for Sicaron will need a review, due to inconsistency in API debuff reporting.
