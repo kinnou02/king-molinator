@@ -927,7 +927,7 @@ local function KBM_UnitHPCheck(info)
 		if KBM_CurrentMod then
 			if info.abilityName then
 				if KBM.Trigger.Damage[info.abilityName] then
-					KBM.Trigger.Damage[info.abilityName]:Activate()
+					KBM.Trigger.Damage[info.abilityName]:Activate(cUnitID, tUnitID)
 				end
 			end
 		end
@@ -1148,10 +1148,14 @@ function KBM.TankSwap:Init()
 						if bDetails.name == self.DebuffName then
 							if bDetails.stack then
 								TankObj.Stacks = bDetails.stack
+							else
+								TankObj.Stacks = 0
 							end
 							if bDetails.remaining > 0 then
 								TankObj.Remaining = bDetails.remaining
 								TankObj.Duration = bDetails.duration
+							else
+								TankObj.Remaining = 0
 							end
 							break
 						end
@@ -1167,7 +1171,11 @@ function KBM.TankSwap:Init()
 				TankObj.DeCool:SetPoint("RIGHT", TankObj.DeCoolFrame, (TankObj.Remaining/TankObj.Duration), nil)
 				TankObj.DeCool.Text:ResizeToText()
 				TankObj.DeCoolFrame:SetVisible(true)
-				TankObj.DebuffFrame.Text:SetText(TankObj.Stacks)
+				if TankObj.Stacks then
+					TankObj.DebuffFrame.Text:SetText(TankObj.Stacks)
+				else
+					TankObj.DebuffFrame.Text:SetText("-")
+				end
 				TankObj.DebuffFrame.Text:ResizeToText()
 				TankObj.DebuffFrame.Text:SetVisible(true)
 			end
