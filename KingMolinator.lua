@@ -359,7 +359,6 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 	function Timer:Start(CurrentTime)
 		if self.Enabled then
 			if self.Active then
-				self.Active = false
 				if not self.Removing then
 					self.Removing = true
 					table.insert(KBM.MechTimer.RemoveTimers, self)

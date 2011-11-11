@@ -1,4 +1,5 @@
 ﻿v0.4.9:
+* Fixed: Major issue with timers that could start "silently" leaving redundant timers.
 * Fixed: Turning the King Monitor off, actually does so now.
 * Fixed: King's Monitor now remembers last settings.
 * Fixed: Fixed an issue where filtered castbars would throw out timers completely.
