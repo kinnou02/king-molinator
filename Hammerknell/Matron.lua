@@ -62,7 +62,7 @@ MZ.Lang.Ability.Shadow.German = "Schattenschlag"
 -- Debuff Dictionary
 MZ.Lang.Debuff = {}
 MZ.Lang.Debuff.Curse = KBM.Language:Add("Matron's Curse")
-MZ.Lang.Debuff.Curse.German = "Matron's Fluch"
+MZ.Lang.Debuff.Curse.German = "Fluch der Matrone"
 
 MZ.Matron.Name = MZ.Lang.Matron[KBM.Lang]
 
@@ -227,7 +227,7 @@ function MZ:Start()
 	self.Matron.MenuItem.Check:SetEnabled(false)
 		
 	-- Create Timers
-	self.Matron.TimersRef.Concussion = KBM.MechTimer:Add(self.Lang.Ability.Concussion[KBM.Lang], 15)
+	self.Matron.TimersRef.Concussion = KBM.MechTimer:Add(self.Lang.Ability.Concussion[KBM.Lang], 13)
 	self.Matron.TimersRef.Mark = KBM.MechTimer:Add(self.Lang.Ability.Mark[KBM.Lang], 24)
 	self.Matron.TimersRef.Shadow = KBM.MechTimer:Add(self.Lang.Ability.Shadow[KBM.Lang], 11)
 	
@@ -237,7 +237,7 @@ function MZ:Start()
 	self.Matron.AlertsRef.MarkDamage = KBM.Alert:Create(self.Lang.Ability.Mark[KBM.Lang], 6, false, true, "purple")
 	
 	-- Assign Mechanics to Triggers
-	self.Matron.Triggers.Concussion = KBM.Trigger:Create(self.Lang.Ability.Concussion[KBM.Lang], "cast", self.Matron)
+	self.Matron.Triggers.Concussion = KBM.Trigger:Create(self.Lang.Ability.Concussion[KBM.Lang], "damage", self.Matron)
 	self.Matron.Triggers.Concussion:AddTimer(self.Matron.TimersRef.Concussion)
 	self.Matron.Triggers.Concussion:AddAlert(self.Matron.AlertsRef.Concussion)
 	self.Matron.Triggers.Blast = KBM.Trigger:Create(self.Lang.Ability.Blast[KBM.Lang], "cast", self.Matron)

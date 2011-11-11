@@ -1,6 +1,9 @@
 ﻿v0.5.1
 * Change: Attempt to fix Sicaron's Unholy Contract, 12 second solid blue personal alert.
 * Change: Unholy Contract timer should now trigger from the emote, instead of from the buff.
+* Change: Changed T-SM for Matron Zamira, was incorrect for German clients.
+* Change: Dark Concussion changed to a Damage trigger.
+* Change: Dark Concussion timer reduced to 13 seconds.
 ----
 v0.5.0
 * Fixed: Tank-Swap error spam when there's no stack info.
