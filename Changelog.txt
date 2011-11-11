@@ -1,6 +1,10 @@
-﻿v0.5.0
+﻿v0.5.1
+* Change: Attempt to fix Sicaron's Unholy Contract, 12 second solid blue personal alert.
+* Change: Unholy Contract timer should now trigger from the emote, instead of from the buff.
+----
+v0.5.0
 * Fixed: Tank-Swap error spam when there's no stack info.
-* Fixed: Person bubble for Matron, wasn't registering UnitID for the player.
+* Fixed: Personal screen alert for Matron, wasn't registering UnitID for the player.
 * Fixed: Garua error report at the start of the fight. Gone.
 * Fixed: Incorrect wording for Bloodtide trigger.
 * Added: Timer for Shadow Strike.

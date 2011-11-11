@@ -1823,8 +1823,8 @@ local function KBM_AutoReset()
 end
 
 local function KBM_Help()
-	print("King Molinator in game slash commands")
-	print("/kbmreset -- Resets the monitor's data, and recalculates.")
+	print("KB:Boss Mods in game slash commands")
+	print("/kbmreset -- Resets the current encounter.")
 	print("/kbmoptions -- Toggles the GUI Options screen.")
 	print("/kbmhelp -- Displays what you're reading now :)")
 end
@@ -1835,8 +1835,13 @@ function KBM.Notify(data)
 			if KBM_CurrentMod then
 				if KBM.Trigger.Notify[KBM_CurrentMod.ID] then
 					for i, TriggerObj in ipairs(KBM.Trigger.Notify[KBM_CurrentMod.ID]) do
-						if string.find(data.message, TriggerObj.Phrase, 1, true) then
-							KBM.Trigger.Queue:Add(TriggerObj)
+						sStart, sEnd, Target = string.find(data.message, TriggerObj.Phrase, 1, true)
+						if sStart then
+							unitID = nil
+							if Target == KBM_PlayerName then
+								unitID = KBM_PlayerID
+							end
+							KBM.Trigger.Queue:Add(TriggerObj, nil, unitID)
 							break
 						end
 					end
@@ -2234,6 +2239,7 @@ local function KBM_WaitReady(unitID)
 		Mod:Start(KBM_MainWin)
 	end
 	KBM_PlayerID = unitID
+	KBM_PlayerName = Inspect.Unit.Detail(unitID).name
 	-- if KBM.Testing then
 		-- TestBar = KBM.CastBar:Add(KBM, KBM.TestBoss, true)
 		-- TestBar:Create(KBM_PlayerID)

@@ -45,6 +45,10 @@ local KBM = KBM_RegisterMod(SN.Sicaron.ID, SN)
 
 SN.Lang.Sicaron = KBM.Language:Add(SN.Sicaron.Name)
 
+-- Notify Dictionary
+SN.Lang.Notify = {}
+SN.Lang.Notify.Contract = KBM.Language:Add("Sicaron foces %w in to an unholy contract")
+
 -- Debuff Dictionary
 SN.Lang.Debuff = {}
 SN.Lang.Debuff.Contract = KBM.Language:Add("Unholy Contract")
@@ -186,10 +190,10 @@ function SN:Start()
 	self.Sicaron.TimersRef.Contract.Enabled = self.Settings.Timers.Contract
 	
 	-- Create Alerts
-	self.Sicaron.AlertsRef.Contract = KBM.Alert:Create(self.Lang.Debuff.Contract[KBM.Lang], 10, false, true, "blue")
+	self.Sicaron.AlertsRef.Contract = KBM.Alert:Create(self.Lang.Debuff.Contract[KBM.Lang], 12, false, true, "blue")
 	
 	-- Assign Mechanics to Triggers
-	self.Sicaron.Triggers.Contract = KBM.Trigger:Create(self.Lang.Debuff.Contract[KBM.Lang], "buff", self.Sicaron)
+	self.Sicaron.Triggers.Contract = KBM.Trigger:Create(self.Lang.Notify.Contract[KBM.Lang], "notify", self.Sicaron)
 	self.Sicaron.Triggers.Contract:AddTimer(self.Sicaron.TimersRef.Contract)
 	self.Sicaron.Triggers.Contract:AddAlert(self.Sicaron.AlertsRef.Contract, true)
 	
