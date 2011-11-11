@@ -160,7 +160,7 @@ function GU:UnitHPCheck(unitDetails, unitID)
 					self.TimeElapsed = 0
 					self.Garau.Dead = false
 					self.Garau.Casting = false
-					self.Garau.CastBar = KBM.CastBar:Create(unitID)
+					self.Garau.CastBar:Create(unitID)
 				end
 				self.Garau.UnitID = unitID
 				self.Garau.Available = true
