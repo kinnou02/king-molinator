@@ -1,4 +1,4 @@
-﻿-- Inwar Darktide Boss Mod for KM:Boss Mods
+﻿-- Inwar Darktide Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --

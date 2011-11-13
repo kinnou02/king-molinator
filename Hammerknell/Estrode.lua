@@ -1,4 +1,4 @@
-﻿-- Estrode Boss Mod for KM:Boss Mods
+﻿-- Estrode Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --

@@ -1,4 +1,4 @@
-﻿-- King Molinar Boss Mod for KM:Boss Mods
+﻿-- King Molinar Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --

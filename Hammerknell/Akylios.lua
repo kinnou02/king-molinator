@@ -1,4 +1,4 @@
-﻿-- Akylios Boss Mod for KM:Boss Mods
+﻿-- Akylios Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --

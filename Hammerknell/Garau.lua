@@ -1,4 +1,4 @@
-﻿-- Inquisitor Garau Boss Mod for KM:Boss Mods
+﻿-- Inquisitor Garau Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --

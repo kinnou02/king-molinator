@@ -1,4 +1,4 @@
-﻿-- Matron Zamira Boss Mod for KM:Boss Mods
+﻿-- Matron Zamira Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --

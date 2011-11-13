@@ -1,4 +1,4 @@
-﻿-- King Molinator: Boss Mods
+﻿-- King Boss Mods
 -- Written By Paul Snart
 -- Copyright 2011
 
@@ -19,23 +19,6 @@ KBM.MenuOptions = {
 	Options = nil,
 	Name = "Options",
 	ID = "Options",
-}
-
-KBM.TestBoss = {
-	Mod = KBM,
-	Level = "??",
-	Active = false,
-	Name = "Safe",
-	Castbar = nil,
-	CastFilters = {},
-	Timers = {},
-	TimersRef = {},
-	Dead = false,
-	Available = false,
-	UnitID = nil,
-	Descript = "Test Boss",
-	TimeOut = 5,
-	Triggers = {},
 }
 
 local function KBM_DefineVars(AddonID)
@@ -178,6 +161,7 @@ KBM.BossID = {}
 KBM.Encounter = false
 KBM.HeaderList = {}
 KBM.CurrentBoss = ""
+KBM.Phase = 1
 local KBM_CurrentMod = nil
 local KBM_PlayerID = nil
 local KBM_TestIsCasting = false
@@ -1823,7 +1807,7 @@ local function KBM_AutoReset()
 end
 
 local function KBM_Help()
-	print("KB:Boss Mods in game slash commands")
+	print("King Boss Mods in game slash commands")
 	print("/kbmreset -- Resets the current encounter.")
 	print("/kbmoptions -- Toggles the GUI Options screen.")
 	print("/kbmhelp -- Displays what you're reading now :)")

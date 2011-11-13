@@ -1,4 +1,10 @@
-﻿v0.5.1
+﻿v0.5.2
+* Change: Simplified naming to King Boss Mods (KBM).
+* Change: Increased Vladmal Prime's Ancient Flames timer by 1s.
+* Added: Vladmal Prime: Personal Screen alert for Ancient Flames (orange).
+
+----
+v0.5.1
 * Change: Attempt to fix Sicaron's Unholy Contract, 12 second solid blue personal alert.
 * Change: Unholy Contract timer should now trigger from the emote, instead of from the buff.
 * Change: Changed T-SM for Matron Zamira, was incorrect for German clients.

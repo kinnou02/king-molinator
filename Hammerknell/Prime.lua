@@ -1,4 +1,4 @@
-﻿-- Vladmal Prime Boss Mod for KM:Boss Mods
+﻿-- Vladmal Prime Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --
@@ -169,12 +169,17 @@ function VP:Start()
 	self.Prime.MenuItem.Check:SetEnabled(false)
 	
 	-- Add Timers
-	self.Prime.TimersRef.Flames = KBM.MechTimer:Add(self.Lang.Flames[KBM.Lang], 30)
+	self.Prime.TimersRef.Flames = KBM.MechTimer:Add(self.Lang.Flames[KBM.Lang], 31)
 	self.Prime.TimersRef.Flames.Enabled = self.Settings.Timers.FlamesEnabled
+	
+	-- Add Alerts
+	self.Prime.AlertsRef.Flames = KBM.Alert:Create(self.Lang.Flames[KBM.Lang], 13, false, true, "orange")
 	
 	-- Add Mechanics to Triggers
 	self.Prime.Triggers.Flames = KBM.Trigger:Create(self.Lang.Flames[KBM.Lang], "cast", self.Prime)
 	self.Prime.Triggers.Flames:AddTimer(self.Prime.TimersRef.Flames)
+	self.Prime.Triggers.FlamesDebuff = KBM.Trigger:Create(self.Lang.Flames[KBM.Lang], "buff", self.Prime)
+	self.Prime.Triggers.FlamesDebuff:AddAlert(self.Prime.AlertsRef.Flames, true)
 	
 	self.Prime.CastBar = KBM.CastBar:Add(self, self.Prime, true)
 end

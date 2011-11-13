@@ -1,4 +1,4 @@
-﻿-- Hammerknell Header for KM:Boss Mods
+﻿-- Hammerknell Header for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --

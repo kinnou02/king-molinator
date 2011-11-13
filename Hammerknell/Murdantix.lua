@@ -1,4 +1,4 @@
-﻿-- Murdantix Boss Mod for KM:Boss Mods
+﻿-- Murdantix Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --

@@ -1,4 +1,4 @@
-﻿-- KM Options System for KM:Boss Mods
+﻿-- KM Options System for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 
@@ -132,14 +132,14 @@ function KBM.Scroller:Create(Type, Size, Parent, Callback)
 end
 
 function KBM.InitOptions()
-	KBM.MainWin = UI.CreateFrame("RiftWindow", "Safe's Boss Mods", KBM.Context)
+	KBM.MainWin = UI.CreateFrame("RiftWindow", "King Boss Mods", KBM.Context)
 	KBM.MainWin.Options = {}
 	KBM.MainWin.MenuSize = 0
 	KBM.MainWin:SetVisible(false)
 	KBM.MainWin:SetController("border")
 	KBM.MainWin:SetWidth(730)
 	KBM.MainWin:SetHeight(550)
-	KBM.MainWin:SetTitle("KM Boss Mods: Options")
+	KBM.MainWin:SetTitle("King Boss Mods: Options")
 				
 	if not KBM.Options.Frame.x then
 		KBM.MainWin:SetPoint("CENTER", UIParent, "CENTER")
