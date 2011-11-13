@@ -20,7 +20,7 @@ local ES = {
 	PhaseList = {},
 	Timers = {},
 	Lang = {},
-	Enrage = 60 * 15,
+	Enrage = 60 * 12,
 	ID = "Estrode",
 }
 
