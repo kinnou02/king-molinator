@@ -1307,6 +1307,7 @@ function KBM.Alert:Init()
 	self.Enabled = true
 	self.Current = nil
 	self.StopTime = 0
+	self.Remaining = 0
 	self.Alpha = 1
 	self.Notify = KBM.Options.Alert.Notify
 	self.Flash = KBM.Options.Alert.Flash
@@ -1336,6 +1337,11 @@ function KBM.Alert:Init()
 		AlertObj.Text = Text
 		AlertObj.Countdown = Countdown
 		AlertObj.Enabled = false
+		AlertObj.AlertAfter = nil
+		
+		function AlertObj:AlertEnd(endAlertObj)
+			self.AlertAfter = endAlertObj
+		end
 		
 		table.insert(self.List, AlertObj)
 		return AlertObj
@@ -1355,6 +1361,7 @@ function KBM.Alert:Init()
 				end
 			end
 			self.Current = AlertObj
+			self.Alpha = 1
 			if KBM.Options.Alert.Flash then
 				self.Color = AlertObj.Color
 				self.Left[self.Color]:SetAlpha(1)
@@ -1368,14 +1375,15 @@ function KBM.Alert:Init()
 				if AlertObj.Text then
 					self.Text:SetText(AlertObj.Text)
 					self.Shadow:SetText(AlertObj.Text)
-					self.Text:ResizeToText()
 					self.Shadow:ResizeToText()
+					self.Text:ResizeToText()
 					self.Anchor:SetVisible(true)
 					self.Anchor:SetAlpha(1)
 				end
 			end
 			if AlertObj.Duration then
 				self.StopTime = CurrentTime + AlertObj.Duration
+				self.Remaining = self.StopTime - CurrentTime
 			else
 				self.StopTime = false
 			end
@@ -1384,15 +1392,15 @@ function KBM.Alert:Init()
 	end
 	function self:Update(CurrentTime)
 		if self.Current.Stopping then
-			if self.Alpha <= 0.1 then
+			if self.Alpha <= 0.1 then -- lag threshold
 				self:Stop()
 			else
 				self.Alpha = self.Alpha + self.Direction
-				if self.Flash then
+				if KBM.Options.Alert.Flash then
 					self.Left[self.Color]:SetAlpha(self.Alpha)
 					self.Right[self.Color]:SetAlpha(self.Alpha)
 				end
-				if self.Notify then
+				if KBM.Options.Alert.Notify then
 					self.Anchor:SetAlpha(self.Alpha)
 				end
 			end
@@ -1409,10 +1417,31 @@ function KBM.Alert:Init()
 				self.Left[self.Color]:SetAlpha(self.Alpha)
 				self.Right[self.Color]:SetAlpha(self.Alpha)
 			end
+			if self.Current.Countdown then
+				if self.Remaining then
+					self.Remaining = self.StopTime - CurrentTime
+					if self.Remaining <= 0 then
+						self.Remaining = 00
+						self.Text:SetText(self.Current.Text)
+						self.Shadow:SetText(self.Current.Text)
+						self.Shadow:ResizeToText()
+						self.Text:ResizeToText()
+					else
+						self.Text:SetText(string.format("%0.1f - "..self.Current.Text, self.Remaining))
+						self.Shadow:SetText(AlertObj.Text)
+						self.Shadow:ResizeToText()
+						self.Text:ResizeToText()
+					end
+				end
+			end
 			if self.StopTime then
 				if self.StopTime <= CurrentTime then
-					self.Direction = -self.Speed
-					self.Current.Stopping = true
+					if self.Current.AlertAfter then
+						self:Start(self.Current.AlertAfter, Inspect.Time.Real())
+					else
+						self.Direction = -self.Speed
+						self.Current.Stopping = true
+					end
 				end
 			end
 		end
@@ -1630,10 +1659,10 @@ function KBM.ConvertTime(Time)
 	local TimeHours = 0
 	if Time >= 60 then
 		TimeMinutes = math.floor(Time / 60)
-		TimeSeconds = Time - (TimeMinutes * 60)
+		TimeSeconds = Time - (TimeMinutes * 60) - 1
 		if TimeMinutes >= 60 then
 			TimeHours = math.floor(TimeMinutes / 60)
-			TimeMinutes = TimeMinutes - (TimeHours * 60)
+			TimeMinutes = TimeMinutes - (TimeHours * 60) - 1
 			TimeString = string.format("%dh:%02dm:%02ds", TimeHours, TimeMinutes, TimeSeconds)
 		else
 			TimeString = string.format("%02dm:%02ds", TimeMinutes, TimeSeconds)
@@ -1719,8 +1748,11 @@ function KBM:Timer()
 		-- for UnitID, CastCheck in pairs(KBM.CastBar.List) do
 			-- CastCheck:Update()
 		-- end
-		if not KBM.Encounter then
-		end
+		-- if KBM.Testing then
+			-- if self.Alert.Current then
+				-- self.Alert:Update(Inspect.Time.Real())
+			-- end
+		-- end
 	end
 	-- if KBM.Testing then
 		-- d = math.random(1,2000)
@@ -1827,7 +1859,7 @@ function KBM.Notify(data)
 			if KBM_CurrentMod then
 				if KBM.Trigger.Notify[KBM_CurrentMod.ID] then
 					for i, TriggerObj in ipairs(KBM.Trigger.Notify[KBM_CurrentMod.ID]) do
-						sStart, sEnd, Target = string.find(data.message, TriggerObj.Phrase, 1, true)
+						sStart, sEnd, Target = string.find(data.message, TriggerObj.Phrase)
 						if sStart then
 							unitID = nil
 							if Target == KBM_PlayerName then
@@ -1850,7 +1882,7 @@ function KBM.NPCChat(data)
 				if KBM.Trigger.Say[KBM_CurrentMod.ID] then
 					for i, TriggerObj in ipairs(KBM.Trigger.Say[KBM_CurrentMod.ID]) do
 						if TriggerObj.Unit.Name == data.fromName then
-							if string.find(data.message, TriggerObj.Phrase, 1, true) then
+							if string.find(data.message, TriggerObj.Phrase) then
 								KBM.Trigger.Queue:Add(TriggerObj)
 								break
 							end
@@ -2225,13 +2257,13 @@ local function KBM_Start()
 end
 
 local function KBM_WaitReady(unitID)
+	KBM_PlayerID = unitID
+	KBM_PlayerName = Inspect.Unit.Detail(unitID).name
 	KBM_Start()
 	for _, Mod in ipairs(KBM_BossMod) do
 		Mod:AddBosses(KBM_Boss)
 		Mod:Start(KBM_MainWin)
 	end
-	KBM_PlayerID = unitID
-	KBM_PlayerName = Inspect.Unit.Detail(unitID).name
 	-- if KBM.Testing then
 		-- TestBar = KBM.CastBar:Add(KBM, KBM.TestBoss, true)
 		-- TestBar:Create(KBM_PlayerID)

@@ -47,7 +47,7 @@ SN.Lang.Sicaron = KBM.Language:Add(SN.Sicaron.Name)
 
 -- Notify Dictionary
 SN.Lang.Notify = {}
-SN.Lang.Notify.Contract = KBM.Language:Add("Sicaron foces %w in to an unholy contract")
+SN.Lang.Notify.Contract = KBM.Language:Add("Sicaron forces (%a*) in to an unholy contract")
 
 -- Debuff Dictionary
 SN.Lang.Debuff = {}
@@ -185,17 +185,20 @@ function SN:Start()
 	self.Header = KBM.HeaderList[self.Instance]
 	self.Sicaron.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Sicaron, true, self.Header)
 	self.Sicaron.MenuItem.Check:SetEnabled(false)
+	
 	-- Create Timers
 	self.Sicaron.TimersRef.Contract = KBM.MechTimer:Add(self.Lang.Debuff.Contract[KBM.Lang], 17)
 	self.Sicaron.TimersRef.Contract.Enabled = self.Settings.Timers.Contract
 	
 	-- Create Alerts
 	self.Sicaron.AlertsRef.Contract = KBM.Alert:Create(self.Lang.Debuff.Contract[KBM.Lang], 12, false, true, "blue")
+	self.Sicaron.AlertsRef.ContractRed = KBM.Alert:Create(self.Lang.Debuff.Contract[KBM.Lang], 5, true, true, "red")
 	
 	-- Assign Mechanics to Triggers
 	self.Sicaron.Triggers.Contract = KBM.Trigger:Create(self.Lang.Notify.Contract[KBM.Lang], "notify", self.Sicaron)
 	self.Sicaron.Triggers.Contract:AddTimer(self.Sicaron.TimersRef.Contract)
-	self.Sicaron.Triggers.Contract:AddAlert(self.Sicaron.AlertsRef.Contract, true)
-	
+	self.Sicaron.Triggers.Contract:AddAlert(self.Sicaron.AlertsRef.Contract)
+	self.Sicaron.AlertsRef.Contract:AlertEnd(self.Sicaron.AlertsRef.ContractRed)
+		
 	self.Sicaron.CastBar = KBM.CastBar:Add(self, self.Sicaron, true)
 end
