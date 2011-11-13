@@ -1,4 +1,8 @@
-﻿v0.5.2
+﻿v0.5.3
+* Added: Grugonim: German Translation for Rampant Decay.
+* Added: Grugonim: German Translation for Corrosive Bile.
+----
+v0.5.2
 * Change: Simplified naming to King Boss Mods (KBM).
 * Change: Increased Vladmal Prime's Ancient Flames timer by 1 second.
 * Change: Estrode: Enrage Timer reduced to 12 minutes.
