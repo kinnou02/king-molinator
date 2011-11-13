@@ -179,7 +179,7 @@ KBM.CastBar.List = {}
 
 -- Addon Primary Context
 KBM.Context = UI.CreateContext("KBM_Context")
-local KM_Name = "KM:Boss Mods"
+local KM_Name = "King Boss Mods"
 
 -- Addon KBM Primary Frames
 KBM.MainWin = {
@@ -233,6 +233,14 @@ function KBM.Language:Add(Phrase)
 end
 
 -- Main Addon Dictionary
+-- Colors
+KBM.Language.Color = {}
+KBM.Language.Color.Red = KBM.Language:Add("Red")
+KBM.Language.Color.Blue = KBM.Language:Add("Blue")
+KBM.Language.Color.Dark_Green = KBM.Language:Add("Dark Green")
+KBM.Language.Color.Yellow = KBM.Language:Add("Yellow")
+KBM.Language.Color.Orange = KBM.Language:Add("Orange")
+KBM.Language.Color.Purple = KBM.Language:Add("Purple")
 -- Cast-bar related
 KBM.Language.Options = {}
 KBM.Language.Options.Castbar = KBM.Language:Add("Cast-bars")
@@ -1281,7 +1289,7 @@ function KBM.Alert:Init()
 	self.Anchor:SetWidth(self.Text:GetWidth())
 	self.Anchor:SetHeight(self.Text:GetHeight())
 	self.Anchor:SetVisible(KBM.Options.Alert.Visible)
-	self.ColorList = {"red", "blue", "yellow", "orange", "purple"}
+	self.ColorList = {"red", "blue", "yellow", "orange", "purple", "dark_green"}
 	self.Left = {}
 	self.Right = {}
 	for _t, Color in ipairs(self.ColorList) do

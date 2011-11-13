@@ -33,6 +33,8 @@ VP.Prime = {
 	CastFilters = {},
 	Timers = {},
 	TimersRef = {},
+	Alerts =  {},
+	AlertsRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
@@ -62,7 +64,11 @@ function VP:InitVars()
 	self.Settings = {
 		Timers = {
 			Enabled = true,
-			FlamesEnabled = true,
+			Flames = true,
+		},
+		Alerts = {
+			Enabled = true,
+			Flames = true,
 		},
 		CastBar = {
 			x = false,
@@ -151,15 +157,27 @@ end
 
 function VP.Prime:Options()
 	function self:TimersEnabled(bool)
+		VP.Settings.Timers.Enabled = bool
 	end
-	function self:FlamesEnabled(bool)
-		VP.Settings.Timers.FlamesEnabled = bool
+	-- Timers
+	function self:FlamesTimer(bool)
+		VP.Settings.Timers.Flames = bool
 		VP.Prime.TimersRef.Flames.Enabled = bool
+	end
+	-- Alerts
+	function self:AlertsEnabled(bool)
+		VP.Settings.Alerts.Enabled = bool
+	end
+	function self:FlamesAlert(bool)
+		VP.Settings.Alerts.Flames = bool
+		VP.Prime.AlertsRef.Flames.Enabled = bool
 	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
 	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, VP.Settings.Timers.Enabled)
-	Timers:AddCheck(VP.Lang.Flames[KBM.Lang], self.FlamesEnabled, VP.Settings.Timers.FlamesEnabled)	
+	Timers:AddCheck(VP.Lang.Flames[KBM.Lang], self.FlamesTimer, VP.Settings.Timers.Flames)
+	local Alerts = Options:AddHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], self.AlertsEnabled, VP.Settings.Alerts.Enabled)
+	Alerts:AddCheck(VP.Lang.Flames[KBM.Lang], self.FlamesAlert, VP.Settings.Alerts.Flames)
 	
 end
 

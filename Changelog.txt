@@ -1,8 +1,10 @@
 ﻿v0.5.2
 * Change: Simplified naming to King Boss Mods (KBM).
-* Change: Increased Vladmal Prime's Ancient Flames timer by 1s.
+* Change: Increased Vladmal Prime's Ancient Flames timer by 1 second.
 * Added: Vladmal Prime: Personal Screen alert for Ancient Flames (orange).
-
+* Added: Vladmal Prime: Alert Filter.
+* Added: Grugonim: Screen alert for Rampant Decay (purple)
+* Added: Grugonim: Screen alert for Corrosive Bile (dark green)
 ----
 v0.5.1
 * Change: Attempt to fix Sicaron's Unholy Contract, 12 second solid blue personal alert.

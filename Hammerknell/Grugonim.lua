@@ -33,15 +33,22 @@ GR.Grugonim = {
 	CastFilters = {},
 	Timers = {},
 	TimersRef = {},
+	AlertsRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
+	Triggers = {},
 }
 
 local KBM = KBM_RegisterMod(GR.Grugonim.ID, GR)
 
 GR.Lang.Grugonim = KBM.Language:Add(GR.Grugonim.Name)
+
+-- Ability Dictionary
+GR.Lang.Ability = {}
+GR.Lang.Ability.Decay = KBM.Language:Add("Rampant Decay")
+GR.Lang.Ability.Bile = KBM.Language:Add("Corrosive Bile")
 
 GR.Grugonim.Name = GR.Lang.Grugonim[KBM.Lang]
 
@@ -58,6 +65,11 @@ function GR:InitVars()
 	self.Settings = {
 		Timers = {
 			Enabled = true,
+		},
+		Alerts = {
+			Enabled = true,
+			Decay = true,
+			Bile = true,
 		},
 		CastBar = {
 			x = false,
@@ -146,12 +158,23 @@ function GR:Timer()
 end
 
 function GR.Grugonim:Options()
-	function self:TimersEnabled(bool)
+	function self:AlertsEnabled(bool)
+		GR.Settings.Alerts.Enabled = bool
+	
+	end
+	function self:DecayAlert(bool)
+		GR.Settings.Alerts.Decay = bool
+		GR.Grugonim.AlertsRef.Decay.Enabled = bool
+	end
+	function self:BileAlert(bool)
+		GR.Settings.Alerts.Bile = bool
+		GR.Grugonim.AlertsRef.Bile.Enabled = bool
 	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
-	local Timers = Options:AddHeader("Timers Enabled", self.TimersEnabled, GR.Settings.Timers.Enabled)
-	--Timers:AddCheck(GR.Lang.Flames[KBM.Lang], self.FlamesEnabled, GR.Settings.Timers.FlamesEnabled)	
+	local Alerts = Options:AddHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], self.AlertsEnabled, GR.Settings.Alerts.Enabled)
+	Alerts:AddCheck(GR.Lang.Ability.Decay[KBM.Lang], self.DecayAlert, GR.Settings.Alerts.Decay)
+	Alerts:AddCheck(GR.Lang.Ability.Bile[KBM.Lang], self.BileAlert, GR.Settings.Alerts.Bile)
 	
 end
 
@@ -159,8 +182,18 @@ function GR:Start()
 	self.Header = KBM.HeaderList[self.Instance]
 	self.Grugonim.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Grugonim, true, self.Header)
 	self.Grugonim.MenuItem.Check:SetEnabled(false)
-	--self.Grugonim.TimersRef.Flames = KBM.MechTimer:Add(self.Lang.Flames[KBM.Lang], "cast", 30, self, nil)
-	--self.Grugonim.TimersRef.Flames.Enabled = self.Settings.Timers.FlamesEnabled
+	
+	-- Add Alerts
+	self.Grugonim.AlertsRef.Decay = KBM.Alert:Create(self.Lang.Ability.Decay[KBM.Lang], 3, true, true, "dark_green")
+	self.Grugonim.AlertsRef.Decay.Enabled = self.Settings.Alerts.Decay
+	self.Grugonim.AlertsRef.Bile = KBM.Alert:Create(self.Lang.Ability.Bile[KBM.Lang], 2, true, true, "purple")
+	self.Grugonim.AlertsRef.Bile.Enabled = self.Settings.Alerts.Bile
+	
+	-- Assign Mechanics to Triggers
+	self.Grugonim.Triggers.Decay = KBM.Trigger:Create(self.Lang.Ability.Decay[KBM.Lang], "cast", self.Grugonim)
+	self.Grugonim.Triggers.Decay:AddAlert(self.Grugonim.AlertsRef.Decay)
+	self.Grugonim.Triggers.Bile = KBM.Trigger:Create(self.Lang.Ability.Bile[KBM.Lang], "cast", self.Grugonim)
+	self.Grugonim.Triggers.Bile:AddAlert(self.Grugonim.AlertsRef.Bile)
 	
 	self.Grugonim.CastBar = KBM.CastBar:Add(self, self.Grugonim, true)
 end
