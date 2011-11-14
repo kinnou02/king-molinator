@@ -32,6 +32,7 @@ AK.Jornaru = {
 	CastFilters = {},
 	Timers = {},
 	TimersRef = {},
+	AlertsRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
@@ -47,6 +48,7 @@ AK.Akylios = {
 	CastFilters = {},
 	Timers = {},
 	TimersRef = {},
+	AlertsRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
@@ -71,8 +73,8 @@ AK.Lang.Mechanic.Wave.German = "Flutwelle"
 
 -- Options Dictionary.
 AK.Lang.Options = {}
-AK.Lang.Options.Wave1 = KBM.Language:Add("Tidal Wave (Phase 1)")
-AK.Lang.Options.Wave4 = KBM.Language:Add("Tidal Wave (Phase 4)")
+AK.Lang.Options.WaveOne = KBM.Language:Add("Tidal Wave (Phase 1)")
+AK.Lang.Options.WaveFour = KBM.Language:Add("Tidal Wave (Phase 4)")
 
 function AK:AddBosses(KBM_Boss)
 	self.Jornaru.Descript = "Akylios & Jornaru"
@@ -90,7 +92,11 @@ function AK:InitVars()
 	self.Settings = {
 		Timers = {
 			Enabled = true,
-			WaveStartEnabled = true,
+			WaveOneEnabled = true,
+		},
+		Alerts = {
+			Enabled = true,
+			WaveOneWarn = true,
 		},
 		CastBar = {
 			x = false,
@@ -177,15 +183,25 @@ end
 
 function AK.Akylios:Options()
 	function self:TimersEnabled(bool)
+		AK.Settings.Timers.Enabled = bool
 	end
-	function self:WaveStartEnabled(bool)
-		AK.Settings.Timers.WaveStartEnabled = bool
-		AK.Jornaru.TimersRef.Wave.Enable = bool
+	function self:WaveOneEnabled(bool)
+		AK.Settings.Timers.WaveOneEnabled = bool
+		AK.Jornaru.TimersRef.WaveOne.Enable = bool
+	end
+	function self:AlertsEnabled(bool)
+		AK.Settings.Alerts.Enabled = bool
+	end
+	function self:WaveOneWarn(bool)
+		AK.Settings.Alerts.WaveOneWarn = bool
+		AK.Jornaru.AlertsRef.WaveOneWarn.Enabled = bool
 	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
 	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, AK.Settings.Timers.Enabled)
-	Timers:AddCheck(AK.Lang.Options.Wave1[KBM.Lang], self.WaveStartEnabled, AK.Settings.Timers.WaveStartEnabled)	
+	Timers:AddCheck(AK.Lang.Options.WaveOne[KBM.Lang], self.WaveOneEnabled, AK.Settings.Timers.WaveOneEnabled)
+	local Alerts = Options:AddHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], self.AlertsEnabled, AK.Settings.Alerts.Enabled)
+	Alerts:AddCheck(AK.Lang.Options.WaveOne[KBM.Lang], self.WaveOneWarn, AK.Settings.Alerts.WaveOneWarn)
 	
 end
 
@@ -195,11 +211,16 @@ function AK:Start()
 	self.Akylios.MenuItem.Check:SetEnabled(false)
 	
 	-- Create Timers
-	self.Jornaru.TimersRef.Wave = KBM.MechTimer:Add(AK.Lang.Mechanic.Wave[KBM.Lang], 40, true)
-	self.Jornaru.TimersRef.Wave.Enable = self.Settings.Timers.WaveStartEnabled
+	self.Jornaru.TimersRef.WaveOne = KBM.MechTimer:Add(AK.Lang.Mechanic.Wave[KBM.Lang], 40, true)
+	self.Jornaru.TimersRef.WaveOne.Enable = self.Settings.Timers.WaveOneEnabled
+	
+	-- Create Alerts
+	self.Jornaru.AlertsRef.WaveOneWarn = KBM.Alert:Create(AK.Lang.Mechanic.Wave[KBM.Lang], 5, true, true, "blue")
+	self.Jornaru.AlertsRef.WaveOneWarn.Enabled = self.Settings.Alerts.WaveOneWarn
 	
 	-- Assign Mechanics to Triggers
 	self.Jornaru.Triggers.Start = KBM.Trigger:Create(AK.Lang.Mechanic.Wave[KBM.Lang], "start", self.Jornaru)
-	self.Jornaru.Triggers.Start:AddTimer(self.Jornaru.TimersRef.Wave)
+	self.Jornaru.Triggers.Start:AddTimer(self.Jornaru.TimersRef.WaveOne)
+	self.Jornaru.TimersRef.WaveOne:AddAlert(self.Jornaru.AlertsRef.WaveOneWarn, 5)
 	
 end

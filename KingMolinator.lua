@@ -156,6 +156,7 @@ end
 
 KBM.Lang = Inspect.System.Language()
 KBM.Language = {}
+KBM.MenuGroup = {}
 local KBM_Boss = {}
 KBM.BossID = {}
 KBM.Encounter = false
@@ -357,6 +358,8 @@ end
 function KBM.MechTimer:Add(Name, Duration, Repeat)
 	local Timer = {}
 	Timer.Active = false
+	Timer.Alerts = {}
+	Timer.Timers = {}
 	Timer.TimeStart = nil
 	Timer.Removing = false
 	Timer.Starting = false
@@ -451,6 +454,9 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 		self.Remaining = 0
 		self.TimeStart = 0
 		self.Removing = false
+		for i, AlertObj in pairs(self.Alerts) do
+			self.Alerts[i].Triggered = false
+		end
 		self.CastInfo:sRemove()
 		self.TimeBar:sRemove()
 		self.Background:sRemove()
@@ -461,6 +467,17 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 			self.Starting = true
 			table.insert(KBM.MechTimer.StartTimers, self)
 		end
+	end
+	function Timer:AddAlert(AlertObj, Time)
+		self.Alerts[Time] = {}
+		self.Alerts[Time].Triggered = false
+		self.Alerts[Time].AlertObj = AlertObj
+	end
+	function Timer:AddTimer(TimerObj, Time)
+	
+	end
+	function Timer:AddTrigger(TriggerObj, Time)
+	
 	end
 	function Timer:Update(CurrentTime)
 		if self.Active then
@@ -473,6 +490,12 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 				self.Remaining = 0
 				table.insert(KBM.MechTimer.RemoveTimers, self)
 				self.Removing = true
+			end
+			TriggerTime = math.ceil(self.Remaining)
+			if self.Alerts[TriggerTime] then
+				if not self.Alerts[TriggerTime].Triggered then
+					self.Alerts[TriggerTime].AlertObj:Start(CurrentTime)
+				end
 			end
 		end
 	end
@@ -501,34 +524,38 @@ function KBM.Trigger:Init()
 	self.Buff = {}
 
 	function self.Queue:Add(TriggerObj, Caster, Target, Duration)
-		if TriggerObj.Queued or self.Removing then
-			return
-		else
-			TriggerObj.Queued = true
+		if KBM.Encounter then
+			if TriggerObj.Queued or self.Removing then
+				return
+			else
+				TriggerObj.Queued = true
+			end
+			repeat
+			until not self.Locked
+			self.Locked = true
+			table.insert(self.List, TriggerObj)
+			TriggerObj.Caster = Caster
+			TriggerObj.Target = Target
+			TriggerObj.Data = Data		
+			self.Locked = false
 		end
-		repeat
-		until not self.Locked
-		self.Locked = true
-		table.insert(self.List, TriggerObj)
-		TriggerObj.Caster = Caster
-		TriggerObj.Target = Target
-		TriggerObj.Data = Data		
-		self.Locked = false
 	end
 	
 	function self.Queue:Activate()
-		if self.Removing then
-			return
+		if KBM.Encounter then
+			if self.Removing then
+				return
+			end
+			repeat
+			until not self.Locked
+			self.Locked = true
+			for i, TriggerObj in ipairs(self.List) do
+				TriggerObj:Activate(TriggerObj.Caster, TriggerObj.Target, TriggerObj.Data)
+				TriggerObj.Queued = false
+			end
+			self.List = {}
+			self.Locked = false
 		end
-		repeat
-		until not self.Locked
-		self.Locked = true
-		for i, TriggerObj in ipairs(self.List) do
-			TriggerObj:Activate(TriggerObj.Caster, TriggerObj.Target, TriggerObj.Data)
-			TriggerObj.Queued = false
-		end
-		self.List = {}
-		self.Locked = false
 	end
 	
 	function self.Queue:Remove()
@@ -938,19 +965,21 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 						
 					else
 						KBM.BossID[UnitID].dead = true
-						KBM.BossID[UnitID].available = true
+						KBM.BossID[UnitID].available = false
 					end					
 				end
 			end
 		end
 	else
-		if KBM.BossID[UnitID].IdleSince then
-			if uDetails then
-				KBM_CurrentMod:UnitHPCheck(uDetails, UnitID)
-				KBM.BossID[UnitID].IdleSince = false
-				KBM.BossID[UnitID].available = true
-			else
-				KBM.BossID[UnitID].IdleSince = Inspect.Time.Real()
+		if not KBM.BossID[UnitID].dead then
+			if KBM.BossID[UnitID].IdleSince then
+				if uDetails then
+					KBM_CurrentMod:UnitHPCheck(uDetails, UnitID)
+					KBM.BossID[UnitID].IdleSince = false
+					KBM.BossID[UnitID].available = true
+				else
+					KBM.BossID[UnitID].IdleSince = Inspect.Time.Real()
+				end
 			end
 		end
 	end
@@ -1613,12 +1642,12 @@ end
 local function KBM_Reset()
 	if KBM.Encounter then
 		if KBM_CurrentMod then
+			KBM.Encounter = false
 			KBM_CurrentMod:Reset()
 			KBM_CurrentMod = nil
 			KBM.CurrentBoss = ""
 			KBM.BossID = {}
 			KBM_CurrentBossName = ""
-			KBM.Encounter = false
 			KBM.TimeElapsed = 0
 			KBM.TimeStart = 0
 			KBM.EnrageTime = 0
@@ -2222,6 +2251,22 @@ function KBM.MenuOptions.Main:Options()
 	
 end
 
+function KBM.MenuGroup:SetTenMan()
+	self.tenMan = KBM.MainWin.Menu:CreateHeader("10-Man Raids", nil, nil, true)
+end
+
+function KBM.MenuGroup:SetMaster()
+	self.MasterModes = KBM.MainWin.Menu:CreateHeader("Master Modes", nil, nil, true)
+end
+
+function KBM.MenuGroup:SetExpertTwo()
+	self.ExpertTwo = KBM.MainWin.Menu:CreateHeader("Tier 2 Experts", nil, nil, true)
+end
+
+function KBM.MenuGroup:SetExpertOne()
+	self.ExpertOne = KBM.MainWin.Menu:CreateHeader("Tier 1 Experts", nil, nil, true)
+end
+
 local function KBM_Start()
 	KBM.Button:Init()
 	KBM.TankSwap:Init()
@@ -2237,6 +2282,7 @@ local function KBM_Start()
 	KBM.MenuOptions.CastBars.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.Castbar[KBM.Lang], KBM.MenuOptions.CastBars, true, Header)
 	KBM.MenuOptions.Alerts.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.Alert[KBM.Lang], KBM.MenuOptions.Alerts, true, Header)
 	KBM.MenuOptions.TankSwap.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.TankSwap[KBM.Lang], KBM.MenuOptions.TankSwap, true, Header)
+	KBM.MenuGroup.twentyman = KBM.MainWin.Menu:CreateHeader("20-Man Raids", nil, nil, true)
 	table.insert(Command.Slash.Register("kbmreset"), {KBM_Reset, "KingMolinator", "KBM Reset"})
 	table.insert(Event.Chat.Notify, {KBM.Notify, "KingMolinator", "Notify Event"})
 	table.insert(Event.Chat.Npc, {KBM.NPCChat, "KingMolinator", "NPC Chat"})
@@ -2264,6 +2310,10 @@ local function KBM_WaitReady(unitID)
 		Mod:AddBosses(KBM_Boss)
 		Mod:Start(KBM_MainWin)
 	end
+	KBM.MenuGroup:SetTenMan()
+	KBM.MenuGroup:SetMaster()
+	KBM.MenuGroup:SetExpertTwo()
+	KBM.MenuGroup:SetExpertOne()
 	-- if KBM.Testing then
 		-- TestBar = KBM.CastBar:Add(KBM, KBM.TestBoss, true)
 		-- TestBar:Create(KBM_PlayerID)

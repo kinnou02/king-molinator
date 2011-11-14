@@ -296,7 +296,7 @@ function KBM.InitOptions()
 		end
 	end
 
-	function KBM.MainWin.Menu:CreateHeader(Text, Hook, Default)
+	function KBM.MainWin.Menu:CreateHeader(Text, Hook, Default, Static)
 		Header = {}
 		Header = KBM:CallFrame(self)
 		Header.Children = {}
@@ -312,12 +312,19 @@ function KBM.InitOptions()
 		Header.Text = KBM:CallText(Header)
 		Header.Text:SetWidth(Header:GetWidth() - Header.Check:GetWidth())
 		Header.Text:SetText(Text)
-		Header.Text:SetFontSize(16)
+		if Static then
+			Header.Text:SetFontColor(0.85,0.85,0.0)
+			Header.Text:SetFontSize(18)
+			Header:SetBackgroundColor(0,0,0,0.33)
+			Header.Enabled = false
+		else
+			Header.Text:SetFontColor(0.85,0.65,0.0)
+			Header.Text:SetFontSize(16)
+			Header.Enabled = true
+		end
 		Header.Text:SetHeight(Header.Text:GetFullHeight())
 		Header:SetHeight(Header.Text:GetHeight())
 		Header.Text:SetPoint("CENTERLEFT", Header.Check, "CENTERRIGHT")
-		Header.Text:SetFontColor(0.85,0.65,0.0)
-		Header.Enabled = true
 		table.insert(self.Headers, Header)
 		if not self.LastHeader then
 			Header:SetPoint("TOPLEFT", self, "TOPLEFT")

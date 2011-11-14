@@ -1,8 +1,13 @@
-﻿v0.5.3
+﻿v0.5.4
+* New: Menu Groups for 20 and 10 Man Raids, Master Modes and Expert T1 and T2.
+* New: Akylios 5 second warning Wave (P1) screen alert (flashing, blue).
+* Change: Attempted to fix the continuing encounter issues, this will be re-addressed in 1.6.
+----
+v0.5.3
 * Fixed: Alerts: Options were not working as intended.
 * Fixed: Sicaron: Changed Trigger method for Unholy Contract.
 * Fixed: Sicaron: Typo corrected in Trigger method.
-* Added: Certain screen alerts now have perfixed countdown timer.
+* Added: Certain screen alerts now have prefixed countdown timer.
 * Added: Sicaron: Red flashing personal alert for 5 seconds after Blue alert.
 * Added: Grugonim: German Translation for Rampant Decay.
 * Added: Grugonim: German Translation for Corrosive Bile.
