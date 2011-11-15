@@ -13,14 +13,15 @@ local PH = {
 		Enabled = true,
 		Handler = nil,
 		Options = nil,
-		ID = "Hylas",
 	},
 	Instance = GSB.Name,
+	Type = "20man",
 	HasPhases = true,
 	PhaseType = "percentage",
 	PhaseList = {},
 	Timers = {},
 	Lang = {},
+	ID = "Hylas",	
 }
 
 PH.Hylas = {
@@ -32,10 +33,12 @@ PH.Hylas = {
 	CastFilters = {},
 	Timers = {},
 	TimersRef = {},
+	AlertsRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
+	Triggers = {},
 }
 
 local KBM = KBM_RegisterMod(PH.Hylas.ID, PH)
@@ -155,7 +158,7 @@ function PH.Hylas:Options()
 	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
-	local Timers = Options:AddHeader("Timers Enabled", self.TimersEnabled, PH.Settings.Timers.Enabled)
+	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, PH.Settings.Timers.Enabled)
 	--Timers:AddCheck(PH.Lang.Flames[KBM.Lang], self.FlamesEnabled, PH.Settings.Timers.FlamesEnabled)	
 	
 end

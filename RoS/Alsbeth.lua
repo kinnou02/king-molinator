@@ -13,15 +13,16 @@ local AD = {
 		Enabled = true,
 		Handler = nil,
 		Options = nil,
-		ID = "Alsbeth",
 	},
 	Instance = ROS.Name,
+	Type = "20man",
 	HasPhases = true,
 	PhaseType = "percentage",
 	PhaseList = {},
 	Timers = {},
 	Lang = {},
-	Enrage = 60 * 19, 
+	Enrage = 60 * 19,
+	ID = "Alsbeth",
 }
 
 AD.Alsbeth = {
@@ -33,10 +34,12 @@ AD.Alsbeth = {
 	CastFilters = {},
 	Timers = {},
 	TimersRef = {},
+	AlertsRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
+	Triggers = {},
 }
 
 local KBM = KBM_RegisterMod(AD.Alsbeth.ID, AD)
@@ -156,7 +159,7 @@ function AD.Alsbeth:Options()
 	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
-	local Timers = Options:AddHeader("Timers Enabled", self.TimersEnabled, AD.Settings.Timers.Enabled)
+	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, AD.Settings.Timers.Enabled)
 	--Timers:AddCheck(AD.Lang.Flames[KBM.Lang], self.FlamesEnabled, AD.Settings.Timers.FlamesEnabled)	
 	
 end

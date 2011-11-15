@@ -13,15 +13,16 @@ local WG = {
 		Enabled = true,
 		Handler = nil,
 		Options = nil,
-		ID = "Warmaster Galenir",
 	},
 	Instance = ROS.Name,
+	Type = "20man",
 	HasPhases = true,
 	PhaseType = "percentage",
 	PhaseList = {},
 	Timers = {},
 	Lang = {},
-	Enrage = 60 * 5.5, 
+	Enrage = 60 * 5.5,
+	ID = "Warmaster Galenir",	
 }
 
 WG.Galenir = {
@@ -33,10 +34,12 @@ WG.Galenir = {
 	CastFilters = {},
 	Timers = {},
 	TimersRef = {},
+	AlertsRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
+	Triggers = {},
 }
 
 local KBM = KBM_RegisterMod(WG.Galenir.ID, WG)
@@ -157,7 +160,7 @@ function WG.Galenir:Options()
 	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
-	local Timers = Options:AddHeader("Timers Enabled", self.TimersEnabled, WG.Settings.Timers.Enabled)
+	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, WG.Settings.Timers.Enabled)
 	--Timers:AddCheck(WG.Lang.Flames[KBM.Lang], self.FlamesEnabled, WG.Settings.Timers.FlamesEnabled)	
 	
 end

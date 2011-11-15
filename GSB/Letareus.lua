@@ -13,14 +13,15 @@ local DL = {
 		Enabled = true,
 		Handler = nil,
 		Options = nil,
-		ID = "Letareus",
 	},
 	Instance = GSB.Name,
+	Type = "20man",
 	HasPhases = true,
 	PhaseType = "percentage",
 	PhaseList = {},
 	Timers = {},
 	Lang = {},
+	ID = "Letareus",	
 }
 
 DL.Letareus = {
@@ -32,10 +33,12 @@ DL.Letareus = {
 	CastFilters = {},
 	Timers = {},
 	TimersRef = {},
+	AlertsRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	TimeOut = 5,
+	TimeOut = 3,
+	Triggers = {},
 }
 
 local KBM = KBM_RegisterMod(DL.Letareus.ID, DL)
@@ -155,7 +158,7 @@ function DL.Letareus:Options()
 	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
-	local Timers = Options:AddHeader("Timers Enabled", self.TimersEnabled, DL.Settings.Timers.Enabled)
+	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, DL.Settings.Timers.Enabled)
 	--Timers:AddCheck(DL.Lang.Flames[KBM.Lang], self.FlamesEnabled, DL.Settings.Timers.FlamesEnabled)	
 	
 end

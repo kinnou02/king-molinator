@@ -13,14 +13,15 @@ local IJ = {
 		Enabled = true,
 		Handler = nil,
 		Options = nil,
-		ID = "Johlen",
 	},
 	Instance = GSB.Name,
+	Type = "20man",
 	HasPhases = true,
 	PhaseType = "percentage",
 	PhaseList = {},
 	Timers = {},
 	Lang = {},
+	ID = "Johlen",	
 }
 
 IJ.Johlen = {
@@ -32,10 +33,12 @@ IJ.Johlen = {
 	CastFilters = {},
 	Timers = {},
 	TimersRef = {},
+	AlertsRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
+	Triggers = {},
 }
 
 local KBM = KBM_RegisterMod(IJ.Johlen.ID, IJ)
@@ -155,7 +158,7 @@ function IJ.Johlen:Options()
 	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
-	local Timers = Options:AddHeader("Timers Enabled", self.TimersEnabled, IJ.Settings.Timers.Enabled)
+	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, IJ.Settings.Timers.Enabled)
 	--Timers:AddCheck(IJ.Lang.Flames[KBM.Lang], self.FlamesEnabled, IJ.Settings.Timers.FlamesEnabled)	
 	
 end

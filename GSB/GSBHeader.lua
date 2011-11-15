@@ -10,6 +10,7 @@ local GSB = {
 	Enabled = true,
 	IsInstance = true,
 	Name = "Greenscale's Blight",
+	ID = "GSB",
 }
 
 local KBM = KBM_RegisterMod("Greenscale's Blight", GSB)

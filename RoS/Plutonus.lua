@@ -13,14 +13,15 @@ local PI = {
 		Enabled = true,
 		Handler = nil,
 		Options = nil,
-		ID = "Plutonus",
 	},
 	Instance = ROS.Name,
+	Type = "20man",
 	HasPhases = true,
 	PhaseType = "percentage",
 	PhaseList = {},
 	Timers = {},
 	Lang = {},
+	ID = "Plutonus",	
 }
 
 PI.Plutonus = {
@@ -32,10 +33,12 @@ PI.Plutonus = {
 	CastFilters = {},
 	Timers = {},
 	TimersRef = {},
+	AlertsRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
+	Triggers = {},
 }
 
 local KBM = KBM_RegisterMod(PI.Plutonus.ID, PI)
@@ -155,7 +158,7 @@ function PI.Plutonus:Options()
 	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
-	local Timers = Options:AddHeader("Timers Enabled", self.TimersEnabled, PI.Settings.Timers.Enabled)
+	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, PI.Settings.Timers.Enabled)
 	--Timers:AddCheck(PI.Lang.Flames[KBM.Lang], self.FlamesEnabled, PI.Settings.Timers.FlamesEnabled)	
 	
 end

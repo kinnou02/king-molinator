@@ -10,7 +10,7 @@ Author = "Paul Snart"
 Website = "http://www.facebook.com/pages/King-Boss-Mods/271482262893152"
 Email = "snarty@gmail.com"
 
-Version = "0.5.4"
+Version = "0.5.5"
 
 Environment = "1.5"
 
@@ -41,6 +41,21 @@ RunOnStartup = {
 	"GSB/Aleria.lua",
 	"GSB/Hylas.lua",
 	"GSB/Greenscale.lua",
+	"10_Man/Rise_of_the_Phoenix/ROTPHeader.lua",
+	"10_Man/Rise_of_the_Phoenix/Ereandorn.lua",
+	"10_Man/Rise_of_the_Phoenix/Silgen.lua",
+	"10_Man/Rise_of_the_Phoenix/Beruhast.lua",
+	"10_Man/Rise_of_the_Phoenix/Arakhurn.lua",
+	"10_Man/Guilded_Prophecy/GPHeader.lua",
+	"10_Man/Guilded_Prophecy/Anrak.lua",
+	"10_Man/Guilded_Prophecy/Guurloth.lua",
+	"10_Man/Guilded_Prophecy/Thalquur.lua",
+	"10_Man/Guilded_Prophecy/Uruluuk.lua",
+	"10_Man/Drowned_Halls/DHHeader.lua",
+	"10_Man/Drowned_Halls/Jorb.lua",
+	"10_Man/Drowned_Halls/Joloral.lua",
+	"10_Man/Drowned_Halls/Isskal.lua",
+	"10_Man/Drowned_Halls/Hydriss.lua",
 }
 
 Embed = {
@@ -73,6 +88,21 @@ SavedVariables = {
 	KBMGSBOA_Settings = "account",
 	KBMGSBPH_Settings = "account",
 	KBMGSBLG_Settings = "account",
+	KBMROTP_Settings = "account",
+	KBMROTPEN_Settings = "account",
+	KBMROTPHA_Settings = "account",
+	KBMROTPBT_Settings = "account",
+	KBMROTPGS_Settings = "account",
+	KBMGP_Settings = "account",
+	KBMGPAF_Settings = "account",
+	KBMGPGH_Settings = "account",
+	KBMGPTR_Settings = "account",
+	KBMGPUK_Settings = "account",
+	KBMDH_Settings = "account",
+	KBMDHAJ_Settings = "account",
+	KBMDHJR_Settings = "account",
+	KBMDHIL_Settings = "account",
+	KBMDHHH_Settings = "account",
 	KBM_GlobalOptions = "account",
 }
 

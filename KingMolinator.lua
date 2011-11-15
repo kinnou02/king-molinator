@@ -929,7 +929,7 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 	if not KBM.BossID[UnitID] then
 		if uDetails then
 			if KBM_Boss[uDetails.name] then
-				if uDetails.level == KBM_Boss[uDetails.name].Level then
+				--if uDetails.level == KBM_Boss[uDetails.name].Level then
 					KBM.BossID[UnitID] = {}
 					KBM.BossID[UnitID].name = uDetails.name
 					KBM.BossID[UnitID].monitor = true
@@ -967,7 +967,7 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 						KBM.BossID[UnitID].dead = true
 						KBM.BossID[UnitID].available = false
 					end					
-				end
+				--end
 			end
 		end
 	else
@@ -977,8 +977,8 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 					KBM_CurrentMod:UnitHPCheck(uDetails, UnitID)
 					KBM.BossID[UnitID].IdleSince = false
 					KBM.BossID[UnitID].available = true
-				else
-					KBM.BossID[UnitID].IdleSince = Inspect.Time.Real()
+				-- else
+					-- KBM.BossID[UnitID].IdleSince = Inspect.Time.Real()
 				end
 			end
 		end
@@ -987,6 +987,8 @@ end
 
 local function KBM_UnitHPCheck(info)
 
+	-- Damage Based Events
+	--
 	local tUnitID = info.target
 	local cUnitID = info.caster
 	local tDetails = Inspect.Unit.Detail(tUnitID)
@@ -1002,15 +1004,22 @@ local function KBM_UnitHPCheck(info)
 				KBM.CheckActiveBoss(cDetails, cUnitID)
 			end
 		end
-	elseif KBM.Encounter then
-		if KBM.BossID[tUnitID] then
-			KBM.CheckActiveBoss(tDetails, tUnitID)
-		end
-		if KBM.BossID[cUnitID] then
-			KBM.CheckActiveBoss(cDetails, cUnitID)
-		end
 	end
 	if KBM.Encounter then
+		if tUnitID then
+			if KBM.BossID[tUnitID] then
+				if KBM.BossID[tUnitID].IdleSince then
+					KBM.BossID[tUnitID].IdleSince = Inspect.Time.Real()
+				end
+			end
+		end
+		if cUnitID then
+			if KBM.BossID[cUnitID] then
+				if KBM.BossID[cUnitID].IdleSince then
+					KBM.BossID[tUnitID].IdleSinse = Inspect.Time.Real()
+				end
+			end
+		end
 		if KBM_CurrentMod then
 			if info.abilityName then
 				if KBM.Trigger.Damage[info.abilityName] then
@@ -1023,6 +1032,7 @@ local function KBM_UnitHPCheck(info)
 end
 
 local function KBM_UnitAvailable(units)
+
 	if KBM.Encounter then
 		for UnitID, Specifier in pairs(units) do
 			if KBM.BossID[UnitID] then
@@ -1032,6 +1042,7 @@ local function KBM_UnitAvailable(units)
 			end
 		end
 	end
+	
 end
 
 function KBM.AttachDragFrame(parent, hook, name, layer)
@@ -1851,7 +1862,7 @@ local function KBM_Death(info)
 			if uDetails then
 				if not uDetails.player then
 					if KBM.BossID[UnitID] then
-						KBM.BossID[UnitID] = nil
+						KBM.BossID[UnitID].dead = true
 						if KBM_CurrentMod:Death(UnitID) then
 							print("Encounter Victory")
 							print("Time: "..KBM.ConvertTime(Inspect.Time.Real() - KBM.StartTime))
@@ -2310,10 +2321,9 @@ local function KBM_WaitReady(unitID)
 		Mod:AddBosses(KBM_Boss)
 		Mod:Start(KBM_MainWin)
 	end
-	KBM.MenuGroup:SetTenMan()
-	KBM.MenuGroup:SetMaster()
-	KBM.MenuGroup:SetExpertTwo()
-	KBM.MenuGroup:SetExpertOne()
+--	KBM.MenuGroup:SetMaster()
+--	KBM.MenuGroup:SetExpertTwo()
+--	KBM.MenuGroup:SetExpertOne()
 	-- if KBM.Testing then
 		-- TestBar = KBM.CastBar:Add(KBM, KBM.TestBoss, true)
 		-- TestBar:Create(KBM_PlayerID)

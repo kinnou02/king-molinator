@@ -13,15 +13,16 @@ local HG = {
 		Enabled = true,
 		Handler = nil,
 		Options = nil,
-		ID = "Herald Gaurath",
 	},
 	Instance = ROS.Name,
+	Type = "20man",
 	HasPhases = true,
 	PhaseType = "percentage",
 	PhaseList = {},
 	Timers = {},
 	Lang = {},
-	Enrage = 60 * 9.5, 
+	Enrage = 60 * 9.5,
+	ID = "Herald Gaurath",
 }
 
 HG.Gaurath = {
@@ -33,6 +34,7 @@ HG.Gaurath = {
 	CastFilters = {},
 	Timers = {},
 	TimersRef = {},
+	AlertsRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
@@ -156,7 +158,7 @@ function HG.Gaurath:Options()
 	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
-	local Timers = Options:AddHeader("Timers Enabled", self.TimersEnabled, HG.Settings.Timers.Enabled)
+	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, HG.Settings.Timers.Enabled)
 	--Timers:AddCheck(HG.Lang.Flames[KBM.Lang], self.FlamesEnabled, HG.Settings.Timers.FlamesEnabled)	
 	
 end

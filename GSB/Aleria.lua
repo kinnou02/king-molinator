@@ -13,7 +13,6 @@ local OA = {
 		Enabled = true,
 		Handler = nil,
 		Options = nil,
-		ID = "Aleria",
 	},
 	Instance = GSB.Name,
 	HasPhases = true,
@@ -21,7 +20,8 @@ local OA = {
 	PhaseList = {},
 	Timers = {},
 	Lang = {},
-}
+	ID = "Aleria",
+	}
 
 OA.Aleria = {
 	Mod = OA,
@@ -32,10 +32,12 @@ OA.Aleria = {
 	CastFilters = {},
 	Timers = {},
 	TimersRef = {},
+	AlertsRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
+	Triggers = {},
 }
 
 local KBM = KBM_RegisterMod(OA.Aleria.ID, OA)
@@ -155,7 +157,7 @@ function OA.Aleria:Options()
 	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
-	local Timers = Options:AddHeader("Timers Enabled", self.TimersEnabled, OA.Settings.Timers.Enabled)
+	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, OA.Settings.Timers.Enabled)
 	--Timers:AddCheck(OA.Lang.Flames[KBM.Lang], self.FlamesEnabled, OA.Settings.Timers.FlamesEnabled)	
 	
 end

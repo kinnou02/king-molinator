@@ -10,6 +10,8 @@ local ROS = {
 	Enabled = true,
 	IsInstance = true,
 	Name = "River Of Souls",
+	Type = "20man",
+	ID = "ROS",
 }
 
 local KBM = KBM_RegisterMod("River Of Souls", ROS)

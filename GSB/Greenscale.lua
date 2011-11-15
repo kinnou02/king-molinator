@@ -13,7 +13,6 @@ local LG = {
 		Enabled = true,
 		Handler = nil,
 		Options = nil,
-		ID = "Greenscale",
 	},
 	Instance = GSB.Name,
 	HasPhases = true,
@@ -21,7 +20,8 @@ local LG = {
 	PhaseList = {},
 	Timers = {},
 	Lang = {},
-	Enrage = 60 * 14.5, 
+	Enrage = 60 * 14.5,
+	ID = "Greenscale",	
 }
 
 LG.Greenscale = {
@@ -33,10 +33,12 @@ LG.Greenscale = {
 	CastFilters = {},
 	Timers = {},
 	TimersRef = {},
+	AlertsRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
+	Triggers = {},
 }
 
 local KBM = KBM_RegisterMod(LG.Greenscale.ID, LG)
@@ -156,7 +158,7 @@ function LG.Greenscale:Options()
 	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
-	local Timers = Options:AddHeader("Timers Enabled", self.TimersEnabled, LG.Settings.Timers.Enabled)
+	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, LG.Settings.Timers.Enabled)
 	--Timers:AddCheck(LG.Lang.Flames[KBM.Lang], self.FlamesEnabled, LG.Settings.Timers.FlamesEnabled)	
 	
 end
