@@ -879,7 +879,7 @@ function KBM.EncTimer:Init()
 		if KBM.Options.EncTimer.Enrage then
 			if KBM_CurrentMod.Enrage then
 				if current < KBM.EnrageTime then
-					EnrageString = KBM.ConvertTime(KBM_CurrentMod.Enrage - KBM.TimeElapsed)
+					EnrageString = KBM.ConvertTime(KBM.EnrageTime - current + 1)
 					self.Enrage.Text:SetText(KBM.Language.Timers.Enrage[KBM.Lang].." "..EnrageString)
 					self.Enrage.Text:ResizeToText()
 					self.Enrage.Progress:SetPoint("RIGHT", self.Enrage.Frame, KBM.TimeElapsed/KBM_CurrentMod.Enrage, nil)
@@ -1022,7 +1022,7 @@ local function KBM_UnitHPCheck(info)
 		if cUnitID then
 			if KBM.BossID[cUnitID] then
 				if KBM.BossID[cUnitID].IdleSince then
-					KBM.BossID[tUnitID].IdleSince = Inspect.Time.Real()
+					KBM.BossID[cUnitID].IdleSince = Inspect.Time.Real()
 				end
 			end
 		end
@@ -1700,16 +1700,17 @@ local function KBM_Reset()
 end
 
 function KBM.ConvertTime(Time)
+	Time = math.floor(Time)
 	local TimeString = "00"
 	local TimeSeconds = 0
 	local TimeMinutes = 0
 	local TimeHours = 0
 	if Time >= 60 then
 		TimeMinutes = math.floor(Time / 60)
-		TimeSeconds = Time - (TimeMinutes * 60) - 1
+		TimeSeconds = Time - (TimeMinutes * 60)
 		if TimeMinutes >= 60 then
 			TimeHours = math.floor(TimeMinutes / 60)
-			TimeMinutes = TimeMinutes - (TimeHours * 60) - 1
+			TimeMinutes = TimeMinutes - (TimeHours * 60)
 			TimeString = string.format("%dh:%02dm:%02ds", TimeHours, TimeMinutes, TimeSeconds)
 		else
 			TimeString = string.format("%02dm:%02ds", TimeMinutes, TimeSeconds)
@@ -2036,7 +2037,7 @@ function KBM.MenuOptions.Timers:Options()
 	
 	-- Timer Options
 	self.Menu = {}
-	self.Menu.EncTimers = Options:AddHeader(KBM.Language.Options.EncTimers[KBM.Lang], self.EncTimersEnabled, true)
+	self.Menu.EncTimers = Options:AddHeader(KBM.Language.Options.EncTimers[KBM.Lang], self.EncTimersEnabled, KBM.Options.EncTimer.Enabled)
 	self.Menu.EncTimers:AddCheck(KBM.Language.Options.ShowTimer[KBM.Lang], self.ShowEncTimer, KBM.Options.EncTimer.Visible)
 	self.Menu.EncTimers:AddCheck(KBM.Language.Options.LockTimer[KBM.Lang], self.LockEncTimer, KBM.Options.EncTimer.Unlocked)
 	self.Menu.EncTimers:AddCheck(KBM.Language.Options.Timer[KBM.Lang], self.EncDuration, KBM.Options.EncTimer.Duration)

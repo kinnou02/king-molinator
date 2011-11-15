@@ -2,6 +2,9 @@
 * Fixed: Drop shadows on Alert countdown text.
 * Fixed: Thalquur is now correctly Thalguur.
 * Fixed: Drowned Halls registering as Guilded Prophecy (sneaky!)
+* Fixed: Encounter Timer options.
+* Fixed: Encounter enrage timer display.
+* Fixed: Error reports with some Idle-time combinations.
 * Added: German Translations for:
 ** Sicaron: Unhonly Contract trigger.
 ** Greenscale's Blight
