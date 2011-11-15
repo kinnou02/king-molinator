@@ -1,4 +1,4 @@
-﻿-- Joloral Ragetide Boss Mod for KM:Boss Mods
+﻿-- Joloral Ragetide Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --
@@ -43,6 +43,7 @@ JR.Joloral = {
 local KBM = KBM_RegisterMod(JR.Joloral.ID, JR)
 
 JR.Lang.Joloral = KBM.Language:Add(JR.Joloral.Name)
+JR.Lang.Joloral.German = "Joloral Wutflut"
 -- JR.Lang.Flames = KBM.Language:Add("Ancient Flames")
 -- JR.Lang.Flames.French = "Flammes anciennes"
 

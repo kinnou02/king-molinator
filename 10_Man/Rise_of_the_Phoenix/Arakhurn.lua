@@ -1,4 +1,4 @@
-﻿-- High Priest Arakhurn Boss Mod for KM:Boss Mods
+﻿-- High Priest Arakhurn Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --
@@ -43,6 +43,7 @@ HA.Arakhurn = {
 local KBM = KBM_RegisterMod(HA.Arakhurn.ID, HA)
 
 HA.Lang.Arakhurn = KBM.Language:Add(HA.Arakhurn.Name)
+HA.Lang.Arakhurn.German = "Hohepriester Arakhurn"
 -- HA.Lang.Flames = KBM.Language:Add("Ancient Flames")
 -- HA.Lang.Flames.French = "Flammes anciennes"
 

@@ -1,4 +1,4 @@
-﻿-- Anrak the Foul Boss Mod for KM:Boss Mods
+﻿-- Anrak the Foul Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --
@@ -43,6 +43,7 @@ AF.Anrak = {
 local KBM = KBM_RegisterMod(AF.Anrak.ID, AF)
 
 AF.Lang.Anrak = KBM.Language:Add(AF.Anrak.Name)
+AF.Lang.Anrak.German = "Anrak der Üble"
 -- AF.Lang.Flames = KBM.Language:Add("Ancient Flames")
 -- AF.Lang.Flames.French = "Flammes anciennes"
 

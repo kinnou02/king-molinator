@@ -1,4 +1,4 @@
-﻿-- Assualt Commander Jorb Boss Mod for KM:Boss Mods
+﻿-- Assualt Commander Jorb Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --
@@ -43,6 +43,7 @@ AJ.Jorb = {
 local KBM = KBM_RegisterMod(AJ.Jorb.ID, AJ)
 
 AJ.Lang.Jorb = KBM.Language:Add(AJ.Jorb.Name)
+AJ.Lang.Jorb.German = "Überfallkommandant Jorb"
 -- AJ.Lang.Flames = KBM.Language:Add("Ancient Flames")
 -- AJ.Lang.Flames.French = "Flammes anciennes"
 

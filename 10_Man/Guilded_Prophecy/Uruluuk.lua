@@ -1,4 +1,4 @@
-﻿-- Uruluuk Boss Mod for KM:Boss Mods
+﻿-- Uruluuk Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --

@@ -1,4 +1,4 @@
-﻿-- Drowned Halls Header for KM:Boss Mods
+﻿-- Drowned Halls Header for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --
@@ -14,10 +14,10 @@ local DH = {
 	ID = "DH",
 }
 
-local KBM = KBM_RegisterMod("Guilded Prophecy", DH)
+local KBM = KBM_RegisterMod("Drowned Halls", DH)
 
 KBM.Language:Add(DH.Name)
---KBM.Language[HK.Name]:SetFrench("Glasmarteau")
+KBM.Language[DH.Name]:SetGerman("Überflutete Hallen")
 
 DH.Name = KBM.Language[DH.Name][KBM.Lang]
 

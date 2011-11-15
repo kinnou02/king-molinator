@@ -1,4 +1,4 @@
-﻿-- Oracle Aleria Boss Mod for KM:Boss Mods
+﻿-- Oracle Aleria Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --
@@ -43,6 +43,7 @@ OA.Aleria = {
 local KBM = KBM_RegisterMod(OA.Aleria.ID, OA)
 
 OA.Lang.Aleria = KBM.Language:Add(OA.Aleria.Name)
+OA.Lang.Aleria.German = "Orakel Aleria"
 -- OA.Lang.Flames = KBM.Language:Add("Ancient Flames")
 -- OA.Lang.Flames.French = "Flammes anciennes"
 

@@ -1,4 +1,4 @@
-﻿-- High Priestess Hydriss Boss Mod for KM:Boss Mods
+﻿-- High Priestess Hydriss Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --
@@ -43,6 +43,7 @@ HH.Hydriss = {
 local KBM = KBM_RegisterMod(HH.Hydriss.ID, HH)
 
 HH.Lang.Hydriss = KBM.Language:Add(HH.Hydriss.Name)
+HH.Lang.Hydriss.German = "Hohepriesterin Hydriss"
 -- HH.Lang.Flames = KBM.Language:Add("Ancient Flames")
 -- HH.Lang.Flames.French = "Flammes anciennes"
 

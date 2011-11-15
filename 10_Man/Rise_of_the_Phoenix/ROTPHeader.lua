@@ -1,4 +1,4 @@
-﻿-- Rise of the Phoenix Header for KM:Boss Mods
+﻿-- Rise of the Phoenix Header for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --
@@ -17,7 +17,7 @@ local ROTP = {
 local KBM = KBM_RegisterMod("Rise of the Phoenix", ROTP)
 
 KBM.Language:Add(ROTP.Name)
---KBM.Language[HK.Name]:SetFrench("Glasmarteau")
+KBM.Language[ROTP.Name]:SetGerman("Aufstieg des Phönix")
 
 ROTP.Name = KBM.Language[ROTP.Name][KBM.Lang]
 

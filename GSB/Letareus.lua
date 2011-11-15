@@ -1,4 +1,4 @@
-﻿-- Duke Letareus Boss Mod for KM:Boss Mods
+﻿-- Duke Letareus Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --
@@ -44,6 +44,7 @@ DL.Letareus = {
 local KBM = KBM_RegisterMod(DL.Letareus.ID, DL)
 
 DL.Lang.Letareus = KBM.Language:Add(DL.Letareus.Name)
+DL.Lang.Letareus.German = "Herzog Letareus"
 -- DL.Lang.Flames = KBM.Language:Add("Ancient Flames")
 -- DL.Lang.Flames.French = "Flammes anciennes"
 

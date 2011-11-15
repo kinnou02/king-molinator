@@ -1,4 +1,30 @@
-﻿v0.5.6
+﻿v0.5.7
+* Fixed: Drop shadows on Alert countdown text.
+* Fixed: Thalquur is now correctly Thalguur.
+* Fixed: Drowned Halls registering as Guilded Prophecy (sneaky!)
+* Added: German Translations for:
+** Sicaron: Unhonly Contract trigger.
+** Greenscale's Blight
+** Oracle Aleria
+** Greenscale
+** Prince Hylas
+** Duke Letarues
+** River of Souls
+** Warmaster Galenir
+** Dark Foci
+** Plutonus the Immortal
+** Herald Gaurath
+** Alsbeth the Discordant
+** Drowned Halls
+** Assault Commander Jorb
+** Joloral Ragetide
+** High Priestess Hydriss
+** Guilded Prophecy
+** Anrak the Foul
+** Rise of the Phoenix
+** High Priest Arakhurn
+----
+v0.5.6
 * HotFix: Akylios Wave 1 timers and alerts.
 ----
 v0.5.5

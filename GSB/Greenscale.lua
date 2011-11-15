@@ -1,4 +1,4 @@
-﻿-- Lord Greenscale Boss Mod for KM:Boss Mods
+﻿-- Lord Greenscale Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --
@@ -44,6 +44,7 @@ LG.Greenscale = {
 local KBM = KBM_RegisterMod(LG.Greenscale.ID, LG)
 
 LG.Lang.Greenscale = KBM.Language:Add(LG.Greenscale.Name)
+LG.Lang.Greenscale.German = "Fürst Grünschuppe"
 -- LG.Lang.Flames = KBM.Language:Add("Ancient Flames")
 -- LG.Lang.Flames.French = "Flammes anciennes"
 

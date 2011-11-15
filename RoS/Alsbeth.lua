@@ -1,4 +1,4 @@
-﻿-- Alsbeth the Discordant Boss Mod for KM:Boss Mods
+﻿-- Alsbeth the Discordant Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --
@@ -45,6 +45,7 @@ AD.Alsbeth = {
 local KBM = KBM_RegisterMod(AD.Alsbeth.ID, AD)
 
 AD.Lang.Alsbeth = KBM.Language:Add(AD.Alsbeth.Name)
+AD.Lang.Alsbeth.German = "Alsbeth die Streitsuchende"
 -- AD.Lang.Flames = KBM.Language:Add("Ancient Flames")
 -- AD.Lang.Flames.French = "Flammes anciennes"
 

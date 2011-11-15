@@ -1,4 +1,4 @@
-﻿-- Plutonus the Immortal Boss Mod for KM:Boss Mods
+﻿-- Plutonus the Immortal Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --
@@ -21,7 +21,7 @@ local PI = {
 	PhaseList = {},
 	Timers = {},
 	Lang = {},
-	ID = "Plutonus",	
+	ID = "Plutonus",
 }
 
 PI.Plutonus = {
@@ -44,6 +44,7 @@ PI.Plutonus = {
 local KBM = KBM_RegisterMod(PI.Plutonus.ID, PI)
 
 PI.Lang.Plutonus = KBM.Language:Add(PI.Plutonus.Name)
+PI.Lang.Plutonus.German = "Plutonus der Unsterbliche"
 -- PI.Lang.Flames = KBM.Language:Add("Ancient Flames")
 -- PI.Lang.Flames.French = "Flammes anciennes"
 

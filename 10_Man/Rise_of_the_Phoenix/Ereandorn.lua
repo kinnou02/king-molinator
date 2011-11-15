@@ -1,4 +1,4 @@
-﻿-- Ereandorn Boss Mod for KM:Boss Mods
+﻿-- Ereandorn Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --

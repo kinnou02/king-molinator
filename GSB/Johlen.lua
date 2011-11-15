@@ -1,4 +1,4 @@
-﻿-- Infiltrator Johlen Boss Mod for KM:Boss Mods
+﻿-- Infiltrator Johlen Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --

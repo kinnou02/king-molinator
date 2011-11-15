@@ -1,4 +1,4 @@
-﻿-- Dark Foci Boss Mod for KM:Boss Mods
+﻿-- Dark Foci Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --
@@ -44,6 +44,7 @@ DF.Foci = {
 local KBM = KBM_RegisterMod(DF.Foci.ID, DF)
 
 DF.Lang.Foci = KBM.Language:Add(DF.Foci.Name)
+DF.Lang.Foci.German = "Finsterer Fokus"
 -- DF.Lang.Flames = KBM.Language:Add("Ancient Flames")
 -- DF.Lang.Flames.French = "Flammes anciennes"
 

@@ -48,6 +48,7 @@ SN.Lang.Sicaron = KBM.Language:Add(SN.Sicaron.Name)
 -- Notify Dictionary
 SN.Lang.Notify = {}
 SN.Lang.Notify.Contract = KBM.Language:Add("Sicaron forces (%a*) in to an unholy contract")
+SN.Lang.Notify.Contract.German = "Sicaron zwingt (%a*) in einen unheiligen Pakt"
 
 -- Debuff Dictionary
 SN.Lang.Debuff = {}

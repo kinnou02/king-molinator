@@ -1,4 +1,4 @@
-﻿-- General Silgen Boss Mod for KM:Boss Mods
+﻿-- General Silgen Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --

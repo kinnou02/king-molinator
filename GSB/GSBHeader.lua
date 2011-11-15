@@ -1,4 +1,4 @@
-﻿-- Hammerknell Header for KM:Boss Mods
+﻿-- Hammerknell Header for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --
@@ -16,7 +16,7 @@ local GSB = {
 local KBM = KBM_RegisterMod("Greenscale's Blight", GSB)
 
 KBM.Language:Add(GSB.Name)
---KBM.Language[HK.Name]:SetFrench("Glasmarteau")
+KBM.Language[GSB.Name]:SetGerman("Grünschuppes Pesthauch")
 
 GSB.Name = KBM.Language[GSB.Name][KBM.Lang]
 

@@ -1,4 +1,4 @@
-﻿-- Herald Gaurath Boss Mod for KM:Boss Mods
+﻿-- Herald Gaurath Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --
@@ -44,6 +44,7 @@ HG.Gaurath = {
 local KBM = KBM_RegisterMod(HG.Gaurath.ID, HG)
 
 HG.Lang.Gaurath = KBM.Language:Add(HG.Gaurath.Name)
+HG.Lang.Gaurath.German = "Herold Gaurath"
 -- HG.Lang.Flames = KBM.Language:Add("Ancient Flames")
 -- HG.Lang.Flames.French = "Flammes anciennes"
 

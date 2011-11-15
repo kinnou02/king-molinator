@@ -190,7 +190,7 @@ function KBM.InitOptions()
 		end
 	end
 	
-	MenuWidth = math.floor(ContentW * 0.31)-10
+	MenuWidth = math.floor(ContentW * 0.33)-10
 	
 	KBM.MainWin.Mask = UI.CreateFrame("Mask", "KBM Menu Mask", KBM.MainWin.Content)
 	

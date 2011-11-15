@@ -1,4 +1,4 @@
-﻿-- Guurloth Boss Mod for KM:Boss Mods
+﻿-- Guurloth Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --

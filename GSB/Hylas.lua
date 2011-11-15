@@ -1,4 +1,4 @@
-﻿-- Prince Hylas Boss Mod for KM:Boss Mods
+﻿-- Prince Hylas Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --
@@ -44,6 +44,7 @@ PH.Hylas = {
 local KBM = KBM_RegisterMod(PH.Hylas.ID, PH)
 
 PH.Lang.Hylas = KBM.Language:Add(PH.Hylas.Name)
+PH.Lang.Hylas.German = "Prinz Hylas"
 -- PH.Lang.Flames = KBM.Language:Add("Ancient Flames")
 -- PH.Lang.Flames.French = "Flammes anciennes"
 

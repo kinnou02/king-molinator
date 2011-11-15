@@ -234,6 +234,12 @@ function KBM.Language:Add(Phrase)
 end
 
 -- Main Addon Dictionary
+-- Encounter related messages
+KBM.Language.Encounter = {}
+KBM.Language.Encounter.Start = KBM.Language:Add("Encounter started:")
+KBM.Language.Encounter.GLuck = KBM.Language:Add("Good luck!")
+KBM.Language.Encounter.Wipe = KBM.Language:Add("Encounter ended, possible wipe.")
+KBM.Language.Encounter.Victory = KBM.Language:Add("Encounter Victory!")
 -- Colors
 KBM.Language.Color = {}
 KBM.Language.Color.Red = KBM.Language:Add("Red")
@@ -250,7 +256,7 @@ KBM.Language.Options.Castbar.German = "Zauberbalken"
 KBM.Language.Options.CastbarEnabled = KBM.Language:Add("Cast-bars enabled.")
 KBM.Language.Options.CastbarEnabled.French = "Barres-cast activ\195\169."
 KBM.Language.Options.CastbarEnabled.German = "Zauberbalken anzeigen."
--- Timer Related
+-- Timer Options
 KBM.Language.Options.EncTimers = KBM.Language:Add("Encounter Timers enabled.")
 KBM.Language.Options.MechanicTimers = KBM.Language:Add("Mechanic Timers enabled.")
 KBM.Language.Options.MechanicTimers.French = "Timers de M\195\169canisme."
@@ -270,7 +276,7 @@ KBM.Language.Options.Timer.German = "Kampfdauer anzeige."
 KBM.Language.Options.Enrage = KBM.Language:Add("Enrage Timer (if supported).")
 KBM.Language.Options.Enrage.French = "Timer d'Enrage (si support\195\169)."
 KBM.Language.Options.Enrage.German = "Enrage Anzeige (wenn unterstützt)."
--- Anchors
+-- Anchors Options
 KBM.Language.Options.ShowAnchor = KBM.Language:Add("Show anchor (for positioning).")
 KBM.Language.Options.ShowAnchor.French = "Montrer ancrage (pour positionnement)."
 KBM.Language.Options.ShowAnchor.German = "Zeige Anker (für Positionierung)."
@@ -309,7 +315,6 @@ KBM.Language.Options.AlertText.French = "Texte Avertissement Alerte activ\195\16
 KBM.Language.Options.Settings = KBM.Language:Add("Settings")
 KBM.Language.Options.Settings.French = "Configurations"
 KBM.Language.Options.Settings.German = "Einstellungen"
-
 -- Timer Dictionary
 KBM.Language.Timers = {}
 KBM.Language.Timers.Time = KBM.Language:Add("Time:")
@@ -495,6 +500,7 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 			if self.Alerts[TriggerTime] then
 				if not self.Alerts[TriggerTime].Triggered then
 					KBM.Alert:Start(self.Alerts[TriggerTime].AlertObj, CurrentTime)
+					self.Alerts[TriggerTime].Triggered = true
 				end
 			end
 		end
@@ -873,7 +879,7 @@ function KBM.EncTimer:Init()
 		if KBM.Options.EncTimer.Enrage then
 			if KBM_CurrentMod.Enrage then
 				if current < KBM.EnrageTime then
-					EnrageString = KBM.ConvertTime(KBM.EnrageTime - current)
+					EnrageString = KBM.ConvertTime(KBM_CurrentMod.Enrage - KBM.TimeElapsed)
 					self.Enrage.Text:SetText(KBM.Language.Timers.Enrage[KBM.Lang].." "..EnrageString)
 					self.Enrage.Text:ResizeToText()
 					self.Enrage.Progress:SetPoint("RIGHT", self.Enrage.Frame, KBM.TimeElapsed/KBM_CurrentMod.Enrage, nil)
@@ -949,8 +955,8 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 							KBM_CurrentBossName = uDetails.Name
 							KBM_CurrentMod = KBM.BossID[UnitID].Mod
 							if not KBM_CurrentMod.EncounterRunning then
-								print("Encounter Started: "..KBM_Boss[uDetails.name].Descript)
-								print("Good luck!")
+								print(KBM.Language.Encounter.Start[KBM.Lang].." "..KBM_Boss[uDetails.Name].Descript)
+								print(KBM.Language.Encounter.GLuck[KBM.Lang])
 								KBM.TimeElapsed = 0
 								KBM.StartTime = Inspect.Time.Real()
 								if KBM_CurrentMod.Enrage then
@@ -1461,14 +1467,15 @@ function KBM.Alert:Init()
 				if self.Remaining then
 					self.Remaining = self.StopTime - CurrentTime
 					if self.Remaining <= 0 then
-						self.Remaining = 00
+						self.Remaining = 0
 						self.Text:SetText(self.Current.Text)
 						self.Shadow:SetText(self.Current.Text)
 						self.Shadow:ResizeToText()
 						self.Text:ResizeToText()
 					else
-						self.Text:SetText(string.format("%0.1f - "..self.Current.Text, self.Remaining))
-						self.Shadow:SetText(AlertObj.Text)
+						local CDText = string.format("%0.1f - "..self.Current.Text, self.Remaining)
+						self.Shadow:SetText(CDText)
+						self.Text:SetText(CDText)
 						self.Shadow:ResizeToText()
 						self.Text:ResizeToText()
 					end
@@ -1719,8 +1726,8 @@ function KBM:CheckBossStates(current)
 			if BossData.IdleSince then
 				if BossData.IdleSince + BossData.TimeOut <= current then
 					if KBM_CurrentMod:RemoveUnits(UnitID) then
-						print("Encounter Ended, possible wipe.")
-						print("Time: "..KBM.ConvertTime(BossData.IdleSince - KBM.StartTime))
+						print(KBM.Language.Encounter.Wipe[KBM.Lang])
+						print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(BossData.IdleSince - KBM.StartTime))
 						KBM_Reset()
 						break
 					end			
@@ -1864,8 +1871,8 @@ local function KBM_Death(info)
 					if KBM.BossID[UnitID] then
 						KBM.BossID[UnitID].dead = true
 						if KBM_CurrentMod:Death(UnitID) then
-							print("Encounter Victory")
-							print("Time: "..KBM.ConvertTime(Inspect.Time.Real() - KBM.StartTime))
+							print(KBM.Language.Encounter.Victory[KBM.Lang])
+							print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(Inspect.Time.Real() - KBM.StartTime))
 							KBM_Reset()
 						end
 					end

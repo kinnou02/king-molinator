@@ -1,4 +1,4 @@
-﻿-- Hammerknell Header for KM:Boss Mods
+﻿-- River of Souls Header for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --
@@ -17,7 +17,7 @@ local ROS = {
 local KBM = KBM_RegisterMod("River Of Souls", ROS)
 
 KBM.Language:Add(ROS.Name)
---KBM.Language[HK.Name]:SetFrench("Glasmarteau")
+KBM.Language[ROS.Name]:SetGerman("Seelenfluss")
 
 ROS.Name = KBM.Language[ROS.Name][KBM.Lang]
 

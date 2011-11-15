@@ -1,4 +1,4 @@
-﻿-- Beruhast Boss Mod for KM:Boss Mods
+﻿-- Beruhast Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --

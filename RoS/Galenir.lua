@@ -1,4 +1,4 @@
-﻿-- Warmaster Galenir Boss Mod for KM:Boss Mods
+﻿-- Warmaster Galenir Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --
@@ -45,6 +45,7 @@ WG.Galenir = {
 local KBM = KBM_RegisterMod(WG.Galenir.ID, WG)
 
 WG.Lang.Galenir = KBM.Language:Add(WG.Galenir.Name)
+WG.Lang.Galenir.German = "Kriegsmeister Galenir"
 -- WG.Lang.Flames = KBM.Language:Add("Ancient Flames")
 -- WG.Lang.Flames.French = "Flammes anciennes"
 

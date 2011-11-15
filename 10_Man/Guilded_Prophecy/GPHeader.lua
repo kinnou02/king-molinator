@@ -1,4 +1,4 @@
-﻿-- Guilded Prophecy Header for KM:Boss Mods
+﻿-- Guilded Prophecy Header for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --
@@ -17,7 +17,7 @@ local GP = {
 local KBM = KBM_RegisterMod("Guilded Prophecy", GP)
 
 KBM.Language:Add(GP.Name)
---KBM.Language[HK.Name]:SetFrench("Glasmarteau")
+KBM.Language[GP.Name]:SetGerman("Güldene Prophezeiung")
 
 GP.Name = KBM.Language[GP.Name][KBM.Lang]
 
