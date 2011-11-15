@@ -935,7 +935,7 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 	if not KBM.BossID[UnitID] then
 		if uDetails then
 			if KBM_Boss[uDetails.name] then
-				--if uDetails.level == KBM_Boss[uDetails.name].Level then
+				if uDetails.level == KBM_Boss[uDetails.name].Level then
 					KBM.BossID[UnitID] = {}
 					KBM.BossID[UnitID].name = uDetails.name
 					KBM.BossID[UnitID].monitor = true
@@ -973,7 +973,7 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 						KBM.BossID[UnitID].dead = true
 						KBM.BossID[UnitID].available = false
 					end					
-				--end
+				end
 			end
 		end
 	else
