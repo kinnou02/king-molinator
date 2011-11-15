@@ -952,10 +952,10 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 						if not KBM.Encounter then
 							KBM.Encounter = true
 							KBM.CurrentBoss = UnitID
-							KBM_CurrentBossName = uDetails.Name
+							KBM_CurrentBossName = uDetails.name
 							KBM_CurrentMod = KBM.BossID[UnitID].Mod
 							if not KBM_CurrentMod.EncounterRunning then
-								print(KBM.Language.Encounter.Start[KBM.Lang].." "..KBM_Boss[uDetails.Name].Descript)
+								print(KBM.Language.Encounter.Start[KBM.Lang].." "..KBM_Boss[uDetails.name].Descript)
 								print(KBM.Language.Encounter.GLuck[KBM.Lang])
 								KBM.TimeElapsed = 0
 								KBM.StartTime = Inspect.Time.Real()
@@ -1022,7 +1022,7 @@ local function KBM_UnitHPCheck(info)
 		if cUnitID then
 			if KBM.BossID[cUnitID] then
 				if KBM.BossID[cUnitID].IdleSince then
-					KBM.BossID[tUnitID].IdleSinse = Inspect.Time.Real()
+					KBM.BossID[tUnitID].IdleSince = Inspect.Time.Real()
 				end
 			end
 		end
