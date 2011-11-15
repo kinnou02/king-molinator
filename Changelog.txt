@@ -3,8 +3,20 @@
 * Change: Last attempt at fixing encounter wipe detection before 1.6.
 * New: Added final template encounters before 1.6.
 * Added: Rise of the Phoenix (template)
+* Added: Ereandorn (template)
+* Added: General Silgen (template)
+* Added: Beruhast (template)
+* Added: High Priest Arakhurn (template)
 * Added: Drowned Halls (template)
+* Added: Assault Commander Jorb (template)
+* Added: Joloral Ragetide (template)
+* Added: Isskal (template)
+* Added: Uruluuk (template)
 * Added: Guilded Prophecy (template)
+* Added: Anrak the Foul (template)
+* Added: Guurloth (template)
+* Added: Thalquur (template)
+* Added: High Priestess Hydriss (template)
 ----
 v0.5.4
 * New: Menu Groups for 20 and 10 Man Raids, Master Modes and Expert T1 and T2.
