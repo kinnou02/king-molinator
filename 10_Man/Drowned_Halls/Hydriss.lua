@@ -20,14 +20,14 @@ local HH = {
 	PhaseList = {},
 	Timers = {},
 	Lang = {},
-	ID = "High Priestess Hydriss",
+	ID = "Hydriss",
 	}
 
 HH.Hydriss = {
 	Mod = HH,
 	Level = "??",
 	Active = false,
-	Name = "Hydriss",
+	Name = "High Priestess Hydriss",
 	Castbar = nil,
 	CastFilters = {},
 	Timers = {},

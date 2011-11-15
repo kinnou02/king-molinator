@@ -1,4 +1,7 @@
-﻿v0.5.5
+﻿v0.5.6
+* HotFix: Akylios Wave 1 timers and alerts.
+----
+v0.5.5
 * Change: Reduced Inquisitor Garau's time-out by 2 seconds
 * Change: Last attempt at fixing encounter wipe detection before 1.6.
 * New: Added final template encounters before 1.6.

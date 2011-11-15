@@ -494,7 +494,7 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 			TriggerTime = math.ceil(self.Remaining)
 			if self.Alerts[TriggerTime] then
 				if not self.Alerts[TriggerTime].Triggered then
-					self.Alerts[TriggerTime].AlertObj:Start(CurrentTime)
+					KBM.Alert:Start(self.Alerts[TriggerTime].AlertObj, CurrentTime)
 				end
 			end
 		end
