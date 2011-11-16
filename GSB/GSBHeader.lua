@@ -1,4 +1,4 @@
-﻿-- Hammerknell Header for King Boss Mods
+﻿-- Greenscale's Blight Header for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --
@@ -17,6 +17,7 @@ local KBM = KBM_RegisterMod("Greenscale's Blight", GSB)
 
 KBM.Language:Add(GSB.Name)
 KBM.Language[GSB.Name]:SetGerman("Grünschuppes Pesthauch")
+KBM.Language[GSB.Name]:SetFrench("Fl\195\169au de Vert\195\169caille")
 
 GSB.Name = KBM.Language[GSB.Name][KBM.Lang]
 

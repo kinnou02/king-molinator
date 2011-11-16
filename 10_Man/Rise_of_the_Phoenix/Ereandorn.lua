@@ -43,8 +43,12 @@ EN.Ereandorn = {
 local KBM = KBM_RegisterMod(EN.Ereandorn.ID, EN)
 
 EN.Lang.Ereandorn = KBM.Language:Add(EN.Ereandorn.Name)
--- EN.Lang.Flames = KBM.Language:Add("Ancient Flames")
--- EN.Lang.Flames.French = "Flammes anciennes"
+
+-- Notify Dictionary
+EN.Lang.Ereandorn.Notify = {}
+EN.Lang.Ereandorn.Notify.Burn = KBM.Language:Add("Ereandorn says, (%a*), how does it feel to burn")
+EN.Lang.Ereandorn.Notify.Fuel = KBM.Language:Add("The corpse of (%a*) will fuel our conquest")
+EN.Lang.Ereandorn.Notify.Bomb = KBM.Language:Add("I will rebuild this world in flames!")
 
 EN.Ereandorn.Name = EN.Lang.Ereandorn[KBM.Lang]
 
@@ -61,7 +65,12 @@ function EN:InitVars()
 	self.Settings = {
 		Timers = {
 			Enabled = true,
-			FlamesEnabled = true,
+		},
+		Alerts = {
+			Enabled = true,
+			Burn = true,
+			Fuel = true,
+			Bomb = true,
 		},
 		CastBar = {
 			x = false,
@@ -149,16 +158,34 @@ function EN:Timer()
 end
 
 function EN.Ereandorn:Options()
+	-- Timer Options
 	function self:TimersEnabled(bool)
+		EN.Settings.Timers.Enabled = bool
 	end
-	function self:FlamesEnabled(bool)
-		EN.Settings.Timers.FlamesEnabled = bool
-		EN.Ereandorn.TimersRef.Flames.Enabled = bool
+	-- Alert Options
+	function self:AlertsEnabled(bool)
+		EN.Settings.Alerts.Enabled = bool
+	end
+	function self:BurnAlert(bool)
+		EN.Settings.Alerts.Burn = bool
+		EN.Ereandorn.AlertsRef.Burn.Enabled = bool
+	end
+	function self:FuelAlert(bool)
+		EN.Settings.Alerts.Fuel = bool
+		EN.Ereandorn.AlertsRef.Fuel.Enabled = bool
+	end
+	function self:BombAlert(bool)
+		EN.Settings.Alerts.Bomb = bool
+		EN.Ereandorn.AlertsRef.Bomb.Enabled = bool
 	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
-	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, EN.Settings.Timers.Enabled)
-	--Timers:AddCheck(EN.Lang.Flames[KBM.Lang], self.FlamesEnabled, EN.Settings.Timers.FlamesEnabled)	
+	--local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, EN.Settings.Timers.Enabled)
+	--Timers:AddCheck(EN.Lang.Flames[KBM.Lang], self.FlamesEnabled, EN.Settings.Timers.FlamesEnabled)
+	local Alerts = Options:AddHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], self.AlertsEnabled, EN.Settings.Alerts.Enabled)
+	-- Alerts:AddCheck("Burn move out alert (temporary name).", self.BurnAlert, EN.Settings.Alerts.Burn)
+	-- Alerts:AddCheck("Target Pillar alert (temporary name).", self.FuelAlert, EN.Settings.Alerts.Fuel)
+	-- Alerts:AddCheck("Bomb alert (temporary name).", self.BombAlert, EN.Settings.Alerts.Bomb)
 	
 end
 
@@ -166,8 +193,19 @@ function EN:Start()
 	self.Header = KBM.HeaderList[self.Instance]
 	self.Ereandorn.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Ereandorn, true, self.Header)
 	self.Ereandorn.MenuItem.Check:SetEnabled(false)
-	-- self.Ereandorn.TimersRef.Flames = KBM.MechTimer:Add(self.Lang.Flames[KBM.Lang], "cast", 30, self, nil)
-	-- self.Ereandorn.TimersRef.Flames.Enabled = self.Settings.Timers.FlamesEnabled
+	
+	-- Alerts
+	-- self.Ereandorn.AlertsRef.Burn = KBM.Alert:Create("Run away!", 5, true, false, "red")
+	-- self.Ereandorn.AlertsRef.Fuel = KBM.Alert:Create("Pillar", 5, true, false, "orange")
+	-- self.Ereandorn.AlertsRef.Bomb = KBM.Alert:Create("Bomb!", 5, true, false, "orange")
+		
+	-- Assign mechanics to Triggers
+	-- self.Ereandorn.Triggers.Burn = KBM.Trigger:Create(self.Lang.Ereandorn.Notify.Burn[KBM.Lang], "notify", self.Ereandorn)
+	-- self.Ereandorn.Triggers.Burn:AddAlert(self.Ereandorn.AlertsRef.Burn, true)
+	-- self.Ereandorn.Triggers.Fuel = KBM.Trigger:Create(self.Lang.Ereandorn.Notify.Fuel[KBM.Lang], "notify", self.Ereandorn)
+	-- self.Ereandorn.Triggers.Fuel:AddAlert(self.Ereandorn.AlertsRef.Fuel)
+	-- self.Ereandorn.Triggers.Bomb = KBM.Trigger:Create(self.Lang.Ereandorn.Notify.Bomb[KBM.Lang], "notify", self.Ereandorn)
+	-- self.Ereandorn.Triggers.Bomb:AddAlert(self.Ereandorn.AlertsRef.Bomb)
 	
 	self.Ereandorn.CastBar = KBM.CastBar:Add(self, self.Ereandorn, true)
 end

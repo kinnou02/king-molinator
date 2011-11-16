@@ -45,8 +45,7 @@ local KBM = KBM_RegisterMod(PI.Plutonus.ID, PI)
 
 PI.Lang.Plutonus = KBM.Language:Add(PI.Plutonus.Name)
 PI.Lang.Plutonus.German = "Plutonus der Unsterbliche"
--- PI.Lang.Flames = KBM.Language:Add("Ancient Flames")
--- PI.Lang.Flames.French = "Flammes anciennes"
+PI.Lang.Plutonus.French = "Plutonus l'Immortel"
 
 PI.Plutonus.Name = PI.Lang.Plutonus[KBM.Lang]
 

@@ -44,8 +44,7 @@ IJ.Johlen = {
 local KBM = KBM_RegisterMod(IJ.Johlen.ID, IJ)
 
 IJ.Lang.Johlen = KBM.Language:Add(IJ.Johlen.Name)
--- IJ.Lang.Flames = KBM.Language:Add("Ancient Flames")
--- IJ.Lang.Flames.French = "Flammes anciennes"
+IJ.Lang.Johlen.French = "Infiltrateur Johlen"
 
 IJ.Johlen.Name = IJ.Lang.Johlen[KBM.Lang]
 

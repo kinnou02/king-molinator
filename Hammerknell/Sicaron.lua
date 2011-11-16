@@ -54,6 +54,7 @@ SN.Lang.Notify.Contract.German = "Sicaron zwingt (%a*) in einen unheiligen Pakt"
 SN.Lang.Debuff = {}
 SN.Lang.Debuff.Contract = KBM.Language:Add("Unholy Contract")
 SN.Lang.Debuff.Contract.German = "Unheiliger Vertrag"
+SN.Lang.Debuff.Contract.French = "Contrat impie"
 
 SN.Sicaron.Name = SN.Lang.Sicaron[KBM.Lang]
 

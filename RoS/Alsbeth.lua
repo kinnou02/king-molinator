@@ -46,8 +46,7 @@ local KBM = KBM_RegisterMod(AD.Alsbeth.ID, AD)
 
 AD.Lang.Alsbeth = KBM.Language:Add(AD.Alsbeth.Name)
 AD.Lang.Alsbeth.German = "Alsbeth die Streitsuchende"
--- AD.Lang.Flames = KBM.Language:Add("Ancient Flames")
--- AD.Lang.Flames.French = "Flammes anciennes"
+AD.Lang.Alsbeth.French = "Alsbeth la Discordante"
 
 AD.Alsbeth.Name = AD.Lang.Alsbeth[KBM.Lang]
 

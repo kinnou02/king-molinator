@@ -45,8 +45,7 @@ local KBM = KBM_RegisterMod(DF.Foci.ID, DF)
 
 DF.Lang.Foci = KBM.Language:Add(DF.Foci.Name)
 DF.Lang.Foci.German = "Finsterer Fokus"
--- DF.Lang.Flames = KBM.Language:Add("Ancient Flames")
--- DF.Lang.Flames.French = "Flammes anciennes"
+DF.Lang.Foci.French = "Balises T\195\169n\195\169breuses"
 
 DF.Foci.Name = DF.Lang.Foci[KBM.Lang]
 

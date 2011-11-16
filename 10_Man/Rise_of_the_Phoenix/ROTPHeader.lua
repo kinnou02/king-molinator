@@ -18,6 +18,7 @@ local KBM = KBM_RegisterMod("Rise of the Phoenix", ROTP)
 
 KBM.Language:Add(ROTP.Name)
 KBM.Language[ROTP.Name]:SetGerman("Aufstieg des Phönix")
+KBM.Language[ROTP.Name]:SetFrench("Envol du Ph\195\169nix")
 
 ROTP.Name = KBM.Language[ROTP.Name][KBM.Lang]
 

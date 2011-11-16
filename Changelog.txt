@@ -1,4 +1,36 @@
-﻿v0.5.7
+﻿v0.5.8
+* Notice: First release for 1.6, expect more to come.
+* Notice: Any needed hotfixes will be incoming, plus RotP mechanics.
+* Change: Support for 1.6 Rift Client.
+* Added: French translations for:
+** Encounter start, end etc messages.
+** Matron Zamira
+** Matron Zamira's Mark of Oblivion
+** Soulrender Zilas
+** Inwar Darktide
+** Sicaron's Unholy Contract (Debuff only)
+** Grugonim's Rampant Decay
+** Grugonim's Corrosive Bile
+** River of Souls
+** Dark Foci
+** Warmaster Galenir
+** Plutonus the Immortal
+** Herald Gaurath
+** Alsbeth the Discordant
+** Greenscale's Blight
+** Duke Letarues
+** Infiltrator Johlen
+** Lord Greenscale
+** Rise of the Phoenix
+** General Silgen
+** High Priest Arakhurn
+** Guilded Prophecy
+** Anrak the Foul
+** Drowned Halls
+** Assault Commander Jorb
+** Joloral Ragetide
+----
+v0.5.7
 * Fixed: Drop shadows on Alert countdown text.
 * Fixed: Thalquur is now correctly Thalguur.
 * Fixed: Drowned Halls registering as Guilded Prophecy (sneaky!)
@@ -6,7 +38,7 @@
 * Fixed: Encounter enrage timer display.
 * Fixed: Error reports with some Idle-time combinations.
 * Added: German Translations for:
-** Sicaron: Unhonly Contract trigger.
+** Sicaron: Unholy Contract trigger.
 ** Greenscale's Blight
 ** Oracle Aleria
 ** Greenscale

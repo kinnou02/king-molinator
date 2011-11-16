@@ -18,6 +18,7 @@ local KBM = KBM_RegisterMod("River Of Souls", ROS)
 
 KBM.Language:Add(ROS.Name)
 KBM.Language[ROS.Name]:SetGerman("Seelenfluss")
+KBM.Language[ROS.Name]:SetFrench("Fleuves des \195\130mes")
 
 ROS.Name = KBM.Language[ROS.Name][KBM.Lang]
 

@@ -44,8 +44,7 @@ local KBM = KBM_RegisterMod(HA.Arakhurn.ID, HA)
 
 HA.Lang.Arakhurn = KBM.Language:Add(HA.Arakhurn.Name)
 HA.Lang.Arakhurn.German = "Hohepriester Arakhurn"
--- HA.Lang.Flames = KBM.Language:Add("Ancient Flames")
--- HA.Lang.Flames.French = "Flammes anciennes"
+HA.Lang.Arakhurn.French = "Grand Pr\195\170tre Arakhurn"
 
 HA.Arakhurn.Name = HA.Lang.Arakhurn[KBM.Lang]
 

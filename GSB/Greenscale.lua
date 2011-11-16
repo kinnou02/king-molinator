@@ -45,8 +45,7 @@ local KBM = KBM_RegisterMod(LG.Greenscale.ID, LG)
 
 LG.Lang.Greenscale = KBM.Language:Add(LG.Greenscale.Name)
 LG.Lang.Greenscale.German = "Fürst Grünschuppe"
--- LG.Lang.Flames = KBM.Language:Add("Ancient Flames")
--- LG.Lang.Flames.French = "Flammes anciennes"
+LG.Lang.Greenscale.French = "Seigneur Vert\195\169caille"
 
 LG.Greenscale.Name = LG.Lang.Greenscale[KBM.Lang]
 

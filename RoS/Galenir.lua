@@ -46,8 +46,7 @@ local KBM = KBM_RegisterMod(WG.Galenir.ID, WG)
 
 WG.Lang.Galenir = KBM.Language:Add(WG.Galenir.Name)
 WG.Lang.Galenir.German = "Kriegsmeister Galenir"
--- WG.Lang.Flames = KBM.Language:Add("Ancient Flames")
--- WG.Lang.Flames.French = "Flammes anciennes"
+WG.Lang.Galenir.French = "Ma\195\174tre de Guerre Galenir"
 
 WG.Galenir.Name = WG.Lang.Galenir[KBM.Lang]
 

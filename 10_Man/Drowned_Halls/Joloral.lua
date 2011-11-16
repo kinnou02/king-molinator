@@ -44,8 +44,7 @@ local KBM = KBM_RegisterMod(JR.Joloral.ID, JR)
 
 JR.Lang.Joloral = KBM.Language:Add(JR.Joloral.Name)
 JR.Lang.Joloral.German = "Joloral Wutflut"
--- JR.Lang.Flames = KBM.Language:Add("Ancient Flames")
--- JR.Lang.Flames.French = "Flammes anciennes"
+JR.Lang.Joloral.French = "Joloral Ragemar\195\169e"
 
 JR.Joloral.Name = JR.Lang.Joloral[KBM.Lang]
 

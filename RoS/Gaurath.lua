@@ -45,8 +45,7 @@ local KBM = KBM_RegisterMod(HG.Gaurath.ID, HG)
 
 HG.Lang.Gaurath = KBM.Language:Add(HG.Gaurath.Name)
 HG.Lang.Gaurath.German = "Herold Gaurath"
--- HG.Lang.Flames = KBM.Language:Add("Ancient Flames")
--- HG.Lang.Flames.French = "Flammes anciennes"
+HG.Lang.Gaurath.French = "H\195\169raut Gaurath"
 
 HG.Gaurath.Name = HG.Lang.Gaurath[KBM.Lang]
 

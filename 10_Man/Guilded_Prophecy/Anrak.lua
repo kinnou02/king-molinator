@@ -44,8 +44,7 @@ local KBM = KBM_RegisterMod(AF.Anrak.ID, AF)
 
 AF.Lang.Anrak = KBM.Language:Add(AF.Anrak.Name)
 AF.Lang.Anrak.German = "Anrak der Üble"
--- AF.Lang.Flames = KBM.Language:Add("Ancient Flames")
--- AF.Lang.Flames.French = "Flammes anciennes"
+AF.Lang.Anrak.French = "Anrak l'ignoble"
 
 AF.Anrak.Name = AF.Lang.Anrak[KBM.Lang]
 

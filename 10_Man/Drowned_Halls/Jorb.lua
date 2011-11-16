@@ -44,8 +44,7 @@ local KBM = KBM_RegisterMod(AJ.Jorb.ID, AJ)
 
 AJ.Lang.Jorb = KBM.Language:Add(AJ.Jorb.Name)
 AJ.Lang.Jorb.German = "Überfallkommandant Jorb"
--- AJ.Lang.Flames = KBM.Language:Add("Ancient Flames")
--- AJ.Lang.Flames.French = "Flammes anciennes"
+AJ.Lang.Jorb.French = "Commandant d'assaut Jorb"
 
 AJ.Jorb.Name = AJ.Lang.Jorb[KBM.Lang]
 

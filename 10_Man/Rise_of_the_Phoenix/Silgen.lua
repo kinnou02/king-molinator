@@ -43,8 +43,7 @@ GS.Silgen = {
 local KBM = KBM_RegisterMod(GS.Silgen.ID, GS)
 
 GS.Lang.Silgen = KBM.Language:Add(GS.Silgen.Name)
--- GS.Lang.Flames = KBM.Language:Add("Ancient Flames")
--- GS.Lang.Flames.French = "Flammes anciennes"
+GS.Lang.Silgen.French = "G\195\169n\195\169ral Silgen"
 
 GS.Silgen.Name = GS.Lang.Silgen[KBM.Lang]
 

@@ -42,6 +42,7 @@ local KBM = KBM_RegisterMod(SZ.Zilas.ID, SZ)
 
 SZ.Lang.Zilas = KBM.Language:Add(SZ.Zilas.Name)
 SZ.Lang.Zilas.German = "Seelenreißer Zilas"
+SZ.Lang.Zilas.French = "\195\137tripeur d'\195\162mes Zilas"
 
 SZ.Zilas.Name = SZ.Lang.Zilas[KBM.Lang]
 

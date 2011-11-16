@@ -49,8 +49,10 @@ GR.Lang.Grugonim = KBM.Language:Add(GR.Grugonim.Name)
 GR.Lang.Ability = {}
 GR.Lang.Ability.Decay = KBM.Language:Add("Rampant Decay")
 GR.Lang.Ability.Decay.German = "Wilder Verfall"
+GR.Lang.Ability.Decay.French = "Pourriture rampante"
 GR.Lang.Ability.Bile = KBM.Language:Add("Corrosive Bile")
-GR.Lang.Ability.Bile.German = "Ätzende Galle" 
+GR.Lang.Ability.Bile.German = "Ätzende Galle"
+GR.Lang.Ability.Bile.French = "Vase corrosive"
 
 GR.Grugonim.Name = GR.Lang.Grugonim[KBM.Lang]
 

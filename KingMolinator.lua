@@ -237,9 +237,13 @@ end
 -- Encounter related messages
 KBM.Language.Encounter = {}
 KBM.Language.Encounter.Start = KBM.Language:Add("Encounter started:")
+KBM.Language.Encounter.Start.French = "Combat d\195\169but\195\169"
 KBM.Language.Encounter.GLuck = KBM.Language:Add("Good luck!")
+KBM.Language.Encounter.GLuck.French = "Bonne chance!"
 KBM.Language.Encounter.Wipe = KBM.Language:Add("Encounter ended, possible wipe.")
+KBM.Language.Encounter.Wipe.French = "Combat termin\195\169, wipe possible."
 KBM.Language.Encounter.Victory = KBM.Language:Add("Encounter Victory!")
+KBM.Language.Encounter.Victory.French = "Victoire, On l'a tué!"
 -- Colors
 KBM.Language.Color = {}
 KBM.Language.Color.Red = KBM.Language:Add("Red")

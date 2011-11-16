@@ -18,6 +18,7 @@ local KBM = KBM_RegisterMod("Drowned Halls", DH)
 
 KBM.Language:Add(DH.Name)
 KBM.Language[DH.Name]:SetGerman("Überflutete Hallen")
+KBM.Language[DH.Name]:SetFrench("Salles englouties")
 
 DH.Name = KBM.Language[DH.Name][KBM.Lang]
 

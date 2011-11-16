@@ -45,8 +45,7 @@ local KBM = KBM_RegisterMod(DL.Letareus.ID, DL)
 
 DL.Lang.Letareus = KBM.Language:Add(DL.Letareus.Name)
 DL.Lang.Letareus.German = "Herzog Letareus"
--- DL.Lang.Flames = KBM.Language:Add("Ancient Flames")
--- DL.Lang.Flames.French = "Flammes anciennes"
+DL.Lang.Letareus.French = "Duc Letareus"
 
 DL.Letareus.Name = DL.Lang.Letareus[KBM.Lang]
 
