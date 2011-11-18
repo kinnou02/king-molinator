@@ -4,7 +4,10 @@
 --
 
 KBMROSDF_Settings = nil
-ROS = KBMROS_Register()
+-- Link Mods
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+local ROS = KBM.BossMod["River of Souls"]
 
 local DF = {
 	ModEnabled = true,
@@ -41,7 +44,7 @@ DF.Foci = {
 	Triggers = {},
 }
 
-local KBM = KBM_RegisterMod(DF.Foci.ID, DF)
+KBM.RegisterMod(DF.ID, DF)
 
 DF.Lang.Foci = KBM.Language:Add(DF.Foci.Name)
 DF.Lang.Foci.German = "Finsterer Fokus"

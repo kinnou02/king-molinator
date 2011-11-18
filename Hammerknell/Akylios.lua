@@ -4,7 +4,10 @@
 --
 
 KBMAK_Settings = nil
-HK = KBMHK_Register()
+-- Link Mods
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+local HK = KBM.BossMod["Hammerknell"]
 
 local AK = {
 	ModEnabled = true,
@@ -55,7 +58,7 @@ AK.Akylios = {
 	Triggers = {},
 }
 
-local KBM = KBM_RegisterMod(AK.Akylios.ID, AK)
+KBM.RegisterMod(AK.ID, AK)
 
 AK.Lang.Akylios = KBM.Language:Add(AK.Akylios.Name)
 AK.Lang.Jornaru = KBM.Language:Add(AK.Jornaru.Name)

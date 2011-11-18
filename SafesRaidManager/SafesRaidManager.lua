@@ -9,8 +9,11 @@ LibSRM.Player = {}
 LibSRM.Player.ID = Inspect.Unit.Detail("player")
 LibSRM.Player.Grouped = false
 LibSRM.Player.Loaded = false
+LibSRM.Player.Combat = false
 
-LibSRM.Group = {}
+LibSRM.Group = {
+	Combat = 0,
+}
 
 local SRM_HeldTime = Inspect.Time.Real()
 local SRM_Units = {}
@@ -50,13 +53,35 @@ local function SRM_IndexToSpec(i, Addition)
 	return string.format("group%02d"..Addition, i)
 end
 
-local SRM_Group = {}
-SRM_Group.Join = {}
-SRM_Group.Leave = {}
-SRM_Group.Change = {}
+local SRM_Group = {
+	Join = {},
+	Leave = {},
+	Change = {},
+}
 SRM_Group.Join, SRM_Group.Join.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Join")
 SRM_Group.Leave, SRM_Group.Leave.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Leave")
 SRM_Group.Change, SRM_Group.Change.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Change")
+SRM_Group.Combat = {
+	Start = {},
+	End = {},
+	Enter = {},
+	Leave = {},
+	Damage = {},
+	Heal = {},
+	Death = {},
+}
+SRM_Group.Combat.Enter, SRM_Group.Combat.Enter.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Combat.Enter")
+SRM_Group.Combat.Leave, SRM_Group.Combat.Leave.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Combat.Leave")
+SRM_Group.Combat.Start, SRM_Group.Combat.Start.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Combat.Start")
+SRM_Group.Combat.End, SRM_Group.Combat.End.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Combat.End")
+SRM_Group.Combat.Damage, SRM_Group.Combat.Damage.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Combat.Damage")
+SRM_Group.Combat.Heal, SRM_Group.Combat.Heal.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Combat.Heal")
+SRM_Group.Combat.Death, SRM_Group.Combat.Death.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Combat.Death")
+
+SRM_Group.Location = {
+	Change = {},
+}
+SRM_Group.Location.Change, SRM_Group.Location.Change.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Location.Change")
 
 local SRM_Pet = {}
 SRM_Pet.Add = {}
@@ -64,19 +89,39 @@ SRM_Pet.Remove = {}
 SRM_Pet.Add, SRM_Pet.Add.EventTable = Utility.Event.Create("SafesRaidManager", "Pet.Add")
 SRM_Pet.Remove, SRM_Pet.Remove.EventTable = Utility.Event.Create("SafesRaidManager", "Pet.Remove")
 
-local SRM_System = {}
-SRM_System.Player = {}
-SRM_System.Player.Ready = {}
-SRM_System.Player.Join = {}
-SRM_System.Player.Leave = {}
-SRM_System.Player.Pet = {}
-SRM_System.Player.Pet.Add = {}
-SRM_System.Player.Pet.Remove = {}
+local SRM_System = {
+	Player = {
+		Ready = {},
+		Join = {},
+		Leave = {},
+		Pet = {
+			Add = {},
+			Remove = {},
+		},
+		Combat = {
+			Enter = {},
+			Leave = {},
+		},
+	},
+	Combat = {
+		Damage = {},
+		Enter = {},
+		Leave = {},
+		Death = {},
+	},
+}
+
+SRM_System.Player.Combat.Enter, SRM_System.Player.Combat.Enter.EventTable = Utility.Event.Create("SafesRaidManager", "Player.Combat.Enter")
+SRM_System.Player.Combat.Leave, SRM_System.Player.Combat.Leave.EventTable = Utility.Event.Create("SafesRaidManager", "Player.Combat.Leave")
 SRM_System.Player.Ready, SRM_System.Player.Ready.EventTable = Utility.Event.Create("SafesRaidManager", "Player.Ready")
 SRM_System.Player.Join, SRM_System.Player.Join.EventTable = Utility.Event.Create("SafesRaidManager", "Player.Join")
 SRM_System.Player.Leave, SRM_System.Player.Leave.EventTable = Utility.Event.Create("SafesRaidManager", "Player.Leave") 
 SRM_System.Player.Pet.Add, SRM_System.Player.Pet.Add.EventTable = Utility.Event.Create("SafesRaidManager", "Player.Pet.Add")
 SRM_System.Player.Pet.Remove, SRM_System.Player.Pet.Remove.EventTable = Utility.Event.Create("SafesRaidManager", "Player.Pet.Remove")
+SRM_System.Combat.Damage, SRM_System.Combat.Damage.EventTable = Utility.Event.Create("SafesRaidManager", "Combat.Damage")
+SRM_System.Combat.Enter, SRM_System.Combat.Enter.EventTable = Utility.Event.Create("SafesRaidManager", "Combat.Enter")
+SRM_System.Combat.Leave, SRM_System.Combat.Leave.EventTable = Utility.Event.Create("SafesRaidManager", "Combat.Leave")
+SRM_System.Combat.Death, SRM_System.Combat.Death.EventTable = Utility.Event.Create("SafesRaidManager", "Combat.Death")
 
 local function SRM_CheckGroupState(force)
 	--print(SRM_Raid.Populated)
@@ -207,6 +252,8 @@ local function SRM_SetSpecifier(Specifier)
 					SRM_Units[self.UnitID].UnitID = self.UnitID
 					SRM_Units[self.UnitID].name = uDetails.name
 					SRM_Units[self.UnitID].Loaded = true
+					SRM_Units[self.UnitID].Combat = uDetails.combat
+					SRM_Units[self.UnitID].Location = uDetails.location
 					SRM_Units[self.UnitID].PetID = Inspect.Unit.Lookup(self.Spec..".pet")
 					SRM_Raid.Populated = SRM_Raid.Populated + 1
 					SRM_CheckGroupState()
@@ -239,6 +286,181 @@ local function SRM_SetSpecifier(Specifier)
 	table.insert(event, {function (data) Unit:Change(data, true) end, "SafesRaidManager", Specifier})
 	Unit:Load()
 	Unit:PetLoad()
+end
+
+local function SRM_Combat(units)
+	for UnitID, State in pairs(units) do
+		uDetails = Inspect.Unit.Detail(UnitID)
+		sent = false
+		if uDetails then
+			if State then
+				-- Entered Combat
+				if SRM_Units[UnitID] then
+					SRM_Units[UnitID].Combat = true
+					LibSRM.Group.Combat = LibSRM.Group.Combat + 1
+					if LibSRM.Group.Combat == 1 then
+						SRM_Group.Combat.Start()
+					end
+					SRM_Group.Combat.Enter(UnitID)
+					sent = true
+				end
+				if LibSRM.Player.ID == UnitID then
+					LibSRM.Player.Combat = true
+					SRM_System.Player.Combat.Enter()
+					if not sent then
+						SRM_Group.Combat.Start()
+					end
+					sent = true
+				end
+				if not sent then
+					if not SRM_Units.Pets[UnitID] then
+						if UnitID ~= LibSRM.Player.PetID then
+							SRM_System.Combat.Enter(UnitID)
+						end
+					end
+				end
+			else
+				-- Left Combat
+				if SRM_Units[UnitID] then
+					SRM_Units[UnitID].Combat = false
+					LibSRM.Group.Combat = LibSRM.Group.Combat - 1
+					if LibSRM.Group.Combat == 0 then
+						SRM_Group.Combat.End()
+					end
+					SRM_Group.Combat.Leave(UnitID)
+					sent = true
+				end
+				if LibSRM.Player.ID == UnitID then
+					LibSRM.Player.Combat = true
+					SRM_System.Player.Combat.Leave()
+					if not sent then 
+						SRM_Group.Combat.End()
+					end
+					sent = true
+				end
+				if not sent then
+					if not SRM_Units.Pets[UnitID] then
+						if UnitID ~= LibSRM.Player.PetID then
+							SRM_System.Combat.Leave(UnitID)
+						end
+					end
+				end
+			end
+		end
+	end
+end
+
+local function SRM_Death(data)
+	local sent = false
+	if data.target then
+		if LibSRM.Player.Grouped then
+			if SRM_Units[data.target] then
+				-- Group member damage
+				if data.target == LibSRM.Player then
+					data.player = true
+				else
+					data.player = false
+				end
+				SRM_Units[data.target].Dead = true
+				data.specifier = SRM_Units[data.target].Specifier
+				SRM_Group.Combat.Death(data)
+				sent = true
+			end
+		else
+			if data.target == LibSRM.Player.ID then
+				-- Player damage
+				data.player = true
+				SRM_Group.Combat.Death(data)
+				sent = true
+			end
+		end
+	end
+	if sent == false then
+		SRM_System.Combat.Death(data.target, data.caster)
+	end
+end
+
+local function SRM_Heal(data)
+
+end
+
+local function SRM_Damage(data)
+	local sent = false
+	if data.caster then
+		if LibSRM.Player.Grouped then
+			if SRM_Units[data.caster] then
+				-- Group member damage
+				if data.caster == LibSRM.Player then
+					data.player = true
+				else
+					data.player = false
+				end
+				data.pet = false
+				data.owner = nil
+				data.specifier = SRM_Units[data.caster].Specifier
+				SRM_Group.Combat.Damage(data)
+				sent = true
+			elseif SRM_Units.Pets[data.caster] then
+				-- Group member's pet damage
+				if SRM_Units.Pets[data.caster].OwnerID == LibSRM.Player.ID then
+					data.player = true
+				else
+					data.player = false
+				end
+				data.pet = true
+				data.owner = SRM_Units.Pets[data.caster].OwnerID
+				data.specifier = SRM_Units.Pets[data.caster].Specifier
+				SRM_Group.Combat.Damage(data)
+				sent = true
+			else
+				PetOwnerID = Inspect.Unit.Lookup(data.caster..".owner")
+				if PetOwnerID then
+					if SRM_Units[PetOwnerID] then
+						-- Group member's summoned pet damage
+						if PetOwnerID == LibSRM.Player.ID then
+							data.player = true
+						else
+							data.player = false
+						end
+						data.pet = true
+						data.owner = PetOwnerID
+						data.specifier = SRM_Units[PetOwnerID].Specifier
+						SRM_Group.Combat.Damage(data)
+						sent = true
+					end
+				end
+			end
+		else
+			if data.caster == LibSRM.Player.ID then
+				-- Player damage
+				data.pet = false
+				data.owner = nil
+				data.player = true
+				SRM_Group.Combat.Damage(data)
+				sent = true
+			elseif data.caster == LibSRM.Player.PetID then
+				-- Player pet damage
+				data.pet = true
+				data.owner = LibSRM.Player.ID
+				data.player = true
+				SRM_Group.Combat.Damage(data)
+				sent = true
+			else
+				PetOwnerID = Inspect.Unit.Lookup(data.caster..".owner")
+				if PetOwnerID == LibSRM.Player.ID then
+					-- Player Summoned pet damage
+					data.pet = true
+					data.owner = LibSRM.Player.ID
+					data.player = true
+					SRM_Group.Combat.Damage(data)
+					sent = true
+				end
+			end
+		end
+	end
+	if sent == false then
+		SRM_System.Combat.Damage(data)
+	end
 end
 
 local function SRM_InitRaid()
@@ -279,14 +501,14 @@ table.insert(Event.Unit.Available, {SRM_UnitAvailable, "SafesRaidManager", "Unit
 local function SRM_PlayerPet(PetUID)
 	if PetUID then
 		-- Player Pet Added
-		--print("Players Pet Added.")
+		-- print("Players Pet Added.")
 		LibSRM.Player.PetID = PetUID
 		SRM_System.Player.Pet.Add(PetUID)
 	else
 		-- Player Pet Removed
-		--print("Players Pet Removed.")
+		-- print("Players Pet Removed.")
 		SRM_System.Player.Pet.Remove()
-		LibSRM.Player.PetID = nilw
+		LibSRM.Player.PetID = nil
 	end
 end
 
@@ -308,6 +530,10 @@ local function SRM_Stall()
 			LibSRM.Player.Loaded = true
 			SRM_System.Player.Ready(LibSRM.Player.ID, PlayerDets)
 			event = Library.LibUnitChange.Register("player.pet")
+			table.insert(Event.Combat.Damage, {SRM_Damage, "SafesRaidManager", "Damage Monitor"})
+			table.insert(Event.Combat.Heal, {SRM_Heal, "SafesRaidManager", "Heal Monitor"})
+			table.insert(Event.Combat.Death, {SRM_Death, "SafesRaidManager", "Death Monitor"})
+			table.insert(Event.Unit.Detail.Combat, {SRM_Combat, "SafesRaidManager", "Combat Monitor"})
 			table.insert(event, {SRM_PlayerPet, "SafesRaidManager", "player.pet"})
 			if LibSRM.Player.PetID then
 				--print(": Players Pet Loaded.")

@@ -4,7 +4,10 @@
 --
 
 KBMROTPEN_Settings = nil
-ROTP = KBMROTP_Register()
+-- Link Mods
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+local ROTP = KBM.BossMod["Rise of the Phoenix"]
 
 local EN = {
 	ModEnabled = true,
@@ -40,13 +43,13 @@ EN.Ereandorn = {
 	Triggers = {},
 }
 
-local KBM = KBM_RegisterMod(EN.Ereandorn.ID, EN)
+KBM.RegisterMod(EN.ID, EN)
 
 EN.Lang.Ereandorn = KBM.Language:Add(EN.Ereandorn.Name)
 
 -- Notify Dictionary
 EN.Lang.Ereandorn.Notify = {}
-EN.Lang.Ereandorn.Notify.Burn = KBM.Language:Add("Ereandorn says, (%a*), how does it feel to burn")
+EN.Lang.Ereandorn.Notify.Burn = KBM.Language:Add('Ereandorn says, "(%a*), how does it feel to burn?"')
 EN.Lang.Ereandorn.Notify.Fuel = KBM.Language:Add("The corpse of (%a*) will fuel our conquest")
 EN.Lang.Ereandorn.Notify.Bomb = KBM.Language:Add("I will rebuild this world in flames!")
 
@@ -195,17 +198,17 @@ function EN:Start()
 	self.Ereandorn.MenuItem.Check:SetEnabled(false)
 	
 	-- Alerts
-	-- self.Ereandorn.AlertsRef.Burn = KBM.Alert:Create("Run away!", 5, true, false, "red")
-	-- self.Ereandorn.AlertsRef.Fuel = KBM.Alert:Create("Pillar", 5, true, false, "orange")
-	-- self.Ereandorn.AlertsRef.Bomb = KBM.Alert:Create("Bomb!", 5, true, false, "orange")
+	self.Ereandorn.AlertsRef.Burn = KBM.Alert:Create("Run away!", 5, true, false, "red")
+	self.Ereandorn.AlertsRef.Fuel = KBM.Alert:Create("Pillar", 8, true, true, "orange")
+	self.Ereandorn.AlertsRef.Bomb = KBM.Alert:Create("Bomb!", 5, true, false, "orange")
 		
 	-- Assign mechanics to Triggers
-	-- self.Ereandorn.Triggers.Burn = KBM.Trigger:Create(self.Lang.Ereandorn.Notify.Burn[KBM.Lang], "notify", self.Ereandorn)
-	-- self.Ereandorn.Triggers.Burn:AddAlert(self.Ereandorn.AlertsRef.Burn, true)
-	-- self.Ereandorn.Triggers.Fuel = KBM.Trigger:Create(self.Lang.Ereandorn.Notify.Fuel[KBM.Lang], "notify", self.Ereandorn)
-	-- self.Ereandorn.Triggers.Fuel:AddAlert(self.Ereandorn.AlertsRef.Fuel)
-	-- self.Ereandorn.Triggers.Bomb = KBM.Trigger:Create(self.Lang.Ereandorn.Notify.Bomb[KBM.Lang], "notify", self.Ereandorn)
-	-- self.Ereandorn.Triggers.Bomb:AddAlert(self.Ereandorn.AlertsRef.Bomb)
+	self.Ereandorn.Triggers.Burn = KBM.Trigger:Create(self.Lang.Ereandorn.Notify.Burn[KBM.Lang], "notify", self.Ereandorn)
+	self.Ereandorn.Triggers.Burn:AddAlert(self.Ereandorn.AlertsRef.Burn, true)
+	self.Ereandorn.Triggers.Fuel = KBM.Trigger:Create(self.Lang.Ereandorn.Notify.Fuel[KBM.Lang], "notify", self.Ereandorn)
+	self.Ereandorn.Triggers.Fuel:AddAlert(self.Ereandorn.AlertsRef.Fuel)
+	self.Ereandorn.Triggers.Bomb = KBM.Trigger:Create(self.Lang.Ereandorn.Notify.Bomb[KBM.Lang], "notify", self.Ereandorn)
+	self.Ereandorn.Triggers.Bomb:AddAlert(self.Ereandorn.AlertsRef.Bomb)
 	
 	self.Ereandorn.CastBar = KBM.CastBar:Add(self, self.Ereandorn, true)
 end

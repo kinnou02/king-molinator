@@ -4,8 +4,10 @@
 --
 
 KM_Settings = nil
-
-local HK = KBMHK_Register()
+-- Link Mods
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+local HK = KBM.BossMod["Hammerknell"]
 
 local KM = {
 	ModEnabled = true,
@@ -135,7 +137,7 @@ KM.King = {
 	Triggers = {},
 }
 
-local KBM = KBM_RegisterMod("Molinar", KM)
+KBM.RegisterMod(KM.ID, KM)
 
 KM.Lang.Molinar = KBM.Language:Add(KM.King.Name)
 KM.Lang.Dollin = KBM.Language:Add(KM.Prince.Name)

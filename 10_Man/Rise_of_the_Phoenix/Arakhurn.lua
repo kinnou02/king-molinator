@@ -4,7 +4,10 @@
 --
 
 KBMROTPHA_Settings = nil
-ROTP = KBMROTP_Register()
+-- Link Mods
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+local ROTP = KBM.BossMod["Rise of the Phoenix"]
 
 local HA = {
 	ModEnabled = true,
@@ -40,7 +43,7 @@ HA.Arakhurn = {
 	Triggers = {},
 }
 
-local KBM = KBM_RegisterMod(HA.Arakhurn.ID, HA)
+KBM.RegisterMod(HA.ID, HA)
 
 HA.Lang.Arakhurn = KBM.Language:Add(HA.Arakhurn.Name)
 HA.Lang.Arakhurn.German = "Hohepriester Arakhurn"

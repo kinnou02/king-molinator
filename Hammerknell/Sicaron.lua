@@ -4,7 +4,10 @@
 --
 
 KBMSN_Settings = nil
-HK = KBMHK_Register()
+-- Link Mods
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+local HK = KBM.BossMod["Hammerknell"]
 
 local SN = {
 	ModEnabled = true,
@@ -41,7 +44,7 @@ SN.Sicaron = {
 	Triggers = {},
 }
 
-local KBM = KBM_RegisterMod(SN.Sicaron.ID, SN)
+KBM.RegisterMod(SN.ID, SN)
 
 SN.Lang.Sicaron = KBM.Language:Add(SN.Sicaron.Name)
 

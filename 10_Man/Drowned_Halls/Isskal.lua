@@ -4,7 +4,10 @@
 --
 
 KBMDHIL_Settings = nil
-DH = KBMDH_Register()
+-- Link Mods
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+local DH = KBM.BossMod["Drowned Halls"]
 
 local IL = {
 	ModEnabled = true,
@@ -40,7 +43,7 @@ IL.Isskal = {
 	Triggers = {},
 }
 
-local KBM = KBM_RegisterMod(IL.Isskal.ID, IL)
+KBM.RegisterMod(IL.ID, IL)
 
 IL.Lang.Isskal = KBM.Language:Add(IL.Isskal.Name)
 -- IL.Lang.Flames = KBM.Language:Add("Ancient Flames")

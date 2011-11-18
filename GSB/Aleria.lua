@@ -4,7 +4,9 @@
 --
 
 KBMGSBOA_Settings = nil
-GSB = KBMGSB_Register()
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+local GSB = KBM.BossMod["Greenscales Blight"]
 
 local OA = {
 	ModEnabled = true,
@@ -40,7 +42,7 @@ OA.Aleria = {
 	Triggers = {},
 }
 
-local KBM = KBM_RegisterMod(OA.Aleria.ID, OA)
+KBM.RegisterMod(OA.ID, OA)
 
 OA.Lang.Aleria = KBM.Language:Add(OA.Aleria.Name)
 OA.Lang.Aleria.German = "Orakel Aleria"

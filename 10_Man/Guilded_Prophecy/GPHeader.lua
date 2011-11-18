@@ -14,7 +14,10 @@ local GP = {
 	ID = "GP",
 }
 
-local KBM = KBM_RegisterMod("Guilded Prophecy", GP)
+-- Link Mods
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+KBM.RegisterMod("Guilded Prophecy", GP)
 
 KBM.Language:Add(GP.Name)
 KBM.Language[GP.Name]:SetGerman("Güldene Prophezeiung")

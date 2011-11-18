@@ -4,7 +4,10 @@
 --
 
 KBMGPGH_Settings = nil
-GP = KBMGP_Register()
+-- Link Mods
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+local GP = KBM.BossMod["Guilded Prophecy"]
 
 local GH = {
 	ModEnabled = true,
@@ -40,7 +43,7 @@ GH.Guurloth = {
 	Triggers = {},
 }
 
-local KBM = KBM_RegisterMod(GH.Guurloth.ID, GH)
+KBM.RegisterMod(GH.ID, GH)
 
 GH.Lang.Guurloth = KBM.Language:Add(GH.Guurloth.Name)
 -- GH.Lang.Flames = KBM.Language:Add("Ancient Flames")

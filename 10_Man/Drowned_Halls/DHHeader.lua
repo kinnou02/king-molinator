@@ -14,7 +14,10 @@ local DH = {
 	ID = "DH",
 }
 
-local KBM = KBM_RegisterMod("Drowned Halls", DH)
+-- Link Mods
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+KBM.RegisterMod("Drowned Halls", DH)
 
 KBM.Language:Add(DH.Name)
 KBM.Language[DH.Name]:SetGerman("Überflutete Hallen")
@@ -40,8 +43,4 @@ function DH:Start()
 	end
 	DH.Header = KBM.MainWin.Menu:CreateHeader(self.Name, self.Enabled, true)
 	DH.Header.Check:SetEnabled(false)
-end
-
-function KBMDH_Register()
-	return DH
 end

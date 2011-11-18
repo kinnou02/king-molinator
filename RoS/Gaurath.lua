@@ -4,7 +4,10 @@
 --
 
 KBMROSHG_Settings = nil
-ROS = KBMROS_Register()
+-- Link Mods
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+local ROS = KBM.BossMod["River of Souls"]
 
 local HG = {
 	ModEnabled = true,
@@ -41,7 +44,7 @@ HG.Gaurath = {
 	TimeOut = 5,
 }
 
-local KBM = KBM_RegisterMod(HG.Gaurath.ID, HG)
+KBM.RegisterMod(HG.ID, HG)
 
 HG.Lang.Gaurath = KBM.Language:Add(HG.Gaurath.Name)
 HG.Lang.Gaurath.German = "Herold Gaurath"

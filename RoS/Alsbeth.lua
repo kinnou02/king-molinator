@@ -4,7 +4,10 @@
 --
 
 KBMROSAD_Settings = nil
-ROS = KBMROS_Register()
+-- Link Mods
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+local ROS = KBM.BossMod["River of Souls"]
 
 local AD = {
 	ModEnabled = true,
@@ -42,7 +45,7 @@ AD.Alsbeth = {
 	Triggers = {},
 }
 
-local KBM = KBM_RegisterMod(AD.Alsbeth.ID, AD)
+KBM.RegisterMod(AD.ID, AD)
 
 AD.Lang.Alsbeth = KBM.Language:Add(AD.Alsbeth.Name)
 AD.Lang.Alsbeth.German = "Alsbeth die Streitsuchende"

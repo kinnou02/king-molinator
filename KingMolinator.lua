@@ -3,9 +3,12 @@
 -- Copyright 2011
 
 KBM_GlobalOptions = nil
-local KBM_BossMod = {}
+
 local KingMol_Main = {}
-local KBM = {}
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+KBM.BossMod = {}
+KBM.ModList = {}
 KBM.Testing = false
 KBM.TestFilters = {}
 KBM.MenuOptions = {
@@ -110,7 +113,7 @@ local function KBM_DefineVars(AddonID)
 			},
 		}
 		KBM_GlobalOptions = KBM.Options
-		for _, Mod in ipairs(KBM_BossMod) do
+		for _, Mod in ipairs(KBM.ModList) do
 			Mod:InitVars()
 		end
 	end
@@ -135,7 +138,7 @@ local function KBM_LoadVars(AddonID)
 				end
 			end
 		end
-		for _, Mod in ipairs(KBM_BossMod) do
+		for _, Mod in ipairs(KBM.ModList) do
 			Mod:LoadVars()
 		end
 	end
@@ -144,13 +147,13 @@ end
 local function KBM_SaveVars(AddonID)
 	if AddonID == "KingMolinator" then
 		KBM_GlobalOptions = KBM.Options
-		for _, Mod in ipairs(KBM_BossMod) do
+		for _, Mod in ipairs(KBM.ModList) do
 			Mod:SaveVars()
 		end
 	end
 end
 
-function KBM_ToAbilityID(num)
+function KBM.ToAbilityID(num)
 	return string.format("a%016X", num)
 end
 
@@ -237,13 +240,17 @@ end
 -- Encounter related messages
 KBM.Language.Encounter = {}
 KBM.Language.Encounter.Start = KBM.Language:Add("Encounter started:")
-KBM.Language.Encounter.Start.French = "Combat d\195\169but\195\169"
+KBM.Language.Encounter.Start.French = "Combat d\195\169but\195\169:"
+KBM.Language.Encounter.Start.German = "Bosskampf gestartet:"
 KBM.Language.Encounter.GLuck = KBM.Language:Add("Good luck!")
 KBM.Language.Encounter.GLuck.French = "Bonne chance!"
+KBM.Language.Encounter.GLuck.German = "Viel Erfolg!"
 KBM.Language.Encounter.Wipe = KBM.Language:Add("Encounter ended, possible wipe.")
 KBM.Language.Encounter.Wipe.French = "Combat termin\195\169, wipe possible."
+KBM.Language.Encounter.Wipe.German = "Bosskampf beendet, möglicher Wipe."
 KBM.Language.Encounter.Victory = KBM.Language:Add("Encounter Victory!")
 KBM.Language.Encounter.Victory.French = "Victoire, On l'a tué!"
+KBM.Language.Encounter.Victory.German = "Bosskampf erfolgreich!"
 -- Colors
 KBM.Language.Color = {}
 KBM.Language.Color.Red = KBM.Language:Add("Red")
@@ -328,6 +335,7 @@ KBM.Language.Timers.Enrage = KBM.Language:Add("Enrage in:")
 KBM.Language.Timers.Enrage.French = "Enrage dans:"
 
 function KBM.MechTimer:Init()
+
 	self.TimerList = {}
 	self.ActiveTimers = {}
 	self.RemoveTimers = {}
@@ -357,14 +365,15 @@ function KBM.MechTimer:Init()
 	self.Anchor.Text = UI.CreateFrame("Text", "Timer Info", self.Anchor)
 	self.Anchor.Text:SetText(" 00.0 Timer Anchor")
 	self.Anchor.Text:SetFontSize(KBM.Options.MechTimer.TextSize)
-	self.Anchor.Text:ResizeToText()
 	self.Anchor.Text:SetPoint("CENTERLEFT", self.Anchor, "CENTERLEFT")
 	self.Anchor.Drag = KBM.AttachDragFrame(self.Anchor, function(uType) self.Anchor:Update(uType) end, "Anchor Drag", 2)
 	self.Anchor:SetVisible(KBM.Options.MechTimer.Visible)
 	self.Anchor.Drag:SetVisible(KBM.Options.MechTimer.Unlocked)
+	
 end
 
 function KBM.MechTimer:Add(Name, Duration, Repeat)
+
 	local Timer = {}
 	Timer.Active = false
 	Timer.Alerts = {}
@@ -378,6 +387,7 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 	Timer.Repeat = Repeat
 	Timer.Name = Name
 	function Timer:Start(CurrentTime)
+	
 		if self.Enabled then
 			if self.Active then
 				if not self.Removing then
@@ -412,7 +422,6 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 			self.CastInfo:SetFontSize(KBM.Options.MechTimer.TextSize)
 			self.CastInfo:SetPoint("CENTERLEFT", self.Background, "CENTERLEFT")
 			self.CastInfo:SetLayer(2)
-			self.CastInfo:ResizeToText()
 			self.CastInfo:SetFontColor(1,1,1)
 			if #KBM.MechTimer.ActiveTimers > 0 then
 				for i, cTimer in ipairs(KBM.MechTimer.ActiveTimers) do
@@ -442,7 +451,9 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 				KBM.MechTimer.LastTimer = self
 			end
 		end
+		
 	end
+	
 	function Timer:Stop()
 		for i, Timer in ipairs(KBM.MechTimer.ActiveTimers) do
 			if Timer == self then
@@ -477,23 +488,26 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 			table.insert(KBM.MechTimer.StartTimers, self)
 		end
 	end
+	
 	function Timer:AddAlert(AlertObj, Time)
 		self.Alerts[Time] = {}
 		self.Alerts[Time].Triggered = false
 		self.Alerts[Time].AlertObj = AlertObj
 	end
+	
 	function Timer:AddTimer(TimerObj, Time)
 	
 	end
+	
 	function Timer:AddTrigger(TriggerObj, Time)
 	
 	end
+	
 	function Timer:Update(CurrentTime)
 		if self.Active then
 			self.Remaining = self.Time - (CurrentTime - self.TimeStart)
 			local text = string.format(" %0.01f : ", self.Remaining)..self.Name
 			self.CastInfo:SetText(text)
-			self.CastInfo:ResizeToText()
 			self.TimeBar:SetWidth(self.Background:GetWidth() * (self.Remaining/self.Time))
 			if self.Remaining <= 0 then
 				self.Remaining = 0
@@ -514,6 +528,7 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 		-- table.insert(self.testTimerList, iTrigger)
 	-- end
 	return Timer
+	
 end
 
 function KBM.Trigger:Init()
@@ -534,6 +549,7 @@ function KBM.Trigger:Init()
 	self.Buff = {}
 
 	function self.Queue:Add(TriggerObj, Caster, Target, Duration)
+	
 		if KBM.Encounter then
 			if TriggerObj.Queued or self.Removing then
 				return
@@ -549,9 +565,11 @@ function KBM.Trigger:Init()
 			TriggerObj.Data = Data		
 			self.Locked = false
 		end
+		
 	end
 	
 	function self.Queue:Activate()
+	
 		if KBM.Encounter then
 			if self.Removing then
 				return
@@ -566,9 +584,11 @@ function KBM.Trigger:Init()
 			self.List = {}
 			self.Locked = false
 		end
+		
 	end
 	
 	function self.Queue:Remove()
+	
 		self.Removing = true
 		repeat
 		until not self.Locked
@@ -576,9 +596,11 @@ function KBM.Trigger:Init()
 		self.List = {}
 		self.Locked = false
 		self.Removing = false
+		
 	end
 	
 	function self:Create(Trigger, Type, Unit, Hook)
+	
 		TriggerObj = {}
 		TriggerObj.Timers = {}
 		TriggerObj.Alerts = {}
@@ -671,8 +693,11 @@ function KBM.Trigger:Init()
 		
 		table.insert(self.List, TriggerObj)
 		return TriggerObj
+		
 	end
+	
 	function self:Unload()
+	
 		self.Notify = {}
 		self.Say = {}
 		self.Damage = {}
@@ -682,11 +707,13 @@ function KBM.Trigger:Init()
 		self.Start = {}
 		self.Death = {}
 		self.Buff = {}
+		
 	end
 
 end
 
 function KBM:CallFrame(parent)
+
 	local frame = nil
 	if #self.FrameStore == 0 then
 		self.TotalFrames = self.TotalFrames + 1
@@ -709,9 +736,11 @@ function KBM:CallFrame(parent)
 		frame:SetAlpha(1)
 	end
 	return frame
+	
 end
 
 function KBM:CallCheck(parent)
+
 	local Checkbox = nil
 	if #self.CheckStore == 0 then
 		self.TotalChecks = self.TotalChecks + 1
@@ -734,9 +763,11 @@ function KBM:CallCheck(parent)
 		Checkbox:SetAlpha(1)
 	end
 	return Checkbox
+	
 end
 
 function KBM:CallText(parent, debugInfo)
+
 	local Textfbox = nil
 	if #self.TextfStore == 0 then
 		self.TotalTexts = self.TotalTexts + 1
@@ -760,9 +791,11 @@ function KBM:CallText(parent, debugInfo)
 		Textfbox:SetAlpha(1)
 	end
 	return Textfbox
+	
 end
 
 function KBM:CallSlider(parent)
+
 	local Slider = nil
 	if #self.SlideStore == 0 then
 		self.TotalSliders = self.TotalSliders + 1
@@ -785,17 +818,21 @@ function KBM:CallSlider(parent)
 		Slider:SetAlpha(1)
 	end
 	return Slider
+	
 end
 
 local function KBM_Options()
+
 	if KBM.MainWin:GetVisible() then
 		KBM.MainWin:SetVisible(false)
 	else
 		KBM.MainWin:SetVisible(true)
 	end
+	
 end
 
 function KBM.Button:Init()
+
 	KBM.Button.Texture = UI.CreateFrame("Texture", "Button Texture", KBM.Context)
 	KBM.Button.Texture:SetTexture("KingMolinator", "Media/Options_Button.png")
 	if not KBM.Options.Button.x then
@@ -825,6 +862,7 @@ function KBM.Button:Init()
 	if not KBM.Options.Button.Visible then
 		KBM.Button.Texture:SetVisible(false)
 	end
+	
 end
 
 function KBM.PhaseMonitor:Init()
@@ -850,7 +888,6 @@ function KBM.EncTimer:Init()
 	self.Frame.Text = UI.CreateFrame("Text", "Encounter Text", self.Frame)
 	self.Frame.Text:SetText("Time: 00m:00s")
 	self.Frame.Text:SetFontSize(KBM.Options.EncTimer.TextSize)
-	self.Frame.Text:ResizeToText()
 	self.Frame.Text:SetPoint("CENTER", self.Frame, "CENTER")
 	self.Enrage = {}
 	self.Enrage.Frame = UI.CreateFrame("Frame", "Enrage Timer", KBM.Context)
@@ -861,7 +898,6 @@ function KBM.EncTimer:Init()
 	self.Enrage.Text = UI.CreateFrame("Text", "Enrage Text", self.Enrage.Frame)
 	self.Enrage.Text:SetText("Enrage in: 00m:00s")
 	self.Enrage.Text:SetFontSize(KBM.Options.EncTimer.TextSize)
-	self.Enrage.Text:ResizeToText()
 	self.Enrage.Text:SetPoint("CENTER", self.Enrage.Frame, "CENTER")
 	self.Enrage.Progress = UI.CreateFrame("Frame", "Enrage Progress", self.Enrage.Frame)
 	self.Enrage.Progress:SetPoint("TOPLEFT", self.Enrage.Frame, "TOPLEFT")
@@ -878,18 +914,15 @@ function KBM.EncTimer:Init()
 		local EnrageString = ""
 		if KBM.Options.EncTimer.Duration then
 			self.Frame.Text:SetText(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
-			self.Frame.Text:ResizeToText()
 		end
 		if KBM.Options.EncTimer.Enrage then
 			if KBM_CurrentMod.Enrage then
 				if current < KBM.EnrageTime then
 					EnrageString = KBM.ConvertTime(KBM.EnrageTime - current + 1)
 					self.Enrage.Text:SetText(KBM.Language.Timers.Enrage[KBM.Lang].." "..EnrageString)
-					self.Enrage.Text:ResizeToText()
 					self.Enrage.Progress:SetPoint("RIGHT", self.Enrage.Frame, KBM.TimeElapsed/KBM_CurrentMod.Enrage, nil)
 				else
 					self.Enrage.Text:SetText("!! Enraged !!")
-					self.Enrage.Text:ResizeToText()
 					self.Enrage.Progress:SetPoint("RIGHT", self.Enrage.Frame, "RIGHT")
 				end
 			end
@@ -922,9 +955,7 @@ function KBM.EncTimer:Init()
 	function self:SetTest(bool)
 		if bool then
 			self.Enrage.Text:SetText(KBM.Language.Timers.Enrage[KBM.Lang].." 00m:00s")
-			self.Enrage.Text:ResizeToText()
 			self.Frame.Text:SetText(KBM.Language.Timers.Timer[KBM.Lang].." 00m:00s")
-			self.Frame.Text:ResizeToText()
 		end
 		self.Frame:SetVisible(bool)
 		self.Enrange:SetVisible(bool)
@@ -933,9 +964,11 @@ function KBM.EncTimer:Init()
 	self.Frame:SetVisible(KBM.Options.EncTimer.Visible)
 	self.Enrage.Frame:SetVisible(KBM.Options.EncTimer.Visible)
 	self.Frame.Drag:SetVisible(KBM.Options.EncTimer.Unlocked)
+	
 end
 
 function KBM.CheckActiveBoss(uDetails, UnitID)
+
 	if not KBM.BossID[UnitID] then
 		if uDetails then
 			if KBM_Boss[uDetails.name] then
@@ -951,48 +984,72 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 						KBM.BossID[UnitID].TimeOut = 0
 					end
 					if uDetails.health > 0 then
-						KBM.BossID[UnitID].dead = false
-						KBM.BossID[UnitID].available = true
-						if not KBM.Encounter then
-							KBM.Encounter = true
-							KBM.CurrentBoss = UnitID
-							KBM_CurrentBossName = uDetails.name
-							KBM_CurrentMod = KBM.BossID[UnitID].Mod
-							if not KBM_CurrentMod.EncounterRunning then
-								print(KBM.Language.Encounter.Start[KBM.Lang].." "..KBM_Boss[uDetails.name].Descript)
-								print(KBM.Language.Encounter.GLuck[KBM.Lang])
-								KBM.TimeElapsed = 0
-								KBM.StartTime = Inspect.Time.Real()
-								if KBM_CurrentMod.Enrage then
-									KBM.EnrageTime = KBM.StartTime + KBM_CurrentMod.Enrage
-								end
-								if KBM.Options.EncTimer.Enabled then
-									KBM.EncTimer:Start(KBM.StartTime)
+						if uDetails.combat then
+							KBM.BossID[UnitID].Combat = true
+							KBM.BossID[UnitID].dead = false
+							KBM.BossID[UnitID].available = true
+							if not KBM.Encounter then
+								KBM.Encounter = true
+								KBM.CurrentBoss = UnitID
+								KBM_CurrentBossName = uDetails.name
+								KBM_CurrentMod = KBM.BossID[UnitID].Mod
+								if not KBM_CurrentMod.EncounterRunning then
+									print(KBM.Language.Encounter.Start[KBM.Lang].." "..KBM_Boss[uDetails.name].Descript)
+									print(KBM.Language.Encounter.GLuck[KBM.Lang])
+									KBM.TimeElapsed = 0
+									KBM.StartTime = Inspect.Time.Real()
+									if KBM_CurrentMod.Enrage then
+										KBM.EnrageTime = KBM.StartTime + KBM_CurrentMod.Enrage
+									end
+									if KBM.Options.EncTimer.Enabled then
+										KBM.EncTimer:Start(KBM.StartTime)
+									end
 								end
 							end
+							if KBM_Boss[uDetails.name].Mod.ID == KBM_CurrentMod.ID then
+								KBM.BossID[UnitID].Boss = KBM_CurrentMod:UnitHPCheck(uDetails, UnitID)
+							end
+						else
+							KBM.BossID[UnitID] = nil
 						end
-						KBM.BossID[UnitID].Boss = KBM_CurrentMod:UnitHPCheck(uDetails, UnitID)
-						
 					else
+						KBM.BossID[UnitID].Combat = false
 						KBM.BossID[UnitID].dead = true
-						KBM.BossID[UnitID].available = false
+						KBM.BossID[UnitID].available = true
 					end					
 				end
 			end
 		end
 	else
-		if not KBM.BossID[UnitID].dead then
-			if KBM.BossID[UnitID].IdleSince then
-				if uDetails then
-					KBM_CurrentMod:UnitHPCheck(uDetails, UnitID)
-					KBM.BossID[UnitID].IdleSince = false
-					KBM.BossID[UnitID].available = true
-				-- else
-					-- KBM.BossID[UnitID].IdleSince = Inspect.Time.Real()
-				end
+		KBM.CheckIdle(uDetails, UnitID)
+	end
+	
+end
+
+function KBM.CheckIdle(uDetails, UnitID)
+
+	if not KBM.BossID[UnitID].dead then
+		if KBM.BossID[UnitID].IdleSince then
+			if uDetails then
+				KBM_CurrentMod:UnitHPCheck(uDetails, UnitID)
+				KBM.BossID[UnitID].IdleSince = false
+				KBM.BossID[UnitID].available = true
+			else
+				KBM.BossID[UnitID].IdleSince = Inspect.Time.Real()
 			end
 		end
 	end
+	
+end
+
+local function KBM_CombatEnter(UnitID)
+	if not KBM.Encounter then
+		KBM.CheckActiveBoss(Inspect.Unit.Detail(UnitID), UnitID)
+	end
+end
+
+function KBM.CombatLeave(UnitID)
+
 end
 
 local function KBM_UnitHPCheck(info)
@@ -1003,30 +1060,30 @@ local function KBM_UnitHPCheck(info)
 	local cUnitID = info.caster
 	local tDetails = Inspect.Unit.Detail(tUnitID)
 	local cDetails = Inspect.Unit.Detail(cUnitID)
-	if tDetails and cDetails then
-		if cDetails.player then
-			if not tDetails.player then
-				KBM.CheckActiveBoss(tDetails, tUnitID)
-			end
-		end
-		if tDetails.player then
-			if not cDetails.player then
-				KBM.CheckActiveBoss(cDetails, cUnitID)
-			end
-		end
-	end
 	if KBM.Encounter then
 		if tUnitID then
 			if KBM.BossID[tUnitID] then
 				if KBM.BossID[tUnitID].IdleSince then
-					KBM.BossID[tUnitID].IdleSince = Inspect.Time.Real()
+					KBM.CheckIdle(tDetails, tUnitID)
+				end
+			else
+				if tDetails then
+					if not tDetails.player then
+						KBM.CheckActiveBoss(tDetails, tUnitID)
+					end
 				end
 			end
 		end
 		if cUnitID then
 			if KBM.BossID[cUnitID] then
 				if KBM.BossID[cUnitID].IdleSince then
-					KBM.BossID[cUnitID].IdleSince = Inspect.Time.Real()
+					KBM.CheckIdle(cDetails, cUnitID)
+				end
+			else
+				if cDetails then
+					if not cDetails.player then
+						KBM.CheckActiveBoss(cDetails, cUnitID)
+					end
 				end
 			end
 		end
@@ -1038,19 +1095,24 @@ local function KBM_UnitHPCheck(info)
 				end
 			end
 		end
+	else
+		if tDetails then
+			if not tDetails.player then
+				KBM.CheckActiveBoss(tDetails, tUnitID)
+			end
+		end
+		if cDetails then
+			if not cDetails.player then
+				KBM.CheckActiveBoss(cDetails, cUnitID)
+			end
+		end
 	end
 end
 
 local function KBM_UnitAvailable(units)
 
-	if KBM.Encounter then
-		for UnitID, Specifier in pairs(units) do
-			if KBM.BossID[UnitID] then
-				if KBM.BossID[UnitID].IdleSince then
-					KBM.CheckActiveBoss(Inspect.Unit.Detail(UnitID), UnitID)
-				end
-			end
-		end
+	for UnitID, Specifier in pairs(units) do
+		KBM.CheckActiveBoss(Inspect.Unit.Detail(UnitID), UnitID)
 	end
 	
 end
@@ -1139,7 +1201,6 @@ function KBM.TankSwap:Init()
 	self.Anchor.Text = UI.CreateFrame("Text", "TankSwap info", self.Anchor)
 	self.Anchor.Text:SetText("Tank-Swap Anchor")
 	self.Anchor.Text:SetFontSize(KBM.Options.TankSwap.TextSize)
-	self.Anchor.Text:ResizeToText()
 	self.Anchor.Text:SetPoint("CENTER", self.Anchor, "CENTER")
 	self.Anchor.Drag = KBM.AttachDragFrame(self.Anchor, function(uType) self.Anchor:Update(uType) end, "TS Anchor Drag", 2)
 	self.Anchor:SetVisible(KBM.Options.TankSwap.Visible)
@@ -1181,7 +1242,6 @@ function KBM.TankSwap:Init()
 		TankObj.TankText:SetLayer(2)
 		TankObj.TankText:SetText(TankObj.Name)
 		TankObj.TankText:SetFontSize(KBM.Options.TankSwap.TextSize)
-		TankObj.TankText:ResizeToText()
 		TankObj.TankText:SetPoint("CENTERLEFT", TankObj.TankFrame, "CENTERLEFT", 2, 0)
 		TankObj.DebuffFrame = KBM:CallFrame(TankObj.Frame)
 		TankObj.DebuffFrame:SetPoint("TOPRIGHT", TankObj.Frame, "TOPRIGHT")
@@ -1192,7 +1252,6 @@ function KBM.TankSwap:Init()
 		TankObj.DebuffFrame.Text = KBM:CallText(TankObj.DebuffFrame)
 		TankObj.DebuffFrame.Text:SetFontSize(KBM.Options.TankSwap.TextSize)
 		TankObj.DebuffFrame.Text:SetLayer(2)
-		TankObj.DebuffFrame.Text:ResizeToText()
 		TankObj.DebuffFrame.Text:SetPoint("CENTER", TankObj.DebuffFrame, "CENTER")
 		TankObj.TankFrame:SetPoint("TOPRIGHT", TankObj.DebuffFrame, "TOPLEFT")
 		TankObj.TankHP:SetPoint("TOPLEFT", TankObj.TankFrame, "TOPLEFT")
@@ -1209,7 +1268,6 @@ function KBM.TankSwap:Init()
 		TankObj.DeCool:SetBackgroundColor(0,0,1,0.4)
 		TankObj.DeCool.Text = KBM:CallText(TankObj.DeCoolFrame)
 		TankObj.DeCool.Text:SetFontSize(KBM.Options.TankSwap.TextSize)
-		TankObj.DeCool.Text:ResizeToText()
 		TankObj.DeCool.Text:SetPoint("CENTER", TankObj.DeCoolFrame, "CENTER")
 		TankObj.DeCool.Text:SetLayer(2)
 		self.LastTank = TankObj
@@ -1217,9 +1275,7 @@ function KBM.TankSwap:Init()
 		self.TankCount = self.TankCount + 1
 		if self.Test then
 			TankObj.DebuffFrame.Text:SetText("2")
-			TankObj.DebuffFrame.Text:ResizeToText()
 			TankObj.DeCool.Text:SetText("99.9")
-			TankObj.DeCool.Text:ResizeToText()
 		end
 		return TankObj
 	end
@@ -1278,14 +1334,12 @@ function KBM.TankSwap:Init()
 			else
 				TankObj.DeCool.Text:SetText(string.format("%0.01f", TankObj.Remaining))
 				TankObj.DeCool:SetPoint("RIGHT", TankObj.DeCoolFrame, (TankObj.Remaining/TankObj.Duration), nil)
-				TankObj.DeCool.Text:ResizeToText()
 				TankObj.DeCoolFrame:SetVisible(true)
 				if TankObj.Stacks then
-					TankObj.DebuffFrame.Text:SetText(TankObj.Stacks)
+					TankObj.DebuffFrame.Text:SetText(tostring(TankObj.Stacks))
 				else
 					TankObj.DebuffFrame.Text:SetText("-")
 				end
-				TankObj.DebuffFrame.Text:ResizeToText()
 				TankObj.DebuffFrame.Text:SetVisible(true)
 			end
 		end
@@ -1332,8 +1386,6 @@ function KBM.Alert:Init()
 	self.Shadow:SetText(self.Text:GetText())
 	self.Shadow:SetFontSize(self.Text:GetFontSize())
 	self.Text:SetFontColor(1,1,1)
-	self.Shadow:ResizeToText()
-	self.Text:ResizeToText()
 	self.Text:SetPoint("CENTER", self.Anchor, "CENTER")
 	self.Text:SetLayer(2)
 	self.Anchor:SetWidth(self.Text:GetWidth())
@@ -1423,10 +1475,8 @@ function KBM.Alert:Init()
 			end
 			if KBM.Options.Alert.Notify then
 				if AlertObj.Text then
-					self.Text:SetText(AlertObj.Text)
 					self.Shadow:SetText(AlertObj.Text)
-					self.Shadow:ResizeToText()
-					self.Text:ResizeToText()
+					self.Text:SetText(AlertObj.Text)
 					self.Anchor:SetVisible(true)
 					self.Anchor:SetAlpha(1)
 				end
@@ -1472,16 +1522,12 @@ function KBM.Alert:Init()
 					self.Remaining = self.StopTime - CurrentTime
 					if self.Remaining <= 0 then
 						self.Remaining = 0
-						self.Text:SetText(self.Current.Text)
 						self.Shadow:SetText(self.Current.Text)
-						self.Shadow:ResizeToText()
-						self.Text:ResizeToText()
+						self.Text:SetText(self.Current.Text)
 					else
 						local CDText = string.format("%0.1f - "..self.Current.Text, self.Remaining)
 						self.Shadow:SetText(CDText)
 						self.Text:SetText(CDText)
-						self.Shadow:ResizeToText()
-						self.Text:ResizeToText()
 					end
 				end
 			end
@@ -1504,10 +1550,8 @@ function KBM.Alert:Init()
 		self.Left[self.Color]:SetVisible(false)
 		self.Right[self.Color]:SetVisible(false)
 		self.Anchor:SetVisible(false)
-		self.Text:SetText(" Alert Anchor ")
 		self.Shadow:SetText(" Alert Anchor ")
-		self.Text:ResizeToText()
-		self.Shadow:ResizeToText()
+		self.Text:SetText(" Alert Anchor ")
 	end
 	
 end
@@ -1537,7 +1581,6 @@ function KBM.CastBar:Init()
 	self.Anchor.Text = UI.CreateFrame("Text", "CastBar Info", self.Anchor)
 	self.Anchor.Text:SetText("CastBar Anchor")
 	self.Anchor.Text:SetFontSize(KBM.Options.CastBar.TextSize)
-	self.Anchor.Text:ResizeToText()
 	self.Anchor.Text:SetPoint("CENTER", self.Anchor, "CENTER")
 	self.Anchor.Drag = KBM.AttachDragFrame(self.Anchor, function(uType) self.Anchor:Update(uType) end , "CB Anchor Drag", 2)
 	self.Anchor:SetVisible(KBM.Options.CastBar.Visible)
@@ -1610,7 +1653,6 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 								bProgress = bDetails.remaining						
 								self.Progress:SetWidth(self.Frame:GetWidth() * (1-(bProgress/bCastTime)))
 								self.Text:SetText(string.format("%0.01f", bProgress).." - "..bDetails.abilityName)
-								self.Text:ResizeToText()
 							else
 								self.Casting = false
 								self.Frame:SetVisible(false)
@@ -1625,7 +1667,6 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 						bProgress = bDetails.remaining						
 						self.Progress:SetWidth(self.Frame:GetWidth() * (1-(bProgress/bCastTime)))
 						self.Text:SetText(string.format("%0.01f", bProgress).." - "..bDetails.abilityName)
-						self.Text:ResizeToText()	
 					end
 				end
 				if self.LastCast ~= bDetails.abilityName then
@@ -1662,6 +1703,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 end
 
 local function KBM_Reset()
+
 	if KBM.Encounter then
 		if KBM_CurrentMod then
 			KBM.Encounter = false
@@ -1701,9 +1743,11 @@ local function KBM_Reset()
 	else
 		print("No encounter to reset.")
 	end
+
 end
 
 function KBM.ConvertTime(Time)
+
 	Time = math.floor(Time)
 	local TimeString = "00"
 	local TimeSeconds = 0
@@ -1723,26 +1767,54 @@ function KBM.ConvertTime(Time)
 		TimeString = string.format("%02ds", Time)
 	end
 	return TimeString
+	
 end
 
 function KBM:CheckBossStates(current)
-	for UnitID, BossData in pairs(self.BossID) do
-		if not BossData.available then
-			if BossData.IdleSince then
-				if BossData.IdleSince + BossData.TimeOut <= current then
-					if KBM_CurrentMod:RemoveUnits(UnitID) then
-						print(KBM.Language.Encounter.Wipe[KBM.Lang])
-						print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(BossData.IdleSince - KBM.StartTime))
-						KBM_Reset()
-						break
-					end			
-				end
+
+	-- for UnitID, BossData in pairs(self.BossID) do
+		-- if not BossData.available then
+			-- if BossData.IdleSince then
+				-- if BossData.IdleSince + BossData.TimeOut <= current then
+					-- if KBM_CurrentMod:RemoveUnits(UnitID) then
+						-- print(KBM.Language.Encounter.Wipe[KBM.Lang])
+						-- print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(BossData.IdleSince - KBM.StartTime))
+						-- KBM_Reset()
+						-- break
+					-- end			
+				-- end
+			-- end
+		-- end
+	-- end
+	
+end
+
+function KBM:RaidCombatEnter()
+	--print("Raid has entered combat")
+end
+
+function KBM:RaidCombatLeave()
+	--print("Raid has left combat")
+	if KBM.Encounter then
+		local Dead = 0
+		local Total = 0
+		for BossID, BossObj in pairs(KBM.BossID) do
+			if BossObj.dead then
+				Dead = Dead + 1
 			end
+			Total = Total + 1
+		end
+		if Dead ~= Total then
+			print(KBM.Language.Encounter.Wipe[KBM.Lang])
+			print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
+			KBM_Reset()
 		end
 	end
+	
 end
 
 function KBM:Timer()
+	
 	if KBM.Encounter then
 		local current = Inspect.Time.Real()
 		local diff = (current - self.HeldTime)
@@ -1812,22 +1884,25 @@ function KBM:Timer()
 			-- d = math.random(1, #KBM.Trigger.List)
 			-- KBM.Trigger.Queue:Add(KBM.Trigger.List[d], KBM_PlayerID, KBM_PlayerID, d)
 		-- end
-	-- end	
+	-- end
+	
 end
 
 local function KBM_CastBar(units)
 
-	if KBM.Encounter then
-		if KBM_CurrentCBHook then
-			KBM_CurrentCBHook(units)
-		end
-	--else
+	-- if KBM.Encounter then
+		-- if KBM_CurrentCBHook then
+			-- KBM_CurrentCBHook(units)
+		-- end
+	-- else
 		-- Testing Only!
-		--KM_CastBar(units)
-	end
+		-- KM_CastBar(units)
+	-- end
+	
 end
 
 function KBM:TimeToHours(Time)
+
 	self.TimeVisual.String = "00"
 	if Time >= 60 then
 		self.TimeVisual.Minutes = math.floor(Time / 60)
@@ -1842,6 +1917,7 @@ function KBM:TimeToHours(Time)
 		self.TimeVisual.Seconds = Time
 		self.TimeVisual.String = string.format("%02d", self.TimeVisual.Seconds)
 	end
+
 end
 
 local function KM_ToggleEnabled(result)
@@ -1865,10 +1941,9 @@ local function KBM_UnitRemoved(units)
 	
 end
 
-local function KBM_Death(info)
+local function KBM_Death(UnitID)
 	
 	if KBM.Encounter then
-		local UnitID = info.target
 		if UnitID then
 			local uDetails = Inspect.Unit.Detail(UnitID)
 			if uDetails then
@@ -1906,6 +1981,7 @@ local function KBM_Help()
 end
 
 function KBM.Notify(data)
+
 	if KBM.Encounter then
 		if data.message then
 			if KBM_CurrentMod then
@@ -1925,9 +2001,11 @@ function KBM.Notify(data)
 			end
 		end
 	end
+	
 end
 
 function KBM.NPCChat(data)
+
 	if KBM.Encounter then
 		if data.fromName then
 			if KBM_CurrentMod then
@@ -1944,10 +2022,12 @@ function KBM.NPCChat(data)
 			end
 		end
 	end
+	
 end
 
 -- Used to manage Triggers and soon Tank-Swap managing.
 function KBM:BuffMonitor(unitID, Buffs, Type)
+
 	if unitID then
 		for buffID, bool in pairs(Buffs) do
 			bDetails = Inspect.Buff.Detail(unitID, buffID)
@@ -1961,6 +2041,7 @@ function KBM:BuffMonitor(unitID, Buffs, Type)
 			end
 		end
 	end
+	
 end
 
 -- Timer options.
@@ -2028,13 +2109,11 @@ function KBM.MenuOptions.Timers:Options()
 			KBM.Options.MechTimer.TextSize = 14
 			Check.Slider.Bar:SetPosition(KBM.Options.MechTimer.TextSize)
 			KBM.MechTimer.Anchor.Text:SetFontSize(KBM.Options.MechTimer.TextSize)
-			KBM.MechTimer.Anchor.Text:ResizeToText()
 		end
 	end
 	function self:MechTextChange(value)
 		KBM.Options.MechTimer.TextSize = value
 		KBM.MechTimer.Anchor.Text:SetFontSize(KBM.Options.MechTimer.TextSize)
-		KBM.MechTimer.Anchor.Text:ResizeToText()
 	end
 	Options = self.MenuItem.Options
 	Options:SetTitle()
@@ -2120,13 +2199,11 @@ function KBM.MenuOptions.TankSwap:Options()
 			KBM.Options.TankSwap.TextSize = 16
 			--Check.Slider.Bar:SetPosition(KBM.Options.CastBar.TextSize)
 			KBM.TankSwap.Anchor.Text:SetFontSize(KBM.Options.TankSwap.TextSize)
-			KBM.TankSwap.Anchor.Text:ResizeToText()
 		end
 	end
 	function self:TextChange(value)
 		KBM.Options.TankSwap.TextSize = value
 		KBM.CastBar.Anchor.Text:SetFontSize(KBM.Options.TankSwap.TextSize)
-		KBM.CastBar.Anchor.Text:ResizeToText()
 	end
 	function self:ShowTest(bool)
 		if bool then
@@ -2197,13 +2274,11 @@ function KBM.MenuOptions.CastBars:Options()
 			KBM.Options.CastBar.TextSize = 20
 			Check.Slider.Bar:SetPosition(KBM.Options.CastBar.TextSize)
 			KBM.CastBar.Anchor.Text:SetFontSize(KBM.Options.CastBar.TextSize)
-			KBM.CastBar.Anchor.Text:ResizeToText()
 		end
 	end
 	function self:CastTextChange(value)
 		KBM.Options.CastBar.TextSize = value
 		KBM.CastBar.Anchor.Text:SetFontSize(KBM.Options.CastBar.TextSize)
-		KBM.CastBar.Anchor.Text:ResizeToText()
 	end
 	
 	Options = self.MenuItem.Options
@@ -2290,6 +2365,10 @@ function KBM.MenuGroup:SetExpertOne()
 	self.ExpertOne = KBM.MainWin.Menu:CreateHeader("Tier 1 Experts", nil, nil, true)
 end
 
+function KBM.ApplySettings()
+	KBM.TankSwap.Enabled = KBM.Options.TankSwap.Enabled
+end
+
 local function KBM_Start()
 	KBM.Button:Init()
 	KBM.TankSwap:Init()
@@ -2315,7 +2394,11 @@ local function KBM_Start()
 	table.insert(Event.Unit.Unavailable, {KBM_UnitRemoved, "KingMolinator", "Unit Unavailable"})
 	table.insert(Event.Unit.Available, {KBM_UnitAvailable, "KingMolinator", "Unit Available"})
 	table.insert(Event.System.Update.Begin, {function () KBM:Timer() end, "KingMolinator", "System Update"}) 
-	table.insert(Event.Combat.Death, {KBM_Death, "KingMolinator", "Combat Death"})
+	table.insert(Event.SafesRaidManager.Combat.Death, {KBM_Death, "KingMolinator", "Combat Death"})
+	table.insert(Event.SafesRaidManager.Combat.Enter, {KBM_CombatEnter, "KingMolinator", "Non raid combat enter"})
+	table.insert(Event.SafesRaidManager.Combat.Leave, {KBM.CombatLeave, "KingMolinator", "Non raid combat leave"})
+	table.insert(Event.SafesRaidManager.Group.Combat.End, {KBM.RaidCombatLeave, "KingMolinator", "Raid Combat Leave"})
+	table.insert(Event.SafesRaidManager.Group.Combat.Start, {KBM.RaidCombatEnter, "KingMolinator", "Raid Combat Enter"})
 	table.insert(Event.Unit.Castbar, {KBM_CastBar, "KingMolinator", "Cast Bar Event"})
 	table.insert(Command.Slash.Register("kbmhelp"), {KBM_Help, "KingMolinator", "KBM Hekp"})
 	table.insert(Command.Slash.Register("kbmautoreset"), {KBM_AutoReset, "KingMolinator", "KBM Auto Reset Toggle"})
@@ -2329,10 +2412,12 @@ local function KBM_WaitReady(unitID)
 	KBM_PlayerID = unitID
 	KBM_PlayerName = Inspect.Unit.Detail(unitID).name
 	KBM_Start()
-	for _, Mod in ipairs(KBM_BossMod) do
+	for _, Mod in ipairs(KBM.ModList) do
 		Mod:AddBosses(KBM_Boss)
 		Mod:Start(KBM_MainWin)
 	end
+	KBM.ApplySettings()
+	
 --	KBM.MenuGroup:SetMaster()
 --	KBM.MenuGroup:SetExpertTwo()
 --	KBM.MenuGroup:SetExpertOne()
@@ -2348,13 +2433,9 @@ local function KBM_WaitReady(unitID)
 	-- end
 end
 
-function KBM_RegisterApp()
-	return KBM
-end
-
-function KBM_RegisterMod(ModID, Mod)
-	table.insert(KBM_BossMod, Mod)
-	return KBM
+function KBM.RegisterMod(ModID, Mod)
+	KBM.BossMod[ModID] = Mod
+	table.insert(KBM.ModList, Mod)
 end
 
 table.insert(Event.Addon.SavedVariables.Load.Begin, {KBM_DefineVars, "KingMolinator", "Pre Load"})

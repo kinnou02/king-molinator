@@ -12,7 +12,9 @@ local HK = {
 	Name = "Hammerknell Fortress",
 }
 
-local KBM = KBM_RegisterMod("Hammerknell", HK)
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+KBM.RegisterMod("Hammerknell", HK)
 
 KBM.Language:Add(HK.Name)
 KBM.Language[HK.Name]:SetFrench("Glasmarteau")
@@ -39,6 +41,6 @@ function HK:Start()
 	HK.Header.Check:SetEnabled(false)
 end
 
-function KBMHK_Register()
+function HK.Register()
 	return HK
 end

@@ -4,7 +4,10 @@
 --
 
 KBMDHJR_Settings = nil
-DH = KBMDH_Register()
+-- Link Mods
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+local DH = KBM.BossMod["Drowned Halls"]
 
 local JR = {
 	ModEnabled = true,
@@ -40,7 +43,7 @@ JR.Joloral = {
 	Triggers = {},
 }
 
-local KBM = KBM_RegisterMod(JR.Joloral.ID, JR)
+KBM.RegisterMod(JR.ID, JR)
 
 JR.Lang.Joloral = KBM.Language:Add(JR.Joloral.Name)
 JR.Lang.Joloral.German = "Joloral Wutflut"

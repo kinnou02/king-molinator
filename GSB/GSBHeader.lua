@@ -13,7 +13,10 @@ local GSB = {
 	ID = "GSB",
 }
 
-local KBM = KBM_RegisterMod("Greenscale's Blight", GSB)
+-- Link Mods
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+KBM.RegisterMod("Greenscales Blight", GSB)
 
 KBM.Language:Add(GSB.Name)
 KBM.Language[GSB.Name]:SetGerman("Grünschuppes Pesthauch")
@@ -39,8 +42,4 @@ function GSB:Start()
 	end
 	GSB.Header = KBM.MainWin.Menu:CreateHeader(self.Name, self.Enabled, true)
 	GSB.Header.Check:SetEnabled(false)
-end
-
-function KBMGSB_Register()
-	return GSB
 end

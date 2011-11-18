@@ -4,7 +4,10 @@
 --
 
 KBMGPTR_Settings = nil
-GP = KBMGP_Register()
+-- Link Mods
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+local GP = KBM.BossMod["Guilded Prophecy"]
 
 local TR = {
 	ModEnabled = true,
@@ -40,7 +43,7 @@ TR.Thalguur = {
 	Triggers = {},
 }
 
-local KBM = KBM_RegisterMod(TR.Thalguur.ID, TR)
+KBM.RegisterMod(TR.ID, TR)
 
 TR.Lang.Thalguur = KBM.Language:Add(TR.Thalguur.Name)
 -- TR.Lang.Flames = KBM.Language:Add("Ancient Flames")

@@ -4,7 +4,10 @@
 --
 
 KBMGSBDL_Settings = nil
-GSB = KBMGSB_Register()
+-- Link Mods
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+local GSB = KBM.BossMod["Greenscales Blight"]
 
 local DL = {
 	ModEnabled = true,
@@ -41,7 +44,7 @@ DL.Letareus = {
 	Triggers = {},
 }
 
-local KBM = KBM_RegisterMod(DL.Letareus.ID, DL)
+KBM.RegisterMod(DL.ID, DL)
 
 DL.Lang.Letareus = KBM.Language:Add(DL.Letareus.Name)
 DL.Lang.Letareus.German = "Herzog Letareus"

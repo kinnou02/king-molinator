@@ -4,7 +4,9 @@
 --
 
 KBMGSBPH_Settings = nil
-GSB = KBMGSB_Register()
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+local GSB = KBM.BossMod["Greenscales Blight"]
 
 local PH = {
 	ModEnabled = true,
@@ -41,7 +43,7 @@ PH.Hylas = {
 	Triggers = {},
 }
 
-local KBM = KBM_RegisterMod(PH.Hylas.ID, PH)
+KBM.RegisterMod(PH.ID, PH)
 
 PH.Lang.Hylas = KBM.Language:Add(PH.Hylas.Name)
 PH.Lang.Hylas.German = "Prinz Hylas"

@@ -4,7 +4,10 @@
 --
 
 KBMGU_Settings = nil
-local HK = KBMHK_Register()
+-- Link Mods
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+local HK = KBM.BossMod["Hammerknell"]
 
 local GU = {
 	ModEnabled = true,
@@ -42,7 +45,7 @@ GU.Garau = {
 	Triggers = {},
 }
 
-local KBM = KBM_RegisterMod(GU.Garau.ID, GU)
+KBM.RegisterMod(GU.ID, GU)
 
 GU.Lang.Garau = KBM.Language:Add(GU.Garau.Name)
 GU.Lang.Garau.French = "Inquisiteur Garau"

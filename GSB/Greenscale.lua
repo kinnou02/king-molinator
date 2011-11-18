@@ -4,7 +4,9 @@
 --
 
 KBMGSBLG_Settings = nil
-GSB = KBMGSB_Register()
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+local GSB = KBM.BossMod["Greenscales Blight"]
 
 local LG = {
 	ModEnabled = true,
@@ -41,7 +43,7 @@ LG.Greenscale = {
 	Triggers = {},
 }
 
-local KBM = KBM_RegisterMod(LG.Greenscale.ID, LG)
+KBM.RegisterMod(LG.ID, LG)
 
 LG.Lang.Greenscale = KBM.Language:Add(LG.Greenscale.Name)
 LG.Lang.Greenscale.German = "Fürst Grünschuppe"

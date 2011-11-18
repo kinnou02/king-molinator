@@ -4,7 +4,9 @@
 --
 
 KBMGSBIJ_Settings = nil
-GSB = KBMGSB_Register()
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+local GSB = KBM.BossMod["Greenscales Blight"]
 
 local IJ = {
 	ModEnabled = true,
@@ -41,7 +43,7 @@ IJ.Johlen = {
 	Triggers = {},
 }
 
-local KBM = KBM_RegisterMod(IJ.Johlen.ID, IJ)
+KBM.RegisterMod(IJ.ID, IJ)
 
 IJ.Lang.Johlen = KBM.Language:Add(IJ.Johlen.Name)
 IJ.Lang.Johlen.French = "Infiltrateur Johlen"

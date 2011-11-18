@@ -4,7 +4,10 @@
 --
 
 KBMID_Settings = nil
-HK = KBMHK_Register()
+-- Link Mods
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+local HK = KBM.BossMod["Hammerknell"]
 
 local ID = {
 	ModEnabled = true,
@@ -37,7 +40,7 @@ ID.Inwar = {
 	UnitID = nil,
 }
 
-local KBM = KBM_RegisterMod(ID.Inwar.ID, ID)
+KBM.RegisterMod(ID.ID, ID)
 
 ID.Lang.Inwar = KBM.Language:Add(ID.Inwar.Name)
 ID.Lang.Inwar.German = "Inwar Dunkelflut"

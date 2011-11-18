@@ -4,7 +4,10 @@
 --
 
 KBMDHHH_Settings = nil
-DH = KBMDH_Register()
+-- Link Mods
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+local DH = KBM.BossMod["Drowned Halls"]
 
 local HH = {
 	ModEnabled = true,
@@ -40,7 +43,7 @@ HH.Hydriss = {
 	Triggers = {},
 }
 
-local KBM = KBM_RegisterMod(HH.Hydriss.ID, HH)
+KBM.RegisterMod(HH.ID, HH)
 
 HH.Lang.Hydriss = KBM.Language:Add(HH.Hydriss.Name)
 HH.Lang.Hydriss.German = "Hohepriesterin Hydriss"

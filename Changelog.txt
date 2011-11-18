@@ -1,4 +1,19 @@
-﻿v0.5.8
+﻿v0.5.9
+* New: Ereandorn: Added alert for Ticking Time Bomb.
+* New: Ereandorn: Added personal alert for stop casting.
+* New: Ereandorn: Added alert for Pillar.
+* Note: Please bare with me while I transition this addon to Rift 1.6.
+* Note: Several encounters may experience issues at present, this will be fixed.
+* Added: German Translation for Encounter start, end messages.
+* Fixed: Some Settings were not initiating correctly on start-up/reloadui.
+* Fixed: Error spam from Tank-Swap due to Stack sizes. (Rift 1.6 Fix)
+* Removed: Rift 1.6 removed commands.
+* Change: The options window now has a Rift style close button. (new Rift 1.6)
+* Change: Removed the majority of global namespace allocation. (new Rift 1.6)
+* Change: Major change with Encounter monitoring using Combat states. (new Rift 1.6)
+* Change: Safe's Raid Manager v1.1.0 Beta
+----
+v0.5.8
 * Notice: First release for 1.6, expect more to come.
 * Notice: Any needed hotfixes will be incoming, plus RotP mechanics.
 * Change: Support for 1.6 Rift Client.

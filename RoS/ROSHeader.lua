@@ -4,17 +4,20 @@
 --
 
 KBMROS_Settings = {}
+-- Link Mods
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
 
 local ROS = {
 	Header = nil,
 	Enabled = true,
 	IsInstance = true,
-	Name = "River Of Souls",
+	Name = "River of Souls",
 	Type = "20man",
 	ID = "ROS",
 }
 
-local KBM = KBM_RegisterMod("River Of Souls", ROS)
+KBM.RegisterMod("River of Souls", ROS)
 
 KBM.Language:Add(ROS.Name)
 KBM.Language[ROS.Name]:SetGerman("Seelenfluss")
@@ -40,8 +43,4 @@ function ROS:Start()
 	end
 	ROS.Header = KBM.MainWin.Menu:CreateHeader(self.Name, self.Enabled, true)
 	ROS.Header.Check:SetEnabled(false)
-end
-
-function KBMROS_Register()
-	return ROS
 end

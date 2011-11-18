@@ -4,7 +4,10 @@
 --
 
 KBMROTPGS_Settings = nil
-ROTP = KBMROTP_Register()
+-- Link Mods
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+local ROTP = KBM.BossMod["Rise of the Phoenix"]
 
 local GS = {
 	ModEnabled = true,
@@ -40,7 +43,7 @@ GS.Silgen = {
 	Triggers = {},
 }
 
-local KBM = KBM_RegisterMod(GS.Silgen.ID, GS)
+KBM.RegisterMod(GS.ID, GS)
 
 GS.Lang.Silgen = KBM.Language:Add(GS.Silgen.Name)
 GS.Lang.Silgen.French = "G\195\169n\195\169ral Silgen"

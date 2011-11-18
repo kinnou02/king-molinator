@@ -4,7 +4,10 @@
 --
 
 KBMGPAF_Settings = nil
-GP = KBMGP_Register()
+-- Link Mods
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+local GP = KBM.BossMod["Guilded Prophecy"]
 
 local AF = {
 	ModEnabled = true,
@@ -40,7 +43,7 @@ AF.Anrak = {
 	Triggers = {},
 }
 
-local KBM = KBM_RegisterMod(AF.Anrak.ID, AF)
+KBM.RegisterMod(AF.ID, AF)
 
 AF.Lang.Anrak = KBM.Language:Add(AF.Anrak.Name)
 AF.Lang.Anrak.German = "Anrak der Üble"

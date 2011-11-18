@@ -4,7 +4,10 @@
 --
 
 KBMROSPI_Settings = nil
-ROS = KBMROS_Register()
+-- Link Mods
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+local ROS = KBM.BossMod["River of Souls"]
 
 local PI = {
 	ModEnabled = true,
@@ -41,7 +44,7 @@ PI.Plutonus = {
 	Triggers = {},
 }
 
-local KBM = KBM_RegisterMod(PI.Plutonus.ID, PI)
+KBM.RegisterMod(PI.ID, PI)
 
 PI.Lang.Plutonus = KBM.Language:Add(PI.Plutonus.Name)
 PI.Lang.Plutonus.German = "Plutonus der Unsterbliche"

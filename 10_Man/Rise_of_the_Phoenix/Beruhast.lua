@@ -4,7 +4,10 @@
 --
 
 KBMROTPBT_Settings = nil
-ROTP = KBMROTP_Register()
+-- Link Mods
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+local ROTP = KBM.BossMod["Rise of the Phoenix"]
 
 local BT = {
 	ModEnabled = true,
@@ -40,7 +43,7 @@ BT.Beruhast = {
 	Triggers = {},
 }
 
-local KBM = KBM_RegisterMod(BT.Beruhast.ID, BT)
+KBM.RegisterMod(BT.ID, BT)
 
 BT.Lang.Beruhast = KBM.Language:Add(BT.Beruhast.Name)
 -- BT.Lang.Flames = KBM.Language:Add("Ancient Flames")

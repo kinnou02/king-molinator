@@ -4,7 +4,10 @@
 --
 
 KBMVP_Settings = nil
-HK = KBMHK_Register()
+-- Link Mods
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+local HK = KBM.BossMod["Hammerknell"]
 
 local VP = {
 	ModEnabled = true,
@@ -42,7 +45,7 @@ VP.Prime = {
 	Triggers = {},
 }
 
-local KBM = KBM_RegisterMod(VP.Prime.ID, VP)
+KBM.RegisterMod(VP.ID, VP)
 
 VP.Lang.Prime = KBM.Language:Add(VP.Prime.Name)
 VP.Lang.Flames = KBM.Language:Add("Ancient Flames")

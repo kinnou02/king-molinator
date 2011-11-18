@@ -14,7 +14,9 @@ local ROTP = {
 	ID = "ROTP",
 }
 
-local KBM = KBM_RegisterMod("Rise of the Phoenix", ROTP)
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+KBM.RegisterMod("Rise of the Phoenix", ROTP)
 
 KBM.Language:Add(ROTP.Name)
 KBM.Language[ROTP.Name]:SetGerman("Aufstieg des Phönix")
@@ -41,8 +43,4 @@ function ROTP:Start()
 	KBM.MenuGroup:SetTenMan()
 	ROTP.Header = KBM.MainWin.Menu:CreateHeader(self.Name, self.Enabled, true)
 	ROTP.Header.Check:SetEnabled(false)
-end
-
-function KBMROTP_Register()
-	return ROTP
 end

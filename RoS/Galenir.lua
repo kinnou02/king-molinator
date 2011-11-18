@@ -4,7 +4,10 @@
 --
 
 KBMROSWG_Settings = nil
-ROS = KBMROS_Register()
+-- Link Mods
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+local ROS = KBM.BossMod["River of Souls"]
 
 local WG = {
 	ModEnabled = true,
@@ -42,7 +45,7 @@ WG.Galenir = {
 	Triggers = {},
 }
 
-local KBM = KBM_RegisterMod(WG.Galenir.ID, WG)
+KBM.RegisterMod(WG.ID, WG)
 
 WG.Lang.Galenir = KBM.Language:Add(WG.Galenir.Name)
 WG.Lang.Galenir.German = "Kriegsmeister Galenir"

@@ -4,7 +4,10 @@
 --
 
 KBMGPUK_Settings = nil
-GP = KBMGP_Register()
+-- Link Mods
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+local GP = KBM.BossMod["Guilded Prophecy"]
 
 local UK = {
 	ModEnabled = true,
@@ -40,7 +43,7 @@ UK.Uruluuk = {
 	Triggers = {},
 }
 
-local KBM = KBM_RegisterMod(UK.Uruluuk.ID, UK)
+KBM.RegisterMod(UK.ID, UK)
 
 UK.Lang.Uruluuk = KBM.Language:Add(UK.Uruluuk.Name)
 -- UK.Lang.Flames = KBM.Language:Add("Ancient Flames")

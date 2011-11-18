@@ -4,7 +4,10 @@
 --
 
 KBMGR_Settings = nil
-HK = KBMHK_Register()
+-- Link Mods
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+local HK = KBM.BossMod["Hammerknell"]
 
 local GR = {
 	ModEnabled = true,
@@ -41,7 +44,7 @@ GR.Grugonim = {
 	Triggers = {},
 }
 
-local KBM = KBM_RegisterMod(GR.Grugonim.ID, GR)
+KBM.RegisterMod(GR.ID, GR)
 
 GR.Lang.Grugonim = KBM.Language:Add(GR.Grugonim.Name)
 

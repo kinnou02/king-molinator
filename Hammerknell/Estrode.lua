@@ -4,7 +4,10 @@
 --
 
 KBMES_Settings = nil
-HK = KBMHK_Register()
+-- Link Mods
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+local HK = KBM.BossMod["Hammerknell"]
 
 local ES = {
 	ModEnabled = true,
@@ -40,7 +43,7 @@ ES.Estrode = {
 	Triggers = {},
 }
 
-local KBM = KBM_RegisterMod(ES.Estrode.ID, ES)
+KBM.RegisterMod(ES.ID, ES)
 
 ES.Lang.Estrode = KBM.Language:Add(ES.Estrode.Name)
 

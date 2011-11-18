@@ -5,7 +5,10 @@
 
 KBMMZ_Settings = nil
 
-local HK = KBMHK_Register()
+-- Link Mods
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+local HK = KBM.BossMod["Hammerknell"]
 
 local MZ = {
 	ModEnabled = true,
@@ -41,7 +44,7 @@ MZ.Matron = {
 	Triggers = {},
 }
 
-local KBM = KBM_RegisterMod(MZ.Matron.ID, MZ)
+KBM.RegisterMod(MZ.ID, MZ)
 
 MZ.Lang.Matron = KBM.Language:Add(MZ.Matron.Name)
 MZ.Lang.Matron.German = "Matrone Zamira"

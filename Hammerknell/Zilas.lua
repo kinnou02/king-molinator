@@ -4,7 +4,10 @@
 --
 
 KBMSZ_Settings = nil
-HK = KBMHK_Register()
+-- Link Mods
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+local HK = KBM.BossMod["Hammerknell"]
 
 local SZ = {
 	ModEnabled = true,
@@ -38,7 +41,7 @@ SZ.Zilas = {
 	TimeOut = 5,
 }
 
-local KBM = KBM_RegisterMod(SZ.Zilas.ID, SZ)
+KBM.RegisterMod(SZ.ID, SZ)
 
 SZ.Lang.Zilas = KBM.Language:Add(SZ.Zilas.Name)
 SZ.Lang.Zilas.German = "Seelenreißer Zilas"

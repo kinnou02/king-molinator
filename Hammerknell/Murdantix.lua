@@ -5,7 +5,10 @@
 
 KBMMX_Settings = nil
 
-local HK = KBMHK_Register()
+-- Link Mods
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+local HK = KBM.BossMod["Hammerknell"]
 
 local MX = {
 	ModEnabled = true,
@@ -46,7 +49,7 @@ MX.Murd = {
 	TimeOut = 5,
 }
 
-local KBM = KBM_RegisterMod("Murdantix", MX)
+KBM.RegisterMod("Murdantix", MX)
 
 MX.Lang.Murdantix = KBM.Language:Add(MX.Murd.Name)
 

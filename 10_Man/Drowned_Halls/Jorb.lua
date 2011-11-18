@@ -4,7 +4,10 @@
 --
 
 KBMDHAJ_Settings = nil
-DH = KBMDH_Register()
+-- Link Mods
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+local DH = KBM.BossMod["Drowned Halls"]
 
 local AJ = {
 	ModEnabled = true,
@@ -40,7 +43,7 @@ AJ.Jorb = {
 	Triggers = {},
 }
 
-local KBM = KBM_RegisterMod(AJ.Jorb.ID, AJ)
+KBM.RegisterMod(AJ.ID, AJ)
 
 AJ.Lang.Jorb = KBM.Language:Add(AJ.Jorb.Name)
 AJ.Lang.Jorb.German = "Überfallkommandant Jorb"

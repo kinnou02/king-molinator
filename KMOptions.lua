@@ -2,7 +2,8 @@
 -- Written by Paul Snart
 -- Copyright 2011
 
-KBM = KBM_RegisterApp()
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
 KBM.Scroller = {}
 
 function KBM.Scroller:Create(Type, Size, Parent, Callback)
@@ -266,8 +267,9 @@ function KBM.InitOptions()
 	KBM.MainWin.Options.Scroller.Frame:SetLayer(3)
 	KBM.MainWin.Options.Scroller.Handle:SetLayer(4)
 	
-	KBM.MainWin.Options.Close = UI.CreateFrame("RiftButton", "Close Options", KBM.MainWin.Options.Footer)
-	KBM.MainWin.Options.Close:SetPoint("BOTTOMRIGHT", KBM.MainWin.Options.Footer, "BOTTOMRIGHT")
+	KBM.MainWin.Options.Close = UI.CreateFrame("RiftButton", "Close Options", KBM.MainWin.Handle)
+	KBM.MainWin.Options.Close:SetSkin("close")
+	KBM.MainWin.Options.Close:SetPoint("BOTTOMRIGHT", KBM.MainWin.Handle, "BOTTOMRIGHT", -8, -5)
 	KBM.MainWin.Options.Close:SetText("Close")
 	
 	KBM.MainWin.CurrentPage = nil
