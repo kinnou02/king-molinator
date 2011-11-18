@@ -186,9 +186,9 @@ function EN.Ereandorn:Options()
 	--local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, EN.Settings.Timers.Enabled)
 	--Timers:AddCheck(EN.Lang.Flames[KBM.Lang], self.FlamesEnabled, EN.Settings.Timers.FlamesEnabled)
 	local Alerts = Options:AddHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], self.AlertsEnabled, EN.Settings.Alerts.Enabled)
-	-- Alerts:AddCheck("Burn move out alert (temporary name).", self.BurnAlert, EN.Settings.Alerts.Burn)
-	-- Alerts:AddCheck("Target Pillar alert (temporary name).", self.FuelAlert, EN.Settings.Alerts.Fuel)
-	-- Alerts:AddCheck("Bomb alert (temporary name).", self.BombAlert, EN.Settings.Alerts.Bomb)
+	Alerts:AddCheck("Burn move out alert (temporary name).", self.BurnAlert, EN.Settings.Alerts.Burn)
+	Alerts:AddCheck("Target Pillar alert (temporary name).", self.FuelAlert, EN.Settings.Alerts.Fuel)
+	Alerts:AddCheck("Bomb alert (temporary name).", self.BombAlert, EN.Settings.Alerts.Bomb)
 	
 end
 
