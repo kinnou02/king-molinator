@@ -10,6 +10,7 @@ local KBM = AddonData.data
 KBM.BossMod = {}
 KBM.ModList = {}
 KBM.Testing = false
+KBM.Debug = false
 KBM.TestFilters = {}
 KBM.MenuOptions = {
 	Timers = {},
@@ -1982,6 +1983,10 @@ end
 
 function KBM.Notify(data)
 
+	if KBM.Debug then
+		dump(data)
+	end
+
 	if KBM.Encounter then
 		if data.message then
 			if KBM_CurrentMod then
@@ -2005,6 +2010,10 @@ function KBM.Notify(data)
 end
 
 function KBM.NPCChat(data)
+
+	if KBM.Debug then
+		dump(data)
+	end
 
 	if KBM.Encounter then
 		if data.fromName then
@@ -2403,6 +2412,7 @@ local function KBM_Start()
 	table.insert(Command.Slash.Register("kbmhelp"), {KBM_Help, "KingMolinator", "KBM Hekp"})
 	table.insert(Command.Slash.Register("kbmautoreset"), {KBM_AutoReset, "KingMolinator", "KBM Auto Reset Toggle"})
 	table.insert(Command.Slash.Register("kbmoptions"), {KBM_Options, "KingMolinator", "KBM Open Options"})
+	print("Welcome to King Boss Mods v"..AddonData.toc.Version)
 	print("/kbmhelp for a list of commands.")
 	print("/kbmoptions for options.")
 	KBM.MenuOptions.Timers:Options()

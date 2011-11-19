@@ -13,6 +13,7 @@ function KBM.Scroller:Create(Type, Size, Parent, Callback)
 	ScrollerObj.Frame = KBM:CallFrame(Parent)
 	ScrollerObj.Frame:SetBackgroundColor(0,0,0,0.5)
 	ScrollerObj.Type = Type
+	ScrollerObj.Position = 0
 	ScrollerObj.Handle = KBM:CallFrame(ScrollerObj.Frame)
 	if Type == "H" then
 		
@@ -98,13 +99,13 @@ function KBM.Scroller:Create(Type, Size, Parent, Callback)
 		self.Size = Size
 		self.Total = Total
 		self.Range = (Size - Total) / self.Handle.Multiplier
-		self.Position = 0
 		if self.Range < 0 then
 			self.Handle:SetVisible(false)
 		else
 			self.Handle:SetVisible(true)
 			self:UpdateHandle()
 		end
+		self:SetPosition(self.Position)
 	end
 	function ScrollerObj:SetPosition(Value)
 		if self.Handle:GetVisible() then
@@ -269,13 +270,17 @@ function KBM.InitOptions()
 	
 	KBM.MainWin.Options.Close = UI.CreateFrame("RiftButton", "Close Options", KBM.MainWin.Handle)
 	KBM.MainWin.Options.Close:SetSkin("close")
-	KBM.MainWin.Options.Close:SetPoint("BOTTOMRIGHT", KBM.MainWin.Handle, "BOTTOMRIGHT", -8, -5)
+	KBM.MainWin.Options.Close:SetPoint("BOTTOMRIGHT", KBM.MainWin.Handle, "BOTTOMRIGHT", -8, -5.5)
 	KBM.MainWin.Options.Close:SetText("Close")
 	
 	KBM.MainWin.CurrentPage = nil
 	
 	function KBM.MainWin:AddSize(Frame)
 		self.MenuSize = self.MenuSize + Frame:GetHeight()
+		self.Scroller:SetRange(self.MenuSize, self.Scroller.Frame:GetHeight())
+	end
+	function KBM.MainWin:SubSize(Size)
+		self.MenuSize = self.MenuSize - Size
 		self.Scroller:SetRange(self.MenuSize, self.Scroller.Frame:GetHeight())
 	end
 	
@@ -304,7 +309,8 @@ function KBM.InitOptions()
 		Header:SetWidth(self:GetWidth())
 		Header.Check = KBM:CallCheck(Header)
 		Header.Check:SetPoint("CENTERLEFT", Header, "CENTERLEFT", 4, 0)
-		if Hook ~= nil and Default ~= nil then
+		Default = Default or true
+		if not Static then
 			Header.Check:SetChecked(Default)
 		else
 			Header.Check:SetVisible(false)
@@ -339,6 +345,21 @@ function KBM.InitOptions()
 			end
 		end
 		self.LastHeader = Header
+		function Header.Check.Event:CheckboxChange()
+			if self:GetChecked() then
+				for _, Child in ipairs(self:GetParent().Children) do
+					Child:SetVisible(true)
+				end
+				self:GetParent().LastChild:SetPoint("TOP", self:GetParent().LastChild.Prev, "BOTTOM")
+				KBM.MainWin:SubSize(-self:GetParent().ChildSize)
+			else
+				for _, Child in ipairs(self:GetParent().Children) do
+					Child:SetVisible(false)
+				end
+				self:GetParent().LastChild:SetPoint("TOP", self:GetParent(), "TOP")
+				KBM.MainWin:SubSize(self:GetParent().ChildSize)
+			end
+		end
 		function Header.Event:MouseIn()
 			if self.Enabled and not KBM.MainWin.Scroller.Handle.MouseDown then
 				self:SetBackgroundColor(0,0,0,0.5)
@@ -351,10 +372,15 @@ function KBM.InitOptions()
 		end
 		function Header.Event:LeftClick()
 			if self.Enabled then
-				if self.Hook then
-					--self.Hook:Options()
+				if self.Check:GetChecked() then
+					self.Check:SetChecked(false)
+				else
+					self.Check:SetChecked(true)
 				end
 			end
+		end
+		function Header:AddChildSize(Child)
+			self.ChildSize = self.ChildSize + Child:GetHeight()
 		end
 		--Header.LastChild = nil
 		KBM.MainWin:AddSize(Header)
@@ -362,11 +388,12 @@ function KBM.InitOptions()
 		if not KBM.MainWin.FirstItem then
 			KBM.MainWin.FirstItem = Header
 		end
+		Header.ChildSize = 0
 		return Header
 	end
 	function KBM.MainWin.Menu:CreateEncounter(Text, Link, Default, Header)
 		Child = {}
-		Child = KBM:CallFrame(self)
+		Child = KBM:CallFrame(Header)
 		Child:SetWidth(self:GetWidth()-Header.Check:GetWidth())
 		Child:SetPoint("RIGHT", self, "RIGHT")
 		Child.Enabled = true
@@ -390,8 +417,10 @@ function KBM.InitOptions()
 		if not Header.LastChild then
 			Header.LastChild = Child
 			Child:SetPoint("TOP", Header, "BOTTOM")
+			Child.Prev = Header
 		else
 			Child:SetPoint("TOP", Header.LastChild, "BOTTOM")
+			Child.Prev = Header.LastChild
 			Header.LastChild = Child
 		end
 		function Child:Enabled(bool)
@@ -682,6 +711,7 @@ function KBM.InitOptions()
 		end
 		Header.LastChild = Child
 		KBM.MainWin:AddSize(Child)
+		Header:AddChildSize(Child)
 		return Child
 	end
 			

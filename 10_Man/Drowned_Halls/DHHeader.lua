@@ -38,9 +38,10 @@ function DH:SaveVars()
 end
 
 function DH:Start()
+
 	function self:Enabled(bool)
 	
 	end
 	DH.Header = KBM.MainWin.Menu:CreateHeader(self.Name, self.Enabled, true)
-	DH.Header.Check:SetEnabled(false)
+	
 end

@@ -46,8 +46,12 @@ BT.Beruhast = {
 KBM.RegisterMod(BT.ID, BT)
 
 BT.Lang.Beruhast = KBM.Language:Add(BT.Beruhast.Name)
--- BT.Lang.Flames = KBM.Language:Add("Ancient Flames")
--- BT.Lang.Flames.French = "Flammes anciennes"
+
+-- Ability Dictionary
+BT.Lang.Ability = {}
+BT.Lang.Ability.Inferno = KBM.Language:Add("Inferno Lash")
+BT.Lang.Ability.Flame = KBM.Language:Add("Leaping Flame")
+BT.Lang.Ability.Vortex = KBM.Language:Add("Flaming Vortex")
 
 BT.Beruhast.Name = BT.Lang.Beruhast[KBM.Lang]
 
@@ -64,7 +68,11 @@ function BT:InitVars()
 	self.Settings = {
 		Timers = {
 			Enabled = true,
-			FlamesEnabled = true,
+			Flame = true,
+		},
+		Alerts = {
+			Enabled = true,
+			Inferno = true,
 		},
 		CastBar = {
 			x = false,
@@ -131,6 +139,7 @@ function BT:UnitHPCheck(unitDetails, unitID)
 					self.Beruhast.Dead = false
 					self.Beruhast.Casting = false
 					self.Beruhast.CastBar:Create(unitID)
+					self.Beruhast.TimersRef.FlameStart:Start(Inspect.Time.Real())
 				end
 				self.Beruhast.UnitID = unitID
 				self.Beruhast.Available = true
@@ -152,16 +161,29 @@ function BT:Timer()
 end
 
 function BT.Beruhast:Options()
-	function self:TimersEnabled(bool)
+	-- Timer Settings
+	function self:Timers(bool)
+		BT.Settings.Timers.Enabled = bool
 	end
 	function self:FlamesEnabled(bool)
-		BT.Settings.Timers.FlamesEnabled = bool
-		BT.Beruhast.TimersRef.Flames.Enabled = bool
+		BT.Settings.Timers.Flame = bool
+		BT.Beruhast.TimersRef.Flame.Enabled = bool
+		BT.Beruhast.TimersRef.FlameStart.Enabled = bool
+	end
+	-- Alert Settings
+	function self:Alerts(bool)
+		BT.Settings.Alerts.Enabled = bool
+	end
+	function self:InfernoAlert(bool)
+		BT.Settings.Alerts.Inferno = bool
+		BT.Beruhast.AlertsRef.Inferno.Enabled = bool
 	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
-	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, BT.Settings.Timers.Enabled)
-	--Timers:AddCheck(BT.Lang.Flames[KBM.Lang], self.FlamesEnabled, BT.Settings.Timers.FlamesEnabled)	
+	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.Timers, BT.Settings.Timers.Enabled)
+	Timers:AddCheck(BT.Lang.Ability.Flame[KBM.Lang], self.FlameTimer, BT.Settings.Timers.Flame)
+	local Alerts = Options:AddHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], self.Alerts, BT.Settings.Alerts.Enabled)
+	Alerts:AddCheck(BT.Lang.Ability.Inferno[KBM.Lang], self.InfernoAlert, BT.Settings.Alerts.Inferno)
 	
 end
 
@@ -169,8 +191,22 @@ function BT:Start()
 	self.Header = KBM.HeaderList[self.Instance]
 	self.Beruhast.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Beruhast, true, self.Header)
 	self.Beruhast.MenuItem.Check:SetEnabled(false)
-	-- self.Beruhast.TimersRef.Flames = KBM.MechTimer:Add(self.Lang.Flames[KBM.Lang], "cast", 30, self, nil)
-	-- self.Beruhast.TimersRef.Flames.Enabled = self.Settings.Timers.FlamesEnabled
+	
+	-- Alerts
+	self.Beruhast.AlertsRef.Inferno = KBM.Alert:Create(self.Lang.Ability.Inferno[KBM.Lang], 2, true, true, "yellow")
+	self.Beruhast.AlertsRef.Inferno.Enabled = self.Settings.Alerts.Inferno
+	
+	-- Timers
+	self.Beruhast.TimersRef.Flame = KBM.MechTimer:Add(self.Lang.Ability.Flame[KBM.Lang], 70)
+	self.Beruhast.TimersRef.Flame.Enabled = self.Settings.Timers.Flame
+	self.Beruhast.TimersRef.FlameStart = KBM.MechTimer:Add(self.Lang.Ability.Flame[KBM.Lang], 30)
+	self.Beruhast.TimersRef.FlameStart.Enabled = self.Settings.Timers.Flame
+	
+	-- Assign Mechanics to Triggers
+	self.Beruhast.Triggers.Inferno = KBM.Trigger:Create(self.Lang.Ability.Inferno[KBM.Lang], "cast", self.Beruhast)
+	self.Beruhast.Triggers.Inferno:AddAlert(self.Beruhast.AlertsRef.Inferno)
+	self.Beruhast.Triggers.Flame = KBM.Trigger:Create(self.Lang.Ability.Flame[KBM.Lang], "cast", self.Beruhast)
+	self.Beruhast.Triggers.Flame:AddTimer(self.Beruhast.TimersRef.Flame)
 	
 	self.Beruhast.CastBar = KBM.CastBar:Add(self, self.Beruhast, true)
 end

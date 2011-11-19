@@ -38,7 +38,6 @@ function HK:Start()
 	
 	end
 	HK.Header = KBM.MainWin.Menu:CreateHeader(self.Name, self.Enabled, true)
-	HK.Header.Check:SetEnabled(false)
 end
 
 function HK.Register()

@@ -10,7 +10,7 @@ Author = "Paul Snart"
 Website = "http://www.facebook.com/pages/King-Boss-Mods/271482262893152"
 Email = "snarty@gmail.com"
 
-Version = "0.5.9"
+Version = "0.6.0"
 
 Environment = "1.6"
 
@@ -43,8 +43,8 @@ RunOnStartup = {
 	"GSB/Greenscale.lua",
 	"10_Man/Rise_of_the_Phoenix/ROTPHeader.lua",
 	"10_Man/Rise_of_the_Phoenix/Ereandorn.lua",
-	"10_Man/Rise_of_the_Phoenix/Silgen.lua",
 	"10_Man/Rise_of_the_Phoenix/Beruhast.lua",
+	"10_Man/Rise_of_the_Phoenix/Silgen.lua",
 	"10_Man/Rise_of_the_Phoenix/Arakhurn.lua",
 	"10_Man/Guilded_Prophecy/GPHeader.lua",
 	"10_Man/Guilded_Prophecy/Anrak.lua",

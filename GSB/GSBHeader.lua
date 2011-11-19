@@ -41,5 +41,5 @@ function GSB:Start()
 	
 	end
 	GSB.Header = KBM.MainWin.Menu:CreateHeader(self.Name, self.Enabled, true)
-	GSB.Header.Check:SetEnabled(false)
+	
 end

@@ -186,9 +186,9 @@ function EN.Ereandorn:Options()
 	--local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, EN.Settings.Timers.Enabled)
 	--Timers:AddCheck(EN.Lang.Flames[KBM.Lang], self.FlamesEnabled, EN.Settings.Timers.FlamesEnabled)
 	local Alerts = Options:AddHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], self.AlertsEnabled, EN.Settings.Alerts.Enabled)
-	Alerts:AddCheck("Burn move out alert (temporary name).", self.BurnAlert, EN.Settings.Alerts.Burn)
-	Alerts:AddCheck("Target Pillar alert (temporary name).", self.FuelAlert, EN.Settings.Alerts.Fuel)
-	Alerts:AddCheck("Bomb alert (temporary name).", self.BombAlert, EN.Settings.Alerts.Bomb)
+	Alerts:AddCheck("Excitable Combustion.", self.BurnAlert, EN.Settings.Alerts.Burn)
+	Alerts:AddCheck("Molten Growth.", self.FuelAlert, EN.Settings.Alerts.Fuel)
+	Alerts:AddCheck("Volcanic Eruption.", self.BombAlert, EN.Settings.Alerts.Bomb)
 	
 end
 
@@ -198,9 +198,9 @@ function EN:Start()
 	self.Ereandorn.MenuItem.Check:SetEnabled(false)
 	
 	-- Alerts
-	self.Ereandorn.AlertsRef.Burn = KBM.Alert:Create("Run away!", 5, true, false, "red")
-	self.Ereandorn.AlertsRef.Fuel = KBM.Alert:Create("Pillar", 8, true, true, "orange")
-	self.Ereandorn.AlertsRef.Bomb = KBM.Alert:Create("Bomb!", 5, true, false, "orange")
+	self.Ereandorn.AlertsRef.Burn = KBM.Alert:Create("Excitable Combustion", 5, true, false, "red")
+	self.Ereandorn.AlertsRef.Fuel = KBM.Alert:Create("Molten Growth", 8, true, true, "orange")
+	self.Ereandorn.AlertsRef.Bomb = KBM.Alert:Create("Volcanic Eruption", 5, true, false, "orange")
 		
 	-- Assign mechanics to Triggers
 	self.Ereandorn.Triggers.Burn = KBM.Trigger:Create(self.Lang.Ereandorn.Notify.Burn[KBM.Lang], "notify", self.Ereandorn)

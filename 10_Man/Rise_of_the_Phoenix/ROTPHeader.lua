@@ -42,5 +42,5 @@ function ROTP:Start()
 	end
 	KBM.MenuGroup:SetTenMan()
 	ROTP.Header = KBM.MainWin.Menu:CreateHeader(self.Name, self.Enabled, true)
-	ROTP.Header.Check:SetEnabled(false)
+	
 end

@@ -38,9 +38,10 @@ function ROS:SaveVars()
 end
 
 function ROS:Start()
+
 	function self:Enabled(bool)
 	
 	end
 	ROS.Header = KBM.MainWin.Menu:CreateHeader(self.Name, self.Enabled, true)
-	ROS.Header.Check:SetEnabled(false)
+	
 end

@@ -38,11 +38,12 @@ function GP:SaveVars()
 end
 
 function GP:Start()
+
 	function self:Enabled(bool)
 	
 	end
 	GP.Header = KBM.MainWin.Menu:CreateHeader(self.Name, self.Enabled, true)
-	GP.Header.Check:SetEnabled(false)
+	
 end
 
 function KBMGP_Register()
