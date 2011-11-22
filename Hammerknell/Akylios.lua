@@ -197,8 +197,8 @@ end
 
 function AK.PhaseThree()
 	AK.Phase = 3
-	AK.Lashers.UnitList = {}
-	AK.Stingers.UnitList = {}
+	AK.Lasher.UnitList = {}
+	AK.Stinger.UnitList = {}
 	AK.Counts.Stingers = 0
 	AK.Counts.Lashers = 0
 	print("Phase 3 starting!")
