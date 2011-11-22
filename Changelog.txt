@@ -1,12 +1,38 @@
-﻿v0.6.0
+﻿v0.6.1
+* New: Encounter phase engine.
+* New: Encounter phase monitor.
+* New: Ecnounter phase objectives list.
+* Fixed: Buff triggers were not responding.
+* Added: /kbmversion slash command (Displays current version)
+* French Translations
+** Rise of the Phoenix: Beruhast: Leaping Flame
+** Rise of the Phoenix: Beruhast: Inferno Lash
+** Rise of the Phoenix: Beruhast: Flaming Vortex
+* Hammerknell
+** Added: Akylios: Phase 2 recognition.
+** Added: Akylios: Phase 2: Wave Timer will now stop.
+** Added: Akylios: Phase 2: First Suffocating Orb timer.
+** Added: Akylios: Phase 2+: Suffocating Orb timers.
+** Added: Akylios: Phase 2+: Suffocating Orb personal screen alert.
+** Added: Inwar Darktide: Denizar and Aqualix are now tracked.
+** Added: Inwar Darktide: Encounter should trigger from Phase 1.
+** Fixed: Vladmal Prime: Ancient Flames personal screen alert.
+* Guilded Prophecy
+** Added: Anrak the Foul: 7 minute enrage timer.
+* Encounter Timer
+** Fixed: Accuracy is back once again with Time v Enrage.
+----
+v0.6.0
+* Tank-Swap Monitor.
+** Now visible to any raid member.
 * Rise of the Phoenix:
 ** Added: Beruhast: Screen alert for Inferno Lash.
 ** Added: Beruhast: Timer for Leaping Flame.
 ** Added: Beruhast: Timer for first Leaping Flame.
 ** Change: Renamed Ereandorn's alerts.
 * Options Window:
-** New: Collapsable menu headers.
-** Change: Swapped Beruhast and Silgen, to show progression flow.
+** New: Collapsible menu headers.
+** Change: Swapped Beruhast and Silgen, to show progression flow. 
 ----
 v0.5.9
 * New: Ereandorn: Added alert for Ticking Time Bomb.

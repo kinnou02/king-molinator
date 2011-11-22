@@ -17,6 +17,7 @@ KBM.MenuOptions = {
 	CastBars = {},
 	TankSwap = {},
 	Alerts = {},
+	Phases = {},
 	Main = {},
 	Enabled = true,
 	Handler = nil,
@@ -64,6 +65,23 @@ local function KBM_DefineVars(AddonID)
 				TextScale = false,
 				Enrage = true,
 				Duration = true,
+			},
+			PhaseMon = {
+				x = false,
+				y = false,
+				w = 200,
+				h = 50,
+				wScale = 1,
+				hScale = 1,
+				Enabled = true,
+				Unlocked = true,
+				Visible = true,
+				ScaleWidth = false,
+				ScaleHeight = false,
+				TextSize = 15,
+				TextScale = false,
+				Objectives = true,
+				PhaseDisplay = true,
 			},
 			MechTimer = {
 				x = false,
@@ -162,11 +180,11 @@ KBM.Lang = Inspect.System.Language()
 KBM.Language = {}
 KBM.MenuGroup = {}
 local KBM_Boss = {}
+KBM.SubBoss = {}
 KBM.BossID = {}
 KBM.Encounter = false
 KBM.HeaderList = {}
 KBM.CurrentBoss = ""
-KBM.Phase = 1
 local KBM_CurrentMod = nil
 local KBM_PlayerID = nil
 local KBM_TestIsCasting = false
@@ -295,6 +313,12 @@ KBM.Language.Options.ShowAnchor.German = "Zeige Anker (für Positionierung)."
 KBM.Language.Options.LockAnchor = KBM.Language:Add("Unlock anchor.")
 KBM.Language.Options.LockAnchor.French = "D\195\169bloquer Ancrage."
 KBM.Language.Options.LockAnchor.German = "Anker ist verschiebbar."
+-- Phase Monitor
+KBM.Language.Options.PhaseMonitor = KBM.Language:Add("Phase Monitor")
+KBM.Language.Options.PhaseEnabled = KBM.Language:Add("Enable Phase Monitor.")
+KBM.Language.Options.Phases = KBM.Language:Add("Display current Phase.")
+KBM.Language.Options.Objectives = KBM.Language:Add("Display Phase objective tracking.")
+KBM.Language.Options.Phase = KBM.Language:Add("Phase")
 -- Button Options
 KBM.Language.Options.Button = KBM.Language:Add("Options Button Visible.")
 KBM.Language.Options.Button.French = "Bouton Configurations Visible."
@@ -364,8 +388,8 @@ function KBM.MechTimer:Init()
 		end
 	end
 	self.Anchor.Text = UI.CreateFrame("Text", "Timer Info", self.Anchor)
-	self.Anchor.Text:SetText(" 00.0 Timer Anchor")
 	self.Anchor.Text:SetFontSize(KBM.Options.MechTimer.TextSize)
+	self.Anchor.Text:SetText(" 00.0 Timer Anchor")
 	self.Anchor.Text:SetPoint("CENTERLEFT", self.Anchor, "CENTERLEFT")
 	self.Anchor.Drag = KBM.AttachDragFrame(self.Anchor, function(uType) self.Anchor:Update(uType) end, "Anchor Drag", 2)
 	self.Anchor:SetVisible(KBM.Options.MechTimer.Visible)
@@ -379,6 +403,7 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 	Timer.Active = false
 	Timer.Alerts = {}
 	Timer.Timers = {}
+	Timer.Triggers = {}
 	Timer.TimeStart = nil
 	Timer.Removing = false
 	Timer.Starting = false
@@ -387,6 +412,8 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 	Timer.Enabled = true
 	Timer.Repeat = Repeat
 	Timer.Name = Name
+	Timer.Phase = 0
+	
 	function Timer:Start(CurrentTime)
 	
 		if self.Enabled then
@@ -481,12 +508,13 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 		self.CastInfo:sRemove()
 		self.TimeBar:sRemove()
 		self.Background:sRemove()
-		-- if KBM.Testing then
-			-- self.Starting = true
-			-- table.insert(KBM.MechTimer.StartTimers, self)
 		if self.Repeat then
-			self.Starting = true
-			table.insert(KBM.MechTimer.StartTimers, self)
+			if KBM.Encounter then
+				if self.Phase == KBM_CurrentMod.Phase or self.Phase == 0 then
+					self.Starting = true
+					table.insert(KBM.MechTimer.StartTimers, self)
+				end
+			end
 		end
 	end
 	
@@ -497,11 +525,19 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 	end
 	
 	function Timer:AddTimer(TimerObj, Time)
-	
+		self.Timers[Time] = {}
+		self.Timers[Time].Triggered = false
+		self.Timers[Time].TimerObj = TimerObj
 	end
 	
 	function Timer:AddTrigger(TriggerObj, Time)
+		self.Triggers[Time] = {}
+		self.Triggers[Time].Triggered = false
+		self.Triggers[Time].TriggerObj = TriggerObj
+	end
 	
+	function Timer:SetPhase(Phase)
+		Timer.Phase = Phase
 	end
 	
 	function Timer:Update(CurrentTime)
@@ -612,6 +648,7 @@ function KBM.Trigger:Init()
 		TriggerObj.Caster = nil
 		TriggerObj.Target = nil
 		TriggerObj.Queued = false
+		TriggerObj.Phase = nil
 		
 		function TriggerObj:AddTimer(TimerObj)
 			table.insert(self.Timers, TimerObj)
@@ -655,6 +692,9 @@ function KBM.Trigger:Init()
 			for i, Obj in ipairs(self.Stop) do
 				Obj:Stop()
 			end
+			if self.Phase then
+				self.Phase()
+			end
 		end
 		
 		if Type == "notify" then
@@ -677,8 +717,13 @@ function KBM.Trigger:Init()
 			end
 			self.Cast[Trigger][Unit.Name] = TriggerObj
 		elseif Type == "percent" then
-			TriggerObj.Percent = Trigger
-			self.Percent[Unit.Name] = TriggerObj
+			if not self.Percent[Unit.Mod.ID] then
+				self.Percent[Unit.Mod.ID] = {}
+			end
+			if not self.Percent[Unit.Mod.ID][Unit.Name] then
+				self.Percent[Unit.Mod.ID][Unit.Name] = {}
+			end
+			self.Percent[Unit.Mod.ID][Unit.Name][Trigger] = TriggerObj
 		elseif Type == "combat" then
 			self.Combat[Trigger] = TriggerObj
 		elseif Type == "start" then
@@ -868,9 +913,111 @@ end
 
 function KBM.PhaseMonitor:Init()
 	
-	self.TestMode = false
+	self.Anchor = UI.CreateFrame("Frame", "Phase Anchor", KBM.Context)
+	self.Anchor:SetLayer(5)
+	self.Anchor:SetWidth(KBM.Options.PhaseMon.w * KBM.Options.PhaseMon.wScale)
+	self.Anchor:SetHeight(KBM.Options.PhaseMon.h * KBM.Options.PhaseMon.hScale)
+	self.Anchor:SetBackgroundColor(0,0,0,0.33)
+	if not KBM.Options.PhaseMon.x then
+		self.Anchor:SetPoint("CENTERTOP", UIParent, "CENTERTOP")
+	else
+		self.Anchor:SetPoint("TOPLEFT", UIParent, "TOPLEFT", KBM.Options.PhaseMon.x, KBM.Options.PhaseMon.y)
+	end
+	self.Anchor.Text = UI.CreateFrame("Text", "Phase Anchor Text", self.Anchor)
+	self.Anchor.Text:SetFontSize(KBM.Options.PhaseMon.TextSize)
+	self.Anchor.Text:SetText("Phases and Objectives")
+	self.Anchor.Text:SetPoint("CENTER", self.Anchor, "CENTER")
+
+	function self.Anchor:Update(uType)
+		if uType == "end" then
+			KBM.Options.PhaseMon.x = self:GetLeft()
+			KBM.Options.PhaseMon.y = self:GetTop()
+		end
+	end
+		
+	self.Anchor.Drag = KBM.AttachDragFrame(self.Anchor, function(uType) self.Anchor:Update(uType) end, "Phase Anchor Drag", 2)
+	self.Anchor:SetVisible(KBM.Options.PhaseMon.Visible)
+	self.Anchor.Drag:SetVisible(KBM.Options.PhaseMon.Unlocked)
+
 	self.Frame = UI.CreateFrame("Frame", "Phase Monitor", KBM.Context)
+	self.Frame:SetLayer(5)
+	self.Frame:SetBackgroundColor(0,0,0,0.33)
+	self.Frame:SetPoint("LEFT", self.Anchor, "LEFT")
+	self.Frame:SetPoint("RIGHT", self.Anchor, "RIGHT")
+	self.Frame:SetPoint("TOP", self.Anchor, "TOP")
+	self.Frame:SetPoint("BOTTOM", self.Anchor, "CENTERY")
+	self.Frame.Text = UI.CreateFrame("Text", "Phase Monitor Text", self.Frame)
+	self.Frame.Text:SetText("Phase 1")
+	self.Frame.Text:SetFontSize(KBM.Options.PhaseMon.TextSize)
+	self.Frame.Text:SetPoint("CENTER", self.Frame, "CENTER")
 	
+	self.Frame:SetVisible(false)
+	
+	self.Objective = {}
+	self.Phase = {}
+	self.Phase.Object = nil
+	
+	self.Objective.Lists = {}
+	self.Objective.Lists.Death = {}
+	self.Objective.Lists.Percent = {}
+	self.Objective.Lists.Time = {}
+	self.Objective.Lists.All = {}
+	self.Objective.Lists.LastObjective = nil
+	
+	function self.Objective.Lists:Add(Object)
+		if #self.All then
+			Object.Previous = self.All[#self.All]
+		end
+		self.LastObjective = Object
+		table.insert(self.All, Object)
+	end
+	function self.Objective.Lists:Remove(Object)
+	
+	end
+	
+	function self.Phase:Create(Phase)
+		local PhaseObj = {}
+		PhaseObj.StartTime = 0
+		PhaseObj.Phase = Phase
+		PhaseObj.Objectives = {}
+		PhaseObj.LastObjective = KBM.PhaseMonitor.Frame
+		
+		function PhaseObj:Start(Time)
+			self.StartTime = math.floor(Time)
+			KBM.PhaseMonitor.Frame.Text:SetText(KBM.Language.Phase[KBM.Lang].." "..self.Phase)
+			if KBM.Options.PhaseDisplay then
+				KBM.PhaseMonitor.Frame:SetVisible(true)
+			end
+		end
+		function PhaseObj:Update(Time)
+			Time = math.floor(Time)
+		end
+		function PhaseObj.Objectives:AddDeath(UnitID, Count)
+			local DeathObj = {}
+			
+			
+			KBM.PhaseMonitor.Objectives.Lists.Death[UnitID] = DeathObj
+			KBM.PhaseMonitor.Objectives.Lists:Add(DeathObj)
+		end
+		function PhaseObj.Objectives:AddPercent(UnitID, Percent)
+			local PercentObj = {}
+			
+			KBM.PhaseMonitor.Objectives.Lists.Percent[UnitID] = PercentObj
+			KBM.PhaseMonitor.Objectives.Lists:Add(PercentObj)
+		end
+		function PhaseObj.Objectives:AddTime(Time)
+	
+		end
+		function PhaseObj.Objectives:Remove()
+		
+		end
+		
+		self.Object = PhaseObj
+		return PhaseObj
+	end
+	function self.Phase:Remove()
+	
+	end
 end
 
 function KBM.EncTimer:Init()
@@ -970,17 +1117,23 @@ end
 
 function KBM.CheckActiveBoss(uDetails, UnitID)
 
+	local BossObj = nil
 	if not KBM.BossID[UnitID] then
 		if uDetails then
 			if KBM_Boss[uDetails.name] then
-				if uDetails.level == KBM_Boss[uDetails.name].Level then
+				BossObj = KBM_Boss[uDetails.name]
+			elseif KBM.SubBoss[uDetails.name] then
+				BossObj = KBM.SubBoss[uDetails.name]
+			end
+			if BossObj then
+				if uDetails.level == BossObj.Level then
 					KBM.BossID[UnitID] = {}
 					KBM.BossID[UnitID].name = uDetails.name
 					KBM.BossID[UnitID].monitor = true
-					KBM.BossID[UnitID].Mod = KBM_Boss[uDetails.name].Mod
+					KBM.BossID[UnitID].Mod = BossObj.Mod
 					KBM.BossID[UnitID].IdleSince = false
-					if KBM_Boss[uDetails.name].TimeOut then
-						KBM.BossID[UnitID].TimeOut = KBM_Boss[uDetails.name].TimeOut
+					if BossObj.TimeOut then
+						KBM.BossID[UnitID].TimeOut = BossObj.TimeOut
 					else
 						KBM.BossID[UnitID].TimeOut = 0
 					end
@@ -989,16 +1142,20 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 							KBM.BossID[UnitID].Combat = true
 							KBM.BossID[UnitID].dead = false
 							KBM.BossID[UnitID].available = true
+							KBM.BossID[UnitID].PercentRaw = (uDetails.health/uDetails.healthMax)*100
+							KBM.BossID[UnitID].Percent = math.ceil(KBM.BossID[UnitID].PercentRaw)
+							KBM.BossID[UnitID].PercentLast = KBM.BossID[UnitID].Percent
 							if not KBM.Encounter then
 								KBM.Encounter = true
 								KBM.CurrentBoss = UnitID
 								KBM_CurrentBossName = uDetails.name
 								KBM_CurrentMod = KBM.BossID[UnitID].Mod
 								if not KBM_CurrentMod.EncounterRunning then
-									print(KBM.Language.Encounter.Start[KBM.Lang].." "..KBM_Boss[uDetails.name].Descript)
+									print(KBM.Language.Encounter.Start[KBM.Lang].." "..BossObj.Descript)
 									print(KBM.Language.Encounter.GLuck[KBM.Lang])
 									KBM.TimeElapsed = 0
-									KBM.StartTime = Inspect.Time.Real()
+									KBM.StartTime = math.floor(Inspect.Time.Real())
+									KBM_CurrentMod.Phase = 1
 									if KBM_CurrentMod.Enrage then
 										KBM.EnrageTime = KBM.StartTime + KBM_CurrentMod.Enrage
 									end
@@ -1007,7 +1164,7 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 									end
 								end
 							end
-							if KBM_Boss[uDetails.name].Mod.ID == KBM_CurrentMod.ID then
+							if BossObj.Mod.ID == KBM_CurrentMod.ID then
 								KBM.BossID[UnitID].Boss = KBM_CurrentMod:UnitHPCheck(uDetails, UnitID)
 							end
 						else
@@ -1066,6 +1223,24 @@ local function KBM_UnitHPCheck(info)
 			if KBM.BossID[tUnitID] then
 				if KBM.BossID[tUnitID].IdleSince then
 					KBM.CheckIdle(tDetails, tUnitID)
+				end
+				if tDetails then
+					KBM.BossID[tUnitID].PercentRaw = (tDetails.health/tDetails.healthMax)*100
+					KBM.BossID[tUnitID].Percent = math.ceil(KBM.BossID[tUnitID].PercentRaw)
+					if KBM.BossID[tUnitID].Percent ~= KBM.BossID[tUnitID].PercentLast then
+						if KBM.Debug then
+							print(KBM.BossID[tUnitID].Percent)
+						end
+						if KBM.Trigger.Percent[KBM_CurrentMod.ID] then
+							if KBM.Trigger.Percent[KBM_CurrentMod.ID][tDetails.name] then
+								if KBM.Trigger.Percent[KBM_CurrentMod.ID][tDetails.name][KBM.BossID[tUnitID].Percent] then
+									TriggerObj = KBM.Trigger.Percent[KBM_CurrentMod.ID][tDetails.name][KBM.BossID[tUnitID].Percent]
+									KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
+								end
+							end
+						end
+						KBM.BossID[tUnitID].PercentLast = KBM.BossID[tUnitID].Percent
+					end
 				end
 			else
 				if tDetails then
@@ -1600,6 +1775,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 	CastBarObj.LastCast = nil
 	CastBarObj.Enabled = Enabled
 	CastBarObj.Mod = Mod
+	CastBarObj.Active = false
 	function CastBarObj:Position(uType)
 		if uType == "end" then
 			self.Boss.Settings.CastBar.x = self.Frame.GetLeft() 
@@ -1637,6 +1813,8 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 		if Boss.PinCastBar then
 			Boss:PinCastBar()
 		end
+		self.Frame:SetVisible(false)
+		self.Active = true
 	end
 	function CastBarObj:Update()
 		bDetails = Inspect.Unit.Castbar(self.UnitID)
@@ -1697,6 +1875,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 		self.Progress:sRemove()
 		self.Frame:sRemove()
 		self.Drag:Remove()
+		self.Active = false
 	end
 	self[Boss.Name] = CastBarObj
 	return self[Boss.Name]
@@ -1749,14 +1928,13 @@ end
 
 function KBM.ConvertTime(Time)
 
-	Time = math.floor(Time)
 	local TimeString = "00"
 	local TimeSeconds = 0
 	local TimeMinutes = 0
 	local TimeHours = 0
 	if Time >= 60 then
 		TimeMinutes = math.floor(Time / 60)
-		TimeSeconds = Time - (TimeMinutes * 60)
+		TimeSeconds = math.floor(Time) - (TimeMinutes * 60)
 		if TimeMinutes >= 60 then
 			TimeHours = math.floor(TimeMinutes / 60)
 			TimeMinutes = TimeMinutes - (TimeHours * 60)
@@ -1824,10 +2002,10 @@ function KBM:Timer()
 			KBM_CurrentMod:Timer(current, diff)
 		end
 		if diff >= 1 then
-			self.TimeElapsed = current - self.StartTime
+			self.TimeElapsed = math.floor(current) - self.StartTime
 			if not KBM.Testing then
 				if KBM_CurrentMod.Enrage then
-					self.EnrageTimer = self.EnrageTime - current
+					self.EnrageTimer = self.EnrageTime - math.floor(current)
 				end
 				if self.Options.EncTimer.Enabled then
 					self.EncTimer:Update(current)
@@ -1902,25 +2080,6 @@ local function KBM_CastBar(units)
 	
 end
 
-function KBM:TimeToHours(Time)
-
-	self.TimeVisual.String = "00"
-	if Time >= 60 then
-		self.TimeVisual.Minutes = math.floor(Time / 60)
-		self.TimeVisual.Seconds = Time - (self.TimeVisual.Minutes * 60)
-		if self.TimeVisual.Minutes >= 60 then
-			self.TimeVisual.Hours = math.floor(self.TimeVisual.Minutes / 60)
-			self.TimeVisual.Minutes = self.TimeVisual.Minutes - math.floor(self.TimeVisual.Hours * 60)
-		else
-			self.TimeVisual.String = string.format("%02d:%02d", self.TimeVisual.Minutes, self.TimeVisual.Seconds)
-		end
-	else
-		self.TimeVisual.Seconds = Time
-		self.TimeVisual.String = string.format("%02d", self.TimeVisual.Seconds)
-	end
-
-end
-
 local function KM_ToggleEnabled(result)
 	
 end
@@ -1977,6 +2136,7 @@ end
 local function KBM_Help()
 	print("King Boss Mods in game slash commands")
 	print("/kbmreset -- Resets the current encounter.")
+	print("/kbmversion -- Displays the current version.")
 	print("/kbmoptions -- Toggles the GUI Options screen.")
 	print("/kbmhelp -- Displays what you're reading now :)")
 end
@@ -2041,7 +2201,7 @@ function KBM:BuffMonitor(unitID, Buffs, Type)
 		for buffID, bool in pairs(Buffs) do
 			bDetails = Inspect.Buff.Detail(unitID, buffID)
 			if bDetails then
-				if Type == "added" then
+				if Type == "new" then
 					if KBM.Trigger.Buff[bDetails.name] then
 						TriggerObj = KBM.Trigger.Buff[bDetails.name]
 						KBM.Trigger.Queue:Add(TriggerObj, nil, unitID, bDetails.remaining)
@@ -2050,6 +2210,41 @@ function KBM:BuffMonitor(unitID, Buffs, Type)
 			end
 		end
 	end
+	
+end
+
+-- Phase Monitor options.
+function KBM.MenuOptions.Phases:Options()
+	
+	-- Phase Monitor Callbacks.
+	function self:Enabled(bool)
+		KBM.Options.PhaseMon.Enabled = bool
+	end
+	function self:Visible(bool)
+		KBM.Options.PhaseMon.Visible = bool
+		KBM.PhaseMonitor.Anchor:SetVisible(bool)
+	end
+	function self:Unlocked(bool)
+		KBM.Options.PhaseMon.Unlocked = bool
+		KBM.PhaseMonitor.Anchor.Drag:SetVisible(bool)
+	end
+	function self:PhaseDisplay(bool)
+		KBM.Options.PhaseMon.PhaseDisplay = bool
+	end
+	function self:Objectives(bool)
+		KBM.Options.PhaseMon.Objectives = bool
+	end
+
+	Options = self.MenuItem.Options
+	Options:SetTitle()
+	
+	-- Timer Options
+	self.Menu = {}
+	self.Menu.PhaseMon = Options:AddHeader(KBM.Language.Options.PhaseEnabled[KBM.Lang], self.Enabled, KBM.Options.PhaseMon.Enabled)
+	self.Menu.PhaseMon:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.Visible, KBM.Options.PhaseMon.Visible)
+	self.Menu.PhaseMon:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.Unlocked, KBM.Options.PhaseMon.Unlocked)
+	self.Menu.PhaseMon:AddCheck(KBM.Language.Options.Phases[KBM.Lang], self.PhaseDisplay, KBM.Options.PhaseMon.PhaseDisplay)
+	self.Menu.PhaseMon:AddCheck(KBM.Language.Options.Objectives[KBM.Lang], self.Objectives, KBM.Options.PhaseMon.Objectives)
 	
 end
 
@@ -2159,6 +2354,11 @@ function KBM.MenuOptions.TankSwap:Close()
 			KBM.TankSwap.Anchor:SetVisible(KBM.Options.TankSwap.Visible)
 		end
 	end
+end
+
+local function KBM_Version()
+	print("You are running:")
+	print("King Boss Mods v"..AddonData.toc.Version)
 end
 
 -- Tank Swap Menu Handler
@@ -2378,6 +2578,14 @@ function KBM.ApplySettings()
 	KBM.TankSwap.Enabled = KBM.Options.TankSwap.Enabled
 end
 
+function KBM_Debug()
+	if KBM.Debug then
+		KBM.Debug = false
+	else
+		KBM.Debug = true
+	end
+end
+
 local function KBM_Start()
 	KBM.Button:Init()
 	KBM.TankSwap:Init()
@@ -2385,11 +2593,13 @@ local function KBM_Start()
 	KBM.MechTimer:Init()
 	KBM.CastBar:Init()
 	KBM.EncTimer:Init()
+--	KBM.PhaseMonitor:Init()
 	KBM.Trigger:Init()
 	KBM.InitOptions()
 	local Header = KBM.MainWin.Menu:CreateHeader("Options")
 	KBM.MenuOptions.Main.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.Settings[KBM.Lang], KBM.MenuOptions.Main, nil, Header)
 	KBM.MenuOptions.Timers.MenuItem = KBM.MainWin.Menu:CreateEncounter("Timers", KBM.MenuOptions.Timers, true, Header)
+--	KBM.MenuOptions.Phases.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.PhaseMonitor[KBM.Lang], KBM.MenuOptions.Phases, true, Header) 
 	KBM.MenuOptions.CastBars.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.Castbar[KBM.Lang], KBM.MenuOptions.CastBars, true, Header)
 	KBM.MenuOptions.Alerts.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.Alert[KBM.Lang], KBM.MenuOptions.Alerts, true, Header)
 	KBM.MenuOptions.TankSwap.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.TankSwap[KBM.Lang], KBM.MenuOptions.TankSwap, true, Header)
@@ -2409,9 +2619,10 @@ local function KBM_Start()
 	table.insert(Event.SafesRaidManager.Group.Combat.End, {KBM.RaidCombatLeave, "KingMolinator", "Raid Combat Leave"})
 	table.insert(Event.SafesRaidManager.Group.Combat.Start, {KBM.RaidCombatEnter, "KingMolinator", "Raid Combat Enter"})
 	table.insert(Event.Unit.Castbar, {KBM_CastBar, "KingMolinator", "Cast Bar Event"})
-	table.insert(Command.Slash.Register("kbmhelp"), {KBM_Help, "KingMolinator", "KBM Hekp"})
-	table.insert(Command.Slash.Register("kbmautoreset"), {KBM_AutoReset, "KingMolinator", "KBM Auto Reset Toggle"})
+	table.insert(Command.Slash.Register("kbmhelp"), {KBM_Help, "KingMolinator", "KBM Help"})
+	table.insert(Command.Slash.Register("kbmversion"), {KBM_Version, "KingMolinator", "KBM Version Info"})
 	table.insert(Command.Slash.Register("kbmoptions"), {KBM_Options, "KingMolinator", "KBM Open Options"})
+	table.insert(Command.Slash.Register("kbmdebug"), {KBM_Debug, "KingMolinator", "KBM Debug on/off"})
 	print("Welcome to King Boss Mods v"..AddonData.toc.Version)
 	print("/kbmhelp for a list of commands.")
 	print("/kbmoptions for options.")
@@ -2427,7 +2638,7 @@ local function KBM_WaitReady(unitID)
 		Mod:Start(KBM_MainWin)
 	end
 	KBM.ApplySettings()
-	
+		
 --	KBM.MenuGroup:SetMaster()
 --	KBM.MenuGroup:SetExpertTwo()
 --	KBM.MenuGroup:SetExpertOne()

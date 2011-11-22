@@ -21,8 +21,7 @@ local MX = {
 	},
 	Instance = HK.Name,
 	HasPhases = true,
-	PhaseType = "percentage",
-	PhaseList = {},
+	Phase = 1,
 	Timers = {},
 	Lang = {},
 	TankSwap = true,
@@ -142,6 +141,21 @@ function MX:Death(UnitID)
 	return false
 end
 
+function MX.PhaseTwo()
+	print("Phase 2 starting!")
+	MX.Phase = 2
+end
+
+function MX.PhaseThree()
+	print("Phase 3 starting!")
+	MX.Phase = 3
+end
+
+function MX.PhaseFour()
+	print("Phase 4 starting!")
+	MX.Phase = 4
+end
+
 function MX:UnitHPCheck(unitDetails, unitID)
 	
 	if unitDetails and unitID then
@@ -154,6 +168,7 @@ function MX:UnitHPCheck(unitDetails, unitID)
 					self.TimeElapsed = 0
 					self.Murd.Dead = false
 					self.Murd.Casting = false
+					self.Phase = 1
 					self.Murd.CastBar:Create(unitID)
 					KBM.TankSwap:Start(self.Lang.Debuff.Mangled[KBM.Lang])
 				end
@@ -169,6 +184,7 @@ function MX:Reset()
 	self.EncounterRunning = false
 	self.Murd.UnitID = nil
 	self.Murd.CastBar:Remove()
+	self.Phase = 1
 end
 
 function MX:Timer()
@@ -251,6 +267,12 @@ function MX:Start()
 	self.Murd.Triggers.Trauma = KBM.Trigger:Create(self.Lang.Trauma[KBM.Lang], "cast", self.Murd)
 	self.Murd.Triggers.Trauma:AddTimer(self.Murd.TimersRef.Trauma)
 	self.Murd.Triggers.Trauma:AddAlert(self.Murd.AlertsRef.Trauma)
+	self.Murd.Triggers.PhaseTwo = KBM.Trigger:Create(75, "percent", self.Murd)
+	self.Murd.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
+	self.Murd.Triggers.PhaseThree = KBM.Trigger:Create(50, "percent", self.Murd)
+	self.Murd.Triggers.PhaseThree:AddPhase(self.PhaseThree)
+	self.Murd.Triggers.PhaseFour = KBM.Trigger:Create(25, "percent", self.Murd)
+	self.Murd.Triggers.PhaseFour:AddPhase(self.PhaseFour)
 	
 	self.Murd.CastBar = KBM.CastBar:Add(self, self.Murd, true)
 end

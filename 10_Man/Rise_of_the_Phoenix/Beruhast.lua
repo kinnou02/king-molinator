@@ -50,8 +50,11 @@ BT.Lang.Beruhast = KBM.Language:Add(BT.Beruhast.Name)
 -- Ability Dictionary
 BT.Lang.Ability = {}
 BT.Lang.Ability.Inferno = KBM.Language:Add("Inferno Lash")
+BT.Lang.Ability.Inferno.French = "Fouet des limbes"
 BT.Lang.Ability.Flame = KBM.Language:Add("Leaping Flame")
+BT.Lang.Ability.Flame.French = "Flamme bondissante"
 BT.Lang.Ability.Vortex = KBM.Language:Add("Flaming Vortex")
+BT.Lang.Ability.Vortex.French = "Embrasement"
 
 BT.Beruhast.Name = BT.Lang.Beruhast[KBM.Lang]
 

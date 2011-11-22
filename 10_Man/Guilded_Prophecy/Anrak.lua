@@ -23,6 +23,7 @@ local AF = {
 	PhaseList = {},
 	Timers = {},
 	Lang = {},
+	Enrage = 60 * 7,
 	ID = "Anrak",
 	}
 
