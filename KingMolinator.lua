@@ -12,6 +12,16 @@ KBM.ModList = {}
 KBM.Testing = false
 KBM.Debug = false
 KBM.TestFilters = {}
+KBM.Idle = {
+	Until = 0,
+	Duration = 2,
+	Wait = false,
+	Combat = {
+		Until = 0,
+		Duration = 2,
+		Wait = false,
+	}
+}
 KBM.MenuOptions = {
 	Timers = {},
 	CastBars = {},
@@ -29,7 +39,8 @@ KBM.MenuOptions = {
 local function KBM_DefineVars(AddonID)
 	if AddonID == "KingMolinator" then
 		KBM.Options = {
-			AutoReset = true,
+			Enabled = true,
+			Debug = false,
 			Frame = {
 				x = false,
 				y = false,
@@ -139,6 +150,7 @@ local function KBM_DefineVars(AddonID)
 end
 
 local function KBM_LoadVars(AddonID)
+
 	if AddonID == "KingMolinator" then
 		if type(KBM_GlobalOptions) == "table" then
 			for Setting, Value in pairs(KBM_GlobalOptions) do
@@ -160,16 +172,20 @@ local function KBM_LoadVars(AddonID)
 		for _, Mod in ipairs(KBM.ModList) do
 			Mod:LoadVars()
 		end
+		KBM.Debug = KBM.Options.Debug
 	end
+	
 end
 
 local function KBM_SaveVars(AddonID)
+
 	if AddonID == "KingMolinator" then
 		KBM_GlobalOptions = KBM.Options
 		for _, Mod in ipairs(KBM.ModList) do
 			Mod:SaveVars()
 		end
 	end
+	
 end
 
 function KBM.ToAbilityID(num)
@@ -239,6 +255,7 @@ KBM.Trigger = {}
 KBM.Alert = {}
 
 function KBM.Language:Add(Phrase)
+
 	local SetPhrase = {}
 	SetPhrase.English = Phrase
 	SetPhrase.French = Phrase
@@ -253,6 +270,7 @@ function KBM.Language:Add(Phrase)
 	end
 	KBM.Language[Phrase] = SetPhrase
 	return KBM.Language[Phrase]
+	
 end
 
 -- Main Addon Dictionary
@@ -288,9 +306,10 @@ KBM.Language.Options.CastbarEnabled.French = "Barres-cast activ\195\169."
 KBM.Language.Options.CastbarEnabled.German = "Zauberbalken anzeigen."
 -- Timer Options
 KBM.Language.Options.EncTimers = KBM.Language:Add("Encounter Timers enabled.")
+KBM.Language.Options.EncTimers.German = "Boss Timer anzeigen."
 KBM.Language.Options.MechanicTimers = KBM.Language:Add("Mechanic Timers enabled.")
 KBM.Language.Options.MechanicTimers.French = "Timers de M\195\169canisme."
-KBM.Language.Options.MechanicTimers.German = "Mechanik Timers."
+KBM.Language.Options.MechanicTimers.German = "Mechanik Timer."
 KBM.Language.Options.TimersEnabled = KBM.Language:Add("Timers enabled.")
 KBM.Language.Options.TimersEnabled.French = "Timers activ\195\169."
 KBM.Language.Options.TimersEnabled.German = "Timer anzeigen."
@@ -348,6 +367,7 @@ KBM.Language.Options.AlertText = KBM.Language:Add("Alert warning text enabled.")
 KBM.Language.Options.AlertText.German = "Alarmierungs-Text aktiviert."
 KBM.Language.Options.AlertText.French = "Texte Avertissement Alerte activ\195\169 ."
 -- Misc.
+KBM.Language.Options.Enabled = KBM.Language:Add("Enable King Boss Mods v"..AddonData.toc.Version)
 KBM.Language.Options.Settings = KBM.Language:Add("Settings")
 KBM.Language.Options.Settings.French = "Configurations"
 KBM.Language.Options.Settings.German = "Einstellungen"
@@ -1117,178 +1137,187 @@ end
 
 function KBM.CheckActiveBoss(uDetails, UnitID)
 
-	local BossObj = nil
-	if not KBM.BossID[UnitID] then
-		if uDetails then
-			if KBM_Boss[uDetails.name] then
-				BossObj = KBM_Boss[uDetails.name]
-			elseif KBM.SubBoss[uDetails.name] then
-				BossObj = KBM.SubBoss[uDetails.name]
-			end
-			if BossObj then
-				if uDetails.level == BossObj.Level then
-					KBM.BossID[UnitID] = {}
-					KBM.BossID[UnitID].name = uDetails.name
-					KBM.BossID[UnitID].monitor = true
-					KBM.BossID[UnitID].Mod = BossObj.Mod
-					KBM.BossID[UnitID].IdleSince = false
-					if BossObj.TimeOut then
-						KBM.BossID[UnitID].TimeOut = BossObj.TimeOut
-					else
-						KBM.BossID[UnitID].TimeOut = 0
+	current = Inspect.Time.Real()
+	if KBM.Options.Enabled then
+		if not KBM.Idle.Wait or (KBM.Idle.Wait and KBM.Idle.Until < current) then
+			local BossObj = nil
+			KBM.Idle.Wait = false
+			if not KBM.BossID[UnitID] then
+				if uDetails then
+					if KBM_Boss[uDetails.name] then
+						BossObj = KBM_Boss[uDetails.name]
+					elseif KBM.SubBoss[uDetails.name] then
+						BossObj = KBM.SubBoss[uDetails.name]
 					end
-					if uDetails.health > 0 then
-						if uDetails.combat then
-							KBM.BossID[UnitID].Combat = true
-							KBM.BossID[UnitID].dead = false
-							KBM.BossID[UnitID].available = true
-							KBM.BossID[UnitID].PercentRaw = (uDetails.health/uDetails.healthMax)*100
-							KBM.BossID[UnitID].Percent = math.ceil(KBM.BossID[UnitID].PercentRaw)
-							KBM.BossID[UnitID].PercentLast = KBM.BossID[UnitID].Percent
-							if not KBM.Encounter then
-								KBM.Encounter = true
-								KBM.CurrentBoss = UnitID
-								KBM_CurrentBossName = uDetails.name
-								KBM_CurrentMod = KBM.BossID[UnitID].Mod
-								if not KBM_CurrentMod.EncounterRunning then
-									print(KBM.Language.Encounter.Start[KBM.Lang].." "..BossObj.Descript)
-									print(KBM.Language.Encounter.GLuck[KBM.Lang])
-									KBM.TimeElapsed = 0
-									KBM.StartTime = math.floor(Inspect.Time.Real())
-									KBM_CurrentMod.Phase = 1
-									if KBM_CurrentMod.Enrage then
-										KBM.EnrageTime = KBM.StartTime + KBM_CurrentMod.Enrage
-									end
-									if KBM.Options.EncTimer.Enabled then
-										KBM.EncTimer:Start(KBM.StartTime)
-									end
-								end
-							end
-							if BossObj.Mod.ID == KBM_CurrentMod.ID then
-								KBM.BossID[UnitID].Boss = KBM_CurrentMod:UnitHPCheck(uDetails, UnitID)
-							end
-						else
-							KBM.BossID[UnitID] = nil
+					if BossObj then
+						if KBM.Debug then
+							print("Boss found Checking")
 						end
-					else
+						if not BossObj.Ignore and uDetails.combat then
+							if KBM.Debug then
+								print("Boss matched checking encounter start")
+							end
+							if uDetails.level == BossObj.Level then
+								KBM.BossID[UnitID] = {}
+								KBM.BossID[UnitID].name = uDetails.name
+								KBM.BossID[UnitID].monitor = true
+								KBM.BossID[UnitID].Mod = BossObj.Mod
+								KBM.BossID[UnitID].IdleSince = false
+								if uDetails.health > 0 then
+									if KBM.Debug then
+										print("Boss is alive and in combat, activating.")
+									end
+									KBM.BossID[UnitID].Combat = true
+									KBM.BossID[UnitID].dead = false
+									KBM.BossID[UnitID].available = true
+									KBM.BossID[UnitID].PercentRaw = (uDetails.health/uDetails.healthMax)*100
+									KBM.BossID[UnitID].Percent = math.ceil(KBM.BossID[UnitID].PercentRaw)
+									KBM.BossID[UnitID].PercentLast = KBM.BossID[UnitID].Percent
+									if not KBM.Encounter then
+										if KBM.Debug then
+											print("New encounter, starting")
+										end
+										KBM.Encounter = true
+										KBM.CurrentBoss = UnitID
+										KBM_CurrentBossName = uDetails.name
+										KBM_CurrentMod = KBM.BossID[UnitID].Mod
+										if not KBM_CurrentMod.EncounterRunning then
+											print(KBM.Language.Encounter.Start[KBM.Lang].." "..BossObj.Descript)
+											print(KBM.Language.Encounter.GLuck[KBM.Lang])
+											KBM.TimeElapsed = 0
+											KBM.StartTime = math.floor(current)
+											KBM_CurrentMod.Phase = 1
+											if KBM_CurrentMod.Enrage then
+												KBM.EnrageTime = KBM.StartTime + KBM_CurrentMod.Enrage
+											end
+											if KBM.Options.EncTimer.Enabled then
+												KBM.EncTimer:Start(KBM.StartTime)
+											end
+										end
+									end
+									if BossObj.Mod.ID == KBM_CurrentMod.ID then
+										KBM.BossID[UnitID].Boss = KBM_CurrentMod:UnitHPCheck(uDetails, UnitID)
+									end
+								else
+									KBM.BossID[UnitID].Combat = false
+									KBM.BossID[UnitID].dead = true
+									KBM.BossID[UnitID].available = true
+								end					
+							end
+						end
+					end
+				end
+			else
+				if uDetails then
+					if uDetails.health == 0 then
 						KBM.BossID[UnitID].Combat = false
-						KBM.BossID[UnitID].dead = true
 						KBM.BossID[UnitID].available = true
-					end					
+						if not KBM.BossID[UnitID].dead then
+							KBM.BossID[UnitID].dead = true
+						end
+					end
 				end
 			end
-		end
-	else
-		KBM.CheckIdle(uDetails, UnitID)
-	end
-	
-end
-
-function KBM.CheckIdle(uDetails, UnitID)
-
-	if not KBM.BossID[UnitID].dead then
-		if KBM.BossID[UnitID].IdleSince then
-			if uDetails then
-				KBM_CurrentMod:UnitHPCheck(uDetails, UnitID)
-				KBM.BossID[UnitID].IdleSince = false
-				KBM.BossID[UnitID].available = true
-			else
-				KBM.BossID[UnitID].IdleSince = Inspect.Time.Real()
+		else
+			if KBM.Debug then
+				print("Encounter idle wait, skipping start.")
+			end
+			if KBM.Idle.Until < current then
+				KBM.Idle.Wait = false
 			end
 		end
 	end
 	
 end
 
-local function KBM_CombatEnter(UnitID)
-	if not KBM.Encounter then
-		KBM.CheckActiveBoss(Inspect.Unit.Detail(UnitID), UnitID)
+
+function KBM.CombatEnter(UnitID)
+
+	if KBM.Options.Enabled then
+		uDetails = Inspect.Unit.Detail(UnitID)
+		if uDetails then
+			if not uDetails.player then
+				KBM.CheckActiveBoss(uDetails, UnitID)
+			end
+		end
 	end
+	
 end
 
 function KBM.CombatLeave(UnitID)
-
+	
 end
 
 local function KBM_UnitHPCheck(info)
 
 	-- Damage Based Events
 	--
-	local tUnitID = info.target
-	local cUnitID = info.caster
-	local tDetails = Inspect.Unit.Detail(tUnitID)
-	local cDetails = Inspect.Unit.Detail(cUnitID)
-	if KBM.Encounter then
-		if tUnitID then
-			if KBM.BossID[tUnitID] then
-				if KBM.BossID[tUnitID].IdleSince then
-					KBM.CheckIdle(tDetails, tUnitID)
-				end
-				if tDetails then
-					KBM.BossID[tUnitID].PercentRaw = (tDetails.health/tDetails.healthMax)*100
-					KBM.BossID[tUnitID].Percent = math.ceil(KBM.BossID[tUnitID].PercentRaw)
-					if KBM.BossID[tUnitID].Percent ~= KBM.BossID[tUnitID].PercentLast then
-						if KBM.Debug then
-							print(KBM.BossID[tUnitID].Percent)
-						end
-						if KBM.Trigger.Percent[KBM_CurrentMod.ID] then
-							if KBM.Trigger.Percent[KBM_CurrentMod.ID][tDetails.name] then
-								if KBM.Trigger.Percent[KBM_CurrentMod.ID][tDetails.name][KBM.BossID[tUnitID].Percent] then
-									TriggerObj = KBM.Trigger.Percent[KBM_CurrentMod.ID][tDetails.name][KBM.BossID[tUnitID].Percent]
-									KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
+	if KBM.Options.Enabled then
+		local tUnitID = info.target
+		local tDetails = Inspect.Unit.Detail(tUnitID)
+		local cUnitID = info.caster
+		local cDetails = Inspect.Unit.Detail(cUnitID)
+		if KBM.Encounter then
+			if tUnitID then
+				if KBM.BossID[tUnitID] then
+					if tDetails then
+						KBM.BossID[tUnitID].PercentRaw = (tDetails.health/tDetails.healthMax)*100
+						KBM.BossID[tUnitID].Percent = math.ceil(KBM.BossID[tUnitID].PercentRaw)
+						if KBM.BossID[tUnitID].Percent ~= KBM.BossID[tUnitID].PercentLast then
+							if KBM.Trigger.Percent[KBM_CurrentMod.ID] then
+								if KBM.Trigger.Percent[KBM_CurrentMod.ID][tDetails.name] then
+									if KBM.Trigger.Percent[KBM_CurrentMod.ID][tDetails.name][KBM.BossID[tUnitID].Percent] then
+										TriggerObj = KBM.Trigger.Percent[KBM_CurrentMod.ID][tDetails.name][KBM.BossID[tUnitID].Percent]
+										KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
+									end
 								end
 							end
+							KBM.BossID[tUnitID].PercentLast = KBM.BossID[tUnitID].Percent
 						end
-						KBM.BossID[tUnitID].PercentLast = KBM.BossID[tUnitID].Percent
 					end
-				end
-			else
-				if tDetails then
-					if not tDetails.player then
-						KBM.CheckActiveBoss(tDetails, tUnitID)
-					end
-				end
-			end
-		end
-		if cUnitID then
-			if KBM.BossID[cUnitID] then
-				if KBM.BossID[cUnitID].IdleSince then
-					KBM.CheckIdle(cDetails, cUnitID)
-				end
-			else
-				if cDetails then
-					if not cDetails.player then
-						KBM.CheckActiveBoss(cDetails, cUnitID)
+				else
+					if tDetails then
+						if not tDetails.player then
+							KBM.CheckActiveBoss(tDetails, tUnitID)
+						end
 					end
 				end
 			end
-		end
-		if KBM_CurrentMod then
-			if info.abilityName then
-				if KBM.Trigger.Damage[info.abilityName] then
-					TriggerObj = KBM.Trigger.Damage[info.abilityName]
-					KBM.Trigger.Queue:Add(TriggerObj, cUnitID, tUnitID)
+		else
+			if tDetails then
+				if not tDetails.player then
+					if tDetails.combat then
+						if tDetails.health > 0 then
+							KBM.CheckActiveBoss(tDetails, tUnitID)
+						end
+					end
 				end
 			end
-		end
-	else
-		if tDetails then
-			if not tDetails.player then
-				KBM.CheckActiveBoss(tDetails, tUnitID)
-			end
-		end
-		if cDetails then
-			if not cDetails.player then
-				KBM.CheckActiveBoss(cDetails, cUnitID)
+			if cDetails then
+				if not cDetails.player then
+					if cDetails.combat then
+						if cDetails.health > 0 then
+							KBM.CheckActiveBoss(cDetails, cUnitID)
+						end
+					end
+				end
 			end
 		end
 	end
+	
 end
 
 local function KBM_UnitAvailable(units)
 
-	for UnitID, Specifier in pairs(units) do
-		KBM.CheckActiveBoss(Inspect.Unit.Detail(UnitID), UnitID)
+	if KBM.Encounter then
+		for UnitID, Specifier in pairs(units) do
+			uDetails = Inspect.Unit.Detail(UnitID)
+			if uDetails then
+				if not uDetails.player then
+					KBM.CheckActiveBoss(uDetails, UnitID)
+				end
+			end
+		end
 	end
 	
 end
@@ -1350,6 +1379,7 @@ function KBM.AttachDragFrame(parent, hook, name, layer)
 end
 
 function KBM.TankSwap:Init()
+
 	self.Tanks = {}
 	self.TankCount = 0
 	self.Active = false
@@ -1538,6 +1568,7 @@ function KBM.TankSwap:Init()
 		self.Active = false
 		self.Test = false
 	end
+	
 end
 
 function KBM.Alert:Init()
@@ -1886,6 +1917,8 @@ local function KBM_Reset()
 
 	if KBM.Encounter then
 		if KBM_CurrentMod then
+			KBM.Idle.Wait = true
+			KBM.Idle.Until = Inspect.Time.Real() + KBM.Idle.Duration
 			KBM.Encounter = false
 			KBM_CurrentMod:Reset()
 			KBM_CurrentMod = nil
@@ -1919,6 +1952,7 @@ local function KBM_Reset()
 				KBM.MechTimer.StartTimers = {}
 			end
 			KBM.Trigger.Queue:Remove()
+			KBM.Idle.Combat.Wait = false
 		end
 	else
 		print("No encounter to reset.")
@@ -1949,44 +1983,48 @@ function KBM.ConvertTime(Time)
 	
 end
 
-function KBM:CheckBossStates(current)
+function KBM:RaidCombatEnter()
 
-	-- for UnitID, BossData in pairs(self.BossID) do
-		-- if not BossData.available then
-			-- if BossData.IdleSince then
-				-- if BossData.IdleSince + BossData.TimeOut <= current then
-					-- if KBM_CurrentMod:RemoveUnits(UnitID) then
-						-- print(KBM.Language.Encounter.Wipe[KBM.Lang])
-						-- print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(BossData.IdleSince - KBM.StartTime))
-						-- KBM_Reset()
-						-- break
-					-- end			
-				-- end
-			-- end
-		-- end
-	-- end
+	if KBM.Debug then
+		print("Raid has entered combat")
+	end
+	if KBM.Idle.Combat.Wait then
+		KBM.Idle.Combat.Wait = false
+	end
 	
 end
 
-function KBM:RaidCombatEnter()
-	--print("Raid has entered combat")
+function KBM.WipeIt()
+
+	KBM.Idle.Combat.Wait = false
+	if KBM.Encounter then
+		KBM.TimeElapsed = KBM.TimeElapsed - KBM.Idle.Combat.Duration
+		print(KBM.Language.Encounter.Wipe[KBM.Lang])
+		print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
+		KBM_Reset()
+	end
+	
 end
 
 function KBM:RaidCombatLeave()
-	--print("Raid has left combat")
-	if KBM.Encounter then
-		local Dead = 0
-		local Total = 0
-		for BossID, BossObj in pairs(KBM.BossID) do
-			if BossObj.dead then
-				Dead = Dead + 1
+	if KBM.Debug then
+		print("Raid has left combat")
+	end
+	if KBM.Options.Enabled then
+		if KBM.Encounter then
+			local Dead = 0
+			local Total = 0
+			for BossID, BossObj in pairs(KBM.BossID) do
+				if BossObj.dead then
+					Dead = Dead + 1
+				end
+				Total = Total + 1
 			end
-			Total = Total + 1
-		end
-		if Dead ~= Total then
-			print(KBM.Language.Encounter.Wipe[KBM.Lang])
-			print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
-			KBM_Reset()
+			if Dead ~= Total then
+				print("Possible Wipe, waiting raid out of combat")
+				KBM.Idle.Combat.Wait = true
+				KBM.Idle.Combat.Until = Inspect.Time.Real() + KBM.Idle.Combat.Duration
+			end
 		end
 	end
 	
@@ -1994,89 +2032,86 @@ end
 
 function KBM:Timer()
 	
-	if KBM.Encounter then
-		local current = Inspect.Time.Real()
-		local diff = (current - self.HeldTime)
-		local udiff = (current - self.UpdateTime)
-		if KBM_CurrentMod then
-			KBM_CurrentMod:Timer(current, diff)
-		end
-		if diff >= 1 then
-			self.TimeElapsed = math.floor(current) - self.StartTime
-			if not KBM.Testing then
-				if KBM_CurrentMod.Enrage then
-					self.EnrageTimer = self.EnrageTime - math.floor(current)
+	if KBM.Options.Enabled then
+		if KBM.Encounter then
+			local current = Inspect.Time.Real()
+			local diff = (current - self.HeldTime)
+			local udiff = (current - self.UpdateTime)
+			if KBM_CurrentMod then
+				KBM_CurrentMod:Timer(current, diff)
+			end
+			if diff >= 1 then
+				self.TimeElapsed = math.floor(current) - self.StartTime
+				if not KBM.Testing then
+					if KBM_CurrentMod.Enrage then
+						self.EnrageTimer = self.EnrageTime - math.floor(current)
+					end
+					if self.Options.EncTimer.Enabled then
+						self.EncTimer:Update(current)
+					end
 				end
-				if self.Options.EncTimer.Enabled then
-					self.EncTimer:Update(current)
+				self.HeldTime = current - (diff - math.floor(diff))
+				self.UpdateTime = current
+			end
+			if udiff >= 0.05 then
+				for UnitID, CastCheck in pairs(KBM.CastBar.ActiveCastBars) do
+					CastCheck:Update()
+				end
+				if #self.MechTimer.ActiveTimers > 0 then
+					for i, Timer in ipairs(self.MechTimer.ActiveTimers) do
+						Timer:Update(current)
+					end
+				end
+				self.UpdateTime = current
+				if not KBM.TankSwap.Test then
+					if KBM.TankSwap.Active then
+						KBM.TankSwap:Update()
+					end
 				end
 			end
-			self.HeldTime = current - (diff - math.floor(diff))
-			self.UpdateTime = current
-			self:CheckBossStates(current)			
-		end
-		if udiff >= 0.05 then
-			for UnitID, CastCheck in pairs(KBM.CastBar.ActiveCastBars) do
-				CastCheck:Update()
+			if self.Alert.Current then
+				self.Alert:Update(current)
 			end
-			if #self.MechTimer.ActiveTimers > 0 then
-				for i, Timer in ipairs(self.MechTimer.ActiveTimers) do
-					Timer:Update(current)
+			self.Trigger.Queue:Activate()
+			if #self.MechTimer.RemoveTimers > 0 then
+				for i, Timer in ipairs(self.MechTimer.RemoveTimers) do
+					Timer:Stop()
+				end
+				self.MechTimer.RemoveTimers = {}
+			end
+			if #self.MechTimer.StartTimers > 0 then
+				for i, Timer in ipairs(self.MechTimer.StartTimers) do
+					Timer:Start(current)
+				end
+				self.MechTimer.StartTimers = {}
+			end
+			if KBM.Idle.Combat.Wait then
+				if KBM.Idle.Combat.Until < current then
+					KBM.WipeIt()
 				end
 			end
-			self.UpdateTime = current
-			if not KBM.TankSwap.Test then
-				if KBM.TankSwap.Active then
-					KBM.TankSwap:Update()
-				end
-			end
+		else
+			-- for UnitID, CastCheck in pairs(KBM.CastBar.List) do
+				-- CastCheck:Update()
+			-- end
+			-- if KBM.Testing then
+				-- if self.Alert.Current then
+					-- self.Alert:Update(Inspect.Time.Real())
+				-- end
+			-- end
 		end
-		if self.Alert.Current then
-			self.Alert:Update(Inspect.Time.Real())
-		end
-		self.Trigger.Queue:Activate()
-		if #self.MechTimer.RemoveTimers > 0 then
-			for i, Timer in ipairs(self.MechTimer.RemoveTimers) do
-				Timer:Stop()
-			end
-			self.MechTimer.RemoveTimers = {}
-		end
-		if #self.MechTimer.StartTimers > 0 then
-			for i, Timer in ipairs(self.MechTimer.StartTimers) do
-				Timer:Start(current)
-			end
-			self.MechTimer.StartTimers = {}
-		end
-	else
-		-- for UnitID, CastCheck in pairs(KBM.CastBar.List) do
-			-- CastCheck:Update()
-		-- end
 		-- if KBM.Testing then
-			-- if self.Alert.Current then
-				-- self.Alert:Update(Inspect.Time.Real())
+			-- d = math.random(1,2000)
+			-- if d < 20 then
+				-- d = math.random(1, #KBM.Trigger.List)
+				-- KBM.Trigger.Queue:Add(KBM.Trigger.List[d], KBM_PlayerID, KBM_PlayerID, d)
 			-- end
 		-- end
 	end
-	-- if KBM.Testing then
-		-- d = math.random(1,2000)
-		-- if d < 20 then
-			-- d = math.random(1, #KBM.Trigger.List)
-			-- KBM.Trigger.Queue:Add(KBM.Trigger.List[d], KBM_PlayerID, KBM_PlayerID, d)
-		-- end
-	-- end
 	
 end
 
 local function KBM_CastBar(units)
-
-	-- if KBM.Encounter then
-		-- if KBM_CurrentCBHook then
-			-- KBM_CurrentCBHook(units)
-		-- end
-	-- else
-		-- Testing Only!
-		-- KM_CastBar(units)
-	-- end
 	
 end
 
@@ -2086,34 +2121,36 @@ end
 
 local function KBM_UnitRemoved(units)
 
-	if KBM.Encounter then
-		for UnitID, Specifier in pairs(units) do
-			if not Inspect.Unit.Detail(UnitID) then
-				if KBM.BossID[UnitID] then
-					if KBM_CurrentMod then
-						KBM.BossID[UnitID].available = false
-						KBM.BossID[UnitID].IdleSince = Inspect.Time.Real()
-					end
-				end
-			end
-		end
-	end
+	-- if KBM.Encounter then
+		-- for UnitID, Specifier in pairs(units) do
+			-- if not Inspect.Unit.Detail(UnitID) then
+				-- if KBM.BossID[UnitID] then
+					-- if KBM_CurrentMod then
+						-- KBM.BossID[UnitID].available = false
+						-- KBM.BossID[UnitID].IdleSince = Inspect.Time.Real()
+					-- end
+				-- end
+			-- end
+		-- end
+	-- end
 	
 end
 
 local function KBM_Death(UnitID)
 	
-	if KBM.Encounter then
-		if UnitID then
-			local uDetails = Inspect.Unit.Detail(UnitID)
-			if uDetails then
-				if not uDetails.player then
-					if KBM.BossID[UnitID] then
-						KBM.BossID[UnitID].dead = true
-						if KBM_CurrentMod:Death(UnitID) then
-							print(KBM.Language.Encounter.Victory[KBM.Lang])
-							print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(Inspect.Time.Real() - KBM.StartTime))
-							KBM_Reset()
+	if KBM.Options.Enabled then 
+		if KBM.Encounter then
+			if UnitID then
+				local uDetails = Inspect.Unit.Detail(UnitID)
+				if uDetails then
+					if not uDetails.player then
+						if KBM.BossID[UnitID] then
+							KBM.BossID[UnitID].dead = true
+							if KBM_CurrentMod:Death(UnitID) then
+								print(KBM.Language.Encounter.Victory[KBM.Lang])
+								print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(Inspect.Time.Real() - KBM.StartTime))
+								KBM_Reset()
+							end
 						end
 					end
 				end
@@ -2121,16 +2158,6 @@ local function KBM_Death(UnitID)
 		end
 	end
 	
-end
-
-local function KBM_AutoReset()
-	-- if KBM.Options.AutoReset then
-		-- KBM.Options.AutoReset = false
-		-- print("Auto-Reset is now off.")
-	-- else
-		-- KBM.Options.AutoReset = true
-		-- print("Auto-Reset is now on (Experimental: Please report the accuracy of this.)")
-	-- end
 end
 
 local function KBM_Help()
@@ -2147,19 +2174,21 @@ function KBM.Notify(data)
 		dump(data)
 	end
 
-	if KBM.Encounter then
-		if data.message then
-			if KBM_CurrentMod then
-				if KBM.Trigger.Notify[KBM_CurrentMod.ID] then
-					for i, TriggerObj in ipairs(KBM.Trigger.Notify[KBM_CurrentMod.ID]) do
-						sStart, sEnd, Target = string.find(data.message, TriggerObj.Phrase)
-						if sStart then
-							unitID = nil
-							if Target == KBM_PlayerName then
-								unitID = KBM_PlayerID
+	if KBM.Options.Enabled then
+		if KBM.Encounter then
+			if data.message then
+				if KBM_CurrentMod then
+					if KBM.Trigger.Notify[KBM_CurrentMod.ID] then
+						for i, TriggerObj in ipairs(KBM.Trigger.Notify[KBM_CurrentMod.ID]) do
+							sStart, sEnd, Target = string.find(data.message, TriggerObj.Phrase)
+							if sStart then
+								unitID = nil
+								if Target == KBM_PlayerName then
+									unitID = KBM_PlayerID
+								end
+								KBM.Trigger.Queue:Add(TriggerObj, nil, unitID)
+								break
 							end
-							KBM.Trigger.Queue:Add(TriggerObj, nil, unitID)
-							break
 						end
 					end
 				end
@@ -2175,15 +2204,17 @@ function KBM.NPCChat(data)
 		dump(data)
 	end
 
-	if KBM.Encounter then
-		if data.fromName then
-			if KBM_CurrentMod then
-				if KBM.Trigger.Say[KBM_CurrentMod.ID] then
-					for i, TriggerObj in ipairs(KBM.Trigger.Say[KBM_CurrentMod.ID]) do
-						if TriggerObj.Unit.Name == data.fromName then
-							if string.find(data.message, TriggerObj.Phrase) then
-								KBM.Trigger.Queue:Add(TriggerObj)
-								break
+	if KBM.Options.Enabled then
+		if KBM.Encounter then
+			if data.fromName then
+				if KBM_CurrentMod then
+					if KBM.Trigger.Say[KBM_CurrentMod.ID] then
+						for i, TriggerObj in ipairs(KBM.Trigger.Say[KBM_CurrentMod.ID]) do
+							if TriggerObj.Unit.Name == data.fromName then
+								if string.find(data.message, TriggerObj.Phrase) then
+									KBM.Trigger.Queue:Add(TriggerObj)
+									break
+								end
 							end
 						end
 					end
@@ -2194,17 +2225,21 @@ function KBM.NPCChat(data)
 	
 end
 
--- Used to manage Triggers and soon Tank-Swap managing.
 function KBM:BuffMonitor(unitID, Buffs, Type)
 
-	if unitID then
-		for buffID, bool in pairs(Buffs) do
-			bDetails = Inspect.Buff.Detail(unitID, buffID)
-			if bDetails then
-				if Type == "new" then
-					if KBM.Trigger.Buff[bDetails.name] then
-						TriggerObj = KBM.Trigger.Buff[bDetails.name]
-						KBM.Trigger.Queue:Add(TriggerObj, nil, unitID, bDetails.remaining)
+	-- Used to manage Triggers and soon Tank-Swap managing.
+	if KBM.Options.Enabled then
+		if KBM.Encounter then
+			if unitID then
+				for buffID, bool in pairs(Buffs) do
+					bDetails = Inspect.Buff.Detail(unitID, buffID)
+					if bDetails then
+						if Type == "new" then
+							if KBM.Trigger.Buff[bDetails.name] then
+								TriggerObj = KBM.Trigger.Buff[bDetails.name]
+								KBM.Trigger.Queue:Add(TriggerObj, nil, unitID, bDetails.remaining)
+							end
+						end
 					end
 				end
 			end
@@ -2541,6 +2576,19 @@ end
 
 function KBM.MenuOptions.Main:Options()
 
+	function self:Enabled(bool)
+		KBM.Options.Enabled = bool
+		if KBM.Options.Enabled then
+			print("King Boss Mods is now Enabled.")
+		else
+			print("King Boss Mods is now Disabled.")
+			if KBM.Encounter then
+				print("Stopping running Encounter.")
+				KBM:Reset()
+			end
+		end
+			
+	end
 	function self:ButtonVisible(bool)
 		KBM.Options.Button.Visible = bool
 		KBM.Button.Texture:SetVisible(bool)
@@ -2553,6 +2601,7 @@ function KBM.MenuOptions.Main:Options()
 	Options = self.MenuItem.Options
 	Options:SetTitle()
 
+	self.Enbaled = Options:AddHeader(KBM.Language.Options.Enabled[KBM.Lang], self.Enabled, KBM.Options.Enabled)
 	self.Button = Options:AddHeader(KBM.Language.Options.Button[KBM.Lang], self.ButtonVisible, KBM.Options.Button.Visible)
 	self.Button:AddCheck(KBM.Language.Options.LockButton[KBM.Lang], self.LockButton, KBM.Options.Button.Unlocked)
 	
@@ -2580,9 +2629,13 @@ end
 
 function KBM_Debug()
 	if KBM.Debug then
+		print("Debugging disabled")
 		KBM.Debug = false
+		KBM.Options.Debug = false
 	else
+		print("Debugging enabled")
 		KBM.Debug = true
+		KBM.Options.Debug = true
 	end
 end
 
@@ -2610,11 +2663,11 @@ local function KBM_Start()
 	table.insert(Event.Buff.Add, {function (unitID, Buffs) KBM:BuffMonitor(unitID, Buffs, "new") end, "KingMolinator", "Buff Monitor (Add)"})
 	table.insert(Event.Buff.Change, {function (unitID, Buffs) KBM:BuffMonitor(unitID, Buffs, "change") end, "KingMolinator", "Buff Monitor (change)"})
 	table.insert(Event.Combat.Damage, {KBM_UnitHPCheck, "KingMolinator", "Combat Damage"})
-	table.insert(Event.Unit.Unavailable, {KBM_UnitRemoved, "KingMolinator", "Unit Unavailable"})
+	-- table.insert(Event.Unit.Unavailable, {KBM_UnitRemoved, "KingMolinator", "Unit Unavailable"})
 	table.insert(Event.Unit.Available, {KBM_UnitAvailable, "KingMolinator", "Unit Available"})
 	table.insert(Event.System.Update.Begin, {function () KBM:Timer() end, "KingMolinator", "System Update"}) 
 	table.insert(Event.SafesRaidManager.Combat.Death, {KBM_Death, "KingMolinator", "Combat Death"})
-	table.insert(Event.SafesRaidManager.Combat.Enter, {KBM_CombatEnter, "KingMolinator", "Non raid combat enter"})
+	table.insert(Event.SafesRaidManager.Combat.Enter, {KBM.CombatEnter, "KingMolinator", "Non raid combat enter"})
 	table.insert(Event.SafesRaidManager.Combat.Leave, {KBM.CombatLeave, "KingMolinator", "Non raid combat leave"})
 	table.insert(Event.SafesRaidManager.Group.Combat.End, {KBM.RaidCombatLeave, "KingMolinator", "Raid Combat Leave"})
 	table.insert(Event.SafesRaidManager.Group.Combat.Start, {KBM.RaidCombatEnter, "KingMolinator", "Raid Combat Enter"})

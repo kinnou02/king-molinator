@@ -27,6 +27,7 @@ local AK = {
 	Timers = {},
 	Lang = {},
 	ID = "Akylios",
+	Enrage = 60 * 20,
 }
 
 AK.Jornaru = {
@@ -70,6 +71,7 @@ AK.Stinger = {
 	AlertsRef = {},
 	Triggers = {},
 	UnitList = {},
+	Ignore = true,
 }
 
 AK.Lasher = {
@@ -81,6 +83,7 @@ AK.Lasher = {
 	AlertsRef = {},
 	Triggers = {},
 	UnitList = {},
+	Ignore = true,
 }
 
 KBM.RegisterMod(AK.ID, AK)

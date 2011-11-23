@@ -48,10 +48,22 @@ KBM.RegisterMod(EN.ID, EN)
 EN.Lang.Ereandorn = KBM.Language:Add(EN.Ereandorn.Name)
 
 -- Notify Dictionary
-EN.Lang.Ereandorn.Notify = {}
-EN.Lang.Ereandorn.Notify.Burn = KBM.Language:Add('Ereandorn says, "(%a*), how does it feel to burn?"')
-EN.Lang.Ereandorn.Notify.Fuel = KBM.Language:Add("The corpse of (%a*) will fuel our conquest")
-EN.Lang.Ereandorn.Notify.Bomb = KBM.Language:Add("I will rebuild this world in flames!")
+EN.Lang.Notify = {}
+EN.Lang.Notify.Combustion = KBM.Language:Add('Ereandorn says, "(%a*), how does it feel to burn?"')
+EN.Lang.Notify.Combustion.German = 'Ereandorn sagt: "(%a*), wie fühlt es sich an, zu verbrennen?"'
+EN.Lang.Notify.Growth = KBM.Language:Add("The corpse of (%a*) will fuel our conquest")
+EN.Lang.Notify.Growth.German = "Der Leichnam von (%a*) wird unsere Eroberung vorantreiben!"
+EN.Lang.Notify.Eruption = KBM.Language:Add("I will rebuild this world in flames!")
+EN.Lang.Notify.Eruption.German = "Ich werde diese Welt in Flammen neu formen!"
+
+-- Ability Dictionary
+EN.Lang.Ability = {}
+EN.Lang.Ability.Combustion = KBM.Language:Add("Excitable Combustion")
+EN.Lang.Ability.Combustion.German = "Aufgeregte Verbrennung"
+EN.Lang.Ability.Growth = KBM.Language:Add("Molten Growth")
+EN.Lang.Ability.Growth.German = KBM.Language:Add("Geschmolzener Wuchs")
+EN.Lang.Ability.Eruption = KBM.Language:Add("Volcanic Eruption")
+EN.Lang.Ability.Eruption.German = "Vulkanausbruch"
 
 EN.Ereandorn.Name = EN.Lang.Ereandorn[KBM.Lang]
 
@@ -71,9 +83,9 @@ function EN:InitVars()
 		},
 		Alerts = {
 			Enabled = true,
-			Burn = true,
-			Fuel = true,
-			Bomb = true,
+			Combustion = true,
+			Growth = true,
+			Eruption = true,
 		},
 		CastBar = {
 			x = false,
@@ -169,26 +181,26 @@ function EN.Ereandorn:Options()
 	function self:AlertsEnabled(bool)
 		EN.Settings.Alerts.Enabled = bool
 	end
-	function self:BurnAlert(bool)
-		EN.Settings.Alerts.Burn = bool
-		EN.Ereandorn.AlertsRef.Burn.Enabled = bool
+	function self:CombustionAlert(bool)
+		EN.Settings.Alerts.Combustion = bool
+		EN.Ereandorn.AlertsRef.Combustion.Enabled = bool
 	end
-	function self:FuelAlert(bool)
-		EN.Settings.Alerts.Fuel = bool
-		EN.Ereandorn.AlertsRef.Fuel.Enabled = bool
+	function self:GrowthAlert(bool)
+		EN.Settings.Alerts.Growth = bool
+		EN.Ereandorn.AlertsRef.Growth.Enabled = bool
 	end
-	function self:BombAlert(bool)
-		EN.Settings.Alerts.Bomb = bool
-		EN.Ereandorn.AlertsRef.Bomb.Enabled = bool
+	function self:EruptionAlert(bool)
+		EN.Settings.Alerts.Eruption = bool
+		EN.Ereandorn.AlertsRef.Eruption.Enabled = bool
 	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
 	--local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, EN.Settings.Timers.Enabled)
 	--Timers:AddCheck(EN.Lang.Flames[KBM.Lang], self.FlamesEnabled, EN.Settings.Timers.FlamesEnabled)
 	local Alerts = Options:AddHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], self.AlertsEnabled, EN.Settings.Alerts.Enabled)
-	Alerts:AddCheck("Excitable Combustion.", self.BurnAlert, EN.Settings.Alerts.Burn)
-	Alerts:AddCheck("Molten Growth.", self.FuelAlert, EN.Settings.Alerts.Fuel)
-	Alerts:AddCheck("Volcanic Eruption.", self.BombAlert, EN.Settings.Alerts.Bomb)
+	Alerts:AddCheck(EN.Lang.Ability.Combustion[KBM.Lang]..".", self.CombustionAlert, EN.Settings.Alerts.Combustion)
+	Alerts:AddCheck(EN.Lang.Ability.Growth[KBM.Lang]..".", self.GrowthAlert, EN.Settings.Alerts.Growth)
+	Alerts:AddCheck(EN.Lang.Ability.Eruption[KBM.Lang]..".", self.EruptionAlert, EN.Settings.Alerts.Eruption)
 	
 end
 
@@ -198,17 +210,17 @@ function EN:Start()
 	self.Ereandorn.MenuItem.Check:SetEnabled(false)
 	
 	-- Alerts
-	self.Ereandorn.AlertsRef.Burn = KBM.Alert:Create("Excitable Combustion", 5, true, false, "red")
-	self.Ereandorn.AlertsRef.Fuel = KBM.Alert:Create("Molten Growth", 8, true, true, "orange")
-	self.Ereandorn.AlertsRef.Bomb = KBM.Alert:Create("Volcanic Eruption", 5, true, false, "orange")
+	self.Ereandorn.AlertsRef.Combustion = KBM.Alert:Create(self.Lang.Ability.Combustion[KBM.Lang], 5, true, false, "red")
+	self.Ereandorn.AlertsRef.Growth = KBM.Alert:Create(self.Lang.Ability.Growth[KBM.Lang], 8, true, true, "orange")
+	self.Ereandorn.AlertsRef.Eruption = KBM.Alert:Create(self.Lang.Ability.Eruption[KBM.Lang], 5, true, false, "orange")
 		
 	-- Assign mechanics to Triggers
-	self.Ereandorn.Triggers.Burn = KBM.Trigger:Create(self.Lang.Ereandorn.Notify.Burn[KBM.Lang], "notify", self.Ereandorn)
-	self.Ereandorn.Triggers.Burn:AddAlert(self.Ereandorn.AlertsRef.Burn, true)
-	self.Ereandorn.Triggers.Fuel = KBM.Trigger:Create(self.Lang.Ereandorn.Notify.Fuel[KBM.Lang], "notify", self.Ereandorn)
-	self.Ereandorn.Triggers.Fuel:AddAlert(self.Ereandorn.AlertsRef.Fuel)
-	self.Ereandorn.Triggers.Bomb = KBM.Trigger:Create(self.Lang.Ereandorn.Notify.Bomb[KBM.Lang], "notify", self.Ereandorn)
-	self.Ereandorn.Triggers.Bomb:AddAlert(self.Ereandorn.AlertsRef.Bomb)
+	self.Ereandorn.Triggers.Combustion = KBM.Trigger:Create(self.Lang.Notify.Combustion[KBM.Lang], "notify", self.Ereandorn)
+	self.Ereandorn.Triggers.Combustion:AddAlert(self.Ereandorn.AlertsRef.Combustion, true)
+	self.Ereandorn.Triggers.Growth = KBM.Trigger:Create(self.Lang.Notify.Growth[KBM.Lang], "notify", self.Ereandorn)
+	self.Ereandorn.Triggers.Growth:AddAlert(self.Ereandorn.AlertsRef.Growth)
+	self.Ereandorn.Triggers.Eruption = KBM.Trigger:Create(self.Lang.Notify.Eruption[KBM.Lang], "notify", self.Ereandorn)
+	self.Ereandorn.Triggers.Eruption:AddAlert(self.Ereandorn.AlertsRef.Eruption)
 	
 	self.Ereandorn.CastBar = KBM.CastBar:Add(self, self.Ereandorn, true)
 end

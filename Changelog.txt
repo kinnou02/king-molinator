@@ -1,4 +1,20 @@
-﻿v0.6.1
+﻿v0.6.2
+* New: Settings: Option to Enable/Disable the Addon from triggering entirely.
+* New: 2s time-out on death calculations to attempt to prevent encounter restarts.
+* New: 2s down-time after wipe calling to allow for damage events to fall off.
+* Change: Further adjustments to encounter start accuracy.
+* Hammerknell
+** Akylios: Added enrage timer. 20 minutes
+* German Translations
+** Options: Encounter Timers.
+** Options: Adjusted wording for Mechanic Timers.
+** Beruhast: Flaming Vortex.
+** Beruhast: Inferno Lash.
+** Beruhast: Leaping Flame.
+** Ereandorn: Excitable Combustion.
+** Ereandorn: Molten Growth.
+** Ereandorn: Volcanic Eruption.
+v0.6.1
 * New: Encounter phase engine.
 * New: Encounter phase monitor.
 * New: Ecnounter phase objectives list.
