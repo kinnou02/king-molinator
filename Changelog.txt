@@ -14,6 +14,7 @@
 ** Ereandorn: Excitable Combustion.
 ** Ereandorn: Molten Growth.
 ** Ereandorn: Volcanic Eruption.
+----
 v0.6.1
 * New: Encounter phase engine.
 * New: Encounter phase monitor.
