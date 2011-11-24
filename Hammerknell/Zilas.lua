@@ -202,7 +202,7 @@ function SZ:Start()
 	self.Zilas.Triggers.Grasp = KBM.Trigger:Create(self.Lang.Ability.Grasp[KBM.Lang], "cast", self.Zilas)
 	self.Zilas.Triggers.Grasp:AddTimer(self.Zilas.TimersRef.Grasp)
 	self.Zilas.Triggers.Grasp:AddAlert(self.Zilas.AlertsRef.GraspWarn)
-	self.Zilas.AlertsRef.Grasp:AlertEnd(self.Zilas.AlertsRef.Grasp)
+	self.Zilas.AlertsRef.GraspWarn:AlertEnd(self.Zilas.AlertsRef.Grasp)
 	
 	self.Zilas.CastBar = KBM.CastBar:Add(self, self.Zilas, true)
 end

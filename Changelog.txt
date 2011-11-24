@@ -6,7 +6,7 @@
 * New: Alerts can now be flagged as "Important" meaning they will be persistent during other alerts.
 * Hammerknell
 ** King Molinar: Fixed: Terminate Life Alert saying Consuming, and wrong color.
-** Sicaron: Fixed: Unholy Contract message not triggering.
+** Sicaron: Fixed: Unholy Contract alerts not triggering.
 ** Matron Zamira: Fixed: Matron's settings were not initiating on start up/reloadui.
 ** Matron Zamira: Added: Important flag to Mark of Oblivion.
 ** Matron Zamira: Attempt to fix Matron's Mark of Oblivion not triggering. (reverted to buff)
