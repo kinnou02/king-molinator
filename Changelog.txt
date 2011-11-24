@@ -1,4 +1,25 @@
-﻿v0.6.2
+﻿v0.6.3
+* New: Alerts can now be flagged as "Important" meaning they will be persistent during other alerts.
+* Hammerknell
+** Matron Zamira: Fixed: Matron's settings were not initiating on start up/reloadui.
+** Matron Zamira: Added: Important flag to Mark of Oblivion.
+** Soulrender Zilas: Added: Warning Screen Alert for Soulrender's Grasp. (flashing orange)
+** Soulrender Zilas: Added: Active duration Screen Alert for Soulrender's Grasp. (solid red)
+** Soulrender Zilas: Added: Timer for next Soulrender's Grasp.
+** Soulrender Zilas: Added: Alert and Timer filtering options.
+** Akylios: Added: Mind Decay personal screen alert. (flashing purple)
+** Akylios: Added: Breath of Madness warning screen alert (flashing red)
+** Akylios: Added: Breath of Madness duration screen alert (solid red) 
+** Akylios: Added: Important flag to Mind Decay.
+** Akylios: Added: Important flag to Suffocating Orbs.
+* Rise of the Phoenix
+** Ereandorn: Fixed: settings were not initiating on game start up/reloadui.
+* German Translations
+** Fixed: Typo with Kampfdauer Anzeige.
+** Fixed: Molten Growth skill name.
+** Added: Phase related translations.
+----
+v0.6.2
 * New: Settings: Option to Enable/Disable the Addon from triggering entirely.
 * New: 2s time-out on death calculations to attempt to prevent encounter restarts.
 * New: 2s down-time after wipe calling to allow for damage events to fall off.

@@ -35,10 +35,11 @@ SZ.Zilas = {
 	CastFilters = {},
 	Timers = {},
 	TimersRef = {},
+	AlertsRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	TimeOut = 5,
+	Triggers = {},
 }
 
 KBM.RegisterMod(SZ.ID, SZ)
@@ -48,6 +49,10 @@ SZ.Lang.Zilas.German = "Seelenreißer Zilas"
 SZ.Lang.Zilas.French = "\195\137tripeur d'\195\162mes Zilas"
 
 SZ.Zilas.Name = SZ.Lang.Zilas[KBM.Lang]
+
+-- Ability Dictionary
+SZ.Lang.Ability = {}
+SZ.Lang.Ability.Grasp = KBM.Language:Add("Soulrender's Grasp")
 
 function SZ:AddBosses(KBM_Boss)
 	self.Zilas.Descript = self.Zilas.Name
@@ -62,6 +67,11 @@ function SZ:InitVars()
 	self.Settings = {
 		Timers = {
 			Enabled = true,
+			Grasp = true,
+		},
+		Alerts = {
+			Enabled = true,
+			Grasp = true,
 		},
 		CastBar = {
 			x = false,
@@ -149,12 +159,28 @@ function SZ:Timer()
 end
 
 function SZ.Zilas:Options()
-	function self:TimersEnabled(bool)
+	-- Timer Options
+	function self:Timers(bool)
+		SZ.Settings.Timers.Enabled = bool
+	end
+	function self:GraspTimer(bool)
+		SZ.Settings.Timers.Grasp = bool
+		SZ.Zilas.TimersRef.Grasp.Enabled = bool
+	end
+	-- Alert Options
+	function self:Alerts(bool)
+		SZ.Settings.Alerts.Enabled = bool
+	end
+	function self:GraspAlert(bool)
+		SZ.Settings.Alerts.Grasp = bool
+		SZ.Zilas.AlertsRef.Grasp.Enabled = bool
 	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
-	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, SZ.Settings.Timers.Enabled)
-	--Timers:AddCheck("Tidal Wave (Phase 1)", self.WaveStartEnabled, SZ.Settings.Timers.WaveStartEnabled)	
+	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.Timers, SZ.Settings.Timers.Enabled)
+	Timers:AddCheck(SZ.Lang.Ability.Grasp[KBM.Lang], self.GraspTimer, SZ.Settings.Timers.Grasp)
+	local Alerts = Options:AddHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], self.Alerts, SZ.Settings.Alerts.Enabled)
+	Alerts:AddCheck(SZ.Lang.Ability.Grasp[KBM.Lang], self.GraspAlert, SZ.Settings.Alerts.Grasp)
 	
 end
 
@@ -162,8 +188,21 @@ function SZ:Start()
 	self.Header = KBM.HeaderList[self.Instance]
 	self.Zilas.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Zilas, true, self.Header)
 	self.Zilas.MenuItem.Check:SetEnabled(false)
-	--self.Jornaru.TimersRef.Wave = KBM.MechTimer:Add("Wave1", "repeat", 40, self, nil, "Tidal Wave")
-	--self.Jornaru.TimersRef.Wave.Enable = self.Settings.Timers.WaveStartEnabled
+	
+	-- Mechanics Timers
+	self.Zilas.TimersRef.Grasp = KBM.MechTimer:Add(self.Lang.Ability.Grasp[KBM.Lang], 60)
+	self.Zilas.TimersRef.Grasp.Enabled = self.Settings.Timers.Grasp
+	
+	-- Screen Alerts
+	self.Zilas.AlertsRef.GraspWarn = KBM.Alert:Create(self.Lang.Ability.Grasp[KBM.Lang], 5, true, true, "orange")
+	self.Zilas.AlertsRef.GraspWarn.Enabled = self.Settings.Alerts.Grasp
+	self.Zilas.AlertsRef.Grasp = KBM.Alert:Create(self.Lang.Ability.Grasp[KBM.Lang], 9, false, true, "red")
+	self.Zilas.AlertsRef.Grasp.Enabled = self.Settings.Alerts.Grasp
+	
+	self.Zilas.Triggers.Grasp = KBM.Trigger:Create(self.Lang.Ability.Grasp[KBM.Lang], "cast", self.Zilas)
+	self.Zilas.Triggers.Grasp:AddTimer(self.Zilas.TimersRef.Grasp)
+	self.Zilas.Triggers.Grasp:AddAlert(self.Zilas.AlertsRef.GraspWarn)
+	self.Zilas.AlertsRef.Grasp:AlertEnd(self.Zilas.AlertsRef.Grasp)
 	
 	self.Zilas.CastBar = KBM.CastBar:Add(self, self.Zilas, true)
 end

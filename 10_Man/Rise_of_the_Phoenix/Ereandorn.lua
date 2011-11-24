@@ -211,8 +211,11 @@ function EN:Start()
 	
 	-- Alerts
 	self.Ereandorn.AlertsRef.Combustion = KBM.Alert:Create(self.Lang.Ability.Combustion[KBM.Lang], 5, true, false, "red")
+	self.Ereandorn.AlertsRef.Combustion.Enabled = self.Settings.Alerts.Combustion
 	self.Ereandorn.AlertsRef.Growth = KBM.Alert:Create(self.Lang.Ability.Growth[KBM.Lang], 8, true, true, "orange")
+	self.Ereandorn.AlertsRef.Growth.Enabled = self.Settings.Alerts.Growth
 	self.Ereandorn.AlertsRef.Eruption = KBM.Alert:Create(self.Lang.Ability.Eruption[KBM.Lang], 5, true, false, "orange")
+	self.Ereandorn.AlertsRef.Eruption.Enabled = self.Settings.Alerts.Eruption
 		
 	-- Assign mechanics to Triggers
 	self.Ereandorn.Triggers.Combustion = KBM.Trigger:Create(self.Lang.Notify.Combustion[KBM.Lang], "notify", self.Ereandorn)

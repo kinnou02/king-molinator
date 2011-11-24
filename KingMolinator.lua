@@ -321,7 +321,7 @@ KBM.Language.Options.LockTimer.French = "D\195\169bloquer Timer."
 KBM.Language.Options.LockTimer.German = "Timer ist verschiebbar."
 KBM.Language.Options.Timer = KBM.Language:Add("Encounter duration Timer.")
 KBM.Language.Options.Timer.French = "Timer duration combat."
-KBM.Language.Options.Timer.German = "Kampfdauer anzeige."
+KBM.Language.Options.Timer.German = "Kampfdauer Anzeige."
 KBM.Language.Options.Enrage = KBM.Language:Add("Enrage Timer (if supported).")
 KBM.Language.Options.Enrage.French = "Timer d'Enrage (si support\195\169)."
 KBM.Language.Options.Enrage.German = "Enrage Anzeige (wenn unterstützt)."
@@ -334,9 +334,13 @@ KBM.Language.Options.LockAnchor.French = "D\195\169bloquer Ancrage."
 KBM.Language.Options.LockAnchor.German = "Anker ist verschiebbar."
 -- Phase Monitor
 KBM.Language.Options.PhaseMonitor = KBM.Language:Add("Phase Monitor")
+KBM.Language.Options.PhaseMonitor.German = "Phasen Monitor"
 KBM.Language.Options.PhaseEnabled = KBM.Language:Add("Enable Phase Monitor.")
+KBM.Language.Options.PhaseEnabled.German = "Phasen Monitor aktiviert."
 KBM.Language.Options.Phases = KBM.Language:Add("Display current Phase.")
+KBM.Language.Options.Phases.German = "Zeige aktuelle Phase an."
 KBM.Language.Options.Objectives = KBM.Language:Add("Display Phase objective tracking.")
+KBM.Language.Options.Objectives.German = "Zeige Phasen Aufgabe an."
 KBM.Language.Options.Phase = KBM.Language:Add("Phase")
 -- Button Options
 KBM.Language.Options.Button = KBM.Language:Add("Options Button Visible.")
@@ -1651,12 +1655,18 @@ function KBM.Alert:Init()
 		function AlertObj:AlertEnd(endAlertObj)
 			self.AlertAfter = endAlertObj
 		end
+		function AlertObj:Important()
+			self.Important = true
+		end
 		
 		table.insert(self.List, AlertObj)
 		return AlertObj
 	end
 	function self:Start(AlertObj, CurrentTime, Duration)
 		if self.Current then
+			if self.Current.Important then
+				return
+			end
 			self:Stop()
 		end
 		if KBM.Options.Alert.Enabled then

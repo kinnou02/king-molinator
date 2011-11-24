@@ -102,6 +102,8 @@ AK.Lasher.Name = AK.Lang.Unit.Lasher[KBM.Lang]
 
 -- Ability Dictionary.
 AK.Lang.Ability = {}
+AK.Lang.Ability.Decay = KBM.Language:Add("Mind Decay")
+AK.Lang.Ability.Breath = KBM.Language:Add("Breath of Madness")
 
 -- Debuff Dictionary.
 AK.Lang.Debuff = {}
@@ -149,11 +151,14 @@ function AK:InitVars()
 			WaveOne = true,
 			WaveFour = true,
 			Orb = true,
+			Breath = true,
 		},
 		Alerts = {
 			Enabled = true,
 			WaveWarning = true,
 			Orb = true,
+			Breath = true,
+			Decay = true,
 		},
 		CastBar = {
 			x = false,
@@ -342,6 +347,10 @@ function AK.Akylios:Options()
 		AK.Jornaru.TimersRef.OrbFirst.Enabled = bool
 		AK.Jornaru.TimersRef.Orb.Enabled = bool
 	end
+	function self:BreathTimer(bool)
+		AK.Settings.Timers.Breath = bool
+		AK.Akylios.TimersRef.Breath.Enabled = bool
+	end
 	-- Alert Options
 	function self:Alerts(bool)
 		AK.Settings.Alerts.Enabled = bool
@@ -354,15 +363,27 @@ function AK.Akylios:Options()
 		AK.Settings.Alerts.Orb = bool
 		AK.Jornaru.AlertsRef.Orb.Enabled = bool
 	end
+	function self:DecayAlert(bool)
+		AK.Settings.Alerts.Decay = bool
+		AK.Akylios.AlertsRef.Decay.Enabled = bool
+	end
+	function self:BreathAlert(bool)
+		AK.Settings.Alerts.Breath = bool
+		AK.Akylios.AlertsRef.Breath.Enabled = bool
+		AK.Akylios.AlertsRef.BreathWarn.Enabled = bool
+	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
 	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.Timers, AK.Settings.Timers.Enabled)
 	Timers:AddCheck(AK.Lang.Options.WaveOne[KBM.Lang], self.WaveOneTimer, AK.Settings.Timers.WaveOne)
 	Timers:AddCheck(AK.Lang.Options.WaveFour[KBM.Lang], self.WaveFourTimer, AK.Settings.Timers.WaveFour)
 	Timers:AddCheck(AK.Lang.Mechanic.Orb[KBM.Lang], self.OrbTimer, AK.Settings.Timers.Orb)
+	Timers:AddCheck(AK.Lang.Ability.Breath[KBM.Lang], self.BreathTimer, AK.Settings.Timers.Breath)
 	local Alerts = Options:AddHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], self.Alerts, AK.Settings.Alerts.Enabled)
 	Alerts:AddCheck(AK.Lang.Options.WaveWarn[KBM.Lang], self.WaveWarning, AK.Settings.Alerts.WaveWarning)
 	Alerts:AddCheck(AK.Lang.Mechanic.Orb[KBM.Lang], self.OrbAlert, AK.Settings.Alerts.Orb)
+	Alerts:AddCheck(AK.Lang.Ability.Decay[KBM.Lang], self.DecayAlert, AK.Settings.Alerts.Decay)
+	Alerts:AddCheck(AK.Lang.Ability.Breath[KBM.Lang], self.BreathAlert, AK.Settings.Alerts.Breath)
 	
 end
 
@@ -380,12 +401,20 @@ function AK:Start()
 	self.Jornaru.TimersRef.OrbFirst.Enabled = self.Settings.Timers.Orb
 	self.Jornaru.TimersRef.Orb = KBM.MechTimer:Add(AK.Lang.Mechanic.Orb[KBM.Lang], 30)
 	self.Jornaru.TimersRef.Orb.Enabled = self.Settings.Timers.Orb
+	self.Akylios.TimersRef.Breath = KBM.MechTimer:Add(AK.Lang.Ability.Breath[KBM.Lang], 25)
+	self.Akylios.TimersRef.Breath.Enabled = self.Settings.Timers.Breath
 	
 	-- Create Alerts
 	self.Jornaru.AlertsRef.WaveWarning = KBM.Alert:Create(AK.Lang.Mechanic.Wave[KBM.Lang], 5, true, true, "blue")
 	self.Jornaru.AlertsRef.WaveWarning.Enabled = self.Settings.Alerts.WaveWarning
 	self.Jornaru.AlertsRef.Orb = KBM.Alert:Create(AK.Lang.Mechanic.Orb[KBM.Lang], 8, true, true, "orange")
 	self.Jornaru.AlertsRef.Orb.Enabled = self.Settings.Alerts.Orb
+	self.Akylios.AlertsRef.Decay = KBM.Alert:Create(AK.Lang.Ability.Decay[KBM.Lang], 10, true, true, "purple")
+	self.Akylios.AlertsRef.Decay.Enabled = self.Settings.Alerts.Decay
+	self.Akylios.AlertsRef.BreathWarn = KBM.Alert:Create(AK.Lang.Ability.Breath[KBM.Lang], 4, true, true, "red")
+	self.Akylios.AlertsRef.BreathWarn.Enabled = self.Settings.Alerts.Breath
+	self.Akylios.AlertsRef.Breath = KBM.Alert:Create(AK.Lang.Ability.Breath[KBM.Lang], 5, false, true, "red")
+	self.Akylios.AlertsRef.BreathWarn.Enabled = self.Settings.Alerts.Breath
 	
 	-- Assign Mechanics to Triggers
 	self.Jornaru.Triggers.Start = KBM.Trigger:Create(AK.Lang.Mechanic.Wave[KBM.Lang], "start", self.Jornaru)
@@ -396,11 +425,18 @@ function AK:Start()
 	self.Jornaru.Triggers.Orb = KBM.Trigger:Create(AK.Lang.Notify.Orb[KBM.Lang], "notify", self.Jornaru)
 	self.Jornaru.Triggers.Orb:AddAlert(self.Jornaru.AlertsRef.Orb, true)
 	self.Jornaru.Triggers.Orb:AddTimer(self.Jornaru.TimersRef.Orb)
+	self.Jornaru.AlertsRef.Orb:Important()
 	self.Jornaru.Triggers.PhaseTwo = KBM.Trigger:Create(AK.Lang.Say.PhaseTwo[KBM.Lang], "say", self.Jornaru)
 	self.Jornaru.Triggers.PhaseTwo:AddTimer(self.Jornaru.TimersRef.OrbFirst)
 	self.Jornaru.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
 	self.Akylios.Triggers.PhaseFour = KBM.Trigger:Create(55, "percent", self.Akylios)
 	self.Akylios.Triggers.PhaseFour:AddPhase(self.PhaseFour)
+	self.Akylios.Triggers.Decay = KBM.Trigger:Create(self.Lang.Ability.Decay[KBM.Lang], "buff", self.Akylios)
+	self.Akylios.Triggers.Decay:AddAlert(self.Akylios.AlertsRef.Decay, true)
+	self.Akylios.AlertsRef.Decay:Important()
+	self.Akylios.Triggers.Breath = KBM.Trigger:Create(AK.Lang.Ability.Breath[KBM.Lang], "cast", self.Akylios)
+	self.Akylios.Triggers.Breath:AddAlert(AK.Akylios.AlertsRef.BreathWarn)
+	self.Akylios.AlertsRef.BreathWarn:AlertEnd(self.Akylios.AlertsRef.Breath)
 	
 	self.Jornaru.CastBar = KBM.CastBar:Add(self, self.Jornaru, true)
 	self.Akylios.CastBar = KBM.CastBar:Add(self, self.Akylios, true)

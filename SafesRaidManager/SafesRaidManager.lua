@@ -333,7 +333,7 @@ local function SRM_Combat(units)
 				if LibSRM.Player.ID == UnitID then
 					LibSRM.Player.Combat = true
 					SRM_System.Player.Combat.Leave()
-					if not sent then 
+					if not sent then
 						SRM_Group.Combat.End()
 					end
 					sent = true

@@ -233,13 +233,19 @@ function MZ:Start()
 		
 	-- Create Timers
 	self.Matron.TimersRef.Concussion = KBM.MechTimer:Add(self.Lang.Ability.Concussion[KBM.Lang], 13)
+	self.Matron.TimersRef.Concussion.Enabled = self.Settings.Timers.Concussion
 	self.Matron.TimersRef.Mark = KBM.MechTimer:Add(self.Lang.Ability.Mark[KBM.Lang], 24)
+	self.Matron.TimersRef.Mark.Enabled = self.Settings.Timers.Mark
 	self.Matron.TimersRef.Shadow = KBM.MechTimer:Add(self.Lang.Ability.Shadow[KBM.Lang], 11)
+	self.Matron.TimersRef.Shadow.Enabled = self.Settings.Timers.Shadow
 	
 	-- Create Alerts
 	self.Matron.AlertsRef.Concussion = KBM.Alert:Create(self.Lang.Ability.Concussion[KBM.Lang], 3, true, false, "red")
+	self.Matron.AlertsRef.Concussion.Enabled = self.Settings.Alerts.Concussion
 	self.Matron.AlertsRef.Blast = KBM.Alert:Create(self.Lang.Ability.Blast[KBM.Lang], 2, true, false, "yellow")
+	self.Matron.AlertsRef.Blast.Enabled = self.Settings.Alerts.Blast
 	self.Matron.AlertsRef.MarkDamage = KBM.Alert:Create(self.Lang.Ability.Mark[KBM.Lang], 6, false, true, "purple")
+	self.Matron.AlertsRef.MarkDamage.Enabled = self.Settings.Alerts.Mark
 	
 	-- Assign Mechanics to Triggers
 	self.Matron.Triggers.Concussion = KBM.Trigger:Create(self.Lang.Ability.Concussion[KBM.Lang], "damage", self.Matron)
@@ -251,6 +257,7 @@ function MZ:Start()
 	self.Matron.Triggers.Mark:AddTimer(self.Matron.TimersRef.Mark)
 	self.Matron.Triggers.MarkDamage = KBM.Trigger:Create(self.Lang.Ability.Mark[KBM.Lang], "damage", self.Matron)
 	self.Matron.Triggers.MarkDamage:AddAlert(self.Matron.AlertsRef.MarkDamage, true)
+	self.Matron.AlertsRef.MarkDamage:Important()
 	self.Matron.Triggers.Shadow = KBM.Trigger:Create(self.Lang.Ability.Shadow[KBM.Lang], "damage", self.Matron)
 	self.Matron.Triggers.Shadow:AddTimer(self.Matron.TimersRef.Shadow)
 	
