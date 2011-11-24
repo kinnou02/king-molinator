@@ -1,12 +1,20 @@
 ﻿v0.6.3
+* Known Issue: Combat damage based Triggers are currently disabled, they'll return in 0.6.4.
+** Disabled: Murdantix: Ferocious Pound
+** Disabled: Murdantix: Mangling Crush
+** Disabled: Matron Zamira: Dark Concussion
 * New: Alerts can now be flagged as "Important" meaning they will be persistent during other alerts.
 * Hammerknell
+** King Molinar: Fixed: Terminate Life Alert saying Consuming, and wrong color.
+** Sicaron: Fixed: Unholy Contract message not triggering.
 ** Matron Zamira: Fixed: Matron's settings were not initiating on start up/reloadui.
 ** Matron Zamira: Added: Important flag to Mark of Oblivion.
+** Matron Zamira: Attempt to fix Matron's Mark of Oblivion not triggering. (reverted to buff)
 ** Soulrender Zilas: Added: Warning Screen Alert for Soulrender's Grasp. (flashing orange)
 ** Soulrender Zilas: Added: Active duration Screen Alert for Soulrender's Grasp. (solid red)
 ** Soulrender Zilas: Added: Timer for next Soulrender's Grasp.
 ** Soulrender Zilas: Added: Alert and Timer filtering options.
+** Inwar Darktide: Fixed an error during the Inwar encounter.
 ** Akylios: Added: Mind Decay personal screen alert. (flashing purple)
 ** Akylios: Added: Breath of Madness warning screen alert (flashing red)
 ** Akylios: Added: Breath of Madness duration screen alert (solid red) 
@@ -28,7 +36,7 @@ v0.6.2
 ** Akylios: Added enrage timer. 20 minutes
 * German Translations
 ** Options: Encounter Timers.
-** Options: Adjusted wording for Mechanic Timers.
+** Options: Adjusted wording fo Mechanic Timers.
 ** Beruhast: Flaming Vortex.
 ** Beruhast: Inferno Lash.
 ** Beruhast: Leaping Flame.
@@ -39,7 +47,7 @@ v0.6.2
 v0.6.1
 * New: Encounter phase engine.
 * New: Encounter phase monitor.
-* New: Ecnounter phase objectives list.
+* New: Encounter phase objectives list.
 * Fixed: Buff triggers were not responding.
 * Added: /kbmversion slash command (Displays current version)
 * French Translations

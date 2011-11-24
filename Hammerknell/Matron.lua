@@ -211,7 +211,7 @@ function MZ.Matron:Options()
 	end
 	function self:MarkAlert(bool)
 		MZ.Settings.Alerts.Mark = bool
-		MZ.Matron.AlertsRef.MarkDamage.Enabled = bool
+		MZ.Matron.AlertsRef.Mark.Enabled = bool
 	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
@@ -244,8 +244,8 @@ function MZ:Start()
 	self.Matron.AlertsRef.Concussion.Enabled = self.Settings.Alerts.Concussion
 	self.Matron.AlertsRef.Blast = KBM.Alert:Create(self.Lang.Ability.Blast[KBM.Lang], 2, true, false, "yellow")
 	self.Matron.AlertsRef.Blast.Enabled = self.Settings.Alerts.Blast
-	self.Matron.AlertsRef.MarkDamage = KBM.Alert:Create(self.Lang.Ability.Mark[KBM.Lang], 6, false, true, "purple")
-	self.Matron.AlertsRef.MarkDamage.Enabled = self.Settings.Alerts.Mark
+	self.Matron.AlertsRef.Mark = KBM.Alert:Create(self.Lang.Ability.Mark[KBM.Lang], 6, false, true, "purple")
+	self.Matron.AlertsRef.Mark.Enabled = self.Settings.Alerts.Mark
 	
 	-- Assign Mechanics to Triggers
 	self.Matron.Triggers.Concussion = KBM.Trigger:Create(self.Lang.Ability.Concussion[KBM.Lang], "damage", self.Matron)
@@ -253,11 +253,10 @@ function MZ:Start()
 	self.Matron.Triggers.Concussion:AddAlert(self.Matron.AlertsRef.Concussion)
 	self.Matron.Triggers.Blast = KBM.Trigger:Create(self.Lang.Ability.Blast[KBM.Lang], "cast", self.Matron)
 	self.Matron.Triggers.Blast:AddAlert(self.Matron.AlertsRef.Blast)
-	self.Matron.Triggers.Mark = KBM.Trigger:Create(self.Lang.Ability.Mark[KBM.Lang], "cast", self.Matron)
+	self.Matron.Triggers.Mark = KBM.Trigger:Create(self.Lang.Ability.Mark[KBM.Lang], "buff", self.Matron)
 	self.Matron.Triggers.Mark:AddTimer(self.Matron.TimersRef.Mark)
-	self.Matron.Triggers.MarkDamage = KBM.Trigger:Create(self.Lang.Ability.Mark[KBM.Lang], "damage", self.Matron)
-	self.Matron.Triggers.MarkDamage:AddAlert(self.Matron.AlertsRef.MarkDamage, true)
-	self.Matron.AlertsRef.MarkDamage:Important()
+	self.Matron.Triggers.Mark:AddAlert(self.Matron.AlertsRef.Mark, true)
+	self.Matron.AlertsRef.Mark:Important()
 	self.Matron.Triggers.Shadow = KBM.Trigger:Create(self.Lang.Ability.Shadow[KBM.Lang], "damage", self.Matron)
 	self.Matron.Triggers.Shadow:AddTimer(self.Matron.TimersRef.Shadow)
 	

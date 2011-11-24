@@ -196,7 +196,7 @@ function ID:UnitHPCheck(uDetails, unitID)
 					self.TimeElapsed = 0
 					self.Phase = 1
 				end
-				if not self.Bosses[uDetails.nam].CastBar.Active then
+				if not self.Bosses[uDetails.name].CastBar.Active then
 					self.Bosses[uDetails.name].CastBar:Create(unitID)			
 				end
 				self.Bosses[uDetails.name].Dead = false

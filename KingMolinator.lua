@@ -1283,6 +1283,8 @@ local function KBM_UnitHPCheck(info)
 					if tDetails then
 						if not tDetails.player then
 							KBM.CheckActiveBoss(tDetails, tUnitID)
+						else
+						
 						end
 					end
 				end
