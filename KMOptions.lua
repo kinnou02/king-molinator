@@ -453,11 +453,14 @@ function KBM.InitOptions()
 		function Child.Event:LeftClick()
 			if self.Enabled then
 				if KBM.MainWin.CurrentPage ~= self.Options then
-					KBM.MainWin.Options.PageSize = 0
-					self.Link:Options()
-					KBM.MainWin.Options.Scroller:SetRange(KBM.MainWin.Options.PageSize, KBM.MainWin.Options.Height)
+					KBM.QueuePage = self
 				end
 			end
+		end
+		function Child:Open()
+			KBM.MainWin.Options.PageSize = 0
+			self.Link:Options()
+			KBM.MainWin.Options.Scroller:SetRange(KBM.MainWin.Options.PageSize, KBM.MainWin.Options.Height)
 		end
 		function Child.Options:Remove()
 			for _, Item in ipairs(self.List) do
@@ -471,7 +474,6 @@ function KBM.InitOptions()
 				if KBM.MainWin.CurrentPage.Link.Close then
 					KBM.MainWin.CurrentPage.Link:Close()
 				end
-				KBM.MainWin.CurrentPage:Remove()
 				KBM.MainWin.CurrentPage = self
 			else
 				KBM.MainWin.CurrentPage = self
@@ -681,6 +683,9 @@ function KBM.InitOptions()
 					self.Check.Frame:sRemove()
 					self.Text.Frame:sRemove()
 					self.Frame:sRemove()
+					for Obj, pObject in pairs(self) do
+						self[Obj] = nil
+					end
 				end
 				self.LastChild = CheckObj
 				KBM.MainWin.Options:AddSize(CheckObj.Frame)
@@ -700,7 +705,11 @@ function KBM.InitOptions()
 					Child = nil
 				end
 				self.Children = {}
+				self.LastChild = nil
 				self.Frame:sRemove()
+				for Obj, pObject in pairs(self) do
+					self[Obj] = nil
+				end
 			end
 			return HeaderObj
 		end

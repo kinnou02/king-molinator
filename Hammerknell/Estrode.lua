@@ -36,6 +36,7 @@ ES.Estrode = {
 	CastFilters = {},
 	Timers = {},
 	TimersRef = {},
+	AlertsRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
@@ -53,6 +54,9 @@ ES.Lang.Ability.Soul = KBM.Language:Add("Soul Capture")
 ES.Lang.Ability.Soul.German = "Seelenfang"
 ES.Lang.Ability.Mind = KBM.Language:Add("Mind Control")
 ES.Lang.Ability.Mind.German = "Gedankenkontrolle"
+ES.Lang.Ability.Dancing = KBM.Language:Add("Dancing Steel")
+ES.Lang.Ability.North = KBM.Language:Add("Rage of the North")
+ES.Lang.Ability.Chastise = KBM.Language:Add("Chastise")
 
 -- Speak Dictionary
 ES.Lang.Say = {}
@@ -76,6 +80,12 @@ function ES:InitVars()
 			Enabled = true,
 			Soul = true,
 			Mind = true,
+		},
+		Alerts = {
+			Enabled = true,
+			Dancing = true,
+			North = true,
+			Chastise = true,
 		},
 		CastBar = {
 			x = false,
@@ -163,7 +173,9 @@ function ES:Timer()
 end
 
 function ES.Estrode:Options()
-	function self:TimersEnabled(bool)
+	-- Timer Options
+	function self:Timers(bool)
+		ES.Settings.Timers.Enabled = bool
 	end
 	function self:SoulEnabled(bool)
 		ES.Settings.Timers.Soul = bool
@@ -173,11 +185,31 @@ function ES.Estrode:Options()
 		ES.Settings.Timers.Mind = bool
 		ES.Estrode.TimersRef.Mind.Enabled = bool
 	end
+	-- Alert Options
+	function self:Alerts(bool)
+		ES.Settings.Alerts.Enabled = bool
+	end
+	function self:DancingAlert(bool)
+		ES.Settings.Alerts.Dancing = bool
+		ES.Estrode.AlertsRef.Dancing.Enabled = bool
+	end
+	function self:NorthAlert(bool)
+		ES.Settings.Alerts.North = bool
+		ES.Estrode.AlertsRef.North.Enabled = bool
+	end
+	function self:ChastiseAlert(bool)
+		ES.Settings.Alerts.Chastise = bool
+		ES.Estrode.AlertsRef.Chastise.Enabled = bool
+	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
-	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, ES.Settings.Timers.Enabled)
+	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.Timers, ES.Settings.Timers.Enabled)
 	Timers:AddCheck(ES.Lang.Ability.Soul[KBM.Lang], self.SoulEnabled, ES.Settings.Timers.Soul)
 	Timers:AddCheck(ES.Lang.Ability.Mind[KBM.Lang], self.MindEnabled, ES.Settings.Timers.Mind)
+	local Alerts = Options:AddHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], self.Alerts, ES.Settings.Alerts.Enabled)
+	Alerts:AddCheck(ES.Lang.Ability.Dancing[KBM.Lang], self.DancingAlert, ES.Settings.Alerts.Dancing)
+	Alerts:AddCheck(ES.Lang.Ability.North[KBM.Lang], self.NorthAlert, ES.Settings.Alerts.North)
+	Alerts:AddCheck(ES.Lang.Ability.Chastise[KBM.Lang], self.ChastiseAlert, ES.Settings.Alerts.Chastise)
 	
 end
 
@@ -192,11 +224,25 @@ function ES:Start()
 	self.Estrode.TimersRef.Mind = KBM.MechTimer:Add(self.Lang.Ability.Mind[KBM.Lang], 60)
 	self.Estrode.TimersRef.Mind.Enabled = self.Settings.Timers.Mind
 	
+	-- Screen Alerts
+	self.Estrode.AlertsRef.Dancing = KBM.Alert:Create(self.Lang.Ability.Dancing[KBM.Lang], 2, true, true, "red")
+	self.Estrode.AlertsRef.Dancing.Enabled = self.Settings.Alerts.Dancing
+	self.Estrode.AlertsRef.North = KBM.Alert:Create(self.Lang.Ability.North[KBM.Lang], 2, true, true, "orange")
+	self.Estrode.AlertsRef.North.Enabled = self.Settings.Alerts.North
+	self.Estrode.AlertsRef.Chastise = KBM.Alert:Create(self.Lang.Ability.Chastise[KBM.Lang], 2, true, true, "yellow")
+	self.Estrode.AlertsRef.Chastise.Enabled = self.Settings.Alerts.Chastise
+	
 	-- Assign Mechanics to Triggers
 	self.Estrode.Triggers.Soul = KBM.Trigger:Create(self.Lang.Ability.Soul[KBM.Lang], "cast", self.Estrode)
 	self.Estrode.Triggers.Soul:AddTimer(self.Estrode.TimersRef.Soul)
 	self.Estrode.Triggers.Mind = KBM.Trigger:Create(self.Lang.Say.Mind[KBM.Lang], "say", self.Estrode)
 	self.Estrode.Triggers.Mind:AddTimer(self.Estrode.TimersRef.Mind)
+	self.Estrode.Triggers.Dancing = KBM.Trigger:Create(self.Lang.Ability.Dancing[KBM.Lang], "cast", self.Estrode)
+	self.Estrode.Triggers.Dancing:AddAlert(self.Estrode.AlertsRef.Dancing)
+	self.Estrode.Triggers.North = KBM.Trigger:Create(self.Lang.Ability.North[KBM.Lang], "cast", self.Estrode)
+	self.Estrode.Triggers.North:AddAlert(self.Estrode.AlertsRef.North)
+	self.Estrode.Triggers.Chastise = KBM.Trigger:Create(self.Lang.Ability.Chastise[KBM.Lang], "cast", self.Estrode)
+	self.Estrode.Triggers.Chastise:AddAlert(self.Estrode.AlertsRef.Chastise)
 	
 	self.Estrode.CastBar = KBM.CastBar:Add(self, self.Estrode, true)
 end

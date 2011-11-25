@@ -1,4 +1,19 @@
-﻿v0.6.3
+﻿v0.6.4
+* Notice: Boss Alert and Timer global switches (Enabled/Disabled) are currently unlinked. Use individual checks.
+* Notice: The above will be coming very shortly, along with new Per-Character Profile saving.
+* New: Recycled Frames now use a queuing system to avoid the crashes introduced by Trion.
+* Fixed: Attempted to correct the errors introduced by Trion over night with client crashes.
+* Fixed: Enabled combat damage based triggers, previously disabled triggers are back.
+* Fixed: Various inconsistencies which could arise with Important Screen Alerts.
+* Hammerknell
+** Matron Zamira: Reverted Mark of Oblivion back to a damage trigger for personal screen alerts.
+** Matron Zamira: Seperated Mark of Oblivion timer to a cast trigger.
+** Sicaron: Fixed: option for disabling Timers not saving/changing or initiating.
+** Sicaron: Added: Screen Alert for Dancing Steel. (flashing red)
+** Sicaron: Added: Screen Alert for Rage of the North. (flashing orange)
+** Sicaron: Added: Screen Alert for Chastise. (flashing yellow)
+----
+v0.6.3
 * Known Issue: Combat damage based Triggers are currently disabled, they'll return in 0.6.4.
 ** Disabled: Murdantix: Ferocious Pound
 ** Disabled: Murdantix: Mangling Crush

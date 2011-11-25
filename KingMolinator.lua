@@ -234,9 +234,13 @@ KBM.TimeVisual.Minutes = 0
 KBM.TimeVisual.Hours = 0
 
 KBM.FrameStore = {}
+KBM.FrameQueue = {}
 KBM.CheckStore = {}
+KBM.CheckQueue = {}
 KBM.SlideStore = {}
+KBM.SlideQueue = {}
 KBM.TextfStore = {}
+KBM.TextfQueue = {}
 KBM.TotalTexts = 0
 KBM.TotalChecks = 0
 KBM.TotalFrames = 0
@@ -440,6 +444,7 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 	
 	function Timer:Start(CurrentTime)
 	
+		self.Queued = false
 		if self.Enabled then
 			if self.Active then
 				if not self.Removing then
@@ -506,37 +511,49 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 		
 	end
 	
+	function Timer:Queue()
+		if not self.Queued then
+			self.Queued = true
+			self.Starting = true
+			table.insert(KBM.MechTimer.StartTimers, self)
+		end
+	end
+	
 	function Timer:Stop()
-		for i, Timer in ipairs(KBM.MechTimer.ActiveTimers) do
-			if Timer == self then
-				if #KBM.MechTimer.ActiveTimers == 1 then
-					KBM.MechTimer.LastTimer = nil
-				elseif i == 1 then
-					KBM.MechTimer.ActiveTimers[i+1].Background:SetPoint("TOPLEFT", KBM.MechTimer.Anchor, "TOPLEFT")
-				elseif i == #KBM.MechTimer.ActiveTimers then
-					KBM.MechTimer.LastTimer = KBM.MechTimer.ActiveTimers[i-1]
-				else
-					KBM.MechTimer.ActiveTimers[i+1].Background:SetPoint("TOPLEFT", KBM.MechTimer.ActiveTimers[i-1].Background, "BOTTOMLEFT", 0, 1)
+		if not self.Deleting then
+			self.Deleting = true
+			for i, Timer in ipairs(KBM.MechTimer.ActiveTimers) do
+				if Timer == self then
+					if #KBM.MechTimer.ActiveTimers == 1 then
+						KBM.MechTimer.LastTimer = nil
+					elseif i == 1 then
+						KBM.MechTimer.ActiveTimers[i+1].Background:SetPoint("TOPLEFT", KBM.MechTimer.Anchor, "TOPLEFT")
+					elseif i == #KBM.MechTimer.ActiveTimers then
+						KBM.MechTimer.LastTimer = KBM.MechTimer.ActiveTimers[i-1]
+					else
+						KBM.MechTimer.ActiveTimers[i+1].Background:SetPoint("TOPLEFT", KBM.MechTimer.ActiveTimers[i-1].Background, "BOTTOMLEFT", 0, 1)
+					end
+					table.remove(KBM.MechTimer.ActiveTimers, i)
+					break
 				end
-				table.remove(KBM.MechTimer.ActiveTimers, i)
-				break
 			end
-		end
-		self.Active = false
-		self.Remaining = 0
-		self.TimeStart = 0
-		self.Removing = false
-		for i, AlertObj in pairs(self.Alerts) do
-			self.Alerts[i].Triggered = false
-		end
-		self.CastInfo:sRemove()
-		self.TimeBar:sRemove()
-		self.Background:sRemove()
-		if self.Repeat then
-			if KBM.Encounter then
-				if self.Phase == KBM_CurrentMod.Phase or self.Phase == 0 then
-					self.Starting = true
-					table.insert(KBM.MechTimer.StartTimers, self)
+			self.Active = false
+			self.Remaining = 0
+			self.TimeStart = 0
+			for i, AlertObj in pairs(self.Alerts) do
+				self.Alerts[i].Triggered = false
+			end
+			self.CastInfo:sRemove()
+			self.TimeBar:sRemove()
+			self.Background:sRemove()
+			self.Removing = false
+			self.Deleting = false
+			if self.Repeat then
+				if KBM.Encounter then
+					if self.Phase == KBM_CurrentMod.Phase or self.Phase == 0 then
+						self.Starting = true
+						table.insert(KBM.MechTimer.StartTimers, self)
+					end
 				end
 			end
 		end
@@ -611,52 +628,63 @@ function KBM.Trigger:Init()
 
 	function self.Queue:Add(TriggerObj, Caster, Target, Duration)
 	
-		if KBM.Encounter then
+		if KBM.Encounter or KBM.Testing then
 			if TriggerObj.Queued or self.Removing then
 				return
 			else
 				TriggerObj.Queued = true
 			end
-			repeat
-			until not self.Locked
+			if self.Locked then
+				repeat
+				until not self.Locked
+			end
 			self.Locked = true
 			table.insert(self.List, TriggerObj)
 			TriggerObj.Caster = Caster
 			TriggerObj.Target = Target
-			TriggerObj.Data = Data		
+			TriggerObj.Duration = Duration
 			self.Locked = false
+			self.Queued = true
 		end
 		
 	end
 	
 	function self.Queue:Activate()
 	
-		if KBM.Encounter then
-			if self.Removing then
-				return
+		if self.Queued then
+			if KBM.Encounter or KBM.Testing then
+				if self.Removing then
+					return
+				end
+				if self.Locked then
+					repeat
+					until not self.Locked
+				end
+				self.Locked = true
+				for i, TriggerObj in ipairs(self.List) do
+					TriggerObj:Activate(TriggerObj.Caster, TriggerObj.Target, TriggerObj.Duration)
+					TriggerObj.Queued = false
+				end
+				self.List = {}
+				self.Locked = false
+				self.Queued = false
 			end
-			repeat
-			until not self.Locked
-			self.Locked = true
-			for i, TriggerObj in ipairs(self.List) do
-				TriggerObj:Activate(TriggerObj.Caster, TriggerObj.Target, TriggerObj.Data)
-				TriggerObj.Queued = false
-			end
-			self.List = {}
-			self.Locked = false
 		end
 		
 	end
 	
 	function self.Queue:Remove()
-	
+		
 		self.Removing = true
-		repeat
-		until not self.Locked
+		if self.Locked then
+			repeat
+			until not self.Locked
+		end
 		self.Locked = true
 		self.List = {}
 		self.Locked = false
 		self.Removing = false
+		self.Queued = false
 		
 	end
 	
@@ -673,6 +701,7 @@ function KBM.Trigger:Init()
 		TriggerObj.Target = nil
 		TriggerObj.Queued = false
 		TriggerObj.Phase = nil
+		TriggerObj.Trigger = Trigger
 		
 		function TriggerObj:AddTimer(TimerObj)
 			table.insert(self.Timers, TimerObj)
@@ -693,15 +722,15 @@ function KBM.Trigger:Init()
 				for i, Timer in ipairs(self.Timers) do
 					if Timer.Active then
 						if Timer.Remaining < 3 then
-							Timer:Start(Inspect.Time.Real())
+							Timer:Queue()
 						end
 					else
-						Timer:Start(Inspect.Time.Real())
+						Timer:Queue()
 					end
 				end
 			else
 				for i, Timer in ipairs(self.Timers) do
-					Timer:Start(Inspect.Time.Real())
+					Timer:Queue()
 				end
 			end
 			for i, AlertObj in ipairs(self.Alerts) do
@@ -716,8 +745,10 @@ function KBM.Trigger:Init()
 			for i, Obj in ipairs(self.Stop) do
 				Obj:Stop()
 			end
-			if self.Phase then
-				self.Phase()
+			if KBM.Encounter then
+				if self.Phase then
+					self.Phase()
+				end
 			end
 		end
 		
@@ -789,15 +820,18 @@ function KBM:CallFrame(parent)
 		self.TotalFrames = self.TotalFrames + 1
 		frame = UI.CreateFrame("Frame", "Frame Store"..self.TotalFrames, parent)
 		function frame:sRemove()
+			table.insert(KBM.FrameQueue, self)
+		end
+		function frame:Delete()
 			for EventName, pFunction in pairs(self.Event) do
 				self.Event[EventName] = nil
 			end
-			self:SetParent(KBM.Context)
+			--self:SetParent(KBM.Context)
 			self:ClearAll()
 			self:SetVisible(false)
 			self:SetLayer(0)
 			self:SetBackgroundColor(0,0,0,0)
-			table.insert(KBM.FrameStore, self)
+			table.insert(KBM.FrameStore, self)			
 		end
 	else
 		frame = table.remove(self.FrameStore)
@@ -816,14 +850,17 @@ function KBM:CallCheck(parent)
 		self.TotalChecks = self.TotalChecks + 1
 		Checkbox = UI.CreateFrame("RiftCheckbox", "Check Store"..self.TotalChecks, parent)
 		function Checkbox:sRemove()
+			table.insert(KBM.CheckQueue, self)
+		end
+		function Checkbox:Delete()
 			for EventName, pFunction in pairs(self.Event) do
 				self.Event[EventName] = nil
 			end
 			self:ClearAll()
-			self:SetParent(KBM.Context)
+			--self:SetParent(KBM.Context)
 			self:SetVisible(false)
 			self:SetLayer(0)
-			table.insert(KBM.CheckStore, self)
+			table.insert(KBM.CheckStore, self)			
 		end
 	else
 		Checkbox = table.remove(self.CheckStore)
@@ -843,15 +880,18 @@ function KBM:CallText(parent, debugInfo)
 		self.TotalTexts = self.TotalTexts + 1
 		Textfbox = UI.CreateFrame("Text", "Textf Store"..self.TotalTexts, parent)
 		function Textfbox:sRemove()
+			table.insert(KBM.TextfQueue, self)
+		end
+		function Textfbox:Delete()
 			for EventName, pFunction in pairs(self.Event) do
 				self.Event[EventName] = nil
 			end
 			self:SetText("")
 			self:ClearAll()
-			self:SetParent(KBM.Context)
+			--self:SetParent(KBM.Context)
 			self:SetVisible(false)
 			self:SetLayer(0)
-			table.insert(KBM.TextfStore, self)
+			table.insert(KBM.TextfStore, self)			
 		end
 	else
 		Textfbox = table.remove(self.TextfStore)
@@ -866,28 +906,28 @@ end
 
 function KBM:CallSlider(parent)
 
-	local Slider = nil
-	if #self.SlideStore == 0 then
-		self.TotalSliders = self.TotalSliders + 1
-		Slider = UI.CreateFrame("RiftSlider", "Slide Store"..self.TotalSliders, parent)
-		function Slider:sRemove()
-			for EventName, pFunction in pairs(self.Event) do
-				self.Event[EventName] = nil
-			end
-			self:SetParent(KBM.Context)
-			self:SetVisible(false)
-			self:ClearAll()
-			self:SetLayer(0)
-			table.insert(KBM.SlideStore, self)
-		end
-	else
-		Slider = table.remove(self.SlideStore)
-		Slider:SetParent(parent)
-		Slider:SetVisible(true)
-		Slider:SetEnabled(true)
-		Slider:SetAlpha(1)
-	end
-	return Slider
+	-- local Slider = nil
+	-- if #self.SlideStore == 0 then
+		-- self.TotalSliders = self.TotalSliders + 1
+		-- Slider = UI.CreateFrame("RiftSlider", "Slide Store"..self.TotalSliders, parent)
+		-- function Slider:sRemove()
+			-- for EventName, pFunction in pairs(self.Event) do
+				-- self.Event[EventName] = nil
+			-- end
+			-- self:SetParent(KBM.Context)
+			-- self:SetVisible(false)
+			-- self:ClearAll()
+			-- self:SetLayer(0)
+			-- table.insert(KBM.SlideStore, self)
+		-- end
+	-- else
+		-- Slider = table.remove(self.SlideStore)
+		-- Slider:SetParent(parent)
+		-- Slider:SetVisible(true)
+		-- Slider:SetEnabled(true)
+		-- Slider:SetAlpha(1)
+	-- end
+	-- return Slider
 	
 end
 
@@ -1284,7 +1324,14 @@ local function KBM_UnitHPCheck(info)
 						if not tDetails.player then
 							KBM.CheckActiveBoss(tDetails, tUnitID)
 						else
-						
+							if KBM_CurrentMod then
+								if info.abilityName then
+									if KBM.Trigger.Damage[info.abilityName] then
+										TriggerObj = KBM.Trigger.Damage[info.abilityName]
+										KBM.Trigger.Queue:Add(TriggerObj, cUnitID, tUnitID)
+									end
+								end
+							end	
 						end
 					end
 				end
@@ -1608,12 +1655,12 @@ function KBM.Alert:Init()
 	self.Left = {}
 	self.Right = {}
 	for _t, Color in ipairs(self.ColorList) do
-		self.Left[Color] = UI.CreateFrame("Texture", "Left Alert", KBM.Context)
+		self.Left[Color] = UI.CreateFrame("Texture", "Left Alert "..Color, KBM.Context)
 		self.Left[Color]:SetTexture("KingMolinator", "Media/Alert_Left_"..Color..".png")
 		self.Left[Color]:SetPoint("TOPLEFT", UIParent, "TOPLEFT")
 		self.Left[Color]:SetPoint("BOTTOM", UIParent, "BOTTOM")
 		self.Left[Color]:SetVisible(false)
-		self.Right[Color] = UI.CreateFrame("Texture", "Right Alert", KBM.Context)
+		self.Right[Color] = UI.CreateFrame("Texture", "Right Alert"..Color, KBM.Context)
 		self.Right[Color]:SetTexture("KingMolinator", "Media/Alert_Right_"..Color..".png")
 		self.Right[Color]:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT")
 		self.Right[Color]:SetPoint("BOTTOM", UIParent, "BOTTOM")
@@ -1624,6 +1671,7 @@ function KBM.Alert:Init()
 	self.StopTime = 0
 	self.Remaining = 0
 	self.Alpha = 1
+	self.Queue = {}
 	self.Notify = KBM.Options.Alert.Notify
 	self.Flash = KBM.Options.Alert.Flash
 	self.Speed = 0.025
@@ -1653,25 +1701,34 @@ function KBM.Alert:Init()
 		AlertObj.Countdown = Countdown
 		AlertObj.Enabled = false
 		AlertObj.AlertAfter = nil
+		AlertObj.isImportant = false
 		
 		function AlertObj:AlertEnd(endAlertObj)
 			self.AlertAfter = endAlertObj
 		end
+
 		function AlertObj:Important()
-			self.Important = true
+			self.isImportant = true
 		end
 		
 		table.insert(self.List, AlertObj)
 		return AlertObj
 	end
 	function self:Start(AlertObj, CurrentTime, Duration)
-		if self.Current then
-			if self.Current.Important then
+		
+		if KBM.Options.Alert.Enabled then
+			if self.Starting then
 				return
 			end
-			self:Stop()
-		end
-		if KBM.Options.Alert.Enabled then
+			if self.Current then
+				if self.Current.isImportant then
+					return
+				end
+				self.Starting = true
+				self:Stop()
+			else
+				self.Starting = true
+			end
 			if Duration then
 				if not self.DefaultDuration then
 					self.Duration = Duration
@@ -1707,8 +1764,26 @@ function KBM.Alert:Init()
 				self.StopTime = false
 			end
 			self:Update(CurrentTime)
+			self.Starting = false
 		end
 	end
+	function self:Stop()
+		self.Left[self.Color]:SetVisible(false)
+		self.Right[self.Color]:SetVisible(false)
+		self.Anchor:SetVisible(false)
+		self.Shadow:SetText(" Alert Anchor ")
+		self.Text:SetText(" Alert Anchor ")
+		self.Current.Stopping = false
+		self.StopTime = false
+		if self.Current.AlertAfter and not self.Starting then
+			local TempObj = self.Current
+			self.Current = nil
+			self:Start(TempObj.AlertAfter, Inspect.Time.Real())
+			TempObj = nil
+		else
+			self.Current = nil
+		end
+	end	
 	function self:Update(CurrentTime)
 		if self.Current.Stopping then
 			if self.Alpha <= 0.1 then -- lag threshold
@@ -1752,25 +1827,11 @@ function KBM.Alert:Init()
 			end
 			if self.StopTime then
 				if self.StopTime <= CurrentTime then
-					if self.Current.AlertAfter then
-						self:Start(self.Current.AlertAfter, Inspect.Time.Real())
-					else
-						self.Direction = -self.Speed
-						self.Current.Stopping = true
-					end
+					self.Direction = -self.Speed
+					self.Current.Stopping = true
 				end
 			end
 		end
-	end
-	function self:Stop()
-		self.Current.Stopping = false
-		self.Current = nil
-		self.StopTime = false
-		self.Left[self.Color]:SetVisible(false)
-		self.Right[self.Color]:SetVisible(false)
-		self.Anchor:SetVisible(false)
-		self.Shadow:SetText(" Alert Anchor ")
-		self.Text:SetText(" Alert Anchor ")
 	end
 	
 end
@@ -2043,82 +2104,106 @@ function KBM:RaidCombatLeave()
 end
 
 function KBM:Timer()
-	
-	if KBM.Options.Enabled then
-		if KBM.Encounter then
-			local current = Inspect.Time.Real()
-			local diff = (current - self.HeldTime)
-			local udiff = (current - self.UpdateTime)
-			if KBM_CurrentMod then
-				KBM_CurrentMod:Timer(current, diff)
+
+	if not KBM.Updating then
+		KBM.Updating = true
+		if KBM.QueuePage then
+			if KBM.MainWin.CurrentPage then
+				KBM.MainWin.CurrentPage:Remove()
 			end
-			if diff >= 1 then
-				self.TimeElapsed = math.floor(current) - self.StartTime
-				if not KBM.Testing then
-					if KBM_CurrentMod.Enrage then
-						self.EnrageTimer = self.EnrageTime - math.floor(current)
-					end
-					if self.Options.EncTimer.Enabled then
-						self.EncTimer:Update(current)
-					end
+		end
+		for _, Frame in ipairs(KBM.FrameQueue) do
+			Frame:Delete()
+		end
+		KBM.FrameQueue = {}
+		for _, Check in ipairs(KBM.CheckQueue) do
+			Check:Delete()
+		end
+		KBM.CheckQueue = {}
+		for _, Text in ipairs(KBM.TextfQueue) do
+			Text:Delete()
+		end	
+		KBM.TextfQueue = {}
+		
+		if KBM.Options.Enabled then
+			if KBM.Encounter or KBM.Testing then
+				local current = Inspect.Time.Real()
+				local diff = (current - self.HeldTime)
+				local udiff = (current - self.UpdateTime)
+				if KBM_CurrentMod then
+					KBM_CurrentMod:Timer(current, diff)
 				end
-				self.HeldTime = current - (diff - math.floor(diff))
-				self.UpdateTime = current
-			end
-			if udiff >= 0.05 then
-				for UnitID, CastCheck in pairs(KBM.CastBar.ActiveCastBars) do
-					CastCheck:Update()
+				if diff >= 1 then
+					self.TimeElapsed = math.floor(current) - self.StartTime
+					if not KBM.Testing then
+						if KBM_CurrentMod.Enrage then
+							self.EnrageTimer = self.EnrageTime - math.floor(current)
+						end
+						if self.Options.EncTimer.Enabled then
+							self.EncTimer:Update(current)
+						end
+					end
+					self.HeldTime = current - (diff - math.floor(diff))
+					self.UpdateTime = current
 				end
-				if #self.MechTimer.ActiveTimers > 0 then
+				if udiff >= 0.05 then
+					for UnitID, CastCheck in pairs(KBM.CastBar.ActiveCastBars) do
+						CastCheck:Update()
+					end
 					for i, Timer in ipairs(self.MechTimer.ActiveTimers) do
 						Timer:Update(current)
 					end
-				end
-				self.UpdateTime = current
-				if not KBM.TankSwap.Test then
-					if KBM.TankSwap.Active then
-						KBM.TankSwap:Update()
+					self.UpdateTime = current
+					if not KBM.TankSwap.Test then
+						if KBM.TankSwap.Active then
+							KBM.TankSwap:Update()
+						end
 					end
 				end
-			end
-			if self.Alert.Current then
-				self.Alert:Update(current)
-			end
-			self.Trigger.Queue:Activate()
-			if #self.MechTimer.RemoveTimers > 0 then
+				self.Trigger.Queue:Activate()
 				for i, Timer in ipairs(self.MechTimer.RemoveTimers) do
 					Timer:Stop()
 				end
-				self.MechTimer.RemoveTimers = {}
-			end
-			if #self.MechTimer.StartTimers > 0 then
+				self.MechTimer.RemoveTimers = {}	
 				for i, Timer in ipairs(self.MechTimer.StartTimers) do
 					Timer:Start(current)
 				end
 				self.MechTimer.StartTimers = {}
+				if KBM.Idle.Combat.Wait then
+					if KBM.Idle.Combat.Until < current then
+						KBM.WipeIt()
+					end
+				end
+				if self.Alert.Current then
+					self.Alert:Update(current)
+				end
+			else
+				-- for UnitID, CastCheck in pairs(KBM.CastBar.List) do
+					-- CastCheck:Update()
+				-- end
+				-- if KBM.Testing then
+					-- if self.Alert.Current then
+						-- self.Alert:Update(Inspect.Time.Real())
+					-- end
+				-- end
 			end
-			if KBM.Idle.Combat.Wait then
-				if KBM.Idle.Combat.Until < current then
-					KBM.WipeIt()
+			if KBM.Testing then
+				d = math.random(1,2000)
+				if d < 20 then
+					d = math.random(1, #KBM.Trigger.List)
+					if KBM.Trigger.List[d].Type ~= "phase" and KBM.Trigger.List[d].Type ~= "percent" then
+						KBM.Trigger.Queue:Add(KBM.Trigger.List[d], KBM_PlayerID, KBM_PlayerID, 2)
+					end
 				end
 			end
-		else
-			-- for UnitID, CastCheck in pairs(KBM.CastBar.List) do
-				-- CastCheck:Update()
-			-- end
-			-- if KBM.Testing then
-				-- if self.Alert.Current then
-					-- self.Alert:Update(Inspect.Time.Real())
-				-- end
-			-- end
 		end
-		-- if KBM.Testing then
-			-- d = math.random(1,2000)
-			-- if d < 20 then
-				-- d = math.random(1, #KBM.Trigger.List)
-				-- KBM.Trigger.Queue:Add(KBM.Trigger.List[d], KBM_PlayerID, KBM_PlayerID, d)
-			-- end
-		-- end
+		if KBM.QueuePage then
+			KBM.QueuePage:Open()
+			KBM.QueuePage = nil
+		end
+		KBM.Updating = false
+	else
+		print("locked")
 	end
 	
 end
@@ -2174,6 +2259,8 @@ end
 
 local function KBM_Help()
 	print("King Boss Mods in game slash commands")
+	print("/kbmon -- Turns the Addon to it's on state.")
+	print("/kbmoff -- Switches the Addon off.")
 	print("/kbmreset -- Resets the current encounter.")
 	print("/kbmversion -- Displays the current version.")
 	print("/kbmoptions -- Toggles the GUI Options screen.")
@@ -2282,16 +2369,15 @@ function KBM.MenuOptions.Phases:Options()
 		KBM.Options.PhaseMon.Objectives = bool
 	end
 
-	Options = self.MenuItem.Options
+	local Options = self.MenuItem.Options
 	Options:SetTitle()
 	
 	-- Timer Options
-	self.Menu = {}
-	self.Menu.PhaseMon = Options:AddHeader(KBM.Language.Options.PhaseEnabled[KBM.Lang], self.Enabled, KBM.Options.PhaseMon.Enabled)
-	self.Menu.PhaseMon:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.Visible, KBM.Options.PhaseMon.Visible)
-	self.Menu.PhaseMon:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.Unlocked, KBM.Options.PhaseMon.Unlocked)
-	self.Menu.PhaseMon:AddCheck(KBM.Language.Options.Phases[KBM.Lang], self.PhaseDisplay, KBM.Options.PhaseMon.PhaseDisplay)
-	self.Menu.PhaseMon:AddCheck(KBM.Language.Options.Objectives[KBM.Lang], self.Objectives, KBM.Options.PhaseMon.Objectives)
+	local PhaseMon = Options:AddHeader(KBM.Language.Options.PhaseEnabled[KBM.Lang], self.Enabled, KBM.Options.PhaseMon.Enabled)
+	PhaseMon:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.Visible, KBM.Options.PhaseMon.Visible)
+	PhaseMon:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.Unlocked, KBM.Options.PhaseMon.Unlocked)
+	PhaseMon:AddCheck(KBM.Language.Options.Phases[KBM.Lang], self.PhaseDisplay, KBM.Options.PhaseMon.PhaseDisplay)
+	PhaseMon:AddCheck(KBM.Language.Options.Objectives[KBM.Lang], self.Objectives, KBM.Options.PhaseMon.Objectives)
 	
 end
 
@@ -2366,21 +2452,20 @@ function KBM.MenuOptions.Timers:Options()
 		KBM.Options.MechTimer.TextSize = value
 		KBM.MechTimer.Anchor.Text:SetFontSize(KBM.Options.MechTimer.TextSize)
 	end
-	Options = self.MenuItem.Options
+	local Options = self.MenuItem.Options
 	Options:SetTitle()
 	
 	-- Timer Options
-	self.Menu = {}
-	self.Menu.EncTimers = Options:AddHeader(KBM.Language.Options.EncTimers[KBM.Lang], self.EncTimersEnabled, KBM.Options.EncTimer.Enabled)
-	self.Menu.EncTimers:AddCheck(KBM.Language.Options.ShowTimer[KBM.Lang], self.ShowEncTimer, KBM.Options.EncTimer.Visible)
-	self.Menu.EncTimers:AddCheck(KBM.Language.Options.LockTimer[KBM.Lang], self.LockEncTimer, KBM.Options.EncTimer.Unlocked)
-	self.Menu.EncTimers:AddCheck(KBM.Language.Options.Timer[KBM.Lang], self.EncDuration, KBM.Options.EncTimer.Duration)
-	self.Menu.EncTimers:AddCheck(KBM.Language.Options.Enrage[KBM.Lang], self.EncEnrage, KBM.Options.EncTimer.Enrage)
-	self.Menu.MechTimers = Options:AddHeader(KBM.Language.Options.MechanicTimers[KBM.Lang], self.MechEnabled, true)
-	self.Menu.MechTimers.Check.Frame:SetEnabled(false)
+	local Timers = Options:AddHeader(KBM.Language.Options.EncTimers[KBM.Lang], self.EncTimersEnabled, KBM.Options.EncTimer.Enabled)
+	Timers:AddCheck(KBM.Language.Options.ShowTimer[KBM.Lang], self.ShowEncTimer, KBM.Options.EncTimer.Visible)
+	Timers:AddCheck(KBM.Language.Options.LockTimer[KBM.Lang], self.LockEncTimer, KBM.Options.EncTimer.Unlocked)
+	Timers:AddCheck(KBM.Language.Options.Timer[KBM.Lang], self.EncDuration, KBM.Options.EncTimer.Duration)
+	Timers:AddCheck(KBM.Language.Options.Enrage[KBM.Lang], self.EncEnrage, KBM.Options.EncTimer.Enrage)
+	local MechTimers = Options:AddHeader(KBM.Language.Options.MechanicTimers[KBM.Lang], self.MechEnabled, true)
+	MechTimers.Check.Frame:SetEnabled(false)
 	KBM.Options.MechTimer.Enabled = true
-	self.Menu.MechTimers:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowMechAnchor, KBM.Options.MechTimer.Visible)
-	self.Menu.MechTimers:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.LockMechAnchor, KBM.Options.MechTimer.Unlocked)
+	MechTimers:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowMechAnchor, KBM.Options.MechTimer.Visible)
+	MechTimers:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.LockMechAnchor, KBM.Options.MechTimer.Unlocked)
 	-- self.MechTimers:AddCheck("Width scaling.", self.MechScaleWidth, KBM.Options.MechTimer.ScaleWidth)
 	-- self.MechTimers:AddCheck("Enable Width mouse wheel scaling.", self.MechWidthMouse, KBM.Options.MechTimer.WidthMouse)
 	-- local slider = self.MechTimers:AddSlider(50, 150, nil, (KBM.Options.MechTimer.wScale*100))
@@ -2472,14 +2557,14 @@ function KBM.MenuOptions.TankSwap:Options()
 			KBM.TankSwap.Anchor:SetVisible(KBM.Options.TankSwap.Visible)
 		end
 	end
-	Options = self.MenuItem.Options
+	local Options = self.MenuItem.Options
 	Options:SetTitle()
 
 	-- Tank-Swap Options. 
-	self.TankSwap = Options:AddHeader(KBM.Language.Options.TankSwapEnabled[KBM.Lang], self.Enabled, KBM.Options.TankSwap.Enabled)
-	self.TankSwap:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowAnchor, KBM.Options.TankSwap.Visible)
-	self.TankSwap:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.LockAnchor, KBM.Options.TankSwap.Unlocked)
-	self.TestLink = self.TankSwap:AddCheck(KBM.Language.Options.Tank[KBM.Lang], self.ShowTest, false)
+	local TankSwap = Options:AddHeader(KBM.Language.Options.TankSwapEnabled[KBM.Lang], self.Enabled, KBM.Options.TankSwap.Enabled)
+	TankSwap:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowAnchor, KBM.Options.TankSwap.Visible)
+	TankSwap:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.LockAnchor, KBM.Options.TankSwap.Unlocked)
+	self.TestLink = TankSwap:AddCheck(KBM.Language.Options.Tank[KBM.Lang], self.ShowTest, false)
 	-- self.CastBars:AddCheck("Width scaling.", self.CastScaleWidth, KBM.Options.CastBar.ScaleWidth)
 	-- self.CastBars:AddCheck("Height scaling.", self.CastScaleHeight, KBM.Options.CastBar.ScaleHeight)
 	-- self.CastBars:AddCheck("Text Size", self.CastTextSize, KBM.Options.CastBar.TextScale)
@@ -2537,15 +2622,15 @@ function KBM.MenuOptions.CastBars:Options()
 		KBM.CastBar.Anchor.Text:SetFontSize(KBM.Options.CastBar.TextSize)
 	end
 	
-	Options = self.MenuItem.Options
+	local Options = self.MenuItem.Options
 	Options:SetTitle()
 
 	-- CastBar Options. 
-	self.CastBars = Options:AddHeader(KBM.Language.Options.CastbarEnabled[KBM.Lang], self.CastBarEnabled, true)
-	self.CastBars.Check.Frame:SetEnabled(false)
+	local CastBars = Options:AddHeader(KBM.Language.Options.CastbarEnabled[KBM.Lang], self.CastBarEnabled, true)
+	CastBars.Check.Frame:SetEnabled(false)
 	KBM.Options.CastBar.Enabled = true
-	self.CastBars:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowCastAnchor, KBM.Options.CastBar.Visible)
-	self.CastBars:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.LockCastAnchor, KBM.Options.CastBar.Unlocked)
+	CastBars:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowCastAnchor, KBM.Options.CastBar.Visible)
+	CastBars:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.LockCastAnchor, KBM.Options.CastBar.Unlocked)
 	-- self.CastBars:AddCheck("Width scaling.", self.CastScaleWidth, KBM.Options.CastBar.ScaleWidth)
 	-- self.CastBars:AddCheck("Height scaling.", self.CastScaleHeight, KBM.Options.CastBar.ScaleHeight)
 	-- self.CastBars:AddCheck("Text Size", self.CastTextSize, KBM.Options.CastBar.TextScale)
@@ -2575,31 +2660,34 @@ function KBM.MenuOptions.Alerts:Options()
 		KBM.Options.Alert.Notify = bool
 	end
 	
-	Options = self.MenuItem.Options
+	local Options = self.MenuItem.Options
 	Options:SetTitle()
 
-	self.Alert = Options:AddHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], self.AlertEnabled, KBM.Options.Alert.Enabled)
-	self.Alert:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowAnchor, KBM.Options.Alert.Visible)
-	self.Alert:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.LockAnchor, KBM.Options.Alert.Unlocked)
-	self.Alert:AddCheck(KBM.Language.Options.AlertFlash[KBM.Lang], self.FlashEnabled, KBM.Options.Alert.Flash)
-	self.Alert:AddCheck(KBM.Language.Options.AlertText[KBM.Lang], self.TextEnabled, KBM.Options.Alert.Notify)
+	local Alert = Options:AddHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], self.AlertEnabled, KBM.Options.Alert.Enabled)
+	Alert:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowAnchor, KBM.Options.Alert.Visible)
+	Alert:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.LockAnchor, KBM.Options.Alert.Unlocked)
+	Alert:AddCheck(KBM.Language.Options.AlertFlash[KBM.Lang], self.FlashEnabled, KBM.Options.Alert.Flash)
+	Alert:AddCheck(KBM.Language.Options.AlertText[KBM.Lang], self.TextEnabled, KBM.Options.Alert.Notify)
 	
+end
+
+function KBM.StateSwitch(bool)
+	KBM.Options.Enabled = bool
+	if KBM.Options.Enabled then
+		print("King Boss Mods is now Enabled.")
+	else
+		print("King Boss Mods is now Disabled.")
+		if KBM.Encounter then
+			print("Stopping running Encounter.")
+			KBM:Reset()
+		end
+	end
 end
 
 function KBM.MenuOptions.Main:Options()
 
 	function self:Enabled(bool)
-		KBM.Options.Enabled = bool
-		if KBM.Options.Enabled then
-			print("King Boss Mods is now Enabled.")
-		else
-			print("King Boss Mods is now Disabled.")
-			if KBM.Encounter then
-				print("Stopping running Encounter.")
-				KBM:Reset()
-			end
-		end
-			
+		KBM.StateSwitch(bool)
 	end
 	function self:ButtonVisible(bool)
 		KBM.Options.Button.Visible = bool
@@ -2610,12 +2698,12 @@ function KBM.MenuOptions.Main:Options()
 		KBM.Button.Drag:SetVisible(bool)
 	end
 
-	Options = self.MenuItem.Options
+	local Options = self.MenuItem.Options
 	Options:SetTitle()
 
-	self.Enbaled = Options:AddHeader(KBM.Language.Options.Enabled[KBM.Lang], self.Enabled, KBM.Options.Enabled)
-	self.Button = Options:AddHeader(KBM.Language.Options.Button[KBM.Lang], self.ButtonVisible, KBM.Options.Button.Visible)
-	self.Button:AddCheck(KBM.Language.Options.LockButton[KBM.Lang], self.LockButton, KBM.Options.Button.Unlocked)
+	local Enabled = Options:AddHeader(KBM.Language.Options.Enabled[KBM.Lang], self.Enabled, KBM.Options.Enabled)
+	local Button = Options:AddHeader(KBM.Language.Options.Button[KBM.Lang], self.ButtonVisible, KBM.Options.Button.Visible)
+	Button:AddCheck(KBM.Language.Options.LockButton[KBM.Lang], self.LockButton, KBM.Options.Button.Unlocked)
 	
 end
 
@@ -2692,6 +2780,8 @@ local function KBM_Start()
 	print("/kbmhelp for a list of commands.")
 	print("/kbmoptions for options.")
 	KBM.MenuOptions.Timers:Options()
+	table.insert(Command.Slash.Register("kbmon"), {function() KBM.StateSwitch(true) end, "KingMolinator", "KBM On"})
+	table.insert(Command.Slash.Register("kbmoff"), {function() KBM.StateSwitch(false) end, "KingMolinator", "KBM Off"})	
 end
 
 local function KBM_WaitReady(unitID)

@@ -198,7 +198,7 @@ end
 
 function AK.PhaseTwo()
 	AK.Phase = 2
-	AK.Jornaru.TimersRef.WaveOne:Stop()
+	table.insert(KBM.MechTimer.StopTimers, AK.Jornaru.TimersRef.WaveOne)
 	AK.Jornaru.CastBar.Enabled = false
 	print("Phase 2 starting!")
 end
@@ -214,7 +214,7 @@ end
 
 function AK.PhaseFour()
 	AK.Phase = 4
-	AK.Jornaru.TimersRef.WaveFour:Start(Inspect.Time.Real())
+	table.insert(KBM.MechTimer.StartTimers, AK.Jornaru.TimersRef.WaveFour)
 	print("Phase 4 starting!")
 end
 
@@ -414,7 +414,7 @@ function AK:Start()
 	self.Akylios.AlertsRef.BreathWarn = KBM.Alert:Create(AK.Lang.Ability.Breath[KBM.Lang], 4, true, true, "red")
 	self.Akylios.AlertsRef.BreathWarn.Enabled = self.Settings.Alerts.Breath
 	self.Akylios.AlertsRef.Breath = KBM.Alert:Create(AK.Lang.Ability.Breath[KBM.Lang], 5, false, true, "red")
-	self.Akylios.AlertsRef.BreathWarn.Enabled = self.Settings.Alerts.Breath
+	self.Akylios.AlertsRef.Breath.Enabled = self.Settings.Alerts.Breath
 	
 	-- Assign Mechanics to Triggers
 	self.Jornaru.Triggers.Start = KBM.Trigger:Create(AK.Lang.Mechanic.Wave[KBM.Lang], "start", self.Jornaru)

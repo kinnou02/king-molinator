@@ -203,6 +203,7 @@ function SN:Start()
 	self.Sicaron.Triggers.Contract = KBM.Trigger:Create(self.Lang.Notify.Contract[KBM.Lang], "notify", self.Sicaron)
 	self.Sicaron.Triggers.Contract:AddTimer(self.Sicaron.TimersRef.Contract)
 	self.Sicaron.Triggers.Contract:AddAlert(self.Sicaron.AlertsRef.Contract, true)
+	self.Sicaron.AlertsRef.Contract:Important()
 	self.Sicaron.AlertsRef.Contract:AlertEnd(self.Sicaron.AlertsRef.ContractRed)
 		
 	self.Sicaron.CastBar = KBM.CastBar:Add(self, self.Sicaron, true)

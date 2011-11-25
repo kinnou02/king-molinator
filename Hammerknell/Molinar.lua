@@ -740,9 +740,6 @@ function KM:Timer(current, diff)
 end
 
 function KM.KingMolinar:OptionsClose()
-	self.Monitor = nil
-	self.KingMech = nil
-	self.PrinceMech = nil
 end
 
 function KM.KingMolinar:Options()
