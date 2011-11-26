@@ -1,11 +1,11 @@
 ﻿v0.6.5
 * New: You can now select to save all settings for KBM for the current character.
 * Hammerknell
-** New: Converted all bosses settings to account and per-character methods.
+** New: Converted all boss settings to account and per-character methods.
 ** Fixed: Due to the new saving methods, many bosses who's settings were not working, will work now.
-** Fixed: All bosses options should work as intended.
+** Fixed: All boss options should work as intended.
 * Rise of the Phoenix
-** New: Converted all bosses settings to account and per-character methods.
+** New: Converted all boss settings to account and per-character methods.
 ** Beruhast: Fixed: Settings bug for Timers.
 ** Beruhast: Added: Summoned Flame timer.
 ----
