@@ -87,14 +87,37 @@ function SN:InitVars()
 		},
 	}
 	KBMSN_Settings = self.Settings
+	chKBMSN_Settings = self.Settings
+	
+end
+
+function SN:SwapSettings(bool)
+
+	if bool then
+		KBMSN_Settings = self.Settings
+		self.Settings = chKBMSN_Settings
+	else
+		chKBMSN_Settings = self.Settings
+		self.Settings = KBMSN_Settings
+	end
+
 end
 
 function SN:LoadVars()
-	if type(KBMSN_Settings) == "table" then
-		for Setting, Value in pairs(KBMSN_Settings) do
-			if type(KBMSN_Settings[Setting]) == "table" then
+	
+	local TargetLoad = nil
+	
+	if KBM.Options.Character then
+		TargetLoad = chKBMSN_Settings
+	else
+		TargetLoad = KBMSN_Settings
+	end
+	
+	if type(TargetLoad) == "table" then
+		for Setting, Value in pairs(TargetLoad) do
+			if type(TargetLoad[Setting]) == "table" then
 				if self.Settings[Setting] ~= nil then
-					for tSetting, tValue in pairs(KBMSN_Settings[Setting]) do
+					for tSetting, tValue in pairs(TargetLoad[Setting]) do
 						if self.Settings[Setting][tSetting] ~= nil then
 							self.Settings[Setting][tSetting] = tValue
 						end
@@ -107,10 +130,23 @@ function SN:LoadVars()
 			end
 		end
 	end
+	
+	if KBM.Options.Character then
+		chKBMSN_Settings = self.Settings
+	else
+		KBMSN_Settings = self.Settings
+	end
+	
 end
 
 function SN:SaveVars()
-	KBMSN_Settings = self.Settings
+
+	if KBM.Options.Settings then
+		chKBMSN_Settings = self.Settings
+	else
+		KBMSN_Settings = self.Settings
+	end
+	
 end
 
 function SN:Castbar(units)
@@ -165,18 +201,52 @@ function SN:Timer()
 	
 end
 
-function SN.Sicaron:Options()
-	function self:Timers(bool)
+function SN:SetTimers(bool)
+
+	if bool then
+		self.Sicaron.TimersRef.Contract.Enabled = self.Settings.Timers.Contract
+	else
+		self.Sicaron.TimersRef.Contract.Enabled = false
 	end
-	function self:Alerts(bool)
 	
+end
+
+function SN:SetAlerts(bool)
+
+	if bool then
+		self.Sicaron.AlertsRef.Contract.Enabled = self.Settings.Alerts.Contract
+		self.Sicaron.AlertsRef.ContractRed.Enabled = self.Settings.Alerts.Contract
+	else
+		self.Sicaron.AlertsRef.Contract.Enabled = false
+		self.Sicaron.AlertsRef.ContractRed.Enabled = false
+	end
+	
+end
+
+function SN.Sicaron:Options()
+
+	-- Timer Options.
+	function self:Timers(bool)
+		SN.Settings.Timers.Enabled = bool
+		SN:SetTimers(bool)
 	end
 	function self:ContractTimer(bool)
+		SN.Settings.Timers.Contract = bool
+		SN.Sicaron.TimersRef.Contract.Enabled = bool
+	end
 	
+	-- Alert Options.
+	function self:Alerts(bool)
+		SN.Settings.Alerts.Enabled = bool
+		SN:SetAlerts(bool)
 	end
 	function self:ContractAlert(bool)
-	
+		SN.Settings.Alerts.Contract = bool
+		SN.Sicaron.AlertsRef.Contract.Enabled = bool
+		SN.Sicaron.AlertsRef.ContractRed.Enabled = bool
 	end
+	
+	-- Menu Options.
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
 	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.Timers, SN.Settings.Timers.Enabled)
@@ -187,17 +257,20 @@ function SN.Sicaron:Options()
 end
 
 function SN:Start()
+	
+	-- Initiate Main Menu option.
 	self.Header = KBM.HeaderList[self.Instance]
 	self.Sicaron.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Sicaron, true, self.Header)
 	self.Sicaron.MenuItem.Check:SetEnabled(false)
 	
 	-- Create Timers
 	self.Sicaron.TimersRef.Contract = KBM.MechTimer:Add(self.Lang.Debuff.Contract[KBM.Lang], 17)
-	self.Sicaron.TimersRef.Contract.Enabled = self.Settings.Timers.Contract
+	self:SetTimers(bool)
 	
 	-- Create Alerts
 	self.Sicaron.AlertsRef.Contract = KBM.Alert:Create(self.Lang.Debuff.Contract[KBM.Lang], 12, false, true, "blue")
 	self.Sicaron.AlertsRef.ContractRed = KBM.Alert:Create(self.Lang.Debuff.Contract[KBM.Lang], 5, true, true, "red")
+	self:SetAlerts(bool)
 	
 	-- Assign Mechanics to Triggers
 	self.Sicaron.Triggers.Contract = KBM.Trigger:Create(self.Lang.Notify.Contract[KBM.Lang], "notify", self.Sicaron)
@@ -205,6 +278,8 @@ function SN:Start()
 	self.Sicaron.Triggers.Contract:AddAlert(self.Sicaron.AlertsRef.Contract, true)
 	self.Sicaron.AlertsRef.Contract:Important()
 	self.Sicaron.AlertsRef.Contract:AlertEnd(self.Sicaron.AlertsRef.ContractRed)
-		
+	
+	-- Assign Castbar object.
 	self.Sicaron.CastBar = KBM.CastBar:Add(self, self.Sicaron, true)
+	
 end

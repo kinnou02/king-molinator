@@ -3,6 +3,7 @@
 -- Copyright 2011
 
 KBM_GlobalOptions = nil
+chKBM_GlobalOptions = nil
 
 local KingMol_Main = {}
 local AddonData = Inspect.Addon.Detail("KingMolinator")
@@ -39,6 +40,7 @@ KBM.MenuOptions = {
 local function KBM_DefineVars(AddonID)
 	if AddonID == "KingMolinator" then
 		KBM.Options = {
+			Character = false,
 			Enabled = true,
 			Debug = false,
 			Frame = {
@@ -143,6 +145,7 @@ local function KBM_DefineVars(AddonID)
 			},
 		}
 		KBM_GlobalOptions = KBM.Options
+		chKBM_GlobalOptions = KBM.Options
 		for _, Mod in ipairs(KBM.ModList) do
 			Mod:InitVars()
 		end
@@ -151,12 +154,19 @@ end
 
 local function KBM_LoadVars(AddonID)
 
+	local TargetLoad = nil
+
 	if AddonID == "KingMolinator" then
-		if type(KBM_GlobalOptions) == "table" then
-			for Setting, Value in pairs(KBM_GlobalOptions) do
-				if type(KBM_GlobalOptions[Setting]) == "table" then
+		if KBM_GlobalOptions.Character then
+			TargetLoad = chKBM_GlobalOptions
+		else
+			TargetLoad = KBM_GlobalOptions
+		end
+		if type(TargetLoad) == "table" then
+			for Setting, Value in pairs(TargetLoad) do
+				if type(TargetLoad[Setting]) == "table" then
 					if KBM.Options[Setting] ~= nil then
-						for tSetting, tValue in pairs(KBM_GlobalOptions[Setting]) do
+						for tSetting, tValue in pairs(TargetLoad[Setting]) do
 							if KBM.Options[Setting][tSetting] ~= nil then
 								KBM.Options[Setting][tSetting] = tValue
 							end
@@ -169,6 +179,11 @@ local function KBM_LoadVars(AddonID)
 				end
 			end
 		end
+		if KBM.Options.Character then
+			chKBM_GlobalOptions = KBM.Options			
+		else
+			KBM_GlobalOptions = KBM.Options		
+		end
 		for _, Mod in ipairs(KBM.ModList) do
 			Mod:LoadVars()
 		end
@@ -180,7 +195,11 @@ end
 local function KBM_SaveVars(AddonID)
 
 	if AddonID == "KingMolinator" then
-		KBM_GlobalOptions = KBM.Options
+		if not KBM.Options.Character then
+			KBM_GlobalOptions = KBM.Options
+		else
+			chKBM_GlobalOptions = KBM.Options
+		end
 		for _, Mod in ipairs(KBM.ModList) do
 			Mod:SaveVars()
 		end
@@ -375,6 +394,7 @@ KBM.Language.Options.AlertText = KBM.Language:Add("Alert warning text enabled.")
 KBM.Language.Options.AlertText.German = "Alarmierungs-Text aktiviert."
 KBM.Language.Options.AlertText.French = "Texte Avertissement Alerte activ\195\169 ."
 -- Misc.
+KBM.Language.Options.Character = KBM.Language:Add("Saving settings for this character only.")
 KBM.Language.Options.Enabled = KBM.Language:Add("Enable King Boss Mods v"..AddonData.toc.Version)
 KBM.Language.Options.Settings = KBM.Language:Add("Settings")
 KBM.Language.Options.Settings.French = "Configurations"
@@ -2187,23 +2207,21 @@ function KBM:Timer()
 					-- end
 				-- end
 			end
-			if KBM.Testing then
-				d = math.random(1,2000)
-				if d < 20 then
-					d = math.random(1, #KBM.Trigger.List)
-					if KBM.Trigger.List[d].Type ~= "phase" and KBM.Trigger.List[d].Type ~= "percent" then
-						KBM.Trigger.Queue:Add(KBM.Trigger.List[d], KBM_PlayerID, KBM_PlayerID, 2)
-					end
-				end
-			end
+			-- if KBM.Testing then
+				-- d = math.random(1,2000)
+				-- if d < 20 then
+					-- d = math.random(1, #KBM.Trigger.List)
+					-- if KBM.Trigger.List[d].Type ~= "phase" and KBM.Trigger.List[d].Type ~= "percent" then
+						-- KBM.Trigger.Queue:Add(KBM.Trigger.List[d], KBM_PlayerID, KBM_PlayerID, 2)
+					-- end
+				-- end
+			-- end
 		end
 		if KBM.QueuePage then
 			KBM.QueuePage:Open()
 			KBM.QueuePage = nil
 		end
 		KBM.Updating = false
-	else
-		print("locked")
 	end
 	
 end
@@ -2686,6 +2704,28 @@ end
 
 function KBM.MenuOptions.Main:Options()
 
+	function self:Character(bool)
+		KBM.Options.Character = bool
+		if bool then
+			KBM_GlobalOptions = KBM.Options
+			KBM.Options = chKBM_GlobalOptions
+			KBM.Options.Character = true
+			for _, Mod in ipairs(KBM.ModList) do
+				if Mod.SwapSettings then
+					Mod:SwapSettings(bool)
+				end
+			end
+		else
+			chKBM_GlobalOptions = KBM.Options
+			KBM.Options = KBM_GlobalOptions
+			KBM.Options.Character = false
+			for _, Mod in ipairs(KBM.ModList) do
+				if Mod.SwapSettings then
+					Mod:SwapSettings(bool)
+				end
+			end
+		end
+	end
 	function self:Enabled(bool)
 		KBM.StateSwitch(bool)
 	end
@@ -2701,6 +2741,7 @@ function KBM.MenuOptions.Main:Options()
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
 
+	local Character = Options:AddHeader(KBM.Language.Options.Character[KBM.Lang], self.Character, KBM.Options.Character)
 	local Enabled = Options:AddHeader(KBM.Language.Options.Enabled[KBM.Lang], self.Enabled, KBM.Options.Enabled)
 	local Button = Options:AddHeader(KBM.Language.Options.Button[KBM.Lang], self.ButtonVisible, KBM.Options.Button.Visible)
 	Button:AddCheck(KBM.Language.Options.LockButton[KBM.Lang], self.LockButton, KBM.Options.Button.Unlocked)

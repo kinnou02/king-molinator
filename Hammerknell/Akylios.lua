@@ -167,14 +167,37 @@ function AK:InitVars()
 		},
 	}
 	KBMAK_Settings = self.Settings
+	chKBMAK_Settings = self.Settings
+	
+end
+
+function AK:SwapSettings(bool)
+
+	if bool then
+		KBMAK_Settings = self.Settings
+		self.Settings = chKBMAK_Settings
+	else
+		chKBMAK_Settings = self.Settings
+		self.Settings = KBMAK_Settings
+	end
+
 end
 
 function AK:LoadVars()
-	if type(KBMAK_Settings) == "table" then
-		for Setting, Value in pairs(KBMAK_Settings) do
-			if type(KBMAK_Settings[Setting]) == "table" then
+	
+	local TargetLoad = nil
+	
+	if KBM.Options.Character then
+		TargetLoad = chKBMAK_Settings
+	else
+		TargetLoad = KBMAK_Settings
+	end
+	
+	if type(TargetLoad) == "table" then
+		for Setting, Value in pairs(TargetLoad) do
+			if type(TargetLoad[Setting]) == "table" then
 				if self.Settings[Setting] ~= nil then
-					for tSetting, tValue in pairs(KBMAK_Settings[Setting]) do
+					for tSetting, tValue in pairs(TargetLoad[Setting]) do
 						if self.Settings[Setting][tSetting] ~= nil then
 							self.Settings[Setting][tSetting] = tValue
 						end
@@ -187,10 +210,23 @@ function AK:LoadVars()
 			end
 		end
 	end
+	
+	if KBM.Options.Character then
+		chKBMAK_Settings = self.Settings
+	else
+		KBMAK_Settings = self.Settings
+	end
+	
 end
 
 function AK:SaveVars()
-	KBMAK_Settings = self.Settings
+	
+	if KBM.Options.Character then
+		chKBMAK_Settings = self.Settings
+	else
+		KBMAK_Settings = self.Settings
+	end
+	
 end
 
 function AK:Castbar(units)
@@ -270,7 +306,7 @@ function AK:UnitHPCheck(uDetails, unitID)
 						self.HeldTime = self.StartTime
 						self.TimeElapsed = 0
 						self.Jornaru.CastBar:Create(unitID)
-						self.Jornaru.TimersRef.WaveOne:Start(Inspect.Time.Real())
+						table.insert(KBM.MechTimer.StartTimers, self.Jornaru.TimersRef.WaveOne)
 					end
 					self.Jornaru.Dead = false
 					self.Jornaru.Casting = false
@@ -329,10 +365,47 @@ function AK:Timer()
 	
 end
 
+function AK:SetTimers(bool)
+
+	if bool then
+		self.Jornaru.TimersRef.WaveOne.Enabled = self.Settings.Timers.WaveOne
+		self.Jornaru.TimersRef.WaveFour.Enabled = self.Settings.Timers.WaveFour
+		self.Jornaru.TimersRef.OrbFirst.Enabled = self.Settings.Timers.Orb
+		self.Jornaru.TimersRef.Orb.Enabled = self.Settings.Timers.Orb
+		self.Akylios.TimersRef.Breath.Enabled = self.Settings.Timers.Breath
+	else
+		self.Jornaru.TimersRef.WaveOne.Enabled = false
+		self.Jornaru.TimersRef.WaveFour.Enabled = false
+		self.Jornaru.TimersRef.OrbFirst.Enabled = false
+		self.Jornaru.TimersRef.Orb.Enabled = false
+		self.Akylios.TimersRef.Breath.Enabled = false
+	end
+
+end
+
+function AK:SetAlerts(bool)
+
+	if bool then
+		self.Jornaru.AlertsRef.WaveWarning.Enabled = self.Settings.Alerts.WaveWarning
+		self.Jornaru.AlertsRef.Orb.Enabled = self.Settings.Alerts.Orb
+		self.Akylios.AlertsRef.Decay.Enabled = self.Settings.Alerts.Decay
+		self.Akylios.AlertsRef.BreathWarn.Enabled = self.Settings.Alerts.Breath
+		self.Akylios.AlertsRef.Breath.Enabled = self.Settings.Alerts.Breath
+	else
+		self.Jornaru.AlertsRef.WaveWarning.Enabled = false
+		self.Jornaru.AlertsRef.Orb.Enabled = false
+		self.Akylios.AlertsRef.Decay.Enabled = false
+		self.Akylios.AlertsRef.BreathWarn.Enabled = false
+		self.Akylios.AlertsRef.Breath.Enabled = false
+	end
+
+end
+
 function AK.Akylios:Options()
 	-- Timer Options
 	function self:Timers(bool)
 		AK.Settings.Timers.Enabled = bool
+		AK:SetTimers(bool)
 	end
 	function self:WaveOneTimer(bool)
 		AK.Settings.Timers.WaveOne = bool
@@ -354,6 +427,7 @@ function AK.Akylios:Options()
 	-- Alert Options
 	function self:Alerts(bool)
 		AK.Settings.Alerts.Enabled = bool
+		AK:SetAlerts(bool)
 	end
 	function self:WaveWarning(bool)
 		AK.Settings.Alerts.WaveWarning = bool
@@ -394,27 +468,19 @@ function AK:Start()
 	
 	-- Create Timers
 	self.Jornaru.TimersRef.WaveOne = KBM.MechTimer:Add(AK.Lang.Mechanic.Wave[KBM.Lang], 40, true)
-	self.Jornaru.TimersRef.WaveOne.Enable = self.Settings.Timers.WaveOne
 	self.Jornaru.TimersRef.WaveFour = KBM.MechTimer:Add(AK.Lang.Mechanic.Wave[KBM.Lang], 50, true)
-	self.Jornaru.TimersRef.WaveFour.Enable = self.Settings.Timers.WaveFour
 	self.Jornaru.TimersRef.OrbFirst = KBM.MechTimer:Add(AK.Lang.Mechanic.Orb[KBM.Lang], 50)
-	self.Jornaru.TimersRef.OrbFirst.Enabled = self.Settings.Timers.Orb
 	self.Jornaru.TimersRef.Orb = KBM.MechTimer:Add(AK.Lang.Mechanic.Orb[KBM.Lang], 30)
-	self.Jornaru.TimersRef.Orb.Enabled = self.Settings.Timers.Orb
 	self.Akylios.TimersRef.Breath = KBM.MechTimer:Add(AK.Lang.Ability.Breath[KBM.Lang], 25)
-	self.Akylios.TimersRef.Breath.Enabled = self.Settings.Timers.Breath
+	self:SetTimers(self.Settings.Timers.Enabled)
 	
 	-- Create Alerts
 	self.Jornaru.AlertsRef.WaveWarning = KBM.Alert:Create(AK.Lang.Mechanic.Wave[KBM.Lang], 5, true, true, "blue")
-	self.Jornaru.AlertsRef.WaveWarning.Enabled = self.Settings.Alerts.WaveWarning
 	self.Jornaru.AlertsRef.Orb = KBM.Alert:Create(AK.Lang.Mechanic.Orb[KBM.Lang], 8, true, true, "orange")
-	self.Jornaru.AlertsRef.Orb.Enabled = self.Settings.Alerts.Orb
 	self.Akylios.AlertsRef.Decay = KBM.Alert:Create(AK.Lang.Ability.Decay[KBM.Lang], 10, true, true, "purple")
-	self.Akylios.AlertsRef.Decay.Enabled = self.Settings.Alerts.Decay
 	self.Akylios.AlertsRef.BreathWarn = KBM.Alert:Create(AK.Lang.Ability.Breath[KBM.Lang], 4, true, true, "red")
-	self.Akylios.AlertsRef.BreathWarn.Enabled = self.Settings.Alerts.Breath
 	self.Akylios.AlertsRef.Breath = KBM.Alert:Create(AK.Lang.Ability.Breath[KBM.Lang], 5, false, true, "red")
-	self.Akylios.AlertsRef.Breath.Enabled = self.Settings.Alerts.Breath
+	self:SetAlerts(self.Settings.Alerts.Enabled)
 	
 	-- Assign Mechanics to Triggers
 	self.Jornaru.Triggers.Start = KBM.Trigger:Create(AK.Lang.Mechanic.Wave[KBM.Lang], "start", self.Jornaru)

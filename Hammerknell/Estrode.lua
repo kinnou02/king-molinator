@@ -94,14 +94,37 @@ function ES:InitVars()
 		},
 	}
 	KBMES_Settings = self.Settings
+	chKBMES_Settings = self.Settings
+	
+end
+
+function ES:SwapSettings(bool)
+
+	if bool then
+		KBMES_Settings = self.Settings
+		self.Settings = chKBMES_Settings
+	else
+		chKBMES_Settings = self.Settings
+		self.Settings = KBMES_Settings
+	end
+
 end
 
 function ES:LoadVars()
-	if type(KBMES_Settings) == "table" then
-		for Setting, Value in pairs(KBMES_Settings) do
-			if type(KBMES_Settings[Setting]) == "table" then
+
+	local TargetLoad = nil
+	
+	if KBM.Options.Character then
+		TargetLoad = chKBMES_Settings
+	else
+		TargetLoad = KBMES_Settings
+	end
+	
+	if type(TargetLoad) == "table" then
+		for Setting, Value in pairs(TargetLoad) do
+			if type(TargetLoad[Setting]) == "table" then
 				if self.Settings[Setting] ~= nil then
-					for tSetting, tValue in pairs(KBMES_Settings[Setting]) do
+					for tSetting, tValue in pairs(TargetLoad[Setting]) do
 						if self.Settings[Setting][tSetting] ~= nil then
 							self.Settings[Setting][tSetting] = tValue
 						end
@@ -114,10 +137,23 @@ function ES:LoadVars()
 			end
 		end
 	end
+	
+	if KBM.Options.Character then
+		chKBMES_Settings = self.Settings
+	else
+		KBMES_Settings = self.Settings
+	end
+	
 end
 
 function ES:SaveVars()
-	KBMES_Settings = self.Settings
+
+	if KBM.Options.Character then
+		chKBMES_Settings = self.Settings
+	else
+		KBMES_Settings = self.Settings
+	end
+	
 end
 
 function ES:Castbar(units)
@@ -172,10 +208,37 @@ function ES:Timer()
 	
 end
 
+function ES:SetTimers(bool)
+	
+	if bool then
+		self.Estrode.TimersRef.Soul.Enabled = self.Settings.Timers.Soul
+		self.Estrode.TimersRef.Mind.Enabled = self.Settings.Timers.Mind
+	else
+		self.Estrode.TimersRef.Soul.Enabled = false
+		self.Estrode.TimersRef.Mind.Enabled = false
+	end
+
+end
+
+function ES:SetAlerts(bool)
+
+	if bool then
+		self.Estrode.AlertsRef.Dancing.Enabled = self.Settings.Alerts.Dancing
+		self.Estrode.AlertsRef.North.Enabled = self.Settings.Alerts.North
+		self.Estrode.AlertsRef.Chastise.Enabled = self.Settings.Alerts.Chastise
+	else
+		self.Estrode.AlertsRef.Dancing.Enabled = false
+		self.Estrode.AlertsRef.North.Enabled = false
+		self.Estrode.AlertsRef.Chastise.Enabled = false
+	end
+
+end
+
 function ES.Estrode:Options()
 	-- Timer Options
 	function self:Timers(bool)
 		ES.Settings.Timers.Enabled = bool
+		ES:SetTimers(bool)
 	end
 	function self:SoulEnabled(bool)
 		ES.Settings.Timers.Soul = bool
@@ -188,6 +251,7 @@ function ES.Estrode:Options()
 	-- Alert Options
 	function self:Alerts(bool)
 		ES.Settings.Alerts.Enabled = bool
+		ES:SetAlerts(bool)
 	end
 	function self:DancingAlert(bool)
 		ES.Settings.Alerts.Dancing = bool
@@ -220,17 +284,14 @@ function ES:Start()
 	
 	-- Create Timers
 	self.Estrode.TimersRef.Soul = KBM.MechTimer:Add(self.Lang.Ability.Soul[KBM.Lang], 40)
-	self.Estrode.TimersRef.Soul.Enabled = self.Settings.Timers.Soul
 	self.Estrode.TimersRef.Mind = KBM.MechTimer:Add(self.Lang.Ability.Mind[KBM.Lang], 60)
-	self.Estrode.TimersRef.Mind.Enabled = self.Settings.Timers.Mind
+	self:SetTimers(self.Settings.Timers.Enabled)
 	
 	-- Screen Alerts
 	self.Estrode.AlertsRef.Dancing = KBM.Alert:Create(self.Lang.Ability.Dancing[KBM.Lang], 2, true, true, "red")
-	self.Estrode.AlertsRef.Dancing.Enabled = self.Settings.Alerts.Dancing
 	self.Estrode.AlertsRef.North = KBM.Alert:Create(self.Lang.Ability.North[KBM.Lang], 2, true, true, "orange")
-	self.Estrode.AlertsRef.North.Enabled = self.Settings.Alerts.North
 	self.Estrode.AlertsRef.Chastise = KBM.Alert:Create(self.Lang.Ability.Chastise[KBM.Lang], 2, true, true, "yellow")
-	self.Estrode.AlertsRef.Chastise.Enabled = self.Settings.Alerts.Chastise
+	self:SetAlerts(self.Settings.Alerts.Enabled)
 	
 	-- Assign Mechanics to Triggers
 	self.Estrode.Triggers.Soul = KBM.Trigger:Create(self.Lang.Ability.Soul[KBM.Lang], "cast", self.Estrode)

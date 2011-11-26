@@ -4,6 +4,7 @@
 --
 
 KBMMX_Settings = nil
+chKBMMX_Settings = nil
 
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
@@ -80,10 +81,10 @@ function MX:InitVars()
 	self.Settings = {
 		Timers = {
 			Enabled = true,
-			MangleEnabled = true,
-			PoundEnabled = true,
-			BlastEnabled = true,
-			TraumaEnabled = true,
+			Mangle = true,
+			Pound = true,
+			Blast = true,
+			Trauma = true,
 		},
 		Alerts = {
 			Enabled = true,
@@ -96,14 +97,37 @@ function MX:InitVars()
 		},
 	}
 	KBMMX_Settings = self.Settings
+	chKBMMX_Settings = self.Settings
+	
+end
+
+function MX:SwapSettings(bool)
+
+	if bool then
+		KBMMX_Settings = self.Settings
+		self.Settings = chKBMMX_Settings
+	else
+		chKBMMX_Settings = self.Settings
+		self.Settings = KBMMX_Settings
+	end
+
 end
 
 function MX:LoadVars()
-	if type(KBMMX_Settings) == "table" then
-		for Setting, Value in pairs(KBMMX_Settings) do
-			if type(KBMMX_Settings[Setting]) == "table" then
+	
+	local TargetLoad = nil
+	
+	if KBM.Options.Character then
+		TargetLoad = chKBMMX_Settings
+	else
+		TargetLoad = KBMMX_Settings
+	end
+	
+	if type(TargetLoad) == "table" then
+		for Setting, Value in pairs(TargetLoad) do
+			if type(TargetLoad[Setting]) == "table" then
 				if self.Settings[Setting] ~= nil then
-					for tSetting, tValue in pairs(KBMMX_Settings[Setting]) do
+					for tSetting, tValue in pairs(TargetLoad[Setting]) do
 						if self.Settings[Setting][tSetting] ~= nil then
 							self.Settings[Setting][tSetting] = tValue
 						end
@@ -116,10 +140,23 @@ function MX:LoadVars()
 			end
 		end
 	end
+	
+	if KBM.Options.Character then
+		chKBMMX_Settings = self.Settings
+	else
+		KBMMX_Settings = self.Settings
+	end
+	
 end
 
 function MX:SaveVars()
-	KBMMX_Settings = self.Settings
+	
+	if KBM.Options.Character then
+		chKBMMX_Settings = self.Settings
+	else
+		KBMMX_Settings = self.Settings
+	end
+	
 end
 
 function MX:Castbar()
@@ -191,34 +228,60 @@ function MX:Timer()
 	
 end
 
-function MX.Murdantix:Options()
-	function self:TimersEnabled(bool)
-		MX.Settings.Timers.Enabled = bool
-		MX.Murd.TimersRef.Enabled = bool
-		if bool then
-			MX.Murdantix.Menu.Header:EnableChildren()
-		else
-			MX.Murdantix.Menu.Header:DisableChildren()
-		end
+function MX:SetTimers(bool)
+
+	if bool then
+		self.Murd.TimersRef.Mangling.Enabled = MX.Settings.Timers.Mangle
+		self.Murd.TimersRef.Pound.Enabled = MX.Settings.Timers.Pound
+		self.Murd.TimersRef.Blast.Enabled = MX.Settings.Timers.Blast
+		self.Murd.TimersRef.Trauma.Enabled = MX.Settings.Timers.Trauma
+	else
+		self.Murd.TimersRef.Mangling.Enabled = false
+		self.Murd.TimersRef.Pound.Enabled = false
+		self.Murd.TimersRef.Blast.Enabled = false
+		self.Murd.TimersRef.Trauma.Enabled = false
 	end
-	function self:MangleEnabled(bool)
-		MX.Settings.Timers.MangleEnabled = bool
+
+end
+
+function MX:SetAlerts(bool)
+
+	if bool then
+		self.Murd.AlertsRef.Trauma.Enabled = self.Settings.Alerts.Trauma
+	else
+		self.Murd.AlertsRef.Trauma.Enabled = false
+	end
+	
+end
+
+function MX.Murdantix:Options()
+
+	-- Timer Options
+	function self:Timers(bool)
+		MX.Settings.Timers.Enabled = bool
+		MX:SetTimers(bool)
+	end
+	function self:MangleTimer(bool)
+		MX.Settings.Timers.Mangle = bool
 		MX.Murd.TimersRef.Mangling.Enabled = bool
 	end
-	function self:PoundEnabled(bool)
-		MX.Settings.Timers.PoundEnabled = bool
+	function self:PoundTimer(bool)
+		MX.Settings.Timers.Pound = bool
 		MX.Murd.TimersRef.Pound.Enabled = bool
 	end
-	function self:BlastEnabled(bool)
-		MX.Settings.Timers.BlastEnabled = bool
+	function self:BlastTimer(bool)
+		MX.Settings.Timers.Blast = bool
 		MX.Murd.TimersRef.Blast.Enabled = bool
 	end
-	function self:TraumaEnabled(bool)
-		MX.Settings.Timers.TraumaEnabled = bool
+	function self:TraumaTimer(bool)
+		MX.Settings.Timers.Trauma = bool
 		MX.Murd.TimersRef.Trauma.Enabled = bool
 	end
-	function self:AlertEnabled(bool)
+	
+	-- Alert Options
+	function self:Alerts(bool)
 		MX.Settings.Alerts.Enabled = bool
+		MX:SetAlerts(bool)
 	end
 	function self:TraumaAlert(bool)
 		MX.Settings.Alerts.Trauma = bool
@@ -228,34 +291,34 @@ function MX.Murdantix:Options()
 	Options:SetTitle()
 	
 	-- Timers Menu
-	local Header = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, MX.Settings.Timers.Enabled)
-	Header:AddCheck(MX.Lang.Mangling[KBM.Lang], self.MangleEnabled, MX.Settings.Timers.MangleEnabled)
-	Header:AddCheck(MX.Lang.Pound[KBM.Lang], self.PoundEnabled, MX.Settings.Timers.PoundEnabled)
-	Header:AddCheck(MX.Lang.Blast[KBM.Lang], self.BlastEnabled, MX.Settings.Timers.BlastEnabled)
-	Header:AddCheck(MX.Lang.Trauma[KBM.Lang], self.TraumaEnabled, MX.Settings.Timers.TraumaEnabled)
+	local Header = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.Timers, MX.Settings.Timers.Enabled)
+	Header:AddCheck(MX.Lang.Mangling[KBM.Lang], self.MangleTimer, MX.Settings.Timers.Mangle)
+	Header:AddCheck(MX.Lang.Pound[KBM.Lang], self.PoundTimer, MX.Settings.Timers.Pound)
+	Header:AddCheck(MX.Lang.Blast[KBM.Lang], self.BlastTimer, MX.Settings.Timers.Blast)
+	Header:AddCheck(MX.Lang.Trauma[KBM.Lang], self.TraumaTimer, MX.Settings.Timers.Trauma)
 	-- Alerts Menu
-	local Alerts = Options:AddHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], self.AlertEnabled, MX.Settings.Alerts.Enabled)
+	local Alerts = Options:AddHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], self.Alerts, MX.Settings.Alerts.Enabled)
 	Alerts:AddCheck(MX.Lang.Trauma[KBM.Lang], self.TraumaAlert, MX.Settings.Alerts.Trauma)
 	
 end
 
 function MX:Start()
+
+	-- Intitiate Main Menu option.
 	self.Header = KBM.HeaderList[self.Instance]
 	self.Murdantix.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Murdantix, true, self.Header)
 	self.Murdantix.MenuItem.Check:SetEnabled(false)
 	
 	-- Create Timers
 	self.Murd.TimersRef.Mangling = KBM.MechTimer:Add(self.Lang.Mangling[KBM.Lang], 12)
-	self.Murd.TimersRef.Mangling.Enabled = MX.Settings.Timers.MangleEnabled
 	self.Murd.TimersRef.Pound = KBM.MechTimer:Add(self.Lang.Pound[KBM.Lang], 35)
-	self.Murd.TimersRef.Pound.Enabled = MX.Settings.Timers.PoundEnabled
 	self.Murd.TimersRef.Blast = KBM.MechTimer:Add(self.Lang.Blast[KBM.Lang], 16)
-	self.Murd.TimersRef.Blast.Enabled = MX.Settings.Timers.BlastEnabled
 	self.Murd.TimersRef.Trauma = KBM.MechTimer:Add(self.Lang.Trauma[KBM.Lang], 9)
-	self.Murd.TimersRef.Trauma.Enabled = MX.Settings.Timers.TraumaEnabled
+	self:SetTimers(self.Settings.Timers.Enabled)
 	
 	-- Create Alerts
 	self.Murd.AlertsRef.Trauma = KBM.Alert:Create(self.Lang.Trauma[KBM.Lang], 2, true, nil, "yellow")
+	self:SetAlerts(self.Settings.Alerts.Enabled)
 	
 	-- Assign Mechanics to Triggers
 	self.Murd.Triggers.Mangling = KBM.Trigger:Create(self.Lang.Mangling[KBM.Lang], "damage", self.Murd)
@@ -274,5 +337,7 @@ function MX:Start()
 	self.Murd.Triggers.PhaseFour = KBM.Trigger:Create(25, "percent", self.Murd)
 	self.Murd.Triggers.PhaseFour:AddPhase(self.PhaseFour)
 	
+	-- Assign Castbar object.
 	self.Murd.CastBar = KBM.CastBar:Add(self, self.Murd, true)
+	
 end

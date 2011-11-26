@@ -10,7 +10,7 @@ Author = "Paul Snart"
 Website = "http://www.facebook.com/pages/King-Boss-Mods/271482262893152"
 Email = "snarty@gmail.com"
 
-Version = "0.6.4"
+Version = "0.6.5"
 
 Environment = "1.6"
 
@@ -104,6 +104,46 @@ SavedVariables = {
 	KBMDHIL_Settings = "account",
 	KBMDHHH_Settings = "account",
 	KBM_GlobalOptions = "account",
+	chKM_Settings = "character",
+	chKBMAK_Settings = "character",
+	chKBMGU_Settings = "character",
+	chKBMMX_Settings = "character",
+	chKBMHK_Settings = "character",
+	chKBMMZ_Settings = "character",
+	chKBMSZ_Settings = "character",
+	chKBMSN_Settings = "character",
+	chKBMVP_Settings = "character",
+	chKBMES_Settings = "character",
+	chKBMGR_Settings = "character",
+	chKBMID_Settings = "character",
+	chKBMROS_Settings = "character",
+	chKBMROSDF_Settings = "character",
+	chKBMROSWG_Settings = "character",
+	chKBMROSPI_Settings = "character",
+	chKBMROSHG_Settings = "character",
+	chKBMROSAD_Settings = "character",
+	chKBMGSB_Settings = "character",
+	chKBMGSBDL_Settings = "character",
+	chKBMGSBIJ_Settings = "character",
+	chKBMGSBOA_Settings = "character",
+	chKBMGSBPH_Settings = "character",
+	chKBMGSBLG_Settings = "character",
+	chKBMROTP_Settings = "character",
+	chKBMROTPEN_Settings = "character",
+	chKBMROTPHA_Settings = "character",
+	chKBMROTPBT_Settings = "character",
+	chKBMROTPGS_Settings = "character",
+	chKBMGP_Settings = "character",
+	chKBMGPAF_Settings = "character",
+	chKBMGPGH_Settings = "character",
+	chKBMGPTR_Settings = "character",
+	chKBMGPUK_Settings = "character",
+	chKBMDH_Settings = "character",
+	chKBMDHAJ_Settings = "character",
+	chKBMDHJR_Settings = "character",
+	chKBMDHIL_Settings = "character",
+	chKBMDHHH_Settings = "character",
+	chKBM_GlobalOptions = "character",	
 }
 
 Dependencies = {

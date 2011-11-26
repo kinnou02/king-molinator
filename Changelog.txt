@@ -1,4 +1,15 @@
-﻿v0.6.4
+﻿v0.6.5
+* New: You can now select to save all settings for KBM for the current character.
+* Hammerknell
+** New: Converted all bosses settings to account and per-character methods.
+** Fixed: Due to the new saving methods, many bosses who's settings were not working, will work now.
+** Fixed: All bosses options should work as intended.
+* Rise of the Phoenix
+** New: Converted all bosses settings to account and per-character methods.
+** Beruhast: Fixed: Settings bug for Timers.
+** Beruhast: Added: Summoned Flame timer.
+----
+v0.6.4
 * Notice: Boss Alert and Timer global switches (Enabled/Disabled) are currently unlinked. Use individual checks.
 * Notice: The above will be coming very shortly, along with new Per-Character Profile saving.
 * New: Recycled Frames now use a queuing system to avoid the crashes introduced by Trion.
@@ -9,9 +20,9 @@
 ** Matron Zamira: Reverted Mark of Oblivion back to a damage trigger for personal screen alerts.
 ** Matron Zamira: Seperated Mark of Oblivion timer to a cast trigger.
 ** Sicaron: Fixed: option for disabling Timers not saving/changing or initiating.
-** Sicaron: Added: Screen Alert for Dancing Steel. (flashing red)
-** Sicaron: Added: Screen Alert for Rage of the North. (flashing orange)
-** Sicaron: Added: Screen Alert for Chastise. (flashing yellow)
+** Estrode: Added: Screen Alert for Dancing Steel. (flashing red)
+** Estrode: Added: Screen Alert for Rage of the North. (flashing orange)
+** Estrode: Added: Screen Alert for Chastise. (flashing yellow)
 ----
 v0.6.3
 * Known Issue: Combat damage based Triggers are currently disabled, they'll return in 0.6.4.

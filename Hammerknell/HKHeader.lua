@@ -4,6 +4,7 @@
 --
 
 KBMHK_Settings = {}
+chKBMHK_Settings = {}
 
 local HK = {
 	Header = nil,

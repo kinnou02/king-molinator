@@ -80,14 +80,37 @@ function SZ:InitVars()
 		},
 	}
 	KBMSZ_Settings = self.Settings
+	chKBMSZ_Settings = self.Settings
+	
+end
+
+function SZ:SwapSettings(bool)
+
+	if bool then
+		KBMSZ_Settings = self.Settings
+		self.Settings = chKBMSZ_Settings
+	else
+		chKBMSZ_Settings = self.Settings
+		self.Settings = KBMSZ_Settings
+	end
+
 end
 
 function SZ:LoadVars()
-	if type(KBMSZ_Settings) == "table" then
-		for Setting, Value in pairs(KBMSZ_Settings) do
-			if type(KBMSZ_Settings[Setting]) == "table" then
+	
+	local TargetLoad = nil
+	
+	if KBM.Options.Character then
+		TargetLoad = chKBMSZ_Settings
+	else
+		TargetLoad = KBMSZ_Settings
+	end
+	
+	if type(TargetLoad) == "table" then
+		for Setting, Value in pairs(TargetLoad) do
+			if type(TargetLoad[Setting]) == "table" then
 				if self.Settings[Setting] ~= nil then
-					for tSetting, tValue in pairs(KBMSZ_Settings[Setting]) do
+					for tSetting, tValue in pairs(TargetLoad[Setting]) do
 						if self.Settings[Setting][tSetting] ~= nil then
 							self.Settings[Setting][tSetting] = tValue
 						end
@@ -100,10 +123,23 @@ function SZ:LoadVars()
 			end
 		end
 	end
+	
+	if KBM.Options.Character then
+		chKBMSZ_Settings = self.Settings
+	else
+		KBMSZ_Settings = self.Settings
+	end
+	
 end
 
 function SZ:SaveVars()
-	KBMSZ_Settings = self.Settings
+	
+	if KBM.Options.Settings then
+		chKBMSZ_Settings = self.Settings
+	else
+		KBMSZ_Settings = self.Settings
+	end
+	
 end
 
 function SZ:Castbar(units)
@@ -158,23 +194,50 @@ function SZ:Timer()
 	
 end
 
+function SZ:SetTimers(bool)
+
+	if bool then
+		self.Zilas.TimersRef.Grasp.Enabled = self.Settings.Timers.Grasp		
+	else
+		self.Zilas.TimersRef.Grasp.Enabled = false
+	end
+
+end
+
+function SZ:SetAlerts(bool)
+
+	if bool then
+		self.Zilas.AlertsRef.GraspWarn.Enabled = self.Settings.Alerts.Grasp
+		self.Zilas.AlertsRef.Grasp.Enabled = self.Settings.Alerts.Grasp
+	else
+		self.Zilas.AlertsRef.GraspWarn.Enabled = false
+		self.Zilas.AlertsRef.Grasp.Enabled = false
+	end
+
+end
+
 function SZ.Zilas:Options()
-	-- Timer Options
+
+	-- Timer Options.
 	function self:Timers(bool)
 		SZ.Settings.Timers.Enabled = bool
+		SZ:SetTimers(bool)
 	end
 	function self:GraspTimer(bool)
 		SZ.Settings.Timers.Grasp = bool
 		SZ.Zilas.TimersRef.Grasp.Enabled = bool
 	end
-	-- Alert Options
+	-- Alert Options.
 	function self:Alerts(bool)
 		SZ.Settings.Alerts.Enabled = bool
+		SZ:SetAlerts(bool)
 	end
 	function self:GraspAlert(bool)
 		SZ.Settings.Alerts.Grasp = bool
 		SZ.Zilas.AlertsRef.Grasp.Enabled = bool
 	end
+	
+	-- Menu Options.
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
 	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.Timers, SZ.Settings.Timers.Enabled)
@@ -185,24 +248,27 @@ function SZ.Zilas:Options()
 end
 
 function SZ:Start()
+
+	-- Initiate Main Menu option.
 	self.Header = KBM.HeaderList[self.Instance]
 	self.Zilas.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Zilas, true, self.Header)
 	self.Zilas.MenuItem.Check:SetEnabled(false)
 	
-	-- Mechanics Timers
+	-- Create Timers
 	self.Zilas.TimersRef.Grasp = KBM.MechTimer:Add(self.Lang.Ability.Grasp[KBM.Lang], 60)
-	self.Zilas.TimersRef.Grasp.Enabled = self.Settings.Timers.Grasp
+	self:SetTimers(bool)
 	
-	-- Screen Alerts
+	-- Create Alerts
 	self.Zilas.AlertsRef.GraspWarn = KBM.Alert:Create(self.Lang.Ability.Grasp[KBM.Lang], 5, true, true, "orange")
-	self.Zilas.AlertsRef.GraspWarn.Enabled = self.Settings.Alerts.Grasp
 	self.Zilas.AlertsRef.Grasp = KBM.Alert:Create(self.Lang.Ability.Grasp[KBM.Lang], 9, false, true, "red")
-	self.Zilas.AlertsRef.Grasp.Enabled = self.Settings.Alerts.Grasp
 	
+	-- Assign Mechanics to Triggers.
 	self.Zilas.Triggers.Grasp = KBM.Trigger:Create(self.Lang.Ability.Grasp[KBM.Lang], "cast", self.Zilas)
 	self.Zilas.Triggers.Grasp:AddTimer(self.Zilas.TimersRef.Grasp)
 	self.Zilas.Triggers.Grasp:AddAlert(self.Zilas.AlertsRef.GraspWarn)
 	self.Zilas.AlertsRef.GraspWarn:AlertEnd(self.Zilas.AlertsRef.Grasp)
 	
+	-- Assign Castbar object.
 	self.Zilas.CastBar = KBM.CastBar:Add(self, self.Zilas, true)
+	
 end

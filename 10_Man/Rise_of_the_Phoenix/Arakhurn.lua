@@ -61,6 +61,7 @@ function HA:AddBosses(KBM_Boss)
 end
 
 function HA:InitVars()
+
 	self.Settings = {
 		Timers = {
 			Enabled = true,
@@ -72,15 +73,38 @@ function HA:InitVars()
 			Enabled = true,
 		},
 	}
-	KBMGS_Settings = self.Settings
+	KBMROTPHA_Settings = self.Settings
+	chKBMROTPHA_Settings = self.Settings
+	
+end
+
+function HA:SwapSettings(bool)
+
+	if bool then
+		KBMROTPHA_Settings = self.Settings
+		self.Settings = chKBMROTPHA_Settings
+	else
+		chKBMROTPHA_Settings = self.Settings
+		self.Settings = KBMROTPHA_Settings
+	end
+
 end
 
 function HA:LoadVars()
-	if type(KBMGSBGS_Settings) == "table" then
-		for Setting, Value in pairs(KBMGSBGS_Settings) do
-			if type(KBMGSBGS_Settings[Setting]) == "table" then
+	
+	local TargetLoad = nil
+	
+	if KBM.Options.Character then
+		TargetLoad = chKBMROTPHA_Settings
+	else
+		TargetLoad = KBMROTPHA_Settings
+	end
+	
+	if type(TargetLoad) == "table" then
+		for Setting, Value in pairs(TargetLoad) do
+			if type(TargetLoad[Setting]) == "table" then
 				if self.Settings[Setting] ~= nil then
-					for tSetting, tValue in pairs(KBMGSBGS_Settings[Setting]) do
+					for tSetting, tValue in pairs(TargetLoad[Setting]) do
 						if self.Settings[Setting][tSetting] ~= nil then
 							self.Settings[Setting][tSetting] = tValue
 						end
@@ -93,10 +117,23 @@ function HA:LoadVars()
 			end
 		end
 	end
+	
+	if KBM.Options.Character then
+		chKBMROTPHA_Settings = self.Settings
+	else
+		KBMROTPHA_Settings = self.Settings
+	end
+	
 end
 
 function HA:SaveVars()
-	KBMGSBGS_Settings = self.Settings
+	
+	if KBM.Options.Character then
+		chKBMROTPHA_Settings = self.Settings
+	else
+		KBMROTPHA_Settings = self.Settings
+	end
+	
 end
 
 function HA:Castbar(units)

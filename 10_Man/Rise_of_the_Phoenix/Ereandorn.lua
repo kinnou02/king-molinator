@@ -93,15 +93,38 @@ function EN:InitVars()
 			Enabled = true,
 		},
 	}
-	KBMEN_Settings = self.Settings
+	KBMROTPEN_Settings = self.Settings
+	chKBMROTPEN_Settings = self.Settings
+	
+end
+
+function EN:SwapSettings(bool)
+
+	if bool then
+		KBMROTPEN_Settings = self.Settings
+		self.Settings = chKBMROTPEN_Settings
+	else
+		chKBMROTPEN_Settings = self.Settings
+		self.Settings = KBMROTPEN_Settings
+	end
+
 end
 
 function EN:LoadVars()
-	if type(KBMGSBEN_Settings) == "table" then
-		for Setting, Value in pairs(KBMGSBEN_Settings) do
-			if type(KBMGSBEN_Settings[Setting]) == "table" then
+	
+	local TargetLoad = nil
+	
+	if KBM.Options.Character then
+		TargetLoad = chKBMROTPEN_Settings
+	else
+		TargetLoad = KBMROTPEN_Settings
+	end
+	
+	if type(TargetLoad) == "table" then
+		for Setting, Value in pairs(TargetLoad) do
+			if type(TargetLoad[Setting]) == "table" then
 				if self.Settings[Setting] ~= nil then
-					for tSetting, tValue in pairs(KBMGSBEN_Settings[Setting]) do
+					for tSetting, tValue in pairs(TargetLoad[Setting]) do
 						if self.Settings[Setting][tSetting] ~= nil then
 							self.Settings[Setting][tSetting] = tValue
 						end
@@ -114,10 +137,23 @@ function EN:LoadVars()
 			end
 		end
 	end
+	
+	if KBM.Options.Character then
+		chKBMROTPEN_Settings = self.Settings
+	else
+		KBMROTPEN_Settings = self.Settings
+	end
+	
 end
 
 function EN:SaveVars()
-	KBMGSBEN_Settings = self.Settings
+	
+	if KBM.Options.Character then
+		chKBMROTPEN_Settings = self.Settings
+	else
+		KBMROTPEN_Settings = self.Settings
+	end
+	
 end
 
 function EN:Castbar(units)
@@ -172,14 +208,40 @@ function EN:Timer()
 	
 end
 
+function EN:SetTimers(bool)
+	
+	if bool then
+	
+	else
+	
+	end
+	
+end
+
+function EN:SetAlerts(bool)
+
+	if bool then
+		self.Ereandorn.AlertsRef.Combustion.Enabled = self.Settings.Alerts.Combustion
+		self.Ereandorn.AlertsRef.Growth.Enabled = self.Settings.Alerts.Growth
+		self.Ereandorn.AlertsRef.Eruption.Enabled = self.Settings.Alerts.Eruption
+	else
+		self.Ereandorn.AlertsRef.Combustion.Enabled = false
+		self.Ereandorn.AlertsRef.Growth.Enabled = false
+		self.Ereandorn.AlertsRef.Eruption.Enabled = false
+	end
+
+end
+
 function EN.Ereandorn:Options()
 	-- Timer Options
 	function self:TimersEnabled(bool)
 		EN.Settings.Timers.Enabled = bool
+		EN:SetTimers(bool)
 	end
 	-- Alert Options
 	function self:AlertsEnabled(bool)
 		EN.Settings.Alerts.Enabled = bool
+		EN:SetAlerts(bool)
 	end
 	function self:CombustionAlert(bool)
 		EN.Settings.Alerts.Combustion = bool
@@ -211,11 +273,9 @@ function EN:Start()
 	
 	-- Alerts
 	self.Ereandorn.AlertsRef.Combustion = KBM.Alert:Create(self.Lang.Ability.Combustion[KBM.Lang], 5, true, false, "red")
-	self.Ereandorn.AlertsRef.Combustion.Enabled = self.Settings.Alerts.Combustion
 	self.Ereandorn.AlertsRef.Growth = KBM.Alert:Create(self.Lang.Ability.Growth[KBM.Lang], 8, true, true, "orange")
-	self.Ereandorn.AlertsRef.Growth.Enabled = self.Settings.Alerts.Growth
 	self.Ereandorn.AlertsRef.Eruption = KBM.Alert:Create(self.Lang.Ability.Eruption[KBM.Lang], 5, true, false, "orange")
-	self.Ereandorn.AlertsRef.Eruption.Enabled = self.Settings.Alerts.Eruption
+	self:SetAlerts(self.Settings.Alerts.Enabled)
 		
 	-- Assign mechanics to Triggers
 	self.Ereandorn.Triggers.Combustion = KBM.Trigger:Create(self.Lang.Notify.Combustion[KBM.Lang], "notify", self.Ereandorn)

@@ -530,6 +530,17 @@ function KBM.InitOptions()
 			HeaderObj.Check = {}
 			HeaderObj.Check.Frame = KBM:CallCheck(HeaderObj.Frame)
 			HeaderObj.Check.Frame:SetPoint("CENTERLEFT", HeaderObj.Frame, "CENTERLEFT")
+			HeaderObj.Check.Frame.Header = HeaderObj
+			function HeaderObj:EnableChildren()
+				for _, ChildObj in ipairs(self.Children) do
+					ChildObj:Enable()
+				end
+			end
+			function HeaderObj:DisableChildren()
+				for _, ChildObj in ipairs(self.Children) do
+					ChildObj:Disable()
+				end
+			end
 			if not Callback then
 				HeaderObj.Check.Frame:SetEnabled(false)
 				HeaderObj.Check.Frame:SetVisible(false)
@@ -539,6 +550,11 @@ function KBM.InitOptions()
 				function HeaderObj.Check.Frame.Event:CheckboxChange()
 					if HeaderObj.Check.Callback then
 						HeaderObj.Check:Callback(self:GetChecked())
+					end
+					if self:GetChecked() then
+						self.Header:EnableChildren()
+					else
+						self.Header:DisableChildren()
 					end
 				end
 			end
@@ -671,9 +687,11 @@ function KBM.InitOptions()
 				end
 				function CheckObj:Enable()
 					self.Check.Frame:SetEnabled(true)
+					self.Text.Frame:SetAlpha(1)
 				end
 				function CheckObj:Disable()
 					self.Check.Frame:SetEnabled(false)
+					self.Text.Frame:SetAlpha(0.5)
 				end
 				function CheckObj:Remove()
 					if self.SliderObj then
@@ -689,13 +707,12 @@ function KBM.InitOptions()
 				end
 				self.LastChild = CheckObj
 				KBM.MainWin.Options:AddSize(CheckObj.Frame)
+				if self.Check.Frame:GetChecked() then
+					CheckObj:Enable()
+				else
+					CheckObj:Disable()
+				end
 				return CheckObj
-			end
-			function HeaderObj:EnableChildren()
-			
-			end
-			function HeaderObj:DisableChildren()
-			
 			end
 			function HeaderObj:Remove()
 				self.Check.Frame:sRemove()

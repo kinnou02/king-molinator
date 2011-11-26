@@ -85,14 +85,37 @@ function GR:InitVars()
 		},
 	}
 	KBMGR_Settings = self.Settings
+	chKBMGR_Settings = self.Settings
+	
+end
+
+function GR:SwapSettings(bool)
+
+	if bool then
+		KBMGR_Settings = self.Settings
+		self.Settings = chKBMGR_Settings
+	else
+		chKBMGR_Settings = self.Settings
+		self.Settings = KBMGR_Settings
+	end
+
 end
 
 function GR:LoadVars()
-	if type(KBMGR_Settings) == "table" then
-		for Setting, Value in pairs(KBMGR_Settings) do
-			if type(KBMGR_Settings[Setting]) == "table" then
+	
+	local TargetLoad = nil
+	
+	if KBM.Options.Character then
+		TargetLoad = chKBMGR_Settings
+	else
+		TargetLoad = KBMGR_Settings
+	end
+	
+	if type(TargetLoad) == "table" then
+		for Setting, Value in pairs(TargetLoad) do
+			if type(TargetLoad[Setting]) == "table" then
 				if self.Settings[Setting] ~= nil then
-					for tSetting, tValue in pairs(KBMGR_Settings[Setting]) do
+					for tSetting, tValue in pairs(TargetLoad[Setting]) do
 						if self.Settings[Setting][tSetting] ~= nil then
 							self.Settings[Setting][tSetting] = tValue
 						end
@@ -105,10 +128,23 @@ function GR:LoadVars()
 			end
 		end
 	end
+	
+	if KBM.Options.Character then
+		chKBMGR_Settings = self.Settings
+	else
+		KBMGR_Settings = self.Settings
+	end
+	
 end
 
 function GR:SaveVars()
-	KBMGR_Settings = self.Settings
+
+	if KBM.Options.Character then
+		chKBMGR_Settings = self.Settings
+	else
+		KBMGR_Settings = self.Settings
+	end
+	
 end
 
 function GR:Castbar(units)
@@ -164,10 +200,34 @@ function GR:Timer()
 	
 end
 
-function GR.Grugonim:Options()
-	function self:AlertsEnabled(bool)
-		GR.Settings.Alerts.Enabled = bool
+function GR:SetTimers(bool)
+
+	if bool then
 	
+	else
+	
+	end
+
+end
+
+function GR:SetAlerts(bool)
+
+	if bool then
+		self.Grugonim.AlertsRef.Decay.Enabled = self.Settings.Alerts.Decay
+		self.Grugonim.AlertsRef.Bile.Enabled = self.Settings.Alerts.Bile
+	else
+		self.Grugonim.AlertsRef.Decay.Enabled = false
+		self.Grugonim.AlertsRef.Bile.Enabled = false
+	end
+
+end
+
+function GR.Grugonim:Options()
+
+	-- Alert Options
+	function self:Alerts(bool)
+		GR.Settings.Alerts.Enabled = bool
+		GR:SetAlerts(bool)
 	end
 	function self:DecayAlert(bool)
 		GR.Settings.Alerts.Decay = bool
@@ -179,7 +239,7 @@ function GR.Grugonim:Options()
 	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
-	local Alerts = Options:AddHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], self.AlertsEnabled, GR.Settings.Alerts.Enabled)
+	local Alerts = Options:AddHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], self.Alerts, GR.Settings.Alerts.Enabled)
 	Alerts:AddCheck(GR.Lang.Ability.Decay[KBM.Lang], self.DecayAlert, GR.Settings.Alerts.Decay)
 	Alerts:AddCheck(GR.Lang.Ability.Bile[KBM.Lang], self.BileAlert, GR.Settings.Alerts.Bile)
 	
@@ -192,9 +252,8 @@ function GR:Start()
 	
 	-- Add Alerts
 	self.Grugonim.AlertsRef.Decay = KBM.Alert:Create(self.Lang.Ability.Decay[KBM.Lang], 3, true, true, "dark_green")
-	self.Grugonim.AlertsRef.Decay.Enabled = self.Settings.Alerts.Decay
 	self.Grugonim.AlertsRef.Bile = KBM.Alert:Create(self.Lang.Ability.Bile[KBM.Lang], 2, true, true, "purple")
-	self.Grugonim.AlertsRef.Bile.Enabled = self.Settings.Alerts.Bile
+	self:SetAlerts(self.Settings.Alerts.Enabled)
 	
 	-- Assign Mechanics to Triggers
 	self.Grugonim.Triggers.Decay = KBM.Trigger:Create(self.Lang.Ability.Decay[KBM.Lang], "cast", self.Grugonim)

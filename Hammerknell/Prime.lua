@@ -80,14 +80,37 @@ function VP:InitVars()
 		},
 	}
 	KBMVP_Settings = self.Settings
+	chKBMVP_Settings = self.Settings
+	
+end
+
+function VP:SwapSettings(bool)
+
+	if bool then
+		KBMVP_Settings = self.Settings
+		self.Settings = chKBMVP_Settings
+	else
+		chKBMVP_Settings = self.Settings
+		self.Settings = KBMVP_Settings
+	end
+
 end
 
 function VP:LoadVars()
-	if type(KBMVP_Settings) == "table" then
-		for Setting, Value in pairs(KBMVP_Settings) do
-			if type(KBMVP_Settings[Setting]) == "table" then
+	
+	local TargetLoad = nil
+	
+	if KBM.Options.Character then
+		TargetLoad = chKBMVP_Settings
+	else
+		TargetLoad = KBMVP_Settings
+	end
+	
+	if type(TargetLoad) == "table" then
+		for Setting, Value in pairs(TargetLoad) do
+			if type(TargetLoad[Setting]) == "table" then
 				if self.Settings[Setting] ~= nil then
-					for tSetting, tValue in pairs(KBMVP_Settings[Setting]) do
+					for tSetting, tValue in pairs(TargetLoad[Setting]) do
 						if self.Settings[Setting][tSetting] ~= nil then
 							self.Settings[Setting][tSetting] = tValue
 						end
@@ -100,10 +123,23 @@ function VP:LoadVars()
 			end
 		end
 	end
+	
+	if KBM.Options.Character then
+		chKBMVP_Settings = self.Settings
+	else
+		KBMVP_Settings = self.Settings
+	end
+	
 end
 
 function VP:SaveVars()
-	KBMVP_Settings = self.Settings
+
+	if KBM.Options.Character then
+		chKBMVP_Settings = self.Settings
+	else
+		KBMVP_Settings = self.Settings
+	end	
+		
 end
 
 function VP:Castbar(units)
@@ -158,43 +194,71 @@ function VP:Timer()
 	
 end
 
-function VP.Prime:Options()
-	function self:TimersEnabled(bool)
-		VP.Settings.Timers.Enabled = bool
+function VP:SetTimers(bool)
+
+	if bool then
+		self.Prime.TimersRef.Flames.Enabled = self.Settings.Timers.Flames
+	else
+		self.Prime.TimersRef.Flames.Enabled = false
 	end
-	-- Timers
+
+end
+
+function VP:SetAlerts(bool)
+
+	if bool then
+		self.Prime.AlertsRef.Flames.Enabled = self.Settings.Alerts.Flames
+	else
+		self.Prime.AlertsRef.Flames.Enabled = false
+	end
+
+end
+
+function VP.Prime:Options()
+
+	-- Timers Options
+	function self:Timers(bool)
+		VP.Settings.Timers.Enabled = bool
+		VP:SetTimers(bool)
+	end
 	function self:FlamesTimer(bool)
 		VP.Settings.Timers.Flames = bool
 		VP.Prime.TimersRef.Flames.Enabled = bool
 	end
-	-- Alerts
-	function self:AlertsEnabled(bool)
+	-- Alerts Options
+	function self:Alerts(bool)
 		VP.Settings.Alerts.Enabled = bool
+		VP:SetAlerts(bool)
 	end
 	function self:FlamesAlert(bool)
 		VP.Settings.Alerts.Flames = bool
 		VP.Prime.AlertsRef.Flames.Enabled = bool
 	end
+	
+	-- Menu Options
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
-	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, VP.Settings.Timers.Enabled)
+	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.Timers, VP.Settings.Timers.Enabled)
 	Timers:AddCheck(VP.Lang.Flames[KBM.Lang], self.FlamesTimer, VP.Settings.Timers.Flames)
-	local Alerts = Options:AddHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], self.AlertsEnabled, VP.Settings.Alerts.Enabled)
+	local Alerts = Options:AddHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], self.Alerts, VP.Settings.Alerts.Enabled)
 	Alerts:AddCheck(VP.Lang.Flames[KBM.Lang], self.FlamesAlert, VP.Settings.Alerts.Flames)
 	
 end
 
 function VP:Start()
+
+	-- Intitiate Main Menu option.
 	self.Header = KBM.HeaderList[self.Instance]
 	self.Prime.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Prime, true, self.Header)
 	self.Prime.MenuItem.Check:SetEnabled(false)
 	
-	-- Add Timers
+	-- Timers
 	self.Prime.TimersRef.Flames = KBM.MechTimer:Add(self.Lang.Flames[KBM.Lang], 31)
-	self.Prime.TimersRef.Flames.Enabled = self.Settings.Timers.FlamesEnabled
+	self:SetTimers(self.Settings.Timers.Enabled)
 	
-	-- Add Alerts
+	-- Alerts
 	self.Prime.AlertsRef.Flames = KBM.Alert:Create(self.Lang.Flames[KBM.Lang], 13, false, true, "orange")
+	self:SetAlerts(self.Settings.Alerts.Enabled)
 	
 	-- Add Mechanics to Triggers
 	self.Prime.Triggers.Flames = KBM.Trigger:Create(self.Lang.Flames[KBM.Lang], "cast", self.Prime)
