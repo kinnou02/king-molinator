@@ -267,6 +267,7 @@ function EN.Ereandorn:Options()
 end
 
 function EN:Start()
+
 	self.Header = KBM.HeaderList[self.Instance]
 	self.Ereandorn.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Ereandorn, true, self.Header)
 	self.Ereandorn.MenuItem.Check:SetEnabled(false)

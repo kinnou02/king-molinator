@@ -10,11 +10,11 @@ function KBM.Scroller:Create(Type, Size, Parent, Callback)
 
 	local ScrollerObj = {}
 	ScrollerObj.Callback = Callback
-	ScrollerObj.Frame = KBM:CallFrame(Parent)
+	ScrollerObj.Frame = UI.CreateFrame("Frame", "Scroller", Parent)
 	ScrollerObj.Frame:SetBackgroundColor(0,0,0,0.5)
 	ScrollerObj.Type = Type
 	ScrollerObj.Position = 0
-	ScrollerObj.Handle = KBM:CallFrame(ScrollerObj.Frame)
+	ScrollerObj.Handle = UI.CreateFrame("Frame", "Scroller Handle", ScrollerObj.Frame)
 	if Type == "H" then
 		
 	else
@@ -134,8 +134,12 @@ function KBM.Scroller:Create(Type, Size, Parent, Callback)
 end
 
 function KBM.InitOptions()
+
 	KBM.MainWin = UI.CreateFrame("RiftWindow", "King Boss Mods", KBM.Context)
 	KBM.MainWin.Options = {}
+	KBM.MainWin.ChildStore = {}
+	KBM.MainWin.HeaderStore = {}
+	KBM.MainWin.SpacerStore = {}
 	KBM.MainWin.MenuSize = 0
 	KBM.MainWin:SetVisible(false)
 	KBM.MainWin:SetController("border")
@@ -192,10 +196,92 @@ function KBM.InitOptions()
 		end
 	end
 	
-	MenuWidth = math.floor(ContentW * 0.33)-10
+	function KBM.MainWin:PushHeader(GUI)
+		for Event, Value in pairs(GUI.Frame.Event) do
+			GUI.Frame[Event] = nil
+		end
+		for Event, Value in pairs(GUI.Text.Event) do
+			GUI.Text[Event] = nil
+		end
+		for Event, Value in pairs(GUI.Check.Event) do
+			GUI.Check[Event] = nil
+		end
+		GUI.Frame:SetVisible(false)
+		table.insert(KBM.MainWin.HeaderStore, GUI)
+	end
 	
-	KBM.MainWin.Mask = UI.CreateFrame("Mask", "KBM Menu Mask", KBM.MainWin.Content)
+	function KBM.MainWin:PullHeader()
+
+		local GUI = {}
+		if #self.HeaderStore > 0 then
+			GUI = table.remove(self.HeaderStore)
+		else
+			GUI.Frame = UI.CreateFrame("Frame", "Options Page Header", KBM.MainWin.Options.Frame)
+			GUI.Frame:SetBackgroundColor(0,0,0,0)
+			GUI.Text = UI.CreateFrame("Text", "Options Page Header Text", GUI.Frame)
+			GUI.Text:SetFontColor(0.85,0.65,0)
+			GUI.Text:SetFontSize(16)
+			GUI.Text:SetLayer(0)
+			GUI.Check = UI.CreateFrame("RiftCheckbox", "Options Page Checkbox", GUI.Frame)
+			GUI.Check:SetPoint("CENTERLEFT", GUI.Frame, "CENTERLEFT")
+		end
+		GUI.Check:SetEnabled(true)
+		GUI.Text:SetAlpha(1)
+		return GUI
 	
+	end
+	
+	function KBM.MainWin:PushChild(GUI)
+		for Event, Value in pairs(GUI.Frame.Event) do
+			GUI.Frame[Event] = nil
+		end
+		for Event, Value in pairs(GUI.Text.Event) do
+			GUI.Text[Event] = nil
+		end
+		for Event, Value in pairs(GUI.Check.Event) do
+			GUI.Check[Event] = nil
+		end
+		GUI.Frame:SetVisible(false)
+		table.insert(KBM.MainWin.ChildStore, GUI)	
+	end
+	
+	function KBM.MainWin:PullChild()
+	
+		local GUI = {}
+		if #self.ChildStore > 0 then
+			GUI = table.remove(self.ChildStore)
+		else
+			GUI.Frame = UI.CreateFrame("Frame", "Options Page Child Frame", KBM.MainWin.Options.Frame)
+			GUI.Frame:SetBackgroundColor(0,0,0,0)
+			GUI.Check = UI.CreateFrame("RiftCheckbox", "Options Page Child Check", GUI.Frame)
+			GUI.Check:SetPoint("CENTERLEFT", GUI.Frame, "CENTERLEFT")
+			GUI.Text = UI.CreateFrame("Text", "Options Page Child Text", GUI.Frame)
+			GUI.Text:SetFontSize(14)
+			GUI.Text:SetFontColor(1,1,1,1)
+			GUI.Text:SetPoint("CENTERLEFT", GUI.Check, "CENTERRIGHT")
+			GUI.Text:SetLayer(1)
+		end
+		GUI.Check:SetEnabled(true)
+		GUI.Text:SetAlpha(1)
+		return GUI
+	
+	end
+	
+	function KBM.MainWin:PullSpacer()
+	
+		local GUI = {}
+		if #self.SpacerStore > 0 then
+			GUI = table.remove(self.SpacerStore)
+		else
+			GUI.Frame = UI.CreateFrame("Frame", "Options Page Space", KBM.MainWin.Options.Frame)
+			GUI.Frame:SetBackgroundColor(0,0,0,0)			
+		end
+		return GUI
+	
+	end
+	
+	MenuWidth = math.floor(ContentW * 0.33)-10	
+	KBM.MainWin.Mask = UI.CreateFrame("Mask", "KBM Menu Mask", KBM.MainWin.Content)	
 	KBM.MainWin.Menu = UI.CreateFrame("Frame", "KBM Menu Frame", KBM.MainWin.Mask)
 	KBM.MainWin.Menu:SetMouseMasking("limited")
 	KBM.MainWin.Mask:SetPoint("TOPLEFT", KBM.MainWin.Menu, "TOPLEFT")
@@ -260,7 +346,7 @@ function KBM.InitOptions()
 	KBM.MainWin.Options.Frame:SetPoint("BOTTOM", KBM.MainWin.Options.Footer, "TOP", nil, -10)
 	KBM.MainWin.Options.Height = KBM.MainWin.Options.Frame:GetHeight()
 	function KBM.MainWin.Options.Scrollback(value)
-		KBM.MainWin.Options.FirstItem.Frame:SetPoint("TOP", KBM.MainWin.Options.Frame, "TOP", nil, -value)
+		KBM.MainWin.Options.FirstItem.GUI.Frame:SetPoint("TOP", KBM.MainWin.Options.Frame, "TOP", nil, -value)
 	end
 	KBM.MainWin.Options.Scroller = KBM.Scroller:Create("V", KBM.MainWin.Options.Height, KBM.MainWin.Content, KBM.MainWin.Options.Scrollback)
 	KBM.MainWin.Options.Scroller.Frame:SetPoint("TOPRIGHT", KBM.MainWin.Options.Header, "BOTTOMRIGHT",0, 10)
@@ -304,10 +390,10 @@ function KBM.InitOptions()
 
 	function KBM.MainWin.Menu:CreateHeader(Text, Hook, Default, Static)
 		Header = {}
-		Header = KBM:CallFrame(self)
+		Header = UI.CreateFrame("Frame", "Header: "..Text, self)
 		Header.Children = {}
 		Header:SetWidth(self:GetWidth())
-		Header.Check = KBM:CallCheck(Header)
+		Header.Check = UI.CreateFrame("RiftCheckbox", "Header Check: "..Text, Header)
 		Header.Check:SetPoint("CENTERLEFT", Header, "CENTERLEFT", 4, 0)
 		Default = Default or true
 		if not Static then
@@ -316,7 +402,7 @@ function KBM.InitOptions()
 			Header.Check:SetVisible(false)
 			Header.Check:SetEnabled(false)
 		end
-		Header.Text = KBM:CallText(Header)
+		Header.Text = UI.CreateFrame("Text", "Header Text: "..Text, Header)
 		Header.Text:SetWidth(Header:GetWidth() - Header.Check:GetWidth())
 		Header.Text:SetText(Text)
 		if Static then
@@ -382,7 +468,6 @@ function KBM.InitOptions()
 		function Header:AddChildSize(Child)
 			self.ChildSize = self.ChildSize + Child:GetHeight()
 		end
-		--Header.LastChild = nil
 		KBM.MainWin:AddSize(Header)
 		KBM.HeaderList[Text] = Header
 		if not KBM.MainWin.FirstItem then
@@ -393,11 +478,11 @@ function KBM.InitOptions()
 	end
 	function KBM.MainWin.Menu:CreateEncounter(Text, Link, Default, Header)
 		Child = {}
-		Child = KBM:CallFrame(Header)
+		Child = UI.CreateFrame("Frame", "Encounter_Header", Header)
 		Child:SetWidth(self:GetWidth()-Header.Check:GetWidth())
 		Child:SetPoint("RIGHT", self, "RIGHT")
 		Child.Enabled = true
-		Child.Check = KBM:CallCheck(Child)
+		Child.Check = UI.CreateFrame("RiftCheckbox", "Encounter_Check", Child)
 		Child.Check:SetPoint("CENTERLEFT", Child, "CENTERLEFT", 4, 0)
 		if Default == nil then
 			Child.Check:SetChecked(false)
@@ -406,7 +491,7 @@ function KBM.InitOptions()
 		else
 			Child.Check:SetChecked(Default)
 		end
-		Child.Text = KBM:CallText(Child)
+		Child.Text = UI.CreateFrame("Text", "Encounter_Text", Child)
 		Child.Text:SetWidth(Child:GetWidth() - Child.Check:GetWidth())
 		Child.Text:SetText(Text)
 		Child.Text:SetFontSize(13)
@@ -489,48 +574,40 @@ function KBM.InitOptions()
 				Size = 10
 			end
 			local SpacerObj = {}
-			SpacerObj.Frame = KBM:CallFrame(KBM.MainWin.Options.Frame)
-			SpacerObj.Frame:SetBackgroundColor(0,0,0,0)
+			SpacerObj.GUI = KBM.MainWin:PullSpacer()
 			if self.LastItem.LastChild then
-				SpacerObj.Frame:SetPoint("TOP", self.LastItem.LastChild.Frame, "BOTTOM")
-				SpacerObj.Frame:SetPoint("LEFT", KBM.MainWin.Options.Frame, "LEFT")
+				SpacerObj.GUI.Frame:SetPoint("TOP", self.LastItem.LastChild.GUI.Frame, "BOTTOM")
+				SpacerObj.GUI.Frame:SetPoint("LEFT", KBM.MainWin.Options.Frame, "LEFT")
 			else
-				SpacerObj.Frame:SetPoint("TOPLEFT", self.LastItem.Frame, "BOTTOMLEFT")
+				SpacerObj.GUI.Frame:SetPoint("TOPLEFT", self.LastItem.GUI.Frame, "BOTTOMLEFT")
 			end
-			SpacerObj.Frame:SetWidth(KBM.MainWin.Options.Frame:GetWidth())
-			SpacerObj.Frame:SetHeight(Size)
+			SpacerObj.GUI.Frame:SetWidth(KBM.MainWin.Options.Frame:GetWidth())
+			SpacerObj.GUI.Frame:SetHeight(Size)
 			self.LastItem = SpacerObj
 			table.insert(self.List, SpacerObj)
-			KBM.MainWin.Options:AddSize(SpacerObj.Frame)
+			KBM.MainWin.Options:AddSize(SpacerObj.GUI.Frame)
 			function SpacerObj:Remove()
-				self.Frame:sRemove()
+				table.insert(KBM.MainWin.SpacerStore, self.GUI)
+				self.GUI = nil
 			end
 		end
 		function Child.Options:AddHeader(Text, Callback, Default)
 			local HeaderObj = {}
-			HeaderObj.Frame = KBM:CallFrame(KBM.MainWin.Options.Frame)
+			HeaderObj.GUI = KBM.MainWin:PullHeader()
+			HeaderObj.GUI.Text:SetText(Text)
+			HeaderObj.GUI.Check.Header = HeaderObj
+			HeaderObj.GUI.Frame.Header = HeaderObj
 			if self.LastItem then
 				if self.LastItem.LastChild then
-					HeaderObj.Frame:SetPoint("TOP", self.LastItem.LastChild.Frame, "BOTTOM")
-					HeaderObj.Frame:SetPoint("LEFT", KBM.MainWin.Options.Frame, "LEFT")
+					HeaderObj.GUI.Frame:SetPoint("TOP", self.LastItem.LastChild.GUI.Frame, "BOTTOM")
+					HeaderObj.GUI.Frame:SetPoint("LEFT", KBM.MainWin.Options.Frame, "LEFT")
 				else
-					HeaderObj.Frame:SetPoint("TOPLEFT", self.LastItem.Frame, "BOTTOMLEFT")
+					HeaderObj.GUI.Frame:SetPoint("TOPLEFT", self.LastItem.GUI.Frame, "BOTTOMLEFT")
 				end
 			else
-				HeaderObj.Frame:SetPoint("TOPLEFT", KBM.MainWin.Options.Frame, "TOPLEFT")
+				HeaderObj.GUI.Frame:SetPoint("TOPLEFT", KBM.MainWin.Options.Frame, "TOPLEFT")
 				KBM.MainWin.Options.FirstItem = HeaderObj
 			end
-			HeaderObj.Text = {}
-			HeaderObj.Text.Frame = KBM:CallText(HeaderObj.Frame)
-			HeaderObj.Text.Frame:SetFontColor(0.85,0.65,0)
-			HeaderObj.Text.Frame:SetFontSize(16)
-			HeaderObj.Text.Frame:SetLayer(0)
-			HeaderObj.Text.Frame:SetText(Text)
-			HeaderObj.Text.Frame:ResizeToText()
-			HeaderObj.Check = {}
-			HeaderObj.Check.Frame = KBM:CallCheck(HeaderObj.Frame)
-			HeaderObj.Check.Frame:SetPoint("CENTERLEFT", HeaderObj.Frame, "CENTERLEFT")
-			HeaderObj.Check.Frame.Header = HeaderObj
 			function HeaderObj:EnableChildren()
 				for _, ChildObj in ipairs(self.Children) do
 					ChildObj:Enable()
@@ -542,14 +619,14 @@ function KBM.InitOptions()
 				end
 			end
 			if not Callback then
-				HeaderObj.Check.Frame:SetEnabled(false)
-				HeaderObj.Check.Frame:SetVisible(false)
+				HeaderObj.GUI.Check.Callback = nil
+				HeaderObj.GUI.Check:SetEnabled(false)
+				HeaderObj.GUI.Check:SetVisible(false)
 			else
-				HeaderObj.Check.Frame:SetChecked(Default)
-				HeaderObj.Check.Callback = Callback
-				function HeaderObj.Check.Frame.Event:CheckboxChange()
-					if HeaderObj.Check.Callback then
-						HeaderObj.Check:Callback(self:GetChecked())
+				HeaderObj.GUI.Check.Callback = Callback
+				function HeaderObj.GUI.Check.Event:CheckboxChange()
+					if self.Callback then
+						self:Callback(self:GetChecked())
 					end
 					if self:GetChecked() then
 						self.Header:EnableChildren()
@@ -558,48 +635,37 @@ function KBM.InitOptions()
 					end
 				end
 			end
-			HeaderObj.Text.Frame:SetPoint("CENTERLEFT", HeaderObj.Check.Frame, "CENTERRIGHT")
-			HeaderObj.Frame:SetWidth(HeaderObj.Text.Frame:GetWidth()+HeaderObj.Check.Frame:GetWidth())
-			HeaderObj.Frame:SetHeight(HeaderObj.Text.Frame:GetHeight())
-			KBM.MainWin.Options:AddSize(HeaderObj.Frame)
+			HeaderObj.GUI.Text:SetPoint("CENTERLEFT", HeaderObj.GUI.Check, "CENTERRIGHT")
+			HeaderObj.GUI.Frame:SetWidth(HeaderObj.GUI.Text:GetWidth()+HeaderObj.GUI.Check:GetWidth())
+			HeaderObj.GUI.Frame:SetHeight(HeaderObj.GUI.Text:GetHeight())
+			KBM.MainWin.Options:AddSize(HeaderObj.GUI.Frame)
 			HeaderObj.Children = {}
 			HeaderObj.LastChild = HeaderObj
 			self.LastItem = HeaderObj
-			function HeaderObj.Frame.Event:LeftClick()
-				if HeaderObj.Check.Frame:GetEnabled() then
-					if HeaderObj.Check.Frame:GetChecked() then
-						HeaderObj.Check.Frame:SetChecked(false)
+			function HeaderObj.GUI.Frame.Event:LeftClick()
+				if self.Header.GUI.Check:GetEnabled() then
+					if self.Header.GUI.Check:GetChecked() then
+						self.Header.GUI.Check:SetChecked(false)
 					else
-						HeaderObj.Check.Frame:SetChecked(true)
+						self.Header.GUI.Check:SetChecked(true)
 					end
 				end
 			end
 			table.insert(self.List, HeaderObj)
 			function HeaderObj:AddCheck(Text, Callback, Default, Slider)
 				local CheckObj = {}
-				CheckObj.Frame = KBM:CallFrame(KBM.MainWin.Options.Frame)
-				CheckObj.Frame:SetBackgroundColor(0,0,0,0)
+				CheckObj.GUI = KBM.MainWin:PullChild()
+				CheckObj.GUI.Text:SetText(Text)
 				if self.LastChild == self then
-					CheckObj.Frame:SetPoint("LEFT", self.Check.Frame, "RIGHT")
-					CheckObj.Frame:SetPoint("TOP", self.Frame, "BOTTOM")
+					CheckObj.GUI.Frame:SetPoint("LEFT", self.GUI.Check, "RIGHT")
+					CheckObj.GUI.Frame:SetPoint("TOP", self.GUI.Frame, "BOTTOM")
 				else
-					CheckObj.Frame:SetPoint("TOPLEFT", self.LastChild.Frame, "BOTTOMLEFT")
+					CheckObj.GUI.Frame:SetPoint("TOPLEFT", self.LastChild.GUI.Frame, "BOTTOMLEFT")
 				end
-				CheckObj.Check = {}
-				CheckObj.Check.Frame = KBM:CallCheck(CheckObj.Frame)
-				CheckObj.Check.Frame:SetChecked(Default)
-				CheckObj.Check.Frame:SetPoint("CENTERLEFT", CheckObj.Frame, "CENTERLEFT")
-				CheckObj.Text = {}
-				CheckObj.Text.Frame = KBM:CallText(CheckObj.Frame)
-				CheckObj.Text.Frame:SetFontSize(14)
-				CheckObj.Text.Frame:SetFontColor(1,1,1,1)
-				CheckObj.Text.Frame:SetText(Text)
-				CheckObj.Text.Frame:SetPoint("CENTERLEFT", CheckObj.Check.Frame, "CENTERRIGHT")
-				CheckObj.Text.Frame:ResizeToText()
-				CheckObj.Text.Frame:SetLayer(1)
-				CheckObj.Frame:SetWidth(CheckObj.Text.Frame:GetWidth()+CheckObj.Check.Frame:GetWidth())
-				CheckObj.Frame:SetHeight(CheckObj.Text.Frame:GetHeight())
-				CheckObj.Check.Callback = Callback
+				CheckObj.GUI.Check.Callback = Callback
+				CheckObj.GUI.Frame:SetWidth(CheckObj.GUI.Text:GetWidth()+CheckObj.GUI.Check:GetWidth())
+				CheckObj.GUI.Frame:SetHeight(CheckObj.GUI.Text:GetHeight())
+				CheckObj.GUI.Frame.Base = CheckObj
 				-- if Slider then
 					-- local SliderObj = {}
 					-- SliderObj.Frame = KBM:CallFrame(KBM.MainWin.Options)
@@ -661,73 +727,73 @@ function KBM.InitOptions()
 				-- else
 				-- end
 				table.insert(self.Children, CheckObj)
-				function CheckObj.Check.Frame.Event:CheckboxChange()
+				function CheckObj.GUI.Check.Event:CheckboxChange()
 					local bool = self:GetChecked()
-					if CheckObj.Check.Callback then
-						if CheckObj.SliderObj then
-							CheckObj.Check:Callback(bool, CheckObj)
+					if self.Callback then
+						if self.SliderObj then
+							self:Callback(bool, CheckObj)
 							if bool then
-								CheckObj.SliderObj:Enable()
+								self.SliderObj:Enable()
 							else
-								CheckObj.SliderObj:Disable()
+								self.SliderObj:Disable()
 							end
 						else
-							CheckObj.Check:Callback(bool)
+							self:Callback(bool)
 						end
 					end
 				end
-				function CheckObj.Frame.Event:LeftClick()
-					if CheckObj.Check.Frame:GetEnabled() then
-						if CheckObj.Check.Frame:GetChecked() then
-							CheckObj.Check.Frame:SetChecked(false)
+				function CheckObj.GUI.Frame.Event:LeftClick()
+					if self.Base.GUI.Check:GetEnabled() then
+						if self.Base.GUI.Check:GetChecked() then
+							self.Base.GUI.Check:SetChecked(false)
 						else
-							CheckObj.Check.Frame:SetChecked(true)
+							self.Base.GUI.Check:SetChecked(true)
 						end
 					end
 				end
 				function CheckObj:Enable()
-					self.Check.Frame:SetEnabled(true)
-					self.Text.Frame:SetAlpha(1)
+					self.GUI.Check:SetEnabled(true)
+					self.GUI.Text:SetAlpha(1)
 				end
 				function CheckObj:Disable()
-					self.Check.Frame:SetEnabled(false)
-					self.Text.Frame:SetAlpha(0.5)
+					self.GUI.Check:SetEnabled(false)
+					self.GUI.Text:SetAlpha(0.5)
 				end
 				function CheckObj:Remove()
 					if self.SliderObj then
 						self.SliderObj:Remove()
 						self.SliderObj = nil
 					end
-					self.Check.Frame:sRemove()
-					self.Text.Frame:sRemove()
-					self.Frame:sRemove()
+					KBM.MainWin:PushChild(self.GUI)
 					for Obj, pObject in pairs(self) do
 						self[Obj] = nil
 					end
 				end
 				self.LastChild = CheckObj
-				KBM.MainWin.Options:AddSize(CheckObj.Frame)
-				if self.Check.Frame:GetChecked() then
+				KBM.MainWin.Options:AddSize(CheckObj.GUI.Frame)
+				if self.GUI.Check:GetChecked() then
 					CheckObj:Enable()
 				else
 					CheckObj:Disable()
 				end
+				CheckObj.GUI.Check:SetChecked(Default)
+				CheckObj.GUI.Frame:SetVisible(true)
 				return CheckObj
 			end
 			function HeaderObj:Remove()
-				self.Check.Frame:sRemove()
-				self.Text.Frame:sRemove()
 				for _, Child in ipairs(self.Children) do
 					Child:Remove()
 					Child = nil
 				end
 				self.Children = {}
 				self.LastChild = nil
-				self.Frame:sRemove()
+				KBM.MainWin:PushHeader(self.GUI)
 				for Obj, pObject in pairs(self) do
 					self[Obj] = nil
 				end
 			end
+			HeaderObj.GUI.Frame:SetVisible(true)
+			HeaderObj.GUI.Check:SetChecked(Default)
 			return HeaderObj
 		end
 		function Child.Options:AddCheck(Text)

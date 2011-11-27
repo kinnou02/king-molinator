@@ -207,14 +207,17 @@ KM.King.Name = KM.Lang.Molinar[KBM.Lang]
 KM.Prince.Name = KM.Lang.Dollin[KBM.Lang]
 
 function KM:AddBosses(KBM_Boss)
+
 	self.MenuName = self.King.Name
 	self.Prince.Descript = self.King.Name.." & "..self.Prince.Name
 	self.King.Descript = self.Prince.Descript
 	KBM_Boss[self.Prince.Name] = self.Prince
 	KBM_Boss[self.King.Name] = self.King
+	
 end
 
 function KM:InitVars()
+
 	self.Settings = {
 		LocX = false,
 		LocY = false,
@@ -331,6 +334,7 @@ function KM:SaveVars()
 end
 
 function KM:RemoveUnits(UnitID)
+
 	if self.KingID == UnitID then
 		self.KingUnavail = true
 	elseif self.PrinceID == UnitID then
@@ -340,9 +344,11 @@ function KM:RemoveUnits(UnitID)
 		return true
 	end
 	return false
+	
 end
 
 function KM:Death(UnitID)
+
 	if self.KingID == UnitID then
 		self.King.Dead = true
 	elseif self.PrinceID == UnitID then
@@ -352,6 +358,7 @@ function KM:Death(UnitID)
 		return true
 	end
 	return false
+	
 end
 
 function KM:UnitHPCheck(unitDetails, unitID)
@@ -404,6 +411,7 @@ function KM:UnitHPCheck(unitDetails, unitID)
 end
 
 function KM:Reset()
+
 	self.EncounterRunning = false
 	self.PrinceID = nil
 	self.KingID = nil
@@ -430,9 +438,11 @@ function KM:Reset()
 	self.King.CastBar:Remove()
 	self.Prince.CastBar:Remove()
 	print("Monitor reset.")
+	
 end
 
 function KM:CheckTrends()
+
 	-- Adjust the Current and Trend bars accordingly.	
 	if self.KingID ~= nil and self.PrinceID ~= nil then
 		-- King Calc
@@ -474,6 +484,7 @@ function KM:CheckTrends()
 		self.PrincePText:SetWidth(self.PrincePText:GetFullWidth())
 		self.PrinceHPBar:SetWidth(self.BossHPWidth * self.PrincePerc)
 	end
+	
 end
 
 function KM:DPSUpdate()
@@ -532,12 +543,14 @@ function KM:DPSUpdate()
 		end
 		self:CheckTrends()
 	end
+	
 end
 
 function KM.HPChangeCheck(units)
 end
 
 function KM:SetNormal()
+
 	self.FrameBase:SetHeight(self.FBHeight)
 	self.FrameBase:SetWidth(self.FBWidth)
 	
@@ -582,6 +595,7 @@ function KM:SetNormal()
 end
 
 function KM:SetCompact()
+
 	self.FrameBase:SetHeight(self.FBHeight * 0.75)
 	self.FrameBase:SetWidth(self.FBWidth * 0.75)
 	
@@ -753,18 +767,21 @@ function KM.Prince:PinCastBar()
 end
 
 function KM.King:PinCastBar()
-	self.CastBar.Frame:ClearAll()
-	self.CastBar.Frame:SetPoint("BOTTOMLEFT", KM.FrameBase, "TOPLEFT")
-	self.CastBar.Frame:SetPoint("BOTTOMRIGHT", KM.FrameBase, "TOPRIGHT")
-	self.CastBar.Frame:SetHeight(KM.IconSize)
+
+	self.CastBar.GUI.Frame:ClearAll()
+	self.CastBar.GUI.Frame:SetPoint("BOTTOMLEFT", KM.FrameBase, "TOPLEFT")
+	self.CastBar.GUI.Frame:SetPoint("BOTTOMRIGHT", KM.FrameBase, "TOPRIGHT")
+	self.CastBar.GUI.Frame:SetHeight(KM.IconSize)
 	if KM.Settings.Compact then
-		self.CastBar.Text:SetFontSize(16)
+		self.CastBar.GUI.Text:SetFontSize(16)
 	else
-		self.CastBar.Text:SetFontSize(20)
+		self.CastBar.GUI.Text:SetFontSize(20)
 	end
+	
 end
 
 function KM:Timer(current, diff)
+
 	if self.EncounterRunning then
 		local udiff = current - self.UpdateTime
 		if diff >= 1 then
@@ -774,6 +791,7 @@ function KM:Timer(current, diff)
 			self.UpdateTime = current
 		end
 	end
+	
 end
 
 function KM.KingMolinar:OptionsClose()

@@ -414,6 +414,7 @@ function KBM.MechTimer:Init()
 	self.RemoveTimers = {}
 	self.StartTimers = {}
 	self.LastTimer = nil
+	self.Store = {}
 	self.Anchor = UI.CreateFrame("Frame", "Timer Anchor", KBM.Context)
 	self.Anchor:SetLayer(5)
 	self.Anchor:SetWidth(KBM.Options.MechTimer.w * KBM.Options.MechTimer.wScale)
@@ -443,6 +444,32 @@ function KBM.MechTimer:Init()
 	self.Anchor:SetVisible(KBM.Options.MechTimer.Visible)
 	self.Anchor.Drag:SetVisible(KBM.Options.MechTimer.Unlocked)
 	
+end
+
+function KBM.MechTimer:Pull()
+
+	local GUI = {}
+	if #self.Store > 0 then
+		GUI = table.remove(self.Store)
+	else
+		GUI.Background = UI.CreateFrame("Frame", "Timer Frame", KBM.Context)
+		GUI.Background:SetWidth(KBM.Options.MechTimer.w * KBM.Options.MechTimer.wScale)
+		GUI.Background:SetHeight(KBM.Options.MechTimer.h * KBM.Options.MechTimer.hScale)
+		GUI.Background:SetBackgroundColor(0,0,0,0.33)
+		GUI.TimeBar = UI.CreateFrame("Frame", "Timer Progress Frame", GUI.Background)
+		GUI.TimeBar:SetWidth(KBM.Options.MechTimer.w * KBM.Options.MechTimer.wScale)
+		GUI.TimeBar:SetHeight(KBM.Options.MechTimer.h * KBM.Options.MechTimer.hScale)
+		GUI.TimeBar:SetPoint("TOPLEFT", GUI.Background, "TOPLEFT")
+		GUI.TimeBar:SetLayer(1)
+		GUI.TimeBar:SetBackgroundColor(0,0,1,0.33)
+		GUI.CastInfo = UI.CreateFrame("Text", "Timer Text Frame", GUI.Background)
+		GUI.CastInfo:SetFontSize(KBM.Options.MechTimer.TextSize)
+		GUI.CastInfo:SetPoint("CENTERLEFT", GUI.Background, "CENTERLEFT")
+		GUI.CastInfo:SetLayer(2)
+		GUI.CastInfo:SetFontColor(1,1,1)
+	end
+	return GUI
+
 end
 
 function KBM.MechTimer:Add(Name, Duration, Repeat)
@@ -477,56 +504,43 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 				end
 				return
 			end
-			self.Starting = false
 			local Anchor = KBM.MechTimer.Anchor
-			self.Background = KBM:CallFrame(KBM.Context)
-			self.Background:SetWidth(KBM.Options.MechTimer.w * KBM.Options.MechTimer.wScale)
-			self.Background:SetHeight(KBM.Options.MechTimer.h * KBM.Options.MechTimer.hScale)
-			self.Background:SetBackgroundColor(0,0,0,0.33)
-			self.TimeBar = KBM:CallFrame(self.Background)
-			self.TimeBar:SetWidth(KBM.Options.MechTimer.w * KBM.Options.MechTimer.wScale)
-			self.TimeBar:SetHeight(KBM.Options.MechTimer.h * KBM.Options.MechTimer.hScale)
-			self.TimeBar:SetPoint("TOPLEFT", self.Background, "TOPLEFT")
-			self.TimeBar:SetLayer(1)
-			self.TimeBar:SetBackgroundColor(0,0,1,0.33)
+			self.GUI = KBM.MechTimer:Pull()
+			self.Starting = false
 			self.TimeStart = CurrentTime
 			self.Remaining = self.Time
+			self.GUI.CastInfo:SetText(string.format(" %0.01f : ", self.Remaining)..self.Name)
 			if self.Delay then
 				self.Time = Delay
 			end
-			self.CastInfo = KBM:CallText(self.Background, self.Trigger)
-			self.CastInfo:SetText(string.format(" %0.01f : ", self.Remaining)..self.Name)
-			self.CastInfo:SetFontSize(KBM.Options.MechTimer.TextSize)
-			self.CastInfo:SetPoint("CENTERLEFT", self.Background, "CENTERLEFT")
-			self.CastInfo:SetLayer(2)
-			self.CastInfo:SetFontColor(1,1,1)
 			if #KBM.MechTimer.ActiveTimers > 0 then
 				for i, cTimer in ipairs(KBM.MechTimer.ActiveTimers) do
 					if self.Remaining < cTimer.Remaining then
 						self.Active = true
 						if i == 1 then
-							self.Background:SetPoint("TOPLEFT", Anchor, "TOPLEFT")
-							cTimer.Background:SetPoint("TOPLEFT", self.Background, "BOTTOMLEFT", 0, 1)
+							self.GUI.Background:SetPoint("TOPLEFT", Anchor, "TOPLEFT")
+							cTimer.GUI.Background:SetPoint("TOPLEFT", self.GUI.Background, "BOTTOMLEFT", 0, 1)
 						else
-							self.Background:SetPoint("TOPLEFT", KBM.MechTimer.ActiveTimers[i-1].Background, "BOTTOMLEFT", 0, 1)
-							cTimer.Background:SetPoint("TOPLEFT", self.Background, "BOTTOMLEFT", 0, 1)
+							self.GUI.Background:SetPoint("TOPLEFT", KBM.MechTimer.ActiveTimers[i-1].GUI.Background, "BOTTOMLEFT", 0, 1)
+							cTimer.GUI.Background:SetPoint("TOPLEFT", self.GUI.Background, "BOTTOMLEFT", 0, 1)
 						end
 						table.insert(KBM.MechTimer.ActiveTimers, i, self)
 						break
 					end
 				end
 				if not self.Active then
-					self.Background:SetPoint("TOPLEFT", KBM.MechTimer.LastTimer.Background, "BOTTOMLEFT", 0, 1)
+					self.GUI.Background:SetPoint("TOPLEFT", KBM.MechTimer.LastTimer.GUI.Background, "BOTTOMLEFT", 0, 1)
 					table.insert(KBM.MechTimer.ActiveTimers, self)
 					KBM.MechTimer.LastTimer = self
 					self.Active = true
 				end
 			else
-				self.Background:SetPoint("TOPLEFT", KBM.MechTimer.Anchor, "TOPLEFT")
+				self.GUI.Background:SetPoint("TOPLEFT", KBM.MechTimer.Anchor, "TOPLEFT")
 				table.insert(KBM.MechTimer.ActiveTimers, self)
 				self.Active = true
 				KBM.MechTimer.LastTimer = self
 			end
+			self.GUI.Background:SetVisible(true)
 		end
 		
 	end
@@ -547,11 +561,11 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 					if #KBM.MechTimer.ActiveTimers == 1 then
 						KBM.MechTimer.LastTimer = nil
 					elseif i == 1 then
-						KBM.MechTimer.ActiveTimers[i+1].Background:SetPoint("TOPLEFT", KBM.MechTimer.Anchor, "TOPLEFT")
+						KBM.MechTimer.ActiveTimers[i+1].GUI.Background:SetPoint("TOPLEFT", KBM.MechTimer.Anchor, "TOPLEFT")
 					elseif i == #KBM.MechTimer.ActiveTimers then
 						KBM.MechTimer.LastTimer = KBM.MechTimer.ActiveTimers[i-1]
 					else
-						KBM.MechTimer.ActiveTimers[i+1].Background:SetPoint("TOPLEFT", KBM.MechTimer.ActiveTimers[i-1].Background, "BOTTOMLEFT", 0, 1)
+						KBM.MechTimer.ActiveTimers[i+1].GUI.Background:SetPoint("TOPLEFT", KBM.MechTimer.ActiveTimers[i-1].GUI.Background, "BOTTOMLEFT", 0, 1)
 					end
 					table.remove(KBM.MechTimer.ActiveTimers, i)
 					break
@@ -563,9 +577,9 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 			for i, AlertObj in pairs(self.Alerts) do
 				self.Alerts[i].Triggered = false
 			end
-			self.CastInfo:sRemove()
-			self.TimeBar:sRemove()
-			self.Background:sRemove()
+			self.GUI.Background:SetVisible(false)
+			table.insert(KBM.MechTimer.Store, self.GUI)
+			self.GUI = nil
 			self.Removing = false
 			self.Deleting = false
 			if self.Repeat then
@@ -605,8 +619,8 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 		if self.Active then
 			self.Remaining = self.Time - (CurrentTime - self.TimeStart)
 			local text = string.format(" %0.01f : ", self.Remaining)..self.Name
-			self.CastInfo:SetText(text)
-			self.TimeBar:SetWidth(self.Background:GetWidth() * (self.Remaining/self.Time))
+			self.GUI.CastInfo:SetText(text)
+			self.GUI.TimeBar:SetWidth(self.GUI.Background:GetWidth() * (self.Remaining/self.Time))
 			if self.Remaining <= 0 then
 				self.Remaining = 0
 				table.insert(KBM.MechTimer.RemoveTimers, self)
@@ -621,10 +635,6 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 			end
 		end
 	end
-	-- if KBM.Testing then
-		-- Timer:Start(Inspect.Time.Real())
-		-- table.insert(self.testTimerList, iTrigger)
-	-- end
 	return Timer
 	
 end
@@ -835,6 +845,7 @@ end
 
 function KBM:CallFrame(parent)
 
+	print("Warning: CallFrame used, old Recycling system, please report: WCF848")
 	local frame = nil
 	if #self.FrameStore == 0 then
 		self.TotalFrames = self.TotalFrames + 1
@@ -865,6 +876,7 @@ end
 
 function KBM:CallCheck(parent)
 
+	print("Warning: CallCheck used, old Recycling system, please report: WCC879")
 	local Checkbox = nil
 	if #self.CheckStore == 0 then
 		self.TotalChecks = self.TotalChecks + 1
@@ -895,6 +907,7 @@ end
 
 function KBM:CallText(parent, debugInfo)
 
+	print("Warning: CallText used, old Recycling system, please report: WCT910")
 	local Textfbox = nil
 	if #self.TextfStore == 0 then
 		self.TotalTexts = self.TotalTexts + 1
@@ -1401,7 +1414,7 @@ function KBM.AttachDragFrame(parent, hook, name, layer)
 	if not layer then layer = 0 end
 	
 	local Drag = {}
-	Drag.Frame = KBM:CallFrame(parent)
+	Drag.Frame = UI.CreateFrame("Frame", "Drag Frame", parent)
 	Drag.Frame:SetPoint("TOPLEFT", parent, "TOPLEFT")
 	Drag.Frame:SetPoint("BOTTOMRIGHT", parent, "BOTTOMRIGHT")
 	Drag.Frame.parent = parent
@@ -1451,6 +1464,57 @@ function KBM.AttachDragFrame(parent, hook, name, layer)
 	return Drag.Frame
 end
 
+function KBM.TankSwap:Pull()
+
+	local GUI = {}
+	if #self.TankStore > 0 then
+		GUI = table.remove(self.TankStore)
+	else
+		GUI.Frame = UI.CreateFrame("Frame", "TankSwap Base Frame", KBM.Context)
+		GUI.Frame:SetLayer(1)
+		GUI.Frame:SetHeight(KBM.Options.TankSwap.h)
+		GUI.Frame:SetBackgroundColor(0,0,0,0.4)
+		GUI.TankFrame = UI.CreateFrame("Frame", "TankSwap Tank Frame", GUI.Frame)
+		GUI.TankFrame:SetPoint("TOPLEFT", GUI.Frame, "TOPLEFT")
+		GUI.TankFrame:SetPoint("BOTTOMLEFT", GUI.Frame, "CENTERLEFT")
+		GUI.TankHP = UI.CreateFrame("Frame", "TankSwap Tank HP Frame", GUI.TankFrame)
+		GUI.TankHP:SetLayer(1)
+		GUI.TankText = UI.CreateFrame("Text", "TankSwap Tank Text", GUI.TankFrame)
+		GUI.TankText:SetLayer(2)
+		GUI.TankText:SetFontSize(KBM.Options.TankSwap.TextSize)
+		GUI.TankText:SetPoint("CENTERLEFT", GUI.TankFrame, "CENTERLEFT", 2, 0)
+		GUI.DebuffFrame = UI.CreateFrame("Frame", "TankSwap Debuff Frame", GUI.Frame)
+		GUI.DebuffFrame:SetPoint("TOPRIGHT", GUI.Frame, "TOPRIGHT")
+		GUI.DebuffFrame:SetPoint("BOTTOMRIGHT", GUI.Frame, "CENTERRIGHT")
+		GUI.DebuffFrame:SetPoint("LEFT", GUI.Frame, 0.8, nil)
+		GUI.DebuffFrame:SetBackgroundColor(0.5,0,0,0.4)
+		GUI.DebuffFrame:SetLayer(1)
+		GUI.DebuffFrame.Text = UI.CreateFrame("Text", "TankSwap Debuff Text", GUI.DebuffFrame)
+		GUI.DebuffFrame.Text:SetFontSize(KBM.Options.TankSwap.TextSize)
+		GUI.DebuffFrame.Text:SetLayer(2)
+		GUI.DebuffFrame.Text:SetPoint("CENTER", GUI.DebuffFrame, "CENTER")
+		GUI.TankFrame:SetPoint("TOPRIGHT", GUI.DebuffFrame, "TOPLEFT")
+		GUI.TankHP:SetPoint("TOPLEFT", GUI.TankFrame, "TOPLEFT")
+		GUI.TankHP:SetPoint("BOTTOM", GUI.TankFrame, "BOTTOM")
+		GUI.TankHP:SetPoint("RIGHT", GUI.TankFrame, 1, nil)
+		GUI.DeCoolFrame = UI.CreateFrame("Frame", "TankSwap Cooldown Frame", GUI.Frame)
+		GUI.DeCoolFrame:SetPoint("TOPLEFT", GUI.TankFrame, "BOTTOMLEFT")
+		GUI.DeCoolFrame:SetPoint("BOTTOM", GUI.Frame, "BOTTOM")
+		GUI.DeCoolFrame:SetPoint("RIGHT", GUI.Frame, "RIGHT")
+		GUI.DeCool = UI.CreateFrame("Frame", "TankSwap Cooldown Progress", GUI.DeCoolFrame)
+		GUI.DeCool:SetPoint("TOPLEFT", GUI.DeCoolFrame, "TOPLEFT")
+		GUI.DeCool:SetPoint("BOTTOM", GUI.DeCoolFrame, "BOTTOM")
+		GUI.DeCool:SetPoint("RIGHT", GUI.DeCoolFrame, 1, nil)
+		GUI.DeCool:SetBackgroundColor(0,0,1,0.4)
+		GUI.DeCool.Text = UI.CreateFrame("Text", "TankSwap Cooldown Text", GUI.DeCoolFrame)
+		GUI.DeCool.Text:SetFontSize(KBM.Options.TankSwap.TextSize)
+		GUI.DeCool.Text:SetPoint("CENTER", GUI.DeCoolFrame, "CENTER")
+		GUI.DeCool.Text:SetLayer(2)		
+	end
+	return GUI
+
+end
+
 function KBM.TankSwap:Init()
 
 	self.Tanks = {}
@@ -1459,6 +1523,7 @@ function KBM.TankSwap:Init()
 	self.DebuffID = nil
 	self.LastTank = nil
 	self.Test = false
+	self.TankStore = {}
 	self.Enabled = KBM.Options.TankSwap.Enabled
 	
 	self.Anchor = UI.CreateFrame("Frame", "Tank-Swap Anchor", KBM.Context)
@@ -1501,60 +1566,22 @@ function KBM.TankSwap:Init()
 				TankObj.Name = uDetails.name
 			end
 		end
-		TankObj.Frame = KBM:CallFrame(KBM.Context)
-		TankObj.Frame:SetLayer(1)
-		TankObj.Frame:SetHeight(KBM.Options.TankSwap.h)
-		TankObj.Frame:SetBackgroundColor(0,0,0,0.4)
+		TankObj.GUI = KBM.TankSwap:Pull()
+		TankObj.GUI.TankText:SetText(TankObj.Name)
 		if self.TankCount == 0 then
-			TankObj.Frame:SetPoint("TOPLEFT", self.Anchor, "TOPLEFT")
-			TankObj.Frame:SetPoint("TOPRIGHT", self.Anchor, "TOPRIGHT")
+			TankObj.GUI.Frame:SetPoint("TOPLEFT", self.Anchor, "TOPLEFT")
+			TankObj.GUI.Frame:SetPoint("TOPRIGHT", self.Anchor, "TOPRIGHT")
 		else
-			TankObj.Frame:SetPoint("TOPLEFT", self.LastTank.Frame, "BOTTOMLEFT", 0, 2)
-			TankObj.Frame:SetPoint("RIGHT", self.LastTank.Frame, "RIGHT")
+			TankObj.GUI.Frame:SetPoint("TOPLEFT", self.LastTank.GUI.Frame, "BOTTOMLEFT", 0, 2)
+			TankObj.GUI.Frame:SetPoint("RIGHT", self.LastTank.GUI.Frame, "RIGHT")
 		end
-		TankObj.TankFrame = KBM:CallFrame(TankObj.Frame)
-		TankObj.TankFrame:SetPoint("TOPLEFT", TankObj.Frame, "TOPLEFT")
-		TankObj.TankFrame:SetPoint("BOTTOMLEFT", TankObj.Frame, "CENTERLEFT")
-		TankObj.TankHP = KBM:CallFrame(TankObj.TankFrame)
-		TankObj.TankHP:SetLayer(1)
-		TankObj.TankText = KBM:CallText(TankObj.TankFrame)
-		TankObj.TankText:SetLayer(2)
-		TankObj.TankText:SetText(TankObj.Name)
-		TankObj.TankText:SetFontSize(KBM.Options.TankSwap.TextSize)
-		TankObj.TankText:SetPoint("CENTERLEFT", TankObj.TankFrame, "CENTERLEFT", 2, 0)
-		TankObj.DebuffFrame = KBM:CallFrame(TankObj.Frame)
-		TankObj.DebuffFrame:SetPoint("TOPRIGHT", TankObj.Frame, "TOPRIGHT")
-		TankObj.DebuffFrame:SetPoint("BOTTOMRIGHT", TankObj.Frame, "CENTERRIGHT")
-		TankObj.DebuffFrame:SetPoint("LEFT", TankObj.Frame, 0.8, nil)
-		TankObj.DebuffFrame:SetBackgroundColor(0.5,0,0,0.4)
-		TankObj.DebuffFrame:SetLayer(1)
-		TankObj.DebuffFrame.Text = KBM:CallText(TankObj.DebuffFrame)
-		TankObj.DebuffFrame.Text:SetFontSize(KBM.Options.TankSwap.TextSize)
-		TankObj.DebuffFrame.Text:SetLayer(2)
-		TankObj.DebuffFrame.Text:SetPoint("CENTER", TankObj.DebuffFrame, "CENTER")
-		TankObj.TankFrame:SetPoint("TOPRIGHT", TankObj.DebuffFrame, "TOPLEFT")
-		TankObj.TankHP:SetPoint("TOPLEFT", TankObj.TankFrame, "TOPLEFT")
-		TankObj.TankHP:SetPoint("BOTTOM", TankObj.TankFrame, "BOTTOM")
-		TankObj.TankHP:SetPoint("RIGHT", TankObj.TankFrame, 1, nil)
-		TankObj.DeCoolFrame = KBM:CallFrame(TankObj.Frame)
-		TankObj.DeCoolFrame:SetPoint("TOPLEFT", TankObj.TankFrame, "BOTTOMLEFT")
-		TankObj.DeCoolFrame:SetPoint("BOTTOM", TankObj.Frame, "BOTTOM")
-		TankObj.DeCoolFrame:SetPoint("RIGHT", TankObj.Frame, "RIGHT")
-		TankObj.DeCool = KBM:CallFrame(TankObj.DeCoolFrame)
-		TankObj.DeCool:SetPoint("TOPLEFT", TankObj.DeCoolFrame, "TOPLEFT")
-		TankObj.DeCool:SetPoint("BOTTOM", TankObj.DeCoolFrame, "BOTTOM")
-		TankObj.DeCool:SetPoint("RIGHT", TankObj.DeCoolFrame, 1, nil)
-		TankObj.DeCool:SetBackgroundColor(0,0,1,0.4)
-		TankObj.DeCool.Text = KBM:CallText(TankObj.DeCoolFrame)
-		TankObj.DeCool.Text:SetFontSize(KBM.Options.TankSwap.TextSize)
-		TankObj.DeCool.Text:SetPoint("CENTER", TankObj.DeCoolFrame, "CENTER")
-		TankObj.DeCool.Text:SetLayer(2)
 		self.LastTank = TankObj
 		self.Tanks[TankObj.UnitID] = TankObj
 		self.TankCount = self.TankCount + 1
 		if self.Test then
-			TankObj.DebuffFrame.Text:SetText("2")
-			TankObj.DeCool.Text:SetText("99.9")
+			TankObj.GUI.DebuffFrame.Text:SetText("2")
+			TankObj.GUI.DeCool.Text:SetText("99.9")
+			TankObj.GUI.Frame:SetVisible(true)
 		end
 		return TankObj
 	end
@@ -1607,33 +1634,27 @@ function KBM.TankSwap:Init()
 				end
 			end
 			if TankObj.Remaining <= 0 then
-				TankObj.DeCoolFrame:SetVisible(false)
-				TankObj.DeCool:SetPoint("RIGHT", TankObj.DeCoolFrame, 1, nil)
-				TankObj.DebuffFrame.Text:SetVisible(false)
+				TankObj.GUI.DeCoolFrame:SetVisible(false)
+				TankObj.GUI.DeCool:SetPoint("RIGHT", GUI.DeCoolFrame, 1, nil)
+				TankObj.GUI.DebuffFrame.Text:SetVisible(false)
 			else
-				TankObj.DeCool.Text:SetText(string.format("%0.01f", TankObj.Remaining))
-				TankObj.DeCool:SetPoint("RIGHT", TankObj.DeCoolFrame, (TankObj.Remaining/TankObj.Duration), nil)
-				TankObj.DeCoolFrame:SetVisible(true)
+				TankObj.GUI.DeCool.Text:SetText(string.format("%0.01f", TankObj.Remaining))
+				TankObj.GUI.DeCool:SetPoint("RIGHT", TankObj.DeCoolFrame, (TankObj.Remaining/TankObj.Duration), nil)
+				TankObj.GUI.DeCoolFrame:SetVisible(true)
 				if TankObj.Stacks then
-					TankObj.DebuffFrame.Text:SetText(tostring(TankObj.Stacks))
+					TankObj.GUI.DebuffFrame.Text:SetText(tostring(TankObj.Stacks))
 				else
-					TankObj.DebuffFrame.Text:SetText("-")
+					TankObj.GUI.DebuffFrame.Text:SetText("-")
 				end
-				TankObj.DebuffFrame.Text:SetVisible(true)
+				TankObj.GUI.DebuffFrame.Text:SetVisible(true)
 			end
 		end
 	end
 	function self:Remove()
 		for UnitID, TankObj in pairs(self.Tanks) do
-			TankObj.DeCool.Text:sRemove()
-			TankObj.DebuffFrame.Text:sRemove()
-			TankObj.DeCool:sRemove()
-			TankObj.DeCoolFrame:sRemove()
-			TankObj.DebuffFrame:sRemove()
-			TankObj.TankText:sRemove()
-			TankObj.TankHP:sRemove()
-			TankObj.TankFrame:sRemove()
-			TankObj.Frame:sRemove()
+			table.insert(self.TankStore, TankObj.GUI)
+			TankObj.GUI.Frame:SetVisible(false)
+			TankObj.GUI = nil
 		end
 		self.Tanks = {}
 		self.LastTank = nil
@@ -1863,6 +1884,7 @@ function KBM.CastBar:Init()
 	self.RemoveCastBars = {}
 	self.WaitCastBars = {}
 	self.StartCastBars = {}
+	self.Store = {}
 	self.Anchor = UI.CreateFrame("Frame", "CastBar Anchor", KBM.Context)
 	self.Anchor:SetWidth(KBM.Options.CastBar.w * KBM.Options.CastBar.wScale)
 	self.Anchor:SetHeight(KBM.Options.CastBar.h * KBM.Options.CastBar.hScale)
@@ -1888,6 +1910,42 @@ function KBM.CastBar:Init()
 
 end
 
+function KBM.CastBar:Pull()
+	
+	local GUI = {}
+	if #self.Store > 0 then
+		GUI = table.remove(self.Store)
+		GUI.Frame:SetVisible(false)
+	else
+		GUI.Frame = UI.CreateFrame("Frame", "CastBar Frame", KBM.Context)
+		GUI.Frame:SetWidth(KBM.Options.CastBar.w)
+		GUI.Frame:SetHeight(KBM.Options.CastBar.h)
+		GUI.Progress = UI.CreatFrame("Frame", "CastBar Progress Frame", GUI.Frame)
+		GUI.Progress:SetWidth(0)
+		GUI.Progress:SetHeight(self.Frame:GetHeight())
+		GUI.Text = UI.CreateFrame(GUI.Frame)
+		GUI.Progress:SetLayer(1)
+		GUI.Text:SetLayer(2)
+		GUI.Text:SetPoint("CENTER", GUI.Frame, "CENTER")
+		if not KBM.Options.CastBar.x then
+			GUI.Frame:SetPoint("CENTERX", UIParent, "CENTERX")
+		else
+			GUI.Frame:SetPoint("LEFT", UIParent, "LEFT", KBM.Options.CastBar.x, nil)
+		end
+		if not KBM.Options.CastBar.y then
+			GUI.Frame:SetPoint("CENTERY", UIParent, "CENTERY")
+		else
+			GUI.Frame:SetPoint("TOP", UIParent, "TOP", nil, KBM.Options.CastBar.y)
+		end
+		GUI.Progress:SetPoint("TOPLEFT", GUI.Frame, "TOPLEFT")
+		GUI.Frame:SetBackgroundColor(0,0,0,0.3)
+		GUI.Progress:SetBackgroundColor(0.7,0,0,0.5)
+		GUI.Frame:SetVisible(false)
+	end
+	return GUI
+	
+end
+
 function KBM.CastBar:Add(Mod, Boss, Enabled)
 
 	local CastBarObj = {}
@@ -1900,44 +1958,13 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 	CastBarObj.Enabled = Enabled
 	CastBarObj.Mod = Mod
 	CastBarObj.Active = false
-	function CastBarObj:Position(uType)
-		if uType == "end" then
-			self.Boss.Settings.CastBar.x = self.Frame.GetLeft() 
-			self.Boss.Settings.CastBar.y = self.Frame.GetRight()
-		end
-	end
 	function CastBarObj:Create(UnitID)
 		self.UnitID = UnitID
-		self.Frame = KBM:CallFrame(KBM.Context)
-		self.Frame:SetWidth(KBM.Options.CastBar.w)
-		self.Frame:SetHeight(KBM.Options.CastBar.h)
-		self.Progress = KBM:CallFrame(self.Frame)
-		self.Progress:SetWidth(0)
-		self.Progress:SetHeight(self.Frame:GetHeight())
-		self.Text = KBM:CallText(self.Frame)
-		self.Progress:SetLayer(1)
-		self.Text:SetLayer(2)
-		self.Text:SetPoint("CENTER", self.Frame, "CENTER")
-		if not KBM.Options.CastBar.x then
-			self.Frame:SetPoint("CENTERX", UIParent, "CENTERX")
-		else
-			self.Frame:SetPoint("LEFT", UIParent, "LEFT", KBM.Options.CastBar.x, nil)
-		end
-		if not KBM.Options.CastBar.y then
-			self.Frame:SetPoint("CENTERY", UIParent, "CENTERY")
-		else
-			self.Frame:SetPoint("TOP", UIParent, "TOP", nil, KBM.Options.CastBar.y)
-		end
-		self.Progress:SetPoint("TOPLEFT", self.Frame, "TOPLEFT")
-		self.Frame:SetBackgroundColor(0,0,0,0.3)
-		self.Progress:SetBackgroundColor(0.7,0,0,0.5)
-		self.Drag = KBM.AttachDragFrame(self.Frame, function(uType) self:Position(uType) end, self.Boss.Name.." Drag", 2)
-		self.Drag:SetVisible(false)
+		self.GUI = KBM.CastBar:Pull()
 		KBM.CastBar.ActiveCastBars[UnitID] = self
 		if Boss.PinCastBar then
 			Boss:PinCastBar()
 		end
-		self.Frame:SetVisible(false)
 		self.Active = true
 	end
 	function CastBarObj:Update()
@@ -1950,26 +1977,26 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 							if self.Filters[bDetails.abilityName].Enabled then
 								if not self.Casting then
 									self.Casting = true
-									self.Frame:SetVisible(true)
+									self.GUI.Frame:SetVisible(true)
 								end
 								bCastTime = bDetails.duration
 								bProgress = bDetails.remaining						
-								self.Progress:SetWidth(self.Frame:GetWidth() * (1-(bProgress/bCastTime)))
-								self.Text:SetText(string.format("%0.01f", bProgress).." - "..bDetails.abilityName)
+								self.GUI.Progress:SetWidth(self.Frame:GetWidth() * (1-(bProgress/bCastTime)))
+								self.GUI.Text:SetText(string.format("%0.01f", bProgress).." - "..bDetails.abilityName)
 							else
 								self.Casting = false
-								self.Frame:SetVisible(false)
+								self.GUI.Frame:SetVisible(false)
 							end
 						end
 					else
 						if not self.Casting then
 							self.Casting = true
-							self.Frame:SetVisible(true)
+							self.GUI.Frame:SetVisible(true)
 						end
 						bCastTime = bDetails.duration
 						bProgress = bDetails.remaining						
-						self.Progress:SetWidth(self.Frame:GetWidth() * (1-(bProgress/bCastTime)))
-						self.Text:SetText(string.format("%0.01f", bProgress).." - "..bDetails.abilityName)
+						self.GUI.Progress:SetWidth(self.Frame:GetWidth() * (1-(bProgress/bCastTime)))
+						self.GUI.Text:SetText(string.format("%0.01f", bProgress).." - "..bDetails.abilityName)
 					end
 				end
 				if self.LastCast ~= bDetails.abilityName then
@@ -1983,23 +2010,21 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 				end
 			else
 				self.Casting = false
-				self.Frame:SetVisible(false)
+				self.GUI.Frame:SetVisible(false)
 				self.LastCast = ""
 			end
 		else
 			self.Casting = false
-			self.Frame:SetVisible(false)
+			self.GUI.Frame:SetVisible(false)
 			self.LastCast = ""
 		end
 	end
 	function CastBarObj:Remove()
 		KBM.CastBar.ActiveCastBars[self.UnitID] = nil
 		self.UnitID = nil
-		self.Text:sRemove()
-		self.Progress:sRemove()
-		self.Frame:sRemove()
-		self.Drag:Remove()
 		self.Active = false
+		table.insert(KBM.CastBar.Store, self.GUI)
+		self.GUI = nil
 	end
 	self[Boss.Name] = CastBarObj
 	return self[Boss.Name]
@@ -2480,7 +2505,7 @@ function KBM.MenuOptions.Timers:Options()
 	Timers:AddCheck(KBM.Language.Options.Timer[KBM.Lang], self.EncDuration, KBM.Options.EncTimer.Duration)
 	Timers:AddCheck(KBM.Language.Options.Enrage[KBM.Lang], self.EncEnrage, KBM.Options.EncTimer.Enrage)
 	local MechTimers = Options:AddHeader(KBM.Language.Options.MechanicTimers[KBM.Lang], self.MechEnabled, true)
-	MechTimers.Check.Frame:SetEnabled(false)
+	MechTimers.GUI.Check:SetEnabled(false)
 	KBM.Options.MechTimer.Enabled = true
 	MechTimers:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowMechAnchor, KBM.Options.MechTimer.Visible)
 	MechTimers:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.LockMechAnchor, KBM.Options.MechTimer.Unlocked)
@@ -2500,7 +2525,7 @@ end
 function KBM.MenuOptions.TankSwap:Close()
 	if KBM.TankSwap.Active then
 		if KBM.TankSwap.Test then
-			self.TestLink.Check.Frame:SetChecked(false)
+			self.ShowTest(false)
 			KBM.TankSwap.Anchor:SetVisible(KBM.Options.TankSwap.Visible)
 		end
 	end
@@ -2582,7 +2607,7 @@ function KBM.MenuOptions.TankSwap:Options()
 	local TankSwap = Options:AddHeader(KBM.Language.Options.TankSwapEnabled[KBM.Lang], self.Enabled, KBM.Options.TankSwap.Enabled)
 	TankSwap:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowAnchor, KBM.Options.TankSwap.Visible)
 	TankSwap:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.LockAnchor, KBM.Options.TankSwap.Unlocked)
-	self.TestLink = TankSwap:AddCheck(KBM.Language.Options.Tank[KBM.Lang], self.ShowTest, false)
+	TankSwap:AddCheck(KBM.Language.Options.Tank[KBM.Lang], self.ShowTest, false)
 	-- self.CastBars:AddCheck("Width scaling.", self.CastScaleWidth, KBM.Options.CastBar.ScaleWidth)
 	-- self.CastBars:AddCheck("Height scaling.", self.CastScaleHeight, KBM.Options.CastBar.ScaleHeight)
 	-- self.CastBars:AddCheck("Text Size", self.CastTextSize, KBM.Options.CastBar.TextScale)
@@ -2645,7 +2670,7 @@ function KBM.MenuOptions.CastBars:Options()
 
 	-- CastBar Options. 
 	local CastBars = Options:AddHeader(KBM.Language.Options.CastbarEnabled[KBM.Lang], self.CastBarEnabled, true)
-	CastBars.Check.Frame:SetEnabled(false)
+	CastBars.GUI.Check:SetEnabled(false)
 	KBM.Options.CastBar.Enabled = true
 	CastBars:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowCastAnchor, KBM.Options.CastBar.Visible)
 	CastBars:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.LockCastAnchor, KBM.Options.CastBar.Unlocked)

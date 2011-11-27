@@ -1,4 +1,16 @@
-﻿v0.6.5
+﻿v0.6.6
+* Beta Note: Castbars are currently untested.
+* Removed: Dynamic Frame recycling which could trigger inconsistencies and Client Crashes (due to a recent Trion patch)
+* New: Dynamic GUI Object recycling robust engine which bypasses the issues introduced by Trion.
+* New: Mechanic Timers are now the new GUI Object packages rendering.
+* New: Castbars are now the new GUI Object packages for rendering.
+* New: Options Window now uses new GUI Object packages for rendering.
+* New: Tank-Swap Monitor now uses new GUI Object packages for rendering.
+* Note: Memory usage has not been effected by these changes, still around the 2mb mark.
+* Note: CPU Load has been reduced with the new system by around 50% (optimized queuing system).
+* Note: Some minor use of the old system may be in place, warnings will be given instead of crashes.
+----
+v0.6.5
 * New: You can now select to save all settings for KBM for the current character.
 * Hammerknell
 ** New: Converted all boss settings to account and per-character methods.
