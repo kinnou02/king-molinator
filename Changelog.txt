@@ -1,5 +1,4 @@
 ﻿v0.6.6
-* Beta Note: Castbars are currently untested.
 * Removed: Dynamic Frame recycling which could trigger inconsistencies and Client Crashes (due to a recent Trion patch)
 * New: Dynamic GUI Object recycling robust engine which bypasses the issues introduced by Trion.
 * New: Mechanic Timers are now the new GUI Object packages rendering.

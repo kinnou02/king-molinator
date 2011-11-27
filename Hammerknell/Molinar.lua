@@ -755,14 +755,14 @@ function KM.UpdateBaseVars(callType)
 end
 
 function KM.Prince:PinCastBar()
-	self.CastBar.Frame:ClearAll()
-	self.CastBar.Frame:SetPoint("TOPLEFT", KM.FrameBase, "BOTTOMLEFT")
-	self.CastBar.Frame:SetPoint("TOPRIGHT", KM.FrameBase, "BOTTOMRIGHT")
-	self.CastBar.Frame:SetHeight(KM.IconSize)
+	self.CastBar.GUI.Frame:ClearAll()
+	self.CastBar.GUI.Frame:SetPoint("TOPLEFT", KM.FrameBase, "BOTTOMLEFT")
+	self.CastBar.GUI.Frame:SetPoint("TOPRIGHT", KM.FrameBase, "BOTTOMRIGHT")
+	self.CastBar.GUI.Frame:SetHeight(KM.IconSize)
 	if KM.Settings.Compact then
-		self.CastBar.Text:SetFontSize(16)
+		self.CastBar.GUI.Text:SetFontSize(16)
 	else
-		self.CastBar.Text:SetFontSize(20)
+		self.CastBar.GUI.Text:SetFontSize(20)
 	end
 end
 

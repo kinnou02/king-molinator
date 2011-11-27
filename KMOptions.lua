@@ -594,6 +594,7 @@ function KBM.InitOptions()
 		function Child.Options:AddHeader(Text, Callback, Default)
 			local HeaderObj = {}
 			HeaderObj.GUI = KBM.MainWin:PullHeader()
+			HeaderObj.Loaded = false
 			HeaderObj.GUI.Text:SetText(Text)
 			HeaderObj.GUI.Check.Header = HeaderObj
 			HeaderObj.GUI.Frame.Header = HeaderObj
@@ -625,13 +626,15 @@ function KBM.InitOptions()
 			else
 				HeaderObj.GUI.Check.Callback = Callback
 				function HeaderObj.GUI.Check.Event:CheckboxChange()
-					if self.Callback then
-						self:Callback(self:GetChecked())
-					end
-					if self:GetChecked() then
-						self.Header:EnableChildren()
-					else
-						self.Header:DisableChildren()
+					if self.Header.Loaded then
+						if self.Callback then
+							self:Callback(self:GetChecked())
+						end
+						if self:GetChecked() then
+							self.Header:EnableChildren()
+						else
+							self.Header:DisableChildren()
+						end
 					end
 				end
 			end
@@ -643,11 +646,13 @@ function KBM.InitOptions()
 			HeaderObj.LastChild = HeaderObj
 			self.LastItem = HeaderObj
 			function HeaderObj.GUI.Frame.Event:LeftClick()
-				if self.Header.GUI.Check:GetEnabled() then
-					if self.Header.GUI.Check:GetChecked() then
-						self.Header.GUI.Check:SetChecked(false)
-					else
-						self.Header.GUI.Check:SetChecked(true)
+				if self.Header.Loaded then
+					if self.Header.GUI.Check:GetEnabled() then
+						if self.Header.GUI.Check:GetChecked() then
+							self.Header.GUI.Check:SetChecked(false)
+						else
+							self.Header.GUI.Check:SetChecked(true)
+						end
 					end
 				end
 			end
@@ -656,6 +661,9 @@ function KBM.InitOptions()
 				local CheckObj = {}
 				CheckObj.GUI = KBM.MainWin:PullChild()
 				CheckObj.GUI.Text:SetText(Text)
+				CheckObj.Loaded = false
+				CheckObj.GUI.Frame.Base = CheckObj
+				CheckObj.GUI.Check.Base = CheckObj
 				if self.LastChild == self then
 					CheckObj.GUI.Frame:SetPoint("LEFT", self.GUI.Check, "RIGHT")
 					CheckObj.GUI.Frame:SetPoint("TOP", self.GUI.Frame, "BOTTOM")
@@ -665,7 +673,6 @@ function KBM.InitOptions()
 				CheckObj.GUI.Check.Callback = Callback
 				CheckObj.GUI.Frame:SetWidth(CheckObj.GUI.Text:GetWidth()+CheckObj.GUI.Check:GetWidth())
 				CheckObj.GUI.Frame:SetHeight(CheckObj.GUI.Text:GetHeight())
-				CheckObj.GUI.Frame.Base = CheckObj
 				-- if Slider then
 					-- local SliderObj = {}
 					-- SliderObj.Frame = KBM:CallFrame(KBM.MainWin.Options)
@@ -728,26 +735,30 @@ function KBM.InitOptions()
 				-- end
 				table.insert(self.Children, CheckObj)
 				function CheckObj.GUI.Check.Event:CheckboxChange()
-					local bool = self:GetChecked()
-					if self.Callback then
-						if self.SliderObj then
-							self:Callback(bool, CheckObj)
-							if bool then
-								self.SliderObj:Enable()
+					if self.Base.Loaded then
+						local bool = self:GetChecked()
+						if self.Callback then
+							if self.SliderObj then
+								self:Callback(bool, CheckObj)
+								if bool then
+									self.SliderObj:Enable()
+								else
+									self.SliderObj:Disable()
+								end
 							else
-								self.SliderObj:Disable()
+								self:Callback(bool)
 							end
-						else
-							self:Callback(bool)
 						end
 					end
 				end
 				function CheckObj.GUI.Frame.Event:LeftClick()
-					if self.Base.GUI.Check:GetEnabled() then
-						if self.Base.GUI.Check:GetChecked() then
-							self.Base.GUI.Check:SetChecked(false)
-						else
-							self.Base.GUI.Check:SetChecked(true)
+					if self.Base.Loaded then
+						if self.Base.GUI.Check:GetEnabled() then
+							if self.Base.GUI.Check:GetChecked() then
+								self.Base.GUI.Check:SetChecked(false)
+							else
+								self.Base.GUI.Check:SetChecked(true)
+							end
 						end
 					end
 				end
@@ -778,6 +789,7 @@ function KBM.InitOptions()
 				end
 				CheckObj.GUI.Check:SetChecked(Default)
 				CheckObj.GUI.Frame:SetVisible(true)
+				CheckObj.Loaded = true
 				return CheckObj
 			end
 			function HeaderObj:Remove()
@@ -794,6 +806,7 @@ function KBM.InitOptions()
 			end
 			HeaderObj.GUI.Frame:SetVisible(true)
 			HeaderObj.GUI.Check:SetChecked(Default)
+			HeaderObj.Loaded = true
 			return HeaderObj
 		end
 		function Child.Options:AddCheck(Text)

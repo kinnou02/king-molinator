@@ -1920,10 +1920,10 @@ function KBM.CastBar:Pull()
 		GUI.Frame = UI.CreateFrame("Frame", "CastBar Frame", KBM.Context)
 		GUI.Frame:SetWidth(KBM.Options.CastBar.w)
 		GUI.Frame:SetHeight(KBM.Options.CastBar.h)
-		GUI.Progress = UI.CreatFrame("Frame", "CastBar Progress Frame", GUI.Frame)
+		GUI.Progress = UI.CreateFrame("Frame", "CastBar Progress Frame", GUI.Frame)
 		GUI.Progress:SetWidth(0)
-		GUI.Progress:SetHeight(self.Frame:GetHeight())
-		GUI.Text = UI.CreateFrame(GUI.Frame)
+		GUI.Progress:SetHeight(GUI.Frame:GetHeight())
+		GUI.Text = UI.CreateFrame("Text", "Castbar Text", GUI.Frame)
 		GUI.Progress:SetLayer(1)
 		GUI.Text:SetLayer(2)
 		GUI.Text:SetPoint("CENTER", GUI.Frame, "CENTER")
@@ -1981,7 +1981,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 								end
 								bCastTime = bDetails.duration
 								bProgress = bDetails.remaining						
-								self.GUI.Progress:SetWidth(self.Frame:GetWidth() * (1-(bProgress/bCastTime)))
+								self.GUI.Progress:SetWidth(self.GUI.Frame:GetWidth() * (1-(bProgress/bCastTime)))
 								self.GUI.Text:SetText(string.format("%0.01f", bProgress).." - "..bDetails.abilityName)
 							else
 								self.Casting = false
@@ -1995,7 +1995,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 						end
 						bCastTime = bDetails.duration
 						bProgress = bDetails.remaining						
-						self.GUI.Progress:SetWidth(self.Frame:GetWidth() * (1-(bProgress/bCastTime)))
+						self.GUI.Progress:SetWidth(self.GUI.Frame:GetWidth() * (1-(bProgress/bCastTime)))
 						self.GUI.Text:SetText(string.format("%0.01f", bProgress).." - "..bDetails.abilityName)
 					end
 				end
@@ -2023,6 +2023,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 		KBM.CastBar.ActiveCastBars[self.UnitID] = nil
 		self.UnitID = nil
 		self.Active = false
+		self.GUI.Frame:SetVisible(false)
 		table.insert(KBM.CastBar.Store, self.GUI)
 		self.GUI = nil
 	end
