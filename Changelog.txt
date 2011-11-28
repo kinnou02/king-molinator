@@ -1,5 +1,23 @@
-﻿v0.6.8
-* Change: Changed Encounters to use new method for interecting with Timers Engine.
+﻿v0.6.9
+* Hammerknell
+** Added: Murdantix: Phase Monitoring and display.
+** Added: Akylios: Advanced Phase Monitoring and display.
+* Greenscale's Blight
+** Added: Duke Letarues: State Monitoring for Tank/Kite.
+** Added: Duke Letarues: Advanced Phase Monitoring and display.
+** Added: Duke Letarues: Screen alert for Duke's Wrath (flashing red).
+** Added: Duke Letarues: Screen alert for Tank phase resuming (flashing orange).
+** Added: Duke Letarues: Per-Character settings method.
+** Added: Duke Letarues: Phase Timer and Castbar.
+* German Translations
+** HK: Estrode: Dancing Steel.
+** HK: Estrode: Rage of the North.
+** HK: Estrode: Chastise.
+** HK: Soulrender Zilas: Soulrender's Grasp.
+** RotP: Beruhast: Summoned Flames.
+----
+v0.6.8
+* Change: Changed Encounters to use new method for interacting with Timers Engine.
 * Added: Activated part of the display for Phase and Objectives monitoring.
 * Note: Minor Fix to iron out some more issues with lingering old engine.
 ----

@@ -27,7 +27,7 @@ local OA = {
 
 OA.Aleria = {
 	Mod = OA,
-	Level = "??",
+	Level = "52",
 	Active = false,
 	Name = "Oracle Aleria",
 	Castbar = nil,

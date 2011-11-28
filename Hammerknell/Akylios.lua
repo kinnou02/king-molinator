@@ -234,24 +234,34 @@ function AK:Castbar(units)
 end
 
 function AK.PhaseTwo()
+	AK.PhaseObj.Objectives:Remove()
 	AK.Phase = 2
+	AK.PhaseObj:SetPhase(2)
+	AK.PhaseObj.Objectives:AddDeath(AK.Stingers.Name, 8)
+	AK.PhaseObj.Objectives:AddDeath(AK.Lashers.Name, 4)
 	KBM.MechTimer:AddRemove(AK.Jornaru.TimersRef.WaveOne)
 	AK.Jornaru.CastBar.Enabled = false
 	print("Phase 2 starting!")
 end
 
 function AK.PhaseThree()
+	AK.PhaseObj.Objectives:Remove()
 	AK.Phase = 3
+	AK.PhaseObj:SetPhase(3)
 	AK.Lasher.UnitList = {}
 	AK.Stinger.UnitList = {}
 	AK.Counts.Stingers = 0
 	AK.Counts.Lashers = 0
+	AK.PhaseObj.Objectives:AddPercent(AK.Akylios.Name, 55, 100)
 	print("Phase 3 starting!")
 end
 
 function AK.PhaseFour()
+	AK.PhaseObj.Objectives:Remove()
 	AK.Phase = 4
+	AK.PhaseObj:SetPhase(4)
 	KBM.MechTimer:AddStart(AK.Jornaru.TimersRef.WaveFour)
+	AK.PhaseObj.Objectives:AddDeath(AK.Akylios.Name, 1)
 	print("Phase 4 starting!")
 end
 
@@ -279,13 +289,9 @@ function AK:Death(UnitID)
 			if self.Stinger.UnitList[UnitID] then
 				self.Counts.Stingers = self.Counts.Stingers + 1
 				self.Stinger.UnitList[UnitID].Dead = true
-				print("----\nStingers: "..self.Counts.Stingers.."/8")
-				print("Lashers: "..self.Counts.Lashers.."/4")
 			elseif self.Lasher.UnitList[UnitID] then
 				self.Counts.Lashers = self.Counts.Lashers + 1
 				self.Lasher.UnitList[UnitID].Dead = true
-				print("----\nStingers: "..self.Counts.Stingers.."/8")
-				print("Lashers: "..self.Counts.Lashers.."/4")
 			end
 			if self.Counts.Stingers == 8 and self.Counts.Lashers == 4 then
 				AK.PhaseThree()
@@ -306,10 +312,11 @@ function AK:UnitHPCheck(uDetails, unitID)
 						self.StartTime = Inspect.Time.Real()
 						self.HeldTime = self.StartTime
 						self.TimeElapsed = 0
+						self.Phase = 1
 						self.Jornaru.CastBar:Create(unitID)
 						KBM.MechTimer:AddStart(self.Jornaru.TimersRef.WaveOne)
-						--self.PhaseObj.Objectives:AddPercent(self.Jornaru.Name, 50, 100)
-						--self.PhaseObj:Start(self.StartTime)
+						self.PhaseObj.Objectives:AddPercent(self.Jornaru.Name, 50, 100)
+						self.PhaseObj:Start(self.StartTime)
 					end
 					self.Jornaru.Dead = false
 					self.Jornaru.Casting = false
@@ -352,8 +359,10 @@ end
 function AK:Reset()
 	self.EncounterRunning = false
 	self.Jornaru.UnitID = nil
+	self.Akylios.UnitID = nil
 	self.Counts.Lashers = 0
 	self.Counts.Stingers = 0
+	self.Phase = 1
 	for StingerID, Stinger in pairs(self.Stinger.UnitList) do
 		Stinger = nil
 	end
@@ -361,7 +370,8 @@ function AK:Reset()
 	for LasherID, Lasher in pairs(self.Lasher.UnitList) do
 		Lasher = nil
 	end
-	self.Stinger.UnitList = {}
+	self.Lasher.UnitList = {}
+	self.PhaseObj:End(Inspect.Time.Real())
 end
 
 function AK:Timer()
@@ -510,6 +520,6 @@ function AK:Start()
 	self.Jornaru.CastBar = KBM.CastBar:Add(self, self.Jornaru, true)
 	self.Akylios.CastBar = KBM.CastBar:Add(self, self.Akylios, true)
 
-	--self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
+	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

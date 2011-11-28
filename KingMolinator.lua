@@ -19,9 +19,10 @@ KBM.Idle = {
 	Wait = false,
 	Combat = {
 		Until = 0,
-		Duration = 2,
+		Duration = 3,
 		Wait = false,
-	}
+		StoreTime = 0,
+	},
 }
 KBM.MenuOptions = {
 	Timers = {},
@@ -490,11 +491,17 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 	Timer.Phase = 0
 	
 	function self:AddRemove(Object)
-		table.insert(self.RemoveTimers, Object)
+		if not Object.Removing then
+			Object.Removing = true
+			table.insert(self.RemoveTimers, Object)
+		end
 	end
 	
 	function self:AddStart(Object)
-		table.insert(self.StartTimers, Object)
+		if not Object.Starting then
+			Object.Starting = true
+			table.insert(self.StartTimers, Object)
+		end
 	end
 	
 	function Timer:Start(CurrentTime)
@@ -502,14 +509,8 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 		self.Queued = false
 		if self.Enabled then
 			if self.Active then
-				if not self.Removing then
-					self.Removing = true
-					KBM.MechTimer:AddRemove(self)
-				end
-				if not self.Starting then
-					KBM.MechTimer:AddStart(self)
-					self.Starting = true
-				end
+				KBM.MechTimer:AddRemove(self)
+				KBM.MechTimer:AddStart(self)
 				return
 			end
 			local Anchor = KBM.MechTimer.Anchor
@@ -556,8 +557,7 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 	function Timer:Queue()
 		if not self.Queued then
 			self.Queued = true
-			self.Starting = true
-			table.insert(KBM.MechTimer.StartTimers, self)
+			KBM.MechTimer:AddStart(self)
 		end
 	end
 	
@@ -594,7 +594,7 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 				if KBM.Encounter then
 					if self.Phase == KBM_CurrentMod.Phase or self.Phase == 0 then
 						self.Starting = true
-						table.insert(KBM.MechTimer.StartTimers, self)
+						KBM.MechTimer:AddStart(self)
 					end
 				end
 			end
@@ -631,8 +631,7 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 			self.GUI.TimeBar:SetWidth(self.GUI.Background:GetWidth() * (self.Remaining/self.Time))
 			if self.Remaining <= 0 then
 				self.Remaining = 0
-				table.insert(KBM.MechTimer.RemoveTimers, self)
-				self.Removing = true
+				KBM.MechTimer:AddRemove(self)
 			end
 			TriggerTime = math.ceil(self.Remaining)
 			if self.Alerts[TriggerTime] then
@@ -929,8 +928,10 @@ function KBM.PhaseMonitor:PullObjective()
 		GUI.Frame:SetPoint("RIGHT", self.Anchor, "RIGHT")
 		GUI.Text = UI.CreateFrame("Text", "Objective_Text", GUI.Frame)
 		GUI.Text:SetPoint("CENTERLEFT", GUI.Frame, "CENTERLEFT")
+		GUI.Text:SetFontSize(KBM.Options.PhaseMon.TextSize)
 		GUI.Objective = UI.CreateFrame("Text", "Objective_Tracker", GUI.Frame)
 		GUI.Objective:SetPoint("CENTERRIGHT", GUI.Frame, "CENTERRIGHT")
+		GUI.Objective:SetFontSize(KBM.Options.PhaseMon.TextSize)
 	end
 	return GUI
 
@@ -972,7 +973,7 @@ function KBM.PhaseMonitor:Init()
 	self.Frame:SetPoint("TOP", self.Anchor, "TOP")
 	self.Frame:SetPoint("BOTTOM", self.Anchor, "CENTERY")
 	self.Frame.Text = UI.CreateFrame("Text", "Phase Monitor Text", self.Frame)
-	self.Frame.Text:SetText("Phase 1")
+	self.Frame.Text:SetText("Phase: 1")
 	self.Frame.Text:SetFontSize(KBM.Options.PhaseMon.TextSize)
 	self.Frame.Text:SetPoint("CENTER", self.Frame, "CENTER")
 	
@@ -1008,10 +1009,12 @@ function KBM.PhaseMonitor:Init()
 	
 	end
 	function self:SetPhase(Phase)
-		self.Frame.Text:SetText("Phase "..Phase)
+		self.Phase = Phase
+		self.Frame.Text:SetText("Phase: "..Phase)
 	end
 	
 	function self.Phase:Create(Phase)
+	
 		local PhaseObj = {}
 		PhaseObj.StartTime = 0
 		PhaseObj.Phase = Phase
@@ -1021,10 +1024,12 @@ function KBM.PhaseMonitor:Init()
 		function PhaseObj:Update(Time)
 			Time = math.floor(Time)
 		end
+		
 		function PhaseObj:SetPhase(Phase)
 			self.Phase = Phase
 			KBM.PhaseMonitor:SetPhase(Phase)
 		end
+		
 		function PhaseObj.Objectives:AddDeath(Name, Total)
 			
 			local DeathObj = {}
@@ -1037,7 +1042,7 @@ function KBM.PhaseMonitor:Init()
 			function DeathObj:Kill()
 				if self.Count < Total then
 					self.Count = self.Count + 1
-					self.GUI.Objective:SetTexr(self.Count.."/"..self.Total)
+					self.GUI.Objective:SetText(self.Count.."/"..self.Total)
 				end
 			end
 			
@@ -1047,6 +1052,7 @@ function KBM.PhaseMonitor:Init()
 			DeathObj.GUI.Frame:SetVisible(true)
 			
 		end
+		
 		function PhaseObj.Objectives:AddPercent(Name, Target, Current)
 		
 			local PercentObj = {}
@@ -1061,8 +1067,8 @@ function KBM.PhaseMonitor:Init()
 			function PercentObj:Update(PercentRaw)
 				self.PercentRaw = PercentRaw
 				self.Percent = math.ceil(PercentRaw)
-				if self.Percent > Target then
-					self.GUI.Ojective:SetText(self.Percent.."%/"..self.Target.."%")
+				if self.Percent >= Target then
+					self.GUI.Objective:SetText(self.Percent.."%/"..self.Target.."%")
 				end
 			end
 			
@@ -1072,25 +1078,35 @@ function KBM.PhaseMonitor:Init()
 			PercentObj.GUI.Frame:SetVisible(true)
 						
 		end
+		
 		function PhaseObj.Objectives:AddTime(Time)
 	
 		end
+		
 		function PhaseObj.Objectives:Remove()
-			for _, Object in ipairs(KBM.PhaseMonitor.Lists.All) do
+			for _, Object in ipairs(KBM.PhaseMonitor.Objectives.Lists.All) do
 				table.insert(KBM.PhaseMonitor.ObjectiveStore, Object.GUI)
 			end
-			for ListName, List in pairs(KBM.PhaseMonitor.Lists) do
-				KBM.PhaseMonitor.Lists[ListName] = {}
+			for ListName, List in pairs(KBM.PhaseMonitor.Objectives.Lists) do
+				if type(List) == "table" then
+					KBM.PhaseMonitor.Objectives.Lists[ListName] = {}
+				end
 			end
 		end
+		
 		function PhaseObj:Start(Time)
 			self.StartTime = math.floor(Time)
 			KBM.PhaseMonitor.Frame.Text:SetText(KBM.Language.Phase[KBM.Lang].." "..tostring(self.Phase))
-			if KBM.Options.PhaseDisplay then
+			if KBM.Options.PhaseMon.PhaseDisplay then
 				KBM.PhaseMonitor.Frame:SetVisible(true)
 			end
-			self.Active = true
+			KBM.PhaseMonitor.Active = true
 			self:SetPhase(self.Phase)
+		end
+		function PhaseObj:End(Time)
+			self.Objectives:Remove()
+			KBM.PhaseMonitor.Frame:SetVisible(false)
+			KBM.PhaseMonitor.Active = false
 		end
 	
 		self.Object = PhaseObj
@@ -1200,7 +1216,7 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 
 	current = Inspect.Time.Real()
 	if KBM.Options.Enabled then
-		if not KBM.Idle.Wait or (KBM.Idle.Wait and KBM.Idle.Until < current) or KBM.Encounter then
+		if (not KBM.Idle.Wait or (KBM.Idle.Wait and KBM.Idle.Until < current)) or KBM.Encounter then
 			local BossObj = nil
 			KBM.Idle.Wait = false
 			if not KBM.BossID[UnitID] then
@@ -1214,7 +1230,7 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 						if KBM.Debug then
 							print("Boss found Checking")
 						end
-						if not BossObj.Ignore and uDetails.combat then
+						if uDetails.combat then
 							if KBM.Debug then
 								print("Boss matched checking encounter start")
 							end
@@ -1234,7 +1250,7 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 									KBM.BossID[UnitID].PercentRaw = (uDetails.health/uDetails.healthMax)*100
 									KBM.BossID[UnitID].Percent = math.ceil(KBM.BossID[UnitID].PercentRaw)
 									KBM.BossID[UnitID].PercentLast = KBM.BossID[UnitID].Percent
-									if not KBM.Encounter then
+									if not KBM.Encounter and not BossObj.Ignore then
 										if KBM.Debug then
 											print("New encounter, starting")
 										end
@@ -1327,17 +1343,26 @@ local function KBM_UnitHPCheck(info)
 						if KBM.BossID[tUnitID].Percent ~= KBM.BossID[tUnitID].PercentLast then
 							if KBM.Trigger.Percent[KBM_CurrentMod.ID] then
 								if KBM.Trigger.Percent[KBM_CurrentMod.ID][tDetails.name] then
-									if KBM.Trigger.Percent[KBM_CurrentMod.ID][tDetails.name][KBM.BossID[tUnitID].Percent] then
-										TriggerObj = KBM.Trigger.Percent[KBM_CurrentMod.ID][tDetails.name][KBM.BossID[tUnitID].Percent]
-										KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
+									if KBM.BossID[tUnitID].PercentLast - KBM.BossID[tUnitID].Percent > 1 then
+										for PCycle = KBM.BossID[tUnitID].PercentLast, KBM.BossID[tUnitID].Percent, -1 do
+											if KBM.Trigger.Percent[KBM_CurrentMod.ID][tDetails.name][PCycle] then
+												TriggerObj = KBM.Trigger.Percent[KBM_CurrentMod.ID][tDetails.name][PCycle]
+												KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
+											end
+										end
+									else
+										if KBM.Trigger.Percent[KBM_CurrentMod.ID][tDetails.name][KBM.BossID[tUnitID].Percent] then
+											TriggerObj = KBM.Trigger.Percent[KBM_CurrentMod.ID][tDetails.name][KBM.BossID[tUnitID].Percent]
+											KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
+										end
 									end
 								end
 							end
 							KBM.BossID[tUnitID].PercentLast = KBM.BossID[tUnitID].Percent
 						end
 						if KBM.PhaseMonitor.Active then
-							if KBM.PhaseMonitor.List.Percent[tUnitID.Name] then
-								KBM.PhaseMonitor.List.Percent[tUnitID.Name]:Update(KBM.BossID[tUnitID].PercentRaw)
+							if KBM.PhaseMonitor.Objectives.Lists.Percent[tDetails.name] then
+								KBM.PhaseMonitor.Objectives.Lists.Percent[tDetails.name]:Update(KBM.BossID[tUnitID].PercentRaw)
 							end
 						end
 					end
@@ -2048,7 +2073,7 @@ local function KBM_Reset()
 			end
 			if #KBM.MechTimer.ActiveTimers > 0 then
 				for i, Timer in ipairs(KBM.MechTimer.ActiveTimers) do
-					table.insert(KBM.MechTimer.RemoveTimers, Timer)
+					KBM.MechTimer:AddRemove(Timer)
 				end
 				if #KBM.MechTimer.RemoveTimers > 0 then
 					for i, Timer in ipairs(KBM.MechTimer.RemoveTimers) do
@@ -2106,7 +2131,7 @@ function KBM.WipeIt()
 
 	KBM.Idle.Combat.Wait = false
 	if KBM.Encounter then
-		KBM.TimeElapsed = KBM.TimeElapsed - KBM.Idle.Combat.Duration
+		KBM.TimeElapsed = KBM.Idle.Combat.StoreTime
 		print(KBM.Language.Encounter.Wipe[KBM.Lang])
 		print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
 		KBM_Reset()
@@ -2134,6 +2159,7 @@ function KBM:RaidCombatLeave()
 				end
 				KBM.Idle.Combat.Wait = true
 				KBM.Idle.Combat.Until = Inspect.Time.Real() + KBM.Idle.Combat.Duration
+				KBM.Idle.Combat.StoreTime = KBM.TimeElapsed
 			end
 		end
 	end
@@ -2194,13 +2220,13 @@ function KBM:Timer()
 					Timer:Start(current)
 				end
 				self.MechTimer.StartTimers = {}
+				if self.Alert.Current then
+					self.Alert:Update(current)
+				end
 				if KBM.Idle.Combat.Wait then
 					if KBM.Idle.Combat.Until < current then
 						KBM.WipeIt()
 					end
-				end
-				if self.Alert.Current then
-					self.Alert:Update(current)
 				end
 			else
 				-- for UnitID, CastCheck in pairs(KBM.CastBar.List) do
@@ -2266,6 +2292,11 @@ local function KBM_Death(UnitID)
 					if not uDetails.player then
 						if KBM.BossID[UnitID] then
 							KBM.BossID[UnitID].dead = true
+							if KBM.PhaseMonitor.Active then
+								if KBM.PhaseMonitor.Objectives.Lists.Death[uDetails.name] then
+									KBM.PhaseMonitor.Objectives.Lists.Death[uDetails.name]:Kill()
+								end
+							end
 							if KBM_CurrentMod:Death(UnitID) then
 								print(KBM.Language.Encounter.Victory[KBM.Lang])
 								print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(Inspect.Time.Real() - KBM.StartTime))

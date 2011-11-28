@@ -63,10 +63,12 @@ BT.Lang.Ability.Vortex.German = "Flammenwirbel"
 -- Unit Dictionary
 BT.Lang.Unit = {}
 BT.Lang.Unit.Summon = KBM.Language:Add("Summoned Flame")
+BT.Lang.Unit.Summon.German = "Beschworene Flamme"
 
 -- Notify Dictionary
 BT.Lang.Notify = {}
 BT.Lang.Notify.Summon = KBM.Language:Add('Beruhast says, "A pet from Maelforge should keep you warm."')
+BT.Lang.Notify.Summon.German = 'Beruhast sagt: "Ein Begleiter von Flammenmaul sollte Euch warmhalten."'
 
 BT.Beruhast.Name = BT.Lang.Beruhast[KBM.Lang]
 

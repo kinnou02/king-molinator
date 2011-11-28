@@ -52,7 +52,7 @@ EN.Lang.Notify = {}
 EN.Lang.Notify.Combustion = KBM.Language:Add('Ereandorn says, "(%a*), how does it feel to burn?"')
 EN.Lang.Notify.Combustion.German = 'Ereandorn sagt: "(%a*), wie fühlt es sich an, zu verbrennen?"'
 EN.Lang.Notify.Growth = KBM.Language:Add("The corpse of (%a*) will fuel our conquest")
-EN.Lang.Notify.Growth.German = "Der Leichnam von (%a*) wird unsere Eroberung vorantreiben!"
+EN.Lang.Notify.Growth.German = "Der Leichnam von (%a*) wird unsere Eroberung vorantreiben"
 EN.Lang.Notify.Eruption = KBM.Language:Add("I will rebuild this world in flames!")
 EN.Lang.Notify.Eruption.German = "Ich werde diese Welt in Flammen neu formen!"
 

@@ -55,8 +55,11 @@ ES.Lang.Ability.Soul.German = "Seelenfang"
 ES.Lang.Ability.Mind = KBM.Language:Add("Mind Control")
 ES.Lang.Ability.Mind.German = "Gedankenkontrolle"
 ES.Lang.Ability.Dancing = KBM.Language:Add("Dancing Steel")
+ES.Lang.Ability.Dancing.German = "Tanzender Stahl"
 ES.Lang.Ability.North = KBM.Language:Add("Rage of the North")
+ES.Lang.Ability.North.German = "Wut des Nordens"
 ES.Lang.Ability.Chastise = KBM.Language:Add("Chastise")
+ES.Lang.Ability.Chastise.German = "Züchtigung"
 
 -- Speak Dictionary
 ES.Lang.Say = {}
