@@ -15,7 +15,7 @@ KBM.Debug = false
 KBM.TestFilters = {}
 KBM.Idle = {
 	Until = 0,
-	Duration = 2,
+	Duration = 5,
 	Wait = false,
 	Combat = {
 		Until = 0,
@@ -847,29 +847,8 @@ function KBM:CallFrame(parent)
 
 	print("Warning: CallFrame used, old Recycling system, please report: WCF848")
 	local frame = nil
-	if #self.FrameStore == 0 then
-		self.TotalFrames = self.TotalFrames + 1
-		frame = UI.CreateFrame("Frame", "Frame Store"..self.TotalFrames, parent)
-		function frame:sRemove()
-			table.insert(KBM.FrameQueue, self)
-		end
-		function frame:Delete()
-			for EventName, pFunction in pairs(self.Event) do
-				self.Event[EventName] = nil
-			end
-			--self:SetParent(KBM.Context)
-			self:ClearAll()
-			self:SetVisible(false)
-			self:SetLayer(0)
-			self:SetBackgroundColor(0,0,0,0)
-			table.insert(KBM.FrameStore, self)			
-		end
-	else
-		frame = table.remove(self.FrameStore)
-		frame:SetParent(parent)
-		frame:SetVisible(parent:GetVisible())
-		frame:SetAlpha(1)
-	end
+	self.TotalFrames = self.TotalFrames + 1
+	frame = UI.CreateFrame("Frame", "Frame_Store"..tostring(self.TotalFrames), parent)
 	return frame
 	
 end
@@ -877,30 +856,8 @@ end
 function KBM:CallCheck(parent)
 
 	print("Warning: CallCheck used, old Recycling system, please report: WCC879")
-	local Checkbox = nil
-	if #self.CheckStore == 0 then
-		self.TotalChecks = self.TotalChecks + 1
-		Checkbox = UI.CreateFrame("RiftCheckbox", "Check Store"..self.TotalChecks, parent)
-		function Checkbox:sRemove()
-			table.insert(KBM.CheckQueue, self)
-		end
-		function Checkbox:Delete()
-			for EventName, pFunction in pairs(self.Event) do
-				self.Event[EventName] = nil
-			end
-			self:ClearAll()
-			--self:SetParent(KBM.Context)
-			self:SetVisible(false)
-			self:SetLayer(0)
-			table.insert(KBM.CheckStore, self)			
-		end
-	else
-		Checkbox = table.remove(self.CheckStore)
-		Checkbox:SetParent(parent)
-		Checkbox:SetVisible(parent:GetVisible())
-		Checkbox:SetEnabled(true)
-		Checkbox:SetAlpha(1)
-	end
+	self.TotalChecks = self.TotalChecks + 1
+	Checkbox = UI.CreateFrame("RiftCheckbox", "Check Store"..self.TotalChecks, parent)
 	return Checkbox
 	
 end
@@ -909,58 +866,13 @@ function KBM:CallText(parent, debugInfo)
 
 	print("Warning: CallText used, old Recycling system, please report: WCT910")
 	local Textfbox = nil
-	if #self.TextfStore == 0 then
-		self.TotalTexts = self.TotalTexts + 1
-		Textfbox = UI.CreateFrame("Text", "Textf Store"..self.TotalTexts, parent)
-		function Textfbox:sRemove()
-			table.insert(KBM.TextfQueue, self)
-		end
-		function Textfbox:Delete()
-			for EventName, pFunction in pairs(self.Event) do
-				self.Event[EventName] = nil
-			end
-			self:SetText("")
-			self:ClearAll()
-			--self:SetParent(KBM.Context)
-			self:SetVisible(false)
-			self:SetLayer(0)
-			table.insert(KBM.TextfStore, self)			
-		end
-	else
-		Textfbox = table.remove(self.TextfStore)
-		Textfbox:SetParent(parent)
-		Textfbox:SetFontColor(1,1,1,1)
-		Textfbox:SetVisible(parent:GetVisible())
-		Textfbox:SetAlpha(1)
-	end
+	self.TotalTexts = self.TotalTexts + 1
+	Textfbox = UI.CreateFrame("Text", "Textf Store"..self.TotalTexts, parent)
 	return Textfbox
 	
 end
 
 function KBM:CallSlider(parent)
-
-	-- local Slider = nil
-	-- if #self.SlideStore == 0 then
-		-- self.TotalSliders = self.TotalSliders + 1
-		-- Slider = UI.CreateFrame("RiftSlider", "Slide Store"..self.TotalSliders, parent)
-		-- function Slider:sRemove()
-			-- for EventName, pFunction in pairs(self.Event) do
-				-- self.Event[EventName] = nil
-			-- end
-			-- self:SetParent(KBM.Context)
-			-- self:SetVisible(false)
-			-- self:ClearAll()
-			-- self:SetLayer(0)
-			-- table.insert(KBM.SlideStore, self)
-		-- end
-	-- else
-		-- Slider = table.remove(self.SlideStore)
-		-- Slider:SetParent(parent)
-		-- Slider:SetVisible(true)
-		-- Slider:SetEnabled(true)
-		-- Slider:SetAlpha(1)
-	-- end
-	-- return Slider
 	
 end
 
@@ -1008,6 +920,26 @@ function KBM.Button:Init()
 	
 end
 
+function KBM.PhaseMonitor:PullObjective()
+
+	local GUI  = {}
+	if #self.ObjectiveStore > 0 then
+		GUI = table.remove(self.ObjectiveStore)
+	else
+		GUI.Frame = UI.CreateFrame("Frame", "Objective_Base", KBM.Context)
+		GUI.Frame:SetBackgroundColor(0,0,0,0.33)
+		GUI.Frame:SetHeight(self.Anchor:GetHeight() * 0.5)
+		GUI.Frame:SetPoint("LEFT", self.Anchor, "LEFT")
+		GUI.Frame:SetPoint("RIGHT", self.Anchor, "RIGHT")
+		GUI.Text = UI.CreateFrame("Text", "Objective_Text", GUI.Frame)
+		GUI.Text:SetPoint("CENTERLEFT", GUI.Frame, "CENTERLEFT")
+		GUI.Objective = UI.CreateFrame("Text", "Objective_Tracker", GUI.Frame)
+		GUI.Objective:SetPoint("CENTERRIGHT", GUI.Frame, "CENTERRIGHT")
+	end
+	return GUI
+
+end
+
 function KBM.PhaseMonitor:Init()
 	
 	self.Anchor = UI.CreateFrame("Frame", "Phase Anchor", KBM.Context)
@@ -1051,8 +983,10 @@ function KBM.PhaseMonitor:Init()
 	self.Frame:SetVisible(false)
 	
 	self.Objective = {}
+	self.ObjectStore = {}
 	self.Phase = {}
 	self.Phase.Object = nil
+	self.Active = false
 	
 	self.Objective.Lists = {}
 	self.Objective.Lists.Death = {}
@@ -1067,9 +1001,18 @@ function KBM.PhaseMonitor:Init()
 		end
 		self.LastObjective = Object
 		table.insert(self.All, Object)
+		if Object.Previous then
+			Object.GUI.Frame:SetPoint("TOP", Object.Previous.GUI.Frame, "BOTTOM")
+		else
+			Object.GUI.Frame:SetPoint("TOP", KBM.PhaseMonitor.Frame, "BOTTOM")
+		end
+		
 	end
 	function self.Objective.Lists:Remove(Object)
 	
+	end
+	function self:SetPhase(Phase)
+		self.Frame.Text:SetText("Phase "..Phase)
 	end
 	
 	function self.Phase:Create(Phase)
@@ -1079,28 +1022,59 @@ function KBM.PhaseMonitor:Init()
 		PhaseObj.Objectives = {}
 		PhaseObj.LastObjective = KBM.PhaseMonitor.Frame
 		
-		function PhaseObj:Start(Time)
-			self.StartTime = math.floor(Time)
-			KBM.PhaseMonitor.Frame.Text:SetText(KBM.Language.Phase[KBM.Lang].." "..self.Phase)
-			if KBM.Options.PhaseDisplay then
-				KBM.PhaseMonitor.Frame:SetVisible(true)
-			end
-		end
 		function PhaseObj:Update(Time)
 			Time = math.floor(Time)
 		end
-		function PhaseObj.Objectives:AddDeath(UnitID, Count)
-			local DeathObj = {}
-			
-			
-			KBM.PhaseMonitor.Objectives.Lists.Death[UnitID] = DeathObj
-			KBM.PhaseMonitor.Objectives.Lists:Add(DeathObj)
+		function PhaseObj:SetPhase(Phase)
+			self.Phase = Phase
+			KBM.PhaseMonitor:SetPhase(Phase)
 		end
-		function PhaseObj.Objectives:AddPercent(UnitID, Percent)
-			local PercentObj = {}
+		function PhaseObj.Objectives:AddDeath(Name, Total)
 			
-			KBM.PhaseMonitor.Objectives.Lists.Percent[UnitID] = PercentObj
+			local DeathObj = {}
+			DeathObj.Count = 0
+			DeathObj.Total = Total
+			DeathObj.GUI = KBM.PhaseMonitor:PullObjective()
+			DeathObj.GUI.Text:SetText(Name)
+			DeathObj.GUI.Objective:SetText(DeathObj.Count.."/"..DeathObj.Total)
+			
+			function DeathObj:Kill()
+				if self.Count < Total then
+					self.Count = self.Count + 1
+					self.GUI.Objective:SetTexr(self.Count.."/"..self.Total)
+				end
+			end
+			
+			KBM.PhaseMonitor.Objectives.Lists.Death[Name] = DeathObj
+			KBM.PhaseMonitor.Objectives.Lists:Add(DeathObj)
+			
+			DeathObj.GUI.Frame:SetVisible(true)
+			
+		end
+		function PhaseObj.Objectives:AddPercent(Name, Target, Current)
+		
+			local PercentObj = {}
+			PercentObj.Name = Name
+			PercentObj.Target = Target
+			PercentObj.PercentRaw = Current
+			PercentObj.Percent = math.ceil(Current)
+			PercentObj.GUI = KBM.PhaseMonitor:PullObjective()
+			PercentObj.GUI.Text:SetText(Name)
+			PercentObj.GUI.Objective:SetText(PercentObj.Percent.."%/"..PercentObj.Target.."%")
+			
+			function Percent:Update(PercentRaw)
+				self.PercentRaw = PercentRaw
+				self.Percent = math.ceil(PercentRaw)
+				if self.Percent > Target then
+					self.GUI.Ojective:SetText(self.Percent.."%/"..self.Target.."%")
+				end
+			end
+			
+			KBM.PhaseMonitor.Objectives.Lists.Percent[Name] = PercentObj
 			KBM.PhaseMonitor.Objectives.Lists:Add(PercentObj)
+			
+			PercentObj.GUI.Frame:SetVisible(true)
+						
 		end
 		function PhaseObj.Objectives:AddTime(Time)
 	
@@ -1108,7 +1082,16 @@ function KBM.PhaseMonitor:Init()
 		function PhaseObj.Objectives:Remove()
 		
 		end
-		
+		function PhaseObj:Start(Time)
+			self.StartTime = math.floor(Time)
+			KBM.PhaseMonitor.Frame.Text:SetText(KBM.Language.Phase[KBM.Lang].." "..tostring(self.Phase))
+			if KBM.Options.PhaseDisplay then
+				KBM.PhaseMonitor.Frame:SetVisible(true)
+			end
+			self.Active = true
+			self:SetPhase(self.Phase)
+		end
+	
 		self.Object = PhaseObj
 		return PhaseObj
 	end
@@ -1216,7 +1199,7 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 
 	current = Inspect.Time.Real()
 	if KBM.Options.Enabled then
-		if not KBM.Idle.Wait or (KBM.Idle.Wait and KBM.Idle.Until < current) then
+		if not KBM.Idle.Wait or (KBM.Idle.Wait and KBM.Idle.Until < current) or KBM.Encounter then
 			local BossObj = nil
 			KBM.Idle.Wait = false
 			if not KBM.BossID[UnitID] then
@@ -2140,7 +2123,9 @@ function KBM:RaidCombatLeave()
 				Total = Total + 1
 			end
 			if Dead ~= Total then
-				print("Possible Wipe, waiting raid out of combat")
+				if KBM.Debug then
+					print("Possible Wipe, waiting raid out of combat")
+				end
 				KBM.Idle.Combat.Wait = true
 				KBM.Idle.Combat.Until = Inspect.Time.Real() + KBM.Idle.Combat.Duration
 			end
@@ -2158,18 +2143,6 @@ function KBM:Timer()
 				KBM.MainWin.CurrentPage:Remove()
 			end
 		end
-		for _, Frame in ipairs(KBM.FrameQueue) do
-			Frame:Delete()
-		end
-		KBM.FrameQueue = {}
-		for _, Check in ipairs(KBM.CheckQueue) do
-			Check:Delete()
-		end
-		KBM.CheckQueue = {}
-		for _, Text in ipairs(KBM.TextfQueue) do
-			Text:Delete()
-		end	
-		KBM.TextfQueue = {}
 		
 		if KBM.Options.Enabled then
 			if KBM.Encounter or KBM.Testing then
@@ -2813,13 +2786,13 @@ local function KBM_Start()
 	KBM.MechTimer:Init()
 	KBM.CastBar:Init()
 	KBM.EncTimer:Init()
---	KBM.PhaseMonitor:Init()
+	KBM.PhaseMonitor:Init()
 	KBM.Trigger:Init()
 	KBM.InitOptions()
 	local Header = KBM.MainWin.Menu:CreateHeader("Options")
 	KBM.MenuOptions.Main.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.Settings[KBM.Lang], KBM.MenuOptions.Main, nil, Header)
 	KBM.MenuOptions.Timers.MenuItem = KBM.MainWin.Menu:CreateEncounter("Timers", KBM.MenuOptions.Timers, true, Header)
---	KBM.MenuOptions.Phases.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.PhaseMonitor[KBM.Lang], KBM.MenuOptions.Phases, true, Header) 
+	KBM.MenuOptions.Phases.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.PhaseMonitor[KBM.Lang], KBM.MenuOptions.Phases, true, Header) 
 	KBM.MenuOptions.CastBars.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.Castbar[KBM.Lang], KBM.MenuOptions.CastBars, true, Header)
 	KBM.MenuOptions.Alerts.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.Alert[KBM.Lang], KBM.MenuOptions.Alerts, true, Header)
 	KBM.MenuOptions.TankSwap.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.TankSwap[KBM.Lang], KBM.MenuOptions.TankSwap, true, Header)

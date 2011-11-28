@@ -58,6 +58,7 @@ AK.Akylios = {
 	AlertsRef = {},
 	Dead = false,
 	Available = false,
+	PhaseObj = nil,
 	UnitID = nil,
 	Triggers = {},
 }
@@ -234,7 +235,7 @@ end
 
 function AK.PhaseTwo()
 	AK.Phase = 2
-	table.insert(KBM.MechTimer.StopTimers, AK.Jornaru.TimersRef.WaveOne)
+	table.insert(KBM.MechTimer.RemoveTimers, AK.Jornaru.TimersRef.WaveOne)
 	AK.Jornaru.CastBar.Enabled = false
 	print("Phase 2 starting!")
 end
@@ -307,6 +308,8 @@ function AK:UnitHPCheck(uDetails, unitID)
 						self.TimeElapsed = 0
 						self.Jornaru.CastBar:Create(unitID)
 						table.insert(KBM.MechTimer.StartTimers, self.Jornaru.TimersRef.WaveOne)
+						--self.PhaseObj:Start(self.StartTime)
+						--self.PhaseObj.Objectives:AddPercent(self.Jornaru.Name, 50, 100)
 					end
 					self.Jornaru.Dead = false
 					self.Jornaru.Casting = false
@@ -507,4 +510,6 @@ function AK:Start()
 	self.Jornaru.CastBar = KBM.CastBar:Add(self, self.Jornaru, true)
 	self.Akylios.CastBar = KBM.CastBar:Add(self, self.Akylios, true)
 
+	--self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
+	
 end

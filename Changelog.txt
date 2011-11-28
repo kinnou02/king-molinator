@@ -1,4 +1,7 @@
-﻿v0.6.6
+﻿v0.6.7
+* Fixed: Akylios attempting to use old system caused crashes.
+----
+v0.6.6
 * Removed: Dynamic Frame recycling which could trigger inconsistencies and Client Crashes (due to a recent Trion patch)
 * New: Dynamic GUI Object recycling robust engine which bypasses the issues introduced by Trion.
 * New: Mechanic Timers are now the new GUI Object packages rendering.
