@@ -179,8 +179,11 @@ function MX:Death(UnitID)
 end
 
 function MX.PhaseTwo()
+	MX.PhaseObj.Objectives:Remove()
 	print("Phase 2 starting!")
 	MX.Phase = 2
+	MX.PhaseObj:SetPhase(2)
+	MX.PhaseObj.Objectives:AddPercent(self.Murd.Name, 50, 75)
 end
 
 function MX.PhaseThree()
@@ -208,6 +211,8 @@ function MX:UnitHPCheck(unitDetails, unitID)
 					self.Phase = 1
 					self.Murd.CastBar:Create(unitID)
 					KBM.TankSwap:Start(self.Lang.Debuff.Mangled[KBM.Lang])
+					self.PhaseObj.Objectives:AddPercent(self.Murd.Name, 75, 100)
+					self.PhaseObj:Start(self.StartTime)
 				end
 				self.Murd.UnitID = unitID
 				self.Murd.Available = true
@@ -339,5 +344,7 @@ function MX:Start()
 	
 	-- Assign Castbar object.
 	self.Murd.CastBar = KBM.CastBar:Add(self, self.Murd, true)
+	
+	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

@@ -235,7 +235,7 @@ end
 
 function AK.PhaseTwo()
 	AK.Phase = 2
-	table.insert(KBM.MechTimer.RemoveTimers, AK.Jornaru.TimersRef.WaveOne)
+	KBM.MechTimer:AddRemove(AK.Jornaru.TimersRef.WaveOne)
 	AK.Jornaru.CastBar.Enabled = false
 	print("Phase 2 starting!")
 end
@@ -251,7 +251,7 @@ end
 
 function AK.PhaseFour()
 	AK.Phase = 4
-	table.insert(KBM.MechTimer.StartTimers, AK.Jornaru.TimersRef.WaveFour)
+	KBM.MechTimer:AddStart(AK.Jornaru.TimersRef.WaveFour)
 	print("Phase 4 starting!")
 end
 
@@ -307,9 +307,9 @@ function AK:UnitHPCheck(uDetails, unitID)
 						self.HeldTime = self.StartTime
 						self.TimeElapsed = 0
 						self.Jornaru.CastBar:Create(unitID)
-						table.insert(KBM.MechTimer.StartTimers, self.Jornaru.TimersRef.WaveOne)
-						--self.PhaseObj:Start(self.StartTime)
+						KBM.MechTimer:AddStart(self.Jornaru.TimersRef.WaveOne)
 						--self.PhaseObj.Objectives:AddPercent(self.Jornaru.Name, 50, 100)
+						--self.PhaseObj:Start(self.StartTime)
 					end
 					self.Jornaru.Dead = false
 					self.Jornaru.Casting = false

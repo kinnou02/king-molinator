@@ -372,7 +372,9 @@ function KM:UnitHPCheck(unitDetails, unitID)
 						self.StartTime = Inspect.Time.Real()
 						self.HeldTime = self.StartTime
 						self.TimeElapsed = 0
+						self.PhaseObj:Start(self.StartTime)
 					end
+					self.PhaseObj.Objectives:AddPercent(self.King.Name, 90, 100)
 					self.KingLastHP = unitDetails.healthMax
 					self.KingHPMax = unitDetails.healthMax
 					if self.Settings.Enabled then
@@ -392,7 +394,9 @@ function KM:UnitHPCheck(unitDetails, unitID)
 						self.StartTime = Inspect.Time.Real()
 						self.HeldTime = self.StartTime
 						self.TimeElapsed = 0
+						self.PhaseObj:Start(self.StartTime)
 					end
+					self.PhaseObj.Objectives:AddPercent(self.Prince.Name, 90, 100)
 					self.PrinceLastHP = unitDetails.healthMax
 					self.PrinceHPMax = unitDetails.healthMax
 					if self.Settings.Enabled then
@@ -1075,5 +1079,8 @@ function KM:Start()
 	if not self.DisplayReady then
 		self.DisplayReady = true
 		self:BuildDisplay()
-	end	
+	end
+	
+	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
+	
 end

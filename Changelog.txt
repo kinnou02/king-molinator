@@ -1,4 +1,9 @@
-﻿v0.6.7
+﻿v0.6.8
+* Change: Changed Encounters to use new method for interecting with Timers Engine.
+* Added: Activated part of the display for Phase and Objectives monitoring.
+* Note: Minor Fix to iron out some more issues with lingering old engine.
+----
+v0.6.7
 * Fixed: Akylios attempting to use old system caused crashes.
 ----
 v0.6.6

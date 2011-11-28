@@ -489,6 +489,14 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 	Timer.Name = Name
 	Timer.Phase = 0
 	
+	function self:AddRemove(Object)
+		table.insert(self.RemoveTimers, Object)
+	end
+	
+	function self:AddStart(Object)
+		table.insert(self.StartTimers, Object)
+	end
+	
 	function Timer:Start(CurrentTime)
 	
 		self.Queued = false
@@ -496,10 +504,10 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 			if self.Active then
 				if not self.Removing then
 					self.Removing = true
-					table.insert(KBM.MechTimer.RemoveTimers, self)
+					KBM.MechTimer:AddRemove(self)
 				end
 				if not self.Starting then
-					table.insert(KBM.MechTimer.StartTimers, self)
+					KBM.MechTimer:AddStart(self)
 					self.Starting = true
 				end
 				return
@@ -664,10 +672,6 @@ function KBM.Trigger:Init()
 			else
 				TriggerObj.Queued = true
 			end
-			if self.Locked then
-				repeat
-				until not self.Locked
-			end
 			self.Locked = true
 			table.insert(self.List, TriggerObj)
 			TriggerObj.Caster = Caster
@@ -686,10 +690,6 @@ function KBM.Trigger:Init()
 				if self.Removing then
 					return
 				end
-				if self.Locked then
-					repeat
-					until not self.Locked
-				end
 				self.Locked = true
 				for i, TriggerObj in ipairs(self.List) do
 					TriggerObj:Activate(TriggerObj.Caster, TriggerObj.Target, TriggerObj.Duration)
@@ -706,10 +706,6 @@ function KBM.Trigger:Init()
 	function self.Queue:Remove()
 		
 		self.Removing = true
-		if self.Locked then
-			repeat
-			until not self.Locked
-		end
 		self.Locked = true
 		self.List = {}
 		self.Locked = false
@@ -982,20 +978,20 @@ function KBM.PhaseMonitor:Init()
 	
 	self.Frame:SetVisible(false)
 	
-	self.Objective = {}
-	self.ObjectStore = {}
+	self.Objectives = {}
+	self.ObjectiveStore = {}
 	self.Phase = {}
 	self.Phase.Object = nil
 	self.Active = false
 	
-	self.Objective.Lists = {}
-	self.Objective.Lists.Death = {}
-	self.Objective.Lists.Percent = {}
-	self.Objective.Lists.Time = {}
-	self.Objective.Lists.All = {}
-	self.Objective.Lists.LastObjective = nil
+	self.Objectives.Lists = {}
+	self.Objectives.Lists.Death = {}
+	self.Objectives.Lists.Percent = {}
+	self.Objectives.Lists.Time = {}
+	self.Objectives.Lists.All = {}
+	self.Objectives.Lists.LastObjective = nil
 	
-	function self.Objective.Lists:Add(Object)
+	function self.Objectives.Lists:Add(Object)
 		if #self.All then
 			Object.Previous = self.All[#self.All]
 		end
@@ -1008,7 +1004,7 @@ function KBM.PhaseMonitor:Init()
 		end
 		
 	end
-	function self.Objective.Lists:Remove(Object)
+	function self.Objectives.Lists:Remove(Object)
 	
 	end
 	function self:SetPhase(Phase)
@@ -1062,7 +1058,7 @@ function KBM.PhaseMonitor:Init()
 			PercentObj.GUI.Text:SetText(Name)
 			PercentObj.GUI.Objective:SetText(PercentObj.Percent.."%/"..PercentObj.Target.."%")
 			
-			function Percent:Update(PercentRaw)
+			function PercentObj:Update(PercentRaw)
 				self.PercentRaw = PercentRaw
 				self.Percent = math.ceil(PercentRaw)
 				if self.Percent > Target then
@@ -1080,7 +1076,12 @@ function KBM.PhaseMonitor:Init()
 	
 		end
 		function PhaseObj.Objectives:Remove()
-		
+			for _, Object in ipairs(KBM.PhaseMonitor.Lists.All) do
+				table.insert(KBM.PhaseMonitor.ObjectiveStore, Object.GUI)
+			end
+			for ListName, List in pairs(KBM.PhaseMonitor.Lists) do
+				KBM.PhaseMonitor.Lists[ListName] = {}
+			end
 		end
 		function PhaseObj:Start(Time)
 			self.StartTime = math.floor(Time)
@@ -1217,7 +1218,7 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 							if KBM.Debug then
 								print("Boss matched checking encounter start")
 							end
-							if uDetails.level == BossObj.Level then
+							--if uDetails.level == BossObj.Level then
 								KBM.BossID[UnitID] = {}
 								KBM.BossID[UnitID].name = uDetails.name
 								KBM.BossID[UnitID].monitor = true
@@ -1263,7 +1264,7 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 									KBM.BossID[UnitID].dead = true
 									KBM.BossID[UnitID].available = true
 								end					
-							end
+							--end
 						end
 					end
 				end
@@ -1333,6 +1334,11 @@ local function KBM_UnitHPCheck(info)
 								end
 							end
 							KBM.BossID[tUnitID].PercentLast = KBM.BossID[tUnitID].Percent
+						end
+						if KBM.PhaseMonitor.Active then
+							if KBM.PhaseMonitor.List.Percent[tUnitID.Name] then
+								KBM.PhaseMonitor.List.Percent[tUnitID.Name]:Update(KBM.BossID[tUnitID].PercentRaw)
+							end
 						end
 					end
 				else
@@ -2696,7 +2702,7 @@ function KBM.StateSwitch(bool)
 		print("King Boss Mods is now Disabled.")
 		if KBM.Encounter then
 			print("Stopping running Encounter.")
-			KBM:Reset()
+			KBM_Reset()
 		end
 	end
 end
