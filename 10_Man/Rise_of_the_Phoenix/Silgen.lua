@@ -28,7 +28,7 @@ local GS = {
 
 GS.Silgen = {
 	Mod = GS,
-	Level = "??",
+	Level = "52",
 	Active = false,
 	Name = "General Silgen",
 	Castbar = nil,

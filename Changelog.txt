@@ -10,6 +10,9 @@
 ** Added: Duke Letarues: Screen alert for Tank phase resuming (flashing orange).
 ** Added: Duke Letarues: Per-Character settings method.
 ** Added: Duke Letarues: Phase Timer and Castbar.
+* Rise of the Phoenix
+** Change: Ereandorn: Changed level match from "??" to "52", not entirely if this is a string or number.
+** Change: General Silgen: Changed level match from "??" to "52". Same as above.
 * German Translations
 ** HK: Estrode: Dancing Steel.
 ** HK: Estrode: Rage of the North.

@@ -28,7 +28,7 @@ local EN = {
 
 EN.Ereandorn = {
 	Mod = EN,
-	Level = "??",
+	Level = "52",
 	Active = false,
 	Name = "Ereandorn",
 	Castbar = nil,
