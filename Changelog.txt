@@ -1,6 +1,22 @@
-﻿v0.7.0
+﻿v0.7.1
+* General
+** Change: Castbars: These can now be globally enabled/disabled.
+** Change: Unit Deaths: Increased accuracy of death state monitoring.
+* Timers
+** New: Drop shadows to Timer text for better clarity. (optional)
+** New: Textured overlay for bars. (optional)
+** Change: Addressed issues where disabled timers could sometimes throw errors.
+** Fixed: Possibilty for timers to throw non-critical errors if passed nil durations from Rift events.
+* Hammerknell
+** Added: Akylios: Timer for Phase 1 Adds.
+** Added: Akylios: Timer for Phase 2 Adds.
+* German Client
+** Fixed: Ereandorn: Issues with translation dictionary.
+----
+v0.7.0
 * Hammerknell
 ** Hotfix: Akylios: Several issues with the encounter (non-critical).
+** Hotfix: Akylios: Enabled Breath timers.
 ----
 v0.6.9
 * Hammerknell

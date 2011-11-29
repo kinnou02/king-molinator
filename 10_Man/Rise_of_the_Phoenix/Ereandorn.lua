@@ -61,7 +61,7 @@ EN.Lang.Ability = {}
 EN.Lang.Ability.Combustion = KBM.Language:Add("Excitable Combustion")
 EN.Lang.Ability.Combustion.German = "Aufgeregte Verbrennung"
 EN.Lang.Ability.Growth = KBM.Language:Add("Molten Growth")
-EN.Lang.Ability.Growth.German = KBM.Language:Add("Geschmolzener Wuchs")
+EN.Lang.Ability.Growth.German = "Geschmolzener Wuchs"
 EN.Lang.Ability.Eruption = KBM.Language:Add("Volcanic Eruption")
 EN.Lang.Ability.Eruption.German = "Vulkanausbruch"
 

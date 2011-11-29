@@ -71,8 +71,8 @@ local function KBM_DefineVars(AddonID)
 				wScale = 1,
 				hScale = 1,
 				Enabled = true,
-				Unlocked = false,
-				Visible = false,
+				Unlocked = true,
+				Visible = true,
 				ScaleWidth = false,
 				ScaleHeight = false,
 				TextSize = 15,
@@ -105,8 +105,10 @@ local function KBM_DefineVars(AddonID)
 				wScale = 1,
 				hScale = 1,
 				Enabled = true,
-				Unlocked = false,
-				Visible = false,
+				Unlocked = true,
+				Shadow = true,
+				Texture = true,
+				Visible = true,
 				ScaleWidth = false,
 				ScaleHeight = false,
 				TextSize = 16,
@@ -117,9 +119,10 @@ local function KBM_DefineVars(AddonID)
 				y = false,
 				w = 350,
 				h = 32,
-				Enabled = false,
-				Unlocked = false,
-				Visible = false,
+				Enabled = true,
+				Shadow = true,
+				Unlocked = true,
+				Visible = true,
 				ScaleWidth = false,
 				wScale = 1,
 				hScale = 1,
@@ -139,8 +142,8 @@ local function KBM_DefineVars(AddonID)
 				TextScale = false,
 				TextSize = 14,
 				Enabled = true,
-				Visible = false,
-				Unlocked = false,
+				Visible = true,
+				Unlocked = true,
 			},
 			BestTimes = {
 			},
@@ -402,6 +405,8 @@ KBM.Language.Options.Enabled = KBM.Language:Add("Enable King Boss Mods v"..Addon
 KBM.Language.Options.Settings = KBM.Language:Add("Settings")
 KBM.Language.Options.Settings.French = "Configurations"
 KBM.Language.Options.Settings.German = "Einstellungen"
+KBM.Language.Options.Shadow = KBM.Language:Add("Show text shadows.")
+KBM.Language.Options.Texture = KBM.Language:Add("Enable textured overlay.")
 -- Timer Dictionary
 KBM.Language.Timers = {}
 KBM.Language.Timers.Time = KBM.Language:Add("Time:")
@@ -455,21 +460,31 @@ function KBM.MechTimer:Pull()
 	if #self.Store > 0 then
 		GUI = table.remove(self.Store)
 	else
-		GUI.Background = UI.CreateFrame("Frame", "Timer Frame", KBM.Context)
+		GUI.Background = UI.CreateFrame("Frame", "Timer_Frame", KBM.Context)
 		GUI.Background:SetWidth(KBM.Options.MechTimer.w * KBM.Options.MechTimer.wScale)
 		GUI.Background:SetHeight(KBM.Options.MechTimer.h * KBM.Options.MechTimer.hScale)
 		GUI.Background:SetBackgroundColor(0,0,0,0.33)
-		GUI.TimeBar = UI.CreateFrame("Frame", "Timer Progress Frame", GUI.Background)
+		GUI.TimeBar = UI.CreateFrame("Frame", "Timer_Progress_Frame", GUI.Background)
 		GUI.TimeBar:SetWidth(KBM.Options.MechTimer.w * KBM.Options.MechTimer.wScale)
 		GUI.TimeBar:SetHeight(KBM.Options.MechTimer.h * KBM.Options.MechTimer.hScale)
 		GUI.TimeBar:SetPoint("TOPLEFT", GUI.Background, "TOPLEFT")
 		GUI.TimeBar:SetLayer(1)
 		GUI.TimeBar:SetBackgroundColor(0,0,1,0.33)
-		GUI.CastInfo = UI.CreateFrame("Text", "Timer Text Frame", GUI.Background)
+		GUI.CastInfo = UI.CreateFrame("Text", "Timer_Text_Frame", GUI.Background)
 		GUI.CastInfo:SetFontSize(KBM.Options.MechTimer.TextSize)
 		GUI.CastInfo:SetPoint("CENTERLEFT", GUI.Background, "CENTERLEFT")
-		GUI.CastInfo:SetLayer(2)
+		GUI.CastInfo:SetLayer(3)
 		GUI.CastInfo:SetFontColor(1,1,1)
+		GUI.Shadow = UI.CreateFrame("Text", "Timer_Text_Shadow", GUI.Background)
+		GUI.Shadow:SetFontSize(KBM.Options.MechTimer.TextSize)
+		GUI.Shadow:SetPoint("CENTER", GUI.CastInfo, "CENTER", 2, 2)
+		GUI.Shadow:SetLayer(2)
+		GUI.Shadow:SetFontColor(0,0,0)
+		GUI.Texture = UI.CreateFrame("Texture", "Timer_Skin", GUI.Background)
+		GUI.Texture:SetTexture("KingMolinator", "Media/BarSkin.png")
+		GUI.Texture:SetPoint("TOPLEFT", GUI.Background, "TOPLEFT")
+		GUI.Texture:SetPoint("BOTTOMRIGHT", GUI.Background, "BOTTOMRIGHT")
+		GUI.Texture:SetLayer(4)
 	end
 	return GUI
 
@@ -494,15 +509,19 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 	
 	function self:AddRemove(Object)
 		if not Object.Removing then
-			Object.Removing = true
-			table.insert(self.RemoveTimers, Object)
+			if Object.Enabled and Object.Active then
+				Object.Removing = true
+				table.insert(self.RemoveTimers, Object)
+			end
 		end
 	end
 	
 	function self:AddStart(Object)
 		if not Object.Starting then
-			Object.Starting = true
-			table.insert(self.StartTimers, Object)
+			if Object.Enabled then
+				Object.Starting = true
+				table.insert(self.StartTimers, Object)
+			end
 		end
 	end
 	
@@ -520,6 +539,17 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 			self.TimeStart = CurrentTime
 			self.Remaining = self.Time
 			self.GUI.CastInfo:SetText(string.format(" %0.01f : ", self.Remaining)..self.Name)
+			if KBM.Options.MechTimer.Shadow then
+				self.GUI.Shadow:SetText(self.GUI.CastInfo:GetText())
+				self.GUI.Shadow:SetVisible(true)
+			else
+				self.GUI.Shadow:SetVisible(false)
+			end
+			if KBM.Options.MechTimer.Texture then
+				self.GUI.Texture:SetVisible(true)
+			else
+				self.GUI.Texture:SetVisible(false)
+			end
 			if self.Delay then
 				self.Time = Delay
 			end
@@ -558,8 +588,10 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 	
 	function Timer:Queue()
 		if not self.Queued then
-			self.Queued = true
-			KBM.MechTimer:AddStart(self)
+			if self.Enabled then
+				self.Queued = true
+				KBM.MechTimer:AddStart(self)
+			end
 		end
 	end
 	
@@ -582,6 +614,7 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 				end
 			end
 			self.GUI.Background:SetVisible(false)
+			self.GUI.Shadow:SetText("")
 			table.insert(KBM.MechTimer.Store, self.GUI)
 			self.Active = false
 			self.Remaining = 0
@@ -629,6 +662,7 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 			self.Remaining = self.Time - (CurrentTime - self.TimeStart)
 			local text = string.format(" %0.01f : ", self.Remaining)..self.Name
 			self.GUI.CastInfo:SetText(text)
+			self.GUI.Shadow:SetText(text)
 			self.GUI.TimeBar:SetWidth(self.GUI.Background:GetWidth() * (self.Remaining/self.Time))
 			if self.Remaining <= 0 then
 				self.Remaining = 0
@@ -1019,6 +1053,7 @@ function KBM.PhaseMonitor:Init()
 		local PhaseObj = {}
 		PhaseObj.StartTime = 0
 		PhaseObj.Phase = Phase
+		PhaseObj.DefaultPhase = Phase
 		PhaseObj.Objectives = {}
 		PhaseObj.LastObjective = KBM.PhaseMonitor.Frame
 		
@@ -1098,7 +1133,7 @@ function KBM.PhaseMonitor:Init()
 		
 		function PhaseObj:Start(Time)
 			self.StartTime = math.floor(Time)
-			KBM.PhaseMonitor.Frame.Text:SetText(KBM.Language.Phase[KBM.Lang].." "..tostring(self.Phase))
+			self.Phase = self.DefaultPhase
 			if KBM.Options.PhaseMon.PhaseDisplay then
 				KBM.PhaseMonitor.Frame:SetVisible(true)
 			end
@@ -1786,16 +1821,18 @@ function KBM.Alert:Init()
 			else
 				self.Starting = true
 			end
+			self.Duration = AlertObj.Duration
 			if Duration then
-				if not self.DefaultDuration then
+				if not AlertObj.DefDuration then
 					self.Duration = Duration
 				end
 			else
-				if not self.DefaultDuration then
+				if not AlertObj.DefDuration then
 					self.Duration = 2
 				end
 			end
 			self.Current = AlertObj
+			AlertObj.Duration = self.Duration
 			self.Alpha = 1
 			if KBM.Options.Alert.Flash then
 				self.Color = AlertObj.Color
@@ -1814,11 +1851,11 @@ function KBM.Alert:Init()
 					self.Anchor:SetAlpha(1)
 				end
 			end
-			if AlertObj.Duration then
+			if self.Duration then
 				self.StopTime = CurrentTime + AlertObj.Duration
 				self.Remaining = self.StopTime - CurrentTime
 			else
-				self.StopTime = false
+				self.StopTime = 0
 			end
 			self:Update(CurrentTime)
 			self.Starting = false
@@ -1831,7 +1868,7 @@ function KBM.Alert:Init()
 		self.Shadow:SetText(" Alert Anchor ")
 		self.Text:SetText(" Alert Anchor ")
 		self.Current.Stopping = false
-		self.StopTime = false
+		self.StopTime = 0
 		if self.Current.AlertAfter and not self.Starting then
 			local TempObj = self.Current
 			self.Current = nil
@@ -1987,7 +2024,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 		bDetails = Inspect.Unit.Castbar(self.UnitID)
 		if bDetails then
 			if bDetails.abilityName then
-				if self.Enabled then
+				if self.Enabled and KBM.Options.CastBar.Enabled then
 					if self.HasFilters then
 						if self.Filters[bDetails.abilityName] then
 							if self.Filters[bDetails.abilityName].Enabled then
@@ -2289,22 +2326,17 @@ local function KBM_Death(UnitID)
 	if KBM.Options.Enabled then 
 		if KBM.Encounter then
 			if UnitID then
-				local uDetails = Inspect.Unit.Detail(UnitID)
-				if uDetails then
-					if not uDetails.player then
-						if KBM.BossID[UnitID] then
-							KBM.BossID[UnitID].dead = true
-							if KBM.PhaseMonitor.Active then
-								if KBM.PhaseMonitor.Objectives.Lists.Death[uDetails.name] then
-									KBM.PhaseMonitor.Objectives.Lists.Death[uDetails.name]:Kill()
-								end
-							end
-							if KBM_CurrentMod:Death(UnitID) then
-								print(KBM.Language.Encounter.Victory[KBM.Lang])
-								print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(Inspect.Time.Real() - KBM.StartTime))
-								KBM_Reset()
-							end
+				if KBM.BossID[UnitID] then
+					KBM.BossID[UnitID].dead = true
+					if KBM.PhaseMonitor.Active then
+						if KBM.PhaseMonitor.Objectives.Lists.Death[KBM.BossID[UnitID].name] then
+							KBM.PhaseMonitor.Objectives.Lists.Death[KBM.BossID[UnitID].name]:Kill()
 						end
+					end
+					if KBM_CurrentMod:Death(UnitID) then
+						print(KBM.Language.Encounter.Victory[KBM.Lang])
+						print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(Inspect.Time.Real() - KBM.StartTime))
+						KBM_Reset()
 					end
 				end
 			end
@@ -2464,6 +2496,12 @@ function KBM.MenuOptions.Timers:Options()
 	function self:MechEnabled(bool)
 		KBM.Options.MechTimer.Enabled = bool
 	end
+	function self:MechShadow(bool)
+		KBM.Options.MechTimer.Shadow = bool
+	end
+	function self:MechTexture(bool)
+		KBM.Options.MechTimer.Texture = bool
+	end
 	function self:ShowMechAnchor(bool)
 		KBM.Options.MechTimer.Visible = bool
 		KBM.MechTimer.Anchor:SetVisible(bool)
@@ -2520,6 +2558,8 @@ function KBM.MenuOptions.Timers:Options()
 	local MechTimers = Options:AddHeader(KBM.Language.Options.MechanicTimers[KBM.Lang], self.MechEnabled, true)
 	MechTimers.GUI.Check:SetEnabled(false)
 	KBM.Options.MechTimer.Enabled = true
+	MechTimers:AddCheck(KBM.Language.Options.Texture[KBM.Lang], self.MechTexture, KBM.Options.MechTimer.Texture)
+	MechTimers:AddCheck(KBM.Language.Options.Shadow[KBM.Lang], self.MechShadow, KBM.Options.MechTimer.Shadow)
 	MechTimers:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowMechAnchor, KBM.Options.MechTimer.Visible)
 	MechTimers:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.LockMechAnchor, KBM.Options.MechTimer.Unlocked)
 	-- self.MechTimers:AddCheck("Width scaling.", self.MechScaleWidth, KBM.Options.MechTimer.ScaleWidth)
@@ -2682,9 +2722,7 @@ function KBM.MenuOptions.CastBars:Options()
 	Options:SetTitle()
 
 	-- CastBar Options. 
-	local CastBars = Options:AddHeader(KBM.Language.Options.CastbarEnabled[KBM.Lang], self.CastBarEnabled, true)
-	CastBars.GUI.Check:SetEnabled(false)
-	KBM.Options.CastBar.Enabled = true
+	local CastBars = Options:AddHeader(KBM.Language.Options.CastbarEnabled[KBM.Lang], self.CastBarEnabled, KBM.Options.CastBar.Enabled)
 	CastBars:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowCastAnchor, KBM.Options.CastBar.Visible)
 	CastBars:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.LockCastAnchor, KBM.Options.CastBar.Unlocked)
 	-- self.CastBars:AddCheck("Width scaling.", self.CastScaleWidth, KBM.Options.CastBar.ScaleWidth)

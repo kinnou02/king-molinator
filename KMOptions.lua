@@ -216,14 +216,16 @@ function KBM.InitOptions()
 		if #self.HeaderStore > 0 then
 			GUI = table.remove(self.HeaderStore)
 		else
-			GUI.Frame = UI.CreateFrame("Frame", "Options Page Header", KBM.MainWin.Options.Frame)
+			GUI.Frame = UI.CreateFrame("Frame", "Options_Page_Header", KBM.MainWin.Options.Frame)
 			GUI.Frame:SetBackgroundColor(0,0,0,0)
-			GUI.Text = UI.CreateFrame("Text", "Options Page Header Text", GUI.Frame)
+			GUI.Check = UI.CreateFrame("RiftCheckbox", "Options_Page_Checkbox", GUI.Frame)
+			GUI.Check:SetPoint("CENTERLEFT", GUI.Frame, "CENTERLEFT")
+			GUI.Check:SetLayer(2)
+			GUI.Text = UI.CreateFrame("Text", "Options_Page_Header_Text", GUI.Frame)
 			GUI.Text:SetFontColor(0.85,0.65,0)
 			GUI.Text:SetFontSize(16)
-			GUI.Text:SetLayer(0)
-			GUI.Check = UI.CreateFrame("RiftCheckbox", "Options Page Checkbox", GUI.Frame)
-			GUI.Check:SetPoint("CENTERLEFT", GUI.Frame, "CENTERLEFT")
+			GUI.Text:SetPoint("CENTERLEFT", GUI.Check, "CENTERRIGHT")
+			GUI.Text:SetLayer(1)
 		end
 		GUI.Check:SetEnabled(true)
 		GUI.Text:SetAlpha(1)
@@ -251,11 +253,12 @@ function KBM.InitOptions()
 		if #self.ChildStore > 0 then
 			GUI = table.remove(self.ChildStore)
 		else
-			GUI.Frame = UI.CreateFrame("Frame", "Options Page Child Frame", KBM.MainWin.Options.Frame)
+			GUI.Frame = UI.CreateFrame("Frame", "Options_Page_Child_Frame", KBM.MainWin.Options.Frame)
 			GUI.Frame:SetBackgroundColor(0,0,0,0)
-			GUI.Check = UI.CreateFrame("RiftCheckbox", "Options Page Child Check", GUI.Frame)
+			GUI.Check = UI.CreateFrame("RiftCheckbox", "Options_Page_Child_Check", GUI.Frame)
 			GUI.Check:SetPoint("CENTERLEFT", GUI.Frame, "CENTERLEFT")
-			GUI.Text = UI.CreateFrame("Text", "Options Page Child Text", GUI.Frame)
+			GUI.Check:SetLayer(2)
+			GUI.Text = UI.CreateFrame("Text", "Options_Page_Child_Text", GUI.Frame)
 			GUI.Text:SetFontSize(14)
 			GUI.Text:SetFontColor(1,1,1,1)
 			GUI.Text:SetPoint("CENTERLEFT", GUI.Check, "CENTERRIGHT")
@@ -273,7 +276,7 @@ function KBM.InitOptions()
 		if #self.SpacerStore > 0 then
 			GUI = table.remove(self.SpacerStore)
 		else
-			GUI.Frame = UI.CreateFrame("Frame", "Options Page Space", KBM.MainWin.Options.Frame)
+			GUI.Frame = UI.CreateFrame("Frame", "Options_Page_Space", KBM.MainWin.Options.Frame)
 			GUI.Frame:SetBackgroundColor(0,0,0,0)			
 		end
 		return GUI
@@ -281,8 +284,8 @@ function KBM.InitOptions()
 	end
 	
 	MenuWidth = math.floor(ContentW * 0.33)-10	
-	KBM.MainWin.Mask = UI.CreateFrame("Mask", "KBM Menu Mask", KBM.MainWin.Content)	
-	KBM.MainWin.Menu = UI.CreateFrame("Frame", "KBM Menu Frame", KBM.MainWin.Mask)
+	KBM.MainWin.Mask = UI.CreateFrame("Mask", "KBM_Menu_Mask", KBM.MainWin.Content)	
+	KBM.MainWin.Menu = UI.CreateFrame("Frame", "KBM_Menu_Frame", KBM.MainWin.Mask)
 	KBM.MainWin.Menu:SetMouseMasking("limited")
 	KBM.MainWin.Mask:SetPoint("TOPLEFT", KBM.MainWin.Menu, "TOPLEFT")
 	KBM.MainWin.Mask:SetPoint("BOTTOMRIGHT", KBM.MainWin.Menu, "BOTTOMRIGHT")
@@ -292,7 +295,7 @@ function KBM.InitOptions()
 	KBM.MainWin.Menu.Headers = {}
 	KBM.MainWin.Menu.LastHeader = nil
 	
-	KBM.MainWin.SplitFrame = UI.CreateFrame("Frame", "KBM Splitter", KBM.MainWin.Content)
+	KBM.MainWin.SplitFrame = UI.CreateFrame("Frame", "KBM_Splitter", KBM.MainWin.Content)
 	KBM.MainWin.SplitFrame:SetWidth(14)
 	KBM.MainWin.SplitFrame:SetHeight(ContentH)
 	KBM.MainWin.SplitFrame:SetPoint("LEFT", KBM.MainWin.Content, "LEFT", MenuWidth, nil)
