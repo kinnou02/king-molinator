@@ -29,7 +29,7 @@ local DL = {
 
 DL.Letareus = {
 	Mod = DL,
-	Level = 52,
+	Level = "52",
 	Active = false,
 	Name = "Duke Letareus",
 	Castbar = nil,

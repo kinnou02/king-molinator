@@ -1,6 +1,7 @@
 ﻿v0.6.9
 * Hammerknell
 ** Added: Murdantix: Phase Monitoring and display.
+** Added: King Molinar: Advanced Phase Monitoring and display.
 ** Added: Akylios: Advanced Phase Monitoring and display.
 * Greenscale's Blight
 ** Added: Duke Letarues: State Monitoring for Tank/Kite.
