@@ -259,10 +259,11 @@ end
 function AK.PhaseFour()
 	AK.PhaseObj.Objectives:Remove()
 	AK.Phase = 4
-	AK.PhaseObj:SetPhase(4)
+	AK.PhaseObj:SetPhase("Final")
 	KBM.MechTimer:AddStart(AK.Jornaru.TimersRef.WaveFour)
 	AK.PhaseObj.Objectives:AddDeath(AK.Akylios.Name, 1)
-	print("Phase 4 starting!")
+	AK.PhaseObj.Objectives:AddDeath(AK.Jornaru.Name, 1)
+	print("Final Phase starting!")
 end
 
 function AK:RemoveUnits(UnitID)

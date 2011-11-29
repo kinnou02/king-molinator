@@ -83,7 +83,7 @@ local function KBM_DefineVars(AddonID)
 			PhaseMon = {
 				x = false,
 				y = false,
-				w = 200,
+				w = 225,
 				h = 50,
 				wScale = 1,
 				hScale = 1,
@@ -92,7 +92,7 @@ local function KBM_DefineVars(AddonID)
 				Visible = true,
 				ScaleWidth = false,
 				ScaleHeight = false,
-				TextSize = 15,
+				TextSize = 14,
 				TextScale = false,
 				Objectives = true,
 				PhaseDisplay = true,
@@ -189,6 +189,8 @@ local function KBM_LoadVars(AddonID)
 			Mod:LoadVars()
 		end
 		KBM.Debug = KBM.Options.Debug
+		KBM.Options.PhaseMon.w = 225
+		KBM.Options.PhaseMon.TextSize = 14
 	end
 	
 end
@@ -967,7 +969,7 @@ function KBM.PhaseMonitor:Init()
 
 	self.Frame = UI.CreateFrame("Frame", "Phase Monitor", KBM.Context)
 	self.Frame:SetLayer(5)
-	self.Frame:SetBackgroundColor(0,0,0,0.33)
+	self.Frame:SetBackgroundColor(0,0,0.9,0.33)
 	self.Frame:SetPoint("LEFT", self.Anchor, "LEFT")
 	self.Frame:SetPoint("RIGHT", self.Anchor, "RIGHT")
 	self.Frame:SetPoint("TOP", self.Anchor, "TOP")
@@ -1085,6 +1087,7 @@ function KBM.PhaseMonitor:Init()
 		
 		function PhaseObj.Objectives:Remove()
 			for _, Object in ipairs(KBM.PhaseMonitor.Objectives.Lists.All) do
+				Object.GUI.Frame:SetVisible(false)
 				table.insert(KBM.PhaseMonitor.ObjectiveStore, Object.GUI)
 			end
 			for ListName, List in pairs(KBM.PhaseMonitor.Objectives.Lists) do

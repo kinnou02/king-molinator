@@ -182,21 +182,21 @@ function MX.PhaseTwo()
 	MX.PhaseObj.Objectives:Remove()
 	MX.Phase = 2
 	MX.PhaseObj:SetPhase(2)
-	MX.PhaseObj.Objectives:AddPercent(self.Murd.Name, 50, 75)
+	MX.PhaseObj.Objectives:AddPercent(MX.Murd.Name, 50, 75)
 end
 
 function MX.PhaseThree()
 	MX.PhaseObj.Objectives:Remove()
 	MX.Phase = 3
 	MX.PhaseObj:SetPhase(3)
-	MX.PhaseObj.Objectives:AddPercent(self.Murd.Name, 25, 50)
+	MX.PhaseObj.Objectives:AddPercent(MX.Murd.Name, 25, 50)
 end
 
 function MX.PhaseFour()
-	MX.Phase.Objectives:Remove()
+	MX.PhaseObj.Objectives:Remove()
 	MX.Phase = 4
-	MX.PhaseObj:SetPhase(4)
-	MX.PhaseObj.Objectives:AddPercent(self.Murd.Name, 0, 25)
+	MX.PhaseObj:SetPhase("Final")
+	MX.PhaseObj.Objectives:AddPercent(MX.Murd.Name, 0, 25)
 end
 
 function MX:UnitHPCheck(unitDetails, unitID)
@@ -226,11 +226,13 @@ function MX:UnitHPCheck(unitDetails, unitID)
 end
 
 function MX:Reset()
+
 	self.EncounterRunning = false
 	self.Murd.UnitID = nil
 	self.Murd.CastBar:Remove()
 	self.Phase = 1
 	self.PhaseObj:End(Inspect.Time.Real())
+	
 end
 
 function MX:Timer()

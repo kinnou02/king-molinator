@@ -373,8 +373,9 @@ function KM:UnitHPCheck(unitDetails, unitID)
 						self.HeldTime = self.StartTime
 						self.TimeElapsed = 0
 						self.PhaseObj:Start(self.StartTime)
+						self.PhaseObj.Objectives:AddPercent(self.King.Name, 90, 100)
+						self.PhaseObj.Objectives:AddPercent(self.Prince.Name, 90, 100)
 					end
-					self.PhaseObj.Objectives:AddPercent(self.King.Name, 90, 100)
 					self.KingLastHP = unitDetails.healthMax
 					self.KingHPMax = unitDetails.healthMax
 					if self.Settings.Enabled then
@@ -395,8 +396,9 @@ function KM:UnitHPCheck(unitDetails, unitID)
 						self.HeldTime = self.StartTime
 						self.TimeElapsed = 0
 						self.PhaseObj:Start(self.StartTime)
+						self.PhaseObj.Objectives:AddPercent(self.King.Name, 90, 100)
+						self.PhaseObj.Objectives:AddPercent(self.Prince.Name, 90, 100)
 					end
-					self.PhaseObj.Objectives:AddPercent(self.Prince.Name, 90, 100)
 					self.PrinceLastHP = unitDetails.healthMax
 					self.PrinceHPMax = unitDetails.healthMax
 					if self.Settings.Enabled then
@@ -441,8 +443,49 @@ function KM:Reset()
 	end
 	self.King.CastBar:Remove()
 	self.Prince.CastBar:Remove()
+	self.Phase = 1
+	self.PhaseObj:End(Inspect.Time.Real())
 	print("Monitor reset.")
 	
+end
+
+function KM.PhaseTwo()
+
+	if KM.Phase == 1 then
+		KM.PhaseObj.Objectives:Remove()
+		KM.Phase = 2
+		KM.PhaseObj:SetPhase(2)
+		KM.PhaseObj.Objectives:AddPercent(KM.King.Name, 65, 90)
+		KM.PhaseObj.Objectives:AddPercent(KM.Prince.Name, 65, 90)
+		print("Starting Phase 2!")
+	end
+
+end
+
+function KM.PhaseThree()
+
+	if KM.Phase == 2 then
+		KM.PhaseObj.Objectives:Remove()
+		KM.Phase = 3
+		KM.PhaseObj:SetPhase(3)
+		KM.PhaseObj.Objectives:AddPercent(KM.King.Name, 40, 65)
+		KM.PhaseObj.Objectives:AddPercent(KM.Prince.Name, 40, 65)
+		print("Starting Phase 3!")
+	end
+	
+end
+
+function KM.PhaseFour()
+
+	if KM.Phase == 3 then
+		KM.PhaseObj.Objectives:Remove()
+		KM.Phase = 4
+		KM.PhaseObj:SetPhase("Final")
+		KM.PhaseObj.Objectives:AddDeath(KM.King.Name, 1)
+		KM.PhaseObj.Objectives:AddDeath(KM.Prince.Name, 1)
+		print("Starting Final Phase!")
+	end
+
 end
 
 function KM:CheckTrends()
@@ -1050,6 +1093,12 @@ function KM:Start()
 	self.King.Triggers.Consuming:AddAlert(self.King.AlertsRef.Consuming)
 	self.King.Triggers.Rev = KBM.Trigger:Create(self.Lang.Notify.Revenant[KBM.Lang], "notify", self.King)
 	self.King.Triggers.Rev:AddTimer(self.King.TimersRef.Rev)
+	self.King.Triggers.PhaseTwo = KBM.Trigger:Create(90, "percent", self.King)
+	self.King.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
+	self.King.Triggers.PhaseThree = KBM.Trigger:Create(65, "percent", self.King)
+	self.King.Triggers.PhaseThree:AddPhase(self.PhaseThree)
+	self.King.Triggers.PhaseFour = KBM.Trigger:Create(40, "percent", self.King)
+	self.King.Triggers.PhaseFour:AddPhase(self.PhaseFour)
 	
 	-- Add Prince's Timers
 	self.Prince.TimersRef.Terminate = KBM.MechTimer:Add(KM.Lang.Ability.Terminate[KBM.Lang], 21)
@@ -1071,6 +1120,12 @@ function KM:Start()
 	self.Prince.Triggers.Consuming:AddAlert(self.Prince.AlertsRef.Consuming)
 	self.Prince.Triggers.Runic = KBM.Trigger:Create(KM.Lang.Ability.Runic[KBM.Lang], "cast", self.Prince)
 	self.Prince.Triggers.Runic:AddTimer(self.Prince.TimersRef.Runic)
+	self.Prince.Triggers.PhaseTwo = KBM.Trigger:Create(90, "percent", self.Prince)
+	self.Prince.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
+	self.Prince.Triggers.PhaseThree = KBM.Trigger:Create(65, "percent", self.Prince)
+	self.Prince.Triggers.PhaseThree:AddPhase(self.PhaseThree)
+	self.Prince.Triggers.PhaseFour = KBM.Trigger:Create(40, "percent", self.Prince)
+	self.Prince.Triggers.PhaseFour:AddPhase(self.PhaseFour)
 	
 	self.King.CastBar = KBM.CastBar:Add(self, self.King, self.King.PinCastBar, self.Settings.KingBar)
 	self.Prince.CastBar = KBM.CastBar:Add(self, self.Prince, self.Prince.PinCastBar, self.Settings.PrinceBar)
