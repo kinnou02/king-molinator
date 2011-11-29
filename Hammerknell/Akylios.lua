@@ -497,8 +497,6 @@ function AK:Start()
 	self:SetAlerts(self.Settings.Alerts.Enabled)
 	
 	-- Assign Mechanics to Triggers
-	self.Jornaru.Triggers.Start = KBM.Trigger:Create(AK.Lang.Mechanic.Wave[KBM.Lang], "start", self.Jornaru)
-	self.Jornaru.Triggers.Start:AddTimer(self.Jornaru.TimersRef.WaveOne)
 	self.Jornaru.TimersRef.WaveOne:AddAlert(self.Jornaru.AlertsRef.WaveWarning, 5)
 	self.Jornaru.TimersRef.WaveOne:SetPhase(1)
 	self.Jornaru.TimersRef.WaveFour:AddAlert(self.Jornaru.AlertsRef.WaveWarning, 5)

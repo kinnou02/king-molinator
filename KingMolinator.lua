@@ -517,7 +517,6 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 			end
 			local Anchor = KBM.MechTimer.Anchor
 			self.GUI = KBM.MechTimer:Pull()
-			self.Starting = false
 			self.TimeStart = CurrentTime
 			self.Remaining = self.Time
 			self.GUI.CastInfo:SetText(string.format(" %0.01f : ", self.Remaining)..self.Name)
@@ -552,6 +551,7 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 				KBM.MechTimer.LastTimer = self
 			end
 			self.GUI.Background:SetVisible(true)
+			self.Starting = false
 		end
 		
 	end
@@ -581,21 +581,20 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 					break
 				end
 			end
+			self.GUI.Background:SetVisible(false)
+			table.insert(KBM.MechTimer.Store, self.GUI)
 			self.Active = false
 			self.Remaining = 0
 			self.TimeStart = 0
 			for i, AlertObj in pairs(self.Alerts) do
 				self.Alerts[i].Triggered = false
 			end
-			self.GUI.Background:SetVisible(false)
-			table.insert(KBM.MechTimer.Store, self.GUI)
 			self.GUI = nil
 			self.Removing = false
 			self.Deleting = false
 			if self.Repeat then
 				if KBM.Encounter then
 					if self.Phase == KBM_CurrentMod.Phase or self.Phase == 0 then
-						self.Starting = true
 						KBM.MechTimer:AddStart(self)
 					end
 				end
@@ -622,7 +621,7 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 	end
 	
 	function Timer:SetPhase(Phase)
-		Timer.Phase = Phase
+		self.Phase = Phase
 	end
 	
 	function Timer:Update(CurrentTime)
