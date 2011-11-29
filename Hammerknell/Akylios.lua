@@ -237,8 +237,8 @@ function AK.PhaseTwo()
 	AK.PhaseObj.Objectives:Remove()
 	AK.Phase = 2
 	AK.PhaseObj:SetPhase(2)
-	AK.PhaseObj.Objectives:AddDeath(AK.Stingers.Name, 8)
-	AK.PhaseObj.Objectives:AddDeath(AK.Lashers.Name, 4)
+	AK.PhaseObj.Objectives:AddDeath(AK.Stinger.Name, 8)
+	AK.PhaseObj.Objectives:AddDeath(AK.Lasher.Name, 4)
 	KBM.MechTimer:AddRemove(AK.Jornaru.TimersRef.WaveOne)
 	AK.Jornaru.CastBar.Enabled = false
 	print("Phase 2 starting!")
