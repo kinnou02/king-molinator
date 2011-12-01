@@ -3,9 +3,11 @@
 ** Note: All below changes tested (except Inwar) fully with HK 10/11 farm.
 ** Note: Any issues with Inwar will be non-critical and will only display errors. (if at all)
 ** Change: Moved Combat damage handling to new system, improved CPU usage.
-** Change: Castbar text reverted to original size.
 ** Change: Reduced the default intensity of Mechanic Timer textures by 25%. 
 ** Fixed: Finally got around to having a good look at timers in general. Stability improved.
+* Castbar
+** Fixed: Issue were Castbars would lose global settings after King Molinar encounter.
+** Change: Castbar text reverted to setting size.
 * Tank-Swap
 ** Fixed: Issue with errors when Tank-Swap Initiates.
 ** Change: Finalized the change over of Tank-Swap to new engine.
