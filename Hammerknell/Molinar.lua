@@ -481,8 +481,8 @@ function KM.PhaseFour()
 		KM.PhaseObj.Objectives:Remove()
 		KM.Phase = 4
 		KM.PhaseObj:SetPhase("Final")
-		KM.PhaseObj.Objectives:AddDeath(KM.King.Name, 1)
-		KM.PhaseObj.Objectives:AddDeath(KM.Prince.Name, 1)
+		KM.PhaseObj.Objectives:AddPercent(KM.King.Name, 0, 40)
+		KM.PhaseObj.Objectives:AddPercent(KM.Prince.Name, 0, 40)
 		print("Starting Final Phase!")
 	end
 

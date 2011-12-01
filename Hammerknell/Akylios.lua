@@ -35,7 +35,7 @@ AK.Jornaru = {
 	Level = "??",
 	Active = false,
 	Name = "Jornaru",
-	Castbar = nil,
+	CastBar = nil,
 	CastFilters = {},
 	Timers = {},
 	TimersRef = {},
@@ -51,7 +51,7 @@ AK.Akylios = {
 	Level = "??",
 	Active = false,
 	Name = "Akylios",
-	Castbar = nil,
+	CastBar = nil,
 	CastFilters = {},
 	Timers = {},
 	TimersRef = {},
@@ -133,6 +133,7 @@ AK.Lang.Options.Summon = KBM.Language:Add(AK.Lang.Mechanic.Summon[KBM.Lang].." (
 AK.Lang.Options.SummonTwo = KBM.Language:Add(AK.Lang.Mechanic.Summon[KBM.Lang].." (Phase 2)")
 
 function AK:AddBosses(KBM_Boss)
+
 	self.Jornaru.Descript = "Akylios & Jornaru"
 	self.Akylios.Descript = self.Jornaru.Descript
 	self.MenuName = self.Akylios.Descript
@@ -146,9 +147,11 @@ function AK:AddBosses(KBM_Boss)
 	KBM_Boss[self.Akylios.Name] = self.Akylios
 	KBM.SubBoss[self.Stinger.Name] = self.Stinger
 	KBM.SubBoss[self.Lasher.Name] = self.Lasher
+	
 end
 
 function AK:InitVars()
+
 	self.Settings = {
 		Timers = {
 			Enabled = true,
@@ -239,6 +242,7 @@ function AK:Castbar(units)
 end
 
 function AK.PhaseTwo()
+
 	AK.PhaseObj.Objectives:Remove()
 	AK.Phase = 2
 	AK.PhaseObj:SetPhase(2)
@@ -249,9 +253,11 @@ function AK.PhaseTwo()
 	KBM.MechTimer:AddStart(AK.Jornaru.TimersRef.SummonTwo)
 	AK.Jornaru.CastBar.Enabled = false
 	print("Phase 2 starting!")
+	
 end
 
 function AK.PhaseThree()
+
 	AK.PhaseObj.Objectives:Remove()
 	AK.Phase = 3
 	AK.PhaseObj:SetPhase(3)
@@ -262,9 +268,11 @@ function AK.PhaseThree()
 	AK.MechTimer:AddRemove(AK.Jornaru.TimersRef.SummonTwo)
 	AK.PhaseObj.Objectives:AddPercent(AK.Akylios.Name, 55, 100)
 	print("Phase 3 starting!")
+	
 end
 
 function AK.PhaseFour()
+
 	AK.PhaseObj.Objectives:Remove()
 	AK.Phase = 4
 	AK.PhaseObj:SetPhase("Final")
@@ -272,17 +280,21 @@ function AK.PhaseFour()
 	AK.PhaseObj.Objectives:AddDeath(AK.Akylios.Name, 1)
 	AK.PhaseObj.Objectives:AddDeath(AK.Jornaru.Name, 1)
 	print("Final Phase starting!")
+	
 end
 
 function AK:RemoveUnits(UnitID)
+
 	if self.Jornaru.UnitID == UnitID then
 		self.Jornaru.Available = false
 		return true
 	end
 	return false
+	
 end
 
 function AK:Death(UnitID)
+
 	if self.Jornaru.UnitID == UnitID then
 		self.Jornaru.Dead = true
 		if self.Akylios.Dead then
@@ -308,6 +320,7 @@ function AK:Death(UnitID)
 		end
 	end
 	return false
+	
 end
 
 function AK:UnitHPCheck(uDetails, unitID)
@@ -363,6 +376,7 @@ function AK:UnitHPCheck(uDetails, unitID)
 			end
 		end
 	end
+	
 end
 
 function AK:Reset()

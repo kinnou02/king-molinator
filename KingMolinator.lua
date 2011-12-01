@@ -23,6 +23,9 @@ KBM.Idle = {
 		Wait = false,
 		StoreTime = 0,
 	},
+	Trigger = {
+		Duration = 2, 
+	}
 }
 KBM.MenuOptions = {
 	Timers = {},
@@ -108,6 +111,7 @@ local function KBM_DefineVars(AddonID)
 				Unlocked = true,
 				Shadow = true,
 				Texture = true,
+				TextureAlpha = 0.75,
 				Visible = true,
 				ScaleWidth = false,
 				ScaleHeight = false,
@@ -128,7 +132,7 @@ local function KBM_DefineVars(AddonID)
 				hScale = 1,
 				ScaleHeight = false,
 				TextScale = false,
-				TextSize = 20,
+				TextSize = 18,
 			},
 			TankSwap = {
 				x = false,
@@ -194,6 +198,8 @@ local function KBM_LoadVars(AddonID)
 		KBM.Debug = KBM.Options.Debug
 		KBM.Options.PhaseMon.w = 225
 		KBM.Options.PhaseMon.TextSize = 14
+		KBM.Options.MechTimer.TextSize = 18
+		KBM.Options.MechTimer.TextureAlpha = 0.75
 	end
 	
 end
@@ -420,7 +426,9 @@ function KBM.MechTimer:Init()
 	self.TimerList = {}
 	self.ActiveTimers = {}
 	self.RemoveTimers = {}
+	self.RemoveCount = 0
 	self.StartTimers = {}
+	self.StartCount = 0
 	self.LastTimer = nil
 	self.Store = {}
 	self.Anchor = UI.CreateFrame("Frame", "Timer Anchor", KBM.Context)
@@ -482,6 +490,7 @@ function KBM.MechTimer:Pull()
 		GUI.Shadow:SetFontColor(0,0,0)
 		GUI.Texture = UI.CreateFrame("Texture", "Timer_Skin", GUI.Background)
 		GUI.Texture:SetTexture("KingMolinator", "Media/BarSkin.png")
+		GUI.Texture:SetAlpha(KBM.Options.MechTimer.TextureAlpha)
 		GUI.Texture:SetPoint("TOPLEFT", GUI.Background, "TOPLEFT")
 		GUI.Texture:SetPoint("BOTTOMRIGHT", GUI.Background, "BOTTOMRIGHT")
 		GUI.Texture:SetLayer(4)
@@ -512,6 +521,7 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 			if Object.Enabled and Object.Active then
 				Object.Removing = true
 				table.insert(self.RemoveTimers, Object)
+				self.RemoveCount = self.RemoveCount + 1
 			end
 		end
 	end
@@ -519,18 +529,19 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 	function self:AddStart(Object)
 		if not Object.Starting then
 			if Object.Enabled then
+				self.Queued = false
 				Object.Starting = true
+				self.StartCount = self.StartCount + 1
 				table.insert(self.StartTimers, Object)
+				self:AddRemove(Object)
 			end
 		end
 	end
 	
-	function Timer:Start(CurrentTime)
+	function Timer:Start(CurrentTime, DebugInfo)
 	
-		self.Queued = false
 		if self.Enabled then
 			if self.Active then
-				KBM.MechTimer:AddRemove(self)
 				KBM.MechTimer:AddStart(self)
 				return
 			end
@@ -587,11 +598,8 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 	end
 	
 	function Timer:Queue()
-		if not self.Queued then
-			if self.Enabled then
-				self.Queued = true
-				KBM.MechTimer:AddStart(self)
-			end
+		if self.Enabled then
+			KBM.MechTimer:AddStart(self)
 		end
 	end
 	
@@ -762,6 +770,7 @@ function KBM.Trigger:Init()
 		TriggerObj.Queued = false
 		TriggerObj.Phase = nil
 		TriggerObj.Trigger = Trigger
+		TriggerObj.LastTrigger = 0
 		
 		function TriggerObj:AddTimer(TimerObj)
 			table.insert(self.Timers, TimerObj)
@@ -778,37 +787,49 @@ function KBM.Trigger:Init()
 		end
 		
 		function TriggerObj:Activate(Caster, Target, Data)
+			local Triggered = false
+			local current = Inspect.Time.Real()
 			if self.Type == "damage" then
 				for i, Timer in ipairs(self.Timers) do
 					if Timer.Active then
-						if Timer.Remaining < 3 then
+						if current - self.LastTrigger > KBM.Idle.Trigger.Duration then
 							Timer:Queue()
+							Triggered = true
 						end
 					else
 						Timer:Queue()
+						Triggered = true
 					end
 				end
 			else
 				for i, Timer in ipairs(self.Timers) do
 					Timer:Queue()
+					Triggered = true
 				end
 			end
 			for i, AlertObj in ipairs(self.Alerts) do
 				if AlertObj.Player then
 					if KBM_PlayerID == Target then
 						KBM.Alert:Start(AlertObj, Inspect.Time.Real(), Data)
+						Triggered = true
 					end
 				else
 					KBM.Alert:Start(AlertObj, Inspect.Time.Real(), Data)
+					Triggered = true
 				end
 			end
 			for i, Obj in ipairs(self.Stop) do
 				Obj:Stop()
+				Triggered = true
 			end
 			if KBM.Encounter then
 				if self.Phase then
 					self.Phase()
+					Triggered = true
 				end
+			end
+			if Triggered then
+				self.LastTrigger = current
 			end
 		end
 		
@@ -1362,61 +1383,88 @@ function KBM.CombatLeave(UnitID)
 	
 end
 
-local function KBM_UnitHPCheck(info)
+function KBM.MobDamage(info)
 
-	-- Damage Based Events
-	--
 	if KBM.Options.Enabled then
 		local tUnitID = info.target
 		local tDetails = Inspect.Unit.Detail(tUnitID)
 		local cUnitID = info.caster
-		local cDetails = Inspect.Unit.Detail(cUnitID)
+		local cDetails = nil
+		if cUnitID then
+			cDetails = Inspect.Unit.Detail(cUnitID)
+		end
 		if KBM.Encounter then
+			-- Check for damage done to the raid by Bosses
 			if tUnitID then
-				if KBM.BossID[tUnitID] then
-					if tDetails then
-						KBM.BossID[tUnitID].PercentRaw = (tDetails.health/tDetails.healthMax)*100
-						KBM.BossID[tUnitID].Percent = math.ceil(KBM.BossID[tUnitID].PercentRaw)
-						if KBM.BossID[tUnitID].Percent ~= KBM.BossID[tUnitID].PercentLast then
-							if KBM.Trigger.Percent[KBM_CurrentMod.ID] then
-								if KBM.Trigger.Percent[KBM_CurrentMod.ID][tDetails.name] then
-									if KBM.BossID[tUnitID].PercentLast - KBM.BossID[tUnitID].Percent > 1 then
-										for PCycle = KBM.BossID[tUnitID].PercentLast, KBM.BossID[tUnitID].Percent, -1 do
-											if KBM.Trigger.Percent[KBM_CurrentMod.ID][tDetails.name][PCycle] then
-												TriggerObj = KBM.Trigger.Percent[KBM_CurrentMod.ID][tDetails.name][PCycle]
-												KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
-											end
-										end
-									else
-										if KBM.Trigger.Percent[KBM_CurrentMod.ID][tDetails.name][KBM.BossID[tUnitID].Percent] then
-											TriggerObj = KBM.Trigger.Percent[KBM_CurrentMod.ID][tDetails.name][KBM.BossID[tUnitID].Percent]
-											KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
-										end
+				if tDetails then
+					if KBM_CurrentMod then
+						if info.abilityName then
+							if KBM.Trigger.Damage[info.abilityName] then
+								TriggerObj = KBM.Trigger.Damage[info.abilityName]
+								KBM.Trigger.Queue:Add(TriggerObj, cUnitID, tUnitID)
+							end
+						end
+					end	
+				end
+			end			
+		else
+			-- Encounter state is idle, check triggering methods.
+			-- This is a fail-safe, and not usually used for Encounter starts.
+			if cDetails then
+				if not cDetails.player then
+					if cDetails.combat then
+						if cDetails.health > 0 then
+							KBM.CheckActiveBoss(cDetails, cUnitID)
+						end
+					end
+				end
+			end		
+		end
+	end
+
+end
+
+function KBM.RaidDamage(info)
+
+	-- Will be used for DPS Monitoring
+	if KBM.Options.Enabled then
+		local tUnitID = info.target
+		local tDetails = Inspect.Unit.Detail(tUnitID)
+		local cUnitID = info.caster
+		local cDetails = nil
+		if cUnitID then
+			cDetails = Inspect.Unit.Detail(cUnitID)
+		end
+		if KBM.BossID[tUnitID] then
+			-- Damage inflicted to a Boss Unit by the Raid.
+			-- Update Health etc, checks done to bypass Unit.Health requiring available state.
+			if tDetails then
+				KBM.BossID[tUnitID].PercentRaw = (tDetails.health/tDetails.healthMax)*100
+				KBM.BossID[tUnitID].Percent = math.ceil(KBM.BossID[tUnitID].PercentRaw)
+				if KBM.BossID[tUnitID].Percent ~= KBM.BossID[tUnitID].PercentLast then
+					if KBM.Trigger.Percent[KBM_CurrentMod.ID] then
+						if KBM.Trigger.Percent[KBM_CurrentMod.ID][tDetails.name] then
+							if KBM.BossID[tUnitID].PercentLast - KBM.BossID[tUnitID].Percent > 1 then
+								for PCycle = KBM.BossID[tUnitID].PercentLast, KBM.BossID[tUnitID].Percent, -1 do
+									if KBM.Trigger.Percent[KBM_CurrentMod.ID][tDetails.name][PCycle] then
+										TriggerObj = KBM.Trigger.Percent[KBM_CurrentMod.ID][tDetails.name][PCycle]
+										KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
 									end
 								end
-							end
-							KBM.BossID[tUnitID].PercentLast = KBM.BossID[tUnitID].Percent
-						end
-						if KBM.PhaseMonitor.Active then
-							if KBM.PhaseMonitor.Objectives.Lists.Percent[tDetails.name] then
-								KBM.PhaseMonitor.Objectives.Lists.Percent[tDetails.name]:Update(KBM.BossID[tUnitID].PercentRaw)
+							else
+								if KBM.Trigger.Percent[KBM_CurrentMod.ID][tDetails.name][KBM.BossID[tUnitID].Percent] then
+									TriggerObj = KBM.Trigger.Percent[KBM_CurrentMod.ID][tDetails.name][KBM.BossID[tUnitID].Percent]
+									KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
+								end
 							end
 						end
 					end
-				else
-					if tDetails then
-						if not tDetails.player then
-							KBM.CheckActiveBoss(tDetails, tUnitID)
-						else
-							if KBM_CurrentMod then
-								if info.abilityName then
-									if KBM.Trigger.Damage[info.abilityName] then
-										TriggerObj = KBM.Trigger.Damage[info.abilityName]
-										KBM.Trigger.Queue:Add(TriggerObj, cUnitID, tUnitID)
-									end
-								end
-							end	
-						end
+					KBM.BossID[tUnitID].PercentLast = KBM.BossID[tUnitID].Percent
+				end
+				-- Update Phase Monitor accordingly.
+				if KBM.PhaseMonitor.Active then
+					if KBM.PhaseMonitor.Objectives.Lists.Percent[tDetails.name] then
+						KBM.PhaseMonitor.Objectives.Lists.Percent[tDetails.name]:Update(KBM.BossID[tUnitID].PercentRaw)
 					end
 				end
 			end
@@ -1426,15 +1474,6 @@ local function KBM_UnitHPCheck(info)
 					if tDetails.combat then
 						if tDetails.health > 0 then
 							KBM.CheckActiveBoss(tDetails, tUnitID)
-						end
-					end
-				end
-			end
-			if cDetails then
-				if not cDetails.player then
-					if cDetails.combat then
-						if cDetails.health > 0 then
-							KBM.CheckActiveBoss(cDetails, cUnitID)
 						end
 					end
 				end
@@ -1686,11 +1725,11 @@ function KBM.TankSwap:Init()
 			end
 			if TankObj.Remaining <= 0 then
 				TankObj.GUI.DeCoolFrame:SetVisible(false)
-				TankObj.GUI.DeCool:SetPoint("RIGHT", GUI.DeCoolFrame, 1, nil)
+				TankObj.GUI.DeCool:SetPoint("RIGHT", TankObj.GUI.DeCoolFrame, 1, nil)
 				TankObj.GUI.DebuffFrame.Text:SetVisible(false)
 			else
 				TankObj.GUI.DeCool.Text:SetText(string.format("%0.01f", TankObj.Remaining))
-				TankObj.GUI.DeCool:SetPoint("RIGHT", TankObj.DeCoolFrame, (TankObj.Remaining/TankObj.Duration), nil)
+				TankObj.GUI.DeCool:SetPoint("RIGHT", TankObj.GUI.DeCoolFrame, (TankObj.Remaining/TankObj.Duration), nil)
 				TankObj.GUI.DeCoolFrame:SetVisible(true)
 				if TankObj.Stacks then
 					TankObj.GUI.DebuffFrame.Text:SetText(tostring(TankObj.Stacks))
@@ -1979,17 +2018,8 @@ function KBM.CastBar:Pull()
 		GUI.Text = UI.CreateFrame("Text", "Castbar Text", GUI.Frame)
 		GUI.Progress:SetLayer(1)
 		GUI.Text:SetLayer(2)
+		GUI.Text:SetFontSize(KBM.Options.CastBar.TextSize)
 		GUI.Text:SetPoint("CENTER", GUI.Frame, "CENTER")
-		if not KBM.Options.CastBar.x then
-			GUI.Frame:SetPoint("CENTERX", UIParent, "CENTERX")
-		else
-			GUI.Frame:SetPoint("LEFT", UIParent, "LEFT", KBM.Options.CastBar.x, nil)
-		end
-		if not KBM.Options.CastBar.y then
-			GUI.Frame:SetPoint("CENTERY", UIParent, "CENTERY")
-		else
-			GUI.Frame:SetPoint("TOP", UIParent, "TOP", nil, KBM.Options.CastBar.y)
-		end
 		GUI.Progress:SetPoint("TOPLEFT", GUI.Frame, "TOPLEFT")
 		GUI.Frame:SetBackgroundColor(0,0,0,0.3)
 		GUI.Progress:SetBackgroundColor(0.7,0,0,0.5)
@@ -2014,6 +2044,20 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 	function CastBarObj:Create(UnitID)
 		self.UnitID = UnitID
 		self.GUI = KBM.CastBar:Pull()
+		self.GUI.Frame:SetWidth(KBM.Options.CastBar.w)
+		self.GUI.Frame:SetHeight(KBM.Options.CastBar.h)
+		self.GUI.Progress:SetWidth(0)
+		self.GUI.Progress:SetHeight(self.GUI.Frame:GetHeight())
+		if not KBM.Options.CastBar.x then
+			self.GUI.Frame:SetPoint("CENTERX", UIParent, "CENTERX")
+		else
+			self.GUI.Frame:SetPoint("LEFT", UIParent, "LEFT", KBM.Options.CastBar.x, nil)
+		end
+		if not KBM.Options.CastBar.y then
+			self.GUI.Frame:SetPoint("CENTERY", UIParent, "CENTERY")
+		else
+			self.GUI.Frame:SetPoint("TOP", UIParent, "TOP", nil, KBM.Options.CastBar.y)
+		end
 		KBM.CastBar.ActiveCastBars[UnitID] = self
 		if Boss.PinCastBar then
 			Boss:PinCastBar()
@@ -2251,14 +2295,20 @@ function KBM:Timer()
 					end
 				end
 				self.Trigger.Queue:Activate()
-				for i, Timer in ipairs(self.MechTimer.RemoveTimers) do
-					Timer:Stop()
+				if self.MechTimer.RemoveCount > 0 then
+					for i, Timer in ipairs(self.MechTimer.RemoveTimers) do
+						Timer:Stop()
+					end
+					self.MechTimer.RemoveTimers = {}
+					self.MechTimer.RemoveCount = 0
 				end
-				self.MechTimer.RemoveTimers = {}	
-				for i, Timer in ipairs(self.MechTimer.StartTimers) do
-					Timer:Start(current)
+				if self.MechTimer.StartCount > 0 then
+					for i, Timer in ipairs(self.MechTimer.StartTimers) do
+						Timer:Start(current, "From StartTimers list")
+					end
+					self.MechTimer.StartTimers = {}
+					self.MechTimer.StartCount = 0
 				end
-				self.MechTimer.StartTimers = {}
 				if self.Alert.Current then
 					self.Alert:Update(current)
 				end
@@ -2358,6 +2408,7 @@ end
 function KBM.Notify(data)
 
 	if KBM.Debug then
+		print("Notify Capture;")
 		dump(data)
 	end
 
@@ -2388,6 +2439,7 @@ end
 function KBM.NPCChat(data)
 
 	if KBM.Debug then
+		print("Chat Capture;")
 		dump(data)
 	end
 
@@ -2879,7 +2931,8 @@ local function KBM_Start()
 	table.insert(Event.Chat.Npc, {KBM.NPCChat, "KingMolinator", "NPC Chat"})
 	table.insert(Event.Buff.Add, {function (unitID, Buffs) KBM:BuffMonitor(unitID, Buffs, "new") end, "KingMolinator", "Buff Monitor (Add)"})
 	table.insert(Event.Buff.Change, {function (unitID, Buffs) KBM:BuffMonitor(unitID, Buffs, "change") end, "KingMolinator", "Buff Monitor (change)"})
-	table.insert(Event.Combat.Damage, {KBM_UnitHPCheck, "KingMolinator", "Combat Damage"})
+	table.insert(Event.SafesRaidManager.Combat.Damage, {KBM.MobDamage, "KingMolinator", "Combat Damage"})
+	table.insert(Event.SafesRaidManager.Group.Combat.Damage, {KBM.RaidDamage, "KingMolinator", "Raid Damage"})
 	-- table.insert(Event.Unit.Unavailable, {KBM_UnitRemoved, "KingMolinator", "Unit Unavailable"})
 	table.insert(Event.Unit.Available, {KBM_UnitAvailable, "KingMolinator", "Unit Available"})
 	table.insert(Event.System.Update.Begin, {function () KBM:Timer() end, "KingMolinator", "System Update"}) 

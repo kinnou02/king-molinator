@@ -1,4 +1,22 @@
-﻿v0.7.1
+﻿v0.7.2
+* General
+** Note: All below changes tested (except Inwar) fully with HK 10/11 farm.
+** Note: Any issues with Inwar will be non-critical and will only display errors. (if at all)
+** Change: Moved Combat damage handling to new system, improved CPU usage.
+** Change: Castbar text reverted to original size.
+** Change: Reduced the default intensity of Mechanic Timer textures by 25%. 
+** Fixed: Finally got around to having a good look at timers in general. Stability improved.
+* Tank-Swap
+** Fixed: Issue with errors when Tank-Swap Initiates.
+** Change: Finalized the change over of Tank-Swap to new engine.
+* Hammerknell
+** New: Inwar Darktide: Advanced Phase tracking. (Experimental)
+** New: Inwar Darktide: Phase Monitoring and objectives display. (Experimental)
+** Note: Inwar Darktide: The above is the basis for more advanced features incoming for this encounter.
+** Note: Inwar Darktide: If there are any issues with the encounter they will be non-critical and at the worst will stop the encounter tracking.
+** Change: King Molinar: Changed final phase to percent countdown rather than Kill.
+----
+v0.7.1
 * General
 ** Change: Castbars: These can now be globally enabled/disabled.
 ** Change: Unit Deaths: Increased accuracy of death state monitoring.
