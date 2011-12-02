@@ -48,6 +48,11 @@ KBM.RegisterMod(SN.ID, SN)
 
 SN.Lang.Sicaron = KBM.Language:Add(SN.Sicaron.Name)
 
+-- Ability Dictionary
+SN.Lang.Ability = {}
+SN.Lang.Ability.Hex = KBM.Language:Add("Excruciating Hex")
+SN.Lang.Ability.Decay = KBM.Language:Add("Moldering Decay")
+
 -- Notify Dictionary
 SN.Lang.Notify = {}
 SN.Lang.Notify.Contract = KBM.Language:Add("Sicaron forces (%a*) into an unholy contract")
@@ -75,10 +80,14 @@ function SN:InitVars()
 		Timers = {
 			Enabled = true,
 			Contract = true,
+			Hex = true,
+			Decay = true,
 		},
 		Alerts = {
 			Enabled = true,
 			Contract = true,
+			Hex = true,
+			Decay = true,
 		},
 		CastBar = {
 			x = false,
@@ -205,8 +214,12 @@ function SN:SetTimers(bool)
 
 	if bool then
 		self.Sicaron.TimersRef.Contract.Enabled = self.Settings.Timers.Contract
+		self.Sicaron.TimersRef.Hex.Enabled = self.Settings.Timers.Hex
+		self.Sicaron.TimersRef.Decay.Enabled = self.Settings.Timers.Decay
 	else
 		self.Sicaron.TimersRef.Contract.Enabled = false
+		self.Sicaron.TimersRef.Hex.Enabled = false
+		self.Sicaron.TimersRef.Decay.Enabled = false
 	end
 	
 end
@@ -216,9 +229,13 @@ function SN:SetAlerts(bool)
 	if bool then
 		self.Sicaron.AlertsRef.Contract.Enabled = self.Settings.Alerts.Contract
 		self.Sicaron.AlertsRef.ContractRed.Enabled = self.Settings.Alerts.Contract
+		self.Sicaron.AlertsRef.Hex.Enabled = self.Settings.Alerts.Hex
+		self.Sicaron.AlertsRef.Decay.Enabled = self.Settings.Alerts.Decay
 	else
 		self.Sicaron.AlertsRef.Contract.Enabled = false
 		self.Sicaron.AlertsRef.ContractRed.Enabled = false
+		self.Sicaron.AlertsRef.Hex.Enabled = false
+		self.Sicaron.AlertsRef.Decay.Enabled = false
 	end
 	
 end
@@ -234,6 +251,14 @@ function SN.Sicaron:Options()
 		SN.Settings.Timers.Contract = bool
 		SN.Sicaron.TimersRef.Contract.Enabled = bool
 	end
+	function self:HexTimer(bool)
+		SN.Settings.Timers.Hex = bool
+		SN.Sicaron.TimersRef.Hex.Enabled = bool
+	end
+	function self:DecayTimer(bool)
+		SN.Settings.Timers.Decay = bool
+		SN.Sicaron.TimersRef.Decay.Enabled = bool
+	end
 	
 	-- Alert Options.
 	function self:Alerts(bool)
@@ -245,14 +270,26 @@ function SN.Sicaron:Options()
 		SN.Sicaron.AlertsRef.Contract.Enabled = bool
 		SN.Sicaron.AlertsRef.ContractRed.Enabled = bool
 	end
+	function self:HexAlert(bool)
+		SN.Settings.Alerts.Hex = bool
+		SN.Sicaron.AlertsRef.Hex.Enabled = bool
+	end
+	function self:DecayAlert(bool)
+		SN.Settings.Alerts.Decay = bool
+		SN.Sicaron.AlertsRef.Decay.Enabled = bool
+	end
 	
 	-- Menu Options.
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
 	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.Timers, SN.Settings.Timers.Enabled)
 	Timers:AddCheck(SN.Lang.Debuff.Contract[KBM.Lang], self.ContractTimer, SN.Settings.Timers.Contract)
+	Timers:AddCheck(SN.Lang.Ability.Hex[KBM.Lang], self.HexTimer, SN.Settings.Timers.Hex)
+	Timers:AddCheck(SN.Lang.Ability.Decay[KBM.Lang], self.DecayTimer, SN.Settings.Timers.Decay)
 	local Alerts = Options:AddHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], self.Alerts, SN.Settings.Alerts.Enabled)
 	Alerts:AddCheck(SN.Lang.Debuff.Contract[KBM.Lang], self.ContractAlert, SN.Settings.Alerts.Contract)
+	Alerts:AddCheck(SN.Lang.Ability.Hex[KBM.Lang], self.HexAlert, SN.Settings.Alerts.Hex)
+	Alerts:AddCheck(SN.Lang.Ability.Decay[KBM.Lang], self.DecayAlert, SN.Settings.Alerts.Decay)
 	
 end
 
@@ -265,12 +302,16 @@ function SN:Start()
 	
 	-- Create Timers
 	self.Sicaron.TimersRef.Contract = KBM.MechTimer:Add(self.Lang.Debuff.Contract[KBM.Lang], 17)
-	self:SetTimers(bool)
+	self.Sicaron.TimersRef.Hex = KBM.MechTimer:Add(self.Lang.Ability.Hex[KBM.Lang], 26)
+	self.Sicaron.TimersRef.Decay = KBM.MechTimer:Add(self.Lang.Ability.Decay[KBM.Lang], 20.5)
+	self:SetTimers(self.Settings.Timers.Enabled)
 	
 	-- Create Alerts
 	self.Sicaron.AlertsRef.Contract = KBM.Alert:Create(self.Lang.Debuff.Contract[KBM.Lang], 12, false, true, "blue")
 	self.Sicaron.AlertsRef.ContractRed = KBM.Alert:Create(self.Lang.Debuff.Contract[KBM.Lang], 5, true, true, "red")
-	self:SetAlerts(bool)
+	self.Sicaron.AlertsRef.Hex = KBM.Alert:Create(self.Lang.Ability.Hex[KBM.Lang], nil, true, true, "purple")
+	self.Sicaron.AlertsRef.Decay = KBM.Alert:Create(self.Lang.Ability.Decay[KBM.Lan], nil, true, true, "dark-green")
+	self:SetAlerts(self.Settings.Alerts.Enabled)
 	
 	-- Assign Mechanics to Triggers
 	self.Sicaron.Triggers.Contract = KBM.Trigger:Create(self.Lang.Notify.Contract[KBM.Lang], "notify", self.Sicaron)
@@ -278,6 +319,12 @@ function SN:Start()
 	self.Sicaron.Triggers.Contract:AddAlert(self.Sicaron.AlertsRef.Contract, true)
 	self.Sicaron.AlertsRef.Contract:Important()
 	self.Sicaron.AlertsRef.Contract:AlertEnd(self.Sicaron.AlertsRef.ContractRed)
+	self.Sicaron.Triggers.Hex = KBM.Trigger:Create(self.Lang.Ability.Hex[KBM.Lang], "cast", self.Sicaron)
+	self.Sicaron.Triggers.Hex:AddAlert(self.Sicaron.AlertsRef.Hex)
+	self.Sicaron.Triggers.Hex:AddTimer(self.Sicaron.TimersRef.Hex)
+	self.Sicaron.Triggers.Decay = KBM.Trigger:Create(self.Lang.Ability.Decay[KBM.Lang], "cast", self.Sicaron)
+	self.Sicaron.Triggers.Decay:AddAlert(self.Sicaron.AlertsRef.Decay)
+	self.Sicaron.Triggers.Decay:AddTimer(self.Sicaron.TimersRef.Decay)
 	
 	-- Assign Castbar object.
 	self.Sicaron.CastBar = KBM.CastBar:Add(self, self.Sicaron, true)

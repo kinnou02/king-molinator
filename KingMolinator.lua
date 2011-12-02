@@ -515,6 +515,7 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 	Timer.Repeat = Repeat
 	Timer.Name = Name
 	Timer.Phase = 0
+	Timer.Type = "timer"
 	
 	function self:AddRemove(Object)
 		if not Object.Removing then

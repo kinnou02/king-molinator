@@ -1,4 +1,22 @@
-﻿v0.7.2
+﻿v0.7.3
+* Hammerknell
+** New: King Molinar: Screen alert warning added for Runic Feedback. (solid blue)
+** New: King Molinar: Screen alert duration added for Runic Feedback. (flashing blue)
+** New: King Molinar: Timer added for Frightening Shout.
+** Added: King Molinar: Important flag to Consuming Essence alert, for King and Prince.
+** New: Estrode: Timer for Rage of the North.
+** New: Estrode: Duration alert and countdown for Dancing Steel.
+** New: Matron Zamira: Timer added for Hideous Blast.
+** New: Matron Zamira: Timer added for Revolting Ichor.
+** New: Sicaron: Timer added for Excruciating Hex.
+** New: Sicaron: Screen alert added for Excruciating Hex. (flashing purple)
+** New: Sicaron: Timer added for Moldering Decay.
+** New: Sicaron: Screen alert added for Moldering Decay. (flashing dark green)
+** Fixed: Sicaron: Settings were not initializing correctly. (new method)
+** Fixed: Soulrender Zilas: Settings were not initializing correctly. (new method)
+** Fixed: Akylios: P3 Error on switching. Timer stop error.
+----
+v0.7.2
 * General
 ** Note: All below changes tested (except Inwar) fully with HK 10/11 farm.
 ** Note: Any issues with Inwar will be non-critical and will only display errors. (if at all)
@@ -6,7 +24,7 @@
 ** Change: Reduced the default intensity of Mechanic Timer textures by 25%. 
 ** Fixed: Finally got around to having a good look at timers in general. Stability improved.
 * Castbar
-** Fixed: Issue were Castbars would lose global settings after King Molinar encounter.
+** Fixed: Issue where Castbars would lose global settings after King Molinar encounter.
 ** Change: Castbar text reverted to setting size.
 * Tank-Swap
 ** Fixed: Issue with errors when Tank-Swap Initiates.
@@ -26,7 +44,7 @@ v0.7.1
 ** New: Drop shadows to Timer text for better clarity. (optional)
 ** New: Textured overlay for bars. (optional)
 ** Change: Addressed issues where disabled timers could sometimes throw errors.
-** Fixed: Possibilty for timers to throw non-critical errors if passed nil durations from Rift events.
+** Fixed: Posibilty for timers to throw non-critical errors if passed nil durations from Rift events.
 * Hammerknell
 ** Added: Akylios: Timer for Phase 1 Adds.
 ** Added: Akylios: Timer for Phase 2 Adds.

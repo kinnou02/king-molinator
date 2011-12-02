@@ -265,7 +265,7 @@ function AK.PhaseThree()
 	AK.Stinger.UnitList = {}
 	AK.Counts.Stingers = 0
 	AK.Counts.Lashers = 0
-	AK.MechTimer:AddRemove(AK.Jornaru.TimersRef.SummonTwo)
+	KBM.MechTimer:AddRemove(AK.Jornaru.TimersRef.SummonTwo)
 	AK.PhaseObj.Objectives:AddPercent(AK.Akylios.Name, 55, 100)
 	print("Phase 3 starting!")
 	
@@ -549,6 +549,7 @@ function AK:Start()
 	self.Jornaru.Triggers.Summon = KBM.Trigger:Create(self.Lang.Mechanic.Summon[KBM.Lang], "cast", self.Jornaru)
 	self.Jornaru.TimersRef.SummonTwo:SetPhase(2)
 	self.Jornaru.Triggers.Summon:AddTimer(self.Jornaru.TimersRef.Summon)
+	self.Jornaru.TimersRef.Summon:SetPhase(1)
 	
 	self.Akylios.Triggers.PhaseFour = KBM.Trigger:Create(55, "percent", self.Akylios)
 	self.Akylios.Triggers.PhaseFour:AddPhase(self.PhaseFour)

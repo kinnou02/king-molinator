@@ -63,6 +63,7 @@ MZ.Lang.Ability.Mark.German = "Zeichen der Vergessenheit"
 MZ.Lang.Ability.Mark.French = "Marque de l'oubli"
 MZ.Lang.Ability.Shadow = KBM.Language:Add("Shadow Strike")
 MZ.Lang.Ability.Shadow.German = "Schattenschlag"
+MZ.Lang.Ability.Ichor = KBM.Language:Add("Revolting Ichor")
 
 -- Debuff Dictionary
 MZ.Lang.Debuff = {}
@@ -87,6 +88,8 @@ function MZ:InitVars()
 			Concussion = true,
 			Mark = true,
 			Shadow = true,
+			Blast = true,
+			Ichor = true,
 		},
 		Alerts = {
 			Enabled = true,
@@ -222,10 +225,14 @@ function MZ:SetTimers(bool)
 		self.Matron.TimersRef.Concussion.Enabled = self.Settings.Timers.Concussion
 		self.Matron.TimersRef.Mark.Enabled = self.Settings.Timers.Mark
 		self.Matron.TimersRef.Shadow.Enabled = self.Settings.Timers.Shadow
+		self.Matron.TimersRef.Blast.Enabled = self.Settings.Timers.Blast
+		self.Matron.TimersRef.Ichor.Enabled = self.Settings.Timers.Ichor
 	else
 		self.Matron.TimersRef.Concussion.Enabled = false
 		self.Matron.TimersRef.Mark.Enabled = false
 		self.Matron.TimersRef.Shadow.Enabled = false
+		self.Matron.TimersRef.Blast.Enabled = false
+		self.Matron.TimersRef.Ichor.Enabled = false
 	end
 	
 end
@@ -262,6 +269,14 @@ function MZ.Matron:Options()
 		MZ.Settings.Timers.Shadow = bool
 		MZ.Matron.TimersRef.Shadow.Enabled = bool
 	end
+	function self:BlastTimer(bool)
+		MZ.Settings.Timers.Blast = bool
+		MZ.Matron.TimersRef.Blast.Enabled = bool
+	end
+	function self:IchorTimer(bool)
+		MZ.Settings.Timers.Ichor = bool
+		MZ.Matron.TimersRef.Ichor.Enabled = bool
+	end
 	-- Alert Options
 	function self:AlertsEnabled(bool)
 		MZ.Settings.Alerts.Enabled = bool
@@ -286,6 +301,8 @@ function MZ.Matron:Options()
 	Timers:AddCheck(MZ.Lang.Ability.Concussion[KBM.Lang], self.ConcussionTimer, MZ.Settings.Timers.Concussion)
 	Timers:AddCheck(MZ.Lang.Ability.Mark[KBM.Lang], self.MarkTimer, MZ.Settings.Timers.Mark)
 	Timers:AddCheck(MZ.Lang.Ability.Shadow[KBM.Lang], self.ShadowTimer, MZ.Settings.Timers.Shadow)
+	Timers:AddCheck(MZ.Lang.Ability.Blast[KBM.Lang], self.BlastTimer, MZ.Settings.Timers.Blast)
+	Timers:AddCheck(MZ.Lang.Ability.Ichor[KBM.Lang], self.IchorTimer, MZ.Settings.Timers.Ichor)
 	local Alerts = Options:AddHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], self.AlertsEnabled, MZ.Settings.Alerts.Enabled)
 	Alerts:AddCheck(MZ.Lang.Ability.Concussion[KBM.Lang], self.ConcussionAlert, MZ.Settings.Alerts.Concussion)
 	Alerts:AddCheck(MZ.Lang.Ability.Blast[KBM.Lang], self.BlastAlert, MZ.Settings.Alerts.Blast)
@@ -304,11 +321,13 @@ function MZ:Start()
 	self.Matron.TimersRef.Concussion = KBM.MechTimer:Add(self.Lang.Ability.Concussion[KBM.Lang], 13)
 	self.Matron.TimersRef.Mark = KBM.MechTimer:Add(self.Lang.Ability.Mark[KBM.Lang], 24)
 	self.Matron.TimersRef.Shadow = KBM.MechTimer:Add(self.Lang.Ability.Shadow[KBM.Lang], 11)
+	self.Matron.TimersRef.Blast = KBM.MechTimer:Add(self.Lang.Ability.Blast[KBM.Lang], 8)
+	self.Matron.TimersRef.Ichor = KBM.MechTimer:Add(self.Lang.Ability.Ichor[KBM.Lang], 5)
 	self:SetTimers(self.Settings.Timers.Enabled)
 	
 	-- Create Alerts
-	self.Matron.AlertsRef.Concussion = KBM.Alert:Create(self.Lang.Ability.Concussion[KBM.Lang], 3, true, false, "red")
-	self.Matron.AlertsRef.Blast = KBM.Alert:Create(self.Lang.Ability.Blast[KBM.Lang], 2, true, false, "yellow")
+	self.Matron.AlertsRef.Concussion = KBM.Alert:Create(self.Lang.Ability.Concussion[KBM.Lang], 2, true, false, "red")
+	self.Matron.AlertsRef.Blast = KBM.Alert:Create(self.Lang.Ability.Blast[KBM.Lang], nil, true, false, "yellow")
 	self.Matron.AlertsRef.Mark = KBM.Alert:Create(self.Lang.Ability.Mark[KBM.Lang], 6, false, true, "purple")
 	self:SetAlerts(self.Settings.Alerts.Enabled)
 	
@@ -318,6 +337,9 @@ function MZ:Start()
 	self.Matron.Triggers.Concussion:AddAlert(self.Matron.AlertsRef.Concussion)
 	self.Matron.Triggers.Blast = KBM.Trigger:Create(self.Lang.Ability.Blast[KBM.Lang], "cast", self.Matron)
 	self.Matron.Triggers.Blast:AddAlert(self.Matron.AlertsRef.Blast)
+	self.Matron.Triggers.Blast:AddTimer(self.Matron.TimersRef.Blast)
+	self.Matron.Triggers.Ichor = KBM.Trigger:Create(self.Lang.Ability.Ichor[KBM.Lang], "cast", self.Matron)
+	self.Matron.Triggers.Ichor:AddTimer(self.Matron.TimersRef.Ichor)
 	self.Matron.Triggers.Mark = KBM.Trigger:Create(self.Lang.Ability.Mark[KBM.Lang], "cast", self.Matron)
 	self.Matron.Triggers.Mark:AddTimer(self.Matron.TimersRef.Mark)
 	self.Matron.Triggers.MarkDamage = KBM.Trigger:Create(self.Lang.Ability.Mark[KBM.Lang], "damage", self.Matron)
