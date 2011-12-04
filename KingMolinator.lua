@@ -407,12 +407,15 @@ KBM.Language.Options.AlertText.German = "Alarmierungs-Text aktiviert."
 KBM.Language.Options.AlertText.French = "Texte Avertissement Alerte activ\195\169 ."
 -- Misc.
 KBM.Language.Options.Character = KBM.Language:Add("Saving settings for this character only.")
+KBM.Language.Options.Character.German = "Einstellungen nur für diesen Charakter speichern."
 KBM.Language.Options.Enabled = KBM.Language:Add("Enable King Boss Mods v"..AddonData.toc.Version)
 KBM.Language.Options.Settings = KBM.Language:Add("Settings")
 KBM.Language.Options.Settings.French = "Configurations"
 KBM.Language.Options.Settings.German = "Einstellungen"
 KBM.Language.Options.Shadow = KBM.Language:Add("Show text shadows.")
+KBM.Language.Options.Shadow.German = "Zeige Text Schattierung."
 KBM.Language.Options.Texture = KBM.Language:Add("Enable textured overlay.")
+KBM.Language.Options.Texture.German = "Texturierte Balken aktiviert." 
 -- Timer Dictionary
 KBM.Language.Timers = {}
 KBM.Language.Timers.Time = KBM.Language:Add("Time:")
@@ -715,12 +718,10 @@ function KBM.Trigger:Init()
 			else
 				TriggerObj.Queued = true
 			end
-			self.Locked = true
 			table.insert(self.List, TriggerObj)
 			TriggerObj.Caster = Caster
 			TriggerObj.Target = Target
 			TriggerObj.Duration = Duration
-			self.Locked = false
 			self.Queued = true
 		end
 		
@@ -733,13 +734,11 @@ function KBM.Trigger:Init()
 				if self.Removing then
 					return
 				end
-				self.Locked = true
 				for i, TriggerObj in ipairs(self.List) do
 					TriggerObj:Activate(TriggerObj.Caster, TriggerObj.Target, TriggerObj.Duration)
 					TriggerObj.Queued = false
 				end
 				self.List = {}
-				self.Locked = false
 				self.Queued = false
 			end
 		end
@@ -749,9 +748,7 @@ function KBM.Trigger:Init()
 	function self.Queue:Remove()
 		
 		self.Removing = true
-		self.Locked = true
 		self.List = {}
-		self.Locked = false
 		self.Removing = false
 		self.Queued = false
 		
@@ -820,7 +817,7 @@ function KBM.Trigger:Init()
 				end
 			end
 			for i, Obj in ipairs(self.Stop) do
-				Obj:Stop()
+				KBM.MechTimer:AddRemove(Obj)
 				Triggered = true
 			end
 			if KBM.Encounter then
@@ -1125,8 +1122,12 @@ function KBM.PhaseMonitor:Init()
 			function PercentObj:Update(PercentRaw)
 				self.PercentRaw = PercentRaw
 				self.Percent = math.ceil(PercentRaw)
-				if self.Percent >= Target then
-					self.GUI.Objective:SetText(self.Percent.."%/"..self.Target.."%")
+				if self.Percent >= self.Target then
+					if self.Target == 0 then
+						self.GUI.Objective:SetText(self.Percent.."%")
+					else
+						self.GUI.Objective:SetText(self.Percent.."%/"..self.Target.."%")
+					end	
 				end
 			end
 			

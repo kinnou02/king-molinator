@@ -1,4 +1,18 @@
-﻿v0.7.3
+﻿v0.7.4
+* Fixed: Stop objects re-addressed, only affects Akylios. (rare case)
+* Objective Tracking
+** Change: When using a zero percent target, obective now only displays boss perctange.
+* Hammerknell
+** New: Matron Zamira: Phase Tracking and boss percent display.
+** Fixed: Sicaron: Moldering Decay would cause an error.
+* German Client translations.
+** Added: Various new Menu option translations.
+** Added: HK: Matron Zamira: Revolting Ichor.
+** Added: HK: Sicaron: Excruciating Hex.
+** Added: HK: Sicaron: Moldering Decay.
+** Added: GSB: Duke Letarues: Duke's Wrath
+----
+v0.7.3
 * Hammerknell
 ** New: King Molinar: Screen alert warning added for Runic Feedback. (solid blue)
 ** New: King Molinar: Screen alert duration added for Runic Feedback. (flashing blue)

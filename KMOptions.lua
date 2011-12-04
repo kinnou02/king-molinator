@@ -398,6 +398,7 @@ function KBM.InitOptions()
 		Header:SetWidth(self:GetWidth())
 		Header.Check = UI.CreateFrame("RiftCheckbox", "Header Check: "..Text, Header)
 		Header.Check:SetPoint("CENTERLEFT", Header, "CENTERLEFT", 4, 0)
+		Header.Type = "header"
 		Default = Default or true
 		if not Static then
 			Header.Check:SetChecked(Default)
@@ -478,6 +479,110 @@ function KBM.InitOptions()
 		end
 		Header.ChildSize = 0
 		return Header
+	end
+	function KBM.MainWin.Menu:CreateInstance(Name, Default, Hook)
+		
+		-- New Menu Handler
+		Instance = {}
+		Instance.GUI = {}
+		Instance.GUI.Frame = UI.CreateFrame("Frame", "Instance_"..Name, self)
+		Instance.GUI.Frame.Instance = Instance
+		Instance.Children = {}
+		Instamce.LastChild = nil
+		Instance.GUI.Frame:SetWidth(self:GetWidth())
+		Instance.GUI.Check = UI.CreateFrame("RiftCheckbox", "Instance_Check_"..Name, Instance.GUI.Frame)
+		Instance.GUI.Check:SetPoint("CENTERLEFT", Instance.GUI.Frame, "CENTERLEFT", 4, 0)
+		Default = Default or true
+		Instance.GUI.Check:SetChecked(Default)
+		Instance.GUI.Text = UI.CreateFrame("Text", "Instance_Text_"..Text, Instance.GUI.Frame)
+		Instance.GUI.Text:SetWidth(Instance.GUI.Frame:GetWidth() - Instance.GUI.Check:GetWidth())
+		Instance.GUI.Text:SetText(Name)
+		Instance.GUI.Text:SetFontColor(0.85,0.65,0.0)
+		Instance.GUI.Text:SetFontSize(16)
+		Instance.Enabled = true
+		Instance.GUI.Text:SetHeight(Instance.GUI.Text:GetHeight())
+		Instance.GUI.Frame:SetHeight(Instance.GUI.Text:GetHeight())
+		Instance.GUI.Text:SetPoint("CENTERLEFT", Instance.GUI.Check, "CENTERRIGHT")
+		Instance.Type = "instance"
+		table.insert(self.Headers, Instance)
+		if not self.LastHeader then
+			Instance.GUI.Frame:SetPoint("TOPLEFT", self, "TOPLEFT")
+		else
+			if self.LastHeader.LastChild then
+				Instance.GUI.Frame:SetPoint("TOP", self.LastHeader.LastChild, "BOTTOM")
+				Instance.GUI.Frame:SetPoint("LEFT", self, "LEFT")
+			else
+				if self.LastHeader.Type == "instance" then
+					Instance.GUI.Frame:SetPoint("TOP", self.LastHeader.GUI.Frame, "BOTTOM")
+					Instance.GUI.Frame:SetPoint("LEFT", self, "LEFT")
+				else
+					Instance.GUI.Frame:SetPoint("TOP", self.LastHeader, "BOTTOM")
+					Instance.GUI.Frame:SetPoint("LEFT", self, "LEFT")
+				end
+			end
+		end
+		self.LastHeader = Instance
+		Instance.GUI.Check.Instance = Instance
+		function Instance.GUI.Check.Event:CheckboxChange()
+			if self:GetChecked() then
+				for _, Child in ipairs(self.Instance.Children) do
+					Child:SetVisible(true)
+				end
+				self.Instance.LastChild:SetPoint("TOP", self.Instance.LastChild.Prev.GUI.Frame, "BOTTOM")
+				KBM.MainWin:SubSize(-self.Instance.ChildSize)
+			else
+				for _, Child in ipairs(self.Instance.Children) do
+					Child:SetVisible(false)
+				end
+				self.Instance.LastChild:SetPoint("TOP", self.Instance.GUI.Frame, "TOP")
+				KBM.MainWin:SubSize(self.Instance.ChildSize)
+			end
+		end
+		function Instance.GUI.Frame.Event:MouseIn()
+			if self.Instance.Enabled and not KBM.MainWin.Scroller.Handle.MouseDown then
+				self:SetBackgroundColor(0,0,0,0.5)
+			end
+		end
+		function Instance.GUI.Frame.Event:MouseOut()
+			if self.Instance.Enabled then
+				self:SetBackgroundColor(0,0,0,0)
+			end
+		end
+		function Instance.GUI.Frame.Event:LeftClick()
+			if self.Instance.Enabled then
+				if self.Instance.GUI.Check:GetChecked() then
+					self.Instance.GUI.Check:SetChecked(false)
+				else
+					self.Instance.GUI.Check:SetChecked(true)
+				end
+			end
+		end
+		function Instance:AddChildSize(Child)
+			self.ChildSize = self.ChildSize + Child:GetHeight()
+		end
+		KBM.MainWin:AddSize(Instance.GUI.Frame)
+		KBM.HeaderList[Text] = Instance
+		if not KBM.MainWin.FirstItem then
+			KBM.MainWin.FirstItem = Instance
+		end
+		Instance.ChildSize = 0
+		return Instance
+		
+	end
+	function KBM.MainWin.Menu:CreateChild(Header)
+		GUI = {}
+		GUI.Frame = UI.CreateFrame("Frame", "Encounter_Child", Header)
+		GUI.Frame:SetWidth(self:GetWidth()-Header.Check:GetWidth())
+		return GUI
+	end
+	function KBM.MainWin.Menu:CreatePageLink(Encounter, Page, Default, MenuHeader)
+		-- Child = {}
+		-- Child = UI.CreateFrem("Frame", "Encounter_Option", MenuHeader)
+		-- Child:SetWidth(self:GetWidth()-MenuHeader.Check:GetWidth())
+		-- Child:SetPoint("RIGHT", self, "RIGHT")
+		-- Child.Enabled = true
+		-- Child.Check 
+		
 	end
 	function KBM.MainWin.Menu:CreateEncounter(Text, Link, Default, Header)
 		Child = {}

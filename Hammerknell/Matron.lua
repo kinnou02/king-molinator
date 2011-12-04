@@ -20,8 +20,7 @@ local MZ = {
 	},
 	Instance = HK.Name,
 	HasPhases = true,
-	PhaseType = "percentage",
-	PhaseList = {},
+	PhaseObj = nil,
 	Timers = {},
 	Lang = {},
 	ID = "Matron",
@@ -64,6 +63,7 @@ MZ.Lang.Ability.Mark.French = "Marque de l'oubli"
 MZ.Lang.Ability.Shadow = KBM.Language:Add("Shadow Strike")
 MZ.Lang.Ability.Shadow.German = "Schattenschlag"
 MZ.Lang.Ability.Ichor = KBM.Language:Add("Revolting Ichor")
+MZ.Lang.Ability.Ichor.German = "Abscheulicher Eiter"
 
 -- Debuff Dictionary
 MZ.Lang.Debuff = {}
@@ -185,6 +185,15 @@ function MZ:Death(UnitID)
 	return false
 end
 
+function MZ.PhaseTwo()
+	
+	MZ.Phase = 2
+	MZ.PhaseObj.Objectives:Remove()
+	MZ.PhaseObj:SetPhase(2)
+	MZ.PhaseObj.Objectives:AddPercent(MZ.Matron.Name, 0, 40)
+	
+end
+
 function MZ:UnitHPCheck(unitDetails, unitID)
 	
 	if unitDetails and unitID then
@@ -199,6 +208,8 @@ function MZ:UnitHPCheck(unitDetails, unitID)
 					self.Matron.Casting = false
 					self.Matron.CastBar:Create(unitID)
 					KBM.TankSwap:Start(MZ.Lang.Debuff.Curse[KBM.Lang])
+					self.PhaseObj.Objectives:AddPercent(self.Matron.Name, 40, 100)
+					self.PhaseObj:Start(self.StartTime)
 				end
 				self.Matron.UnitID = unitID
 				self.Matron.Available = true
@@ -209,10 +220,13 @@ function MZ:UnitHPCheck(unitDetails, unitID)
 end
 
 function MZ:Reset()
+
 	self.EncounterRunning = false
 	self.Matron.Available = false
 	self.Matron.UnitID = nil
 	self.Matron.CastBar:Remove()
+	self.PhaseObj:End(self.TimeElapsed)
+	
 end
 
 function MZ:Timer()
@@ -347,8 +361,12 @@ function MZ:Start()
 	self.Matron.AlertsRef.Mark:Important()
 	self.Matron.Triggers.Shadow = KBM.Trigger:Create(self.Lang.Ability.Shadow[KBM.Lang], "damage", self.Matron)
 	self.Matron.Triggers.Shadow:AddTimer(self.Matron.TimersRef.Shadow)
+	self.Matron.Triggers.PhaseTwo = KBM.Trigger:Create(40, "percent", self.Matron)
+	self.Matron.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
 	
 	-- Assign Castbar object
 	self.Matron.CastBar = KBM.CastBar:Add(self, self.Matron, true)
+
+	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

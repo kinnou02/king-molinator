@@ -54,10 +54,13 @@ DL.Letareus.Name = DL.Lang.Letareus[KBM.Lang]
 -- Ability Dictionary
 DL.Lang.Ability = {}
 DL.Lang.Ability.Wrath = KBM.Language:Add("Duke's Wrath")
+DL.Lang.Ability.Wrath.German = "Zorn des Herzogs" 
 
 -- Mechanic Dictionary
 DL.Lang.Mechanic = {}
-DL.Lang.Mechanic.Tank = KBM.Language:Add("Tank Phase")
+DL.Lang.Mechanic.TankPhase = KBM.Language:Add("Tank Phase")
+DL.Lang.Mechanic.Tank = KBM.Language:Add("Tank")
+DL.Lang.Mechanic.Kite = KBM.Language:Add("Kite")
 
 function DL:AddBosses(KBM_Boss)
 
@@ -169,6 +172,7 @@ function DL:UnitHPCheck(unitDetails, unitID)
 					self.TimeElapsed = 0
 					self.Phase = 1
 					self.Letareus.CastBar:Create(unitID)
+					self.PahseObj:SetPhase(DL.Lang.Mechanic.Tank[KBM.Lang])
 					self.PhaseObj.Objectives:AddPercent(self.Letareus.Name, 86, 100)
 					self.PhaseObj:Start(self.StartTime)
 				end
@@ -185,43 +189,43 @@ end
 
 function DL:PhaseTwo()
 	DL.PhaseObj.Objectives:Remove()
-	DL.PhaseObj:SetPhase("Kite")
+	DL.PhaseObj:SetPhase(DL.Lang.Mechanic.Kite[KBM.Lang])
 	DL.PhaseObj.Objectives:AddPercent(DL.Letareus.Name, 76, 86)	
 end
 
 function DL:PhaseThree()
 	DL.PhaseObj.Objectives:Remove()
-	DL.PhaseObj:SetPhase("Tank")
+	DL.PhaseObj:SetPhase(DL.Lang.Mechanic.Tank[KBM.Lang])
 	DL.PhaseObj.Objectives:AddPercent(DL.Letareus.Name, 61, 76)
 end
 
 function DL:PhaseFour()
 	DL.PhaseObj.Objectives:Remove()
-	DL.PhaseObj:SetPhase("Kite")
+	DL.PhaseObj:SetPhase(DL.Lang.Mechanic.Kite[KBM.Lang])
 	DL.PhaseObj.Objectives:AddPercent(DL.Letareus.Name, 51, 61)
 end
 
 function DL:PhaseFive()
 	DL.PhaseObj.Objectives:Remove()
-	DL.PhaseObj:SetPhase("Tank")
+	DL.PhaseObj:SetPhase(DL.Lang.Mechanic.Tank[KBM.Lang])
 	DL.PhaseObj.Objectives:AddPercent(DL.Letareus.Name, 36, 51)
 end
 
 function DL:PhaseSix()
 	DL.PhaseObj.Objectives:Remove()
-	DL.PhaseObj:SetPhase("Kite")
+	DL.PhaseObj:SetPhase(DL.Lang.Mechanic.Kite[KBM.Lang])
 	DL.PhaseObj.Objectives:AddPercent(DL.Letareus.Name, 26, 36)
 end
 
 function DL.PhaseSeven()
 	DL.PhaseObj.Objectives:Remove()
-	DL.PhaseObj:SetPhase("Tank")
+	DL.PhaseObj:SetPhase(DL.Lang.Mechanic.Tank[KBM.Lang])
 	DL.PhaseObj.Objectives:AddPercent(DL.Letareus.Name, 11, 26)
 end
 
 function DL.PhaseEight()
 	DL.PhaseObj.Objectives:Remove()
-	DL.PhaseObj:SetPhase("Kite")
+	DL.PhaseObj:SetPhase(DL.Lang.Mechanic.Kite[KBM.Lang])
 	DL.PhaseObj.Objectives:AddPercent(DL.Letareus.Name, 0, 11)
 end
 
@@ -276,7 +280,7 @@ function DL.Letareus:Options()
 	Options:SetTitle()
 	local Alerts = Options:AddHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], self.Alerts, DL.Settings.Alerts.Enabled)
 	Alerts:AddCheck(DL.Lang.Ability.Wrath[KBM.Lang], self.WrathAlert, DL.Settings.Alerts.Wrath)
-	Alerts:AddCheck(DL.Lang.Mechanic.Tank[KBM.Lang], self.TankAlert, DL.Settings.Alerts.Tank)
+	Alerts:AddCheck(DL.Lang.Mechanic.TankPhase[KBM.Lang], self.TankAlert, DL.Settings.Alerts.Tank)
 	
 end
 
@@ -291,7 +295,7 @@ function DL:Start()
 	
 	-- Create AlertsRef
 	self.Letareus.AlertsRef.Wrath = KBM.Alert:Create(self.Lang.Ability.Wrath[KBM.Lang], nil, true, true, "red")
-	self.Letareus.AlertsRef.Tank = KBM.Alert:Create(self.Lang.Mechanic.Tank[KBM.Lang], 2, true, false, "orange")
+	self.Letareus.AlertsRef.Tank = KBM.Alert:Create(self.Lang.Mechanic.TankPhase[KBM.Lang], 2, true, false, "orange")
 	self:SetAlerts(self.Settings.Alerts.Enabled)
 	
 	-- Assign Mechanics to Triggers
@@ -317,6 +321,6 @@ function DL:Start()
 		
 	-- Initialize Castbar and Phase Object.
 	self.Letareus.CastBar = KBM.CastBar:Add(self, self.Letareus, true)
-	self.PhaseObj = KBM.PhaseMonitor.Phase:Create("Tank")
+	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(DL.Lang.Mechanic.Tank[KBM.Lang])
 	
 end

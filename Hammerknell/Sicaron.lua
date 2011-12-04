@@ -51,7 +51,9 @@ SN.Lang.Sicaron = KBM.Language:Add(SN.Sicaron.Name)
 -- Ability Dictionary
 SN.Lang.Ability = {}
 SN.Lang.Ability.Hex = KBM.Language:Add("Excruciating Hex")
+SN.Lang.Ability.Hex.German = "Quälende Verhexung"
 SN.Lang.Ability.Decay = KBM.Language:Add("Moldering Decay")
+SN.Lang.Ability.Decay.German = "Zerfallende Verwesung" 
 
 -- Notify Dictionary
 SN.Lang.Notify = {}
@@ -310,7 +312,7 @@ function SN:Start()
 	self.Sicaron.AlertsRef.Contract = KBM.Alert:Create(self.Lang.Debuff.Contract[KBM.Lang], 12, false, true, "blue")
 	self.Sicaron.AlertsRef.ContractRed = KBM.Alert:Create(self.Lang.Debuff.Contract[KBM.Lang], 5, true, true, "red")
 	self.Sicaron.AlertsRef.Hex = KBM.Alert:Create(self.Lang.Ability.Hex[KBM.Lang], nil, true, true, "purple")
-	self.Sicaron.AlertsRef.Decay = KBM.Alert:Create(self.Lang.Ability.Decay[KBM.Lan], nil, true, true, "dark-green")
+	self.Sicaron.AlertsRef.Decay = KBM.Alert:Create(self.Lang.Ability.Decay[KBM.Lang], nil, true, true, "dark_green")
 	self:SetAlerts(self.Settings.Alerts.Enabled)
 	
 	-- Assign Mechanics to Triggers
