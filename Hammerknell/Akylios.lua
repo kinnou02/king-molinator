@@ -252,7 +252,7 @@ function AK.PhaseTwo()
 	AK.PhaseObj.Objectives:AddDeath(AK.Lasher.Name, 4)
 	KBM.MechTimer:AddRemove(AK.Jornaru.TimersRef.WaveOne)
 	KBM.MechTimer:AddRemove(AK.Jornaru.TimersRef.Summon)
-	KBM.MechTimer:AddStart(AK.Jornaru.TimersRef.SummonTwo)
+	KBM.MechTimer:AddStart(AK.Jornaru.TimersRef.SummonTwoFirst)
 	AK.Jornaru.CastBar.Enabled = false
 	print("Phase 2 starting!")
 	
@@ -413,6 +413,7 @@ function AK:SetTimers(bool)
 		self.Jornaru.TimersRef.Orb.Enabled = self.Settings.Timers.Orb
 		self.Jornaru.TimersRef.Summon.Enabled = self.Settings.Timers.Summon
 		self.Jornaru.TimersRef.SummonTwo.Enabled = self.Settings.Timers.SummonTwo
+		self.Jornaru.TimersRef.SummonTwoFirst.Enabled = self.Settings.Timers.SummonTwo
 		self.Akylios.TimersRef.Breath.Enabled = self.Settings.Timers.Breath
 	else
 		self.Jornaru.TimersRef.WaveOne.Enabled = false
@@ -421,6 +422,7 @@ function AK:SetTimers(bool)
 		self.Jornaru.TimersRef.Orb.Enabled = false
 		self.Jornaru.TimersRef.Summon.Enabled = false
 		self.Jornaru.TimersRef.SummonTwo.Enabled = false
+		self.Jornaru.TimersRef.SummonTwoFirst.Enabled = false
 		self.Akylios.TimersRef.Breath.Enabled = false
 	end
 
@@ -473,6 +475,7 @@ function AK.Akylios:Options()
 	end
 	function self:SummonTwoTimer(bool)
 		AK.Settings.Timers.SummonTwo = bool
+		AK.Jornaru.TimersRef.SummonTwoFirst.Enabled = bool
 		AK.Jornaru.TimersRef.SummonTwo.Enabled = bool
 	end
 	-- Alert Options
@@ -525,6 +528,7 @@ function AK:Start()
 	self.Jornaru.TimersRef.OrbFirst = KBM.MechTimer:Add(AK.Lang.Mechanic.Orb[KBM.Lang], 50)
 	self.Jornaru.TimersRef.Orb = KBM.MechTimer:Add(AK.Lang.Mechanic.Orb[KBM.Lang], 30)
 	self.Jornaru.TimersRef.Summon = KBM.MechTimer:Add(AK.Lang.Mechanic.Summon[KBM.Lang], 70)
+	self.Jornaru.TimersRef.SummonTwoFirst = KBM.MechTimer:Add(AK.Lang.Mechanic.Summon[KBM.Lang], 45)
 	self.Jornaru.TimersRef.SummonTwo = KBM.MechTimer:Add(AK.Lang.Mechanic.Summon[KBM.Lang], 80, true)
 	self.Akylios.TimersRef.Breath = KBM.MechTimer:Add(AK.Lang.Ability.Breath[KBM.Lang], 25)
 	self:SetTimers(self.Settings.Timers.Enabled)
@@ -549,9 +553,10 @@ function AK:Start()
 	self.Jornaru.Triggers.PhaseTwo:AddTimer(self.Jornaru.TimersRef.OrbFirst)
 	self.Jornaru.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
 	self.Jornaru.Triggers.Summon = KBM.Trigger:Create(self.Lang.Mechanic.Summon[KBM.Lang], "cast", self.Jornaru)
-	self.Jornaru.TimersRef.SummonTwo:SetPhase(2)
 	self.Jornaru.Triggers.Summon:AddTimer(self.Jornaru.TimersRef.Summon)
 	self.Jornaru.TimersRef.Summon:SetPhase(1)
+	self.Jornaru.TimersRef.SummonTwo:SetPhase(2)
+	self.Jornaru.TimersRef.SummonTwoFirst:AddTimer(self.Jornaru.TimersRef.SummonTwo, 0)
 	
 	self.Akylios.Triggers.PhaseFour = KBM.Trigger:Create(55, "percent", self.Akylios)
 	self.Akylios.Triggers.PhaseFour:AddPhase(self.PhaseFour)

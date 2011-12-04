@@ -117,6 +117,7 @@ local function KBM_DefineVars(AddonID)
 				ScaleHeight = false,
 				TextSize = 16,
 				TextScale = false,
+				tScale = 1,
 			},
 			CastBar = {
 				x = false,
@@ -434,6 +435,7 @@ function KBM.MechTimer:Init()
 	self.StartCount = 0
 	self.LastTimer = nil
 	self.Store = {}
+	self.Settings = KBM.Options.MechTimer
 	self.Anchor = UI.CreateFrame("Frame", "Timer Anchor", KBM.Context)
 	self.Anchor:SetLayer(5)
 	self.Anchor:SetWidth(KBM.Options.MechTimer.w * KBM.Options.MechTimer.wScale)
@@ -456,12 +458,95 @@ function KBM.MechTimer:Init()
 		end
 	end
 	self.Anchor.Text = UI.CreateFrame("Text", "Timer Info", self.Anchor)
-	self.Anchor.Text:SetFontSize(KBM.Options.MechTimer.TextSize)
+	self.Anchor.Text:SetFontSize(KBM.Options.MechTimer.TextSize * KBM.Options.MechTimer.tScale)
 	self.Anchor.Text:SetText(" 00.0 Timer Anchor")
 	self.Anchor.Text:SetPoint("CENTERLEFT", self.Anchor, "CENTERLEFT")
-	self.Anchor.Drag = KBM.AttachDragFrame(self.Anchor, function(uType) self.Anchor:Update(uType) end, "Anchor Drag", 2)
+	self.Anchor.Drag = KBM.AttachDragFrame(self.Anchor, function(uType) self.Anchor:Update(uType) end, "Anchor_Drag", 5)
 	self.Anchor:SetVisible(KBM.Options.MechTimer.Visible)
 	self.Anchor.Drag:SetVisible(KBM.Options.MechTimer.Unlocked)
+	function self.Anchor.Drag.Event:WheelForward()
+	
+		if KBM.MechTimer.Settings.ScaleWidth then
+			if KBM.MechTimer.Settings.wScale < 1.5 then
+				KBM.MechTimer.Settings.wScale = KBM.MechTimer.Settings.wScale + 0.025
+				if KBM.MechTimer.Settings.wScale > 1.5 then
+					KBM.MechTimer.Settings.wScale = 1.5
+				end
+				KBM.MechTimer.Anchor:SetWidth(KBM.MechTimer.Settings.wScale * KBM.MechTimer.Settings.w)
+			end
+		end
+		if KBM.MechTimer.Settings.ScaleHeight then
+			if KBM.MechTimer.Settings.hScale < 1.5 then
+				KBM.MechTimer.Settings.hScale = KBM.MechTimer.Settings.hScale + 0.025
+				if KBM.MechTimer.Settings.hScale > 1.5 then
+					KBM.MechTimer.Settings.hScale = 1.5
+				end
+				KBM.MechTimer.Anchor:SetHeight(KBM.MechTimer.Settings.hScale * KBM.MechTimer.Settings.h)
+				if #KBM.MechTimer.ActiveTimers > 0 then
+					for _, Timer in ipairs(KBM.MechTimer.ActiveTimers) do
+						Timer.GUI.Background:SetHeight(KBM.MechTimer.Anchor:GetHeight())
+					end
+				end
+			end
+		end
+		if KBM.MechTimer.Settings.TextScale then
+			if KBM.MechTimer.Settings.tScale < 1.5 then
+				KBM.MechTimer.Settings.tScale = KBM.MechTimer.Settings.tScale + 0.025
+				if KBM.MechTimer.Settings.tScale > 1.5 then
+					KBM.MechTimer.Settings.tScale = 1.5
+				end
+				KBM.MechTimer.Anchor.Text:SetFontSize(KBM.MechTimer.Settings.TextSize * KBM.MechTimer.Settings.tScale)
+				if #KBM.MechTimer.ActiveTimers > 0 then
+					for _, Timer in ipairs(KBM.MechTimer.ActiveTimers) do
+						Timer.GUI.CastInfo:SetFontSize(KBM.MechTimer.Settings.tScale * KBM.MechTimer.Settings.TextSize)
+						Timer.GUI.Shadow:SetFontSize(KBM.MechTimer.Settings.tScale * KBM.MechTimer.Settings.TextSize)
+					end
+				end
+			end
+		end
+		
+	end
+	function self.Anchor.Drag.Event:WheelBack()
+		
+		if KBM.MechTimer.Settings.ScaleWidth then
+			if KBM.MechTimer.Settings.wScale > 0.5 then
+				KBM.MechTimer.Settings.wScale = KBM.MechTimer.Settings.wScale - 0.025
+				if KBM.MechTimer.Settings.wScale < 0.5 then
+					KBM.MechTimer.Settings.wScale = 0.5
+				end
+				KBM.MechTimer.Anchor:SetWidth(KBM.MechTimer.Settings.wScale * KBM.MechTimer.Settings.w)
+			end
+		end
+		if KBM.MechTimer.Settings.ScaleHeight then
+			if KBM.MechTimer.Settings.hScale > 0.5 then
+				KBM.MechTimer.Settings.hScale = KBM.MechTimer.Settings.hScale - 0.025
+				if KBM.MechTimer.Settings.hScale < 0.5 then
+					KBM.MechTimer.Settings.hScale = 0.5
+				end
+				KBM.MechTimer.Anchor:SetHeight(KBM.MechTimer.Settings.hScale * KBM.MechTimer.Settings.h)
+				if #KBM.MechTimer.ActiveTimers > 0 then
+					for _, Timer in ipairs(KBM.MechTimer.ActiveTimers) do
+						Timer.GUI.Background:SetHeight(KBM.MechTimer.Anchor:GetHeight())
+					end
+				end
+			end
+		end
+		if KBM.MechTimer.Settings.TextScale then
+			if KBM.MechTimer.Settings.tScale > 0.5 then
+				KBM.MechTimer.Settings.tScale = KBM.MechTimer.Settings.tScale - 0.025
+				if KBM.MechTimer.Settings.tScale < 0.5 then
+					KBM.MechTimer.Settings.tScale = 0.5
+				end
+				KBM.MechTimer.Anchor.Text:SetFontSize(KBM.MechTimer.Settings.tScale * KBM.MechTimer.Settings.TextSize)
+				if #KBM.MechTimer.ActiveTimers > 0 then
+					for _, Timer in ipairs(KBM.MechTimer.ActiveTimers) do
+						Timer.GUI.CastInfo:SetFontSize(KBM.MechTimer.Settings.tScale * KBM.MechTimer.Settings.TextSize)
+						Timer.GUI.Shadow:SetFontSize(KBM.MechTimer.Settings.tScale * KBM.MechTimer.Settings.TextSize)
+					end
+				end				
+			end
+		end
+	end
 	
 end
 
@@ -472,31 +557,37 @@ function KBM.MechTimer:Pull()
 		GUI = table.remove(self.Store)
 	else
 		GUI.Background = UI.CreateFrame("Frame", "Timer_Frame", KBM.Context)
-		GUI.Background:SetWidth(KBM.Options.MechTimer.w * KBM.Options.MechTimer.wScale)
-		GUI.Background:SetHeight(KBM.Options.MechTimer.h * KBM.Options.MechTimer.hScale)
+		GUI.Background:SetPoint("LEFT", KBM.MechTimer.Anchor, "LEFT")
+		GUI.Background:SetPoint("RIGHT", KBM.MechTimer.Anchor, "RIGHT")
+		GUI.Background:SetHeight(KBM.MechTimer.Anchor:GetHeight())
 		GUI.Background:SetBackgroundColor(0,0,0,0.33)
+		GUI.Background:SetMouseMasking("limited")
 		GUI.TimeBar = UI.CreateFrame("Frame", "Timer_Progress_Frame", GUI.Background)
-		GUI.TimeBar:SetWidth(KBM.Options.MechTimer.w * KBM.Options.MechTimer.wScale)
-		GUI.TimeBar:SetHeight(KBM.Options.MechTimer.h * KBM.Options.MechTimer.hScale)
+		GUI.TimeBar:SetWidth(KBM.MechTimer.Anchor:GetWidth())
+		GUI.TimeBar:SetPoint("BOTTOM", GUI.Background, "BOTTOM")
 		GUI.TimeBar:SetPoint("TOPLEFT", GUI.Background, "TOPLEFT")
 		GUI.TimeBar:SetLayer(1)
 		GUI.TimeBar:SetBackgroundColor(0,0,1,0.33)
+		GUI.TimeBar:SetMouseMasking("limited")
 		GUI.CastInfo = UI.CreateFrame("Text", "Timer_Text_Frame", GUI.Background)
-		GUI.CastInfo:SetFontSize(KBM.Options.MechTimer.TextSize)
+		GUI.CastInfo:SetFontSize(KBM.Options.MechTimer.TextSize * KBM.Options.MechTimer.tScale)
 		GUI.CastInfo:SetPoint("CENTERLEFT", GUI.Background, "CENTERLEFT")
 		GUI.CastInfo:SetLayer(3)
 		GUI.CastInfo:SetFontColor(1,1,1)
+		GUI.CastInfo:SetMouseMasking("limited")
 		GUI.Shadow = UI.CreateFrame("Text", "Timer_Text_Shadow", GUI.Background)
-		GUI.Shadow:SetFontSize(KBM.Options.MechTimer.TextSize)
+		GUI.Shadow:SetFontSize(KBM.Options.MechTimer.TextSize * KBM.Options.MechTimer.tScale)
 		GUI.Shadow:SetPoint("CENTER", GUI.CastInfo, "CENTER", 2, 2)
 		GUI.Shadow:SetLayer(2)
 		GUI.Shadow:SetFontColor(0,0,0)
+		GUI.Shadow:SetMouseMasking("limited")
 		GUI.Texture = UI.CreateFrame("Texture", "Timer_Skin", GUI.Background)
 		GUI.Texture:SetTexture("KingMolinator", "Media/BarSkin.png")
 		GUI.Texture:SetAlpha(KBM.Options.MechTimer.TextureAlpha)
 		GUI.Texture:SetPoint("TOPLEFT", GUI.Background, "TOPLEFT")
 		GUI.Texture:SetPoint("BOTTOMRIGHT", GUI.Background, "BOTTOMRIGHT")
 		GUI.Texture:SetLayer(4)
+		GUI.Texture:SetMouseMasking("limited")
 	end
 	return GUI
 
@@ -551,6 +642,9 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 			end
 			local Anchor = KBM.MechTimer.Anchor
 			self.GUI = KBM.MechTimer:Pull()
+			self.GUI.Background:SetHeight(KBM.MechTimer.Anchor:GetHeight())
+			self.GUI.CastInfo:SetFontSize(KBM.MechTimer.Settings.TextSize * KBM.MechTimer.Settings.tScale)
+			self.GUI.Shadow:SetFontSize(self.GUI.CastInfo:GetFontSize())
 			self.TimeStart = CurrentTime
 			self.Remaining = self.Time
 			self.GUI.CastInfo:SetText(string.format(" %0.01f : ", self.Remaining)..self.Name)
@@ -594,6 +688,9 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 				table.insert(KBM.MechTimer.ActiveTimers, self)
 				self.Active = true
 				KBM.MechTimer.LastTimer = self
+				if KBM.Options.MechTimer.Visible then
+					KBM.MechTimer.Anchor.Text:SetVisible(false)
+				end
 			end
 			self.GUI.Background:SetVisible(true)
 			self.Starting = false
@@ -614,6 +711,9 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 				if Timer == self then
 					if #KBM.MechTimer.ActiveTimers == 1 then
 						KBM.MechTimer.LastTimer = nil
+						if KBM.Options.MechTimer.Visible then
+							KBM.MechTimer.Anchor.Text:SetVisible(true)
+						end
 					elseif i == 1 then
 						KBM.MechTimer.ActiveTimers[i+1].GUI.Background:SetPoint("TOPLEFT", KBM.MechTimer.Anchor, "TOPLEFT")
 					elseif i == #KBM.MechTimer.ActiveTimers then
@@ -644,6 +744,13 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 					end
 				end
 			end
+			if self.TimerAfter then
+				if KBM.Encounter then
+					if self.TimerAfter.Phase == KBM_CurrentMod.Phase or self.TimerAfter.Phase == 0 then
+						KBM.MechTimer:AddStart(self.TimerAfter)
+					end
+				end
+			end
 		end
 	end
 	
@@ -654,9 +761,13 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 	end
 	
 	function Timer:AddTimer(TimerObj, Time)
-		self.Timers[Time] = {}
-		self.Timers[Time].Triggered = false
-		self.Timers[Time].TimerObj = TimerObj
+		if Time == 0 then
+			self.TimerAfter = TimerObj
+		else
+			self.Timers[Time] = {}
+			self.Timers[Time].Triggered = false
+			self.Timers[Time].TimerObj = TimerObj
+		end
 	end
 	
 	function Timer:AddTrigger(TriggerObj, Time)
@@ -2644,46 +2755,24 @@ function KBM.MenuOptions.Timers:Options()
 	function self:ShowMechAnchor(bool)
 		KBM.Options.MechTimer.Visible = bool
 		KBM.MechTimer.Anchor:SetVisible(bool)
-	end
-	function self:LockMechAnchor(bool)
 		KBM.Options.MechTimer.Unlocked = bool
 		KBM.MechTimer.Anchor.Drag:SetVisible(bool)
+		if #KBM.MechTimer.ActiveTimers > 0 then
+			KBM.MechTimer.Anchor.Text:SetVisible(false)
+		else
+			if bool then
+				KBM.MechTimer.Anchor.Text:SetVisible(true)
+			end
+		end
 	end
 	function self:MechScaleHeight(bool, Check)
 		KBM.Options.MechTimer.ScaleHeight = bool
-		if not bool then
-			KBM.Options.MechTimer.hScale = 1
-			Check.Slider.Bar:SetPosition(100)
-			KBM.MechTimer.Anchor:SetHeight(KBM.Options.MechTimer.h)
-		end
-	end
-	function self:MechhScaleChange(value)
-		KBM.Options.MechTimer.hScale = value * 0.01
-		KBM.MechTimer.Anchor:SetHeight(KBM.Options.MechTimer.h * KBM.Options.MechTimer.hScale)
 	end
 	function self:MechScaleWidth(bool, Check)
 		KBM.Options.MechTimer.ScaleWidth = bool
-		if not bool then
-			KBM.Options.MechTimer.wScale = 1
-			Check.Slider.Bar:SetPosition(100)
-			KBM.MechTimer.Anchor:SetWidth(KBM.Options.MechTimer.w)
-		end
-	end
-	function self:MechwScaleChange(value)
-		KBM.Options.MechTimer.wScale = value * 0.01
-		KBM.MechTimer.Anchor:SetWidth(KBM.Options.MechTimer.w * KBM.Options.MechTimer.wScale)
 	end
 	function self:MechTextSize(bool, Check)
 		KBM.Options.MechTimer.TextScale = bool
-		if not bool then
-			KBM.Options.MechTimer.TextSize = 14
-			Check.Slider.Bar:SetPosition(KBM.Options.MechTimer.TextSize)
-			KBM.MechTimer.Anchor.Text:SetFontSize(KBM.Options.MechTimer.TextSize)
-		end
-	end
-	function self:MechTextChange(value)
-		KBM.Options.MechTimer.TextSize = value
-		KBM.MechTimer.Anchor.Text:SetFontSize(KBM.Options.MechTimer.TextSize)
 	end
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
@@ -2700,17 +2789,9 @@ function KBM.MenuOptions.Timers:Options()
 	MechTimers:AddCheck(KBM.Language.Options.Texture[KBM.Lang], self.MechTexture, KBM.Options.MechTimer.Texture)
 	MechTimers:AddCheck(KBM.Language.Options.Shadow[KBM.Lang], self.MechShadow, KBM.Options.MechTimer.Shadow)
 	MechTimers:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowMechAnchor, KBM.Options.MechTimer.Visible)
-	MechTimers:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.LockMechAnchor, KBM.Options.MechTimer.Unlocked)
-	-- self.MechTimers:AddCheck("Width scaling.", self.MechScaleWidth, KBM.Options.MechTimer.ScaleWidth)
-	-- self.MechTimers:AddCheck("Enable Width mouse wheel scaling.", self.MechWidthMouse, KBM.Options.MechTimer.WidthMouse)
-	-- local slider = self.MechTimers:AddSlider(50, 150, nil, (KBM.Options.MechTimer.wScale*100))
-	-- Mechwidth:LinkSlider(slider, self.MechwScaleChange)
-	-- local Mechheight = self.MechTimers:AddCheck("Height scaling.", self.MechScaleHeight, KBM.Options.MechTimer.ScaleHeight)
-	-- slider = self.MechTimers:AddSlider(50, 150, nil, (KBM.Options.MechTimer.hScale*100))
-	-- Mechheight:LinkSlider(slider, self.MechhScaleChange)
-	-- local MechText = self.MechTimers:AddCheck("Text Size", self.MechTextSize, KBM.Options.MechTimer.TextScale)
-	-- slider = self.MechTimers:AddSlider(8, 20, nil, KBM.Options.MechTimer.TextSize)
-	-- MechText:LinkSlider(slider, self.MechTextChange)
+	MechTimers:AddCheck("Unlock width scaling.", self.MechScaleWidth, KBM.Options.MechTimer.ScaleWidth)
+	MechTimers:AddCheck("Unlock height scaling.", self.MechScaleHeight, KBM.Options.MechTimer.ScaleHeight)
+	MechTimers:AddCheck("Unlock text size.", self.MechTextSize, KBM.Options.MechTimer.TextScale)
 	
 end
 

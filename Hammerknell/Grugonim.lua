@@ -74,7 +74,9 @@ GR.Lang.Ability.Bile = KBM.Language:Add("Corrosive Bile")
 GR.Lang.Ability.Bile.German = "Ätzende Galle"
 GR.Lang.Ability.Bile.French = "Vase corrosive"
 GR.Lang.Ability.Breath = KBM.Language:Add("Necrotic Breath")
+GR.Lang.Ability.Breath.German = "Nekrotischer Atem"
 GR.Lang.Ability.Disruption = KBM.Language:Add("Seismic Disruption")
+GR.Lang.Ability.Disruption.German = "Seismische Störung"
 
 GR.Grugonim.Name = GR.Lang.Grugonim[KBM.Lang]
 GR.Tower.Name = GR.Lang.Tower[KBM.Lang]
@@ -233,10 +235,10 @@ function GR.TowerPhase()
 	GR.PhaseObj:SetPhase("Towers")
 	if GR.Phase == 1 then
 		GR.Phase = 2
-		GR.PhaseObj.Objectives:AddDeath(GR.Lang.Unit.Tower[KBM.Lang], 3)
+		GR.PhaseObj.Objectives:AddDeath(GR.Tower.Name, 3)
 	else
-		GR.Phase = 5
-		GR.PhaseObj.Objectives:AddDeath(GR.Lang.Unit.Tower[KBM.Lang], 6)
+		GR.Phase = 4
+		GR.PhaseObj.Objectives:AddDeath(GR.Tower.Name, 6)
 	end
 
 end

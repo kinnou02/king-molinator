@@ -1,4 +1,19 @@
-﻿v0.7.5
+﻿v0.7.6
+* Mechanic Timers
+** Note: To change various unlocked states, move the mouse wheel back and forward over the anchor.
+** Change: When the Anchor is visible, it automatically allows movement of the timers.
+** New: Ability to globally change the width. (50%-150%)
+** New: Ability to globally change the height. (50%-150%)
+** New: Ability to globally change the text size. (50%-150% Limited to actual Text Sizes)
+** New: Ability to globally change the transparency. (20-100%)
+* Hammerknell
+** New: Akylios: Phase 2 first add spawn timer added, which cues Phase 2 add timer.
+** Fix: Grugonim: Tower Phase looking for incorrect Unit name.
+* German Translations
+** Added: HK: Grugonim: Necrotic Breath
+** Added: HK: Grugonim: Seismic Disruption
+----
+v0.7.5
 * Fixed: Alerts were misbehaving and ignoring their individual settings.
 * Note: All Screen alerts can now be individually filtered per encounter.
 * Hammerknell
