@@ -226,7 +226,7 @@ function MX:UnitHPCheck(unitDetails, unitID)
 					KBM.TankSwap:Start(self.Lang.Debuff.Mangled[KBM.Lang])
 					self.PhaseObj.Objectives:AddPercent(self.Murd.Name, 75, 100)
 					self.PhaseObj:Start(self.StartTime)
-					slef.PhaseObj:SetPhase(1)
+					self.PhaseObj:SetPhase(1)
 				end
 				self.Murd.UnitID = unitID
 				self.Murd.Available = true

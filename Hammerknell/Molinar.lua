@@ -375,6 +375,8 @@ function KM:UnitHPCheck(unitDetails, unitID)
 						self.HeldTime = self.StartTime
 						self.TimeElapsed = 0
 						self.PhaseObj:Start(self.StartTime)
+						self.Phase = 1
+						self.PhaseObj:SetPhase(1)
 						self.PhaseObj.Objectives:AddPercent(self.King.Name, 90, 100)
 						self.PhaseObj.Objectives:AddPercent(self.Prince.Name, 90, 100)
 					end
@@ -398,6 +400,8 @@ function KM:UnitHPCheck(unitDetails, unitID)
 						self.HeldTime = self.StartTime
 						self.TimeElapsed = 0
 						self.PhaseObj:Start(self.StartTime)
+						self.Phase = 1
+						self.PhaseObj:SetPhase(1)
 						self.PhaseObj.Objectives:AddPercent(self.King.Name, 90, 100)
 						self.PhaseObj.Objectives:AddPercent(self.Prince.Name, 90, 100)
 					end
