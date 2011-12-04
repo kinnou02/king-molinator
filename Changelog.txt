@@ -1,4 +1,7 @@
-﻿v0.7.6
+﻿v0.7.7
+* Fixed Murdantix
+----
+v0.7.6
 * Mechanic Timers
 ** Note: To change various unlocked states, move the mouse wheel back and forward over the anchor.
 ** Change: When the Anchor is visible, it automatically allows movement of the timers.
