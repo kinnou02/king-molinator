@@ -1,7 +1,17 @@
-﻿v0.7.4
+﻿v0.7.5
+* Fixed: Alerts were misbehaving and ignoring their individual settings.
+* Note: All Screen alerts can now be individualy filtered per encounter.
+* Hammerknell
+** New: Sicaron: Added Phase Tracking support.
+** New: Soulrender Zilas: Added Phase Tracking support.
+** New: Grugonim: Added Advanced Phase Tracking, including Breath counts.
+** New: Grugonim: Added Timer for Necrotic Breath.
+** New: Grugonim: Added Alert warning for Necrotic Breath. (flashing red)
+----
+v0.7.4
 * Fixed: Stop objects re-addressed, only affects Akylios. (rare case)
 * Objective Tracking
-** Change: When using a zero percent target, obective now only displays boss perctange.
+** Change: When using a zero percent target, objective now only displays boss percentage.
 * Hammerknell
 ** New: Matron Zamira: Phase Tracking and boss percent display.
 ** Fixed: Sicaron: Moldering Decay would cause an error.

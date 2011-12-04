@@ -11,16 +11,9 @@ local HK = KBM.BossMod["Hammerknell"]
 
 local SZ = {
 	ModEnabled = true,
-	Zilas = {
-		MenuItem = nil,
-		Enabled = true,
-		Handler = nil,
-		Options = nil,
-	},
 	Instance = HK.Name,
-	HasPhases = true,
-	PhaseType = "percentage",
-	PhaseList = {},
+	PhaseObj = nil,
+	Phase = 1,
 	Timers = {},
 	Lang = {},
 	ID = "Zilas",
@@ -174,6 +167,9 @@ function SZ:UnitHPCheck(unitDetails, unitID)
 					self.Zilas.Dead = false
 					self.Zilas.Casting = false
 					self.Zilas.CastBar:Create(unitID)
+					self.PhaseObj.Objectives:AddPercent(self.Zilas.Name, 80, 100)
+					self.PhaseObj:Start(self.StartTime)
+					self.PhaseObj:SetPhase(1)
 				end
 				self.Zilas.UnitID = unitID
 				self.Zilas.Available = true
@@ -183,11 +179,55 @@ function SZ:UnitHPCheck(unitDetails, unitID)
 	end
 end
 
+function SZ.PhaseTwo()
+	
+	SZ.Phase = 2
+	SZ.PhaseObj.Objectives:Remove()
+	SZ.PhaseObj:SetPhase(2)
+	SZ.PhaseObj.Objectives:AddPercent(SZ.Zilas.Name, 60, 80)
+	print("Phase 2 Starting!")
+	
+end
+
+function SZ.PhaseThree()
+
+	SZ.Phase = 3
+	SZ.PhaseObj.Objectives:Remove()
+	SZ.PhaseObj:SetPhase(3)
+	SZ.PhaseObj.Objectives:AddPercent(SZ.Zilas.Name, 40, 60)
+	print("Phase 3 Starting! - Kite phase incoming.")
+
+end
+
+function SZ.PhaseFour()
+
+	SZ.Phase = 4
+	SZ.PhaseObj.Objectives:Remove()
+	SZ.PhaseObj:SetPhase(4)
+	SZ.PhaseObj.Objectives:AddPercent(SZ.Zilas.Name, 20, 40)
+	print("Phase 4 Starting!")
+	
+end
+
+function SZ.PhaseFive()
+
+	SZ.Phase = 5
+	SZ.PhaseObj.Objectives:Remove()
+	SZ.PhaseObj:SetPhase("Final")
+	SZ.PhaseObj.Objectives:AddPercent(SZ.Zilas.Name, 0, 20)
+	print("Final Phase!")
+
+end
+
 function SZ:Reset()
+
 	self.EncounterRunning = false
 	self.Zilas.Available = false
 	self.Zilas.UnitID = nil
 	self.Zilas.CastBar:Remove()
+	self.PhaseObj:End(self.TimeElapsed)
+	self.Phase = 1
+	
 end
 
 function SZ:Timer()
@@ -268,8 +308,19 @@ function SZ:Start()
 	self.Zilas.Triggers.Grasp:AddTimer(self.Zilas.TimersRef.Grasp)
 	self.Zilas.Triggers.Grasp:AddAlert(self.Zilas.AlertsRef.GraspWarn)
 	self.Zilas.AlertsRef.GraspWarn:AlertEnd(self.Zilas.AlertsRef.Grasp)
+	self.Zilas.Triggers.PhaseTwo = KBM.Trigger:Create(80, "percent", self.Zilas)
+	self.Zilas.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
+	self.Zilas.Triggers.PhaseThree = KBM.Trigger:Create(60, "percent", self.Zilas)
+	self.Zilas.Triggers.PhaseThree:AddPhase(self.PhaseThree)
+	self.Zilas.Triggers.PhaseFour = KBM.Trigger:Create(40, "percent", self.Zilas)
+	self.Zilas.Triggers.PhaseFour:AddPhase(self.PhaseFour)
+	self.Zilas.Triggers.PhaseFive = KBM.Trigger:Create(20, "percent", self.Zilas)
+	self.Zilas.Triggers.PhaseFive:AddPhase(self.PhaseFive)
 	
 	-- Assign Castbar object.
 	self.Zilas.CastBar = KBM.CastBar:Add(self, self.Zilas, true)
+	
+	-- Assing Phase Tracking.
+	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

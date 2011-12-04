@@ -1040,28 +1040,74 @@ function KBM.PhaseMonitor:Init()
 	self.Active = false
 	
 	self.Objectives.Lists = {}
+	self.Objectives.Lists.Meta = {}
 	self.Objectives.Lists.Death = {}
 	self.Objectives.Lists.Percent = {}
 	self.Objectives.Lists.Time = {}
 	self.Objectives.Lists.All = {}
 	self.Objectives.Lists.LastObjective = nil
+	self.Objectives.Lists.Count = 0
 	
 	function self.Objectives.Lists:Add(Object)
-		if #self.All then
-			Object.Previous = self.All[#self.All]
+	
+		if self.Count > 0 then
+			Object.Previous = self.LastObjective
 		end
+		self.Count = self.Count + 1
 		self.LastObjective = Object
-		table.insert(self.All, Object)
+		self.All[self.Count] = Object
 		if Object.Previous then
+			-- Appended to current List
 			Object.GUI.Frame:SetPoint("TOP", Object.Previous.GUI.Frame, "BOTTOM")
+			Object.Previous.Next = Object
+			Object.Next = nil
 		else
+			-- First in the list
 			Object.GUI.Frame:SetPoint("TOP", KBM.PhaseMonitor.Frame, "BOTTOM")
+			Object.Previous = nil
+			Object.Next = nil
+		end
+		Object.Index = self.Count
+		
+	end
+	
+	function self.Objectives.Lists:Remove(Object)
+	
+		if self.Count == 1 then
+			Object.GUI.Frame:SetVisible(false)
+			table.insert(KBM.PhaseMonitor.ObjectiveStore, Object.GUI)
+			self[Object.Type][Object.Name] = nil
+			self[Object.Type] = {}
+			self.All = {}
+			Object = nil
+			self.Count = 0
+		else
+			Object.GUI.Frame:SetVisible(false)
+			table.insert(KBM.PhaseMonitor.ObjectiveStore, Object.GUI)
+			if Object.Next then
+				if Object.Previous then
+					-- Next Object is now after this objects previous in the list.
+					Object.Previous.Next = Object.Next
+					Object.Next.GUI.Frame:SetPoint("TOP", Object.Previous.GUI.Frame, "BOTTOM")
+				else
+					-- Next Object is now First in the list
+					Object.Next.Previous = nil
+					Object.Next.GUI.Frame:SetPoint("TOP", KBM.PhaseMonitor.Frame, "BOTTOM")
+				end
+				Object.Next.Index = Object.Next.Index - 1
+			else
+				-- This object was the last object in the list, and now the previous object is.
+				Object.Previous.Next = nil
+				self.LastObjective = Object.Previous
+			end
+			self[Object.Type][Object.Name] = nil
+			self.All[Object.Index] = nil
+			Object = nil
+			self.Count = self.Count - 1
 		end
 		
 	end
-	function self.Objectives.Lists:Remove(Object)
 	
-	end
 	function self:SetPhase(Phase)
 		self.Phase = Phase
 		self.Frame.Text:SetText("Phase: "..Phase)
@@ -1085,14 +1131,41 @@ function KBM.PhaseMonitor:Init()
 			KBM.PhaseMonitor:SetPhase(Phase)
 		end
 		
+		function PhaseObj.Objectives:AddMeta(Name, Target, Total)
+		
+			local MetaObj = {}
+			MetaObj.Count = Total
+			MetaObj.Target = Target
+			MetaObj.Name = Name
+			MetaObj.GUI = KBM.PhaseMonitor:PullObjective()
+			MetaObj.GUI.Text:SetText(Name)
+			MetaObj.GUI.Objective:SetText(MetaObj.Count.."/"..MetaObj.Target)
+			MetaObj.Type = "Meta"
+			
+			function MetaObj:Update(Total)
+				if self.Target < Total then
+					self.Count = Total
+					self.GUI.Objective:SetText(self.Count.."/"..self.Target)
+				end
+			end
+			
+			KBM.PhaseMonitor.Objectives.Lists.Meta[Name] = MetaObj
+			KBM.PhaseMonitor.Objectives.Lists:Add(MetaObj)
+			
+			MetaObj.GUI.Frame:SetVisible(true)
+		
+		end
+		
 		function PhaseObj.Objectives:AddDeath(Name, Total)
 			
 			local DeathObj = {}
 			DeathObj.Count = 0
 			DeathObj.Total = Total
+			DeathObj.Name = Name
 			DeathObj.GUI = KBM.PhaseMonitor:PullObjective()
 			DeathObj.GUI.Text:SetText(Name)
 			DeathObj.GUI.Objective:SetText(DeathObj.Count.."/"..DeathObj.Total)
+			DeathObj.Type = "Death"
 			
 			function DeathObj:Kill()
 				if self.Count < Total then
@@ -1118,6 +1191,7 @@ function KBM.PhaseMonitor:Init()
 			PercentObj.GUI = KBM.PhaseMonitor:PullObjective()
 			PercentObj.GUI.Text:SetText(Name)
 			PercentObj.GUI.Objective:SetText(PercentObj.Percent.."%/"..PercentObj.Target.."%")
+			PercentObj.Type = "Percent"
 			
 			function PercentObj:Update(PercentRaw)
 				self.PercentRaw = PercentRaw
@@ -1142,16 +1216,23 @@ function KBM.PhaseMonitor:Init()
 	
 		end
 		
-		function PhaseObj.Objectives:Remove()
-			for _, Object in ipairs(KBM.PhaseMonitor.Objectives.Lists.All) do
-				Object.GUI.Frame:SetVisible(false)
-				table.insert(KBM.PhaseMonitor.ObjectiveStore, Object.GUI)
-			end
-			for ListName, List in pairs(KBM.PhaseMonitor.Objectives.Lists) do
-				if type(List) == "table" then
-					KBM.PhaseMonitor.Objectives.Lists[ListName] = {}
+		function PhaseObj.Objectives:Remove(Name)
+		
+			if Name then
+				KBM.PhaseMonitor.Objectives.Lists:Remove(KBM.PhaseMonitor.Lists.All[Name])
+			else
+				for _, Object in ipairs(KBM.PhaseMonitor.Objectives.Lists.All) do
+					Object.GUI.Frame:SetVisible(false)
+					table.insert(KBM.PhaseMonitor.ObjectiveStore, Object.GUI)
 				end
+				for ListName, List in pairs(KBM.PhaseMonitor.Objectives.Lists) do
+					if type(List) == "table" then
+						KBM.PhaseMonitor.Objectives.Lists[ListName] = {}
+					end
+				end
+				KBM.PhaseMonitor.Objectives.Lists.Count = 0
 			end
+			
 		end
 		
 		function PhaseObj:Start(Time)
@@ -1821,6 +1902,7 @@ function KBM.Alert:Init()
 	self.Anchor.Drag:SetVisible(KBM.Options.Alert.Unlocked)
 	
 	function self:Create(Text, Duration, Flash, Countdown, Color)
+	
 		AlertObj = {}
 		AlertObj.DefDuration = Duration
 		AlertObj.Duration = Duration
@@ -1832,7 +1914,7 @@ function KBM.Alert:Init()
 		end
 		AlertObj.Text = Text
 		AlertObj.Countdown = Countdown
-		AlertObj.Enabled = false
+		AlertObj.Enabled = true
 		AlertObj.AlertAfter = nil
 		AlertObj.isImportant = false
 		
@@ -1846,60 +1928,63 @@ function KBM.Alert:Init()
 		
 		table.insert(self.List, AlertObj)
 		return AlertObj
+		
 	end
 	function self:Start(AlertObj, CurrentTime, Duration)
 		
 		if KBM.Options.Alert.Enabled then
-			if self.Starting then
-				return
-			end
-			if self.Current then
-				if self.Current.isImportant then
+			if AlertObj.Enabled then
+				if self.Starting then
 					return
 				end
-				self.Starting = true
-				self:Stop()
-			else
-				self.Starting = true
-			end
-			self.Duration = AlertObj.Duration
-			if Duration then
-				if not AlertObj.DefDuration then
-					self.Duration = Duration
+				if self.Current then
+					if self.Current.isImportant then
+						return
+					end
+					self.Starting = true
+					self:Stop()
+				else
+					self.Starting = true
 				end
-			else
-				if not AlertObj.DefDuration then
-					self.Duration = 2
+				self.Duration = AlertObj.Duration
+				if Duration then
+					if not AlertObj.DefDuration then
+						self.Duration = Duration
+					end
+				else
+					if not AlertObj.DefDuration then
+						self.Duration = 2
+					end
 				end
-			end
-			self.Current = AlertObj
-			AlertObj.Duration = self.Duration
-			self.Alpha = 1
-			if KBM.Options.Alert.Flash then
-				self.Color = AlertObj.Color
-				self.Left[self.Color]:SetAlpha(1)
-				self.Left[self.Color]:SetVisible(true)
-				self.Right[self.Color]:SetAlpha(1)
-				self.Right[self.Color]:SetVisible(true)
-				self.Direction = -self.Speed
-				self.Flash = AlertObj.Flash
-			end
-			if KBM.Options.Alert.Notify then
-				if AlertObj.Text then
-					self.Shadow:SetText(AlertObj.Text)
-					self.Text:SetText(AlertObj.Text)
-					self.Anchor:SetVisible(true)
-					self.Anchor:SetAlpha(1)
+				self.Current = AlertObj
+				AlertObj.Duration = self.Duration
+				self.Alpha = 1
+				if KBM.Options.Alert.Flash then
+					self.Color = AlertObj.Color
+					self.Left[self.Color]:SetAlpha(1)
+					self.Left[self.Color]:SetVisible(true)
+					self.Right[self.Color]:SetAlpha(1)
+					self.Right[self.Color]:SetVisible(true)
+					self.Direction = -self.Speed
+					self.Flash = AlertObj.Flash
 				end
+				if KBM.Options.Alert.Notify then
+					if AlertObj.Text then
+						self.Shadow:SetText(AlertObj.Text)
+						self.Text:SetText(AlertObj.Text)
+						self.Anchor:SetVisible(true)
+						self.Anchor:SetAlpha(1)
+					end
+				end
+				if self.Duration then
+					self.StopTime = CurrentTime + AlertObj.Duration
+					self.Remaining = self.StopTime - CurrentTime
+				else
+					self.StopTime = 0
+				end
+				self:Update(CurrentTime)
+				self.Starting = false
 			end
-			if self.Duration then
-				self.StopTime = CurrentTime + AlertObj.Duration
-				self.Remaining = self.StopTime - CurrentTime
-			else
-				self.StopTime = 0
-			end
-			self:Update(CurrentTime)
-			self.Starting = false
 		end
 	end
 	function self:Stop()

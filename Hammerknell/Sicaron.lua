@@ -11,19 +11,12 @@ local HK = KBM.BossMod["Hammerknell"]
 
 local SN = {
 	ModEnabled = true,
-	Sicaron = {
-		MenuItem = nil,
-		Enabled = true,
-		Handler = nil,
-		Options = nil,
-	},
 	Instance = HK.Name,
-	HasPhases = true,
-	PhaseType = "percentage",
-	PhaseList = {},
 	Timers = {},
 	Lang = {},
 	Enrage = 60 * 12,
+	PhaseObj = nil,
+	Phase = 1,
 	ID = "Sicaron",
 }
 
@@ -164,19 +157,23 @@ function SN:Castbar(units)
 end
 
 function SN:RemoveUnits(UnitID)
+
 	if self.Sicaron.UnitID == UnitID then
 		self.Sicaron.Available = false
 		return true
 	end
 	return false
+	
 end
 
 function SN:Death(UnitID)
+
 	if self.Sicaron.UnitID == UnitID then
 		self.Sicaron.Dead = true
 		return true
 	end
 	return false
+	
 end
 
 function SN:UnitHPCheck(unitDetails, unitID)
@@ -192,6 +189,9 @@ function SN:UnitHPCheck(unitDetails, unitID)
 					self.Sicaron.Dead = false
 					self.Sicaron.Casting = false
 					self.Sicaron.CastBar:Create(unitID)
+					self.PhaseObj.Objectives:AddPercent(self.Sicaron.Name, 80, 100)
+					self.PhaseObj:Start(self.StartTime)
+					self.PhaseObj:SetPhase(1)
 				end
 				self.Sicaron.UnitID = unitID
 				self.Sicaron.Available = true
@@ -201,11 +201,55 @@ function SN:UnitHPCheck(unitDetails, unitID)
 	end
 end
 
+function SN.PhaseTwo()
+
+	SN.Phase = 2
+	SN.PhaseObj.Objectives:Remove()
+	SN.PhaseObj.Objectives:AddPercent(SN.Sicaron.Name, 50, 80)
+	SN.PhaseObj:SetPhase(SN.Phase)
+	print("Phase 2 Starting, 20s purges.")
+
+end
+
+function SN.PhaseThree()
+
+	SN.Phase = 3
+	SN.PhaseObj.Objectives:Remove()
+	SN.PhaseObj.Objectives:AddPercent(SN.Sicaron.Name, 25, 50)
+	SN.PhaseObj:SetPhase(SN.Phase)
+	print("Phase 3 Starting, 16s purges.")
+
+end
+
+function SN.PhaseFour()
+
+	SN.Phase = 4
+	SN.PhaseObj.Objectives:Remove()
+	SN.PhaseObj.Objectives:AddPercent(SN.Sicaron.Name, 10, 25)
+	SN.PhaseObj:SetPhase(SN.Phase)
+	print("Phase 4 Starting, 12s purges.")
+
+end
+
+function SN.PhaseFive()
+
+	SN.Phase = 5
+	SN.PhaseObj.Objectives:Remove()
+	SN.PhaseObj.Objectives:AddPercent(SN.Sicaron.Name, 0, 10)
+	SN.PhaseObj:SetPhase("Final")
+	print("Final Phase! 8s purges.")
+
+end
+
 function SN:Reset()
+	
 	self.EncounterRunning = false
 	self.Sicaron.Available = false
 	self.Sicaron.UnitID = nil
 	self.Sicaron.CastBar:Remove()
+	self.PhaseObj:End(self.TimeElapsed)
+	self.Phase = 1
+	
 end
 
 function SN:Timer()
@@ -327,8 +371,19 @@ function SN:Start()
 	self.Sicaron.Triggers.Decay = KBM.Trigger:Create(self.Lang.Ability.Decay[KBM.Lang], "cast", self.Sicaron)
 	self.Sicaron.Triggers.Decay:AddAlert(self.Sicaron.AlertsRef.Decay)
 	self.Sicaron.Triggers.Decay:AddTimer(self.Sicaron.TimersRef.Decay)
+	self.Sicaron.Triggers.PhaseTwo = KBM.Trigger:Create(80, "percent", self.Sicaron)
+	self.Sicaron.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
+	self.Sicaron.Triggers.PhaseThree = KBM.Trigger:Create(50, "percent", self.Sicaron)
+	self.Sicaron.Triggers.PhaseThree:AddPhase(self.PhaseThree)
+	self.Sicaron.Triggers.PhaseFour = KBM.Trigger:Create(25, "percent", self.Sicaron)
+	self.Sicaron.Triggers.PhaseFour:AddPhase(self.PhaseFour)
+	self.Sicaron.Triggers.PhaseFive = KBM.Trigger:Create(10, "percent", self.Sicaron)
+	self.Sicaron.Triggers.PhaseFive:AddPhase(self.PhaseFive)
 	
 	-- Assign Castbar object.
 	self.Sicaron.CastBar = KBM.CastBar:Add(self, self.Sicaron, true)
+	
+	-- Assign Phase Monitor.
+	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

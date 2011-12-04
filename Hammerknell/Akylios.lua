@@ -73,6 +73,7 @@ AK.Stinger = {
 	Triggers = {},
 	UnitList = {},
 	Ignore = true,
+	Type = "multi",
 }
 
 AK.Lasher = {
@@ -85,6 +86,7 @@ AK.Lasher = {
 	Triggers = {},
 	UnitList = {},
 	Ignore = true,
+	Type = "multi",
 }
 
 KBM.RegisterMod(AK.ID, AK)

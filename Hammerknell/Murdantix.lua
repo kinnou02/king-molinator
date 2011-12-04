@@ -163,40 +163,50 @@ function MX:Castbar()
 end
 
 function MX:RemoveUnits(UnitID)
+
 	if self.Murd.UnitID == UnitID then
 		self.Murd.Available = false
 		return true
 	end
 	return false
+	
 end
 
 function MX:Death(UnitID)
+
 	if self.Murd.UnitID == UnitID then
 		self.Murd.Dead = true
 		return true
 	end
 	return false
+	
 end
 
 function MX.PhaseTwo()
+
 	MX.PhaseObj.Objectives:Remove()
 	MX.Phase = 2
 	MX.PhaseObj:SetPhase(2)
 	MX.PhaseObj.Objectives:AddPercent(MX.Murd.Name, 50, 75)
+	
 end
 
 function MX.PhaseThree()
+
 	MX.PhaseObj.Objectives:Remove()
 	MX.Phase = 3
 	MX.PhaseObj:SetPhase(3)
 	MX.PhaseObj.Objectives:AddPercent(MX.Murd.Name, 25, 50)
+	
 end
 
 function MX.PhaseFour()
+
 	MX.PhaseObj.Objectives:Remove()
 	MX.Phase = 4
 	MX.PhaseObj:SetPhase("Final")
 	MX.PhaseObj.Objectives:AddPercent(MX.Murd.Name, 0, 25)
+	
 end
 
 function MX:UnitHPCheck(unitDetails, unitID)
@@ -216,6 +226,7 @@ function MX:UnitHPCheck(unitDetails, unitID)
 					KBM.TankSwap:Start(self.Lang.Debuff.Mangled[KBM.Lang])
 					self.PhaseObj.Objectives:AddPercent(self.Murd.Name, 75, 100)
 					self.PhaseObj:Start(self.StartTime)
+					slef.PhaseObj:SetPhase(1)
 				end
 				self.Murd.UnitID = unitID
 				self.Murd.Available = true
