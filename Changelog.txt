@@ -1,6 +1,6 @@
 ﻿v0.7.5
 * Fixed: Alerts were misbehaving and ignoring their individual settings.
-* Note: All Screen alerts can now be individualy filtered per encounter.
+* Note: All Screen alerts can now be individually filtered per encounter.
 * Hammerknell
 ** New: Sicaron: Added Phase Tracking support.
 ** New: Soulrender Zilas: Added Phase Tracking support.
