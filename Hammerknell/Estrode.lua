@@ -10,7 +10,7 @@ local KBM = AddonData.data
 local HK = KBM.BossMod["Hammerknell"]
 
 local ES = {
-	ModEnabled = true,
+	Enabled = true,
 	Estrode = {
 		MenuItem = nil,
 		Enabled = true,
@@ -21,7 +21,6 @@ local ES = {
 	HasPhases = true,
 	PhaseType = "percentage",
 	PhaseList = {},
-	Timers = {},
 	Lang = {},
 	Enrage = 60 * 12,
 	ID = "Estrode",
@@ -34,7 +33,6 @@ ES.Estrode = {
 	Name = "Estrode",
 	CastBar = nil,
 	CastFilters = {},
-	Timers = {},
 	TimersRef = {},
 	AlertsRef = {},
 	Dead = false,
@@ -42,6 +40,23 @@ ES.Estrode = {
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+		TimersRef = {
+			Enabled = true,
+			Soul = KBM.Defaults.TimerObj.Create(),
+			Mind = KBM.Defaults.TimerObj.Create(),
+			North = KBM.Defaults.TimerObj.Create(),
+		},
+		AlertsRef = {
+			Enabled = true,
+			Dancing = KBM.Defaults.AlertObj.Create("red", false),
+			DancingWarn = KBM.Defaults.AlertObj.Create("red"),
+			North = KBM.Defaults.AlertObj.Create("orange"),
+			Chastise = KBM.Defaults.AlertObj.Create("yellow"),
+			Rift = KBM.Defaults.AlertObj.Create("orange"),
+		},
+	},
 }
 
 KBM.RegisterMod(ES.ID, ES)
@@ -60,6 +75,7 @@ ES.Lang.Ability.North = KBM.Language:Add("Rage of the North")
 ES.Lang.Ability.North.German = "Wut des Nordens"
 ES.Lang.Ability.Chastise = KBM.Language:Add("Chastise")
 ES.Lang.Ability.Chastise.German = "Züchtigung"
+ES.Lang.Ability.Rift = KBM.Language:Add("Mistress of the Rift")
 
 -- Speak Dictionary
 ES.Lang.Say = {}
@@ -72,38 +88,26 @@ function ES:AddBosses(KBM_Boss)
 	self.Estrode.Descript = self.Estrode.Name
 	self.MenuName = self.Estrode.Descript
 	self.Bosses = {
-		[self.Estrode.Name] = true,
+		[self.Estrode.Name] = self.Estrode,
 	}
 	KBM_Boss[self.Estrode.Name] = self.Estrode	
 end
 
 function ES:InitVars()
 	self.Settings = {
-		Timers = {
-			Enabled = true,
-			Soul = true,
-			Mind = true,
-			North = true,
-		},
-		Alerts = {
-			Enabled = true,
-			Dancing = true,
-			North = true,
-			Chastise = true,
-		},
-		CastBar = {
-			x = false,
-			y = false,
-			Enabled = true,
-		},
+		Enabled = true,
+		EncTimer = KBM.Defaults.EncTimer(),
+		MechTimer = KBM.Defaults.MechTimer(),		
+		Alerts = KBM.Defaults.Alerts(),
+		CastBar = self.Estrode.Settings.CastBar,
+		TimersRef = self.Estrode.Settings.TimersRef,
+		AlertsRef = self.Estrode.Settings.AlertsRef,
 	}
 	KBMES_Settings = self.Settings
-	chKBMES_Settings = self.Settings
-	
+	chKBMES_Settings = self.Settings	
 end
 
 function ES:SwapSettings(bool)
-
 	if bool then
 		KBMES_Settings = self.Settings
 		self.Settings = chKBMES_Settings
@@ -111,53 +115,29 @@ function ES:SwapSettings(bool)
 		chKBMES_Settings = self.Settings
 		self.Settings = KBMES_Settings
 	end
-
 end
 
 function ES:LoadVars()
-
-	local TargetLoad = nil
-	
+	local TargetLoad = nil	
 	if KBM.Options.Character then
-		TargetLoad = chKBMES_Settings
+		KBM.LoadTable(chKBMES_Settings, self.Settings)
 	else
-		TargetLoad = KBMES_Settings
+		KBM.LoadTable(KBMES_Settings, self.Settings)
 	end
-	
-	if type(TargetLoad) == "table" then
-		for Setting, Value in pairs(TargetLoad) do
-			if type(TargetLoad[Setting]) == "table" then
-				if self.Settings[Setting] ~= nil then
-					for tSetting, tValue in pairs(TargetLoad[Setting]) do
-						if self.Settings[Setting][tSetting] ~= nil then
-							self.Settings[Setting][tSetting] = tValue
-						end
-					end
-				end
-			else
-				if self.Settings[Setting] ~= nil then
-					self.Settings[Setting] = Value
-				end
-			end
-		end
-	end
-	
+		
 	if KBM.Options.Character then
 		chKBMES_Settings = self.Settings
 	else
 		KBMES_Settings = self.Settings
-	end
-	
+	end	
 end
 
 function ES:SaveVars()
-
 	if KBM.Options.Character then
 		chKBMES_Settings = self.Settings
 	else
 		KBMES_Settings = self.Settings
-	end
-	
+	end	
 end
 
 function ES:Castbar(units)
@@ -179,8 +159,7 @@ function ES:Death(UnitID)
 	return false
 end
 
-function ES:UnitHPCheck(unitDetails, unitID)
-	
+function ES:UnitHPCheck(unitDetails, unitID)	
 	if unitDetails and unitID then
 		if not unitDetails.player then
 			if unitDetails.name == self.Estrode.Name then
@@ -205,109 +184,56 @@ function ES:Reset()
 	self.EncounterRunning = false
 	self.Estrode.Available = false
 	self.Estrode.UnitID = nil
-	self.Estrode.CastBar:Remove()
+	self.Estrode.CastBar:Remove()	
 end
 
 function ES:Timer()
 	
 end
 
-function ES:SetTimers(bool)
-	
+function ES.Estrode:SetTimers(bool)	
 	if bool then
-		self.Estrode.TimersRef.Soul.Enabled = self.Settings.Timers.Soul
-		self.Estrode.TimersRef.Mind.Enabled = self.Settings.Timers.Mind
-		self.Estrode.TimersRef.North.Enabled = self.Settings.Timers.North
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = TimerObj.Settings.Enabled
+		end
 	else
-		self.Estrode.TimersRef.Soul.Enabled = false
-		self.Estrode.TimersRef.Mind.Enabled = false
-		self.Estrode.TimersRef.North.Enabled = false
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = false
+		end
 	end
-
 end
 
-function ES:SetAlerts(bool)
-
+function ES.Estrode:SetAlerts(bool)
 	if bool then
-		self.Estrode.AlertsRef.Dancing.Enabled = self.Settings.Alerts.Dancing
-		self.Estrode.AlertsRef.North.Enabled = self.Settings.Alerts.North
-		self.Estrode.AlertsRef.Chastise.Enabled = self.Settings.Alerts.Chastise
-		self.Estrode.AlertsRef.DancingWarn.Enabled = self.Settings.Alerts.DancingWarn
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = AlertObj.Settings.Enabled
+		end
 	else
-		self.Estrode.AlertsRef.Dancing.Enabled = false
-		self.Estrode.AlertsRef.North.Enabled = false
-		self.Estrode.AlertsRef.Chastise.Enabled = false
-		self.Estrode.AlertsRef.DancingWarn.Enabled = false
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = false
+		end
 	end
-
 end
 
-function ES.Estrode:Options()
-	-- Timer Options
-	function self:Timers(bool)
-		ES.Settings.Timers.Enabled = bool
-		ES:SetTimers(bool)
-	end
-	function self:SoulEnabled(bool)
-		ES.Settings.Timers.Soul = bool
-		ES.Estrode.TimersRef.Soul.Enabled = bool
-	end
-	function self:MindEnabled(bool)
-		ES.Settings.Timers.Mind = bool
-		ES.Estrode.TimersRef.Mind.Enabled = bool
-	end
-	function self:NorthTimer(bool)
-		ES.Settings.Timers.North = bool
-		ES.Estrode.TimersRef.North.Enabled = bool
-	end
-	-- Alert Options
-	function self:Alerts(bool)
-		ES.Settings.Alerts.Enabled = bool
-		ES:SetAlerts(bool)
-	end
-	function self:DancingAlert(bool)
-		ES.Settings.Alerts.Dancing = bool
-		ES.Estrode.AlertsRef.DancingWarn.Enabled = bool
-		ES.Estrode.AlertsRef.Dancing.Enabled = bool
-	end
-	function self:NorthAlert(bool)
-		ES.Settings.Alerts.North = bool
-		ES.Estrode.AlertsRef.North.Enabled = bool
-	end
-	function self:ChastiseAlert(bool)
-		ES.Settings.Alerts.Chastise = bool
-		ES.Estrode.AlertsRef.Chastise.Enabled = bool
-	end
-	local Options = self.MenuItem.Options
-	Options:SetTitle()
-	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.Timers, ES.Settings.Timers.Enabled)
-	Timers:AddCheck(ES.Lang.Ability.Soul[KBM.Lang], self.SoulEnabled, ES.Settings.Timers.Soul)
-	Timers:AddCheck(ES.Lang.Ability.Mind[KBM.Lang], self.MindEnabled, ES.Settings.Timers.Mind)
-	Timers:AddCheck(ES.Lang.Ability.North[KBM.Lang], self.NorthTimer, ES.Settings.Timers.North)
-	local Alerts = Options:AddHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], self.Alerts, ES.Settings.Alerts.Enabled)
-	Alerts:AddCheck(ES.Lang.Ability.Dancing[KBM.Lang], self.DancingAlert, ES.Settings.Alerts.Dancing)
-	Alerts:AddCheck(ES.Lang.Ability.North[KBM.Lang], self.NorthAlert, ES.Settings.Alerts.North)
-	Alerts:AddCheck(ES.Lang.Ability.Chastise[KBM.Lang], self.ChastiseAlert, ES.Settings.Alerts.Chastise)
-	
+function ES:DefineMenu()
+	self.Menu = HK.Menu:CreateEncounter(self.Estrode, self.Enabled)
 end
 
-function ES:Start()
-	self.Header = KBM.HeaderList[self.Instance]
-	self.Estrode.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Estrode, true, self.Header)
-	self.Estrode.MenuItem.Check:SetEnabled(false)
-	
+function ES:Start()	
 	-- Create Timers
 	self.Estrode.TimersRef.Soul = KBM.MechTimer:Add(self.Lang.Ability.Soul[KBM.Lang], 40)
 	self.Estrode.TimersRef.Mind = KBM.MechTimer:Add(self.Lang.Ability.Mind[KBM.Lang], 60)
 	self.Estrode.TimersRef.North = KBM.MechTimer:Add(self.Lang.Ability.North[KBM.Lang], 8)
-	self:SetTimers(self.Settings.Timers.Enabled)
 	
 	-- Screen Alerts
 	self.Estrode.AlertsRef.DancingWarn = KBM.Alert:Create(self.Lang.Ability.Dancing[KBM.Lang], nil, false, true, "red")
 	self.Estrode.AlertsRef.Dancing = KBM.Alert:Create(self.Lang.Ability.Dancing[KBM.Lang], 6, true, true, "red")
 	self.Estrode.AlertsRef.North = KBM.Alert:Create(self.Lang.Ability.North[KBM.Lang], nil, true, true, "orange")
 	self.Estrode.AlertsRef.Chastise = KBM.Alert:Create(self.Lang.Ability.Chastise[KBM.Lang], nil, true, true, "yellow")
-	self:SetAlerts(self.Settings.Alerts.Enabled)
+	self.Estrode.AlertsRef.Rift = KBM.Alert:Create(self.Lang.Ability.Rift[KBM.Lang], 2, true, true, "orange")
+	
+	KBM.Defaults.TimerObj.Assign(self.Estrode)
+	KBM.Defaults.AlertObj.Assign(self.Estrode)
 	
 	-- Assign Mechanics to Triggers
 	self.Estrode.Triggers.Soul = KBM.Trigger:Create(self.Lang.Ability.Soul[KBM.Lang], "cast", self.Estrode)
@@ -323,6 +249,9 @@ function ES:Start()
 	self.Estrode.Triggers.North:AddTimer(self.Estrode.TimersRef.North)
 	self.Estrode.Triggers.Chastise = KBM.Trigger:Create(self.Lang.Ability.Chastise[KBM.Lang], "cast", self.Estrode)
 	self.Estrode.Triggers.Chastise:AddAlert(self.Estrode.AlertsRef.Chastise)
+	self.Estrode.Triggers.Rift = KBM.Trigger:Create(self.Lang.Ability.Rift[KBM.Lang], "buff", self.Estrode)
+	self.Estrode.Triggers.Rift:AddAlert(self.Estrode.AlertsRef.Rift)
 	
 	self.Estrode.CastBar = KBM.CastBar:Add(self, self.Estrode, true)
+	self:DefineMenu()	
 end

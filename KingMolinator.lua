@@ -9,6 +9,7 @@ local KingMol_Main = {}
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 KBM.BossMod = {}
+KBM.ID = "KingMolinator"
 KBM.ModList = {}
 KBM.Testing = false
 KBM.Debug = false
@@ -41,6 +42,244 @@ KBM.MenuOptions = {
 	ID = "Options",
 }
 
+KBM.Defaults = {}
+
+function KBM.Defaults.EncTimer()
+	local EncTimer = {
+		Type = "EncTimer",
+		Override = false,
+		x = false,
+		y = false,
+		w = 150,
+		h = 25,
+		wScale = 1,
+		hScale = 1,
+		tScale = 1,
+		Enabled = true,
+		Unlocked = true,
+		Visible = true,
+		ScaleWidth = false,
+		ScaleHeight = false,
+		TextSize = 15,
+		TextScale = false,
+		Enrage = true,
+		Duration = true,
+	}
+	return EncTimer
+end
+
+KBM.Defaults.CastFilter = {}
+function KBM.Defaults.CastFilter.Create(Color)
+	if not Color then
+		Color = "red"
+	end
+	if not KBM.Colors.List[Color] then
+		print("Warning: Color error for CastFilter.Create ("..Color..")")
+		print("Color does not exist.")
+	end
+	local FilterObj = {
+		ID = nil,
+		Enabled = true,
+		Color = Color,
+		Custom = false,
+	}
+	return FilterObj
+end
+function KBM.Defaults.CastFilter.Assign(BossObj)
+	if BossObj.HasCastFilters then
+		for ID, Data in pairs(BossObj.Settings.Filters) do
+			if type(Data) == "table" then
+				Data.ID = ID
+			end
+		end
+	end
+end
+
+KBM.Defaults.TimerObj = {}
+function KBM.Defaults.TimerObj.Create(Color, HasMenu)
+	if not Color then
+		Color = "blue"
+	end
+	if HasMenu == nil then
+		HasMenu = true
+	end
+	if not KBM.Colors.List[Color] then
+		print("Warning: Color error for TimerObj.Create ("..Color..")")
+		print("Color Index does not exist.")
+	end
+	local TimerObj = {
+		ID = nil,
+		Enabled = true,
+		HasMenu = HasMenu,
+		Color = Color,
+		Custom = false,
+	}
+	return TimerObj
+end
+function KBM.Defaults.TimerObj.Assign(BossObj)
+	for ID, Data in pairs(BossObj.TimersRef) do
+		if BossObj.Settings.TimersRef[ID] then
+			Data.ID = ID
+			Data.Enabled = BossObj.Settings.TimersRef[ID].Enabled
+			Data.Settings = BossObj.Settings.TimersRef[ID]
+			BossObj.Settings.TimersRef[ID].ID = ID
+			if KBM.Colors.List[Data.Settings.Color] then
+				Data.Color = Data.Settings.Color
+			else
+				print("TimerObj Assign Error: "..Data.ID)
+				print("Color Index ("..Data.Settings.Color..") does not exist, ignoring settings.")
+				print("For: "..BossObj.Name)
+				Data.Settings.Color = Data.Color
+			end
+		else
+			print("Warning: "..ID.." is undefined in TimersRef")
+			print("for boss: "..BossObj.Name)
+			print("---------------")
+		end
+	end
+end	
+
+KBM.Defaults.AlertObj = {}
+function KBM.Defaults.AlertObj.Create(Color, HasMenu)
+	if not Color then
+		Color = "red"
+	end
+	if HasMenu == nil then
+		HasMenu = true
+	end
+	if not KBM.Colors.List[Color] then
+		print("Warning: Color error for AlertObj.Create ("..Color..")")
+		print("Color Index does not exist.")
+	end
+	local AlertObj = {
+		ID = nil,
+		Enabled = true,
+		HasMenu = HasMenu,
+		Color = Color,
+		Custom = false,
+	}
+	return AlertObj
+end
+
+function KBM.Defaults.AlertObj.Assign(BossObj)
+	for ID, Data in pairs(BossObj.AlertsRef) do
+		if BossObj.Settings.AlertsRef[ID] then
+			Data.ID = ID
+			Data.Enabled = BossObj.Settings.AlertsRef[ID].Enabled
+			Data.Settings = BossObj.Settings.AlertsRef[ID]
+			if KBM.Colors.List[Data.Settings.Color] then
+				Data.Color = Data.Settings.Color
+			else
+				print("AlertObj Assign Error: "..Data.ID)
+				print("Color Index ("..Data.Settings.Color..") does not exist, ignoring settings.")
+				print("For: "..BossObj.Name)
+				Data.Settings.Color = Data.Color
+			end
+			BossObj.Settings.AlertsRef[ID].ID = ID
+		else
+			print("Warning: "..ID.." is undefined in AlertsRef")
+			print("for boss: "..BossObj.Name)
+			print("---------------")
+		end
+	end
+end
+
+
+function KBM.Defaults.CastBar()
+	local CastBar = {
+		Override = false,
+		x = false,
+		y = false,
+		w = 350,
+		h = 32,
+		Enabled = true,
+		Shadow = true,
+		Unlocked = true,
+		Visible = true,
+		ScaleWidth = false,
+		wScale = 1,
+		hScale = 1,
+		tScale = 1,
+		Shadow = true,
+		Texture = true,
+		TextureAlpha = 0.75,
+		ScaleHeight = false,
+		TextScale = false,
+		TextSize = 18,
+		Pinned = false,
+		Color = "red",
+		Custom = false,
+		Type = "CastBar",
+	}
+	return CastBar
+end
+
+function KBM.Defaults.PhaseMon()
+	local PhaseMon = {
+		Override = false,
+		x = false,
+		y = false,
+		w = 225,
+		h = 50,
+		wScale = 1,
+		hScale = 1,
+		tScale = 1,
+		Enabled = true,
+		Unlocked = true,
+		Visible = true,
+		ScaleWidth = false,
+		ScaleHeight = false,
+		TextSize = 14,
+		TextScale = false,
+		Objectives = true,
+		PhaseDisplay = true,
+		Type = "PhaseMon",
+	}
+	return PhaseMon
+end
+
+function KBM.Defaults.MechTimer()
+	local MechTimer = {
+		Override = false,
+		x = false,
+		y = false,
+		w = 350,
+		h = 32,
+		wScale = 1,
+		hScale = 1,
+		tScale = 1,
+		Enabled = true,
+		Unlocked = true,
+		Shadow = true,
+		Texture = true,
+		TextureAlpha = 0.75,
+		Visible = true,
+		ScaleWidth = false,
+		ScaleHeight = false,
+		TextSize = 16,
+		TextScale = false,
+		Custom = false,
+		Color = "blue",
+		Type = "MechTimer",
+	}
+	return MechTimer
+end
+
+function KBM.Defaults.Alerts()
+	local Alerts = {
+		Override = false,
+		Enabled = true,
+		Flash = true,
+		Notify = true,
+		Visible = false,
+		Unlocked = false,
+		x = false,
+		y = false,
+		Type = "Alerts",
+	}
+	return Alerts
+end
+
 local function KBM_DefineVars(AddonID)
 	if AddonID == "KingMolinator" then
 		KBM.Options = {
@@ -57,84 +296,11 @@ local function KBM_DefineVars(AddonID)
 				Unlocked = true,
 				Visible = true,
 			},
-			Alert = {
-				Enabled = true,
-				Flash = true,
-				Notify = true,
-				Visible = false,
-				Unlocked = false,
-				x = false,
-				y = false,
-			},
-			EncTimer = {
-				x = false,
-				y = false,
-				w = 150,
-				h = 25,
-				wScale = 1,
-				hScale = 1,
-				Enabled = true,
-				Unlocked = true,
-				Visible = true,
-				ScaleWidth = false,
-				ScaleHeight = false,
-				TextSize = 15,
-				TextScale = false,
-				Enrage = true,
-				Duration = true,
-			},
-			PhaseMon = {
-				x = false,
-				y = false,
-				w = 225,
-				h = 50,
-				wScale = 1,
-				hScale = 1,
-				Enabled = true,
-				Unlocked = true,
-				Visible = true,
-				ScaleWidth = false,
-				ScaleHeight = false,
-				TextSize = 14,
-				TextScale = false,
-				Objectives = true,
-				PhaseDisplay = true,
-			},
-			MechTimer = {
-				x = false,
-				y = false,
-				w = 350,
-				h = 32,
-				wScale = 1,
-				hScale = 1,
-				Enabled = true,
-				Unlocked = true,
-				Shadow = true,
-				Texture = true,
-				TextureAlpha = 0.75,
-				Visible = true,
-				ScaleWidth = false,
-				ScaleHeight = false,
-				TextSize = 16,
-				TextScale = false,
-				tScale = 1,
-			},
-			CastBar = {
-				x = false,
-				y = false,
-				w = 350,
-				h = 32,
-				Enabled = true,
-				Shadow = true,
-				Unlocked = true,
-				Visible = true,
-				ScaleWidth = false,
-				wScale = 1,
-				hScale = 1,
-				ScaleHeight = false,
-				TextScale = false,
-				TextSize = 18,
-			},
+			Alerts = KBM.Defaults.Alerts(),
+			EncTimer = KBM.Defaults.EncTimer(),
+			PhaseMon = KBM.Defaults.PhaseMon(),
+			CastBar = KBM.Defaults.CastBar(),
+			MechTimer = KBM.Defaults.MechTimer(),
 			TankSwap = {
 				x = false,
 				y = false,
@@ -161,52 +327,55 @@ local function KBM_DefineVars(AddonID)
 	end
 end
 
-local function KBM_LoadVars(AddonID)
-
-	local TargetLoad = nil
-
-	if AddonID == "KingMolinator" then
-		if KBM_GlobalOptions.Character then
-			TargetLoad = chKBM_GlobalOptions
-		else
-			TargetLoad = KBM_GlobalOptions
-		end
-		if type(TargetLoad) == "table" then
-			for Setting, Value in pairs(TargetLoad) do
-				if type(TargetLoad[Setting]) == "table" then
-					if KBM.Options[Setting] ~= nil then
-						for tSetting, tValue in pairs(TargetLoad[Setting]) do
-							if KBM.Options[Setting][tSetting] ~= nil then
-								KBM.Options[Setting][tSetting] = tValue
-							end
-						end
+function KBM.LoadTable(Source, Target)
+	if type(Source) == "table" then
+		for Setting, Value in pairs(Source) do
+			if type(Value) == "table" then
+				if Target[Setting] ~= nil then
+					if type(Target[Setting]) == "table" then
+						KBM.LoadTable(Value, Target[Setting])
 					end
-				else
-					if KBM.Options[Setting] ~= nil then
-						KBM.Options[Setting] = Value
+				end
+			else
+				if(Target[Setting]) ~= nil then
+					if type(Target[Settings]) ~= "table" then
+						Target[Setting] = Value
 					end
 				end
 			end
 		end
+	end
+end
+
+local function KBM_LoadVars(AddonID)
+	local TargetLoad = nil
+	if AddonID == "KingMolinator" then
+		if chKBM_GlobalOptions.Character then
+			KBM.LoadTable(chKBM_GlobalOptions, KBM.Options)
+		else
+			KBM.LoadTable(KBM_GlobalOptions, KBM.Options)
+		end		
+				
 		if KBM.Options.Character then
 			chKBM_GlobalOptions = KBM.Options			
 		else
 			KBM_GlobalOptions = KBM.Options		
 		end
+		
 		for _, Mod in ipairs(KBM.ModList) do
 			Mod:LoadVars()
 		end
-		KBM.Debug = KBM.Options.Debug
-		KBM.Options.PhaseMon.w = 225
-		KBM.Options.PhaseMon.TextSize = 14
-		KBM.Options.MechTimer.TextSize = 18
-		KBM.Options.MechTimer.TextureAlpha = 0.75
+		
+		KBM.Debug = KBM.Options.Debug		
+		if KBM.Lang ~= "English" then
+			KBM.Options.TankSwap.Enabled = false
+			KBM.Options.TankSwap.Visible = false
+			KBM.Options.TankSwap.Unlocked = false
+		end
 	end
-	
 end
 
 local function KBM_SaveVars(AddonID)
-
 	if AddonID == "KingMolinator" then
 		if not KBM.Options.Character then
 			KBM_GlobalOptions = KBM.Options
@@ -217,7 +386,6 @@ local function KBM_SaveVars(AddonID)
 			Mod:SaveVars()
 		end
 	end
-	
 end
 
 function KBM.ToAbilityID(num)
@@ -291,7 +459,8 @@ KBM.Trigger = {}
 KBM.Alert = {}
 
 function KBM.Language:Add(Phrase)
-
+	-- Main Dictionary Handler
+	-- All Languages are filled with English versions, until updated.
 	local SetPhrase = {}
 	SetPhrase.English = Phrase
 	SetPhrase.French = Phrase
@@ -306,7 +475,6 @@ function KBM.Language:Add(Phrase)
 	end
 	KBM.Language[Phrase] = SetPhrase
 	return KBM.Language[Phrase]
-	
 end
 
 -- Main Addon Dictionary
@@ -326,6 +494,7 @@ KBM.Language.Encounter.Victory.French = "Victoire, On l'a tué!"
 KBM.Language.Encounter.Victory.German = "Bosskampf erfolgreich!"
 -- Colors
 KBM.Language.Color = {}
+KBM.Language.Color.Custom = KBM.Language:Add("Custom color.")
 KBM.Language.Color.Red = KBM.Language:Add("Red")
 KBM.Language.Color.Blue = KBM.Language:Add("Blue")
 KBM.Language.Color.Dark_Green = KBM.Language:Add("Dark Green")
@@ -334,6 +503,9 @@ KBM.Language.Color.Orange = KBM.Language:Add("Orange")
 KBM.Language.Color.Purple = KBM.Language:Add("Purple")
 -- Cast-bar related
 KBM.Language.Options = {}
+KBM.Language.Options.CastbarOverride = KBM.Language:Add("Castbar: Override")
+KBM.Language.Options.Pinned = KBM.Language:Add("Pin to ")
+KBM.Language.Options.FiltersEnabled = KBM.Language:Add("Enable cast filters")
 KBM.Language.Options.Castbar = KBM.Language:Add("Cast-bars")
 KBM.Language.Options.Castbar.French = "Barres-cast"
 KBM.Language.Options.Castbar.German = "Zauberbalken"
@@ -341,6 +513,8 @@ KBM.Language.Options.CastbarEnabled = KBM.Language:Add("Cast-bars enabled.")
 KBM.Language.Options.CastbarEnabled.French = "Barres-cast activ\195\169."
 KBM.Language.Options.CastbarEnabled.German = "Zauberbalken anzeigen."
 -- Timer Options
+KBM.Language.Options.MechTimerOverride = KBM.Language:Add("Mechanic Timers: Override.")
+KBM.Language.Options.EncTimerOverride = KBM.Language:Add("Encounter Timer: Override.")
 KBM.Language.Options.EncTimers = KBM.Language:Add("Encounter Timers enabled.")
 KBM.Language.Options.EncTimers.German = "Boss Timer anzeigen."
 KBM.Language.Options.MechanicTimers = KBM.Language:Add("Mechanic Timers enabled.")
@@ -369,6 +543,7 @@ KBM.Language.Options.LockAnchor = KBM.Language:Add("Unlock anchor.")
 KBM.Language.Options.LockAnchor.French = "D\195\169bloquer Ancrage."
 KBM.Language.Options.LockAnchor.German = "Anker ist verschiebbar."
 -- Phase Monitor
+KBM.Language.Options.PhaseMonOverride = KBM.Language:Add("Phase Monitor: Override.")
 KBM.Language.Options.PhaseMonitor = KBM.Language:Add("Phase Monitor")
 KBM.Language.Options.PhaseMonitor.German = "Phasen Monitor"
 KBM.Language.Options.PhaseEnabled = KBM.Language:Add("Enable Phase Monitor.")
@@ -394,6 +569,7 @@ KBM.Language.Options.Tank.German = "Zeige Test-Tanks-Fenster."
 KBM.Language.Options.TankSwapEnabled = KBM.Language:Add("Tank-Swaps enabled.")
 KBM.Language.Options.TankSwapEnabled.German = "Tank Wechsel anzeigen."
 -- Alert related
+KBM.Language.Options.AlertsOverride = KBM.Language:Add("Alerts: Override")
 KBM.Language.Options.Alert = KBM.Language:Add("Screen Alerts")
 KBM.Language.Options.Alert.German = "Alarmierungen"
 KBM.Language.Options.Alert.French = "Alerte \195\160 l'\195\169cran"
@@ -406,10 +582,16 @@ KBM.Language.Options.AlertFlash.French = "Flash \195\169cran activ\195\169."
 KBM.Language.Options.AlertText = KBM.Language:Add("Alert warning text enabled.")
 KBM.Language.Options.AlertText.German = "Alarmierungs-Text aktiviert."
 KBM.Language.Options.AlertText.French = "Texte Avertissement Alerte activ\195\169 ."
+-- Size Dictionary
+KBM.Language.Options.UnlockWidth = KBM.Language:Add("Unlock width for scaling.")
+KBM.Language.Options.UnlockHeight = KBM.Language:Add("Unlock height for scaling.")
+KBM.Language.Options.UnlockText = KBM.Language:Add("Unlock Text size.")
+KBM.Language.Options.UnlockAlpha = KBM.Language:Add("Unlock transparency.")
 -- Misc.
 KBM.Language.Options.Character = KBM.Language:Add("Saving settings for this character only.")
 KBM.Language.Options.Character.German = "Einstellungen nur für diesen Charakter speichern."
-KBM.Language.Options.Enabled = KBM.Language:Add("Enable King Boss Mods v"..AddonData.toc.Version)
+KBM.Language.Options.ModEnabled = KBM.Language:Add("Enable King Boss Mods v"..AddonData.toc.Version)
+KBM.Language.Options.Enabled = KBM.Language:Add("Enabled.")
 KBM.Language.Options.Settings = KBM.Language:Add("Settings")
 KBM.Language.Options.Settings.French = "Configurations"
 KBM.Language.Options.Settings.German = "Einstellungen"
@@ -425,8 +607,66 @@ KBM.Language.Timers.Time.German = "Zeit:"
 KBM.Language.Timers.Enrage = KBM.Language:Add("Enrage in:")
 KBM.Language.Timers.Enrage.French = "Enrage dans:"
 
-function KBM.MechTimer:Init()
+-- Main Color Library.
+-- Colors will remain preset based to avoid ugly videos :)
+KBM.Colors = {
+	Count = 6,
+	List = {
+		red = {
+			Name = KBM.Language.Color.Red[KBM.Lang],
+			Red = 1,
+			Green = 0,
+			Blue = 0,
+		},
+		dark_green = {
+			Name = KBM.Language.Color.Dark_Green[KBM.Lang],
+			Red = 0,
+			Green = 0.6,
+			Blue = 0,
+		},
+		orange = {
+			Name = KBM.Language.Color.Orange[KBM.Lang],
+			Red = 1,
+			Green = 0.5,
+			Blue = 0,
+		},
+		blue = {
+			Name = KBM.Language.Color.Blue[KBM.Lang],
+			Red = 0,
+			Green = 0,
+			Blue = 1,
+		},
+		yellow = {
+			Name = KBM.Language.Color.Yellow[KBM.Lang],
+			Red = 1,
+			Green = 1,
+			Blue = 0,
+		},
+		purple = {
+			Name = KBM.Language.Color.Purple[KBM.Lang],
+			Red = 0.85,
+			Green = 0,
+			Blue = 0.65,
+		},
+	}
+}
+function KBM.MechTimer:ApplySettings()
 
+	self.Anchor:ClearAll()
+	if self.Settings.x then
+		self.Anchor:SetPoint("TOPLEFT", UIParent, "TOPLEFT", self.Settings.x, self.Settings.y)
+	else
+		self.Anchor:SetPoint("BOTTOMRIGHT", UIParent, 0.9, 0.5)
+	end
+	self.Anchor:SetWidth(self.Settings.w * self.Settings.wScale)
+	self.Anchor:SetHeight(self.Settings.h * self.Settings.hScale)
+	self.Anchor.Text:SetFontSize(self.Settings.TextSize * self.Settings.tScale)
+	self.Anchor:SetVisible(self.Settings.Visible)
+	self.Anchor.Drag:SetVisible(self.Settings.Unlocked)
+	
+end
+
+function KBM.MechTimer:Init()
 	self.TimerList = {}
 	self.ActiveTimers = {}
 	self.RemoveTimers = {}
@@ -438,34 +678,21 @@ function KBM.MechTimer:Init()
 	self.Settings = KBM.Options.MechTimer
 	self.Anchor = UI.CreateFrame("Frame", "Timer Anchor", KBM.Context)
 	self.Anchor:SetLayer(5)
-	self.Anchor:SetWidth(KBM.Options.MechTimer.w * KBM.Options.MechTimer.wScale)
-	self.Anchor:SetHeight(KBM.Options.MechTimer.h * KBM.Options.MechTimer.hScale)
 	self.Anchor:SetBackgroundColor(0,0,0,0.33)
-	if KBM.Options.MechTimer.x then
-		self.Anchor:SetPoint("LEFT", UIParent, "LEFT", KBM.Options.MechTimer.x, nil)
-	else
-		self.Anchor:SetPoint("CENTERX", UIParent, "CENTERX")
-	end
-	if KBM.Options.MechTimer.y then
-		self.Anchor:SetPoint("TOP", UIParent, "TOP", nil, KBM.Options.MechTimer.y)
-	else
-		self.Anchor:SetPoint("CENTERY", UIParent, "CENTERY")
-	end
+		
 	function self.Anchor:Update(uType)
 		if uType == "end" then
-			KBM.Options.MechTimer.x = self:GetLeft()
-			KBM.Options.MechTimer.y = self:GetTop()
+			KBM.MechTimer.Settings.x = self:GetLeft()
+			KBM.MechTimer.Settings.y = self:GetTop()
 		end
 	end
+	
 	self.Anchor.Text = UI.CreateFrame("Text", "Timer Info", self.Anchor)
-	self.Anchor.Text:SetFontSize(KBM.Options.MechTimer.TextSize * KBM.Options.MechTimer.tScale)
 	self.Anchor.Text:SetText(" 00.0 Timer Anchor")
 	self.Anchor.Text:SetPoint("CENTERLEFT", self.Anchor, "CENTERLEFT")
 	self.Anchor.Drag = KBM.AttachDragFrame(self.Anchor, function(uType) self.Anchor:Update(uType) end, "Anchor_Drag", 5)
-	self.Anchor:SetVisible(KBM.Options.MechTimer.Visible)
-	self.Anchor.Drag:SetVisible(KBM.Options.MechTimer.Unlocked)
-	function self.Anchor.Drag.Event:WheelForward()
 	
+	function self.Anchor.Drag.Event:WheelForward()
 		if KBM.MechTimer.Settings.ScaleWidth then
 			if KBM.MechTimer.Settings.wScale < 1.5 then
 				KBM.MechTimer.Settings.wScale = KBM.MechTimer.Settings.wScale + 0.025
@@ -475,6 +702,7 @@ function KBM.MechTimer:Init()
 				KBM.MechTimer.Anchor:SetWidth(KBM.MechTimer.Settings.wScale * KBM.MechTimer.Settings.w)
 			end
 		end
+		
 		if KBM.MechTimer.Settings.ScaleHeight then
 			if KBM.MechTimer.Settings.hScale < 1.5 then
 				KBM.MechTimer.Settings.hScale = KBM.MechTimer.Settings.hScale + 0.025
@@ -489,6 +717,7 @@ function KBM.MechTimer:Init()
 				end
 			end
 		end
+		
 		if KBM.MechTimer.Settings.TextScale then
 			if KBM.MechTimer.Settings.tScale < 1.5 then
 				KBM.MechTimer.Settings.tScale = KBM.MechTimer.Settings.tScale + 0.025
@@ -504,10 +733,9 @@ function KBM.MechTimer:Init()
 				end
 			end
 		end
-		
 	end
-	function self.Anchor.Drag.Event:WheelBack()
-		
+	
+	function self.Anchor.Drag.Event:WheelBack()		
 		if KBM.MechTimer.Settings.ScaleWidth then
 			if KBM.MechTimer.Settings.wScale > 0.5 then
 				KBM.MechTimer.Settings.wScale = KBM.MechTimer.Settings.wScale - 0.025
@@ -517,6 +745,7 @@ function KBM.MechTimer:Init()
 				KBM.MechTimer.Anchor:SetWidth(KBM.MechTimer.Settings.wScale * KBM.MechTimer.Settings.w)
 			end
 		end
+		
 		if KBM.MechTimer.Settings.ScaleHeight then
 			if KBM.MechTimer.Settings.hScale > 0.5 then
 				KBM.MechTimer.Settings.hScale = KBM.MechTimer.Settings.hScale - 0.025
@@ -531,6 +760,7 @@ function KBM.MechTimer:Init()
 				end
 			end
 		end
+		
 		if KBM.MechTimer.Settings.TextScale then
 			if KBM.MechTimer.Settings.tScale > 0.5 then
 				KBM.MechTimer.Settings.tScale = KBM.MechTimer.Settings.tScale - 0.025
@@ -547,11 +777,11 @@ function KBM.MechTimer:Init()
 			end
 		end
 	end
+	self:ApplySettings()
 	
 end
 
 function KBM.MechTimer:Pull()
-
 	local GUI = {}
 	if #self.Store > 0 then
 		GUI = table.remove(self.Store)
@@ -570,31 +800,29 @@ function KBM.MechTimer:Pull()
 		GUI.TimeBar:SetBackgroundColor(0,0,1,0.33)
 		GUI.TimeBar:SetMouseMasking("limited")
 		GUI.CastInfo = UI.CreateFrame("Text", "Timer_Text_Frame", GUI.Background)
-		GUI.CastInfo:SetFontSize(KBM.Options.MechTimer.TextSize * KBM.Options.MechTimer.tScale)
+		GUI.CastInfo:SetFontSize(KBM.MechTimer.Settings.TextSize * KBM.MechTimer.Settings.tScale)
 		GUI.CastInfo:SetPoint("CENTERLEFT", GUI.Background, "CENTERLEFT")
 		GUI.CastInfo:SetLayer(3)
 		GUI.CastInfo:SetFontColor(1,1,1)
 		GUI.CastInfo:SetMouseMasking("limited")
 		GUI.Shadow = UI.CreateFrame("Text", "Timer_Text_Shadow", GUI.Background)
-		GUI.Shadow:SetFontSize(KBM.Options.MechTimer.TextSize * KBM.Options.MechTimer.tScale)
+		GUI.Shadow:SetFontSize(KBM.MechTimer.Settings.TextSize * KBM.MechTimer.Settings.tScale)
 		GUI.Shadow:SetPoint("CENTER", GUI.CastInfo, "CENTER", 2, 2)
 		GUI.Shadow:SetLayer(2)
 		GUI.Shadow:SetFontColor(0,0,0)
 		GUI.Shadow:SetMouseMasking("limited")
 		GUI.Texture = UI.CreateFrame("Texture", "Timer_Skin", GUI.Background)
 		GUI.Texture:SetTexture("KingMolinator", "Media/BarSkin.png")
-		GUI.Texture:SetAlpha(KBM.Options.MechTimer.TextureAlpha)
+		GUI.Texture:SetAlpha(KBM.MechTimer.Settings.TextureAlpha)
 		GUI.Texture:SetPoint("TOPLEFT", GUI.Background, "TOPLEFT")
 		GUI.Texture:SetPoint("BOTTOMRIGHT", GUI.Background, "BOTTOMRIGHT")
 		GUI.Texture:SetLayer(4)
 		GUI.Texture:SetMouseMasking("limited")
 	end
 	return GUI
-
 end
 
 function KBM.MechTimer:Add(Name, Duration, Repeat)
-
 	local Timer = {}
 	Timer.Active = false
 	Timer.Alerts = {}
@@ -610,6 +838,8 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 	Timer.Name = Name
 	Timer.Phase = 0
 	Timer.Type = "timer"
+	Timer.Custom = false
+	Timer.Color = KBM.Options.MechTimer.Color
 	
 	function self:AddRemove(Object)
 		if not Object.Removing then
@@ -633,8 +863,7 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 		end
 	end
 	
-	function Timer:Start(CurrentTime, DebugInfo)
-	
+	function Timer:Start(CurrentTime, DebugInfo)	
 		if self.Enabled then
 			if self.Active then
 				KBM.MechTimer:AddStart(self)
@@ -648,20 +877,30 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 			self.TimeStart = CurrentTime
 			self.Remaining = self.Time
 			self.GUI.CastInfo:SetText(string.format(" %0.01f : ", self.Remaining)..self.Name)
-			if KBM.Options.MechTimer.Shadow then
+			
+			if KBM.MechTimer.Settings.Shadow then
 				self.GUI.Shadow:SetText(self.GUI.CastInfo:GetText())
 				self.GUI.Shadow:SetVisible(true)
 			else
 				self.GUI.Shadow:SetVisible(false)
 			end
-			if KBM.Options.MechTimer.Texture then
+			
+			if KBM.MechTimer.Settings.Texture then
 				self.GUI.Texture:SetVisible(true)
 			else
 				self.GUI.Texture:SetVisible(false)
 			end
+			
 			if self.Delay then
 				self.Time = Delay
 			end
+			
+			if self.Settings then
+				self.GUI.TimeBar:SetBackgroundColor(KBM.Colors.List[self.Settings.Color].Red, KBM.Colors.List[self.Settings.Color].Green, KBM.Colors.List[self.Settings.Color].Blue, 0.33)
+			else
+				self.GUI.TimeBar:SetBackgroundColor(KBM.Colors.List[KBM.MechTimer.Settings.Color].Red, KBM.Colors.List[KBM.MechTimer.Settings.Color].Green, KBM.Colors.List[KBM.MechTimer.Settings.Color].Blue, 0.33)
+			end
+			
 			if #KBM.MechTimer.ActiveTimers > 0 then
 				for i, cTimer in ipairs(KBM.MechTimer.ActiveTimers) do
 					if self.Remaining < cTimer.Remaining then
@@ -688,14 +927,13 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 				table.insert(KBM.MechTimer.ActiveTimers, self)
 				self.Active = true
 				KBM.MechTimer.LastTimer = self
-				if KBM.Options.MechTimer.Visible then
+				if KBM.MechTimer.Settings.Visible then
 					KBM.MechTimer.Anchor.Text:SetVisible(false)
 				end
 			end
 			self.GUI.Background:SetVisible(true)
 			self.Starting = false
-		end
-		
+		end		
 	end
 	
 	function Timer:Queue()
@@ -711,7 +949,7 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 				if Timer == self then
 					if #KBM.MechTimer.ActiveTimers == 1 then
 						KBM.MechTimer.LastTimer = nil
-						if KBM.Options.MechTimer.Visible then
+						if KBM.MechTimer.Settings.Visible then
 							KBM.MechTimer.Anchor.Text:SetVisible(true)
 						end
 					elseif i == 1 then
@@ -805,7 +1043,6 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 end
 
 function KBM.Trigger:Init()
-
 	self.Queue = {}
 	self.Queue.Locked = false
 	self.Queue.Removing = false
@@ -821,8 +1058,7 @@ function KBM.Trigger:Init()
 	self.Death = {}
 	self.Buff = {}
 
-	function self.Queue:Add(TriggerObj, Caster, Target, Duration)
-	
+	function self.Queue:Add(TriggerObj, Caster, Target, Duration)	
 		if KBM.Encounter or KBM.Testing then
 			if TriggerObj.Queued or self.Removing then
 				return
@@ -834,12 +1070,10 @@ function KBM.Trigger:Init()
 			TriggerObj.Target = Target
 			TriggerObj.Duration = Duration
 			self.Queued = true
-		end
-		
+		end		
 	end
 	
-	function self.Queue:Activate()
-	
+	function self.Queue:Activate()	
 		if self.Queued then
 			if KBM.Encounter or KBM.Testing then
 				if self.Removing then
@@ -852,21 +1086,17 @@ function KBM.Trigger:Init()
 				self.List = {}
 				self.Queued = false
 			end
-		end
-		
+		end		
 	end
 	
-	function self.Queue:Remove()
-		
+	function self.Queue:Remove()		
 		self.Removing = true
 		self.List = {}
 		self.Removing = false
-		self.Queued = false
-		
+		self.Queued = false		
 	end
 	
-	function self:Create(Trigger, Type, Unit, Hook)
-	
+	function self:Create(Trigger, Type, Unit, Hook)	
 		TriggerObj = {}
 		TriggerObj.Timers = {}
 		TriggerObj.Alerts = {}
@@ -884,13 +1114,16 @@ function KBM.Trigger:Init()
 		function TriggerObj:AddTimer(TimerObj)
 			table.insert(self.Timers, TimerObj)
 		end
+		
 		function TriggerObj:AddAlert(AlertObj, Player)
 			AlertObj.Player = Player
 			table.insert(self.Alerts, AlertObj)
 		end
+		
 		function TriggerObj:AddPhase(PhaseObj)
 			self.Phase = PhaseObj 
 		end
+		
 		function TriggerObj:AddStop(Object)
 			table.insert(self.Stop, Object)
 		end
@@ -983,12 +1216,10 @@ function KBM.Trigger:Init()
 		end
 		
 		table.insert(self.List, TriggerObj)
-		return TriggerObj
-		
+		return TriggerObj		
 	end
 	
 	function self:Unload()
-	
 		self.Notify = {}
 		self.Say = {}
 		self.Damage = {}
@@ -997,57 +1228,42 @@ function KBM.Trigger:Init()
 		self.Combat = {}
 		self.Start = {}
 		self.Death = {}
-		self.Buff = {}
-		
+		self.Buff = {}		
 	end
-
 end
 
 function KBM:CallFrame(parent)
-
 	print("Warning: CallFrame used, old Recycling system, please report: WCF848")
 	local frame = nil
 	self.TotalFrames = self.TotalFrames + 1
 	frame = UI.CreateFrame("Frame", "Frame_Store"..tostring(self.TotalFrames), parent)
-	return frame
-	
+	return frame	
 end
 
 function KBM:CallCheck(parent)
-
 	print("Warning: CallCheck used, old Recycling system, please report: WCC879")
 	self.TotalChecks = self.TotalChecks + 1
 	Checkbox = UI.CreateFrame("RiftCheckbox", "Check Store"..self.TotalChecks, parent)
-	return Checkbox
-	
+	return Checkbox	
 end
 
 function KBM:CallText(parent, debugInfo)
-
 	print("Warning: CallText used, old Recycling system, please report: WCT910")
 	local Textfbox = nil
 	self.TotalTexts = self.TotalTexts + 1
 	Textfbox = UI.CreateFrame("Text", "Textf Store"..self.TotalTexts, parent)
-	return Textfbox
-	
-end
-
-function KBM:CallSlider(parent)
-	
+	return Textfbox	
 end
 
 local function KBM_Options()
-
 	if KBM.MainWin:GetVisible() then
 		KBM.MainWin:SetVisible(false)
 	else
 		KBM.MainWin:SetVisible(true)
-	end
-	
+	end	
 end
 
 function KBM.Button:Init()
-
 	KBM.Button.Texture = UI.CreateFrame("Texture", "Button Texture", KBM.Context)
 	KBM.Button.Texture:SetTexture("KingMolinator", "Media/Options_Button.png")
 	if not KBM.Options.Button.x then
@@ -1056,15 +1272,18 @@ function KBM.Button:Init()
 		KBM.Button.Texture:SetPoint("TOPLEFT", UIParent, "TOPLEFT", KBM.Options.Button.x, KBM.Options.Button.y)
 	end
 	KBM.Button.Texture:SetLayer(5)
+	
 	function KBM.Button:UpdateMove(uType)
 		if uType == "end" then
 			KBM.Options.Button.x = self.Texture:GetLeft()
 			KBM.Options.Button.y = self.Texture:GetTop()
 		end	
 	end
+	
 	function KBM.Button.Texture.Event.LeftClick()
 		KBM_Options()
 	end
+	
 	KBM.Button.Drag = KBM.AttachDragFrame(KBM.Button.Texture, function (uType) self:UpdateMove(uType) end, "Button Drag", 6)
 	KBM.Button.Drag.Event.RightDown = KBM.Button.Drag.Event.LeftDown
 	KBM.Button.Drag.Event.RightUp = KBM.Button.Drag.Event.LeftUp
@@ -1076,12 +1295,10 @@ function KBM.Button:Init()
 	end
 	if not KBM.Options.Button.Visible then
 		KBM.Button.Texture:SetVisible(false)
-	end
-	
+	end	
 end
 
 function KBM.PhaseMonitor:PullObjective()
-
 	local GUI  = {}
 	if #self.ObjectiveStore > 0 then
 		GUI = table.remove(self.ObjectiveStore)
@@ -1093,42 +1310,36 @@ function KBM.PhaseMonitor:PullObjective()
 		GUI.Frame:SetPoint("RIGHT", self.Anchor, "RIGHT")
 		GUI.Text = UI.CreateFrame("Text", "Objective_Text", GUI.Frame)
 		GUI.Text:SetPoint("CENTERLEFT", GUI.Frame, "CENTERLEFT")
-		GUI.Text:SetFontSize(KBM.Options.PhaseMon.TextSize)
+		GUI.Text:SetFontSize(self.Settings.TextSize * self.Settings.tScale)
 		GUI.Objective = UI.CreateFrame("Text", "Objective_Tracker", GUI.Frame)
 		GUI.Objective:SetPoint("CENTERRIGHT", GUI.Frame, "CENTERRIGHT")
-		GUI.Objective:SetFontSize(KBM.Options.PhaseMon.TextSize)
+		GUI.Objective:SetFontSize(self.Settings.TextSize * self.Settings.tScale)
+		GUI.Frame:SetVisible(self.Settings.Enabled)
 	end
 	return GUI
-
 end
 
 function KBM.PhaseMonitor:Init()
-	
+
+	self.Settings = KBM.Options.PhaseMon
+	if self.Settings.Type ~= "PhaseMon" then
+		print("Error: Incorrect Settings for Phase Monintor")
+	end
 	self.Anchor = UI.CreateFrame("Frame", "Phase Anchor", KBM.Context)
 	self.Anchor:SetLayer(5)
-	self.Anchor:SetWidth(KBM.Options.PhaseMon.w * KBM.Options.PhaseMon.wScale)
-	self.Anchor:SetHeight(KBM.Options.PhaseMon.h * KBM.Options.PhaseMon.hScale)
 	self.Anchor:SetBackgroundColor(0,0,0,0.33)
-	if not KBM.Options.PhaseMon.x then
-		self.Anchor:SetPoint("CENTERTOP", UIParent, "CENTERTOP")
-	else
-		self.Anchor:SetPoint("TOPLEFT", UIParent, "TOPLEFT", KBM.Options.PhaseMon.x, KBM.Options.PhaseMon.y)
-	end
 	self.Anchor.Text = UI.CreateFrame("Text", "Phase Anchor Text", self.Anchor)
-	self.Anchor.Text:SetFontSize(KBM.Options.PhaseMon.TextSize)
 	self.Anchor.Text:SetText("Phases and Objectives")
 	self.Anchor.Text:SetPoint("CENTER", self.Anchor, "CENTER")
 
 	function self.Anchor:Update(uType)
 		if uType == "end" then
-			KBM.Options.PhaseMon.x = self:GetLeft()
-			KBM.Options.PhaseMon.y = self:GetTop()
+			KBM.PhaseMonitor.Settings.x = self:GetLeft()
+			KBM.PhaseMonitor.Settings.y = self:GetTop()
 		end
 	end
 		
 	self.Anchor.Drag = KBM.AttachDragFrame(self.Anchor, function(uType) self.Anchor:Update(uType) end, "Phase Anchor Drag", 2)
-	self.Anchor:SetVisible(KBM.Options.PhaseMon.Visible)
-	self.Anchor.Drag:SetVisible(KBM.Options.PhaseMon.Unlocked)
 
 	self.Frame = UI.CreateFrame("Frame", "Phase Monitor", KBM.Context)
 	self.Frame:SetLayer(5)
@@ -1137,9 +1348,8 @@ function KBM.PhaseMonitor:Init()
 	self.Frame:SetPoint("RIGHT", self.Anchor, "RIGHT")
 	self.Frame:SetPoint("TOP", self.Anchor, "TOP")
 	self.Frame:SetPoint("BOTTOM", self.Anchor, "CENTERY")
-	self.Frame.Text = UI.CreateFrame("Text", "Phase Monitor Text", self.Frame)
+	self.Frame.Text = UI.CreateFrame("Text", "Phase_Monitor_Text", self.Frame)
 	self.Frame.Text:SetText("Phase: 1")
-	self.Frame.Text:SetFontSize(KBM.Options.PhaseMon.TextSize)
 	self.Frame.Text:SetPoint("CENTER", self.Frame, "CENTER")
 	
 	self.Frame:SetVisible(false)
@@ -1159,8 +1369,37 @@ function KBM.PhaseMonitor:Init()
 	self.Objectives.Lists.LastObjective = nil
 	self.Objectives.Lists.Count = 0
 	
-	function self.Objectives.Lists:Add(Object)
+	function self:ApplySettings()
 	
+		if self.Settings.Type ~= "PhaseMon" then
+			print("Error (Apply Settings): Incorrect Settings for Phase Monitor")
+		end
+	
+		self.Anchor:ClearAll()
+		if not self.Settings.x then
+			self.Anchor:SetPoint("CENTERTOP", UIParent, "CENTERTOP")
+		else
+			self.Anchor:SetPoint("TOPLEFT", UIParent, "TOPLEFT", self.Settings.x, self.Settings.y)
+		end
+		self.Anchor:SetWidth(self.Settings.w * self.Settings.wScale)
+		self.Anchor:SetHeight(self.Settings.h * self.Settings.hScale)
+		self.Anchor.Text:SetFontSize(self.Settings.TextSize * self.Settings.tScale)
+		self.Frame.Text:SetFontSize(self.Settings.TextSize * self.Settings.tScale)
+		self.Anchor:SetVisible(self.Settings.Visible)
+		self.Anchor.Drag:SetVisible(self.Settings.Unlocked)
+		if #self.ObjectiveStore > 0 then
+			for _, GUI in ipairs(self.ObjectiveStore) do
+				GUI.Frame:SetHeight(self.Anchor:GetHeight() * 0.5)
+			end
+		end
+		if self.Objectives.Lists.Count > 0 then
+			for _, Object in ipairs(self.Objectives.Lists.All) do
+				Object.GUI.Frame:SetHeight(self.Anchor:GetHeight() * 0.5)
+			end
+		end	
+	end
+	
+	function self.Objectives.Lists:Add(Object)	
 		if self.Count > 0 then
 			Object.Previous = self.LastObjective
 		end
@@ -1178,12 +1417,10 @@ function KBM.PhaseMonitor:Init()
 			Object.Previous = nil
 			Object.Next = nil
 		end
-		Object.Index = self.Count
-		
+		Object.Index = self.Count		
 	end
 	
-	function self.Objectives.Lists:Remove(Object)
-	
+	function self.Objectives.Lists:Remove(Object)	
 		if self.Count == 1 then
 			Object.GUI.Frame:SetVisible(false)
 			table.insert(KBM.PhaseMonitor.ObjectiveStore, Object.GUI)
@@ -1215,8 +1452,7 @@ function KBM.PhaseMonitor:Init()
 			self.All[Object.Index] = nil
 			Object = nil
 			self.Count = self.Count - 1
-		end
-		
+		end		
 	end
 	
 	function self:SetPhase(Phase)
@@ -1225,7 +1461,6 @@ function KBM.PhaseMonitor:Init()
 	end
 	
 	function self.Phase:Create(Phase)
-	
 		local PhaseObj = {}
 		PhaseObj.StartTime = 0
 		PhaseObj.Phase = Phase
@@ -1242,8 +1477,7 @@ function KBM.PhaseMonitor:Init()
 			KBM.PhaseMonitor:SetPhase(Phase)
 		end
 		
-		function PhaseObj.Objectives:AddMeta(Name, Target, Total)
-		
+		function PhaseObj.Objectives:AddMeta(Name, Target, Total)		
 			local MetaObj = {}
 			MetaObj.Count = Total
 			MetaObj.Target = Target
@@ -1254,7 +1488,7 @@ function KBM.PhaseMonitor:Init()
 			MetaObj.Type = "Meta"
 			
 			function MetaObj:Update(Total)
-				if self.Target < Total then
+				if self.Target >= Total then
 					self.Count = Total
 					self.GUI.Objective:SetText(self.Count.."/"..self.Target)
 				end
@@ -1263,12 +1497,12 @@ function KBM.PhaseMonitor:Init()
 			KBM.PhaseMonitor.Objectives.Lists.Meta[Name] = MetaObj
 			KBM.PhaseMonitor.Objectives.Lists:Add(MetaObj)
 			
-			MetaObj.GUI.Frame:SetVisible(true)
-		
+			if KBM.PhaseMonitor.Settings.Enabled then
+				MetaObj.GUI.Frame:SetVisible(KBM.PhaseMonitor.Settings.Objectives)
+			end		
 		end
 		
-		function PhaseObj.Objectives:AddDeath(Name, Total)
-			
+		function PhaseObj.Objectives:AddDeath(Name, Total)		
 			local DeathObj = {}
 			DeathObj.Count = 0
 			DeathObj.Total = Total
@@ -1288,12 +1522,12 @@ function KBM.PhaseMonitor:Init()
 			KBM.PhaseMonitor.Objectives.Lists.Death[Name] = DeathObj
 			KBM.PhaseMonitor.Objectives.Lists:Add(DeathObj)
 			
-			DeathObj.GUI.Frame:SetVisible(true)
-			
+			if KBM.PhaseMonitor.Settings.Enabled then
+				DeathObj.GUI.Frame:SetVisible(KBM.PhaseMonitor.Settings.Objectives)
+			end			
 		end
 		
-		function PhaseObj.Objectives:AddPercent(Name, Target, Current)
-		
+		function PhaseObj.Objectives:AddPercent(Name, Target, Current)		
 			local PercentObj = {}
 			PercentObj.Name = Name
 			PercentObj.Target = Target
@@ -1319,16 +1553,15 @@ function KBM.PhaseMonitor:Init()
 			KBM.PhaseMonitor.Objectives.Lists.Percent[Name] = PercentObj
 			KBM.PhaseMonitor.Objectives.Lists:Add(PercentObj)
 			
-			PercentObj.GUI.Frame:SetVisible(true)
-						
+			if KBM.PhaseMonitor.Settings.Enabled then
+				PercentObj.GUI.Frame:SetVisible(KBM.PhaseMonitor.Settings.Objectives)
+			end						
 		end
 		
 		function PhaseObj.Objectives:AddTime(Time)
-	
 		end
 		
-		function PhaseObj.Objectives:Remove(Name)
-		
+		function PhaseObj.Objectives:Remove(Name)		
 			if Name then
 				KBM.PhaseMonitor.Objectives.Lists:Remove(KBM.PhaseMonitor.Lists.All[Name])
 			else
@@ -1342,19 +1575,21 @@ function KBM.PhaseMonitor:Init()
 					end
 				end
 				KBM.PhaseMonitor.Objectives.Lists.Count = 0
-			end
-			
+			end			
 		end
 		
 		function PhaseObj:Start(Time)
 			self.StartTime = math.floor(Time)
 			self.Phase = self.DefaultPhase
-			if KBM.Options.PhaseMon.PhaseDisplay then
-				KBM.PhaseMonitor.Frame:SetVisible(true)
+			if KBM.PhaseMonitor.Settings.Enabled then
+				if KBM.PhaseMonitor.Settings.PhaseDisplay then
+					KBM.PhaseMonitor.Frame:SetVisible(true)
+				end
 			end
 			KBM.PhaseMonitor.Active = true
 			self:SetPhase(self.Phase)
 		end
+		
 		function PhaseObj:End(Time)
 			self.Objectives:Remove()
 			KBM.PhaseMonitor.Frame:SetVisible(false)
@@ -1364,55 +1599,140 @@ function KBM.PhaseMonitor:Init()
 		self.Object = PhaseObj
 		return PhaseObj
 	end
-	function self.Phase:Remove()
 	
+	function self.Phase:Remove()	
 	end
+	
+	function self.Anchor.Drag.Event:WheelForward()	
+		local Change = false
+		if KBM.PhaseMonitor.Settings.ScaleWidth then
+			if KBM.PhaseMonitor.Settings.wScale < 1.6 then
+				KBM.PhaseMonitor.Settings.wScale = KBM.PhaseMonitor.Settings.wScale + 0.02
+				if KBM.PhaseMonitor.Settings.wScale > 1.6 then
+					KBM.PhaseMonitor.Settings.wScale = 1.6
+				end
+				Change = true
+			end
+		end
+		
+		if KBM.PhaseMonitor.Settings.ScaleHeight then
+			if KBM.PhaseMonitor.Settings.hScale < 1.6 then
+				KBM.PhaseMonitor.Settings.hScale = KBM.PhaseMonitor.Settings.hScale + 0.02
+				if KBM.PhaseMonitor.Settings.hScale > 1.6 then
+					KBM.PhaseMonitor.Settings.hScale = 1.6
+				end
+				Change = true
+			end
+		end
+		
+		if KBM.PhaseMonitor.Settings.TextScale then
+			if KBM.PhaseMonitor.Settings.tScale < 1.6 then
+				KBM.PhaseMonitor.Settings.tScale = KBM.PhaseMonitor.Settings.tScale + 0.02
+				if KBM.PhaseMonitor.Settings.tScale > 1.6 then
+					KBM.PhaseMonitor.Settings.tScale = 1.6
+				end
+				Change = true
+			end
+		end
+		
+		if Change then
+			KBM.PhaseMonitor:ApplySettings()
+		end		
+	end
+	
+	function self.Anchor.Drag.Event:WheelBack()	
+		local Change = false
+		if KBM.PhaseMonitor.Settings.ScaleWidth then
+			if KBM.PhaseMonitor.Settings.wScale > 0.6 then
+				KBM.PhaseMonitor.Settings.wScale = KBM.PhaseMonitor.Settings.wScale - 0.02
+				if KBM.PhaseMonitor.Settings.wScale < 0.6 then
+					KBM.PhaseMonitor.Settings.wScale = 0.6
+				end
+				Change = true
+			end
+		end
+		
+		if KBM.PhaseMonitor.Settings.ScaleHeight then
+			if KBM.PhaseMonitor.Settings.hScale > 0.6 then
+				KBM.PhaseMonitor.Settings.hScale = KBM.PhaseMonitor.Settings.hScale - 0.02
+				if KBM.PhaseMonitor.Settings.hScale < 0.6 then
+					KBM.PhaseMonitor.Settings.hScale = 0.6
+				end
+				Change = true
+			end
+		end
+		
+		if KBM.PhaseMonitor.Settings.TextScale then
+			if KBM.PhaseMonitor.Settings.tScale > 0.6 then
+				KBM.PhaseMonitor.Settings.tScale = KBM.PhaseMonitor.Settings.tScale - 0.02
+				if KBM.PhaseMonitor.Settings.tScale < 0.6 then
+					KBM.PhaseMonitor.Settings.tScale = 0.6
+				end
+				Change = true
+			end
+		end
+		
+		if Change then 
+			KBM.PhaseMonitor:ApplySettings()
+		end
+	end
+	self:ApplySettings()	
 end
 
-function KBM.EncTimer:Init()
-	
+function KBM.EncTimer:Init()	
 	self.TestMode = false
+	self.Settings = KBM.Options.EncTimer
 	self.Frame = UI.CreateFrame("Frame", "Encounter Timer", KBM.Context)
 	self.Frame:SetLayer(5)
-	self.Frame:SetWidth(KBM.Options.EncTimer.w)
-	self.Frame:SetHeight(KBM.Options.EncTimer.h)
-	if not KBM.Options.EncTimer.x then
-		self.Frame:SetPoint("CENTERTOP", UIParent, "CENTERTOP")
-	else
-		self.Frame:SetPoint("TOPLEFT", UIParent, "TOPLEFT", KBM.Options.EncTimer.x, KBM.Options.EncTimer.y)
-	end
 	self.Frame:SetBackgroundColor(0,0,0,0.33)
 	self.Frame.Text = UI.CreateFrame("Text", "Encounter Text", self.Frame)
 	self.Frame.Text:SetText("Time: 00m:00s")
-	self.Frame.Text:SetFontSize(KBM.Options.EncTimer.TextSize)
 	self.Frame.Text:SetPoint("CENTER", self.Frame, "CENTER")
 	self.Enrage = {}
 	self.Enrage.Frame = UI.CreateFrame("Frame", "Enrage Timer", KBM.Context)
 	self.Enrage.Frame:SetPoint("TOPLEFT", self.Frame, "BOTTOMLEFT")
 	self.Enrage.Frame:SetPoint("RIGHT", self.Frame, "RIGHT")
-	self.Enrage.Frame:SetHeight(self.Frame:GetHeight())
 	self.Enrage.Frame:SetBackgroundColor(0,0,0,0.33)
 	self.Enrage.Text = UI.CreateFrame("Text", "Enrage Text", self.Enrage.Frame)
 	self.Enrage.Text:SetText("Enrage in: 00m:00s")
-	self.Enrage.Text:SetFontSize(KBM.Options.EncTimer.TextSize)
 	self.Enrage.Text:SetPoint("CENTER", self.Enrage.Frame, "CENTER")
 	self.Enrage.Progress = UI.CreateFrame("Frame", "Enrage Progress", self.Enrage.Frame)
 	self.Enrage.Progress:SetPoint("TOPLEFT", self.Enrage.Frame, "TOPLEFT")
 	self.Enrage.Progress:SetPoint("BOTTOM", self.Enrage.Frame, "BOTTOM")
 	self.Enrage.Progress:SetPoint("RIGHT", self.Enrage.Frame, 0, nil)
 	self.Enrage.Progress:SetBackgroundColor(0.9,0,0,0.33)
-	function self:UpdateMove(uType)
-		if uType == "end" then
-			KBM.Options.EncTimer.x = self.Frame:GetLeft()
-			KBM.Options.EncTimer.y = self.Frame:GetTop()
+	
+	function self:ApplySettings()
+		self.Frame:ClearAll()
+		if not self.Settings.x then
+			self.Frame:SetPoint("CENTERTOP", UIParent, "CENTERTOP")
+		else
+			self.Frame:SetPoint("TOPLEFT", UIParent, "TOPLEFT", self.Settings.x, self.Settings.y)
 		end
+		self.Frame:SetWidth(self.Settings.w * self.Settings.wScale)
+		self.Frame:SetHeight(self.Settings.h * self.Settings.hScale)
+		self.Enrage.Frame:SetHeight(self.Frame:GetHeight())
+		self.Frame:SetVisible(self.Settings.Visible)
+		self.Enrage.Frame:SetVisible(self.Settings.Visible)
+		self.Frame.Drag:SetVisible(self.Settings.Unlocked)
+		self.Frame.Text:SetFontSize(self.Settings.TextSize * self.Settings.tScale)
+		self.Enrage.Text:SetFontSize(self.Settings.TextSize * self.Settings.tScale)		
 	end
-	function self:Update(current)
+	
+	function self:UpdateMove(uType)	
+		if uType == "end" then
+			self.Settings.x = self.Frame:GetLeft()
+			self.Settings.y = self.Frame:GetTop()
+		end		
+	end
+	
+	function self:Update(current)	
 		local EnrageString = ""
-		if KBM.Options.EncTimer.Duration then
+		if self.Settings.Duration then
 			self.Frame.Text:SetText(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
 		end
-		if KBM.Options.EncTimer.Enrage then
+		
+		if self.Settings.Enrage then
 			if KBM_CurrentMod.Enrage then
 				if current < KBM.EnrageTime then
 					EnrageString = KBM.ConvertTime(KBM.EnrageTime - current + 1)
@@ -1423,49 +1743,119 @@ function KBM.EncTimer:Init()
 					self.Enrage.Progress:SetPoint("RIGHT", self.Enrage.Frame, "RIGHT")
 				end
 			end
-		end
+		end		
 	end
-	function self:Start(Time)
-		if KBM.Options.EncTimer.Duration then
-			self.Frame:SetVisible(true)
-			self.Active = true
-		end
-		if KBM.Options.EncTimer.Enrage then
-			if KBM_CurrentMod.Enrage then
-				self.Enrage.Frame:SetVisible(true)
-				self.Enrage.Progress:SetPoint("RIGHT", self.Enrage.Frame, "LEFT")
+	
+	function self:Start(Time)	
+		if self.Settings.Enabled then
+			if self.Settings.Duration then
+				self.Frame:SetVisible(true)
 				self.Active = true
 			end
-		end
-		if self.Active then
-			self:Update(Time)
-		end
+			if self.Settings.Enrage then
+				if KBM_CurrentMod.Enrage then
+					self.Enrage.Frame:SetVisible(true)
+					self.Enrage.Progress:SetPoint("RIGHT", self.Enrage.Frame, "LEFT")
+					self.Active = true
+				end
+			end
+			if self.Active then
+				self:Update(Time)
+			end
+		end		
 	end
-	function self:TestUpdate()
 	
+	function self:TestUpdate()	
 	end
-	function self:End()
-		self.Active = false
-		self.Frame:SetVisible(false)
-		self.Enrage.Frame:SetVisible(false)
+	
+	function self:End()	
+		self.Active = false		
+		self.Frame.Text:SetText("Time: 00m:00s")
+		self.Enrage.Text:SetText("Enrage in: 00m:00s")
+		self.Enrage.Progress:SetVisible(false)
 	end
-	function self:SetTest(bool)
+	
+	function self:SetTest(bool)	
 		if bool then
 			self.Enrage.Text:SetText(KBM.Language.Timers.Enrage[KBM.Lang].." 00m:00s")
 			self.Frame.Text:SetText(KBM.Language.Timers.Timer[KBM.Lang].." 00m:00s")
 		end
 		self.Frame:SetVisible(bool)
-		self.Enrange:SetVisible(bool)
+		self.Enrange:SetVisible(bool)		
 	end
-	self.Frame.Drag = KBM.AttachDragFrame(self.Frame, function (uType) self:UpdateMove(uType) end, "Enc Timer Drag", 2)
-	self.Frame:SetVisible(KBM.Options.EncTimer.Visible)
-	self.Enrage.Frame:SetVisible(KBM.Options.EncTimer.Visible)
-	self.Frame.Drag:SetVisible(KBM.Options.EncTimer.Unlocked)
 	
+	self.Frame.Drag = KBM.AttachDragFrame(self.Frame, function (uType) self:UpdateMove(uType) end, "Enc Timer Drag", 2)
+	function self.Frame.Drag.Event:WheelForward()	
+		if KBM.EncTimer.Settings.ScaleWidth then
+			if KBM.EncTimer.Settings.wScale < 1.6 then
+				KBM.EncTimer.Settings.wScale = KBM.EncTimer.Settings.wScale + 0.02
+				if KBM.EncTimer.Settings.wScale > 1.6 then
+					KBM.EncTimer.Settings.wScale = 1.6
+				end
+				KBM.EncTimer.Frame:SetWidth(KBM.EncTimer.Settings.wScale * KBM.EncTimer.Settings.w)
+			end
+		end
+		
+		if KBM.EncTimer.Settings.ScaleHeight then
+			if KBM.EncTimer.Settings.hScale < 1.6 then
+				KBM.EncTimer.Settings.hScale = KBM.EncTimer.Settings.hScale + 0.02
+				if KBM.EncTimer.Settings.hScale > 1.6 then
+					KBM.EncTimer.Settings.hScale = 1.6
+				end
+				KBM.EncTimer.Frame:SetHeight(KBM.EncTimer.Settings.hScale * KBM.EncTimer.Settings.h)
+				KBM.EncTimer.Enrage.Frame:SetHeight(KBM.EncTimer.Frame:GetHeight())
+			end
+		end
+		
+		if KBM.EncTimer.Settings.TextScale then
+			if KBM.EncTimer.Settings.tScale < 1.6 then
+				KBM.EncTimer.Settings.tScale = KBM.EncTimer.Settings.tScale + 0.02
+				if KBM.EncTimer.Settings.tScale > 1.6 then
+					KBM.EncTimer.Settings.tScale = 1.6
+				end
+				KBM.EncTimer.Frame.Text:SetFontSize(KBM.EncTimer.Settings.TextSize * KBM.EncTimer.Settings.tScale)
+				KBM.EncTimer.Enrage.Text:SetFontSize(KBM.EncTimer.Settings.TextSize * KBM.EncTimer.Settings.tScale)
+			end
+		end		
+	end
+	
+	function self.Frame.Drag.Event:WheelBack()	
+		if KBM.EncTimer.Settings.ScaleWidth then
+			if KBM.EncTimer.Settings.wScale > 0.6 then
+				KBM.EncTimer.Settings.wScale = KBM.EncTimer.Settings.wScale - 0.02
+				if KBM.EncTimer.Settings.wScale < 0.6 then
+					KBM.EncTimer.Settings.wScale = 0.6
+				end
+				KBM.EncTimer.Frame:SetWidth(KBM.EncTimer.Settings.wScale * KBM.EncTimer.Settings.w)
+			end
+		end
+		
+		if KBM.EncTimer.Settings.ScaleHeight then
+			if KBM.EncTimer.Settings.hScale > 0.6 then
+				KBM.EncTimer.Settings.hScale = KBM.EncTimer.Settings.hScale - 0.02
+				if KBM.EncTimer.Settings.hScale < 0.6 then
+					KBM.EncTimer.Settings.hScale = 0.6
+				end
+				KBM.EncTimer.Frame:SetHeight(KBM.EncTimer.Settings.hScale * KBM.EncTimer.Settings.h)
+				KBM.EncTimer.Enrage.Frame:SetHeight(KBM.EncTimer.Frame:GetHeight())
+			end
+		end
+		
+		if KBM.EncTimer.Settings.TextScale then
+			if KBM.EncTimer.Settings.tScale > 0.6 then
+				KBM.EncTimer.Settings.tScale = KBM.EncTimer.Settings.tScale - 0.02
+				if KBM.EncTimer.Settings.tScale < 0.6 then
+					KBM.EncTimer.Settings.tScale = 0.6
+				end
+				KBM.EncTimer.Frame.Text:SetFontSize(KBM.EncTimer.Settings.tScale * KBM.EncTimer.Settings.TextSize)
+				KBM.EncTimer.Enrage.Text:SetFontSize(KBM.EncTimer.Settings.tScale * KBM.EncTimer.Settings.TextSize)
+			end
+		end
+	end
+	self:ApplySettings()	
 end
 
 function KBM.CheckActiveBoss(uDetails, UnitID)
-
 	current = Inspect.Time.Real()
 	if KBM.Options.Enabled then
 		if (not KBM.Idle.Wait or (KBM.Idle.Wait and KBM.Idle.Until < current)) or KBM.Encounter then
@@ -1516,12 +1906,50 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 											KBM.TimeElapsed = 0
 											KBM.StartTime = math.floor(current)
 											KBM_CurrentMod.Phase = 1
+											if KBM_CurrentMod.Settings.EncTimer then
+												if KBM_CurrentMod.Settings.EncTimer.Override then
+													KBM.EncTimer.Settings = KBM_CurrentMod.Settings.EncTimer
+												else
+													KBM.EncTimer.Settings = KBM.Options.EncTimer
+												end
+											else
+												KBM.EncTimer.Settings = KBM.Options.EncTimer
+											end
+											if KBM_CurrentMod.Settings.PhaseMon then
+												if KBM_CurrentMod.Settings.PhaseMon.Override then
+													KBM.PhaseMonitor.Settings = KBM_CurrentMod.Settings.PhaseMon
+												else
+													KBM.PhaseMonitor.Settings = KBM.Options.PhaseMon
+												end
+											else
+												KBM.PhaseMonitor.Settings = KBM.Options.PhaseMon
+											end
+											if KBM_CurrentMod.Settings.MechTimer then
+												if KBM_CurrentMod.Settings.MechTimer.Override then
+													KBM.MechTimer.Settings = KBM_CurrentMod.Settings.MechTimer
+												else
+													KBM.MechTimer.Settings = KBM.Options.MechTimer
+												end
+											else
+												KBM.MechTimer.Setting = KBM.Options.MechTimer
+											end
+											if KBM_CurrentMod.Settings.Alerts then
+												if KBM_CurrentMod.Settings.Alerts.Override then
+													KBM.Alert.Settings = KBM_CurrentMod.Settings.Alerts
+												else
+													KBM.Alert.Settings = KBM.Options.Alerts
+												end
+											else
+												KBM.Alert.Settings = KBM.Options.Alerts
+											end	
+											KBM.EncTimer:ApplySettings()
+											KBM.PhaseMonitor:ApplySettings()
+											KBM.MechTimer:ApplySettings()
+											KBM.Alert:ApplySettings()
 											if KBM_CurrentMod.Enrage then
 												KBM.EnrageTime = KBM.StartTime + KBM_CurrentMod.Enrage
 											end
-											if KBM.Options.EncTimer.Enabled then
-												KBM.EncTimer:Start(KBM.StartTime)
-											end
+											KBM.EncTimer:Start(KBM.StartTime)
 										end
 									end
 									if BossObj.Mod.ID == KBM_CurrentMod.ID then
@@ -1555,13 +1983,11 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 				KBM.Idle.Wait = false
 			end
 		end
-	end
-	
+	end	
 end
 
 
 function KBM.CombatEnter(UnitID)
-
 	if KBM.Options.Enabled then
 		uDetails = Inspect.Unit.Detail(UnitID)
 		if uDetails then
@@ -1569,16 +1995,13 @@ function KBM.CombatEnter(UnitID)
 				KBM.CheckActiveBoss(uDetails, UnitID)
 			end
 		end
-	end
-	
+	end	
 end
 
-function KBM.CombatLeave(UnitID)
-	
+function KBM.CombatLeave(UnitID)	
 end
 
 function KBM.MobDamage(info)
-
 	if KBM.Options.Enabled then
 		local tUnitID = info.target
 		local tDetails = Inspect.Unit.Detail(tUnitID)
@@ -1615,11 +2038,9 @@ function KBM.MobDamage(info)
 			end		
 		end
 	end
-
 end
 
 function KBM.RaidDamage(info)
-
 	-- Will be used for DPS Monitoring
 	if KBM.Options.Enabled then
 		local tUnitID = info.target
@@ -1633,6 +2054,7 @@ function KBM.RaidDamage(info)
 			-- Damage inflicted to a Boss Unit by the Raid.
 			-- Update Health etc, checks done to bypass Unit.Health requiring available state.
 			if tDetails then
+				KBM.BossID[tUnitID].Health = tDetails.health
 				KBM.BossID[tUnitID].PercentRaw = (tDetails.health/tDetails.healthMax)*100
 				KBM.BossID[tUnitID].Percent = math.ceil(KBM.BossID[tUnitID].PercentRaw)
 				if KBM.BossID[tUnitID].Percent ~= KBM.BossID[tUnitID].PercentLast then
@@ -1673,12 +2095,10 @@ function KBM.RaidDamage(info)
 				end
 			end
 		end
-	end
-	
+	end	
 end
 
 local function KBM_UnitAvailable(units)
-
 	if KBM.Encounter then
 		for UnitID, Specifier in pairs(units) do
 			uDetails = Inspect.Unit.Detail(UnitID)
@@ -1688,12 +2108,10 @@ local function KBM_UnitAvailable(units)
 				end
 			end
 		end
-	end
-	
+	end	
 end
 
 function KBM.AttachDragFrame(parent, hook, name, layer)
-
 	if not name then name = "" end
 	if not layer then layer = 0 end
 	
@@ -1724,11 +2142,13 @@ function KBM.AttachDragFrame(parent, hook, name, layer)
 		self:SetBackgroundColor(0,0,0,0.5)
 		Drag.hook("start")
 	end
+	
 	function Drag.Frame.Event:MouseMove(mouseX, mouseY)
 		if self.MouseDown then
 			self.parent:SetPoint("TOPLEFT", UIParent, "TOPLEFT", (mouseX - self.StartX), (mouseY - self.StartY))
 		end
 	end
+	
 	function Drag.Frame.Event:LeftUp()
 		if self.MouseDown then
 			self.MouseDown = false
@@ -1736,20 +2156,19 @@ function KBM.AttachDragFrame(parent, hook, name, layer)
 			Drag.hook("end")
 		end
 	end
-	function Drag.Frame:Remove()
+	
+	function Drag.Frame:Remove()	
 		self.Event.LeftDown = nil
 		self.Event.MouseMove = nil
 		self.Event.LeftUp = nil
 		Drag.hook = nil
 		self:sRemove()
-		self.Remove = nil
-	end
-	
+		self.Remove = nil		
+	end	
 	return Drag.Frame
 end
 
 function KBM.TankSwap:Pull()
-
 	local GUI = {}
 	if #self.TankStore > 0 then
 		GUI = table.remove(self.TankStore)
@@ -1796,7 +2215,6 @@ function KBM.TankSwap:Pull()
 		GUI.DeCool.Text:SetLayer(2)		
 	end
 	return GUI
-
 end
 
 function KBM.TankSwap:Init()
@@ -1834,6 +2252,7 @@ function KBM.TankSwap:Init()
 	self.Anchor:SetVisible(KBM.Options.TankSwap.Visible)
 	self.Anchor.Drag:SetVisible(KBM.Options.TankSwap.Unlocked)
 	function self:Add(UnitID, Test)
+		
 		local TankObj = {}
 		TankObj.UnitID = UnitID
 		TankObj.Test = Test
@@ -1868,8 +2287,10 @@ function KBM.TankSwap:Init()
 			TankObj.GUI.Frame:SetVisible(true)
 		end
 		return TankObj
+		
 	end
 	function self:Start(DebuffName, DebuffID)
+		
 		if self.Enabled then
 			local Spec = ""
 			local UnitID = ""
@@ -1890,8 +2311,10 @@ function KBM.TankSwap:Init()
 				end
 			end
 		end
+		
 	end
 	function self:Update()
+	
 		for UnitID, TankObj in pairs(self.Tanks) do
 			Buffs = Inspect.Buff.List(UnitID)
 			TankObj.Stacks = 0
@@ -1933,8 +2356,10 @@ function KBM.TankSwap:Init()
 				TankObj.GUI.DebuffFrame.Text:SetVisible(true)
 			end
 		end
+		
 	end
 	function self:Remove()
+	
 		for UnitID, TankObj in pairs(self.Tanks) do
 			table.insert(self.TankStore, TankObj.GUI)
 			TankObj.GUI.Frame:SetVisible(false)
@@ -1945,22 +2370,32 @@ function KBM.TankSwap:Init()
 		self.TankCount = 0
 		self.Active = false
 		self.Test = false
+		
 	end
 	
 end
 
 function KBM.Alert:Init()
 
+	function self:ApplySettings()
+		self.Anchor:ClearAll()
+		if self.Settings.x then
+			self.Anchor:SetPoint("TOPLEFT", UIParent, "TOPLEFT", self.Settings.x, self.Settings.y)
+		else
+			self.Anchor:SetPoint("CENTERX", UIParent, "CENTERX")
+			self.Anchor:SetPoint("CENTERY", UIParent, nil, 0.25)
+		end	
+		self.Notify = self.Settings.Notify
+		self.Flash = self.Settings.Flash
+		self.Enabled = self.Settings.Enabled
+		self.Anchor.Drag:SetVisible(self.Settings.Unlocked)
+	end
+
 	self.List = {}
+	self.Settings = KBM.Options.Alerts
 	self.Anchor = UI.CreateFrame("Frame", "Alert Text Anchor", KBM.Context)
 	self.Anchor:SetBackgroundColor(0,0,0,0)
 	self.Anchor:SetLayer(5)
-	if KBM.Options.Alert.x then
-		self.Anchor:SetPoint("TOPLEFT", UIParent, "TOPLEFT", KBM.Options.Alert.x, KBM.Options.Alert.y)
-	else
-		self.Anchor:SetPoint("CENTERX", UIParent, "CENTERX")
-		self.Anchor:SetPoint("CENTERY", UIParent, nil, 0.25)
-	end
 	self.Shadow = UI.CreateFrame("Text", "Alert Text Outline", self.Anchor)
 	self.Shadow:SetFontColor(0,0,0)
 	self.Shadow:SetLayer(1)
@@ -1975,7 +2410,7 @@ function KBM.Alert:Init()
 	self.Text:SetLayer(2)
 	self.Anchor:SetWidth(self.Text:GetWidth())
 	self.Anchor:SetHeight(self.Text:GetHeight())
-	self.Anchor:SetVisible(KBM.Options.Alert.Visible)
+	self.Anchor:SetVisible(self.Settings.Visible)
 	self.ColorList = {"red", "blue", "yellow", "orange", "purple", "dark_green"}
 	self.Left = {}
 	self.Right = {}
@@ -1991,26 +2426,22 @@ function KBM.Alert:Init()
 		self.Right[Color]:SetPoint("BOTTOM", UIParent, "BOTTOM")
 		self.Right[Color]:SetVisible(false)
 	end
-	self.Enabled = true
 	self.Current = nil
 	self.StopTime = 0
 	self.Remaining = 0
 	self.Alpha = 1
 	self.Queue = {}
-	self.Notify = KBM.Options.Alert.Notify
-	self.Flash = KBM.Options.Alert.Flash
 	self.Speed = 0.025
 	self.Direction = -self.Speed
 	self.Color = "red"
 	function self.Anchor:Update(uType)
 		if uType == "end" then
-			KBM.Options.Alert.x = self:GetLeft()
-			KBM.Options.Alert.y = self:GetTop()
+			KBM.Alert.Settings.x = self:GetLeft()
+			KBM.Alert.Settings.y = self:GetTop()
 		end
 	end
 	self.Anchor.Drag = KBM.AttachDragFrame(self.Anchor, function(uType) self.Anchor:Update(uType) end, "Alert Anchor Drag", 2)
 	self.Anchor.Drag:SetLayer(3)
-	self.Anchor.Drag:SetVisible(KBM.Options.Alert.Unlocked)
 	
 	function self:Create(Text, Duration, Flash, Countdown, Color)
 	
@@ -2043,7 +2474,7 @@ function KBM.Alert:Init()
 	end
 	function self:Start(AlertObj, CurrentTime, Duration)
 		
-		if KBM.Options.Alert.Enabled then
+		if self.Settings.Enabled then
 			if AlertObj.Enabled then
 				if self.Starting then
 					return
@@ -2070,7 +2501,7 @@ function KBM.Alert:Init()
 				self.Current = AlertObj
 				AlertObj.Duration = self.Duration
 				self.Alpha = 1
-				if KBM.Options.Alert.Flash then
+				if self.Settings.Flash then
 					self.Color = AlertObj.Color
 					self.Left[self.Color]:SetAlpha(1)
 					self.Left[self.Color]:SetVisible(true)
@@ -2079,7 +2510,7 @@ function KBM.Alert:Init()
 					self.Direction = -self.Speed
 					self.Flash = AlertObj.Flash
 				end
-				if KBM.Options.Alert.Notify then
+				if self.Settings.Notify then
 					if AlertObj.Text then
 						self.Shadow:SetText(AlertObj.Text)
 						self.Text:SetText(AlertObj.Text)
@@ -2107,10 +2538,11 @@ function KBM.Alert:Init()
 		self.Current.Stopping = false
 		self.StopTime = 0
 		if self.Current.AlertAfter and not self.Starting then
-			local TempObj = self.Current
-			self.Current = nil
-			self:Start(TempObj.AlertAfter, Inspect.Time.Real())
-			TempObj = nil
+			if KBM.Encounter then
+				local TempObj = self.Current
+				self.Current = nil
+				self:Start(TempObj.AlertAfter, Inspect.Time.Real())
+			end
 		else
 			self.Current = nil
 		end
@@ -2121,26 +2553,28 @@ function KBM.Alert:Init()
 				self:Stop()
 			else
 				self.Alpha = self.Alpha + self.Direction
-				if KBM.Options.Alert.Flash then
+				if self.Settings.Flash then
 					self.Left[self.Color]:SetAlpha(self.Alpha)
 					self.Right[self.Color]:SetAlpha(self.Alpha)
 				end
-				if KBM.Options.Alert.Notify then
+				if self.Settings.Notify then
 					self.Anchor:SetAlpha(self.Alpha)
 				end
 			end
 		else
-			if self.Flash then
-				self.Alpha = self.Alpha + self.Direction
-				if self.Alpha <= 0.2 then
-					self.Alpha = 0.2
-					self.Direction = self.Speed
-				elseif self.Alpha >= 1 then
-					self.Alpha = 1
-					self.Direction = -self.Speed
+			if self.Settings.Flash then
+				if self.Flash then
+					self.Alpha = self.Alpha + self.Direction
+					if self.Alpha <= 0.2 then
+						self.Alpha = 0.2
+						self.Direction = self.Speed
+					elseif self.Alpha >= 1 then
+						self.Alpha = 1
+						self.Direction = -self.Speed
+					end
+					self.Left[self.Color]:SetAlpha(self.Alpha)
+					self.Right[self.Color]:SetAlpha(self.Alpha)
 				end
-				self.Left[self.Color]:SetAlpha(self.Alpha)
-				self.Right[self.Color]:SetAlpha(self.Alpha)
 			end
 			if self.Current.Countdown then
 				if self.Remaining then
@@ -2164,10 +2598,13 @@ function KBM.Alert:Init()
 			end
 		end
 	end
+	self:ApplySettings()
 	
 end
 
 function KBM.CastBar:Init()
+
+	self.Settings = KBM.Options.CastBar
 
 	self.CastBarList = {}
 	self.ActiveCastBars = {}
@@ -2175,55 +2612,130 @@ function KBM.CastBar:Init()
 	self.WaitCastBars = {}
 	self.StartCastBars = {}
 	self.Store = {}
-	self.Anchor = UI.CreateFrame("Frame", "CastBar Anchor", KBM.Context)
-	self.Anchor:SetWidth(KBM.Options.CastBar.w * KBM.Options.CastBar.wScale)
-	self.Anchor:SetHeight(KBM.Options.CastBar.h * KBM.Options.CastBar.hScale)
-	self.Anchor:SetBackgroundColor(0,0,0,0.33)
-	if KBM.Options.CastBar.x then
-		self.Anchor:SetPoint("TOPLEFT", UIParent, "TOPLEFT", KBM.Options.CastBar.x, KBM.Options.CastBar.y)
-	else
-		self.Anchor:SetPoint("CENTER", UIParent, "CENTER")
-	end
-	function self.Anchor:Update(uType)
-		if uType == "end" then
-			KBM.Options.CastBar.x = self:GetLeft()
-			KBM.Options.CastBar.y = self:GetTop()
-		end
-	end
-	self.Anchor.Text = UI.CreateFrame("Text", "CastBar Info", self.Anchor)
-	self.Anchor.Text:SetText("CastBar Anchor")
-	self.Anchor.Text:SetFontSize(KBM.Options.CastBar.TextSize)
-	self.Anchor.Text:SetPoint("CENTER", self.Anchor, "CENTER")
-	self.Anchor.Drag = KBM.AttachDragFrame(self.Anchor, function(uType) self.Anchor:Update(uType) end , "CB Anchor Drag", 2)
-	self.Anchor:SetVisible(KBM.Options.CastBar.Visible)
-	self.Anchor.Drag:SetVisible(KBM.Options.CastBar.Unlocked)
-
-end
-
-function KBM.CastBar:Pull()
 	
-	local GUI = {}
-	if #self.Store > 0 then
-		GUI = table.remove(self.Store)
-		GUI.Frame:SetVisible(false)
-	else
-		GUI.Frame = UI.CreateFrame("Frame", "CastBar Frame", KBM.Context)
-		GUI.Frame:SetWidth(KBM.Options.CastBar.w)
-		GUI.Frame:SetHeight(KBM.Options.CastBar.h)
-		GUI.Progress = UI.CreateFrame("Frame", "CastBar Progress Frame", GUI.Frame)
-		GUI.Progress:SetWidth(0)
-		GUI.Progress:SetHeight(GUI.Frame:GetHeight())
-		GUI.Text = UI.CreateFrame("Text", "Castbar Text", GUI.Frame)
-		GUI.Progress:SetLayer(1)
-		GUI.Text:SetLayer(2)
-		GUI.Text:SetFontSize(KBM.Options.CastBar.TextSize)
-		GUI.Text:SetPoint("CENTER", GUI.Frame, "CENTER")
-		GUI.Progress:SetPoint("TOPLEFT", GUI.Frame, "TOPLEFT")
-		GUI.Frame:SetBackgroundColor(0,0,0,0.3)
-		GUI.Progress:SetBackgroundColor(0.7,0,0,0.5)
-		GUI.Frame:SetVisible(false)
+	self.ActiveCount = 0
+
+	function self:Pull(Anchor)
+		
+		local GUI = {}
+		if #self.Store > 0 then
+			GUI = table.remove(self.Store)
+			GUI.Frame:SetVisible(false)
+		else
+			GUI.Frame = UI.CreateFrame("Frame", "CastBar Frame", KBM.Context)
+			GUI.Frame:SetWidth(self.Settings.w * self.Settings.wScale)
+			GUI.Frame:SetHeight(self.Settings.h * self.Settings.hScale)
+			GUI.Frame:SetLayer(2)
+			GUI.Progress = UI.CreateFrame("Frame", "CastBar Progress Frame", GUI.Frame)
+			GUI.Progress:SetWidth(0)
+			GUI.Shadow = UI.CreateFrame("Text", "Timer_Text_Shadow", GUI.Frame)
+			GUI.Shadow:SetFontSize(self.Settings.TextSize * self.Settings.tScale)
+			GUI.Shadow:SetPoint("CENTER", GUI.Frame, "CENTER", 2, 2)
+			GUI.Shadow:SetLayer(2)
+			GUI.Shadow:SetFontColor(0,0,0)
+			GUI.Shadow:SetMouseMasking("limited")
+			GUI.Text = UI.CreateFrame("Text", "Castbar Text", GUI.Frame)
+			GUI.Progress:SetLayer(1)
+			GUI.Text:SetLayer(3)
+			GUI.Text:SetFontSize(self.Settings.TextSize * self.Settings.tScale)
+			GUI.Text:SetPoint("CENTER", GUI.Frame, "CENTER")
+			GUI.Progress:SetPoint("TOPLEFT", GUI.Frame, "TOPLEFT")
+			GUI.Progress:SetPoint("BOTTOM", GUI.Frame, "BOTTOM")
+			GUI.Frame:SetBackgroundColor(0,0,0,0.3)
+			GUI.Progress:SetBackgroundColor(1,0,0,0.5)
+			GUI.Frame:SetVisible(false)
+			GUI.Texture = UI.CreateFrame("Texture", "Timer_Skin", GUI.Frame)
+			GUI.Texture:SetTexture("KingMolinator", "Media/BarSkin.png")
+			GUI.Texture:SetAlpha(self.Settings.TextureAlpha)
+			GUI.Texture:SetPoint("TOPLEFT", GUI.Frame, "TOPLEFT")
+			GUI.Texture:SetPoint("BOTTOMRIGHT", GUI.Frame, "BOTTOMRIGHT")
+			GUI.Texture:SetLayer(4)
+			GUI.Texture:SetMouseMasking("limited")
+			
+			function GUI:Update(uType)
+				if uType == "end" then
+					self.CastBarObj.Settings.x = self.Drag:GetLeft()
+					self.CastBarObj.Settings.y = self.Drag:GetTop()
+				end
+			end			
+			GUI.Drag = KBM.AttachDragFrame(GUI.Frame, function(uType) GUI:Update(uType) end , "CB Live Drag", 2)
+			GUI.Drag.GUI = GUI
+			
+			function GUI:SetText(Text)
+				self.Shadow:SetText(Text)
+				self.Text:SetText(Text)
+			end
+			function GUI.Drag.Event:WheelForward()
+			
+				if self.GUI.CastBarObj.Settings.ScaleWidth then
+					if self.GUI.CastBarObj.Settings.wScale < 1.5 then
+						self.GUI.CastBarObj.Settings.wScale = self.GUI.CastBarObj.Settings.wScale + 0.025
+						if self.GUI.CastBarObj.Settings.wScale > 1.5 then
+							self.GUI.CastBarObj.Settings.wScale = 1.5
+						end
+						self.GUI.Frame:SetWidth(self.GUI.CastBarObj.Settings.wScale * self.GUI.CastBarObj.Settings.w)
+					end
+				end
+				if self.GUI.CastBarObj.Settings.ScaleHeight then
+					if self.GUI.CastBarObj.Settings.hScale < 1.5 then
+						self.GUI.CastBarObj.Settings.hScale =self.GUI.CastBarObj.Settings.hScale + 0.025
+						if self.GUI.CastBarObj.Settings.hScale > 1.5 then
+							self.GUI.CastBarObj.Settings.hScale = 1.5
+						end
+						self.GUI.Frame:SetHeight(self.GUI.CastBarObj.Settings.hScale * self.GUI.CastBarObj.Settings.h)
+					end
+				end
+				if self.GUI.CastBarObj.Settings.TextScale then
+					if self.GUI.CastBarObj.Settings.tScale < 1.5 then
+						self.GUI.CastBarObj.Settings.tScale = self.GUI.CastBarObj.Settings.tScale + 0.025
+						if self.GUI.CastBarObj.Settings.tScale > 1.5 then
+							self.GUI.CastBarObj.Settings.tScale = 1.5
+						end
+						self.GUI.Text:SetFontSize(self.GUI.CastBarObj.Settings.TextSize * self.GUI.CastBarObj.Settings.tScale)
+						self.GUI.Shadow:SetFontSize(self.GUI.CastBarObj.Settings.TextSize * self.GUI.CastBarObj.Settings.tScale)
+					end
+				end
+				
+			end
+			function GUI.Drag.Event:WheelBack()
+				
+				if self.GUI.CastBarObj.Settings.ScaleWidth then
+					if self.GUI.CastBarObj.Settings.wScale > 0.5 then
+						self.GUI.CastBarObj.Settings.wScale = self.GUI.CastBarObj.Settings.wScale - 0.025
+						if self.GUI.CastBarObj.Settings.wScale < 0.5 then
+							self.GUI.CastBarObj.Settings.wScale = 0.5
+						end
+						self.GUI.Frame:SetWidth(self.GUI.CastBarObj.Settings.wScale * self.GUI.CastBarObj.Settings.w)
+					end
+				end
+				if self.GUI.CastBarObj.Settings.ScaleHeight then
+					if self.GUI.CastBarObj.Settings.hScale > 0.5 then
+						self.GUI.CastBarObj.Settings.hScale = self.GUI.CastBarObj.Settings.hScale - 0.025
+						if self.GUI.CastBarObj.Settings.hScale < 0.5 then
+							self.GUI.CastBarObj.Settings.hScale = 0.5
+						end
+						self.GUI.Frame:SetHeight(self.GUI.CastBarObj.Settings.hScale * self.GUI.CastBarObj.Settings.h)
+					end
+				end
+				if self.GUI.CastBarObj.Settings.TextScale then
+					if self.GUI.CastBarObj.Settings.tScale > 0.5 then
+						self.GUI.CastBarObj.Settings.tScale = self.GUI.CastBarObj.Settings.tScale - 0.025
+						if self.GUI.CastBarObj.Settings.tScale < 0.5 then
+							self.GUI.CastBarObj.Settings.tScale = 0.5
+						end
+						self.GUI.Text:SetFontSize(self.GUI.CastBarObj.Settings.tScale * self.GUI.CastBarObj.Settings.TextSize)
+						self.GUI.Shadow:SetFontSize(self.GUI.CastBarObj.Settings.TextSize * self.GUI.CastBarObj.Settings.tScale)
+					end
+				end
+			end		
+		end
+		return GUI
+		
 	end
-	return GUI
+	
+	self.Anchor = self:Add(KBM, {Name = "Global Castbar"}, true)
+	self.Anchor.Anchor = true
+	self.Anchor:Display()
 	
 end
 
@@ -2234,64 +2746,146 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 	CastBarObj.Boss = Boss
 	CastBarObj.Filters = Boss.CastFilters
 	CastBarObj.HasFilters = Boss.HasCastFilters
+	if Boss.Settings then
+		CastBarObj.Settings = Boss.Settings.CastBar
+	end
+	if not CastBarObj.Settings then
+		if Mod.Settings then
+			if Mod.Settings.CastBar then
+				if Mod.Settings.CastBar.Override then
+					CastBarObj.Settings = Mod.Settings.CastBar
+				else
+					CastBarObj.Settings = self.Settings
+				end
+			else
+				CastBarObj.Settings = self.Settings
+			end
+		else
+			CastBarObj.Settings = self.Settings
+		end
+	end	
 	CastBarObj.Casting = false
 	CastBarObj.LastCast = nil
-	CastBarObj.Enabled = Enabled
+	CastBarObj.Enabled = CastBarObj.Settings.Enabled
 	CastBarObj.Mod = Mod
 	CastBarObj.Active = false
-	function CastBarObj:Create(UnitID)
-		self.UnitID = UnitID
-		self.GUI = KBM.CastBar:Pull()
-		self.GUI.Frame:SetWidth(KBM.Options.CastBar.w)
-		self.GUI.Frame:SetHeight(KBM.Options.CastBar.h)
-		self.GUI.Progress:SetWidth(0)
-		self.GUI.Progress:SetHeight(self.GUI.Frame:GetHeight())
-		if not KBM.Options.CastBar.x then
-			self.GUI.Frame:SetPoint("CENTERX", UIParent, "CENTERX")
+	CastBarObj.Anchor = false
+	
+	function CastBarObj:ApplySettings()
+	
+		self.GUI.Frame:ClearAll()
+		if not self.Settings.x then
+			self.GUI.Frame:SetPoint("CENTER", UIParent, 0.5, 0.7)
 		else
-			self.GUI.Frame:SetPoint("LEFT", UIParent, "LEFT", KBM.Options.CastBar.x, nil)
+			self.GUI.Frame:SetPoint("TOPLEFT", UIParent, "TOPLEFT", self.Settings.x, self.Settings.y)
 		end
-		if not KBM.Options.CastBar.y then
-			self.GUI.Frame:SetPoint("CENTERY", UIParent, "CENTERY")
+		self.GUI.Frame:SetWidth(self.Settings.w * self.Settings.wScale)
+		self.GUI.Frame:SetHeight(self.Settings.h * self.Settings.hScale)
+		self.GUI.Text:SetFontSize(self.Settings.TextSize * self.Settings.tScale)
+		self.GUI.Shadow:SetFontSize(self.Settings.TextSize * self.Settings.tScale)
+		self.GUI.Shadow:SetVisible(self.Settings.Shadow)
+		self.GUI.Texture:SetVisible(self.Settings.Texture)
+		self.GUI.Progress:SetWidth(0)
+		self.GUI:SetText(self.Boss.Name)
+		self.GUI.Frame:SetVisible(self.Settings.Visible)
+		if not self.Settings.Pinned then
+			self.GUI.Drag:SetVisible(true)
 		else
-			self.GUI.Frame:SetPoint("TOP", UIParent, "TOP", nil, KBM.Options.CastBar.y)
+			self.GUI.Drag:SetVisible(self.Settings.Unlocked)
+		end
+		
+	end
+	
+	function CastBarObj:Display()	
+		
+		if self.Settings.Visible and self.Settings.Enabled then
+			self.Visible = true
+			if not self.GUI then
+				self.GUI = KBM.CastBar:Pull(true)
+				self.GUI.CastBarObj = self
+				self:ApplySettings()
+			end
+			self.GUI.Frame:SetVisible(true)
+			if not self.Settings.Pinned then
+				self.GUI.Drag:SetVisible(true)
+			else
+				self.GUI.Drag:SetVisible(false)
+				if self.Boss.PinCastBar then
+					self.Boss:PinCastBar()
+				end
+			end
+		end
+		
+	end
+	
+	function CastBarObj:Create(UnitID)
+	
+		self.UnitID = UnitID
+		if not self.GUI then
+			self.GUI = KBM.CastBar:Pull()
+			self.GUI.CastBarObj = self
+			self:ApplySettings()
+		end
+		if self.Settings.Pinned then
+			if self.Boss.PinCastBar then
+				self.Boss:PinCastBar()
+			end
 		end
 		KBM.CastBar.ActiveCastBars[UnitID] = self
-		if Boss.PinCastBar then
-			Boss:PinCastBar()
-		end
 		self.Active = true
+		
+	end
+	function CastBarObj:Start()
+	
+		self.Casting = true
+		self.GUI.Frame:SetVisible(true)
+		self.GUI.Progress:SetVisible(true)
+		
 	end
 	function CastBarObj:Update()
+	
 		bDetails = Inspect.Unit.Castbar(self.UnitID)
 		if bDetails then
 			if bDetails.abilityName then
-				if self.Enabled and KBM.Options.CastBar.Enabled then
+				if self.Settings.Enabled then
 					if self.HasFilters then
 						if self.Filters[bDetails.abilityName] then
-							if self.Filters[bDetails.abilityName].Enabled then
+							FilterObj = self.Filters[bDetails.abilityName]
+							if FilterObj.Enabled then
 								if not self.Casting then
-									self.Casting = true
-									self.GUI.Frame:SetVisible(true)
+									self:Start()
+									if FilterObj.Custom then
+										self.GUI.Progress:SetBackgroundColor(KBM.Colors.List[FilterObj.Color].Red, KBM.Colors.List[FilterObj.Color].Green, KBM.Colors.List[FilterObj.Color].Blue, 0.33)
+									else
+										if self.Settings.Custom then
+											self.GUI.Progress:SetBackgroundColor(KBM.Colors.List[self.Settings.Color].Red, KBM.Colors.List[self.Settings.Color].Green, KBM.Colors.List[self.Settings.Color].Blue, 0.33)
+										else
+											self.GUI.Progress:SetBackgroundColor(1, 0, 0, 0.33)
+										end
+									end
 								end
-								bCastTime = bDetails.duration
-								bProgress = bDetails.remaining						
-								self.GUI.Progress:SetWidth(self.GUI.Frame:GetWidth() * (1-(bProgress/bCastTime)))
-								self.GUI.Text:SetText(string.format("%0.01f", bProgress).." - "..bDetails.abilityName)
+								self.CastTime = bDetails.duration
+								self.Progress = bDetails.remaining						
+								self.GUI.Progress:SetWidth(self.GUI.Frame:GetWidth() * (1-(self.Progress/self.CastTime)))
+								self.GUI:SetText(string.format("%0.01f", self.Progress).." - "..bDetails.abilityName)
 							else
+								self:Stop()
 								self.Casting = false
-								self.GUI.Frame:SetVisible(false)
 							end
 						end
 					else
 						if not self.Casting then
-							self.Casting = true
-							self.GUI.Frame:SetVisible(true)
+							self:Start()
+							if self.Custom then
+								self.GUI.Progress:SetBackgroundColor(KBM.Colors.List[self.Settings.Color].Red, KBM.Colors.List[self.Settings.Color].Green, KBM.Colors.List[self.Settings.Color].Blue, 0.33)
+							else
+								self.GUI.Progress:SetBackgroundColor(1, 0, 0, 0.33)
+							end
 						end
-						bCastTime = bDetails.duration
-						bProgress = bDetails.remaining						
-						self.GUI.Progress:SetWidth(self.GUI.Frame:GetWidth() * (1-(bProgress/bCastTime)))
-						self.GUI.Text:SetText(string.format("%0.01f", bProgress).." - "..bDetails.abilityName)
+						self.CastTime = bDetails.duration
+						self.Progress = bDetails.remaining
+						self.GUI.Progress:SetWidth(self.GUI.Frame:GetWidth() * (1-(self.Progress/self.CastTime)))
+						self.GUI:SetText(string.format("%0.01f", self.Progress).." - "..bDetails.abilityName)
 					end
 				end
 				if self.LastCast ~= bDetails.abilityName then
@@ -2304,25 +2898,69 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 					end
 				end
 			else
+				self:Stop()
 				self.Casting = false
-				self.GUI.Frame:SetVisible(false)
-				self.LastCast = ""
 			end
 		else
-			self.Casting = false
-			self.GUI.Frame:SetVisible(false)
-			self.LastCast = ""
+			if self.Casting then
+				if self.Progress > 0.05 then
+					-- if Inspect.Unit.Lookup(self.UnitID) then
+						-- Interrupt
+					-- end
+				end
+				self:Stop()
+				self.Casting = false
+			end
 		end
+		
+	end
+	function CastBarObj:Stop()
+	
+		self.Casting = false
+		self.LastCast = ""
+		if self.Settings.Visible then
+			self.GUI:SetText(self.Boss.Name)
+			self.GUI.Progress:SetVisible(false)
+		else
+			self.GUI.Frame:SetVisible(false)
+		end
+		self.Duration = 0
+		self.CastTime = 0
+		
+	end
+	function CastBarObj:Hide()
+	
+		if self.Visible then
+			self.Visible = false
+			if not self.Active then
+				self.GUI.CastBarObj = nil
+				self.GUI.Frame:SetVisible(false)
+				table.insert(KBM.CastBar.Store, self.GUI)
+				self.GUI = nil
+			else
+				self.GUI.Drag:SetVisible(false)
+			end
+		end
+	
 	end
 	function CastBarObj:Remove()
+	
 		KBM.CastBar.ActiveCastBars[self.UnitID] = nil
 		self.UnitID = nil
 		self.Active = false
-		self.GUI.Frame:SetVisible(false)
-		table.insert(KBM.CastBar.Store, self.GUI)
-		self.GUI = nil
+		if not self.Settings.Visible then
+			self.GUI.CastBarObj = nil
+			self.GUI.Frame:SetVisible(false)
+			table.insert(KBM.CastBar.Store, self.GUI)
+			self.GUI = nil
+		end
+		
 	end
 	self[Boss.Name] = CastBarObj
+	if not self.CastBarList[Mod.ID] then
+		self.CastBarList[Mod.ID] = {}
+	end
+	table.insert(self.CastBarList[Mod.ID], CastBarObj)
 	return self[Boss.Name]
 
 end
@@ -2330,44 +2968,52 @@ end
 local function KBM_Reset()
 
 	if KBM.Encounter then
+		KBM.Encounter = false
+		KBM.Idle.Wait = true
+		KBM.Idle.Until = Inspect.Time.Real() + KBM.Idle.Duration
 		if KBM_CurrentMod then
-			KBM.Idle.Wait = true
-			KBM.Idle.Until = Inspect.Time.Real() + KBM.Idle.Duration
-			KBM.Encounter = false
 			KBM_CurrentMod:Reset()
 			KBM_CurrentMod = nil
 			KBM.CurrentBoss = ""
-			KBM.BossID = {}
 			KBM_CurrentBossName = ""
-			KBM.TimeElapsed = 0
-			KBM.TimeStart = 0
-			KBM.EnrageTime = 0
-			KBM.EnrageTimer = 0
-			if KBM.EncTimer.Active then
-				KBM.EncTimer:End()
-			end
-			if KBM.TankSwap.Active then
-				KBM.TankSwap:Remove()
-			end
-			if KBM.Alert.Current then
-				KBM.Alert:Stop()
-			end
-			if #KBM.MechTimer.ActiveTimers > 0 then
-				for i, Timer in ipairs(KBM.MechTimer.ActiveTimers) do
-					KBM.MechTimer:AddRemove(Timer)
-				end
-				if #KBM.MechTimer.RemoveTimers > 0 then
-					for i, Timer in ipairs(KBM.MechTimer.RemoveTimers) do
-						Timer:Stop()
-					end
-				end
-				KBM.MechTimer.RemoveTimers = {}
-				KBM.MechTimer.ActiveTimers = {}
-				KBM.MechTimer.StartTimers = {}
-			end
-			KBM.Trigger.Queue:Remove()
-			KBM.Idle.Combat.Wait = false
 		end
+		KBM.BossID = {}
+		KBM.TimeElapsed = 0
+		KBM.TimeStart = 0
+		KBM.EnrageTime = 0
+		KBM.EnrageTimer = 0
+		if KBM.EncTimer.Active then
+			KBM.EncTimer:End()
+		end
+		if KBM.TankSwap.Active then
+			KBM.TankSwap:Remove()
+		end
+		if KBM.Alert.Current then
+			KBM.Alert:Stop()
+		end
+		if #KBM.MechTimer.ActiveTimers > 0 then
+			for i, Timer in ipairs(KBM.MechTimer.ActiveTimers) do
+				KBM.MechTimer:AddRemove(Timer)
+			end
+			if #KBM.MechTimer.RemoveTimers > 0 then
+				for i, Timer in ipairs(KBM.MechTimer.RemoveTimers) do
+					Timer:Stop()
+				end
+			end
+			KBM.MechTimer.RemoveTimers = {}
+			KBM.MechTimer.ActiveTimers = {}
+			KBM.MechTimer.StartTimers = {}
+		end
+		KBM.Trigger.Queue:Remove()
+		KBM.Idle.Combat.Wait = false
+		KBM.EncTimer.Settings = KBM.Options.EncTimer
+		KBM.EncTimer:ApplySettings()
+		KBM.PhaseMonitor.Settings = KBM.Options.PhaseMon
+		KBM.PhaseMonitor:ApplySettings()
+		KBM.MechTimer.Settings = KBM.Options.MechTimer
+		KBM.MechTimer:ApplySettings()
+		KBM.Alert.Settings = KBM.Options.Alerts
+		KBM.Alert:ApplySettings()
 	else
 		print("No encounter to reset.")
 	end
@@ -2421,6 +3067,7 @@ function KBM.WipeIt()
 end
 
 function KBM:RaidCombatLeave()
+
 	if KBM.Debug then
 		print("Raid has left combat")
 	end
@@ -2453,7 +3100,11 @@ function KBM:Timer()
 		KBM.Updating = true
 		if KBM.QueuePage then
 			if KBM.MainWin.CurrentPage then
-				KBM.MainWin.CurrentPage:Remove()
+				if KBM.MainWin.CurrentPage.Type == "encounter" then
+					KBM.MainWin.CurrentPage:ClearPage()
+				else
+					KBM.MainWin.CurrentPage:Remove()
+				end
 			end
 		end
 		
@@ -2515,7 +3166,7 @@ function KBM:Timer()
 						KBM.WipeIt()
 					end
 				end
-			else
+			end
 				-- for UnitID, CastCheck in pairs(KBM.CastBar.List) do
 					-- CastCheck:Update()
 				-- end
@@ -2524,7 +3175,6 @@ function KBM:Timer()
 						-- self.Alert:Update(Inspect.Time.Real())
 					-- end
 				-- end
-			end
 			-- if KBM.Testing then
 				-- d = math.random(1,2000)
 				-- if d < 20 then
@@ -2536,7 +3186,11 @@ function KBM:Timer()
 			-- end
 		end
 		if KBM.QueuePage then
-			KBM.QueuePage:Open()
+			if KBM.QueuePage.Type == "encounter" then
+				KBM.QueuePage:SetPage()
+			else
+				KBM.QueuePage:Open()
+			end
 			KBM.QueuePage = nil
 		end
 		KBM.Updating = false
@@ -2648,7 +3302,8 @@ function KBM.NPCChat(data)
 					if KBM.Trigger.Say[KBM_CurrentMod.ID] then
 						for i, TriggerObj in ipairs(KBM.Trigger.Say[KBM_CurrentMod.ID]) do
 							if TriggerObj.Unit.Name == data.fromName then
-								if string.find(data.message, TriggerObj.Phrase) then
+								sStart, sEnd, Target = string.find(data.message, TriggerObj.Phrase)
+								if sStart then
 									KBM.Trigger.Queue:Add(TriggerObj)
 									break
 								end
@@ -2695,8 +3350,6 @@ function KBM.MenuOptions.Phases:Options()
 	function self:Visible(bool)
 		KBM.Options.PhaseMon.Visible = bool
 		KBM.PhaseMonitor.Anchor:SetVisible(bool)
-	end
-	function self:Unlocked(bool)
 		KBM.Options.PhaseMon.Unlocked = bool
 		KBM.PhaseMonitor.Anchor.Drag:SetVisible(bool)
 	end
@@ -2706,16 +3359,27 @@ function KBM.MenuOptions.Phases:Options()
 	function self:Objectives(bool)
 		KBM.Options.PhaseMon.Objectives = bool
 	end
-
+	function self:ScaleWidth(bool)
+		KBM.Options.PhaseMon.ScaleWidth = bool
+	end
+	function self:ScaleHeight(bool)
+		KBM.Options.PhaseMon.ScaleHeight = bool
+	end
+	function self:TextScale(bool)
+		KBM.Options.PhaseMon.TextScale = bool
+	end
+	
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
 	
 	-- Timer Options
 	local PhaseMon = Options:AddHeader(KBM.Language.Options.PhaseEnabled[KBM.Lang], self.Enabled, KBM.Options.PhaseMon.Enabled)
-	PhaseMon:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.Visible, KBM.Options.PhaseMon.Visible)
-	PhaseMon:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.Unlocked, KBM.Options.PhaseMon.Unlocked)
 	PhaseMon:AddCheck(KBM.Language.Options.Phases[KBM.Lang], self.PhaseDisplay, KBM.Options.PhaseMon.PhaseDisplay)
 	PhaseMon:AddCheck(KBM.Language.Options.Objectives[KBM.Lang], self.Objectives, KBM.Options.PhaseMon.Objectives)
+	PhaseMon:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.Visible, KBM.Options.PhaseMon.Visible)
+	PhaseMon:AddCheck(KBM.Language.Options.UnlockWidth[KBM.Lang], self.ScaleWidth, KBM.Options.PhaseMon.ScaleWidth)
+	PhaseMon:AddCheck(KBM.Language.Options.UnlockHeight[KBM.Lang], self.ScaleHeight, KBM.Options.PhaseMon.ScaleHeight)
+	PhaseMon:AddCheck(KBM.Language.Options.UnlockText[KBM.Lang], self.TextScale, KBM.Options.PhaseMon.TextScale)
 	
 end
 
@@ -2730,8 +3394,6 @@ function KBM.MenuOptions.Timers:Options()
 		KBM.Options.EncTimer.Visible = bool
 		KBM.EncTimer.Frame:SetVisible(bool)
 		KBM.EncTimer.Enrage.Frame:SetVisible(bool)
-	end
-	function self:LockEncTimer(bool)
 		KBM.Options.EncTimer.Unlocked = bool
 		KBM.EncTimer.Frame.Drag:SetVisible(bool)
 	end
@@ -2740,6 +3402,15 @@ function KBM.MenuOptions.Timers:Options()
 	end
 	function self:EncEnrage(bool)
 		KBM.Options.EncTimer.Enrage = bool
+	end
+	function self:EncScaleHeight(bool, Check)
+		KBM.Options.EncTimer.ScaleHeight = bool
+	end
+	function self:EncScaleWidth(bool, Check)
+		KBM.Options.EncTimer.ScaleWidth = bool
+	end
+	function self:EncTextSize(bool, Check)
+		KBM.Options.EncTimer.TextScale = bool
 	end
 	
 	-- Timer Callbacks
@@ -2779,19 +3450,21 @@ function KBM.MenuOptions.Timers:Options()
 	
 	-- Timer Options
 	local Timers = Options:AddHeader(KBM.Language.Options.EncTimers[KBM.Lang], self.EncTimersEnabled, KBM.Options.EncTimer.Enabled)
-	Timers:AddCheck(KBM.Language.Options.ShowTimer[KBM.Lang], self.ShowEncTimer, KBM.Options.EncTimer.Visible)
-	Timers:AddCheck(KBM.Language.Options.LockTimer[KBM.Lang], self.LockEncTimer, KBM.Options.EncTimer.Unlocked)
 	Timers:AddCheck(KBM.Language.Options.Timer[KBM.Lang], self.EncDuration, KBM.Options.EncTimer.Duration)
 	Timers:AddCheck(KBM.Language.Options.Enrage[KBM.Lang], self.EncEnrage, KBM.Options.EncTimer.Enrage)
+	Timers:AddCheck(KBM.Language.Options.ShowTimer[KBM.Lang], self.ShowEncTimer, KBM.Options.EncTimer.Visible)
+	Timers:AddCheck(KBM.Language.Options.UnlockWidth[KBM.Lang], self.EncScaleWidth, KBM.Options.EncTimer.ScaleWidth)
+	Timers:AddCheck(KBM.Language.Options.UnlockHeight[KBM.Lang], self.EncScaleHeight, KBM.Options.EncTimer.ScaleHeight)
+	Timers:AddCheck(KBM.Language.Options.UnlockText[KBM.Lang], self.EncTextSize, KBM.Options.EncTimer.TextScale)
 	local MechTimers = Options:AddHeader(KBM.Language.Options.MechanicTimers[KBM.Lang], self.MechEnabled, true)
 	MechTimers.GUI.Check:SetEnabled(false)
 	KBM.Options.MechTimer.Enabled = true
 	MechTimers:AddCheck(KBM.Language.Options.Texture[KBM.Lang], self.MechTexture, KBM.Options.MechTimer.Texture)
 	MechTimers:AddCheck(KBM.Language.Options.Shadow[KBM.Lang], self.MechShadow, KBM.Options.MechTimer.Shadow)
 	MechTimers:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowMechAnchor, KBM.Options.MechTimer.Visible)
-	MechTimers:AddCheck("Unlock width scaling.", self.MechScaleWidth, KBM.Options.MechTimer.ScaleWidth)
-	MechTimers:AddCheck("Unlock height scaling.", self.MechScaleHeight, KBM.Options.MechTimer.ScaleHeight)
-	MechTimers:AddCheck("Unlock text size.", self.MechTextSize, KBM.Options.MechTimer.TextScale)
+	MechTimers:AddCheck(KBM.Language.Options.UnlockWidth[KBM.Lang], self.MechScaleWidth, KBM.Options.MechTimer.ScaleWidth)
+	MechTimers:AddCheck(KBM.Language.Options.UnlockHeight[KBM.Lang], self.MechScaleHeight, KBM.Options.MechTimer.ScaleHeight)
+	MechTimers:AddCheck(KBM.Language.Options.UnlockText[KBM.Lang], self.MechTextSize, KBM.Options.MechTimer.TextScale)
 	
 end
 
@@ -2890,98 +3563,81 @@ end
 function KBM.MenuOptions.CastBars:Options()
 
 	-- Castbar Callbacks
-	function self:CastBarEnabled(bool)
+	function self:Enabled(bool)
 		KBM.Options.CastBar.Enabled = bool
 	end
-	function self:ShowCastAnchor(bool)
+	function self:Texture(bool)
+		KBM.Options.CastBar.Texture = bool
+		KBM.CastBar.Anchor.GUI.Texture:SetVisible(bool)
+	end
+	function self:Shadow(bool)
+		KBM.Options.CastBar.Shadow = bool
+		KBM.CastBar.Anchor.GUI.Shadow:SetVisible(bool)
+	end
+	function self:Visible(bool)
 		KBM.Options.CastBar.Visible = bool
-		KBM.CastBar.Anchor:SetVisible(bool)
-	end
-	function self:LockCastAnchor(bool)
 		KBM.Options.CastBar.Unlocked = bool
-		KBM.CastBar.Anchor.Drag:SetVisible(bool)
+		if bool then
+			KBM.CastBar.Anchor:Display()
+		else
+			KBM.CastBar.Anchor:Hide()
+		end
 	end
-	function self:CastScaleWidth(bool, Check)
+	function self:Width(bool)
 		KBM.Options.CastBar.ScaleWidth = bool
-		if not bool then
-			KBM.Options.CastBar.wScale = 1
-			Check.SliderObj.Bar.Frame:SetPosition(100)
-			KBM.CastBar.Anchor:SetWidth(KBM.Options.CastBar.w)
-		end
 	end
-	function self:CastwScaleChange(value)
-		KBM.Options.CastBar.wScale = value * 0.01
-		KBM.CastBar.Anchor:SetWidth(KBM.Options.CastBar.w * KBM.Options.CastBar.wScale)
-	end
-	function self:CastScaleHeight(bool, Check)
+	function self:Height(bool)
 		KBM.Options.CastBar.ScaleHeight = bool
-		if not bool then
-			KBM.Options.CastBar.hScale = 1
-			Check.SliderObj.Bar.Frame:SetPosition(100)
-			KBM.CastBar.Anchor:SetHeight(KBM.Options.CastBar.h)
-		end
 	end
-	function self:CasthScaleChange(value)
-		KBM.Options.CastBar.hScale = value * 0.01
-		KBM.CastBar.Anchor:SetHeight(KBM.Options.CastBar.h * KBM.Options.CastBar.hScale)
-	end
-	function self:CastTextSize(bool, Check)
+	function self:Text(bool)
 		KBM.Options.CastBar.TextScale = bool
-		if not bool then
-			KBM.Options.CastBar.TextSize = 20
-			Check.Slider.Bar:SetPosition(KBM.Options.CastBar.TextSize)
-			KBM.CastBar.Anchor.Text:SetFontSize(KBM.Options.CastBar.TextSize)
-		end
-	end
-	function self:CastTextChange(value)
-		KBM.Options.CastBar.TextSize = value
-		KBM.CastBar.Anchor.Text:SetFontSize(KBM.Options.CastBar.TextSize)
 	end
 	
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
 
 	-- CastBar Options. 
-	local CastBars = Options:AddHeader(KBM.Language.Options.CastbarEnabled[KBM.Lang], self.CastBarEnabled, KBM.Options.CastBar.Enabled)
-	CastBars:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowCastAnchor, KBM.Options.CastBar.Visible)
-	CastBars:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.LockCastAnchor, KBM.Options.CastBar.Unlocked)
-	-- self.CastBars:AddCheck("Width scaling.", self.CastScaleWidth, KBM.Options.CastBar.ScaleWidth)
-	-- self.CastBars:AddCheck("Height scaling.", self.CastScaleHeight, KBM.Options.CastBar.ScaleHeight)
-	-- self.CastBars:AddCheck("Text Size", self.CastTextSize, KBM.Options.CastBar.TextScale)
+	local CastBars = Options:AddHeader(KBM.Language.Options.CastbarEnabled[KBM.Lang], self.Enabled, KBM.Options.CastBar.Enabled)
+	CastBars:AddCheck(KBM.Language.Options.Texture[KBM.Lang], self.Texture, KBM.Options.CastBar.Texture)
+	CastBars:AddCheck(KBM.Language.Options.Shadow[KBM.Lang], self.Shadow, KBM.Options.CastBar.Shadow)
+	CastBars:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.Visible, KBM.Options.CastBar.Visible)
+	CastBars:AddCheck(KBM.Language.Options.UnlockWidth[KBM.Lang], self.Width, KBM.Options.CastBar.ScaleWidth)
+	CastBars:AddCheck(KBM.Language.Options.UnlockHeight[KBM.Lang], self.Height, KBM.Options.CastBar.ScaleHeight)
+	CastBars:AddCheck(KBM.Language.Options.UnlockText[KBM.Lang], self.Text, KBM.Options.CastBar.TextScale)
 
 end
 
 function KBM.MenuOptions.Alerts:Options()
 
 	function self:AlertEnabled(bool)
-		KBM.Options.Alert.Enabled = bool
+		KBM.Options.Alerts.Enabled = bool
 	end
 	function self:ShowAnchor(bool)
-		KBM.Options.Alert.Visible = bool
+		KBM.Options.Alerts.Visible = bool
 		KBM.Alert.Anchor:SetVisible(bool)
 		if bool then
 			KBM.Alert.Anchor:SetAlpha(1)
 		end
 	end
 	function self:LockAnchor(bool)
-		KBM.Options.Alert.Unlocked = bool
+		KBM.Options.Alerts.Unlocked = bool
 		KBM.Alert.Anchor.Drag:SetVisible(bool)
 	end
 	function self:FlashEnabled(bool)
-		KBM.Options.Alert.Flash = bool
+		KBM.Options.Alerts.Flash = bool
 	end
 	function self:TextEnabled(bool)
-		KBM.Options.Alert.Notify = bool
+		KBM.Options.Alerts.Notify = bool
 	end
 	
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
 
-	local Alert = Options:AddHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], self.AlertEnabled, KBM.Options.Alert.Enabled)
-	Alert:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowAnchor, KBM.Options.Alert.Visible)
-	Alert:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.LockAnchor, KBM.Options.Alert.Unlocked)
-	Alert:AddCheck(KBM.Language.Options.AlertFlash[KBM.Lang], self.FlashEnabled, KBM.Options.Alert.Flash)
-	Alert:AddCheck(KBM.Language.Options.AlertText[KBM.Lang], self.TextEnabled, KBM.Options.Alert.Notify)
+	local Alert = Options:AddHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], self.AlertEnabled, KBM.Options.Alerts.Enabled)
+	Alert:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowAnchor, KBM.Options.Alerts.Visible)
+	Alert:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.LockAnchor, KBM.Options.Alerts.Unlocked)
+	Alert:AddCheck(KBM.Language.Options.AlertFlash[KBM.Lang], self.FlashEnabled, KBM.Options.Alerts.Flash)
+	Alert:AddCheck(KBM.Language.Options.AlertText[KBM.Lang], self.TextEnabled, KBM.Options.Alerts.Notify)
 	
 end
 
@@ -3038,7 +3694,7 @@ function KBM.MenuOptions.Main:Options()
 	Options:SetTitle()
 
 	local Character = Options:AddHeader(KBM.Language.Options.Character[KBM.Lang], self.Character, KBM.Options.Character)
-	local Enabled = Options:AddHeader(KBM.Language.Options.Enabled[KBM.Lang], self.Enabled, KBM.Options.Enabled)
+	local Enabled = Options:AddHeader(KBM.Language.Options.ModEnabled[KBM.Lang], self.Enabled, KBM.Options.Enabled)
 	local Button = Options:AddHeader(KBM.Language.Options.Button[KBM.Lang], self.ButtonVisible, KBM.Options.Button.Visible)
 	Button:AddCheck(KBM.Language.Options.LockButton[KBM.Lang], self.LockButton, KBM.Options.Button.Unlocked)
 	
@@ -3086,13 +3742,18 @@ local function KBM_Start()
 	KBM.PhaseMonitor:Init()
 	KBM.Trigger:Init()
 	KBM.InitOptions()
-	local Header = KBM.MainWin.Menu:CreateHeader("Options")
+	local Header = KBM.MainWin.Menu:CreateHeader("Global Options")
 	KBM.MenuOptions.Main.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.Settings[KBM.Lang], KBM.MenuOptions.Main, nil, Header)
 	KBM.MenuOptions.Timers.MenuItem = KBM.MainWin.Menu:CreateEncounter("Timers", KBM.MenuOptions.Timers, true, Header)
 	KBM.MenuOptions.Phases.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.PhaseMonitor[KBM.Lang], KBM.MenuOptions.Phases, true, Header) 
 	KBM.MenuOptions.CastBars.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.Castbar[KBM.Lang], KBM.MenuOptions.CastBars, true, Header)
 	KBM.MenuOptions.Alerts.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.Alert[KBM.Lang], KBM.MenuOptions.Alerts, true, Header)
-	KBM.MenuOptions.TankSwap.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.TankSwap[KBM.Lang], KBM.MenuOptions.TankSwap, true, Header)
+	if KBM.Lang ~= "English" then
+		KBM.MenuOptions.TankSwap.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.TankSwap[KBM.Lang].." (Disabled)", KBM.MenuOptions.TankSwap, true, Header)
+		KBM.MenuOptions.TankSwap.MenuItem:Enabled(false)
+	else
+		KBM.MenuOptions.TankSwap.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.TankSwap[KBM.Lang], KBM.MenuOptions.TankSwap, true, Header)	
+	end
 	KBM.MenuGroup.twentyman = KBM.MainWin.Menu:CreateHeader("20-Man Raids", nil, nil, true)
 	table.insert(Command.Slash.Register("kbmreset"), {KBM_Reset, "KingMolinator", "KBM Reset"})
 	table.insert(Event.Chat.Notify, {KBM.Notify, "KingMolinator", "Notify Event"})
@@ -3131,6 +3792,12 @@ local function KBM_WaitReady(unitID)
 		Mod:Start(KBM_MainWin)
 	end
 	KBM.ApplySettings()
+	
+	-- KBM.Settings = {}
+	-- KBM.Settings.CastBar = KBM.Defaults.CastBar()
+	
+	-- KBM_PlayerCastBar = KBM.CastBar:Add(KBM, {Name = KBM_PlayerName, Mod = KBM}, true)
+	-- KBM_PlayerCastBar:Create(KBM_PlayerID)
 		
 --	KBM.MenuGroup:SetMaster()
 --	KBM.MenuGroup:SetExpertTwo()
@@ -3145,6 +3812,7 @@ local function KBM_WaitReady(unitID)
 		-- TestTrigger = KBM.Trigger:Create("Summon: Skeletal Knight", "cast", KBM.TestBoss)
 		-- TestTrigger:AddTimer(TestTimer)
 	-- end
+		
 end
 
 function KBM.RegisterMod(ModID, Mod)

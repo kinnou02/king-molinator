@@ -10,7 +10,7 @@ local KBM = AddonData.data
 local HK = KBM.BossMod["Hammerknell"]
 
 local SZ = {
-	ModEnabled = true,
+	Enabled = true,
 	Instance = HK.Name,
 	PhaseObj = nil,
 	Phase = 1,
@@ -24,15 +24,25 @@ SZ.Zilas = {
 	Level = "??",
 	Active = false,
 	Name = "Soulrender Zilas",
-	Castbar = nil,
 	CastFilters = {},
-	Timers = {},
 	TimersRef = {},
 	AlertsRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
 	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+		TimersRef = {
+			Enabled = true,
+			Grasp = KBM.Defaults.TimerObj.Create(),
+		},
+		AlertsRef = {
+			Enabled = true,
+			GraspWarn = KBM.Defaults.AlertObj.Create("orange"),
+			Grasp = KBM.Defaults.AlertObj.Create("red", false),
+		},		
+	},
 }
 
 KBM.RegisterMod(SZ.ID, SZ)
@@ -51,26 +61,21 @@ function SZ:AddBosses(KBM_Boss)
 	self.Zilas.Descript = self.Zilas.Name
 	self.MenuName = self.Zilas.Descript
 	self.Bosses = {
-		[self.Zilas.Name] = true,
+		[self.Zilas.Name] = self.Zilas,
 	}
 	KBM_Boss[self.Zilas.Name] = self.Zilas	
 end
 
 function SZ:InitVars()
 	self.Settings = {
-		Timers = {
-			Enabled = true,
-			Grasp = true,
-		},
-		Alerts = {
-			Enabled = true,
-			Grasp = true,
-		},
-		CastBar = {
-			x = false,
-			y = false,
-			Enabled = true,
-		},
+		Enabled = true,
+		EncTimer = KBM.Defaults.EncTimer(),
+		PhaseMon = KBM.Defaults.PhaseMon(),
+		MechTimer = KBM.Defaults.MechTimer(),		
+		Alerts = KBM.Defaults.Alerts(),
+		CastBar = self.Zilas.Settings.CastBar,
+		TimersRef = self.Zilas.Settings.TimersRef,
+		AlertsRef = self.Zilas.Settings.AlertsRef,
 	}
 	KBMSZ_Settings = self.Settings
 	chKBMSZ_Settings = self.Settings
@@ -94,29 +99,11 @@ function SZ:LoadVars()
 	local TargetLoad = nil
 	
 	if KBM.Options.Character then
-		TargetLoad = chKBMSZ_Settings
+		KBM.LoadTable(chKBMSZ_Settings, self.Settings)
 	else
-		TargetLoad = KBMSZ_Settings
+		KBM.LoadTable(KBMSZ_Settings, self.Settings)
 	end
-	
-	if type(TargetLoad) == "table" then
-		for Setting, Value in pairs(TargetLoad) do
-			if type(TargetLoad[Setting]) == "table" then
-				if self.Settings[Setting] ~= nil then
-					for tSetting, tValue in pairs(TargetLoad[Setting]) do
-						if self.Settings[Setting][tSetting] ~= nil then
-							self.Settings[Setting][tSetting] = tValue
-						end
-					end
-				end
-			else
-				if self.Settings[Setting] ~= nil then
-					self.Settings[Setting] = Value
-				end
-			end
-		end
-	end
-	
+		
 	if KBM.Options.Character then
 		chKBMSZ_Settings = self.Settings
 	else
@@ -154,23 +141,23 @@ function SZ:Death(UnitID)
 	return false
 end
 
-function SZ:UnitHPCheck(unitDetails, unitID)
+function SZ:UnitHPCheck(uDetails, unitID)
 	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if unitDetails.name == self.Zilas.Name then
+	if uDetails and unitID then
+		if not uDetails.player then
+			if uDetails.name == self.Zilas.Name then
 				if not self.Zilas.UnitID then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
 					self.TimeElapsed = 0
-					self.Zilas.Dead = false
-					self.Zilas.Casting = false
 					self.Zilas.CastBar:Create(unitID)
 					self.PhaseObj.Objectives:AddPercent(self.Zilas.Name, 80, 100)
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase(1)
 				end
+				self.Zilas.Dead = false
+				self.Zilas.Casting = false
 				self.Zilas.UnitID = unitID
 				self.Zilas.Available = true
 				return self.Zilas
@@ -180,128 +167,87 @@ function SZ:UnitHPCheck(unitDetails, unitID)
 end
 
 function SZ.PhaseTwo()
-	
 	SZ.Phase = 2
 	SZ.PhaseObj.Objectives:Remove()
 	SZ.PhaseObj:SetPhase(2)
 	SZ.PhaseObj.Objectives:AddPercent(SZ.Zilas.Name, 60, 80)
 	print("Phase 2 Starting!")
-	
 end
 
 function SZ.PhaseThree()
-
 	SZ.Phase = 3
 	SZ.PhaseObj.Objectives:Remove()
 	SZ.PhaseObj:SetPhase(3)
 	SZ.PhaseObj.Objectives:AddPercent(SZ.Zilas.Name, 40, 60)
 	print("Phase 3 Starting! - Kite phase incoming.")
-
 end
 
 function SZ.PhaseFour()
-
 	SZ.Phase = 4
 	SZ.PhaseObj.Objectives:Remove()
 	SZ.PhaseObj:SetPhase(4)
 	SZ.PhaseObj.Objectives:AddPercent(SZ.Zilas.Name, 20, 40)
-	print("Phase 4 Starting!")
-	
+	print("Phase 4 Starting!")	
 end
 
 function SZ.PhaseFive()
-
 	SZ.Phase = 5
 	SZ.PhaseObj.Objectives:Remove()
 	SZ.PhaseObj:SetPhase("Final")
 	SZ.PhaseObj.Objectives:AddPercent(SZ.Zilas.Name, 0, 20)
 	print("Final Phase!")
-
 end
 
 function SZ:Reset()
-
 	self.EncounterRunning = false
 	self.Zilas.Available = false
 	self.Zilas.UnitID = nil
 	self.Zilas.CastBar:Remove()
 	self.PhaseObj:End(self.TimeElapsed)
-	self.Phase = 1
-	
+	self.Phase = 1	
 end
 
 function SZ:Timer()
-	
 end
 
-function SZ:SetTimers(bool)
-
+function SZ.Zilas:SetTimers(bool)	
 	if bool then
-		self.Zilas.TimersRef.Grasp.Enabled = self.Settings.Timers.Grasp		
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = TimerObj.Settings.Enabled
+		end
 	else
-		self.Zilas.TimersRef.Grasp.Enabled = false
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = false
+		end
 	end
-
 end
 
-function SZ:SetAlerts(bool)
-
+function SZ.Zilas:SetAlerts(bool)
 	if bool then
-		self.Zilas.AlertsRef.GraspWarn.Enabled = self.Settings.Alerts.Grasp
-		self.Zilas.AlertsRef.Grasp.Enabled = self.Settings.Alerts.Grasp
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = AlertObj.Settings.Enabled
+		end
 	else
-		self.Zilas.AlertsRef.GraspWarn.Enabled = false
-		self.Zilas.AlertsRef.Grasp.Enabled = false
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = false
+		end
 	end
-
 end
 
-function SZ.Zilas:Options()
-
-	-- Timer Options.
-	function self:Timers(bool)
-		SZ.Settings.Timers.Enabled = bool
-		SZ:SetTimers(bool)
-	end
-	function self:GraspTimer(bool)
-		SZ.Settings.Timers.Grasp = bool
-		SZ.Zilas.TimersRef.Grasp.Enabled = bool
-	end
-	-- Alert Options.
-	function self:Alerts(bool)
-		SZ.Settings.Alerts.Enabled = bool
-		SZ:SetAlerts(bool)
-	end
-	function self:GraspAlert(bool)
-		SZ.Settings.Alerts.Grasp = bool
-		SZ.Zilas.AlertsRef.Grasp.Enabled = bool
-	end
-	
-	-- Menu Options.
-	local Options = self.MenuItem.Options
-	Options:SetTitle()
-	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.Timers, SZ.Settings.Timers.Enabled)
-	Timers:AddCheck(SZ.Lang.Ability.Grasp[KBM.Lang], self.GraspTimer, SZ.Settings.Timers.Grasp)
-	local Alerts = Options:AddHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], self.Alerts, SZ.Settings.Alerts.Enabled)
-	Alerts:AddCheck(SZ.Lang.Ability.Grasp[KBM.Lang], self.GraspAlert, SZ.Settings.Alerts.Grasp)
-	
+function SZ:DefineMenu()
+	self.Menu = HK.Menu:CreateEncounter(self.Zilas, self.Enabled)
 end
 
 function SZ:Start()
-
-	-- Initiate Main Menu option.
-	self.Header = KBM.HeaderList[self.Instance]
-	self.Zilas.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Zilas, true, self.Header)
-	self.Zilas.MenuItem.Check:SetEnabled(false)
-	
 	-- Create Timers
 	self.Zilas.TimersRef.Grasp = KBM.MechTimer:Add(self.Lang.Ability.Grasp[KBM.Lang], 60)
-	self:SetTimers(self.Settings.Timers.Enabled)
 	
 	-- Create Alerts
-	self.Zilas.AlertsRef.GraspWarn = KBM.Alert:Create(self.Lang.Ability.Grasp[KBM.Lang], 5, true, true, "orange")
-	self.Zilas.AlertsRef.Grasp = KBM.Alert:Create(self.Lang.Ability.Grasp[KBM.Lang], 9, false, true, "red")
-	self:SetAlerts(self.Settings.Alerts.Enabled)
+	self.Zilas.AlertsRef.GraspWarn = KBM.Alert:Create(self.Lang.Ability.Grasp[KBM.Lang], 5, true, true)
+	self.Zilas.AlertsRef.Grasp = KBM.Alert:Create(self.Lang.Ability.Grasp[KBM.Lang], 9, false, true)
+
+	KBM.Defaults.TimerObj.Assign(self.Zilas)
+	KBM.Defaults.AlertObj.Assign(self.Zilas)
 	
 	-- Assign Mechanics to Triggers.
 	self.Zilas.Triggers.Grasp = KBM.Trigger:Create(self.Lang.Ability.Grasp[KBM.Lang], "cast", self.Zilas)
@@ -322,5 +268,5 @@ function SZ:Start()
 	
 	-- Assing Phase Tracking.
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	
+	self:DefineMenu()
 end

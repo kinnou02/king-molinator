@@ -172,7 +172,7 @@ function DL:UnitHPCheck(unitDetails, unitID)
 					self.TimeElapsed = 0
 					self.Phase = 1
 					self.Letareus.CastBar:Create(unitID)
-					self.PahseObj:SetPhase(DL.Lang.Mechanic.Tank[KBM.Lang])
+					self.PhaseObj:SetPhase(DL.Lang.Mechanic.Tank[KBM.Lang])
 					self.PhaseObj.Objectives:AddPercent(self.Letareus.Name, 86, 100)
 					self.PhaseObj:Start(self.StartTime)
 				end

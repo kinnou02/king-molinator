@@ -4,25 +4,15 @@
 --
 
 KBMGU_Settings = nil
+chKBMGU_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 local HK = KBM.BossMod["Hammerknell"]
 
 local GU = {
-	ModEnabled = true,
-	MenuName = "",
-	Garau = {
-		MenuItem = nil,
-		Enabled = true,
-		Handler = nil,
-		Options = nil,
-	},
+	Enabled = true,
 	Instance = HK.Name,
-	HasPhases = true,
-	PhaseType = "percentage",
-	PhaseList = {},
-	Timers = {},
 	Lang = {},
 	Enrage = 60 * 12,
 	ID = "Garau",
@@ -33,16 +23,28 @@ GU.Garau = {
 	Level = "??",
 	Active = false,
 	Name = "Inquisitor Garau",
-	Castbar = nil,
-	CastFilters = {},
-	Timers = {},
+	NameShort = "Garau",
 	TimersRef = {},
+	AlertsRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
 	Descript = "Inquisitor Garau",
 	TimeOut = 3,
 	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+		TimersRef = {
+			Enabled = true,
+			Blood = KBM.Defaults.TimerObj.Create("red"),
+			Porter = KBM.Defaults.TimerObj.Create("purple"),
+			Essence = KBM.Defaults.TimerObj.Create("orange"),
+			Crawler = KBM.Defaults.TimerObj.Create("dark_green"),
+		},
+		AlertsRef = {
+			Enabled = false,
+		},
+	},
 }
 
 KBM.RegisterMod(GU.ID, GU)
@@ -83,27 +85,22 @@ GU.Lang.Unit.Crawler.German = "Durchdrungener Kriecher"
 GU.Garau.Name = KBM.Language[GU.Garau.Name][KBM.Lang]
 
 function GU:AddBosses(KBM_Boss)
+	self.Garau.Descript = self.Garau.Name
 	self.MenuName = self.Garau.Name
-	self.Garau.Bosses = {
-		[self.Garau.Name] = true,
+	self.Bosses = {
+		[self.Garau.Name] = self.Garau,
 	}
 	KBM_Boss[self.Garau.Name] = self.Garau	
 end
 
 function GU:InitVars()
 	self.Settings = {
-		Timers = {
-			Enabled = true,
-			BloodEnabled = true,
-			PorterEnabled = true,
-			EssenceEnabled = true,
-			CrawlerEnabled = true,
-		},
-		CastBar =  {
-			x = false,
-			y = false,
-			Enabled = true,
-		},
+		Enabled = true,
+		EncTimer = KBM.Defaults.EncTimer(),
+		MechTimer = KBM.Defaults.MechTimer(),		
+		CastBar = self.Garau.Settings.CastBar,
+		TimersRef = self.Garau.Settings.TimersRef,
+		AlertsRef = self.Garau.Settings.AlertsRef,
 	}
 	KBMGU_Settings = self.Settings
 	chKBMGU_Settings = self.Settings
@@ -111,7 +108,6 @@ function GU:InitVars()
 end
 
 function GU:SwapSettings(bool)
-
 	if bool then
 		KBMGU_Settings = self.Settings
 		self.Settings = chKBMGU_Settings
@@ -119,53 +115,29 @@ function GU:SwapSettings(bool)
 		chKBMGU_Settings = self.Settings
 		self.Settings = KBMGU_Settings
 	end
-
 end
 
 function GU:LoadVars()
-
-	local TargetLoad = nil
-	
+	local TargetLoad = nil	
 	if KBM.Options.Character then
-		TargetLoad = chKBMGU_Settings
+		KBM.LoadTable(chKBMGU_Settings, self.Settings)
 	else
-		TargetLoad = KBMGU_Settings
+		KBM.LoadTable(KBMGU_Settings, self.Settings)
 	end
-	
-	if type(TargetLoad) == "table" then
-		for Setting, Value in pairs(TargetLoad) do
-			if type(TargetLoad[Setting]) == "table" then
-				if self.Settings[Setting] ~= nil then
-					for tSetting, tValue in pairs(TargetLoad[Setting]) do
-						if self.Settings[Setting][tSetting] ~= nil then
-							self.Settings[Setting][tSetting] = tValue
-						end
-					end
-				end
-			else
-				if self.Settings[Setting] ~= nil then
-					self.Settings[Setting] = Value
-				end
-			end
-		end
-	end
-	
+		
 	if KBM.Options.Character then
 		chKBMGU_Settings = self.Settings
 	else
 		KBMGU_Settings = self.Settings
-	end
-	
+	end	
 end
 
 function GU:SaveVars()
-
 	if KBM.Options.Character then
 		chKBMGU_Settings = self.Settings
 	else
 		KBMGU_Settings = self.Settings
-	end
-	
+	end	
 end
 
 function GU:Castbar(units)
@@ -187,20 +159,19 @@ function GU:Death(UnitID)
 	return false
 end
 
-function GU:UnitHPCheck(unitDetails, unitID)
-	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if unitDetails.name == self.Garau.Name then
+function GU:UnitHPCheck(uDetails, unitID)
+	if uDetails and unitID then
+		if not uDetails.player then
+			if uDetails.name == self.Garau.Name then
 				if not self.Garau.UnitID then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
 					self.TimeElapsed = 0
-					self.Garau.Dead = false
-					self.Garau.Casting = false
 					self.Garau.CastBar:Create(unitID)
 				end
+				self.Garau.Dead = false
+				self.Garau.Casting = false
 				self.Garau.UnitID = unitID
 				self.Garau.Available = true
 				return self.Garau
@@ -216,80 +187,45 @@ function GU:Reset()
 	self.Garau.CastBar:Remove()
 end
 
-function GU:Timer()
-	
+function GU:Timer()	
 end
 
-function GU:SetTimers(bool)
-
+function GU.Garau:SetTimers(bool)	
 	if bool then
-		self.Garau.TimersRef.Blood.Enabled = self.Settings.Timers.BloodEnabled
-		self.Garau.TimersRef.Crawler.Enabled = self.Settings.Timers.CrawlerEnabled
-		self.Garau.TimersRef.Porter.Enabled = self.Settings.Timers.PorterEnabled
-		self.Garau.TimersRef.Essence.Enabled = self.Settings.Timers.EssenceEnabled
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = TimerObj.Settings.Enabled
+		end
 	else
-		self.Garau.TimersRef.Blood.Enabled = false
-		self.Garau.TimersRef.Crawler.Enabled = false
-		self.Garau.TimersRef.Porter.Enabled = false
-		self.Garau.TimersRef.Essence.Enabled = false
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = false
+		end
 	end
-
 end
 
-function GU:SetAlerts(bool)
-
+function GU.Garau:SetAlerts(bool)
 	if bool then
-	
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = AlertObj.Settings.Enabled
+		end
 	else
-	
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = false
+		end
 	end
-
 end
 
-function GU.Garau:Options()
-
-	-- Timer Options
-	function self:TimersEnabled(bool)
-		GU.Settings.Timers.Enabled = bool
-		GU:SetTimers(bool)
-	end
-	function self:BloodEnabled(bool)
-		GU.Settings.Timers.BloodEnabled = bool
-		GU.Garau.TimersRef.Blood.Enabled = bool
-	end
-	function self:CrawlerEnabled(bool)
-		GU.Settings.Timers.CrawlerEnabled = bool
-		GU.Garau.TimersRef.Crawler.Enabled = bool
-	end
-	function self:PorterEnabled(bool)
-		GU.Settings.Timers.PorterEnabled = bool
-		GU.Garau.TimersRef.Porter.Enabled = bool
-	end
-	function self:EssenceEnabled(bool)
-		GU.Settings.Timers.EssenceEnabled = bool
-		GU.Garau.TimersRef.Essence.Enabled = bool
-	end
-	local Options = self.MenuItem.Options
-	Options:SetTitle()
-	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, GU.Settings.Timers.Enabled)
-	Timers:AddCheck(GU.Lang.Ability.Blood[KBM.Lang], self.BloodEnabled, GU.Settings.Timers.BloodEnabled)
-	Timers:AddCheck(GU.Lang.Unit.Crawler[KBM.Lang], self.CrawlerEnabled, GU.Settings.Timers.CrawlerEnabled)
-	Timers:AddCheck(GU.Lang.Unit.Porter[KBM.Lang], self.PorterEnabled, GU.Settings.Timers.PorterEnabled)
-	Timers:AddCheck(GU.Lang.Ability.Arcane[KBM.Lang], self.EssenceEnabled, GU.Settings.Timers.EssenceEnabled)
-	
+function GU:DefineMenu()
+	self.Menu = HK.Menu:CreateEncounter(self.Garau, self.Enabled)
 end
 
 function GU:Start()
-	self.Header = KBM.HeaderList[self.Instance]
-	self.Garau.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Garau, true, self.Header)
-	self.Garau.MenuItem.Check:SetEnabled(false)
-	
 	-- Create Timers
 	self.Garau.TimersRef.Blood = KBM.MechTimer:Add(GU.Lang.Ability.Blood[KBM.Lang], 18)
 	self.Garau.TimersRef.Crawler = KBM.MechTimer:Add(self.Lang.Unit.Crawler[KBM.Lang], 30)
 	self.Garau.TimersRef.Porter = KBM.MechTimer:Add(GU.Lang.Unit.Porter[KBM.Lang], 45)
 	self.Garau.TimersRef.Essence = KBM.MechTimer:Add(GU.Lang.Ability.Arcane[KBM.Lang], 20)
-	self:SetTimers(self.Settings.Timers.Enabled)
+
+	KBM.Defaults.TimerObj.Assign(self.Garau)
 	
 	-- Assign Mechanics to Triggers
 	self.Garau.Triggers.Blood = KBM.Trigger:Create(GU.Lang.Ability.Blood[KBM.Lang], "damage", self.Garau)
@@ -304,4 +240,5 @@ function GU:Start()
 	self.Garau.Triggers.Essence:AddTimer(self.Garau.TimersRef.Essence)
 	
 	self.Garau.CastBar = KBM.CastBar:Add(self, self.Garau, true)
+	self:DefineMenu()
 end

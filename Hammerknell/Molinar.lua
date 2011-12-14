@@ -4,24 +4,26 @@
 --
 
 KM_Settings = nil
+chKM_Settings = nil
+
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 local HK = KBM.BossMod["Hammerknell"]
 
 local KM = {
-	ModEnabled = true,
-	ID = nil,
+	Enabled = true,
 	KingMolinar = {
 		MenuItem = nil,
 		Enabled = true,
 		Handler = nil,
 		Options = nil,
-		Name = "King Molinar",
 	},
 	Instance = HK.Name,
+	Phase = 1,
 	Timers = {},
 	Lang = {},
+	Menu = nil,
 	Enrage = 60 * 10,
 	ID = "KingMolinar",
 }
@@ -39,16 +41,6 @@ KM.KingPText = nil
 KM.StatusForecast = nil
 KM.StatusBar = nil
 KM.IconSize = nil
-KM.KingCastbar = nil
-KM.PrinceCastbar = nil
-KM.IconSize = nil
-KM.PrinceCastIcon = nil
-KM.KingCastIcon = nil
-KM.AbilityWatch = {}
-KM.KingCastText = nil
-KM.PrinceCastText = nil
-
-KM.Abilities = {}
 
 -- Frame Defaults
 KM.FBWidth = 600
@@ -70,12 +62,6 @@ KM.KingDPSTable = {}
 KM.KingLastHP = 0
 KM.KingSample = 0 -- Total damage done to King Molinar over {SampleDPS} seconds
 KM.KingSampleDPS = 0 -- Average DPS done to King Molinar over {SampleDPS} seconds.
-KM.KingName = "Rune King Molinar"
-KM.KingSearchName = "Molinar"
-KM.KingDead = false
-KM.KingUnavail = false
-KM.KingCasting = false
-KM.KingLastCast = ""
 -- Prince Dollin
 KM.PrinceHPP = "100" -- Visual percentage
 KM.PrincePerc = 1 -- Decimal percentage holder.
@@ -84,16 +70,8 @@ KM.PrinceDPSTable = {}
 KM.PrinceLastHP = 0
 KM.PrinceSample = 0 -- Total damage done to Prince Dollin over {SampleDPS} seconds.
 KM.PrinceSampleDPS = 0 -- Average DPS done to Prince Dollin over {SampleDPS} seconds.
-KM.PrinceName = "Prince Dollin"
-KM.PrinceSearchName = "Dollin"
-KM.PrinceDead = false
-KM.PrinceUnavail = false
-KM.PrinceCasting = false
-KM.PrinceLastCast = ""
 -- State Variables
 KM.EncounterRunning = false
-KM.KingID = nil
-KM.PrinceID = nil
 KM.StartTime = Inspect.Time.Real()
 KM.HeldTime = KM.StartTime
 KM.UpdateTime = KM.StartTime
@@ -107,10 +85,11 @@ KM.Prince = {
 	Level = "??",
 	Active = false,
 	Name = "Prince Dollin",
-	Castbar = nil,
+	NameShort = "Dollin",
+	CastBar = nil,
 	CastFilters = {},
+	Casting = false,
 	HasCastFilters = true,
-	Timers = {},
 	TimersRef = {},
 	AlertsRef = {},
 	Dead = false,
@@ -118,14 +97,43 @@ KM.Prince = {
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+		PinMenu = KBM.Language.Options.Pinned[KBM.Lang].."Percentage Monitor",
+		Filters = {
+			Enabled = true,
+			Rend = KBM.Defaults.CastFilter.Create(),
+			Feedback = KBM.Defaults.CastFilter.Create(),
+			Essence = KBM.Defaults.CastFilter.Create(),
+			Terminate = KBM.Defaults.CastFilter.Create(),
+			Blast = KBM.Defaults.CastFilter.Create(),
+			Crushing = KBM.Defaults.CastFilter.Create(),
+		},
+		TimersRef = {
+			Enabled = true,
+			Terminate = KBM.Defaults.TimerObj.Create(),
+			Crushing = KBM.Defaults.TimerObj.Create(),
+			Essence = KBM.Defaults.TimerObj.Create(),
+			Feedback = KBM.Defaults.TimerObj.Create(),
+		},
+		AlertsRef = {
+			Enabled = true,
+			Terminate = KBM.Defaults.AlertObj.Create("orange"),
+			Essence = KBM.Defaults.AlertObj.Create("yellow"),
+			Feedback = KBM.Defaults.AlertObj.Create("blue", false),
+			FeedbackWarn = KBM.Defaults.AlertObj.Create("blue"),
+		}
+	}
 }
 KM.King = {
 	Mod = KM,
 	Level = "??",
 	Active = false,
 	Name = "Rune King Molinar",
-	Castbar = nil,
+	NameShort = "Molinar",
+	CastBar = nil,
 	CastFilters = {},
+	Casting = false,
 	HasCastFilters = true,
 	Timers = {},
 	TimersRef = {},
@@ -135,7 +143,35 @@ KM.King = {
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+		PinMenu = KBM.Language.Options.Pinned[KBM.Lang].."Percentage Monitor",
+		Filters = {
+			Enabled = true,
+			Shout = KBM.Defaults.CastFilter.Create(),
+			Cursed = KBM.Defaults.CastFilter.Create(),
+			Essence = KBM.Defaults.CastFilter.Create(),
+			Feedback = KBM.Defaults.CastFilter.Create()
+		},
+		TimersRef = {
+			Enabled = true,
+			Shout = KBM.Defaults.TimerObj.Create(),
+			Cursed = KBM.Defaults.TimerObj.Create(),
+			Essence = KBM.Defaults.TimerObj.Create(),
+			Feedback = KBM.Defaults.TimerObj.Create(),
+			Rev = KBM.Defaults.TimerObj.Create(),
+		},
+		AlertsRef = {
+			Enabled = true,
+			Cursed = KBM.Defaults.AlertObj.Create("red"),
+			Essence = KBM.Defaults.AlertObj.Create("yellow"),
+			Feedback = KBM.Defaults.AlertObj.Create("blue", false),
+			FeedbackWarn = KBM.Defaults.AlertObj.Create("blue"),
+		},
+	},
 }
+KM.King.Settings.CastBar.Pinned = true
+KM.Prince.Settings.CastBar.Pinned = true
 
 KBM.RegisterMod(KM.ID, KM)
 
@@ -153,12 +189,12 @@ KM.Lang.Ability.Rend.German = "Leben entreißen"
 KM.Lang.Ability.Terminate = KBM.Language:Add("Terminate Life")
 KM.Lang.Ability.Terminate.French = "Ach\195\168vement de Vie"
 KM.Lang.Ability.Terminate.German = "Leben auslöschen"
-KM.Lang.Ability.Consuming = KBM.Language:Add("Consuming Essence")
-KM.Lang.Ability.Consuming.French = "Combustion d'essence"
-KM.Lang.Ability.Consuming.German = "Verschlingende Essenz"
-KM.Lang.Ability.Runic = KBM.Language:Add("Runic Feedback")
-KM.Lang.Ability.Runic.French = "R\195\169action runique"
-KM.Lang.Ability.Runic.German = "Runen-Resonanz"
+KM.Lang.Ability.Essence = KBM.Language:Add("Consuming Essence")
+KM.Lang.Ability.Essence.French = "Combustion d'essence"
+KM.Lang.Ability.Essence.German = "Verschlingende Essenz"
+KM.Lang.Ability.Feedback = KBM.Language:Add("Runic Feedback")
+KM.Lang.Ability.Feedback.French = "R\195\169action runique"
+KM.Lang.Ability.Feedback.German = "Runen-Resonanz"
 KM.Lang.Ability.Crushing = KBM.Language:Add("Crushing Regret")
 KM.Lang.Ability.Crushing.French = "Blasph\195\168me infect"
 KM.Lang.Ability.Forked = KBM.Language:Add("Forked Blast")
@@ -178,30 +214,22 @@ KM.Lang.Unit.Revenant.German = "Unkörperlicher Wiedergänger"
 
 -- Notify Trigger Dictionary
 KM.Lang.Notify = {}
-KM.Lang.Notify.Revenant = KBM.Language:Add("Incorporeal Revenant begins to phase into this reality.")
-KM.Lang.Notify.Revenant.French = "Revenant chim\195\169rique commence \195\160 se mat\195\169rialiser dans cette réalit\195\169."
-KM.Lang.Notify.Revenant.German = "Unkörperlicher Wiedergänger beginnt, in diese Realität zu gleiten."
+KM.Lang.Notify.Rev = KBM.Language:Add("Incorporeal Revenant begins to phase into this reality.")
+KM.Lang.Notify.Rev.French = "Revenant chim\195\169rique commence \195\160 se mat\195\169rialiser dans cette réalit\195\169."
+KM.Lang.Notify.Rev.German = "Unkörperlicher Wiedergänger beginnt, in diese Realität zu gleiten."
 
 -- King's Options page Dictionary
 KM.Lang.Options = {}
-KM.Lang.Options.ShowMonitor = KBM.Language:Add("Show Percentage Monitor.")
-KM.Lang.Options.ShowMonitor.French = "Montrer Moniteur Pct."
-KM.Lang.Options.ShowMonitor.German = "Prozent Monitor anzeigen."
-KM.Lang.Options.HiddenStart = KBM.Language:Add("Hidden until encounter start.")
-KM.Lang.Options.HiddenStart.French = "Cacher avant d\195\169but du combat."
-KM.Lang.Options.HiddenStart.German = "Verbergen bis zum Kampfbeginn."
-KM.Lang.Options.Compact = KBM.Language:Add("Compact Mode.")
-KM.Lang.Options.Compact.French = "Mode Compact."
-KM.Lang.Options.Compact.German = "Kompakte Anzeige."
-KM.Lang.Options.Locked = KBM.Language:Add("Locked in place.")
-KM.Lang.Options.Locked.French = "Fix\195\169 en place."
-KM.Lang.Options.Locked.German = "Anzeige festsetzen."
-KM.Lang.Options.ShowKingCast = KBM.Language:Add("Show King Molinar's cast-bar")
-KM.Lang.Options.ShowKingCast.French = "Montrer barres-cast Roi Molinar"
-KM.Lang.Options.ShowKingCast.German = "Zeige Zauberbalken von Runenkönig Molinar"
-KM.Lang.Options.ShowPrinceCast = KBM.Language:Add("Show Prince Dollin's cast-bar")
-KM.Lang.Options.ShowPrinceCast.French = "Montrer barres-cast Prince Dollin"
-KM.Lang.Options.ShowPrinceCast.German = "Zeige Zauberbalken von Prinz Dollin"
+KM.Lang.Options.Monitor = {}
+KM.Lang.Options.Monitor.Enabled = KBM.Language:Add("Enable Percentage Monitor.")
+KM.Lang.Options.Monitor.Enabled.French = "Montrer Moniteur Pct."
+KM.Lang.Options.Monitor.Enabled.German = "Prozent Monitor anzeigen."
+KM.Lang.Options.Monitor.Visible = KBM.Language:Add("Show Monitor (for positioning).")
+KM.Lang.Options.Monitor.Visible.French = "Cacher avant d\195\169but du combat."
+KM.Lang.Options.Monitor.Visible.German = "Verbergen bis zum Kampfbeginn."
+KM.Lang.Options.Monitor.Compact = KBM.Language:Add("Compact Mode.")
+KM.Lang.Options.Monitor.Compact.French = "Mode Compact."
+KM.Lang.Options.Monitor.Compact.German = "Kompakte Anzeige."
 
 KM.King.Name = KM.Lang.Molinar[KBM.Lang]
 KM.Prince.Name = KM.Lang.Dollin[KBM.Lang]
@@ -213,53 +241,46 @@ function KM:AddBosses(KBM_Boss)
 	self.King.Descript = self.Prince.Descript
 	KBM_Boss[self.Prince.Name] = self.Prince
 	KBM_Boss[self.King.Name] = self.King
+	self.Bosses = {
+		[self.King.Name] = self.King,
+		[self.Prince.Name] = self.Prince,
+	}
 	
 end
 
 function KM:InitVars()
 
 	self.Settings = {
-		LocX = false,
-		LocY = false,
-		Size = 1,
+		Enabled = true,
+		EncTimer = KBM.Defaults.EncTimer(),
+		PhaseMon = KBM.Defaults.PhaseMon(),
+		MechTimer = KBM.Defaults.MechTimer(),
+		Alerts = KBM.Defaults.Alerts(),
+		CastBar = {
+			Multi = true,
+			Override = true,
+		},
+		PercentMonitor = {
+			x = false,
+			y = false,
+			Size = 1,
+			Visible = false,
+			Unlocked = false,
+			Compact = false,
+			Enabled = true,
+		},
 		SampleDPS = 4,
-		Hidden = false,
-		Locked = false,
-		Compact = false,
-		AutoReset = true,
-		PrinceBar = true,
 		King = {
-			Timers = true,
-			Alerts = true,
-			Cursed = true,
-			CursedAlert = true,
-			ConsumingAlert = true,
-			Consuming = true,
-			Rev = true,
-			Shout = true,
+			CastBar = KM.King.Settings.CastBar,
+			CastFilters = KM.King.Settings.Filters,
+			TimersRef = KM.King.Settings.TimersRef,
+			AlertsRef = KM.King.Settings.AlertsRef,
 		},
 		Prince = {
-			Timers = true,
-			Alerts = true,
-			Terminate = true,
-			Consuming = true,
-			TerminateAlert = true,
-			ConsumingAlert = true,
-			Runic = true,
-			RunicAlert = true,
-		},
-		KingBar = true,
-		Enabled = true,
-		RendEnabled = true,
-		TerminateEnabled = true,
-		PCEssenceEnabled = true,
-		KCEssenceEnabled = true,
-		CursedEnabled = true,
-		FShoutEnabled = true,
-		RFeedbackEnabled = true,
-		CrushingEnabled = true,
-		FBlastEnabled = true,
-		Timers = {
+			CastBar = KM.Prince.Settings.CastBar,
+			CastFilters = KM.Prince.Settings.Filters,
+			TimersRef = KM.Prince.Settings.TimersRef,
+			AlertsRef = KM.Prince.Settings.AlertsRef,
 		},
 	}
 	KM_Settings = self.Settings
@@ -281,94 +302,77 @@ end
 
 function KM:LoadVars()
 	
-	local TargetLoad = nil
-	
+	local TargetLoad = nil	
 	if KBM.Options.Character then
-		TargetLoad = chKM_Settings
+		KBM.LoadTable(chKM_Settings, KM.Settings)
 	else
-		TargetLoad = KM_Settings
-	end
-	
-	if type(TargetLoad) == "table" then
-		for Setting, Value in pairs(TargetLoad) do
-			if type(TargetLoad[Setting]) == "table" then
-				if self.Settings[Setting] ~= nil then
-					for tSetting, tValue in pairs(TargetLoad[Setting]) do
-						if self.Settings[Setting][tSetting] ~= nil then
-							self.Settings[Setting][tSetting] = tValue
-						end
-					end
-				end
-			else
-				if self.Settings[Setting] ~= nil then
-					self.Settings[Setting] = Value
-				end
-			end
-		end
+		KBM.LoadTable(KM_Settings, KM.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKM_Settings = self.Settings
+		chKM_Settings = KM.Settings
 	else
-		KM_Settings = self.Settings
+		KM_Settings = KM.Settings
 	end
 
-	KM.Prince.CastFilters[KM.Lang.Ability.Rend[KBM.Lang]] = {Enabled = self.Settings.RendEnabled}
-	KM.Prince.CastFilters[KM.Lang.Ability.Terminate[KBM.Lang]] = {Enabled = self.Settings.TerminateEnabled}
-	KM.Prince.CastFilters[KM.Lang.Ability.Consuming[KBM.Lang]] = {Enabled = self.Settings.PCEssenceEnabled}
-	KM.Prince.CastFilters[KM.Lang.Ability.Runic[KBM.Lang]] = {Enabled = self.Settings.RFeedbackEnabled}
-	KM.Prince.CastFilters[KM.Lang.Ability.Crushing[KBM.Lang]] = {Enabled = self.Settings.CrushingEnabled}
-	KM.Prince.CastFilters[KM.Lang.Ability.Forked[KBM.Lang]] = {Enabled = self.Settings.FBlastEnabled}
-	KM.King.CastFilters[KM.Lang.Ability.Shout[KBM.Lang]] = {Enabled = self.Settings.FShoutEnabled}
-	KM.King.CastFilters[KM.Lang.Ability.Cursed[KBM.Lang]] = {Enabled = self.Settings.CursedEnabled}
-	KM.King.CastFilters[KM.Lang.Ability.Consuming[KBM.Lang]] = {Enabled = self.Settings.KCEssenceEnabled}
-		
+	self.King.Settings.CastBar.Override = true
+	self.King.Settings.CastBar.Multi = true
+	self.Prince.Settings.CastBar.Override = true
+	self.Prince.Settings.CastBar.Multi = true
+	
+	KM.Prince.CastFilters[KM.Lang.Ability.Rend[KBM.Lang]] = self.Settings.Prince.CastFilters.Rend
+	KM.Prince.CastFilters[KM.Lang.Ability.Terminate[KBM.Lang]] = self.Settings.Prince.CastFilters.Terminate
+	KM.Prince.CastFilters[KM.Lang.Ability.Essence[KBM.Lang]] = self.Settings.Prince.CastFilters.Essence
+	KM.Prince.CastFilters[KM.Lang.Ability.Feedback[KBM.Lang]] = self.Settings.Prince.CastFilters.Feedback
+	KM.Prince.CastFilters[KM.Lang.Ability.Crushing[KBM.Lang]] = self.Settings.Prince.CastFilters.Crushing
+	KM.Prince.CastFilters[KM.Lang.Ability.Forked[KBM.Lang]] = self.Settings.Prince.CastFilters.Blast
+	KM.King.CastFilters[KM.Lang.Ability.Shout[KBM.Lang]] = self.Settings.King.CastFilters.Shout
+	KM.King.CastFilters[KM.Lang.Ability.Cursed[KBM.Lang]] = self.Settings.King.CastFilters.Cursed
+	KM.King.CastFilters[KM.Lang.Ability.Essence[KBM.Lang]] = self.Settings.King.CastFilters.Essence
+	KM.King.CastFilters[KM.Lang.Ability.Feedback[KBM.Lang]] = self.Settings.King.CastFilters.Feedback
+	
+	KBM.Defaults.CastFilter.Assign(self.King)
+	KBM.Defaults.CastFilter.Assign(self.Prince)
+	
 end
 
-function KM:SaveVars()
-	
+function KM:SaveVars()	
 	if KBM.Options.Character then
 		chKM_Settings = self.Settings
 	else
 		KM_Settings = self.Settings
-	end
-	
+	end	
 end
 
 function KM:RemoveUnits(UnitID)
-
-	if self.KingID == UnitID then
-		self.KingUnavail = true
-	elseif self.PrinceID == UnitID then
-		self.PrinceUnavail = true
+	if self.King.UnitID == UnitID then
+		self.King.Available = false
+	elseif self.Prince.UnitID == UnitID then
+		self.Prince.Available = false
 	end
-	if self.PrinceUnavail and self.KingUnavail then
+	if not self.Prince.Available and not self.King.Available then
 		return true
 	end
-	return false
-	
+	return false	
 end
 
 function KM:Death(UnitID)
-
-	if self.KingID == UnitID then
+	if self.King.UnitID == UnitID then
 		self.King.Dead = true
-	elseif self.PrinceID == UnitID then
+	elseif self.Prince.UnitID == UnitID then
 		self.Prince.Dead = true
 	end
 	if self.King.Dead and self.Prince.Dead then
 		return true
 	end
-	return false
-	
+	return false	
 end
 
 function KM:UnitHPCheck(unitDetails, unitID)
-	
 	if unitDetails and unitID then
 		if unitDetails.player == nil then
 			if unitDetails.name == self.King.Name then
-				if not self.KingID then
+				if not self.King.UnitID then
 					if not self.EncounterRunning then
 						self.EncounterRunning = true
 						self.StartTime = Inspect.Time.Real()
@@ -382,18 +386,18 @@ function KM:UnitHPCheck(unitDetails, unitID)
 					end
 					self.KingLastHP = unitDetails.healthMax
 					self.KingHPMax = unitDetails.healthMax
-					if self.Settings.Enabled then
+					if self.Settings.PercentMonitor.Enabled then
 						self.FrameBase:SetVisible(true)
 					end
-					self.King.Dead = false
-					self.KingCasting = false
+					self.King.Casting = false
 					self.King.CastBar:Create(unitID)
 				end
-				self.KingID = unitID
-				self.KingUnavail = false
+				self.King.Dead = false
+				self.King.UnitID = unitID
+				self.King.Available = true
 				return self.King
 			elseif unitDetails.name == self.Prince.Name then
-				if not self.PrinceID then
+				if not self.Prince.UnitID then
 					if not self.EncounterRunning then
 						self.EncounterRunning = true
 						self.StartTime = Inspect.Time.Real()
@@ -407,15 +411,15 @@ function KM:UnitHPCheck(unitDetails, unitID)
 					end
 					self.PrinceLastHP = unitDetails.healthMax
 					self.PrinceHPMax = unitDetails.healthMax
-					if self.Settings.Enabled then
+					if self.Settings.PercentMonitor.Enabled then
 						self.FrameBase:SetVisible(true)
 					end
-					self.Prince.Dead = false
-					self.PrinceCasting = false
+					self.Prince.Casting = false
 					self.Prince.CastBar:Create(unitID)
 				end
-				self.PrinceID = unitID
-				self.PrinceUnavail = false
+				self.Prince.Dead = false
+				self.Prince.UnitID = unitID
+				self.Prince.Available = true
 				return self.Prince
 			end
 		end
@@ -423,10 +427,9 @@ function KM:UnitHPCheck(unitDetails, unitID)
 end
 
 function KM:Reset()
-
 	self.EncounterRunning = false
-	self.PrinceID = nil
-	self.KingID = nil
+	self.Prince.UnitID = nil
+	self.King.UnitID = nil
 	self.KingDPSTable = {}
 	self.PrinceDPSTable = {}
 	self.KingHPBar:SetWidth(self.BossHPWidth)
@@ -442,22 +445,20 @@ function KM:Reset()
 	self.CurrentSwing = 0
 	self.KingPerc = 1
 	self.PrincePerc = 1
-	self.KingUnavail = false
-	self.PrinceUnavail = false
-	if self.Settings.Hidden then
+	self.King.Available = false
+	self.Prince.Available = false
+	if not self.Settings.PercentMonitor.Visible then
 		self.FrameBase:SetVisible(false)
 	end
 	self.King.CastBar:Remove()
 	self.Prince.CastBar:Remove()
 	self.Phase = 1
 	self.PhaseObj:End(Inspect.Time.Real())
-	print("Monitor reset.")
-	
+	print("Monitor reset.")	
 end
 
 function KM.PhaseTwo()
-
-	if KM.Phase == 1 then
+	if KM.Phase < 2 then
 		KM.PhaseObj.Objectives:Remove()
 		KM.Phase = 2
 		KM.PhaseObj:SetPhase(2)
@@ -465,25 +466,21 @@ function KM.PhaseTwo()
 		KM.PhaseObj.Objectives:AddPercent(KM.Prince.Name, 65, 90)
 		print("Starting Phase 2!")
 	end
-
 end
 
 function KM.PhaseThree()
-
-	if KM.Phase == 2 then
+	if KM.Phase < 3 then
 		KM.PhaseObj.Objectives:Remove()
 		KM.Phase = 3
 		KM.PhaseObj:SetPhase(3)
 		KM.PhaseObj.Objectives:AddPercent(KM.King.Name, 40, 65)
 		KM.PhaseObj.Objectives:AddPercent(KM.Prince.Name, 40, 65)
 		print("Starting Phase 3!")
-	end
-	
+	end	
 end
 
 function KM.PhaseFour()
-
-	if KM.Phase == 3 then
+	if KM.Phase < 4 then
 		KM.PhaseObj.Objectives:Remove()
 		KM.Phase = 4
 		KM.PhaseObj:SetPhase("Final")
@@ -491,13 +488,11 @@ function KM.PhaseFour()
 		KM.PhaseObj.Objectives:AddPercent(KM.Prince.Name, 0, 40)
 		print("Starting Final Phase!")
 	end
-
 end
 
 function KM:CheckTrends()
-
 	-- Adjust the Current and Trend bars accordingly.	
-	if self.KingID ~= nil and self.PrinceID ~= nil then
+	if self.King.UnitID ~= nil and self.Prince.UnitID ~= nil then
 		-- King Calc
 		local KingForecastHP = self.KingLastHP-(self.KingSampleDPS * 8)
 		local KingForecastP = KingForecastHP / self.KingHPMax
@@ -536,93 +531,81 @@ function KM:CheckTrends()
 		self.PrincePText:SetText(self.PrinceHPP)
 		self.PrincePText:SetWidth(self.PrincePText:GetFullWidth())
 		self.PrinceHPBar:SetWidth(self.BossHPWidth * self.PrincePerc)
-	end
-	
+	end	
 end
 
 function KM:DPSUpdate()
-	
-	if self.KingID ~= nil and self.PrinceID ~= nil then
+	if self.King.UnitID ~= nil and self.Prince.UnitID ~= nil then
 		local DumpDPS = 0
-		local KingDetails = Inspect.Unit.Detail(self.KingID)
-		local PrinceDetails = Inspect.Unit.Detail(self.PrinceID)
-		local KingCurrentHP = self.KingLastHP
-		local KingDPS = 0
-		if KingDetails then
-			if KingDetails.health then
-				KingCurrentHP = KingDetails.health
-				KingDPS = self.KingLastHP - KingCurrentHP
-				self.KingLastHP = KingCurrentHP
-			else
-				KingCurrentHP = 0
+		local KingDetails = Inspect.Unit.Detail(self.King.UnitID)
+		local PrinceDetails = Inspect.Unit.Detail(self.Prince.UnitID)
+		if KingDetails and PrinceDetails then
+			local KingCurrentHP = self.KingLastHP
+			local KingDPS = 0
+			if KingDetails then
+				if KingDetails.health then
+					KingCurrentHP = KingDetails.health
+					KingDPS = self.KingLastHP - KingCurrentHP
+					self.KingLastHP = KingCurrentHP
+				else
+					KingCurrentHP = 0
+				end
 			end
-		end
-		self.KingPerc = KingCurrentHP / self.KingHPMax
-		dpsheld = #self.KingDPSTable
-		if dpsheld >= self.Settings.SampleDPS then
-			DumpDPS = table.remove(self.KingDPSTable, 1)
-			table.insert(self.KingDPSTable, KingDPS)
-			if not DumpDPS then DumpDPS = 0 end
-			self.KingSample = self.KingSample - DumpDPS + KingDPS
-			self.KingSampleDPS = self.KingSample / self.Settings.SampleDPS
-		else
-			if dpsheld == 0 then dpsheld = 1 end
-			self.KingSampleDPS = self.PrinceSample / dpsheld
-			table.insert(self.KingDPSTable, KingDPS)
-		end
-		local PrinceCurrentHP = self.PrinceLastHP
-		local PrinceDPS = 0
-		if PrinceDetails then
-			if PrinceDetails.health then
-				PrinceCurrentHP = PrinceDetails.health
-				PrinceDPS = self.PrinceLastHP - PrinceCurrentHP
-				self.PrinceLastHP = PrinceCurrentHP
+			self.KingPerc = KingCurrentHP / self.KingHPMax
+			dpsheld = #self.KingDPSTable
+			if dpsheld >= self.Settings.SampleDPS then
+				DumpDPS = table.remove(self.KingDPSTable, 1)
+				table.insert(self.KingDPSTable, KingDPS)
+				if not DumpDPS then DumpDPS = 0 end
+				self.KingSample = self.KingSample - DumpDPS + KingDPS
+				self.KingSampleDPS = self.KingSample / self.Settings.SampleDPS
 			else
-				PrinceCurrentHP = 0
+				if dpsheld == 0 then dpsheld = 1 end
+				self.KingSampleDPS = self.PrinceSample / dpsheld
+				table.insert(self.KingDPSTable, KingDPS)
 			end
-		end
-		self.PrincePerc = PrinceCurrentHP / self.PrinceHPMax
-		dpsheld = #self.PrinceDPSTable
-		if dpsheld > self.Settings.SampleDPS then
-			DumpDPS = table.remove(self.PrinceDPSTable, 1)
-			table.insert(self.PrinceDPSTable, PrinceDPS)
-			if not DumpDPS then DumpDPS = 0 end
-			self.PrinceSample = self.PrinceSample - DumpDPS + PrinceDPS
-			self.PrinceSampleDPS = self.PrinceSample / self.Settings.SampleDPS
-		else
-			if dpsheld == 0 then dpsheld = 1 end
-			self.PrinceSampleDPS = self.PrinceSample / dpsheld
-			table.insert(self.PrinceDPSTable, PrinceDPS)
+			local PrinceCurrentHP = self.PrinceLastHP
+			local PrinceDPS = 0
+			if PrinceDetails then
+				if PrinceDetails.health then
+					PrinceCurrentHP = PrinceDetails.health
+					PrinceDPS = self.PrinceLastHP - PrinceCurrentHP
+					self.PrinceLastHP = PrinceCurrentHP
+				else
+					PrinceCurrentHP = 0
+				end
+			end
+			self.PrincePerc = PrinceCurrentHP / self.PrinceHPMax
+			dpsheld = #self.PrinceDPSTable
+			if dpsheld > self.Settings.SampleDPS then
+				DumpDPS = table.remove(self.PrinceDPSTable, 1)
+				table.insert(self.PrinceDPSTable, PrinceDPS)
+				if not DumpDPS then DumpDPS = 0 end
+				self.PrinceSample = self.PrinceSample - DumpDPS + PrinceDPS
+				self.PrinceSampleDPS = self.PrinceSample / self.Settings.SampleDPS
+			else
+				if dpsheld == 0 then dpsheld = 1 end
+				self.PrinceSampleDPS = self.PrinceSample / dpsheld
+				table.insert(self.PrinceDPSTable, PrinceDPS)
+			end
 		end
 		self:CheckTrends()
-	end
-	
+	end	
 end
 
 function KM.HPChangeCheck(units)
 end
 
 function KM:SetNormal()
-
 	self.FrameBase:SetHeight(self.FBHeight)
-	self.FrameBase:SetWidth(self.FBWidth)
-	
+	self.FrameBase:SetWidth(self.FBWidth)	
 	self.IconSize = 36	
-	self.KingText:SetWidth(self.KingText:GetFullWidth())
-	self.KingText:SetHeight(self.KingText:GetFullHeight())
-	
-	self.PrinceText:SetWidth(self.PrinceText:GetFullWidth())
-	self.PrinceText:SetHeight(self.PrinceText:GetFullHeight())
 	
 	self.KingPText:SetFontSize(16)
-	self.KingPText:SetWidth(self.KingPText:GetFullWidth())
-	self.KingPText:SetHeight(self.KingPText:GetFullHeight())
 	self.KingPBack:SetWidth(self.KingPText:GetWidth() + 6)
 	self.KingPBack:SetHeight(self.KingPText:GetHeight() + 4)
 
 	self.PrincePText:SetFontSize(16)
-	self.PrincePText:SetWidth(self.PrincePText:GetFullWidth())
-	self.PrincePText:SetHeight(self.PrincePText:GetFullHeight())
 	self.PrincePBack:SetWidth(self.PrincePText:GetWidth() + 6)
 	self.PrincePBack:SetHeight(self.PrincePText:GetHeight() + 4)
 
@@ -648,26 +631,16 @@ function KM:SetNormal()
 end
 
 function KM:SetCompact()
-
 	self.FrameBase:SetHeight(self.FBHeight * 0.75)
 	self.FrameBase:SetWidth(self.FBWidth * 0.75)
 	
 	self.IconSize = 36 * 0.75	
-	self.KingText:SetWidth(self.KingText:GetFullWidth())
-	self.KingText:SetHeight(self.KingText:GetFullHeight())
-	
-	self.PrinceText:SetWidth(self.PrinceText:GetFullWidth())
-	self.PrinceText:SetHeight(self.PrinceText:GetFullHeight())
 	
 	self.KingPText:SetFontSize(12)
-	self.KingPText:SetWidth(self.KingPText:GetFullWidth())
-	self.KingPText:SetHeight(self.KingPText:GetFullHeight())
 	self.KingPBack:SetWidth(self.KingPText:GetWidth() + 2)
 	self.KingPBack:SetHeight(self.KingPText:GetHeight() + 1)
 
 	self.PrincePText:SetFontSize(12)
-	self.PrincePText:SetWidth(self.PrincePText:GetFullWidth())
-	self.PrincePText:SetHeight(self.PrincePText:GetFullHeight())
 	self.PrincePBack:SetWidth(self.PrincePText:GetWidth())
 	self.PrincePBack:SetHeight(self.PrincePText:GetHeight())
 
@@ -698,28 +671,22 @@ function KM:SetCompact()
 end
 
 function KM:BuildDisplay()
-
 	self.FrameBase = UI.CreateFrame("Frame", "FrameBase", KBM.Context)
 	self.FrameBase:SetVisible(false)
-	if not self.FBDefX then
-		self.FrameBase:SetPoint("CENTERX", UIParent, "CENTERX")
+	if not self.Settings.PercentMonitor.x then
+		self.FrameBase:SetPoint("CENTER", UIParent, "CENTER")
 	else
-		self.FrameBase:SetPoint("LEFT", UIParent, "LEFT", self.FBDefX, nil)
-	end
-	if not self.FBDefY then
-		self.FrameBase:SetPoint("CENTERY", UIParent, "CENTERY")
-	else
-		self.FrameBase:SetPoint("TOP", UIParent, "TOP", nil, self.FBDefY)
+		self.FrameBase:SetPoint("TOPLEFT", UIParent, "TOPLEFT", self.Settings.PercentMonitor.x, self.Settings.PercentMonitor.y)
 	end
 	self.FrameBase:SetBackgroundColor(0,0,0,0.4)
 	self.FBLayer = self.FrameBase:GetLayer()
 
 	self.KingText = UI.CreateFrame("Text", "KingText", self.FrameBase)
-	self.KingText:SetText(self.KingName)
+	self.KingText:SetText(self.King.Name)
 	self.KingText:SetPoint("TOPLEFT", self.FrameBase, "TOPLEFT", 1, 0)
 	
 	self.PrinceText = UI.CreateFrame("Text", "PrinceText", self.FrameBase)
-	self.PrinceText:SetText(self.PrinceName)
+	self.PrinceText:SetText(self.Prince.Name)
 	self.PrinceText:SetPoint("BOTTOMRIGHT", self.FrameBase, "BOTTOMRIGHT", -1, 0)
 		
 	self.KingPBack = UI.CreateFrame("Frame", "KingPBack", self.FrameBase)
@@ -778,33 +745,27 @@ function KM:BuildDisplay()
 	self.StatusForecast:SetBackgroundColor(0.9,0.9,0.9,0.3)
 	self.StatusForecast:SetLayer(4)
 		
-	self.FrameBase:SetVisible(true)
+	self.FrameBase:SetVisible(false)
 	self.DragFrame = KBM.AttachDragFrame(self.FrameBase, KM.UpdateBaseVars, "FrameBase", 4)
 	
-	if not self.Settings.Compact then
+	if not self.Settings.PercentMonitor.Compact then
 		self:SetNormal()
 	else
 		self:SetCompact()
 	end
 		
-	if self.Settings.Hidden then
-		self.FrameBase:SetVisible(false)
-	end
-	if self.Settings.Locked then
-		self.DragFrame:SetVisible(false)
-	end
-	
+	self.FrameBase:SetVisible(self.Settings.PercentMonitor.Visible)
+	self.DragFrame:SetVisible(self.Settings.PercentMonitor.Unlocked)	
 end
 
 function KM:CastBars(units)
-
 end
 
 function KM.UpdateBaseVars(callType)
 	if callType == "end" then
-		KM.Settings.LocX = KM.FrameBase:GetLeft()
-		KM.Settings.LocY = KM.FrameBase:GetTop()
-	end
+		KM.Settings.PercentMonitor.x = KM.FrameBase:GetLeft()
+		KM.Settings.PercentMonitor.y = KM.FrameBase:GetTop()
+	end	
 end
 
 function KM.Prince:PinCastBar()
@@ -814,298 +775,158 @@ function KM.Prince:PinCastBar()
 	self.CastBar.GUI.Frame:SetHeight(KM.IconSize)
 	if KM.Settings.Compact then
 		self.CastBar.GUI.Text:SetFontSize(16)
+		self.CastBar.GUI.Shadow:SetFontSize(16)
 	else
 		self.CastBar.GUI.Text:SetFontSize(20)
-	end
+		self.CastBar.GUI.Shadow:SetFontSize(20)
+	end	
 end
 
 function KM.King:PinCastBar()
-
 	self.CastBar.GUI.Frame:ClearAll()
 	self.CastBar.GUI.Frame:SetPoint("BOTTOMLEFT", KM.FrameBase, "TOPLEFT")
 	self.CastBar.GUI.Frame:SetPoint("BOTTOMRIGHT", KM.FrameBase, "TOPRIGHT")
 	self.CastBar.GUI.Frame:SetHeight(KM.IconSize)
 	if KM.Settings.Compact then
 		self.CastBar.GUI.Text:SetFontSize(16)
+		self.CastBar.GUI.Shadow:SetFontSize(16)
 	else
 		self.CastBar.GUI.Text:SetFontSize(20)
-	end
-	
+		self.CastBar.GUI.Shadow:SetFontSize(20)
+	end		
 end
 
 function KM:Timer(current, diff)
-
 	if self.EncounterRunning then
 		local udiff = current - self.UpdateTime
 		if diff >= 1 then
 			self:DPSUpdate()
-		elseif udiff > 0.095 then
+		elseif udiff > 0.05 then
 			self:CheckTrends()
 			self.UpdateTime = current
 		end
 	end
-	
 end
 
 function KM.KingMolinar:OptionsClose()
 end
 
-function KM.King:SetTimers(bool)
-	
+function KM.King:SetTimers(bool)	
 	if bool then
-		self.TimersRef.Cursed.Enabled = KM.Settings.King.Cursed
-		self.TimersRef.Consuming.Enabled = KM.Settings.King.Consuming
-		self.TimersRef.Rev.Enabled = KM.Settings.King.Rev
-		self.TimersRef.Shout.Enabled = KM.Settings.King.Shout
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = TimerObj.Settings.Enabled
+		end
 	else
-		self.TimersRef.Cursed.Enabled = false
-		self.TimersRef.Consuming.Enabled = false
-		self.TimersRef.Rev.Enabled = false
-		self.TimersRef.Shout.Enabled = false
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = false
+		end
 	end
-
 end
 
 function KM.King:SetAlerts(bool)
-
 	if bool then
-		self.AlertsRef.Cursed.Enabled = KM.Settings.King.CursedAlert
-		self.AlertsRef.Consuming.Enabled = KM.Settings.King.ConsumingAlert
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = AlertObj.Settings.Enabled
+		end
 	else
-		self.AlertsRef.Cursed.Enabled = false
-		self.AlertsRef.Consuming.Enabled = false
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = false
+		end
 	end
-
 end
 
 function KM.Prince:SetTimers(bool)
-
 	if bool then
-		self.TimersRef.Terminate.Enabled = KM.Settings.Prince.Terminate
-		self.TimersRef.Consuming.Enabled = KM.Settings.Prince.Consuming
-		self.TimersRef.Runic.Enabled = KM.Settings.Prince.Runic
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = TimerObj.Settings.Enabled
+		end
 	else
-		self.TimersRef.Terminate.Enabled = false
-		self.TimersRef.Consuming.Enabled = false
-		self.TimersRef.Runic.Enabled = false
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = false
+		end
 	end
-
 end
 
 function KM.Prince:SetAlerts(bool)
-
 	if bool then
-		self.AlertsRef.Terminate.Enabled = KM.Settings.Prince.TerminateAlert
-		self.AlertsRef.Consuming.Enabled = KM.Settings.Prince.ConsumingAlert
-		self.AlertsRef.RunicWarn.Enabled = KM.Settings.Prince.RunicAlert
-		self.AlertsRef.Runic.Enabled = KM.Settings.Prince.RunicAlert
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = AlertObj.Settings.Enabled
+		end
 	else
-		self.AlertsRef.Terminate.Enabled = false
-		self.AlertsRef.Consuming.Enabled = false
-		self.AlertsRef.RunicWarn.Enabled = false
-		self.AlertsRef.Runic.Enabled = false
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = false
+		end
 	end
-
 end
 
-function KM.KingMolinar:Options()
+KM.Custom = {}
+KM.Custom.Encounter = {}
+function KM.Custom.Encounter.Menu(Menu)
 
-	function self:Hidden(bool)
-		KM.Settings.Hidden = bool
-		if bool then
-			KM.FrameBase:SetVisible(false)
-		else
-			KM.FrameBase:SetVisible(true)
-		end
+	local Callbacks = {}
+
+	function Callbacks:Enabled(bool)
+		KM.Settings.PercentMonitor.Enabled = bool
 	end
-	function self:Compact(bool)
-		KM.Settings.Compact = bool
-		if not KM.Settings.Compact then
-			KM:SetNormal()
-		else
+	function Callbacks:Visible(bool)
+		KM.Settings.PercentMonitor.Visible = bool
+		KM.Settings.PercentMonitor.Unlocked = bool
+		KM.FrameBase:SetVisible(bool)
+		KM.DragFrame:SetVisible(bool)
+	end
+	function Callbacks:Compact(bool)
+		KM.Settings.PercentMonitor.Compact = bool
+		KM.King.CastBar:Hide()
+		KM.Prince.CastBar:Hide()
+		if bool then
 			KM:SetCompact()
-		end
-	end
-	function self:Locked(bool)
-		KM.Settings.Locked = bool
-		if bool then
-			KM.DragFrame:SetVisible(false)
 		else
-			KM.DragFrame:SetVisible(true)
+			KM:SetNormal()
 		end
+		KM.King.CastBar:Display()
+		KM.Prince.CastBar:Display()
 	end
-	function self:KingEnabled(bool)
-		KM.Settings.KingBar = bool
-		KM.King.CastBar.Enabled = bool
-	end
-	function self:PrinceEnabled(bool)
-		KM.Settings.PrinceBar = bool
-		KM.Prince.CastBar.Enabled = bool
-	end
-	function self:RendEnabled(bool)
-		KM.Settings.RendEnabled = bool
-		KM.Prince.CastFilters[KM.Lang.Ability.Rend[KBM.Lang]].Enabled = bool
-	end
-	function self:TerminateEnabled(bool)
-		KM.Settings.TerminateEnabled = bool
-		KM.Prince.CastFilters[KM.Lang.Ability.Terminate[KBM.Lang]].Enabled = bool
-	end
-	function self:PCEssenceEnabled(bool)
-		KM.Settings.PCEssenceEnabled = bool
-		KM.Prince.CastFilters[KM.Lang.Ability.Consuming[KBM.Lang]].Enabled = bool
-	end
-	function self:KCEssenceEnabled(bool)
-		KM.Settings.KCEssenceEnabled = bool
-		KM.King.CastFilters[KM.Lang.Ability.Consuming[KBM.Lang]].Enabled = bool
-	end
-	function self:CursedEnabled(bool)
-		KM.Settings.CursedEnabled = bool
-		KM.King.CastFilters[KM.Lang.Ability.Cursed[KBM.Lang]].Enabled = bool
-	end
-	function self:FShoutEnabled(bool)
-		KM.Settings.FShoutEnabled = bool
-		KM.King.CastFilters[KM.Lang.Ability.Shout[KBM.Lang]].Enabled = bool
-	end
-	function self:RFeedbackEnabled(bool)
-		KM.Settings.RFeedbackEnabled = bool
-		KM.Prince.CastFilters[KM.Lang.Ability.Runic[KBM.Lang]].Enabled = bool
-	end
-	function self:CrushingEnabled(bool)
-		KM.Settings.CrushingEnabled = bool
-		KM.Prince.CastFilters[KM.Lang.Ability.Crushing[KBM.Lang]].Enabled = bool
-	end
-	function self:FBlastEnabled(bool)
-		KM.Settings.FBlastEnabled = bool
-		KM.Prince.CastFilters[KM.Lang.Ability.Forked[KBM.Lang]].Enabled = bool
-	end
-	function self:MonitorEnabled(bool)
-		KM.Settings.Enabled = bool
-	end
-	function self:KingTimers(bool)
-		KM.Settings.King.Timers = bool
-		KM.King:SetTimers(bool)
-	end
-	function self:KingCursed(bool)
-		KM.Settings.King.Cursed = bool
-		KM.King.TimersRef.Cursed.Enabled = bool
-	end
-	function self:KingConsuming(bool)
-		KM.Settings.King.Consuming = bool
-		KM.King.TimersRef.Consuming.Enabled = bool
-	end
-	function self:KingRev(bool)
-		KM.Settings.King.Rev = bool
-		KM.King.TimersRef.Rev.Enabled = bool
-	end
-	function self:KingShout(bool)
-		KM.Settings.King.Shout(bool)
-		KM.King.TimersRef.Shout.Enabled = bool
-	end
-	function self:PrinceTimers(bool)
-		KM.Settings.Prince.Timers = bool
-		KM.Prince:SetTimers(bool)
-	end
-	function self:PrinceTerminate(bool)
-		KM.Settings.Prince.Terminate = bool
-		KM.Prince.TimersRef.Terminate = bool
-	end
-	function self:PrinceConsuming(bool)
-		KM.Settings.Prince.Consuming = bool
-		KM.Prince.TimersRef.Consuming.Enabled = bool
-	end
-	function self:PrinceRunic(bool)
-		KM.Settings.Prince.Runic = bool
-		KM.Prince.TimersRef.Runic.Enabled = bool
-	end
-	-- King Alert Settings
-	function self:KingAlerts(bool)
-		KM.Settings.King.Alerts = bool
-		KM.King:SetAlerts(bool)
-	end
-	function self:KingCursedAlert(bool)
-		KM.Settings.King.CursedAlert = bool
-		KM.King.AlertsRef.Cursed.Enabled = bool
-	end
-	function self:KingConsumingAlert(bool)
-		KM.Settings.King.ConsumingAlert = bool
-		KM.King.AlertsRef.Consuming.Enabled = bool
-	end
-	-- Prince Alert Settings
-	function self:PrinceAlerts(bool)
-		KM.Settings.Prince.Alerts = bool
-		KM.Prince:SetAlerts(bool)
-	end
-	function self:PrinceTerminateAlert(bool)
-		KM.Settings.Prince.TerminateAlert = bool
-		KM.Prince.AlertsRef.Terminate.Enabled = bool
-	end
-	function self:PrinceConsumingAlert(bool)
-		KM.Settings.Prince.ConsumingAlert = bool
-		KM.Prince.AlertsRef.Consuming.Enabled = bool
-	end
-	function self:PrinceRunicAlert(bool)
-		KM.Settings.Prince.RunicAlert = bool
-		KM.Prince.AlertsRef.RunicWarn.Enabled = bool
-		KM.Prince.AlertsRef.Runic.Enabled = bool
-	end
-	local Options = self.MenuItem.Options
-	Options:SetTitle()
-	local Monitor = Options:AddHeader(KM.Lang.Options.ShowMonitor[KBM.Lang], self.MonitorEnabled, KM.Settings.Enabled)
-	Monitor:AddCheck(KM.Lang.Options.HiddenStart[KBM.Lang], self.Hidden, KM.Settings.Hidden)
-	Monitor:AddCheck(KM.Lang.Options.Compact[KBM.Lang], self.Compact, KM.Settings.Compact)
-	Monitor:AddCheck(KM.Lang.Options.Locked[KBM.Lang], self.Locked, KM.Settings.Locked)
-	Options:AddSpacer()	
-	local KingTimers = Options:AddHeader(KM.Lang.Molinar[KBM.Lang].." "..KBM.Language.Options.TimersEnabled[KBM.Lang], self.KingTimers, KM.Settings.King.Timers)
-	KingTimers:AddCheck(KM.Lang.Ability.Cursed[KBM.Lang], self.KingCursed, KM.Settings.King.Cursed)
-	KingTimers:AddCheck(KM.Lang.Ability.Consuming[KBM.Lang], self.KingConsuming, KM.Settings.King.Consuming)
-	KingTimers:AddCheck(KM.Lang.Unit.Revenant[KBM.Lang], self.KingRev, KM.Settings.King.Rev)
-	KingTimers:AddCheck(KM.Lang.Ability.Shout[KBM.Lang], self.KingShout, KM.Settings.King.Shout)
-	local KingAlerts = Options:AddHeader(KM.Lang.Molinar[KBM.Lang].." "..KBM.Language.Options.AlertsEnabled[KBM.Lang], self.KingAlerts, KM.Settings.King.Alerts)
-	KingAlerts:AddCheck(KM.Lang.Ability.Cursed[KBM.Lang], self.KingCursedAlert, KM.Settings.King.CursedAlert)
-	KingAlerts:AddCheck(KM.Lang.Ability.Consuming[KBM.Lang], self.KingConsumingAlert, KM.Settings.King.ConsumingAlert)
-	Options:AddSpacer()	
-	local PrinceTimers = Options:AddHeader(KM.Lang.Dollin[KBM.Lang].." "..KBM.Language.Options.TimersEnabled[KBM.Lang], self.PrinceTimers, KM.Settings.Prince.Timers)
-	PrinceTimers:AddCheck(KM.Lang.Ability.Terminate[KBM.Lang], self.PrinceTerminate, KM.Settings.Prince.Terminate)
-	PrinceTimers:AddCheck(KM.Lang.Ability.Consuming[KBM.Lang], self.PrinceConsuming, KM.Settings.Prince.Consuming)
-	PrinceTimers:AddCheck(KM.Lang.Ability.Runic[KBM.Lang], self.PrinceRunic, KM.Settings.Prince.Runic)
-	local PrinceAlerts = Options:AddHeader(KM.Lang.Dollin[KBM.Lang].." "..KBM.Language.Options.AlertsEnabled[KBM.Lang], self.PrinceAlerts, KM.Settings.Prince.Alerts)
-	PrinceAlerts:AddCheck(KM.Lang.Ability.Terminate[KBM.Lang], self.PrinceTerminateAlert, KM.Settings.Prince.TerminateAlert)
-	PrinceAlerts:AddCheck(KM.Lang.Ability.Consuming[KBM.Lang], self.PrinceConsumingAlert, KM.Settings.Prince.ConsumingAlert)
-	PrinceAlerts:AddCheck(KM.Lang.Ability.Runic[KBM.Lang], self.PrinceRunicAlert, KM.Settings.Prince.RunicAlert)
-	Options:AddSpacer()
-	local KingMech = Options:AddHeader(KM.Lang.Options.ShowKingCast[KBM.Lang], self.KingEnabled, KM.Settings.KingBar)
-	KingMech:AddCheck(KM.Lang.Ability.Shout[KBM.Lang]..".", self.FShoutEnabled, KM.Settings.FShoutEnabled)
-	KingMech:AddCheck(KM.Lang.Ability.Cursed[KBM.Lang]..".", self.CursedEnabled, KM.Settings.CursedEnabled)
-	KingMech:AddCheck(KM.Lang.Ability.Consuming[KBM.Lang]..".", self.KCEssenceEnabled, KM.Settings.KCEssenceEnabled)
-	Options:AddSpacer()
-	local PrinceMech = Options:AddHeader(KM.Lang.Options.ShowPrinceCast[KBM.Lang], self.PrinceEnabled, KM.Settings.PrinceBar)
-	PrinceMech:AddCheck(KM.Lang.Ability.Rend[KBM.Lang]..".", self.RendEnabled, KM.Settings.RendEnabled)
-	PrinceMech:AddCheck(KM.Lang.Ability.Terminate[KBM.Lang]..".", self.TerminateEnabled, KM.Settings.TerminateEnabled)
-	PrinceMech:AddCheck(KM.Lang.Ability.Crushing[KBM.Lang]..".", self.CrushingEnabled, KM.Settings.CrushingEnabled)
-	PrinceMech:AddCheck(KM.Lang.Ability.Consuming[KBM.Lang]..".", self.PCEssenceEnabled, KM.Settings.PCEssenceEnabled)
-	PrinceMech:AddCheck(KM.Lang.Ability.Runic[KBM.Lang]..".", self.RFeedbackEnabled, KM.Settings.RFeedbackEnabled)
-	PrinceMech:AddCheck(KM.Lang.Ability.Forked[KBM.Lang]..".", self.FBlastEnabled, KM.Settings.FBlastEnabled)
+
+	local Settings = KM.Settings.PercentMonitor
+	Header = Menu:CreateHeader(KM.Lang.Options.Monitor.Enabled[KBM.Lang], "check", "Encounter", "Main")
+	Header:SetChecked(Settings.Enabled)
+	Header:SetHook(Callbacks.Enabled)
+	Child = Header:CreateOption(KM.Lang.Options.Monitor.Visible[KBM.Lang], "check", Callbacks.Visible)
+	Child:SetChecked(Settings.Visible)
+	Child = Header:CreateOption(KM.Lang.Options.Monitor.Compact[KBM.Lang], "check", Callbacks.Compact)
+	Child:SetChecked(Settings.Compact)
 	
+end
+
+function KM.Custom.Encounter.SetPage()
+end
+
+function KM.Custom.Encounter.ClearPage()
+end
+
+function KM:DefineMenu()
+	self.Menu = HK.Menu:CreateEncounter(self.King, self.Enabled)
 end
 
 function KM:Start()
+
 	self.FBDefX = self.Settings.LocX
 	self.FBDefY = self.Settings.LocY
-	self.Header = KBM.HeaderList[self.Instance]
-	self.KingMolinar.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.KingMolinar, true, self.Header)
-	self.KingMolinar.MenuItem.Check:SetEnabled(false)
-	
+		
 	-- Add King's Timers
 	self.King.TimersRef.Cursed = KBM.MechTimer:Add(KM.Lang.Ability.Cursed[KBM.Lang], 55)
-	self.King.TimersRef.Consuming = KBM.MechTimer:Add("(King) "..KM.Lang.Ability.Consuming[KBM.Lang], 22)
+	self.King.TimersRef.Essence = KBM.MechTimer:Add("(King) "..KM.Lang.Ability.Essence[KBM.Lang], 22)
 	self.King.TimersRef.Rev = KBM.MechTimer:Add(self.Lang.Unit.Revenant[KBM.Lang], 82)
 	self.King.TimersRef.Shout = KBM.MechTimer:Add(KM.Lang.Ability.Shout[KBM.Lang], 30)
-	self.King:SetTimers(self.Settings.King.Timers)
+	self.King.TimersRef.Feedback = KBM.MechTimer:Add(KM.Lang.Ability.Feedback[KBM.Lang], 48)
+	KBM.Defaults.TimerObj.Assign(self.King)
 	
 	-- Add King's Alerts
-	self.King.AlertsRef.Cursed = KBM.Alert:Create(KM.Lang.Ability.Cursed[KBM.Lang], 9, true, nil, "red")
-	self.King.AlertsRef.Consuming = KBM.Alert:Create(KM.Lang.Ability.Consuming[KBM.Lang], 2, true, nil, "yellow")
-	self.King:SetAlerts(self.Settings.King.Alerts)
+	self.King.AlertsRef.Cursed = KBM.Alert:Create(KM.Lang.Ability.Cursed[KBM.Lang], 9, true, nil)
+	self.King.AlertsRef.Essence = KBM.Alert:Create(KM.Lang.Ability.Essence[KBM.Lang], 2, true, nil)
+	self.King.AlertsRef.FeedbackWarn = KBM.Alert:Create(KM.Lang.Ability.Feedback[KBM.Lang], nil, false)
+	self.King.AlertsRef.Feedback = KBM.Alert:Create(KM.Lang.Ability.Feedback[KBM.Lang], 5, true, true)
+	KBM.Defaults.AlertObj.Assign(self.King)
 	
 	-- Assign King's Mechanics to Triggers
 	self.King.Triggers.Cursed = KBM.Trigger:Create(KM.Lang.Ability.Cursed[KBM.Lang], "cast", self.King)
@@ -1113,11 +934,15 @@ function KM:Start()
 	self.King.Triggers.Cursed:AddAlert(self.King.AlertsRef.Cursed)
 	self.King.Triggers.Shout = KBM.Trigger:Create(KM.Lang.Ability.Shout[KBM.Lang], "cast", self.King)
 	self.King.Triggers.Shout:AddTimer(self.King.TimersRef.Shout)
-	self.King.Triggers.Consuming = KBM.Trigger:Create(KM.Lang.Ability.Consuming[KBM.Lang], "cast", self.King)
-	self.King.Triggers.Consuming:AddTimer(self.King.TimersRef.Consuming)
-	self.King.Triggers.Consuming:AddAlert(self.King.AlertsRef.Consuming)
-	self.King.AlertsRef.Consuming:Important()
-	self.King.Triggers.Rev = KBM.Trigger:Create(self.Lang.Notify.Revenant[KBM.Lang], "notify", self.King)
+	self.King.Triggers.Essence = KBM.Trigger:Create(KM.Lang.Ability.Essence[KBM.Lang], "cast", self.King)
+	self.King.Triggers.Essence:AddTimer(self.King.TimersRef.Essence)
+	self.King.Triggers.Essence:AddAlert(self.King.AlertsRef.Essence)
+	self.King.AlertsRef.Essence:Important()
+	self.King.Triggers.Feedback = KBM.Trigger:Create(KM.Lang.Ability.Feedback[KBM.Lang], "cast", self.King)
+	self.King.Triggers.Feedback:AddTimer(self.King.TimersRef.Feedback)
+	self.King.Triggers.Feedback:AddAlert(self.King.AlertsRef.FeedbackWarn)
+	self.King.AlertsRef.Feedback:AlertEnd(self.King.AlertsRef.Feedback)
+	self.King.Triggers.Rev = KBM.Trigger:Create(self.Lang.Notify.Rev[KBM.Lang], "notify", self.King)
 	self.King.Triggers.Rev:AddTimer(self.King.TimersRef.Rev)
 	self.King.Triggers.PhaseTwo = KBM.Trigger:Create(90, "percent", self.King)
 	self.King.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
@@ -1128,29 +953,29 @@ function KM:Start()
 	
 	-- Add Prince's Timers
 	self.Prince.TimersRef.Terminate = KBM.MechTimer:Add(KM.Lang.Ability.Terminate[KBM.Lang], 21)
-	self.Prince.TimersRef.Consuming = KBM.MechTimer:Add("(Prince) "..KM.Lang.Ability.Consuming[KBM.Lang], 22)
-	self.Prince.TimersRef.Runic = KBM.MechTimer:Add(KM.Lang.Ability.Runic[KBM.Lang], 48)
-	self.Prince:SetTimers(self.Settings.Prince.Timers)
+	self.Prince.TimersRef.Essence = KBM.MechTimer:Add("(Prince) "..KM.Lang.Ability.Essence[KBM.Lang], 22)
+	self.Prince.TimersRef.Feedback = KBM.MechTimer:Add(KM.Lang.Ability.Feedback[KBM.Lang], 48)
+	KBM.Defaults.TimerObj.Assign(self.Prince)
 	
 	-- Add Prince's Alerts
-	self.Prince.AlertsRef.Terminate = KBM.Alert:Create(KM.Lang.Ability.Terminate[KBM.Lang], 3, true, nil, "orange")
-	self.Prince.AlertsRef.Consuming = KBM.Alert:Create(KM.Lang.Ability.Consuming[KBM.Lang], 2, true, nil, "yellow")
-	self.Prince.AlertsRef.RunicWarn = KBM.Alert:Create(KM.Lang.Ability.Runic[KBM.Lang], nil, false, true, "blue")
-	self.Prince.AlertsRef.Runic = KBM.Alert:Create(KM.Lang.Ability.Runic[KBM.Lang], 5, true, true, "blue")
-	self.Prince:SetAlerts(self.Settings.Prince.Alerts)
+	self.Prince.AlertsRef.Terminate = KBM.Alert:Create(KM.Lang.Ability.Terminate[KBM.Lang], 3, true, nil)
+	self.Prince.AlertsRef.Essence = KBM.Alert:Create(KM.Lang.Ability.Essence[KBM.Lang], 2, true, nil)
+	self.Prince.AlertsRef.FeedbackWarn = KBM.Alert:Create(KM.Lang.Ability.Feedback[KBM.Lang], nil, false, true)
+	self.Prince.AlertsRef.Feedback = KBM.Alert:Create(KM.Lang.Ability.Feedback[KBM.Lang], 5, true, true)
+	KBM.Defaults.AlertObj.Assign(self.Prince)
 	
 	-- Assign Prince's Mechanics to Triggers
 	self.Prince.Triggers.Terminate = KBM.Trigger:Create(KM.Lang.Ability.Terminate[KBM.Lang], "cast", self.Prince)
 	self.Prince.Triggers.Terminate:AddTimer(self.Prince.TimersRef.Terminate)
 	self.Prince.Triggers.Terminate:AddAlert(self.Prince.AlertsRef.Terminate)
-	self.Prince.Triggers.Consuming = KBM.Trigger:Create(KM.Lang.Ability.Consuming[KBM.Lang], "cast", self.Prince)
-	self.Prince.Triggers.Consuming:AddTimer(self.Prince.TimersRef.Consuming)
-	self.Prince.Triggers.Consuming:AddAlert(self.Prince.AlertsRef.Consuming)
-	self.Prince.AlertsRef.Consuming:Important()
-	self.Prince.Triggers.Runic = KBM.Trigger:Create(KM.Lang.Ability.Runic[KBM.Lang], "cast", self.Prince)
-	self.Prince.Triggers.Runic:AddTimer(self.Prince.TimersRef.Runic)
-	self.Prince.Triggers.Runic:AddAlert(self.Prince.AlertsRef.RunicWarn)
-	self.Prince.AlertsRef.Runic:AlertEnd(self.Prince.AlertsRef.Runic)
+	self.Prince.Triggers.Essence = KBM.Trigger:Create(KM.Lang.Ability.Essence[KBM.Lang], "cast", self.Prince)
+	self.Prince.Triggers.Essence:AddTimer(self.Prince.TimersRef.Essence)
+	self.Prince.Triggers.Essence:AddAlert(self.Prince.AlertsRef.Essence)
+	self.Prince.AlertsRef.Essence:Important()
+	self.Prince.Triggers.Feedback = KBM.Trigger:Create(KM.Lang.Ability.Feedback[KBM.Lang], "cast", self.Prince)
+	self.Prince.Triggers.Feedback:AddTimer(self.Prince.TimersRef.Feedback)
+	self.Prince.Triggers.Feedback:AddAlert(self.Prince.AlertsRef.FeedbackWarn)
+	self.Prince.AlertsRef.Feedback:AlertEnd(self.Prince.AlertsRef.Feedback)
 	self.Prince.Triggers.PhaseTwo = KBM.Trigger:Create(90, "percent", self.Prince)
 	self.Prince.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
 	self.Prince.Triggers.PhaseThree = KBM.Trigger:Create(65, "percent", self.Prince)
@@ -1158,15 +983,15 @@ function KM:Start()
 	self.Prince.Triggers.PhaseFour = KBM.Trigger:Create(40, "percent", self.Prince)
 	self.Prince.Triggers.PhaseFour:AddPhase(self.PhaseFour)
 	
-	self.King.CastBar = KBM.CastBar:Add(self, self.King, self.King.PinCastBar, self.Settings.KingBar)
-	self.Prince.CastBar = KBM.CastBar:Add(self, self.Prince, self.Prince.PinCastBar, self.Settings.PrinceBar)
+	self.King.CastBar = KBM.CastBar:Add(self, self.King)
+	self.Prince.CastBar = KBM.CastBar:Add(self, self.Prince)
 	
 	--self.KingMolinar:Options()
 	if not self.DisplayReady then
 		self.DisplayReady = true
 		self:BuildDisplay()
 	end
-	
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
+	self:DefineMenu()
 	
 end

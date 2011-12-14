@@ -8,6 +8,7 @@ chKBMHK_Settings = {}
 
 local HK = {
 	Header = nil,
+	Menu = nil,
 	Enabled = true,
 	IsInstance = true,
 	Name = "Hammerknell Fortress",
@@ -35,10 +36,13 @@ function HK:SaveVars()
 end
 
 function HK:Start()
-	function self:Enabled(bool)
+
+	function self:Handler(bool)
 	
 	end
-	HK.Header = KBM.MainWin.Menu:CreateHeader(self.Name, self.Enabled, true)
+	
+	HK.Menu = KBM.MainWin.Menu:CreateInstance(self.Name, true, self.Handler)
+	
 end
 
 function HK.Register()

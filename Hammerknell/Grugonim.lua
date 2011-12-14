@@ -10,7 +10,7 @@ local KBM = AddonData.data
 local HK = KBM.BossMod["Hammerknell"]
 
 local GR = {
-	ModEnabled = true,
+	Enabled = true,
 	Grugonim = {
 		MenuItem = nil,
 		Enabled = true,
@@ -18,9 +18,6 @@ local GR = {
 		Options = nil,
 	},
 	Instance = HK.Name,
-	HasPhases = true,
-	PhaseType = "percentage",
-	PhaseList = {},
 	Timers = {},
 	Lang = {},
 	Phase = 1,
@@ -37,24 +34,33 @@ GR.Grugonim = {
 	Name = "Grugonim",
 	Castbar = nil,
 	CastFilters = {},
+	HasCastFilters = false,
 	Timers = {},
 	TimersRef = {},
 	AlertsRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	Phase = 1,
 	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+		TimersRef = {
+			Enabled = true,
+			Breath = KBM.Defaults.TimerObj.Create(),
+		},
+		AlertsRef = {
+			Enabled = true,
+			Decay = KBM.Defaults.AlertObj.Create("purple"),
+			Bile = KBM.Defaults.AlertObj.Create("dark_green"),
+			Breath = KBM.Defaults.AlertObj.Create("red"),
+		},
+	}
 }
 
 GR.Tower = {
 	Mod = GR,
 	Level = "??",
 	Name = "Manifested Death",
-	Timers = {},
-	TimersRef = {},
-	AlertsRef = {},
-	Triggers = {},
 	UnitList = {},
 	Ignore = true,
 	Type = "multi",
@@ -64,6 +70,8 @@ KBM.RegisterMod(GR.ID, GR)
 
 GR.Lang.Grugonim = KBM.Language:Add(GR.Grugonim.Name)
 GR.Lang.Tower = KBM.Language:Add(GR.Tower.Name)
+GR.Lang.Tower.German = "Manifestierter Tod"
+GR.Lang.Tower.French = "Mort manifestée"
 
 -- Ability Dictionary
 GR.Lang.Ability = {}
@@ -82,7 +90,6 @@ GR.Grugonim.Name = GR.Lang.Grugonim[KBM.Lang]
 GR.Tower.Name = GR.Lang.Tower[KBM.Lang]
 
 function GR:AddBosses(KBM_Boss)
-
 	self.Grugonim.Descript = self.Grugonim.Name
 	self.MenuName = self.Grugonim.Descript
 	self.Bosses = {
@@ -90,36 +97,25 @@ function GR:AddBosses(KBM_Boss)
 		[self.Tower.Name] = self.Tower,
 	}
 	KBM_Boss[self.Grugonim.Name] = self.Grugonim
-	KBM.SubBoss[self.Tower.Name] = self.Tower
-	
+	KBM.SubBoss[self.Tower.Name] = self.Tower	
 end
 
-function GR:InitVars()
-	
+function GR:InitVars()	
 	self.Settings = {
-		Timers = {
-			Enabled = true,
-			Breath = true,
-		},
-		Alerts = {
-			Enabled = true,
-			Decay = true,
-			Bile = true,
-			Breath = true,
-		},
-		CastBar = {
-			x = false,
-			y = false,
-			Enabled = true,
-		},
+		Enabled = true,
+		EncTimer = KBM.Defaults.EncTimer(),
+		CastBar = GR.Grugonim.Settings.CastBar,
+		PhaseMon = KBM.Defaults.PhaseMon(),
+		MechTimer = KBM.Defaults.MechTimer(),
+		TimersRef = GR.Grugonim.Settings.TimersRef,
+		AlertsRef = GR.Grugonim.Settings.AlertsRef,
+		Alerts = KBM.Defaults.Alerts(),
 	}
 	KBMGR_Settings = self.Settings
-	chKBMGR_Settings = self.Settings
-	
+	chKBMGR_Settings = self.Settings	
 end
 
 function GR:SwapSettings(bool)
-
 	if bool then
 		KBMGR_Settings = self.Settings
 		self.Settings = chKBMGR_Settings
@@ -127,11 +123,9 @@ function GR:SwapSettings(bool)
 		chKBMGR_Settings = self.Settings
 		self.Settings = KBMGR_Settings
 	end
-
 end
 
-function GR:LoadVars()
-	
+function GR:LoadVars()	
 	local TargetLoad = nil
 	
 	if KBM.Options.Character then
@@ -141,95 +135,69 @@ function GR:LoadVars()
 	end
 	
 	if type(TargetLoad) == "table" then
-		for Setting, Value in pairs(TargetLoad) do
-			if type(TargetLoad[Setting]) == "table" then
-				if self.Settings[Setting] ~= nil then
-					for tSetting, tValue in pairs(TargetLoad[Setting]) do
-						if self.Settings[Setting][tSetting] ~= nil then
-							self.Settings[Setting][tSetting] = tValue
-						end
-					end
-				end
-			else
-				if self.Settings[Setting] ~= nil then
-					self.Settings[Setting] = Value
-				end
-			end
-		end
+		KBM.LoadTable(TargetLoad, self.Settings)
 	end
 	
 	if KBM.Options.Character then
 		chKBMGR_Settings = self.Settings
 	else
 		KBMGR_Settings = self.Settings
-	end
-	
+	end	
 end
 
 function GR:SaveVars()
-
 	if KBM.Options.Character then
 		chKBMGR_Settings = self.Settings
 	else
 		KBMGR_Settings = self.Settings
-	end
-	
+	end	
 end
 
 function GR:Castbar(units)
 end
 
 function GR:RemoveUnits(UnitID)
-
 	if self.Grugonim.UnitID == UnitID then
 		self.Grugonim.Available = false
 		return true
 	end
-	return false
-	
+	return false	
 end
 
 function GR:Death(UnitID)
-
 	if self.Grugonim.UnitID == UnitID then
 		self.Grugonim.Dead = true
 		return true
 	else
 		-- Tower Phase
-		if Phase == 2 then
-			Towers = Towers + 1
-			if Towers == 3 then
-				Towers = 0
-				GR.PhaseThree()
+		if self.Phase == 2 then
+			self.Towers = self.Towers + 1
+			if self.Towers == 3 then
+				self.Towers = 0
+				self.PhaseThree()
 			end
-		elseif Phase == 4 then
-			Towers = Towers + 1
-			if Towers == 6 then
-				Towers = 0
-				GR.PhaseFive()
+		elseif self.Phase == 4 then
+			self.Towers = self.Towers + 1
+			if self.Towers == 6 then
+				self.Towers = 0
+				self.PhaseFive()
 			end
 		end
 	end
-	return false
-	
+	return false	
 end
 
 function GR.BreathCount()
-
 	GR.Breaths = GR.Breaths + 1
 	KBM.PhaseMonitor.Objectives.Lists.Meta[GR.Lang.Ability.Breath[KBM.Lang]]:Update(GR.Breaths)
-
 end
 
 function GR.BreathReset()
-
 	GR.Breaths = 0
 	KBM.PhaseMonitor.Objectives.Lists.Meta[GR.Lang.Ability.Breath[KBM.Lang]]:Update(GR.Breaths)
-
 end
 
 function GR.TowerPhase()
-
 	GR.Breaths = 0
 	GR.PhaseObj.Objectives:Remove()
 	GR.PhaseObj:SetPhase("Towers")
@@ -240,33 +208,28 @@ function GR.TowerPhase()
 		GR.Phase = 4
 		GR.PhaseObj.Objectives:AddDeath(GR.Tower.Name, 6)
 	end
-
 end
 
 function GR.PhaseThree()
-
 	GR.Phase = 3
 	GR.PhaseObj.Objectives:Remove()
 	GR.PhaseObj:SetPhase(GR.Phase)
 	GR.PhaseObj.Objectives:AddPercent(GR.Grugonim.Name, 10, 50)
 	GR.PhaseObj.Objectives:AddMeta(GR.Lang.Ability.Breath[KBM.Lang], 3, 0)
-
 end
 
 function GR.PhaseFive()
-
 	GR.Phase = 5
 	GR.PhaseObj.Objectives:Remove()
 	GR.PhaseObj:SetPhase("Final")
 	GR.PhaseObj.Objectives:AddPercent(GR.Grugonim.Name, 0, 10)
 	GR.PhaseObj.Objectives:AddMeta(GR.Lang.Ability.Breath[KBM.Lang], 3, 0)
-
 end
 
-function GR:UnitHPCheck(uDetails, unitID)
-	
+function GR:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
 		if not uDetails.player then
+		
 			if uDetails.name == self.Grugonim.Name then
 				if not self.Grugonim.UnitID then
 					self.EncounterRunning = true
@@ -276,6 +239,7 @@ function GR:UnitHPCheck(uDetails, unitID)
 					self.Grugonim.CastBar:Create(unitID)
 					KBM.TankSwap:Start("Heart Stopping Toxin")
 					self.Phase = 1
+					self.Breaths = 0
 					self.PhaseObj.Objectives:AddPercent(self.Grugonim.Name, 50, 100)
 					self.PhaseObj.Objectives:AddMeta(self.Lang.Ability.Breath[KBM.Lang], 3, 0)
 					self.PhaseObj:Start(self.StartTime)
@@ -304,12 +268,12 @@ function GR:UnitHPCheck(uDetails, unitID)
 				end
 				return self.Bosses[uDetails.name].UnitList[unitID]
 			end
+			
 		end
 	end
 end
 
-function GR:Reset()
-	
+function GR:Reset()	
 	self.EncounterRunning = false
 	self.Grugonim.Available = false
 	self.Grugonim.UnitID = nil
@@ -319,91 +283,51 @@ function GR:Reset()
 	for TowerID, Tower in pairs(self.Tower.UnitList) do
 		Tower = nil
 	end
-	self.Tower.UnitList = {}
-	
+	self.Tower.UnitList = {}	
 end
 
 function GR:Timer()
 	
 end
 
-function GR:SetTimers(bool)
-
+function GR.Grugonim:SetTimers(bool)	
 	if bool then
-		self.Grugonim.TimersRef.Breath.Enabled = self.Settings.Timers.Breath
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = TimerObj.Settings.Enabled
+		end
 	else
-		self.Grugonim.TimersRef.Breath.Enabled = false
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = false
+		end
 	end
-
 end
 
-function GR:SetAlerts(bool)
-
+function GR.Grugonim:SetAlerts(bool)
 	if bool then
-		self.Grugonim.AlertsRef.Decay.Enabled = self.Settings.Alerts.Decay
-		self.Grugonim.AlertsRef.Bile.Enabled = self.Settings.Alerts.Bile
-		self.Grugonim.AlertsRef.Breath.Enabled = self.Settings.Alerts.Breath
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = AlertObj.Settings.Enabled
+		end
 	else
-		self.Grugonim.AlertsRef.Decay.Enabled = false
-		self.Grugonim.AlertsRef.Bile.Enabled = false
-		self.Grugonim.AlertsRef.Breath.Enabled = false
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = false
+		end
 	end
-
 end
 
-function GR.Grugonim:Options()
-
-	-- Timer Options
-	function self:Timers(bool)
-		GR.Settings.Timers.Enabled = bool
-		GR:SetTimers(bool)
-	end
-	function self:BreathTimer(bool)
-		GR.Settings.Timers.Breath = bool
-		GR.Grugonim.TimersRef.Breath.Enabled = bool
-	end
-	-- Alert Options
-	function self:Alerts(bool)
-		GR.Settings.Alerts.Enabled = bool
-		GR:SetAlerts(bool)
-	end
-	function self:DecayAlert(bool)
-		GR.Settings.Alerts.Decay = bool
-		GR.Grugonim.AlertsRef.Decay.Enabled = bool
-	end
-	function self:BileAlert(bool)
-		GR.Settings.Alerts.Bile = bool
-		GR.Grugonim.AlertsRef.Bile.Enabled = bool
-	end
-	function self:BreathAlert(bool)
-		GR.Settings.Alerts.Breath = bool
-		GR.Grugonim.AlertsRef.Breath.Enabled = bool
-	end
-	local Options = self.MenuItem.Options
-	Options:SetTitle()
-	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.Timers, GR.Settings.Timers.Enabled)
-	Timers:AddCheck(GR.Lang.Ability.Breath[KBM.Lang], self.BreathTimer, GR.Settings.Timers.Breath)
-	local Alerts = Options:AddHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], self.Alerts, GR.Settings.Alerts.Enabled)
-	Alerts:AddCheck(GR.Lang.Ability.Decay[KBM.Lang], self.DecayAlert, GR.Settings.Alerts.Decay)
-	Alerts:AddCheck(GR.Lang.Ability.Bile[KBM.Lang], self.BileAlert, GR.Settings.Alerts.Bile)
-	Alerts:AddCheck(GR.Lang.Ability.Breath[KBM.Lang], self.BreathAlert, GR.Settings.Alerts.Breath)
-	
+function GR:DefineMenu()
+	self.Menu = HK.Menu:CreateEncounter(self.Grugonim, self.Enabled)
 end
 
-function GR:Start()
-	self.Header = KBM.HeaderList[self.Instance]
-	self.Grugonim.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Grugonim, true, self.Header)
-	self.Grugonim.MenuItem.Check:SetEnabled(false)
-	
+function GR:Start()	
 	-- AddTimers
 	self.Grugonim.TimersRef.Breath = KBM.MechTimer:Add(self.Lang.Ability.Breath[KBM.Lang], 15)
-	self:SetTimers(self.Settings.Timers.Enabled)
+	KBM.Defaults.TimerObj.Assign(self.Grugonim)
 	
 	-- Add Alerts
-	self.Grugonim.AlertsRef.Decay = KBM.Alert:Create(self.Lang.Ability.Decay[KBM.Lang], 3, true, true, "dark_green")
-	self.Grugonim.AlertsRef.Bile = KBM.Alert:Create(self.Lang.Ability.Bile[KBM.Lang], 2, true, true, "purple")
-	self.Grugonim.AlertsRef.Breath = KBM.Alert:Create(self.Lang.Ability.Breath[KBM.Lang], nil, true, true, "red")
-	self:SetAlerts(self.Settings.Alerts.Enabled)
+	self.Grugonim.AlertsRef.Decay = KBM.Alert:Create(self.Lang.Ability.Decay[KBM.Lang], 3, true, true)
+	self.Grugonim.AlertsRef.Bile = KBM.Alert:Create(self.Lang.Ability.Bile[KBM.Lang], 2, true, true)
+	self.Grugonim.AlertsRef.Breath = KBM.Alert:Create(self.Lang.Ability.Breath[KBM.Lang], nil, true, true)
+	KBM.Defaults.AlertObj.Assign(self.Grugonim)
 	
 	-- Assign Mechanics to Triggers
 	self.Grugonim.Triggers.Decay = KBM.Trigger:Create(self.Lang.Ability.Decay[KBM.Lang], "cast", self.Grugonim)
@@ -422,8 +346,8 @@ function GR:Start()
 	self.Grugonim.Triggers.PhaseFour = KBM.Trigger:Create(10, "percent", self.Grugonim)
 	self.Grugonim.Triggers.PhaseFour:AddPhase(self.TowerPhase)
 	
-	self.Grugonim.CastBar = KBM.CastBar:Add(self, self.Grugonim, true)
+	self.Grugonim.CastBar = KBM.CastBar:Add(self, self.Grugonim, true)	
+	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)	
 	
-	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	
+	self:DefineMenu()
 end

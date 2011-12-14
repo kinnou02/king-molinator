@@ -1,4 +1,53 @@
-﻿v0.7.7
+﻿v0.7.8
+* Options
+** Fixed: Per-Character saving was not working 100% accurately.
+** New: All option text has been given shadows for better clarity.
+** New: Encounters now have a more indepth customization level.
+** New: Fully enable or disable individual encounters from triggering.
+* Encounter & Enrage Timers
+** New: Select Encounter and Enrage Timer activations for each encounter.
+** New: Customize Encounter and Enrage Timer sizes for each encounter.
+* Phase Monitor
+** Fixed: Almost all settings were being ignored. It should behave now.
+** New: Select Phase and Objective tracking activations for each encounter.
+** New: Customize Phase and Objective tracking sizes for each encounter.
+* Castbars
+** New: Enable or Disable Castbars for individual encounters.
+** New: Customize Castbars size and color for each encounter, and for each supported Unit.
+** New: Supported Castbars now allow you to define Castbar color for that ability only.
+** New: Castbars have had a make-over and now have a similar look to Timers.
+* Mechanic Timers
+** New: Enable or Disable mechanic timers per boss or encounter.
+** New: Customize Timer bars color on a per timer basis.
+* Alerts
+** New: Enable or Disable Alerts per boss or encounter.
+** New: Set Alert text positioning on a per encounter basis.
+** New: Customize encounter flash colors.
+** Fixed: Stopped a rare case where Alerts could trigger Alerts after a wipe/encounter.
+* Hammerknell
+** New: All encounters can now be fully customized.
+** New: Preparations made to fully enable or disable any encounter.
+** Fixed: Grugonim: Internal Tower phase tracking wasn't working as intented.
+** Fixed: Grugonim: Breath counts were not being recognised.
+** Fixed: Akylios: Rare case where Breath could trigger it's duration state after a wipe.
+** New: Estrode: Screen alert added for Mistress of the Rift buff (flashing orange)
+** Change: King Molinar: Worded Percentage Monitor options a little clearer.
+** Change: Akylios: Screen alert for Mind Decay is now solid. (purple)
+** Change: Akylios: Screen alert for Suffocating Orb is now solid. (orange)
+* Green Scale's Blight
+* Fixed: Duke Letareus: Phase Tracking error.
+* German Translations
+** Added: HK: Grugonim: Manifested Death
+* French Translations
+** Added: HK: Grugonim: Manifested Death
+* Tank-Swap
+** Disabled: For German and French clients only. See below.
+** Note: This is now receiving a full re-write in order to address CPU usage.
+** Note: This tool will be making a full return in 0.7.9, but only if I'm happy with stability.
+** Note: The new Tank-Swap monitor will include HP displays for all tanks, and MouseOver functionality.
+
+----
+v0.7.7
 * Fixed Murdantix
 ----
 v0.7.6

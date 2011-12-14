@@ -11,7 +11,7 @@ local KBM = AddonData.data
 local HK = KBM.BossMod["Hammerknell"]
 
 local MZ = {
-	ModEnabled = true,
+	Enabled = true,
 	Matron = {
 		MenuItem = nil,
 		Enabled = true,
@@ -41,6 +41,23 @@ MZ.Matron = {
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+		TimersRef = {
+			Enabled = true,
+			Concussion = KBM.Defaults.TimerObj.Create(),
+			Mark = KBM.Defaults.TimerObj.Create(),
+			Shadow = KBM.Defaults.TimerObj.Create(),
+			Blast = KBM.Defaults.TimerObj.Create(),
+			Ichor = KBM.Defaults.TimerObj.Create(),
+		},
+		AlertsRef = {
+			Enabled = true,
+			Concussion = KBM.Defaults.AlertObj.Create("red"),
+			Blast = KBM.Defaults.AlertObj.Create("yellow"),
+			Mark = KBM.Defaults.AlertObj.Create("purple"),
+		},
+	},
 }
 
 KBM.RegisterMod(MZ.ID, MZ)
@@ -76,32 +93,21 @@ function MZ:AddBosses(KBM_Boss)
 	self.Matron.Descript = self.Matron.Name
 	self.MenuName = self.Matron.Descript
 	self.Bosses = {
-		[self.Matron.Name] = true,
+		[self.Matron.Name] = self.Matron,
 	}
 	KBM_Boss[self.Matron.Name] = self.Matron	
 end
 
 function MZ:InitVars()
 	self.Settings = {
-		Timers = {
-			Enabled = true,
-			Concussion = true,
-			Mark = true,
-			Shadow = true,
-			Blast = true,
-			Ichor = true,
-		},
-		Alerts = {
-			Enabled = true,
-			Concussion = true,
-			Blast = true,
-			Mark = true,
-		},
-		CastBar = {
-			x = false,
-			y = false,
-			Enabled = true,
-		},
+		Enabled = true,
+		EncTimer = KBM.Defaults.EncTimer(),
+		PhaseMon = KBM.Defaults.PhaseMon(),
+		MechTimer = KBM.Defaults.MechTimer(),		
+		Alerts = KBM.Defaults.Alerts(),
+		CastBar = self.Matron.Settings.CastBar,
+		TimersRef = self.Matron.Settings.TimersRef,
+		AlertsRef = self.Matron.Settings.AlertsRef,
 	}
 	KBMMZ_Settings = self.Settings
 	chKBMMZ_Settings = self.Settings
@@ -125,29 +131,11 @@ function MZ:LoadVars()
 	local TargetLoad = nil
 	
 	if KBM.Options.Character then
-		TargetLoad = chKBMMZ_Settings
+		KBM.LoadTable(chKBMMZ_Settings, self.Settings)
 	else
-		TargetLoad = KBMMZ_Settings
+		KBM.LoadTable(KBMMZ_Settings, self.Settings)
 	end
-	
-	if type(TargetLoad) == "table" then
-		for Setting, Value in pairs(TargetLoad) do
-			if type(TargetLoad[Setting]) == "table" then
-				if self.Settings[Setting] ~= nil then
-					for tSetting, tValue in pairs(TargetLoad[Setting]) do
-						if self.Settings[Setting][tSetting] ~= nil then
-							self.Settings[Setting][tSetting] = tValue
-						end
-					end
-				end
-			else
-				if self.Settings[Setting] ~= nil then
-					self.Settings[Setting] = Value
-				end
-			end
-		end
-	end
-	
+		
 	if KBM.Options.Character then
 		chKBMMZ_Settings = self.Settings
 	else
@@ -185,17 +173,14 @@ function MZ:Death(UnitID)
 	return false
 end
 
-function MZ.PhaseTwo()
-	
+function MZ.PhaseTwo()	
 	MZ.Phase = 2
 	MZ.PhaseObj.Objectives:Remove()
 	MZ.PhaseObj:SetPhase(2)
-	MZ.PhaseObj.Objectives:AddPercent(MZ.Matron.Name, 0, 40)
-	
+	MZ.PhaseObj.Objectives:AddPercent(MZ.Matron.Name, 0, 40)	
 end
 
-function MZ:UnitHPCheck(unitDetails, unitID)
-	
+function MZ:UnitHPCheck(unitDetails, unitID)	
 	if unitDetails and unitID then
 		if not unitDetails.player then
 			if unitDetails.name == self.Matron.Name then
@@ -220,130 +205,59 @@ function MZ:UnitHPCheck(unitDetails, unitID)
 end
 
 function MZ:Reset()
-
 	self.EncounterRunning = false
 	self.Matron.Available = false
 	self.Matron.UnitID = nil
 	self.Matron.CastBar:Remove()
-	self.PhaseObj:End(self.TimeElapsed)
-	
+	self.PhaseObj:End(self.TimeElapsed)	
 end
 
-function MZ:Timer()
-	
+function MZ:Timer()	
 end
 
-function MZ:SetTimers(bool)
-
+function MZ.Matron:SetTimers(bool)	
 	if bool then
-		self.Matron.TimersRef.Concussion.Enabled = self.Settings.Timers.Concussion
-		self.Matron.TimersRef.Mark.Enabled = self.Settings.Timers.Mark
-		self.Matron.TimersRef.Shadow.Enabled = self.Settings.Timers.Shadow
-		self.Matron.TimersRef.Blast.Enabled = self.Settings.Timers.Blast
-		self.Matron.TimersRef.Ichor.Enabled = self.Settings.Timers.Ichor
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = TimerObj.Settings.Enabled
+		end
 	else
-		self.Matron.TimersRef.Concussion.Enabled = false
-		self.Matron.TimersRef.Mark.Enabled = false
-		self.Matron.TimersRef.Shadow.Enabled = false
-		self.Matron.TimersRef.Blast.Enabled = false
-		self.Matron.TimersRef.Ichor.Enabled = false
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = false
+		end
 	end
-	
 end
 
-function MZ:SetAlerts(bool)
-
+function MZ.Matron:SetAlerts(bool)
 	if bool then
-		self.Matron.AlertsRef.Concussion.Enabled = self.Settings.Alerts.Concussion
-		self.Matron.AlertsRef.Blast.Enabled = self.Settings.Alerts.Blast
-		self.Matron.AlertsRef.Mark.Enabled = self.Settings.Alerts.Mark
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = AlertObj.Settings.Enabled
+		end
 	else
-		self.Matron.AlertsRef.Concussion.Enabled = false
-		self.Matron.AlertsRef.Blast.Enabled = false
-		self.Matron.AlertsRef.Mark.Enabled = false
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = false
+		end
 	end
-	
 end
 
-function MZ.Matron:Options()
-	-- Timer Options
-	function self:TimersEnabled(bool)
-		MZ.Settings.Timers.Enabled = bool
-		MZ:SetTimers(bool)
-	end
-	function self:ConcussionTimer(bool)
-		MZ.Settings.Timers.Concussion = bool
-		MZ.Matron.TimersRef.Concussion.Enabled = bool
-	end
-	function self:MarkTimer(bool)
-		MZ.Settings.Timers.Mark = bool
-		MZ.Matron.TimersRef.Mark.Enabled = bool
-	end
-	function self:ShaodwTimer(bool)
-		MZ.Settings.Timers.Shadow = bool
-		MZ.Matron.TimersRef.Shadow.Enabled = bool
-	end
-	function self:BlastTimer(bool)
-		MZ.Settings.Timers.Blast = bool
-		MZ.Matron.TimersRef.Blast.Enabled = bool
-	end
-	function self:IchorTimer(bool)
-		MZ.Settings.Timers.Ichor = bool
-		MZ.Matron.TimersRef.Ichor.Enabled = bool
-	end
-	-- Alert Options
-	function self:AlertsEnabled(bool)
-		MZ.Settings.Alerts.Enabled = bool
-		MZ:SetAlerts(bool)
-	end
-	function self:ConcussionAlert(bool)
-		MZ.Settings.Alerts.Concussion = bool
-		MZ.Matron.AlertsRef.Concussion.Enabled = bool
-	end
-	function self:BlastAlert(bool)
-		MZ.Settings.Alerts.Blast = bool
-		MZ.Matron.AlertsRef.Blast.Enabled = bool
-	end
-	function self:MarkAlert(bool)
-		MZ.Settings.Alerts.Mark = bool
-		MZ.Matron.AlertsRef.Mark.Enabled = bool
-	end
-	local Options = self.MenuItem.Options
-	Options:SetTitle()
-	
-	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, MZ.Settings.Timers.Enabled)
-	Timers:AddCheck(MZ.Lang.Ability.Concussion[KBM.Lang], self.ConcussionTimer, MZ.Settings.Timers.Concussion)
-	Timers:AddCheck(MZ.Lang.Ability.Mark[KBM.Lang], self.MarkTimer, MZ.Settings.Timers.Mark)
-	Timers:AddCheck(MZ.Lang.Ability.Shadow[KBM.Lang], self.ShadowTimer, MZ.Settings.Timers.Shadow)
-	Timers:AddCheck(MZ.Lang.Ability.Blast[KBM.Lang], self.BlastTimer, MZ.Settings.Timers.Blast)
-	Timers:AddCheck(MZ.Lang.Ability.Ichor[KBM.Lang], self.IchorTimer, MZ.Settings.Timers.Ichor)
-	local Alerts = Options:AddHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], self.AlertsEnabled, MZ.Settings.Alerts.Enabled)
-	Alerts:AddCheck(MZ.Lang.Ability.Concussion[KBM.Lang], self.ConcussionAlert, MZ.Settings.Alerts.Concussion)
-	Alerts:AddCheck(MZ.Lang.Ability.Blast[KBM.Lang], self.BlastAlert, MZ.Settings.Alerts.Blast)
-	Alerts:AddCheck(MZ.Lang.Ability.Mark[KBM.Lang], self.MarkAlert, MZ.Settings.Alerts.Mark)
-	
+function MZ:DefineMenu()
+	self.Menu = HK.Menu:CreateEncounter(self.Matron, self.Enabled)
 end
 
-function MZ:Start()
-
-	-- Initiate Main Menu option.
-	self.Header = KBM.HeaderList[self.Instance]
-	self.Matron.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Matron, true, self.Header)
-	self.Matron.MenuItem.Check:SetEnabled(false)
-		
+function MZ:Start()		
 	-- Create Timers
 	self.Matron.TimersRef.Concussion = KBM.MechTimer:Add(self.Lang.Ability.Concussion[KBM.Lang], 13)
 	self.Matron.TimersRef.Mark = KBM.MechTimer:Add(self.Lang.Ability.Mark[KBM.Lang], 24)
 	self.Matron.TimersRef.Shadow = KBM.MechTimer:Add(self.Lang.Ability.Shadow[KBM.Lang], 11)
 	self.Matron.TimersRef.Blast = KBM.MechTimer:Add(self.Lang.Ability.Blast[KBM.Lang], 8)
 	self.Matron.TimersRef.Ichor = KBM.MechTimer:Add(self.Lang.Ability.Ichor[KBM.Lang], 5)
-	self:SetTimers(self.Settings.Timers.Enabled)
 	
 	-- Create Alerts
 	self.Matron.AlertsRef.Concussion = KBM.Alert:Create(self.Lang.Ability.Concussion[KBM.Lang], 2, true, false, "red")
 	self.Matron.AlertsRef.Blast = KBM.Alert:Create(self.Lang.Ability.Blast[KBM.Lang], nil, true, false, "yellow")
 	self.Matron.AlertsRef.Mark = KBM.Alert:Create(self.Lang.Ability.Mark[KBM.Lang], 6, false, true, "purple")
-	self:SetAlerts(self.Settings.Alerts.Enabled)
+
+	KBM.Defaults.TimerObj.Assign(self.Matron)
+	KBM.Defaults.AlertObj.Assign(self.Matron)
 	
 	-- Assign Mechanics to Triggers
 	self.Matron.Triggers.Concussion = KBM.Trigger:Create(self.Lang.Ability.Concussion[KBM.Lang], "damage", self.Matron)
@@ -366,7 +280,6 @@ function MZ:Start()
 	
 	-- Assign Castbar object
 	self.Matron.CastBar = KBM.CastBar:Add(self, self.Matron, true)
-
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	
+	self:DefineMenu()		
 end

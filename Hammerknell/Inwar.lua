@@ -4,19 +4,14 @@
 --
 
 KBMID_Settings = nil
+chKBMID_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 local HK = KBM.BossMod["Hammerknell"]
 
 local ID = {
-	ModEnabled = true,
-	Inwar = {
-		MenuItem = nil,
-		Enabled = true,
-		Handler = nil,
-		Options = nil,
-	},
+	Enabled = true,
 	Counts = {
 		Slimes = 0,
 		Wranglers = 0,
@@ -25,7 +20,6 @@ local ID = {
 	Instance = HK.Name,
 	HasPhases = true,
 	Phase = 1,
-	Timers = {},
 	Lang = {},
 	ID = "Inwar",
 }
@@ -35,17 +29,15 @@ ID.Inwar = {
 	Level = "??",
 	Active = false,
 	Name = "Inwar Darktide",
-	CastBar = nil,
-	CastFilters = {},
-	Timers = {},
-	TimersRef = {},
-	AlertsRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
 	Primary = true,
 	Required = 1,
 	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+	}
 }
 
 ID.Denizar = {
@@ -53,11 +45,6 @@ ID.Denizar = {
 	Level = "??",
 	Active = false,
 	Name = "Denizar",
-	CastBar = nil,
-	CastFilters = {},
-	Timers = {},
-	TimersRef = {},
-	AlertsRef = {},
 	Dead = false, 
 	Available = false,
 	UnitID = nil,
@@ -72,10 +59,6 @@ ID.Aqualix = {
 	Active = false,
 	Name = "Denizar",
 	CastBar = nil,
-	CastFilters = {},
-	Timers = {},
-	TimersRef = {},
-	AlertsRef = {},
 	Dead = false, 
 	Available = false,
 	UnitID = nil,
@@ -89,11 +72,6 @@ ID.Undertow = {
 	Level = "??",
 	Active = false,
 	Name = "Undertow",
-	CastBar = nil,
-	CastFilters = {},
-	Timers = {},
-	TimersRef = {},
-	AlertsRef = {},
 	Dead = false, 
 	Available = false,
 	UnitID = nil,
@@ -107,11 +85,6 @@ ID.Rotjaw = {
 	Level = "??",
 	Active = false,
 	Name = "Rot Jaw",
-	CastBar = nil,
-	CastFilters = {},
-	Timers = {},
-	TimersRef = {},
-	AlertsRef = {},
 	Dead = false, 
 	Available = false,
 	UnitID = nil,
@@ -124,10 +97,6 @@ ID.Slime = {
 	Mod = ID,
 	Level = "??",
 	Name = "Fetid Slime",
-	Timers = {},
-	TimersRef = {},
-	AlertsRef = {},
-	Triggers = {},
 	UnitList = {},
 	Ignore = true,
 	Type = "multi",
@@ -137,10 +106,6 @@ ID.Wrangler = {
 	Mod = ID,
 	Level = "??",
 	Name = "Scuttle Claw Wrangler",
-	Timers = {},
-	TimersRef = {},
-	AlertsRef = {},
-	Triggers = {},
 	UnitList = {},
 	Ignore = true,
 	Type = "multi",
@@ -150,10 +115,6 @@ ID.Warden = {
 	Mod = ID,
 	Level = "??",
 	Name = "Tide Warden",
-	Timers = {},
-	TimersRef = {},
-	AlertsRef = {},
-	Triggers = {},
 	UnitList = {},
 	Ignore = true,
 	Type = "multi",
@@ -211,20 +172,24 @@ function ID:AddBosses(KBM_Boss)
 	KBM.SubBoss[self.Wrangler.Name] = self.Wrangler
 	KBM.SubBoss[self.Warden.Name] = self.Warden
 	
+	self.Inwar.Settings.CastBar.Override = true
+	self.Inwar.Settings.CastBar.Multi = true
+	
 end
 
 function ID:InitVars()
 
 	self.Settings = {
-		Timers = {
-			Enabled = true,
-			FlamesEnabled = true,
-		},
+		Enabled = true,
+		EncTimer = KBM.Defaults.EncTimer(),
+		PhaseMon = KBM.Defaults.PhaseMon(),
 		CastBar = {
-			x = false,
-			y = false,
-			Enabled = true,
+			Override = true,
+			Multi = true,
 		},
+		Inwar = {
+			CastBar = self.Inwar.Settings.CastBar,
+		}
 	}
 	KBMID_Settings = self.Settings
 	chKBMID_Settings = self.Settings
@@ -248,29 +213,11 @@ function ID:LoadVars()
 	local TargetLoad = nil
 	
 	if KBM.Options.Character then
-		TargetLoad = chKBMID_Settings
+		KBM.LoadTable(chKBMID_Settings, self.Settings)
 	else
-		TargetLoad = KBMID_Settings
+		KBM.LoadTable(KBMID_Settings, self.Settings)
 	end
-	
-	if type(TargetLoad) == "table" then
-		for Setting, Value in pairs(TargetLoad) do
-			if type(TargetLoad[Setting]) == "table" then
-				if self.Settings[Setting] ~= nil then
-					for tSetting, tValue in pairs(TargetLoad[Setting]) do
-						if self.Settings[Setting][tSetting] ~= nil then
-							self.Settings[Setting][tSetting] = tValue
-						end
-					end
-				end
-			else
-				if self.Settings[Setting] ~= nil then
-					self.Settings[Setting] = Value
-				end
-			end
-		end
-	end
-	
+		
 	if KBM.Options.Character then
 		chKBMID_Settings = self.Settings
 	else
@@ -300,46 +247,38 @@ function ID:RemoveUnits(UnitID)
 	return false
 end
 
-function ID.PhaseTwo()
-	
+function ID.PhaseTwo()	
 	ID.Phase = 2
 	ID.PhaseObj.Objectives:Remove()
 	print("Phase 2 starting!")
 	ID.PhaseObj:SetPhase(2)
 	ID.PhaseObj.Objectives:AddDeath(ID.Slime.Name, 3)
-	ID.PhaseObj.Objectives:AddDeath(ID.Wrangler.Name, 3)
-	
+	ID.PhaseObj.Objectives:AddDeath(ID.Wrangler.Name, 3)	
 end
 
 function ID.PhaseThree()
-
 	ID.Phase = 3
 	ID.PhaseObj.Objectives:Remove()
 	print("Phase 3 starting!")
 	ID.PhaseObj:SetPhase(3)
 	ID.PhaseObj.Objectives:AddDeath(ID.Warden.Name, 2)
-	
 end
 
 function ID.PhaseFour()
-
 	ID.Phase = 4
 	ID.PhaseObj.Objectives:Remove()
 	print("Phase 4 starting!")
 	ID.PhaseObj:SetPhase(4)
 	ID.PhaseObj.Objectives:AddPercent(ID.Undertow.Name, 0, 100)
 	ID.PhaseObj.Objectives:AddPercent(ID.Rotjaw.Name, 0, 100)
-
 end
 
 function ID.PhaseFive()
-
 	ID.Phase = 5
 	ID.PhaseObj.Objectives:Remove()
 	print("Final phase starting!")
 	ID.PhaseObj:SetPhase("Final")
 	ID.PhaseObj.Objectives:AddPercent(ID.Inwar.Name, 0, 100)
-
 end
 
 function ID:Death(UnitID)
@@ -451,7 +390,6 @@ function ID:UnitHPCheck(uDetails, unitID)
 end
 
 function ID:Reset()
-
 	self.EncounterRunning = false
 	for BossName, BossObj in pairs(self.Bosses) do
 		if BossObj.Type == "multi" then
@@ -475,49 +413,17 @@ function ID:Reset()
 	self.Counts.Wranglers = 0
 	self.PhaseObj:End(Inspect.Time.Real())
 	self.Phase = 1
-	
 end
 
-function ID:Timer()
-	
+function ID:Timer()	
 end
 
-function ID:SetTimers(bool)
-
-	if bool then
-	
-	else
-	
-	end
-	
-end
-
-function ID:SetAlerts(bool)
-
-	if bool then
-	
-	else
-	
-	end
-	
-end
-
-function ID.Inwar:Options()
-
-	function self:TimersEnabled(bool)
-	end
-	local Options = self.MenuItem.Options
-	Options:SetTitle()
-	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, ID.Settings.Timers.Enabled)
-	
+function ID:DefineMenu()
+	self.Menu = HK.Menu:CreateEncounter(self.Inwar, self.Enabled)
 end
 
 function ID:Start()
 
-	self.Header = KBM.HeaderList[self.Instance]
-	self.Inwar.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Inwar, true, self.Header)
-	self.Inwar.MenuItem.Check:SetEnabled(false)
-	
 	self.Inwar.CastBar = KBM.CastBar:Add(self, self.Inwar, true)
 	self.Aqualix.CastBar = KBM.CastBar:Add(self, self.Aqualix, false)
 	self.Denizar.CastBar = KBM.CastBar:Add(self, self.Denizar, false)
@@ -525,5 +431,6 @@ function ID:Start()
 	self.Rotjaw.CastBar = KBM.CastBar:Add(self, self.Rotjaw, false)
 	
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
+	self:DefineMenu()
 
 end
