@@ -1,8 +1,8 @@
-﻿v0.7.8
+﻿﻿v0.7.8
 * Options
 ** Fixed: Per-Character saving was not working 100% accurately.
 ** New: All option text has been given shadows for better clarity.
-** New: Encounters now have a more indepth customization level.
+** New: Encounters now have a more in-depth customization level.
 ** New: Fully enable or disable individual encounters from triggering.
 * Encounter & Enrage Timers
 ** New: Select Encounter and Enrage Timer activations for each encounter.
@@ -27,8 +27,8 @@
 * Hammerknell
 ** New: All encounters can now be fully customized.
 ** New: Preparations made to fully enable or disable any encounter.
-** Fixed: Grugonim: Internal Tower phase tracking wasn't working as intented.
-** Fixed: Grugonim: Breath counts were not being recognised.
+** Fixed: Grugonim: Internal Tower phase tracking wasn't working as intended.
+** Fixed: Grugonim: Breath counts were not being recognized.
 ** Fixed: Akylios: Rare case where Breath could trigger it's duration state after a wipe.
 ** New: Estrode: Screen alert added for Mistress of the Rift buff (flashing orange)
 ** Change: King Molinar: Worded Percentage Monitor options a little clearer.
@@ -44,8 +44,7 @@
 ** Disabled: For German and French clients only. See below.
 ** Note: This is now receiving a full re-write in order to address CPU usage.
 ** Note: This tool will be making a full return in 0.7.9, but only if I'm happy with stability.
-** Note: The new Tank-Swap monitor will include HP displays for all tanks, and MouseOver functionality.
-
+** Note: The new Tank-Swap monitor will include HP displays for all tanks, and Mouse-over functionality.
 ----
 v0.7.7
 * Fixed Murdantix
