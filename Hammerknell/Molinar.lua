@@ -151,7 +151,7 @@ KM.King = {
 			Shout = KBM.Defaults.CastFilter.Create(),
 			Cursed = KBM.Defaults.CastFilter.Create(),
 			Essence = KBM.Defaults.CastFilter.Create(),
-			Feedback = KBM.Defaults.CastFilter.Create()
+			Feedback = KBM.Defaults.CastFilter.Create(),
 		},
 		TimersRef = {
 			Enabled = true,
@@ -167,6 +167,7 @@ KM.King = {
 			Essence = KBM.Defaults.AlertObj.Create("yellow"),
 			Feedback = KBM.Defaults.AlertObj.Create("blue", false),
 			FeedbackWarn = KBM.Defaults.AlertObj.Create("blue"),
+			Shout = KBM.Defaults.AlertObj.Create("purple"),
 		},
 	},
 }
@@ -922,10 +923,11 @@ function KM:Start()
 	KBM.Defaults.TimerObj.Assign(self.King)
 	
 	-- Add King's Alerts
-	self.King.AlertsRef.Cursed = KBM.Alert:Create(KM.Lang.Ability.Cursed[KBM.Lang], 9, true, nil)
-	self.King.AlertsRef.Essence = KBM.Alert:Create(KM.Lang.Ability.Essence[KBM.Lang], 2, true, nil)
-	self.King.AlertsRef.FeedbackWarn = KBM.Alert:Create(KM.Lang.Ability.Feedback[KBM.Lang], nil, false)
-	self.King.AlertsRef.Feedback = KBM.Alert:Create(KM.Lang.Ability.Feedback[KBM.Lang], 5, true, true)
+	self.King.AlertsRef.Cursed = KBM.Alert:Create(KM.Lang.Ability.Cursed[KBM.Lang], 9, true, nil, "red")
+	self.King.AlertsRef.Essence = KBM.Alert:Create(KM.Lang.Ability.Essence[KBM.Lang], 2, true, nil, "yellow")
+	self.King.AlertsRef.FeedbackWarn = KBM.Alert:Create(KM.Lang.Ability.Feedback[KBM.Lang], nil, false, "blue")
+	self.King.AlertsRef.Feedback = KBM.Alert:Create(KM.Lang.Ability.Feedback[KBM.Lang], 5, true, true, "blue")
+	self.King.AlertsRef.Shout = KBM.Alert:Create(KM.Lang.Ability.Shout[KBM.Lang], 2, true, true, "purple")
 	KBM.Defaults.AlertObj.Assign(self.King)
 	
 	-- Assign King's Mechanics to Triggers
@@ -934,6 +936,7 @@ function KM:Start()
 	self.King.Triggers.Cursed:AddAlert(self.King.AlertsRef.Cursed)
 	self.King.Triggers.Shout = KBM.Trigger:Create(KM.Lang.Ability.Shout[KBM.Lang], "cast", self.King)
 	self.King.Triggers.Shout:AddTimer(self.King.TimersRef.Shout)
+	self.King.Triggers.Shout:AddAlert(self.King.AlertsRef.Shout)
 	self.King.Triggers.Essence = KBM.Trigger:Create(KM.Lang.Ability.Essence[KBM.Lang], "cast", self.King)
 	self.King.Triggers.Essence:AddTimer(self.King.TimersRef.Essence)
 	self.King.Triggers.Essence:AddAlert(self.King.AlertsRef.Essence)
@@ -958,10 +961,10 @@ function KM:Start()
 	KBM.Defaults.TimerObj.Assign(self.Prince)
 	
 	-- Add Prince's Alerts
-	self.Prince.AlertsRef.Terminate = KBM.Alert:Create(KM.Lang.Ability.Terminate[KBM.Lang], 3, true, nil)
-	self.Prince.AlertsRef.Essence = KBM.Alert:Create(KM.Lang.Ability.Essence[KBM.Lang], 2, true, nil)
-	self.Prince.AlertsRef.FeedbackWarn = KBM.Alert:Create(KM.Lang.Ability.Feedback[KBM.Lang], nil, false, true)
-	self.Prince.AlertsRef.Feedback = KBM.Alert:Create(KM.Lang.Ability.Feedback[KBM.Lang], 5, true, true)
+	self.Prince.AlertsRef.Terminate = KBM.Alert:Create(KM.Lang.Ability.Terminate[KBM.Lang], 3, true, nil, "orange")
+	self.Prince.AlertsRef.Essence = KBM.Alert:Create(KM.Lang.Ability.Essence[KBM.Lang], 2, true, nil, "yellow")
+	self.Prince.AlertsRef.FeedbackWarn = KBM.Alert:Create(KM.Lang.Ability.Feedback[KBM.Lang], nil, false, true, "blue")
+	self.Prince.AlertsRef.Feedback = KBM.Alert:Create(KM.Lang.Ability.Feedback[KBM.Lang], 5, true, true, "blue")
 	KBM.Defaults.AlertObj.Assign(self.Prince)
 	
 	-- Assign Prince's Mechanics to Triggers

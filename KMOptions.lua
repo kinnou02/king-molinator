@@ -177,13 +177,13 @@ function KBM.InitTabs()
 		Tab.Texture:SetLayer(1)
 		Tab.TextShadow = UI.CreateFrame("Text", "Tabbar_TextShadow_"..Name, Tab.Frame)
 		Tab.TextShadow:SetText(Name)
-		Tab.TextShadow:SetPoint("CENTER", Tab.Texture, "CENTER", 1, 2)
 		Tab.TextShadow:SetFontSize(14)
 		Tab.TextShadow:SetFontColor(0,0,0)
 		Tab.TextShadow:SetLayer(2)
 		Tab.Text = UI.CreateFrame("Text", "Tabber_Text_"..Name, Tab.TextShadow)
 		Tab.Text:SetText(Name)
-		Tab.Text:SetPoint("TOPLEFT", Tab.TextShadow, "TOPLEFT", -1, -1)
+		Tab.Text:SetPoint("CENTER", Tab.Texture, "CENTER", 1, 2)
+		Tab.TextShadow:SetPoint("TOPLEFT", Tab.Text, "TOPLEFT", -1, -1)
 		Tab.Text:SetFontSize(14)
 		Tab.Text:SetFontColor(0.7, 0.7, 0.7)
 		Tab.Text:SetLayer(3)
@@ -409,11 +409,11 @@ function KBM.InitTabs()
 				GUI.ShadowText = UI.CreateFrame("Text", "Options_Page_Child_ShadowText", GUI.Frame)
 				GUI.ShadowText:SetFontSize(14)
 				GUI.ShadowText:SetFontColor(0,0,0,0.9)
-				GUI.ShadowText:SetPoint("CENTERLEFT", GUI.Check, "CENTERRIGHT", 1, 1)
 				GUI.ShadowText:SetLayer(1)
 				GUI.Text = UI.CreateFrame("Text", "Options_Page_Child_Text", GUI.Frame)
 				GUI.Text:SetFontSize(14)
 				GUI.Text:SetFontColor(1,1,1,1)
+				GUI.ShadowText:SetPoint("TOPLEFT", GUI.Text, "TOPLEFT", 1, 1)
 				GUI.Text:SetPoint("CENTERLEFT", GUI.Check, "CENTERRIGHT")
 				GUI.Text:SetLayer(2)
 				GUI.Side = Side
@@ -528,11 +528,11 @@ function KBM.InitTabs()
 				GUI.ShadowText = UI.CreateFrame("Text", "Options_Page_Child_ShadowText", GUI.Frame)
 				GUI.ShadowText:SetFontSize(14)
 				GUI.ShadowText:SetFontColor(0,0,0,0.9)
-				GUI.ShadowText:SetPoint("CENTERLEFT", GUI.Check, "CENTERRIGHT", 1, 1)
 				GUI.ShadowText:SetLayer(1)
 				GUI.Text = UI.CreateFrame("Text", "Options_Page_Child_Text", GUI.Frame)
 				GUI.Text:SetFontSize(14)
 				GUI.Text:SetFontColor(1,1,1,1)
+				GUI.ShadowText:SetPoint("TOPLEFT", GUI.Text, "TOPLEFT", 1, 1)
 				GUI.Text:SetPoint("CENTERLEFT", GUI.Check, "CENTERRIGHT")
 				GUI.Text:SetLayer(2)
 				GUI.Text:SetMouseMasking("limited")
@@ -564,11 +564,11 @@ function KBM.InitTabs()
 				GUI.ShadowText = UI.CreateFrame("Text", "Options_Page_Header_ShadowText", GUI.Frame)
 				GUI.ShadowText:SetFontSize(16)
 				GUI.ShadowText:SetFontColor(0,0,0,0.9)
-				GUI.ShadowText:SetPoint("CENTERLEFT", GUI.Check, "CENTERRIGHT", 1, 1)
 				GUI.ShadowText:SetLayer(1)
 				GUI.Text = UI.CreateFrame("Text", "Options_Page_Header_Text", GUI.Frame)
 				GUI.Text:SetFontColor(0.85,0.65,0)
 				GUI.Text:SetFontSize(16)
+				GUI.ShadowText:SetPoint("TOPLEFT", GUI.Text, "TOPLEFT", 1, 1)
 				GUI.Text:SetPoint("CENTERLEFT", GUI.Check, "CENTERRIGHT")
 				GUI.Text:SetLayer(2)
 				GUI.Side = Side
@@ -1252,7 +1252,7 @@ function KBM.InitOptions()
 			Encounter.GUI.Text:SetFontColor(1,1,1)
 			Encounter.GUI.Text:SetLayer(2)
 			Encounter.GUI.Frame:SetHeight(Encounter.GUI.Text:GetHeight())
-			Encounter.GUI.TextShadow:SetPoint("CENTERLEFT", Encounter.GUI.Check, "CENTERRIGHT",1 ,1)
+			Encounter.GUI.TextShadow:SetPoint("TOPLEFT", Encounter.GUI.Text, "TOPLEFT", 1 ,1)
 			Encounter.GUI.Text:SetPoint("CENTERLEFT", Encounter.GUI.Check, "CENTERRIGHT")
 			table.insert(self.Children, Encounter)
 			Encounter.Instance = self
@@ -1425,8 +1425,12 @@ function KBM.InitOptions()
 					
 					if self.Type == "plain" then
 						self.GUI.Check:SetVisible(false)
+						self.GUI.Text:ClearPoint("LEFT")
+						self.GUI.Text:SetPoint("LEFT", self.GUI.Check, "LEFT")
 					else
 						self.GUI.Check:SetChecked(self.Checked)
+						self.GUI.Text:ClearPoint("LEFT")
+						self.GUI.Text:SetPoint("LEFT", self.GUI.Check, "RIGHT")
 						if self.Hook then
 							self.GUI.Check:SetEnabled(true)				
 						else
@@ -1580,7 +1584,11 @@ function KBM.InitOptions()
 									self.Child.Checked = self:GetChecked()
 									self.Child:Hook(self.Child.Checked)
 									if self.Child.Controller then
-										self.Child.Controller.GUI.Check:SetChecked(self:GetChecked())
+										if self.Child.Controller.GUI then
+											self.Child.Controller.GUI.Check:SetChecked(self:GetChecked())
+										else
+											self.Child.Controller.Checked = self:GetChecked()
+										end
 									end
 								end
 							end							
@@ -1692,23 +1700,27 @@ function KBM.InitOptions()
 					function Option:Enable(bool)
 						if bool then
 							self.Enabled = true
-							self.GUI.Text:SetAlpha(1)
-							self.GUI.Check:SetEnabled(true)
-							if self.Type == "color" then
-								self.GUI:SetEnabled(self.Data.Custom)
+							if self.GUI then
+								self.GUI.Text:SetAlpha(1)
+								self.GUI.Check:SetEnabled(true)
+								if self.Type == "color" then
+									self.GUI:SetEnabled(self.Data.Custom)
+								end
 							end
 						else
 							self.Enabled = false
-							self.GUI.Text:SetAlpha(0.5)
-							self.GUI.Check:SetEnabled(false)
-							if self.Selected then
-								self:SubHide()
-								self.Tab.Selected = nil
-								self.Selected = false
-								self.GUI.Frame:SetBackgroundColor(0,0,0,0)
-							end
-							if self.Type == "color" then
-								self.GUI:SetEnabled(false)
+							if self.GUI then
+								self.GUI.Text:SetAlpha(0.5)
+								self.GUI.Check:SetEnabled(false)
+								if self.Selected then
+									self:SubHide()
+									self.Tab.Selected = nil
+									self.Selected = false
+									self.GUI.Frame:SetBackgroundColor(0,0,0,0)
+								end
+								if self.Type == "color" then
+									self.GUI:SetEnabled(false)
+								end
 							end
 						end
 					end

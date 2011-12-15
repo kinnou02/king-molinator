@@ -124,7 +124,9 @@ function KBM.Defaults.TimerObj.Assign(BossObj)
 			Data.Settings = BossObj.Settings.TimersRef[ID]
 			BossObj.Settings.TimersRef[ID].ID = ID
 			if KBM.Colors.List[Data.Settings.Color] then
-				Data.Color = Data.Settings.Color
+				if Data.Color.Custom then
+					Data.Color = Data.Settings.Color
+				end
 			else
 				print("TimerObj Assign Error: "..Data.ID)
 				print("Color Index ("..Data.Settings.Color..") does not exist, ignoring settings.")
@@ -168,7 +170,9 @@ function KBM.Defaults.AlertObj.Assign(BossObj)
 			Data.Enabled = BossObj.Settings.AlertsRef[ID].Enabled
 			Data.Settings = BossObj.Settings.AlertsRef[ID]
 			if KBM.Colors.List[Data.Settings.Color] then
-				Data.Color = Data.Settings.Color
+				if Data.Settings.Custom then
+					Data.Color = Data.Settings.Color
+				end
 			else
 				print("AlertObj Assign Error: "..Data.ID)
 				print("Color Index ("..Data.Settings.Color..") does not exist, ignoring settings.")
@@ -1941,7 +1945,7 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 												end
 											else
 												KBM.Alert.Settings = KBM.Options.Alerts
-											end	
+											end
 											KBM.EncTimer:ApplySettings()
 											KBM.PhaseMonitor:ApplySettings()
 											KBM.MechTimer:ApplySettings()
@@ -2502,7 +2506,11 @@ function KBM.Alert:Init()
 				AlertObj.Duration = self.Duration
 				self.Alpha = 1
 				if self.Settings.Flash then
-					self.Color = AlertObj.Color
+					if AlertObj.Settings.Custom then
+						self.Color = AlertObj.Settings.Color
+					else
+						self.Color = AlertObj.Color
+					end
 					self.Left[self.Color]:SetAlpha(1)
 					self.Left[self.Color]:SetVisible(true)
 					self.Right[self.Color]:SetAlpha(1)
@@ -2765,11 +2773,29 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 		end
 	end	
 	CastBarObj.Casting = false
-	CastBarObj.LastCast = nil
+	CastBarObj.LastCast = ""
 	CastBarObj.Enabled = CastBarObj.Settings.Enabled
 	CastBarObj.Mod = Mod
 	CastBarObj.Active = false
 	CastBarObj.Anchor = false
+	
+	function CastBarObj:ManageSettings()
+		if not self.Anchor then
+			if self.Boss.Settings then
+				if self.Boss.Settings.CastBar then
+					if self.Boss.Settings.CastBar.Override then
+						self.Settings = self.Boss.Settings.CastBar
+					else
+						self.Settings = KBM.Options.CastBar
+					end
+				else
+					self.Settings = KBM.Options.CastBar
+				end
+			else
+				self.Settings = KBM.Options.CastBar
+			end
+		end
+	end
 	
 	function CastBarObj:ApplySettings()
 	
@@ -2787,17 +2813,19 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 		self.GUI.Texture:SetVisible(self.Settings.Texture)
 		self.GUI.Progress:SetWidth(0)
 		self.GUI:SetText(self.Boss.Name)
-		self.GUI.Frame:SetVisible(self.Settings.Visible)
-		if not self.Settings.Pinned then
-			self.GUI.Drag:SetVisible(true)
-		else
-			self.GUI.Drag:SetVisible(self.Settings.Unlocked)
+		if self.Settings.Enabled then
+			self.GUI.Frame:SetVisible(self.Settings.Visible)
 		end
-		
+		if not self.Settings.Pinned then
+			self.GUI.Drag:SetVisible(self.Settings.Unlocked)
+		else
+			self.GUI.Drag:SetVisible(false)
+		end
 	end
 	
 	function CastBarObj:Display()	
-		
+	
+		self:ManageSettings()
 		if self.Settings.Visible and self.Settings.Enabled then
 			self.Visible = true
 			if not self.GUI then
@@ -2815,12 +2843,14 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 				end
 			end
 		end
-		
 	end
 	
 	function CastBarObj:Create(UnitID)
 	
+		self:ManageSettings()
 		self.UnitID = UnitID
+		self.LastCast = ""
+		
 		if not self.GUI then
 			self.GUI = KBM.CastBar:Pull()
 			self.GUI.CastBarObj = self
@@ -2902,11 +2932,13 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 				self.Casting = false
 			end
 		else
-			if self.Casting then
-				if self.Progress > 0.05 then
+			if self.Casting or (self.LastCast ~= "") then
+				if self.Progress then
+					if self.Progress > 0.05 then
 					-- if Inspect.Unit.Lookup(self.UnitID) then
 						-- Interrupt
 					-- end
+					end
 				end
 				self:Stop()
 				self.Casting = false
@@ -3568,11 +3600,15 @@ function KBM.MenuOptions.CastBars:Options()
 	end
 	function self:Texture(bool)
 		KBM.Options.CastBar.Texture = bool
-		KBM.CastBar.Anchor.GUI.Texture:SetVisible(bool)
+		if KBM.CastBar.Anchor.GUI then
+			KBM.CastBar.Anchor.GUI.Texture:SetVisible(bool)
+		end
 	end
 	function self:Shadow(bool)
 		KBM.Options.CastBar.Shadow = bool
-		KBM.CastBar.Anchor.GUI.Shadow:SetVisible(bool)
+		if KBM.CastBar.Anchor.GUI then
+			KBM.CastBar.Anchor.GUI.Shadow:SetVisible(bool)
+		end
 	end
 	function self:Visible(bool)
 		KBM.Options.CastBar.Visible = bool

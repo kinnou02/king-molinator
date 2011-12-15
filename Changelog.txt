@@ -1,4 +1,19 @@
-﻿﻿v0.7.8
+﻿v0.7.9
+* Castbars
+** Fixed: Error when changing shadow/texture options while not visible.
+** Fixed: Settings where not being actively applied until the next /reloadui or restart.
+** Fixed: Error when switching Timer States when the sub menu isn't active. (1702 error)
+* Alerts
+** Fixed: Custom color settings were not actively apply during combat/session.
+** Fixed: Once applied custom colors were always used, which lost default colors.
+* Castbar Triggers
+** Fixed: Casting states were not correctly resetting after multiple casts of the same type.
+** Fixed: Alerts and Timers related to casts should now be working correctly.
+* Hammerknell
+** Change: Restored lost default settings, and removed various ghost timers/alerts from menus.
+** Added: Rune King Monlinar: Alert for Frightening Shout (flashing purple).
+----
+﻿v0.7.8
 * Options
 ** Fixed: Per-Character saving was not working 100% accurately.
 ** New: All option text has been given shadows for better clarity.
