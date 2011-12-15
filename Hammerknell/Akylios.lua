@@ -126,6 +126,7 @@ AK.Lasher.Name = AK.Lang.Unit.Lasher[KBM.Lang]
 AK.Lang.Ability = {}
 AK.Lang.Ability.Decay = KBM.Language:Add("Mind Decay")
 AK.Lang.Ability.Breath = KBM.Language:Add("Breath of Madness")
+AK.Lang.Ability.Grave = KBM.Language:Add("Watery Grave")
 
 -- Debuff Dictionary.
 AK.Lang.Debuff = {}
@@ -176,6 +177,7 @@ function AK:InitVars()
 
 	self.Settings = {
 		Enabled = true,
+		PhaseAlt = false,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		MechTimer = KBM.Defaults.MechTimer(),
@@ -251,17 +253,22 @@ end
 function AK:Castbar(units)
 end
 
-function AK.PhaseTwo()
-	AK.PhaseObj.Objectives:Remove()
-	AK.Phase = 2
-	AK.PhaseObj:SetPhase(2)
-	AK.PhaseObj.Objectives:AddDeath(AK.Stinger.Name, 8)
-	AK.PhaseObj.Objectives:AddDeath(AK.Lasher.Name, 4)
-	KBM.MechTimer:AddRemove(AK.Jornaru.TimersRef.WaveOne)
-	KBM.MechTimer:AddRemove(AK.Jornaru.TimersRef.Summon)
-	KBM.MechTimer:AddStart(AK.Jornaru.TimersRef.SummonTwoFirst)
-	AK.Jornaru.CastBar.Enabled = false
-	print("Phase 2 starting!")
+function AK.PhaseTwo(Type)
+	if (Type == "percent" and AK.Settings.PhaseAlt == true) or (Type == "say" and AK.Settings.PhaseAlt == false) then
+		if AK.Phase == 1 then
+			AK.PhaseObj.Objectives:Remove()
+			AK.Phase = 2
+			AK.PhaseObj:SetPhase(2)
+			AK.PhaseObj.Objectives:AddDeath(AK.Stinger.Name, 8)
+			AK.PhaseObj.Objectives:AddDeath(AK.Lasher.Name, 4)
+			KBM.MechTimer:AddRemove(AK.Jornaru.TimersRef.WaveOne)
+			KBM.MechTimer:AddRemove(AK.Jornaru.TimersRef.Summon)
+			KBM.MechTimer:AddStart(AK.Jornaru.TimersRef.SummonTwoFirst)
+			KBM.MechTimer:AddStart(AK.Jornaru.TimersRef.OrbFirst)
+			AK.Jornaru.CastBar.Enabled = false
+			print("Phase 2 starting!")
+		end
+	end
 end
 
 function AK.PhaseThree()
@@ -392,6 +399,22 @@ end
 function AK:Timer()
 end
 
+AK.Custom = {}
+AK.Custom.Encounter = {}
+function AK.Custom.Encounter.Menu(Menu)
+
+	local Callbacks = {}
+
+	function Callbacks:Enabled(bool)
+		AK.Settings.PhaseAlt = bool
+	end
+
+	Header = Menu:CreateHeader("Use percentage based trigger for Phase 2", "check", "Encounter", "Main")
+	Header:SetChecked(AK.Settings.PhaseAlt)
+	Header:SetHook(Callbacks.Enabled)
+	
+end
+
 function AK.Jornaru:SetTimers(bool)	
 	if bool then
 		for TimerID, TimerObj in pairs(self.TimersRef) do
@@ -478,8 +501,9 @@ function AK:Start()
 	self.Jornaru.Triggers.Orb:AddTimer(self.Jornaru.TimersRef.Orb)
 	self.Jornaru.AlertsRef.Orb:Important()
 	self.Jornaru.Triggers.PhaseTwo = KBM.Trigger:Create(AK.Lang.Say.PhaseTwo[KBM.Lang], "say", self.Jornaru)
-	self.Jornaru.Triggers.PhaseTwo:AddTimer(self.Jornaru.TimersRef.OrbFirst)
 	self.Jornaru.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
+	self.Jornaru.Triggers.PhaseTwoAlt = KBM.Trigger:Create(50, "percent", self.Jornaru)
+	self.Jornaru.Triggers.PhaseTwoAlt:AddPhase(self.PhaseTwo)
 	self.Jornaru.Triggers.Summon = KBM.Trigger:Create(self.Lang.Mechanic.Summon[KBM.Lang], "cast", self.Jornaru)
 	self.Jornaru.Triggers.Summon:AddTimer(self.Jornaru.TimersRef.Summon)
 	self.Jornaru.TimersRef.Summon:SetPhase(1)

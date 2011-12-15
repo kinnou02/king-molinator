@@ -1010,7 +1010,8 @@ function KBM.InitOptions()
 	end
 
 	function KBM.MainWin.Menu:CreateHeader(Text, Hook, Default, Static)
-		Header = {}
+	
+		local Header = {}
 		Header = UI.CreateFrame("Frame", "Header: "..Text, self)
 		Header.Children = {}
 		Header:SetWidth(self:GetWidth())
@@ -1117,7 +1118,7 @@ function KBM.InitOptions()
 	function KBM.MainWin.Menu:CreateInstance(Name, Default, Hook)
 		
 		-- New Menu Handler
-		Instance = {}
+		local Instance = {}
 		Instance.GUI = {}
 		Instance.GUI.Frame = UI.CreateFrame("Frame", "Instance_"..Name, self)
 		Instance.GUI.Frame.Instance = Instance
@@ -1223,8 +1224,8 @@ function KBM.InitOptions()
 		Instance.ChildSize = 0
 		
 		function Instance:CreateEncounter(Boss, Default)			
-			Menu = KBM.MainWin.Menu
-			Encounter = {}
+			local Menu = KBM.MainWin.Menu
+			local Encounter = {}
 			Encounter.Boss = Boss
 			Encounter.GUI = {}
 			Encounter.Pages = {}
@@ -1386,7 +1387,7 @@ function KBM.InitOptions()
 					Side = "Main"
 				end
 				
-				Header = {}
+				local Header = {}
 				Header.Type = Type
 				Header.Name = Name
 				Header.Side = Side
@@ -1930,7 +1931,7 @@ function KBM.InitOptions()
 							Child = Header:CreateOption(FilterName, "excheck", Callbacks.Callback)
 							Child.Data = FilterData
 							Child:SetChecked(FilterData.Enabled)
-							SubHeader = Child:CreateHeader(FilterName, "plain")
+							local SubHeader = Child:CreateHeader(FilterName, "plain")
 							SubHeader.Boss = BossObj
 							BossObj.Menu.Filters[FilterData.ID] = {}
 							BossObj.Menu.Filters[FilterData.ID].Enabled = SubHeader:CreateOption(KBM.Language.Options.Enabled[KBM.Lang], "check", Callbacks.Enabled)
@@ -2079,7 +2080,7 @@ function KBM.InitOptions()
 								Child = Header:CreateOption(MenuName, "excheck", Callbacks.Callback)
 								Child.Data = TimerData.Settings
 								Child:SetChecked(TimerData.Settings.Enabled)							
-								SubHeader = Child:CreateHeader(MenuName, "plain")
+								local SubHeader = Child:CreateHeader(MenuName, "plain")
 								SubHeader.Boss = BossObj
 								BossObj.Menu.Timers[TimerID] = {}
 								BossObj.Menu.Timers[TimerID].Enabled = SubHeader:CreateOption(KBM.Language.Options.Enabled[KBM.Lang], "check", Callbacks.Enabled)
@@ -2198,7 +2199,7 @@ function KBM.InitOptions()
 								Child = Header:CreateOption(AlertData.Text, "excheck", Callbacks.Callback)
 								Child.Data = AlertData.Settings
 								Child:SetChecked(AlertData.Settings.Enabled)							
-								SubHeader = Child:CreateHeader(AlertData.Text, "plain")
+								local SubHeader = Child:CreateHeader(AlertData.Text, "plain")
 								SubHeader.Boss = BossObj
 								BossObj.Menu.Alerts[AlertID] = {}
 								BossObj.Menu.Alerts[AlertID].Enabled = SubHeader:CreateOption(KBM.Language.Options.Enabled[KBM.Lang], "check", Callbacks.Enabled)

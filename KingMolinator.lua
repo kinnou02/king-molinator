@@ -1170,7 +1170,7 @@ function KBM.Trigger:Init()
 			end
 			if KBM.Encounter then
 				if self.Phase then
-					self.Phase()
+					self.Phase(self.Type)
 					Triggered = true
 				end
 			end

@@ -1,4 +1,10 @@
-﻿v0.7.9
+﻿v0.8.0
+* Fixed: Removed some sneaky variables using the Global Name-space. Simple Meter uses the global name space.
+* Hammerknell
+** Added: Akylios: Optional percentage based trigger for Phase 2 if for some reason the say trigger fails.
+** Note: If during your pull, Phase 2 does not start, enable the percentage trigger.
+----
+v0.7.9
 * Castbars
 ** Fixed: Error when changing shadow/texture options while not visible.
 ** Fixed: Settings where not being actively applied until the next /reloadui or restart.
