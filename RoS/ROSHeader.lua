@@ -4,6 +4,7 @@
 --
 
 KBMROS_Settings = {}
+
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
@@ -38,10 +39,7 @@ function ROS:SaveVars()
 end
 
 function ROS:Start()
-
-	function self:Enabled(bool)
-	
+	function self:Handler(bool)
 	end
-	ROS.Header = KBM.MainWin.Menu:CreateHeader(self.Name, self.Enabled, true)
-	
+	ROS.Menu = KBM.MainWin.Menu:CreateInstance(self.Name, true, self.Handler)	
 end

@@ -13,17 +13,11 @@ local HK = KBM.BossMod["Hammerknell"]
 
 local KM = {
 	Enabled = true,
-	KingMolinar = {
-		MenuItem = nil,
-		Enabled = true,
-		Handler = nil,
-		Options = nil,
-	},
 	Instance = HK.Name,
+	HasPhases = true,
 	Phase = 1,
-	Timers = {},
+	TankSwap = false,
 	Lang = {},
-	Menu = nil,
 	Enrage = 60 * 10,
 	ID = "KingMolinar",
 }
@@ -120,7 +114,7 @@ KM.Prince = {
 			Enabled = true,
 			Terminate = KBM.Defaults.AlertObj.Create("orange"),
 			Essence = KBM.Defaults.AlertObj.Create("yellow"),
-			Feedback = KBM.Defaults.AlertObj.Create("blue", false),
+			Feedback = KBM.Defaults.AlertObj.Create("blue"),
 			FeedbackWarn = KBM.Defaults.AlertObj.Create("blue"),
 		}
 	}
@@ -165,7 +159,7 @@ KM.King = {
 			Enabled = true,
 			Cursed = KBM.Defaults.AlertObj.Create("red"),
 			Essence = KBM.Defaults.AlertObj.Create("yellow"),
-			Feedback = KBM.Defaults.AlertObj.Create("blue", false),
+			Feedback = KBM.Defaults.AlertObj.Create("blue"),
 			FeedbackWarn = KBM.Defaults.AlertObj.Create("blue"),
 			Shout = KBM.Defaults.AlertObj.Create("purple"),
 		},
@@ -384,16 +378,17 @@ function KM:UnitHPCheck(unitDetails, unitID)
 						self.PhaseObj:SetPhase(1)
 						self.PhaseObj.Objectives:AddPercent(self.King.Name, 90, 100)
 						self.PhaseObj.Objectives:AddPercent(self.Prince.Name, 90, 100)
+						self.King.Dead = false
 					end
+					self.King.Casting = false
 					self.KingLastHP = unitDetails.healthMax
 					self.KingHPMax = unitDetails.healthMax
+					self.KingCurrentHP = self.KingLastHP
 					if self.Settings.PercentMonitor.Enabled then
 						self.FrameBase:SetVisible(true)
 					end
-					self.King.Casting = false
 					self.King.CastBar:Create(unitID)
 				end
-				self.King.Dead = false
 				self.King.UnitID = unitID
 				self.King.Available = true
 				return self.King
@@ -409,16 +404,17 @@ function KM:UnitHPCheck(unitDetails, unitID)
 						self.PhaseObj:SetPhase(1)
 						self.PhaseObj.Objectives:AddPercent(self.King.Name, 90, 100)
 						self.PhaseObj.Objectives:AddPercent(self.Prince.Name, 90, 100)
+						self.Prince.Dead = false
 					end
 					self.PrinceLastHP = unitDetails.healthMax
 					self.PrinceHPMax = unitDetails.healthMax
+					self.PrinceCurrentHP = self.PrinceLastHP
+					self.Prince.Casting = false
 					if self.Settings.PercentMonitor.Enabled then
 						self.FrameBase:SetVisible(true)
 					end
-					self.Prince.Casting = false
 					self.Prince.CastBar:Create(unitID)
 				end
-				self.Prince.Dead = false
 				self.Prince.UnitID = unitID
 				self.Prince.Available = true
 				return self.Prince
@@ -446,13 +442,15 @@ function KM:Reset()
 	self.CurrentSwing = 0
 	self.KingPerc = 1
 	self.PrincePerc = 1
-	self.King.Available = false
-	self.Prince.Available = false
 	if not self.Settings.PercentMonitor.Visible then
 		self.FrameBase:SetVisible(false)
 	end
 	self.King.CastBar:Remove()
+	self.King.Dead = false
+	self.King.Available = false
 	self.Prince.CastBar:Remove()
+	self.Prince.Dead = false
+	self.Prince.Available = false
 	self.Phase = 1
 	self.PhaseObj:End(Inspect.Time.Real())
 	print("Monitor reset.")	
@@ -674,6 +672,7 @@ end
 function KM:BuildDisplay()
 	self.FrameBase = UI.CreateFrame("Frame", "FrameBase", KBM.Context)
 	self.FrameBase:SetVisible(false)
+	self.FrameBase:SetLayer(2)
 	if not self.Settings.PercentMonitor.x then
 		self.FrameBase:SetPoint("CENTER", UIParent, "CENTER")
 	else
@@ -809,7 +808,7 @@ function KM:Timer(current, diff)
 	end
 end
 
-function KM.KingMolinar:OptionsClose()
+function KM:OptionsClose()
 end
 
 function KM.King:SetTimers(bool)	
@@ -927,6 +926,7 @@ function KM:Start()
 	self.King.AlertsRef.Essence = KBM.Alert:Create(KM.Lang.Ability.Essence[KBM.Lang], 2, true, nil, "yellow")
 	self.King.AlertsRef.FeedbackWarn = KBM.Alert:Create(KM.Lang.Ability.Feedback[KBM.Lang], nil, false, "blue")
 	self.King.AlertsRef.Feedback = KBM.Alert:Create(KM.Lang.Ability.Feedback[KBM.Lang], 5, true, true, "blue")
+	self.King.AlertsRef.Feedback:NoMenu()
 	self.King.AlertsRef.Shout = KBM.Alert:Create(KM.Lang.Ability.Shout[KBM.Lang], 2, true, true, "purple")
 	KBM.Defaults.AlertObj.Assign(self.King)
 	
@@ -965,6 +965,7 @@ function KM:Start()
 	self.Prince.AlertsRef.Essence = KBM.Alert:Create(KM.Lang.Ability.Essence[KBM.Lang], 2, true, nil, "yellow")
 	self.Prince.AlertsRef.FeedbackWarn = KBM.Alert:Create(KM.Lang.Ability.Feedback[KBM.Lang], nil, false, true, "blue")
 	self.Prince.AlertsRef.Feedback = KBM.Alert:Create(KM.Lang.Ability.Feedback[KBM.Lang], 5, true, true, "blue")
+	self.Prince.AlertsRef.Feedback:NoMenu()
 	KBM.Defaults.AlertObj.Assign(self.Prince)
 	
 	-- Assign Prince's Mechanics to Triggers

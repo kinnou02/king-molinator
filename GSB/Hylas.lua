@@ -4,51 +4,42 @@
 --
 
 KBMGSBPH_Settings = nil
+chKBMGSBPH_Settings = nil
+
+-- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 local GSB = KBM.BossMod["Greenscales Blight"]
 
 local PH = {
-	ModEnabled = true,
-	Hylas = {
-		MenuItem = nil,
-		Enabled = true,
-		Handler = nil,
-		Options = nil,
-	},
+	Enabled = true,
 	Instance = GSB.Name,
-	Type = "20man",
 	HasPhases = true,
-	PhaseType = "percentage",
-	PhaseList = {},
-	Timers = {},
 	Lang = {},
-	ID = "Hylas",	
+	ID = "Hylas",
 }
 
 PH.Hylas = {
 	Mod = PH,
-	Level = "??",
+	Level = "52",
 	Active = false,
 	Name = "Prince Hylas",
+	Menu = {},
 	Castbar = nil,
-	CastFilters = {},
-	Timers = {},
-	TimersRef = {},
-	AlertsRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+	}
 }
 
 KBM.RegisterMod(PH.ID, PH)
 
 PH.Lang.Hylas = KBM.Language:Add(PH.Hylas.Name)
 PH.Lang.Hylas.German = "Prinz Hylas"
--- PH.Lang.Flames = KBM.Language:Add("Ancient Flames")
--- PH.Lang.Flames.French = "Flammes anciennes"
 
 PH.Hylas.Name = PH.Lang.Hylas[KBM.Lang]
 
@@ -56,48 +47,51 @@ function PH:AddBosses(KBM_Boss)
 	self.Hylas.Descript = self.Hylas.Name
 	self.MenuName = self.Hylas.Descript
 	self.Bosses = {
-		[self.Hylas.Name] = true,
+		[self.Hylas.Name] = self.Hylas,
 	}
 	KBM_Boss[self.Hylas.Name] = self.Hylas	
 end
 
 function PH:InitVars()
 	self.Settings = {
-		Timers = {
-			Enabled = true,
-			FlamesEnabled = true,
-		},
-		CastBar = {
-			x = false,
-			y = false,
-			Enabled = true,
-		},
+		Enabled = true,
+		CastBar = self.Hylas.Settings.CastBar,
+		EncTimer = KBM.Defaults.EncTimer(),
 	}
-	KBMPH_Settings = self.Settings
+	KBMGSBPH_Settings = self.Settings
+	chKBMGSBPH_Settings = self.Settings	
 end
 
-function PH:LoadVars()
-	if type(KBMGSBPH_Settings) == "table" then
-		for Setting, Value in pairs(KBMGSBPH_Settings) do
-			if type(KBMGSBPH_Settings[Setting]) == "table" then
-				if self.Settings[Setting] ~= nil then
-					for tSetting, tValue in pairs(KBMGSBPH_Settings[Setting]) do
-						if self.Settings[Setting][tSetting] ~= nil then
-							self.Settings[Setting][tSetting] = tValue
-						end
-					end
-				end
-			else
-				if self.Settings[Setting] ~= nil then
-					self.Settings[Setting] = Value
-				end
-			end
-		end
+function PH:SwapSettings(bool)
+	if bool then
+		KBMGSBPH_Settings = self.Settings
+		self.Settings = chKBMGSBPH_Settings
+	else
+		chKBMGSBPH_Settings = self.Settings
+		self.Settings = KBMGSBPH_Settings
 	end
 end
 
-function PH:SaveVars()
-	KBMGSBPH_Settings = self.Settings
+function PH:LoadVars()	
+	if KBM.Options.Character then
+		KBM.LoadTable(chKBMGSBPH_Settings, self.Settings)
+	else
+		KBM.LoadTable(KBMGSBPH_Settings, self.Settings)
+	end
+	
+	if KBM.Options.Character then
+		chKBMGSBPH_Settings = self.Settings
+	else
+		KBMGSBPH_Settings = self.Settings
+	end	
+end
+
+function PH:SaveVars()	
+	if KBM.Options.Character then
+		chKBMGSBPH_Settings = self.Settings
+	else
+		KBMGSBPH_Settings = self.Settings
+	end	
 end
 
 function PH:Castbar(units)
@@ -119,8 +113,7 @@ function PH:Death(UnitID)
 	return false
 end
 
-function PH:UnitHPCheck(unitDetails, unitID)
-	
+function PH:UnitHPCheck(unitDetails, unitID)	
 	if unitDetails and unitID then
 		if not unitDetails.player then
 			if unitDetails.name == self.Hylas.Name then
@@ -148,30 +141,38 @@ function PH:Reset()
 	self.Hylas.CastBar:Remove()
 end
 
-function PH:Timer()
-	
+function PH:Timer()	
 end
 
-function PH.Hylas:Options()
-	function self:TimersEnabled(bool)
+function PH.Hylas:SetTimers(bool)	
+	if bool then
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = TimerObj.Settings.Enabled
+		end
+	else
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = false
+		end
 	end
-	function self:FlamesEnabled(bool)
-		PH.Settings.Timers.FlamesEnabled = bool
-		PH.Hylas.TimersRef.Flames.Enabled = bool
-	end
-	local Options = self.MenuItem.Options
-	Options:SetTitle()
-	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, PH.Settings.Timers.Enabled)
-	--Timers:AddCheck(PH.Lang.Flames[KBM.Lang], self.FlamesEnabled, PH.Settings.Timers.FlamesEnabled)	
-	
 end
 
-function PH:Start()
-	self.Header = KBM.HeaderList[self.Instance]
-	self.Hylas.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Hylas, true, self.Header)
-	self.Hylas.MenuItem.Check:SetEnabled(false)
-	-- self.Hylas.TimersRef.Flames = KBM.MechTimer:Add(self.Lang.Flames[KBM.Lang], "cast", 30, self, nil)
-	-- self.Hylas.TimersRef.Flames.Enabled = self.Settings.Timers.FlamesEnabled
-	
-	self.Hylas.CastBar = KBM.CastBar:Add(self, self.Hylas, true)
+function PH.Hylas:SetAlerts(bool)
+	if bool then
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = AlertObj.Settings.Enabled
+		end
+	else
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = false
+		end
+	end
+end
+
+function PH:DefineMenu()
+	self.Menu = GSB.Menu:CreateEncounter(self.Hylas, self.Enabled)
+end
+
+function PH:Start()	
+	self.Hylas.CastBar = KBM.CastBar:Add(self, self.Hylas)
+	self:DefineMenu()
 end

@@ -4,43 +4,42 @@
 --
 
 KBMGSBIJ_Settings = nil
+chKBMGSBIJ_Settings = nil
+
+-- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 local GSB = KBM.BossMod["Greenscales Blight"]
 
 local IJ = {
-	ModEnabled = true,
-	Johlen = {
-		MenuItem = nil,
-		Enabled = true,
-		Handler = nil,
-		Options = nil,
-	},
+	Enabled = true,
 	Instance = GSB.Name,
-	Type = "20man",
 	HasPhases = true,
-	PhaseType = "percentage",
-	PhaseList = {},
-	Timers = {},
 	Lang = {},
-	ID = "Johlen",	
+	ID = "Johlen",
 }
 
 IJ.Johlen = {
 	Mod = IJ,
-	Level = "??",
+	Level = "52",
 	Active = false,
 	Name = "Infiltrator Johlen",
-	Castbar = nil,
-	CastFilters = {},
-	Timers = {},
-	TimersRef = {},
+	NameShort = "Johlen",
+	Menu = {},
 	AlertsRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+		AlertsRef = {
+			Enabled = true,
+			Blinding = KBM.Defaults.AlertObj.Create("yellow"),
+			Bomb = KBM.Defaults.AlertObj.Create("red"),
+		},
+	},
 }
 
 KBM.RegisterMod(IJ.ID, IJ)
@@ -48,54 +47,83 @@ KBM.RegisterMod(IJ.ID, IJ)
 IJ.Lang.Johlen = KBM.Language:Add(IJ.Johlen.Name)
 IJ.Lang.Johlen.French = "Infiltrateur Johlen"
 
+-- Ability Dictionary
+IJ.Lang.Ability = {}
+IJ.Lang.Ability.Blinding = KBM.Language:Add("Blinding Bomb")
+
+-- Verbose Dictionary 
+IJ.Lang.Verbose = {}
+IJ.Lang.Verbose.Bomb = KBM.Language:Add("Devastation")
+
+-- Unit Dictionary
+IJ.Lang.Unit = {}
+IJ.Lang.Unit.Bomb = KBM.Language:Add("Devastating Bomb")
+
 IJ.Johlen.Name = IJ.Lang.Johlen[KBM.Lang]
+
+IJ.Bomb = {
+	Mod = ID,
+	Level = "??",
+	Name = IJ.Lang.Unit.Bomb[KBM.Lang],
+	UnitList = {},
+	Ignore = true,
+	Type = "multi",
+}
 
 function IJ:AddBosses(KBM_Boss)
 	self.Johlen.Descript = self.Johlen.Name
 	self.MenuName = self.Johlen.Descript
 	self.Bosses = {
-		[self.Johlen.Name] = true,
+		[self.Johlen.Name] = self.Johlen,
+		[self.Bomb.Name] = self.Bomb,
 	}
-	KBM_Boss[self.Johlen.Name] = self.Johlen	
+	KBM_Boss[self.Johlen.Name] = self.Johlen
+	KBM.SubBoss[self.Bomb.Name] = self.Bomb
 end
 
 function IJ:InitVars()
 	self.Settings = {
-		Timers = {
-			Enabled = true,
-			FlamesEnabled = true,
-		},
-		CastBar = {
-			x = false,
-			y = false,
-			Enabled = true,
-		},
+		Enabled = true,
+		CastBar = self.Johlen.Settings.CastBar,
+		AlertsRef = self.Johlen.Settings.AlertsRef,
+		EncTimer = KBM.Defaults.EncTimer(),
+		PhaseMon = KBM.Defaults.PhaseMon(),
+		Alerts = KBM.Defaults.Alerts(),
 	}
-	KBMIJ_Settings = self.Settings
+	KBMGSBIJ_Settings = self.Settings
+	chKBMGSBIJ_Settings = self.Settings
 end
 
-function IJ:LoadVars()
-	if type(KBMGSBIJ_Settings) == "table" then
-		for Setting, Value in pairs(KBMGSBIJ_Settings) do
-			if type(KBMGSBIJ_Settings[Setting]) == "table" then
-				if self.Settings[Setting] ~= nil then
-					for tSetting, tValue in pairs(KBMGSBIJ_Settings[Setting]) do
-						if self.Settings[Setting][tSetting] ~= nil then
-							self.Settings[Setting][tSetting] = tValue
-						end
-					end
-				end
-			else
-				if self.Settings[Setting] ~= nil then
-					self.Settings[Setting] = Value
-				end
-			end
-		end
+function IJ:SwapSettings(bool)
+	if bool then
+		KBMGSBIJ_Settings = self.Settings
+		self.Settings = chKBMGSBIJ_Settings
+	else
+		chKBMGSBIJ_Settings = self.Settings
+		self.Settings = KBMGSBIJ_Settings
 	end
 end
 
-function IJ:SaveVars()
-	KBMGSBIJ_Settings = self.Settings
+function IJ:LoadVars()	
+	if KBM.Options.Character then
+		KBM.LoadTable(chKBMGSBIJ_Settings, self.Settings)
+	else
+		KBM.LoadTable(KBMGSBIJ_Settings, self.Settings)
+	end
+	
+	if KBM.Options.Character then
+		chKBMGSBIJ_Settings = self.Settings
+	else
+		KBMGSBIJ_Settings = self.Settings
+	end	
+end
+
+function IJ:SaveVars()	
+	if KBM.Options.Character then
+		chKBMGSBIJ_Settings = self.Settings
+	else
+		KBMGSBIJ_Settings = self.Settings
+	end	
 end
 
 function IJ:Castbar(units)
@@ -113,30 +141,77 @@ function IJ:Death(UnitID)
 	if self.Johlen.UnitID == UnitID then
 		self.Johlen.Dead = true
 		return true
+	elseif self.Bomb.UnitList[UnitID] then
+		self.Bomb.UnitList[UnitID].Dead = true
+		self.PhaseObj.Objectives:Remove(self.Lang.Unit.Bomb[KBM.Lang])
+		self.PhaseObj:SetPhase(self.Phase)
 	end
 	return false
 end
 
-function IJ:UnitHPCheck(unitDetails, unitID)
-	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if unitDetails.name == self.Johlen.Name then
+function IJ:UnitHPCheck(uDetails, unitID)	
+	if uDetails and unitID then
+		if not uDetails.player then
+			if uDetails.name == self.Johlen.Name then
 				if not self.Johlen.UnitID then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
 					self.TimeElapsed = 0
 					self.Johlen.Dead = false
-					self.Johlen.Casting = false
 					self.Johlen.CastBar:Create(unitID)
+					self.PhaseObj:Start(self.StartTime)
+					self.PhaseObj.Objectives:AddPercent(self.Johlen.Name, 75, 100)
+					self.PhaseObj:SetPhase(1)
 				end
+				self.Johlen.Casting = false
 				self.Johlen.UnitID = unitID
 				self.Johlen.Available = true
 				return self.Johlen
+			else
+				if not self.Bosses[uDetails.name].UnitList[unitID] then
+					SubBossObj = {
+						Mod = IJ,
+						Level = "??",
+						Name = uDetails.name,
+						Dead = false,
+						Casting = false,
+						UnitID = unitID,
+						Available = true,
+					}
+					self.Bosses[uDetails.name].UnitList[unitID] = SubBossObj
+				else
+					self.Bosses[uDetails.name].UnitList[unitID].Available = true
+					self.Bosses[uDetails.name].UnitList[unitID].UnitID = UnitID
+				end
+				return self.Bosses[uDetails.name].UnitList[unitID]			
 			end
 		end
 	end
+end
+
+function IJ.PhaseTwo()
+	IJ.PhaseObj.Objectives:Remove()
+	IJ.Phase = 2
+	IJ.PhaseObj:SetPhase("Bomb 1/3")
+	IJ.PhaseObj.Objectives:AddPercent(IJ.Johlen.Name, 50, 75)
+	IJ.PhaseObj.Objectives:AddPercent(IJ.Bomb.Name, 0, 100)	
+end
+
+function IJ.PhaseThree()
+	IJ.PhaseObj.Objectives:Remove()
+	IJ.Phase = 3
+	IJ.PhaseObj:SetPhase("Bomb 2/3")
+	IJ.PhaseObj.Objectives:AddPercent(IJ.Johlen.Name, 25, 50)
+	IJ.PhaseObj.Objectives:AddPercent(IJ.Bomb.Name, 0, 100)	
+end
+
+function IJ.PhaseFour()
+	IJ.PhaseObj.Objectives:Remove()
+	IJ.Phase = 4
+	IJ.PhaseObj:SetPhase("Bomb 3/3")
+	IJ.PhaseObj.Objectives:AddPercent(IJ.Johlen.Name, 0, 25)
+	IJ.PhaseObj.Objectives:AddPercent(IJ.Bomb.Name, 0, 100)	
 end
 
 function IJ:Reset()
@@ -144,32 +219,63 @@ function IJ:Reset()
 	self.Johlen.Available = false
 	self.Johlen.UnitID = nil
 	self.Johlen.CastBar:Remove()
+	self.Johlen.Dead = false
+	self.Bomb.UnitList = {}
+	self.Phase = 1
+	self.PhaseObj:End(Inspect.Time.Real())
 end
 
-function IJ:Timer()
-	
+function IJ:Timer()	
 end
 
-function IJ.Johlen:Options()
-	function self:TimersEnabled(bool)
+function IJ.Johlen:SetTimers(bool)	
+	if bool then
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = TimerObj.Settings.Enabled
+		end
+	else
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = false
+		end
 	end
-	function self:FlamesEnabled(bool)
-		IJ.Settings.Timers.FlamesEnabled = bool
-		IJ.Johlen.TimersRef.Flames.Enabled = bool
+end
+
+function IJ.Johlen:SetAlerts(bool)
+	if bool then
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = AlertObj.Settings.Enabled
+		end
+	else
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = false
+		end
 	end
-	local Options = self.MenuItem.Options
-	Options:SetTitle()
-	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, IJ.Settings.Timers.Enabled)
-	--Timers:AddCheck(IJ.Lang.Flames[KBM.Lang], self.FlamesEnabled, IJ.Settings.Timers.FlamesEnabled)	
-	
+end
+
+function IJ:DefineMenu()
+	self.Menu = GSB.Menu:CreateEncounter(self.Johlen, self.Enabled)
 end
 
 function IJ:Start()
-	self.Header = KBM.HeaderList[self.Instance]
-	self.Johlen.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Johlen, true, self.Header)
-	self.Johlen.MenuItem.Check:SetEnabled(false)
-	-- self.Johlen.TimersRef.Flames = KBM.MechTimer:Add(self.Lang.Flames[KBM.Lang], "cast", 30, self, nil)
-	-- self.Johlen.TimersRef.Flames.Enabled = self.Settings.Timers.FlamesEnabled
+	-- Create Alerts
+	self.Johlen.AlertsRef.Blinding = KBM.Alert:Create(self.Lang.Ability.Blinding[KBM.Lang], 5, true, true, "yellow")
+	self.Johlen.AlertsRef.Bomb = KBM.Alert:Create(self.Lang.Verbose.Bomb[KBM.Lang], 25, false, true, "red")
+	self.Johlen.AlertsRef.Bomb.MenuName = self.Lang.Unit.Bomb[KBM.Lang]
+	KBM.Defaults.AlertObj.Assign(self.Johlen)
 	
-	self.Johlen.CastBar = KBM.CastBar:Add(self, self.Johlen, true)
+	-- Assign and Create Triggers
+	self.Johlen.Triggers.Bomb = KBM.Trigger:Create(self.Lang.Unit.Bomb[KBM.Lang], "notify", self.Johlen)
+	self.Johlen.Triggers.Bomb:AddAlert(self.Johlen.AlertsRef.Bomb)
+	self.Johlen.Triggers.Blinding = KBM.Trigger:Create(self.Lang.Ability.Blinding[KBM.Lang], "cast", self.Johlen)
+	self.Johlen.Triggers.Blinding:AddAlert(self.Johlen.AlertsRef.Blinding)
+	self.Johlen.Triggers.PhaseTwo = KBM.Trigger:Create(75, "percent", self.Johlen)
+	self.Johlen.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
+	self.Johlen.Triggers.PhaseThree = KBM.Trigger:Create(50, "percent", self.Johlen)
+	self.Johlen.Triggers.PhaseThree:AddPhase(self.PhaseThree)
+	self.Johlen.Triggers.PhaseFour = KBM.Trigger:Create(25, "percent", self.Johlen)
+	self.Johlen.Triggers.PhaseFour:AddPhase(self.PhaseFour)
+	
+	self.Johlen.CastBar = KBM.CastBar:Add(self, self.Johlen)
+	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
+	self:DefineMenu()
 end

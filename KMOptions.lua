@@ -129,12 +129,10 @@ function KBM.Scroller:Create(Type, Size, Parent, Callback)
 		ScrollerObj:SetWidth(12)
 	end
 	ScrollerObj.Handle.Controller = ScrollerObj
-	return ScrollerObj
-	
+	return ScrollerObj	
 end
 
 function KBM.InitTabs()
-
 	KBM.Tabs = {}
 	KBM.Tabs.Total = 0
 	KBM.Tabs.Current = nil
@@ -145,21 +143,23 @@ function KBM.InitTabs()
 	KBM.Tabs.GUI.Page:SetPoint("BOTTOMRIGHT", KBM.MainWin.Content, "BOTTOMRIGHT")
 	KBM.Tabs.GUI.Page:SetLayer(2)
 	
-	function KBM.Tabs:Create(Name, Type)
-	
+	function KBM.Tabs:Create(Name, Type)	
 		if not Type then
 			Type = "Single"
 		end
 		self.Total = self.Total + 1
 		self.Size = (self.GUI.Page:GetWidth() / self.Total) - 2
+		
 		for TabName, Tab in pairs(self.List) do
 			Tab.Frame:SetWidth(self.Size)
 		end
+		
 		local Tab = {}
 		Tab.Name = Name
 		Tab.Type = Type
 		Tab.Selected = false
 		Tab.Frame = UI.CreateFrame("Frame", "Tabber_"..Name, self.GUI.Page)
+		
 		if self.Total == 1 then
 			self.LastTab = Tab
 			Tab.Frame:SetPoint("LEFT", self.GUI.Page, "LEFT")
@@ -168,6 +168,7 @@ function KBM.InitTabs()
 			Tab.Frame:SetPoint("LEFT", Tab.Previous.Frame, "RIGHT", 1, nil)
 			self.LastTab = Tab
 		end
+		
 		Tab.Frame:SetPoint("TOP", self.GUI.Page, "TOP", nil, 5)
 		Tab.Frame:SetWidth(self.Size)
 		Tab.Texture = UI.CreateFrame("Texture", "Tabber_Texture_"..Name, Tab.Frame)
@@ -200,17 +201,21 @@ function KBM.InitTabs()
 		Tab.Main:SetPoint("BOTTOM", Tab.Page, "BOTTOM")
 		Tab.MaxPageSize = Tab.Main:GetHeight()-4
 		Tab.Main.Tab = Tab
+		
 		function Tab.Main:Callback(Position)
 			if self.Data.Main.FirstItem.GUI then
 				self.Data.Main.FirstItem.GUI.Frame:SetPoint("TOP", Tab.Page, "TOP", nil, -Position)
 			end
 		end
+		
 		function Tab.Main.Event:WheelForward()
 			self.Scroller:SetPosition(-20)
 		end
+		
 		function Tab.Main.Event:WheelBack()
 			self.Scroller:SetPosition(20)
 		end
+		
 		if Tab.Type == "Single" then
 			Tab.Main.Scroller = KBM.Scroller:Create("V", Tab.MaxPageSize, Tab.Page, Tab.Main.Callback)
 			Tab.Main.Scroller.Frame:SetPoint("TOPLEFT", Tab.Main, "TOPRIGHT", 8, 2)
@@ -240,6 +245,7 @@ function KBM.InitTabs()
 			Tab.Sub.Scroller.Frame:SetPoint("TOPLEFT", Tab.Sub, "TOPRIGHT")
 			Tab.Sub:SetWidth((Tab.Page:GetWidth() * 0.40)-Tab.Sub.Scroller.Frame:GetWidth() + 2)
 		end
+		
 		Tab.Page:SetVisible(false)
 		Tab.Stores = {
 			Main = {
@@ -257,8 +263,7 @@ function KBM.InitTabs()
 		}
 		Tab.Frame.Tab = Tab
 		
-		function Tab:Deselect()
-		
+		function Tab:Deselect()		
 			self.Texture:SetTexture("KingMolinator", "Media/Tabber_Off.png")
 			self.Page:SetVisible(false)
 			self.Text:SetFontColor(0.7, 0.7, 0.7)
@@ -273,14 +278,11 @@ function KBM.InitTabs()
 				for _, Header in ipairs(self.Data.Main.Headers) do
 					Header:Hide()
 				end			
-			end
-			
-			self.Main.Scroller:SetRange(self.Stores.Main.PageSize, self.MaxPageSize)
-		
+			end		
+			self.Main.Scroller:SetRange(self.Stores.Main.PageSize, self.MaxPageSize)		
 		end
 		
-		function Tab.Frame.Event:MouseIn()
-			
+		function Tab.Frame.Event:MouseIn()			
 			if self.Tab.Active then
 				self.Tab.MouseOver = true
 				if not self.Tab.Selected then
@@ -288,12 +290,10 @@ function KBM.InitTabs()
 					self.Tab.Text:SetFontSize(16)
 					self.Tab.TextShadow:SetFontSize(16)
 				end
-			end
-			
+			end			
 		end
 		
-		function Tab.Frame.Event:MouseOut()
-		
+		function Tab.Frame.Event:MouseOut()		
 			if self.Tab.Active then
 				self.MouseOver = false
 				if not self.Tab.Selected then
@@ -301,22 +301,18 @@ function KBM.InitTabs()
 					self.Tab.Text:SetFontSize(14)
 					self.Tab.TextShadow:SetFontSize(14)
 				end
-			end
-		
+			end		
 		end
 		
-		function Tab.Frame.Event:LeftClick()
-			
+		function Tab.Frame.Event:LeftClick()			
 			if self.Tab.Active then
 				if not self.Tab.Selected then
 					self.Tab:Select()
 				end
-			end
-		
+			end		
 		end
 		
-		function Tab:Enabled(bool)
-		
+		function Tab:Enabled(bool)		
 			self.Active = bool
 			if bool then
 				if not self.Selected then
@@ -326,12 +322,10 @@ function KBM.InitTabs()
 				if not self.Selected then
 					self.Text:SetFontColor(0.3, 0.3, 0.3)
 				end
-			end
-		
+			end		
 		end
 		
-		function Tab:PushHeader(GUI)
-		
+		function Tab:PushHeader(GUI)		
 			for Event, Value in pairs(GUI.Frame.Event) do
 				GUI.Frame[Event] = nil
 			end
@@ -344,12 +338,10 @@ function KBM.InitTabs()
 			GUI.Frame.Header = nil
 			GUI.Check.Header = nil
 			GUI.Frame:SetVisible(false)
-			table.insert(self.Stores[GUI.Side].Header, GUI)
-		
+			table.insert(self.Stores[GUI.Side].Header, GUI)		
 		end
 
 		function Tab:PushColorGUI(GUI)
-
 			GUI.Active = false
 			for Event, Value in pairs(GUI.Frame.Event) do
 				GUI.Frame[Event] = nil
@@ -367,12 +359,10 @@ function KBM.InitTabs()
 			GUI.Frame:SetVisible(false)
 			GUI.Hook = nil
 			GUI.ColorObj[GUI.Color].Check:SetChecked(false)
-			table.insert(self.Stores[GUI.Side].ColorGUI, GUI)
-		
+			table.insert(self.Stores[GUI.Side].ColorGUI, GUI)		
 		end
 		
-		function Tab:PushChild(GUI)
-		
+		function Tab:PushChild(GUI)	
 			for Event, Value in pairs(GUI.Frame.Event) do
 				GUI.Frame[Event] = nil
 			end
@@ -385,8 +375,7 @@ function KBM.InitTabs()
 			GUI.Frame.Child = nil
 			GUI.Check.Child = nil
 			GUI.Frame:SetVisible(false)
-			table.insert(self.Stores[GUI.Side].Child, GUI)
-			
+			table.insert(self.Stores[GUI.Side].Child, GUI)			
 		end
 		
 		function Tab:PullColorGUI(Side, Color)
@@ -508,12 +497,10 @@ function KBM.InitTabs()
 			end
 			GUI.Color = Color
 			GUI.Active = true
-			return GUI
-		
+			return GUI		
 		end
 		
-		function Tab:PullChild(Side)
-		
+		function Tab:PullChild(Side)		
 			local GUI = {}
 			if not Side then
 				Side = "Main"
@@ -548,8 +535,7 @@ function KBM.InitTabs()
 			return GUI	
 		end
 		
-		function Tab:PullHeader(Side)
-			
+		function Tab:PullHeader(Side)			
 			local GUI = {}
 			if not Side then
 				Side = "Main"
@@ -580,12 +566,10 @@ function KBM.InitTabs()
 			GUI.Check:SetEnabled(true)
 			GUI.Frame:SetBackgroundColor(0,0,0,0)
 			GUI.Text:SetAlpha(1)
-			return GUI
-			
+			return GUI			
 		end
 		
-		function Tab:Select(Open)
-			
+		function Tab:Select(Open)			
 			self.Stores.Main.PageSize = 0
 			self.Stores.Sub.PageSize = 0
 			if KBM.Tabs.Current then
@@ -593,6 +577,7 @@ function KBM.InitTabs()
 					KBM.Tabs.Current:Deselect()
 				end
 			end
+			
 			KBM.Tabs.Current = self
 			self.Texture:SetTexture("KingMolinator", "Media/Tabber.png")
 			self.Text:SetFontColor(1, 1, 1)
@@ -606,55 +591,47 @@ function KBM.InitTabs()
 				for _, Header in ipairs(self.Data.Main.Headers) do
 					Header:Display()
 				end
-			end
-			
+			end			
 			self.Page:SetVisible(true)
-			self.Main.Scroller:SetRange(self.Stores.Main.PageSize, self.MaxPageSize)
-			
-		end		
+			self.Main.Scroller:SetRange(self.Stores.Main.PageSize, self.MaxPageSize)			
+		end	
+		
 		function Tab:SetData(DataObj)		
 			self.Data = DataObj			
-		end		
+		end
+		
 		function Tab:ClearData()		
 			self.Data = nil		
 		end
+		
 		function Tab:AddSize(Side, Object)
 			self.Stores[Side].PageSize = self.Stores[Side].PageSize + Object.GUI.Frame:GetHeight() + Object.ChildSize
-		end
-		
-		self.List[Name] = Tab
-	
+		end		
+		self.List[Name] = Tab	
 	end
 
 	KBM.Tabs:Create("Encounter", "Single")
 	KBM.Tabs:Create("Timers", "Double")
 	KBM.Tabs:Create("Alerts", "Double")
 	KBM.Tabs:Create("Castbars", "Double")
-	KBM.Tabs:Create("Achievements", "Single")
+	KBM.Tabs:Create("Records", "Single")
 
-	function KBM.Tabs:Open(DataObj)
-		
+	function KBM.Tabs:Open(DataObj)		
 		self.Data = DataObj
 		for TabName, Data in pairs(DataObj.Tabs) do
 			self.List[TabName]:SetData(Data)
+			self.List[TabName]:Enabled(Data.Enabled)
 		end
 		if DataObj.Selected then
 			self.List[DataObj.Selected]:Select(true)
 		else
 			self.List.Encounter:Select(true)
 		end
-		for TabName, Tab in pairs(self.List) do
-			if Tab.Data then
-				Tab:Enabled(true)
-			else
-				Tab:Enabled(false)
-			end
-		end
 		self.GUI.Page:SetVisible(true)
 		
 	end
-	function KBM.Tabs:Close()
 	
+	function KBM.Tabs:Close()	
 		self.GUI.Page:SetVisible(false)
 		for TabName, Tab in pairs(self.List) do
 			if Tab.Selected then
@@ -663,14 +640,13 @@ function KBM.InitTabs()
 			end
 			Tab:ClearData()
 		end
-		self.Data = nil
-	
+		self.Data = nil	
 	end
-	function KBM.Tabs.Populate()
-		
 	
+	function KBM.Tabs.Populate()
 		local Tabs = {
 			Encounter = {
+				Enabled = true,
 				Main = {
 					Headers = {},
 					LastHeader = nil,
@@ -679,6 +655,7 @@ function KBM.InitTabs()
 				Selected = nil,
 			},
 			Timers = {
+				Enabled = true,
 				Main = {
 					Headers = {},
 				},
@@ -688,6 +665,7 @@ function KBM.InitTabs()
 				Selected = nil,
 			},
 			Alerts = {
+				Enabled = true,
 				Main = {
 					Headers = {},
 				},
@@ -697,6 +675,7 @@ function KBM.InitTabs()
 				Selected = nil,
 			},
 			Castbars = {
+				Enabled = true,
 				Main = {
 					Headers = {},
 					LastHeader = nil,
@@ -705,16 +684,17 @@ function KBM.InitTabs()
 				Sub = {},
 				Selected = nil,
 			},
+			Records = {
+				Enabled = false,
+			},
 		}
-		return Tabs
-	
+		return Tabs	
 	end
-	KBM.Tabs.GUI.Page:SetVisible(false)
 	
+	KBM.Tabs.GUI.Page:SetVisible(false)
 end
 
 function KBM.InitOptions()
-
 	KBM.MainWin = UI.CreateFrame("RiftWindow", "King Boss Mods", KBM.Context)
 	KBM.MainWin.Options = {}
 	KBM.MainWin.ChildStore = {}
@@ -997,6 +977,10 @@ function KBM.InitOptions()
 	end
 	
 	function KBM.MainWin.Options.Close.Event:LeftPress()
+		KBM.MainWin.Options:Close()
+	end
+	
+	function KBM.MainWin.Options.Close()
 		KBM.MainWin:SetVisible(false)
 		if KBM.MainWin.CurrentPage then
 			if KBM.MainWin.CurrentPage.Type == "encounter" then
@@ -1004,6 +988,19 @@ function KBM.InitOptions()
 			else
 				if KBM.MainWin.CurrentPage.Link.Close then
 					KBM.MainWin.CurrentPage.Link:Close()
+				end
+			end
+		end	
+	end
+	
+	function KBM.MainWin.Options.Open()
+		KBM.MainWin:SetVisible(true)
+		if KBM.MainWin.CurrentPage then
+			if KBM.MainWin.CurrentPage.Type == "encounter" then
+			
+			else
+				if KBM.MainWin.CurrentPage.Link.Open then
+					KBM.MainWin.CurrentPage.Ling:Open()
 				end
 			end
 		end
@@ -1229,6 +1226,7 @@ function KBM.InitOptions()
 			Encounter.Boss = Boss
 			Encounter.GUI = {}
 			Encounter.Pages = {}
+			Encounter.Name = Boss.Mod.MenuName
 			Encounter.Pages.Tabs = KBM.Tabs.Populate()
 			Encounter.Headers = {}
 			Encounter.GUI.Frame = UI.CreateFrame("Frame", "Instance_Encounter", Menu)
@@ -2040,15 +2038,14 @@ function KBM.InitOptions()
 						self.Boss:SetTimers(bool)
 					end
 										
-					if BossObj.TimersRef then
-					
+					if BossObj.TimersRef then					
 						Header = self:CreateHeader(KBM.Language.Options.TimersEnabled[KBM.Lang].." ("..MenuName..")", "check", "Timers", "Main")
 						Header:SetChecked(BossObj.Settings.TimersRef.Enabled)
 						Header:SetHook(Callbacks.Enabled)
 						Header.Boss = BossObj
 						
 						for TimerID, TimerData in pairs(BossObj.TimersRef) do
-							if TimerData.Settings.HasMenu then
+							if TimerData.HasMenu then
 								local Callbacks = {}
 								Callbacks.Option = self
 								
@@ -2098,11 +2095,16 @@ function KBM.InitOptions()
 					end
 				end
 				
+				local TimerCreated = false
 				for BossName, BossObj in pairs(self.Boss.Mod.Bosses) do
 					if BossObj.TimersRef then
 						self:CreateOptions(BossObj)
+						TimerCreated = true
 					end
-				end								
+				end							
+				if not TimerCreated then
+					self.Pages.Tabs.Timers.Enabled = false									
+				end
 			end		
 
 			function Encounter:Alerts()
@@ -2172,7 +2174,7 @@ function KBM.InitOptions()
 						Header.Boss = BossObj
 						
 						for AlertID, AlertData in pairs(BossObj.AlertsRef) do
-							if AlertData.Settings.HasMenu then
+							if AlertData.HasMenu then
 								local Callbacks = {}
 								Callbacks.Option = self
 								
@@ -2195,11 +2197,16 @@ function KBM.InitOptions()
 										self.Manager.Color = Color
 									end								
 								end
-							
-								Child = Header:CreateOption(AlertData.Text, "excheck", Callbacks.Callback)
+
+								local MenuName = AlertData.Text
+								if AlertData.MenuName then
+									MenuName = AlertData.MenuName
+								end
+								
+								Child = Header:CreateOption(MenuName, "excheck", Callbacks.Callback)
 								Child.Data = AlertData.Settings
 								Child:SetChecked(AlertData.Settings.Enabled)							
-								local SubHeader = Child:CreateHeader(AlertData.Text, "plain")
+								local SubHeader = Child:CreateHeader(MenuName, "plain")
 								SubHeader.Boss = BossObj
 								BossObj.Menu.Alerts[AlertID] = {}
 								BossObj.Menu.Alerts[AlertID].Enabled = SubHeader:CreateOption(KBM.Language.Options.Enabled[KBM.Lang], "check", Callbacks.Enabled)
@@ -2217,11 +2224,16 @@ function KBM.InitOptions()
 					end
 				end
 				
+				local AlertCreated = false
 				for BossName, BossObj in pairs(self.Boss.Mod.Bosses) do
 					if BossObj.AlertsRef then
 						self:CreateOptions(BossObj)
+						AlertCreated = true
 					end
 				end								
+				if not AlertCreated then
+					self.Pages.Tabs.Alerts.Enabled = false
+				end
 			end		
 			
 			function Encounter:PhaseMon()			
@@ -2365,7 +2377,11 @@ function KBM.InitOptions()
 			Encounter:Alerts()
 			
 			-- Initialize Castbars Tab
-			Encounter:CastBar()
+			if Encounter.Boss.Mod.Settings.CastBar then
+				Encounter:CastBar()
+			else
+				Encounter.Pages.Tabs.Castbars.Enabled = false
+			end
 			
 			KBM.MainWin:AddSize(Encounter.GUI.Frame)
 			self:AddChildSize(Encounter.GUI.Frame)

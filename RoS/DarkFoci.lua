@@ -4,27 +4,20 @@
 --
 
 KBMROSDF_Settings = nil
+chKBMROSDF_Settings = nil
+
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 local ROS = KBM.BossMod["River of Souls"]
 
 local DF = {
-	ModEnabled = true,
-	Foci = {
-		MenuItem = nil,
-		Enabled = true,
-		Handler = nil,
-		Options = nil,
-	},
+	Enabled = true,
 	Instance = ROS.Name,
 	Type = "20man",
 	HasPhases = true,
-	PhaseType = "percentage",
-	PhaseList = {},
-	Timers = {},
 	Lang = {},
-	ID = "Dark Foci",
+	ID = "Dark_Foci",	
 }
 
 DF.Foci = {
@@ -32,16 +25,14 @@ DF.Foci = {
 	Level = "??",
 	Active = false,
 	Name = "Dark Foci",
-	Castbar = nil,
-	CastFilters = {},
-	Timers = {},
-	TimersRef = {},
-	AlertsRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+	},
 }
 
 KBM.RegisterMod(DF.ID, DF)
@@ -56,48 +47,51 @@ function DF:AddBosses(KBM_Boss)
 	self.Foci.Descript = self.Foci.Name
 	self.MenuName = self.Foci.Descript
 	self.Bosses = {
-		[self.Foci.Name] = true,
+		[self.Foci.Name] = self.Foci,
 	}
 	KBM_Boss[self.Foci.Name] = self.Foci	
 end
 
 function DF:InitVars()
 	self.Settings = {
-		Timers = {
-			Enabled = true,
-			FlamesEnabled = true,
-		},
-		CastBar = {
-			x = false,
-			y = false,
-			Enabled = true,
-		},
+		Enabled = true,
+		CastBar = self.Foci.Settings.CastBar,
+		EncTimer = KBM.Defaults.EncTimer(),
 	}
-	KBMDF_Settings = self.Settings
+	KBMROSDF_Settings = self.Settings
+	chKBMROSDF_Settings = self.Settings
 end
 
-function DF:LoadVars()
-	if type(KBMROSDF_Settings) == "table" then
-		for Setting, Value in pairs(KBMROSDF_Settings) do
-			if type(KBMROSDF_Settings[Setting]) == "table" then
-				if self.Settings[Setting] ~= nil then
-					for tSetting, tValue in pairs(KBMROSDF_Settings[Setting]) do
-						if self.Settings[Setting][tSetting] ~= nil then
-							self.Settings[Setting][tSetting] = tValue
-						end
-					end
-				end
-			else
-				if self.Settings[Setting] ~= nil then
-					self.Settings[Setting] = Value
-				end
-			end
-		end
+function DF:SwapSettings(bool)
+	if bool then
+		KBMROSDF_Settings = self.Settings
+		self.Settings = chKBMROSDF_Settings
+	else
+		chKBMROSDF_Settings = self.Settings
+		self.Settings = KBMROSDF_Settings
 	end
 end
 
+function DF:LoadVars()
+	if KBM.Options.Character then
+		KBM.LoadTable(chKBMROSDF_Settings, self.Settings)
+	else
+		KBM.LoadTable(KBMROSDF_Settings, self.Settings)
+	end
+		
+	if KBM.Options.Character then
+		chKBMROSDF_Settings = self.Settings
+	else
+		KBMROSDF_Settings = self.Settings
+	end	
+end
+
 function DF:SaveVars()
-	KBMROSDF_Settings = self.Settings
+	if KBM.Options.Character then
+		chKBMROSDF_Settings = self.Settings
+	else
+		KBMROSDF_Settings = self.Settings
+	end	
 end
 
 function DF:Castbar(units)
@@ -124,7 +118,7 @@ function DF:UnitHPCheck(unitDetails, unitID)
 	if unitDetails and unitID then
 		if not unitDetails.player then
 			if unitDetails.name == self.Foci.Name then
-				if not self.Foci.UnitID then
+				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
@@ -146,32 +140,41 @@ function DF:Reset()
 	self.Foci.Available = false
 	self.Foci.UnitID = nil
 	self.Foci.CastBar:Remove()
+	self.Foci.Dead = false
 end
 
-function DF:Timer()
-	
+function DF:Timer()	
 end
 
-function DF.Foci:Options()
-	function self:TimersEnabled(bool)
+function DF.Foci:SetTimers(bool)	
+	if bool then
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = TimerObj.Settings.Enabled
+		end
+	else
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = false
+		end
 	end
-	function self:FlamesEnabled(bool)
-		DF.Settings.Timers.FlamesEnabled = bool
-		DF.Foci.TimersRef.Flames.Enabled = bool
-	end
-	local Options = self.MenuItem.Options
-	Options:SetTitle()
-	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, DF.Settings.Timers.Enabled)
-	--Timers:AddCheck(DF.Lang.Flames[KBM.Lang], self.FlamesEnabled, DF.Settings.Timers.FlamesEnabled)	
-	
 end
 
-function DF:Start()
-	self.Header = KBM.HeaderList[self.Instance]
-	self.Foci.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Foci, true, self.Header)
-	self.Foci.MenuItem.Check:SetEnabled(false)
-	-- self.Foci.TimersRef.Flames = KBM.MechTimer:Add(self.Lang.Flames[KBM.Lang], "cast", 30, self, nil)
-	-- self.Foci.TimersRef.Flames.Enabled = self.Settings.Timers.FlamesEnabled
-	
-	self.Foci.CastBar = KBM.CastBar:Add(self, self.Foci, true)
+function DF.Foci:SetAlerts(bool)
+	if bool then
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = AlertObj.Settings.Enabled
+		end
+	else
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = false
+		end
+	end
+end
+
+function DF:DefineMenu()
+	self.Menu = ROS.Menu:CreateEncounter(self.Foci, self.Enabled)
+end
+
+function DF:Start()	
+	self.Foci.CastBar = KBM.CastBar:Add(self, self.Foci)
+	self:DefineMenu()
 end

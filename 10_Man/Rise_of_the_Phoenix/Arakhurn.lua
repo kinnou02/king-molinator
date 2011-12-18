@@ -4,43 +4,37 @@
 --
 
 KBMROTPHA_Settings = nil
+chKBMROTPHA_Settings = nil
+
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 local ROTP = KBM.BossMod["Rise of the Phoenix"]
 
 local HA = {
-	ModEnabled = true,
-	Arakhurn = {
-		MenuItem = nil,
-		Enabled = true,
-		Handler = nil,
-		Options = nil,
-	},
+	Enabled = true,
 	Instance = ROTP.Name,
 	HasPhases = true,
-	PhaseType = "percentage",
-	PhaseList = {},
-	Timers = {},
 	Lang = {},
 	ID = "Arakhurn",
-	}
+}
 
 HA.Arakhurn = {
 	Mod = HA,
-	Level = "??",
+	Level = "52",
 	Active = false,
 	Name = "High Priest Arakhurn",
+	NameShort = "Arakhurn",
+	Menu = {},
 	Castbar = nil,
-	CastFilters = {},
-	Timers = {},
-	TimersRef = {},
-	AlertsRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+	}
 }
 
 KBM.RegisterMod(HA.ID, HA)
@@ -55,23 +49,16 @@ function HA:AddBosses(KBM_Boss)
 	self.Arakhurn.Descript = self.Arakhurn.Name
 	self.MenuName = self.Arakhurn.Descript
 	self.Bosses = {
-		[self.Arakhurn.Name] = true,
+		[self.Arakhurn.Name] = self.Arakhurn,
 	}
 	KBM_Boss[self.Arakhurn.Name] = self.Arakhurn	
 end
 
 function HA:InitVars()
-
 	self.Settings = {
-		Timers = {
-			Enabled = true,
-			FlamesEnabled = true,
-		},
-		CastBar = {
-			x = false,
-			y = false,
-			Enabled = true,
-		},
+		Enabled = true,
+		CastBar = self.Arakhurn.Settings.CastBar,
+		EncTimer = KBM.Defaults.EncTimer(),
 	}
 	KBMROTPHA_Settings = self.Settings
 	chKBMROTPHA_Settings = self.Settings
@@ -79,61 +66,35 @@ function HA:InitVars()
 end
 
 function HA:SwapSettings(bool)
-
 	if bool then
 		KBMROTPHA_Settings = self.Settings
 		self.Settings = chKBMROTPHA_Settings
 	else
-		chKBMROTPHA_Settings = self.Settings
+		chKBMROTPGS_Settings = self.Settings
 		self.Settings = KBMROTPHA_Settings
 	end
-
 end
 
-function HA:LoadVars()
-	
-	local TargetLoad = nil
-	
+function HA:LoadVars()	
 	if KBM.Options.Character then
-		TargetLoad = chKBMROTPHA_Settings
+		KBM.LoadTable(chKBMROTPHA_Settings, self.Settings)
 	else
-		TargetLoad = KBMROTPHA_Settings
-	end
-	
-	if type(TargetLoad) == "table" then
-		for Setting, Value in pairs(TargetLoad) do
-			if type(TargetLoad[Setting]) == "table" then
-				if self.Settings[Setting] ~= nil then
-					for tSetting, tValue in pairs(TargetLoad[Setting]) do
-						if self.Settings[Setting][tSetting] ~= nil then
-							self.Settings[Setting][tSetting] = tValue
-						end
-					end
-				end
-			else
-				if self.Settings[Setting] ~= nil then
-					self.Settings[Setting] = Value
-				end
-			end
-		end
+		KBM.LoadTable(KBMROTPHA_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
 		chKBMROTPHA_Settings = self.Settings
 	else
 		KBMROTPHA_Settings = self.Settings
-	end
-	
+	end	
 end
 
-function HA:SaveVars()
-	
+function HA:SaveVars()	
 	if KBM.Options.Character then
 		chKBMROTPHA_Settings = self.Settings
 	else
 		KBMROTPHA_Settings = self.Settings
-	end
-	
+	end	
 end
 
 function HA:Castbar(units)
@@ -155,8 +116,7 @@ function HA:Death(UnitID)
 	return false
 end
 
-function HA:UnitHPCheck(unitDetails, unitID)
-	
+function HA:UnitHPCheck(unitDetails, unitID)	
 	if unitDetails and unitID then
 		if not unitDetails.player then
 			if unitDetails.name == self.Arakhurn.Name then
@@ -184,30 +144,38 @@ function HA:Reset()
 	self.Arakhurn.CastBar:Remove()
 end
 
-function HA:Timer()
-	
+function HA:Timer()	
 end
 
-function HA.Arakhurn:Options()
-	function self:TimersEnabled(bool)
+function HA.Arakhurn:SetTimers(bool)	
+	if bool then
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = TimerObj.Settings.Enabled
+		end
+	else
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = false
+		end
 	end
-	function self:FlamesEnabled(bool)
-		HA.Settings.Timers.FlamesEnabled = bool
-		HA.Arakhurn.TimersRef.Flames.Enabled = bool
-	end
-	local Options = self.MenuItem.Options
-	Options:SetTitle()
-	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, HA.Settings.Timers.Enabled)
-	--Timers:AddCheck(HA.Lang.Flames[KBM.Lang], self.FlamesEnabled, HA.Settings.Timers.FlamesEnabled)	
-	
 end
 
-function HA:Start()
-	self.Header = KBM.HeaderList[self.Instance]
-	self.Arakhurn.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Arakhurn, true, self.Header)
-	self.Arakhurn.MenuItem.Check:SetEnabled(false)
-	-- self.Arakhurn.TimersRef.Flames = KBM.MechTimer:Add(self.Lang.Flames[KBM.Lang], "cast", 30, self, nil)
-	-- self.Arakhurn.TimersRef.Flames.Enabled = self.Settings.Timers.FlamesEnabled
-	
-	self.Arakhurn.CastBar = KBM.CastBar:Add(self, self.Arakhurn, true)
+function HA.Arakhurn:SetAlerts(bool)
+	if bool then
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = AlertObj.Settings.Enabled
+		end
+	else
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = false
+		end
+	end
+end
+
+function HA:DefineMenu()
+	self.Menu = ROTP.Menu:CreateEncounter(self.Arakhurn, self.Enabled)
+end
+
+function HA:Start()	
+	self.Arakhurn.CastBar = KBM.CastBar:Add(self, self.Arakhurn)
+	self:DefineMenu()
 end

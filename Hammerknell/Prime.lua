@@ -139,14 +139,14 @@ function VP:UnitHPCheck(uDetails, unitID)
 	if uDetails and unitID then
 		if not uDetails.player then
 			if uDetails.name == self.Prime.Name then
-				if not self.Prime.UnitID then
+				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
 					self.TimeElapsed = 0
 					self.Prime.CastBar:Create(unitID)
+					self.Prime.Dead = false
 				end
-				self.Prime.Dead = false
 				self.Prime.Casting = false
 				self.Prime.UnitID = unitID
 				self.Prime.Available = true

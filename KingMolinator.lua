@@ -96,7 +96,7 @@ function KBM.Defaults.CastFilter.Assign(BossObj)
 end
 
 KBM.Defaults.TimerObj = {}
-function KBM.Defaults.TimerObj.Create(Color, HasMenu)
+function KBM.Defaults.TimerObj.Create(Color, OldData)
 	if not Color then
 		Color = "blue"
 	end
@@ -104,13 +104,14 @@ function KBM.Defaults.TimerObj.Create(Color, HasMenu)
 		HasMenu = true
 	end
 	if not KBM.Colors.List[Color] then
-		print("Warning: Color error for TimerObj.Create ("..Color..")")
-		print("Color Index does not exist.")
+		error("Color error for TimerObj.Create ("..Color..")/nColor Index does not exist.")
 	end
+	if OldData ~= nil then
+		error("Incorrect Format: TimerObj.Create.HasMenu no longer a setting")
+	end	
 	local TimerObj = {
 		ID = nil,
 		Enabled = true,
-		HasMenu = HasMenu,
 		Color = Color,
 		Custom = false,
 	}
@@ -142,21 +143,21 @@ function KBM.Defaults.TimerObj.Assign(BossObj)
 end	
 
 KBM.Defaults.AlertObj = {}
-function KBM.Defaults.AlertObj.Create(Color, HasMenu)
+function KBM.Defaults.AlertObj.Create(Color, OldData)
 	if not Color then
 		Color = "red"
 	end
-	if HasMenu == nil then
-		HasMenu = true
-	end
 	if not KBM.Colors.List[Color] then
 		print("Warning: Color error for AlertObj.Create ("..Color..")")
-		print("Color Index does not exist.")
+		print("Color Index does not exist, setting to Red")
+		Color = "red"
+	end
+	if OldData ~= nil then
+		error("Incorrect Format: AlertObj.Create.HasMenu no longer a setting")
 	end
 	local AlertObj = {
 		ID = nil,
 		Enabled = true,
-		HasMenu = HasMenu,
 		Color = Color,
 		Custom = false,
 	}
@@ -174,16 +175,15 @@ function KBM.Defaults.AlertObj.Assign(BossObj)
 					Data.Color = Data.Settings.Color
 				end
 			else
-				print("AlertObj Assign Error: "..Data.ID)
-				print("Color Index ("..Data.Settings.Color..") does not exist, ignoring settings.")
-				print("For: "..BossObj.Name)
+				error(	"AlertObj Assign Error: "..Data.ID..
+						"/nColor Index ("..Data.Settings.Color..") does not exist, ignoring settings."..
+						"/nFor: "..BossObj.Name)
 				Data.Settings.Color = Data.Color
 			end
 			BossObj.Settings.AlertsRef[ID].ID = ID
 		else
-			print("Warning: "..ID.." is undefined in AlertsRef")
-			print("for boss: "..BossObj.Name)
-			print("---------------")
+			error(	"Warning: "..ID.." is undefined in AlertsRef"..
+					"/nfor boss: "..BossObj.Name)
 		end
 	end
 end
@@ -371,11 +371,6 @@ local function KBM_LoadVars(AddonID)
 		end
 		
 		KBM.Debug = KBM.Options.Debug		
-		if KBM.Lang ~= "English" then
-			KBM.Options.TankSwap.Enabled = false
-			KBM.Options.TankSwap.Visible = false
-			KBM.Options.TankSwap.Unlocked = false
-		end
 	end
 end
 
@@ -843,7 +838,8 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 	Timer.Phase = 0
 	Timer.Type = "timer"
 	Timer.Custom = false
-	Timer.Color = KBM.Options.MechTimer.Color
+	Timer.Color = KBM.MechTimer.Settings.Color
+	Timer.HasMenu = true
 	
 	function self:AddRemove(Object)
 		if not Object.Removing then
@@ -1042,6 +1038,11 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 			end
 		end
 	end
+	
+	function Timer:NoMenu()
+		self.HasMenu = false
+	end
+	
 	return Timer
 	
 end
@@ -1116,19 +1117,41 @@ function KBM.Trigger:Init()
 		TriggerObj.LastTrigger = 0
 		
 		function TriggerObj:AddTimer(TimerObj)
+			if not TimerObj then
+				error("Timer Object does not exist!")
+			end
+			if type(TimerObj) ~= "table" then
+				error("TimerObj: Expecting Table, got "..tostring(type(TimerObj)))
+			elseif TimerObj.Type ~= "timer" then
+				error("TimerObj: Expecting timer, got "..tostring(TimerObj.Type))
+			end
 			table.insert(self.Timers, TimerObj)
 		end
 		
 		function TriggerObj:AddAlert(AlertObj, Player)
+			if not AlertObj then
+				error("Alert Object does not exist!")
+			end
+			if type(AlertObj) ~= "table" then
+				error("AlertObj: Expecting Table, got "..tostring(type(AlertObj)))
+			elseif AlertObj.Type ~= "alert" then
+				error("AlertObj: Expecting alert, got "..tostring(AlertObj.Type))
+			end
 			AlertObj.Player = Player
 			table.insert(self.Alerts, AlertObj)
 		end
 		
 		function TriggerObj:AddPhase(PhaseObj)
+			if not PhaseObj then
+				error("Phase Object does not exist!")
+			end
 			self.Phase = PhaseObj 
 		end
 		
 		function TriggerObj:AddStop(Object)
+			if not Object then
+				error("Stop Object does not exist!")
+			end
 			table.insert(self.Stop, Object)
 		end
 		
@@ -1261,9 +1284,9 @@ end
 
 local function KBM_Options()
 	if KBM.MainWin:GetVisible() then
-		KBM.MainWin:SetVisible(false)
+		KBM.MainWin.Options:Close()
 	else
-		KBM.MainWin:SetVisible(true)
+		KBM.MainWin.Options:Open()
 	end	
 end
 
@@ -1376,12 +1399,12 @@ function KBM.PhaseMonitor:Init()
 	function self:ApplySettings()
 	
 		if self.Settings.Type ~= "PhaseMon" then
-			print("Error (Apply Settings): Incorrect Settings for Phase Monitor")
+			error("Error (Apply Settings): Incorrect Settings for Phase Monitor")
 		end
 	
 		self.Anchor:ClearAll()
 		if not self.Settings.x then
-			self.Anchor:SetPoint("CENTERTOP", UIParent, "CENTERTOP")
+			self.Anchor:SetPoint("CENTERTOP", UIParent, 0.65, 0)
 		else
 			self.Anchor:SetPoint("TOPLEFT", UIParent, "TOPLEFT", self.Settings.x, self.Settings.y)
 		end
@@ -1389,8 +1412,13 @@ function KBM.PhaseMonitor:Init()
 		self.Anchor:SetHeight(self.Settings.h * self.Settings.hScale)
 		self.Anchor.Text:SetFontSize(self.Settings.TextSize * self.Settings.tScale)
 		self.Frame.Text:SetFontSize(self.Settings.TextSize * self.Settings.tScale)
-		self.Anchor:SetVisible(self.Settings.Visible)
-		self.Anchor.Drag:SetVisible(self.Settings.Unlocked)
+		if self.Settings.Enabled then
+			self.Anchor:SetVisible(self.Settings.Visible)
+			self.Anchor:SetBackgroundColor(0,0,0,0.33)
+			self.Anchor.Drag:SetVisible(self.Settings.Unlocked)
+		else
+			self.Anchor:SetVisible(false)
+		end
 		if #self.ObjectiveStore > 0 then
 			for _, GUI in ipairs(self.ObjectiveStore) do
 				GUI.Frame:SetHeight(self.Anchor:GetHeight() * 0.5)
@@ -1471,6 +1499,7 @@ function KBM.PhaseMonitor:Init()
 		PhaseObj.DefaultPhase = Phase
 		PhaseObj.Objectives = {}
 		PhaseObj.LastObjective = KBM.PhaseMonitor.Frame
+		PhaseObj.Type = "PhaseMon"
 		
 		function PhaseObj:Update(Time)
 			Time = math.floor(Time)
@@ -1503,6 +1532,8 @@ function KBM.PhaseMonitor:Init()
 			
 			if KBM.PhaseMonitor.Settings.Enabled then
 				MetaObj.GUI.Frame:SetVisible(KBM.PhaseMonitor.Settings.Objectives)
+			else
+				MetaObj.GUI.Frame:SetVisible(false)
 			end		
 		end
 		
@@ -1528,6 +1559,8 @@ function KBM.PhaseMonitor:Init()
 			
 			if KBM.PhaseMonitor.Settings.Enabled then
 				DeathObj.GUI.Frame:SetVisible(KBM.PhaseMonitor.Settings.Objectives)
+			else
+				DeathObj.GUI.Frame:SetVisible(false)
 			end			
 		end
 		
@@ -1539,7 +1572,11 @@ function KBM.PhaseMonitor:Init()
 			PercentObj.Percent = math.ceil(Current)
 			PercentObj.GUI = KBM.PhaseMonitor:PullObjective()
 			PercentObj.GUI.Text:SetText(Name)
-			PercentObj.GUI.Objective:SetText(PercentObj.Percent.."%/"..PercentObj.Target.."%")
+			if Target == 0 then
+				PercentObj.GUI.Objective:SetText(Current.."%")
+			else
+				PercentObj.GUI.Objective:SetText(Current.."%/"..Target.."%")
+			end	
 			PercentObj.Type = "Percent"
 			
 			function PercentObj:Update(PercentRaw)
@@ -1559,6 +1596,8 @@ function KBM.PhaseMonitor:Init()
 			
 			if KBM.PhaseMonitor.Settings.Enabled then
 				PercentObj.GUI.Frame:SetVisible(KBM.PhaseMonitor.Settings.Objectives)
+			else
+				PercentObj.GUI.Frame:SetVisible(false)
 			end						
 		end
 		
@@ -1592,12 +1631,28 @@ function KBM.PhaseMonitor:Init()
 			end
 			KBM.PhaseMonitor.Active = true
 			self:SetPhase(self.Phase)
+			if KBM.PhaseMonitor.Anchor:GetVisible() then
+				if KBM.PhaseMonitor.Settings.Enabled then
+					KBM.PhaseMonitor.Anchor:SetVisible(false)
+				else
+					KBM.PhaseMonitor.Anchor.Text:SetVisible(false)
+					KBM.PhaseMonitor.Anchor:SetBackgroundColor(0,0,0,0)
+				end
+			end
 		end
 		
 		function PhaseObj:End(Time)
 			self.Objectives:Remove()
 			KBM.PhaseMonitor.Frame:SetVisible(false)
 			KBM.PhaseMonitor.Active = false
+			if KBM.PhaseMonitor.Anchor:GetVisible() then
+				KBM.PhaseMonitor.Anchor.Text:SetVisible(true)
+				KBM.PhaseMonitor.Anchor:SetBackgroundColor(0,0,0,0.33)
+			else
+				if KBM.PhaseMonitor.Settings.Visible then
+					KBM.PhaseMonitor.Anchor:SetVisible(true)
+				end
+			end
 		end
 	
 		self.Object = PhaseObj
@@ -1862,7 +1917,7 @@ end
 function KBM.CheckActiveBoss(uDetails, UnitID)
 	current = Inspect.Time.Real()
 	if KBM.Options.Enabled then
-		if (not KBM.Idle.Wait or (KBM.Idle.Wait and KBM.Idle.Until < current)) or KBM.Encounter then
+		if (not KBM.Idle.Wait or (KBM.Idle.Wait == true and KBM.Idle.Until < current)) or KBM.Encounter then
 			local BossObj = nil
 			KBM.Idle.Wait = false
 			if not KBM.BossID[UnitID] then
@@ -1989,7 +2044,6 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 		end
 	end	
 end
-
 
 function KBM.CombatEnter(UnitID)
 	if KBM.Options.Enabled then
@@ -2177,46 +2231,98 @@ function KBM.TankSwap:Pull()
 	if #self.TankStore > 0 then
 		GUI = table.remove(self.TankStore)
 	else
-		GUI.Frame = UI.CreateFrame("Frame", "TankSwap Base Frame", KBM.Context)
+		GUI.Frame = UI.CreateFrame("Frame", "TankSwap_Frame", KBM.Context)
 		GUI.Frame:SetLayer(1)
 		GUI.Frame:SetHeight(KBM.Options.TankSwap.h)
-		GUI.Frame:SetBackgroundColor(0,0,0,0.4)
-		GUI.TankFrame = UI.CreateFrame("Frame", "TankSwap Tank Frame", GUI.Frame)
+		GUI.Frame:SetBackgroundColor(0,0,0,0.33)
+		GUI.TankFrame = UI.CreateFrame("Frame", "TankSwap_Tank_Frame", GUI.Frame)
 		GUI.TankFrame:SetPoint("TOPLEFT", GUI.Frame, "TOPLEFT")
 		GUI.TankFrame:SetPoint("BOTTOMLEFT", GUI.Frame, "CENTERLEFT")
-		GUI.TankHP = UI.CreateFrame("Frame", "TankSwap Tank HP Frame", GUI.TankFrame)
+		GUI.TankHP = UI.CreateFrame("Frame", "TankSwap_Tank_HPFrame", GUI.TankFrame)
 		GUI.TankHP:SetLayer(1)
-		GUI.TankText = UI.CreateFrame("Text", "TankSwap Tank Text", GUI.TankFrame)
-		GUI.TankText:SetLayer(2)
+		GUI.TankHP:SetBackgroundColor(0,0.8,0,0.33)
+		GUI.TankShadow = UI.CreateFrame("Text", "TankSwap_Tank_Shadow", GUI.TankFrame)
+		GUI.TankShadow:SetFontSize(KBM.Options.TankSwap.TextSize)
+		GUI.TankShadow:SetLayer(2)
+		GUI.TankShadow:SetFontColor(0,0,0)
+		GUI.TankText = UI.CreateFrame("Text", "TankSwap_Tank_Text", GUI.TankFrame)
+		GUI.TankText:SetLayer(3)
 		GUI.TankText:SetFontSize(KBM.Options.TankSwap.TextSize)
-		GUI.TankText:SetPoint("CENTERLEFT", GUI.TankFrame, "CENTERLEFT", 2, 0)
-		GUI.DebuffFrame = UI.CreateFrame("Frame", "TankSwap Debuff Frame", GUI.Frame)
+		GUI.TankShadow:SetPoint("TOPLEFT", GUI.TankText, "TOPLEFT", 1, 1)
+		GUI.TankText:SetPoint("CENTERLEFT", GUI.TankFrame, "CENTERLEFT", 2, 0)	
+		GUI.DebuffFrame = UI.CreateFrame("Texture", "TankSwap Debuff Frame", GUI.Frame)
 		GUI.DebuffFrame:SetPoint("TOPRIGHT", GUI.Frame, "TOPRIGHT")
 		GUI.DebuffFrame:SetPoint("BOTTOMRIGHT", GUI.Frame, "CENTERRIGHT")
 		GUI.DebuffFrame:SetPoint("LEFT", GUI.Frame, 0.8, nil)
-		GUI.DebuffFrame:SetBackgroundColor(0.5,0,0,0.4)
+		GUI.DebuffFrame:SetBackgroundColor(0,0,0,0.33)
 		GUI.DebuffFrame:SetLayer(1)
-		GUI.DebuffFrame.Text = UI.CreateFrame("Text", "TankSwap Debuff Text", GUI.DebuffFrame)
+		GUI.DebuffFrame.Shadow = UI.CreateFrame("Text", "TankSwap_Debuff_Shadow", GUI.DebuffFrame)
+		GUI.DebuffFrame.Shadow:SetFontSize(KBM.Options.TankSwap.TextSize)
+		GUI.DebuffFrame.Shadow:SetFontColor(0,0,0)
+		GUI.DebuffFrame.Shadow:SetLayer(2)
+		GUI.DebuffFrame.Text = UI.CreateFrame("Text", "TankSwap_Debuff_Text", GUI.DebuffFrame)
 		GUI.DebuffFrame.Text:SetFontSize(KBM.Options.TankSwap.TextSize)
-		GUI.DebuffFrame.Text:SetLayer(2)
+		GUI.DebuffFrame.Text:SetLayer(3)
+		GUI.DebuffFrame.Shadow:SetPoint("TOPLEFT", GUI.DebuffFrame.Text, "TOPLEFT", 1, 1)
 		GUI.DebuffFrame.Text:SetPoint("CENTER", GUI.DebuffFrame, "CENTER")
 		GUI.TankFrame:SetPoint("TOPRIGHT", GUI.DebuffFrame, "TOPLEFT")
-		GUI.TankHP:SetPoint("TOPLEFT", GUI.TankFrame, "TOPLEFT")
+		GUI.TankHP:SetPoint("TOP", GUI.TankFrame, "TOP")
+		GUI.TankHP:SetPoint("LEFT", GUI.TankFrame, "LEFT")
 		GUI.TankHP:SetPoint("BOTTOM", GUI.TankFrame, "BOTTOM")
 		GUI.TankHP:SetPoint("RIGHT", GUI.TankFrame, 1, nil)
-		GUI.DeCoolFrame = UI.CreateFrame("Frame", "TankSwap Cooldown Frame", GUI.Frame)
+		GUI.DeCoolFrame = UI.CreateFrame("Frame", "TankSwap_CDFrame", GUI.Frame)
 		GUI.DeCoolFrame:SetPoint("TOPLEFT", GUI.TankFrame, "BOTTOMLEFT")
 		GUI.DeCoolFrame:SetPoint("BOTTOM", GUI.Frame, "BOTTOM")
 		GUI.DeCoolFrame:SetPoint("RIGHT", GUI.Frame, "RIGHT")
-		GUI.DeCool = UI.CreateFrame("Frame", "TankSwap Cooldown Progress", GUI.DeCoolFrame)
+		GUI.DeCool = UI.CreateFrame("Frame", "TankSwap_CD_Progress", GUI.DeCoolFrame)
 		GUI.DeCool:SetPoint("TOPLEFT", GUI.DeCoolFrame, "TOPLEFT")
 		GUI.DeCool:SetPoint("BOTTOM", GUI.DeCoolFrame, "BOTTOM")
-		GUI.DeCool:SetPoint("RIGHT", GUI.DeCoolFrame, 1, nil)
-		GUI.DeCool:SetBackgroundColor(0,0,1,0.4)
-		GUI.DeCool.Text = UI.CreateFrame("Text", "TankSwap Cooldown Text", GUI.DeCoolFrame)
+		GUI.DeCool:SetPoint("RIGHT", GUI.DeCoolFrame, 0, nil)
+		GUI.DeCool:SetBackgroundColor(0.5,0,0.8,0.33)
+		GUI.DeCool.Shadow = UI.CreateFrame("Text", "TankSwap_CD_Shadow", GUI.DeCoolFrame)
+		GUI.DeCool.Shadow:SetFontSize(KBM.Options.TankSwap.TextSize)
+		GUI.DeCool.Shadow:SetFontColor(0,0,0)
+		GUI.DeCool.Shadow:SetLayer(2)
+		GUI.DeCool.Text = UI.CreateFrame("Text", "TankSwap_CD_Text", GUI.DeCoolFrame)
 		GUI.DeCool.Text:SetFontSize(KBM.Options.TankSwap.TextSize)
+		GUI.DeCool.Shadow:SetPoint("TOPLEFT", GUI.DeCool.Text, "TOPLEFT", 1, 1)
 		GUI.DeCool.Text:SetPoint("CENTER", GUI.DeCoolFrame, "CENTER")
-		GUI.DeCool.Text:SetLayer(2)		
+		GUI.DeCool.Text:SetLayer(3)
+		GUI.Dead = UI.CreateFrame("Texture", "TankSwap_Dead", GUI.DebuffFrame)
+		GUI.Dead:SetTexture("KingMolinator", "Media/KBM_Death.png")
+		GUI.Dead:SetLayer(1)
+		GUI.Dead:SetPoint("TOPLEFT", GUI.DebuffFrame, "TOPLEFT", 4, 1)
+		GUI.Dead:SetPoint("BOTTOMRIGHT", GUI.DebuffFrame, "BOTTOMRIGHT", -4, -1)
+		GUI.Dead:SetAlpha(0.8)
+		function GUI:SetTank(Text)
+			self.TankShadow:SetText(Text)
+			self.TankText:SetText(Text)
+		end
+		function GUI:SetDeCool(Text)
+			self.DeCool.Shadow:SetText(Text)
+			self.DeCool.Text:SetText(Text)
+		end
+		function GUI:SetStack(Text)
+			self.DebuffFrame.Shadow:SetText(Text)
+			self.DebuffFrame.Text:SetText(Text)
+		end
+		function GUI:SetDeath(bool)
+			if bool then
+				self.TankText:SetAlpha(0.5)
+				self.DebuffFrame.Shadow:SetVisible(false)
+				self.DebuffFrame.Text:SetVisible(false)
+				self.Dead:SetVisible(true)
+				self.TankHP:SetVisible(false)
+				self.DeCoolFrame:SetVisible(false)
+			else
+				self.TankText:SetAlpha(1)
+				self.Dead:SetVisible(false)
+				self.DebuffFrame.Shadow:SetVisible(true)
+				self.DebuffFrame.Text:SetVisible(true)
+				self.TankHP:SetVisible(true)
+				self.DeCoolFrame:SetVisible(false)
+			end			
+		end
 	end
 	return GUI
 end
@@ -2255,46 +2361,113 @@ function KBM.TankSwap:Init()
 	self.Anchor.Drag = KBM.AttachDragFrame(self.Anchor, function(uType) self.Anchor:Update(uType) end, "TS Anchor Drag", 2)
 	self.Anchor:SetVisible(KBM.Options.TankSwap.Visible)
 	self.Anchor.Drag:SetVisible(KBM.Options.TankSwap.Unlocked)
-	function self:Add(UnitID, Test)
-		
+	
+	function self:Add(UnitID, Test)		
+		if self.Test and not Test then
+			self:Remove()
+			self.Anchor:SetVisible(false)
+		end
 		local TankObj = {}
 		TankObj.UnitID = UnitID
+		TankObj.DebuffID = nil
 		TankObj.Test = Test
 		self.Active = true
 		TankObj.Stacks = 0
 		TankObj.Remaining = 0
+		TankObj.Dead = false
+		
 		if Test then
 			TankObj.Name = Test
 			TankObj.UnitID = Test
 			self.Test = true
+			TankObj.Dead = false
 		else
 			local uDetails = Inspect.Unit.Detail(UnitID)
 			if uDetails then
 				TankObj.Name = uDetails.name
+				if uDetails.health then
+					if uDetails.health > 0 then
+						TankObj.Dead = false
+					else
+						TankObj.Dead = true
+					end
+				else
+					TankObj.Dead = true
+				end
 			end
 		end
+		
 		TankObj.GUI = KBM.TankSwap:Pull()
-		TankObj.GUI.TankText:SetText(TankObj.Name)
+		TankObj.GUI:SetTank(TankObj.Name)
+		
 		if self.TankCount == 0 then
 			TankObj.GUI.Frame:SetPoint("TOPLEFT", self.Anchor, "TOPLEFT")
-			TankObj.GUI.Frame:SetPoint("TOPRIGHT", self.Anchor, "TOPRIGHT")
+			TankObj.GUI.Frame:SetPoint("RIGHT", self.Anchor, "RIGHT")
 		else
 			TankObj.GUI.Frame:SetPoint("TOPLEFT", self.LastTank.GUI.Frame, "BOTTOMLEFT", 0, 2)
 			TankObj.GUI.Frame:SetPoint("RIGHT", self.LastTank.GUI.Frame, "RIGHT")
 		end
+		
 		self.LastTank = TankObj
 		self.Tanks[TankObj.UnitID] = TankObj
 		self.TankCount = self.TankCount + 1
-		if self.Test then
-			TankObj.GUI.DebuffFrame.Text:SetText("2")
-			TankObj.GUI.DeCool.Text:SetText("99.9")
-			TankObj.GUI.Frame:SetVisible(true)
+		
+		function TankObj:BuffUpdate(DebuffID)
+			self.DebuffID = DebuffID
 		end
-		return TankObj
 		
+		function TankObj:Death()
+			self.Dead = true
+			self.GUI:SetDeath(true)
+		end
+		
+		function TankObj:UpdateHP()
+			local uDetails = Inspect.Unit.Detail(self.UnitID)
+			local HPMax = 1
+			local HPCurrent = 1
+			local HPPer = 1.0
+			if uDetails then
+				if uDetails.health then
+					HPCurrent = uDetails.health
+					if HPCurrent > 0 then
+						if self.Dead then
+							self.GUI:SetDeath(false)
+							self.Dead = false
+						end
+						--if uDetails.healthCap then
+						--	HPMax = uDetails.healthCap
+						--else
+							HPMax = uDetails.healthMax
+						--end
+						HPPer = HPCurrent / HPMax
+						self.GUI.TankHP:SetPoint("RIGHT", self.GUI.TankFrame, HPPer, nil)
+					else
+						if not self.Dead then
+							self:Death()
+						end
+					end
+				else
+					if not self.Dead then
+						self:Death()
+					end
+				end
+			end
+		end
+		TankObj.GUI:SetDeath(TankObj.Dead)
+		if self.Test then
+			TankObj.GUI:SetStack("2")
+			TankObj.GUI:SetDeCool("99.9")
+			TankObj.GUI.DeCoolFrame:SetVisible(true)
+			TankObj.GUI.DeCool:SetPoint("RIGHT", TankObj.GUI.DeCoolFrame, 1, nil)
+		else
+			TankObj.GUI:SetStack("")
+			TankObj.GUI:SetDeCool("")
+		end
+		TankObj.GUI.Frame:SetVisible(true)
+		return TankObj		
 	end
-	function self:Start(DebuffName, DebuffID)
-		
+	
+	function self:Start(DebuffName, DebuffID)	
 		if self.Enabled then
 			local Spec = ""
 			local UnitID = ""
@@ -2314,73 +2487,57 @@ function KBM.TankSwap:Init()
 					end
 				end
 			end
-		end
-		
+		end		
 	end
-	function self:Update()
 	
+	function self:Update()	
+		local uDetails = ""
 		for UnitID, TankObj in pairs(self.Tanks) do
-			Buffs = Inspect.Buff.List(UnitID)
-			TankObj.Stacks = 0
-			TankObj.Remaining = 0
-			if Buffs then
-				for BuffID, bool in pairs(Buffs) do
-					bDetails = Inspect.Buff.Detail(UnitID, BuffID)
-					if bDetails then
-						if bDetails.name == self.DebuffName then
-							if bDetails.stack then
-								TankObj.Stacks = bDetails.stack
-							else
-								TankObj.Stacks = 0
-							end
-							if bDetails.remaining > 0 then
-								TankObj.Remaining = bDetails.remaining
-								TankObj.Duration = bDetails.duration
-							else
-								TankObj.Remaining = 0
-							end
-							break
+			if TankObj.DebuffID then
+				bDetails = Inspect.Buff.Detail(UnitID, TankObj.DebuffID)
+				if bDetails then
+					if bDetails.name == self.DebuffName then
+						if bDetails.stack then
+							TankObj.Stacks = bDetails.stack
+						else
+							TankObj.Stacks = 1
 						end
+						TankObj.Remaining = bDetails.remaining
+						TankObj.Duration = bDetails.duration
+						TankObj.GUI:SetDeCool(string.format("%0.01f", TankObj.Remaining))
+						TankObj.GUI.DeCool:SetPoint("RIGHT", TankObj.GUI.DeCoolFrame, (TankObj.Remaining/TankObj.Duration), nil)
+						TankObj.GUI.DeCoolFrame:SetVisible(true)
+						TankObj.GUI:SetStack(tostring(TankObj.Stacks))
 					end
-				end
-			end
-			if TankObj.Remaining <= 0 then
-				TankObj.GUI.DeCoolFrame:SetVisible(false)
-				TankObj.GUI.DeCool:SetPoint("RIGHT", TankObj.GUI.DeCoolFrame, 1, nil)
-				TankObj.GUI.DebuffFrame.Text:SetVisible(false)
-			else
-				TankObj.GUI.DeCool.Text:SetText(string.format("%0.01f", TankObj.Remaining))
-				TankObj.GUI.DeCool:SetPoint("RIGHT", TankObj.GUI.DeCoolFrame, (TankObj.Remaining/TankObj.Duration), nil)
-				TankObj.GUI.DeCoolFrame:SetVisible(true)
-				if TankObj.Stacks then
-					TankObj.GUI.DebuffFrame.Text:SetText(tostring(TankObj.Stacks))
 				else
-					TankObj.GUI.DebuffFrame.Text:SetText("-")
+					TankObj.DebuffID = nil
+					TankObj.Remaing = 0
+					TankObj.Duration = 0
+					TankObj.GUI.DeCoolFrame:SetVisible(false)
+					TankObj.GUI.DeCool:SetPoint("RIGHT", TankObj.GUI.DeCoolFrame, 0, nil)
+					TankObj.GUI:SetDeCool("")
+					TankObj.GUI:SetStack("")
 				end
-				TankObj.GUI.DebuffFrame.Text:SetVisible(true)
 			end
-		end
-		
+			TankObj:UpdateHP()
+		end	
 	end
-	function self:Remove()
 	
+	function self:Remove()	
 		for UnitID, TankObj in pairs(self.Tanks) do
 			table.insert(self.TankStore, TankObj.GUI)
 			TankObj.GUI.Frame:SetVisible(false)
 			TankObj.GUI = nil
 		end
+		self.Active = false
 		self.Tanks = {}
 		self.LastTank = nil
 		self.TankCount = 0
-		self.Active = false
-		self.Test = false
-		
-	end
-	
+		self.Test = false		
+	end	
 end
 
 function KBM.Alert:Init()
-
 	function self:ApplySettings()
 		self.Anchor:ClearAll()
 		if self.Settings.x then
@@ -2418,6 +2575,7 @@ function KBM.Alert:Init()
 	self.ColorList = {"red", "blue", "yellow", "orange", "purple", "dark_green"}
 	self.Left = {}
 	self.Right = {}
+	self.Count = 0
 	for _t, Color in ipairs(self.ColorList) do
 		self.Left[Color] = UI.CreateFrame("Texture", "Left Alert "..Color, KBM.Context)
 		self.Left[Color]:SetTexture("KingMolinator", "Media/Alert_Left_"..Color..".png")
@@ -2448,7 +2606,6 @@ function KBM.Alert:Init()
 	self.Anchor.Drag:SetLayer(3)
 	
 	function self:Create(Text, Duration, Flash, Countdown, Color)
-	
 		AlertObj = {}
 		AlertObj.DefDuration = Duration
 		AlertObj.Duration = Duration
@@ -2463,6 +2620,8 @@ function KBM.Alert:Init()
 		AlertObj.Enabled = true
 		AlertObj.AlertAfter = nil
 		AlertObj.isImportant = false
+		AlertObj.HasMenu = true
+		AlertObj.Type = "alert"
 		
 		function AlertObj:AlertEnd(endAlertObj)
 			self.AlertAfter = endAlertObj
@@ -2472,12 +2631,16 @@ function KBM.Alert:Init()
 			self.isImportant = true
 		end
 		
+		function AlertObj:NoMenu()
+			self.HasMenu = false
+		end
+		
+		self.Count = self.Count + 1
 		table.insert(self.List, AlertObj)
-		return AlertObj
-		
+		return AlertObj		
 	end
-	function self:Start(AlertObj, CurrentTime, Duration)
-		
+	
+	function self:Start(AlertObj, CurrentTime, Duration)		
 		if self.Settings.Enabled then
 			if AlertObj.Enabled then
 				if self.Starting then
@@ -2506,10 +2669,15 @@ function KBM.Alert:Init()
 				AlertObj.Duration = self.Duration
 				self.Alpha = 1
 				if self.Settings.Flash then
-					if AlertObj.Settings.Custom then
-						self.Color = AlertObj.Settings.Color
-					else
+					if not AlertObj.Settings then
 						self.Color = AlertObj.Color
+						AlertObj.Settings = KBM.Defaults.AlertObj()
+					else
+						if AlertObj.Settings.Custom then
+							self.Color = AlertObj.Settings.Color
+						else
+							self.Color = AlertObj.Color
+						end
 					end
 					self.Left[self.Color]:SetAlpha(1)
 					self.Left[self.Color]:SetVisible(true)
@@ -2537,6 +2705,7 @@ function KBM.Alert:Init()
 			end
 		end
 	end
+	
 	function self:Stop()
 		self.Left[self.Color]:SetVisible(false)
 		self.Right[self.Color]:SetVisible(false)
@@ -2550,11 +2719,15 @@ function KBM.Alert:Init()
 				local TempObj = self.Current
 				self.Current = nil
 				self:Start(TempObj.AlertAfter, Inspect.Time.Real())
+			else
+				self.Current = nil
 			end
+			self.Current = nil
 		else
 			self.Current = nil
 		end
 	end	
+	
 	function self:Update(CurrentTime)
 		if self.Current.Stopping then
 			if self.Alpha <= 0.1 then -- lag threshold
@@ -2606,12 +2779,10 @@ function KBM.Alert:Init()
 			end
 		end
 	end
-	self:ApplySettings()
-	
+	self:ApplySettings()	
 end
 
 function KBM.CastBar:Init()
-
 	self.Settings = KBM.Options.CastBar
 
 	self.CastBarList = {}
@@ -2619,12 +2790,10 @@ function KBM.CastBar:Init()
 	self.RemoveCastBars = {}
 	self.WaitCastBars = {}
 	self.StartCastBars = {}
-	self.Store = {}
-	
+	self.Store = {}	
 	self.ActiveCount = 0
 
-	function self:Pull(Anchor)
-		
+	function self:Pull(Anchor)	
 		local GUI = {}
 		if #self.Store > 0 then
 			GUI = table.remove(self.Store)
@@ -3000,9 +3169,10 @@ end
 local function KBM_Reset()
 
 	if KBM.Encounter then
-		KBM.Encounter = false
 		KBM.Idle.Wait = true
 		KBM.Idle.Until = Inspect.Time.Real() + KBM.Idle.Duration
+		KBM.Idle.Combat.Wait = false
+		KBM.Encounter = false
 		if KBM_CurrentMod then
 			KBM_CurrentMod:Reset()
 			KBM_CurrentMod = nil
@@ -3037,7 +3207,6 @@ local function KBM_Reset()
 			KBM.MechTimer.StartTimers = {}
 		end
 		KBM.Trigger.Queue:Remove()
-		KBM.Idle.Combat.Wait = false
 		KBM.EncTimer.Settings = KBM.Options.EncTimer
 		KBM.EncTimer:ApplySettings()
 		KBM.PhaseMonitor.Settings = KBM.Options.PhaseMon
@@ -3105,22 +3274,12 @@ function KBM:RaidCombatLeave()
 	end
 	if KBM.Options.Enabled then
 		if KBM.Encounter then
-			local Dead = 0
-			local Total = 0
-			for BossID, BossObj in pairs(KBM.BossID) do
-				if BossObj.dead then
-					Dead = Dead + 1
-				end
-				Total = Total + 1
+			if KBM.Debug then
+				print("Possible Wipe, waiting raid out of combat")
 			end
-			if Dead ~= Total then
-				if KBM.Debug then
-					print("Possible Wipe, waiting raid out of combat")
-				end
-				KBM.Idle.Combat.Wait = true
-				KBM.Idle.Combat.Until = Inspect.Time.Real() + KBM.Idle.Combat.Duration
-				KBM.Idle.Combat.StoreTime = KBM.TimeElapsed
-			end
+			KBM.Idle.Combat.Wait = true
+			KBM.Idle.Combat.Until = Inspect.Time.Real() + KBM.Idle.Combat.Duration
+			KBM.Idle.Combat.StoreTime = KBM.TimeElapsed
 		end
 	end
 	
@@ -3207,7 +3366,8 @@ function KBM:Timer()
 						-- self.Alert:Update(Inspect.Time.Real())
 					-- end
 				-- end
-			-- if KBM.Testing then
+			--if KBM.Testing then
+				-- Random Triggers
 				-- d = math.random(1,2000)
 				-- if d < 20 then
 					-- d = math.random(1, #KBM.Trigger.List)
@@ -3215,7 +3375,19 @@ function KBM:Timer()
 						-- KBM.Trigger.Queue:Add(KBM.Trigger.List[d], KBM_PlayerID, KBM_PlayerID, 2)
 					-- end
 				-- end
-			-- end
+				-- Cycle All Alerts
+				-- if not KBM.NextAlert then
+					-- KBM.NextAlert = 1
+				-- end
+				-- if not KBM.Alert.Current then
+					-- KBM.Alert.List[KBM.NextAlert].Enabled = true
+					-- KBM.Alert:Start(KBM.Alert.List[KBM.NextAlert], Inspect.Time.Real(), 2)
+					-- KBM.NextAlert = KBM.NextAlert + 1
+					-- if KBM.NextAlert > KBM.Alert.Count then
+						-- KBM.NextAlert = 1
+					-- end
+				-- end
+			--end
 		end
 		if KBM.QueuePage then
 			if KBM.QueuePage.Type == "encounter" then
@@ -3253,6 +3425,20 @@ local function KBM_UnitRemoved(units)
 		-- end
 	-- end
 	
+end
+
+function KBM.GroupDeath(UnitID)
+
+	if KBM.Options.Enabled then
+		if KBM.Encounter then
+			if KBM.TankSwap.Active then
+				if KBM.TankSwap.Tanks[UnitID] then
+					KBM.TankSwap.Tanks[UnitID]:Death()
+				end
+			end
+		end
+	end
+
 end
 
 local function KBM_Death(UnitID)
@@ -3354,30 +3540,65 @@ function KBM:BuffMonitor(unitID, Buffs, Type)
 	-- Used to manage Triggers and soon Tank-Swap managing.
 	if KBM.Options.Enabled then
 		if KBM.Encounter then
-			if unitID then
-				for buffID, bool in pairs(Buffs) do
-					bDetails = Inspect.Buff.Detail(unitID, buffID)
-					if bDetails then
-						if Type == "new" then
+			if Type == "new" then
+				if unitID then
+					for buffID, bool in pairs(Buffs) do
+						bDetails = Inspect.Buff.Detail(unitID, buffID)
+						if bDetails then
 							if KBM.Trigger.Buff[bDetails.name] then
 								TriggerObj = KBM.Trigger.Buff[bDetails.name]
 								KBM.Trigger.Queue:Add(TriggerObj, nil, unitID, bDetails.remaining)
 							end
+							if KBM.TankSwap.Active then
+								if KBM.TankSwap.Tanks[unitID] then
+									if KBM.TankSwap.DebuffName == bDetails.name then
+										KBM.TankSwap.Tanks[unitID]:BuffUpdate(buffID)
+									end
+								end
+							end
 						end
 					end
-				end
+				end				
 			end
 		end
 	end
 	
 end
 
+local function KBM_Version()
+	print("You are running:")
+	print("King Boss Mods v"..AddonData.toc.Version)
+end
+
+function KBM.StateSwitch(bool)
+	KBM.Options.Enabled = bool
+	if KBM.Options.Enabled then
+		print("King Boss Mods is now Enabled.")
+	else
+		print("King Boss Mods is now Disabled.")
+		if KBM.Encounter then
+			print("Stopping running Encounter.")
+			KBM_Reset()
+		end
+	end
+end
+
+---------------------------------------------
+-----          Menu Options            ------
+---------------------------------------------
 -- Phase Monitor options.
 function KBM.MenuOptions.Phases:Options()
 	
 	-- Phase Monitor Callbacks.
 	function self:Enabled(bool)
 		KBM.Options.PhaseMon.Enabled = bool
+		if KBM.Options.PhaseMon.Visible then
+			if bool then
+				KBM.PhaseMonitor.Anchor:SetVisible(true)
+			else
+				KBM.PhaseMonitor.Anchor:SetVisible(false)
+			end
+		end
 	end
 	function self:Visible(bool)
 		KBM.Options.PhaseMon.Visible = bool
@@ -3500,21 +3721,16 @@ function KBM.MenuOptions.Timers:Options()
 	
 end
 
+-- Tank-Swap Close link.
 function KBM.MenuOptions.TankSwap:Close()
 	if KBM.TankSwap.Active then
 		if KBM.TankSwap.Test then
-			self.ShowTest(false)
-			KBM.TankSwap.Anchor:SetVisible(KBM.Options.TankSwap.Visible)
+			self.TestCheck.GUI.Check:SetChecked(false)
 		end
 	end
 end
 
-local function KBM_Version()
-	print("You are running:")
-	print("King Boss Mods v"..AddonData.toc.Version)
-end
-
--- Tank Swap Menu Handler
+-- Tank Swap options.
 function KBM.MenuOptions.TankSwap:Options()
 
 	function self:Enabled(bool)
@@ -3585,13 +3801,14 @@ function KBM.MenuOptions.TankSwap:Options()
 	local TankSwap = Options:AddHeader(KBM.Language.Options.TankSwapEnabled[KBM.Lang], self.Enabled, KBM.Options.TankSwap.Enabled)
 	TankSwap:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowAnchor, KBM.Options.TankSwap.Visible)
 	TankSwap:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.LockAnchor, KBM.Options.TankSwap.Unlocked)
-	TankSwap:AddCheck(KBM.Language.Options.Tank[KBM.Lang], self.ShowTest, false)
+	self.TestCheck = TankSwap:AddCheck(KBM.Language.Options.Tank[KBM.Lang], self.ShowTest, false)
 	-- self.CastBars:AddCheck("Width scaling.", self.CastScaleWidth, KBM.Options.CastBar.ScaleWidth)
 	-- self.CastBars:AddCheck("Height scaling.", self.CastScaleHeight, KBM.Options.CastBar.ScaleHeight)
 	-- self.CastBars:AddCheck("Text Size", self.CastTextSize, KBM.Options.CastBar.TextScale)
 
 end
 
+-- Castbar options
 function KBM.MenuOptions.CastBars:Options()
 
 	-- Castbar Callbacks
@@ -3643,6 +3860,7 @@ function KBM.MenuOptions.CastBars:Options()
 
 end
 
+-- Alert options.
 function KBM.MenuOptions.Alerts:Options()
 
 	function self:AlertEnabled(bool)
@@ -3677,19 +3895,7 @@ function KBM.MenuOptions.Alerts:Options()
 	
 end
 
-function KBM.StateSwitch(bool)
-	KBM.Options.Enabled = bool
-	if KBM.Options.Enabled then
-		print("King Boss Mods is now Enabled.")
-	else
-		print("King Boss Mods is now Disabled.")
-		if KBM.Encounter then
-			print("Stopping running Encounter.")
-			KBM_Reset()
-		end
-	end
-end
-
+-- Main options.
 function KBM.MenuOptions.Main:Options()
 
 	function self:Character(bool)
@@ -3784,12 +3990,7 @@ local function KBM_Start()
 	KBM.MenuOptions.Phases.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.PhaseMonitor[KBM.Lang], KBM.MenuOptions.Phases, true, Header) 
 	KBM.MenuOptions.CastBars.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.Castbar[KBM.Lang], KBM.MenuOptions.CastBars, true, Header)
 	KBM.MenuOptions.Alerts.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.Alert[KBM.Lang], KBM.MenuOptions.Alerts, true, Header)
-	if KBM.Lang ~= "English" then
-		KBM.MenuOptions.TankSwap.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.TankSwap[KBM.Lang].." (Disabled)", KBM.MenuOptions.TankSwap, true, Header)
-		KBM.MenuOptions.TankSwap.MenuItem:Enabled(false)
-	else
-		KBM.MenuOptions.TankSwap.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.TankSwap[KBM.Lang], KBM.MenuOptions.TankSwap, true, Header)	
-	end
+	KBM.MenuOptions.TankSwap.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.TankSwap[KBM.Lang], KBM.MenuOptions.TankSwap, true, Header)	
 	KBM.MenuGroup.twentyman = KBM.MainWin.Menu:CreateHeader("20-Man Raids", nil, nil, true)
 	table.insert(Command.Slash.Register("kbmreset"), {KBM_Reset, "KingMolinator", "KBM Reset"})
 	table.insert(Event.Chat.Notify, {KBM.Notify, "KingMolinator", "Notify Event"})
@@ -3804,6 +4005,7 @@ local function KBM_Start()
 	table.insert(Event.SafesRaidManager.Combat.Death, {KBM_Death, "KingMolinator", "Combat Death"})
 	table.insert(Event.SafesRaidManager.Combat.Enter, {KBM.CombatEnter, "KingMolinator", "Non raid combat enter"})
 	table.insert(Event.SafesRaidManager.Combat.Leave, {KBM.CombatLeave, "KingMolinator", "Non raid combat leave"})
+	table.insert(Event.SafesRaidManager.Group.Combat.Death, {KBM.GroupDeath, "KingMolinator", "Group Death"})
 	table.insert(Event.SafesRaidManager.Group.Combat.End, {KBM.RaidCombatLeave, "KingMolinator", "Raid Combat Leave"})
 	table.insert(Event.SafesRaidManager.Group.Combat.Start, {KBM.RaidCombatEnter, "KingMolinator", "Raid Combat Enter"})
 	table.insert(Event.Unit.Castbar, {KBM_CastBar, "KingMolinator", "Cast Bar Event"})
@@ -3819,9 +4021,9 @@ local function KBM_Start()
 	table.insert(Command.Slash.Register("kbmoff"), {function() KBM.StateSwitch(false) end, "KingMolinator", "KBM Off"})	
 end
 
-local function KBM_WaitReady(unitID)
+local function KBM_WaitReady(unitID, uDetails)
 	KBM_PlayerID = unitID
-	KBM_PlayerName = Inspect.Unit.Detail(unitID).name
+	KBM_PlayerName = uDetails.name
 	KBM_Start()
 	for _, Mod in ipairs(KBM.ModList) do
 		Mod:AddBosses(KBM_Boss)

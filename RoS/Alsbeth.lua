@@ -4,28 +4,21 @@
 --
 
 KBMROSAD_Settings = nil
+chKBMROSAD_Settings = nil
+
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 local ROS = KBM.BossMod["River of Souls"]
 
 local AD = {
-	ModEnabled = true,
-	Alsbeth = {
-		MenuItem = nil,
-		Enabled = true,
-		Handler = nil,
-		Options = nil,
-	},
+	Enabled = true,
 	Instance = ROS.Name,
 	Type = "20man",
 	HasPhases = true,
-	PhaseType = "percentage",
-	PhaseList = {},
-	Timers = {},
 	Lang = {},
 	Enrage = 60 * 19,
-	ID = "Alsbeth",
+	ID = "Alsbeth",	
 }
 
 AD.Alsbeth = {
@@ -33,16 +26,14 @@ AD.Alsbeth = {
 	Level = "??",
 	Active = false,
 	Name = "Alsbeth the Discordant",
-	Castbar = nil,
-	CastFilters = {},
-	Timers = {},
-	TimersRef = {},
-	AlertsRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+	},
 }
 
 KBM.RegisterMod(AD.ID, AD)
@@ -57,48 +48,51 @@ function AD:AddBosses(KBM_Boss)
 	self.Alsbeth.Descript = self.Alsbeth.Name
 	self.MenuName = self.Alsbeth.Descript
 	self.Bosses = {
-		[self.Alsbeth.Name] = true,
+		[self.Alsbeth.Name] = self.Alsbeth,
 	}
 	KBM_Boss[self.Alsbeth.Name] = self.Alsbeth	
 end
 
 function AD:InitVars()
 	self.Settings = {
-		Timers = {
-			Enabled = true,
-			FlamesEnabled = true,
-		},
-		CastBar = {
-			x = false,
-			y = false,
-			Enabled = true,
-		},
+		Enabled = true,
+		CastBar = self.Alsbeth.Settings.CastBar,
+		EncTimer = KBM.Defaults.EncTimer(),
 	}
-	KBMAD_Settings = self.Settings
+	KBMROSAD_Settings = self.Settings
+	chKBMROSAD_Settings = self.Settings
 end
 
-function AD:LoadVars()
-	if type(KBMROSAD_Settings) == "table" then
-		for Setting, Value in pairs(KBMROSAD_Settings) do
-			if type(KBMROSAD_Settings[Setting]) == "table" then
-				if self.Settings[Setting] ~= nil then
-					for tSetting, tValue in pairs(KBMROSAD_Settings[Setting]) do
-						if self.Settings[Setting][tSetting] ~= nil then
-							self.Settings[Setting][tSetting] = tValue
-						end
-					end
-				end
-			else
-				if self.Settings[Setting] ~= nil then
-					self.Settings[Setting] = Value
-				end
-			end
-		end
+function AD:SwapSettings(bool)
+	if bool then
+		KBMROSAD_Settings = self.Settings
+		self.Settings = chKBMROSAD_Settings
+	else
+		chKBMROSAD_Settings = self.Settings
+		self.Settings = KBMROSAD_Settings
 	end
 end
 
+function AD:LoadVars()
+	if KBM.Options.Character then
+		KBM.LoadTable(chKBMROSAD_Settings, self.Settings)
+	else
+		KBM.LoadTable(KBMROSAD_Settings, self.Settings)
+	end
+		
+	if KBM.Options.Character then
+		chKBMROSAD_Settings = self.Settings
+	else
+		KBMROSAD_Settings = self.Settings
+	end	
+end
+
 function AD:SaveVars()
-	KBMROSAD_Settings = self.Settings
+	if KBM.Options.Character then
+		chKBMROSAD_Settings = self.Settings
+	else
+		KBMROSAD_Settings = self.Settings
+	end	
 end
 
 function AD:Castbar(units)
@@ -147,32 +141,41 @@ function AD:Reset()
 	self.Alsbeth.Available = false
 	self.Alsbeth.UnitID = nil
 	self.Alsbeth.CastBar:Remove()
+	self.Alsbeth.Dead = false
 end
 
-function AD:Timer()
-	
+function AD:Timer()	
 end
 
-function AD.Alsbeth:Options()
-	function self:TimersEnabled(bool)
+function AD.Alsbeth:SetTimers(bool)	
+	if bool then
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = TimerObj.Settings.Enabled
+		end
+	else
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = false
+		end
 	end
-	function self:FlamesEnabled(bool)
-		AD.Settings.Timers.FlamesEnabled = bool
-		AD.Alsbeth.TimersRef.Flames.Enabled = bool
-	end
-	local Options = self.MenuItem.Options
-	Options:SetTitle()
-	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, AD.Settings.Timers.Enabled)
-	--Timers:AddCheck(AD.Lang.Flames[KBM.Lang], self.FlamesEnabled, AD.Settings.Timers.FlamesEnabled)	
-	
 end
 
-function AD:Start()
-	self.Header = KBM.HeaderList[self.Instance]
-	self.Alsbeth.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Alsbeth, true, self.Header)
-	self.Alsbeth.MenuItem.Check:SetEnabled(false)
-	-- self.Alsbeth.TimersRef.Flames = KBM.MechTimer:Add(self.Lang.Flames[KBM.Lang], "cast", 30, self, nil)
-	-- self.Alsbeth.TimersRef.Flames.Enabled = self.Settings.Timers.FlamesEnabled
-	
-	self.Alsbeth.CastBar = KBM.CastBar:Add(self, self.Alsbeth, true)
+function AD.Alsbeth:SetAlerts(bool)
+	if bool then
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = AlertObj.Settings.Enabled
+		end
+	else
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = false
+		end
+	end
+end
+
+function AD:DefineMenu()
+	self.Menu = ROS.Menu:CreateEncounter(self.Alsbeth, self.Enabled)
+end
+
+function AD:Start()	
+	self.Alsbeth.CastBar = KBM.CastBar:Add(self, self.Alsbeth)
+	self:DefineMenu()
 end

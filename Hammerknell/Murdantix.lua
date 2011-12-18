@@ -13,17 +13,9 @@ local HK = KBM.BossMod["Hammerknell"]
 
 local MX = {
 	Enabled = true,
-	Murdantix = {
-		MenuItem = nil,
-		Enabled = true,
-		Handler = nil,
-		Options = nil,
-		Name = "Murdantix",
-	},
 	Instance = HK.Name,
-	HasPhases = true,
 	Phase = 1,
-	Timers = {},
+	HasPhases = true,
 	Lang = {},
 	TankSwap = true,
 	Enrage = 60 * 10,
@@ -46,7 +38,6 @@ MX.Murd = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	Descript = "Murdantix",
 	TimeOut = 5,
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -86,9 +77,11 @@ MX.Lang.Trauma.German = "Seelentrauma"
 MX.Lang.Debuff = {}
 MX.Lang.Debuff.Mangled = KBM.Language:Add("Mangled")
 MX.Lang.Debuff.Mangled.German = "Üble Blessur"
+MX.Lang.Debuff.Mangled.French = "Estrop\195\169"
 
 function MX:AddBosses(KBM_Boss)
 	self.MenuName = self.Murd.Name
+	self.Murd.Descript = self.Murd.Name
 	KBM_Boss[self.Murd.Name] = self.Murd
 	self.Bosses = {
 		[self.Murd.Name] = self.Murd
@@ -120,27 +113,25 @@ function MX:SwapSettings(bool)
 	end
 end
 
-function MX:LoadVars()	
-	local TargetLoad = nil
-	
+function MX:LoadVars()		
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMMX_Settings, MX.Settings)
+		KBM.LoadTable(chKBMMX_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMMX_Settings, MX.Settings)
+		KBM.LoadTable(KBMMX_Settings, self.Settings)
 	end
 		
 	if KBM.Options.Character then
-		chKBMMX_Settings = MX.Settings
+		chKBMMX_Settings = self.Settings
 	else
-		KBMMX_Settings = MX.Settings
+		KBMMX_Settings = self.Settings
 	end	
 end
 
 function MX:SaveVars()	
 	if KBM.Options.Character then
-		chKBMMX_Settings = MX.Settings
+		chKBMMX_Settings = self.Settings
 	else
-		KBMMX_Settings = MX.Settings
+		KBMMX_Settings = self.Settings
 	end	
 end
 
@@ -188,20 +179,20 @@ function MX:UnitHPCheck(unitDetails, unitID)
 	if unitDetails and unitID then
 		if not unitDetails.player then
 			if unitDetails.name == self.Murd.Name then
-				if not self.Murd.UnitID then
+				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
 					self.TimeElapsed = 0
-					self.Murd.Dead = false
-					self.Murd.Casting = false
 					self.Phase = 1
+					self.Murd.Dead = false
 					self.Murd.CastBar:Create(unitID)
 					KBM.TankSwap:Start(self.Lang.Debuff.Mangled[KBM.Lang])
 					self.PhaseObj.Objectives:AddPercent(self.Murd.Name, 75, 100)
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase(1)
 				end
+				self.Murd.Casting = false
 				self.Murd.UnitID = unitID
 				self.Murd.Available = true
 				return self.Murd
@@ -213,6 +204,8 @@ end
 function MX:Reset()
 	self.EncounterRunning = false
 	self.Murd.UnitID = nil
+	self.Murd.Dead = false
+	self.Murd.Available = false
 	self.Murd.CastBar:Remove()
 	self.Phase = 1
 	self.PhaseObj:End(Inspect.Time.Real())	

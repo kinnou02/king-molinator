@@ -37,10 +37,8 @@ function ROTP:SaveVars()
 end
 
 function ROTP:Start()
-	function self:Enabled(bool)
-	
-	end
 	KBM.MenuGroup:SetTenMan()
-	ROTP.Header = KBM.MainWin.Menu:CreateHeader(self.Name, self.Enabled, true)
-	
+	function self:Handler(bool)
+	end
+	ROTP.Menu = KBM.MainWin.Menu:CreateInstance(self.Name, true, self.Handler)
 end

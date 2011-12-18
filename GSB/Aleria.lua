@@ -4,37 +4,66 @@
 --
 
 KBMGSBOA_Settings = nil
+chKBMGSBOA_Settings = nil
+
+-- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 local GSB = KBM.BossMod["Greenscales Blight"]
 
 local OA = {
-	ModEnabled = true,
-	Aleria = {
-		MenuItem = nil,
-		Enabled = true,
-		Handler = nil,
-		Options = nil,
-	},
+	Enabled = true,
 	Instance = GSB.Name,
 	HasPhases = true,
-	PhaseType = "percentage",
-	PhaseList = {},
-	Timers = {},
 	Lang = {},
 	ID = "Aleria",
-	}
+}
 
 OA.Aleria = {
 	Mod = OA,
-	Level = "??",
+	Level = "52",
 	Active = false,
 	Name = "Oracle Aleria",
-	Castbar = nil,
-	CastFilters = {},
-	Timers = {},
-	TimersRef = {},
+	Menu = {},
 	AlertsRef = {},
+	TimersRef = {},
+	Dead = false,
+	Available = false,
+	UnitID = nil,
+	TimeOut = 5,
+	Triggers = {},
+	Settings = {
+		AlertsRef = {
+			Enabled = true,
+			Necrotic = KBM.Defaults.AlertObj.Create("purple"),
+		},
+		TimersRef = {
+			Enabled = true,
+			Necrotic = KBM.Defaults.TimerObj.Create("purple"),
+		},
+	},
+}
+
+KBM.RegisterMod(OA.ID, OA)
+
+OA.Lang.Aleria = KBM.Language:Add(OA.Aleria.Name)
+OA.Lang.Aleria.German = "Orakel Aleria"
+
+-- Unit Dictionary
+OA.Lang.Unit = {}
+OA.Lang.Unit.Primal = KBM.Language:Add("Primal Werewolf")
+OA.Lang.Unit.Necrotic = KBM.Language:Add("Necrotic Werewolf")
+
+-- Debuff Dictionary
+OA.Lang.Debuff = {}
+OA.Lang.Debuff.Necrotic = KBM.Language:Add("Necrotic Eruption")
+
+OA.Primal = {
+	Mod = OA,
+	Level = "52",
+	Active = false,
+	Name = OA.Lang.Unit.Primal[KBM.Lang],
+	Menu = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
@@ -42,61 +71,76 @@ OA.Aleria = {
 	Triggers = {},
 }
 
-KBM.RegisterMod(OA.ID, OA)
-
-OA.Lang.Aleria = KBM.Language:Add(OA.Aleria.Name)
-OA.Lang.Aleria.German = "Orakel Aleria"
--- OA.Lang.Flames = KBM.Language:Add("Ancient Flames")
--- OA.Lang.Flames.French = "Flammes anciennes"
+OA.Necrotic = {
+	Mod = OA,
+	Level = "52",
+	Active = false,
+	Name = OA.Lang.Unit.Necrotic[KBM.Lang],
+	Menu = {},
+	Dead = false,
+	Available = false,
+	UnitID = nil,
+	TimeOut = 5,
+	Triggers = {},
+}
 
 OA.Aleria.Name = OA.Lang.Aleria[KBM.Lang]
 
 function OA:AddBosses(KBM_Boss)
 	self.Aleria.Descript = self.Aleria.Name
+	self.Primal.Descript = self.Aleria.Descript
+	self.Necrotic.Descript = self.Aleria.Descript
 	self.MenuName = self.Aleria.Descript
 	self.Bosses = {
-		[self.Aleria.Name] = true,
+		[self.Aleria.Name] = self.Aleria,
+		[self.Primal.Name] = self.Primal,
+		[self.Necrotic.Name] = self.Necrotic,
 	}
-	KBM_Boss[self.Aleria.Name] = self.Aleria	
+	KBM_Boss[self.Aleria.Name] = self.Aleria
+	KBM.SubBoss[self.Primal.Name] = self.Primal
+	KBM.SubBoss[self.Necrotic.Name] = self.Necrotic
 end
 
 function OA:InitVars()
 	self.Settings = {
-		Timers = {
-			Enabled = true,
-			FlamesEnabled = true,
-		},
-		CastBar = {
-			x = false,
-			y = false,
-			Enabled = true,
-		},
+		Enabled = true,
+		EncTimer = KBM.Defaults.EncTimer(),
+		PhaseMon = KBM.Defaults.PhaseMon(),
 	}
-	KBMOA_Settings = self.Settings
+	KBMGSBOA_Settings = self.Settings
+	chKBMGSBOA_Settings = self.Settings
 end
 
-function OA:LoadVars()
-	if type(KBMGSBOA_Settings) == "table" then
-		for Setting, Value in pairs(KBMGSBOA_Settings) do
-			if type(KBMGSBOA_Settings[Setting]) == "table" then
-				if self.Settings[Setting] ~= nil then
-					for tSetting, tValue in pairs(KBMGSBOA_Settings[Setting]) do
-						if self.Settings[Setting][tSetting] ~= nil then
-							self.Settings[Setting][tSetting] = tValue
-						end
-					end
-				end
-			else
-				if self.Settings[Setting] ~= nil then
-					self.Settings[Setting] = Value
-				end
-			end
-		end
+function OA:SwapSettings(bool)
+	if bool then
+		KBMGSBOA_Settings = self.Settings
+		self.Settings = chKBMGSBOA_Settings
+	else
+		chKBMGSBOA_Settings = self.Settings
+		self.Settings = KBMGSBOA_Settings
 	end
 end
 
-function OA:SaveVars()
-	KBMGSBOA_Settings = self.Settings
+function OA:LoadVars()	
+	if KBM.Options.Character then
+		KBM.LoadTable(chKBMGSBOA_Settings, self.Settings)
+	else
+		KBM.LoadTable(KBMGSBOA_Settings, self.Settings)
+	end
+	
+	if KBM.Options.Character then
+		chKBMGSBOA_Settings = self.Settings
+	else
+		KBMGSBOA_Settings = self.Settings
+	end
+end
+
+function OA:SaveVars()	
+	if KBM.Options.Character then
+		chKBMGSBOA_Settings = self.Settings
+	else
+		KBMGSBOA_Settings = self.Settings
+	end	
 end
 
 function OA:Castbar(units)
@@ -110,31 +154,51 @@ function OA:RemoveUnits(UnitID)
 	return false
 end
 
+function OA.PhaseTwo()
+	OA.PhaseObj.Objectives:Remove()
+	OA.Phase = 2
+	OA.PhaseObj:SetPhase("Final")
+	OA.PhaseObj.Objectives:AddPercent(OA.Aleria.Name, 0, 100)
+end
+
 function OA:Death(UnitID)
 	if self.Aleria.UnitID == UnitID then
 		self.Aleria.Dead = true
 		return true
+	else
+		if self.Primal.UnitID == UnitID then
+			self.Primal.Dead = true
+		elseif self.Necrotic.UnitID == UnitID then
+			self.Necrotic.Dead = true
+		end
+		if self.Primal.Dead and self.Necrotic.Dead then
+			self.PhaseTwo()
+		end
 	end
 	return false
 end
 
-function OA:UnitHPCheck(unitDetails, unitID)
-	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if unitDetails.name == self.Aleria.Name then
-				if not self.Aleria.UnitID then
+function OA:UnitHPCheck(uDetails, unitID)	
+	if uDetails and unitID then
+		if not uDetails.player then
+			if self.Bosses[uDetails.name] then
+				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
 					self.TimeElapsed = 0
-					self.Aleria.Dead = false
-					self.Aleria.Casting = false
-					self.Aleria.CastBar:Create(unitID)
+					self.Phase = 1
+					self.PhaseObj:Start(self.StartTime)
+					self.PhaseObj:SetPhase(1)
+					self.PhaseObj.Objectives:AddPercent(self.Primal.Name, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Necrotic.Name, 0, 100)
 				end
-				self.Aleria.UnitID = unitID
-				self.Aleria.Available = true
-				return self.Aleria
+				if not self.Bosses[uDetails.name].UnitID then
+					self.Bosses[uDetails.name].Dead = false
+				end
+				self.Bosses[uDetails.name].UnitID = unitID
+				self.Bosses[uDetails.name].Available = true
+				return self.Bosses[uDetails.name]
 			end
 		end
 	end
@@ -142,35 +206,59 @@ end
 
 function OA:Reset()
 	self.EncounterRunning = false
-	self.Aleria.Available = false
-	self.Aleria.UnitID = nil
-	self.Aleria.CastBar:Remove()
+	for BossName, BossObj in pairs(self.Bosses) do
+		BossObj.Available = false
+		BossObj.Dead = false
+		BossObj.UnitID = nil
+	end
+	self.PhaseObj:End(Inspect.Time.Real())
 end
 
-function OA:Timer()
-	
+function OA:Timer()	
 end
 
-function OA.Aleria:Options()
-	function self:TimersEnabled(bool)
+function OA.Aleria:SetTimers(bool)	
+	if bool then
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = TimerObj.Settings.Enabled
+		end
+	else
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = false
+		end
 	end
-	function self:FlamesEnabled(bool)
-		OA.Settings.Timers.FlamesEnabled = bool
-		OA.Aleria.TimersRef.Flames.Enabled = bool
+end
+
+function OA.Aleria:SetAlerts(bool)
+	if bool then
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = AlertObj.Settings.Enabled
+		end
+	else
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = false
+		end
 	end
-	local Options = self.MenuItem.Options
-	Options:SetTitle()
-	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, OA.Settings.Timers.Enabled)
-	--Timers:AddCheck(OA.Lang.Flames[KBM.Lang], self.FlamesEnabled, OA.Settings.Timers.FlamesEnabled)	
-	
+end
+
+function OA:DefineMenu()
+	self.Menu = GSB.Menu:CreateEncounter(self.Aleria, self.Enabled)
 end
 
 function OA:Start()
-	self.Header = KBM.HeaderList[self.Instance]
-	self.Aleria.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Aleria, true, self.Header)
-	self.Aleria.MenuItem.Check:SetEnabled(false)
-	-- self.Aleria.TimersRef.Flames = KBM.MechTimer:Add(self.Lang.Flames[KBM.Lang], "cast", 30, self, nil)
-	-- self.Aleria.TimersRef.Flames.Enabled = self.Settings.Timers.FlamesEnabled
+	-- Create Alert
+	self.Aleria.AlertsRef.Necrotic = KBM.Alert:Create(self.Lang.Debuff.Necrotic[KBM.Lang], nil, false, true, "purple")
+	KBM.Defaults.AlertObj.Assign(self.Aleria)
 	
-	self.Aleria.CastBar = KBM.CastBar:Add(self, self.Aleria, true)
+	-- Create Timer
+	self.Aleria.TimersRef.Necrotic = KBM.MechTimer:Add(self.Lang.Debuff.Necrotic[KBM.Lang], 22, "purple")
+	KBM.Defaults.TimerObj.Assign(self.Aleria)
+
+	-- Assign Alert to Trigger
+	self.Aleria.Triggers.Necrotic = KBM.Trigger:Create(self.Lang.Debuff.Necrotic[KBM.Lang], "buff", self.Aleria)
+	self.Aleria.Triggers.Necrotic:AddAlert(self.Aleria.AlertsRef.Necrotic, true)
+	self.Aleria.Triggers.Necrotic:AddTimer(self.Aleria.TimersRef.Necrotic)
+	
+	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
+	self:DefineMenu()
 end

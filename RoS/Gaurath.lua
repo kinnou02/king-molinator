@@ -4,28 +4,21 @@
 --
 
 KBMROSHG_Settings = nil
+chKBMROSHG_Settings = nil
+
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 local ROS = KBM.BossMod["River of Souls"]
 
 local HG = {
-	ModEnabled = true,
-	Gaurath = {
-		MenuItem = nil,
-		Enabled = true,
-		Handler = nil,
-		Options = nil,
-	},
+	Enabled = true,
 	Instance = ROS.Name,
 	Type = "20man",
 	HasPhases = true,
-	PhaseType = "percentage",
-	PhaseList = {},
-	Timers = {},
 	Lang = {},
 	Enrage = 60 * 9.5,
-	ID = "Herald Gaurath",
+	ID = "Herald_Gaurath",	
 }
 
 HG.Gaurath = {
@@ -33,15 +26,14 @@ HG.Gaurath = {
 	Level = "??",
 	Active = false,
 	Name = "Herald Gaurath",
-	Castbar = nil,
-	CastFilters = {},
-	Timers = {},
-	TimersRef = {},
-	AlertsRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
+	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+	},
 }
 
 KBM.RegisterMod(HG.ID, HG)
@@ -56,48 +48,51 @@ function HG:AddBosses(KBM_Boss)
 	self.Gaurath.Descript = self.Gaurath.Name
 	self.MenuName = self.Gaurath.Descript
 	self.Bosses = {
-		[self.Gaurath.Name] = true,
+		[self.Gaurath.Name] = self.Gaurath,
 	}
 	KBM_Boss[self.Gaurath.Name] = self.Gaurath	
 end
 
 function HG:InitVars()
 	self.Settings = {
-		Timers = {
-			Enabled = true,
-			FlamesEnabled = true,
-		},
-		CastBar = {
-			x = false,
-			y = false,
-			Enabled = true,
-		},
+		Enabled = true,
+		CastBar = self.Gaurath.Settings.CastBar,
+		EncTimer = KBM.Defaults.EncTimer(),
 	}
-	KBMHG_Settings = self.Settings
+	KBMROSHG_Settings = self.Settings
+	chKBMROSHG_Settings = self.Settings
 end
 
-function HG:LoadVars()
-	if type(KBMROSHG_Settings) == "table" then
-		for Setting, Value in pairs(KBMROSHG_Settings) do
-			if type(KBMROSHG_Settings[Setting]) == "table" then
-				if self.Settings[Setting] ~= nil then
-					for tSetting, tValue in pairs(KBMROSHG_Settings[Setting]) do
-						if self.Settings[Setting][tSetting] ~= nil then
-							self.Settings[Setting][tSetting] = tValue
-						end
-					end
-				end
-			else
-				if self.Settings[Setting] ~= nil then
-					self.Settings[Setting] = Value
-				end
-			end
-		end
+function HG:SwapSettings(bool)
+	if bool then
+		KBMROSHG_Settings = self.Settings
+		self.Settings = chKBMROSHG_Settings
+	else
+		chKBMROSHG_Settings = self.Settings
+		self.Settings = KBMROSHG_Settings
 	end
 end
 
+function HG:LoadVars()
+	if KBM.Options.Character then
+		KBM.LoadTable(chKBMROSHG_Settings, self.Settings)
+	else
+		KBM.LoadTable(KBMROSHG_Settings, self.Settings)
+	end
+		
+	if KBM.Options.Character then
+		chKBMROSHG_Settings = self.Settings
+	else
+		KBMROSHG_Settings = self.Settings
+	end	
+end
+
 function HG:SaveVars()
-	KBMROSHG_Settings = self.Settings
+	if KBM.Options.Character then
+		chKBMROSHG_Settings = self.Settings
+	else
+		KBMROSHG_Settings = self.Settings
+	end	
 end
 
 function HG:Castbar(units)
@@ -124,15 +119,15 @@ function HG:UnitHPCheck(unitDetails, unitID)
 	if unitDetails and unitID then
 		if not unitDetails.player then
 			if unitDetails.name == self.Gaurath.Name then
-				if not self.Gaurath.UnitID then
+				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
 					self.TimeElapsed = 0
 					self.Gaurath.Dead = false
-					self.Gaurath.Casting = false
 					self.Gaurath.CastBar:Create(unitID)
 				end
+				self.Gaurath.Casting = false
 				self.Gaurath.UnitID = unitID
 				self.Gaurath.Available = true
 				return self.Gaurath
@@ -146,32 +141,41 @@ function HG:Reset()
 	self.Gaurath.Available = false
 	self.Gaurath.UnitID = nil
 	self.Gaurath.CastBar:Remove()
+	self.Gaurath.Dead = false
 end
 
-function HG:Timer()
-	
+function HG:Timer()	
 end
 
-function HG.Gaurath:Options()
-	function self:TimersEnabled(bool)
+function HG.Gaurath:SetTimers(bool)	
+	if bool then
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = TimerObj.Settings.Enabled
+		end
+	else
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = false
+		end
 	end
-	function self:FlamesEnabled(bool)
-		HG.Settings.Timers.FlamesEnabled = bool
-		HG.Gaurath.TimersRef.Flames.Enabled = bool
-	end
-	local Options = self.MenuItem.Options
-	Options:SetTitle()
-	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, HG.Settings.Timers.Enabled)
-	--Timers:AddCheck(HG.Lang.Flames[KBM.Lang], self.FlamesEnabled, HG.Settings.Timers.FlamesEnabled)	
-	
 end
 
-function HG:Start()
-	self.Header = KBM.HeaderList[self.Instance]
-	self.Gaurath.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Gaurath, true, self.Header)
-	self.Gaurath.MenuItem.Check:SetEnabled(false)
-	-- self.Gaurath.TimersRef.Flames = KBM.MechTimer:Add(self.Lang.Flames[KBM.Lang], "cast", 30, self, nil)
-	-- self.Gaurath.TimersRef.Flames.Enabled = self.Settings.Timers.FlamesEnabled
-	
-	self.Gaurath.CastBar = KBM.CastBar:Add(self, self.Gaurath, true)
+function HG.Gaurath:SetAlerts(bool)
+	if bool then
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = AlertObj.Settings.Enabled
+		end
+	else
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = false
+		end
+	end
+end
+
+function HG:DefineMenu()
+	self.Menu = ROS.Menu:CreateEncounter(self.Gaurath, self.Enabled)
+end
+
+function HG:Start()	
+	self.Gaurath.CastBar = KBM.CastBar:Add(self, self.Gaurath)
+	self:DefineMenu()
 end

@@ -86,6 +86,11 @@ GR.Lang.Ability.Breath.German = "Nekrotischer Atem"
 GR.Lang.Ability.Disruption = KBM.Language:Add("Seismic Disruption")
 GR.Lang.Ability.Disruption.German = "Seismische Störung"
 
+-- Debuff Dictionary
+GR.Lang.Debuff = {}
+GR.Lang.Debuff.Toxin = KBM.Language:Add("Heart Stopping Toxin")
+GR.Lang.Debuff.Toxin.French = "Toxin d'arr\195\170t cardiaque"
+
 GR.Grugonim.Name = GR.Lang.Grugonim[KBM.Lang]
 GR.Tower.Name = GR.Lang.Tower[KBM.Lang]
 
@@ -237,7 +242,7 @@ function GR:UnitHPCheck(uDetails, unitID)
 					self.HeldTime = self.StartTime
 					self.TimeElapsed = 0
 					self.Grugonim.CastBar:Create(unitID)
-					KBM.TankSwap:Start("Heart Stopping Toxin")
+					KBM.TankSwap:Start(self.Lang.Debuff.Toxin[KBM.Lang])
 					self.Phase = 1
 					self.Breaths = 0
 					self.PhaseObj.Objectives:AddPercent(self.Grugonim.Name, 50, 100)

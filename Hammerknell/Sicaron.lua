@@ -46,7 +46,7 @@ SN.Sicaron = {
 		AlertsRef = {
 			Enabled = true,
 			Contract = KBM.Defaults.AlertObj.Create("blue"),
-			ContractRed = KBM.Defaults.AlertObj.Create("red", false),
+			ContractRed = KBM.Defaults.AlertObj.Create("red"),
 			Hex = KBM.Defaults.AlertObj.Create("purple"),
 			Decay = KBM.Defaults.AlertObj.Create("dark_green"),
 		},
@@ -161,18 +161,18 @@ function SN:UnitHPCheck(unitDetails, unitID)
 	if unitDetails and unitID then
 		if not unitDetails.player then
 			if unitDetails.name == self.Sicaron.Name then
-				if not self.Sicaron.UnitID then
+				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
 					self.TimeElapsed = 0
 					self.Sicaron.Dead = false
-					self.Sicaron.Casting = false
 					self.Sicaron.CastBar:Create(unitID)
 					self.PhaseObj.Objectives:AddPercent(self.Sicaron.Name, 80, 100)
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase(1)
 				end
+				self.Sicaron.Casting = false
 				self.Sicaron.UnitID = unitID
 				self.Sicaron.Available = true
 				return self.Sicaron
@@ -263,6 +263,7 @@ function SN:Start()
 	-- Create Alerts
 	self.Sicaron.AlertsRef.Contract = KBM.Alert:Create(self.Lang.Debuff.Contract[KBM.Lang], 12, false, true, "blue")
 	self.Sicaron.AlertsRef.ContractRed = KBM.Alert:Create(self.Lang.Debuff.Contract[KBM.Lang], 5, true, true, "red")
+	self.Sicaron.AlertsRef.ContractRed:NoMenu()
 	self.Sicaron.AlertsRef.Hex = KBM.Alert:Create(self.Lang.Ability.Hex[KBM.Lang], nil, true, true, "purple")
 	self.Sicaron.AlertsRef.Decay = KBM.Alert:Create(self.Lang.Ability.Decay[KBM.Lang], nil, true, true, "dark_green")
 

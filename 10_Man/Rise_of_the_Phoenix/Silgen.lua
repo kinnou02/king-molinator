@@ -10,37 +10,28 @@ local KBM = AddonData.data
 local ROTP = KBM.BossMod["Rise of the Phoenix"]
 
 local GS = {
-	ModEnabled = true,
-	Silgen = {
-		MenuItem = nil,
-		Enabled = true,
-		Handler = nil,
-		Options = nil,
-	},
+	Enabled = true,
 	Instance = ROTP.Name,
 	HasPhases = true,
-	PhaseType = "percentage",
-	PhaseList = {},
-	Timers = {},
 	Lang = {},
 	ID = "Silgen",
-	}
+}
 
 GS.Silgen = {
 	Mod = GS,
 	Level = "52",
 	Active = false,
 	Name = "General Silgen",
+	Menu = {},
 	Castbar = nil,
-	CastFilters = {},
-	Timers = {},
-	TimersRef = {},
-	AlertsRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+	}
 }
 
 KBM.RegisterMod(GS.ID, GS)
@@ -54,22 +45,16 @@ function GS:AddBosses(KBM_Boss)
 	self.Silgen.Descript = self.Silgen.Name
 	self.MenuName = self.Silgen.Descript
 	self.Bosses = {
-		[self.Silgen.Name] = true,
+		[self.Silgen.Name] = self.Silgen,
 	}
 	KBM_Boss[self.Silgen.Name] = self.Silgen	
 end
 
 function GS:InitVars()
 	self.Settings = {
-		Timers = {
-			Enabled = true,
-			FlamesEnabled = true,
-		},
-		CastBar = {
-			x = false,
-			y = false,
-			Enabled = true,
-		},
+		Enabled = true,
+		CastBar = self.Silgen.Settings.CastBar,
+		EncTimer = KBM.Defaults.EncTimer(),
 	}
 	KBMROTPGS_Settings = self.Settings
 	chKBMROTPGS_Settings = self.Settings
@@ -88,50 +73,26 @@ function GS:SwapSettings(bool)
 
 end
 
-function GS:LoadVars()
-	
-	local TargetLoad = nil
-	
+function GS:LoadVars()	
 	if KBM.Options.Character then
-		TargetLoad = chKBMROTPGS_Settings
+		KBM.LoadTable(chKBMROTPGS_Settings, self.Settings)
 	else
-		TargetLoad = KBMROTPGS_Settings
-	end
-	
-	if type(TargetLoad) == "table" then
-		for Setting, Value in pairs(TargetLoad) do
-			if type(TargetLoad[Setting]) == "table" then
-				if self.Settings[Setting] ~= nil then
-					for tSetting, tValue in pairs(TargetLoad[Setting]) do
-						if self.Settings[Setting][tSetting] ~= nil then
-							self.Settings[Setting][tSetting] = tValue
-						end
-					end
-				end
-			else
-				if self.Settings[Setting] ~= nil then
-					self.Settings[Setting] = Value
-				end
-			end
-		end
+		KBM.LoadTable(KBMROTPGS_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
 		chKBMROTPGS_Settings = self.Settings
 	else
 		KBMROTPGS_Settings = self.Settings
-	end
-	
+	end	
 end
 
-function GS:SaveVars()
-	
+function GS:SaveVars()	
 	if KBM.Options.Character then
 		chKBMROTPGS_Settings = self.Settings
 	else
 		KBMROTPGS_Settings = self.Settings
-	end
-	
+	end	
 end
 
 function GS:Castbar(units)
@@ -153,8 +114,7 @@ function GS:Death(UnitID)
 	return false
 end
 
-function GS:UnitHPCheck(unitDetails, unitID)
-	
+function GS:UnitHPCheck(unitDetails, unitID)	
 	if unitDetails and unitID then
 		if not unitDetails.player then
 			if unitDetails.name == self.Silgen.Name then
@@ -182,30 +142,38 @@ function GS:Reset()
 	self.Silgen.CastBar:Remove()
 end
 
-function GS:Timer()
-	
+function GS:Timer()	
 end
 
-function GS.Silgen:Options()
-	function self:TimersEnabled(bool)
+function GS.Silgen:SetTimers(bool)	
+	if bool then
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = TimerObj.Settings.Enabled
+		end
+	else
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = false
+		end
 	end
-	function self:FlamesEnabled(bool)
-		GS.Settings.Timers.FlamesEnabled = bool
-		GS.Silgen.TimersRef.Flames.Enabled = bool
-	end
-	local Options = self.MenuItem.Options
-	Options:SetTitle()
-	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, GS.Settings.Timers.Enabled)
-	--Timers:AddCheck(GS.Lang.Flames[KBM.Lang], self.FlamesEnabled, GS.Settings.Timers.FlamesEnabled)	
-	
 end
 
-function GS:Start()
-	self.Header = KBM.HeaderList[self.Instance]
-	self.Silgen.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Silgen, true, self.Header)
-	self.Silgen.MenuItem.Check:SetEnabled(false)
-	-- self.Silgen.TimersRef.Flames = KBM.MechTimer:Add(self.Lang.Flames[KBM.Lang], "cast", 30, self, nil)
-	-- self.Silgen.TimersRef.Flames.Enabled = self.Settings.Timers.FlamesEnabled
-	
-	self.Silgen.CastBar = KBM.CastBar:Add(self, self.Silgen, true)
+function GS.Silgen:SetAlerts(bool)
+	if bool then
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = AlertObj.Settings.Enabled
+		end
+	else
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = false
+		end
+	end
+end
+
+function GS:DefineMenu()
+	self.Menu = ROTP.Menu:CreateEncounter(self.Silgen, self.Enabled)
+end
+
+function GS:Start()	
+	self.Silgen.CastBar = KBM.CastBar:Add(self, self.Silgen)
+	self:DefineMenu()
 end

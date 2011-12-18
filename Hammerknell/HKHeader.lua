@@ -12,6 +12,8 @@ local HK = {
 	Enabled = true,
 	IsInstance = true,
 	Name = "Hammerknell Fortress",
+	Type = "20man",
+	ID = "HK",
 }
 
 local AddonData = Inspect.Addon.Detail("KingMolinator")

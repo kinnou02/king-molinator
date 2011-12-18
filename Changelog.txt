@@ -1,4 +1,63 @@
-﻿v0.8.0
+﻿v0.8.1
+* New: All 20 man raids are now fully converted to the new engine.
+* Tank-Swap Monitor
+** New: All T-SM text has received shadows for better clarity.
+** New: All tanks now have HP display updated real-time.
+** New: Tanks death states are now tracked.
+** Change: The main monitoring engine has been overhauled to improve performance. Feedback welcome.
+** Change: With the above in mind, French and German client T-SM's have been re-enabled.
+** Change: Options: Closing the options window with Test Tanks visible, will uncheck the item.
+* Phase Monitor
+** New: Phase Monitor anchor text will automatically be shown/hidden if an encounter starts/ends and is visible.
+** New: Phase Monitor anchor will auto-hide if the monitor is disabled for the current encounter.
+** New: If the Phase Monitor is disabled, the anchor will no long be visible/adjustable.
+* Alerts
+** Fixed: Older alerts would throw an error after v0.7.9 changes.
+** Change: Alert graphics now take up a fraction of the space and memory.
+* Hammerknell
+** Change: Rune King Molinar: Percentage Monitor will no longer be hidden by the options window.
+* River of Souls
+** Dark Foci
+*** Change: Converted to the new engine.
+** Warmaster Galenir
+*** New: Per-Character saving enabled.
+*** Change: Converted to the new engine.
+*** Fixed: Tank-Swap: Debuff name was incorrect for Infecting Strike.
+** Plutonus the Immortal
+** Herald Gaurath
+*** Change: Converted to the new engine.
+** Alsbeth the Discordant
+* Greenscale's Blight
+** Duke Letareus
+*** Change: Converted to the new engine, you can enable all alerts.
+** Infiltrator Johlen
+*** New: Added phase tracking to the encounter.
+*** New: Added Objective and percentage monitoring.
+*** New: Alert then countdown for Blinding Bomb detonation.
+*** New: Alert then countdown for Devastating Bomb phase transition.
+*** Change: Converted to the new engine.
+** Oracle Aleria
+*** New: Added phase tracking to the encounter.
+*** New: Added Objective and percentage monitoring.
+*** New: Added tracking for Primal and Necrotic Werewolves.
+*** New: Personal Screen Alert added for Necrotic Eruption (purple)
+*** New: Mechanic Timer add for Necrotic Eruption.
+*** Change: Converted to the new engine.
+** Prince Hylas
+*** Change: Converted to the new engine.
+** Lord Greenscale
+*** Change: Lord Greenscale: Converted to the new engine.
+* Rise of the Phoenix
+** Change: Ereandorn: Converted to the new engine, you can enable all alerts.
+** Change: Beruhast: Converted to the new engine, you can enable all Alerts and Timers again.
+** Change: General Silgen: Converted to the new engine.
+** Change: High Priest Arakhurn: Converted to the new engine.
+* French Translations
+** Added: Murdantix: Tank-Swap debuff for Mangled.
+** Added: Matron Zamira: Tank-Swap debuff for Matron's Curse.
+** Added: Grugonim: Tank-Swap debuff for Heart Stopping Toxin.
+----
+v0.8.0
 * Fixed: Removed some sneaky variables using the Global Name-space. Simple Meter uses the global name space.
 * Hammerknell
 ** Added: Akylios: Optional percentage based trigger for Phase 2 if for some reason the say trigger fails.
@@ -56,7 +115,7 @@ v0.7.9
 ** Change: Akylios: Screen alert for Mind Decay is now solid. (purple)
 ** Change: Akylios: Screen alert for Suffocating Orb is now solid. (orange)
 * Green Scale's Blight
-* Fixed: Duke Letareus: Phase Tracking error.
+** Fixed: Duke Letareus: Phase Tracking error.
 * German Translations
 ** Added: HK: Grugonim: Manifested Death
 * French Translations
@@ -64,7 +123,7 @@ v0.7.9
 * Tank-Swap
 ** Disabled: For German and French clients only. See below.
 ** Note: This is now receiving a full re-write in order to address CPU usage.
-** Note: This tool will be making a full return in 0.7.9, but only if I'm happy with stability.
+** Note: This tool will be making a full return in 0.8.1, but only if I'm happy with stability.
 ** Note: The new Tank-Swap monitor will include HP displays for all tanks, and Mouse-over functionality.
 ----
 v0.7.7

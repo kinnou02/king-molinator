@@ -86,6 +86,7 @@ MZ.Lang.Ability.Ichor.German = "Abscheulicher Eiter"
 MZ.Lang.Debuff = {}
 MZ.Lang.Debuff.Curse = KBM.Language:Add("Matron's Curse")
 MZ.Lang.Debuff.Curse.German = "Fluch der Matrone"
+MZ.Lang.Debuff.Curse.French = "Mal\195\169diction de la matrone"
 
 MZ.Matron.Name = MZ.Lang.Matron[KBM.Lang]
 
@@ -184,7 +185,7 @@ function MZ:UnitHPCheck(unitDetails, unitID)
 	if unitDetails and unitID then
 		if not unitDetails.player then
 			if unitDetails.name == self.Matron.Name then
-				if not self.Matron.UnitID then
+				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime

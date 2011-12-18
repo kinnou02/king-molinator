@@ -40,7 +40,7 @@ SZ.Zilas = {
 		AlertsRef = {
 			Enabled = true,
 			GraspWarn = KBM.Defaults.AlertObj.Create("orange"),
-			Grasp = KBM.Defaults.AlertObj.Create("red", false),
+			Grasp = KBM.Defaults.AlertObj.Create("red"),
 		},		
 	},
 }
@@ -146,7 +146,7 @@ function SZ:UnitHPCheck(uDetails, unitID)
 	if uDetails and unitID then
 		if not uDetails.player then
 			if uDetails.name == self.Zilas.Name then
-				if not self.Zilas.UnitID then
+				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
@@ -245,6 +245,7 @@ function SZ:Start()
 	-- Create Alerts
 	self.Zilas.AlertsRef.GraspWarn = KBM.Alert:Create(self.Lang.Ability.Grasp[KBM.Lang], 5, true, true)
 	self.Zilas.AlertsRef.Grasp = KBM.Alert:Create(self.Lang.Ability.Grasp[KBM.Lang], 9, false, true)
+	self.Zilas.AlertsRef.Grasp:NoMenu()
 
 	KBM.Defaults.TimerObj.Assign(self.Zilas)
 	KBM.Defaults.AlertObj.Assign(self.Zilas)

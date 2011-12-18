@@ -51,7 +51,7 @@ AK.Jornaru = {
 			Orb = KBM.Defaults.TimerObj.Create("orange"),
 			OrbFirst = KBM.Defaults.TimerObj.Create("orange"),
 			Summon = KBM.Defaults.TimerObj.Create("dark_green"),
-			SummonTwo = KBM.Defaults.TimerObj.Create("dark_green", false),
+			SummonTwo = KBM.Defaults.TimerObj.Create("dark_green"),
 			SummonTwoFirst = KBM.Defaults.TimerObj.Create("dark_green"),
 		},
 		AlertsRef = {
@@ -83,7 +83,7 @@ AK.Akylios = {
 		},
 		AlertsRef = {
 			Enabled = true,
-			Breath = KBM.Defaults.AlertObj.Create("red", false),
+			Breath = KBM.Defaults.AlertObj.Create("red"),
 			BreathWarn = KBM.Defaults.AlertObj.Create("red"),
 			Decay = KBM.Defaults.AlertObj.Create("purple"),
 		},
@@ -234,10 +234,7 @@ function AK:LoadVars()
 	self.Jornaru.Settings.CastBar.Override = true
 	self.Akylios.Settings.CastBar.Multi = true
 	self.Jornaru.Settings.CastBar.Multi = true
-	
-	self.Jornaru.Settings.TimersRef.SummonTwo.HasMenu = false
-	self.Akylios.Settings.AlertsRef.Breath.HasMenu = false
-	
+		
 end
 
 function AK:SaveVars()
@@ -335,7 +332,7 @@ function AK:UnitHPCheck(uDetails, unitID)
 		if not uDetails.player then
 			if self.Bosses[uDetails.name] then
 				if uDetails.name == self.Jornaru.Name then
-					if not self.Jornaru.UnitID then
+					if not self.EncounterRunning then
 						self.EncounterRunning = true
 						self.StartTime = Inspect.Time.Real()
 						self.HeldTime = self.StartTime
@@ -344,9 +341,9 @@ function AK:UnitHPCheck(uDetails, unitID)
 						self.Jornaru.CastBar:Create(unitID)
 						KBM.MechTimer:AddStart(self.Jornaru.TimersRef.WaveOne)
 						self.PhaseObj.Objectives:AddPercent(self.Jornaru.Name, 50, 100)
+						self.PhaseObj:SetPhase(1)
 						self.PhaseObj:Start(self.StartTime)
 					end
-					self.Jornaru.Dead = false
 					self.Jornaru.Casting = false
 					self.Jornaru.UnitID = unitID
 					self.Jornaru.Available = true
@@ -355,7 +352,6 @@ function AK:UnitHPCheck(uDetails, unitID)
 					if not self.Akylios.UnitID then
 						self.Akylios.CastBar:Create(unitID)
 					end
-					self.Akylios.Dead = false
 					self.Akylios.Casting = false
 					self.Akylios.UnitID = unitID
 					self.Akylios.Available = true
@@ -373,7 +369,6 @@ function AK:UnitHPCheck(uDetails, unitID)
 						}
 						self.Bosses[uDetails.name].UnitList[unitID] = SubBossObj
 					else
-						self.Bosses[uDetails.name].UnitList[unitID].Dead = false
 						self.Bosses[uDetails.name].UnitList[unitID].Available = true
 						self.Bosses[uDetails.name].UnitList[unitID].UnitID = UnitID
 					end
@@ -388,6 +383,8 @@ function AK:Reset()
 	self.EncounterRunning = false
 	self.Jornaru.UnitID = nil
 	self.Akylios.UnitID = nil
+	self.Jornaru.Dead = false
+	self.Akylios.Dead = false
 	self.Counts.Lashers = 0
 	self.Counts.Stingers = 0
 	self.Phase = 1
@@ -481,6 +478,7 @@ function AK:Start()
 	self.Jornaru.TimersRef.Summon.MenuName = AK.Lang.Options.Summon[KBM.Lang]
 	self.Jornaru.TimersRef.SummonTwoFirst = KBM.MechTimer:Add(AK.Lang.Mechanic.Summon[KBM.Lang], 45)
 	self.Jornaru.TimersRef.SummonTwo = KBM.MechTimer:Add(AK.Lang.Mechanic.Summon[KBM.Lang], 80, true)
+	self.Jornaru.TimersRef.SummonTwo:NoMenu()
 	self.Jornaru.TimersRef.SummonTwoFirst.MenuName = AK.Lang.Options.SummonTwo[KBM.Lang]
 	self.Akylios.TimersRef.Breath = KBM.MechTimer:Add(AK.Lang.Ability.Breath[KBM.Lang], 25)
 	
@@ -491,6 +489,7 @@ function AK:Start()
 	self.Akylios.AlertsRef.Decay = KBM.Alert:Create(AK.Lang.Ability.Decay[KBM.Lang], 10, false, true, "purple")
 	self.Akylios.AlertsRef.BreathWarn = KBM.Alert:Create(AK.Lang.Ability.Breath[KBM.Lang], 4, true, true, "red")
 	self.Akylios.AlertsRef.Breath = KBM.Alert:Create(AK.Lang.Ability.Breath[KBM.Lang], 5, false, true, "red")
+	self.Akylios.AlertsRef.Breath:NoMenu()
 	
 	-- Assign Mechanics to Triggers
 	self.Jornaru.TimersRef.WaveOne:AddAlert(self.Jornaru.AlertsRef.WaveWarn, 5)

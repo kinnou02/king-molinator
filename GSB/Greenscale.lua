@@ -4,43 +4,37 @@
 --
 
 KBMGSBLG_Settings = nil
+chKBMGSBLG_Settings = nil
+
+-- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 local GSB = KBM.BossMod["Greenscales Blight"]
 
 local LG = {
-	ModEnabled = true,
-	Greenscale = {
-		MenuItem = nil,
-		Enabled = true,
-		Handler = nil,
-		Options = nil,
-	},
+	Enabled = true,
 	Instance = GSB.Name,
 	HasPhases = true,
-	PhaseType = "percentage",
-	PhaseList = {},
-	Timers = {},
 	Lang = {},
-	Enrage = 60 * 14.5,
-	ID = "Greenscale",	
+	Enrage = 60 * 14.5,	
+	ID = "Greenscale",
 }
 
 LG.Greenscale = {
 	Mod = LG,
-	Level = "??",
+	Level = "52",
 	Active = false,
 	Name = "Lord Greenscale",
+	Menu = {},
 	Castbar = nil,
-	CastFilters = {},
-	Timers = {},
-	TimersRef = {},
-	AlertsRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+	}
 }
 
 KBM.RegisterMod(LG.ID, LG)
@@ -55,48 +49,51 @@ function LG:AddBosses(KBM_Boss)
 	self.Greenscale.Descript = self.Greenscale.Name
 	self.MenuName = self.Greenscale.Descript
 	self.Bosses = {
-		[self.Greenscale.Name] = true,
+		[self.Greenscale.Name] = self.Greenscale,
 	}
 	KBM_Boss[self.Greenscale.Name] = self.Greenscale	
 end
 
 function LG:InitVars()
 	self.Settings = {
-		Timers = {
-			Enabled = true,
-			FlamesEnabled = true,
-		},
-		CastBar = {
-			x = false,
-			y = false,
-			Enabled = true,
-		},
+		Enabled = true,
+		CastBar = self.Greenscale.Settings.CastBar,
+		EncTimer = KBM.Defaults.EncTimer(),
 	}
-	KBMLG_Settings = self.Settings
+	KBMGSBLG_Settings = self.Settings
+	chKBMGSBLG_Settings = self.Settings	
 end
 
-function LG:LoadVars()
-	if type(KBMGSBLG_Settings) == "table" then
-		for Setting, Value in pairs(KBMGSBLG_Settings) do
-			if type(KBMGSBLG_Settings[Setting]) == "table" then
-				if self.Settings[Setting] ~= nil then
-					for tSetting, tValue in pairs(KBMGSBLG_Settings[Setting]) do
-						if self.Settings[Setting][tSetting] ~= nil then
-							self.Settings[Setting][tSetting] = tValue
-						end
-					end
-				end
-			else
-				if self.Settings[Setting] ~= nil then
-					self.Settings[Setting] = Value
-				end
-			end
-		end
+function LG:SwapSettings(bool)
+	if bool then
+		KBMGSBLG_Settings = self.Settings
+		self.Settings = chKBMGSBLG_Settings
+	else
+		chKBMGSBLG_Settings = self.Settings
+		self.Settings = KBMGSBLG_Settings
 	end
 end
 
-function LG:SaveVars()
-	KBMGSBLG_Settings = self.Settings
+function LG:LoadVars()	
+	if KBM.Options.Character then
+		KBM.LoadTable(chKBMGSBLG_Settings, self.Settings)
+	else
+		KBM.LoadTable(KBMGSBLG_Settings, self.Settings)
+	end
+	
+	if KBM.Options.Character then
+		chKBMGSBLG_Settings = self.Settings
+	else
+		KBMGSBLG_Settings = self.Settings
+	end	
+end
+
+function LG:SaveVars()	
+	if KBM.Options.Character then
+		chKBMGSBLG_Settings = self.Settings
+	else
+		KBMGSBLG_Settings = self.Settings
+	end	
 end
 
 function LG:Castbar(units)
@@ -118,20 +115,19 @@ function LG:Death(UnitID)
 	return false
 end
 
-function LG:UnitHPCheck(unitDetails, unitID)
-	
+function LG:UnitHPCheck(unitDetails, unitID)	
 	if unitDetails and unitID then
 		if not unitDetails.player then
 			if unitDetails.name == self.Greenscale.Name then
-				if not self.Greenscale.UnitID then
+				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
 					self.TimeElapsed = 0
 					self.Greenscale.Dead = false
-					self.Greenscale.Casting = false
 					self.Greenscale.CastBar:Create(unitID)
 				end
+				self.Greenscale.Casting = false
 				self.Greenscale.UnitID = unitID
 				self.Greenscale.Available = true
 				return self.Greenscale
@@ -145,32 +141,41 @@ function LG:Reset()
 	self.Greenscale.Available = false
 	self.Greenscale.UnitID = nil
 	self.Greenscale.CastBar:Remove()
+	self.Greenscale.Dead = false
 end
 
-function LG:Timer()
-	
+function LG:Timer()	
 end
 
-function LG.Greenscale:Options()
-	function self:TimersEnabled(bool)
+function LG.Greenscale:SetTimers(bool)	
+	if bool then
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = TimerObj.Settings.Enabled
+		end
+	else
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = false
+		end
 	end
-	function self:FlamesEnabled(bool)
-		LG.Settings.Timers.FlamesEnabled = bool
-		LG.Greenscale.TimersRef.Flames.Enabled = bool
-	end
-	local Options = self.MenuItem.Options
-	Options:SetTitle()
-	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, LG.Settings.Timers.Enabled)
-	--Timers:AddCheck(LG.Lang.Flames[KBM.Lang], self.FlamesEnabled, LG.Settings.Timers.FlamesEnabled)	
-	
 end
 
-function LG:Start()
-	self.Header = KBM.HeaderList[self.Instance]
-	self.Greenscale.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Greenscale, true, self.Header)
-	self.Greenscale.MenuItem.Check:SetEnabled(false)
-	-- self.Greenscale.TimersRef.Flames = KBM.MechTimer:Add(self.Lang.Flames[KBM.Lang], "cast", 30, self, nil)
-	-- self.Greenscale.TimersRef.Flames.Enabled = self.Settings.Timers.FlamesEnabled
-	
-	self.Greenscale.CastBar = KBM.CastBar:Add(self, self.Greenscale, true)
+function LG.Greenscale:SetAlerts(bool)
+	if bool then
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = AlertObj.Settings.Enabled
+		end
+	else
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = false
+		end
+	end
+end
+
+function LG:DefineMenu()
+	self.Menu = GSB.Menu:CreateEncounter(self.Greenscale, self.Enabled)
+end
+
+function LG:Start()	
+	self.Greenscale.CastBar = KBM.CastBar:Add(self, self.Greenscale)
+	self:DefineMenu()
 end

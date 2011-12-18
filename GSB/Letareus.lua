@@ -4,25 +4,17 @@
 --
 
 KBMGSBDL_Settings = nil
+chKBMGSBDL_Settings = nil
+
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 local GSB = KBM.BossMod["Greenscales Blight"]
 
 local DL = {
-	ModEnabled = true,
-	Letareus = {
-		MenuItem = nil,
-		Enabled = true,
-		Handler = nil,
-		Options = nil,
-	},
+	Enabled = true,
 	Instance = GSB.Name,
-	Type = "20man",
 	HasPhases = true,
-	PhaseType = "percentage",
-	PhaseList = {},
-	Timers = {},
 	Lang = {},
 	ID = "Letareus",	
 }
@@ -32,16 +24,21 @@ DL.Letareus = {
 	Level = "52",
 	Active = false,
 	Name = "Duke Letareus",
-	Castbar = nil,
-	CastFilters = {},
-	Timers = {},
-	TimersRef = {},
+	NameShort = "Letareus",
+	Menu = {},
 	AlertsRef = {},
 	Dead = false,
 	Available = false,
-	UnitID = nil,
 	TimeOut = 3,
 	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+		AlertsRef = {
+			Enabled = true,
+			Wrath = KBM.Defaults.AlertObj.Create("red"),
+			Tank = KBM.Defaults.AlertObj.Create("orange"),
+		},
+	},
 }
 
 KBM.RegisterMod(DL.ID, DL)
@@ -63,82 +60,47 @@ DL.Lang.Mechanic.Tank = KBM.Language:Add("Tank")
 DL.Lang.Mechanic.Kite = KBM.Language:Add("Kite")
 
 function DL:AddBosses(KBM_Boss)
-
 	self.Letareus.Descript = self.Letareus.Name
 	self.MenuName = self.Letareus.Descript
 	self.Bosses = {
 		[self.Letareus.Name] = self.Letareus,
 	}
-	KBM_Boss[self.Letareus.Name] = self.Letareus
-	
+	KBM_Boss[self.Letareus.Name] = self.Letareus	
 end
 
 function DL:InitVars()
-
 	self.Settings = {
-		Timers = {
-			Enabled = true,
-		},
-		Alerts = {
-			Enabled = true,
-			Wrath = true,
-			Tank = true,
-		},
-		CastBar = {
-			x = false,
-			y = false,
-			Enabled = true,
-		},
+		Enabled = true,
+		Alerts = KBM.Defaults.Alerts(),
+		EncTimer = KBM.Defaults.EncTimer(),
+		PhaseMon = KBM.Defaults.PhaseMon(),
+		CastBar = self.Letareus.Settings.CastBar,
+		AlertsRef = self.Letareus.Settings.AlertsRef,
 	}
 	KBMGSBDL_Settings = self.Settings
-	chKBMGSBDL_Settings = self.Settings
-	
+	chKBMGSBDL_Settings = self.Settings	
 end
 
 function DL:LoadVars()
-
-	local TargetLoad = nil
-	
 	if KBM.Options.Character then
-		TargetLoad = chKBMGSBDL_Settings
+		KBM.LoadTable(chKBMGSBDL_Settings, self.Settings)
 	else
-		TargetLoad = KBMGSBDL_Settings
+		KBM.LoadTable(KBMGSBDL_Settings, self.Settings)
 	end
-	
-	if type(TargetLoad) == "table" then
-		for Setting, Value in pairs(TargetLoad) do
-			if type(TargetLoad[Setting]) == "table" then
-				if self.Settings[Setting] ~= nil then
-					for tSetting, tValue in pairs(TargetLoad[Setting]) do
-						if self.Settings[Setting][tSetting] ~= nil then
-							self.Settings[Setting][tSetting] = tValue
-						end
-					end
-				end
-			else
-				if self.Settings[Setting] ~= nil then
-					self.Settings[Setting] = Value
-				end
-			end
-		end
-	end
-	
+
 	if KBM.Options.Character then
 		chKBMGSBDL_Settings = self.Settings
 	else
 		KBMGSBDL_Settings = self.Settings
-	end
-	
+	end	
 end
 
-function DL:SaveVars()
-	
+function DL:SaveVars()	
 	if KBM.Options.Character then
 		chKBMGSBDL_Settings = self.Settings
 	else
 		KBMGSBDL_Settings = self.Settings
-	end
-	
+	end	
 end
 
 function DL:Castbar(units)
@@ -176,7 +138,6 @@ function DL:UnitHPCheck(unitDetails, unitID)
 					self.PhaseObj.Objectives:AddPercent(self.Letareus.Name, 86, 100)
 					self.PhaseObj:Start(self.StartTime)
 				end
-				self.Letareus.Dead = false
 				self.Letareus.Casting = false
 				self.Letareus.UnitID = unitID
 				self.Letareus.Available = true
@@ -230,73 +191,52 @@ function DL.PhaseEight()
 end
 
 function DL:Reset()
-
 	self.EncounterRunning = false
 	self.Letareus.Available = false
 	self.Letareus.UnitID = nil
 	self.Letareus.CastBar:Remove()
 	self.Phase = 1
-	self.PhaseObj:End()
-	
+	self.PhaseObj:End()	
 end
 
 function DL:Timer()
-	
 end
 
-function DL:SetAlerts(bool)
-
+function DL.Letareus:SetTimers(bool)	
 	if bool then
-		self.Letareus.AlertsRef.Wrath.Enabled = self.Settings.Alerts.Trauma
-		self.Letareus.AlertsRef.Tank.Enabled = self.Settings.Alerts.Tank
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = TimerObj.Settings.Enabled
+		end
 	else
-		self.Letareus.AlertsRef.Wrath.Enabled = false
-		self.Letareus.AlertsRef.Tank.Enabled = false
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = false
+		end
 	end
-	
 end
 
-function DL.Letareus:Options()
+function DL.Letareus:SetAlerts(bool)
+	if bool then
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = AlertObj.Settings.Enabled
+		end
+	else
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = false
+		end
+	end
+end
 
-	-- Timer Settings.
-	function self:Timers(bool)
-	end
-	-- Alert Settings
-	function self:Alerts(bool)
-		DL.Settings.Alerts.Enabled = bool
-		DL:SetAlerts(bool)
-	end
-	function self:WrathAlert(bool)
-		DL.Settings.Alerts.Wrath = bool
-		DL.Letareus.AlertsRef.Wrath.Enabled = bool
-	end
-	function self:TankAlert(bool)
-		DL.Settings.Alerts.Tank = bool
-		DL.Letareus.AlertsRef.Tank.Enabled = bool
-	end
-	
-	-- Create Options Page.
-	local Options = self.MenuItem.Options
-	Options:SetTitle()
-	local Alerts = Options:AddHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], self.Alerts, DL.Settings.Alerts.Enabled)
-	Alerts:AddCheck(DL.Lang.Ability.Wrath[KBM.Lang], self.WrathAlert, DL.Settings.Alerts.Wrath)
-	Alerts:AddCheck(DL.Lang.Mechanic.TankPhase[KBM.Lang], self.TankAlert, DL.Settings.Alerts.Tank)
-	
+function DL:DefineMenu()
+	self.Menu = GSB.Menu:CreateEncounter(self.Letareus, self.Enabled)
 end
 
 function DL:Start()
-
-	-- Create Options Menu.
-	self.Header = KBM.HeaderList[self.Instance]
-	self.Letareus.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Letareus, true, self.Header)
-	self.Letareus.MenuItem.Check:SetEnabled(false)
-	
 	-- Create Timers
 	
 	-- Create AlertsRef
 	self.Letareus.AlertsRef.Wrath = KBM.Alert:Create(self.Lang.Ability.Wrath[KBM.Lang], nil, true, true, "red")
 	self.Letareus.AlertsRef.Tank = KBM.Alert:Create(self.Lang.Mechanic.TankPhase[KBM.Lang], 2, true, false, "orange")
-	self:SetAlerts(self.Settings.Alerts.Enabled)
+	KBM.Defaults.AlertObj.Assign(self.Letareus)
 	
 	-- Assign Mechanics to Triggers
 	self.Letareus.Triggers.Wrath = KBM.Trigger:Create(self.Lang.Ability.Wrath[KBM.Lang], "cast", self.Letareus)
@@ -320,7 +260,7 @@ function DL:Start()
 	self.Letareus.Triggers.PhaseEight:AddPhase(self.PhaseEight)
 		
 	-- Initialize Castbar and Phase Object.
-	self.Letareus.CastBar = KBM.CastBar:Add(self, self.Letareus, true)
+	self.Letareus.CastBar = KBM.CastBar:Add(self, self.Letareus)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(DL.Lang.Mechanic.Tank[KBM.Lang])
-	
+	self:DefineMenu()
 end

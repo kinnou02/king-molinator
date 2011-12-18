@@ -4,25 +4,18 @@
 --
 
 KBMROSWG_Settings = nil
+chKBMROSWG_Settings = nil
+
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 local ROS = KBM.BossMod["River of Souls"]
 
 local WG = {
-	ModEnabled = true,
-	Galenir = {
-		MenuItem = nil,
-		Enabled = true,
-		Handler = nil,
-		Options = nil,
-	},
+	Enabled = true,
 	Instance = ROS.Name,
 	Type = "20man",
 	HasPhases = true,
-	PhaseType = "percentage",
-	PhaseList = {},
-	Timers = {},
 	Lang = {},
 	Enrage = 60 * 5.5,
 	ID = "Warmaster Galenir",	
@@ -33,16 +26,14 @@ WG.Galenir = {
 	Level = "??",
 	Active = false,
 	Name = "Warmaster Galenir",
-	Castbar = nil,
-	CastFilters = {},
-	Timers = {},
-	TimersRef = {},
-	AlertsRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+	},
 }
 
 KBM.RegisterMod(WG.ID, WG)
@@ -51,54 +42,61 @@ WG.Lang.Galenir = KBM.Language:Add(WG.Galenir.Name)
 WG.Lang.Galenir.German = "Kriegsmeister Galenir"
 WG.Lang.Galenir.French = "Ma\195\174tre de Guerre Galenir"
 
+-- Debuff Dictionary
+WG.Lang.Debuff = {}
+WG.Lang.Debuff.Festering = KBM.Language:Add("Festering Infection")
+
 WG.Galenir.Name = WG.Lang.Galenir[KBM.Lang]
 
 function WG:AddBosses(KBM_Boss)
 	self.Galenir.Descript = self.Galenir.Name
 	self.MenuName = self.Galenir.Descript
 	self.Bosses = {
-		[self.Galenir.Name] = true,
+		[self.Galenir.Name] = self.Galenir,
 	}
 	KBM_Boss[self.Galenir.Name] = self.Galenir	
 end
 
 function WG:InitVars()
 	self.Settings = {
-		Timers = {
-			Enabled = true,
-			FlamesEnabled = true,
-		},
-		CastBar = {
-			x = false,
-			y = false,
-			Enabled = true,
-		},
+		Enabled = true,
+		CastBar = self.Galenir.Settings.CastBar,
+		EncTimer = KBM.Defaults.EncTimer(),
 	}
-	KBMWG_Settings = self.Settings
+	KBMROSWG_Settings = self.Settings
+	chKBMROSWG_Settings = self.Settings
 end
 
-function WG:LoadVars()
-	if type(KBMROSWG_Settings) == "table" then
-		for Setting, Value in pairs(KBMROSWG_Settings) do
-			if type(KBMROSWG_Settings[Setting]) == "table" then
-				if self.Settings[Setting] ~= nil then
-					for tSetting, tValue in pairs(KBMROSWG_Settings[Setting]) do
-						if self.Settings[Setting][tSetting] ~= nil then
-							self.Settings[Setting][tSetting] = tValue
-						end
-					end
-				end
-			else
-				if self.Settings[Setting] ~= nil then
-					self.Settings[Setting] = Value
-				end
-			end
-		end
+function WG:SwapSettings(bool)
+	if bool then
+		KBMROSWG_Settings = self.Settings
+		self.Settings = chKBMROSWG_Settings
+	else
+		chKBMROSWG_Settings = self.Settings
+		self.Settings = KBMROSWG_Settings
 	end
 end
 
+function WG:LoadVars()
+	if KBM.Options.Character then
+		KBM.LoadTable(chKBMROSWG_Settings, self.Settings)
+	else
+		KBM.LoadTable(KBMROSWG_Settings, self.Settings)
+	end
+		
+	if KBM.Options.Character then
+		chKBMROSWG_Settings = self.Settings
+	else
+		KBMROSWG_Settings = self.Settings
+	end	
+end
+
 function WG:SaveVars()
-	KBMROSWG_Settings = self.Settings
+	if KBM.Options.Character then
+		chKBMROSWG_Settings = self.Settings
+	else
+		KBMROSWG_Settings = self.Settings
+	end	
 end
 
 function WG:Castbar(units)
@@ -125,7 +123,7 @@ function WG:UnitHPCheck(unitDetails, unitID)
 	if unitDetails and unitID then
 		if not unitDetails.player then
 			if unitDetails.name == self.Galenir.Name then
-				if not self.Galenir.UnitID then
+				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
@@ -133,7 +131,7 @@ function WG:UnitHPCheck(unitDetails, unitID)
 					self.Galenir.Dead = false
 					self.Galenir.Casting = false
 					self.Galenir.CastBar:Create(unitID)
-					KBM.TankSwap:Start("Infecting Strike")
+					KBM.TankSwap:Start(KBM.Lang.Debuff.Festering[KBM.Lang])
 				end
 				self.Galenir.UnitID = unitID
 				self.Galenir.Available = true
@@ -148,32 +146,41 @@ function WG:Reset()
 	self.Galenir.Available = false
 	self.Galenir.UnitID = nil
 	self.Galenir.CastBar:Remove()
+	self.Galenir.Dead = false
 end
 
-function WG:Timer()
-	
+function WG:Timer()	
 end
 
-function WG.Galenir:Options()
-	function self:TimersEnabled(bool)
+function WG.Galenir:SetTimers(bool)	
+	if bool then
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = TimerObj.Settings.Enabled
+		end
+	else
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = false
+		end
 	end
-	function self:FlamesEnabled(bool)
-		WG.Settings.Timers.FlamesEnabled = bool
-		WG.Galenir.TimersRef.Flames.Enabled = bool
-	end
-	local Options = self.MenuItem.Options
-	Options:SetTitle()
-	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, WG.Settings.Timers.Enabled)
-	--Timers:AddCheck(WG.Lang.Flames[KBM.Lang], self.FlamesEnabled, WG.Settings.Timers.FlamesEnabled)	
-	
 end
 
-function WG:Start()
-	self.Header = KBM.HeaderList[self.Instance]
-	self.Galenir.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Galenir, true, self.Header)
-	self.Galenir.MenuItem.Check:SetEnabled(false)
-	-- self.Galenir.TimersRef.Flames = KBM.MechTimer:Add(self.Lang.Flames[KBM.Lang], "cast", 30, self, nil)
-	-- self.Galenir.TimersRef.Flames.Enabled = self.Settings.Timers.FlamesEnabled
-	
-	self.Galenir.CastBar = KBM.CastBar:Add(self, self.Galenir, true)
+function WG.Galenir:SetAlerts(bool)
+	if bool then
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = AlertObj.Settings.Enabled
+		end
+	else
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = false
+		end
+	end
+end
+
+function WG:DefineMenu()
+	self.Menu = ROS.Menu:CreateEncounter(self.Galenir, self.Enabled)
+end
+
+function WG:Start()	
+	self.Galenir.CastBar = KBM.CastBar:Add(self, self.Galenir)
+	self:DefineMenu()
 end

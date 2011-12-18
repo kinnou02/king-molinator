@@ -50,7 +50,7 @@ ES.Estrode = {
 		},
 		AlertsRef = {
 			Enabled = true,
-			Dancing = KBM.Defaults.AlertObj.Create("red", false),
+			Dancing = KBM.Defaults.AlertObj.Create("red"),
 			DancingWarn = KBM.Defaults.AlertObj.Create("red"),
 			North = KBM.Defaults.AlertObj.Create("orange"),
 			Chastise = KBM.Defaults.AlertObj.Create("yellow"),
@@ -163,7 +163,7 @@ function ES:UnitHPCheck(unitDetails, unitID)
 	if unitDetails and unitID then
 		if not unitDetails.player then
 			if unitDetails.name == self.Estrode.Name then
-				if not self.Estrode.UnitID then
+				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
@@ -228,6 +228,7 @@ function ES:Start()
 	-- Screen Alerts
 	self.Estrode.AlertsRef.DancingWarn = KBM.Alert:Create(self.Lang.Ability.Dancing[KBM.Lang], nil, false, true, "red")
 	self.Estrode.AlertsRef.Dancing = KBM.Alert:Create(self.Lang.Ability.Dancing[KBM.Lang], 6, true, true, "red")
+	self.Estrode.AlertsRef.Dancing:NoMenu()
 	self.Estrode.AlertsRef.North = KBM.Alert:Create(self.Lang.Ability.North[KBM.Lang], nil, true, true, "orange")
 	self.Estrode.AlertsRef.Chastise = KBM.Alert:Create(self.Lang.Ability.Chastise[KBM.Lang], nil, true, true, "yellow")
 	self.Estrode.AlertsRef.Rift = KBM.Alert:Create(self.Lang.Ability.Rift[KBM.Lang], 2, true, true, "orange")

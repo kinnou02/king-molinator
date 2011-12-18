@@ -11,30 +11,22 @@ local KBM = AddonData.data
 local ROTP = KBM.BossMod["Rise of the Phoenix"]
 
 local BT = {
-	ModEnabled = true,
-	Beruhast = {
-		MenuItem = nil,
-		Enabled = true,
-		Handler = nil,
-		Options = nil,
-	},
+	Enabled = true,
 	Instance = ROTP.Name,
-	HasPhases = true,
-	PhaseType = "percentage",
-	PhaseList = {},
-	Timers = {},
+	HasPhases = false,
 	Lang = {},
 	ID = "Beruhast",
-	}
+	Menu = {},
+}
 
 BT.Beruhast = {
 	Mod = BT,
 	Level = "??",
+	Menu = {},
 	Active = false,
 	Name = "Beruhast",
 	Castbar = nil,
 	CastFilters = {},
-	Timers = {},
 	TimersRef = {},
 	AlertsRef = {},
 	Dead = false,
@@ -42,6 +34,19 @@ BT.Beruhast = {
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+		TimersRef = {
+			Enabled = true,
+			FlameStart = KBM.Defaults.TimerObj.Create("orange"),
+			Flame = KBM.Defaults.TimerObj.Create("orange"),
+			Summon = KBM.Defaults.TimerObj.Create("dark_green"),
+		},
+		AlertsRef = {
+			Enabled = true,
+			Inferno = KBM.Defaults.TimerObj.Create("yellow"),
+		},
+	},
 }
 
 KBM.RegisterMod(BT.ID, BT)
@@ -76,36 +81,26 @@ function BT:AddBosses(KBM_Boss)
 	self.Beruhast.Descript = self.Beruhast.Name
 	self.MenuName = self.Beruhast.Descript
 	self.Bosses = {
-		[self.Beruhast.Name] = true,
+		[self.Beruhast.Name] = self.Beruhast,
 	}
 	KBM_Boss[self.Beruhast.Name] = self.Beruhast	
 end
 
 function BT:InitVars()
-
 	self.Settings = {
-		Timers = {
-			Enabled = true,
-			Flame = true,
-			Summon = true,
-		},
-		Alerts = {
-			Enabled = true,
-			Inferno = true,
-		},
-		CastBar = {
-			x = false,
-			y = false,
-			Enabled = true,
-		},
+		Enabled = true,
+		CastBar = self.Beruhast.Settings.CastBar,
+		MechTimer = KBM.Defaults.MechTimer(),
+		EncTimer = KBM.Defaults.EncTimer(),
+		AlertsRef = self.Beruhast.Settings.AlertsRef,
+		TimersRef = self.Beruhast.Settings.TimersRef,
+		Alerts = KBM.Defaults.Alerts(),
 	}
 	KBMROTPBT_Settings = self.Settings
 	chKBMROTPBT_Settings = self.Settings
-	
 end
 
 function BT:SwapSettings(bool)
-
 	if bool then
 		KBMROTPBT_Settings = self.Settings
 		self.Settings = chKBMROTPBT_Settings
@@ -113,35 +108,13 @@ function BT:SwapSettings(bool)
 		chKBMROTPBT_Settings = self.Settings
 		self.Settings = KBMROTPBT_Settings
 	end
-
 end
 
-function BT:LoadVars()
-	
-	local TargetLoad = nil
-	
+function BT:LoadVars()	
 	if KBM.Options.Character then
-		TargetLoad = chKBMROTPBT_Settings
+		KBM.LoadTable(chKBMROTPBT_Settings, self.Settings)
 	else
-		TargetLoad = KBMROTPBT_Settings
-	end
-	
-	if type(TargetLoad) == "table" then
-		for Setting, Value in pairs(TargetLoad) do
-			if type(TargetLoad[Setting]) == "table" then
-				if self.Settings[Setting] ~= nil then
-					for tSetting, tValue in pairs(TargetLoad[Setting]) do
-						if self.Settings[Setting][tSetting] ~= nil then
-							self.Settings[Setting][tSetting] = tValue
-						end
-					end
-				end
-			else
-				if self.Settings[Setting] ~= nil then
-					self.Settings[Setting] = Value
-				end
-			end
-		end
+		KBM.LoadTable(KBMROTPBT_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
@@ -149,17 +122,14 @@ function BT:LoadVars()
 	else
 		KBMROTPBT_Settings = self.Settings
 	end
-	
 end
 
 function BT:SaveVars()
-	
 	if KBM.Options.Character then
 		chKBMROTPBT_Settings = self.Settings
 	else
 		KBMROTPBT_Settings = self.Settings
 	end
-	
 end
 
 function BT:Castbar(units)
@@ -191,7 +161,6 @@ function BT:UnitHPCheck(unitDetails, unitID)
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
 					self.TimeElapsed = 0
-					self.Beruhast.Dead = false
 					self.Beruhast.Casting = false
 					self.Beruhast.CastBar:Create(unitID)
 					self.Beruhast.TimersRef.FlameStart:Start(Inspect.Time.Real())
@@ -209,88 +178,51 @@ function BT:Reset()
 	self.Beruhast.Available = false
 	self.Beruhast.UnitID = nil
 	self.Beruhast.CastBar:Remove()
+	self.Beruhast.Dead = false
 end
 
 function BT:Timer()
-	
 end
 
-function BT:SetTimers(bool)
-
+function BT.Beruhast:SetTimers(bool)	
 	if bool then
-		self.Beruhast.TimersRef.Flame.Enabled = self.Settings.Timers.Flame
-		self.Beruhast.TimersRef.FlameStart.Enabled = self.Settings.Timers.Flame
-		self.Beruhast.TimersRef.Summon.Enabled = self.Settings.Timers.Summon
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = TimerObj.Settings.Enabled
+		end
 	else
-		self.Beruhast.TimersRef.Flame.Enabled = false
-		self.Beruhast.TimersRef.FlameStart.Enabled = false
-		self.Beruhast.TimersRef.Summon.Enabled = false
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = false
+		end
 	end
-
 end
 
-function BT:SetAlerts(bool)
-
+function BT.Beruhast:SetAlerts(bool)
 	if bool then
-		self.Beruhast.AlertsRef.Inferno.Enabled = self.Settings.Alerts.Inferno	
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = AlertObj.Settings.Enabled
+		end
 	else
-		self.Beruhast.AlertsRef.Inferno.Enabled = false	
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = false
+		end
 	end
-
 end
 
-function BT.Beruhast:Options()
-
-	-- Timer Settings
-	function self:Timers(bool)
-		BT.Settings.Timers.Enabled = bool
-		BT:SetTimers(bool)
-	end
-	function self:FlameTimer(bool)
-		BT.Settings.Timers.Flame = bool
-		BT.Beruhast.TimersRef.Flame.Enabled = bool
-		BT.Beruhast.TimersRef.FlameStart.Enabled = bool
-	end
-	function self:SummonTimer(bool)
-		BT.Settings.Timers.Summon = bool
-		BT.Beruhast.TimersRef.Summon.Enabled = bool
-	end
-	
-	-- Alert Settings
-	function self:Alerts(bool)
-		BT.Settings.Alerts.Enabled = bool
-		BT:SetAlerts(bool)
-	end
-	function self:InfernoAlert(bool)
-		BT.Settings.Alerts.Inferno = bool
-		BT.Beruhast.AlertsRef.Inferno.Enabled = bool
-	end
-	
-	-- Menu options.
-	local Options = self.MenuItem.Options
-	Options:SetTitle()
-	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.Timers, BT.Settings.Timers.Enabled)
-	Timers:AddCheck(BT.Lang.Ability.Flame[KBM.Lang], self.FlameTimer, BT.Settings.Timers.Flame)
-	Timers:AddCheck(BT.Lang.Unit.Summon[KBM.Lang], self.SummonTimer, BT.Settings.Timers.Summon)
-	local Alerts = Options:AddHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], self.Alerts, BT.Settings.Alerts.Enabled)
-	Alerts:AddCheck(BT.Lang.Ability.Inferno[KBM.Lang], self.InfernoAlert, BT.Settings.Alerts.Inferno)
-	
+function BT:DefineMenu()
+	self.Menu = ROTP.Menu:CreateEncounter(self.Beruhast, self.Enabled)
 end
 
 function BT:Start()
-	self.Header = KBM.HeaderList[self.Instance]
-	self.Beruhast.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Beruhast, true, self.Header)
-	self.Beruhast.MenuItem.Check:SetEnabled(false)
-	
 	-- Alerts
 	self.Beruhast.AlertsRef.Inferno = KBM.Alert:Create(self.Lang.Ability.Inferno[KBM.Lang], 2, true, true, "yellow")
-	self:SetAlerts(self.Settings.Alerts.Enabled)
+	KBM.Defaults.AlertObj.Assign(self.Beruhast)
 	
 	-- Timers
 	self.Beruhast.TimersRef.Flame = KBM.MechTimer:Add(self.Lang.Ability.Flame[KBM.Lang], 70)
 	self.Beruhast.TimersRef.FlameStart = KBM.MechTimer:Add(self.Lang.Ability.Flame[KBM.Lang], 30)
+	self.Beruhast.TimersRef.FlameStart.MenuName = self.Lang.Ability.Flame[KBM.Lang].." (Until First)"
 	self.Beruhast.TimersRef.Summon = KBM.MechTimer:Add(self.Lang.Unit.Summon[KBM.Lang], 70)
-	self:SetTimers(self.Settings.Timers.Enabled)
+	KBM.Defaults.TimerObj.Assign(self.Beruhast)
 	
 	-- Assign Mechanics to Triggers
 	self.Beruhast.Triggers.Inferno = KBM.Trigger:Create(self.Lang.Ability.Inferno[KBM.Lang], "cast", self.Beruhast)
@@ -301,4 +233,5 @@ function BT:Start()
 	self.Beruhast.Triggers.Summon:AddTimer(self.Beruhast.TimersRef.Summon)
 	
 	self.Beruhast.CastBar = KBM.CastBar:Add(self, self.Beruhast, true)
+	self:DefineMenu()
 end

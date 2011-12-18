@@ -5,17 +5,19 @@
 
 KBMGSB_Settings = {}
 
+-- Link Mods
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+
 local GSB = {
 	Header = nil,
 	Enabled = true,
 	IsInstance = true,
 	Name = "Greenscale's Blight",
+	Type = "20man",
 	ID = "GSB",
 }
 
--- Link Mods
-local AddonData = Inspect.Addon.Detail("KingMolinator")
-local KBM = AddonData.data
 KBM.RegisterMod("Greenscales Blight", GSB)
 
 KBM.Language:Add(GSB.Name)
@@ -37,9 +39,7 @@ function GSB:SaveVars()
 end
 
 function GSB:Start()
-	function self:Enabled(bool)
-	
+	function self:Handler(bool)
 	end
-	GSB.Header = KBM.MainWin.Menu:CreateHeader(self.Name, self.Enabled, true)
-	
+	GSB.Menu = KBM.MainWin.Menu:CreateInstance(self.Name, true, self.Handler)	
 end

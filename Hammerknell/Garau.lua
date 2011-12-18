@@ -163,14 +163,13 @@ function GU:UnitHPCheck(uDetails, unitID)
 	if uDetails and unitID then
 		if not uDetails.player then
 			if uDetails.name == self.Garau.Name then
-				if not self.Garau.UnitID then
+				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
 					self.TimeElapsed = 0
 					self.Garau.CastBar:Create(unitID)
 				end
-				self.Garau.Dead = false
 				self.Garau.Casting = false
 				self.Garau.UnitID = unitID
 				self.Garau.Available = true
@@ -185,6 +184,7 @@ function GU:Reset()
 	self.Garau.Available = false
 	self.Garau.UnitID = nil
 	self.Garau.CastBar:Remove()
+	self.Garau.Dead = false
 end
 
 function GU:Timer()	

@@ -31,6 +31,7 @@ ID.Inwar = {
 	Name = "Inwar Darktide",
 	Dead = false,
 	Available = false,
+	Menu = {},
 	UnitID = nil,
 	Primary = true,
 	Required = 1,
@@ -360,7 +361,6 @@ function ID:UnitHPCheck(uDetails, unitID)
 							self.Bosses[uDetails.name].CastBar:Create(unitID)			
 						end
 					end
-					self.Bosses[uDetails.name].Dead = false
 					self.Bosses[uDetails.name].Casting = false
 					self.Bosses[uDetails.name].UnitID = unitID
 					self.Bosses[uDetails.name].Available = true
@@ -378,7 +378,6 @@ function ID:UnitHPCheck(uDetails, unitID)
 						}
 						self.Bosses[uDetails.name].UnitList[unitID] = SubBossObj
 					else
-						self.Bosses[uDetails.name].UnitList[unitID].Dead = false
 						self.Bosses[uDetails.name].UnitList[unitID].Available = true
 						self.Bosses[uDetails.name].UnitList[unitID].UnitID = UnitID
 					end
@@ -393,9 +392,6 @@ function ID:Reset()
 	self.EncounterRunning = false
 	for BossName, BossObj in pairs(self.Bosses) do
 		if BossObj.Type == "multi" then
-			for SubID, SubBoss in pairs(BossObj.UnitList) do
-				SubBoss = nil
-			end
 			BossObj.UnitList = {}
 		else
 			BossObj.Available = false
