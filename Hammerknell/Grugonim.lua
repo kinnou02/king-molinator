@@ -34,7 +34,7 @@ GR.Grugonim = {
 	Name = "Grugonim",
 	Castbar = nil,
 	CastFilters = {},
-	HasCastFilters = false,
+	HasCastFilters = true,
 	Timers = {},
 	TimersRef = {},
 	AlertsRef = {},
@@ -44,14 +44,22 @@ GR.Grugonim = {
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
+		Filters = {
+			Enabled = true,
+			Decay = KBM.Defaults.CastFilter.Create("dark_green"),
+			Bile = KBM.Defaults.CastFilter.Create("purple"),
+			Breath = KBM.Defaults.CastFilter.Create("red"),
+			Disruption = KBM.Defaults.CastFilter.Create("orange"),
+			Swarm = KBM.Defaults.CastFilter.Create("blue"),
+		},
 		TimersRef = {
 			Enabled = true,
 			Breath = KBM.Defaults.TimerObj.Create(),
 		},
 		AlertsRef = {
 			Enabled = true,
-			Decay = KBM.Defaults.AlertObj.Create("purple"),
-			Bile = KBM.Defaults.AlertObj.Create("dark_green"),
+			Decay = KBM.Defaults.AlertObj.Create("dark_green"),
+			Bile = KBM.Defaults.AlertObj.Create("purple"),
 			Breath = KBM.Defaults.AlertObj.Create("red"),
 		},
 	}
@@ -85,6 +93,7 @@ GR.Lang.Ability.Breath = KBM.Language:Add("Necrotic Breath")
 GR.Lang.Ability.Breath.German = "Nekrotischer Atem"
 GR.Lang.Ability.Disruption = KBM.Language:Add("Seismic Disruption")
 GR.Lang.Ability.Disruption.German = "Seismische Störung"
+GR.Lang.Ability.Swarm = KBM.Language:Add("Parasite Swarm")
 
 -- Debuff Dictionary
 GR.Lang.Debuff = {}
@@ -110,6 +119,7 @@ function GR:InitVars()
 		Enabled = true,
 		EncTimer = KBM.Defaults.EncTimer(),
 		CastBar = GR.Grugonim.Settings.CastBar,
+		CastFilters = GR.Grugonim.Settings.Filters,
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		MechTimer = KBM.Defaults.MechTimer(),
 		TimersRef = GR.Grugonim.Settings.TimersRef,
@@ -117,7 +127,7 @@ function GR:InitVars()
 		Alerts = KBM.Defaults.Alerts(),
 	}
 	KBMGR_Settings = self.Settings
-	chKBMGR_Settings = self.Settings	
+	chKBMGR_Settings = self.Settings
 end
 
 function GR:SwapSettings(bool)
@@ -131,23 +141,25 @@ function GR:SwapSettings(bool)
 end
 
 function GR:LoadVars()	
-	local TargetLoad = nil
-	
 	if KBM.Options.Character then
-		TargetLoad = chKBMGR_Settings
+		KBM.LoadTable(chKBMGR_Settings, self.Settings)
 	else
-		TargetLoad = KBMGR_Settings
+		KBM.LoadTable(KBMGR_Settings, self.Settings)
 	end
-	
-	if type(TargetLoad) == "table" then
-		KBM.LoadTable(TargetLoad, self.Settings)
-	end
-	
+		
 	if KBM.Options.Character then
 		chKBMGR_Settings = self.Settings
 	else
 		KBMGR_Settings = self.Settings
-	end	
+	end
+	
+	self.Grugonim.CastFilters[self.Lang.Ability.Decay[KBM.Lang]] = self.Settings.CastFilters.Decay
+	self.Grugonim.CastFilters[self.Lang.Ability.Bile[KBM.Lang]] = self.Settings.CastFilters.Bile
+	self.Grugonim.CastFilters[self.Lang.Ability.Breath[KBM.Lang]] = self.Settings.CastFilters.Breath
+	self.Grugonim.CastFilters[self.Lang.Ability.Disruption[KBM.Lang]] = self.Settings.CastFilters.Disruption
+	self.Grugonim.CastFilters[self.Lang.Ability.Swarm[KBM.Lang]] = self.Settings.CastFilters.Swarm
+		
+	KBM.Defaults.CastFilter.Assign(self.Grugonim)	
 end
 
 function GR:SaveVars()
@@ -200,12 +212,14 @@ end
 function GR.BreathReset()
 	GR.Breaths = 0
 	KBM.PhaseMonitor.Objectives.Lists.Meta[GR.Lang.Ability.Breath[KBM.Lang]]:Update(GR.Breaths)
+	GR.Settings.CastFilters.Breath.Current = 1
 end
 
 function GR.TowerPhase()
 	GR.Breaths = 0
 	GR.PhaseObj.Objectives:Remove()
 	GR.PhaseObj:SetPhase("Towers")
+	GR.Settings.CastFilters.Breath.Current = 1
 	if GR.Phase == 1 then
 		GR.Phase = 2
 		GR.PhaseObj.Objectives:AddDeath(GR.Tower.Name, 3)
@@ -248,6 +262,8 @@ function GR:UnitHPCheck(uDetails, unitID)
 					self.PhaseObj.Objectives:AddPercent(self.Grugonim.Name, 50, 100)
 					self.PhaseObj.Objectives:AddMeta(self.Lang.Ability.Breath[KBM.Lang], 3, 0)
 					self.PhaseObj:Start(self.StartTime)
+					self.Settings.CastFilters.Breath.Count = 3
+					self.Settings.CastFilters.Breath.Current = 1
 				end
 				self.Grugonim.Dead = false
 				self.Grugonim.Casting = false
@@ -348,8 +364,10 @@ function GR:Start()
 	self.Grugonim.Triggers.Disruption:AddStop(self.Grugonim.TimersRef.Breath)
 	self.Grugonim.Triggers.PhaseTwo = KBM.Trigger:Create(50, "percent", self.Grugonim)
 	self.Grugonim.Triggers.PhaseTwo:AddPhase(self.TowerPhase)
+	self.Grugonim.Triggers.PhaseTwo:AddStop(self.Grugonim.TimersRef.Breath)
 	self.Grugonim.Triggers.PhaseFour = KBM.Trigger:Create(10, "percent", self.Grugonim)
 	self.Grugonim.Triggers.PhaseFour:AddPhase(self.TowerPhase)
+	self.Grugonim.Triggers.PhaseFour:AddStop(self.Grugonim.TimersRef.Breath)
 	
 	self.Grugonim.CastBar = KBM.CastBar:Add(self, self.Grugonim, true)	
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)	

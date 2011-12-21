@@ -80,6 +80,10 @@ AK.Akylios = {
 		TimersRef = {
 			Enabled = true,
 			Breath = KBM.Defaults.TimerObj.Create(),
+			EmergeFirst = KBM.Defaults.TimerObj.Create("dark_green"),
+			BreathFirst = KBM.Defaults.TimerObj.Create(),
+			Emerge = KBM.Defaults.TimerObj.Create("dark_green"),
+			Submerge = KBM.Defaults.TimerObj.Create("dark_green"),
 		},
 		AlertsRef = {
 			Enabled = true,
@@ -137,6 +141,8 @@ AK.Lang.Mechanic.Wave = KBM.Language:Add("Tidal Wave")
 AK.Lang.Mechanic.Wave.German = "Flutwelle"
 AK.Lang.Mechanic.Orb = KBM.Language:Add("Suffocating Orb")
 AK.Lang.Mechanic.Summon = KBM.Language:Add("Summon the Abyss")
+AK.Lang.Mechanic.Emerge = KBM.Language:Add("Akylios emerges")
+AK.Lang.Mechanic.Submerge = KBM.Language:Add("Akylios submerges")
 
 -- Notify Dictionary
 AK.Lang.Notify = {}
@@ -156,7 +162,6 @@ AK.Lang.Options.SummonTwo = KBM.Language:Add(AK.Lang.Mechanic.Summon[KBM.Lang]..
 AK.Lang.Options.Orb = KBM.Language:Add(AK.Lang.Mechanic.Orb[KBM.Lang].." (P2 First)")
 
 function AK:AddBosses(KBM_Boss)
-
 	self.Jornaru.Descript = "Akylios & Jornaru"
 	self.Akylios.Descript = self.Jornaru.Descript
 	self.MenuName = self.Akylios.Descript
@@ -169,15 +174,13 @@ function AK:AddBosses(KBM_Boss)
 	KBM_Boss[self.Jornaru.Name] = self.Jornaru
 	KBM_Boss[self.Akylios.Name] = self.Akylios
 	KBM.SubBoss[self.Stinger.Name] = self.Stinger
-	KBM.SubBoss[self.Lasher.Name] = self.Lasher
-	
+	KBM.SubBoss[self.Lasher.Name] = self.Lasher	
 end
 
 function AK:InitVars()
-
 	self.Settings = {
 		Enabled = true,
-		PhaseAlt = false,
+		PhaseAlt = true,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		MechTimer = KBM.Defaults.MechTimer(),
@@ -198,12 +201,10 @@ function AK:InitVars()
 		},
 	}
 	KBMAK_Settings = self.Settings
-	chKBMAK_Settings = self.Settings
-	
+	chKBMAK_Settings = self.Settings	
 end
 
 function AK:SwapSettings(bool)
-
 	if bool then
 		KBMAK_Settings = self.Settings
 		self.Settings = chKBMAK_Settings
@@ -211,13 +212,9 @@ function AK:SwapSettings(bool)
 		chKBMAK_Settings = self.Settings
 		self.Settings = KBMAK_Settings
 	end
-
 end
 
 function AK:LoadVars()
-	
-	local TargetLoad = nil
-	
 	if KBM.Options.Character then
 		KBM.LoadTable(chKBMAK_Settings, self.Settings)
 	else
@@ -234,17 +231,16 @@ function AK:LoadVars()
 	self.Jornaru.Settings.CastBar.Override = true
 	self.Akylios.Settings.CastBar.Multi = true
 	self.Jornaru.Settings.CastBar.Multi = true
-		
+	
+	self.Akylios.Settings.AlertsRef.Breath.Enabled = true	
 end
 
-function AK:SaveVars()
-	
+function AK:SaveVars()	
 	if KBM.Options.Character then
 		chKBMAK_Settings = self.Settings
 	else
 		KBMAK_Settings = self.Settings
-	end
-	
+	end	
 end
 
 function AK:Castbar(units)
@@ -277,6 +273,8 @@ function AK.PhaseThree()
 	AK.Counts.Stingers = 0
 	AK.Counts.Lashers = 0
 	KBM.MechTimer:AddRemove(AK.Jornaru.TimersRef.SummonTwo)
+	KBM.MechTimer:AddStart(AK.Akylios.TimersRef.EmergeFirst)
+	KBM.MechTimer:AddStart(AK.Akylios.TimersRef.BreathFirst)
 	AK.PhaseObj.Objectives:AddPercent(AK.Akylios.Name, 55, 100)
 	print("Phase 3 starting!")	
 end
@@ -399,17 +397,22 @@ end
 AK.Custom = {}
 AK.Custom.Encounter = {}
 function AK.Custom.Encounter.Menu(Menu)
-
 	local Callbacks = {}
 
 	function Callbacks:Enabled(bool)
 		AK.Settings.PhaseAlt = bool
+		if bool then
+			AK.Jornaru.TimersRef.OrbFirst.Time = 65
+			AK.Jornaru.TimersRef.SummonTwoFirst.Time = 58
+		else
+			AK.Jornaru.TimersRef.OrbFirst.Time = 50
+			AK.Jornaru.TimersRef.SummonTwoFirst.Time = 45
+		end
 	end
 
 	Header = Menu:CreateHeader("Use percentage based trigger for Phase 2", "check", "Encounter", "Main")
 	Header:SetChecked(AK.Settings.PhaseAlt)
-	Header:SetHook(Callbacks.Enabled)
-	
+	Header:SetHook(Callbacks.Enabled)	
 end
 
 function AK.Jornaru:SetTimers(bool)	
@@ -464,50 +467,58 @@ function AK:DefineMenu()
 	self.Menu = HK.Menu:CreateEncounter(self.Akylios, self.Enabled)
 end
 
-function AK:Start()
-	
+function AK:Start()	
 	-- Create Timers
 	self.Jornaru.TimersRef.WaveOne = KBM.MechTimer:Add(AK.Lang.Mechanic.Wave[KBM.Lang], 40, true)
 	self.Jornaru.TimersRef.WaveOne.MenuName = AK.Lang.Options.WaveOne[KBM.Lang]
+	self.Jornaru.TimersRef.WaveOne:SetPhase(1)
 	self.Jornaru.TimersRef.WaveFour = KBM.MechTimer:Add(AK.Lang.Mechanic.Wave[KBM.Lang], 50, true)
 	self.Jornaru.TimersRef.WaveFour.MenuName = AK.Lang.Options.WaveFour[KBM.Lang]
-	self.Jornaru.TimersRef.OrbFirst = KBM.MechTimer:Add(AK.Lang.Mechanic.Orb[KBM.Lang], 50)
+	if not self.Settings.PhaseAlt then
+		self.Jornaru.TimersRef.OrbFirst = KBM.MechTimer:Add(AK.Lang.Mechanic.Orb[KBM.Lang], 50)
+	else
+		self.Jornaru.TimersRef.OrbFirst = KBM.MechTimer:Add(AK.Lang.Mechanic.Orb[KBM.Lang], 65)
+	end
 	self.Jornaru.TimersRef.OrbFirst.MenuName = AK.Lang.Options.Orb[KBM.Lang]
 	self.Jornaru.TimersRef.Orb = KBM.MechTimer:Add(AK.Lang.Mechanic.Orb[KBM.Lang], 30)
 	self.Jornaru.TimersRef.Summon = KBM.MechTimer:Add(AK.Lang.Mechanic.Summon[KBM.Lang], 70)
+	self.Jornaru.TimersRef.Summon:SetPhase(1)
 	self.Jornaru.TimersRef.Summon.MenuName = AK.Lang.Options.Summon[KBM.Lang]
-	self.Jornaru.TimersRef.SummonTwoFirst = KBM.MechTimer:Add(AK.Lang.Mechanic.Summon[KBM.Lang], 45)
 	self.Jornaru.TimersRef.SummonTwo = KBM.MechTimer:Add(AK.Lang.Mechanic.Summon[KBM.Lang], 80, true)
+	self.Jornaru.TimersRef.SummonTwo:SetPhase(2)
 	self.Jornaru.TimersRef.SummonTwo:NoMenu()
+	if not self.Settings.PhaseAlt then
+		self.Jornaru.TimersRef.SummonTwoFirst = KBM.MechTimer:Add(AK.Lang.Mechanic.Summon[KBM.Lang], 45)
+	else
+		self.Jornaru.TimersRef.SummonTwoFirst = KBM.MechTimer:Add(AK.Lang.Mechanic.Summon[KBM.Lang], 58)
+	end
+	self.Jornaru.TimersRef.SummonTwoFirst:AddTimer(self.Jornaru.TimersRef.SummonTwo, 0)
 	self.Jornaru.TimersRef.SummonTwoFirst.MenuName = AK.Lang.Options.SummonTwo[KBM.Lang]
 	self.Akylios.TimersRef.Breath = KBM.MechTimer:Add(AK.Lang.Ability.Breath[KBM.Lang], 25)
+	self.Akylios.TimersRef.Emerge = KBM.MechTimer:Add(AK.Lang.Mechanic.Emerge[KBM.Lang], 75)
+	self.Akylios.TimersRef.Emerge:NoMenu()
+	self.Akylios.TimersRef.Submerge = KBM.MechTimer:Add(AK.Lang.Mechanic.Submerge[KBM.Lang], 80)
+	self.Akylios.TimersRef.Submerge:NoMenu()
+	self.Akylios.TimersRef.Submerge:AddTimer(self.Akylios.TimersRef.Emerge, 0)
+	self.Akylios.TimersRef.EmergeFirst = KBM.MechTimer:Add(AK.Lang.Mechanic.Emerge[KBM.Lang], 80)
+	self.Akylios.TimersRef.EmergeFirst.MenuName = "Emerge/Submerge Timers"
+	self.Akylios.TimersRef.EmergeFirst:AddTimer(self.Akylios.TimersRef.Submerge, 0)
+	self.Akylios.TimersRef.BreathFirst = KBM.MechTimer:Add(AK.Lang.Ability.Breath[KBM.Lang], 87)
+	self.Akylios.TimersRef.BreathFirst.MenuName = "First Breath in Phase 3"
 	
 	-- Create Alerts
 	self.Jornaru.AlertsRef.WaveWarn = KBM.Alert:Create(AK.Lang.Mechanic.Wave[KBM.Lang], 5, true, true, "blue")
 	self.Jornaru.AlertsRef.WaveWarn.MenuName = AK.Lang.Options.WaveWarn[KBM.Lang]
+	self.Jornaru.TimersRef.WaveOne:AddAlert(self.Jornaru.AlertsRef.WaveWarn, 5)
+	self.Jornaru.TimersRef.WaveFour:AddAlert(self.Jornaru.AlertsRef.WaveWarn, 5)
 	self.Jornaru.AlertsRef.Orb = KBM.Alert:Create(AK.Lang.Mechanic.Orb[KBM.Lang], 8, false, true, "orange")
+	self.Jornaru.AlertsRef.Orb:Important()
 	self.Akylios.AlertsRef.Decay = KBM.Alert:Create(AK.Lang.Ability.Decay[KBM.Lang], 10, false, true, "purple")
-	self.Akylios.AlertsRef.BreathWarn = KBM.Alert:Create(AK.Lang.Ability.Breath[KBM.Lang], 4, true, true, "red")
+	self.Akylios.AlertsRef.Decay:Important()
 	self.Akylios.AlertsRef.Breath = KBM.Alert:Create(AK.Lang.Ability.Breath[KBM.Lang], 5, false, true, "red")
 	self.Akylios.AlertsRef.Breath:NoMenu()
-	
-	-- Assign Mechanics to Triggers
-	self.Jornaru.TimersRef.WaveOne:AddAlert(self.Jornaru.AlertsRef.WaveWarn, 5)
-	self.Jornaru.TimersRef.WaveOne:SetPhase(1)
-	self.Jornaru.TimersRef.WaveFour:AddAlert(self.Jornaru.AlertsRef.WaveWarn, 5)
-	self.Jornaru.Triggers.Orb = KBM.Trigger:Create(AK.Lang.Notify.Orb[KBM.Lang], "notify", self.Jornaru)
-	self.Jornaru.Triggers.Orb:AddAlert(self.Jornaru.AlertsRef.Orb, true)
-	self.Jornaru.Triggers.Orb:AddTimer(self.Jornaru.TimersRef.Orb)
-	self.Jornaru.AlertsRef.Orb:Important()
-	self.Jornaru.Triggers.PhaseTwo = KBM.Trigger:Create(AK.Lang.Say.PhaseTwo[KBM.Lang], "say", self.Jornaru)
-	self.Jornaru.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
-	self.Jornaru.Triggers.PhaseTwoAlt = KBM.Trigger:Create(50, "percent", self.Jornaru)
-	self.Jornaru.Triggers.PhaseTwoAlt:AddPhase(self.PhaseTwo)
-	self.Jornaru.Triggers.Summon = KBM.Trigger:Create(self.Lang.Mechanic.Summon[KBM.Lang], "cast", self.Jornaru)
-	self.Jornaru.Triggers.Summon:AddTimer(self.Jornaru.TimersRef.Summon)
-	self.Jornaru.TimersRef.Summon:SetPhase(1)
-	self.Jornaru.TimersRef.SummonTwo:SetPhase(2)
-	self.Jornaru.TimersRef.SummonTwoFirst:AddTimer(self.Jornaru.TimersRef.SummonTwo, 0)
+	self.Akylios.AlertsRef.BreathWarn = KBM.Alert:Create(AK.Lang.Ability.Breath[KBM.Lang], 4, true, true, "red")
+	self.Akylios.AlertsRef.BreathWarn:AlertEnd(self.Akylios.AlertsRef.Breath)
 
 	KBM.Defaults.AlertObj.Assign(self.Jornaru)
 	KBM.Defaults.AlertObj.Assign(self.Akylios)
@@ -515,21 +526,29 @@ function AK:Start()
 	KBM.Defaults.TimerObj.Assign(self.Jornaru)
 	KBM.Defaults.TimerObj.Assign(self.Akylios)
 	
+	-- Assign Mechanics to Triggers
+	self.Jornaru.Triggers.Orb = KBM.Trigger:Create(AK.Lang.Notify.Orb[KBM.Lang], "notify", self.Jornaru)
+	self.Jornaru.Triggers.Orb:AddAlert(self.Jornaru.AlertsRef.Orb, true)
+	self.Jornaru.Triggers.Orb:AddTimer(self.Jornaru.TimersRef.Orb)
+	self.Jornaru.Triggers.PhaseTwo = KBM.Trigger:Create(AK.Lang.Say.PhaseTwo[KBM.Lang], "say", self.Jornaru)
+	self.Jornaru.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
+	self.Jornaru.Triggers.PhaseTwoAlt = KBM.Trigger:Create(50, "percent", self.Jornaru)
+	self.Jornaru.Triggers.PhaseTwoAlt:AddPhase(self.PhaseTwo)
+	self.Jornaru.Triggers.Summon = KBM.Trigger:Create(self.Lang.Mechanic.Summon[KBM.Lang], "cast", self.Jornaru)
+	self.Jornaru.Triggers.Summon:AddTimer(self.Jornaru.TimersRef.Summon)
+	
 	self.Akylios.Triggers.PhaseFour = KBM.Trigger:Create(55, "percent", self.Akylios)
 	self.Akylios.Triggers.PhaseFour:AddPhase(self.PhaseFour)
 	self.Akylios.Triggers.Decay = KBM.Trigger:Create(self.Lang.Ability.Decay[KBM.Lang], "buff", self.Akylios)
 	self.Akylios.Triggers.Decay:AddAlert(self.Akylios.AlertsRef.Decay, true)
-	self.Akylios.AlertsRef.Decay:Important()
 	self.Akylios.Triggers.Breath = KBM.Trigger:Create(AK.Lang.Ability.Breath[KBM.Lang], "cast", self.Akylios)
 	self.Akylios.Triggers.Breath:AddTimer(AK.Akylios.TimersRef.Breath)
 	self.Akylios.Triggers.Breath:AddAlert(AK.Akylios.AlertsRef.BreathWarn)
-	self.Akylios.AlertsRef.BreathWarn:AlertEnd(self.Akylios.AlertsRef.Breath)
 	
 	self.Jornaru.CastBar = KBM.CastBar:Add(self, self.Jornaru, true)
 	self.Akylios.CastBar = KBM.CastBar:Add(self, self.Akylios, true)
 
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
-	self:DefineMenu()
-	
+	self:DefineMenu()	
 end

@@ -52,20 +52,25 @@ ID.Denizar = {
 	Primary = false,
 	Required = 1,
 	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+	}
 }
 
 ID.Aqualix = {
 	Mod = ID,
 	Level = "??",
 	Active = false,
-	Name = "Denizar",
-	CastBar = nil,
+	Name = "Aqualix",
 	Dead = false, 
 	Available = false,
 	UnitID = nil,
 	Primary = false,
 	Required = 1,
-	Triggers = {},	
+	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+	}
 }
 
 ID.Undertow = {
@@ -79,6 +84,9 @@ ID.Undertow = {
 	Primary = false,
 	Required = 1,
 	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+	},
 }
 
 ID.Rotjaw = {
@@ -92,6 +100,9 @@ ID.Rotjaw = {
 	Primary = false,
 	Required = 1,
 	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+	},
 }
 
 ID.Slime = {
@@ -175,6 +186,15 @@ function ID:AddBosses(KBM_Boss)
 	
 	self.Inwar.Settings.CastBar.Override = true
 	self.Inwar.Settings.CastBar.Multi = true
+
+	for BossName, BossObj in pairs(self.Bosses) do
+		if BossObj.Settings then
+			if BossObj.Settings.CastBar then
+				BossObj.Settings.CastBar.Override = true
+				BossObj.Settings.CastBar.Multi = true
+			end
+		end
+	end
 	
 end
 
@@ -190,7 +210,19 @@ function ID:InitVars()
 		},
 		Inwar = {
 			CastBar = self.Inwar.Settings.CastBar,
-		}
+		},
+		Rotjaw = {
+			CastBar = self.Rotjaw.Settings.CastBar,
+		},
+		Undertow = {
+			CastBar = self.Undertow.Settings.CastBar,
+		},
+		Aqualix = {
+			CastBar = self.Aqualix.Settings.CastBar,
+		},
+		Denizar = {
+			CastBar = self.Denizar.Settings.CastBar,
+		},
 	}
 	KBMID_Settings = self.Settings
 	chKBMID_Settings = self.Settings
@@ -224,7 +256,7 @@ function ID:LoadVars()
 	else
 		KBMID_Settings = self.Settings
 	end
-
+	
 end
 
 function ID:SaveVars()
@@ -421,10 +453,10 @@ end
 function ID:Start()
 
 	self.Inwar.CastBar = KBM.CastBar:Add(self, self.Inwar, true)
-	self.Aqualix.CastBar = KBM.CastBar:Add(self, self.Aqualix, false)
-	self.Denizar.CastBar = KBM.CastBar:Add(self, self.Denizar, false)
-	self.Undertow.CastBar = KBM.CastBar:Add(self, self.Undertow, false)
-	self.Rotjaw.CastBar = KBM.CastBar:Add(self, self.Rotjaw, false)
+	self.Aqualix.CastBar = KBM.CastBar:Add(self, self.Aqualix, true)
+	self.Denizar.CastBar = KBM.CastBar:Add(self, self.Denizar, true)
+	self.Undertow.CastBar = KBM.CastBar:Add(self, self.Undertow, true)
+	self.Rotjaw.CastBar = KBM.CastBar:Add(self, self.Rotjaw, true)
 	
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()

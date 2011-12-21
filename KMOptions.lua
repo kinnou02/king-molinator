@@ -138,7 +138,7 @@ function KBM.InitTabs()
 	KBM.Tabs.Current = nil
 	KBM.Tabs.List = {}
 	KBM.Tabs.GUI = {}
-	KBM.Tabs.GUI.Page = UI.CreateFrame("Frame", "Encounter_Tabber", KBM.MainWin.Content)
+	KBM.Tabs.GUI.Page = UI.CreateFrame("Frame", "Encounter_Tabber", KBM.MainWin)
 	KBM.Tabs.GUI.Page:SetPoint("TOPLEFT", KBM.MainWin.Options.Frame, "TOPLEFT")
 	KBM.Tabs.GUI.Page:SetPoint("BOTTOMRIGHT", KBM.MainWin.Content, "BOTTOMRIGHT")
 	KBM.Tabs.GUI.Page:SetLayer(2)
@@ -728,7 +728,7 @@ function KBM.InitOptions()
 	KBM.MainWin.Handle:SetWidth(KBM.MainWin.Border:GetWidth())
 	KBM.MainWin.Handle:SetHeight(ContentY-BorderY)
 	KBM.MainWin.Handle.parent = KBM.MainWin.Handle:GetParent()
-	
+			
 	function KBM.MainWin.Handle.Event:LeftDown()
 	
 		local cMouse = Inspect.Mouse()
@@ -874,7 +874,8 @@ function KBM.InitOptions()
 	end
 	
 	MenuWidth = math.floor(ContentW * 0.30)-10	
-	KBM.MainWin.Mask = UI.CreateFrame("Mask", "KBM_Menu_Mask", KBM.MainWin.Content)	
+	KBM.MainWin.Mask = UI.CreateFrame("Mask", "KBM_Menu_Mask", KBM.MainWin)
+	KBM.MainWin.Mask:SetMouseMasking("limited")
 	KBM.MainWin.Menu = UI.CreateFrame("Frame", "KBM_Menu_Frame", KBM.MainWin.Mask)
 	KBM.MainWin.Menu:SetMouseMasking("limited")
 	KBM.MainWin.Mask:SetPoint("TOPLEFT", KBM.MainWin.Menu, "TOPLEFT")
@@ -885,7 +886,7 @@ function KBM.InitOptions()
 	KBM.MainWin.Menu.Headers = {}
 	KBM.MainWin.Menu.LastHeader = nil
 	
-	KBM.MainWin.SplitFrame = UI.CreateFrame("Frame", "KBM_Splitter", KBM.MainWin.Content)
+	KBM.MainWin.SplitFrame = UI.CreateFrame("Frame", "KBM_Splitter", KBM.MainWin)
 	KBM.MainWin.SplitFrame:SetWidth(14)
 	KBM.MainWin.SplitFrame:SetHeight(ContentH)
 	KBM.MainWin.SplitFrame:SetPoint("LEFT", KBM.MainWin.Content, "LEFT", MenuWidth, nil)
@@ -899,7 +900,7 @@ function KBM.InitOptions()
 	function KBM.MainWin.Scrollback(value)
 		KBM.MainWin.FirstItem:SetPoint("TOP", KBM.MainWin.Menu, "TOP", nil, -value)
 	end	
-	KBM.MainWin.Scroller = KBM.Scroller:Create("V", KBM.MainWin.Menu:GetHeight(), KBM.MainWin.Content, KBM.MainWin.Scrollback)
+	KBM.MainWin.Scroller = KBM.Scroller:Create("V", KBM.MainWin.Menu:GetHeight(), KBM.MainWin, KBM.MainWin.Scrollback)
 	KBM.MainWin.Scroller.Frame:SetPoint("TOPRIGHT", KBM.MainWin.SplitFrame, "TOPLEFT")
 	OptionsWidth = ContentW - KBM.MainWin.Menu:GetWidth() - KBM.MainWin.SplitFrame:GetWidth() - 10
 	KBM.MainWin.Menu:ClearWidth()
@@ -912,12 +913,14 @@ function KBM.InitOptions()
 		KBM.MainWin.Scroller:SetPosition(20)
 	end
 	
-	KBM.MainWin.Options.Mask = UI.CreateFrame("Mask", "KBM Options Mask", KBM.MainWin.Content)
+	KBM.MainWin.Options.Mask = UI.CreateFrame("Mask", "KBM Options Mask", KBM.MainWin)
+	KBM.MainWin.Options.Mask:SetMouseMasking("limited")
 	KBM.MainWin.Options.Frame = UI.CreateFrame("Frame", "KBM Options Frame", KBM.MainWin.Options.Mask)
+	KBM.MainWin.Options.Frame:SetMouseMasking("limited")
 	KBM.MainWin.Options.Mask:SetPoint("TOPLEFT", KBM.MainWin.Options.Frame, "TOPLEFT")
 	KBM.MainWin.Options.Mask:SetPoint("BOTTOMRIGHT", KBM.MainWin.Options.Frame, "BOTTOMRIGHT")
 	KBM.MainWin.Options.PageSize = 0
-	KBM.MainWin.Options.Header = UI.CreateFrame("Frame", "KBM Options Header", KBM.MainWin.Content)
+	KBM.MainWin.Options.Header = UI.CreateFrame("Frame", "KBM Options Header", KBM.MainWin)
 	KBM.MainWin.Options.Header:SetWidth(OptionsWidth)
 	KBM.MainWin.Options.Header:SetHeight(40)
 	KBM.MainWin.Options.Header:SetBackgroundColor(0,0,0,0.25)
@@ -930,7 +933,7 @@ function KBM.InitOptions()
 	KBM.MainWin.Options.SubText:SetPoint("BOTTOMLEFT", KBM.MainWin.Options.Header, "BOTTOMLEFT", 4, 0)
 	KBM.MainWin.Options.SubText:SetFontColor(1,1,1)
 	KBM.MainWin.Options.SubText:SetFontSize(18)
-	KBM.MainWin.Options.Footer = UI.CreateFrame("Frame", "KBM Options Footer", KBM.MainWin.Content)
+	KBM.MainWin.Options.Footer = UI.CreateFrame("Frame", "KBM Options Footer", KBM.MainWin)
 	KBM.MainWin.Options.Footer:SetWidth(OptionsWidth)
 	KBM.MainWin.Options.Footer:SetHeight(40)
 	KBM.MainWin.Options.Footer:SetBackgroundColor(0,0,0,0.25)
@@ -941,7 +944,7 @@ function KBM.InitOptions()
 	function KBM.MainWin.Options.Scrollback(value)
 		KBM.MainWin.Options.FirstItem.GUI.Frame:SetPoint("TOP", KBM.MainWin.Options.Frame, "TOP", nil, -value)
 	end
-	KBM.MainWin.Options.Scroller = KBM.Scroller:Create("V", KBM.MainWin.Options.Height, KBM.MainWin.Content, KBM.MainWin.Options.Scrollback)
+	KBM.MainWin.Options.Scroller = KBM.Scroller:Create("V", KBM.MainWin.Options.Height, KBM.MainWin, KBM.MainWin.Options.Scrollback)
 	KBM.MainWin.Options.Scroller.Frame:SetPoint("TOPRIGHT", KBM.MainWin.Options.Header, "BOTTOMRIGHT",0, 10)
 	KBM.MainWin.Options.Frame:SetPoint("RIGHT", KBM.MainWin.Options.Scroller.Frame, "LEFT")
 	KBM.MainWin.Options.Scroller.Frame:SetLayer(3)
@@ -984,25 +987,82 @@ function KBM.InitOptions()
 		KBM.MainWin:SetVisible(false)
 		if KBM.MainWin.CurrentPage then
 			if KBM.MainWin.CurrentPage.Type == "encounter" then
-				
+				KBM.MainWin.CurrentPage:ClearPage()
 			else
 				if KBM.MainWin.CurrentPage.Link.Close then
 					KBM.MainWin.CurrentPage.Link:Close()
 				end
 			end
 		end	
+		if KBM.Options.CastBar.Visible then
+			KBM.CastBar.Anchor:Hide()
+		end		
+		if KBM.Encounter then
+			if KBM.CurrentMod.Settings.Alerts then
+				if KBM.CurrentMod.Settings.Alerts.Override then
+					KBM.Alert.Settings = KBM.CurrentMod.Settings.Alerts
+				else
+					KBM.Alert.Settings = KBM.Options.Alerts
+				end
+			end
+			if KBM.CurrentMod.Settings.MechTimer then
+				if KBM.CurrentMod.Settings.MechTimer.Override then
+					KBM.MechTimer.Settings = KBM.CurrentMod.Settings.MechTimer
+				else
+					KBM.MechTimer.Settings = KBM.Options.MechTimer
+				end
+			end
+			if KBM.CurrentMod.Settings.PhaseMon then
+				if KBM.CurrentMod.Settings.PhaseMon.Override then
+					KBM.PhaseMonitor.Settings = KBM.CurrentMod.Settings.PhaseMon
+				else
+					KBM.PhaseMonitor.Settings = KBM.Options.PhaseMon
+				end
+			end
+			if KBM.CurrentMod.Settings.EncTimer then
+				if KBM.CurrentMod.Settings.EncTimer.Override then
+					KBM.EncTimer.Settings = KBM.CurrentMod.Settings.EncTimer
+				else
+					KBM.EncTimer.Settings = KBM.Options.EncTimer
+				end
+			end
+			if KBM.CurrentMod.Settings.CastBar then
+				for BossName, BossObj in pairs(KBM.CurrentMod.Bosses) do
+					if BossObj.CastBar then
+						BossObj.CastBar:Hide()
+					end
+				end
+			end
+		end
+		KBM.Alert:ApplySettings()
+		KBM.MechTimer:ApplySettings()
+		KBM.PhaseMonitor:ApplySettings()
+		KBM.EncTimer:ApplySettings()
+		KBM.TankSwap.Anchor:SetVisible(false)
+		KBM.TankSwap.Anchor.Drag:SetVisible(false)
 	end
 	
 	function KBM.MainWin.Options.Open()
 		KBM.MainWin:SetVisible(true)
+		if KBM.Options.CastBar.Visible then
+			KBM.CastBar.Anchor:Display()
+		end
 		if KBM.MainWin.CurrentPage then
 			if KBM.MainWin.CurrentPage.Type == "encounter" then
-			
+				KBM.MainWin.CurrentPage:SetPage()
 			else
 				if KBM.MainWin.CurrentPage.Link.Open then
 					KBM.MainWin.CurrentPage.Ling:Open()
 				end
 			end
+		end
+		KBM.Alert:ApplySettings()
+		KBM.MechTimer:ApplySettings()
+		KBM.PhaseMonitor:ApplySettings()
+		KBM.EncTimer:ApplySettings()
+		if KBM.Options.TankSwap.Visible then
+			KBM.TankSwap.Anchor:SetVisible(true)
+			KBM.TankSwap.Anchor.Drag:SetVisible(KBM.Options.TankSwap.Unlocked)
 		end
 	end
 
@@ -1339,6 +1399,13 @@ function KBM.InitOptions()
 					end
 				end
 				
+				if self.Boss.Mod.Settings.Alerts then
+					if self.Boss.Mod.Settings.Alerts.Override then
+						KBM.Alert.Settings = self.Boss.Mod.Settings.Alerts
+						KBM.Alert:ApplySettings()
+					end
+				end
+				
 				if self.Boss.Mod.Settings.CastBar then
 					if self.Boss.Mod.Settings.CastBar.Multi then
 						KBM.CastBar.Anchor:Hide()
@@ -1362,6 +1429,8 @@ function KBM.InitOptions()
 				KBM.PhaseMonitor:ApplySettings()
 				KBM.MechTimer.Settings = KBM.Options.MechTimer
 				KBM.MechTimer:ApplySettings()
+				KBM.Alert.Settings = KBM.Options.Alerts
+				KBM.Alert:ApplySettings()
 				
 				if self.Boss.Mod.Settings.CastBar then
 					if self.Boss.Mod.Settings.CastBar.Multi then

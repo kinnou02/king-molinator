@@ -296,8 +296,6 @@ function KM:SwapSettings(bool)
 end
 
 function KM:LoadVars()
-	
-	local TargetLoad = nil	
 	if KBM.Options.Character then
 		KBM.LoadTable(chKM_Settings, KM.Settings)
 	else
@@ -314,6 +312,9 @@ function KM:LoadVars()
 	self.King.Settings.CastBar.Multi = true
 	self.Prince.Settings.CastBar.Override = true
 	self.Prince.Settings.CastBar.Multi = true
+	
+	self.King.Settings.AlertsRef.Feedback.Enabled = true
+	self.Prince.Settings.AlertsRef.Feedback.Enabled = true
 	
 	KM.Prince.CastFilters[KM.Lang.Ability.Rend[KBM.Lang]] = self.Settings.Prince.CastFilters.Rend
 	KM.Prince.CastFilters[KM.Lang.Ability.Terminate[KBM.Lang]] = self.Settings.Prince.CastFilters.Terminate

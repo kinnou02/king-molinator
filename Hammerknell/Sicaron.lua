@@ -27,6 +27,7 @@ SN.Sicaron = {
 	Name = "Sicaron",
 	Castbar = nil,
 	CastFilters = {},
+	HasCastFilters = true,
 	Timers = {},
 	TimersRef = {},
 	AlertsRef = {},
@@ -37,6 +38,12 @@ SN.Sicaron = {
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
+		Filters = {
+			Enabled = true,
+			Hex = KBM.Defaults.CastFilter.Create("purple"),
+			Contract = KBM.Defaults.CastFilter.Create("blue"),
+			Decay = KBM.Defaults.CastFilter.Create("dark_green"),
+		},
 		TimersRef = {
 			Enabled = true,
 			Contract = KBM.Defaults.TimerObj.Create("blue"),
@@ -91,6 +98,7 @@ function SN:InitVars()
 		Enabled = true,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
+		CastFilters = self.Sicaron.Settings.Filters,
 		MechTimer = KBM.Defaults.MechTimer(),		
 		Alerts = KBM.Defaults.Alerts(),
 		CastBar = self.Sicaron.Settings.CastBar,
@@ -98,8 +106,7 @@ function SN:InitVars()
 		AlertsRef = self.Sicaron.Settings.AlertsRef,
 	}
 	KBMSN_Settings = self.Settings
-	chKBMSN_Settings = self.Settings
-	
+	chKBMSN_Settings = self.Settings	
 end
 
 function SN:SwapSettings(bool)
@@ -127,7 +134,12 @@ function SN:LoadVars()
 	else
 		KBMSN_Settings = self.Settings
 	end
+	self.Sicaron.CastFilters[self.Lang.Ability.Hex[KBM.Lang]] = self.Settings.CastFilters.Hex
+	self.Sicaron.CastFilters[self.Lang.Debuff.Contract[KBM.Lang]] = self.Settings.CastFilters.Contract
+	self.Sicaron.CastFilters[self.Lang.Ability.Decay[KBM.Lang]] = self.Settings.CastFilters.Decay
+	KBM.Defaults.CastFilter.Assign(self.Sicaron)	
 	
+	self.Sicaron.Settings.AlertsRef.ContractRed.Enabled = true
 end
 
 function SN:SaveVars()

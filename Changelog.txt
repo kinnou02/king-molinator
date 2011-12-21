@@ -1,4 +1,69 @@
-﻿v0.8.1
+﻿v0.8.2
+* System
+** New: Buff removed triggers are now available for use by the engine.
+** New: Encounter timers can now trigger timers, alerts and phases.
+** New: Interrupt triggers are now available for use by the engine.
+* Mechanic Timers
+** Change: Mechanic timers now only display 10ths of a second sub 10 seconds remaining.
+** Change: The Anchor for these will now only be displayed if the options page is active.
+** Note: This change is to gauage feedback and is subject to change/improvement.
+* Screen Alerts
+** Fixed: Linked Alerts have been fixed.
+** Change: Screen Alerts are now a static width with the ability to customize the size.
+** Change: The anchor for these will now only be displayed if the options page is active.
+* Options Window
+** New: Anchors enabled for specific encounters are hidden when the window is closed.
+** Note: It's advisable to edit the layout of an encounter before entering combat.
+* Castbars
+** New: Castbars can now track casting counts for specific skills.
+** Change: The anchors for these will now only show when the options page is active.
+** Note: Cast Filters allow to ignore certain skills from being shown.
+** Note: Cast Filters allow you to change the color of the castbar for specific skills.
+* Hammerknell
+** Rune King Molinar
+*** Fixed: Runic Feedback: The channeled portion of this alerts is now working again.
+*** Change: Runic Feedback: The duration alert is now linked to the warning alert.
+** Sicaron
+*** Fixed: Unholy Contract's red portion of the Alert is now working again.
+*** Change: Unholy Contract: The red debuff alert is now linked to the blue buff alert.
+*** New: Cast Filters have been added to the encounter. (see Castbars tab)
+** Akylios
+*** New: Emerge Timer for the first time Akylios emerges in Phase 3.
+*** New: Successive Emerge/Submerge timers (experimental).
+*** New: Breath of Madness: Timer for first in Phase 3.
+*** Fixed: Breath of Madness: The channelled version of this alert is now working again.
+*** Fixed: Breath of Madness: This is now linked correctly to the warning.
+*** Change: Add spawn timers for phase 1 should no longer trigger in phase 2 regardless of target.
+*** Change: Increased timer for first orb timer for Phase 2 when using percentage trigger.
+*** Change: Increased timer for first adds spawn for Phase 2 when using percentage trigger.
+** Gugonim
+*** Change: Tower Phase: The start of this phase will now stop the Breath timer.
+*** New: Cast Filters have been added to the encounter. (see Castbars tab)
+*** New: Necrotic Breath: Now uses the new casting count method. (1st, 2nd, 3rd)
+** Inwar Darktide
+*** New: Added customization settings for each the castbars.
+*** Fixed: Settings for each of the castbars will now be saved correctly.
+* Greenscale's Blight
+** Prince Hylas
+*** New: Per-Character layout settings.
+*** New: Timer and Alert filtering options, and custom timer layout settings.
+*** New: Timer and Alert for the addition of Duke Letareus.
+*** New: Timer and Alert for the addition of Infiltrator Johlen.
+*** New: Timer and Alert for the addition of Oracle Aleria.
+*** New: Timer and Alert for Prince's Wrath AoE ability.
+*** New: Timer and Alert for Soul Fracture.
+*** New: Timer and Alert for Contagious Cottontail.
+*** New: Phase, percentage and objective monitoring.
+*** New: Phase Monitor options.
+** Lord Greenscale
+*** New: Per-Character layout settings.
+*** New: Timer and Alert filtering options, and custom timer layout settings.
+*** New: Phase, percentage and objective monitoring.
+*** New: Phase Monitor options.
+*** New: Timer and Alert for Strangling Blight.
+*** New: Timer and Alert for Noxious Fumes. (warning and duration).
+----
+v0.8.1
 * New: All 20 man raids are now fully converted to the new engine.
 * Tank-Swap Monitor
 ** New: All T-SM text has received shadows for better clarity.
@@ -46,7 +111,7 @@
 ** Prince Hylas
 *** Change: Converted to the new engine.
 ** Lord Greenscale
-*** Change: Lord Greenscale: Converted to the new engine.
+*** Change: Converted to the new engine.
 * Rise of the Phoenix
 ** Change: Ereandorn: Converted to the new engine, you can enable all alerts.
 ** Change: Beruhast: Converted to the new engine, you can enable all Alerts and Timers again.
