@@ -1,4 +1,4 @@
-﻿v0.8.2
+﻿﻿v0.8.2
 * System
 ** New: Buff removed triggers are now available for use by the engine.
 ** New: Encounter timers can now trigger timers, alerts and phases.
@@ -6,7 +6,7 @@
 * Mechanic Timers
 ** Change: Mechanic timers now only display 10ths of a second sub 10 seconds remaining.
 ** Change: The Anchor for these will now only be displayed if the options page is active.
-** Note: This change is to gauage feedback and is subject to change/improvement.
+** Note: This change is to gauge feedback and is subject to change/improvement.
 * Screen Alerts
 ** Fixed: Linked Alerts have been fixed.
 ** Change: Screen Alerts are now a static width with the ability to customize the size.
@@ -31,7 +31,7 @@
 *** New: Emerge Timer for the first time Akylios emerges in Phase 3.
 *** New: Successive Emerge/Submerge timers (experimental).
 *** New: Breath of Madness: Timer for first in Phase 3.
-*** Fixed: Breath of Madness: The channelled version of this alert is now working again.
+*** Fixed: Breath of Madness: The channeled version of this alert is now working again.
 *** Fixed: Breath of Madness: This is now linked correctly to the warning.
 *** Change: Add spawn timers for phase 1 should no longer trigger in phase 2 regardless of target.
 *** Change: Increased timer for first orb timer for Phase 2 when using percentage trigger.
