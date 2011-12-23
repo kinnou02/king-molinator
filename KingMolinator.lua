@@ -92,6 +92,11 @@ function KBM.Defaults.CastFilter.Assign(BossObj)
 				Data.ID = ID
 			end
 		end
+		for Name, Data in pairs(BossObj.CastFilters) do
+			if type(Data) == "table" then
+				Data.Prefix = ""
+			end
+		end
 	end
 end
 
@@ -620,7 +625,7 @@ function KBM.Numbers.GetPlace(Number)
 	local Check = 0
 	local Last = 0
 	if Number < 4 or Number > 20 then
-		Last = tonumber(string.sub(Number, -1))
+		Last = tonumber(string.sub(tostring(Number), -1))
 		if Last > 0 and Last < 4 then
 			Check = Last
 		end
@@ -819,6 +824,7 @@ function KBM.MechTimer:Pull()
 		GUI.Background:SetBackgroundColor(0,0,0,0.33)
 		GUI.Background:SetMouseMasking("limited")
 		GUI.TimeBar = UI.CreateFrame("Frame", "Timer_Progress_Frame", GUI.Background)
+		--GUI.TimeBar:SetTexture("KingMolinator", "Media/BarTexture2.png")
 		GUI.TimeBar:SetWidth(KBM.MechTimer.Anchor:GetWidth())
 		GUI.TimeBar:SetPoint("BOTTOM", GUI.Background, "BOTTOM")
 		GUI.TimeBar:SetPoint("TOPLEFT", GUI.Background, "TOPLEFT")
@@ -2320,10 +2326,16 @@ function KBM.TankSwap:Pull()
 		GUI.Frame:SetLayer(1)
 		GUI.Frame:SetHeight(KBM.Options.TankSwap.h)
 		GUI.Frame:SetBackgroundColor(0,0,0,0.33)
+		-- GUI.Overlay = UI.CreateFrame("Texture", "TankSwap_Overlay", GUI.Frame)
+		-- GUI.Overlay:SetPoint("TOPLEFT", GUI.Frame, "TOPLEFT")
+		-- GUI.Overlay:SetPoint("BOTTOMRIGHT", GUI.Frame, "BOTTOMRIGHT")
+		-- GUI.Overlay:SetLayer(5)
+		-- GUI.Overlay:SetTexture("KingMolinator", "Media/BarSkin.png")
 		GUI.TankFrame = UI.CreateFrame("Frame", "TankSwap_Tank_Frame", GUI.Frame)
 		GUI.TankFrame:SetPoint("TOPLEFT", GUI.Frame, "TOPLEFT")
-		GUI.TankFrame:SetPoint("BOTTOMLEFT", GUI.Frame, "CENTERLEFT")
-		GUI.TankHP = UI.CreateFrame("Frame", "TankSwap_Tank_HPFrame", GUI.TankFrame)
+		GUI.TankFrame:SetPoint("BOTTOM", GUI.Frame, "CENTERY")
+		GUI.TankHP = UI.CreateFrame("Texture", "TankSwap_Tank_HPFrame", GUI.TankFrame)
+		GUI.TankHP:SetTexture("KingMolinator", "Media/BarTexture.png")
 		GUI.TankHP:SetLayer(1)
 		GUI.TankHP:SetBackgroundColor(0,0.8,0,0.33)
 		GUI.TankShadow = UI.CreateFrame("Text", "TankSwap_Tank_Shadow", GUI.TankFrame)
@@ -2354,16 +2366,18 @@ function KBM.TankSwap:Pull()
 		GUI.TankHP:SetPoint("TOP", GUI.TankFrame, "TOP")
 		GUI.TankHP:SetPoint("LEFT", GUI.TankFrame, "LEFT")
 		GUI.TankHP:SetPoint("BOTTOM", GUI.TankFrame, "BOTTOM")
-		GUI.TankHP:SetPoint("RIGHT", GUI.TankFrame, 1, nil)
-		GUI.DeCoolFrame = UI.CreateFrame("Frame", "TankSwap_CDFrame", GUI.Frame)
+		GUI.TankHP:SetWidth(GUI.TankFrame:GetWidth())
+		GUI.DeCoolFrame = UI.CreateFrame("Texture", "TankSwap_CDFrame", GUI.Frame)
 		GUI.DeCoolFrame:SetPoint("TOPLEFT", GUI.TankFrame, "BOTTOMLEFT")
 		GUI.DeCoolFrame:SetPoint("BOTTOM", GUI.Frame, "BOTTOM")
 		GUI.DeCoolFrame:SetPoint("RIGHT", GUI.Frame, "RIGHT")
-		GUI.DeCool = UI.CreateFrame("Frame", "TankSwap_CD_Progress", GUI.DeCoolFrame)
+		GUI.DeCoolFrame:SetBackgroundColor(0,0,0,0.33)
+		GUI.DeCool = UI.CreateFrame("Texture", "TankSwap_CD_Progress", GUI.DeCoolFrame)
+		GUI.DeCool:SetTexture("KingMolinator", "Media/BarTexture.png")
 		GUI.DeCool:SetPoint("TOPLEFT", GUI.DeCoolFrame, "TOPLEFT")
 		GUI.DeCool:SetPoint("BOTTOM", GUI.DeCoolFrame, "BOTTOM")
-		GUI.DeCool:SetPoint("RIGHT", GUI.DeCoolFrame, 0, nil)
-		GUI.DeCool:SetBackgroundColor(0.5,0,0.8,0.33)
+		GUI.DeCool:SetWidth(0)
+		GUI.DeCool:SetBackgroundColor(0.5,0,8,0.33)
 		GUI.DeCool.Shadow = UI.CreateFrame("Text", "TankSwap_CD_Shadow", GUI.DeCoolFrame)
 		GUI.DeCool.Shadow:SetFontSize(KBM.Options.TankSwap.TextSize)
 		GUI.DeCool.Shadow:SetFontColor(0,0,0)
@@ -2530,7 +2544,7 @@ function KBM.TankSwap:Init()
 							HPMax = uDetails.healthMax
 						--end
 						HPPer = HPCurrent / HPMax
-						self.GUI.TankHP:SetPoint("RIGHT", self.GUI.TankFrame, HPPer, nil)
+						self.GUI.TankHP:SetWidth(self.GUI.TankFrame:GetWidth() * HPPer)
 					else
 						if not self.Dead then
 							self:Death()
@@ -2548,7 +2562,8 @@ function KBM.TankSwap:Init()
 			TankObj.GUI:SetStack("2")
 			TankObj.GUI:SetDeCool("99.9")
 			TankObj.GUI.DeCoolFrame:SetVisible(true)
-			TankObj.GUI.DeCool:SetPoint("RIGHT", TankObj.GUI.DeCoolFrame, 1, nil)
+			TankObj.GUI.DeCool:SetWidth(TankObj.GUI.DeCoolFrame:GetWidth())
+			TankObj.GUI.TankHP:SetWidth(TankObj.GUI.TankFrame:GetWidth())
 		else
 			TankObj.GUI:SetStack("")
 			TankObj.GUI:SetDeCool("")
@@ -2595,7 +2610,7 @@ function KBM.TankSwap:Init()
 						TankObj.Remaining = bDetails.remaining
 						TankObj.Duration = bDetails.duration
 						TankObj.GUI:SetDeCool(string.format("%0.01f", TankObj.Remaining))
-						TankObj.GUI.DeCool:SetPoint("RIGHT", TankObj.GUI.DeCoolFrame, (TankObj.Remaining/TankObj.Duration), nil)
+						TankObj.GUI.DeCool:SetWidth(TankObj.GUI.DeCoolFrame:GetWidth() * (TankObj.Remaining/TankObj.Duration))
 						TankObj.GUI.DeCoolFrame:SetVisible(true)
 						TankObj.GUI:SetStack(tostring(TankObj.Stacks))
 					end
@@ -2604,7 +2619,7 @@ function KBM.TankSwap:Init()
 					TankObj.Remaing = 0
 					TankObj.Duration = 0
 					TankObj.GUI.DeCoolFrame:SetVisible(false)
-					TankObj.GUI.DeCool:SetPoint("RIGHT", TankObj.GUI.DeCoolFrame, 0, nil)
+					TankObj.GUI.DeCool:SetWidth(0)
 					TankObj.GUI:SetDeCool("")
 					TankObj.GUI:SetStack("")
 				end
@@ -3220,9 +3235,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 						if self.Filters[bDetails.abilityName] then
 							FilterObj = self.Filters[bDetails.abilityName]
 							if FilterObj.Enabled then
-								local Prefix = ""
 								if not self.Casting then
-									self:Start()
 									if FilterObj.Custom then
 										self.GUI.Progress:SetBackgroundColor(KBM.Colors.List[FilterObj.Color].Red, KBM.Colors.List[FilterObj.Color].Green, KBM.Colors.List[FilterObj.Color].Blue, 0.33)
 									else
@@ -3232,19 +3245,27 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 											self.GUI.Progress:SetBackgroundColor(1, 0, 0, 0.33)
 										end
 									end
-								end
-								if FilterObj.Count then
-									Prefix = KBM.Numbers.GetPlace(FilterObj.Current)
-									if FilterObj.Current < FilterObj.Count then
-										FilterObj.Current = FilterObj.Current + 1
+									if FilterObj.Count then
+										FilterObj.Prefix = KBM.Numbers.GetPlace(FilterObj.Current).." "
+										if FilterObj.Current < FilterObj.Count then
+											FilterObj.Current = FilterObj.Current + 1
+										else
+											FilterObj.Current = 1
+										end
 									else
-										FilterObj.Current = 1
+										FilterObj.Prefix = ""
 									end
+									self.CastTime = bDetails.duration
+									self.Progress = bDetails.remaining						
+									self.GUI.Progress:SetWidth(self.GUI.Frame:GetWidth() * (1-(self.Progress/self.CastTime)))
+									self.GUI:SetText(string.format("%0.01f", self.Progress).." - "..FilterObj.Prefix..bDetails.abilityName)
+									self:Start()
+								else
+									self.CastTime = bDetails.duration
+									self.Progress = bDetails.remaining						
+									self.GUI.Progress:SetWidth(self.GUI.Frame:GetWidth() * (1-(self.Progress/self.CastTime)))
+									self.GUI:SetText(string.format("%0.01f", self.Progress).." - "..FilterObj.Prefix..bDetails.abilityName)	
 								end
-								self.CastTime = bDetails.duration
-								self.Progress = bDetails.remaining						
-								self.GUI.Progress:SetWidth(self.GUI.Frame:GetWidth() * (1-(self.Progress/self.CastTime)))
-								self.GUI:SetText(string.format("%0.01f", self.Progress).." - "..Prefix..bDetails.abilityName)
 							else
 								self:Stop()
 								self.Casting = false
@@ -3334,14 +3355,18 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 	end
 	function CastBarObj:Remove()
 	
-		KBM.CastBar.ActiveCastBars[self.UnitID] = nil
+		if self.UnitID then
+			KBM.CastBar.ActiveCastBars[self.UnitID] = nil
+		end
 		self.UnitID = nil
 		self.Active = false
-		if not self.Settings.Visible then
-			self.GUI.CastBarObj = nil
-			self.GUI.Frame:SetVisible(false)
-			table.insert(KBM.CastBar.Store, self.GUI)
-			self.GUI = nil
+		if not self.Settings.Visible or not KBM.MainWin:GetVisible() then
+			if self.GUI then
+				self.GUI.CastBarObj = nil
+				self.GUI.Frame:SetVisible(false)
+				table.insert(KBM.CastBar.Store, self.GUI)
+				self.GUI = nil
+			end
 		end
 		
 	end
@@ -3760,7 +3785,7 @@ function KBM:BuffMonitor(unitID, Buffs, Type)
 			elseif Type == "remove" then
 				if unitID then
 					for BuffID, bool in pairs(Buffs) do
-						bDetails = Inspect.Buff.Detail(unitID, buffID)
+						bDetails = Inspect.Buff.Detail(unitID, BuffID)
 						if bDetails then
 							if KBM.Trigger.BuffEnd[bDetails.name] then
 								TriggerObj = KBM.Trigger.BuffEnd[bDetails.name]
@@ -4258,6 +4283,7 @@ local function KBM_Start()
 	table.insert(Event.Chat.Npc, {KBM.NPCChat, "KingMolinator", "NPC Chat"})
 	table.insert(Event.Buff.Add, {function (unitID, Buffs) KBM:BuffMonitor(unitID, Buffs, "new") end, "KingMolinator", "Buff Monitor (Add)"})
 	table.insert(Event.Buff.Change, {function (unitID, Buffs) KBM:BuffMonitor(unitID, Buffs, "change") end, "KingMolinator", "Buff Monitor (change)"})
+	table.insert(Event.Buff.Remove, {function (unitID, Buffs) KBM:BuffMonitor(unitID, Buffs, "remove") end, "KingMolinator", "Buff Monitor (remove)"})
 	table.insert(Event.SafesRaidManager.Combat.Damage, {KBM.MobDamage, "KingMolinator", "Combat Damage"})
 	table.insert(Event.SafesRaidManager.Group.Combat.Damage, {KBM.RaidDamage, "KingMolinator", "Raid Damage"})
 	-- table.insert(Event.Unit.Unavailable, {KBM_UnitRemoved, "KingMolinator", "Unit Unavailable"})

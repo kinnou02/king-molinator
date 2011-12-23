@@ -1418,7 +1418,12 @@ function KBM.InitOptions()
 						KBM.CastBar.Anchor:Hide()
 						self.Boss.CastBar:Display()
 					end
-				end					
+				end
+				if self.Boss.Mod.Custom then
+					if self.Boss.Mod.Custom.SetPage then
+						self.Boss.Mod.Custom.SetPage()
+					end
+				end
 			end
 			
 			function Encounter:ClearPage()			
@@ -1445,8 +1450,13 @@ function KBM.InitOptions()
 						KBM.CastBar.Anchor:Display()
 					end
 				end
+				if self.Boss.Mod.Custom then
+					if self.Boss.Mod.Custom.ClearPage then
+						self.Boss.Mod.Custom.ClearPage()
+					end
+				end
+				KBM.MainWin.Options.Scroller.Frame:SetVisible(true)
 				
-				KBM.MainWin.Options.Scroller.Frame:SetVisible(true)			
 			end
 			
 			function Encounter:CreateHeader(Name, Type, Tab, Side)				
@@ -2249,20 +2259,22 @@ function KBM.InitOptions()
 								
 								function Callbacks:Callback(bool)
 									self.Data.Enabled = bool
-									self.Boss.Menu.Alerts[self.Data.ID].ColorGUI:Enable(bool)
+									self.Data.Settings.Enabled = bool
+									self.Boss.Menu.Alerts[self.Data.Settings.ID].ColorGUI:Enable(bool)
 								end
 								
 								function Callbacks:Enabled(bool)
 									self.Data.Enabled = bool
-									self.Boss.Menu.Alerts[self.Data.ID].ColorGUI:Enable(bool)
+									self.Data.Settings.Enabled = bool
+									self.Boss.Menu.Alerts[self.Data.Settings.ID].ColorGUI:Enable(bool)
 								end
 								
 								function Callbacks:Color(bool, Color)							
 									if not Color then
-										self.Data.Custom = bool
+										self.Data.Settings.Custom = bool
 										self.GUI:SetEnabled(bool)
 									elseif Color then
-										self.Manager.Data.Color = Color
+										self.Manager.Data.Settings.Color = Color
 										self.Manager.Color = Color
 									end								
 								end
@@ -2273,21 +2285,21 @@ function KBM.InitOptions()
 								end
 								
 								Child = Header:CreateOption(MenuName, "excheck", Callbacks.Callback)
-								Child.Data = AlertData.Settings
+								Child.Data = AlertData
 								Child:SetChecked(AlertData.Settings.Enabled)							
 								local SubHeader = Child:CreateHeader(MenuName, "plain")
 								SubHeader.Boss = BossObj
 								BossObj.Menu.Alerts[AlertID] = {}
 								BossObj.Menu.Alerts[AlertID].Enabled = SubHeader:CreateOption(KBM.Language.Options.Enabled[KBM.Lang], "check", Callbacks.Enabled)
 								BossObj.Menu.Alerts[AlertID].Enabled:SetChecked(AlertData.Settings.Enabled)
-								BossObj.Menu.Alerts[AlertID].Enabled.Data = AlertData.Settings
+								BossObj.Menu.Alerts[AlertID].Enabled.Data = AlertData
 								BossObj.Menu.Alerts[AlertID].Enabled.Controller = Child
 								Child.Controller = BossObj.Menu.Alerts[AlertID].Enabled
 								BossObj.Menu.Alerts[AlertID].ColorGUI = SubHeader:CreateOption(KBM.Language.Color.Custom[KBM.Lang], "color", Callbacks.Color)
 								BossObj.Menu.Alerts[AlertID].ColorGUI:SetChecked(AlertData.Settings.Custom)
 								BossObj.Menu.Alerts[AlertID].ColorGUI.Enabled = AlertData.Settings.Enabled
 								BossObj.Menu.Alerts[AlertID].ColorGUI.Color = AlertData.Settings.Color
-								BossObj.Menu.Alerts[AlertID].ColorGUI.Data = AlertData.Settings
+								BossObj.Menu.Alerts[AlertID].ColorGUI.Data = AlertData
 							end
 						end
 					end

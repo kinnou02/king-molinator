@@ -26,13 +26,19 @@ WG.Galenir = {
 	Level = "??",
 	Active = false,
 	Name = "Warmaster Galenir",
+	NameShort = "Galenir",
 	Dead = false,
 	Available = false,
+	AlertsRef = {},
+	Menu = {},
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		AlertsRef = {
+			Enabled = true,
+			Essence = KBM.Defaults.AlertObj.Create("red"),
+		},
 	},
 }
 
@@ -45,6 +51,7 @@ WG.Lang.Galenir.French = "Ma\195\174tre de Guerre Galenir"
 -- Debuff Dictionary
 WG.Lang.Debuff = {}
 WG.Lang.Debuff.Festering = KBM.Language:Add("Festering Infection")
+WG.Lang.Debuff.Essence = KBM.Language:Add("Essence Transfer")
 
 WG.Galenir.Name = WG.Lang.Galenir[KBM.Lang]
 
@@ -60,8 +67,9 @@ end
 function WG:InitVars()
 	self.Settings = {
 		Enabled = true,
-		CastBar = self.Galenir.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
+		AlertsRef = self.Galenir.Settings.AlertsRef,
+		Alerts = KBM.Defaults.Alerts(),
 	}
 	KBMROSWG_Settings = self.Settings
 	chKBMROSWG_Settings = self.Settings
@@ -129,9 +137,7 @@ function WG:UnitHPCheck(unitDetails, unitID)
 					self.HeldTime = self.StartTime
 					self.TimeElapsed = 0
 					self.Galenir.Dead = false
-					self.Galenir.Casting = false
-					self.Galenir.CastBar:Create(unitID)
-					KBM.TankSwap:Start(KBM.Lang.Debuff.Festering[KBM.Lang])
+					KBM.TankSwap:Start(self.Lang.Debuff.Festering[KBM.Lang])
 				end
 				self.Galenir.UnitID = unitID
 				self.Galenir.Available = true
@@ -145,7 +151,6 @@ function WG:Reset()
 	self.EncounterRunning = false
 	self.Galenir.Available = false
 	self.Galenir.UnitID = nil
-	self.Galenir.CastBar:Remove()
 	self.Galenir.Dead = false
 end
 
@@ -181,6 +186,13 @@ function WG:DefineMenu()
 end
 
 function WG:Start()	
-	self.Galenir.CastBar = KBM.CastBar:Add(self, self.Galenir)
+	-- Create Alerts
+	self.Galenir.AlertsRef.Essence = KBM.Alert:Create(self.Lang.Debuff.Essence[KBM.Lang], nil, false, true, "red")
+	KBM.Defaults.AlertObj.Assign(self.Galenir)
+	
+	-- Assign Alerts and Timers to Triggers
+	self.Galenir.Triggers.Essence = KBM.Trigger:Create(self.Lang.Debuff.Essence[KBM.Lang], "buff", self.Galenir)
+	self.Galenir.Triggers.Essence:AddAlert(self.Galenir.AlertsRef.Essence, true)
+	
 	self:DefineMenu()
 end

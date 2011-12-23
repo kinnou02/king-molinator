@@ -443,9 +443,7 @@ function KM:Reset()
 	self.CurrentSwing = 0
 	self.KingPerc = 1
 	self.PrincePerc = 1
-	if not self.Settings.PercentMonitor.Visible then
-		self.FrameBase:SetVisible(false)
-	end
+	self.FrameBase:SetVisible(false)
 	self.King.CastBar:Remove()
 	self.King.Dead = false
 	self.King.Available = false
@@ -753,10 +751,7 @@ function KM:BuildDisplay()
 		self:SetNormal()
 	else
 		self:SetCompact()
-	end
-		
-	self.FrameBase:SetVisible(self.Settings.PercentMonitor.Visible)
-	self.DragFrame:SetVisible(self.Settings.PercentMonitor.Unlocked)	
+	end		
 end
 
 function KM:CastBars(units)
@@ -897,6 +892,20 @@ function KM.Custom.Encounter.Menu(Menu)
 	Child = Header:CreateOption(KM.Lang.Options.Monitor.Compact[KBM.Lang], "check", Callbacks.Compact)
 	Child:SetChecked(Settings.Compact)
 	
+end
+
+function KM.Custom.SetPage()
+	if KM.Settings.PercentMonitor.Enabled then
+		if KM.Settings.PercentMonitor.Visible then
+			KM.FrameBase:SetVisible(true)
+		end
+	end
+end
+
+function KM.Custom.ClearPage()
+	if not KM.EncounterRunning then
+		KM.FrameBase:SetVisible(false)
+	end
 end
 
 function KM.Custom.Encounter.SetPage()

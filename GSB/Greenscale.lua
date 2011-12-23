@@ -25,6 +25,7 @@ LG.Greenscale = {
 	Level = "52",
 	Active = false,
 	Name = "Lord Greenscale",
+	NameShort = "Greenscale",
 	Menu = {},
 	Castbar = nil,
 	Dead = false,
@@ -46,6 +47,7 @@ LG.Greenscale = {
 			Blight = KBM.Defaults.AlertObj.Create("red"),
 			FumesWarn = KBM.Defaults.AlertObj.Create("purple"),
 			Fumes = KBM.Defaults.AlertObj.Create("purple"),
+			Death = KBM.Defaults.AlertObj.Create("dark_green"),
 		},
 	}
 }
@@ -56,19 +58,44 @@ LG.Lang.Greenscale = KBM.Language:Add(LG.Greenscale.Name)
 LG.Lang.Greenscale.German = "Fürst Grünschuppe"
 LG.Lang.Greenscale.French = "Seigneur Vert\195\169caille"
 
+-- Ability Dictionary
 LG.Lang.Ability = {}
 LG.Lang.Ability.Blight = KBM.Language:Add("Strangling Blight")
 LG.Lang.Ability.Fumes = KBM.Language:Add("Noxious Fumes")
 
+-- Unit Dictionary
+LG.Lang.Unit = {}
+LG.Lang.Unit.Verdant = KBM.Language:Add("Verdant Annihilator")
+
+-- Mechanic Dictionary
+LG.Lang.Mechanic = {}
+LG.Lang.Mechanic.Death = KBM.Language:Add("Protective Shield")
+
 LG.Greenscale.Name = LG.Lang.Greenscale[KBM.Lang]
+
+LG.Verdant = {
+	Mod = ID,
+	Level = "??",
+	Active = false,
+	Name = LG.Lang.Unit.Verdant[KBM.Lang],
+	Dead = false, 
+	Available = false,
+	UnitID = nil,
+	Primary = false,
+	Required = 1,
+	Ignore = true,
+	Triggers = {},
+}
 
 function LG:AddBosses(KBM_Boss)
 	self.Greenscale.Descript = self.Greenscale.Name
 	self.MenuName = self.Greenscale.Descript
 	self.Bosses = {
 		[self.Greenscale.Name] = self.Greenscale,
+		[self.Verdant.Name] = self.Verdant,
 	}
-	KBM_Boss[self.Greenscale.Name] = self.Greenscale	
+	KBM_Boss[self.Greenscale.Name] = self.Greenscale
+	KBM.SubBoss[self.Verdant.Name] = self.Verdant
 end
 
 function LG:InitVars()
@@ -129,14 +156,6 @@ function LG:RemoveUnits(UnitID)
 	return false
 end
 
-function LG:Death(UnitID)
-	if self.Greenscale.UnitID == UnitID then
-		self.Greenscale.Dead = true
-		return true
-	end
-	return false
-end
-
 function LG:UnitHPCheck(unitDetails, unitID)	
 	if unitDetails and unitID then
 		if not unitDetails.player then
@@ -152,14 +171,29 @@ function LG:UnitHPCheck(unitDetails, unitID)
 					self.Phase = 1
 					self.PhaseObj:SetPhase(1)
 					self.PhaseObj.Objectives:AddPercent(self.Greenscale.Name, 75, 100)
+					self.Verdant.UnitID = nil
 				end
 				self.Greenscale.Casting = false
 				self.Greenscale.UnitID = unitID
 				self.Greenscale.Available = true
 				return self.Greenscale
+			elseif uDetails.name == self.Verdant.Name then
+				if self.Verdant.UnitID == nil then
+					self.Verdant.Casting = false
+					self.Verdant.Dead = false
+					self.Verdant.UnitID = unitID
+					self.Verdant.Available = true
+					return self.Verdant
+				end
 			end
 		end
 	end
+end
+
+function LG.AirPhase()
+	LG.PhaseObj.Objectives:Remove()
+	LG.PhaseObj:SetPhase("Air")
+	LG.PhaseObj.Objectives:AddPercent(LG.Verdant.Name, 0, 100)
 end
 
 function LG.PhaseTwo()
@@ -181,6 +215,27 @@ function LG.PhaseFour()
 	LG.Phase = 4
 	LG.PhaseObj:SetPhase("Final")
 	LG.PhaseObj.Objectives:AddPercent(LG.Greenscale.Name, 0, 25)
+end
+
+function LG:Death(UnitID)
+	if self.Greenscale.UnitID == UnitID then
+		self.Greenscale.Dead = true
+		return true
+	elseif self.Verdant.UnitID == UnitID then
+		if not self.Verdant.Dead then
+			KBM.Alert:Start(self.Greenscale.AlertsRef.Death, Inspect.Time.Real())
+			self.Verdant.Dead = true
+			self.Verdant.UnitID = nil
+			if self.Phase == 1 then
+				self.PhaseTwo()
+			elseif self.Phase == 2 then
+				self.PhaseThree()
+			elseif self.Phase == 3 then
+				self.PhaseFour()
+			end
+		end
+	end
+	return false
 end
 
 function LG:Reset()
@@ -235,6 +290,7 @@ function LG:Start()
 	self.Greenscale.AlertsRef.Fumes = KBM.Alert:Create(self.Lang.Ability.Fumes[KBM.Lang], 3, false, true, "purple")
 	self.Greenscale.AlertsRef.Fumes:NoMenu()
 	self.Greenscale.AlertsRef.FumesWarn:AlertEnd(self.Greenscale.AlertsRef.Fumes)
+	self.Greenscale.AlertsRef.Death = KBM.Alert:Create(self.Lang.Mechanic.Death[KBM.Lang], 3, true, true, "dark_green")
 	KBM.Defaults.AlertObj.Assign(self.Greenscale)
 	
 	-- Assign Timers and Alerts to Triggers
@@ -245,11 +301,11 @@ function LG:Start()
 	self.Greenscale.Triggers.Fumes:AddTimer(self.Greenscale.TimersRef.Fumes)
 	self.Greenscale.Triggers.Fumes:AddAlert(self.Greenscale.AlertsRef.FumesWarn)
 	self.Greenscale.Triggers.PhaseTwo = KBM.Trigger:Create(75, "percent", self.Greenscale)
-	self.Greenscale.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
+	self.Greenscale.Triggers.PhaseTwo:AddPhase(self.AirPhase)
 	self.Greenscale.Triggers.PhaseThree = KBM.Trigger:Create(50, "percent", self.Greenscale)
-	self.Greenscale.Triggers.PhaseThree:AddPhase(self.PhaseThree)
+	self.Greenscale.Triggers.PhaseThree:AddPhase(self.AirPhase)
 	self.Greenscale.Triggers.PhaseFour = KBM.Trigger:Create(25, "percent", self.Greenscale)
-	self.Greenscale.Triggers.PhaseFour:AddPhase(self.PhaseFour)
+	self.Greenscale.Triggers.PhaseFour:AddPhase(self.AirPhase)
 	
 	self.Greenscale.CastBar = KBM.CastBar:Add(self, self.Greenscale)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

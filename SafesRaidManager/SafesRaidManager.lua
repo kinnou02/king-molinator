@@ -149,7 +149,7 @@ local function SRM_SetSpecifier(Specifier)
 	function Unit:PetLoad()
 		if self.PetID then
 			if not SRM_Units.Pets[self.PetID] then
-				petDetails = Inspect.Unit.Detail(self.PetID)
+				local petDetails = Inspect.Unit.Detail(self.PetID)
 				if petDetails then
 					--print("New pet added!")
 					SRM_Units.Pets[self.PetID] = {}
@@ -245,7 +245,7 @@ local function SRM_SetSpecifier(Specifier)
 	function Unit:Load()
 		if self.UnitID then
 			if not SRM_Units[self.UnitID] then
-				uDetails = Inspect.Unit.Detail(self.UnitID)
+				local uDetails = Inspect.Unit.Detail(self.UnitID)
 				if uDetails then
 					SRM_Units[self.UnitID] = {}
 					SRM_Units[self.UnitID].Specifier = self.Spec
@@ -290,30 +290,34 @@ end
 
 local function SRM_Combat(units)
 	for UnitID, State in pairs(units) do
-		uDetails = Inspect.Unit.Detail(UnitID)
-		sent = false
+		local uDetails = Inspect.Unit.Detail(UnitID)
+		local sent = false
 		if uDetails then
 			if State then
 				-- Entered Combat
 				if SRM_Units[UnitID] then
-					SRM_Units[UnitID].Combat = true
-					LibSRM.Group.Combat = LibSRM.Group.Combat + 1
-					if LibSRM.Group.Combat == 1 then
-						SRM_Group.Combat.Start()
+					if not SRM_Units[UnitID].Combat then
+						SRM_Units[UnitID].Combat = true
+						LibSRM.Group.Combat = LibSRM.Group.Combat + 1
+						if LibSRM.Group.Combat == 1 then
+							SRM_Group.Combat.Start()
+						end
+						SRM_Group.Combat.Enter(UnitID)
+						sent = true
 					end
-					SRM_Group.Combat.Enter(UnitID)
-					sent = true
 				end
 				if LibSRM.Player.ID == UnitID then
-					LibSRM.Player.Combat = true
-					SRM_System.Player.Combat.Enter()
-					if not sent then
-						SRM_Group.Combat.Start()
+					if not LibSRM.Player.Combat then
+						LibSRM.Player.Combat = true
+						SRM_System.Player.Combat.Enter()
+						if not sent then
+							SRM_Group.Combat.Start()
+						end
+						sent = true
 					end
-					sent = true
 				end
 				if not sent then
-					if not SRM_Units.Pets[UnitID] then
+					if not SRM_Units.Pets[UnitID] and not SRM_Units[UnitID] then
 						if UnitID ~= LibSRM.Player.PetID then
 							SRM_System.Combat.Enter(UnitID)
 						end
@@ -322,24 +326,28 @@ local function SRM_Combat(units)
 			else
 				-- Left Combat
 				if SRM_Units[UnitID] then
-					SRM_Units[UnitID].Combat = false
-					LibSRM.Group.Combat = LibSRM.Group.Combat - 1
-					if LibSRM.Group.Combat == 0 then
-						SRM_Group.Combat.End()
+					if SRM_Units[UnitID].Combat then
+						SRM_Units[UnitID].Combat = false
+						LibSRM.Group.Combat = LibSRM.Group.Combat - 1
+						if LibSRM.Group.Combat == 0 then
+							SRM_Group.Combat.End()
+						end
+						SRM_Group.Combat.Leave(UnitID)
+						sent = true
 					end
-					SRM_Group.Combat.Leave(UnitID)
-					sent = true
 				end
 				if LibSRM.Player.ID == UnitID then
-					LibSRM.Player.Combat = true
-					SRM_System.Player.Combat.Leave()
-					if not sent then
-						SRM_Group.Combat.End()
+					if LibSRM.Player.Combat then
+						LibSRM.Player.Combat = false
+						SRM_System.Player.Combat.Leave()
+						if not sent then
+							SRM_Group.Combat.End()
+						end
+						sent = true
 					end
-					sent = true
 				end
 				if not sent then
-					if not SRM_Units.Pets[UnitID] then
+					if not SRM_Units.Pets[UnitID] and not SRM_Units[UnitID] then
 						if UnitID ~= LibSRM.Player.PetID then
 							SRM_System.Combat.Leave(UnitID)
 						end

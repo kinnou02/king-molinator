@@ -30,7 +30,7 @@ MX.Murd = {
 	Name = "Murdantix",
 	Castbar = nil,
 	CastFilters = {},
-	HasCastFilters = false,
+	HasCastFilters = true,
 	Timers = {},
 	TimersRef = {},
 	AlertsRef = {},
@@ -41,6 +41,11 @@ MX.Murd = {
 	TimeOut = 5,
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
+		Filters = {
+			Enabled = true,
+			Trauma = KBM.Defaults.CastFilter.Create("yellow"),
+			Blast = KBM.Defaults.CastFilter.Create(),
+		},
 		TimersRef = {
 			Enabled = true,
 			Crush = KBM.Defaults.TimerObj.Create(),
@@ -98,6 +103,7 @@ function MX:InitVars()
 		TimersRef = MX.Murd.Settings.TimersRef,
 		AlertsRef = MX.Murd.Settings.AlertsRef,
 		Alerts = KBM.Defaults.Alerts(),
+		CastFilters = MX.Murd.Settings.Filters,
 	}
 	KBMMX_Settings = self.Settings
 	chKBMMX_Settings = self.Settings	
@@ -124,7 +130,12 @@ function MX:LoadVars()
 		chKBMMX_Settings = self.Settings
 	else
 		KBMMX_Settings = self.Settings
-	end	
+	end
+	
+	self.Murd.CastFilters[self.Lang.Trauma[KBM.Lang]] = self.Settings.CastFilters.Trauma
+	self.Murd.CastFilters[self.Lang.Blast[KBM.Lang]] = self.Settings.CastFilters.Blast
+	KBM.Defaults.CastFilter.Assign(self.Murd)
+	
 end
 
 function MX:SaveVars()	
