@@ -1,9 +1,9 @@
-﻿﻿v0.8.3
+﻿﻿﻿v0.8.3
 * System
 ** Change: Improved accuracy of group combat state monitoring.
 ** Fixed: Buff removed triggers were being handled incorrectly for some buffs.
 * Alerts
-** Fixed: Alerts were ignoring Enabled/Disabled settings. (engine compatability issue)
+** Fixed: Alerts were ignoring Enabled/Disabled settings. (engine compatibility issue)
 ** Note: Previously saved alert options will begin working as you intended.
 * Tank-Swap
 ** New: Added a slight texture to T-SM's Tank HP and debuff duration bars.
@@ -14,7 +14,7 @@
 *** The monitor will only display when the encounter options page is active, and set to show and enabled.
 *** The monitor will only display during the encounter if enabled. (Show has no effect beyond options)
 ** Grugonim
-*** Fixed: Breath counter was not working as intented by about a mile.
+*** Fixed: Breath counter was not working as intended by about a mile.
 * River of Souls
 ** Dark Foci
 *** New: Added castbar for Force of Corruption.
@@ -22,7 +22,7 @@
 *** New: Timer and personal Alert for Destabilize Soul.
 *** New: Force of Corruption: Added solid orange alert with countdown for Corrupt Blast.
 *** New: Added phase tracking for Before and After Darkness.
-*** New: Added Objective tracking with percantages.
+*** New: Added Objective tracking with percentages.
 ** Warmaster Galenir
 *** Fixed: Incorrect Tank-Swap initiation.
 *** New: Solid red personal alert and countdown for Essence Transfer.
@@ -33,8 +33,7 @@
 *** New: Added phase tracking for Air Phase.
 *** New: Added percentage tracking for Verdant Annihilator in Objectives list.
 *** New: Added alert for death of Verdant Annihilator (Protective Shield up).
-----
-v0.8.2
+----v0.8.2
 * System
 ** New: Buff removed triggers are now available for use by the engine.
 ** New: Encounter timers can now trigger timers, alerts and phases.
