@@ -18,6 +18,8 @@ local AD = {
 	HasPhases = true,
 	Lang = {},
 	Enrage = 60 * 19,
+	GhostCount = 0,
+	PillarDeaths = 0,
 	ID = "Alsbeth",	
 }
 
@@ -26,13 +28,33 @@ AD.Alsbeth = {
 	Level = "??",
 	Active = false,
 	Name = "Alsbeth the Discordant",
+	NameShort = "Alsbeth",
 	Dead = false,
+	TimersRef = {},
+	AlertsRef = {},
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
+		TimersRef = {
+			Enabled = true,
+			Phase = KBM.Defaults.TimerObj.Create(),
+			Blast = KBM.Defaults.TimerObj.Create("red"),
+			Meteor = KBM.Defaults.TimerObj.Create("orange"),
+			MeteorFirst = KBM.Defaults.TimerObj.Create("orange"),
+			Shield = KBM.Defaults.TimerObj.Create("blue"),
+		},
+		AlertsRef = {
+			Enabled = true,
+			PunishWarn = KBM.Defaults.AlertObj.Create("purple"),
+			Punish = KBM.Defaults.AlertObj.Create("purple"),
+			Blast = KBM.Defaults.AlertObj.Create("red"),
+			Ground = KBM.Defaults.AlertObj.Create("yellow"),
+			Meteor = KBM.Defaults.AlertObj.Create("orange"),
+			Shield = KBM.Defaults.AlertObj.Create("blue"),
+		},
 	},
 }
 
@@ -42,6 +64,98 @@ AD.Lang.Alsbeth = KBM.Language:Add(AD.Alsbeth.Name)
 AD.Lang.Alsbeth.German = "Alsbeth die Streitsuchende"
 AD.Lang.Alsbeth.French = "Alsbeth la Discordante"
 
+-- Ability Dictionary
+AD.Lang.Ability = {}
+AD.Lang.Ability.Punish = KBM.Language:Add("Punish Soul")
+AD.Lang.Ability.Ground = KBM.Language:Add("Discordant Ground")
+AD.Lang.Ability.Blast = KBM.Language:Add("Discordant Blast")
+AD.Lang.Ability.Soul = KBM.Language:Add("Soul Destruction")
+AD.Lang.Ability.Meteor = KBM.Language:Add("Discordant Meteor")
+
+-- Buff Dictionary
+AD.Lang.Buff = {}
+AD.Lang.Buff.Shield = KBM.Language:Add("Shield of Darkness")
+
+-- Verbose Dictionary
+AD.Lang.Verbose = {}
+AD.Lang.Verbose.Phase = KBM.Language:Add("Until air phase")
+AD.Lang.Verbose.PunishWarn = KBM.Language:Add(AD.Lang.Ability.Punish[KBM.Lang].." (Raid-wide warning)")
+AD.Lang.Verbose.Punish = KBM.Language:Add(AD.Lang.Ability.Punish[KBM.Lang].." (Personal Alert)")
+AD.Lang.Verbose.Meteor = KBM.Language:Add(AD.Lang.Ability.Meteor[KBM.Lang].." (First in phase 2)")
+
+-- Unit Dictionary
+AD.Lang.Unit = {}
+AD.Lang.Unit.Pillar = KBM.Language:Add("Discordant Pillar")
+AD.Lang.Unit.PillarShort = KBM.Language:Add("Pillar")
+AD.Lang.Unit.Harbinger = KBM.Language:Add("Soul Harbinger")
+AD.Lang.Unit.HarbingerShort = KBM.Language:Add("Harbinger")
+AD.Lang.Unit.Thief = KBM.Language:Add("Soul Thief")
+AD.Lang.Unit.ThiefShort = KBM.Language:Add("Thief")
+AD.Lang.Unit.Magus = KBM.Language:Add("Soul Magus")
+AD.Lang.Unit.MagusShort = KBM.Language:Add("Magi")
+
+AD.Harbinger = {
+	Mod = AD,
+	Level = "??",
+	Active = false,
+	Name = AD.Lang.Unit.Harbinger[KBM.Lang],
+	NameShort = AD.Lang.Unit.HarbingerShort[KBM.Lang],
+	Dead = false,
+	Available = false,
+	UnitID = nil,
+	Ignore = true,
+	Triggers = {},
+}
+
+AD.Thief = {
+	Mod = AD,
+	Level = "??",
+	Active = false,
+	Name = AD.Lang.Unit.Thief[KBM.Lang],
+	NameShort = AD.Lang.Unit.ThiefShort[KBM.Lang],
+	Dead = false,
+	Available = false,
+	UnitID = nil,
+	Ignore = true,
+	Triggers = {},
+}
+
+AD.Magus = {
+	Mod = AD,
+	Level = "??",
+	Active = false,
+	Name = AD.Lang.Unit.Magus[KBM.Lang],
+	NameShort = AD.Lang.Unit.MagusShort[KBM.Lang],
+	TimersRef = {},
+	AlertsRef = {},
+	Dead = false,
+	Available = false,
+	UnitID = nil,
+	Ignore = true,
+	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+		TimersRef = {
+			Enabled = true,
+			Soul = KBM.Defaults.TimerObj.Create("yellow"),
+		},
+		AlertsRef = {
+			Enabled = true,
+			Soul = KBM.Defaults.AlertObj.Create("yellow"),
+		},
+	},
+}
+
+AD.Pillar = {
+	Mod = AD,
+	Level = "??",
+	Name = AD.Lang.Unit.Pillar[KBM.Lang],
+	NameShort = AD.Lang.Unit.PillarShort[KBM.Lang],
+	UnitList = {},
+	Ignore = true,
+	Type = "multi",
+}
+
 AD.Alsbeth.Name = AD.Lang.Alsbeth[KBM.Lang]
 
 function AD:AddBosses(KBM_Boss)
@@ -49,15 +163,39 @@ function AD:AddBosses(KBM_Boss)
 	self.MenuName = self.Alsbeth.Descript
 	self.Bosses = {
 		[self.Alsbeth.Name] = self.Alsbeth,
+		[self.Harbinger.Name] = self.Harbinger,
+		[self.Thief.Name] = self.Thief,
+		[self.Magus.Name] = self.Magus,
+		[self.Pillar.Name] = self.Pillar,
 	}
 	KBM_Boss[self.Alsbeth.Name] = self.Alsbeth	
+	KBM.SubBoss[self.Harbinger.Name] = self.Harbinger
+	KBM.SubBoss[self.Thief.Name] = self.Thief
+	KBM.SubBoss[self.Magus.Name] = self.Magus
+	KBM.SubBoss[self.Pillar.Name] = self.Pillar
 end
 
 function AD:InitVars()
 	self.Settings = {
 		Enabled = true,
-		CastBar = self.Alsbeth.Settings.CastBar,
+		CastBar = {
+			Multi = true,
+			Override = true,
+		},
 		EncTimer = KBM.Defaults.EncTimer(),
+		MechTimer = KBM.Defaults.MechTimer(),
+		Alerts = KBM.Defaults.Alerts(),
+		PhaseMon = KBM.Defaults.PhaseMon(),
+		Alsbeth = {
+			CastBar = self.Alsbeth.Settings.CastBar,
+			TimersRef = self.Alsbeth.Settings.TimersRef,
+			AlertsRef = self.Alsbeth.Settings.AlertsRef,
+		},
+		Magus = {
+			CastBar = self.Magus.Settings.CastBar,
+			TimersRef = self.Magus.Settings.TimersRef,
+			AlertsRef = self.Magus.Settings.AlertsRef,
+		},
 	}
 	KBMROSAD_Settings = self.Settings
 	chKBMROSAD_Settings = self.Settings
@@ -84,7 +222,14 @@ function AD:LoadVars()
 		chKBMROSAD_Settings = self.Settings
 	else
 		KBMROSAD_Settings = self.Settings
-	end	
+	end
+	
+	self.Settings.CastBar.Multi = true
+	self.Settings.CastBar.Override = true
+	
+	self.Settings.Alsbeth.CastBar.Multi = true
+	self.Settings.Alsbeth.CastBar.Override = true
+	
 end
 
 function AD:SaveVars()
@@ -106,19 +251,71 @@ function AD:RemoveUnits(UnitID)
 	return false
 end
 
+function AD.AirPhase()
+	AD.Phase = 2
+	AD.GhostCount = AD.GhostCount + 1
+	AD.PillarDeaths = 0
+	if AD.GhostCount > 3 then
+		AD.GhostCount = 3
+	end
+	AD.PhaseObj:SetPhase("Air")
+	AD.PhaseObj.Objectives:AddDeath(AD.Pillar.Name, AD.GhostCount, 0)
+	KBM.MechTimer:AddStart(AD.Alsbeth.TimersRef.MeteorFirst)
+end
+
+function AD.GroundPhase()
+	AD.Phase = 1
+	AD.PhaseObj.Objectives:Remove()
+	AD.PhaseObj:SetPhase("Ground")
+	AD.PhaseObj.Objectives:AddPercent(AD.Alsbeth.Name, 20, 100)
+	AD.MechTimer:AddRemove(self.Alsbeth.TimersRef.Meteor)
+	AD.MechTimer:AddStart(self.Alsbeth.TimersRef.Phase)
+end
+
+function AD.FinalPhase()
+	AD.Phase = 3
+	AD.PhaseObj.Objectives:Remove()
+	AD.PhaseObj:SetPhase("Final")
+	AD.PhaseObj.Objectives:AddPercent(AD.Alsbeth.Name, 0, 20)
+end
+
 function AD:Death(UnitID)
 	if self.Alsbeth.UnitID == UnitID then
 		self.Alsbeth.Dead = true
 		return true
 	end
+	if self.Phase == 2 then
+		if self.Magus.UnitID == UnitID then
+			self.Magus.Dead = true
+			self.Magus.CastBar:Remove()
+			self.Magus.UnitID = nil
+		elseif self.Thief.UnitID == UnitID then
+			self.Thief.Dead = true
+			self.Thief.UnitID = nil
+		elseif self.Harbinger.UnitID == UnitID then
+			self.Harbinger.Dead = true
+			self.Harbinger.UnitID = nil
+		else
+			if self.Phase == 2 then
+				if self.Pillar.UnitList[UnitID] then
+					if not self.Pillar.UnitList[UnitID].Dead then
+						self.PillarDeaths = self.PillarDeaths + 1
+						if self.PillarDeaths == self.GhostCount then
+							self.GroundPhase()
+						end
+					end
+				end
+			end
+		end
+	end	
 	return false
 end
 
-function AD:UnitHPCheck(unitDetails, unitID)
+function AD:UnitHPCheck(uDetails, unitID)
 	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if unitDetails.name == self.Alsbeth.Name then
+	if uDetails and unitID then
+		if not uDetails.player then
+			if uDetails.name == self.Alsbeth.Name then
 				if not self.Alsbeth.UnitID then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
@@ -127,10 +324,54 @@ function AD:UnitHPCheck(unitDetails, unitID)
 					self.Alsbeth.Dead = false
 					self.Alsbeth.Casting = false
 					self.Alsbeth.CastBar:Create(unitID)
+					self.PhaseObj:Start(self.StartTime)
+					self.PhaseObj.Objectives:AddPercent(self.Alsbeth.Name, 20, 100)
+					self.PhaseObj:SetPhase("Ground")
+					self.GhostCount = 0
+					self.Phase = 1
+					KBM.MechTimer:AddStart(self.Alsbeth.TimersRef.Phase)
 				end
 				self.Alsbeth.UnitID = unitID
 				self.Alsbeth.Available = true
 				return self.Alsbeth
+			elseif uDetails.name == self.Pillar.Name then
+				if self.Phase < 3 then
+					if not self.Bosses[uDetails.name].UnitList[unitID] then
+						SubBossObj = {
+							Mod = AD,
+							Level = "??",
+							Name = uDetails.name,
+							Dead = false,
+							Casting = false,
+							UnitID = unitID,
+							Available = true,
+						}
+						self.Bosses[uDetails.name].UnitList[unitID] = SubBossObj
+					else
+						self.Bosses[uDetails.name].UnitList[unitID].Available = true
+						self.Bosses[uDetails.name].UnitList[unitID].UnitID = UnitID
+					end
+					return self.Bosses[uDetails.name].UnitList[unitID]
+				end
+			else
+				if self.Phase < 3 then
+					if not self.Bosses[uDetails.name].UnitID then
+						self.Bosses[uDetails.name].UnitID = unitID
+						self.Bosses[uDetails.name].Available = true
+						self.Bosses[uDetails.name].Dead = false
+						if uDetails.name == self.Magus.Name then
+							self.Magus.CastBar:Create(unitID)
+						end
+						if self.Phase ~= 2 then
+							self.AirPhase()
+						end
+						self.PhaseObj.Objectives:AddPercent(uDetails.name, 0, 100)
+					else
+						self.Bosses[uDetails.name].Available = true
+						self.Bosses[uDetails.name].UnitID = unitID
+					end
+					return self.Bosses[uDetails.name]
+				end
 			end
 		end
 	end
@@ -142,6 +383,16 @@ function AD:Reset()
 	self.Alsbeth.UnitID = nil
 	self.Alsbeth.CastBar:Remove()
 	self.Alsbeth.Dead = false
+	self.PhaseObj:End(Inspect.Time.Real())
+	self.GhostCount = 0
+	self.PillarCount = 0
+	self.Pillar.UnitList = {}
+	self.Magus.UnitID = nil
+	self.Magus.Dead = false
+	self.Harbinger.UnitID = nil
+	self.Harbinger.Dead = false
+	self.Thief.UnitID = nil
+	self.Thief.Dead = false
 end
 
 function AD:Timer()	
@@ -171,11 +422,86 @@ function AD.Alsbeth:SetAlerts(bool)
 	end
 end
 
+function AD.Magus:SetTimers(bool)	
+	if bool then
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = TimerObj.Settings.Enabled
+		end
+	else
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = false
+		end
+	end
+end
+
+function AD.Magus:SetAlerts(bool)
+	if bool then
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = AlertObj.Settings.Enabled
+		end
+	else
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = false
+		end
+	end
+end
+
 function AD:DefineMenu()
 	self.Menu = ROS.Menu:CreateEncounter(self.Alsbeth, self.Enabled)
 end
 
-function AD:Start()	
+function AD:Start()
+	-- Create Timers
+	self.Alsbeth.TimersRef.Phase = KBM.MechTimer:Add(self.Lang.Verbose.Phase[KBM.Lang], 45)
+	self.Alsbeth.TimersRef.Blast = KBM.MechTimer:Add(self.Lang.Ability.Blast[KBM.Lang], 38)
+	self.Alsbeth.TimersRef.Meteor = KBM.MechTimer:Add(self.Lang.Ability.Meteor[KBM.Lang], 36)
+	self.Alsbeth.TimersRef.MeteorFirst = KBM.MechTimer:Add(self.Lang.Ability.Meteor[KBM.Lang], 10)
+	self.Alsbeth.TimersRef.MeteorFirst.MenuName = self.Lang.Verbose.Meteor[KBM.Lang]
+	self.Alsbeth.TimersRef.Shield = KBM.MechTimer:Add(self.Lang.Buff.Shield[KBM.Lang], 32)
+	self.Magus.TimersRef.Soul = KBM.MechTimer:Add(self.Lang.Ability.Soul[KBM.Lang], 10)
+	KBM.Defaults.TimerObj.Assign(self.Alsbeth)
+	KBM.Defaults.TimerObj.Assign(self.Magus)
+	
+	-- Create Alerts
+	self.Alsbeth.AlertsRef.PunishWarn = KBM.Alert:Create(self.Lang.Ability.Punish[KBM.Lang], nil, true, true, "purple")
+	self.Alsbeth.AlertsRef.PunishWarn.MenuName = self.Lang.Verbose.PunishWarn[KBM.Lang]
+	self.Alsbeth.AlertsRef.Punish = KBM.Alert:Create(self.Lang.Ability.Punish[KBM.Lang], nil, false, true, "purple")
+	self.Alsbeth.AlertsRef.Punish:Important()
+	self.Alsbeth.AlertsRef.Punish.MenuName = self.Lang.Verbose.Punish[KBM.Lang]
+	self.Alsbeth.AlertsRef.Blast = KBM.Alert:Create(self.Lang.Ability.Blast[KBM.Lang], nil, true, true, "red")
+	self.Alsbeth.AlertsRef.Ground = KBM.Alert:Create(self.Lang.Ability.Ground[KBM.Lang], nil, true, true, "yellow")
+	self.Alsbeth.AlertsRef.Meteor = KBM.Alert:Create(self.Lang.Ability.Meteor[KBM.Lang], 12, false, true, "orange")
+	self.Alsbeth.AlertsRef.Shield = KBM.Alert:Create(self.Lang.Buff.Shield[KBM.Lang], nil, false, true, "blue")
+	self.Magus.AlertsRef.Soul = KBM.Alert:Create(self.Lang.Ability.Soul[KBM.Lang], nil, true, true, "yellow")
+	KBM.Defaults.AlertObj.Assign(self.Alsbeth)
+	KBM.Defaults.AlertObj.Assign(self.Magus)
+	
+	-- Assign Timers and Alerts to triggers.
+	self.Alsbeth.Triggers.PunishWarn = KBM.Trigger:Create(self.Lang.Ability.Punish[KBM.Lang], "cast", self.Alsbeth)
+	self.Alsbeth.Triggers.PunishWarn:AddAlert(self.Alsbeth.AlertsRef.PunishWarn)
+	self.Alsbeth.Triggers.Punish = KBM.Trigger:Create(self.Lang.Ability.Punish[KBM.Lang], "buff", self.Alsbeth)
+	self.Alsbeth.Triggers.Punish:AddAlert(self.Alsbeth.AlertsRef.Punish, true)
+	self.Alsbeth.Triggers.Final = KBM.Trigger:Create(20, "percent", self.Alsbeth)
+	self.Alsbeth.Triggers.Final:AddPhase(self.FinalPhase)
+	self.Alsbeth.Triggers.Blast = KBM.Trigger:Create(self.Lang.Ability.Blast[KBM.Lang], "cast", self.Alsbeth)
+	self.Alsbeth.Triggers.Blast:AddTimer(self.Alsbeth.TimersRef.Blast)
+	self.Alsbeth.Triggers.Blast:AddAlert(self.Alsbeth.AlertsRef.Blast)
+	self.Alsbeth.Triggers.Ground = KBM.Trigger:Create(self.Lang.Ability.Ground[KBM.Lang], "cast", self.Alsbeth)
+	self.Alsbeth.Triggers.Ground:AddAlert(self.Alsbeth.AlertsRef.Ground)
+	self.Alsbeth.Triggers.Meteor = KBM.Trigger:Create(self.Lang.Ability.Meteor[KBM.Lang], "cast", self.Alsbeth)
+	self.Alsbeth.Triggers.Meteor:AddTimer(self.Alsbeth.TimersRef.Meteor)
+	self.Alsbeth.Triggers.Meteor:AddAlert(self.Alsbeth.AlertsRef.Meteor)
+	self.Alsbeth.Triggers.Shield = KBM.Trigger:Create(self.Lang.Buff.Shield[KBM.Lang], "buff", self.Alsbeth)
+	self.Alsbeth.Triggers.Shield:AddTimer(self.Alsbeth.TimersRef.Shield)
+	self.Alsbeth.Triggers.Shield:AddAlert(self.Alsbeth.AlertsRef.Shield)
+	self.Alsbeth.Triggers.ShieldEnd = KBM.Trigger:Create(self.Lang.Buff.Shield[KBM.Lang], "buffRemove", self.Alsbeth)
+	self.Alsbeth.Triggers.ShieldEnd:AddStop(self.Alsbeth.AlertsRef.Shield)
+	self.Magus.Triggers.Soul = KBM.Trigger:Create(self.Lang.Ability.Soul[KBM.Lang], "cast", self.Magus)
+	self.Magus.Triggers.Soul:AddTimer(self.Magus.TimersRef.Soul)
+	self.Magus.Triggers.Soul:AddAlert(self.Magus.AlertsRef.Soul)
+	
+	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self.Alsbeth.CastBar = KBM.CastBar:Add(self, self.Alsbeth)
+	self.Magus.CastBar = KBM.CastBar:Add(self, self.Magus)
 	self:DefineMenu()
 end

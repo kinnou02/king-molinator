@@ -178,7 +178,14 @@ function MZ.PhaseTwo()
 	MZ.Phase = 2
 	MZ.PhaseObj.Objectives:Remove()
 	MZ.PhaseObj:SetPhase(2)
-	MZ.PhaseObj.Objectives:AddPercent(MZ.Matron.Name, 0, 40)	
+	MZ.PhaseObj.Objectives:AddPercent(MZ.Matron.Name, 30, 40)	
+end
+
+function MZ.PhaseThree()
+	MZ.Phase = 3
+	MZ.PhaseObj.Objectives:Remove()
+	MZ.PhaseObj:SetPhase("Final")
+	MZ.PhaseObj.Objectives:AddPercent(MZ.Matron.Name, 0, 30)	
 end
 
 function MZ:UnitHPCheck(unitDetails, unitID)	
@@ -278,6 +285,8 @@ function MZ:Start()
 	self.Matron.Triggers.Shadow:AddTimer(self.Matron.TimersRef.Shadow)
 	self.Matron.Triggers.PhaseTwo = KBM.Trigger:Create(40, "percent", self.Matron)
 	self.Matron.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
+	self.Matron.Triggers.PhaseThree = KBM.Trigger:Create(30, "percent", self.Matron)
+	self.Matron.Triggers.PhaseThree:AddPhase(self.PhaseThree)
 	
 	-- Assign Castbar object
 	self.Matron.CastBar = KBM.CastBar:Add(self, self.Matron, true)

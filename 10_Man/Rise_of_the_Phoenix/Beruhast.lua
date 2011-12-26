@@ -17,6 +17,7 @@ local BT = {
 	Lang = {},
 	ID = "Beruhast",
 	Menu = {},
+	Enrage = 60 * 8,
 }
 
 BT.Beruhast = {

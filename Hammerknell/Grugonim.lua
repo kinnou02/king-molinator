@@ -94,6 +94,7 @@ GR.Lang.Ability.Breath.German = "Nekrotischer Atem"
 GR.Lang.Ability.Disruption = KBM.Language:Add("Seismic Disruption")
 GR.Lang.Ability.Disruption.German = "Seismische Störung"
 GR.Lang.Ability.Swarm = KBM.Language:Add("Parasite Swarm")
+GR.Lang.Ability.Swarm.German = "Parasitenschwarm"
 
 -- Debuff Dictionary
 GR.Lang.Debuff = {}

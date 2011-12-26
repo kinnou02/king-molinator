@@ -74,12 +74,16 @@ PH.Lang.Unit.Aleria.German = "Orakel Aleria"
 -- Ability Dictionary
 PH.Lang.Ability = {}
 PH.Lang.Ability.Wrath = KBM.Language:Add("Prince's Wrath")
+PH.Lang.Ability.Wrath.German = "Zorn des Prinzen"
 PH.Lang.Ability.Soul = KBM.Language:Add("Soul Fracture")
+PH.Lang.Ability.Soul.German = "Seelenfraktur"
 PH.Lang.Ability.Cotton = KBM.Language:Add("Contagious Cottontail")
+PH.Lang.Ability.Cotton.German = "Grüner Schlag"
 
 -- Buff Dictionary
 PH.Lang.Buff = {}
 PH.Lang.Buff.Life = KBM.Language:Add("Invocation of Life")
+PH.Lang.Buff.Life.German = "Beschwörung des Lebens"
 
 PH.Hylas.Name = PH.Lang.Hylas[KBM.Lang]
 

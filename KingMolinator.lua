@@ -9,6 +9,8 @@ local KingMol_Main = {}
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 KBM.BossMod = {}
+KBM.Lang = Inspect.System.Language()
+KBM.Language = {}
 KBM.ID = "KingMolinator"
 KBM.ModList = {}
 KBM.Testing = false
@@ -188,7 +190,7 @@ function KBM.Defaults.AlertObj.Assign(BossObj)
 			BossObj.Settings.AlertsRef[ID].ID = ID
 		else
 			error(	"Warning: "..ID.." is undefined in AlertsRef"..
-					"/nfor boss: "..BossObj.Name)
+					"\nfor boss: "..BossObj.Name)
 		end
 	end
 end
@@ -398,8 +400,6 @@ function KBM.ToAbilityID(num)
 	return string.format("a%016X", num)
 end
 
-KBM.Lang = Inspect.System.Language()
-KBM.Language = {}
 KBM.MenuGroup = {}
 local KBM_Boss = {}
 KBM.SubBoss = {}
@@ -510,8 +510,11 @@ KBM.Language.Color.Purple = KBM.Language:Add("Purple")
 -- Cast-bar related
 KBM.Language.Options = {}
 KBM.Language.Options.CastbarOverride = KBM.Language:Add("Castbar: Override")
+KBM.Language.Options.CastbarOverride.German = "Zauberbalken: Einstellungen."
 KBM.Language.Options.Pinned = KBM.Language:Add("Pin to ")
+KBM.Language.Options.Pinned.German = "Anheften an "
 KBM.Language.Options.FiltersEnabled = KBM.Language:Add("Enable cast filters")
+KBM.Language.Options.FiltersEnabled.German = "Aktiviere Zauber Filter"
 KBM.Language.Options.Castbar = KBM.Language:Add("Cast-bars")
 KBM.Language.Options.Castbar.French = "Barres-cast"
 KBM.Language.Options.Castbar.German = "Zauberbalken"
@@ -520,7 +523,9 @@ KBM.Language.Options.CastbarEnabled.French = "Barres-cast activ\195\169."
 KBM.Language.Options.CastbarEnabled.German = "Zauberbalken anzeigen."
 -- Timer Options
 KBM.Language.Options.MechTimerOverride = KBM.Language:Add("Mechanic Timers: Override.")
+KBM.Language.Options.MechTimerOverride.German = "Mechanik Timer: Einstellungen."
 KBM.Language.Options.EncTimerOverride = KBM.Language:Add("Encounter Timer: Override.")
+KBM.Language.Options.EncTimerOverride.German = "Boss Timer: Einstellungen."
 KBM.Language.Options.EncTimers = KBM.Language:Add("Encounter Timers enabled.")
 KBM.Language.Options.EncTimers.German = "Boss Timer anzeigen."
 KBM.Language.Options.MechanicTimers = KBM.Language:Add("Mechanic Timers enabled.")
@@ -550,6 +555,7 @@ KBM.Language.Options.LockAnchor.French = "D\195\169bloquer Ancrage."
 KBM.Language.Options.LockAnchor.German = "Anker ist verschiebbar."
 -- Phase Monitor
 KBM.Language.Options.PhaseMonOverride = KBM.Language:Add("Phase Monitor: Override.")
+KBM.Language.Options.PhaseMonOverride.German = "Phasen Monitor: Einstellungen."
 KBM.Language.Options.PhaseMonitor = KBM.Language:Add("Phase Monitor")
 KBM.Language.Options.PhaseMonitor.German = "Phasen Monitor"
 KBM.Language.Options.PhaseEnabled = KBM.Language:Add("Enable Phase Monitor.")
@@ -576,6 +582,7 @@ KBM.Language.Options.TankSwapEnabled = KBM.Language:Add("Tank-Swaps enabled.")
 KBM.Language.Options.TankSwapEnabled.German = "Tank Wechsel anzeigen."
 -- Alert related
 KBM.Language.Options.AlertsOverride = KBM.Language:Add("Alerts: Override")
+KBM.Language.Options.AlertsOverride.German = "Alarmierungs: Einstellungen."
 KBM.Language.Options.Alert = KBM.Language:Add("Screen Alerts")
 KBM.Language.Options.Alert.German = "Alarmierungen"
 KBM.Language.Options.Alert.French = "Alerte \195\160 l'\195\169cran"
@@ -589,16 +596,22 @@ KBM.Language.Options.AlertText = KBM.Language:Add("Alert warning text enabled.")
 KBM.Language.Options.AlertText.German = "Alarmierungs-Text aktiviert."
 KBM.Language.Options.AlertText.French = "Texte Avertissement Alerte activ\195\169 ."
 KBM.Language.Options.UnlockFlash = KBM.Language:Add("Unlock alert border")
+KBM.Language.Options.UnlockFlash.German = "Alarmierungs Ecken sind änderbar."
 -- Size Dictionary
 KBM.Language.Options.UnlockWidth = KBM.Language:Add("Unlock width for scaling.")
+KBM.Language.Options.UnlockWidth.German = "Breite ist skalierbar."
 KBM.Language.Options.UnlockHeight = KBM.Language:Add("Unlock height for scaling.")
+KBM.Language.Options.UnlockHeight.German = "Höhe ist skalierbar."
 KBM.Language.Options.UnlockText = KBM.Language:Add("Unlock Text size.")
+KBM.Language.Options.UnlockText.German = "Textgröße ist änderbar."
 KBM.Language.Options.UnlockAlpha = KBM.Language:Add("Unlock transparency.")
+KBM.Language.Options.UnlockAlpha.German = "Transparenz ist änderbar."
 -- Misc.
 KBM.Language.Options.Character = KBM.Language:Add("Saving settings for this character only.")
 KBM.Language.Options.Character.German = "Einstellungen nur für diesen Charakter speichern."
 KBM.Language.Options.ModEnabled = KBM.Language:Add("Enable King Boss Mods v"..AddonData.toc.Version)
 KBM.Language.Options.Enabled = KBM.Language:Add("Enabled.")
+KBM.Language.Options.Enabled.German = "Aktiviert."
 KBM.Language.Options.Settings = KBM.Language:Add("Settings")
 KBM.Language.Options.Settings.French = "Configurations"
 KBM.Language.Options.Settings.German = "Einstellungen"
@@ -1607,7 +1620,8 @@ function KBM.PhaseMonitor:Init()
 				MetaObj.GUI.Frame:SetVisible(KBM.PhaseMonitor.Settings.Objectives)
 			else
 				MetaObj.GUI.Frame:SetVisible(false)
-			end		
+			end
+			return MetaObj
 		end
 		
 		function PhaseObj.Objectives:AddDeath(Name, Total)		
@@ -2801,7 +2815,27 @@ function KBM.Alert:Init()
 		AlertObj.Type = "alert"
 		
 		function AlertObj:AlertEnd(endAlertObj)
-			self.AlertAfter = endAlertObj
+			if type(endAlertObj) == "table" then
+				if endAlertObj.Type == "alert" then
+					self.AlertAfter = endAlertObj
+				else
+					error("KBM.Alert:AlertEnd - Expecting Alert Object: Got "..tostring(endAlertObj.Type))
+				end
+			else
+				error("KBM.Alert:AlertEnd - Expecting at least table: Got "..tostring(type(endAlertObj)))
+			end
+		end
+		
+		function AlertObj:TimerEnd(endTimerObj)
+			if type(endTimerObj) == "table" then
+				if endTimerObj.Type == "timer" then
+					self.TimerAfter = endTimerObj
+				else
+					error("KBM.Alert:TimerEnd - Expecting Timer Object: Got "..tostring(endTimerObj.Type))
+				end
+			else
+				error("KBM.Alert:TimerEnd - Expecting at least table: Got "..tostring(type(endTimerObj)))
+			end
 		end
 
 		function AlertObj:Important()
@@ -2899,8 +2933,13 @@ function KBM.Alert:Init()
 		self.Current.Stopping = false
 		self.Active = false
 		if self.Current.AlertAfter and not self.Starting then
-			if KBM.Encounter or KBM.Testing then
+			if KBM.Encounter then
 				KBM.Alert:Start(self.Current.AlertAfter, Inspect.Time.Real())
+			end
+		end
+		if self.Current.TimerAfter then
+			if KBM.Encounter then
+				KBM.MechTimer:AddStart(self.Current.TimerAfter)
 			end
 		end
 	end	

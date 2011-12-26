@@ -50,14 +50,17 @@ IJ.Lang.Johlen.French = "Infiltrateur Johlen"
 -- Ability Dictionary
 IJ.Lang.Ability = {}
 IJ.Lang.Ability.Blinding = KBM.Language:Add("Blinding Bomb")
+IJ.Lang.Ability.Blinding.German = "Blendbombe"
 
 -- Verbose Dictionary 
 IJ.Lang.Verbose = {}
 IJ.Lang.Verbose.Bomb = KBM.Language:Add("Devastation")
+IJ.Lang.Verbose.Bomb.German = "Vernichtung"
 
 -- Unit Dictionary
 IJ.Lang.Unit = {}
 IJ.Lang.Unit.Bomb = KBM.Language:Add("Devastating Bomb")
+IJ.Lang.Unit.Bomb.German = "Vernichtende Bombe"
 
 IJ.Johlen.Name = IJ.Lang.Johlen[KBM.Lang]
 

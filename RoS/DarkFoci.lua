@@ -60,16 +60,20 @@ DF.Lang.Foci.French = "Balises T\195\169n\195\169breuses"
 -- Ability Dictionary
 DF.Lang.Ability = {}
 DF.Lang.Ability.Ground = KBM.Language:Add("Unhallowed Ground")
+DF.Lang.Ability.Ground.German = "Unheiliger Boden"
 DF.Lang.Ability.Call = KBM.Language:Add("Call Darkness")
+DF.Lang.Ability.Call.German = "Finsternis rufen"
 DF.Lang.Ability.Blast = KBM.Language:Add("Corrupt Blast")
 
 -- Debuff Dictionary
 DF.Lang.Debuff = {}
-DF.Lang.Debuff.Soul = KBM.Language:Add("Distabilizing Soul")
+DF.Lang.Debuff.Soul = KBM.Language:Add("Destabilize Soul")
+DF.Lang.Debuff.Soul.German = "Seele destabilisieren"
 
 -- Unit Dictionary
 DF.Lang.Unit = {}
 DF.Lang.Unit.Force = KBM.Language:Add("Force of Corruption")
+DF.Lang.Unit.Force.German = "Verderbende Kraft" 
 
 DF.Force = {
 	Mod = DF,

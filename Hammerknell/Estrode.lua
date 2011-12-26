@@ -76,6 +76,7 @@ ES.Lang.Ability.North.German = "Wut des Nordens"
 ES.Lang.Ability.Chastise = KBM.Language:Add("Chastise")
 ES.Lang.Ability.Chastise.German = "Züchtigung"
 ES.Lang.Ability.Rift = KBM.Language:Add("Mistress of the Rift")
+ES.Lang.Ability.Rift.German = "Avatar des Risses"
 
 -- Speak Dictionary
 ES.Lang.Say = {}

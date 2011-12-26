@@ -1,4 +1,85 @@
-﻿﻿﻿v0.8.3
+﻿v0.8.4﻿﻿
+* Hammerknell
+** Matron Zamira
+*** Change: Phase 2 is now from 40-30%
+*** New: Added Phase 3, starting at 30%
+** Soulrender Zilas
+*** Change: Reduced timer for Grasp slightly.
+* River of Souls
+** Dark Foci
+*** Fixed: Debuff named incorrectly for personal screen alert.
+** Plutonus the Immortal
+*** New: Timer and Alert for Walking Sleep.
+*** New: Alerts for 40, 30, 20 and 10 percent.
+*** New: Phase and Objective Tracking.
+** Herald Gaurath
+*** New: Phase and objective Tracking for Air/Ground phase.
+*** New: Percentage monitoring.
+*** New: Cast tracking and Alert for Raise the Dead.
+*** New: Timer and Alert for Breath of the Void.
+*** New: Alert and duration for Tidings of Woe.
+*** New: Timer until Death group rise.
+** Alsbeth the Discordant
+*** New: Advanced phase and objective tracking.
+*** New: Percentage monitoring.
+*** New: Full tracking of air, ground and final phases.
+*** New: Destroyed Pillar tracking.
+*** New: Timer until next air phase.
+*** New: Raid wide alert warning for Punish Soul cast.
+*** New: Personal alert and duration countdown for Punish Soul debuff.
+*** Note: There is no timer for Punish Soul due to it's non-static timing.
+*** New: Add persistent Castbars for Soul Magi.
+*** New: Timer and Alert for Soul Magi's Soul Destruction.
+*** New: Timer and Alert for Discordant Blast.
+*** New: Alert for Discordant Ground.
+*** New: Timer, Alert and Duration until impact for Discordant Meteor.
+*** New: Timer until first Discordant Meteor in the Air Phase.
+*** New: Timer for Shield of Darkness during final phase.
+*** New: Alert for Shield of Darkness, while active, during final phase.
+* Rise of the Phoenix
+** Beruhast
+*** Added: 8 minute Enrage Timer.
+* German Translations.
+** Options
+*** Added: Castbar: Override.
+*** Added: Pin to prefix.
+*** Added: Enable cast filters.
+*** Added: Mechanic Timer: Override.
+*** Added: Encounter Timer: Override.
+*** Added: Phase Monitor: Override.
+*** Added: Alerts: Override.
+*** Added: Unlock alert border.
+*** Added: Unlock Width, Height, Text and Transparency.
+** Estrode
+*** Added: Mistress of the Rift.
+** Grugonim
+*** Added: Parasite Swarm.
+** Dark Foci
+*** Added: Unhallowed Ground.
+*** Added: Call Darkness.
+*** Added: Destabilize Soul.
+*** Added: Force of Corruption.
+** Warmaster Galenir
+*** Added: Essence Transfer.
+** Infiltrator Johlen
+*** Added: Blinding Bomb.
+*** Added: Devastating Bomb.
+*** Added: Devastation.
+** Oracle Aleria
+*** Added: Primal Werewolf.
+*** Added: Necrotic Werewolf.
+*** Added: Necrotic Eruption.
+** Prince Hylas
+*** Added: Prince's Wrath.
+*** Added: Soul Fracture.
+*** Added: Contagious Cottontail.
+*** Added: Invocation of Life.
+** Lord Greenscales
+*** Added: Strangling Blight.
+*** Added: Noxious Fumes.
+*** Added: Verdant Annihilator.
+----
+0.8.3
 * System
 ** Change: Improved accuracy of group combat state monitoring.
 ** Fixed: Buff removed triggers were being handled incorrectly for some buffs.

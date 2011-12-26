@@ -52,6 +52,7 @@ WG.Lang.Galenir.French = "Ma\195\174tre de Guerre Galenir"
 WG.Lang.Debuff = {}
 WG.Lang.Debuff.Festering = KBM.Language:Add("Festering Infection")
 WG.Lang.Debuff.Essence = KBM.Language:Add("Essence Transfer")
+WG.Lang.Debuff.Essence.German = "Essenz Transfer"
 
 WG.Galenir.Name = WG.Lang.Galenir[KBM.Lang]
 

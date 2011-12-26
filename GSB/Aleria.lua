@@ -52,11 +52,14 @@ OA.Lang.Aleria.German = "Orakel Aleria"
 -- Unit Dictionary
 OA.Lang.Unit = {}
 OA.Lang.Unit.Primal = KBM.Language:Add("Primal Werewolf")
+OA.Lang.Unit.Primal.German = "Ur-Werwolf"
 OA.Lang.Unit.Necrotic = KBM.Language:Add("Necrotic Werewolf")
+OA.Lang.Unit.Necrotic.German = "Nekrotischer Werwolf"
 
 -- Debuff Dictionary
 OA.Lang.Debuff = {}
 OA.Lang.Debuff.Necrotic = KBM.Language:Add("Necrotic Eruption")
+OA.Lang.Debuff.Necrotic.German = "Nekrotischer Ausbruch" 
 
 OA.Primal = {
 	Mod = OA,

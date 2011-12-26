@@ -61,11 +61,14 @@ LG.Lang.Greenscale.French = "Seigneur Vert\195\169caille"
 -- Ability Dictionary
 LG.Lang.Ability = {}
 LG.Lang.Ability.Blight = KBM.Language:Add("Strangling Blight")
+LG.Lang.Ability.Blight.German = "Würgepflanze"
 LG.Lang.Ability.Fumes = KBM.Language:Add("Noxious Fumes")
+LG.Lang.Ability.Fumes.German = "Giftige Dämpfe"
 
 -- Unit Dictionary
 LG.Lang.Unit = {}
 LG.Lang.Unit.Verdant = KBM.Language:Add("Verdant Annihilator")
+LG.Lang.Unit.Verdant.German = "Grüner Auslöscher" 
 
 -- Mechanic Dictionary
 LG.Lang.Mechanic = {}
