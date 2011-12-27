@@ -222,7 +222,7 @@ function DF:UnitHPCheck(uDetails, unitID)
 					self.TimeElapsed = 0
 					self.Foci.Dead = false
 					self.Foci.Casting = false
-					self.Foci.CastBar:Create(UnitID)
+					self.Foci.CastBar:Create(unitID)
 					self.Force.UnitID = nil
 					self.Phase = 1
 					self.PhaseObj:SetPhase("Foci")
@@ -238,7 +238,7 @@ function DF:UnitHPCheck(uDetails, unitID)
 					self.Force.Dead = false
 					self.Force.UnitID = unitID
 					self.Force.Available = true
-					self.Force.CastBar:Create(UnitID)
+					self.Force.CastBar:Create(unitID)
 					return self.Force
 				end
 			end

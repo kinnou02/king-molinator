@@ -17,7 +17,7 @@ local AD = {
 	Type = "20man",
 	HasPhases = true,
 	Lang = {},
-	Enrage = 60 * 19,
+	Enrage = 60 * 18,
 	GhostCount = 0,
 	PillarDeaths = 0,
 	ID = "Alsbeth",	
@@ -268,8 +268,8 @@ function AD.GroundPhase()
 	AD.PhaseObj.Objectives:Remove()
 	AD.PhaseObj:SetPhase("Ground")
 	AD.PhaseObj.Objectives:AddPercent(AD.Alsbeth.Name, 20, 100)
-	AD.MechTimer:AddRemove(self.Alsbeth.TimersRef.Meteor)
-	AD.MechTimer:AddStart(self.Alsbeth.TimersRef.Phase)
+	KBM.MechTimer:AddRemove(AD.Alsbeth.TimersRef.Meteor)
+	KBM.MechTimer:AddStart(AD.Alsbeth.TimersRef.Phase)
 end
 
 function AD.FinalPhase()

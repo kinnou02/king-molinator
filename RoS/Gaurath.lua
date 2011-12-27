@@ -184,7 +184,7 @@ function HG:UnitHPCheck(unitDetails, unitID)
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase("Ground")
 					self.PhaseObj.Objectives:AddPercent(self.Gaurath.Name, 0, 100)
-					self.RaiseObj = self.PhaseObj.Objectives:AddMeta(self.Lang.Ability.Raise, 2, 0)
+					self.RaiseObj = self.PhaseObj.Objectives:AddMeta(self.Lang.Ability.Raise[KBM.Lang], 2, 0)
 					self.RaiseCounter = 0
 				end
 				self.Gaurath.Casting = false
@@ -241,7 +241,7 @@ end
 function HG:Start()	
 	-- Create Timers
 	self.Gaurath.TimersRef.Breath = KBM.MechTimer:Add(self.Lang.Ability.Breath[KBM.Lang], 26)
-	self.Gaurath.TimersRef.Raise = KBM.MechTimer:Add(self.Lang.Verbose.Raise[KBM.Lang], 8)
+	self.Gaurath.TimersRef.Raise = KBM.MechTimer:Add(self.Lang.Verbose.Raise[KBM.Lang], 7)
 	KBM.Defaults.TimerObj.Assign(self.Gaurath)
 	
 	-- Create Alerts

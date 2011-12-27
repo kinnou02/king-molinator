@@ -1,4 +1,16 @@
-﻿v0.8.4﻿﻿
+﻿v0.8.5
+* River of Souls
+** Dark Focus
+*** Fixed: Error spam on pull.
+** Herald Gaurath
+*** Fixed: Error spam on pull.
+** Plutonus the Immortal
+*** Fixed: Error on Phase 1 to Phase 2 transition.
+** Alsbeth the Discordant
+*** Fixed: Error from Air to Ground phase.
+*** Change: Enrage time to 18m.
+---
+v0.8.4﻿﻿
 * Hammerknell
 ** Matron Zamira
 *** Change: Phase 2 is now from 40-30%
@@ -74,7 +86,7 @@
 *** Added: Soul Fracture.
 *** Added: Contagious Cottontail.
 *** Added: Invocation of Life.
-** Lord Greenscales
+** Lord Greenscale
 *** Added: Strangling Blight.
 *** Added: Noxious Fumes.
 *** Added: Verdant Annihilator.
@@ -114,7 +126,8 @@
 *** New: Added phase tracking for Air Phase.
 *** New: Added percentage tracking for Verdant Annihilator in Objectives list.
 *** New: Added alert for death of Verdant Annihilator (Protective Shield up).
-----v0.8.2
+----
+v0.8.2
 * System
 ** New: Buff removed triggers are now available for use by the engine.
 ** New: Encounter timers can now trigger timers, alerts and phases.

@@ -141,7 +141,7 @@ function PI.PhaseTwo()
 	PI.PhaseObj.Objectives:Remove()
 	PI.PhaseObj:SetPhase(2)
 	PI.Phase = 2
-	PI.PahseObj.Objectives:AddPercent(PI.Plutonus.Name, 0, 50)
+	PI.PhaseObj.Objectives:AddPercent(PI.Plutonus.Name, 0, 50)
 end
 
 function PI:UnitHPCheck(unitDetails, unitID)
