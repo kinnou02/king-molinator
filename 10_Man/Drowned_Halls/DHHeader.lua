@@ -39,6 +39,8 @@ end
 
 function DH:Start()
 
+	DH.Menu = KBM.MainWin.Menu:CreateInstance(self.Name, true, self.Handler)
+
 	function self:Enabled(bool)
 	
 	end
