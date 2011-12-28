@@ -15,6 +15,7 @@ local GS = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Silgen",
+	Enrage = 60 * 10,
 }
 
 GS.Silgen = {
@@ -22,15 +23,29 @@ GS.Silgen = {
 	Level = "52",
 	Active = false,
 	Name = "General Silgen",
+	NameShort = "Silgen",
 	Menu = {},
 	Castbar = nil,
 	Dead = false,
+	TimersRef = {},
+	AlertsRef = {},
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
+		TimersRef = {
+			Enabled = true,
+			Funnel = KBM.Defaults.TimerObj.Create("red"),
+			Incinerate = KBM.Defaults.TimerObj.Create("yellow"),
+		},
+		AlertsRef = {
+			Enabled = true,
+			Funnel = KBM.Defaults.AlertObj.Create("red"),
+			Anchor = KBM.Defaults.AlertObj.Create("orange"),
+			Incinerate = KBM.Defaults.AlertObj.Create("yellow"),
+		},
 	}
 }
 
@@ -38,6 +53,15 @@ KBM.RegisterMod(GS.ID, GS)
 
 GS.Lang.Silgen = KBM.Language:Add(GS.Silgen.Name)
 GS.Lang.Silgen.French = "G\195\169n\195\169ral Silgen"
+
+-- Ability Dictionary
+GS.Lang.Ability = {}
+GS.Lang.Ability.Funnel = KBM.Language:Add("Heat Funnel")
+GS.Lang.Ability.Incinerate = KBM.Language:Add("Incinerate")
+
+-- Debuff Dictionary
+GS.Lang.Debuff = {}
+GS.Lang.Debuff.Anchor = KBM.Language:Add("Anchored in Flames")
 
 GS.Silgen.Name = GS.Lang.Silgen[KBM.Lang]
 
@@ -55,6 +79,10 @@ function GS:InitVars()
 		Enabled = true,
 		CastBar = self.Silgen.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
+		MechTimer = KBM.Defaults.MechTimer(),
+		Alerts = KBM.Defaults.Alerts(),
+		TimersRef = self.Silgen.Settings.TimersRef,
+		AlertsRef = self.Silgen.Settings.AlertsRef,
 	}
 	KBMROTPGS_Settings = self.Settings
 	chKBMROTPGS_Settings = self.Settings
@@ -126,6 +154,7 @@ function GS:UnitHPCheck(unitDetails, unitID)
 					self.Silgen.Dead = false
 					self.Silgen.Casting = false
 					self.Silgen.CastBar:Create(unitID)
+					KBM.MechTimer:AddStart(self.Silgen.TimersRef.Incinerate)
 				end
 				self.Silgen.UnitID = unitID
 				self.Silgen.Available = true
@@ -173,7 +202,30 @@ function GS:DefineMenu()
 	self.Menu = ROTP.Menu:CreateEncounter(self.Silgen, self.Enabled)
 end
 
-function GS:Start()	
+function GS:Start()
+	-- Create Timers
+	self.Silgen.TimersRef.Funnel = KBM.MechTimer:Add(self.Lang.Ability.Funnel[KBM.Lang], 15)
+	self.Silgen.TimersRef.Incinerate = KBM.MechTimer:Add(self.Lang.Ability.Incinerate[KBM.Lang], 60)
+	KBM.Defaults.TimerObj.Assign(self.Silgen)
+	
+	-- Create Alerts
+	self.Silgen.AlertsRef.Funnel = KBM.Alert:Create(self.Lang.Ability.Funnel[KBM.Lang], nil, true, true, "red")
+	self.Silgen.AlertsRef.Anchor = KBM.Alert:Create(self.Lang.Debuff.Anchor[KBM.Lang], nil, true, true, "orange")
+	self.Silgen.AlertsRef.Incinerate = KBM.Alert:Create(self.Lang.Ability.Incinerate[KBM.Lang], nil, true, true, "yellow")
+	KBM.Defaults.AlertObj.Assign(self.Silgen)
+	
+	-- Assign Alerts and Timers to Triggers
+	self.Silgen.Triggers.Funnel = KBM.Trigger:Create(self.Lang.Ability.Funnel[KBM.Lang], "cast", self.Silgen)
+	self.Silgen.Triggers.Funnel:AddTimer(self.Silgen.TimersRef.Funnel)
+	self.Silgen.Triggers.Funnel:AddAlert(self.Silgen.AlertsRef.Funnel)
+	self.Silgen.Triggers.Anchor = KBM.Trigger:Create(self.Lang.Debuff.Anchor[KBM.Lang], "buff", self.Silgen)
+	self.Silgen.Triggers.Anchor:AddAlert(self.Silgen.AlertsRef.Anchor, true)
+	self.Silgen.Triggers.AnchorRemove = KBM.Trigger:Create(self.Lang.Debuff.Anchor[KBM.Lang], "buffRemove", self.Silgen)
+	self.Silgen.Triggers.AnchorRemove:AddStop(self.Silgen.AlertsRef.Anchor)
+	self.Silgen.Triggers.Incinerate = KBM.Trigger:Create(self.Lang.Ability.Incinerate[KBM.Lang], "cast", self.Silgen)
+	self.Silgen.Triggers.Incinerate:AddTimer(self.Silgen.TimersRef.Incinerate)
+	self.Silgen.Triggers.Incinerate:AddAlert(self.Silgen.AlertsRef.Incinerate)
+	
 	self.Silgen.CastBar = KBM.CastBar:Add(self, self.Silgen)
 	self:DefineMenu()
 end

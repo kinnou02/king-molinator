@@ -111,7 +111,7 @@ function KBM.Defaults.TimerObj.Create(Color, OldData)
 		HasMenu = true
 	end
 	if not KBM.Colors.List[Color] then
-		error("Color error for TimerObj.Create ("..Color..")/nColor Index does not exist.")
+		error("Color error for TimerObj.Create ("..tostring(Color)..")\nColor Index does not exist.")
 	end
 	if OldData ~= nil then
 		error("Incorrect Format: TimerObj.Create.HasMenu no longer a setting")
@@ -1228,8 +1228,11 @@ function KBM.Trigger:Init()
 		end
 		
 		function TriggerObj:AddStop(Object)
-			if not Object then
-				error("Stop Object does not exist!")
+			if type(Object) ~= "table" then
+				error("Expecting at least table: Got "..tostring(type(Object)))
+				if Object.Type ~= "timer" or Object.Type ~= "alert" then
+					error("Expecting at least Timer or Alert: Got "..tostring(Object.Type))
+				end
 			end
 			table.insert(self.Stop, Object)
 		end
@@ -1267,8 +1270,13 @@ function KBM.Trigger:Init()
 				end
 			end
 			for i, Obj in ipairs(self.Stop) do
-				KBM.MechTimer:AddRemove(Obj)
-				Triggered = true
+				if Obj.Type == "timer" then
+					KBM.MechTimer:AddRemove(Obj)
+					Triggered = true
+				elseif Obj.Type == "alert" then
+					KBM.Alert:Stop(Obj)
+					Triggered = true
+				end
 			end
 			if KBM.Encounter then
 				if self.Phase then
@@ -1326,6 +1334,8 @@ function KBM.Trigger:Init()
 				self.Time[Unit.Mod.ID] = {}
 			end
 			self.Time[Unit.Mod.ID][Trigger] = TriggerObj
+		else
+			error("Unknown trigger type: "..tostring(Type))
 		end
 		
 		table.insert(self.List, TriggerObj)
@@ -2921,25 +2931,29 @@ function KBM.Alert:Init()
 		end
 	end
 	
-	function self:Stop()
-		self.Current.Stopping = true
-		self.Left[self.Color]:SetVisible(false)
-		self.Right[self.Color]:SetVisible(false)
-		self.Anchor:SetVisible(false)
-		self.Shadow:SetText(" Alert Anchor ")
-		self.Text:SetText(" Alert Anchor ")
-		self.StopTime = 0
-		self.Current.Active = false
-		self.Current.Stopping = false
-		self.Active = false
-		if self.Current.AlertAfter and not self.Starting then
-			if KBM.Encounter then
-				KBM.Alert:Start(self.Current.AlertAfter, Inspect.Time.Real())
-			end
-		end
-		if self.Current.TimerAfter then
-			if KBM.Encounter then
-				KBM.MechTimer:AddStart(self.Current.TimerAfter)
+	function self:Stop(SpecObj)
+		if (self.Current and not SpecObj) or (self.Current and SpecObj == self.Current) then
+			if self.Current.Active then
+				self.Current.Stopping = true
+				self.Left[self.Color]:SetVisible(false)
+				self.Right[self.Color]:SetVisible(false)
+				self.Anchor:SetVisible(false)
+				self.Shadow:SetText(" Alert Anchor ")
+				self.Text:SetText(" Alert Anchor ")
+				self.StopTime = 0
+				self.Current.Active = false
+				self.Current.Stopping = false
+				self.Active = false
+				if self.Current.AlertAfter and not self.Starting then
+					if KBM.Encounter then
+						KBM.Alert:Start(self.Current.AlertAfter, Inspect.Time.Real())
+					end
+				end
+				if self.Current.TimerAfter then
+					if KBM.Encounter then
+						KBM.MechTimer:AddStart(self.Current.TimerAfter)
+					end
+				end
 			end
 		end
 	end	

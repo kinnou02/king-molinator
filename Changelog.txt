@@ -1,4 +1,23 @@
-﻿v0.8.5
+﻿v0.8.6
+* Hammerknell
+** Inquisitor Garau
+*** New: Screen alert added for Arcane Porter spawn. (flashing purple)
+*** New: Screen alert added for Glacial Shield duration. (solid blue)
+*** Change: Bloodtide is now a cast trigger instead of damage.
+* River of Souls
+** Dark Foci
+*** Fixed: Percentage display now correct after phase change.
+** Alsbeth the Discordant
+*** Change: Punish Soul warning will now only flash your screen if you are the target.
+*** Fixed: Castbar for Soul Magus was not initiating due to a settings conflict.
+* Rise of the Phoenix
+** General Silgen
+*** New: Added enrage timer.
+*** New: Added timer and alert warning for Heat Funnel.
+*** New: Added personal screen alert for Anchored in Flames.
+*** New: Added timer and alert for Incinerate
+----
+v0.8.5
 * River of Souls
 ** Dark Focus
 *** Fixed: Error spam on pull.
@@ -9,7 +28,7 @@
 ** Alsbeth the Discordant
 *** Fixed: Error from Air to Ground phase.
 *** Change: Enrage time to 18m.
----
+----
 v0.8.4﻿﻿
 * Hammerknell
 ** Matron Zamira

@@ -42,7 +42,9 @@ GU.Garau = {
 			Crawler = KBM.Defaults.TimerObj.Create("dark_green"),
 		},
 		AlertsRef = {
-			Enabled = false,
+			Enabled = true,
+			Porter = KBM.Defaults.AlertObj.Create("purple"),
+			Shield = KBM.Defaults.AlertObj.Create("blue"),
 		},
 	},
 }
@@ -59,6 +61,10 @@ GU.Lang.Ability.Arcane.French = "Syphon d'essence"
 GU.Lang.Ability.Arcane.German = "Essenzabsauger"
 GU.Lang.Ability.Blood = KBM.Language:Add("Bloodtide")
 GU.Lang.Ability.Blood.German = "Blutflut"
+
+-- Buff Dictionary
+GU.Lang.Buff = {}
+GU.Lang.Buff.Shield = KBM.Language:Add("Glacial Shield")
 
 -- Speak Dictionary
 GU.Lang.Say = {}
@@ -224,11 +230,15 @@ function GU:Start()
 	self.Garau.TimersRef.Crawler = KBM.MechTimer:Add(self.Lang.Unit.Crawler[KBM.Lang], 30)
 	self.Garau.TimersRef.Porter = KBM.MechTimer:Add(GU.Lang.Unit.Porter[KBM.Lang], 45)
 	self.Garau.TimersRef.Essence = KBM.MechTimer:Add(GU.Lang.Ability.Arcane[KBM.Lang], 20)
-
 	KBM.Defaults.TimerObj.Assign(self.Garau)
 	
+	-- Create Alerts
+	self.Garau.AlertsRef.Porter = KBM.Alert:Create(self.Lang.Unit.Porter[KBM.Lang], 2, true, false, "purple")
+	self.Garau.AlertsRef.Shield = KBM.Alert:Create(self.Lang.Buff.Shield[KBM.Lang], nil, false, true, "blue")
+	KBM.Defaults.AlertObj.Assign(self.Garau)
+	
 	-- Assign Mechanics to Triggers
-	self.Garau.Triggers.Blood = KBM.Trigger:Create(GU.Lang.Ability.Blood[KBM.Lang], "damage", self.Garau)
+	self.Garau.Triggers.Blood = KBM.Trigger:Create(GU.Lang.Ability.Blood[KBM.Lang], "cast", self.Garau)
 	self.Garau.Triggers.Blood:AddTimer(self.Garau.TimersRef.Blood)
 	self.Garau.Triggers.CrawlerA = KBM.Trigger:Create(GU.Lang.Say.Bask[KBM.Lang], "say", self.Garau)
 	self.Garau.Triggers.CrawlerA:AddTimer(self.Garau.TimersRef.Crawler)
@@ -236,8 +246,13 @@ function GU:Start()
 	self.Garau.Triggers.CrawlerB:AddTimer(self.Garau.TimersRef.Crawler)
 	self.Garau.Triggers.Porter = KBM.Trigger:Create(GU.Lang.Say.Power[KBM.Lang], "say", self.Garau)
 	self.Garau.Triggers.Porter:AddTimer(self.Garau.TimersRef.Porter)
+	self.Garau.Triggers.Porter:AddAlert(self.Garau.AlertsRef.Porter)
 	self.Garau.Triggers.Essence = KBM.Trigger:Create(GU.Lang.Say.Arcane[KBM.Lang], "notify", self.Garau)
 	self.Garau.Triggers.Essence:AddTimer(self.Garau.TimersRef.Essence)
+	self.Garau.Triggers.Shield = KBM.Trigger:Create(GU.Lang.Buff.Shield[KBM.Lang], "buff", self.Garau)
+	self.Garau.Triggers.Shield:AddAlert(self.Garau.AlertsRef.Shield)
+	self.Garau.Triggers.Shield = KBM.Trigger:Create(GU.Lang.Buff.Shield[KBM.Lang], "buffRemove", self.Garau)
+	self.Garau.Triggers.Shield:AddStop(self.Garau.AlertsRef.Shield)
 	
 	self.Garau.CastBar = KBM.CastBar:Add(self, self.Garau, true)
 	self:DefineMenu()

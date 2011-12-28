@@ -195,7 +195,7 @@ function DF.PhaseFoci()
 	DF.PhaseObj.Objectives:Remove()
 	DF.PhaseObj:SetPhase("Foci")
 	DF.Phase = 1
-	DF.PhaseObj.Objectives:AddPercent(DF.Force.Name, 0, 100)
+	DF.PhaseObj.Objectives:AddPercent(DF.Foci.Name, 0, 100)
 end
 
 function DF:Death(UnitID)

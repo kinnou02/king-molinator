@@ -72,6 +72,10 @@ AD.Lang.Ability.Blast = KBM.Language:Add("Discordant Blast")
 AD.Lang.Ability.Soul = KBM.Language:Add("Soul Destruction")
 AD.Lang.Ability.Meteor = KBM.Language:Add("Discordant Meteor")
 
+-- Notify Dictionary
+AD.Lang.Notify = {}
+AD.Lang.Notify.Punish = KBM.Language:Add("(%a*)'s soul is wracked with energy!")
+
 -- Buff Dictionary
 AD.Lang.Buff = {}
 AD.Lang.Buff.Shield = KBM.Language:Add("Shield of Darkness")
@@ -229,6 +233,8 @@ function AD:LoadVars()
 	
 	self.Settings.Alsbeth.CastBar.Multi = true
 	self.Settings.Alsbeth.CastBar.Override = true
+	self.Settings.Magus.CastBar.Multi = true
+	self.Settings.Magus.CastBar.Override = true
 	
 end
 
@@ -463,7 +469,7 @@ function AD:Start()
 	KBM.Defaults.TimerObj.Assign(self.Magus)
 	
 	-- Create Alerts
-	self.Alsbeth.AlertsRef.PunishWarn = KBM.Alert:Create(self.Lang.Ability.Punish[KBM.Lang], nil, true, true, "purple")
+	self.Alsbeth.AlertsRef.PunishWarn = KBM.Alert:Create(self.Lang.Ability.Punish[KBM.Lang], 1.5, true, true, "purple")
 	self.Alsbeth.AlertsRef.PunishWarn.MenuName = self.Lang.Verbose.PunishWarn[KBM.Lang]
 	self.Alsbeth.AlertsRef.Punish = KBM.Alert:Create(self.Lang.Ability.Punish[KBM.Lang], nil, false, true, "purple")
 	self.Alsbeth.AlertsRef.Punish:Important()
@@ -477,8 +483,8 @@ function AD:Start()
 	KBM.Defaults.AlertObj.Assign(self.Magus)
 	
 	-- Assign Timers and Alerts to triggers.
-	self.Alsbeth.Triggers.PunishWarn = KBM.Trigger:Create(self.Lang.Ability.Punish[KBM.Lang], "cast", self.Alsbeth)
-	self.Alsbeth.Triggers.PunishWarn:AddAlert(self.Alsbeth.AlertsRef.PunishWarn)
+	self.Alsbeth.Triggers.PunishWarn = KBM.Trigger:Create(self.Lang.Notify.Punish[KBM.Lang], "notify", self.Alsbeth)
+	self.Alsbeth.Triggers.PunishWarn:AddAlert(self.Alsbeth.AlertsRef.PunishWarn, true)
 	self.Alsbeth.Triggers.Punish = KBM.Trigger:Create(self.Lang.Ability.Punish[KBM.Lang], "buff", self.Alsbeth)
 	self.Alsbeth.Triggers.Punish:AddAlert(self.Alsbeth.AlertsRef.Punish, true)
 	self.Alsbeth.Triggers.Final = KBM.Trigger:Create(20, "percent", self.Alsbeth)
