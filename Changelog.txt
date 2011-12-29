@@ -1,5 +1,10 @@
 ﻿v0.8.6
+* Mechanic Timers
+** Fixed: Setting changes were not applied until a /reloadui or restart.
+** Note: This was the same issue as the previously fixed alert settings.
 * Hammerknell
+** Soulrender Zilas
+*** Fixed: The duration portion of Soulrenders Grasp had become disabled.
 ** Inquisitor Garau
 *** New: Screen alert added for Arcane Porter spawn. (flashing purple)
 *** New: Screen alert added for Glacial Shield duration. (solid blue)
@@ -16,6 +21,23 @@
 *** New: Added timer and alert warning for Heat Funnel.
 *** New: Added personal screen alert for Anchored in Flames.
 *** New: Added timer and alert for Incinerate
+* Drowned Halls
+** Converted to new engine.
+** Assault Commander Jorb
+*** Converted to new engine.
+*** New: Added enrage timer.
+*** New: Timer and alert for Forceful Impact.
+*** New: Add Alert and duration countdown for Paralyzing Grasp.
+** Joloral Ragetide
+*** Converted to new engine.
+** Isskal
+*** Converted to new engine.
+** Priestess Hydriss
+*** Converted to new engine.
+* French Translation
+** New: Added Soulrenders Grasp.
+* German Translations
+** 
 ----
 v0.8.5
 * River of Souls

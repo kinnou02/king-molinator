@@ -4,43 +4,45 @@
 --
 
 KBMDHAJ_Settings = nil
+chKBMDHAJ_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 local DH = KBM.BossMod["Drowned Halls"]
 
 local AJ = {
-	ModEnabled = true,
-	Jorb = {
-		MenuItem = nil,
-		Enabled = true,
-		Handler = nil,
-		Options = nil,
-	},
+	Enabled = true,
 	Instance = DH.Name,
-	HasPhases = true,
-	PhaseType = "percentage",
-	PhaseList = {},
-	Timers = {},
 	Lang = {},
+	Enrage = 5 * 60,
 	ID = "Jorb",
-	}
+}
 
 AJ.Jorb = {
 	Mod = AJ,
 	Level = "??",
 	Active = false,
 	Name = "Assault Commander Jorb",
-	Castbar = nil,
-	CastFilters = {},
-	Timers = {},
-	TimersRef = {},
-	AlertsRef = {},
+	NameShort = "Jorb",
+	Menu = {},
 	Dead = false,
+	AlertsRef = {},
+	TimersRef = {},
 	Available = false,
 	UnitID = nil,
-	TimeOut = 5,
 	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+		TimersRef = {
+			Enabled = true,
+			Impact = KBM.Defaults.TimerObj.Create("purple"),
+		},
+		AlertsRef = {
+			Enabled = true,
+			Impact = KBM.Defaults.AlertObj.Create("purple"),
+			Grasp = KBM.Defaults.AlertObj.Create("orange"),
+		},
+	},
 }
 
 KBM.RegisterMod(AJ.ID, AJ)
@@ -49,54 +51,73 @@ AJ.Lang.Jorb = KBM.Language:Add(AJ.Jorb.Name)
 AJ.Lang.Jorb.German = "Überfallkommandant Jorb"
 AJ.Lang.Jorb.French = "Commandant d'assaut Jorb"
 
+-- Ability Dictionary
+AJ.Lang.Ability = {}
+AJ.Lang.Ability.Impact = KBM.Language:Add("Forceful Impact")
+
+-- Notify Dictionary
+AJ.Lang.Notify = {}
+AJ.Lang.Notify.Stand = KBM.Language:Add("(%a*), stand to attention!")
+
+-- Debuff Dictionary
+AJ.Lang.Debuff = {}
+AJ.Lang.Debuff.Grasp = KBM.Language:Add("Paralyzing Grasp")
+
 AJ.Jorb.Name = AJ.Lang.Jorb[KBM.Lang]
 
 function AJ:AddBosses(KBM_Boss)
 	self.Jorb.Descript = self.Jorb.Name
 	self.MenuName = self.Jorb.Descript
 	self.Bosses = {
-		[self.Jorb.Name] = true,
+		[self.Jorb.Name] = self.Jorb,
 	}
 	KBM_Boss[self.Jorb.Name] = self.Jorb	
 end
 
 function AJ:InitVars()
 	self.Settings = {
-		Timers = {
-			Enabled = true,
-			FlamesEnabled = true,
-		},
-		CastBar = {
-			x = false,
-			y = false,
-			Enabled = true,
-		},
+		Enabled = true,
+		CastBar = self.Jorb.Settings.CastBar,
+		EncTimer = KBM.Defaults.EncTimer(),
+		AlertsRef = self.Jorb.Settings.AlertsRef,
+		TimersRef = self.Jorb.Settings.TimersRef,
 	}
-	KBMGS_Settings = self.Settings
+	KBMDHAJ_Settings = self.Settings
+	chKBMDHAJ_Settings = self.Settings
 end
 
-function AJ:LoadVars()
-	if type(KBMGSBGS_Settings) == "table" then
-		for Setting, Value in pairs(KBMGSBGS_Settings) do
-			if type(KBMGSBGS_Settings[Setting]) == "table" then
-				if self.Settings[Setting] ~= nil then
-					for tSetting, tValue in pairs(KBMGSBGS_Settings[Setting]) do
-						if self.Settings[Setting][tSetting] ~= nil then
-							self.Settings[Setting][tSetting] = tValue
-						end
-					end
-				end
-			else
-				if self.Settings[Setting] ~= nil then
-					self.Settings[Setting] = Value
-				end
-			end
-		end
+function AJ:SwapSettings(bool)
+
+	if bool then
+		KBMDHAJ_Settings = self.Settings
+		self.Settings = chKBMDHAJ_Settings
+	else
+		chKBMDHAJ_Settings = self.Settings
+		self.Settings = KBMDHAJ_Settings
 	end
+
 end
 
-function AJ:SaveVars()
-	KBMGSBGS_Settings = self.Settings
+function AJ:LoadVars()	
+	if KBM.Options.Character then
+		KBM.LoadTable(chKBMDHAJ_Settings, self.Settings)
+	else
+		KBM.LoadTable(KBMDHAJ_Settings, self.Settings)
+	end
+	
+	if KBM.Options.Character then
+		chKBMDHAJ_Settings = self.Settings
+	else
+		KBMDHAJ_Settings = self.Settings
+	end	
+end
+
+function AJ:SaveVars()	
+	if KBM.Options.Character then
+		chKBMDHAJ_Settings = self.Settings
+	else
+		KBMDHAJ_Settings = self.Settings
+	end	
 end
 
 function AJ:Castbar(units)
@@ -118,12 +139,12 @@ function AJ:Death(UnitID)
 	return false
 end
 
-function AJ:UnitHPCheck(unitDetails, unitID)
+function AJ:UnitHPCheck(uDetails, unitID)
 	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if unitDetails.name == self.Jorb.Name then
-				if not self.Jorb.UnitID then
+	if uDetails and unitID then
+		if not uDetails.player then
+			if uDetails.name == self.Jorb.Name then
+				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
@@ -144,6 +165,7 @@ function AJ:Reset()
 	self.EncounterRunning = false
 	self.Jorb.Available = false
 	self.Jorb.UnitID = nil
+	self.Jorb.Dead = false
 	self.Jorb.CastBar:Remove()
 end
 
@@ -151,26 +173,51 @@ function AJ:Timer()
 	
 end
 
-function AJ.Jorb:Options()
-	function self:TimersEnabled(bool)
+function AJ.Jorb:SetTimers(bool)	
+	if bool then
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = TimerObj.Settings.Enabled
+		end
+	else
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = false
+		end
 	end
-	function self:FlamesEnabled(bool)
-		AJ.Settings.Timers.FlamesEnabled = bool
-		AJ.Jorb.TimersRef.Flames.Enabled = bool
+end
+
+function AJ.Jorb:SetAlerts(bool)
+	if bool then
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = AlertObj.Settings.Enabled
+		end
+	else
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = false
+		end
 	end
-	local Options = self.MenuItem.Options
-	Options:SetTitle()
-	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, AJ.Settings.Timers.Enabled)
-	--Timers:AddCheck(AJ.Lang.Flames[KBM.Lang], self.FlamesEnabled, AJ.Settings.Timers.FlamesEnabled)	
-	
+end
+
+function AJ:DefineMenu()
+	self.Menu = DH.Menu:CreateEncounter(self.Jorb, self.Enabled)
 end
 
 function AJ:Start()
-	self.Header = KBM.HeaderList[self.Instance]
-	self.Jorb.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Jorb, true, self.Header)
-	self.Jorb.MenuItem.Check:SetEnabled(false)
-	-- self.Jorb.TimersRef.Flames = KBM.MechTimer:Add(self.Lang.Flames[KBM.Lang], "cast", 30, self, nil)
-	-- self.Jorb.TimersRef.Flames.Enabled = self.Settings.Timers.FlamesEnabled
+	-- Create Timers
+	self.Jorb.TimersRef.Impact = KBM.MechTimer:Add(self.Lang.Ability.Impact[KBM.Lang], 16)
+	KBM.Defaults.TimerObj.Assign(self.Jorb)
+
+	-- Create Alerts
+	self.Jorb.AlertsRef.Impact = KBM.Alert:Create(self.Lang.Ability.Impact[KBM.Lang], nil, true, true, "purple")
+	self.Jorb.AlertsRef.Grasp = KBM.Alert:Create(self.Lang.Debuff.Grasp[KBM.Lang], 5, false, true, "orange")
+	KBM.Defaults.AlertObj.Assign(self.Jorb)
+	
+	-- Assign Alerts and Timers to Triggers
+	self.Jorb.Triggers.Impact = KBM.Trigger:Create(self.Lang.Ability.Impact[KBM.Lang], "cast", self.Jorb)
+	self.Jorb.Triggers.Impact:AddAlert(self.Jorb.AlertsRef.Impact)
+	self.Jorb.Triggers.Impact:AddTimer(self.Jorb.TimersRef.Impact)
+	self.Jorb.Triggers.Grasp = KBM.Trigger:Create(self.Lang.Debuff.Grasp[KBM.Lang], "buff", self.Jorb)
+	self.Jorb.Triggers.Grasp:AddAlert(self.Jorb.AlertsRef.Grasp)
 	
 	self.Jorb.CastBar = KBM.CastBar:Add(self, self.Jorb, true)
+	self:DefineMenu()
 end

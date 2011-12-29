@@ -1,27 +1,18 @@
-﻿-- Isskal Ragetide Boss Mod for King Boss Mods
+﻿-- Isskal Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --
 
 KBMDHIL_Settings = nil
+chKBMDHIL_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 local DH = KBM.BossMod["Drowned Halls"]
 
 local IL = {
-	ModEnabled = true,
-	Isskal = {
-		MenuItem = nil,
-		Enabled = true,
-		Handler = nil,
-		Options = nil,
-	},
+	Enabled = true,
 	Instance = DH.Name,
-	HasPhases = true,
-	PhaseType = "percentage",
-	PhaseList = {},
-	Timers = {},
 	Lang = {},
 	ID = "Isskal",
 	}
@@ -31,23 +22,19 @@ IL.Isskal = {
 	Level = "??",
 	Active = false,
 	Name = "Isskal",
-	Castbar = nil,
-	CastFilters = {},
-	Timers = {},
-	TimersRef = {},
-	AlertsRef = {},
+	Menu = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	TimeOut = 5,
 	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+	},
 }
 
 KBM.RegisterMod(IL.ID, IL)
 
 IL.Lang.Isskal = KBM.Language:Add(IL.Isskal.Name)
--- IL.Lang.Flames = KBM.Language:Add("Ancient Flames")
--- IL.Lang.Flames.French = "Flammes anciennes"
 
 IL.Isskal.Name = IL.Lang.Isskal[KBM.Lang]
 
@@ -55,48 +42,53 @@ function IL:AddBosses(KBM_Boss)
 	self.Isskal.Descript = self.Isskal.Name
 	self.MenuName = self.Isskal.Descript
 	self.Bosses = {
-		[self.Isskal.Name] = true,
+		[self.Isskal.Name] = self.Isskal,
 	}
 	KBM_Boss[self.Isskal.Name] = self.Isskal	
 end
 
 function IL:InitVars()
 	self.Settings = {
-		Timers = {
-			Enabled = true,
-			FlamesEnabled = true,
-		},
-		CastBar = {
-			x = false,
-			y = false,
-			Enabled = true,
-		},
+		Enabled = true,
+		CastBar = self.Isskal.Settings.CastBar,
+		EncTimer = KBM.Defaults.EncTimer(),
 	}
-	KBMGS_Settings = self.Settings
+	KBMDHIL_Settings = self.Settings
+	chKBMDHIL_Settings = self.Settings
 end
 
-function IL:LoadVars()
-	if type(KBMGSBGS_Settings) == "table" then
-		for Setting, Value in pairs(KBMGSBGS_Settings) do
-			if type(KBMGSBGS_Settings[Setting]) == "table" then
-				if self.Settings[Setting] ~= nil then
-					for tSetting, tValue in pairs(KBMGSBGS_Settings[Setting]) do
-						if self.Settings[Setting][tSetting] ~= nil then
-							self.Settings[Setting][tSetting] = tValue
-						end
-					end
-				end
-			else
-				if self.Settings[Setting] ~= nil then
-					self.Settings[Setting] = Value
-				end
-			end
-		end
+function IL:SwapSettings(bool)
+
+	if bool then
+		KBMDHIL_Settings = self.Settings
+		self.Settings = chKBMDHIL_Settings
+	else
+		chKBMDHIL_Settings = self.Settings
+		self.Settings = KBMDHIL_Settings
 	end
+
 end
 
-function IL:SaveVars()
-	KBMGSBGS_Settings = self.Settings
+function IL:LoadVars()	
+	if KBM.Options.Character then
+		KBM.LoadTable(chKBMDHIL_Settings, self.Settings)
+	else
+		KBM.LoadTable(KBMDHIL_Settings, self.Settings)
+	end
+	
+	if KBM.Options.Character then
+		chKBMDHIL_Settings = self.Settings
+	else
+		KBMDHIL_Settings = self.Settings
+	end	
+end
+
+function IL:SaveVars()	
+	if KBM.Options.Character then
+		chKBMDHIL_Settings = self.Settings
+	else
+		KBMDHIL_Settings = self.Settings
+	end	
 end
 
 function IL:Castbar(units)
@@ -118,12 +110,12 @@ function IL:Death(UnitID)
 	return false
 end
 
-function IL:UnitHPCheck(unitDetails, unitID)
+function IL:UnitHPCheck(uDetails, unitID)
 	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if unitDetails.name == self.Isskal.Name then
-				if not self.Isskal.UnitID then
+	if uDetails and unitID then
+		if not uDetails.player then
+			if uDetails.name == self.Isskal.Name then
+				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
@@ -144,6 +136,7 @@ function IL:Reset()
 	self.EncounterRunning = false
 	self.Isskal.Available = false
 	self.Isskal.UnitID = nil
+	self.Isskal.Dead = false
 	self.Isskal.CastBar:Remove()
 end
 
@@ -151,26 +144,35 @@ function IL:Timer()
 	
 end
 
-function IL.Isskal:Options()
-	function self:TimersEnabled(bool)
+function IL.Isskal:SetTimers(bool)	
+	if bool then
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = TimerObj.Settings.Enabled
+		end
+	else
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = false
+		end
 	end
-	function self:FlamesEnabled(bool)
-		IL.Settings.Timers.FlamesEnabled = bool
-		IL.Isskal.TimersRef.Flames.Enabled = bool
+end
+
+function IL.Isskal:SetAlerts(bool)
+	if bool then
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = AlertObj.Settings.Enabled
+		end
+	else
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = false
+		end
 	end
-	local Options = self.MenuItem.Options
-	Options:SetTitle()
-	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, IL.Settings.Timers.Enabled)
-	--Timers:AddCheck(IL.Lang.Flames[KBM.Lang], self.FlamesEnabled, IL.Settings.Timers.FlamesEnabled)	
-	
+end
+
+function IL:DefineMenu()
+	self.Menu = DH.Menu:CreateEncounter(self.Isskal, self.Enabled)
 end
 
 function IL:Start()
-	self.Header = KBM.HeaderList[self.Instance]
-	self.Isskal.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Isskal, true, self.Header)
-	self.Isskal.MenuItem.Check:SetEnabled(false)
-	-- self.Isskal.TimersRef.Flames = KBM.MechTimer:Add(self.Lang.Flames[KBM.Lang], "cast", 30, self, nil)
-	-- self.Isskal.TimersRef.Flames.Enabled = self.Settings.Timers.FlamesEnabled
-	
 	self.Isskal.CastBar = KBM.CastBar:Add(self, self.Isskal, true)
+	self:DefineMenu()
 end

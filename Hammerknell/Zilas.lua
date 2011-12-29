@@ -24,6 +24,7 @@ SZ.Zilas = {
 	Level = "??",
 	Active = false,
 	Name = "Soulrender Zilas",
+	NameShort = "Zilas",
 	CastFilters = {},
 	TimersRef = {},
 	AlertsRef = {},
@@ -56,6 +57,7 @@ SZ.Zilas.Name = SZ.Lang.Zilas[KBM.Lang]
 SZ.Lang.Ability = {}
 SZ.Lang.Ability.Grasp = KBM.Language:Add("Soulrender's Grasp")
 SZ.Lang.Ability.Grasp.German = "Seelenreißer Griff"
+SZ.Lang.Ability.Grasp.French = "Poigne d'\195\137tripeur d'\195\162mes"
 
 function SZ:AddBosses(KBM_Boss)
 	self.Zilas.Descript = self.Zilas.Name
@@ -109,6 +111,8 @@ function SZ:LoadVars()
 	else
 		KBMSZ_Settings = self.Settings
 	end
+	
+	self.Zilas.Settings.AlertsRef.Grasp.Enabled = true
 	
 end
 

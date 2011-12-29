@@ -2130,20 +2130,22 @@ function KBM.InitOptions()
 								
 								function Callbacks:Callback(bool)
 									self.Data.Enabled = bool
-									self.Boss.Menu.Timers[self.Data.ID].ColorGUI:Enable(bool)
+									self.Data.Settings.Enabled = bool
+									self.Boss.Menu.Timers[self.Data.Settings.ID].ColorGUI:Enable(bool)
 								end
 								
 								function Callbacks:Enabled(bool)
 									self.Data.Enabled = bool
-									self.Boss.Menu.Timers[self.Data.ID].ColorGUI:Enable(bool)
+									self.Data.Settings.Enabled = bool
+									self.Boss.Menu.Timers[self.Data.Settings.ID].ColorGUI:Enable(bool)
 								end
 								
 								function Callbacks:Color(bool, Color)							
 									if not Color then
-										self.Data.Custom = bool
+										self.Data.Settings.Custom = bool
 										self.GUI:SetEnabled(bool)
 									elseif Color then
-										self.Manager.Data.Color = Color
+										self.Manager.Data.Settings.Color = Color
 										self.Manager.Color = Color
 									end								
 								end
@@ -2154,21 +2156,21 @@ function KBM.InitOptions()
 								end
 							
 								Child = Header:CreateOption(MenuName, "excheck", Callbacks.Callback)
-								Child.Data = TimerData.Settings
+								Child.Data = TimerData
 								Child:SetChecked(TimerData.Settings.Enabled)							
 								local SubHeader = Child:CreateHeader(MenuName, "plain")
 								SubHeader.Boss = BossObj
 								BossObj.Menu.Timers[TimerID] = {}
 								BossObj.Menu.Timers[TimerID].Enabled = SubHeader:CreateOption(KBM.Language.Options.Enabled[KBM.Lang], "check", Callbacks.Enabled)
 								BossObj.Menu.Timers[TimerID].Enabled:SetChecked(TimerData.Settings.Enabled)
-								BossObj.Menu.Timers[TimerID].Enabled.Data = TimerData.Settings
+								BossObj.Menu.Timers[TimerID].Enabled.Data = TimerData
 								BossObj.Menu.Timers[TimerID].Enabled.Controller = Child
 								Child.Controller = BossObj.Menu.Timers[TimerID].Enabled
 								BossObj.Menu.Timers[TimerID].ColorGUI = SubHeader:CreateOption(KBM.Language.Color.Custom[KBM.Lang], "color", Callbacks.Color)
 								BossObj.Menu.Timers[TimerID].ColorGUI:SetChecked(TimerData.Settings.Custom)
 								BossObj.Menu.Timers[TimerID].ColorGUI.Enabled = TimerData.Settings.Enabled
 								BossObj.Menu.Timers[TimerID].ColorGUI.Color = TimerData.Settings.Color
-								BossObj.Menu.Timers[TimerID].ColorGUI.Data = TimerData.Settings
+								BossObj.Menu.Timers[TimerID].ColorGUI.Data = TimerData
 							end
 						end
 					end

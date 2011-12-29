@@ -3,25 +3,16 @@
 -- Copyright 2011
 --
 
-KBMDHJR_Settings = nil
+KBMDHRT_Settings = nil
+chKBMDHRT_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 local DH = KBM.BossMod["Drowned Halls"]
 
 local JR = {
-	ModEnabled = true,
-	Joloral = {
-		MenuItem = nil,
-		Enabled = true,
-		Handler = nil,
-		Options = nil,
-	},
+	Enabled = true,
 	Instance = DH.Name,
-	HasPhases = true,
-	PhaseType = "percentage",
-	PhaseList = {},
-	Timers = {},
 	Lang = {},
 	ID = "Joloral",
 	}
@@ -31,16 +22,15 @@ JR.Joloral = {
 	Level = "??",
 	Active = false,
 	Name = "Joloral Ragetide",
-	Castbar = nil,
-	CastFilters = {},
-	Timers = {},
-	TimersRef = {},
-	AlertsRef = {},
+	NameShort = "Joloral",
+	Menu = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	TimeOut = 5,
 	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+	},
 }
 
 KBM.RegisterMod(JR.ID, JR)
@@ -55,48 +45,53 @@ function JR:AddBosses(KBM_Boss)
 	self.Joloral.Descript = self.Joloral.Name
 	self.MenuName = self.Joloral.Descript
 	self.Bosses = {
-		[self.Joloral.Name] = true,
+		[self.Joloral.Name] = self.Joloral,
 	}
 	KBM_Boss[self.Joloral.Name] = self.Joloral	
 end
 
 function JR:InitVars()
 	self.Settings = {
-		Timers = {
-			Enabled = true,
-			FlamesEnabled = true,
-		},
-		CastBar = {
-			x = false,
-			y = false,
-			Enabled = true,
-		},
+		Enabled = true,
+		CastBar = self.Joloral.Settings.CastBar,
+		EncTimer = KBM.Defaults.EncTimer(),
 	}
-	KBMGS_Settings = self.Settings
+	KBMDHJR_Settings = self.Settings
+	chKBMDHJR_Settings = self.Settings
 end
 
-function JR:LoadVars()
-	if type(KBMGSBGS_Settings) == "table" then
-		for Setting, Value in pairs(KBMGSBGS_Settings) do
-			if type(KBMGSBGS_Settings[Setting]) == "table" then
-				if self.Settings[Setting] ~= nil then
-					for tSetting, tValue in pairs(KBMGSBGS_Settings[Setting]) do
-						if self.Settings[Setting][tSetting] ~= nil then
-							self.Settings[Setting][tSetting] = tValue
-						end
-					end
-				end
-			else
-				if self.Settings[Setting] ~= nil then
-					self.Settings[Setting] = Value
-				end
-			end
-		end
+function JR:SwapSettings(bool)
+
+	if bool then
+		KBMDHJR_Settings = self.Settings
+		self.Settings = chKBMDHJR_Settings
+	else
+		chKBMDHJR_Settings = self.Settings
+		self.Settings = KBMDHJR_Settings
 	end
+
 end
 
-function JR:SaveVars()
-	KBMGSBGS_Settings = self.Settings
+function JR:LoadVars()	
+	if KBM.Options.Character then
+		KBM.LoadTable(chKBMDHJR_Settings, self.Settings)
+	else
+		KBM.LoadTable(KBMDHJR_Settings, self.Settings)
+	end
+	
+	if KBM.Options.Character then
+		chKBMDHJR_Settings = self.Settings
+	else
+		KBMDHJR_Settings = self.Settings
+	end	
+end
+
+function JR:SaveVars()	
+	if KBM.Options.Character then
+		chKBMDHJR_Settings = self.Settings
+	else
+		KBMDHJR_Settings = self.Settings
+	end	
 end
 
 function JR:Castbar(units)
@@ -118,12 +113,12 @@ function JR:Death(UnitID)
 	return false
 end
 
-function JR:UnitHPCheck(unitDetails, unitID)
+function JR:UnitHPCheck(uDetails, unitID)
 	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if unitDetails.name == self.Joloral.Name then
-				if not self.Joloral.UnitID then
+	if uDetails and unitID then
+		if not uDetails.player then
+			if uDetails.name == self.Joloral.Name then
+				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
@@ -144,6 +139,7 @@ function JR:Reset()
 	self.EncounterRunning = false
 	self.Joloral.Available = false
 	self.Joloral.UnitID = nil
+	self.Joloral.Dead = false
 	self.Joloral.CastBar:Remove()
 end
 
@@ -151,26 +147,35 @@ function JR:Timer()
 	
 end
 
-function JR.Joloral:Options()
-	function self:TimersEnabled(bool)
+function JR.Joloral:SetTimers(bool)	
+	if bool then
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = TimerObj.Settings.Enabled
+		end
+	else
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = false
+		end
 	end
-	function self:FlamesEnabled(bool)
-		JR.Settings.Timers.FlamesEnabled = bool
-		JR.Joloral.TimersRef.Flames.Enabled = bool
+end
+
+function JR.Joloral:SetAlerts(bool)
+	if bool then
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = AlertObj.Settings.Enabled
+		end
+	else
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = false
+		end
 	end
-	local Options = self.MenuItem.Options
-	Options:SetTitle()
-	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, JR.Settings.Timers.Enabled)
-	--Timers:AddCheck(JR.Lang.Flames[KBM.Lang], self.FlamesEnabled, JR.Settings.Timers.FlamesEnabled)	
-	
+end
+
+function JR:DefineMenu()
+	self.Menu = DH.Menu:CreateEncounter(self.Joloral, self.Enabled)
 end
 
 function JR:Start()
-	self.Header = KBM.HeaderList[self.Instance]
-	self.Joloral.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Joloral, true, self.Header)
-	self.Joloral.MenuItem.Check:SetEnabled(false)
-	-- self.Joloral.TimersRef.Flames = KBM.MechTimer:Add(self.Lang.Flames[KBM.Lang], "cast", 30, self, nil)
-	-- self.Joloral.TimersRef.Flames.Enabled = self.Settings.Timers.FlamesEnabled
-	
 	self.Joloral.CastBar = KBM.CastBar:Add(self, self.Joloral, true)
+	self:DefineMenu()
 end

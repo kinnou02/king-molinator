@@ -1326,7 +1326,10 @@ function KBM.Trigger:Init()
 		elseif Type == "death" then
 			self.Death[Trigger] = TriggerObj
 		elseif Type == "buff" then
-			self.Buff[Trigger] = TriggerObj
+			if not self.Buff[Unit.Mod.ID] then
+				self.Buff[Unit.Mod.ID] = {}
+			end
+			self.Buff[Unit.Mod.ID][Trigger] = TriggerObj
 		elseif Type == "buffRemove" then
 			self.BuffRemove[Trigger] = TriggerObj
 		elseif Type == "time" then
@@ -3821,9 +3824,11 @@ function KBM:BuffMonitor(unitID, Buffs, Type)
 					for buffID, bool in pairs(Buffs) do
 						bDetails = Inspect.Buff.Detail(unitID, buffID)
 						if bDetails then
-							if KBM.Trigger.Buff[bDetails.name] then
-								TriggerObj = KBM.Trigger.Buff[bDetails.name]
-								KBM.Trigger.Queue:Add(TriggerObj, nil, unitID, bDetails.remaining)
+							if KBM.Trigger.Buff[KBM.CurrentMod.ID] then
+								if KBM.Trigger.Buff[KBM.CurrentMod.ID][bDetails.name] then
+									TriggerObj = KBM.Trigger.Buff[KBM.CurrentMod.ID][bDetails.name]
+									KBM.Trigger.Queue:Add(TriggerObj, nil, unitID, bDetails.remaining)
+								end
 							end
 							if KBM.TankSwap.Active then
 								if KBM.TankSwap.Tanks[unitID] then

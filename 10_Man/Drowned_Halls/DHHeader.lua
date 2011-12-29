@@ -38,12 +38,5 @@ function DH:SaveVars()
 end
 
 function DH:Start()
-
-	DH.Menu = KBM.MainWin.Menu:CreateInstance(self.Name, true, self.Handler)
-
-	function self:Enabled(bool)
-	
-	end
-	DH.Header = KBM.MainWin.Menu:CreateHeader(self.Name, self.Enabled, true)
-	
+	DH.Menu = KBM.MainWin.Menu:CreateInstance(self.Name, true, self.Handler)	
 end

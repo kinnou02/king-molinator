@@ -4,24 +4,15 @@
 --
 
 KBMDHHH_Settings = nil
+chKBMDHHH_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 local DH = KBM.BossMod["Drowned Halls"]
 
 local HH = {
-	ModEnabled = true,
-	Hydriss = {
-		MenuItem = nil,
-		Enabled = true,
-		Handler = nil,
-		Options = nil,
-	},
+	Enabled = true,
 	Instance = DH.Name,
-	HasPhases = true,
-	PhaseType = "percentage",
-	PhaseList = {},
-	Timers = {},
 	Lang = {},
 	ID = "Hydriss",
 	}
@@ -30,25 +21,22 @@ HH.Hydriss = {
 	Mod = HH,
 	Level = "??",
 	Active = false,
-	Name = "High Priestess Hydriss",
-	Castbar = nil,
-	CastFilters = {},
-	Timers = {},
-	TimersRef = {},
-	AlertsRef = {},
+	Name = "Priestess Hydriss",
+	NameShort = "Hydriss",
+	Menu = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	TimeOut = 3,
 	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+	},
 }
 
 KBM.RegisterMod(HH.ID, HH)
 
 HH.Lang.Hydriss = KBM.Language:Add(HH.Hydriss.Name)
 HH.Lang.Hydriss.German = "Hohepriesterin Hydriss"
--- HH.Lang.Flames = KBM.Language:Add("Ancient Flames")
--- HH.Lang.Flames.French = "Flammes anciennes"
 
 HH.Hydriss.Name = HH.Lang.Hydriss[KBM.Lang]
 
@@ -56,48 +44,53 @@ function HH:AddBosses(KBM_Boss)
 	self.Hydriss.Descript = self.Hydriss.Name
 	self.MenuName = self.Hydriss.Descript
 	self.Bosses = {
-		[self.Hydriss.Name] = true,
+		[self.Hydriss.Name] = self.Hydriss,
 	}
 	KBM_Boss[self.Hydriss.Name] = self.Hydriss	
 end
 
 function HH:InitVars()
 	self.Settings = {
-		Timers = {
-			Enabled = true,
-			FlamesEnabled = true,
-		},
-		CastBar = {
-			x = false,
-			y = false,
-			Enabled = true,
-		},
+		Enabled = true,
+		CastBar = self.Hydriss.Settings.CastBar,
+		EncTimer = KBM.Defaults.EncTimer(),
 	}
-	KBMGS_Settings = self.Settings
+	KBMDHHH_Settings = self.Settings
+	chKBMDHHH_Settings = self.Settings
 end
 
-function HH:LoadVars()
-	if type(KBMGSBGS_Settings) == "table" then
-		for Setting, Value in pairs(KBMGSBGS_Settings) do
-			if type(KBMGSBGS_Settings[Setting]) == "table" then
-				if self.Settings[Setting] ~= nil then
-					for tSetting, tValue in pairs(KBMGSBGS_Settings[Setting]) do
-						if self.Settings[Setting][tSetting] ~= nil then
-							self.Settings[Setting][tSetting] = tValue
-						end
-					end
-				end
-			else
-				if self.Settings[Setting] ~= nil then
-					self.Settings[Setting] = Value
-				end
-			end
-		end
+function HH:SwapSettings(bool)
+
+	if bool then
+		KBMDHHH_Settings = self.Settings
+		self.Settings = chKBMDHHH_Settings
+	else
+		chKBMDHHH_Settings = self.Settings
+		self.Settings = KBMDHHH_Settings
 	end
+
 end
 
-function HH:SaveVars()
-	KBMGSBGS_Settings = self.Settings
+function HH:LoadVars()	
+	if KBM.Options.Character then
+		KBM.LoadTable(chKBMDHHH_Settings, self.Settings)
+	else
+		KBM.LoadTable(KBMDHHH_Settings, self.Settings)
+	end
+	
+	if KBM.Options.Character then
+		chKBMDHHH_Settings = self.Settings
+	else
+		KBMDHHH_Settings = self.Settings
+	end	
+end
+
+function HH:SaveVars()	
+	if KBM.Options.Character then
+		chKBMDHHH_Settings = self.Settings
+	else
+		KBMDHHH_Settings = self.Settings
+	end	
 end
 
 function HH:Castbar(units)
@@ -119,12 +112,12 @@ function HH:Death(UnitID)
 	return false
 end
 
-function HH:UnitHPCheck(unitDetails, unitID)
+function HH:UnitHPCheck(uDetails, unitID)
 	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if unitDetails.name == self.Hydriss.Name then
-				if not self.Hydriss.UnitID then
+	if uDetails and unitID then
+		if not uDetails.player then
+			if uDetails.name == self.Hydriss.Name then
+				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
@@ -145,6 +138,7 @@ function HH:Reset()
 	self.EncounterRunning = false
 	self.Hydriss.Available = false
 	self.Hydriss.UnitID = nil
+	self.Hydriss.Dead = false
 	self.Hydriss.CastBar:Remove()
 end
 
@@ -152,26 +146,35 @@ function HH:Timer()
 	
 end
 
-function HH.Hydriss:Options()
-	function self:TimersEnabled(bool)
+function HH.Hydriss:SetTimers(bool)	
+	if bool then
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = TimerObj.Settings.Enabled
+		end
+	else
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = false
+		end
 	end
-	function self:FlamesEnabled(bool)
-		HH.Settings.Timers.FlamesEnabled = bool
-		HH.Hydriss.TimersRef.Flames.Enabled = bool
+end
+
+function HH.Hydriss:SetAlerts(bool)
+	if bool then
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = AlertObj.Settings.Enabled
+		end
+	else
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = false
+		end
 	end
-	local Options = self.MenuItem.Options
-	Options:SetTitle()
-	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, HH.Settings.Timers.Enabled)
-	--Timers:AddCheck(HH.Lang.Flames[KBM.Lang], self.FlamesEnabled, HH.Settings.Timers.FlamesEnabled)	
-	
+end
+
+function HH:DefineMenu()
+	self.Menu = DH.Menu:CreateEncounter(self.Hydriss, self.Enabled)
 end
 
 function HH:Start()
-	self.Header = KBM.HeaderList[self.Instance]
-	self.Hydriss.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Hydriss, true, self.Header)
-	self.Hydriss.MenuItem.Check:SetEnabled(false)
-	-- self.Hydriss.TimersRef.Flames = KBM.MechTimer:Add(self.Lang.Flames[KBM.Lang], "cast", 30, self, nil)
-	-- self.Hydriss.TimersRef.Flames.Enabled = self.Settings.Timers.FlamesEnabled
-	
 	self.Hydriss.CastBar = KBM.CastBar:Add(self, self.Hydriss, true)
+	self:DefineMenu()
 end
