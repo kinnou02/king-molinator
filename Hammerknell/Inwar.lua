@@ -141,13 +141,18 @@ ID.Lang.Inwar.French = "Inwar Noirflux"
 ID.Lang.Denizar = KBM.Language:Add(ID.Denizar.Name)
 ID.Lang.Aqualix = KBM.Language:Add(ID.Aqualix.Name)
 ID.Lang.Undertow = KBM.Language:Add(ID.Undertow.Name)
+ID.Lang.Undertow.German = "Sog"
 ID.Lang.Rotjaw = KBM.Language:Add(ID.Rotjaw.Name)
+ID.Lang.Rotjaw.German = "Faulkriefer"
 
 -- Unit Dictionary
 ID.Lang.Unit = {}
 ID.Lang.Unit.Slime = KBM.Language:Add(ID.Slime.Name)
+ID.Lang.Unit.Slime.German = "Stinkender Schleim"
 ID.Lang.Unit.Wrangler = KBM.Language:Add(ID.Wrangler.Name)
+ID.Lang.Unit.Wrangler.German = "Krabbelklauen-Zämker"
 ID.Lang.Unit.Warden = KBM.Language:Add(ID.Warden.Name)
+ID.Lang.Unit.Warden.German = "Gezeitenbewahrer"
 
 -- Adjust Unit Names to match Client
 ID.Inwar.Name = ID.Lang.Inwar[KBM.Lang]

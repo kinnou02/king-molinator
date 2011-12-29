@@ -129,7 +129,9 @@ AK.Lasher.Name = AK.Lang.Unit.Lasher[KBM.Lang]
 -- Ability Dictionary.
 AK.Lang.Ability = {}
 AK.Lang.Ability.Decay = KBM.Language:Add("Mind Decay")
+AK.Lang.Ability.Decay.German = "Geistiger Verfall"
 AK.Lang.Ability.Breath = KBM.Language:Add("Breath of Madness")
+AK.Lang.Ability.Breath.German = "Hauch des Wahnsinns"
 AK.Lang.Ability.Grave = KBM.Language:Add("Watery Grave")
 
 -- Debuff Dictionary.
@@ -140,9 +142,12 @@ AK.Lang.Mechanic = {}
 AK.Lang.Mechanic.Wave = KBM.Language:Add("Tidal Wave")
 AK.Lang.Mechanic.Wave.German = "Flutwelle"
 AK.Lang.Mechanic.Orb = KBM.Language:Add("Suffocating Orb")
+AK.Lang.Mechanic.Orb.German = "Erstickungskugel"
 AK.Lang.Mechanic.Summon = KBM.Language:Add("Summon the Abyss")
 AK.Lang.Mechanic.Emerge = KBM.Language:Add("Akylios emerges")
+AK.Lang.Mechanic.Emerge.German = "Akylios taucht auf"
 AK.Lang.Mechanic.Submerge = KBM.Language:Add("Akylios submerges")
+AK.Lang.Mechanic.Submerge.German = "Akylios taucht unter"
 
 -- Notify Dictionary
 AK.Lang.Notify = {}

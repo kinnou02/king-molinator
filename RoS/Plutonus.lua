@@ -60,6 +60,7 @@ PI.Lang.Plutonus.French = "Plutonus l'Immortel"
 -- Ability Dictionary
 PI.Lang.Ability = {}
 PI.Lang.Ability.Sleep = KBM.Language:Add("Walking Sleep")
+PI.Lang.Ability.Sleep.German = "Wandelnder Schlaf" 
 
 PI.Plutonus.Name = PI.Lang.Plutonus[KBM.Lang]
 

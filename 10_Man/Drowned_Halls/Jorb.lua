@@ -54,10 +54,12 @@ AJ.Lang.Jorb.French = "Commandant d'assaut Jorb"
 -- Ability Dictionary
 AJ.Lang.Ability = {}
 AJ.Lang.Ability.Impact = KBM.Language:Add("Forceful Impact")
+AJ.Lang.Ability.Impact.German = "Machtvoller Schlag"
 
 -- Notify Dictionary
 AJ.Lang.Notify = {}
 AJ.Lang.Notify.Stand = KBM.Language:Add("(%a*), stand to attention!")
+AJ.Lang.Notify.Stand.German = "(%a*), Stillgestanden!"
 
 -- Debuff Dictionary
 AJ.Lang.Debuff = {}

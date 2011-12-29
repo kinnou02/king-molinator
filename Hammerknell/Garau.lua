@@ -65,6 +65,7 @@ GU.Lang.Ability.Blood.German = "Blutflut"
 -- Buff Dictionary
 GU.Lang.Buff = {}
 GU.Lang.Buff.Shield = KBM.Language:Add("Glacial Shield")
+GU.Lang.Buff.Shield.German = "Gletscherschild"
 
 -- Speak Dictionary
 GU.Lang.Say = {}

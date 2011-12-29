@@ -60,8 +60,11 @@ HG.Lang.Gaurath.French = "H\195\169raut Gaurath"
 -- Ability Dictionary
 HG.Lang.Ability = {}
 HG.Lang.Ability.Breath = KBM.Language:Add("Breath of the Void")
+HG.Lang.Ability.Breath.German = "Atem der Leere"
 HG.Lang.Ability.Raise = KBM.Language:Add("Raise the Dead")
+HG.Lang.Ability.Raise.German = "Auferstehung der Toten"
 HG.Lang.Ability.Tidings = KBM.Language:Add("Tidings of Woe")
+HG.Lang.Ability.Tidings.German = "Botschaft der Not"
 
 -- Verbose Dictionary
 HG.Lang.Verbose = {}

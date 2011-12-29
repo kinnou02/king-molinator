@@ -16,8 +16,8 @@
 *** New: Timer added for duration of debuff before Tome can be used again.
 *** Change: Alert for Mark of Oblivion duration reduced slightly.
 ** Estrode
-*** New: Added a stop method to Mistress of the Rift buffs for when it's removed.
-*** Change: The duration of the Mistress of the Rift buff will match that of the buff's.
+*** New: Added a stop method to Mistress of the Rift buff for when it's removed.
+*** Change: The duration of the Mistress of the Rift alert will match that of the buff's.
 ** Inquisitor Garau
 *** New: Screen alert added for Arcane Porter spawn. (flashing purple)
 *** New: Screen alert added for Glacial Shield duration. (solid blue)
@@ -50,10 +50,46 @@
 * French Translation
 ** New: Added Soulrenders Grasp.
 * German Translations
+** Estrode
+*** Change: Herrin des Risses.
+** Grugonim
+*** New: Herzstillstandsgift.
+** Inquisitor Garau
+*** New: Gletscherschild.
+** Inwar Darktide
+*** New: Sog.
+*** New: Faulkriefer.
+*** New: Stinkender Schleim.
+*** New: Krabbelklauen-Zämker.
+*** New: Gezeitenbewahrer.
+** Aylios
+*** New: Geistiger Verfall.
+*** New: Hauch des Wahnsinns.
+*** New: Erstickungskugel.
+*** New: Akylios taucht auf.
+*** New: Akylios taucht unter.
+** Plutonus
+*** New: Wandelnder Schlaf.
+** Herald Gaurath
+*** New: Atem der Leere.
+*** New: Auferstehung der Toten.
+*** New: Botschaft der Not.
+** Alsbeth the Discordant
+*** New: Seelenbestrafung.
+*** New: Boden der Zwietracht.
+*** New: Seelenzerstörung.
+*** New: Zwietracht-Meteor.
+*** New: Zwietracht-Säule.
+*** New: Seelen-Vorbote.
+*** New: Seelen-Dieb.
+*** New: Seelen-Magus.
+** Assault Commander Jorb
+*** New: Machtvoller Schlag.
+*** New: Stillgestanden!.
 ** General Silgen
-*** New: Added Heat Funnel.
-*** New: Added Incinerate.
-*** New: Added Anchored in Flames.
+*** New: Hitzetrichter.
+*** New: Verbrennen.
+*** New: In Flammen verankert.
 ----
 v0.8.5
 * River of Souls

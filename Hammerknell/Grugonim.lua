@@ -100,6 +100,7 @@ GR.Lang.Ability.Swarm.German = "Parasitenschwarm"
 GR.Lang.Debuff = {}
 GR.Lang.Debuff.Toxin = KBM.Language:Add("Heart Stopping Toxin")
 GR.Lang.Debuff.Toxin.French = "Toxin d'arr\195\170t cardiaque"
+GR.Lang.Debuff.Toxin.German = "Herzstillstandsgift" 
 
 GR.Grugonim.Name = GR.Lang.Grugonim[KBM.Lang]
 GR.Tower.Name = GR.Lang.Tower[KBM.Lang]

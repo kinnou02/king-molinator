@@ -67,10 +67,14 @@ AD.Lang.Alsbeth.French = "Alsbeth la Discordante"
 -- Ability Dictionary
 AD.Lang.Ability = {}
 AD.Lang.Ability.Punish = KBM.Language:Add("Punish Soul")
+AD.Lang.Ability.Punish.German = "Seelenbestrafung"
 AD.Lang.Ability.Ground = KBM.Language:Add("Discordant Ground")
+AD.Lang.Ability.Ground.German = "Boden der Zwietracht"
 AD.Lang.Ability.Blast = KBM.Language:Add("Discordant Blast")
 AD.Lang.Ability.Soul = KBM.Language:Add("Soul Destruction")
+AD.Lang.Ability.Soul.German = "Seelenzerstörung"
 AD.Lang.Ability.Meteor = KBM.Language:Add("Discordant Meteor")
+AD.Lang.Ability.Meteor.German = "Zwietracht-Meteor"
 
 -- Notify Dictionary
 AD.Lang.Notify = {}
@@ -90,13 +94,21 @@ AD.Lang.Verbose.Meteor = KBM.Language:Add(AD.Lang.Ability.Meteor[KBM.Lang].." (F
 -- Unit Dictionary
 AD.Lang.Unit = {}
 AD.Lang.Unit.Pillar = KBM.Language:Add("Discordant Pillar")
+AD.Lang.Unit.Pillar.German = "Zwietracht-Säule"
 AD.Lang.Unit.PillarShort = KBM.Language:Add("Pillar")
+AD.Lang.Unit.PillarShort.German = "Säule"
 AD.Lang.Unit.Harbinger = KBM.Language:Add("Soul Harbinger")
+AD.Lang.Unit.Harbinger.German = "Seelen-Vorbote"
 AD.Lang.Unit.HarbingerShort = KBM.Language:Add("Harbinger")
+AD.Lang.Unit.HarbingerShort.German = "Vorbote"
 AD.Lang.Unit.Thief = KBM.Language:Add("Soul Thief")
+AD.Lang.Unit.Thief.German = "Seelen-Dieb"
 AD.Lang.Unit.ThiefShort = KBM.Language:Add("Thief")
+AD.Lang.Unit.ThiefShort.German = "Dieb"
 AD.Lang.Unit.Magus = KBM.Language:Add("Soul Magus")
+AD.Lang.Unit.Magus.German = "Seelen-Magus"
 AD.Lang.Unit.MagusShort = KBM.Language:Add("Magi")
+AD.Lang.Unit.MagusShort.German = "Magus"
 
 AD.Harbinger = {
 	Mod = AD,
