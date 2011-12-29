@@ -1,10 +1,23 @@
 ﻿v0.8.6
+* Trigger Engine
+** Buffs
+*** New: There is now a new trigger for buffs/debuffs which target raid members.
+*** Change: All previous buff triggers for players have been converted. Please report any issues.
+*** Change: Buff triggers are now matched to an encounter and unit ID before triggering.
+*** Fixed: BuffRemove triggers where not working as intented.
 * Mechanic Timers
 ** Fixed: Setting changes were not applied until a /reloadui or restart.
 ** Note: This was the same issue as the previously fixed alert settings.
 * Hammerknell
 ** Soulrender Zilas
 *** Fixed: The duration portion of Soulrenders Grasp had become disabled.
+** Matron Zamira
+*** New: Timer added for spawn of adds after Tome use.
+*** New: Timer added for duration of debuff before Tome can be used again.
+*** Change: Alert for Mark of Oblivion duration reduced slightly.
+** Estrode
+*** New: Added a stop method to Mistress of the Rift buffs for when it's removed.
+*** Change: The duration of the Mistress of the Rift buff will match that of the buff's.
 ** Inquisitor Garau
 *** New: Screen alert added for Arcane Porter spawn. (flashing purple)
 *** New: Screen alert added for Glacial Shield duration. (solid blue)
@@ -27,7 +40,7 @@
 *** Converted to new engine.
 *** New: Added enrage timer.
 *** New: Timer and alert for Forceful Impact.
-*** New: Add Alert and duration countdown for Paralyzing Grasp.
+*** New: Added Alert and duration countdown for Paralyzing Grasp.
 ** Joloral Ragetide
 *** Converted to new engine.
 ** Isskal
@@ -37,7 +50,10 @@
 * French Translation
 ** New: Added Soulrenders Grasp.
 * German Translations
-** 
+** General Silgen
+*** New: Added Heat Funnel.
+*** New: Added Incinerate.
+*** New: Added Anchored in Flames.
 ----
 v0.8.5
 * River of Souls

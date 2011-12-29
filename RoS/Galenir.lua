@@ -192,7 +192,7 @@ function WG:Start()
 	KBM.Defaults.AlertObj.Assign(self.Galenir)
 	
 	-- Assign Alerts and Timers to Triggers
-	self.Galenir.Triggers.Essence = KBM.Trigger:Create(self.Lang.Debuff.Essence[KBM.Lang], "buff", self.Galenir)
+	self.Galenir.Triggers.Essence = KBM.Trigger:Create(self.Lang.Debuff.Essence[KBM.Lang], "playerBuff", self.Galenir)
 	self.Galenir.Triggers.Essence:AddAlert(self.Galenir.AlertsRef.Essence, true)
 	
 	self:DefineMenu()

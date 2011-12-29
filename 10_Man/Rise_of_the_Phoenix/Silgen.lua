@@ -10,6 +10,8 @@ local KBM = AddonData.data
 local ROTP = KBM.BossMod["Rise of the Phoenix"]
 
 local GS = {
+	Directory = ROTP.Directory,
+	File = "Silgen.lua",
 	Enabled = true,
 	Instance = ROTP.Name,
 	HasPhases = true,
@@ -57,11 +59,14 @@ GS.Lang.Silgen.French = "G\195\169n\195\169ral Silgen"
 -- Ability Dictionary
 GS.Lang.Ability = {}
 GS.Lang.Ability.Funnel = KBM.Language:Add("Heat Funnel")
+GS.Lang.Ability.Funnel.German = "Hitzetrichter"
 GS.Lang.Ability.Incinerate = KBM.Language:Add("Incinerate")
+GS.Lang.Ability.Incinerate.German = "Verbrennen"
 
 -- Debuff Dictionary
 GS.Lang.Debuff = {}
 GS.Lang.Debuff.Anchor = KBM.Language:Add("Anchored in Flames")
+GS.Lang.Debuff.Anchor.German = "In Flammen verankert"
 
 GS.Silgen.Name = GS.Lang.Silgen[KBM.Lang]
 
@@ -218,9 +223,9 @@ function GS:Start()
 	self.Silgen.Triggers.Funnel = KBM.Trigger:Create(self.Lang.Ability.Funnel[KBM.Lang], "cast", self.Silgen)
 	self.Silgen.Triggers.Funnel:AddTimer(self.Silgen.TimersRef.Funnel)
 	self.Silgen.Triggers.Funnel:AddAlert(self.Silgen.AlertsRef.Funnel)
-	self.Silgen.Triggers.Anchor = KBM.Trigger:Create(self.Lang.Debuff.Anchor[KBM.Lang], "buff", self.Silgen)
+	self.Silgen.Triggers.Anchor = KBM.Trigger:Create(self.Lang.Debuff.Anchor[KBM.Lang], "playerBuff", self.Silgen)
 	self.Silgen.Triggers.Anchor:AddAlert(self.Silgen.AlertsRef.Anchor, true)
-	self.Silgen.Triggers.AnchorRemove = KBM.Trigger:Create(self.Lang.Debuff.Anchor[KBM.Lang], "buffRemove", self.Silgen)
+	self.Silgen.Triggers.AnchorRemove = KBM.Trigger:Create(self.Lang.Debuff.Anchor[KBM.Lang], "playerBuffRemove", self.Silgen)
 	self.Silgen.Triggers.AnchorRemove:AddStop(self.Silgen.AlertsRef.Anchor)
 	self.Silgen.Triggers.Incinerate = KBM.Trigger:Create(self.Lang.Ability.Incinerate[KBM.Lang], "cast", self.Silgen)
 	self.Silgen.Triggers.Incinerate:AddTimer(self.Silgen.TimersRef.Incinerate)

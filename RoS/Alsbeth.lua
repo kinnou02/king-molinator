@@ -485,7 +485,7 @@ function AD:Start()
 	-- Assign Timers and Alerts to triggers.
 	self.Alsbeth.Triggers.PunishWarn = KBM.Trigger:Create(self.Lang.Notify.Punish[KBM.Lang], "notify", self.Alsbeth)
 	self.Alsbeth.Triggers.PunishWarn:AddAlert(self.Alsbeth.AlertsRef.PunishWarn, true)
-	self.Alsbeth.Triggers.Punish = KBM.Trigger:Create(self.Lang.Ability.Punish[KBM.Lang], "buff", self.Alsbeth)
+	self.Alsbeth.Triggers.Punish = KBM.Trigger:Create(self.Lang.Ability.Punish[KBM.Lang], "playerBuff", self.Alsbeth)
 	self.Alsbeth.Triggers.Punish:AddAlert(self.Alsbeth.AlertsRef.Punish, true)
 	self.Alsbeth.Triggers.Final = KBM.Trigger:Create(20, "percent", self.Alsbeth)
 	self.Alsbeth.Triggers.Final:AddPhase(self.FinalPhase)

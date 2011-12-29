@@ -335,7 +335,7 @@ function DF:Start()
 	self.Foci.Triggers.Call:AddTimer(self.Foci.TimersRef.Call)
 	self.Foci.Triggers.Call:AddAlert(self.Foci.AlertsRef.Call)
 	self.Foci.Triggers.Call:AddPhase(self.PhaseForce)
-	self.Foci.Triggers.Soul = KBM.Trigger:Create(self.Lang.Debuff.Soul[KBM.Lang], "buff", self.Foci)
+	self.Foci.Triggers.Soul = KBM.Trigger:Create(self.Lang.Debuff.Soul[KBM.Lang], "playerBuff", self.Foci)
 	self.Foci.Triggers.Soul:AddTimer(self.Foci.TimersRef.Soul)
 	self.Foci.Triggers.Soul:AddAlert(self.Foci.AlertsRef.Soul, true)
 	

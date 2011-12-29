@@ -258,7 +258,7 @@ function OA:Start()
 	KBM.Defaults.TimerObj.Assign(self.Aleria)
 
 	-- Assign Alert to Trigger
-	self.Aleria.Triggers.Necrotic = KBM.Trigger:Create(self.Lang.Debuff.Necrotic[KBM.Lang], "buff", self.Aleria)
+	self.Aleria.Triggers.Necrotic = KBM.Trigger:Create(self.Lang.Debuff.Necrotic[KBM.Lang], "playerBuff", self.Aleria)
 	self.Aleria.Triggers.Necrotic:AddAlert(self.Aleria.AlertsRef.Necrotic, true)
 	self.Aleria.Triggers.Necrotic:AddTimer(self.Aleria.TimersRef.Necrotic)
 	

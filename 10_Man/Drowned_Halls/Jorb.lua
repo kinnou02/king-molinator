@@ -215,7 +215,7 @@ function AJ:Start()
 	self.Jorb.Triggers.Impact = KBM.Trigger:Create(self.Lang.Ability.Impact[KBM.Lang], "cast", self.Jorb)
 	self.Jorb.Triggers.Impact:AddAlert(self.Jorb.AlertsRef.Impact)
 	self.Jorb.Triggers.Impact:AddTimer(self.Jorb.TimersRef.Impact)
-	self.Jorb.Triggers.Grasp = KBM.Trigger:Create(self.Lang.Debuff.Grasp[KBM.Lang], "buff", self.Jorb)
+	self.Jorb.Triggers.Grasp = KBM.Trigger:Create(self.Lang.Debuff.Grasp[KBM.Lang], "playerBuff", self.Jorb)
 	self.Jorb.Triggers.Grasp:AddAlert(self.Jorb.AlertsRef.Grasp)
 	
 	self.Jorb.CastBar = KBM.CastBar:Add(self, self.Jorb, true)

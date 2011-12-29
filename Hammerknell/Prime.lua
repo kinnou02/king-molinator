@@ -207,7 +207,7 @@ function VP:Start()
 	-- Add Mechanics to Triggers
 	self.Prime.Triggers.Flames = KBM.Trigger:Create(self.Lang.Flames[KBM.Lang], "cast", self.Prime)
 	self.Prime.Triggers.Flames:AddTimer(self.Prime.TimersRef.Flames)
-	self.Prime.Triggers.FlamesDebuff = KBM.Trigger:Create(self.Lang.Flames[KBM.Lang], "buff", self.Prime)
+	self.Prime.Triggers.FlamesDebuff = KBM.Trigger:Create(self.Lang.Flames[KBM.Lang], "playerBuff", self.Prime)
 	self.Prime.Triggers.FlamesDebuff:AddAlert(self.Prime.AlertsRef.Flames, true)
 	
 	self.Prime.CastBar = KBM.CastBar:Add(self, self.Prime, true)

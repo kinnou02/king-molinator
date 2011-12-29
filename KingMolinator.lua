@@ -10,6 +10,7 @@ local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 KBM.BossMod = {}
 KBM.Lang = Inspect.System.Language()
+KBM.Player = {}
 KBM.Language = {}
 KBM.ID = "KingMolinator"
 KBM.ModList = {}
@@ -408,7 +409,6 @@ KBM.Encounter = false
 KBM.HeaderList = {}
 KBM.CurrentBoss = ""
 KBM.CurrentMod = nil
-local KBM_PlayerID = nil
 local KBM_TestIsCasting = false
 local KBM_TestAbility = nil
 
@@ -1139,7 +1139,9 @@ function KBM.Trigger:Init()
 	self.Start = {}
 	self.Death = {}
 	self.Buff = {}
+	self.PlayerBuff = {}
 	self.BuffRemove = {}
+	self.PlayerBuffRemove = {}
 	self.Time = {}
 
 	function self.Queue:Add(TriggerObj, Caster, Target, Duration)	
@@ -1260,7 +1262,7 @@ function KBM.Trigger:Init()
 			end
 			for i, AlertObj in ipairs(self.Alerts) do
 				if AlertObj.Player then
-					if KBM_PlayerID == Target then
+					if KBM.Player.UnitID == Target then
 						KBM.Alert:Start(AlertObj, Inspect.Time.Real(), Data)
 						Triggered = true
 					end
@@ -1331,7 +1333,20 @@ function KBM.Trigger:Init()
 			end
 			self.Buff[Unit.Mod.ID][Trigger] = TriggerObj
 		elseif Type == "buffRemove" then
-			self.BuffRemove[Trigger] = TriggerObj
+			if not self.BuffRemove[Unit.Mod.ID] then
+				self.BuffRemove[Unit.Mod.ID] = {}
+			end
+			self.BuffRemove[Unit.Mod.ID][Trigger] = TriggerObj
+		elseif Type == "playerBuff" then
+			if not self.PlayerBuff[Unit.Mod.ID] then
+				self.PlayerBuff[Unit.Mod.ID] = {}
+			end
+			self.PlayerBuff[Unit.Mod.ID][Trigger] = TriggerObj
+		elseif Type == "playerBuffRemove" then
+			if not self.PlayerBuffRemove[Unit.Mod.ID] then
+				self.PlayerBuffRemove[Unit.Mod.ID] = {}
+			end
+			self.PlayerBuffRemove[Unit.Mod.ID][Trigger] = TriggerObj
 		elseif Type == "time" then
 			if not self.Time[Unit.Mod.ID] then
 				self.Time[Unit.Mod.ID] = {}
@@ -3651,7 +3666,7 @@ function KBM:Timer()
 				-- if d < 20 then
 					-- d = math.random(1, #KBM.Trigger.List)
 					-- if KBM.Trigger.List[d].Type ~= "phase" and KBM.Trigger.List[d].Type ~= "percent" then
-						-- KBM.Trigger.Queue:Add(KBM.Trigger.List[d], KBM_PlayerID, KBM_PlayerID, 2)
+						-- KBM.Trigger.Queue:Add(KBM.Trigger.List[d], KBM.Player.UnitID, KBM.Player.UnitID, 2)
 					-- end
 				-- end
 				-- Cycle All Alerts
@@ -3770,8 +3785,8 @@ function KBM.Notify(data)
 							sStart, sEnd, Target = string.find(data.message, TriggerObj.Phrase)
 							if sStart then
 								unitID = nil
-								if Target == KBM_PlayerName then
-									unitID = KBM_PlayerID
+								if Target == KBM.Player.Name then
+									unitID = KBM.Player.UnitID
 								end
 								KBM.Trigger.Queue:Add(TriggerObj, nil, unitID)
 								break
@@ -3827,7 +3842,16 @@ function KBM:BuffMonitor(unitID, Buffs, Type)
 							if KBM.Trigger.Buff[KBM.CurrentMod.ID] then
 								if KBM.Trigger.Buff[KBM.CurrentMod.ID][bDetails.name] then
 									TriggerObj = KBM.Trigger.Buff[KBM.CurrentMod.ID][bDetails.name]
-									KBM.Trigger.Queue:Add(TriggerObj, nil, unitID, bDetails.remaining)
+									if TriggerObj.Unit.UnitID == unitID then
+										KBM.Trigger.Queue:Add(TriggerObj, nil, unitID, bDetails.remaining)
+									end
+								end
+							elseif KBM.Trigger.PlayerBuff[KBM.CurrentMod.ID] then
+								if KBM.Trigger.PlayerBuff[KBM.CurrentMod.ID][bDetails.name] then
+									TriggerObj = KBM.Trigger.PlayerBuff[KBM.CurrentMod.ID][bDetails.name]
+									if LibSRM.Group.UnitExists(unitID) then
+										KBM.Trigger.Queue:Add(TriggerObj, nil, unitID, bDetails.remaining)
+									end
 								end
 							end
 							if KBM.TankSwap.Active then
@@ -3845,9 +3869,20 @@ function KBM:BuffMonitor(unitID, Buffs, Type)
 					for BuffID, bool in pairs(Buffs) do
 						bDetails = Inspect.Buff.Detail(unitID, BuffID)
 						if bDetails then
-							if KBM.Trigger.BuffEnd[bDetails.name] then
-								TriggerObj = KBM.Trigger.BuffEnd[bDetails.name]
-								KBM.Trigger.Queue:Add(TriggerObj, nil, unitID, nil)
+							if KBM.Trigger.BuffRemove[KBM.CurrentMod.ID] then
+								if KBM.Trigger.BuffRemove[KBM.CurrenMod.ID][bDetails.name] then
+									TriggerObj = KBM.Trigger.BuffRemove[KBM.CurrentMod.ID][bDetails.name]
+									if TriggerObj.Unit.UnitID == unitID then
+										KBM.Trigger.Queue:Add(TriggerObj, nil, unitID, nil)
+									end
+								end
+							elseif KBM.Trigger.PlayerBuffRemove[KBM.CurrentMod.ID] then
+								if KBM.Trigger.PlayerBuffRemove[KBM.CurrentMod.ID][bDetails.name] then
+									TriggerObj = KBM.Trigger.PlayerBuffRemove[KBM.CurrentMod.ID][bDetails.name]
+									if LibSRM.Group.UnitExists(unitID) then
+										KBM.Trigger.Queue:Add(TriggerObj, nil, unitID, nil)
+									end
+								end
 							end
 						end
 					end
@@ -4369,8 +4404,8 @@ local function KBM_Start()
 end
 
 local function KBM_WaitReady(unitID, uDetails)
-	KBM_PlayerID = unitID
-	KBM_PlayerName = uDetails.name
+	KBM.Player.UnitID = unitID
+	KBM.Player.Name = uDetails.name
 	KBM_Start()
 	for _, Mod in ipairs(KBM.ModList) do
 		Mod:AddBosses(KBM_Boss)
@@ -4381,15 +4416,15 @@ local function KBM_WaitReady(unitID, uDetails)
 	-- KBM.Settings = {}
 	-- KBM.Settings.CastBar = KBM.Defaults.CastBar()
 	
-	-- KBM_PlayerCastBar = KBM.CastBar:Add(KBM, {Name = KBM_PlayerName, Mod = KBM}, true)
-	-- KBM_PlayerCastBar:Create(KBM_PlayerID)
+	-- KBM_PlayerCastBar = KBM.CastBar:Add(KBM, {Name = KBM.Player.Name, Mod = KBM}, true)
+	-- KBM_PlayerCastBar:Create(KBM.Player.UnitID)
 		
 --	KBM.MenuGroup:SetMaster()
 --	KBM.MenuGroup:SetExpertTwo()
 --	KBM.MenuGroup:SetExpertOne()
 	-- if KBM.Testing then
 		-- TestBar = KBM.CastBar:Add(KBM, KBM.TestBoss, true)
-		-- TestBar:Create(KBM_PlayerID)
+		-- TestBar:Create(KBM.Player.UnitID)
 		-- for i, TriggerObj in ipairs(KBM.Trigger.List) do
 			-- TriggerObj:Activate()
 		-- end

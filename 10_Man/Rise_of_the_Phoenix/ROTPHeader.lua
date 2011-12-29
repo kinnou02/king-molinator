@@ -6,6 +6,7 @@
 KBMROTP_Settings = {}
 
 local ROTP = {
+	Directory = "10_Man/Rise_of_the_Phoenix",
 	Header = nil,
 	Enabled = true,
 	IsInstance = true,

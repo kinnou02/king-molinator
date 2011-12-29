@@ -11,13 +11,9 @@ local KBM = AddonData.data
 local HK = KBM.BossMod["Hammerknell"]
 
 local MZ = {
+	Directory = HK.Directory,
+	File = "Matron.lua",
 	Enabled = true,
-	Matron = {
-		MenuItem = nil,
-		Enabled = true,
-		Handler = nil,
-		Options = nil,
-	},
 	Instance = HK.Name,
 	HasPhases = true,
 	PhaseObj = nil,
@@ -31,6 +27,7 @@ MZ.Matron = {
 	Level = "??",
 	Active = false,
 	Name = "Matron Zamira",
+	NameShort = "Zamira",
 	Castbar = nil,
 	CastFilters = {},
 	Timers = {},
@@ -50,6 +47,8 @@ MZ.Matron = {
 			Shadow = KBM.Defaults.TimerObj.Create(),
 			Blast = KBM.Defaults.TimerObj.Create(),
 			Ichor = KBM.Defaults.TimerObj.Create(),
+			Adds = KBM.Defaults.TimerObj.Create(),
+			Spiritual = KBM.Defaults.TimerObj.Create(),
 		},
 		AlertsRef = {
 			Enabled = true,
@@ -87,6 +86,12 @@ MZ.Lang.Debuff = {}
 MZ.Lang.Debuff.Curse = KBM.Language:Add("Matron's Curse")
 MZ.Lang.Debuff.Curse.German = "Fluch der Matrone"
 MZ.Lang.Debuff.Curse.French = "Mal\195\169diction de la matrone"
+MZ.Lang.Debuff.Spiritual = KBM.Language:Add("Spiritual Exhaustion")
+
+-- Verbose Dictionary
+MZ.Lang.Verbose = {}
+MZ.Lang.Verbose.Adds = KBM.Language:Add("Adds spawn")
+MZ.Lang.Verbose.Spiritual = KBM.Language:Add(MZ.Lang.Debuff.Spiritual[KBM.Lang].." fades")
 
 MZ.Matron.Name = MZ.Lang.Matron[KBM.Lang]
 
@@ -258,11 +263,13 @@ function MZ:Start()
 	self.Matron.TimersRef.Shadow = KBM.MechTimer:Add(self.Lang.Ability.Shadow[KBM.Lang], 11)
 	self.Matron.TimersRef.Blast = KBM.MechTimer:Add(self.Lang.Ability.Blast[KBM.Lang], 8)
 	self.Matron.TimersRef.Ichor = KBM.MechTimer:Add(self.Lang.Ability.Ichor[KBM.Lang], 5)
+	self.Matron.TimersRef.Adds = KBM.MechTimer:Add(self.Lang.Verbose.Adds[KBM.Lang], 10)
+	self.Matron.TimersRef.Spiritual = KBM.MechTimer:Add(self.Lang.Verbose.Spiritual[KBM.Lang], 60)
 	
 	-- Create Alerts
 	self.Matron.AlertsRef.Concussion = KBM.Alert:Create(self.Lang.Ability.Concussion[KBM.Lang], 2, true, false, "red")
 	self.Matron.AlertsRef.Blast = KBM.Alert:Create(self.Lang.Ability.Blast[KBM.Lang], nil, true, false, "yellow")
-	self.Matron.AlertsRef.Mark = KBM.Alert:Create(self.Lang.Ability.Mark[KBM.Lang], 6, false, true, "purple")
+	self.Matron.AlertsRef.Mark = KBM.Alert:Create(self.Lang.Ability.Mark[KBM.Lang], 5, false, true, "purple")
 
 	KBM.Defaults.TimerObj.Assign(self.Matron)
 	KBM.Defaults.AlertObj.Assign(self.Matron)
@@ -287,6 +294,9 @@ function MZ:Start()
 	self.Matron.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
 	self.Matron.Triggers.PhaseThree = KBM.Trigger:Create(30, "percent", self.Matron)
 	self.Matron.Triggers.PhaseThree:AddPhase(self.PhaseThree)
+	self.Matron.Triggers.Spiritual = KBM.Trigger:Create(self.Lang.Debuff.Spiritual[KBM.Lang], "playerBuff", self.Matron)
+	self.Matron.Triggers.Spiritual:AddTimer(self.Matron.TimersRef.Adds)
+	self.Matron.Triggers.Spiritual:AddTimer(self.Matron.TimersRef.Spiritual)
 	
 	-- Assign Castbar object
 	self.Matron.CastBar = KBM.CastBar:Add(self, self.Matron, true)

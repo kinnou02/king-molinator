@@ -12,6 +12,8 @@ local KBM = AddonData.data
 local ROTP = KBM.BossMod["Rise of the Phoenix"]
 
 local HA = {
+	Directory = ROTP.Directory,
+	File = "Arakhurn.lua",
 	Enabled = true,
 	Instance = ROTP.Name,
 	HasPhases = true,

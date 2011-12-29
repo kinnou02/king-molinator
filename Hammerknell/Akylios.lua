@@ -539,7 +539,7 @@ function AK:Start()
 	
 	self.Akylios.Triggers.PhaseFour = KBM.Trigger:Create(55, "percent", self.Akylios)
 	self.Akylios.Triggers.PhaseFour:AddPhase(self.PhaseFour)
-	self.Akylios.Triggers.Decay = KBM.Trigger:Create(self.Lang.Ability.Decay[KBM.Lang], "buff", self.Akylios)
+	self.Akylios.Triggers.Decay = KBM.Trigger:Create(self.Lang.Ability.Decay[KBM.Lang], "playerBuff", self.Akylios)
 	self.Akylios.Triggers.Decay:AddAlert(self.Akylios.AlertsRef.Decay, true)
 	self.Akylios.Triggers.Breath = KBM.Trigger:Create(AK.Lang.Ability.Breath[KBM.Lang], "cast", self.Akylios)
 	self.Akylios.Triggers.Breath:AddTimer(AK.Akylios.TimersRef.Breath)
