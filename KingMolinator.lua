@@ -1045,6 +1045,11 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 					end
 				end
 			end
+			if self.AlertAfter then
+				if KBM.Encounter then
+					KBM.Alert:Start(self.AlertAfter, Inspect.Timer.Real())
+				end
+			end
 		end
 	end
 	
@@ -1053,9 +1058,13 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 			if AlertObj.Type ~= "alert" then
 				error("Expecting AlertObj got "..tostring(AlertObj.Type))
 			else
-				self.Alerts[Time] = {}
-				self.Alerts[Time].Triggered = false
-				self.Alerts[Time].AlertObj = AlertObj
+				if Time == 0 then
+					self.AlertAfter = AlertObj
+				else
+					self.Alerts[Time] = {}
+					self.Alerts[Time].Triggered = false
+					self.Alerts[Time].AlertObj = AlertObj
+				end
 			end
 		else
 			error("Expecting AlertObj got "..type(AlertObj))

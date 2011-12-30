@@ -47,6 +47,11 @@
 *** New: Added Alert for Panic Attack duration.
 ** Isskal
 *** Converted to new engine.
+*** New: Added Alert for Ice Shard.
+*** New: Added Timer until Whirlpool.
+*** New: Added Alert for Whirlpool starting.
+*** New: Added duration Timers for both Clockwise and Anti-clockwise running.
+*** New: Added Timer until Glacial Wave start.
 ** Priestess Hydriss
 *** Converted to new engine.
 * French Translation
