@@ -24,12 +24,23 @@ JR.Joloral = {
 	Name = "Joloral Ragetide",
 	NameShort = "Joloral",
 	Menu = {},
+	AlertsRef = {},
+	TimersRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
+		AlertsRef = {
+			Enabled = true,
+			Panic = KBM.Defaults.AlertObj.Create("purple"),
+			PanicDuration = KBM.Defaults.AlertObj.Create("purple"),
+		},
+		TimersRef = {
+			Enabled = true,
+			Panic = KBM.Defaults.TimerObj.Create("purple"),
+		},
 	},
 }
 
@@ -38,6 +49,18 @@ KBM.RegisterMod(JR.ID, JR)
 JR.Lang.Joloral = KBM.Language:Add(JR.Joloral.Name)
 JR.Lang.Joloral.German = "Joloral Wutflut"
 JR.Lang.Joloral.French = "Joloral Ragemar\195\169e"
+
+-- Ability Dictionary
+JR.Lang.Ability = {}
+JR.Lang.Ability.Panic = KBM.Language:Add("Panic Attack")
+
+-- Notify Dictionary
+JR.Lang.Notify = {}
+JR.Lang.Notify.Panic = KBM.Language:Add("Joloral Ragetide glares at (%a*)")
+
+-- Menu Dictionary
+JR.Lang.Menu = {}
+JR.Lang.Menu.Panic = KBM.Language:Add(JR.Lang.Ability.Panic[KBM.Lang].." duration.")
 
 JR.Joloral.Name = JR.Lang.Joloral[KBM.Lang]
 
@@ -55,6 +78,10 @@ function JR:InitVars()
 		Enabled = true,
 		CastBar = self.Joloral.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
+		AlertsRef = self.Joloral.Settings.AlertsRef,
+		TimersRef = self.Joloral.Settings.TimersRef,
+		Alert = KBM.Defaults.Alerts(),
+		MechTimer = KBM.Defaults.MechTimer(),
 	}
 	KBMDHJR_Settings = self.Settings
 	chKBMDHJR_Settings = self.Settings
@@ -176,6 +203,23 @@ function JR:DefineMenu()
 end
 
 function JR:Start()
+	-- Create Timers
+	self.Joloral.TimersRef.Panic = KBM.MechTimer:Add(self.Lang.Ability.Panic[KBM.Lang], 37)
+	KBM.Defaults.TimerObj.Assign(self.Joloral)
+	
+	-- Create Alerts
+	self.Joloral.AlertsRef.Panic = KBM.Alert:Create(self.Lang.Ability.Panic[KBM.Lang], nil, true, true, "purple")
+	self.Joloral.AlertsRef.PanicDuration = KBM.Alert:Create(self.Lang.Ability.Panic[KBM.Lang], nil, false, true, "purple")
+	self.Joloral.AlertsRef.PanicDuration.MenuName = self.Lang.Menu.Panic[KBM.Lang]
+	KBM.Defaults.AlertObj.Assign(self.Joloral)
+	
+	-- Assign Timers and Alerts to Triggers
+	self.Joloral.Triggers.Panic = KBM.Trigger:Create(self.Lang.Ability.Panic[KBM.Lang], "cast", self.Joloral)
+	self.Joloral.Triggers.Panic:AddTimer(self.Joloral.TimersRef.Panic)
+	self.Joloral.Triggers.Panic:AddAlert(self.Joloral.AlertsRef.Panic)
+	self.Joloral.Triggers.PanicDuration = KBM.Trigger:Create(self.Lang.Ability.Panic[KBM.Lang], "playerBuff", self.Joloral)
+	self.Joloral.Triggers.PanicDuration:AddAlert(self.Joloral.AlertsRef.PanicDuration)
+	
 	self.Joloral.CastBar = KBM.CastBar:Add(self, self.Joloral, true)
 	self:DefineMenu()
 end

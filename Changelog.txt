@@ -43,6 +43,8 @@
 *** New: Added Alert and duration countdown for Paralyzing Grasp.
 ** Joloral Ragetide
 *** Converted to new engine.
+*** New: Added Timer and Alert for Panic Attack.
+*** New: Added Alert for Panic Attack duration.
 ** Isskal
 *** Converted to new engine.
 ** Priestess Hydriss
