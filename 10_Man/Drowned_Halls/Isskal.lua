@@ -53,18 +53,24 @@ IL.Lang.Isskal = KBM.Language:Add(IL.Isskal.Name)
 -- Ability Dictionary
 IL.Lang.Ability = {}
 IL.Lang.Ability.Shard = KBM.Language:Add("Ice Shard")
+IL.Lang.Ability.Shard.German = "Eissplitter"
 IL.Lang.Ability.Wave = KBM.Language:Add("Glacial Wave")
+IL.Lang.Ability.Wave.German = "Gletscherwelle"
 
 -- Mechanic Dictionary
 IL.Lang.Mechanic = {}
 IL.Lang.Mechanic.Whirlpool = KBM.Language:Add("Whirlpool")
 IL.Lang.Mechanic.Anti = KBM.Language:Add("Anti-Clockwise")
+IL.Lang.Mechanic.Anti.German = "Gegen Uhrzeigersinn"
 IL.Lang.Mechanic.Clock = KBM.Language:Add("Clockwise")
+IL.Lang.Mechanic.Clock.German = "Im Uhrzeigersinn"
 
 -- Mechanic Notify
 IL.Lang.Notify = {}
 IL.Lang.Notify.Whirlpool = KBM.Language:Add("Go with the current - or die!")
+IL.Lang.Notify.Whirlpool.German = "Folgt dem Strom, oder sterbt!"
 IL.Lang.Notify.Clock = KBM.Language:Add("You're going the wrong way, fools!")
+IL.Lang.Notify.Clock.German = "Ihr Narren geht in die falsche Richtung!"
 
 IL.Isskal.Name = IL.Lang.Isskal[KBM.Lang]
 

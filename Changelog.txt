@@ -111,6 +111,14 @@
 *** New: Hitzetrichter.
 *** New: Verbrennen.
 *** New: In Flammen verankert.
+** Joloral Wutflut
+*** New: Plattenverkrüppler.
+*** New: Panikattacke.
+** Isskal
+*** New: Eissplitter.
+*** New: Gletscherwelle.
+*** New: Gegen Uhrzeigersinn.
+*** New: Im Uhrzeigersinn.
 ----
 v0.8.5
 * River of Souls

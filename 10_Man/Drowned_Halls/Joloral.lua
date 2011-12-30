@@ -53,22 +53,27 @@ JR.Lang.Joloral.French = "Joloral Ragemar\195\169e"
 -- Unit Dictionary
 JR.Lang.Unit = {}
 JR.Lang.Unit.Crippler = KBM.Language:Add("Plated Crippler")
+JR.Lang.Unit.Crippler.German = "Plattenverkrüppler"
 
 -- Ability Dictionary
 JR.Lang.Ability = {}
 JR.Lang.Ability.Panic = KBM.Language:Add("Panic Attack")
+JR.Lang.Ability.Panic.German = "Panikattacke"
 
 -- Notify Dictionary
 JR.Lang.Notify = {}
 JR.Lang.Notify.Panic = KBM.Language:Add("Joloral Ragetide glares at (%a*)")
+JR.Lang.Notify.Panic.German = "Joloral Wutflut starrt (%a*) an!"
 
 -- Verbose Dictionary
 JR.Lang.Verbose = {}
 JR.Lang.Verbose.Crippler = KBM.Language:Add(JR.Lang.Unit.Crippler[KBM.Lang].." enters the battle")
+JR.Lang.Verbose.Crippler.German = JR.Lang.Unit.Crippler[KBM.Lang].." greift in den Kampf ein!"
 
 -- Menu Dictionary
 JR.Lang.Menu = {}
 JR.Lang.Menu.Panic = KBM.Language:Add(JR.Lang.Ability.Panic[KBM.Lang].." duration.")
+JR.Lang.Menu.Panic.German = JR.Lang.Ability.Panic[KBM.Lang].." Dauer."
 
 JR.Joloral.Name = JR.Lang.Joloral[KBM.Lang]
 
