@@ -56,41 +56,55 @@
 *** Converted to new engine.
 * French Translation
 ** New: Added Soulrenders Grasp.
+** Fixed: Duke Letareus in Prince Hylas encounter.
 * German Translations
+** Fixed: Duke Letareus in Prince Hylas ecnotuner.
+** New: Various Options translated.
+** Matrone Zamira
+*** New: Adds spawnen.
+*** New: Spiritual Exhaustion ausgelaufen!
+** Vladmal Prime
+*** Change: Uralte Flammen
 ** Estrode
 *** Change: Herrin des Risses.
 ** Grugonim
 *** New: Herzstillstandsgift.
 ** Inquisitor Garau
 *** New: Gletscherschild.
-** Inwar Darktide
+** Inwar Dunkelflut
 *** New: Sog.
 *** New: Faulkriefer.
 *** New: Stinkender Schleim.
 *** New: Krabbelklauen-Zämker.
 *** New: Gezeitenbewahrer.
-** Aylios
+** Akylios
 *** New: Geistiger Verfall.
 *** New: Hauch des Wahnsinns.
 *** New: Erstickungskugel.
 *** New: Akylios taucht auf.
 *** New: Akylios taucht unter.
+*** New: Warnung für Flutwellen 5 Sekunden vorher.
 ** Plutonus
 *** New: Wandelnder Schlaf.
-** Herald Gaurath
-*** New: Atem der Leere.
-*** New: Auferstehung der Toten.
-*** New: Botschaft der Not.
-** Alsbeth the Discordant
+** Herold Gaurath
+*** New: Odem der Leere.
+*** New: Erweckung der Toten.
+*** New: Leidvolle Kunde.
+** Alsbeth die Streitsuchende
 *** New: Seelenbestrafung.
 *** New: Boden der Zwietracht.
+*** New: Zwietracht Explosion.
 *** New: Seelenzerstörung.
 *** New: Zwietracht-Meteor.
 *** New: Zwietracht-Säule.
 *** New: Seelen-Vorbote.
 *** New: Seelen-Dieb.
 *** New: Seelen-Magus.
-** Assault Commander Jorb
+** Prinz Hylas
+*** Change: Ansteckender Baumwollschwanz.
+** Fürst Grünschuppe
+*** Change: Würgende Plage.
+** Überfallkommandant Jorb
 *** New: Machtvoller Schlag.
 *** New: Stillgestanden!.
 ** General Silgen

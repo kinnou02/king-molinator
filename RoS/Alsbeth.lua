@@ -71,6 +71,7 @@ AD.Lang.Ability.Punish.German = "Seelenbestrafung"
 AD.Lang.Ability.Ground = KBM.Language:Add("Discordant Ground")
 AD.Lang.Ability.Ground.German = "Boden der Zwietracht"
 AD.Lang.Ability.Blast = KBM.Language:Add("Discordant Blast")
+AD.Lang.Ability.Blast.German = "Zwietracht Explosion"
 AD.Lang.Ability.Soul = KBM.Language:Add("Soul Destruction")
 AD.Lang.Ability.Soul.German = "Seelenzerstörung"
 AD.Lang.Ability.Meteor = KBM.Language:Add("Discordant Meteor")
@@ -79,6 +80,7 @@ AD.Lang.Ability.Meteor.German = "Zwietracht-Meteor"
 -- Notify Dictionary
 AD.Lang.Notify = {}
 AD.Lang.Notify.Punish = KBM.Language:Add("(%a*)'s soul is wracked with energy!")
+AD.Lang.Notify.Punish.German = "Die Seele von (%a*) wird mit Energie überladen!"
 
 -- Buff Dictionary
 AD.Lang.Buff = {}
@@ -87,9 +89,13 @@ AD.Lang.Buff.Shield = KBM.Language:Add("Shield of Darkness")
 -- Verbose Dictionary
 AD.Lang.Verbose = {}
 AD.Lang.Verbose.Phase = KBM.Language:Add("Until air phase")
-AD.Lang.Verbose.PunishWarn = KBM.Language:Add(AD.Lang.Ability.Punish[KBM.Lang].." (Raid-wide warning)")
+AD.Lang.Verbose.Phase.German = "bis zur Flugphase"
+AD.Lang.Verbose.PunishWarn = KBM.Language:Add(AD.Lang.Ability.Punish[KBM.Lang].." (Personal Alert)")
+AD.Lang.Verbose.PunishWarn.German = AD.Lang.Ability.Punish[KBM.Lang].." (Eigene Warnung)"
 AD.Lang.Verbose.Punish = KBM.Language:Add(AD.Lang.Ability.Punish[KBM.Lang].." (Personal Alert)")
+AD.Lang.Verbose.Punish.German = AD.Lang.Ability.Punish[KBM.Lang].." (Eigene Warnung)"
 AD.Lang.Verbose.Meteor = KBM.Language:Add(AD.Lang.Ability.Meteor[KBM.Lang].." (First in phase 2)")
+AD.Lang.Verbose.Meteor.German = AD.Lang.Ability.Meteor[KBM.Lang].." (Erste in Phase 2)"
 
 -- Unit Dictionary
 AD.Lang.Unit = {}

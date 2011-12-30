@@ -104,19 +104,13 @@ function KBM.Defaults.CastFilter.Assign(BossObj)
 end
 
 KBM.Defaults.TimerObj = {}
-function KBM.Defaults.TimerObj.Create(Color, OldData)
+function KBM.Defaults.TimerObj.Create(Color)
 	if not Color then
 		Color = "blue"
-	end
-	if HasMenu == nil then
-		HasMenu = true
 	end
 	if not KBM.Colors.List[Color] then
 		error("Color error for TimerObj.Create ("..tostring(Color)..")\nColor Index does not exist.")
 	end
-	if OldData ~= nil then
-		error("Incorrect Format: TimerObj.Create.HasMenu no longer a setting")
-	end	
 	local TimerObj = {
 		ID = nil,
 		Enabled = true,
@@ -473,11 +467,18 @@ function KBM.Language:Add(Phrase)
 	SetPhrase.German = Phrase
 	SetPhrase.Russian = Phrase
 	SetPhrase.Korean = Phrase
+	SetPhrase.Translated = {}
 	function SetPhrase:SetFrench(frPhrase)
 		self.French = frPhrase
+		self.Translated.French = true
 	end
 	function SetPhrase:SetGerman(gePhrase)
 		self.German = gePhrase
+		self.Translated.German = true
+	end
+	function SetPhrase:SetRussion(ruPhrase)
+		self.Russian = ruPhrase
+		self.Translated.Russian = true
 	end
 	KBM.Language[Phrase] = SetPhrase
 	return KBM.Language[Phrase]
@@ -501,12 +502,18 @@ KBM.Language.Encounter.Victory.German = "Bosskampf erfolgreich!"
 -- Colors
 KBM.Language.Color = {}
 KBM.Language.Color.Custom = KBM.Language:Add("Custom color.")
+KBM.Language.Color.Custom.German = "eigene Farbauswahl."
 KBM.Language.Color.Red = KBM.Language:Add("Red")
+KBM.Language.Color.Red.German = "Rot"
 KBM.Language.Color.Blue = KBM.Language:Add("Blue")
 KBM.Language.Color.Dark_Green = KBM.Language:Add("Dark Green")
+KBM.Language.Color.Dark_Green.German = "Dunkelgrün"
 KBM.Language.Color.Yellow = KBM.Language:Add("Yellow")
+KBM.Language.Color.Yellow.German = "Gelb"
 KBM.Language.Color.Orange = KBM.Language:Add("Orange")
+KBM.Language.Color.Orange.German = "Orange"
 KBM.Language.Color.Purple = KBM.Language:Add("Purple")
+KBM.Language.Color.Purple.German = "Lila"
 -- Cast-bar related
 KBM.Language.Options = {}
 KBM.Language.Options.CastbarOverride = KBM.Language:Add("Castbar: Override")
@@ -596,7 +603,7 @@ KBM.Language.Options.AlertText = KBM.Language:Add("Alert warning text enabled.")
 KBM.Language.Options.AlertText.German = "Alarmierungs-Text aktiviert."
 KBM.Language.Options.AlertText.French = "Texte Avertissement Alerte activ\195\169 ."
 KBM.Language.Options.UnlockFlash = KBM.Language:Add("Unlock alert border")
-KBM.Language.Options.UnlockFlash.German = "Alarmierungs Ecken sind änderbar."
+KBM.Language.Options.UnlockFlash.German = "Alarmierungs Ränder sind änderbar."
 -- Size Dictionary
 KBM.Language.Options.UnlockWidth = KBM.Language:Add("Unlock width for scaling.")
 KBM.Language.Options.UnlockWidth.German = "Breite ist skalierbar."
@@ -610,6 +617,7 @@ KBM.Language.Options.UnlockAlpha.German = "Transparenz ist änderbar."
 KBM.Language.Options.Character = KBM.Language:Add("Saving settings for this character only.")
 KBM.Language.Options.Character.German = "Einstellungen nur für diesen Charakter speichern."
 KBM.Language.Options.ModEnabled = KBM.Language:Add("Enable King Boss Mods v"..AddonData.toc.Version)
+KBM.Language.Options.ModEnabled.German = "Aktiviere King Boss Mods v"..AddonData.toc.Version
 KBM.Language.Options.Enabled = KBM.Language:Add("Enabled.")
 KBM.Language.Options.Enabled.German = "Aktiviert."
 KBM.Language.Options.Settings = KBM.Language:Add("Settings")
@@ -1127,6 +1135,7 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 	
 	function Timer:NoMenu()
 		self.HasMenu = false
+		self.Enabled = true
 	end
 	
 	return Timer
@@ -1208,7 +1217,7 @@ function KBM.Trigger:Init()
 		
 		function TriggerObj:AddTimer(TimerObj)
 			if not TimerObj then
-				error("Timer Object does not exist!")
+				error("Timer object does not exist!")
 			end
 			if type(TimerObj) ~= "table" then
 				error("TimerObj: Expecting Table, got "..tostring(type(TimerObj)))
@@ -1241,9 +1250,8 @@ function KBM.Trigger:Init()
 		function TriggerObj:AddStop(Object)
 			if type(Object) ~= "table" then
 				error("Expecting at least table: Got "..tostring(type(Object)))
-				if Object.Type ~= "timer" or Object.Type ~= "alert" then
-					error("Expecting at least Timer or Alert: Got "..tostring(Object.Type))
-				end
+			elseif Object.Type ~= "timer" and Object.Type ~= "alert" then
+				error("Expecting at least Timer or Alert: Got "..tostring(Object.Type))
 			end
 			table.insert(self.Stop, Object)
 		end
@@ -1380,29 +1388,6 @@ function KBM.Trigger:Init()
 		self.Death = {}
 		self.Buff = {}		
 	end
-end
-
-function KBM:CallFrame(parent)
-	print("Warning: CallFrame used, old Recycling system, please report: WCF848")
-	local frame = nil
-	self.TotalFrames = self.TotalFrames + 1
-	frame = UI.CreateFrame("Frame", "Frame_Store"..tostring(self.TotalFrames), parent)
-	return frame	
-end
-
-function KBM:CallCheck(parent)
-	print("Warning: CallCheck used, old Recycling system, please report: WCC879")
-	self.TotalChecks = self.TotalChecks + 1
-	Checkbox = UI.CreateFrame("RiftCheckbox", "Check Store"..self.TotalChecks, parent)
-	return Checkbox	
-end
-
-function KBM:CallText(parent, debugInfo)
-	print("Warning: CallText used, old Recycling system, please report: WCT910")
-	local Textfbox = nil
-	self.TotalTexts = self.TotalTexts + 1
-	Textfbox = UI.CreateFrame("Text", "Textf Store"..self.TotalTexts, parent)
-	return Textfbox	
 end
 
 local function KBM_Options()
@@ -2881,6 +2866,7 @@ function KBM.Alert:Init()
 		
 		function AlertObj:NoMenu()
 			self.HasMenu = false
+			self.Enabled = true
 		end
 		
 		self.Count = self.Count + 1

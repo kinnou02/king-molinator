@@ -64,8 +64,8 @@ PH.Lang.Hylas.German = "Prinz Hylas"
 -- Unit Dictionary
 PH.Lang.Unit = {}
 PH.Lang.Unit.Duke = KBM.Language:Add("Duke Letareus")
-PH.Lang.Unit.German = "Herzog Letareus"
-PH.Lang.Unit.French = "Duc Letareus"
+PH.Lang.Unit.Duke.German = "Herzog Letareus"
+PH.Lang.Unit.Duke.French = "Duc Letareus"
 PH.Lang.Unit.Johlen = KBM.Language:Add("Infiltrator Johlen")
 PH.Lang.Unit.Johlen.French = "Infiltrateur Johlen"
 PH.Lang.Unit.Aleria = KBM.Language:Add("Oracle Aleria")
@@ -78,7 +78,7 @@ PH.Lang.Ability.Wrath.German = "Zorn des Prinzen"
 PH.Lang.Ability.Soul = KBM.Language:Add("Soul Fracture")
 PH.Lang.Ability.Soul.German = "Seelenfraktur"
 PH.Lang.Ability.Cotton = KBM.Language:Add("Contagious Cottontail")
-PH.Lang.Ability.Cotton.German = "Grüner Schlag"
+PH.Lang.Ability.Cotton.German = "Ansteckender Baumwollschwanz"
 
 -- Buff Dictionary
 PH.Lang.Buff = {}

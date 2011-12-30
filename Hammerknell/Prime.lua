@@ -51,9 +51,11 @@ VP.Prime = {
 KBM.RegisterMod(VP.ID, VP)
 
 VP.Lang.Prime = KBM.Language:Add(VP.Prime.Name)
+
+-- Ability Dictionary
 VP.Lang.Flames = KBM.Language:Add("Ancient Flames")
 VP.Lang.Flames.French = "Flammes anciennes"
-VP.Lang.Flames.German = "Uralte Flamme"
+VP.Lang.Flames.German = "Uralte Flammen"
 
 VP.Prime.Name = VP.Lang.Prime[KBM.Lang]
 

@@ -61,7 +61,7 @@ LG.Lang.Greenscale.French = "Seigneur Vert\195\169caille"
 -- Ability Dictionary
 LG.Lang.Ability = {}
 LG.Lang.Ability.Blight = KBM.Language:Add("Strangling Blight")
-LG.Lang.Ability.Blight.German = "Würgepflanze"
+LG.Lang.Ability.Blight.German = "Würgende Plage"
 LG.Lang.Ability.Fumes = KBM.Language:Add("Noxious Fumes")
 LG.Lang.Ability.Fumes.German = "Giftige Dämpfe"
 
