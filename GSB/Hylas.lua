@@ -183,9 +183,9 @@ function PH.PhaseFour()
 		PH.PhaseObj.Objectives:Remove()
 		PH.PhaseObj:SetPhase("Critters")
 		PH.Phase = 4
-		KBM.MechTimer:AddRemove(self.Hylas.TimersRef.Soul)
-		KBM.MechTimer:AddRemove(self.Hylas.TimersRef.Wrath)
-		KBM.MechTimer:AddRemove(self.Hylas.TimersRef.Cotton)
+		KBM.MechTimer:AddRemove(PH.Hylas.TimersRef.Soul)
+		KBM.MechTimer:AddRemove(PH.Hylas.TimersRef.Wrath)
+		KBM.MechTimer:AddRemove(PH.Hylas.TimersRef.Cotton)
 	end
 end
 

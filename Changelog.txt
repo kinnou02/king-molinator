@@ -28,6 +28,8 @@
 ** Alsbeth the Discordant
 *** Change: Punish Soul warning will now only flash your screen if you are the target.
 *** Fixed: Castbar for Soul Magus was not initiating due to a settings conflict.
+* Greenscale's Blight
+** Fixed: Error on phase switch to P4.
 * Rise of the Phoenix
 ** General Silgen
 *** New: Added enrage timer.

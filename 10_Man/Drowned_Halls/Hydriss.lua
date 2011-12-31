@@ -15,13 +15,14 @@ local HH = {
 	Instance = DH.Name,
 	Lang = {},
 	ID = "Hydriss",
+	Enrage = 60 * 12,
 	}
 
 HH.Hydriss = {
 	Mod = HH,
 	Level = "??",
 	Active = false,
-	Name = "Priestess Hydriss",
+	Name = "High Priestess Hydriss",
 	NameShort = "Hydriss",
 	Menu = {},
 	Dead = false,

@@ -897,6 +897,9 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 	if type(Duration) ~= "number" then
 		error("Expecting Number, got "..type(Duration).." for Duration")
 	end
+	if type(Name) ~= "string" then
+		error("Expecting String for Name, got "..type(Name))
+	end
 	
 	function self:AddRemove(Object)
 		if not Object.Removing then
@@ -1110,24 +1113,28 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 	function Timer:Update(CurrentTime)
 		local text = ""
 		if self.Active then
-			self.Remaining = self.Time - (CurrentTime - self.TimeStart)
-			if self.Remaining < 10 then
-				text = string.format(" %0.01f : ", self.Remaining)..self.Name
+			if self.Waiting then
+			
 			else
-				text = " "..math.floor(self.Remaining).." : "..self.Name
-			end
-			self.GUI.CastInfo:SetText(text)
-			self.GUI.Shadow:SetText(text)
-			self.GUI.TimeBar:SetWidth(self.GUI.Background:GetWidth() * (self.Remaining/self.Time))
-			if self.Remaining <= 0 then
-				self.Remaining = 0
-				KBM.MechTimer:AddRemove(self)
-			end
-			TriggerTime = math.ceil(self.Remaining)
-			if self.Alerts[TriggerTime] then
-				if not self.Alerts[TriggerTime].Triggered then
-					KBM.Alert:Start(self.Alerts[TriggerTime].AlertObj, CurrentTime)
-					self.Alerts[TriggerTime].Triggered = true
+				self.Remaining = self.Time - (CurrentTime - self.TimeStart)
+				if self.Remaining < 10 then
+					text = string.format(" %0.01f : ", self.Remaining)..self.Name
+				else
+					text = " "..math.floor(self.Remaining).." : "..self.Name
+				end
+				self.GUI.CastInfo:SetText(text)
+				self.GUI.Shadow:SetText(text)
+				self.GUI.TimeBar:SetWidth(self.GUI.Background:GetWidth() * (self.Remaining/self.Time))
+				if self.Remaining <= 0 then
+					self.Remaining = 0
+					KBM.MechTimer:AddRemove(self)
+				end
+				TriggerTime = math.ceil(self.Remaining)
+				if self.Alerts[TriggerTime] then
+					if not self.Alerts[TriggerTime].Triggered then
+						KBM.Alert:Start(self.Alerts[TriggerTime].AlertObj, CurrentTime)
+						self.Alerts[TriggerTime].Triggered = true
+					end
 				end
 			end
 		end
@@ -2835,6 +2842,12 @@ function KBM.Alert:Init()
 		AlertObj.isImportant = false
 		AlertObj.HasMenu = true
 		AlertObj.Type = "alert"
+		if type(Text) ~= "string" then
+			error("Expecting String for Text, got: "..type(Text))
+		end
+		if not self.Left[AlertObj.Color] then
+			error("Alert:Create() Invalid color supplied:- "..AlertObj.Color)
+		end
 		
 		function AlertObj:AlertEnd(endAlertObj)
 			if type(endAlertObj) == "table" then
@@ -3469,7 +3482,7 @@ local function KBM_Reset()
 		if KBM.TankSwap.Active then
 			KBM.TankSwap:Remove()
 		end
-		if KBM.Alert.Active then
+		if KBM.Alert.Current then
 			KBM.Alert:Stop()
 		end
 		if #KBM.MechTimer.ActiveTimers > 0 then

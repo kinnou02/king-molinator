@@ -38,6 +38,7 @@ IL.Isskal = {
 		},
 		TimersRef = {
 			Enabled = true,
+			WhirlpoolFirst = KBM.Defaults.TimerObj.Create("blue"),
 			Whirlpool = KBM.Defaults.TimerObj.Create("blue"),
 			Anti = KBM.Defaults.TimerObj.Create("blue"),
 			Clock = KBM.Defaults.TimerObj.Create("blue"),
@@ -71,6 +72,11 @@ IL.Lang.Notify.Whirlpool = KBM.Language:Add("Go with the current - or die!")
 IL.Lang.Notify.Whirlpool.German = "Folgt dem Strom, oder sterbt!"
 IL.Lang.Notify.Clock = KBM.Language:Add("You're going the wrong way, fools!")
 IL.Lang.Notify.Clock.German = "Ihr Narren geht in die falsche Richtung!"
+
+-- Menu Dictionary
+IL.Lang.Menu = {}
+IL.Lang.Menu.WhirlpoolFirst = KBM.Language:Add("First "..IL.Lang.Mechanic.Whirlpool[KBM.Lang])
+IL.Lang.Menu.WhirlpoolFirst.German = "Erste "..IL.Lang.Mechanic.Whirlpool[KBM.Lang]
 
 IL.Isskal.Name = IL.Lang.Isskal[KBM.Lang]
 
@@ -163,7 +169,7 @@ function IL:UnitHPCheck(uDetails, unitID)
 					self.Isskal.Dead = false
 					self.Isskal.Casting = false
 					self.Isskal.CastBar:Create(unitID)
-					KBM.MechTimer:AddStart(self.Isskal.TimersRef.Whirlpool)
+					KBM.MechTimer:AddStart(self.Isskal.TimersRef.WhirlpoolFirst)
 				end
 				self.Isskal.UnitID = unitID
 				self.Isskal.Available = true
@@ -215,10 +221,13 @@ end
 
 function IL:Start()
 	-- Create Timers
-	self.Isskal.TimersRef.Whirlpool = KBM.MechTimer:Add(self.Lang.Mechanic.Whirlpool[KBM.Lang], 32)
+	self.Isskal.TimersRef.WhirlpoolFirst = KBM.MechTimer:Add(self.Lang.Mechanic.Whirlpool[KBM.Lang], 32)
+	self.Isskal.TimersRef.WhirlpoolFirst.MenuName = self.Lang.Menu.WhirlpoolFirst[KBM.Lang]
+	self.Isskal.TimersRef.Whirlpool = KBM.MechTimer:Add(self.Lang.Mechanic.Whirlpool[KBM.Lang], 62)
 	self.Isskal.TimersRef.Anti = KBM.MechTimer:Add(self.Lang.Mechanic.Anti[KBM.Lang], 14)
 	self.Isskal.TimersRef.Clock = KBM.MechTimer:Add(self.Lang.Mechanic.Clock[KBM.Lang], 14)
 	self.Isskal.TimersRef.Wave = KBM.MechTimer:Add(self.Lang.Ability.Wave[KBM.Lang], 50)
+	self.Isskal.TimersRef.Wave:AddTimer(self.Isskal.TimersRef.Whirlpool, 0)
 	KBM.Defaults.TimerObj.Assign(self.Isskal)
 	
 	-- Create Alerts
