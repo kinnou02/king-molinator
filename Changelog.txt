@@ -54,8 +54,13 @@
 *** New: Added Alert for Whirlpool starting.
 *** New: Added duration Timers for both Clockwise and Anti-clockwise running.
 *** New: Added Timer until Glacial Wave start.
-** Priestess Hydriss
+** High Priestess Hydriss
 *** Converted to new engine.
+*** Note: Hydriss will be revisited as I need to collect further data.
+*** New: Added Timer for first Air Phase.
+*** New: Added Timer for Tsunami.
+*** New: Added Timer for first Seaspawn.
+*** New: Added Timer for Seaspawns.
 * French Translation
 ** New: Added Soulrenders Grasp.
 ** Fixed: Duke Letareus in Prince Hylas encounter.

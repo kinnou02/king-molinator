@@ -605,11 +605,11 @@ KBM.Language.Options.AlertText.French = "Texte Avertissement Alerte activ\195\16
 KBM.Language.Options.UnlockFlash = KBM.Language:Add("Unlock alert border")
 KBM.Language.Options.UnlockFlash.German = "Alarmierungs Ränder sind änderbar."
 -- Size Dictionary
-KBM.Language.Options.UnlockWidth = KBM.Language:Add("Unlock width for scaling.")
+KBM.Language.Options.UnlockWidth = KBM.Language:Add("Unlock width for scaling. (Mouse wheel)")
 KBM.Language.Options.UnlockWidth.German = "Breite ist skalierbar."
-KBM.Language.Options.UnlockHeight = KBM.Language:Add("Unlock height for scaling.")
+KBM.Language.Options.UnlockHeight = KBM.Language:Add("Unlock height for scaling. (Mouse wheel)")
 KBM.Language.Options.UnlockHeight.German = "Höhe ist skalierbar."
-KBM.Language.Options.UnlockText = KBM.Language:Add("Unlock Text size.")
+KBM.Language.Options.UnlockText = KBM.Language:Add("Unlock Text size. (Mouse wheel)")
 KBM.Language.Options.UnlockText.German = "Textgröße ist änderbar."
 KBM.Language.Options.UnlockAlpha = KBM.Language:Add("Unlock transparency.")
 KBM.Language.Options.UnlockAlpha.German = "Transparenz ist änderbar."
@@ -1118,7 +1118,9 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 			else
 				self.Remaining = self.Time - (CurrentTime - self.TimeStart)
 				if self.Remaining < 10 then
-					text = string.format(" %0.01f : ", self.Remaining)..self.Name
+					text = string.format(" %0.01f : ", math.floor(self.Remaining))..self.Name
+				elseif self.Remaining >= 60 then
+					text = " "..KBM.ConvertTime(self.Remaining).." : "..self.Name
 				else
 					text = " "..math.floor(self.Remaining).." : "..self.Name
 				end
@@ -3515,22 +3517,23 @@ end
 
 function KBM.ConvertTime(Time)
 
+	Time = math.floor(Time)
 	local TimeString = "00"
 	local TimeSeconds = 0
 	local TimeMinutes = 0
 	local TimeHours = 0
-	if Time >= 60 then
+	if Time > 59 then
 		TimeMinutes = math.floor(Time / 60)
-		TimeSeconds = math.floor(Time) - (TimeMinutes * 60)
-		if TimeMinutes >= 60 then
+		TimeSeconds = Time - (TimeMinutes * 60)
+		if TimeMinutes > 59 then
 			TimeHours = math.floor(TimeMinutes / 60)
 			TimeMinutes = TimeMinutes - (TimeHours * 60)
-			TimeString = string.format("%dh:%02dm:%02ds", TimeHours, TimeMinutes, TimeSeconds)
+			TimeString = string.format("%d:%02d:%02d", TimeHours, TimeMinutes, TimeSeconds)
 		else
-			TimeString = string.format("%02dm:%02ds", TimeMinutes, TimeSeconds)
+			TimeString = string.format("%02d:%02d", TimeMinutes, TimeSeconds)
 		end
 	else
-		TimeString = string.format("%02ds", Time)
+		TimeString = string.format("%02d", Time)
 	end
 	return TimeString
 	

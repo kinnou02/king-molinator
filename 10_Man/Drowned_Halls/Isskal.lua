@@ -40,8 +40,8 @@ IL.Isskal = {
 			Enabled = true,
 			WhirlpoolFirst = KBM.Defaults.TimerObj.Create("blue"),
 			Whirlpool = KBM.Defaults.TimerObj.Create("blue"),
-			Anti = KBM.Defaults.TimerObj.Create("blue"),
-			Clock = KBM.Defaults.TimerObj.Create("blue"),
+			WhirlpoolEnd = KBM.Defaults.TimerObj.Create("blue"),
+			Reverse = KBM.Defaults.TimerObj.Create("blue"),
 			Wave = KBM.Defaults.TimerObj.Create("red"),
 		},
 	},
@@ -65,13 +65,15 @@ IL.Lang.Mechanic.Anti = KBM.Language:Add("Anti-Clockwise")
 IL.Lang.Mechanic.Anti.German = "Gegen Uhrzeigersinn"
 IL.Lang.Mechanic.Clock = KBM.Language:Add("Clockwise")
 IL.Lang.Mechanic.Clock.German = "Im Uhrzeigersinn"
+IL.Lang.Mechanic.WhirlpoolEnd = KBM.Language:Add("Whirlpool ends")
+IL.Lang.Mechanic.Reverse = KBM.Language:Add("Changing direction")
 
 -- Mechanic Notify
 IL.Lang.Notify = {}
-IL.Lang.Notify.Whirlpool = KBM.Language:Add("Go with the current - or die!")
+IL.Lang.Notify.Whirlpool = KBM.Language:Add("Go with the current, or die!")
 IL.Lang.Notify.Whirlpool.German = "Folgt dem Strom, oder sterbt!"
-IL.Lang.Notify.Clock = KBM.Language:Add("You're going the wrong way, fools!")
-IL.Lang.Notify.Clock.German = "Ihr Narren geht in die falsche Richtung!"
+IL.Lang.Notify.Reverse = KBM.Language:Add("You're going the wrong way, fools!")
+IL.Lang.Notify.Reverse.German = "Ihr Narren geht in die falsche Richtung!"
 
 -- Menu Dictionary
 IL.Lang.Menu = {}
@@ -224,8 +226,8 @@ function IL:Start()
 	self.Isskal.TimersRef.WhirlpoolFirst = KBM.MechTimer:Add(self.Lang.Mechanic.Whirlpool[KBM.Lang], 32)
 	self.Isskal.TimersRef.WhirlpoolFirst.MenuName = self.Lang.Menu.WhirlpoolFirst[KBM.Lang]
 	self.Isskal.TimersRef.Whirlpool = KBM.MechTimer:Add(self.Lang.Mechanic.Whirlpool[KBM.Lang], 62)
-	self.Isskal.TimersRef.Anti = KBM.MechTimer:Add(self.Lang.Mechanic.Anti[KBM.Lang], 14)
-	self.Isskal.TimersRef.Clock = KBM.MechTimer:Add(self.Lang.Mechanic.Clock[KBM.Lang], 14)
+	self.Isskal.TimersRef.Reverse = KBM.MechTimer:Add(self.Lang.Mechanic.Reverse[KBM.Lang], 14)
+	self.Isskal.TimersRef.WhirlpoolEnd = KBM.MechTimer:Add(self.Lang.Mechanic.WhirlpoolEnd[KBM.Lang], 14)
 	self.Isskal.TimersRef.Wave = KBM.MechTimer:Add(self.Lang.Ability.Wave[KBM.Lang], 50)
 	self.Isskal.TimersRef.Wave:AddTimer(self.Isskal.TimersRef.Whirlpool, 0)
 	KBM.Defaults.TimerObj.Assign(self.Isskal)
@@ -240,10 +242,10 @@ function IL:Start()
 	self.Isskal.Triggers.Shard:AddAlert(self.Isskal.AlertsRef.Shard)
 	self.Isskal.Triggers.Whirlpool = KBM.Trigger:Create(self.Lang.Notify.Whirlpool[KBM.Lang], "notify", self.Isskal)
 	self.Isskal.Triggers.Whirlpool:AddAlert(self.Isskal.AlertsRef.Whirlpool)
-	self.Isskal.Triggers.Whirlpool:AddTimer(self.Isskal.TimersRef.Anti)
+	self.Isskal.Triggers.Whirlpool:AddTimer(self.Isskal.TimersRef.Reverse)
 	self.Isskal.Triggers.Whirlpool:AddTimer(self.Isskal.TimersRef.Wave)
-	self.Isskal.Triggers.Clock = KBM.Trigger:Create(self.Lang.Notify.Clock[KBM.Lang], "notify", self.Isskal)
-	self.Isskal.Triggers.Clock:AddTimer(self.Isskal.TimersRef.Clock)
+	self.Isskal.Triggers.WhirlpoolEnd = KBM.Trigger:Create(self.Lang.Notify.Reverse[KBM.Lang], "notify", self.Isskal)
+	self.Isskal.Triggers.WhirlpoolEnd:AddTimer(self.Isskal.TimersRef.WhirlpoolEnd)
 	
 	self.Isskal.CastBar = KBM.CastBar:Add(self, self.Isskal, true)
 	self:DefineMenu()
