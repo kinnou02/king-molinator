@@ -140,6 +140,73 @@ local function SRM_CheckGroupState(force)
 	end
 end
 
+local function SRM_Combat(units)
+	for UnitID, State in pairs(units) do
+		local sent = false
+		if State then
+			-- Entered Combat
+			if SRM_Units[UnitID] then
+				if not SRM_Units[UnitID].Combat then
+					SRM_Units[UnitID].Combat = true
+					LibSRM.Group.Combat = LibSRM.Group.Combat + 1
+					if LibSRM.Group.Combat == 1 then
+						SRM_Group.Combat.Start()
+					end
+					SRM_Group.Combat.Enter(UnitID)
+					sent = true
+				end
+			end
+			if LibSRM.Player.ID == UnitID then
+				if not LibSRM.Player.Combat then
+					LibSRM.Player.Combat = true
+					SRM_System.Player.Combat.Enter()
+					if not sent then
+						SRM_Group.Combat.Start()
+					end
+					sent = true
+				end
+			end
+			if not sent then
+				if not SRM_Units.Pets[UnitID] and not SRM_Units[UnitID] then
+					if UnitID ~= LibSRM.Player.PetID then
+						SRM_System.Combat.Enter(UnitID)
+					end
+				end
+			end
+		else
+			-- Left Combat
+			if SRM_Units[UnitID] then
+				if SRM_Units[UnitID].Combat then
+					SRM_Units[UnitID].Combat = false
+					LibSRM.Group.Combat = LibSRM.Group.Combat - 1
+					if LibSRM.Group.Combat == 0 then
+						SRM_Group.Combat.End()
+					end
+					SRM_Group.Combat.Leave(UnitID)
+					sent = true
+				end
+			end
+			if LibSRM.Player.ID == UnitID then
+				if LibSRM.Player.Combat then
+					LibSRM.Player.Combat = false
+					SRM_System.Player.Combat.Leave()
+					if not sent then
+						SRM_Group.Combat.End()
+					end
+					sent = true
+				end
+			end
+			if not sent then
+				if not SRM_Units.Pets[UnitID] and not SRM_Units[UnitID] then
+					if UnitID ~= LibSRM.Player.PetID then
+						SRM_System.Combat.Leave(UnitID)
+					end
+				end
+			end
+		end
+	end
+end
+
 local function SRM_SetSpecifier(Specifier)
 	SRM_Raid[Specifier] = {}
 	SRM_Raid[Specifier].UnitID = Inspect.Unit.Lookup(Specifier)
@@ -225,6 +292,7 @@ local function SRM_SetSpecifier(Specifier)
 					end
 				end
 				--print(SRM_Units[self.UnitID].name.." has left the group.")
+				SRM_Combat({[self.UnitID] = false})
 				SRM_Group.Leave(self.UnitID, self.Spec)
 				SRM_Raid.Populated = SRM_Raid.Populated - 1
 				SRM_Units[self.UnitID] = nil
@@ -253,6 +321,7 @@ local function SRM_SetSpecifier(Specifier)
 					SRM_Units[self.UnitID].name = uDetails.name
 					SRM_Units[self.UnitID].Loaded = true
 					SRM_Units[self.UnitID].Combat = uDetails.combat
+					SRM_Combat({[self.UnitID] = uDetails.combat})
 					SRM_Units[self.UnitID].Location = uDetails.location
 					SRM_Units[self.UnitID].PetID = Inspect.Unit.Lookup(self.Spec..".pet")
 					SRM_Raid.Populated = SRM_Raid.Populated + 1
@@ -286,76 +355,6 @@ local function SRM_SetSpecifier(Specifier)
 	table.insert(event, {function (data) Unit:Change(data, true) end, "SafesRaidManager", Specifier})
 	Unit:Load()
 	Unit:PetLoad()
-end
-
-local function SRM_Combat(units)
-	for UnitID, State in pairs(units) do
-		local uDetails = Inspect.Unit.Detail(UnitID)
-		local sent = false
-		if uDetails then
-			if State then
-				-- Entered Combat
-				if SRM_Units[UnitID] then
-					if not SRM_Units[UnitID].Combat then
-						SRM_Units[UnitID].Combat = true
-						LibSRM.Group.Combat = LibSRM.Group.Combat + 1
-						if LibSRM.Group.Combat == 1 then
-							SRM_Group.Combat.Start()
-						end
-						SRM_Group.Combat.Enter(UnitID)
-						sent = true
-					end
-				end
-				if LibSRM.Player.ID == UnitID then
-					if not LibSRM.Player.Combat then
-						LibSRM.Player.Combat = true
-						SRM_System.Player.Combat.Enter()
-						if not sent then
-							SRM_Group.Combat.Start()
-						end
-						sent = true
-					end
-				end
-				if not sent then
-					if not SRM_Units.Pets[UnitID] and not SRM_Units[UnitID] then
-						if UnitID ~= LibSRM.Player.PetID then
-							SRM_System.Combat.Enter(UnitID)
-						end
-					end
-				end
-			else
-				-- Left Combat
-				if SRM_Units[UnitID] then
-					if SRM_Units[UnitID].Combat then
-						SRM_Units[UnitID].Combat = false
-						LibSRM.Group.Combat = LibSRM.Group.Combat - 1
-						if LibSRM.Group.Combat == 0 then
-							SRM_Group.Combat.End()
-						end
-						SRM_Group.Combat.Leave(UnitID)
-						sent = true
-					end
-				end
-				if LibSRM.Player.ID == UnitID then
-					if LibSRM.Player.Combat then
-						LibSRM.Player.Combat = false
-						SRM_System.Player.Combat.Leave()
-						if not sent then
-							SRM_Group.Combat.End()
-						end
-						sent = true
-					end
-				end
-				if not sent then
-					if not SRM_Units.Pets[UnitID] and not SRM_Units[UnitID] then
-						if UnitID ~= LibSRM.Player.PetID then
-							SRM_System.Combat.Leave(UnitID)
-						end
-					end
-				end
-			end
-		end
-	end
 end
 
 local function SRM_Death(data)

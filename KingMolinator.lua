@@ -3542,7 +3542,7 @@ end
 function KBM:RaidCombatEnter()
 
 	if KBM.Debug then
-		print("Raid has entered combat")
+		print("Raid has entered combat: Number in combat = "..LibSRM.Group.Combat)
 	end
 	if KBM.Idle.Combat.Wait then
 		KBM.Idle.Combat.Wait = false

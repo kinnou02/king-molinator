@@ -65,7 +65,7 @@ IJ.Lang.Unit.Bomb.German = "Vernichtende Bombe"
 IJ.Johlen.Name = IJ.Lang.Johlen[KBM.Lang]
 
 IJ.Bomb = {
-	Mod = ID,
+	Mod = IJ,
 	Level = "??",
 	Name = IJ.Lang.Unit.Bomb[KBM.Lang],
 	UnitList = {},

@@ -1,4 +1,12 @@
-﻿v0.8.6
+﻿v0.8.7
+* System
+** Change: Tweaked the main engine for Safe's Raid Manager to better track combat states.
+** Note: The above, although a small change should greatly improve the accuracy of combat monitoring.
+* Greenscale's Blight
+** Fixed Infiltrator Johlen error on Bomb phase.
+** Fixed Lord Greenscale error during Verdant Annihilator phase.
+
+v0.8.6
 * Trigger Engine
 ** Buffs
 *** New: There is now a new trigger for buffs/debuffs which target raid members.

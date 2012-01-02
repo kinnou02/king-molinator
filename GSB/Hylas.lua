@@ -24,6 +24,7 @@ PH.Hylas = {
 	Level = "52",
 	Active = false,
 	Name = "Prince Hylas",
+	NameShort = "Hylas",
 	Menu = {},
 	Castbar = nil,
 	TimersRef = {},
@@ -163,19 +164,25 @@ function PH:Death(UnitID)
 end
 
 function PH.PhaseOne()
-	PH.PhaseObj.Objectives:AddPercent(PH.Lang.Unit.Duke[KBM.Lang], 0, 100)
+	if PH.Phase == 1 then
+		PH.PhaseObj.Objectives:AddPercent(PH.Lang.Unit.Duke[KBM.Lang], 0, 100)
+	end
 end
 
 function PH.PhaseTwo()
-	PH.PhaseObj.Objectives:AddPercent(PH.Lang.Unit.Johlen[KBM.Lang], 0, 100)
-	PH.PhaseObj:SetPhase(2)
-	PH.Phase = 2
+	if PH.Phase < 2 then
+		PH.PhaseObj.Objectives:AddPercent(PH.Lang.Unit.Johlen[KBM.Lang], 0, 100)
+		PH.PhaseObj:SetPhase(2)
+		PH.Phase = 2
+	end
 end
 
 function PH.PhaseThree()
-	PH.PhaseObj.Objectives:AddPercent(PH.Lang.Unit.Aleria[KBM.Lang], 0, 100)
-	PH.PhaseObj:SetPhase(3)
-	PH.Phase = 3
+	if PH.Phase < 3 then
+		PH.PhaseObj.Objectives:AddPercent(PH.Lang.Unit.Aleria[KBM.Lang], 0, 100)
+		PH.PhaseObj:SetPhase(3)
+		PH.Phase = 3
+	end
 end
 
 function PH.PhaseFour()
@@ -227,6 +234,7 @@ function PH:Reset()
 	self.Hylas.UnitID = nil
 	self.Hylas.CastBar:Remove()
 	self.PhaseObj:End(Inspect.Time.Real())
+	self.Phase = 1
 end
 
 function PH:Timer()	

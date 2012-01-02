@@ -77,7 +77,7 @@ LG.Lang.Mechanic.Death = KBM.Language:Add("Protective Shield")
 LG.Greenscale.Name = LG.Lang.Greenscale[KBM.Lang]
 
 LG.Verdant = {
-	Mod = ID,
+	Mod = LG,
 	Level = "??",
 	Active = false,
 	Name = LG.Lang.Unit.Verdant[KBM.Lang],
