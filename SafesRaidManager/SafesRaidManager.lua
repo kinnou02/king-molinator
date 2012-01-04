@@ -320,7 +320,6 @@ local function SRM_SetSpecifier(Specifier)
 					SRM_Units[self.UnitID].UnitID = self.UnitID
 					SRM_Units[self.UnitID].name = uDetails.name
 					SRM_Units[self.UnitID].Loaded = true
-					SRM_Units[self.UnitID].Combat = uDetails.combat
 					SRM_Combat({[self.UnitID] = uDetails.combat})
 					SRM_Units[self.UnitID].Location = uDetails.location
 					SRM_Units[self.UnitID].PetID = Inspect.Unit.Lookup(self.Spec..".pet")
@@ -536,7 +535,7 @@ local function SRM_Stall()
 			end
 			LibSRM.Player.Loaded = true
 			SRM_System.Player.Ready(LibSRM.Player.ID, PlayerDets)
-			event = Library.LibUnitChange.Register("player.pet")
+			local event = Library.LibUnitChange.Register("player.pet")
 			table.insert(Event.Combat.Damage, {SRM_Damage, "SafesRaidManager", "Damage Monitor"})
 			table.insert(Event.Combat.Heal, {SRM_Heal, "SafesRaidManager", "Heal Monitor"})
 			table.insert(Event.Combat.Death, {SRM_Death, "SafesRaidManager", "Death Monitor"})

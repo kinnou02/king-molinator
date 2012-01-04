@@ -1,11 +1,40 @@
-﻿v0.8.7
+﻿v0.8.8
+* System
+** Change: Linked alerts and timers without settings have been enabled.
+** Change: Further tweaks to the Raid Manager combat state monitoring.
+** New: Added registered Buff/Debuff tracking to allow playerBuffRemove and buffRemove triggers to work.
+* Encounter Timer
+** New: Added a drop shadow to the time display to improve clarity.
+** New: Added a drop shadow to the enrage time display to improve clarity.
+** New: Added a slight texture to the Enrage progress bar.
+* Phase and Objective Tracker
+** New: Added a drop shadow to the Phase text to improve clarity.
+** New: Added a drop shadow to the Objective text to improve clarity.
+** New: Added a slight texture to the Phase heading.
+* Castbar Engine
+** Fixed: Stopped an error which could occur if a nil was passed to Inspect.Unit.Castbar.
+* Alerts
+** Change: Minimum alert size has been decreased slightly.
+** Fixed: Alerts could sometimes stay on the screen after the encounter ended.
+* Mechanic Timers
+** Change: 10th's of a second have returned sub 10 seconds, this was a rounding issue.
+* Hammerknell
+** Soulrender Zilas
+*** New: Added a timer for the first Soulrender's Grasp.
+** Estrode
+*** Change: Removed Duration countdown for Mistress of the Rift alert.
+*** Change: Removed Duration countdown for Rage of the North alert.
+*** Change: Set Mistress of the Rift alert duration to 2 seconds.
+*** Chnage: Set Rage of the North alert duration to 2 seconds.
+----
+v0.8.7
 * System
 ** Change: Tweaked the main engine for Safe's Raid Manager to better track combat states.
 ** Note: The above, although a small change should greatly improve the accuracy of combat monitoring.
 * Greenscale's Blight
 ** Fixed Infiltrator Johlen error on Bomb phase.
 ** Fixed Lord Greenscale error during Verdant Annihilator phase.
-
+----
 v0.8.6
 * Trigger Engine
 ** Buffs

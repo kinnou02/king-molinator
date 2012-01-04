@@ -37,6 +37,7 @@ SZ.Zilas = {
 		TimersRef = {
 			Enabled = true,
 			Grasp = KBM.Defaults.TimerObj.Create(),
+			GraspFirst = KBM.Defaults.TimerObj.Create(),
 		},
 		AlertsRef = {
 			Enabled = true,
@@ -58,6 +59,10 @@ SZ.Lang.Ability = {}
 SZ.Lang.Ability.Grasp = KBM.Language:Add("Soulrender's Grasp")
 SZ.Lang.Ability.Grasp.German = "Seelenreißer Griff"
 SZ.Lang.Ability.Grasp.French = "Poigne d'\195\137tripeur d'\195\162mes"
+
+-- Menu Dictionary
+SZ.Lang.Menu = {}
+SZ.Lang.Menu.Grasp = KBM.Language:Add("First "..SZ.Lang.Ability.Grasp[KBM.Lang])
 
 function SZ:AddBosses(KBM_Boss)
 	self.Zilas.Descript = self.Zilas.Name
@@ -183,7 +188,7 @@ function SZ.PhaseThree()
 	SZ.PhaseObj.Objectives:Remove()
 	SZ.PhaseObj:SetPhase(3)
 	SZ.PhaseObj.Objectives:AddPercent(SZ.Zilas.Name, 40, 60)
-	print("Phase 3 Starting! - Kite phase incoming.")
+	print("Phase 3 Starting!")
 end
 
 function SZ.PhaseFour()
@@ -245,6 +250,8 @@ end
 function SZ:Start()
 	-- Create Timers
 	self.Zilas.TimersRef.Grasp = KBM.MechTimer:Add(self.Lang.Ability.Grasp[KBM.Lang], 58)
+	self.Zilas.TimersRef.GraspFirst = KBM.MechTimer:Add(self.Lang.Ability.Grasp[KBM.Lang], 42)
+	self.Zilas.TimersRef.GraspFirst.MenuName = self.Lang.Menu.Grasp[KBM.Lang]
 	
 	-- Create Alerts
 	self.Zilas.AlertsRef.GraspWarn = KBM.Alert:Create(self.Lang.Ability.Grasp[KBM.Lang], 5, true, true)
@@ -261,6 +268,8 @@ function SZ:Start()
 	self.Zilas.AlertsRef.GraspWarn:AlertEnd(self.Zilas.AlertsRef.Grasp)
 	self.Zilas.Triggers.PhaseTwo = KBM.Trigger:Create(80, "percent", self.Zilas)
 	self.Zilas.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
+	self.Zilas.Triggers.Grasp = KBM.Trigger:Create(70, "percent", self.Zilas)
+	self.Zilas.Triggers.Grasp:AddTimer(self.Zilas.TimersRef.GraspFirst)
 	self.Zilas.Triggers.PhaseThree = KBM.Trigger:Create(60, "percent", self.Zilas)
 	self.Zilas.Triggers.PhaseThree:AddPhase(self.PhaseThree)
 	self.Zilas.Triggers.PhaseFour = KBM.Trigger:Create(40, "percent", self.Zilas)

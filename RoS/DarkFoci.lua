@@ -159,6 +159,9 @@ function DF:LoadVars()
 		KBMROSDF_Settings = self.Settings
 	end
 	
+	self.Settings.CastBar.Multi = true
+	self.Settings.CastBar.Override = true
+	
 	self.Settings.Foci.CastBar.Multi = true
 	self.Settings.Force.CastBar.Multi = true
 	self.Settings.Foci.CastBar.Override = true
@@ -234,7 +237,7 @@ function DF:UnitHPCheck(uDetails, unitID)
 				return self.Foci
 			elseif uDetails.name == self.Force.Name then
 				if not self.Force.UnitID then
-					self.Force.Casting = true
+					self.Force.Casting = false
 					self.Force.Dead = false
 					self.Force.UnitID = unitID
 					self.Force.Available = true
@@ -254,6 +257,7 @@ function DF:Reset()
 	self.Foci.Dead = false
 	self.Force.Dead = false
 	self.Force.UnitID = false
+	self.Force.CastBar:Remove()
 	self.PhaseObj:End(Inspect.Time.Real())
 end
 

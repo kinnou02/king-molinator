@@ -151,7 +151,7 @@ function GS:UnitHPCheck(unitDetails, unitID)
 	if unitDetails and unitID then
 		if not unitDetails.player then
 			if unitDetails.name == self.Silgen.Name then
-				if not self.Silgen.UnitID then
+				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
