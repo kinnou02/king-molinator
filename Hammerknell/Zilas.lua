@@ -179,7 +179,7 @@ function SZ.PhaseTwo()
 	SZ.Phase = 2
 	SZ.PhaseObj.Objectives:Remove()
 	SZ.PhaseObj:SetPhase(2)
-	SZ.PhaseObj.Objectives:AddPercent(SZ.Zilas.Name, 60, 80)
+	SZ.PhaseObj.Objectives:AddPercent(SZ.Zilas.Name, 70, 80)
 	print("Phase 2 Starting!")
 end
 
@@ -187,7 +187,7 @@ function SZ.PhaseThree()
 	SZ.Phase = 3
 	SZ.PhaseObj.Objectives:Remove()
 	SZ.PhaseObj:SetPhase(3)
-	SZ.PhaseObj.Objectives:AddPercent(SZ.Zilas.Name, 40, 60)
+	SZ.PhaseObj.Objectives:AddPercent(SZ.Zilas.Name, 40, 70)
 	print("Phase 3 Starting!")
 end
 
@@ -268,9 +268,8 @@ function SZ:Start()
 	self.Zilas.AlertsRef.GraspWarn:AlertEnd(self.Zilas.AlertsRef.Grasp)
 	self.Zilas.Triggers.PhaseTwo = KBM.Trigger:Create(80, "percent", self.Zilas)
 	self.Zilas.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
-	self.Zilas.Triggers.Grasp = KBM.Trigger:Create(70, "percent", self.Zilas)
-	self.Zilas.Triggers.Grasp:AddTimer(self.Zilas.TimersRef.GraspFirst)
-	self.Zilas.Triggers.PhaseThree = KBM.Trigger:Create(60, "percent", self.Zilas)
+	self.Zilas.Triggers.PhaseThree = KBM.Trigger:Create(70, "percent", self.Zilas)
+	self.Zilas.Triggers.PhaseThree:AddTimer(self.Zilas.TimersRef.GraspFirst)
 	self.Zilas.Triggers.PhaseThree:AddPhase(self.PhaseThree)
 	self.Zilas.Triggers.PhaseFour = KBM.Trigger:Create(40, "percent", self.Zilas)
 	self.Zilas.Triggers.PhaseFour:AddPhase(self.PhaseFour)

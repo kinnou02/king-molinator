@@ -21,11 +21,12 @@
 * Hammerknell
 ** Soulrender Zilas
 *** New: Added a timer for the first Soulrender's Grasp.
+*** Change: Phase 2 now triggers at 70% (RNG Magus + Timed first Grasp)
 ** Estrode
 *** Change: Removed Duration countdown for Mistress of the Rift alert.
 *** Change: Removed Duration countdown for Rage of the North alert.
 *** Change: Set Mistress of the Rift alert duration to 2 seconds.
-*** Chnage: Set Rage of the North alert duration to 2 seconds.
+*** Change: Set Rage of the North alert duration to 2 seconds.
 ----
 v0.8.7
 * System
@@ -41,7 +42,7 @@ v0.8.6
 *** New: There is now a new trigger for buffs/debuffs which target raid members.
 *** Change: All previous buff triggers for players have been converted. Please report any issues.
 *** Change: Buff triggers are now matched to an encounter and unit ID before triggering.
-*** Fixed: BuffRemove triggers where not working as intented.
+*** Fixed: BuffRemove triggers where not working as intended.
 * Mechanic Timers
 ** Fixed: Setting changes were not applied until a /reloadui or restart.
 ** Note: This was the same issue as the previously fixed alert settings.
