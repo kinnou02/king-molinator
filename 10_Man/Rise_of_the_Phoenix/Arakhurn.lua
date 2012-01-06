@@ -76,7 +76,11 @@ HA.Lang.Ability.Nova = KBM.Language:Add("Fire Nova")
 HA.Lang.Notify = {}
 HA.Lang.Notify.Nova = KBM.Language:Add("High Priest Arakhurn releases the fiery energy within")
 HA.Lang.Notify.Respawn = KBM.Language:Add("The lava churns violently as a large shadow moves beneath it and then rushes to the surface")
-HA.Lang.Notify.Death = KBM.Language:Add("As Arakhurn turns to ash, something stirs beneath the molten lava")
+HA.Lang.Notify.Death = KBM.Language:Add("As Arakhurn turns to ash, something stirs beneath the molten lava.")
+
+HA.Lang.Chat = {}
+HA.Lang.Chat.Respawn = KBM.Language:Add("Come to me, my children.")
+HA.Lang.Chat.Death = KBM.Language:Add("The fire within me weakens. I must regain the power of the flame.")
 
 -- Buff Dictionary
 HA.Lang.Buff = {}
@@ -208,7 +212,7 @@ end
 function HA.PhaseTwo()
 	HA.PhaseObj.Objectives:Remove()
 	HA.PhaseObj:SetPhase("Adds")
-	HA.PhaseObj.Objectvies:AddDeath(HA.Lang.Unit.Spawn[KBM.Lang], 6)
+	HA.PhaseObj.Objectives:AddDeath(HA.Lang.Unit.Spawn[KBM.Lang], 6)
 	HA.Arakhurn.UnitID = nil
 end
 
@@ -346,9 +350,9 @@ function HA:Start()
 	self.Arakhurn.Triggers.Fiery = KBM.Trigger:Create(self.Lang.Buff.Fiery[KBM.Lang], "playerBuff", self.Arakhurn)
 	self.Arakhurn.Triggers.Fiery:AddTimer(self.Arakhurn.TimersRef.Fiery)
 	self.Arakhurn.Triggers.Fiery:AddAlert(self.Arakhurn.AlertsRef.Fiery, true)
-	self.Arakhurn.Triggers.PhaseTwo = KBM.Trigger:Create(self.Lang.Notify.Death[KBM.Lang], "notify", self.Arakhurn)
+	self.Arakhurn.Triggers.PhaseTwo = KBM.Trigger:Create(self.Lang.Chat.Death[KBM.Lang], "say", self.Arakhurn)
 	self.Arakhurn.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
-	self.Arakhurn.Triggers.PhaseThree = KBM.Trigger:Create(self.Lang.Notify.Respawn[KBM.Lang], "notify", self.Arakhurn)
+	self.Arakhurn.Triggers.PhaseThree = KBM.Trigger:Create(self.Lang.Chat.Respawn[KBM.Lang], "say", self.Arakhurn)
 	self.Arakhurn.Triggers.PhaseThree:AddPhase(self.PhaseThree)
 	self.Arakhurn.Triggers.PhaseThree:AddTimer(self.Arakhurn.TimersRef.AddFirst)
 	self.Arakhurn.Triggers.PhaseThree:AddTimer(self.Arakhurn.TimersRef.NovaPThree)
