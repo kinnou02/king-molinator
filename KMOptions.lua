@@ -1635,9 +1635,9 @@ function KBM.InitOptions()
 						if self.Type == "color" then
 							self.GUI.Hook = self.Hook
 							self.GUI.Manager = self
-							self:Enable(self.Data.Enabled)
-							if self.Data.Enabled then
-								self.GUI:SetEnabled(self.Data.Custom)
+							self:Enable(self.Data.Settings.Enabled)
+							if self.Data.Settings.Enabled then
+								self.GUI:SetEnabled(self.Data.Settings.Custom)
 							end
 						else
 							if self.Type == "check" then

@@ -1,7 +1,10 @@
 ﻿v0.8.9
-* Tank-Swap
-** Fixed: Error when switching menu items with Test Tanks enabled.
-** Fixed: Glitch where Test Tanks would remain on screen when switching to an encounter menu.
+* Menu Options
+** Custom Colors
+*** Fixed: When custom colors where enabled the color selector would be disabled when re-selecting.
+** Tank-Swap
+*** Fixed: Error when switching menu items with Test Tanks enabled.
+*** Fixed: Glitch where Test Tanks would remain on screen when switching to an encounter menu.
 * Rise of the Phoenix
 ** High Priest Arakhurn
 *** New: Added advanced Phase and Objective tracking.
