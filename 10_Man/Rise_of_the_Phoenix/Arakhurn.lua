@@ -198,8 +198,8 @@ end
 function HA.Stall()
 	if HA.Phase == 1 then
 		HA.TimeoutOverride = true
-		KBM.MechTimer:AddStop(HA.Arakhurn.TimersRef.Nova)
-		KBM.MechTimer:AddStop(HA.Arakhurn.TimersRef.Fiery)
+		KBM.MechTimer:AddRemove(HA.Arakhurn.TimersRef.Nova)
+		KBM.MechTimer:AddRemove(HA.Arakhurn.TimersRef.Fiery)
 		HA.Arakhurn.CastBar:Remove()
 		HA.Phase = 2
 	end
