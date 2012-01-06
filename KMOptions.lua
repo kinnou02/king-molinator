@@ -1052,7 +1052,7 @@ function KBM.InitOptions()
 				KBM.MainWin.CurrentPage:SetPage()
 			else
 				if KBM.MainWin.CurrentPage.Link.Open then
-					KBM.MainWin.CurrentPage.Ling:Open()
+					KBM.MainWin.CurrentPage.Link:Open()
 				end
 			end
 		end
@@ -1426,7 +1426,8 @@ function KBM.InitOptions()
 				end
 			end
 			
-			function Encounter:ClearPage()			
+			function Encounter:ClearPage()
+				KBM.MainWin.CurrentPage = self
 				KBM.Tabs:Close()
 				KBM.EncTimer.Settings = KBM.Options.EncTimer
 				KBM.EncTimer:ApplySettings()
@@ -2552,13 +2553,6 @@ function KBM.InitOptions()
 			KBM.MainWin.Options.Scroller:SetRange(KBM.MainWin.Options.PageSize, KBM.MainWin.Options.Height)
 		end
 		function Child.Options:Remove()
-			for _, Item in ipairs(self.List) do
-				Item:Remove()
-				Item = nil
-			end
-			self.List = {}
-		end
-		function Child.Options:SetTitle()
 			if KBM.MainWin.CurrentPage then
 				if KBM.MainWin.CurrentPage.Type == "encounter" then
 				
@@ -2567,10 +2561,15 @@ function KBM.InitOptions()
 						KBM.MainWin.CurrentPage.Link:Close()
 					end
 				end
-				KBM.MainWin.CurrentPage = self
-			else
-				KBM.MainWin.CurrentPage = self
 			end
+			for _, Item in ipairs(self.List) do
+				Item:Remove()
+				Item = nil
+			end
+			self.List = {}
+		end
+		function Child.Options:SetTitle()
+			KBM.MainWin.CurrentPage = self
 			KBM.MainWin.Options.HeadText:SetText(self.Child.Header.Text:GetText())
 			KBM.MainWin.Options.SubText:SetText(self.Child.Text:GetText())
 			self.LastItem = nil

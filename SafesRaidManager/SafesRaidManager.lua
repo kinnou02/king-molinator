@@ -69,6 +69,7 @@ SRM_Group.Combat = {
 	Damage = {},
 	Heal = {},
 	Death = {},
+	Res = {},
 }
 SRM_Group.Combat.Enter, SRM_Group.Combat.Enter.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Combat.Enter")
 SRM_Group.Combat.Leave, SRM_Group.Combat.Leave.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Combat.Leave")
@@ -77,6 +78,7 @@ SRM_Group.Combat.End, SRM_Group.Combat.End.EventTable = Utility.Event.Create("Sa
 SRM_Group.Combat.Damage, SRM_Group.Combat.Damage.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Combat.Damage")
 SRM_Group.Combat.Heal, SRM_Group.Combat.Heal.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Combat.Heal")
 SRM_Group.Combat.Death, SRM_Group.Combat.Death.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Combat.Death")
+SRM_Group.Combat.Res, SRM_Group.Combat.Res.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Combat.Res")
 
 SRM_Group.Location = {
 	Change = {},
@@ -108,6 +110,7 @@ local SRM_System = {
 		Enter = {},
 		Leave = {},
 		Death = {},
+		Heal = {},
 	},
 }
 
@@ -122,6 +125,7 @@ SRM_System.Combat.Damage, SRM_System.Combat.Damage.EventTable = Utility.Event.Cr
 SRM_System.Combat.Enter, SRM_System.Combat.Enter.EventTable = Utility.Event.Create("SafesRaidManager", "Combat.Enter")
 SRM_System.Combat.Leave, SRM_System.Combat.Leave.EventTable = Utility.Event.Create("SafesRaidManager", "Combat.Leave")
 SRM_System.Combat.Death, SRM_System.Combat.Death.EventTable = Utility.Event.Create("SafesRaidManager", "Combat.Death")
+SRM_System.Combat.Heal, SRM_System.Combat.Heal.EventTable = Utility.Event.Create("SafesRaidManager", "Combat.Heal")
 
 local function SRM_CheckGroupState(force)
 	--print(SRM_Raid.Populated)
@@ -386,8 +390,92 @@ local function SRM_Death(data)
 	end
 end
 
-local function SRM_Heal(data)
+local function SRM_Res(HealData)
+	SRM_Units[HealData.target].Dead = false
+	SRM_Group.Combat.Res(HealData.target, HealData.caster)
+end
 
+local function SRM_Heal(data)
+	local sent = false
+	if data.caster then
+		if LibSRM.Player.Grouped then
+			if SRM_Units[data.caster] then
+				-- Group member damage
+				if data.caster == LibSRM.Player then
+					data.player = true
+				else
+					data.player = false
+				end
+				data.pet = false
+				data.owner = nil
+				data.specifier = SRM_Units[data.caster].Specifier
+				if SRM_Units[data.caster].Dead then
+					-- Player was previously dead, this SHOULD be a res skill.
+					SRM_Res(data)
+				end
+				SRM_Group.Combat.Heal(data)
+				sent = true
+			elseif SRM_Units.Pets[data.caster] then
+				-- Group member's pet healing. Usually only Cleric Fairy
+				if SRM_Units.Pets[data.caster].OwnerID == LibSRM.Player.ID then
+					data.player = true
+				else
+					data.player = false
+				end
+				data.pet = true
+				data.owner = SRM_Units.Pets[data.caster].OwnerID
+				data.specifier = SRM_Units.Pets[data.caster].Specifier
+				SRM_Group.Combat.Heal(data)
+				sent = true
+			else
+				PetOwnerID = Inspect.Unit.Lookup(data.caster..".owner")
+				if PetOwnerID then
+					if SRM_Units[PetOwnerID] then
+						-- Group member's summoned pet healing? Doubtful
+						if PetOwnerID == LibSRM.Player.ID then
+							data.player = true
+						else
+							data.player = false
+						end
+						data.pet = true
+						data.owner = PetOwnerID
+						data.specifier = SRM_Units[PetOwnerID].Specifier
+						SRM_Group.Combat.Heal(data)
+						sent = true
+					end
+				end
+			end
+		else
+			if data.caster == LibSRM.Player.ID then
+				-- Player damage
+				data.pet = false
+				data.owner = nil
+				data.player = true
+				SRM_Group.Combat.Heal(data)
+				sent = true
+			elseif data.caster == LibSRM.Player.PetID then
+				-- Player pet damage
+				data.pet = true
+				data.owner = LibSRM.Player.ID
+				data.player = true
+				SRM_Group.Combat.Heal(data)
+				sent = true
+			else
+				PetOwnerID = Inspect.Unit.Lookup(data.caster..".owner")
+				if PetOwnerID == LibSRM.Player.ID then
+					-- Player Summoned pet damage
+					data.pet = true
+					data.owner = LibSRM.Player.ID
+					data.player = true
+					SRM_Group.Combat.Heal(data)
+					sent = true
+				end
+			end
+		end
+	end
+	if sent == false then
+		SRM_System.Combat.Heal(data)
+	end
 end
 
 local function SRM_Damage(data)

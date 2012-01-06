@@ -1,4 +1,26 @@
-﻿v0.8.8
+﻿v0.8.9
+* Tank-Swap
+** Fixed: Error when switching menu items with Test Tanks enabled.
+** Fixed: Glitch where Test Tanks would remain on screen when switching to an encounter menu.
+* Rise of the Phoenix
+** High Priest Arakhurn
+*** New: Added advanced Phase and Objective tracking.
+*** New: Added Tank-Swap Monitor support to the encounter for Armor Rip.
+*** New: Added Phase transition trigger for the end of phase 1.
+*** New: Added Phase transition trigger for the start of Phase 2.
+*** New: Added Phase transition trigger for the start of Phase 3 (with timers.)
+*** New: Added hard enrage timer.
+*** New: Added 5 second warning alert for all Fire Novas.
+*** New: Added Timer for first Fire Nova.
+*** New: Added Timer for first Fire Nova in Phase 3.
+*** New: Added Timer for first Fiery Metamorphosis.
+*** New: Added Timer for first Fiery Metamorphosis in Phase 3.
+*** New: Added Timer, Alerts and duration countdowns for all Fire Novas.
+*** New: Added Timer, personal Alert and duration countdowns for all Fire Metamorphosis buffs.
+*** New: Added Timer for first Enraged Spawn of Arakhurn in Phase 3.
+*** New: Added Timer for all remaining Enraged Spawn of Arakhurn adds.
+----
+v0.8.8
 * System
 ** Change: Linked alerts and timers without settings have been enabled.
 ** Change: Further tweaks to the Raid Manager combat state monitoring.

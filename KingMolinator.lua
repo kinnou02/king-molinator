@@ -3657,7 +3657,11 @@ function KBM:RaidCombatLeave()
 				print("Possible Wipe, waiting raid out of combat")
 			end
 			KBM.Idle.Combat.Wait = true
-			KBM.Idle.Combat.Until = Inspect.Time.Real() + KBM.Idle.Combat.Duration
+			if KBM.CurrentMod.TimeoutOverride then
+				KBM.Idle.Combat.Until = Inspect.Time.Real() + KBM.CurrentMod.Timeout
+			else
+				KBM.Idle.Combat.Until = Inspect.Time.Real() + KBM.Idle.Combat.Duration
+			end
 			KBM.Idle.Combat.StoreTime = KBM.TimeElapsed
 		end
 	end
