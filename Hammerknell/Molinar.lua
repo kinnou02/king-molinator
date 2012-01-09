@@ -192,6 +192,7 @@ KM.Lang.Ability.Feedback = KBM.Language:Add("Runic Feedback")
 KM.Lang.Ability.Feedback.French = "R\195\169action runique"
 KM.Lang.Ability.Feedback.German = "Runen-Resonanz"
 KM.Lang.Ability.Crushing = KBM.Language:Add("Crushing Regret")
+KM.Lang.Ability.Crushing.German = "Erdrückendes Bedauern"
 KM.Lang.Ability.Crushing.French = "Blasph\195\168me infect"
 KM.Lang.Ability.Forked = KBM.Language:Add("Forked Blast")
 KM.Lang.Ability.Forked.French = "Explosion fourchue"

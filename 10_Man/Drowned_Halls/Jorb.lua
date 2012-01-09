@@ -64,6 +64,7 @@ AJ.Lang.Notify.Stand.German = "(%a*), Stillgestanden!"
 -- Debuff Dictionary
 AJ.Lang.Debuff = {}
 AJ.Lang.Debuff.Grasp = KBM.Language:Add("Paralyzing Grasp")
+AJ.Lang.Debuff.Grasp.German = "Lähmender Griff"
 
 AJ.Jorb.Name = AJ.Lang.Jorb[KBM.Lang]
 AJ.Descript = AJ.Jorb.Name

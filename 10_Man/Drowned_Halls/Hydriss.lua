@@ -60,11 +60,14 @@ HH.Lang.Ability.Tsunami = KBM.Language:Add("Tsunami")
 -- Mechanic Dictionary
 HH.Lang.Mechanic = {}
 HH.Lang.Mechanic.Air = KBM.Language:Add("Air Phase")
+HH.Lang.Mechanic.Air.German = "Flug Phase"
 
 -- Unit Dictionary
 HH.Lang.Unit = {}
 HH.Lang.Unit.Sea = KBM.Language:Add("Seaspawn")
+HH.Lang.Unit.Sea.German = "Meeresbrut"
 HH.Lang.Unit.Hive = KBM.Language:Add("Seaclaw Hive")
+HH.Lang.Unit.Hive.German = "Seeklauennest"
 
 HH.Seaspawn = {
 	Mod = HH,

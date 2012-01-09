@@ -66,7 +66,9 @@ IL.Lang.Mechanic.Anti.German = "Gegen Uhrzeigersinn"
 IL.Lang.Mechanic.Clock = KBM.Language:Add("Clockwise")
 IL.Lang.Mechanic.Clock.German = "Im Uhrzeigersinn"
 IL.Lang.Mechanic.WhirlpoolEnd = KBM.Language:Add("Whirlpool ends")
+IL.Lang.Mechanic.WhirlpoolEnd.German = "Whirlpool beendet"
 IL.Lang.Mechanic.Reverse = KBM.Language:Add("Changing direction")
+IL.Lang.Mechanic.Reverse.German = "Richtung wechseln"
 
 -- Mechanic Notify
 IL.Lang.Notify = {}
@@ -78,7 +80,7 @@ IL.Lang.Notify.Reverse.German = "Ihr Narren geht in die falsche Richtung!"
 -- Menu Dictionary
 IL.Lang.Menu = {}
 IL.Lang.Menu.WhirlpoolFirst = KBM.Language:Add("First "..IL.Lang.Mechanic.Whirlpool[KBM.Lang])
-IL.Lang.Menu.WhirlpoolFirst.German = "Erste "..IL.Lang.Mechanic.Whirlpool[KBM.Lang]
+IL.Lang.Menu.WhirlpoolFirst.German = "Erster "..IL.Lang.Mechanic.Whirlpool[KBM.Lang]
 
 IL.Isskal.Name = IL.Lang.Isskal[KBM.Lang]
 IL.Descript = IL.Isskal.Name

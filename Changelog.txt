@@ -30,6 +30,19 @@
 * Raid Manager
 ** Fixed: Inconsistent error on "some" resurrect mechanics. (Error moved to debug tracking info, non-critical)
 ** Fixed: Heal events were not triggering as expected, catch added for inconsistent nil caster/target errors.
+* German Translations
+** Runenkönig Molinar
+*** New: Erdrückendes Bedauern.
+** Hohepriesterin Hydriss
+*** New: Flug Phase.
+*** New: Meeresbrut.
+*** New: Seeklauennest.
+** Isskal
+*** New: Whirlpool beendet.
+*** New: Richtung wechseln.
+*** New: Erster Whirlpool.
+** Überfallkommandant Jorb
+*** New: Lähmender Griff.
 ----
 v0.8.9
 * Menu Options
