@@ -202,24 +202,24 @@ function IJ.PhaseTwo()
 	IJ.PhaseObj.Objectives:Remove()
 	IJ.Phase = 2
 	IJ.PhaseObj:SetPhase("Bomb 1/3")
-	IJ.Bomb.PhaseObjective = IJ.PhaseObj.Objectives:AddPercent(IJ.Bomb.Name, 0, 100)	
 	IJ.PhaseObj.Objectives:AddPercent(IJ.Johlen.Name, 50, 75)
+	IJ.Bomb.PhaseObjective = IJ.PhaseObj.Objectives:AddPercent(IJ.Bomb.Name, 0, 100)	
 end
 
 function IJ.PhaseThree()
 	IJ.PhaseObj.Objectives:Remove()
 	IJ.Phase = 3
 	IJ.PhaseObj:SetPhase("Bomb 2/3")
-	IJ.Bomb.PhaseObjective = IJ.PhaseObj.Objectives:AddPercent(IJ.Bomb.Name, 0, 100)	
 	IJ.PhaseObj.Objectives:AddPercent(IJ.Johlen.Name, 25, 50)
+	IJ.Bomb.PhaseObjective = IJ.PhaseObj.Objectives:AddPercent(IJ.Bomb.Name, 0, 100)	
 end
 
 function IJ.PhaseFour()
 	IJ.PhaseObj.Objectives:Remove()
 	IJ.Phase = 4
 	IJ.PhaseObj:SetPhase("Bomb 3/3")
-	IJ.Bomb.PhaseObjective = IJ.PhaseObj.Objectives:AddPercent(IJ.Johlen.Name, 0, 25)
-	IJ.PhaseObj.Objectives:AddPercent(IJ.Bomb.Name, 0, 100)	
+	IJ.PhaseObj.Objectives:AddPercent(IJ.Johlen.Name, 0, 25)
+	IJ.Bomb.PhaseObjective = IJ.PhaseObj.Objectives:AddPercent(IJ.Bomb.Name, 0, 100)		
 end
 
 function IJ:Reset()
