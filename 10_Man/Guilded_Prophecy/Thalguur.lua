@@ -4,24 +4,16 @@
 --
 
 KBMGPTR_Settings = nil
+chKBMGPTR_Settings = nil
+
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 local GP = KBM.BossMod["Guilded Prophecy"]
 
 local TR = {
-	ModEnabled = true,
-	Thalguur = {
-		MenuItem = nil,
-		Enabled = true,
-		Handler = nil,
-		Options = nil,
-	},
+	Enabled = true,
 	Instance = GP.Name,
-	HasPhases = true,
-	PhaseType = "percentage",
-	PhaseList = {},
-	Timers = {},
 	Lang = {},
 	ID = "Thalguur",
 	}
@@ -31,72 +23,74 @@ TR.Thalguur = {
 	Level = "??",
 	Active = false,
 	Name = "Thalguur",
-	Castbar = nil,
-	CastFilters = {},
-	Timers = {},
-	TimersRef = {},
-	AlertsRef = {},
+	NameShort = "Thalguur",
+	Menu = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	TimeOut = 5,
 	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+	},
 }
 
 KBM.RegisterMod(TR.ID, TR)
 
 TR.Lang.Thalguur = KBM.Language:Add(TR.Thalguur.Name)
--- TR.Lang.Flames = KBM.Language:Add("Ancient Flames")
--- TR.Lang.Flames.French = "Flammes anciennes"
 
 TR.Thalguur.Name = TR.Lang.Thalguur[KBM.Lang]
+TR.Descript = TR.Thalguur.Name
 
 function TR:AddBosses(KBM_Boss)
-	self.Thalguur.Descript = self.Thalguur.Name
-	self.MenuName = self.Thalguur.Descript
+	self.MenuName = self.Descript
 	self.Bosses = {
-		[self.Thalguur.Name] = true,
+		[self.Thalguur.Name] = self.Thalguur,
 	}
 	KBM_Boss[self.Thalguur.Name] = self.Thalguur	
 end
 
 function TR:InitVars()
 	self.Settings = {
-		Timers = {
-			Enabled = true,
-			FlamesEnabled = true,
-		},
-		CastBar = {
-			x = false,
-			y = false,
-			Enabled = true,
-		},
+		Enabled = true,
+		CastBar = self.Thalguur.Settings.CastBar,
+		EncTimer = KBM.Defaults.EncTimer(),
 	}
-	KBMGS_Settings = self.Settings
+	KBMGPTR_Settings = self.Settings
+	chKBMGPTR_Settings = self.Settings
 end
 
-function TR:LoadVars()
-	if type(KBMGSBGS_Settings) == "table" then
-		for Setting, Value in pairs(KBMGSBGS_Settings) do
-			if type(KBMGSBGS_Settings[Setting]) == "table" then
-				if self.Settings[Setting] ~= nil then
-					for tSetting, tValue in pairs(KBMGSBGS_Settings[Setting]) do
-						if self.Settings[Setting][tSetting] ~= nil then
-							self.Settings[Setting][tSetting] = tValue
-						end
-					end
-				end
-			else
-				if self.Settings[Setting] ~= nil then
-					self.Settings[Setting] = Value
-				end
-			end
-		end
+function TR:SwapSettings(bool)
+
+	if bool then
+		KBMGPTR_Settings = self.Settings
+		self.Settings = chKBMGPTR_Settings
+	else
+		chKBMGPTR_Settings = self.Settings
+		self.Settings = KBMGPTR_Settings
 	end
+
 end
 
-function TR:SaveVars()
-	KBMGSBGS_Settings = self.Settings
+function TR:LoadVars()	
+	if KBM.Options.Character then
+		KBM.LoadTable(chKBMGPTR_Settings, self.Settings)
+	else
+		KBM.LoadTable(KBMGPTR_Settings, self.Settings)
+	end
+	
+	if KBM.Options.Character then
+		chKBMGPTR_Settings = self.Settings
+	else
+		KBMGPTR_Settings = self.Settings
+	end	
+end
+
+function TR:SaveVars()	
+	if KBM.Options.Character then
+		chKBMGPTR_Settings = self.Settings
+	else
+		KBMGPTR_Settings = self.Settings
+	end	
 end
 
 function TR:Castbar(units)
@@ -118,12 +112,12 @@ function TR:Death(UnitID)
 	return false
 end
 
-function TR:UnitHPCheck(unitDetails, unitID)
+function TR:UnitHPCheck(uDetails, unitID)
 	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if unitDetails.name == self.Thalguur.Name then
-				if not self.Thalguur.UnitID then
+	if uDetails and unitID then
+		if not uDetails.player then
+			if uDetails.name == self.Thalguur.Name then
+				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
@@ -144,6 +138,7 @@ function TR:Reset()
 	self.EncounterRunning = false
 	self.Thalguur.Available = false
 	self.Thalguur.UnitID = nil
+	self.Thalguur.Dead = false
 	self.Thalguur.CastBar:Remove()
 end
 
@@ -151,26 +146,41 @@ function TR:Timer()
 	
 end
 
-function TR.Thalguur:Options()
-	function self:TimersEnabled(bool)
+function TR.Thalguur:SetTimers(bool)	
+	if bool then
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = TimerObj.Settings.Enabled
+		end
+	else
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = false
+		end
 	end
-	function self:FlamesEnabled(bool)
-		TR.Settings.Timers.FlamesEnabled = bool
-		TR.Thalguur.TimersRef.Flames.Enabled = bool
+end
+
+function TR.Thalguur:SetAlerts(bool)
+	if bool then
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = AlertObj.Settings.Enabled
+		end
+	else
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = false
+		end
 	end
-	local Options = self.MenuItem.Options
-	Options:SetTitle()
-	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, TR.Settings.Timers.Enabled)
-	--Timers:AddCheck(TR.Lang.Flames[KBM.Lang], self.FlamesEnabled, TR.Settings.Timers.FlamesEnabled)	
-	
+end
+
+function TR:DefineMenu()
+	self.Menu = GP.Menu:CreateEncounter(self.Thalguur, self.Enabled)
 end
 
 function TR:Start()
-	self.Header = KBM.HeaderList[self.Instance]
-	self.Thalguur.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Thalguur, true, self.Header)
-	self.Thalguur.MenuItem.Check:SetEnabled(false)
-	-- self.Thalguur.TimersRef.Flames = KBM.MechTimer:Add(self.Lang.Flames[KBM.Lang], "cast", 30, self, nil)
-	-- self.Thalguur.TimersRef.Flames.Enabled = self.Settings.Timers.FlamesEnabled
+	-- Create Timers
+	
+	-- Create Alerts
+	
+	-- Assign Timers and Alerts to Triggers
 	
 	self.Thalguur.CastBar = KBM.CastBar:Add(self, self.Thalguur, true)
+	self:DefineMenu()
 end

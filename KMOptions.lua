@@ -1984,26 +1984,26 @@ function KBM.InitOptions()
 							
 							function Callbacks:Callback(bool)					
 								self.Data.Enabled = bool
-								self.Boss.Settings.Filters[self.Data.ID].Enabled = bool
+								self.Data.Settings.Enabled = bool
 								self.Boss.Menu.Filters[self.Data.ID].ColorGUI:Enable(bool)
 							end
 							
 							function Callbacks:Enabled(bool)
 								self.Data.Enabled = bool
-								self.Boss.Settings.Filters[self.Data.ID].Enabled = bool
+								self.Data.Settings.Enabled = bool
 								self.Boss.Menu.Filters[self.Data.ID].ColorGUI:Enable(bool)
 							end
 							
 							function Callbacks:Color(bool, Color)							
 								if not Color then
 									self.Data.Custom = bool
-									self.Boss.Settings.Filters[self.Data.ID].Custom = bool
+									self.Data.Settings.Custom = bool
 									self.GUI:SetEnabled(bool)
 								elseif Color then
 									self.Manager.Data.Color = Color
-									self.Manager.Boss.Settings.Filters[self.Manager.Data.ID].Color = Color
+									self.Manager.Data.Settings.Color = Color
 									self.Manager.Color = Color
-								end								
+								end
 							end
 							
 							Child = Header:CreateOption(FilterName, "excheck", Callbacks.Callback)
@@ -2013,14 +2013,14 @@ function KBM.InitOptions()
 							SubHeader.Boss = BossObj
 							BossObj.Menu.Filters[FilterData.ID] = {}
 							BossObj.Menu.Filters[FilterData.ID].Enabled = SubHeader:CreateOption(KBM.Language.Options.Enabled[KBM.Lang], "check", Callbacks.Enabled)
-							BossObj.Menu.Filters[FilterData.ID].Enabled:SetChecked(FilterData.Enabled)
+							BossObj.Menu.Filters[FilterData.ID].Enabled:SetChecked(FilterData.Settings.Enabled)
 							BossObj.Menu.Filters[FilterData.ID].Enabled.Data = FilterData
 							BossObj.Menu.Filters[FilterData.ID].Enabled.Controller = Child
 							Child.Controller = BossObj.Menu.Filters[FilterData.ID].Enabled
 							BossObj.Menu.Filters[FilterData.ID].ColorGUI = SubHeader:CreateOption(KBM.Language.Color.Custom[KBM.Lang], "color", Callbacks.Color)
-							BossObj.Menu.Filters[FilterData.ID].ColorGUI:SetChecked(FilterData.Custom)
-							BossObj.Menu.Filters[FilterData.ID].ColorGUI.Enabled = FilterData.Enabled
-							BossObj.Menu.Filters[FilterData.ID].ColorGUI.Color = FilterData.Color
+							BossObj.Menu.Filters[FilterData.ID].ColorGUI:SetChecked(FilterData.Settings.Custom)
+							BossObj.Menu.Filters[FilterData.ID].ColorGUI.Enabled = FilterData.Settings.Enabled
+							BossObj.Menu.Filters[FilterData.ID].ColorGUI.Color = FilterData.Settings.Color
 							BossObj.Menu.Filters[FilterData.ID].ColorGUI.Data = FilterData							
 						end								
 					end							

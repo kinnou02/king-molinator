@@ -104,10 +104,11 @@ GR.Lang.Debuff.Toxin.German = "Herzstillstandsgift"
 
 GR.Grugonim.Name = GR.Lang.Grugonim[KBM.Lang]
 GR.Tower.Name = GR.Lang.Tower[KBM.Lang]
+GR.Descript = GR.Grugonim.Name
+
 
 function GR:AddBosses(KBM_Boss)
-	self.Grugonim.Descript = self.Grugonim.Name
-	self.MenuName = self.Grugonim.Descript
+	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Grugonim.Name] = self.Grugonim,
 		[self.Tower.Name] = self.Tower,
@@ -155,11 +156,11 @@ function GR:LoadVars()
 		KBMGR_Settings = self.Settings
 	end
 	
-	self.Grugonim.CastFilters[self.Lang.Ability.Decay[KBM.Lang]] = self.Settings.CastFilters.Decay
-	self.Grugonim.CastFilters[self.Lang.Ability.Bile[KBM.Lang]] = self.Settings.CastFilters.Bile
-	self.Grugonim.CastFilters[self.Lang.Ability.Breath[KBM.Lang]] = self.Settings.CastFilters.Breath
-	self.Grugonim.CastFilters[self.Lang.Ability.Disruption[KBM.Lang]] = self.Settings.CastFilters.Disruption
-	self.Grugonim.CastFilters[self.Lang.Ability.Swarm[KBM.Lang]] = self.Settings.CastFilters.Swarm
+	self.Grugonim.CastFilters[self.Lang.Ability.Decay[KBM.Lang]] = {ID = "Decay"}
+	self.Grugonim.CastFilters[self.Lang.Ability.Bile[KBM.Lang]] = {ID = "Bile"}
+	self.Grugonim.CastFilters[self.Lang.Ability.Breath[KBM.Lang]] = {ID = "Breath"}
+	self.Grugonim.CastFilters[self.Lang.Ability.Disruption[KBM.Lang]] = {ID = "Disruption"}
+	self.Grugonim.CastFilters[self.Lang.Ability.Swarm[KBM.Lang]] = {ID = "Swarm"}
 		
 	KBM.Defaults.CastFilter.Assign(self.Grugonim)	
 end
@@ -208,12 +209,16 @@ end
 
 function GR.BreathCount()
 	GR.Breaths = GR.Breaths + 1
-	KBM.PhaseMonitor.Objectives.Lists.Meta[GR.Lang.Ability.Breath[KBM.Lang]]:Update(GR.Breaths)
+	if KBM.PhaseMonitor.Objectives.Lists.Meta[GR.Lang.Ability.Breath[KBM.Lang]] then
+		KBM.PhaseMonitor.Objectives.Lists.Meta[GR.Lang.Ability.Breath[KBM.Lang]]:Update(GR.Breaths)
+	end
 end
 
 function GR.BreathReset()
 	GR.Breaths = 0
-	KBM.PhaseMonitor.Objectives.Lists.Meta[GR.Lang.Ability.Breath[KBM.Lang]]:Update(GR.Breaths)
+	if KBM.PhaseMonitor.Objectives.Lists.Meta[GR.Lang.Ability.Breath[KBM.Lang]] then
+		KBM.PhaseMonitor.Objectives.Lists.Meta[GR.Lang.Ability.Breath[KBM.Lang]]:Update(GR.Breaths)
+	end
 	GR.Settings.CastFilters.Breath.Current = 1
 end
 

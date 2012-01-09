@@ -63,10 +63,10 @@ PI.Lang.Ability.Sleep = KBM.Language:Add("Walking Sleep")
 PI.Lang.Ability.Sleep.German = "Wandelnder Schlaf" 
 
 PI.Plutonus.Name = PI.Lang.Plutonus[KBM.Lang]
+PI.Descript = PI.Plutonus.Name
 
 function PI:AddBosses(KBM_Boss)
-	self.Plutonus.Descript = self.Plutonus.Name
-	self.MenuName = self.Plutonus.Descript
+	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Plutonus.Name] = self.Plutonus,
 	}

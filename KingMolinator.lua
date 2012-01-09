@@ -100,6 +100,10 @@ function KBM.Defaults.CastFilter.Assign(BossObj)
 		for Name, Data in pairs(BossObj.CastFilters) do
 			if type(Data) == "table" then
 				Data.Prefix = ""
+				Data.Settings = BossObj.Settings.Filters[Data.ID]
+				Data.Enabled = Data.Settings.Enabled
+				Data.Color = Data.Settings.Color
+				Data.Custom = Data.Settings.Custom
 			end
 		end
 	end
@@ -341,6 +345,19 @@ local function KBM_DefineVars(AddonID)
 		chKBM_GlobalOptions = KBM.Options
 		for _, Mod in ipairs(KBM.ModList) do
 			Mod:InitVars()
+			if not Mod.IsInstance then
+				if Mod.Settings then
+					if not Mod.Settings.Records then
+						Mod.Settings.Records = KBM.Defaults.Records()
+						if Mod.HasChronicle then
+							Mod.Settings.Records.Chronicle = KBM.Defaults.Records()
+						end
+					end
+				end
+			end
+			if not Mod.Descript then
+				print("Warning: "..Mod.ID.." has no description.")
+			end
 		end
 	end
 end
@@ -509,6 +526,7 @@ KBM.Language.Encounter.Wipe.German = "Bosskampf beendet, möglicher Wipe."
 KBM.Language.Encounter.Victory = KBM.Language:Add("Encounter Victory!")
 KBM.Language.Encounter.Victory.French = "Victoire, On l'a tué!"
 KBM.Language.Encounter.Victory.German = "Bosskampf erfolgreich!"
+KBM.Language.Encounter.Chronicle = KBM.Language:Add("Activate in Chronicles.")
 -- Colors
 KBM.Language.Color = {}
 KBM.Language.Color.Custom = KBM.Language:Add("Custom color.")
@@ -1619,10 +1637,16 @@ function KBM.PhaseMonitor:Init()
 			Object.Previous = nil
 			Object.Next = nil
 		end
-		Object.Index = self.Count		
+		Object.Index = self.Count
 	end
 	
-	function self.Objectives.Lists:Remove(Object)	
+	function self.Objectives.Lists:Remove(Object)
+		if not Object then
+			if KBM.Debug then
+				print("Error: Unknown Object")
+			end
+			return
+		end
 		if self.Count == 1 then
 			Object.GUI.Frame:SetVisible(false)
 			table.insert(KBM.PhaseMonitor.ObjectiveStore, Object.GUI)
@@ -1644,15 +1668,17 @@ function KBM.PhaseMonitor:Init()
 					Object.Next.Previous = nil
 					Object.Next.GUI.Frame:SetPoint("TOP", KBM.PhaseMonitor.Frame, "BOTTOM")
 				end
-				Object.Next.Index = Object.Next.Index - 1
 			else
 				-- This object was the last object in the list, and now the previous object is.
 				Object.Previous.Next = nil
 				self.LastObjective = Object.Previous
 			end
 			self[Object.Type][Object.Name] = nil
-			self.All[Object.Index] = nil
-			Object = nil
+			table.remove(self.All, Object.Index)
+			-- Re-Index list
+			for Index, Object in ipairs(self.All) do
+				Object.Index = Index
+			end
 			self.Count = self.Count - 1
 		end		
 	end
@@ -1688,7 +1714,7 @@ function KBM.PhaseMonitor:Init()
 			MetaObj.Name = Name
 			MetaObj.GUI = KBM.PhaseMonitor:PullObjective()
 			MetaObj.GUI:SetName(Name)
-			MetaObj.GUI.Objective:SetText(MetaObj.Count.."/"..MetaObj.Target)
+			MetaObj.GUI:SetObjective(MetaObj.Count.."/"..MetaObj.Target)
 			MetaObj.Type = "Meta"
 			
 			function MetaObj:Update(Total)
@@ -1696,6 +1722,9 @@ function KBM.PhaseMonitor:Init()
 					self.Count = Total
 					self.GUI:SetObjective(self.Count.."/"..self.Target)
 				end
+			end
+			function MetaObj:Remove()
+				KBM.PhaseMonitor.Objectives.Lists:Remove(self)
 			end
 			
 			KBM.PhaseMonitor.Objectives.Lists.Meta[Name] = MetaObj
@@ -1725,6 +1754,9 @@ function KBM.PhaseMonitor:Init()
 					self.GUI:SetObjective(self.Count.."/"..self.Total)
 				end
 			end
+			function DeathObj:Remove()
+				KBM.PhaseMonitor.Objectives.Lists:Remove(self)
+			end
 			
 			KBM.PhaseMonitor.Objectives.Lists.Death[Name] = DeathObj
 			KBM.PhaseMonitor.Objectives.Lists:Add(DeathObj)
@@ -1733,7 +1765,8 @@ function KBM.PhaseMonitor:Init()
 				DeathObj.GUI.Frame:SetVisible(KBM.PhaseMonitor.Settings.Objectives)
 			else
 				DeathObj.GUI.Frame:SetVisible(false)
-			end			
+			end
+			return DeathObj
 		end
 		
 		function PhaseObj.Objectives:AddPercent(Name, Target, Current)		
@@ -1762,6 +1795,9 @@ function KBM.PhaseMonitor:Init()
 					end	
 				end
 			end
+			function PercentObj:Remove()
+				KBM.PhaseMonitor.Objectives.Lists:Remove(self)
+			end
 			
 			KBM.PhaseMonitor.Objectives.Lists.Percent[Name] = PercentObj
 			KBM.PhaseMonitor.Objectives.Lists:Add(PercentObj)
@@ -1770,15 +1806,16 @@ function KBM.PhaseMonitor:Init()
 				PercentObj.GUI.Frame:SetVisible(KBM.PhaseMonitor.Settings.Objectives)
 			else
 				PercentObj.GUI.Frame:SetVisible(false)
-			end						
+			end
+			return PercentObj
 		end
 		
 		function PhaseObj.Objectives:AddTime(Time)
 		end
 		
-		function PhaseObj.Objectives:Remove(Name)		
-			if Name then
-				KBM.PhaseMonitor.Objectives.Lists:Remove(KBM.PhaseMonitor.Lists.All[Name])
+		function PhaseObj.Objectives:Remove(Index)		
+			if type(Index) == "number" then
+				KBM.PhaseMonitor.Objectives.Lists:Remove(KBM.PhaseMonitor.Objectives.Lists.All[Index])
 			else
 				for _, Object in ipairs(KBM.PhaseMonitor.Objectives.Lists.All) do
 					Object.GUI.Frame:SetVisible(false)
@@ -2149,13 +2186,29 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 					end
 					if BossObj then
 						if KBM.Debug then
-							print("Boss found Checking")
+							print("Boss found Checking: Tier = "..uDetails.tier.." "..uDetails.level.." ("..type(uDetails.level)..")")
+							print("Players location: "..Inspect.Unit.Detail(KBM.Player.UnitID).locationName)
 						end
 						if uDetails.combat then
 							if KBM.Debug then
 								print("Boss matched checking encounter start")
 							end
-							--if uDetails.level == BossObj.Level then
+							if BossObj.Mod.HasChronicle then
+								if uDetails.healthMax < 150000 then
+									KBM.EncounterMode = "chronicle"
+									if KBM.Debug then
+										print("Chronicle mode active")
+									end
+								else
+									KBM.EncounterMode = "normal"
+									if KBM.Debug then
+										print("Normal mode active")
+									end
+								end
+							else
+								KBM.EncounterMode = "normal"
+							end
+							if KBM.EncounterMode == "normal" or (KBM.EncounterMode == "chronicle" and BossObj.Mod.Settings.Chronicle) then
 								KBM.BossID[UnitID] = {}
 								KBM.BossID[UnitID].name = uDetails.name
 								KBM.BossID[UnitID].monitor = true
@@ -2180,7 +2233,13 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 										KBM_CurrentBossName = uDetails.name
 										KBM.CurrentMod = KBM.BossID[UnitID].Mod
 										if not KBM.CurrentMod.EncounterRunning then
-											print(KBM.Language.Encounter.Start[KBM.Lang].." "..BossObj.Descript)
+											if KBM.EncounterMode == "chronicle" then
+												print(KBM.Language.Encounter.Start[KBM.Lang].." "..KBM.CurrentMod.Descript.." (Chronicles)")
+												KBM.CurrentMod.Settings.Records.Chronicle.Attempts = KBM.CurrentMod.Settings.Records.Chronicle.Attempts + 1
+											else
+												print(KBM.Language.Encounter.Start[KBM.Lang].." "..KBM.CurrentMod.Descript)
+												KBM.CurrentMod.Settings.Records.Attempts = KBM.CurrentMod.Settings.Records.Attempts + 1
+											end
 											print(KBM.Language.Encounter.GLuck[KBM.Lang])
 											KBM.TimeElapsed = 0
 											KBM.StartTime = math.floor(current)
@@ -2239,8 +2298,8 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 									KBM.BossID[UnitID].Combat = false
 									KBM.BossID[UnitID].dead = true
 									KBM.BossID[UnitID].available = true
-								end					
-							--end
+								end
+							end
 						end
 					end
 				end
@@ -3424,6 +3483,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 										self.GUI.Progress:SetWidth(self.GUI.Frame:GetWidth() * (1-(self.Progress/self.CastTime)))
 										self.GUI:SetText(string.format("%0.01f", self.Progress).." - "..FilterObj.Prefix..bDetails.abilityName)
 										self:Start()
+										self.CastStart = bDetails.begin
 									else
 										self.CastTime = bDetails.duration
 										self.Progress = bDetails.remaining						
@@ -3442,6 +3502,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 									else
 										self.GUI.Progress:SetBackgroundColor(1, 0, 0, 0.33)
 									end
+									self.CastStart = bDetails.begin
 								end
 								self.CastTime = bDetails.duration
 								self.Progress = bDetails.remaining
@@ -3456,6 +3517,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 								else
 									self.GUI.Progress:SetBackgroundColor(1, 0, 0, 0.33)
 								end
+								self.CastStart = bDetails.begin
 							end
 							self.CastTime = bDetails.duration
 							self.Progress = bDetails.remaining
@@ -3479,7 +3541,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 			else
 				if self.Casting or (self.LastCast ~= "") then
 					if self.Progress then
-						if self.Progress > 0.05 then
+						if self.Progress > 0.025 then
 						-- if Inspect.Unit.Lookup(self.UnitID) then
 							-- Interrupt
 						-- end
@@ -3641,6 +3703,11 @@ function KBM.WipeIt()
 		KBM.TimeElapsed = KBM.Idle.Combat.StoreTime
 		print(KBM.Language.Encounter.Wipe[KBM.Lang])
 		print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
+		if KBM.EncounterMode == "chronicle" then
+			KBM.CurrentMod.Settings.Records.Chronicle.Wipes = KBM.CurrentMod.Settings.Records.Chronicle.Wipes + 1
+		else
+			KBM.CurrentMod.Settings.Records.Wipes = KBM.CurrentMod.Settings.Records.Wipes + 1
+		end
 		KBM_Reset()
 	end
 	
@@ -3713,10 +3780,10 @@ function KBM:Timer()
 						end
 					end
 				end
+				for UnitID, CastCheck in pairs(KBM.CastBar.ActiveCastBars) do
+					CastCheck:Update()
+				end
 				if udiff >= 0.05 then
-					for UnitID, CastCheck in pairs(KBM.CastBar.ActiveCastBars) do
-						CastCheck:Update()
-					end
 					for i, Timer in ipairs(self.MechTimer.ActiveTimers) do
 						Timer:Update(current)
 					end
@@ -3848,7 +3915,37 @@ local function KBM_Death(UnitID)
 					end
 					if KBM.CurrentMod:Death(UnitID) then
 						print(KBM.Language.Encounter.Victory[KBM.Lang])
-						print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(Inspect.Time.Real() - KBM.StartTime))
+						if KBM.EncounterMode == "normal" then
+							if KBM.CurrentMod.Settings.Records.Best == 0 or (KBM.TimeElapsed < KBM.CurrentMod.Settings.Records.Best) then
+								print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
+								if KBM.CurrentMod.Settings.Records.Best ~= 0 then
+									print("Previous best: "..KBM.ConvertTime(KBM.CurrentMod.Settings.Records.Best))
+									print("Congratulations: New Record!")
+								else
+									print("Congratulations: A new record has been set!")
+								end
+								KBM.CurrentMod.Settings.Records.Best = KBM.TimeElapsed
+								KBM.CurrentMod.Settings.Records.Kills = KBM.CurrentMod.Settings.Records.Kills + 1
+							else
+								print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
+								print("Current Record: "..KBM.ConvertTime(KBM.CurrentMod.Settings.Records.Best))
+							end
+						else
+							if KBM.CurrentMod.Settings.Records.Chronicle.Best == 0 or KBM.TimeElapsed < KBM.CurrentMod.Settings.Records.Chronicle.Best then
+								print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
+								if KBM.CurrentMod.Settings.Records.Chronicle.Best ~= 0 then
+									print("Previous best: "..KBM.ConvertTime(KBM.CurrentMod.Settings.Records.Chronicle.Best))
+									print("Congratulations: New Chronicle Record!")
+								else
+									print("Congratulations: A new record has been set!")
+								end
+								KBM.CurrentMod.Settings.Records.Chronicle.Best = KBM.TimeElapsed
+								KBM.CurrentMod.Settings.Records.Chronicle.Kills = KBM.CurrentMod.Settings.Records.Chronicle.Kills + 1
+							else
+								print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))								
+								print("Current Record: "..KBM.ConvertTime(KBM.CurrentMod.Settings.Records.Chronicle.Best))
+							end						
+						end
 						KBM_Reset()
 					end
 				end
@@ -3939,6 +4036,9 @@ function KBM:BuffMonitor(unitID, Buffs, Type)
 						bDetails = Inspect.Buff.Detail(unitID, BuffID)
 						if bDetails then
 							KBM.Buffs.Active[BuffID] = bDetails
+							if KBM.Debug then
+								print("Buff tracking added for: "..bDetails.name)
+							end
 							if KBM.Trigger.Buff[KBM.CurrentMod.ID] then
 								if KBM.Trigger.Buff[KBM.CurrentMod.ID][bDetails.name] then
 									TriggerObj = KBM.Trigger.Buff[KBM.CurrentMod.ID][bDetails.name]
@@ -3949,7 +4049,7 @@ function KBM:BuffMonitor(unitID, Buffs, Type)
 							elseif KBM.Trigger.PlayerBuff[KBM.CurrentMod.ID] then
 								if KBM.Trigger.PlayerBuff[KBM.CurrentMod.ID][bDetails.name] then
 									TriggerObj = KBM.Trigger.PlayerBuff[KBM.CurrentMod.ID][bDetails.name]
-									if LibSRM.Group.UnitExists(unitID) then
+									if LibSRM.Group.UnitExists(unitID) or unitID == KBM.Player.UnitID then
 										KBM.Trigger.Queue:Add(TriggerObj, nil, unitID, bDetails.remaining)
 									end
 								end
@@ -3971,7 +4071,7 @@ function KBM:BuffMonitor(unitID, Buffs, Type)
 							if KBM.Buffs.Active[BuffID] then
 								bDetails = KBM.Buffs.Active[BuffID]
 								if KBM.Trigger.BuffRemove[KBM.CurrentMod.ID] then
-									if KBM.Trigger.BuffRemove[KBM.CurrenMod.ID][bDetails.name] then
+									if KBM.Trigger.BuffRemove[KBM.CurrentMod.ID][bDetails.name] then
 										TriggerObj = KBM.Trigger.BuffRemove[KBM.CurrentMod.ID][bDetails.name]
 										if TriggerObj.Unit.UnitID == unitID then
 											KBM.Trigger.Queue:Add(TriggerObj, nil, unitID, nil)
@@ -4538,9 +4638,25 @@ local function KBM_WaitReady(unitID, uDetails)
 		
 end
 
+function KBM.Defaults.Records()
+
+	local RecordObj = {
+		Attempts = 0,
+		Wipes = 0,
+		Kills = 0,
+		Best = 0,
+	}
+	return RecordObj
+	
+end
+
 function KBM.RegisterMod(ModID, Mod)
-	KBM.BossMod[ModID] = Mod
-	table.insert(KBM.ModList, Mod)
+	if KBM.BossMod[ModID] then
+		error("<Mod ID Conflict> The Mod ID: "..ModID.." already exists.") 
+	else
+		KBM.BossMod[ModID] = Mod
+		table.insert(KBM.ModList, Mod)
+	end
 end
 
 table.insert(Event.Addon.SavedVariables.Load.Begin, {KBM_DefineVars, "KingMolinator", "Pre Load"})

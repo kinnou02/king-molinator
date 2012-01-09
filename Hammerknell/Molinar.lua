@@ -19,6 +19,7 @@ local KM = {
 	TankSwap = false,
 	Lang = {},
 	Enrage = 60 * 10,
+	HasChronicle = true,
 	ID = "KingMolinar",
 }
 
@@ -229,11 +230,11 @@ KM.Lang.Options.Monitor.Compact.German = "Kompakte Anzeige."
 KM.King.Name = KM.Lang.Molinar[KBM.Lang]
 KM.Prince.Name = KM.Lang.Dollin[KBM.Lang]
 
+KM.Descript = KM.King.Name.." & "..KM.Prince.Name
+
 function KM:AddBosses(KBM_Boss)
 
 	self.MenuName = self.King.Name
-	self.Prince.Descript = self.King.Name.." & "..self.Prince.Name
-	self.King.Descript = self.Prince.Descript
 	KBM_Boss[self.Prince.Name] = self.Prince
 	KBM_Boss[self.King.Name] = self.King
 	self.Bosses = {
@@ -247,6 +248,7 @@ function KM:InitVars()
 
 	self.Settings = {
 		Enabled = true,
+		Chronicle = true,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		MechTimer = KBM.Defaults.MechTimer(),
@@ -316,16 +318,16 @@ function KM:LoadVars()
 	self.King.Settings.AlertsRef.Feedback.Enabled = true
 	self.Prince.Settings.AlertsRef.Feedback.Enabled = true
 	
-	KM.Prince.CastFilters[KM.Lang.Ability.Rend[KBM.Lang]] = self.Settings.Prince.CastFilters.Rend
-	KM.Prince.CastFilters[KM.Lang.Ability.Terminate[KBM.Lang]] = self.Settings.Prince.CastFilters.Terminate
-	KM.Prince.CastFilters[KM.Lang.Ability.Essence[KBM.Lang]] = self.Settings.Prince.CastFilters.Essence
-	KM.Prince.CastFilters[KM.Lang.Ability.Feedback[KBM.Lang]] = self.Settings.Prince.CastFilters.Feedback
-	KM.Prince.CastFilters[KM.Lang.Ability.Crushing[KBM.Lang]] = self.Settings.Prince.CastFilters.Crushing
-	KM.Prince.CastFilters[KM.Lang.Ability.Forked[KBM.Lang]] = self.Settings.Prince.CastFilters.Blast
-	KM.King.CastFilters[KM.Lang.Ability.Shout[KBM.Lang]] = self.Settings.King.CastFilters.Shout
-	KM.King.CastFilters[KM.Lang.Ability.Cursed[KBM.Lang]] = self.Settings.King.CastFilters.Cursed
-	KM.King.CastFilters[KM.Lang.Ability.Essence[KBM.Lang]] = self.Settings.King.CastFilters.Essence
-	KM.King.CastFilters[KM.Lang.Ability.Feedback[KBM.Lang]] = self.Settings.King.CastFilters.Feedback
+	KM.Prince.CastFilters[KM.Lang.Ability.Rend[KBM.Lang]] = {ID = "Rend"}
+	KM.Prince.CastFilters[KM.Lang.Ability.Terminate[KBM.Lang]] = {ID = "Terminate"}
+	KM.Prince.CastFilters[KM.Lang.Ability.Essence[KBM.Lang]] = {ID = "Essence"}
+	KM.Prince.CastFilters[KM.Lang.Ability.Feedback[KBM.Lang]] = {ID = "Feedback"}
+	KM.Prince.CastFilters[KM.Lang.Ability.Crushing[KBM.Lang]] = {ID = "Crushing"}
+	KM.Prince.CastFilters[KM.Lang.Ability.Forked[KBM.Lang]] = {ID = "Blast"}
+	KM.King.CastFilters[KM.Lang.Ability.Shout[KBM.Lang]] = {ID = "Shout"}
+	KM.King.CastFilters[KM.Lang.Ability.Cursed[KBM.Lang]] = {ID = "Cursed"}
+	KM.King.CastFilters[KM.Lang.Ability.Essence[KBM.Lang]] = {ID = "Essence"}
+	KM.King.CastFilters[KM.Lang.Ability.Feedback[KBM.Lang]] = {ID = "Feedback"}
 	
 	KBM.Defaults.CastFilter.Assign(self.King)
 	KBM.Defaults.CastFilter.Assign(self.Prince)
@@ -882,8 +884,14 @@ function KM.Custom.Encounter.Menu(Menu)
 		KM.King.CastBar:Display()
 		KM.Prince.CastBar:Display()
 	end
+	function Callbacks:Chronicle(bool)
+		KM.Settings.Chronicle = bool
+	end
 
 	local Settings = KM.Settings.PercentMonitor
+	Header = Menu:CreateHeader(KBM.Language.Encounter.Chronicle[KBM.Lang], "check", "Encounter", "Main")
+	Header:SetChecked(KM.Settings.Chronicle)
+	Header:SetHook(Callbacks.Chronicle)
 	Header = Menu:CreateHeader(KM.Lang.Options.Monitor.Enabled[KBM.Lang], "check", "Encounter", "Main")
 	Header:SetChecked(Settings.Enabled)
 	Header:SetHook(Callbacks.Enabled)

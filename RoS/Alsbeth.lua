@@ -179,10 +179,10 @@ AD.Pillar = {
 }
 
 AD.Alsbeth.Name = AD.Lang.Alsbeth[KBM.Lang]
+AD.Descript = AD.Alsbeth.Name
 
 function AD:AddBosses(KBM_Boss)
-	self.Alsbeth.Descript = self.Alsbeth.Name
-	self.MenuName = self.Alsbeth.Descript
+	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Alsbeth.Name] = self.Alsbeth,
 		[self.Harbinger.Name] = self.Harbinger,

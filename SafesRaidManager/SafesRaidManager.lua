@@ -297,6 +297,9 @@ local function SRM_SetSpecifier(Specifier)
 				end
 				--print(SRM_Units[self.UnitID].name.." has left the group.")
 				SRM_Combat({[self.UnitID] = false})
+				if self.Dead then
+					LibSRM.Dead = LibSRM.Dead - 1
+				end
 				SRM_Group.Leave(self.UnitID, self.Spec)
 				SRM_Raid.Populated = SRM_Raid.Populated - 1
 				SRM_Units[self.UnitID] = nil
@@ -327,6 +330,9 @@ local function SRM_SetSpecifier(Specifier)
 					SRM_Combat({[self.UnitID] = uDetails.combat})
 					SRM_Units[self.UnitID].Location = uDetails.location
 					SRM_Units[self.UnitID].PetID = Inspect.Unit.Lookup(self.Spec..".pet")
+					if uDetails.health == 0 then
+						SRM_Units[self.UnitID].Dead = true
+					end
 					SRM_Raid.Populated = SRM_Raid.Populated + 1
 					SRM_CheckGroupState()
 					if SRM_Units[self.UnitID].PetID then
@@ -340,13 +346,13 @@ local function SRM_SetSpecifier(Specifier)
 							end
 						end
 					end
+					-- Send JOIN message HERE
 					SRM_Group.Join(self.UnitID, self.Spec)
 					--print("Unit joined group: "..uDetails.name)
-					-- Send JOIN message HERE
 				else
+					-- Send JOIN-WAIT message HERE (maybe)
 					SRM_UnitQueue:Add(self)
 					--print("Unit joined group, details not loaded.")
-					-- Send JOIN-WAIT message HERE (maybe)
 				end
 			end
 		end
@@ -371,7 +377,10 @@ local function SRM_Death(data)
 				else
 					data.player = false
 				end
-				SRM_Units[data.target].Dead = true
+				if not SRM_Units[data.target].Dead then
+					SRM_Units[data.target].Dead = true
+					LibSRM.Dead = LibSRM.Dead + 1
+				end
 				data.specifier = SRM_Units[data.target].Specifier
 				SRM_Group.Combat.Death(data)
 				sent = true
@@ -380,6 +389,7 @@ local function SRM_Death(data)
 			if data.target == LibSRM.Player.ID then
 				-- Player damage
 				data.player = true
+				LibSRM.Dead = 1
 				SRM_Group.Combat.Death(data)
 				sent = true
 			end
@@ -390,9 +400,12 @@ local function SRM_Death(data)
 	end
 end
 
-local function SRM_Res(HealData)
-	SRM_Units[HealData.target].Dead = false
-	SRM_Group.Combat.Res(HealData.target, HealData.caster)
+local function SRM_Res(TargetID, CasterID)
+	if SRM_Units[TargetID].Dead then
+		SRM_Units[TargetID].Dead = false
+		LibSRM.Dead = LibSRM.Dead - 1
+		SRM_Group.Combat.Res(TargetID, CasterID)
+	end
 end
 
 local function SRM_Heal(data)
@@ -409,9 +422,13 @@ local function SRM_Heal(data)
 				data.pet = false
 				data.owner = nil
 				data.specifier = SRM_Units[data.caster].Specifier
-				if SRM_Units[data.caster].Dead then
-					-- Player was previously dead, this SHOULD be a res skill.
-					SRM_Res(data)
+				if data.target then
+					if SRM_Units[data.target] then
+						if SRM_Units[data.target].Dead then
+							-- Player was previously dead, this SHOULD be a res skill.
+							SRM_Res(data.target, data.caster)
+						end
+					end
 				end
 				SRM_Group.Combat.Heal(data)
 				sent = true

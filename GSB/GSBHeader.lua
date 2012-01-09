@@ -25,6 +25,7 @@ KBM.Language[GSB.Name]:SetGerman("Grünschuppes Pesthauch")
 KBM.Language[GSB.Name]:SetFrench("Fl\195\169au de Vert\195\169caille")
 
 GSB.Name = KBM.Language[GSB.Name][KBM.Lang]
+GSB.Descript = GSB.Name
 
 function GSB:AddBosses(KBM_Boss)
 end

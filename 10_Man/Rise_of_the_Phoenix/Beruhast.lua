@@ -77,10 +77,10 @@ BT.Lang.Notify.Summon = KBM.Language:Add('Beruhast says, "A pet from Maelforge s
 BT.Lang.Notify.Summon.German = 'Beruhast sagt: "Ein Begleiter von Flammenmaul sollte Euch warmhalten."'
 
 BT.Beruhast.Name = BT.Lang.Beruhast[KBM.Lang]
+BT.Descript = BT.Beruhast.Name
 
 function BT:AddBosses(KBM_Boss)
-	self.Beruhast.Descript = self.Beruhast.Name
-	self.MenuName = self.Beruhast.Descript
+	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Beruhast.Name] = self.Beruhast,
 	}

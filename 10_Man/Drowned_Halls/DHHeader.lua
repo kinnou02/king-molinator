@@ -24,6 +24,7 @@ KBM.Language[DH.Name]:SetGerman("Überflutete Hallen")
 KBM.Language[DH.Name]:SetFrench("Salles englouties")
 
 DH.Name = KBM.Language[DH.Name][KBM.Lang]
+DH.Descript = DH.Name
 
 function DH:AddBosses(KBM_Boss)
 end

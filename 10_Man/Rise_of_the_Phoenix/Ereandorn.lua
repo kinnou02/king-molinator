@@ -21,7 +21,7 @@ local EN = {
 
 EN.Ereandorn = {
 	Mod = EN,
-	Level = "52",
+	Level = 52,
 	Active = false,
 	Name = "Ereandorn",
 	Menu = {},
@@ -68,10 +68,10 @@ EN.Lang.Ability.Eruption = KBM.Language:Add("Volcanic Eruption")
 EN.Lang.Ability.Eruption.German = "Vulkanausbruch"
 
 EN.Ereandorn.Name = EN.Lang.Ereandorn[KBM.Lang]
+EN.Descript = EN.Ereandorn.Name
 
 function EN:AddBosses(KBM_Boss)
-	self.Ereandorn.Descript = self.Ereandorn.Name
-	self.MenuName = self.Ereandorn.Descript
+	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Ereandorn.Name] = self.Ereandorn,
 	}

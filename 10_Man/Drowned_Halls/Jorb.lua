@@ -66,10 +66,10 @@ AJ.Lang.Debuff = {}
 AJ.Lang.Debuff.Grasp = KBM.Language:Add("Paralyzing Grasp")
 
 AJ.Jorb.Name = AJ.Lang.Jorb[KBM.Lang]
+AJ.Descript = AJ.Jorb.Name
 
 function AJ:AddBosses(KBM_Boss)
-	self.Jorb.Descript = self.Jorb.Name
-	self.MenuName = self.Jorb.Descript
+	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Jorb.Name] = self.Jorb,
 	}

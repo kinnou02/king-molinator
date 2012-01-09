@@ -69,10 +69,10 @@ GS.Lang.Debuff.Anchor = KBM.Language:Add("Anchored in Flames")
 GS.Lang.Debuff.Anchor.German = "In Flammen verankert"
 
 GS.Silgen.Name = GS.Lang.Silgen[KBM.Lang]
+GS.Descript = GS.Silgen.Name
 
 function GS:AddBosses(KBM_Boss)
-	self.Silgen.Descript = self.Silgen.Name
-	self.MenuName = self.Silgen.Descript
+	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Silgen.Name] = self.Silgen,
 	}

@@ -26,6 +26,7 @@ KBM.Language:Add(HK.Name)
 KBM.Language[HK.Name]:SetFrench("Glasmarteau")
 KBM.Language[HK.Name]:SetGerman("Festung Hammerhall")
 HK.Name = KBM.Language[HK.Name][KBM.Lang]
+HK.Descript = HK.Name
 
 function HK:AddBosses(KBM_Boss)
 end

@@ -4,24 +4,16 @@
 --
 
 KBMGPGH_Settings = nil
+chKBMGPGH_Settings = nil
+
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 local GP = KBM.BossMod["Guilded Prophecy"]
 
 local GH = {
-	ModEnabled = true,
-	Guurloth = {
-		MenuItem = nil,
-		Enabled = true,
-		Handler = nil,
-		Options = nil,
-	},
+	Enabled = true,
 	Instance = GP.Name,
-	HasPhases = true,
-	PhaseType = "percentage",
-	PhaseList = {},
-	Timers = {},
 	Lang = {},
 	ID = "Guurloth",
 	}
@@ -31,72 +23,74 @@ GH.Guurloth = {
 	Level = "??",
 	Active = false,
 	Name = "Guurloth",
-	Castbar = nil,
-	CastFilters = {},
-	Timers = {},
-	TimersRef = {},
-	AlertsRef = {},
+	NameShort = "Guurloth",
+	Menu = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	TimeOut = 5,
 	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+	},
 }
 
 KBM.RegisterMod(GH.ID, GH)
 
 GH.Lang.Guurloth = KBM.Language:Add(GH.Guurloth.Name)
--- GH.Lang.Flames = KBM.Language:Add("Ancient Flames")
--- GH.Lang.Flames.French = "Flammes anciennes"
 
 GH.Guurloth.Name = GH.Lang.Guurloth[KBM.Lang]
+GH.Descript = GH.Guurloth.Name
 
 function GH:AddBosses(KBM_Boss)
-	self.Guurloth.Descript = self.Guurloth.Name
-	self.MenuName = self.Guurloth.Descript
+	self.MenuName = self.Descript
 	self.Bosses = {
-		[self.Guurloth.Name] = true,
+		[self.Guurloth.Name] = self.Guurloth,
 	}
 	KBM_Boss[self.Guurloth.Name] = self.Guurloth	
 end
 
 function GH:InitVars()
 	self.Settings = {
-		Timers = {
-			Enabled = true,
-			FlamesEnabled = true,
-		},
-		CastBar = {
-			x = false,
-			y = false,
-			Enabled = true,
-		},
+		Enabled = true,
+		CastBar = self.Guurloth.Settings.CastBar,
+		EncTimer = KBM.Defaults.EncTimer(),
 	}
-	KBMGS_Settings = self.Settings
+	KBMGPGH_Settings = self.Settings
+	chKBMGPGH_Settings = self.Settings
 end
 
-function GH:LoadVars()
-	if type(KBMGSBGS_Settings) == "table" then
-		for Setting, Value in pairs(KBMGSBGS_Settings) do
-			if type(KBMGSBGS_Settings[Setting]) == "table" then
-				if self.Settings[Setting] ~= nil then
-					for tSetting, tValue in pairs(KBMGSBGS_Settings[Setting]) do
-						if self.Settings[Setting][tSetting] ~= nil then
-							self.Settings[Setting][tSetting] = tValue
-						end
-					end
-				end
-			else
-				if self.Settings[Setting] ~= nil then
-					self.Settings[Setting] = Value
-				end
-			end
-		end
+function GH:SwapSettings(bool)
+
+	if bool then
+		KBMGPGH_Settings = self.Settings
+		self.Settings = chKBMGPGH_Settings
+	else
+		chKBMGPGH_Settings = self.Settings
+		self.Settings = KBMGPGH_Settings
 	end
+
 end
 
-function GH:SaveVars()
-	KBMGSBGS_Settings = self.Settings
+function GH:LoadVars()	
+	if KBM.Options.Character then
+		KBM.LoadTable(chKBMGPGH_Settings, self.Settings)
+	else
+		KBM.LoadTable(KBMGPGH_Settings, self.Settings)
+	end
+	
+	if KBM.Options.Character then
+		chKBMGPGH_Settings = self.Settings
+	else
+		KBMGPGH_Settings = self.Settings
+	end	
+end
+
+function GH:SaveVars()	
+	if KBM.Options.Character then
+		chKBMGPGH_Settings = self.Settings
+	else
+		KBMGPGH_Settings = self.Settings
+	end	
 end
 
 function GH:Castbar(units)
@@ -118,12 +112,12 @@ function GH:Death(UnitID)
 	return false
 end
 
-function GH:UnitHPCheck(unitDetails, unitID)
+function GH:UnitHPCheck(uDetails, unitID)
 	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if unitDetails.name == self.Guurloth.Name then
-				if not self.Guurloth.UnitID then
+	if uDetails and unitID then
+		if not uDetails.player then
+			if uDetails.name == self.Guurloth.Name then
+				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
@@ -144,6 +138,7 @@ function GH:Reset()
 	self.EncounterRunning = false
 	self.Guurloth.Available = false
 	self.Guurloth.UnitID = nil
+	self.Guurloth.Dead = false
 	self.Guurloth.CastBar:Remove()
 end
 
@@ -151,26 +146,41 @@ function GH:Timer()
 	
 end
 
-function GH.Guurloth:Options()
-	function self:TimersEnabled(bool)
+function GH.Guurloth:SetTimers(bool)	
+	if bool then
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = TimerObj.Settings.Enabled
+		end
+	else
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = false
+		end
 	end
-	function self:FlamesEnabled(bool)
-		GH.Settings.Timers.FlamesEnabled = bool
-		GH.Guurloth.TimersRef.Flames.Enabled = bool
+end
+
+function GH.Guurloth:SetAlerts(bool)
+	if bool then
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = AlertObj.Settings.Enabled
+		end
+	else
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = false
+		end
 	end
-	local Options = self.MenuItem.Options
-	Options:SetTitle()
-	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, GH.Settings.Timers.Enabled)
-	--Timers:AddCheck(GH.Lang.Flames[KBM.Lang], self.FlamesEnabled, GH.Settings.Timers.FlamesEnabled)	
-	
+end
+
+function GH:DefineMenu()
+	self.Menu = GP.Menu:CreateEncounter(self.Guurloth, self.Enabled)
 end
 
 function GH:Start()
-	self.Header = KBM.HeaderList[self.Instance]
-	self.Guurloth.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Guurloth, true, self.Header)
-	self.Guurloth.MenuItem.Check:SetEnabled(false)
-	-- self.Guurloth.TimersRef.Flames = KBM.MechTimer:Add(self.Lang.Flames[KBM.Lang], "cast", 30, self, nil)
-	-- self.Guurloth.TimersRef.Flames.Enabled = self.Settings.Timers.FlamesEnabled
+	-- Create Timers
+	
+	-- Create Alerts
+	
+	-- Assign Timers and Alerts to Triggers
 	
 	self.Guurloth.CastBar = KBM.CastBar:Add(self, self.Guurloth, true)
+	self:DefineMenu()
 end

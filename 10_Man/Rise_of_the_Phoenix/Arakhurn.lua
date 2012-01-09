@@ -108,6 +108,7 @@ HA.Lang.Menu.AddFirst = KBM.Language:Add("First "..HA.Lang.Unit.Enraged[KBM.Lang
 HA.Lang.Menu.NovaWarn = KBM.Language:Add("5 second warning for "..HA.Lang.Ability.Nova[KBM.Lang])
 
 HA.Arakhurn.Name = HA.Lang.Arakhurn[KBM.Lang]
+HA.Descript = HA.Arakhurn.Name
 
 HA.Enraged = {
 	Mod = HA,
@@ -120,8 +121,7 @@ HA.Enraged = {
 }
 
 function HA:AddBosses(KBM_Boss)
-	self.Arakhurn.Descript = self.Arakhurn.Name
-	self.MenuName = self.Arakhurn.Descript
+	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Arakhurn.Name] = self.Arakhurn,
 		[self.Enraged.Name] = self.Enraged,

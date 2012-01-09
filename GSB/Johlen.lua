@@ -17,11 +17,12 @@ local IJ = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Johlen",
+	HasChronicle = true,
 }
 
 IJ.Johlen = {
 	Mod = IJ,
-	Level = "52",
+	Level = 52,
 	Active = false,
 	Name = "Infiltrator Johlen",
 	NameShort = "Johlen",
@@ -63,10 +64,11 @@ IJ.Lang.Unit.Bomb = KBM.Language:Add("Devastating Bomb")
 IJ.Lang.Unit.Bomb.German = "Vernichtende Bombe"
 
 IJ.Johlen.Name = IJ.Lang.Johlen[KBM.Lang]
+IJ.Descript = IJ.Johlen.Name
 
 IJ.Bomb = {
 	Mod = IJ,
-	Level = "??",
+	Level = 52,
 	Name = IJ.Lang.Unit.Bomb[KBM.Lang],
 	UnitList = {},
 	Ignore = true,
@@ -74,8 +76,7 @@ IJ.Bomb = {
 }
 
 function IJ:AddBosses(KBM_Boss)
-	self.Johlen.Descript = self.Johlen.Name
-	self.MenuName = self.Johlen.Descript
+	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Johlen.Name] = self.Johlen,
 		[self.Bomb.Name] = self.Bomb,
@@ -87,6 +88,7 @@ end
 function IJ:InitVars()
 	self.Settings = {
 		Enabled = true,
+		Chronicle = true,
 		CastBar = self.Johlen.Settings.CastBar,
 		AlertsRef = self.Johlen.Settings.AlertsRef,
 		EncTimer = KBM.Defaults.EncTimer(),
@@ -146,7 +148,10 @@ function IJ:Death(UnitID)
 		return true
 	elseif self.Bomb.UnitList[UnitID] then
 		self.Bomb.UnitList[UnitID].Dead = true
-		self.PhaseObj.Objectives:Remove(self.Lang.Unit.Bomb[KBM.Lang])
+		if self.Bomb.PhaseObjective then
+			self.Bomb.PhaseObjective:Remove()
+			self.Bomb.PhaseObjective = nil
+		end
 		self.PhaseObj:SetPhase(self.Phase)
 	end
 	return false
@@ -197,23 +202,23 @@ function IJ.PhaseTwo()
 	IJ.PhaseObj.Objectives:Remove()
 	IJ.Phase = 2
 	IJ.PhaseObj:SetPhase("Bomb 1/3")
+	IJ.Bomb.PhaseObjective = IJ.PhaseObj.Objectives:AddPercent(IJ.Bomb.Name, 0, 100)	
 	IJ.PhaseObj.Objectives:AddPercent(IJ.Johlen.Name, 50, 75)
-	IJ.PhaseObj.Objectives:AddPercent(IJ.Bomb.Name, 0, 100)	
 end
 
 function IJ.PhaseThree()
 	IJ.PhaseObj.Objectives:Remove()
 	IJ.Phase = 3
 	IJ.PhaseObj:SetPhase("Bomb 2/3")
+	IJ.Bomb.PhaseObjective = IJ.PhaseObj.Objectives:AddPercent(IJ.Bomb.Name, 0, 100)	
 	IJ.PhaseObj.Objectives:AddPercent(IJ.Johlen.Name, 25, 50)
-	IJ.PhaseObj.Objectives:AddPercent(IJ.Bomb.Name, 0, 100)	
 end
 
 function IJ.PhaseFour()
 	IJ.PhaseObj.Objectives:Remove()
 	IJ.Phase = 4
 	IJ.PhaseObj:SetPhase("Bomb 3/3")
-	IJ.PhaseObj.Objectives:AddPercent(IJ.Johlen.Name, 0, 25)
+	IJ.Bomb.PhaseObjective = IJ.PhaseObj.Objectives:AddPercent(IJ.Johlen.Name, 0, 25)
 	IJ.PhaseObj.Objectives:AddPercent(IJ.Bomb.Name, 0, 100)	
 end
 
@@ -226,6 +231,7 @@ function IJ:Reset()
 	self.Bomb.UnitList = {}
 	self.Phase = 1
 	self.PhaseObj:End(Inspect.Time.Real())
+	self.Bomb.PhaseObjective = nil
 end
 
 function IJ:Timer()	
@@ -257,6 +263,22 @@ end
 
 function IJ:DefineMenu()
 	self.Menu = GSB.Menu:CreateEncounter(self.Johlen, self.Enabled)
+end
+
+IJ.Custom = {}
+IJ.Custom.Encounter = {}
+function IJ.Custom.Encounter.Menu(Menu)
+
+	local Callbacks = {}
+
+	function Callbacks:Chronicle(bool)
+		IJ.Settings.Chronicle = bool
+	end
+
+	Header = Menu:CreateHeader(KBM.Language.Encounter.Chronicle[KBM.Lang], "check", "Encounter", "Main")
+	Header:SetChecked(IJ.Settings.Chronicle)
+	Header:SetHook(Callbacks.Chronicle)
+	
 end
 
 function IJ:Start()

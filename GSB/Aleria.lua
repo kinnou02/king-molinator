@@ -17,6 +17,7 @@ local OA = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Aleria",
+	HasChronicle = true,
 }
 
 OA.Aleria = {
@@ -48,6 +49,7 @@ KBM.RegisterMod(OA.ID, OA)
 
 OA.Lang.Aleria = KBM.Language:Add(OA.Aleria.Name)
 OA.Lang.Aleria.German = "Orakel Aleria"
+OA.Descript = OA.Lang.Aleria[KBM.Lang]
 
 -- Unit Dictionary
 OA.Lang.Unit = {}
@@ -90,10 +92,7 @@ OA.Necrotic = {
 OA.Aleria.Name = OA.Lang.Aleria[KBM.Lang]
 
 function OA:AddBosses(KBM_Boss)
-	self.Aleria.Descript = self.Aleria.Name
-	self.Primal.Descript = self.Aleria.Descript
-	self.Necrotic.Descript = self.Aleria.Descript
-	self.MenuName = self.Aleria.Descript
+	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Aleria.Name] = self.Aleria,
 		[self.Primal.Name] = self.Primal,
@@ -107,6 +106,7 @@ end
 function OA:InitVars()
 	self.Settings = {
 		Enabled = true,
+		Chronicle = true,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 	}
@@ -246,6 +246,22 @@ end
 
 function OA:DefineMenu()
 	self.Menu = GSB.Menu:CreateEncounter(self.Aleria, self.Enabled)
+end
+
+OA.Custom = {}
+OA.Custom.Encounter = {}
+function OA.Custom.Encounter.Menu(Menu)
+
+	local Callbacks = {}
+
+	function Callbacks:Chronicle(bool)
+		OA.Settings.Chronicle = bool
+	end
+
+	Header = Menu:CreateHeader(KBM.Language.Encounter.Chronicle[KBM.Lang], "check", "Encounter", "Main")
+	Header:SetChecked(OA.Settings.Chronicle)
+	Header:SetHook(Callbacks.Chronicle)
+	
 end
 
 function OA:Start()

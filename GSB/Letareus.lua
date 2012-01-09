@@ -16,12 +16,13 @@ local DL = {
 	Instance = GSB.Name,
 	HasPhases = true,
 	Lang = {},
-	ID = "Letareus",	
+	ID = "Letareus",
+	HasChronicle = true,
 }
 
 DL.Letareus = {
 	Mod = DL,
-	Level = "52",
+	Level = 52,
 	Active = false,
 	Name = "Duke Letareus",
 	NameShort = "Letareus",
@@ -59,9 +60,10 @@ DL.Lang.Mechanic.TankPhase = KBM.Language:Add("Tank Phase")
 DL.Lang.Mechanic.Tank = KBM.Language:Add("Tank")
 DL.Lang.Mechanic.Kite = KBM.Language:Add("Kite")
 
+DL.Descript = DL.Letareus.Name
+
 function DL:AddBosses(KBM_Boss)
-	self.Letareus.Descript = self.Letareus.Name
-	self.MenuName = self.Letareus.Descript
+	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Letareus.Name] = self.Letareus,
 	}
@@ -71,6 +73,7 @@ end
 function DL:InitVars()
 	self.Settings = {
 		Enabled = true,
+		Chronicle = true,
 		Alerts = KBM.Defaults.Alerts(),
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
@@ -228,6 +231,22 @@ end
 
 function DL:DefineMenu()
 	self.Menu = GSB.Menu:CreateEncounter(self.Letareus, self.Enabled)
+end
+
+DL.Custom = {}
+DL.Custom.Encounter = {}
+function DL.Custom.Encounter.Menu(Menu)
+
+	local Callbacks = {}
+
+	function Callbacks:Chronicle(bool)
+		DL.Settings.Chronicle = bool
+	end
+
+	Header = Menu:CreateHeader(KBM.Language.Encounter.Chronicle[KBM.Lang], "check", "Encounter", "Main")
+	Header:SetChecked(DL.Settings.Chronicle)
+	Header:SetHook(Callbacks.Chronicle)
+	
 end
 
 function DL:Start()

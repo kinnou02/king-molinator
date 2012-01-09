@@ -24,6 +24,7 @@ KBM.Language[ROTP.Name]:SetGerman("Aufstieg des Phönix")
 KBM.Language[ROTP.Name]:SetFrench("Envol du Ph\195\169nix")
 
 ROTP.Name = KBM.Language[ROTP.Name][KBM.Lang]
+ROTP.Descript = ROTP.Name
 
 function ROTP:AddBosses(KBM_Boss)
 end

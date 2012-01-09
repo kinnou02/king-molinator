@@ -25,6 +25,7 @@ KBM.Language[ROS.Name]:SetGerman("Seelenfluss")
 KBM.Language[ROS.Name]:SetFrench("Fleuves des \195\130mes")
 
 ROS.Name = KBM.Language[ROS.Name][KBM.Lang]
+ROS.Descript = ROS.Name
 
 function ROS:AddBosses(KBM_Boss)
 end

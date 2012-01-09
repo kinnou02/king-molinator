@@ -18,6 +18,7 @@ local LG = {
 	Lang = {},
 	Enrage = 60 * 14.5,	
 	ID = "Greenscale",
+	HasChronicle = true,
 }
 
 LG.Greenscale = {
@@ -75,6 +76,7 @@ LG.Lang.Mechanic = {}
 LG.Lang.Mechanic.Death = KBM.Language:Add("Protective Shield")
 
 LG.Greenscale.Name = LG.Lang.Greenscale[KBM.Lang]
+LG.Descript = LG.Greenscale.Name
 
 LG.Verdant = {
 	Mod = LG,
@@ -91,8 +93,7 @@ LG.Verdant = {
 }
 
 function LG:AddBosses(KBM_Boss)
-	self.Greenscale.Descript = self.Greenscale.Name
-	self.MenuName = self.Greenscale.Descript
+	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Greenscale.Name] = self.Greenscale,
 		[self.Verdant.Name] = self.Verdant,
@@ -104,6 +105,7 @@ end
 function LG:InitVars()
 	self.Settings = {
 		Enabled = true,
+		Chronicle = true,
 		CastBar = self.Greenscale.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		MechTimer = KBM.Defaults.MechTimer(),
@@ -279,6 +281,22 @@ end
 
 function LG:DefineMenu()
 	self.Menu = GSB.Menu:CreateEncounter(self.Greenscale, self.Enabled)
+end
+
+LG.Custom = {}
+LG.Custom.Encounter = {}
+function LG.Custom.Encounter.Menu(Menu)
+
+	local Callbacks = {}
+
+	function Callbacks:Chronicle(bool)
+		LG.Settings.Chronicle = bool
+	end
+
+	Header = Menu:CreateHeader(KBM.Language.Encounter.Chronicle[KBM.Lang], "check", "Encounter", "Main")
+	Header:SetChecked(LG.Settings.Chronicle)
+	Header:SetHook(Callbacks.Chronicle)
+	
 end
 
 function LG:Start()

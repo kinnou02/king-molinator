@@ -163,13 +163,11 @@ ID.Rotjaw.Name = ID.Lang.Rotjaw[KBM.Lang]
 ID.Slime.Name = ID.Lang.Unit.Slime[KBM.Lang]
 ID.Wrangler.Name = ID.Lang.Unit.Wrangler[KBM.Lang]
 ID.Warden.Name = ID.Lang.Unit.Warden[KBM.Lang]
+ID.Descript = ID.Inwar.Name
 
 function ID:AddBosses(KBM_Boss)
 
-	self.Inwar.Descript = self.Inwar.Name
-	self.Denizar.Descript = self.Inwar.Name
-	self.Aqualix.Descript = self.Inwar.Name
-	self.MenuName = self.Inwar.Descript
+	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Inwar.Name] = self.Inwar,
 		[self.Denizar.Name] = self.Denizar,

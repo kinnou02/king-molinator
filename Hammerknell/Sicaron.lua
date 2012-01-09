@@ -83,9 +83,9 @@ SN.Lang.Debuff.Contract.German = "Unheiliger Vertrag"
 SN.Lang.Debuff.Contract.French = "Contrat impie"
 
 SN.Sicaron.Name = SN.Lang.Sicaron[KBM.Lang]
+SN.Descript = SN.Sicaron.Name
 
 function SN:AddBosses(KBM_Boss)
-	self.Sicaron.Descript = self.Sicaron.Name
 	self.MenuName = self.Sicaron.Descript
 	self.Bosses = {
 		[self.Sicaron.Name] = self.Sicaron,
@@ -134,9 +134,9 @@ function SN:LoadVars()
 	else
 		KBMSN_Settings = self.Settings
 	end
-	self.Sicaron.CastFilters[self.Lang.Ability.Hex[KBM.Lang]] = self.Settings.CastFilters.Hex
-	self.Sicaron.CastFilters[self.Lang.Debuff.Contract[KBM.Lang]] = self.Settings.CastFilters.Contract
-	self.Sicaron.CastFilters[self.Lang.Ability.Decay[KBM.Lang]] = self.Settings.CastFilters.Decay
+	self.Sicaron.CastFilters[self.Lang.Ability.Hex[KBM.Lang]] = {ID = "Hex"}
+	self.Sicaron.CastFilters[self.Lang.Debuff.Contract[KBM.Lang]] = {ID = "Contract"}
+	self.Sicaron.CastFilters[self.Lang.Ability.Decay[KBM.Lang]] = {ID = "Decay"}
 	KBM.Defaults.CastFilter.Assign(self.Sicaron)	
 	
 	self.Sicaron.Settings.AlertsRef.ContractRed.Enabled = true

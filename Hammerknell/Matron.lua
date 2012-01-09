@@ -96,10 +96,10 @@ MZ.Lang.Verbose.Spiritual = KBM.Language:Add(MZ.Lang.Debuff.Spiritual[KBM.Lang].
 MZ.Lang.Verbose.Spiritual.German = MZ.Lang.Debuff.Spiritual[KBM.Lang].." ausgelaufen!"
 
 MZ.Matron.Name = MZ.Lang.Matron[KBM.Lang]
+MZ.Descript = MZ.Matron.Name
 
 function MZ:AddBosses(KBM_Boss)
-	self.Matron.Descript = self.Matron.Name
-	self.MenuName = self.Matron.Descript
+	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Matron.Name] = self.Matron,
 	}

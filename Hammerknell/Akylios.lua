@@ -167,10 +167,10 @@ AK.Lang.Options.Summon = KBM.Language:Add(AK.Lang.Mechanic.Summon[KBM.Lang].." (
 AK.Lang.Options.SummonTwo = KBM.Language:Add(AK.Lang.Mechanic.Summon[KBM.Lang].." (Phase 2)")
 AK.Lang.Options.Orb = KBM.Language:Add(AK.Lang.Mechanic.Orb[KBM.Lang].." (P2 First)")
 
+AK.Descript = "Akylios & Jornaru"
+
 function AK:AddBosses(KBM_Boss)
-	self.Jornaru.Descript = "Akylios & Jornaru"
-	self.Akylios.Descript = self.Jornaru.Descript
-	self.MenuName = self.Akylios.Descript
+	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Jornaru.Name] = self.Jornaru,
 		[self.Akylios.Name] = self.Akylios,

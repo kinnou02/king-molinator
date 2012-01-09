@@ -84,10 +84,10 @@ ES.Lang.Say.Mind = KBM.Language:Add("Mmmm, you look delectable.")
 ES.Lang.Say.Mind.German = "Hm, Ihr seht köstlich aus."
 
 ES.Estrode.Name = ES.Lang.Estrode[KBM.Lang]
+ES.Descript = ES.Estrode.Name
 
 function ES:AddBosses(KBM_Boss)
-	self.Estrode.Descript = self.Estrode.Name
-	self.MenuName = self.Estrode.Descript
+	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Estrode.Name] = self.Estrode,
 	}

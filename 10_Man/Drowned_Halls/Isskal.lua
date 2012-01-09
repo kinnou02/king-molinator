@@ -81,10 +81,10 @@ IL.Lang.Menu.WhirlpoolFirst = KBM.Language:Add("First "..IL.Lang.Mechanic.Whirlp
 IL.Lang.Menu.WhirlpoolFirst.German = "Erste "..IL.Lang.Mechanic.Whirlpool[KBM.Lang]
 
 IL.Isskal.Name = IL.Lang.Isskal[KBM.Lang]
+IL.Descript = IL.Isskal.Name
 
 function IL:AddBosses(KBM_Boss)
-	self.Isskal.Descript = self.Isskal.Name
-	self.MenuName = self.Isskal.Descript
+	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Isskal.Name] = self.Isskal,
 	}

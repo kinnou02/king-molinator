@@ -90,10 +90,10 @@ GU.Lang.Unit.Crawler = KBM.Language:Add("Infused Crawler")
 GU.Lang.Unit.Crawler.German = "Durchdrungener Kriecher"
 
 GU.Garau.Name = KBM.Language[GU.Garau.Name][KBM.Lang]
-
+GU.Descript = GU.Garau.Name
+	
 function GU:AddBosses(KBM_Boss)
-	self.Garau.Descript = self.Garau.Name
-	self.MenuName = self.Garau.Name
+	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Garau.Name] = self.Garau,
 	}

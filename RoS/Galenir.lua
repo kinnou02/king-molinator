@@ -55,10 +55,11 @@ WG.Lang.Debuff.Essence = KBM.Language:Add("Essence Transfer")
 WG.Lang.Debuff.Essence.German = "Essenz Transfer"
 
 WG.Galenir.Name = WG.Lang.Galenir[KBM.Lang]
+WG.Descript = WG.Galenir.Name
+
 
 function WG:AddBosses(KBM_Boss)
-	self.Galenir.Descript = self.Galenir.Name
-	self.MenuName = self.Galenir.Descript
+	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Galenir.Name] = self.Galenir,
 	}

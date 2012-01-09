@@ -20,6 +20,7 @@ local MX = {
 	TankSwap = true,
 	Enrage = 60 * 10,
 	ID = "Murdantix",
+	HasChronicle = true,
 }
 
 MX.Murd = {
@@ -63,6 +64,7 @@ MX.Murd = {
 KBM.RegisterMod("Murdantix", MX)
 
 MX.Lang.Murdantix = KBM.Language:Add(MX.Murd.Name)
+MX.Descript = MX.Lang.Murdantix[KBM.Lang]
 
 -- Ability Dictionary
 MX.Lang.Crush = KBM.Language:Add("Mangling Crush")
@@ -86,7 +88,6 @@ MX.Lang.Debuff.Mangled.French = "Estrop\195\169"
 
 function MX:AddBosses(KBM_Boss)
 	self.MenuName = self.Murd.Name
-	self.Murd.Descript = self.Murd.Name
 	KBM_Boss[self.Murd.Name] = self.Murd
 	self.Bosses = {
 		[self.Murd.Name] = self.Murd
@@ -96,6 +97,7 @@ end
 function MX:InitVars()
 	self.Settings = {
 		Enabled = true,
+		Chronicle = true,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		CastBar = MX.Murd.Settings.CastBar,
@@ -132,8 +134,8 @@ function MX:LoadVars()
 		KBMMX_Settings = self.Settings
 	end
 	
-	self.Murd.CastFilters[self.Lang.Trauma[KBM.Lang]] = self.Settings.CastFilters.Trauma
-	self.Murd.CastFilters[self.Lang.Blast[KBM.Lang]] = self.Settings.CastFilters.Blast
+	self.Murd.CastFilters[self.Lang.Trauma[KBM.Lang]] = {ID = "Trauma"}
+	self.Murd.CastFilters[self.Lang.Blast[KBM.Lang]] = {ID = "Blast"}
 	KBM.Defaults.CastFilter.Assign(self.Murd)
 	
 end
@@ -251,6 +253,22 @@ end
 
 function MX:DefineMenu()
 	self.Menu = HK.Menu:CreateEncounter(self.Murd, self.Enabled)
+end
+
+MX.Custom = {}
+MX.Custom.Encounter = {}
+function MX.Custom.Encounter.Menu(Menu)
+
+	local Callbacks = {}
+
+	function Callbacks:Chronicle(bool)
+		MX.Settings.Chronicle = bool
+	end
+
+	Header = Menu:CreateHeader(KBM.Language.Encounter.Chronicle[KBM.Lang], "check", "Encounter", "Main")
+	Header:SetChecked(MX.Settings.Chronicle)
+	Header:SetHook(Callbacks.Chronicle)
+	
 end
 
 function MX:Start()	

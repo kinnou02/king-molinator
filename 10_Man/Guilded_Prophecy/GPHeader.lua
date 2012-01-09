@@ -24,6 +24,7 @@ KBM.Language[GP.Name]:SetGerman("Güldene Prophezeiung")
 KBM.Language[GP.Name]:SetFrench("Proph\195\169tie dor\195\169e")
 
 GP.Name = KBM.Language[GP.Name][KBM.Lang]
+GP.Descript = GP.Name
 
 function GP:AddBosses(KBM_Boss)
 end
@@ -38,14 +39,5 @@ function GP:SaveVars()
 end
 
 function GP:Start()
-
-	function self:Enabled(bool)
-	
-	end
-	GP.Header = KBM.MainWin.Menu:CreateHeader(self.Name, self.Enabled, true)
-	
-end
-
-function KBMGP_Register()
-	return GP
+	GP.Menu = KBM.MainWin.Menu:CreateInstance(self.Name, true, self.Handler)	
 end

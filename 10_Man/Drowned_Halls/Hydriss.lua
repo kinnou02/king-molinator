@@ -83,10 +83,10 @@ HH.Hive = {
 }
 
 HH.Hydriss.Name = HH.Lang.Hydriss[KBM.Lang]
+HH.Descript = HH.Hydriss.Name
 
 function HH:AddBosses(KBM_Boss)
-	self.Hydriss.Descript = self.Hydriss.Name
-	self.MenuName = self.Hydriss.Descript
+	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Hydriss.Name] = self.Hydriss,
 	}

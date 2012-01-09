@@ -76,10 +76,10 @@ JR.Lang.Menu.Panic = KBM.Language:Add(JR.Lang.Ability.Panic[KBM.Lang].." duratio
 JR.Lang.Menu.Panic.German = JR.Lang.Ability.Panic[KBM.Lang].." Dauer."
 
 JR.Joloral.Name = JR.Lang.Joloral[KBM.Lang]
+JR.Descript = JR.Joloral.Name
 
 function JR:AddBosses(KBM_Boss)
-	self.Joloral.Descript = self.Joloral.Name
-	self.MenuName = self.Joloral.Descript
+	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Joloral.Name] = self.Joloral,
 	}

@@ -1,27 +1,19 @@
 ﻿-- Uruluuk Boss Mod for King Boss Mods
 -- Written by Paul Snart
--- Copyright 2011
+-- CopyriUKt 2011
 --
 
 KBMGPUK_Settings = nil
+chKBMGPUK_Settings = nil
+
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 local GP = KBM.BossMod["Guilded Prophecy"]
 
 local UK = {
-	ModEnabled = true,
-	Uruluuk = {
-		MenuItem = nil,
-		Enabled = true,
-		Handler = nil,
-		Options = nil,
-	},
+	Enabled = true,
 	Instance = GP.Name,
-	HasPhases = true,
-	PhaseType = "percentage",
-	PhaseList = {},
-	Timers = {},
 	Lang = {},
 	ID = "Uruluuk",
 	}
@@ -31,72 +23,74 @@ UK.Uruluuk = {
 	Level = "??",
 	Active = false,
 	Name = "Uruluuk",
-	Castbar = nil,
-	CastFilters = {},
-	Timers = {},
-	TimersRef = {},
-	AlertsRef = {},
+	NameShort = "Uruluuk",
+	Menu = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	TimeOut = 5,
 	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+	},
 }
 
 KBM.RegisterMod(UK.ID, UK)
 
 UK.Lang.Uruluuk = KBM.Language:Add(UK.Uruluuk.Name)
--- UK.Lang.Flames = KBM.Language:Add("Ancient Flames")
--- UK.Lang.Flames.French = "Flammes anciennes"
 
 UK.Uruluuk.Name = UK.Lang.Uruluuk[KBM.Lang]
+UK.Descript = UK.Uruluuk.Name
 
 function UK:AddBosses(KBM_Boss)
-	self.Uruluuk.Descript = self.Uruluuk.Name
-	self.MenuName = self.Uruluuk.Descript
+	self.MenuName = self.Descript
 	self.Bosses = {
-		[self.Uruluuk.Name] = true,
+		[self.Uruluuk.Name] = self.Uruluuk,
 	}
 	KBM_Boss[self.Uruluuk.Name] = self.Uruluuk	
 end
 
 function UK:InitVars()
 	self.Settings = {
-		Timers = {
-			Enabled = true,
-			FlamesEnabled = true,
-		},
-		CastBar = {
-			x = false,
-			y = false,
-			Enabled = true,
-		},
+		Enabled = true,
+		CastBar = self.Uruluuk.Settings.CastBar,
+		EncTimer = KBM.Defaults.EncTimer(),
 	}
-	KBMGS_Settings = self.Settings
+	KBMGPUK_Settings = self.Settings
+	chKBMGPUK_Settings = self.Settings
 end
 
-function UK:LoadVars()
-	if type(KBMGSBGS_Settings) == "table" then
-		for Setting, Value in pairs(KBMGSBGS_Settings) do
-			if type(KBMGSBGS_Settings[Setting]) == "table" then
-				if self.Settings[Setting] ~= nil then
-					for tSetting, tValue in pairs(KBMGSBGS_Settings[Setting]) do
-						if self.Settings[Setting][tSetting] ~= nil then
-							self.Settings[Setting][tSetting] = tValue
-						end
-					end
-				end
-			else
-				if self.Settings[Setting] ~= nil then
-					self.Settings[Setting] = Value
-				end
-			end
-		end
+function UK:SwapSettings(bool)
+
+	if bool then
+		KBMGPUK_Settings = self.Settings
+		self.Settings = chKBMGPUK_Settings
+	else
+		chKBMGPUK_Settings = self.Settings
+		self.Settings = KBMGPUK_Settings
 	end
+
 end
 
-function UK:SaveVars()
-	KBMGSBGS_Settings = self.Settings
+function UK:LoadVars()	
+	if KBM.Options.Character then
+		KBM.LoadTable(chKBMGPUK_Settings, self.Settings)
+	else
+		KBM.LoadTable(KBMGPUK_Settings, self.Settings)
+	end
+	
+	if KBM.Options.Character then
+		chKBMGPUK_Settings = self.Settings
+	else
+		KBMGPUK_Settings = self.Settings
+	end	
+end
+
+function UK:SaveVars()	
+	if KBM.Options.Character then
+		chKBMGPUK_Settings = self.Settings
+	else
+		KBMGPUK_Settings = self.Settings
+	end	
 end
 
 function UK:Castbar(units)
@@ -118,12 +112,12 @@ function UK:Death(UnitID)
 	return false
 end
 
-function UK:UnitHPCheck(unitDetails, unitID)
+function UK:UnitHPCheck(uDetails, unitID)
 	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if unitDetails.name == self.Uruluuk.Name then
-				if not self.Uruluuk.UnitID then
+	if uDetails and unitID then
+		if not uDetails.player then
+			if uDetails.name == self.Uruluuk.Name then
+				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
@@ -144,6 +138,7 @@ function UK:Reset()
 	self.EncounterRunning = false
 	self.Uruluuk.Available = false
 	self.Uruluuk.UnitID = nil
+	self.Uruluuk.Dead = false
 	self.Uruluuk.CastBar:Remove()
 end
 
@@ -151,26 +146,41 @@ function UK:Timer()
 	
 end
 
-function UK.Uruluuk:Options()
-	function self:TimersEnabled(bool)
+function UK.Uruluuk:SetTimers(bool)	
+	if bool then
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = TimerObj.Settings.Enabled
+		end
+	else
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = false
+		end
 	end
-	function self:FlamesEnabled(bool)
-		UK.Settings.Timers.FlamesEnabled = bool
-		UK.Uruluuk.TimersRef.Flames.Enabled = bool
+end
+
+function UK.Uruluuk:SetAlerts(bool)
+	if bool then
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = AlertObj.Settings.Enabled
+		end
+	else
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = false
+		end
 	end
-	local Options = self.MenuItem.Options
-	Options:SetTitle()
-	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, UK.Settings.Timers.Enabled)
-	--Timers:AddCheck(UK.Lang.Flames[KBM.Lang], self.FlamesEnabled, UK.Settings.Timers.FlamesEnabled)	
-	
+end
+
+function UK:DefineMenu()
+	self.Menu = GP.Menu:CreateEncounter(self.Uruluuk, self.Enabled)
 end
 
 function UK:Start()
-	self.Header = KBM.HeaderList[self.Instance]
-	self.Uruluuk.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Uruluuk, true, self.Header)
-	self.Uruluuk.MenuItem.Check:SetEnabled(false)
-	-- self.Uruluuk.TimersRef.Flames = KBM.MechTimer:Add(self.Lang.Flames[KBM.Lang], "cast", 30, self, nil)
-	-- self.Uruluuk.TimersRef.Flames.Enabled = self.Settings.Timers.FlamesEnabled
+	-- Create Timers
+	
+	-- Create Alerts
+	
+	-- Assign Timers and Alerts to Triggers
 	
 	self.Uruluuk.CastBar = KBM.CastBar:Add(self, self.Uruluuk, true)
+	self:DefineMenu()
 end

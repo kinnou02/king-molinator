@@ -99,10 +99,11 @@ DF.Force = {
 }
 
 DF.Foci.Name = DF.Lang.Foci[KBM.Lang]
+DF.Descript = DF.Foci.Name
+
 
 function DF:AddBosses(KBM_Boss)
-	self.Foci.Descript = self.Foci.Name
-	self.MenuName = self.Foci.Descript
+	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Foci.Name] = self.Foci,
 		[self.Force.Name] = self.Force,

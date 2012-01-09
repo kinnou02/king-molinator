@@ -17,6 +17,7 @@ local PH = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Hylas",
+	HasChronicle = true,
 }
 
 PH.Hylas = {
@@ -87,10 +88,11 @@ PH.Lang.Buff.Life = KBM.Language:Add("Invocation of Life")
 PH.Lang.Buff.Life.German = "Beschwörung des Lebens"
 
 PH.Hylas.Name = PH.Lang.Hylas[KBM.Lang]
+PH.Descript = PH.Hylas.Name
+
 
 function PH:AddBosses(KBM_Boss)
-	self.Hylas.Descript = self.Hylas.Name
-	self.MenuName = self.Hylas.Descript
+	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Hylas.Name] = self.Hylas,
 	}
@@ -100,6 +102,7 @@ end
 function PH:InitVars()
 	self.Settings = {
 		Enabled = true,
+		Chronicle = true,
 		CastBar = self.Hylas.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		MechTimer = KBM.Defaults.MechTimer(),
@@ -197,6 +200,7 @@ function PH.PhaseFour()
 end
 
 function PH.PhaseFive()
+	PH.PhaseObj.Objectives:Remove()
 	PH.Phase = 5
 	PH.PhaseObj:SetPhase("Final")
 	PH.PhaseObj.Objectives:AddPercent(PH.Hylas.Name, 0, 50)
@@ -266,6 +270,22 @@ end
 
 function PH:DefineMenu()
 	self.Menu = GSB.Menu:CreateEncounter(self.Hylas, self.Enabled)
+end
+
+PH.Custom = {}
+PH.Custom.Encounter = {}
+function PH.Custom.Encounter.Menu(Menu)
+
+	local Callbacks = {}
+
+	function Callbacks:Chronicle(bool)
+		PH.Settings.Chronicle = bool
+	end
+
+	Header = Menu:CreateHeader(KBM.Language.Encounter.Chronicle[KBM.Lang], "check", "Encounter", "Main")
+	Header:SetChecked(PH.Settings.Chronicle)
+	Header:SetHook(Callbacks.Chronicle)
+	
 end
 
 function PH:Start()	

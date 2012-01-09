@@ -77,10 +77,10 @@ HG.Lang.Notify.Tidings = KBM.Language:Add("unleashes woeful tidings upon (%a*)")
 HG.Lang.Notify.Tidings.German = "entfesselt traurige Kunde auf (%a*)"
 
 HG.Gaurath.Name = HG.Lang.Gaurath[KBM.Lang]
+HG.Descript = HG.Gaurath.Name
 
 function HG:AddBosses(KBM_Boss)
-	self.Gaurath.Descript = self.Gaurath.Name
-	self.MenuName = self.Gaurath.Descript
+	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Gaurath.Name] = self.Gaurath,
 	}

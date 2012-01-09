@@ -58,10 +58,10 @@ VP.Lang.Flames.French = "Flammes anciennes"
 VP.Lang.Flames.German = "Uralte Flammen"
 
 VP.Prime.Name = VP.Lang.Prime[KBM.Lang]
+VP.Descript = VP.Prime.Name
 
 function VP:AddBosses(KBM_Boss)
-	self.Prime.Descript = self.Prime.Name
-	self.MenuName = self.Prime.Descript
+	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Prime.Name] = self.Prime,
 	}

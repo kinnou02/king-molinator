@@ -63,10 +63,10 @@ SZ.Lang.Ability.Grasp.French = "Poigne d'\195\137tripeur d'\195\162mes"
 -- Menu Dictionary
 SZ.Lang.Menu = {}
 SZ.Lang.Menu.Grasp = KBM.Language:Add("First "..SZ.Lang.Ability.Grasp[KBM.Lang])
+SZ.Descript = SZ.Zilas.Name
 
 function SZ:AddBosses(KBM_Boss)
-	self.Zilas.Descript = self.Zilas.Name
-	self.MenuName = self.Zilas.Descript
+	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Zilas.Name] = self.Zilas,
 	}

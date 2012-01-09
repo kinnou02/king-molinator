@@ -1,4 +1,37 @@
-﻿v0.8.9
+﻿v0.9.0
+* System
+** New: The addon's tracking system has now been enabled for: Attempts, Wipes, Kills and Best Times.
+** New: Boss Encounter's which have a Chronicle variant can now be identified separately mainly for kill tracking.
+** New: You can now select to not trigger the addon during Chronicles in Hammerknell and GSB.
+** New: Internal Achievement matching and tracking system has started. (Including Rapid Assualt timers)
+** Note: This is currently internal, but will be displayed in the Records tab shortly.
+** Change: All boss and instance mods have been converted to try and better avoid rare errors.
+* Menu Options
+** Cast Filters
+*** Fixed: Error on selecting cast filters for custom colors.
+*** Change: Adjusted Filter settings internally to use the same template as Alerts and Timers.
+* Castbars 
+** Change: Castbar updating has been unthrottled in order to better account for interrupt accuracy.
+** Note: This is experimental, please report any CPU usage issues compared to previous version.
+* Phase Monitor
+** Fixed: Objective shadows were not correct on initiation for Meta objectives.
+** Fixed: Error involving .Lists member corrected for new dynamic objective manager.
+* Hammerknell
+** Grugonim
+*** Fixed: A slight possibility for the encounter to crash on transition to Tower phases. (rare)
+* Greenscale's Blight
+** Infiltrator Johlen
+*** Fixed: Error on bomb phase transition.
+** Prince Hylas
+*** Change: Cleaned up the objective tracking a little.
+* Guilded Prophecy
+** New: Converted to new engine.
+** New: Converted all boss modules to new engine in preparation for fully supported mechanics.
+* Raid Manager
+** Fixed: Inconsistent error on "some" resurect mechanics. (Error moved to debug tracking info, non-critical)
+** Fixed: Heal events were not triggering as expected, catch added for inconsistent nil caster/target errors.
+----
+v0.8.9
 * Menu Options
 ** Custom Colors
 *** Fixed: When custom colors where enabled the color selector would be disabled when re-selecting.

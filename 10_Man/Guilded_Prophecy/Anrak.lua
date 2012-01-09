@@ -4,26 +4,17 @@
 --
 
 KBMGPAF_Settings = nil
+chKBMGPAF_Settings = nil
+
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 local GP = KBM.BossMod["Guilded Prophecy"]
 
 local AF = {
-	ModEnabled = true,
-	Anrak = {
-		MenuItem = nil,
-		Enabled = true,
-		Handler = nil,
-		Options = nil,
-	},
+	Enabled = true,
 	Instance = GP.Name,
-	HasPhases = true,
-	PhaseType = "percentage",
-	PhaseList = {},
-	Timers = {},
 	Lang = {},
-	Enrage = 60 * 7,
 	ID = "Anrak",
 	}
 
@@ -32,16 +23,15 @@ AF.Anrak = {
 	Level = "??",
 	Active = false,
 	Name = "Anrak the Foul",
-	Castbar = nil,
-	CastFilters = {},
-	Timers = {},
-	TimersRef = {},
-	AlertsRef = {},
+	NameShort = "Anrak",
+	Menu = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	TimeOut = 5,
 	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+	},
 }
 
 KBM.RegisterMod(AF.ID, AF)
@@ -51,53 +41,58 @@ AF.Lang.Anrak.German = "Anrak der Üble"
 AF.Lang.Anrak.French = "Anrak l'ignoble"
 
 AF.Anrak.Name = AF.Lang.Anrak[KBM.Lang]
+AF.Descript = AF.Anrak.Name
 
 function AF:AddBosses(KBM_Boss)
-	self.Anrak.Descript = self.Anrak.Name
-	self.MenuName = self.Anrak.Descript
+	self.MenuName = self.Descript
 	self.Bosses = {
-		[self.Anrak.Name] = true,
+		[self.Anrak.Name] = self.Anrak,
 	}
 	KBM_Boss[self.Anrak.Name] = self.Anrak	
 end
 
 function AF:InitVars()
 	self.Settings = {
-		Timers = {
-			Enabled = true,
-			FlamesEnabled = true,
-		},
-		CastBar = {
-			x = false,
-			y = false,
-			Enabled = true,
-		},
+		Enabled = true,
+		CastBar = self.Anrak.Settings.CastBar,
+		EncTimer = KBM.Defaults.EncTimer(),
 	}
-	KBMGS_Settings = self.Settings
+	KBMGPAF_Settings = self.Settings
+	chKBMGPAF_Settings = self.Settings
 end
 
-function AF:LoadVars()
-	if type(KBMGSBGS_Settings) == "table" then
-		for Setting, Value in pairs(KBMGSBGS_Settings) do
-			if type(KBMGSBGS_Settings[Setting]) == "table" then
-				if self.Settings[Setting] ~= nil then
-					for tSetting, tValue in pairs(KBMGSBGS_Settings[Setting]) do
-						if self.Settings[Setting][tSetting] ~= nil then
-							self.Settings[Setting][tSetting] = tValue
-						end
-					end
-				end
-			else
-				if self.Settings[Setting] ~= nil then
-					self.Settings[Setting] = Value
-				end
-			end
-		end
+function AF:SwapSettings(bool)
+
+	if bool then
+		KBMGPAF_Settings = self.Settings
+		self.Settings = chKBMGPAF_Settings
+	else
+		chKBMGPAF_Settings = self.Settings
+		self.Settings = KBMGPAF_Settings
 	end
+
 end
 
-function AF:SaveVars()
-	KBMGSBGS_Settings = self.Settings
+function AF:LoadVars()	
+	if KBM.Options.Character then
+		KBM.LoadTable(chKBMGPAF_Settings, self.Settings)
+	else
+		KBM.LoadTable(KBMGPAF_Settings, self.Settings)
+	end
+	
+	if KBM.Options.Character then
+		chKBMGPAF_Settings = self.Settings
+	else
+		KBMGPAF_Settings = self.Settings
+	end	
+end
+
+function AF:SaveVars()	
+	if KBM.Options.Character then
+		chKBMGPAF_Settings = self.Settings
+	else
+		KBMGPAF_Settings = self.Settings
+	end	
 end
 
 function AF:Castbar(units)
@@ -119,12 +114,12 @@ function AF:Death(UnitID)
 	return false
 end
 
-function AF:UnitHPCheck(unitDetails, unitID)
+function AF:UnitHPCheck(uDetails, unitID)
 	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if unitDetails.name == self.Anrak.Name then
-				if not self.Anrak.UnitID then
+	if uDetails and unitID then
+		if not uDetails.player then
+			if uDetails.name == self.Anrak.Name then
+				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
@@ -145,6 +140,7 @@ function AF:Reset()
 	self.EncounterRunning = false
 	self.Anrak.Available = false
 	self.Anrak.UnitID = nil
+	self.Anrak.Dead = false
 	self.Anrak.CastBar:Remove()
 end
 
@@ -152,26 +148,41 @@ function AF:Timer()
 	
 end
 
-function AF.Anrak:Options()
-	function self:TimersEnabled(bool)
+function AF.Anrak:SetTimers(bool)	
+	if bool then
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = TimerObj.Settings.Enabled
+		end
+	else
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = false
+		end
 	end
-	function self:FlamesEnabled(bool)
-		AF.Settings.Timers.FlamesEnabled = bool
-		AF.Anrak.TimersRef.Flames.Enabled = bool
+end
+
+function AF.Anrak:SetAlerts(bool)
+	if bool then
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = AlertObj.Settings.Enabled
+		end
+	else
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = false
+		end
 	end
-	local Options = self.MenuItem.Options
-	Options:SetTitle()
-	local Timers = Options:AddHeader(KBM.Language.Options.TimersEnabled[KBM.Lang], self.TimersEnabled, AF.Settings.Timers.Enabled)
-	--Timers:AddCheck(AF.Lang.Flames[KBM.Lang], self.FlamesEnabled, AF.Settings.Timers.FlamesEnabled)	
-	
+end
+
+function AF:DefineMenu()
+	self.Menu = GP.Menu:CreateEncounter(self.Anrak, self.Enabled)
 end
 
 function AF:Start()
-	self.Header = KBM.HeaderList[self.Instance]
-	self.Anrak.MenuItem = KBM.MainWin.Menu:CreateEncounter(self.MenuName, self.Anrak, true, self.Header)
-	self.Anrak.MenuItem.Check:SetEnabled(false)
-	-- self.Anrak.TimersRef.Flames = KBM.MechTimer:Add(self.Lang.Flames[KBM.Lang], "cast", 30, self, nil)
-	-- self.Anrak.TimersRef.Flames.Enabled = self.Settings.Timers.FlamesEnabled
+	-- Create Timers
+	
+	-- Create Alerts
+	
+	-- Assign Timers and Alerts to Triggers
 	
 	self.Anrak.CastBar = KBM.CastBar:Add(self, self.Anrak, true)
+	self:DefineMenu()
 end
