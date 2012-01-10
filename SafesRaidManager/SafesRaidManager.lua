@@ -10,6 +10,7 @@ LibSRM.Player.ID = Inspect.Unit.Detail("player")
 LibSRM.Player.Grouped = false
 LibSRM.Player.Loaded = false
 LibSRM.Player.Combat = false
+LibSRM.Dead = 0
 
 LibSRM.Group = {
 	Combat = 0,
