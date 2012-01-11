@@ -1,4 +1,12 @@
-﻿﻿v0.9.0
+﻿v0.9.1
+* System
+** Buff Triggers
+*** Fixed: Some triggers would not fire if there were both Player and Boss buff lists in a mod.
+* German Translations
+** Seelenreißer Zilas
+*** Fixed: Seelenreißer-Griff
+----
+﻿v0.9.0
 * System
 ** New: The addon's tracking system has now been enabled for: Attempts, Wipes, Kills and Best Times.
 ** New: Boss Encounter's which have a Chronicle variant can now be identified separately mainly for kill tracking.

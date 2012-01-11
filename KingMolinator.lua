@@ -3036,13 +3036,20 @@ function KBM.Alert:Init()
 	function self:Start(AlertObj, CurrentTime, Duration)		
 		if self.Settings.Enabled then
 			if AlertObj.Enabled then
-				if self.Starting then
+				if self.Starting and not AlertObj.isImportant then
+					if KBM.Debug then
+						print("Alert starting overlap: Aborting")
+					end
 					return
 				end
 				if self.Active then
 					if self.Current.Active then
-						if self.Current.isImportant then
-							return
+						if not AlertObj.isImportant then
+							if self.Current.isImportant then
+								if not self.Current.Stopping then
+									return
+								end
+							end
 						end
 						self.Starting = true
 						self:Stop()
@@ -3058,6 +3065,8 @@ function KBM.Alert:Init()
 				else
 					if not AlertObj.DefDuration then
 						self.Duration = 2
+					else
+						self.Duration = AlertObj.DefDuration
 					end
 				end
 				self.Current = AlertObj
@@ -4036,21 +4045,19 @@ function KBM:BuffMonitor(unitID, Buffs, Type)
 						bDetails = Inspect.Buff.Detail(unitID, BuffID)
 						if bDetails then
 							KBM.Buffs.Active[BuffID] = bDetails
-							if KBM.Debug then
-								print("Buff tracking added for: "..bDetails.name)
-							end
 							if KBM.Trigger.Buff[KBM.CurrentMod.ID] then
 								if KBM.Trigger.Buff[KBM.CurrentMod.ID][bDetails.name] then
 									TriggerObj = KBM.Trigger.Buff[KBM.CurrentMod.ID][bDetails.name]
 									if TriggerObj.Unit.UnitID == unitID then
-										KBM.Trigger.Queue:Add(TriggerObj, nil, unitID, bDetails.remaining)
+										KBM.Trigger.Queue:Add(TriggerObj, unitID, unitID, bDetails.remaining)
 									end
 								end
-							elseif KBM.Trigger.PlayerBuff[KBM.CurrentMod.ID] then
+							end
+							if KBM.Trigger.PlayerBuff[KBM.CurrentMod.ID] then
 								if KBM.Trigger.PlayerBuff[KBM.CurrentMod.ID][bDetails.name] then
 									TriggerObj = KBM.Trigger.PlayerBuff[KBM.CurrentMod.ID][bDetails.name]
 									if LibSRM.Group.UnitExists(unitID) or unitID == KBM.Player.UnitID then
-										KBM.Trigger.Queue:Add(TriggerObj, nil, unitID, bDetails.remaining)
+										KBM.Trigger.Queue:Add(TriggerObj, unitID, unitID, bDetails.remaining)
 									end
 								end
 							end
@@ -4077,7 +4084,8 @@ function KBM:BuffMonitor(unitID, Buffs, Type)
 											KBM.Trigger.Queue:Add(TriggerObj, nil, unitID, nil)
 										end
 									end
-								elseif KBM.Trigger.PlayerBuffRemove[KBM.CurrentMod.ID] then
+								end
+								if KBM.Trigger.PlayerBuffRemove[KBM.CurrentMod.ID] then
 									if KBM.Trigger.PlayerBuffRemove[KBM.CurrentMod.ID][bDetails.name] then
 										TriggerObj = KBM.Trigger.PlayerBuffRemove[KBM.CurrentMod.ID][bDetails.name]
 										if LibSRM.Group.UnitExists(unitID) then

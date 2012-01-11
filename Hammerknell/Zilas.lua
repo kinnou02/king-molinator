@@ -57,7 +57,7 @@ SZ.Zilas.Name = SZ.Lang.Zilas[KBM.Lang]
 -- Ability Dictionary
 SZ.Lang.Ability = {}
 SZ.Lang.Ability.Grasp = KBM.Language:Add("Soulrender's Grasp")
-SZ.Lang.Ability.Grasp.German = "Seelenreißer Griff"
+SZ.Lang.Ability.Grasp.German = "Seelenreißer-Griff"
 SZ.Lang.Ability.Grasp.French = "Poigne d'\195\137tripeur d'\195\162mes"
 
 -- Menu Dictionary
