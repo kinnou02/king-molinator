@@ -61,7 +61,7 @@ EN.Lang.Notify.Eruption.German = "Ich werde diese Welt in Flammen neu formen!"
 -- Ability Dictionary
 EN.Lang.Ability = {}
 EN.Lang.Ability.Combustion = KBM.Language:Add("Excitable Combustion")
-EN.Lang.Ability.Combustion.German = "Aufgeregte Verbrennung"
+EN.Lang.Ability.Combustion.German = "Anregbare Verbrennung" 
 EN.Lang.Ability.Growth = KBM.Language:Add("Molten Growth")
 EN.Lang.Ability.Growth.German = "Geschmolzener Wuchs"
 EN.Lang.Ability.Eruption = KBM.Language:Add("Volcanic Eruption")

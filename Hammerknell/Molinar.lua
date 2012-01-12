@@ -159,6 +159,7 @@ KM.King = {
 		AlertsRef = {
 			Enabled = true,
 			Cursed = KBM.Defaults.AlertObj.Create("red"),
+			CursedDuration = KBM.Defaults.AlertObj.Create("red"),
 			Essence = KBM.Defaults.AlertObj.Create("yellow"),
 			Feedback = KBM.Defaults.AlertObj.Create("blue"),
 			FeedbackWarn = KBM.Defaults.AlertObj.Create("blue"),
@@ -195,6 +196,7 @@ KM.Lang.Ability.Crushing = KBM.Language:Add("Crushing Regret")
 KM.Lang.Ability.Crushing.German = "Erdrückendes Bedauern"
 KM.Lang.Ability.Crushing.French = "Blasph\195\168me infect"
 KM.Lang.Ability.Forked = KBM.Language:Add("Forked Blast")
+KM.Lang.Ability.Forked.German = "Gabelstoß" 
 KM.Lang.Ability.Forked.French = "Explosion fourchue"
 KM.Lang.Ability.Shout = KBM.Language:Add("Frightening Shout")
 KM.Lang.Ability.Shout.French = "Flammes maudites"
@@ -214,6 +216,10 @@ KM.Lang.Notify = {}
 KM.Lang.Notify.Rev = KBM.Language:Add("Incorporeal Revenant begins to phase into this reality.")
 KM.Lang.Notify.Rev.French = "Revenant chim\195\169rique commence \195\160 se mat\195\169rialiser dans cette réalit\195\169."
 KM.Lang.Notify.Rev.German = "Unkörperlicher Wiedergänger beginnt, in diese Realität zu gleiten."
+
+-- Menu Dictionary
+KM.Lang.Menu = {}
+KM.Lang.Menu.Cursed = KBM.Language:Add(KM.Lang.Ability.Cursed[KBM.Lang].." duration.")
 
 -- King's Options page Dictionary
 KM.Lang.Options = {}
@@ -941,7 +947,9 @@ function KM:Start()
 	KBM.Defaults.TimerObj.Assign(self.King)
 	
 	-- Add King's Alerts
-	self.King.AlertsRef.Cursed = KBM.Alert:Create(KM.Lang.Ability.Cursed[KBM.Lang], 9, true, nil, "red")
+	self.King.AlertsRef.Cursed = KBM.Alert:Create(KM.Lang.Ability.Cursed[KBM.Lang], nil, false, true, "red")
+	self.King.AlertsRef.CursedDuration = KBM.Alert:Create(KM.Lang.Ability.Cursed[KBM.Lang], nil, true, true, "red")
+	self.King.AlertsRef.CursedDuration.MenuName = KM.Lang.Menu.Cursed[KBM.Lang]
 	self.King.AlertsRef.Essence = KBM.Alert:Create(KM.Lang.Ability.Essence[KBM.Lang], 2, true, nil, "yellow")
 	self.King.AlertsRef.FeedbackWarn = KBM.Alert:Create(KM.Lang.Ability.Feedback[KBM.Lang], nil, false, "blue")
 	self.King.AlertsRef.Feedback = KBM.Alert:Create(KM.Lang.Ability.Feedback[KBM.Lang], 5, true, true, "blue")
@@ -953,12 +961,16 @@ function KM:Start()
 	self.King.Triggers.Cursed = KBM.Trigger:Create(KM.Lang.Ability.Cursed[KBM.Lang], "cast", self.King)
 	self.King.Triggers.Cursed:AddTimer(self.King.TimersRef.Cursed)
 	self.King.Triggers.Cursed:AddAlert(self.King.AlertsRef.Cursed)
+	self.King.Triggers.CursedDuration = KBM.Trigger:Create(KM.Lang.Ability.Cursed[KBM.Lang], "channel", self.King)
+	self.King.Triggers.CursedDuration:AddAlert(self.King.AlertsRef.CursedDuration)
 	self.King.Triggers.Shout = KBM.Trigger:Create(KM.Lang.Ability.Shout[KBM.Lang], "cast", self.King)
 	self.King.Triggers.Shout:AddTimer(self.King.TimersRef.Shout)
 	self.King.Triggers.Shout:AddAlert(self.King.AlertsRef.Shout)
 	self.King.Triggers.Essence = KBM.Trigger:Create(KM.Lang.Ability.Essence[KBM.Lang], "cast", self.King)
 	self.King.Triggers.Essence:AddTimer(self.King.TimersRef.Essence)
 	self.King.Triggers.Essence:AddAlert(self.King.AlertsRef.Essence)
+	self.King.Triggers.EssenceInt = KBM.Trigger:Create(KM.Lang.Ability.Essence[KBM.Lang], "interrupt", self.King)
+	self.King.Triggers.EssenceInt:AddStop(self.King.AlertsRef.Essence)
 	self.King.AlertsRef.Essence:Important()
 	self.King.Triggers.Feedback = KBM.Trigger:Create(KM.Lang.Ability.Feedback[KBM.Lang], "cast", self.King)
 	self.King.Triggers.Feedback:AddTimer(self.King.TimersRef.Feedback)
@@ -994,6 +1006,8 @@ function KM:Start()
 	self.Prince.Triggers.Essence = KBM.Trigger:Create(KM.Lang.Ability.Essence[KBM.Lang], "cast", self.Prince)
 	self.Prince.Triggers.Essence:AddTimer(self.Prince.TimersRef.Essence)
 	self.Prince.Triggers.Essence:AddAlert(self.Prince.AlertsRef.Essence)
+	self.Prince.Triggers.EssenceInt = KBM.Trigger:Create(KM.Lang.Ability.Essence[KBM.Lang], "interrupt", self.Prince)
+	self.Prince.Triggers.EssenceInt:AddStop(self.Prince.AlertsRef.Essence)
 	self.Prince.AlertsRef.Essence:Important()
 	self.Prince.Triggers.Feedback = KBM.Trigger:Create(KM.Lang.Ability.Feedback[KBM.Lang], "cast", self.Prince)
 	self.Prince.Triggers.Feedback:AddTimer(self.Prince.TimersRef.Feedback)

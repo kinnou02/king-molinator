@@ -15,6 +15,7 @@ KBM.Language = {}
 KBM.ID = "KingMolinator"
 KBM.ModList = {}
 KBM.Testing = false
+KBM.ValidTime = false
 KBM.Debug = false
 KBM.TestFilters = {}
 KBM.Idle = {
@@ -512,6 +513,7 @@ function KBM.Language:Add(Phrase)
 end
 
 -- Main Addon Dictionary
+
 -- Encounter related messages
 KBM.Language.Encounter = {}
 KBM.Language.Encounter.Start = KBM.Language:Add("Encounter started:")
@@ -527,6 +529,8 @@ KBM.Language.Encounter.Victory = KBM.Language:Add("Encounter Victory!")
 KBM.Language.Encounter.Victory.French = "Victoire, On l'a tué!"
 KBM.Language.Encounter.Victory.German = "Bosskampf erfolgreich!"
 KBM.Language.Encounter.Chronicle = KBM.Language:Add("Activate in Chronicles.")
+KBM.Language.Encounter.Chronicle.German = "in den Chroniken verwenden."
+
 -- Colors
 KBM.Language.Color = {}
 KBM.Language.Color.Custom = KBM.Language:Add("Custom color.")
@@ -534,6 +538,7 @@ KBM.Language.Color.Custom.German = "eigene Farbauswahl."
 KBM.Language.Color.Red = KBM.Language:Add("Red")
 KBM.Language.Color.Red.German = "Rot"
 KBM.Language.Color.Blue = KBM.Language:Add("Blue")
+KBM.Language.Color.Blue.German = "Blau" 
 KBM.Language.Color.Dark_Green = KBM.Language:Add("Dark Green")
 KBM.Language.Color.Dark_Green.German = "Dunkelgrün"
 KBM.Language.Color.Yellow = KBM.Language:Add("Yellow")
@@ -542,6 +547,7 @@ KBM.Language.Color.Orange = KBM.Language:Add("Orange")
 KBM.Language.Color.Orange.German = "Orange"
 KBM.Language.Color.Purple = KBM.Language:Add("Purple")
 KBM.Language.Color.Purple.German = "Lila"
+
 -- Cast-bar related
 KBM.Language.Options = {}
 KBM.Language.Options.CastbarOverride = KBM.Language:Add("Castbar: Override")
@@ -556,6 +562,7 @@ KBM.Language.Options.Castbar.German = "Zauberbalken"
 KBM.Language.Options.CastbarEnabled = KBM.Language:Add("Cast-bars enabled.")
 KBM.Language.Options.CastbarEnabled.French = "Barres-cast activ\195\169."
 KBM.Language.Options.CastbarEnabled.German = "Zauberbalken anzeigen."
+
 -- Timer Options
 KBM.Language.Options.MechTimerOverride = KBM.Language:Add("Mechanic Timers: Override.")
 KBM.Language.Options.MechTimerOverride.German = "Mechanik Timer: Einstellungen."
@@ -581,6 +588,7 @@ KBM.Language.Options.Timer.German = "Kampfdauer Anzeige."
 KBM.Language.Options.Enrage = KBM.Language:Add("Enrage Timer (if supported).")
 KBM.Language.Options.Enrage.French = "Timer d'Enrage (si support\195\169)."
 KBM.Language.Options.Enrage.German = "Enrage Anzeige (wenn unterstützt)."
+
 -- Anchors Options
 KBM.Language.Options.ShowAnchor = KBM.Language:Add("Show anchor (for positioning).")
 KBM.Language.Options.ShowAnchor.French = "Montrer ancrage (pour positionnement)."
@@ -588,6 +596,7 @@ KBM.Language.Options.ShowAnchor.German = "Zeige Anker (für Positionierung)."
 KBM.Language.Options.LockAnchor = KBM.Language:Add("Unlock anchor.")
 KBM.Language.Options.LockAnchor.French = "D\195\169bloquer Ancrage."
 KBM.Language.Options.LockAnchor.German = "Anker ist verschiebbar."
+
 -- Phase Monitor
 KBM.Language.Options.PhaseMonOverride = KBM.Language:Add("Phase Monitor: Override.")
 KBM.Language.Options.PhaseMonOverride.German = "Phasen Monitor: Einstellungen."
@@ -600,6 +609,7 @@ KBM.Language.Options.Phases.German = "Zeige aktuelle Phase an."
 KBM.Language.Options.Objectives = KBM.Language:Add("Display Phase objective tracking.")
 KBM.Language.Options.Objectives.German = "Zeige Phasen Aufgabe an."
 KBM.Language.Options.Phase = KBM.Language:Add("Phase")
+
 -- Button Options
 KBM.Language.Options.Button = KBM.Language:Add("Options Button Visible.")
 KBM.Language.Options.Button.French = "Bouton Configurations Visible."
@@ -607,6 +617,7 @@ KBM.Language.Options.Button.German = "Options-Schalter sichtbar."
 KBM.Language.Options.LockButton = KBM.Language:Add("Unlock Button (right-click to move).")
 KBM.Language.Options.LockButton.French = "D\195\169bloquer Bouton (click-droit pour d\195\169placer)."
 KBM.Language.Options.LockButton.German = "Schalter ist verschiebbar (Rechts-Klick zum verschieben)."
+
 -- Tank Swap related
 KBM.Language.Options.TankSwap = KBM.Language:Add("Tank-Swaps")
 KBM.Language.Options.TankSwap.German = "Tank Wechsel"
@@ -615,6 +626,7 @@ KBM.Language.Options.Tank.French = "Afficher Test Tanks."
 KBM.Language.Options.Tank.German = "Zeige Test-Tanks-Fenster."
 KBM.Language.Options.TankSwapEnabled = KBM.Language:Add("Tank-Swaps enabled.")
 KBM.Language.Options.TankSwapEnabled.German = "Tank Wechsel anzeigen."
+
 -- Alert related
 KBM.Language.Options.AlertsOverride = KBM.Language:Add("Alerts: Override")
 KBM.Language.Options.AlertsOverride.German = "Alarmierungs: Einstellungen."
@@ -632,6 +644,7 @@ KBM.Language.Options.AlertText.German = "Alarmierungs-Text aktiviert."
 KBM.Language.Options.AlertText.French = "Texte Avertissement Alerte activ\195\169 ."
 KBM.Language.Options.UnlockFlash = KBM.Language:Add("Unlock alert border")
 KBM.Language.Options.UnlockFlash.German = "Alarmierungs Ränder sind änderbar."
+
 -- Size Dictionary
 KBM.Language.Options.UnlockWidth = KBM.Language:Add("Unlock width for scaling. (Mouse wheel)")
 KBM.Language.Options.UnlockWidth.German = "Breite ist skalierbar."
@@ -641,6 +654,7 @@ KBM.Language.Options.UnlockText = KBM.Language:Add("Unlock Text size. (Mouse whe
 KBM.Language.Options.UnlockText.German = "Textgröße ist änderbar."
 KBM.Language.Options.UnlockAlpha = KBM.Language:Add("Unlock transparency.")
 KBM.Language.Options.UnlockAlpha.German = "Transparenz ist änderbar."
+
 -- Misc.
 KBM.Language.Options.Character = KBM.Language:Add("Saving settings for this character only.")
 KBM.Language.Options.Character.German = "Einstellungen nur für diesen Charakter speichern."
@@ -654,7 +668,8 @@ KBM.Language.Options.Settings.German = "Einstellungen"
 KBM.Language.Options.Shadow = KBM.Language:Add("Show text shadows.")
 KBM.Language.Options.Shadow.German = "Zeige Text Schattierung."
 KBM.Language.Options.Texture = KBM.Language:Add("Enable textured overlay.")
-KBM.Language.Options.Texture.German = "Texturierte Balken aktiviert." 
+KBM.Language.Options.Texture.German = "Texturierte Balken aktiviert."
+
 -- Timer Dictionary
 KBM.Language.Timers = {}
 KBM.Language.Timers.Time = KBM.Language:Add("Time")
@@ -1198,6 +1213,8 @@ function KBM.Trigger:Init()
 	self.BuffRemove = {}
 	self.PlayerBuffRemove = {}
 	self.Time = {}
+	self.Channel = {}
+	self.Interrupt = {}
 
 	function self.Queue:Add(TriggerObj, Caster, Target, Duration)	
 		if KBM.Encounter or KBM.Testing then
@@ -1364,6 +1381,16 @@ function KBM.Trigger:Init()
 				self.Cast[Trigger] = {}
 			end
 			self.Cast[Trigger][Unit.Name] = TriggerObj
+		elseif Type == "channel" then
+			if not self.Channel[Trigger] then
+				self.Channel[Trigger] = {}
+			end
+			self.Channel[Trigger][Unit.Name] = TriggerObj
+		elseif Type == "interrupt" then
+			if not self.Interrupt[Trigger] then
+				self.Interrupt[Trigger] = {}
+			end
+			self.Interrupt[Trigger][Unit.Name] = TriggerObj
 		elseif Type == "percent" then
 			if not self.Percent[Unit.Mod.ID] then
 				self.Percent[Unit.Mod.ID] = {}
@@ -2235,10 +2262,19 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 										if not KBM.CurrentMod.EncounterRunning then
 											if KBM.EncounterMode == "chronicle" then
 												print(KBM.Language.Encounter.Start[KBM.Lang].." "..KBM.CurrentMod.Descript.." (Chronicles)")
-												KBM.CurrentMod.Settings.Records.Chronicle.Attempts = KBM.CurrentMod.Settings.Records.Chronicle.Attempts + 1
+												if KBM.BossID[UnitID].Percent >= 99 then 
+													KBM.CurrentMod.Settings.Records.Chronicle.Attempts = KBM.CurrentMod.Settings.Records.Chronicle.Attempts + 1
+												end
 											else
 												print(KBM.Language.Encounter.Start[KBM.Lang].." "..KBM.CurrentMod.Descript)
-												KBM.CurrentMod.Settings.Records.Attempts = KBM.CurrentMod.Settings.Records.Attempts + 1
+												if KBM.BossID[UnitID].Percent >= 99 then
+													KBM.CurrentMod.Settings.Records.Attempts = KBM.CurrentMod.Settings.Records.Attempts + 1
+												end
+											end
+											if KBM.BossID[UnitID].Percent < 99 then
+												KBM.ValidTime = false
+											else
+												KBM.ValidTime = true
 											end
 											print(KBM.Language.Encounter.GLuck[KBM.Lang])
 											KBM.TimeElapsed = 0
@@ -3435,7 +3471,10 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 	function CastBarObj:Create(UnitID)	
 		self:ManageSettings()
 		self.UnitID = UnitID
-		self.LastCast = ""		
+		self.LastCast = ""
+		self.Interrupted = false
+		self.LastStart = nil
+		self.InterruptEnd = nil
 		if not self.GUI then
 			self.GUI = KBM.CastBar:Pull()
 			self.GUI.CastBarObj = self
@@ -3453,8 +3492,10 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 	
 	function CastBarObj:Start()	
 		self.Casting = true
+		self.CastMod = 1
+		self.GUI.Frame:SetAlpha(1)
 		self.GUI.Frame:SetVisible(true)
-		self.GUI.Progress:SetVisible(true)		
+		self.GUI.Progress:SetVisible(true)
 	end
 	
 	function CastBarObj:Update()	
@@ -3487,21 +3528,27 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 										else
 											FilterObj.Prefix = ""
 										end
-										self.CastTime = bDetails.duration
-										self.Progress = bDetails.remaining						
-										self.GUI.Progress:SetWidth(self.GUI.Frame:GetWidth() * (1-(self.Progress/self.CastTime)))
-										self.GUI:SetText(string.format("%0.01f", self.Progress).." - "..FilterObj.Prefix..bDetails.abilityName)
 										self:Start()
-										self.CastStart = bDetails.begin
+										self.CastTime = bDetails.duration
+										self.Progress = bDetails.remaining
+										if bDetails.channeled then
+											self.GUI.Progress:SetWidth(self.GUI.Frame:GetWidth() * (self.Progress/self.CastTime))								
+										else
+											self.GUI.Progress:SetWidth(self.GUI.Frame:GetWidth() * (1-(self.Progress/self.CastTime)))
+										end
+										self.GUI:SetText(string.format("%0.01f", self.Progress).." - "..FilterObj.Prefix..bDetails.abilityName)
 									else
 										self.CastTime = bDetails.duration
-										self.Progress = bDetails.remaining						
-										self.GUI.Progress:SetWidth(self.GUI.Frame:GetWidth() * (1-(self.Progress/self.CastTime)))
+										self.Progress = bDetails.remaining
+										if bDetails.channeled then
+											self.GUI.Progress:SetWidth(self.GUI.Frame:GetWidth() * (self.Progress/self.CastTime))								
+										else
+											self.GUI.Progress:SetWidth(self.GUI.Frame:GetWidth() * (1-(self.Progress/self.CastTime)))
+										end
 										self.GUI:SetText(string.format("%0.01f", self.Progress).." - "..FilterObj.Prefix..bDetails.abilityName)	
 									end
-								else
+								elseif self.Casting then
 									self:Stop()
-									self.Casting = false
 								end
 							else
 								if not self.Casting then
@@ -3511,11 +3558,14 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 									else
 										self.GUI.Progress:SetBackgroundColor(1, 0, 0, 0.33)
 									end
-									self.CastStart = bDetails.begin
 								end
 								self.CastTime = bDetails.duration
 								self.Progress = bDetails.remaining
-								self.GUI.Progress:SetWidth(self.GUI.Frame:GetWidth() * (1-(self.Progress/self.CastTime)))
+								if bDetails.channeled then
+									self.GUI.Progress:SetWidth(self.GUI.Frame:GetWidth() * (self.Progress/self.CastTime))								
+								else
+									self.GUI.Progress:SetWidth(self.GUI.Frame:GetWidth() * (1-(self.Progress/self.CastTime)))
+								end
 								self.GUI:SetText(string.format("%0.01f", self.Progress).." - "..bDetails.abilityName)
 							end
 						else
@@ -3526,54 +3576,100 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 								else
 									self.GUI.Progress:SetBackgroundColor(1, 0, 0, 0.33)
 								end
-								self.CastStart = bDetails.begin
 							end
 							self.CastTime = bDetails.duration
 							self.Progress = bDetails.remaining
-							self.GUI.Progress:SetWidth(self.GUI.Frame:GetWidth() * (1-(self.Progress/self.CastTime)))
+							if bDetails.channeled then
+								self.GUI.Progress:SetWidth(self.GUI.Frame:GetWidth() * (self.Progress/self.CastTime))								
+							else
+								self.GUI.Progress:SetWidth(self.GUI.Frame:GetWidth() * (1-(self.Progress/self.CastTime)))
+							end
 							self.GUI:SetText(string.format("%0.01f", self.Progress).." - "..bDetails.abilityName)
 						end
 					end
-					if self.LastCast ~= bDetails.abilityName then
-						self.LastCast = bDetails.abilityName
-						if KBM.Trigger.Cast[bDetails.abilityName] then
-							if KBM.Trigger.Cast[bDetails.abilityName][self.Boss.Name] then
-								TriggerObj = KBM.Trigger.Cast[bDetails.abilityName][self.Boss.Name]
-								KBM.Trigger.Queue:Add(TriggerObj, nil, nil, bDetails.remaining)
+					self.CastObject = bDetails
+					if self.LastStart ~= bDetails.begin then
+						self.LastStart = bDetails.begin
+						if not bDetails.channeled then	
+							if KBM.Trigger.Cast[bDetails.abilityName] then
+								if KBM.Trigger.Cast[bDetails.abilityName][self.Boss.Name] then
+									TriggerObj = KBM.Trigger.Cast[bDetails.abilityName][self.Boss.Name]
+									KBM.Trigger.Queue:Add(TriggerObj, nil, nil, bDetails.remaining)
+								end
+							end
+						else
+							if not self.Channeled then
+								self.Channeled = true
+								if KBM.Trigger.Channel[bDetails.abilityName] then
+									if KBM.Trigger.Channel[bDetails.abilityName][self.Boss.Name] then
+										TriggerObj = KBM.Trigger.Channel[bDetails.abilityName][self.Boss.Name]
+										KBM.Trigger.Queue:Add(TriggerObj, nil, nil, bDetails.remaining)
+									end
+								end
 							end
 						end
 					end
 				else
-					self:Stop()
-					self.Casting = false
+					if self.Casting then
+						self:Stop()
+						self.Casting = false
+					end
 				end
 			else
-				if self.Casting or (self.LastCast ~= "") then
-					if self.Progress then
-						if self.Progress > 0.025 then
-						-- if Inspect.Unit.Lookup(self.UnitID) then
-							-- Interrupt
-						-- end
+				if self.LastStart then
+					if Inspect.Unit.Lookup(self.UnitID) then
+						if self.CastObject then
+							if self.CastObject.remaining > 0 and not self.CastObject.uninterruptible then
+								--- Do Cast Interrupt Triggers (if any)
+								if KBM.Trigger.Interrupt[self.CastObject.abilityName] then
+									if KBM.Trigger.Interrupt[self.CastObject.abilityName][self.Boss.Name] then
+										TriggerObj = KBM.Trigger.Interrupt[self.CastObject.abilityName][self.Boss.Name]
+										KBM.Trigger.Queue:Add(TriggerObj, nil, nil, self.CastObject.remaining)
+									end
+								end
+								self.Interrupted = true
+							else
+								--- Do Cast End Triggers (if any)
+							end
+							self.CastObject = nil
 						end
+						self.LastStart = nil
 					end
 					self:Stop()
-					self.Casting = false
+				elseif self.Interrupted then
+					if self.InterruptEnd < Inspect.Time.Real() then
+						self.Interrupted = false
+						self.InterruptEnd = nil
+						self.GUI:SetText(self.Boss.Name)
+						self.GUI.Frame:SetVisible(false)
+					else
+						self.GUI.Frame:SetAlpha(self.InterruptEnd - Inspect.Time.Real())
+					end
 				end
 			end
 		end
 	end
-	function CastBarObj:Stop()
 	
+	function CastBarObj:Stop()	
 		self.Casting = false
 		self.LastCast = ""
-		self.GUI:SetText(self.Boss.Name)
-		self.GUI.Frame:SetVisible(false)
+		if not self.Interrupted then
+			self.GUI:SetText(self.Boss.Name)
+			self.GUI.Frame:SetVisible(false)
+		else
+			if not self.InterruptEnd then
+				self.GUI:SetText("Interrupted")
+				self.InterruptEnd = Inspect.Time.Real() + 1
+				self.GUI.Progress:SetWidth(0)
+			end
+		end
 		self.Duration = 0
 		self.CastTime = 0
-		
+		self.CastStart = 0
+		self.Channeled = false		
 	end
-	function CastBarObj:Hide()
 	
+	function CastBarObj:Hide()	
 		if self.Visible then
 			self.Visible = false
 			if not self.Active then
@@ -3585,11 +3681,10 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 				self.GUI.Frame:SetVisible(false)
 				self.GUI.Drag:SetVisible(false)
 			end
-		end
-	
+		end	
 	end
-	function CastBarObj:Remove()
 	
+	function CastBarObj:Remove()
 		if self.UnitID then
 			KBM.CastBar.ActiveCastBars[self.UnitID] = nil
 		end
@@ -3602,20 +3697,18 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 				table.insert(KBM.CastBar.Store, self.GUI)
 				self.GUI = nil
 			end
-		end
-		
+		end		
 	end
+	
 	self[Boss.Name] = CastBarObj
 	if not self.CastBarList[Mod.ID] then
 		self.CastBarList[Mod.ID] = {}
 	end
 	table.insert(self.CastBarList[Mod.ID], CastBarObj)
 	return self[Boss.Name]
-
 end
 
 local function KBM_Reset()
-
 	if KBM.Encounter then
 		KBM.Idle.Wait = true
 		KBM.Idle.Until = Inspect.Time.Real() + KBM.Idle.Duration
@@ -3667,11 +3760,9 @@ local function KBM_Reset()
 	else
 		print("No encounter to reset.")
 	end
-
 end
 
 function KBM.ConvertTime(Time)
-
 	Time = math.floor(Time)
 	local TimeString = "00"
 	local TimeSeconds = 0
@@ -3691,7 +3782,6 @@ function KBM.ConvertTime(Time)
 		TimeString = string.format("%02d", Time)
 	end
 	return TimeString
-	
 end
 
 function KBM:RaidCombatEnter()
@@ -3925,35 +4015,47 @@ local function KBM_Death(UnitID)
 					if KBM.CurrentMod:Death(UnitID) then
 						print(KBM.Language.Encounter.Victory[KBM.Lang])
 						if KBM.EncounterMode == "normal" then
-							if KBM.CurrentMod.Settings.Records.Best == 0 or (KBM.TimeElapsed < KBM.CurrentMod.Settings.Records.Best) then
-								print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
-								if KBM.CurrentMod.Settings.Records.Best ~= 0 then
-									print("Previous best: "..KBM.ConvertTime(KBM.CurrentMod.Settings.Records.Best))
-									print("Congratulations: New Record!")
+							if KBM.ValidTime then
+								if KBM.CurrentMod.Settings.Records.Best == 0 or (KBM.TimeElapsed < KBM.CurrentMod.Settings.Records.Best) then
+									print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
+									if KBM.CurrentMod.Settings.Records.Best ~= 0 then
+										print("Previous best: "..KBM.ConvertTime(KBM.CurrentMod.Settings.Records.Best))
+										print("Congratulations: New Record!")
+									else
+										print("Congratulations: A new record has been set!")
+									end
+									KBM.CurrentMod.Settings.Records.Best = KBM.TimeElapsed
+									KBM.CurrentMod.Settings.Records.Kills = KBM.CurrentMod.Settings.Records.Kills + 1
 								else
-									print("Congratulations: A new record has been set!")
+									print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
+									print("Current Record: "..KBM.ConvertTime(KBM.CurrentMod.Settings.Records.Best))
 								end
-								KBM.CurrentMod.Settings.Records.Best = KBM.TimeElapsed
-								KBM.CurrentMod.Settings.Records.Kills = KBM.CurrentMod.Settings.Records.Kills + 1
 							else
 								print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
-								print("Current Record: "..KBM.ConvertTime(KBM.CurrentMod.Settings.Records.Best))
+								print("Time is invalid, no records can be set.")
+								KBM.CurrentMod.Settings.Records.Kills = KBM.CurrentMod.Settings.Records.Kills + 1
 							end
 						else
-							if KBM.CurrentMod.Settings.Records.Chronicle.Best == 0 or KBM.TimeElapsed < KBM.CurrentMod.Settings.Records.Chronicle.Best then
-								print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
-								if KBM.CurrentMod.Settings.Records.Chronicle.Best ~= 0 then
-									print("Previous best: "..KBM.ConvertTime(KBM.CurrentMod.Settings.Records.Chronicle.Best))
-									print("Congratulations: New Chronicle Record!")
+							if KBM.ValidTime then
+								if KBM.CurrentMod.Settings.Records.Chronicle.Best == 0 or KBM.TimeElapsed < KBM.CurrentMod.Settings.Records.Chronicle.Best then
+									print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
+									if KBM.CurrentMod.Settings.Records.Chronicle.Best ~= 0 then
+										print("Previous best: "..KBM.ConvertTime(KBM.CurrentMod.Settings.Records.Chronicle.Best))
+										print("Congratulations: New Chronicle Record!")
+									else
+										print("Congratulations: A new record has been set!")
+									end
+									KBM.CurrentMod.Settings.Records.Chronicle.Best = KBM.TimeElapsed
+									KBM.CurrentMod.Settings.Records.Chronicle.Kills = KBM.CurrentMod.Settings.Records.Chronicle.Kills + 1
 								else
-									print("Congratulations: A new record has been set!")
+									print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))								
+									print("Current Record: "..KBM.ConvertTime(KBM.CurrentMod.Settings.Records.Chronicle.Best))
 								end
-								KBM.CurrentMod.Settings.Records.Chronicle.Best = KBM.TimeElapsed
-								KBM.CurrentMod.Settings.Records.Chronicle.Kills = KBM.CurrentMod.Settings.Records.Chronicle.Kills + 1
 							else
-								print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))								
-								print("Current Record: "..KBM.ConvertTime(KBM.CurrentMod.Settings.Records.Chronicle.Best))
-							end						
+								print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
+								print("Time is invalid, no records can be set.")
+								KBM.CurrentMod.Settings.Records.Chronicle.Kills = KBM.CurrentMod.Settings.Records.Kills + 1
+							end
 						end
 						KBM_Reset()
 					end
@@ -4576,11 +4678,17 @@ local function KBM_Start()
 	KBM.Trigger:Init()
 	local Header = KBM.MainWin.Menu:CreateHeader("Global Options")
 	KBM.MenuOptions.Main.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.Settings[KBM.Lang], KBM.MenuOptions.Main, nil, Header)
+	KBM.MenuOptions.Main.MenuItem.Check:SetEnabled(false)
 	KBM.MenuOptions.Timers.MenuItem = KBM.MainWin.Menu:CreateEncounter("Timers", KBM.MenuOptions.Timers, true, Header)
+	KBM.MenuOptions.Timers.MenuItem.Check:SetEnabled(false)
 	KBM.MenuOptions.Phases.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.PhaseMonitor[KBM.Lang], KBM.MenuOptions.Phases, true, Header) 
+	KBM.MenuOptions.Phases.MenuItem.Check:SetEnabled(false)
 	KBM.MenuOptions.CastBars.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.Castbar[KBM.Lang], KBM.MenuOptions.CastBars, true, Header)
+	KBM.MenuOptions.CastBars.MenuItem.Check:SetEnabled(false)
 	KBM.MenuOptions.Alerts.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.Alert[KBM.Lang], KBM.MenuOptions.Alerts, true, Header)
+	KBM.MenuOptions.Alerts.MenuItem.Check:SetEnabled(false)
 	KBM.MenuOptions.TankSwap.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.TankSwap[KBM.Lang], KBM.MenuOptions.TankSwap, true, Header)	
+	KBM.MenuOptions.TankSwap.MenuItem.Check:SetEnabled(false)
 	KBM.MenuGroup.twentyman = KBM.MainWin.Menu:CreateHeader("20-Man Raids", nil, nil, true)
 	table.insert(Command.Slash.Register("kbmreset"), {KBM_Reset, "KingMolinator", "KBM Reset"})
 	table.insert(Event.Chat.Notify, {KBM.Notify, "KingMolinator", "Notify Event"})
@@ -4609,7 +4717,7 @@ local function KBM_Start()
 	print("Welcome to King Boss Mods v"..AddonData.toc.Version)
 	print("/kbmhelp for a list of commands.")
 	print("/kbmoptions for options.")
-	KBM.MenuOptions.Timers:Options()
+	KBM.MenuOptions.Main:Options()
 	table.insert(Command.Slash.Register("kbmon"), {function() KBM.StateSwitch(true) end, "KingMolinator", "KBM On"})
 	table.insert(Command.Slash.Register("kbmoff"), {function() KBM.StateSwitch(false) end, "KingMolinator", "KBM Off"})	
 end

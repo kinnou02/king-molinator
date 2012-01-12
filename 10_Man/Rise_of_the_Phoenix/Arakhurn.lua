@@ -71,15 +71,21 @@ HA.Lang.Arakhurn.French = "Grand Pr\195\170tre Arakhurn"
 -- Ability Dictionary
 HA.Lang.Ability = {}
 HA.Lang.Ability.Nova = KBM.Language:Add("Fire Nova")
+HA.Lang.Ability.Nova.German = "Feuernova"
 
 -- Notify Dictionary
 HA.Lang.Notify = {}
 HA.Lang.Notify.Nova = KBM.Language:Add("High Priest Arakhurn releases the fiery energy within")
+HA.Lang.Notify.Nova.German = "Hohepriester Arakhurn lässt die feurige Energie seines Inneren frei."
 HA.Lang.Notify.Respawn = KBM.Language:Add("The lava churns violently as a large shadow moves beneath it and then rushes to the surface")
+HA.Lang.Notify.Respawn.German = "Die Lava brodelt gewaltig, während sich ein großer Schatten unter ihr bewegt und dann an die Oberfläche schnellt."
 HA.Lang.Notify.Death = KBM.Language:Add("As Arakhurn turns to ash, something stirs beneath the molten lava.")
+HA.Lang.Notify.Death.German = "Als Arakhurn zu Asche zerfällt, regt sich etwas unter der schwelenden Lava."
 
+-- Chat Dictionary
 HA.Lang.Chat = {}
 HA.Lang.Chat.Respawn = KBM.Language:Add("Come to me, my children.")
+HA.Lang.Chat.Respawn.German = "Kommt zu mir, meine Kinder."
 HA.Lang.Chat.Death = KBM.Language:Add("The fire within me weakens. I must regain the power of the flame.")
 
 -- Buff Dictionary
@@ -93,19 +99,29 @@ HA.Lang.Debuff.Armor = KBM.Language:Add("Armor Rip")
 -- Unit Dictionary
 HA.Lang.Unit = {}
 HA.Lang.Unit.Spawn = KBM.Language:Add("Spawn of Arakhurn")
+HA.Lang.Unit.Spawn.German = "Brut von Arakhurn"
 HA.Lang.Unit.Enraged = KBM.Language:Add("Enraged Spawn of Arakhurn")
+HA.Lang.Unit.Enraged.German = "Zornige Brut von Arakhurn"
 
+-- Verbose Dictionary
 HA.Lang.Verbose = {}
 HA.Lang.Verbose.Nova = KBM.Language:Add("until "..HA.Lang.Ability.Nova[KBM.Lang])
+HA.Lang.Verbose.Nova.German = "bis "..HA.Lang.Ability.Nova[KBM.Lang]
 
 -- Menu Dictionary
 HA.Lang.Menu = {}
 HA.Lang.Menu.FieryFirst = KBM.Language:Add("First "..HA.Lang.Buff.Fiery[KBM.Lang])
+HA.Lang.Menu.FieryFirst.German = "Erste "..HA.Lang.Buff.Fiery[KBM.Lang]
 HA.Lang.Menu.FieryPThree = KBM.Language:Add("First "..HA.Lang.Buff.Fiery[KBM.Lang].." (Phase 3)")
+HA.Lang.Menu.FieryPThree.German = "Erste "..HA.Lang.Buff.Fiery[KBM.Lang].." (Phase 3)"
 HA.Lang.Menu.NovaFirst = KBM.Language:Add("First "..HA.Lang.Ability.Nova[KBM.Lang])
+HA.Lang.Menu.NovaFirst.German = "Erste "..HA.Lang.Ability.Nova[KBM.Lang]
 HA.Lang.Menu.NovaPThree = KBM.Language:Add("First "..HA.Lang.Ability.Nova[KBM.Lang].." (Phase 3)")
+HA.Lang.Menu.NovaPThree.German = "Erste "..HA.Lang.Ability.Nova[KBM.Lang].." (Phase 3)"
 HA.Lang.Menu.AddFirst = KBM.Language:Add("First "..HA.Lang.Unit.Enraged[KBM.Lang])
+HA.Lang.Menu.AddFirst.German = "Erste "..HA.Lang.Unit.Enraged[KBM.Lang]
 HA.Lang.Menu.NovaWarn = KBM.Language:Add("5 second warning for "..HA.Lang.Ability.Nova[KBM.Lang])
+HA.Lang.Menu.NovaWarn.German = "5 Sekunden bis "..HA.Lang.Ability.Nova[KBM.Lang]
 
 HA.Arakhurn.Name = HA.Lang.Arakhurn[KBM.Lang]
 HA.Descript = HA.Arakhurn.Name

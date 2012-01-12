@@ -87,6 +87,7 @@ MZ.Lang.Debuff.Curse = KBM.Language:Add("Matron's Curse")
 MZ.Lang.Debuff.Curse.German = "Fluch der Matrone"
 MZ.Lang.Debuff.Curse.French = "Mal\195\169diction de la matrone"
 MZ.Lang.Debuff.Spiritual = KBM.Language:Add("Spiritual Exhaustion")
+MZ.Lang.Debuff.Spiritual.German = "Spirituelle Erschöpfung"
 
 -- Verbose Dictionary
 MZ.Lang.Verbose = {}
