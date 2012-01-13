@@ -61,6 +61,7 @@ GR.Grugonim = {
 			Decay = KBM.Defaults.AlertObj.Create("dark_green"),
 			Bile = KBM.Defaults.AlertObj.Create("purple"),
 			Breath = KBM.Defaults.AlertObj.Create("red"),
+			BreathWarn = KBM.Defaults.AlertObj.Create("orange"),
 		},
 	}
 }
@@ -100,7 +101,11 @@ GR.Lang.Ability.Swarm.German = "Parasitenschwarm"
 GR.Lang.Debuff = {}
 GR.Lang.Debuff.Toxin = KBM.Language:Add("Heart Stopping Toxin")
 GR.Lang.Debuff.Toxin.French = "Toxin d'arr\195\170t cardiaque"
-GR.Lang.Debuff.Toxin.German = "Herzstillstandsgift" 
+GR.Lang.Debuff.Toxin.German = "Herzstillstandsgift"
+
+-- Menu Dictionary
+GR.Lang.Menu = {}
+GR.Lang.Menu.Breath = KBM.Language:Add(GR.Lang.Ability.Breath[KBM.Lang].." duration")
 
 GR.Grugonim.Name = GR.Lang.Grugonim[KBM.Lang]
 GR.Tower.Name = GR.Lang.Tower[KBM.Lang]
@@ -352,9 +357,11 @@ function GR:Start()
 	KBM.Defaults.TimerObj.Assign(self.Grugonim)
 	
 	-- Add Alerts
-	self.Grugonim.AlertsRef.Decay = KBM.Alert:Create(self.Lang.Ability.Decay[KBM.Lang], 3, true, true, "dark_green")
-	self.Grugonim.AlertsRef.Bile = KBM.Alert:Create(self.Lang.Ability.Bile[KBM.Lang], 2, true, true, "purple")
-	self.Grugonim.AlertsRef.Breath = KBM.Alert:Create(self.Lang.Ability.Breath[KBM.Lang], nil, true, true, "red")
+	self.Grugonim.AlertsRef.Decay = KBM.Alert:Create(self.Lang.Ability.Decay[KBM.Lang], nil, false, true, "dark_green")
+	self.Grugonim.AlertsRef.Bile = KBM.Alert:Create(self.Lang.Ability.Bile[KBM.Lang], nil, false, true, "purple")
+	self.Grugonim.AlertsRef.BreathWarn = KBM.Alert:Create(self.Lang.Ability.Breath[KBM.Lang], nil, true, true, "orange")
+	self.Grugonim.AlertsRef.Breath = KBM.Alert:Create(self.Lang.Ability.Breath[KBM.Lang], nil, false, true, "red")
+	self.Grugonim.AlertsRef.Breath.MenuName = self.Lang.Menu.Breath[KBM.Lang]
 	KBM.Defaults.AlertObj.Assign(self.Grugonim)
 	
 	-- Assign Mechanics to Triggers
@@ -362,10 +369,12 @@ function GR:Start()
 	self.Grugonim.Triggers.Decay:AddAlert(self.Grugonim.AlertsRef.Decay)
 	self.Grugonim.Triggers.Bile = KBM.Trigger:Create(self.Lang.Ability.Bile[KBM.Lang], "cast", self.Grugonim)
 	self.Grugonim.Triggers.Bile:AddAlert(self.Grugonim.AlertsRef.Bile)
-	self.Grugonim.Triggers.Breath = KBM.Trigger:Create(self.Lang.Ability.Breath[KBM.Lang], "cast", self.Grugonim)
-	self.Grugonim.Triggers.Breath:AddTimer(self.Grugonim.TimersRef.Breath)
+	self.Grugonim.Triggers.BreathWarn = KBM.Trigger:Create(self.Lang.Ability.Breath[KBM.Lang], "cast", self.Grugonim)
+	self.Grugonim.Triggers.BreathWarn:AddTimer(self.Grugonim.TimersRef.Breath)
+	self.Grugonim.Triggers.BreathWarn:AddAlert(self.Grugonim.AlertsRef.BreathWarn)
+	self.Grugonim.Triggers.BreathWarn:AddPhase(self.BreathCount)
+	self.Grugonim.Triggers.Breath = KBM.Trigger:Create(self.Lang.Ability.Breath[KBM.Lang], "channel", self.Grugonim)
 	self.Grugonim.Triggers.Breath:AddAlert(self.Grugonim.AlertsRef.Breath)
-	self.Grugonim.Triggers.Breath:AddPhase(self.BreathCount)
 	self.Grugonim.Triggers.Disruption = KBM.Trigger:Create(self.Lang.Ability.Disruption[KBM.Lang], "cast", self.Grugonim)
 	self.Grugonim.Triggers.Disruption:AddPhase(self.BreathReset)
 	self.Grugonim.Triggers.Disruption:AddStop(self.Grugonim.TimersRef.Breath)

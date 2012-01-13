@@ -45,7 +45,8 @@ BT.Beruhast = {
 		},
 		AlertsRef = {
 			Enabled = true,
-			Inferno = KBM.Defaults.TimerObj.Create("yellow"),
+			Inferno = KBM.Defaults.AlertObj.Create("yellow"),
+			Summon = KBM.Defaults.AlertObj.Create("dark_green"),
 		},
 	},
 }
@@ -57,24 +58,29 @@ BT.Lang.Beruhast = KBM.Language:Add(BT.Beruhast.Name)
 -- Ability Dictionary
 BT.Lang.Ability = {}
 BT.Lang.Ability.Inferno = KBM.Language:Add("Inferno Lash")
-BT.Lang.Ability.Inferno.French = "Fouet des limbes"
-BT.Lang.Ability.Inferno.German = "Infernopeitsche"
+BT.Lang.Ability.Inferno:SetFrench("Fouet des limbes")
+BT.Lang.Ability.Inferno:SetGerman("Infernopeitsche")
 BT.Lang.Ability.Flame = KBM.Language:Add("Leaping Flame")
-BT.Lang.Ability.Flame.French = "Flamme bondissante"
-BT.Lang.Ability.Flame.German = "Springende Flamme"
+BT.Lang.Ability.Flame:SetFrench("Flamme bondissante")
+BT.Lang.Ability.Flame:SetGerman("Springende Flamme")
 BT.Lang.Ability.Vortex = KBM.Language:Add("Flaming Vortex")
-BT.Lang.Ability.Vortex.French = "Embrasement"
-BT.Lang.Ability.Vortex.German = "Flammenwirbel"
+BT.Lang.Ability.Vortex:SetFrench("Embrasement")
+BT.Lang.Ability.Vortex:SetGerman("Flammenwirbel")
 
 -- Unit Dictionary
 BT.Lang.Unit = {}
 BT.Lang.Unit.Summon = KBM.Language:Add("Summoned Flame")
-BT.Lang.Unit.Summon.German = "Beschworene Flamme"
+BT.Lang.Unit.Summon:SetGerman("Beschworene Flamme")
 
 -- Notify Dictionary
 BT.Lang.Notify = {}
 BT.Lang.Notify.Summon = KBM.Language:Add('Beruhast says, "A pet from Maelforge should keep you warm."')
-BT.Lang.Notify.Summon.German = 'Beruhast sagt: "Ein Begleiter von Flammenmaul sollte Euch warmhalten."'
+BT.Lang.Notify.Summon:SetGerman('Beruhast sagt: "Ein Begleiter von Flammenmaul sollte Euch warmhalten."')
+
+-- Menu Dictionary
+BT.Lang.Menu = {}
+BT.Lang.Menu.Flame = KBM.Language:Add("First "..BT.Lang.Ability.Flame[KBM.Lang])
+BT.Lang.Menu.Flame:SetGerman("Erste "..BT.Lang.Ability.Flame[KBM.Lang])
 
 BT.Beruhast.Name = BT.Lang.Beruhast[KBM.Lang]
 BT.Descript = BT.Beruhast.Name
@@ -216,6 +222,7 @@ end
 function BT:Start()
 	-- Alerts
 	self.Beruhast.AlertsRef.Inferno = KBM.Alert:Create(self.Lang.Ability.Inferno[KBM.Lang], 2, true, true, "yellow")
+	self.Beruhast.AlertsRef.Summon = KBM.Alert:Create(self.Lang.Unit.Summon[KBM.Lang], nil, true, true, "dark_green")
 	KBM.Defaults.AlertObj.Assign(self.Beruhast)
 	
 	-- Timers
@@ -228,10 +235,13 @@ function BT:Start()
 	-- Assign Mechanics to Triggers
 	self.Beruhast.Triggers.Inferno = KBM.Trigger:Create(self.Lang.Ability.Inferno[KBM.Lang], "cast", self.Beruhast)
 	self.Beruhast.Triggers.Inferno:AddAlert(self.Beruhast.AlertsRef.Inferno)
+	self.Beruhast.Triggers.InfernoInt = KBM.Trigger:Create(self.Lang.Ability.Inferno[KBM.Lang], "interrupt", self.Beruhast)
+	self.Beruhast.Triggers.InfernoInt:AddStop(self.Beruhast.AlertsRef.Inferno)
 	self.Beruhast.Triggers.Flame = KBM.Trigger:Create(self.Lang.Ability.Flame[KBM.Lang], "cast", self.Beruhast)
 	self.Beruhast.Triggers.Flame:AddTimer(self.Beruhast.TimersRef.Flame)
 	self.Beruhast.Triggers.Summon = KBM.Trigger:Create(self.Lang.Notify.Summon[KBM.Lang], "notify", self.Beruhast)
 	self.Beruhast.Triggers.Summon:AddTimer(self.Beruhast.TimersRef.Summon)
+	self.Beruhast.Triggers.Summon:AddAlert(self.Beruhast.AlertsRef.Summon)
 	
 	self.Beruhast.CastBar = KBM.CastBar:Add(self, self.Beruhast, true)
 	self:DefineMenu()

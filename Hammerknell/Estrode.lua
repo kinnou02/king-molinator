@@ -83,6 +83,10 @@ ES.Lang.Say = {}
 ES.Lang.Say.Mind = KBM.Language:Add("Mmmm, you look delectable.")
 ES.Lang.Say.Mind.German = "Hm, Ihr seht köstlich aus."
 
+-- Menu Dictionary
+ES.Lang.Menu = {}
+ES.Lang.Menu.Dancing = KBM.Language:Add(ES.Lang.Ability.Dancing[KBM.Lang].." duration")
+
 ES.Estrode.Name = ES.Lang.Estrode[KBM.Lang]
 ES.Descript = ES.Estrode.Name
 
@@ -228,8 +232,8 @@ function ES:Start()
 	
 	-- Screen Alerts
 	self.Estrode.AlertsRef.DancingWarn = KBM.Alert:Create(self.Lang.Ability.Dancing[KBM.Lang], nil, false, true, "red")
-	self.Estrode.AlertsRef.Dancing = KBM.Alert:Create(self.Lang.Ability.Dancing[KBM.Lang], 6, true, true, "red")
-	self.Estrode.AlertsRef.Dancing:NoMenu()
+	self.Estrode.AlertsRef.Dancing = KBM.Alert:Create(self.Lang.Ability.Dancing[KBM.Lang], nil, true, true, "red")
+	self.Estrode.AlertsRef.Dancing.MenuName = self.Lang.Menu.Dancing[KBM.Lang]
 	self.Estrode.AlertsRef.North = KBM.Alert:Create(self.Lang.Ability.North[KBM.Lang], 2, true, false, "orange")
 	self.Estrode.AlertsRef.Chastise = KBM.Alert:Create(self.Lang.Ability.Chastise[KBM.Lang], nil, true, true, "yellow")
 	self.Estrode.AlertsRef.Rift = KBM.Alert:Create(self.Lang.Ability.Rift[KBM.Lang], 2, true, false, "orange")
@@ -243,14 +247,17 @@ function ES:Start()
 	self.Estrode.Triggers.Soul:AddStop(self.Estrode.TimersRef.North)
 	self.Estrode.Triggers.Mind = KBM.Trigger:Create(self.Lang.Say.Mind[KBM.Lang], "say", self.Estrode)
 	self.Estrode.Triggers.Mind:AddTimer(self.Estrode.TimersRef.Mind)
-	self.Estrode.Triggers.Dancing = KBM.Trigger:Create(self.Lang.Ability.Dancing[KBM.Lang], "cast", self.Estrode)
-	self.Estrode.Triggers.Dancing:AddAlert(self.Estrode.AlertsRef.DancingWarn)
-	self.Estrode.AlertsRef.DancingWarn:AlertEnd(self.Estrode.AlertsRef.Dancing)	
+	self.Estrode.Triggers.DancingWarn = KBM.Trigger:Create(self.Lang.Ability.Dancing[KBM.Lang], "cast", self.Estrode)
+	self.Estrode.Triggers.DancingWarn:AddAlert(self.Estrode.AlertsRef.DancingWarn)
+	self.Estrode.Triggers.Dancing = KBM.Trigger:Create(self.Lang.Ability.Dancing[KBM.Lang], "channel", self.Estrode)
+	self.Estrode.Triggers.Dancing:AddAlert(self.Estrode.AlertsRef.Dancing)
 	self.Estrode.Triggers.North = KBM.Trigger:Create(self.Lang.Ability.North[KBM.Lang], "cast", self.Estrode)
 	self.Estrode.Triggers.North:AddAlert(self.Estrode.AlertsRef.North)
 	self.Estrode.Triggers.North:AddTimer(self.Estrode.TimersRef.North)
 	self.Estrode.Triggers.Chastise = KBM.Trigger:Create(self.Lang.Ability.Chastise[KBM.Lang], "cast", self.Estrode)
 	self.Estrode.Triggers.Chastise:AddAlert(self.Estrode.AlertsRef.Chastise)
+	self.Estrode.Triggers.ChastiseInt = KBM.Trigger:Create(self.Lang.Ability.Chastise[KBM.Lang], "interrupt", self.Estrode)
+	self.Estrode.Triggers.ChastiseInt:AddStop(self.Estrode.AlertsRef.Chastise)
 	self.Estrode.Triggers.Rift = KBM.Trigger:Create(self.Lang.Ability.Rift[KBM.Lang], "buff", self.Estrode)
 	self.Estrode.Triggers.Rift:AddAlert(self.Estrode.AlertsRef.Rift)
 	

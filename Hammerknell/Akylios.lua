@@ -166,6 +166,7 @@ AK.Lang.Options.WaveWarn.German = "Warnung für Flutwellen 5 Sekunden vorher."
 AK.Lang.Options.Summon = KBM.Language:Add(AK.Lang.Mechanic.Summon[KBM.Lang].." (Phase 1)")
 AK.Lang.Options.SummonTwo = KBM.Language:Add(AK.Lang.Mechanic.Summon[KBM.Lang].." (Phase 2)")
 AK.Lang.Options.Orb = KBM.Language:Add(AK.Lang.Mechanic.Orb[KBM.Lang].." (P2 First)")
+AK.Lang.Options.Breath = KBM.Language:Add(AK.Lang.Ability.Breath[KBM.Lang].." duration.")
 
 AK.Descript = "Akylios & Jornaru"
 
@@ -521,10 +522,9 @@ function AK:Start()
 	self.Jornaru.AlertsRef.Orb:Important()
 	self.Akylios.AlertsRef.Decay = KBM.Alert:Create(AK.Lang.Ability.Decay[KBM.Lang], 10, false, true, "purple")
 	self.Akylios.AlertsRef.Decay:Important()
-	self.Akylios.AlertsRef.Breath = KBM.Alert:Create(AK.Lang.Ability.Breath[KBM.Lang], 5, false, true, "red")
-	self.Akylios.AlertsRef.Breath:NoMenu()
-	self.Akylios.AlertsRef.BreathWarn = KBM.Alert:Create(AK.Lang.Ability.Breath[KBM.Lang], 4, true, true, "red")
-	self.Akylios.AlertsRef.BreathWarn:AlertEnd(self.Akylios.AlertsRef.Breath)
+	self.Akylios.AlertsRef.Breath = KBM.Alert:Create(AK.Lang.Ability.Breath[KBM.Lang], nil, false, true, "red")
+	self.Akylios.AlertsRef.Breath.MenuName = self.Lang.Options.Breath[KBM.Lang]
+	self.Akylios.AlertsRef.BreathWarn = KBM.Alert:Create(AK.Lang.Ability.Breath[KBM.Lang], nil, true, true, "red")
 
 	KBM.Defaults.AlertObj.Assign(self.Jornaru)
 	KBM.Defaults.AlertObj.Assign(self.Akylios)
@@ -547,9 +547,11 @@ function AK:Start()
 	self.Akylios.Triggers.PhaseFour:AddPhase(self.PhaseFour)
 	self.Akylios.Triggers.Decay = KBM.Trigger:Create(self.Lang.Ability.Decay[KBM.Lang], "playerBuff", self.Akylios)
 	self.Akylios.Triggers.Decay:AddAlert(self.Akylios.AlertsRef.Decay, true)
-	self.Akylios.Triggers.Breath = KBM.Trigger:Create(AK.Lang.Ability.Breath[KBM.Lang], "cast", self.Akylios)
-	self.Akylios.Triggers.Breath:AddTimer(AK.Akylios.TimersRef.Breath)
-	self.Akylios.Triggers.Breath:AddAlert(AK.Akylios.AlertsRef.BreathWarn)
+	self.Akylios.Triggers.BreathWarn = KBM.Trigger:Create(AK.Lang.Ability.Breath[KBM.Lang], "cast", self.Akylios)
+	self.Akylios.Triggers.BreathWarn:AddTimer(AK.Akylios.TimersRef.Breath)
+	self.Akylios.Triggers.BreathWarn:AddAlert(AK.Akylios.AlertsRef.BreathWarn)
+	self.Akylios.Triggers.Breath = KBM.Trigger:Create(self.Lang.Ability.Breath[KBM.Lang], "channel", self.Akylios)
+	self.Akylios.Triggers.Breath:AddAlert(self.Akylios.AlertsRef.Breath)
 	
 	self.Jornaru.CastBar = KBM.CastBar:Add(self, self.Jornaru, true)
 	self.Akylios.CastBar = KBM.CastBar:Add(self, self.Akylios, true)

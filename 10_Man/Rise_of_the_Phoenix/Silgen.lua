@@ -54,19 +54,19 @@ GS.Silgen = {
 KBM.RegisterMod(GS.ID, GS)
 
 GS.Lang.Silgen = KBM.Language:Add(GS.Silgen.Name)
-GS.Lang.Silgen.French = "G\195\169n\195\169ral Silgen"
+GS.Lang.Silgen:SetFrench("G\195\169n\195\169ral Silgen")
 
 -- Ability Dictionary
 GS.Lang.Ability = {}
 GS.Lang.Ability.Funnel = KBM.Language:Add("Heat Funnel")
-GS.Lang.Ability.Funnel.German = "Hitzetrichter"
+GS.Lang.Ability.Funnel:SetGerman("Hitzetrichter")
 GS.Lang.Ability.Incinerate = KBM.Language:Add("Incinerate")
-GS.Lang.Ability.Incinerate.German = "Verbrennen"
+GS.Lang.Ability.Incinerate:SetGerman("Verbrennen")
 
 -- Debuff Dictionary
 GS.Lang.Debuff = {}
 GS.Lang.Debuff.Anchor = KBM.Language:Add("Anchored in Flames")
-GS.Lang.Debuff.Anchor.German = "In Flammen verankert"
+GS.Lang.Debuff.Anchor:SetGerman("In Flammen verankert")
 
 GS.Silgen.Name = GS.Lang.Silgen[KBM.Lang]
 GS.Descript = GS.Silgen.Name
@@ -220,14 +220,14 @@ function GS:Start()
 	KBM.Defaults.AlertObj.Assign(self.Silgen)
 	
 	-- Assign Alerts and Timers to Triggers
-	self.Silgen.Triggers.Funnel = KBM.Trigger:Create(self.Lang.Ability.Funnel[KBM.Lang], "cast", self.Silgen)
+	self.Silgen.Triggers.Funnel = KBM.Trigger:Create(self.Lang.Ability.Funnel[KBM.Lang], "channel", self.Silgen)
 	self.Silgen.Triggers.Funnel:AddTimer(self.Silgen.TimersRef.Funnel)
 	self.Silgen.Triggers.Funnel:AddAlert(self.Silgen.AlertsRef.Funnel)
 	self.Silgen.Triggers.Anchor = KBM.Trigger:Create(self.Lang.Debuff.Anchor[KBM.Lang], "playerBuff", self.Silgen)
 	self.Silgen.Triggers.Anchor:AddAlert(self.Silgen.AlertsRef.Anchor, true)
 	self.Silgen.Triggers.AnchorRemove = KBM.Trigger:Create(self.Lang.Debuff.Anchor[KBM.Lang], "playerBuffRemove", self.Silgen)
 	self.Silgen.Triggers.AnchorRemove:AddStop(self.Silgen.AlertsRef.Anchor)
-	self.Silgen.Triggers.Incinerate = KBM.Trigger:Create(self.Lang.Ability.Incinerate[KBM.Lang], "cast", self.Silgen)
+	self.Silgen.Triggers.Incinerate = KBM.Trigger:Create(self.Lang.Ability.Incinerate[KBM.Lang], "channel", self.Silgen)
 	self.Silgen.Triggers.Incinerate:AddTimer(self.Silgen.TimersRef.Incinerate)
 	self.Silgen.Triggers.Incinerate:AddAlert(self.Silgen.AlertsRef.Incinerate)
 	

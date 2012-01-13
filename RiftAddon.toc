@@ -4,7 +4,7 @@ Name = "King Boss Mods"
 
 NameShort = "KBM"
 
-Description = "Early development of a fully fledged Raid and Dungeon encounter alert system."
+Description = "Development of a fully fledged Raid and Dungeon encounter alert system."
 
 Author = "Paul Snart"
 Website = "http://www.facebook.com/pages/King-Boss-Mods/271482262893152"

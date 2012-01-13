@@ -28,19 +28,18 @@ AF.Anrak = {
 	Menu = {},
 	Dead = false,
 	Available = false,
-	TimersRef = {},
 	AlertsRef = {},
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		TimersRef = {
-			Enabled = true,
-		},
 		AlertsRef = {
 			Enabled = true,
 			SpinesWarn = KBM.Defaults.AlertObj.Create("yellow"),
 			Spines = KBM.Defaults.AlertObj.Create("yellow"),
+			Strike = KBM.Defaults.AlertObj.Create("red"),
+			Call = KBM.Defaults.AlertObj.Create("dark_green"),
+			Bond = KBM.Defaults.AlertObj.Create("orange"),
 		},
 	},
 }
@@ -57,6 +56,9 @@ AF.Descript = AF.Anrak.Name
 -- Ability Dictionary
 AF.Lang.Ability = {}
 AF.Lang.Ability.Spines = KBM.Language:Add("Spines of Earth")
+AF.Lang.Ability.Strike = KBM.Language:Add("Vicious Tail Strike")
+AF.Lang.Ability.Call = KBM.Language:Add("Call of Anrak")
+AF.Lang.Ability.Bond = KBM.Language:Add("Bond of the Earth")
 
 -- Debuff Dictionary
 AF.Lang.Debuff = {}
@@ -78,11 +80,9 @@ function AF:InitVars()
 	self.Settings = {
 		Enabled = true,
 		CastBar = self.Anrak.Settings.CastBar,
-		MechTimer = KBM.Defaults.MechTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		EncTimer = KBM.Defaults.EncTimer(),
 		Alerts = KBM.Defaults.Alerts(),
-		TimersRef = self.Anrak.Settings.TimersRef,
 		AlertsRef = self.Anrak.Settings.AlertsRef,
 	}
 	KBMGPAF_Settings = self.Settings
@@ -157,6 +157,7 @@ function AF:UnitHPCheck(uDetails, unitID)
 					self.Anrak.CastBar:Create(unitID)
 					self.Phase = 1
 					self.PhaseObj:Start(self.StartTime)
+					self.PhaseObj:SetPhase("Single")
 					self.PhaseObj.Objectives:AddPercent(self.Anrak.Name, 0, 100)
 					KBM.TankSwap:Start(self.Lang.Debuff.Brittle[KBM.Lang])
 					KBM.MechTimer:AddStart(self.Anrak.TimersRef.SpinesFirst)
@@ -217,6 +218,9 @@ function AF:Start()
 	self.Anrak.AlertsRef.SpinesWarn = KBM.Alert:Create(self.Lang.Ability.Spines[KBM.Lang], nil, false, true, "yellow")
 	self.Anrak.AlertsRef.SpinesWarn.MenuName = self.Lang.Menu.Spines[KBM.Lang]
 	self.Anrak.AlertsRef.Spines = KBM.Alert:Create(self.Lang.Ability.Spines[KBM.Lang], nil, true, true, "yellow")
+	self.Anrak.AlertsRef.Strike = KBM.Alert:Create(self.Lang.Ability.Strike[KBM.Lang], nil, true, true, "red")
+	self.Anrak.AlertsRef.Call = KBM.Alert:Create(self.Lang.Ability.Call[KBM.Lang], nil, true, true, "dark_green")
+	self.Anrak.AlertsRef.Bond = KBM.Alert:Create(self.Lang.Ability.Bond[KBM.Lang], nil, true, true, "orange")
 	KBM.Defaults.AlertObj.Assign(self.Anrak)
 	
 	-- Assign Timers and Alerts to Triggers
@@ -224,6 +228,12 @@ function AF:Start()
 	self.Anrak.Triggers.SpinesWarn:AddAlert(self.Anrak.AlertsRef.SpinesWarn)
 	self.Anrak.Triggers.Spines = KBM.Trigger:Create(self.Lang.Ability.Spines[KBM.Lang], "channel", self.Anrak)
 	self.Anrak.Triggers.Spines:AddAlert(self.Anrak.AlertsRef.Spines)
+	self.Anrak.Triggers.Strike = KBM.Trigger:Create(self.Lang.Ability.Strike[KBM.Lang], "cast", self.Anrak)
+	self.Anrak.Triggers.Strike:AddAlert(self.Anrak.AlertsRef.Strike)
+	self.Anrak.Triggers.Call = KBM.Trigger:Create(self.Lang.Ability.Call[KBM.Lang], "cast", self.Anrak)
+	self.Anrak.Triggers.Call:AddAlert(self.Anrak.AlertsRef.Call)
+	self.Anrak.Triggers.Bond = KBM.Trigger:Create(self.Lang.Ability.Bond[KBM.Lang], "cast", self.Anrak)
+	self.Anrak.Triggers.Bond:AddAlert(self.Anrak.AlertsRef.Bond)
 	
 	self.Anrak.CastBar = KBM.CastBar:Add(self, self.Anrak, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

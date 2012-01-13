@@ -129,23 +129,25 @@ end
 function KBM.Defaults.TimerObj.Assign(BossObj)
 	for ID, Data in pairs(BossObj.TimersRef) do
 		if BossObj.Settings.TimersRef[ID] then
-			Data.ID = ID
-			Data.Enabled = BossObj.Settings.TimersRef[ID].Enabled
-			Data.Settings = BossObj.Settings.TimersRef[ID]
-			BossObj.Settings.TimersRef[ID].ID = ID
-			if not Data.HasMenu then
-				Data.Enabled = true
-				Data.Settings.Enabled = true
-			end
-			if KBM.Colors.List[Data.Settings.Color] then
-				if Data.Color.Custom then
-					Data.Color = Data.Settings.Color
+			if type(BossObj.Settings.TimersRef[ID]) == "table" then
+				Data.ID = ID
+				Data.Enabled = BossObj.Settings.TimersRef[ID].Enabled
+				Data.Settings = BossObj.Settings.TimersRef[ID]
+				BossObj.Settings.TimersRef[ID].ID = ID
+				if not Data.HasMenu then
+					Data.Enabled = true
+					Data.Settings.Enabled = true
 				end
-			else
-				print("TimerObj Assign Error: "..Data.ID)
-				print("Color Index ("..Data.Settings.Color..") does not exist, ignoring settings.")
-				print("For: "..BossObj.Name)
-				Data.Settings.Color = Data.Color
+				if KBM.Colors.List[Data.Settings.Color] then
+					if Data.Color.Custom then
+						Data.Color = Data.Settings.Color
+					end
+				else
+					print("TimerObj Assign Error: "..Data.ID)
+					print("Color Index ("..Data.Settings.Color..") does not exist, ignoring settings.")
+					print("For: "..BossObj.Name)
+					Data.Settings.Color = Data.Color
+				end
 			end
 		else
 			print("Warning: "..ID.." is undefined in TimersRef")
@@ -180,24 +182,26 @@ end
 function KBM.Defaults.AlertObj.Assign(BossObj)
 	for ID, Data in pairs(BossObj.AlertsRef) do
 		if BossObj.Settings.AlertsRef[ID] then
-			Data.ID = ID
-			Data.Enabled = BossObj.Settings.AlertsRef[ID].Enabled
-			Data.Settings = BossObj.Settings.AlertsRef[ID]
-			if not Data.HasMenu then
-				Data.Enabled = true
-				Data.Settings.Enabled = true
-			end
-			if KBM.Colors.List[Data.Settings.Color] then
-				if Data.Settings.Custom then
-					Data.Color = Data.Settings.Color
+			if type(BossObj.Settings.AlertsRef[ID]) == "table" then
+				Data.ID = ID
+				Data.Enabled = BossObj.Settings.AlertsRef[ID].Enabled
+				Data.Settings = BossObj.Settings.AlertsRef[ID]
+				if not Data.HasMenu then
+					Data.Enabled = true
+					Data.Settings.Enabled = true
 				end
-			else
-				error(	"AlertObj Assign Error: "..Data.ID..
-						"/nColor Index ("..Data.Settings.Color..") does not exist, ignoring settings."..
-						"/nFor: "..BossObj.Name)
-				Data.Settings.Color = Data.Color
+				if KBM.Colors.List[Data.Settings.Color] then
+					if Data.Settings.Custom then
+						Data.Color = Data.Settings.Color
+					end
+				else
+					error(	"AlertObj Assign Error: "..Data.ID..
+							"/nColor Index ("..Data.Settings.Color..") does not exist, ignoring settings."..
+							"/nFor: "..BossObj.Name)
+					Data.Settings.Color = Data.Color
+				end
+				BossObj.Settings.AlertsRef[ID].ID = ID
 			end
-			BossObj.Settings.AlertsRef[ID].ID = ID
 		else
 			error(	"Warning: "..ID.." is undefined in AlertsRef"..
 					"\nfor boss: "..BossObj.Name)
@@ -374,7 +378,7 @@ function KBM.LoadTable(Source, Target)
 				end
 			else
 				if(Target[Setting]) ~= nil then
-					if type(Target[Settings]) ~= "table" then
+					if type(Target[Setting]) ~= "table" then
 						Target[Setting] = Value
 					end
 				end
@@ -3660,7 +3664,8 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 			if not self.InterruptEnd then
 				self.GUI:SetText("Interrupted")
 				self.InterruptEnd = Inspect.Time.Real() + 1
-				self.GUI.Progress:SetWidth(0)
+				self.GUI.Progress:SetBackgroundColor(0,7,7,0.33)
+				self.GUI.Progress:SetWidth(self.GUI.Frame:GetWidth())
 			end
 		end
 		self.Duration = 0

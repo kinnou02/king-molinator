@@ -220,6 +220,7 @@ KM.Lang.Notify.Rev.German = "Unkörperlicher Wiedergänger beginnt, in diese Rea
 -- Menu Dictionary
 KM.Lang.Menu = {}
 KM.Lang.Menu.Cursed = KBM.Language:Add(KM.Lang.Ability.Cursed[KBM.Lang].." duration.")
+KM.Lang.Menu.Feedback = KBM.Language:Add(KM.Lang.Ability.Feedback[KBM.Lang].." duration.")
 
 -- King's Options page Dictionary
 KM.Lang.Options = {}
@@ -950,11 +951,12 @@ function KM:Start()
 	self.King.AlertsRef.Cursed = KBM.Alert:Create(KM.Lang.Ability.Cursed[KBM.Lang], nil, false, true, "red")
 	self.King.AlertsRef.CursedDuration = KBM.Alert:Create(KM.Lang.Ability.Cursed[KBM.Lang], nil, true, true, "red")
 	self.King.AlertsRef.CursedDuration.MenuName = KM.Lang.Menu.Cursed[KBM.Lang]
-	self.King.AlertsRef.Essence = KBM.Alert:Create(KM.Lang.Ability.Essence[KBM.Lang], 2, true, nil, "yellow")
+	self.King.AlertsRef.Essence = KBM.Alert:Create(KM.Lang.Ability.Essence[KBM.Lang], nil, true, nil, "yellow")
+	self.King.AlertsRef.Essence:Important()
 	self.King.AlertsRef.FeedbackWarn = KBM.Alert:Create(KM.Lang.Ability.Feedback[KBM.Lang], nil, false, "blue")
-	self.King.AlertsRef.Feedback = KBM.Alert:Create(KM.Lang.Ability.Feedback[KBM.Lang], 5, true, true, "blue")
-	self.King.AlertsRef.Feedback:NoMenu()
-	self.King.AlertsRef.Shout = KBM.Alert:Create(KM.Lang.Ability.Shout[KBM.Lang], 2, true, true, "purple")
+	self.King.AlertsRef.Feedback = KBM.Alert:Create(KM.Lang.Ability.Feedback[KBM.Lang], nil, true, true, "blue")
+	self.King.AlertsRef.Feedback.MenuName = self.Lang.Menu.Feedback[KBM.Lang]
+	self.King.AlertsRef.Shout = KBM.Alert:Create(KM.Lang.Ability.Shout[KBM.Lang], nil, true, true, "purple")
 	KBM.Defaults.AlertObj.Assign(self.King)
 	
 	-- Assign King's Mechanics to Triggers
@@ -971,11 +973,11 @@ function KM:Start()
 	self.King.Triggers.Essence:AddAlert(self.King.AlertsRef.Essence)
 	self.King.Triggers.EssenceInt = KBM.Trigger:Create(KM.Lang.Ability.Essence[KBM.Lang], "interrupt", self.King)
 	self.King.Triggers.EssenceInt:AddStop(self.King.AlertsRef.Essence)
-	self.King.AlertsRef.Essence:Important()
-	self.King.Triggers.Feedback = KBM.Trigger:Create(KM.Lang.Ability.Feedback[KBM.Lang], "cast", self.King)
-	self.King.Triggers.Feedback:AddTimer(self.King.TimersRef.Feedback)
-	self.King.Triggers.Feedback:AddAlert(self.King.AlertsRef.FeedbackWarn)
-	self.King.AlertsRef.Feedback:AlertEnd(self.King.AlertsRef.Feedback)
+	self.King.Triggers.FeedbackWarn = KBM.Trigger:Create(KM.Lang.Ability.Feedback[KBM.Lang], "cast", self.King)
+	self.King.Triggers.FeedbackWarn:AddTimer(self.King.TimersRef.Feedback)
+	self.King.Triggers.FeedbackWarn:AddAlert(self.King.AlertsRef.FeedbackWarn)
+	self.King.Triggers.Feedback = KBM.Trigger:Create(KM.Lang.Ability.Feedback[KBM.Lang], "channel", self.King)
+	self.King.Triggers.Feedback:AddAlert(self.King.AlertsRef.Feedback)
 	self.King.Triggers.Rev = KBM.Trigger:Create(self.Lang.Notify.Rev[KBM.Lang], "notify", self.King)
 	self.King.Triggers.Rev:AddTimer(self.King.TimersRef.Rev)
 	self.King.Triggers.PhaseTwo = KBM.Trigger:Create(90, "percent", self.King)
@@ -992,11 +994,12 @@ function KM:Start()
 	KBM.Defaults.TimerObj.Assign(self.Prince)
 	
 	-- Add Prince's Alerts
-	self.Prince.AlertsRef.Terminate = KBM.Alert:Create(KM.Lang.Ability.Terminate[KBM.Lang], 3, true, nil, "orange")
-	self.Prince.AlertsRef.Essence = KBM.Alert:Create(KM.Lang.Ability.Essence[KBM.Lang], 2, true, nil, "yellow")
+	self.Prince.AlertsRef.Terminate = KBM.Alert:Create(KM.Lang.Ability.Terminate[KBM.Lang], nil, true, nil, "orange")
+	self.Prince.AlertsRef.Essence = KBM.Alert:Create(KM.Lang.Ability.Essence[KBM.Lang], nil, true, nil, "yellow")
+	self.Prince.AlertsRef.Essence:Important()
 	self.Prince.AlertsRef.FeedbackWarn = KBM.Alert:Create(KM.Lang.Ability.Feedback[KBM.Lang], nil, false, true, "blue")
-	self.Prince.AlertsRef.Feedback = KBM.Alert:Create(KM.Lang.Ability.Feedback[KBM.Lang], 5, true, true, "blue")
-	self.Prince.AlertsRef.Feedback:NoMenu()
+	self.Prince.AlertsRef.Feedback = KBM.Alert:Create(KM.Lang.Ability.Feedback[KBM.Lang], nil, true, true, "blue")
+	self.Prince.AlertsRef.Feedback.MenuName = self.Lang.Menu.Feedback[KBM.Lang]
 	KBM.Defaults.AlertObj.Assign(self.Prince)
 	
 	-- Assign Prince's Mechanics to Triggers
@@ -1008,11 +1011,11 @@ function KM:Start()
 	self.Prince.Triggers.Essence:AddAlert(self.Prince.AlertsRef.Essence)
 	self.Prince.Triggers.EssenceInt = KBM.Trigger:Create(KM.Lang.Ability.Essence[KBM.Lang], "interrupt", self.Prince)
 	self.Prince.Triggers.EssenceInt:AddStop(self.Prince.AlertsRef.Essence)
-	self.Prince.AlertsRef.Essence:Important()
-	self.Prince.Triggers.Feedback = KBM.Trigger:Create(KM.Lang.Ability.Feedback[KBM.Lang], "cast", self.Prince)
-	self.Prince.Triggers.Feedback:AddTimer(self.Prince.TimersRef.Feedback)
-	self.Prince.Triggers.Feedback:AddAlert(self.Prince.AlertsRef.FeedbackWarn)
-	self.Prince.AlertsRef.Feedback:AlertEnd(self.Prince.AlertsRef.Feedback)
+	self.Prince.Triggers.FeedbackWarn = KBM.Trigger:Create(KM.Lang.Ability.Feedback[KBM.Lang], "cast", self.Prince)
+	self.Prince.Triggers.FeedbackWarn:AddTimer(self.Prince.TimersRef.Feedback)
+	self.Prince.Triggers.FeedbackWarn:AddAlert(self.Prince.AlertsRef.FeedbackWarn)
+	self.Prince.Triggers.Feedback = KBM.Trigger:Create(KM.Lang.Ability.Feedback[KBM.Lang], "channel", self.Prince)
+	self.Prince.Triggers.Feedback:AddAlert(self.Prince.AlertsRef.Feedback)
 	self.Prince.Triggers.PhaseTwo = KBM.Trigger:Create(90, "percent", self.Prince)
 	self.Prince.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
 	self.Prince.Triggers.PhaseThree = KBM.Trigger:Create(65, "percent", self.Prince)

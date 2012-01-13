@@ -1,29 +1,60 @@
 ﻿v0.9.1
+
 System
 * Timers and Records
 ** Change: Records will no longer be recorded if you have to restart, reloadui or reset an encounter mid way through.
 ** Note: Kills, attempts and wipes will still be recorded.
+
 Cast Bars
 * New: Castbars will now record interrupted and succesful cast end states.
+* New: Interrupted casts will now change to an Interrupt fade out bar to better gauage successful interrupts.
+* New: Channeled casts now operate in the same way as they do in native Rift, they are also seperate triggers.
 * Change: Castbars now work a little different internally. This should help rule out any inconsistency with triggers.
 * Note: The above change should also improve CPU usage during cast heavy fights.
+
 Options
 * Change: All sub-level check boxes have been disabled in the main menu to avoid confusion.
 * Note: The above check boxes will be re-enabled when they actualy do something. Apologies.
-* Triggers
-** Fixed: Some triggers would not fire if there were both Player and Boss buff lists in a mod.
-** New: Added Channeled cast triggers for better tracking and duration of channeled casts.
-** New: Added Interrupt triggers for better tracking of alerts. (experimental)
+
+Triggers
+* Fixed: Some triggers would not fire if there were both Player and Boss buff lists in a mod.
+* New: Added Channeled cast triggers for better tracking and duration of channeled casts.
+* New: Added Interrupt triggers for better tracking of alerts. (experimental)
+
 Hammerknell
+* Murdantix
+** New: Soul Trauma interrupts now stops the alerts from flashing instantly.
 * Rune King Molinar
-** New: Consuming Essence interrupts now stop the alert from flashing immediatly.
+** New: Consuming Essence interrupts now stops the alerts from flashing instantly.
+** Change: Runic Feedback cast and duration are now seperate triggers with countdowns available.
 ** Change: Cursed Blows cast and duration are now seperate triggers with countdowns available.
 ** Change: The alerts for the above are now seperated, cast solid and duration flashing.
+* Estrode
+** New: Chastise interrupts now stops the alerts from flashing instantly.
+** Change: Dancing Steel cast and duration are now seperate triggers with countdowns available.
+* Grugonim
+** New: Necrotic Breath duration now has a seperate screen alert to it's initial cast.
+* Akylios
+** Change: Breath of Madness cast and duration are now separate triggers with countdowns available.
+
+Rise of the Phoenix
+* Beruhast
+** New: Inferno Lash interrupts now stop the alert from flashing instantly.
+** New: Added an alert to notify of a new add spawning.
+* General Silgen
+** Change: Heat Funnel has changed to channeled cast trigger.
+** Change: Incinerate has changed to channeled cast trigger.
+
 Guilded Prophecy
 * Anrak the Foul
 ** New: Enabled Tank-Swap for Brittle.
 ** New: Added screen alert warning for Spines of Earth cast.
 ** New: Added screen alert and duration countdown for Spines of Earth.
+** New: Added screen alert for Vicious Tail Strike.
+** New: Added screen alert for Call of Anrak.
+** New: Added screen alert for Bond of the Earth.
+** Note: Timers have been left out due to not being able to find consistent time data.
+
 German Translations
 * Configurations
 ** New: in den Chroniken verwenden.
