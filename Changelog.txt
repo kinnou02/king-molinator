@@ -4,6 +4,8 @@ System
 * Timers and Records
 ** Change: Records will no longer be recorded if you have to restart, reloadui or reset an encounter mid way through.
 ** Note: Kills, attempts and wipes will still be recorded.
+* Mechanic Timers
+** New: Timers can now be dynamic and change based on data supplied via triggers. (See Sicaron)
 
 Cast Bars
 * New: Castbars will now record interrupted and successful cast end states.
@@ -32,6 +34,8 @@ Hammerknell
 * Estrode
 ** New: Chastise interrupts now stops the alerts from flashing instantly.
 ** Change: Dancing Steel cast and duration are now separate triggers with countdowns available.
+* Sicaron
+** New: Soul Harvest now has a dynamic Timer.
 * Grugonim
 ** New: Necrotic Breath duration now has a separate screen alert to it's initial cast.
 * Akylios
@@ -59,9 +63,12 @@ Guilded Prophecy
 ** New: Alerts added for each Orb of Searing Power cast and duration.
 ** New: Alerts added for each Rumbling Earth cast and duration.
 ** New: Timer added for first Add spawn. (Estimate/Average)
-** New: Alert added for Add spawns. (Estimate/Average)
+** New: Timer added for Add spawns. (Estimate/Average)
+** New: Alert added for Add spawns.
 ** New: Alert added for Boulder of Destruction.
 ** New: Alerts added for each Earthen Toil cast and duration.
+** New: Added Timer for Earthen Punishment.
+** New: Added personal Alert for Earthen Punishment and duration countdown.
 
 German Translations
 * Configurations

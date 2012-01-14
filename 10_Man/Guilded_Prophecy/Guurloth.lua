@@ -39,6 +39,7 @@ GH.Guurloth = {
 			Orb = KBM.Defaults.TimerObj.Create("orange"),
 			CallFirst = KBM.Defaults.TimerObj.Create("dark_green"),
 			Call = KBM.Defaults.TimerObj.Create("purple"),
+			Punish = KBM.Defaults.TimerObj.Create("red"),
 		},
 		AlertsRef = {
 			Enabled = true,
@@ -50,6 +51,7 @@ GH.Guurloth = {
 			Boulder = KBM.Defaults.AlertObj.Create("yellow"),
 			Toil = KBM.Defaults.AlertObj.Create("dark_green"),
 			ToilWarn = KBM.Defaults.AlertObj.Create("dark_green"),
+			Punish = KBM.Defaults.AlertObj.Create("red"),
 		},
 	},
 }
@@ -67,12 +69,17 @@ GH.Lang.Ability.Call = KBM.Language:Add("Guurloth's Call")
 GH.Lang.Ability.Boulder = KBM.Language:Add("Boulder of Destruction")
 GH.Lang.Ability.Toil = KBM.Language:Add("Earthen Toil")
 
+-- Debuff Dictionary
+GH.Lang.Debuff = {}
+GH.Lang.Debuff.Punish = KBM.Language:Add("Earthen Punishment")
+
 -- Verbose Dictionary
 GH.Lang.Verbose = {}
 GH.Lang.Verbose.Orb = KBM.Language:Add("Look away now!")
 GH.Lang.Verbose.Rumbling = KBM.Language:Add("Jump!")
 GH.Lang.Verbose.Call = KBM.Language:Add("until Adds")
 GH.Lang.Verbose.Toil = KBM.Language:Add("Run around!")
+GH.Lang.Verbose.Punish = KBM.Language:Add("Stop!")
 
 -- Menu Dictionary
 GH.Lang.Menu = {}
@@ -240,6 +247,7 @@ function GH:Start()
 	self.Guurloth.TimersRef.CallFirst.MenuName = self.Lang.Menu.CallFirst[KBM.Lang]
 	self.Guurloth.TimersRef.Call = KBM.MechTimer:Add(self.Lang.Verbose.Call[KBM.Lang], 136)
 	self.Guurloth.TimersRef.Call.MenuName = self.Lang.Ability.Call[KBM.Lang]
+	self.Guurloth.TimersRef.Punish = KBM.MechTimer:Add(self.Lang.Debuff.Punish[KBM.Lang], 60)
 	KBM.Defaults.TimerObj.Assign(self.Guurloth)
 	
 	-- Create Alerts
@@ -257,6 +265,8 @@ function GH:Start()
 	self.Guurloth.AlertsRef.ToilWarn.MenuName = self.Lang.Ability.Toil[KBM.Lang]
 	self.Guurloth.AlertsRef.Toil = KBM.Alert:Create(self.Lang.Ability.Toil[KBM.Lang], nil, true, true, "dark_green")
 	self.Guurloth.AlertsRef.Toil.MenuName = self.Lang.Menu.Toil[KBM.Lang]
+	self.Guurloth.AlertsRef.Punish = KBM.Alert:Create(self.Lang.Verbose.Punish[KBM.Lang], nil, true, true, "red")
+	self.Guurloth.AlertsRef.Punish.MenuName = self.Lang.Debuff.Punish[KBM.Lang]
 	KBM.Defaults.AlertObj.Assign(self.Guurloth)
 	
 	-- Assign Timers and Alerts to Triggers
@@ -278,8 +288,11 @@ function GH:Start()
 	self.Guurloth.Triggers.ToilWarn:AddAlert(self.Guurloth.AlertsRef.ToilWarn)
 	self.Guurloth.Triggers.Toil = KBM.Trigger:Create(self.Lang.Ability.Toil[KBM.Lang], "channel", self.Guurloth)
 	self.Guurloth.Triggers.Toil:AddAlert(self.Guurloth.AlertsRef.Toil)
+	self.Guurloth.Triggers.Punish = KBM.Trigger:Create(self.Lang.Debuff.Punish[KBM.Lang], "playerBuff", self.Guurloth)
+	self.Guurloth.Triggers.Punish:AddAlert(self.Guurloth.AlertsRef.Punish, true)
+	self.Guurloth.Triggers.Punish:AddTimer(self.Guurloth.TimersRef.Punish)
 	
-	self.Guurloth.CastBar = KBM.CastBar:Add(self, self.Guurloth, true)
+	self.Guurloth.CastBar = KBM.CastBar:Add(self, self.Guurloth)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()
 end

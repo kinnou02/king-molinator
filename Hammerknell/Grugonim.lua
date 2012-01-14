@@ -224,14 +224,14 @@ function GR.BreathReset()
 	if KBM.PhaseMonitor.Objectives.Lists.Meta[GR.Lang.Ability.Breath[KBM.Lang]] then
 		KBM.PhaseMonitor.Objectives.Lists.Meta[GR.Lang.Ability.Breath[KBM.Lang]]:Update(GR.Breaths)
 	end
-	GR.Settings.CastFilters.Breath.Current = 1
+	GR.Grugonim.CastFilters[GR.Lang.Ability.Breath[KBM.Lang]].Current = 1
 end
 
 function GR.TowerPhase()
 	GR.Breaths = 0
 	GR.PhaseObj.Objectives:Remove()
 	GR.PhaseObj:SetPhase("Towers")
-	GR.Settings.CastFilters.Breath.Current = 1
+	GR.Grugonim.CastFilters[GR.Lang.Ability.Breath[KBM.Lang]].Current = 1
 	if GR.Phase == 1 then
 		GR.Phase = 2
 		GR.PhaseObj.Objectives:AddDeath(GR.Tower.Name, 3)
@@ -274,8 +274,8 @@ function GR:UnitHPCheck(uDetails, unitID)
 					self.PhaseObj.Objectives:AddPercent(self.Grugonim.Name, 50, 100)
 					self.PhaseObj.Objectives:AddMeta(self.Lang.Ability.Breath[KBM.Lang], 3, 0)
 					self.PhaseObj:Start(self.StartTime)
-					self.Settings.CastFilters.Breath.Count = 3
-					self.Settings.CastFilters.Breath.Current = 1
+					self.Grugonim.CastFilters[self.Lang.Ability.Breath[KBM.Lang]].Count = 3
+					self.Grugonim.CastFilters[self.Lang.Ability.Breath[KBM.Lang]].Current = 1
 				end
 				self.Grugonim.Dead = false
 				self.Grugonim.Casting = false
@@ -385,7 +385,7 @@ function GR:Start()
 	self.Grugonim.Triggers.PhaseFour:AddPhase(self.TowerPhase)
 	self.Grugonim.Triggers.PhaseFour:AddStop(self.Grugonim.TimersRef.Breath)
 	
-	self.Grugonim.CastBar = KBM.CastBar:Add(self, self.Grugonim, true)	
+	self.Grugonim.CastBar = KBM.CastBar:Add(self, self.Grugonim)	
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)	
 	
 	self:DefineMenu()

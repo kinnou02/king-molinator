@@ -552,7 +552,11 @@ KBM.Language.Color.Orange.German = "Orange"
 KBM.Language.Color.Purple = KBM.Language:Add("Purple")
 KBM.Language.Color.Purple.German = "Lila"
 
--- Cast-bar related
+-- Castbar Action Dictionary
+KBM.Language.CastBar = {}
+KBM.Language.CastBar.Interrupt = KBM.Language:Add("Interrupted")
+
+-- Cast-bar related options
 KBM.Language.Options = {}
 KBM.Language.Options.CastbarOverride = KBM.Language:Add("Castbar: Override")
 KBM.Language.Options.CastbarOverride.German = "Zauberbalken: Einstellungen."
@@ -3523,6 +3527,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 								FilterObj = self.Filters[bDetails.abilityName]
 								if FilterObj.Enabled then
 									if not self.Casting then
+										self:Start()
 										if FilterObj.Custom then
 											self.GUI.Progress:SetBackgroundColor(KBM.Colors.List[FilterObj.Color].Red, KBM.Colors.List[FilterObj.Color].Green, KBM.Colors.List[FilterObj.Color].Blue, 0.33)
 										else
@@ -3534,15 +3539,16 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 										end
 										if FilterObj.Count then
 											FilterObj.Prefix = KBM.Numbers.GetPlace(FilterObj.Current).." "
-											if FilterObj.Current < FilterObj.Count then
-												FilterObj.Current = FilterObj.Current + 1
-											else
-												FilterObj.Current = 1
+											if not bDetails.channeled then
+												if FilterObj.Current < FilterObj.Count then
+													FilterObj.Current = FilterObj.Current + 1
+												else
+													FilterObj.Current = 1
+												end
 											end
 										else
 											FilterObj.Prefix = ""
 										end
-										self:Start()
 										self.CastTime = bDetails.duration
 										self.Progress = bDetails.remaining
 										if bDetails.channeled then
@@ -3672,7 +3678,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 			self.GUI.Frame:SetVisible(false)
 		else
 			if not self.InterruptEnd then
-				self.GUI:SetText("Interrupted")
+				self.GUI:SetText(KBM.Language.CastBar.Interrupt[KBM.Lang])
 				self.InterruptEnd = Inspect.Time.Real() + 1
 				self.GUI.Progress:SetBackgroundColor(0,7,7,0.33)
 				self.GUI.Progress:SetWidth(self.GUI.Frame:GetWidth())

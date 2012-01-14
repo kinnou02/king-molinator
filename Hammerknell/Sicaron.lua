@@ -274,6 +274,7 @@ function SN:Start()
 	self.Sicaron.TimersRef.Hex = KBM.MechTimer:Add(self.Lang.Ability.Hex[KBM.Lang], 26)
 	self.Sicaron.TimersRef.Decay = KBM.MechTimer:Add(self.Lang.Ability.Decay[KBM.Lang], 20.5)
 	self.Sicaron.TimersRef.Soul = KBM.MechTimer:Add(self.Lang.Debuff.Soul[KBM.Lang], nil)
+	KBM.Defaults.TimerObj.Assign(self.Sicaron)
 	
 	-- Create Alerts
 	self.Sicaron.AlertsRef.Contract = KBM.Alert:Create(self.Lang.Debuff.Contract[KBM.Lang], 12, false, true, "blue")
@@ -281,8 +282,6 @@ function SN:Start()
 	self.Sicaron.AlertsRef.ContractRed:NoMenu()
 	self.Sicaron.AlertsRef.Hex = KBM.Alert:Create(self.Lang.Ability.Hex[KBM.Lang], nil, true, true, "purple")
 	self.Sicaron.AlertsRef.Decay = KBM.Alert:Create(self.Lang.Ability.Decay[KBM.Lang], nil, true, true, "dark_green")
-
-	KBM.Defaults.TimerObj.Assign(self.Sicaron)
 	KBM.Defaults.AlertObj.Assign(self.Sicaron)
 	
 	-- Assign Mechanics to Triggers
@@ -309,7 +308,7 @@ function SN:Start()
 	self.Sicaron.Triggers.Soul:AddTimer(self.Sicaron.TimersRef.Soul)
 	
 	-- Assign Castbar object.
-	self.Sicaron.CastBar = KBM.CastBar:Add(self, self.Sicaron, true)
+	self.Sicaron.CastBar = KBM.CastBar:Add(self, self.Sicaron)
 	
 	-- Assign Phase Monitor.
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
