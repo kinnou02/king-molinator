@@ -49,6 +49,7 @@ SN.Sicaron = {
 			Contract = KBM.Defaults.TimerObj.Create("blue"),
 			Hex = KBM.Defaults.TimerObj.Create("purple"),
 			Decay = KBM.Defaults.TimerObj.Create("dark_green"),
+			Soul = KBM.Defaults.TimerObj.Create("orange"),
 		},
 		AlertsRef = {
 			Enabled = true,
@@ -81,6 +82,7 @@ SN.Lang.Debuff = {}
 SN.Lang.Debuff.Contract = KBM.Language:Add("Unholy Contract")
 SN.Lang.Debuff.Contract.German = "Unheiliger Vertrag"
 SN.Lang.Debuff.Contract.French = "Contrat impie"
+SN.Lang.Debuff.Soul = KBM.Language:Add("Soul Harvest")
 
 SN.Sicaron.Name = SN.Lang.Sicaron[KBM.Lang]
 SN.Descript = SN.Sicaron.Name
@@ -271,6 +273,7 @@ function SN:Start()
 	self.Sicaron.TimersRef.Contract = KBM.MechTimer:Add(self.Lang.Debuff.Contract[KBM.Lang], 17)
 	self.Sicaron.TimersRef.Hex = KBM.MechTimer:Add(self.Lang.Ability.Hex[KBM.Lang], 26)
 	self.Sicaron.TimersRef.Decay = KBM.MechTimer:Add(self.Lang.Ability.Decay[KBM.Lang], 20.5)
+	self.Sicaron.TimersRef.Soul = KBM.MechTimer:Add(self.Lang.Debuff.Soul[KBM.Lang], nil)
 	
 	-- Create Alerts
 	self.Sicaron.AlertsRef.Contract = KBM.Alert:Create(self.Lang.Debuff.Contract[KBM.Lang], 12, false, true, "blue")
@@ -291,9 +294,9 @@ function SN:Start()
 	self.Sicaron.Triggers.Hex = KBM.Trigger:Create(self.Lang.Ability.Hex[KBM.Lang], "cast", self.Sicaron)
 	self.Sicaron.Triggers.Hex:AddAlert(self.Sicaron.AlertsRef.Hex)
 	self.Sicaron.Triggers.Hex:AddTimer(self.Sicaron.TimersRef.Hex)
-	self.Sicaron.Triggers.Decay = KBM.Trigger:Create(self.Lang.Ability.Decay[KBM.Lang], "cast", self.Sicaron)
-	self.Sicaron.Triggers.Decay:AddAlert(self.Sicaron.AlertsRef.Decay)
-	self.Sicaron.Triggers.Decay:AddTimer(self.Sicaron.TimersRef.Decay)
+	self.Sicaron.Triggers.DecayWarn = KBM.Trigger:Create(self.Lang.Ability.Decay[KBM.Lang], "cast", self.Sicaron)
+	self.Sicaron.Triggers.DecayWarn:AddAlert(self.Sicaron.AlertsRef.Decay)
+	self.Sicaron.Triggers.DecayWarn:AddTimer(self.Sicaron.TimersRef.Decay)
 	self.Sicaron.Triggers.PhaseTwo = KBM.Trigger:Create(80, "percent", self.Sicaron)
 	self.Sicaron.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
 	self.Sicaron.Triggers.PhaseThree = KBM.Trigger:Create(50, "percent", self.Sicaron)
@@ -302,6 +305,8 @@ function SN:Start()
 	self.Sicaron.Triggers.PhaseFour:AddPhase(self.PhaseFour)
 	self.Sicaron.Triggers.PhaseFive = KBM.Trigger:Create(10, "percent", self.Sicaron)
 	self.Sicaron.Triggers.PhaseFive:AddPhase(self.PhaseFive)
+	self.Sicaron.Triggers.Soul = KBM.Trigger:Create(self.Lang.Debuff.Soul[KBM.Lang], "buff", self.Sicaron)
+	self.Sicaron.Triggers.Soul:AddTimer(self.Sicaron.TimersRef.Soul)
 	
 	-- Assign Castbar object.
 	self.Sicaron.CastBar = KBM.CastBar:Add(self, self.Sicaron, true)

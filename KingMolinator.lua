@@ -931,7 +931,13 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 	Timer.TimeStart = nil
 	Timer.Removing = false
 	Timer.Starting = false
-	Timer.Time = Duration
+	if not Duration then
+		Timer.Time = 2
+		Timer.Dynamic = true
+	else
+		Timer.Time = Duration
+		Timer.Dynamic = false
+	end
 	Timer.Delay = iStart
 	Timer.Enabled = true
 	Timer.Repeat = Repeat
@@ -941,9 +947,6 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 	Timer.Custom = false
 	Timer.Color = KBM.MechTimer.Settings.Color
 	Timer.HasMenu = true
-	if type(Duration) ~= "number" then
-		error("Expecting Number, got "..type(Duration).." for Duration")
-	end
 	if type(Name) ~= "string" then
 		error("Expecting String for Name, got "..type(Name))
 	end
@@ -958,11 +961,14 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 		end
 	end
 	
-	function self:AddStart(Object)
+	function self:AddStart(Object, Duration)
 		if not Object.Starting then
 			if Object.Enabled then
 				self.Queued = false
 				Object.Starting = true
+				if Object.Dynamic then
+					Object.Time = Duration
+				end
 				self.StartCount = self.StartCount + 1
 				table.insert(self.StartTimers, Object)
 				self:AddRemove(Object)
@@ -1050,9 +1056,9 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 		end		
 	end
 	
-	function Timer:Queue()
+	function Timer:Queue(Duration)
 		if self.Enabled then
-			KBM.MechTimer:AddStart(self)
+			KBM.MechTimer:AddStart(self, Duration)
 		end
 	end
 	
@@ -1321,17 +1327,17 @@ function KBM.Trigger:Init()
 				for i, Timer in ipairs(self.Timers) do
 					if Timer.Active then
 						if current - self.LastTrigger > KBM.Idle.Trigger.Duration then
-							Timer:Queue()
+							Timer:Queue(Data)
 							Triggered = true
 						end
 					else
-						Timer:Queue()
+						Timer:Queue(Data)
 						Triggered = true
 					end
 				end
 			else
 				for i, Timer in ipairs(self.Timers) do
-					Timer:Queue()
+					Timer:Queue(Data)
 					Triggered = true
 				end
 			end
@@ -2264,18 +2270,22 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 										KBM_CurrentBossName = uDetails.name
 										KBM.CurrentMod = KBM.BossID[UnitID].Mod
 										if not KBM.CurrentMod.EncounterRunning then
+											local PercentOver = 99
 											if KBM.EncounterMode == "chronicle" then
+												if KBM.CurrentMod.ChroniclePOver then
+													PercentOver = KBM.CurrentMod.ChroniclePOver
+												end
 												print(KBM.Language.Encounter.Start[KBM.Lang].." "..KBM.CurrentMod.Descript.." (Chronicles)")
-												if KBM.BossID[UnitID].Percent >= 99 then 
+												if KBM.BossID[UnitID].Percent >= PercentOver then 
 													KBM.CurrentMod.Settings.Records.Chronicle.Attempts = KBM.CurrentMod.Settings.Records.Chronicle.Attempts + 1
 												end
 											else
 												print(KBM.Language.Encounter.Start[KBM.Lang].." "..KBM.CurrentMod.Descript)
-												if KBM.BossID[UnitID].Percent >= 99 then
+												if KBM.BossID[UnitID].Percent >= PercentOver then
 													KBM.CurrentMod.Settings.Records.Attempts = KBM.CurrentMod.Settings.Records.Attempts + 1
 												end
 											end
-											if KBM.BossID[UnitID].Percent < 99 then
+											if KBM.BossID[UnitID].Percent < PercentOver then
 												KBM.ValidTime = false
 											else
 												KBM.ValidTime = true

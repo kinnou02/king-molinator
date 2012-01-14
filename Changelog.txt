@@ -1,4 +1,4 @@
-﻿v0.9.1
+﻿﻿v0.9.1 
 
 System
 * Timers and Records
@@ -6,15 +6,15 @@ System
 ** Note: Kills, attempts and wipes will still be recorded.
 
 Cast Bars
-* New: Castbars will now record interrupted and succesful cast end states.
-* New: Interrupted casts will now change to an Interrupt fade out bar to better gauage successful interrupts.
-* New: Channeled casts now operate in the same way as they do in native Rift, they are also seperate triggers.
+* New: Castbars will now record interrupted and successful cast end states.
+* New: Interrupted casts will now change to an Interrupt fade out bar to better gauge successful interrupts.
+* New: Channeled casts now operate in the same way as they do in native Rift, they are also separate triggers.
 * Change: Castbars now work a little different internally. This should help rule out any inconsistency with triggers.
 * Note: The above change should also improve CPU usage during cast heavy fights.
 
 Options
 * Change: All sub-level check boxes have been disabled in the main menu to avoid confusion.
-* Note: The above check boxes will be re-enabled when they actualy do something. Apologies.
+* Note: The above check boxes will be re-enabled when they actually do something. Apologies.
 
 Triggers
 * Fixed: Some triggers would not fire if there were both Player and Boss buff lists in a mod.
@@ -26,14 +26,14 @@ Hammerknell
 ** New: Soul Trauma interrupts now stops the alerts from flashing instantly.
 * Rune King Molinar
 ** New: Consuming Essence interrupts now stops the alerts from flashing instantly.
-** Change: Runic Feedback cast and duration are now seperate triggers with countdowns available.
-** Change: Cursed Blows cast and duration are now seperate triggers with countdowns available.
-** Change: The alerts for the above are now seperated, cast solid and duration flashing.
+** Change: Runic Feedback cast and duration are now separate triggers with countdowns available.
+** Change: Cursed Blows cast and duration are now separate triggers with countdowns available.
+** Change: The alerts for the above are now separated, cast solid and duration flashing.
 * Estrode
 ** New: Chastise interrupts now stops the alerts from flashing instantly.
-** Change: Dancing Steel cast and duration are now seperate triggers with countdowns available.
+** Change: Dancing Steel cast and duration are now separate triggers with countdowns available.
 * Grugonim
-** New: Necrotic Breath duration now has a seperate screen alert to it's initial cast.
+** New: Necrotic Breath duration now has a separate screen alert to it's initial cast.
 * Akylios
 ** Change: Breath of Madness cast and duration are now separate triggers with countdowns available.
 
@@ -54,6 +54,14 @@ Guilded Prophecy
 ** New: Added screen alert for Call of Anrak.
 ** New: Added screen alert for Bond of the Earth.
 ** Note: Timers have been left out due to not being able to find consistent time data.
+* Guurloth
+** New: Timer added for first Orb of Searing Power.
+** New: Alerts added for each Orb of Searing Power cast and duration.
+** New: Alerts added for each Rumbling Earth cast and duration.
+** New: Timer added for first Add spawn. (Estimate/Average)
+** New: Alert added for Add spawns. (Estimate/Average)
+** New: Alert added for Boulder of Destruction.
+** New: Alerts added for each Earthen Toil cast and duration.
 
 German Translations
 * Configurations
@@ -246,7 +254,7 @@ v0.8.6
 ** New: Added Soulrenders Grasp.
 ** Fixed: Duke Letareus in Prince Hylas encounter.
 * German Translations
-** Fixed: Duke Letareus in Prince Hylas ecnotuner.
+** Fixed: Duke Letareus in Prince Hylas encounter.
 ** New: Various Options translated.
 ** Matrone Zamira
 *** New: Adds spawnen.
@@ -475,7 +483,7 @@ v0.8.2
 *** Change: Add spawn timers for phase 1 should no longer trigger in phase 2 regardless of target.
 *** Change: Increased timer for first orb timer for Phase 2 when using percentage trigger.
 *** Change: Increased timer for first adds spawn for Phase 2 when using percentage trigger.
-** Gugonim
+** Grugonim
 *** Change: Tower Phase: The start of this phase will now stop the Breath timer.
 *** New: Cast Filters have been added to the encounter. (see Castbars tab)
 *** New: Necrotic Breath: Now uses the new casting count method. (1st, 2nd, 3rd)
@@ -718,7 +726,7 @@ v0.7.1
 ** New: Drop shadows to Timer text for better clarity. (optional)
 ** New: Textured overlay for bars. (optional)
 ** Change: Addressed issues where disabled timers could sometimes throw errors.
-** Fixed: Posibilty for timers to throw non-critical errors if passed nil durations from Rift events.
+** Fixed: Possibility for timers to throw non-critical errors if passed nil durations from Rift events.
 * Hammerknell
 ** Added: Akylios: Timer for Phase 1 Adds.
 ** Added: Akylios: Timer for Phase 2 Adds.
@@ -791,7 +799,7 @@ v0.6.4
 * Fixed: Various inconsistencies which could arise with Important Screen Alerts.
 * Hammerknell
 ** Matron Zamira: Reverted Mark of Oblivion back to a damage trigger for personal screen alerts.
-** Matron Zamira: Seperated Mark of Oblivion timer to a cast trigger.
+** Matron Zamira: Separated Mark of Oblivion timer to a cast trigger.
 ** Sicaron: Fixed: option for disabling Timers not saving/changing or initiating.
 ** Estrode: Added: Screen Alert for Dancing Steel. (flashing red)
 ** Estrode: Added: Screen Alert for Rage of the North. (flashing orange)
@@ -890,13 +898,13 @@ v0.5.9
 * Fixed: Error spam from Tank-Swap due to Stack sizes. (Rift 1.6 Fix)
 * Removed: Rift 1.6 removed commands.
 * Change: The options window now has a Rift style close button. (new Rift 1.6)
-* Change: Removed the majority of global namespace allocation. (new Rift 1.6)
+* Change: Removed the majority of global name-space allocation. (new Rift 1.6)
 * Change: Major change with Encounter monitoring using Combat states. (new Rift 1.6)
 * Change: Safe's Raid Manager v1.1.0 Beta
 ----
 v0.5.8
 * Notice: First release for 1.6, expect more to come.
-* Notice: Any needed hotfixes will be incoming, plus RotP mechanics.
+* Notice: Any needed hot-fixes will be incoming, plus RotP mechanics.
 * Change: Support for 1.6 Rift Client.
 * Added: French translations for:
 ** Encounter start, end etc messages.
@@ -956,7 +964,7 @@ v0.5.7
 ** High Priest Arakhurn
 ----
 v0.5.6
-* HotFix: Akylios Wave 1 timers and alerts.
+* Hot-Fix: Akylios Wave 1 timers and alerts.
 ----
 v0.5.5
 * Change: Reduced Inquisitor Garau's time-out by 2 seconds
@@ -1012,7 +1020,7 @@ v0.5.1
 v0.5.0
 * Fixed: Tank-Swap error spam when there's no stack info.
 * Fixed: Personal screen alert for Matron, wasn't registering UnitID for the player.
-* Fixed: Garua error report at the start of the fight. Gone.
+* Fixed: Garau error report at the start of the fight. Gone.
 * Fixed: Incorrect wording for Bloodtide trigger.
 * Added: Timer for Shadow Strike.
 * Change: Revised trigger system to hopefully iron some issues with event spams.
@@ -1028,7 +1036,7 @@ v0.4.9
 * Change: Options window scrollers are now more responsive.
 ----
 v0.4.8
-* Fixed: TankSwap options should now work as intended.
+* Fixed: Tank-Swap options should now work as intended.
 * Fixed: Matron Zamira's Hideous Blast alert.
 * Change: Minor adjustments to personal screen alerts engine.
 * Change: Anchors should now appear above the options window when visible.
@@ -1040,7 +1048,7 @@ v0.4.8
 ----
 v0.4.7
 * New: Buff monitoring and triggers.
-* New: Screen alerts now seperated by color sets.
+* New: Screen alerts now separated by color sets.
 * Fixed: Murdantix: Alert Timer option for Soul Trauma.
 * Fixed: Say Type Triggers.
 * Fixed: Alerts not closing if the encounter ends.
@@ -1087,7 +1095,7 @@ v0.4.3
 * Added: German Translations for:
 ** More menu options.
 ** Vladmal Prime's Ancient Flames.
-** Inquisitor Garau's Acrane Porters.
+** Inquisitor Garau's Arcane Porters.
 ** Inquisitor Garau's Arcane Essence.
 ** Inquisitor Garau's Blood Tide.
 ** Inquisitor Garau's Infused Crawlers.
@@ -1265,7 +1273,7 @@ v0.2.3
 * Note: Early release to hopefully catch inconsistency with abilities.
 * Fix should be in place for better Cast bar filtering.
 * Added the ability to select options via the description.
-* More backend changes to the plug-in system.
+* More back-end changes to the plug-in system.
 * Improved options page functionality.
 ----
 v0.2.2
@@ -1275,8 +1283,8 @@ v0.2.2
 ** Rend Life.
 ** Terminate Life.
 ** Crushing Regret.
-** Consuming Essense (King Molinar.)
-** Consuming Essense (Prince Dollin.)
+** Consuming Essence (King Molinar.)
+** Consuming Essence (Prince Dollin.)
 ** Forked Blast.
 ** Runic Feedback.
 ** Frightening Shout.

@@ -21,6 +21,7 @@ local MX = {
 	Enrage = 60 * 10,
 	ID = "Murdantix",
 	HasChronicle = true,
+	ChroniclePOver = 90,
 }
 
 MX.Murd = {
