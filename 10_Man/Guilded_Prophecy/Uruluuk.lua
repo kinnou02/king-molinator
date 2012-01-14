@@ -125,6 +125,9 @@ function UK:UnitHPCheck(uDetails, unitID)
 					self.Uruluuk.Dead = false
 					self.Uruluuk.Casting = false
 					self.Uruluuk.CastBar:Create(unitID)
+					self.Phase = 1
+					self.PhaseObj:Start(self.StartTime)
+					self.PhaseObj.Objective:AddPercent(self.Uruluuk.Name, 0, 100)
 				end
 				self.Uruluuk.UnitID = unitID
 				self.Uruluuk.Available = true
@@ -140,6 +143,7 @@ function UK:Reset()
 	self.Uruluuk.UnitID = nil
 	self.Uruluuk.Dead = false
 	self.Uruluuk.CastBar:Remove()
+	self.PhaseObj:End(Inspect.Time.Real())
 end
 
 function UK:Timer()
@@ -181,6 +185,7 @@ function UK:Start()
 	
 	-- Assign Timers and Alerts to Triggers
 	
-	self.Uruluuk.CastBar = KBM.CastBar:Add(self, self.Uruluuk, true)
+	self.Uruluuk.CastBar = KBM.CastBar:Add(self, self.Uruluuk)
+	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()
 end

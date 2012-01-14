@@ -69,6 +69,14 @@ Guilded Prophecy
 ** New: Alerts added for each Earthen Toil cast and duration.
 ** New: Added Timer for Earthen Punishment.
 ** New: Added personal Alert for Earthen Punishment and duration countdown.
+** New: Timer and Alert added for Earthen Geyser.
+* Thalguur
+** New: Alert added for Touch of the Core.
+** New: Timer added for Absorb Power duration.
+** New: Alert added for start of Absorb Power phase.
+** New: Added Phase and Objective tracking.
+** New: Alert added for while you are affected by someones Call of Gold.
+* Uruluuk
 
 German Translations
 * Configurations
@@ -80,6 +88,14 @@ German Translations
 ** New: Spirituelle Erschöpfung
 * Seelenreißer Zilas
 ** Fixed: Seelenreißer-Griff
+* Kriegsmeister Galenir
+** New: Eitriger Infekt
+** Fixed: Essenztransfer
+* Alsbeth die Streitsuchende
+** Fixed: Zwietracht-Explosion
+** New: Schild der Dunkelheit
+* Prinz Hylas
+** Fixed: Anrufung des Lebens
 * Hohepriester Arakhurn
 ** New: Feuernova
 ** New: Brut von Arakhurn

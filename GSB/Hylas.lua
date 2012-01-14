@@ -85,7 +85,7 @@ PH.Lang.Ability.Cotton.German = "Ansteckender Baumwollschwanz"
 -- Buff Dictionary
 PH.Lang.Buff = {}
 PH.Lang.Buff.Life = KBM.Language:Add("Invocation of Life")
-PH.Lang.Buff.Life.German = "Beschwörung des Lebens"
+PH.Lang.Buff.Life.German = "Anrufung des Lebens"
 
 PH.Hylas.Name = PH.Lang.Hylas[KBM.Lang]
 PH.Descript = PH.Hylas.Name

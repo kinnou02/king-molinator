@@ -235,7 +235,7 @@ function AF:Start()
 	self.Anrak.Triggers.Bond = KBM.Trigger:Create(self.Lang.Ability.Bond[KBM.Lang], "cast", self.Anrak)
 	self.Anrak.Triggers.Bond:AddAlert(self.Anrak.AlertsRef.Bond)
 	
-	self.Anrak.CastBar = KBM.CastBar:Add(self, self.Anrak, true)
+	self.Anrak.CastBar = KBM.CastBar:Add(self, self.Anrak)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()
 end

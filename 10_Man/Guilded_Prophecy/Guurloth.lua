@@ -40,6 +40,7 @@ GH.Guurloth = {
 			CallFirst = KBM.Defaults.TimerObj.Create("dark_green"),
 			Call = KBM.Defaults.TimerObj.Create("purple"),
 			Punish = KBM.Defaults.TimerObj.Create("red"),
+			Geyser = KBM.Defaults.TimerObj.Create("purple"),
 		},
 		AlertsRef = {
 			Enabled = true,
@@ -52,6 +53,7 @@ GH.Guurloth = {
 			Toil = KBM.Defaults.AlertObj.Create("dark_green"),
 			ToilWarn = KBM.Defaults.AlertObj.Create("dark_green"),
 			Punish = KBM.Defaults.AlertObj.Create("red"),
+			Geyser = KBM.Defaults.AlertObj.Create("purple"),
 		},
 	},
 }
@@ -68,6 +70,7 @@ GH.Lang.Ability.Rumbling = KBM.Language:Add("Rumbling Earth")
 GH.Lang.Ability.Call = KBM.Language:Add("Guurloth's Call")
 GH.Lang.Ability.Boulder = KBM.Language:Add("Boulder of Destruction")
 GH.Lang.Ability.Toil = KBM.Language:Add("Earthen Toil")
+GH.Lang.Ability.Geyser = KBM.Language:Add("Earthen Geyser")
 
 -- Debuff Dictionary
 GH.Lang.Debuff = {}
@@ -248,6 +251,7 @@ function GH:Start()
 	self.Guurloth.TimersRef.Call = KBM.MechTimer:Add(self.Lang.Verbose.Call[KBM.Lang], 136)
 	self.Guurloth.TimersRef.Call.MenuName = self.Lang.Ability.Call[KBM.Lang]
 	self.Guurloth.TimersRef.Punish = KBM.MechTimer:Add(self.Lang.Debuff.Punish[KBM.Lang], 60)
+	self.Guurloth.TimersRef.Geyser = KBM.MechTimer:Add(self.Lang.Ability.Geyser[KBM.Lang], 27)
 	KBM.Defaults.TimerObj.Assign(self.Guurloth)
 	
 	-- Create Alerts
@@ -267,6 +271,7 @@ function GH:Start()
 	self.Guurloth.AlertsRef.Toil.MenuName = self.Lang.Menu.Toil[KBM.Lang]
 	self.Guurloth.AlertsRef.Punish = KBM.Alert:Create(self.Lang.Verbose.Punish[KBM.Lang], nil, true, true, "red")
 	self.Guurloth.AlertsRef.Punish.MenuName = self.Lang.Debuff.Punish[KBM.Lang]
+	self.Guurloth.AlertsRef.Geyser = KBM.Alert:Create(self.Lang.Ability.Geyser[KBM.Lang], nil, false, true, "purple")
 	KBM.Defaults.AlertObj.Assign(self.Guurloth)
 	
 	-- Assign Timers and Alerts to Triggers
@@ -291,6 +296,9 @@ function GH:Start()
 	self.Guurloth.Triggers.Punish = KBM.Trigger:Create(self.Lang.Debuff.Punish[KBM.Lang], "playerBuff", self.Guurloth)
 	self.Guurloth.Triggers.Punish:AddAlert(self.Guurloth.AlertsRef.Punish, true)
 	self.Guurloth.Triggers.Punish:AddTimer(self.Guurloth.TimersRef.Punish)
+	self.Guurloth.Triggers.Geyser = KBM.Trigger:Create(self.Lang.Ability.Geyser[KBM.Lang], "cast", self.Guurloth)
+	self.Guurloth.Triggers.Geyser:AddAlert(self.Guurloth.AlertsRef.Geyser)
+	self.Guurloth.Triggers.Geyser:AddTimer(self.Guurloth.TimersRef.Geyser)
 	
 	self.Guurloth.CastBar = KBM.CastBar:Add(self, self.Guurloth)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

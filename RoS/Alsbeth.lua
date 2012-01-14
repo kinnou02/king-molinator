@@ -71,7 +71,7 @@ AD.Lang.Ability.Punish.German = "Seelenbestrafung"
 AD.Lang.Ability.Ground = KBM.Language:Add("Discordant Ground")
 AD.Lang.Ability.Ground.German = "Boden der Zwietracht"
 AD.Lang.Ability.Blast = KBM.Language:Add("Discordant Blast")
-AD.Lang.Ability.Blast.German = "Zwietracht Explosion"
+AD.Lang.Ability.Blast.German = "Zwietracht-Explosion"
 AD.Lang.Ability.Soul = KBM.Language:Add("Soul Destruction")
 AD.Lang.Ability.Soul.German = "Seelenzerstörung"
 AD.Lang.Ability.Meteor = KBM.Language:Add("Discordant Meteor")
@@ -85,6 +85,7 @@ AD.Lang.Notify.Punish.German = "Die Seele von (%a*) wird mit Energie überladen!
 -- Buff Dictionary
 AD.Lang.Buff = {}
 AD.Lang.Buff.Shield = KBM.Language:Add("Shield of Darkness")
+AD.Lang.Buff.Shield.German = "Schild der Dunkelheit"
 
 -- Verbose Dictionary
 AD.Lang.Verbose = {}
