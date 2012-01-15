@@ -56,17 +56,23 @@ AF.Descript = AF.Anrak.Name
 -- Ability Dictionary
 AF.Lang.Ability = {}
 AF.Lang.Ability.Spines = KBM.Language:Add("Spines of Earth")
+AF.Lang.Ability.Spines.German = "Stacheln der Erde"
 AF.Lang.Ability.Strike = KBM.Language:Add("Vicious Tail Strike")
+AF.Lang.Ability.Strike.German = "Bösartiger Schweifschlag"
 AF.Lang.Ability.Call = KBM.Language:Add("Call of Anrak")
+AF.Lang.Ability.Call.German = "Ruf von Anrak"
 AF.Lang.Ability.Bond = KBM.Language:Add("Bond of the Earth")
+AF.Lang.Ability.Bond.German = "Bande der Erde"
 
 -- Debuff Dictionary
 AF.Lang.Debuff = {}
 AF.Lang.Debuff.Brittle = KBM.Language:Add("Brittle")
+AF.Lang.Debuff.Brittle.German = "Brüchig"
 
 -- Menu Dictionary
 AF.Lang.Menu = {}
 AF.Lang.Menu.Spines = KBM.Language:Add("Spines cast warning")
+AF.Lang.Menu.Spines.German = "Stacheln Zauber Warnung" 
 
 function AF:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript

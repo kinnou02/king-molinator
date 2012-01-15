@@ -55,12 +55,16 @@ TR.Thalguur.Name = TR.Lang.Thalguur[KBM.Lang]
 -- Ability Dictionary
 TR.Lang.Ability = {}
 TR.Lang.Ability.Touch = KBM.Language:Add("Touch of the Core")
+TR.Lang.Ability.Touch.German = "Berührung des Kerns"
 TR.Lang.Ability.Power = KBM.Language:Add("Absorb Power")
+TR.Lang.Ability.Power.German = "Kraft absorbieren"
 
 -- Debuff Dictionary
 TR.Lang.Debuff = {}
 TR.Lang.Debuff.Gold = KBM.Language:Add("Call of Gold")
+TR.Lang.Debuff.Gold.German = "Ruf des Goldes"
 TR.Lang.Debuff.Curse = KBM.Language:Add("Curse of Greed")
+TR.Lang.Debuff.Curse.German = "Fluch der Gier" 
 
 TR.Descript = TR.Thalguur.Name
 

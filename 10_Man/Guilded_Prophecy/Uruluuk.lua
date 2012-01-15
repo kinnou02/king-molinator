@@ -49,16 +49,21 @@ UK.Uruluuk.Name = UK.Lang.Uruluuk[KBM.Lang]
 -- Ability Dictionary
 UK.Lang.Ability = {}
 UK.Lang.Ability.Fist = KBM.Language:Add("Fist of Laethys")
+UK.Lang.Ability.Fist.German = "Faust von Laethys"
 UK.Lang.Ability.Storm = KBM.Language:Add("Storm of Force")
+UK.Lang.Ability.Storm.German = "Sturm der Stärke"
 UK.Lang.Ability.Crystal = KBM.Language:Add("Crystal Imprisonment")
+UK.Lang.Ability.Crystal.German = "Kristallgefängnis"
 
 -- Verbose Dictionary
 UK.Lang.Verbose = {}
 UK.Lang.Verbose.Crystal = KBM.Language:Add("Crystal on YOU soon!")
+UK.Lang.Verbose.Crystal.German = "Achtung, du wirst zum Kristall"
 
 -- NPC Notify Dictionary
 UK.Lang.Notify = {}
 UK.Lang.Notify.Crystal = KBM.Language:Add("Uruluuk points at (%a*)!")
+UK.Lang.Notify.Crystal.German = "Uruluuk zeigt auf (%a*)!" 
 
 UK.Descript = UK.Uruluuk.Name
 

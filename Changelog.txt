@@ -101,25 +101,48 @@ Guilded Prophecy
 German Translations
 * Configurations
 ** New: in den Chroniken verwenden.
-** New: Blua
+** New: Blua.
 * Runenkönig Molinar
-** New: Gabelstoß
+** New: Gabelstoß.
 * Matrone Zamira
-** New: Spirituelle Erschöpfung
+** New: Spirituelle Erschöpfung.
 * Seelenreißer Zilas
-** Fixed: Seelenreißer-Griff
+** Fixed: Seelenreißer-Griff.
 * Kriegsmeister Galenir
-** New: Eitriger Infekt
-** Fixed: Essenztransfer
+** New: Eitriger Infekt.
+** Fixed: Essenztransfer.
 * Alsbeth die Streitsuchende
-** Fixed: Zwietracht-Explosion
-** New: Schild der Dunkelheit
+** Fixed: Zwietracht-Explosion.
+** New: Schild der Dunkelheit.
 * Prinz Hylas
-** Fixed: Anrufung des Lebens
+** Fixed: Anrufung des Lebens.
 * Hohepriester Arakhurn
-** New: Feuernova
-** New: Brut von Arakhurn
-** New: Zornige Brut von Arakhurn
+** New: Feuernova.
+** New: Brut von Arakhurn.
+** New: Zornige Brut von Arakhurn.
+* Anrak der Üble
+** New: Stacheln der Erde.
+** New: Bösartiger Schweifschlag.
+** New: Ruf von Anrak.
+** New: Bande der Erde.
+** New: Brüchig.
+* Guurloth
+** New: Kugel der sengenden Macht.
+** New: Grollende Erde.
+** New: Guurloths Ruf.
+** New: Fels der Zerstörung.
+** New: Irdene Mühe.
+** New: Erdengeysir.
+** New: Erdenbestrafung.
+* Thalguur
+** New: Berührung des Kerns.
+** New: Kraft absorbieren.
+** New: Ruf des Goldes.
+** New: Fluch der Gier.
+* Uruluuk
+** New: Faust von Laethys.
+** New: Sturm der Stärke.
+** New: Kristallgefängnis.
 ----
 ﻿v0.9.0
 * System
