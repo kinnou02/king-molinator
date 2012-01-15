@@ -80,7 +80,7 @@ GH.Lang.Debuff.Punish = KBM.Language:Add("Earthen Punishment")
 GH.Lang.Verbose = {}
 GH.Lang.Verbose.Orb = KBM.Language:Add("Look away now!")
 GH.Lang.Verbose.Rumbling = KBM.Language:Add("Jump!")
-GH.Lang.Verbose.Call = KBM.Language:Add("until Adds")
+GH.Lang.Verbose.Call = KBM.Language:Add("Adds Spawn.")
 GH.Lang.Verbose.Toil = KBM.Language:Add("Run around!")
 GH.Lang.Verbose.Punish = KBM.Language:Add("Stop!")
 

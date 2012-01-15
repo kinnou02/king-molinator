@@ -42,6 +42,7 @@ TR.Thalguur = {
 			Touch = KBM.Defaults.AlertObj.Create("red"),
 			Power = KBM.Defaults.AlertObj.Create("dark_green"),
 			Gold = KBM.Defaults.AlertObj.Create("yellow"),
+			Curse = KBM.Defaults.AlertObj.Create("purple"),
 		},
 	},
 }
@@ -59,6 +60,7 @@ TR.Lang.Ability.Power = KBM.Language:Add("Absorb Power")
 -- Debuff Dictionary
 TR.Lang.Debuff = {}
 TR.Lang.Debuff.Gold = KBM.Language:Add("Call of Gold")
+TR.Lang.Debuff.Curse = KBM.Language:Add("Curse of Greed")
 
 TR.Descript = TR.Thalguur.Name
 
@@ -249,6 +251,7 @@ function TR:Start()
 	self.Thalguur.AlertsRef.Touch = KBM.Alert:Create(self.Lang.Ability.Touch[KBM.Lang], nil, true, true, "red")
 	self.Thalguur.AlertsRef.Power = KBM.Alert:Create(self.Lang.Ability.Power[KBM.Lang], 3, true, true, "dark_green")
 	self.Thalguur.AlertsRef.Gold = KBM.Alert:Create(self.Lang.Debuff.Gold[KBM.Lang], nil, false, false, "yellow")
+	self.Thalguur.AlertsRef.Curse = KBM.Alert:Create(self.Lang.Debuff.Curse[KBM.Lang], nil, false, true, "purple")
 	KBM.Defaults.AlertObj.Assign(self.Thalguur)
 	
 	-- Assign Timers and Alerts to Triggers
@@ -261,6 +264,8 @@ function TR:Start()
 	self.Thalguur.Triggers.Gold:AddAlert(self.Thalguur.AlertsRef.Gold)
 	self.Thalguur.Triggers.GoldRemove = KBM.Trigger:Create(self.Lang.Debuff.Gold[KBM.Lang], "playerBuffRemove", self.Thalguur)
 	self.Thalguur.Triggers.GoldRemove:AddStop(self.Thalguur.AlertsRef.Gold)
+	self.Thalguur.Triggers.Curse = KBM.Trigger:Create(self.Lang.Debuff.Curse[KBM.Lang], "playerBuff", self.Thalguur)
+	self.Thalguur.Triggers.Curse:AddAlert(self.Thalguur.AlertsRef.Curse)
 	self.Thalguur.Triggers.PhaseTwo = KBM.Trigger:Create(90, "percent", self.Thalguur)
 	self.Thalguur.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
 	self.Thalguur.Triggers.PhaseThree = KBM.Trigger:Create(70, "percent", self.Thalguur)

@@ -25,20 +25,41 @@ UK.Uruluuk = {
 	Name = "Uruluuk",
 	NameShort = "Uruluuk",
 	Menu = {},
+	AlertsRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
+		AlertsRef = {
+			Enabled = true,
+			Fist = KBM.Defaults.AlertObj.Create("yellow"),
+			Storm = KBM.Defaults.AlertObj.Create("red"),
+			Crystal = KBM.Defaults.AlertObj.Create("blue"),	
+		},
 	},
 }
 
 KBM.RegisterMod(UK.ID, UK)
 
 UK.Lang.Uruluuk = KBM.Language:Add(UK.Uruluuk.Name)
-
 UK.Uruluuk.Name = UK.Lang.Uruluuk[KBM.Lang]
+
+-- Ability Dictionary
+UK.Lang.Ability = {}
+UK.Lang.Ability.Fist = KBM.Language:Add("Fist of Laethys")
+UK.Lang.Ability.Storm = KBM.Language:Add("Storm of Force")
+UK.Lang.Ability.Crystal = KBM.Language:Add("Crystal Imprisonment")
+
+-- Verbose Dictionary
+UK.Lang.Verbose = {}
+UK.Lang.Verbose.Crystal = KBM.Language:Add("Crystal on YOU soon!")
+
+-- NPC Notify Dictionary
+UK.Lang.Notify = {}
+UK.Lang.Notify.Crystal = KBM.Language:Add("Uruluuk points at (%a*)!")
+
 UK.Descript = UK.Uruluuk.Name
 
 function UK:AddBosses(KBM_Boss)
@@ -54,6 +75,9 @@ function UK:InitVars()
 		Enabled = true,
 		CastBar = self.Uruluuk.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
+		Alerts = KBM.Defaults.Alerts(),
+		PhaseMon = KBM.Defaults.PhaseMon(),
+		AlertsRef = self.Uruluuk.Settings.AlertsRef,
 	}
 	KBMGPUK_Settings = self.Settings
 	chKBMGPUK_Settings = self.Settings
@@ -112,6 +136,13 @@ function UK:Death(UnitID)
 	return false
 end
 
+function UK.PhaseFinal()
+	UK.PhaseObj.Objectives:Remove()
+	UK.Phase = 4
+	UK.PhaseObj:SetPhase("Final")
+	UK.PhaseObj.Objectives:AddPercent(UK.Uruluuk.Name, 0, 30)
+end
+
 function UK:UnitHPCheck(uDetails, unitID)
 	
 	if uDetails and unitID then
@@ -127,7 +158,8 @@ function UK:UnitHPCheck(uDetails, unitID)
 					self.Uruluuk.CastBar:Create(unitID)
 					self.Phase = 1
 					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj.Objectives:AddPercent(self.Uruluuk.Name, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Uruluuk.Name, 30, 100)
+					self.PhaseObj:SetPhase(1)
 				end
 				self.Uruluuk.UnitID = unitID
 				self.Uruluuk.Available = true
@@ -182,8 +214,20 @@ function UK:Start()
 	-- Create Timers
 	
 	-- Create Alerts
+	self.Uruluuk.AlertsRef.Fist = KBM.Alert:Create(self.Lang.Ability.Fist[KBM.Lang], nil, false, true, "yellow")
+	self.Uruluuk.AlertsRef.Storm = KBM.Alert:Create(self.Lang.Ability.Storm[KBM.Lang], nil, true, true, "red")
+	self.Uruluuk.AlertsRef.Crystal = KBM.Alert:Create(self.Lang.Verbose.Crystal[KBM.Lang], 3, true, false, "blue")
+	KBM.Defaults.AlertObj.Assign(self.Uruluuk)
 	
 	-- Assign Timers and Alerts to Triggers
+	self.Uruluuk.Triggers.Fist = KBM.Trigger:Create(self.Lang.Ability.Fist[KBM.Lang], "cast", self.Uruluuk)
+	self.Uruluuk.Triggers.Fist:AddAlert(self.Uruluuk.AlertsRef.Fist)
+	self.Uruluuk.Triggers.PhaseFinal = KBM.Trigger:Create(30, "percent", self.Uruluuk)
+	self.Uruluuk.Triggers.PhaseFinal:AddPhase(self.PhaseFinal)
+	self.Uruluuk.Triggers.Storm = KBM.Trigger:Create(self.Lang.Ability.Storm[KBM.Lang], "cast", self.Uruluuk)
+	self.Uruluuk.Triggers.Storm:AddAlert(self.Uruluuk.AlertsRef.Storm)
+	self.Uruluuk.Triggers.Crystal = KBM.Trigger:Create(self.Lang.Notify.Crystal[KBM.Lang], "notify", self.Uruluuk)
+	self.Uruluuk.Triggers.Crystal:AddAlert(self.Uruluuk.AlertsRef.Crystal, true)
 	
 	self.Uruluuk.CastBar = KBM.CastBar:Add(self, self.Uruluuk)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

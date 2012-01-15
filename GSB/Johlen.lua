@@ -297,7 +297,7 @@ function IJ:Start()
 	self.Johlen.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
 	self.Johlen.Triggers.PhaseThree = KBM.Trigger:Create(50, "percent", self.Johlen)
 	self.Johlen.Triggers.PhaseThree:AddPhase(self.PhaseThree)
-	self.Johlen.Triggers.PhaseFour = KBM.Trigger:Create(25, "percent", self.Johlen)
+	self.Johlen.Triggers.PhaseFour = KBM.Trigger:Create(26, "percent", self.Johlen)
 	self.Johlen.Triggers.PhaseFour:AddPhase(self.PhaseFour)
 	
 	self.Johlen.CastBar = KBM.CastBar:Add(self, self.Johlen)

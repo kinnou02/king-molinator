@@ -951,7 +951,7 @@ function KM:Start()
 	self.King.AlertsRef.Cursed = KBM.Alert:Create(KM.Lang.Ability.Cursed[KBM.Lang], nil, false, true, "red")
 	self.King.AlertsRef.CursedDuration = KBM.Alert:Create(KM.Lang.Ability.Cursed[KBM.Lang], nil, true, true, "red")
 	self.King.AlertsRef.CursedDuration.MenuName = KM.Lang.Menu.Cursed[KBM.Lang]
-	self.King.AlertsRef.Essence = KBM.Alert:Create(KM.Lang.Ability.Essence[KBM.Lang], nil, true, nil, "yellow")
+	self.King.AlertsRef.Essence = KBM.Alert:Create(KM.Lang.Ability.Essence[KBM.Lang], nil, false, true, "yellow")
 	self.King.AlertsRef.Essence:Important()
 	self.King.AlertsRef.FeedbackWarn = KBM.Alert:Create(KM.Lang.Ability.Feedback[KBM.Lang], nil, false, "blue")
 	self.King.AlertsRef.Feedback = KBM.Alert:Create(KM.Lang.Ability.Feedback[KBM.Lang], nil, true, true, "blue")
@@ -995,7 +995,7 @@ function KM:Start()
 	
 	-- Add Prince's Alerts
 	self.Prince.AlertsRef.Terminate = KBM.Alert:Create(KM.Lang.Ability.Terminate[KBM.Lang], nil, true, nil, "orange")
-	self.Prince.AlertsRef.Essence = KBM.Alert:Create(KM.Lang.Ability.Essence[KBM.Lang], nil, true, nil, "yellow")
+	self.Prince.AlertsRef.Essence = KBM.Alert:Create(KM.Lang.Ability.Essence[KBM.Lang], nil, false, true, "yellow")
 	self.Prince.AlertsRef.Essence:Important()
 	self.Prince.AlertsRef.FeedbackWarn = KBM.Alert:Create(KM.Lang.Ability.Feedback[KBM.Lang], nil, false, true, "blue")
 	self.Prince.AlertsRef.Feedback = KBM.Alert:Create(KM.Lang.Ability.Feedback[KBM.Lang], nil, true, true, "blue")

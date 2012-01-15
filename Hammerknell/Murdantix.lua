@@ -281,7 +281,7 @@ function MX:Start()
 	KBM.Defaults.TimerObj.Assign(self.Murd)
 	
 	-- Create Alerts
-	self.Murd.AlertsRef.Trauma = KBM.Alert:Create(self.Lang.Trauma[KBM.Lang], 2, true, nil, "yellow")
+	self.Murd.AlertsRef.Trauma = KBM.Alert:Create(self.Lang.Trauma[KBM.Lang], nil, false, true, "yellow")
 	KBM.Defaults.AlertObj.Assign(self.Murd)
 	
 	-- Assign Mechanics to Triggers

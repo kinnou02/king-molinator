@@ -271,7 +271,7 @@ function MZ:Start()
 	
 	-- Create Alerts
 	self.Matron.AlertsRef.Concussion = KBM.Alert:Create(self.Lang.Ability.Concussion[KBM.Lang], 2, true, false, "red")
-	self.Matron.AlertsRef.Blast = KBM.Alert:Create(self.Lang.Ability.Blast[KBM.Lang], nil, true, false, "yellow")
+	self.Matron.AlertsRef.Blast = KBM.Alert:Create(self.Lang.Ability.Blast[KBM.Lang], nil, false, true, "yellow")
 	self.Matron.AlertsRef.Mark = KBM.Alert:Create(self.Lang.Ability.Mark[KBM.Lang], 5, false, true, "purple")
 
 	KBM.Defaults.TimerObj.Assign(self.Matron)
@@ -284,6 +284,8 @@ function MZ:Start()
 	self.Matron.Triggers.Blast = KBM.Trigger:Create(self.Lang.Ability.Blast[KBM.Lang], "cast", self.Matron)
 	self.Matron.Triggers.Blast:AddAlert(self.Matron.AlertsRef.Blast)
 	self.Matron.Triggers.Blast:AddTimer(self.Matron.TimersRef.Blast)
+	self.Matron.Triggers.BlastInt = KBM.Trigger:Create(self.Lang.Ability.Blast[KBM.Lang], "interrupt", self.Matron)
+	self.Matron.Triggers.BlastInt:AddStop(self.Matron.AlertsRef.Blast)
 	self.Matron.Triggers.Ichor = KBM.Trigger:Create(self.Lang.Ability.Ichor[KBM.Lang], "cast", self.Matron)
 	self.Matron.Triggers.Ichor:AddTimer(self.Matron.TimersRef.Ichor)
 	self.Matron.Triggers.Mark = KBM.Trigger:Create(self.Lang.Ability.Mark[KBM.Lang], "cast", self.Matron)
