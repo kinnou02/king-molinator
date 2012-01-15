@@ -142,35 +142,35 @@ function TR.PhaseTwo()
 	TR.Phase = 2
 	TR.PhaseObj.Objectives:Remove()
 	TR.PhaseObj.Objectives:AddPercent(TR.Thalguur.Name, 70, 90)
-	TR.PhaseObj.Objectives:SetPhase(2)
+	TR.PhaseObj:SetPhase(2)
 end
 
 function TR.PhaseThree()
 	TR.Phase = 3
 	TR.PhaseObj.Objectives:Remove()
 	TR.PhaseObj.Objectives:AddPercent(TR.Thalguur.Name, 50, 70)
-	TR.PhaseObj.Objectives:SetPhase(3)
+	TR.PhaseObj:SetPhase(3)
 end
 
 function TR.PhaseFour()
 	TR.Phase = 4
 	TR.PhaseObj.Objectives:Remove()
 	TR.PhaseObj.Objectives:AddPercent(TR.Thalguur.Name, 30, 50)
-	TR.PhaseObj.Objectives:SetPhase(4)
+	TR.PhaseObj:SetPhase(4)
 end
 
 function TR.PhaseFive()
 	TR.Phase = 5
 	TR.PhaseObj.Objectives:Remove()
 	TR.PhaseObj.Objectives:AddPercent(TR.Thalguur.Name, 10, 30)
-	TR.PhaseObj.Objectives:SetPhase(5)
+	TR.PhaseObj:SetPhase(5)
 end
 
 function TR.PhaseSix()
 	TR.Phase = 6
 	TR.PhaseObj.Objectives:Remove()
 	TR.PhaseObj.Objectives:AddPercent(TR.Thalguur.Name, 0, 10)
-	TR.PhaseObj.Objectives:SetPhase("Final")
+	TR.PhaseObj:SetPhase("Final")
 end
 
 function TR:UnitHPCheck(uDetails, unitID)

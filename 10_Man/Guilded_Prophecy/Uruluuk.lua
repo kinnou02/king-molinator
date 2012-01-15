@@ -127,7 +127,7 @@ function UK:UnitHPCheck(uDetails, unitID)
 					self.Uruluuk.CastBar:Create(unitID)
 					self.Phase = 1
 					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj.Objective:AddPercent(self.Uruluuk.Name, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Uruluuk.Name, 0, 100)
 				end
 				self.Uruluuk.UnitID = unitID
 				self.Uruluuk.Available = true

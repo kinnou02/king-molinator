@@ -257,17 +257,17 @@ function GH:Start()
 	-- Create Alerts
 	self.Guurloth.AlertsRef.OrbWarn = KBM.Alert:Create(self.Lang.Verbose.Orb[KBM.Lang], nil, false, true, "orange")
 	self.Guurloth.AlertsRef.OrbWarn.MenuName = self.Lang.Ability.Orb[KBM.Lang]
-	self.Guurloth.AlertsRef.Orb = KBM.Alert:Create(self.Lang.Ability.Orb[KBM.Lang], nil, true, true, "orange")
+	self.Guurloth.AlertsRef.Orb = KBM.Alert:Create(self.Lang.Verbose.Orb[KBM.Lang], nil, true, true, "orange")
 	self.Guurloth.AlertsRef.Orb.MenuName = self.Lang.Menu.OrbDuration[KBM.Lang]
 	self.Guurloth.AlertsRef.RumblingWarn = KBM.Alert:Create(self.Lang.Verbose.Rumbling[KBM.Lang], nil, false, true, "blue")
 	self.Guurloth.AlertsRef.RumblingWarn.MenuName = self.Lang.Ability.Rumbling[KBM.Lang]
-	self.Guurloth.AlertsRef.Rumbling = KBM.Alert:Create(self.Lang.Ability.Rumbling[KBM.Lang], nil, true, true, "blue")
+	self.Guurloth.AlertsRef.Rumbling = KBM.Alert:Create(self.Lang.Verbose.Rumbling[KBM.Lang], nil, true, true, "blue")
 	self.Guurloth.AlertsRef.Rumbling.MenuName = self.Lang.Menu.Rumbling[KBM.Lang]
 	self.Guurloth.AlertsRef.Call = KBM.Alert:Create(self.Lang.Ability.Call[KBM.Lang], nil, true, true, "purple")
 	self.Guurloth.AlertsRef.Boulder = KBM.Alert:Create(self.Lang.Ability.Boulder[KBM.Lang], nil, true, true, "yellow")
 	self.Guurloth.AlertsRef.ToilWarn = KBM.Alert:Create(self.Lang.Verbose.Toil[KBM.Lang], nil, false, true, "dark_green")
 	self.Guurloth.AlertsRef.ToilWarn.MenuName = self.Lang.Ability.Toil[KBM.Lang]
-	self.Guurloth.AlertsRef.Toil = KBM.Alert:Create(self.Lang.Ability.Toil[KBM.Lang], nil, true, true, "dark_green")
+	self.Guurloth.AlertsRef.Toil = KBM.Alert:Create(self.Lang.Verbose.Toil[KBM.Lang], nil, true, true, "dark_green")
 	self.Guurloth.AlertsRef.Toil.MenuName = self.Lang.Menu.Toil[KBM.Lang]
 	self.Guurloth.AlertsRef.Punish = KBM.Alert:Create(self.Lang.Verbose.Punish[KBM.Lang], nil, true, true, "red")
 	self.Guurloth.AlertsRef.Punish.MenuName = self.Lang.Debuff.Punish[KBM.Lang]

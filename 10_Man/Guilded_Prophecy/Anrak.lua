@@ -160,7 +160,6 @@ function AF:UnitHPCheck(uDetails, unitID)
 					self.PhaseObj:SetPhase("Single")
 					self.PhaseObj.Objectives:AddPercent(self.Anrak.Name, 0, 100)
 					KBM.TankSwap:Start(self.Lang.Debuff.Brittle[KBM.Lang])
-					KBM.MechTimer:AddStart(self.Anrak.TimersRef.SpinesFirst)
 				end
 				self.Anrak.UnitID = unitID
 				self.Anrak.Available = true
