@@ -3639,7 +3639,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 				if self.LastStart then
 					if Inspect.Unit.Lookup(self.UnitID) then
 						if self.CastObject then
-							if self.CastObject.remaining > 0 and not self.CastObject.uninterruptible then
+							if self.CastObject.remaining > 0.05 and not self.CastObject.uninterruptible then
 								--- Do Cast Interrupt Triggers (if any)
 								if KBM.Trigger.Interrupt[self.CastObject.abilityName] then
 									if KBM.Trigger.Interrupt[self.CastObject.abilityName][self.Boss.Name] then

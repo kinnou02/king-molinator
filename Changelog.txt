@@ -1,4 +1,22 @@
-﻿﻿v0.9.1 
+﻿﻿v0.9.2
+
+Castbars
+* Change: Reduced the accuracy of interrupts being fired to above 5/100ths of a second only.
+
+Hammerknell
+* Inwar Darktide
+** Fixed: Fetid Slime count changed to 15. This should allow Phase 3 to trigger correctly.
+
+Rise of the Phoenix
+* High Priest Arakhurn
+** Fixed: Fire Nova trigger changed from cast to channel.
+
+German Translations
+* High Priest Arakhurn
+** New: Feurige Metamorphose
+** New: Rüstung aufreißen (T-SM)
+----
+v0.9.1 
 
 System
 * Timers and Records

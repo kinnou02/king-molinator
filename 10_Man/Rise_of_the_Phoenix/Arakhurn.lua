@@ -91,10 +91,12 @@ HA.Lang.Chat.Death = KBM.Language:Add("The fire within me weakens. I must regain
 -- Buff Dictionary
 HA.Lang.Buff = {}
 HA.Lang.Buff.Fiery = KBM.Language:Add("Fiery Metamorphosis")
+HA.Lang.Buff.Fiery.German = "Feurige Metamorphose"
 
 -- Debuff Dictionary
 HA.Lang.Debuff = {}
 HA.Lang.Debuff.Armor = KBM.Language:Add("Armor Rip")
+HA.Lang.Debuff.Armor.German = "Rüstung aufreißen"
 
 -- Unit Dictionary
 HA.Lang.Unit = {}
@@ -360,7 +362,7 @@ function HA:Start()
 	-- Assign Timers and Alerts to Triggers
 	self.Arakhurn.Triggers.Stall = KBM.Trigger:Create(1, "percent", self.Arakhurn)
 	self.Arakhurn.Triggers.Stall:AddPhase(self.Stall)
-	self.Arakhurn.Triggers.Nova = KBM.Trigger:Create(self.Lang.Ability.Nova[KBM.Lang], "cast", self.Arakhurn)
+	self.Arakhurn.Triggers.Nova = KBM.Trigger:Create(self.Lang.Ability.Nova[KBM.Lang], "channel", self.Arakhurn)
 	self.Arakhurn.Triggers.Nova:AddTimer(self.Arakhurn.TimersRef.Nova)
 	self.Arakhurn.Triggers.Nova:AddAlert(self.Arakhurn.AlertsRef.Nova)
 	self.Arakhurn.Triggers.Fiery = KBM.Trigger:Create(self.Lang.Buff.Fiery[KBM.Lang], "playerBuff", self.Arakhurn)

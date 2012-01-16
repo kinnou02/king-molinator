@@ -288,7 +288,7 @@ function ID.PhaseTwo()
 	ID.PhaseObj.Objectives:Remove()
 	print("Phase 2 starting!")
 	ID.PhaseObj:SetPhase(2)
-	ID.PhaseObj.Objectives:AddDeath(ID.Slime.Name, 3)
+	ID.PhaseObj.Objectives:AddDeath(ID.Slime.Name, 15)
 	ID.PhaseObj.Objectives:AddDeath(ID.Wrangler.Name, 3)	
 end
 
@@ -343,7 +343,7 @@ function ID:Death(UnitID)
 				self.Counts.Wranglers = self.Counts.Wranglers + 1
 				self.Wrangler.UnitList[UnitID].Dead = true
 			end
-			if self.Counts.Slimes == 3 and self.Counts.Wranglers == 3 then
+			if self.Counts.Slimes == 15 and self.Counts.Wranglers == 3 then
 				ID.PhaseThree()
 			end
 		elseif self.Phase == 3 then
