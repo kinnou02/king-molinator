@@ -265,7 +265,7 @@ function AK.PhaseTwo(Type)
 			KBM.MechTimer:AddRemove(AK.Jornaru.TimersRef.Summon)
 			KBM.MechTimer:AddStart(AK.Jornaru.TimersRef.SummonTwoFirst)
 			KBM.MechTimer:AddStart(AK.Jornaru.TimersRef.OrbFirst)
-			AK.Jornaru.CastBar.Enabled = false
+			AK.Jornaru.CastBar:Remove()
 			print("Phase 2 starting!")
 		end
 	end
@@ -287,13 +287,29 @@ function AK.PhaseThree()
 end
 
 function AK.PhaseFour()
-	AK.PhaseObj.Objectives:Remove()
-	AK.Phase = 4
-	AK.PhaseObj:SetPhase("Final")
-	KBM.MechTimer:AddStart(AK.Jornaru.TimersRef.WaveFour)
-	AK.PhaseObj.Objectives:AddPercent(AK.Akylios.Name, 0, 55)
-	AK.PhaseObj.Objectives:AddPercent(AK.Jornaru.Name, 0, 50)
-	print("Final Phase starting!")	
+	if AK.Phase < 4 then
+		AK.PhaseObj.Objectives:Remove()
+		AK.Phase = 4
+		AK.PhaseObj:SetPhase(4)
+		KBM.MechTimer:AddStart(AK.Jornaru.TimersRef.WaveFour)
+		AK.Jornaru.CastBar:Start(AK.Jornaru.UnitID)
+		AK.PhaseObj.Objectives:AddPercent(AK.Akylios.Name, 15, 55)
+		AK.PhaseObj.Objectives:AddPercent(AK.Jornaru.Name, 0, 50)
+		print("Phase 4 starting!")
+	end
+end
+
+function AK.PhaseFinal()
+	if AK.Phase < 5 then
+		AK.PhaseObj.Objectives:Remove()
+		AK.Phase = 5
+		AK.PhaseObj:SetPhase("Final")
+		KBM.MechTimer:AddRemove(AK.Akylios.TimersRef.Emerge)
+		KBM.MechTimer:AddRemove(AK.Akylios.TimersRef.Submerge)
+		AK.PhaseObj.Objectives:AddPercent(AK.Akylios.Name, 0, 15)
+		AK.PhaseObj.Objectives:AddPercent(AK.Jornaru.Name, 0, 15)
+		print("Final phase starting - Good Luck!")
+	end
 end
 
 function AK:RemoveUnits(UnitID)
@@ -389,7 +405,9 @@ function AK:Reset()
 	self.Jornaru.UnitID = nil
 	self.Akylios.UnitID = nil
 	self.Jornaru.Dead = false
+	self.Jornaru.CastBar:Remove()
 	self.Akylios.Dead = false
+	self.Akylios.CastBar:Remove()
 	self.Counts.Lashers = 0
 	self.Counts.Stingers = 0
 	self.Phase = 1
@@ -507,6 +525,8 @@ function AK:Start()
 	self.Akylios.TimersRef.Submerge = KBM.MechTimer:Add(AK.Lang.Mechanic.Submerge[KBM.Lang], 80)
 	self.Akylios.TimersRef.Submerge:NoMenu()
 	self.Akylios.TimersRef.Submerge:AddTimer(self.Akylios.TimersRef.Emerge, 0)
+	self.Akylios.TimersRef.Submerge:SetPhase(4)
+	self.Akylios.TimersRef.Emerge:AddTimer(self.Akylios.TimersRef.Submerge, 0)
 	self.Akylios.TimersRef.EmergeFirst = KBM.MechTimer:Add(AK.Lang.Mechanic.Emerge[KBM.Lang], 80)
 	self.Akylios.TimersRef.EmergeFirst.MenuName = "Emerge/Submerge Timers"
 	self.Akylios.TimersRef.EmergeFirst:AddTimer(self.Akylios.TimersRef.Submerge, 0)
@@ -545,6 +565,8 @@ function AK:Start()
 	
 	self.Akylios.Triggers.PhaseFour = KBM.Trigger:Create(55, "percent", self.Akylios)
 	self.Akylios.Triggers.PhaseFour:AddPhase(self.PhaseFour)
+	self.Akylios.Triggers.PhaseFinal = KBM.Trigger:Create(15, "percent", self.Akylios)
+	self.Akylios.Triggers.PhaseFinal:AddPhase(self.PhaseFinal)
 	self.Akylios.Triggers.Decay = KBM.Trigger:Create(self.Lang.Ability.Decay[KBM.Lang], "playerBuff", self.Akylios)
 	self.Akylios.Triggers.Decay:AddAlert(self.Akylios.AlertsRef.Decay, true)
 	self.Akylios.Triggers.BreathWarn = KBM.Trigger:Create(AK.Lang.Ability.Breath[KBM.Lang], "cast", self.Akylios)
@@ -553,8 +575,8 @@ function AK:Start()
 	self.Akylios.Triggers.Breath = KBM.Trigger:Create(self.Lang.Ability.Breath[KBM.Lang], "channel", self.Akylios)
 	self.Akylios.Triggers.Breath:AddAlert(self.Akylios.AlertsRef.Breath)
 	
-	self.Jornaru.CastBar = KBM.CastBar:Add(self, self.Jornaru, true)
-	self.Akylios.CastBar = KBM.CastBar:Add(self, self.Akylios, true)
+	self.Jornaru.CastBar = KBM.CastBar:Add(self, self.Jornaru)
+	self.Akylios.CastBar = KBM.CastBar:Add(self, self.Akylios)
 
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	

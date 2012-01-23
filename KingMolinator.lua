@@ -24,7 +24,7 @@ KBM.Idle = {
 	Wait = false,
 	Combat = {
 		Until = 0,
-		Duration = 3,
+		Duration = 4,
 		Wait = false,
 		StoreTime = 0,
 	},
@@ -72,6 +72,52 @@ function KBM.Defaults.EncTimer()
 		Duration = true,
 	}
 	return EncTimer
+end
+
+KBM.Version = {}
+function KBM.Version:Load()
+	s, e, self.High, self.Mid, self.Low = string.find(AddonData.toc.Version, "(%d+).(%d+).(%d+)")
+	if self.High then
+		self.High = tonumber(self.High)
+	else
+		self.High = 0
+	end
+	if self.Mid then
+		self.Mid = tonumber(self.Mid)
+	else
+		self.Mid = 0
+	end
+	if self.Low then
+		self.Low = tonumber(self.Low)
+	else
+		self.Low = 0
+	end
+end
+
+KBM.Version:Load()
+
+function KBM.Version:Check(High, Mid, Low)
+	if High <= self.High then
+		if High < self.High then
+			return true
+		else
+			if Mid <= self.Mid then
+				if Mid < self.Mid then
+					return true
+				else
+					if Low <= self.Low then
+						return true
+					else
+						return false
+					end
+				end
+			else
+				return
+			end
+		end
+	else
+		return false
+	end
 end
 
 KBM.Defaults.CastFilter = {}
@@ -175,6 +221,9 @@ function KBM.Defaults.AlertObj.Create(Color, OldData)
 		Enabled = true,
 		Color = Color,
 		Custom = false,
+		Border = true,
+		Notify = true,
+		Sound = true,
 	}
 	return AlertObj
 end
@@ -299,7 +348,7 @@ function KBM.Defaults.Alerts()
 		Visible = false,
 		Unlocked = false,
 		FlashUnlocked = false,
-		fScale = 1,
+		fScale = 0.4,
 		x = false,
 		y = false,
 		Type = "Alerts",
@@ -364,6 +413,8 @@ local function KBM_DefineVars(AddonID)
 				print("Warning: "..Mod.ID.." has no description.")
 			end
 		end
+	elseif KBM.PlugIn.List[AddonID] then
+		KBM.PlugIn.List[AddonID]:InitVars()
 	end
 end
 
@@ -406,7 +457,9 @@ local function KBM_LoadVars(AddonID)
 			Mod:LoadVars()
 		end
 		
-		KBM.Debug = KBM.Options.Debug		
+		KBM.Debug = KBM.Options.Debug
+	elseif KBM.PlugIn.List[AddonID] then
+		KBM.PlugIn.List[AddonID]:LoadVars()
 	end
 end
 
@@ -420,6 +473,8 @@ local function KBM_SaveVars(AddonID)
 		for _, Mod in ipairs(KBM.ModList) do
 			Mod:SaveVars()
 		end
+	elseif KBM.PlugIn.List[AddonID] then
+		KBM.PlugIn.List[AddonID]:SaveVars()
 	end
 end
 
@@ -650,8 +705,11 @@ KBM.Language.Options.AlertFlash.French = "Flash \195\169cran activ\195\169."
 KBM.Language.Options.AlertText = KBM.Language:Add("Alert warning text enabled.")
 KBM.Language.Options.AlertText.German = "Alarmierungs-Text aktiviert."
 KBM.Language.Options.AlertText.French = "Texte Avertissement Alerte activ\195\169 ."
-KBM.Language.Options.UnlockFlash = KBM.Language:Add("Unlock alert border")
+KBM.Language.Options.UnlockFlash = KBM.Language:Add("Unlock alert border for scaling.")
 KBM.Language.Options.UnlockFlash.German = "Alarmierungs Ränder sind änderbar."
+KBM.Language.Options.Border = KBM.Language:Add("Enable Border")
+KBM.Language.Options.Notify = KBM.Language:Add("Enable Text")
+KBM.Language.Options.Sound = KBM.Language:Add("Play Sound")
 
 -- Size Dictionary
 KBM.Language.Options.UnlockWidth = KBM.Language:Add("Unlock width for scaling. (Mouse wheel)")
@@ -957,7 +1015,7 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 	
 	function self:AddRemove(Object)
 		if not Object.Removing then
-			if Object.Enabled and Object.Active then
+			if Object.Active then
 				Object.Removing = true
 				table.insert(self.RemoveTimers, Object)
 				self.RemoveCount = self.RemoveCount + 1
@@ -1108,7 +1166,7 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 			end
 			if self.TimerAfter then
 				if KBM.Encounter then
-					if self.TimerAfter.Phase == KBM.CurrentMod.Phase or self.TimerAfter.Phase == 0 then
+					if self.TimerAfter.Phase <= KBM.CurrentMod.Phase or self.TimerAfter.Phase == 0 then
 						KBM.MechTimer:AddStart(self.TimerAfter)
 					end
 				end
@@ -2498,8 +2556,24 @@ local function KBM_UnitAvailable(units)
 				if not uDetails.player then
 					KBM.CheckActiveBoss(uDetails, UnitID)
 				end
+				if uDetails.mark then
+					if KBM.PlugIn.List.KBMMarkIt then
+						KBM.PlugIn.List.KBMMarkIt:MarkChange(uDetails.mark, UnitID)
+					end
+				end
 			end
 		end
+	else
+		for UnitID, Specifier in pairs(units) do
+			uDetails = Inspect.Unit.Detail(UnitID)
+			if uDetails then
+				if uDetails.mark then
+					if KBM.PlugIn.List.KBMMarkIt then
+						KBM.PlugIn.List.KBMMarkIt:MarkChange(uDetails.mark, UnitID)
+					end
+				end
+			end
+		end	
 	end	
 end
 
@@ -3137,18 +3211,22 @@ function KBM.Alert:Init()
 							self.Color = AlertObj.Color
 						end
 					end
-					self.Left[self.Color]:SetAlpha(1)
-					self.Left[self.Color]:SetVisible(true)
-					self.Right[self.Color]:SetAlpha(1)
-					self.Right[self.Color]:SetVisible(true)
-					self.Direction = -self.Speed
+					if AlertObj.Settings.Border then
+						self.Left[self.Color]:SetAlpha(1)
+						self.Left[self.Color]:SetVisible(true)
+						self.Right[self.Color]:SetAlpha(1)
+						self.Right[self.Color]:SetVisible(true)
+						self.Direction = -self.Speed
+					end
 				end
 				if self.Settings.Notify then
 					if AlertObj.Text then
-						self.Shadow:SetText(AlertObj.Text)
-						self.Text:SetText(AlertObj.Text)
-						self.Anchor:SetVisible(true)
-						self.Anchor:SetAlpha(1)
+						if AlertObj.Settings.Notify then
+							self.Shadow:SetText(AlertObj.Text)
+							self.Text:SetText(AlertObj.Text)
+							self.Anchor:SetVisible(true)
+							self.Anchor:SetAlpha(1)
+						end
 					end
 				end
 				if self.Duration then
@@ -3198,39 +3276,47 @@ function KBM.Alert:Init()
 			else
 				self.Alpha = self.Alpha + self.Direction
 				if self.Settings.Flash then
-					self.Left[self.Color]:SetAlpha(self.Alpha)
-					self.Right[self.Color]:SetAlpha(self.Alpha)
+					if self.Current.Settings.Border then
+						self.Left[self.Color]:SetAlpha(self.Alpha)
+						self.Right[self.Color]:SetAlpha(self.Alpha)
+					end
 				end
 				if self.Settings.Notify then
-					self.Anchor:SetAlpha(self.Alpha)
+					if self.Current.Settings.Notify then
+						self.Anchor:SetAlpha(self.Alpha)
+					end
 				end
 			end
 		else
 			if self.Settings.Flash then
 				if self.Current.Flash then
-					self.Alpha = self.Alpha + self.Direction
-					if self.Alpha <= 0.2 then
-						self.Alpha = 0.2
-						self.Direction = self.Speed
-					elseif self.Alpha >= 1 then
-						self.Alpha = 1
-						self.Direction = -self.Speed
+					if self.Current.Settings.Border then
+						self.Alpha = self.Alpha + self.Direction
+						if self.Alpha <= 0.2 then
+							self.Alpha = 0.2
+							self.Direction = self.Speed
+						elseif self.Alpha >= 1 then
+							self.Alpha = 1
+							self.Direction = -self.Speed
+						end
+						self.Left[self.Color]:SetAlpha(self.Alpha)
+						self.Right[self.Color]:SetAlpha(self.Alpha)
 					end
-					self.Left[self.Color]:SetAlpha(self.Alpha)
-					self.Right[self.Color]:SetAlpha(self.Alpha)
 				end
 			end
 			if self.Current.Countdown then
 				if self.Remaining then
 					self.Remaining = self.StopTime - CurrentTime
-					if self.Remaining <= 0 then
-						self.Remaining = 0
-						self.Shadow:SetText(self.Current.Text)
-						self.Text:SetText(self.Current.Text)
-					else
-						CDText = string.format("%0.1f - "..self.Current.Text, self.Remaining)
-						self.Shadow:SetText(CDText)
-						self.Text:SetText(CDText)
+					if self.Current.Settings.Notify then
+						if self.Remaining <= 0 then
+							self.Remaining = 0
+							self.Shadow:SetText(self.Current.Text)
+							self.Text:SetText(self.Current.Text)
+						else
+							CDText = string.format("%0.1f - "..self.Current.Text, self.Remaining)
+							self.Shadow:SetText(CDText)
+							self.Text:SetText(CDText)
+						end
 					end
 				end
 			end
@@ -3511,6 +3597,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 	function CastBarObj:Start()	
 		self.Casting = true
 		self.CastMod = 1
+		self.Interrupted = false
 		self.GUI.Frame:SetAlpha(1)
 		self.GUI.Frame:SetVisible(true)
 		self.GUI.Progress:SetVisible(true)
@@ -3568,7 +3655,9 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 										self.GUI:SetText(string.format("%0.01f", self.Progress).." - "..FilterObj.Prefix..bDetails.abilityName)	
 									end
 								elseif self.Casting then
-									self:Stop()
+									if not self.Interrupted then
+										self:Stop()
+									end
 								end
 							else
 								if not self.Casting then
@@ -3656,18 +3745,19 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 						self.LastStart = nil
 					end
 					self:Stop()
-				elseif self.Interrupted then
-					if self.InterruptEnd < Inspect.Time.Real() then
-						self.Interrupted = false
-						self.InterruptEnd = nil
-						self.GUI:SetText(self.Boss.Name)
-						self.GUI.Frame:SetVisible(false)
-					else
-						self.GUI.Frame:SetAlpha(self.InterruptEnd - Inspect.Time.Real())
-					end
 				end
 			end
 		end
+		if self.Interrupted then
+			if self.InterruptEnd < Inspect.Time.Real() then
+				self.Interrupted = false
+				self.InterruptEnd = nil
+				self.GUI:SetText(self.Boss.Name)
+				self.GUI.Frame:SetVisible(false)
+			else
+				self.GUI.Frame:SetAlpha(self.InterruptEnd - Inspect.Time.Real())
+			end
+		end			
 	end
 	
 	function CastBarObj:Stop()	
@@ -3857,6 +3947,10 @@ end
 
 function KBM:Timer()
 
+	local current = Inspect.Time.Real()
+	local diff = (current - self.HeldTime)
+	local udiff = (current - self.UpdateTime)
+	
 	if not KBM.Updating then
 		KBM.Updating = true
 		if KBM.QueuePage then
@@ -3871,9 +3965,6 @@ function KBM:Timer()
 		
 		if KBM.Options.Enabled then
 			if KBM.Encounter or KBM.Testing then
-				local current = Inspect.Time.Real()
-				local diff = (current - self.HeldTime)
-				local udiff = (current - self.UpdateTime)
 				if KBM.CurrentMod then
 					KBM.CurrentMod:Timer(current, diff)
 				end
@@ -3979,6 +4070,11 @@ function KBM:Timer()
 		end
 		KBM.Updating = false
 	end
+	if self.PlugIn.Count > 0 then
+		for ID, PlugIn in pairs(self.PlugIn.List) do
+			PlugIn:Timer(current)
+		end
+	end
 	
 end
 
@@ -4004,6 +4100,11 @@ local function KBM_UnitRemoved(units)
 			-- end
 		-- end
 	-- end
+	for UnitID, Specifier in pairs(units) do
+		if KBM.PlugIn.List.KBMMarkIt then
+			KBM.PlugIn.List.KBMMarkIt:MarkChange(false, UnitID)
+		end
+	end	
 	
 end
 
@@ -4631,12 +4732,8 @@ function KBM.MenuGroup:SetMaster()
 	self.MasterModes = KBM.MainWin.Menu:CreateHeader("Master Modes", nil, nil, true)
 end
 
-function KBM.MenuGroup:SetExpertTwo()
-	self.ExpertTwo = KBM.MainWin.Menu:CreateHeader("Tier 2 Experts", nil, nil, true)
-end
-
-function KBM.MenuGroup:SetExpertOne()
-	self.ExpertOne = KBM.MainWin.Menu:CreateHeader("Tier 1 Experts", nil, nil, true)
+function KBM.MenuGroup:SetExperts()
+	self.Experts = KBM.MainWin.Menu:CreateHeader("Experts", nil, nil, true)
 end
 
 function KBM.ApplySettings()
@@ -4653,6 +4750,20 @@ function KBM_Debug()
 		KBM.Debug = true
 		KBM.Options.Debug = true
 	end
+end
+
+function KBM.MarkChange(units)
+	if KBM.PlugIn.List.KBMMarkIt then
+		for UnitID, Mark in pairs(units) do
+			KBM.PlugIn.List.KBMMarkIt:MarkChange(Mark, UnitID)
+		end
+	end
+end
+
+function KBM.SecureEnter()
+end
+
+function KBM.SecureLeave()
 end
 
 -- local function KBM_TestAlert(data)
@@ -4697,6 +4808,15 @@ local function KBM_Start()
 	KBM.EncTimer:Init()
 	KBM.PhaseMonitor:Init()
 	KBM.Trigger:Init()
+	if KBM.PlugIn.Count > 0 then
+		KBM.MenuGroup.plugin = KBM.MainWin.Menu:CreateHeader("Plug-In", nil, nil, true)
+		for ID, PlugIn in pairs(KBM.PlugIn.List) do
+			if PlugIn.Start then
+				PlugIn:Start()
+			end
+		end
+		KBM.MenuGroup.main = KBM.MainWin.Menu:CreateHeader("KBM", nil, nil, true)
+	end
 	local Header = KBM.MainWin.Menu:CreateHeader("Global Options")
 	KBM.MenuOptions.Main.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.Settings[KBM.Lang], KBM.MenuOptions.Main, nil, Header)
 	KBM.MenuOptions.Main.MenuItem.Check:SetEnabled(false)
@@ -4717,9 +4837,10 @@ local function KBM_Start()
 	table.insert(Event.Buff.Add, {function (unitID, Buffs) KBM:BuffMonitor(unitID, Buffs, "new") end, "KingMolinator", "Buff Monitor (Add)"})
 	table.insert(Event.Buff.Change, {function (unitID, Buffs) KBM:BuffMonitor(unitID, Buffs, "change") end, "KingMolinator", "Buff Monitor (change)"})
 	table.insert(Event.Buff.Remove, {function (unitID, Buffs) KBM:BuffMonitor(unitID, Buffs, "remove") end, "KingMolinator", "Buff Monitor (remove)"})
+	table.insert(Event.Unit.Detail.Mark, {KBM.MarkChange, "KingMolinator", "Mark_Changed_Event"})
 	table.insert(Event.SafesRaidManager.Combat.Damage, {KBM.MobDamage, "KingMolinator", "Combat Damage"})
 	table.insert(Event.SafesRaidManager.Group.Combat.Damage, {KBM.RaidDamage, "KingMolinator", "Raid Damage"})
-	-- table.insert(Event.Unit.Unavailable, {KBM_UnitRemoved, "KingMolinator", "Unit Unavailable"})
+	table.insert(Event.Unit.Unavailable, {KBM_UnitRemoved, "KingMolinator", "Unit Unavailable"})
 	table.insert(Event.Unit.Available, {KBM_UnitAvailable, "KingMolinator", "Unit Available"})
 	table.insert(Event.System.Update.Begin, {function () KBM:Timer() end, "KingMolinator", "System Update"}) 
 	table.insert(Event.SafesRaidManager.Combat.Death, {KBM_Death, "KingMolinator", "Combat Death"})
@@ -4729,6 +4850,8 @@ local function KBM_Start()
 	table.insert(Event.SafesRaidManager.Group.Combat.End, {KBM.RaidCombatLeave, "KingMolinator", "Raid Combat Leave"})
 	table.insert(Event.SafesRaidManager.Group.Combat.Start, {KBM.RaidCombatEnter, "KingMolinator", "Raid Combat Enter"})
 	table.insert(Event.Unit.Castbar, {KBM_CastBar, "KingMolinator", "Cast Bar Event"})
+	table.insert(Event.System.Secure.Enter, {KBM.SecureEnter, "KingMolinator", "Secure Enter"})
+	table.insert(Event.System.Secure.Leave, {KBM.SecureLeave, "KingMolinator", "Secure Leave"})
 	table.insert(Command.Slash.Register("kbmhelp"), {KBM_Help, "KingMolinator", "KBM Help"})
 	table.insert(Command.Slash.Register("kbmversion"), {KBM_Version, "KingMolinator", "KBM Version Info"})
 	table.insert(Command.Slash.Register("kbmoptions"), {KBM_Options, "KingMolinator", "KBM Open Options"})
@@ -4785,6 +4908,24 @@ function KBM.Defaults.Records()
 	}
 	return RecordObj
 	
+end
+
+KBM.PlugIn = {}
+KBM.PlugIn.List = {}
+KBM.PlugIn.Count = 0
+function KBM.PlugIn.Register(PlugIn)
+	if PlugIn then
+		if KBM.PlugIn.List[PlugIn.ID] then
+			print("<Plug-In ID Conflict> The Plug-In ID: "..PlugIn.ID.." already exists.")
+			print("Plug-In will not be registered.")
+		else
+			KBM.PlugIn.List[PlugIn.ID] = PlugIn
+			KBM.PlugIn.Count = KBM.PlugIn.Count + 1
+		end
+	else
+		print("Attempted Plug-In load failed. Incorrect parameters <PlugIn>")
+		print("Expecting Plug-In Table Object.")
+	end
 end
 
 function KBM.RegisterMod(ModID, Mod)

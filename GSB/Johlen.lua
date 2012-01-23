@@ -151,6 +151,11 @@ function IJ:Death(UnitID)
 		if self.Bomb.PhaseObjective then
 			self.Bomb.PhaseObjective:Remove()
 			self.Bomb.PhaseObjective = nil
+			if self.Phase < 4 then
+				self.PhaseObj:SetPhase(self.Phase)
+			else
+				self.PhaseObj:SetPhase("Final")
+			end
 		end
 		self.PhaseObj:SetPhase(self.Phase)
 	end
@@ -293,9 +298,9 @@ function IJ:Start()
 	self.Johlen.Triggers.Bomb:AddAlert(self.Johlen.AlertsRef.Bomb)
 	self.Johlen.Triggers.Blinding = KBM.Trigger:Create(self.Lang.Ability.Blinding[KBM.Lang], "cast", self.Johlen)
 	self.Johlen.Triggers.Blinding:AddAlert(self.Johlen.AlertsRef.Blinding)
-	self.Johlen.Triggers.PhaseTwo = KBM.Trigger:Create(75, "percent", self.Johlen)
+	self.Johlen.Triggers.PhaseTwo = KBM.Trigger:Create(76, "percent", self.Johlen)
 	self.Johlen.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
-	self.Johlen.Triggers.PhaseThree = KBM.Trigger:Create(50, "percent", self.Johlen)
+	self.Johlen.Triggers.PhaseThree = KBM.Trigger:Create(51, "percent", self.Johlen)
 	self.Johlen.Triggers.PhaseThree:AddPhase(self.PhaseThree)
 	self.Johlen.Triggers.PhaseFour = KBM.Trigger:Create(26, "percent", self.Johlen)
 	self.Johlen.Triggers.PhaseFour:AddPhase(self.PhaseFour)

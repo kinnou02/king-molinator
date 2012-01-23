@@ -39,7 +39,7 @@ KM.IconSize = nil
 
 -- Frame Defaults
 KM.FBWidth = 600
-KM.SwingMulti = (KM.FBWidth * 0.5) * 0.25
+KM.SwingMulti = (KM.FBWidth * 0.5) * 0.1428571
 KM.FBHeight = 100
 KM.SafeWidth = KM.FBWidth * 0.5
 KM.DangerWidth = KM.FBWidth * 0.125
@@ -178,7 +178,7 @@ KBM.Language[KM.King.Name]:SetGerman("Runenkönig Molinar")
 KBM.Language[KM.Prince.Name]:SetGerman("Prinz Dollin")
 KBM.Language[KM.King.Name]:SetFrench("Roi runique Molinar")
 
--- King and Princes Ability Dictionary
+-- Ability Dictionary
 KM.Lang.Ability = {}
 KM.Lang.Ability.Rend = KBM.Language:Add("Rend Life")
 KM.Lang.Ability.Rend.French = "D\195\169chire-Vie"
@@ -211,7 +211,7 @@ KM.Lang.Unit.Revenant = KBM.Language:Add("Incorporeal Revenant")
 KM.Lang.Unit.Revenant.French = "Revenant chim\195\169rique"
 KM.Lang.Unit.Revenant.German = "Unkörperlicher Wiedergänger"
 
--- Notify Trigger Dictionary
+-- Notify Dictionary
 KM.Lang.Notify = {}
 KM.Lang.Notify.Rev = KBM.Language:Add("Incorporeal Revenant begins to phase into this reality.")
 KM.Lang.Notify.Rev.French = "Revenant chim\195\169rique commence \195\160 se mat\195\169rialiser dans cette réalit\195\169."
@@ -220,7 +220,9 @@ KM.Lang.Notify.Rev.German = "Unkörperlicher Wiedergänger beginnt, in diese Rea
 -- Menu Dictionary
 KM.Lang.Menu = {}
 KM.Lang.Menu.Cursed = KBM.Language:Add(KM.Lang.Ability.Cursed[KBM.Lang].." duration.")
+KM.Lang.Menu.Cursed.German = KM.Lang.Ability.Cursed[KBM.Lang].." Dauer."
 KM.Lang.Menu.Feedback = KBM.Language:Add(KM.Lang.Ability.Feedback[KBM.Lang].." duration.")
+KM.Lang.Menu.Feedback.German = KM.Lang.Ability.Feedback[KBM.Lang].." Dauer." 
 
 -- King's Options page Dictionary
 KM.Lang.Options = {}
@@ -374,10 +376,10 @@ function KM:Death(UnitID)
 	return false	
 end
 
-function KM:UnitHPCheck(unitDetails, unitID)
-	if unitDetails and unitID then
-		if unitDetails.player == nil then
-			if unitDetails.name == self.King.Name then
+function KM:UnitHPCheck(uDetails, unitID)
+	if uDetails and unitID then
+		if uDetails.player == nil then
+			if uDetails.name == self.King.Name then
 				if not self.King.UnitID then
 					if not self.EncounterRunning then
 						self.EncounterRunning = true
@@ -392,8 +394,8 @@ function KM:UnitHPCheck(unitDetails, unitID)
 						self.King.Dead = false
 					end
 					self.King.Casting = false
-					self.KingLastHP = unitDetails.healthMax
-					self.KingHPMax = unitDetails.healthMax
+					self.KingLastHP = uDetails.healthMax
+					self.KingHPMax = uDetails.healthMax
 					self.KingCurrentHP = self.KingLastHP
 					if self.Settings.PercentMonitor.Enabled then
 						self.FrameBase:SetVisible(true)
@@ -403,7 +405,7 @@ function KM:UnitHPCheck(unitDetails, unitID)
 				self.King.UnitID = unitID
 				self.King.Available = true
 				return self.King
-			elseif unitDetails.name == self.Prince.Name then
+			elseif uDetails.name == self.Prince.Name then
 				if not self.Prince.UnitID then
 					if not self.EncounterRunning then
 						self.EncounterRunning = true
@@ -417,8 +419,8 @@ function KM:UnitHPCheck(unitDetails, unitID)
 						self.PhaseObj.Objectives:AddPercent(self.Prince.Name, 90, 100)
 						self.Prince.Dead = false
 					end
-					self.PrinceLastHP = unitDetails.healthMax
-					self.PrinceHPMax = unitDetails.healthMax
+					self.PrinceLastHP = uDetails.healthMax
+					self.PrinceHPMax = uDetails.healthMax
 					self.PrinceCurrentHP = self.PrinceLastHP
 					self.Prince.Casting = false
 					if self.Settings.PercentMonitor.Enabled then
@@ -505,39 +507,29 @@ function KM:CheckTrends()
 		local KingForecastHP = self.KingLastHP-(self.KingSampleDPS * 8)
 		local KingForecastP = KingForecastHP / self.KingHPMax
 		local KingMulti = self.KingPerc*100
-		local stupidKing = math.floor(KingMulti)
-		if (KingMulti - stupidKing) > 0.005 then -- Account for lag
-			stupidKing = stupidKing + 1
-		end
-		self.KingHPP = tostring(stupidKing).."%"
+		self.KingHPP = tostring(math.ceil(KingMulti)).."%"
 		-- Prince Calc
 		local PrinceForecastHP = self.PrinceLastHP-(self.PrinceSampleDPS * 8)
 		local PrinceForecastP = PrinceForecastHP / self.PrinceHPMax
 		local PrinceMulti = self.PrincePerc*100
-		local stupidPrince = math.floor(PrinceMulti)
-		if (PrinceMulti - stupidPrince) > 0.005 then -- Account for lag
-			stupidPrince = stupidPrince + 1
-		end
-		self.PrinceHPP = tostring(stupidPrince).."%"
+		self.PrinceHPP = tostring(math.ceil(PrinceMulti)).."%"
 		self.CurrentSwing = self.KingPerc - self.PrincePerc
-		if self.CurrentSwing > 0.04 then
-			self.CurrentSwing = 0.04
-		elseif self.CurrentSwing < -0.04 then
-			self.CurrentSwing = -0.04
+		if self.CurrentSwing > 0.07 then
+			self.CurrentSwing = 0.07
+		elseif self.CurrentSwing < -0.07 then
+			self.CurrentSwing = -0.07
 		end
 		self.ForecastSwing = KingForecastP - PrinceForecastP
-		if self.ForecastSwing > 0.04 then
-			self.ForecastSwing = 0.04
-		elseif self.ForecastSwing < -0.04 then
-			self.ForecastSwing = -0.04
+		if self.ForecastSwing > 0.07 then
+			self.ForecastSwing = 0.07
+		elseif self.ForecastSwing < -0.07 then
+			self.ForecastSwing = -0.07
 		end
 		self.StatusBar:SetPoint("CENTER", self.FrameBase, "CENTER", (self.CurrentSwing * self.SwingMulti) * 100, 0)
 		self.StatusForecast:SetPoint("CENTER", self.FrameBase, "CENTER", (self.ForecastSwing * self.SwingMulti) * 100, 0)
 		self.KingPText:SetText(self.KingHPP)
-		self.KingPText:SetWidth(self.KingPText:GetFullWidth())
 		self.KingHPBar:SetWidth(self.BossHPWidth * self.KingPerc)
 		self.PrincePText:SetText(self.PrinceHPP)
-		self.PrincePText:SetWidth(self.PrincePText:GetFullWidth())
 		self.PrinceHPBar:SetWidth(self.BossHPWidth * self.PrincePerc)
 	end	
 end
@@ -635,7 +627,7 @@ function KM:SetNormal()
 	self.StatusForecast:SetWidth(11)
 	self.StatusForecast:SetHeight(self.PrinceStop:GetHeight() + 10)
 	
-	self.SwingMulti = (self.FBWidth * 0.5) * 0.25
+	self.SwingMulti = (self.FBWidth * 0.5) * 0.1428571
 end
 
 function KM:SetCompact()
@@ -675,7 +667,7 @@ function KM:SetCompact()
 	self.StatusForecast:SetWidth(7)
 	self.StatusForecast:SetHeight(self.PrinceStop:GetHeight() + 4)
 	
-	self.SwingMulti = ((self.FBWidth * 0.75) * 0.5) * 0.25
+	self.SwingMulti = ((self.FBWidth * 0.75) * 0.5) * 0.1428571
 end
 
 function KM:BuildDisplay()

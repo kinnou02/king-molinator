@@ -1,4 +1,52 @@
-﻿﻿v0.9.2
+﻿﻿v0.9.3
+
+Plug-Ins
+* New: Added the framework for the Plug-In Engine.
+* New: Linked Plug-In engine to be able to interact with and use KBM's options page.
+* New: Plug-In version tracking enabled. Plug-Ins require a minimum version of King Boss Mods to work.
+
+Screen Alerts
+* Change: Reduced the default size of screen alerts by 60%. These can still be resized within the same bounds.
+* New: Individual Alerts can now have their borders shown or hidden while triggered.
+* New: Individual Alerts can now have their notification text shown or hidden while triggered.
+
+Castbars
+* Esthetics: Fixed the fade-out for interrupts when preceeding a disabled filter cast.
+
+Options
+* Change: Mechanic Timers that are disabled during an encounter will be stopped if currently active.
+* New: Plug-Ins will appear at the top of the menu list when installed. (this will change eventually)
+* New: Option to disable an individual alert to not display the border.
+* New: Option to disable an individual alert to not display alert text and countdown.
+
+Hammerknell
+* Vladmal Prime
+** New: Added Single phase Phase Monitor for percentage monitoring.
+* Rune King Molinar
+** Change: The percentage monitor now tracks 7% variations.
+* Inwar Darktide
+** Change: Merged Phase 3 and Phase 2, there will now be a requirement to kill 2 Tide Wardens.
+** Change: After killing 2 Tide Wardens, Phase 3 will trigger with Percentage display for Undertow and Rot Jaw.
+** New: Added further triggers to capture any kills missed due to out-of-range issues with kill events.
+** New: Phase 3 will trigger when either Rotjaw or Undertow become available.
+** New: Phase 4 will trigger when Inwar Darktide becomes available.
+* Akylios & Jornaru
+** New: Added an additional phase when Akylios is at 15%. This will stop the submerge timer.
+** Fixed: Castbars were not resetting correctly after a wipe/kill.
+** Fixed: The emerge/submerge timer association had become unlinked.
+** Fixed: Jornaru's castbar would become disabled in Phase 2.. and never internally enabled.
+** Change: Jornaru's castbar tracking is now removed at the start of phase 2. And reapplied in Phase 4.
+
+Rise of the Phoenix
+* High Priest Arakhurn
+** New: Added a further trigger to catch the start of P3. (Again until Trion clean this encounter up, I'll continue to work around it)
+** New: Added Unit tracking for Spawn of Arakhurn in P2 (Transition Phase). This should enable the Objectives to track correctly.
+
+Greenscale's Blight
+* Infiltrator Johlen
+** Change: Phase percentages tweaked again for the first and second bombs. (76% and 51% respectively)
+----
+v0.9.2
 
 Castbars
 * Change: Reduced the accuracy of interrupts being fired to above 5/100ths of a second only.
@@ -12,7 +60,7 @@ Rise of the Phoenix
 ** Fixed: Fire Nova trigger changed from cast to channel.
 
 German Translations
-* High Priest Arakhurn
+* Hohepriester Arakhurn
 ** New: Feurige Metamorphose
 ** New: Rüstung aufreißen (T-SM)
 ----

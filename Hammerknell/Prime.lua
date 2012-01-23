@@ -77,6 +77,7 @@ function VP:InitVars()
 		CastBar = self.Prime.Settings.CastBar,
 		TimersRef = self.Prime.Settings.TimersRef,
 		AlertsRef = self.Prime.Settings.AlertsRef,
+		PhaseMon = KBM.Defaults.PhaseMon(),
 	}
 	KBMVP_Settings = self.Settings
 	chKBMVP_Settings = self.Settings
@@ -148,6 +149,10 @@ function VP:UnitHPCheck(uDetails, unitID)
 					self.TimeElapsed = 0
 					self.Prime.CastBar:Create(unitID)
 					self.Prime.Dead = false
+					self.Phase = 1
+					self.PhaseObj:Start(self.StartTime)
+					self.PhaseObj.Objectives:AddPercent(self.Prime.Name, 0, 100)
+					self.PhaseObj:SetPhase("Single")
 				end
 				self.Prime.Casting = false
 				self.Prime.UnitID = unitID
@@ -163,6 +168,7 @@ function VP:Reset()
 	self.Prime.Available = false
 	self.Prime.UnitID = nil
 	self.Prime.CastBar:Remove()
+	self.PhaseObj:End(Inspect.Time.Real())
 end
 
 function VP:Timer()	
@@ -213,5 +219,6 @@ function VP:Start()
 	self.Prime.Triggers.FlamesDebuff:AddAlert(self.Prime.AlertsRef.Flames, true)
 	
 	self.Prime.CastBar = KBM.CastBar:Add(self, self.Prime, true)
+	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()
 end

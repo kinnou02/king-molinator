@@ -1626,7 +1626,7 @@ function KBM.InitOptions()
 						
 						self.GUI.Check:SetChecked(self.Checked)
 						if self.Hook then
-							self.GUI.Check:SetEnabled(true)				
+							self.GUI.Check:SetEnabled(true)
 						else
 							self.GUI.Check:SetEnabled(false)
 						end
@@ -1646,6 +1646,7 @@ function KBM.InitOptions()
 								self.GUI.Frame:SetWidth(KBM.Tabs.List[self.Header.Tab][self.Header.Side]:GetWidth())
 							end
 							self.GUI.Frame:SetHeight(self.GUI.Text:GetHeight())
+							self:Enable(self.Enabled)
 						end
 						
 						self.GUI.Check.Child = self
@@ -2133,12 +2134,18 @@ function KBM.InitOptions()
 									self.Data.Enabled = bool
 									self.Data.Settings.Enabled = bool
 									self.Boss.Menu.Timers[self.Data.Settings.ID].ColorGUI:Enable(bool)
+									if not bool then
+										KBM.MechTimer:AddRemove(self.Data)
+									end
 								end
 								
 								function Callbacks:Enabled(bool)
 									self.Data.Enabled = bool
 									self.Data.Settings.Enabled = bool
 									self.Boss.Menu.Timers[self.Data.Settings.ID].ColorGUI:Enable(bool)
+									if not bool then
+										KBM.MechTimer:AddRemove(self.Data)
+									end
 								end
 								
 								function Callbacks:Color(bool, Color)							
@@ -2263,13 +2270,29 @@ function KBM.InitOptions()
 								function Callbacks:Callback(bool)
 									self.Data.Enabled = bool
 									self.Data.Settings.Enabled = bool
+									self.Boss.Menu.Alerts[self.Data.Settings.ID].Border:Enable(bool)
+									self.Boss.Menu.Alerts[self.Data.Settings.ID].Notify:Enable(bool)
 									self.Boss.Menu.Alerts[self.Data.Settings.ID].ColorGUI:Enable(bool)
 								end
 								
 								function Callbacks:Enabled(bool)
 									self.Data.Enabled = bool
 									self.Data.Settings.Enabled = bool
+									self.Boss.Menu.Alerts[self.Data.Settings.ID].Border:Enable(bool)
+									self.Boss.Menu.Alerts[self.Data.Settings.ID].Notify:Enable(bool)
 									self.Boss.Menu.Alerts[self.Data.Settings.ID].ColorGUI:Enable(bool)
+								end
+								
+								function Callbacks:Border(bool)
+									self.Data.Settings.Border = bool
+								end
+								
+								function Callbacks:Notify(bool)
+									self.Data.Settings.Notify = bool
+								end
+								
+								function Callbacks:Sound(bool)
+									self.Data.Settings.Sound = bool
 								end
 								
 								function Callbacks:Color(bool, Color)							
@@ -2297,6 +2320,18 @@ function KBM.InitOptions()
 								BossObj.Menu.Alerts[AlertID].Enabled:SetChecked(AlertData.Settings.Enabled)
 								BossObj.Menu.Alerts[AlertID].Enabled.Data = AlertData
 								BossObj.Menu.Alerts[AlertID].Enabled.Controller = Child
+								BossObj.Menu.Alerts[AlertID].Border = SubHeader:CreateOption(KBM.Language.Options.Border[KBM.Lang], "check", Callbacks.Border)
+								BossObj.Menu.Alerts[AlertID].Border:SetChecked(AlertData.Settings.Border)
+								BossObj.Menu.Alerts[AlertID].Border.Data = AlertData
+								BossObj.Menu.Alerts[AlertID].Border.Enabled = AlertData.Settings.Enabled
+								BossObj.Menu.Alerts[AlertID].Notify = SubHeader:CreateOption(KBM.Language.Options.Notify[KBM.Lang], "check", Callbacks.Notify)
+								BossObj.Menu.Alerts[AlertID].Notify:SetChecked(AlertData.Settings.Notify)
+								BossObj.Menu.Alerts[AlertID].Notify.Data = AlertData
+								BossObj.Menu.Alerts[AlertID].Notify.Enabled = AlertData.Settings.Enabled
+								BossObj.Menu.Alerts[AlertID].Sound = SubHeader:CreateOption(KBM.Language.Options.Sound[KBM.Lang], "check", Callbacks.Sound)
+								BossObj.Menu.Alerts[AlertID].Sound:SetChecked(AlertData.Settings.Sound)
+								BossObj.Menu.Alerts[AlertID].Sound.Data = AlertData
+								BossObj.Menu.Alerts[AlertID].Sound.Enabled = false
 								Child.Controller = BossObj.Menu.Alerts[AlertID].Enabled
 								BossObj.Menu.Alerts[AlertID].ColorGUI = SubHeader:CreateOption(KBM.Language.Color.Custom[KBM.Lang], "color", Callbacks.Color)
 								BossObj.Menu.Alerts[AlertID].ColorGUI:SetChecked(AlertData.Settings.Custom)
@@ -2488,6 +2523,7 @@ function KBM.InitOptions()
 		else
 			Child.Check:SetChecked(Default)
 		end
+		Child.Check.Child = Child
 		Child.TextShadow = UI.CreateFrame("Text", "Encounter_Text_Shadow", Child)
 		Child.TextShadow:SetWidth(Child:GetWidth() - Child.Check:GetWidth())
 		Child.TextShadow:SetText(Text)
@@ -2513,7 +2549,10 @@ function KBM.InitOptions()
 			Child.Prev = Header.LastChild
 			Header.LastChild = Child
 		end
-		function Child:Enabled(bool)
+		function Child:SetHook(Hook)
+			self.Check.Hook = Hook
+		end
+		function Child:SetEnabled(bool)
 			self.Check:SetEnabled(bool)
 			self.Enabled = bool
 			if bool then
@@ -2521,6 +2560,7 @@ function KBM.InitOptions()
 			else
 				self.Text:SetFontColor(0.5,0.5,0.5)
 			end
+			self:SetBackgroundColor(0,0,0,0)
 		end
 		function Child.Event:MouseIn()
 			if self.Enabled and not KBM.MainWin.Scroller.Handle.MouseDown then
@@ -2530,6 +2570,13 @@ function KBM.InitOptions()
 		function Child.Event:MouseOut()
 			if self.Enabled then
 				self:SetBackgroundColor(0,0,0,0)
+			end
+		end
+		function Child.Check.Event:CheckboxChange()
+			if self.Child.Enabled then
+				if self.Hook then
+					self:Hook(self:GetChecked())
+				end
 			end
 		end
 		Child.Link = Link

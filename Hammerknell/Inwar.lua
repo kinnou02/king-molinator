@@ -290,6 +290,7 @@ function ID.PhaseTwo()
 	ID.PhaseObj:SetPhase(2)
 	ID.PhaseObj.Objectives:AddDeath(ID.Slime.Name, 15)
 	ID.PhaseObj.Objectives:AddDeath(ID.Wrangler.Name, 3)	
+	ID.PhaseObj.Objectives:AddDeath(ID.Warden.Name, 2)
 end
 
 function ID.PhaseThree()
@@ -297,20 +298,12 @@ function ID.PhaseThree()
 	ID.PhaseObj.Objectives:Remove()
 	print("Phase 3 starting!")
 	ID.PhaseObj:SetPhase(3)
-	ID.PhaseObj.Objectives:AddDeath(ID.Warden.Name, 2)
-end
-
-function ID.PhaseFour()
-	ID.Phase = 4
-	ID.PhaseObj.Objectives:Remove()
-	print("Phase 4 starting!")
-	ID.PhaseObj:SetPhase(4)
 	ID.PhaseObj.Objectives:AddPercent(ID.Undertow.Name, 0, 100)
 	ID.PhaseObj.Objectives:AddPercent(ID.Rotjaw.Name, 0, 100)
 end
 
-function ID.PhaseFive()
-	ID.Phase = 5
+function ID.PhaseFour()
+	ID.Phase = 4
 	ID.PhaseObj.Objectives:Remove()
 	print("Final phase starting!")
 	ID.PhaseObj:SetPhase("Final")
@@ -342,20 +335,14 @@ function ID:Death(UnitID)
 			elseif self.Wrangler.UnitList[UnitID] then
 				self.Counts.Wranglers = self.Counts.Wranglers + 1
 				self.Wrangler.UnitList[UnitID].Dead = true
-			end
-			if self.Counts.Slimes == 15 and self.Counts.Wranglers == 3 then
-				ID.PhaseThree()
-			end
-		elseif self.Phase == 3 then
-			-- Wardens
-			if self.Warden.UnitList[UnitID] then
+			elseif self.Warden.UnitList[UnitID] then
 				self.Counts.Wardens = self.Counts.Wardens + 1
 				self.Warden.UnitList[UnitID].Dead = true
 			end
 			if self.Counts.Wardens == 2 then
-				ID.PhaseFour()
+				ID.PhaseThree()
 			end
-		elseif self.Phase == 4 then
+		elseif self.Phase == 3 then
 			-- Last Minibosses before Inwar
 			if self.Undertow.UnitID == UnitID then
 				self.Undertow.Dead = true
@@ -365,7 +352,7 @@ function ID:Death(UnitID)
 				self.Rotjaw.CastBar:Remove()
 			end
 			if self.Undertow.Dead and self.Rotjaw.Dead then
-				ID.PhaseFive()
+				ID.PhaseFour()
 			end
 		end
 	end
@@ -399,6 +386,15 @@ function ID:UnitHPCheck(uDetails, unitID)
 					self.Bosses[uDetails.name].Casting = false
 					self.Bosses[uDetails.name].UnitID = unitID
 					self.Bosses[uDetails.name].Available = true
+					if self.Phase > 1 then
+						if uDetails.name == self.Rotjaw.Name or uDetails.name == self.Undertow.Name then
+							self.PhaseThree()
+						end
+					elseif Phase == 3 then
+						if uDetails.name == self.Inwar.Name then
+							self.PhaseFour()
+						end
+					end
 					return self.Bosses[uDetails.name]
 				else
 					if not self.Bosses[uDetails.name].UnitList[unitID] then

@@ -132,6 +132,16 @@ HA.Enraged = {
 	Mod = HA,
 	Level = "??",
 	Name = HA.Lang.Unit.Enraged[KBM.Lang],
+	NameShort = "Enraged Spawn",
+	UnitList = {},
+	Ignore = true,
+	Type = "multi",
+}
+
+HA.Spawn = {
+	Mod = HA,
+	Level = "??",
+	Name = HA.Lang.Unit.Spawn[KBM.Lang],
 	NameShort = "Spawn",
 	UnitList = {},
 	Ignore = true,
@@ -143,9 +153,11 @@ function HA:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Arakhurn.Name] = self.Arakhurn,
 		[self.Enraged.Name] = self.Enraged,
+		[self.Spawn.Name] = self.Spawn,
 	}
 	KBM_Boss[self.Arakhurn.Name] = self.Arakhurn
 	KBM.SubBoss[self.Enraged.Name] = self.Enraged
+	KBM.SubBoss[self.Spawn.Name] = self.Spawn
 end
 
 function HA:InitVars()
@@ -235,11 +247,13 @@ function HA.PhaseTwo()
 end
 
 function HA.PhaseThree()
-	HA.Phase = 3
-	HA.TimeoutOverride = false
-	HA.PhaseObj.Objectives:Remove()
-	HA.PhaseObj:SetPhase("Final")
-	HA.PhaseObj.Objectives:AddPercent(HA.Arakhurn.Name, 0, 100)
+	if HA.Phase < 3 then
+		HA.Phase = 3
+		HA.TimeoutOverride = false
+		HA.PhaseObj.Objectives:Remove()
+		HA.PhaseObj:SetPhase("Final")
+		HA.PhaseObj.Objectives:AddPercent(HA.Arakhurn.Name, 0, 100)
+	end
 end
 
 function HA:UnitHPCheck(uDetails, unitID)	
@@ -264,6 +278,7 @@ function HA:UnitHPCheck(uDetails, unitID)
 				elseif self.Arakhurn.UnitID ~= unitID then
 					self.Arakhurn.Casting = false
 					self.Arakhurn.CastBar:Create(unitID)
+					self.PhaseThree()
 				end
 				self.Arakhurn.UnitID = unitID
 				self.Arakhurn.Available = true
@@ -280,7 +295,9 @@ function HA:UnitHPCheck(uDetails, unitID)
 						Available = true,
 					}
 					self.Bosses[uDetails.name].UnitList[unitID] = SubBossObj
-					KBM.MechTimer:AddStart(self.Arakhurn.TimersRef.Add)
+					if uDetails.name == self.Enraged.Name then
+						KBM.MechTimer:AddStart(self.Arakhurn.TimersRef.Add)
+					end
 				else
 					self.Bosses[uDetails.name].UnitList[unitID].Available = true
 					self.Bosses[uDetails.name].UnitList[unitID].UnitID = UnitID
@@ -299,6 +316,7 @@ function HA:Reset()
 	self.Arakhurn.CastBar:Remove()
 	self.TimeoutOverride = false
 	self.Enraged.UnitList = {}
+	self.Spawn.UnitList = {}
 end
 
 function HA:Timer()	
