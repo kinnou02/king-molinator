@@ -505,6 +505,7 @@ KBM.CastBar.List = {}
 
 -- Addon Primary Context
 KBM.Context = UI.CreateContext("KBM_Context")
+KBM.Context:SetMouseMasking("limited")
 local KM_Name = "King Boss Mods"
 
 -- Addon KBM Primary Frames

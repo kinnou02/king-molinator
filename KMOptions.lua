@@ -1040,6 +1040,13 @@ function KBM.InitOptions()
 		KBM.EncTimer:ApplySettings()
 		KBM.TankSwap.Anchor:SetVisible(false)
 		KBM.TankSwap.Anchor.Drag:SetVisible(false)
+		if KBM.PlugIn.Count > 0 then
+			for ID, PlugIn in pairs(KBM.PlugIn.List) do
+				if PlugIn.MenuClose then
+					PlugIn:MenuClose()
+				end
+			end
+		end
 	end
 	
 	function KBM.MainWin.Options.Open()
@@ -1063,6 +1070,13 @@ function KBM.InitOptions()
 		if KBM.Options.TankSwap.Visible then
 			KBM.TankSwap.Anchor:SetVisible(true)
 			KBM.TankSwap.Anchor.Drag:SetVisible(KBM.Options.TankSwap.Unlocked)
+		end
+		if KBM.PlugIn.Count > 0 then
+			for ID, PlugIn in pairs(KBM.PlugIn.List) do
+				if PlugIn.MenuOpen then
+					PlugIn:MenuOpen()
+				end
+			end
 		end
 	end
 
