@@ -356,6 +356,18 @@ function KBM.Defaults.Alerts()
 	return Alerts
 end
 
+function KBM.Defaults.Records()
+
+	local RecordObj = {
+		Attempts = 0,
+		Wipes = 0,
+		Kills = 0,
+		Best = 0,
+	}
+	return RecordObj
+	
+end
+
 local function KBM_DefineVars(AddonID)
 	if AddonID == "KingMolinator" then
 		KBM.Options = {
@@ -564,7 +576,7 @@ function KBM.Language:Add(Phrase)
 		self.German = gePhrase
 		self.Translated.German = true
 	end
-	function SetPhrase:SetRussion(ruPhrase)
+	function SetPhrase:SetRussian(ruPhrase)
 		self.Russian = ruPhrase
 		self.Translated.Russian = true
 	end
@@ -4152,6 +4164,7 @@ local function KBM_Death(UnitID)
 								else
 									print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
 									print("Current Record: "..KBM.ConvertTime(KBM.CurrentMod.Settings.Records.Best))
+									KBM.CurrentMod.Settings.Records.Kills = KBM.CurrentMod.Settings.Records.Kills + 1
 								end
 							else
 								print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
@@ -4173,6 +4186,7 @@ local function KBM_Death(UnitID)
 								else
 									print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))								
 									print("Current Record: "..KBM.ConvertTime(KBM.CurrentMod.Settings.Records.Chronicle.Best))
+									KBM.CurrentMod.Settings.Records.Kills = KBM.CurrentMod.Settings.Records.Kills + 1
 								end
 							else
 								print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
@@ -4674,8 +4688,7 @@ function KBM.MenuOptions.Alerts:Options()
 	Alert:AddCheck(KBM.Language.Options.AlertText[KBM.Lang], self.TextEnabled, KBM.Options.Alerts.Notify)
 	Alert:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowAnchor, KBM.Options.Alerts.Visible)
 	Alert:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.LockAnchor, KBM.Options.Alerts.Unlocked)
-	Alert:AddCheck(KBM.Language.Options.UnlockFlash[KBM.Lang], self.UnlockFlash, KBM.Options.Alerts.FlashUnlocked)
-	
+	Alert:AddCheck(KBM.Language.Options.UnlockFlash[KBM.Lang], self.UnlockFlash, KBM.Options.Alerts.FlashUnlocked)	
 end
 
 -- Main options.
@@ -4722,7 +4735,6 @@ function KBM.MenuOptions.Main:Options()
 	local Enabled = Options:AddHeader(KBM.Language.Options.ModEnabled[KBM.Lang], self.Enabled, KBM.Options.Enabled)
 	local Button = Options:AddHeader(KBM.Language.Options.Button[KBM.Lang], self.ButtonVisible, KBM.Options.Button.Visible)
 	Button:AddCheck(KBM.Language.Options.LockButton[KBM.Lang], self.LockButton, KBM.Options.Button.Unlocked)
-	
 end
 
 function KBM.MenuGroup:SetTenMan()
@@ -4897,18 +4909,6 @@ local function KBM_WaitReady(unitID, uDetails)
 		-- TestTrigger:AddTimer(TestTimer)
 	-- end
 		
-end
-
-function KBM.Defaults.Records()
-
-	local RecordObj = {
-		Attempts = 0,
-		Wipes = 0,
-		Kills = 0,
-		Best = 0,
-	}
-	return RecordObj
-	
 end
 
 KBM.PlugIn = {}

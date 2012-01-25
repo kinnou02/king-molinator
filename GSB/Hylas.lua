@@ -62,25 +62,32 @@ KBM.RegisterMod(PH.ID, PH)
 
 PH.Lang.Hylas = KBM.Language:Add(PH.Hylas.Name)
 PH.Lang.Hylas.German = "Prinz Hylas"
+PH.Lang.Hylas.Russian = "Принц Гилас"
 
 -- Unit Dictionary
 PH.Lang.Unit = {}
 PH.Lang.Unit.Duke = KBM.Language:Add("Duke Letareus")
 PH.Lang.Unit.Duke.German = "Herzog Letareus"
 PH.Lang.Unit.Duke.French = "Duc Letareus"
+PH.Lang.Unit.Duke.Russian = "Герцог Летареус"
 PH.Lang.Unit.Johlen = KBM.Language:Add("Infiltrator Johlen")
 PH.Lang.Unit.Johlen.French = "Infiltrateur Johlen"
+PH.Lang.Unit.Johlen.Russian = "Лазутчик Джохлен"
 PH.Lang.Unit.Aleria = KBM.Language:Add("Oracle Aleria")
 PH.Lang.Unit.Aleria.German = "Orakel Aleria"
+PH.Lang.Unit.Aleria.Russian = "Оракул Алерия"
 
 -- Ability Dictionary
 PH.Lang.Ability = {}
 PH.Lang.Ability.Wrath = KBM.Language:Add("Prince's Wrath")
 PH.Lang.Ability.Wrath.German = "Zorn des Prinzen"
+PH.Lang.Ability.Wrath.Russian = "Гнев принца"
 PH.Lang.Ability.Soul = KBM.Language:Add("Soul Fracture")
 PH.Lang.Ability.Soul.German = "Seelenfraktur"
+PH.Lang.Ability.Soul.Russian = "Распад души"
 PH.Lang.Ability.Cotton = KBM.Language:Add("Contagious Cottontail")
 PH.Lang.Ability.Cotton.German = "Ansteckender Baumwollschwanz"
+PH.Lang.Ability.Cotton.Russian = "Заразный кролик"
 
 -- Buff Dictionary
 PH.Lang.Buff = {}

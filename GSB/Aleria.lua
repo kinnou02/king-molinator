@@ -49,6 +49,7 @@ KBM.RegisterMod(OA.ID, OA)
 
 OA.Lang.Aleria = KBM.Language:Add(OA.Aleria.Name)
 OA.Lang.Aleria.German = "Orakel Aleria"
+OA.Lang.Aleria.Russian = "Оракул Алерия"
 OA.Descript = OA.Lang.Aleria[KBM.Lang]
 
 -- Unit Dictionary
@@ -62,6 +63,7 @@ OA.Lang.Unit.Necrotic.German = "Nekrotischer Werwolf"
 OA.Lang.Debuff = {}
 OA.Lang.Debuff.Necrotic = KBM.Language:Add("Necrotic Eruption")
 OA.Lang.Debuff.Necrotic.German = "Nekrotischer Ausbruch" 
+OA.Lang.Debuff.Necrotic.Russian = "Умервщляющий взрыв"
 
 OA.Primal = {
 	Mod = OA,

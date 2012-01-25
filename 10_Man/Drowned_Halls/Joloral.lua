@@ -49,6 +49,7 @@ KBM.RegisterMod(JR.ID, JR)
 JR.Lang.Joloral = KBM.Language:Add(JR.Joloral.Name)
 JR.Lang.Joloral.German = "Joloral Wutflut"
 JR.Lang.Joloral.French = "Joloral Ragemar\195\169e"
+JR.Lang.Joloral.Russian = "Йолорал Яролив"
 
 -- Unit Dictionary
 JR.Lang.Unit = {}
@@ -59,6 +60,7 @@ JR.Lang.Unit.Crippler.German = "Plattenverkrüppler"
 JR.Lang.Ability = {}
 JR.Lang.Ability.Panic = KBM.Language:Add("Panic Attack")
 JR.Lang.Ability.Panic.German = "Panikattacke"
+JR.Lang.Ability.Panic.Russian = "Приступ паники"
 
 -- Notify Dictionary
 JR.Lang.Notify = {}

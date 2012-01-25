@@ -1,4 +1,54 @@
-﻿﻿v0.9.3
+﻿v0.9.4﻿
+
+Options
+* Records Tab
+** New: This has now been unlocked.
+** New: View best times for all Raid boss encounters.
+** New: View records of Attempts, Kills, Wipes and success rates for all Raid boss encounters.
+
+German Translations
+Festung Hammerhall
+* Sicaron
+** New: Seelenernte
+* Grugonim
+** New: Nekrotischer Atem Dauer
+* Estrode
+** New: Tanzender Stahl Dauer
+* Akylios
+** New: Hauch des Wahnsinns Dauer
+Seelenfluss
+* Dark Foci
+** New: Sturmverderbnis
+
+Russian Translations
+Парализующая хватка
+* New: Герцог Летареус
+** New: Ярость герцога
+* New: Лазутчик Джохлен
+** New: Ослепляющая бомба
+** New: Разрушительная бомба
+* New: Принц Гилас
+** New: Герцог Летареус
+** New: Лазутчик Джохлен
+** New: Оракул Алерия
+** New: Гнев принца
+** New: Распад души
+** New: Заразный кролик
+* New: Лорд Зеленокож
+** New: Умервщляющий взрыв
+Река Душ
+* New: Плутон Бессмертный
+Затопленные Залы
+* New: Первосвященница Гайдрисс
+* New: Исскал
+** New: Осколок льда
+* New: Йолорал Яролив
+** New: Приступ паники
+* New: Командир штурмовой группы Йорб
+** New: Сильный удар
+** New: Парализующая хватка
+----
+v0.9.3
 
 Plug-Ins
 * New: Added the framework for the Plug-In Engine.

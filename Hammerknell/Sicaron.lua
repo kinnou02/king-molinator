@@ -83,6 +83,7 @@ SN.Lang.Debuff.Contract = KBM.Language:Add("Unholy Contract")
 SN.Lang.Debuff.Contract.German = "Unheiliger Vertrag"
 SN.Lang.Debuff.Contract.French = "Contrat impie"
 SN.Lang.Debuff.Soul = KBM.Language:Add("Soul Harvest")
+SN.Lang.Debuff.Soul.German = "Seelenernte" 
 
 SN.Sicaron.Name = SN.Lang.Sicaron[KBM.Lang]
 SN.Descript = SN.Sicaron.Name

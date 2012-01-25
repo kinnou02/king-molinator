@@ -56,6 +56,7 @@ KBM.RegisterMod(PI.ID, PI)
 PI.Lang.Plutonus = KBM.Language:Add(PI.Plutonus.Name)
 PI.Lang.Plutonus.German = "Plutonus der Unsterbliche"
 PI.Lang.Plutonus.French = "Plutonus l'Immortel"
+PI.Lang.Plutonus.Russian = "Плутон Бессмертный"
 
 -- Ability Dictionary
 PI.Lang.Ability = {}

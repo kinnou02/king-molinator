@@ -47,12 +47,14 @@ KBM.RegisterMod(DL.ID, DL)
 DL.Lang.Letareus = KBM.Language:Add(DL.Letareus.Name)
 DL.Lang.Letareus.German = "Herzog Letareus"
 DL.Lang.Letareus.French = "Duc Letareus"
+DL.Lang.Letareus.Russian = "Герцог Летареус"
 DL.Letareus.Name = DL.Lang.Letareus[KBM.Lang]
 
 -- Ability Dictionary
 DL.Lang.Ability = {}
 DL.Lang.Ability.Wrath = KBM.Language:Add("Duke's Wrath")
-DL.Lang.Ability.Wrath.German = "Zorn des Herzogs" 
+DL.Lang.Ability.Wrath.German = "Zorn des Herzogs"
+DL.Lang.Ability.Wrath.Russian = "Ярость герцога"
 
 -- Mechanic Dictionary
 DL.Lang.Mechanic = {}

@@ -50,11 +50,13 @@ KBM.RegisterMod(AJ.ID, AJ)
 AJ.Lang.Jorb = KBM.Language:Add(AJ.Jorb.Name)
 AJ.Lang.Jorb.German = "Überfallkommandant Jorb"
 AJ.Lang.Jorb.French = "Commandant d'assaut Jorb"
+AJ.Lang.Jorb.Russian = "Командир штурмовой группы Йорб"
 
 -- Ability Dictionary
 AJ.Lang.Ability = {}
 AJ.Lang.Ability.Impact = KBM.Language:Add("Forceful Impact")
 AJ.Lang.Ability.Impact.German = "Machtvoller Schlag"
+AJ.Lang.Ability.Impact.Russian = "Сильный удар"
 
 -- Notify Dictionary
 AJ.Lang.Notify = {}
@@ -65,6 +67,7 @@ AJ.Lang.Notify.Stand.German = "(%a*), Stillgestanden!"
 AJ.Lang.Debuff = {}
 AJ.Lang.Debuff.Grasp = KBM.Language:Add("Paralyzing Grasp")
 AJ.Lang.Debuff.Grasp.German = "Lähmender Griff"
+AJ.Lang.Debuff.Grasp.Russian = "Парализующая хватка"
 
 AJ.Jorb.Name = AJ.Lang.Jorb[KBM.Lang]
 AJ.Descript = AJ.Jorb.Name

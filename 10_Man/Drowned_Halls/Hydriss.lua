@@ -52,6 +52,7 @@ KBM.RegisterMod(HH.ID, HH)
 
 HH.Lang.Hydriss = KBM.Language:Add(HH.Hydriss.Name)
 HH.Lang.Hydriss.German = "Hohepriesterin Hydriss"
+HH.Lang.Hydriss.Russian = "Первосвященница Гайдрисс"
 
 -- Ability Dictionary
 HH.Lang.Ability = {}

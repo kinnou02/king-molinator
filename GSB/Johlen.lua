@@ -47,11 +47,13 @@ KBM.RegisterMod(IJ.ID, IJ)
 
 IJ.Lang.Johlen = KBM.Language:Add(IJ.Johlen.Name)
 IJ.Lang.Johlen.French = "Infiltrateur Johlen"
+IJ.Lang.Johlen.Russian = "Лазутчик Джохлен"
 
 -- Ability Dictionary
 IJ.Lang.Ability = {}
 IJ.Lang.Ability.Blinding = KBM.Language:Add("Blinding Bomb")
 IJ.Lang.Ability.Blinding.German = "Blendbombe"
+IJ.Lang.Ability.Blinding.Russian = "Ослепляющая бомба"
 
 -- Verbose Dictionary 
 IJ.Lang.Verbose = {}
@@ -62,6 +64,7 @@ IJ.Lang.Verbose.Bomb.German = "Vernichtung"
 IJ.Lang.Unit = {}
 IJ.Lang.Unit.Bomb = KBM.Language:Add("Devastating Bomb")
 IJ.Lang.Unit.Bomb.German = "Vernichtende Bombe"
+IJ.Lang.Unit.Bomb.Russian = "Разрушительная бомба"
 
 IJ.Johlen.Name = IJ.Lang.Johlen[KBM.Lang]
 IJ.Descript = IJ.Johlen.Name

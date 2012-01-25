@@ -64,6 +64,7 @@ DF.Lang.Ability.Ground.German = "Unheiliger Boden"
 DF.Lang.Ability.Call = KBM.Language:Add("Call Darkness")
 DF.Lang.Ability.Call.German = "Finsternis rufen"
 DF.Lang.Ability.Blast = KBM.Language:Add("Corrupt Blast")
+DF.Lang.Ability.Blast.German = "Sturmverderbnis" 
 
 -- Debuff Dictionary
 DF.Lang.Debuff = {}

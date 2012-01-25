@@ -23,6 +23,7 @@ KBM.RegisterMod("Greenscales Blight", GSB)
 KBM.Language:Add(GSB.Name)
 KBM.Language[GSB.Name]:SetGerman("Grünschuppes Pesthauch")
 KBM.Language[GSB.Name]:SetFrench("Fl\195\169au de Vert\195\169caille")
+KBM.Language[GSB.Name]:SetRussian("Парализующая хватка")
 
 GSB.Name = KBM.Language[GSB.Name][KBM.Lang]
 GSB.Descript = GSB.Name

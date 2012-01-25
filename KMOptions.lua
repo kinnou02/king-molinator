@@ -685,7 +685,10 @@ function KBM.InitTabs()
 				Selected = nil,
 			},
 			Records = {
-				Enabled = false,
+				Enabled = true,
+				Main = {
+					Headers = {},
+				},
 			},
 		}
 		return Tabs	
@@ -2494,6 +2497,41 @@ function KBM.InitOptions()
 				end			
 			end
 			
+			function Encounter:Records()
+				local Child = nil
+				local Header = nil
+				local Callbacks = {}
+				Callbacks.Boss = self.Boss
+				
+				local Settings = self.Boss.Mod.Settings.Records
+				Header = self:CreateHeader("Best Time:", "plain", "Records", "Main")
+				if Settings.Best then
+					if Settings.Best > 0 then
+						Header:CreateOption(KBM.ConvertTime(Settings.Best), "plain")
+					else
+						Header:CreateOption("No kill has been recorded.", "plain")
+					end
+				else
+					Header:CreateOption("No kill has been recorded.", "plain")
+				end
+				Header = self:CreateHeader("Details:", "plain", "Records", "Main")
+				if Settings.Kills > Settings.Attempts then
+					local Adjust = Settings.Kills - Settings.Attempts
+					Settings.Attempts = Settings.Attempts + Adjust
+				end
+				if Settings.Wipes ~= (Settings.Attempts - Settings.Kills) then
+					Settings.Kills = (Settings.Attempts - Settings.Wipes)
+				end
+				Header:CreateOption("Attempts: "..Settings.Attempts, "plain")
+				Header:CreateOption("Kills: "..Settings.Kills, "plain")
+				Header:CreateOption("Wipes: "..Settings.Wipes, "plain")
+				if Settings.Attempts > 0 then
+					Header:CreateOption("Success rate is: "..string.format("%0.1f", (Settings.Kills/Settings.Attempts) * 100).."%", "plain")
+				else
+					Header:CreateOption("Success rate is: n/a")
+				end
+			end
+			
 			-- Initialize Encounter Tab
 			if Boss.Mod.Custom then
 				if Boss.Mod.Custom.Encounter then
@@ -2515,6 +2553,9 @@ function KBM.InitOptions()
 			else
 				Encounter.Pages.Tabs.Castbars.Enabled = false
 			end
+			
+			-- Initialize Records Tab
+			Encounter:Records()
 			
 			KBM.MainWin:AddSize(Encounter.GUI.Frame)
 			self:AddChildSize(Encounter.GUI.Frame)

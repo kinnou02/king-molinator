@@ -106,6 +106,7 @@ GR.Lang.Debuff.Toxin.German = "Herzstillstandsgift"
 -- Menu Dictionary
 GR.Lang.Menu = {}
 GR.Lang.Menu.Breath = KBM.Language:Add(GR.Lang.Ability.Breath[KBM.Lang].." duration")
+GR.Lang.Menu.Breath.German = GR.Lang.Ability.Breath[KBM.Lang].." Dauer" 
 
 GR.Grugonim.Name = GR.Lang.Grugonim[KBM.Lang]
 GR.Tower.Name = GR.Lang.Tower[KBM.Lang]

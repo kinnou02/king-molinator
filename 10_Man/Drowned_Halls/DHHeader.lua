@@ -22,6 +22,7 @@ KBM.RegisterMod("Drowned Halls", DH)
 KBM.Language:Add(DH.Name)
 KBM.Language[DH.Name]:SetGerman("Überflutete Hallen")
 KBM.Language[DH.Name]:SetFrench("Salles englouties")
+KBM.Language[DH.Name]:SetRussian("Затопленные Залы")
 
 DH.Name = KBM.Language[DH.Name][KBM.Lang]
 DH.Descript = DH.Name

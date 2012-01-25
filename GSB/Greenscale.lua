@@ -58,13 +58,16 @@ KBM.RegisterMod(LG.ID, LG)
 LG.Lang.Greenscale = KBM.Language:Add(LG.Greenscale.Name)
 LG.Lang.Greenscale.German = "Fürst Grünschuppe"
 LG.Lang.Greenscale.French = "Seigneur Vert\195\169caille"
+LG.Lang.Greenscale.Russian = "Лорд Зеленокож"
 
 -- Ability Dictionary
 LG.Lang.Ability = {}
 LG.Lang.Ability.Blight = KBM.Language:Add("Strangling Blight")
 LG.Lang.Ability.Blight.German = "Würgende Plage"
+LG.Lang.Ability.Blight.Russian = "Удушающая болезнь"
 LG.Lang.Ability.Fumes = KBM.Language:Add("Noxious Fumes")
 LG.Lang.Ability.Fumes.German = "Giftige Dämpfe"
+LG.Lang.Ability.Fumes.German = "Ядовитые пары"
 
 -- Unit Dictionary
 LG.Lang.Unit = {}

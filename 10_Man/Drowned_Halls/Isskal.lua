@@ -50,11 +50,13 @@ IL.Isskal = {
 KBM.RegisterMod(IL.ID, IL)
 
 IL.Lang.Isskal = KBM.Language:Add(IL.Isskal.Name)
+IL.Lang.Isskal.Russian = "Исскал"
 
 -- Ability Dictionary
 IL.Lang.Ability = {}
 IL.Lang.Ability.Shard = KBM.Language:Add("Ice Shard")
 IL.Lang.Ability.Shard.German = "Eissplitter"
+IL.Lang.Ability.Shard.Russian = "Осколок льда"
 IL.Lang.Ability.Wave = KBM.Language:Add("Glacial Wave")
 IL.Lang.Ability.Wave.German = "Gletscherwelle"
 

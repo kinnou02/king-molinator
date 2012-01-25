@@ -86,6 +86,7 @@ ES.Lang.Say.Mind.German = "Hm, Ihr seht köstlich aus."
 -- Menu Dictionary
 ES.Lang.Menu = {}
 ES.Lang.Menu.Dancing = KBM.Language:Add(ES.Lang.Ability.Dancing[KBM.Lang].." duration")
+ES.Lang.Menu.Dancing.German = ES.Lang.Ability.Dancing[KBM.Lang].." Dauer" 
 
 ES.Estrode.Name = ES.Lang.Estrode[KBM.Lang]
 ES.Descript = ES.Estrode.Name
