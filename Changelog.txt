@@ -6,6 +6,13 @@ Options
 ** New: View best times for all Raid boss encounters.
 ** New: View records of Attempts, Kills, Wipes and success rates for all Raid boss encounters.
 
+Guilded Prophecy
+* Guurloth
+** Fixed: Look Away warning now says so, instead of Jump (however amusing it was to watch my guild jump).
+* Thalguur
+** Change: Call of Gold is now a personal alert (beam)
+** Change: Curse of Greed is now a perconal alert.
+
 German Translations
 Festung Hammerhall
 * Sicaron

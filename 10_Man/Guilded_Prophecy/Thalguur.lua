@@ -64,7 +64,7 @@ TR.Lang.Debuff = {}
 TR.Lang.Debuff.Gold = KBM.Language:Add("Call of Gold")
 TR.Lang.Debuff.Gold.German = "Ruf des Goldes"
 TR.Lang.Debuff.Curse = KBM.Language:Add("Curse of Greed")
-TR.Lang.Debuff.Curse.German = "Fluch der Gier" 
+TR.Lang.Debuff.Curse.German = "Fluch der Gier"
 
 TR.Descript = TR.Thalguur.Name
 
@@ -265,11 +265,11 @@ function TR:Start()
 	self.Thalguur.Triggers.Power:AddAlert(self.Thalguur.AlertsRef.Power)
 	self.Thalguur.Triggers.Power:AddTimer(self.Thalguur.TimersRef.Power)
 	self.Thalguur.Triggers.Gold = KBM.Trigger:Create(self.Lang.Debuff.Gold[KBM.Lang], "playerBuff", self.Thalguur)
-	self.Thalguur.Triggers.Gold:AddAlert(self.Thalguur.AlertsRef.Gold)
+	self.Thalguur.Triggers.Gold:AddAlert(self.Thalguur.AlertsRef.Gold, true)
 	self.Thalguur.Triggers.GoldRemove = KBM.Trigger:Create(self.Lang.Debuff.Gold[KBM.Lang], "playerBuffRemove", self.Thalguur)
 	self.Thalguur.Triggers.GoldRemove:AddStop(self.Thalguur.AlertsRef.Gold)
 	self.Thalguur.Triggers.Curse = KBM.Trigger:Create(self.Lang.Debuff.Curse[KBM.Lang], "playerBuff", self.Thalguur)
-	self.Thalguur.Triggers.Curse:AddAlert(self.Thalguur.AlertsRef.Curse)
+	self.Thalguur.Triggers.Curse:AddAlert(self.Thalguur.AlertsRef.Curse, true)
 	self.Thalguur.Triggers.PhaseTwo = KBM.Trigger:Create(90, "percent", self.Thalguur)
 	self.Thalguur.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
 	self.Thalguur.Triggers.PhaseThree = KBM.Trigger:Create(70, "percent", self.Thalguur)
