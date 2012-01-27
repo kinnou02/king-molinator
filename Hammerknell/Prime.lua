@@ -51,14 +51,15 @@ VP.Prime = {
 KBM.RegisterMod(VP.ID, VP)
 
 VP.Lang.Prime = KBM.Language:Add(VP.Prime.Name)
+VP.Lang.Prime.Russian = "Владмал Прайм"
+VP.Prime.Name = VP.Lang.Prime[KBM.Lang]
+VP.Descript = VP.Prime.Name
 
 -- Ability Dictionary
 VP.Lang.Flames = KBM.Language:Add("Ancient Flames")
 VP.Lang.Flames.French = "Flammes anciennes"
 VP.Lang.Flames.German = "Uralte Flammen"
-
-VP.Prime.Name = VP.Lang.Prime[KBM.Lang]
-VP.Descript = VP.Prime.Name
+VP.Lang.Flames.Russian = "Древние огни"
 
 function VP:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript

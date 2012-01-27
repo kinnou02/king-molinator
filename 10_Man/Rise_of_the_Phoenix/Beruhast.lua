@@ -54,36 +54,42 @@ BT.Beruhast = {
 KBM.RegisterMod(BT.ID, BT)
 
 BT.Lang.Beruhast = KBM.Language:Add(BT.Beruhast.Name)
+BT.Lang.Beruhast.Russian = "Беругаст"
+BT.Beruhast.Name = BT.Lang.Beruhast[KBM.Lang]
+BT.Descript = BT.Beruhast.Name
 
 -- Ability Dictionary
 BT.Lang.Ability = {}
 BT.Lang.Ability.Inferno = KBM.Language:Add("Inferno Lash")
 BT.Lang.Ability.Inferno:SetFrench("Fouet des limbes")
 BT.Lang.Ability.Inferno:SetGerman("Infernopeitsche")
+BT.Lang.Ability.Inferno:SetRussian("Адская плеть")
 BT.Lang.Ability.Flame = KBM.Language:Add("Leaping Flame")
 BT.Lang.Ability.Flame:SetFrench("Flamme bondissante")
 BT.Lang.Ability.Flame:SetGerman("Springende Flamme")
+BT.Lang.Ability.Flame:SetRussian("Мечущееся пламя")
 BT.Lang.Ability.Vortex = KBM.Language:Add("Flaming Vortex")
 BT.Lang.Ability.Vortex:SetFrench("Embrasement")
 BT.Lang.Ability.Vortex:SetGerman("Flammenwirbel")
+BT.Lang.Ability.Vortex:SetRussian("Огненный вихрь")
 
 -- Unit Dictionary
 BT.Lang.Unit = {}
 BT.Lang.Unit.Summon = KBM.Language:Add("Summoned Flame")
 BT.Lang.Unit.Summon:SetGerman("Beschworene Flamme")
+BT.Lang.Unit.Summon:SetRussian("Призванный огонь")
 
 -- Notify Dictionary
 BT.Lang.Notify = {}
 BT.Lang.Notify.Summon = KBM.Language:Add('Beruhast says, "A pet from Maelforge should keep you warm."')
 BT.Lang.Notify.Summon:SetGerman('Beruhast sagt: "Ein Begleiter von Flammenmaul sollte Euch warmhalten."')
+BT.Lang.Notify.Summon:SetRussian('Беругаст говорит: "питомец Маэлфорджа вас согреет."')
 
 -- Menu Dictionary
 BT.Lang.Menu = {}
 BT.Lang.Menu.Flame = KBM.Language:Add("First "..BT.Lang.Ability.Flame[KBM.Lang])
 BT.Lang.Menu.Flame:SetGerman("Erste "..BT.Lang.Ability.Flame[KBM.Lang])
-
-BT.Beruhast.Name = BT.Lang.Beruhast[KBM.Lang]
-BT.Descript = BT.Beruhast.Name
+BT.Lang.Menu.Flame:SetRussian("Первый "..BT.Lang.Ability.Flame[KBM.Lang])
 
 function BT:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript

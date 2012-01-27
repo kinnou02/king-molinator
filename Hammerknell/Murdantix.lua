@@ -65,21 +65,27 @@ MX.Murd = {
 KBM.RegisterMod("Murdantix", MX)
 
 MX.Lang.Murdantix = KBM.Language:Add(MX.Murd.Name)
+MX.Lang.Murdantix.Russian = "Мурдантикс"
+MX.Murd.Name = MX.Lang.Murdantix[KBM.Lang]
 MX.Descript = MX.Lang.Murdantix[KBM.Lang]
 
 -- Ability Dictionary
 MX.Lang.Crush = KBM.Language:Add("Mangling Crush")
 MX.Lang.Crush.French = "Essorage"
 MX.Lang.Crush.German = "Erdrückender Stoss"
+MX.Lang.Crush.Russian = "Калечащий удар"
 MX.Lang.Pound = KBM.Language:Add("Ferocious Pound")
 MX.Lang.Pound.French = "Attaque f\195\169roce"
 MX.Lang.Pound.German = "Wildes Zuschlagen"
+MX.Lang.Pound.Russian = "Свирепый удар"
 MX.Lang.Blast = KBM.Language:Add("Demonic Blast")
 MX.Lang.Blast.French = "Explosion d\195\169moniaque"
 MX.Lang.Blast.German = "Dämonische Explosion"
+MX.Lang.Blast.Russian = "Демонический Взрыв"
 MX.Lang.Trauma = KBM.Language:Add("Soul Trauma")
 MX.Lang.Trauma.French = "Traumatisme d'\195\162me"
 MX.Lang.Trauma.German = "Seelentrauma"
+MX.Lang.Trauma.Russian = "Травма души"
 
 -- Debuff Dictionary
 MX.Lang.Debuff = {}

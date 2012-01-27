@@ -50,6 +50,7 @@ TR.Thalguur = {
 KBM.RegisterMod(TR.ID, TR)
 
 TR.Lang.Thalguur = KBM.Language:Add(TR.Thalguur.Name)
+TR.Lang.Thalguur:SetRussian("Талгуур")
 TR.Thalguur.Name = TR.Lang.Thalguur[KBM.Lang]
 
 -- Ability Dictionary

@@ -49,6 +49,7 @@ KBM.RegisterMod(AF.ID, AF)
 AF.Lang.Anrak = KBM.Language:Add(AF.Anrak.Name)
 AF.Lang.Anrak:SetGerman("Anrak der Üble")
 AF.Lang.Anrak:SetFrench("Anrak l'ignoble")
+AF.Lang.Anrak:SetRussian("Анрак Скверный")
 
 AF.Anrak.Name = AF.Lang.Anrak[KBM.Lang]
 AF.Descript = AF.Anrak.Name

@@ -5,15 +5,26 @@ Options
 ** New: This has now been unlocked.
 ** New: View best times for all Raid boss encounters.
 ** New: View records of Attempts, Kills, Wipes and success rates for all Raid boss encounters.
+** New: Added Translation interface to Records tab and messages.
 
 Guilded Prophecy
 * Guurloth
 ** Fixed: Look Away warning now says so, instead of Jump (however amusing it was to watch my guild jump).
 * Thalguur
 ** Change: Call of Gold is now a personal alert (beam)
-** Change: Curse of Greed is now a perconal alert.
+** Change: Curse of Greed is now a personal alert.
+
+Hammerknell
+* Akylios
+** Change: Added Jornaru's percentage monitoring to Phase 3 incase Phase 4 doesn't trigger.
+** Fix: Breath of Madness duration setting. It was stuck in the enabled state.
+
+Rise of the Phoenix
+* High Priest Arakhurn
+** Change: Add count for Phase transition up to 8
 
 German Translations
+
 Festung Hammerhall
 * Sicaron
 ** New: Seelenernte
@@ -23,11 +34,83 @@ Festung Hammerhall
 ** New: Tanzender Stahl Dauer
 * Akylios
 ** New: Hauch des Wahnsinns Dauer
+
 Seelenfluss
 * Dark Foci
 ** New: Sturmverderbnis
 
 Russian Translations
+* New: Various Menu Options.
+
+Крепость Молотозвона
+* New: Мурдантикс
+** New: Калечащий удар
+** New: Свирепый удар
+** New: Демонический Взрыв
+** New: Травма души
+* New: Старуха Замира
+** New: Мерзейший взрыв
+** New: Знак забвения
+** New: Омерзительный гной
+* New: Душераздиратель Зилас
+** New: Хватка душедера
+* New: Рунный король Молинар & Принц Доллин
+** New: Прервать жизнь
+** New: Поглощающая сущность
+** New: Рунический вампиризм
+** New: Пугающий крик
+** New: Проклятые удары
+** New: Бестелесный восставший
+* New: Эстрода
+** New: Захват души
+** New: Контрол разума
+** New: Ярость севера
+* New: Владмал Прайм
+** New: Древние огни
+* New: Сикарон
+** New: Смертоностное проклятие
+** New: Тлеющее увядание
+** New: Нечестивый договор
+** New: Сбор души
+* New: Гругоним
+** New: Материализованная Смерть
+** New: Бурное разложение
+** New: Едкая желчь
+** New: Мертвящее дыхание
+** New: Останавливающий сердце яд
+* New: Инквизитор Гарау
+** New: Магическая эссения
+** New: Кровавая волна
+** New: Ледниковый щит
+** New: Привратник Магической Руки
+* New: Инвар Темная Волна
+** New: Денизар
+** New: Акваликс
+** New: Подводное течение
+** New: Гнилая челюсть
+** New: Зловонный слизень
+** New: Страж прилива
+
+Rise of the Phoenix
+* New: Эреандорн
+** New: Опасное сгорание
+** New: Извержение лавы
+** New: Извержение вулкана
+* New: Беругаст
+** New: Адская плеть
+** New: Мечущееся пламя
+** New: Огненный вихрь
+** New: Призванный огонь
+* New: Генерал Силген
+** New: Раскаленный горн
+** New: Защита огня
+* New: Первосвященник Аракурн
+** New: Огненная сверхновая
+** New: Огненное превращение
+** New: Раздиратель доспехов
+** New: Отродье Арахурна
+** New: Взбесившееся порождение Арахурна
+
 Парализующая хватка
 * New: Герцог Летареус
 ** New: Ярость герцога
@@ -43,12 +126,42 @@ Russian Translations
 ** New: Заразный кролик
 * New: Лорд Зеленокож
 ** New: Умервщляющий взрыв
+
 Река Душ
+* New: Темное средоточия
+** New: Земля нечестивости
+** New: Призыв тьмы
+** New: Черный луч
+** New: Раскачать душу
+* New: Воевода Галенир
+** New: Передача сущности
+** New: Гнойное заражение
+* New: Глашатай Гораф
+** New: Дыхание Пустоты
+** New: Поднять мертвых
+** New: Плохие известия
 * New: Плутон Бессмертный
+* New: Альсбет Раздорная
+** New: Покарать душу
+** New: Земля раздора
+** New: Взрыв раздора
+** New: Разрушение души
+** New: Метеор раздора
+** New: Щит тьмы
+
+Позолоченное пророчество
+* New: Анрак Скверный
+* New: Гуурлот
+* New: Талгуур
+
 Затопленные Залы
 * New: Первосвященница Гайдрисс
+** New: Цунами
+** New: Гидростатический удар
+** New: Приливная волна
 * New: Исскал
 ** New: Осколок льда
+** New: Вихрь смерти
 * New: Йолорал Яролив
 ** New: Приступ паники
 * New: Командир штурмовой группы Йорб

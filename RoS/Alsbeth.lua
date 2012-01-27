@@ -61,61 +61,68 @@ AD.Alsbeth = {
 KBM.RegisterMod(AD.ID, AD)
 
 AD.Lang.Alsbeth = KBM.Language:Add(AD.Alsbeth.Name)
-AD.Lang.Alsbeth.German = "Alsbeth die Streitsuchende"
-AD.Lang.Alsbeth.French = "Alsbeth la Discordante"
+AD.Lang.Alsbeth:SetGerman("Alsbeth die Streitsuchende")
+AD.Lang.Alsbeth:SetFrench("Alsbeth la Discordante")
+AD.Lang.Alsbeth:SetRussian("Альсбет Раздорная")
 
 -- Ability Dictionary
 AD.Lang.Ability = {}
 AD.Lang.Ability.Punish = KBM.Language:Add("Punish Soul")
 AD.Lang.Ability.Punish.German = "Seelenbestrafung"
+AD.Lang.Ability.Punish:SetRussian("Покарать душу")
 AD.Lang.Ability.Ground = KBM.Language:Add("Discordant Ground")
-AD.Lang.Ability.Ground.German = "Boden der Zwietracht"
+AD.Lang.Ability.Ground:SetGerman("Boden der Zwietracht")
+AD.Lang.Ability.Ground:SetRussian("Земля раздора")
 AD.Lang.Ability.Blast = KBM.Language:Add("Discordant Blast")
-AD.Lang.Ability.Blast.German = "Zwietracht-Explosion"
+AD.Lang.Ability.Blast:SetGerman("Zwietracht-Explosion")
+AD.Lang.Ability.Blast:SetRussian("Взрыв раздора")
 AD.Lang.Ability.Soul = KBM.Language:Add("Soul Destruction")
-AD.Lang.Ability.Soul.German = "Seelenzerstörung"
+AD.Lang.Ability.Soul:SetGerman("Seelenzerstörung")
+AD.Lang.Ability.Soul:SetRussian("Разрушение души")
 AD.Lang.Ability.Meteor = KBM.Language:Add("Discordant Meteor")
-AD.Lang.Ability.Meteor.German = "Zwietracht-Meteor"
+AD.Lang.Ability.Meteor:SetGerman("Zwietracht-Meteor")
+AD.Lang.Ability.Meteor:SetRussian("Метеор раздора")
 
 -- Notify Dictionary
 AD.Lang.Notify = {}
 AD.Lang.Notify.Punish = KBM.Language:Add("(%a*)'s soul is wracked with energy!")
-AD.Lang.Notify.Punish.German = "Die Seele von (%a*) wird mit Energie überladen!"
+AD.Lang.Notify.Punish:SetGerman("Die Seele von (%a*) wird mit Energie überladen!")
 
 -- Buff Dictionary
 AD.Lang.Buff = {}
 AD.Lang.Buff.Shield = KBM.Language:Add("Shield of Darkness")
-AD.Lang.Buff.Shield.German = "Schild der Dunkelheit"
+AD.Lang.Buff.Shield:SetGerman("Schild der Dunkelheit")
+AD.Lang.Buff.Shield:SetRussian("Щит тьмы")
 
 -- Verbose Dictionary
 AD.Lang.Verbose = {}
 AD.Lang.Verbose.Phase = KBM.Language:Add("Until air phase")
-AD.Lang.Verbose.Phase.German = "bis zur Flugphase"
+AD.Lang.Verbose.Phase:SetGerman("bis zur Flugphase")
 AD.Lang.Verbose.PunishWarn = KBM.Language:Add(AD.Lang.Ability.Punish[KBM.Lang].." (Personal Alert)")
-AD.Lang.Verbose.PunishWarn.German = AD.Lang.Ability.Punish[KBM.Lang].." (Eigene Warnung)"
+AD.Lang.Verbose.PunishWarn:SetGerman(AD.Lang.Ability.Punish[KBM.Lang].." (Eigene Warnung)")
 AD.Lang.Verbose.Punish = KBM.Language:Add(AD.Lang.Ability.Punish[KBM.Lang].." (Personal Alert)")
-AD.Lang.Verbose.Punish.German = AD.Lang.Ability.Punish[KBM.Lang].." (Eigene Warnung)"
+AD.Lang.Verbose.Punish:SetGerman(AD.Lang.Ability.Punish[KBM.Lang].." (Eigene Warnung)")
 AD.Lang.Verbose.Meteor = KBM.Language:Add(AD.Lang.Ability.Meteor[KBM.Lang].." (First in phase 2)")
-AD.Lang.Verbose.Meteor.German = AD.Lang.Ability.Meteor[KBM.Lang].." (Erste in Phase 2)"
+AD.Lang.Verbose.Meteor:SetGerman(AD.Lang.Ability.Meteor[KBM.Lang].." (Erste in Phase 2)")
 
 -- Unit Dictionary
 AD.Lang.Unit = {}
 AD.Lang.Unit.Pillar = KBM.Language:Add("Discordant Pillar")
-AD.Lang.Unit.Pillar.German = "Zwietracht-Säule"
+AD.Lang.Unit.Pillar:SetGerman("Zwietracht-Säule")
 AD.Lang.Unit.PillarShort = KBM.Language:Add("Pillar")
-AD.Lang.Unit.PillarShort.German = "Säule"
+AD.Lang.Unit.PillarShort:SetGerman("Säule")
 AD.Lang.Unit.Harbinger = KBM.Language:Add("Soul Harbinger")
-AD.Lang.Unit.Harbinger.German = "Seelen-Vorbote"
+AD.Lang.Unit.Harbinger:SetGerman("Seelen-Vorbote")
 AD.Lang.Unit.HarbingerShort = KBM.Language:Add("Harbinger")
-AD.Lang.Unit.HarbingerShort.German = "Vorbote"
+AD.Lang.Unit.HarbingerShort:SetGerman("Vorbote")
 AD.Lang.Unit.Thief = KBM.Language:Add("Soul Thief")
-AD.Lang.Unit.Thief.German = "Seelen-Dieb"
+AD.Lang.Unit.Thief:SetGerman("Seelen-Dieb")
 AD.Lang.Unit.ThiefShort = KBM.Language:Add("Thief")
-AD.Lang.Unit.ThiefShort.German = "Dieb"
+AD.Lang.Unit.ThiefShort:SetGerman("Dieb")
 AD.Lang.Unit.Magus = KBM.Language:Add("Soul Magus")
-AD.Lang.Unit.Magus.German = "Seelen-Magus"
+AD.Lang.Unit.Magus:SetGerman("Seelen-Magus")
 AD.Lang.Unit.MagusShort = KBM.Language:Add("Magi")
-AD.Lang.Unit.MagusShort.German = "Magus"
+AD.Lang.Unit.MagusShort:SetGerman("Magus")
 
 AD.Harbinger = {
 	Mod = AD,

@@ -64,6 +64,7 @@ KBM.RegisterMod(MZ.ID, MZ)
 MZ.Lang.Matron = KBM.Language:Add(MZ.Matron.Name)
 MZ.Lang.Matron.German = "Matrone Zamira"
 MZ.Lang.Matron.French = "Matrone Zamira"
+MZ.Lang.Matron.Russian = "Старуха Замира"
 
 -- Ability Dictionary
 MZ.Lang.Ability = {}
@@ -73,13 +74,16 @@ MZ.Lang.Ability.Concussion.French = "Concussion sombre"
 MZ.Lang.Ability.Blast = KBM.Language:Add("Hideous Blast")
 MZ.Lang.Ability.Blast.German = "Schrecklicher Schlag"
 MZ.Lang.Ability.Blast.French = "Explosion atroce"
+MZ.Lang.Ability.Blast.Russian = "Мерзейший взрыв"
 MZ.Lang.Ability.Mark = KBM.Language:Add("Mark of Oblivion")
 MZ.Lang.Ability.Mark.German = "Zeichen der Vergessenheit"
 MZ.Lang.Ability.Mark.French = "Marque de l'oubli"
+MZ.Lang.Ability.Mark.Russian = "Знак забвения"
 MZ.Lang.Ability.Shadow = KBM.Language:Add("Shadow Strike")
 MZ.Lang.Ability.Shadow.German = "Schattenschlag"
 MZ.Lang.Ability.Ichor = KBM.Language:Add("Revolting Ichor")
 MZ.Lang.Ability.Ichor.German = "Abscheulicher Eiter"
+MZ.Lang.Ability.Ichor.Russian = "Омерзительный гной"
 
 -- Debuff Dictionary
 MZ.Lang.Debuff = {}

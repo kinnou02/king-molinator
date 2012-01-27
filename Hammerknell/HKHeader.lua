@@ -25,6 +25,7 @@ KBM.RegisterMod("Hammerknell", HK)
 KBM.Language:Add(HK.Name)
 KBM.Language[HK.Name]:SetFrench("Glasmarteau")
 KBM.Language[HK.Name]:SetGerman("Festung Hammerhall")
+KBM.Language[HK.Name]:SetRussian("Крепость Молотозвона")
 HK.Name = KBM.Language[HK.Name][KBM.Lang]
 HK.Descript = HK.Name
 

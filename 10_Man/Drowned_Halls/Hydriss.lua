@@ -51,24 +51,28 @@ HH.Hydriss = {
 KBM.RegisterMod(HH.ID, HH)
 
 HH.Lang.Hydriss = KBM.Language:Add(HH.Hydriss.Name)
-HH.Lang.Hydriss.German = "Hohepriesterin Hydriss"
-HH.Lang.Hydriss.Russian = "Первосвященница Гайдрисс"
+HH.Lang.Hydriss:SetGerman("Hohepriesterin Hydriss")
+HH.Lang.Hydriss:SetRussian("Первосвященница Гайдрисс")
 
 -- Ability Dictionary
 HH.Lang.Ability = {}
 HH.Lang.Ability.Tsunami = KBM.Language:Add("Tsunami")
+HH.Lang.Ability.Tsunami:SetRussian("Цунами")
+HH.Lang.Ability.Shock = KBM.Language:Add("Hydrostatic Shock")
+HH.Lang.Ability.Shock:SetRussian("Гидростатический удар")
 
 -- Mechanic Dictionary
 HH.Lang.Mechanic = {}
 HH.Lang.Mechanic.Air = KBM.Language:Add("Air Phase")
-HH.Lang.Mechanic.Air.German = "Flug Phase"
+HH.Lang.Mechanic.Air:SetGerman("Flug Phase")
 
 -- Unit Dictionary
 HH.Lang.Unit = {}
 HH.Lang.Unit.Sea = KBM.Language:Add("Seaspawn")
-HH.Lang.Unit.Sea.German = "Meeresbrut"
+HH.Lang.Unit.Sea:SetGerman("Meeresbrut")
+HH.Lang.Unit.Sea:SetRussian("Приливная волна")
 HH.Lang.Unit.Hive = KBM.Language:Add("Seaclaw Hive")
-HH.Lang.Unit.Hive.German = "Seeklauennest"
+HH.Lang.Unit.Hive:SetGerman("Seeklauennest")
 
 HH.Seaspawn = {
 	Mod = HH,

@@ -22,6 +22,7 @@ KBM.RegisterMod("Guilded Prophecy", GP)
 KBM.Language:Add(GP.Name)
 KBM.Language[GP.Name]:SetGerman("Güldene Prophezeiung")
 KBM.Language[GP.Name]:SetFrench("Proph\195\169tie dor\195\169e")
+KBM.Language[GP.Name]:SetRussian("Позолоченное пророчество")
 
 GP.Name = KBM.Language[GP.Name][KBM.Lang]
 GP.Descript = GP.Name

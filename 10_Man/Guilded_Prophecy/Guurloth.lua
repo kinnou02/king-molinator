@@ -61,6 +61,7 @@ GH.Guurloth = {
 KBM.RegisterMod(GH.ID, GH)
 
 GH.Lang.Guurloth = KBM.Language:Add(GH.Guurloth.Name)
+GH.Lang.Guurloth:SetRussian("Гуурлот")
 GH.Guurloth.Name = GH.Lang.Guurloth[KBM.Lang]
 
 -- Ability Dictionary

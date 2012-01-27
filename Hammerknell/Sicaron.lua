@@ -63,30 +63,36 @@ SN.Sicaron = {
 
 KBM.RegisterMod(SN.ID, SN)
 
+-- Define Name
 SN.Lang.Sicaron = KBM.Language:Add(SN.Sicaron.Name)
+SN.Lang.Sicaron.Russian = "Сикарон"
+SN.Sicaron.Name = SN.Lang.Sicaron[KBM.Lang]
+SN.Descript = SN.Sicaron.Name
 
 -- Ability Dictionary
 SN.Lang.Ability = {}
 SN.Lang.Ability.Hex = KBM.Language:Add("Excruciating Hex")
 SN.Lang.Ability.Hex.German = "Quälende Verhexung"
+SN.Lang.Ability.Hex.Russian = "Смертоностное проклятие"
 SN.Lang.Ability.Decay = KBM.Language:Add("Moldering Decay")
-SN.Lang.Ability.Decay.German = "Zerfallende Verwesung" 
+SN.Lang.Ability.Decay.German = "Zerfallende Verwesung"
+SN.Lang.Ability.Decay.Russian = "Тлеющее увядание" 
 
 -- Notify Dictionary
 SN.Lang.Notify = {}
 SN.Lang.Notify.Contract = KBM.Language:Add("Sicaron forces (%a*) into an unholy contract")
 SN.Lang.Notify.Contract.German = "Sicaron zwingt (%a*) in einen unheiligen Pakt"
+SN.Lang.Notify.Contract.Russian = "Сикарон заключает дьявольский контракт. Партнер - (%a*)."
 
 -- Debuff Dictionary
 SN.Lang.Debuff = {}
 SN.Lang.Debuff.Contract = KBM.Language:Add("Unholy Contract")
 SN.Lang.Debuff.Contract.German = "Unheiliger Vertrag"
 SN.Lang.Debuff.Contract.French = "Contrat impie"
+SN.Lang.Debuff.Contract.Russian = "Нечестивый договор"
 SN.Lang.Debuff.Soul = KBM.Language:Add("Soul Harvest")
-SN.Lang.Debuff.Soul.German = "Seelenernte" 
-
-SN.Sicaron.Name = SN.Lang.Sicaron[KBM.Lang]
-SN.Descript = SN.Sicaron.Name
+SN.Lang.Debuff.Soul.German = "Seelenernte"
+SN.Lang.Debuff.Soul.Russian = "Сбор души"
 
 function SN:AddBosses(KBM_Boss)
 	self.MenuName = self.Sicaron.Descript

@@ -2504,17 +2504,17 @@ function KBM.InitOptions()
 				Callbacks.Boss = self.Boss
 				
 				local Settings = self.Boss.Mod.Settings.Records
-				Header = self:CreateHeader("Best Time:", "plain", "Records", "Main")
+				Header = self:CreateHeader(KBM.Language.Records.Best[KBM.Lang], "plain", "Records", "Main")
 				if Settings.Best then
 					if Settings.Best > 0 then
 						Header:CreateOption(KBM.ConvertTime(Settings.Best), "plain")
 					else
-						Header:CreateOption("No kill has been recorded.", "plain")
+						Header:CreateOption(KBM.Language.Records.NoRecord[KBM.Lang], "plain")
 					end
 				else
-					Header:CreateOption("No kill has been recorded.", "plain")
+					Header:CreateOption(KBM.Language.Records.NoRecord[KBM.Lang], "plain")
 				end
-				Header = self:CreateHeader("Details:", "plain", "Records", "Main")
+				Header = self:CreateHeader(KBM.Language.Records.Details[KBM.Lang], "plain", "Records", "Main")
 				if Settings.Kills > Settings.Attempts then
 					local Adjust = Settings.Kills - Settings.Attempts
 					Settings.Attempts = Settings.Attempts + Adjust
@@ -2522,13 +2522,13 @@ function KBM.InitOptions()
 				if Settings.Wipes ~= (Settings.Attempts - Settings.Kills) then
 					Settings.Kills = (Settings.Attempts - Settings.Wipes)
 				end
-				Header:CreateOption("Attempts: "..Settings.Attempts, "plain")
-				Header:CreateOption("Kills: "..Settings.Kills, "plain")
-				Header:CreateOption("Wipes: "..Settings.Wipes, "plain")
+				Header:CreateOption(KBM.Language.Records.Attempts[KBM.Lang]..Settings.Attempts, "plain")
+				Header:CreateOption(KBM.Language.Records.Kills[KBM.Lang]..Settings.Kills, "plain")
+				Header:CreateOption(KBM.Language.Records.Wipes[KBM.Lang]..Settings.Wipes, "plain")
 				if Settings.Attempts > 0 then
-					Header:CreateOption("Success rate is: "..string.format("%0.1f", (Settings.Kills/Settings.Attempts) * 100).."%", "plain")
+					Header:CreateOption(KBM.Language.Records.Rate[KBM.Lang]..string.format("%0.1f", (Settings.Kills/Settings.Attempts) * 100).."%", "plain")
 				else
-					Header:CreateOption("Success rate is: n/a")
+					Header:CreateOption(KBM.Language.Records.Rate[KBM.Lang].."n/a")
 				end
 			end
 			

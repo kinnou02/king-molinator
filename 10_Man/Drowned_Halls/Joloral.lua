@@ -76,6 +76,7 @@ JR.Lang.Verbose.Crippler.German = JR.Lang.Unit.Crippler[KBM.Lang].." greift in d
 JR.Lang.Menu = {}
 JR.Lang.Menu.Panic = KBM.Language:Add(JR.Lang.Ability.Panic[KBM.Lang].." duration.")
 JR.Lang.Menu.Panic.German = JR.Lang.Ability.Panic[KBM.Lang].." Dauer."
+JR.Lang.Menu.Panic.Russian = "Длительность "..JR.Lang.Ability.Panic[KBM.Lang]
 
 JR.Joloral.Name = JR.Lang.Joloral[KBM.Lang]
 JR.Descript = JR.Joloral.Name

@@ -44,6 +44,7 @@ UK.Uruluuk = {
 KBM.RegisterMod(UK.ID, UK)
 
 UK.Lang.Uruluuk = KBM.Language:Add(UK.Uruluuk.Name)
+UK.Lang.Uruluuk:SetRussian("Улуруук")
 UK.Uruluuk.Name = UK.Lang.Uruluuk[KBM.Lang]
 
 -- Ability Dictionary

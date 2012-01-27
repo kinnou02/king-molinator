@@ -177,6 +177,8 @@ KM.Lang.Dollin = KBM.Language:Add(KM.Prince.Name)
 KBM.Language[KM.King.Name]:SetGerman("Runenkönig Molinar")
 KBM.Language[KM.Prince.Name]:SetGerman("Prinz Dollin")
 KBM.Language[KM.King.Name]:SetFrench("Roi runique Molinar")
+KBM.Language[KM.King.Name]:SetRussian("Рунный король Молинар")
+KBM.Language[KM.Prince.Name]:SetRussian("Принц Доллин")
 
 -- Ability Dictionary
 KM.Lang.Ability = {}
@@ -186,12 +188,15 @@ KM.Lang.Ability.Rend.German = "Leben entreißen"
 KM.Lang.Ability.Terminate = KBM.Language:Add("Terminate Life")
 KM.Lang.Ability.Terminate.French = "Ach\195\168vement de Vie"
 KM.Lang.Ability.Terminate.German = "Leben auslöschen"
+KM.Lang.Ability.Terminate.Russian = "Прервать жизнь"
 KM.Lang.Ability.Essence = KBM.Language:Add("Consuming Essence")
 KM.Lang.Ability.Essence.French = "Combustion d'essence"
 KM.Lang.Ability.Essence.German = "Verschlingende Essenz"
+KM.Lang.Ability.Essence.Russian = "Поглощающая сущность"
 KM.Lang.Ability.Feedback = KBM.Language:Add("Runic Feedback")
 KM.Lang.Ability.Feedback.French = "R\195\169action runique"
 KM.Lang.Ability.Feedback.German = "Runen-Resonanz"
+KM.Lang.Ability.Feedback.Russian = "Рунический вампиризм"
 KM.Lang.Ability.Crushing = KBM.Language:Add("Crushing Regret")
 KM.Lang.Ability.Crushing.German = "Erdrückendes Bedauern"
 KM.Lang.Ability.Crushing.French = "Blasph\195\168me infect"
@@ -201,28 +206,35 @@ KM.Lang.Ability.Forked.French = "Explosion fourchue"
 KM.Lang.Ability.Shout = KBM.Language:Add("Frightening Shout")
 KM.Lang.Ability.Shout.French = "Flammes maudites"
 KM.Lang.Ability.Shout.German = "Verängstigender Schrei"
+KM.Lang.Ability.Shout.Russian = "Пугающий крик"
 KM.Lang.Ability.Cursed = KBM.Language:Add("Cursed Blows")
 KM.Lang.Ability.Cursed.French = "Frappes maudites"
 KM.Lang.Ability.Cursed.German = "Verfluchte Schläge"
+KM.Lang.Ability.Cursed.Russian = "Проклятые удары"
 
 -- Units Dictionary
 KM.Lang.Unit = {}
 KM.Lang.Unit.Revenant = KBM.Language:Add("Incorporeal Revenant")
 KM.Lang.Unit.Revenant.French = "Revenant chim\195\169rique"
 KM.Lang.Unit.Revenant.German = "Unkörperlicher Wiedergänger"
+KM.Lang.Unit.Revenant.Russian = "Бестелесный восставший"
 
 -- Notify Dictionary
 KM.Lang.Notify = {}
 KM.Lang.Notify.Rev = KBM.Language:Add("Incorporeal Revenant begins to phase into this reality.")
 KM.Lang.Notify.Rev.French = "Revenant chim\195\169rique commence \195\160 se mat\195\169rialiser dans cette réalit\195\169."
 KM.Lang.Notify.Rev.German = "Unkörperlicher Wiedergänger beginnt, in diese Realität zu gleiten."
+KM.Lang.Notify.Rev.Russian = "Бестелесный восставший начинает переноситься в эту реальность."
 
 -- Menu Dictionary
 KM.Lang.Menu = {}
 KM.Lang.Menu.Cursed = KBM.Language:Add(KM.Lang.Ability.Cursed[KBM.Lang].." duration.")
 KM.Lang.Menu.Cursed.German = KM.Lang.Ability.Cursed[KBM.Lang].." Dauer."
+KM.Lang.Menu.Cursed.Russian = KM.Lang.Ability.Cursed[KBM.Lang].." длительность."
 KM.Lang.Menu.Feedback = KBM.Language:Add(KM.Lang.Ability.Feedback[KBM.Lang].." duration.")
-KM.Lang.Menu.Feedback.German = KM.Lang.Ability.Feedback[KBM.Lang].." Dauer." 
+KM.Lang.Menu.Feedback.German = KM.Lang.Ability.Feedback[KBM.Lang].." Dauer."
+KM.Lang.Menu.Feedback.Russian = KM.Lang.Ability.Feedback[KBM.Lang].." длительность." 
+
 
 -- King's Options page Dictionary
 KM.Lang.Options = {}
@@ -230,12 +242,15 @@ KM.Lang.Options.Monitor = {}
 KM.Lang.Options.Monitor.Enabled = KBM.Language:Add("Enable Percentage Monitor.")
 KM.Lang.Options.Monitor.Enabled.French = "Montrer Moniteur Pct."
 KM.Lang.Options.Monitor.Enabled.German = "Prozent Monitor anzeigen."
+KM.Lang.Options.Monitor.Enabled.Russian = "Включить монитор хп боссов в процентах."
 KM.Lang.Options.Monitor.Visible = KBM.Language:Add("Show Monitor (for positioning).")
 KM.Lang.Options.Monitor.Visible.French = "Cacher avant d\195\169but du combat."
 KM.Lang.Options.Monitor.Visible.German = "Verbergen bis zum Kampfbeginn."
+KM.Lang.Options.Monitor.Visible.Russian = "Показать монитор (для смены позици)."
 KM.Lang.Options.Monitor.Compact = KBM.Language:Add("Compact Mode.")
 KM.Lang.Options.Monitor.Compact.French = "Mode Compact."
 KM.Lang.Options.Monitor.Compact.German = "Kompakte Anzeige."
+KM.Lang.Options.Monitor.Compact.Russian = "Сделать компактным."
 
 KM.King.Name = KM.Lang.Molinar[KBM.Lang]
 KM.Prince.Name = KM.Lang.Dollin[KBM.Lang]

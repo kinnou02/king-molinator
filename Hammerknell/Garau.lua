@@ -51,46 +51,55 @@ GU.Garau = {
 
 KBM.RegisterMod(GU.ID, GU)
 
+-- Define Name
 GU.Lang.Garau = KBM.Language:Add(GU.Garau.Name)
 GU.Lang.Garau.French = "Inquisiteur Garau"
+GU.Lang.Garau.Russian = "Инквизитор Гарау"
+GU.Garau.Name = GU.Lang.Garau[KBM.Lang]
+GU.Descript = GU.Garau.Name
 
 -- Ability Dictionary
 GU.Lang.Ability = {}
 GU.Lang.Ability.Arcane = KBM.Language:Add("Arcane Essence")
 GU.Lang.Ability.Arcane.French = "Syphon d'essence"
 GU.Lang.Ability.Arcane.German = "Essenzabsauger"
+GU.Lang.Ability.Arcane.Russian = "Магическая эссения"
 GU.Lang.Ability.Blood = KBM.Language:Add("Bloodtide")
 GU.Lang.Ability.Blood.German = "Blutflut"
+GU.Lang.Ability.Blood.Russian = "Кровавая волна"
 
 -- Buff Dictionary
 GU.Lang.Buff = {}
 GU.Lang.Buff.Shield = KBM.Language:Add("Glacial Shield")
 GU.Lang.Buff.Shield.German = "Gletscherschild"
+GU.Lang.Buff.Shield.Russian = "Ледниковый щит"
 
 -- Speak Dictionary
 GU.Lang.Say = {}
 GU.Lang.Say.Power = KBM.Language:Add("Power my creation!")
 GU.Lang.Say.Power.French = "Alimentez ma cr\195\169ation*!"
 GU.Lang.Say.Power.German = "Macht meiner Schöpfung!"
+GU.Lang.Say.Power.Russian = "Наполни мое творение силой!"
 GU.Lang.Say.Arcane = KBM.Language:Add("Inquisitor Garau siphons arcane essence from nearby enemies!")
 GU.Lang.Say.Arcane.French = "Inquisiteur Garau siphonne l'essence occulte des ennemis \195\160 proximit\195\169 !"
 GU.Lang.Say.Arcane.German = "Inquisitor Garau saugt von Feinden in der Nähe arkane Essenz ab!"
+GU.Lang.Say.Arcane.Russian = "Инквизитор Гарау высасывает магическую энергию из окружающих врагов!"
 GU.Lang.Say.Bask = KBM.Language:Add("Bask in the power of Akylios!")
 GU.Lang.Say.Bask.French = "Savourez le pouvoir d'Akylios !"
 GU.Lang.Say.Bask.German = "Preiset die Macht des Akylios!"
+GU.Lang.Say.Bask.Russian = "Познайте мощь Акилиоса!"
 GU.Lang.Say.Sacrifice = KBM.Language:Add("Sacrifice your lives for Akylios!")
 GU.Lang.Say.Sacrifice.French = "Sacrifiez vos vies pour Akylios !"
 GU.Lang.Say.Sacrifice.German = "Opfert Eure leben dem Akylios!"
+GU.Lang.Say.Sacrifice.Russian = "Ваши жизни станут жертвой в честь Акилиоса!"
 
 -- Unit Dictionary
 GU.Lang.Unit = {}
 GU.Lang.Unit.Porter = KBM.Language:Add("Arcane Porter")
 GU.Lang.Unit.Porter.German = "Arkane Torwache"
+GU.Lang.Unit.Porter.Russian = "Привратник Магической Руки"
 GU.Lang.Unit.Crawler = KBM.Language:Add("Infused Crawler")
 GU.Lang.Unit.Crawler.German = "Durchdrungener Kriecher"
-
-GU.Garau.Name = KBM.Language[GU.Garau.Name][KBM.Lang]
-GU.Descript = GU.Garau.Name
 	
 function GU:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript

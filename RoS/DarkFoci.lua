@@ -54,27 +54,32 @@ DF.Foci = {
 KBM.RegisterMod(DF.ID, DF)
 
 DF.Lang.Foci = KBM.Language:Add(DF.Foci.Name)
-DF.Lang.Foci.German = "Finsterer Fokus"
-DF.Lang.Foci.French = "Balises T\195\169n\195\169breuses"
+DF.Lang.Foci:SetGerman("Finsterer Fokus")
+DF.Lang.Foci:SetFrench("Balises T\195\169n\195\169breuses")
+DF.Lang.Foci:SetRussian("Темное средоточия")
 
 -- Ability Dictionary
 DF.Lang.Ability = {}
 DF.Lang.Ability.Ground = KBM.Language:Add("Unhallowed Ground")
-DF.Lang.Ability.Ground.German = "Unheiliger Boden"
+DF.Lang.Ability.Ground:SetGerman("Unheiliger Boden")
+DF.Lang.Ability.Ground:SetRussian("Земля нечестивости")
 DF.Lang.Ability.Call = KBM.Language:Add("Call Darkness")
-DF.Lang.Ability.Call.German = "Finsternis rufen"
+DF.Lang.Ability.Call:SetGerman("Finsternis rufen")
+DF.Lang.Ability.Call:SetRussian("Призыв тьмы")
 DF.Lang.Ability.Blast = KBM.Language:Add("Corrupt Blast")
-DF.Lang.Ability.Blast.German = "Sturmverderbnis" 
+DF.Lang.Ability.Blast:SetGerman("Sturmverderbnis")
+DF.Lang.Ability.Blast:SetRussian("Черный луч")
 
 -- Debuff Dictionary
 DF.Lang.Debuff = {}
 DF.Lang.Debuff.Soul = KBM.Language:Add("Destabilize Soul")
-DF.Lang.Debuff.Soul.German = "Seele destabilisieren"
+DF.Lang.Debuff.Soul:SetGerman("Seele destabilisieren")
+DF.Lang.Debuff.Soul:SetRussian("Раскачать душу")
 
 -- Unit Dictionary
 DF.Lang.Unit = {}
 DF.Lang.Unit.Force = KBM.Language:Add("Force of Corruption")
-DF.Lang.Unit.Force.German = "Verderbende Kraft" 
+DF.Lang.Unit.Force:SetGerman("Verderbende Kraft")
 
 DF.Force = {
 	Mod = DF,

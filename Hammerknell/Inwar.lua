@@ -138,21 +138,29 @@ KBM.RegisterMod(ID.ID, ID)
 ID.Lang.Inwar = KBM.Language:Add(ID.Inwar.Name)
 ID.Lang.Inwar.German = "Inwar Dunkelflut"
 ID.Lang.Inwar.French = "Inwar Noirflux"
+ID.Lang.Inwar.Russian = "Инвар Темная Волна"
 ID.Lang.Denizar = KBM.Language:Add(ID.Denizar.Name)
+ID.Lang.Denizar.Russian = "Денизар"
 ID.Lang.Aqualix = KBM.Language:Add(ID.Aqualix.Name)
+ID.Lang.Aqualix.Russian = "Акваликс"
 ID.Lang.Undertow = KBM.Language:Add(ID.Undertow.Name)
 ID.Lang.Undertow.German = "Sog"
+ID.Lang.Undertow.Russian = "Подводное течение"
 ID.Lang.Rotjaw = KBM.Language:Add(ID.Rotjaw.Name)
 ID.Lang.Rotjaw.German = "Faulkriefer"
+ID.Lang.Rotjaw.Russian = "Гнилая челюсть"
 
 -- Unit Dictionary
 ID.Lang.Unit = {}
 ID.Lang.Unit.Slime = KBM.Language:Add(ID.Slime.Name)
 ID.Lang.Unit.Slime.German = "Stinkender Schleim"
+ID.Lang.Unit.Slime.Russian = "Зловонный слизень"
 ID.Lang.Unit.Wrangler = KBM.Language:Add(ID.Wrangler.Name)
 ID.Lang.Unit.Wrangler.German = "Krabbelklauen-Zämker"
+--ID.Lang.Unit.Wrangler.Russian = "Scuttle Claw Wrangler"
 ID.Lang.Unit.Warden = KBM.Language:Add(ID.Warden.Name)
 ID.Lang.Unit.Warden.German = "Gezeitenbewahrer"
+ID.Lang.Unit.Warden.Russian = "Страж прилива"
 
 -- Adjust Unit Names to match Client
 ID.Inwar.Name = ID.Lang.Inwar[KBM.Lang]

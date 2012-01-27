@@ -45,15 +45,18 @@ WG.Galenir = {
 KBM.RegisterMod(WG.ID, WG)
 
 WG.Lang.Galenir = KBM.Language:Add(WG.Galenir.Name)
-WG.Lang.Galenir.German = "Kriegsmeister Galenir"
-WG.Lang.Galenir.French = "Ma\195\174tre de Guerre Galenir"
+WG.Lang.Galenir:SetGerman("Kriegsmeister Galenir")
+WG.Lang.Galenir:SetFrench("Ma\195\174tre de Guerre Galenir")
+WG.Lang.Galenir:SetRussian("Воевода Галенир")
 
 -- Debuff Dictionary
 WG.Lang.Debuff = {}
 WG.Lang.Debuff.Festering = KBM.Language:Add("Festering Infection")
-WG.Lang.Debuff.Festering.German = "Eitriger Infekt"
+WG.Lang.Debuff.Festering:SetGerman("Eitriger Infekt")
+WG.Lang.Debuff.Festering:SetRussian("Передача сущности")
 WG.Lang.Debuff.Essence = KBM.Language:Add("Essence Transfer")
-WG.Lang.Debuff.Essence.German = "Essenztransfer"
+WG.Lang.Debuff.Essence:SetGerman("Essenztransfer")
+WG.Lang.Debuff.Essence:SetRussian("Гнойное заражение")
 
 WG.Galenir.Name = WG.Lang.Galenir[KBM.Lang]
 WG.Descript = WG.Galenir.Name

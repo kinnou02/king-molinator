@@ -63,6 +63,7 @@ IL.Lang.Ability.Wave.German = "Gletscherwelle"
 -- Mechanic Dictionary
 IL.Lang.Mechanic = {}
 IL.Lang.Mechanic.Whirlpool = KBM.Language:Add("Whirlpool")
+IL.Lang.Mechanic.Whirlpool.Russian = "Вихрь смерти"
 IL.Lang.Mechanic.Anti = KBM.Language:Add("Anti-Clockwise")
 IL.Lang.Mechanic.Anti.German = "Gegen Uhrzeigersinn"
 IL.Lang.Mechanic.Clock = KBM.Language:Add("Clockwise")

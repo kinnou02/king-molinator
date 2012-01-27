@@ -239,8 +239,6 @@ function AK:LoadVars()
 	self.Jornaru.Settings.CastBar.Override = true
 	self.Akylios.Settings.CastBar.Multi = true
 	self.Jornaru.Settings.CastBar.Multi = true
-	
-	self.Akylios.Settings.AlertsRef.Breath.Enabled = true	
 end
 
 function AK:SaveVars()	
@@ -284,6 +282,7 @@ function AK.PhaseThree()
 	KBM.MechTimer:AddStart(AK.Akylios.TimersRef.EmergeFirst)
 	KBM.MechTimer:AddStart(AK.Akylios.TimersRef.BreathFirst)
 	AK.PhaseObj.Objectives:AddPercent(AK.Akylios.Name, 55, 100)
+	AK.PhaseObj.Objectives:AddPercent(AK.Jornaru.Name, 0, 50)
 	print("Phase 3 starting!")	
 end
 
@@ -526,7 +525,6 @@ function AK:Start()
 	self.Akylios.TimersRef.Submerge = KBM.MechTimer:Add(AK.Lang.Mechanic.Submerge[KBM.Lang], 80)
 	self.Akylios.TimersRef.Submerge:NoMenu()
 	self.Akylios.TimersRef.Submerge:AddTimer(self.Akylios.TimersRef.Emerge, 0)
-	self.Akylios.TimersRef.Submerge:SetPhase(4)
 	self.Akylios.TimersRef.Emerge:AddTimer(self.Akylios.TimersRef.Submerge, 0)
 	self.Akylios.TimersRef.EmergeFirst = KBM.MechTimer:Add(AK.Lang.Mechanic.Emerge[KBM.Lang], 80)
 	self.Akylios.TimersRef.EmergeFirst.MenuName = "Emerge/Submerge Timers"

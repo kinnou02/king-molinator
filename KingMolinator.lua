@@ -603,6 +603,28 @@ KBM.Language.Encounter.Victory.German = "Bosskampf erfolgreich!"
 KBM.Language.Encounter.Chronicle = KBM.Language:Add("Activate in Chronicles.")
 KBM.Language.Encounter.Chronicle.German = "in den Chroniken verwenden."
 
+-- Records Dictionary
+KBM.Language.Records = {}
+-- Records Tab
+KBM.Language.Records.Attempts = KBM.Language:Add("Attempts: ")
+KBM.Language.Records.Attempts.German = "Pulls: "
+KBM.Language.Records.Wipes = KBM.Language:Add("Wipes: ")
+KBM.Language.Records.Kills = KBM.Language:Add("Kills: ")
+KBM.Language.Records.Best = KBM.Language:Add("Best Time:")
+KBM.Language.Records.Best.German = "Bestzeit:"
+KBM.Language.Records.Details = KBM.Language:Add("Details:")
+KBM.Language.Records.Rate = KBM.Language:Add("Success Rate is ")
+KBM.Language.Records.Rate.German = "Erfolgsrate ist "
+KBM.Language.Records.NoRecord = KBM.Language:Add("No kills have been recorded.")
+KBM.Language.Records.Previous = KBM.Language:Add("Previous best: ")
+-- In game Messages
+KBM.Language.Records.BeatRecord = KBM.Language:Add("Congratulations: New Record!")
+KBM.Language.Records.BeatChrRecord = KBM.Language:Add("Congratulations: New Chronicle Record!")
+KBM.Language.Records.NewRecord = KBM.Language:Add("Congratulations: A new record has been set!")
+KBM.Language.Records.NewChrRecord = KBM.Language:Add("Congratulations: A new Chronicle record has been set!")
+KBM.Language.Records.Current = KBM.Language:Add("Current Record: ")
+KBM.Language.Records.Invalid = KBM.Language:Add("Time is invalid, no records can be set.")
+
 -- Colors
 KBM.Language.Color = {}
 KBM.Language.Color.Custom = KBM.Language:Add("Custom color.")
@@ -623,6 +645,7 @@ KBM.Language.Color.Purple.German = "Lila"
 -- Castbar Action Dictionary
 KBM.Language.CastBar = {}
 KBM.Language.CastBar.Interrupt = KBM.Language:Add("Interrupted")
+KBM.Language.CastBar.Interrupt.German = "Unterbrochen"
 
 -- Cast-bar related options
 KBM.Language.Options = {}
@@ -655,15 +678,19 @@ KBM.Language.Options.TimersEnabled.German = "Timer anzeigen."
 KBM.Language.Options.ShowTimer = KBM.Language:Add("Show Timer (for positioning).")
 KBM.Language.Options.ShowTimer.French = "Montrer Timer (pour positionnement)."
 KBM.Language.Options.ShowTimer.German = "Zeige Timer (für Positionierung)."
+KBM.Language.Options.ShowTimer.Russian = "Показать таймер (для позиционирования)."
 KBM.Language.Options.LockTimer = KBM.Language:Add("Unlock Timer.")
 KBM.Language.Options.LockTimer.French = "D\195\169bloquer Timer."
 KBM.Language.Options.LockTimer.German = "Timer ist verschiebbar."
+KBM.Language.Options.LockTimer.Russian = "Разблокировать таймер."
 KBM.Language.Options.Timer = KBM.Language:Add("Encounter duration Timer.")
 KBM.Language.Options.Timer.French = "Timer duration combat."
 KBM.Language.Options.Timer.German = "Kampfdauer Anzeige."
+KBM.Language.Options.Timer.Russian = "Таймер продолжительности энкаунтера."
 KBM.Language.Options.Enrage = KBM.Language:Add("Enrage Timer (if supported).")
 KBM.Language.Options.Enrage.French = "Timer d'Enrage (si support\195\169)."
 KBM.Language.Options.Enrage.German = "Enrage Anzeige (wenn unterstützt)."
+KBM.Language.Options.Enrage.Russian = "Энрейдж Таймер (если поддерживается)."
 
 -- Anchors Options
 KBM.Language.Options.ShowAnchor = KBM.Language:Add("Show anchor (for positioning).")
@@ -690,18 +717,22 @@ KBM.Language.Options.Phase = KBM.Language:Add("Phase")
 KBM.Language.Options.Button = KBM.Language:Add("Options Button Visible.")
 KBM.Language.Options.Button.French = "Bouton Configurations Visible."
 KBM.Language.Options.Button.German = "Options-Schalter sichtbar."
+KBM.Language.Options.Button.Russian = "Отображать кнопку настроек."
 KBM.Language.Options.LockButton = KBM.Language:Add("Unlock Button (right-click to move).")
 KBM.Language.Options.LockButton.French = "D\195\169bloquer Bouton (click-droit pour d\195\169placer)."
 KBM.Language.Options.LockButton.German = "Schalter ist verschiebbar (Rechts-Klick zum verschieben)."
+KBM.Language.Options.LockButton.Russian = "Разблокировать кнопку (правый клик для перемещения)."
 
 -- Tank Swap related
 KBM.Language.Options.TankSwap = KBM.Language:Add("Tank-Swaps")
 KBM.Language.Options.TankSwap.German = "Tank Wechsel"
+KBM.Language.Options.TankSwap.Russian = "Танк-свап"
 KBM.Language.Options.Tank = KBM.Language:Add("Show Test Tanks.")
 KBM.Language.Options.Tank.French = "Afficher Test Tanks."
 KBM.Language.Options.Tank.German = "Zeige Test-Tanks-Fenster."
 KBM.Language.Options.TankSwapEnabled = KBM.Language:Add("Tank-Swaps enabled.")
 KBM.Language.Options.TankSwapEnabled.German = "Tank Wechsel anzeigen."
+KBM.Language.Options.TankSwapEnabled.Russian = "Включить танк-свап."
 
 -- Alert related
 KBM.Language.Options.AlertsOverride = KBM.Language:Add("Alerts: Override")
@@ -709,9 +740,11 @@ KBM.Language.Options.AlertsOverride.German = "Alarmierungs: Einstellungen."
 KBM.Language.Options.Alert = KBM.Language:Add("Screen Alerts")
 KBM.Language.Options.Alert.German = "Alarmierungen"
 KBM.Language.Options.Alert.French = "Alerte \195\160 l'\195\169cran"
+KBM.Language.Options.Alert.Russian = "Предупреждения на экране"
 KBM.Language.Options.AlertsEnabled = KBM.Language:Add("Screen Alerts enabled.")
 KBM.Language.Options.AlertsEnabled.German = "Bildschirm Alarmierungen aktiviert."
 KBM.Language.Options.AlertsEnabled.French = "Alerte \195\160 l'\195\169cran activ\195\169."
+KBM.Language.Options.AlertsEnabled.Russian = "Отображать предупреждения на экране."
 KBM.Language.Options.AlertFlash = KBM.Language:Add("Screen flash enabled.")
 KBM.Language.Options.AlertFlash.German = "Bildschirm-Rand Flackern aktiviert."
 KBM.Language.Options.AlertFlash.French = "Flash \195\169cran activ\195\169."
@@ -721,8 +754,11 @@ KBM.Language.Options.AlertText.French = "Texte Avertissement Alerte activ\195\16
 KBM.Language.Options.UnlockFlash = KBM.Language:Add("Unlock alert border for scaling.")
 KBM.Language.Options.UnlockFlash.German = "Alarmierungs Ränder sind änderbar."
 KBM.Language.Options.Border = KBM.Language:Add("Enable Border")
+KBM.Language.Options.Border.German = "Ränder aktivieren"
 KBM.Language.Options.Notify = KBM.Language:Add("Enable Text")
+KBM.Language.Options.Notify.German = "Text aktivieren"
 KBM.Language.Options.Sound = KBM.Language:Add("Play Sound")
+KBM.Language.Options.Sound.German = "Sound abspielen"
 
 -- Size Dictionary
 KBM.Language.Options.UnlockWidth = KBM.Language:Add("Unlock width for scaling. (Mouse wheel)")
@@ -737,17 +773,23 @@ KBM.Language.Options.UnlockAlpha.German = "Transparenz ist änderbar."
 -- Misc.
 KBM.Language.Options.Character = KBM.Language:Add("Saving settings for this character only.")
 KBM.Language.Options.Character.German = "Einstellungen nur für diesen Charakter speichern."
+KBM.Language.Options.Character.Russian = "Сохранить настройки только для этого персонажа."
 KBM.Language.Options.ModEnabled = KBM.Language:Add("Enable King Boss Mods v"..AddonData.toc.Version)
 KBM.Language.Options.ModEnabled.German = "Aktiviere King Boss Mods v"..AddonData.toc.Version
+KBM.Language.Options.ModEnabled.Russian = "Активировать King Boss Mods v"..AddonData.toc.Version
 KBM.Language.Options.Enabled = KBM.Language:Add("Enabled.")
 KBM.Language.Options.Enabled.German = "Aktiviert."
+KBM.Language.Options.Enabled.Russian = "Активировать."
 KBM.Language.Options.Settings = KBM.Language:Add("Settings")
 KBM.Language.Options.Settings.French = "Configurations"
 KBM.Language.Options.Settings.German = "Einstellungen"
+KBM.Language.Options.Settings.Russian = "Настройки"
 KBM.Language.Options.Shadow = KBM.Language:Add("Show text shadows.")
 KBM.Language.Options.Shadow.German = "Zeige Text Schattierung."
+KBM.Language.Options.Shadow.Russian = "Отображать тень текста."
 KBM.Language.Options.Texture = KBM.Language:Add("Enable textured overlay.")
 KBM.Language.Options.Texture.German = "Texturierte Balken aktiviert."
+KBM.Language.Options.Texture.Russian = "Включить функцию наложения текстур."
 
 -- Timer Dictionary
 KBM.Language.Timers = {}
@@ -4154,21 +4196,21 @@ local function KBM_Death(UnitID)
 								if KBM.CurrentMod.Settings.Records.Best == 0 or (KBM.TimeElapsed < KBM.CurrentMod.Settings.Records.Best) then
 									print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
 									if KBM.CurrentMod.Settings.Records.Best ~= 0 then
-										print("Previous best: "..KBM.ConvertTime(KBM.CurrentMod.Settings.Records.Best))
-										print("Congratulations: New Record!")
+										print(KBM.Language.Records.Previous[KBM.Lang]..KBM.ConvertTime(KBM.CurrentMod.Settings.Records.Best))
+										print(KBM.Language.Records.BeatRecord[KBM.Lang])
 									else
-										print("Congratulations: A new record has been set!")
+										print(KBM.Language.Records.NewRecord[KBM.Lang])
 									end
 									KBM.CurrentMod.Settings.Records.Best = KBM.TimeElapsed
 									KBM.CurrentMod.Settings.Records.Kills = KBM.CurrentMod.Settings.Records.Kills + 1
 								else
 									print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
-									print("Current Record: "..KBM.ConvertTime(KBM.CurrentMod.Settings.Records.Best))
+									print(KBM.Language.Records.Current[KBM.Lang]..KBM.ConvertTime(KBM.CurrentMod.Settings.Records.Best))
 									KBM.CurrentMod.Settings.Records.Kills = KBM.CurrentMod.Settings.Records.Kills + 1
 								end
 							else
 								print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
-								print("Time is invalid, no records can be set.")
+								print(KBM.Language.Records.Invalid[KBM.Lang])
 								KBM.CurrentMod.Settings.Records.Kills = KBM.CurrentMod.Settings.Records.Kills + 1
 							end
 						else
@@ -4176,21 +4218,21 @@ local function KBM_Death(UnitID)
 								if KBM.CurrentMod.Settings.Records.Chronicle.Best == 0 or KBM.TimeElapsed < KBM.CurrentMod.Settings.Records.Chronicle.Best then
 									print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
 									if KBM.CurrentMod.Settings.Records.Chronicle.Best ~= 0 then
-										print("Previous best: "..KBM.ConvertTime(KBM.CurrentMod.Settings.Records.Chronicle.Best))
-										print("Congratulations: New Chronicle Record!")
+										print(KBM.Language.Records.Previous[KBM.Lang]..KBM.ConvertTime(KBM.CurrentMod.Settings.Records.Chronicle.Best))
+										print(KBM.Language.Records.BeatChrRecord[KBM.Lang])
 									else
-										print("Congratulations: A new record has been set!")
+										print(KBM.Language.Records.NewChrRecord[KBM.Lang])
 									end
 									KBM.CurrentMod.Settings.Records.Chronicle.Best = KBM.TimeElapsed
 									KBM.CurrentMod.Settings.Records.Chronicle.Kills = KBM.CurrentMod.Settings.Records.Chronicle.Kills + 1
 								else
 									print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))								
-									print("Current Record: "..KBM.ConvertTime(KBM.CurrentMod.Settings.Records.Chronicle.Best))
+									print(KBM.Language.Records.Current[KBM.Lang]..KBM.ConvertTime(KBM.CurrentMod.Settings.Records.Chronicle.Best))
 									KBM.CurrentMod.Settings.Records.Kills = KBM.CurrentMod.Settings.Records.Kills + 1
 								end
 							else
 								print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
-								print("Time is invalid, no records can be set.")
+								print(KBM.Language.Records.Invalid[KBM.Lang])
 								KBM.CurrentMod.Settings.Records.Chronicle.Kills = KBM.CurrentMod.Settings.Records.Kills + 1
 							end
 						end
@@ -4199,8 +4241,7 @@ local function KBM_Death(UnitID)
 				end
 			end
 		end
-	end
-	
+	end	
 end
 
 local function KBM_Help()

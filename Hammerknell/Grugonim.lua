@@ -77,41 +77,49 @@ GR.Tower = {
 
 KBM.RegisterMod(GR.ID, GR)
 
+-- Define Names
 GR.Lang.Grugonim = KBM.Language:Add(GR.Grugonim.Name)
+GR.Lang.Grugonim.Russian = "Гругоним"
+GR.Grugonim.Name = GR.Lang.Grugonim[KBM.Lang]
 GR.Lang.Tower = KBM.Language:Add(GR.Tower.Name)
 GR.Lang.Tower.German = "Manifestierter Tod"
 GR.Lang.Tower.French = "Mort manifestée"
+GR.Lang.Tower.Russian = "Материализованная Смерть"
+GR.Tower.Name = GR.Lang.Tower[KBM.Lang]
+GR.Descript = GR.Grugonim.Name
 
 -- Ability Dictionary
 GR.Lang.Ability = {}
 GR.Lang.Ability.Decay = KBM.Language:Add("Rampant Decay")
 GR.Lang.Ability.Decay.German = "Wilder Verfall"
 GR.Lang.Ability.Decay.French = "Pourriture rampante"
+GR.Lang.Ability.Decay.Russian = "Бурное разложение"
 GR.Lang.Ability.Bile = KBM.Language:Add("Corrosive Bile")
 GR.Lang.Ability.Bile.German = "Ätzende Galle"
 GR.Lang.Ability.Bile.French = "Vase corrosive"
+GR.Lang.Ability.Bile.Russian = "Едкая желчь"
 GR.Lang.Ability.Breath = KBM.Language:Add("Necrotic Breath")
 GR.Lang.Ability.Breath.German = "Nekrotischer Atem"
+GR.Lang.Ability.Breath.Russian = "Мертвящее дыхание"
 GR.Lang.Ability.Disruption = KBM.Language:Add("Seismic Disruption")
 GR.Lang.Ability.Disruption.German = "Seismische Störung"
+-- GR.Lang.Ability.Disrtuption.Russian =
 GR.Lang.Ability.Swarm = KBM.Language:Add("Parasite Swarm")
 GR.Lang.Ability.Swarm.German = "Parasitenschwarm"
+-- GR.Lang.Ability.Swarm.Russian =
 
 -- Debuff Dictionary
 GR.Lang.Debuff = {}
 GR.Lang.Debuff.Toxin = KBM.Language:Add("Heart Stopping Toxin")
 GR.Lang.Debuff.Toxin.French = "Toxin d'arr\195\170t cardiaque"
 GR.Lang.Debuff.Toxin.German = "Herzstillstandsgift"
+GR.Lang.Debuff.Toxin.Russian = "Останавливающий сердце яд"
 
 -- Menu Dictionary
 GR.Lang.Menu = {}
 GR.Lang.Menu.Breath = KBM.Language:Add(GR.Lang.Ability.Breath[KBM.Lang].." duration")
-GR.Lang.Menu.Breath.German = GR.Lang.Ability.Breath[KBM.Lang].." Dauer" 
-
-GR.Grugonim.Name = GR.Lang.Grugonim[KBM.Lang]
-GR.Tower.Name = GR.Lang.Tower[KBM.Lang]
-GR.Descript = GR.Grugonim.Name
-
+GR.Lang.Menu.Breath.German = GR.Lang.Ability.Breath[KBM.Lang].." Dauer"
+GR.Lang.Menu.Breath.Russian = GR.Lang.Ability.Breath[KBM.Lang].." продолжительность"
 
 function GR:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript

@@ -62,17 +62,23 @@ ES.Estrode = {
 KBM.RegisterMod(ES.ID, ES)
 
 ES.Lang.Estrode = KBM.Language:Add(ES.Estrode.Name)
+ES.Lang.Estrode.Russian = "Эстрода"
+ES.Estrode.Name = ES.Lang.Estrode[KBM.Lang]
+ES.Descript = ES.Estrode.Name
 
 -- Ability Dictionary
 ES.Lang.Ability = {}
 ES.Lang.Ability.Soul = KBM.Language:Add("Soul Capture")
 ES.Lang.Ability.Soul.German = "Seelenfang"
+ES.Lang.Ability.Soul.Russian = "Захват души"
 ES.Lang.Ability.Mind = KBM.Language:Add("Mind Control")
 ES.Lang.Ability.Mind.German = "Gedankenkontrolle"
+ES.Lang.Ability.Mind.Russian = "Контрол разума"
 ES.Lang.Ability.Dancing = KBM.Language:Add("Dancing Steel")
 ES.Lang.Ability.Dancing.German = "Tanzender Stahl"
 ES.Lang.Ability.North = KBM.Language:Add("Rage of the North")
 ES.Lang.Ability.North.German = "Wut des Nordens"
+ES.Lang.Ability.North.Russian = "Ярость севера"
 ES.Lang.Ability.Chastise = KBM.Language:Add("Chastise")
 ES.Lang.Ability.Chastise.German = "Züchtigung"
 ES.Lang.Ability.Rift = KBM.Language:Add("Mistress of the Rift")
@@ -82,14 +88,13 @@ ES.Lang.Ability.Rift.German = "Herrin des Risses"
 ES.Lang.Say = {}
 ES.Lang.Say.Mind = KBM.Language:Add("Mmmm, you look delectable.")
 ES.Lang.Say.Mind.German = "Hm, Ihr seht köstlich aus."
+ES.Lang.Say.Mind.Russian = "М-м-м, а ты выглядишь вкусно."
 
 -- Menu Dictionary
 ES.Lang.Menu = {}
 ES.Lang.Menu.Dancing = KBM.Language:Add(ES.Lang.Ability.Dancing[KBM.Lang].." duration")
-ES.Lang.Menu.Dancing.German = ES.Lang.Ability.Dancing[KBM.Lang].." Dauer" 
-
-ES.Estrode.Name = ES.Lang.Estrode[KBM.Lang]
-ES.Descript = ES.Estrode.Name
+ES.Lang.Menu.Dancing.German = ES.Lang.Ability.Dancing[KBM.Lang].." Dauer"
+ES.Lang.Menu.Dancing.Russian = ES.Lang.Ability.Dancing[KBM.Lang].." продолжительность" 
 
 function ES:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
