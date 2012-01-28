@@ -240,6 +240,11 @@ function HA:Death(UnitID)
 			self.Arakhurn.Dead = true
 			return true
 		end
+	elseif self.Enraged.UnitList[UnitID] then
+		if not self.Enraged.UnitList[UnitID].Dead then
+			KBM.MechTimer:AddStart(self.Arakhurn.TimersRef.Add)
+			self.Enraged.UnitList[UnitID].Dead = true
+		end
 	end
 	return false
 end
@@ -257,7 +262,7 @@ end
 function HA.PhaseTwo()
 	HA.PhaseObj.Objectives:Remove()
 	HA.PhaseObj:SetPhase("Adds")
-	HA.PhaseObj.Objectives:AddDeath(HA.Lang.Unit.Spawn[KBM.Lang], 8)
+	HA.PhaseObj.Objectives:AddDeath(HA.Lang.Unit.Spawn[KBM.Lang], 6)
 	HA.Arakhurn.UnitID = nil
 end
 
@@ -310,9 +315,6 @@ function HA:UnitHPCheck(uDetails, unitID)
 						Available = true,
 					}
 					self.Bosses[uDetails.name].UnitList[unitID] = SubBossObj
-					if uDetails.name == self.Enraged.Name then
-						KBM.MechTimer:AddStart(self.Arakhurn.TimersRef.Add)
-					end
 				else
 					self.Bosses[uDetails.name].UnitList[unitID].Available = true
 					self.Bosses[uDetails.name].UnitList[unitID].UnitID = UnitID
@@ -375,11 +377,11 @@ function HA:Start()
 	self.Arakhurn.TimersRef.FieryFirst = KBM.MechTimer:Add(self.Lang.Buff.Fiery[KBM.Lang], 75)
 	self.Arakhurn.TimersRef.FieryFirst.MenuName = self.Lang.Menu.FieryFirst[KBM.Lang]
 	self.Arakhurn.TimersRef.Fiery = KBM.MechTimer:Add(self.Lang.Buff.Fiery[KBM.Lang], 60)
-	self.Arakhurn.TimersRef.FieryPThree = KBM.MechTimer:Add(self.Lang.Buff.Fiery[KBM.Lang], 85)
+	self.Arakhurn.TimersRef.FieryPThree = KBM.MechTimer:Add(self.Lang.Buff.Fiery[KBM.Lang], 81)
 	self.Arakhurn.TimersRef.FieryPThree.MenuName = self.Lang.Menu.FieryPThree[KBM.Lang]
-	self.Arakhurn.TimersRef.AddFirst = KBM.MechTimer:Add(self.Lang.Unit.Enraged[KBM.Lang], 35)
+	self.Arakhurn.TimersRef.AddFirst = KBM.MechTimer:Add(self.Lang.Unit.Enraged[KBM.Lang], 33)
 	self.Arakhurn.TimersRef.AddFirst.MenuName = self.Lang.Menu.AddFirst[KBM.Lang]
-	self.Arakhurn.TimersRef.Add = KBM.MechTimer:Add(self.Lang.Unit.Enraged[KBM.Lang], 90)
+	self.Arakhurn.TimersRef.Add = KBM.MechTimer:Add(self.Lang.Unit.Enraged[KBM.Lang], 60)
 	KBM.Defaults.TimerObj.Assign(self.Arakhurn)
 	
 	-- Create Alerts

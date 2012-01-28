@@ -630,16 +630,24 @@ KBM.Language.Records.Best = KBM.Language:Add("Best Time:")
 KBM.Language.Records.Best.German = "Bestzeit:"
 KBM.Language.Records.Details = KBM.Language:Add("Details:")
 KBM.Language.Records.Rate = KBM.Language:Add("Success Rate is ")
-KBM.Language.Records.Rate.German = "Erfolgsrate ist "
+KBM.Language.Records.Rate.German = "Erfolgsrate ist: "
 KBM.Language.Records.NoRecord = KBM.Language:Add("No kills have been recorded.")
-KBM.Language.Records.Previous = KBM.Language:Add("Previous best: ")
+KBM.Language.Records.NoRecord.German = "Keine Kills wurden bisher verzeichnet."
 -- In game Messages
+KBM.Language.Records.Previous = KBM.Language:Add("Previous best: ")
+KBM.Language.Records.Previous.German = "Alte Bestzeit: "
 KBM.Language.Records.BeatRecord = KBM.Language:Add("Congratulations: New Record!")
+KBM.Language.Records.BeatRecord.German = "Gratulation! Neue Bestzeit!"
 KBM.Language.Records.BeatChrRecord = KBM.Language:Add("Congratulations: New Chronicle Record!")
+KBM.Language.Records.BeatChrRecord.German = "Gratulation! Neue Chroniken Bestzeit!"
 KBM.Language.Records.NewRecord = KBM.Language:Add("Congratulations: A new record has been set!")
+KBM.Language.Records.NewRecord.German = "Gratulation! Eine neue Bestzeit wurde gesetzt!"
 KBM.Language.Records.NewChrRecord = KBM.Language:Add("Congratulations: A new Chronicle record has been set!")
+KBM.Language.Records.NewChrRecord.German = "Gratulation! Eine neue Chroniken Bestzeit wurde gesetzt!"
 KBM.Language.Records.Current = KBM.Language:Add("Current Record: ")
+KBM.Language.Records.Current.German = "Aktuelle Bestzeit: "
 KBM.Language.Records.Invalid = KBM.Language:Add("Time is invalid, no records can be set.")
+KBM.Language.Records.Invalid.German = "Die Zeit ist ungültig, Bestzeit konnte nicht gesetzt werden." 
 
 -- Colors
 KBM.Language.Color = {}
