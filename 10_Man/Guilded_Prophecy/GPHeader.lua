@@ -1,4 +1,4 @@
-﻿-- Guilded Prophecy Header for King Boss Mods
+﻿-- Gilded Prophecy Header for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --
@@ -9,7 +9,7 @@ local GP = {
 	Header = nil,
 	Enabled = true,
 	IsInstance = true,
-	Name = "Guilded Prophecy",
+	Name = "Gilded Prophecy",
 	Type = "10man",
 	ID = "GP",
 }
@@ -17,7 +17,7 @@ local GP = {
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
-KBM.RegisterMod("Guilded Prophecy", GP)
+KBM.RegisterMod("Gilded Prophecy", GP)
 
 KBM.Language:Add(GP.Name)
 KBM.Language[GP.Name]:SetGerman("Güldene Prophezeiung")

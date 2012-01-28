@@ -3056,7 +3056,7 @@ function KBM.Alert:Init()
 		self.AlertControl.Right:SetPoint("LEFT", UIParent, 1 - (0.2 * self.Settings.fScale), nil)
 		if KBM.MainWin:GetVisible() then
 			self.Anchor:SetVisible(self.Settings.Visible)
-			self.Anchor.Drag:SetVisible(self.Settings.Unlocked)
+			self.Anchor.Drag:SetVisible(self.Settings.Visible)
 			self.Left.red:SetVisible(self.Settings.Visible)
 			self.Right.red:SetVisible(self.Settings.Visible)
 			if self.Settings.Visible then

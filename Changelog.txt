@@ -1,4 +1,9 @@
-﻿v0.9.4﻿
+﻿v0.9.5 (Hotfix)
+
+* Alerts
+** Fixed: The sizing and positioning of alert text had become permanently locked.
+
+v0.9.4﻿
 
 Options
 * Records Tab
@@ -18,7 +23,7 @@ Alerts
 * New: Turn on/off Alert Text on a per encounter basis. (when override is enabled)
 * New: Turn on/off Alert Borders on a per encounter basis. (when override is enabled)
 
-Guilded Prophecy
+Gilded Prophecy
 * Guurloth
 ** Fixed: Look Away warning now says so, instead of Jump (however amusing it was to watch my guild jump).
 * Thalguur
@@ -310,7 +315,7 @@ Drowned Halls
 * Note: Rift Instance inconsistency with NPC Notify and Say messages.
 * Note: The Rift API is receiving no messages for this instance, when it's fixed by Trion all timers/alerts will work.
 
-Guilded Prophecy
+Gilded Prophecy
 * Anrak the Foul
 ** New: Tank-Swap: Enabled support for Brittle.
 ** New: Spines of Earth: Alert warning for cast and duration added.
@@ -419,7 +424,7 @@ German Translations
 *** Fixed: Error on bomb phase transition.
 ** Prince Hylas
 *** Change: Cleaned up the objective tracking a little.
-* Guilded Prophecy
+* Gilded Prophecy
 ** New: Converted to new engine.
 ** New: Converted all boss modules to new engine in preparation for fully supported mechanics.
 * Raid Manager
@@ -1185,7 +1190,7 @@ v0.6.1
 ** Added: Inwar Darktide: Denizar and Aqualix are now tracked.
 ** Added: Inwar Darktide: Encounter should trigger from Phase 1.
 ** Fixed: Vladmal Prime: Ancient Flames personal screen alert.
-* Guilded Prophecy
+* Gilded Prophecy
 ** Added: Anrak the Foul: 7 minute enrage timer.
 * Encounter Timer
 ** Fixed: Accuracy is back once again with Time v Enrage.
@@ -1243,7 +1248,7 @@ v0.5.8
 ** Rise of the Phoenix
 ** General Silgen
 ** High Priest Arakhurn
-** Guilded Prophecy
+** Gilded Prophecy
 ** Anrak the Foul
 ** Drowned Halls
 ** Assault Commander Jorb
@@ -1252,7 +1257,7 @@ v0.5.8
 v0.5.7
 * Fixed: Drop shadows on Alert countdown text.
 * Fixed: Thalquur is now correctly Thalguur.
-* Fixed: Drowned Halls registering as Guilded Prophecy (sneaky!)
+* Fixed: Drowned Halls registering as Gilded Prophecy (sneaky!)
 * Fixed: Encounter Timer options.
 * Fixed: Encounter enrage timer display.
 * Fixed: Error reports with some Idle-time combinations.
@@ -1273,7 +1278,7 @@ v0.5.7
 ** Assault Commander Jorb
 ** Joloral Ragetide
 ** High Priestess Hydriss
-** Guilded Prophecy
+** Gilded Prophecy
 ** Anrak the Foul
 ** Rise of the Phoenix
 ** High Priest Arakhurn
@@ -1295,7 +1300,7 @@ v0.5.5
 * Added: Joloral Ragetide (template)
 * Added: Isskal (template)
 * Added: Uruluuk (template)
-* Added: Guilded Prophecy (template)
+* Added: Gilded Prophecy (template)
 * Added: Anrak the Foul (template)
 * Added: Guurloth (template)
 * Added: Thalquur (template)

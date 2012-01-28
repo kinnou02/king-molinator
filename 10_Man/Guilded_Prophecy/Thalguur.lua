@@ -9,7 +9,7 @@ chKBMGPTR_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
-local GP = KBM.BossMod["Guilded Prophecy"]
+local GP = KBM.BossMod["Gilded Prophecy"]
 
 local TR = {
 	Enabled = true,
