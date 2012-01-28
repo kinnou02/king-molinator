@@ -7,6 +7,10 @@ Options
 ** New: View records of Attempts, Kills, Wipes and success rates for all Raid boss encounters.
 ** New: Added Translation interface to Records tab and messages.
 
+Engine
+* Castbars
+** New: Castbars are now tracked outside of boss encounters. (Plug-In preparation)
+
 Alerts
 * New: Adjust the size of the Alert Text. (Mouse Wheel)
 * New: Adjust the size of the Alert Text on a per encounter basis (when override is enabled)
@@ -29,7 +33,7 @@ Hammerknell
 Rise of the Phoenix
 * High Priest Arakhurn
 ** Change: Reduced timer for first Fiery Metamorphosis in Phase 3 slightly.
-** Change: Reduced timer for frist Add in Phase 3 slightly.
+** Change: Reduced timer for first Add in Phase 3 slightly.
 ** Change: The timers for Enraged Spawns of Arakhurn will now trigger on death. (dynamic)
 
 German Translations

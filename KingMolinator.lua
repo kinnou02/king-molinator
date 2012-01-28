@@ -4177,6 +4177,10 @@ function KBM:Timer()
 			KBM.QueuePage = nil
 		end
 		KBM.Updating = false
+	else
+		for UnitID, CastCheck in pairs(KBM.CastBar.ActiveCastBars) do
+			CastCheck:Update()
+		end		
 	end
 	if self.PlugIn.Count > 0 then
 		for ID, PlugIn in pairs(self.PlugIn.List) do
