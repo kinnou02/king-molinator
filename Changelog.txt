@@ -23,7 +23,7 @@ Guilded Prophecy
 
 Hammerknell
 * Akylios
-** Change: Added Jornaru's percentage monitoring to Phase 3 incase Phase 4 doesn't trigger.
+** Change: Added Jornaru's percentage monitoring to Phase 3 in case Phase 4 doesn't trigger.
 ** Fix: Breath of Madness duration setting. It was stuck in the enabled state.
 
 Rise of the Phoenix

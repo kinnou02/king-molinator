@@ -1387,12 +1387,13 @@ function KBM.InitOptions()
 				end				
 			end
 			
-			function Encounter:SetPage()			
+			function Encounter:SetPage()
 				KBM.MainWin.Options.Scroller.Frame:SetVisible(false)			
 				KBM.MainWin.CurrentPage = self
 				KBM.MainWin.Options.Footer:SetVisible(false)
 				KBM.MainWin.Options.HeadText:SetText(self.Instance.Name)
 				KBM.MainWin.Options.SubText:SetText(self.Boss.Name)
+				Encounter:ApplyRecords()
 				
 				KBM.Tabs:Open(self.Pages)
 				if self.Boss.Mod.Settings.EncTimer then
@@ -1629,7 +1630,7 @@ function KBM.InitOptions()
 						end
 					end
 					
-					function Option:Display()						
+					function Option:Display()
 						if self.Type == "color" then
 							self.GUI = KBM.Tabs.List[self.Header.Tab]:PullColorGUI(self.Header.Side, self.Color)
 						else
@@ -2517,27 +2518,20 @@ function KBM.InitOptions()
 					Child:SetChecked(Settings.ScaleHeight)
 					Child = Header:CreateOption(KBM.Language.Options.UnlockText[KBM.Lang], "check", Callbacks.Text)
 					Child:SetChecked(Settings.TextScale)
-				end			
+				end
 			end
 			
-			function Encounter:Records()
-				local Child = nil
-				local Header = nil
-				local Callbacks = {}
-				Callbacks.Boss = self.Boss
-				
+			function Encounter:ApplyRecords()
 				local Settings = self.Boss.Mod.Settings.Records
-				Header = self:CreateHeader(KBM.Language.Records.Best[KBM.Lang], "plain", "Records", "Main")
 				if Settings.Best then
 					if Settings.Best > 0 then
-						Header:CreateOption(KBM.ConvertTime(Settings.Best), "plain")
+						self.Boss.Mod.MenuStore.Records.Best.Name = KBM.ConvertTime(Settings.Best)
 					else
-						Header:CreateOption(KBM.Language.Records.NoRecord[KBM.Lang], "plain")
+						self.Boss.Mod.MenuStore.Records.Best.Name = KBM.Language.Records.NoRecord[KBM.Lang]
 					end
 				else
-					Header:CreateOption(KBM.Language.Records.NoRecord[KBM.Lang], "plain")
+					self.Boss.Mod.MenuStore.RecordsStore.Best.Name = KBM.Language.Records.NoRecord[KBM.Lang]
 				end
-				Header = self:CreateHeader(KBM.Language.Records.Details[KBM.Lang], "plain", "Records", "Main")
 				if Settings.Kills > Settings.Attempts then
 					local Adjust = Settings.Kills - Settings.Attempts
 					Settings.Attempts = Settings.Attempts + Adjust
@@ -2545,14 +2539,35 @@ function KBM.InitOptions()
 				if Settings.Wipes ~= (Settings.Attempts - Settings.Kills) then
 					Settings.Kills = (Settings.Attempts - Settings.Wipes)
 				end
-				Header:CreateOption(KBM.Language.Records.Attempts[KBM.Lang]..Settings.Attempts, "plain")
-				Header:CreateOption(KBM.Language.Records.Kills[KBM.Lang]..Settings.Kills, "plain")
-				Header:CreateOption(KBM.Language.Records.Wipes[KBM.Lang]..Settings.Wipes, "plain")
+				self.Boss.Mod.MenuStore.Records.Attempts.Name = KBM.Language.Records.Attempts[KBM.Lang]..Settings.Attempts
+				self.Boss.Mod.MenuStore.Records.Kills.Name = KBM.Language.Records.Kills[KBM.Lang]..Settings.Kills
+				self.Boss.Mod.MenuStore.Records.Wipes.Name = KBM.Language.Records.Wipes[KBM.Lang]..Settings.Wipes
 				if Settings.Attempts > 0 then
-					Header:CreateOption(KBM.Language.Records.Rate[KBM.Lang]..string.format("%0.1f", (Settings.Kills/Settings.Attempts) * 100).."%", "plain")
+					self.Boss.Mod.MenuStore.Records.Rate.Name = KBM.Language.Records.Rate[KBM.Lang]..string.format("%0.1f", (Settings.Kills/Settings.Attempts) * 100)
 				else
-					Header:CreateOption(KBM.Language.Records.Rate[KBM.Lang].."n/a")
+					self.Boss.Mod.MenuStore.Records.Rate.Name = KBM.Language.Records.Rate[KBM.Lang].."n/a"
 				end
+			end
+			
+			function Encounter:Records()
+				local Child = nil
+				local Header = nil
+				local Callbacks = {}
+				Callbacks.Boss = self.Boss
+				if not self.Boss.Mod.MenuStore then
+					self.Boss.Mod.MenuStore = {}
+				end
+				self.Boss.Mod.MenuStore.Records = {}
+				
+				local Settings = self.Boss.Mod.Settings.Records
+				Header = self:CreateHeader(KBM.Language.Records.Best[KBM.Lang], "plain", "Records", "Main")
+				self.Boss.Mod.MenuStore.Records.Best = Header:CreateOption(KBM.ConvertTime(Settings.Best), "plain")
+				Header = self:CreateHeader(KBM.Language.Records.Details[KBM.Lang], "plain", "Records", "Main")
+				self.Boss.Mod.MenuStore.Records.Attempts = Header:CreateOption(KBM.Language.Records.Attempts[KBM.Lang]..Settings.Attempts, "plain")
+				self.Boss.Mod.MenuStore.Records.Kills = Header:CreateOption(KBM.Language.Records.Kills[KBM.Lang]..Settings.Kills, "plain")
+				self.Boss.Mod.MenuStore.Records.Wipes = Header:CreateOption(KBM.Language.Records.Wipes[KBM.Lang]..Settings.Wipes, "plain")
+				self.Boss.Mod.MenuStore.Records.Rate = Header:CreateOption(KBM.Language.Records.Rate[KBM.Lang].."n/a", "plain")
+				self:ApplyRecords()
 			end
 			
 			-- Initialize Encounter Tab
