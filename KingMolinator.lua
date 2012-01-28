@@ -47,6 +47,7 @@ KBM.MenuOptions = {
 }
 
 KBM.Defaults = {}
+KBM.Constant = {}
 KBM.Buffs = {}
 KBM.Buffs.Active = {}
 
@@ -312,6 +313,19 @@ function KBM.Defaults.PhaseMon()
 	return PhaseMon
 end
 
+function KBM.Constant:Init()
+	self.PhaseMon = {
+		w = 225,
+		h = 50,
+		TextSize = 14,
+	}
+	self.Alerts = {
+		TextSize = 32,
+	}
+end
+
+KBM.Constant:Init()
+
 function KBM.Defaults.MechTimer()
 	local MechTimer = {
 		Override = false,
@@ -348,7 +362,9 @@ function KBM.Defaults.Alerts()
 		Visible = false,
 		Unlocked = false,
 		FlashUnlocked = false,
+		ScaleText = false,
 		fScale = 0.4,
+		tScale = 1,
 		x = false,
 		y = false,
 		Type = "Alerts",
@@ -3017,6 +3033,8 @@ end
 function KBM.Alert:Init()
 	function self:ApplySettings()
 		self.Anchor:ClearAll()
+		self.Text:SetFontSize(KBM.Constant.Alerts.TextSize * self.Settings.tScale)
+		self.Shadow:SetFontSize(self.Text:GetFontSize())
 		if self.Settings.x then
 			self.Anchor:SetPoint("TOPLEFT", UIParent, "TOPLEFT", self.Settings.x, self.Settings.y)
 		else
@@ -3026,6 +3044,8 @@ function KBM.Alert:Init()
 		self.Notify = self.Settings.Notify
 		self.Flash = self.Settings.Flash
 		self.Enabled = self.Settings.Enabled
+		self.AlertControl.Left:SetPoint("RIGHT", UIParent, 0.2 * self.Settings.fScale, nil)
+		self.AlertControl.Right:SetPoint("LEFT", UIParent, 1 - (0.2 * self.Settings.fScale), nil)
 		if KBM.MainWin:GetVisible() then
 			self.Anchor:SetVisible(self.Settings.Visible)
 			self.Anchor.Drag:SetVisible(self.Settings.Unlocked)
@@ -3055,15 +3075,12 @@ function KBM.Alert:Init()
 	self.Shadow:SetLayer(1)
 	self.Text = UI.CreateFrame("Text", "Alert Text", self.Anchor)
 	self.Shadow:SetPoint("CENTER", self.Text, "CENTER", 2, 2)
-	self.Text:SetFontSize(32)
 	self.Text:SetText(" Alert Anchor ")
 	self.Shadow:SetText(self.Text:GetText())
 	self.Shadow:SetFontSize(self.Text:GetFontSize())
 	self.Text:SetFontColor(1,1,1)
 	self.Text:SetPoint("CENTER", self.Anchor, "CENTER")
 	self.Text:SetLayer(2)
-	self.Anchor:SetWidth(self.Text:GetWidth())
-	self.Anchor:SetHeight(self.Text:GetHeight())
 	self.Anchor:SetVisible(self.Settings.Visible)
 	self.ColorList = {"red", "blue", "yellow", "orange", "purple", "dark_green"}
 	self.Left = {}
@@ -3153,6 +3170,34 @@ function KBM.Alert:Init()
 	
 	self.Anchor.Drag = KBM.AttachDragFrame(self.Anchor, function(uType) self.Anchor:Update(uType) end, "Alert Anchor Drag", 2)
 	self.Anchor.Drag:SetLayer(3)
+	self.Anchor.Drag:ClearAll()
+	self.Anchor.Drag:SetPoint("TOPRIGHT", self.Text, "TOPRIGHT")
+	self.Anchor.Drag:SetPoint("BOTTOMLEFT", self.Text, "BOTTOMLEFT")
+	function self.Anchor.Drag.Event:WheelForward()
+		if KBM.Alert.Settings.ScaleText then
+			if KBM.Alert.Settings.tScale < 2 then
+				KBM.Alert.Settings.tScale = KBM.Alert.Settings.tScale + 0.02
+				if KBM.Alert.Settings.tScale > 2 then
+					KBM.Alert.Settings.tScale = 2
+				end
+				KBM.Alert.Shadow:SetFontSize(KBM.Constant.Alerts.TextSize * KBM.Alert.Settings.tScale)
+				KBM.Alert.Text:SetFontSize(KBM.Constant.Alerts.TextSize * KBM.Alert.Settings.tScale)	
+			end
+		end		
+	end
+	
+	function self.Anchor.Drag.Event:WheelBack()	
+		if KBM.Alert.Settings.ScaleText then
+			if KBM.Alert.Settings.tScale > 0.8 then
+				KBM.Alert.Settings.tScale = KBM.Alert.Settings.tScale - 0.02
+				if KBM.Alert.Settings.tScale < 0.8 then
+					KBM.Alert.Settings.tScale = 0.8
+				end
+				KBM.Alert.Shadow:SetFontSize(KBM.Constant.Alerts.TextSize * KBM.Alert.Settings.tScale)
+				KBM.Alert.Text:SetFontSize(KBM.Constant.Alerts.TextSize * KBM.Alert.Settings.tScale)	
+			end
+		end
+	end
 	
 	function self:Create(Text, Duration, Flash, Countdown, Color)
 		AlertObj = {}
@@ -4621,9 +4666,6 @@ function KBM.MenuOptions.TankSwap:Options()
 	TankSwap:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowAnchor, KBM.Options.TankSwap.Visible)
 	TankSwap:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.LockAnchor, KBM.Options.TankSwap.Unlocked)
 	self.TestCheck = TankSwap:AddCheck(KBM.Language.Options.Tank[KBM.Lang], self.ShowTest, false)
-	-- self.CastBars:AddCheck("Width scaling.", self.CastScaleWidth, KBM.Options.CastBar.ScaleWidth)
-	-- self.CastBars:AddCheck("Height scaling.", self.CastScaleHeight, KBM.Options.CastBar.ScaleHeight)
-	-- self.CastBars:AddCheck("Text Size", self.CastTextSize, KBM.Options.CastBar.TextScale)
 
 end
 
@@ -4676,7 +4718,6 @@ function KBM.MenuOptions.CastBars:Options()
 	CastBars:AddCheck(KBM.Language.Options.UnlockWidth[KBM.Lang], self.Width, KBM.Options.CastBar.ScaleWidth)
 	CastBars:AddCheck(KBM.Language.Options.UnlockHeight[KBM.Lang], self.Height, KBM.Options.CastBar.ScaleHeight)
 	CastBars:AddCheck(KBM.Language.Options.UnlockText[KBM.Lang], self.Text, KBM.Options.CastBar.TextScale)
-
 end
 
 -- Alert options.
@@ -4703,9 +4744,8 @@ function KBM.MenuOptions.Alerts:Options()
 			KBM.Alert.Right.red:SetAlpha(1)
 		end
 	end
-	function self:LockAnchor(bool)
-		KBM.Options.Alerts.Unlocked = bool
-		KBM.Alert.Anchor.Drag:SetVisible(bool)
+	function self:ScaleText(bool)
+		KBM.Options.Alerts.ScaleText = bool
 	end
 	function self:UnlockFlash(bool)
 		KBM.Options.Alerts.FlashUnlocked = bool
@@ -4728,7 +4768,7 @@ function KBM.MenuOptions.Alerts:Options()
 	Alert:AddCheck(KBM.Language.Options.AlertFlash[KBM.Lang], self.FlashEnabled, KBM.Options.Alerts.Flash)
 	Alert:AddCheck(KBM.Language.Options.AlertText[KBM.Lang], self.TextEnabled, KBM.Options.Alerts.Notify)
 	Alert:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowAnchor, KBM.Options.Alerts.Visible)
-	Alert:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.LockAnchor, KBM.Options.Alerts.Unlocked)
+	Alert:AddCheck(KBM.Language.Options.UnlockText[KBM.Lang], self.ScaleText, KBM.Options.Alerts.ScaleText)
 	Alert:AddCheck(KBM.Language.Options.UnlockFlash[KBM.Lang], self.UnlockFlash, KBM.Options.Alerts.FlashUnlocked)	
 end
 

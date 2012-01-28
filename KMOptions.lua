@@ -2234,14 +2234,29 @@ function KBM.InitOptions()
 					self.Header.Encounter.Boss.Mod.Settings.Alerts.Enabled = bool
 				end
 				
+				function Callbacks:Flash(bool)
+					self.Header.Encounter.Boss.Mod.Settings.Alerts.Flash = bool
+				end
+				
+				function Callbacks:Notify(bool)
+					self.Header.Encounter.Boss.Mod.Settings.Alerts.Text = bool
+				end
+				
 				function Callbacks:Visible(bool)
 					self.Header.Encounter.Boss.Mod.Settings.Alerts.Visible = bool
 					self.Header.Encounter.Boss.Mod.Settings.Alerts.Unlocked = bool
 					KBM.Alert.Anchor:SetVisible(bool)
 					KBM.Alert.Anchor.Drag:SetVisible(bool)
-					if bool then
-						KBM.Alert.Anchor:SetAlpha(1)
-					end
+					KBM.Alert:ApplySettings()
+				end
+				
+				function Callbacks:ScaleText(bool)
+					self.Header.Encounter.Boss.Mod.Settings.Alerts.ScaleText = bool
+				end
+				
+				function Callbacks:FlashUnlocked(bool)
+					self.Header.Encounter.Boss.Mod.Settings.Alerts.FlashUnlocked = bool
+					KBM.Alert:ApplySettings()
 				end
 							
 				if self.Boss.Mod.Settings.Alerts then
@@ -2251,8 +2266,16 @@ function KBM.InitOptions()
 					Header:SetHook(Callbacks.Override)
 					Child = Header:CreateOption(KBM.Language.Options.Enabled[KBM.Lang], "check", Callbacks.Enabled)
 					Child:SetChecked(Settings.Enabled)
+					Child = Header:CreateOption(KBM.Language.Options.AlertFlash[KBM.Lang], "check", Callbacks.Flash)
+					Child:SetChecked(Settings.Flash)
+					Child = Header:CreateOption(KBM.Language.Options.AlertText[KBM.Lang], "check", Callbacks.Notify)
+					Child:SetChecked(Settings.Notify)
 					Child = Header:CreateOption(KBM.Language.Options.ShowAnchor[KBM.Lang], "check", Callbacks.Visible)
 					Child:SetChecked(Settings.Visible)
+					Child = Header:CreateOption(KBM.Language.Options.UnlockText[KBM.Lang], "check", Callbacks.ScaleText)
+					Child:SetChecked(Settings.ScaleText)
+					Child = Header:CreateOption(KBM.Language.Options.UnlockFlash[KBM.Lang], "check", Callbacks.FlashUnlocked)
+					Child:SetChecked(Settings.FlashUnlocked)
 				end
 				
 				function self:CreateOptions(BossObj)
