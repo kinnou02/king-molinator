@@ -82,6 +82,7 @@ HA.Lang.Ability.Nova.Russian = "Огненная сверхновая"
 HA.Lang.Notify = {}
 HA.Lang.Notify.Nova = KBM.Language:Add("High Priest Arakhurn releases the fiery energy within")
 HA.Lang.Notify.Nova.German = "Hohepriester Arakhurn lässt die feurige Energie seines Inneren frei."
+HA.Lang.Notify.Nova.Russian = "Первосвященник Аракурн высвобождает скрытую внутри яростную энергию."
 HA.Lang.Notify.Respawn = KBM.Language:Add("The lava churns violently as a large shadow moves beneath it and then rushes to the surface")
 HA.Lang.Notify.Respawn.German = "Die Lava brodelt gewaltig, während sich ein großer Schatten unter ihr bewegt und dann an die Oberfläche schnellt."
 HA.Lang.Notify.Respawn.Russian = "Лава бурлит; под ней движеться огромная тень, стремительно всплывая к поверхности."
@@ -93,7 +94,9 @@ HA.Lang.Notify.Death.Russian = "По мере того, как Аракурн п
 HA.Lang.Chat = {}
 HA.Lang.Chat.Respawn = KBM.Language:Add("Come to me, my children.")
 HA.Lang.Chat.Respawn.German = "Kommt zu mir, meine Kinder."
+HA.Lang.Chat.Respawn.Russian = "Ко мне, дети мои."
 HA.Lang.Chat.Death = KBM.Language:Add("The fire within me weakens. I must regain the power of the flame.")
+HA.Lang.Chat.Death.Russian = "Огонь во мне ослабевает. Я должен восполнить силу пламени."
 
 -- Buff Dictionary
 HA.Lang.Buff = {}

@@ -292,7 +292,9 @@ function AK.PhaseFour()
 		AK.Phase = 4
 		AK.PhaseObj:SetPhase(4)
 		KBM.MechTimer:AddStart(AK.Jornaru.TimersRef.WaveFour)
-		AK.Jornaru.CastBar:Start(AK.Jornaru.UnitID)
+		if AK.Jornaru.UnitID then
+			AK.Jornaru.CastBar:Create(AK.Jornaru.UnitID)
+		end
 		AK.PhaseObj.Objectives:AddPercent(AK.Akylios.Name, 15, 55)
 		AK.PhaseObj.Objectives:AddPercent(AK.Jornaru.Name, 0, 50)
 		print("Phase 4 starting!")

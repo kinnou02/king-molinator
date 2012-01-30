@@ -117,6 +117,7 @@ function GU:InitVars()
 		CastBar = self.Garau.Settings.CastBar,
 		TimersRef = self.Garau.Settings.TimersRef,
 		AlertsRef = self.Garau.Settings.AlertsRef,
+		PhaseMon = KBM.Defaults.PhaseMon()
 	}
 	KBMGU_Settings = self.Settings
 	chKBMGU_Settings = self.Settings
@@ -185,6 +186,10 @@ function GU:UnitHPCheck(uDetails, unitID)
 					self.HeldTime = self.StartTime
 					self.TimeElapsed = 0
 					self.Garau.CastBar:Create(unitID)
+					self.Phase = 1
+					self.PhaseObj:Start(self.StartTime)
+					self.PhaseObj:SetPhase("Single")
+					self.PhaseObj.Objectives:AddPercent(self.Garau.Name, 0, 100)
 				end
 				self.Garau.Casting = false
 				self.Garau.UnitID = unitID
@@ -201,6 +206,7 @@ function GU:Reset()
 	self.Garau.UnitID = nil
 	self.Garau.CastBar:Remove()
 	self.Garau.Dead = false
+	self.PhaseObj:End(Inspect.Time.Real())
 end
 
 function GU:Timer()	
@@ -265,5 +271,6 @@ function GU:Start()
 	self.Garau.Triggers.Shield:AddStop(self.Garau.AlertsRef.Shield)
 	
 	self.Garau.CastBar = KBM.CastBar:Add(self, self.Garau, true)
+	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()
 end

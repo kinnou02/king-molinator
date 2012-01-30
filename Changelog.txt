@@ -1,4 +1,24 @@
-﻿v0.9.5 (Hotfix)
+﻿v0.9.6
+
+Hammerknell
+* Inquisitor Garau
+** New: Added single phase Phase Monitoring to always show Garau's HP percentage.
+* Akylios
+** Fixed: Error on Phase 4 starting.
+
+River of Souls
+* Dark Foci
+** Change: Destabilize Soul personal screen alert is now flagged as important.
+
+Russian Translations
+* Fixed: Темница Зеленокожа
+
+Rise of the Phoenix
+* Первосвященник Аракурн
+** New: Additional Trigger translations.
+
+
+v0.9.5 (Hotfix)
 
 * Alerts
 ** Fixed: The sizing and positioning of alert text had become permanently locked.
