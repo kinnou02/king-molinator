@@ -137,6 +137,10 @@ function KBM.InitTabs()
 	KBM.Tabs.Total = 0
 	KBM.Tabs.Current = nil
 	KBM.Tabs.List = {}
+	KBM.Tabs.Height = {
+		Selected = 31,
+		Unselected = 25,
+	}
 	KBM.Tabs.GUI = {}
 	KBM.Tabs.GUI.Page = UI.CreateFrame("Frame", "Encounter_Tabber", KBM.MainWin)
 	KBM.Tabs.GUI.Page:SetPoint("TOPLEFT", KBM.MainWin.Options.Frame, "TOPLEFT")
@@ -169,11 +173,12 @@ function KBM.InitTabs()
 			self.LastTab = Tab
 		end
 		
-		Tab.Frame:SetPoint("TOP", self.GUI.Page, "TOP", nil, 5)
+		Tab.Frame:SetPoint("BOTTOM", self.GUI.Page, "TOP", nil, self.Height.Unselected)
 		Tab.Frame:SetWidth(self.Size)
+		Tab.Frame:SetHeight(self.Height.Unselected)
 		Tab.Texture = UI.CreateFrame("Texture", "Tabber_Texture_"..Name, Tab.Frame)
 		Tab.Texture:SetTexture("KingMolinator", "Media/Tabber_Off.png")
-		Tab.Texture:SetPoint("TOPLEFT", Tab.Frame, "TOPLEFT", 0, 3)
+		Tab.Texture:SetPoint("TOPLEFT", Tab.Frame, "TOPLEFT")
 		Tab.Texture:SetPoint("BOTTOMRIGHT", Tab.Frame, "BOTTOMRIGHT")
 		Tab.Texture:SetLayer(1)
 		Tab.TextShadow = UI.CreateFrame("Text", "Tabbar_TextShadow_"..Name, Tab.Frame)
@@ -183,12 +188,11 @@ function KBM.InitTabs()
 		Tab.TextShadow:SetLayer(2)
 		Tab.Text = UI.CreateFrame("Text", "Tabber_Text_"..Name, Tab.TextShadow)
 		Tab.Text:SetText(Name)
-		Tab.Text:SetPoint("CENTER", Tab.Texture, "CENTER", 1, 2)
-		Tab.TextShadow:SetPoint("TOPLEFT", Tab.Text, "TOPLEFT", -1, -1)
+		Tab.Text:SetPoint("CENTER", Tab.Texture, "CENTER", 0, 1)
+		Tab.TextShadow:SetPoint("TOPLEFT", Tab.Text, "TOPLEFT", 1, 2)
 		Tab.Text:SetFontSize(14)
 		Tab.Text:SetFontColor(0.7, 0.7, 0.7)
 		Tab.Text:SetLayer(3)
-		Tab.Frame:SetHeight(Tab.Text:GetHeight() + 6)
 		Tab.Page = UI.CreateFrame("Frame", "Tabber_Page_"..Name, self.GUI.Page)
 		Tab.Page:SetPoint("TOP", Tab.Frame, "BOTTOM")
 		Tab.Page:SetPoint("LEFT", self.GUI.Page, "LEFT")
@@ -264,15 +268,15 @@ function KBM.InitTabs()
 		Tab.Frame.Tab = Tab
 		
 		function Tab:Deselect()		
-			self.Texture:SetTexture("KingMolinator", "Media/Tabber_Off.png")
 			self.Page:SetVisible(false)
 			self.Text:SetFontColor(0.7, 0.7, 0.7)
 			self.Text:SetFontSize(14)
 			self.TextShadow:SetFontSize(14)
 			self.Selected = false
 			self.TextShadow:SetPoint("CENTER", self.Texture, "CENTER", 1, 2)
-			self.Texture:SetPoint("TOP", self.Frame, "TOP", nil, 3)
+			self.Frame:SetHeight(KBM.Tabs.Height.Unselected)
 			self.PageSize = 0
+			self.Texture:SetTexture("KingMolinator", "Media/Tabber_Off.png")
 			
 			if self.Data then
 				for _, Header in ipairs(self.Data.Main.Headers) do
@@ -579,13 +583,15 @@ function KBM.InitTabs()
 			end
 			
 			KBM.Tabs.Current = self
-			self.Texture:SetTexture("KingMolinator", "Media/Tabber.png")
 			self.Text:SetFontColor(1, 1, 1)
 			self.TextShadow:SetFontSize(16)
 			self.Text:SetFontSize(16)
 			self.Selected = true
-			self.Texture:SetPoint("TOP", self.Frame, "TOP", nil, -2)
+			self.Frame:SetHeight(KBM.Tabs.Height.Selected)
+			self.Texture:SetPoint("TOPLEFT", self.Frame, "TOPLEFT")
+			self.Texture:SetPoint("BOTTOMRIGHT", self.Frame, "BOTTOMRIGHT")
 			self.TextShadow:SetPoint("CENTER", self.Texture, "CENTER", 1, 1)
+			self.Texture:SetTexture("KingMolinator", "Media/Tabber.png")
 			
 			if self.Data then
 				for _, Header in ipairs(self.Data.Main.Headers) do
@@ -627,8 +633,7 @@ function KBM.InitTabs()
 		else
 			self.List.Encounter:Select(true)
 		end
-		self.GUI.Page:SetVisible(true)
-		
+		self.GUI.Page:SetVisible(true)		
 	end
 	
 	function KBM.Tabs:Close()	
@@ -719,12 +724,12 @@ function KBM.InitOptions()
 	KBM.MainWin.Border = KBM.MainWin:GetBorder()
 	KBM.MainWin.Content = KBM.MainWin:GetContent()
 
-	BorderX = KBM.MainWin.Border:GetLeft()
-	BorderY = KBM.MainWin.Border:GetTop()
-	ContentX = KBM.MainWin.Content:GetLeft()
-	ContentY = KBM.MainWin.Content:GetTop()
-	ContentW = KBM.MainWin.Content:GetWidth()
-	ContentH = KBM.MainWin.Content:GetHeight()
+	local BorderX = KBM.MainWin.Border:GetLeft()
+	local BorderY = KBM.MainWin.Border:GetTop()
+	local ContentX = KBM.MainWin.Content:GetLeft()
+	local ContentY = KBM.MainWin.Content:GetTop()
+	local ContentW = KBM.MainWin.Content:GetWidth()
+	local ContentH = KBM.MainWin.Content:GetHeight()
 	
 	KBM.MainWin.Handle = UI.CreateFrame("Frame", "SBM Window Handle", KBM.MainWin)
 	KBM.MainWin.Handle:SetPoint("TOPLEFT", KBM.MainWin, "TOPLEFT")
@@ -876,45 +881,361 @@ function KBM.InitOptions()
 	
 	end
 	
-	MenuWidth = math.floor(ContentW * 0.30)-10	
-	KBM.MainWin.Mask = UI.CreateFrame("Mask", "KBM_Menu_Mask", KBM.MainWin)
-	KBM.MainWin.Mask:SetMouseMasking("limited")
-	KBM.MainWin.Menu = UI.CreateFrame("Frame", "KBM_Menu_Frame", KBM.MainWin.Mask)
-	KBM.MainWin.Menu:SetMouseMasking("limited")
-	KBM.MainWin.Mask:SetPoint("TOPLEFT", KBM.MainWin.Menu, "TOPLEFT")
-	KBM.MainWin.Mask:SetPoint("BOTTOMRIGHT", KBM.MainWin.Menu, "BOTTOMRIGHT")
-	KBM.MainWin.Menu:SetWidth(MenuWidth)
-	KBM.MainWin.Menu:SetHeight(ContentH)
-	KBM.MainWin.Menu:SetPoint("TOPLEFT", KBM.MainWin.Content, "TOPLEFT",5, 5)
-	KBM.MainWin.Menu.Headers = {}
-	KBM.MainWin.Menu.LastHeader = nil
+	function KBM.MainWin.DefaultTabs()
+		local TabObject = {
+			MenuSize = 0,
+			Headers = {},
+		}
+		return TabObject
+	end
+
+	-- Define Menu related holders
+	KBM.MainWin.Tabs = {
+		Main = KBM.MainWin.DefaultTabs(),
+		Plug = KBM.MainWin.DefaultTabs(),
+		Raid = KBM.MainWin.DefaultTabs(),
+		Sliver = KBM.MainWin.DefaultTabs(),
+		Group = KBM.MainWin.DefaultTabs(),
+		Selected = {
+			Main = "Main",
+			Instance = "Raid",
+		}
+	}
+	KBM.MainWin.Masks = {}
+	KBM.MainWin.Scroller = {}
+
+	-- Initialize Left Panel
+	KBM.MainWin.MenuArea = UI.CreateFrame("Frame", "KBM_Menu_Area", KBM.MainWin)
+	KBM.MainWin.MenuArea:SetPoint("TOPLEFT", KBM.MainWin.Content, "TOPLEFT")
+	KBM.MainWin.MenuArea:SetPoint("BOTTOMRIGHT", KBM.MainWin.Content, 0.3, 1)
 	
+	-- Initialize Content Splitter
 	KBM.MainWin.SplitFrame = UI.CreateFrame("Frame", "KBM_Splitter", KBM.MainWin)
 	KBM.MainWin.SplitFrame:SetWidth(14)
 	KBM.MainWin.SplitFrame:SetHeight(ContentH)
-	KBM.MainWin.SplitFrame:SetPoint("LEFT", KBM.MainWin.Content, "LEFT", MenuWidth, nil)
-	KBM.MainWin.SplitFrame:SetPoint("TOP", KBM.MainWin.Content, "TOP")
+	KBM.MainWin.SplitFrame:SetPoint("TOPRIGHT", KBM.MainWin.MenuArea, "TOPRIGHT")
 	KBM.MainWin.SplitHandle = UI.CreateFrame("Frame", "KBM Splitter Handle", KBM.MainWin.SplitFrame)
 	KBM.MainWin.SplitHandle:SetWidth(5)
 	KBM.MainWin.SplitHandle:SetHeight(ContentH)
 	KBM.MainWin.SplitHandle:SetPoint("CENTER", KBM.MainWin.SplitFrame, "CENTER")
 	KBM.MainWin.SplitHandle:SetBackgroundColor(0.85,0.65,0,0.5)
 
-	function KBM.MainWin.Scrollback(value)
-		KBM.MainWin.FirstItem:SetPoint("TOP", KBM.MainWin.Menu, "TOP", nil, -value)
-	end	
-	KBM.MainWin.Scroller = KBM.Scroller:Create("V", KBM.MainWin.Menu:GetHeight(), KBM.MainWin, KBM.MainWin.Scrollback)
-	KBM.MainWin.Scroller.Frame:SetPoint("TOPRIGHT", KBM.MainWin.SplitFrame, "TOPLEFT")
-	OptionsWidth = ContentW - KBM.MainWin.Menu:GetWidth() - KBM.MainWin.SplitFrame:GetWidth() - 10
-	KBM.MainWin.Menu:ClearWidth()
-	KBM.MainWin.Menu:SetPoint("TOPRIGHT", KBM.MainWin.Scroller.Frame, "TOPLEFT")
+	local TabHeight = 30
+	local TabHeight_Idle = 26
+	local IconSize = 24
+	local IconSize_Idle = 17
+	local IconSize_High = 20
+	local FontSize = 16
+	local FontSize_Idle = 12
+	local FontSize_High = 14
+	local MainHeight = KBM.MainWin.MenuArea:GetHeight() * 0.35
 
-	function KBM.MainWin.Menu.Event:WheelForward()
-		KBM.MainWin.Scroller:SetPosition(-20)
+	-- Initialize Left Panel Scrollbars
+	KBM.MainWin.Scroller.Main = UI.CreateFrame("RiftScrollbar", "KBM_Main_Scroller", KBM.MainWin.MenuArea)
+	KBM.MainWin.Scroller.Main:SetPoint("TOPRIGHT", KBM.MainWin.SplitFrame, "TOPLEFT")
+	KBM.MainWin.Scroller.Main:SetHeight(MainHeight)
+	KBM.MainWin.Scroller.Instance = UI.CreateFrame("RiftScrollbar", "KBM_Main_Scroller", KBM.MainWin.MenuArea)
+	KBM.MainWin.Scroller.Instance:SetPoint("TOPRIGHT", KBM.MainWin.SplitFrame, "TOPLEFT")
+	
+	local MenuWidth = KBM.MainWin.MenuArea:GetWidth() - KBM.MainWin.SplitFrame:GetWidth() - KBM.MainWin.Scroller.Main:GetWidth() - 6
+	local TabWidth = {
+		Main = (MenuWidth + KBM.MainWin.Scroller.Main:GetWidth()) * 0.5,
+		Instance = ((MenuWidth + KBM.MainWin.Scroller.Main:GetWidth()) * 0.33) + 1,
+	}
+
+	-- Tab & Scroller Functions
+	function KBM.MainWin.Scroller.Main.Event:ScrollbarChange()
+		local TabObj = KBM.MainWin.Tabs[KBM.MainWin.Tabs.Selected.Main]
+		TabObj.FirstItem:SetPoint("TOP", TabObj.Menu, "TOP", nil, -self:GetPosition() * 5)
 	end
-	function KBM.MainWin.Menu.Event:WheelBack()
-		KBM.MainWin.Scroller:SetPosition(20)
+	function KBM.MainWin.Scroller.Main.Event:ScrollbarGrab()
+		self.Grabbed = true
 	end
+	function KBM.MainWin.Scroller.Main.Event:ScrollbarRelease()
+		self.Grabbed = false
+	end
+	function KBM.MainWin.Scroller.Instance.Event:ScrollbarChange()
+		local TabObj = KBM.MainWin.Tabs[KBM.MainWin.Tabs.Selected.Instance]
+		TabObj.FirstItem.GUI.Frame:SetPoint("TOP", TabObj.Menu, "TOP", nil, -self:GetPosition() * 5)
+	end
+	function KBM.MainWin.Scroller.Instance.Event:ScrollbarGrab()
+		self.Grabbed = true
+	end
+	function KBM.MainWin.Scroller.Instance.Event:ScrollbarRelease()
+		self.Grabbed = false
+	end
+	function KBM.MainWin.Tabs:UpdateScroller(Tab)
+		if Tab == self.Selected.Main or Tab == self.Selected.Instance then
+			if self[Tab].MenuSize < self[Tab].Menu:GetHeight() then
+				self[Tab].Scroller:SetEnabled(false)
+			else
+				if not self[Tab].Scroller:GetEnabled() then
+					self[Tab].Scroller:SetEnabled(true)
+				end
+				local Max = self[Tab].MenuSize - self[Tab].Menu:GetHeight()
+				self[Tab].Scroller:SetRange(0, Max / 5)
+			end
+		end	
+	end
+
+	function KBM.MainWin.Tabs:CreateFunctions(Tab)
+		local TabObj = self[Tab]
+		TabObj.Tab.ID = Tab
+		TabObj.Tab.Parent = TabObj
+		TabObj.Tab.Position = 0
+		function TabObj.Tab.Event:MouseIn()
+			if KBM.MainWin.Tabs.Selected[self.Parent.Type] ~= self.ID then
+				if self.Parent.Type == "Instance" then
+					self.Parent.Icon:SetAlpha(1)
+					self.Parent.Icon:SetWidth(IconSize_High)
+					self.Parent.Icon:SetHeight(IconSize_High)
+				else
+					self.Parent.Shadow:SetAlpha(1)
+					self.Parent.Shadow:SetFontSize(FontSize_High)
+					self.Parent.Text:SetFontSize(FontSize_High)
+				end
+			end
+		end
+		function TabObj.Tab.Event:MouseOut()
+			if KBM.MainWin.Tabs.Selected[self.Parent.Type] ~= self.ID then
+				if self.Parent.Type == "Instance" then
+					self.Parent.Icon:SetAlpha(0.5)
+					self.Parent.Icon:SetWidth(IconSize_Idle)
+					self.Parent.Icon:SetHeight(IconSize_Idle)
+				else
+					self.Parent.Shadow:SetAlpha(0.6)
+					self.Parent.Shadow:SetFontSize(FontSize_Idle)
+					self.Parent.Text:SetFontSize(FontSize_Idle)
+				end
+			end
+		end
+		function TabObj.Tab.Event:LeftClick()
+			if KBM.MainWin.Tabs.Selected[self.Parent.Type] ~= self.ID then
+				local Current = KBM.MainWin.Tabs[KBM.MainWin.Tabs.Selected[self.Parent.Type]]
+				Current.Menu:SetVisible(false)
+				Current.Texture:SetTexture("KingMolinator", "Media/Tabber_Off.png")
+				Current.Tab:SetHeight(TabHeight_Idle)
+				Current.Tab.Position = Current.Scroller:GetPosition()
+				KBM.MainWin.Tabs.Selected[self.Parent.Type] = self.ID
+				self.Parent.Menu:SetVisible(true)
+				self.Parent.Texture:SetTexture("KingMolinator", "Media/Tabber.png")
+				self.Parent.Tab:SetHeight(TabHeight)
+				if self.Parent.Type == "Instance" then
+					self.Parent.Icon:SetAlpha(1)
+					self.Parent.Icon:SetWidth(IconSize)
+					self.Parent.Icon:SetHeight(IconSize)
+					Current.Icon:SetAlpha(0.5)
+					Current.Icon:SetWidth(IconSize_Idle)
+					Current.Icon:SetHeight(IconSize_Idle)
+				else
+					self.Parent.Shadow:SetAlpha(1)
+					self.Parent.Shadow:SetFontSize(FontSize)
+					self.Parent.Text:SetFontSize(FontSize)
+					Current.Shadow:SetAlpha(0.6)
+					Current.Shadow:SetFontSize(FontSize_Idle)
+					Current.Text:SetFontSize(FontSize_Idle)
+				end
+				KBM.MainWin.Tabs:UpdateScroller(self.ID)
+				if self.Parent.Scroller:GetEnabled() then
+					self.Parent.Scroller:SetPosition(self.Position)
+				end
+			end
+		end
+	end
+	
+	-- Initialize Main Tabs
+	KBM.MainWin.Tabs.Main.Tab = UI.CreateFrame("Frame", "KBM_Tab_KBM", KBM.MainWin.MenuArea)
+	KBM.MainWin.Tabs.Main.Tab:SetPoint("BOTTOMLEFT", KBM.MainWin.MenuArea, "TOPLEFT", 4, TabHeight + 4)
+	KBM.MainWin.Tabs.Main.Tab:SetWidth(TabWidth.Main)
+	KBM.MainWin.Tabs.Main.Tab:SetHeight(TabHeight)
+	KBM.MainWin.Tabs.Main.Scroller = KBM.MainWin.Scroller.Main
+	KBM.MainWin.Tabs.Main.Type = "Main"
+	KBM.MainWin.Tabs.Main.Texture = UI.CreateFrame("Texture", "KBM_Main_Texture", KBM.MainWin.Tabs.Main.Tab)
+	KBM.MainWin.Tabs.Main.Texture:SetTexture("KingMolinator", "Media/Tabber.png")
+	KBM.MainWin.Tabs.Main.Texture:SetPoint("TOPLEFT", KBM.MainWin.Tabs.Main.Tab, "TOPLEFT")
+	KBM.MainWin.Tabs.Main.Texture:SetPoint("BOTTOMRIGHT", KBM.MainWin.Tabs.Main.Tab, "BOTTOMRIGHT")
+	KBM.MainWin.Tabs.Main.Shadow = UI.CreateFrame("Text", "KBM_Main_Tab_Shadow", KBM.MainWin.Tabs.Main.Tab)
+	KBM.MainWin.Tabs.Main.Shadow:SetText("KBM")
+	KBM.MainWin.Tabs.Main.Shadow:SetFontColor(0,0,0,1)
+	KBM.MainWin.Tabs.Main.Shadow:SetPoint("CENTER", KBM.MainWin.Tabs.Main.Tab, "CENTER", 1, 1)
+	KBM.MainWin.Tabs.Main.Shadow:SetFontSize(FontSize)
+	KBM.MainWin.Tabs.Main.Shadow:SetLayer(2)
+	KBM.MainWin.Tabs.Main.Text = UI.CreateFrame("Text", "KBM_Main_Tab_Text", KBM.MainWin.Tabs.Main.Shadow)
+	KBM.MainWin.Tabs.Main.Text:SetText("KBM")
+	KBM.MainWin.Tabs.Main.Text:SetFontColor(1,1,1,1)
+	KBM.MainWin.Tabs.Main.Text:SetPoint("TOPLEFT", KBM.MainWin.Tabs.Main.Shadow, "TOPLEFT", -1, -1)
+	KBM.MainWin.Tabs.Main.Text:SetFontSize(FontSize)
+	KBM.MainWin.Tabs:CreateFunctions("Main")
+	KBM.MainWin.Scroller.Main:ClearPoint("TOP")
+	KBM.MainWin.Scroller.Main:SetPoint("TOP", KBM.MainWin.Tabs.Main.Tab, "BOTTOM", nil, 3)
+	KBM.MainWin.Tabs.Plug.Tab = UI.CreateFrame("Frame", "KBM_Tab_PlugIn", KBM.MainWin.MenuArea)
+	KBM.MainWin.Tabs.Plug.Tab:SetPoint("BOTTOMLEFT", KBM.MainWin.Tabs.Main.Tab, "BOTTOMRIGHT", 2, 0)
+	KBM.MainWin.Tabs.Plug.Tab:SetWidth(TabWidth.Main)
+	KBM.MainWin.Tabs.Plug.Scroller = KBM.MainWin.Scroller.Main
+	KBM.MainWin.Tabs.Plug.Tab:SetHeight(TabHeight_Idle)
+	KBM.MainWin.Tabs.Plug.Type = "Main"
+	KBM.MainWin.Tabs.Plug.Texture = UI.CreateFrame("Texture", "KBM_Main_Texture", KBM.MainWin.Tabs.Plug.Tab)
+	KBM.MainWin.Tabs.Plug.Texture:SetTexture("KingMolinator", "Media/Tabber_Off.png")
+	KBM.MainWin.Tabs.Plug.Texture:SetPoint("TOPLEFT", KBM.MainWin.Tabs.Plug.Tab, "TOPLEFT")
+	KBM.MainWin.Tabs.Plug.Texture:SetPoint("BOTTOMRIGHT", KBM.MainWin.Tabs.Plug.Tab, "BOTTOMRIGHT")
+	KBM.MainWin.Tabs.Plug.Shadow = UI.CreateFrame("Text", "KBM_Plug_Tab_Shadow", KBM.MainWin.Tabs.Plug.Tab)
+	KBM.MainWin.Tabs.Plug.Shadow:SetText("Plug-Ins")
+	KBM.MainWin.Tabs.Plug.Shadow:SetFontColor(0,0,0,1)
+	KBM.MainWin.Tabs.Plug.Shadow:SetPoint("CENTER", KBM.MainWin.Tabs.Plug.Tab, "CENTER", 1, 1)
+	KBM.MainWin.Tabs.Plug.Shadow:SetFontSize(FontSize_Idle)
+	KBM.MainWin.Tabs.Plug.Shadow:SetAlpha(0.6)
+	KBM.MainWin.Tabs.Plug.Shadow:SetLayer(2)
+	KBM.MainWin.Tabs.Plug.Text = UI.CreateFrame("Text", "KBM_Plug_Tab_Text", KBM.MainWin.Tabs.Plug.Shadow)
+	KBM.MainWin.Tabs.Plug.Text:SetText("Plug-Ins")
+	KBM.MainWin.Tabs.Plug.Text:SetFontColor(1,1,1,1)
+	KBM.MainWin.Tabs.Plug.Text:SetPoint("TOPLEFT", KBM.MainWin.Tabs.Plug.Shadow, "TOPLEFT", -1, -1)
+	KBM.MainWin.Tabs.Plug.Text:SetFontSize(FontSize_Idle)
+	KBM.MainWin.Tabs:CreateFunctions("Plug")
+	
+	-- Initialize Main Mask
+	KBM.MainWin.Masks.Main = UI.CreateFrame("Mask", "KBM_Global_Menu_Mask", KBM.MainWin.MenuArea)
+	KBM.MainWin.Masks.Main:SetMouseMasking("limited")
+	KBM.MainWin.Masks.Main:SetWidth(MenuWidth)
+	KBM.MainWin.Masks.Main:SetHeight(MainHeight)
+	KBM.MainWin.Masks.Main:SetPoint("TOPLEFT", KBM.MainWin.Tabs.Main.Tab, "BOTTOMLEFT", 5, 5)
+	
+	-- Initialize Main Tabs pages
+	KBM.MainWin.Tabs.Main.Menu = UI.CreateFrame("Frame", "KBM_Global_Menu", KBM.MainWin.Masks.Main)
+	KBM.MainWin.Tabs.Main.Menu:SetMouseMasking("limited")
+	KBM.MainWin.Tabs.Main.Menu:SetPoint("TOPLEFT", KBM.MainWin.Masks.Main, "TOPLEFT")
+	KBM.MainWin.Tabs.Main.Menu:SetPoint("BOTTOMRIGHT", KBM.MainWin.Masks.Main, "BOTTOMRIGHT")
+	KBM.MainWin.Tabs.Plug.Menu = UI.CreateFrame("Frame", "KBM_PlugIn_Menu", KBM.MainWin.Masks.Main)
+	KBM.MainWin.Tabs.Plug.Menu:SetMouseMasking("limited")
+	KBM.MainWin.Tabs.Plug.Menu:SetPoint("TOPLEFT", KBM.MainWin.Masks.Main, "TOPLEFT")
+	KBM.MainWin.Tabs.Plug.Menu:SetPoint("BOTTOMRIGHT", KBM.MainWin.Masks.Main, "BOTTOMRIGHT")
+	KBM.MainWin.Tabs.Plug.Menu:SetVisible(false)
+	
+	-- Initialize Instance Tabs
+	KBM.MainWin.Tabs.Raid.Tab = UI.CreateFrame("Frame", "KBM_Raid_Tab", KBM.MainWin.MenuArea)
+	KBM.MainWin.Tabs.Raid.Tab:SetPoint("LEFT", KBM.MainWin.MenuArea, "LEFT", 4, nil)
+	KBM.MainWin.Tabs.Raid.Tab:SetPoint("BOTTOM", KBM.MainWin.Masks.Main, "BOTTOM", nil, TabHeight + 4)
+	KBM.MainWin.Tabs.Raid.Tab:SetWidth(TabWidth.Instance)
+	KBM.MainWin.Tabs.Raid.Tab:SetHeight(TabHeight)
+	KBM.MainWin.Tabs.Raid.Scroller = KBM.MainWin.Scroller.Instance
+	KBM.MainWin.Tabs.Raid.Type = "Instance"
+	KBM.MainWin.Tabs.Raid.Texture = UI.CreateFrame("Texture", "KBM_Raid_Texture", KBM.MainWin.Tabs.Raid.Tab)
+	KBM.MainWin.Tabs.Raid.Texture:SetTexture("KingMolinator", "Media/Tabber.png")
+	KBM.MainWin.Tabs.Raid.Texture:SetPoint("TOPLEFT", KBM.MainWin.Tabs.Raid.Tab, "TOPLEFT")
+	KBM.MainWin.Tabs.Raid.Texture:SetPoint("BOTTOMRIGHT", KBM.MainWin.Tabs.Raid.Tab, "BOTTOMRIGHT")
+	KBM.MainWin.Tabs.Raid.Icon = UI.CreateFrame("Texture", "KBM_Raid_Icon", KBM.MainWin.Tabs.Raid.Tab)
+	KBM.MainWin.Tabs.Raid.Icon:SetTexture("KingMolinator", "Media/Raid_Icon.png")
+	KBM.MainWin.Tabs.Raid.Icon:SetPoint("CENTER", KBM.MainWin.Tabs.Raid.Tab, "CENTER")
+	KBM.MainWin.Tabs.Raid.Icon:SetHeight(IconSize)
+	KBM.MainWin.Tabs.Raid.Icon:SetWidth(IconSize)
+	KBM.MainWin.Tabs.Raid.Icon:SetLayer(2)
+	KBM.MainWin.Scroller.Instance:ClearPoint("TOP")
+	KBM.MainWin.Scroller.Instance:SetPoint("TOP", KBM.MainWin.Tabs.Raid.Tab, "BOTTOM", nil, 3)
+	KBM.MainWin.Scroller.Instance:SetPoint("BOTTOM", KBM.MainWin.MenuArea, "BOTTOM")
+	KBM.MainWin.Tabs.Sliver.Tab = UI.CreateFrame("Frame", "KBM_Sliver_Tab", KBM.MainWin.MenuArea)
+	KBM.MainWin.Tabs.Sliver.Tab:SetPoint("BOTTOMLEFT", KBM.MainWin.Tabs.Raid.Tab, "BOTTOMRIGHT", 1, 0)
+	KBM.MainWin.Tabs.Sliver.Tab:SetWidth(TabWidth.Instance)
+	KBM.MainWin.Tabs.Sliver.Tab:SetHeight(TabHeight_Idle)
+	KBM.MainWin.Tabs.Sliver.Scroller = KBM.MainWin.Scroller.Instance
+	KBM.MainWin.Tabs.Sliver.Type = "Instance"
+	KBM.MainWin.Tabs.Sliver.Texture = UI.CreateFrame("Texture", "KBM_Sliver_Texture", KBM.MainWin.Tabs.Sliver.Tab)
+	KBM.MainWin.Tabs.Sliver.Texture:SetTexture("KingMolinator", "Media/Tabber_Off.png")
+	KBM.MainWin.Tabs.Sliver.Texture:SetPoint("TOPLEFT", KBM.MainWin.Tabs.Sliver.Tab, "TOPLEFT")
+	KBM.MainWin.Tabs.Sliver.Texture:SetPoint("BOTTOMRIGHT", KBM.MainWin.Tabs.Sliver.Tab, "BOTTOMRIGHT")
+	KBM.MainWin.Tabs.Sliver.Icon = UI.CreateFrame("Texture", "KBM_Sliver_Icon", KBM.MainWin.Tabs.Sliver.Tab)
+	KBM.MainWin.Tabs.Sliver.Icon:SetTexture("KingMolinator", "Media/Sliver_Icon.png")
+	KBM.MainWin.Tabs.Sliver.Icon:SetPoint("CENTER", KBM.MainWin.Tabs.Sliver.Tab, "CENTER")
+	KBM.MainWin.Tabs.Sliver.Icon:SetHeight(IconSize_Idle)
+	KBM.MainWin.Tabs.Sliver.Icon:SetWidth(IconSize_Idle)
+	KBM.MainWin.Tabs.Sliver.Icon:SetAlpha(0.5)
+	KBM.MainWin.Tabs.Sliver.Icon:SetLayer(2)
+	KBM.MainWin.Tabs.Group.Tab = UI.CreateFrame("Frame", "KBM_Group_Tab", KBM.MainWin.MenuArea)
+	KBM.MainWin.Tabs.Group.Tab:SetPoint("BOTTOMLEFT", KBM.MainWin.Tabs.Sliver.Tab, "BOTTOMRIGHT", 1, 0)
+	KBM.MainWin.Tabs.Group.Tab:SetWidth(TabWidth.Instance)
+	KBM.MainWin.Tabs.Group.Tab:SetHeight(TabHeight_Idle)
+	KBM.MainWin.Tabs.Group.Scroller = KBM.MainWin.Scroller.Instance
+	KBM.MainWin.Tabs.Group.Type = "Instance"
+	KBM.MainWin.Tabs.Group.Texture = UI.CreateFrame("Texture", "KBM_Group_Texture", KBM.MainWin.Tabs.Group.Tab)
+	KBM.MainWin.Tabs.Group.Texture:SetTexture("KingMolinator", "Media/Tabber_Off.png")
+	KBM.MainWin.Tabs.Group.Texture:SetPoint("TOPLEFT", KBM.MainWin.Tabs.Group.Tab, "TOPLEFT")
+	KBM.MainWin.Tabs.Group.Texture:SetPoint("BOTTOMRIGHT", KBM.MainWin.Tabs.Group.Tab, "BOTTOMRIGHT")
+	KBM.MainWin.Tabs.Group.Icon = UI.CreateFrame("Texture", "KBM_Group_Icon", KBM.MainWin.Tabs.Group.Tab)
+	KBM.MainWin.Tabs.Group.Icon:SetTexture("KingMolinator", "Media/Group_Icon.png")
+	KBM.MainWin.Tabs.Group.Icon:SetPoint("CENTER", KBM.MainWin.Tabs.Group.Tab, "CENTER")
+	KBM.MainWin.Tabs.Group.Icon:SetHeight(IconSize_Idle)
+	KBM.MainWin.Tabs.Group.Icon:SetWidth(IconSize_Idle)
+	KBM.MainWin.Tabs.Group.Icon:SetAlpha(0.5)
+	KBM.MainWin.Tabs.Group.Icon:SetLayer(2)
+
+	local InstanceHeight = KBM.MainWin.Scroller.Instance:GetHeight()
+	
+	-- Initialize Instance Mask
+	KBM.MainWin.Masks.Instance = UI.CreateFrame("Mask", "KBM_Instance_Mask", KBM.MainWin)
+	KBM.MainWin.Masks.Instance:SetMouseMasking("limited")
+	KBM.MainWin.Masks.Instance:SetWidth(MenuWidth)
+	KBM.MainWin.Masks.Instance:SetHeight(InstanceHeight - 5)
+	KBM.MainWin.Masks.Instance:SetPoint("TOPLEFT", KBM.MainWin.Tabs.Raid.Tab, "BOTTOMLEFT", 0, 5)
+	
+	-- Initialize Instance Tabs Pages
+	KBM.MainWin.Tabs.Raid.Menu = UI.CreateFrame("Frame", "KBM_Raid_Menu", KBM.MainWin.Masks.Instance)
+	KBM.MainWin.Tabs.Raid.Menu:SetMouseMasking("limited")
+	KBM.MainWin.Tabs.Raid.Menu:SetPoint("TOPLEFT", KBM.MainWin.Masks.Instance, "TOPLEFT")
+	KBM.MainWin.Tabs.Raid.Menu:SetPoint("BOTTOMRIGHT", KBM.MainWin.Masks.Instance, "BOTTOMRIGHT")
+	KBM.MainWin.Tabs:CreateFunctions("Raid")
+	KBM.MainWin.Tabs.Sliver.Menu = UI.CreateFrame("Frame", "KBM_Sliver_Menu", KBM.MainWin.Masks.Instance)
+	KBM.MainWin.Tabs.Sliver.Menu:SetMouseMasking("limited")
+	KBM.MainWin.Tabs.Sliver.Menu:SetPoint("TOPLEFT", KBM.MainWin.Masks.Instance, "TOPLEFT")
+	KBM.MainWin.Tabs.Sliver.Menu:SetPoint("BOTTOMRIGHT", KBM.MainWin.Masks.Instance, "BOTTOMRIGHT")
+	KBM.MainWin.Tabs.Sliver.Menu:SetVisible(false)
+	KBM.MainWin.Tabs:CreateFunctions("Sliver")
+	KBM.MainWin.Tabs.Group.Menu = UI.CreateFrame("Frame", "KBM_Group_Menu", KBM.MainWin.Masks.Instance)
+	KBM.MainWin.Tabs.Group.Menu:SetMouseMasking("limited")
+	KBM.MainWin.Tabs.Group.Menu:SetPoint("TOPLEFT", KBM.MainWin.Masks.Instance, "TOPLEFT")
+	KBM.MainWin.Tabs.Group.Menu:SetPoint("BOTTOMRIGHT", KBM.MainWin.Masks.Instance, "BOTTOMRIGHT")
+	KBM.MainWin.Tabs.Group.Menu:SetVisible(false)
+	KBM.MainWin.Tabs:CreateFunctions("Group")
+	
+	-- Define Functions
+	function KBM.MainWin.Masks.Main.Event:WheelForward()
+		if KBM.MainWin.Scroller.Main:GetEnabled() then
+			KBM.MainWin.Scroller.Main:NudgeUp()
+		end
+	end
+	function KBM.MainWin.Masks.Main.Event:WheelBack()
+		if KBM.MainWin.Scroller.Main:GetEnabled() then
+			KBM.MainWin.Scroller.Main:NudgeDown()
+		end
+	end
+	
+	function KBM.MainWin.Masks.Instance.Event:WheelForward()
+		if KBM.MainWin.Scroller.Instance:GetEnabled() then
+			KBM.MainWin.Scroller.Instance:NudgeUp()
+		end
+	end
+	function KBM.MainWin.Masks.Instance.Event:WheelBack()
+		if KBM.MainWin.Scroller.Instance:GetEnabled() then
+			KBM.MainWin.Scroller.Instance:NudgeDown()
+		end
+	end
+		
+	KBM.MainWin.Menu = {}
+		
+	--function KBM.MainWin.Scrollback(value)
+		--KBM.MainWin.FirstItem:SetPoint("TOP", KBM.MainWin.Menu, "TOP", nil, -value)
+	--end	
+	-- KBM.MainWin.Scroller = KBM.Scroller:Create("V", KBM.MainWin.Menu:GetHeight(), KBM.MainWin, KBM.MainWin.Scrollback)
+	-- KBM.MainWin.Scroller.Frame:SetPoint("TOPRIGHT", KBM.MainWin.SplitFrame, "TOPLEFT")
+	local OptionsWidth = ContentW - KBM.MainWin.MenuArea:GetWidth() - KBM.MainWin.SplitFrame:GetWidth() - 10
+	-- KBM.MainWin.Menu:ClearWidth()
+	-- KBM.MainWin.Menu:SetPoint("TOPRIGHT", KBM.MainWin.Scroller.Frame, "TOPLEFT")
+
+	--function KBM.MainWin.Menu.Event:WheelForward()
+		-- KBM.MainWin.Scroller:SetPosition(-20)
+	--end
+	--function KBM.MainWin.Menu.Event:WheelBack()
+		-- KBM.MainWin.Scroller:SetPosition(20)
+	--end
+	
+	-- KBM.MainWin.Scroller.Frame:SetVisible(false)
 	
 	KBM.MainWin.Options.Mask = UI.CreateFrame("Mask", "KBM Options Mask", KBM.MainWin)
 	KBM.MainWin.Options.Mask:SetMouseMasking("limited")
@@ -924,10 +1245,10 @@ function KBM.InitOptions()
 	KBM.MainWin.Options.Mask:SetPoint("BOTTOMRIGHT", KBM.MainWin.Options.Frame, "BOTTOMRIGHT")
 	KBM.MainWin.Options.PageSize = 0
 	KBM.MainWin.Options.Header = UI.CreateFrame("Frame", "KBM Options Header", KBM.MainWin)
-	KBM.MainWin.Options.Header:SetWidth(OptionsWidth)
 	KBM.MainWin.Options.Header:SetHeight(40)
 	KBM.MainWin.Options.Header:SetBackgroundColor(0,0,0,0.25)
 	KBM.MainWin.Options.Header:SetPoint("TOPRIGHT", KBM.MainWin.Content, "TOPRIGHT", -5, 0)
+	KBM.MainWin.Options.Header:SetPoint("LEFT", KBM.MainWin.SplitFrame, "RIGHT")
 	KBM.MainWin.Options.HeadText = UI.CreateFrame("Text", "KBM Header Text", KBM.MainWin.Options.Header)
 	KBM.MainWin.Options.HeadText:SetPoint("TOPRIGHT", KBM.MainWin.Options.Header, "TOPRIGHT")
 	KBM.MainWin.Options.HeadText:SetFontColor(0.85,0.65,0.0)
@@ -961,14 +1282,19 @@ function KBM.InitOptions()
 	KBM.InitTabs()
 	
 	KBM.MainWin.CurrentPage = nil
-	
-	function KBM.MainWin:AddSize(Frame)
-		self.MenuSize = self.MenuSize + Frame:GetHeight()
-		self.Scroller:SetRange(self.MenuSize, self.Scroller.Frame:GetHeight())
+		
+	function KBM.MainWin:AddSize(Frame, Tab)
+		Tab = Tab or "Main"
+		self.Tabs[Tab].MenuSize = self.Tabs[Tab].MenuSize + Frame:GetHeight()
+		self.Tabs:UpdateScroller(Tab)
 	end
 	function KBM.MainWin:SubSize(Size)
 		self.MenuSize = self.MenuSize - Size
-		self.Scroller:SetRange(self.MenuSize, self.Scroller.Frame:GetHeight())
+		-- self.Scroller:SetRange(self.MenuSize, self.Scroller.Frame:GetHeight())
+	end
+	function KBM.MainWin.Tabs:SubSize(Size, Tab)
+		self[Tab].MenuSize = self[Tab].MenuSize - Size
+		self:UpdateScroller(Tab)
 	end
 	
 	function KBM.MainWin.Options.Frame.Event:WheelForward()
@@ -1083,12 +1409,17 @@ function KBM.InitOptions()
 		end
 	end
 
-	function KBM.MainWin.Menu:CreateHeader(Text, Hook, Default, Static)
+	function KBM.MainWin.Menu:CreateHeader(Text, Hook, Default, Static, Tab)
 	
 		local Header = {}
-		Header = UI.CreateFrame("Frame", "Header: "..Text, self)
+		Tab = Tab or "Main"					
+		local TabObj = KBM.MainWin.Tabs[Tab]
+		
+		Header = UI.CreateFrame("Frame", "Header: "..Text, TabObj.Menu)
+		Header.Tab = Tab
 		Header.Children = {}
-		Header:SetWidth(self:GetWidth())
+		Header:SetPoint("LEFT", TabObj.Menu, "LEFT")
+		Header:SetPoint("RIGHT", KBM.MainWin.Scroller.Main, "LEFT")
 		Header.Check = UI.CreateFrame("RiftCheckbox", "Header Check: "..Text, Header)
 		Header.Check:SetPoint("CENTERLEFT", Header, "CENTERLEFT", 4, 0)
 		Header.Type = "header"
@@ -1103,7 +1434,6 @@ function KBM.InitOptions()
 		Header.TextShadow:SetText(Text)
 		Header.TextShadow:SetFontColor(0,0,0,0.9)
 		Header.Text = UI.CreateFrame("Text", "Header_Text_"..Text, Header)
-		Header.Text:SetWidth(Header:GetWidth() - Header.Check:GetWidth())
 		Header.Text:SetText(Text)
 		if Static then
 			Header.Text:SetFontColor(0.85,0.85,0.0)
@@ -1117,50 +1447,49 @@ function KBM.InitOptions()
 			Header.TextShadow:SetFontSize(16)
 			Header.Enabled = true
 		end
-		Header:SetHeight(Header.Text:GetHeight())
 		Header.TextShadow:SetPoint("CENTERLEFT", Header.Check, "CENTERRIGHT", 1, 1)
 		Header.TextShadow:SetLayer(1)
 		Header.Text:SetPoint("CENTERLEFT", Header.Check, "CENTERRIGHT")
 		Header.Text:SetLayer(2)
-		table.insert(self.Headers, Header)
-		if not self.LastHeader then
-			Header:SetPoint("TOP", self, "TOP")
+		table.insert(TabObj.Headers, Header)
+		if not TabObj.LastHeader then
+			Header:SetPoint("TOP", TabObj.Menu, "TOP")
 		else
-			self.PrevHeader = self.LastHeader
-			self.PrevHeader.NextHeader = Header
-			if self.LastHeader.LastChild then
-				if self.LastHeader.LastChild.Type == "encounter" then
-					Header:SetPoint("TOP", self.LastHeader.LastChild.GUI.Frame, "BOTTOM")
+			TabObj.PrevHeader = TabObj.LastHeader
+			TabObj.PrevHeader.NextHeader = Header
+			if TabObj.LastHeader.LastChild then
+				if TabObj.LastHeader.LastChild.Type == "encounter" then
+					Header:SetPoint("TOP", TabObj.LastHeader.LastChild.GUI.Frame, "BOTTOM")
 				else
-					Header:SetPoint("TOP", self.LastHeader.LastChild, "BOTTOM")
+					Header:SetPoint("TOP", TabObj.LastHeader.LastChild, "BOTTOM")
 				end
 			else
-				if self.LastHeader.Type == "instance" then
-					Header:SetPoint("TOP", self.LastHeader.GUI.Frame, "BOTTOM")
+				if TabObj.LastHeader.Type == "instance" then
+					Header:SetPoint("TOP", TabObj.LastHeader.GUI.Frame, "BOTTOM")
 				else
-					Header:SetPoint("TOP", self.LastHeader, "BOTTOM")
+					Header:SetPoint("TOP", TabObj.LastHeader, "BOTTOM")
 				end
 			end
 		end
-		Header:SetPoint("LEFT", self, "LEFT")
-		self.LastHeader = Header
+		Header:SetHeight(Header.Text:GetHeight())
+		TabObj.LastHeader = Header
 		function Header.Check.Event:CheckboxChange()
 			if self:GetChecked() then
 				for _, Child in ipairs(self:GetParent().Children) do
 					Child:SetVisible(true)
 				end
 				self:GetParent().LastChild:SetPoint("TOP", self:GetParent().LastChild.Prev, "BOTTOM")
-				KBM.MainWin:SubSize(-self:GetParent().ChildSize)
+				KBM.MainWin.Tabs:SubSize(-self:GetParent().ChildSize, Header.Tab)
 			else
 				for _, Child in ipairs(self:GetParent().Children) do
 					Child:SetVisible(false)
 				end
 				self:GetParent().LastChild:SetPoint("TOP", self:GetParent(), "TOP")
-				KBM.MainWin:SubSize(self:GetParent().ChildSize)
+				KBM.MainWin.Tabs:SubSize(self:GetParent().ChildSize, Header.Tab)
 			end
 		end
 		function Header.Event:MouseIn()
-			if self.Enabled and not KBM.MainWin.Scroller.Handle.MouseDown then
+			if self.Enabled and not (KBM.MainWin.Scroller.Main.Grabbed or KBM.MainWin.Scroller.Instance.Grabbed) then
 				self:SetBackgroundColor(0,0,0,0.5)
 			end
 		end
@@ -1181,25 +1510,29 @@ function KBM.InitOptions()
 		function Header:AddChildSize(Child)
 			self.ChildSize = self.ChildSize + Child:GetHeight()
 		end
-		KBM.MainWin:AddSize(Header)
+		KBM.MainWin:AddSize(Header, Tab)
 		KBM.HeaderList[Text] = Header
-		if not KBM.MainWin.FirstItem then
-			KBM.MainWin.FirstItem = Header
+		if not TabObj.FirstItem then
+			TabObj.FirstItem = Header
 		end
 		Header.ChildSize = 0
 		return Header
 	end
-	function KBM.MainWin.Menu:CreateInstance(Name, Default, Hook)
+	function KBM.MainWin.Menu:CreateInstance(Name, Default, Hook, Tab)
+		
+		Tab = Tab or "Raid"
 		
 		-- New Menu Handler
 		local Instance = {}
+		local TabObj = KBM.MainWin.Tabs[Tab]
+		Instance.Tab = Tab
 		Instance.GUI = {}
-		Instance.GUI.Frame = UI.CreateFrame("Frame", "Instance_"..Name, self)
+		Instance.GUI.Frame = UI.CreateFrame("Frame", "Instance_"..Name, TabObj.Menu)
 		Instance.GUI.Frame.Instance = Instance
 		Instance.Children = {}
 		Instance.LastChild = nil
 		Instance.Name = Name
-		Instance.GUI.Frame:SetWidth(self:GetWidth())
+		Instance.GUI.Frame:SetWidth(MenuWidth)
 		Instance.GUI.Check = UI.CreateFrame("RiftCheckbox", "Instance_Check_"..Name, Instance.GUI.Frame)
 		Instance.GUI.Check:SetPoint("CENTERLEFT", Instance.GUI.Frame, "CENTERLEFT", 4, 0)
 		Default = Default or true
@@ -1222,28 +1555,28 @@ function KBM.InitOptions()
 		Instance.GUI.TextShadow:SetPoint("CENTERLEFT", Instance.GUI.Check, "CENTERRIGHT", 1, 1)
 		Instance.GUI.Text:SetPoint("CENTERLEFT", Instance.GUI.Check, "CENTERRIGHT")
 		Instance.Type = "instance"
-		table.insert(self.Headers, Instance)
-		if not self.LastHeader then
-			Instance.GUI.Frame:SetPoint("TOP", self, "TOP")
+		table.insert(TabObj.Headers, Instance)
+		if not TabObj.LastHeader then
+			Instance.GUI.Frame:SetPoint("TOP", TabObj.Menu, "TOP")
 		else
-			Instance.PrevHeader = self.LastHeader
+			Instance.PrevHeader = TabObj.LastHeader
 			Instance.PrevHeader.NextHeader = Instance
-			if self.LastHeader.LastChild then
-				if self.LastHeader.LastChild.Type == "encounter" then
-					Instance.GUI.Frame:SetPoint("TOP", self.LastHeader.LastChild.GUI.Frame, "BOTTOM")
+			if TabObj.LastHeader.LastChild then
+				if TabObj.LastHeader.LastChild.Type == "encounter" then
+					Instance.GUI.Frame:SetPoint("TOP", TabObj.LastHeader.LastChild.GUI.Frame, "BOTTOM")
 				else
-					Instance.GUI.Frame:SetPoint("TOP", self.LastHeader.LastChild, "BOTTOM")
+					Instance.GUI.Frame:SetPoint("TOP", TabObj.LastHeader.LastChild, "BOTTOM")
 				end
 			else
-				if self.LastHeader.Type == "instance" then
-					Instance.GUI.Frame:SetPoint("TOP", self.LastHeader.GUI.Frame, "BOTTOM")
+				if TabObj.LastHeader.Type == "instance" then
+					Instance.GUI.Frame:SetPoint("TOP", TabObj.LastHeader.GUI.Frame, "BOTTOM")
 				else
-					Instance.GUI.Frame:SetPoint("TOP", self.LastHeader, "BOTTOM")
+					Instance.GUI.Frame:SetPoint("TOP", TabObj.LastHeader, "BOTTOM")
 				end
 			end
 		end
-		Instance.GUI.Frame:SetPoint("LEFT", self, "LEFT")
-		self.LastHeader = Instance
+		Instance.GUI.Frame:SetPoint("LEFT", TabObj.Menu, "LEFT")
+		TabObj.LastHeader = Instance
 		Instance.GUI.Check.Instance = Instance
 		
 		function Instance.GUI.Check.Event:CheckboxChange()		
@@ -1253,19 +1586,19 @@ function KBM.InitOptions()
 						Child.GUI.Frame:SetVisible(true)
 					end
 					self.Instance.LastChild.GUI.Frame:SetPoint("TOP", self.Instance.LastChild.Prev.GUI.Frame, "BOTTOM")
-					KBM.MainWin:SubSize(-self.Instance.ChildSize)
+					KBM.MainWin.Tabs:SubSize(-self.Instance.ChildSize, self.Instance.Tab)
 				else
 					for _, Child in ipairs(self.Instance.Children) do
 						Child.GUI.Frame:SetVisible(false)
 					end
 					self.Instance.LastChild.GUI.Frame:SetPoint("TOP", self.Instance.GUI.Frame, "TOP")
-					KBM.MainWin:SubSize(self.Instance.ChildSize)
+					KBM.MainWin.Tabs:SubSize(self.Instance.ChildSize, self.Instance.Tab)
 				end
 			end			
 		end
 		
 		function Instance.GUI.Frame.Event:MouseIn()		
-			if self.Instance.Enabled and not KBM.MainWin.Scroller.Handle.MouseDown then
+			if self.Instance.Enabled and not (KBM.MainWin.Scroller.Main.Grabbed or KBM.MainWin.Scroller.Instance.Grabbed) then
 				self:SetBackgroundColor(0,0,0,0.5)
 			end			
 		end
@@ -1290,15 +1623,15 @@ function KBM.InitOptions()
 			self.ChildSize = self.ChildSize + Child:GetHeight()
 		end
 		
-		KBM.MainWin:AddSize(Instance.GUI.Frame)
+		KBM.MainWin:AddSize(Instance.GUI.Frame, Tab)
 		KBM.HeaderList[Name] = Instance
-		if not KBM.MainWin.FirstItem then
-			KBM.MainWin.FirstItem = Instance
+		if not TabObj.FirstItem then
+			TabObj.FirstItem = Instance
 		end
 		Instance.ChildSize = 0
 		
 		function Instance:CreateEncounter(Boss, Default)			
-			local Menu = KBM.MainWin.Menu
+			local Menu = KBM.MainWin.Tabs[Instance.Tab].Menu
 			local Encounter = {}
 			Encounter.Boss = Boss
 			Encounter.GUI = {}
@@ -1368,7 +1701,7 @@ function KBM.InitOptions()
 			end
 			
 			function Encounter.GUI.Frame.Event:MouseIn()				
-				if self.Encounter.Enabled and not KBM.MainWin.Scroller.Handle.MouseDown then
+				if self.Encounter.Enabled and not (KBM.MainWin.Scroller.Main.Grabbed or KBM.MainWin.Scroller.Instance.Grabbed) then
 					self:SetBackgroundColor(0,0,0,0.5)
 				end				
 			end
@@ -2595,7 +2928,7 @@ function KBM.InitOptions()
 			-- Initialize Records Tab
 			Encounter:Records()
 			
-			KBM.MainWin:AddSize(Encounter.GUI.Frame)
+			KBM.MainWin:AddSize(Encounter.GUI.Frame, Instance.Tab)
 			self:AddChildSize(Encounter.GUI.Frame)
 		end
 		return Instance		
@@ -2603,8 +2936,8 @@ function KBM.InitOptions()
 	
 	function KBM.MainWin.Menu:CreateEncounter(Text, Link, Default, Header)
 		Child = UI.CreateFrame("Frame", "Encounter_Header", Header)
-		Child:SetWidth(self:GetWidth()-Header.Check:GetWidth())
-		Child:SetPoint("RIGHT", self, "RIGHT")
+		Child:SetPoint("LEFT", Header.Check, "RIGHT", -4, nil)
+		Child:SetPoint("RIGHT", Header, "RIGHT")
 		Child.Enabled = true
 		Child.Check = UI.CreateFrame("RiftCheckbox", "Encounter_Check", Child)
 		Child.Check:SetPoint("CENTERLEFT", Child, "CENTERLEFT", 4, 0)
@@ -2656,7 +2989,7 @@ function KBM.InitOptions()
 			self:SetBackgroundColor(0,0,0,0)
 		end
 		function Child.Event:MouseIn()
-			if self.Enabled and not KBM.MainWin.Scroller.Handle.MouseDown then
+			if self.Enabled and not (KBM.MainWin.Scroller.Main.Grabbed or KBM.MainWin.Scroller.Instance.Grabbed) then
 				self:SetBackgroundColor(0,0,0,0.5)
 			end
 		end
@@ -2900,7 +3233,7 @@ function KBM.InitOptions()
 		
 		end
 		Header.LastChild = Child
-		KBM.MainWin:AddSize(Child)
+		KBM.MainWin:AddSize(Child, Header.Tab)
 		Header:AddChildSize(Child)
 		return Child
 	end

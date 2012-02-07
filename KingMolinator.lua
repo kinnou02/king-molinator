@@ -4177,15 +4177,14 @@ function KBM:Timer()
 			KBM.QueuePage = nil
 		end
 		KBM.Updating = false
-	else
-		for UnitID, CastCheck in pairs(KBM.CastBar.ActiveCastBars) do
-			CastCheck:Update()
-		end		
 	end
 	if self.PlugIn.Count > 0 then
 		for ID, PlugIn in pairs(self.PlugIn.List) do
 			PlugIn:Timer(current)
 		end
+		for UnitID, CastCheck in pairs(KBM.CastBar.ActiveCastBars) do
+			CastCheck:Update()
+		end		
 	end
 	
 end
@@ -4831,15 +4830,15 @@ function KBM.MenuOptions.Main:Options()
 end
 
 function KBM.MenuGroup:SetTenMan()
-	self.tenMan = KBM.MainWin.Menu:CreateHeader("10-Man Raids", nil, nil, true)
+	--self.tenMan = KBM.MainWin.Menu:CreateHeader("10-Man Raids", nil, nil, true)
 end
 
 function KBM.MenuGroup:SetMaster()
-	self.MasterModes = KBM.MainWin.Menu:CreateHeader("Master Modes", nil, nil, true)
+	--self.MasterModes = KBM.MainWin.Menu:CreateHeader("Master Modes", nil, nil, true)
 end
 
 function KBM.MenuGroup:SetExperts()
-	self.Experts = KBM.MainWin.Menu:CreateHeader("Experts", nil, nil, true)
+	--self.Experts = KBM.MainWin.Menu:CreateHeader("Experts", nil, nil, true)
 end
 
 function KBM.ApplySettings()
@@ -4915,15 +4914,15 @@ local function KBM_Start()
 	KBM.PhaseMonitor:Init()
 	KBM.Trigger:Init()
 	if KBM.PlugIn.Count > 0 then
-		KBM.MenuGroup.plugin = KBM.MainWin.Menu:CreateHeader("Plug-In", nil, nil, true)
+		--KBM.MenuGroup.plugin = KBM.MainWin.Menu:CreateHeader("Plug-In", nil, nil, true)
 		for ID, PlugIn in pairs(KBM.PlugIn.List) do
 			if PlugIn.Start then
 				PlugIn:Start()
 			end
 		end
-		KBM.MenuGroup.main = KBM.MainWin.Menu:CreateHeader("KBM", nil, nil, true)
+		--KBM.MenuGroup.main = KBM.MainWin.Menu:CreateHeader("KBM", nil, nil, true)
 	end
-	local Header = KBM.MainWin.Menu:CreateHeader("Global Options")
+	local Header = KBM.MainWin.Menu:CreateHeader("Global Options", nil, nil, nil, "Main")
 	KBM.MenuOptions.Main.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.Settings[KBM.Lang], KBM.MenuOptions.Main, nil, Header)
 	KBM.MenuOptions.Main.MenuItem.Check:SetEnabled(false)
 	KBM.MenuOptions.Timers.MenuItem = KBM.MainWin.Menu:CreateEncounter("Timers", KBM.MenuOptions.Timers, true, Header)
@@ -4936,7 +4935,7 @@ local function KBM_Start()
 	KBM.MenuOptions.Alerts.MenuItem.Check:SetEnabled(false)
 	KBM.MenuOptions.TankSwap.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.TankSwap[KBM.Lang], KBM.MenuOptions.TankSwap, true, Header)	
 	KBM.MenuOptions.TankSwap.MenuItem.Check:SetEnabled(false)
-	KBM.MenuGroup.twentyman = KBM.MainWin.Menu:CreateHeader("20-Man Raids", nil, nil, true)
+	--KBM.MenuGroup.twentyman = KBM.MainWin.Menu:CreateHeader("20-Man Raids", nil, nil, true)
 	table.insert(Command.Slash.Register("kbmreset"), {KBM_Reset, "KingMolinator", "KBM Reset"})
 	table.insert(Event.Chat.Notify, {KBM.Notify, "KingMolinator", "Notify Event"})
 	table.insert(Event.Chat.Npc, {KBM.NPCChat, "KingMolinator", "NPC Chat"})
@@ -4981,6 +4980,7 @@ local function KBM_WaitReady(unitID, uDetails)
 		Mod:Start(KBM_MainWin)
 	end
 	KBM.ApplySettings()
+	KBM.MainWin.Scroller.Instance:SetPosition(0)
 	
 	-- KBM.Settings = {}
 	-- KBM.Settings.CastBar = KBM.Defaults.CastBar()

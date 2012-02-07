@@ -10,9 +10,9 @@ Author = "Paul Snart"
 Website = "http://www.facebook.com/pages/King-Boss-Mods/271482262893152"
 Email = "snarty@gmail.com"
 
-Version = "0.9.6"
+Version = "0.9.7"
 
-Environment = "1.6"
+Environment = "1.7"
 
 RunOnStartup = {
 	"KingMolinator.lua",
@@ -56,6 +56,28 @@ RunOnStartup = {
 	"10_Man/Drowned_Halls/Joloral.lua",
 	"10_Man/Drowned_Halls/Isskal.lua",
 	"10_Man/Drowned_Halls/Hydriss.lua",
+	"Experts/Abyssal_Precipice/APHeader.lua",
+	"Experts/Abyssal_Precipice/Andrenos.lua",
+	"Experts/Abyssal_Precipice/Icetalon.lua",
+	"Experts/Abyssal_Precipice/Majolic.lua",
+	"Experts/Abyssal_Precipice/Renthar.lua",
+	"Experts/Abyssal_Precipice/Calyx.lua",
+	"Experts/Charmers_Caldera/CCHeader.lua",
+	"Experts/Charmers_Caldera/Smouldaron.lua",
+	"Experts/Charmers_Caldera/Cyclorax.lua",
+	"Experts/Charmers_Caldera/Ryka.lua",
+	"Experts/Charmers_Caldera/Caelia.lua",
+	"Experts/Charmers_Caldera/Gronik.lua",
+	"Experts/Charmers_Caldera/Jultharin.lua",
+	"Experts/Darkening_Deeps/DDHeader.lua",
+	"Experts/Deepstrike_Mines/DMHeader.lua",
+	"Experts/Fall_of_Lantern_Hook/FOLHHeader.lua",
+	"Experts/Foul_Cascade/FCHeader.lua",
+	"Experts/Kings_Breach/KBHeader.lua",
+	"Experts/Runic_Descent/RDHeader.lua",
+	"Experts/The_Iron_Tomb/TITHeader.lua",
+	"Experts/The_Realm_of_the_Fae/ROTFHeader.lua",
+	"Experts/Upper_Caduceus_Rise/UCRHeader.lua",
 }
 
 Embed = {
@@ -103,6 +125,28 @@ SavedVariables = {
 	KBMDHJR_Settings = "account",
 	KBMDHIL_Settings = "account",
 	KBMDHHH_Settings = "account",
+	KBMEXAP_Settings = "account",
+	KBMEXAPKA_Settings = "account",
+	KBMEXAPIN_Settings = "account",
+	KBMEXAPMB_Settings = "account",
+	KBMEXAPRR_Settings = "account",
+	KBMEXAPCA_Settings = "account",
+	KBMEXCC_Settings = "account",
+	KBMEXCCSN_Settings = "account",
+	KBMEXCCCX_Settings = "account",
+	KBMEXCCRD_Settings = "account",
+	KBMEXCCCS_Settings = "account",
+	KBMEXCCGK_Settings = "account",
+	KBMEXCCJN_Settings = "account",
+	KBMEXDD_Settings = "account",
+	KBMEXDM_Settings = "account",
+	KBMEXFOLH_Settings = "account",
+	KBMEXFC_Settings = "account",
+	KBMEXKB_Settings = "account",
+	KBMEXRD_Settings = "account",
+	KBMEXTIT_Settings = "account",
+	KBMEXROTF_Settings = "account",
+	KBMEXUCR_Settings = "account",
 	KBM_GlobalOptions = "account",
 	chKM_Settings = "character",
 	chKBMAK_Settings = "character",
@@ -143,7 +187,28 @@ SavedVariables = {
 	chKBMDHJR_Settings = "character",
 	chKBMDHIL_Settings = "character",
 	chKBMDHHH_Settings = "character",
-	chKBM_GlobalOptions = "character",	
+	chKBMEXAP_Settings = "character",
+	chKBMEXAPKA_Settings = "character",
+	chKBMEXAPIN_Settings = "character",
+	chKBMEXAPMB_Settings = "character",
+	chKBMEXAPRR_Settings = "character",
+	chKBMEXAPCA_Settings = "character",
+	chKBMEXCC_Settings = "character",
+	chKBMEXCCSN_Settings = "character",
+	chKBMEXCCCX_Settings = "character",
+	chKBMEXCCRD_Settings = "character",
+	chKBMEXCCCS_Settings = "character",
+	chKBMEXCCGK_Settings = "character",
+	chKBMEXCCJN_Settings = "character",
+	chKBMEXDD_Settings = "character",
+	chKBMEXFOLH_Settings = "character",
+	chKBMEXFC_Settings = "character",
+	chKBMEXKB_Settings = "character",
+	chKBMEXRD_Settings = "character",
+	chKBMEXTIT_Settings = "character",
+	chKBMEXROTF_Settings = "character",
+	chKBMUCR_Settings = "character",
+	chKBM_GlobalOptions = "character",
 }
 
 Dependencies = {

@@ -1,4 +1,42 @@
-﻿v0.9.6
+﻿v0.9.7
+
+Rift Version
+* New: Compatible with Rift v1.7
+
+Options
+* New: Options down the left panel are now separated in to two sections.
+* New: Added KBM tab to top section for Global Options.
+* New: Added Plug-In tab to top section for all Plug-In settings.
+* New: Added Raid tab (red helm) to lower section for all 20-man instances.
+* New: Added Sliver tab (silver helm) to lower section for all 10-man instances.
+* New: Added Group tab (yellow helm) to lower section for Expert and Master Mode dungeons.
+
+Engine
+* CastBars
+** New: Further adjustments to allow for castbar tracking outside of encounters.
+
+Greenscale's Blight
+* Infiltrator Johlen
+** New: Devastating Bomb alerts will now stop as soon as the bomb is destroyed.
+
+* NOTE: All new dungeon bosses include: Encounter Timer, Castbar, Records and Phase Monitor tracking.
+* NOTE: This is a first release for Dungeons. Timers, Alerts and improved encounter tracking will be added over time.
+
+Expert Dungeons
+* New: Abyssal Precipice
+** New: Kaler Andrenos
+** New: Icetalon
+** New: Majolic the Bloodwalker
+** New: Calyx the Ancient
+* New: Charmer's Caldera
+** New: Smouldaron
+** New: Cyclorax
+** New: Ryka Dharvos
+** New: Caelia the Stormtouched
+** New: Gronik
+** New: Jultharin
+
+v0.9.6
 
 Hammerknell
 * Inquisitor Garau
@@ -16,13 +54,12 @@ Russian Translations
 Rise of the Phoenix
 * Первосвященник Аракурн
 ** New: Additional Trigger translations.
-
-
+----
 v0.9.5 (Hotfix)
 
 * Alerts
 ** Fixed: The sizing and positioning of alert text had become permanently locked.
-
+----
 v0.9.4﻿
 
 Options

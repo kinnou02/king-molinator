@@ -322,9 +322,6 @@ function GR:Reset()
 	self.Grugonim.CastBar:Remove()
 	self.PhaseObj:End(self.TimeElapsed)
 	self.Breaths = 0
-	for TowerID, Tower in pairs(self.Tower.UnitList) do
-		Tower = nil
-	end
 	self.Tower.UnitList = {}	
 end
 

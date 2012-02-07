@@ -40,5 +40,5 @@ function GP:SaveVars()
 end
 
 function GP:Start()
-	GP.Menu = KBM.MainWin.Menu:CreateInstance(self.Name, true, self.Handler)	
+	GP.Menu = KBM.MainWin.Menu:CreateInstance(self.Name, true, self.Handler, "Sliver")	
 end

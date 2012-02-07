@@ -159,8 +159,8 @@ function IJ:Death(UnitID)
 			else
 				self.PhaseObj:SetPhase("Final")
 			end
+			KBM.Alert:Stop(self.Johlen.AlertsRef.Bomb)
 		end
-		self.PhaseObj:SetPhase(self.Phase)
 	end
 	return false
 end
