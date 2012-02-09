@@ -1,4 +1,4 @@
-﻿-- Ryka Boss Mod for King Boss Mods
+﻿-- Ryka Dharvos Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --
@@ -18,7 +18,6 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Ryka",
-	Enrage = 60 * 10,
 }
 
 MOD.Ryka = {
@@ -52,7 +51,7 @@ MOD.Ryka = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Ryka = KBM.Language:Add(MOD.Ryka.Name)
--- MOD.Lang.Ryka:SetGerman("")
+MOD.Lang.Ryka:SetGerman("Ryka Dharvos")
 -- MOD.Lang.Ryka:SetFrench("")
 -- MOD.Lang.Ryka:SetRussian("")
 MOD.Ryka.Name = MOD.Lang.Ryka[KBM.Lang]

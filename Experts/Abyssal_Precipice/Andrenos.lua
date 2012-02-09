@@ -15,10 +15,10 @@ local MOD = {
 	File = "Andrenos.lua",
 	Enabled = true,
 	Instance = Instance.Name,
+	InstanceObj = Instance,
 	HasPhases = true,
 	Lang = {},
 	ID = "Andrenos",
-	Enrage = 60 * 10,
 }
 
 MOD.Andrenos = {
@@ -52,7 +52,7 @@ MOD.Andrenos = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Andrenos = KBM.Language:Add(MOD.Andrenos.Name)
--- MOD.Lang.Andrenos:SetGerman("")
+MOD.Lang.Andrenos:SetGerman("Kaler Andrenos")
 -- MOD.Lang.Andrenos:SetFrench("")
 -- MOD.Lang.Andrenos:SetRussian("")
 MOD.Andrenos.Name = MOD.Lang.Andrenos[KBM.Lang]

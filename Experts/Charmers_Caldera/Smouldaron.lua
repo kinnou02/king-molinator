@@ -18,7 +18,6 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Smouldaron",
-	Enrage = 60 * 10,
 }
 
 MOD.Smouldaron = {
@@ -51,7 +50,7 @@ MOD.Smouldaron = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Smouldaron = KBM.Language:Add(MOD.Smouldaron.Name)
--- MOD.Lang.Smouldaron:SetGerman("")
+MOD.Lang.Smouldaron:SetGerman("Smouldaron")
 -- MOD.Lang.Smouldaron:SetFrench("")
 -- MOD.Lang.Smouldaron:SetRussian("")
 MOD.Smouldaron.Name = MOD.Lang.Smouldaron[KBM.Lang]

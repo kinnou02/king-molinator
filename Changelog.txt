@@ -9,9 +9,15 @@ Options
 * New: Added Plug-In tab to top section for all Plug-In settings.
 * New: Added Raid tab (red helm) to lower section for all 20-man instances.
 * New: Added Sliver tab (silver helm) to lower section for all 10-man instances.
-* New: Added Group tab (yellow helm) to lower section for Expert and Master Mode dungeons.
+* New: Added Group tab (gold helm) to lower section for Expert and Master Mode dungeons.
 
 Engine
+* Encounters
+** New: Encounter type checks are now bypassed once already established.
+** New: Checks added for Expert Mode dungeon recognition. (Master Mode will still trigger currently in Alpha)
+** New: Experimental Unique unit type ID for Duke Letareus chronicle. (Alpha version only)
+** New: Experimental Unique unit type ID for Oracle Aleria. (Alpha version only)
+** Note: If the chronicle version triggers in GSB Raid, please report back. This is to try and gauage better checking.
 * CastBars
 ** New: Further adjustments to allow for castbar tracking outside of encounters.
 
@@ -35,6 +41,27 @@ Expert Dungeons
 ** New: Caelia the Stormtouched
 ** New: Gronik
 ** New: Jultharin
+* New: Darkening Deeps
+** New: Alchemist Braxtepel
+** New: Michael Bringhurst
+** New: Tegenar Deepfang
+** New: Glubmuk
+** New: The Gedlo Council
+** New: Scarn
+* New: Deepstrike Mines
+** New: Overseer Markus
+** New: Gregori Krezlav
+** New: Bonehew the Thunderer
+** New: Gatekeeper Kaleida
+** New: Dichrom
+** New: Caretaker Arcanis
+** New: Plutonus
+
+German Translations
+* New: Matching new dungeon translations.
+
+Russian Translations
+* New: Lots of new translations.
 
 v0.9.6
 

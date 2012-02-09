@@ -18,7 +18,6 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Jultharin",
-	Enrage = 60 * 10,
 }
 
 MOD.Jultharin = {
@@ -51,7 +50,7 @@ MOD.Jultharin = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Jultharin = KBM.Language:Add(MOD.Jultharin.Name)
--- MOD.Lang.Jultharin:SetGerman("")
+MOD.Lang.Jultharin:SetGerman("Jultharin") 
 -- MOD.Lang.Jultharin:SetFrench("")
 -- MOD.Lang.Jultharin:SetRussian("")
 MOD.Jultharin.Name = MOD.Lang.Jultharin[KBM.Lang]

@@ -15,10 +15,10 @@ local MOD = {
 	File = "Renthar.lua",
 	Enabled = true,
 	Instance = Instance.Name,
+	InstanceObj = Instance,
 	HasPhases = true,
 	Lang = {},
 	ID = "Renthar",
-	Enrage = 60 * 10,
 }
 
 MOD.Renthar = {
@@ -52,7 +52,7 @@ MOD.Renthar = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Renthar = KBM.Language:Add(MOD.Renthar.Name)
--- MOD.Lang.Renthar:SetGerman("")
+MOD.Lang.Renthar:SetGerman("Renthar")
 -- MOD.Lang.Renthar:SetFrench("")
 -- MOD.Lang.Renthar:SetRussian("")
 MOD.Renthar.Name = MOD.Lang.Renthar[KBM.Lang]

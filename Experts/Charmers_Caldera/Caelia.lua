@@ -18,7 +18,6 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Caelia",
-	Enrage = 60 * 10,
 }
 
 MOD.Caelia = {
@@ -52,7 +51,7 @@ MOD.Caelia = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Caelia = KBM.Language:Add(MOD.Caelia.Name)
--- MOD.Lang.Caelia:SetGerman("")
+MOD.Lang.Caelia:SetGerman("Caelia die Sturmberührte") 
 -- MOD.Lang.Caelia:SetFrench("")
 -- MOD.Lang.Caelia:SetRussian("")
 MOD.Caelia.Name = MOD.Lang.Caelia[KBM.Lang]

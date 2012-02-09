@@ -3,8 +3,8 @@
 -- Copyright 2011
 --
 
-KBMEXAP_Settings = nil
-chKBMEXAP_Settings = nil
+KBMEXDM_Settings = nil
+chKBMEXDM_Settings = nil
 
 local MOD = {
 	Header = nil,

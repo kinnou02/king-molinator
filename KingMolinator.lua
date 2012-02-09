@@ -18,6 +18,7 @@ KBM.Testing = false
 KBM.ValidTime = false
 KBM.Debug = false
 KBM.TestFilters = {}
+KBM.IgnoreList = {}
 KBM.Idle = {
 	Until = 0,
 	Duration = 5,
@@ -2349,9 +2350,82 @@ function KBM.EncTimer:Init()
 	self:ApplySettings()	
 end
 
+function KBM.MatchType(uDetails, BossObj)
+	if KBM.Encounter then
+		if not BossObj then
+			return false
+		end
+		-- Already established type
+		return true
+	else
+		if BossObj then
+			if BossObj.Mod.InstanceObj then
+				if BossObj.Mod.InstanceObj.Type == "Expert" then
+					if uDetails.level == 52 then
+						if KBM.Debug then 
+							print("Expert Dungeon mode active")
+						end
+						KBM.EncounterMode = "normal"
+						KBM.DungeonMode = "expert"
+						return true
+					end
+				elseif Bossobj.Mod.InstanceObj.Type == "Master" then
+					if uDetails.level == 52 then
+						if KBM.Debug then
+							print("Master Mode Dungeon mode active")
+						end
+						KBM.EncounterMode = "normal"
+						KBM.DungeonMode = "master"
+						return true
+					end
+				end
+			else
+				if BossObj.Mod.HasChronicle then
+					if BossObj.ChronicleID then
+						if uDetails.type == BossObj.ChronicleID then
+							KBM.EncounterMode = "chronicle"
+							if KBM.Debug then
+								print("Chronicle mode active via ID")
+							end
+							return true
+						else
+							KBM.EncounterMode = "normal"
+							if KBM.Debug then
+								print("Normal mode active via ID")
+							end
+							return true
+						end
+					else
+						if KBM.Debug then
+							print("Undefined Chronicle ID, using HP checking method")
+						end
+						if uDetails.healthMax < 1500000 then
+							KBM.EncounterMode = "chronicle"
+							if KBM.Debug then
+								print("Chronicle mode active via HP")
+							end
+							return true
+						else
+							KBM.EncounterMode = "normal"
+							if KBM.Debug then
+								print("Normal mode active via HP")
+							end
+							return true
+						end
+					end
+				else
+					KBM.EncounterMode = "normal"
+					return true
+				end
+			end
+		end
+		return false
+	end
+end
+
 function KBM.CheckActiveBoss(uDetails, UnitID)
 	local current = Inspect.Time.Real()
-	if KBM.Options.Enabled then
+	if KBM.Options.Enabled and not KBM.IgnoreList[UnitID] then
 		if (not KBM.Idle.Wait or (KBM.Idle.Wait == true and KBM.Idle.Until < current)) or KBM.Encounter then
 			local BossObj = nil
 			KBM.Idle.Wait = false
@@ -2362,29 +2436,17 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 					elseif KBM.SubBoss[uDetails.name] then
 						BossObj = KBM.SubBoss[uDetails.name]
 					end
-					if BossObj then
+					if KBM.MatchType(uDetails, BossObj) then
 						if KBM.Debug then
-							print("Boss found Checking: Tier = "..uDetails.tier.." "..uDetails.level.." ("..type(uDetails.level)..")")
+							print("Boss found Checking: Tier = "..tostring(uDetails.tier).." "..tostring(uDetails.level).." ("..type(uDetails.level)..")")
 							print("Players location: "..Inspect.Unit.Detail(KBM.Player.UnitID).locationName)
+							print("Unit Type: "..tostring(uDetails.type))
+							print("Unit Name: "..tostring(uDetails.name))
+							print("------------------------------------")
 						end
 						if uDetails.combat then
 							if KBM.Debug then
 								print("Boss matched checking encounter start")
-							end
-							if BossObj.Mod.HasChronicle then
-								if uDetails.healthMax < 150000 then
-									KBM.EncounterMode = "chronicle"
-									if KBM.Debug then
-										print("Chronicle mode active")
-									end
-								else
-									KBM.EncounterMode = "normal"
-									if KBM.Debug then
-										print("Normal mode active")
-									end
-								end
-							else
-								KBM.EncounterMode = "normal"
 							end
 							if KBM.EncounterMode == "normal" or (KBM.EncounterMode == "chronicle" and BossObj.Mod.Settings.Chronicle) then
 								KBM.BossID[UnitID] = {}
@@ -3976,6 +4038,7 @@ local function KBM_Reset()
 		KBM.Alert.Settings = KBM.Options.Alerts
 		KBM.Alert:ApplySettings()
 		KBM.Buffs.Active = {}
+		KBM.IgnoreList = {}
 	else
 		print("No encounter to reset.")
 	end
@@ -4099,6 +4162,11 @@ function KBM:Timer()
 						end
 					end
 				end
+				if self.PlugIn.Count > 0 then
+					for ID, PlugIn in pairs(self.PlugIn.List) do
+						PlugIn:Timer(current)
+					end
+				end	
 				for UnitID, CastCheck in pairs(KBM.CastBar.ActiveCastBars) do
 					CastCheck:Update()
 				end
@@ -4136,6 +4204,15 @@ function KBM:Timer()
 						KBM.WipeIt()
 					end
 				end
+			else
+				if self.PlugIn.Count > 0 then
+					for ID, PlugIn in pairs(self.PlugIn.List) do
+						PlugIn:Timer(current)
+					end
+					for UnitID, CastCheck in pairs(KBM.CastBar.ActiveCastBars) do
+						CastCheck:Update()
+					end
+				end	
 			end
 				-- for UnitID, CastCheck in pairs(KBM.CastBar.List) do
 					-- CastCheck:Update()
@@ -4177,14 +4254,6 @@ function KBM:Timer()
 			KBM.QueuePage = nil
 		end
 		KBM.Updating = false
-	end
-	if self.PlugIn.Count > 0 then
-		for ID, PlugIn in pairs(self.PlugIn.List) do
-			PlugIn:Timer(current)
-		end
-		for UnitID, CastCheck in pairs(KBM.CastBar.ActiveCastBars) do
-			CastCheck:Update()
-		end		
 	end
 	
 end
@@ -4903,6 +4972,24 @@ end
 	-- end
 -- end
 
+function KBM.LocationChange(LocationList)
+	if LocationList then
+		for UnitID, Location in pairs(LocationList) do
+			if UnitID == KBM.Player.UnitID then
+				if not Location then
+					if KBM.Debug then
+						print("Location unavailable")
+					end
+				else
+					if KBM.Debug then
+						print("New location: "..Location)
+					end
+				end
+			end
+		end
+	end
+end
+
 local function KBM_Start()
 	KBM.InitOptions()
 	KBM.Button:Init()
@@ -4947,6 +5034,7 @@ local function KBM_Start()
 	table.insert(Event.SafesRaidManager.Group.Combat.Damage, {KBM.RaidDamage, "KingMolinator", "Raid Damage"})
 	table.insert(Event.Unit.Unavailable, {KBM_UnitRemoved, "KingMolinator", "Unit Unavailable"})
 	table.insert(Event.Unit.Available, {KBM_UnitAvailable, "KingMolinator", "Unit Available"})
+	table.insert(Event.Unit.Detail.LocationName, {KBM.LocationChange, "KingMolinator", "Location Change"})
 	table.insert(Event.System.Update.Begin, {function () KBM:Timer() end, "KingMolinator", "System Update"}) 
 	table.insert(Event.SafesRaidManager.Combat.Death, {KBM_Death, "KingMolinator", "Combat Death"})
 	table.insert(Event.SafesRaidManager.Combat.Enter, {KBM.CombatEnter, "KingMolinator", "Non raid combat enter"})

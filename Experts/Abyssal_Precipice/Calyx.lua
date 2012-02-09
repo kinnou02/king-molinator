@@ -15,10 +15,10 @@ local MOD = {
 	File = "Calyx.lua",
 	Enabled = true,
 	Instance = Instance.Name,
+	InstanceObj = Instance,
 	HasPhases = true,
 	Lang = {},
 	ID = "Calyx",
-	Enrage = 60 * 10,
 }
 
 MOD.Calyx = {
@@ -52,7 +52,7 @@ MOD.Calyx = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Calyx = KBM.Language:Add(MOD.Calyx.Name)
--- MOD.Lang.Calyx:SetGerman("")
+MOD.Lang.Calyx:SetGerman("Calyx der Alte")
 -- MOD.Lang.Calyx:SetFrench("")
 -- MOD.Lang.Calyx:SetRussian("")
 MOD.Calyx.Name = MOD.Lang.Calyx[KBM.Lang]

@@ -95,7 +95,7 @@ SN.Lang.Debuff.Soul.German = "Seelenernte"
 SN.Lang.Debuff.Soul.Russian = "Сбор души"
 
 function SN:AddBosses(KBM_Boss)
-	self.MenuName = self.Sicaron.Descript
+	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Sicaron.Name] = self.Sicaron,
 	}

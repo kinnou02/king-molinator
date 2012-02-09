@@ -1,32 +1,32 @@
-﻿-- Icetalon Boss Mod for King Boss Mods
+﻿-- Glubmuk Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --
 
-KBMEXAPIN_Settings = nil
-chKBMEXAPIN_Settings = nil
+KBMEXDDGK_Settings = nil
+chKBMEXDDGK_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
-local Instance = KBM.BossMod["Abyssal Precipice"]
+local Instance = KBM.BossMod["Darkening Deeps"]
 
 local MOD = {
 	Directory = Instance.Directory,
-	File = "Icetalon.lua",
+	File = "Glubmuk.lua",
 	Enabled = true,
 	Instance = Instance.Name,
 	InstanceObj = Instance,
 	HasPhases = true,
 	Lang = {},
-	ID = "Icetalon",
+	ID = "Glubmuk",
 }
 
-MOD.Icetalon = {
+MOD.Glubmuk = {
 	Mod = MOD,
-	Level = "52",
+	Level = 52,
 	Active = false,
-	Name = "Icetalon",
-	NameShort = "Icetalon",
+	Name = "Glubmuk",
+	--NameShort = "Glubmuk",
 	Menu = {},
 	Castbar = nil,
 	Dead = false,
@@ -51,12 +51,12 @@ MOD.Icetalon = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Icetalon = KBM.Language:Add(MOD.Icetalon.Name)
-MOD.Lang.Icetalon:SetGerman("Eiskralle") 
--- MOD.Lang.Icetalon:SetFrench("")
--- MOD.Lang.Icetalon:SetRussian("")
-MOD.Icetalon.Name = MOD.Lang.Icetalon[KBM.Lang]
-MOD.Descript = MOD.Icetalon.Name
+MOD.Lang.Glubmuk = KBM.Language:Add(MOD.Glubmuk.Name)
+-- MOD.Lang.Glubmuk:SetGerman("")
+-- MOD.Lang.Glubmuk:SetFrench("")
+-- MOD.Lang.Glubmuk:SetRussian("")
+MOD.Glubmuk.Name = MOD.Lang.Glubmuk[KBM.Lang]
+MOD.Descript = MOD.Glubmuk.Name
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}
@@ -64,58 +64,58 @@ MOD.Lang.Ability = {}
 function MOD:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
-		[self.Icetalon.Name] = self.Icetalon,
+		[self.Glubmuk.Name] = self.Glubmuk,
 	}
-	KBM_Boss[self.Icetalon.Name] = self.Icetalon	
+	KBM_Boss[self.Glubmuk.Name] = self.Glubmuk	
 end
 
 function MOD:InitVars()
 	self.Settings = {
 		Enabled = true,
-		CastBar = self.Icetalon.Settings.CastBar,
+		CastBar = self.Glubmuk.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		-- MechTimer = KBM.Defaults.MechTimer(),
 		-- Alerts = KBM.Defaults.Alerts(),
-		-- TimersRef = self.Icetalon.Settings.TimersRef,
-		-- AlertsRef = self.Icetalon.Settings.AlertsRef,
+		-- TimersRef = self.Glubmuk.Settings.TimersRef,
+		-- AlertsRef = self.Glubmuk.Settings.AlertsRef,
 	}
-	KBMEXAPKA_Settings = self.Settings
-	chKBMEXAPKA_Settings = self.Settings
+	KBMEXDDGK_Settings = self.Settings
+	chKBMEXDDGK_Settings = self.Settings
 	
 end
 
 function MOD:SwapSettings(bool)
 
 	if bool then
-		KBMEXAPIN_Settings = self.Settings
-		self.Settings = chKBMEXAPIN_Settings
+		KBMEXDDGK_Settings = self.Settings
+		self.Settings = chKBMEXDDGK_Settings
 	else
-		chKBMEXAPIN_Settings = self.Settings
-		self.Settings = KBMEXAPIN_Settings
+		chKBMEXDDGK_Settings = self.Settings
+		self.Settings = KBMEXDDGK_Settings
 	end
 
 end
 
 function MOD:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMEXAPIN_Settings, self.Settings)
+		KBM.LoadTable(chKBMEXDDGK_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMEXAPIN_Settings, self.Settings)
+		KBM.LoadTable(KBMEXDDGK_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMEXAPIN_Settings = self.Settings
+		chKBMEXDDGK_Settings = self.Settings
 	else
-		KBMEXAPIN_Settings = self.Settings
+		KBMEXDDGK_Settings = self.Settings
 	end	
 end
 
 function MOD:SaveVars()	
 	if KBM.Options.Character then
-		chKBMEXAPIN_Settings = self.Settings
+		chKBMEXDDGK_Settings = self.Settings
 	else
-		KBMEXAPIN_Settings = self.Settings
+		KBMEXDDGK_Settings = self.Settings
 	end	
 end
 
@@ -123,16 +123,16 @@ function MOD:Castbar(units)
 end
 
 function MOD:RemoveUnits(UnitID)
-	if self.Icetalon.UnitID == UnitID then
-		self.Icetalon.Available = false
+	if self.Glubmuk.UnitID == UnitID then
+		self.Glubmuk.Available = false
 		return true
 	end
 	return false
 end
 
 function MOD:Death(UnitID)
-	if self.Icetalon.UnitID == UnitID then
-		self.Icetalon.Dead = true
+	if self.Glubmuk.UnitID == UnitID then
+		self.Glubmuk.Dead = true
 		return true
 	end
 	return false
@@ -141,23 +141,23 @@ end
 function MOD:UnitHPCheck(unitDetails, unitID)	
 	if unitDetails and unitID then
 		if not unitDetails.player then
-			if unitDetails.name == self.Icetalon.Name then
+			if unitDetails.name == self.Glubmuk.Name then
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
 					self.TimeElapsed = 0
-					self.Icetalon.Dead = false
-					self.Icetalon.Casting = false
-					self.Icetalon.CastBar:Create(unitID)
+					self.Glubmuk.Dead = false
+					self.Glubmuk.Casting = false
+					self.Glubmuk.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase("Single")
-					self.PhaseObj.Objectives:AddPercent(self.Icetalon.Name, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Glubmuk.Name, 0, 100)
 					self.Phase = 1
 				end
-				self.Icetalon.UnitID = unitID
-				self.Icetalon.Available = true
-				return self.Icetalon
+				self.Glubmuk.UnitID = unitID
+				self.Glubmuk.Available = true
+				return self.Glubmuk
 			end
 		end
 	end
@@ -165,16 +165,16 @@ end
 
 function MOD:Reset()
 	self.EncounterRunning = false
-	self.Icetalon.Available = false
-	self.Icetalon.UnitID = nil
-	self.Icetalon.CastBar:Remove()
+	self.Glubmuk.Available = false
+	self.Glubmuk.UnitID = nil
+	self.Glubmuk.CastBar:Remove()
 	self.PhaseObj:End(Inspect.Time.Real())
 end
 
 function MOD:Timer()	
 end
 
-function MOD.Icetalon:SetTimers(bool)	
+function MOD.Glubmuk:SetTimers(bool)	
 	if bool then
 		for TimerID, TimerObj in pairs(self.TimersRef) do
 			TimerObj.Enabled = TimerObj.Settings.Enabled
@@ -186,7 +186,7 @@ function MOD.Icetalon:SetTimers(bool)
 	end
 end
 
-function MOD.Icetalon:SetAlerts(bool)
+function MOD.Glubmuk:SetAlerts(bool)
 	if bool then
 		for AlertID, AlertObj in pairs(self.AlertsRef) do
 			AlertObj.Enabled = AlertObj.Settings.Enabled
@@ -199,19 +199,19 @@ function MOD.Icetalon:SetAlerts(bool)
 end
 
 function MOD:DefineMenu()
-	self.Menu = Instance.Menu:CreateEncounter(self.Icetalon, self.Enabled)
+	self.Menu = Instance.Menu:CreateEncounter(self.Glubmuk, self.Enabled)
 end
 
 function MOD:Start()
 	-- Create Timers
-	--KBM.Defaults.TimerObj.Assign(self.Icetalon)
+	--KBM.Defaults.TimerObj.Assign(self.Glubmuk)
 	
 	-- Create Alerts
-	--KBM.Defaults.AlertObj.Assign(self.Icetalon)
+	--KBM.Defaults.AlertObj.Assign(self.Glubmuk)
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Icetalon.CastBar = KBM.CastBar:Add(self, self.Icetalon)
+	self.Glubmuk.CastBar = KBM.CastBar:Add(self, self.Glubmuk)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()
 end

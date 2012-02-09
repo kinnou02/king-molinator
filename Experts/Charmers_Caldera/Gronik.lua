@@ -18,7 +18,6 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Gronik",
-	Enrage = 60 * 10,
 }
 
 MOD.Gronik = {
@@ -51,7 +50,7 @@ MOD.Gronik = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Gronik = KBM.Language:Add(MOD.Gronik.Name)
--- MOD.Lang.Gronik:SetGerman("")
+MOD.Lang.Gronik:SetGerman("Gronik")
 -- MOD.Lang.Gronik:SetFrench("")
 -- MOD.Lang.Gronik:SetRussian("")
 MOD.Gronik.Name = MOD.Lang.Gronik[KBM.Lang]

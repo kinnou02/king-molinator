@@ -67,7 +67,7 @@ OA.Lang.Debuff.Necrotic.Russian = "Умервщляющий взрыв"
 
 OA.Primal = {
 	Mod = OA,
-	Level = "52",
+	Level = 52,
 	Active = false,
 	Name = OA.Lang.Unit.Primal[KBM.Lang],
 	Menu = {},
@@ -76,11 +76,12 @@ OA.Primal = {
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
+	ChronicleID = "U279898FC4D7B39ED",
 }
 
 OA.Necrotic = {
 	Mod = OA,
-	Level = "52",
+	Level = 52,
 	Active = false,
 	Name = OA.Lang.Unit.Necrotic[KBM.Lang],
 	Menu = {},
@@ -89,6 +90,7 @@ OA.Necrotic = {
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
+	ChronicleID = "U676937B70D146F9F",
 }
 
 OA.Aleria.Name = OA.Lang.Aleria[KBM.Lang]

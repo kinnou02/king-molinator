@@ -1,32 +1,32 @@
-﻿-- Icetalon Boss Mod for King Boss Mods
+﻿-- Overseer Markus Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --
 
-KBMEXAPIN_Settings = nil
-chKBMEXAPIN_Settings = nil
+KBMEXDMOM_Settings = nil
+chKBMEXDMOM_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
-local Instance = KBM.BossMod["Abyssal Precipice"]
+local Instance = KBM.BossMod["Deepstrike Mines"]
 
 local MOD = {
 	Directory = Instance.Directory,
-	File = "Icetalon.lua",
+	File = "Markus.lua",
 	Enabled = true,
 	Instance = Instance.Name,
 	InstanceObj = Instance,
 	HasPhases = true,
 	Lang = {},
-	ID = "Icetalon",
+	ID = "Markus",
 }
 
-MOD.Icetalon = {
+MOD.Markus = {
 	Mod = MOD,
-	Level = "52",
+	Level = 52,
 	Active = false,
-	Name = "Icetalon",
-	NameShort = "Icetalon",
+	Name = "Overseer Markus",
+	NameShort = "Markus",
 	Menu = {},
 	Castbar = nil,
 	Dead = false,
@@ -51,12 +51,12 @@ MOD.Icetalon = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Icetalon = KBM.Language:Add(MOD.Icetalon.Name)
-MOD.Lang.Icetalon:SetGerman("Eiskralle") 
--- MOD.Lang.Icetalon:SetFrench("")
--- MOD.Lang.Icetalon:SetRussian("")
-MOD.Icetalon.Name = MOD.Lang.Icetalon[KBM.Lang]
-MOD.Descript = MOD.Icetalon.Name
+MOD.Lang.Markus = KBM.Language:Add(MOD.Markus.Name)
+-- MOD.Lang.Markus:SetGerman("")
+-- MOD.Lang.Markus:SetFrench("")
+-- MOD.Lang.Markus:SetRussian("")
+MOD.Markus.Name = MOD.Lang.Markus[KBM.Lang]
+MOD.Descript = MOD.Markus.Name
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}
@@ -64,58 +64,58 @@ MOD.Lang.Ability = {}
 function MOD:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
-		[self.Icetalon.Name] = self.Icetalon,
+		[self.Markus.Name] = self.Markus,
 	}
-	KBM_Boss[self.Icetalon.Name] = self.Icetalon	
+	KBM_Boss[self.Markus.Name] = self.Markus	
 end
 
 function MOD:InitVars()
 	self.Settings = {
 		Enabled = true,
-		CastBar = self.Icetalon.Settings.CastBar,
+		CastBar = self.Markus.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		-- MechTimer = KBM.Defaults.MechTimer(),
 		-- Alerts = KBM.Defaults.Alerts(),
-		-- TimersRef = self.Icetalon.Settings.TimersRef,
-		-- AlertsRef = self.Icetalon.Settings.AlertsRef,
+		-- TimersRef = self.Markus.Settings.TimersRef,
+		-- AlertsRef = self.Markus.Settings.AlertsRef,
 	}
-	KBMEXAPKA_Settings = self.Settings
-	chKBMEXAPKA_Settings = self.Settings
+	KBMEXDMOM_Settings = self.Settings
+	chKBMEXDMOM_Settings = self.Settings
 	
 end
 
 function MOD:SwapSettings(bool)
 
 	if bool then
-		KBMEXAPIN_Settings = self.Settings
-		self.Settings = chKBMEXAPIN_Settings
+		KBMEXDMOM_Settings = self.Settings
+		self.Settings = chKBMEXDMOM_Settings
 	else
-		chKBMEXAPIN_Settings = self.Settings
-		self.Settings = KBMEXAPIN_Settings
+		chKBMEXDMOM_Settings = self.Settings
+		self.Settings = KBMEXDMOM_Settings
 	end
 
 end
 
 function MOD:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMEXAPIN_Settings, self.Settings)
+		KBM.LoadTable(chKBMEXDMOM_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMEXAPIN_Settings, self.Settings)
+		KBM.LoadTable(KBMEXDMOM_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMEXAPIN_Settings = self.Settings
+		chKBMEXDMOM_Settings = self.Settings
 	else
-		KBMEXAPIN_Settings = self.Settings
+		KBMEXDMOM_Settings = self.Settings
 	end	
 end
 
 function MOD:SaveVars()	
 	if KBM.Options.Character then
-		chKBMEXAPIN_Settings = self.Settings
+		chKBMEXDMOM_Settings = self.Settings
 	else
-		KBMEXAPIN_Settings = self.Settings
+		KBMEXDMOM_Settings = self.Settings
 	end	
 end
 
@@ -123,16 +123,16 @@ function MOD:Castbar(units)
 end
 
 function MOD:RemoveUnits(UnitID)
-	if self.Icetalon.UnitID == UnitID then
-		self.Icetalon.Available = false
+	if self.Markus.UnitID == UnitID then
+		self.Markus.Available = false
 		return true
 	end
 	return false
 end
 
 function MOD:Death(UnitID)
-	if self.Icetalon.UnitID == UnitID then
-		self.Icetalon.Dead = true
+	if self.Markus.UnitID == UnitID then
+		self.Markus.Dead = true
 		return true
 	end
 	return false
@@ -141,23 +141,23 @@ end
 function MOD:UnitHPCheck(unitDetails, unitID)	
 	if unitDetails and unitID then
 		if not unitDetails.player then
-			if unitDetails.name == self.Icetalon.Name then
+			if unitDetails.name == self.Markus.Name then
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
 					self.TimeElapsed = 0
-					self.Icetalon.Dead = false
-					self.Icetalon.Casting = false
-					self.Icetalon.CastBar:Create(unitID)
+					self.Markus.Dead = false
+					self.Markus.Casting = false
+					self.Markus.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase("Single")
-					self.PhaseObj.Objectives:AddPercent(self.Icetalon.Name, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Markus.Name, 0, 100)
 					self.Phase = 1
 				end
-				self.Icetalon.UnitID = unitID
-				self.Icetalon.Available = true
-				return self.Icetalon
+				self.Markus.UnitID = unitID
+				self.Markus.Available = true
+				return self.Markus
 			end
 		end
 	end
@@ -165,16 +165,16 @@ end
 
 function MOD:Reset()
 	self.EncounterRunning = false
-	self.Icetalon.Available = false
-	self.Icetalon.UnitID = nil
-	self.Icetalon.CastBar:Remove()
+	self.Markus.Available = false
+	self.Markus.UnitID = nil
+	self.Markus.CastBar:Remove()
 	self.PhaseObj:End(Inspect.Time.Real())
 end
 
 function MOD:Timer()	
 end
 
-function MOD.Icetalon:SetTimers(bool)	
+function MOD.Markus:SetTimers(bool)	
 	if bool then
 		for TimerID, TimerObj in pairs(self.TimersRef) do
 			TimerObj.Enabled = TimerObj.Settings.Enabled
@@ -186,7 +186,7 @@ function MOD.Icetalon:SetTimers(bool)
 	end
 end
 
-function MOD.Icetalon:SetAlerts(bool)
+function MOD.Markus:SetAlerts(bool)
 	if bool then
 		for AlertID, AlertObj in pairs(self.AlertsRef) do
 			AlertObj.Enabled = AlertObj.Settings.Enabled
@@ -199,19 +199,19 @@ function MOD.Icetalon:SetAlerts(bool)
 end
 
 function MOD:DefineMenu()
-	self.Menu = Instance.Menu:CreateEncounter(self.Icetalon, self.Enabled)
+	self.Menu = Instance.Menu:CreateEncounter(self.Markus, self.Enabled)
 end
 
 function MOD:Start()
 	-- Create Timers
-	--KBM.Defaults.TimerObj.Assign(self.Icetalon)
+	--KBM.Defaults.TimerObj.Assign(self.Markus)
 	
 	-- Create Alerts
-	--KBM.Defaults.AlertObj.Assign(self.Icetalon)
+	--KBM.Defaults.AlertObj.Assign(self.Markus)
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Icetalon.CastBar = KBM.CastBar:Add(self, self.Icetalon)
+	self.Markus.CastBar = KBM.CastBar:Add(self, self.Markus)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()
 end

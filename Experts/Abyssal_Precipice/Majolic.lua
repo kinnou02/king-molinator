@@ -15,10 +15,10 @@ local MOD = {
 	File = "Majolic.lua",
 	Enabled = true,
 	Instance = Instance.Name,
+	InstanceObj = Instance,
 	HasPhases = true,
 	Lang = {},
 	ID = "Majolic",
-	Enrage = 60 * 10,
 }
 
 MOD.Majolic = {
@@ -52,7 +52,7 @@ MOD.Majolic = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Majolic = KBM.Language:Add(MOD.Majolic.Name)
--- MOD.Lang.Majolic:SetGerman("")
+MOD.Lang.Majolic:SetGerman("Majolic der Blutwandler")
 -- MOD.Lang.Majolic:SetFrench("")
 -- MOD.Lang.Majolic:SetRussian("")
 MOD.Majolic.Name = MOD.Lang.Majolic[KBM.Lang]

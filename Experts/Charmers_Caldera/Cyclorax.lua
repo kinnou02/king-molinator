@@ -18,7 +18,6 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Cyclorax",
-	Enrage = 60 * 10,
 }
 
 MOD.Cyclorax = {
@@ -51,7 +50,7 @@ MOD.Cyclorax = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Cyclorax = KBM.Language:Add(MOD.Cyclorax.Name)
--- MOD.Lang.Cyclorax:SetGerman("")
+MOD.Lang.Cyclorax:SetGerman("Cyclorax")
 -- MOD.Lang.Cyclorax:SetFrench("")
 -- MOD.Lang.Cyclorax:SetRussian("")
 MOD.Cyclorax.Name = MOD.Lang.Cyclorax[KBM.Lang]

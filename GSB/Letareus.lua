@@ -22,6 +22,7 @@ local DL = {
 
 DL.Letareus = {
 	Mod = DL,
+	ChronicleID = "U0C72E33D4A11BCFE",
 	Level = 52,
 	Active = false,
 	Name = "Duke Letareus",
