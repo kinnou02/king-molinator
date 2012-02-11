@@ -36,6 +36,7 @@ MOD.Nuggo = {
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
+	ExpertID = "U43E685D74CAA6694",
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
 		-- TimersRef = {
@@ -52,11 +53,12 @@ MOD.Nuggo = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Nuggo = KBM.Language:Add(MOD.Nuggo.Name)
--- MOD.Lang.Nuggo:SetGerman("")
+MOD.Lang.Nuggo:SetGerman("Oberschamane Nuggo")
 -- MOD.Lang.Nuggo:SetFrench("")
 -- MOD.Lang.Nuggo:SetRussian("")
 MOD.Nuggo.Name = MOD.Lang.Nuggo[KBM.Lang]
 MOD.Lang.Descript = KBM.Language:Add("The Gedlo Council")
+MOD.Lang.Descript.German = "Gedlo-Rat"
 MOD.Descript = MOD.Lang.Descript[KBM.Lang]
 
 -- Ability Dictionary
@@ -65,7 +67,9 @@ MOD.Lang.Ability = {}
 -- Unit Dictionary
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Swedge = KBM.Language:Add("Warlord Swedge")
+MOD.Lang.Unit.Swedge.German = "Kriegsherr Swedge"
 MOD.Lang.Unit.Gerbik = KBM.Language:Add("Incinerator Gerbik")
+MOD.Lang.Unit.Gerbik.German = "Entflammer Gerbik"
 
 MOD.Swedge = {
 	Mod = MOD,
@@ -101,8 +105,8 @@ function MOD:AddBosses(KBM_Boss)
 		[self.Gerbik.Name] = self.Gerbik
 	}
 	KBM_Boss[self.Nuggo.Name] = self.Nuggo
-	KBM_Boss[self.Swedge] = self.Swedge
-	KBM_Boss[self.Gerbik] = self.Gerbik
+	KBM_Boss[self.Swedge.Name] = self.Swedge
+	KBM_Boss[self.Gerbik.Name] = self.Gerbik
 end
 
 function MOD:InitVars()
@@ -183,6 +187,7 @@ function MOD:Death(UnitID)
 	if self.Nuggo.UnitID == UnitID then
 		self.Nuggo.Dead = true
 		self.SetObjectives()
+		self.Nuggo.CastBar:Remove()
 	elseif self.Swedge.UnitID == UnitID then
 		self.Swedge.Dead = true
 		self.SetObjectives()

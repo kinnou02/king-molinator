@@ -75,10 +75,16 @@ IL.Lang.Mechanic.Reverse.German = "Richtung wechseln"
 
 -- Mechanic Notify
 IL.Lang.Notify = {}
-IL.Lang.Notify.Whirlpool = KBM.Language:Add("Go with the current, or die!")
+IL.Lang.Notify.Whirlpool = KBM.Language:Add("Go with the current - or die!")
 IL.Lang.Notify.Whirlpool.German = "Folgt dem Strom, oder sterbt!"
 IL.Lang.Notify.Reverse = KBM.Language:Add("You're going the wrong way, fools!")
 IL.Lang.Notify.Reverse.German = "Ihr Narren geht in die falsche Richtung!"
+
+-- Verbose Dictionary
+IL.Lang.Verbose = {}
+IL.Lang.Verbose.Middle = "Middle"
+IL.Lang.Verbose.Inner = "Inner"
+IL.Lang.Verbose.Outer = "Outer"
 
 -- Menu Dictionary
 IL.Lang.Menu = {}
@@ -230,10 +236,10 @@ function IL:Start()
 	-- Create Timers
 	self.Isskal.TimersRef.WhirlpoolFirst = KBM.MechTimer:Add(self.Lang.Mechanic.Whirlpool[KBM.Lang], 32)
 	self.Isskal.TimersRef.WhirlpoolFirst.MenuName = self.Lang.Menu.WhirlpoolFirst[KBM.Lang]
-	self.Isskal.TimersRef.Whirlpool = KBM.MechTimer:Add(self.Lang.Mechanic.Whirlpool[KBM.Lang], 62)
+	self.Isskal.TimersRef.Whirlpool = KBM.MechTimer:Add(self.Lang.Mechanic.Whirlpool[KBM.Lang], 60)
 	self.Isskal.TimersRef.Reverse = KBM.MechTimer:Add(self.Lang.Mechanic.Reverse[KBM.Lang], 14)
 	self.Isskal.TimersRef.WhirlpoolEnd = KBM.MechTimer:Add(self.Lang.Mechanic.WhirlpoolEnd[KBM.Lang], 14)
-	self.Isskal.TimersRef.Wave = KBM.MechTimer:Add(self.Lang.Ability.Wave[KBM.Lang], 50)
+	self.Isskal.TimersRef.Wave = KBM.MechTimer:Add(self.Lang.Ability.Wave[KBM.Lang], 58)
 	self.Isskal.TimersRef.Wave:AddTimer(self.Isskal.TimersRef.Whirlpool, 0)
 	KBM.Defaults.TimerObj.Assign(self.Isskal)
 	

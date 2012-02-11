@@ -1,32 +1,32 @@
-﻿-- Scarn Boss Mod for King Boss Mods
+﻿-- Sparkwing Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --
 
-KBMEXDDSN_Settings = nil
-chKBMEXDDSN_Settings = nil
+KBMEXFCSG_Settings = nil
+chKBMEXFCSG_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
-local Instance = KBM.BossMod["Darkening Deeps"]
+local Instance = KBM.BossMod["Foul Cascade"]
 
 local MOD = {
 	Directory = Instance.Directory,
-	File = "Scarn.lua",
+	File = "Sparkwing.lua",
 	Enabled = true,
 	Instance = Instance.Name,
 	InstanceObj = Instance,
 	HasPhases = true,
 	Lang = {},
-	ID = "Scarn",
+	ID = "Sparkwing",
 }
 
-MOD.Scarn = {
+MOD.Sparkwing = {
 	Mod = MOD,
 	Level = 52,
 	Active = false,
-	Name = "Scarn",
-	--NameShort = "Scarn",
+	Name = "Sparkwing",
+	NameShort = "Sparkwing",
 	Menu = {},
 	Castbar = nil,
 	Dead = false,
@@ -35,6 +35,7 @@ MOD.Scarn = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
+	ExpertID = nil,
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -51,12 +52,12 @@ MOD.Scarn = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Scarn = KBM.Language:Add(MOD.Scarn.Name)
-MOD.Lang.Scarn:SetGerman("Scarn")
--- MOD.Lang.Scarn:SetFrench("")
--- MOD.Lang.Scarn:SetRussian("")
-MOD.Scarn.Name = MOD.Lang.Scarn[KBM.Lang]
-MOD.Descript = MOD.Scarn.Name
+MOD.Lang.Sparkwing = KBM.Language:Add(MOD.Sparkwing.Name)
+-- MOD.Lang.Sparkwing:SetGerman("")
+-- MOD.Lang.Sparkwing:SetFrench("")
+-- MOD.Lang.Sparkwing:SetRussian("")
+MOD.Sparkwing.Name = MOD.Lang.Sparkwing[KBM.Lang]
+MOD.Descript = MOD.Sparkwing.Name
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}
@@ -64,58 +65,58 @@ MOD.Lang.Ability = {}
 function MOD:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
-		[self.Scarn.Name] = self.Scarn,
+		[self.Sparkwing.Name] = self.Sparkwing,
 	}
-	KBM_Boss[self.Scarn.Name] = self.Scarn	
+	KBM_Boss[self.Sparkwing.Name] = self.Sparkwing	
 end
 
 function MOD:InitVars()
 	self.Settings = {
 		Enabled = true,
-		CastBar = self.Scarn.Settings.CastBar,
+		CastBar = self.Sparkwing.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		-- MechTimer = KBM.Defaults.MechTimer(),
 		-- Alerts = KBM.Defaults.Alerts(),
-		-- TimersRef = self.Scarn.Settings.TimersRef,
-		-- AlertsRef = self.Scarn.Settings.AlertsRef,
+		-- TimersRef = self.Sparkwing.Settings.TimersRef,
+		-- AlertsRef = self.Sparkwing.Settings.AlertsRef,
 	}
-	KBMEXDDSN_Settings = self.Settings
-	chKBMEXDDSN_Settings = self.Settings
+	KBMEXFCSG_Settings = self.Settings
+	chKBMEXFCSG_Settings = self.Settings
 	
 end
 
 function MOD:SwapSettings(bool)
 
 	if bool then
-		KBMEXDDSN_Settings = self.Settings
-		self.Settings = chKBMEXDDSN_Settings
+		KBMEXFCSG_Settings = self.Settings
+		self.Settings = chKBMEXFCSG_Settings
 	else
-		chKBMEXDDSN_Settings = self.Settings
-		self.Settings = KBMEXDDSN_Settings
+		chKBMEXFCSG_Settings = self.Settings
+		self.Settings = KBMEXFCSG_Settings
 	end
 
 end
 
 function MOD:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMEXDDSN_Settings, self.Settings)
+		KBM.LoadTable(chKBMEXFCSG_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMEXDDSN_Settings, self.Settings)
+		KBM.LoadTable(KBMEXFCSG_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMEXDDSN_Settings = self.Settings
+		chKBMEXFCSG_Settings = self.Settings
 	else
-		KBMEXDDSN_Settings = self.Settings
+		KBMEXFCSG_Settings = self.Settings
 	end	
 end
 
 function MOD:SaveVars()	
 	if KBM.Options.Character then
-		chKBMEXDDSN_Settings = self.Settings
+		chKBMEXFCSG_Settings = self.Settings
 	else
-		KBMEXDDSN_Settings = self.Settings
+		KBMEXFCSG_Settings = self.Settings
 	end	
 end
 
@@ -123,16 +124,16 @@ function MOD:Castbar(units)
 end
 
 function MOD:RemoveUnits(UnitID)
-	if self.Scarn.UnitID == UnitID then
-		self.Scarn.Available = false
+	if self.Sparkwing.UnitID == UnitID then
+		self.Sparkwing.Available = false
 		return true
 	end
 	return false
 end
 
 function MOD:Death(UnitID)
-	if self.Scarn.UnitID == UnitID then
-		self.Scarn.Dead = true
+	if self.Sparkwing.UnitID == UnitID then
+		self.Sparkwing.Dead = true
 		return true
 	end
 	return false
@@ -141,23 +142,23 @@ end
 function MOD:UnitHPCheck(unitDetails, unitID)	
 	if unitDetails and unitID then
 		if not unitDetails.player then
-			if unitDetails.name == self.Scarn.Name then
+			if unitDetails.name == self.Sparkwing.Name then
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
 					self.TimeElapsed = 0
-					self.Scarn.Dead = false
-					self.Scarn.Casting = false
-					self.Scarn.CastBar:Create(unitID)
+					self.Sparkwing.Dead = false
+					self.Sparkwing.Casting = false
+					self.Sparkwing.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase("Single")
-					self.PhaseObj.Objectives:AddPercent(self.Scarn.Name, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Sparkwing.Name, 0, 100)
 					self.Phase = 1
 				end
-				self.Scarn.UnitID = unitID
-				self.Scarn.Available = true
-				return self.Scarn
+				self.Sparkwing.UnitID = unitID
+				self.Sparkwing.Available = true
+				return self.Sparkwing
 			end
 		end
 	end
@@ -165,16 +166,16 @@ end
 
 function MOD:Reset()
 	self.EncounterRunning = false
-	self.Scarn.Available = false
-	self.Scarn.UnitID = nil
-	self.Scarn.CastBar:Remove()
+	self.Sparkwing.Available = false
+	self.Sparkwing.UnitID = nil
+	self.Sparkwing.CastBar:Remove()
 	self.PhaseObj:End(Inspect.Time.Real())
 end
 
 function MOD:Timer()	
 end
 
-function MOD.Scarn:SetTimers(bool)	
+function MOD.Sparkwing:SetTimers(bool)	
 	if bool then
 		for TimerID, TimerObj in pairs(self.TimersRef) do
 			TimerObj.Enabled = TimerObj.Settings.Enabled
@@ -186,7 +187,7 @@ function MOD.Scarn:SetTimers(bool)
 	end
 end
 
-function MOD.Scarn:SetAlerts(bool)
+function MOD.Sparkwing:SetAlerts(bool)
 	if bool then
 		for AlertID, AlertObj in pairs(self.AlertsRef) do
 			AlertObj.Enabled = AlertObj.Settings.Enabled
@@ -199,19 +200,19 @@ function MOD.Scarn:SetAlerts(bool)
 end
 
 function MOD:DefineMenu()
-	self.Menu = Instance.Menu:CreateEncounter(self.Scarn, self.Enabled)
+	self.Menu = Instance.Menu:CreateEncounter(self.Sparkwing, self.Enabled)
 end
 
 function MOD:Start()
 	-- Create Timers
-	--KBM.Defaults.TimerObj.Assign(self.Scarn)
+	--KBM.Defaults.TimerObj.Assign(self.Sparkwing)
 	
 	-- Create Alerts
-	--KBM.Defaults.AlertObj.Assign(self.Scarn)
+	--KBM.Defaults.AlertObj.Assign(self.Sparkwing)
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Scarn.CastBar = KBM.CastBar:Add(self, self.Scarn)
+	self.Sparkwing.CastBar = KBM.CastBar:Add(self, self.Sparkwing)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()
 end

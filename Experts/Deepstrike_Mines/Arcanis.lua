@@ -52,7 +52,7 @@ MOD.Arcanis = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Arcanis = KBM.Language:Add(MOD.Arcanis.Name)
--- MOD.Lang.Arcanis:SetGerman("")
+MOD.Lang.Arcanis:SetGerman("Wärter Arcanis") 
 -- MOD.Lang.Arcanis:SetFrench("")
 -- MOD.Lang.Arcanis:SetRussian("")
 MOD.Arcanis.Name = MOD.Lang.Arcanis[KBM.Lang]

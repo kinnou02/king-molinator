@@ -1,32 +1,32 @@
-﻿-- Alchemist Braxtepel Boss Mod for King Boss Mods
+﻿-- Matron Verosa Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --
 
-KBMEXDDAB_Settings = nil
-chKBMEXDDAB_Settings = nil
+KBMEXFOLHRF_Settings = nil
+chKBMEXFOLHRF_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
-local Instance = KBM.BossMod["Darkening Deeps"]
+local Instance = KBM.BossMod["Foul Cascade"]
 
 local MOD = {
 	Directory = Instance.Directory,
-	File = "Braxtepel.lua",
+	File = "Verosa.lua",
 	Enabled = true,
 	Instance = Instance.Name,
 	InstanceObj = Instance,
 	HasPhases = true,
 	Lang = {},
-	ID = "Braxtepel",
+	ID = "Verosa",
 }
 
-MOD.Braxtepel = {
+MOD.Verosa = {
 	Mod = MOD,
 	Level = 52,
 	Active = false,
-	Name = "Alchemist Braxtepel",
-	NameShort = "Braxtepel",
+	Name = "Matron Verosa",
+	NameShort = "Verosa",
 	Menu = {},
 	Castbar = nil,
 	Dead = false,
@@ -51,26 +51,26 @@ MOD.Braxtepel = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Braxtepel = KBM.Language:Add(MOD.Braxtepel.Name)
-MOD.Lang.Braxtepel:SetGerman("Alchemist Braxtepel")
--- MOD.Lang.Braxtepel:SetFrench("")
--- MOD.Lang.Braxtepel:SetRussian("")
-MOD.Braxtepel.Name = MOD.Lang.Braxtepel[KBM.Lang]
-MOD.Descript = MOD.Braxtepel.Name
+MOD.Lang.Verosa = KBM.Language:Add(MOD.Verosa.Name)
+-- MOD.Lang.Verosa:SetGerman("")
+-- MOD.Lang.Verosa:SetFrench("")
+-- MOD.Lang.Verosa:SetRussian("")
+MOD.Verosa.Name = MOD.Lang.Verosa[KBM.Lang]
+MOD.Descript = MOD.Verosa.Name
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}
 
 -- Unit Dictionary
 MOD.Lang.Unit = {}
-MOD.Lang.Unit.Mursh = KBM.Language:Add("Mursh")
-MOD.Lang.Unit.Squersh = KBM.Language:Add("Squersh")
+MOD.Lang.Unit.Lesch = KBM.Language:Add("Lesch")
+MOD.Lang.Unit.Gruze = KBM.Language:Add("Gruze")
 
-MOD.Mursh = {
+MOD.Lesch = {
 	Mod = MOD,
 	Level = 52,
 	Active = false,
-	Name = MOD.Lang.Unit.Mursh[KBM.Lang],
+	Name = MOD.Lang.Unit.Lesch[KBM.Lang],
 	Menu = {},
 	Dead = false,
 	Available = false,
@@ -78,11 +78,11 @@ MOD.Mursh = {
 	TimeOut = 5,
 }
 
-MOD.Squersh = {
+MOD.Gruze = {
 	Mod = MOD,
 	Level = 52,
 	Active = false,
-	Name = MOD.Lang.Unit.Squersh[KBM.Lang],
+	Name = MOD.Lang.Unit.Gruze[KBM.Lang],
 	Menu = {},
 	Dead = false,
 	Available = false,
@@ -93,62 +93,62 @@ MOD.Squersh = {
 function MOD:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
-		[self.Braxtepel.Name] = self.Braxtepel,
-		[self.Mursh.Name] = self.Mursh,
-		[self.Squersh.Name] = self.Squersh
+		[self.Verosa.Name] = self.Verosa,
+		[self.Lesch.Name] = self.Lesch,
+		[self.Gruze.Name] = self.Gruze,
 	}
-	KBM_Boss[self.Braxtepel.Name] = self.Braxtepel
-	KBM.SubBoss[self.Mursh.Name] = self.Mursh
-	KBM.SubBoss[self.Squersh.Name] = self.Squersh
+	KBM_Boss[self.Verosa.Name] = self.Verosa
+	KBM.SubBoss[self.Lesch.Name] = self.Lesch
+	KBM.SubBoss[self.Gruze.Name] = self.Gruze
 end
 
 function MOD:InitVars()
 	self.Settings = {
 		Enabled = true,
-		CastBar = self.Braxtepel.Settings.CastBar,
+		CastBar = self.Verosa.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		-- MechTimer = KBM.Defaults.MechTimer(),
 		-- Alerts = KBM.Defaults.Alerts(),
-		-- TimersRef = self.Braxtepel.Settings.TimersRef,
-		-- AlertsRef = self.Braxtepel.Settings.AlertsRef,
+		-- TimersRef = self.Verosa.Settings.TimersRef,
+		-- AlertsRef = self.Verosa.Settings.AlertsRef,
 	}
-	KBMEXDDAB_Settings = self.Settings
-	chKBMEXDDAB_Settings = self.Settings
+	KBMEXFOLHRF_Settings = self.Settings
+	chKBMEXFOLHRF_Settings = self.Settings
 	
 end
 
 function MOD:SwapSettings(bool)
 
 	if bool then
-		KBMEXDDAB_Settings = self.Settings
-		self.Settings = chKBMEXDDAB_Settings
+		KBMEXFOLHRF_Settings = self.Settings
+		self.Settings = chKBMEXFOLHRF_Settings
 	else
-		chKBMEXDDAB_Settings = self.Settings
-		self.Settings = KBMEXDDAB_Settings
+		chKBMEXFOLHRF_Settings = self.Settings
+		self.Settings = KBMEXFOLHRF_Settings
 	end
 
 end
 
 function MOD:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMEXDDAB_Settings, self.Settings)
+		KBM.LoadTable(chKBMEXFOLHRF_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMEXDDAB_Settings, self.Settings)
+		KBM.LoadTable(KBMEXFOLHRF_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMEXDDAB_Settings = self.Settings
+		chKBMEXFOLHRF_Settings = self.Settings
 	else
-		KBMEXDDAB_Settings = self.Settings
+		KBMEXFOLHRF_Settings = self.Settings
 	end	
 end
 
 function MOD:SaveVars()	
 	if KBM.Options.Character then
-		chKBMEXDDAB_Settings = self.Settings
+		chKBMEXFOLHRF_Settings = self.Settings
 	else
-		KBMEXDDAB_Settings = self.Settings
+		KBMEXFOLHRF_Settings = self.Settings
 	end	
 end
 
@@ -156,33 +156,17 @@ function MOD:Castbar(units)
 end
 
 function MOD:RemoveUnits(UnitID)
-	if self.Braxtepel.UnitID == UnitID then
-		self.Braxtepel.Available = false
+	if self.Verosa.UnitID == UnitID then
+		self.Verosa.Available = false
 		return true
 	end
 	return false
 end
 
-function MOD.PhaseTwo()
-	MOD.PhaseObj.Objectives:Remove()
-	MOD.PhaseObj:SetPhase("Final")
-	MOD.PhaseObj.Objectives:AddPercent(MOD.Braxtepel.Name, 0, 100)
-	MOD.Phase = 2
-end
-
 function MOD:Death(UnitID)
-	if self.Braxtepel.UnitID == UnitID then
-		self.Braxtepel.Dead = true
+	if self.Verosa.UnitID == UnitID then
+		self.Verosa.Dead = true
 		return true
-	else
-		if self.Mursh.UnitID == UnitID then
-			self.Mursh.Dead = true
-		elseif self.Squersh.UnitID == UnitID then
-			self.Squersh.Dead = true
-		end
-		if self.Mursh.Dead and self.Squersh.Dead then
-			self.PhaseTwo()
-		end
 	end
 	return false
 end
@@ -199,24 +183,25 @@ function MOD:UnitHPCheck(unitDetails, unitID)
 					self.TimeElapsed = 0
 					BossObj.Dead = false
 					BossObj.Casting = false
-					if BossObj.Name == self.Braxtepel.Name then
+					if BossObj.Name == self.Verosa.Name then
 						BossObj.CastBar:Create(unitID)
 					end
 					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase("1")
-					self.PhaseObj.Objectives:AddPercent(self.Mursh.Name, 0, 100)
-					self.PhaseObj.Objectives:AddPercent(self.Squersh.Name, 0, 100)
+					self.PhaseObj:SetPhase("Single")
+					self.PhaseObj.Objectives:AddPercent(self.Verosa.Name, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Lesch.Name, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Gruze.Name, 0, 100)
 					self.Phase = 1
 				else
 					BossObj.Dead = false
 					BossObj.Casting = false
-					if BossObj.Name == self.Braxtepel.Name then
+					if BossObj.Name == self.Verosa.Name then
 						BossObj.CastBar:Create(unitID)
 					end
 				end
 				BossObj.UnitID = unitID
 				BossObj.Available = true
-				return self.Braxtepel
+				return self.Verosa
 			end
 		end
 	end
@@ -228,14 +213,14 @@ function MOD:Reset()
 		BossObj.Available = false
 		BossObj.UnitID = nil
 	end
-	self.Braxtepel.CastBar:Remove()	
+	self.Verosa.CastBar:Remove()	
 	self.PhaseObj:End(Inspect.Time.Real())
 end
 
 function MOD:Timer()	
 end
 
-function MOD.Braxtepel:SetTimers(bool)	
+function MOD.Verosa:SetTimers(bool)	
 	if bool then
 		for TimerID, TimerObj in pairs(self.TimersRef) do
 			TimerObj.Enabled = TimerObj.Settings.Enabled
@@ -247,7 +232,7 @@ function MOD.Braxtepel:SetTimers(bool)
 	end
 end
 
-function MOD.Braxtepel:SetAlerts(bool)
+function MOD.Verosa:SetAlerts(bool)
 	if bool then
 		for AlertID, AlertObj in pairs(self.AlertsRef) do
 			AlertObj.Enabled = AlertObj.Settings.Enabled
@@ -260,19 +245,19 @@ function MOD.Braxtepel:SetAlerts(bool)
 end
 
 function MOD:DefineMenu()
-	self.Menu = Instance.Menu:CreateEncounter(self.Braxtepel, self.Enabled)
+	self.Menu = Instance.Menu:CreateEncounter(self.Verosa, self.Enabled)
 end
 
 function MOD:Start()
 	-- Create Timers
-	--KBM.Defaults.TimerObj.Assign(self.Braxtepel)
+	--KBM.Defaults.TimerObj.Assign(self.Verosa)
 	
 	-- Create Alerts
-	--KBM.Defaults.AlertObj.Assign(self.Braxtepel)
+	--KBM.Defaults.AlertObj.Assign(self.Verosa)
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Braxtepel.CastBar = KBM.CastBar:Add(self, self.Braxtepel)
+	self.Verosa.CastBar = KBM.CastBar:Add(self, self.Verosa)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()
 end

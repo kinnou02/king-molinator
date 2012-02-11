@@ -948,7 +948,7 @@ function KM:Start()
 		
 	-- Add King's Timers
 	self.King.TimersRef.Cursed = KBM.MechTimer:Add(KM.Lang.Ability.Cursed[KBM.Lang], 55)
-	self.King.TimersRef.Essence = KBM.MechTimer:Add("(King) "..KM.Lang.Ability.Essence[KBM.Lang], 22)
+	self.King.TimersRef.Essence = KBM.MechTimer:Add("(King) "..KM.Lang.Ability.Essence[KBM.Lang], 20)
 	self.King.TimersRef.Rev = KBM.MechTimer:Add(self.Lang.Unit.Revenant[KBM.Lang], 82)
 	self.King.TimersRef.Shout = KBM.MechTimer:Add(KM.Lang.Ability.Shout[KBM.Lang], 30)
 	self.King.TimersRef.Feedback = KBM.MechTimer:Add(KM.Lang.Ability.Feedback[KBM.Lang], 48)

@@ -36,6 +36,7 @@ MOD.Bringhurst = {
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
+	ExpertID = "U1697B68901F9EB8C",
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
 		-- TimersRef = {
@@ -52,7 +53,7 @@ MOD.Bringhurst = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Bringhurst = KBM.Language:Add(MOD.Bringhurst.Name)
--- MOD.Lang.Bringhurst:SetGerman("")
+MOD.Lang.Bringhurst:SetGerman("Michael Bringhurst") 
 -- MOD.Lang.Bringhurst:SetFrench("")
 -- MOD.Lang.Bringhurst:SetRussian("")
 MOD.Bringhurst.Name = MOD.Lang.Bringhurst[KBM.Lang]

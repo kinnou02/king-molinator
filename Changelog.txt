@@ -21,9 +21,31 @@ Engine
 * CastBars
 ** New: Further adjustments to allow for castbar tracking outside of encounters.
 
+Hammerknell
+* Rune King Molinar
+** Change: Reduced timer for King's Consuming Essence.
+* Grugonim
+** Fixed: Phase Monitor was losing track of Tower kills if you wipe during a Tower phase.
+* Akylios
+** New: Added a stop trigger to Mind Decay alert when the debuff is nullified.
+** Change: Another attempt at Phase limiting timers. This should stop the Submerge/Emerge timer in P5.
+** Note: For alpha. Please report any non-responding timers. Summon Adds, Waves and Submerge/Emerge are all Phase limited.
+
+Rise of the Phoenix
+* High Priest Arakhurn
+** New: Added timer for Arakhurns rise from the flames in P2 (P3 Start).
+** Change: The start has of P3 has changed back to it's original Notify trigger after Trion's fix.
+** Change: Adjusted P3 mechanic start timers slightly to account for the above trigger change.
+** Fix: Due to the recent Trion fix, the Notify trigger will avoid non-starting timers if adds die before Arakhurn rises.
+
 Greenscale's Blight
 * Infiltrator Johlen
 ** New: Devastating Bomb alerts will now stop as soon as the bomb is destroyed.
+
+Drowned Halls
+* Iskaal
+** Fixed: Start of whirlpool phase wasn't triggering additional timers correctly.
+** Change: Adjusted some timings slightly after the new fix. (Alpha, test phase only. Will be adding alerts/timers for dance)
 
 * NOTE: All new dungeon bosses include: Encounter Timer, Castbar, Records and Phase Monitor tracking.
 * NOTE: This is a first release for Dungeons. Timers, Alerts and improved encounter tracking will be added over time.
@@ -56,12 +78,25 @@ Expert Dungeons
 ** New: Dichrom
 ** New: Caretaker Arcanis
 ** New: Plutonus
+* New: Fall of Lantern Hook
+** New: Roft
+** New: Pyromancer Cortilnald
+** New: Flamebringer Druhl
+** New: Emberlord Ereetu
+** New: Oludare the Firehoof
+* New: Foul Cascade
+** New: Countess Surin Skenobar
+** New: Matron Verosa
+** New: Krasimir Barionov
+** New: Tephra Lord Maficros
+** New: Queen Vallnara
+** New: Sparkwing
 
 German Translations
-* New: Matching new dungeon translations.
+* New: Matching new dungeon translations. (Updating 1 version behind current alpha)
 
 Russian Translations
-* New: Lots of new translations.
+* New: Lots of new translations. (Not in alpha version yet)
 
 v0.9.6
 

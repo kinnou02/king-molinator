@@ -52,7 +52,7 @@ MOD.Kaleida = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Kaleida = KBM.Language:Add(MOD.Kaleida.Name)
--- MOD.Lang.Kaleida:SetGerman("")
+MOD.Lang.Kaleida:SetGerman("Torwächterin Kaleida") 
 -- MOD.Lang.Kaleida:SetFrench("")
 -- MOD.Lang.Kaleida:SetRussian("")
 MOD.Kaleida.Name = MOD.Lang.Kaleida[KBM.Lang]

@@ -1085,6 +1085,7 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 	Timer.Repeat = Repeat
 	Timer.Name = Name
 	Timer.Phase = 0
+	Timer.PhaseMax = 0
 	Timer.Type = "timer"
 	Timer.Custom = false
 	Timer.Color = KBM.MechTimer.Settings.Color
@@ -1239,14 +1240,14 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 			self.Deleting = false
 			if self.Repeat then
 				if KBM.Encounter then
-					if self.Phase == KBM.CurrentMod.Phase or self.Phase == 0 then
+					if self.Phase >= KBM.CurrentMod.Phase or self.Phase == 0 then
 						KBM.MechTimer:AddStart(self)
 					end
 				end
 			end
 			if self.TimerAfter then
 				if KBM.Encounter then
-					if self.TimerAfter.Phase <= KBM.CurrentMod.Phase or self.TimerAfter.Phase == 0 then
+					if self.TimerAfter.Phase >= KBM.CurrentMod.Phase or self.TimerAfter.Phase == 0 then
 						KBM.MechTimer:AddStart(self.TimerAfter)
 					end
 				end

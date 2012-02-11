@@ -52,7 +52,7 @@ MOD.Plutonus = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Plutonus = KBM.Language:Add(MOD.Plutonus.Name)
--- MOD.Lang.Plutonus:SetGerman("")
+MOD.Lang.Plutonus:SetGerman("Plutonus") 
 -- MOD.Lang.Plutonus:SetFrench("")
 -- MOD.Lang.Plutonus:SetRussian("")
 MOD.Plutonus.Name = MOD.Lang.Plutonus[KBM.Lang]

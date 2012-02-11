@@ -23,8 +23,10 @@ local GR = {
 	Phase = 1,
 	Enrage = 60 * 13,
 	ID = "Grugonim",
-	Towers = 0,
-	Breaths = 0,	
+	Counts = {
+		Towers = 0,
+		Breaths = 0,
+	}
 }
 
 GR.Grugonim = {
@@ -198,46 +200,23 @@ function GR:RemoveUnits(UnitID)
 	return false	
 end
 
-function GR:Death(UnitID)
-	if self.Grugonim.UnitID == UnitID then
-		self.Grugonim.Dead = true
-		return true
-	else
-		-- Tower Phase
-		if self.Phase == 2 then
-			self.Towers = self.Towers + 1
-			if self.Towers == 3 then
-				self.Towers = 0
-				self.PhaseThree()
-			end
-		elseif self.Phase == 4 then
-			self.Towers = self.Towers + 1
-			if self.Towers == 6 then
-				self.Towers = 0
-				self.PhaseFive()
-			end
-		end
-	end
-	return false	
-end
-
 function GR.BreathCount()
-	GR.Breaths = GR.Breaths + 1
+	GR.Counts.Breaths = GR.Counts.Breaths + 1
 	if KBM.PhaseMonitor.Objectives.Lists.Meta[GR.Lang.Ability.Breath[KBM.Lang]] then
-		KBM.PhaseMonitor.Objectives.Lists.Meta[GR.Lang.Ability.Breath[KBM.Lang]]:Update(GR.Breaths)
+		KBM.PhaseMonitor.Objectives.Lists.Meta[GR.Lang.Ability.Breath[KBM.Lang]]:Update(GR.Counts.Breaths)
 	end
 end
 
 function GR.BreathReset()
-	GR.Breaths = 0
+	GR.Counts.Breaths = 0
 	if KBM.PhaseMonitor.Objectives.Lists.Meta[GR.Lang.Ability.Breath[KBM.Lang]] then
-		KBM.PhaseMonitor.Objectives.Lists.Meta[GR.Lang.Ability.Breath[KBM.Lang]]:Update(GR.Breaths)
+		KBM.PhaseMonitor.Objectives.Lists.Meta[GR.Lang.Ability.Breath[KBM.Lang]]:Update(GR.Counts.Breaths)
 	end
 	GR.Grugonim.CastFilters[GR.Lang.Ability.Breath[KBM.Lang]].Current = 1
 end
 
 function GR.TowerPhase()
-	GR.Breaths = 0
+	GR.Counts.Breaths = 0
 	GR.PhaseObj.Objectives:Remove()
 	GR.PhaseObj:SetPhase("Towers")
 	GR.Grugonim.CastFilters[GR.Lang.Ability.Breath[KBM.Lang]].Current = 1
@@ -266,12 +245,47 @@ function GR.PhaseFive()
 	GR.PhaseObj.Objectives:AddMeta(GR.Lang.Ability.Breath[KBM.Lang], 3, 0)
 end
 
+function GR:Death(UnitID)
+	if self.Grugonim.UnitID == UnitID then
+		self.Grugonim.Dead = true
+		return true
+	else
+		-- Tower Phase
+		if self.Phase == 2 then
+			if self.Tower.UnitList[UnitID] then
+				if not self.Tower.UnitList[UnitID].Dead then
+					self.Counts.Towers = self.Counts.Towers + 1
+					self.Tower.UnitList[UnitID].Dead = true
+					if self.Counts.Towers == 3 then
+						self.Counts.Towers = 0
+						self.Tower.UnitList = {}
+						self.PhaseThree()
+					end
+				end
+			end
+		elseif self.Phase == 4 then
+			if self.Tower.UnitList[UnitID] then
+				if not self.Tower.UnitList[UnitID].Dead then
+					self.Counts.Towers = self.Counts.Towers + 1
+					self.Tower.UnitList[UnitID] = {}
+					if self.Counts.Towers == 6 then
+						self.Counts.Towers = 0
+						self.Tower.UnitList = {}
+						self.PhaseFive()
+					end
+				end
+			end
+		end
+	end
+	return false	
+end
+
 function GR:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
 		if not uDetails.player then
 		
 			if uDetails.name == self.Grugonim.Name then
-				if not self.Grugonim.UnitID then
+				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
@@ -279,7 +293,8 @@ function GR:UnitHPCheck(uDetails, unitID)
 					self.Grugonim.CastBar:Create(unitID)
 					KBM.TankSwap:Start(self.Lang.Debuff.Toxin[KBM.Lang])
 					self.Phase = 1
-					self.Breaths = 0
+					self.Counts.Breaths = 0
+					self.Counts.Towers = 0
 					self.PhaseObj.Objectives:AddPercent(self.Grugonim.Name, 50, 100)
 					self.PhaseObj.Objectives:AddMeta(self.Lang.Ability.Breath[KBM.Lang], 3, 0)
 					self.PhaseObj:Start(self.StartTime)
@@ -321,7 +336,8 @@ function GR:Reset()
 	self.Grugonim.UnitID = nil
 	self.Grugonim.CastBar:Remove()
 	self.PhaseObj:End(self.TimeElapsed)
-	self.Breaths = 0
+	self.Counts.Breaths = 0
+	self.Counts.Towers = 0
 	self.Tower.UnitList = {}	
 end
 

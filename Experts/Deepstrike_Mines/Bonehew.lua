@@ -55,7 +55,7 @@ MOD.Bonehew = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Bonehew = KBM.Language:Add(MOD.Bonehew.Name)
--- MOD.Lang.Bonehew:SetGerman("")
+MOD.Lang.Bonehew:SetGerman("Bonehew der Donnerer")
 -- MOD.Lang.Bonehew:SetFrench("")
 -- MOD.Lang.Bonehew:SetRussian("")
 MOD.Bonehew.Name = MOD.Lang.Bonehew[KBM.Lang]
@@ -67,6 +67,7 @@ MOD.Lang.Ability = {}
 -- Unit Dictionary
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Fragment = KBM.Language:Add("Fragmented Bonehew")
+MOD.Lang.Unit.Fragment.German = "Fragmentierter Bonehew"
 
 MOD.Fragment = {
 	Mod = MOD,

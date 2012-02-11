@@ -946,7 +946,7 @@ function KBM.InitOptions()
 	-- Tab & Scroller Functions
 	function KBM.MainWin.Scroller.Main.Event:ScrollbarChange()
 		local TabObj = KBM.MainWin.Tabs[KBM.MainWin.Tabs.Selected.Main]
-		TabObj.FirstItem:SetPoint("TOP", TabObj.Menu, "TOP", nil, -self:GetPosition() * 5)
+		TabObj.FirstItem:SetPoint("TOP", TabObj.Menu, "TOP", nil, -self:GetPosition() * TabObj.Multiplier)
 	end
 	function KBM.MainWin.Scroller.Main.Event:ScrollbarGrab()
 		self.Grabbed = true
@@ -956,7 +956,7 @@ function KBM.InitOptions()
 	end
 	function KBM.MainWin.Scroller.Instance.Event:ScrollbarChange()
 		local TabObj = KBM.MainWin.Tabs[KBM.MainWin.Tabs.Selected.Instance]
-		TabObj.FirstItem.GUI.Frame:SetPoint("TOP", TabObj.Menu, "TOP", nil, -self:GetPosition() * 5)
+		TabObj.FirstItem.GUI.Frame:SetPoint("TOP", TabObj.Menu, "TOP", nil, -self:GetPosition() * TabObj.Multiplier)
 	end
 	function KBM.MainWin.Scroller.Instance.Event:ScrollbarGrab()
 		self.Grabbed = true
@@ -973,7 +973,7 @@ function KBM.InitOptions()
 					self[Tab].Scroller:SetEnabled(true)
 				end
 				local Max = self[Tab].MenuSize - self[Tab].Menu:GetHeight()
-				self[Tab].Scroller:SetRange(0, Max / 5)
+				self[Tab].Scroller:SetRange(0, Max / self[Tab].Multiplier)
 			end
 		end	
 	end
@@ -983,6 +983,9 @@ function KBM.InitOptions()
 		TabObj.Tab.ID = Tab
 		TabObj.Tab.Parent = TabObj
 		TabObj.Tab.Position = 0
+		if not TabObj.Multiplier then
+			TabObj.Multiplier = 5
+		end
 		function TabObj.Tab.Event:MouseIn()
 			if KBM.MainWin.Tabs.Selected[self.Parent.Type] ~= self.ID then
 				if self.Parent.Type == "Instance" then
@@ -1154,6 +1157,7 @@ function KBM.InitOptions()
 	KBM.MainWin.Tabs.Group.Tab:SetHeight(TabHeight_Idle)
 	KBM.MainWin.Tabs.Group.Scroller = KBM.MainWin.Scroller.Instance
 	KBM.MainWin.Tabs.Group.Type = "Instance"
+	KBM.MainWin.Tabs.Group.Multiplier = 10
 	KBM.MainWin.Tabs.Group.Texture = UI.CreateFrame("Texture", "KBM_Group_Texture", KBM.MainWin.Tabs.Group.Tab)
 	KBM.MainWin.Tabs.Group.Texture:SetTexture("KingMolinator", "Media/Tabber_Off.png")
 	KBM.MainWin.Tabs.Group.Texture:SetPoint("TOPLEFT", KBM.MainWin.Tabs.Group.Tab, "TOPLEFT")

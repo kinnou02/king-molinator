@@ -52,7 +52,7 @@ MOD.Markus = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Markus = KBM.Language:Add(MOD.Markus.Name)
--- MOD.Lang.Markus:SetGerman("")
+MOD.Lang.Markus:SetGerman("Aufseher Markus") 
 -- MOD.Lang.Markus:SetFrench("")
 -- MOD.Lang.Markus:SetRussian("")
 MOD.Markus.Name = MOD.Lang.Markus[KBM.Lang]

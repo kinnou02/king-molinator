@@ -35,6 +35,7 @@ MOD.Tegenar = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
+	ExpertID = "U089394436FFDC210",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -52,7 +53,7 @@ MOD.Tegenar = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Tegenar = KBM.Language:Add(MOD.Tegenar.Name)
--- MOD.Lang.Tegenar:SetGerman("")
+MOD.Lang.Tegenar:SetGerman("Tegenar Tiefzahn")
 -- MOD.Lang.Tegenar:SetFrench("")
 -- MOD.Lang.Tegenar:SetRussian("")
 MOD.Tegenar.Name = MOD.Lang.Tegenar[KBM.Lang]

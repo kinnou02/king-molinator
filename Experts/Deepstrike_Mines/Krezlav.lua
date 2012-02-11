@@ -52,7 +52,7 @@ MOD.Krezlav = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Krezlav = KBM.Language:Add(MOD.Krezlav.Name)
--- MOD.Lang.Krezlav:SetGerman("")
+MOD.Lang.Krezlav:SetGerman("Gregori Krezlav") 
 -- MOD.Lang.Krezlav:SetFrench("")
 -- MOD.Lang.Krezlav:SetRussian("")
 MOD.Krezlav.Name = MOD.Lang.Krezlav[KBM.Lang]

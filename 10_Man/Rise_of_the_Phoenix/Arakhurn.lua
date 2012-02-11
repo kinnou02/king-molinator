@@ -52,6 +52,7 @@ HA.Arakhurn = {
 			FieryPThree = KBM.Defaults.TimerObj.Create("orange"),
 			AddFirst = KBM.Defaults.TimerObj.Create("dark_green"),
 			Add = KBM.Defaults.TimerObj.Create("dark_green"),
+			Rise = KBM.Defaults.TimerObj.Create("orange"),
 		},
 		AlertsRef = {
 			Enabled = true,
@@ -124,6 +125,7 @@ HA.Lang.Verbose = {}
 HA.Lang.Verbose.Nova = KBM.Language:Add("until "..HA.Lang.Ability.Nova[KBM.Lang])
 HA.Lang.Verbose.Nova.German = "bis "..HA.Lang.Ability.Nova[KBM.Lang]
 HA.Lang.Verbose.Nova.Russian = "до "..HA.Lang.Ability.Nova[KBM.Lang]
+HA.Lang.Verbose.Rise = KBM.Language:Add(HA.Lang.Arakhurn[KBM.Lang].." rises")
 
 -- Menu Dictionary
 HA.Lang.Menu = {}
@@ -380,11 +382,12 @@ function HA:Start()
 	self.Arakhurn.TimersRef.FieryFirst = KBM.MechTimer:Add(self.Lang.Buff.Fiery[KBM.Lang], 75)
 	self.Arakhurn.TimersRef.FieryFirst.MenuName = self.Lang.Menu.FieryFirst[KBM.Lang]
 	self.Arakhurn.TimersRef.Fiery = KBM.MechTimer:Add(self.Lang.Buff.Fiery[KBM.Lang], 60)
-	self.Arakhurn.TimersRef.FieryPThree = KBM.MechTimer:Add(self.Lang.Buff.Fiery[KBM.Lang], 81)
+	self.Arakhurn.TimersRef.FieryPThree = KBM.MechTimer:Add(self.Lang.Buff.Fiery[KBM.Lang], 84)
 	self.Arakhurn.TimersRef.FieryPThree.MenuName = self.Lang.Menu.FieryPThree[KBM.Lang]
-	self.Arakhurn.TimersRef.AddFirst = KBM.MechTimer:Add(self.Lang.Unit.Enraged[KBM.Lang], 33)
+	self.Arakhurn.TimersRef.AddFirst = KBM.MechTimer:Add(self.Lang.Unit.Enraged[KBM.Lang], 36)
 	self.Arakhurn.TimersRef.AddFirst.MenuName = self.Lang.Menu.AddFirst[KBM.Lang]
 	self.Arakhurn.TimersRef.Add = KBM.MechTimer:Add(self.Lang.Unit.Enraged[KBM.Lang], 60)
+	self.Arakhurn.TimersRef.Rise = KBM.MechTimer:Add(self.Lang.Verbose.Rise[KBM.Lang], 48)
 	KBM.Defaults.TimerObj.Assign(self.Arakhurn)
 	
 	-- Create Alerts
@@ -407,8 +410,9 @@ function HA:Start()
 	self.Arakhurn.Triggers.Fiery:AddTimer(self.Arakhurn.TimersRef.Fiery)
 	self.Arakhurn.Triggers.Fiery:AddAlert(self.Arakhurn.AlertsRef.Fiery, true)
 	self.Arakhurn.Triggers.PhaseTwo = KBM.Trigger:Create(self.Lang.Chat.Death[KBM.Lang], "say", self.Arakhurn)
+	self.Arakhurn.Triggers.PhaseTwo:AddTimer(self.Arakhurn.TimersRef.Rise)
 	self.Arakhurn.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
-	self.Arakhurn.Triggers.PhaseThree = KBM.Trigger:Create(self.Lang.Chat.Respawn[KBM.Lang], "say", self.Arakhurn)
+	self.Arakhurn.Triggers.PhaseThree = KBM.Trigger:Create(self.Lang.Notify.Respawn[KBM.Lang], "notify", self.Arakhurn)
 	self.Arakhurn.Triggers.PhaseThree:AddPhase(self.PhaseThree)
 	self.Arakhurn.Triggers.PhaseThree:AddTimer(self.Arakhurn.TimersRef.AddFirst)
 	self.Arakhurn.Triggers.PhaseThree:AddTimer(self.Arakhurn.TimersRef.NovaPThree)
