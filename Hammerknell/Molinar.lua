@@ -457,6 +457,10 @@ function KM:Reset()
 	self.King.UnitID = nil
 	self.KingDPSTable = {}
 	self.PrinceDPSTable = {}
+	self.KingSampleDPS = 0
+	self.KingSample = 0
+	self.PrinceSampleDPS = 0
+	self.PrinceSample = 0
 	self.KingHPBar:SetWidth(self.BossHPWidth)
 	self.PrinceHPBar:SetWidth(self.BossHPWidth)
 	self.StatusBar:SetPoint("CENTER", self.FrameBase, "CENTER")
@@ -576,7 +580,7 @@ function KM:DPSUpdate()
 				self.KingSampleDPS = self.KingSample / self.Settings.SampleDPS
 			else
 				if dpsheld == 0 then dpsheld = 1 end
-				self.KingSampleDPS = self.PrinceSample / dpsheld
+				self.KingSampleDPS = self.KingSample / dpsheld
 				table.insert(self.KingDPSTable, KingDPS)
 			end
 			local PrinceCurrentHP = self.PrinceLastHP

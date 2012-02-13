@@ -260,7 +260,6 @@ function KBM.Defaults.AlertObj.Assign(BossObj)
 	end
 end
 
-
 function KBM.Defaults.CastBar()
 	local CastBar = {
 		Override = false,
@@ -380,6 +379,7 @@ function KBM.Defaults.Records()
 		Wipes = 0,
 		Kills = 0,
 		Best = 0,
+		Date = nil,
 	}
 	return RecordObj
 	
@@ -629,6 +629,7 @@ KBM.Language.Records.Wipes = KBM.Language:Add("Wipes: ")
 KBM.Language.Records.Kills = KBM.Language:Add("Kills: ")
 KBM.Language.Records.Best = KBM.Language:Add("Best Time:")
 KBM.Language.Records.Best.German = "Bestzeit:"
+KBM.Language.Records.Date = KBM.Language:Add("Date set: ")
 KBM.Language.Records.Details = KBM.Language:Add("Details:")
 KBM.Language.Records.Rate = KBM.Language:Add("Success Rate is ")
 KBM.Language.Records.Rate.German = "Erfolgsrate ist: "
@@ -4328,6 +4329,7 @@ local function KBM_Death(UnitID)
 										print(KBM.Language.Records.NewRecord[KBM.Lang])
 									end
 									KBM.CurrentMod.Settings.Records.Best = KBM.TimeElapsed
+									KBM.CurrentMod.Settings.Records.Date = os.date()
 									KBM.CurrentMod.Settings.Records.Kills = KBM.CurrentMod.Settings.Records.Kills + 1
 								else
 									print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
@@ -4339,7 +4341,7 @@ local function KBM_Death(UnitID)
 								print(KBM.Language.Records.Invalid[KBM.Lang])
 								KBM.CurrentMod.Settings.Records.Kills = KBM.CurrentMod.Settings.Records.Kills + 1
 							end
-						else
+						elseif KBM.EncounterMode == "chronicle" then
 							if KBM.ValidTime then
 								if KBM.CurrentMod.Settings.Records.Chronicle.Best == 0 or KBM.TimeElapsed < KBM.CurrentMod.Settings.Records.Chronicle.Best then
 									print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
@@ -4350,6 +4352,7 @@ local function KBM_Death(UnitID)
 										print(KBM.Language.Records.NewChrRecord[KBM.Lang])
 									end
 									KBM.CurrentMod.Settings.Records.Chronicle.Best = KBM.TimeElapsed
+									KBM.CurrentMod.Settings.Records.Chronicle.Date = os.date()
 									KBM.CurrentMod.Settings.Records.Chronicle.Kills = KBM.CurrentMod.Settings.Records.Chronicle.Kills + 1
 								else
 									print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))								

@@ -3,6 +3,9 @@
 Rift Version
 * New: Compatible with Rift v1.7
 
+Record Times
+* New: Added a date recorder to record times. (Will only effect new records)
+
 Options
 * New: Options down the left panel are now separated in to two sections.
 * New: Added KBM tab to top section for Global Options.
@@ -24,6 +27,8 @@ Engine
 Hammerknell
 * Rune King Molinar
 ** Change: Reduced timer for King's Consuming Essence.
+** Fixed: Predictive DPS meter was not resetting correctly after a wipe. (Yes, that did take a while to fix)
+** Change: Predictive algorithm has finally been revised. This should offer better insight in DPS trends. 
 * Grugonim
 ** Fixed: Phase Monitor was losing track of Tower kills if you wipe during a Tower phase.
 * Akylios
@@ -34,7 +39,7 @@ Hammerknell
 Rise of the Phoenix
 * High Priest Arakhurn
 ** New: Added timer for Arakhurns rise from the flames in P2 (P3 Start).
-** Change: The start has of P3 has changed back to it's original Notify trigger after Trion's fix.
+** Change: The start of P3 has changed back to its original Notify trigger after Trion's fix.
 ** Change: Adjusted P3 mechanic start timers slightly to account for the above trigger change.
 ** Fix: Due to the recent Trion fix, the Notify trigger will avoid non-starting timers if adds die before Arakhurn rises.
 
@@ -47,10 +52,10 @@ Drowned Halls
 ** Fixed: Start of whirlpool phase wasn't triggering additional timers correctly.
 ** Change: Adjusted some timings slightly after the new fix. (Alpha, test phase only. Will be adding alerts/timers for dance)
 
+Expert Dungeons
 * NOTE: All new dungeon bosses include: Encounter Timer, Castbar, Records and Phase Monitor tracking.
 * NOTE: This is a first release for Dungeons. Timers, Alerts and improved encounter tracking will be added over time.
 
-Expert Dungeons
 * New: Abyssal Precipice
 ** New: Kaler Andrenos
 ** New: Icetalon
@@ -91,6 +96,18 @@ Expert Dungeons
 ** New: Tephra Lord Maficros
 ** New: Queen Vallnara
 ** New: Sparkwing
+* New: Kings Breach
+** New: Hunter Suleng
+** New: Ravalos
+** New: Flesheater Autoch
+** New: Shadehorror Phantasm
+** New: Konstantin
+* New: Runic Descent
+** New: Rictus
+** New: Wormwood
+** New: Warden Falidor
+** New: Atrophinius the Fallen
+** New: Eliam the Corrupted
 
 German Translations
 * New: Matching new dungeon translations. (Updating 1 version behind current alpha)

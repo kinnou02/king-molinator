@@ -64,7 +64,7 @@ MOD.Lang.Ability = {}
 -- Unit Dictionary
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Lesch = KBM.Language:Add("Lesch")
-MOD.Lang.Unit.Gruze = KBM.Language:Add("Gruze")
+MOD.Lang.Unit.Gurze = KBM.Language:Add("Gurze")
 
 MOD.Lesch = {
 	Mod = MOD,
@@ -78,11 +78,11 @@ MOD.Lesch = {
 	TimeOut = 5,
 }
 
-MOD.Gruze = {
+MOD.Gurze = {
 	Mod = MOD,
 	Level = 52,
 	Active = false,
-	Name = MOD.Lang.Unit.Gruze[KBM.Lang],
+	Name = MOD.Lang.Unit.Gurze[KBM.Lang],
 	Menu = {},
 	Dead = false,
 	Available = false,
@@ -95,11 +95,11 @@ function MOD:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Verosa.Name] = self.Verosa,
 		[self.Lesch.Name] = self.Lesch,
-		[self.Gruze.Name] = self.Gruze,
+		[self.Gurze.Name] = self.Gurze,
 	}
 	KBM_Boss[self.Verosa.Name] = self.Verosa
 	KBM.SubBoss[self.Lesch.Name] = self.Lesch
-	KBM.SubBoss[self.Gruze.Name] = self.Gruze
+	KBM.SubBoss[self.Gurze.Name] = self.Gurze
 end
 
 function MOD:InitVars()
@@ -190,7 +190,7 @@ function MOD:UnitHPCheck(unitDetails, unitID)
 					self.PhaseObj:SetPhase("Single")
 					self.PhaseObj.Objectives:AddPercent(self.Verosa.Name, 0, 100)
 					self.PhaseObj.Objectives:AddPercent(self.Lesch.Name, 0, 100)
-					self.PhaseObj.Objectives:AddPercent(self.Gruze.Name, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Gurze.Name, 0, 100)
 					self.Phase = 1
 				else
 					BossObj.Dead = false

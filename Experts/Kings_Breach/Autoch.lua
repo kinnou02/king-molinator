@@ -1,32 +1,32 @@
-﻿-- The Gedlo Council Boss Mod for King Boss Mods
+﻿-- Flesheater Autoch Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --
 
-KBMEXDDTC_Settings = nil
-chKBMEXDDTC_Settings = nil
+KBMEXFOLHAM_Settings = nil
+chKBMEXFOLHAM_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
-local Instance = KBM.BossMod["Darkening Deeps"]
+local Instance = KBM.BossMod["Kings Breach"]
 
 local MOD = {
 	Directory = Instance.Directory,
-	File = "Nuggo.lua",
+	File = "Autoch.lua",
 	Enabled = true,
 	Instance = Instance.Name,
 	InstanceObj = Instance,
 	HasPhases = true,
 	Lang = {},
-	ID = "Nuggo",
+	ID = "Autoch",
 }
 
-MOD.Nuggo = {
+MOD.Autoch = {
 	Mod = MOD,
 	Level = 52,
 	Active = false,
-	Name = "High Shaman Nuggo",
-	NameShort = "Nuggo",
+	Name = "Flesheater Autoch",
+	NameShort = "Autoch",
 	Menu = {},
 	Castbar = nil,
 	Dead = false,
@@ -36,8 +36,6 @@ MOD.Nuggo = {
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
-	ExpertID = "U43E685D74CAA6694",
-	MasterID = "U024CAD61448FED64",
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
 		-- TimersRef = {
@@ -53,44 +51,25 @@ MOD.Nuggo = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Nuggo = KBM.Language:Add(MOD.Nuggo.Name)
-MOD.Lang.Nuggo:SetGerman("Oberschamane Nuggo")
--- MOD.Lang.Nuggo:SetFrench("")
--- MOD.Lang.Nuggo:SetRussian("")
-MOD.Nuggo.Name = MOD.Lang.Nuggo[KBM.Lang]
-MOD.Lang.Descript = KBM.Language:Add("The Gedlo Council")
-MOD.Lang.Descript.German = "Gedlo-Rat"
-MOD.Descript = MOD.Lang.Descript[KBM.Lang]
+MOD.Lang.Autoch = KBM.Language:Add(MOD.Autoch.Name)
+-- MOD.Lang.Autoch:SetGerman("")
+-- MOD.Lang.Autoch:SetFrench("")
+-- MOD.Lang.Autoch:SetRussian("")
+MOD.Autoch.Name = MOD.Lang.Autoch[KBM.Lang]
+MOD.Descript = MOD.Autoch.Name
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}
 
 -- Unit Dictionary
 MOD.Lang.Unit = {}
-MOD.Lang.Unit.Swedge = KBM.Language:Add("Warlord Swedge")
-MOD.Lang.Unit.Swedge.German = "Kriegsherr Swedge"
-MOD.Lang.Unit.Gerbik = KBM.Language:Add("Incinerator Gerbik")
-MOD.Lang.Unit.Gerbik.German = "Entflammer Gerbik"
+MOD.Lang.Unit.Mondrach = KBM.Language:Add("Soulflayer Mondrach")
 
-MOD.Swedge = {
+MOD.Mondrach = {
 	Mod = MOD,
 	Level = 52,
 	Active = false,
-	Name = MOD.Lang.Unit.Swedge[KBM.Lang],
-	NameShort = "Swedge",
-	Menu = {},
-	Dead = false,
-	Available = false,
-	UnitID = nil,
-	TimeOut = 5,
-}
-
-MOD.Gerbik = {
-	Mod = MOD,
-	Level = 52,
-	Active = false,
-	Name = MOD.Lang.Unit.Gerbik[KBM.Lang],
-	NameShort = "Gerbik",
+	Name = MOD.Lang.Unit.Mondrach[KBM.Lang],
 	Menu = {},
 	Dead = false,
 	Available = false,
@@ -101,62 +80,60 @@ MOD.Gerbik = {
 function MOD:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
-		[self.Nuggo.Name] = self.Nuggo,
-		[self.Swedge.Name] = self.Swedge,
-		[self.Gerbik.Name] = self.Gerbik
+		[self.Autoch.Name] = self.Autoch,
+		[self.Mondrach.Name] = self.Mondrach,
 	}
-	KBM_Boss[self.Nuggo.Name] = self.Nuggo
-	KBM_Boss[self.Swedge.Name] = self.Swedge
-	KBM_Boss[self.Gerbik.Name] = self.Gerbik
+	KBM_Boss[self.Autoch.Name] = self.Autoch
+	KBM_Boss[self.Mondrach.Name] = self.Mondrach
 end
 
 function MOD:InitVars()
 	self.Settings = {
 		Enabled = true,
-		CastBar = self.Nuggo.Settings.CastBar,
+		CastBar = self.Autoch.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		-- MechTimer = KBM.Defaults.MechTimer(),
 		-- Alerts = KBM.Defaults.Alerts(),
-		-- TimersRef = self.Nuggo.Settings.TimersRef,
-		-- AlertsRef = self.Nuggo.Settings.AlertsRef,
+		-- TimersRef = self.Autoch.Settings.TimersRef,
+		-- AlertsRef = self.Autoch.Settings.AlertsRef,
 	}
-	KBMEXDDAB_Settings = self.Settings
-	chKBMEXDDAB_Settings = self.Settings
+	KBMEXFOLHAM_Settings = self.Settings
+	chKBMEXFOLHAM_Settings = self.Settings
 	
 end
 
 function MOD:SwapSettings(bool)
 
 	if bool then
-		KBMEXDDAB_Settings = self.Settings
-		self.Settings = chKBMEXDDAB_Settings
+		KBMEXFOLHAM_Settings = self.Settings
+		self.Settings = chKBMEXFOLHAM_Settings
 	else
-		chKBMEXDDAB_Settings = self.Settings
-		self.Settings = KBMEXDDAB_Settings
+		chKBMEXFOLHAM_Settings = self.Settings
+		self.Settings = KBMEXFOLHAM_Settings
 	end
 
 end
 
 function MOD:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMEXDDAB_Settings, self.Settings)
+		KBM.LoadTable(chKBMEXFOLHAM_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMEXDDAB_Settings, self.Settings)
+		KBM.LoadTable(KBMEXFOLHAM_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMEXDDAB_Settings = self.Settings
+		chKBMEXFOLHAM_Settings = self.Settings
 	else
-		KBMEXDDAB_Settings = self.Settings
+		KBMEXFOLHAM_Settings = self.Settings
 	end	
 end
 
 function MOD:SaveVars()	
 	if KBM.Options.Character then
-		chKBMEXDDAB_Settings = self.Settings
+		chKBMEXFOLHAM_Settings = self.Settings
 	else
-		KBMEXDDAB_Settings = self.Settings
+		KBMEXFOLHAM_Settings = self.Settings
 	end	
 end
 
@@ -164,39 +141,20 @@ function MOD:Castbar(units)
 end
 
 function MOD:RemoveUnits(UnitID)
-	if self.Nuggo.UnitID == UnitID then
-		self.Nuggo.Available = false
+	if self.Autoch.UnitID == UnitID then
+		self.Autoch.Available = false
 		return true
 	end
 	return false
 end
 
-function MOD.SetObjectives()
-	MOD.PhaseObj.Objectives:Remove()
-	if not MOD.Nuggo.Dead then
-		MOD.PhaseObj.Objectives:AddPercent(MOD.Nuggo.Name, 0, 100)
-	end
-	if not MOD.Swedge.Dead then
-		MOD.PhaseObj.Objectives:AddPercent(MOD.Swedge.Name, 0, 100)	
-	end
-	if not MOD.Gerbik.Dead then
-		MOD.PhaseObj.Objectives:AddPercent(MOD.Gerbik.Name, 0, 100)
-	end
-end
-
 function MOD:Death(UnitID)
-	if self.Nuggo.UnitID == UnitID then
-		self.Nuggo.Dead = true
-		self.SetObjectives()
-		self.Nuggo.CastBar:Remove()
-	elseif self.Swedge.UnitID == UnitID then
-		self.Swedge.Dead = true
-		self.SetObjectives()
-	elseif self.Gerbik.UnitID == UnitID then
-		self.Gerbik.Dead = true
-		self.SetObjectives()
+	if self.Autoch.UnitID == UnitID then
+		self.Autoch.Dead = true
+	elseif self.Mondrach.UnitID == UnitID then
+		self.Mondrach.Dead = true
 	end
-	if self.Nuggo.Dead and self.Swedge.Dead and self.Gerbik.Dead then
+	if self.Autoch.Dead and self.Mondrach.Dead then
 		return true
 	end
 	return false
@@ -214,23 +172,24 @@ function MOD:UnitHPCheck(unitDetails, unitID)
 					self.TimeElapsed = 0
 					BossObj.Dead = false
 					BossObj.Casting = false
-					if BossObj.Name == self.Nuggo.Name then
+					if BossObj.Name == self.Autoch.Name then
 						BossObj.CastBar:Create(unitID)
 					end
 					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase("1")
-					self.SetObjectives()
+					self.PhaseObj:SetPhase("Single")
+					self.PhaseObj.Objectives:AddPercent(self.Autoch.Name, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Mondrach.Name, 0, 100)
 					self.Phase = 1
 				else
 					BossObj.Dead = false
 					BossObj.Casting = false
-					if BossObj.Name == self.Nuggo.Name then
+					if BossObj.Name == self.Autoch.Name then
 						BossObj.CastBar:Create(unitID)
 					end
 				end
 				BossObj.UnitID = unitID
 				BossObj.Available = true
-				return self.Nuggo
+				return self.Autoch
 			end
 		end
 	end
@@ -242,16 +201,15 @@ function MOD:Reset()
 		BossObj.Available = false
 		BossObj.UnitID = nil
 		BossObj.Dead = false
-		BossObj.Casting = false
 	end
-	self.Nuggo.CastBar:Remove()	
+	self.Autoch.CastBar:Remove()	
 	self.PhaseObj:End(Inspect.Time.Real())
 end
 
 function MOD:Timer()	
 end
 
-function MOD.Nuggo:SetTimers(bool)	
+function MOD.Autoch:SetTimers(bool)	
 	if bool then
 		for TimerID, TimerObj in pairs(self.TimersRef) do
 			TimerObj.Enabled = TimerObj.Settings.Enabled
@@ -263,7 +221,7 @@ function MOD.Nuggo:SetTimers(bool)
 	end
 end
 
-function MOD.Nuggo:SetAlerts(bool)
+function MOD.Autoch:SetAlerts(bool)
 	if bool then
 		for AlertID, AlertObj in pairs(self.AlertsRef) do
 			AlertObj.Enabled = AlertObj.Settings.Enabled
@@ -276,19 +234,19 @@ function MOD.Nuggo:SetAlerts(bool)
 end
 
 function MOD:DefineMenu()
-	self.Menu = Instance.Menu:CreateEncounter(self.Nuggo, self.Enabled)
+	self.Menu = Instance.Menu:CreateEncounter(self.Autoch, self.Enabled)
 end
 
 function MOD:Start()
 	-- Create Timers
-	--KBM.Defaults.TimerObj.Assign(self.Nuggo)
+	--KBM.Defaults.TimerObj.Assign(self.Autoch)
 	
 	-- Create Alerts
-	--KBM.Defaults.AlertObj.Assign(self.Nuggo)
+	--KBM.Defaults.AlertObj.Assign(self.Autoch)
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Nuggo.CastBar = KBM.CastBar:Add(self, self.Nuggo)
+	self.Autoch.CastBar = KBM.CastBar:Add(self, self.Autoch)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()
 end

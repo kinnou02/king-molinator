@@ -1253,11 +1253,19 @@ function KBM.InitOptions()
 	KBM.MainWin.Options.Header:SetBackgroundColor(0,0,0,0.25)
 	KBM.MainWin.Options.Header:SetPoint("TOPRIGHT", KBM.MainWin.Content, "TOPRIGHT", -5, 0)
 	KBM.MainWin.Options.Header:SetPoint("LEFT", KBM.MainWin.SplitFrame, "RIGHT")
-	KBM.MainWin.Options.HeadText = UI.CreateFrame("Text", "KBM Header Text", KBM.MainWin.Options.Header)
+	KBM.MainWin.Options.HeadShadow = UI.CreateFrame("Text", "KBM_Header_Shadow", KBM.MainWin.Options.Header)
+	KBM.MainWin.Options.HeadShadow:SetPoint("TOPRIGHT", KBM.MainWin.Options.Header, "TOPRIGHT", 1, 1)
+	KBM.MainWin.Options.HeadShadow:SetFontColor(0,0,0,1)
+	KBM.MainWin.Options.HeadShadow:SetFontSize(18)
+	KBM.MainWin.Options.HeadText = UI.CreateFrame("Text", "KBM Header Text", KBM.MainWin.Options.HeadShadow)
 	KBM.MainWin.Options.HeadText:SetPoint("TOPRIGHT", KBM.MainWin.Options.Header, "TOPRIGHT")
 	KBM.MainWin.Options.HeadText:SetFontColor(0.85,0.65,0.0)
 	KBM.MainWin.Options.HeadText:SetFontSize(18)
-	KBM.MainWin.Options.SubText = UI.CreateFrame("Text", "KBM SubText Text", KBM.MainWin.Options.Header)
+	KBM.MainWin.Options.SubShadow = UI.CreateFrame("Text", "KBM_SubText_Shadow", KBM.MainWin.Options.Header)
+	KBM.MainWin.Options.SubShadow:SetPoint("BOTTOMLEFT", KBM.MainWin.Options.Header, "BOTTOMLEFT", 5, 1)
+	KBM.MainWin.Options.SubShadow:SetFontColor(0,0,0,1)
+	KBM.MainWin.Options.SubShadow:SetFontSize(18)
+	KBM.MainWin.Options.SubText = UI.CreateFrame("Text", "KBM SubText Text", KBM.MainWin.Options.SubShadow)
 	KBM.MainWin.Options.SubText:SetPoint("BOTTOMLEFT", KBM.MainWin.Options.Header, "BOTTOMLEFT", 4, 0)
 	KBM.MainWin.Options.SubText:SetFontColor(1,1,1)
 	KBM.MainWin.Options.SubText:SetFontSize(18)
@@ -1728,7 +1736,9 @@ function KBM.InitOptions()
 				KBM.MainWin.Options.Scroller.Frame:SetVisible(false)			
 				KBM.MainWin.CurrentPage = self
 				KBM.MainWin.Options.Footer:SetVisible(false)
+				KBM.MainWin.Options.HeadShadow:SetText(self.Instance.Name)
 				KBM.MainWin.Options.HeadText:SetText(self.Instance.Name)
+				KBM.MainWin.Options.SubShadow:SetText(self.Name)
 				KBM.MainWin.Options.SubText:SetText(self.Name)
 				Encounter:ApplyRecords()
 				
@@ -2863,6 +2873,9 @@ function KBM.InitOptions()
 				if Settings.Best then
 					if Settings.Best > 0 then
 						self.Boss.Mod.MenuStore.Records.Best.Name = KBM.ConvertTime(Settings.Best)
+						if Settings.Date then
+							self.Boss.Mod.MenuStore.Records.Date.Name = Settings.Date
+						end
 					else
 						self.Boss.Mod.MenuStore.Records.Best.Name = KBM.Language.Records.NoRecord[KBM.Lang]
 					end
@@ -2899,6 +2912,7 @@ function KBM.InitOptions()
 				local Settings = self.Boss.Mod.Settings.Records
 				Header = self:CreateHeader(KBM.Language.Records.Best[KBM.Lang], "plain", "Records", "Main")
 				self.Boss.Mod.MenuStore.Records.Best = Header:CreateOption(KBM.ConvertTime(Settings.Best), "plain")
+				self.Boss.Mod.MenuStore.Records.Date = Header:CreateOption(KBM.Language.Records.Date[KBM.Lang].."n/a", "plain")
 				Header = self:CreateHeader(KBM.Language.Records.Details[KBM.Lang], "plain", "Records", "Main")
 				self.Boss.Mod.MenuStore.Records.Attempts = Header:CreateOption(KBM.Language.Records.Attempts[KBM.Lang]..Settings.Attempts, "plain")
 				self.Boss.Mod.MenuStore.Records.Kills = Header:CreateOption(KBM.Language.Records.Kills[KBM.Lang]..Settings.Kills, "plain")
@@ -3047,7 +3061,9 @@ function KBM.InitOptions()
 		end
 		function Child.Options:SetTitle()
 			KBM.MainWin.CurrentPage = self
+			KBM.MainWin.Options.HeadShadow:SetText(self.Child.Header.Text:GetText())
 			KBM.MainWin.Options.HeadText:SetText(self.Child.Header.Text:GetText())
+			KBM.MainWin.Options.SubShadow:SetText(self.Child.Text:GetText())
 			KBM.MainWin.Options.SubText:SetText(self.Child.Text:GetText())
 			self.LastItem = nil
 		end
