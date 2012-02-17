@@ -321,7 +321,7 @@ function GR:UnitHPCheck(uDetails, unitID)
 				else
 					self.Bosses[uDetails.name].UnitList[unitID].Dead = false
 					self.Bosses[uDetails.name].UnitList[unitID].Available = true
-					self.Bosses[uDetails.name].UnitList[unitID].UnitID = UnitID
+					self.Bosses[uDetails.name].UnitList[unitID].UnitID = unitID
 				end
 				return self.Bosses[uDetails.name].UnitList[unitID]
 			end

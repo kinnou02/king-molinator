@@ -418,7 +418,7 @@ function ID:UnitHPCheck(uDetails, unitID)
 						self.Bosses[uDetails.name].UnitList[unitID] = SubBossObj
 					else
 						self.Bosses[uDetails.name].UnitList[unitID].Available = true
-						self.Bosses[uDetails.name].UnitList[unitID].UnitID = UnitID
+						self.Bosses[uDetails.name].UnitList[unitID].UnitID = unitID
 					end
 					return self.Bosses[uDetails.name].UnitList[unitID]				
 				end
