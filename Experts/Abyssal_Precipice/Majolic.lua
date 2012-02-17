@@ -35,6 +35,7 @@ MOD.Majolic = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
+	ExpertID = "Expert",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -66,7 +67,6 @@ function MOD:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Majolic.Name] = self.Majolic,
 	}
-	KBM_Boss[self.Majolic.Name] = self.Majolic	
 end
 
 function MOD:InitVars()

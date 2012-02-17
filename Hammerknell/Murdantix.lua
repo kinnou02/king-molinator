@@ -30,6 +30,7 @@ MX.Murd = {
 	Level = "??",
 	Active = false,
 	Name = "Murdantix",
+	ChronicleID = "U6B8A9FEF19F94B1F",
 	Castbar = nil,
 	CastFilters = {},
 	HasCastFilters = true,
@@ -92,6 +93,7 @@ MX.Lang.Debuff = {}
 MX.Lang.Debuff.Mangled = KBM.Language:Add("Mangled")
 MX.Lang.Debuff.Mangled.German = "Üble Blessur"
 MX.Lang.Debuff.Mangled.French = "Estrop\195\169"
+MX.Lang.Debuff.Mangled.Russian = "Искалечен"
 
 function MX:AddBosses(KBM_Boss)
 	self.MenuName = self.Murd.Name

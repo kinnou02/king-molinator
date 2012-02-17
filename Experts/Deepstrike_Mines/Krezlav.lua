@@ -35,6 +35,7 @@ MOD.Krezlav = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
+	ExpertID = "Expert",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -66,7 +67,6 @@ function MOD:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Krezlav.Name] = self.Krezlav,
 	}
-	KBM_Boss[self.Krezlav.Name] = self.Krezlav	
 end
 
 function MOD:InitVars()

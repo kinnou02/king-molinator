@@ -33,6 +33,7 @@ MOD.Cyclorax = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
+	ExpertID = "Expert",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -64,7 +65,6 @@ function MOD:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Cyclorax.Name] = self.Cyclorax,
 	}
-	KBM_Boss[self.Cyclorax.Name] = self.Cyclorax	
 end
 
 function MOD:InitVars()

@@ -35,7 +35,7 @@ MOD.Ereetu = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
-	ExpertID = nil,
+	ExpertID = "Expert",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -53,7 +53,7 @@ MOD.Ereetu = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Ereetu = KBM.Language:Add(MOD.Ereetu.Name)
--- MOD.Lang.Ereetu:SetGerman("")
+MOD.Lang.Ereetu:SetGerman("Glutfürst Ereetu") 
 -- MOD.Lang.Ereetu:SetFrench("")
 -- MOD.Lang.Ereetu:SetRussian("")
 MOD.Ereetu.Name = MOD.Lang.Ereetu[KBM.Lang]
@@ -67,7 +67,6 @@ function MOD:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Ereetu.Name] = self.Ereetu,
 	}
-	KBM_Boss[self.Ereetu.Name] = self.Ereetu	
 end
 
 function MOD:InitVars()

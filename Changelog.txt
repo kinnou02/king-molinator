@@ -12,19 +12,23 @@ Options
 * New: Added Plug-In tab to top section for all Plug-In settings.
 * New: Added Raid tab (red helm) to lower section for all 20-man instances.
 * New: Added Sliver tab (silver helm) to lower section for all 10-man instances.
-* New: Added Group tab (gold helm) to lower section for Expert and Master Mode dungeons.
+* New: Added Master tab (blue helm) to lower section for Master Mode dungeons.
+* New: Added Group tab (gold helm) to lower section for Expert dungeons.
+* Alerts
+** Change: Reduced the default Alert size by 50%
 
 Engine
 * Encounters
 ** New: Encounter type checks are now bypassed once already established.
 ** New: Checks added for Expert Mode dungeon recognition. (Master Mode will still trigger currently in Alpha)
-** New: Experimental Unique unit type ID for Duke Letareus chronicle. (Alpha version only)
-** New: Experimental Unique unit type ID for Oracle Aleria. (Alpha version only)
-** Note: If the chronicle version triggers in GSB Raid, please report back. This is to try and gauage better checking.
 * CastBars
 ** New: Further adjustments to allow for castbar tracking outside of encounters.
+** New: Castbars can now have multiple displays per Unit ID, but will only ever use one for triggering events.
+** New: Silent Dynamic Castbars added to the engine to cater for "lesser" units in encounters.
 
 Hammerknell
+* Soulrender Zilas
+** New: Escaped Imps now have an Alert for Cede Spirit. (Alerts happen for any Imp Casting, that is seen by the raid)
 * Rune King Molinar
 ** Change: Reduced timer for King's Consuming Essence.
 ** Fixed: Predictive DPS meter was not resetting correctly after a wipe. (Yes, that did take a while to fix)
@@ -46,11 +50,46 @@ Rise of the Phoenix
 Greenscale's Blight
 * Infiltrator Johlen
 ** New: Devastating Bomb alerts will now stop as soon as the bomb is destroyed.
+** Change: Increased the alert of Blinding Bomb by 1s.
 
 Drowned Halls
 * Iskaal
 ** Fixed: Start of whirlpool phase wasn't triggering additional timers correctly.
 ** Change: Adjusted some timings slightly after the new fix. (Alpha, test phase only. Will be adding alerts/timers for dance)
+
+River of Souls Chronicle
+* Stopped Alsbeth's raid encounter triggering during chronicles.
+
+Greenscale's Blight Chronicle
+* Duke Letareus: Added UID.
+* Oracle Aleria: Added UID.
+* Infiltrator Johlen: Added UID.
+* Prince Hylas: Added UID.
+* Lord Greenscale: Added UID.
+
+Master Mode Dungeons
+* NOTE: All new dungeon bosses include: Encounter Timer, Castbar, Records and Phase Monitor tracking.
+* NOTE: This is a first release for Dungeons. Timers, Alerts and improved encounter tracking will be added over time.
+
+* New: Caduceus Rise
+** New: High Thane Hergen
+** New: Faultwalker Alraj
+** New: Coalgut
+** New: Zugthak
+** New: Ashcaller Zael
+** New: Headhunter Kulir
+** New: Rodiafel
+** New: Captain Black Spit
+** New: Cinderstorm
+** New: Caduceus
+* New: Darkening Deeps
+** New: Alchemist Braxtepel
+** New: Emissary Villizar
+** New: Michael Bringhurst
+** New: Tegenar Deepfang
+** New: Glubmuk
+** New: The Gedlo Council
+** New: Scarn
 
 Expert Dungeons
 * NOTE: All new dungeon bosses include: Encounter Timer, Castbar, Records and Phase Monitor tracking.
@@ -102,18 +141,47 @@ Expert Dungeons
 ** New: Flesheater Autoch
 ** New: Shadehorror Phantasm
 ** New: Konstantin
+* New: Lower Caduceus Rise
+** New: High Thane Hergen
+** New: Faultwalker Alraj
+** New: Hookmaster Palos
+** New: Ashcaller Zael
+** New: Coalgut
+** New: Caduceus
 * New: Runic Descent
 ** New: Rictus
 ** New: Wormwood
 ** New: Warden Falidor
 ** New: Atrophinius the Fallen
 ** New: Eliam the Corrupted
+* New: The Iron Tomb
+** New: Caor Ashstone
+** New: Broodmother Venoxa
+** New: The Three Kings
+** New: Bonelord Fetlorn
+** New: Ragnoth the Despoiler
+** New: Totek the Ancient
+* New: The Realm of the Fae
+** New: Trickster Maelow
+** New: Loggodhan
+** New: Grand Apiarist Orban
+** New: Battlemaster Atrophinius
+** New: Chillblains Winterfrost
+** New: Fae Lord Twyl
+* New: Upper Caduceus Rise
+** New: Zugthak
+** New: Rodiafel
+** New: Captain Black Spit
+** New: Cinderstorm
+** New: Headhunter Kulir
+** New: Caduceus
 
 German Translations
 * New: Matching new dungeon translations. (Updating 1 version behind current alpha)
+* New: Additions to Akylios.
 
 Russian Translations
-* New: Lots of new translations. (Not in alpha version yet)
+* New: Lots of new translations, including In game messages, Menu Options and Boss Mechanics.
 
 v0.9.6
 

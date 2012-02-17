@@ -27,6 +27,8 @@ LG.Greenscale = {
 	Active = false,
 	Name = "Lord Greenscale",
 	NameShort = "Greenscale",
+	ChronicleID = "U1930C7F350FEC7B3",
+	RaidID = "U633EAF7811771C3D",
 	Menu = {},
 	Castbar = nil,
 	Dead = false,
@@ -67,14 +69,15 @@ LG.Lang.Ability.Blight.German = "Würgende Plage"
 LG.Lang.Ability.Blight.Russian = "Удушающая болезнь"
 LG.Lang.Ability.Fumes = KBM.Language:Add("Noxious Fumes")
 LG.Lang.Ability.Fumes.German = "Giftige Dämpfe"
-LG.Lang.Ability.Fumes.German = "Ядовитые пары"
+LG.Lang.Ability.Fumes.Russian = "Ядовитые пары"
 
 -- Unit Dictionary
 LG.Lang.Unit = {}
 LG.Lang.Unit.Verdant = KBM.Language:Add("Verdant Annihilator")
-LG.Lang.Unit.Verdant.German = "Grüner Auslöscher" 
+LG.Lang.Unit.Verdant.German = "Grüner Auslöscher"
+LG.Lang.Unit.Verdant.Russian = "Лиственный расщепитель"
 
--- Mechanic Dictionary
+-- Mechanic Dictionary (Verbose)
 LG.Lang.Mechanic = {}
 LG.Lang.Mechanic.Death = KBM.Language:Add("Protective Shield")
 
@@ -93,6 +96,7 @@ LG.Verdant = {
 	Required = 1,
 	Ignore = true,
 	Triggers = {},
+	RaidID = "U52347B1D400FD113",
 }
 
 function LG:AddBosses(KBM_Boss)

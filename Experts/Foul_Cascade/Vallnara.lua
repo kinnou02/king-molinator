@@ -35,7 +35,7 @@ MOD.Vallnara = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
-	ExpertID = nil,
+	ExpertID = "Expert",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -53,21 +53,38 @@ MOD.Vallnara = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Vallnara = KBM.Language:Add(MOD.Vallnara.Name)
--- MOD.Lang.Vallnara:SetGerman("")
+MOD.Lang.Vallnara:SetGerman("Königin Vallnara")
 -- MOD.Lang.Vallnara:SetFrench("")
 -- MOD.Lang.Vallnara:SetRussian("")
 MOD.Vallnara.Name = MOD.Lang.Vallnara[KBM.Lang]
 MOD.Descript = MOD.Vallnara.Name
 
+-- Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.CorruptQueen = KBM.Language:Add("Corrupted Queen Vallnara")
+
 -- Ability Dictionary
 MOD.Lang.Ability = {}
+
+MOD.CorruptQueen = {
+	Mod = MOD,
+	Level = 52,
+	Active = false,
+	Name = MOD.Lang.Unit.CorruptQueen[KBM.Lang],
+	Menu = {},
+	Dead = false,
+	Available = false,
+	UnitID = nil,
+	ExpertID = "Expert",
+	TimeOut = 5,
+}
 
 function MOD:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Vallnara.Name] = self.Vallnara,
+		[self.CorruptQueen.Name] = self.CorruptQueen,
 	}
-	KBM_Boss[self.Vallnara.Name] = self.Vallnara	
 end
 
 function MOD:InitVars()
@@ -127,6 +144,9 @@ function MOD:RemoveUnits(UnitID)
 	if self.Vallnara.UnitID == UnitID then
 		self.Vallnara.Available = false
 		return true
+	elseif self.CorruptQueen.UnitID == UnitID then
+		self.CorruptQueen.Available = false
+		return true
 	end
 	return false
 end
@@ -135,6 +155,9 @@ function MOD:Death(UnitID)
 	if self.Vallnara.UnitID == UnitID then
 		self.Vallnara.Dead = true
 		return true
+	elseif self.CorruptQueen.UnitID == UnitID then
+		self.CorruptQueen.Dead = true
+		return true
 	end
 	return false
 end
@@ -142,23 +165,28 @@ end
 function MOD:UnitHPCheck(unitDetails, unitID)	
 	if unitDetails and unitID then
 		if not unitDetails.player then
-			if unitDetails.name == self.Vallnara.Name then
+			if self.Bosses[unitDetails.name] then
+				local BossObj = self.Bosses[unitDetails.name]
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
 					self.TimeElapsed = 0
-					self.Vallnara.Dead = false
-					self.Vallnara.Casting = false
+					BossObj.Dead = false
+					BossObj.Casting = false
 					self.Vallnara.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase("Single")
-					self.PhaseObj.Objectives:AddPercent(self.Vallnara.Name, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(BossObj.Name, 0, 100)
 					self.Phase = 1
+				else
+					BossObj.Dead = false
+					BossObj.Casting = false
+					self.Vallnara.CastBar:Create(unitID)
 				end
-				self.Vallnara.UnitID = unitID
-				self.Vallnara.Available = true
-				return self.Vallnara
+				BossObj.UnitID = unitID
+				BossObj.Available = true
+				return BossObj
 			end
 		end
 	end
@@ -169,6 +197,8 @@ function MOD:Reset()
 	self.Vallnara.Available = false
 	self.Vallnara.UnitID = nil
 	self.Vallnara.CastBar:Remove()
+	self.CorruptQueen.Available = false
+	self.CorruptQueen.UnitID = nil
 	self.PhaseObj:End(Inspect.Time.Real())
 end
 

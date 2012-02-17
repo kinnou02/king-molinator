@@ -35,7 +35,7 @@ MOD.Cortilnald = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
-	ExpertID = nil,
+	ExpertID = "Expert",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -53,7 +53,7 @@ MOD.Cortilnald = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Cortilnald = KBM.Language:Add(MOD.Cortilnald.Name)
--- MOD.Lang.Cortilnald:SetGerman("")
+MOD.Lang.Cortilnald:SetGerman("Feuermeister Cortilnald") 
 -- MOD.Lang.Cortilnald:SetFrench("")
 -- MOD.Lang.Cortilnald:SetRussian("")
 MOD.Cortilnald.Name = MOD.Lang.Cortilnald[KBM.Lang]
@@ -67,7 +67,6 @@ function MOD:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Cortilnald.Name] = self.Cortilnald,
 	}
-	KBM_Boss[self.Cortilnald.Name] = self.Cortilnald	
 end
 
 function MOD:InitVars()

@@ -3,16 +3,17 @@
 -- Copyright 2011
 --
 
-KBMEXAP_Settings = nil
-chKBMEXAP_Settings = nil
+KBMEXDD_Settings = nil
+chKBMEXDD_Settings = nil
 
 local MOD = {
 	Header = nil,
 	Enabled = true,
 	IsInstance = true,
+	HasMaster = true,
 	Name = "Darkening Deeps",
 	Type = "Expert",
-	ID = "MOD",
+	ID = "Darkening_Deeps",
 }
 
 -- Link Mods

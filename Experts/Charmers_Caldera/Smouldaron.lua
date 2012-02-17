@@ -33,6 +33,7 @@ MOD.Smouldaron = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
+	ExpertID = "Expert",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -64,7 +65,6 @@ function MOD:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Smouldaron.Name] = self.Smouldaron,
 	}
-	KBM_Boss[self.Smouldaron.Name] = self.Smouldaron	
 end
 
 function MOD:InitVars()

@@ -35,6 +35,7 @@ MOD.Autoch = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
+	ExpertID = "Expert",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -52,7 +53,7 @@ MOD.Autoch = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Autoch = KBM.Language:Add(MOD.Autoch.Name)
--- MOD.Lang.Autoch:SetGerman("")
+MOD.Lang.Autoch:SetGerman("Fleischfresser Autoch")
 -- MOD.Lang.Autoch:SetFrench("")
 -- MOD.Lang.Autoch:SetRussian("")
 MOD.Autoch.Name = MOD.Lang.Autoch[KBM.Lang]
@@ -64,6 +65,7 @@ MOD.Lang.Ability = {}
 -- Unit Dictionary
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Mondrach = KBM.Language:Add("Soulflayer Mondrach")
+MOD.Lang.Unit.Mondrach.German = "Seelenschinder Mondrach"
 
 MOD.Mondrach = {
 	Mod = MOD,
@@ -75,6 +77,7 @@ MOD.Mondrach = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
+	ExpertID = "Expert",
 }
 
 function MOD:AddBosses(KBM_Boss)
@@ -83,8 +86,6 @@ function MOD:AddBosses(KBM_Boss)
 		[self.Autoch.Name] = self.Autoch,
 		[self.Mondrach.Name] = self.Mondrach,
 	}
-	KBM_Boss[self.Autoch.Name] = self.Autoch
-	KBM_Boss[self.Mondrach.Name] = self.Mondrach
 end
 
 function MOD:InitVars()

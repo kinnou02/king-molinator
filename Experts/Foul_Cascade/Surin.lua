@@ -35,7 +35,7 @@ MOD.Surin = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
-	ExpertID = nil,
+	ExpertID = "U5FEBA8BF71086D4A",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -53,7 +53,7 @@ MOD.Surin = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Surin = KBM.Language:Add(MOD.Surin.Name)
--- MOD.Lang.Surin:SetGerman("")
+MOD.Lang.Surin:SetGerman("Gräfin Surin Skenobar")
 -- MOD.Lang.Surin:SetFrench("")
 -- MOD.Lang.Surin:SetRussian("")
 MOD.Surin.Name = MOD.Lang.Surin[KBM.Lang]
@@ -67,7 +67,6 @@ function MOD:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Surin.Name] = self.Surin,
 	}
-	KBM_Boss[self.Surin.Name] = self.Surin	
 end
 
 function MOD:InitVars()

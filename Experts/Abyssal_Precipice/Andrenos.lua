@@ -34,6 +34,7 @@ MOD.Andrenos = {
 	-- AlertsRef = {},
 	Available = false,
 	UnitID = nil,
+	ExpertID = "Expert",
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
@@ -66,7 +67,6 @@ function MOD:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Andrenos.Name] = self.Andrenos,
 	}
-	KBM_Boss[self.Andrenos.Name] = self.Andrenos	
 end
 
 function MOD:InitVars()

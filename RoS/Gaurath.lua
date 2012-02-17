@@ -68,12 +68,13 @@ HG.Lang.Ability.Raise:SetGerman("Erweckung der Toten")
 HG.Lang.Ability.Raise:SetRussian("Поднять мертвых")
 HG.Lang.Ability.Tidings = KBM.Language:Add("Tidings of Woe")
 HG.Lang.Ability.Tidings:SetGerman("Leidvolle Kunde")
-HG.Lang.Ability.Tidings:SetGerman("Плохие известия")
+HG.Lang.Ability.Tidings:SetRussian("Плохие известия")
 
 -- Verbose Dictionary
 HG.Lang.Verbose = {}
 HG.Lang.Verbose.Raise = KBM.Language:Add("Death group rise")
 HG.Lang.Verbose.Raise:SetGerman("Erweckung der Toten")
+HG.Lang.Verbose.Raise:SetRussian("Призыв аддов")
 
 -- Notify Dictionary
 HG.Lang.Notify = {}

@@ -67,7 +67,6 @@ function MOD:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Tegenar.Name] = self.Tegenar,
 	}
-	KBM_Boss[self.Tegenar.Name] = self.Tegenar	
 end
 
 function MOD:InitVars()

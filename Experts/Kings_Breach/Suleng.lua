@@ -35,7 +35,7 @@ MOD.Suleng = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
-	ExpertID = nil,
+	ExpertID = "U42D35C2922BE1C1B",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -53,7 +53,7 @@ MOD.Suleng = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Suleng = KBM.Language:Add(MOD.Suleng.Name)
--- MOD.Lang.Suleng:SetGerman("")
+MOD.Lang.Suleng:SetGerman("Jäger Suleng") 
 -- MOD.Lang.Suleng:SetFrench("")
 -- MOD.Lang.Suleng:SetRussian("")
 MOD.Suleng.Name = MOD.Lang.Suleng[KBM.Lang]
@@ -67,7 +67,6 @@ function MOD:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Suleng.Name] = self.Suleng,
 	}
-	KBM_Boss[self.Suleng.Name] = self.Suleng	
 end
 
 function MOD:InitVars()

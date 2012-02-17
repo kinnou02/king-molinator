@@ -53,10 +53,10 @@ WG.Lang.Galenir:SetRussian("Воевода Галенир")
 WG.Lang.Debuff = {}
 WG.Lang.Debuff.Festering = KBM.Language:Add("Festering Infection")
 WG.Lang.Debuff.Festering:SetGerman("Eitriger Infekt")
-WG.Lang.Debuff.Festering:SetRussian("Передача сущности")
+WG.Lang.Debuff.Festering:SetRussian("Гнойное заражение")
 WG.Lang.Debuff.Essence = KBM.Language:Add("Essence Transfer")
 WG.Lang.Debuff.Essence:SetGerman("Essenztransfer")
-WG.Lang.Debuff.Essence:SetRussian("Гнойное заражение")
+WG.Lang.Debuff.Essence:SetRussian("Передача сущности")
 
 WG.Galenir.Name = WG.Lang.Galenir[KBM.Lang]
 WG.Descript = WG.Galenir.Name

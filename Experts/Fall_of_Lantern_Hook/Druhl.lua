@@ -35,7 +35,7 @@ MOD.Druhl = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
-	ExpertID = nil,
+	ExpertID = "Expert",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -53,7 +53,7 @@ MOD.Druhl = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Druhl = KBM.Language:Add(MOD.Druhl.Name)
--- MOD.Lang.Druhl:SetGerman("")
+MOD.Lang.Druhl:SetGerman("Flammenbringer Druhl") 
 -- MOD.Lang.Druhl:SetFrench("")
 -- MOD.Lang.Druhl:SetRussian("")
 MOD.Druhl.Name = MOD.Lang.Druhl[KBM.Lang]
@@ -67,7 +67,6 @@ function MOD:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Druhl.Name] = self.Druhl,
 	}
-	KBM_Boss[self.Druhl.Name] = self.Druhl	
 end
 
 function MOD:InitVars()

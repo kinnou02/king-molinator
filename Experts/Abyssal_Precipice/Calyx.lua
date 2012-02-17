@@ -35,6 +35,7 @@ MOD.Calyx = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
+	ExpertID = "Expert",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -66,7 +67,6 @@ function MOD:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Calyx.Name] = self.Calyx,
 	}
-	KBM_Boss[self.Calyx.Name] = self.Calyx	
 end
 
 function MOD:InitVars()

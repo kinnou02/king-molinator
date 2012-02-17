@@ -711,8 +711,8 @@ function KBM.InitOptions()
 	KBM.MainWin.MenuSize = 0
 	KBM.MainWin:SetVisible(false)
 	KBM.MainWin:SetController("border")
-	KBM.MainWin:SetWidth(800)
-	KBM.MainWin:SetHeight(550)
+	KBM.MainWin:SetWidth(820)
+	KBM.MainWin:SetHeight(580)
 	KBM.MainWin:SetTitle("King Boss Mods: Options")
 				
 	if not KBM.Options.Frame.x then
@@ -895,6 +895,7 @@ function KBM.InitOptions()
 		Plug = KBM.MainWin.DefaultTabs(),
 		Raid = KBM.MainWin.DefaultTabs(),
 		Sliver = KBM.MainWin.DefaultTabs(),
+		Master = KBM.MainWin.DefaultTabs(),
 		Group = KBM.MainWin.DefaultTabs(),
 		Selected = {
 			Main = "Main",
@@ -940,7 +941,7 @@ function KBM.InitOptions()
 	local MenuWidth = KBM.MainWin.MenuArea:GetWidth() - KBM.MainWin.SplitFrame:GetWidth() - KBM.MainWin.Scroller.Main:GetWidth() - 6
 	local TabWidth = {
 		Main = (MenuWidth + KBM.MainWin.Scroller.Main:GetWidth()) * 0.5,
-		Instance = ((MenuWidth + KBM.MainWin.Scroller.Main:GetWidth()) * 0.33) + 1,
+		Instance = ((MenuWidth + KBM.MainWin.Scroller.Main:GetWidth()) * 0.25),
 	}
 
 	-- Tab & Scroller Functions
@@ -1151,8 +1152,25 @@ function KBM.InitOptions()
 	KBM.MainWin.Tabs.Sliver.Icon:SetWidth(IconSize_Idle)
 	KBM.MainWin.Tabs.Sliver.Icon:SetAlpha(0.5)
 	KBM.MainWin.Tabs.Sliver.Icon:SetLayer(2)
+	KBM.MainWin.Tabs.Master.Tab = UI.CreateFrame("Frame", "KBM_Master_Tab", KBM.MainWin.MenuArea)
+	KBM.MainWin.Tabs.Master.Tab:SetPoint("BOTTOMLEFT", KBM.MainWin.Tabs.Sliver.Tab, "BOTTOMRIGHT", 1, 0)
+	KBM.MainWin.Tabs.Master.Tab:SetWidth(TabWidth.Instance)
+	KBM.MainWin.Tabs.Master.Tab:SetHeight(TabHeight_Idle)
+	KBM.MainWin.Tabs.Master.Scroller = KBM.MainWin.Scroller.Instance
+	KBM.MainWin.Tabs.Master.Type = "Instance"
+	KBM.MainWin.Tabs.Master.Texture = UI.CreateFrame("Texture", "KBM_Group_Texture", KBM.MainWin.Tabs.Master.Tab)
+	KBM.MainWin.Tabs.Master.Texture:SetTexture("KingMolinator", "Media/Tabber_Off.png")
+	KBM.MainWin.Tabs.Master.Texture:SetPoint("TOPLEFT", KBM.MainWin.Tabs.Master.Tab, "TOPLEFT")
+	KBM.MainWin.Tabs.Master.Texture:SetPoint("BOTTOMRIGHT", KBM.MainWin.Tabs.Master.Tab, "BOTTOMRIGHT")
+	KBM.MainWin.Tabs.Master.Icon = UI.CreateFrame("Texture", "KBM_Group_Icon", KBM.MainWin.Tabs.Master.Tab)
+	KBM.MainWin.Tabs.Master.Icon:SetTexture("KingMolinator", "Media/Master_Icon.png")
+	KBM.MainWin.Tabs.Master.Icon:SetPoint("CENTER", KBM.MainWin.Tabs.Master.Tab, "CENTER")
+	KBM.MainWin.Tabs.Master.Icon:SetHeight(IconSize_Idle)
+	KBM.MainWin.Tabs.Master.Icon:SetWidth(IconSize_Idle)
+	KBM.MainWin.Tabs.Master.Icon:SetAlpha(0.5)
+	KBM.MainWin.Tabs.Master.Icon:SetLayer(2)
 	KBM.MainWin.Tabs.Group.Tab = UI.CreateFrame("Frame", "KBM_Group_Tab", KBM.MainWin.MenuArea)
-	KBM.MainWin.Tabs.Group.Tab:SetPoint("BOTTOMLEFT", KBM.MainWin.Tabs.Sliver.Tab, "BOTTOMRIGHT", 1, 0)
+	KBM.MainWin.Tabs.Group.Tab:SetPoint("BOTTOMLEFT", KBM.MainWin.Tabs.Master.Tab, "BOTTOMRIGHT", 1, 0)
 	KBM.MainWin.Tabs.Group.Tab:SetWidth(TabWidth.Instance)
 	KBM.MainWin.Tabs.Group.Tab:SetHeight(TabHeight_Idle)
 	KBM.MainWin.Tabs.Group.Scroller = KBM.MainWin.Scroller.Instance
@@ -1191,6 +1209,12 @@ function KBM.InitOptions()
 	KBM.MainWin.Tabs.Sliver.Menu:SetPoint("BOTTOMRIGHT", KBM.MainWin.Masks.Instance, "BOTTOMRIGHT")
 	KBM.MainWin.Tabs.Sliver.Menu:SetVisible(false)
 	KBM.MainWin.Tabs:CreateFunctions("Sliver")
+	KBM.MainWin.Tabs.Master.Menu = UI.CreateFrame("Frame", "KBM_Master_Menu", KBM.MainWin.Masks.Instance)
+	KBM.MainWin.Tabs.Master.Menu:SetMouseMasking("limited")
+	KBM.MainWin.Tabs.Master.Menu:SetPoint("TOPLEFT", KBM.MainWin.Masks.Instance, "TOPLEFT")
+	KBM.MainWin.Tabs.Master.Menu:SetPoint("BOTTOMRIGHT", KBM.MainWin.Masks.Instance, "BOTTOMRIGHT")
+	KBM.MainWin.Tabs.Master.Menu:SetVisible(false)
+	KBM.MainWin.Tabs:CreateFunctions("Master")
 	KBM.MainWin.Tabs.Group.Menu = UI.CreateFrame("Frame", "KBM_Group_Menu", KBM.MainWin.Masks.Instance)
 	KBM.MainWin.Tabs.Group.Menu:SetMouseMasking("limited")
 	KBM.MainWin.Tabs.Group.Menu:SetPoint("TOPLEFT", KBM.MainWin.Masks.Instance, "TOPLEFT")

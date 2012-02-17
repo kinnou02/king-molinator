@@ -65,12 +65,13 @@ HH.Lang.Ability.Shock:SetRussian("Гидростатический удар")
 HH.Lang.Mechanic = {}
 HH.Lang.Mechanic.Air = KBM.Language:Add("Air Phase")
 HH.Lang.Mechanic.Air:SetGerman("Flug Phase")
+HH.Lang.Mechanic.Air:SetRussian("Воздушная фаза")
 
 -- Unit Dictionary
 HH.Lang.Unit = {}
 HH.Lang.Unit.Sea = KBM.Language:Add("Seaspawn")
 HH.Lang.Unit.Sea:SetGerman("Meeresbrut")
-HH.Lang.Unit.Sea:SetRussian("Приливная волна")
+HH.Lang.Unit.Sea:SetRussian("Порождение моря")
 HH.Lang.Unit.Hive = KBM.Language:Add("Seaclaw Hive")
 HH.Lang.Unit.Hive:SetGerman("Seeklauennest")
 

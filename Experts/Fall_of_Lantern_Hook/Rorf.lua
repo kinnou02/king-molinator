@@ -34,6 +34,7 @@ MOD.Rorf = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
+	ExpertID = "Expert",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -51,7 +52,7 @@ MOD.Rorf = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Rorf = KBM.Language:Add(MOD.Rorf.Name)
--- MOD.Lang.Rorf:SetGerman("")
+MOD.Lang.Rorf:SetGerman("Rorf")
 -- MOD.Lang.Rorf:SetFrench("")
 -- MOD.Lang.Rorf:SetRussian("")
 MOD.Rorf.Name = MOD.Lang.Rorf[KBM.Lang]
@@ -63,8 +64,11 @@ MOD.Lang.Ability = {}
 -- Unit Dictionary
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Sneaky = KBM.Language:Add("Sneaky")
+MOD.Lang.Unit.Sneaky.German = "Schleich"
 MOD.Lang.Unit.Scratchy = KBM.Language:Add("Scratchy")
+MOD.Lang.Unit.Scratchy.German = "Kratz"
 MOD.Lang.Unit.Scary = KBM.Language:Add("Scary")
+MOD.Lang.Unit.Scary.German = "Schreck" 
 
 MOD.Sneaky = {
 	Mod = MOD,
@@ -75,6 +79,7 @@ MOD.Sneaky = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
+	ExpertID = "Expert",
 	TimeOut = 5,
 }
 
@@ -87,6 +92,7 @@ MOD.Scratchy = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
+	ExpertID = "Expert",
 	TimeOut = 5,
 }
 
@@ -99,6 +105,7 @@ MOD.Scary = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
+	ExpertID = "Expert",
 	TimeOut = 5,
 }
 
@@ -110,10 +117,6 @@ function MOD:AddBosses(KBM_Boss)
 		[self.Scratchy.Name] = self.Scratchy,
 		[self.Scary.Name] = self.Scary,
 	}
-	KBM_Boss[self.Rorf.Name] = self.Rorf
-	KBM.SubBoss[self.Sneaky.Name] = self.Sneaky
-	KBM.SubBoss[self.Scratchy.Name] = self.Scratchy
-	KBM.SubBoss[self.Scary.Name] = self.Scary
 end
 
 function MOD:InitVars()

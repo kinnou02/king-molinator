@@ -35,7 +35,7 @@ MOD.Krasimir = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
-	ExpertID = nil,
+	ExpertID = "U5AC4C2CB54AAAE6C",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -53,7 +53,7 @@ MOD.Krasimir = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Krasimir = KBM.Language:Add(MOD.Krasimir.Name)
--- MOD.Lang.Krasimir:SetGerman("")
+MOD.Lang.Krasimir:SetGerman("Krasimir Barionov")
 -- MOD.Lang.Krasimir:SetFrench("")
 -- MOD.Lang.Krasimir:SetRussian("")
 MOD.Krasimir.Name = MOD.Lang.Krasimir[KBM.Lang]
@@ -62,12 +62,28 @@ MOD.Descript = MOD.Krasimir.Name
 -- Ability Dictionary
 MOD.Lang.Ability = {}
 
+MOD.KrasPhaseTwo = {
+	Mod = MOD,
+	Level = 52,
+	Active = false,
+	Name = MOD.Lang.Krasimir[KBM.Lang],
+	Menu = {},
+	Dead = false,
+	Available = false,
+	UnitID = nil,
+	ExpertID = "U31EE805D62BE070F",
+	TimeOut = 5,
+}
+
+MOD.Krasimir.AltBossList = {
+	[1] = MOD.KrasPhaseTwo,
+}
+
 function MOD:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Krasimir.Name] = self.Krasimir,
 	}
-	KBM_Boss[self.Krasimir.Name] = self.Krasimir	
 end
 
 function MOD:InitVars()
@@ -133,8 +149,10 @@ end
 
 function MOD:Death(UnitID)
 	if self.Krasimir.UnitID == UnitID then
-		self.Krasimir.Dead = true
-		return true
+		if self.Phase == 2 then
+			self.Krasimir.Dead = true
+			return true
+		end
 	end
 	return false
 end
@@ -152,9 +170,14 @@ function MOD:UnitHPCheck(unitDetails, unitID)
 					self.Krasimir.Casting = false
 					self.Krasimir.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase("Single")
+					if self.Krasimir.ExpertID == unitDetails.type then
+						self.PhaseObj:SetPhase("1")
+						self.Phase = 1
+					else
+						self.PhaseObj:SetPhase("2")
+						self.Phase = 2
+					end
 					self.PhaseObj.Objectives:AddPercent(self.Krasimir.Name, 0, 100)
-					self.Phase = 1
 				end
 				self.Krasimir.UnitID = unitID
 				self.Krasimir.Available = true

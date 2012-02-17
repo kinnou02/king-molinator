@@ -34,6 +34,7 @@ MOD.Verosa = {
 	-- AlertsRef = {},
 	Available = false,
 	UnitID = nil,
+	ExpertID = "U22D5027D3A7FDA7C",
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
@@ -52,7 +53,7 @@ MOD.Verosa = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Verosa = KBM.Language:Add(MOD.Verosa.Name)
--- MOD.Lang.Verosa:SetGerman("")
+MOD.Lang.Verosa:SetGerman("Matrone Verosa")
 -- MOD.Lang.Verosa:SetFrench("")
 -- MOD.Lang.Verosa:SetRussian("")
 MOD.Verosa.Name = MOD.Lang.Verosa[KBM.Lang]
@@ -64,7 +65,9 @@ MOD.Lang.Ability = {}
 -- Unit Dictionary
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Lesch = KBM.Language:Add("Lesch")
+MOD.Lang.Unit.Lesch.German = "Lesch"
 MOD.Lang.Unit.Gurze = KBM.Language:Add("Gurze")
+MOD.Lang.Unit.Gurze.German = "Gurze" 
 
 MOD.Lesch = {
 	Mod = MOD,
@@ -75,6 +78,7 @@ MOD.Lesch = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
+	ExpertID = "Expert",
 	TimeOut = 5,
 }
 
@@ -87,6 +91,7 @@ MOD.Gurze = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
+	ExpertID = "Expert",
 	TimeOut = 5,
 }
 
@@ -97,9 +102,6 @@ function MOD:AddBosses(KBM_Boss)
 		[self.Lesch.Name] = self.Lesch,
 		[self.Gurze.Name] = self.Gurze,
 	}
-	KBM_Boss[self.Verosa.Name] = self.Verosa
-	KBM.SubBoss[self.Lesch.Name] = self.Lesch
-	KBM.SubBoss[self.Gurze.Name] = self.Gurze
 end
 
 function MOD:InitVars()
@@ -201,7 +203,7 @@ function MOD:UnitHPCheck(unitDetails, unitID)
 				end
 				BossObj.UnitID = unitID
 				BossObj.Available = true
-				return self.Verosa
+				return BossObj
 			end
 		end
 	end

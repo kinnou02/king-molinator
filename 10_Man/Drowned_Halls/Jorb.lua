@@ -62,6 +62,7 @@ AJ.Lang.Ability.Impact.Russian = "Сильный удар"
 AJ.Lang.Notify = {}
 AJ.Lang.Notify.Stand = KBM.Language:Add("(%a*), stand to attention!")
 AJ.Lang.Notify.Stand.German = "(%a*), Stillgestanden!"
+AJ.Lang.Notify.Stand.Russian = "(%a*), внимание!"
 
 -- Debuff Dictionary
 AJ.Lang.Debuff = {}

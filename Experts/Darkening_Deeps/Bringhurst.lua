@@ -67,7 +67,6 @@ function MOD:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Bringhurst.Name] = self.Bringhurst,
 	}
-	KBM_Boss[self.Bringhurst.Name] = self.Bringhurst	
 end
 
 function MOD:InitVars()

@@ -23,6 +23,7 @@ local DL = {
 DL.Letareus = {
 	Mod = DL,
 	ChronicleID = "U0C72E33D4A11BCFE",
+	RaidID = "U03AED7765DDCDB5D",
 	Level = 52,
 	Active = false,
 	Name = "Duke Letareus",
@@ -60,8 +61,11 @@ DL.Lang.Ability.Wrath.Russian = "Ярость герцога"
 -- Mechanic Dictionary
 DL.Lang.Mechanic = {}
 DL.Lang.Mechanic.TankPhase = KBM.Language:Add("Tank Phase")
+DL.Lang.Mechanic.TankPhase.Russian = "Фаза танкования"
 DL.Lang.Mechanic.Tank = KBM.Language:Add("Tank")
+DL.Lang.Mechanic.Tank.Russian = "Танкуем"
 DL.Lang.Mechanic.Kite = KBM.Language:Add("Kite")
+DL.Lang.Mechanic.Kite.Russian = "Кайтим"
 
 DL.Descript = DL.Letareus.Name
 

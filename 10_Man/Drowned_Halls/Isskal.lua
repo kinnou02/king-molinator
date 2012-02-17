@@ -59,6 +59,7 @@ IL.Lang.Ability.Shard.German = "Eissplitter"
 IL.Lang.Ability.Shard.Russian = "Осколок льда"
 IL.Lang.Ability.Wave = KBM.Language:Add("Glacial Wave")
 IL.Lang.Ability.Wave.German = "Gletscherwelle"
+IL.Lang.Ability.Wave.Russian = "Ледяная волна"
 
 -- Mechanic Dictionary
 IL.Lang.Mechanic = {}
@@ -70,15 +71,19 @@ IL.Lang.Mechanic.Clock = KBM.Language:Add("Clockwise")
 IL.Lang.Mechanic.Clock.German = "Im Uhrzeigersinn"
 IL.Lang.Mechanic.WhirlpoolEnd = KBM.Language:Add("Whirlpool ends")
 IL.Lang.Mechanic.WhirlpoolEnd.German = "Whirlpool beendet"
+IL.Lang.Mechanic.WhirlpoolEnd.Russian = "Завершение водоворота"
 IL.Lang.Mechanic.Reverse = KBM.Language:Add("Changing direction")
 IL.Lang.Mechanic.Reverse.German = "Richtung wechseln"
+IL.Lang.Mechanic.Reverse.Russian = "Смена направления"
 
 -- Mechanic Notify
 IL.Lang.Notify = {}
 IL.Lang.Notify.Whirlpool = KBM.Language:Add("Go with the current - or die!")
 IL.Lang.Notify.Whirlpool.German = "Folgt dem Strom, oder sterbt!"
+IL.Lang.Notify.Whirlpool.Russian = "Плывите по течению - или умрите!"
 IL.Lang.Notify.Reverse = KBM.Language:Add("You're going the wrong way, fools!")
 IL.Lang.Notify.Reverse.German = "Ihr Narren geht in die falsche Richtung!"
+IL.Lang.Notify.Reverse.Russian = "Вы не туда идете, придурки!"
 
 -- Verbose Dictionary
 IL.Lang.Verbose = {}
@@ -90,6 +95,7 @@ IL.Lang.Verbose.Outer = "Outer"
 IL.Lang.Menu = {}
 IL.Lang.Menu.WhirlpoolFirst = KBM.Language:Add("First "..IL.Lang.Mechanic.Whirlpool[KBM.Lang])
 IL.Lang.Menu.WhirlpoolFirst.German = "Erster "..IL.Lang.Mechanic.Whirlpool[KBM.Lang]
+IL.Lang.Menu.WhirlpoolFirst.Russian  = "Первый "..IL.Lang.Mechanic.Whirlpool[KBM.Lang]
 
 IL.Isskal.Name = IL.Lang.Isskal[KBM.Lang]
 IL.Descript = IL.Isskal.Name

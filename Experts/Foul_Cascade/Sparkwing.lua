@@ -35,7 +35,7 @@ MOD.Sparkwing = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
-	ExpertID = nil,
+	ExpertID = "Expert",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -53,7 +53,7 @@ MOD.Sparkwing = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Sparkwing = KBM.Language:Add(MOD.Sparkwing.Name)
--- MOD.Lang.Sparkwing:SetGerman("")
+MOD.Lang.Sparkwing:SetGerman("Funkenschwinge")
 -- MOD.Lang.Sparkwing:SetFrench("")
 -- MOD.Lang.Sparkwing:SetRussian("")
 MOD.Sparkwing.Name = MOD.Lang.Sparkwing[KBM.Lang]
@@ -67,7 +67,6 @@ function MOD:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Sparkwing.Name] = self.Sparkwing,
 	}
-	KBM_Boss[self.Sparkwing.Name] = self.Sparkwing	
 end
 
 function MOD:InitVars()

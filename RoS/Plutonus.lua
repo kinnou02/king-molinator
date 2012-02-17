@@ -26,6 +26,7 @@ PI.Plutonus = {
 	Active = false,
 	Name = "Plutonus the Immortal",
 	NameShort = "Plutonus",
+	RaidID = "U2DB0546F4CB868BE",
 	Dead = false,
 	Available = false,
 	TimersRef = {},
@@ -62,6 +63,7 @@ PI.Lang.Plutonus.Russian = "Плутон Бессмертный"
 PI.Lang.Ability = {}
 PI.Lang.Ability.Sleep = KBM.Language:Add("Walking Sleep")
 PI.Lang.Ability.Sleep.German = "Wandelnder Schlaf" 
+PI.Lang.Ability.Sleep.Russian = "Сон на ходу" 
 
 PI.Plutonus.Name = PI.Lang.Plutonus[KBM.Lang]
 PI.Descript = PI.Plutonus.Name

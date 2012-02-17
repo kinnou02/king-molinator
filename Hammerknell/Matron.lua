@@ -71,6 +71,7 @@ MZ.Lang.Ability = {}
 MZ.Lang.Ability.Concussion = KBM.Language:Add("Dark Concussion")
 MZ.Lang.Ability.Concussion.German = "Dunkle Erschütterung"
 MZ.Lang.Ability.Concussion.French = "Concussion sombre"
+MZ.Lang.Ability.Concussion.Russian = "Темное сотрясение"
 MZ.Lang.Ability.Blast = KBM.Language:Add("Hideous Blast")
 MZ.Lang.Ability.Blast.German = "Schrecklicher Schlag"
 MZ.Lang.Ability.Blast.French = "Explosion atroce"
@@ -81,6 +82,7 @@ MZ.Lang.Ability.Mark.French = "Marque de l'oubli"
 MZ.Lang.Ability.Mark.Russian = "Знак забвения"
 MZ.Lang.Ability.Shadow = KBM.Language:Add("Shadow Strike")
 MZ.Lang.Ability.Shadow.German = "Schattenschlag"
+MZ.Lang.Ability.Shadow.Russian = "Поражение тенью"
 MZ.Lang.Ability.Ichor = KBM.Language:Add("Revolting Ichor")
 MZ.Lang.Ability.Ichor.German = "Abscheulicher Eiter"
 MZ.Lang.Ability.Ichor.Russian = "Омерзительный гной"
@@ -90,15 +92,19 @@ MZ.Lang.Debuff = {}
 MZ.Lang.Debuff.Curse = KBM.Language:Add("Matron's Curse")
 MZ.Lang.Debuff.Curse.German = "Fluch der Matrone"
 MZ.Lang.Debuff.Curse.French = "Mal\195\169diction de la matrone"
+MZ.Lang.Debuff.Curse.Russian = "Проклятие старухи"
 MZ.Lang.Debuff.Spiritual = KBM.Language:Add("Spiritual Exhaustion")
 MZ.Lang.Debuff.Spiritual.German = "Spirituelle Erschöpfung"
+MZ.Lang.Debuff.Spiritual.Russian = "Духовное истощение"
 
 -- Verbose Dictionary
 MZ.Lang.Verbose = {}
 MZ.Lang.Verbose.Adds = KBM.Language:Add("Adds spawn")
 MZ.Lang.Verbose.Adds.German = "Adds spawnen"
+MZ.Lang.Verbose.Adds.Russian = "Призыв аддов"
 MZ.Lang.Verbose.Spiritual = KBM.Language:Add(MZ.Lang.Debuff.Spiritual[KBM.Lang].." fades")
 MZ.Lang.Verbose.Spiritual.German = MZ.Lang.Debuff.Spiritual[KBM.Lang].." ausgelaufen!"
+MZ.Lang.Verbose.Spiritual.Russian = MZ.Lang.Debuff.Spiritual[KBM.Lang].." заканчивается"
 
 MZ.Matron.Name = MZ.Lang.Matron[KBM.Lang]
 MZ.Descript = MZ.Matron.Name

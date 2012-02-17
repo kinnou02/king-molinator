@@ -35,7 +35,7 @@ MOD.Eliam = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
-	ExpertID = nil,
+	ExpertID = "U115ACF3868DD6535",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -53,7 +53,7 @@ MOD.Eliam = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Eliam = KBM.Language:Add(MOD.Eliam.Name)
--- MOD.Lang.Eliam:SetGerman("")
+MOD.Lang.Eliam:SetGerman("Eliam der Verderbte") 
 -- MOD.Lang.Eliam:SetFrench("")
 -- MOD.Lang.Eliam:SetRussian("")
 MOD.Eliam.Name = MOD.Lang.Eliam[KBM.Lang]
@@ -67,7 +67,6 @@ function MOD:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Eliam.Name] = self.Eliam,
 	}
-	KBM_Boss[self.Eliam.Name] = self.Eliam	
 end
 
 function MOD:InitVars()

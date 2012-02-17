@@ -35,7 +35,7 @@ MOD.Atrophinius = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
-	ExpertID = nil,
+	ExpertID = "U40F731D921A7F4EF",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -53,7 +53,7 @@ MOD.Atrophinius = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Atrophinius = KBM.Language:Add(MOD.Atrophinius.Name)
--- MOD.Lang.Atrophinius:SetGerman("")
+MOD.Lang.Atrophinius:SetGerman("Atrophinius der Gefallene") 
 -- MOD.Lang.Atrophinius:SetFrench("")
 -- MOD.Lang.Atrophinius:SetRussian("")
 MOD.Atrophinius.Name = MOD.Lang.Atrophinius[KBM.Lang]
@@ -67,7 +67,6 @@ function MOD:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Atrophinius.Name] = self.Atrophinius,
 	}
-	KBM_Boss[self.Atrophinius.Name] = self.Atrophinius	
 end
 
 function MOD:InitVars()

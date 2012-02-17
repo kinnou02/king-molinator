@@ -38,6 +38,7 @@ MOD.Bonehew = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
+	ExpertID = "Expert",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -75,6 +76,7 @@ MOD.Fragment = {
 	Name = MOD.Lang.Unit.Fragment[KBM.Lang],
 	UnitList = {},
 	Ignore = true,
+	ExpertID = "Expert",
 	Type = "multi",
 }
 
@@ -82,8 +84,8 @@ function MOD:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Bonehew.Name] = self.Bonehew,
+		[self.Fragment.Name] = self.Fragment,
 	}
-	KBM_Boss[self.Bonehew.Name] = self.Bonehew	
 end
 
 function MOD:InitVars()

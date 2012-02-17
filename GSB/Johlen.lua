@@ -26,6 +26,7 @@ IJ.Johlen = {
 	Active = false,
 	Name = "Infiltrator Johlen",
 	NameShort = "Johlen",
+	ChronicleID = "U24253CDD6002C8D5",
 	Menu = {},
 	AlertsRef = {},
 	Dead = false,
@@ -291,7 +292,7 @@ end
 
 function IJ:Start()
 	-- Create Alerts
-	self.Johlen.AlertsRef.Blinding = KBM.Alert:Create(self.Lang.Ability.Blinding[KBM.Lang], 5, true, true, "yellow")
+	self.Johlen.AlertsRef.Blinding = KBM.Alert:Create(self.Lang.Ability.Blinding[KBM.Lang], 6, true, true, "yellow")
 	self.Johlen.AlertsRef.Bomb = KBM.Alert:Create(self.Lang.Verbose.Bomb[KBM.Lang], 25, false, true, "red")
 	self.Johlen.AlertsRef.Bomb.MenuName = self.Lang.Unit.Bomb[KBM.Lang]
 	KBM.Defaults.AlertObj.Assign(self.Johlen)

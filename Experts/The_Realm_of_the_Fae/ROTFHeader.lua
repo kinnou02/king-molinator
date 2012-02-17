@@ -12,7 +12,7 @@ local MOD = {
 	IsInstance = true,
 	Name = "The Realm of the Fae",
 	Type = "Expert",
-	ID = "MOD",
+	ID = "The_Realm_of_the_Fae",
 }
 
 -- Link Mods

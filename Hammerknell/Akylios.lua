@@ -112,6 +112,15 @@ AK.Lasher = {
 	Type = "multi",
 }
 
+AK.Apostle = {
+	Mod = AK,
+	Level = "??",
+	Name = "Apostle of Jornaru",
+	UnitList = {},
+	Ignore = true,
+	Type = "multi",
+}
+
 KBM.RegisterMod(AK.ID, AK)
 
 AK.Lang.Akylios = KBM.Language:Add(AK.Akylios.Name)
@@ -122,9 +131,15 @@ AK.Jornaru.Name = AK.Lang.Jornaru[KBM.Lang]
 -- Unit List
 AK.Lang.Unit = {}
 AK.Lang.Unit.Stinger = KBM.Language:Add(AK.Stinger.Name)
+AK.Lang.Unit.Stinger.German = "Stachel des Akylios"
 AK.Stinger.Name = AK.Lang.Unit.Stinger[KBM.Lang]
 AK.Lang.Unit.Lasher = KBM.Language:Add(AK.Lasher.Name)
+AK.Lang.Unit.Lasher.German = "Peitscher des Akylios"
 AK.Lasher.Name = AK.Lang.Unit.Lasher[KBM.Lang]
+AK.Lang.Unit.Apostle = KBM.Language:Add(AK.Apostle.Name)
+AK.Apostle.Name = AK.Lang.Unit.Apostle[KBM.Lang]
+AK.Lang.Unit.ApostleShort = KBM.Language:Add("Apostle")
+AK.Apostle.NameShort = AK.Lang.Unit.ApostleShort[KBM.Lang]
 
 -- Ability Dictionary.
 AK.Lang.Ability = {}
@@ -133,6 +148,8 @@ AK.Lang.Ability.Decay.German = "Geistiger Verfall"
 AK.Lang.Ability.Breath = KBM.Language:Add("Breath of Madness")
 AK.Lang.Ability.Breath.German = "Hauch des Wahnsinns"
 AK.Lang.Ability.Grave = KBM.Language:Add("Watery Grave")
+AK.Lang.Ability.Storm = KBM.Language:Add("Tidal Storm")
+AK.Lang.Ability.Storm.German = "Flutsturm"
 
 -- Debuff Dictionary.
 AK.Lang.Debuff = {}
@@ -152,10 +169,12 @@ AK.Lang.Mechanic.Submerge.German = "Akylios taucht unter"
 -- Notify Dictionary
 AK.Lang.Notify = {}
 AK.Lang.Notify.Orb = KBM.Language:Add("Jornaru launches a suffocating orb at (%a*)")
+AK.Lang.Notify.Orb.German = "Jornaru wirft eine Erstickungskugel auf (%a*)"
 
 -- Say Dictionary
 AK.Lang.Say = {}
 AK.Lang.Say.PhaseTwo = KBM.Language:Add("Master, your plan is fulfilled. After a millennia of manipulation, the wards of Hammerknell are shattered. I release you, Akylios! Come forth and claim this world.")
+AK.Lang.Say.PhaseTwo.German = "Meister, Euer Plan ist vollendet. Nach Millennium der Manipulation fallen die Schutzzauber Hammerhalls. Ich befreie Euch, Akylios! Kommt, nehmt Euch diese Welt." 
 
 -- Options Dictionary.
 AK.Lang.Options = {}
@@ -178,11 +197,13 @@ function AK:AddBosses(KBM_Boss)
 		[self.Akylios.Name] = self.Akylios,
 		[self.Stinger.Name] = self.Stinger,
 		[self.Lasher.Name] = self.Lasher,
+		[self.Apostle.Name] = self.Apostle,
 	}
 	KBM_Boss[self.Jornaru.Name] = self.Jornaru
 	KBM_Boss[self.Akylios.Name] = self.Akylios
 	KBM.SubBoss[self.Stinger.Name] = self.Stinger
-	KBM.SubBoss[self.Lasher.Name] = self.Lasher	
+	KBM.SubBoss[self.Lasher.Name] = self.Lasher
+	KBM.SubBoss[self.Apostle.Name] = self.Apostle
 end
 
 function AK:InitVars()

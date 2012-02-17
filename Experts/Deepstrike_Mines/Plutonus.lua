@@ -35,6 +35,7 @@ MOD.Plutonus = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
+	ExpertID = "Expert",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -66,7 +67,6 @@ function MOD:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Plutonus.Name] = self.Plutonus,
 	}
-	KBM_Boss[self.Plutonus.Name] = self.Plutonus	
 end
 
 function MOD:InitVars()

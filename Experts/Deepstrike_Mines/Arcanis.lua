@@ -35,6 +35,7 @@ MOD.Arcanis = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
+	ExpertID = "Expert",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -66,7 +67,6 @@ function MOD:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Arcanis.Name] = self.Arcanis,
 	}
-	KBM_Boss[self.Arcanis.Name] = self.Arcanis	
 end
 
 function MOD:InitVars()

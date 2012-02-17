@@ -80,6 +80,7 @@ DF.Lang.Debuff.Soul:SetRussian("Раскачать душу")
 DF.Lang.Unit = {}
 DF.Lang.Unit.Force = KBM.Language:Add("Force of Corruption")
 DF.Lang.Unit.Force:SetGerman("Verderbende Kraft")
+DF.Lang.Unit.Force:SetRussian("Сила искажения")
 
 DF.Force = {
 	Mod = DF,

@@ -3,8 +3,8 @@
 -- Copyright 2011
 --
 
-KBMEXAP_Settings = nil
-chKBMEXAP_Settings = nil
+KBMEXRD_Settings = nil
+chKBMEXRD_Settings = nil
 
 local MOD = {
 	Header = nil,
@@ -12,7 +12,7 @@ local MOD = {
 	IsInstance = true,
 	Name = "Runic Descent",
 	Type = "Expert",
-	ID = "MOD",
+	ID = "Runic_Descent",
 }
 
 -- Link Mods
@@ -21,7 +21,7 @@ local KBM = AddonData.data
 KBM.RegisterMod(MOD.Name, MOD)
 
 KBM.Language:Add(MOD.Name)
--- KBM.Language[MOD.Name]:SetGerman("")
+KBM.Language[MOD.Name]:SetGerman("Runental")
 -- KBM.Language[MOD.Name]:SetFrench("")
 -- KBM.Language[MOD.Name]:SetRussian("")
 

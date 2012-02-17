@@ -26,6 +26,7 @@ PH.Hylas = {
 	Active = false,
 	Name = "Prince Hylas",
 	NameShort = "Hylas",
+	ChronicleID = "U48BA191868D74700",
 	Menu = {},
 	Castbar = nil,
 	TimersRef = {},

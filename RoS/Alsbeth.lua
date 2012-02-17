@@ -29,6 +29,8 @@ AD.Alsbeth = {
 	Active = false,
 	Name = "Alsbeth the Discordant",
 	NameShort = "Alsbeth",
+	RaidID = "U54832B5406F7E5EF",
+	IgnoreID = "U210226B462CFF74C",
 	Dead = false,
 	TimersRef = {},
 	AlertsRef = {},
@@ -98,31 +100,43 @@ AD.Lang.Buff.Shield:SetRussian("Щит тьмы")
 AD.Lang.Verbose = {}
 AD.Lang.Verbose.Phase = KBM.Language:Add("Until air phase")
 AD.Lang.Verbose.Phase:SetGerman("bis zur Flugphase")
-AD.Lang.Verbose.PunishWarn = KBM.Language:Add(AD.Lang.Ability.Punish[KBM.Lang].." (Personal Alert)")
+AD.Lang.Verbose.Phase:SetRussian("Воздушная фаза")
+AD.Lang.Verbose.PunishWarn = KBM.Language:Add(AD.Lang.Ability.Punish[KBM.Lang].." (Personal Alert, Warning)")
 AD.Lang.Verbose.PunishWarn:SetGerman(AD.Lang.Ability.Punish[KBM.Lang].." (Eigene Warnung)")
-AD.Lang.Verbose.Punish = KBM.Language:Add(AD.Lang.Ability.Punish[KBM.Lang].." (Personal Alert)")
+AD.Lang.Verbose.PunishWarn:SetRussian(AD.Lang.Ability.Punish[KBM.Lang].." (персональное)")
+AD.Lang.Verbose.Punish = KBM.Language:Add(AD.Lang.Ability.Punish[KBM.Lang].." (Personal Alert, Duration)")
 AD.Lang.Verbose.Punish:SetGerman(AD.Lang.Ability.Punish[KBM.Lang].." (Eigene Warnung)")
+AD.Lang.Verbose.Punish:SetRussian(AD.Lang.Ability.Punish[KBM.Lang].." (персональное)")
 AD.Lang.Verbose.Meteor = KBM.Language:Add(AD.Lang.Ability.Meteor[KBM.Lang].." (First in phase 2)")
 AD.Lang.Verbose.Meteor:SetGerman(AD.Lang.Ability.Meteor[KBM.Lang].." (Erste in Phase 2)")
+AD.Lang.Verbose.Meteor:SetRussian(AD.Lang.Ability.Meteor[KBM.Lang].." (первый на фазе 2)")
 
 -- Unit Dictionary
 AD.Lang.Unit = {}
 AD.Lang.Unit.Pillar = KBM.Language:Add("Discordant Pillar")
 AD.Lang.Unit.Pillar:SetGerman("Zwietracht-Säule")
+AD.Lang.Unit.Pillar:SetRussian("Столб раздора")
 AD.Lang.Unit.PillarShort = KBM.Language:Add("Pillar")
 AD.Lang.Unit.PillarShort:SetGerman("Säule")
+AD.Lang.Unit.PillarShort:SetRussian("Столб")
 AD.Lang.Unit.Harbinger = KBM.Language:Add("Soul Harbinger")
 AD.Lang.Unit.Harbinger:SetGerman("Seelen-Vorbote")
+AD.Lang.Unit.Harbinger:SetRussian("Духовный вестник")
 AD.Lang.Unit.HarbingerShort = KBM.Language:Add("Harbinger")
 AD.Lang.Unit.HarbingerShort:SetGerman("Vorbote")
+AD.Lang.Unit.HarbingerShort:SetRussian("Вестник")
 AD.Lang.Unit.Thief = KBM.Language:Add("Soul Thief")
 AD.Lang.Unit.Thief:SetGerman("Seelen-Dieb")
+AD.Lang.Unit.Thief:SetRussian("Вор душ")
 AD.Lang.Unit.ThiefShort = KBM.Language:Add("Thief")
 AD.Lang.Unit.ThiefShort:SetGerman("Dieb")
+AD.Lang.Unit.ThiefShort:SetRussian("Вор")
 AD.Lang.Unit.Magus = KBM.Language:Add("Soul Magus")
 AD.Lang.Unit.Magus:SetGerman("Seelen-Magus")
+AD.Lang.Unit.Magus:SetRussian("Маг души")
 AD.Lang.Unit.MagusShort = KBM.Language:Add("Magi")
 AD.Lang.Unit.MagusShort:SetGerman("Magus")
+AD.Lang.Unit.MagusShort:SetRussian("Маг")
 
 AD.Harbinger = {
 	Mod = AD,

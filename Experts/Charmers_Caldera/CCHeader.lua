@@ -3,8 +3,8 @@
 -- Copyright 2011
 --
 
-KBMEXAP_Settings = nil
-chKBMEXAP_Settings = nil
+KBMEXCC_Settings = nil
+chKBMEXCC_Settings = nil
 
 local MOD = {
 	Header = nil,
@@ -12,7 +12,7 @@ local MOD = {
 	IsInstance = true,
 	Name = "Charmer's Caldera",
 	Type = "Expert",
-	ID = "MOD",
+	ID = "Charmers_Caldera",
 }
 
 -- Link Mods

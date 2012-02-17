@@ -3,16 +3,17 @@
 -- Copyright 2011
 --
 
-KBMEXAP_Settings = nil
-chKBMEXAP_Settings = nil
+KBMEXUCR_Settings = nil
+chKBMEXUCR_Settings = nil
 
 local MOD = {
+	Directory = "Upper_Caduceus_Rise",
 	Header = nil,
 	Enabled = true,
 	IsInstance = true,
 	Name = "Upper Caduceus Rise",
 	Type = "Expert",
-	ID = "MOD",
+	ID = "Upper_Caduceus_Rise",
 }
 
 -- Link Mods

@@ -3,8 +3,8 @@
 -- Copyright 2011
 --
 
-KBMEXAP_Settings = nil
-chKBMEXAP_Settings = nil
+KBMEXTIT_Settings = nil
+chKBMEXTIT_Settings = nil
 
 local MOD = {
 	Header = nil,
@@ -12,7 +12,7 @@ local MOD = {
 	IsInstance = true,
 	Name = "The Iron Tomb",
 	Type = "Expert",
-	ID = "MOD",
+	ID = "The_Iron_Tomb",
 }
 
 -- Link Mods

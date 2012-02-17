@@ -35,7 +35,7 @@ MOD.Falidor = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
-	ExpertID = nil,
+	ExpertID = "U76E6B91B7D0F7456",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -53,7 +53,7 @@ MOD.Falidor = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Falidor = KBM.Language:Add(MOD.Falidor.Name)
--- MOD.Lang.Falidor:SetGerman("")
+MOD.Lang.Falidor:SetGerman("Bewahrer Falidor") 
 -- MOD.Lang.Falidor:SetFrench("")
 -- MOD.Lang.Falidor:SetRussian("")
 MOD.Falidor.Name = MOD.Lang.Falidor[KBM.Lang]

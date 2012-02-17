@@ -35,7 +35,7 @@ MOD.Shadehorror = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
-	ExpertID = nil,
+	ExpertID = "Expert",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -53,7 +53,7 @@ MOD.Shadehorror = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Shadehorror = KBM.Language:Add(MOD.Shadehorror.Name)
--- MOD.Lang.Shadehorror:SetGerman("")
+MOD.Lang.Shadehorror:SetGerman("Schattenschrecktrugbild") 
 -- MOD.Lang.Shadehorror:SetFrench("")
 -- MOD.Lang.Shadehorror:SetRussian("")
 MOD.Shadehorror.Name = MOD.Lang.Shadehorror[KBM.Lang]
@@ -67,7 +67,6 @@ function MOD:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Shadehorror.Name] = self.Shadehorror,
 	}
-	KBM_Boss[self.Shadehorror.Name] = self.Shadehorror	
 end
 
 function MOD:InitVars()

@@ -34,6 +34,7 @@ MOD.Caelia = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
+	ExpertID = "Expert",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -65,7 +66,6 @@ function MOD:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Caelia.Name] = self.Caelia,
 	}
-	KBM_Boss[self.Caelia.Name] = self.Caelia	
 end
 
 function MOD:InitVars()

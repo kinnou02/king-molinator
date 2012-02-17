@@ -35,7 +35,7 @@ MOD.Wormwood = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
-	ExpertID = nil,
+	ExpertID = "U7DA7C4360F5A75EF",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -53,7 +53,7 @@ MOD.Wormwood = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Wormwood = KBM.Language:Add(MOD.Wormwood.Name)
--- MOD.Lang.Wormwood:SetGerman("")
+MOD.Lang.Wormwood:SetGerman("Wurmholz")
 -- MOD.Lang.Wormwood:SetFrench("")
 -- MOD.Lang.Wormwood:SetRussian("")
 MOD.Wormwood.Name = MOD.Lang.Wormwood[KBM.Lang]
@@ -67,7 +67,6 @@ function MOD:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Wormwood.Name] = self.Wormwood,
 	}
-	KBM_Boss[self.Wormwood.Name] = self.Wormwood	
 end
 
 function MOD:InitVars()

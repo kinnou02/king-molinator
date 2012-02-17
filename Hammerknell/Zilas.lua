@@ -61,18 +61,45 @@ SZ.Lang.Ability.Grasp = KBM.Language:Add("Soulrender's Grasp")
 SZ.Lang.Ability.Grasp.German = "Seelenreißer-Griff"
 SZ.Lang.Ability.Grasp.French = "Poigne d'\195\137tripeur d'\195\162mes"
 SZ.Lang.Ability.Grasp.Russian = "Хватка душедера"
+SZ.Lang.Ability.Cede = KBM.Language:Add("Cede Spirit")
 
 -- Menu Dictionary
 SZ.Lang.Menu = {}
 SZ.Lang.Menu.Grasp = KBM.Language:Add("First "..SZ.Lang.Ability.Grasp[KBM.Lang])
 SZ.Descript = SZ.Zilas.Name
 
+-- Unit Dictionary
+SZ.Lang.Unit = {}
+SZ.Lang.Unit.Imp = KBM.Language:Add("Escaped Imp")
+SZ.Lang.Unit.ImpShort = KBM.Language:Add("Imp")
+
+SZ.Imp = {
+	Mod = SZ,
+	Level = "??",
+	Name = SZ.Lang.Unit.Imp[KBM.Lang],
+	NameShort = SZ.Lang.Unit.ImpShort[KBM.Lang],
+	UnitList = {},
+	Menu = {},
+	AlertsRef = {},
+	Ignore = true,
+	Type = "multi",
+	Triggers = {},
+	Settings = {
+		AlertsRef = {
+			Enabled = true,
+			Cede = KBM.Defaults.AlertObj.Create("yellow"),
+		},
+	}
+}
+
 function SZ:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Zilas.Name] = self.Zilas,
+		[self.Imp.Name] = self.Imp,
 	}
-	KBM_Boss[self.Zilas.Name] = self.Zilas	
+	KBM_Boss[self.Zilas.Name] = self.Zilas
+	KBM.SubBoss[self.Imp.Name] = self.Imp
 end
 
 function SZ:InitVars()
@@ -82,9 +109,14 @@ function SZ:InitVars()
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		MechTimer = KBM.Defaults.MechTimer(),		
 		Alerts = KBM.Defaults.Alerts(),
-		CastBar = self.Zilas.Settings.CastBar,
-		TimersRef = self.Zilas.Settings.TimersRef,
-		AlertsRef = self.Zilas.Settings.AlertsRef,
+		Zilas = {
+			CastBar = self.Zilas.Settings.CastBar,
+			TimersRef = self.Zilas.Settings.TimersRef,
+			AlertsRef = self.Zilas.Settings.AlertsRef,
+		},
+		Imp = {
+			AlertsRef = self.Imp.Settings.AlertsRef,
+		}
 	}
 	KBMSZ_Settings = self.Settings
 	chKBMSZ_Settings = self.Settings
@@ -148,6 +180,10 @@ function SZ:Death(UnitID)
 	if self.Zilas.UnitID == UnitID then
 		self.Zilas.Dead = true
 		return true
+	elseif self.Imp.UnitList[UnitID] then
+		self.Imp.UnitList[UnitID].CastBar:Remove()
+		self.Imp.UnitList[UnitID].Dead = true
+		self.Imp.UnitList[UnitID].CastBar = nil
 	end
 	return false
 end
@@ -172,6 +208,29 @@ function SZ:UnitHPCheck(uDetails, unitID)
 				self.Zilas.UnitID = unitID
 				self.Zilas.Available = true
 				return self.Zilas
+			else
+				if self.Bosses[uDetails.name] then
+					if not self.Bosses[uDetails.name].UnitList[unitID] then
+						SubBossObj = {
+							Mod = AK,
+							Level = "??",
+							Name = uDetails.name,
+							Dead = false,
+							Casting = false,
+							UnitID = unitID,
+							Available = true,
+						}
+						self.Bosses[uDetails.name].UnitList[unitID] = SubBossObj
+						if uDetails.name == self.Imp.Name then
+							SubBossObj.CastBar = KBM.CastBar:Add(self, self.Imp, false, true)
+							SubBossObj.CastBar:Create(unitID)
+						end
+					else
+						self.Bosses[uDetails.name].UnitList[unitID].Available = true
+						self.Bosses[uDetails.name].UnitList[unitID].UnitID = UnitID
+					end
+					return self.Bosses[uDetails.name].UnitList[unitID]
+				end
 			end
 		end
 	end
@@ -215,6 +274,12 @@ function SZ:Reset()
 	self.Zilas.UnitID = nil
 	self.Zilas.CastBar:Remove()
 	self.PhaseObj:End(self.TimeElapsed)
+	for UnitID, BossObj in pairs(self.Imp.UnitList) do
+		if BossObj.CastBar then
+			BossObj.CastBar:Remove()
+		end
+	end
+	self.Imp.UnitList = {}
 	self.Phase = 1	
 end
 
@@ -256,14 +321,19 @@ function SZ:Start()
 	self.Zilas.TimersRef.GraspFirst.MenuName = self.Lang.Menu.Grasp[KBM.Lang]
 	
 	-- Create Alerts
+	-- Zilas
 	self.Zilas.AlertsRef.GraspWarn = KBM.Alert:Create(self.Lang.Ability.Grasp[KBM.Lang], 5, true, true)
 	self.Zilas.AlertsRef.Grasp = KBM.Alert:Create(self.Lang.Ability.Grasp[KBM.Lang], 9, false, true)
 	self.Zilas.AlertsRef.Grasp:NoMenu()
-
+	-- Escaped Imp
+	self.Imp.AlertsRef.Cede = KBM.Alert:Create(self.Lang.Ability.Cede[KBM.Lang], nil, false, true, "yellow")
+	
 	KBM.Defaults.TimerObj.Assign(self.Zilas)
 	KBM.Defaults.AlertObj.Assign(self.Zilas)
+	KBM.Defaults.AlertObj.Assign(self.Imp)
 	
 	-- Assign Mechanics to Triggers.
+	-- Zilas
 	self.Zilas.Triggers.Grasp = KBM.Trigger:Create(self.Lang.Ability.Grasp[KBM.Lang], "cast", self.Zilas)
 	self.Zilas.Triggers.Grasp:AddTimer(self.Zilas.TimersRef.Grasp)
 	self.Zilas.Triggers.Grasp:AddAlert(self.Zilas.AlertsRef.GraspWarn)
@@ -277,6 +347,10 @@ function SZ:Start()
 	self.Zilas.Triggers.PhaseFour:AddPhase(self.PhaseFour)
 	self.Zilas.Triggers.PhaseFive = KBM.Trigger:Create(20, "percent", self.Zilas)
 	self.Zilas.Triggers.PhaseFive:AddPhase(self.PhaseFive)
+	
+	-- Imps
+	self.Imp.Triggers.Cede = KBM.Trigger:Create(self.Lang.Ability.Cede[KBM.Lang], "cast", self.Imp)
+	self.Imp.Triggers.Cede:AddAlert(self.Imp.AlertsRef.Cede)
 	
 	-- Assign Castbar object.
 	self.Zilas.CastBar = KBM.CastBar:Add(self, self.Zilas, true)

@@ -12,7 +12,7 @@ local MOD = {
 	IsInstance = true,
 	Name = "Abyssal Precipice",
 	Type = "Expert",
-	ID = "MOD",
+	ID = "Abyssal_Precipice",
 }
 
 -- Link Mods

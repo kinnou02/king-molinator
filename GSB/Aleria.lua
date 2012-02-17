@@ -22,9 +22,11 @@ local OA = {
 
 OA.Aleria = {
 	Mod = OA,
-	Level = "52",
+	Level = 52,
 	Active = false,
 	Name = "Oracle Aleria",
+	ChronicleID = "U76F49CD858530EEA",
+	RaidID = "U6D36D79B7B3CF7B3",
 	Menu = {},
 	AlertsRef = {},
 	TimersRef = {},
@@ -56,8 +58,10 @@ OA.Descript = OA.Lang.Aleria[KBM.Lang]
 OA.Lang.Unit = {}
 OA.Lang.Unit.Primal = KBM.Language:Add("Primal Werewolf")
 OA.Lang.Unit.Primal.German = "Ur-Werwolf"
+OA.Lang.Unit.Primal.Russian = "Первобытный оборотень"
 OA.Lang.Unit.Necrotic = KBM.Language:Add("Necrotic Werewolf")
 OA.Lang.Unit.Necrotic.German = "Nekrotischer Werwolf"
+OA.Lang.Unit.Necrotic.Russian = "Разлагающийся оборотень"
 
 -- Debuff Dictionary
 OA.Lang.Debuff = {}
@@ -77,6 +81,7 @@ OA.Primal = {
 	TimeOut = 5,
 	Triggers = {},
 	ChronicleID = "U279898FC4D7B39ED",
+	RaidID = "U5EC70B376208CAC3",
 }
 
 OA.Necrotic = {
@@ -91,6 +96,7 @@ OA.Necrotic = {
 	TimeOut = 5,
 	Triggers = {},
 	ChronicleID = "U676937B70D146F9F",
+	RaidID = "U2ED1EB3228891BA6",
 }
 
 OA.Aleria.Name = OA.Lang.Aleria[KBM.Lang]

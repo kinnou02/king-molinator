@@ -35,7 +35,7 @@ MOD.Ravalos = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
-	ExpertID = nil,
+	ExpertID = "U6A58D2FC2645834E",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -53,7 +53,7 @@ MOD.Ravalos = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Ravalos = KBM.Language:Add(MOD.Ravalos.Name)
--- MOD.Lang.Ravalos:SetGerman("")
+MOD.Lang.Ravalos:SetGerman("Ravalos")
 -- MOD.Lang.Ravalos:SetFrench("")
 -- MOD.Lang.Ravalos:SetRussian("")
 MOD.Ravalos.Name = MOD.Lang.Ravalos[KBM.Lang]
@@ -67,7 +67,6 @@ function MOD:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Ravalos.Name] = self.Ravalos,
 	}
-	KBM_Boss[self.Ravalos.Name] = self.Ravalos	
 end
 
 function MOD:InitVars()

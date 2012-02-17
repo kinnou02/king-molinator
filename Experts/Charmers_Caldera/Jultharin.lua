@@ -33,6 +33,7 @@ MOD.Jultharin = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
+	ExpertID = "Expert",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -64,7 +65,6 @@ function MOD:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Jultharin.Name] = self.Jultharin,
 	}
-	KBM_Boss[self.Jultharin.Name] = self.Jultharin	
 end
 
 function MOD:InitVars()

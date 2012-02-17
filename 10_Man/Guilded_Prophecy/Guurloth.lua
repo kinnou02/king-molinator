@@ -68,47 +68,64 @@ GH.Guurloth.Name = GH.Lang.Guurloth[KBM.Lang]
 GH.Lang.Ability = {}
 GH.Lang.Ability.Orb = KBM.Language:Add("Orb of Searing Power")
 GH.Lang.Ability.Orb.German = "Kugel der sengenden Macht"
+GH.Lang.Ability.Orb.Russian = "Сфера жгучей мощи"
 GH.Lang.Ability.Rumbling = KBM.Language:Add("Rumbling Earth")
 GH.Lang.Ability.Rumbling.German = "Grollende Erde"
+GH.Lang.Ability.Rumbling.Russian = "Гремящая земля"
 GH.Lang.Ability.Call = KBM.Language:Add("Guurloth's Call")
 GH.Lang.Ability.Call.German = "Guurloths Ruf"
+GH.Lang.Ability.Call.Russian = "Зов Гуурлота"
 GH.Lang.Ability.Boulder = KBM.Language:Add("Boulder of Destruction")
 GH.Lang.Ability.Boulder.German = "Fels der Zerstörung"
+GH.Lang.Ability.Boulder.Russian = "Разрушительный булыжник"
 GH.Lang.Ability.Toil = KBM.Language:Add("Earthen Toil")
 GH.Lang.Ability.Toil.German = "Irdene Mühe"
+GH.Lang.Ability.Toil.Russian = "Землянистая пошлина"
 GH.Lang.Ability.Geyser = KBM.Language:Add("Earthen Geyser")
 GH.Lang.Ability.Geyser.German = "Erdengeysir"
+GH.Lang.Ability.Geyser.Russian = "Грязевой гейзер"
 
 -- Debuff Dictionary
 GH.Lang.Debuff = {}
 GH.Lang.Debuff.Punish = KBM.Language:Add("Earthen Punishment")
 GH.Lang.Debuff.Punish.German = "Erdenbestrafung"
+GH.Lang.Debuff.Punish.Russian = "Земляное наказание"
 
 -- Verbose Dictionary
 GH.Lang.Verbose = {}
 GH.Lang.Verbose.Orb = KBM.Language:Add("Look away now!")
 GH.Lang.Verbose.Orb.German = "WEGSCHAUEN"
+GH.Lang.Verbose.Orb.Russian = "Отвернитесь!"
 GH.Lang.Verbose.Rumbling = KBM.Language:Add("Jump!")
 GH.Lang.Verbose.Rumbling.German = "SPRINGEN"
+GH.Lang.Verbose.Rumbling.Russian = "Прыгайте!"
 GH.Lang.Verbose.Call = KBM.Language:Add("Adds Spawn")
 GH.Lang.Verbose.Call.German = "ADD kommt"
+GH.Lang.Verbose.Call.Russian = "Призывается адд!"
 GH.Lang.Verbose.Toil = KBM.Language:Add("Run around!")
 GH.Lang.Verbose.Toil.German = "LAUFEN"
+GH.Lang.Verbose.Toil.Russian = "Бегайте!"
 GH.Lang.Verbose.Punish = KBM.Language:Add("Stop!")
 GH.Lang.Verbose.Punish.German = "NICHTS MACHEN"
+GH.Lang.Verbose.Punish.Russian = "Ничего не делайте!"
 
 -- Menu Dictionary
 GH.Lang.Menu = {}
 GH.Lang.Menu.Orb = KBM.Language:Add("First "..GH.Lang.Ability.Orb[KBM.Lang])
 GH.Lang.Menu.Orb.German = "Erste "..GH.Lang.Ability.Orb[KBM.Lang]
+GH.Lang.Menu.Orb.Russian = "Первая "..GH.Lang.Ability.Orb[KBM.Lang]
 GH.Lang.Menu.OrbDuration = KBM.Language:Add(GH.Lang.Ability.Orb[KBM.Lang].." duration")
 GH.Lang.Menu.OrbDuration.German = GH.Lang.Ability.Orb[KBM.Lang].." Dauer"
+GH.Lang.Menu.OrbDuration.Russian = "Длительность "..GH.Lang.Ability.Orb[KBM.Lang]
 GH.Lang.Menu.Rumbling = KBM.Language:Add(GH.Lang.Ability.Rumbling[KBM.Lang].." duration")
 GH.Lang.Menu.Rumbling.German = GH.Lang.Ability.Rumbling[KBM.Lang].." Dauer"
+GH.Lang.Menu.Rumbling.Russian = "Длительность "..GH.Lang.Ability.Rumbling[KBM.Lang]
 GH.Lang.Menu.CallFirst = KBM.Language:Add("First "..GH.Lang.Ability.Call[KBM.Lang])
 GH.Lang.Menu.CallFirst.German = "Erster "..GH.Lang.Ability.Call[KBM.Lang]
+GH.Lang.Menu.CallFirst.Russian = "Первый "..GH.Lang.Ability.Call[KBM.Lang]
 GH.Lang.Menu.Toil = KBM.Language:Add(GH.Lang.Ability.Toil[KBM.Lang].." duration")
 GH.Lang.Menu.Toil.German = GH.Lang.Ability.Toil[KBM.Lang].." Dauer"
+GH.Lang.Menu.Toil.Russian ="Длительность "..GH.Lang.Ability.Toil[KBM.Lang]
 
 GH.Descript = GH.Guurloth.Name
 

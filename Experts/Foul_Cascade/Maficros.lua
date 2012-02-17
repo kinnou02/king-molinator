@@ -35,7 +35,7 @@ MOD.Maficros = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
-	ExpertID = nil,
+	ExpertID = "U438906C70E91EC3A",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -53,7 +53,7 @@ MOD.Maficros = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Maficros = KBM.Language:Add(MOD.Maficros.Name)
--- MOD.Lang.Maficros:SetGerman("")
+MOD.Lang.Maficros:SetGerman("Tephraherrscher Maficros")
 -- MOD.Lang.Maficros:SetFrench("")
 -- MOD.Lang.Maficros:SetRussian("")
 MOD.Maficros.Name = MOD.Lang.Maficros[KBM.Lang]
@@ -67,7 +67,6 @@ function MOD:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Maficros.Name] = self.Maficros,
 	}
-	KBM_Boss[self.Maficros.Name] = self.Maficros	
 end
 
 function MOD:InitVars()

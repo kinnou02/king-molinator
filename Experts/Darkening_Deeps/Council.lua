@@ -37,7 +37,6 @@ MOD.Nuggo = {
 	TimeOut = 5,
 	Triggers = {},
 	ExpertID = "U43E685D74CAA6694",
-	MasterID = "U024CAD61448FED64",
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
 		-- TimersRef = {
@@ -82,6 +81,7 @@ MOD.Swedge = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
+	ExpertID = "Expert",
 	TimeOut = 5,
 }
 
@@ -95,6 +95,7 @@ MOD.Gerbik = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
+	ExpertID = "Expert",
 	TimeOut = 5,
 }
 
@@ -105,9 +106,6 @@ function MOD:AddBosses(KBM_Boss)
 		[self.Swedge.Name] = self.Swedge,
 		[self.Gerbik.Name] = self.Gerbik
 	}
-	KBM_Boss[self.Nuggo.Name] = self.Nuggo
-	KBM_Boss[self.Swedge.Name] = self.Swedge
-	KBM_Boss[self.Gerbik.Name] = self.Gerbik
 end
 
 function MOD:InitVars()
@@ -121,42 +119,42 @@ function MOD:InitVars()
 		-- TimersRef = self.Nuggo.Settings.TimersRef,
 		-- AlertsRef = self.Nuggo.Settings.AlertsRef,
 	}
-	KBMEXDDAB_Settings = self.Settings
-	chKBMEXDDAB_Settings = self.Settings
+	KBMEXDDTC_Settings = self.Settings
+	chKBMEXDDTC_Settings = self.Settings
 	
 end
 
 function MOD:SwapSettings(bool)
 
 	if bool then
-		KBMEXDDAB_Settings = self.Settings
-		self.Settings = chKBMEXDDAB_Settings
+		KBMEXDDTC_Settings = self.Settings
+		self.Settings = chKBMEXDDTC_Settings
 	else
-		chKBMEXDDAB_Settings = self.Settings
-		self.Settings = KBMEXDDAB_Settings
+		chKBMEXDDTC_Settings = self.Settings
+		self.Settings = KBMEXDDTC_Settings
 	end
 
 end
 
 function MOD:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMEXDDAB_Settings, self.Settings)
+		KBM.LoadTable(chKBMEXDDTC_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMEXDDAB_Settings, self.Settings)
+		KBM.LoadTable(KBMEXDDTC_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMEXDDAB_Settings = self.Settings
+		chKBMEXDDTC_Settings = self.Settings
 	else
-		KBMEXDDAB_Settings = self.Settings
+		KBMEXDDTC_Settings = self.Settings
 	end	
 end
 
 function MOD:SaveVars()	
 	if KBM.Options.Character then
-		chKBMEXDDAB_Settings = self.Settings
+		chKBMEXDDTC_Settings = self.Settings
 	else
-		KBMEXDDAB_Settings = self.Settings
+		KBMEXDDTC_Settings = self.Settings
 	end	
 end
 

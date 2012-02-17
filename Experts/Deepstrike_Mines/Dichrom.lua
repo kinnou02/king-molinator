@@ -35,6 +35,7 @@ MOD.Dichrom = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
+	ExpertID = "Expert",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -66,7 +67,6 @@ function MOD:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Dichrom.Name] = self.Dichrom,
 	}
-	KBM_Boss[self.Dichrom.Name] = self.Dichrom	
 end
 
 function MOD:InitVars()

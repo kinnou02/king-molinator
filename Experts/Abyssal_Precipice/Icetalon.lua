@@ -35,6 +35,7 @@ MOD.Icetalon = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
+	ExpertID = "Expert",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -66,7 +67,6 @@ function MOD:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Icetalon.Name] = self.Icetalon,
 	}
-	KBM_Boss[self.Icetalon.Name] = self.Icetalon	
 end
 
 function MOD:InitVars()

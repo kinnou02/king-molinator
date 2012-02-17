@@ -35,6 +35,7 @@ MOD.Markus = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
+	ExpertID = "Expert",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -66,7 +67,6 @@ function MOD:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Markus.Name] = self.Markus,
 	}
-	KBM_Boss[self.Markus.Name] = self.Markus	
 end
 
 function MOD:InitVars()

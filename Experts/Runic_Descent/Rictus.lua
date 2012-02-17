@@ -35,7 +35,7 @@ MOD.Rictus = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
-	ExpertID = nil,
+	ExpertID = "U06CF214A071F281B",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -53,7 +53,7 @@ MOD.Rictus = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Rictus = KBM.Language:Add(MOD.Rictus.Name)
--- MOD.Lang.Rictus:SetGerman("")
+MOD.Lang.Rictus:SetGerman("Rictus") 
 -- MOD.Lang.Rictus:SetFrench("")
 -- MOD.Lang.Rictus:SetRussian("")
 MOD.Rictus.Name = MOD.Lang.Rictus[KBM.Lang]
@@ -67,7 +67,6 @@ function MOD:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Rictus.Name] = self.Rictus,
 	}
-	KBM_Boss[self.Rictus.Name] = self.Rictus	
 end
 
 function MOD:InitVars()

@@ -12,7 +12,7 @@ local MOD = {
 	IsInstance = true,
 	Name = "Deepstrike Mines",
 	Type = "Expert",
-	ID = "MOD",
+	ID = "Deepstrike_Mines",
 }
 
 -- Link Mods

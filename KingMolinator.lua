@@ -363,7 +363,7 @@ function KBM.Defaults.Alerts()
 		Unlocked = false,
 		FlashUnlocked = false,
 		ScaleText = false,
-		fScale = 0.4,
+		fScale = 0.2,
 		tScale = 1,
 		x = false,
 		y = false,
@@ -513,6 +513,37 @@ end
 
 KBM.MenuGroup = {}
 local KBM_Boss = {}
+KBM.Boss = {
+	Raid = {},
+	Sliver = {},
+	Dungeon = {
+		List = {},
+	},
+	Chronicle = {},
+	Rift = {},
+	ExRift = {},
+	RaidRift = {},
+	World = {},
+}
+function KBM.Boss.Dungeon:AddBoss(BossObj)
+	local BossID = nil
+	if BossObj.Mod.InstanceObj.Type == "Expert" then
+		BossID = BossObj.ExpertID
+	elseif BossObj.Mod.InstanceObj.Type == "Master" then
+		BossID = BossObj.MasterID
+	end
+	if not BossID then
+		print("Instance: "..BossObj.Mod.Instance)
+		error("Missing ExpertID or MasterID for "..BossObj.Name)
+	end
+	if self.List[BossObj.Name] then
+		self.List[BossObj.Name][BossID] = BossObj
+	else
+		self.List[BossObj.Name] = {}
+		self.List[BossObj.Name][BossID] = BossObj
+	end
+end
+
 KBM.SubBoss = {}
 KBM.BossID = {}
 KBM.Encounter = false
@@ -608,222 +639,283 @@ KBM.Language.Encounter = {}
 KBM.Language.Encounter.Start = KBM.Language:Add("Encounter started:")
 KBM.Language.Encounter.Start.French = "Combat d\195\169but\195\169:"
 KBM.Language.Encounter.Start.German = "Bosskampf gestartet:"
+KBM.Language.Encounter.Start.Russian = "Бой начался:"
 KBM.Language.Encounter.GLuck = KBM.Language:Add("Good luck!")
 KBM.Language.Encounter.GLuck.French = "Bonne chance!"
 KBM.Language.Encounter.GLuck.German = "Viel Erfolg!"
+KBM.Language.Encounter.GLuck.Russian = "Удачи!"
 KBM.Language.Encounter.Wipe = KBM.Language:Add("Encounter ended, possible wipe.")
 KBM.Language.Encounter.Wipe.French = "Combat termin\195\169, wipe possible."
 KBM.Language.Encounter.Wipe.German = "Bosskampf beendet, möglicher Wipe."
+KBM.Language.Encounter.Wipe.Russian  = "Бой закончен, возможный вайп."
 KBM.Language.Encounter.Victory = KBM.Language:Add("Encounter Victory!")
 KBM.Language.Encounter.Victory.French = "Victoire, On l'a tué!"
 KBM.Language.Encounter.Victory.German = "Bosskampf erfolgreich!"
-KBM.Language.Encounter.Chronicle = KBM.Language:Add("Activate in Chronicles.")
-KBM.Language.Encounter.Chronicle.German = "in den Chroniken verwenden."
+KBM.Language.Encounter.Victory.Russian = "Победа!"
+KBM.Language.Encounter.Chronicle = KBM.Language:Add("Activate in Chronicles")
+KBM.Language.Encounter.Chronicle.German = "in den Chroniken verwenden"
+KBM.Language.Encounter.Chronicle.Russian = "Активировать в хрониках"
 
 -- Records Dictionary
 KBM.Language.Records = {}
 -- Records Tab
 KBM.Language.Records.Attempts = KBM.Language:Add("Attempts: ")
 KBM.Language.Records.Attempts.German = "Pulls: "
+KBM.Language.Records.Attempts.Russian = "Пулы: "
 KBM.Language.Records.Wipes = KBM.Language:Add("Wipes: ")
+KBM.Language.Records.Wipes.Russian = "Вайпы: "
 KBM.Language.Records.Kills = KBM.Language:Add("Kills: ")
+KBM.Language.Records.Kills.Russian = "Победы: "
 KBM.Language.Records.Best = KBM.Language:Add("Best Time:")
 KBM.Language.Records.Best.German = "Bestzeit:"
+KBM.Language.Records.Best.Russian = "Лучшее время:"
 KBM.Language.Records.Date = KBM.Language:Add("Date set: ")
+KBM.Language.Records.Date.German = "Datum: " 
 KBM.Language.Records.Details = KBM.Language:Add("Details:")
+KBM.Language.Records.Details.Russian = "Подробности:"
 KBM.Language.Records.Rate = KBM.Language:Add("Success Rate is ")
 KBM.Language.Records.Rate.German = "Erfolgsrate ist: "
-KBM.Language.Records.NoRecord = KBM.Language:Add("No kills have been recorded.")
-KBM.Language.Records.NoRecord.German = "Keine Kills wurden bisher verzeichnet."
+KBM.Language.Records.Rate.Russian = "Процент успеха: "
+KBM.Language.Records.NoRecord = KBM.Language:Add("No kills have been recorded")
+KBM.Language.Records.NoRecord.German = "Keine Kills wurden bisher verzeichnet"
+KBM.Language.Records.NoRecord.Russian = "Бои с этим боссом отсутсвуют"
+
 -- In game Messages
 KBM.Language.Records.Previous = KBM.Language:Add("Previous best: ")
 KBM.Language.Records.Previous.German = "Alte Bestzeit: "
+KBM.Language.Records.Previous.Russian = "Предыдущий рекорд: "
 KBM.Language.Records.BeatRecord = KBM.Language:Add("Congratulations: New Record!")
 KBM.Language.Records.BeatRecord.German = "Gratulation! Neue Bestzeit!"
+KBM.Language.Records.BeatRecord.Russian = "Поздравляем! Вы улучшили свой рекорд!"
 KBM.Language.Records.BeatChrRecord = KBM.Language:Add("Congratulations: New Chronicle Record!")
 KBM.Language.Records.BeatChrRecord.German = "Gratulation! Neue Chroniken Bestzeit!"
+KBM.Language.Records.BeatChrRecord.Russian = "Поздравляем! Вы улучшили свой рекорд в хрониках!"
 KBM.Language.Records.NewRecord = KBM.Language:Add("Congratulations: A new record has been set!")
 KBM.Language.Records.NewRecord.German = "Gratulation! Eine neue Bestzeit wurde gesetzt!"
+KBM.Language.Records.NewRecord.Russian = "Поздравляем! Вы установили рекорд!"
 KBM.Language.Records.NewChrRecord = KBM.Language:Add("Congratulations: A new Chronicle record has been set!")
 KBM.Language.Records.NewChrRecord.German = "Gratulation! Eine neue Chroniken Bestzeit wurde gesetzt!"
+KBM.Language.Records.NewChrRecord.Russian = "Поздравляем! Вы установили рекорд в хрониках!"
 KBM.Language.Records.Current = KBM.Language:Add("Current Record: ")
 KBM.Language.Records.Current.German = "Aktuelle Bestzeit: "
+KBM.Language.Records.Current.Russian = "Текущий рекорд: "
 KBM.Language.Records.Invalid = KBM.Language:Add("Time is invalid, no records can be set.")
-KBM.Language.Records.Invalid.German = "Die Zeit ist ungültig, Bestzeit konnte nicht gesetzt werden." 
+KBM.Language.Records.Invalid.German = "Die Zeit ist ungültig, Bestzeit konnte nicht gesetzt werden."
+KBM.Language.Records.Invalid.Russian = "Время не удалось измерить, рекорд не засчитан." 
 
 -- Colors
 KBM.Language.Color = {}
-KBM.Language.Color.Custom = KBM.Language:Add("Custom color.")
-KBM.Language.Color.Custom.German = "eigene Farbauswahl."
+KBM.Language.Color.Custom = KBM.Language:Add("Custom color")
+KBM.Language.Color.Custom.German = "eigene Farbauswahl"
+KBM.Language.Color.Custom.Russian  = "Свой цвет"
 KBM.Language.Color.Red = KBM.Language:Add("Red")
 KBM.Language.Color.Red.German = "Rot"
+KBM.Language.Color.Red.Russian = "Красный"
 KBM.Language.Color.Blue = KBM.Language:Add("Blue")
-KBM.Language.Color.Blue.German = "Blau" 
+KBM.Language.Color.Blue.German = "Blau"
+KBM.Language.Color.Blue.Russian = "Голубой" 
 KBM.Language.Color.Dark_Green = KBM.Language:Add("Dark Green")
 KBM.Language.Color.Dark_Green.German = "Dunkelgrün"
+KBM.Language.Color.Dark_Green.Russian = "Темнозеленый"
 KBM.Language.Color.Yellow = KBM.Language:Add("Yellow")
 KBM.Language.Color.Yellow.German = "Gelb"
+KBM.Language.Color.Yellow.Russian = "Желтый"
 KBM.Language.Color.Orange = KBM.Language:Add("Orange")
 KBM.Language.Color.Orange.German = "Orange"
+KBM.Language.Color.Orange.Russian = "Оранжевый"
 KBM.Language.Color.Purple = KBM.Language:Add("Purple")
 KBM.Language.Color.Purple.German = "Lila"
+KBM.Language.Color.Purple.Russian = "Фиолетовый"
 
 -- Castbar Action Dictionary
 KBM.Language.CastBar = {}
 KBM.Language.CastBar.Interrupt = KBM.Language:Add("Interrupted")
 KBM.Language.CastBar.Interrupt.German = "Unterbrochen"
+KBM.Language.CastBar.Interrupt.Russian = "Прерван"
 
 -- Cast-bar related options
 KBM.Language.Options = {}
 KBM.Language.Options.CastbarOverride = KBM.Language:Add("Castbar: Override")
-KBM.Language.Options.CastbarOverride.German = "Zauberbalken: Einstellungen."
+KBM.Language.Options.CastbarOverride.German = "Zauberbalken: Einstellungen"
+KBM.Language.Options.CastbarOverride.Russian = "Кастбар: Переопределить"
 KBM.Language.Options.Pinned = KBM.Language:Add("Pin to ")
 KBM.Language.Options.Pinned.German = "Anheften an "
+KBM.Language.Options.Pinned.Russian = "Привязать к "
 KBM.Language.Options.FiltersEnabled = KBM.Language:Add("Enable cast filters")
 KBM.Language.Options.FiltersEnabled.German = "Aktiviere Zauber Filter"
+KBM.Language.Options.FiltersEnabled.Russian = "Разрешить фильтры кастбара"
 KBM.Language.Options.Castbar = KBM.Language:Add("Cast-bars")
 KBM.Language.Options.Castbar.French = "Barres-cast"
 KBM.Language.Options.Castbar.German = "Zauberbalken"
-KBM.Language.Options.CastbarEnabled = KBM.Language:Add("Cast-bars enabled.")
-KBM.Language.Options.CastbarEnabled.French = "Barres-cast activ\195\169."
-KBM.Language.Options.CastbarEnabled.German = "Zauberbalken anzeigen."
+KBM.Language.Options.Castbar.Russian = "Кастбары"
+KBM.Language.Options.CastbarEnabled = KBM.Language:Add("Cast-bars enabled")
+KBM.Language.Options.CastbarEnabled.French = "Barres-cast activ\195\169"
+KBM.Language.Options.CastbarEnabled.German = "Zauberbalken anzeigen"
+KBM.Language.Options.CastbarEnabled.Russian = "Кастбары разрешены"
 
 -- Timer Options
-KBM.Language.Options.MechTimerOverride = KBM.Language:Add("Mechanic Timers: Override.")
-KBM.Language.Options.MechTimerOverride.German = "Mechanik Timer: Einstellungen."
-KBM.Language.Options.EncTimerOverride = KBM.Language:Add("Encounter Timer: Override.")
-KBM.Language.Options.EncTimerOverride.German = "Boss Timer: Einstellungen."
-KBM.Language.Options.EncTimers = KBM.Language:Add("Encounter Timers enabled.")
-KBM.Language.Options.EncTimers.German = "Boss Timer anzeigen."
-KBM.Language.Options.MechanicTimers = KBM.Language:Add("Mechanic Timers enabled.")
-KBM.Language.Options.MechanicTimers.French = "Timers de M\195\169canisme."
-KBM.Language.Options.MechanicTimers.German = "Mechanik Timer."
-KBM.Language.Options.TimersEnabled = KBM.Language:Add("Timers enabled.")
-KBM.Language.Options.TimersEnabled.French = "Timers activ\195\169."
-KBM.Language.Options.TimersEnabled.German = "Timer anzeigen."
-KBM.Language.Options.ShowTimer = KBM.Language:Add("Show Timer (for positioning).")
-KBM.Language.Options.ShowTimer.French = "Montrer Timer (pour positionnement)."
-KBM.Language.Options.ShowTimer.German = "Zeige Timer (für Positionierung)."
-KBM.Language.Options.ShowTimer.Russian = "Показать таймер (для позиционирования)."
-KBM.Language.Options.LockTimer = KBM.Language:Add("Unlock Timer.")
-KBM.Language.Options.LockTimer.French = "D\195\169bloquer Timer."
-KBM.Language.Options.LockTimer.German = "Timer ist verschiebbar."
-KBM.Language.Options.LockTimer.Russian = "Разблокировать таймер."
-KBM.Language.Options.Timer = KBM.Language:Add("Encounter duration Timer.")
-KBM.Language.Options.Timer.French = "Timer duration combat."
-KBM.Language.Options.Timer.German = "Kampfdauer Anzeige."
-KBM.Language.Options.Timer.Russian = "Таймер продолжительности энкаунтера."
-KBM.Language.Options.Enrage = KBM.Language:Add("Enrage Timer (if supported).")
-KBM.Language.Options.Enrage.French = "Timer d'Enrage (si support\195\169)."
-KBM.Language.Options.Enrage.German = "Enrage Anzeige (wenn unterstützt)."
-KBM.Language.Options.Enrage.Russian = "Энрейдж Таймер (если поддерживается)."
+KBM.Language.Options.MechTimerOverride = KBM.Language:Add("Mechanic Timers: Override")
+KBM.Language.Options.MechTimerOverride.German = "Mechanik Timer: Einstellungen"
+KBM.Language.Options.MechTimerOverride.Russian = "Таймеры механики: Переопределить"
+KBM.Language.Options.EncTimerOverride = KBM.Language:Add("Encounter Timer: Override")
+KBM.Language.Options.EncTimerOverride.German = "Boss Timer: Einstellungen"
+KBM.Language.Options.EncTimerOverride.Russian = "Таймер боя: Переопределить"
+KBM.Language.Options.EncTimers = KBM.Language:Add("Encounter Timers enabled")
+KBM.Language.Options.EncTimers.German = "Boss Timer anzeigen"
+KBM.Language.Options.EncTimers.Russian = "Таймеры боя разрешены"
+KBM.Language.Options.MechanicTimers = KBM.Language:Add("Mechanic Timers enabled")
+KBM.Language.Options.MechanicTimers.French = "Timers de M\195\169canisme"
+KBM.Language.Options.MechanicTimers.German = "Mechanik Timer"
+KBM.Language.Options.MechanicTimers.Russian = "Таймеры механики разрешены"
+KBM.Language.Options.TimersEnabled = KBM.Language:Add("Timers enabled")
+KBM.Language.Options.TimersEnabled.French = "Timers activ\195\169"
+KBM.Language.Options.TimersEnabled.German = "Timer anzeigen"
+KBM.Language.Options.TimersEnabled.Russian = "Таймер разрешен"
+KBM.Language.Options.ShowTimer = KBM.Language:Add("Show Timer (for positioning)")
+KBM.Language.Options.ShowTimer.French = "Montrer Timer (pour positionnement)"
+KBM.Language.Options.ShowTimer.German = "Zeige Timer (für Positionierung)"
+KBM.Language.Options.ShowTimer.Russian = "Показать таймер (для позиционирования)"
+KBM.Language.Options.LockTimer = KBM.Language:Add("Unlock Timer")
+KBM.Language.Options.LockTimer.French = "D\195\169bloquer Timer"
+KBM.Language.Options.LockTimer.German = "Timer ist verschiebbar"
+KBM.Language.Options.LockTimer.Russian = "Разблокировать таймер"
+KBM.Language.Options.Timer = KBM.Language:Add("Encounter duration Timer")
+KBM.Language.Options.Timer.French = "Timer duration combat"
+KBM.Language.Options.Timer.German = "Kampfdauer Anzeige"
+KBM.Language.Options.Timer.Russian = "Таймер продолжительности энкаунтера"
+KBM.Language.Options.Enrage = KBM.Language:Add("Enrage Timer (if supported)")
+KBM.Language.Options.Enrage.French = "Timer d'Enrage (si support\195\169)"
+KBM.Language.Options.Enrage.German = "Enrage Anzeige (wenn unterstützt)"
+KBM.Language.Options.Enrage.Russian = "Энрейдж Таймер (если поддерживается)"
 
 -- Anchors Options
-KBM.Language.Options.ShowAnchor = KBM.Language:Add("Show anchor (for positioning).")
-KBM.Language.Options.ShowAnchor.French = "Montrer ancrage (pour positionnement)."
-KBM.Language.Options.ShowAnchor.German = "Zeige Anker (für Positionierung)."
-KBM.Language.Options.LockAnchor = KBM.Language:Add("Unlock anchor.")
-KBM.Language.Options.LockAnchor.French = "D\195\169bloquer Ancrage."
-KBM.Language.Options.LockAnchor.German = "Anker ist verschiebbar."
+KBM.Language.Options.ShowAnchor = KBM.Language:Add("Show anchor (for positioning)")
+KBM.Language.Options.ShowAnchor.French = "Montrer ancrage (pour positionnement)"
+KBM.Language.Options.ShowAnchor.German = "Zeige Anker (für Positionierung)"
+KBM.Language.Options.ShowAnchor.Russian = "Показать якорь (для позиционирования)"
+KBM.Language.Options.LockAnchor = KBM.Language:Add("Unlock anchor")
+KBM.Language.Options.LockAnchor.French = "D\195\169bloquer Ancrage"
+KBM.Language.Options.LockAnchor.German = "Anker ist verschiebbar"
+KBM.Language.Options.LockAnchor.Russian = "Разблокировать якорь"
 
 -- Phase Monitor
-KBM.Language.Options.PhaseMonOverride = KBM.Language:Add("Phase Monitor: Override.")
-KBM.Language.Options.PhaseMonOverride.German = "Phasen Monitor: Einstellungen."
+KBM.Language.Options.PhaseMonOverride = KBM.Language:Add("Phase Monitor: Override")
+KBM.Language.Options.PhaseMonOverride.German = "Phasen Monitor: Einstellungen"
+KBM.Language.Options.PhaseMonOverride.Russian = "Монитор фаз: Переопределить"
 KBM.Language.Options.PhaseMonitor = KBM.Language:Add("Phase Monitor")
 KBM.Language.Options.PhaseMonitor.German = "Phasen Monitor"
-KBM.Language.Options.PhaseEnabled = KBM.Language:Add("Enable Phase Monitor.")
-KBM.Language.Options.PhaseEnabled.German = "Phasen Monitor aktiviert."
-KBM.Language.Options.Phases = KBM.Language:Add("Display current Phase.")
-KBM.Language.Options.Phases.German = "Zeige aktuelle Phase an."
-KBM.Language.Options.Objectives = KBM.Language:Add("Display Phase objective tracking.")
-KBM.Language.Options.Objectives.German = "Zeige Phasen Aufgabe an."
+KBM.Language.Options.PhaseMonitor.Russian = "Монитор фаз"
+KBM.Language.Options.PhaseEnabled = KBM.Language:Add("Enable Phase Monitor")
+KBM.Language.Options.PhaseEnabled.German = "Phasen Monitor aktiviert"
+KBM.Language.Options.PhaseEnabled.Russian = "Монитор фаз: активирован"
+KBM.Language.Options.Phases = KBM.Language:Add("Display current Phase")
+KBM.Language.Options.Phases.German = "Zeige aktuelle Phase an"
+KBM.Language.Options.Phases.Russian = "Показывать текущую фазу"
+KBM.Language.Options.Objectives = KBM.Language:Add("Display Phase objective tracking")
+KBM.Language.Options.Objectives.German = "Zeige Phasen Aufgabe an"
+KBM.Language.Options.Objectives.Russian = "Показывать цели фазы"
 KBM.Language.Options.Phase = KBM.Language:Add("Phase")
+KBM.Language.Options.Phase.Russian = "Фаза"
 
 -- Button Options
-KBM.Language.Options.Button = KBM.Language:Add("Options Button Visible.")
-KBM.Language.Options.Button.French = "Bouton Configurations Visible."
-KBM.Language.Options.Button.German = "Options-Schalter sichtbar."
-KBM.Language.Options.Button.Russian = "Отображать кнопку настроек."
-KBM.Language.Options.LockButton = KBM.Language:Add("Unlock Button (right-click to move).")
-KBM.Language.Options.LockButton.French = "D\195\169bloquer Bouton (click-droit pour d\195\169placer)."
-KBM.Language.Options.LockButton.German = "Schalter ist verschiebbar (Rechts-Klick zum verschieben)."
-KBM.Language.Options.LockButton.Russian = "Разблокировать кнопку (правый клик для перемещения)."
+KBM.Language.Options.Button = KBM.Language:Add("Options Button Visible")
+KBM.Language.Options.Button.French = "Bouton Configurations Visible"
+KBM.Language.Options.Button.German = "Options-Schalter sichtbar"
+KBM.Language.Options.Button.Russian = "Отображать кнопку настроек"
+KBM.Language.Options.LockButton = KBM.Language:Add("Unlock Button (right-click to move)")
+KBM.Language.Options.LockButton.French = "D\195\169bloquer Bouton (click-droit pour d\195\169placer)"
+KBM.Language.Options.LockButton.German = "Schalter ist verschiebbar (Rechts-Klick zum verschieben)"
+KBM.Language.Options.LockButton.Russian = "Разблокировать кнопку (правый клик для перемещения)"
 
 -- Tank Swap related
 KBM.Language.Options.TankSwap = KBM.Language:Add("Tank-Swaps")
 KBM.Language.Options.TankSwap.German = "Tank Wechsel"
 KBM.Language.Options.TankSwap.Russian = "Танк-свап"
-KBM.Language.Options.Tank = KBM.Language:Add("Show Test Tanks.")
-KBM.Language.Options.Tank.French = "Afficher Test Tanks."
-KBM.Language.Options.Tank.German = "Zeige Test-Tanks-Fenster."
-KBM.Language.Options.TankSwapEnabled = KBM.Language:Add("Tank-Swaps enabled.")
-KBM.Language.Options.TankSwapEnabled.German = "Tank Wechsel anzeigen."
-KBM.Language.Options.TankSwapEnabled.Russian = "Включить танк-свап."
+KBM.Language.Options.Tank = KBM.Language:Add("Show Test Tanks")
+KBM.Language.Options.Tank.French = "Afficher Test Tanks"
+KBM.Language.Options.Tank.German = "Zeige Test-Tanks-Fenster"
+KBM.Language.Options.Tank.Russian = "Показать тестовых танков"
+KBM.Language.Options.TankSwapEnabled = KBM.Language:Add("Tank-Swaps enabled")
+KBM.Language.Options.TankSwapEnabled.German = "Tank Wechsel anzeigen"
+KBM.Language.Options.TankSwapEnabled.Russian = "Включить танк-свап"
 
 -- Alert related
 KBM.Language.Options.AlertsOverride = KBM.Language:Add("Alerts: Override")
-KBM.Language.Options.AlertsOverride.German = "Alarmierungs: Einstellungen."
+KBM.Language.Options.AlertsOverride.German = "Alarmierungs: Einstellungen"
+KBM.Language.Options.AlertsOverride.Russian = "Предупреждения: Переопределить"
 KBM.Language.Options.Alert = KBM.Language:Add("Screen Alerts")
 KBM.Language.Options.Alert.German = "Alarmierungen"
 KBM.Language.Options.Alert.French = "Alerte \195\160 l'\195\169cran"
 KBM.Language.Options.Alert.Russian = "Предупреждения на экране"
-KBM.Language.Options.AlertsEnabled = KBM.Language:Add("Screen Alerts enabled.")
-KBM.Language.Options.AlertsEnabled.German = "Bildschirm Alarmierungen aktiviert."
-KBM.Language.Options.AlertsEnabled.French = "Alerte \195\160 l'\195\169cran activ\195\169."
-KBM.Language.Options.AlertsEnabled.Russian = "Отображать предупреждения на экране."
-KBM.Language.Options.AlertFlash = KBM.Language:Add("Screen flash enabled.")
-KBM.Language.Options.AlertFlash.German = "Bildschirm-Rand Flackern aktiviert."
-KBM.Language.Options.AlertFlash.French = "Flash \195\169cran activ\195\169."
-KBM.Language.Options.AlertText = KBM.Language:Add("Alert warning text enabled.")
-KBM.Language.Options.AlertText.German = "Alarmierungs-Text aktiviert."
-KBM.Language.Options.AlertText.French = "Texte Avertissement Alerte activ\195\169 ."
-KBM.Language.Options.UnlockFlash = KBM.Language:Add("Unlock alert border for scaling.")
+KBM.Language.Options.AlertsEnabled = KBM.Language:Add("Screen Alerts enabled")
+KBM.Language.Options.AlertsEnabled.German = "Bildschirm Alarmierungen aktiviert"
+KBM.Language.Options.AlertsEnabled.French = "Alerte \195\160 l'\195\169cran activ\195\169"
+KBM.Language.Options.AlertsEnabled.Russian = "Отображать предупреждения на экране"
+KBM.Language.Options.AlertFlash = KBM.Language:Add("Screen flash enabled")
+KBM.Language.Options.AlertFlash.German = "Bildschirm-Rand Flackern aktiviert"
+KBM.Language.Options.AlertFlash.French = "Flash \195\169cran activ\195\169"
+KBM.Language.Options.AlertFlash.Russian = "Мигание экрана разрешено"
+KBM.Language.Options.AlertText = KBM.Language:Add("Alert warning text enabled")
+KBM.Language.Options.AlertText.German = "Alarmierungs-Text aktiviert"
+KBM.Language.Options.AlertText.French = "Texte Avertissement Alerte activ\195\169"
+KBM.Language.Options.AlertText.Russian = "Текст предупреждения разрешен"
+KBM.Language.Options.UnlockFlash = KBM.Language:Add("Unlock alert border for scaling")
 KBM.Language.Options.UnlockFlash.German = "Alarmierungs Ränder sind änderbar."
+KBM.Language.Options.UnlockFlash.Russian = "Разблокировать рамку предупреждения"
 KBM.Language.Options.Border = KBM.Language:Add("Enable Border")
 KBM.Language.Options.Border.German = "Ränder aktivieren"
+KBM.Language.Options.Border.Russian = "Показать рамку"
 KBM.Language.Options.Notify = KBM.Language:Add("Enable Text")
 KBM.Language.Options.Notify.German = "Text aktivieren"
+KBM.Language.Options.Notify.Russian = "Показать текст"
 KBM.Language.Options.Sound = KBM.Language:Add("Play Sound")
 KBM.Language.Options.Sound.German = "Sound abspielen"
+KBM.Language.Options.Sound.German = "Играть звук"
 
 -- Size Dictionary
-KBM.Language.Options.UnlockWidth = KBM.Language:Add("Unlock width for scaling. (Mouse wheel)")
-KBM.Language.Options.UnlockWidth.German = "Breite ist skalierbar."
-KBM.Language.Options.UnlockHeight = KBM.Language:Add("Unlock height for scaling. (Mouse wheel)")
-KBM.Language.Options.UnlockHeight.German = "Höhe ist skalierbar."
-KBM.Language.Options.UnlockText = KBM.Language:Add("Unlock Text size. (Mouse wheel)")
-KBM.Language.Options.UnlockText.German = "Textgröße ist änderbar."
-KBM.Language.Options.UnlockAlpha = KBM.Language:Add("Unlock transparency.")
-KBM.Language.Options.UnlockAlpha.German = "Transparenz ist änderbar."
+KBM.Language.Options.UnlockWidth = KBM.Language:Add("Unlock width for scaling (Mouse wheel)")
+KBM.Language.Options.UnlockWidth.German = "Breite ist skalierbar"
+KBM.Language.Options.UnlockWidth.Russian = "Разблокировать ширину (колесо мыши)"
+KBM.Language.Options.UnlockHeight = KBM.Language:Add("Unlock height for scaling (Mouse wheel)")
+KBM.Language.Options.UnlockHeight.German = "Höhe ist skalierbar"
+KBM.Language.Options.UnlockHeight.Russian = "Разблокировать высоту (колесо мыши)"
+KBM.Language.Options.UnlockText = KBM.Language:Add("Unlock Text size (Mouse wheel)")
+KBM.Language.Options.UnlockText.German = "Textgröße ist änderbar"
+KBM.Language.Options.UnlockText.Russian = "Разблокировать размер текста (колесо мыши)"
+KBM.Language.Options.UnlockAlpha = KBM.Language:Add("Unlock transparency")
+KBM.Language.Options.UnlockAlpha.German = "Transparenz ist änderbar"
+KBM.Language.Options.UnlockAlpha.Russian = "Разблокировать прозрачность"
 
 -- Misc.
-KBM.Language.Options.Character = KBM.Language:Add("Saving settings for this character only.")
-KBM.Language.Options.Character.German = "Einstellungen nur für diesen Charakter speichern."
-KBM.Language.Options.Character.Russian = "Сохранить настройки только для этого персонажа."
+KBM.Language.Options.Character = KBM.Language:Add("Saving settings for this character only")
+KBM.Language.Options.Character.German = "Einstellungen nur für diesen Charakter speichern"
+KBM.Language.Options.Character.Russian = "Сохранить настройки только для этого персонажа"
 KBM.Language.Options.ModEnabled = KBM.Language:Add("Enable King Boss Mods v"..AddonData.toc.Version)
 KBM.Language.Options.ModEnabled.German = "Aktiviere King Boss Mods v"..AddonData.toc.Version
 KBM.Language.Options.ModEnabled.Russian = "Активировать King Boss Mods v"..AddonData.toc.Version
-KBM.Language.Options.Enabled = KBM.Language:Add("Enabled.")
-KBM.Language.Options.Enabled.German = "Aktiviert."
-KBM.Language.Options.Enabled.Russian = "Активировать."
+KBM.Language.Options.Enabled = KBM.Language:Add("Enabled")
+KBM.Language.Options.Enabled.German = "Aktiviert"
+KBM.Language.Options.Enabled.Russian = "Активировать"
 KBM.Language.Options.Settings = KBM.Language:Add("Settings")
 KBM.Language.Options.Settings.French = "Configurations"
 KBM.Language.Options.Settings.German = "Einstellungen"
 KBM.Language.Options.Settings.Russian = "Настройки"
-KBM.Language.Options.Shadow = KBM.Language:Add("Show text shadows.")
-KBM.Language.Options.Shadow.German = "Zeige Text Schattierung."
-KBM.Language.Options.Shadow.Russian = "Отображать тень текста."
-KBM.Language.Options.Texture = KBM.Language:Add("Enable textured overlay.")
-KBM.Language.Options.Texture.German = "Texturierte Balken aktiviert."
-KBM.Language.Options.Texture.Russian = "Включить функцию наложения текстур."
+KBM.Language.Options.Shadow = KBM.Language:Add("Show text shadows")
+KBM.Language.Options.Shadow.German = "Zeige Text Schattierung"
+KBM.Language.Options.Shadow.Russian = "Отображать тень текста"
+KBM.Language.Options.Texture = KBM.Language:Add("Enable textured overlay")
+KBM.Language.Options.Texture.German = "Texturierte Balken aktiviert"
+KBM.Language.Options.Texture.Russian = "Включить функцию наложения текстур"
 
 -- Timer Dictionary
 KBM.Language.Timers = {}
 KBM.Language.Timers.Time = KBM.Language:Add("Time")
 KBM.Language.Timers.Time.French = "Dur\195\169e"
 KBM.Language.Timers.Time.German = "Zeit"
+KBM.Language.Timers.Time.Russian = "Время"
 KBM.Language.Timers.Enrage = KBM.Language:Add("Enrage in")
 KBM.Language.Timers.Enrage.French = "Enrage dans"
+KBM.Language.Timers.Enrage.Russian = "Энрейдж через"
 
 KBM.Numbers = {}
 KBM.Numbers.Place = {}
@@ -2353,72 +2445,108 @@ function KBM.EncTimer:Init()
 end
 
 function KBM.MatchType(uDetails, BossObj)
+	if not BossObj then
+		return false
+	end
 	if KBM.Encounter then
-		if not BossObj then
-			return false
-		end
 		-- Already established type
-		return true
+		if KBM.DungeonMode then
+			if not BossObj[uDetails.type] then
+				if KBM.Debug then
+					print("Unique ID not set: "..uDetails.name)
+					print("Unique ID: "..uDetails.type)
+				end
+				if KBM.DungeonMode == "expert" then
+					return BossObj.Expert
+				else
+					return BossObj.Master
+				end
+			else
+				return BossObj[uDetails.type]
+			end
+		else
+			return BossObj
+		end
 	else
-		if BossObj then
+		if not BossObj.Mod then
+			if BossObj[uDetails.type] then
+				BossObj = BossObj[uDetails.type]
+			else
+				if BossObj.Expert then
+					BossObj = BossObj.Expert
+				elseif BossObj.Master then
+					BossObj = BossObj.Master
+				else
+					if KBM.Debug then
+						print("Unhandled Unit: "..uDetails.name)
+						print("Unique ID: "..uDetails.type)
+					end
+					return false
+				end
+			end
 			if BossObj.Mod.InstanceObj then
 				if BossObj.Mod.InstanceObj.Type == "Expert" then
-					if uDetails.level == 52 then
+					if uDetails.level == 52 or uDetails.level == "??" then
 						if KBM.Debug then 
 							print("Expert Dungeon mode active")
 						end
 						KBM.EncounterMode = "normal"
 						KBM.DungeonMode = "expert"
-						return true
+						return BossObj
+					else
+						return false
 					end
-				elseif Bossobj.Mod.InstanceObj.Type == "Master" then
-					if uDetails.level == 52 then
+				elseif BossObj.Mod.InstanceObj.Type == "Master" then
+					if uDetails.level == 52 or uDetails.level == "??" then
 						if KBM.Debug then
 							print("Master Mode Dungeon mode active")
 						end
 						KBM.EncounterMode = "normal"
 						KBM.DungeonMode = "master"
-						return true
+						return BossObj
+					else
+						return false
+					end
+				end
+			end
+		else
+			KBM.DungeonMode = false
+			if BossObj.Mod.HasChronicle then
+				if BossObj.ChronicleID then
+					if uDetails.type == BossObj.ChronicleID then
+						KBM.EncounterMode = "chronicle"
+						if KBM.Debug then
+							print("Chronicle mode active via ID")
+						end
+						return BossObj
+					else
+						KBM.EncounterMode = "normal"
+						if KBM.Debug then
+							print("Normal mode active via ID")
+						end
+						return BossObj
+					end
+				else
+					if KBM.Debug then
+						print("Undefined Chronicle ID, using HP checking method")
+					end
+					if uDetails.healthMax < 1500000 then
+						KBM.EncounterMode = "chronicle"
+						if KBM.Debug then
+							print("Chronicle mode active via HP")
+						end
+						return BossObj
+					else
+						KBM.EncounterMode = "normal"
+						if KBM.Debug then
+							print("Normal mode active via HP")
+						end
+						return BossObj
 					end
 				end
 			else
-				if BossObj.Mod.HasChronicle then
-					if BossObj.ChronicleID then
-						if uDetails.type == BossObj.ChronicleID then
-							KBM.EncounterMode = "chronicle"
-							if KBM.Debug then
-								print("Chronicle mode active via ID")
-							end
-							return true
-						else
-							KBM.EncounterMode = "normal"
-							if KBM.Debug then
-								print("Normal mode active via ID")
-							end
-							return true
-						end
-					else
-						if KBM.Debug then
-							print("Undefined Chronicle ID, using HP checking method")
-						end
-						if uDetails.healthMax < 1500000 then
-							KBM.EncounterMode = "chronicle"
-							if KBM.Debug then
-								print("Chronicle mode active via HP")
-							end
-							return true
-						else
-							KBM.EncounterMode = "normal"
-							if KBM.Debug then
-								print("Normal mode active via HP")
-							end
-							return true
-						end
-					end
-				else
-					KBM.EncounterMode = "normal"
-					return true
-				end
+				KBM.EncounterMode = "normal"
+				return BossObj
 			end
 		end
 		return false
@@ -2435,10 +2563,17 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 				if uDetails then
 					if KBM_Boss[uDetails.name] then
 						BossObj = KBM_Boss[uDetails.name]
+						if BossObj.IgnoreID == uDetails.type then
+							BossObj = nil
+							KBM.IgnoreList[UnitID] = true
+						end
 					elseif KBM.SubBoss[uDetails.name] then
 						BossObj = KBM.SubBoss[uDetails.name]
+					elseif KBM.Boss.Dungeon.List[uDetails.name] then
+						BossObj = KBM.Boss.Dungeon.List[uDetails.name]
 					end
-					if KBM.MatchType(uDetails, BossObj) then
+					BossObj = KBM.MatchType(uDetails, BossObj)
+					if BossObj then
 						if KBM.Debug then
 							print("Boss found Checking: Tier = "..tostring(uDetails.tier).." "..tostring(uDetails.level).." ("..type(uDetails.level)..")")
 							print("Players location: "..Inspect.Unit.Detail(KBM.Player.UnitID).locationName)
@@ -2447,9 +2582,9 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 							print("------------------------------------")
 						end
 						if uDetails.combat then
-							if KBM.Debug then
-								print("Boss matched checking encounter start")
-							end
+							-- if KBM.Debug then
+								-- print("Boss matched checking encounter start")
+							-- end
 							if KBM.EncounterMode == "normal" or (KBM.EncounterMode == "chronicle" and BossObj.Mod.Settings.Chronicle) then
 								KBM.BossID[UnitID] = {}
 								KBM.BossID[UnitID].name = uDetails.name
@@ -2467,9 +2602,9 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 									KBM.BossID[UnitID].Percent = math.ceil(KBM.BossID[UnitID].PercentRaw)
 									KBM.BossID[UnitID].PercentLast = KBM.BossID[UnitID].Percent
 									if not KBM.Encounter and not BossObj.Ignore then
-										if KBM.Debug then
-											print("New encounter, starting")
-										end
+										-- if KBM.Debug then
+											-- print("New encounter, starting")
+										-- end
 										KBM.Encounter = true
 										KBM.CurrentBoss = UnitID
 										KBM_CurrentBossName = uDetails.name
@@ -2570,9 +2705,9 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 				end
 			end
 		else
-			if KBM.Debug then
-				print("Encounter idle wait, skipping start.")
-			end
+			-- if KBM.Debug then
+				-- print("Encounter idle wait, skipping start.")
+			-- end
 			if KBM.Idle.Until < current then
 				KBM.Idle.Wait = false
 			end
@@ -3636,10 +3771,13 @@ function KBM.CastBar:Init()
 	
 end
 
-function KBM.CastBar:Add(Mod, Boss, Enabled)
+function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 	local CastBarObj = {}
 	CastBarObj.UnitID = nil
 	CastBarObj.Boss = Boss
+	CastBarObj.Dynamic = Dynamic
+	CastBarObj.Name = Boss.Name
+	CastBarObj.ID = Boss.Name
 	CastBarObj.Filters = Boss.CastFilters
 	CastBarObj.HasFilters = Boss.HasCastFilters
 	if Boss.Settings then
@@ -3664,7 +3802,11 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 	
 	CastBarObj.Casting = false
 	CastBarObj.LastCast = ""
-	CastBarObj.Enabled = CastBarObj.Settings.Enabled
+	if not Enabled then
+		CastBarObj.Enabled = CastBarObj.Settings.Enabled
+	else
+		CastBarObj.Enabled = Enabled
+	end
 	CastBarObj.Mod = Mod
 	CastBarObj.Active = false
 	CastBarObj.Anchor = false
@@ -3762,7 +3904,14 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 				self.Boss:PinCastBar()
 			end
 		end
-		KBM.CastBar.ActiveCastBars[UnitID] = self
+		if not KBM.CastBar.ActiveCastBars[UnitID] then
+			KBM.CastBar.ActiveCastBars[UnitID] = {
+				List = {},
+				Count = 0,
+			}
+		end
+		KBM.CastBar.ActiveCastBars[UnitID].List[self.ID] = self
+		KBM.CastBar.ActiveCastBars[UnitID].Count = KBM.CastBar.ActiveCastBars[UnitID].Count + 1
 		self.Active = true		
 	end
 	
@@ -3775,7 +3924,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 		self.GUI.Progress:SetVisible(true)
 	end
 	
-	function CastBarObj:Update()	
+	function CastBarObj:Update(Trigger)	
 		if self.UnitID then
 			bDetails = Inspect.Unit.Castbar(self.UnitID)
 			if bDetails then
@@ -3872,7 +4021,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 					if self.LastStart ~= bDetails.begin then
 						self.LastStart = bDetails.begin
 						if not bDetails.channeled then	
-							if KBM.Trigger.Cast[bDetails.abilityName] then
+							if KBM.Trigger.Cast[bDetails.abilityName] and Trigger then
 								if KBM.Trigger.Cast[bDetails.abilityName][self.Boss.Name] then
 									TriggerObj = KBM.Trigger.Cast[bDetails.abilityName][self.Boss.Name]
 									KBM.Trigger.Queue:Add(TriggerObj, nil, nil, bDetails.remaining)
@@ -3881,7 +4030,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 						else
 							if not self.Channeled then
 								self.Channeled = true
-								if KBM.Trigger.Channel[bDetails.abilityName] then
+								if KBM.Trigger.Channel[bDetails.abilityName] and Trigger then
 									if KBM.Trigger.Channel[bDetails.abilityName][self.Boss.Name] then
 										TriggerObj = KBM.Trigger.Channel[bDetails.abilityName][self.Boss.Name]
 										KBM.Trigger.Queue:Add(TriggerObj, nil, nil, bDetails.remaining)
@@ -3902,7 +4051,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 						if self.CastObject then
 							if self.CastObject.remaining > 0.05 and not self.CastObject.uninterruptible then
 								--- Do Cast Interrupt Triggers (if any)
-								if KBM.Trigger.Interrupt[self.CastObject.abilityName] then
+								if KBM.Trigger.Interrupt[self.CastObject.abilityName] and Trigger then
 									if KBM.Trigger.Interrupt[self.CastObject.abilityName][self.Boss.Name] then
 										TriggerObj = KBM.Trigger.Interrupt[self.CastObject.abilityName][self.Boss.Name]
 										KBM.Trigger.Queue:Add(TriggerObj, nil, nil, self.CastObject.remaining)
@@ -3969,7 +4118,11 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 	
 	function CastBarObj:Remove()
 		if self.UnitID then
-			KBM.CastBar.ActiveCastBars[self.UnitID] = nil
+			KBM.CastBar.ActiveCastBars[self.UnitID].List[self.ID] = nil
+			KBM.CastBar.ActiveCastBars[self.UnitID].Count = KBM.CastBar.ActiveCastBars[self.UnitID].Count - 1
+			if KBM.CastBar.ActiveCastBars[self.UnitID].Count == 0 then
+				KBM.CastBar.ActiveCastBars[self.UnitID] = nil
+			end
 		end
 		self.UnitID = nil
 		self.Active = false
@@ -3980,15 +4133,16 @@ function KBM.CastBar:Add(Mod, Boss, Enabled)
 				table.insert(KBM.CastBar.Store, self.GUI)
 				self.GUI = nil
 			end
-		end		
+		end
 	end
-	
-	self[Boss.Name] = CastBarObj
-	if not self.CastBarList[Mod.ID] then
-		self.CastBarList[Mod.ID] = {}
+		
+	if not self.Dynamic then
+		if not self.CastBarList[Mod.ID] then
+			self.CastBarList[Mod.ID] = {}
+		end
+		table.insert(self.CastBarList[Mod.ID], CastBarObj)
 	end
-	table.insert(self.CastBarList[Mod.ID], CastBarObj)
-	return self[Boss.Name]
+	return CastBarObj
 end
 
 local function KBM_Reset()
@@ -4170,7 +4324,11 @@ function KBM:Timer()
 					end
 				end	
 				for UnitID, CastCheck in pairs(KBM.CastBar.ActiveCastBars) do
-					CastCheck:Update()
+					local Trigger = true
+					for ID, CastBarObj in pairs(CastCheck.List) do
+						CastBarObj:Update(Trigger)
+						Trigger = false
+					end
 				end
 				if udiff >= 0.05 then
 					for i, Timer in ipairs(self.MechTimer.ActiveTimers) do
@@ -4212,7 +4370,11 @@ function KBM:Timer()
 						PlugIn:Timer(current)
 					end
 					for UnitID, CastCheck in pairs(KBM.CastBar.ActiveCastBars) do
-						CastCheck:Update()
+						local Trigger = true
+						for ID, CastBarObj in pairs(CastCheck.List) do
+							CastBarObj:Update(Trigger)
+							Trigger = false
+						end
 					end
 				end	
 			end
@@ -5069,6 +5231,16 @@ local function KBM_WaitReady(unitID, uDetails)
 	KBM_Start()
 	for _, Mod in ipairs(KBM.ModList) do
 		Mod:AddBosses(KBM_Boss)
+		if Mod.InstanceObj then
+			for BossName, BossObj in pairs(Mod.Bosses) do
+				KBM.Boss.Dungeon:AddBoss(BossObj)
+				if BossObj.AltBossList then
+					for i, aBossObj in pairs(BossObj.AltBossList) do
+						KBM.Boss.Dungeon:AddBoss(aBossObj)
+					end
+				end
+			end
+		end
 		Mod:Start(KBM_MainWin)
 	end
 	KBM.ApplySettings()

@@ -3,8 +3,8 @@
 -- Copyright 2011
 --
 
-KBMEXAP_Settings = nil
-chKBMEXAP_Settings = nil
+KBMEXFOLH_Settings = nil
+chKBMEXFOLH_Settings = nil
 
 local MOD = {
 	Header = nil,
@@ -12,7 +12,7 @@ local MOD = {
 	IsInstance = true,
 	Name = "Fall of Lantern Hook",
 	Type = "Expert",
-	ID = "MOD",
+	ID = "Fall_of_Lantern_Hook",
 }
 
 -- Link Mods
@@ -21,7 +21,7 @@ local KBM = AddonData.data
 KBM.RegisterMod(MOD.Name, MOD)
 
 KBM.Language:Add(MOD.Name)
--- KBM.Language[MOD.Name]:SetGerman("")
+KBM.Language[MOD.Name]:SetGerman("Untergang von Laternenhaken") 
 -- KBM.Language[MOD.Name]:SetFrench("")
 -- KBM.Language[MOD.Name]:SetRussian("")
 

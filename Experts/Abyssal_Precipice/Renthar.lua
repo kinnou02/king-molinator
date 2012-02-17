@@ -35,6 +35,7 @@ MOD.Renthar = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
+	ExpertID = "Expert",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -66,7 +67,6 @@ function MOD:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Renthar.Name] = self.Renthar,
 	}
-	KBM_Boss[self.Renthar.Name] = self.Renthar	
 end
 
 function MOD:InitVars()

@@ -35,7 +35,7 @@ MOD.Konstantin = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
-	ExpertID = nil,
+	ExpertID = "U5454BF1F1A43E2CD",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -53,7 +53,7 @@ MOD.Konstantin = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Konstantin = KBM.Language:Add(MOD.Konstantin.Name)
--- MOD.Lang.Konstantin:SetGerman("")
+MOD.Lang.Konstantin:SetGerman("Konstantin")
 -- MOD.Lang.Konstantin:SetFrench("")
 -- MOD.Lang.Konstantin:SetRussian("")
 MOD.Konstantin.Name = MOD.Lang.Konstantin[KBM.Lang]
@@ -67,7 +67,6 @@ function MOD:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Konstantin.Name] = self.Konstantin,
 	}
-	KBM_Boss[self.Konstantin.Name] = self.Konstantin	
 end
 
 function MOD:InitVars()

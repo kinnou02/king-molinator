@@ -33,6 +33,7 @@ MOD.Gronik = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
+	ExpertID = "Expert",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -64,7 +65,6 @@ function MOD:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Gronik.Name] = self.Gronik,
 	}
-	KBM_Boss[self.Gronik.Name] = self.Gronik	
 end
 
 function MOD:InitVars()

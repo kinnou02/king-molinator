@@ -35,6 +35,7 @@ MOD.Braxtepel = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
+	ExpertID = "Expert",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -75,6 +76,7 @@ MOD.Mursh = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
+	ExpertID = "Expert",
 	TimeOut = 5,
 }
 
@@ -87,6 +89,7 @@ MOD.Squersh = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
+	ExpertID = "Expert",
 	TimeOut = 5,
 }
 
@@ -97,9 +100,6 @@ function MOD:AddBosses(KBM_Boss)
 		[self.Mursh.Name] = self.Mursh,
 		[self.Squersh.Name] = self.Squersh
 	}
-	KBM_Boss[self.Braxtepel.Name] = self.Braxtepel
-	KBM.SubBoss[self.Mursh.Name] = self.Mursh
-	KBM.SubBoss[self.Squersh.Name] = self.Squersh
 end
 
 function MOD:InitVars()
