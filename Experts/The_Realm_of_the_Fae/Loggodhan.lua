@@ -53,7 +53,7 @@ MOD.Loggodhan = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Loggodhan = KBM.Language:Add(MOD.Loggodhan.Name)
--- MOD.Lang.Loggodhan:SetGerman("")
+MOD.Lang.Loggodhan:SetGerman("Luggodhan")
 -- MOD.Lang.Loggodhan:SetFrench("")
 -- MOD.Lang.Loggodhan:SetRussian("")
 MOD.Loggodhan.Name = MOD.Lang.Loggodhan[KBM.Lang]

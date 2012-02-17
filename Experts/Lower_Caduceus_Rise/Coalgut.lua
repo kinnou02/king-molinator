@@ -23,7 +23,7 @@ local MOD = {
 
 MOD.Coalgut = {
 	Mod = MOD,
-	Level = 52,
+	Level = "??",
 	Active = false,
 	Name = "Coalgut",
 	--NameShort = "Coalgut",
@@ -53,7 +53,7 @@ MOD.Coalgut = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Coalgut = KBM.Language:Add(MOD.Coalgut.Name)
--- MOD.Lang.Coalgut:SetGerman("")
+MOD.Lang.Coalgut:SetGerman("Kohlbauch") 
 -- MOD.Lang.Coalgut:SetFrench("")
 -- MOD.Lang.Coalgut:SetRussian("")
 MOD.Coalgut.Name = MOD.Lang.Coalgut[KBM.Lang]

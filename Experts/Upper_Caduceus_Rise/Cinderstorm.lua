@@ -23,7 +23,7 @@ local MOD = {
 
 MOD.Cinderstorm = {
 	Mod = MOD,
-	Level = 52,
+	Level = "??",
 	Active = false,
 	Name = "Cinderstorm",
 	--NameShort = "Cinderstorm",
@@ -53,7 +53,7 @@ MOD.Cinderstorm = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Cinderstorm = KBM.Language:Add(MOD.Cinderstorm.Name)
--- MOD.Lang.Cinderstorm:SetGerman("")
+MOD.Lang.Cinderstorm:SetGerman("Aschesturm")
 -- MOD.Lang.Cinderstorm:SetFrench("")
 -- MOD.Lang.Cinderstorm:SetRussian("")
 MOD.Cinderstorm.Name = MOD.Lang.Cinderstorm[KBM.Lang]

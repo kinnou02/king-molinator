@@ -23,7 +23,7 @@ local MOD = {
 
 MOD.Rodiafel = {
 	Mod = MOD,
-	Level = 52,
+	Level = "??",
 	Active = false,
 	Name = "Rodiafel",
 	--NameShort = "Rodiafel",
@@ -53,7 +53,7 @@ MOD.Rodiafel = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Rodiafel = KBM.Language:Add(MOD.Rodiafel.Name)
--- MOD.Lang.Rodiafel:SetGerman("")
+MOD.Lang.Rodiafel:SetGerman("Rodiafel")
 -- MOD.Lang.Rodiafel:SetFrench("")
 -- MOD.Lang.Rodiafel:SetRussian("")
 MOD.Rodiafel.Name = MOD.Lang.Rodiafel[KBM.Lang]

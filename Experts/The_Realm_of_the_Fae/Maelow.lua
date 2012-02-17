@@ -53,7 +53,7 @@ MOD.Maelow = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Maelow = KBM.Language:Add(MOD.Maelow.Name)
--- MOD.Lang.Maelow:SetGerman("")
+MOD.Lang.Maelow:SetGerman("Schwindler Maelow")
 -- MOD.Lang.Maelow:SetFrench("")
 -- MOD.Lang.Maelow:SetRussian("")
 MOD.Maelow.Name = MOD.Lang.Maelow[KBM.Lang]

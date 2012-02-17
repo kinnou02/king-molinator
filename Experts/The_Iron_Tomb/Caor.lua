@@ -53,7 +53,7 @@ MOD.Caor = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Caor = KBM.Language:Add(MOD.Caor.Name)
--- MOD.Lang.Caor:SetGerman("")
+MOD.Lang.Caor:SetGerman("Caor Ashstone")
 -- MOD.Lang.Caor:SetFrench("")
 -- MOD.Lang.Caor:SetRussian("")
 MOD.Caor.Name = MOD.Lang.Caor[KBM.Lang]

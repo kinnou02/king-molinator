@@ -56,12 +56,12 @@ MOD.Laric = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Laric = KBM.Language:Add(MOD.Laric.Name)
--- MOD.Lang.Laric:SetGerman("")
+MOD.Lang.Laric:SetGerman("Laric der Fromme")
 -- MOD.Lang.Laric:SetFrench("")
 -- MOD.Lang.Laric:SetRussian("")
 MOD.Laric.Name = MOD.Lang.Laric[KBM.Lang]
 MOD.Lang.Descript = KBM.Language:Add("The Three Kings")
--- MOD.Lang.Descript.German = ""
+MOD.Lang.Descript:SetGerman("Die drei Könige")
 MOD.Descript = MOD.Lang.Descript[KBM.Lang]
 
 -- Ability Dictionary
@@ -70,9 +70,9 @@ MOD.Lang.Ability = {}
 -- Unit Dictionary
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Derribec = KBM.Language:Add("Derribec the Magus")
--- MOD.Lang.Unit.Derribec.German = ""
+MOD.Lang.Unit.Derribec.German = "Derribec der Magier"
 MOD.Lang.Unit.Humbart = KBM.Language:Add("Humbart the Bold")
--- MOD.Lang.Unit.Humbart.German = ""
+MOD.Lang.Unit.Humbart.German = "Humbart der Verwegene"
 
 MOD.Derribec = {
 	Mod = MOD,

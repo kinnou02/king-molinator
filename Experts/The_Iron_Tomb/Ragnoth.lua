@@ -53,7 +53,7 @@ MOD.Ragnoth = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Ragnoth = KBM.Language:Add(MOD.Ragnoth.Name)
--- MOD.Lang.Ragnoth:SetGerman("")
+MOD.Lang.Ragnoth:SetGerman("Ragnoth der Brandschatzer")
 -- MOD.Lang.Ragnoth:SetFrench("")
 -- MOD.Lang.Ragnoth:SetRussian("")
 MOD.Ragnoth.Name = MOD.Lang.Ragnoth[KBM.Lang]

@@ -62,16 +62,22 @@ SZ.Lang.Ability.Grasp.German = "Seelenreißer-Griff"
 SZ.Lang.Ability.Grasp.French = "Poigne d'\195\137tripeur d'\195\162mes"
 SZ.Lang.Ability.Grasp.Russian = "Хватка душедера"
 SZ.Lang.Ability.Cede = KBM.Language:Add("Cede Spirit")
+SZ.Lang.Ability.Cede.German = "Geist abgeben"
+SZ.Lang.Ability.Volley = KBM.Language:Add("Dark Volley")
 
 -- Menu Dictionary
 SZ.Lang.Menu = {}
 SZ.Lang.Menu.Grasp = KBM.Language:Add("First "..SZ.Lang.Ability.Grasp[KBM.Lang])
+SZ.Lang.Menu.Grasp.German = "Erste "..SZ.Lang.Ability.Grasp[KBM.Lang]
 SZ.Descript = SZ.Zilas.Name
 
 -- Unit Dictionary
 SZ.Lang.Unit = {}
 SZ.Lang.Unit.Imp = KBM.Language:Add("Escaped Imp")
+SZ.Lang.Unit.Imp.German = "Entflohener Imp"
 SZ.Lang.Unit.ImpShort = KBM.Language:Add("Imp")
+SZ.Lang.Unit.Spirit = KBM.Language:Add("Drifting Spirit")
+SZ.Lang.Unit.SpiritShort = KBM.Language:Add("Spirit")
 
 SZ.Imp = {
 	Mod = SZ,
@@ -92,14 +98,35 @@ SZ.Imp = {
 	}
 }
 
+SZ.Spirit = {
+	Mod = SZ,
+	Level = "??",
+	Name = SZ.Lang.Unit.Spirit[KBM.Lang],
+	NameShort = SZ.Lang.Unit.SpiritShort[KBM.Lang],
+	UnitList = {},
+	Menu = {},
+	AlertsRef = {},
+	Ignore = true,
+	Type = "multi",
+	Triggers = {},
+	Settings = {
+		AlertsRef = {
+			Enabled = true,
+			Volley = KBM.Defaults.AlertObj.Create("purple"),
+		},
+	}
+}
+
 function SZ:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Zilas.Name] = self.Zilas,
 		[self.Imp.Name] = self.Imp,
+		[self.Spirit.Name] = self.Spirit
 	}
 	KBM_Boss[self.Zilas.Name] = self.Zilas
 	KBM.SubBoss[self.Imp.Name] = self.Imp
+	KBM.SubBoss[self.Spirit.Name] = self.Spirit
 end
 
 function SZ:InitVars()
@@ -116,7 +143,10 @@ function SZ:InitVars()
 		},
 		Imp = {
 			AlertsRef = self.Imp.Settings.AlertsRef,
-		}
+		},
+		Spirit = {
+			AlertsRef = self.Spirit.Settings.AlertsRef,
+		},
 	}
 	KBMSZ_Settings = self.Settings
 	chKBMSZ_Settings = self.Settings
@@ -184,6 +214,10 @@ function SZ:Death(UnitID)
 		self.Imp.UnitList[UnitID].CastBar:Remove()
 		self.Imp.UnitList[UnitID].Dead = true
 		self.Imp.UnitList[UnitID].CastBar = nil
+	elseif self.Spirit.UnitList[UnitID] then
+		self.Spirit.UnitList[UnitID].CastBar:Remove()
+		self.Spirit.UnitList[UnitID].Dead = true
+		self.Spirit.UnitList[UnitID].CastBar = nil
 	end
 	return false
 end
@@ -212,7 +246,7 @@ function SZ:UnitHPCheck(uDetails, unitID)
 				if self.Bosses[uDetails.name] then
 					if not self.Bosses[uDetails.name].UnitList[unitID] then
 						SubBossObj = {
-							Mod = AK,
+							Mod = SZ,
 							Level = "??",
 							Name = uDetails.name,
 							Dead = false,
@@ -224,10 +258,13 @@ function SZ:UnitHPCheck(uDetails, unitID)
 						if uDetails.name == self.Imp.Name then
 							SubBossObj.CastBar = KBM.CastBar:Add(self, self.Imp, false, true)
 							SubBossObj.CastBar:Create(unitID)
+						elseif uDetails.name == self.Spirit.Name then
+							SubBossObj.CastBar = KBM.CastBar:Add(self, self.Spirit, false, true)
+							SubBossObj.CastBar:Create(unitID)
 						end
 					else
 						self.Bosses[uDetails.name].UnitList[unitID].Available = true
-						self.Bosses[uDetails.name].UnitList[unitID].UnitID = UnitID
+						self.Bosses[uDetails.name].UnitList[unitID].UnitID = unitID
 					end
 					return self.Bosses[uDetails.name].UnitList[unitID]
 				end
@@ -279,7 +316,13 @@ function SZ:Reset()
 			BossObj.CastBar:Remove()
 		end
 	end
+	for UnitID, BossObj in pairs(self.Spirit.UnitList) do
+		if BossObj.CastBar then
+			BossObj.CastBar:Remove()
+		end
+	end
 	self.Imp.UnitList = {}
+	self.Spirit.UnitList = {}
 	self.Phase = 1	
 end
 
@@ -327,10 +370,13 @@ function SZ:Start()
 	self.Zilas.AlertsRef.Grasp:NoMenu()
 	-- Escaped Imp
 	self.Imp.AlertsRef.Cede = KBM.Alert:Create(self.Lang.Ability.Cede[KBM.Lang], nil, false, true, "yellow")
+	-- Drifting Spirit
+	self.Spirit.AlertsRef.Volley = KBM.Alert:Create(self.Lang.Ability.Volley[KBM.Lang], nil, false, true, "purple")
 	
 	KBM.Defaults.TimerObj.Assign(self.Zilas)
 	KBM.Defaults.AlertObj.Assign(self.Zilas)
 	KBM.Defaults.AlertObj.Assign(self.Imp)
+	KBM.Defaults.AlertObj.Assign(self.Spirit)
 	
 	-- Assign Mechanics to Triggers.
 	-- Zilas
@@ -351,6 +397,14 @@ function SZ:Start()
 	-- Imps
 	self.Imp.Triggers.Cede = KBM.Trigger:Create(self.Lang.Ability.Cede[KBM.Lang], "cast", self.Imp)
 	self.Imp.Triggers.Cede:AddAlert(self.Imp.AlertsRef.Cede)
+	self.Imp.Triggers.CedeInt = KBM.Trigger:Create(self.Lang.Ability.Cede[KBM.Lang], "interrupt", self.Imp)
+	self.Imp.Triggers.CedeInt:AddStop(self.Imp.AlertsRef.Cede)
+	
+	-- Spirits
+	self.Spirit.Triggers.Volley = KBM.Trigger:Create(self.Lang.Ability.Volley[KBM.Lang], "cast", self.Spirit)
+	self.Spirit.Triggers.Volley:AddAlert(self.Spirit.AlertsRef.Volley)
+	self.Spirit.Triggers.VolleyInt = KBM.Trigger:Create(self.Lang.Ability.Volley[KBM.Lang], "interrupt", self.Spirit)
+	self.Spirit.Triggers.VolleyInt:AddStop(self.Spirit.AlertsRef.Volley)
 	
 	-- Assign Castbar object.
 	self.Zilas.CastBar = KBM.CastBar:Add(self, self.Zilas, true)

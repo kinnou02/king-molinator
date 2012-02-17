@@ -53,7 +53,7 @@ MOD.Palos = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Palos = KBM.Language:Add(MOD.Palos.Name)
--- MOD.Lang.Palos:SetGerman("")
+MOD.Lang.Palos:SetGerman("Hakenmeister Palos") 
 -- MOD.Lang.Palos:SetFrench("")
 -- MOD.Lang.Palos:SetRussian("")
 MOD.Palos.Name = MOD.Lang.Palos[KBM.Lang]

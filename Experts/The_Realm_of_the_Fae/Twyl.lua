@@ -53,7 +53,7 @@ MOD.Twyl = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Twyl = KBM.Language:Add(MOD.Twyl.Name)
--- MOD.Lang.Twyl:SetGerman("")
+MOD.Lang.Twyl:SetGerman("Feenfürst Twyl")
 -- MOD.Lang.Twyl:SetFrench("")
 -- MOD.Lang.Twyl:SetRussian("")
 MOD.Twyl.Name = MOD.Lang.Twyl[KBM.Lang]
@@ -65,11 +65,17 @@ MOD.Lang.Ability = {}
 -- Unit Dictionary
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Autumn = KBM.Language:Add("Avatar of Autumn")
+MOD.Lang.Unit.Autumn.German = "Avatar des Herbstes"
 MOD.Lang.Unit.AutumnShort = KBM.Language:Add("Autumn")
+MOD.Lang.Unit.AutumnShort.German = "Herbst"
 MOD.Lang.Unit.Summer = KBM.Language:Add("Avatar of Summer")
+MOD.Lang.Unit.Summer.German = "Avatar des Sommers"
 MOD.Lang.Unit.SummerShort = KBM.Language:Add("Summer")
+MOD.Lang.Unit.SummerShort.German = "Sommer"
 MOD.Lang.Unit.Spring = KBM.Language:Add("Avatar of Spring")
+MOD.Lang.Unit.Spring.German = "Avatar des Frühlings"
 MOD.Lang.Unit.SpringShort = KBM.Language:Add("Spring")
+MOD.Lang.Unit.SpringShort.German = "Frühling"
 
 MOD.Autumn = {
 	Mod = MOD,

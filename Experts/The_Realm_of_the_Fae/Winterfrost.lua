@@ -53,7 +53,7 @@ MOD.Winterfrost = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Winterfrost = KBM.Language:Add(MOD.Winterfrost.Name)
--- MOD.Lang.Winterfrost:SetGerman("")
+MOD.Lang.Winterfrost:SetGerman("Chillblains Winterfrost")
 -- MOD.Lang.Winterfrost:SetFrench("")
 -- MOD.Lang.Winterfrost:SetRussian("")
 MOD.Winterfrost.Name = MOD.Lang.Winterfrost[KBM.Lang]

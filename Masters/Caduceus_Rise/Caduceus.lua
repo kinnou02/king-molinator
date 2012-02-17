@@ -23,7 +23,7 @@ local MOD = {
 
 MOD.Caduceus = {
 	Mod = MOD,
-	Level = 52,
+	Level = "??",
 	Active = false,
 	Name = "Caduceus",
 	--NameShort = "Caduceus",
@@ -53,7 +53,7 @@ MOD.Caduceus = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Caduceus = KBM.Language:Add(MOD.Caduceus.Name)
--- MOD.Lang.Caduceus:SetGerman("")
+MOD.Lang.Caduceus:SetGerman("Hermesstab")
 -- MOD.Lang.Caduceus:SetFrench("")
 -- MOD.Lang.Caduceus:SetRussian("")
 MOD.Caduceus.Name = MOD.Lang.Caduceus[KBM.Lang]

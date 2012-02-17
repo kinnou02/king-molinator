@@ -20,7 +20,7 @@ Options
 Engine
 * Encounters
 ** New: Encounter type checks are now bypassed once already established.
-** New: Checks added for Expert Mode dungeon recognition. (Master Mode will still trigger currently in Alpha)
+** New: Checks added for Expert Mode and Master Mode dungeon recognition.
 * CastBars
 ** New: Further adjustments to allow for castbar tracking outside of encounters.
 ** New: Castbars can now have multiple displays per Unit ID, but will only ever use one for triggering events.
@@ -28,7 +28,9 @@ Engine
 
 Hammerknell
 * Soulrender Zilas
-** New: Escaped Imps now have an Alert for Cede Spirit. (Alerts happen for any Imp Casting, that is seen by the raid)
+** New: Escaped Imps now have an Alert for Cede Spirit. (Alerts happen for any Imp casting, that is seen by the raid)
+** New: Drifting Spirits now have an alert for Dark Volley. (Alerts happen for any Spirit casting, that is seen by the raid)
+** New: Added Alert stop triggers for when both Cede Spirit and Dark Volley are interrupted.
 * Rune King Molinar
 ** Change: Reduced timer for King's Consuming Essence.
 ** Fixed: Predictive DPS meter was not resetting correctly after a wipe. (Yes, that did take a while to fix)
@@ -36,6 +38,8 @@ Hammerknell
 * Grugonim
 ** Fixed: Phase Monitor was losing track of Tower kills if you wipe during a Tower phase.
 * Akylios
+** New: Added an alert for Apostle of Jornaru's Tidal Storm ability.
+** New: Added a stop Alert trigger for when Tidal Storm is interrupted.
 ** New: Added a stop trigger to Mind Decay alert when the debuff is nullified.
 ** Change: Another attempt at Phase limiting timers. This should stop the Submerge/Emerge timer in P5.
 ** Note: For alpha. Please report any non-responding timers. Summon Adds, Waves and Submerge/Emerge are all Phase limited.
@@ -182,7 +186,7 @@ German Translations
 
 Russian Translations
 * New: Lots of new translations, including In game messages, Menu Options and Boss Mechanics.
-
+----
 v0.9.6
 
 Hammerknell

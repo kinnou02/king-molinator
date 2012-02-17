@@ -53,7 +53,7 @@ MOD.Orban = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Orban = KBM.Language:Add(MOD.Orban.Name)
--- MOD.Lang.Orban:SetGerman("")
+MOD.Lang.Orban:SetGerman("Orban der große Imker") 
 -- MOD.Lang.Orban:SetFrench("")
 -- MOD.Lang.Orban:SetRussian("")
 MOD.Orban.Name = MOD.Lang.Orban[KBM.Lang]

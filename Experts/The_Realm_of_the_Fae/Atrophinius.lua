@@ -53,7 +53,7 @@ MOD.Atrophinius = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Atrophinius = KBM.Language:Add(MOD.Atrophinius.Name)
--- MOD.Lang.Atrophinius:SetGerman("")
+MOD.Lang.Atrophinius:SetGerman("Kriegsherr Atrophinius")
 -- MOD.Lang.Atrophinius:SetFrench("")
 -- MOD.Lang.Atrophinius:SetRussian("")
 MOD.Atrophinius.Name = MOD.Lang.Atrophinius[KBM.Lang]

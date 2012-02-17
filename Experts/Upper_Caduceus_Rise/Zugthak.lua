@@ -53,7 +53,7 @@ MOD.Zugthak = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Zugthak = KBM.Language:Add(MOD.Zugthak.Name)
--- MOD.Lang.Zugthak:SetGerman("")
+MOD.Lang.Zugthak:SetGerman("Zugthak")
 -- MOD.Lang.Zugthak:SetFrench("")
 -- MOD.Lang.Zugthak:SetRussian("")
 MOD.Zugthak.Name = MOD.Lang.Zugthak[KBM.Lang]

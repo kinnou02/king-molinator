@@ -53,7 +53,7 @@ MOD.Zael = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Zael = KBM.Language:Add(MOD.Zael.Name)
--- MOD.Lang.Zael:SetGerman("")
+MOD.Lang.Zael:SetGerman("Ascherufer Zael")
 -- MOD.Lang.Zael:SetFrench("")
 -- MOD.Lang.Zael:SetRussian("")
 MOD.Zael.Name = MOD.Lang.Zael[KBM.Lang]

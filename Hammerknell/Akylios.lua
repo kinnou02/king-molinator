@@ -117,8 +117,17 @@ AK.Apostle = {
 	Level = "??",
 	Name = "Apostle of Jornaru",
 	UnitList = {},
+	Menu = {},
+	AlertsRef = {},
 	Ignore = true,
 	Type = "multi",
+	Triggers = {},
+	Settings = {
+		AlertsRef = {
+			Enabled = true,
+			Storm = KBM.Defaults.AlertObj.Create("yellow"),
+		},
+	}
 }
 
 KBM.RegisterMod(AK.ID, AK)
@@ -138,7 +147,9 @@ AK.Lang.Unit.Lasher.German = "Peitscher des Akylios"
 AK.Lasher.Name = AK.Lang.Unit.Lasher[KBM.Lang]
 AK.Lang.Unit.Apostle = KBM.Language:Add(AK.Apostle.Name)
 AK.Apostle.Name = AK.Lang.Unit.Apostle[KBM.Lang]
+AK.Lang.Unit.Apostle.German = "Apostel von Jornaru"
 AK.Lang.Unit.ApostleShort = KBM.Language:Add("Apostle")
+AK.Lang.Unit.ApostleShort.German = "Apostel"
 AK.Apostle.NameShort = AK.Lang.Unit.ApostleShort[KBM.Lang]
 
 -- Ability Dictionary.
@@ -161,6 +172,7 @@ AK.Lang.Mechanic.Wave.German = "Flutwelle"
 AK.Lang.Mechanic.Orb = KBM.Language:Add("Suffocating Orb")
 AK.Lang.Mechanic.Orb.German = "Erstickungskugel"
 AK.Lang.Mechanic.Summon = KBM.Language:Add("Summon the Abyss")
+AK.Lang.Mechanic.Summon.German = "Beschwört den Abgrund!"
 AK.Lang.Mechanic.Emerge = KBM.Language:Add("Akylios emerges")
 AK.Lang.Mechanic.Emerge.German = "Akylios taucht auf"
 AK.Lang.Mechanic.Submerge = KBM.Language:Add("Akylios submerges")
@@ -227,6 +239,9 @@ function AK:InitVars()
 			CastBar = AK.Jornaru.Settings.CastBar,
 			TimersRef = AK.Jornaru.Settings.TimersRef,
 			AlertsRef = AK.Jornaru.Settings.AlertsRef,
+		},
+		Apostle = {
+			AlertsRef = AK.Apostle.Settings.AlertsRef,
 		},
 	}
 	KBMAK_Settings = self.Settings
@@ -354,6 +369,10 @@ function AK:Death(UnitID)
 		if self.Jornaru.Dead then
 			return true
 		end
+	elseif self.Apostle.UnitList[UnitID] then
+		self.Apostle.UnitList[UnitID].CastBar:Remove()
+		self.Apostle.UnitList[UnitID].Dead = true
+		self.Apostle.UnitList[UnitID].CastBar = nil
 	else
 		if self.Phase < 3 then
 			if self.Stinger.UnitList[UnitID] then
@@ -412,9 +431,13 @@ function AK:UnitHPCheck(uDetails, unitID)
 							Available = true,
 						}
 						self.Bosses[uDetails.name].UnitList[unitID] = SubBossObj
+						if uDetails.name == self.Apostle.Name then
+							SubBossObj.CastBar = KBM.CastBar:Add(self, self.Apostle, false, true)
+							SubBossObj.CastBar:Create(unitID)
+						end
 					else
 						self.Bosses[uDetails.name].UnitList[unitID].Available = true
-						self.Bosses[uDetails.name].UnitList[unitID].UnitID = UnitID
+						self.Bosses[uDetails.name].UnitList[unitID].UnitID = unitID
 					end
 					return self.Bosses[uDetails.name].UnitList[unitID]
 				end
@@ -436,6 +459,13 @@ function AK:Reset()
 	self.Phase = 1
 	self.Stinger.UnitList = {}
 	self.Lasher.UnitList = {}
+	for UnitID, BossObj in pairs(self.Apostle.UnitList) do
+		if BossObj.CastBar then
+			BossObj.CastBar:Remove()
+			BossObj.CastBar = nil
+		end
+	end
+	self.Apostle.UnitList = {}
 	self.PhaseObj:End(Inspect.Time.Real())	
 end
 
@@ -517,6 +547,7 @@ end
 
 function AK:Start()	
 	-- Create Timers
+	-- Jornaru
 	self.Jornaru.TimersRef.WaveOne = KBM.MechTimer:Add(AK.Lang.Mechanic.Wave[KBM.Lang], 40, true)
 	self.Jornaru.TimersRef.WaveOne.MenuName = AK.Lang.Options.WaveOne[KBM.Lang]
 	self.Jornaru.TimersRef.WaveOne:SetPhase(1)
@@ -542,6 +573,7 @@ function AK:Start()
 	end
 	self.Jornaru.TimersRef.SummonTwoFirst:AddTimer(self.Jornaru.TimersRef.SummonTwo, 0)
 	self.Jornaru.TimersRef.SummonTwoFirst.MenuName = AK.Lang.Options.SummonTwo[KBM.Lang]
+	-- Akylios
 	self.Akylios.TimersRef.Breath = KBM.MechTimer:Add(AK.Lang.Ability.Breath[KBM.Lang], 25)
 	self.Akylios.TimersRef.Emerge = KBM.MechTimer:Add(AK.Lang.Mechanic.Emerge[KBM.Lang], 75)
 	self.Akylios.TimersRef.Emerge:NoMenu()
@@ -558,25 +590,32 @@ function AK:Start()
 	self.Akylios.TimersRef.BreathFirst.MenuName = "First Breath in Phase 3"
 	
 	-- Create Alerts
+	-- Jornaru
 	self.Jornaru.AlertsRef.WaveWarn = KBM.Alert:Create(AK.Lang.Mechanic.Wave[KBM.Lang], 5, true, true, "blue")
 	self.Jornaru.AlertsRef.WaveWarn.MenuName = AK.Lang.Options.WaveWarn[KBM.Lang]
 	self.Jornaru.TimersRef.WaveOne:AddAlert(self.Jornaru.AlertsRef.WaveWarn, 5)
 	self.Jornaru.TimersRef.WaveFour:AddAlert(self.Jornaru.AlertsRef.WaveWarn, 5)
 	self.Jornaru.AlertsRef.Orb = KBM.Alert:Create(AK.Lang.Mechanic.Orb[KBM.Lang], 8, false, true, "orange")
 	self.Jornaru.AlertsRef.Orb:Important()
+	-- Akylios
 	self.Akylios.AlertsRef.Decay = KBM.Alert:Create(AK.Lang.Ability.Decay[KBM.Lang], 10, false, true, "purple")
 	self.Akylios.AlertsRef.Decay:Important()
 	self.Akylios.AlertsRef.Breath = KBM.Alert:Create(AK.Lang.Ability.Breath[KBM.Lang], nil, false, true, "red")
 	self.Akylios.AlertsRef.Breath.MenuName = self.Lang.Options.Breath[KBM.Lang]
 	self.Akylios.AlertsRef.BreathWarn = KBM.Alert:Create(AK.Lang.Ability.Breath[KBM.Lang], nil, true, true, "red")
-
+	-- Apostle of Jornaru
+	self.Apostle.AlertsRef.Storm = KBM.Alert:Create(AK.Lang.Ability.Storm[KBM.Lang], nil, false, true, "yellow")
+	self.Apostle.AlertsRef.Storm:Important()
+	
 	KBM.Defaults.AlertObj.Assign(self.Jornaru)
 	KBM.Defaults.AlertObj.Assign(self.Akylios)
+	KBM.Defaults.AlertObj.Assign(self.Apostle)
 	
 	KBM.Defaults.TimerObj.Assign(self.Jornaru)
 	KBM.Defaults.TimerObj.Assign(self.Akylios)
 	
 	-- Assign Mechanics to Triggers
+	-- Jornaru
 	self.Jornaru.Triggers.Orb = KBM.Trigger:Create(AK.Lang.Notify.Orb[KBM.Lang], "notify", self.Jornaru)
 	self.Jornaru.Triggers.Orb:AddAlert(self.Jornaru.AlertsRef.Orb, true)
 	self.Jornaru.Triggers.Orb:AddTimer(self.Jornaru.TimersRef.Orb)
@@ -586,7 +625,7 @@ function AK:Start()
 	self.Jornaru.Triggers.PhaseTwoAlt:AddPhase(self.PhaseTwo)
 	self.Jornaru.Triggers.Summon = KBM.Trigger:Create(self.Lang.Mechanic.Summon[KBM.Lang], "cast", self.Jornaru)
 	self.Jornaru.Triggers.Summon:AddTimer(self.Jornaru.TimersRef.Summon)
-	
+	-- Akylios
 	self.Akylios.Triggers.PhaseFour = KBM.Trigger:Create(55, "percent", self.Akylios)
 	self.Akylios.Triggers.PhaseFour:AddPhase(self.PhaseFour)
 	self.Akylios.Triggers.PhaseFinal = KBM.Trigger:Create(15, "percent", self.Akylios)
@@ -600,6 +639,11 @@ function AK:Start()
 	self.Akylios.Triggers.BreathWarn:AddAlert(AK.Akylios.AlertsRef.BreathWarn)
 	self.Akylios.Triggers.Breath = KBM.Trigger:Create(self.Lang.Ability.Breath[KBM.Lang], "channel", self.Akylios)
 	self.Akylios.Triggers.Breath:AddAlert(self.Akylios.AlertsRef.Breath)
+	-- Apostle of Jornaru
+	self.Apostle.Triggers.Storm = KBM.Trigger:Create(self.Lang.Ability.Storm[KBM.Lang], "cast", self.Apostle)
+	self.Apostle.Triggers.Storm:AddAlert(self.Apostle.AlertsRef.Storm)
+	self.Apostle.Triggers.StormInt = KBM.Trigger:Create(self.Lang.Ability.Storm[KBM.Lang], "interrupt", self.Apostle)
+	self.Apostle.Triggers.StormInt:AddStop(self.Apostle.AlertsRef.Storm)
 	
 	self.Jornaru.CastBar = KBM.CastBar:Add(self, self.Jornaru)
 	self.Akylios.CastBar = KBM.CastBar:Add(self, self.Akylios)

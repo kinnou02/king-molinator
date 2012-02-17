@@ -23,7 +23,7 @@ local MOD = {
 
 MOD.Black = {
 	Mod = MOD,
-	Level = 52,
+	Level = "??",
 	Active = false,
 	Name = "Captain Black Spit",
 	NameShort = "Black",
@@ -53,7 +53,7 @@ MOD.Black = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Black = KBM.Language:Add(MOD.Black.Name)
--- MOD.Lang.Black:SetGerman("")
+MOD.Lang.Black:SetGerman("Kapitän Schwarzspuck") 
 -- MOD.Lang.Black:SetFrench("")
 -- MOD.Lang.Black:SetRussian("")
 MOD.Black.Name = MOD.Lang.Black[KBM.Lang]

@@ -53,7 +53,7 @@ MOD.Fetlorn = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Fetlorn = KBM.Language:Add(MOD.Fetlorn.Name)
--- MOD.Lang.Fetlorn:SetGerman("")
+MOD.Lang.Fetlorn:SetGerman("Knochenfürst Fetlorn")
 -- MOD.Lang.Fetlorn:SetFrench("")
 -- MOD.Lang.Fetlorn:SetRussian("")
 MOD.Fetlorn.Name = MOD.Lang.Fetlorn[KBM.Lang]

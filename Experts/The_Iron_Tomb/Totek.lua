@@ -53,7 +53,7 @@ MOD.Totek = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Totek = KBM.Language:Add(MOD.Totek.Name)
--- MOD.Lang.Totek:SetGerman("")
+MOD.Lang.Totek:SetGerman("Totek der Alte") 
 -- MOD.Lang.Totek:SetFrench("")
 -- MOD.Lang.Totek:SetRussian("")
 MOD.Totek.Name = MOD.Lang.Totek[KBM.Lang]

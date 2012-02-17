@@ -21,7 +21,7 @@ local KBM = AddonData.data
 KBM.RegisterMod(MOD.ID, MOD)
 
 KBM.Language:Add(MOD.Name)
--- KBM.Language[MOD.Name]:SetGerman("")
+KBM.Language[MOD.Name]:SetGerman("Hermesstab-Anhöhe")
 -- KBM.Language[MOD.Name]:SetFrench("")
 -- KBM.Language[MOD.Name]:SetRussian("")
 

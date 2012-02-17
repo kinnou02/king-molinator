@@ -23,7 +23,7 @@ local MOD = {
 
 MOD.Kulir = {
 	Mod = MOD,
-	Level = 52,
+	Level = "??",
 	Active = false,
 	Name = "Headhunter Kulir",
 	NameShort = "Kulir",
@@ -53,7 +53,7 @@ MOD.Kulir = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Kulir = KBM.Language:Add(MOD.Kulir.Name)
--- MOD.Lang.Kulir:SetGerman("")
+MOD.Lang.Kulir:SetGerman("Kopfgeldjäger Kulir")
 -- MOD.Lang.Kulir:SetFrench("")
 -- MOD.Lang.Kulir:SetRussian("")
 MOD.Kulir.Name = MOD.Lang.Kulir[KBM.Lang]
@@ -65,11 +65,12 @@ MOD.Lang.Ability = {}
 -- Unit Dictionary
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Varash = KBM.Language:Add("Disciple Varash")
+MOD.Lang.Unit.Varash.German = "Jünger Varash"
 MOD.Lang.Unit.VarashShort = KBM.Language:Add("Varash")
 
 MOD.Varash = {
 	Mod = MOD,
-	Level = 52,
+	Level = "??",
 	Active = false,
 	Name = MOD.Lang.Unit.Varash[KBM.Lang],
 	NameShort = MOD.Lang.Unit.VarashShort[KBM.Lang],

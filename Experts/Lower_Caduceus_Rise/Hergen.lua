@@ -53,7 +53,7 @@ MOD.Hergen = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Hergen = KBM.Language:Add(MOD.Hergen.Name)
--- MOD.Lang.Hergen:SetGerman("")
+MOD.Lang.Hergen:SetGerman("Kronvasall Hergen")
 -- MOD.Lang.Hergen:SetFrench("")
 -- MOD.Lang.Hergen:SetRussian("")
 MOD.Hergen.Name = MOD.Lang.Hergen[KBM.Lang]

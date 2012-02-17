@@ -53,7 +53,7 @@ MOD.Alraj = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Alraj = KBM.Language:Add(MOD.Alraj.Name)
--- MOD.Lang.Alraj:SetGerman("")
+MOD.Lang.Alraj:SetGerman("Bruchwandler Alraj")
 -- MOD.Lang.Alraj:SetFrench("")
 -- MOD.Lang.Alraj:SetRussian("")
 MOD.Alraj.Name = MOD.Lang.Alraj[KBM.Lang]

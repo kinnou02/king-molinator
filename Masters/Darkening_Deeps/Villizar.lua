@@ -53,7 +53,7 @@ MOD.Villizar = {
 KBM.RegisterMod(MOD.ID, MOD)
 
 MOD.Lang.Villizar = KBM.Language:Add(MOD.Villizar.Name)
--- MOD.Lang.Villizar:SetGerman("") 
+MOD.Lang.Villizar:SetGerman("Abgesandter Villizar") 
 -- MOD.Lang.Villizar:SetFrench("")
 -- MOD.Lang.Villizar:SetRussian("")
 MOD.Villizar.Name = MOD.Lang.Villizar[KBM.Lang]
