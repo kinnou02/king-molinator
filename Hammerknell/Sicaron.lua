@@ -207,7 +207,7 @@ function SN.PhaseTwo()
 	SN.PhaseObj.Objectives:Remove()
 	SN.PhaseObj.Objectives:AddPercent(SN.Sicaron.Name, 50, 80)
 	SN.PhaseObj:SetPhase(SN.Phase)
-	print("Phase 2 Starting, 20s purges.")
+	print(KBM.Language.Options.Phase[KBM.Lang].." 2 starting, 20s purges.")
 end
 
 function SN.PhaseThree()
@@ -215,7 +215,7 @@ function SN.PhaseThree()
 	SN.PhaseObj.Objectives:Remove()
 	SN.PhaseObj.Objectives:AddPercent(SN.Sicaron.Name, 25, 50)
 	SN.PhaseObj:SetPhase(SN.Phase)
-	print("Phase 3 Starting, 16s purges.")
+	print(KBM.Language.Options.Phase[KBM.Lang].." 3 starting, 16s purges.")
 end
 
 function SN.PhaseFour()
@@ -223,14 +223,14 @@ function SN.PhaseFour()
 	SN.PhaseObj.Objectives:Remove()
 	SN.PhaseObj.Objectives:AddPercent(SN.Sicaron.Name, 10, 25)
 	SN.PhaseObj:SetPhase(SN.Phase)
-	print("Phase 4 Starting, 12s purges.")
+	print(KBM.Language.Options.Phase[KBM.Lang].." 4 starting, 12s purges.")
 end
 
 function SN.PhaseFive()
 	SN.Phase = 5
 	SN.PhaseObj.Objectives:Remove()
 	SN.PhaseObj.Objectives:AddPercent(SN.Sicaron.Name, 0, 10)
-	SN.PhaseObj:SetPhase("Final")
+	SN.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
 	print("Final Phase! 8s purges.")
 end
 

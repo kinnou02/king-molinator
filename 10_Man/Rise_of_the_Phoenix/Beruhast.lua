@@ -105,6 +105,7 @@ function BT:InitVars()
 		CastBar = self.Beruhast.Settings.CastBar,
 		MechTimer = KBM.Defaults.MechTimer(),
 		EncTimer = KBM.Defaults.EncTimer(),
+		PhaseMon = KBM.Defaults.PhaseMon(),
 		AlertsRef = self.Beruhast.Settings.AlertsRef,
 		TimersRef = self.Beruhast.Settings.TimersRef,
 		Alerts = KBM.Defaults.Alerts(),
@@ -177,6 +178,10 @@ function BT:UnitHPCheck(unitDetails, unitID)
 					self.Beruhast.Casting = false
 					self.Beruhast.CastBar:Create(unitID)
 					self.Beruhast.TimersRef.FlameStart:Start(Inspect.Time.Real())
+					self.PhaseObj:Start(self.StartTime)
+					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
+					self.PhaseObj.Objectives:AddPercent(self.Beruhast.Name, 0, 100)
+					self.Phase = 1
 				end
 				self.Beruhast.UnitID = unitID
 				self.Beruhast.Available = true
@@ -192,6 +197,7 @@ function BT:Reset()
 	self.Beruhast.UnitID = nil
 	self.Beruhast.CastBar:Remove()
 	self.Beruhast.Dead = false
+	self.PhaseObj:End(Inspect.Time.Real())
 end
 
 function BT:Timer()
@@ -250,5 +256,6 @@ function BT:Start()
 	self.Beruhast.Triggers.Summon:AddAlert(self.Beruhast.AlertsRef.Summon)
 	
 	self.Beruhast.CastBar = KBM.CastBar:Add(self, self.Beruhast, true)
+	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()
 end

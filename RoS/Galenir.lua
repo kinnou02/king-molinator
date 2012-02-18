@@ -74,6 +74,7 @@ function WG:InitVars()
 	self.Settings = {
 		Enabled = true,
 		EncTimer = KBM.Defaults.EncTimer(),
+		PhaseMon = KBM.Defaults.PhaseMon(),
 		AlertsRef = self.Galenir.Settings.AlertsRef,
 		Alerts = KBM.Defaults.Alerts(),
 	}
@@ -143,6 +144,10 @@ function WG:UnitHPCheck(unitDetails, unitID)
 					self.HeldTime = self.StartTime
 					self.TimeElapsed = 0
 					self.Galenir.Dead = false
+					self.PhaseObj:Start(self.StartTime)
+					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
+					self.PhaseObj.Objectives:AddPercent(self.Galenir.Name, 0, 100)
+					self.Phase = 1
 					KBM.TankSwap:Start(self.Lang.Debuff.Festering[KBM.Lang])
 				end
 				self.Galenir.UnitID = unitID
@@ -158,6 +163,7 @@ function WG:Reset()
 	self.Galenir.Available = false
 	self.Galenir.UnitID = nil
 	self.Galenir.Dead = false
+	self.PhaseObj:End(Inspect.Time.Real())
 end
 
 function WG:Timer()	
@@ -200,5 +206,6 @@ function WG:Start()
 	self.Galenir.Triggers.Essence = KBM.Trigger:Create(self.Lang.Debuff.Essence[KBM.Lang], "playerBuff", self.Galenir)
 	self.Galenir.Triggers.Essence:AddAlert(self.Galenir.AlertsRef.Essence, true)
 	
+	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()
 end

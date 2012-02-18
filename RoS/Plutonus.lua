@@ -144,7 +144,7 @@ end
 
 function PI.PhaseTwo()
 	PI.PhaseObj.Objectives:Remove()
-	PI.PhaseObj:SetPhase(2)
+	PI.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
 	PI.Phase = 2
 	PI.PhaseObj.Objectives:AddPercent(PI.Plutonus.Name, 0, 50)
 end

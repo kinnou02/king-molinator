@@ -151,7 +151,7 @@ function MOD:UnitHPCheck(unitDetails, unitID)
 					self.Caor.Casting = false
 					self.Caor.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase("Single")
+					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
 					self.PhaseObj.Objectives:AddPercent(self.Caor.Name, 0, 100)
 					self.Phase = 1
 				end

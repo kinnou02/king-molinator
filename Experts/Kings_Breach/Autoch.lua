@@ -35,7 +35,7 @@ MOD.Autoch = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
-	ExpertID = "Expert",
+	ExpertID = "U73AE97FB0C802D2F",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -77,7 +77,7 @@ MOD.Mondrach = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
-	ExpertID = "Expert",
+	ExpertID = "U374DD918789A5603",
 }
 
 function MOD:AddBosses(KBM_Boss)
@@ -177,7 +177,7 @@ function MOD:UnitHPCheck(unitDetails, unitID)
 						BossObj.CastBar:Create(unitID)
 					end
 					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase("Single")
+					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
 					self.PhaseObj.Objectives:AddPercent(self.Autoch.Name, 0, 100)
 					self.PhaseObj.Objectives:AddPercent(self.Mondrach.Name, 0, 100)
 					self.Phase = 1

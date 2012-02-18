@@ -108,6 +108,7 @@ function ES:InitVars()
 	self.Settings = {
 		Enabled = true,
 		EncTimer = KBM.Defaults.EncTimer(),
+		PhaseMon = KBM.Defaults.PhaseMon(),
 		MechTimer = KBM.Defaults.MechTimer(),		
 		Alerts = KBM.Defaults.Alerts(),
 		CastBar = self.Estrode.Settings.CastBar,
@@ -182,6 +183,10 @@ function ES:UnitHPCheck(unitDetails, unitID)
 					self.Estrode.Dead = false
 					self.Estrode.Casting = false
 					self.Estrode.CastBar:Create(unitID)
+					self.PhaseObj:Start(self.StartTime)
+					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
+					self.PhaseObj.Objectives:AddPercent(self.Estrode.Name, 0, 100)
+					self.Phase = 1
 				end
 				self.Estrode.UnitID = unitID
 				self.Estrode.Available = true
@@ -196,6 +201,7 @@ function ES:Reset()
 	self.Estrode.Available = false
 	self.Estrode.UnitID = nil
 	self.Estrode.CastBar:Remove()	
+	self.PhaseObj:End(Inspect.Time.Real())
 end
 
 function ES:Timer()
@@ -268,5 +274,6 @@ function ES:Start()
 	self.Estrode.Triggers.Rift:AddAlert(self.Estrode.AlertsRef.Rift)
 	
 	self.Estrode.CastBar = KBM.CastBar:Add(self, self.Estrode, true)
+	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()	
 end

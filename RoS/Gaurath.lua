@@ -159,14 +159,14 @@ function HG:Death(UnitID)
 end
 
 function HG.AirPhase()
-	HG.PhaseObj:SetPhase("Air")
+	HG.PhaseObj:SetPhase(KBM.Language.Options.Air[KBM.Lang])
 	HG.Phase = 2
 	HG.RaiseCounter = 0
 end
 
 function HG.GroundPhase()
 	HG.RaiseObj:Update(0)
-	HG.PhaseObj:SetPhase("Ground")
+	HG.PhaseObj:SetPhase(KBM.Language.Options.Ground[KBM.Lang])
 	HG.Phase = 1
 end
 
@@ -192,7 +192,7 @@ function HG:UnitHPCheck(unitDetails, unitID)
 					self.Gaurath.Dead = false
 					self.Gaurath.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase("Ground")
+					self.PhaseObj:SetPhase(KBM.Language.Options.Ground[KBM.Lang])
 					self.PhaseObj.Objectives:AddPercent(self.Gaurath.Name, 0, 100)
 					self.RaiseObj = self.PhaseObj.Objectives:AddMeta(self.Lang.Ability.Raise[KBM.Lang], 2, 0)
 					self.RaiseCounter = 0

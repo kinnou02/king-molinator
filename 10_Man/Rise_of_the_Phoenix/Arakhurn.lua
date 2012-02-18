@@ -126,6 +126,11 @@ HA.Lang.Verbose.Nova = KBM.Language:Add("until "..HA.Lang.Ability.Nova[KBM.Lang]
 HA.Lang.Verbose.Nova.German = "bis "..HA.Lang.Ability.Nova[KBM.Lang]
 HA.Lang.Verbose.Nova.Russian = "до "..HA.Lang.Ability.Nova[KBM.Lang]
 HA.Lang.Verbose.Rise = KBM.Language:Add(HA.Lang.Arakhurn[KBM.Lang].." rises")
+HA.Lang.Verbose.Rise.German = HA.Lang.Arakhurn[KBM.Lang].." erscheint"
+
+-- Phase Monitor Dictionary
+HA.Lang.Phase = {}
+HA.Lang.Phase.Adds = KBM.Language:Add("Adds")
 
 -- Menu Dictionary
 HA.Lang.Menu = {}
@@ -266,7 +271,7 @@ end
 
 function HA.PhaseTwo()
 	HA.PhaseObj.Objectives:Remove()
-	HA.PhaseObj:SetPhase("Adds")
+	HA.PhaseObj:SetPhase(HA.Lang.Phase.Adds[KBM.Lang])
 	HA.PhaseObj.Objectives:AddDeath(HA.Lang.Unit.Spawn[KBM.Lang], 6)
 	HA.Arakhurn.UnitID = nil
 end
@@ -276,7 +281,7 @@ function HA.PhaseThree()
 		HA.Phase = 3
 		HA.TimeoutOverride = false
 		HA.PhaseObj.Objectives:Remove()
-		HA.PhaseObj:SetPhase("Final")
+		HA.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
 		HA.PhaseObj.Objectives:AddPercent(HA.Arakhurn.Name, 0, 100)
 	end
 end

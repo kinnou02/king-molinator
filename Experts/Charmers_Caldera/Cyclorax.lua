@@ -15,6 +15,7 @@ local MOD = {
 	File = "Cyclorax.lua",
 	Enabled = true,
 	Instance = Instance.Name,
+	InstanceObj = Instance,
 	HasPhases = true,
 	Lang = {},
 	ID = "Cyclorax",
@@ -149,7 +150,7 @@ function MOD:UnitHPCheck(unitDetails, unitID)
 					self.Cyclorax.Casting = false
 					self.Cyclorax.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase("Single")
+					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
 					self.PhaseObj.Objectives:AddPercent(self.Cyclorax.Name, 0, 100)
 					self.Phase = 1
 				end

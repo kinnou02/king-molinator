@@ -34,7 +34,7 @@ MOD.Rorf = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
-	ExpertID = "Expert",
+	ExpertID = "U3D2A3DFB62F9918E",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -79,7 +79,7 @@ MOD.Sneaky = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	ExpertID = "Expert",
+	ExpertID = "U33669D29566B5422",
 	TimeOut = 5,
 }
 
@@ -92,7 +92,7 @@ MOD.Scratchy = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	ExpertID = "Expert",
+	ExpertID = "U34C933EA1FEF2E22",
 	TimeOut = 5,
 }
 
@@ -105,7 +105,7 @@ MOD.Scary = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	ExpertID = "Expert",
+	ExpertID = "U43A11D5109B90B36",
 	TimeOut = 5,
 }
 
@@ -204,7 +204,7 @@ function MOD:UnitHPCheck(unitDetails, unitID)
 						BossObj.CastBar:Create(unitID)
 					end
 					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase("Single")
+					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
 					self.PhaseObj.Objectives:AddPercent(self.Rorf.Name, 0, 100)
 					self.PhaseObj.Objectives:AddPercent(self.Sneaky.Name, 0, 100)
 					self.PhaseObj.Objectives:AddPercent(self.Scratchy.Name, 0, 100)

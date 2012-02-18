@@ -151,7 +151,7 @@ function MOD:UnitHPCheck(unitDetails, unitID)
 					self.Fetlorn.Casting = false
 					self.Fetlorn.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase("Single")
+					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
 					self.PhaseObj.Objectives:AddPercent(self.Fetlorn.Name, 0, 100)
 					self.Phase = 1
 				end

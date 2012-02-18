@@ -18,6 +18,10 @@ Options
 ** Change: Reduced the default Alert size by 50%
 
 Engine
+* Phase Monitor
+** Percentage Based Objectives
+*** New: Displayed percantage will change to 2 decimal places below 3% HP.
+*** New: When a unit dies it is now displayed as such.
 * Encounters
 ** New: Encounter type checks are now bypassed once already established.
 ** New: Checks added for Expert Mode and Master Mode dungeon recognition.
@@ -35,9 +39,13 @@ Hammerknell
 ** Change: Reduced timer for King's Consuming Essence.
 ** Fixed: Predictive DPS meter was not resetting correctly after a wipe. (Yes, that did take a while to fix)
 ** Change: Predictive algorithm has finally been revised. This should offer better insight in DPS trends. 
+* Estrode
+** New: Added Phase Monitor support to the encounter.
 * Grugonim
+** New: Added dictionary definition for "Towers"
 ** Fixed: Phase Monitor was losing track of Tower kills if you wipe during a Tower phase.
 * Akylios
+** New: Added dictionary definitions for all Phase in-game chat display.
 ** New: Added an alert for Apostle of Jornaru's Tidal Storm ability.
 ** New: Added a stop Alert trigger for when Tidal Storm is interrupted.
 ** New: Added a stop trigger to Mind Decay alert when the debuff is nullified.
@@ -45,19 +53,37 @@ Hammerknell
 ** Note: For alpha. Please report any non-responding timers. Summon Adds, Waves and Submerge/Emerge are all Phase limited.
 
 Rise of the Phoenix
+* Ereandorn
+** New: Added Phase Monitor support to the encounter.
+* Beruhast
+** New: Added Phase Monitor support to the encounter.
+* General Silgen
+** New: Added Phase Monitor support to the encounter.
+** New: Added dictionary definition for "Adds"
 * High Priest Arakhurn
 ** New: Added timer for Arakhurns rise from the flames in P2 (P3 Start).
 ** Change: The start of P3 has changed back to its original Notify trigger after Trion's fix.
 ** Change: Adjusted P3 mechanic start timers slightly to account for the above trigger change.
 ** Fix: Due to the recent Trion fix, the Notify trigger will avoid non-starting timers if adds die before Arakhurn rises.
 
+River of Souls
+* Warmaster Galenir
+** New: Added Phase Monitor support to the encounter.
+
 Greenscale's Blight
 * Infiltrator Johlen
 ** New: Devastating Bomb alerts will now stop as soon as the bomb is destroyed.
 ** Change: Increased the alert of Blinding Bomb by 1s.
+* Prince Hylas
+** New: Added dictionary definition for "Critters"
 
 Drowned Halls
+* Assault Commander Jorb
+** New: Added Phase Monitor support to the encounter.
+* Joloral Ragetide
+** New: Added Phase Monitor support to the encounter.
 * Iskaal
+** New: Added Phase Monitor support to the encounter.
 ** Fixed: Start of whirlpool phase wasn't triggering additional timers correctly.
 ** Change: Adjusted some timings slightly after the new fix. (Alpha, test phase only. Will be adding alerts/timers for dance)
 
@@ -180,8 +206,15 @@ Expert Dungeons
 ** New: Headhunter Kulir
 ** New: Caduceus
 
+Dictionary Additions (Phase Monitor)
+* New: Added "Single"
+* New: Added "Ground"
+* New: Added "Air"
+* New: Added "Final"
+* New: Added "Dead"
+
 German Translations
-* New: Matching new dungeon translations. (Updating 1 version behind current alpha)
+* New: Matching new dungeon translations.
 * New: Additions to Akylios.
 
 Russian Translations

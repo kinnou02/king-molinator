@@ -170,7 +170,7 @@ end
 function OA.PhaseTwo()
 	OA.PhaseObj.Objectives:Remove()
 	OA.Phase = 2
-	OA.PhaseObj:SetPhase("Final")
+	OA.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
 	OA.PhaseObj.Objectives:AddPercent(OA.Aleria.Name, 0, 100)
 end
 

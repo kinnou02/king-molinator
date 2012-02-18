@@ -1,4 +1,4 @@
-﻿-- Pyromancer Cortilnald Boss Mod for King Boss Mods
+﻿-- Pyromaster Cortilnald Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --
@@ -25,7 +25,7 @@ MOD.Cortilnald = {
 	Mod = MOD,
 	Level = 52,
 	Active = false,
-	Name = "Pyromancer Cortilnald",
+	Name = "Pyromaster Cortilnald",
 	NameShort = "Cortilnald",
 	Menu = {},
 	Castbar = nil,
@@ -151,7 +151,7 @@ function MOD:UnitHPCheck(unitDetails, unitID)
 					self.Cortilnald.Casting = false
 					self.Cortilnald.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase("Single")
+					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
 					self.PhaseObj.Objectives:AddPercent(self.Cortilnald.Name, 0, 100)
 					self.Phase = 1
 				end

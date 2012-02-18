@@ -150,7 +150,7 @@ end
 function UK.PhaseFinal()
 	UK.PhaseObj.Objectives:Remove()
 	UK.Phase = 4
-	UK.PhaseObj:SetPhase("Final")
+	UK.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
 	UK.PhaseObj.Objectives:AddPercent(UK.Uruluuk.Name, 0, 30)
 end
 

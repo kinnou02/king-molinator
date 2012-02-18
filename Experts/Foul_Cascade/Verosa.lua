@@ -189,7 +189,7 @@ function MOD:UnitHPCheck(unitDetails, unitID)
 						BossObj.CastBar:Create(unitID)
 					end
 					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase("Single")
+					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
 					self.PhaseObj.Objectives:AddPercent(self.Verosa.Name, 0, 100)
 					self.PhaseObj.Objectives:AddPercent(self.Lesch.Name, 0, 100)
 					self.PhaseObj.Objectives:AddPercent(self.Gurze.Name, 0, 100)

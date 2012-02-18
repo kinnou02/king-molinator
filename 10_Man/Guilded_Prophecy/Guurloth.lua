@@ -223,7 +223,7 @@ function GH:UnitHPCheck(uDetails, unitID)
 					self.Phase = 1
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj.Objectives:AddPercent(self.Guurloth.Name, 0, 100)
-					self.PhaseObj:SetPhase("Single")
+					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
 				end
 				self.Guurloth.UnitID = unitID
 				self.Guurloth.Available = true

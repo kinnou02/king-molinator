@@ -89,6 +89,7 @@ function EN:InitVars()
 		Enabled = true,
 		CastBar = self.Ereandorn.Settings.CastBar,
 		AlertsRef = self.Ereandorn.Settings.AlertsRef,
+		PhaseMon = KBM.Defaults.PhaseMon(),
 		EncTimer = KBM.Defaults.EncTimer(),
 		Alerts = KBM.Defaults.Alerts(),
 	}
@@ -159,6 +160,10 @@ function EN:UnitHPCheck(unitDetails, unitID)
 					self.TimeElapsed = 0
 					self.Ereandorn.Casting = false
 					self.Ereandorn.CastBar:Create(unitID)
+					self.PhaseObj:Start(self.StartTime)
+					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
+					self.PhaseObj.Objectives:AddPercent(self.Ereandorn.Name, 0, 100)
+					self.Phase = 1
 				end
 				self.Ereandorn.UnitID = unitID
 				self.Ereandorn.Available = true
@@ -174,6 +179,7 @@ function EN:Reset()
 	self.Ereandorn.UnitID = nil
 	self.Ereandorn.CastBar:Remove()
 	self.Ereandorn.Dead = false
+	self.PhaseObj:End(Inspect.Time.Real())
 end
 
 function EN:Timer()	
@@ -223,5 +229,6 @@ function EN:Start()
 	self.Ereandorn.Triggers.Eruption:AddAlert(self.Ereandorn.AlertsRef.Eruption)
 	
 	self.Ereandorn.CastBar = KBM.CastBar:Add(self, self.Ereandorn)
+	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()
 end

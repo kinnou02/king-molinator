@@ -35,7 +35,7 @@ MOD.Krezlav = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
-	ExpertID = "Expert",
+	ExpertID = "U6C237E5B7A00B2C3",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -151,7 +151,7 @@ function MOD:UnitHPCheck(unitDetails, unitID)
 					self.Krezlav.Casting = false
 					self.Krezlav.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase("Single")
+					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
 					self.PhaseObj.Objectives:AddPercent(self.Krezlav.Name, 0, 100)
 					self.Phase = 1
 				end

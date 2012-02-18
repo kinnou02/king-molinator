@@ -38,7 +38,7 @@ MOD.Bonehew = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
-	ExpertID = "Expert",
+	ExpertID = "U71B4AEF5562A56AE",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -76,7 +76,7 @@ MOD.Fragment = {
 	Name = MOD.Lang.Unit.Fragment[KBM.Lang],
 	UnitList = {},
 	Ignore = true,
-	ExpertID = "Expert",
+	ExpertID = "U5AD287837A0CDF4A",
 	Type = "multi",
 }
 

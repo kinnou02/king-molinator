@@ -294,7 +294,6 @@ end
 function ID.PhaseTwo()	
 	ID.Phase = 2
 	ID.PhaseObj.Objectives:Remove()
-	print("Phase 2 starting!")
 	ID.PhaseObj:SetPhase(2)
 	ID.PhaseObj.Objectives:AddDeath(ID.Slime.Name, 15)
 	ID.PhaseObj.Objectives:AddDeath(ID.Wrangler.Name, 3)	
@@ -304,7 +303,6 @@ end
 function ID.PhaseThree()
 	ID.Phase = 3
 	ID.PhaseObj.Objectives:Remove()
-	print("Phase 3 starting!")
 	ID.PhaseObj:SetPhase(3)
 	ID.PhaseObj.Objectives:AddPercent(ID.Undertow.Name, 0, 100)
 	ID.PhaseObj.Objectives:AddPercent(ID.Rotjaw.Name, 0, 100)
@@ -313,8 +311,7 @@ end
 function ID.PhaseFour()
 	ID.Phase = 4
 	ID.PhaseObj.Objectives:Remove()
-	print("Final phase starting!")
-	ID.PhaseObj:SetPhase("Final")
+	ID.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
 	ID.PhaseObj.Objectives:AddPercent(ID.Inwar.Name, 0, 100)
 end
 

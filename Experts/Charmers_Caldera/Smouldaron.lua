@@ -15,6 +15,7 @@ local MOD = {
 	File = "Smouldaron.lua",
 	Enabled = true,
 	Instance = Instance.Name,
+	InstanceObj = Instance,
 	HasPhases = true,
 	Lang = {},
 	ID = "Smouldaron",
@@ -149,7 +150,7 @@ function MOD:UnitHPCheck(unitDetails, unitID)
 					self.Smouldaron.Casting = false
 					self.Smouldaron.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase("Single")
+					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
 					self.PhaseObj.Objectives:AddPercent(self.Smouldaron.Name, 0, 100)
 					self.Phase = 1
 				end

@@ -204,7 +204,7 @@ end
 
 function LG.AirPhase()
 	LG.PhaseObj.Objectives:Remove()
-	LG.PhaseObj:SetPhase("Air")
+	LG.PhaseObj:SetPhase(KBM.Language.Options.Air[KBM.Lang])
 	LG.PhaseObj.Objectives:AddPercent(LG.Verdant.Name, 0, 100)
 end
 
@@ -225,7 +225,7 @@ end
 function LG.PhaseFour()
 	LG.PhaseObj.Objectives:Remove()
 	LG.Phase = 4
-	LG.PhaseObj:SetPhase("Final")
+	LG.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
 	LG.PhaseObj.Objectives:AddPercent(LG.Greenscale.Name, 0, 25)
 end
 

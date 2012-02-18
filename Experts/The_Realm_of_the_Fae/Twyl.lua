@@ -251,7 +251,7 @@ function MOD:UnitHPCheck(unitDetails, unitID)
 				end
 				BossObj.UnitID = unitID
 				BossObj.Available = true
-				return self.Twyl
+				return BossObj
 			end
 		end
 	end

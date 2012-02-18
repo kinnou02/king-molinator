@@ -188,6 +188,13 @@ AK.Lang.Say = {}
 AK.Lang.Say.PhaseTwo = KBM.Language:Add("Master, your plan is fulfilled. After a millennia of manipulation, the wards of Hammerknell are shattered. I release you, Akylios! Come forth and claim this world.")
 AK.Lang.Say.PhaseTwo.German = "Meister, Euer Plan ist vollendet. Nach Millennium der Manipulation fallen die Schutzzauber Hammerhalls. Ich befreie Euch, Akylios! Kommt, nehmt Euch diese Welt." 
 
+-- Phase Message Dictionary
+AK.Lang.Phase = {}
+AK.Lang.Phase.Two = KBM.Language:Add("Phase 2 starting!")
+AK.Lang.Phase.Three = KBM.Language:Add("Phase 3 starting!")
+AK.Lang.Phase.Four = KBM.Language:Add("Phase 4 starting!")
+AK.Lang.Phase.Final = KBM.Language:Add("Final phase starting, good luck!")
+
 -- Options Dictionary.
 AK.Lang.Options = {}
 AK.Lang.Options.WaveOne = KBM.Language:Add(AK.Lang.Mechanic.Wave[KBM.Lang].." (Phase 1)")
@@ -301,7 +308,7 @@ function AK.PhaseTwo(Type)
 			KBM.MechTimer:AddStart(AK.Jornaru.TimersRef.SummonTwoFirst)
 			KBM.MechTimer:AddStart(AK.Jornaru.TimersRef.OrbFirst)
 			AK.Jornaru.CastBar:Remove()
-			print("Phase 2 starting!")
+			print(AK.Lang.Phase.Two[KBM.Lang])
 		end
 	end
 end
@@ -319,7 +326,7 @@ function AK.PhaseThree()
 	KBM.MechTimer:AddStart(AK.Akylios.TimersRef.BreathFirst)
 	AK.PhaseObj.Objectives:AddPercent(AK.Akylios.Name, 55, 100)
 	AK.PhaseObj.Objectives:AddPercent(AK.Jornaru.Name, 0, 50)
-	print("Phase 3 starting!")	
+	print(AK.Lang.Phase.Three[KBM.Lang])	
 end
 
 function AK.PhaseFour()
@@ -333,7 +340,7 @@ function AK.PhaseFour()
 		end
 		AK.PhaseObj.Objectives:AddPercent(AK.Akylios.Name, 15, 55)
 		AK.PhaseObj.Objectives:AddPercent(AK.Jornaru.Name, 0, 50)
-		print("Phase 4 starting!")
+		print(AK.Lang.Phase.Four[KBM.Lang])
 	end
 end
 
@@ -341,12 +348,12 @@ function AK.PhaseFinal()
 	if AK.Phase < 5 then
 		AK.PhaseObj.Objectives:Remove()
 		AK.Phase = 5
-		AK.PhaseObj:SetPhase("Final")
+		AK.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
 		KBM.MechTimer:AddRemove(AK.Akylios.TimersRef.Emerge)
 		KBM.MechTimer:AddRemove(AK.Akylios.TimersRef.Submerge)
 		AK.PhaseObj.Objectives:AddPercent(AK.Akylios.Name, 0, 15)
 		AK.PhaseObj.Objectives:AddPercent(AK.Jornaru.Name, 0, 15)
-		print("Final phase starting - Good Luck!")
+		print(AK.Lang.Phase.Final[KBM.Lang])
 	end
 end
 

@@ -86,6 +86,7 @@ function AJ:InitVars()
 		Enabled = true,
 		CastBar = self.Jorb.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
+		PhaseMon = KBM.Defaults.PhaseMon(),
 		AlertsRef = self.Jorb.Settings.AlertsRef,
 		TimersRef = self.Jorb.Settings.TimersRef,
 	}
@@ -159,6 +160,10 @@ function AJ:UnitHPCheck(uDetails, unitID)
 					self.Jorb.Dead = false
 					self.Jorb.Casting = false
 					self.Jorb.CastBar:Create(unitID)
+					self.PhaseObj:Start(self.StartTime)
+					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
+					self.PhaseObj.Objectives:AddPercent(self.Jorb.Name, 0, 100)
+					self.Phase = 1					
 				end
 				self.Jorb.UnitID = unitID
 				self.Jorb.Available = true
@@ -174,6 +179,7 @@ function AJ:Reset()
 	self.Jorb.UnitID = nil
 	self.Jorb.Dead = false
 	self.Jorb.CastBar:Remove()
+	self.PhaseObj:End(Inspect.Time.Real())	
 end
 
 function AJ:Timer()
@@ -226,5 +232,6 @@ function AJ:Start()
 	self.Jorb.Triggers.Grasp:AddAlert(self.Jorb.AlertsRef.Grasp)
 	
 	self.Jorb.CastBar = KBM.CastBar:Add(self, self.Jorb, true)
+	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()
 end

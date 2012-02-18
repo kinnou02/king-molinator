@@ -87,9 +87,12 @@ IL.Lang.Notify.Reverse.Russian = "Вы не туда идете, придурк�
 
 -- Verbose Dictionary
 IL.Lang.Verbose = {}
-IL.Lang.Verbose.Middle = "Middle"
-IL.Lang.Verbose.Inner = "Inner"
-IL.Lang.Verbose.Outer = "Outer"
+IL.Lang.Verbose.Middle = KBM.Language:Add("Middle")
+IL.Lang.Verbose.Middle.German = "Mitte"
+IL.Lang.Verbose.Inner = KBM.Language:Add("Inner")
+IL.Lang.Verbose.Inner.German = "Innen"
+IL.Lang.Verbose.Outer = KBM.Language:Add("Outer")
+IL.Lang.Verbose.Outer.German = "Aussen"
 
 -- Menu Dictionary
 IL.Lang.Menu = {}
@@ -114,6 +117,7 @@ function IL:InitVars()
 		CastBar = self.Isskal.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		MechTimer = KBM.Defaults.MechTimer(),
+		PhaseMon = KBM.Defaults.PhaseMon(),
 		Alert = KBM.Defaults.Alerts(),
 		AlertsRef = self.Isskal.Settings.AlertsRef,
 		TimersRef = self.Isskal.Settings.TimersRef,
@@ -188,6 +192,10 @@ function IL:UnitHPCheck(uDetails, unitID)
 					self.Isskal.Dead = false
 					self.Isskal.Casting = false
 					self.Isskal.CastBar:Create(unitID)
+					self.PhaseObj:Start(self.StartTime)
+					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
+					self.PhaseObj.Objectives:AddPercent(self.Isskal.Name, 0, 100)
+					self.Phase = 1
 					KBM.MechTimer:AddStart(self.Isskal.TimersRef.WhirlpoolFirst)
 				end
 				self.Isskal.UnitID = unitID
@@ -204,6 +212,7 @@ function IL:Reset()
 	self.Isskal.UnitID = nil
 	self.Isskal.Dead = false
 	self.Isskal.CastBar:Remove()
+	self.PhaseObj:End(Inspect.Time.Real())
 end
 
 function IL:Timer()
@@ -265,5 +274,6 @@ function IL:Start()
 	self.Isskal.Triggers.WhirlpoolEnd:AddTimer(self.Isskal.TimersRef.WhirlpoolEnd)
 	
 	self.Isskal.CastBar = KBM.CastBar:Add(self, self.Isskal, true)
+	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()
 end

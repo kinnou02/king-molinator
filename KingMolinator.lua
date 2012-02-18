@@ -628,7 +628,9 @@ function KBM.Language:Add(Phrase)
 		self.Russian = ruPhrase
 		self.Translated.Russian = true
 	end
-	KBM.Language[Phrase] = SetPhrase
+	if not KBM.Language[Phrase] then
+		KBM.Language[Phrase] = SetPhrase
+	end
 	return KBM.Language[Phrase]
 end
 
@@ -816,6 +818,11 @@ KBM.Language.Options.Objectives.German = "Zeige Phasen Aufgabe an"
 KBM.Language.Options.Objectives.Russian = "Показывать цели фазы"
 KBM.Language.Options.Phase = KBM.Language:Add("Phase")
 KBM.Language.Options.Phase.Russian = "Фаза"
+KBM.Language.Options.Single = KBM.Language:Add("Single")
+KBM.Language.Options.Ground = KBM.Language:Add("Ground")
+KBM.Language.Options.Air = KBM.Language:Add("Air")
+KBM.Language.Options.Final = KBM.Language:Add("Final")
+KBM.Language.Options.Dead = KBM.Language:Add("Dead")
 
 -- Button Options
 KBM.Language.Options.Button = KBM.Language:Add("Options Button Visible")
@@ -2048,6 +2055,7 @@ function KBM.PhaseMonitor:Init()
 			PercentObj.Target = Target
 			PercentObj.PercentRaw = Current
 			PercentObj.Percent = math.ceil(Current)
+			PercentObj.Dead = false
 			PercentObj.GUI = KBM.PhaseMonitor:PullObjective()
 			PercentObj.GUI:SetName(Name)
 			if Target == 0 then
@@ -2058,14 +2066,26 @@ function KBM.PhaseMonitor:Init()
 			PercentObj.Type = "Percent"
 			
 			function PercentObj:Update(PercentRaw)
+				if self.Dead then
+					return
+				end
 				self.PercentRaw = PercentRaw
 				self.Percent = math.ceil(PercentRaw)
-				if self.Percent >= self.Target then
-					if self.Target == 0 then
-						self.GUI:SetObjective(self.Percent.."%")
-					else
-						self.GUI:SetObjective(self.Percent.."%/"..self.Target.."%")
-					end	
+				if self.Percent == 0 then
+					self.GUI:SetObjective(KBM.Language.Options.Dead[KBM.Lang])
+					self.Dead = true
+				else
+					if self.Percent >= self.Target then
+						if self.Target == 0 then
+							if self.PercentRaw < 3 then
+								self.GUI:SetObjective(string.format("%0.02f", self.PercentRaw).."%")
+							else
+								self.GUI:SetObjective(self.Percent.."%")
+							end
+						else
+							self.GUI:SetObjective(self.Percent.."%/"..self.Target.."%")
+						end	
+					end
 				end
 			end
 			function PercentObj:Remove()
@@ -3919,6 +3939,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 		self.Casting = true
 		self.CastMod = 1
 		self.Interrupted = false
+		self.InterruptEnd = nil
 		self.GUI.Frame:SetAlpha(1)
 		self.GUI.Frame:SetVisible(true)
 		self.GUI.Progress:SetVisible(true)
@@ -4117,6 +4138,9 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 	end
 	
 	function CastBarObj:Remove()
+		self.InterruptEnd = nil
+		self.Interrupted = false
+		self:Stop()
 		if self.UnitID then
 			KBM.CastBar.ActiveCastBars[self.UnitID].List[self.ID] = nil
 			KBM.CastBar.ActiveCastBars[self.UnitID].Count = KBM.CastBar.ActiveCastBars[self.UnitID].Count - 1

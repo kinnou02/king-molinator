@@ -236,7 +236,7 @@ function MOD:UnitHPCheck(unitDetails, unitID)
 				end
 				BossObj.UnitID = unitID
 				BossObj.Available = true
-				return self.Laric
+				return BossObj
 			end
 		end
 	end

@@ -193,7 +193,7 @@ end
 function MX.PhaseFour()
 	MX.PhaseObj.Objectives:Remove()
 	MX.Phase = 4
-	MX.PhaseObj:SetPhase("Final")
+	MX.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
 	MX.PhaseObj.Objectives:AddPercent(MX.Murd.Name, 0, 25)	
 end
 

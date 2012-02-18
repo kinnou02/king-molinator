@@ -64,6 +64,7 @@ SZ.Lang.Ability.Grasp.Russian = "Хватка душедера"
 SZ.Lang.Ability.Cede = KBM.Language:Add("Cede Spirit")
 SZ.Lang.Ability.Cede.German = "Geist abgeben"
 SZ.Lang.Ability.Volley = KBM.Language:Add("Dark Volley")
+SZ.Lang.Ability.Volley.German = "Dunkler Treffer"
 
 -- Menu Dictionary
 SZ.Lang.Menu = {}
@@ -77,7 +78,9 @@ SZ.Lang.Unit.Imp = KBM.Language:Add("Escaped Imp")
 SZ.Lang.Unit.Imp.German = "Entflohener Imp"
 SZ.Lang.Unit.ImpShort = KBM.Language:Add("Imp")
 SZ.Lang.Unit.Spirit = KBM.Language:Add("Drifting Spirit")
+SZ.Lang.Unit.Spirit.German = "Treibender Geist"
 SZ.Lang.Unit.SpiritShort = KBM.Language:Add("Spirit")
+SZ.Lang.Unit.SpiritShort.German = "Geist"
 
 SZ.Imp = {
 	Mod = SZ,
@@ -278,7 +281,7 @@ function SZ.PhaseTwo()
 	SZ.PhaseObj.Objectives:Remove()
 	SZ.PhaseObj:SetPhase(2)
 	SZ.PhaseObj.Objectives:AddPercent(SZ.Zilas.Name, 70, 80)
-	print("Phase 2 Starting!")
+	print("Phase 2 starting!")
 end
 
 function SZ.PhaseThree()
@@ -286,7 +289,7 @@ function SZ.PhaseThree()
 	SZ.PhaseObj.Objectives:Remove()
 	SZ.PhaseObj:SetPhase(3)
 	SZ.PhaseObj.Objectives:AddPercent(SZ.Zilas.Name, 40, 70)
-	print("Phase 3 Starting!")
+	print("Phase 3 starting!")
 end
 
 function SZ.PhaseFour()
@@ -294,13 +297,13 @@ function SZ.PhaseFour()
 	SZ.PhaseObj.Objectives:Remove()
 	SZ.PhaseObj:SetPhase(4)
 	SZ.PhaseObj.Objectives:AddPercent(SZ.Zilas.Name, 20, 40)
-	print("Phase 4 Starting!")	
+	print("Phase 4 starting!")	
 end
 
 function SZ.PhaseFive()
 	SZ.Phase = 5
 	SZ.PhaseObj.Objectives:Remove()
-	SZ.PhaseObj:SetPhase("Final")
+	SZ.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
 	SZ.PhaseObj.Objectives:AddPercent(SZ.Zilas.Name, 0, 20)
 	print("Final Phase!")
 end

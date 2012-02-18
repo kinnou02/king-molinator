@@ -202,7 +202,7 @@ end
 function MZ.PhaseThree()
 	MZ.Phase = 3
 	MZ.PhaseObj.Objectives:Remove()
-	MZ.PhaseObj:SetPhase("Final")
+	MZ.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
 	MZ.PhaseObj.Objectives:AddPercent(MZ.Matron.Name, 0, 30)	
 end
 

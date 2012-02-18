@@ -96,6 +96,7 @@ function JR:InitVars()
 		EncTimer = KBM.Defaults.EncTimer(),
 		AlertsRef = self.Joloral.Settings.AlertsRef,
 		TimersRef = self.Joloral.Settings.TimersRef,
+		PhaseMon = KBM.Defaults.PhaseMon(),
 		Alert = KBM.Defaults.Alerts(),
 		MechTimer = KBM.Defaults.MechTimer(),
 	}
@@ -169,6 +170,10 @@ function JR:UnitHPCheck(uDetails, unitID)
 					self.Joloral.Dead = false
 					self.Joloral.Casting = false
 					self.Joloral.CastBar:Create(unitID)
+					self.PhaseObj:Start(self.StartTime)
+					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
+					self.PhaseObj.Objectives:AddPercent(self.Joloral.Name, 0, 100)
+					self.Phase = 1					
 				end
 				self.Joloral.UnitID = unitID
 				self.Joloral.Available = true
@@ -184,6 +189,7 @@ function JR:Reset()
 	self.Joloral.UnitID = nil
 	self.Joloral.Dead = false
 	self.Joloral.CastBar:Remove()
+	self.PhaseObj:End(Inspect.Time.Real())
 end
 
 function JR:Timer()
@@ -237,5 +243,6 @@ function JR:Start()
 	self.Joloral.Triggers.PanicDuration:AddAlert(self.Joloral.AlertsRef.PanicDuration)
 	
 	self.Joloral.CastBar = KBM.CastBar:Add(self, self.Joloral, true)
+	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()
 end

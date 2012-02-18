@@ -60,6 +60,7 @@ HH.Lang.Ability.Tsunami = KBM.Language:Add("Tsunami")
 HH.Lang.Ability.Tsunami:SetRussian("Цунами")
 HH.Lang.Ability.Shock = KBM.Language:Add("Hydrostatic Shock")
 HH.Lang.Ability.Shock:SetRussian("Гидростатический удар")
+HH.Lang.Ability.Shock:SetGerman("Hydrostatischer Schock") 
 
 -- Mechanic Dictionary
 HH.Lang.Mechanic = {}
@@ -164,12 +165,12 @@ end
 
 function HH.SpawnStart()
 	HH.PhaseObjects.Sea = HH.PhaseObj.Objectives:AddPercent(HH.Seaspawn.Name, 0, 100)
-	HH.PhaseObj:SetPhase("Seaspawn")
+	HH.PhaseObj:SetPhase(HH.Lang.Unit.Sea[KBM.Lang])
 end
 
 function HH.SpawnEnd()
 	HH.PhaseObj.Objectives.Remove(HH.PhaseObjects.Sea)
-	HH.PhaseObj:SetPhase("Ground")
+	HH.PhaseObj:SetPhase(KBM.Language.Options.Ground[KBM.Lang])
 end
 
 function HH:Death(UnitID)
@@ -197,7 +198,7 @@ function HH:UnitHPCheck(uDetails, unitID)
 					KBM.MechTimer:AddStart(self.Hydriss.TimersRef.SeaFirst)
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj.Objectives:AddPercent(self.Hydriss.Name, 0, 100)
-					self.PhaseObj:SetPhase("Ground")
+					self.PhaseObj:SetPhase(KBM.Language.Options.Ground[KBM.Lang])
 					self.Phase = 1
 				end
 				self.Hydriss.UnitID = unitID

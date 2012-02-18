@@ -191,7 +191,7 @@ function MOD:UnitHPCheck(unitDetails, unitID)
 						BossObj.CastBar:Create(unitID)
 					end
 					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase("Single")
+					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
 					self.PhaseObj.Objectives:AddPercent(self.Maelow.Name, 0, 100)
 					self.PhaseObj.Objectives:AddPercent(self.Brae.Name, 0, 100)
 					self.Phase = 1
@@ -204,7 +204,7 @@ function MOD:UnitHPCheck(unitDetails, unitID)
 				end
 				BossObj.UnitID = unitID
 				BossObj.Available = true
-				return self.Maelow
+				return BossObj
 			end
 		end
 	end

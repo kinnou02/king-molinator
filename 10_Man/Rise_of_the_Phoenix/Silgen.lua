@@ -86,6 +86,7 @@ function GS:InitVars()
 		Enabled = true,
 		CastBar = self.Silgen.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
+		PhaseMon = KBM.Defaults.PhaseMon(),
 		MechTimer = KBM.Defaults.MechTimer(),
 		Alerts = KBM.Defaults.Alerts(),
 		TimersRef = self.Silgen.Settings.TimersRef,
@@ -161,6 +162,10 @@ function GS:UnitHPCheck(unitDetails, unitID)
 					self.Silgen.Dead = false
 					self.Silgen.Casting = false
 					self.Silgen.CastBar:Create(unitID)
+					self.PhaseObj:Start(self.StartTime)
+					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
+					self.PhaseObj.Objectives:AddPercent(self.Silgen.Name, 0, 100)
+					self.Phase = 1
 					KBM.MechTimer:AddStart(self.Silgen.TimersRef.Incinerate)
 				end
 				self.Silgen.UnitID = unitID
@@ -176,6 +181,7 @@ function GS:Reset()
 	self.Silgen.Available = false
 	self.Silgen.UnitID = nil
 	self.Silgen.CastBar:Remove()
+	self.PhaseObj:End(Inspect.Time.Real())
 end
 
 function GS:Timer()	
@@ -234,5 +240,6 @@ function GS:Start()
 	self.Silgen.Triggers.Incinerate:AddAlert(self.Silgen.AlertsRef.Incinerate)
 	
 	self.Silgen.CastBar = KBM.CastBar:Add(self, self.Silgen)
+	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()
 end

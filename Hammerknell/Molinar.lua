@@ -495,7 +495,6 @@ function KM.PhaseTwo()
 		KM.PhaseObj:SetPhase(2)
 		KM.PhaseObj.Objectives:AddPercent(KM.King.Name, 65, 90)
 		KM.PhaseObj.Objectives:AddPercent(KM.Prince.Name, 65, 90)
-		print("Starting Phase 2!")
 	end
 end
 
@@ -506,7 +505,6 @@ function KM.PhaseThree()
 		KM.PhaseObj:SetPhase(3)
 		KM.PhaseObj.Objectives:AddPercent(KM.King.Name, 40, 65)
 		KM.PhaseObj.Objectives:AddPercent(KM.Prince.Name, 40, 65)
-		print("Starting Phase 3!")
 	end	
 end
 
@@ -514,10 +512,9 @@ function KM.PhaseFour()
 	if KM.Phase < 4 then
 		KM.PhaseObj.Objectives:Remove()
 		KM.Phase = 4
-		KM.PhaseObj:SetPhase("Final")
+		KM.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
 		KM.PhaseObj.Objectives:AddPercent(KM.King.Name, 0, 40)
 		KM.PhaseObj.Objectives:AddPercent(KM.Prince.Name, 0, 40)
-		print("Starting Final Phase!")
 	end
 end
 

@@ -180,7 +180,7 @@ function TR.PhaseSix()
 	TR.Phase = 6
 	TR.PhaseObj.Objectives:Remove()
 	TR.PhaseObj.Objectives:AddPercent(TR.Thalguur.Name, 0, 10)
-	TR.PhaseObj:SetPhase("Final")
+	TR.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
 end
 
 function TR:UnitHPCheck(uDetails, unitID)

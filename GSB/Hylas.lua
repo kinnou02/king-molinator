@@ -95,6 +95,10 @@ PH.Lang.Buff = {}
 PH.Lang.Buff.Life = KBM.Language:Add("Invocation of Life")
 PH.Lang.Buff.Life.German = "Anrufung des Lebens"
 
+-- Phase Monitor Dictionary
+PH.Lang.Phase = {}
+PH.Lang.Phase.Critters = KBM.Language:Add("Critters")
+
 PH.Hylas.Name = PH.Lang.Hylas[KBM.Lang]
 PH.Descript = PH.Hylas.Name
 
@@ -199,7 +203,7 @@ end
 function PH.PhaseFour()
 	if PH.Phase < 4 then
 		PH.PhaseObj.Objectives:Remove()
-		PH.PhaseObj:SetPhase("Critters")
+		PH.PhaseObj:SetPhase(PH.Lang.Phase.Critters[KBM.Lang])
 		PH.Phase = 4
 		KBM.MechTimer:AddRemove(PH.Hylas.TimersRef.Soul)
 		KBM.MechTimer:AddRemove(PH.Hylas.TimersRef.Wrath)
@@ -210,7 +214,7 @@ end
 function PH.PhaseFive()
 	PH.PhaseObj.Objectives:Remove()
 	PH.Phase = 5
-	PH.PhaseObj:SetPhase("Final")
+	PH.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
 	PH.PhaseObj.Objectives:AddPercent(PH.Hylas.Name, 0, 50)
 end
 

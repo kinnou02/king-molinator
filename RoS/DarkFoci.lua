@@ -82,12 +82,19 @@ DF.Lang.Unit.Force = KBM.Language:Add("Force of Corruption")
 DF.Lang.Unit.Force:SetGerman("Verderbende Kraft")
 DF.Lang.Unit.Force:SetRussian("Сила искажения")
 
+-- Phase Monitor Dictionary
+DF.Lang.Phase = {}
+DF.Lang.Phase.Force = KBM.Language:Add("Force")
+DF.Lang.Phase.Foci = KBM.Language:Add("Foci")
+
+DF.Foci.NameShort = DF.Lang.Phase.Foci[KBM.Lang]
+
 DF.Force = {
 	Mod = DF,
 	Level = "??",
 	Active = false,
 	Name = DF.Lang.Unit.Force[KBM.Lang],
-	NameShort = "Force",
+	NameShort = DF.Lang.Phase.Force[KBM.Lang],
 	Dead = false,
 	Available = false,
 	AlertsRef = {},
@@ -197,14 +204,14 @@ end
 
 function DF.PhaseForce()
 	DF.PhaseObj.Objectives:Remove()
-	DF.PhaseObj:SetPhase("Force")
+	DF.PhaseObj:SetPhase(DF.Lang.Phase.Force[KBM.Lang])
 	DF.Phase = 2
 	DF.PhaseObj.Objectives:AddPercent(DF.Force.Name, 0, 100)
 end
 
 function DF.PhaseFoci()
 	DF.PhaseObj.Objectives:Remove()
-	DF.PhaseObj:SetPhase("Foci")
+	DF.PhaseObj:SetPhase(DF.Lang.Phase.Foci[KBM.Lang])
 	DF.Phase = 1
 	DF.PhaseObj.Objectives:AddPercent(DF.Foci.Name, 0, 100)
 end
@@ -236,7 +243,7 @@ function DF:UnitHPCheck(uDetails, unitID)
 					self.Foci.CastBar:Create(unitID)
 					self.Force.UnitID = nil
 					self.Phase = 1
-					self.PhaseObj:SetPhase("Foci")
+					self.PhaseObj:SetPhase(self.Lang.Phase.Foci[KBM.Lang])
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj.Objectives:AddPercent(self.Foci.Name, 0, 100)
 				end

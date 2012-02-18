@@ -35,7 +35,7 @@ MOD.Plutonus = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
-	ExpertID = "Expert",
+	ExpertID = "U3EA4CAE94A4A0D48",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -151,7 +151,7 @@ function MOD:UnitHPCheck(unitDetails, unitID)
 					self.Plutonus.Casting = false
 					self.Plutonus.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase("Single")
+					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
 					self.PhaseObj.Objectives:AddPercent(self.Plutonus.Name, 0, 100)
 					self.Phase = 1
 				end

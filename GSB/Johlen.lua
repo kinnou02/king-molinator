@@ -67,6 +67,12 @@ IJ.Lang.Unit.Bomb = KBM.Language:Add("Devastating Bomb")
 IJ.Lang.Unit.Bomb.German = "Vernichtende Bombe"
 IJ.Lang.Unit.Bomb.Russian = "Разрушительная бомба"
 
+-- Phase Monitor Dictionary
+IJ.Lang.Phase = {}
+IJ.Lang.Phase.Bomb = KBM.Language:Add("Bomb")
+IJ.Lang.Phase.Bomb.German = "Bombe"
+IJ.Lang.Phase.Bomb.Russian = "бомба"
+
 IJ.Johlen.Name = IJ.Lang.Johlen[KBM.Lang]
 IJ.Descript = IJ.Johlen.Name
 
@@ -158,7 +164,7 @@ function IJ:Death(UnitID)
 			if self.Phase < 4 then
 				self.PhaseObj:SetPhase(self.Phase)
 			else
-				self.PhaseObj:SetPhase("Final")
+				self.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
 			end
 			KBM.Alert:Stop(self.Johlen.AlertsRef.Bomb)
 		end
@@ -210,7 +216,7 @@ end
 function IJ.PhaseTwo()
 	IJ.PhaseObj.Objectives:Remove()
 	IJ.Phase = 2
-	IJ.PhaseObj:SetPhase("Bomb 1/3")
+	IJ.PhaseObj:SetPhase(IJ.Lang.Phase.Bomb[KBM.Lang].." 1/3")
 	IJ.PhaseObj.Objectives:AddPercent(IJ.Johlen.Name, 50, 75)
 	IJ.Bomb.PhaseObjective = IJ.PhaseObj.Objectives:AddPercent(IJ.Bomb.Name, 0, 100)	
 end
@@ -218,7 +224,7 @@ end
 function IJ.PhaseThree()
 	IJ.PhaseObj.Objectives:Remove()
 	IJ.Phase = 3
-	IJ.PhaseObj:SetPhase("Bomb 2/3")
+	IJ.PhaseObj:SetPhase(IJ.Lang.Phase.Bomb[KBM.Lang].." 2/3")
 	IJ.PhaseObj.Objectives:AddPercent(IJ.Johlen.Name, 25, 50)
 	IJ.Bomb.PhaseObjective = IJ.PhaseObj.Objectives:AddPercent(IJ.Bomb.Name, 0, 100)	
 end
@@ -226,7 +232,7 @@ end
 function IJ.PhaseFour()
 	IJ.PhaseObj.Objectives:Remove()
 	IJ.Phase = 4
-	IJ.PhaseObj:SetPhase("Bomb 3/3")
+	IJ.PhaseObj:SetPhase(IJ.Lang.Phase.Bomb[KBM.Lang].." 3/3")
 	IJ.PhaseObj.Objectives:AddPercent(IJ.Johlen.Name, 0, 25)
 	IJ.Bomb.PhaseObjective = IJ.PhaseObj.Objectives:AddPercent(IJ.Bomb.Name, 0, 100)		
 end

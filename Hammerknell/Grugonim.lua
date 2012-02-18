@@ -123,6 +123,10 @@ GR.Lang.Menu.Breath = KBM.Language:Add(GR.Lang.Ability.Breath[KBM.Lang].." durat
 GR.Lang.Menu.Breath.German = GR.Lang.Ability.Breath[KBM.Lang].." Dauer"
 GR.Lang.Menu.Breath.Russian = GR.Lang.Ability.Breath[KBM.Lang].." продолжительность"
 
+-- Phase Monitor Dictionary
+GR.Lang.Phase = {}
+GR.Lang.Phase.Towers = KBM.Language:Add("Towers")
+
 function GR:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
@@ -218,7 +222,7 @@ end
 function GR.TowerPhase()
 	GR.Counts.Breaths = 0
 	GR.PhaseObj.Objectives:Remove()
-	GR.PhaseObj:SetPhase("Towers")
+	GR.PhaseObj:SetPhase(GR.Lang.Phase.Towers[KBM.Lang])
 	GR.Grugonim.CastFilters[GR.Lang.Ability.Breath[KBM.Lang]].Current = 1
 	if GR.Phase == 1 then
 		GR.Phase = 2
@@ -240,7 +244,7 @@ end
 function GR.PhaseFive()
 	GR.Phase = 5
 	GR.PhaseObj.Objectives:Remove()
-	GR.PhaseObj:SetPhase("Final")
+	GR.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
 	GR.PhaseObj.Objectives:AddPercent(GR.Grugonim.Name, 0, 10)
 	GR.PhaseObj.Objectives:AddMeta(GR.Lang.Ability.Breath[KBM.Lang], 3, 0)
 end
@@ -408,7 +412,6 @@ function GR:Start()
 	self.Grugonim.Triggers.PhaseFour:AddStop(self.Grugonim.TimersRef.Breath)
 	
 	self.Grugonim.CastBar = KBM.CastBar:Add(self, self.Grugonim)	
-	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)	
-	
+	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)		
 	self:DefineMenu()
 end
