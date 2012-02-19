@@ -3940,9 +3940,11 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 		self.CastMod = 1
 		self.Interrupted = false
 		self.InterruptEnd = nil
-		self.GUI.Frame:SetAlpha(1)
-		self.GUI.Frame:SetVisible(true)
-		self.GUI.Progress:SetVisible(true)
+		if self.Enabled then
+			self.GUI.Frame:SetAlpha(1)
+			self.GUI.Frame:SetVisible(true)
+			self.GUI.Progress:SetVisible(true)
+		end
 	end
 	
 	function CastBarObj:Update(Trigger)	
