@@ -3822,10 +3822,10 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 	
 	CastBarObj.Casting = false
 	CastBarObj.LastCast = ""
-	if not Enabled then
+	if not Dynamic then
 		CastBarObj.Enabled = CastBarObj.Settings.Enabled
 	else
-		CastBarObj.Enabled = Enabled
+		CastBarObj.Enabled = false
 	end
 	CastBarObj.Mod = Mod
 	CastBarObj.Active = false
@@ -4042,7 +4042,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 					if self.LastStart ~= bDetails.begin then
 						self.LastStart = bDetails.begin
 						if not bDetails.channeled then	
-							if KBM.Trigger.Cast[bDetails.abilityName] and Trigger then
+							if KBM.Trigger.Cast[bDetails.abilityName] then
 								if KBM.Trigger.Cast[bDetails.abilityName][self.Boss.Name] then
 									TriggerObj = KBM.Trigger.Cast[bDetails.abilityName][self.Boss.Name]
 									KBM.Trigger.Queue:Add(TriggerObj, nil, nil, bDetails.remaining)
@@ -4051,7 +4051,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 						else
 							if not self.Channeled then
 								self.Channeled = true
-								if KBM.Trigger.Channel[bDetails.abilityName] and Trigger then
+								if KBM.Trigger.Channel[bDetails.abilityName] then
 									if KBM.Trigger.Channel[bDetails.abilityName][self.Boss.Name] then
 										TriggerObj = KBM.Trigger.Channel[bDetails.abilityName][self.Boss.Name]
 										KBM.Trigger.Queue:Add(TriggerObj, nil, nil, bDetails.remaining)
@@ -4072,7 +4072,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 						if self.CastObject then
 							if self.CastObject.remaining > 0.05 and not self.CastObject.uninterruptible then
 								--- Do Cast Interrupt Triggers (if any)
-								if KBM.Trigger.Interrupt[self.CastObject.abilityName] and Trigger then
+								if KBM.Trigger.Interrupt[self.CastObject.abilityName] then
 									if KBM.Trigger.Interrupt[self.CastObject.abilityName][self.Boss.Name] then
 										TriggerObj = KBM.Trigger.Interrupt[self.CastObject.abilityName][self.Boss.Name]
 										KBM.Trigger.Queue:Add(TriggerObj, nil, nil, self.CastObject.remaining)
@@ -4106,14 +4106,18 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 		self.Casting = false
 		self.LastCast = ""
 		if not self.Interrupted then
-			self.GUI:SetText(self.Boss.Name)
-			self.GUI.Frame:SetVisible(false)
+			if self.GUI then
+				self.GUI:SetText(self.Boss.Name)
+				self.GUI.Frame:SetVisible(false)
+			end
 		else
 			if not self.InterruptEnd then
-				self.GUI:SetText(KBM.Language.CastBar.Interrupt[KBM.Lang])
-				self.InterruptEnd = Inspect.Time.Real() + 1
-				self.GUI.Progress:SetBackgroundColor(0,7,7,0.33)
-				self.GUI.Progress:SetWidth(self.GUI.Frame:GetWidth())
+				if self.GUI then
+					self.GUI:SetText(KBM.Language.CastBar.Interrupt[KBM.Lang])
+					self.InterruptEnd = Inspect.Time.Real() + 1
+					self.GUI.Progress:SetBackgroundColor(0,7,7,0.33)
+					self.GUI.Progress:SetWidth(self.GUI.Frame:GetWidth())
+				end
 			end
 		end
 		self.Duration = 0
@@ -4396,8 +4400,7 @@ function KBM:Timer()
 					for UnitID, CastCheck in pairs(KBM.CastBar.ActiveCastBars) do
 						local Trigger = true
 						for ID, CastBarObj in pairs(CastCheck.List) do
-							CastBarObj:Update(Trigger)
-							Trigger = false
+							CastBarObj:Update(true)
 						end
 					end
 				end	
