@@ -90,7 +90,7 @@ GU.Lang.Say.Bask.German = "Preiset die Macht des Akylios!"
 GU.Lang.Say.Bask.Russian = "Познайте мощь Акилиоса!"
 GU.Lang.Say.Sacrifice = KBM.Language:Add("Sacrifice your lives for Akylios!")
 GU.Lang.Say.Sacrifice.French = "Sacrifiez vos vies pour Akylios !"
-GU.Lang.Say.Sacrifice.German = "Opfert Eure leben dem Akylios!"
+GU.Lang.Say.Sacrifice.German = "Opfert Eure Leben dem Akylios!"
 GU.Lang.Say.Sacrifice.Russian = "Ваши жизни станут жертвой в честь Акилиоса!"
 
 -- Unit Dictionary

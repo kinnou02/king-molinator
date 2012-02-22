@@ -266,6 +266,8 @@ function IL:Start()
 	-- Assign Timers and Alerts to triggers.
 	self.Isskal.Triggers.Shard = KBM.Trigger:Create(self.Lang.Ability.Shard[KBM.Lang], "cast", self.Isskal)
 	self.Isskal.Triggers.Shard:AddAlert(self.Isskal.AlertsRef.Shard)
+	self.Isskal.Triggers.ShardInt = KBM.Trigger:Create(self.Lang.Ability.Shard[KBM.Lang], "interrupt", self.Isskal)
+	self.Isskal.Triggers.ShardInt:AddStop(self.Isskal.AlertsRef.Shard)
 	self.Isskal.Triggers.Whirlpool = KBM.Trigger:Create(self.Lang.Notify.Whirlpool[KBM.Lang], "notify", self.Isskal)
 	self.Isskal.Triggers.Whirlpool:AddAlert(self.Isskal.AlertsRef.Whirlpool)
 	self.Isskal.Triggers.Whirlpool:AddTimer(self.Isskal.TimersRef.Reverse)

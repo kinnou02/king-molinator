@@ -98,6 +98,7 @@ PH.Lang.Buff.Life.German = "Anrufung des Lebens"
 -- Phase Monitor Dictionary
 PH.Lang.Phase = {}
 PH.Lang.Phase.Critters = KBM.Language:Add("Critters")
+PH.Lang.Phase.Critters.German = "Tiere"
 
 PH.Hylas.Name = PH.Lang.Hylas[KBM.Lang]
 PH.Descript = PH.Hylas.Name

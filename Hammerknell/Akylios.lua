@@ -191,9 +191,13 @@ AK.Lang.Say.PhaseTwo.German = "Meister, Euer Plan ist vollendet. Nach Millennium
 -- Phase Message Dictionary
 AK.Lang.Phase = {}
 AK.Lang.Phase.Two = KBM.Language:Add("Phase 2 starting!")
+AK.Lang.Phase.Two.German = "Phase 2 beginnt!"
 AK.Lang.Phase.Three = KBM.Language:Add("Phase 3 starting!")
+AK.Lang.Phase.Three.German = "Phase 3 beginnt!"
 AK.Lang.Phase.Four = KBM.Language:Add("Phase 4 starting!")
+AK.Lang.Phase.Four.German = "Phase 4 beginnt!"
 AK.Lang.Phase.Final = KBM.Language:Add("Final phase starting, good luck!")
+AK.Lang.Phase.Final.German = "Letzte Phase beginnt, viel Erfolg!"
 
 -- Options Dictionary.
 AK.Lang.Options = {}
@@ -204,6 +208,7 @@ AK.Lang.Options.WaveWarn.German = "Warnung für Flutwellen 5 Sekunden vorher."
 AK.Lang.Options.Summon = KBM.Language:Add(AK.Lang.Mechanic.Summon[KBM.Lang].." (Phase 1)")
 AK.Lang.Options.SummonTwo = KBM.Language:Add(AK.Lang.Mechanic.Summon[KBM.Lang].." (Phase 2)")
 AK.Lang.Options.Orb = KBM.Language:Add(AK.Lang.Mechanic.Orb[KBM.Lang].." (P2 First)")
+AK.Lang.Options.Orb.German = AK.Lang.Mechanic.Orb[KBM.Lang].." (Erste in P2)"
 AK.Lang.Options.Breath = KBM.Language:Add(AK.Lang.Ability.Breath[KBM.Lang].." duration.")
 AK.Lang.Options.Breath.German = AK.Lang.Ability.Breath[KBM.Lang].." Dauer." 
 
@@ -326,11 +331,13 @@ function AK.PhaseThree()
 	KBM.MechTimer:AddStart(AK.Akylios.TimersRef.BreathFirst)
 	AK.PhaseObj.Objectives:AddPercent(AK.Akylios.Name, 55, 100)
 	AK.PhaseObj.Objectives:AddPercent(AK.Jornaru.Name, 0, 50)
-	print(AK.Lang.Phase.Three[KBM.Lang])	
+	AK.Jornaru.Triggers.AltPhaseFour.Enabled = true
+	print(AK.Lang.Phase.Three[KBM.Lang])
 end
 
 function AK.PhaseFour()
 	if AK.Phase < 4 then
+		AK.Jornaru.Triggers.AltPhaseFour.Enabled = false
 		AK.PhaseObj.Objectives:Remove()
 		AK.Phase = 4
 		AK.PhaseObj:SetPhase(4)
@@ -466,6 +473,7 @@ function AK:Reset()
 	self.Phase = 1
 	self.Stinger.UnitList = {}
 	self.Lasher.UnitList = {}
+	self.Jornaru.Triggers.AltPhaseFour.Enabled = false
 	for UnitID, BossObj in pairs(self.Apostle.UnitList) do
 		if BossObj.CastBar then
 			BossObj.CastBar:Remove()
@@ -632,6 +640,9 @@ function AK:Start()
 	self.Jornaru.Triggers.PhaseTwoAlt:AddPhase(self.PhaseTwo)
 	self.Jornaru.Triggers.Summon = KBM.Trigger:Create(self.Lang.Mechanic.Summon[KBM.Lang], "cast", self.Jornaru)
 	self.Jornaru.Triggers.Summon:AddTimer(self.Jornaru.TimersRef.Summon)
+	self.Jornaru.Triggers.AltPhaseFour = KBM.Trigger:Create("", "npcDamage", self.Jornaru)
+	self.Jornaru.Triggers.AltPhaseFour:AddPhase(self.PhaseFour)
+	self.Jornaru.Triggers.AltPhaseFour.Enabled = false
 	-- Akylios
 	self.Akylios.Triggers.PhaseFour = KBM.Trigger:Create(55, "percent", self.Akylios)
 	self.Akylios.Triggers.PhaseFour:AddPhase(self.PhaseFour)

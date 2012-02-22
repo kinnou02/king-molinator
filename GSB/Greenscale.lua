@@ -80,6 +80,7 @@ LG.Lang.Unit.Verdant.Russian = "Лиственный расщепитель"
 -- Mechanic Dictionary (Verbose)
 LG.Lang.Mechanic = {}
 LG.Lang.Mechanic.Death = KBM.Language:Add("Protective Shield")
+LG.Lang.Mechanic.Death.German = "Schutzschild" 
 
 LG.Greenscale.Name = LG.Lang.Greenscale[KBM.Lang]
 LG.Descript = LG.Greenscale.Name

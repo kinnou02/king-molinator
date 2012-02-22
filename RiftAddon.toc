@@ -10,7 +10,7 @@ Author = "Paul Snart"
 Website = "http://www.facebook.com/pages/King-Boss-Mods/271482262893152"
 Email = "snarty@gmail.com"
 
-Version = "0.9.7"
+Version = "0.9.8"
 
 Environment = "1.7"
 
@@ -85,9 +85,9 @@ RunOnStartup = {
 	"Experts/Charmers_Caldera/Smouldaron.lua",
 	"Experts/Charmers_Caldera/Cyclorax.lua",
 	"Experts/Charmers_Caldera/Ryka.lua",
-	"Experts/Charmers_Caldera/Caelia.lua",
 	"Experts/Charmers_Caldera/Gronik.lua",
 	"Experts/Charmers_Caldera/Jultharin.lua",
+	"Experts/Charmers_Caldera/Caelia.lua",
 	"Experts/Darkening_Deeps/DDHeader.lua",
 	"Experts/Darkening_Deeps/Braxtepel.lua",
 	"Experts/Darkening_Deeps/Bringhurst.lua",

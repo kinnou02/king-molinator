@@ -1,4 +1,51 @@
-﻿v0.9.7
+﻿v0.9.8
+
+Custom Colors
+* New: Added cyan to the list of available colors for Alerts, Timers and Cast Filters.
+
+Settings
+* Fixed: Disabled Alert groups were not initiating correctly after loading a new session.
+* Fixed: Disabled Timer groups were not initiating correctly after loading a new session.
+* Fixed: Disabled Cast Filter groups were not initiating correctly after loading a new session.
+* Note: Any settings you made to disable any of the above groups will now be applied automatically.
+
+Engine
+* Triggers
+** New: Triggers can now be enabled/disabled via Mods real-time.
+** New: Added NPC Damaged based triggers for rare fail-safes.
+* HP Monitoring
+** New: Unit HP tracking in various applications will now be tracked even when not selected by a raid/group memeber.
+** New: Major increase in Unit HP tracking effeciency and accuracy.
+** Note: The above changes should be most notable in the Phase Monitors percentage based objectives.
+** Note: Tracked Units will need to be "seen" at least once by the raid/group. This is an API restriction.
+
+Records
+* Fixed: Dates were not correctly being recorded.
+
+Hammerknell
+* Inwar Darktide
+** New: Added Timer for the appearance of the first Geyser in Phase 2.
+** New: Added Timer for the appearance of all subsequent Geysers in Phase 2 and Phase 3.
+* Akylios
+** New: Added fail-safe trigger for phase 4. Damage to Jornaru should now trigger P4 if Akylios is submerged.
+** Note: Accuracy of timers triggered this way will be dependent on reaction times to damaging Jornaru.
+** Note: But should be less inaccurate than when P4 hits early during submerge phases.
+
+Drowned Halls
+* Isskal
+** New: Added stop trigger to alert for Ice Shard interrupts.
+
+Expert Dungeons
+* Added more Unique ID's to Expert bosses.
+* Kings Breach
+** Autoch & Mondrach
+*** Fixed: Saved data wasn't being recorded correctly.
+
+German Translations
+* Added: Non-critical translations for Phase Monitor and in-game chat.
+
+----
+v0.9.7
 
 Rift Version
 * New: Compatible with Rift v1.7

@@ -105,7 +105,7 @@ AD.Lang.Verbose.PunishWarn = KBM.Language:Add(AD.Lang.Ability.Punish[KBM.Lang]..
 AD.Lang.Verbose.PunishWarn:SetGerman(AD.Lang.Ability.Punish[KBM.Lang].." (Eigene Warnung)")
 AD.Lang.Verbose.PunishWarn:SetRussian(AD.Lang.Ability.Punish[KBM.Lang].." (персональное)")
 AD.Lang.Verbose.Punish = KBM.Language:Add(AD.Lang.Ability.Punish[KBM.Lang].." (Personal Alert, Duration)")
-AD.Lang.Verbose.Punish:SetGerman(AD.Lang.Ability.Punish[KBM.Lang].." (Eigene Warnung)")
+AD.Lang.Verbose.Punish:SetGerman(AD.Lang.Ability.Punish[KBM.Lang].." (Eigene Warnung, Dauer)")
 AD.Lang.Verbose.Punish:SetRussian(AD.Lang.Ability.Punish[KBM.Lang].." (персональное)")
 AD.Lang.Verbose.Meteor = KBM.Language:Add(AD.Lang.Ability.Meteor[KBM.Lang].." (First in phase 2)")
 AD.Lang.Verbose.Meteor:SetGerman(AD.Lang.Ability.Meteor[KBM.Lang].." (Erste in Phase 2)")

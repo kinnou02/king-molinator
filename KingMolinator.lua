@@ -150,7 +150,11 @@ function KBM.Defaults.CastFilter.Assign(BossObj)
 			if type(Data) == "table" then
 				Data.Prefix = ""
 				Data.Settings = BossObj.Settings.Filters[Data.ID]
-				Data.Enabled = Data.Settings.Enabled
+				if BossObj.Settings.Filters.Enabled then
+					Data.Enabled = Data.Settings.Enabled
+				else
+					Data.Enabled = false
+				end
 				Data.Color = Data.Settings.Color
 				Data.Custom = Data.Settings.Custom
 			end
@@ -179,7 +183,11 @@ function KBM.Defaults.TimerObj.Assign(BossObj)
 		if BossObj.Settings.TimersRef[ID] then
 			if type(BossObj.Settings.TimersRef[ID]) == "table" then
 				Data.ID = ID
-				Data.Enabled = BossObj.Settings.TimersRef[ID].Enabled
+				if BossObj.Settings.TimersRef.Enabled then
+					Data.Enabled = BossObj.Settings.TimersRef[ID].Enabled
+				else
+					Data.Enabled = false
+				end
 				Data.Settings = BossObj.Settings.TimersRef[ID]
 				BossObj.Settings.TimersRef[ID].ID = ID
 				if not Data.HasMenu then
@@ -235,7 +243,11 @@ function KBM.Defaults.AlertObj.Assign(BossObj)
 		if BossObj.Settings.AlertsRef[ID] then
 			if type(BossObj.Settings.AlertsRef[ID]) == "table" then
 				Data.ID = ID
-				Data.Enabled = BossObj.Settings.AlertsRef[ID].Enabled
+				if BossObj.Settings.AlertsRef.Enabled then
+					Data.Enabled = BossObj.Settings.AlertsRef[ID].Enabled
+				else
+					Data.Enabled = false
+				end
 				Data.Settings = BossObj.Settings.AlertsRef[ID]
 				if not Data.HasMenu then
 					Data.Enabled = true
@@ -715,7 +727,8 @@ KBM.Language.Color.Red.German = "Rot"
 KBM.Language.Color.Red.Russian = "Красный"
 KBM.Language.Color.Blue = KBM.Language:Add("Blue")
 KBM.Language.Color.Blue.German = "Blau"
-KBM.Language.Color.Blue.Russian = "Голубой" 
+KBM.Language.Color.Blue.Russian = "Голубой"
+KBM.Language.Color.Cyan = KBM.Language:Add("Cyan")
 KBM.Language.Color.Dark_Green = KBM.Language:Add("Dark Green")
 KBM.Language.Color.Dark_Green.German = "Dunkelgrün"
 KBM.Language.Color.Dark_Green.Russian = "Темнозеленый"
@@ -817,12 +830,18 @@ KBM.Language.Options.Objectives = KBM.Language:Add("Display Phase objective trac
 KBM.Language.Options.Objectives.German = "Zeige Phasen Aufgabe an"
 KBM.Language.Options.Objectives.Russian = "Показывать цели фазы"
 KBM.Language.Options.Phase = KBM.Language:Add("Phase")
+KBM.Language.Options.Phase.German = "Phase"
 KBM.Language.Options.Phase.Russian = "Фаза"
 KBM.Language.Options.Single = KBM.Language:Add("Single")
+KBM.Language.Options.Single.German = "Einzel"
 KBM.Language.Options.Ground = KBM.Language:Add("Ground")
+KBM.Language.Options.Ground.German = "Boden"
 KBM.Language.Options.Air = KBM.Language:Add("Air")
+KBM.Language.Options.Air.German = "Flug"
 KBM.Language.Options.Final = KBM.Language:Add("Final")
+KBM.Language.Options.Final.German = "Letzte"
 KBM.Language.Options.Dead = KBM.Language:Add("Dead")
+KBM.Language.Options.Dead.German = "Tot" 
 
 -- Button Options
 KBM.Language.Options.Button = KBM.Language:Add("Options Button Visible")
@@ -970,6 +989,12 @@ KBM.Colors = {
 			Name = KBM.Language.Color.Blue[KBM.Lang],
 			Red = 0,
 			Green = 0,
+			Blue = 1,
+		},
+		cyan = {
+			Name = KBM.Language.Color.Cyan[KBM.Lang],
+			Red = 0,
+			Green = 1,
 			Blue = 1,
 		},
 		yellow = {
@@ -1468,6 +1493,7 @@ function KBM.Trigger:Init()
 	self.Time = {}
 	self.Channel = {}
 	self.Interrupt = {}
+	self.NpcDamage = {}
 
 	function self.Queue:Add(TriggerObj, Caster, Target, Duration)	
 		if KBM.Encounter or KBM.Testing then
@@ -1521,6 +1547,7 @@ function KBM.Trigger:Init()
 		TriggerObj.Phase = nil
 		TriggerObj.Trigger = Trigger
 		TriggerObj.LastTrigger = 0
+		TriggerObj.Enabled = true
 		
 		function TriggerObj:AddTimer(TimerObj)
 			if not TimerObj then
@@ -1627,6 +1654,11 @@ function KBM.Trigger:Init()
 				self.Say[Unit.Mod.ID] = {}
 			end
 			table.insert(self.Say[Unit.Mod.ID], TriggerObj)
+		elseif Type == "npcDamage" then
+			if not self.NpcDamage[Unit.Mod.ID] then
+				self.NpcDamage[Unit.Mod.ID] = {}
+			end
+			self.NpcDamage[Unit.Mod.ID][Unit.Name] = TriggerObj
 		elseif Type == "damage" then
 			self.Damage[Trigger] = TriggerObj
 		elseif Type == "cast" then
@@ -2055,6 +2087,17 @@ function KBM.PhaseMonitor:Init()
 			PercentObj.Target = Target
 			PercentObj.PercentRaw = Current
 			PercentObj.Percent = math.ceil(Current)
+			if KBM.CurrentMod then
+				if KBM.CurrentMod.Bosses[PercentObj.Name] then
+					if KBM.CurrentMod.Bosses[PercentObj.Name].UnitID then
+						if KBM.BossID[KBM.CurrentMod.Bosses[PercentObj.Name].UnitID] then
+							PercentObj.PercentRaw = KBM.BossID[KBM.CurrentMod.Bosses[PercentObj.Name].UnitID].PercentRaw
+							PercentObj.Percent = KBM.BossID[KBM.CurrentMod.Bosses[PercentObj.Name].UnitID].Percent
+							Currnet = PercentObj.Percent
+						end
+					end
+				end
+			end
 			PercentObj.Dead = false
 			PercentObj.GUI = KBM.PhaseMonitor:PullObjective()
 			PercentObj.GUI:SetName(Name)
@@ -2618,6 +2661,9 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 									KBM.BossID[UnitID].Combat = true
 									KBM.BossID[UnitID].dead = false
 									KBM.BossID[UnitID].available = true
+									KBM.BossID[UnitID].Health = uDetails.health
+									KBM.BossID[UnitID].HealthLast = uDetails.health
+									KBM.BossID[UnitID].HealthMax = uDetails.healthMax
 									KBM.BossID[UnitID].PercentRaw = (uDetails.health/uDetails.healthMax)*100
 									KBM.BossID[UnitID].Percent = math.ceil(KBM.BossID[UnitID].PercentRaw)
 									KBM.BossID[UnitID].PercentLast = KBM.BossID[UnitID].Percent
@@ -2769,7 +2815,97 @@ function KBM.MobDamage(info)
 								KBM.Trigger.Queue:Add(TriggerObj, cUnitID, tUnitID)
 							end
 						end
+						if KBM.BossID[tUnitID] then
+							KBM.BossID[tUnitID].Health = tDetails.health
+							KBM.BossID[tUnitID].HealthLast = tDetails.health
+							KBM.BossID[tUnitID].PercentRaw = (tDetails.health/tDetails.healthMax)*100
+							KBM.BossID[tUnitID].Percent = math.ceil(KBM.BossID[tUnitID].PercentRaw)
+							if KBM.BossID[tUnitID].Percent ~= KBM.BossID[tUnitID].PercentLast then
+								if KBM.Trigger.Percent[KBM.CurrentMod.ID] then
+									if KBM.Trigger.Percent[KBM.CurrentMod.ID][tDetails.name] then
+										if KBM.BossID[tUnitID].PercentLast - KBM.BossID[tUnitID].Percent > 1 then
+											for PCycle = KBM.BossID[tUnitID].PercentLast, KBM.BossID[tUnitID].Percent, -1 do
+												if KBM.Trigger.Percent[KBM.CurrentMod.ID][tDetails.name][PCycle] then
+													TriggerObj = KBM.Trigger.Percent[KBM.CurrentMod.ID][tDetails.name][PCycle]
+													KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
+												end
+											end
+										else
+											if KBM.Trigger.Percent[KBM.CurrentMod.ID][tDetails.name][KBM.BossID[tUnitID].Percent] then
+												TriggerObj = KBM.Trigger.Percent[KBM.CurrentMod.ID][tDetails.name][KBM.BossID[tUnitID].Percent]
+												KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
+											end
+										end
+									end
+								end
+								KBM.BossID[tUnitID].PercentLast = KBM.BossID[tUnitID].Percent
+							end
+							-- Update Phase Monitor accordingly.
+							if KBM.PhaseMonitor.Active then
+								if KBM.PhaseMonitor.Objectives.Lists.Percent[tDetails.name] then
+									KBM.PhaseMonitor.Objectives.Lists.Percent[tDetails.name]:Update(KBM.BossID[tUnitID].PercentRaw)
+								end
+							end
+							-- Check for Npc Based Triggers (Usually Dynamic: Eg - Failsafe for P4 start Akylios)
+							if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID] then
+								if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][tDetails.name] then
+									local TriggerObj = KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][tDetails.name]
+									if TriggerObj.Enabled then
+										KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
+									end
+								end
+							end
+						end
 					end	
+				else
+					if KBM.BossID[tUnitID] then
+						if not KBM.BossID[tUnitID].Dead then
+							if info.damage then
+								KBM.BossID[tUnitID].Health = KBM.BossID[tUnitID].HealthLast - info.damage
+								if info.Overkill then
+									KBM.BossID[tUnitID].Health = 0
+								end
+								KBM.BossID[tUnitID].HealthLast = KBM.BossID[tUnitID].Health
+								KBM.BossID[tUnitID].PercentRaw = (KBM.BossID[tUnitID].Health/KBM.BossID[tUnitID].HealthMax)*100
+								KBM.BossID[tUnitID].Percent = math.ceil(KBM.BossID[tUnitID].PercentRaw)
+								if KBM.BossID[tUnitID].Percent ~= KBM.BossID[tUnitID].PercentLast then
+									if KBM.Trigger.Percent[KBM.CurrentMod.ID] then
+										if KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name] then
+											if KBM.BossID[tUnitID].PercentLast - KBM.BossID[tUnitID].Percent > 1 then
+												for PCycle = KBM.BossID[tUnitID].PercentLast, KBM.BossID[tUnitID].Percent, -1 do
+													if KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name][PCycle] then
+														TriggerObj = KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name][PCycle]
+														KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
+													end
+												end
+											else
+												if KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name][KBM.BossID[tUnitID].Percent] then
+													TriggerObj = KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name][KBM.BossID[tUnitID].Percent]
+													KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
+												end
+											end
+										end
+									end
+									KBM.BossID[tUnitID].PercentLast = KBM.BossID[tUnitID].Percent
+								end
+								-- Update Phase Monitor accordingly.
+								if KBM.PhaseMonitor.Active then
+									if KBM.PhaseMonitor.Objectives.Lists.Percent[KBM.BossID[tUnitID].name] then
+										KBM.PhaseMonitor.Objectives.Lists.Percent[KBM.BossID[tUnitID].name]:Update(KBM.BossID[tUnitID].PercentRaw)
+									end
+								end
+								-- Check for Npc Based Triggers (Usually Dynamic: Eg - Failsafe for P4 start Akylios)
+								if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID] then
+									if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name] then
+										local TriggerObj = KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name]
+										if TriggerObj.Enabled then
+											KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
+										end
+									end
+								end
+							end
+						end
+					end
 				end
 			end			
 		else
@@ -2803,6 +2939,7 @@ function KBM.RaidDamage(info)
 			-- Update Health etc, checks done to bypass Unit.Health requiring available state.
 			if tDetails then
 				KBM.BossID[tUnitID].Health = tDetails.health
+				KBM.BossID[tUnitID].HealthLast = tDetails.health
 				KBM.BossID[tUnitID].PercentRaw = (tDetails.health/tDetails.healthMax)*100
 				KBM.BossID[tUnitID].Percent = math.ceil(KBM.BossID[tUnitID].PercentRaw)
 				if KBM.BossID[tUnitID].Percent ~= KBM.BossID[tUnitID].PercentLast then
@@ -2829,6 +2966,64 @@ function KBM.RaidDamage(info)
 				if KBM.PhaseMonitor.Active then
 					if KBM.PhaseMonitor.Objectives.Lists.Percent[tDetails.name] then
 						KBM.PhaseMonitor.Objectives.Lists.Percent[tDetails.name]:Update(KBM.BossID[tUnitID].PercentRaw)
+					end
+				end
+				-- Check for Npc Based Triggers (Usually Dynamic: Eg - Failsafe for P4 start Akylios)
+				if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID] then
+					if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][tDetails.name] then
+						local TriggerObj = KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][tDetails.name]
+						if TriggerObj.Enabled then
+							KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
+						end
+					end
+				end
+			else
+				if KBM.BossID[tUnitID] then
+					if not KBM.BossID[tUnitID].Dead then
+						if info.damage then
+							KBM.BossID[tUnitID].Health = KBM.BossID[tUnitID].HealthLast - info.damage
+							if info.Overkill then
+								KBM.BossID[tUnitID].Health = 0
+							end
+							KBM.BossID[tUnitID].HealthLast = KBM.BossID[tUnitID].Health
+							KBM.BossID[tUnitID].PercentRaw = (KBM.BossID[tUnitID].Health/KBM.BossID[tUnitID].HealthMax)*100
+							KBM.BossID[tUnitID].Percent = math.ceil(KBM.BossID[tUnitID].PercentRaw)
+							if KBM.BossID[tUnitID].Percent ~= KBM.BossID[tUnitID].PercentLast then
+								if KBM.Trigger.Percent[KBM.CurrentMod.ID] then
+									if KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name] then
+										if KBM.BossID[tUnitID].PercentLast - KBM.BossID[tUnitID].Percent > 1 then
+											for PCycle = KBM.BossID[tUnitID].PercentLast, KBM.BossID[tUnitID].Percent, -1 do
+												if KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name][PCycle] then
+													TriggerObj = KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name][PCycle]
+													KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
+												end
+											end
+										else
+											if KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name][KBM.BossID[tUnitID].Percent] then
+												TriggerObj = KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name][KBM.BossID[tUnitID].Percent]
+												KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
+											end
+										end
+									end
+								end
+								KBM.BossID[tUnitID].PercentLast = KBM.BossID[tUnitID].Percent
+							end
+							-- Update Phase Monitor accordingly.
+							if KBM.PhaseMonitor.Active then
+								if KBM.PhaseMonitor.Objectives.Lists.Percent[KBM.BossID[tUnitID].name] then
+									KBM.PhaseMonitor.Objectives.Lists.Percent[KBM.BossID[tUnitID].name]:Update(KBM.BossID[tUnitID].PercentRaw)
+								end
+							end
+							-- Check for Npc Based Triggers (Usually Dynamic: Eg - Failsafe for P4 start Akylios)
+							if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID] then
+								if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name] then
+									local TriggerObj = KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name]
+									if TriggerObj.Enabled then
+										KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
+									end
+								end
+							end
+						end
 					end
 				end
 			end
@@ -3309,7 +3504,7 @@ function KBM.Alert:Init()
 	self.Text:SetPoint("CENTER", self.Anchor, "CENTER")
 	self.Text:SetLayer(2)
 	self.Anchor:SetVisible(self.Settings.Visible)
-	self.ColorList = {"red", "blue", "yellow", "orange", "purple", "dark_green"}
+	self.ColorList = {"red", "blue", "cyan", "yellow", "orange", "purple", "dark_green"}
 	self.Left = {}
 	self.Right = {}
 	self.Count = 0
@@ -4302,6 +4497,21 @@ function KBM:RaidCombatLeave()
 	
 end
 
+function KBM:UpdateHP(UnitID, BossObj)
+	local uDetails = Inspect.Unit.Detail(UnitID)
+	if uDetails then
+		BossObj.Health = uDetails.health
+		BossObj.PercentRaw = (uDetails.health/uDetails.healthMax)*100
+		BossObj.Percent = math.ceil(BossObj.PercentRaw)
+		-- Update Phase Monitor accordingly.
+		if KBM.PhaseMonitor.Active then
+			if KBM.PhaseMonitor.Objectives.Lists.Percent[uDetails.name] then
+				KBM.PhaseMonitor.Objectives.Lists.Percent[uDetails.name]:Update(BossObj.PercentRaw)
+			end
+		end
+	end
+end
+
 function KBM:Timer()
 
 	local current = Inspect.Time.Real()
@@ -4368,6 +4578,11 @@ function KBM:Timer()
 					if not KBM.TankSwap.Test then
 						if KBM.TankSwap.Active then
 							KBM.TankSwap:Update()
+						end
+					end
+					for UnitID, BossObj in pairs(self.BossID) do
+						if BossObj.available then
+							self:UpdateHP(UnitID, BossObj)
 						end
 					end
 				end
@@ -4461,18 +4676,13 @@ end
 
 local function KBM_UnitRemoved(units)
 
-	-- if KBM.Encounter then
-		-- for UnitID, Specifier in pairs(units) do
-			-- if not Inspect.Unit.Detail(UnitID) then
-				-- if KBM.BossID[UnitID] then
-					-- if KBM.CurrentMod then
-						-- KBM.BossID[UnitID].available = false
-						-- KBM.BossID[UnitID].IdleSince = Inspect.Time.Real()
-					-- end
-				-- end
-			-- end
-		-- end
-	-- end
+	if KBM.Encounter then
+		for UnitID, Specifier in pairs(units) do
+			if KBM.BossID[UnitID] then
+				KBM.BossID[UnitID].available = false
+			end
+		end
+	end
 	for UnitID, Specifier in pairs(units) do
 		if KBM.PlugIn.List.KBMMarkIt then
 			KBM.PlugIn.List.KBMMarkIt:MarkChange(false, UnitID)
@@ -4520,7 +4730,7 @@ local function KBM_Death(UnitID)
 										print(KBM.Language.Records.NewRecord[KBM.Lang])
 									end
 									KBM.CurrentMod.Settings.Records.Best = KBM.TimeElapsed
-									KBM.CurrentMod.Settings.Records.Date = os.date()
+									KBM.CurrentMod.Settings.Records.Date = tostring(os.date())
 									KBM.CurrentMod.Settings.Records.Kills = KBM.CurrentMod.Settings.Records.Kills + 1
 								else
 									print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
@@ -4543,7 +4753,7 @@ local function KBM_Death(UnitID)
 										print(KBM.Language.Records.NewChrRecord[KBM.Lang])
 									end
 									KBM.CurrentMod.Settings.Records.Chronicle.Best = KBM.TimeElapsed
-									KBM.CurrentMod.Settings.Records.Chronicle.Date = os.date()
+									KBM.CurrentMod.Settings.Records.Chronicle.Date = tostring(os.date())
 									KBM.CurrentMod.Settings.Records.Chronicle.Kills = KBM.CurrentMod.Settings.Records.Chronicle.Kills + 1
 								else
 									print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))								

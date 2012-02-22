@@ -85,7 +85,9 @@ DF.Lang.Unit.Force:SetRussian("Сила искажения")
 -- Phase Monitor Dictionary
 DF.Lang.Phase = {}
 DF.Lang.Phase.Force = KBM.Language:Add("Force")
+DF.Lang.Phase.Force.German = "Kraft"
 DF.Lang.Phase.Foci = KBM.Language:Add("Foci")
+DF.Lang.Phase.Foci.German = "Fokus"
 
 DF.Foci.NameShort = DF.Lang.Phase.Foci[KBM.Lang]
 
