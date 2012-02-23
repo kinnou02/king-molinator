@@ -19,6 +19,10 @@ Engine
 ** Note: The above changes should be most notable in the Phase Monitors percentage based objectives.
 ** Note: Tracked Units will need to be "seen" at least once by the raid/group. This is an API restriction.
 
+Phase Monitor
+* Percentage Objectives
+** New: Now have an HP bar displayed for each Unit tracked.
+
 Records
 * Fixed: Dates were not correctly being recorded.
 
@@ -34,6 +38,7 @@ Hammerknell
 Drowned Halls
 * Isskal
 ** New: Added stop trigger to alert for Ice Shard interrupts.
+** Fixed: The initial trigger for both the first Whirlpool even and the first Glacial Wave had LUA search incompatability.
 
 Expert Dungeons
 * Added more Unique ID's to Expert bosses.

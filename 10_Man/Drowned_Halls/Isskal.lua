@@ -78,9 +78,9 @@ IL.Lang.Mechanic.Reverse.Russian = "Смена направления"
 
 -- Mechanic Notify
 IL.Lang.Notify = {}
-IL.Lang.Notify.Whirlpool = KBM.Language:Add("Go with the current - or die!")
+IL.Lang.Notify.Whirlpool = KBM.Language:Add("Go with the current")
 IL.Lang.Notify.Whirlpool.German = "Folgt dem Strom, oder sterbt!"
-IL.Lang.Notify.Whirlpool.Russian = "Плывите по течению - или умрите!"
+IL.Lang.Notify.Whirlpool.Russian = "Плывите по течению"
 IL.Lang.Notify.Reverse = KBM.Language:Add("You're going the wrong way, fools!")
 IL.Lang.Notify.Reverse.German = "Ihr Narren geht in die falsche Richtung!"
 IL.Lang.Notify.Reverse.Russian = "Вы не туда идете, придурки!"
@@ -249,7 +249,7 @@ end
 
 function IL:Start()
 	-- Create Timers
-	self.Isskal.TimersRef.WhirlpoolFirst = KBM.MechTimer:Add(self.Lang.Mechanic.Whirlpool[KBM.Lang], 32)
+	self.Isskal.TimersRef.WhirlpoolFirst = KBM.MechTimer:Add(self.Lang.Mechanic.Whirlpool[KBM.Lang], 33)
 	self.Isskal.TimersRef.WhirlpoolFirst.MenuName = self.Lang.Menu.WhirlpoolFirst[KBM.Lang]
 	self.Isskal.TimersRef.Whirlpool = KBM.MechTimer:Add(self.Lang.Mechanic.Whirlpool[KBM.Lang], 60)
 	self.Isskal.TimersRef.Reverse = KBM.MechTimer:Add(self.Lang.Mechanic.Reverse[KBM.Lang], 14)
@@ -274,7 +274,7 @@ function IL:Start()
 	self.Isskal.Triggers.Whirlpool:AddTimer(self.Isskal.TimersRef.Wave)
 	self.Isskal.Triggers.WhirlpoolEnd = KBM.Trigger:Create(self.Lang.Notify.Reverse[KBM.Lang], "notify", self.Isskal)
 	self.Isskal.Triggers.WhirlpoolEnd:AddTimer(self.Isskal.TimersRef.WhirlpoolEnd)
-	
+
 	self.Isskal.CastBar = KBM.CastBar:Add(self, self.Isskal, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()

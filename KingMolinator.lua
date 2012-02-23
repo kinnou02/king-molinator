@@ -1792,24 +1792,32 @@ function KBM.PhaseMonitor:PullObjective()
 		GUI.Frame:SetHeight(self.Anchor:GetHeight() * 0.5)
 		GUI.Frame:SetPoint("LEFT", self.Anchor, "LEFT")
 		GUI.Frame:SetPoint("RIGHT", self.Anchor, "RIGHT")
+		GUI.Progress = UI.CreateFrame("Texture", "Percentage_Progress", GUI.Frame)
+		GUI.Progress:SetPoint("TOPRIGHT", GUI.Frame, "TOPRIGHT")
+		GUI.Progress:SetPoint("BOTTOM", GUI.Frame, "BOTTOM")
+		GUI.Progress:SetTexture("KingMolinator", "Media/BarTexture.png")
+		GUI.Progress:SetWidth(GUI.Frame:GetWidth())
+		GUI.Progress:SetBackgroundColor(0, 0.5, 0, 0.33)
+		GUI.Progress:SetVisible(false)
+		GUI.Progress:SetLayer(1)
 		GUI.Shadow = UI.CreateFrame("Text", "Objective_Shadow", GUI.Frame)
 		GUI.Shadow:SetFontColor(0,0,0,1)
 		GUI.Shadow:SetFontSize(self.Settings.TextSize * self.Settings.tScale)
 		GUI.Shadow:SetPoint("CENTERLEFT", GUI.Frame, "CENTERLEFT", 1, 1)
-		GUI.Shadow:SetLayer(1)
+		GUI.Shadow:SetLayer(2)
 		GUI.Text = UI.CreateFrame("Text", "Objective_Text", GUI.Frame)
 		GUI.Text:SetPoint("CENTERLEFT", GUI.Frame, "CENTERLEFT")
 		GUI.Text:SetFontSize(self.Settings.TextSize * self.Settings.tScale)
-		GUI.Text:SetLayer(2)
+		GUI.Text:SetLayer(3)
 		GUI.ObShadow = UI.CreateFrame("Text", "Objectives_Shadow", GUI.Frame)
 		GUI.ObShadow:SetFontColor(0,0,0,1)
 		GUI.ObShadow:SetFontSize(self.Settings.TextSize * self.Settings.tScale)
 		GUI.ObShadow:SetPoint("CENTERRIGHT", GUI.Frame, "CENTERRIGHT", 1, 1)
-		GUI.ObShadow:SetLayer(1)
+		GUI.ObShadow:SetLayer(4)
 		GUI.Objective = UI.CreateFrame("Text", "Objective_Tracker", GUI.Frame)
 		GUI.Objective:SetPoint("CENTERRIGHT", GUI.Frame, "CENTERRIGHT")
 		GUI.Objective:SetFontSize(self.Settings.TextSize * self.Settings.tScale)
-		GUI.Objective:SetLayer(2)
+		GUI.Objective:SetLayer(5)
 		GUI.Frame:SetVisible(self.Settings.Enabled)
 		function GUI:SetName(Text)
 			self.Shadow:SetText(Text)
@@ -1960,6 +1968,7 @@ function KBM.PhaseMonitor:Init()
 			return
 		end
 		if self.Count == 1 then
+			Object.GUI.Progress:SetVisible(false)
 			Object.GUI.Frame:SetVisible(false)
 			table.insert(KBM.PhaseMonitor.ObjectiveStore, Object.GUI)
 			self[Object.Type][Object.Name] = nil
@@ -1968,6 +1977,7 @@ function KBM.PhaseMonitor:Init()
 			Object = nil
 			self.Count = 0
 		else
+			Object.GUI.Progress:SetVisible(false)
 			Object.GUI.Frame:SetVisible(false)
 			table.insert(KBM.PhaseMonitor.ObjectiveStore, Object.GUI)
 			if Object.Next then
@@ -2100,11 +2110,13 @@ function KBM.PhaseMonitor:Init()
 			end
 			PercentObj.Dead = false
 			PercentObj.GUI = KBM.PhaseMonitor:PullObjective()
+			PercentObj.GUI.Progress:SetWidth(PercentObj.GUI.Frame:GetWidth() * (PercentObj.PercentRaw * 0.01))
+			PercentObj.GUI.Progress:SetVisible(true)
 			PercentObj.GUI:SetName(Name)
 			if Target == 0 then
-				PercentObj.GUI:SetObjective(Current.."%")
+				PercentObj.GUI:SetObjective(PercentObj.Percent.."%")
 			else
-				PercentObj.GUI:SetObjective(Current.."%/"..Target.."%")
+				PercentObj.GUI:SetObjective(PercentObj.Percent.."%/"..PercentObj.Target.."%")
 			end	
 			PercentObj.Type = "Percent"
 			
@@ -2116,6 +2128,7 @@ function KBM.PhaseMonitor:Init()
 				self.Percent = math.ceil(PercentRaw)
 				if self.Percent == 0 then
 					self.GUI:SetObjective(KBM.Language.Options.Dead[KBM.Lang])
+					self.GUI.Progress:SetVisible(false)
 					self.Dead = true
 				else
 					if self.Percent >= self.Target then
@@ -2127,7 +2140,8 @@ function KBM.PhaseMonitor:Init()
 							end
 						else
 							self.GUI:SetObjective(self.Percent.."%/"..self.Target.."%")
-						end	
+						end
+						self.GUI.Progress:SetWidth(self.GUI.Frame:GetWidth() * (self.PercentRaw * 0.01))
 					end
 				end
 			end
