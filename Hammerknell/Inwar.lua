@@ -404,6 +404,7 @@ function ID:UnitHPCheck(uDetails, unitID)
 					self.PhaseObj.Objectives:AddPercent(self.Aqualix.Name, 0, 100)
 					self.PhaseObj.Objectives:AddPercent(self.Denizar.Name, 0, 100)
 					self.PhaseObj:Start(self.StartTime)
+					KBM.MechTimer:AddStart(self.Denizar.TimersRef.FreezeFirst)
 				end
 				if self.Type ~= "multi" then
 					if self.Bosses[uDetails.name].CastBar then

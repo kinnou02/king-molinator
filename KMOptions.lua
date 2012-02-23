@@ -2898,7 +2898,7 @@ function KBM.InitOptions()
 					if Settings.Best > 0 then
 						self.Boss.Mod.MenuStore.Records.Best.Name = KBM.ConvertTime(Settings.Best)
 						if Settings.Date then
-							self.Boss.Mod.MenuStore.Records.Date.Name = Settings.Date
+							self.Boss.Mod.MenuStore.Records.Date.Name = KBM.Language.Records.Date[KBM.Lang]..Settings.Date
 						end
 					else
 						self.Boss.Mod.MenuStore.Records.Best.Name = KBM.Language.Records.NoRecord[KBM.Lang]

@@ -42,7 +42,8 @@ IL.Isskal = {
 			Whirlpool = KBM.Defaults.TimerObj.Create("blue"),
 			WhirlpoolEnd = KBM.Defaults.TimerObj.Create("blue"),
 			Reverse = KBM.Defaults.TimerObj.Create("blue"),
-			Wave = KBM.Defaults.TimerObj.Create("red"),
+			Wave = KBM.Defaults.TimerObj.Create("cyan"),
+			WaveFirst = KBM.Defaults.TimerObj.Create("cyan"),
 		},
 	},
 }
@@ -197,6 +198,7 @@ function IL:UnitHPCheck(uDetails, unitID)
 					self.PhaseObj.Objectives:AddPercent(self.Isskal.Name, 0, 100)
 					self.Phase = 1
 					KBM.MechTimer:AddStart(self.Isskal.TimersRef.WhirlpoolFirst)
+					KBM.MechTimer:AddStart(self.Isskal.TimersRef.WaveFirst)
 				end
 				self.Isskal.UnitID = unitID
 				self.Isskal.Available = true
@@ -251,11 +253,13 @@ function IL:Start()
 	-- Create Timers
 	self.Isskal.TimersRef.WhirlpoolFirst = KBM.MechTimer:Add(self.Lang.Mechanic.Whirlpool[KBM.Lang], 33)
 	self.Isskal.TimersRef.WhirlpoolFirst.MenuName = self.Lang.Menu.WhirlpoolFirst[KBM.Lang]
-	self.Isskal.TimersRef.Whirlpool = KBM.MechTimer:Add(self.Lang.Mechanic.Whirlpool[KBM.Lang], 60)
+	self.Isskal.TimersRef.Whirlpool = KBM.MechTimer:Add(self.Lang.Mechanic.Whirlpool[KBM.Lang], 120)
 	self.Isskal.TimersRef.Reverse = KBM.MechTimer:Add(self.Lang.Mechanic.Reverse[KBM.Lang], 14)
 	self.Isskal.TimersRef.WhirlpoolEnd = KBM.MechTimer:Add(self.Lang.Mechanic.WhirlpoolEnd[KBM.Lang], 14)
-	self.Isskal.TimersRef.Wave = KBM.MechTimer:Add(self.Lang.Ability.Wave[KBM.Lang], 58)
-	self.Isskal.TimersRef.Wave:AddTimer(self.Isskal.TimersRef.Whirlpool, 0)
+	self.Isskal.TimersRef.Wave = KBM.MechTimer:Add(self.Lang.Ability.Wave[KBM.Lang], 120, "cyan")
+	self.Isskal.TimersRef.Wave:NoMenu()
+	self.Isskal.TimersRef.WaveFirst = KBM.MechTimer:Add(self.Lang.Ability.Wave[KBM.Lang], 90, "cyan")
+	self.Isskal.TimersRef.WaveFirst:AddTimer(self.Isskal.TimersRef.Wave, 0)
 	KBM.Defaults.TimerObj.Assign(self.Isskal)
 	
 	-- Create Alerts
@@ -271,7 +275,7 @@ function IL:Start()
 	self.Isskal.Triggers.Whirlpool = KBM.Trigger:Create(self.Lang.Notify.Whirlpool[KBM.Lang], "notify", self.Isskal)
 	self.Isskal.Triggers.Whirlpool:AddAlert(self.Isskal.AlertsRef.Whirlpool)
 	self.Isskal.Triggers.Whirlpool:AddTimer(self.Isskal.TimersRef.Reverse)
-	self.Isskal.Triggers.Whirlpool:AddTimer(self.Isskal.TimersRef.Wave)
+	self.Isskal.Triggers.Whirlpool:AddTimer(self.Isskal.TimersRef.Whirlpool)
 	self.Isskal.Triggers.WhirlpoolEnd = KBM.Trigger:Create(self.Lang.Notify.Reverse[KBM.Lang], "notify", self.Isskal)
 	self.Isskal.Triggers.WhirlpoolEnd:AddTimer(self.Isskal.TimersRef.WhirlpoolEnd)
 

@@ -38,7 +38,8 @@ Hammerknell
 Drowned Halls
 * Isskal
 ** New: Added stop trigger to alert for Ice Shard interrupts.
-** Fixed: The initial trigger for both the first Whirlpool even and the first Glacial Wave had LUA search incompatability.
+** Change: Adjusted timers to account for new trigger methods.
+** Fixed: The initial trigger for both the first Whirlpool event and the first Glacial Wave had Lua search incompatability.
 
 Expert Dungeons
 * Added more Unique ID's to Expert bosses.

@@ -391,7 +391,7 @@ function KBM.Defaults.Records()
 		Wipes = 0,
 		Kills = 0,
 		Best = 0,
-		Date = nil,
+		Date = "n/a",
 	}
 	return RecordObj
 	
