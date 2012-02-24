@@ -382,7 +382,7 @@ function HA:Start()
 	self.Arakhurn.TimersRef.NovaFirst = KBM.MechTimer:Add(self.Lang.Ability.Nova[KBM.Lang], 46)
 	self.Arakhurn.TimersRef.NovaFirst.MenuName = self.Lang.Menu.NovaFirst[KBM.Lang]
 	self.Arakhurn.TimersRef.Nova = KBM.MechTimer:Add(self.Lang.Ability.Nova[KBM.Lang], 60)
-	self.Arakhurn.TimersRef.NovaPThree = KBM.MechTimer:Add(self.Lang.Ability.Nova[KBM.Lang], 52)
+	self.Arakhurn.TimersRef.NovaPThree = KBM.MechTimer:Add(self.Lang.Ability.Nova[KBM.Lang], 47)
 	self.Arakhurn.TimersRef.NovaPThree.MenuName = self.Lang.Menu.NovaPThree[KBM.Lang]
 	self.Arakhurn.TimersRef.FieryFirst = KBM.MechTimer:Add(self.Lang.Buff.Fiery[KBM.Lang], 75)
 	self.Arakhurn.TimersRef.FieryFirst.MenuName = self.Lang.Menu.FieryFirst[KBM.Lang]

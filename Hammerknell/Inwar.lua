@@ -55,6 +55,7 @@ ID.Denizar = {
 	Dead = false, 
 	Available = false,
 	TimersRef = {},
+	AlertsRef = {},
 	UnitID = nil,
 	Primary = false,
 	Required = 1,
@@ -63,8 +64,11 @@ ID.Denizar = {
 		CastBar = KBM.Defaults.CastBar(),
 		TimersRef = {
 			Enabled = true,
-			FreezeFirst = KBM.Defaults.TimerObj.Create("cyan"),
 			Freeze = KBM.Defaults.TimerObj.Create("cyan"),
+		},
+		AlertsRef = {
+			Enabled = true,
+			Freeze = KBM.Defaults.AlertObj.Create("cyan"),
 		},
 	}
 }
@@ -177,10 +181,12 @@ ID.Lang.Unit.Warden.Russian = "Страж прилива"
 -- Ability Dictionary
 ID.Lang.Ability = {}
 ID.Lang.Ability.Freeze = KBM.Language:Add("Freezing Wave")
+ID.Lang.Ability.Freeze.German = "Frostwelle"
 
 -- Mechanic Dictionary
 ID.Lang.Mechanic = {}
 ID.Lang.Mechanic.Geyser = KBM.Language:Add("Geyser")
+ID.Lang.Mechanic.Geyser.German = "Geysir"
 
 -- Adjust Unit Names to match Client
 ID.Inwar.Name = ID.Lang.Inwar[KBM.Lang]
@@ -254,6 +260,8 @@ function ID:InitVars()
 		},
 		Denizar = {
 			CastBar = self.Denizar.Settings.CastBar,
+			TimersRef = self.Denizar.Settings.TimersRef,
+			AlertsRef = self.Denizar.Settings.AlertsRef,
 		},
 	}
 	KBMID_Settings = self.Settings
@@ -404,7 +412,6 @@ function ID:UnitHPCheck(uDetails, unitID)
 					self.PhaseObj.Objectives:AddPercent(self.Aqualix.Name, 0, 100)
 					self.PhaseObj.Objectives:AddPercent(self.Denizar.Name, 0, 100)
 					self.PhaseObj:Start(self.StartTime)
-					KBM.MechTimer:AddStart(self.Denizar.TimersRef.FreezeFirst)
 				end
 				if self.Type ~= "multi" then
 					if self.Bosses[uDetails.name].CastBar then
@@ -504,11 +511,14 @@ end
 
 function ID:Start()
 
-	-- Creaye Denizar's Timers
-	self.Denizar.TimersRef.FreezeFirst = KBM.MechTimer:Add(self.Lang.Ability.Freeze[KBM.Lang], 15)
-	
+	-- Create Denizar's Timers
+	self.Denizar.TimersRef.Freeze = KBM.MechTimer:Add(self.Lang.Ability.Freeze[KBM.Lang], 75)
 	KBM.Defaults.TimerObj.Assign(self.Denizar)
-
+	
+	-- Create Denizar's Alerts
+	self.Denizar.AlertsRef.Freeze = KBM.Alert:Create(self.Lang.Ability.Freeze[KBM.Lang], nil, true, true, "cyan")
+	KBM.Defaults.AlertObj.Assign(self.Denizar)
+	
 	-- Create Inwar's Timers
 	self.Inwar.TimersRef.GeyserFirst = KBM.MechTimer:Add(self.Lang.Mechanic.Geyser[KBM.Lang], 25)
 	self.Inwar.TimersRef.Geyser = KBM.MechTimer:Add(self.Lang.Mechanic.Geyser[KBM.Lang], 15, true)
@@ -518,6 +528,9 @@ function ID:Start()
 	KBM.Defaults.TimerObj.Assign(self.Inwar)
 	
 	-- Create Triggers
+	self.Denizar.Triggers.Freeze = KBM.Trigger:Create(self.Lang.Ability.Freeze[KBM.Lang], "cast", self.Denizar)
+	self.Denizar.Triggers.Freeze:AddTimer(self.Denizar.TimersRef.Freeze)
+	self.Denizar.Triggers.Freeze:AddAlert(self.Denizar.AlertsRef.Freeze)
 
 	self.Inwar.CastBar = KBM.CastBar:Add(self, self.Inwar, true)
 	self.Aqualix.CastBar = KBM.CastBar:Add(self, self.Aqualix, true)

@@ -35,6 +35,10 @@ Hammerknell
 ** Note: Accuracy of timers triggered this way will be dependent on reaction times to damaging Jornaru.
 ** Note: But should be less inaccurate than when P4 hits early during submerge phases.
 
+Rise of the Phoenix
+* High Priest Arakhurn
+** Change: Reduced the timer for the first Fire Nova in P3, this should be the minimum duration it can occur (it can bug and be 5s late)
+
 Drowned Halls
 * Isskal
 ** New: Added stop trigger to alert for Ice Shard interrupts.

@@ -729,6 +729,7 @@ KBM.Language.Color.Blue = KBM.Language:Add("Blue")
 KBM.Language.Color.Blue.German = "Blau"
 KBM.Language.Color.Blue.Russian = "Голубой"
 KBM.Language.Color.Cyan = KBM.Language:Add("Cyan")
+KBM.Language.Color.Cyan.German = "Blaugrün"
 KBM.Language.Color.Dark_Green = KBM.Language:Add("Dark Green")
 KBM.Language.Color.Dark_Green.German = "Dunkelgrün"
 KBM.Language.Color.Dark_Green.Russian = "Темнозеленый"
@@ -896,7 +897,7 @@ KBM.Language.Options.Notify.German = "Text aktivieren"
 KBM.Language.Options.Notify.Russian = "Показать текст"
 KBM.Language.Options.Sound = KBM.Language:Add("Play Sound")
 KBM.Language.Options.Sound.German = "Sound abspielen"
-KBM.Language.Options.Sound.German = "Играть звук"
+KBM.Language.Options.Sound.Russian = "Играть звук"
 
 -- Size Dictionary
 KBM.Language.Options.UnlockWidth = KBM.Language:Add("Unlock width for scaling (Mouse wheel)")
