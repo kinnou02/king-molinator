@@ -172,7 +172,7 @@ ID.Lang.Unit.Slime = KBM.Language:Add(ID.Slime.Name)
 ID.Lang.Unit.Slime.German = "Stinkender Schleim"
 ID.Lang.Unit.Slime.Russian = "Зловонный слизень"
 ID.Lang.Unit.Wrangler = KBM.Language:Add(ID.Wrangler.Name)
-ID.Lang.Unit.Wrangler.German = "Krabbelklauen-Zämker"
+ID.Lang.Unit.Wrangler.German = "Krabbelklauen-Zänker" 
 --ID.Lang.Unit.Wrangler.Russian = "Scuttle Claw Wrangler"
 ID.Lang.Unit.Warden = KBM.Language:Add(ID.Warden.Name)
 ID.Lang.Unit.Warden.German = "Gezeitenbewahrer"
@@ -524,6 +524,7 @@ function ID:Start()
 	self.Inwar.TimersRef.Geyser = KBM.MechTimer:Add(self.Lang.Mechanic.Geyser[KBM.Lang], 15, true)
 	self.Inwar.TimersRef.Geyser:NoMenu()
 	self.Inwar.TimersRef.Geyser:SetPhase(3)
+	self.Inwar.TimersRef.GeyserFirst:AddTimer(self.Inwar.TimersRef.Geyser, 0)
 	
 	KBM.Defaults.TimerObj.Assign(self.Inwar)
 	

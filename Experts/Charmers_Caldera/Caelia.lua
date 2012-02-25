@@ -15,6 +15,7 @@ local MOD = {
 	File = "Caelia.lua",
 	Enabled = true,
 	Instance = Instance.Name,
+	InstanceObj = Instance,
 	HasPhases = true,
 	Lang = {},
 	ID = "Caelia",

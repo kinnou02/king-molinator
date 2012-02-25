@@ -1373,8 +1373,10 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 			end
 			if self.TimerAfter then
 				if KBM.Encounter then
-					if self.TimerAfter.Phase >= KBM.CurrentMod.Phase or self.TimerAfter.Phase == 0 then
-						KBM.MechTimer:AddStart(self.TimerAfter)
+					for i, TimberObj in ipairs(self.TimerAfter) do
+						if TimerObj.Phase >= KBM.CurrentMod.Phase or TimerObj.Phase == 0 then
+							KBM.MechTimer:AddStart(TimerObj)
+						end
 					end
 				end
 			end
@@ -1410,7 +1412,10 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 				error("Expecting TimerObj got "..tostring(TimerObj.Type))
 			else
 				if Time == 0 then
-					self.TimerAfter = TimerObj
+					if not self.TimerAfter then
+						self.TimerAfter = {}
+					end
+					table.insert(self.TimerAfter, TimerObj)
 				else
 					self.Timers[Time] = {}
 					self.Timers[Time].Triggered = false

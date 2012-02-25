@@ -10,6 +10,8 @@ Settings
 * Note: Any settings you made to disable any of the above groups will now be applied automatically.
 
 Engine
+* Timers
+** New: Timers can now trigger more than one timer at the end of its duration.
 * Triggers
 ** New: Triggers can now be enabled/disabled via Mods real-time.
 ** New: Added NPC Damaged based triggers for rare fail-safes.
@@ -37,7 +39,8 @@ Hammerknell
 
 Rise of the Phoenix
 * High Priest Arakhurn
-** Change: Reduced the timer for the first Fire Nova in P3, this should be the minimum duration it can occur (it can bug and be 5s late)
+** Change: Reduced the timer for the first Fire Nova in P3, this should be the minimum duration it can occur.
+** Change: Reduced the timer for the first Fiery Metamorphosis in P3, this should be the minimum duration it can occur.
 
 Drowned Halls
 * Isskal
@@ -47,9 +50,16 @@ Drowned Halls
 
 Expert Dungeons
 * Added more Unique ID's to Expert bosses.
+* Charmer's Caldera
+** Caelia the Stormtouched
+*** Fixed: Mod initiation corrected. She'll now start her own encounter.
 * Kings Breach
 ** Autoch & Mondrach
 *** Fixed: Saved data wasn't being recorded correctly.
+* The Realm of the Fae
+** Fae Lord Twyl
+*** New: Added dynamic timeout duration after each phase for non-combat state.
+*** Note: Bugged encounters (if any) or unusual wipes could cause the encounter to delay resetting. (rare)
 
 German Translations
 * Added: Non-critical translations for Phase Monitor and in-game chat.

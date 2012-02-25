@@ -387,7 +387,7 @@ function HA:Start()
 	self.Arakhurn.TimersRef.FieryFirst = KBM.MechTimer:Add(self.Lang.Buff.Fiery[KBM.Lang], 75)
 	self.Arakhurn.TimersRef.FieryFirst.MenuName = self.Lang.Menu.FieryFirst[KBM.Lang]
 	self.Arakhurn.TimersRef.Fiery = KBM.MechTimer:Add(self.Lang.Buff.Fiery[KBM.Lang], 60)
-	self.Arakhurn.TimersRef.FieryPThree = KBM.MechTimer:Add(self.Lang.Buff.Fiery[KBM.Lang], 84)
+	self.Arakhurn.TimersRef.FieryPThree = KBM.MechTimer:Add(self.Lang.Buff.Fiery[KBM.Lang], 76)
 	self.Arakhurn.TimersRef.FieryPThree.MenuName = self.Lang.Menu.FieryPThree[KBM.Lang]
 	self.Arakhurn.TimersRef.AddFirst = KBM.MechTimer:Add(self.Lang.Unit.Enraged[KBM.Lang], 36)
 	self.Arakhurn.TimersRef.AddFirst.MenuName = self.Lang.Menu.AddFirst[KBM.Lang]

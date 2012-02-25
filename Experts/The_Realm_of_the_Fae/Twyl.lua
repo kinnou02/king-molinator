@@ -16,6 +16,8 @@ local MOD = {
 	Enabled = true,
 	Instance = Instance.Name,
 	InstanceObj = Instance,
+	TimeoutOverride = false,
+	Timeout = 30,
 	HasPhases = true,
 	Lang = {},
 	ID = "Twyl",
@@ -34,7 +36,7 @@ MOD.Twyl = {
 	-- AlertsRef = {},
 	Available = false,
 	UnitID = nil,
-	ExpertID = "Expert",
+	ExpertID = "U283A2AEA5D374F37",
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
@@ -115,7 +117,7 @@ MOD.Spring = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	ExpertID = "Expert",
+	ExpertID = "U2A3DD96624187F57",
 	TimeOut = 5,
 }
 
@@ -194,6 +196,8 @@ function MOD:Death(UnitID)
 	if self.Twyl.UnitID == UnitID then
 		self.Twyl.Dead = true
 		return true
+	else
+		self.TimeoutOverride = true
 	end
 	return false
 end
@@ -208,6 +212,7 @@ function MOD:SetPhase(BossObj)
 	elseif BossObj.Name == self.Twyl.Name then
 		self.Phase = 4
 	end
+	self.TimeoutOverride = false
 end
 
 function MOD:UnitHPCheck(unitDetails, unitID)	

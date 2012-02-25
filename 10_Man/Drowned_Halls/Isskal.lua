@@ -35,6 +35,9 @@ IL.Isskal = {
 			Enabled = true,
 			Shard = KBM.Defaults.AlertObj.Create("yellow"),
 			Whirlpool = KBM.Defaults.AlertObj.Create("blue"),
+			Inner = KBM.Defaults.AlertObj.Create("cyan"),
+			Middle = KBM.Defaults.AlertObj.Create("cyan"),
+			Outer = KBM.Defaults.AlertObj.Create("cyan"),
 		},
 		TimersRef = {
 			Enabled = true,
@@ -94,6 +97,7 @@ IL.Lang.Verbose.Inner = KBM.Language:Add("Inner")
 IL.Lang.Verbose.Inner.German = "Innen"
 IL.Lang.Verbose.Outer = KBM.Language:Add("Outer")
 IL.Lang.Verbose.Outer.German = "Aussen"
+IL.Lang.Verbose.DanceEnd = KBM.Language:Add("Dance sequence ends")
 
 -- Menu Dictionary
 IL.Lang.Menu = {}
@@ -256,16 +260,52 @@ function IL:Start()
 	self.Isskal.TimersRef.Whirlpool = KBM.MechTimer:Add(self.Lang.Mechanic.Whirlpool[KBM.Lang], 120)
 	self.Isskal.TimersRef.Reverse = KBM.MechTimer:Add(self.Lang.Mechanic.Reverse[KBM.Lang], 14)
 	self.Isskal.TimersRef.WhirlpoolEnd = KBM.MechTimer:Add(self.Lang.Mechanic.WhirlpoolEnd[KBM.Lang], 14)
+	self.Isskal.TimersRef.MiddleFirst = KBM.MechTimer:Add(self.Lang.Verbose.Middle[KBM.Lang], 5)
+	self.Isskal.TimersRef.MiddleFirst:NoMenu()
+	self.Isskal.TimersRef.OuterFirst = KBM.MechTimer:Add(self.Lang.Verbose.Outer[KBM.Lang], 5)
+	self.Isskal.TimersRef.OuterFirst:NoMenu()
+	self.Isskal.TimersRef.MiddleFirst:AddTimer(self.Isskal.TimersRef.OuterFirst, 0)
+	self.Isskal.TimersRef.MiddleSecond = KBM.MechTimer:Add(self.Lang.Verbose.Middle[KBM.Lang], 5)
+	self.Isskal.TimersRef.MiddleSecond:NoMenu()
+	self.Isskal.TimersRef.OuterFirst:AddTimer(self.Isskal.TimersRef.MiddleSecond, 0)
+	self.Isskal.TimersRef.Inner = KBM.MechTimer:Add(self.Lang.Verbose.Inner[KBM.Lang], 5)
+	self.Isskal.TimersRef.Inner:NoMenu()
+	self.Isskal.TimersRef.MiddleSecond:AddTimer(self.Isskal.TimersRef.Inner, 0)
+	self.Isskal.TimersRef.Middle = KBM.MechTimer:Add(self.Lang.Verbose.Middle[KBM.Lang], 5)
+	self.Isskal.TimersRef.Middle:NoMenu()
+	self.Isskal.TimersRef.Inner:AddTimer(self.Isskal.TimersRef.Middle, 0)
+	self.Isskal.TimersRef.Outer = KBM.MechTimer:Add(self.Lang.Verbose.Outer[KBM.Lang], 5)
+	self.Isskal.TimersRef.Outer:NoMenu()
+	self.Isskal.TimersRef.Middle:AddTimer(self.Isskal.TimersRef.Outer, 0)
+	self.Isskal.TimersRef.DanceEnd = KBM.MechTimer:Add(self.Lang.Verbose.DanceEnd[KBM.Lang], 5)
+	self.Isskal.TimersRef.DanceEnd:NoMenu()
+	self.Isskal.TimersRef.Outer:AddTimer(self.Isskal.TimersRef.DanceEnd, 0)
 	self.Isskal.TimersRef.Wave = KBM.MechTimer:Add(self.Lang.Ability.Wave[KBM.Lang], 120, true)
 	self.Isskal.TimersRef.Wave:NoMenu()
+	self.Isskal.TimersRef.Wave:AddTimer(self.Isskal.TimersRef.MiddleFirst, 5)
 	self.Isskal.TimersRef.WaveFirst = KBM.MechTimer:Add(self.Lang.Ability.Wave[KBM.Lang], 90)
 	self.Isskal.TimersRef.WaveFirst:AddTimer(self.Isskal.TimersRef.Wave, 0)
+	self.Isskal.TimersRef.WaveFirst:AddTimer(self.Isskal.TimersRef.MiddleFirst, 5)
 	KBM.Defaults.TimerObj.Assign(self.Isskal)
 	
 	-- Create Alerts
 	self.Isskal.AlertsRef.Shard = KBM.Alert:Create(self.Lang.Ability.Shard[KBM.Lang], nil, true, true, "yellow")
 	self.Isskal.AlertsRef.Whirlpool = KBM.Alert:Create(self.Lang.Mechanic.Whirlpool[KBM.Lang], 2, true, false, "blue")
+	self.Isskal.AlertsRef.Inner = KBM.Alert:Create(self.Lang.Verbose.Inner[KBM.Lang], 4, false, false, "cyan")
+	self.Isskal.AlertsRef.Inner:NoMenu()
+	self.Isskal.AlertsRef.Middle = KBM.Alert:Create(self.Lang.Verbose.Middle[KBM.Lang], 4, false, false, "cyan")
+	self.Isskal.AlertsRef.Middle:NoMenu()
+	self.Isskal.AlertsRef.Outer = KBM.Alert:Create(self.Lang.Verbose.Outer[KBM.Lang], 4, false, false, "cyan")
+	self.Isskal.AlertsRef.Outer:NoMenu()
 	KBM.Defaults.AlertObj.Assign(self.Isskal)
+	
+	-- Assign Alerts to Dance timers
+	self.Isskal.TimersRef.MiddleFirst:AddAlert(self.Isskal.AlertsRef.Middle, 0)
+	self.Isskal.TimersRef.MiddleSecond:AddAlert(self.Isskal.AlertsRef.Middle, 0)
+	self.Isskal.TimersRef.Middle:AddAlert(self.Isskal.AlertsRef.Middle, 0)
+	self.Isskal.TimersRef.OuterFirst:AddAlert(self.Isskal.AlertsRef.Outer, 0)
+	self.Isskal.TimersRef.Outer:AddAlert(self.Isskal.AlertsRef.Outer, 0)
+	self.Isskal.TimersRef.Inner:AddAlert(self.Isskal.AlertsRef.Inner, 0)
 
 	-- Assign Timers and Alerts to triggers.
 	self.Isskal.Triggers.Shard = KBM.Trigger:Create(self.Lang.Ability.Shard[KBM.Lang], "cast", self.Isskal)
