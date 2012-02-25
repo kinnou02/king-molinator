@@ -159,7 +159,6 @@ RunOnStartup = {
 
 Embed = {
 	SafesRaidManager = true,
-	LibUnitChange = true
 }
 
 SavedVariables = {
@@ -447,6 +446,5 @@ SavedVariables = {
 
 Dependencies = {
 	SafesRaidManager = {"required", "before"},
-	LibUnitChange = {"required", "before"},
 	KBMMarkIt = {"optional", "after"},
 }

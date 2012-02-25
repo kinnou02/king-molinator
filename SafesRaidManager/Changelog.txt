@@ -1,0 +1,51 @@
+v1.1.1
+* Directory Structure
+** Change: Addons only require that SafesRaidManager be Embedded or be a dependency.
+v1.1.0
+* Engine
+** Various engine improvements and tweaks
+* Group Events
+** New: Event.SafesRaidManager.Group.Combat.Enter	-- Single Group member enters combat
+** New: Event.SafesRaidManager.Group.Combat.Leave	-- Single Group member leaves combat
+** New: Event.SafesRaidManager.Group.Combat.Start	-- Group now flagged as in combat
+** New: Event.SafesRaidManager.Group.Combat.End		-- Group now flagged as out of combat
+** New: Event.SafesRaidManager.Group.Combat.Damage	-- Group damage done
+** New: Event.SafesRaidManager.Group.Combat.Heal	-- Group healing done
+** New: Event.SafesRaidManager.Group.Combat.Death	-- Group member deaths
+** New: Event.SafesRaidManager.Group.Combat.Res		-- Group resurrects
+* Player Events
+** New: Event.SafesRaidManager.Player.Combat.Enter	-- Player enters combat
+** New: Event.SafesRaidManager.Player.Combat.Leave	-- Player leaves combat
+* System Events
+** New: Event.SafesRaidManager.Combat.Enter		-- Non-Raid/group unit enters combat
+** New: Event.SafesRaidManager.Combat.Leave		-- Non-Raid/group unit leaves combat
+** New: Event.SafesRaidManager.Combat.Death		-- Non-Raid/group unit deaths
+** New: Event.SafesRaidManager.Combat.Heal		-- Non-Raid/group unit Heals
+** New: Event.SafesRaidManager.Combat.Damage		-- Non-Raid/group unit damage
+----
+v1.0.0
+* Status pushed to stable release.
+* Now includes Zorba's LibUnitChange
+----
+v0.0.4 Beta
+* Small change to the Event message firing order for Group.Join and Group.Leave. Player.Leave will now fire after the last Group.Leave event message, and Player.Join will now be the first event message to fire before a list of Group.Join event messages (inclusive of the player) to populate a newly created group or raid.
+----
+v0.0.3 Beta
+* Bug Fix: Pet.Add returning nil incorrectly, or not firing at all.
+* Non-Breaking Changes:
+** Changed Initialization order, and events will not fire now until the player has fully loaded.
+----
+v0.0.2 Beta
+* Added full Player and Group internal pet management, events and commands
+* New Events
+** Event.SafesRaidManager.Pet.Add < Returns PetID {string}, OwnerID {string}
+** Event.SafesRaidManager.Pet.Remove < Returns PetID {string}, OwnerID {string}
+** Event.SafesRaidManager.Player.Pet.Add < Returns PetID {string}
+** Event.SafesRaidManager.Player.Pet.Remove < Returns nil
+* New Commands
+** LibSRM.Group.UnitExists(UnitID) < returns GroupXX Specifier if it exists, or nil
+** LibSRM.Group.PetExists(PetID) < returns GroupXX Specifier and OwnerID if exists, or nil
+** LibSRM.GroupCount() < returns 0 (ungrouped) or 2-20 if grouped.
+----
+v0.0.1 Beta
+* Initial Release 

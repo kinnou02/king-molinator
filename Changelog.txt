@@ -1,5 +1,8 @@
 ﻿v0.9.8
 
+Library Structure
+* Change: KBM now uses the global version of Safe's Raid Manager. (v1.1.1)
+
 Custom Colors
 * New: Added cyan to the list of available colors for Alerts, Timers and Cast Filters.
 
@@ -29,6 +32,10 @@ Records
 * Fixed: Dates were not correctly being recorded.
 
 Hammerknell
+* Matron Zamira
+** Change: Reduced the duration of Mark of Oblivion slightly. (personal alert)
+* Sicaron
+** Change: The debuff portion (Red) of Unholy Contract is now flagged as important. (personal alert)
 * Inwar Darktide
 ** New: Added Timer for the appearance of the first Geyser in Phase 2.
 ** New: Added Timer for the appearance of all subsequent Geysers in Phase 2 and Phase 3.

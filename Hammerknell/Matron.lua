@@ -282,7 +282,7 @@ function MZ:Start()
 	-- Create Alerts
 	self.Matron.AlertsRef.Concussion = KBM.Alert:Create(self.Lang.Ability.Concussion[KBM.Lang], 2, true, false, "red")
 	self.Matron.AlertsRef.Blast = KBM.Alert:Create(self.Lang.Ability.Blast[KBM.Lang], nil, false, true, "yellow")
-	self.Matron.AlertsRef.Mark = KBM.Alert:Create(self.Lang.Ability.Mark[KBM.Lang], 5, false, true, "purple")
+	self.Matron.AlertsRef.Mark = KBM.Alert:Create(self.Lang.Ability.Mark[KBM.Lang], 4, false, true, "purple")
 
 	KBM.Defaults.TimerObj.Assign(self.Matron)
 	KBM.Defaults.AlertObj.Assign(self.Matron)

@@ -196,7 +196,7 @@ AK.Lang.Mechanic.Submerge.Russian = "КРАБ ПОГРУЖАЕЦЦО ПОСАН�
 AK.Lang.Notify = {}
 AK.Lang.Notify.Orb = KBM.Language:Add("Jornaru launches a suffocating orb at (%a*)")
 AK.Lang.Notify.Orb.German = "Jornaru wirft eine Erstickungskugel auf (%a*)"
-AK.Lang.Notify.Orb.Russian = "Йорнару запускает удушающую сферу, его цель - (%a*)."
+AK.Lang.Notify.Orb.Russian = "Йорнару запускает удушающую сферу, его цель %- (%a*)."
 
 -- Say Dictionary
 AK.Lang.Say = {}
@@ -235,7 +235,7 @@ AK.Lang.Options.Breath = KBM.Language:Add(AK.Lang.Ability.Breath[KBM.Lang].." du
 AK.Lang.Options.Breath.German = AK.Lang.Ability.Breath[KBM.Lang].." Dauer."
 AK.Lang.Options.Breath.Russian = AK.Lang.Ability.Breath[KBM.Lang].." Продолжительность."
 
-AK.Descript = "Akylios & Jornaru"
+AK.Descript = AK.Akylios.Name.." & "..AK.Jornaru.Name
 
 function AK:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
