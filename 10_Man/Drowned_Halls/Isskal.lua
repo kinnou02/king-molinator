@@ -47,6 +47,13 @@ IL.Isskal = {
 			Reverse = KBM.Defaults.TimerObj.Create("blue"),
 			Wave = KBM.Defaults.TimerObj.Create("cyan"),
 			WaveFirst = KBM.Defaults.TimerObj.Create("cyan"),
+			MiddleFirst = KBM.Defaults.TimerObj.Create("cyan"),
+			MiddleSecond = KBM.Defaults.TimerObj.Create("cyan"),
+			Middle = KBM.Defaults.TimerObj.Create("cyan"),
+			OuterFirst = KBM.Defaults.TimerObj.Create("cyan"),
+			Outer = KBM.Defaults.TimerObj.Create("cyan"),
+			Inner = KBM.Defaults.TimerObj.Create("cyan"),
+			DanceEnd = KBM.Defaults.TimerObj.Create("dark_green"),
 		},
 	},
 }

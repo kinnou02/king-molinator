@@ -16,8 +16,8 @@ Engine
 ** New: Triggers can now be enabled/disabled via Mods real-time.
 ** New: Added NPC Damaged based triggers for rare fail-safes.
 * HP Monitoring
-** New: Unit HP tracking in various applications will now be tracked even when not selected by a raid/group memeber.
-** New: Major increase in Unit HP tracking effeciency and accuracy.
+** New: Unit HP tracking in various applications will now be tracked even when not selected by a raid/group member.
+** New: Major increase in Unit HP tracking efficiency and accuracy.
 ** Note: The above changes should be most notable in the Phase Monitors percentage based objectives.
 ** Note: Tracked Units will need to be "seen" at least once by the raid/group. This is an API restriction.
 
@@ -46,7 +46,7 @@ Drowned Halls
 * Isskal
 ** New: Added stop trigger to alert for Ice Shard interrupts.
 ** Change: Adjusted timers to account for new trigger methods.
-** Fixed: The initial trigger for both the first Whirlpool event and the first Glacial Wave had Lua search incompatability.
+** Fixed: The initial trigger for both the first Whirlpool event and the first Glacial Wave had Lua search incompatibility.
 
 Expert Dungeons
 * Added more Unique ID's to Expert bosses.
