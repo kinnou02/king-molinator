@@ -187,6 +187,7 @@ ID.Lang.Ability.Freeze.German = "Frostwelle"
 ID.Lang.Mechanic = {}
 ID.Lang.Mechanic.Geyser = KBM.Language:Add("Geyser")
 ID.Lang.Mechanic.Geyser.German = "Geysir"
+ID.Lang.Mechanic.Geyser.Russian = "Гейзер"
 
 -- Adjust Unit Names to match Client
 ID.Inwar.Name = ID.Lang.Inwar[KBM.Lang]

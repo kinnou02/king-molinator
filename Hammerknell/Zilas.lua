@@ -54,6 +54,7 @@ SZ.Lang.Zilas.German = "Seelenreißer Zilas"
 SZ.Lang.Zilas.French = "\195\137tripeur d'\195\162mes Zilas"
 SZ.Lang.Zilas.Russian = "Душераздиратель Зилас"
 SZ.Zilas.Name = SZ.Lang.Zilas[KBM.Lang]
+SZ.Descript = SZ.Zilas.Name
 
 -- Ability Dictionary
 SZ.Lang.Ability = {}
@@ -70,7 +71,6 @@ SZ.Lang.Ability.Volley.German = "Dunkler Treffer"
 SZ.Lang.Menu = {}
 SZ.Lang.Menu.Grasp = KBM.Language:Add("First "..SZ.Lang.Ability.Grasp[KBM.Lang])
 SZ.Lang.Menu.Grasp.German = "Erste "..SZ.Lang.Ability.Grasp[KBM.Lang]
-SZ.Descript = SZ.Zilas.Name
 
 -- Unit Dictionary
 SZ.Lang.Unit = {}

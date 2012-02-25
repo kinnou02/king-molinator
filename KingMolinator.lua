@@ -1373,7 +1373,7 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 			end
 			if self.TimerAfter then
 				if KBM.Encounter then
-					for i, TimberObj in ipairs(self.TimerAfter) do
+					for i, TimerObj in ipairs(self.TimerAfter) do
 						if TimerObj.Phase >= KBM.CurrentMod.Phase or TimerObj.Phase == 0 then
 							KBM.MechTimer:AddStart(TimerObj)
 						end

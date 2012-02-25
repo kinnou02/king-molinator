@@ -105,10 +105,10 @@ GR.Lang.Ability.Breath.German = "Nekrotischer Atem"
 GR.Lang.Ability.Breath.Russian = "Мертвящее дыхание"
 GR.Lang.Ability.Disruption = KBM.Language:Add("Seismic Disruption")
 GR.Lang.Ability.Disruption.German = "Seismische Störung"
--- GR.Lang.Ability.Disruption.Russian =
+GR.Lang.Ability.Disruption.Russian = "Сейсмическое разрушение"
 GR.Lang.Ability.Swarm = KBM.Language:Add("Parasite Swarm")
 GR.Lang.Ability.Swarm.German = "Parasitenschwarm"
--- GR.Lang.Ability.Swarm.Russian =
+GR.Lang.Ability.Swarm.Russian = "Выводок паразитов"
 
 -- Debuff Dictionary
 GR.Lang.Debuff = {}
@@ -127,6 +127,7 @@ GR.Lang.Menu.Breath.Russian = GR.Lang.Ability.Breath[KBM.Lang].." продолж
 GR.Lang.Phase = {}
 GR.Lang.Phase.Towers = KBM.Language:Add("Towers")
 GR.Lang.Phase.Towers.German = "Türme"
+GR.Lang.Phase.Towers.Russian = "Башни"
 
 function GR:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript

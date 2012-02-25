@@ -133,34 +133,43 @@ AK.Apostle = {
 KBM.RegisterMod(AK.ID, AK)
 
 AK.Lang.Akylios = KBM.Language:Add(AK.Akylios.Name)
+AK.Lang.Akylios.Russian = "Акилиос"
 AK.Akylios.Name = AK.Lang.Akylios[KBM.Lang]
 AK.Lang.Jornaru = KBM.Language:Add(AK.Jornaru.Name)
+AK.Lang.Jornaru.Russian = "Йорнару"
 AK.Jornaru.Name = AK.Lang.Jornaru[KBM.Lang]
 
 -- Unit List
 AK.Lang.Unit = {}
 AK.Lang.Unit.Stinger = KBM.Language:Add(AK.Stinger.Name)
 AK.Lang.Unit.Stinger.German = "Stachel des Akylios"
+AK.Lang.Unit.Stinger.Russian = "Жало Акилиоса"
 AK.Stinger.Name = AK.Lang.Unit.Stinger[KBM.Lang]
 AK.Lang.Unit.Lasher = KBM.Language:Add(AK.Lasher.Name)
 AK.Lang.Unit.Lasher.German = "Peitscher des Akylios"
+AK.Lang.Unit.Lasher.Russian = "Бичеватель Акилиоса"
 AK.Lasher.Name = AK.Lang.Unit.Lasher[KBM.Lang]
 AK.Lang.Unit.Apostle = KBM.Language:Add(AK.Apostle.Name)
 AK.Apostle.Name = AK.Lang.Unit.Apostle[KBM.Lang]
 AK.Lang.Unit.Apostle.German = "Apostel von Jornaru"
+AK.Lang.Unit.Apostle.Russian = "Апостол Йорнару"
 AK.Lang.Unit.ApostleShort = KBM.Language:Add("Apostle")
 AK.Lang.Unit.ApostleShort.German = "Apostel"
+AK.Lang.Unit.ApostleShort.Russian = "Апостол"
 AK.Apostle.NameShort = AK.Lang.Unit.ApostleShort[KBM.Lang]
 
 -- Ability Dictionary.
 AK.Lang.Ability = {}
 AK.Lang.Ability.Decay = KBM.Language:Add("Mind Decay")
 AK.Lang.Ability.Decay.German = "Geistiger Verfall"
+AK.Lang.Ability.Decay.Russian = "Деградация сознания"
 AK.Lang.Ability.Breath = KBM.Language:Add("Breath of Madness")
 AK.Lang.Ability.Breath.German = "Hauch des Wahnsinns"
+AK.Lang.Ability.Breath.Russian = "Дыхание безумия"
 AK.Lang.Ability.Grave = KBM.Language:Add("Watery Grave")
 AK.Lang.Ability.Storm = KBM.Language:Add("Tidal Storm")
 AK.Lang.Ability.Storm.German = "Flutsturm"
+AK.Lang.Ability.Storm.Russian = "Приливная буря"
 
 -- Debuff Dictionary.
 AK.Lang.Debuff = {}
@@ -169,35 +178,46 @@ AK.Lang.Debuff = {}
 AK.Lang.Mechanic = {}
 AK.Lang.Mechanic.Wave = KBM.Language:Add("Tidal Wave")
 AK.Lang.Mechanic.Wave.German = "Flutwelle"
+AK.Lang.Mechanic.Wave.Russian = "Приливная волна"
 AK.Lang.Mechanic.Orb = KBM.Language:Add("Suffocating Orb")
 AK.Lang.Mechanic.Orb.German = "Erstickungskugel"
+AK.Lang.Mechanic.Orb.Russian = "Сфера удушья"
 AK.Lang.Mechanic.Summon = KBM.Language:Add("Summon the Abyss")
 AK.Lang.Mechanic.Summon.German = "Beschwört den Abgrund!"
+AK.Lang.Mechanic.Summon.Russian = "Воззвание к глубинам"
 AK.Lang.Mechanic.Emerge = KBM.Language:Add("Akylios emerges")
 AK.Lang.Mechanic.Emerge.German = "Akylios taucht auf"
+AK.Lang.Mechanic.Emerge.Russian = "КРАБ ВСПЛЫВАЕТ ПОСАНЫ!"
 AK.Lang.Mechanic.Submerge = KBM.Language:Add("Akylios submerges")
 AK.Lang.Mechanic.Submerge.German = "Akylios taucht unter"
+AK.Lang.Mechanic.Submerge.Russian = "КРАБ ПОГРУЖАЕЦЦО ПОСАНЫ!"
 
 -- Notify Dictionary
 AK.Lang.Notify = {}
 AK.Lang.Notify.Orb = KBM.Language:Add("Jornaru launches a suffocating orb at (%a*)")
 AK.Lang.Notify.Orb.German = "Jornaru wirft eine Erstickungskugel auf (%a*)"
+AK.Lang.Notify.Orb.Russian = "Йорнару запускает удушающую сферу, его цель - (%a*)."
 
 -- Say Dictionary
 AK.Lang.Say = {}
 AK.Lang.Say.PhaseTwo = KBM.Language:Add("Master, your plan is fulfilled. After a millennia of manipulation, the wards of Hammerknell are shattered. I release you, Akylios! Come forth and claim this world.")
-AK.Lang.Say.PhaseTwo.German = "Meister, Euer Plan ist vollendet. Nach Millennium der Manipulation fallen die Schutzzauber Hammerhalls. Ich befreie Euch, Akylios! Kommt, nehmt Euch diese Welt." 
+AK.Lang.Say.PhaseTwo.German = "Meister, Euer Plan ist vollendet. Nach Millennium der Manipulation fallen die Schutzzauber Hammerhalls. Ich befreie Euch, Akylios! Kommt, nehmt Euch diese Welt."
+AK.Lang.Say.PhaseTwo.Russian = "Господин, ваш замысел исполнен. После тысячилетий труда защита Молотозвона пала. Я, Акилиос, освобождаю вас! Явитесь и захватите этот мир."
 
 -- Phase Message Dictionary
 AK.Lang.Phase = {}
 AK.Lang.Phase.Two = KBM.Language:Add("Phase 2 starting!")
 AK.Lang.Phase.Two.German = "Phase 2 beginnt!"
+AK.Lang.Phase.Two.Russian = "Началась 2ая фаза!"
 AK.Lang.Phase.Three = KBM.Language:Add("Phase 3 starting!")
 AK.Lang.Phase.Three.German = "Phase 3 beginnt!"
+AK.Lang.Phase.Three.Russian = "Началась 3ья фаза!"
 AK.Lang.Phase.Four = KBM.Language:Add("Phase 4 starting!")
 AK.Lang.Phase.Four.German = "Phase 4 beginnt!"
+AK.Lang.Phase.Four.Russian = "Началась 4ая фаза!"
 AK.Lang.Phase.Final = KBM.Language:Add("Final phase starting, good luck!")
 AK.Lang.Phase.Final.German = "Letzte Phase beginnt, viel Erfolg!"
+AK.Lang.Phase.Final.Russian = "Последняя фаза, удачи!"
 
 -- Options Dictionary.
 AK.Lang.Options = {}
@@ -205,12 +225,15 @@ AK.Lang.Options.WaveOne = KBM.Language:Add(AK.Lang.Mechanic.Wave[KBM.Lang].." (P
 AK.Lang.Options.WaveFour = KBM.Language:Add(AK.Lang.Mechanic.Wave[KBM.Lang].." (Phase 4)")
 AK.Lang.Options.WaveWarn = KBM.Language:Add("Warning for Waves at 5 seconds.")
 AK.Lang.Options.WaveWarn.German = "Warnung für Flutwellen 5 Sekunden vorher."
+AK.Lang.Options.WaveWarn.Russian = "Предупреждение о волнах за 5 секунд."
 AK.Lang.Options.Summon = KBM.Language:Add(AK.Lang.Mechanic.Summon[KBM.Lang].." (Phase 1)")
 AK.Lang.Options.SummonTwo = KBM.Language:Add(AK.Lang.Mechanic.Summon[KBM.Lang].." (Phase 2)")
 AK.Lang.Options.Orb = KBM.Language:Add(AK.Lang.Mechanic.Orb[KBM.Lang].." (P2 First)")
 AK.Lang.Options.Orb.German = AK.Lang.Mechanic.Orb[KBM.Lang].." (Erste in P2)"
+AK.Lang.Options.Orb.Russian = AK.Lang.Mechanic.Orb[KBM.Lang].." (Первая во 2ой фазе)"
 AK.Lang.Options.Breath = KBM.Language:Add(AK.Lang.Ability.Breath[KBM.Lang].." duration.")
-AK.Lang.Options.Breath.German = AK.Lang.Ability.Breath[KBM.Lang].." Dauer." 
+AK.Lang.Options.Breath.German = AK.Lang.Ability.Breath[KBM.Lang].." Dauer."
+AK.Lang.Options.Breath.Russian = AK.Lang.Ability.Breath[KBM.Lang].." Продолжительность."
 
 AK.Descript = "Akylios & Jornaru"
 

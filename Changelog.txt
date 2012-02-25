@@ -64,6 +64,9 @@ Expert Dungeons
 German Translations
 * Added: Non-critical translations for Phase Monitor and in-game chat.
 
+Russian Translations
+* Added: Akylios encounter and extra translations for other Hammerknell bosses.
+
 ----
 v0.9.7
 
