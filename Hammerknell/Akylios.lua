@@ -84,6 +84,7 @@ AK.Akylios = {
 			BreathFirst = KBM.Defaults.TimerObj.Create("red"),
 			Emerge = KBM.Defaults.TimerObj.Create("dark_green"),
 			Submerge = KBM.Defaults.TimerObj.Create("dark_green"),
+			Lasher = KBM.Defaults.TimerObj.Create("cyan")
 		},
 		AlertsRef = {
 			Enabled = true,
@@ -234,6 +235,9 @@ AK.Lang.Options.Orb.Russian = AK.Lang.Mechanic.Orb[KBM.Lang].." (Первая в
 AK.Lang.Options.Breath = KBM.Language:Add(AK.Lang.Ability.Breath[KBM.Lang].." duration.")
 AK.Lang.Options.Breath.German = AK.Lang.Ability.Breath[KBM.Lang].." Dauer."
 AK.Lang.Options.Breath.Russian = AK.Lang.Ability.Breath[KBM.Lang].." Продолжительность."
+AK.Lang.Options.Emerge = KBM.Language:Add("Emerge/Submerge Timers")
+AK.Lang.Options.BreathFirst = KBM.Language:Add("First Breath in Phase 3")
+AK.Lang.Options.Lasher = KBM.Language:Add("Second Lasher rises")
 
 AK.Descript = AK.Akylios.Name.." & "..AK.Jornaru.Name
 
@@ -622,10 +626,12 @@ function AK:Start()
 	self.Akylios.TimersRef.Emerge:AddTimer(self.Akylios.TimersRef.Submerge, 0)
 	self.Akylios.TimersRef.Emerge:SetPhase(4)
 	self.Akylios.TimersRef.EmergeFirst = KBM.MechTimer:Add(AK.Lang.Mechanic.Emerge[KBM.Lang], 80)
-	self.Akylios.TimersRef.EmergeFirst.MenuName = "Emerge/Submerge Timers"
+	self.Akylios.TimersRef.EmergeFirst.MenuName = self.Lang.Options.Emerge[KBM.Lang]
 	self.Akylios.TimersRef.EmergeFirst:AddTimer(self.Akylios.TimersRef.Submerge, 0)
 	self.Akylios.TimersRef.BreathFirst = KBM.MechTimer:Add(AK.Lang.Ability.Breath[KBM.Lang], 87)
-	self.Akylios.TimersRef.BreathFirst.MenuName = "First Breath in Phase 3"
+	self.Akylios.TimersRef.BreathFirst.MenuName = self.Lang.Options.BreathFirst[KBM.Lang]
+	self.Akylios.TimersRef.Lasher = KBM.MechTimer:Add(AK.Lang.Options.Lasher[KBM.Lang], 45)
+	self.Akylios.TimersRef.Submerge:AddTimer(self.Akylios.TimersRef.Lasher, 0)
 	
 	-- Create Alerts
 	-- Jornaru

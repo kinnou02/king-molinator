@@ -40,6 +40,7 @@ Hammerknell
 ** New: Added Timer for the appearance of the first Geyser in Phase 2.
 ** New: Added Timer for the appearance of all subsequent Geysers in Phase 2 and Phase 3.
 * Akylios
+** New: Added Timer for the rise of second Lasher during Akylios submerge phases.
 ** New: Added fail-safe trigger for phase 4. Damage to Jornaru should now trigger P4 if Akylios is submerged.
 ** Note: Accuracy of timers triggered this way will be dependent on reaction times to damaging Jornaru.
 ** Note: But should be less inaccurate than when P4 hits early during submerge phases.
