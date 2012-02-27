@@ -158,7 +158,7 @@ RunOnStartup = {
 }
 
 Embed = {
-	SafesRaidManager = true,
+	["SafesRaidManager/"] = true,
 }
 
 SavedVariables = {

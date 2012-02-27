@@ -18,7 +18,7 @@ RunOnStartup = {
 }
 
 Embed = {
-	LibUnitChange,
+	LibUnitChange = true,
 }
 
 Dependencies = {
