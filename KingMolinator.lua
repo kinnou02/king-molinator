@@ -47,6 +47,7 @@ KBM.MenuOptions = {
 	ID = "Options",
 }
 
+--KBM.DistanceCalc = math.sqrt((dx * dx) + (dy * dy) + (dz * dz))
 KBM.Defaults = {}
 KBM.Constant = {}
 KBM.Buffs = {}
@@ -1361,6 +1362,9 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 			for i, AlertObj in pairs(self.Alerts) do
 				self.Alerts[i].Triggered = false
 			end
+			for i, TimerObj in pairs(self.Timers) do
+				self.Timers[i].Triggered = false
+			end
 			self.GUI = nil
 			self.Removing = false
 			self.Deleting = false
@@ -1459,6 +1463,12 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 					KBM.MechTimer:AddRemove(self)
 				end
 				TriggerTime = math.ceil(self.Remaining)
+				if self.Timers[TriggerTime] then
+					if not self.Timers[TriggerTime].Triggered then
+						KBM.MechTimer:AddStart(self.Timers[TriggerTime].TimerObj)
+						self.Timers[TriggerTime].Triggered = true
+					end
+				end
 				if self.Alerts[TriggerTime] then
 					if not self.Alerts[TriggerTime].Triggered then
 						KBM.Alert:Start(self.Alerts[TriggerTime].AlertObj, CurrentTime)
@@ -2043,6 +2053,7 @@ function KBM.PhaseMonitor:Init()
 			MetaObj.GUI = KBM.PhaseMonitor:PullObjective()
 			MetaObj.GUI:SetName(Name)
 			MetaObj.GUI:SetObjective(MetaObj.Count.."/"..MetaObj.Target)
+			MetaObj.GUI.Progress:SetVisible(false)
 			MetaObj.Type = "Meta"
 			
 			function MetaObj:Update(Total)
@@ -2074,6 +2085,7 @@ function KBM.PhaseMonitor:Init()
 			DeathObj.GUI = KBM.PhaseMonitor:PullObjective()
 			DeathObj.GUI:SetName(Name)
 			DeathObj.GUI:SetObjective(DeathObj.Count.."/"..DeathObj.Total)
+			DeathObj.GUI.Progress:SetVisible(false)
 			DeathObj.Type = "Death"
 			
 			function DeathObj:Kill()

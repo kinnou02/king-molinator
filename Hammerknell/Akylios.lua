@@ -57,6 +57,7 @@ AK.Jornaru = {
 		AlertsRef = {
 			Enabled = true,
 			WaveWarn = KBM.Defaults.AlertObj.Create("blue"),
+			WaveWarnLong = KBM.Defaults.AlertObj.Create("cyan"),
 			Orb = KBM.Defaults.AlertObj.Create("orange"),
 		},
 	},
@@ -227,6 +228,9 @@ AK.Lang.Options.WaveFour = KBM.Language:Add(AK.Lang.Mechanic.Wave[KBM.Lang].." (
 AK.Lang.Options.WaveWarn = KBM.Language:Add("Warning for Waves at 5 seconds.")
 AK.Lang.Options.WaveWarn.German = "Warnung für Flutwellen 5 Sekunden vorher."
 AK.Lang.Options.WaveWarn.Russian = "Предупреждение о волнах за 5 секунд."
+AK.Lang.Options.WaveWarnLong = KBM.Language:Add("Warning for Waves at 10 seconds.")
+AK.Lang.Options.WaveWarnLong.German = "Warnung für Flutwellen 10 Sekunden vorher."
+AK.Lang.Options.WaveWarnLong.Russian = "Предупреждение о волнах за 10 секунд."
 AK.Lang.Options.Summon = KBM.Language:Add(AK.Lang.Mechanic.Summon[KBM.Lang].." (Phase 1)")
 AK.Lang.Options.SummonTwo = KBM.Language:Add(AK.Lang.Mechanic.Summon[KBM.Lang].." (Phase 2)")
 AK.Lang.Options.Orb = KBM.Language:Add(AK.Lang.Mechanic.Orb[KBM.Lang].." (P2 First)")
@@ -583,6 +587,30 @@ function AK.Akylios:SetAlerts(bool)
 	end
 end
 
+function AK.Apostle:SetTimers(bool)
+	if bool then
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = TimerObj.Settings.Enabled
+		end
+	else
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = false
+		end
+	end
+end
+
+function AK.Apostle:SetAlerts(bool)
+	if bool then
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = AlertObj.Settings.Enabled
+		end
+	else
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = false
+		end
+	end
+end
+
 function AK:DefineMenu()
 	self.Menu = HK.Menu:CreateEncounter(self.Akylios, self.Enabled)
 end
@@ -637,7 +665,11 @@ function AK:Start()
 	-- Jornaru
 	self.Jornaru.AlertsRef.WaveWarn = KBM.Alert:Create(AK.Lang.Mechanic.Wave[KBM.Lang], 5, true, true, "blue")
 	self.Jornaru.AlertsRef.WaveWarn.MenuName = AK.Lang.Options.WaveWarn[KBM.Lang]
+	self.Jornaru.AlertsRef.WaveWarnLong = KBM.Alert:Create(AK.Lang.Mechanic.Wave[KBM.Lang], 10, true, true, "cyan")
+	self.Jornaru.AlertsRef.WaveWarnLong.MenuName = AK.Lang.Options.WaveWarnLong[KBM.Lang]
+	self.Jornaru.TimersRef.WaveOne:AddAlert(self.Jornaru.AlertsRef.WaveWarnLong, 10)
 	self.Jornaru.TimersRef.WaveOne:AddAlert(self.Jornaru.AlertsRef.WaveWarn, 5)
+	self.Jornaru.TimersRef.WaveFour:AddAlert(self.Jornaru.AlertsRef.WaveWarnLong, 10)
 	self.Jornaru.TimersRef.WaveFour:AddAlert(self.Jornaru.AlertsRef.WaveWarn, 5)
 	self.Jornaru.AlertsRef.Orb = KBM.Alert:Create(AK.Lang.Mechanic.Orb[KBM.Lang], 8, false, true, "orange")
 	self.Jornaru.AlertsRef.Orb:Important()

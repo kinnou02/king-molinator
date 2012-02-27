@@ -356,6 +356,30 @@ function SZ.Zilas:SetAlerts(bool)
 	end
 end
 
+function SZ.Imp:SetAlerts(bool)
+	if bool then
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = AlertObj.Settings.Enabled
+		end
+	else
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = false
+		end
+	end
+end
+
+function SZ.Spirit:SetAlerts(bool)
+	if bool then
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = AlertObj.Settings.Enabled
+		end
+	else
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = false
+		end
+	end
+end
+
 function SZ:DefineMenu()
 	self.Menu = HK.Menu:CreateEncounter(self.Zilas, self.Enabled)
 end

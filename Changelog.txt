@@ -15,6 +15,7 @@ Settings
 Engine
 * Timers
 ** New: Timers can now trigger more than one timer at the end of its duration.
+** New: Timers can now trigger other timers at any point in the timer duration.
 * Triggers
 ** New: Triggers can now be enabled/disabled via Mods real-time.
 ** New: Added NPC Damaged based triggers for rare fail-safes.
@@ -34,6 +35,8 @@ Records
 Hammerknell
 * Matron Zamira
 ** Change: Reduced the duration of Mark of Oblivion slightly. (personal alert)
+* Soulrender Zilas
+** Fixed: Option for Imps and Spirits global alert disabling/enabling.
 * Sicaron
 ** Change: The debuff portion (Red) of Unholy Contract is now flagged as important. (personal alert)
 * Inwar Darktide
@@ -41,7 +44,9 @@ Hammerknell
 ** New: Added Timer for the appearance of all subsequent Geysers in Phase 2 and Phase 3.
 * Akylios
 ** New: Added Timer for the rise of second Lasher during Akylios submerge phases.
+** New: Added optional Alert for 10 second warnings for Waves. (You can have both, and each can be different colors, or just one)
 ** New: Added fail-safe trigger for phase 4. Damage to Jornaru should now trigger P4 if Akylios is submerged.
+** Fixed: Option for Apostle global alert disabling/enabling.
 ** Note: Accuracy of timers triggered this way will be dependent on reaction times to damaging Jornaru.
 ** Note: But should be less inaccurate than when P4 hits early during submerge phases.
 
@@ -98,12 +103,12 @@ Options
 Engine
 * Phase Monitor
 ** Percentage Based Objectives
-*** New: Displayed percantage will change to 2 decimal places below 3% HP.
+*** New: Displayed percentage will change to 2 decimal places below 3% HP.
 *** New: When a unit dies it is now displayed as such.
 * Encounters
 ** New: Encounter type checks are now bypassed once already established.
 ** New: Checks added for Expert Mode and Master Mode dungeon recognition.
-* CastBars
+* Castbars
 ** New: Further adjustments to allow for castbar tracking outside of encounters.
 ** New: Castbars can now have multiple displays per Unit ID, but will only ever use one for triggering events.
 ** New: Silent Dynamic Castbars added to the engine to cater for "lesser" units in encounters.
@@ -140,7 +145,7 @@ Rise of the Phoenix
 ** New: Added dictionary definition for "Adds"
 * High Priest Arakhurn
 ** New: Added timer for Arakhurns rise from the flames in P2 (P3 Start).
-** Change: The start of P3 has changed back to its original Notify trigger after Trion's fix.
+** Change: The start of P3 has changed back to its original Notify trigger after Trions fix.
 ** Change: Adjusted P3 mechanic start timers slightly to account for the above trigger change.
 ** Fix: Due to the recent Trion fix, the Notify trigger will avoid non-starting timers if adds die before Arakhurn rises.
 
@@ -160,7 +165,7 @@ Drowned Halls
 ** New: Added Phase Monitor support to the encounter.
 * Joloral Ragetide
 ** New: Added Phase Monitor support to the encounter.
-* Iskaal
+* Isskal
 ** New: Added Phase Monitor support to the encounter.
 ** Fixed: Start of whirlpool phase wasn't triggering additional timers correctly.
 ** Change: Adjusted some timings slightly after the new fix. (Alpha, test phase only. Will be adding alerts/timers for dance)
