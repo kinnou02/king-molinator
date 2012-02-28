@@ -1368,25 +1368,21 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 			self.GUI = nil
 			self.Removing = false
 			self.Deleting = false
-			if self.Repeat then
-				if KBM.Encounter then
+			if KBM.Encounter then
+				if self.Repeat then
 					if self.Phase >= KBM.CurrentMod.Phase or self.Phase == 0 then
 						KBM.MechTimer:AddStart(self)
 					end
 				end
-			end
-			if self.TimerAfter then
-				if KBM.Encounter then
+				if self.TimerAfter then
 					for i, TimerObj in ipairs(self.TimerAfter) do
 						if TimerObj.Phase >= KBM.CurrentMod.Phase or TimerObj.Phase == 0 then
 							KBM.MechTimer:AddStart(TimerObj)
 						end
 					end
 				end
-			end
-			if self.AlertAfter then
-				if KBM.Encounter then
-					KBM.Alert:Start(self.AlertAfter, Inspect.Timer.Real())
+				if self.AlertAfter then
+					KBM.Alert:Start(self.AlertAfter, Inspect.Time.Real())
 				end
 			end
 		end
@@ -1462,17 +1458,19 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 					self.Remaining = 0
 					KBM.MechTimer:AddRemove(self)
 				end
-				TriggerTime = math.ceil(self.Remaining)
-				if self.Timers[TriggerTime] then
-					if not self.Timers[TriggerTime].Triggered then
-						KBM.MechTimer:AddStart(self.Timers[TriggerTime].TimerObj)
-						self.Timers[TriggerTime].Triggered = true
+				if KBM.Encounter then
+					TriggerTime = math.ceil(self.Remaining)
+					if self.Timers[TriggerTime] then
+						if not self.Timers[TriggerTime].Triggered then
+							KBM.MechTimer:AddStart(self.Timers[TriggerTime].TimerObj)
+							self.Timers[TriggerTime].Triggered = true
+						end
 					end
-				end
-				if self.Alerts[TriggerTime] then
-					if not self.Alerts[TriggerTime].Triggered then
-						KBM.Alert:Start(self.Alerts[TriggerTime].AlertObj, CurrentTime)
-						self.Alerts[TriggerTime].Triggered = true
+					if self.Alerts[TriggerTime] then
+						if not self.Alerts[TriggerTime].Triggered then
+							KBM.Alert:Start(self.Alerts[TriggerTime].AlertObj, CurrentTime)
+							self.Alerts[TriggerTime].Triggered = true
+						end
 					end
 				end
 			end

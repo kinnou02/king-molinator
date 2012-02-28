@@ -9,9 +9,9 @@ Author = "Paul Snart"
 Website = "http://twitter.com/#!/psnart"
 Email = "snarty@gmail.com"
 
-Version = "1.1.0"
+Version = "1.1.1"
 
-Environment = "1.6"
+Environment = "1.7"
 
 RunOnStartup = {
 	"SafesRaidManager.lua",

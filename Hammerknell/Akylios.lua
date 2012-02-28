@@ -240,8 +240,11 @@ AK.Lang.Options.Breath = KBM.Language:Add(AK.Lang.Ability.Breath[KBM.Lang].." du
 AK.Lang.Options.Breath.German = AK.Lang.Ability.Breath[KBM.Lang].." Dauer."
 AK.Lang.Options.Breath.Russian = AK.Lang.Ability.Breath[KBM.Lang].." Продолжительность."
 AK.Lang.Options.Emerge = KBM.Language:Add("Emerge/Submerge Timers")
+AK.Lang.Options.Emerge.German = "Auftauchen/Untertauchen Timer"
 AK.Lang.Options.BreathFirst = KBM.Language:Add("First Breath in Phase 3")
+AK.Lang.Options.BreathFirst.German = "Erster Hauch in Phase 3"
 AK.Lang.Options.Lasher = KBM.Language:Add("Second Lasher rises")
+AK.Lang.Options.Lasher.German = "Zweiter Peitscher erscheint"
 
 AK.Descript = AK.Akylios.Name.." & "..AK.Jornaru.Name
 
