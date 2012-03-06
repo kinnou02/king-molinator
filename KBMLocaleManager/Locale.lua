@@ -478,7 +478,7 @@ function KBMLM.FindMissing()
 			print("Mod: "..ModID.." does not have a translation table.")
 		end
 	end
-	local TempLang = "German"
+	local TempLang = KBM.Lang
 	--print("Missing Translation List")
 	for LangID, Object in pairs(KBMLM.Store) do
 		print(LangID..": "..Object.Total)
