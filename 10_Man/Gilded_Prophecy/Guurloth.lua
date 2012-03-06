@@ -12,11 +12,14 @@ local KBM = AddonData.data
 local GP = KBM.BossMod["Gilded Prophecy"]
 
 local GH = {
+	Directory = GP.Directory,
+	File = "Guurloth.lua",
 	Enabled = true,
 	Instance = GP.Name,
 	Lang = {},
 	ID = "Guurloth",
-	}
+	Object = "GH",
+}
 
 GH.Guurloth = {
 	Mod = GH,
@@ -60,72 +63,75 @@ GH.Guurloth = {
 
 KBM.RegisterMod(GH.ID, GH)
 
-GH.Lang.Guurloth = KBM.Language:Add(GH.Guurloth.Name)
-GH.Lang.Guurloth:SetRussian("Гуурлот")
-GH.Guurloth.Name = GH.Lang.Guurloth[KBM.Lang]
+-- Main Unit Dictionary
+GH.Lang.Unit = {}
+GH.Lang.Unit.Guurloth = KBM.Language:Add(GH.Guurloth.Name)
+GH.Lang.Unit.Guurloth:SetGerman("Guurloth")
+GH.Lang.Unit.Guurloth:SetRussian("Гуурлот")
+GH.Guurloth.Name = GH.Lang.Unit.Guurloth[KBM.Lang]
 
 -- Ability Dictionary
 GH.Lang.Ability = {}
 GH.Lang.Ability.Orb = KBM.Language:Add("Orb of Searing Power")
-GH.Lang.Ability.Orb.German = "Kugel der sengenden Macht"
-GH.Lang.Ability.Orb.Russian = "Сфера жгучей мощи"
+GH.Lang.Ability.Orb:SetGerman("Kugel der sengenden Macht")
+GH.Lang.Ability.Orb:SetRussian("Сфера жгучей мощи")
 GH.Lang.Ability.Rumbling = KBM.Language:Add("Rumbling Earth")
-GH.Lang.Ability.Rumbling.German = "Grollende Erde"
-GH.Lang.Ability.Rumbling.Russian = "Гремящая земля"
+GH.Lang.Ability.Rumbling:SetGerman("Grollende Erde")
+GH.Lang.Ability.Rumbling:SetRussian("Гремящая земля")
 GH.Lang.Ability.Call = KBM.Language:Add("Guurloth's Call")
-GH.Lang.Ability.Call.German = "Guurloths Ruf"
-GH.Lang.Ability.Call.Russian = "Зов Гуурлота"
+GH.Lang.Ability.Call:SetGerman("Guurloths Ruf")
+GH.Lang.Ability.Call:SetRussian("Зов Гуурлота")
 GH.Lang.Ability.Boulder = KBM.Language:Add("Boulder of Destruction")
-GH.Lang.Ability.Boulder.German = "Fels der Zerstörung"
-GH.Lang.Ability.Boulder.Russian = "Разрушительный булыжник"
+GH.Lang.Ability.Boulder:SetGerman("Fels der Zerstörung")
+GH.Lang.Ability.Boulder:SetRussian("Разрушительный булыжник")
 GH.Lang.Ability.Toil = KBM.Language:Add("Earthen Toil")
-GH.Lang.Ability.Toil.German = "Irdene Mühe"
-GH.Lang.Ability.Toil.Russian = "Землянистая пошлина"
+GH.Lang.Ability.Toil:SetGerman("Irdene Mühe")
+GH.Lang.Ability.Toil:SetRussian("Землянистая пошлина")
 GH.Lang.Ability.Geyser = KBM.Language:Add("Earthen Geyser")
-GH.Lang.Ability.Geyser.German = "Erdengeysir"
-GH.Lang.Ability.Geyser.Russian = "Грязевой гейзер"
+GH.Lang.Ability.Geyser:SetGerman("Erdengeysir")
+GH.Lang.Ability.Geyser:SetRussian("Грязевой гейзер")
 
 -- Debuff Dictionary
 GH.Lang.Debuff = {}
 GH.Lang.Debuff.Punish = KBM.Language:Add("Earthen Punishment")
-GH.Lang.Debuff.Punish.German = "Erdenbestrafung"
-GH.Lang.Debuff.Punish.Russian = "Земляное наказание"
+GH.Lang.Debuff.Punish:SetGerman("Erdenbestrafung")
+GH.Lang.Debuff.Punish:SetRussian("Земляное наказание")
 
 -- Verbose Dictionary
 GH.Lang.Verbose = {}
 GH.Lang.Verbose.Orb = KBM.Language:Add("Look away now!")
-GH.Lang.Verbose.Orb.German = "WEGSCHAUEN"
-GH.Lang.Verbose.Orb.Russian = "Отвернитесь!"
+GH.Lang.Verbose.Orb:SetGerman("WEGSCHAUEN")
+GH.Lang.Verbose.Orb:SetRussian("Отвернитесь!")
 GH.Lang.Verbose.Rumbling = KBM.Language:Add("Jump!")
-GH.Lang.Verbose.Rumbling.German = "SPRINGEN"
-GH.Lang.Verbose.Rumbling.Russian = "Прыгайте!"
+GH.Lang.Verbose.Rumbling:SetGerman("SPRINGEN")
+GH.Lang.Verbose.Rumbling:SetRussian("Прыгайте!")
 GH.Lang.Verbose.Call = KBM.Language:Add("Adds Spawn")
-GH.Lang.Verbose.Call.German = "ADD kommt"
-GH.Lang.Verbose.Call.Russian = "Призывается адд!"
+GH.Lang.Verbose.Call:SetGerman("ADD kommt")
+GH.Lang.Verbose.Call:SetRussian("Призывается адд!")
 GH.Lang.Verbose.Toil = KBM.Language:Add("Run around!")
-GH.Lang.Verbose.Toil.German = "LAUFEN"
-GH.Lang.Verbose.Toil.Russian = "Бегайте!"
+GH.Lang.Verbose.Toil:SetGerman("LAUFEN")
+GH.Lang.Verbose.Toil:SetRussian("Бегайте!")
 GH.Lang.Verbose.Punish = KBM.Language:Add("Stop!")
-GH.Lang.Verbose.Punish.German = "NICHTS MACHEN"
-GH.Lang.Verbose.Punish.Russian = "Ничего не делайте!"
+GH.Lang.Verbose.Punish:SetGerman("NICHTS MACHEN")
+GH.Lang.Verbose.Punish:SetRussian("Ничего не делайте!")
 
 -- Menu Dictionary
 GH.Lang.Menu = {}
 GH.Lang.Menu.Orb = KBM.Language:Add("First "..GH.Lang.Ability.Orb[KBM.Lang])
-GH.Lang.Menu.Orb.German = "Erste "..GH.Lang.Ability.Orb[KBM.Lang]
-GH.Lang.Menu.Orb.Russian = "Первая "..GH.Lang.Ability.Orb[KBM.Lang]
+GH.Lang.Menu.Orb:SetGerman("Erste "..GH.Lang.Ability.Orb[KBM.Lang])
+GH.Lang.Menu.Orb:SetRussian("Первая "..GH.Lang.Ability.Orb[KBM.Lang])
 GH.Lang.Menu.OrbDuration = KBM.Language:Add(GH.Lang.Ability.Orb[KBM.Lang].." duration")
-GH.Lang.Menu.OrbDuration.German = GH.Lang.Ability.Orb[KBM.Lang].." Dauer"
-GH.Lang.Menu.OrbDuration.Russian = "Длительность "..GH.Lang.Ability.Orb[KBM.Lang]
+GH.Lang.Menu.OrbDuration:SetGerman(GH.Lang.Ability.Orb[KBM.Lang].." Dauer")
+GH.Lang.Menu.OrbDuration:SetRussian("Длительность "..GH.Lang.Ability.Orb[KBM.Lang])
 GH.Lang.Menu.Rumbling = KBM.Language:Add(GH.Lang.Ability.Rumbling[KBM.Lang].." duration")
-GH.Lang.Menu.Rumbling.German = GH.Lang.Ability.Rumbling[KBM.Lang].." Dauer"
-GH.Lang.Menu.Rumbling.Russian = "Длительность "..GH.Lang.Ability.Rumbling[KBM.Lang]
+GH.Lang.Menu.Rumbling:SetGerman(GH.Lang.Ability.Rumbling[KBM.Lang].." Dauer")
+GH.Lang.Menu.Rumbling:SetRussian("Длительность "..GH.Lang.Ability.Rumbling[KBM.Lang])
 GH.Lang.Menu.CallFirst = KBM.Language:Add("First "..GH.Lang.Ability.Call[KBM.Lang])
-GH.Lang.Menu.CallFirst.German = "Erster "..GH.Lang.Ability.Call[KBM.Lang]
-GH.Lang.Menu.CallFirst.Russian = "Первый "..GH.Lang.Ability.Call[KBM.Lang]
+GH.Lang.Menu.CallFirst:SetGerman("Erster "..GH.Lang.Ability.Call[KBM.Lang])
+GH.Lang.Menu.CallFirst:SetRussian("Первый "..GH.Lang.Ability.Call[KBM.Lang])
 GH.Lang.Menu.Toil = KBM.Language:Add(GH.Lang.Ability.Toil[KBM.Lang].." duration")
-GH.Lang.Menu.Toil.German = GH.Lang.Ability.Toil[KBM.Lang].." Dauer"
-GH.Lang.Menu.Toil.Russian ="Длительность "..GH.Lang.Ability.Toil[KBM.Lang]
+GH.Lang.Menu.Toil:SetGerman(GH.Lang.Ability.Toil[KBM.Lang].." Dauer")
+GH.Lang.Menu.Toil:SetRussian("Длительность "..GH.Lang.Ability.Toil[KBM.Lang])
 
 GH.Descript = GH.Guurloth.Name
 

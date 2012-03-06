@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Shadehorror",
+	Object = "MOD",
 }
 
 MOD.Shadehorror = {
@@ -52,11 +53,13 @@ MOD.Shadehorror = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Shadehorror = KBM.Language:Add(MOD.Shadehorror.Name)
-MOD.Lang.Shadehorror:SetGerman("Schattenschrecktrugbild") 
--- MOD.Lang.Shadehorror:SetFrench("")
--- MOD.Lang.Shadehorror:SetRussian("")
-MOD.Shadehorror.Name = MOD.Lang.Shadehorror[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Shadehorror = KBM.Language:Add(MOD.Shadehorror.Name)
+MOD.Lang.Unit.Shadehorror:SetGerman("Schattenschrecktrugbild") 
+-- MOD.Lang.Unit.Shadehorror:SetFrench("")
+-- MOD.Lang.Unit.Shadehorror:SetRussian("")
+MOD.Shadehorror.Name = MOD.Lang.Unit.Shadehorror[KBM.Lang]
 MOD.Descript = MOD.Shadehorror.Name
 
 -- Ability Dictionary

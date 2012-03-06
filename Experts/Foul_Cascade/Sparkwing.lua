@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Sparkwing",
+	Object = "MOD",
 }
 
 MOD.Sparkwing = {
@@ -52,11 +53,13 @@ MOD.Sparkwing = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Sparkwing = KBM.Language:Add(MOD.Sparkwing.Name)
-MOD.Lang.Sparkwing:SetGerman("Funkenschwinge")
--- MOD.Lang.Sparkwing:SetFrench("")
--- MOD.Lang.Sparkwing:SetRussian("")
-MOD.Sparkwing.Name = MOD.Lang.Sparkwing[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Sparkwing = KBM.Language:Add(MOD.Sparkwing.Name)
+MOD.Lang.Unit.Sparkwing:SetGerman("Funkenschwinge")
+-- MOD.Lang.Unit.Sparkwing:SetFrench("")
+-- MOD.Lang.Unit.Sparkwing:SetRussian("")
+MOD.Sparkwing.Name = MOD.Lang.Unit.Sparkwing[KBM.Lang]
 MOD.Descript = MOD.Sparkwing.Name
 
 -- Ability Dictionary

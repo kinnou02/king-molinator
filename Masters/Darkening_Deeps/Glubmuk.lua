@@ -52,11 +52,13 @@ MOD.Glubmuk = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Glubmuk = KBM.Language:Add(MOD.Glubmuk.Name)
--- MOD.Lang.Glubmuk:SetGerman("")
--- MOD.Lang.Glubmuk:SetFrench("")
--- MOD.Lang.Glubmuk:SetRussian("")
-MOD.Glubmuk.Name = MOD.Lang.Glubmuk[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Glubmuk = KBM.Language:Add(MOD.Glubmuk.Name)
+-- MOD.Lang.Unit.Glubmuk:SetGerman("")
+-- MOD.Lang.Unit.Glubmuk:SetFrench("")
+-- MOD.Lang.Unit.Glubmuk:SetRussian("")
+MOD.Glubmuk.Name = MOD.Lang.Unit.Glubmuk[KBM.Lang]
 MOD.Descript = MOD.Glubmuk.Name
 
 -- Ability Dictionary

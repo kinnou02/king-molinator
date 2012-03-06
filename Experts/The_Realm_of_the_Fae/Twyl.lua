@@ -21,6 +21,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Twyl",
+	Object = "MOD",
 }
 
 MOD.Twyl = {
@@ -54,30 +55,32 @@ MOD.Twyl = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Twyl = KBM.Language:Add(MOD.Twyl.Name)
-MOD.Lang.Twyl:SetGerman("Feenfürst Twyl")
--- MOD.Lang.Twyl:SetFrench("")
--- MOD.Lang.Twyl:SetRussian("")
-MOD.Twyl.Name = MOD.Lang.Twyl[KBM.Lang]
-MOD.Descript = MOD.Twyl.Name
-
 -- Ability Dictionary
 MOD.Lang.Ability = {}
 
--- Unit Dictionary
+-- Main Unit Dictionary
 MOD.Lang.Unit = {}
+MOD.Lang.Unit.Twyl = KBM.Language:Add(MOD.Twyl.Name)
+MOD.Lang.Unit.Twyl:SetGerman("Feenfürst Twyl")
+-- MOD.Lang.Unit.Twyl:SetFrench("")
+-- MOD.Lang.Unit.Twyl:SetRussian("")
+MOD.Twyl.Name = MOD.Lang.Unit.Twyl[KBM.Lang]
+MOD.Descript = MOD.Twyl.Name
+MOD.Lang.Unit.TwylShort = KBM.Language:Add(MOD.Twyl.NameShort)
+MOD.Lang.Unit.TwylShort:SetGerman("Twyl")
+MOD.Twyl.NameShort = MOD.Lang.Unit.TwylShort[KBM.Lang]
 MOD.Lang.Unit.Autumn = KBM.Language:Add("Avatar of Autumn")
-MOD.Lang.Unit.Autumn.German = "Avatar des Herbstes"
+MOD.Lang.Unit.Autumn:SetGerman("Avatar des Herbstes")
 MOD.Lang.Unit.AutumnShort = KBM.Language:Add("Autumn")
-MOD.Lang.Unit.AutumnShort.German = "Herbst"
+MOD.Lang.Unit.AutumnShort:SetGerman("Herbst")
 MOD.Lang.Unit.Summer = KBM.Language:Add("Avatar of Summer")
-MOD.Lang.Unit.Summer.German = "Avatar des Sommers"
+MOD.Lang.Unit.Summer:SetGerman("Avatar des Sommers")
 MOD.Lang.Unit.SummerShort = KBM.Language:Add("Summer")
-MOD.Lang.Unit.SummerShort.German = "Sommer"
+MOD.Lang.Unit.SummerShort:SetGerman("Sommer")
 MOD.Lang.Unit.Spring = KBM.Language:Add("Avatar of Spring")
-MOD.Lang.Unit.Spring.German = "Avatar des Frühlings"
+MOD.Lang.Unit.Spring:SetGerman("Avatar des Frühlings")
 MOD.Lang.Unit.SpringShort = KBM.Language:Add("Spring")
-MOD.Lang.Unit.SpringShort.German = "Frühling"
+MOD.Lang.Unit.SpringShort:SetGerman("Frühling")
 
 MOD.Autumn = {
 	Mod = MOD,

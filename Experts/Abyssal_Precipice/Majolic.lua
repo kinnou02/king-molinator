@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Majolic",
+	Object = "MOD",
 }
 
 MOD.Majolic = {
@@ -52,11 +53,13 @@ MOD.Majolic = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Majolic = KBM.Language:Add(MOD.Majolic.Name)
-MOD.Lang.Majolic:SetGerman("Majolic der Blutwandler")
--- MOD.Lang.Majolic:SetFrench("")
--- MOD.Lang.Majolic:SetRussian("")
-MOD.Majolic.Name = MOD.Lang.Majolic[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Majolic = KBM.Language:Add(MOD.Majolic.Name)
+MOD.Lang.Unit.Majolic:SetGerman("Majolic der Blutwandler")
+-- MOD.Lang.Unit.Majolic:SetFrench("")
+-- MOD.Lang.Unit.Majolic:SetRussian("")
+MOD.Majolic.Name = MOD.Lang.Unit.Majolic[KBM.Lang]
 MOD.Descript = MOD.Majolic.Name
 
 -- Ability Dictionary

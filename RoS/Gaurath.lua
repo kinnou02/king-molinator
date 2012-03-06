@@ -13,13 +13,16 @@ local ROS = KBM.BossMod["River of Souls"]
 
 local HG = {
 	Enabled = true,
+	Directory = ROS.Directory,
+	File = "Gaurath",
 	Instance = ROS.Name,
 	Type = "20man",
 	HasPhases = true,
 	Lang = {},
 	RaiseCounter = 0,
 	Enrage = 60 * 9.5,
-	ID = "Herald_Gaurath",	
+	ID = "Herald_Gaurath",
+	Object = "HG",
 }
 
 HG.Gaurath = {
@@ -53,10 +56,12 @@ HG.Gaurath = {
 
 KBM.RegisterMod(HG.ID, HG)
 
-HG.Lang.Gaurath = KBM.Language:Add(HG.Gaurath.Name)
-HG.Lang.Gaurath:SetGerman("Herold Gaurath")
-HG.Lang.Gaurath:SetFrench("H\195\169raut Gaurath")
-HG.Lang.Gaurath:SetRussian("Глашатай Гораф")
+-- Main Unit Dictionary
+HG.Lang.Unit = {}
+HG.Lang.Unit.Gaurath = KBM.Language:Add(HG.Gaurath.Name)
+HG.Lang.Unit.Gaurath:SetGerman("Herold Gaurath")
+HG.Lang.Unit.Gaurath:SetFrench("H\195\169raut Gaurath")
+HG.Lang.Unit.Gaurath:SetRussian("Глашатай Гораф")
 
 -- Ability Dictionary
 HG.Lang.Ability = {}
@@ -81,7 +86,7 @@ HG.Lang.Notify = {}
 HG.Lang.Notify.Tidings = KBM.Language:Add("unleashes woeful tidings upon (%a*)")
 HG.Lang.Notify.Tidings:SetGerman("entfesselt traurige Kunde auf (%a*)")
 
-HG.Gaurath.Name = HG.Lang.Gaurath[KBM.Lang]
+HG.Gaurath.Name = HG.Lang.Unit.Gaurath[KBM.Lang]
 HG.Descript = HG.Gaurath.Name
 
 function HG:AddBosses(KBM_Boss)

@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Zael",
+	Object = "MOD",
 }
 
 MOD.Zael = {
@@ -52,11 +53,13 @@ MOD.Zael = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Zael = KBM.Language:Add(MOD.Zael.Name)
-MOD.Lang.Zael:SetGerman("Ascherufer Zael")
--- MOD.Lang.Zael:SetFrench("")
--- MOD.Lang.Zael:SetRussian("")
-MOD.Zael.Name = MOD.Lang.Zael[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Zael = KBM.Language:Add(MOD.Zael.Name)
+MOD.Lang.Unit.Zael:SetGerman("Ascherufer Zael")
+-- MOD.Lang.Unit.Zael:SetFrench("")
+-- MOD.Lang.Unit.Zael:SetRussian("")
+MOD.Zael.Name = MOD.Lang.Unit.Zael[KBM.Lang]
 MOD.Descript = MOD.Zael.Name
 
 -- Ability Dictionary

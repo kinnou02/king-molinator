@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Upper_Caduceus",
+	Object = "MOD",
 }
 
 MOD.Caduceus = {
@@ -52,11 +53,13 @@ MOD.Caduceus = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Caduceus = KBM.Language:Add(MOD.Caduceus.Name)
-MOD.Lang.Caduceus:SetGerman("Hermesstab")
--- MOD.Lang.Caduceus:SetFrench("")
--- MOD.Lang.Caduceus:SetRussian("")
-MOD.Caduceus.Name = MOD.Lang.Caduceus[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Caduceus = KBM.Language:Add(MOD.Caduceus.Name)
+MOD.Lang.Unit.Caduceus:SetGerman("Hermesstab")
+-- MOD.Lang.Unit.Caduceus:SetFrench("")
+-- MOD.Lang.Unit.Caduceus:SetRussian("")
+MOD.Caduceus.Name = MOD.Lang.Unit.Caduceus[KBM.Lang]
 MOD.Descript = MOD.Caduceus.Name
 
 -- Ability Dictionary

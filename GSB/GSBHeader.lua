@@ -10,6 +10,8 @@ local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 
 local GSB = {
+	Directory = "GSB",
+	File = "GSBHeader",
 	Header = nil,
 	Enabled = true,
 	IsInstance = true,
@@ -20,12 +22,14 @@ local GSB = {
 
 KBM.RegisterMod("Greenscales Blight", GSB)
 
-KBM.Language:Add(GSB.Name)
-KBM.Language[GSB.Name]:SetGerman("Grünschuppes Pesthauch")
-KBM.Language[GSB.Name]:SetFrench("Fl\195\169au de Vert\195\169caille")
-KBM.Language[GSB.Name]:SetRussian("Темница Зеленокожа")
-
-GSB.Name = KBM.Language[GSB.Name][KBM.Lang]
+-- Header Dictionary
+GSB.Lang = {}
+GSB.Lang.Main = {}
+GSB.Lang.Main.GSB = KBM.Language:Add(GSB.Name)
+GSB.Lang.Main.GSB:SetGerman("Grünschuppes Pesthauch")
+GSB.Lang.Main.GSB:SetFrench("Fl\195\169au de Vert\195\169caille")
+GSB.Lang.Main.GSB:SetRussian("Темница Зеленокожа")
+GSB.Name = GSB.Lang.Main.GSB[KBM.Lang]
 GSB.Descript = GSB.Name
 
 function GSB:AddBosses(KBM_Boss)

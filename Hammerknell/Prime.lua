@@ -12,11 +12,14 @@ local HK = KBM.BossMod["Hammerknell"]
 
 local VP = {
 	Enabled = true,
+	Directory = HK.Directory,
+	File = "Prime.lua",
 	Instance = HK.Name,
 	Lang = {},
 	Enrage = 60 * 11,
 	Phase = 1,
 	ID = "Prime",
+	Object = "VP",
 }
 
 VP.Prime = {
@@ -50,16 +53,22 @@ VP.Prime = {
 
 KBM.RegisterMod(VP.ID, VP)
 
-VP.Lang.Prime = KBM.Language:Add(VP.Prime.Name)
-VP.Lang.Prime.Russian = "Владмал Прайм"
-VP.Prime.Name = VP.Lang.Prime[KBM.Lang]
+-- Main Unit Dictionary
+VP.Lang.Unit = {}
+VP.Lang.Unit.Prime = KBM.Language:Add(VP.Prime.Name)
+VP.Lang.Unit.Prime:SetRussian("Владмал Прайм")
+VP.Prime.Name = VP.Lang.Unit.Prime[KBM.Lang]
 VP.Descript = VP.Prime.Name
+VP.Lang.Unit.PrimeShort = KBM.Language:Add("Vladmal")
+VP.Lang.Unit.PrimeShort:SetGerman("Vladmal")
+VP.Prime.NameShort = VP.Lang.Unit.PrimeShort[KBM.Lang]
 
 -- Ability Dictionary
-VP.Lang.Flames = KBM.Language:Add("Ancient Flames")
-VP.Lang.Flames.French = "Flammes anciennes"
-VP.Lang.Flames.German = "Uralte Flammen"
-VP.Lang.Flames.Russian = "Древние огни"
+VP.Lang.Ability = {}
+VP.Lang.Ability.Flames = KBM.Language:Add("Ancient Flames")
+VP.Lang.Ability.Flames:SetFrench("Flammes anciennes")
+VP.Lang.Ability.Flames:SetGerman("Uralte Flammen")
+VP.Lang.Ability.Flames:SetRussian("Древние огни")
 
 function VP:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
@@ -205,18 +214,18 @@ end
 
 function VP:Start()
 	-- Timers
-	self.Prime.TimersRef.Flames = KBM.MechTimer:Add(self.Lang.Flames[KBM.Lang], 31)
+	self.Prime.TimersRef.Flames = KBM.MechTimer:Add(self.Lang.Ability.Flames[KBM.Lang], 31)
 	
 	-- Alerts
-	self.Prime.AlertsRef.Flames = KBM.Alert:Create(self.Lang.Flames[KBM.Lang], 13, false, true, "orange")
+	self.Prime.AlertsRef.Flames = KBM.Alert:Create(self.Lang.Ability.Flames[KBM.Lang], 13, false, true, "orange")
 
 	KBM.Defaults.TimerObj.Assign(self.Prime)
 	KBM.Defaults.AlertObj.Assign(self.Prime)
 	
 	-- Add Mechanics to Triggers
-	self.Prime.Triggers.Flames = KBM.Trigger:Create(self.Lang.Flames[KBM.Lang], "cast", self.Prime)
+	self.Prime.Triggers.Flames = KBM.Trigger:Create(self.Lang.Ability.Flames[KBM.Lang], "cast", self.Prime)
 	self.Prime.Triggers.Flames:AddTimer(self.Prime.TimersRef.Flames)
-	self.Prime.Triggers.FlamesDebuff = KBM.Trigger:Create(self.Lang.Flames[KBM.Lang], "playerBuff", self.Prime)
+	self.Prime.Triggers.FlamesDebuff = KBM.Trigger:Create(self.Lang.Ability.Flames[KBM.Lang], "playerBuff", self.Prime)
 	self.Prime.Triggers.FlamesDebuff:AddAlert(self.Prime.AlertsRef.Flames, true)
 	
 	self.Prime.CastBar = KBM.CastBar:Add(self, self.Prime, true)

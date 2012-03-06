@@ -21,7 +21,8 @@ local MOD = {
 	ID = "Bonehew",
 	Counts = {
 		Fragments = 0,
-	}
+	},
+	Object = "MOD",
 }
 
 MOD.Bonehew = {
@@ -55,20 +56,20 @@ MOD.Bonehew = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Bonehew = KBM.Language:Add(MOD.Bonehew.Name)
-MOD.Lang.Bonehew:SetGerman("Bonehew der Donnerer")
--- MOD.Lang.Bonehew:SetFrench("")
--- MOD.Lang.Bonehew:SetRussian("")
-MOD.Bonehew.Name = MOD.Lang.Bonehew[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Bonehew = KBM.Language:Add(MOD.Bonehew.Name)
+MOD.Lang.Unit.Bonehew:SetGerman("Bonehew der Donnerer")
+-- MOD.Lang.Unit.Bonehew:SetFrench("")
+-- MOD.Lang.Unit.Bonehew:SetRussian("")
+MOD.Bonehew.Name = MOD.Lang.Unit.Bonehew[KBM.Lang]
 MOD.Descript = MOD.Bonehew.Name
+-- Additional Unit Dictionary
+MOD.Lang.Unit.Fragment = KBM.Language:Add("Fragmented Bonehew")
+MOD.Lang.Unit.Fragment:SetGerman("Fragmentierter Bonehew")
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}
-
--- Unit Dictionary
-MOD.Lang.Unit = {}
-MOD.Lang.Unit.Fragment = KBM.Language:Add("Fragmented Bonehew")
-MOD.Lang.Unit.Fragment.German = "Fragmentierter Bonehew"
 
 MOD.Fragment = {
 	Mod = MOD,

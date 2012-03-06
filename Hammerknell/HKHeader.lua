@@ -7,7 +7,7 @@ KBMHK_Settings = {}
 chKBMHK_Settings = {}
 
 local HK = {
-	Directory = "Hammerknell",
+	Directory = "Hammerknell/",
 	File = "HKHeader.lua",
 	Header = nil,
 	Menu = nil,
@@ -16,17 +16,20 @@ local HK = {
 	Name = "Hammerknell Fortress",
 	Type = "20man",
 	ID = "HK",
+	Object = "HK",
 }
 
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 KBM.RegisterMod("Hammerknell", HK)
 
-KBM.Language:Add(HK.Name)
-KBM.Language[HK.Name]:SetFrench("Glasmarteau")
-KBM.Language[HK.Name]:SetGerman("Festung Hammerhall")
-KBM.Language[HK.Name]:SetRussian("Крепость Молотозвона")
-HK.Name = KBM.Language[HK.Name][KBM.Lang]
+HK.Lang = {}
+HK.Lang.Main = {}
+HK.Lang.Main.Hammerknell = KBM.Language:Add(HK.Name)
+HK.Lang.Main.Hammerknell:SetFrench("Glasmarteau")
+HK.Lang.Main.Hammerknell:SetGerman("Festung Hammerhall")
+HK.Lang.Main.Hammerknell:SetRussian("Крепость Молотозвона")
+HK.Name = HK.Lang.Main.Hammerknell[KBM.Lang]
 HK.Descript = HK.Name
 
 function HK:AddBosses(KBM_Boss)

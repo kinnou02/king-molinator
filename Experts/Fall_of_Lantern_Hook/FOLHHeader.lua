@@ -7,12 +7,15 @@ KBMEXFOLH_Settings = nil
 chKBMEXFOLH_Settings = nil
 
 local MOD = {
+	Directory = "Experts/Fall_of_Lantern_Hook/",
+	File = "FOLHHeader.lua",
 	Header = nil,
 	Enabled = true,
 	IsInstance = true,
 	Name = "Fall of Lantern Hook",
 	Type = "Expert",
 	ID = "Fall_of_Lantern_Hook",
+	Object = "MOD",
 }
 
 -- Link Mods
@@ -20,12 +23,15 @@ local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 KBM.RegisterMod(MOD.Name, MOD)
 
-KBM.Language:Add(MOD.Name)
-KBM.Language[MOD.Name]:SetGerman("Untergang von Laternenhaken") 
--- KBM.Language[MOD.Name]:SetFrench("")
--- KBM.Language[MOD.Name]:SetRussian("")
+-- Header Dictionary
+MOD.Lang = {}
+MOD.Lang.Main = {}
+MOD.Lang.Main.Name = KBM.Language:Add(MOD.Name)
+MOD.Lang.Main.Name:SetGerman("Untergang von Laternenhaken") 
+-- MOD.Lang.Main.Name:SetFrench("")
+-- MOD.Lang.Main.Name:SetRussian("")
 
-MOD.Name = KBM.Language[MOD.Name][KBM.Lang]
+MOD.Name = MOD.Lang.Main.Name[KBM.Lang]
 MOD.Descript = MOD.Name
 
 function MOD:AddBosses(KBM_Boss)

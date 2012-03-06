@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Druhl",
+	Object = "MOD",
 }
 
 MOD.Druhl = {
@@ -52,11 +53,13 @@ MOD.Druhl = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Druhl = KBM.Language:Add(MOD.Druhl.Name)
-MOD.Lang.Druhl:SetGerman("Flammenbringer Druhl") 
--- MOD.Lang.Druhl:SetFrench("")
--- MOD.Lang.Druhl:SetRussian("")
-MOD.Druhl.Name = MOD.Lang.Druhl[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Druhl = KBM.Language:Add(MOD.Druhl.Name)
+MOD.Lang.Unit.Druhl:SetGerman("Flammenbringer Druhl") 
+-- MOD.Lang.Unit.Druhl:SetFrench("")
+-- MOD.Lang.Unit.Druhl:SetRussian("")
+MOD.Druhl.Name = MOD.Lang.Unit.Druhl[KBM.Lang]
 MOD.Descript = MOD.Druhl.Name
 
 -- Ability Dictionary

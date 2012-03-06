@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Alraj",
+	Object = "MOD",
 }
 
 MOD.Alraj = {
@@ -52,11 +53,13 @@ MOD.Alraj = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Alraj = KBM.Language:Add(MOD.Alraj.Name)
-MOD.Lang.Alraj:SetGerman("Bruchwandler Alraj")
--- MOD.Lang.Alraj:SetFrench("")
--- MOD.Lang.Alraj:SetRussian("")
-MOD.Alraj.Name = MOD.Lang.Alraj[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Alraj = KBM.Language:Add(MOD.Alraj.Name)
+MOD.Lang.Unit.Alraj:SetGerman("Bruchwandler Alraj")
+-- MOD.Lang.Unit.Alraj:SetFrench("")
+-- MOD.Lang.Unit.Alraj:SetRussian("")
+MOD.Alraj.Name = MOD.Lang.Unit.Alraj[KBM.Lang]
 MOD.Descript = MOD.Alraj.Name
 
 -- Ability Dictionary

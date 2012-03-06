@@ -7,6 +7,8 @@ KBMEXDD_Settings = nil
 chKBMEXDD_Settings = nil
 
 local MOD = {
+	Directory = "Experts/Darkening_Deeps/",
+	File = "DDHeader.lua",
 	Header = nil,
 	Enabled = true,
 	IsInstance = true,
@@ -14,6 +16,7 @@ local MOD = {
 	Name = "Darkening Deeps",
 	Type = "Expert",
 	ID = "Darkening_Deeps",
+	Object = "MOD",
 }
 
 -- Link Mods
@@ -21,12 +24,15 @@ local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 KBM.RegisterMod(MOD.Name, MOD)
 
-KBM.Language:Add(MOD.Name)
-KBM.Language[MOD.Name]:SetGerman("Finstere Tiefen")
--- KBM.Language[MOD.Name]:SetFrench("")
--- KBM.Language[MOD.Name]:SetRussian("")
+-- Header Dictionary
+MOD.Lang = {}
+MOD.Lang.Main = {}
+MOD.Lang.Main.Name = KBM.Language:Add(MOD.Name)
+MOD.Lang.Main.Name:SetGerman("Finstere Tiefen")
+-- MOD.Lang.Main.Name:SetFrench("")
+-- MOD.Lang.Main.Name:SetRussian("")
 
-MOD.Name = KBM.Language[MOD.Name][KBM.Lang]
+MOD.Name = MOD.Lang.Main.Name[KBM.Lang]
 MOD.Descript = MOD.Name
 
 function MOD:AddBosses(KBM_Boss)

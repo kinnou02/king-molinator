@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Black",
+	Object = "MOD",
 }
 
 MOD.Black = {
@@ -26,7 +27,7 @@ MOD.Black = {
 	Level = "??",
 	Active = false,
 	Name = "Captain Black Spit",
-	NameShort = "Black",
+	NameShort = "Black Spit",
 	Menu = {},
 	Castbar = nil,
 	Dead = false,
@@ -52,12 +53,17 @@ MOD.Black = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Black = KBM.Language:Add(MOD.Black.Name)
-MOD.Lang.Black:SetGerman("Kapitän Schwarzspuck")
--- MOD.Lang.Black:SetFrench("")
--- MOD.Lang.Black:SetRussian("")
-MOD.Black.Name = MOD.Lang.Black[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Black = KBM.Language:Add(MOD.Black.Name)
+MOD.Lang.Unit.Black:SetGerman("Kapitän Schwarzspuck")
+-- MOD.Lang.Unit.Black:SetFrench("")
+-- MOD.Lang.Unit.Black:SetRussian("")
+MOD.Black.Name = MOD.Lang.Unit.Black[KBM.Lang]
 MOD.Descript = MOD.Black.Name
+MOD.Lang.Unit.BlackShort = KBM.Language:Add(MOD.Black.NameShort)
+MOD.Lang.Unit.BlackShort:SetGerman("Schwarzspuck")
+MOD.Black.NameShort = MOD.Lang.Unit.BlackShort[KBM.Lang]
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}

@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Vallnara",
+	Object = "MOD",
 }
 
 MOD.Vallnara = {
@@ -52,11 +53,13 @@ MOD.Vallnara = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Vallnara = KBM.Language:Add(MOD.Vallnara.Name)
-MOD.Lang.Vallnara:SetGerman("Königin Vallnara")
--- MOD.Lang.Vallnara:SetFrench("")
--- MOD.Lang.Vallnara:SetRussian("")
-MOD.Vallnara.Name = MOD.Lang.Vallnara[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Vallnara = KBM.Language:Add(MOD.Vallnara.Name)
+MOD.Lang.Unit.Vallnara:SetGerman("Königin Vallnara")
+-- MOD.Lang.Unit.Vallnara:SetFrench("")
+-- MOD.Lang.Unit.Vallnara:SetRussian("")
+MOD.Vallnara.Name = MOD.Lang.Unit.Vallnara[KBM.Lang]
 MOD.Descript = MOD.Vallnara.Name
 
 -- Unit Dictionary

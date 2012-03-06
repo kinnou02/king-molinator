@@ -13,11 +13,14 @@ local GSB = KBM.BossMod["Greenscales Blight"]
 
 local OA = {
 	Enabled = true,
+	Directory = GSB.Directory,
+	File = "Aleria.lua",
 	Instance = GSB.Name,
 	HasPhases = true,
 	Lang = {},
 	ID = "Aleria",
 	HasChronicle = true,
+	Object = "OA",
 }
 
 OA.Aleria = {
@@ -49,25 +52,25 @@ OA.Aleria = {
 
 KBM.RegisterMod(OA.ID, OA)
 
-OA.Lang.Aleria = KBM.Language:Add(OA.Aleria.Name)
-OA.Lang.Aleria.German = "Orakel Aleria"
-OA.Lang.Aleria.Russian = "Оракул Алерия"
-OA.Descript = OA.Lang.Aleria[KBM.Lang]
-
--- Unit Dictionary
+-- Main Unit Dictionary
 OA.Lang.Unit = {}
+OA.Lang.Unit.Aleria = KBM.Language:Add(OA.Aleria.Name)
+OA.Lang.Unit.Aleria:SetGerman("Orakel Aleria")
+OA.Lang.Unit.Aleria:SetRussian("Оракул Алерия")
+OA.Descript = OA.Lang.Unit.Aleria[KBM.Lang]
+-- Additional Unit Dictionary
 OA.Lang.Unit.Primal = KBM.Language:Add("Primal Werewolf")
-OA.Lang.Unit.Primal.German = "Ur-Werwolf"
-OA.Lang.Unit.Primal.Russian = "Первобытный оборотень"
+OA.Lang.Unit.Primal:SetGerman("Ur-Werwolf")
+OA.Lang.Unit.Primal:SetRussian("Первобытный оборотень")
 OA.Lang.Unit.Necrotic = KBM.Language:Add("Necrotic Werewolf")
-OA.Lang.Unit.Necrotic.German = "Nekrotischer Werwolf"
-OA.Lang.Unit.Necrotic.Russian = "Разлагающийся оборотень"
+OA.Lang.Unit.Necrotic:SetGerman("Nekrotischer Werwolf")
+OA.Lang.Unit.Necrotic:SetRussian("Разлагающийся оборотень")
 
 -- Debuff Dictionary
 OA.Lang.Debuff = {}
 OA.Lang.Debuff.Necrotic = KBM.Language:Add("Necrotic Eruption")
-OA.Lang.Debuff.Necrotic.German = "Nekrotischer Ausbruch" 
-OA.Lang.Debuff.Necrotic.Russian = "Умервщляющий взрыв"
+OA.Lang.Debuff.Necrotic:SetGerman("Nekrotischer Ausbruch")
+OA.Lang.Debuff.Necrotic:SetRussian("Умервщляющий взрыв")
 
 OA.Primal = {
 	Mod = OA,
@@ -99,7 +102,7 @@ OA.Necrotic = {
 	RaidID = "U2ED1EB3228891BA6",
 }
 
-OA.Aleria.Name = OA.Lang.Aleria[KBM.Lang]
+OA.Aleria.Name = OA.Lang.Unit.Aleria[KBM.Lang]
 
 function OA:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript

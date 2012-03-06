@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Falidor",
+	Object = "MOD",
 }
 
 MOD.Falidor = {
@@ -52,11 +53,13 @@ MOD.Falidor = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Falidor = KBM.Language:Add(MOD.Falidor.Name)
-MOD.Lang.Falidor:SetGerman("Bewahrer Falidor") 
--- MOD.Lang.Falidor:SetFrench("")
--- MOD.Lang.Falidor:SetRussian("")
-MOD.Falidor.Name = MOD.Lang.Falidor[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Falidor = KBM.Language:Add(MOD.Falidor.Name)
+MOD.Lang.Unit.Falidor:SetGerman("Bewahrer Falidor") 
+-- MOD.Lang.Unit.Falidor:SetFrench("")
+-- MOD.Lang.Unit.Falidor:SetRussian("")
+MOD.Falidor.Name = MOD.Lang.Unit.Falidor[KBM.Lang]
 MOD.Descript = MOD.Falidor.Name
 
 -- Ability Dictionary

@@ -12,13 +12,14 @@ local Instance = KBM.BossMod["Darkening Deeps"]
 
 local MOD = {
 	Directory = Instance.Directory,
-	File = "Nuggo.lua",
+	File = "Council.lua",
 	Enabled = true,
 	Instance = Instance.Name,
 	InstanceObj = Instance,
 	HasPhases = true,
 	Lang = {},
-	ID = "Nuggo",
+	ID = "Council",
+	Object = "MOD",
 }
 
 MOD.Nuggo = {
@@ -52,31 +53,38 @@ MOD.Nuggo = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Nuggo = KBM.Language:Add(MOD.Nuggo.Name)
-MOD.Lang.Nuggo:SetGerman("Oberschamane Nuggo")
--- MOD.Lang.Nuggo:SetFrench("")
--- MOD.Lang.Nuggo:SetRussian("")
-MOD.Nuggo.Name = MOD.Lang.Nuggo[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Nuggo = KBM.Language:Add(MOD.Nuggo.Name)
+MOD.Lang.Unit.Nuggo:SetGerman("Oberschamane Nuggo")
+-- MOD.Lang.Unit.Nuggo:SetFrench("")
+-- MOD.Lang.Unit.Nuggo:SetRussian("")
+MOD.Lang.Unit.NuggoShort = KBM.Language:Add(MOD.Nuggo.NameShort)
+MOD.Nuggo.Name = MOD.Lang.Unit.Nuggo[KBM.Lang]
 MOD.Lang.Descript = KBM.Language:Add("The Gedlo Council")
 MOD.Lang.Descript.German = "Gedlo-Rat"
 MOD.Descript = MOD.Lang.Descript[KBM.Lang]
+-- Unit Dictionary
+MOD.Lang.Unit.Swedge = KBM.Language:Add("Warlord Swedge")
+MOD.Lang.Unit.Swedge:SetGerman("Kriegsherr Swedge")
+MOD.Lang.Unit.SwedgeShort = KBM.Language:Add("Swedge")
+MOD.Lang.Unit.SwedgeShort:SetGerman("Swedge")
+MOD.Lang.Unit.Gerbik = KBM.Language:Add("Incinerator Gerbik")
+MOD.Lang.Unit.Gerbik:SetGerman("Entflammer Gerbik")
+MOD.Lang.Unit.GerbikShort = KBM.Language:Add("Gerbik")
+MOD.Lang.Unit.GerbikShort:SetGerman("Gerbik")
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}
 
--- Unit Dictionary
-MOD.Lang.Unit = {}
-MOD.Lang.Unit.Swedge = KBM.Language:Add("Warlord Swedge")
-MOD.Lang.Unit.Swedge.German = "Kriegsherr Swedge"
-MOD.Lang.Unit.Gerbik = KBM.Language:Add("Incinerator Gerbik")
-MOD.Lang.Unit.Gerbik.German = "Entflammer Gerbik"
+
 
 MOD.Swedge = {
 	Mod = MOD,
 	Level = 52,
 	Active = false,
 	Name = MOD.Lang.Unit.Swedge[KBM.Lang],
-	NameShort = "Swedge",
+	NameShort = MOD.Lang.Unit.SwedgeShort[KBM.Lang],
 	Menu = {},
 	Dead = false,
 	Available = false,
@@ -90,7 +98,7 @@ MOD.Gerbik = {
 	Level = 52,
 	Active = false,
 	Name = MOD.Lang.Unit.Gerbik[KBM.Lang],
-	NameShort = "Gerbik",
+	NameShort = MOD.Lang.Unit.GerbikShort[KBM.Lang],
 	Menu = {},
 	Dead = false,
 	Available = false,

@@ -12,12 +12,15 @@ local KBM = AddonData.data
 local GP = KBM.BossMod["Gilded Prophecy"]
 
 local AF = {
+	Directory = GP.Directory,
+	File = "Anrak.lua",
 	Enabled = true,
 	Instance = GP.Name,
 	Lang = {},
 	ID = "Anrak",
 	Enrage = 60 * 7,
-	}
+	Object = "AF",
+}
 
 AF.Anrak = {
 	Mod = AF,
@@ -46,40 +49,42 @@ AF.Anrak = {
 
 KBM.RegisterMod(AF.ID, AF)
 
-AF.Lang.Anrak = KBM.Language:Add(AF.Anrak.Name)
-AF.Lang.Anrak:SetGerman("Anrak der Üble")
-AF.Lang.Anrak:SetFrench("Anrak l'ignoble")
-AF.Lang.Anrak:SetRussian("Анрак Скверный")
+-- Main Unit Dictionary
+AF.Lang.Unit = {}
+AF.Lang.Unit.Anrak = KBM.Language:Add(AF.Anrak.Name)
+AF.Lang.Unit.Anrak:SetGerman("Anrak der Üble")
+AF.Lang.Unit.Anrak:SetFrench("Anrak l'ignoble")
+AF.Lang.Unit.Anrak:SetRussian("Анрак Скверный")
 
-AF.Anrak.Name = AF.Lang.Anrak[KBM.Lang]
+AF.Anrak.Name = AF.Lang.Unit.Anrak[KBM.Lang]
 AF.Descript = AF.Anrak.Name
 
 -- Ability Dictionary
 AF.Lang.Ability = {}
 AF.Lang.Ability.Spines = KBM.Language:Add("Spines of Earth")
-AF.Lang.Ability.Spines.German = "Stacheln der Erde"
-AF.Lang.Ability.Spines.Russian = "Гребни Земли"
+AF.Lang.Ability.Spines:SetGerman("Stacheln der Erde")
+AF.Lang.Ability.Spines:SetRussian("Гребни Земли")
 AF.Lang.Ability.Strike = KBM.Language:Add("Vicious Tail Strike")
-AF.Lang.Ability.Strike.German = "Bösartiger Schweifschlag"
-AF.Lang.Ability.Strike.Russian = "Злобный удар хвостом"
+AF.Lang.Ability.Strike:SetGerman("Bösartiger Schweifschlag")
+AF.Lang.Ability.Strike:SetRussian("Злобный удар хвостом")
 AF.Lang.Ability.Call = KBM.Language:Add("Call of Anrak")
-AF.Lang.Ability.Call.German = "Ruf von Anrak"
-AF.Lang.Ability.Call.Russian = "Зов Анрака"
+AF.Lang.Ability.Call:SetGerman("Ruf von Anrak")
+AF.Lang.Ability.Call:SetRussian("Зов Анрака")
 AF.Lang.Ability.Bond = KBM.Language:Add("Bond of the Earth")
-AF.Lang.Ability.Bond.German = "Bande der Erde"
-AF.Lang.Ability.Bond.Russian = "Земляное усиление"
+AF.Lang.Ability.Bond:SetGerman("Bande der Erde")
+AF.Lang.Ability.Bond:SetRussian("Земляное усиление")
 
 -- Debuff Dictionary
 AF.Lang.Debuff = {}
 AF.Lang.Debuff.Brittle = KBM.Language:Add("Brittle")
-AF.Lang.Debuff.Brittle.German = "Brüchig"
-AF.Lang.Debuff.Brittle.Russian = "Хрупкость"
+AF.Lang.Debuff.Brittle:SetGerman("Brüchig")
+AF.Lang.Debuff.Brittle:SetRussian("Хрупкость")
 
 -- Menu Dictionary
 AF.Lang.Menu = {}
 AF.Lang.Menu.Spines = KBM.Language:Add("Spines cast warning")
-AF.Lang.Menu.Spines.German = "Stacheln Zauber Warnung"
-AF.Lang.Menu.Spines.Russian = "Каст гребней земли" 
+AF.Lang.Menu.Spines:SetGerman("Stacheln Zauber Warnung")
+AF.Lang.Menu.Spines:SetRussian("Каст гребней земли")
 
 function AF:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript

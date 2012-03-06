@@ -12,11 +12,14 @@ local KBM = AddonData.data
 local GP = KBM.BossMod["Gilded Prophecy"]
 
 local TR = {
+	Directory = GP.Directory,
+	File = "Thalguur.lua",
 	Enabled = true,
 	Instance = GP.Name,
 	Lang = {},
 	ID = "Thalguur",
-	}
+	Object = "TR",
+}
 
 TR.Thalguur = {
 	Mod = TR,
@@ -49,26 +52,29 @@ TR.Thalguur = {
 
 KBM.RegisterMod(TR.ID, TR)
 
-TR.Lang.Thalguur = KBM.Language:Add(TR.Thalguur.Name)
-TR.Lang.Thalguur:SetRussian("Талгуур")
-TR.Thalguur.Name = TR.Lang.Thalguur[KBM.Lang]
+-- Main Unit Dictionary
+TR.Lang.Unit = {}
+TR.Lang.Unit.Thalguur = KBM.Language:Add(TR.Thalguur.Name)
+TR.Lang.Unit.Thalguur:SetGerman("Thalguur")
+TR.Lang.Unit.Thalguur:SetRussian("Талгуур")
+TR.Thalguur.Name = TR.Lang.Unit.Thalguur[KBM.Lang]
 
 -- Ability Dictionary
 TR.Lang.Ability = {}
 TR.Lang.Ability.Touch = KBM.Language:Add("Touch of the Core")
-TR.Lang.Ability.Touch.German = "Berührung des Kerns"
-TR.Lang.Ability.Touch.Russian = "Прикосновение ядра"
+TR.Lang.Ability.Touch:SetGerman("Berührung des Kerns")
+TR.Lang.Ability.Touch:SetRussian("Прикосновение ядра")
 TR.Lang.Ability.Power = KBM.Language:Add("Absorb Power")
-TR.Lang.Ability.Power.German = "Kraft absorbieren"
+TR.Lang.Ability.Power:SetGerman("Kraft absorbieren")
 
 -- Debuff Dictionary
 TR.Lang.Debuff = {}
 TR.Lang.Debuff.Gold = KBM.Language:Add("Call of Gold")
-TR.Lang.Debuff.Gold.German = "Ruf des Goldes"
-TR.Lang.Debuff.Gold.Russian = "Зов золота"
+TR.Lang.Debuff.Gold:SetGerman("Ruf des Goldes")
+TR.Lang.Debuff.Gold:SetRussian("Зов золота")
 TR.Lang.Debuff.Curse = KBM.Language:Add("Curse of Greed")
-TR.Lang.Debuff.Curse.German = "Fluch der Gier"
-TR.Lang.Debuff.Curse.Russian = "Проклятие жадности"
+TR.Lang.Debuff.Curse:SetGerman("Fluch der Gier")
+TR.Lang.Debuff.Curse:SetRussian("Проклятие жадности")
 
 TR.Descript = TR.Thalguur.Name
 

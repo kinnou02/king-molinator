@@ -12,6 +12,8 @@ local HK = KBM.BossMod["Hammerknell"]
 
 local ID = {
 	Enabled = true,
+	Directory = HK.Directory,
+	File = "Inwar.lua",
 	Counts = {
 		Slimes = 0,
 		Wranglers = 0,
@@ -22,6 +24,7 @@ local ID = {
 	Phase = 1,
 	Lang = {},
 	ID = "Inwar",
+	Object = "ID",
 }
 
 ID.Inwar = {
@@ -32,6 +35,7 @@ ID.Inwar = {
 	Dead = false,
 	Available = false,
 	TimersRef = {},
+	AlertsRef = {},
 	Menu = {},
 	UnitID = nil,
 	Primary = true,
@@ -43,7 +47,17 @@ ID.Inwar = {
 			Enabled = true,
 			Geyser = KBM.Defaults.TimerObj.Create("blue"),
 			GeyserFirst = KBM.Defaults.TimerObj.Create("blue"),
+			Tide = KBM.Defaults.TimerObj.Create("purple"),
+			Surge = KBM.Defaults.TimerObj.Create("red"),
+			Storm = KBM.Defaults.TimerObj.Create("cyan"),
 		},
+		AlertsRef = {
+			Enabled = true,
+			Tide = KBM.Defaults.AlertObj.Create("purple"),
+			Surge = KBM.Defaults.AlertObj.Create("red"),
+			SurgeWarn = KBM.Defaults.AlertObj.Create("orange"),
+			Storm = KBM.Defaults.AlertObj.Create("cyan"),
+		}
 	}
 }
 
@@ -123,9 +137,10 @@ ID.Rotjaw = {
 
 ID.Slime = {
 	Mod = ID,
-	Level = "??",
+	Level = 50,
 	Name = "Fetid Slime",
 	UnitList = {},
+	RaidID = "U26D645C839878645",
 	Ignore = true,
 	Type = "multi",
 }
@@ -143,6 +158,7 @@ ID.Warden = {
 	Mod = ID,
 	Level = "??",
 	Name = "Tide Warden",
+	RaidID = "U542EF20217904738",
 	UnitList = {},
 	Ignore = true,
 	Type = "multi",
@@ -151,50 +167,59 @@ ID.Warden = {
 KBM.RegisterMod(ID.ID, ID)
 
 -- Initialize Main Unit Dictionary
-ID.Lang.Inwar = KBM.Language:Add(ID.Inwar.Name)
-ID.Lang.Inwar.German = "Inwar Dunkelflut"
-ID.Lang.Inwar.French = "Inwar Noirflux"
-ID.Lang.Inwar.Russian = "Инвар Темная Волна"
-ID.Lang.Denizar = KBM.Language:Add(ID.Denizar.Name)
-ID.Lang.Denizar.Russian = "Денизар"
-ID.Lang.Aqualix = KBM.Language:Add(ID.Aqualix.Name)
-ID.Lang.Aqualix.Russian = "Акваликс"
-ID.Lang.Undertow = KBM.Language:Add(ID.Undertow.Name)
-ID.Lang.Undertow.German = "Sog"
-ID.Lang.Undertow.Russian = "Подводное течение"
-ID.Lang.Rotjaw = KBM.Language:Add(ID.Rotjaw.Name)
-ID.Lang.Rotjaw.German = "Faulkriefer"
-ID.Lang.Rotjaw.Russian = "Гнилая челюсть"
-
--- Unit Dictionary
 ID.Lang.Unit = {}
+ID.Lang.Unit.Inwar = KBM.Language:Add(ID.Inwar.Name)
+ID.Lang.Unit.Inwar:SetGerman("Inwar Dunkelflut")
+ID.Lang.Unit.Inwar:SetFrench("Inwar Noirflux")
+ID.Lang.Unit.Inwar:SetRussian("Инвар Темная Волна")
+ID.Lang.Unit.Denizar = KBM.Language:Add(ID.Denizar.Name)
+ID.Lang.Unit.Denizar:SetGerman("Denizar")
+ID.Lang.Unit.Denizar:SetFrench("Denizar")
+ID.Lang.Unit.Denizar:SetRussian("Денизар")
+ID.Lang.Unit.Aqualix = KBM.Language:Add(ID.Aqualix.Name)
+ID.Lang.Unit.Aqualix:SetGerman("Aqualix")
+ID.Lang.Unit.Aqualix:SetFrench("Aqualix")
+ID.Lang.Unit.Aqualix:SetRussian("Акваликс")
+ID.Lang.Unit.Undertow = KBM.Language:Add(ID.Undertow.Name)
+ID.Lang.Unit.Undertow:SetGerman("Sog")
+ID.Lang.Unit.Undertow:SetRussian("Подводное течение")
+ID.Lang.Unit.Rotjaw = KBM.Language:Add(ID.Rotjaw.Name)
+ID.Lang.Unit.Rotjaw:SetGerman("Faulkriefer")
+ID.Lang.Unit.Rotjaw:SetRussian("Гнилая челюсть")
+-- Sub Unit Dictionary
 ID.Lang.Unit.Slime = KBM.Language:Add(ID.Slime.Name)
-ID.Lang.Unit.Slime.German = "Stinkender Schleim"
-ID.Lang.Unit.Slime.Russian = "Зловонный слизень"
+ID.Lang.Unit.Slime:SetGerman("Stinkender Schleim")
+ID.Lang.Unit.Slime:SetRussian("Зловонный слизень")
 ID.Lang.Unit.Wrangler = KBM.Language:Add(ID.Wrangler.Name)
-ID.Lang.Unit.Wrangler.German = "Krabbelklauen-Zänker" 
---ID.Lang.Unit.Wrangler.Russian = "Scuttle Claw Wrangler"
+ID.Lang.Unit.Wrangler:SetGerman("Krabbelklauen-Zänker")
 ID.Lang.Unit.Warden = KBM.Language:Add(ID.Warden.Name)
-ID.Lang.Unit.Warden.German = "Gezeitenbewahrer"
-ID.Lang.Unit.Warden.Russian = "Страж прилива"
+ID.Lang.Unit.Warden:SetGerman("Gezeitenbewahrer")
+ID.Lang.Unit.Warden:SetRussian("Страж прилива")
 
 -- Ability Dictionary
 ID.Lang.Ability = {}
 ID.Lang.Ability.Freeze = KBM.Language:Add("Freezing Wave")
-ID.Lang.Ability.Freeze.German = "Frostwelle"
+ID.Lang.Ability.Freeze:SetGerman("Frostwelle")
+ID.Lang.Ability.Tide = KBM.Language:Add("Dark Tide")
+ID.Lang.Ability.Surge = KBM.Language:Add("Surge")
+ID.Lang.Ability.Storm = KBM.Language:Add("Storm Lash")
 
 -- Mechanic Dictionary
 ID.Lang.Mechanic = {}
 ID.Lang.Mechanic.Geyser = KBM.Language:Add("Geyser")
-ID.Lang.Mechanic.Geyser.German = "Geysir"
-ID.Lang.Mechanic.Geyser.Russian = "Гейзер"
+ID.Lang.Mechanic.Geyser:SetGerman("Geysir")
+ID.Lang.Mechanic.Geyser:SetRussian("Гейзер")
+
+-- Menu Dictionary
+ID.Lang.Menu = {}
+ID.Lang.Menu.Surge = KBM.Language:Add("Surge (Duration)")
 
 -- Adjust Unit Names to match Client
-ID.Inwar.Name = ID.Lang.Inwar[KBM.Lang]
-ID.Denizar.Name = ID.Lang.Denizar[KBM.Lang]
-ID.Aqualix.Name = ID.Lang.Aqualix[KBM.Lang]
-ID.Undertow.Name = ID.Lang.Undertow[KBM.Lang]
-ID.Rotjaw.Name = ID.Lang.Rotjaw[KBM.Lang]
+ID.Inwar.Name = ID.Lang.Unit.Inwar[KBM.Lang]
+ID.Denizar.Name = ID.Lang.Unit.Denizar[KBM.Lang]
+ID.Aqualix.Name = ID.Lang.Unit.Aqualix[KBM.Lang]
+ID.Undertow.Name = ID.Lang.Unit.Undertow[KBM.Lang]
+ID.Rotjaw.Name = ID.Lang.Unit.Rotjaw[KBM.Lang]
 ID.Slime.Name = ID.Lang.Unit.Slime[KBM.Lang]
 ID.Wrangler.Name = ID.Lang.Unit.Wrangler[KBM.Lang]
 ID.Warden.Name = ID.Lang.Unit.Warden[KBM.Lang]
@@ -221,6 +246,8 @@ function ID:AddBosses(KBM_Boss)
 	KBM.SubBoss[self.Slime.Name] = self.Slime
 	KBM.SubBoss[self.Wrangler.Name] = self.Wrangler
 	KBM.SubBoss[self.Warden.Name] = self.Warden
+	KBM.SubBossID[self.Slime.RaidID] = self.Slime
+	KBM.SubBossID[self.Warden.RaidID] = self.Warden
 	
 	self.Inwar.Settings.CastBar.Override = true
 	self.Inwar.Settings.CastBar.Multi = true
@@ -249,6 +276,7 @@ function ID:InitVars()
 		Inwar = {
 			CastBar = self.Inwar.Settings.CastBar,
 			TimersRef = self.Inwar.Settings.TimersRef,
+			AlertsRef = self.Inwar.Settings.AlertsRef,
 		},
 		Rotjaw = {
 			CastBar = self.Rotjaw.Settings.CastBar,
@@ -325,8 +353,8 @@ function ID.PhaseTwo()
 	ID.Phase = 2
 	ID.PhaseObj.Objectives:Remove()
 	ID.PhaseObj:SetPhase(2)
-	ID.PhaseObj.Objectives:AddDeath(ID.Slime.Name, 15)
-	ID.PhaseObj.Objectives:AddDeath(ID.Wrangler.Name, 3)	
+	ID.PhaseObj.Objectives:AddDeath(ID.Slime.Name, 3, true)
+	ID.PhaseObj.Objectives:AddDeath(ID.Wrangler.Name, 3)
 	ID.PhaseObj.Objectives:AddDeath(ID.Warden.Name, 2)
 	KBM.MechTimer:AddStart(ID.Inwar.TimersRef.GeyserFirst)
 end
@@ -506,6 +534,31 @@ function ID.Inwar:SetAlerts(bool)
 	end
 end
 
+function ID.Denizar:SetTimers(bool)
+	if bool then
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = TimerObj.Settings.Enabled
+		end
+	else
+		for TimerID, TimerObj in pairs(self.TimersRef) do
+			TimerObj.Enabled = false
+		end
+	end
+end
+
+function ID.Denizar:SetAlerts(bool)
+	if bool then
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = AlertObj.Settings.Enabled
+		end
+	else
+		for AlertID, AlertObj in pairs(self.AlertsRef) do
+			AlertObj.Enabled = false
+		end
+	end
+end
+
+
 function ID:DefineMenu()
 	self.Menu = HK.Menu:CreateEncounter(self.Inwar, self.Enabled)
 end
@@ -526,13 +579,34 @@ function ID:Start()
 	self.Inwar.TimersRef.Geyser:NoMenu()
 	self.Inwar.TimersRef.Geyser:SetPhase(3)
 	self.Inwar.TimersRef.GeyserFirst:AddTimer(self.Inwar.TimersRef.Geyser, 0)
-	
+	self.Inwar.TimersRef.Tide = KBM.MechTimer:Add(self.Lang.Ability.Tide[KBM.Lang], 60)
+	self.Inwar.TimersRef.Surge = KBM.MechTimer:Add(self.Lang.Ability.Surge[KBM.Lang], 60)
+	self.Inwar.TimersRef.Storm = KBM.MechTimer:Add(self.Lang.Ability.Storm[KBM.Lang], 65)
 	KBM.Defaults.TimerObj.Assign(self.Inwar)
+	
+	-- Create Inwars Alerts
+	self.Inwar.AlertsRef.Tide = KBM.Alert:Create(self.Lang.Ability.Tide[KBM.Lang], nil, false, true, "purple")
+	self.Inwar.AlertsRef.Surge = KBM.Alert:Create(self.Lang.Ability.Surge[KBM.Lang], nil, false, true, "red")
+	self.Inwar.AlertsRef.Surge.MenuName = self.Lang.Menu.Surge[KBM.Lang]
+	self.Inwar.AlertsRef.SurgeWarn = KBM.Alert:Create(self.Lang.Ability.Surge[KBM.Lang], nil, true, true, "orange")
+	self.Inwar.AlertsRef.Storm = KBM.Alert:Create(self.Lang.Ability.Storm[KBM.Lang], nil, true, true, "cyan")
+	KBM.Defaults.AlertObj.Assign(self.Inwar)
 	
 	-- Create Triggers
 	self.Denizar.Triggers.Freeze = KBM.Trigger:Create(self.Lang.Ability.Freeze[KBM.Lang], "cast", self.Denizar)
 	self.Denizar.Triggers.Freeze:AddTimer(self.Denizar.TimersRef.Freeze)
 	self.Denizar.Triggers.Freeze:AddAlert(self.Denizar.AlertsRef.Freeze)
+	self.Inwar.Triggers.Tide = KBM.Trigger:Create(self.Lang.Ability.Tide[KBM.Lang], "cast", self.Inwar)
+	self.Inwar.Triggers.Tide:AddAlert(self.Inwar.AlertsRef.Tide)
+	self.Inwar.Triggers.Tide:AddTimer(self.Inwar.TimersRef.Tide)
+	self.Inwar.Triggers.SurgeWarn = KBM.Trigger:Create(self.Lang.Ability.Surge[KBM.Lang], "cast", self.Inwar)
+	self.Inwar.Triggers.SurgeWarn:AddTimer(self.Inwar.TimersRef.Surge)
+	self.Inwar.Triggers.SurgeWarn:AddAlert(self.Inwar.AlertsRef.SurgeWarn)
+	self.Inwar.Triggers.Surge = KBM.Trigger:Create(self.Lang.Ability.Surge[KBM.Lang], "buff", self.Inwar)
+	self.Inwar.Triggers.Surge:AddAlert(self.Inwar.AlertsRef.Surge)
+	self.Inwar.Triggers.Storm = KBM.Trigger:Create(self.Lang.Ability.Storm[KBM.Lang], "cast", self.Inwar)
+	self.Inwar.Triggers.Storm:AddAlert(self.Inwar.AlertsRef.Storm)
+	self.Inwar.Triggers.Storm:AddTimer(self.Inwar.TimersRef.Storm)
 
 	self.Inwar.CastBar = KBM.CastBar:Add(self, self.Inwar, true)
 	self.Aqualix.CastBar = KBM.CastBar:Add(self, self.Aqualix, true)

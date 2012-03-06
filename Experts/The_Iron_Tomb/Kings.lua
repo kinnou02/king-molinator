@@ -12,7 +12,7 @@ local Instance = KBM.BossMod["The Iron Tomb"]
 
 local MOD = {
 	Directory = Instance.Directory,
-	File = "Laric.lua",
+	File = "Kings.lua",
 	Enabled = true,
 	Instance = Instance.Name,
 	InstanceObj = Instance,
@@ -21,6 +21,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Laric",
+	Object = "MOD",
 }
 
 MOD.Laric = {
@@ -55,31 +56,38 @@ MOD.Laric = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Laric = KBM.Language:Add(MOD.Laric.Name)
-MOD.Lang.Laric:SetGerman("Laric der Fromme")
--- MOD.Lang.Laric:SetFrench("")
--- MOD.Lang.Laric:SetRussian("")
-MOD.Laric.Name = MOD.Lang.Laric[KBM.Lang]
-MOD.Lang.Descript = KBM.Language:Add("The Three Kings")
-MOD.Lang.Descript:SetGerman("Die drei Könige")
-MOD.Descript = MOD.Lang.Descript[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Laric = KBM.Language:Add(MOD.Laric.Name)
+MOD.Lang.Unit.Laric:SetGerman("Laric der Fromme")
+MOD.Laric.Name = MOD.Lang.Unit.Laric[KBM.Lang]
+MOD.Lang.Unit.LaricShort = KBM.Language:Add(MOD.Laric.NameShort)
+MOD.Lang.Unit.LaricShort:SetGerman("Laric")
+MOD.Laric.NameShort = MOD.Lang.Unit.LaricShort[KBM.Lang]
+MOD.Lang.Unit.Derribec = KBM.Language:Add("Derribec the Magus")
+MOD.Lang.Unit.Derribec:SetGerman("Derribec der Magier")
+MOD.Lang.Unit.DerribecShort = KBM.Language:Add("Derribec")
+MOD.Lang.Unit.DerribecShort:SetGerman("Derribec")
+MOD.Lang.Unit.Humbart = KBM.Language:Add("Humbart the Bold")
+MOD.Lang.Unit.Humbart:SetGerman("Humbart der Verwegene")
+MOD.Lang.Unit.HumbartShort = KBM.Language:Add("Humbart")
+MOD.Lang.Unit.HumbartShort:SetGerman("Humbart")
+
+-- Mod Description
+MOD.Lang.Verbose = {}
+MOD.Lang.Verbose.Descript = KBM.Language:Add("The Three Kings")
+MOD.Lang.Verbose.Descript:SetGerman("Die drei Könige")
+MOD.Descript = MOD.Lang.Verbose.Descript[KBM.Lang]
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}
-
--- Unit Dictionary
-MOD.Lang.Unit = {}
-MOD.Lang.Unit.Derribec = KBM.Language:Add("Derribec the Magus")
-MOD.Lang.Unit.Derribec.German = "Derribec der Magier"
-MOD.Lang.Unit.Humbart = KBM.Language:Add("Humbart the Bold")
-MOD.Lang.Unit.Humbart.German = "Humbart der Verwegene"
 
 MOD.Derribec = {
 	Mod = MOD,
 	Level = 52,
 	Active = false,
 	Name = MOD.Lang.Unit.Derribec[KBM.Lang],
-	NameShort = "Derribec",
+	NameShort = MOD.Lang.Unit.DerribecShort[KBM.Lang],
 	Menu = {},
 	Dead = false,
 	Available = false,
@@ -93,7 +101,7 @@ MOD.Humbart = {
 	Level = 52,
 	Active = false,
 	Name = MOD.Lang.Unit.Humbart[KBM.Lang],
-	NameShort = "Humbart",
+	NameShort = MOD.Lang.Unit.HumbartShort[KBM.Lang],
 	Menu = {},
 	Dead = false,
 	Available = false,

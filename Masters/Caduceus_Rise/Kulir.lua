@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "MM_Kulir",
+	Object = "MOD",
 }
 
 MOD.Kulir = {
@@ -52,11 +53,13 @@ MOD.Kulir = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Kulir = KBM.Language:Add(MOD.Kulir.Name)
-MOD.Lang.Kulir:SetGerman("Kopfgeldjäger Kulir")
--- MOD.Lang.Kulir:SetFrench("")
--- MOD.Lang.Kulir:SetRussian("")
-MOD.Kulir.Name = MOD.Lang.Kulir[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Kulir = KBM.Language:Add(MOD.Kulir.Name)
+MOD.Lang.Unit.Kulir:SetGerman("Kopfgeldjäger Kulir")
+-- MOD.Lang.Unit.Kulir:SetFrench("")
+-- MOD.Lang.Unit.Kulir:SetRussian("")
+MOD.Kulir.Name = MOD.Lang.Unit.Kulir[KBM.Lang]
 MOD.Descript = MOD.Kulir.Name
 
 -- Ability Dictionary

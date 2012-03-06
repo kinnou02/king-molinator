@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "MM_Coalgut",
+	Object = "MOD",
 }
 
 MOD.Coalgut = {
@@ -52,11 +53,13 @@ MOD.Coalgut = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Coalgut = KBM.Language:Add(MOD.Coalgut.Name)
-MOD.Lang.Coalgut:SetGerman("Kohlbauch")
--- MOD.Lang.Coalgut:SetFrench("")
--- MOD.Lang.Coalgut:SetRussian("")
-MOD.Coalgut.Name = MOD.Lang.Coalgut[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Coalgut = KBM.Language:Add(MOD.Coalgut.Name)
+MOD.Lang.Unit.Coalgut:SetGerman("Kohlbauch")
+-- MOD.Lang.Unit.Coalgut:SetFrench("")
+-- MOD.Lang.Unit.Coalgut:SetRussian("")
+MOD.Coalgut.Name = MOD.Lang.Unit.Coalgut[KBM.Lang]
 MOD.Descript = MOD.Coalgut.Name
 
 -- Ability Dictionary

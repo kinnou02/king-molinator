@@ -410,16 +410,29 @@ function KBM.InitTabs()
 				GUI.Text:SetPoint("CENTERLEFT", GUI.Check, "CENTERRIGHT")
 				GUI.Text:SetLayer(2)
 				GUI.Side = Side
+				
 				function GUI:SetText(Text)
 					self.ShadowText:SetText(Text)
 					self.Text:SetText(Text)
 				end
+				
 				local Last = GUI.Text
 				GUI.ColorObj = {}
+				
+				function GUI:SetColor(Color)
+					self.Active = false
+					if self.Color then
+						self.ColorObj[self.Color].Check:SetChecked(false)
+					end
+					self.ColorObj[Color].Check:SetChecked(true)
+					self.Color = Color
+					self.Active = true
+				end
+				
 				for ColorID, ColorData in pairs(KBM.Colors.List) do
 					GUI.ColorObj[ColorID] = {}
 					GUI.ColorObj[ColorID].Frame = UI.CreateFrame("Frame", "ColorObj_"..ColorData.Name, GUI.Frame)
-					GUI.ColorObj[ColorID].Frame:SetHeight(30)
+					GUI.ColorObj[ColorID].Frame:SetHeight(28)
 					GUI.ColorObj[ColorID].Frame:SetPoint("RIGHT", GUI.Frame, "RIGHT")
 					GUI.ColorObj[ColorID].Frame:SetPoint("TOPLEFT", Last, "BOTTOMLEFT", 0, 4)
 					GUI.ColorObj[ColorID].Frame:SetBackgroundColor(ColorData.Red, ColorData.Green, ColorData.Blue, 0.33)
@@ -2003,6 +2016,11 @@ function KBM.InitOptions()
 					
 					function Option:Display()
 						if self.Type == "color" then
+							if self.Data.Settings.Custom then
+								self.Color = self.Data.Settings.Color
+							else
+								self.Color = self.Data.Color
+							end
 							self.GUI = KBM.Tabs.List[self.Header.Tab]:PullColorGUI(self.Header.Side, self.Color)
 						else
 							self.GUI = KBM.Tabs.List[self.Header.Tab]:PullChild(self.Header.Side)
@@ -2173,7 +2191,7 @@ function KBM.InitOptions()
 								self.GUI.Text:SetAlpha(1)
 								self.GUI.Check:SetEnabled(true)
 								if self.Type == "color" then
-									self.GUI:SetEnabled(self.Data.Custom)
+									self.GUI:SetEnabled(self.Data.Settings.Custom)
 								end
 							end
 						else
@@ -2541,9 +2559,13 @@ function KBM.InitOptions()
 									if not Color then
 										self.Data.Settings.Custom = bool
 										self.GUI:SetEnabled(bool)
+										if bool then
+											self.GUI:SetColor(self.Data.Settings.Color)
+										else
+											self.GUI:SetColor(self.Data.Color)
+										end
 									elseif Color then
 										self.Manager.Data.Settings.Color = Color
-										self.Manager.Color = Color
 									end								
 								end
 							
@@ -2566,7 +2588,11 @@ function KBM.InitOptions()
 								BossObj.Menu.Timers[TimerID].ColorGUI = SubHeader:CreateOption(KBM.Language.Color.Custom[KBM.Lang], "color", Callbacks.Color)
 								BossObj.Menu.Timers[TimerID].ColorGUI:SetChecked(TimerData.Settings.Custom)
 								BossObj.Menu.Timers[TimerID].ColorGUI.Enabled = TimerData.Settings.Enabled
-								BossObj.Menu.Timers[TimerID].ColorGUI.Color = TimerData.Settings.Color
+								if TimerData.Settings.Custom then
+									BossObj.Menu.Timers[TimerID].ColorGUI.Color = TimerData.Settings.Color
+								else
+									BossObj.Menu.Timers[TimerID].ColorGUI.Color = TimerData.Color
+								end
 								BossObj.Menu.Timers[TimerID].ColorGUI.Data = TimerData
 							end
 						end

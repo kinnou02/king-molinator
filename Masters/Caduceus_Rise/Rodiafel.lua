@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "MM_Rodiafel",
+	Object = "MOD",
 }
 
 MOD.Rodiafel = {
@@ -52,11 +53,13 @@ MOD.Rodiafel = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Rodiafel = KBM.Language:Add(MOD.Rodiafel.Name)
-MOD.Lang.Rodiafel:SetGerman("Rodiafel")
--- MOD.Lang.Rodiafel:SetFrench("")
--- MOD.Lang.Rodiafel:SetRussian("")
-MOD.Rodiafel.Name = MOD.Lang.Rodiafel[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Rodiafel = KBM.Language:Add(MOD.Rodiafel.Name)
+MOD.Lang.Unit.Rodiafel:SetGerman("Rodiafel")
+-- MOD.Lang.Unit.Rodiafel:SetFrench("")
+-- MOD.Lang.Unit.Rodiafel:SetRussian("")
+MOD.Rodiafel.Name = MOD.Lang.Unit.Rodiafel[KBM.Lang]
 MOD.Descript = MOD.Rodiafel.Name
 
 -- Ability Dictionary

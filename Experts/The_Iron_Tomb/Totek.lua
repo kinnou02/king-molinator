@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Totek",
+	Object = "MOD",
 }
 
 MOD.Totek = {
@@ -52,11 +53,13 @@ MOD.Totek = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Totek = KBM.Language:Add(MOD.Totek.Name)
-MOD.Lang.Totek:SetGerman("Totek der Alte") 
--- MOD.Lang.Totek:SetFrench("")
--- MOD.Lang.Totek:SetRussian("")
-MOD.Totek.Name = MOD.Lang.Totek[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Totek = KBM.Language:Add(MOD.Totek.Name)
+MOD.Lang.Unit.Totek:SetGerman("Totek der Alte") 
+-- MOD.Lang.Unit.Totek:SetFrench("")
+-- MOD.Lang.Unit.Totek:SetRussian("")
+MOD.Totek.Name = MOD.Lang.Unit.Totek[KBM.Lang]
 MOD.Descript = MOD.Totek.Name
 
 -- Ability Dictionary

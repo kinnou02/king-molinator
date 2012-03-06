@@ -1,4 +1,30 @@
-﻿v0.9.8
+﻿v0.9.9
+
+Translation System
+* New: A new "How To Translate" page is being written to help keep translations unified with the new system.
+* Change: Major changes to the Translation Engine.
+* Change: Main translations are now stored in KBMLocaleManager/Locale.lua
+* Change: All existing Units should now be inline with the new dictionary naming conventions.
+* Note: Some existing dictionary groups (possibly none now) may fall outside the reports scope. These will be converted as found.
+* Note: Encounter translations will remain in their respective mods. These will be pointed to if a translation is missing.
+* New: Slash Command /kbmlocale (will list total number missing translations for each Language, and a list of missing translations for the current language)
+* Note: /kbmlocale will return a group object stating Directory, File name and list of missing translations for that file or files.
+
+Mechanic Timers
+* Colors
+** Change: Default colors for new and existing timers are now correctly intitialized.
+** Change: When selecting a new custom color, the default color will now be remembered and reinstated should you switch off custom colors.
+** Change: The custom color used will be remembered should you reinstate custom color mode.
+
+Hammerknell
+* Inwar Darktide
+** New: Screen alert and timer for Dark Tide raid wide damaging ability.
+** New: Screen alert and timer for Surge.
+** New: Screen alert and timer for Storm Lash.
+** Fixed: Denizar's alerts and timers group option errors.
+
+----
+v0.9.8
 
 Library Structure
 * Change: KBM now uses the global version of Safe's Raid Manager. (v1.1.1)

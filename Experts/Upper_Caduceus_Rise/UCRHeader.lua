@@ -7,13 +7,15 @@ KBMEXUCR_Settings = nil
 chKBMEXUCR_Settings = nil
 
 local MOD = {
-	Directory = "Upper_Caduceus_Rise",
+	Directory = "Experts/Upper_Caduceus_Rise/",
+	File = "UCRHeader.lua",
 	Header = nil,
 	Enabled = true,
 	IsInstance = true,
 	Name = "Upper Caduceus Rise",
 	Type = "Expert",
 	ID = "Upper_Caduceus_Rise",
+	Object = "MOD",
 }
 
 -- Link Mods
@@ -21,12 +23,15 @@ local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 KBM.RegisterMod(MOD.Name, MOD)
 
-KBM.Language:Add(MOD.Name)
-KBM.Language[MOD.Name]:SetGerman("Obere Hermesstab-Anhöhe")
--- KBM.Language[MOD.Name]:SetFrench("")
--- KBM.Language[MOD.Name]:SetRussian("")
+-- Header Dictionary
+MOD.Lang = {}
+MOD.Lang.Main = {}
+MOD.Lang.Main.Name = KBM.Language:Add(MOD.Name)
+MOD.Lang.Main.Name:SetGerman("Obere Hermesstab-Anhöhe")
+-- MOD.Lang.Main.Name:SetFrench("")
+-- MOD.Lang.Main.Name:SetRussian("")
 
-MOD.Name = KBM.Language[MOD.Name][KBM.Lang]
+MOD.Name = MOD.Lang.Main.Name[KBM.Lang]
 MOD.Descript = MOD.Name
 
 function MOD:AddBosses(KBM_Boss)

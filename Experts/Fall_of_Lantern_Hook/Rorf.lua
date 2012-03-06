@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Rorf",
+	Object = "MOD",
 }
 
 MOD.Rorf = {
@@ -51,24 +52,24 @@ MOD.Rorf = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Rorf = KBM.Language:Add(MOD.Rorf.Name)
-MOD.Lang.Rorf:SetGerman("Rorf")
--- MOD.Lang.Rorf:SetFrench("")
--- MOD.Lang.Rorf:SetRussian("")
-MOD.Rorf.Name = MOD.Lang.Rorf[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Rorf = KBM.Language:Add(MOD.Rorf.Name)
+MOD.Lang.Unit.Rorf:SetGerman("Rorf")
+-- MOD.Lang.Unit.Rorf:SetFrench("")
+-- MOD.Lang.Unit.Rorf:SetRussian("")
+MOD.Rorf.Name = MOD.Lang.Unit.Rorf[KBM.Lang]
 MOD.Descript = MOD.Rorf.Name
+-- Addtional Unit Dictionary
+MOD.Lang.Unit.Sneaky = KBM.Language:Add("Sneaky")
+MOD.Lang.Unit.Sneaky:SetGerman("Schleich")
+MOD.Lang.Unit.Scratchy = KBM.Language:Add("Scratchy")
+MOD.Lang.Unit.Scratchy:SetGerman("Kratz")
+MOD.Lang.Unit.Scary = KBM.Language:Add("Scary")
+MOD.Lang.Unit.Scary:SetGerman("Schreck")
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}
-
--- Unit Dictionary
-MOD.Lang.Unit = {}
-MOD.Lang.Unit.Sneaky = KBM.Language:Add("Sneaky")
-MOD.Lang.Unit.Sneaky.German = "Schleich"
-MOD.Lang.Unit.Scratchy = KBM.Language:Add("Scratchy")
-MOD.Lang.Unit.Scratchy.German = "Kratz"
-MOD.Lang.Unit.Scary = KBM.Language:Add("Scary")
-MOD.Lang.Unit.Scary.German = "Schreck" 
 
 MOD.Sneaky = {
 	Mod = MOD,

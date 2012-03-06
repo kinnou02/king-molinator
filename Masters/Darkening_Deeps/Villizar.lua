@@ -52,11 +52,13 @@ MOD.Villizar = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Villizar = KBM.Language:Add(MOD.Villizar.Name)
-MOD.Lang.Villizar:SetGerman("Abgesandter Villizar") 
--- MOD.Lang.Villizar:SetFrench("")
--- MOD.Lang.Villizar:SetRussian("")
-MOD.Villizar.Name = MOD.Lang.Villizar[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Villizar = KBM.Language:Add(MOD.Villizar.Name)
+MOD.Lang.Unit.Villizar:SetGerman("Abgesandter Villizar") 
+-- MOD.Lang.Unit.Villizar:SetFrench("")
+-- MOD.Lang.Unit.Villizar:SetRussian("")
+MOD.Villizar.Name = MOD.Lang.Unit.Villizar[KBM.Lang]
 MOD.Descript = MOD.Villizar.Name
 
 -- Ability Dictionary

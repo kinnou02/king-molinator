@@ -1,3 +1,7 @@
+v1.1.2
+* Death Monitoring
+** Fixed: New group memebers now correctly add to LibSRM.Dead
+
 v1.1.1
 * Directory Structure
 ** Change: Addons only require that SafesRaidManager be Embedded or be a dependency.

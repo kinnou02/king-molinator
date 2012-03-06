@@ -11,12 +11,8 @@ local HK = KBM.BossMod["Hammerknell"]
 
 local ES = {
 	Enabled = true,
-	Estrode = {
-		MenuItem = nil,
-		Enabled = true,
-		Handler = nil,
-		Options = nil,
-	},
+	Directory = HK.Directory,
+	File = "Estrode.lua",
 	Instance = HK.Name,
 	HasPhases = true,
 	PhaseType = "percentage",
@@ -24,6 +20,7 @@ local ES = {
 	Lang = {},
 	Enrage = 60 * 12,
 	ID = "Estrode",
+	Object = "ES",
 }
 
 ES.Estrode = {
@@ -44,9 +41,9 @@ ES.Estrode = {
 		CastBar = KBM.Defaults.CastBar(),
 		TimersRef = {
 			Enabled = true,
-			Soul = KBM.Defaults.TimerObj.Create(),
-			Mind = KBM.Defaults.TimerObj.Create(),
-			North = KBM.Defaults.TimerObj.Create(),
+			Soul = KBM.Defaults.TimerObj.Create("red"),
+			Mind = KBM.Defaults.TimerObj.Create("purple"),
+			North = KBM.Defaults.TimerObj.Create("orange"),
 		},
 		AlertsRef = {
 			Enabled = true,
@@ -61,40 +58,43 @@ ES.Estrode = {
 
 KBM.RegisterMod(ES.ID, ES)
 
-ES.Lang.Estrode = KBM.Language:Add(ES.Estrode.Name)
-ES.Lang.Estrode.Russian = "Эстрода"
-ES.Estrode.Name = ES.Lang.Estrode[KBM.Lang]
+-- Main Unit Dictionary
+ES.Lang.Unit = {}
+ES.Lang.Unit.Estrode = KBM.Language:Add(ES.Estrode.Name)
+ES.Lang.Unit.Estrode:SetGerman("Estrode")
+ES.Lang.Unit.Estrode:SetRussian("Эстрода")
+ES.Estrode.Name = ES.Lang.Unit.Estrode[KBM.Lang]
 ES.Descript = ES.Estrode.Name
 
 -- Ability Dictionary
 ES.Lang.Ability = {}
 ES.Lang.Ability.Soul = KBM.Language:Add("Soul Capture")
-ES.Lang.Ability.Soul.German = "Seelenfang"
-ES.Lang.Ability.Soul.Russian = "Захват души"
+ES.Lang.Ability.Soul:SetGerman("Seelenfang")
+ES.Lang.Ability.Soul:SetRussian("Захват души")
 ES.Lang.Ability.Mind = KBM.Language:Add("Mind Control")
-ES.Lang.Ability.Mind.German = "Gedankenkontrolle"
-ES.Lang.Ability.Mind.Russian = "Контрол разума"
+ES.Lang.Ability.Mind:SetGerman("Gedankenkontrolle")
+ES.Lang.Ability.Mind:SetRussian("Контрол разума")
 ES.Lang.Ability.Dancing = KBM.Language:Add("Dancing Steel")
-ES.Lang.Ability.Dancing.German = "Tanzender Stahl"
+ES.Lang.Ability.Dancing:SetGerman("Tanzender Stahl")
 ES.Lang.Ability.North = KBM.Language:Add("Rage of the North")
-ES.Lang.Ability.North.German = "Wut des Nordens"
-ES.Lang.Ability.North.Russian = "Ярость севера"
+ES.Lang.Ability.North:SetGerman("Wut des Nordens")
+ES.Lang.Ability.North:SetRussian("Ярость севера")
 ES.Lang.Ability.Chastise = KBM.Language:Add("Chastise")
-ES.Lang.Ability.Chastise.German = "Züchtigung"
+ES.Lang.Ability.Chastise:SetGerman("Züchtigung")
 ES.Lang.Ability.Rift = KBM.Language:Add("Mistress of the Rift")
-ES.Lang.Ability.Rift.German = "Herrin des Risses"
+ES.Lang.Ability.Rift:SetGerman("Herrin des Risses")
 
 -- Speak Dictionary
 ES.Lang.Say = {}
 ES.Lang.Say.Mind = KBM.Language:Add("Mmmm, you look delectable.")
-ES.Lang.Say.Mind.German = "Hm, Ihr seht köstlich aus."
-ES.Lang.Say.Mind.Russian = "М-м-м, а ты выглядишь вкусно."
+ES.Lang.Say.Mind:SetGerman("Hm, Ihr seht köstlich aus.")
+ES.Lang.Say.Mind:SetRussian("М-м-м, а ты выглядишь вкусно.")
 
 -- Menu Dictionary
 ES.Lang.Menu = {}
 ES.Lang.Menu.Dancing = KBM.Language:Add(ES.Lang.Ability.Dancing[KBM.Lang].." duration")
-ES.Lang.Menu.Dancing.German = ES.Lang.Ability.Dancing[KBM.Lang].." Dauer"
-ES.Lang.Menu.Dancing.Russian = ES.Lang.Ability.Dancing[KBM.Lang].." продолжительность" 
+ES.Lang.Menu.Dancing:SetGerman(ES.Lang.Ability.Dancing[KBM.Lang].." Dauer")
+ES.Lang.Menu.Dancing:SetRussian(ES.Lang.Ability.Dancing[KBM.Lang].." продолжительность")
 
 function ES:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript

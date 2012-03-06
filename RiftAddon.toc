@@ -10,7 +10,7 @@ Author = "Paul Snart"
 Website = "http://www.facebook.com/pages/King-Boss-Mods/271482262893152"
 Email = "snarty@gmail.com"
 
-Version = "0.9.8"
+Version = "0.9.9"
 
 Environment = "1.7"
 
@@ -46,11 +46,11 @@ RunOnStartup = {
 	"10_Man/Rise_of_the_Phoenix/Beruhast.lua",
 	"10_Man/Rise_of_the_Phoenix/Silgen.lua",
 	"10_Man/Rise_of_the_Phoenix/Arakhurn.lua",
-	"10_Man/Guilded_Prophecy/GPHeader.lua",
-	"10_Man/Guilded_Prophecy/Anrak.lua",
-	"10_Man/Guilded_Prophecy/Guurloth.lua",
-	"10_Man/Guilded_Prophecy/Thalguur.lua",
-	"10_Man/Guilded_Prophecy/Uruluuk.lua",
+	"10_Man/Gilded_Prophecy/GPHeader.lua",
+	"10_Man/Gilded_Prophecy/Anrak.lua",
+	"10_Man/Gilded_Prophecy/Guurloth.lua",
+	"10_Man/Gilded_Prophecy/Thalguur.lua",
+	"10_Man/Gilded_Prophecy/Uruluuk.lua",
 	"10_Man/Drowned_Halls/DHHeader.lua",
 	"10_Man/Drowned_Halls/Jorb.lua",
 	"10_Man/Drowned_Halls/Joloral.lua",
@@ -159,6 +159,7 @@ RunOnStartup = {
 
 Embed = {
 	["SafesRaidManager/"] = true,
+	["KBMLocaleManager/"] = true,
 }
 
 SavedVariables = {
@@ -446,5 +447,6 @@ SavedVariables = {
 
 Dependencies = {
 	SafesRaidManager = {"required", "before"},
+	KBMLocaleManager = {"required", "before"},
 	KBMMarkIt = {"optional", "after"},
 }

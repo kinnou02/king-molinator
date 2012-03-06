@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Smouldaron",
+	Object = "MOD",
 }
 
 MOD.Smouldaron = {
@@ -51,11 +52,13 @@ MOD.Smouldaron = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Smouldaron = KBM.Language:Add(MOD.Smouldaron.Name)
-MOD.Lang.Smouldaron:SetGerman("Smouldaron")
--- MOD.Lang.Smouldaron:SetFrench("")
--- MOD.Lang.Smouldaron:SetRussian("")
-MOD.Smouldaron.Name = MOD.Lang.Smouldaron[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Smouldaron = KBM.Language:Add(MOD.Smouldaron.Name)
+MOD.Lang.Unit.Smouldaron:SetGerman("Smouldaron")
+-- MOD.Lang.Unit.Smouldaron:SetFrench("")
+-- MOD.Lang.Unit.Smouldaron:SetRussian("")
+MOD.Smouldaron.Name = MOD.Lang.Unit.Smouldaron[KBM.Lang]
 MOD.Descript = MOD.Smouldaron.Name
 
 -- Ability Dictionary

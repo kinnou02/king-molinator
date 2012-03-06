@@ -333,6 +333,7 @@ local function SRM_SetSpecifier(Specifier)
 					SRM_Units[self.UnitID].PetID = Inspect.Unit.Lookup(self.Spec..".pet")
 					if uDetails.health == 0 then
 						SRM_Units[self.UnitID].Dead = true
+						LibSRM.Dead = LibSRM.Dead + 1
 					end
 					SRM_Raid.Populated = SRM_Raid.Populated + 1
 					SRM_CheckGroupState()

@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "MM_Cinderstorm",
+	Object = "MOD",
 }
 
 MOD.Cinderstorm = {
@@ -52,11 +53,13 @@ MOD.Cinderstorm = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Cinderstorm = KBM.Language:Add(MOD.Cinderstorm.Name)
-MOD.Lang.Cinderstorm:SetGerman("Aschesturm") 
--- MOD.Lang.Cinderstorm:SetFrench("")
--- MOD.Lang.Cinderstorm:SetRussian("")
-MOD.Cinderstorm.Name = MOD.Lang.Cinderstorm[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Cinderstorm = KBM.Language:Add(MOD.Cinderstorm.Name)
+MOD.Lang.Unit.Cinderstorm:SetGerman("Aschesturm") 
+-- MOD.Lang.Unit.Cinderstorm:SetFrench("")
+-- MOD.Lang.Unit.Cinderstorm:SetRussian("")
+MOD.Cinderstorm.Name = MOD.Lang.Unit.Cinderstorm[KBM.Lang]
 MOD.Descript = MOD.Cinderstorm.Name
 
 -- Ability Dictionary

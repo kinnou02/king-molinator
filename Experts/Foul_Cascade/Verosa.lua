@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Verosa",
+	Object = "MOD",
 }
 
 MOD.Verosa = {
@@ -52,11 +53,13 @@ MOD.Verosa = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Verosa = KBM.Language:Add(MOD.Verosa.Name)
-MOD.Lang.Verosa:SetGerman("Matrone Verosa")
--- MOD.Lang.Verosa:SetFrench("")
--- MOD.Lang.Verosa:SetRussian("")
-MOD.Verosa.Name = MOD.Lang.Verosa[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Verosa = KBM.Language:Add(MOD.Verosa.Name)
+MOD.Lang.Unit.Verosa:SetGerman("Matrone Verosa")
+-- MOD.Lang.Unit.Verosa:SetFrench("")
+-- MOD.Lang.Unit.Verosa:SetRussian("")
+MOD.Verosa.Name = MOD.Lang.Unit.Verosa[KBM.Lang]
 MOD.Descript = MOD.Verosa.Name
 
 -- Ability Dictionary
@@ -65,9 +68,9 @@ MOD.Lang.Ability = {}
 -- Unit Dictionary
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Lesch = KBM.Language:Add("Lesch")
-MOD.Lang.Unit.Lesch.German = "Lesch"
+MOD.Lang.Unit.Lesch:SetGerman("Lesch")
 MOD.Lang.Unit.Gurze = KBM.Language:Add("Gurze")
-MOD.Lang.Unit.Gurze.German = "Gurze" 
+MOD.Lang.Unit.Gurze:SetGerman("Gurze")
 
 MOD.Lesch = {
 	Mod = MOD,

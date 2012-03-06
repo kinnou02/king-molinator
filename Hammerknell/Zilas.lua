@@ -11,12 +11,15 @@ local HK = KBM.BossMod["Hammerknell"]
 
 local SZ = {
 	Enabled = true,
+	Directory = HK.Directory,
+	File = "Zilas.lua",
 	Instance = HK.Name,
 	PhaseObj = nil,
 	Phase = 1,
 	Timers = {},
 	Lang = {},
 	ID = "Zilas",
+	Object = "SZ",
 }
 
 SZ.Zilas = {
@@ -36,8 +39,8 @@ SZ.Zilas = {
 		CastBar = KBM.Defaults.CastBar(),
 		TimersRef = {
 			Enabled = true,
-			Grasp = KBM.Defaults.TimerObj.Create(),
-			GraspFirst = KBM.Defaults.TimerObj.Create(),
+			Grasp = KBM.Defaults.TimerObj.Create("red"),
+			GraspFirst = KBM.Defaults.TimerObj.Create("red"),
 		},
 		AlertsRef = {
 			Enabled = true,
@@ -49,38 +52,38 @@ SZ.Zilas = {
 
 KBM.RegisterMod(SZ.ID, SZ)
 
-SZ.Lang.Zilas = KBM.Language:Add(SZ.Zilas.Name)
-SZ.Lang.Zilas.German = "Seelenreißer Zilas"
-SZ.Lang.Zilas.French = "\195\137tripeur d'\195\162mes Zilas"
-SZ.Lang.Zilas.Russian = "Душераздиратель Зилас"
-SZ.Zilas.Name = SZ.Lang.Zilas[KBM.Lang]
+-- Main Unit Dictionary
+SZ.Lang.Unit = {}
+SZ.Lang.Unit.Zilas = KBM.Language:Add(SZ.Zilas.Name)
+SZ.Lang.Unit.Zilas:SetGerman("Seelenreißer Zilas")
+SZ.Lang.Unit.Zilas:SetFrench("\195\137tripeur d'\195\162mes Zilas")
+SZ.Lang.Unit.Zilas:SetRussian("Душераздиратель Зилас")
+SZ.Zilas.Name = SZ.Lang.Unit.Zilas[KBM.Lang]
 SZ.Descript = SZ.Zilas.Name
+-- Additional Unit Dictionary
+SZ.Lang.Unit.Imp = KBM.Language:Add("Escaped Imp")
+SZ.Lang.Unit.Imp:SetGerman("Entflohener Imp")
+SZ.Lang.Unit.ImpShort = KBM.Language:Add("Imp")
+SZ.Lang.Unit.Spirit = KBM.Language:Add("Drifting Spirit")
+SZ.Lang.Unit.Spirit:SetGerman("Treibender Geist")
+SZ.Lang.Unit.SpiritShort = KBM.Language:Add("Spirit")
+SZ.Lang.Unit.SpiritShort:SetGerman("Geist")
 
 -- Ability Dictionary
 SZ.Lang.Ability = {}
 SZ.Lang.Ability.Grasp = KBM.Language:Add("Soulrender's Grasp")
-SZ.Lang.Ability.Grasp.German = "Seelenreißer-Griff"
-SZ.Lang.Ability.Grasp.French = "Poigne d'\195\137tripeur d'\195\162mes"
-SZ.Lang.Ability.Grasp.Russian = "Хватка душедера"
+SZ.Lang.Ability.Grasp:SetGerman("Seelenreißer-Griff")
+SZ.Lang.Ability.Grasp:SetFrench("Poigne d'\195\137tripeur d'\195\162mes")
+SZ.Lang.Ability.Grasp:SetRussian("Хватка душедера")
 SZ.Lang.Ability.Cede = KBM.Language:Add("Cede Spirit")
-SZ.Lang.Ability.Cede.German = "Geist abgeben"
+SZ.Lang.Ability.Cede:SetGerman("Geist abgeben")
 SZ.Lang.Ability.Volley = KBM.Language:Add("Dark Volley")
-SZ.Lang.Ability.Volley.German = "Dunkler Treffer"
+SZ.Lang.Ability.Volley:SetGerman("Dunkler Treffer")
 
 -- Menu Dictionary
 SZ.Lang.Menu = {}
 SZ.Lang.Menu.Grasp = KBM.Language:Add("First "..SZ.Lang.Ability.Grasp[KBM.Lang])
-SZ.Lang.Menu.Grasp.German = "Erste "..SZ.Lang.Ability.Grasp[KBM.Lang]
-
--- Unit Dictionary
-SZ.Lang.Unit = {}
-SZ.Lang.Unit.Imp = KBM.Language:Add("Escaped Imp")
-SZ.Lang.Unit.Imp.German = "Entflohener Imp"
-SZ.Lang.Unit.ImpShort = KBM.Language:Add("Imp")
-SZ.Lang.Unit.Spirit = KBM.Language:Add("Drifting Spirit")
-SZ.Lang.Unit.Spirit.German = "Treibender Geist"
-SZ.Lang.Unit.SpiritShort = KBM.Language:Add("Spirit")
-SZ.Lang.Unit.SpiritShort.German = "Geist"
+SZ.Lang.Menu.Grasp:SetGerman("Erste "..SZ.Lang.Ability.Grasp[KBM.Lang])
 
 SZ.Imp = {
 	Mod = SZ,

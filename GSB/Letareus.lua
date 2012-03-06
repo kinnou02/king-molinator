@@ -13,11 +13,14 @@ local GSB = KBM.BossMod["Greenscales Blight"]
 
 local DL = {
 	Enabled = true,
+	Directory = GSB.Directory,
+	File = "Letareus.lua",
 	Instance = GSB.Name,
 	HasPhases = true,
 	Lang = {},
 	ID = "Letareus",
 	HasChronicle = true,
+	Object = "DL",
 }
 
 DL.Letareus = {
@@ -46,26 +49,28 @@ DL.Letareus = {
 
 KBM.RegisterMod(DL.ID, DL)
 
-DL.Lang.Letareus = KBM.Language:Add(DL.Letareus.Name)
-DL.Lang.Letareus.German = "Herzog Letareus"
-DL.Lang.Letareus.French = "Duc Letareus"
-DL.Lang.Letareus.Russian = "Герцог Летареус"
-DL.Letareus.Name = DL.Lang.Letareus[KBM.Lang]
+-- Main Unit Dictionary
+DL.Lang.Unit = {}
+DL.Lang.Unit.Letareus = KBM.Language:Add(DL.Letareus.Name)
+DL.Lang.Unit.Letareus:SetGerman("Herzog Letareus")
+DL.Lang.Unit.Letareus:SetFrench("Duc Letareus")
+DL.Lang.Unit.Letareus:SetRussian("Герцог Летареус")
+DL.Letareus.Name = DL.Lang.Unit.Letareus[KBM.Lang]
 
 -- Ability Dictionary
 DL.Lang.Ability = {}
 DL.Lang.Ability.Wrath = KBM.Language:Add("Duke's Wrath")
-DL.Lang.Ability.Wrath.German = "Zorn des Herzogs"
-DL.Lang.Ability.Wrath.Russian = "Ярость герцога"
+DL.Lang.Ability.Wrath:SetGerman("Zorn des Herzogs")
+DL.Lang.Ability.Wrath:SetRussian("Ярость герцога")
 
 -- Mechanic Dictionary
 DL.Lang.Mechanic = {}
 DL.Lang.Mechanic.TankPhase = KBM.Language:Add("Tank Phase")
-DL.Lang.Mechanic.TankPhase.Russian = "Фаза танкования"
+DL.Lang.Mechanic.TankPhase:SetRussian("Фаза танкования")
 DL.Lang.Mechanic.Tank = KBM.Language:Add("Tank")
-DL.Lang.Mechanic.Tank.Russian = "Танкуем"
+DL.Lang.Mechanic.Tank:SetRussian("Танкуем")
 DL.Lang.Mechanic.Kite = KBM.Language:Add("Kite")
-DL.Lang.Mechanic.Kite.Russian = "Кайтим"
+DL.Lang.Mechanic.Kite:SetRussian("Кайтим")
 
 DL.Descript = DL.Letareus.Name
 

@@ -11,18 +11,15 @@ local HK = KBM.BossMod["Hammerknell"]
 
 local GR = {
 	Enabled = true,
-	Grugonim = {
-		MenuItem = nil,
-		Enabled = true,
-		Handler = nil,
-		Options = nil,
-	},
+	Directory = HK.Directory,
+	File = "Grugonim.lua",
 	Instance = HK.Name,
 	Timers = {},
 	Lang = {},
 	Phase = 1,
 	Enrage = 60 * 13,
 	ID = "Grugonim",
+	Object = "GR",
 	Counts = {
 		Towers = 0,
 		Breaths = 0,
@@ -79,55 +76,57 @@ GR.Tower = {
 
 KBM.RegisterMod(GR.ID, GR)
 
--- Define Names
-GR.Lang.Grugonim = KBM.Language:Add(GR.Grugonim.Name)
-GR.Lang.Grugonim.Russian = "Гругоним"
-GR.Grugonim.Name = GR.Lang.Grugonim[KBM.Lang]
-GR.Lang.Tower = KBM.Language:Add(GR.Tower.Name)
-GR.Lang.Tower.German = "Manifestierter Tod"
-GR.Lang.Tower.French = "Mort manifestée"
-GR.Lang.Tower.Russian = "Материализованная Смерть"
-GR.Tower.Name = GR.Lang.Tower[KBM.Lang]
+-- Main Unit Dictionary
+GR.Lang.Unit = {}
+GR.Lang.Unit.Grugonim = KBM.Language:Add(GR.Grugonim.Name)
+GR.Lang.Unit.Grugonim:SetGerman("Grugonim")
+GR.Lang.Unit.Grugonim:SetRussian("Гругоним")
+GR.Grugonim.Name = GR.Lang.Unit.Grugonim[KBM.Lang]
+GR.Lang.Unit.Tower = KBM.Language:Add(GR.Tower.Name)
+GR.Lang.Unit.Tower:SetGerman("Manifestierter Tod")
+GR.Lang.Unit.Tower:SetFrench("Mort manifestée")
+GR.Lang.Unit.Tower:SetRussian("Материализованная Смерть")
+GR.Tower.Name = GR.Lang.Unit.Tower[KBM.Lang]
 GR.Descript = GR.Grugonim.Name
 
 -- Ability Dictionary
 GR.Lang.Ability = {}
 GR.Lang.Ability.Decay = KBM.Language:Add("Rampant Decay")
-GR.Lang.Ability.Decay.German = "Wilder Verfall"
-GR.Lang.Ability.Decay.French = "Pourriture rampante"
-GR.Lang.Ability.Decay.Russian = "Бурное разложение"
+GR.Lang.Ability.Decay:SetGerman("Wilder Verfall")
+GR.Lang.Ability.Decay:SetFrench("Pourriture rampante")
+GR.Lang.Ability.Decay:SetRussian("Бурное разложение")
 GR.Lang.Ability.Bile = KBM.Language:Add("Corrosive Bile")
-GR.Lang.Ability.Bile.German = "Ätzende Galle"
-GR.Lang.Ability.Bile.French = "Vase corrosive"
-GR.Lang.Ability.Bile.Russian = "Едкая желчь"
+GR.Lang.Ability.Bile:SetGerman("Ätzende Galle")
+GR.Lang.Ability.Bile:SetFrench("Vase corrosive")
+GR.Lang.Ability.Bile:SetRussian("Едкая желчь")
 GR.Lang.Ability.Breath = KBM.Language:Add("Necrotic Breath")
-GR.Lang.Ability.Breath.German = "Nekrotischer Atem"
-GR.Lang.Ability.Breath.Russian = "Мертвящее дыхание"
+GR.Lang.Ability.Breath:SetGerman("Nekrotischer Atem")
+GR.Lang.Ability.Breath:SetRussian("Мертвящее дыхание")
 GR.Lang.Ability.Disruption = KBM.Language:Add("Seismic Disruption")
-GR.Lang.Ability.Disruption.German = "Seismische Störung"
-GR.Lang.Ability.Disruption.Russian = "Сейсмическое разрушение"
+GR.Lang.Ability.Disruption:SetGerman("Seismische Störung")
+GR.Lang.Ability.Disruption:SetRussian("Сейсмическое разрушение")
 GR.Lang.Ability.Swarm = KBM.Language:Add("Parasite Swarm")
-GR.Lang.Ability.Swarm.German = "Parasitenschwarm"
-GR.Lang.Ability.Swarm.Russian = "Выводок паразитов"
+GR.Lang.Ability.Swarm:SetGerman("Parasitenschwarm")
+GR.Lang.Ability.Swarm:SetRussian("Выводок паразитов")
 
 -- Debuff Dictionary
 GR.Lang.Debuff = {}
 GR.Lang.Debuff.Toxin = KBM.Language:Add("Heart Stopping Toxin")
-GR.Lang.Debuff.Toxin.French = "Toxin d'arr\195\170t cardiaque"
-GR.Lang.Debuff.Toxin.German = "Herzstillstandsgift"
-GR.Lang.Debuff.Toxin.Russian = "Останавливающий сердце яд"
+GR.Lang.Debuff.Toxin:SetFrench("Toxin d'arr\195\170t cardiaque")
+GR.Lang.Debuff.Toxin:SetGerman("Herzstillstandsgift")
+GR.Lang.Debuff.Toxin:SetRussian("Останавливающий сердце яд")
 
 -- Menu Dictionary
 GR.Lang.Menu = {}
 GR.Lang.Menu.Breath = KBM.Language:Add(GR.Lang.Ability.Breath[KBM.Lang].." duration")
-GR.Lang.Menu.Breath.German = GR.Lang.Ability.Breath[KBM.Lang].." Dauer"
-GR.Lang.Menu.Breath.Russian = GR.Lang.Ability.Breath[KBM.Lang].." продолжительность"
+GR.Lang.Menu.Breath:SetGerman(GR.Lang.Ability.Breath[KBM.Lang].." Dauer")
+GR.Lang.Menu.Breath:SetRussian(GR.Lang.Ability.Breath[KBM.Lang].." продолжительность")
 
 -- Phase Monitor Dictionary
 GR.Lang.Phase = {}
 GR.Lang.Phase.Towers = KBM.Language:Add("Towers")
-GR.Lang.Phase.Towers.German = "Türme"
-GR.Lang.Phase.Towers.Russian = "Башни"
+GR.Lang.Phase.Towers:SetGerman("Türme")
+GR.Lang.Phase.Towers:SetRussian("Башни")
 
 function GR:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript

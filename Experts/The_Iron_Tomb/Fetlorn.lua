@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Fetlorn",
+	Object = "MOD",
 }
 
 MOD.Fetlorn = {
@@ -52,11 +53,13 @@ MOD.Fetlorn = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Fetlorn = KBM.Language:Add(MOD.Fetlorn.Name)
-MOD.Lang.Fetlorn:SetGerman("Knochenfürst Fetlorn")
--- MOD.Lang.Fetlorn:SetFrench("")
--- MOD.Lang.Fetlorn:SetRussian("")
-MOD.Fetlorn.Name = MOD.Lang.Fetlorn[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Fetlorn = KBM.Language:Add(MOD.Fetlorn.Name)
+MOD.Lang.Unit.Fetlorn:SetGerman("Knochenfürst Fetlorn")
+-- MOD.Lang.Unit.Fetlorn:SetFrench("")
+-- MOD.Lang.Unit.Fetlorn:SetRussian("")
+MOD.Fetlorn.Name = MOD.Lang.Unit.Fetlorn[KBM.Lang]
 MOD.Descript = MOD.Fetlorn.Name
 
 -- Ability Dictionary

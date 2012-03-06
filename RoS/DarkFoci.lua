@@ -13,11 +13,14 @@ local ROS = KBM.BossMod["River of Souls"]
 
 local DF = {
 	Enabled = true,
+	Directory = ROS.Directory,
+	File = "DarkFoci.lua",
 	Instance = ROS.Name,
 	Type = "20man",
 	HasPhases = true,
 	Lang = {},
-	ID = "Dark_Foci",	
+	ID = "Dark_Foci",
+	Object = "DF",
 }
 
 DF.Foci = {
@@ -53,10 +56,16 @@ DF.Foci = {
 
 KBM.RegisterMod(DF.ID, DF)
 
-DF.Lang.Foci = KBM.Language:Add(DF.Foci.Name)
-DF.Lang.Foci:SetGerman("Finsterer Fokus")
-DF.Lang.Foci:SetFrench("Balises T\195\169n\195\169breuses")
-DF.Lang.Foci:SetRussian("Темное средоточия")
+-- Main Unit Dictionary
+DF.Lang.Unit = {}
+DF.Lang.Unit.Foci = KBM.Language:Add(DF.Foci.Name)
+DF.Lang.Unit.Foci:SetGerman("Finsterer Fokus")
+DF.Lang.Unit.Foci:SetFrench("Balises T\195\169n\195\169breuses")
+DF.Lang.Unit.Foci:SetRussian("Темное средоточия")
+-- Additional Unit Dictionary
+DF.Lang.Unit.Force = KBM.Language:Add("Force of Corruption")
+DF.Lang.Unit.Force:SetGerman("Verderbende Kraft")
+DF.Lang.Unit.Force:SetRussian("Сила искажения")
 
 -- Ability Dictionary
 DF.Lang.Ability = {}
@@ -76,18 +85,12 @@ DF.Lang.Debuff.Soul = KBM.Language:Add("Destabilize Soul")
 DF.Lang.Debuff.Soul:SetGerman("Seele destabilisieren")
 DF.Lang.Debuff.Soul:SetRussian("Раскачать душу")
 
--- Unit Dictionary
-DF.Lang.Unit = {}
-DF.Lang.Unit.Force = KBM.Language:Add("Force of Corruption")
-DF.Lang.Unit.Force:SetGerman("Verderbende Kraft")
-DF.Lang.Unit.Force:SetRussian("Сила искажения")
-
 -- Phase Monitor Dictionary
 DF.Lang.Phase = {}
 DF.Lang.Phase.Force = KBM.Language:Add("Force")
-DF.Lang.Phase.Force.German = "Kraft"
+DF.Lang.Phase.Force:SetGerman("Kraft")
 DF.Lang.Phase.Foci = KBM.Language:Add("Foci")
-DF.Lang.Phase.Foci.German = "Fokus"
+DF.Lang.Phase.Foci:SetGerman("Fokus")
 
 DF.Foci.NameShort = DF.Lang.Phase.Foci[KBM.Lang]
 
@@ -114,7 +117,7 @@ DF.Force = {
 	},
 }
 
-DF.Foci.Name = DF.Lang.Foci[KBM.Lang]
+DF.Foci.Name = DF.Lang.Unit.Foci[KBM.Lang]
 DF.Descript = DF.Foci.Name
 
 

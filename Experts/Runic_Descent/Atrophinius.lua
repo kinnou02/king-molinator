@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Atrophinius",
+	Object = "MOD",
 }
 
 MOD.Atrophinius = {
@@ -52,11 +53,13 @@ MOD.Atrophinius = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Atrophinius = KBM.Language:Add(MOD.Atrophinius.Name)
-MOD.Lang.Atrophinius:SetGerman("Atrophinius der Gefallene") 
--- MOD.Lang.Atrophinius:SetFrench("")
--- MOD.Lang.Atrophinius:SetRussian("")
-MOD.Atrophinius.Name = MOD.Lang.Atrophinius[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Atrophinius = KBM.Language:Add(MOD.Atrophinius.Name)
+MOD.Lang.Unit.Atrophinius:SetGerman("Atrophinius der Gefallene") 
+-- MOD.Lang.Unit.Atrophinius:SetFrench("")
+-- MOD.Lang.Unit.Atrophinius:SetRussian("")
+MOD.Atrophinius.Name = MOD.Lang.Unit.Atrophinius[KBM.Lang]
 MOD.Descript = MOD.Atrophinius.Name
 
 -- Ability Dictionary

@@ -10,6 +10,8 @@ local KBM = AddonData.data
 local ROTP = KBM.BossMod["Rise of the Phoenix"]
 
 local EN = {
+	Directory = ROTP.Directory,
+	File = "Ereandorn.lua",
 	Enabled = true,
 	Instance = ROTP.Name,
 	HasPhases = false,
@@ -17,6 +19,7 @@ local EN = {
 	TankSwap = false,
 	ID = "Ereandorn",
 	Menu = {},
+	Object = "EN",
 }
 
 EN.Ereandorn = {
@@ -47,34 +50,36 @@ EN.Ereandorn = {
 
 KBM.RegisterMod(EN.ID, EN)
 
-EN.Lang.Ereandorn = KBM.Language:Add(EN.Ereandorn.Name)
-EN.Lang.Ereandorn.Russian = "Эреандорн"
-EN.Ereandorn.Name = EN.Lang.Ereandorn[KBM.Lang]
+-- Main Unit Dictionary
+EN.Lang.Unit = {}
+EN.Lang.Unit.Ereandorn = KBM.Language:Add(EN.Ereandorn.Name)
+EN.Lang.Unit.Ereandorn:SetRussian("Эреандорн")
+EN.Ereandorn.Name = EN.Lang.Unit.Ereandorn[KBM.Lang]
 EN.Descript = EN.Ereandorn.Name
 
 -- Notify Dictionary
 EN.Lang.Notify = {}
 EN.Lang.Notify.Combustion = KBM.Language:Add('Ereandorn says, "(%a*), how does it feel to burn?"')
-EN.Lang.Notify.Combustion.German = 'Ereandorn sagt: "(%a*), wie fühlt es sich an, zu verbrennen?"'
-EN.Lang.Notify.Combustion.Russian = 'Эреандорн спрашивает: "Ну как, (%a*), нравится тебе гореть?"'
+EN.Lang.Notify.Combustion:SetGerman('Ereandorn sagt: "(%a*), wie fühlt es sich an, zu verbrennen?"')
+EN.Lang.Notify.Combustion:SetRussian('Эреандорн спрашивает: "Ну как, (%a*), нравится тебе гореть?"')
 EN.Lang.Notify.Growth = KBM.Language:Add("The corpse of (%a*) will fuel our conquest")
-EN.Lang.Notify.Growth.German = "Der Leichnam von (%a*) wird unsere Eroberung vorantreiben"
-EN.Lang.Notify.Growth.Russian = "(%a*) - вот чей труп поможет нам в нашем вторжении!"
+EN.Lang.Notify.Growth:SetGerman("Der Leichnam von (%a*) wird unsere Eroberung vorantreiben")
+EN.Lang.Notify.Growth:SetRussian("(%a*) - вот чей труп поможет нам в нашем вторжении!")
 EN.Lang.Notify.Eruption = KBM.Language:Add("I will rebuild this world in flames!")
-EN.Lang.Notify.Eruption.German = "Ich werde diese Welt in Flammen neu formen!"
-EN.Lang.Notify.Eruption.Russian = "Я предам этот мир огню!"
+EN.Lang.Notify.Eruption:SetGerman("Ich werde diese Welt in Flammen neu formen!")
+EN.Lang.Notify.Eruption:SetRussian("Я предам этот мир огню!")
 
 -- Ability Dictionary
 EN.Lang.Ability = {}
 EN.Lang.Ability.Combustion = KBM.Language:Add("Excitable Combustion")
-EN.Lang.Ability.Combustion.German = "Anregbare Verbrennung"
-EN.Lang.Ability.Combustion.Russian = "Опасное сгорание" 
+EN.Lang.Ability.Combustion:SetGerman("Anregbare Verbrennung")
+EN.Lang.Ability.Combustion:SetRussian("Опасное сгорание")
 EN.Lang.Ability.Growth = KBM.Language:Add("Molten Growth")
-EN.Lang.Ability.Growth.German = "Geschmolzener Wuchs"
-EN.Lang.Ability.Growth.Russian = "Извержение лавы"
+EN.Lang.Ability.Growth:SetGerman("Geschmolzener Wuchs")
+EN.Lang.Ability.Growth:SetRussian("Извержение лавы")
 EN.Lang.Ability.Eruption = KBM.Language:Add("Volcanic Eruption")
-EN.Lang.Ability.Eruption.German = "Vulkanausbruch"
-EN.Lang.Ability.Eruption.Russian = "Извержение вулкана"
+EN.Lang.Ability.Eruption:SetGerman("Vulkanausbruch")
+EN.Lang.Ability.Eruption:SetRussian("Извержение вулкана")
 
 function EN:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript

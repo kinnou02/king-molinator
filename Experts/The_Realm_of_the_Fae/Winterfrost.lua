@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Winterfrost",
+	Object = "MOD",
 }
 
 MOD.Winterfrost = {
@@ -52,11 +53,13 @@ MOD.Winterfrost = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Winterfrost = KBM.Language:Add(MOD.Winterfrost.Name)
-MOD.Lang.Winterfrost:SetGerman("Chillblains Winterfrost")
--- MOD.Lang.Winterfrost:SetFrench("")
--- MOD.Lang.Winterfrost:SetRussian("")
-MOD.Winterfrost.Name = MOD.Lang.Winterfrost[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Winterfrost = KBM.Language:Add(MOD.Winterfrost.Name)
+MOD.Lang.Unit.Winterfrost:SetGerman("Chillblains Winterfrost")
+-- MOD.Lang.Unit.Winterfrost:SetFrench("")
+-- MOD.Lang.Unit.Winterfrost:SetRussian("")
+MOD.Winterfrost.Name = MOD.Lang.Unit.Winterfrost[KBM.Lang]
 MOD.Descript = MOD.Winterfrost.Name
 
 -- Ability Dictionary

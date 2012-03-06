@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Venoxa",
+	Object = "MOD",
 }
 
 MOD.Venoxa = {
@@ -52,11 +53,13 @@ MOD.Venoxa = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Venoxa = KBM.Language:Add(MOD.Venoxa.Name)
-MOD.Lang.Venoxa:SetGerman("Brutmutter Venoxa")
--- MOD.Lang.Venoxa:SetFrench("")
--- MOD.Lang.Venoxa:SetRussian("")
-MOD.Venoxa.Name = MOD.Lang.Venoxa[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Venoxa = KBM.Language:Add(MOD.Venoxa.Name)
+MOD.Lang.Unit.Venoxa:SetGerman("Brutmutter Venoxa")
+-- MOD.Lang.Unit.Venoxa:SetFrench("")
+-- MOD.Lang.Unit.Venoxa:SetRussian("")
+MOD.Venoxa.Name = MOD.Lang.Unit.Venoxa[KBM.Lang]
 MOD.Descript = MOD.Venoxa.Name
 
 -- Ability Dictionary

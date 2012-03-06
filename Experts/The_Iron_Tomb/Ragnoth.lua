@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Ragnoth",
+	Object = "MOD",
 }
 
 MOD.Ragnoth = {
@@ -52,11 +53,13 @@ MOD.Ragnoth = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Ragnoth = KBM.Language:Add(MOD.Ragnoth.Name)
-MOD.Lang.Ragnoth:SetGerman("Ragnoth der Brandschatzer")
--- MOD.Lang.Ragnoth:SetFrench("")
--- MOD.Lang.Ragnoth:SetRussian("")
-MOD.Ragnoth.Name = MOD.Lang.Ragnoth[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Ragnoth = KBM.Language:Add(MOD.Ragnoth.Name)
+MOD.Lang.Unit.Ragnoth:SetGerman("Ragnoth der Brandschatzer")
+-- MOD.Lang.Unit.Ragnoth:SetFrench("")
+-- MOD.Lang.Unit.Ragnoth:SetRussian("")
+MOD.Ragnoth.Name = MOD.Lang.Unit.Ragnoth[KBM.Lang]
 MOD.Descript = MOD.Ragnoth.Name
 
 -- Ability Dictionary

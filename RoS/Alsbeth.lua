@@ -13,6 +13,8 @@ local ROS = KBM.BossMod["River of Souls"]
 
 local AD = {
 	Enabled = true,
+	Directory = ROS.Directory,
+	File = "Alsbeth.lua",
 	Instance = ROS.Name,
 	Type = "20man",
 	HasPhases = true,
@@ -20,7 +22,8 @@ local AD = {
 	Enrage = 60 * 18,
 	GhostCount = 0,
 	PillarDeaths = 0,
-	ID = "Alsbeth",	
+	ID = "Alsbeth",
+	Object = "AD",
 }
 
 AD.Alsbeth = {
@@ -62,15 +65,42 @@ AD.Alsbeth = {
 
 KBM.RegisterMod(AD.ID, AD)
 
-AD.Lang.Alsbeth = KBM.Language:Add(AD.Alsbeth.Name)
-AD.Lang.Alsbeth:SetGerman("Alsbeth die Streitsuchende")
-AD.Lang.Alsbeth:SetFrench("Alsbeth la Discordante")
-AD.Lang.Alsbeth:SetRussian("Альсбет Раздорная")
+-- Main Unit Dictionary
+AD.Lang.Unit = {}
+AD.Lang.Unit.Alsbeth = KBM.Language:Add(AD.Alsbeth.Name)
+AD.Lang.Unit.Alsbeth:SetGerman("Alsbeth die Streitsuchende")
+AD.Lang.Unit.Alsbeth:SetFrench("Alsbeth la Discordante")
+AD.Lang.Unit.Alsbeth:SetRussian("Альсбет Раздорная")
+-- Additional Unit Dictionary
+AD.Lang.Unit.Pillar = KBM.Language:Add("Discordant Pillar")
+AD.Lang.Unit.Pillar:SetGerman("Zwietracht-Säule")
+AD.Lang.Unit.Pillar:SetRussian("Столб раздора")
+AD.Lang.Unit.PillarShort = KBM.Language:Add("Pillar")
+AD.Lang.Unit.PillarShort:SetGerman("Säule")
+AD.Lang.Unit.PillarShort:SetRussian("Столб")
+AD.Lang.Unit.Harbinger = KBM.Language:Add("Soul Harbinger")
+AD.Lang.Unit.Harbinger:SetGerman("Seelen-Vorbote")
+AD.Lang.Unit.Harbinger:SetRussian("Духовный вестник")
+AD.Lang.Unit.HarbingerShort = KBM.Language:Add("Harbinger")
+AD.Lang.Unit.HarbingerShort:SetGerman("Vorbote")
+AD.Lang.Unit.HarbingerShort:SetRussian("Вестник")
+AD.Lang.Unit.Thief = KBM.Language:Add("Soul Thief")
+AD.Lang.Unit.Thief:SetGerman("Seelen-Dieb")
+AD.Lang.Unit.Thief:SetRussian("Вор душ")
+AD.Lang.Unit.ThiefShort = KBM.Language:Add("Thief")
+AD.Lang.Unit.ThiefShort:SetGerman("Dieb")
+AD.Lang.Unit.ThiefShort:SetRussian("Вор")
+AD.Lang.Unit.Magus = KBM.Language:Add("Soul Magus")
+AD.Lang.Unit.Magus:SetGerman("Seelen-Magus")
+AD.Lang.Unit.Magus:SetRussian("Маг души")
+AD.Lang.Unit.MagusShort = KBM.Language:Add("Magi")
+AD.Lang.Unit.MagusShort:SetGerman("Magus")
+AD.Lang.Unit.MagusShort:SetRussian("Маг")
 
 -- Ability Dictionary
 AD.Lang.Ability = {}
 AD.Lang.Ability.Punish = KBM.Language:Add("Punish Soul")
-AD.Lang.Ability.Punish.German = "Seelenbestrafung"
+AD.Lang.Ability.Punish:SetGerman("Seelenbestrafung")
 AD.Lang.Ability.Punish:SetRussian("Покарать душу")
 AD.Lang.Ability.Ground = KBM.Language:Add("Discordant Ground")
 AD.Lang.Ability.Ground:SetGerman("Boden der Zwietracht")
@@ -110,33 +140,6 @@ AD.Lang.Verbose.Punish:SetRussian(AD.Lang.Ability.Punish[KBM.Lang].." (перс�
 AD.Lang.Verbose.Meteor = KBM.Language:Add(AD.Lang.Ability.Meteor[KBM.Lang].." (First in phase 2)")
 AD.Lang.Verbose.Meteor:SetGerman(AD.Lang.Ability.Meteor[KBM.Lang].." (Erste in Phase 2)")
 AD.Lang.Verbose.Meteor:SetRussian(AD.Lang.Ability.Meteor[KBM.Lang].." (первый на фазе 2)")
-
--- Unit Dictionary
-AD.Lang.Unit = {}
-AD.Lang.Unit.Pillar = KBM.Language:Add("Discordant Pillar")
-AD.Lang.Unit.Pillar:SetGerman("Zwietracht-Säule")
-AD.Lang.Unit.Pillar:SetRussian("Столб раздора")
-AD.Lang.Unit.PillarShort = KBM.Language:Add("Pillar")
-AD.Lang.Unit.PillarShort:SetGerman("Säule")
-AD.Lang.Unit.PillarShort:SetRussian("Столб")
-AD.Lang.Unit.Harbinger = KBM.Language:Add("Soul Harbinger")
-AD.Lang.Unit.Harbinger:SetGerman("Seelen-Vorbote")
-AD.Lang.Unit.Harbinger:SetRussian("Духовный вестник")
-AD.Lang.Unit.HarbingerShort = KBM.Language:Add("Harbinger")
-AD.Lang.Unit.HarbingerShort:SetGerman("Vorbote")
-AD.Lang.Unit.HarbingerShort:SetRussian("Вестник")
-AD.Lang.Unit.Thief = KBM.Language:Add("Soul Thief")
-AD.Lang.Unit.Thief:SetGerman("Seelen-Dieb")
-AD.Lang.Unit.Thief:SetRussian("Вор душ")
-AD.Lang.Unit.ThiefShort = KBM.Language:Add("Thief")
-AD.Lang.Unit.ThiefShort:SetGerman("Dieb")
-AD.Lang.Unit.ThiefShort:SetRussian("Вор")
-AD.Lang.Unit.Magus = KBM.Language:Add("Soul Magus")
-AD.Lang.Unit.Magus:SetGerman("Seelen-Magus")
-AD.Lang.Unit.Magus:SetRussian("Маг души")
-AD.Lang.Unit.MagusShort = KBM.Language:Add("Magi")
-AD.Lang.Unit.MagusShort:SetGerman("Magus")
-AD.Lang.Unit.MagusShort:SetRussian("Маг")
 
 AD.Harbinger = {
 	Mod = AD,
@@ -200,7 +203,7 @@ AD.Pillar = {
 	Type = "multi",
 }
 
-AD.Alsbeth.Name = AD.Lang.Alsbeth[KBM.Lang]
+AD.Alsbeth.Name = AD.Lang.Unit.Alsbeth[KBM.Lang]
 AD.Descript = AD.Alsbeth.Name
 
 function AD:AddBosses(KBM_Boss)

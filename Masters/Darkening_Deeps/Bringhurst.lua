@@ -52,11 +52,13 @@ MOD.Bringhurst = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Bringhurst = KBM.Language:Add(MOD.Bringhurst.Name)
-MOD.Lang.Bringhurst:SetGerman("Michael Bringhurst") 
--- MOD.Lang.Bringhurst:SetFrench("")
--- MOD.Lang.Bringhurst:SetRussian("")
-MOD.Bringhurst.Name = MOD.Lang.Bringhurst[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Bringhurst = KBM.Language:Add(MOD.Bringhurst.Name)
+MOD.Lang.Unit.Bringhurst:SetGerman("Michael Bringhurst") 
+-- MOD.Lang.Unit.Bringhurst:SetFrench("")
+-- MOD.Lang.Unit.Bringhurst:SetRussian("")
+MOD.Bringhurst.Name = MOD.Lang.Unit.Bringhurst[KBM.Lang]
 MOD.Descript = MOD.Bringhurst.Name
 
 -- Ability Dictionary

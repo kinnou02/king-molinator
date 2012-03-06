@@ -13,11 +13,14 @@ local GSB = KBM.BossMod["Greenscales Blight"]
 
 local IJ = {
 	Enabled = true,
+	Directory = GSB.Directory,
+	File = "Johlen.lua",
 	Instance = GSB.Name,
 	HasPhases = true,
 	Lang = {},
 	ID = "Johlen",
 	HasChronicle = true,
+	Object = "IJ",
 }
 
 IJ.Johlen = {
@@ -46,34 +49,34 @@ IJ.Johlen = {
 
 KBM.RegisterMod(IJ.ID, IJ)
 
-IJ.Lang.Johlen = KBM.Language:Add(IJ.Johlen.Name)
-IJ.Lang.Johlen.French = "Infiltrateur Johlen"
-IJ.Lang.Johlen.Russian = "Лазутчик Джохлен"
+-- Main Unit Dictionary
+IJ.Lang.Unit = {}
+IJ.Lang.Unit.Johlen = KBM.Language:Add(IJ.Johlen.Name)
+IJ.Lang.Unit.Johlen:SetFrench("Infiltrateur Johlen")
+IJ.Lang.Unit.Johlen:SetRussian("Лазутчик Джохлен")
+-- Addtional Unit Dictionary
+IJ.Lang.Unit.Bomb = KBM.Language:Add("Devastating Bomb")
+IJ.Lang.Unit.Bomb:SetGerman("Vernichtende Bombe")
+IJ.Lang.Unit.Bomb:SetRussian("Разрушительная бомба")
 
 -- Ability Dictionary
 IJ.Lang.Ability = {}
 IJ.Lang.Ability.Blinding = KBM.Language:Add("Blinding Bomb")
-IJ.Lang.Ability.Blinding.German = "Blendbombe"
-IJ.Lang.Ability.Blinding.Russian = "Ослепляющая бомба"
+IJ.Lang.Ability.Blinding:SetGerman("Blendbombe")
+IJ.Lang.Ability.Blinding:SetRussian("Ослепляющая бомба")
 
 -- Verbose Dictionary 
 IJ.Lang.Verbose = {}
 IJ.Lang.Verbose.Bomb = KBM.Language:Add("Devastation")
-IJ.Lang.Verbose.Bomb.German = "Vernichtung"
-
--- Unit Dictionary
-IJ.Lang.Unit = {}
-IJ.Lang.Unit.Bomb = KBM.Language:Add("Devastating Bomb")
-IJ.Lang.Unit.Bomb.German = "Vernichtende Bombe"
-IJ.Lang.Unit.Bomb.Russian = "Разрушительная бомба"
+IJ.Lang.Verbose.Bomb:SetGerman("Vernichtung")
 
 -- Phase Monitor Dictionary
 IJ.Lang.Phase = {}
 IJ.Lang.Phase.Bomb = KBM.Language:Add("Bomb")
-IJ.Lang.Phase.Bomb.German = "Bombe"
-IJ.Lang.Phase.Bomb.Russian = "бомба"
+IJ.Lang.Phase.Bomb:SetGerman("Bombe")
+IJ.Lang.Phase.Bomb:SetRussian("бомба")
 
-IJ.Johlen.Name = IJ.Lang.Johlen[KBM.Lang]
+IJ.Johlen.Name = IJ.Lang.Unit.Johlen[KBM.Lang]
 IJ.Descript = IJ.Johlen.Name
 
 IJ.Bomb = {

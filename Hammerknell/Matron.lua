@@ -20,6 +20,7 @@ local MZ = {
 	Timers = {},
 	Lang = {},
 	ID = "Matron",
+	Object = "MZ",
 }
 
 MZ.Matron = {
@@ -42,13 +43,13 @@ MZ.Matron = {
 		CastBar = KBM.Defaults.CastBar(),
 		TimersRef = {
 			Enabled = true,
-			Concussion = KBM.Defaults.TimerObj.Create(),
-			Mark = KBM.Defaults.TimerObj.Create(),
-			Shadow = KBM.Defaults.TimerObj.Create(),
-			Blast = KBM.Defaults.TimerObj.Create(),
-			Ichor = KBM.Defaults.TimerObj.Create(),
-			Adds = KBM.Defaults.TimerObj.Create(),
-			Spiritual = KBM.Defaults.TimerObj.Create(),
+			Concussion = KBM.Defaults.TimerObj.Create("red"),
+			Mark = KBM.Defaults.TimerObj.Create("purple"),
+			Shadow = KBM.Defaults.TimerObj.Create("red"),
+			Blast = KBM.Defaults.TimerObj.Create("yellow"),
+			Ichor = KBM.Defaults.TimerObj.Create("cyan"),
+			Adds = KBM.Defaults.TimerObj.Create("dark_green"),
+			Spiritual = KBM.Defaults.TimerObj.Create("blue"),
 		},
 		AlertsRef = {
 			Enabled = true,
@@ -61,52 +62,54 @@ MZ.Matron = {
 
 KBM.RegisterMod(MZ.ID, MZ)
 
-MZ.Lang.Matron = KBM.Language:Add(MZ.Matron.Name)
-MZ.Lang.Matron.German = "Matrone Zamira"
-MZ.Lang.Matron.French = "Matrone Zamira"
-MZ.Lang.Matron.Russian = "Старуха Замира"
+-- Main Units
+MZ.Lang.Unit = {}
+MZ.Lang.Unit.Matron = KBM.Language:Add(MZ.Matron.Name)
+MZ.Lang.Unit.Matron:SetGerman("Matrone Zamira")
+MZ.Lang.Unit.Matron:SetFrench("Matrone Zamira")
+MZ.Lang.Unit.Matron:SetRussian("Старуха Замира")
 
 -- Ability Dictionary
 MZ.Lang.Ability = {}
 MZ.Lang.Ability.Concussion = KBM.Language:Add("Dark Concussion")
-MZ.Lang.Ability.Concussion.German = "Dunkle Erschütterung"
-MZ.Lang.Ability.Concussion.French = "Concussion sombre"
-MZ.Lang.Ability.Concussion.Russian = "Темное сотрясение"
+MZ.Lang.Ability.Concussion:SetGerman("Dunkle Erschütterung")
+MZ.Lang.Ability.Concussion:SetFrench("Concussion sombre")
+MZ.Lang.Ability.Concussion:SetRussian("Темное сотрясение")
 MZ.Lang.Ability.Blast = KBM.Language:Add("Hideous Blast")
-MZ.Lang.Ability.Blast.German = "Schrecklicher Schlag"
-MZ.Lang.Ability.Blast.French = "Explosion atroce"
-MZ.Lang.Ability.Blast.Russian = "Мерзейший взрыв"
+MZ.Lang.Ability.Blast:SetGerman("Schrecklicher Schlag")
+MZ.Lang.Ability.Blast:SetFrench("Explosion atroce")
+MZ.Lang.Ability.Blast:SetRussian("Мерзейший взрыв")
 MZ.Lang.Ability.Mark = KBM.Language:Add("Mark of Oblivion")
-MZ.Lang.Ability.Mark.German = "Zeichen der Vergessenheit"
-MZ.Lang.Ability.Mark.French = "Marque de l'oubli"
-MZ.Lang.Ability.Mark.Russian = "Знак забвения"
+MZ.Lang.Ability.Mark:SetGerman("Zeichen der Vergessenheit")
+MZ.Lang.Ability.Mark:SetFrench("Marque de l'oubli")
+MZ.Lang.Ability.Mark:SetRussian("Знак забвения")
 MZ.Lang.Ability.Shadow = KBM.Language:Add("Shadow Strike")
-MZ.Lang.Ability.Shadow.German = "Schattenschlag"
-MZ.Lang.Ability.Shadow.Russian = "Поражение тенью"
+MZ.Lang.Ability.Shadow:SetGerman("Schattenschlag")
+MZ.Lang.Ability.Shadow:SetRussian("Поражение тенью")
 MZ.Lang.Ability.Ichor = KBM.Language:Add("Revolting Ichor")
-MZ.Lang.Ability.Ichor.German = "Abscheulicher Eiter"
-MZ.Lang.Ability.Ichor.Russian = "Омерзительный гной"
+MZ.Lang.Ability.Ichor:SetGerman("Abscheulicher Eiter")
+MZ.Lang.Ability.Ichor:SetRussian("Омерзительный гной")
 
 -- Debuff Dictionary
 MZ.Lang.Debuff = {}
 MZ.Lang.Debuff.Curse = KBM.Language:Add("Matron's Curse")
-MZ.Lang.Debuff.Curse.German = "Fluch der Matrone"
-MZ.Lang.Debuff.Curse.French = "Mal\195\169diction de la matrone"
-MZ.Lang.Debuff.Curse.Russian = "Проклятие старухи"
+MZ.Lang.Debuff.Curse:SetGerman("Fluch der Matrone")
+MZ.Lang.Debuff.Curse:SetFrench("Mal\195\169diction de la matrone")
+MZ.Lang.Debuff.Curse:SetRussian("Проклятие старухи")
 MZ.Lang.Debuff.Spiritual = KBM.Language:Add("Spiritual Exhaustion")
-MZ.Lang.Debuff.Spiritual.German = "Spirituelle Erschöpfung"
-MZ.Lang.Debuff.Spiritual.Russian = "Духовное истощение"
+MZ.Lang.Debuff.Spiritual:SetGerman("Spirituelle Erschöpfung")
+MZ.Lang.Debuff.Spiritual:SetRussian("Духовное истощение")
 
 -- Verbose Dictionary
 MZ.Lang.Verbose = {}
 MZ.Lang.Verbose.Adds = KBM.Language:Add("Adds spawn")
-MZ.Lang.Verbose.Adds.German = "Adds spawnen"
-MZ.Lang.Verbose.Adds.Russian = "Призыв аддов"
+MZ.Lang.Verbose.Adds:SetGerman("Adds spawnen")
+MZ.Lang.Verbose.Adds:SetRussian("Призыв аддов")
 MZ.Lang.Verbose.Spiritual = KBM.Language:Add(MZ.Lang.Debuff.Spiritual[KBM.Lang].." fades")
-MZ.Lang.Verbose.Spiritual.German = MZ.Lang.Debuff.Spiritual[KBM.Lang].." ausgelaufen!"
-MZ.Lang.Verbose.Spiritual.Russian = MZ.Lang.Debuff.Spiritual[KBM.Lang].." заканчивается"
+MZ.Lang.Verbose.Spiritual:SetGerman(MZ.Lang.Debuff.Spiritual[KBM.Lang].." ausgelaufen!")
+MZ.Lang.Verbose.Spiritual:SetRussian(MZ.Lang.Debuff.Spiritual[KBM.Lang].." заканчивается")
 
-MZ.Matron.Name = MZ.Lang.Matron[KBM.Lang]
+MZ.Matron.Name = MZ.Lang.Unit.Matron[KBM.Lang]
 MZ.Descript = MZ.Matron.Name
 
 function MZ:AddBosses(KBM_Boss)

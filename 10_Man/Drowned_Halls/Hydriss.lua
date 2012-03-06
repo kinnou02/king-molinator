@@ -11,6 +11,8 @@ local KBM = AddonData.data
 local DH = KBM.BossMod["Drowned Halls"]
 
 local HH = {
+	Directory = DH.Directory,
+	File = "Hydriss.lua",
 	Enabled = true,
 	Instance = DH.Name,
 	Lang = {},
@@ -18,7 +20,8 @@ local HH = {
 	PhaseObjects = {},
 	Phase = 1,
 	Enrage = 60 * 12,
-	}
+	Object = "HH",
+}
 
 HH.Hydriss = {
 	Mod = HH,
@@ -50,9 +53,16 @@ HH.Hydriss = {
 
 KBM.RegisterMod(HH.ID, HH)
 
-HH.Lang.Hydriss = KBM.Language:Add(HH.Hydriss.Name)
-HH.Lang.Hydriss:SetGerman("Hohepriesterin Hydriss")
-HH.Lang.Hydriss:SetRussian("Первосвященница Гайдрисс")
+-- Main Unit Dictionary
+HH.Lang.Unit = {}
+HH.Lang.Unit.Hydriss = KBM.Language:Add(HH.Hydriss.Name)
+HH.Lang.Unit.Hydriss:SetGerman("Hohepriesterin Hydriss")
+HH.Lang.Unit.Hydriss:SetRussian("Первосвященница Гайдрисс")
+HH.Lang.Unit.Sea = KBM.Language:Add("Seaspawn")
+HH.Lang.Unit.Sea:SetGerman("Meeresbrut")
+HH.Lang.Unit.Sea:SetRussian("Порождение моря")
+HH.Lang.Unit.Hive = KBM.Language:Add("Seaclaw Hive")
+HH.Lang.Unit.Hive:SetGerman("Seeklauennest")
 
 -- Ability Dictionary
 HH.Lang.Ability = {}
@@ -67,14 +77,6 @@ HH.Lang.Mechanic = {}
 HH.Lang.Mechanic.Air = KBM.Language:Add("Air Phase")
 HH.Lang.Mechanic.Air:SetGerman("Flug Phase")
 HH.Lang.Mechanic.Air:SetRussian("Воздушная фаза")
-
--- Unit Dictionary
-HH.Lang.Unit = {}
-HH.Lang.Unit.Sea = KBM.Language:Add("Seaspawn")
-HH.Lang.Unit.Sea:SetGerman("Meeresbrut")
-HH.Lang.Unit.Sea:SetRussian("Порождение моря")
-HH.Lang.Unit.Hive = KBM.Language:Add("Seaclaw Hive")
-HH.Lang.Unit.Hive:SetGerman("Seeklauennest")
 
 HH.Seaspawn = {
 	Mod = HH,
@@ -92,7 +94,7 @@ HH.Hive = {
 
 }
 
-HH.Hydriss.Name = HH.Lang.Hydriss[KBM.Lang]
+HH.Hydriss.Name = HH.Lang.Unit.Hydriss[KBM.Lang]
 HH.Descript = HH.Hydriss.Name
 
 function HH:AddBosses(KBM_Boss)

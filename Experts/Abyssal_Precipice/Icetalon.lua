@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Icetalon",
+	Object = "MOD",
 }
 
 MOD.Icetalon = {
@@ -52,11 +53,13 @@ MOD.Icetalon = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Icetalon = KBM.Language:Add(MOD.Icetalon.Name)
-MOD.Lang.Icetalon:SetGerman("Eiskralle") 
--- MOD.Lang.Icetalon:SetFrench("")
--- MOD.Lang.Icetalon:SetRussian("")
-MOD.Icetalon.Name = MOD.Lang.Icetalon[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Icetalon = KBM.Language:Add(MOD.Icetalon.Name)
+MOD.Lang.Unit.Icetalon:SetGerman("Eiskralle") 
+-- MOD.Lang.Unit.Icetalon:SetFrench("")
+-- MOD.Lang.Unit.Icetalon:SetRussian("")
+MOD.Icetalon.Name = MOD.Lang.Unit.Icetalon[KBM.Lang]
 MOD.Descript = MOD.Icetalon.Name
 
 -- Ability Dictionary

@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Maelow",
+	Object = "MOD",
 }
 
 MOD.Maelow = {
@@ -52,22 +53,24 @@ MOD.Maelow = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Maelow = KBM.Language:Add(MOD.Maelow.Name)
-MOD.Lang.Maelow:SetGerman("Schwindler Maelow")
--- MOD.Lang.Maelow:SetFrench("")
--- MOD.Lang.Maelow:SetRussian("")
-MOD.Maelow.Name = MOD.Lang.Maelow[KBM.Lang]
-MOD.Descript = MOD.Maelow.Name
-
--- Ability Dictionary
-MOD.Lang.Ability = {}
-
 -- Unit Dictionary
 MOD.Lang.Unit = {}
+MOD.Lang.Unit.Maelow = KBM.Language:Add(MOD.Maelow.Name)
+MOD.Lang.Unit.Maelow:SetGerman("Schwindler Maelow")
+-- MOD.Lang.Unit.Maelow:SetFrench("")
+-- MOD.Lang.Unit.Maelow:SetRussian("")
+MOD.Maelow.Name = MOD.Lang.Unit.Maelow[KBM.Lang]
+MOD.Descript = MOD.Maelow.Name
+MOD.Lang.Unit.MaelowShort = KBM.Language:Add(MOD.Maelow.NameShort)
+MOD.Lang.Unit.MaelowShort:SetGerman("Maelow")
+MOD.Maelow.NameShort = MOD.Lang.Unit.MaelowShort[KBM.Lang]
 MOD.Lang.Unit.Brae = KBM.Language:Add("Lifeward Brae")
 MOD.Lang.Unit.BraeShort = KBM.Language:Add("Brae")
 MOD.Lang.Unit.Celoah = KBM.Language:Add("Lifeward Celoah")
 MOD.Lang.Unit.CeloahShort = KBM.Language:Add("Celoah")
+
+-- Ability Dictionary
+MOD.Lang.Ability = {}
 
 MOD.Brae = {
 	Mod = MOD,

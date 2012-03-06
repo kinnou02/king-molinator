@@ -11,6 +11,8 @@ local KBM = AddonData.data
 local ROTP = KBM.BossMod["Rise of the Phoenix"]
 
 local BT = {
+	Directory = ROTP.Directory,
+	File = "Beruhast.lua",
 	Enabled = true,
 	Instance = ROTP.Name,
 	HasPhases = false,
@@ -18,6 +20,7 @@ local BT = {
 	ID = "Beruhast",
 	Menu = {},
 	Enrage = 60 * 8,
+	Object = "BT",
 }
 
 BT.Beruhast = {
@@ -53,10 +56,16 @@ BT.Beruhast = {
 
 KBM.RegisterMod(BT.ID, BT)
 
-BT.Lang.Beruhast = KBM.Language:Add(BT.Beruhast.Name)
-BT.Lang.Beruhast.Russian = "Беругаст"
-BT.Beruhast.Name = BT.Lang.Beruhast[KBM.Lang]
+-- Main Unit Dictionary
+BT.Lang.Unit = {}
+BT.Lang.Unit.Beruhast = KBM.Language:Add(BT.Beruhast.Name)
+BT.Lang.Unit.Beruhast.Russian = "Беругаст"
+BT.Beruhast.Name = BT.Lang.Unit.Beruhast[KBM.Lang]
 BT.Descript = BT.Beruhast.Name
+-- Additional Unit Dictionary
+BT.Lang.Unit.Summon = KBM.Language:Add("Summoned Flame")
+BT.Lang.Unit.Summon:SetGerman("Beschworene Flamme")
+BT.Lang.Unit.Summon:SetRussian("Призванный огонь")
 
 -- Ability Dictionary
 BT.Lang.Ability = {}
@@ -72,12 +81,6 @@ BT.Lang.Ability.Vortex = KBM.Language:Add("Flaming Vortex")
 BT.Lang.Ability.Vortex:SetFrench("Embrasement")
 BT.Lang.Ability.Vortex:SetGerman("Flammenwirbel")
 BT.Lang.Ability.Vortex:SetRussian("Огненный вихрь")
-
--- Unit Dictionary
-BT.Lang.Unit = {}
-BT.Lang.Unit.Summon = KBM.Language:Add("Summoned Flame")
-BT.Lang.Unit.Summon:SetGerman("Beschworene Flamme")
-BT.Lang.Unit.Summon:SetRussian("Призванный огонь")
 
 -- Notify Dictionary
 BT.Lang.Notify = {}

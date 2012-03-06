@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Cyclorax",
+	Object = "MOD",
 }
 
 MOD.Cyclorax = {
@@ -51,11 +52,13 @@ MOD.Cyclorax = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Cyclorax = KBM.Language:Add(MOD.Cyclorax.Name)
-MOD.Lang.Cyclorax:SetGerman("Cyclorax")
--- MOD.Lang.Cyclorax:SetFrench("")
--- MOD.Lang.Cyclorax:SetRussian("")
-MOD.Cyclorax.Name = MOD.Lang.Cyclorax[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Cyclorax = KBM.Language:Add(MOD.Cyclorax.Name)
+MOD.Lang.Unit.Cyclorax:SetGerman("Cyclorax")
+-- MOD.Lang.Unit.Cyclorax:SetFrench("")
+-- MOD.Lang.Unit.Cyclorax:SetRussian("")
+MOD.Cyclorax.Name = MOD.Lang.Unit.Cyclorax[KBM.Lang]
 MOD.Descript = MOD.Cyclorax.Name
 
 -- Ability Dictionary

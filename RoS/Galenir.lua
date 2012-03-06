@@ -13,12 +13,15 @@ local ROS = KBM.BossMod["River of Souls"]
 
 local WG = {
 	Enabled = true,
+	Directory = ROS.Directory,
+	File = "Galenir.lua",
 	Instance = ROS.Name,
 	Type = "20man",
 	HasPhases = true,
 	Lang = {},
 	Enrage = 60 * 5.5,
-	ID = "Warmaster Galenir",	
+	ID = "Warmaster Galenir",
+	Object = "WG",
 }
 
 WG.Galenir = {
@@ -44,10 +47,12 @@ WG.Galenir = {
 
 KBM.RegisterMod(WG.ID, WG)
 
-WG.Lang.Galenir = KBM.Language:Add(WG.Galenir.Name)
-WG.Lang.Galenir:SetGerman("Kriegsmeister Galenir")
-WG.Lang.Galenir:SetFrench("Ma\195\174tre de Guerre Galenir")
-WG.Lang.Galenir:SetRussian("Воевода Галенир")
+-- Main Unit Dictionary
+WG.Lang.Unit = {}
+WG.Lang.Unit.Galenir = KBM.Language:Add(WG.Galenir.Name)
+WG.Lang.Unit.Galenir:SetGerman("Kriegsmeister Galenir")
+WG.Lang.Unit.Galenir:SetFrench("Ma\195\174tre de Guerre Galenir")
+WG.Lang.Unit.Galenir:SetRussian("Воевода Галенир")
 
 -- Debuff Dictionary
 WG.Lang.Debuff = {}
@@ -58,7 +63,7 @@ WG.Lang.Debuff.Essence = KBM.Language:Add("Essence Transfer")
 WG.Lang.Debuff.Essence:SetGerman("Essenztransfer")
 WG.Lang.Debuff.Essence:SetRussian("Передача сущности")
 
-WG.Galenir.Name = WG.Lang.Galenir[KBM.Lang]
+WG.Galenir.Name = WG.Lang.Unit.Galenir[KBM.Lang]
 WG.Descript = WG.Galenir.Name
 
 

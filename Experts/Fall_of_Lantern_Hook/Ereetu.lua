@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Ereetu",
+	Object = "MOD",
 }
 
 MOD.Ereetu = {
@@ -52,11 +53,13 @@ MOD.Ereetu = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Ereetu = KBM.Language:Add(MOD.Ereetu.Name)
-MOD.Lang.Ereetu:SetGerman("Glutfürst Ereetu") 
--- MOD.Lang.Ereetu:SetFrench("")
--- MOD.Lang.Ereetu:SetRussian("")
-MOD.Ereetu.Name = MOD.Lang.Ereetu[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Ereetu = KBM.Language:Add(MOD.Ereetu.Name)
+MOD.Lang.Unit.Ereetu:SetGerman("Glutfürst Ereetu") 
+-- MOD.Lang.Unit.Ereetu:SetFrench("")
+-- MOD.Lang.Unit.Ereetu:SetRussian("")
+MOD.Ereetu.Name = MOD.Lang.Unit.Ereetu[KBM.Lang]
 MOD.Descript = MOD.Ereetu.Name
 
 -- Ability Dictionary

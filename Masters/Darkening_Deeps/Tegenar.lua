@@ -52,11 +52,13 @@ MOD.Tegenar = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Tegenar = KBM.Language:Add(MOD.Tegenar.Name)
-MOD.Lang.Tegenar:SetGerman("Tegenar Tiefzahn")
--- MOD.Lang.Tegenar:SetFrench("")
--- MOD.Lang.Tegenar:SetRussian("")
-MOD.Tegenar.Name = MOD.Lang.Tegenar[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Tegenar = KBM.Language:Add(MOD.Tegenar.Name)
+MOD.Lang.Unit.Tegenar:SetGerman("Tegenar Tiefzahn")
+-- MOD.Lang.Unit.Tegenar:SetFrench("")
+-- MOD.Lang.Unit.Tegenar:SetRussian("")
+MOD.Tegenar.Name = MOD.Lang.Unit.Tegenar[KBM.Lang]
 MOD.Descript = MOD.Tegenar.Name
 
 -- Ability Dictionary

@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Rictus",
+	Object = "MOD",
 }
 
 MOD.Rictus = {
@@ -52,11 +53,13 @@ MOD.Rictus = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Rictus = KBM.Language:Add(MOD.Rictus.Name)
-MOD.Lang.Rictus:SetGerman("Rictus") 
--- MOD.Lang.Rictus:SetFrench("")
--- MOD.Lang.Rictus:SetRussian("")
-MOD.Rictus.Name = MOD.Lang.Rictus[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Rictus = KBM.Language:Add(MOD.Rictus.Name)
+MOD.Lang.Unit.Rictus:SetGerman("Rictus") 
+-- MOD.Lang.Unit.Rictus:SetFrench("")
+-- MOD.Lang.Unit.Rictus:SetRussian("")
+MOD.Rictus.Name = MOD.Lang.Unit.Rictus[KBM.Lang]
 MOD.Descript = MOD.Rictus.Name
 
 -- Ability Dictionary

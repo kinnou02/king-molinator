@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Braxtepel",
+	Object = "MOD",
 }
 
 MOD.Braxtepel = {
@@ -52,11 +53,13 @@ MOD.Braxtepel = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Braxtepel = KBM.Language:Add(MOD.Braxtepel.Name)
-MOD.Lang.Braxtepel:SetGerman("Alchemist Braxtepel")
--- MOD.Lang.Braxtepel:SetFrench("")
--- MOD.Lang.Braxtepel:SetRussian("")
-MOD.Braxtepel.Name = MOD.Lang.Braxtepel[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Braxtepel = KBM.Language:Add(MOD.Braxtepel.Name)
+MOD.Lang.Unit.Braxtepel:SetGerman("Alchemist Braxtepel")
+-- MOD.Lang.Unit.Braxtepel:SetFrench("")
+-- MOD.Lang.Unit.Braxtepel:SetRussian("")
+MOD.Braxtepel.Name = MOD.Lang.Unit.Braxtepel[KBM.Lang]
 MOD.Descript = MOD.Braxtepel.Name
 
 -- Ability Dictionary

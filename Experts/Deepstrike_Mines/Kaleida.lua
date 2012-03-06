@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Kaleida",
+	Object = "MOD",
 }
 
 MOD.Kaleida = {
@@ -52,11 +53,13 @@ MOD.Kaleida = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Kaleida = KBM.Language:Add(MOD.Kaleida.Name)
-MOD.Lang.Kaleida:SetGerman("Torwächterin Kaleida") 
--- MOD.Lang.Kaleida:SetFrench("")
--- MOD.Lang.Kaleida:SetRussian("")
-MOD.Kaleida.Name = MOD.Lang.Kaleida[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Kaleida = KBM.Language:Add(MOD.Kaleida.Name)
+MOD.Lang.Unit.Kaleida:SetGerman("Torwächterin Kaleida") 
+-- MOD.Lang.Unit.Kaleida:SetFrench("")
+-- MOD.Lang.Unit.Kaleida:SetRussian("")
+MOD.Kaleida.Name = MOD.Lang.Unit.Kaleida[KBM.Lang]
 MOD.Descript = MOD.Kaleida.Name
 
 -- Ability Dictionary

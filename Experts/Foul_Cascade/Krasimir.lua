@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Krasimir",
+	Object = "MOD",
 }
 
 MOD.Krasimir = {
@@ -52,11 +53,13 @@ MOD.Krasimir = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Krasimir = KBM.Language:Add(MOD.Krasimir.Name)
-MOD.Lang.Krasimir:SetGerman("Krasimir Barionov")
--- MOD.Lang.Krasimir:SetFrench("")
--- MOD.Lang.Krasimir:SetRussian("")
-MOD.Krasimir.Name = MOD.Lang.Krasimir[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Krasimir = KBM.Language:Add(MOD.Krasimir.Name)
+MOD.Lang.Unit.Krasimir:SetGerman("Krasimir Barionov")
+-- MOD.Lang.Unit.Krasimir:SetFrench("")
+-- MOD.Lang.Unit.Krasimir:SetRussian("")
+MOD.Krasimir.Name = MOD.Lang.Unit.Krasimir[KBM.Lang]
 MOD.Descript = MOD.Krasimir.Name
 
 -- Ability Dictionary
@@ -66,7 +69,7 @@ MOD.KrasPhaseTwo = {
 	Mod = MOD,
 	Level = 52,
 	Active = false,
-	Name = MOD.Lang.Krasimir[KBM.Lang],
+	Name = MOD.Lang.Unit.Krasimir[KBM.Lang],
 	Menu = {},
 	Dead = false,
 	Available = false,
@@ -152,6 +155,8 @@ function MOD:Death(UnitID)
 		if self.Phase == 2 then
 			self.Krasimir.Dead = true
 			return true
+		else
+			self.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
 		end
 	end
 	return false
@@ -170,14 +175,14 @@ function MOD:UnitHPCheck(unitDetails, unitID)
 					self.Krasimir.Casting = false
 					self.Krasimir.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
-					if self.Krasimir.ExpertID == unitDetails.type then
-						self.PhaseObj:SetPhase("1")
-						self.Phase = 1
-					else
-						self.PhaseObj:SetPhase("2")
-						self.Phase = 2
-					end
 					self.PhaseObj.Objectives:AddPercent(self.Krasimir.Name, 0, 100)
+				end
+				if self.Krasimir.ExpertID == unitDetails.type then
+					self.PhaseObj:SetPhase(1)
+					self.Phase = 1
+				elseif self.KrasPhaseTwo.ExpertID == unitDetails.type then
+					self.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
+					self.Phase = 2
 				end
 				self.Krasimir.UnitID = unitID
 				self.Krasimir.Available = true

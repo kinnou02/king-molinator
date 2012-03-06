@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Maficros",
+	Object = "MOD",
 }
 
 MOD.Maficros = {
@@ -52,11 +53,13 @@ MOD.Maficros = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Maficros = KBM.Language:Add(MOD.Maficros.Name)
-MOD.Lang.Maficros:SetGerman("Tephraherrscher Maficros")
--- MOD.Lang.Maficros:SetFrench("")
--- MOD.Lang.Maficros:SetRussian("")
-MOD.Maficros.Name = MOD.Lang.Maficros[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Maficros = KBM.Language:Add(MOD.Maficros.Name)
+MOD.Lang.Unit.Maficros:SetGerman("Tephraherrscher Maficros")
+-- MOD.Lang.Unit.Maficros:SetFrench("")
+-- MOD.Lang.Unit.Maficros:SetRussian("")
+MOD.Maficros.Name = MOD.Lang.Unit.Maficros[KBM.Lang]
 MOD.Descript = MOD.Maficros.Name
 
 -- Ability Dictionary

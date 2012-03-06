@@ -6,12 +6,15 @@
 KBMDH_Settings = {}
 
 local DH = {
+	Directory = "10_Man/Drowned_Halls/",
+	File = "DHHeader.lua",
 	Header = nil,
 	Enabled = true,
 	IsInstance = true,
 	Name = "Drowned Halls",
 	Type = "10man",
 	ID = "DH",
+	Object = "DH",
 }
 
 -- Link Mods
@@ -19,12 +22,14 @@ local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 KBM.RegisterMod("Drowned Halls", DH)
 
-KBM.Language:Add(DH.Name)
-KBM.Language[DH.Name]:SetGerman("Überflutete Hallen")
-KBM.Language[DH.Name]:SetFrench("Salles englouties")
-KBM.Language[DH.Name]:SetRussian("Затопленные Залы")
-
-DH.Name = KBM.Language[DH.Name][KBM.Lang]
+-- Header Dictionary
+DH.Lang = {}
+DH.Lang.Main = {}
+DH.Lang.Main.DH = KBM.Language:Add(DH.Name)
+DH.Lang.Main.DH:SetGerman("Überflutete Hallen")
+DH.Lang.Main.DH:SetFrench("Salles englouties")
+DH.Lang.Main.DH:SetRussian("Затопленные Залы")
+DH.Name = DH.Lang.Main.DH[KBM.Lang]
 DH.Descript = DH.Name
 
 function DH:AddBosses(KBM_Boss)

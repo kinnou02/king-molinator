@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Oludare",
+	Object = "MOD",
 }
 
 MOD.Oludare = {
@@ -52,11 +53,13 @@ MOD.Oludare = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Oludare = KBM.Language:Add(MOD.Oludare.Name)
-MOD.Lang.Oludare:SetGerman("Oludare Feuerhuf")
--- MOD.Lang.Oludare:SetFrench("")
--- MOD.Lang.Oludare:SetRussian("")
-MOD.Oludare.Name = MOD.Lang.Oludare[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Oludare = KBM.Language:Add(MOD.Oludare.Name)
+MOD.Lang.Unit.Oludare:SetGerman("Oludare Feuerhuf")
+-- MOD.Lang.Unit.Oludare:SetFrench("")
+-- MOD.Lang.Unit.Oludare:SetRussian("")
+MOD.Oludare.Name = MOD.Lang.Unit.Oludare[KBM.Lang]
 MOD.Descript = MOD.Oludare.Name
 
 -- Ability Dictionary

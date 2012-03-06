@@ -11,11 +11,14 @@ local KBM = AddonData.data
 local DH = KBM.BossMod["Drowned Halls"]
 
 local IL = {
+	Directory = DH.Directory,
+	File = "Isskal.lua",
 	Enabled = true,
 	Instance = DH.Name,
 	Lang = {},
 	ID = "Isskal",
-	}
+	Object = "IL",
+}
 
 IL.Isskal = {
 	Mod = IL,
@@ -60,59 +63,62 @@ IL.Isskal = {
 
 KBM.RegisterMod(IL.ID, IL)
 
-IL.Lang.Isskal = KBM.Language:Add(IL.Isskal.Name)
-IL.Lang.Isskal.Russian = "Исскал"
+-- Main Unit Dictionary
+IL.Lang.Unit = {}
+IL.Lang.Unit.Isskal = KBM.Language:Add(IL.Isskal.Name)
+IL.Lang.Unit.Isskal:SetGerman("Isskal")
+IL.Lang.Unit.Isskal:SetRussian("Исскал")
 
 -- Ability Dictionary
 IL.Lang.Ability = {}
 IL.Lang.Ability.Shard = KBM.Language:Add("Ice Shard")
-IL.Lang.Ability.Shard.German = "Eissplitter"
-IL.Lang.Ability.Shard.Russian = "Осколок льда"
+IL.Lang.Ability.Shard:SetGerman("Eissplitter")
+IL.Lang.Ability.Shard:SetRussian("Осколок льда")
 IL.Lang.Ability.Wave = KBM.Language:Add("Glacial Wave")
-IL.Lang.Ability.Wave.German = "Gletscherwelle"
-IL.Lang.Ability.Wave.Russian = "Ледяная волна"
+IL.Lang.Ability.Wave:SetGerman("Gletscherwelle")
+IL.Lang.Ability.Wave:SetRussian("Ледяная волна")
 
 -- Mechanic Dictionary
 IL.Lang.Mechanic = {}
 IL.Lang.Mechanic.Whirlpool = KBM.Language:Add("Whirlpool")
-IL.Lang.Mechanic.Whirlpool.Russian = "Вихрь смерти"
+IL.Lang.Mechanic.Whirlpool:SetRussian("Вихрь смерти")
 IL.Lang.Mechanic.Anti = KBM.Language:Add("Anti-Clockwise")
-IL.Lang.Mechanic.Anti.German = "Gegen Uhrzeigersinn"
+IL.Lang.Mechanic.Anti:SetGerman("Gegen Uhrzeigersinn")
 IL.Lang.Mechanic.Clock = KBM.Language:Add("Clockwise")
-IL.Lang.Mechanic.Clock.German = "Im Uhrzeigersinn"
+IL.Lang.Mechanic.Clock:SetGerman("Im Uhrzeigersinn")
 IL.Lang.Mechanic.WhirlpoolEnd = KBM.Language:Add("Whirlpool ends")
-IL.Lang.Mechanic.WhirlpoolEnd.German = "Whirlpool beendet"
-IL.Lang.Mechanic.WhirlpoolEnd.Russian = "Завершение водоворота"
+IL.Lang.Mechanic.WhirlpoolEnd:SetGerman("Whirlpool beendet")
+IL.Lang.Mechanic.WhirlpoolEnd:SetRussian("Завершение водоворота")
 IL.Lang.Mechanic.Reverse = KBM.Language:Add("Changing direction")
-IL.Lang.Mechanic.Reverse.German = "Richtung wechseln"
-IL.Lang.Mechanic.Reverse.Russian = "Смена направления"
+IL.Lang.Mechanic.Reverse:SetGerman("Richtung wechseln")
+IL.Lang.Mechanic.Reverse:SetRussian("Смена направления")
 
 -- Mechanic Notify
 IL.Lang.Notify = {}
 IL.Lang.Notify.Whirlpool = KBM.Language:Add("Go with the current %- or die!")
-IL.Lang.Notify.Whirlpool.German = "Folgt dem Strom, oder sterbt!"
-IL.Lang.Notify.Whirlpool.Russian = "Плывите по течению"
+IL.Lang.Notify.Whirlpool:SetGerman("Folgt dem Strom, oder sterbt!")
+IL.Lang.Notify.Whirlpool:SetRussian("Плывите по течению")
 IL.Lang.Notify.Reverse = KBM.Language:Add("You're going the wrong way, fools!")
-IL.Lang.Notify.Reverse.German = "Ihr Narren geht in die falsche Richtung!"
-IL.Lang.Notify.Reverse.Russian = "Вы не туда идете, придурки!"
+IL.Lang.Notify.Reverse:SetGerman("Ihr Narren geht in die falsche Richtung!")
+IL.Lang.Notify.Reverse:SetRussian("Вы не туда идете, придурки!")
 
 -- Verbose Dictionary
 IL.Lang.Verbose = {}
 IL.Lang.Verbose.Middle = KBM.Language:Add("Middle")
-IL.Lang.Verbose.Middle.German = "Mitte"
+IL.Lang.Verbose.Middle:SetGerman("Mitte")
 IL.Lang.Verbose.Inner = KBM.Language:Add("Inner")
-IL.Lang.Verbose.Inner.German = "Innen"
+IL.Lang.Verbose.Inner:SetGerman("Innen")
 IL.Lang.Verbose.Outer = KBM.Language:Add("Outer")
-IL.Lang.Verbose.Outer.German = "Aussen"
+IL.Lang.Verbose.Outer:SetGerman("Aussen")
 IL.Lang.Verbose.DanceEnd = KBM.Language:Add("Dance sequence ends")
 
 -- Menu Dictionary
 IL.Lang.Menu = {}
 IL.Lang.Menu.WhirlpoolFirst = KBM.Language:Add("First "..IL.Lang.Mechanic.Whirlpool[KBM.Lang])
-IL.Lang.Menu.WhirlpoolFirst.German = "Erster "..IL.Lang.Mechanic.Whirlpool[KBM.Lang]
-IL.Lang.Menu.WhirlpoolFirst.Russian  = "Первый "..IL.Lang.Mechanic.Whirlpool[KBM.Lang]
+IL.Lang.Menu.WhirlpoolFirst:SetGerman("Erster "..IL.Lang.Mechanic.Whirlpool[KBM.Lang])
+IL.Lang.Menu.WhirlpoolFirst:SetRussian("Первый "..IL.Lang.Mechanic.Whirlpool[KBM.Lang])
 
-IL.Isskal.Name = IL.Lang.Isskal[KBM.Lang]
+IL.Isskal.Name = IL.Lang.Unit.Isskal[KBM.Lang]
 IL.Descript = IL.Isskal.Name
 
 function IL:AddBosses(KBM_Boss)

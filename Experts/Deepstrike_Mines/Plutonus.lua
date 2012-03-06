@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "ExPlutonus",
+	Object = "MOD",
 }
 
 MOD.Plutonus = {
@@ -52,11 +53,13 @@ MOD.Plutonus = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Plutonus = KBM.Language:Add(MOD.Plutonus.Name)
-MOD.Lang.Plutonus:SetGerman("Plutonus") 
--- MOD.Lang.Plutonus:SetFrench("")
--- MOD.Lang.Plutonus:SetRussian("")
-MOD.Plutonus.Name = MOD.Lang.Plutonus[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Plutonus = KBM.Language:Add(MOD.Plutonus.Name)
+MOD.Lang.Unit.Plutonus:SetGerman("Plutonus") 
+-- MOD.Lang.Unit.Plutonus:SetFrench("")
+-- MOD.Lang.Unit.Plutonus:SetRussian("")
+MOD.Plutonus.Name = MOD.Lang.Unit.Plutonus[KBM.Lang]
 MOD.Descript = MOD.Plutonus.Name
 
 -- Ability Dictionary

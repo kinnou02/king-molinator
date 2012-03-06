@@ -12,6 +12,8 @@ local KBM = AddonData.data
 local HK = KBM.BossMod["Hammerknell"]
 
 local MX = {
+	Directory = HK.Directory,
+	File = "Murdantix.lua",
 	Enabled = true,
 	Instance = HK.Name,
 	Phase = 1,
@@ -22,6 +24,7 @@ local MX = {
 	ID = "Murdantix",
 	HasChronicle = true,
 	ChroniclePOver = 90,
+	Object = "MX",
 }
 
 MX.Murd = {
@@ -47,14 +50,14 @@ MX.Murd = {
 		Filters = {
 			Enabled = true,
 			Trauma = KBM.Defaults.CastFilter.Create("yellow"),
-			Blast = KBM.Defaults.CastFilter.Create(),
+			Blast = KBM.Defaults.CastFilter.Create("red"),
 		},
 		TimersRef = {
 			Enabled = true,
-			Crush = KBM.Defaults.TimerObj.Create(),
-			Pound = KBM.Defaults.TimerObj.Create(),
-			Blast = KBM.Defaults.TimerObj.Create(),
-			Trauma = KBM.Defaults.TimerObj.Create(),
+			Crush = KBM.Defaults.TimerObj.Create("purple"),
+			Pound = KBM.Defaults.TimerObj.Create("blue"),
+			Blast = KBM.Defaults.TimerObj.Create("red"),
+			Trauma = KBM.Defaults.TimerObj.Create("yellow"),
 		},
 		AlertsRef = {
 			Enabled = true,
@@ -65,35 +68,39 @@ MX.Murd = {
 
 KBM.RegisterMod("Murdantix", MX)
 
-MX.Lang.Murdantix = KBM.Language:Add(MX.Murd.Name)
-MX.Lang.Murdantix.Russian = "Мурдантикс"
-MX.Murd.Name = MX.Lang.Murdantix[KBM.Lang]
-MX.Descript = MX.Lang.Murdantix[KBM.Lang]
+-- Main Unit Dictionary
+MX.Lang.Unit = {}
+MX.Lang.Unit.Murdantix = KBM.Language:Add(MX.Murd.Name)
+MX.Lang.Unit.Murdantix:SetGerman("Murdantix")
+MX.Lang.Unit.Murdantix:SetRussian("Мурдантикс")
+MX.Murd.Name = MX.Lang.Unit.Murdantix[KBM.Lang]
+MX.Descript = MX.Lang.Unit.Murdantix[KBM.Lang]
 
 -- Ability Dictionary
-MX.Lang.Crush = KBM.Language:Add("Mangling Crush")
-MX.Lang.Crush.French = "Essorage"
-MX.Lang.Crush.German = "Erdrückender Stoss"
-MX.Lang.Crush.Russian = "Калечащий удар"
-MX.Lang.Pound = KBM.Language:Add("Ferocious Pound")
-MX.Lang.Pound.French = "Attaque f\195\169roce"
-MX.Lang.Pound.German = "Wildes Zuschlagen"
-MX.Lang.Pound.Russian = "Свирепый удар"
-MX.Lang.Blast = KBM.Language:Add("Demonic Blast")
-MX.Lang.Blast.French = "Explosion d\195\169moniaque"
-MX.Lang.Blast.German = "Dämonische Explosion"
-MX.Lang.Blast.Russian = "Демонический Взрыв"
-MX.Lang.Trauma = KBM.Language:Add("Soul Trauma")
-MX.Lang.Trauma.French = "Traumatisme d'\195\162me"
-MX.Lang.Trauma.German = "Seelentrauma"
-MX.Lang.Trauma.Russian = "Травма души"
+MX.Lang.Ability = {}
+MX.Lang.Ability.Crush = KBM.Language:Add("Mangling Crush")
+MX.Lang.Ability.Crush:SetFrench("Essorage")
+MX.Lang.Ability.Crush:SetGerman("Erdrückender Stoss")
+MX.Lang.Ability.Crush:SetRussian("Калечащий удар")
+MX.Lang.Ability.Pound = KBM.Language:Add("Ferocious Pound")
+MX.Lang.Ability.Pound:SetFrench("Attaque f\195\169roce")
+MX.Lang.Ability.Pound:SetGerman("Wildes Zuschlagen")
+MX.Lang.Ability.Pound:SetRussian("Свирепый удар")
+MX.Lang.Ability.Blast = KBM.Language:Add("Demonic Blast")
+MX.Lang.Ability.Blast:SetFrench("Explosion d\195\169moniaque")
+MX.Lang.Ability.Blast:SetGerman("Dämonische Explosion")
+MX.Lang.Ability.Blast:SetRussian("Демонический Взрыв")
+MX.Lang.Ability.Trauma = KBM.Language:Add("Soul Trauma")
+MX.Lang.Ability.Trauma:SetFrench("Traumatisme d'\195\162me")
+MX.Lang.Ability.Trauma:SetGerman("Seelentrauma")
+MX.Lang.Ability.Trauma:SetRussian("Травма души")
 
 -- Debuff Dictionary
 MX.Lang.Debuff = {}
 MX.Lang.Debuff.Mangled = KBM.Language:Add("Mangled")
-MX.Lang.Debuff.Mangled.German = "Üble Blessur"
-MX.Lang.Debuff.Mangled.French = "Estrop\195\169"
-MX.Lang.Debuff.Mangled.Russian = "Искалечен"
+MX.Lang.Debuff.Mangled:SetGerman("Üble Blessur")
+MX.Lang.Debuff.Mangled:SetFrench("Estrop\195\169")
+MX.Lang.Debuff.Mangled:SetRussian("Искалечен")
 
 function MX:AddBosses(KBM_Boss)
 	self.MenuName = self.Murd.Name
@@ -143,8 +150,8 @@ function MX:LoadVars()
 		KBMMX_Settings = self.Settings
 	end
 	
-	self.Murd.CastFilters[self.Lang.Trauma[KBM.Lang]] = {ID = "Trauma"}
-	self.Murd.CastFilters[self.Lang.Blast[KBM.Lang]] = {ID = "Blast"}
+	self.Murd.CastFilters[self.Lang.Ability.Trauma[KBM.Lang]] = {ID = "Trauma"}
+	self.Murd.CastFilters[self.Lang.Ability.Blast[KBM.Lang]] = {ID = "Blast"}
 	KBM.Defaults.CastFilter.Assign(self.Murd)
 	
 end
@@ -282,27 +289,27 @@ end
 
 function MX:Start()	
 	-- Create Timers
-	self.Murd.TimersRef.Crush = KBM.MechTimer:Add(self.Lang.Crush[KBM.Lang], 12)
-	self.Murd.TimersRef.Pound = KBM.MechTimer:Add(self.Lang.Pound[KBM.Lang], 35)
-	self.Murd.TimersRef.Blast = KBM.MechTimer:Add(self.Lang.Blast[KBM.Lang], 16)
-	self.Murd.TimersRef.Trauma = KBM.MechTimer:Add(self.Lang.Trauma[KBM.Lang], 9)
+	self.Murd.TimersRef.Crush = KBM.MechTimer:Add(self.Lang.Ability.Crush[KBM.Lang], 12)
+	self.Murd.TimersRef.Pound = KBM.MechTimer:Add(self.Lang.Ability.Pound[KBM.Lang], 35)
+	self.Murd.TimersRef.Blast = KBM.MechTimer:Add(self.Lang.Ability.Blast[KBM.Lang], 16)
+	self.Murd.TimersRef.Trauma = KBM.MechTimer:Add(self.Lang.Ability.Trauma[KBM.Lang], 9)
 	KBM.Defaults.TimerObj.Assign(self.Murd)
 	
 	-- Create Alerts
-	self.Murd.AlertsRef.Trauma = KBM.Alert:Create(self.Lang.Trauma[KBM.Lang], nil, false, true, "yellow")
+	self.Murd.AlertsRef.Trauma = KBM.Alert:Create(self.Lang.Ability.Trauma[KBM.Lang], nil, false, true, "yellow")
 	KBM.Defaults.AlertObj.Assign(self.Murd)
 	
 	-- Assign Mechanics to Triggers
-	self.Murd.Triggers.Crush = KBM.Trigger:Create(self.Lang.Crush[KBM.Lang], "damage", self.Murd)
+	self.Murd.Triggers.Crush = KBM.Trigger:Create(self.Lang.Ability.Crush[KBM.Lang], "damage", self.Murd)
 	self.Murd.Triggers.Crush:AddTimer(self.Murd.TimersRef.Crush)
-	self.Murd.Triggers.Pound = KBM.Trigger:Create(self.Lang.Pound[KBM.Lang], "damage", self.Murd)
+	self.Murd.Triggers.Pound = KBM.Trigger:Create(self.Lang.Ability.Pound[KBM.Lang], "damage", self.Murd)
 	self.Murd.Triggers.Pound:AddTimer(self.Murd.TimersRef.Pound)
-	self.Murd.Triggers.Blast = KBM.Trigger:Create(self.Lang.Blast[KBM.Lang], "cast", self.Murd)
+	self.Murd.Triggers.Blast = KBM.Trigger:Create(self.Lang.Ability.Blast[KBM.Lang], "cast", self.Murd)
 	self.Murd.Triggers.Blast:AddTimer(self.Murd.TimersRef.Blast)
-	self.Murd.Triggers.Trauma = KBM.Trigger:Create(self.Lang.Trauma[KBM.Lang], "cast", self.Murd)
+	self.Murd.Triggers.Trauma = KBM.Trigger:Create(self.Lang.Ability.Trauma[KBM.Lang], "cast", self.Murd)
 	self.Murd.Triggers.Trauma:AddTimer(self.Murd.TimersRef.Trauma)
 	self.Murd.Triggers.Trauma:AddAlert(self.Murd.AlertsRef.Trauma)
-	self.Murd.Triggers.TraumaInt = KBM.Trigger:Create(self.Lang.Trauma[KBM.Lang], "interrupt", self.Murd)
+	self.Murd.Triggers.TraumaInt = KBM.Trigger:Create(self.Lang.Ability.Trauma[KBM.Lang], "interrupt", self.Murd)
 	self.Murd.Triggers.TraumaInt:AddStop(self.Murd.AlertsRef.Trauma)
 	self.Murd.Triggers.PhaseTwo = KBM.Trigger:Create(75, "percent", self.Murd)
 	self.Murd.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)

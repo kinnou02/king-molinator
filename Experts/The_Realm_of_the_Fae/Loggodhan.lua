@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Loggodhan",
+	Object = "MOD",
 }
 
 MOD.Loggodhan = {
@@ -52,11 +53,13 @@ MOD.Loggodhan = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Loggodhan = KBM.Language:Add(MOD.Loggodhan.Name)
-MOD.Lang.Loggodhan:SetGerman("Luggodhan")
--- MOD.Lang.Loggodhan:SetFrench("")
--- MOD.Lang.Loggodhan:SetRussian("")
-MOD.Loggodhan.Name = MOD.Lang.Loggodhan[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Loggodhan = KBM.Language:Add(MOD.Loggodhan.Name)
+MOD.Lang.Unit.Loggodhan:SetGerman("Luggodhan")
+-- MOD.Lang.Unit.Loggodhan:SetFrench("")
+-- MOD.Lang.Unit.Loggodhan:SetRussian("")
+MOD.Loggodhan.Name = MOD.Lang.Unit.Loggodhan[KBM.Lang]
 MOD.Descript = MOD.Loggodhan.Name
 
 -- Ability Dictionary

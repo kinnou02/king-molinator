@@ -13,11 +13,14 @@ local GSB = KBM.BossMod["Greenscales Blight"]
 
 local PH = {
 	Enabled = true,
+	Directory = GSB.Directory,
+	File = "Hylas.lua",
 	Instance = GSB.Name,
 	HasPhases = true,
 	Lang = {},
 	ID = "Hylas",
 	HasChronicle = true,
+	Object = "PH",
 }
 
 PH.Hylas = {
@@ -61,48 +64,48 @@ PH.Hylas = {
 
 KBM.RegisterMod(PH.ID, PH)
 
-PH.Lang.Hylas = KBM.Language:Add(PH.Hylas.Name)
-PH.Lang.Hylas.German = "Prinz Hylas"
-PH.Lang.Hylas.Russian = "Принц Гилас"
-
--- Unit Dictionary
+-- Main Unit Dictionary
 PH.Lang.Unit = {}
+PH.Lang.Unit.Hylas = KBM.Language:Add(PH.Hylas.Name)
+PH.Lang.Unit.Hylas:SetGerman("Prinz Hylas")
+PH.Lang.Unit.Hylas:SetRussian("Принц Гилас")
+-- Additional Unit Dictionary
 PH.Lang.Unit.Duke = KBM.Language:Add("Duke Letareus")
-PH.Lang.Unit.Duke.German = "Herzog Letareus"
-PH.Lang.Unit.Duke.French = "Duc Letareus"
-PH.Lang.Unit.Duke.Russian = "Герцог Летареус"
+PH.Lang.Unit.Duke:SetGerman("Herzog Letareus")
+PH.Lang.Unit.Duke:SetFrench("Duc Letareus")
+PH.Lang.Unit.Duke:SetRussian("Герцог Летареус")
 PH.Lang.Unit.Johlen = KBM.Language:Add("Infiltrator Johlen")
-PH.Lang.Unit.Johlen.French = "Infiltrateur Johlen"
-PH.Lang.Unit.Johlen.Russian = "Лазутчик Джохлен"
+PH.Lang.Unit.Johlen:SetGerman("Infiltrator Johlen")
+PH.Lang.Unit.Johlen:SetFrench("Infiltrateur Johlen")
+PH.Lang.Unit.Johlen:SetRussian("Лазутчик Джохлен")
 PH.Lang.Unit.Aleria = KBM.Language:Add("Oracle Aleria")
-PH.Lang.Unit.Aleria.German = "Orakel Aleria"
-PH.Lang.Unit.Aleria.Russian = "Оракул Алерия"
+PH.Lang.Unit.Aleria:SetGerman("Orakel Aleria")
+PH.Lang.Unit.Aleria:SetRussian("Оракул Алерия")
 
 -- Ability Dictionary
 PH.Lang.Ability = {}
 PH.Lang.Ability.Wrath = KBM.Language:Add("Prince's Wrath")
-PH.Lang.Ability.Wrath.German = "Zorn des Prinzen"
-PH.Lang.Ability.Wrath.Russian = "Гнев принца"
+PH.Lang.Ability.Wrath:SetGerman("Zorn des Prinzen")
+PH.Lang.Ability.Wrath:SetRussian("Гнев принца")
 PH.Lang.Ability.Soul = KBM.Language:Add("Soul Fracture")
-PH.Lang.Ability.Soul.German = "Seelenfraktur"
-PH.Lang.Ability.Soul.Russian = "Распад души"
+PH.Lang.Ability.Soul:SetGerman("Seelenfraktur")
+PH.Lang.Ability.Soul:SetRussian("Распад души")
 PH.Lang.Ability.Cotton = KBM.Language:Add("Contagious Cottontail")
-PH.Lang.Ability.Cotton.German = "Ansteckender Baumwollschwanz"
-PH.Lang.Ability.Cotton.Russian = "Заразный кролик"
+PH.Lang.Ability.Cotton:SetGerman("Ansteckender Baumwollschwanz")
+PH.Lang.Ability.Cotton:SetRussian("Заразный кролик")
 
 -- Buff Dictionary
 PH.Lang.Buff = {}
 PH.Lang.Buff.Life = KBM.Language:Add("Invocation of Life")
-PH.Lang.Buff.Life.German = "Anrufung des Lebens"
+PH.Lang.Buff.Life:SetGerman("Anrufung des Lebens")
 
 -- Phase Monitor Dictionary
 PH.Lang.Phase = {}
 PH.Lang.Phase.Critters = KBM.Language:Add("Critters")
-PH.Lang.Phase.Critters.German = "Tiere"
+PH.Lang.Phase.Critters:SetGerman("Tiere")
 
-PH.Hylas.Name = PH.Lang.Hylas[KBM.Lang]
+PH.Hylas.Name = PH.Lang.Unit.Hylas[KBM.Lang]
 PH.Descript = PH.Hylas.Name
-
 
 function PH:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript

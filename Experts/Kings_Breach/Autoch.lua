@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Autoch",
+	Object = "MOD",
 }
 
 MOD.Autoch = {
@@ -52,20 +53,20 @@ MOD.Autoch = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Autoch = KBM.Language:Add(MOD.Autoch.Name)
-MOD.Lang.Autoch:SetGerman("Fleischfresser Autoch")
--- MOD.Lang.Autoch:SetFrench("")
--- MOD.Lang.Autoch:SetRussian("")
-MOD.Autoch.Name = MOD.Lang.Autoch[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Autoch = KBM.Language:Add(MOD.Autoch.Name)
+MOD.Lang.Unit.Autoch:SetGerman("Fleischfresser Autoch")
+-- MOD.Lang.Unit.Autoch:SetFrench("")
+-- MOD.Lang.Unit.Autoch:SetRussian("")
+MOD.Autoch.Name = MOD.Lang.Unit.Autoch[KBM.Lang]
 MOD.Descript = MOD.Autoch.Name
+-- Additional Unit Dictionary
+MOD.Lang.Unit.Mondrach = KBM.Language:Add("Soulflayer Mondrach")
+MOD.Lang.Unit.Mondrach:SetGerman("Seelenschinder Mondrach")
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}
-
--- Unit Dictionary
-MOD.Lang.Unit = {}
-MOD.Lang.Unit.Mondrach = KBM.Language:Add("Soulflayer Mondrach")
-MOD.Lang.Unit.Mondrach.German = "Seelenschinder Mondrach"
 
 MOD.Mondrach = {
 	Mod = MOD,

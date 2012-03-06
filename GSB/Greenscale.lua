@@ -13,12 +13,15 @@ local GSB = KBM.BossMod["Greenscales Blight"]
 
 local LG = {
 	Enabled = true,
+	Directory = GSB.Directory,
+	File = "Greenscale.lua",
 	Instance = GSB.Name,
 	HasPhases = true,
 	Lang = {},
 	Enrage = 60 * 14.5,	
 	ID = "Greenscale",
 	HasChronicle = true,
+	Object = "LG",
 }
 
 LG.Greenscale = {
@@ -42,7 +45,7 @@ LG.Greenscale = {
 		CastBar = KBM.Defaults.CastBar(),
 		TimersRef = {
 			Enabled = true,
-			Blight = KBM.Defaults.TimerObj.Create(),
+			Blight = KBM.Defaults.TimerObj.Create("red"),
 			Fumes = KBM.Defaults.TimerObj.Create("purple"),
 		},
 		AlertsRef = {
@@ -57,32 +60,32 @@ LG.Greenscale = {
 
 KBM.RegisterMod(LG.ID, LG)
 
-LG.Lang.Greenscale = KBM.Language:Add(LG.Greenscale.Name)
-LG.Lang.Greenscale.German = "Fürst Grünschuppe"
-LG.Lang.Greenscale.French = "Seigneur Vert\195\169caille"
-LG.Lang.Greenscale.Russian = "Лорд Зеленокож"
+-- Main Unit Dictionary
+LG.Lang.Unit = {}
+LG.Lang.Unit.Greenscale = KBM.Language:Add(LG.Greenscale.Name)
+LG.Lang.Unit.Greenscale:SetGerman("Fürst Grünschuppe")
+LG.Lang.Unit.Greenscale:SetFrench("Seigneur Vert\195\169caille")
+LG.Lang.Unit.Greenscale:SetRussian("Лорд Зеленокож")
+-- Unit Dictionary
+LG.Lang.Unit.Verdant = KBM.Language:Add("Verdant Annihilator")
+LG.Lang.Unit.Verdant:SetGerman("Grüner Auslöscher")
+LG.Lang.Unit.Verdant:SetRussian("Лиственный расщепитель")
 
 -- Ability Dictionary
 LG.Lang.Ability = {}
 LG.Lang.Ability.Blight = KBM.Language:Add("Strangling Blight")
-LG.Lang.Ability.Blight.German = "Würgende Plage"
-LG.Lang.Ability.Blight.Russian = "Удушающая болезнь"
+LG.Lang.Ability.Blight:SetGerman("Würgende Plage")
+LG.Lang.Ability.Blight:SetRussian("Удушающая болезнь")
 LG.Lang.Ability.Fumes = KBM.Language:Add("Noxious Fumes")
-LG.Lang.Ability.Fumes.German = "Giftige Dämpfe"
-LG.Lang.Ability.Fumes.Russian = "Ядовитые пары"
-
--- Unit Dictionary
-LG.Lang.Unit = {}
-LG.Lang.Unit.Verdant = KBM.Language:Add("Verdant Annihilator")
-LG.Lang.Unit.Verdant.German = "Grüner Auslöscher"
-LG.Lang.Unit.Verdant.Russian = "Лиственный расщепитель"
+LG.Lang.Ability.Fumes:SetGerman("Giftige Dämpfe")
+LG.Lang.Ability.Fumes:SetRussian("Ядовитые пары")
 
 -- Mechanic Dictionary (Verbose)
 LG.Lang.Mechanic = {}
 LG.Lang.Mechanic.Death = KBM.Language:Add("Protective Shield")
-LG.Lang.Mechanic.Death.German = "Schutzschild" 
+LG.Lang.Mechanic.Death:SetGerman("Schutzschild")
 
-LG.Greenscale.Name = LG.Lang.Greenscale[KBM.Lang]
+LG.Greenscale.Name = LG.Lang.Unit.Greenscale[KBM.Lang]
 LG.Descript = LG.Greenscale.Name
 
 LG.Verdant = {

@@ -12,11 +12,14 @@ local KBM = AddonData.data
 local GP = KBM.BossMod["Gilded Prophecy"]
 
 local UK = {
+	Directory = GP.Directory,
+	File = "Uruluuk.lua",
 	Enabled = true,
 	Instance = GP.Name,
 	Lang = {},
 	ID = "Uruluuk",
-	}
+	Object = "UK",
+}
 
 UK.Uruluuk = {
 	Mod = UK,
@@ -43,33 +46,36 @@ UK.Uruluuk = {
 
 KBM.RegisterMod(UK.ID, UK)
 
-UK.Lang.Uruluuk = KBM.Language:Add(UK.Uruluuk.Name)
-UK.Lang.Uruluuk:SetRussian("Улуруук")
-UK.Uruluuk.Name = UK.Lang.Uruluuk[KBM.Lang]
+-- Main Unit Dictionary
+UK.Lang.Unit = {}
+UK.Lang.Unit.Uruluuk = KBM.Language:Add(UK.Uruluuk.Name)
+UK.Lang.Unit.Uruluuk:SetGerman("Uruluuk")
+UK.Lang.Unit.Uruluuk:SetRussian("Улуруук")
+UK.Uruluuk.Name = UK.Lang.Unit.Uruluuk[KBM.Lang]
 
 -- Ability Dictionary
 UK.Lang.Ability = {}
 UK.Lang.Ability.Fist = KBM.Language:Add("Fist of Laethys")
-UK.Lang.Ability.Fist.German = "Faust von Laethys"
-UK.Lang.Ability.Fist.Russian = "Кулак Лэтис"
+UK.Lang.Ability.Fist:SetGerman("Faust von Laethys")
+UK.Lang.Ability.Fist:SetRussian("Кулак Лэтис")
 UK.Lang.Ability.Storm = KBM.Language:Add("Storm of Force")
-UK.Lang.Ability.Storm.German = "Sturm der Stärke"
-UK.Lang.Ability.Storm.Russian = "Буря силы"
+UK.Lang.Ability.Storm:SetGerman("Sturm der Stärke")
+UK.Lang.Ability.Storm:SetRussian("Буря силы")
 UK.Lang.Ability.Crystal = KBM.Language:Add("Crystal Imprisonment")
-UK.Lang.Ability.Crystal.German = "Kristallgefängnis"
-UK.Lang.Ability.Crystal.Russian = "Заключение в кристалл"
+UK.Lang.Ability.Crystal:SetGerman("Kristallgefängnis")
+UK.Lang.Ability.Crystal:SetRussian("Заключение в кристалл")
 
 -- Verbose Dictionary
 UK.Lang.Verbose = {}
 UK.Lang.Verbose.Crystal = KBM.Language:Add("Crystal on YOU soon!")
-UK.Lang.Verbose.Crystal.German = "Achtung, du wirst zum Kristall"
-UK.Lang.Verbose.Crystal.Russian = "Вы скоро превратитесь в кристалл!"
+UK.Lang.Verbose.Crystal:SetGerman("Achtung, du wirst zum Kristall")
+UK.Lang.Verbose.Crystal:SetRussian("Вы скоро превратитесь в кристалл!")
 
--- NPC Notify Dictionary
+-- Notify Dictionary
 UK.Lang.Notify = {}
 UK.Lang.Notify.Crystal = KBM.Language:Add("Uruluuk points at (%a*)!")
-UK.Lang.Notify.Crystal.German = "Uruluuk zeigt auf (%a*)!"
-UK.Lang.Notify.Crystal.Russian = "Улуруук указывает туда, где стоит (%a*)!"
+UK.Lang.Notify.Crystal:SetGerman("Uruluuk zeigt auf (%a*)!")
+UK.Lang.Notify.Crystal:SetRussian("Улуруук указывает туда, где стоит (%a*)!")
 
 UK.Descript = UK.Uruluuk.Name
 

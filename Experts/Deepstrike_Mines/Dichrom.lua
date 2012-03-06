@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Dichrom",
+	Object = "MOD",
 }
 
 MOD.Dichrom = {
@@ -52,11 +53,13 @@ MOD.Dichrom = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Dichrom = KBM.Language:Add(MOD.Dichrom.Name)
-MOD.Lang.Dichrom:SetGerman("Dichrom") 
--- MOD.Lang.Dichrom:SetFrench("")
--- MOD.Lang.Dichrom:SetRussian("")
-MOD.Dichrom.Name = MOD.Lang.Dichrom[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Dichrom = KBM.Language:Add(MOD.Dichrom.Name)
+MOD.Lang.Unit.Dichrom:SetGerman("Dichrom")
+-- MOD.Lang.Unit.Dichrom:SetFrench("")
+-- MOD.Lang.Unit.Dichrom:SetRussian("")
+MOD.Dichrom.Name = MOD.Lang.Unit.Dichrom[KBM.Lang]
 MOD.Descript = MOD.Dichrom.Name
 
 -- Ability Dictionary

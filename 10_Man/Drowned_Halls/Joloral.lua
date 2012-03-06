@@ -11,11 +11,14 @@ local KBM = AddonData.data
 local DH = KBM.BossMod["Drowned Halls"]
 
 local JR = {
+	Directory = DH.Directory,
+	File = "Joloral.lua",
 	Enabled = true,
 	Instance = DH.Name,
 	Lang = {},
 	ID = "Joloral",
-	}
+	Object = "JR",
+}
 
 JR.Joloral = {
 	Mod = JR,
@@ -46,39 +49,39 @@ JR.Joloral = {
 
 KBM.RegisterMod(JR.ID, JR)
 
-JR.Lang.Joloral = KBM.Language:Add(JR.Joloral.Name)
-JR.Lang.Joloral.German = "Joloral Wutflut"
-JR.Lang.Joloral.French = "Joloral Ragemar\195\169e"
-JR.Lang.Joloral.Russian = "Йолорал Яролив"
-
 -- Unit Dictionary
 JR.Lang.Unit = {}
+JR.Lang.Unit.Joloral = KBM.Language:Add(JR.Joloral.Name)
+JR.Lang.Unit.Joloral:SetGerman("Joloral Wutflut")
+JR.Lang.Unit.Joloral:SetFrench("Joloral Ragemar\195\169e")
+JR.Lang.Unit.Joloral:SetRussian("Йолорал Яролив")
+-- Additional Unit Dictionary
 JR.Lang.Unit.Crippler = KBM.Language:Add("Plated Crippler")
-JR.Lang.Unit.Crippler.German = "Plattenverkrüppler"
+JR.Lang.Unit.Crippler:SetGerman("Plattenverkrüppler")
 
 -- Ability Dictionary
 JR.Lang.Ability = {}
 JR.Lang.Ability.Panic = KBM.Language:Add("Panic Attack")
-JR.Lang.Ability.Panic.German = "Panikattacke"
-JR.Lang.Ability.Panic.Russian = "Приступ паники"
+JR.Lang.Ability.Panic:SetGerman("Panikattacke")
+JR.Lang.Ability.Panic:SetRussian("Приступ паники")
 
 -- Notify Dictionary
 JR.Lang.Notify = {}
 JR.Lang.Notify.Panic = KBM.Language:Add("Joloral Ragetide glares at (%a*)")
-JR.Lang.Notify.Panic.German = "Joloral Wutflut starrt (%a*) an!"
+JR.Lang.Notify.Panic:SetGerman("Joloral Wutflut starrt (%a*) an!")
 
 -- Verbose Dictionary
 JR.Lang.Verbose = {}
 JR.Lang.Verbose.Crippler = KBM.Language:Add(JR.Lang.Unit.Crippler[KBM.Lang].." enters the battle")
-JR.Lang.Verbose.Crippler.German = JR.Lang.Unit.Crippler[KBM.Lang].." greift in den Kampf ein!"
+JR.Lang.Verbose.Crippler:SetGerman(JR.Lang.Unit.Crippler[KBM.Lang].." greift in den Kampf ein!")
 
 -- Menu Dictionary
 JR.Lang.Menu = {}
 JR.Lang.Menu.Panic = KBM.Language:Add(JR.Lang.Ability.Panic[KBM.Lang].." duration.")
-JR.Lang.Menu.Panic.German = JR.Lang.Ability.Panic[KBM.Lang].." Dauer."
-JR.Lang.Menu.Panic.Russian = "Длительность "..JR.Lang.Ability.Panic[KBM.Lang]
+JR.Lang.Menu.Panic:SetGerman(JR.Lang.Ability.Panic[KBM.Lang].." Dauer.")
+JR.Lang.Menu.Panic:SetRussian("Длительность "..JR.Lang.Ability.Panic[KBM.Lang])
 
-JR.Joloral.Name = JR.Lang.Joloral[KBM.Lang]
+JR.Joloral.Name = JR.Lang.Unit.Joloral[KBM.Lang]
 JR.Descript = JR.Joloral.Name
 
 function JR:AddBosses(KBM_Boss)

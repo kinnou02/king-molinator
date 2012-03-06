@@ -6,25 +6,29 @@
 KBMROTP_Settings = {}
 
 local ROTP = {
-	Directory = "10_Man/Rise_of_the_Phoenix",
+	Directory = "10_Man/Rise_of_the_Phoenix/",
+	File = "ROTPHeader.lua",
 	Header = nil,
 	Enabled = true,
 	IsInstance = true,
 	Name = "Rise of the Phoenix",
 	Type = "10man",
 	ID = "ROTP",
+	Object = "ROTP",
 }
 
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 KBM.RegisterMod("Rise of the Phoenix", ROTP)
 
-KBM.Language:Add(ROTP.Name)
-KBM.Language[ROTP.Name]:SetGerman("Aufstieg des Phönix")
-KBM.Language[ROTP.Name]:SetFrench("Envol du Ph\195\169nix")
-KBM.Language[ROTP.Name]:SetRussian("Возрождение Феникса")
-
-ROTP.Name = KBM.Language[ROTP.Name][KBM.Lang]
+-- Header Dictionary
+ROTP.Lang = {}
+ROTP.Lang.Main = {}
+ROTP.Lang.Main.ROTP = KBM.Language:Add(ROTP.Name)
+ROTP.Lang.Main.ROTP:SetGerman("Aufstieg des Phönix")
+ROTP.Lang.Main.ROTP:SetFrench("Envol du Ph\195\169nix")
+ROTP.Lang.Main.ROTP:SetRussian("Возрождение Феникса")
+ROTP.Name = ROTP.Lang.Main.ROTP[KBM.Lang]
 ROTP.Descript = ROTP.Name
 
 function ROTP:AddBosses(KBM_Boss)

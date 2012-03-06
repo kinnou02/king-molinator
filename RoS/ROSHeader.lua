@@ -10,6 +10,8 @@ local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 
 local ROS = {
+	Directory = "RoS",
+	File = "ROSHeader.lua",
 	Header = nil,
 	Enabled = true,
 	IsInstance = true,
@@ -20,12 +22,15 @@ local ROS = {
 
 KBM.RegisterMod("River of Souls", ROS)
 
-KBM.Language:Add(ROS.Name)
-KBM.Language[ROS.Name]:SetGerman("Seelenfluss")
-KBM.Language[ROS.Name]:SetFrench("Fleuves des \195\130mes")
-KBM.Language[ROS.Name]:SetRussian("Река Душ")
+-- Header Name Dictionary
+ROS.Lang = {}
+ROS.Lang.Main = {}
+ROS.Lang.Main.ROS = KBM.Language:Add(ROS.Name)
+ROS.Lang.Main.ROS:SetGerman("Seelenfluss")
+ROS.Lang.Main.ROS:SetFrench("Fleuves des \195\130mes")
+ROS.Lang.Main.ROS:SetRussian("Река Душ")
 
-ROS.Name = KBM.Language[ROS.Name][KBM.Lang]
+ROS.Name = ROS.Lang.Main.ROS[KBM.Lang]
 ROS.Descript = ROS.Name
 
 function ROS:AddBosses(KBM_Boss)

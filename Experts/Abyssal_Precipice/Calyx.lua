@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Calyx",
+	Object = "MOD",
 }
 
 MOD.Calyx = {
@@ -52,11 +53,13 @@ MOD.Calyx = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Calyx = KBM.Language:Add(MOD.Calyx.Name)
-MOD.Lang.Calyx:SetGerman("Calyx der Alte")
--- MOD.Lang.Calyx:SetFrench("")
--- MOD.Lang.Calyx:SetRussian("")
-MOD.Calyx.Name = MOD.Lang.Calyx[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Calyx = KBM.Language:Add(MOD.Calyx.Name)
+MOD.Lang.Unit.Calyx:SetGerman("Calyx der Alte")
+-- MOD.Lang.Unit.Calyx:SetFrench("")
+-- MOD.Lang.Unit.Calyx:SetRussian("")
+MOD.Calyx.Name = MOD.Lang.Unit.Calyx[KBM.Lang]
 MOD.Descript = MOD.Calyx.Name
 
 -- Ability Dictionary

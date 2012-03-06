@@ -18,6 +18,7 @@ local GS = {
 	Lang = {},
 	ID = "Silgen",
 	Enrage = 60 * 10,
+	Object = "GS",
 }
 
 GS.Silgen = {
@@ -53,10 +54,13 @@ GS.Silgen = {
 
 KBM.RegisterMod(GS.ID, GS)
 
-GS.Lang.Silgen = KBM.Language:Add(GS.Silgen.Name)
-GS.Lang.Silgen:SetFrench("G\195\169n\195\169ral Silgen")
-GS.Lang.Silgen:SetRussian("Генерал Силген")
-GS.Silgen.Name = GS.Lang.Silgen[KBM.Lang]
+-- Main Unit Dictionary
+GS.Lang.Unit = {}
+GS.Lang.Unit.Silgen = KBM.Language:Add(GS.Silgen.Name)
+GS.Lang.Unit.Silgen:SetGerman("Silgen")
+GS.Lang.Unit.Silgen:SetFrench("G\195\169n\195\169ral Silgen")
+GS.Lang.Unit.Silgen:SetRussian("Генерал Силген")
+GS.Silgen.Name = GS.Lang.Unit.Silgen[KBM.Lang]
 GS.Descript = GS.Silgen.Name
 
 -- Ability Dictionary
@@ -66,6 +70,7 @@ GS.Lang.Ability.Funnel:SetGerman("Hitzetrichter")
 GS.Lang.Ability.Funnel:SetRussian("Раскаленный горн")
 GS.Lang.Ability.Incinerate = KBM.Language:Add("Incinerate")
 GS.Lang.Ability.Incinerate:SetGerman("Verbrennen")
+GS.Lang.Ability.Incinerate:SetRussian("Кремация")
 
 -- Debuff Dictionary
 GS.Lang.Debuff = {}

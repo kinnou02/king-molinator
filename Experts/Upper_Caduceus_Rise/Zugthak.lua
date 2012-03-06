@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Zugthak",
+	Object = "MOD",
 }
 
 MOD.Zugthak = {
@@ -26,7 +27,6 @@ MOD.Zugthak = {
 	Level = "??",
 	Active = false,
 	Name = "Zugthak",
-	--NameShort = "Zugthak",
 	Menu = {},
 	Castbar = nil,
 	Dead = false,
@@ -52,11 +52,13 @@ MOD.Zugthak = {
 
 KBM.RegisterMod(MOD.ID, MOD)
 
-MOD.Lang.Zugthak = KBM.Language:Add(MOD.Zugthak.Name)
-MOD.Lang.Zugthak:SetGerman("Zugthak")
--- MOD.Lang.Zugthak:SetFrench("")
--- MOD.Lang.Zugthak:SetRussian("")
-MOD.Zugthak.Name = MOD.Lang.Zugthak[KBM.Lang]
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Zugthak = KBM.Language:Add(MOD.Zugthak.Name)
+MOD.Lang.Unit.Zugthak:SetGerman("Zugthak")
+-- MOD.Lang.Unit.Zugthak:SetFrench("")
+-- MOD.Lang.Unit.Zugthak:SetRussian("")
+MOD.Zugthak.Name = MOD.Lang.Unit.Zugthak[KBM.Lang]
 MOD.Descript = MOD.Zugthak.Name
 
 -- Ability Dictionary

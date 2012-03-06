@@ -1,0 +1,29 @@
+﻿Identifier = "KBMLocaleManager"
+
+Name = "King Boss Mods Locale Manager"
+NameShort = "KBMLocMan"
+
+Description = "King Boss Mods and locale management system."
+
+Author = "Paul Snart"
+Website = "http://twitter.com/#!/psnart"
+Email = "snarty@gmail.com"
+
+Version = "0.0.1"
+
+Environment = "1.7"
+
+RunOnStartup = {
+	"Locale.lua",
+}
+
+SavedVariables = {
+	KBMLM_German = "account",
+	KBMLM_French = "account",
+	KBMLM_Russian = "account",
+	KBMLM_Korean = "account",
+}
+
+Dependencies = {
+	KingMolinator = {"required", "after"},
+}

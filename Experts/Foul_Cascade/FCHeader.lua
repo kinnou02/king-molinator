@@ -7,12 +7,15 @@ KBMEXFC_Settings = nil
 chKBMEXFC_Settings = nil
 
 local MOD = {
+	Directory = "Experts/Foul_Cascade/",
+	File = "FCHeader.lua",
 	Header = nil,
 	Enabled = true,
 	IsInstance = true,
 	Name = "Foul Cascade",
 	Type = "Expert",
 	ID = "Foul_Cascade",
+	Object = "MOD",
 }
 
 -- Link Mods
@@ -20,12 +23,15 @@ local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 KBM.RegisterMod(MOD.Name, MOD)
 
-KBM.Language:Add(MOD.Name)
-KBM.Language[MOD.Name]:SetGerman("Ekelkaskade") 
--- KBM.Language[MOD.Name]:SetFrench("")
--- KBM.Language[MOD.Name]:SetRussian("")
+-- Header Dictionary
+MOD.Lang = {}
+MOD.Lang.Main = {}
+MOD.Lang.Main.Name = KBM.Language:Add(MOD.Name)
+MOD.Lang.Main.Name:SetGerman("Ekelkaskade") 
+-- MOD.Lang.Main.Name:SetFrench("")
+-- MOD.Lang.Main.Name:SetRussian("")
 
-MOD.Name = KBM.Language[MOD.Name][KBM.Lang]
+MOD.Name = MOD.Lang.Main.Name[KBM.Lang]
 MOD.Descript = MOD.Name
 
 function MOD:AddBosses(KBM_Boss)
