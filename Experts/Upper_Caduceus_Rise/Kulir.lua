@@ -65,7 +65,9 @@ MOD.Lang.Unit.KulirShort = KBM.Language:Add(MOD.Kulir.NameShort)
 MOD.Lang.Unit.KulirShort:SetGerman("Kulir")
 MOD.Kulir.NameShort = MOD.Lang.Unit.KulirShort[KBM.Lang]
 MOD.Lang.Unit.Varash = KBM.Language:Add("Disciple Varash")
+MOD.Lang.Unit.Varash:SetGerman("Jünger Varash")
 MOD.Lang.Unit.VarashShort = KBM.Language:Add("Varash")
+MOD.Lang.Unit.VarashShort:SetGerman("Varash")
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}

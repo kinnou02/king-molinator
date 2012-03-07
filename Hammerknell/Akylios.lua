@@ -143,23 +143,26 @@ AK.Lang.Unit.Jornaru:SetGerman(AK.Jornaru.Name)
 AK.Lang.Unit.Jornaru:SetFrench(AK.Jornaru.Name)
 AK.Lang.Unit.Jornaru:SetRussian("Йорнару")
 AK.Jornaru.Name = AK.Lang.Unit.Jornaru[KBM.Lang]
-
 -- Additional Unit List
 AK.Lang.Unit.Stinger = KBM.Language:Add(AK.Stinger.Name)
 AK.Lang.Unit.Stinger:SetGerman("Stachel des Akylios")
 AK.Lang.Unit.Stinger:SetRussian("Жало Акилиоса")
+AK.Lang.Unit.Stinger:SetFrench("Piqueur d'Akylios")
 AK.Stinger.Name = AK.Lang.Unit.Stinger[KBM.Lang]
 AK.Lang.Unit.Lasher = KBM.Language:Add(AK.Lasher.Name)
 AK.Lang.Unit.Lasher:SetGerman("Peitscher des Akylios")
 AK.Lang.Unit.Lasher:SetRussian("Бичеватель Акилиоса")
+AK.Lang.Unit.Lasher:SetFrench("Fouetteur d'Akylios")
 AK.Lasher.Name = AK.Lang.Unit.Lasher[KBM.Lang]
 AK.Lang.Unit.Apostle = KBM.Language:Add(AK.Apostle.Name)
 AK.Apostle.Name = AK.Lang.Unit.Apostle[KBM.Lang]
 AK.Lang.Unit.Apostle:SetGerman("Apostel von Jornaru")
 AK.Lang.Unit.Apostle:SetRussian("Апостол Йорнару")
+AK.Lang.Unit.Apostle:SetFrench("Apôtre de Jornaru")
 AK.Lang.Unit.ApostleShort = KBM.Language:Add("Apostle")
 AK.Lang.Unit.ApostleShort:SetGerman("Apostel")
 AK.Lang.Unit.ApostleShort:SetRussian("Апостол")
+AK.Lang.Unit.ApostleShort:SetFrench("Apôtre")
 AK.Apostle.NameShort = AK.Lang.Unit.ApostleShort[KBM.Lang]
 
 -- Ability Dictionary.
@@ -167,13 +170,17 @@ AK.Lang.Ability = {}
 AK.Lang.Ability.Decay = KBM.Language:Add("Mind Decay")
 AK.Lang.Ability.Decay:SetGerman("Geistiger Verfall")
 AK.Lang.Ability.Decay:SetRussian("Деградация сознания")
+AK.Lang.Ability.Decay:SetFrench("Dépérissement spirituel")
 AK.Lang.Ability.Breath = KBM.Language:Add("Breath of Madness")
 AK.Lang.Ability.Breath:SetGerman("Hauch des Wahnsinns")
 AK.Lang.Ability.Breath:SetRussian("Дыхание безумия")
+AK.Lang.Ability.Breath:SetFrench("Souffle de folie")
 AK.Lang.Ability.Grave = KBM.Language:Add("Watery Grave")
+AK.Lang.Ability.Grave:SetGerman("Wassergrab")
 AK.Lang.Ability.Storm = KBM.Language:Add("Tidal Storm")
 AK.Lang.Ability.Storm:SetGerman("Flutsturm")
 AK.Lang.Ability.Storm:SetRussian("Приливная буря")
+AK.Lang.Ability.Storm:SetFrench("Tempête de la marée")
 
 -- Debuff Dictionary.
 AK.Lang.Debuff = {}
@@ -183,18 +190,22 @@ AK.Lang.Mechanic = {}
 AK.Lang.Mechanic.Wave = KBM.Language:Add("Tidal Wave")
 AK.Lang.Mechanic.Wave:SetGerman("Flutwelle")
 AK.Lang.Mechanic.Wave:SetRussian("Приливная волна")
+AK.Lang.Mechanic.Wave:SetFrench("Raz de marée")
 AK.Lang.Mechanic.Orb = KBM.Language:Add("Suffocating Orb")
 AK.Lang.Mechanic.Orb:SetGerman("Erstickungskugel")
 AK.Lang.Mechanic.Orb:SetRussian("Сфера удушья")
+AK.Lang.Mechanic.Orb:SetFrench("Orbe de suffocation")
 AK.Lang.Mechanic.Summon = KBM.Language:Add("Summon the Abyss")
 AK.Lang.Mechanic.Summon:SetGerman("Beschwört den Abgrund!")
 AK.Lang.Mechanic.Summon:SetRussian("Воззвание к глубинам")
 AK.Lang.Mechanic.Emerge = KBM.Language:Add("Akylios emerges")
 AK.Lang.Mechanic.Emerge:SetGerman("Akylios taucht auf")
 AK.Lang.Mechanic.Emerge:SetRussian("КРАБ ВСПЛЫВАЕТ ПОСАНЫ!")
+AK.Lang.Mechanic.Emerge:SetFrench("Akylios émerge")
 AK.Lang.Mechanic.Submerge = KBM.Language:Add("Akylios submerges")
 AK.Lang.Mechanic.Submerge:SetGerman("Akylios taucht unter")
 AK.Lang.Mechanic.Submerge:SetRussian("КРАБ ПОГРУЖАЕЦЦО ПОСАНЫ!")
+AK.Lang.Mechanic.Submerge:SetFrench("Akylios immerge")
 AK.Lang.Mechanic.Left = "Akylios rears to the left!"
 AK.Lang.Mechanic.Center = "Akylios rears backwards!"
 AK.Lang.Mechanic.Right = "Akylios rears to the right!"
@@ -204,52 +215,69 @@ AK.Lang.Notify = {}
 AK.Lang.Notify.Orb = KBM.Language:Add("Jornaru launches a suffocating orb at (%a*)")
 AK.Lang.Notify.Orb:SetGerman("Jornaru wirft eine Erstickungskugel auf (%a*)")
 AK.Lang.Notify.Orb:SetRussian("Йорнару запускает удушающую сферу, его цель %- (%a*).")
+AK.Lang.Notify.Orb:SetFrench("Jornaru lance un orbe de suffocation à (%a*).")
 
 -- Say Dictionary
 AK.Lang.Say = {}
 AK.Lang.Say.PhaseTwo = KBM.Language:Add("Master, your plan is fulfilled. After a millennia of manipulation, the wards of Hammerknell are shattered. I release you, Akylios! Come forth and claim this world.")
 AK.Lang.Say.PhaseTwo:SetGerman("Meister, Euer Plan ist vollendet. Nach Millennium der Manipulation fallen die Schutzzauber Hammerhalls. Ich befreie Euch, Akylios! Kommt, nehmt Euch diese Welt.")
 AK.Lang.Say.PhaseTwo:SetRussian("Господин, ваш замысел исполнен. После тысячилетий труда защита Молотозвона пала. Я, Акилиос, освобождаю вас! Явитесь и захватите этот мир.")
+AK.Lang.Say.PhaseTwo:SetFrench("Le plan a porté ses fruits, maître. Après un millénaire de manipulations, les protections de Glasmarteau sont enfin brisées. Je vous libère, Akylios ! Venez conquérir ce monde !")
 
 -- Phase Message Dictionary
 AK.Lang.Phase = {}
 AK.Lang.Phase.Two = KBM.Language:Add("Phase 2 starting!")
 AK.Lang.Phase.Two:SetGerman("Phase 2 beginnt!")
 AK.Lang.Phase.Two:SetRussian("Началась 2ая фаза!")
+AK.Lang.Phase.Two:SetFrench("Phase 2 débutée")
 AK.Lang.Phase.Three = KBM.Language:Add("Phase 3 starting!")
 AK.Lang.Phase.Three:SetGerman("Phase 3 beginnt!")
 AK.Lang.Phase.Three:SetRussian("Началась 3ья фаза!")
+AK.Lang.Phase.Three:SetFrench("Phase 3 débutée")
 AK.Lang.Phase.Four = KBM.Language:Add("Phase 4 starting!")
 AK.Lang.Phase.Four:SetGerman("Phase 4 beginnt!")
 AK.Lang.Phase.Four:SetRussian("Началась 4ая фаза!")
+AK.Lang.Phase.Four:SetFrench("Phase 4 débutée")
 AK.Lang.Phase.Final = KBM.Language:Add("Final phase starting, good luck!")
 AK.Lang.Phase.Final:SetGerman("Letzte Phase beginnt, viel Erfolg!")
 AK.Lang.Phase.Final:SetRussian("Последняя фаза, удачи!")
+AK.Lang.Phase.Final:SetFrench("Phase finale débutée, bonne chance!")
 
 -- Options Dictionary.
 AK.Lang.Options = {}
 AK.Lang.Options.WaveOne = KBM.Language:Add(AK.Lang.Mechanic.Wave[KBM.Lang].." (Phase 1)")
+AK.Lang.Options.WaveOne:SetGerman("Flutwelle (Phase 1)")
 AK.Lang.Options.WaveFour = KBM.Language:Add(AK.Lang.Mechanic.Wave[KBM.Lang].." (Phase 4)")
+AK.Lang.Options.WaveFour:SetGerman("Flutwelle (Phase 4)")
 AK.Lang.Options.WaveWarn = KBM.Language:Add("Warning for Waves at 5 seconds.")
 AK.Lang.Options.WaveWarn:SetGerman("Warnung für Flutwellen 5 Sekunden vorher.")
 AK.Lang.Options.WaveWarn:SetRussian("Предупреждение о волнах за 5 секунд.")
+AK.Lang.Options.WaveWarn:SetFrench("Attention vague dans 5 secondes")
 AK.Lang.Options.WaveWarnLong = KBM.Language:Add("Warning for Waves at 10 seconds.")
 AK.Lang.Options.WaveWarnLong:SetGerman("Warnung für Flutwellen 10 Sekunden vorher.")
 AK.Lang.Options.WaveWarnLong:SetRussian("Предупреждение о волнах за 10 секунд.")
+AK.Lang.Options.WaveWarnLong:SetFrench("Attention vague dans 10 secondes.")
 AK.Lang.Options.Summon = KBM.Language:Add(AK.Lang.Mechanic.Summon[KBM.Lang].." (Phase 1)")
+AK.Lang.Options.Summon:SetGerman("Beschwört den Abgrund! (Phase 1)")
 AK.Lang.Options.SummonTwo = KBM.Language:Add(AK.Lang.Mechanic.Summon[KBM.Lang].." (Phase 2)")
+AK.Lang.Options.SummonTwo:SetGerman("Beschwört den Abgrund! (Phase 2)")
 AK.Lang.Options.Orb = KBM.Language:Add(AK.Lang.Mechanic.Orb[KBM.Lang].." (P2 First)")
 AK.Lang.Options.Orb:SetGerman(AK.Lang.Mechanic.Orb[KBM.Lang].." (Erste in P2)")
 AK.Lang.Options.Orb:SetRussian(AK.Lang.Mechanic.Orb[KBM.Lang].." (Первая во 2ой фазе)")
+AK.Lang.Options.Orb:SetFrench(AK.Lang.Mechanic.Orb[KBM.Lang].." (P2 Premier)")
 AK.Lang.Options.Breath = KBM.Language:Add(AK.Lang.Ability.Breath[KBM.Lang].." duration.")
 AK.Lang.Options.Breath:SetGerman(AK.Lang.Ability.Breath[KBM.Lang].." Dauer.")
 AK.Lang.Options.Breath:SetRussian(AK.Lang.Ability.Breath[KBM.Lang].." Продолжительность.")
+AK.Lang.Options.Breath:SetFrench(AK.Lang.Ability.Breath[KBM.Lang].." durée.")
 AK.Lang.Options.Emerge = KBM.Language:Add("Emerge/Submerge Timers")
 AK.Lang.Options.Emerge:SetGerman("Auftauchen/Untertauchen Timer")
+AK.Lang.Options.Emerge:SetFrench("Timers Émerge/Immerge")
 AK.Lang.Options.BreathFirst = KBM.Language:Add("First Breath in Phase 3")
 AK.Lang.Options.BreathFirst:SetGerman("Erster Hauch in Phase 3")
+AK.Lang.Options.BreathFirst:SetFrench("Premier souffle de la Phase 3")
 AK.Lang.Options.Lasher = KBM.Language:Add("Second Lasher rises")
 AK.Lang.Options.Lasher:SetGerman("Zweiter Peitscher erscheint")
+AK.Lang.Options.Lasher:SetFrench("Second Fouetteur apparaît")
 
 AK.Descript = AK.Akylios.Name.." & "..AK.Jornaru.Name
 

@@ -89,8 +89,10 @@ DF.Lang.Debuff.Soul:SetRussian("Раскачать душу")
 DF.Lang.Phase = {}
 DF.Lang.Phase.Force = KBM.Language:Add("Force")
 DF.Lang.Phase.Force:SetGerman("Kraft")
+DF.Lang.Phase.Force:SetRussian("Адд")
 DF.Lang.Phase.Foci = KBM.Language:Add("Foci")
 DF.Lang.Phase.Foci:SetGerman("Fokus")
+DF.Lang.Phase.Foci:SetRussian("Босс")
 
 DF.Foci.NameShort = DF.Lang.Phase.Foci[KBM.Lang]
 

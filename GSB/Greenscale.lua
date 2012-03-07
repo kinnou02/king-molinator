@@ -84,6 +84,7 @@ LG.Lang.Ability.Fumes:SetRussian("Ядовитые пары")
 LG.Lang.Mechanic = {}
 LG.Lang.Mechanic.Death = KBM.Language:Add("Protective Shield")
 LG.Lang.Mechanic.Death:SetGerman("Schutzschild")
+LG.Lang.Mechanic.Death:SetRussian("Защитный купол")
 
 LG.Greenscale.Name = LG.Lang.Unit.Greenscale[KBM.Lang]
 LG.Descript = LG.Greenscale.Name

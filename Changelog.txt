@@ -23,6 +23,15 @@ Hammerknell
 ** New: Screen alert and timer for Storm Lash.
 ** Fixed: Denizar's alerts and timers group option errors.
 
+French Translations
+* MAJOR additions for Hammerknell, Rise of the Phoenix and general Options page.
+
+Russian Translations
+* MINOR fixes for T1 and T2 raids, along with new translations and additional dictionary definitions.
+
+German Translations
+* MINOR fixes and additions.
+
 ----
 v0.9.8
 

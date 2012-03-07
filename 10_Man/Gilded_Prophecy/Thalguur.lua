@@ -66,6 +66,7 @@ TR.Lang.Ability.Touch:SetGerman("Berührung des Kerns")
 TR.Lang.Ability.Touch:SetRussian("Прикосновение ядра")
 TR.Lang.Ability.Power = KBM.Language:Add("Absorb Power")
 TR.Lang.Ability.Power:SetGerman("Kraft absorbieren")
+TR.Lang.Ability.Power:SetRussian("Поглощение силы")
 
 -- Debuff Dictionary
 TR.Lang.Debuff = {}

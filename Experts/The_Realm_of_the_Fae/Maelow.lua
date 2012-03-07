@@ -65,9 +65,13 @@ MOD.Lang.Unit.MaelowShort = KBM.Language:Add(MOD.Maelow.NameShort)
 MOD.Lang.Unit.MaelowShort:SetGerman("Maelow")
 MOD.Maelow.NameShort = MOD.Lang.Unit.MaelowShort[KBM.Lang]
 MOD.Lang.Unit.Brae = KBM.Language:Add("Lifeward Brae")
+MOD.Lang.Unit.Brae:SetGerman("Lebenswache Brae")
 MOD.Lang.Unit.BraeShort = KBM.Language:Add("Brae")
+MOD.Lang.Unit.BraeShort:SetGerman("Brae")
 MOD.Lang.Unit.Celoah = KBM.Language:Add("Lifeward Celoah")
+MOD.Lang.Unit.Celoah:SetGerman("Lebenswache Celoah")
 MOD.Lang.Unit.CeloahShort = KBM.Language:Add("Celoah")
+MOD.Lang.Unit.CeloahShort:SetGerman("Celoah")
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}

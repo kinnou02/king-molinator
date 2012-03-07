@@ -81,6 +81,7 @@ IL.Lang.Ability.Wave:SetRussian("Ледяная волна")
 -- Mechanic Dictionary
 IL.Lang.Mechanic = {}
 IL.Lang.Mechanic.Whirlpool = KBM.Language:Add("Whirlpool")
+IL.Lang.Mechanic.Whirlpool:SetGerman("Whirlpool")
 IL.Lang.Mechanic.Whirlpool:SetRussian("Вихрь смерти")
 IL.Lang.Mechanic.Anti = KBM.Language:Add("Anti-Clockwise")
 IL.Lang.Mechanic.Anti:SetGerman("Gegen Uhrzeigersinn")
@@ -106,11 +107,16 @@ IL.Lang.Notify.Reverse:SetRussian("Вы не туда идете, придурк
 IL.Lang.Verbose = {}
 IL.Lang.Verbose.Middle = KBM.Language:Add("Middle")
 IL.Lang.Verbose.Middle:SetGerman("Mitte")
+IL.Lang.Verbose.Middle:SetRussian("Середина")
 IL.Lang.Verbose.Inner = KBM.Language:Add("Inner")
 IL.Lang.Verbose.Inner:SetGerman("Innen")
+IL.Lang.Verbose.Inner:SetRussian("К боссу")
 IL.Lang.Verbose.Outer = KBM.Language:Add("Outer")
 IL.Lang.Verbose.Outer:SetGerman("Aussen")
+IL.Lang.Verbose.Outer:SetRussian("К стенке")
 IL.Lang.Verbose.DanceEnd = KBM.Language:Add("Dance sequence ends")
+IL.Lang.Verbose.DanceEnd:SetRussian("Бег закончен")
+IL.Lang.Verbose.DanceEnd:SetGerman("Tanz Sequenz beendet")
 
 -- Menu Dictionary
 IL.Lang.Menu = {}

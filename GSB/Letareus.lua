@@ -67,10 +67,13 @@ DL.Lang.Ability.Wrath:SetRussian("Ярость герцога")
 DL.Lang.Mechanic = {}
 DL.Lang.Mechanic.TankPhase = KBM.Language:Add("Tank Phase")
 DL.Lang.Mechanic.TankPhase:SetRussian("Фаза танкования")
+DL.Lang.Mechanic.TankPhase:SetGerman("Tank Phase")
 DL.Lang.Mechanic.Tank = KBM.Language:Add("Tank")
 DL.Lang.Mechanic.Tank:SetRussian("Танкуем")
+DL.Lang.Mechanic.Tank:SetGerman("Tank")
 DL.Lang.Mechanic.Kite = KBM.Language:Add("Kite")
 DL.Lang.Mechanic.Kite:SetRussian("Кайтим")
+DL.Lang.Mechanic.Kite:SetGerman("Kite")
 
 DL.Descript = DL.Letareus.Name
 

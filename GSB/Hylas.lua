@@ -98,11 +98,18 @@ PH.Lang.Ability.Cotton:SetRussian("Заразный кролик")
 PH.Lang.Buff = {}
 PH.Lang.Buff.Life = KBM.Language:Add("Invocation of Life")
 PH.Lang.Buff.Life:SetGerman("Anrufung des Lebens")
+PH.Lang.Buff.Life:SetRussian("Чары жизни")
 
 -- Phase Monitor Dictionary
 PH.Lang.Phase = {}
 PH.Lang.Phase.Critters = KBM.Language:Add("Critters")
 PH.Lang.Phase.Critters:SetGerman("Tiere")
+PH.Lang.Phase.Critters:SetRussian("Зверушки")
+
+-- Verbose Dictionary
+PH.Lang.Verbose = {}
+PH.Lang.Verbose.Reanimate = KBM.Language:Add(" is reanimated")
+PH.Lang.Verbose.Reanimate:SetRussian(" оживает")
 
 PH.Hylas.Name = PH.Lang.Unit.Hylas[KBM.Lang]
 PH.Descript = PH.Hylas.Name
@@ -316,9 +323,9 @@ function PH:Start()
 	KBM.Defaults.TimerObj.Assign(self.Hylas)
 	
 	-- Create Alerts
-	self.Hylas.AlertsRef.Duke = KBM.Alert:Create(self.Lang.Unit.Duke[KBM.Lang].." is reanimated", 2, true, false, "dark_green")
-	self.Hylas.AlertsRef.Johlen = KBM.Alert:Create(self.Lang.Unit.Johlen[KBM.Lang].." is reanimated", 2, true, false, "dark_green")
-	self.Hylas.AlertsRef.Aleria = KBM.Alert:Create(self.Lang.Unit.Aleria[KBM.Lang].." is reanimated", 2, true, false, "dark_green")
+	self.Hylas.AlertsRef.Duke = KBM.Alert:Create(self.Lang.Unit.Duke[KBM.Lang]..self.Lang.Verbose.Reanimate[KBM.Lang], 2, true, false, "dark_green")
+	self.Hylas.AlertsRef.Johlen = KBM.Alert:Create(self.Lang.Unit.Johlen[KBM.Lang]..self.Lang.Verbose.Reanimate[KBM.Lang], 2, true, false, "dark_green")
+	self.Hylas.AlertsRef.Aleria = KBM.Alert:Create(self.Lang.Unit.Aleria[KBM.Lang]..self.Lang.Verbose.Reanimate[KBM.Lang], 2, true, false, "dark_green")
 	self.Hylas.AlertsRef.Wrath = KBM.Alert:Create(self.Lang.Ability.Wrath[KBM.Lang], nil, true, true, "red")
 	self.Hylas.AlertsRef.Soul = KBM.Alert:Create(self.Lang.Ability.Soul[KBM.Lang], 3, true, false, "orange")
 	self.Hylas.AlertsRef.Cotton = KBM.Alert:Create(self.Lang.Ability.Cotton[KBM.Lang], 3, true, false, "purple")

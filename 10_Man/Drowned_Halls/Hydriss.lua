@@ -67,6 +67,7 @@ HH.Lang.Unit.Hive:SetGerman("Seeklauennest")
 -- Ability Dictionary
 HH.Lang.Ability = {}
 HH.Lang.Ability.Tsunami = KBM.Language:Add("Tsunami")
+HH.Lang.Ability.Tsunami:SetGerman("Tsunami")
 HH.Lang.Ability.Tsunami:SetRussian("Цунами")
 HH.Lang.Ability.Shock = KBM.Language:Add("Hydrostatic Shock")
 HH.Lang.Ability.Shock:SetRussian("Гидростатический удар")

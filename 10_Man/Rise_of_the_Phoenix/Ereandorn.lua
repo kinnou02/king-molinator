@@ -53,6 +53,7 @@ KBM.RegisterMod(EN.ID, EN)
 -- Main Unit Dictionary
 EN.Lang.Unit = {}
 EN.Lang.Unit.Ereandorn = KBM.Language:Add(EN.Ereandorn.Name)
+EN.Lang.Unit.Ereandorn:SetGerman("Ereandorn")
 EN.Lang.Unit.Ereandorn:SetRussian("Эреандорн")
 EN.Ereandorn.Name = EN.Lang.Unit.Ereandorn[KBM.Lang]
 EN.Descript = EN.Ereandorn.Name
@@ -74,12 +75,15 @@ EN.Lang.Ability = {}
 EN.Lang.Ability.Combustion = KBM.Language:Add("Excitable Combustion")
 EN.Lang.Ability.Combustion:SetGerman("Anregbare Verbrennung")
 EN.Lang.Ability.Combustion:SetRussian("Опасное сгорание")
+EN.Lang.Ability.Combustion:SetFrench("Combustion tendue")
 EN.Lang.Ability.Growth = KBM.Language:Add("Molten Growth")
 EN.Lang.Ability.Growth:SetGerman("Geschmolzener Wuchs")
 EN.Lang.Ability.Growth:SetRussian("Извержение лавы")
+EN.Lang.Ability.Growth:SetFrench("Éruption liquide")
 EN.Lang.Ability.Eruption = KBM.Language:Add("Volcanic Eruption")
 EN.Lang.Ability.Eruption:SetGerman("Vulkanausbruch")
 EN.Lang.Ability.Eruption:SetRussian("Извержение вулкана")
+EN.Lang.Ability.Eruption:SetFrench("Éruption volcanique")
 
 function EN:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript

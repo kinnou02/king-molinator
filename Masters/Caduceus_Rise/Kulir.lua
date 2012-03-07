@@ -61,15 +61,17 @@ MOD.Lang.Unit.Kulir:SetGerman("Kopfgeldjäger Kulir")
 -- MOD.Lang.Unit.Kulir:SetRussian("")
 MOD.Kulir.Name = MOD.Lang.Unit.Kulir[KBM.Lang]
 MOD.Descript = MOD.Kulir.Name
+MOD.Lang.Unit.KulirShort = KBM.Language:Add("Kulir")
+MOD.Lang.Unit.KulirShort:SetGerman("Kulir")
+MOD.Lang.Unit.KulirShort:SetFrench("Kulir")
+MOD.Kulir.NameShort = MOD.Lang.Unit.KulirShort[KBM.Lang]
+MOD.Lang.Unit.Varash = KBM.Language:Add("Disciple Varash")
+MOD.Lang.Unit.Varash:SetGerman("Jünger Varash")
+MOD.Lang.Unit.VarashShort = KBM.Language:Add("Varash")
+MOD.Lang.Unit.VarashShort:SetGerman("Varash")
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}
-
--- Unit Dictionary
-MOD.Lang.Unit = {}
-MOD.Lang.Unit.Varash = KBM.Language:Add("Disciple Varash")
-MOD.Lang.Unit.Varash.German = "Jünger Varash"
-MOD.Lang.Unit.VarashShort = KBM.Language:Add("Varash")
 
 MOD.Varash = {
 	Mod = MOD,

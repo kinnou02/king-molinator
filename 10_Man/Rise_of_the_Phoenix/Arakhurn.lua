@@ -70,10 +70,15 @@ KBM.RegisterMod(HA.ID, HA)
 HA.Lang.Unit = {}
 HA.Lang.Unit.Arakhurn = KBM.Language:Add(HA.Arakhurn.Name)
 HA.Lang.Unit.Arakhurn:SetGerman("Hohepriester Arakhurn")
-HA.Lang.Unit.Arakhurn:SetFrench("Grand Pr\195\170tre Arakhurn")
+HA.Lang.Unit.Arakhurn:SetFrench("Grand Prêtre Arakhurn")
 HA.Lang.Unit.Arakhurn:SetRussian("Первосвященник Аракурн")
 HA.Arakhurn.Name = HA.Lang.Unit.Arakhurn[KBM.Lang]
 HA.Descript = HA.Arakhurn.Name
+HA.Lang.Unit.ArakhurnShort = KBM.Language:Add("Arakhurn")
+HA.Lang.Unit.ArakhurnShort:SetGerman("Arakhurn")
+HA.Lang.Unit.ArakhurnShort:SetFrench("Arakhurn")
+HA.Lang.Unit.ArakhurnShort:SetRussian("Аракурн")
+HA.Arakhurn.NameShort = HA.Lang.Unit.ArakhurnShort[KBM.Lang]
 -- Unit Dictionary
 HA.Lang.Unit.Spawn = KBM.Language:Add("Spawn of Arakhurn")
 HA.Lang.Unit.Spawn:SetGerman("Brut von Arakhurn")
@@ -87,6 +92,7 @@ HA.Lang.Ability = {}
 HA.Lang.Ability.Nova = KBM.Language:Add("Fire Nova")
 HA.Lang.Ability.Nova:SetGerman("Feuernova")
 HA.Lang.Ability.Nova:SetRussian("Огненная сверхновая")
+HA.Lang.Ability.Nova:SetFrench("Nova de flammes")
 
 -- Notify Dictionary
 HA.Lang.Notify = {}
@@ -96,9 +102,11 @@ HA.Lang.Notify.Nova:SetRussian("Первосвященник Аракурн вы
 HA.Lang.Notify.Respawn = KBM.Language:Add("The lava churns violently as a large shadow moves beneath it and then rushes to the surface")
 HA.Lang.Notify.Respawn:SetGerman("Die Lava brodelt gewaltig, während sich ein großer Schatten unter ihr bewegt und dann an die Oberfläche schnellt.")
 HA.Lang.Notify.Respawn:SetRussian("Лава бурлит; под ней движеться огромная тень, стремительно всплывая к поверхности.")
+HA.Lang.Notify.Respawn:SetFrench("La lave s'agite violemment, tandis qu'une grande ombre bouge dans ses profondeurs et se précipite ensuite vers la surface.")
 HA.Lang.Notify.Death = KBM.Language:Add("As Arakhurn turns to ash, something stirs beneath the molten lava.")
 HA.Lang.Notify.Death:SetGerman("Als Arakhurn zu Asche zerfällt, regt sich etwas unter der schwelenden Lava.")
 HA.Lang.Notify.Death:SetRussian("По мере того, как Аракурн превращается в пепел, что-то пробуждаеться под раскаленной лавой.")
+HA.Lang.Notify.Death:SetFrench("Tandis qu'Arakhurn se consume, on distingue un mouvement sous la lave en fusion.")
 
 -- Chat Dictionary
 HA.Lang.Chat = {}
@@ -128,10 +136,13 @@ HA.Lang.Verbose.Nova:SetGerman("bis "..HA.Lang.Ability.Nova[KBM.Lang])
 HA.Lang.Verbose.Nova:SetRussian("до "..HA.Lang.Ability.Nova[KBM.Lang])
 HA.Lang.Verbose.Rise = KBM.Language:Add(HA.Lang.Unit.Arakhurn[KBM.Lang].." rises")
 HA.Lang.Verbose.Rise:SetGerman(HA.Lang.Unit.Arakhurn[KBM.Lang].." erscheint")
+HA.Lang.Verbose.Rise:SetRussian(HA.Lang.Unit.Arakhurn[KBM.Lang].." оживает")
 
 -- Phase Monitor Dictionary
 HA.Lang.Phase = {}
 HA.Lang.Phase.Adds = KBM.Language:Add("Adds")
+HA.Lang.Phase.Adds:SetGerman("Adds")
+HA.Lang.Phase.Adds:SetRussian("Адды")
 
 -- Menu Dictionary
 HA.Lang.Menu = {}

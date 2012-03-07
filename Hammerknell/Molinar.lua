@@ -183,23 +183,32 @@ KM.Lang.Unit.Molinar = KBM.Language:Add(KM.King.Name)
 KM.Lang.Unit.Molinar:SetGerman("Runenkönig Molinar")
 KM.Lang.Unit.Molinar:SetFrench("Roi runique Molinar")
 KM.Lang.Unit.Molinar:SetRussian("Рунный король Молинар")
+KM.Lang.Unit.MolinarShort = KBM.Language:Add("Molinar")
+KM.Lang.Unit.MolinarShort:SetGerman("Molinar")
+KM.Lang.Unit.MolinarShort:SetFrench("Molinar")
+KM.Lang.Unit.MolinarShort:SetRussian("Король")
 KM.Lang.Unit.Dollin = KBM.Language:Add(KM.Prince.Name)
 KM.Lang.Unit.Dollin:SetGerman("Prinz Dollin")
 KM.Lang.Unit.Dollin:SetFrench("Prince Dollin")
 KM.Lang.Unit.Dollin:SetRussian("Принц Доллин")
+KM.Lang.Unit.DollinShort = KBM.Language:Add("Dollin")
+KM.Lang.Unit.DollinShort:SetGerman("Dollin")
+KM.Lang.Unit.DollinShort:SetFrench("Dollin")
+KM.Lang.Unit.DollinShort:SetRussian("Принц")
 -- Additional Units Dictionary
 KM.Lang.Unit.Revenant = KBM.Language:Add("Incorporeal Revenant")
-KM.Lang.Unit.Revenant:SetFrench("Revenant chim\195\169rique")
+KM.Lang.Unit.Revenant:SetFrench("Revenant chimérique")
 KM.Lang.Unit.Revenant:SetGerman("Unkörperlicher Wiedergänger")
 KM.Lang.Unit.Revenant:SetRussian("Бестелесный восставший")
 
 -- Ability Dictionary
 KM.Lang.Ability = {}
 KM.Lang.Ability.Rend = KBM.Language:Add("Rend Life")
-KM.Lang.Ability.Rend:SetFrench("D\195\169chire-Vie")
+KM.Lang.Ability.Rend:SetFrench("Déchire-Vie")
 KM.Lang.Ability.Rend:SetGerman("Leben entreißen")
+KM.Lang.Ability.Rend:SetRussian("Расколотая жизнь")
 KM.Lang.Ability.Terminate = KBM.Language:Add("Terminate Life")
-KM.Lang.Ability.Terminate:SetFrench("Ach\195\168vement de Vie")
+KM.Lang.Ability.Terminate:SetFrench("Achèvement de Vie")
 KM.Lang.Ability.Terminate:SetGerman("Leben auslöschen")
 KM.Lang.Ability.Terminate:SetRussian("Прервать жизнь")
 KM.Lang.Ability.Essence = KBM.Language:Add("Consuming Essence")
@@ -207,15 +216,17 @@ KM.Lang.Ability.Essence:SetFrench("Combustion d'essence")
 KM.Lang.Ability.Essence:SetGerman("Verschlingende Essenz")
 KM.Lang.Ability.Essence:SetRussian("Поглощающая сущность")
 KM.Lang.Ability.Feedback = KBM.Language:Add("Runic Feedback")
-KM.Lang.Ability.Feedback:SetFrench("R\195\169action runique")
+KM.Lang.Ability.Feedback:SetFrench("Réaction runique")
 KM.Lang.Ability.Feedback:SetGerman("Runen-Resonanz")
-KM.Lang.Ability.Feedback:SetRussian("Рунический вампиризм")
+KM.Lang.Ability.Feedback:SetRussian("Рунический отзыв")
 KM.Lang.Ability.Crushing = KBM.Language:Add("Crushing Regret")
 KM.Lang.Ability.Crushing:SetGerman("Erdrückendes Bedauern")
-KM.Lang.Ability.Crushing:SetFrench("Blasph\195\168me infect")
+KM.Lang.Ability.Crushing:SetFrench("Blasphème infect")
+KM.Lang.Ability.Crushing:SetRussian("Давящее сожаление")
 KM.Lang.Ability.Forked = KBM.Language:Add("Forked Blast")
 KM.Lang.Ability.Forked:SetGerman("Gabelstoß")
 KM.Lang.Ability.Forked:SetFrench("Explosion fourchue")
+KM.Lang.Ability.Forked:SetRussian("Раздвоенный взрыв")
 KM.Lang.Ability.Shout = KBM.Language:Add("Frightening Shout")
 KM.Lang.Ability.Shout:SetFrench("Flammes maudites")
 KM.Lang.Ability.Shout:SetGerman("Verängstigender Schrei")
@@ -228,7 +239,7 @@ KM.Lang.Ability.Cursed:SetRussian("Проклятые удары")
 -- Notify Dictionary
 KM.Lang.Notify = {}
 KM.Lang.Notify.Rev = KBM.Language:Add("Incorporeal Revenant begins to phase into this reality.")
-KM.Lang.Notify.Rev:SetFrench("Revenant chim\195\169rique commence \195\160 se mat\195\169rialiser dans cette réalit\195\169.")
+KM.Lang.Notify.Rev:SetFrench("Revenant chimérique commence à se matérialiser dans cette réalité.")
 KM.Lang.Notify.Rev:SetGerman("Unkörperlicher Wiedergänger beginnt, in diese Realität zu gleiten.")
 KM.Lang.Notify.Rev:SetRussian("Бестелесный восставший начинает переноситься в эту реальность.")
 
@@ -237,19 +248,20 @@ KM.Lang.Menu = {}
 KM.Lang.Menu.Cursed = KBM.Language:Add(KM.Lang.Ability.Cursed[KBM.Lang].." duration.")
 KM.Lang.Menu.Cursed:SetGerman(KM.Lang.Ability.Cursed[KBM.Lang].." Dauer.")
 KM.Lang.Menu.Cursed:SetRussian(KM.Lang.Ability.Cursed[KBM.Lang].." длительность.")
+KM.Lang.Menu.Cursed:SetFrench(KM.Lang.Ability.Cursed[KBM.Lang].." durée.")
 KM.Lang.Menu.Feedback = KBM.Language:Add(KM.Lang.Ability.Feedback[KBM.Lang].." duration.")
 KM.Lang.Menu.Feedback:SetGerman(KM.Lang.Ability.Feedback[KBM.Lang].." Dauer.")
 KM.Lang.Menu.Feedback:SetRussian(KM.Lang.Ability.Feedback[KBM.Lang].." длительность.")
+KM.Lang.Menu.Feedback:SetFrench(KM.Lang.Ability.Feedback[KBM.Lang].." durée.")
 
 -- King's Options page Dictionary
-KM.Lang.Options = {}
 KM.Lang.Options = {}
 KM.Lang.Options.Enabled = KBM.Language:Add("Enable Percentage Monitor.")
 KM.Lang.Options.Enabled:SetFrench("Montrer Moniteur Pct.")
 KM.Lang.Options.Enabled:SetGerman("Prozent Monitor anzeigen.")
 KM.Lang.Options.Enabled:SetRussian("Включить монитор хп боссов в процентах.")
 KM.Lang.Options.Visible = KBM.Language:Add("Show Monitor (for positioning).")
-KM.Lang.Options.Visible:SetFrench("Cacher avant d\195\169but du combat.")
+KM.Lang.Options.Visible:SetFrench("Cacher avant début du combat.")
 KM.Lang.Options.Visible:SetGerman("Verbergen bis zum Kampfbeginn.")
 KM.Lang.Options.Visible:SetRussian("Показать монитор (для смены позици).")
 KM.Lang.Options.Compact = KBM.Language:Add("Compact Mode.")
@@ -257,8 +269,20 @@ KM.Lang.Options.Compact:SetFrench("Mode Compact.")
 KM.Lang.Options.Compact:SetGerman("Kompakte Anzeige.")
 KM.Lang.Options.Compact:SetRussian("Сделать компактным.")
 
+-- Verbose Dictionary
+KM.Lang.Verbose = {}
+KM.Lang.Verbose.King = KBM.Language:Add("King")
+KM.Lang.Verbose.King:SetRussian("Король")
+KM.Lang.Verbose.Prince = KBM.Language:Add("Prince")
+KM.Lang.Verbose.Prince:SetGerman("Prinz")
+KM.Lang.Verbose.Prince:SetFrench("Prince")
+KM.Lang.Verbose.Prince:SetRussian("Принц")
+
+-- Assign Translations to Units
 KM.King.Name = KM.Lang.Unit.Molinar[KBM.Lang]
+KM.King.NameShort = KM.Lang.Unit.MolinarShort[KBM.Lang]
 KM.Prince.Name = KM.Lang.Unit.Dollin[KBM.Lang]
+KM.Prince.NameShort = KM.Lang.Unit.DollinShort[KBM.Lang]
 
 KM.Descript = KM.King.Name.." & "..KM.Prince.Name
 
@@ -954,7 +978,7 @@ function KM:Start()
 		
 	-- Add King's Timers
 	self.King.TimersRef.Cursed = KBM.MechTimer:Add(KM.Lang.Ability.Cursed[KBM.Lang], 55)
-	self.King.TimersRef.Essence = KBM.MechTimer:Add("(King) "..KM.Lang.Ability.Essence[KBM.Lang], 20)
+	self.King.TimersRef.Essence = KBM.MechTimer:Add("("..KM.Lang.Verbose.King[KBM.Lang]..") "..KM.Lang.Ability.Essence[KBM.Lang], 20)
 	self.King.TimersRef.Rev = KBM.MechTimer:Add(self.Lang.Unit.Revenant[KBM.Lang], 82)
 	self.King.TimersRef.Shout = KBM.MechTimer:Add(KM.Lang.Ability.Shout[KBM.Lang], 30)
 	self.King.TimersRef.Feedback = KBM.MechTimer:Add(KM.Lang.Ability.Feedback[KBM.Lang], 48)
@@ -1002,7 +1026,7 @@ function KM:Start()
 	
 	-- Add Prince's Timers
 	self.Prince.TimersRef.Terminate = KBM.MechTimer:Add(KM.Lang.Ability.Terminate[KBM.Lang], 21)
-	self.Prince.TimersRef.Essence = KBM.MechTimer:Add("(Prince) "..KM.Lang.Ability.Essence[KBM.Lang], 22)
+	self.Prince.TimersRef.Essence = KBM.MechTimer:Add("("..KM.Lang.Verbose.Prince[KBM.Lang]..") "..KM.Lang.Ability.Essence[KBM.Lang], 22)
 	self.Prince.TimersRef.Feedback = KBM.MechTimer:Add(KM.Lang.Ability.Feedback[KBM.Lang], 48)
 	KBM.Defaults.TimerObj.Assign(self.Prince)
 	

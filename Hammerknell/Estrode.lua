@@ -62,6 +62,7 @@ KBM.RegisterMod(ES.ID, ES)
 ES.Lang.Unit = {}
 ES.Lang.Unit.Estrode = KBM.Language:Add(ES.Estrode.Name)
 ES.Lang.Unit.Estrode:SetGerman("Estrode")
+ES.Lang.Unit.Estrode:SetFrench("Estrode")
 ES.Lang.Unit.Estrode:SetRussian("Эстрода")
 ES.Estrode.Name = ES.Lang.Unit.Estrode[KBM.Lang]
 ES.Descript = ES.Estrode.Name
@@ -71,30 +72,37 @@ ES.Lang.Ability = {}
 ES.Lang.Ability.Soul = KBM.Language:Add("Soul Capture")
 ES.Lang.Ability.Soul:SetGerman("Seelenfang")
 ES.Lang.Ability.Soul:SetRussian("Захват души")
+ES.Lang.Ability.Soul:SetFrench("Capture d'âme")
 ES.Lang.Ability.Mind = KBM.Language:Add("Mind Control")
 ES.Lang.Ability.Mind:SetGerman("Gedankenkontrolle")
-ES.Lang.Ability.Mind:SetRussian("Контрол разума")
+ES.Lang.Ability.Mind:SetRussian("Контроль разума")
+ES.Lang.Ability.Mind:SetFrench("Volonté impérieuse")
 ES.Lang.Ability.Dancing = KBM.Language:Add("Dancing Steel")
 ES.Lang.Ability.Dancing:SetGerman("Tanzender Stahl")
+ES.Lang.Ability.Dancing:SetRussian("Танцующая сталь")
 ES.Lang.Ability.North = KBM.Language:Add("Rage of the North")
 ES.Lang.Ability.North:SetGerman("Wut des Nordens")
 ES.Lang.Ability.North:SetRussian("Ярость севера")
+ES.Lang.Ability.North:SetFrench("Rage du Nord")
 ES.Lang.Ability.Chastise = KBM.Language:Add("Chastise")
 ES.Lang.Ability.Chastise:SetGerman("Züchtigung")
 ES.Lang.Ability.Rift = KBM.Language:Add("Mistress of the Rift")
 ES.Lang.Ability.Rift:SetGerman("Herrin des Risses")
+ES.Lang.Ability.Rift:SetFrench("Avatar de la Faille")
 
 -- Speak Dictionary
 ES.Lang.Say = {}
 ES.Lang.Say.Mind = KBM.Language:Add("Mmmm, you look delectable.")
 ES.Lang.Say.Mind:SetGerman("Hm, Ihr seht köstlich aus.")
 ES.Lang.Say.Mind:SetRussian("М-м-м, а ты выглядишь вкусно.")
+ES.Lang.Say.Mind:SetFrench("Hum, vous avez l'air délectable.")
 
 -- Menu Dictionary
 ES.Lang.Menu = {}
 ES.Lang.Menu.Dancing = KBM.Language:Add(ES.Lang.Ability.Dancing[KBM.Lang].." duration")
 ES.Lang.Menu.Dancing:SetGerman(ES.Lang.Ability.Dancing[KBM.Lang].." Dauer")
 ES.Lang.Menu.Dancing:SetRussian(ES.Lang.Ability.Dancing[KBM.Lang].." продолжительность")
+ES.Lang.Menu.Dancing:SetFrench(ES.Lang.Ability.Dancing[KBM.Lang].." durée")
 
 function ES:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript

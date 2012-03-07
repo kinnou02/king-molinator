@@ -8,6 +8,7 @@ KBMLM = AddonData.data
 KBMLM.Language = {
 	Phrases = {},
 }
+KBMLM.TotalPhrases = 0
 
 function KBMLM.InitStore()
 	local Store = {
@@ -58,6 +59,7 @@ function KBMLM.Language:Add(Phrase)
 		self.Korean = koPhrase
 		self.Translated.Korean = true
 	end
+	KBMLM.TotalPhrases = KBMLM.TotalPhrases + 1
 	return SetPhrase
 end
 
@@ -93,6 +95,7 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Encounter.Chronicle = KBM.Language:Add("Activate in Chronicles")
 	KBM.Language.Encounter.Chronicle:SetGerman("in den Chroniken verwenden")
 	KBM.Language.Encounter.Chronicle:SetRussian("Активировать в хрониках")
+	KBM.Language.Encounter.Chronicle:SetFrench("Activé dans les Chroniques")
 
 	-- Records Dictionary
 	KBM.Language.Records = {}
@@ -101,45 +104,61 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Records.Attempts = KBM.Language:Add("Attempts: ")
 	KBM.Language.Records.Attempts:SetGerman("Pulls: ")
 	KBM.Language.Records.Attempts:SetRussian("Пулы: ")
+	KBM.Language.Records.Attempts:SetFrench("Essais: ")
 	KBM.Language.Records.Wipes = KBM.Language:Add("Wipes: ")
+	KBM.Language.Records.Wipes:SetGerman("Wipes: ")
 	KBM.Language.Records.Wipes:SetRussian("Вайпы: ")
 	KBM.Language.Records.Kills = KBM.Language:Add("Kills: ")
+	KBM.Language.Records.Kills:SetGerman("Kills: ")
 	KBM.Language.Records.Kills:SetRussian("Победы: ")
 	KBM.Language.Records.Best = KBM.Language:Add("Best Time:")
 	KBM.Language.Records.Best:SetGerman("Bestzeit:")
 	KBM.Language.Records.Best:SetRussian("Лучшее время:")
+	KBM.Language.Records.Best:SetFrench("Meilleur Temps:")
 	KBM.Language.Records.Date = KBM.Language:Add("Date set: ")
 	KBM.Language.Records.Date:SetGerman("Datum: ")
+	KBM.Language.Records.Date:SetRussian("Дата: ")
 	KBM.Language.Records.Details = KBM.Language:Add("Details:")
+	KBM.Language.Records.Details:SetGerman("Details:")
 	KBM.Language.Records.Details:SetRussian("Подробности:")
+	KBM.Language.Records.Details:SetFrench("Détails:")
 	KBM.Language.Records.Rate = KBM.Language:Add("Success Rate is ")
 	KBM.Language.Records.Rate:SetGerman("Erfolgsrate ist: ")
 	KBM.Language.Records.Rate:SetRussian("Процент успеха: ")
+	KBM.Language.Records.Rate:SetFrench("Taux Succès: ")
 	KBM.Language.Records.NoRecord = KBM.Language:Add("No kills have been recorded")
 	KBM.Language.Records.NoRecord:SetGerman("Keine Kills wurden bisher verzeichnet")
 	KBM.Language.Records.NoRecord:SetRussian("Бои с этим боссом отсутсвуют")
+	KBM.Language.Records.NoRecord:SetFrench("Aucun kills a été enregistré")
 	-- In game Messages
 	KBM.Language.Records.Previous = KBM.Language:Add("Previous best: ")
 	KBM.Language.Records.Previous:SetGerman("Alte Bestzeit: ")
 	KBM.Language.Records.Previous:SetRussian("Предыдущий рекорд: ")
+	KBM.Language.Records.Previous:SetFrench("Meilleur précédent: ")
 	KBM.Language.Records.BeatRecord = KBM.Language:Add("Congratulations: New Record!")
 	KBM.Language.Records.BeatRecord:SetGerman("Gratulation! Neue Bestzeit!")
 	KBM.Language.Records.BeatRecord:SetRussian("Поздравляем! Вы улучшили свой рекорд!")
+	KBM.Language.Records.BeatRecord:SetFrench("Félicitation: Nouveau Record!")
 	KBM.Language.Records.BeatChrRecord = KBM.Language:Add("Congratulations: New Chronicle Record!")
 	KBM.Language.Records.BeatChrRecord:SetGerman("Gratulation! Neue Chroniken Bestzeit!")
 	KBM.Language.Records.BeatChrRecord:SetRussian("Поздравляем! Вы улучшили свой рекорд в хрониках!")
+	KBM.Language.Records.BeatChrRecord:SetFrench("Félicitation! Nouveau Record Chronique!")
 	KBM.Language.Records.NewRecord = KBM.Language:Add("Congratulations: A new record has been set!")
 	KBM.Language.Records.NewRecord:SetGerman("Gratulation! Eine neue Bestzeit wurde gesetzt!")
 	KBM.Language.Records.NewRecord:SetRussian("Поздравляем! Вы установили рекорд!")
+	KBM.Language.Records.NewRecord:SetFrench("Félicitation! Nouveau Record a été enregistré!")
 	KBM.Language.Records.NewChrRecord = KBM.Language:Add("Congratulations: A new Chronicle record has been set!")
 	KBM.Language.Records.NewChrRecord:SetGerman("Gratulation! Eine neue Chroniken Bestzeit wurde gesetzt!")
 	KBM.Language.Records.NewChrRecord:SetRussian("Поздравляем! Вы установили рекорд в хрониках!")
+	KBM.Language.Records.NewChrRecord:SetFrench("Félicitation! Nouveau Record Chronique a été enregistré!")
 	KBM.Language.Records.Current = KBM.Language:Add("Current Record: ")
 	KBM.Language.Records.Current:SetGerman("Aktuelle Bestzeit: ")
 	KBM.Language.Records.Current:SetRussian("Текущий рекорд: ")
+	KBM.Language.Records.Current:SetFrench("Record Actuel: ")
 	KBM.Language.Records.Invalid = KBM.Language:Add("Time is invalid, no records can be set.")
 	KBM.Language.Records.Invalid:SetGerman("Die Zeit ist ungültig, Bestzeit konnte nicht gesetzt werden.")
 	KBM.Language.Records.Invalid:SetRussian("Время не удалось измерить, рекорд не засчитан.")
+	KBM.Language.Records.Invalid:SetFrench("Temps est invalide, aucun record enregistrable.")
 
 	-- Colors
 	KBM.Language.Color = {}
@@ -147,26 +166,32 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Color.Custom = KBM.Language:Add("Custom color")
 	KBM.Language.Color.Custom:SetGerman("eigene Farbauswahl")
 	KBM.Language.Color.Custom:SetRussian("Свой цвет")
+	KBM.Language.Color.Custom:SetFrench("Custom couleur")
 	KBM.Language.Color.Red = KBM.Language:Add("Red")
 	KBM.Language.Color.Red:SetGerman("Rot")
 	KBM.Language.Color.Red:SetRussian("Красный")
+	KBM.Language.Color.Red:SetFrench("Rouge")
 	KBM.Language.Color.Blue = KBM.Language:Add("Blue")
 	KBM.Language.Color.Blue:SetGerman("Blau")
 	KBM.Language.Color.Blue:SetRussian("Голубой")
+	KBM.Language.Color.Blue:SetFrench("Bleu")
 	KBM.Language.Color.Cyan = KBM.Language:Add("Cyan")
 	KBM.Language.Color.Cyan:SetGerman("Blaugrün")
 	KBM.Language.Color.Dark_Green = KBM.Language:Add("Dark Green")
 	KBM.Language.Color.Dark_Green:SetGerman("Dunkelgrün")
 	KBM.Language.Color.Dark_Green:SetRussian("Темнозеленый")
+	KBM.Language.Color.Dark_Green:SetFrench("Vert Foncé")
 	KBM.Language.Color.Yellow = KBM.Language:Add("Yellow")
 	KBM.Language.Color.Yellow:SetGerman("Gelb")
 	KBM.Language.Color.Yellow:SetRussian("Желтый")
+	KBM.Language.Color.Yellow:SetFrench("Jaune")
 	KBM.Language.Color.Orange = KBM.Language:Add("Orange")
 	KBM.Language.Color.Orange:SetGerman("Orange")
 	KBM.Language.Color.Orange:SetRussian("Оранжевый")
 	KBM.Language.Color.Purple = KBM.Language:Add("Purple")
 	KBM.Language.Color.Purple:SetGerman("Lila")
 	KBM.Language.Color.Purple:SetRussian("Фиолетовый")
+	KBM.Language.Color.Purple:SetFrench("Violet")
 
 	-- Castbar Action Dictionary
 	KBM.Language.CastBar = {}
@@ -200,12 +225,15 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Options.MechTimerOverride = KBM.Language:Add("Mechanic Timers: Override")
 	KBM.Language.Options.MechTimerOverride:SetGerman("Mechanik Timer: Einstellungen")
 	KBM.Language.Options.MechTimerOverride:SetRussian("Таймеры механики: Переопределить")
+	KBM.Language.Options.MechTimerOverride:SetFrench("Timers de Mécanisme: Override")
 	KBM.Language.Options.EncTimerOverride = KBM.Language:Add("Encounter Timer: Override")
 	KBM.Language.Options.EncTimerOverride:SetGerman("Boss Timer: Einstellungen")
 	KBM.Language.Options.EncTimerOverride:SetRussian("Таймер боя: Переопределить")
+	KBM.Language.Options.EncTimerOverride:SetFrench("Timers combat: Override")
 	KBM.Language.Options.EncTimers = KBM.Language:Add("Encounter Timers enabled")
 	KBM.Language.Options.EncTimers:SetGerman("Boss Timer anzeigen")
 	KBM.Language.Options.EncTimers:SetRussian("Таймеры боя разрешены")
+	KBM.Language.Options.EncTimers:SetFrench("Timers combat activé")
 	KBM.Language.Options.MechanicTimers = KBM.Language:Add("Mechanic Timers enabled")
 	KBM.Language.Options.MechanicTimers:SetFrench("Timers de M\195\169canisme")
 	KBM.Language.Options.MechanicTimers:SetGerman("Mechanik Timer")
@@ -245,18 +273,23 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Options.PhaseMonOverride = KBM.Language:Add("Phase Monitor: Override")
 	KBM.Language.Options.PhaseMonOverride:SetGerman("Phasen Monitor: Einstellungen")
 	KBM.Language.Options.PhaseMonOverride:SetRussian("Монитор фаз: Переопределить")
+	KBM.Language.Options.PhaseMonOverride:SetFrench("Мoniteur Phase: Override")
 	KBM.Language.Options.PhaseMonitor = KBM.Language:Add("Phase Monitor")
 	KBM.Language.Options.PhaseMonitor:SetGerman("Phasen Monitor")
 	KBM.Language.Options.PhaseMonitor:SetRussian("Монитор фаз")
+	KBM.Language.Options.PhaseMonitor:SetFrench("Moniteur Phase")
 	KBM.Language.Options.PhaseEnabled = KBM.Language:Add("Enable Phase Monitor")
 	KBM.Language.Options.PhaseEnabled:SetGerman("Phasen Monitor aktiviert")
 	KBM.Language.Options.PhaseEnabled:SetRussian("Монитор фаз: активирован")
+	KBM.Language.Options.PhaseEnabled:SetFrench("Activer Moniteur Phase")	
 	KBM.Language.Options.Phases = KBM.Language:Add("Display current Phase")
 	KBM.Language.Options.Phases:SetGerman("Zeige aktuelle Phase an")
 	KBM.Language.Options.Phases:SetRussian("Показывать текущую фазу")
+	KBM.Language.Options.Phases:SetFrench("Afficher Phase courante")
 	KBM.Language.Options.Objectives = KBM.Language:Add("Display Phase objective tracking")
 	KBM.Language.Options.Objectives:SetGerman("Zeige Phasen Aufgabe an")
 	KBM.Language.Options.Objectives:SetRussian("Показывать цели фазы")
+	KBM.Language.Options.Objectives:SetFrench("Afficher objectifs de Phase")
 	KBM.Language.Options.Phase = KBM.Language:Add("Phase")
 	KBM.Language.Options.Phase:SetGerman("Phase")
 	KBM.Language.Options.Phase:SetRussian("Фаза")
@@ -270,6 +303,7 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Options.Final:SetGerman("Letzte")
 	KBM.Language.Options.Dead = KBM.Language:Add("Dead")
 	KBM.Language.Options.Dead:SetGerman("Tot")
+	KBM.Language.Options.Dead:SetFrench("Mort")
 
 	-- Button Options
 	KBM.Language.Options.Button = KBM.Language:Add("Options Button Visible")
@@ -283,6 +317,7 @@ function KBMLM.SetMain_Lang()
 
 	-- Tank Swap related
 	KBM.Language.Options.TankSwap = KBM.Language:Add("Tank-Swaps")
+	KBM.Language.Options.TankSwap:SetFrench("Tank-Swaps")
 	KBM.Language.Options.TankSwap:SetGerman("Tank Wechsel")
 	KBM.Language.Options.TankSwap:SetRussian("Танк-свап")
 	KBM.Language.Options.Tank = KBM.Language:Add("Show Test Tanks")
@@ -292,6 +327,7 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Options.TankSwapEnabled = KBM.Language:Add("Tank-Swaps enabled")
 	KBM.Language.Options.TankSwapEnabled:SetGerman("Tank Wechsel anzeigen")
 	KBM.Language.Options.TankSwapEnabled:SetRussian("Включить танк-свап")
+	KBM.Language.Options.TankSwapEnabled:SetFrench("Tank-Swaps activé")
 
 	-- Alert related
 	KBM.Language.Options.AlertsOverride = KBM.Language:Add("Alerts: Override")
@@ -316,40 +352,50 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Options.UnlockFlash = KBM.Language:Add("Unlock alert border for scaling")
 	KBM.Language.Options.UnlockFlash:SetGerman("Alarmierungs Ränder sind änderbar.")
 	KBM.Language.Options.UnlockFlash:SetRussian("Разблокировать рамку предупреждения")
+	KBM.Language.Options.UnlockFlash:SetFrench("Débloquer bordure alerte pour ajustement")
 	KBM.Language.Options.Border = KBM.Language:Add("Enable Border")
 	KBM.Language.Options.Border:SetGerman("Ränder aktivieren")
 	KBM.Language.Options.Border:SetRussian("Показать рамку")
 	KBM.Language.Options.Notify = KBM.Language:Add("Enable Text")
 	KBM.Language.Options.Notify:SetGerman("Text aktivieren")
 	KBM.Language.Options.Notify:SetRussian("Показать текст")
+	KBM.Language.Options.Notify:SetFrench("Activer Texte")
 	KBM.Language.Options.Sound = KBM.Language:Add("Play Sound")
 	KBM.Language.Options.Sound:SetGerman("Sound abspielen")
 	KBM.Language.Options.Sound:SetRussian("Играть звук")
-
+	KBM.Language.Options.Sound:SetFrench("Jouer Son")
+	
 	-- Size Dictionary
 	KBM.Language.Options.UnlockWidth = KBM.Language:Add("Unlock width for scaling (Mouse wheel)")
 	KBM.Language.Options.UnlockWidth:SetGerman("Breite ist skalierbar")
 	KBM.Language.Options.UnlockWidth:SetRussian("Разблокировать ширину (колесо мыши)")
+	KBM.Language.Options.UnlockWidth:SetFrench("Débloquer largeur pour ajustement (Molette souris)")
 	KBM.Language.Options.UnlockHeight = KBM.Language:Add("Unlock height for scaling (Mouse wheel)")
 	KBM.Language.Options.UnlockHeight:SetGerman("Höhe ist skalierbar")
 	KBM.Language.Options.UnlockHeight:SetRussian("Разблокировать высоту (колесо мыши)")
+	KBM.Language.Options.UnlockHeight:SetFrench("Débloquer hauteur pour ajustement (Molette souris)")
 	KBM.Language.Options.UnlockText = KBM.Language:Add("Unlock Text size (Mouse wheel)")
 	KBM.Language.Options.UnlockText:SetGerman("Textgröße ist änderbar")
 	KBM.Language.Options.UnlockText:SetRussian("Разблокировать размер текста (колесо мыши)")
+	KBM.Language.Options.UnlockText:SetFrench("Débloquer Taille Texte (Molette Souris)")
 	KBM.Language.Options.UnlockAlpha = KBM.Language:Add("Unlock transparency")
 	KBM.Language.Options.UnlockAlpha:SetGerman("Transparenz ist änderbar")
 	KBM.Language.Options.UnlockAlpha:SetRussian("Разблокировать прозрачность")
+	KBM.Language.Options.UnlockAlpha:SetFrench("Débloquer transparence")
 
 	-- Misc.
 	KBM.Language.Options.Character = KBM.Language:Add("Saving settings for this character only")
 	KBM.Language.Options.Character:SetGerman("Einstellungen nur für diesen Charakter speichern")
 	KBM.Language.Options.Character:SetRussian("Сохранить настройки только для этого персонажа")
+	KBM.Language.Options.Character.French = "Sauvegarder configuration pour ce personnage uniquement"
 	KBM.Language.Options.ModEnabled = KBM.Language:Add("Enable King Boss Mods v"..AddonData.toc.Version)
 	KBM.Language.Options.ModEnabled:SetGerman("Aktiviere King Boss Mods v"..AddonData.toc.Version)
 	KBM.Language.Options.ModEnabled:SetRussian("Активировать King Boss Mods v"..AddonData.toc.Version)
+	KBM.Language.Options.ModEnabled:SetFrench("Activer King Boss Mods v"..AddonData.toc.Version)
 	KBM.Language.Options.Enabled = KBM.Language:Add("Enabled")
 	KBM.Language.Options.Enabled:SetGerman("Aktiviert")
 	KBM.Language.Options.Enabled:SetRussian("Активировать")
+	KBM.Language.Options.Enabled:SetFrench("Activé")
 	KBM.Language.Options.Settings = KBM.Language:Add("Settings")
 	KBM.Language.Options.Settings:SetFrench("Configurations")
 	KBM.Language.Options.Settings:SetGerman("Einstellungen")
@@ -357,18 +403,21 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Options.Shadow = KBM.Language:Add("Show text shadows")
 	KBM.Language.Options.Shadow:SetGerman("Zeige Text Schattierung")
 	KBM.Language.Options.Shadow:SetRussian("Отображать тень текста")
+	KBM.Language.Options.Shadow:SetFrench("Montrer ombre texte")
 	KBM.Language.Options.Texture = KBM.Language:Add("Enable textured overlay")
 	KBM.Language.Options.Texture:SetGerman("Texturierte Balken aktiviert")
 	KBM.Language.Options.Texture:SetRussian("Включить функцию наложения текстур")
+	KBM.Language.Options.Texture:SetFrench("Activer overlay textures")
 
 	-- Timer Dictionary
 	KBM.Language.Timers = {}
 	KBMLM.SetGroupObject(KBM.Language.Timers, "GroupObject", "Timer related")	
 	KBM.Language.Timers.Time = KBM.Language:Add("Time")
-	KBM.Language.Timers.Time:SetFrench("Dur\195\169e")
+	KBM.Language.Timers.Time:SetFrench("Durée")
 	KBM.Language.Timers.Time:SetGerman("Zeit")
 	KBM.Language.Timers.Time:SetRussian("Время")
 	KBM.Language.Timers.Enrage = KBM.Language:Add("Enrage in")
+	KBM.Language.Timers.Enrage:SetGerman("Enrage in")
 	KBM.Language.Timers.Enrage:SetFrench("Enrage dans")
 	KBM.Language.Timers.Enrage:SetRussian("Энрейдж через")
 
@@ -393,7 +442,7 @@ end
 function KBMLM.CheckLangTable(LangTable, Counter)
 end
 
-function KBMLM.FindMissing()
+function KBMLM.FindMissing(TempLang)
 
 	KBMLM.Store = KBMLM.InitStore()
 	-- First check Main Translations KBM.Language.*.{LangObj}
@@ -478,31 +527,49 @@ function KBMLM.FindMissing()
 			print("Mod: "..ModID.." does not have a translation table.")
 		end
 	end
-	local TempLang = KBM.Lang
-	--print("Missing Translation List")
+	-- Now check for Plug-In Translations
+	-- Tba
+	if TempLang == "" then
+		TempLang = KBM.Lang
+	end
+	print("Total Dictionary Entries: "..KBMLM.TotalPhrases.." (Includes non-tracked Plug-In Translations)")
 	for LangID, Object in pairs(KBMLM.Store) do
 		print(LangID..": "..Object.Total)
 	end
-	print_raw("-- KBM Automated Translation output")
-	print_raw("-- Language: "..TempLang)
-	for ID, Object in pairs(KBMLM.Store[TempLang].List) do
-		print_raw("--")
-		print_raw("-- Group ID: "..tostring(ID))
-		print_raw("-- Directory: "..Object.Directory)
-		for FileID, FileObj in pairs(Object.File) do
-			print_raw("-- File: "..FileID)
-			for GroupID, GroupObj in pairs(FileObj.Group) do
-				print_raw("-- Sub Type: "..GroupObj.Title)
-				for i, Phrase in ipairs(GroupObj.Phrases) do
-					print_raw(Phrase)
+	if KBMLM.Store[TempLang] then
+		print_raw("-- KBM Automated Translation output")
+		print_raw("-- Language: "..TempLang)
+		for ID, Object in pairs(KBMLM.Store[TempLang].List) do
+			print_raw("--")
+			print_raw("-- Group ID: "..tostring(ID))
+			print_raw("-- Directory: "..Object.Directory)
+			for FileID, FileObj in pairs(Object.File) do
+				print_raw("-- File: "..FileID)
+				for GroupID, GroupObj in pairs(FileObj.Group) do
+					print_raw("-- Sub Type: "..GroupObj.Title)
+					for i, Phrase in ipairs(GroupObj.Phrases) do
+						print_raw(Phrase)
+					end
 				end
+				print_raw("-- Group list End ****")
+				print_raw("--")
 			end
-			print_raw("-- Group list End ****")
+			print_raw("-- File List End ******")
 			print_raw("--")
 		end
-		print_raw("-- File List End ******")
 		print_raw("--")
+		print_raw("-- Report complete.")
+	else
+		print("Attempt to produce report for: "..tostring(TempLang))
+		if TempLang == "English" then
+			print("Please use /kbmlocale [language] to report on a non-English language")
+		else
+			print("Unsupported Language: No report can be generated")
+		end
+		local TempStr = "Supported translations are: "
+		for LangID, Object in pairs(KBMLM.Store) do
+			TempStr = TempStr..LangID..", "
+		end
+		print(TempStr)
 	end
-	print_raw("--")
-	print_raw("-- Report complete.")
 end

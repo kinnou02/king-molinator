@@ -80,6 +80,7 @@ KBM.RegisterMod(GR.ID, GR)
 GR.Lang.Unit = {}
 GR.Lang.Unit.Grugonim = KBM.Language:Add(GR.Grugonim.Name)
 GR.Lang.Unit.Grugonim:SetGerman("Grugonim")
+GR.Lang.Unit.Grugonim:SetFrench("Grugonim")
 GR.Lang.Unit.Grugonim:SetRussian("Гругоним")
 GR.Grugonim.Name = GR.Lang.Unit.Grugonim[KBM.Lang]
 GR.Lang.Unit.Tower = KBM.Language:Add(GR.Tower.Name)
@@ -102,6 +103,7 @@ GR.Lang.Ability.Bile:SetRussian("Едкая желчь")
 GR.Lang.Ability.Breath = KBM.Language:Add("Necrotic Breath")
 GR.Lang.Ability.Breath:SetGerman("Nekrotischer Atem")
 GR.Lang.Ability.Breath:SetRussian("Мертвящее дыхание")
+GR.Lang.Ability.Breath:SetFrench("Respiration nécrotique")
 GR.Lang.Ability.Disruption = KBM.Language:Add("Seismic Disruption")
 GR.Lang.Ability.Disruption:SetGerman("Seismische Störung")
 GR.Lang.Ability.Disruption:SetRussian("Сейсмическое разрушение")
@@ -112,7 +114,7 @@ GR.Lang.Ability.Swarm:SetRussian("Выводок паразитов")
 -- Debuff Dictionary
 GR.Lang.Debuff = {}
 GR.Lang.Debuff.Toxin = KBM.Language:Add("Heart Stopping Toxin")
-GR.Lang.Debuff.Toxin:SetFrench("Toxin d'arr\195\170t cardiaque")
+GR.Lang.Debuff.Toxin:SetFrench("Toxine d'arrêt cardiaque")
 GR.Lang.Debuff.Toxin:SetGerman("Herzstillstandsgift")
 GR.Lang.Debuff.Toxin:SetRussian("Останавливающий сердце яд")
 
@@ -121,12 +123,14 @@ GR.Lang.Menu = {}
 GR.Lang.Menu.Breath = KBM.Language:Add(GR.Lang.Ability.Breath[KBM.Lang].." duration")
 GR.Lang.Menu.Breath:SetGerman(GR.Lang.Ability.Breath[KBM.Lang].." Dauer")
 GR.Lang.Menu.Breath:SetRussian(GR.Lang.Ability.Breath[KBM.Lang].." продолжительность")
+GR.Lang.Menu.Breath:SetFrench(GR.Lang.Ability.Breath[KBM.Lang].." durée")
 
 -- Phase Monitor Dictionary
 GR.Lang.Phase = {}
 GR.Lang.Phase.Towers = KBM.Language:Add("Towers")
 GR.Lang.Phase.Towers:SetGerman("Türme")
 GR.Lang.Phase.Towers:SetRussian("Башни")
+GR.Lang.Phase.Towers:SetFrench("Balises")
 
 function GR:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript

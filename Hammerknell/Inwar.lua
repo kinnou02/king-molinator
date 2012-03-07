@@ -183,26 +183,35 @@ ID.Lang.Unit.Aqualix:SetRussian("Акваликс")
 ID.Lang.Unit.Undertow = KBM.Language:Add(ID.Undertow.Name)
 ID.Lang.Unit.Undertow:SetGerman("Sog")
 ID.Lang.Unit.Undertow:SetRussian("Подводное течение")
+ID.Lang.Unit.Undertow:SetFrench("Reflux")
 ID.Lang.Unit.Rotjaw = KBM.Language:Add(ID.Rotjaw.Name)
 ID.Lang.Unit.Rotjaw:SetGerman("Faulkriefer")
 ID.Lang.Unit.Rotjaw:SetRussian("Гнилая челюсть")
+ID.Lang.Unit.Rotjaw:SetFrench("Mâchoire-pourrie")
 -- Sub Unit Dictionary
 ID.Lang.Unit.Slime = KBM.Language:Add(ID.Slime.Name)
 ID.Lang.Unit.Slime:SetGerman("Stinkender Schleim")
 ID.Lang.Unit.Slime:SetRussian("Зловонный слизень")
+ID.Lang.Unit.Slime:SetFrench("Limon fétide")
 ID.Lang.Unit.Wrangler = KBM.Language:Add(ID.Wrangler.Name)
 ID.Lang.Unit.Wrangler:SetGerman("Krabbelklauen-Zänker")
+ID.Lang.Unit.Wrangler:SetFrench("Garde d'écrevisses naufrageuses")
 ID.Lang.Unit.Warden = KBM.Language:Add(ID.Warden.Name)
 ID.Lang.Unit.Warden:SetGerman("Gezeitenbewahrer")
 ID.Lang.Unit.Warden:SetRussian("Страж прилива")
+ID.Lang.Unit.Warden:SetFrench("Garde des marées")
 
 -- Ability Dictionary
 ID.Lang.Ability = {}
 ID.Lang.Ability.Freeze = KBM.Language:Add("Freezing Wave")
 ID.Lang.Ability.Freeze:SetGerman("Frostwelle")
+ID.Lang.Ability.Freeze:SetFrench("Vague glaciale")
 ID.Lang.Ability.Tide = KBM.Language:Add("Dark Tide")
+ID.Lang.Ability.Tide:SetGerman("Dunkle Flut")
 ID.Lang.Ability.Surge = KBM.Language:Add("Surge")
+ID.Lang.Ability.Surge:SetGerman("Schub")
 ID.Lang.Ability.Storm = KBM.Language:Add("Storm Lash")
+ID.Lang.Ability.Storm:SetGerman("Sturmpeitsche")
 
 -- Mechanic Dictionary
 ID.Lang.Mechanic = {}
@@ -213,6 +222,7 @@ ID.Lang.Mechanic.Geyser:SetRussian("Гейзер")
 -- Menu Dictionary
 ID.Lang.Menu = {}
 ID.Lang.Menu.Surge = KBM.Language:Add("Surge (Duration)")
+ID.Lang.Menu.Surge:SetGerman("Schub (Dauer)")
 
 -- Adjust Unit Names to match Client
 ID.Inwar.Name = ID.Lang.Unit.Inwar[KBM.Lang]

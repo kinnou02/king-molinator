@@ -57,8 +57,8 @@ KBM.RegisterMod(GS.ID, GS)
 -- Main Unit Dictionary
 GS.Lang.Unit = {}
 GS.Lang.Unit.Silgen = KBM.Language:Add(GS.Silgen.Name)
-GS.Lang.Unit.Silgen:SetGerman("Silgen")
-GS.Lang.Unit.Silgen:SetFrench("G\195\169n\195\169ral Silgen")
+GS.Lang.Unit.Silgen:SetGerman("General Silgen")
+GS.Lang.Unit.Silgen:SetFrench("Général Silgen")
 GS.Lang.Unit.Silgen:SetRussian("Генерал Силген")
 GS.Silgen.Name = GS.Lang.Unit.Silgen[KBM.Lang]
 GS.Descript = GS.Silgen.Name
@@ -68,15 +68,18 @@ GS.Lang.Ability = {}
 GS.Lang.Ability.Funnel = KBM.Language:Add("Heat Funnel")
 GS.Lang.Ability.Funnel:SetGerman("Hitzetrichter")
 GS.Lang.Ability.Funnel:SetRussian("Раскаленный горн")
+GS.Lang.Ability.Funnel:SetFrench("Conduit de chaleur")
 GS.Lang.Ability.Incinerate = KBM.Language:Add("Incinerate")
 GS.Lang.Ability.Incinerate:SetGerman("Verbrennen")
 GS.Lang.Ability.Incinerate:SetRussian("Кремация")
+GS.Lang.Ability.Incinerate:SetFrench("Incinération")
 
 -- Debuff Dictionary
 GS.Lang.Debuff = {}
 GS.Lang.Debuff.Anchor = KBM.Language:Add("Anchored in Flames")
 GS.Lang.Debuff.Anchor:SetGerman("In Flammen verankert")
 GS.Lang.Debuff.Anchor:SetRussian("Защита огня")
+GS.Lang.Debuff.Anchor:SetFrench("Ancrage de flammes")
 
 function GS:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript

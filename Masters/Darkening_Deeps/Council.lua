@@ -62,9 +62,6 @@ MOD.Lang.Unit.Nuggo:SetGerman("Oberschamane Nuggo")
 MOD.Lang.Unit.NuggoShort = KBM.Language:Add(MOD.Nuggo.NameShort)
 MOD.Lang.Unit.NuggoShort:SetGerman("Nuggo")
 MOD.Nuggo.Name = MOD.Lang.Unit.Nuggo[KBM.Lang]
-MOD.Lang.Descript = KBM.Language:Add("The Gedlo Council")
-MOD.Lang.Descript.German = "Gedlo-Rat"
-MOD.Descript = MOD.Lang.Descript[KBM.Lang]
 MOD.Lang.Unit.Swedge = KBM.Language:Add("Warlord Swedge")
 MOD.Lang.Unit.Swedge:SetGerman("Kriegsherr Swedge")
 MOD.Lang.Unit.SwedgeShort = KBM.Language:Add("Swedge")
@@ -76,6 +73,12 @@ MOD.Lang.Unit.GerbikShort:SetGerman("Gerbik")
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}
+
+-- Description Dictionary
+MOD.Lang.Main = {}
+MOD.Lang.Main.Descript = KBM.Language:Add("The Gedlo Council")
+MOD.Lang.Main.Descript:SetGerman("Gedlo-Rat")
+MOD.Descript = MOD.Lang.Main.Descript[KBM.Lang]
 
 MOD.Swedge = {
 	Mod = MOD,

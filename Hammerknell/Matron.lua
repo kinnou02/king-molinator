@@ -68,6 +68,10 @@ MZ.Lang.Unit.Matron = KBM.Language:Add(MZ.Matron.Name)
 MZ.Lang.Unit.Matron:SetGerman("Matrone Zamira")
 MZ.Lang.Unit.Matron:SetFrench("Matrone Zamira")
 MZ.Lang.Unit.Matron:SetRussian("Старуха Замира")
+MZ.Lang.Unit.MatronShort = KBM.Language:Add("Zamira")
+MZ.Lang.Unit.MatronShort:SetGerman("Zamira")
+MZ.Lang.Unit.MatronShort:SetFrench("Zamira")
+MZ.Lang.Unit.MatronShort:SetRussian("Замира")
 
 -- Ability Dictionary
 MZ.Lang.Ability = {}
@@ -89,6 +93,7 @@ MZ.Lang.Ability.Shadow:SetRussian("Поражение тенью")
 MZ.Lang.Ability.Ichor = KBM.Language:Add("Revolting Ichor")
 MZ.Lang.Ability.Ichor:SetGerman("Abscheulicher Eiter")
 MZ.Lang.Ability.Ichor:SetRussian("Омерзительный гной")
+MZ.Lang.Ability.Ichor:SetFrench("Explosion atroce")
 
 -- Debuff Dictionary
 MZ.Lang.Debuff = {}
@@ -99,17 +104,22 @@ MZ.Lang.Debuff.Curse:SetRussian("Проклятие старухи")
 MZ.Lang.Debuff.Spiritual = KBM.Language:Add("Spiritual Exhaustion")
 MZ.Lang.Debuff.Spiritual:SetGerman("Spirituelle Erschöpfung")
 MZ.Lang.Debuff.Spiritual:SetRussian("Духовное истощение")
+MZ.Lang.Debuff.Spiritual:SetFrench("Esprit cauchemardesque")
 
 -- Verbose Dictionary
 MZ.Lang.Verbose = {}
 MZ.Lang.Verbose.Adds = KBM.Language:Add("Adds spawn")
 MZ.Lang.Verbose.Adds:SetGerman("Adds spawnen")
 MZ.Lang.Verbose.Adds:SetRussian("Призыв аддов")
+MZ.Lang.Verbose.Adds:SetFrench("Pop des Adds")
 MZ.Lang.Verbose.Spiritual = KBM.Language:Add(MZ.Lang.Debuff.Spiritual[KBM.Lang].." fades")
 MZ.Lang.Verbose.Spiritual:SetGerman(MZ.Lang.Debuff.Spiritual[KBM.Lang].." ausgelaufen!")
 MZ.Lang.Verbose.Spiritual:SetRussian(MZ.Lang.Debuff.Spiritual[KBM.Lang].." заканчивается")
+MZ.Lang.Verbose.Spiritual:SetFrench(MZ.Lang.Debuff.Spiritual[KBM.Lang].." s'estompe")
 
+-- Define Translated Names
 MZ.Matron.Name = MZ.Lang.Unit.Matron[KBM.Lang]
+MZ.Matron.NameShort = MZ.Lang.Unit.MatronShort[KBM.Lang]
 MZ.Descript = MZ.Matron.Name
 
 function MZ:AddBosses(KBM_Boss)

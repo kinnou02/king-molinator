@@ -53,7 +53,12 @@ KBM.RegisterMod(IJ.ID, IJ)
 IJ.Lang.Unit = {}
 IJ.Lang.Unit.Johlen = KBM.Language:Add(IJ.Johlen.Name)
 IJ.Lang.Unit.Johlen:SetFrench("Infiltrateur Johlen")
+IJ.Lang.Unit.Johlen:SetGerman("Infiltrator Johlen")
 IJ.Lang.Unit.Johlen:SetRussian("Лазутчик Джохлен")
+IJ.Lang.Unit.JohlenShort = KBM.Language:Add("Johlen")
+IJ.Lang.Unit.JohlenShort:SetFrench("Johlen")
+IJ.Lang.Unit.JohlenShort:SetGerman("Johlen")
+IJ.Lang.Unit.JohlenShort:SetRussian("Джохлен")
 -- Addtional Unit Dictionary
 IJ.Lang.Unit.Bomb = KBM.Language:Add("Devastating Bomb")
 IJ.Lang.Unit.Bomb:SetGerman("Vernichtende Bombe")

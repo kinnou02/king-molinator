@@ -60,30 +60,50 @@ SZ.Lang.Unit.Zilas:SetFrench("\195\137tripeur d'\195\162mes Zilas")
 SZ.Lang.Unit.Zilas:SetRussian("Душераздиратель Зилас")
 SZ.Zilas.Name = SZ.Lang.Unit.Zilas[KBM.Lang]
 SZ.Descript = SZ.Zilas.Name
+SZ.Lang.Unit.ZilasShort = KBM.Language:Add("Zilas")
+SZ.Lang.Unit.ZilasShort:SetGerman("Zilas")
+SZ.Lang.Unit.ZilasShort:SetFrench("Zilas")
+SZ.Lang.Unit.ZilasShort:SetRussian("Зилас")
+SZ.Zilas.NameShort = SZ.Lang.Unit.Zilas[KBM.Lang]
 -- Additional Unit Dictionary
 SZ.Lang.Unit.Imp = KBM.Language:Add("Escaped Imp")
 SZ.Lang.Unit.Imp:SetGerman("Entflohener Imp")
+SZ.Lang.Unit.Imp:SetRussian("Сбежавший бес")
+SZ.Lang.Unit.Imp:SetFrench("Diablotin évadé")
 SZ.Lang.Unit.ImpShort = KBM.Language:Add("Imp")
+SZ.Lang.Unit.ImpShort:SetGerman("Imp")
+SZ.Lang.Unit.ImpShort:SetRussian("Бес")
+SZ.Lang.Unit.ImpShort:SetFrench("Diablotin")
 SZ.Lang.Unit.Spirit = KBM.Language:Add("Drifting Spirit")
 SZ.Lang.Unit.Spirit:SetGerman("Treibender Geist")
+SZ.Lang.Unit.Spirit:SetRussian("Неприкаянная душа")
+SZ.Lang.Unit.Spirit:SetFrench("Esprit errant")
 SZ.Lang.Unit.SpiritShort = KBM.Language:Add("Spirit")
 SZ.Lang.Unit.SpiritShort:SetGerman("Geist")
+SZ.Lang.Unit.SpiritShort:SetRussian("Душа")
+SZ.Lang.Unit.SpiritShort:SetFrench("Esprit")
 
 -- Ability Dictionary
 SZ.Lang.Ability = {}
 SZ.Lang.Ability.Grasp = KBM.Language:Add("Soulrender's Grasp")
 SZ.Lang.Ability.Grasp:SetGerman("Seelenreißer-Griff")
-SZ.Lang.Ability.Grasp:SetFrench("Poigne d'\195\137tripeur d'\195\162mes")
+SZ.Lang.Ability.Grasp:SetFrench("Poigne d'Étripeur d'âmes")
 SZ.Lang.Ability.Grasp:SetRussian("Хватка душедера")
 SZ.Lang.Ability.Cede = KBM.Language:Add("Cede Spirit")
 SZ.Lang.Ability.Cede:SetGerman("Geist abgeben")
+SZ.Lang.Ability.Cede:SetRussian("Передача духа")
+SZ.Lang.Ability.Cede:SetFrench("Pacte impie")
 SZ.Lang.Ability.Volley = KBM.Language:Add("Dark Volley")
 SZ.Lang.Ability.Volley:SetGerman("Dunkler Treffer")
+SZ.Lang.Ability.Volley:SetRussian("Темный залп")
+SZ.Lang.Ability.Volley:SetFrench("Volée obscure")
 
 -- Menu Dictionary
 SZ.Lang.Menu = {}
 SZ.Lang.Menu.Grasp = KBM.Language:Add("First "..SZ.Lang.Ability.Grasp[KBM.Lang])
 SZ.Lang.Menu.Grasp:SetGerman("Erste "..SZ.Lang.Ability.Grasp[KBM.Lang])
+SZ.Lang.Menu.Grasp:SetRussian("Первая "..SZ.Lang.Ability.Grasp[KBM.Lang])
+SZ.Lang.Menu.Grasp:SetFrench("Première "..SZ.Lang.Ability.Grasp[KBM.Lang])
 
 SZ.Imp = {
 	Mod = SZ,
