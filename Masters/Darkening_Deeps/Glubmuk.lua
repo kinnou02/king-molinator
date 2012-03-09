@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "MM_Glubmuk",
+	Object = "MOD",
 }
 
 MOD.Glubmuk = {

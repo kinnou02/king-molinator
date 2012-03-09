@@ -56,11 +56,15 @@ KBM.RegisterMod(MOD.ID, MOD)
 -- Main Unit Dictionary
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Andrenos = KBM.Language:Add(MOD.Andrenos.Name)
-MOD.Lang.Unit.Andrenos:SetGerman("Kaler Andrenos")
--- MOD.Lang.Unit.Andrenos:SetFrench("")
+MOD.Lang.Unit.Andrenos:SetGerman()
+MOD.Lang.Unit.Andrenos:SetFrench()
 -- MOD.Lang.Unit.Andrenos:SetRussian("")
 MOD.Andrenos.Name = MOD.Lang.Unit.Andrenos[KBM.Lang]
 MOD.Descript = MOD.Andrenos.Name
+MOD.Lang.Unit.AndShort = KBM.Language:Add("Andrenos")
+MOD.Lang.Unit.AndShort:SetGerman()
+MOD.Lang.Unit.AndShort:SetFrench()
+MOD.Andrenos.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}

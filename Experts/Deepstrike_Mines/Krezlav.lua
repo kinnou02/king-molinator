@@ -56,11 +56,15 @@ KBM.RegisterMod(MOD.ID, MOD)
 -- Main Unit Dictionary
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Krezlav = KBM.Language:Add(MOD.Krezlav.Name)
-MOD.Lang.Unit.Krezlav:SetGerman("Gregori Krezlav") 
--- MOD.Lang.Unit.Krezlav:SetFrench("")
+MOD.Lang.Unit.Krezlav:SetGerman() 
+MOD.Lang.Unit.Krezlav:SetFrench()
 -- MOD.Lang.Unit.Krezlav:SetRussian("")
 MOD.Krezlav.Name = MOD.Lang.Unit.Krezlav[KBM.Lang]
 MOD.Descript = MOD.Krezlav.Name
+MOD.Lang.Unit.KrezShort = KBM.Language:Add("Krezlav")
+MOD.Lang.Unit.KrezShort:SetGerman()
+MOD.Lang.Unit.KrezShort:SetFrench()
+MOD.Krezlav.NameShort = MOD.Lang.Unit.KrezShort[KBM.Lang]
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}

@@ -57,6 +57,7 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Vallnara = KBM.Language:Add(MOD.Vallnara.Name)
 MOD.Lang.Unit.Vallnara:SetGerman("Königin Vallnara")
+MOD.Lang.Unit.Vallnara:SetFrench("Reine Vallnara")
 MOD.Vallnara.Name = MOD.Lang.Unit.Vallnara[KBM.Lang]
 MOD.Descript = MOD.Vallnara.Name
 MOD.Lang.Unit.ValShort = KBM.Language:Add("Vallnara")
@@ -65,6 +66,7 @@ MOD.Lang.Unit.ValShort:SetFrench("Vallnara")
 MOD.Vallnara.NameShort = MOD.Lang.Unit.ValShort[KBM.Lang]
 MOD.Lang.Unit.CorruptQueen = KBM.Language:Add("Corrupted Queen Vallnara")
 MOD.Lang.Unit.CorruptQueen:SetGerman("Verdorbene Königin Vallnara")
+MOD.Lang.Unit.CorruptQueen:SetFrench("Reine Corrompue Vallnara")
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}

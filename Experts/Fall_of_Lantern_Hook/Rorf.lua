@@ -55,18 +55,21 @@ KBM.RegisterMod(MOD.ID, MOD)
 -- Main Unit Dictionary
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Rorf = KBM.Language:Add(MOD.Rorf.Name)
-MOD.Lang.Unit.Rorf:SetGerman("Rorf")
--- MOD.Lang.Unit.Rorf:SetFrench("")
+MOD.Lang.Unit.Rorf:SetGerman()
+MOD.Lang.Unit.Rorf:SetFrench()
 -- MOD.Lang.Unit.Rorf:SetRussian("")
 MOD.Rorf.Name = MOD.Lang.Unit.Rorf[KBM.Lang]
 MOD.Descript = MOD.Rorf.Name
 -- Addtional Unit Dictionary
 MOD.Lang.Unit.Sneaky = KBM.Language:Add("Sneaky")
 MOD.Lang.Unit.Sneaky:SetGerman("Schleich")
+MOD.Lang.Unit.Sneaky:SetFrench("Sneaky")
 MOD.Lang.Unit.Scratchy = KBM.Language:Add("Scratchy")
 MOD.Lang.Unit.Scratchy:SetGerman("Kratz")
+MOD.Lang.Unit.Scratchy:SetFrench("Scratchy")
 MOD.Lang.Unit.Scary = KBM.Language:Add("Scary")
 MOD.Lang.Unit.Scary:SetGerman("Schreck")
+MOD.Lang.Unit.Scary:SetFrench("Scary")
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}

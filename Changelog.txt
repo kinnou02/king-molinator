@@ -2,6 +2,7 @@
 
 Translation System
 * New: A new "How To Translate" page is being written to help keep translations unified with the new system.
+* New: Identical translations can now be set with :SetGerman(), :SetFrench(), :SetRussian(), and :SetKorean(). No more having to copy English.
 * Change: Major changes to the Translation Engine.
 * Change: Main translations are now stored in KBMLocaleManager/Locale.lua
 * Change: All existing Units should now be in-line with the new dictionary naming conventions.
@@ -11,6 +12,9 @@ Translation System
 * Note: Encounter translations will remain in their respective mods. These will be pointed to if a translation is missing.
 * New: Slash Command /kbmlocale (will list total number missing translations for each Language, and a list of missing translations for the current language)
 * Note: /kbmlocale will return a group object stating Directory, File name and list of missing translations for that file or files.
+
+Alerts
+* Change: Alerts which trigger another Alert and/or Mechanic Timer after itself, now do so immediately. Not after fading.
 
 Mechanic Timers
 * Colors

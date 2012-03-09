@@ -57,10 +57,14 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Calyx = KBM.Language:Add(MOD.Calyx.Name)
 MOD.Lang.Unit.Calyx:SetGerman("Calyx der Alte")
--- MOD.Lang.Unit.Calyx:SetFrench("")
+MOD.Lang.Unit.Calyx:SetFrench("Calyx l'Ancien")
 -- MOD.Lang.Unit.Calyx:SetRussian("")
 MOD.Calyx.Name = MOD.Lang.Unit.Calyx[KBM.Lang]
 MOD.Descript = MOD.Calyx.Name
+MOD.Lang.Unit.CalShort = KBM.Language:Add("Calyx")
+MOD.Lang.Unit.CalShort:SetGerman()
+MOD.Lang.Unit.CalShort:SetFrench()
+MOD.Calyx.NameShort = MOD.Lang.Unit.CalShort[KBM.Lang]
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}

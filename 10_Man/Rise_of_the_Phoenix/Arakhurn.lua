@@ -19,7 +19,7 @@ local HA = {
 	HasPhases = true,
 	Lang = {},
 	TimeoutOverride = false,
-	Timeout = 30,
+	Timeout = 60,
 	Phase = 1,
 	Enrage = 14.5 * 60,
 	ID = "Arakhurn",
@@ -101,11 +101,11 @@ HA.Lang.Notify.Nova:SetGerman("Hohepriester Arakhurn lässt die feurige Energie 
 HA.Lang.Notify.Nova:SetRussian("Первосвященник Аракурн высвобождает скрытую внутри яростную энергию.")
 HA.Lang.Notify.Respawn = KBM.Language:Add("The lava churns violently as a large shadow moves beneath it and then rushes to the surface")
 HA.Lang.Notify.Respawn:SetGerman("Die Lava brodelt gewaltig, während sich ein großer Schatten unter ihr bewegt und dann an die Oberfläche schnellt.")
-HA.Lang.Notify.Respawn:SetRussian("Лава бурлит; под ней движеться огромная тень, стремительно всплывая к поверхности.")
+HA.Lang.Notify.Respawn:SetRussian("Лава бурлит; под ней движется огромная тень, стремительно всплывая к поверхности.")
 HA.Lang.Notify.Respawn:SetFrench("La lave s'agite violemment, tandis qu'une grande ombre bouge dans ses profondeurs et se précipite ensuite vers la surface.")
 HA.Lang.Notify.Death = KBM.Language:Add("As Arakhurn turns to ash, something stirs beneath the molten lava.")
 HA.Lang.Notify.Death:SetGerman("Als Arakhurn zu Asche zerfällt, regt sich etwas unter der schwelenden Lava.")
-HA.Lang.Notify.Death:SetRussian("По мере того, как Аракурн превращается в пепел, что-то пробуждаеться под раскаленной лавой.")
+HA.Lang.Notify.Death:SetRussian("По мере того, как Аракурн превращается в пепел, что-то пробуждается под раскаленной лавой.")
 HA.Lang.Notify.Death:SetFrench("Tandis qu'Arakhurn se consume, on distingue un mouvement sous la lave en fusion.")
 
 -- Chat Dictionary
@@ -121,6 +121,7 @@ HA.Lang.Chat.Death:SetRussian("Огонь во мне ослабевает. Я �
 HA.Lang.Buff = {}
 HA.Lang.Buff.Fiery = KBM.Language:Add("Fiery Metamorphosis")
 HA.Lang.Buff.Fiery:SetGerman("Feurige Metamorphose")
+HA.Lang.Buff.Fiery:SetFrench("Fiery Metamorphosis")
 HA.Lang.Buff.Fiery:SetRussian("Огненное превращение")
 
 -- Debuff Dictionary
@@ -133,6 +134,7 @@ HA.Lang.Debuff.Armor:SetRussian("Раздиратель доспехов")
 HA.Lang.Verbose = {}
 HA.Lang.Verbose.Nova = KBM.Language:Add("until "..HA.Lang.Ability.Nova[KBM.Lang])
 HA.Lang.Verbose.Nova:SetGerman("bis "..HA.Lang.Ability.Nova[KBM.Lang])
+HA.Lang.Verbose.Nova:SetFrench("jusqu'à Nova de flammes")
 HA.Lang.Verbose.Nova:SetRussian("до "..HA.Lang.Ability.Nova[KBM.Lang])
 HA.Lang.Verbose.Rise = KBM.Language:Add(HA.Lang.Unit.Arakhurn[KBM.Lang].." rises")
 HA.Lang.Verbose.Rise:SetGerman(HA.Lang.Unit.Arakhurn[KBM.Lang].." erscheint")
@@ -141,7 +143,8 @@ HA.Lang.Verbose.Rise:SetRussian(HA.Lang.Unit.Arakhurn[KBM.Lang].." оживае�
 -- Phase Monitor Dictionary
 HA.Lang.Phase = {}
 HA.Lang.Phase.Adds = KBM.Language:Add("Adds")
-HA.Lang.Phase.Adds:SetGerman("Adds")
+HA.Lang.Phase.Adds:SetGerman()
+HA.Lang.Phase.Adds:SetFrench()
 HA.Lang.Phase.Adds:SetRussian("Адды")
 
 -- Menu Dictionary
@@ -154,15 +157,18 @@ HA.Lang.Menu.FieryPThree:SetGerman("Erste "..HA.Lang.Buff.Fiery[KBM.Lang].." (Ph
 HA.Lang.Menu.FieryPThree:SetRussian("Первое "..HA.Lang.Buff.Fiery[KBM.Lang].." (Фаза 3)")
 HA.Lang.Menu.NovaFirst = KBM.Language:Add("First "..HA.Lang.Ability.Nova[KBM.Lang])
 HA.Lang.Menu.NovaFirst:SetGerman("Erste "..HA.Lang.Ability.Nova[KBM.Lang])
+HA.Lang.Menu.NovaFirst:SetFrench("Premier Nova de flammes")
 HA.Lang.Menu.NovaFirst:SetRussian("Первая "..HA.Lang.Ability.Nova[KBM.Lang])
 HA.Lang.Menu.NovaPThree = KBM.Language:Add("First "..HA.Lang.Ability.Nova[KBM.Lang].." (Phase 3)")
 HA.Lang.Menu.NovaPThree:SetGerman("Erste "..HA.Lang.Ability.Nova[KBM.Lang].." (Phase 3)")
+HA.Lang.Menu.NovaPThree:SetFrench("Premier Nova de flammes (Phase 3)")
 HA.Lang.Menu.NovaPThree:SetRussian("Первая "..HA.Lang.Ability.Nova[KBM.Lang].." (Фаза 3)")
 HA.Lang.Menu.AddFirst = KBM.Language:Add("First "..HA.Lang.Unit.Enraged[KBM.Lang])
 HA.Lang.Menu.AddFirst:SetGerman("Erste "..HA.Lang.Unit.Enraged[KBM.Lang])
 HA.Lang.Menu.AddFirst:SetRussian("Первое "..HA.Lang.Unit.Enraged[KBM.Lang])
 HA.Lang.Menu.NovaWarn = KBM.Language:Add("5 second warning for "..HA.Lang.Ability.Nova[KBM.Lang])
 HA.Lang.Menu.NovaWarn:SetGerman("5 Sekunden bis "..HA.Lang.Ability.Nova[KBM.Lang])
+HA.Lang.Menu.NovaWarn:SetFrench("5 secondes avertissement pour Nova de flammes")
 HA.Lang.Menu.NovaWarn:SetRussian("5 Секунд до "..HA.Lang.Ability.Nova[KBM.Lang])
 
 HA.Enraged = {

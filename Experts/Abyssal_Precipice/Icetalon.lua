@@ -57,7 +57,7 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Icetalon = KBM.Language:Add(MOD.Icetalon.Name)
 MOD.Lang.Unit.Icetalon:SetGerman("Eiskralle") 
--- MOD.Lang.Unit.Icetalon:SetFrench("")
+MOD.Lang.Unit.Icetalon:SetFrench("Serre de glace")
 -- MOD.Lang.Unit.Icetalon:SetRussian("")
 MOD.Icetalon.Name = MOD.Lang.Unit.Icetalon[KBM.Lang]
 MOD.Descript = MOD.Icetalon.Name

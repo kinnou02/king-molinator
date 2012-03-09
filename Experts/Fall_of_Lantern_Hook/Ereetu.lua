@@ -57,10 +57,14 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Ereetu = KBM.Language:Add(MOD.Ereetu.Name)
 MOD.Lang.Unit.Ereetu:SetGerman("Glutfürst Ereetu") 
--- MOD.Lang.Unit.Ereetu:SetFrench("")
+MOD.Lang.Unit.Ereetu:SetFrench("Seigneur de Braise Ereetu")
 -- MOD.Lang.Unit.Ereetu:SetRussian("")
 MOD.Ereetu.Name = MOD.Lang.Unit.Ereetu[KBM.Lang]
 MOD.Descript = MOD.Ereetu.Name
+MOD.Lang.Unit.EreShort = KBM.Language:Add("Ereetu")
+MOD.Lang.Unit.EreShort:SetGerman()
+MOD.Lang.Unit.EreShort:SetFrench()
+MOD.Ereetu.NameShort = MOD.Lang.Unit.EreShort[KBM.Lang]
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}

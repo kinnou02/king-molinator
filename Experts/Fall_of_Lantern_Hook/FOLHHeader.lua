@@ -28,7 +28,7 @@ MOD.Lang = {}
 MOD.Lang.Main = {}
 MOD.Lang.Main.Name = KBM.Language:Add(MOD.Name)
 MOD.Lang.Main.Name:SetGerman("Untergang von Laternenhaken") 
--- MOD.Lang.Main.Name:SetFrench("")
+MOD.Lang.Main.Name:SetFrench("Chute de Saillant de Lanterne")
 -- MOD.Lang.Main.Name:SetRussian("")
 
 MOD.Name = MOD.Lang.Main.Name[KBM.Lang]

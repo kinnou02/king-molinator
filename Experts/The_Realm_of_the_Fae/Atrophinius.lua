@@ -57,12 +57,13 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Atrophinius = KBM.Language:Add(MOD.Atrophinius.Name)
 MOD.Lang.Unit.Atrophinius:SetGerman("Kriegsherr Atrophinius")
--- MOD.Lang.Unit.Atrophinius:SetFrench("")
+MOD.Lang.Unit.Atrophinius:SetFrench("Maître de guerre Atrophinius")
 -- MOD.Lang.Unit.Atrophinius:SetRussian("")
 MOD.Atrophinius.Name = MOD.Lang.Unit.Atrophinius[KBM.Lang]
 MOD.Descript = MOD.Atrophinius.Name
 MOD.Lang.Unit.AtrophiniusShort = KBM.Language:Add(MOD.Atrophinius.NameShort)
-MOD.Lang.Unit.AtrophiniusShort:SetGerman("Atrophinius")
+MOD.Lang.Unit.AtrophiniusShort:SetGerman()
+MOD.Lang.Unit.AtrophiniusShort:SetFrench()
 MOD.Atrophinius.NameShort = MOD.Lang.Unit.AtrophiniusShort[KBM.Lang]
 
 -- Ability Dictionary

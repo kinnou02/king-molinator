@@ -57,10 +57,14 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Oludare = KBM.Language:Add(MOD.Oludare.Name)
 MOD.Lang.Unit.Oludare:SetGerman("Oludare Feuerhuf")
--- MOD.Lang.Unit.Oludare:SetFrench("")
+MOD.Lang.Unit.Oludare:SetFrench("Oludare le Sabot de feu")
 -- MOD.Lang.Unit.Oludare:SetRussian("")
 MOD.Oludare.Name = MOD.Lang.Unit.Oludare[KBM.Lang]
 MOD.Descript = MOD.Oludare.Name
+MOD.Lang.Unit.OluShort = KBM.Language:Add("Oludare")
+MOD.Lang.Unit.OluShort:SetGerman()
+MOD.Lang.Unit.OluShort:SetFrench()
+MOD.Oludare.NameShort = MOD.Lang.Unit.OluShort[KBM.Lang]
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}

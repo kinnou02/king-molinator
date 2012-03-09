@@ -57,10 +57,14 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Zael = KBM.Language:Add(MOD.Zael.Name)
 MOD.Lang.Unit.Zael:SetGerman("Ascherufer Zael")
--- MOD.Lang.Unit.Zael:SetFrench("")
+MOD.Lang.Unit.Zael:SetFrench("Zael le Mande-cendres")
 -- MOD.Lang.Unit.Zael:SetRussian("")
 MOD.Zael.Name = MOD.Lang.Unit.Zael[KBM.Lang]
 MOD.Descript = MOD.Zael.Name
+MOD.Lang.Unit.ZaelShort = KBM.Language:Add("Zael")
+MOD.Lang.Unit.ZaelShort:SetGerman("Zael")
+MOD.Lang.Unit.ZaelShort:SetFrench("Zael")
+MOD.Zael.NameShort = MOD.Lang.Unit.ZaelShort[KBM.Lang]
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}

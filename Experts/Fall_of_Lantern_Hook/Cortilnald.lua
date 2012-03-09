@@ -57,10 +57,14 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Cortilnald = KBM.Language:Add(MOD.Cortilnald.Name)
 MOD.Lang.Unit.Cortilnald:SetGerman("Feuermeister Cortilnald") 
--- MOD.Lang.Unit.Cortilnald:SetFrench("")
+MOD.Lang.Unit.Cortilnald:SetFrench("Pyromaître Cortilnald")
 -- MOD.Lang.Unit.Cortilnald:SetRussian("")
 MOD.Cortilnald.Name = MOD.Lang.Unit.Cortilnald[KBM.Lang]
 MOD.Descript = MOD.Cortilnald.Name
+MOD.Lang.Unit.CortShort = KBM.Language:Add("Cortilnald")
+MOD.Lang.Unit.CortShort:SetGerman()
+MOD.Lang.Unit.CortShort:SetFrench()
+MOD.Cortilnald.NameShort = MOD.Lang.Unit.CortShort[KBM.Lang]
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}

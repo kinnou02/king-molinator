@@ -74,6 +74,7 @@ IJ.Lang.Ability.Blinding:SetRussian("Ослепляющая бомба")
 IJ.Lang.Verbose = {}
 IJ.Lang.Verbose.Bomb = KBM.Language:Add("Devastation")
 IJ.Lang.Verbose.Bomb:SetGerman("Vernichtung")
+IJ.Lang.Verbose.Bomb:SetRussian("Разрушение")
 
 -- Phase Monitor Dictionary
 IJ.Lang.Phase = {}

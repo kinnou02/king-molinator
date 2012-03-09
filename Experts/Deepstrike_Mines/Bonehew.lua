@@ -60,7 +60,7 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Bonehew = KBM.Language:Add(MOD.Bonehew.Name)
 MOD.Lang.Unit.Bonehew:SetGerman("Bonehew der Donnerer")
--- MOD.Lang.Unit.Bonehew:SetFrench("")
+MOD.Lang.Unit.Bonehew:SetFrench("Taille-os le Tonnant")
 -- MOD.Lang.Unit.Bonehew:SetRussian("")
 MOD.Bonehew.Name = MOD.Lang.Unit.Bonehew[KBM.Lang]
 MOD.Descript = MOD.Bonehew.Name

@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "MM_Villizar",
+	Object = "MOD",
 }
 
 MOD.Villizar = {
@@ -56,10 +57,14 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Villizar = KBM.Language:Add(MOD.Villizar.Name)
 MOD.Lang.Unit.Villizar:SetGerman("Abgesandter Villizar") 
--- MOD.Lang.Unit.Villizar:SetFrench("")
+MOD.Lang.Unit.Villizar:SetFrench("Émissaire Villizar")
 -- MOD.Lang.Unit.Villizar:SetRussian("")
 MOD.Villizar.Name = MOD.Lang.Unit.Villizar[KBM.Lang]
 MOD.Descript = MOD.Villizar.Name
+MOD.Lang.Unit.VilShort = KBM.Language:Add("Villizar")
+MOD.Lang.Unit.VilShort:SetGerman("Villizar")
+MOD.Lang.Unit.VilShort:SetRussian("Villizar")
+MOD.Villizar.NameShort = MOD.Lang.Unit.VilShort[KBM.Lang]
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}

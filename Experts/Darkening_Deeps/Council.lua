@@ -58,18 +58,21 @@ MOD.Lang.Unit = {}
 MOD.Lang.Unit.Nuggo = KBM.Language:Add(MOD.Nuggo.Name)
 MOD.Lang.Unit.Nuggo:SetGerman("Oberschamane Nuggo")
 MOD.Lang.Unit.NuggoShort = KBM.Language:Add(MOD.Nuggo.NameShort)
-MOD.Lang.Unit.NuggoShort:SetGerman("Nuggo")
+MOD.Lang.Unit.NuggoShort:SetGerman()
+MOD.Lang.Unit.NuggoShort:SetFrench()
 MOD.Nuggo.Name = MOD.Lang.Unit.Nuggo[KBM.Lang]
 MOD.Nuggo.NameShort = MOD.Lang.Unit.NuggoShort[KBM.Lang]
 -- Unit Dictionary
 MOD.Lang.Unit.Swedge = KBM.Language:Add("Warlord Swedge")
 MOD.Lang.Unit.Swedge:SetGerman("Kriegsherr Swedge")
 MOD.Lang.Unit.SwedgeShort = KBM.Language:Add("Swedge")
-MOD.Lang.Unit.SwedgeShort:SetGerman("Swedge")
+MOD.Lang.Unit.SwedgeShort:SetGerman()
+MOD.Lang.Unit.SwedgeShort:SetFrench()
 MOD.Lang.Unit.Gerbik = KBM.Language:Add("Incinerator Gerbik")
 MOD.Lang.Unit.Gerbik:SetGerman("Entflammer Gerbik")
 MOD.Lang.Unit.GerbikShort = KBM.Language:Add("Gerbik")
-MOD.Lang.Unit.GerbikShort:SetGerman("Gerbik")
+MOD.Lang.Unit.GerbikShort:SetGerman()
+MOD.Lang.Unit.GerbikShort:SetFrench()
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}
@@ -78,6 +81,7 @@ MOD.Lang.Ability = {}
 MOD.Lang.Main = {}
 MOD.Lang.Main.Descript = KBM.Language:Add("The Gedlo Council")
 MOD.Lang.Main.Descript:SetGerman("Gedlo-Rat")
+MOD.Lang.Main.Descript:SetFrench("Le Conclave des Gedlos")
 MOD.Descript = MOD.Lang.Main.Descript[KBM.Lang]
 
 

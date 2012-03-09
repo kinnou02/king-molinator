@@ -3557,6 +3557,11 @@ function KBM.Alert:Init()
 				if self.StopTime <= CurrentTime then
 					self.Direction = -self.Speed
 					self.Current.Stopping = true
+					if self.Current.AlertAfter and not self.Starting then
+						self:Stop()
+					elseif self.Current.TimerAfter then
+						self:Stop()
+					end
 				end
 			end
 		end

@@ -57,7 +57,7 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Verosa = KBM.Language:Add(MOD.Verosa.Name)
 MOD.Lang.Unit.Verosa:SetGerman("Matrone Verosa")
--- MOD.Lang.Unit.Verosa:SetFrench("")
+MOD.Lang.Unit.Verosa:SetFrench("Matrone Verosa")
 -- MOD.Lang.Unit.Verosa:SetRussian("")
 MOD.Verosa.Name = MOD.Lang.Unit.Verosa[KBM.Lang]
 MOD.Descript = MOD.Verosa.Name
@@ -69,8 +69,10 @@ MOD.Lang.Ability = {}
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Lesch = KBM.Language:Add("Lesch")
 MOD.Lang.Unit.Lesch:SetGerman("Lesch")
+MOD.Lang.Unit.Lesch:SetFrench("Lesch")
 MOD.Lang.Unit.Gurze = KBM.Language:Add("Gurze")
 MOD.Lang.Unit.Gurze:SetGerman("Gurze")
+MOD.Lang.Unit.Gurze:SetFrench("Gurze")
 
 MOD.Lesch = {
 	Mod = MOD,

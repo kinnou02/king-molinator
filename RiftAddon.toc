@@ -151,7 +151,7 @@ RunOnStartup = {
 	"Experts/The_Iron_Tomb/Totek.lua",
 	"Experts/The_Realm_of_the_Fae/ROTFHeader.lua",
 	"Experts/The_Realm_of_the_Fae/Maelow.lua",
-	"Experts/The_Realm_of_the_Fae/Loggodhan.lua",
+	"Experts/The_Realm_of_the_Fae/Luggodhan.lua",
 	"Experts/The_Realm_of_the_Fae/Orban.lua",
 	"Experts/The_Realm_of_the_Fae/Atrophinius.lua",
 	"Experts/The_Realm_of_the_Fae/Winterfrost.lua",

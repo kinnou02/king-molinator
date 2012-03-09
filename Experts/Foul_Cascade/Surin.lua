@@ -57,7 +57,7 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Surin = KBM.Language:Add(MOD.Surin.Name)
 MOD.Lang.Unit.Surin:SetGerman("Gräfin Surin Skenobar")
--- MOD.Lang.Unit.Surin:SetFrench("")
+MOD.Lang.Unit.Surin:SetFrench("Comtesse Surin Skenobar")
 -- MOD.Lang.Unit.Surin:SetRussian("")
 MOD.Surin.Name = MOD.Lang.Unit.Surin[KBM.Lang]
 MOD.Descript = MOD.Surin.Name

@@ -53,7 +53,8 @@ KBM.RegisterMod(EN.ID, EN)
 -- Main Unit Dictionary
 EN.Lang.Unit = {}
 EN.Lang.Unit.Ereandorn = KBM.Language:Add(EN.Ereandorn.Name)
-EN.Lang.Unit.Ereandorn:SetGerman("Ereandorn")
+EN.Lang.Unit.Ereandorn:SetGerman()
+EN.Lang.Unit.Ereandorn:SetFrench()
 EN.Lang.Unit.Ereandorn:SetRussian("Эреандорн")
 EN.Ereandorn.Name = EN.Lang.Unit.Ereandorn[KBM.Lang]
 EN.Descript = EN.Ereandorn.Name

@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "MM_Scarn",
+	Object = "MOD",
 }
 
 MOD.Scarn = {
@@ -56,7 +57,7 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Scarn = KBM.Language:Add(MOD.Scarn.Name)
 MOD.Lang.Unit.Scarn:SetGerman("Scarn")
--- MOD.Lang.Unit.Scarn:SetFrench("")
+MOD.Lang.Unit.Scarn:SetFrench("Scarn")
 -- MOD.Lang.Unit.Scarn:SetRussian("")
 MOD.Scarn.Name = MOD.Lang.Unit.Scarn[KBM.Lang]
 MOD.Descript = MOD.Scarn.Name

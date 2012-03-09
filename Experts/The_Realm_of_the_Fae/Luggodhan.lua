@@ -12,13 +12,13 @@ local Instance = KBM.BossMod["The Realm of the Fae"]
 
 local MOD = {
 	Directory = Instance.Directory,
-	File = "Loggodhan.lua",
+	File = "Luggodhan.lua",
 	Enabled = true,
 	Instance = Instance.Name,
 	InstanceObj = Instance,
 	HasPhases = true,
 	Lang = {},
-	ID = "Loggodhan",
+	ID = "Luggodhan",
 	Object = "MOD",
 }
 
@@ -26,7 +26,7 @@ MOD.Loggodhan = {
 	Mod = MOD,
 	Level = 52,
 	Active = false,
-	Name = "Loggodhan",
+	Name = "Luggodhan",
 	--NameShort = "Loggodhan",
 	Menu = {},
 	Castbar = nil,
@@ -57,7 +57,7 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Loggodhan = KBM.Language:Add(MOD.Loggodhan.Name)
 MOD.Lang.Unit.Loggodhan:SetGerman("Luggodhan")
--- MOD.Lang.Unit.Loggodhan:SetFrench("")
+MOD.Lang.Unit.Loggodhan:SetFrench("Luggodhan")
 -- MOD.Lang.Unit.Loggodhan:SetRussian("")
 MOD.Loggodhan.Name = MOD.Lang.Unit.Loggodhan[KBM.Lang]
 MOD.Descript = MOD.Loggodhan.Name

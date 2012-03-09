@@ -57,12 +57,13 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Caor = KBM.Language:Add(MOD.Caor.Name)
 MOD.Lang.Unit.Caor:SetGerman("Caor Ashstone")
--- MOD.Lang.Unit.Caor:SetFrench("")
+MOD.Lang.Unit.Caor:SetFrench("Caor Ashstone")
 -- MOD.Lang.Unit.Caor:SetRussian("")
 MOD.Caor.Name = MOD.Lang.Unit.Caor[KBM.Lang]
 MOD.Descript = MOD.Caor.Name
 MOD.Lang.Unit.CaorShort = KBM.Language:Add(MOD.Caor.NameShort)
 MOD.Lang.Unit.CaorShort:SetGerman("Caor")
+MOD.Lang.Unit.CaorShort:SetFrench("Caor")
 MOD.Caor.NameShort = MOD.Lang.Unit.CaorShort[KBM.Lang]
 
 -- Ability Dictionary

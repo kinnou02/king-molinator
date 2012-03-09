@@ -57,7 +57,7 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Cinderstorm = KBM.Language:Add(MOD.Cinderstorm.Name)
 MOD.Lang.Unit.Cinderstorm:SetGerman("Aschesturm") 
--- MOD.Lang.Unit.Cinderstorm:SetFrench("")
+MOD.Lang.Unit.Cinderstorm:SetFrench("Cendraille")
 -- MOD.Lang.Unit.Cinderstorm:SetRussian("")
 MOD.Cinderstorm.Name = MOD.Lang.Unit.Cinderstorm[KBM.Lang]
 MOD.Descript = MOD.Cinderstorm.Name

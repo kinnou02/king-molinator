@@ -56,8 +56,8 @@ KBM.RegisterMod(MOD.ID, MOD)
 -- Main Unit Dictionary
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Renthar = KBM.Language:Add(MOD.Renthar.Name)
-MOD.Lang.Unit.Renthar:SetGerman("Renthar")
--- MOD.Lang.Unit.Renthar:SetFrench("")
+MOD.Lang.Unit.Renthar:SetGerman()
+MOD.Lang.Unit.Renthar:SetFrench()
 -- MOD.Lang.Unit.Renthar:SetRussian("")
 MOD.Renthar.Name = MOD.Lang.Unit.Renthar[KBM.Lang]
 MOD.Descript = MOD.Renthar.Name

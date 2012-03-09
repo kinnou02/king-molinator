@@ -57,10 +57,14 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Kaleida = KBM.Language:Add(MOD.Kaleida.Name)
 MOD.Lang.Unit.Kaleida:SetGerman("Torwächterin Kaleida") 
--- MOD.Lang.Unit.Kaleida:SetFrench("")
+MOD.Lang.Unit.Kaleida:SetFrench("Kaleida, le Cerbère de la porte")
 -- MOD.Lang.Unit.Kaleida:SetRussian("")
 MOD.Kaleida.Name = MOD.Lang.Unit.Kaleida[KBM.Lang]
 MOD.Descript = MOD.Kaleida.Name
+MOD.Lang.Unit.KalShort = KBM.Language:Add("Kaleida")
+MOD.Lang.Unit.KalShort:SetGerman()
+MOD.Lang.Unit.KalShort:SetFrench()
+MOD.Kaleida.NameShort = MOD.Lang.Unit.KalShort[KBM.Lang]
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}

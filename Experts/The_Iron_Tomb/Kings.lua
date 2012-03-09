@@ -60,23 +60,30 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Laric = KBM.Language:Add(MOD.Laric.Name)
 MOD.Lang.Unit.Laric:SetGerman("Laric der Fromme")
+MOD.Lang.Unit.Laric:SetFrench("Laric l'Ascendant")
 MOD.Laric.Name = MOD.Lang.Unit.Laric[KBM.Lang]
 MOD.Lang.Unit.LaricShort = KBM.Language:Add(MOD.Laric.NameShort)
 MOD.Lang.Unit.LaricShort:SetGerman("Laric")
+MOD.Lang.Unit.LaricShort:SetFrench("Laric")
 MOD.Laric.NameShort = MOD.Lang.Unit.LaricShort[KBM.Lang]
 MOD.Lang.Unit.Derribec = KBM.Language:Add("Derribec the Magus")
 MOD.Lang.Unit.Derribec:SetGerman("Derribec der Magier")
+MOD.Lang.Unit.Derribec:SetFrench("Derribec le Magus")
 MOD.Lang.Unit.DerribecShort = KBM.Language:Add("Derribec")
 MOD.Lang.Unit.DerribecShort:SetGerman("Derribec")
+MOD.Lang.Unit.DerribecShort:SetFrench("Derribec")
 MOD.Lang.Unit.Humbart = KBM.Language:Add("Humbart the Bold")
 MOD.Lang.Unit.Humbart:SetGerman("Humbart der Verwegene")
+MOD.Lang.Unit.Humbart:SetFrench("Humbart l'Audacieux")
 MOD.Lang.Unit.HumbartShort = KBM.Language:Add("Humbart")
 MOD.Lang.Unit.HumbartShort:SetGerman("Humbart")
+MOD.Lang.Unit.HumbartShort:SetFrench("Humbart")
 
 -- Mod Description
 MOD.Lang.Verbose = {}
 MOD.Lang.Verbose.Descript = KBM.Language:Add("The Three Kings")
 MOD.Lang.Verbose.Descript:SetGerman("Die drei Könige")
+MOD.Lang.Verbose.Descript:SetFrench("les Trois Rois")
 MOD.Descript = MOD.Lang.Verbose.Descript[KBM.Lang]
 
 -- Ability Dictionary

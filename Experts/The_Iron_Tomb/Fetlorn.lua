@@ -57,10 +57,14 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Fetlorn = KBM.Language:Add(MOD.Fetlorn.Name)
 MOD.Lang.Unit.Fetlorn:SetGerman("Knochenfürst Fetlorn")
--- MOD.Lang.Unit.Fetlorn:SetFrench("")
+MOD.Lang.Unit.Fetlorn:SetFrench("Seigner des ossements Fetlorn")
 -- MOD.Lang.Unit.Fetlorn:SetRussian("")
 MOD.Fetlorn.Name = MOD.Lang.Unit.Fetlorn[KBM.Lang]
 MOD.Descript = MOD.Fetlorn.Name
+MOD.Lang.Unit.FetShort = KBM.Language:Add("Fetlorn")
+MOD.Lang.Unit.FetShort:SetGerman("Fetlorn")
+MOD.Lang.Unit.FetShort:SetFrench("Fetlorn")
+MOD.Fetlorn.NameShort = MOD.Lang.Unit.FetShort[KBM.Lang]
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}

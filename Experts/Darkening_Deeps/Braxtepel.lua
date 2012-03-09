@@ -57,15 +57,19 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Braxtepel = KBM.Language:Add(MOD.Braxtepel.Name)
 MOD.Lang.Unit.Braxtepel:SetGerman("Alchemist Braxtepel")
+MOD.Lang.Unit.Braxtepel:SetFrench("Alchemiste Braxtepel")
 MOD.Braxtepel.Name = MOD.Lang.Unit.Braxtepel[KBM.Lang]
 MOD.Descript = MOD.Braxtepel.Name
 MOD.Lang.Unit.BraxShort = KBM.Language:Add("Braxtepel")
-MOD.Lang.Unit.BraxShort:SetGerman("Braxtepel")
+MOD.Lang.Unit.BraxShort:SetGerman()
+MOD.Lang.Unit.BraxShort:SetFrench()
 MOD.Braxtepel.NameShort = MOD.Lang.Unit.BraxShort[KBM.Lang]
 MOD.Lang.Unit.Mursh = KBM.Language:Add("Mursh")
-MOD.Lang.Unit.Mursh:SetGerman("Mursh")
+MOD.Lang.Unit.Mursh:SetGerman()
+MOD.Lang.Unit.Mursh:SetFrench()
 MOD.Lang.Unit.Squersh = KBM.Language:Add("Squersh")
-MOD.Lang.Unit.Squersh:SetGerman("Squersh")
+MOD.Lang.Unit.Squersh:SetGerman()
+MOD.Lang.Unit.Squersh:SetFrench()
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}

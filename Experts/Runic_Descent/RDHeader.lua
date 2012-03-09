@@ -28,7 +28,7 @@ MOD.Lang = {}
 MOD.Lang.Main = {}
 MOD.Lang.Main.Name = KBM.Language:Add(MOD.Name)
 MOD.Lang.Main.Name:SetGerman("Runental")
--- MOD.Lang.Main.Name:SetFrench("")
+MOD.Lang.Main.Name:SetFrench("Descente runique")
 -- MOD.Lang.Main.Name:SetRussian("")
 
 MOD.Name = MOD.Lang.Main.Name[KBM.Lang]

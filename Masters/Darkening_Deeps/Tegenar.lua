@@ -19,6 +19,7 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "MM_Tegenar",
+	Object = "MOD",
 }
 
 MOD.Tegenar = {
@@ -56,10 +57,14 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Tegenar = KBM.Language:Add(MOD.Tegenar.Name)
 MOD.Lang.Unit.Tegenar:SetGerman("Tegenar Tiefzahn")
--- MOD.Lang.Unit.Tegenar:SetFrench("")
+MOD.Lang.Unit.Tegenar:SetFrench("Tegenar Long-croc")
 -- MOD.Lang.Unit.Tegenar:SetRussian("")
 MOD.Tegenar.Name = MOD.Lang.Unit.Tegenar[KBM.Lang]
 MOD.Descript = MOD.Tegenar.Name
+MOD.Lang.Unit.TegShort = KBM.Language:Add("Tegenar")
+MOD.Lang.Unit.TegShort:SetGerman("Tegenar")
+MOD.Lang.Unit.TegShort:SetFrench("Tegenar")
+MOD.Tegenar.NameShort = MOD.Lang.Unit.TegShort[KBM.Lang]
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}

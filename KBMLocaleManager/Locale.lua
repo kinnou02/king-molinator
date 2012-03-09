@@ -44,19 +44,27 @@ function KBMLM.Language:Add(Phrase)
 	SetPhrase.Type = "Phrase"
 	SetPhrase.Translated = {}
 	function SetPhrase:SetFrench(frPhrase)
-		self.French = frPhrase
+		if frPhrase then
+			self.French = frPhrase
+		end
 		self.Translated.French = true
 	end
 	function SetPhrase:SetGerman(gePhrase)
-		self.German = gePhrase
+		if gePhrase then
+			self.German = gePhrase
+		end
 		self.Translated.German = true
 	end
 	function SetPhrase:SetRussian(ruPhrase)
-		self.Russian = ruPhrase
+		if ruPhrase then
+			self.Russian = ruPhrase
+		end
 		self.Translated.Russian = true
 	end
 	function SetPhrase:SetKorean(koPhrase)
-		self.Korean = koPhrase
+		if koPhrase then
+			self.Korean = koPhrase
+		end
 		self.Translated.Korean = true
 	end
 	KBMLM.TotalPhrases = KBMLM.TotalPhrases + 1
@@ -107,9 +115,11 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Records.Attempts:SetFrench("Essais: ")
 	KBM.Language.Records.Wipes = KBM.Language:Add("Wipes: ")
 	KBM.Language.Records.Wipes:SetGerman("Wipes: ")
+	KBM.Language.Records.Wipes:SetFrench("Wipes: ")
 	KBM.Language.Records.Wipes:SetRussian("Вайпы: ")
 	KBM.Language.Records.Kills = KBM.Language:Add("Kills: ")
 	KBM.Language.Records.Kills:SetGerman("Kills: ")
+	KBM.Language.Records.Kills:SetFrench("Tués: ")
 	KBM.Language.Records.Kills:SetRussian("Победы: ")
 	KBM.Language.Records.Best = KBM.Language:Add("Best Time:")
 	KBM.Language.Records.Best:SetGerman("Bestzeit:")
@@ -117,6 +127,7 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Records.Best:SetFrench("Meilleur Temps:")
 	KBM.Language.Records.Date = KBM.Language:Add("Date set: ")
 	KBM.Language.Records.Date:SetGerman("Datum: ")
+	KBM.Language.Records.Date:SetFrench("Date set: ")
 	KBM.Language.Records.Date:SetRussian("Дата: ")
 	KBM.Language.Records.Details = KBM.Language:Add("Details:")
 	KBM.Language.Records.Details:SetGerman("Details:")
@@ -177,6 +188,7 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Color.Blue:SetFrench("Bleu")
 	KBM.Language.Color.Cyan = KBM.Language:Add("Cyan")
 	KBM.Language.Color.Cyan:SetGerman("Blaugrün")
+	KBM.Language.Color.Cyan:SetFrench("Cyan")
 	KBM.Language.Color.Dark_Green = KBM.Language:Add("Dark Green")
 	KBM.Language.Color.Dark_Green:SetGerman("Dunkelgrün")
 	KBM.Language.Color.Dark_Green:SetRussian("Темнозеленый")
@@ -187,6 +199,7 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Color.Yellow:SetFrench("Jaune")
 	KBM.Language.Color.Orange = KBM.Language:Add("Orange")
 	KBM.Language.Color.Orange:SetGerman("Orange")
+	KBM.Language.Color.Orange:SetFrench("Orange")
 	KBM.Language.Color.Orange:SetRussian("Оранжевый")
 	KBM.Language.Color.Purple = KBM.Language:Add("Purple")
 	KBM.Language.Color.Purple:SetGerman("Lila")
@@ -198,6 +211,7 @@ function KBMLM.SetMain_Lang()
 	KBMLM.SetGroupObject(KBM.Language.CastBar, "GroupObject", "Castbar Action")
 	KBM.Language.CastBar.Interrupt = KBM.Language:Add("Interrupted")
 	KBM.Language.CastBar.Interrupt:SetGerman("Unterbrochen")
+	KBM.Language.CastBar.Interrupt:SetFrench("Interrupted")
 	KBM.Language.CastBar.Interrupt:SetRussian("Прерван")
 
 	-- Cast-bar related options
@@ -205,12 +219,15 @@ function KBMLM.SetMain_Lang()
 	KBMLM.SetGroupObject(KBM.Language.Options, "GroupObject", "General and Main options")
 	KBM.Language.Options.CastbarOverride = KBM.Language:Add("Castbar: Override")
 	KBM.Language.Options.CastbarOverride:SetGerman("separate Einstellungen")
+	KBM.Language.Options.CastbarOverride:SetFrench("Barre-cast: Substituer")
 	KBM.Language.Options.CastbarOverride:SetRussian("Кастбар: Переопределить")
 	KBM.Language.Options.Pinned = KBM.Language:Add("Pin to ")
 	KBM.Language.Options.Pinned:SetGerman("Anheften an ")
+	KBM.Language.Options.Pinned:SetFrench("Pin à ")
 	KBM.Language.Options.Pinned:SetRussian("Привязать к ")
 	KBM.Language.Options.FiltersEnabled = KBM.Language:Add("Enable cast filters")
 	KBM.Language.Options.FiltersEnabled:SetGerman("Aktiviere Zauber Filter")
+	KBM.Language.Options.FiltersEnabled:SetFrench("Activer filtres cast")
 	KBM.Language.Options.FiltersEnabled:SetRussian("Разрешить фильтры кастбара")
 	KBM.Language.Options.Castbar = KBM.Language:Add("Cast-bars")
 	KBM.Language.Options.Castbar:SetFrench("Barres-cast")
@@ -272,6 +289,7 @@ function KBMLM.SetMain_Lang()
 	-- Phase Monitor
 	KBM.Language.Options.PhaseMonOverride = KBM.Language:Add("Phase Monitor: Override")
 	KBM.Language.Options.PhaseMonOverride:SetGerman("separate Phasen Monitor: Einstellungen")
+	KBM.Language.Options.PhaseMonOverride:SetFrench("Moniteur Phase: Substituer")
 	KBM.Language.Options.PhaseMonOverride:SetRussian("Монитор фаз: Переопределить")
 	KBM.Language.Options.PhaseMonOverride:SetFrench("Мoniteur Phase: Override")
 	KBM.Language.Options.PhaseMonitor = KBM.Language:Add("Phase Monitor")
@@ -292,15 +310,20 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Options.Objectives:SetFrench("Afficher objectifs de Phase")
 	KBM.Language.Options.Phase = KBM.Language:Add("Phase")
 	KBM.Language.Options.Phase:SetGerman("Phase")
+	KBM.Language.Options.Phase:SetFrench("Phase")
 	KBM.Language.Options.Phase:SetRussian("Фаза")
 	KBM.Language.Options.Single = KBM.Language:Add("Single")
 	KBM.Language.Options.Single:SetGerman("Einzel")
+	KBM.Language.Options.Single:SetFrench("Simple")
 	KBM.Language.Options.Ground = KBM.Language:Add("Ground")
 	KBM.Language.Options.Ground:SetGerman("Boden")
+	KBM.Language.Options.Ground:SetFrench("Sol")
 	KBM.Language.Options.Air = KBM.Language:Add("Air")
 	KBM.Language.Options.Air:SetGerman("Flug")
+	KBM.Language.Options.Air:SetFrench("Air")
 	KBM.Language.Options.Final = KBM.Language:Add("Final")
 	KBM.Language.Options.Final:SetGerman("Letzte")
+	KBM.Language.Options.Final:SetFrench("Final")
 	KBM.Language.Options.Dead = KBM.Language:Add("Dead")
 	KBM.Language.Options.Dead:SetGerman("Tot")
 	KBM.Language.Options.Dead:SetFrench("Mort")
@@ -332,6 +355,7 @@ function KBMLM.SetMain_Lang()
 	-- Alert related
 	KBM.Language.Options.AlertsOverride = KBM.Language:Add("Alerts: Override")
 	KBM.Language.Options.AlertsOverride:SetGerman("separate Einstellungen")
+	KBM.Language.Options.AlertsOverride:SetFrench("Alertes: Substituer")
 	KBM.Language.Options.AlertsOverride:SetRussian("Предупреждения: Переопределить")
 	KBM.Language.Options.Alert = KBM.Language:Add("Screen Alerts")
 	KBM.Language.Options.Alert:SetGerman("Alarmierungen")
@@ -355,6 +379,7 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Options.UnlockFlash:SetFrench("Débloquer bordure alerte pour ajustement")
 	KBM.Language.Options.Border = KBM.Language:Add("Enable Border")
 	KBM.Language.Options.Border:SetGerman("Ränder aktivieren")
+	KBM.Language.Options.Border:SetFrench("Activer Bordure")
 	KBM.Language.Options.Border:SetRussian("Показать рамку")
 	KBM.Language.Options.Notify = KBM.Language:Add("Enable Text")
 	KBM.Language.Options.Notify:SetGerman("Text aktivieren")
@@ -397,6 +422,7 @@ function KBMLM.SetMain_Lang()
 	-- Misc.
 	KBM.Language.Options.Character = KBM.Language:Add("Saving settings for this character only")
 	KBM.Language.Options.Character:SetGerman("Einstellungen nur für diesen Charakter speichern")
+	KBM.Language.Options.Character:SetFrench("Sauvegarder paramètre pour ce personnage uniquement")
 	KBM.Language.Options.Character:SetRussian("Сохранить настройки только для этого персонажа")
 	KBM.Language.Options.Character.French = "Sauvegarder configuration pour ce personnage uniquement"
 	KBM.Language.Options.ModEnabled = KBM.Language:Add("Enable King Boss Mods v"..AddonData.toc.Version)

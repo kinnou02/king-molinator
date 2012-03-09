@@ -57,12 +57,13 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Orban = KBM.Language:Add(MOD.Orban.Name)
 MOD.Lang.Unit.Orban:SetGerman("Orban der große Imker")
--- MOD.Lang.Unit.Orban:SetFrench("")
+MOD.Lang.Unit.Orban:SetFrench("Grand Apiculteur Orban")
 -- MOD.Lang.Unit.Orban:SetRussian("")
 MOD.Orban.Name = MOD.Lang.Unit.Orban[KBM.Lang]
 MOD.Descript = MOD.Orban.Name
 MOD.Lang.Unit.OrbanShort = KBM.Language:Add(MOD.Orban.NameShort)
-MOD.Lang.Unit.OrbanShort:SetGerman("Orban")
+MOD.Lang.Unit.OrbanShort:SetGerman()
+MOD.Lang.Unit.OrbanShort:SetFrench()
 MOD.Orban.NameShort = MOD.Lang.Unit.OrbanShort[KBM.Lang]
 
 -- Ability Dictionary

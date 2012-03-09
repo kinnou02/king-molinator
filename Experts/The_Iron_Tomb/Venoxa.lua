@@ -57,7 +57,7 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Venoxa = KBM.Language:Add(MOD.Venoxa.Name)
 MOD.Lang.Unit.Venoxa:SetGerman("Brutmutter Venoxa")
--- MOD.Lang.Unit.Venoxa:SetFrench("")
+MOD.Lang.Unit.Venoxa:SetFrench("Matriarche Venoxa")
 -- MOD.Lang.Unit.Venoxa:SetRussian("")
 MOD.Venoxa.Name = MOD.Lang.Unit.Venoxa[KBM.Lang]
 MOD.Descript = MOD.Venoxa.Name

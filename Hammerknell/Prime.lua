@@ -56,12 +56,14 @@ KBM.RegisterMod(VP.ID, VP)
 -- Main Unit Dictionary
 VP.Lang.Unit = {}
 VP.Lang.Unit.Prime = KBM.Language:Add(VP.Prime.Name)
-VP.Lang.Unit.Prime:SetGerman("Vladmal Prime")
+VP.Lang.Unit.Prime:SetGerman()
+VP.Lang.Unit.Prime:SetFrench()
 VP.Lang.Unit.Prime:SetRussian("Владмал Прайм")
 VP.Prime.Name = VP.Lang.Unit.Prime[KBM.Lang]
 VP.Descript = VP.Prime.Name
 VP.Lang.Unit.PrimeShort = KBM.Language:Add("Vladmal")
-VP.Lang.Unit.PrimeShort:SetGerman("Vladmal")
+VP.Lang.Unit.PrimeShort:SetGerman()
+VP.Lang.Unit.PrimeShort:SetFrench()
 VP.Prime.NameShort = VP.Lang.Unit.PrimeShort[KBM.Lang]
 
 -- Ability Dictionary

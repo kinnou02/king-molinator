@@ -57,10 +57,14 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Arcanis = KBM.Language:Add(MOD.Arcanis.Name)
 MOD.Lang.Unit.Arcanis:SetGerman("Wärter Arcanis") 
--- MOD.Lang.Unit.Arcanis:SetFrench("")
+MOD.Lang.Unit.Arcanis:SetFrench("Reliquaire Arcanis")
 -- MOD.Lang.Unit.Arcanis:SetRussian("")
 MOD.Arcanis.Name = MOD.Lang.Unit.Arcanis[KBM.Lang]
 MOD.Descript = MOD.Arcanis.Name
+MOD.Lang.Unit.ArcShort = KBM.Language:Add("Arcanis")
+MOD.Lang.Unit.ArcShort:SetGerman("Arcanis")
+MOD.Lang.Unit.ArcShort:SetFrench("Arcanis")
+MOD.Arcanis.NameShort = MOD.Lang.Unit.ArcShort[KBM.Lang]
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}

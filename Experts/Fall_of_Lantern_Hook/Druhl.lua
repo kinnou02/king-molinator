@@ -57,10 +57,14 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Druhl = KBM.Language:Add(MOD.Druhl.Name)
 MOD.Lang.Unit.Druhl:SetGerman("Flammenbringer Druhl") 
--- MOD.Lang.Unit.Druhl:SetFrench("")
+MOD.Lang.Unit.Druhl:SetFrench("Druhl le Porte-flammes")
 -- MOD.Lang.Unit.Druhl:SetRussian("")
 MOD.Druhl.Name = MOD.Lang.Unit.Druhl[KBM.Lang]
 MOD.Descript = MOD.Druhl.Name
+MOD.Lang.Unit.DruShort = KBM.Language:Add("Druhl")
+MOD.Lang.Unit.DruShort:SetGerman()
+MOD.Lang.Unit.DruShort:SetFrench()
+MOD.Druhl.NameShort = MOD.Lang.Unit.DruShort[KBM.Lang]
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}
