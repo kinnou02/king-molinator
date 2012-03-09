@@ -4,7 +4,7 @@ Translation System
 * New: A new "How To Translate" page is being written to help keep translations unified with the new system.
 * Change: Major changes to the Translation Engine.
 * Change: Main translations are now stored in KBMLocaleManager/Locale.lua
-* Change: All existing Units should now be inline with the new dictionary naming conventions.
+* Change: All existing Units should now be in-line with the new dictionary naming conventions.
 * New: Enable .. Castbars and Enable .. Filters now have dictionary entries.
 * New: Global Options and Timers menu pane headings now have dictionary entries.
 * Note: Some existing dictionary groups (possibly none now) may fall outside the reports scope. These will be converted as found.
@@ -14,7 +14,7 @@ Translation System
 
 Mechanic Timers
 * Colors
-** Change: Default colors for new and existing timers are now correctly intitialized.
+** Change: Default colors for new and existing timers are now correctly initialized.
 ** Change: When selecting a new custom color, the default color will now be remembered and reinstated should you switch off custom colors.
 ** Change: The custom color used will be remembered should you reinstate custom color mode.
 
