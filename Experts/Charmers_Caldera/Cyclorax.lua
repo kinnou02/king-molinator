@@ -55,8 +55,8 @@ KBM.RegisterMod(MOD.ID, MOD)
 -- Main Unit Dictionary
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Cyclorax = KBM.Language:Add(MOD.Cyclorax.Name)
-MOD.Lang.Unit.Cyclorax:SetGerman("Cyclorax")
--- MOD.Lang.Unit.Cyclorax:SetFrench("")
+MOD.Lang.Unit.Cyclorax:SetGerman()
+MOD.Lang.Unit.Cyclorax:SetFrench()
 -- MOD.Lang.Unit.Cyclorax:SetRussian("")
 MOD.Cyclorax.Name = MOD.Lang.Unit.Cyclorax[KBM.Lang]
 MOD.Descript = MOD.Cyclorax.Name

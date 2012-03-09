@@ -56,11 +56,15 @@ KBM.RegisterMod(MOD.ID, MOD)
 -- Main Unit Dictionary
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Ryka = KBM.Language:Add(MOD.Ryka.Name)
-MOD.Lang.Unit.Ryka:SetGerman("Ryka Dharvos")
--- MOD.Lang.Unit.Ryka:SetFrench("")
+MOD.Lang.Unit.Ryka:SetGerman()
+MOD.Lang.Unit.Ryka:SetFrench()
 -- MOD.Lang.Unit.Ryka:SetRussian("")
 MOD.Ryka.Name = MOD.Lang.Unit.Ryka[KBM.Lang]
 MOD.Descript = MOD.Ryka.Name
+MOD.Lang.Unit.RykaShort = KBM.Language:Add("Ryka")
+MOD.Lang.Unit.RykaShort:SetGerman()
+MOD.Lang.Unit.RykaShort:SetFrench()
+MOD.Ryka.NameShort = MOD.Lang.Unit.RykaShort[KBM.Lang]
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}
