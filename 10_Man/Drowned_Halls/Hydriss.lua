@@ -260,6 +260,7 @@ function HH:Start()
 	self.Hydriss.TimersRef.Tsunami = KBM.MechTimer:Add(self.Lang.Ability.Tsunami[KBM.Lang], 10)
 	self.Hydriss.TimersRef.SeaFirst = KBM.MechTimer:Add(self.Lang.Unit.Sea[KBM.Lang], 20)
 	self.Hydriss.TimersRef.Sea = KBM.MechTimer:Add(self.Lang.Unit.Sea[KBM.Lang], 180, true)
+	self.Hydriss.TimersRef.Sea:NoMenu()
 	self.Hydriss.TimersRef.SeaFirst:AddTimer(self.Hydriss.TimersRef.Sea, 0)
 	KBM.Defaults.TimerObj.Assign(self.Hydriss)
 	

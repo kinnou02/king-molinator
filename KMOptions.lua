@@ -1464,12 +1464,12 @@ function KBM.InitOptions()
 		Tab = Tab or "Main"					
 		local TabObj = KBM.MainWin.Tabs[Tab]
 		
-		Header = UI.CreateFrame("Frame", "Header: "..Text, TabObj.Menu)
+		Header = UI.CreateFrame("Frame", "Header_"..Text, TabObj.Menu)
 		Header.Tab = Tab
 		Header.Children = {}
 		Header:SetPoint("LEFT", TabObj.Menu, "LEFT")
 		Header:SetPoint("RIGHT", KBM.MainWin.Scroller.Main, "LEFT")
-		Header.Check = UI.CreateFrame("RiftCheckbox", "Header Check: "..Text, Header)
+		Header.Check = UI.CreateFrame("RiftCheckbox", "Header_Check_"..Text, Header)
 		Header.Check:SetPoint("CENTERLEFT", Header, "CENTERLEFT", 4, 0)
 		Header.Type = "header"
 		Default = Default or true
@@ -2291,7 +2291,7 @@ function KBM.InitOptions()
 						end
 						
 						local Settings = BossObj.Settings.CastBar
-						Header = self:CreateHeader("Enable "..MenuName.."'s castbar.", "check", "Castbars", "Main")
+						Header = self:CreateHeader(KBM.Language.Menu.Enable[KBM.Lang].." "..MenuName.."'s "..KBM.Language.Menu.Castbars[KBM.Lang]..".", "check", "Castbars", "Main")
 						Header:SetChecked(Settings.Enabled)
 						Header:SetHook(Callbacks.Enabled)
 						Header.Boss = BossObj
@@ -2380,7 +2380,7 @@ function KBM.InitOptions()
 						end
 
 						local Settings = BossObj.Settings.Filters
-						Header = self:CreateHeader("Enable "..MenuName.."'s filters.", "check", "Castbars", "Main")
+						Header = self:CreateHeader(KBM.Language.Menu.Enable[KBM.Lang].." "..MenuName.."'s "..KBM.Language.Menu.Filters[KBM.Lang], "check", "Castbars", "Main")
 						Header:SetChecked(Settings.Enabled)
 						Header:SetHook(Callbacks.Enabled)
 						Header.Boss = BossObj

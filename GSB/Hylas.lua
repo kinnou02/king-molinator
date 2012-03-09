@@ -110,6 +110,7 @@ PH.Lang.Phase.Critters:SetRussian("Зверушки")
 PH.Lang.Verbose = {}
 PH.Lang.Verbose.Reanimate = KBM.Language:Add(" is reanimated")
 PH.Lang.Verbose.Reanimate:SetRussian(" оживает")
+PH.Lang.Verbose.Reanimate:SetGerman(" ist auferstanden")
 
 PH.Hylas.Name = PH.Lang.Unit.Hylas[KBM.Lang]
 PH.Descript = PH.Hylas.Name

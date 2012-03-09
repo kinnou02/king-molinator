@@ -5154,10 +5154,10 @@ local function KBM_Start()
 		end
 		--KBM.MenuGroup.main = KBM.MainWin.Menu:CreateHeader("KBM", nil, nil, true)
 	end
-	local Header = KBM.MainWin.Menu:CreateHeader("Global Options", nil, nil, nil, "Main")
+	local Header = KBM.MainWin.Menu:CreateHeader(KBM.Language.Menu.Global[KBM.Lang], nil, nil, nil, "Main")
 	KBM.MenuOptions.Main.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.Settings[KBM.Lang], KBM.MenuOptions.Main, nil, Header)
 	KBM.MenuOptions.Main.MenuItem.Check:SetEnabled(false)
-	KBM.MenuOptions.Timers.MenuItem = KBM.MainWin.Menu:CreateEncounter("Timers", KBM.MenuOptions.Timers, true, Header)
+	KBM.MenuOptions.Timers.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Menu.Timers[KBM.Lang], KBM.MenuOptions.Timers, true, Header)
 	KBM.MenuOptions.Timers.MenuItem.Check:SetEnabled(false)
 	KBM.MenuOptions.Phases.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.PhaseMonitor[KBM.Lang], KBM.MenuOptions.Phases, true, Header) 
 	KBM.MenuOptions.Phases.MenuItem.Check:SetEnabled(false)

@@ -273,6 +273,7 @@ KM.Lang.Options.Compact:SetRussian("Сделать компактным.")
 KM.Lang.Verbose = {}
 KM.Lang.Verbose.King = KBM.Language:Add("King")
 KM.Lang.Verbose.King:SetRussian("Король")
+KM.Lang.Verbose.King:SetGerman("König")
 KM.Lang.Verbose.Prince = KBM.Language:Add("Prince")
 KM.Lang.Verbose.Prince:SetGerman("Prinz")
 KM.Lang.Verbose.Prince:SetFrench("Prince")

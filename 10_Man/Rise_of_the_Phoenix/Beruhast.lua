@@ -103,6 +103,7 @@ BT.Lang.Menu.Flame:SetFrench("Première "..BT.Lang.Ability.Flame[KBM.Lang])
 BT.Lang.Verbose = {}
 BT.Lang.Verbose.Until = KBM.Language:Add(" (Until first)")
 BT.Lang.Verbose.Until:SetRussian(" (первое)")
+BT.Lang.Verbose.Until:SetGerman(" (bis zum ersten)")
 
 function BT:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
@@ -253,7 +254,7 @@ function BT:Start()
 	-- Timers
 	self.Beruhast.TimersRef.Flame = KBM.MechTimer:Add(self.Lang.Ability.Flame[KBM.Lang], 70)
 	self.Beruhast.TimersRef.FlameStart = KBM.MechTimer:Add(self.Lang.Ability.Flame[KBM.Lang], 30)
-	self.Beruhast.TimersRef.FlameStart.MenuName = self.Lang.Ability.Flame[KBM.Lang].." (Until First)"
+	self.Beruhast.TimersRef.FlameStart.MenuName = self.Lang.Ability.Flame[KBM.Lang]..self.Lang.Verbose.Until[KBM.Lang]
 	self.Beruhast.TimersRef.Summon = KBM.MechTimer:Add(self.Lang.Unit.Summon[KBM.Lang], 70)
 	KBM.Defaults.TimerObj.Assign(self.Beruhast)
 	

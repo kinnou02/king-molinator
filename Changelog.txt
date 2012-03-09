@@ -5,6 +5,8 @@ Translation System
 * Change: Major changes to the Translation Engine.
 * Change: Main translations are now stored in KBMLocaleManager/Locale.lua
 * Change: All existing Units should now be inline with the new dictionary naming conventions.
+* New: Enable .. Castbars and Enable .. Filters now have dictionary entries.
+* New: Global Options and Timers menu pane headings now have dictionary entries.
 * Note: Some existing dictionary groups (possibly none now) may fall outside the reports scope. These will be converted as found.
 * Note: Encounter translations will remain in their respective mods. These will be pointed to if a translation is missing.
 * New: Slash Command /kbmlocale (will list total number missing translations for each Language, and a list of missing translations for the current language)
