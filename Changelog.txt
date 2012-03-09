@@ -18,6 +18,24 @@ Mechanic Timers
 ** Change: When selecting a new custom color, the default color will now be remembered and reinstated should you switch off custom colors.
 ** Change: The custom color used will be remembered should you reinstate custom color mode.
 
+Infernal Dawn
+* Warboss Drak
+** New: Added base template for the encounter. (EN, DE)
+* Maglamos the Scryer
+** New: Added base template for the encounter. (EN, DE)
+* Rusilia Dreadblade
+** New: Added base template for the encounter. (EN, DE)
+* Itualxi
+** New: Added base template for the encounter. (EN, DE)
+* The Ember Conclave
+** New: Added base template for the encounter. (EN, DE)
+* Laethys
+** New: Added base template for the encounter. (EN, DE)
+* Maelforge
+** New: Added base template for the encounter. (EN, DE)
+* Note: Base templates include Phase Monitor (Single Phase), Encounter Timer and Boss Castbar.
+* Note: Supported languages follow in brackets.
+
 Hammerknell
 * Inwar Darktide
 ** New: Screen alert and timer for Dark Tide raid wide damaging ability.
