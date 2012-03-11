@@ -1,6 +1,7 @@
 v1.1.2
 * Death Monitoring
-** Fixed: New group memebers now correctly add to LibSRM.Dead
+** Fixed: New group members now correctly add to LibSRM.Dead
+** Change: Adjusted how .combat state is registered for new group members.
 
 v1.1.1
 * Directory Structure

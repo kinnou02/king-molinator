@@ -411,12 +411,16 @@ function KBMLM.SetMain_Lang()
 	-- Main Options Dictionary
 	KBM.Language.Menu = {}
 	KBM.Language.Menu.Global = KBM.Language:Add("Global Options")
+	KBM.Language.Menu.Global:SetGerman("Globale Einstellungen")
 	KBM.Language.Menu.Timers = KBM.Language:Add("Timers")
+	KBM.Language.Menu.Timers:SetGerman("Timer")
 	KBM.Language.Menu.Enable = KBM.Language:Add("Enable")
+	KBM.Language.Menu.Enable:SetGerman("Aktiviere")
 	KBM.Language.Menu.Filters = KBM.Language:Add("filters")
+	KBM.Language.Menu.Filters:SetGerman("Filter")
 	KBM.Language.Menu.Castbars = KBM.Language:Add("cast-bars")
 	KBM.Language.Menu.Castbars:SetFrench("barres-cast")
-	KBM.Language.Menu.Castbars:SetGerman("zauberbalken")
+	KBM.Language.Menu.Castbars:SetGerman("Zauberbalken")
 	KBM.Language.Menu.Castbars:SetRussian("Кастбары")
 	
 	-- Misc.

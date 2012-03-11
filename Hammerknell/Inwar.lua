@@ -208,21 +208,26 @@ ID.Lang.Ability.Freeze:SetGerman("Frostwelle")
 ID.Lang.Ability.Freeze:SetFrench("Vague glaciale")
 ID.Lang.Ability.Tide = KBM.Language:Add("Dark Tide")
 ID.Lang.Ability.Tide:SetGerman("Dunkle Flut")
+ID.Lang.Ability.Tide:SetFrench("Vague maléfique")
 ID.Lang.Ability.Surge = KBM.Language:Add("Surge")
 ID.Lang.Ability.Surge:SetGerman("Schub")
+ID.Lang.Ability.Surge:SetFrench("Poussée")
 ID.Lang.Ability.Storm = KBM.Language:Add("Storm Lash")
 ID.Lang.Ability.Storm:SetGerman("Sturmpeitsche")
+ID.Lang.Ability.Storm:SetFrench("Déchaînement de la tempête")
 
 -- Mechanic Dictionary
 ID.Lang.Mechanic = {}
 ID.Lang.Mechanic.Geyser = KBM.Language:Add("Geyser")
 ID.Lang.Mechanic.Geyser:SetGerman("Geysir")
+ID.Lang.Mechanic.Geyser:SetFrench("Zone au sol")
 ID.Lang.Mechanic.Geyser:SetRussian("Гейзер")
 
 -- Menu Dictionary
 ID.Lang.Menu = {}
 ID.Lang.Menu.Surge = KBM.Language:Add("Surge (Duration)")
 ID.Lang.Menu.Surge:SetGerman("Schub (Dauer)")
+ID.Lang.Menu.Surge:SetFrench("Poussée (Durée)")
 
 -- Adjust Unit Names to match Client
 ID.Inwar.Name = ID.Lang.Unit.Inwar[KBM.Lang]
@@ -363,7 +368,7 @@ function ID.PhaseTwo()
 	ID.Phase = 2
 	ID.PhaseObj.Objectives:Remove()
 	ID.PhaseObj:SetPhase(2)
-	ID.PhaseObj.Objectives:AddDeath(ID.Slime.Name, 3, true)
+	ID.PhaseObj.Objectives:AddMeta(ID.Slime.Name, 3, ID.Slime)
 	ID.PhaseObj.Objectives:AddDeath(ID.Wrangler.Name, 3)
 	ID.PhaseObj.Objectives:AddDeath(ID.Warden.Name, 2)
 	KBM.MechTimer:AddStart(ID.Inwar.TimersRef.GeyserFirst)

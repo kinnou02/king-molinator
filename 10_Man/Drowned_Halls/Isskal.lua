@@ -66,56 +66,70 @@ KBM.RegisterMod(IL.ID, IL)
 -- Main Unit Dictionary
 IL.Lang.Unit = {}
 IL.Lang.Unit.Isskal = KBM.Language:Add(IL.Isskal.Name)
-IL.Lang.Unit.Isskal:SetGerman("Isskal")
+IL.Lang.Unit.Isskal:SetGerman()
+IL.Lang.Unit.Isskal:SetFrench()
 IL.Lang.Unit.Isskal:SetRussian("Исскал")
 
 -- Ability Dictionary
 IL.Lang.Ability = {}
 IL.Lang.Ability.Shard = KBM.Language:Add("Ice Shard")
 IL.Lang.Ability.Shard:SetGerman("Eissplitter")
+IL.Lang.Ability.Shard:SetFrench("Pique de glace")
 IL.Lang.Ability.Shard:SetRussian("Осколок льда")
 IL.Lang.Ability.Wave = KBM.Language:Add("Glacial Wave")
 IL.Lang.Ability.Wave:SetGerman("Gletscherwelle")
+IL.Lang.Ability.Wave:SetFrench("Vague glaciale")
 IL.Lang.Ability.Wave:SetRussian("Ледяная волна")
 
 -- Mechanic Dictionary
 IL.Lang.Mechanic = {}
 IL.Lang.Mechanic.Whirlpool = KBM.Language:Add("Whirlpool")
-IL.Lang.Mechanic.Whirlpool:SetGerman("Whirlpool")
+IL.Lang.Mechanic.Whirlpool:SetGerman()
+IL.Lang.Mechanic.Whirlpool:SetFrench("Tourbillon d'eau")
 IL.Lang.Mechanic.Whirlpool:SetRussian("Вихрь смерти")
 IL.Lang.Mechanic.Anti = KBM.Language:Add("Anti-Clockwise")
 IL.Lang.Mechanic.Anti:SetGerman("Gegen Uhrzeigersinn")
+IL.Lang.Mechanic.Anti:SetFrench("Anti-horaire") 
 IL.Lang.Mechanic.Clock = KBM.Language:Add("Clockwise")
 IL.Lang.Mechanic.Clock:SetGerman("Im Uhrzeigersinn")
+IL.Lang.Mechanic.Clock:SetFrench("Sens horaire")
 IL.Lang.Mechanic.WhirlpoolEnd = KBM.Language:Add("Whirlpool ends")
 IL.Lang.Mechanic.WhirlpoolEnd:SetGerman("Whirlpool beendet")
+IL.Lang.Mechanic.WhirlpoolEnd:SetFrench("Tourbillon d'eau terminé")
 IL.Lang.Mechanic.WhirlpoolEnd:SetRussian("Завершение водоворота")
 IL.Lang.Mechanic.Reverse = KBM.Language:Add("Changing direction")
 IL.Lang.Mechanic.Reverse:SetGerman("Richtung wechseln")
+IL.Lang.Mechanic.Reverse:SetFrench("Changé de direction")
 IL.Lang.Mechanic.Reverse:SetRussian("Смена направления")
 
 -- Mechanic Notify
 IL.Lang.Notify = {}
 IL.Lang.Notify.Whirlpool = KBM.Language:Add("Go with the current %- or die!")
 IL.Lang.Notify.Whirlpool:SetGerman("Folgt dem Strom, oder sterbt!")
+IL.Lang.Notify.Whirlpool:SetFrench("Suivez le courant... ou disparaissez !")
 IL.Lang.Notify.Whirlpool:SetRussian("Плывите по течению")
 IL.Lang.Notify.Reverse = KBM.Language:Add("You're going the wrong way, fools!")
 IL.Lang.Notify.Reverse:SetGerman("Ihr Narren geht in die falsche Richtung!")
+IL.Lang.Notify.Reverse:SetFrench("Vous allez dans le mauvais direction, pauvres fous !")
 IL.Lang.Notify.Reverse:SetRussian("Вы не туда идете, придурки!")
 
 -- Verbose Dictionary
 IL.Lang.Verbose = {}
 IL.Lang.Verbose.Middle = KBM.Language:Add("Middle")
 IL.Lang.Verbose.Middle:SetGerman("Mitte")
+IL.Lang.Verbose.Middle:SetFrench("Milieu")
 IL.Lang.Verbose.Middle:SetRussian("Середина")
 IL.Lang.Verbose.Inner = KBM.Language:Add("Inner")
 IL.Lang.Verbose.Inner:SetGerman("Innen")
+IL.Lang.Verbose.Inner:SetFrench("Intérieur")
 IL.Lang.Verbose.Inner:SetRussian("К боссу")
 IL.Lang.Verbose.Outer = KBM.Language:Add("Outer")
 IL.Lang.Verbose.Outer:SetGerman("Aussen")
+IL.Lang.Verbose.Outer:SetFrench("Extérieur")
 IL.Lang.Verbose.Outer:SetRussian("К стенке")
 IL.Lang.Verbose.DanceEnd = KBM.Language:Add("Dance sequence ends")
 IL.Lang.Verbose.DanceEnd:SetRussian("Бег закончен")
+IL.Lang.Verbose.DanceEnd:SetFrench("Fin séquence de la dance")
 IL.Lang.Verbose.DanceEnd:SetGerman("Tanz Sequenz beendet")
 
 -- Menu Dictionary
@@ -123,6 +137,7 @@ IL.Lang.Menu = {}
 IL.Lang.Menu.WhirlpoolFirst = KBM.Language:Add("First "..IL.Lang.Mechanic.Whirlpool[KBM.Lang])
 IL.Lang.Menu.WhirlpoolFirst:SetGerman("Erster "..IL.Lang.Mechanic.Whirlpool[KBM.Lang])
 IL.Lang.Menu.WhirlpoolFirst:SetRussian("Первый "..IL.Lang.Mechanic.Whirlpool[KBM.Lang])
+IL.Lang.Menu.WhirlpoolFirst:SetFrench("Premier Tourbillon d'eau")
 
 IL.Isskal.Name = IL.Lang.Unit.Isskal[KBM.Lang]
 IL.Descript = IL.Isskal.Name

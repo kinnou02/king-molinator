@@ -22,6 +22,9 @@ Mechanic Timers
 ** Change: When selecting a new custom color, the default color will now be remembered and reinstated should you switch off custom colors.
 ** Change: The custom color used will be remembered should you reinstate custom color mode.
 
+Triggers
+* Fixed: Multiple same-type triggers where being ignored. Only one unitID was being passed. This was the cause behind only one person being alerted of Mind Decay.
+
 Infernal Dawn
 * Warboss Drak
 ** New: Added base template for the encounter. (EN, DE)
@@ -46,6 +49,16 @@ Hammerknell
 ** New: Screen alert and timer for Surge.
 ** New: Screen alert and timer for Storm Lash.
 ** Fixed: Denizar's alerts and timers group option errors.
+* Akylios
+** Fixed: Mind Decay now triggers for all players effected. Not just the first one triggered.
+
+Rise of the Phoenix
+* Arakhurn
+** New: Both versions of Arakhurn are now matched via their UID in order to catch Phases better in the event of disconnects, releases etc.
+** Change: Adjusted the time-out for transition to P3. Killing adds fast would cause an additional out of combat state resetting the encounter.
+** Note: Due to the above change, this may have given false readings on the first P3 Nova, since it would trigger the initial Nova timer.
+** Change: Recalculated the first Nova in P3 via latest video footage to hopefully be more accurate. Based on Trigger message.
+** Change: Recalculated the first Fiery Metamorphosis in P3 via the same methods as above.
 
 French Translations
 * MAJOR additions for Hammerknell, Rise of the Phoenix and general Options page.

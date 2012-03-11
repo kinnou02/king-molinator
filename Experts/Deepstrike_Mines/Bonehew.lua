@@ -67,6 +67,7 @@ MOD.Descript = MOD.Bonehew.Name
 -- Additional Unit Dictionary
 MOD.Lang.Unit.Fragment = KBM.Language:Add("Fragmented Bonehew")
 MOD.Lang.Unit.Fragment:SetGerman("Fragmentierter Bonehew")
+MOD.Lang.Unit.Fragment:SetFrench("Taille-os en morceaux ")
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}

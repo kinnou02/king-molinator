@@ -58,27 +58,32 @@ JR.Lang.Unit.Joloral:SetRussian("Йолорал Яролив")
 -- Additional Unit Dictionary
 JR.Lang.Unit.Crippler = KBM.Language:Add("Plated Crippler")
 JR.Lang.Unit.Crippler:SetGerman("Plattenverkrüppler")
+JR.Lang.Unit.Crippler:SetFrench("Mutilateur cuirassé")
 
 -- Ability Dictionary
 JR.Lang.Ability = {}
 JR.Lang.Ability.Panic = KBM.Language:Add("Panic Attack")
 JR.Lang.Ability.Panic:SetGerman("Panikattacke")
+JR.Lang.Ability.Panic:SetFrench("Crise de panique")
 JR.Lang.Ability.Panic:SetRussian("Приступ паники")
 
 -- Notify Dictionary
 JR.Lang.Notify = {}
 JR.Lang.Notify.Panic = KBM.Language:Add("Joloral Ragetide glares at (%a*)")
 JR.Lang.Notify.Panic:SetGerman("Joloral Wutflut starrt (%a*) an!")
+JR.Lang.Notify.Panic:SetFrench("Joloral Ragemarée lance un regard furieux à (%a*)")
 
 -- Verbose Dictionary
 JR.Lang.Verbose = {}
 JR.Lang.Verbose.Crippler = KBM.Language:Add(JR.Lang.Unit.Crippler[KBM.Lang].." enters the battle")
 JR.Lang.Verbose.Crippler:SetGerman(JR.Lang.Unit.Crippler[KBM.Lang].." greift in den Kampf ein!")
+JR.Lang.Verbose.Crippler:SetFrench("Mutilateur cuirassé entre en combat")
 
 -- Menu Dictionary
 JR.Lang.Menu = {}
 JR.Lang.Menu.Panic = KBM.Language:Add(JR.Lang.Ability.Panic[KBM.Lang].." duration.")
 JR.Lang.Menu.Panic:SetGerman(JR.Lang.Ability.Panic[KBM.Lang].." Dauer.")
+JR.Lang.Menu.Panic:SetFrench("Durée des Crise de panique.")
 JR.Lang.Menu.Panic:SetRussian("Длительность "..JR.Lang.Ability.Panic[KBM.Lang])
 
 JR.Joloral.Name = JR.Lang.Unit.Joloral[KBM.Lang]

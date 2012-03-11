@@ -56,26 +56,34 @@ AJ.Lang.Unit.Jorb = KBM.Language:Add(AJ.Jorb.Name)
 AJ.Lang.Unit.Jorb:SetGerman("Überfallkommandant Jorb")
 AJ.Lang.Unit.Jorb:SetFrench("Commandant d'assaut Jorb")
 AJ.Lang.Unit.Jorb:SetRussian("Командир штурмовой группы Йорб")
+AJ.Lang.Unit.JorbShort = KBM.Language:Add("Jorb")
+AJ.Lang.Unit.JorbShort:SetGerman()
+AJ.Lang.Unit.JorbShort:SetFrench()
+AJ.Lang.Unit.JorbShort:SetRussian("Йорб")
 
 -- Ability Dictionary
 AJ.Lang.Ability = {}
 AJ.Lang.Ability.Impact = KBM.Language:Add("Forceful Impact")
 AJ.Lang.Ability.Impact:SetGerman("Machtvoller Schlag")
+AJ.Lang.Ability.Impact:SetFrench("Impact énergique")
 AJ.Lang.Ability.Impact:SetRussian("Сильный удар")
 
 -- Notify Dictionary
 AJ.Lang.Notify = {}
 AJ.Lang.Notify.Stand = KBM.Language:Add("(%a*), stand to attention!")
 AJ.Lang.Notify.Stand:SetGerman("(%a*), Stillgestanden!")
+AJ.Lang.Notify.Stand:SetFrench("Gardez les yeux bien ouverts, (%a*) !")
 AJ.Lang.Notify.Stand:SetRussian("(%a*), внимание!")
 
 -- Debuff Dictionary
 AJ.Lang.Debuff = {}
 AJ.Lang.Debuff.Grasp = KBM.Language:Add("Paralyzing Grasp")
 AJ.Lang.Debuff.Grasp:SetGerman("Lähmender Griff")
+AJ.Lang.Debuff.Grasp:SetFrench("Poigne paralysante")
 AJ.Lang.Debuff.Grasp:SetRussian("Парализующая хватка")
 
 AJ.Jorb.Name = AJ.Lang.Unit.Jorb[KBM.Lang]
+AJ.Jorb.NameShort = AJ.Lang.Unit.JorbShort[KBM.Lang]
 AJ.Descript = AJ.Jorb.Name
 
 function AJ:AddBosses(KBM_Boss)

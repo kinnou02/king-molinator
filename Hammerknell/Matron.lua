@@ -89,11 +89,12 @@ MZ.Lang.Ability.Mark:SetFrench("Marque de l'oubli")
 MZ.Lang.Ability.Mark:SetRussian("Знак забвения")
 MZ.Lang.Ability.Shadow = KBM.Language:Add("Shadow Strike")
 MZ.Lang.Ability.Shadow:SetGerman("Schattenschlag")
+MZ.Lang.Ability.Shadow:SetFrench("Barrage de l'ombre")
 MZ.Lang.Ability.Shadow:SetRussian("Поражение тенью")
 MZ.Lang.Ability.Ichor = KBM.Language:Add("Revolting Ichor")
 MZ.Lang.Ability.Ichor:SetGerman("Abscheulicher Eiter")
 MZ.Lang.Ability.Ichor:SetRussian("Омерзительный гной")
-MZ.Lang.Ability.Ichor:SetFrench("Explosion atroce")
+MZ.Lang.Ability.Ichor:SetFrench("Ichor répugnant")
 
 -- Debuff Dictionary
 MZ.Lang.Debuff = {}

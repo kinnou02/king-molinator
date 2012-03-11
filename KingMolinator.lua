@@ -27,12 +27,12 @@ KBM.Idle = {
 	Wait = false,
 	Combat = {
 		Until = 0,
-		Duration = 4,
+		Duration = 5,
 		Wait = false,
 		StoreTime = 0,
 	},
 	Trigger = {
-		Duration = 2, 
+		Duration = 0, 
 	}
 }
 KBM.MenuOptions = {
@@ -1185,14 +1185,20 @@ function KBM.Trigger:Init()
 
 	function self.Queue:Add(TriggerObj, Caster, Target, Duration)	
 		if KBM.Encounter or KBM.Testing then
-			if TriggerObj.Queued or self.Removing then
+			if TriggerObj.Queued then
+				TriggerObj.Target[Target] = true
 				return
-			else
-				TriggerObj.Queued = true
+			elseif self.Removing then
+				return
 			end
+			TriggerObj.Queued = true
 			table.insert(self.List, TriggerObj)
 			TriggerObj.Caster = Caster
-			TriggerObj.Target = Target
+			if Target then
+				TriggerObj.Target = {[Target] = true}
+			else
+				TriggerObj.Target = {}
+			end
 			TriggerObj.Duration = Duration
 			self.Queued = true
 		end		
@@ -1230,7 +1236,7 @@ function KBM.Trigger:Init()
 		TriggerObj.Unit = Unit
 		TriggerObj.Type = Type
 		TriggerObj.Caster = nil
-		TriggerObj.Target = nil
+		TriggerObj.Target = {}
 		TriggerObj.Queued = false
 		TriggerObj.Phase = nil
 		TriggerObj.Trigger = Trigger
@@ -1269,7 +1275,7 @@ function KBM.Trigger:Init()
 			self.Phase = PhaseObj 
 		end
 		
-		function TriggerObj:AddStop(Object)
+		function TriggerObj:AddStop(Object, Player)
 			if type(Object) ~= "table" then
 				error("Expecting at least table: Got "..tostring(type(Object)))
 			elseif Object.Type ~= "timer" and Object.Type ~= "alert" then
@@ -1301,7 +1307,7 @@ function KBM.Trigger:Init()
 			end
 			for i, AlertObj in ipairs(self.Alerts) do
 				if AlertObj.Player then
-					if KBM.Player.UnitID == Target then
+					if self.Target[KBM.Player.UnitID] then
 						KBM.Alert:Start(AlertObj, Inspect.Time.Real(), Data)
 						Triggered = true
 					end
@@ -1327,6 +1333,7 @@ function KBM.Trigger:Init()
 			end
 			if Triggered then
 				self.LastTrigger = current
+				self.Target = {}
 			end
 		end
 		
@@ -4174,12 +4181,16 @@ function KBM:RaidCombatEnter()
 	
 end
 
-function KBM.WipeIt()
+function KBM.WipeIt(Force)
 
 	KBM.Idle.Combat.Wait = false
 	if KBM.Encounter then
 		KBM.TimeElapsed = KBM.Idle.Combat.StoreTime
-		print(KBM.Language.Encounter.Wipe[KBM.Lang])
+		if Force then
+			print("Encounter ended. Wiped.")
+		else
+			print(KBM.Language.Encounter.Wipe[KBM.Lang])
+		end
 		print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
 		if KBM.EncounterMode == "chronicle" then
 			KBM.CurrentMod.Settings.Records.Chronicle.Wipes = KBM.CurrentMod.Settings.Records.Chronicle.Wipes + 1
@@ -4414,6 +4425,13 @@ function KBM.GroupDeath(UnitID)
 			if KBM.TankSwap.Active then
 				if KBM.TankSwap.Tanks[UnitID] then
 					KBM.TankSwap.Tanks[UnitID]:Death()
+				end
+			end
+			if LibSRM.Dead == LibSRM.GroupCount() then
+				if KBM.Debug then
+					print("All dead, definate wipe")
+					KBM.Idle.Combat.StoreTime = KBM.TimeElapsed
+					KBM.WipeIt(true)
 				end
 			end
 		end

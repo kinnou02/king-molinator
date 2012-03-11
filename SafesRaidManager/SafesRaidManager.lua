@@ -328,7 +328,9 @@ local function SRM_SetSpecifier(Specifier)
 					SRM_Units[self.UnitID].UnitID = self.UnitID
 					SRM_Units[self.UnitID].name = uDetails.name
 					SRM_Units[self.UnitID].Loaded = true
-					SRM_Combat({[self.UnitID] = uDetails.combat})
+					if uDetails.combat then
+						SRM_Combat({[self.UnitID] = true})
+					end
 					SRM_Units[self.UnitID].Location = uDetails.location
 					SRM_Units[self.UnitID].PetID = Inspect.Unit.Lookup(self.Spec..".pet")
 					if uDetails.health == 0 then
@@ -487,6 +489,16 @@ local function SRM_Heal(data)
 					data.owner = LibSRM.Player.ID
 					data.player = true
 					SRM_Group.Combat.Heal(data)
+					sent = true
+				end
+			end
+		end
+	else
+		if data.target then
+			if SRM_Units[data.target] then
+				if SRM_Units[data.target].Dead then
+					-- Player was previously dead, this SHOULD be a res skill.
+					SRM_Res(data.target, data.target)
 					sent = true
 				end
 			end

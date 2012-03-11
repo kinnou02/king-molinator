@@ -106,9 +106,11 @@ GR.Lang.Ability.Breath:SetRussian("Мертвящее дыхание")
 GR.Lang.Ability.Breath:SetFrench("Respiration nécrotique")
 GR.Lang.Ability.Disruption = KBM.Language:Add("Seismic Disruption")
 GR.Lang.Ability.Disruption:SetGerman("Seismische Störung")
+GR.Lang.Ability.Disruption:SetFrench("Perturbation sismique")
 GR.Lang.Ability.Disruption:SetRussian("Сейсмическое разрушение")
 GR.Lang.Ability.Swarm = KBM.Language:Add("Parasite Swarm")
 GR.Lang.Ability.Swarm:SetGerman("Parasitenschwarm")
+GR.Lang.Ability.Swarm:SetFrench("Nuée parasite")
 GR.Lang.Ability.Swarm:SetRussian("Выводок паразитов")
 
 -- Debuff Dictionary

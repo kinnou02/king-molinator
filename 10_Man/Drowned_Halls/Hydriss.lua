@@ -57,26 +57,35 @@ KBM.RegisterMod(HH.ID, HH)
 HH.Lang.Unit = {}
 HH.Lang.Unit.Hydriss = KBM.Language:Add(HH.Hydriss.Name)
 HH.Lang.Unit.Hydriss:SetGerman("Hohepriesterin Hydriss")
+HH.Lang.Unit.Hydriss:SetFrench("Grande prêtresse Hydriss")
 HH.Lang.Unit.Hydriss:SetRussian("Первосвященница Гайдрисс")
+HH.Lang.Unit.HydShort = KBM.Language:Add(HH.Hydriss.Name)
+HH.Lang.Unit.HydShort:SetGerman()
+HH.Lang.Unit.HydShort:SetFrench()
 HH.Lang.Unit.Sea = KBM.Language:Add("Seaspawn")
 HH.Lang.Unit.Sea:SetGerman("Meeresbrut")
+HH.Lang.Unit.Sea:SetFrench("Engeance des mers")
 HH.Lang.Unit.Sea:SetRussian("Порождение моря")
 HH.Lang.Unit.Hive = KBM.Language:Add("Seaclaw Hive")
+HH.Lang.Unit.Hive:SetFrench("Nid de griffemarées")
 HH.Lang.Unit.Hive:SetGerman("Seeklauennest")
 
 -- Ability Dictionary
 HH.Lang.Ability = {}
 HH.Lang.Ability.Tsunami = KBM.Language:Add("Tsunami")
-HH.Lang.Ability.Tsunami:SetGerman("Tsunami")
+HH.Lang.Ability.Tsunami:SetGerman()
+HH.Lang.Ability.Tsunami:SetFrench()
 HH.Lang.Ability.Tsunami:SetRussian("Цунами")
 HH.Lang.Ability.Shock = KBM.Language:Add("Hydrostatic Shock")
 HH.Lang.Ability.Shock:SetRussian("Гидростатический удар")
+HH.Lang.Ability.Shock:SetFrench("Choc hydrostatique")
 HH.Lang.Ability.Shock:SetGerman("Hydrostatischer Schock") 
 
 -- Mechanic Dictionary
 HH.Lang.Mechanic = {}
 HH.Lang.Mechanic.Air = KBM.Language:Add("Air Phase")
 HH.Lang.Mechanic.Air:SetGerman("Flug Phase")
+HH.Lang.Mechanic.Air:SetFrench("Phase Air")
 HH.Lang.Mechanic.Air:SetRussian("Воздушная фаза")
 
 HH.Seaspawn = {
@@ -96,6 +105,7 @@ HH.Hive = {
 }
 
 HH.Hydriss.Name = HH.Lang.Unit.Hydriss[KBM.Lang]
+HH.Hydriss.NameShort = HH.Lang.Unit.HydShort[KBM.Lang]
 HH.Descript = HH.Hydriss.Name
 
 function HH:AddBosses(KBM_Boss)
