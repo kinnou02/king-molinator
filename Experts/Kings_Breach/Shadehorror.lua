@@ -57,7 +57,7 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Shadehorror = KBM.Language:Add(MOD.Shadehorror.Name)
 MOD.Lang.Unit.Shadehorror:SetGerman("Schattenschrecktrugbild") 
--- MOD.Lang.Unit.Shadehorror:SetFrench("")
+MOD.Lang.Unit.Shadehorror:SetFrench("Chimère Ombreffroi")
 -- MOD.Lang.Unit.Shadehorror:SetRussian("")
 MOD.Shadehorror.Name = MOD.Lang.Unit.Shadehorror[KBM.Lang]
 MOD.Descript = MOD.Shadehorror.Name

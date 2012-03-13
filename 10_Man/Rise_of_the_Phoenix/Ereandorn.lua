@@ -63,12 +63,15 @@ EN.Descript = EN.Ereandorn.Name
 EN.Lang.Notify = {}
 EN.Lang.Notify.Combustion = KBM.Language:Add('Ereandorn says, "(%a*), how does it feel to burn?"')
 EN.Lang.Notify.Combustion:SetGerman('Ereandorn sagt: "(%a*), wie fühlt es sich an, zu verbrennen?"')
+EN.Lang.Notify.Combustion:SetFrench('Ereandorn dit : "Cà vous fait quel effet de brûler, (%a*) ?"')
 EN.Lang.Notify.Combustion:SetRussian('Эреандорн спрашивает: "Ну как, (%a*), нравится тебе гореть?"')
 EN.Lang.Notify.Growth = KBM.Language:Add("The corpse of (%a*) will fuel our conquest")
 EN.Lang.Notify.Growth:SetGerman("Der Leichnam von (%a*) wird unsere Eroberung vorantreiben")
+EN.Lang.Notify.Growth:SetFrench("Le cadavre de (%a*) alimentera notre conquête !")
 EN.Lang.Notify.Growth:SetRussian("(%a*) - вот чей труп поможет нам в нашем вторжении!")
 EN.Lang.Notify.Eruption = KBM.Language:Add("I will rebuild this world in flames!")
 EN.Lang.Notify.Eruption:SetGerman("Ich werde diese Welt in Flammen neu formen!")
+EN.Lang.Notify.Eruption:SetFrench("Je rebâtirai ce monde dans les flammes !")
 EN.Lang.Notify.Eruption:SetRussian("Я предам этот мир огню!")
 
 -- Ability Dictionary

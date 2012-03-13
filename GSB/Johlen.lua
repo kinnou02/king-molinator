@@ -62,24 +62,28 @@ IJ.Lang.Unit.JohlenShort:SetRussian("Джохлен")
 -- Addtional Unit Dictionary
 IJ.Lang.Unit.Bomb = KBM.Language:Add("Devastating Bomb")
 IJ.Lang.Unit.Bomb:SetGerman("Vernichtende Bombe")
+IJ.Lang.Unit.Bomb:SetFrench("Bombe dévastatrice")
 IJ.Lang.Unit.Bomb:SetRussian("Разрушительная бомба")
 
 -- Ability Dictionary
 IJ.Lang.Ability = {}
 IJ.Lang.Ability.Blinding = KBM.Language:Add("Blinding Bomb")
 IJ.Lang.Ability.Blinding:SetGerman("Blendbombe")
+IJ.Lang.Ability.Blinding:SetFrench("Bombe aveuglante")
 IJ.Lang.Ability.Blinding:SetRussian("Ослепляющая бомба")
 
 -- Verbose Dictionary 
 IJ.Lang.Verbose = {}
 IJ.Lang.Verbose.Bomb = KBM.Language:Add("Devastation")
 IJ.Lang.Verbose.Bomb:SetGerman("Vernichtung")
+IJ.Lang.Verbose.Bomb:SetFrench("Dévastation")
 IJ.Lang.Verbose.Bomb:SetRussian("Разрушение")
 
 -- Phase Monitor Dictionary
 IJ.Lang.Phase = {}
 IJ.Lang.Phase.Bomb = KBM.Language:Add("Bomb")
 IJ.Lang.Phase.Bomb:SetGerman("Bombe")
+IJ.Lang.Phase.Bomb:SetFrench("Bombe")
 IJ.Lang.Phase.Bomb:SetRussian("бомба")
 
 IJ.Johlen.Name = IJ.Lang.Unit.Johlen[KBM.Lang]

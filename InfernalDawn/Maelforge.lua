@@ -56,8 +56,8 @@ KBM.RegisterMod(MF.ID, MF)
 -- Main Unit Dictionary
 MF.Lang.Unit = {}
 MF.Lang.Unit.Maelforge = KBM.Language:Add(MF.Maelforge.Name)
--- MF.Lang.Unit.Maelforge:SetGerman("")
--- MF.Lang.Unit.Maelforge:SetFrench("")
+MF.Lang.Unit.Maelforge:SetGerman()
+MF.Lang.Unit.Maelforge:SetFrench()
 -- MF.Lang.Unit.Maelforge:SetRussian("")
 
 -- Ability Dictionary

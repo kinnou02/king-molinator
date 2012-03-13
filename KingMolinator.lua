@@ -12,6 +12,28 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
+KBM.Unit = {
+	UIDs = {
+		Available = {},
+		Idle = {},
+	},
+	NPC = {
+		Friendly = {},
+		Hostile = {},
+		Neutral = {},
+		Count = 0,
+	},
+	Player = {
+		Friendly = {},
+		Hostile = {},
+		Neutral = {},
+		Count = 0,
+	},
+	Names = {},
+	Dead = {
+		Count = 0,
+	},
+}
 KBM.Lang = Inspect.System.Language()
 KBM.Player = {}
 KBM.ID = "KingMolinator"
@@ -1761,6 +1783,7 @@ function KBM.PhaseMonitor:Init()
 			DeathObj.Count = 0
 			DeathObj.Total = Total
 			DeathObj.Name = Name
+			DeathObj.Boss = BossObj
 			DeathObj.GUI = KBM.PhaseMonitor:PullObjective()
 			DeathObj.GUI:SetName(Name)
 			DeathObj.GUI:SetObjective(DeathObj.Count.."/"..DeathObj.Total)
@@ -2099,7 +2122,7 @@ function KBM.EncTimer:Init()
 		end		
 	end
 	
-	function self:Start(Time)	
+	function self:Start(Time)
 		if self.Settings.Enabled then
 			if self.Settings.Duration then
 				self.Frame:SetVisible(true)
@@ -2759,11 +2782,143 @@ function KBM.RaidDamage(info)
 	end	
 end
 
+function KBM.Unit:DamageHandler()
+
+end
+
+function KBM.Unit:Add(uDetails, UnitID)
+	if not self.Dead[UnitID] then
+		if uDetails.health == 0 then
+			self:Death(UnitID)
+			return
+		else
+			if (not self.UIDs.Available[UnitID]) and (not self.UIDs.Idle[UnitID]) then
+				if KBM.Debug then
+					print("New unit seen by tracking engine")
+				end
+				if uDetails.player then
+					if KBM.Debug then
+						print("Unit is a player: "..uDetails.name)
+					end
+					if uDetails.relation == "hostile" then
+						if KBM.Debug then
+							print("Player is Hostile: "..UnitID)
+						end
+						self.Player.Hostile[UnitID] = {
+							Relation = "hostile",
+							Player = true,
+							Dead = false,
+							Details = uDetails,
+							DamageHandler = function () self.DamageHandler(self) end,
+						}
+						self.UIDs.Available[UnitID] = self.Player.Hostile[UnitID]
+					elseif uDetails.relation == "friendly" then
+						if KBM.Debug then
+							print("Player is Friendly: "..UnitID)
+						end
+						self.Player.Friendly[UnitID] = {
+							Relation = "friendly",
+							Player = true,
+							Dead = false,
+							Details = uDetails,
+							DamageHandler = function () self.DamageHandler(self) end,
+						}
+						self.UIDs.Available[UnitID] = self.Player.Friendly[UnitID]
+					else
+						-- Not sure if this could ever happen, maybe if they're out unflagged?
+						if KBM.Debug then
+							print("Player is Neutral?: "..UnitID)
+						end
+						self.Player.Neutral[UnitID] = {
+							Relation = "neutral",
+							Player = true,
+							Dead = false,
+							Details = uDetails,
+							DamageHandler = function () self.DamageHandler(self) end,
+						}
+						self.UIDs.Available[UnitID] = self.Player.Neutral[UnitID]
+					end
+					self.Player.Count = self.Player.Count + 1
+				else
+					if KBM.Debug then
+						print("Unit is an NPC: "..uDetails.name)
+					end
+					if uDetails.relation == "hostile" then
+						self.NPC.Hostile[UnitID] = {
+							Relation = "hostile",
+							Player = false,
+							Dead = false,
+							Details = uDetails,
+							DamagerHandler = function () self.DamageHandler(self) end,
+						}
+						self.UIDs.Available = self.NPC.Hostile[UnitID]
+					elseif uDetails.relation == "friendly" then
+						self.NPC.Friendly[UnitID] = {
+							Relation = "friendly",
+							Player = false,
+							Dead = false,
+							DamagerHandler = function () self.DamageHandler(self) end,
+							Details = uDetails,
+						}
+						self.DamageHandler(self.NPC.Friendly[UnitID])
+						self.UIDs.Available[UnitID] = self.NPC.Friendly[UnitID]
+					else
+						self.NPC.Neutral[UnitID] = {
+							Relation = "neutral",
+							Player = false,
+							Dead = false,
+							DamagerHandler = function () self.DamageHandler(self) end,
+							Details = uDetails,
+						}
+						self.DamageHandler(self.NPC.Neutral[UnitID])
+						self.UIDs.Available[UnitID] = self.NPC.Neutral[UnitID]
+					end
+					self.NPC.Count = self.NPC.Count + 1
+				end
+			else
+				if self.UIDs.Idle[UnitID] then
+					
+				end
+			end
+		end
+	end
+end
+
+function KBM.Unit:Idle(UnitID)
+	self.UIDs.Idle[UnitID] = self.UIDs.Available[UnitID]
+	self.UIDs.Available[UnitD] = nil
+	self.UIDs.Idle[UnitID].IdleStart = Inspect.Time.Real()
+end
+
+function KBM.Unit:Death(UnitID)
+	if KBM.Debug then
+		print("Adding Unit to Death list")
+	end
+	if self.UIDs.Idle[UnitID] then
+		if KBM.Debug then
+			print("Unit is idle and tracked: "..UnitID)
+		end
+		self.Dead[UnitID] = self.UIDs.Idle[UnitID]
+		self.UIDs.Idle[UnitID] = nil
+		self.Dead.Count = self.Dead.Count + 1
+	elseif self.UIDs.Available[UnitID] then
+		self.Dead[UnitID] = self.UIDs.Available[UnitID]
+		self.UIDs.Idle[UnitID] = nil
+		self.Dead.Count = self.Dead.Count + 1
+	else
+		self.Dead[UnitID] = {
+			NoTracking = true,
+		}
+		self.Dead.Count = self.Dead.Count + 1
+	end
+end
+
 local function KBM_UnitAvailable(units)
 	if KBM.Encounter then
 		for UnitID, Specifier in pairs(units) do
 			uDetails = Inspect.Unit.Detail(UnitID)
 			if uDetails then
+				KBM.Unit:Add(uDetails, UnitID)
 				if not uDetails.player then
 					KBM.CheckActiveBoss(uDetails, UnitID)
 				end
@@ -2778,6 +2933,7 @@ local function KBM_UnitAvailable(units)
 		for UnitID, Specifier in pairs(units) do
 			uDetails = Inspect.Unit.Detail(UnitID)
 			if uDetails then
+				KBM.Unit:Add(uDetails, UnitID)
 				if uDetails.mark then
 					if KBM.PlugIn.List.KBMMarkIt then
 						KBM.PlugIn.List.KBMMarkIt:MarkChange(uDetails.mark, UnitID)
@@ -3401,7 +3557,8 @@ function KBM.Alert:Init()
 		return AlertObj		
 	end
 	
-	function self:Start(AlertObj, CurrentTime, Duration)		
+	function self:Start(AlertObj, CurrentTime, Duration)
+		local CurrentTime = Inspect.Time.Real()
 		if self.Settings.Enabled then
 			if AlertObj.Enabled then
 				if self.Starting and not AlertObj.isImportant then
@@ -3439,7 +3596,7 @@ function KBM.Alert:Init()
 				end
 				self.Current = AlertObj
 				AlertObj.Duration = self.Duration
-				self.Alpha = 1
+				self.Alpha = 1.0
 				if self.Settings.Flash then
 					if not AlertObj.Settings then
 						self.Color = AlertObj.Color
@@ -3452,11 +3609,12 @@ function KBM.Alert:Init()
 						end
 					end
 					if AlertObj.Settings.Border then
-						self.Left[self.Color]:SetAlpha(1)
+						self.Left[self.Color]:SetAlpha(1.0)
 						self.Left[self.Color]:SetVisible(true)
-						self.Right[self.Color]:SetAlpha(1)
+						self.Right[self.Color]:SetAlpha(1.0)
 						self.Right[self.Color]:SetVisible(true)
-						self.Direction = -self.Speed
+						self.Direction = false
+						self.FadeStart = CurrentTime
 					end
 				end
 				if self.Settings.Notify then
@@ -3465,7 +3623,7 @@ function KBM.Alert:Init()
 							self.Shadow:SetText(AlertObj.Text)
 							self.Text:SetText(AlertObj.Text)
 							self.Anchor:SetVisible(true)
-							self.Anchor:SetAlpha(1)
+							self.Anchor:SetAlpha(1.0)
 						end
 					end
 				end
@@ -3502,7 +3660,10 @@ function KBM.Alert:Init()
 				end
 				if self.Current.TimerAfter then
 					if KBM.Encounter then
-						KBM.MechTimer:AddStart(self.Current.TimerAfter)
+						if not self.Current.TAStarted then
+							KBM.MechTimer:AddStart(self.Current.TimerAfter)
+							self.Current.TAStart = false
+						end
 					end
 				end
 			end
@@ -3510,11 +3671,16 @@ function KBM.Alert:Init()
 	end	
 	
 	function self:Update(CurrentTime)
+		local CurrentTime = Inspect.Time.Real()
 		if self.Current.Stopping then
-			if self.Alpha <= 0.1 then -- lag threshold
+			if self.Alpha == 0 then
 				self:Stop()
 			else
-				self.Alpha = self.Alpha + self.Direction
+				local TimeDiff = CurrentTime - self.FadeStart
+				self.Alpha = 1.0 - (TimeDiff * 1.25)
+				if self.Alpha < 0 then
+					self.Alpha = 0.0
+				end
 				if self.Settings.Flash then
 					if self.Current.Settings.Border then
 						self.Left[self.Color]:SetAlpha(self.Alpha)
@@ -3531,13 +3697,23 @@ function KBM.Alert:Init()
 			if self.Settings.Flash then
 				if self.Current.Flash then
 					if self.Current.Settings.Border then
-						self.Alpha = self.Alpha + self.Direction
-						if self.Alpha <= 0.2 then
-							self.Alpha = 0.2
-							self.Direction = self.Speed
-						elseif self.Alpha >= 1 then
-							self.Alpha = 1
-							self.Direction = -self.Speed
+						local TimeDiff = CurrentTime - self.FadeStart
+						if self.Direction then
+							if TimeDiff > 0.5 then
+								self.Alpha = 1.0
+								self.Direction = false
+								self.FadeStart = CurrentTime
+							else
+								self.Alpha = TimeDiff * 2
+							end
+						else
+							if TimeDiff > 0.5 then
+								self.Alpha = 0.0
+								self.Direction = true
+								self.FadeStart = CurrentTime
+							else
+								self.Alpha = 1.0 - (TimeDiff * 2)
+							end
 						end
 						self.Left[self.Color]:SetAlpha(self.Alpha)
 						self.Right[self.Color]:SetAlpha(self.Alpha)
@@ -3562,12 +3738,16 @@ function KBM.Alert:Init()
 			end
 			if self.StopTime then
 				if self.StopTime <= CurrentTime then
-					self.Direction = -self.Speed
+					self.Direction = false
+					self.FadeStart = (CurrentTime - (1.0 - self.Alpha))
 					self.Current.Stopping = true
 					if self.Current.AlertAfter and not self.Starting then
 						self:Stop()
 					elseif self.Current.TimerAfter then
-						self:Stop()
+						if KBM.Encounter then
+							KBM.MechTimer:AddStart(self.Current.TimerAfter)
+							self.Current.TAStarted = true
+						end
 					end
 				end
 			end
@@ -4239,6 +4419,8 @@ function KBM:UpdateHP(UnitID, BossObj)
 	end
 end
 
+KBM.ClearBuffers = 0
+
 function KBM:Timer()
 
 	local current = Inspect.Time.Real()
@@ -4388,6 +4570,12 @@ function KBM:Timer()
 			end
 			KBM.QueuePage = nil
 		end
+		if (current - KBM.ClearBuffers) > 60 then
+			KBM.ClearBuffers = current
+			KBM.Unit.Dead = {
+				Count = 0,
+			}
+		end
 		KBM.Updating = false
 	end
 	
@@ -4411,6 +4599,7 @@ local function KBM_UnitRemoved(units)
 		end
 	end
 	for UnitID, Specifier in pairs(units) do
+		KBM.Unit:Death(UnitID)
 		if KBM.PlugIn.List.KBMMarkIt then
 			KBM.PlugIn.List.KBMMarkIt:MarkChange(false, UnitID)
 		end

@@ -45,6 +45,7 @@ AK.Jornaru = {
 			Enabled = true,
 			WaveOne = KBM.Defaults.TimerObj.Create("blue"),
 			WaveFour = KBM.Defaults.TimerObj.Create("blue"),
+			WaveFourFirst = KBM.Defaults.TimerObj.Create("blue"),
 			Orb = KBM.Defaults.TimerObj.Create("orange"),
 			OrbFirst = KBM.Defaults.TimerObj.Create("orange"),
 			Summon = KBM.Defaults.TimerObj.Create("dark_green"),
@@ -664,7 +665,10 @@ function AK:Start()
 	self.Jornaru.TimersRef.WaveOne.MenuName = AK.Lang.Options.WaveOne[KBM.Lang]
 	self.Jornaru.TimersRef.WaveOne:SetPhase(1)
 	self.Jornaru.TimersRef.WaveFour = KBM.MechTimer:Add(AK.Lang.Mechanic.Wave[KBM.Lang], 50, true)
-	self.Jornaru.TimersRef.WaveFour.MenuName = AK.Lang.Options.WaveFour[KBM.Lang]
+	self.Jornaru.TimersRef.WaveFour:NoMenu()
+	self.Jornaru.TimersRef.WaveFourFirst = KBM.MechTimer:Add(AK.Lang.Mechanic.Wave[KBM.Lang], 55)
+	self.Jornaru.TimersRef.WaveFourFirst.MenuName = AK.Lang.Options.WaveFour[KBM.Lang]
+	self.Jornaru.TimersRef.WaveFourFirst:AddTimer(self.Jornaru.TimersRef.WaveFour, 0)
 	if not self.Settings.PhaseAlt then
 		self.Jornaru.TimersRef.OrbFirst = KBM.MechTimer:Add(AK.Lang.Mechanic.Orb[KBM.Lang], 50)
 	else
@@ -701,6 +705,7 @@ function AK:Start()
 	self.Akylios.TimersRef.BreathFirst = KBM.MechTimer:Add(AK.Lang.Ability.Breath[KBM.Lang], 87)
 	self.Akylios.TimersRef.BreathFirst.MenuName = self.Lang.Options.BreathFirst[KBM.Lang]
 	self.Akylios.TimersRef.Lasher = KBM.MechTimer:Add(AK.Lang.Options.Lasher[KBM.Lang], 45)
+	self.Akylios.TimersRef.Lasher:SetPhase(4)
 	self.Akylios.TimersRef.Submerge:AddTimer(self.Akylios.TimersRef.Lasher, 0)
 	
 	-- Create Alerts
@@ -713,6 +718,8 @@ function AK:Start()
 	self.Jornaru.TimersRef.WaveOne:AddAlert(self.Jornaru.AlertsRef.WaveWarn, 5)
 	self.Jornaru.TimersRef.WaveFour:AddAlert(self.Jornaru.AlertsRef.WaveWarnLong, 10)
 	self.Jornaru.TimersRef.WaveFour:AddAlert(self.Jornaru.AlertsRef.WaveWarn, 5)
+	self.Jornaru.TimersRef.WaveFourFirst:AddAlert(self.Jornaru.AlertsRef.WaveWarnLong, 10)
+	self.Jornaru.TimersRef.WaveFourFirst:AddAlert(self.Jornaru.AlertsRef.WaveWarn, 5)
 	self.Jornaru.AlertsRef.Orb = KBM.Alert:Create(AK.Lang.Mechanic.Orb[KBM.Lang], 8, false, true, "orange")
 	self.Jornaru.AlertsRef.Orb:Important()
 	-- Akylios

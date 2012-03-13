@@ -57,10 +57,14 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Suleng = KBM.Language:Add(MOD.Suleng.Name)
 MOD.Lang.Unit.Suleng:SetGerman("Jäger Suleng") 
--- MOD.Lang.Unit.Suleng:SetFrench("")
+MOD.Lang.Unit.Suleng:SetFrench("Chasseur Suleng")
 -- MOD.Lang.Unit.Suleng:SetRussian("")
 MOD.Suleng.Name = MOD.Lang.Unit.Suleng[KBM.Lang]
 MOD.Descript = MOD.Suleng.Name
+MOD.Lang.Unit.SuShort = KBM.Language:Add("Suleng")
+MOD.Lang.Unit.SuShort:SetGerman()
+MOD.Lang.Unit.SuShort:SetFrench()
+MOD.Suleng.NameShort = MOD.Lang.Unit.SuShort[KBM.Lang]
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}

@@ -49,7 +49,8 @@ KBM.RegisterMod(UK.ID, UK)
 -- Main Unit Dictionary
 UK.Lang.Unit = {}
 UK.Lang.Unit.Uruluuk = KBM.Language:Add(UK.Uruluuk.Name)
-UK.Lang.Unit.Uruluuk:SetGerman("Uruluuk")
+UK.Lang.Unit.Uruluuk:SetGerman()
+UK.Lang.Unit.Uruluuk:SetFrench()
 UK.Lang.Unit.Uruluuk:SetRussian("Улуруук")
 UK.Uruluuk.Name = UK.Lang.Unit.Uruluuk[KBM.Lang]
 
@@ -57,24 +58,29 @@ UK.Uruluuk.Name = UK.Lang.Unit.Uruluuk[KBM.Lang]
 UK.Lang.Ability = {}
 UK.Lang.Ability.Fist = KBM.Language:Add("Fist of Laethys")
 UK.Lang.Ability.Fist:SetGerman("Faust von Laethys")
+UK.Lang.Ability.Fist:SetFrench("Poing de Laethys")
 UK.Lang.Ability.Fist:SetRussian("Кулак Лэтис")
 UK.Lang.Ability.Storm = KBM.Language:Add("Storm of Force")
 UK.Lang.Ability.Storm:SetGerman("Sturm der Stärke")
+UK.Lang.Ability.Storm:SetFrench("Tempête de Force")
 UK.Lang.Ability.Storm:SetRussian("Буря силы")
 UK.Lang.Ability.Crystal = KBM.Language:Add("Crystal Imprisonment")
 UK.Lang.Ability.Crystal:SetGerman("Kristallgefängnis")
+UK.Lang.Ability.Crystal:SetFrench("Prison de cristal")
 UK.Lang.Ability.Crystal:SetRussian("Заключение в кристалл")
 
 -- Verbose Dictionary
 UK.Lang.Verbose = {}
 UK.Lang.Verbose.Crystal = KBM.Language:Add("Crystal on YOU soon!")
 UK.Lang.Verbose.Crystal:SetGerman("Achtung, du wirst zum Kristall")
+UK.Lang.Verbose.Crystal:SetFrench("Emprisonnement de cristal sur vous bientôt!")
 UK.Lang.Verbose.Crystal:SetRussian("Вы скоро превратитесь в кристалл!")
 
 -- Notify Dictionary
 UK.Lang.Notify = {}
 UK.Lang.Notify.Crystal = KBM.Language:Add("Uruluuk points at (%a*)!")
 UK.Lang.Notify.Crystal:SetGerman("Uruluuk zeigt auf (%a*)!")
+UK.Lang.Notify.Crystal:SetFrench("Uruluuk montre (%a*) du doigt !")
 UK.Lang.Notify.Crystal:SetRussian("Улуруук указывает туда, где стоит (%a*)!")
 
 UK.Descript = UK.Uruluuk.Name

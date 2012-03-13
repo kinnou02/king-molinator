@@ -68,6 +68,7 @@ PI.Lang.Unit.Plutonus:SetRussian("Плутон Бессмертный")
 PI.Lang.Ability = {}
 PI.Lang.Ability.Sleep = KBM.Language:Add("Walking Sleep")
 PI.Lang.Ability.Sleep:SetGerman("Wandelnder Schlaf")
+PI.Lang.Ability.Sleep:SetFrench("Somnambulisme")
 PI.Lang.Ability.Sleep:SetRussian("Сон на ходу")
 
 PI.Plutonus.Name = PI.Lang.Unit.Plutonus[KBM.Lang]

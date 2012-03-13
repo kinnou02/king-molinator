@@ -64,7 +64,7 @@ SZ.Lang.Unit.ZilasShort = KBM.Language:Add("Zilas")
 SZ.Lang.Unit.ZilasShort:SetGerman("Zilas")
 SZ.Lang.Unit.ZilasShort:SetFrench("Zilas")
 SZ.Lang.Unit.ZilasShort:SetRussian("Зилас")
-SZ.Zilas.NameShort = SZ.Lang.Unit.Zilas[KBM.Lang]
+SZ.Zilas.NameShort = SZ.Lang.Unit.ZilasShort[KBM.Lang]
 -- Additional Unit Dictionary
 SZ.Lang.Unit.Imp = KBM.Language:Add("Escaped Imp")
 SZ.Lang.Unit.Imp:SetGerman("Entflohener Imp")

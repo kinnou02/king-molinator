@@ -69,21 +69,25 @@ LG.Lang.Unit.Greenscale:SetRussian("Лорд Зеленокож")
 -- Unit Dictionary
 LG.Lang.Unit.Verdant = KBM.Language:Add("Verdant Annihilator")
 LG.Lang.Unit.Verdant:SetGerman("Grüner Auslöscher")
+LG.Lang.Unit.Verdant:SetFrench("Annihilateur verdoyant")
 LG.Lang.Unit.Verdant:SetRussian("Лиственный расщепитель")
 
 -- Ability Dictionary
 LG.Lang.Ability = {}
 LG.Lang.Ability.Blight = KBM.Language:Add("Strangling Blight")
 LG.Lang.Ability.Blight:SetGerman("Würgende Plage")
+LG.Lang.Ability.Blight:SetFrench("Fléau étrangleur")
 LG.Lang.Ability.Blight:SetRussian("Удушающая болезнь")
 LG.Lang.Ability.Fumes = KBM.Language:Add("Noxious Fumes")
 LG.Lang.Ability.Fumes:SetGerman("Giftige Dämpfe")
+LG.Lang.Ability.Fumes:SetFrench("Émanations nocives")
 LG.Lang.Ability.Fumes:SetRussian("Ядовитые пары")
 
 -- Mechanic Dictionary (Verbose)
 LG.Lang.Mechanic = {}
 LG.Lang.Mechanic.Death = KBM.Language:Add("Protective Shield")
 LG.Lang.Mechanic.Death:SetGerman("Schutzschild")
+LG.Lang.Mechanic.Death:SetFrench("Bouclier protecteur")
 LG.Lang.Mechanic.Death:SetRussian("Защитный купол")
 
 LG.Greenscale.Name = LG.Lang.Unit.Greenscale[KBM.Lang]

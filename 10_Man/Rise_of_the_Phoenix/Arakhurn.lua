@@ -102,6 +102,7 @@ HA.Lang.Ability.Nova:SetFrench("Nova de flammes")
 HA.Lang.Notify = {}
 HA.Lang.Notify.Nova = KBM.Language:Add("High Priest Arakhurn releases the fiery energy within")
 HA.Lang.Notify.Nova:SetGerman("Hohepriester Arakhurn lässt die feurige Energie seines Inneren frei.")
+HA.Lang.Notify.Nova:SetFrench("Grand prêtre Arakhurn libère l'énergie en lui")
 HA.Lang.Notify.Nova:SetRussian("Первосвященник Аракурн высвобождает скрытую внутри яростную энергию.")
 HA.Lang.Notify.Respawn = KBM.Language:Add("The lava churns violently as a large shadow moves beneath it and then rushes to the surface")
 HA.Lang.Notify.Respawn:SetGerman("Die Lava brodelt gewaltig, während sich ein großer Schatten unter ihr bewegt und dann an die Oberfläche schnellt.")

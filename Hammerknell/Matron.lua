@@ -96,6 +96,10 @@ MZ.Lang.Ability.Ichor:SetGerman("Abscheulicher Eiter")
 MZ.Lang.Ability.Ichor:SetRussian("Омерзительный гной")
 MZ.Lang.Ability.Ichor:SetFrench("Ichor répugnant")
 
+-- Notify Dictionary
+MZ.Lang.Notify = {}
+MZ.Lang.Notify.Mark = KBM.Language:Add("Matron Zamira places the Mark of Oblivion upon (%a*).")
+
 -- Debuff Dictionary
 MZ.Lang.Debuff = {}
 MZ.Lang.Debuff.Curse = KBM.Language:Add("Matron's Curse")
@@ -314,8 +318,13 @@ function MZ:Start()
 	self.Matron.Triggers.Ichor:AddTimer(self.Matron.TimersRef.Ichor)
 	self.Matron.Triggers.Mark = KBM.Trigger:Create(self.Lang.Ability.Mark[KBM.Lang], "cast", self.Matron)
 	self.Matron.Triggers.Mark:AddTimer(self.Matron.TimersRef.Mark)
-	self.Matron.Triggers.MarkDamage = KBM.Trigger:Create(self.Lang.Ability.Mark[KBM.Lang], "damage", self.Matron)
-	self.Matron.Triggers.MarkDamage:AddAlert(self.Matron.AlertsRef.Mark, true)
+	if self.Lang.Notify.Mark.Translated[KBM.Lang] then
+		self.Matron.Triggers.MarkNotify = KBM.Trigger:Create(self.Lang.Notify.Mark[KBM.Lang], "notify", self.Matron)
+		self.Matron.Triggers.MarkNotify:AddAlert(self.Matron.AlertsRef.Mark, true)
+	else
+		self.Matron.Triggers.MarkDamage = KBM.Trigger:Create(self.Lang.Ability.Mark[KBM.Lang], "damage", self.Matron)
+		self.Matron.Triggers.MarkDamage:AddAlert(self.Matron.AlertsRef.Mark, true)
+	end
 	self.Matron.AlertsRef.Mark:Important()
 	self.Matron.Triggers.Shadow = KBM.Trigger:Create(self.Lang.Ability.Shadow[KBM.Lang], "damage", self.Matron)
 	self.Matron.Triggers.Shadow:AddTimer(self.Matron.TimersRef.Shadow)

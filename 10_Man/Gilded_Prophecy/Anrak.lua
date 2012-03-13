@@ -63,27 +63,33 @@ AF.Descript = AF.Anrak.Name
 AF.Lang.Ability = {}
 AF.Lang.Ability.Spines = KBM.Language:Add("Spines of Earth")
 AF.Lang.Ability.Spines:SetGerman("Stacheln der Erde")
+AF.Lang.Ability.Spines:SetFrench("Épines de Terre")
 AF.Lang.Ability.Spines:SetRussian("Гребни Земли")
 AF.Lang.Ability.Strike = KBM.Language:Add("Vicious Tail Strike")
 AF.Lang.Ability.Strike:SetGerman("Bösartiger Schweifschlag")
+AF.Lang.Ability.Strike:SetFrench("Coup de queue retors")
 AF.Lang.Ability.Strike:SetRussian("Злобный удар хвостом")
 AF.Lang.Ability.Call = KBM.Language:Add("Call of Anrak")
 AF.Lang.Ability.Call:SetGerman("Ruf von Anrak")
+AF.Lang.Ability.Call:SetFrench("L'appel d'Anrak")
 AF.Lang.Ability.Call:SetRussian("Зов Анрака")
 AF.Lang.Ability.Bond = KBM.Language:Add("Bond of the Earth")
 AF.Lang.Ability.Bond:SetGerman("Bande der Erde")
+AF.Lang.Ability.Bond:SetFrench("Lien de la Terre")
 AF.Lang.Ability.Bond:SetRussian("Земляное усиление")
 
 -- Debuff Dictionary
 AF.Lang.Debuff = {}
 AF.Lang.Debuff.Brittle = KBM.Language:Add("Brittle")
 AF.Lang.Debuff.Brittle:SetGerman("Brüchig")
+AF.Lang.Debuff.Brittle:SetFrench("Fragile")
 AF.Lang.Debuff.Brittle:SetRussian("Хрупкость")
 
 -- Menu Dictionary
 AF.Lang.Menu = {}
 AF.Lang.Menu.Spines = KBM.Language:Add("Spines cast warning")
 AF.Lang.Menu.Spines:SetGerman("Stacheln Zauber Warnung")
+AF.Lang.Menu.Spines:SetFrench("Avertissement Épines de Terre")
 AF.Lang.Menu.Spines:SetRussian("Каст гребней земли")
 
 function AF:AddBosses(KBM_Boss)

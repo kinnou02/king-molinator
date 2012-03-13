@@ -65,33 +65,40 @@ DF.Lang.Unit.Foci:SetRussian("Темное средоточия")
 -- Additional Unit Dictionary
 DF.Lang.Unit.Force = KBM.Language:Add("Force of Corruption")
 DF.Lang.Unit.Force:SetGerman("Verderbende Kraft")
+DF.Lang.Unit.Force:SetFrench("Force de corruption")
 DF.Lang.Unit.Force:SetRussian("Сила искажения")
 
 -- Ability Dictionary
 DF.Lang.Ability = {}
 DF.Lang.Ability.Ground = KBM.Language:Add("Unhallowed Ground")
 DF.Lang.Ability.Ground:SetGerman("Unheiliger Boden")
+DF.Lang.Ability.Ground:SetFrench("Sol non consacré")
 DF.Lang.Ability.Ground:SetRussian("Земля нечестивости")
 DF.Lang.Ability.Call = KBM.Language:Add("Call Darkness")
 DF.Lang.Ability.Call:SetGerman("Finsternis rufen")
+DF.Lang.Ability.Call:SetFrench("Appel des ténèbres")
 DF.Lang.Ability.Call:SetRussian("Призыв тьмы")
 DF.Lang.Ability.Blast = KBM.Language:Add("Corrupt Blast")
 DF.Lang.Ability.Blast:SetGerman("Sturmverderbnis")
+DF.Lang.Ability.Blast:SetFrench("Souffle corrompu")
 DF.Lang.Ability.Blast:SetRussian("Черный луч")
 
 -- Debuff Dictionary
 DF.Lang.Debuff = {}
 DF.Lang.Debuff.Soul = KBM.Language:Add("Destabilize Soul")
 DF.Lang.Debuff.Soul:SetGerman("Seele destabilisieren")
+DF.Lang.Debuff.Soul:SetFrench("Âme déstabilisée")
 DF.Lang.Debuff.Soul:SetRussian("Раскачать душу")
 
 -- Phase Monitor Dictionary
 DF.Lang.Phase = {}
 DF.Lang.Phase.Force = KBM.Language:Add("Force")
 DF.Lang.Phase.Force:SetGerman("Kraft")
+DF.Lang.Phase.Force:SetFrench()
 DF.Lang.Phase.Force:SetRussian("Адд")
 DF.Lang.Phase.Foci = KBM.Language:Add("Foci")
 DF.Lang.Phase.Foci:SetGerman("Fokus")
+DF.Lang.Phase.Foci:SetFrench("Balise")
 DF.Lang.Phase.Foci:SetRussian("Босс")
 
 DF.Foci.NameShort = DF.Lang.Phase.Foci[KBM.Lang]

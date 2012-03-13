@@ -56,8 +56,8 @@ KBM.RegisterMod(LT.ID, LT)
 -- Main Unit Dictionary
 LT.Lang.Unit = {}
 LT.Lang.Unit.Laethys = KBM.Language:Add(LT.Laethys.Name)
--- LT.Lang.Unit.Laethys:SetGerman("")
--- LT.Lang.Unit.Laethys:SetFrench("")
+LT.Lang.Unit.Laethys:SetGerman()
+LT.Lang.Unit.Laethys:SetFrench()
 -- LT.Lang.Unit.Laethys:SetRussian("")
 
 -- Ability Dictionary

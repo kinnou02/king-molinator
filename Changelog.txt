@@ -13,8 +13,17 @@ Translation System
 * New: Slash Command /kbmlocale (will list total number missing translations for each Language, and a list of missing translations for the current language)
 * Note: /kbmlocale will return a group object stating Directory, File name and list of missing translations for that file or files.
 
+Engine
+* Unit Tracking
+** New: Units are now constantly tracked and monitored.
+** New: Smart caching system tracks all seen units and groups them for fast reference.
+** New: Dead Units are removed from the tracking system every 60 seconds to avoid memory leaks.
+** NOTE: Please report any FPS issues with regards to this new system.
+
 Alerts
 * Change: Alerts which trigger another Alert and/or Mechanic Timer after itself, now do so immediately. Not after fading.
+* Change: Alert border flashes are now time based rather than frame reliant to account for variable frame rates.
+* Change: Alert border stop fades are now time based rather than frame reliant to account for variable frame rates.
 
 Mechanic Timers
 * Colors
@@ -27,23 +36,25 @@ Triggers
 
 Infernal Dawn
 * Warboss Drak
-** New: Added base template for the encounter. (EN, DE)
+** New: Added base template for the encounter. (EN)
 * Maglamos the Scryer
-** New: Added base template for the encounter. (EN, DE)
+** New: Added base template for the encounter. (EN)
 * Rusilia Dreadblade
-** New: Added base template for the encounter. (EN, DE)
+** New: Added base template for the encounter. (EN)
 * Itualxi
-** New: Added base template for the encounter. (EN, DE)
+** New: Added base template for the encounter. (EN)
 * The Ember Conclave
-** New: Added base template for the encounter. (EN, DE)
+** New: Added base template for the encounter. (EN)
 * Laethys
-** New: Added base template for the encounter. (EN, DE)
+** New: Added base template for the encounter. (EN)
 * Maelforge
-** New: Added base template for the encounter. (EN, DE)
+** New: Added base template for the encounter. (EN)
 * Note: Base templates include Phase Monitor (Single Phase), Encounter Timer and Boss Castbar.
 * Note: Supported languages follow in brackets.
 
 Hammerknell
+* Matron Zamira
+** New: The personal alert for Mark of Oblivion now triggers from the Emote and not the damage/debuff to give you more time to react.
 * Inwar Darktide
 ** New: Screen alert and timer for Dark Tide raid wide damaging ability.
 ** New: Screen alert and timer for Surge.
@@ -51,6 +62,8 @@ Hammerknell
 ** Fixed: Denizar's alerts and timers group option errors.
 * Akylios
 ** Fixed: Mind Decay now triggers for all players effected. Not just the first one triggered.
+** Change: The initial timer for the first Tidal Wave for P4 has been increased slightly to better align waves.
+** Change: Added a phase limit to the second lasher timer to stop it triggering once after the submerge timer.
 
 Rise of the Phoenix
 * Arakhurn

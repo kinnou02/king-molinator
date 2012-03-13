@@ -67,23 +67,28 @@ HG.Lang.Unit.Gaurath:SetRussian("Глашатай Гораф")
 HG.Lang.Ability = {}
 HG.Lang.Ability.Breath = KBM.Language:Add("Breath of the Void")
 HG.Lang.Ability.Breath:SetGerman("Odem der Leere")
+HG.Lang.Ability.Breath:SetFrench("Souffle du Néant")
 HG.Lang.Ability.Breath:SetRussian("Дыхание Пустоты")
 HG.Lang.Ability.Raise = KBM.Language:Add("Raise the Dead")
 HG.Lang.Ability.Raise:SetGerman("Erweckung der Toten")
+HG.Lang.Ability.Raise:SetFrench("Résurrection des morts")
 HG.Lang.Ability.Raise:SetRussian("Поднять мертвых")
 HG.Lang.Ability.Tidings = KBM.Language:Add("Tidings of Woe")
 HG.Lang.Ability.Tidings:SetGerman("Leidvolle Kunde")
+HG.Lang.Ability.Tidings:SetFrench("Nouvelles du Malheur")
 HG.Lang.Ability.Tidings:SetRussian("Плохие известия")
 
 -- Verbose Dictionary
 HG.Lang.Verbose = {}
 HG.Lang.Verbose.Raise = KBM.Language:Add("Death group rise")
 HG.Lang.Verbose.Raise:SetGerman("Erweckung der Toten")
+HG.Lang.Verbose.Raise:SetFrench("Résurrection des morts")
 HG.Lang.Verbose.Raise:SetRussian("Призыв аддов")
 
 -- Notify Dictionary
 HG.Lang.Notify = {}
 HG.Lang.Notify.Tidings = KBM.Language:Add("unleashes woeful tidings upon (%a*)")
+HG.Lang.Notify.Tidings:SetFrench("déchaine son pouvoir sur (%a*)")
 HG.Lang.Notify.Tidings:SetGerman("entfesselt traurige Kunde auf (%a*)")
 
 HG.Gaurath.Name = HG.Lang.Unit.Gaurath[KBM.Lang]

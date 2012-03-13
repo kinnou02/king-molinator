@@ -68,6 +68,7 @@ KBM.RegisterMod(PH.ID, PH)
 PH.Lang.Unit = {}
 PH.Lang.Unit.Hylas = KBM.Language:Add(PH.Hylas.Name)
 PH.Lang.Unit.Hylas:SetGerman("Prinz Hylas")
+PH.Lang.Unit.Hylas:SetFrench("Prince Hylas")
 PH.Lang.Unit.Hylas:SetRussian("Принц Гилас")
 -- Additional Unit Dictionary
 PH.Lang.Unit.Duke = KBM.Language:Add("Duke Letareus")
@@ -80,36 +81,43 @@ PH.Lang.Unit.Johlen:SetFrench("Infiltrateur Johlen")
 PH.Lang.Unit.Johlen:SetRussian("Лазутчик Джохлен")
 PH.Lang.Unit.Aleria = KBM.Language:Add("Oracle Aleria")
 PH.Lang.Unit.Aleria:SetGerman("Orakel Aleria")
+PH.Lang.Unit.Aleria:SetFrench("Aleria l'Oracle")
 PH.Lang.Unit.Aleria:SetRussian("Оракул Алерия")
 
 -- Ability Dictionary
 PH.Lang.Ability = {}
 PH.Lang.Ability.Wrath = KBM.Language:Add("Prince's Wrath")
 PH.Lang.Ability.Wrath:SetGerman("Zorn des Prinzen")
+PH.Lang.Ability.Wrath:SetFrench("Courroux du Prince")
 PH.Lang.Ability.Wrath:SetRussian("Гнев принца")
 PH.Lang.Ability.Soul = KBM.Language:Add("Soul Fracture")
 PH.Lang.Ability.Soul:SetGerman("Seelenfraktur")
+PH.Lang.Ability.Soul:SetFrench("Fracture de l'âme")
 PH.Lang.Ability.Soul:SetRussian("Распад души")
 PH.Lang.Ability.Cotton = KBM.Language:Add("Contagious Cottontail")
 PH.Lang.Ability.Cotton:SetGerman("Ansteckender Baumwollschwanz")
+PH.Lang.Ability.Cotton:SetFrench("Queue de coton contagieuse")
 PH.Lang.Ability.Cotton:SetRussian("Заразный кролик")
 
 -- Buff Dictionary
 PH.Lang.Buff = {}
 PH.Lang.Buff.Life = KBM.Language:Add("Invocation of Life")
 PH.Lang.Buff.Life:SetGerman("Anrufung des Lebens")
+PH.Lang.Buff.Life:SetFrench("Invocation de Vie")
 PH.Lang.Buff.Life:SetRussian("Чары жизни")
 
 -- Phase Monitor Dictionary
 PH.Lang.Phase = {}
 PH.Lang.Phase.Critters = KBM.Language:Add("Critters")
 PH.Lang.Phase.Critters:SetGerman("Tiere")
+PH.Lang.Phase.Critters:SetFrench("Apparitions")
 PH.Lang.Phase.Critters:SetRussian("Зверушки")
 
 -- Verbose Dictionary
 PH.Lang.Verbose = {}
 PH.Lang.Verbose.Reanimate = KBM.Language:Add(" is reanimated")
 PH.Lang.Verbose.Reanimate:SetRussian(" оживает")
+PH.Lang.Verbose.Reanimate:SetFrench(" est réanimé")
 PH.Lang.Verbose.Reanimate:SetGerman(" ist auferstanden")
 
 PH.Hylas.Name = PH.Lang.Unit.Hylas[KBM.Lang]

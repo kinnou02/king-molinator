@@ -57,10 +57,14 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Palos = KBM.Language:Add(MOD.Palos.Name)
 MOD.Lang.Unit.Palos:SetGerman("Hakenmeister Palos") 
--- MOD.Lang.Unit.Palos:SetFrench("")
+MOD.Lang.Unit.Palos:SetFrench("Maître-crochet Palos")
 -- MOD.Lang.Unit.Palos:SetRussian("")
 MOD.Palos.Name = MOD.Lang.Unit.Palos[KBM.Lang]
 MOD.Descript = MOD.Palos.Name
+MOD.Lang.Unit.PalShort = KBM.Language:Add("Palos")
+MOD.Lang.Unit.PalShort:SetGerman()
+MOD.Lang.Unit.PalShort:SetFrench()
+MOD.Palos.NameShort = MOD.Lang.Unit.PalShort[KBM.Lang]
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}

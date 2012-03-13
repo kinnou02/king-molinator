@@ -103,6 +103,7 @@ BT.Lang.Menu.Flame:SetFrench("Première "..BT.Lang.Ability.Flame[KBM.Lang])
 BT.Lang.Verbose = {}
 BT.Lang.Verbose.Until = KBM.Language:Add(" (Until first)")
 BT.Lang.Verbose.Until:SetRussian(" (первое)")
+BT.Lang.Verbose.Until:SetFrench(" (jusqu'à la première)")
 BT.Lang.Verbose.Until:SetGerman(" (bis zum ersten)")
 
 function BT:AddBosses(KBM_Boss)

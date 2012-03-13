@@ -61,18 +61,22 @@ DL.Letareus.Name = DL.Lang.Unit.Letareus[KBM.Lang]
 DL.Lang.Ability = {}
 DL.Lang.Ability.Wrath = KBM.Language:Add("Duke's Wrath")
 DL.Lang.Ability.Wrath:SetGerman("Zorn des Herzogs")
+DL.Lang.Ability.Wrath:SetFrench("Colère du Duc")
 DL.Lang.Ability.Wrath:SetRussian("Ярость герцога")
 
 -- Mechanic Dictionary
 DL.Lang.Mechanic = {}
 DL.Lang.Mechanic.TankPhase = KBM.Language:Add("Tank Phase")
 DL.Lang.Mechanic.TankPhase:SetRussian("Фаза танкования")
+DL.Lang.Mechanic.TankPhase:SetFrench("Phase Tank")
 DL.Lang.Mechanic.TankPhase:SetGerman("Tank Phase")
 DL.Lang.Mechanic.Tank = KBM.Language:Add("Tank")
 DL.Lang.Mechanic.Tank:SetRussian("Танкуем")
-DL.Lang.Mechanic.Tank:SetGerman("Tank")
+DL.Lang.Mechanic.Tank:SetGerman()
+DL.Lang.Mechanic.Tank:SetFrench()
 DL.Lang.Mechanic.Kite = KBM.Language:Add("Kite")
 DL.Lang.Mechanic.Kite:SetRussian("Кайтим")
+DL.Lang.Mechanic.Kite:SetFrench("Kiting")
 DL.Lang.Mechanic.Kite:SetGerman("Kite")
 
 DL.Descript = DL.Letareus.Name

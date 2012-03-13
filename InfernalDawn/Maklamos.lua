@@ -1,4 +1,4 @@
-﻿-- Maglamos the Scryer Boss Mod for King Boss Mods
+﻿-- Maklamos the Scryer Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --
@@ -14,21 +14,21 @@ local IND = KBM.BossMod["Infernal Dawn"]
 local ML = {
 	Enabled = true,
 	Directory = IND.Directory,
-	File = "Maglamos.lua",
+	File = "Maklamos.lua",
 	Instance = IND.Name,
 	Type = "20man",
 	HasPhases = true,
 	Lang = {},
-	ID = "Maglamos the Scryer",
+	ID = "Maklamos the Scryer",
 	Object = "ML",
 }
 
-ML.Maglamos = {
+ML.Maklamos = {
 	Mod = ML,
 	Level = "??",
 	Active = false,
-	Name = "Maglamos the Scryer",
-	NameShort = "Maglamos",
+	Name = "Maklamos the Scryer",
+	NameShort = "Maklamos",
 	Dead = false,
 	Available = false,
 	Menu = {},
@@ -55,34 +55,34 @@ KBM.RegisterMod(ML.ID, ML)
 
 -- Main Unit Dictionary
 ML.Lang.Unit = {}
-ML.Lang.Unit.Maglamos = KBM.Language:Add(ML.Maglamos.Name)
--- ML.Lang.Unit.Maglamos:SetGerman("")
--- ML.Lang.Unit.Maglamos:SetFrench("")
--- ML.Lang.Unit.Maglamos:SetRussian("")
+ML.Lang.Unit.Maklamos = KBM.Language:Add(ML.Maklamos.Name)
+-- ML.Lang.Unit.Maklamos:SetGerman("")
+-- ML.Lang.Unit.Maklamos:SetFrench("")
+-- ML.Lang.Unit.Maklamos:SetRussian("")
 
 -- Ability Dictionary
 ML.Lang.Ability = {}
 
-ML.Maglamos.Name = ML.Lang.Unit.Maglamos[KBM.Lang]
-ML.Descript = ML.Maglamos.Name
+ML.Maklamos.Name = ML.Lang.Unit.Maklamos[KBM.Lang]
+ML.Descript = ML.Maklamos.Name
 
 function ML:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
-		[self.Maglamos.Name] = self.Maglamos,
+		[self.Maklamos.Name] = self.Maklamos,
 	}
 end
 
 function ML:InitVars()
 	self.Settings = {
 		Enabled = true,
-		CastBar = self.Maglamos.Settings.CastBar,
+		CastBar = self.Maklamos.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		-- MechTimer = KBM.Defaults.MechTimer(),
 		-- Alerts = KBM.Defaults.Alerts(),
-		-- TimersRef = self.Maglamos.Settings.TimersRef,
-		-- AlertsRef = self.Maglamos.Settings.AlertsRef,
+		-- TimersRef = self.Maklamos.Settings.TimersRef,
+		-- AlertsRef = self.Maklamos.Settings.AlertsRef,
 	}
 	KBMINDML_Settings = self.Settings
 	chKBMINDML_Settings = self.Settings
@@ -127,16 +127,16 @@ function ML:Castbar(units)
 end
 
 function ML:RemoveUnits(UnitID)
-	if self.Maglamos.UnitID == UnitID then
-		self.Maglamos.Available = false
+	if self.Maklamos.UnitID == UnitID then
+		self.Maklamos.Available = false
 		return true
 	end
 	return false
 end
 
 function ML:Death(UnitID)
-	if self.Maglamos.UnitID == UnitID then
-		self.Maglamos.Dead = true
+	if self.Maklamos.UnitID == UnitID then
+		self.Maklamos.Dead = true
 		return true
 	end
 	return false
@@ -145,23 +145,23 @@ end
 function ML:UnitHPCheck(unitDetails, unitID)	
 	if unitDetails and unitID then
 		if not unitDetails.player then
-			if unitDetails.name == self.Maglamos.Name then
+			if unitDetails.name == self.Maklamos.Name then
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
 					self.TimeElapsed = 0
-					self.Maglamos.Dead = false
-					self.Maglamos.Casting = false
-					self.Maglamos.CastBar:Create(unitID)
+					self.Maklamos.Dead = false
+					self.Maklamos.Casting = false
+					self.Maklamos.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase("Single")
-					self.PhaseObj.Objectives:AddPercent(self.Maglamos.Name, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Maklamos.Name, 0, 100)
 					self.Phase = 1
 				end
-				self.Maglamos.UnitID = unitID
-				self.Maglamos.Available = true
-				return self.Maglamos
+				self.Maklamos.UnitID = unitID
+				self.Maklamos.Available = true
+				return self.Maklamos
 			end
 		end
 	end
@@ -169,16 +169,16 @@ end
 
 function ML:Reset()
 	self.EncounterRunning = false
-	self.Maglamos.Available = false
-	self.Maglamos.UnitID = nil
-	self.Maglamos.CastBar:Remove()
+	self.Maklamos.Available = false
+	self.Maklamos.UnitID = nil
+	self.Maklamos.CastBar:Remove()
 	self.PhaseObj:End(Inspect.Time.Real())
 end
 
 function ML:Timer()	
 end
 
-function ML.Maglamos:SetTimers(bool)	
+function ML.Maklamos:SetTimers(bool)	
 	if bool then
 		for TimerID, TimerObj in pairs(self.TimersRef) do
 			TimerObj.Enabled = TimerObj.Settings.Enabled
@@ -190,7 +190,7 @@ function ML.Maglamos:SetTimers(bool)
 	end
 end
 
-function ML.Maglamos:SetAlerts(bool)
+function ML.Maklamos:SetAlerts(bool)
 	if bool then
 		for AlertID, AlertObj in pairs(self.AlertsRef) do
 			AlertObj.Enabled = AlertObj.Settings.Enabled
@@ -203,19 +203,19 @@ function ML.Maglamos:SetAlerts(bool)
 end
 
 function ML:DefineMenu()
-	self.Menu = IND.Menu:CreateEncounter(self.Maglamos, self.Enabled)
+	self.Menu = IND.Menu:CreateEncounter(self.Maklamos, self.Enabled)
 end
 
 function ML:Start()
 	-- Create Timers
-	-- KBM.Defaults.TimerObj.Assign(self.Maglamos)
+	-- KBM.Defaults.TimerObj.Assign(self.Maklamos)
 	
 	-- Create Alerts
-	-- KBM.Defaults.AlertObj.Assign(self.Maglamos)
+	-- KBM.Defaults.AlertObj.Assign(self.Maklamos)
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Maglamos.CastBar = KBM.CastBar:Add(self, self.Maglamos)
+	self.Maklamos.CastBar = KBM.CastBar:Add(self, self.Maklamos)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()
 end

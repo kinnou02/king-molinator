@@ -28,7 +28,7 @@ MOD.Lang = {}
 MOD.Lang.Main = {}
 MOD.Lang.Main.Name = KBM.Language:Add(MOD.Name)
 MOD.Lang.Main.Name:SetGerman("Königsbresche")
--- MOD.Lang.Main.Name:SetFrench("")
+MOD.Lang.Main.Name:SetFrench("Voie Royale")
 -- MOD.Lang.Main.Name:SetRussian("")
 
 MOD.Name = MOD.Lang.Main.Name[KBM.Lang]

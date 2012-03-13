@@ -56,20 +56,24 @@ KBM.RegisterMod(OA.ID, OA)
 OA.Lang.Unit = {}
 OA.Lang.Unit.Aleria = KBM.Language:Add(OA.Aleria.Name)
 OA.Lang.Unit.Aleria:SetGerman("Orakel Aleria")
+OA.Lang.Unit.Aleria:SetFrench("Aleria l'Oracle")
 OA.Lang.Unit.Aleria:SetRussian("Оракул Алерия")
 OA.Descript = OA.Lang.Unit.Aleria[KBM.Lang]
 -- Additional Unit Dictionary
 OA.Lang.Unit.Primal = KBM.Language:Add("Primal Werewolf")
 OA.Lang.Unit.Primal:SetGerman("Ur-Werwolf")
+OA.Lang.Unit.Primal:SetFrench("Loup-garou primaire")
 OA.Lang.Unit.Primal:SetRussian("Первобытный оборотень")
 OA.Lang.Unit.Necrotic = KBM.Language:Add("Necrotic Werewolf")
 OA.Lang.Unit.Necrotic:SetGerman("Nekrotischer Werwolf")
+OA.Lang.Unit.Necrotic:SetFrench("Loup-garou nécrotique")
 OA.Lang.Unit.Necrotic:SetRussian("Разлагающийся оборотень")
 
 -- Debuff Dictionary
 OA.Lang.Debuff = {}
 OA.Lang.Debuff.Necrotic = KBM.Language:Add("Necrotic Eruption")
 OA.Lang.Debuff.Necrotic:SetGerman("Nekrotischer Ausbruch")
+OA.Lang.Debuff.Necrotic:SetFrench("Énergie nécrotique")
 OA.Lang.Debuff.Necrotic:SetRussian("Умервщляющий взрыв")
 
 OA.Primal = {

@@ -42,7 +42,7 @@ function KBMLM.Language:Add(Phrase)
 	SetPhrase.Russian = Phrase
 	SetPhrase.Korean = Phrase
 	SetPhrase.Type = "Phrase"
-	SetPhrase.Translated = {}
+	SetPhrase.Translated = {English = true}
 	function SetPhrase:SetFrench(frPhrase)
 		if frPhrase then
 			self.French = frPhrase
