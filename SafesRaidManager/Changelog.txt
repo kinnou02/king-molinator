@@ -1,4 +1,6 @@
 v1.1.2
+* Player Ready
+** Change: The .Player.Ready event will now only fire once the players name is available.
 * Death Monitoring
 ** Fixed: New group members now correctly add to LibSRM.Dead
 ** Change: Adjusted how .combat state is registered for new group members.

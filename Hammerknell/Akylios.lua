@@ -415,7 +415,7 @@ function AK.PhaseFour()
 		AK.PhaseObj.Objectives:Remove()
 		AK.Phase = 4
 		AK.PhaseObj:SetPhase(4)
-		KBM.MechTimer:AddStart(AK.Jornaru.TimersRef.WaveFour)
+		KBM.MechTimer:AddStart(AK.Jornaru.TimersRef.WaveFourFirst)
 		if AK.Jornaru.UnitID then
 			AK.Jornaru.CastBar:Create(AK.Jornaru.UnitID)
 		end

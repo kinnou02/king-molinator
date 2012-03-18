@@ -51,7 +51,7 @@ KBM.RegisterMod(WG.ID, WG)
 WG.Lang.Unit = {}
 WG.Lang.Unit.Galenir = KBM.Language:Add(WG.Galenir.Name)
 WG.Lang.Unit.Galenir:SetGerman("Kriegsmeister Galenir")
-WG.Lang.Unit.Galenir:SetFrench("Ma\195\174tre de Guerre Galenir")
+WG.Lang.Unit.Galenir:SetFrench("Maître de guerre Galenir")
 WG.Lang.Unit.Galenir:SetRussian("Воевода Галенир")
 
 -- Debuff Dictionary

@@ -645,31 +645,33 @@ local function SRM_Stall()
 		LibSRM.Player.PetID = Inspect.Unit.Lookup("player.pet")
 		PlayerDets = Inspect.Unit.Detail(LibSRM.Player.ID)
 		if PlayerDets then
-			-- Remove this Handler, start actual program
-			for i, n in ipairs(Event.System.Update.Begin) do
-				if n[2] == "SafesRaidManager" then
-					table.remove(Event.System.Update.Begin, i)
-					break
+			if PlayerDets.name then
+				-- Remove this Handler, start actual program
+				for i, n in ipairs(Event.System.Update.Begin) do
+					if n[2] == "SafesRaidManager" then
+						table.remove(Event.System.Update.Begin, i)
+						break
+					end
 				end
-			end
-			LibSRM.Player.Loaded = true
-			SRM_System.Player.Ready(LibSRM.Player.ID, PlayerDets)
-			local event = Library.LibUnitChange.Register("player.pet")
-			table.insert(Event.Combat.Damage, {SRM_Damage, "SafesRaidManager", "Damage Monitor"})
-			table.insert(Event.Combat.Heal, {SRM_Heal, "SafesRaidManager", "Heal Monitor"})
-			table.insert(Event.Combat.Death, {SRM_Death, "SafesRaidManager", "Death Monitor"})
-			table.insert(Event.Unit.Detail.Combat, {SRM_Combat, "SafesRaidManager", "Combat Monitor"})
-			table.insert(event, {SRM_PlayerPet, "SafesRaidManager", "player.pet"})
-			if LibSRM.Player.PetID then
-				--print(": Players Pet Loaded.")
-				PetDetails = Inspect.Unit.Detail(LibSRM.Player.PetID)
-				if PetDetails then
-					LibSRM.Player.PetName = PetDetails.name
+				LibSRM.Player.Loaded = true
+				SRM_System.Player.Ready(LibSRM.Player.ID, PlayerDets)
+				local event = Library.LibUnitChange.Register("player.pet")
+				table.insert(Event.Combat.Damage, {SRM_Damage, "SafesRaidManager", "Damage Monitor"})
+				table.insert(Event.Combat.Heal, {SRM_Heal, "SafesRaidManager", "Heal Monitor"})
+				table.insert(Event.Combat.Death, {SRM_Death, "SafesRaidManager", "Death Monitor"})
+				table.insert(Event.Unit.Detail.Combat, {SRM_Combat, "SafesRaidManager", "Combat Monitor"})
+				table.insert(event, {SRM_PlayerPet, "SafesRaidManager", "player.pet"})
+				if LibSRM.Player.PetID then
+					--print(": Players Pet Loaded.")
+					PetDetails = Inspect.Unit.Detail(LibSRM.Player.PetID)
+					if PetDetails then
+						LibSRM.Player.PetName = PetDetails.name
+					end
 				end
+				print(": Initialized")
+				SRM_InitRaid()
+				return
 			end
-			print(": Initialized")
-			SRM_InitRaid()
-			return
 		end
 		HP_HeldTime = current
 	end

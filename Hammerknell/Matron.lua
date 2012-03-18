@@ -99,6 +99,7 @@ MZ.Lang.Ability.Ichor:SetFrench("Ichor répugnant")
 -- Notify Dictionary
 MZ.Lang.Notify = {}
 MZ.Lang.Notify.Mark = KBM.Language:Add("Matron Zamira places the Mark of Oblivion upon (%a*).")
+MZ.Lang.Notify.Mark:SetGerman("Matrone Zamira belegt (%a*) mit dem Zeichen der Vergessenheit.")
 
 -- Debuff Dictionary
 MZ.Lang.Debuff = {}

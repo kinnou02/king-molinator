@@ -44,7 +44,6 @@ function ROTP:SaveVars()
 end
 
 function ROTP:Start()
-	KBM.MenuGroup:SetTenMan()
 	function self:Handler(bool)
 	end
 	ROTP.Menu = KBM.MainWin.Menu:CreateInstance(self.Name, true, self.Handler, "Sliver")

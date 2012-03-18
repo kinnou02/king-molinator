@@ -187,7 +187,7 @@ function MOD:Death(UnitID)
 		elseif self.Squersh.UnitID == UnitID then
 			self.Squersh.Dead = true
 		end
-		if self.Mursh.Dead and self.Squersh.Dead then
+		if self.Mursh.Dead == true and self.Squersh.Dead == true then
 			self.PhaseTwo()
 		end
 	end
@@ -204,18 +204,20 @@ function MOD:UnitHPCheck(unitDetails, unitID)
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
 					self.TimeElapsed = 0
-					BossObj.Dead = false
 					BossObj.Casting = false
+					self.PhaseObj:Start(self.StartTime)
 					if BossObj.Name == self.Braxtepel.Name then
 						BossObj.CastBar:Create(unitID)
+						self.PhaseObj:SetPhase("2")
+						self.PhaseObj.Objective:AddPercent(self.Braxtepel.Name, 0, 100)
+						self.Phase = 1
+					else
+						self.PhaseObj:SetPhase("1")
+						self.PhaseObj.Objectives:AddPercent(self.Mursh.Name, 0, 100)
+						self.PhaseObj.Objectives:AddPercent(self.Squersh.Name, 0, 100)
+						self.Phase = 1
 					end
-					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase("1")
-					self.PhaseObj.Objectives:AddPercent(self.Mursh.Name, 0, 100)
-					self.PhaseObj.Objectives:AddPercent(self.Squersh.Name, 0, 100)
-					self.Phase = 1
 				else
-					BossObj.Dead = false
 					BossObj.Casting = false
 					if BossObj.Name == self.Braxtepel.Name then
 						BossObj.CastBar:Create(unitID)
@@ -223,7 +225,7 @@ function MOD:UnitHPCheck(unitDetails, unitID)
 				end
 				BossObj.UnitID = unitID
 				BossObj.Available = true
-				return self.Braxtepel
+				return BossObj
 			end
 		end
 	end
@@ -234,6 +236,8 @@ function MOD:Reset()
 	for BossName, BossObj in pairs(self.Bosses) do
 		BossObj.Available = false
 		BossObj.UnitID = nil
+		BossObj.Dead = false
+		BossObj.Casting = false
 	end
 	self.Braxtepel.CastBar:Remove()	
 	self.PhaseObj:End(Inspect.Time.Real())

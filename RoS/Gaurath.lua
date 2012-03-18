@@ -60,7 +60,7 @@ KBM.RegisterMod(HG.ID, HG)
 HG.Lang.Unit = {}
 HG.Lang.Unit.Gaurath = KBM.Language:Add(HG.Gaurath.Name)
 HG.Lang.Unit.Gaurath:SetGerman("Herold Gaurath")
-HG.Lang.Unit.Gaurath:SetFrench("H\195\169raut Gaurath")
+HG.Lang.Unit.Gaurath:SetFrench("Héraut Gaurath")
 HG.Lang.Unit.Gaurath:SetRussian("Глашатай Гораф")
 
 -- Ability Dictionary
@@ -71,7 +71,7 @@ HG.Lang.Ability.Breath:SetFrench("Souffle du Néant")
 HG.Lang.Ability.Breath:SetRussian("Дыхание Пустоты")
 HG.Lang.Ability.Raise = KBM.Language:Add("Raise the Dead")
 HG.Lang.Ability.Raise:SetGerman("Erweckung der Toten")
-HG.Lang.Ability.Raise:SetFrench("Résurrection des morts")
+HG.Lang.Ability.Raise:SetFrench("Résurrection des Morts")
 HG.Lang.Ability.Raise:SetRussian("Поднять мертвых")
 HG.Lang.Ability.Tidings = KBM.Language:Add("Tidings of Woe")
 HG.Lang.Ability.Tidings:SetGerman("Leidvolle Kunde")
@@ -82,13 +82,13 @@ HG.Lang.Ability.Tidings:SetRussian("Плохие известия")
 HG.Lang.Verbose = {}
 HG.Lang.Verbose.Raise = KBM.Language:Add("Death group rise")
 HG.Lang.Verbose.Raise:SetGerman("Erweckung der Toten")
-HG.Lang.Verbose.Raise:SetFrench("Résurrection des morts")
+HG.Lang.Verbose.Raise:SetFrench("Résurrection des Morts")
 HG.Lang.Verbose.Raise:SetRussian("Призыв аддов")
 
 -- Notify Dictionary
 HG.Lang.Notify = {}
 HG.Lang.Notify.Tidings = KBM.Language:Add("unleashes woeful tidings upon (%a*)")
-HG.Lang.Notify.Tidings:SetFrench("déchaine son pouvoir sur (%a*)")
+HG.Lang.Notify.Tidings:SetFrench("déchaîne son pouvoir sur (%a*)")
 HG.Lang.Notify.Tidings:SetGerman("entfesselt traurige Kunde auf (%a*)")
 
 HG.Gaurath.Name = HG.Lang.Unit.Gaurath[KBM.Lang]

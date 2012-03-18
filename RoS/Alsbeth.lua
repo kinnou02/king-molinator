@@ -131,7 +131,7 @@ AD.Lang.Ability.Meteor:SetRussian("Метеор раздора")
 -- Notify Dictionary
 AD.Lang.Notify = {}
 AD.Lang.Notify.Punish = KBM.Language:Add("(%a*)'s soul is wracked with energy!")
-AD.Lang.Notify.Punish:SetFrench("L'âme de (%a*) est ravagée par l'énergie!")
+AD.Lang.Notify.Punish:SetFrench("L'âme de (%a*) est ravagée par l'énergie !")
 AD.Lang.Notify.Punish:SetGerman("Die Seele von (%a*) wird mit Energie überladen!")
 
 -- Buff Dictionary

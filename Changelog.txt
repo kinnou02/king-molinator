@@ -17,7 +17,7 @@ Engine
 * Unit Tracking
 ** New: Units are now constantly tracked and monitored.
 ** New: Smart caching system tracks all seen units and groups them for fast reference.
-** New: Dead Units are removed from the tracking system every 60 seconds to avoid memory leaks.
+** New: Idle Units are removed from the tracking system every 10 minutes to avoid memory build up.
 ** NOTE: Please report any FPS issues with regards to this new system.
 
 Alerts
@@ -39,9 +39,9 @@ Infernal Dawn
 ** New: Added base template for the encounter. (EN)
 * Maglamos the Scryer
 ** New: Added base template for the encounter. (EN)
-* Rusilia Dreadblade
+* Ruslia Dreadblade
 ** New: Added base template for the encounter. (EN)
-* Itualxi
+* Ituziel
 ** New: Added base template for the encounter. (EN)
 * The Ember Conclave
 ** New: Added base template for the encounter. (EN)
@@ -73,8 +73,12 @@ Rise of the Phoenix
 ** Change: Recalculated the first Nova in P3 via latest video footage to hopefully be more accurate. Based on Trigger message.
 ** Change: Recalculated the first Fiery Metamorphosis in P3 via the same methods as above.
 
+Darkening Deeps
+* Expert and Master Mode
+** Fixed: Alchemist Braxtepel was not trigger phase 2 correctly. Although records have been recording accurately.
+
 French Translations
-* MAJOR additions for Hammerknell, Rise of the Phoenix and general Options page.
+* MAJOR additions for Hammerknell, Greenscale's Blight, River of Souls, Rise of the Phoenix, Drowned Halls, Gilded Prophecy, Master Modes and Expert Dungeons and general Options page additions.
 
 Russian Translations
 * MINOR fixes for T1 and T2 raids, along with new translations and additional dictionary definitions.

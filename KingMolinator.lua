@@ -16,17 +16,37 @@ KBM.Unit = {
 	UIDs = {
 		Available = {},
 		Idle = {},
+		Flush = {},
+		Count = {
+			Available = 0,
+			Idle = 0,
+		},
+	},
+	List = {
+		UID = {},
+		Type = {},
+		Name = {},
 	},
 	NPC = {
-		Friendly = {},
-		Hostile = {},
-		Neutral = {},
+		friendly = {},
+		hostile = {},
+		neutral = {},
+		unknown = {},
 		Count = 0,
 	},
 	Player = {
-		Friendly = {},
-		Hostile = {},
-		Neutral = {},
+		friendly = {},
+		hostile = {},
+		neutral = {},
+		unknown = {},
+		Count = 0,
+	},
+	Unknown = {
+		List = {},
+		neutral = {},
+		hostile = {},
+		friendly = {},
+		unknown = {},
 		Count = 0,
 	},
 	Names = {},
@@ -427,6 +447,10 @@ local function KBM_DefineVars(AddonID)
 			Character = false,
 			Enabled = true,
 			Debug = false,
+			DebugSettings = {
+				x = false,
+				y = false,
+			},
 			Frame = {
 				x = false,
 				y = false,
@@ -2542,8 +2566,16 @@ function KBM.MobDamage(info)
 		local tDetails = Inspect.Unit.Detail(tUnitID)
 		local cUnitID = info.caster
 		local cDetails = nil
+		local UnitObj = nil
 		if cUnitID then
 			cDetails = Inspect.Unit.Detail(cUnitID)
+		end
+		if tUnitID then
+			UnitObj = KBM.Unit:Add(tDetails, tUnitID)
+			UnitObj:DamageHandler(info)
+		end
+		if cUnitID then
+			KBM.Unit:Add(cDetails, cUnitID)
 		end
 		if KBM.Encounter then
 			-- Check for damage done to the raid by Bosses
@@ -2672,8 +2704,16 @@ function KBM.RaidDamage(info)
 		local tDetails = Inspect.Unit.Detail(tUnitID)
 		local cUnitID = info.caster
 		local cDetails = nil
+		local UnitObj = nil
 		if cUnitID then
 			cDetails = Inspect.Unit.Detail(cUnitID)
+		end
+		if tUnitID then
+			UnitObj = KBM.Unit:Add(tDetails, tUnitID)
+			UnitObj:DamageHandler(info)
+		end
+		if cUnitID then
+			UnitObj = KBM.Unit:Add(cDetails, cUnitID)
 		end
 		if KBM.BossID[tUnitID] then
 			-- Damage inflicted to a Boss Unit by the Raid.
@@ -2782,134 +2822,328 @@ function KBM.RaidDamage(info)
 	end	
 end
 
-function KBM.Unit:DamageHandler()
+function KBM.Unit:Create(uDetails, UnitID)
+	local UnitObj = {
+		Available = false,
+		UnitID = UnitID,
+	}
+	function UnitObj:DamageHandler(DamageObj)
+		if self.Available then
+		
+		else
+		
+		end
+	end
+	function UnitObj:UpdateData(uDetails)
+		if uDetails then
+			if (self.Relation ~= uDetails.relation) and uDetails.relation ~= nil then
+				if self.Group ~= nil then
+					if KBM.Unit[self.Group] then
+						if KBM.Unit[self.Group][self.Relation] then
+							KBM.Unit[self.Group][self.Relation][UnitID] = nil
+						end
+					end
+				end
+				self.Relation = uDetails.relation
+			elseif self.Relation == nil then
+				self.Relation = "neutral"
+			end
+			self.Available = true
+			if uDetails.player then
+				self:SetGroup("Player")
+				self.Player = true
+			else
+				self:SetGroup("NPC")
+				self.Player = false
+			end
+			self.Details = uDetails
+			self:SetName(uDetails.name)
+		else
+			if not self.Group then
+				if self.Relation ~= "unknown" then
+					if self.Relation == nil then
+						self.Relation = "unknown"
+					end
+				end
+				self:SetGroup("Unknown")
+				self:SetName()
+			end
+		end
+	end
+	function UnitObj:SetGroup(Group)
+		if Group then
+			if self.Group ~= Group then
+				if self.Group ~= nil then
+					KBM.Unit[self.Group].Count = KBM.Unit[self.Group].Count - 1
+					KBM.Unit[self.Group][self.Relation][self.UnitID] = nil
+					KBM.Unit[self.Group][self.UnitID] = nil
+				end
+				self.Group = Group
+				KBM.Unit[Group][self.Relation][self.UnitID] = self
+				KBM.Unit[Group][self.UnitID] = self
+				KBM.Unit[Group].Count = KBM.Unit[Group].Count + 1
+			end
+		else
+			print("Warning: Group set as nil")
+		end
+	end
+	function UnitObj:SetName(Name)
+		if Name ~= nil then
+			if self.Name ~= Name then
+				if KBM.Unit.List.Name[self.Name] then
+					if KBM.Unit.List.Name[self.Name][self.UnitID] then
+						KBM.Unit.List.Name[self.Name][self.UnitID] = nil
+					end
+				end
+				self.Name = Name
+				if not KBM.Unit.List.Name[Name] then
+					KBM.Unit.List.Name[Name] = {}
+				end
+				KBM.Unit.List.Name[Name][self.UnitID] = self
+			end
+		else
+			if self.Name == nil then
+				self.Name = "<Unknown>"
+				Name = "<Unknown>"
+				if not KBM.Unit.List.Name[Name] then
+					KBM.Unit.List.Name[Name] = {}
+				end
+				KBM.Unit.List.Name[Name][self.UnitID] = self
+			end
+		end
+	end
+	self.List.UID[UnitID] = UnitObj
+	UnitObj:UpdateData(uDetails)
+	return UnitObj
+end
 
+KBM.Unit.Debug = {}
+function KBM.Unit.Debug:Init()
+	self.Constant = {
+		Width = 150,
+		Height = 20,
+		Text = 12,
+	}
+	self.Callbacks = {}
+	function self.Callbacks.Position(Type)
+		if Type == "end" then
+			KBM.Options.DebugSettings.x = KBM.Unit.Debug.GUI.Header:GetLeft()
+			KBM.Options.DebugSettings.y = KBM.Unit.Debug.GUI.Header:GetTop()
+		end
+	end
+	self.GUI = {}
+	self.GUI.Header = UI.CreateFrame("Texture", "Unit_Tracking_Debug_Header", KBM.Context)
+	self.GUI.Header:SetWidth(self.Constant.Width)
+	self.GUI.Header:SetHeight(self.Constant.Height)
+	self.GUI.Header:SetTexture("KingMolinator", "Media/BarTexture.png")
+	self.GUI.Header:SetBackgroundColor(0.5, 0, 0, 0.75)
+	if not KBM.Options.DebugSettings.x then
+		self.GUI.Header:SetPoint("CENTER", UIParent, "CENTER")
+	else
+		self.GUI.Header:SetPoint("TOPLEFT", UIParent, "TOPLEFT", KBM.Options.DebugSettings.x, KBM.Options.DebugSettings.y)
+	end
+	self.GUI.HeadText = UI.CreateFrame("Text", "Unit_Tracking_Debug_HText", self.GUI.Header)
+	self.GUI.HeadText:SetFontSize(self.Constant.Text)
+	self.GUI.HeadText:SetText("Unit Tracker")
+	self.GUI.HeadText:SetPoint("CENTER", self.GUI.Header, "CENTER")
+	self.GUI.DragFrame = KBM.AttachDragFrame(self.GUI.Header, self.Callbacks.Position, 5)
+	self.GUI.Trackers = {}
+	self.GUI.LastTracker = self.GUI.Header
+	function self:CreateTrack(Name, R, G, B)
+		local TrackObj = {
+			GUI = {},
+		}
+		TrackObj.GUI.Frame = UI.CreateFrame("Frame", Name, self.GUI.Header)
+		TrackObj.GUI.Frame:SetBackgroundColor(0,0,0,0.33)
+		TrackObj.GUI.Frame:SetPoint("TOPLEFT", self.GUI.LastTracker, "BOTTOMLEFT")
+		TrackObj.GUI.Frame:SetPoint("RIGHT", self.GUI.LastTracker, "RIGHT")
+		TrackObj.GUI.Frame:SetHeight(self.Constant.Height)
+		TrackObj.GUI.Text = UI.CreateFrame("Text", Name.."_Text", TrackObj.GUI.Frame)
+		TrackObj.GUI.Text:SetText(Name)
+		TrackObj.GUI.Text:SetFontSize(self.Constant.Text)
+		TrackObj.GUI.Text:SetPoint("CENTERLEFT", TrackObj.GUI.Frame, "CENTERLEFT", 2, 0)
+		TrackObj.GUI.Data = UI.CreateFrame("Text", Name.."_Data", TrackObj.GUI.Frame)
+		TrackObj.GUI.Data:SetText("0")
+		TrackObj.GUI.Data:SetFontColor(R, G, B)
+		TrackObj.GUI.Data:SetFontSize(self.Constant.Text)
+		TrackObj.GUI.Data:SetPoint("CENTERRIGHT", TrackObj.GUI.Frame, "CENTERRIGHT", -2, 0)
+		function TrackObj:UpdateDisplay(New)
+			self.GUI.Data:SetText(tostring(New))
+		end
+		self.GUI.Trackers[Name] = TrackObj
+		self.GUI.LastTracker = TrackObj.GUI.Frame
+	end
+	self:CreateTrack("Idle", 0.9, 0.5, 0.35)
+	self:CreateTrack("Available", 0, 0.9, 0)
+	self:CreateTrack("Total States", 1, 1, 1)
+	self:CreateTrack("Unknown", 1, 0.7, 0.7)
+	self:CreateTrack("Players", 0.7, 1, 0.7)
+	self:CreateTrack("NPCs", 0.7, 0.7, 1)
+	self:CreateTrack("Total Groups", 1, 1, 1)
+	function self:UpdateAll()
+		self.GUI.Trackers["Idle"]:UpdateDisplay(KBM.Unit.UIDs.Count.Idle)
+		self.GUI.Trackers["Available"]:UpdateDisplay(KBM.Unit.UIDs.Count.Available)
+		self.GUI.Trackers["Total States"]:UpdateDisplay(KBM.Unit.UIDs.Count.Idle + KBM.Unit.UIDs.Count.Available)
+		self.GUI.Trackers["Unknown"]:UpdateDisplay(KBM.Unit.Unknown.Count)
+		self.GUI.Trackers["Players"]:UpdateDisplay(KBM.Unit.Player.Count)
+		self.GUI.Trackers["NPCs"]:UpdateDisplay(KBM.Unit.NPC.Count)
+		self.GUI.Trackers["Total Groups"]:UpdateDisplay(KBM.Unit.Unknown.Count + KBM.Unit.Player.Count + KBM.Unit.NPC.Count)
+	end
 end
 
 function KBM.Unit:Add(uDetails, UnitID)
-	if not self.Dead[UnitID] then
-		if uDetails.health == 0 then
-			self:Death(UnitID)
-			return
+	local UnitObj = nil
+	if uDetails then
+		if not self.List.UID[UnitID] then
+			UnitObj = self:Create(uDetails, UnitID)
 		else
-			if (not self.UIDs.Available[UnitID]) and (not self.UIDs.Idle[UnitID]) then
-				if KBM.Debug then
-					print("New unit seen by tracking engine")
-				end
-				if uDetails.player then
-					if KBM.Debug then
-						print("Unit is a player: "..uDetails.name)
-					end
-					if uDetails.relation == "hostile" then
-						if KBM.Debug then
-							print("Player is Hostile: "..UnitID)
-						end
-						self.Player.Hostile[UnitID] = {
-							Relation = "hostile",
-							Player = true,
-							Dead = false,
-							Details = uDetails,
-							DamageHandler = function () self.DamageHandler(self) end,
-						}
-						self.UIDs.Available[UnitID] = self.Player.Hostile[UnitID]
-					elseif uDetails.relation == "friendly" then
-						if KBM.Debug then
-							print("Player is Friendly: "..UnitID)
-						end
-						self.Player.Friendly[UnitID] = {
-							Relation = "friendly",
-							Player = true,
-							Dead = false,
-							Details = uDetails,
-							DamageHandler = function () self.DamageHandler(self) end,
-						}
-						self.UIDs.Available[UnitID] = self.Player.Friendly[UnitID]
-					else
-						-- Not sure if this could ever happen, maybe if they're out unflagged?
-						if KBM.Debug then
-							print("Player is Neutral?: "..UnitID)
-						end
-						self.Player.Neutral[UnitID] = {
-							Relation = "neutral",
-							Player = true,
-							Dead = false,
-							Details = uDetails,
-							DamageHandler = function () self.DamageHandler(self) end,
-						}
-						self.UIDs.Available[UnitID] = self.Player.Neutral[UnitID]
-					end
-					self.Player.Count = self.Player.Count + 1
-				else
-					if KBM.Debug then
-						print("Unit is an NPC: "..uDetails.name)
-					end
-					if uDetails.relation == "hostile" then
-						self.NPC.Hostile[UnitID] = {
-							Relation = "hostile",
-							Player = false,
-							Dead = false,
-							Details = uDetails,
-							DamagerHandler = function () self.DamageHandler(self) end,
-						}
-						self.UIDs.Available = self.NPC.Hostile[UnitID]
-					elseif uDetails.relation == "friendly" then
-						self.NPC.Friendly[UnitID] = {
-							Relation = "friendly",
-							Player = false,
-							Dead = false,
-							DamagerHandler = function () self.DamageHandler(self) end,
-							Details = uDetails,
-						}
-						self.DamageHandler(self.NPC.Friendly[UnitID])
-						self.UIDs.Available[UnitID] = self.NPC.Friendly[UnitID]
-					else
-						self.NPC.Neutral[UnitID] = {
-							Relation = "neutral",
-							Player = false,
-							Dead = false,
-							DamagerHandler = function () self.DamageHandler(self) end,
-							Details = uDetails,
-						}
-						self.DamageHandler(self.NPC.Neutral[UnitID])
-						self.UIDs.Available[UnitID] = self.NPC.Neutral[UnitID]
-					end
-					self.NPC.Count = self.NPC.Count + 1
-				end
-			else
-				if self.UIDs.Idle[UnitID] then
-					
-				end
-			end
+			UnitObj = self.List.UID[UnitID]
+			UnitObj:UpdateData(uDetails)
 		end
+		if (self.UIDs.Available[UnitID] == nil) and (self.UIDs.Idle[UnitID] == nil) then
+			self.UIDs.Available[UnitID] = UnitObj
+			self.UIDs.Count.Available = self.UIDs.Count.Available + 1
+			if uDetails.type then
+				if not self.List.Type[uDetails.type] then
+					self.List.Type[uDetails.type] = {}
+				end
+				self.List.Type[uDetails.type][UnitID] = UnitObj
+			end
+			if KBM.Debug then
+				self.Debug:UpdateAll()
+			end
+			return UnitObj
+		else
+			if self.UIDs.Idle[UnitID] then
+				self.UIDs.Available[UnitID] = self.UIDs.Idle[UnitID]
+				self.UIDs.Idle[UnitID] = nil
+				self.UIDs.Count.Idle = self.UIDs.Count.Idle - 1
+				self.UIDs.Count.Available = self.UIDs.Count.Available + 1
+				if self.UIDs.Flush[self.UIDs.Available[UnitID].Time][UnitID] then
+					self.UIDs.Flush[self.UIDs.Available[UnitID].Time][UnitID] = nil
+				end
+				self.UIDs.Available[UnitID].Time = nil
+				self.UIDs.Available[UnitID].Available = true
+				-- if self.UIDs.Available[UnitID].Relation ~= uDetails.relation and uDetails.relations ~= nil then
+					-- self[self.UIDs.Available[UnitID].Group][self.UIDs.Available[UnitID].Relation][UnitID] = nil
+					-- self[self.UIDs.Available[UnitID].Group][uDetails.relation][UnitID] = self.UIDs.Available[UnitID]
+					-- self.UIDs.Available[UnitID].Relation = uDetails.relation
+				-- end
+			-- elseif self.Unknown[UnitID] then
+				-- self.UIDs.Available[UnitID] = self.Unknown[UnitID]
+				-- self.UIDs.Count.Available = self.UIDs.Count.Available + 1
+				-- self.Unknown.Count = self.Unknown.Count - 1
+				-- self.Unknown.unknown[UnitID] = nil
+				-- self.Unknown[UnitID] = nil
+				-- UnitObj:UpdateData(uDetails)
+			end
+			if KBM.Debug then
+				self.Debug:UpdateAll()
+			end
+			return UnitObj
+		end
+	else
+		if not self.List.UID[UnitID] then
+			UnitObj = self:Idle(UnitID)
+		else
+			UnitObj = self.List.UID[UnitID]
+		end
+		if KBM.Debug then
+			self.Debug:UpdateAll()
+		end
+		return UnitObj
 	end
 end
 
 function KBM.Unit:Idle(UnitID)
-	self.UIDs.Idle[UnitID] = self.UIDs.Available[UnitID]
-	self.UIDs.Available[UnitD] = nil
-	self.UIDs.Idle[UnitID].IdleStart = Inspect.Time.Real()
+	local Number = 0
+	if self.UIDs.Available[UnitID] then
+		self.UIDs.Idle[UnitID] = self.UIDs.Available[UnitID]
+		self.UIDs.Available[UnitID] = nil
+		self.UIDs.Idle[UnitID].Available = false
+		Number = math.floor((Inspect.Time.Real() + 600) / 60)
+		self.UIDs.Idle[UnitID].Time = Number
+		if not self.UIDs.Flush[Number] then
+			self.UIDs.Flush[Number] = {}
+		end
+		self.UIDs.Flush[Number][UnitID] = self.UIDs.Idle[UnitID]
+		self.UIDs.Count.Idle = self.UIDs.Count.Idle + 1
+		self.UIDs.Count.Available = self.UIDs.Count.Available - 1
+		if KBM.Debug then
+			self.Debug:UpdateAll()
+		end		
+		return self.UIDs.Idle[UnitID]
+	else
+		if self.List.UID[UnitID] == nil then
+			self:Create(nil, UnitID)
+			if not self.UIDs.Idle[UnitID] then
+				self.UIDs.Idle[UnitID] = self.List.UID[UnitID]
+				self.UIDs.Idle[UnitID].Available = false
+				Number = math.floor((Inspect.Time.Real() + 600) / 60)
+				self.UIDs.Idle[UnitID].Time = Number
+				if not self.UIDs.Flush[Number] then
+					self.UIDs.Flush[Number] = {}
+				end
+				self.UIDs.Flush[Number][UnitID] = self.UIDs.Idle[UnitID]
+				self.UIDs.Count.Idle = self.UIDs.Count.Idle + 1
+			end
+			return self.Unknown[UnitID]
+		else
+			if not self.UIDs.Idle[UnitID] then
+				self.UIDs.Idle[UnitID] = self.List.UID[UnitID]
+				self.UIDs.Idle[UnitID].Available = false
+				Number = math.floor((Inspect.Time.Real() + 600) / 60)
+				self.UIDs.Idle[UnitID].Time = Number
+				if not self.UIDs.Flush[Number] then
+					self.UIDs.Flush[Number] = {}
+				end
+				self.UIDs.Flush[Number][UnitID] = self.UIDs.Idle[UnitID]
+				self.UIDs.Count.Idle = self.UIDs.Count.Idle + 1				
+			end
+			return self.Unknown[UnitID]
+		end
+	end
+end
+
+function KBM.Unit:CheckIdle(CurrentTime)
+	local CompTime = math.floor(CurrentTime / 60)
+	if self.UIDs.Flush[CompTime] then
+		for UnitID, UnitObj in pairs(self.UIDs.Flush[CompTime]) do
+			if self.UIDs.Idle[UnitID] then
+				self.UIDs.Idle[UnitID] = nil
+				self.UIDs.Count.Idle = self.UIDs.Count.Idle - 1
+				self[UnitObj.Group].Count = self[UnitObj.Group].Count - 1
+				self[UnitObj.Group][UnitObj.Relation][UnitID] = nil
+				self[UnitObj.Group][UnitID] = nil
+				self.List.UID[UnitID] = nil
+				if self.List.Name[UnitObj.Name] then
+					self.List.Name[UnitObj.Name][UnitID] = nil
+				end
+				if UnitObj.Type then
+					if self.List.Type[UnitObj.Type] then
+						self.List.Type[UnitObj.Type][UnitID] = nil
+					end
+				end
+			-- elseif self.Unknown.List[UnitID] then
+				-- self.Unknown.List[UnitID] = nil
+				-- self.Unknown.Count = self.Unknown.Count - 1
+				-- self.Unknown.unknown[UnitID] = nil
+				-- self.List.UID[UnitID] = nil
+				-- if self.List.Name[UnitObj.Name] then
+					-- self.List.Name[UnitObj.Name][UnitID] = nil
+				-- end
+			end
+		end
+		self.UIDs.Flush[CompTime] = nil
+		if KBM.Debug then
+			self.Debug:UpdateAll()
+		end
+	end
 end
 
 function KBM.Unit:Death(UnitID)
-	if KBM.Debug then
-		print("Adding Unit to Death list")
-	end
-	if self.UIDs.Idle[UnitID] then
-		if KBM.Debug then
-			print("Unit is idle and tracked: "..UnitID)
-		end
-		self.Dead[UnitID] = self.UIDs.Idle[UnitID]
-		self.UIDs.Idle[UnitID] = nil
-		self.Dead.Count = self.Dead.Count + 1
-	elseif self.UIDs.Available[UnitID] then
-		self.Dead[UnitID] = self.UIDs.Available[UnitID]
-		self.UIDs.Idle[UnitID] = nil
-		self.Dead.Count = self.Dead.Count + 1
-	else
-		self.Dead[UnitID] = {
-			NoTracking = true,
-		}
-		self.Dead.Count = self.Dead.Count + 1
+	if self.List.UID[UnitID] then
+		self.List.UID[UnitID].Dead = true
 	end
 end
 
@@ -2917,8 +3151,8 @@ local function KBM_UnitAvailable(units)
 	if KBM.Encounter then
 		for UnitID, Specifier in pairs(units) do
 			uDetails = Inspect.Unit.Detail(UnitID)
+			KBM.Unit:Add(uDetails, UnitID)
 			if uDetails then
-				KBM.Unit:Add(uDetails, UnitID)
 				if not uDetails.player then
 					KBM.CheckActiveBoss(uDetails, UnitID)
 				end
@@ -2932,8 +3166,8 @@ local function KBM_UnitAvailable(units)
 	else
 		for UnitID, Specifier in pairs(units) do
 			uDetails = Inspect.Unit.Detail(UnitID)
+			KBM.Unit:Add(uDetails, UnitID)
 			if uDetails then
-				KBM.Unit:Add(uDetails, UnitID)
 				if uDetails.mark then
 					if KBM.PlugIn.List.KBMMarkIt then
 						KBM.PlugIn.List.KBMMarkIt:MarkChange(uDetails.mark, UnitID)
@@ -4572,9 +4806,7 @@ function KBM:Timer()
 		end
 		if (current - KBM.ClearBuffers) > 60 then
 			KBM.ClearBuffers = current
-			KBM.Unit.Dead = {
-				Count = 0,
-			}
+			KBM.Unit:CheckIdle(current)
 		end
 		KBM.Updating = false
 	end
@@ -4599,7 +4831,7 @@ local function KBM_UnitRemoved(units)
 		end
 	end
 	for UnitID, Specifier in pairs(units) do
-		KBM.Unit:Death(UnitID)
+		KBM.Unit:Idle(UnitID)
 		if KBM.PlugIn.List.KBMMarkIt then
 			KBM.PlugIn.List.KBMMarkIt:MarkChange(false, UnitID)
 		end
@@ -4630,7 +4862,8 @@ end
 
 local function KBM_Death(UnitID)
 	
-	if KBM.Options.Enabled then 
+	KBM.Unit:Death(UnitID)
+	if KBM.Options.Enabled then	
 		if KBM.Encounter then
 			if UnitID then
 				if KBM.BossID[UnitID] then
@@ -5246,18 +5479,6 @@ function KBM.MenuOptions.Main:Options()
 	Button:AddCheck(KBM.Language.Options.LockButton[KBM.Lang], self.LockButton, KBM.Options.Button.Unlocked)
 end
 
-function KBM.MenuGroup:SetTenMan()
-	--self.tenMan = KBM.MainWin.Menu:CreateHeader("10-Man Raids", nil, nil, true)
-end
-
-function KBM.MenuGroup:SetMaster()
-	--self.MasterModes = KBM.MainWin.Menu:CreateHeader("Master Modes", nil, nil, true)
-end
-
-function KBM.MenuGroup:SetExperts()
-	--self.Experts = KBM.MainWin.Menu:CreateHeader("Experts", nil, nil, true)
-end
-
 function KBM.ApplySettings()
 	KBM.TankSwap.Enabled = KBM.Options.TankSwap.Enabled
 end
@@ -5267,10 +5488,20 @@ function KBM_Debug()
 		print("Debugging disabled")
 		KBM.Debug = false
 		KBM.Options.Debug = false
+		if KBM.Unit.Debug.GUI.Header then
+			KBM.Unit.Debug.GUI.Header:SetVisible(false)
+		end
 	else
 		print("Debugging enabled")
 		KBM.Debug = true
 		KBM.Options.Debug = true
+		if KBM.Unit.Debug.GUI then
+			KBM.Unit.Debug.GUI.Header:SetVisible(true)
+			KBM.Unit.Debug:UpdateAll()
+		else
+			KBM.Unit.Debug:Init()
+			KBM.Unit.Debug:UpdateAll()
+		end
 	end
 end
 
@@ -5338,6 +5569,16 @@ function KBM.LocationChange(LocationList)
 	end
 end
 
+function KBM.GroupJoin(UnitID, Specifier)
+	--KBM.Unit:Add(Inspect.Unit.Detail(UnitID), UnitID)
+end
+
+function KBM.GroupLeave(UnitID, Specifier)
+	-- if UnitID ~= KBM.Player.UnitID then
+		-- KBM.Unit:Idle(UnitID)
+	-- end
+end
+
 function KBM.RaidRes(data)
 	if KBM.Debug then
 		print("Raid Ressurect")
@@ -5357,6 +5598,15 @@ local function KBM_Start()
 	KBM.EncTimer:Init()
 	KBM.PhaseMonitor:Init()
 	KBM.Trigger:Init()
+	if KBM.Debug then
+		KBM.Unit.Debug:Init()
+	end
+	UnitList = Inspect.Unit.List()
+	if UnitList then
+		for UnitID, Specifier in pairs(UnitList) do
+			KBM.Unit:Add(Inspect.Unit.Detail(UnitID), UnitID)
+		end
+	end
 	if KBM.PlugIn.Count > 0 then
 		--KBM.MenuGroup.plugin = KBM.MainWin.Menu:CreateHeader("Plug-In", nil, nil, true)
 		for ID, PlugIn in pairs(KBM.PlugIn.List) do
@@ -5400,6 +5650,8 @@ local function KBM_Start()
 	table.insert(Event.SafesRaidManager.Group.Combat.End, {KBM.RaidCombatLeave, "KingMolinator", "Raid Combat Leave"})
 	table.insert(Event.SafesRaidManager.Group.Combat.Start, {KBM.RaidCombatEnter, "KingMolinator", "Raid Combat Enter"})
 	table.insert(Event.SafesRaidManager.Group.Combat.Res, {KBM.RaidRes, "KingMolinator", "Raid Res"})
+	table.insert(Event.SafesRaidManager.Group.Join, {KBM.GroupJoin, "KingMolinator", "Raid Member Joins"})
+	table.insert(Event.SafesRaidManager.Group.Leave, {KBM.GroupLeave, "KingMolinator", "Raid Member Leave"})
 	table.insert(Event.Unit.Castbar, {KBM_CastBar, "KingMolinator", "Cast Bar Event"})
 	table.insert(Event.System.Secure.Enter, {KBM.SecureEnter, "KingMolinator", "Secure Enter"})
 	table.insert(Event.System.Secure.Leave, {KBM.SecureLeave, "KingMolinator", "Secure Leave"})
@@ -5416,12 +5668,12 @@ local function KBM_Start()
 	KBM.MenuOptions.Main:Options()
 	table.insert(Command.Slash.Register("kbmon"), {function() KBM.StateSwitch(true) end, "KingMolinator", "KBM On"})
 	table.insert(Command.Slash.Register("kbmoff"), {function() KBM.StateSwitch(false) end, "KingMolinator", "KBM Off"})
-	--KBMLM.FindMissing()
 end
 
 local function KBM_WaitReady(unitID, uDetails)
 	KBM.Player.UnitID = unitID
 	KBM.Player.Name = uDetails.name
+	KBM.Player.Details = uDetails
 	KBM_Start()
 	for _, Mod in ipairs(KBM.ModList) do
 		Mod:AddBosses(KBM_Boss)

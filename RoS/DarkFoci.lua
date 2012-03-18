@@ -60,7 +60,7 @@ KBM.RegisterMod(DF.ID, DF)
 DF.Lang.Unit = {}
 DF.Lang.Unit.Foci = KBM.Language:Add(DF.Foci.Name)
 DF.Lang.Unit.Foci:SetGerman("Finsterer Fokus")
-DF.Lang.Unit.Foci:SetFrench("Balises T\195\169n\195\169breuses")
+DF.Lang.Unit.Foci:SetFrench("Balise ténébreuse")
 DF.Lang.Unit.Foci:SetRussian("Темное средоточия")
 -- Additional Unit Dictionary
 DF.Lang.Unit.Force = KBM.Language:Add("Force of Corruption")
