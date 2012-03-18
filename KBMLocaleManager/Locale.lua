@@ -428,10 +428,10 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Options.Character:SetFrench("Sauvegarder paramètre pour ce personnage uniquement")
 	KBM.Language.Options.Character:SetRussian("Сохранить настройки только для этого персонажа")
 	KBM.Language.Options.Character.French = "Sauvegarder configuration pour ce personnage uniquement"
-	KBM.Language.Options.ModEnabled = KBM.Language:Add("Enable King Boss Mods v"..AddonData.toc.Version)
-	KBM.Language.Options.ModEnabled:SetGerman("Aktiviere King Boss Mods v"..AddonData.toc.Version)
-	KBM.Language.Options.ModEnabled:SetRussian("Активировать King Boss Mods v"..AddonData.toc.Version)
-	KBM.Language.Options.ModEnabled:SetFrench("Activer King Boss Mods v"..AddonData.toc.Version)
+	KBM.Language.Options.ModEnabled = KBM.Language:Add("Enable King Boss Mods v"..KBMLM.KBMAddonData.toc.Version)
+	KBM.Language.Options.ModEnabled:SetGerman("Aktiviere King Boss Mods v"..KBMLM.KBMAddonData.toc.Version)
+	KBM.Language.Options.ModEnabled:SetRussian("Активировать King Boss Mods v"..KBMLM.KBMAddonData.toc.Version)
+	KBM.Language.Options.ModEnabled:SetFrench("Activer King Boss Mods v"..KBMLM.KBMAddonData.toc.Version)
 	KBM.Language.Options.Enabled = KBM.Language:Add("Enabled")
 	KBM.Language.Options.Enabled:SetGerman("Aktiviert")
 	KBM.Language.Options.Enabled:SetRussian("Активировать")
@@ -472,6 +472,7 @@ end
 function KBMLM.Start(KBM)
 	KBMLM.KBM = KBM
 	KBM.Language = KBMLM.Language
+	KBMLM.KBMAddonData = Inspect.Addon.Detail("KingMolinator")
 	KBMLM.SetMain_Lang()
 	print("Locale Manager Sync")
 end

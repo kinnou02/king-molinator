@@ -368,7 +368,7 @@ function ID.PhaseTwo()
 	ID.Phase = 2
 	ID.PhaseObj.Objectives:Remove()
 	ID.PhaseObj:SetPhase(2)
-	ID.PhaseObj.Objectives:AddDeath(ID.Slime.Name, 15)
+	ID.PhaseObj.Objectives:AddDeath(ID.Slime.Name, 3, ID.Slime.RaidID)
 	ID.PhaseObj.Objectives:AddDeath(ID.Wrangler.Name, 3)
 	ID.PhaseObj.Objectives:AddDeath(ID.Warden.Name, 2)
 	KBM.MechTimer:AddStart(ID.Inwar.TimersRef.GeyserFirst)

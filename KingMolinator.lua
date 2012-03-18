@@ -1802,11 +1802,12 @@ function KBM.PhaseMonitor:Init()
 			return MetaObj
 		end
 		
-		function PhaseObj.Objectives:AddDeath(Name, Total)		
+		function PhaseObj.Objectives:AddDeath(Name, Total, Type)		
 			local DeathObj = {}
 			DeathObj.Count = 0
 			DeathObj.Total = Total
 			DeathObj.Name = Name
+			DeathObj.uType = Type
 			DeathObj.Boss = BossObj
 			DeathObj.GUI = KBM.PhaseMonitor:PullObjective()
 			DeathObj.GUI:SetName(Name)
@@ -1814,10 +1815,12 @@ function KBM.PhaseMonitor:Init()
 			DeathObj.GUI.Progress:SetVisible(false)
 			DeathObj.Type = "Death"
 			
-			function DeathObj:Kill()
+			function DeathObj:Kill(UnitObj)
 				if self.Count < Total then
-					self.Count = self.Count + 1
-					self.GUI:SetObjective(self.Count.."/"..self.Total)
+					if (self.uType ~= nil and (self.uType == UnitObj.Details.type)) or self.uType == nil then
+						self.Count = self.Count + 1
+						self.GUI:SetObjective(self.Count.."/"..self.Total)
+					end
 				end
 			end
 			function DeathObj:Remove()
@@ -2826,6 +2829,7 @@ function KBM.Unit:Create(uDetails, UnitID)
 	local UnitObj = {
 		Available = false,
 		UnitID = UnitID,
+		Details = {},
 	}
 	function UnitObj:DamageHandler(DamageObj)
 		if self.Available then
@@ -3143,6 +3147,9 @@ end
 
 function KBM.Unit:Death(UnitID)
 	if self.List.UID[UnitID] then
+		self.List.UID[UnitID].Dead = true
+	else
+		self:Create(Inspect.Unit.Detail(UnitID), UnitID)
 		self.List.UID[UnitID].Dead = true
 	end
 end
@@ -4870,7 +4877,7 @@ local function KBM_Death(UnitID)
 					KBM.BossID[UnitID].dead = true
 					if KBM.PhaseMonitor.Active then
 						if KBM.PhaseMonitor.Objectives.Lists.Death[KBM.BossID[UnitID].name] then
-							KBM.PhaseMonitor.Objectives.Lists.Death[KBM.BossID[UnitID].name]:Kill()
+							KBM.PhaseMonitor.Objectives.Lists.Death[KBM.BossID[UnitID].name]:Kill(KBM.Unit.List.UID[UnitID])
 						end
 					end
 					if KBM.CurrentMod:Death(UnitID) then

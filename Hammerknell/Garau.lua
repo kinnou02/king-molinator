@@ -98,7 +98,7 @@ GU.Lang.Buff.Shield:SetFrench("Bouclier glacial")
 -- Speak Dictionary
 GU.Lang.Say = {}
 GU.Lang.Say.Power = KBM.Language:Add("Power my creation!")
-GU.Lang.Say.Power:SetFrench("Alimentez ma création*!")
+GU.Lang.Say.Power:SetFrench("Alimentez ma création !")
 GU.Lang.Say.Power:SetGerman("Macht meiner Schöpfung!")
 GU.Lang.Say.Power:SetRussian("Наполни мое творение силой!")
 GU.Lang.Say.Arcane = KBM.Language:Add("Inquisitor Garau siphons arcane essence from nearby enemies!")

@@ -72,7 +72,7 @@ KBM.RegisterMod(HA.ID, HA)
 HA.Lang.Unit = {}
 HA.Lang.Unit.Arakhurn = KBM.Language:Add(HA.Arakhurn.Name)
 HA.Lang.Unit.Arakhurn:SetGerman("Hohepriester Arakhurn")
-HA.Lang.Unit.Arakhurn:SetFrench("Grand Prêtre Arakhurn")
+HA.Lang.Unit.Arakhurn:SetFrench("Grand-prêtre Arakhurn")
 HA.Lang.Unit.Arakhurn:SetRussian("Первосвященник Аракурн")
 HA.Arakhurn.Name = HA.Lang.Unit.Arakhurn[KBM.Lang]
 HA.Descript = HA.Arakhurn.Name
@@ -102,7 +102,7 @@ HA.Lang.Ability.Nova:SetFrench("Nova de flammes")
 HA.Lang.Notify = {}
 HA.Lang.Notify.Nova = KBM.Language:Add("High Priest Arakhurn releases the fiery energy within")
 HA.Lang.Notify.Nova:SetGerman("Hohepriester Arakhurn lässt die feurige Energie seines Inneren frei.")
-HA.Lang.Notify.Nova:SetFrench("Grand prêtre Arakhurn libère l'énergie en lui")
+HA.Lang.Notify.Nova:SetFrench("Grand-prêtre Arakhurn commence à libèrer l'énergie ardente qui réside en lui")
 HA.Lang.Notify.Nova:SetRussian("Первосвященник Аракурн высвобождает скрытую внутри яростную энергию.")
 HA.Lang.Notify.Respawn = KBM.Language:Add("The lava churns violently as a large shadow moves beneath it and then rushes to the surface")
 HA.Lang.Notify.Respawn:SetGerman("Die Lava brodelt gewaltig, während sich ein großer Schatten unter ihr bewegt und dann an die Oberfläche schnellt.")
@@ -117,9 +117,11 @@ HA.Lang.Notify.Death:SetFrench("Tandis qu'Arakhurn se consume, on distingue un m
 HA.Lang.Chat = {}
 HA.Lang.Chat.Respawn = KBM.Language:Add("Come to me, my children.")
 HA.Lang.Chat.Respawn:SetGerman("Kommt zu mir, meine Kinder.")
+HA.Lang.Chat.Respawn:SetFrench("Venez à moi, mes enfants.")
 HA.Lang.Chat.Respawn:SetRussian("Ко мне, дети мои.")
 HA.Lang.Chat.Death = KBM.Language:Add("The fire within me weakens. I must regain the power of the flame.")
 HA.Lang.Chat.Death:SetGerman("Das Feuer in mir wird schwächer. Ich muss die Kraft der Flamme zurückgewinnen.")
+HA.Lang.Chat.Death:SetFrench("Le feu faiblit en moi. Je dois retrouver le pouvoir de la flamme.")
 HA.Lang.Chat.Death:SetRussian("Огонь во мне ослабевает. Я должен восполнить силу пламени.")
 
 -- Buff Dictionary
@@ -144,7 +146,7 @@ HA.Lang.Verbose.Nova:SetFrench("jusqu'à Nova de flammes")
 HA.Lang.Verbose.Nova:SetRussian("до "..HA.Lang.Ability.Nova[KBM.Lang])
 HA.Lang.Verbose.Rise = KBM.Language:Add(HA.Lang.Unit.Arakhurn[KBM.Lang].." rises")
 HA.Lang.Verbose.Rise:SetGerman(HA.Lang.Unit.Arakhurn[KBM.Lang].." erscheint")
-HA.Lang.Verbose.Rise:SetFrench("Grand Prêtre Arakhurn rises")
+HA.Lang.Verbose.Rise:SetFrench("Grand-Prêtre Arakhurn revit")
 HA.Lang.Verbose.Rise:SetRussian(HA.Lang.Unit.Arakhurn[KBM.Lang].." оживает")
 
 -- Phase Monitor Dictionary
