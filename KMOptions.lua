@@ -6,6 +6,8 @@ local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 KBM.Scroller = {}
 
+KBM.MenuIDList = {}
+
 function KBM.Scroller:Create(Type, Size, Parent, Callback)
 
 	local ScrollerObj = {}
@@ -1461,11 +1463,17 @@ function KBM.InitOptions()
 	function KBM.MainWin.Menu:CreateHeader(Text, Hook, Default, Static, Tab)
 	
 		local Header = {}
-		Tab = Tab or "Main"					
+		Tab = Tab or "Main"
 		local TabObj = KBM.MainWin.Tabs[Tab]
 		
 		Header = UI.CreateFrame("Frame", "Header_"..Text, TabObj.Menu)
+		Header.ID = Tab..Text
+		if not KBM.Options.Menu[Header.ID] then
+			KBM.Options.Menu[Header.ID] = KBM.Defaults.Menu(Header.ID)
+		end
+		KBM.MenuIDList[Header.ID] = Header
 		Header.Tab = Tab
+		Header.Settings = KBM.Options.Menu[Header.ID]
 		Header.Children = {}
 		Header:SetPoint("LEFT", TabObj.Menu, "LEFT")
 		Header:SetPoint("RIGHT", KBM.MainWin.Scroller.Main, "LEFT")
@@ -1500,6 +1508,7 @@ function KBM.InitOptions()
 		Header.TextShadow:SetLayer(1)
 		Header.Text:SetPoint("CENTERLEFT", Header.Check, "CENTERRIGHT")
 		Header.Text:SetLayer(2)
+		Header.Check.Header = Header
 		table.insert(TabObj.Headers, Header)
 		if not TabObj.LastHeader then
 			Header:SetPoint("TOP", TabObj.Menu, "TOP")
@@ -1524,12 +1533,14 @@ function KBM.InitOptions()
 		TabObj.LastHeader = Header
 		function Header.Check.Event:CheckboxChange()
 			if self:GetChecked() then
+				self.Header.Settings.Collapse = false
 				for _, Child in ipairs(self:GetParent().Children) do
 					Child:SetVisible(true)
 				end
 				self:GetParent().LastChild:SetPoint("TOP", self:GetParent().LastChild.Prev, "BOTTOM")
 				KBM.MainWin.Tabs:SubSize(-self:GetParent().ChildSize, Header.Tab)
 			else
+				self.Header.Settings.Collapse = true
 				for _, Child in ipairs(self:GetParent().Children) do
 					Child:SetVisible(false)
 				end
@@ -1573,12 +1584,19 @@ function KBM.InitOptions()
 		
 		-- New Menu Handler
 		local Instance = {}
+		Instance.ID = Tab..Name
 		local TabObj = KBM.MainWin.Tabs[Tab]
+		if not KBM.Options.Menu[Instance.ID] then
+			KBM.Options.Menu[Instance.ID] = KBM.Defaults.Menu(Instance.ID)
+		end
+		KBM.MenuIDList[Instance.ID] = Instance
+		
 		Instance.Tab = Tab
 		Instance.GUI = {}
 		Instance.GUI.Frame = UI.CreateFrame("Frame", "Instance_"..Name, TabObj.Menu)
 		Instance.GUI.Frame.Instance = Instance
 		Instance.Children = {}
+		Instance.Settings = KBM.Options.Menu[Instance.ID]
 		Instance.LastChild = nil
 		Instance.Name = Name
 		Instance.GUI.Frame:SetWidth(MenuWidth)
@@ -1631,12 +1649,14 @@ function KBM.InitOptions()
 		function Instance.GUI.Check.Event:CheckboxChange()		
 			if self.Instance.LastChild then
 				if self:GetChecked() then
+					self.Instance.Settings.Collapse = false
 					for _, Child in ipairs(self.Instance.Children) do
 						Child.GUI.Frame:SetVisible(true)
 					end
 					self.Instance.LastChild.GUI.Frame:SetPoint("TOP", self.Instance.LastChild.Prev.GUI.Frame, "BOTTOM")
 					KBM.MainWin.Tabs:SubSize(-self.Instance.ChildSize, self.Instance.Tab)
 				else
+					self.Instance.Settings.Collapse = true
 					for _, Child in ipairs(self.Instance.Children) do
 						Child.GUI.Frame:SetVisible(false)
 					end

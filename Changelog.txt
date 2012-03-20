@@ -13,12 +13,17 @@ Translation System
 * New: Slash Command /kbmlocale (will list total number missing translations for each Language, and a list of missing translations for the current language)
 * Note: /kbmlocale will return a group object stating Directory, File name and list of missing translations for that file or files.
 
+Menu
+* New: Menu headers, such as Instances and Plug-Ins now remember their collapsed state.
+
 Engine
 * Unit Tracking
 ** New: Units are now constantly tracked and monitored.
 ** New: Smart caching system tracks all seen units and groups them for fast reference.
 ** New: Idle Units are removed from the tracking system every 10 minutes to avoid memory build up.
 ** NOTE: Please report any FPS issues with regards to this new system.
+* Plug-In Interface
+** Change: KBM now communicates updates to Plug-Ins via a new Event driven interface rather then selective function calling.
 
 Alerts
 * Change: Alerts which trigger another Alert and/or Mechanic Timer after itself, now do so immediately. Not after fading.
