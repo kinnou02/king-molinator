@@ -560,7 +560,7 @@ local function KBM_LoadVars(AddonID)
 			chKBM_GlobalOptions = KBM.Options			
 		else
 			if KBM_GlobalOptions.Menu then
-				KBM.Options.Menu = KBM_GlobaleOptions.Menu
+				KBM.Options.Menu = KBM_GlobalOptions.Menu
 			end
 			KBM_GlobalOptions = KBM.Options		
 		end
@@ -2916,8 +2916,8 @@ function KBM.Unit:Create(uDetails, UnitID)
 			if not self.Available then
 				if not HealObj.heal then
 					HealObj.heal = 0
+					self.Health = self.Health + HealObj.heal
 				end
-				self.Health = self.Health + HealObj.heal
 				if self.Dead then
 					self.Dead = false
 				end
