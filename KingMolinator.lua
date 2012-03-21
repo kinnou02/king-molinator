@@ -2914,6 +2914,9 @@ function KBM.Unit:Create(uDetails, UnitID)
 	function UnitObj:HealHandler(HealObj)
 		if self.Loaded then
 			if not self.Available then
+				if not HealObj.heal then
+					HealObj.heal = 0
+				end
 				self.Health = self.Health + HealObj.heal
 				if self.Dead then
 					self.Dead = false
