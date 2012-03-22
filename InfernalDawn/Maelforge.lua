@@ -58,7 +58,7 @@ MF.Lang.Unit = {}
 MF.Lang.Unit.Maelforge = KBM.Language:Add(MF.Maelforge.Name)
 MF.Lang.Unit.Maelforge:SetGerman()
 MF.Lang.Unit.Maelforge:SetFrench()
--- MF.Lang.Unit.Maelforge:SetRussian("")
+MF.Lang.Unit.Maelforge:SetRussian("Маэлфорж")
 
 -- Ability Dictionary
 MF.Lang.Ability = {}

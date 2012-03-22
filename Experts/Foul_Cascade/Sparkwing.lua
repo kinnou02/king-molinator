@@ -58,7 +58,7 @@ MOD.Lang.Unit = {}
 MOD.Lang.Unit.Sparkwing = KBM.Language:Add(MOD.Sparkwing.Name)
 MOD.Lang.Unit.Sparkwing:SetGerman("Funkenschwinge")
 MOD.Lang.Unit.Sparkwing:SetFrench("Étinssaile")
--- MOD.Lang.Unit.Sparkwing:SetRussian("")
+MOD.Lang.Unit.Sparkwing:SetRussian("Искрокрыл")
 MOD.Sparkwing.Name = MOD.Lang.Unit.Sparkwing[KBM.Lang]
 MOD.Descript = MOD.Sparkwing.Name
 

@@ -29,7 +29,7 @@ MOD.Lang.Main = {}
 MOD.Lang.Main.Name = KBM.Language:Add(MOD.Name)
 MOD.Lang.Main.Name:SetGerman("Ekelkaskade") 
 MOD.Lang.Main.Name:SetFrench("Cascade Infecte")
--- MOD.Lang.Main.Name:SetRussian("")
+MOD.Lang.Main.Name:SetRussian("Зловещий Водопад")
 
 MOD.Name = MOD.Lang.Main.Name[KBM.Lang]
 MOD.Descript = MOD.Name

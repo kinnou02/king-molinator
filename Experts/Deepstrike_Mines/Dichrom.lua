@@ -58,7 +58,7 @@ MOD.Lang.Unit = {}
 MOD.Lang.Unit.Dichrom = KBM.Language:Add(MOD.Dichrom.Name)
 MOD.Lang.Unit.Dichrom:SetGerman("Dichrom")
 MOD.Lang.Unit.Dichrom:SetFrench("Dichrom")
--- MOD.Lang.Unit.Dichrom:SetRussian("")
+MOD.Lang.Unit.Dichrom:SetRussian("Дихром")
 MOD.Dichrom.Name = MOD.Lang.Unit.Dichrom[KBM.Lang]
 MOD.Descript = MOD.Dichrom.Name
 

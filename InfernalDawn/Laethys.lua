@@ -58,7 +58,7 @@ LT.Lang.Unit = {}
 LT.Lang.Unit.Laethys = KBM.Language:Add(LT.Laethys.Name)
 LT.Lang.Unit.Laethys:SetGerman()
 LT.Lang.Unit.Laethys:SetFrench()
--- LT.Lang.Unit.Laethys:SetRussian("")
+LT.Lang.Unit.Laethys:SetRussian("Лаэтис")
 
 -- Ability Dictionary
 LT.Lang.Ability = {}

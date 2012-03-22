@@ -58,7 +58,7 @@ MOD.Lang.Unit = {}
 MOD.Lang.Unit.Totek = KBM.Language:Add(MOD.Totek.Name)
 MOD.Lang.Unit.Totek:SetGerman("Totek der Alte") 
 MOD.Lang.Unit.Totek:SetFrench("Totek l'Ancient")
--- MOD.Lang.Unit.Totek:SetRussian("")
+MOD.Lang.Unit.Totek:SetRussian("Тотек Древний")
 MOD.Totek.Name = MOD.Lang.Unit.Totek[KBM.Lang]
 MOD.Descript = MOD.Totek.Name
 

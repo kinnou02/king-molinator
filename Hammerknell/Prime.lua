@@ -64,6 +64,7 @@ VP.Descript = VP.Prime.Name
 VP.Lang.Unit.PrimeShort = KBM.Language:Add("Vladmal")
 VP.Lang.Unit.PrimeShort:SetGerman()
 VP.Lang.Unit.PrimeShort:SetFrench()
+VP.Lang.Unit.PrimeShort:SetRussian("Владмал")
 VP.Prime.NameShort = VP.Lang.Unit.PrimeShort[KBM.Lang]
 
 -- Ability Dictionary

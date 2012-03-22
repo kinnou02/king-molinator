@@ -58,12 +58,13 @@ MOD.Lang.Unit = {}
 MOD.Lang.Unit.Krezlav = KBM.Language:Add(MOD.Krezlav.Name)
 MOD.Lang.Unit.Krezlav:SetGerman() 
 MOD.Lang.Unit.Krezlav:SetFrench()
--- MOD.Lang.Unit.Krezlav:SetRussian("")
+MOD.Lang.Unit.Krezlav:SetRussian("Грегорий Крецлав")
 MOD.Krezlav.Name = MOD.Lang.Unit.Krezlav[KBM.Lang]
 MOD.Descript = MOD.Krezlav.Name
 MOD.Lang.Unit.KrezShort = KBM.Language:Add("Krezlav")
 MOD.Lang.Unit.KrezShort:SetGerman()
 MOD.Lang.Unit.KrezShort:SetFrench()
+MOD.Lang.Unit.KrezShort:SetRussian("Крецлав")
 MOD.Krezlav.NameShort = MOD.Lang.Unit.KrezShort[KBM.Lang]
 
 -- Ability Dictionary

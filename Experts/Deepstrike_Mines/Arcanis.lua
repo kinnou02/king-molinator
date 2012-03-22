@@ -64,6 +64,7 @@ MOD.Descript = MOD.Arcanis.Name
 MOD.Lang.Unit.ArcShort = KBM.Language:Add("Arcanis")
 MOD.Lang.Unit.ArcShort:SetGerman("Arcanis")
 MOD.Lang.Unit.ArcShort:SetFrench("Arcanis")
+MOD.Lang.Unit.ArcShort:SetRussian("Арканис")
 MOD.Arcanis.NameShort = MOD.Lang.Unit.ArcShort[KBM.Lang]
 
 -- Ability Dictionary

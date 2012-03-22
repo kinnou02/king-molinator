@@ -58,7 +58,7 @@ MOD.Lang.Unit = {}
 MOD.Lang.Unit.Eliam = KBM.Language:Add(MOD.Eliam.Name)
 MOD.Lang.Unit.Eliam:SetGerman("Eliam der Verderbte") 
 MOD.Lang.Unit.Eliam:SetFrench("Eliam le Corrompu")
--- MOD.Lang.Unit.Eliam:SetRussian("")
+MOD.Lang.Unit.Eliam:SetRussian("Элиам Искаженный")
 MOD.Eliam.Name = MOD.Lang.Unit.Eliam[KBM.Lang]
 MOD.Descript = MOD.Eliam.Name
 

@@ -58,7 +58,7 @@ MOD.Lang.Unit = {}
 MOD.Lang.Unit.Rictus = KBM.Language:Add(MOD.Rictus.Name)
 MOD.Lang.Unit.Rictus:SetGerman("Rictus") 
 MOD.Lang.Unit.Rictus:SetFrench("Rictus")
--- MOD.Lang.Unit.Rictus:SetRussian("")
+MOD.Lang.Unit.Rictus:SetRussian("Риктус")
 MOD.Rictus.Name = MOD.Lang.Unit.Rictus[KBM.Lang]
 MOD.Descript = MOD.Rictus.Name
 

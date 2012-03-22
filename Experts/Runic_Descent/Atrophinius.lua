@@ -58,7 +58,7 @@ MOD.Lang.Unit = {}
 MOD.Lang.Unit.Atrophinius = KBM.Language:Add(MOD.Atrophinius.Name)
 MOD.Lang.Unit.Atrophinius:SetGerman("Atrophinius der Gefallene") 
 MOD.Lang.Unit.Atrophinius:SetFrench("Atrophinius le Déchu")
--- MOD.Lang.Unit.Atrophinius:SetRussian("")
+MOD.Lang.Unit.Atrophinius:SetRussian("Atrophinius the Fallen")
 MOD.Atrophinius.Name = MOD.Lang.Unit.Atrophinius[KBM.Lang]
 MOD.Descript = MOD.Atrophinius.Name
 
