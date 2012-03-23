@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r322"
+--KBM.Alpha = ".r323"
 KBM.Event = {
 	Mark = {},
 	Unit = {
@@ -2901,6 +2901,31 @@ function KBM.Unit:Create(uDetails, UnitID)
 		UsedBy = {},
 		Type = "Unit",
 	}
+	function UnitObj:Update()
+		if self.Loaded then
+			if self.Available then
+				local uDetails = Inspect.Unit.Detail(self.UnitID)
+				if uDetails then
+					self.Details = uDetails
+				end
+				if not self.Details.health then
+					self.Health = 0
+				else
+					self.Health = self.Details.health
+				end
+				if self.Details.healthMax then
+					self.HealthMax = self.Details.healthMax
+				end
+				self.PercentRaw = (self.Health/self.HealthMax)*100
+				self.Percent = math.ceil(self.PercentRaw)
+				if self.Mark ~= self.Details.mark then
+					self.Mark = self.Details.mark
+					KBM.Event.Mark(self.Mark, self.UnitID)
+				end
+				KBM.Event.Unit.PercentChange(self.UnitID)
+			end
+		end
+	end
 	function UnitObj:DamageHandler(DamageObj)
 		if self.Loaded then
 			if not self.Available then
@@ -2910,9 +2935,15 @@ function KBM.Unit:Create(uDetails, UnitID)
 				if DamageObj.overkill then
 					self.Health = 0
 				end
+			else
+				self.Details = Inspect.Unit.Detail(self.UnitID)
+				if self.Details then
+					self.Health = (self.Details.health or 0)
+				end
 			end
 			self.PercentRaw = (self.Health/self.HealthMax)*100
 			self.Percent = math.ceil(self.PercentRaw)
+			KBM.Event.Unit.PercentChange(self.UnitID)
 		end
 	end
 	function UnitObj:HealHandler(HealObj)
@@ -2928,6 +2959,7 @@ function KBM.Unit:Create(uDetails, UnitID)
 			end
 			self.PercentRaw = (self.Health/self.HealthMax)*100
 			self.Percent = math.ceil(self.PercentRaw)
+			KBM.Event.Unit.PercentChange(self.UnitID)
 		end
 	end
 	function UnitObj:UpdateData(uDetails)
@@ -4750,7 +4782,6 @@ function KBM:UpdateHP(UnitID)
 end
 
 KBM.ClearBuffers = 0
-
 function KBM:Timer()
 
 	local current = Inspect.Time.Real()
@@ -4770,7 +4801,12 @@ function KBM:Timer()
 		end
 		
 		if KBM.Options.Enabled then
-			if KBM.Encounter or KBM.Testing then
+			if diff >= 1 then
+				for UnitID, UnitObj in pairs(KBM.Unit.UIDs.Available) do
+					UnitObj:Update()
+				end
+			end
+			if KBM.Encounter then
 				if KBM.CurrentMod then
 					KBM.CurrentMod:Timer(current, diff)
 				end
@@ -5605,7 +5641,7 @@ end
 
 function KBM.MarkChange(units)
 	for UnitID, Mark in pairs(units) do
-		KBM.Event.Mark(Mark, UnitID)
+		--KBM.Event.Mark(Mark, UnitID)
 	end
 end
 KBM.Event.Mark, KBM.Event.Mark.EventTable = Utility.Event.Create("KingMolinator", "Mark")
@@ -5728,7 +5764,7 @@ local function KBM_Start()
 	table.insert(Event.Buff.Add, {function (unitID, Buffs) KBM:BuffMonitor(unitID, Buffs, "new") end, "KingMolinator", "Buff Monitor (Add)"})
 	table.insert(Event.Buff.Change, {function (unitID, Buffs) KBM:BuffMonitor(unitID, Buffs, "change") end, "KingMolinator", "Buff Monitor (change)"})
 	table.insert(Event.Buff.Remove, {function (unitID, Buffs) KBM:BuffMonitor(unitID, Buffs, "remove") end, "KingMolinator", "Buff Monitor (remove)"})
-	table.insert(Event.Unit.Detail.Mark, {KBM.MarkChange, "KingMolinator", "Mark_Changed_Event"})
+	--table.insert(Event.Unit.Detail.Mark, {KBM.MarkChange, "KingMolinator", "Mark_Changed_Event"})
 	table.insert(Event.SafesRaidManager.Combat.Damage, {KBM.MobDamage, "KingMolinator", "Combat Damage"})
 	table.insert(Event.SafesRaidManager.Group.Combat.Damage, {KBM.RaidDamage, "KingMolinator", "Raid Damage"})
 	table.insert(Event.SafesRaidManager.Combat.Heal, {KBM.MobHeal, "KingMolinator", "Combat Heal"})

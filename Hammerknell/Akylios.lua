@@ -674,7 +674,7 @@ function AK:Start()
 	self.Jornaru.TimersRef.WaveOne:SetPhase(1)
 	self.Jornaru.TimersRef.WaveFour = KBM.MechTimer:Add(AK.Lang.Mechanic.Wave[KBM.Lang], 50, true)
 	self.Jornaru.TimersRef.WaveFour:NoMenu()
-	self.Jornaru.TimersRef.WaveFourFirst = KBM.MechTimer:Add(AK.Lang.Mechanic.Wave[KBM.Lang], 55)
+	self.Jornaru.TimersRef.WaveFourFirst = KBM.MechTimer:Add(AK.Lang.Mechanic.Wave[KBM.Lang], 54)
 	self.Jornaru.TimersRef.WaveFourFirst.MenuName = AK.Lang.Options.WaveFour[KBM.Lang]
 	self.Jornaru.TimersRef.WaveFourFirst:AddTimer(self.Jornaru.TimersRef.WaveFour, 0)
 	if not self.Settings.PhaseAlt then
