@@ -12,10 +12,13 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
+KBM.Alpha = ".r322"
 KBM.Event = {
 	Mark = {},
 	Unit = {
 		PercentChange = {},
+		Available = {},
+		Unavailable = {},
 	},
 }
 KBM.Unit = {
@@ -2896,6 +2899,7 @@ function KBM.Unit:Create(uDetails, UnitID)
 		Percent = 100,
 		PercentRaw = 100.0,
 		UsedBy = {},
+		Type = "Unit",
 	}
 	function UnitObj:DamageHandler(DamageObj)
 		if self.Loaded then
@@ -3118,6 +3122,7 @@ function KBM.Unit:Add(uDetails, UnitID)
 			if KBM.Debug then
 				self.Debug:UpdateAll()
 			end
+			KBM.Event.Unit.Available(UnitObj)
 			return UnitObj
 		else
 			if self.UIDs.Idle[UnitID] then
@@ -3130,6 +3135,7 @@ function KBM.Unit:Add(uDetails, UnitID)
 				end
 				self.UIDs.Available[UnitID].Time = nil
 				self.UIDs.Available[UnitID].Available = true
+				KBM.Event.Unit.Available(self.List.UID[UnitID])
 			end
 			if KBM.Debug then
 				self.Debug:UpdateAll()
@@ -3161,7 +3167,8 @@ function KBM.Unit:Idle(UnitID)
 		self.UIDs.Count.Available = self.UIDs.Count.Available - 1
 		if KBM.Debug then
 			self.Debug:UpdateAll()
-		end		
+		end
+		KBM.Event.Unit.Unavailable(UnitID)
 		return self.List.UID[UnitID]
 	else
 		if self.List.UID[UnitID] == nil then
@@ -5603,6 +5610,8 @@ function KBM.MarkChange(units)
 end
 KBM.Event.Mark, KBM.Event.Mark.EventTable = Utility.Event.Create("KingMolinator", "Mark")
 KBM.Event.Unit.PercentChange, KBM.Event.Unit.PercentChange.EventTable = Utility.Event.Create("KingMolinator", "Unit.PercentChange")
+KBM.Event.Unit.Available, KBM.Event.Unit.Available.EventTable = Utility.Event.Create("KingMolinator", "Unit.Available")
+KBM.Event.Unit.Unavailable, KBM.Event.Unit.Unavailable.EventTable = Utility.Event.Create("KingMolinator", "Unit.Unavailable")
 
 function KBM.SecureEnter()
 end
@@ -5746,7 +5755,11 @@ local function KBM_Start()
 	table.insert(Command.Slash.Register("kbmlocale"), {KBMLM.FindMissing, "KBMLocaleManager", "KBM Locale Finder"})
 	-- table.insert(Command.Slash.Register("talert"), {KBM_TestAlert, "KingMolinator", "Alert Testing function"})
 	-- table.insert(Command.Slash.Register("setMod"), {KBM_SetMod, "KingMolinator", "Testing Command"})
-	print("Welcome to King Boss Mods v"..AddonData.toc.Version)
+	if KBM.Alpha then
+		print("Welcome to King Boss Mods v"..AddonData.toc.Version..KBM.Alpha)	
+	else
+		print("Welcome to King Boss Mods v"..AddonData.toc.Version)
+	end
 	print("/kbmhelp for a list of commands.")
 	print("/kbmoptions for options.")
 	KBM.MenuOptions.Main:Options()
