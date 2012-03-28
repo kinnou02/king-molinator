@@ -57,7 +57,7 @@ MOD.Lang.Unit = {}
 MOD.Lang.Unit.Gronik = KBM.Language:Add(MOD.Gronik.Name)
 MOD.Lang.Unit.Gronik:SetGerman()
 MOD.Lang.Unit.Gronik:SetFrench()
--- MOD.Lang.Unit.Gronik:SetRussian("")
+MOD.Lang.Unit.Gronik:SetRussian("Гроник")
 MOD.Gronik.Name = MOD.Lang.Unit.Gronik[KBM.Lang]
 MOD.Descript = MOD.Gronik.Name
 

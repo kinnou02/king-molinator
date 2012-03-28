@@ -58,25 +58,30 @@ MOD.Lang.Unit = {}
 MOD.Lang.Unit.Maelow = KBM.Language:Add(MOD.Maelow.Name)
 MOD.Lang.Unit.Maelow:SetGerman("Schwindler Maelow")
 MOD.Lang.Unit.Maelow:SetFrench("Entourloupeur Maelow")
--- MOD.Lang.Unit.Maelow:SetRussian("")
+MOD.Lang.Unit.Maelow:SetRussian("Ловкач Майлоу")
 MOD.Maelow.Name = MOD.Lang.Unit.Maelow[KBM.Lang]
 MOD.Descript = MOD.Maelow.Name
 MOD.Lang.Unit.MaelowShort = KBM.Language:Add(MOD.Maelow.NameShort)
 MOD.Lang.Unit.MaelowShort:SetGerman()
 MOD.Lang.Unit.MaelowShort:SetFrench()
+MOD.Lang.Unit.MaelowShort:SetRussian("Майлоу")
 MOD.Maelow.NameShort = MOD.Lang.Unit.MaelowShort[KBM.Lang]
 MOD.Lang.Unit.Brae = KBM.Language:Add("Lifeward Brae")
 MOD.Lang.Unit.Brae:SetGerman("Lebenswache Brae")
 MOD.Lang.Unit.Brae:SetFrench("Garde-vie Brae")
+MOD.Lang.Unit.Brae:SetRussian("Хранительница жизни Браэ")
 MOD.Lang.Unit.BraeShort = KBM.Language:Add("Brae")
 MOD.Lang.Unit.BraeShort:SetGerman()
 MOD.Lang.Unit.BraeShort:SetFrench()
+MOD.Lang.Unit.BraeShort:SetRussian("Браэ")
 MOD.Lang.Unit.Celoah = KBM.Language:Add("Lifeward Celoah")
 MOD.Lang.Unit.Celoah:SetGerman("Lebenswache Celoah")
 MOD.Lang.Unit.Celoah:SetFrench("Garde-vie Celoah")
+MOD.Lang.Unit.Celoah:SetRussian("Хранительница жизни Целоа")
 MOD.Lang.Unit.CeloahShort = KBM.Language:Add("Celoah")
 MOD.Lang.Unit.CeloahShort:SetGerman()
 MOD.Lang.Unit.CeloahShort:SetFrench()
+MOD.Lang.Unit.CeloahShort:SetRussian("Целоа")
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}

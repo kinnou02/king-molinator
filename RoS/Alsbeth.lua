@@ -133,6 +133,8 @@ AD.Lang.Notify = {}
 AD.Lang.Notify.Punish = KBM.Language:Add("(%a*)'s soul is wracked with energy!")
 AD.Lang.Notify.Punish:SetFrench("L'âme de (%a*) est ravagée par l'énergie !")
 AD.Lang.Notify.Punish:SetGerman("Die Seele von (%a*) wird mit Energie überladen!")
+AD.Lang.Notify.Punish:SetRussian("(%a*) чувствует, что его душа изувечена энергией!")
+AD.Lang.Notify.Meteor = KBM.Language:Add("Alsbeth the Discordant points at (%a*).")
 
 -- Buff Dictionary
 AD.Lang.Buff = {}
@@ -556,7 +558,7 @@ function AD:Start()
 	self.Alsbeth.Triggers.Blast:AddAlert(self.Alsbeth.AlertsRef.Blast)
 	self.Alsbeth.Triggers.Ground = KBM.Trigger:Create(self.Lang.Ability.Ground[KBM.Lang], "cast", self.Alsbeth)
 	self.Alsbeth.Triggers.Ground:AddAlert(self.Alsbeth.AlertsRef.Ground)
-	self.Alsbeth.Triggers.Meteor = KBM.Trigger:Create(self.Lang.Ability.Meteor[KBM.Lang], "cast", self.Alsbeth)
+	self.Alsbeth.Triggers.Meteor = KBM.Trigger:Create(self.Lang.Notify.Meteor[KBM.Lang], "notify", self.Alsbeth)
 	self.Alsbeth.Triggers.Meteor:AddTimer(self.Alsbeth.TimersRef.Meteor)
 	self.Alsbeth.Triggers.Meteor:AddAlert(self.Alsbeth.AlertsRef.Meteor)
 	self.Alsbeth.Triggers.Shield = KBM.Trigger:Create(self.Lang.Buff.Shield[KBM.Lang], "buff", self.Alsbeth)
@@ -567,6 +569,8 @@ function AD:Start()
 	self.Magus.Triggers.Soul = KBM.Trigger:Create(self.Lang.Ability.Soul[KBM.Lang], "cast", self.Magus)
 	self.Magus.Triggers.Soul:AddTimer(self.Magus.TimersRef.Soul)
 	self.Magus.Triggers.Soul:AddAlert(self.Magus.AlertsRef.Soul)
+	self.Magus.Triggers.SoulInt = KBM.Trigger:Create(self.Lang.Ability.Soul[KBM.Lang], "interrupt", self.Magus)
+	self.Magus.Triggers.SoulInt:AddStop(self.Magus.AlertsRef.Soul)
 	
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self.Alsbeth.CastBar = KBM.CastBar:Add(self, self.Alsbeth)

@@ -57,7 +57,7 @@ MOD.Lang.Unit = {}
 MOD.Lang.Unit.Smouldaron = KBM.Language:Add(MOD.Smouldaron.Name)
 MOD.Lang.Unit.Smouldaron:SetGerman("Smouldaron")
 MOD.Lang.Unit.Smouldaron:SetFrench("Flambetison")
--- MOD.Lang.Unit.Smouldaron:SetRussian("")
+MOD.Lang.Unit.Smouldaron:SetRussian("Пеплотворец")
 MOD.Smouldaron.Name = MOD.Lang.Unit.Smouldaron[KBM.Lang]
 MOD.Descript = MOD.Smouldaron.Name
 

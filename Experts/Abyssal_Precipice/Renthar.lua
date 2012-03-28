@@ -58,7 +58,7 @@ MOD.Lang.Unit = {}
 MOD.Lang.Unit.Renthar = KBM.Language:Add(MOD.Renthar.Name)
 MOD.Lang.Unit.Renthar:SetGerman()
 MOD.Lang.Unit.Renthar:SetFrench()
--- MOD.Lang.Unit.Renthar:SetRussian("")
+MOD.Lang.Unit.Renthar:SetRussian("Рентар")
 MOD.Renthar.Name = MOD.Lang.Unit.Renthar[KBM.Lang]
 MOD.Descript = MOD.Renthar.Name
 

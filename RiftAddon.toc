@@ -10,7 +10,7 @@ Author = "Paul Snart"
 Website = "http://www.facebook.com/pages/King-Boss-Mods/271482262893152"
 Email = "snarty@gmail.com"
 
-Version = "0.9.9"
+Version = "1.0.0"
 
 Environment = "1.7"
 
@@ -19,8 +19,9 @@ RunOnStartup = {
 	"KMOptions.lua",
 	"InfernalDawn/INDHeader.lua",
 	"InfernalDawn/Drak.lua",
+	"InfernalDawn/Gorlach.lua",	
 	"InfernalDawn/Maklamos.lua",
-	"InfernalDawn/Ruslia.lua",
+	"InfernalDawn/Rusila.lua",
 	"InfernalDawn/Ituziel.lua",
 	"InfernalDawn/Conclave.lua",
 	"InfernalDawn/Laethys.lua",

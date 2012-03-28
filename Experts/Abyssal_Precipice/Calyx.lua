@@ -58,12 +58,13 @@ MOD.Lang.Unit = {}
 MOD.Lang.Unit.Calyx = KBM.Language:Add(MOD.Calyx.Name)
 MOD.Lang.Unit.Calyx:SetGerman("Calyx der Alte")
 MOD.Lang.Unit.Calyx:SetFrench("Calyx l'Ancien")
--- MOD.Lang.Unit.Calyx:SetRussian("")
+MOD.Lang.Unit.Calyx:SetRussian("Каликс Древний")
 MOD.Calyx.Name = MOD.Lang.Unit.Calyx[KBM.Lang]
 MOD.Descript = MOD.Calyx.Name
 MOD.Lang.Unit.CalShort = KBM.Language:Add("Calyx")
 MOD.Lang.Unit.CalShort:SetGerman()
 MOD.Lang.Unit.CalShort:SetFrench()
+MOD.Lang.Unit.CalShort:SetRussian("Каликс")
 MOD.Calyx.NameShort = MOD.Lang.Unit.CalShort[KBM.Lang]
 
 -- Ability Dictionary

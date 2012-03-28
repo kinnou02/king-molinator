@@ -30,6 +30,7 @@ TR.Thalguur = {
 	Menu = {},
 	TimersRef = {},
 	AlertsRef = {},
+	MechRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
@@ -46,6 +47,11 @@ TR.Thalguur = {
 			Power = KBM.Defaults.AlertObj.Create("dark_green"),
 			Gold = KBM.Defaults.AlertObj.Create("yellow"),
 			Curse = KBM.Defaults.AlertObj.Create("purple"),
+		},
+		MechRef = {
+			Enabled = true,
+			Gold = KBM.Defaults.MechObj.Create("yellow"),
+			Touch = KBM.Defaults.MechObj.Create("red"),
 		},
 	},
 }
@@ -98,10 +104,12 @@ function TR:InitVars()
 		CastBar = self.Thalguur.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		MechTimer = KBM.Defaults.MechTimer(),
+		MechSpy = KBM.Defaults.MechSpy(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		Alerts = KBM.Defaults.Alerts(),
 		AlertsRef = self.Thalguur.Settings.AlertsRef,
 		TimersRef = self.Thalguur.Settings.TimersRef,
+		MechRef = self.Thalguur.Settings.MechRef,
 	}
 	KBMGPTR_Settings = self.Settings
 	chKBMGPTR_Settings = self.Settings
@@ -274,16 +282,24 @@ function TR:Start()
 	self.Thalguur.AlertsRef.Curse = KBM.Alert:Create(self.Lang.Debuff.Curse[KBM.Lang], nil, false, true, "purple")
 	KBM.Defaults.AlertObj.Assign(self.Thalguur)
 	
+	-- Create Mechanic Spies
+	self.Thalguur.MechRef.Gold = KBM.MechSpy:Add(self.Lang.Debuff.Gold[KBM.Lang], nil, "playerDebuff", self.Thalguur)
+	self.Thalguur.MechRef.Touch = KBM.MechSpy:Add(self.Lang.Ability.Touch[KBM.Lang], nil, "channel", self.Thalguur)
+	KBM.Defaults.MechObj.Assign(self.Thalguur)
+	
 	-- Assign Timers and Alerts to Triggers
 	self.Thalguur.Triggers.Touch = KBM.Trigger:Create(self.Lang.Ability.Touch[KBM.Lang], "channel", self.Thalguur)
 	self.Thalguur.Triggers.Touch:AddAlert(self.Thalguur.AlertsRef.Touch)
+	self.Thalguur.Triggers.Touch:AddSpy(self.Thalguur.MechRef.Touch)
 	self.Thalguur.Triggers.Power = KBM.Trigger:Create(self.Lang.Ability.Power[KBM.Lang], "channel", self.Thalguur)
 	self.Thalguur.Triggers.Power:AddAlert(self.Thalguur.AlertsRef.Power)
 	self.Thalguur.Triggers.Power:AddTimer(self.Thalguur.TimersRef.Power)
-	self.Thalguur.Triggers.Gold = KBM.Trigger:Create(self.Lang.Debuff.Gold[KBM.Lang], "playerBuff", self.Thalguur)
+	self.Thalguur.Triggers.Gold = KBM.Trigger:Create("B6EFA4619511ADE8D", "playerIDBuff", self.Thalguur)
 	self.Thalguur.Triggers.Gold:AddAlert(self.Thalguur.AlertsRef.Gold, true)
-	self.Thalguur.Triggers.GoldRemove = KBM.Trigger:Create(self.Lang.Debuff.Gold[KBM.Lang], "playerBuffRemove", self.Thalguur)
+	self.Thalguur.Triggers.Gold:AddSpy(self.Thalguur.MechRef.Gold)
+	self.Thalguur.Triggers.GoldRemove = KBM.Trigger:Create("B6EFA4619511ADE8D", "playerIDBuffRemove", self.Thalguur)
 	self.Thalguur.Triggers.GoldRemove:AddStop(self.Thalguur.AlertsRef.Gold)
+	self.Thalguur.Triggers.GoldRemove:AddStop(self.Thalguur.MechRef.Gold)
 	self.Thalguur.Triggers.Curse = KBM.Trigger:Create(self.Lang.Debuff.Curse[KBM.Lang], "playerBuff", self.Thalguur)
 	self.Thalguur.Triggers.Curse:AddAlert(self.Thalguur.AlertsRef.Curse, true)
 	self.Thalguur.Triggers.PhaseTwo = KBM.Trigger:Create(90, "percent", self.Thalguur)

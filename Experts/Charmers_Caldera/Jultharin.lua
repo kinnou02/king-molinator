@@ -57,7 +57,7 @@ MOD.Lang.Unit = {}
 MOD.Lang.Unit.Jultharin = KBM.Language:Add(MOD.Jultharin.Name)
 MOD.Lang.Unit.Jultharin:SetGerman() 
 MOD.Lang.Unit.Jultharin:SetFrench()
--- MOD.Lang.Unit.Jultharin:SetRussian("")
+MOD.Lang.Unit.Jultharin:SetRussian("Джалтарин")
 MOD.Jultharin.Name = MOD.Lang.Unit.Jultharin[KBM.Lang]
 MOD.Descript = MOD.Jultharin.Name
 

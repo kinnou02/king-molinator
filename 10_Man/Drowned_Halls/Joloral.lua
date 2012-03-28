@@ -29,6 +29,7 @@ JR.Joloral = {
 	Menu = {},
 	AlertsRef = {},
 	TimersRef = {},
+	MechRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
@@ -41,6 +42,10 @@ JR.Joloral = {
 			PanicDuration = KBM.Defaults.AlertObj.Create("purple"),
 		},
 		TimersRef = {
+			Enabled = true,
+			Panic = KBM.Defaults.TimerObj.Create("purple"),
+		},
+		MechRef = {
 			Enabled = true,
 			Panic = KBM.Defaults.TimerObj.Create("purple"),
 		},
@@ -102,8 +107,10 @@ function JR:InitVars()
 		Enabled = true,
 		CastBar = self.Joloral.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
+		MechSpy = KBM.Defaults.MechSpy(),
 		AlertsRef = self.Joloral.Settings.AlertsRef,
 		TimersRef = self.Joloral.Settings.TimersRef,
+		MechRef = self.Joloral.Settings.MechRef,
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		Alert = KBM.Defaults.Alerts(),
 		MechTimer = KBM.Defaults.MechTimer(),
@@ -243,12 +250,17 @@ function JR:Start()
 	self.Joloral.AlertsRef.PanicDuration.MenuName = self.Lang.Menu.Panic[KBM.Lang]
 	KBM.Defaults.AlertObj.Assign(self.Joloral)
 	
+	-- Create Mechanic Spies
+	self.Joloral.MechRef.Panic = KBM.MechSpy:Add(self.Lang.Ability.Panic[KBM.Lang], nil, "playerDebuff", self.Joloral)
+	KBM.Defaults.MechObj.Assign(self.Joloral)
+	
 	-- Assign Timers and Alerts to Triggers
 	self.Joloral.Triggers.Panic = KBM.Trigger:Create(self.Lang.Ability.Panic[KBM.Lang], "cast", self.Joloral)
 	self.Joloral.Triggers.Panic:AddTimer(self.Joloral.TimersRef.Panic)
 	self.Joloral.Triggers.Panic:AddAlert(self.Joloral.AlertsRef.Panic)
-	self.Joloral.Triggers.PanicDuration = KBM.Trigger:Create(self.Lang.Ability.Panic[KBM.Lang], "playerBuff", self.Joloral)
+	self.Joloral.Triggers.PanicDuration = KBM.Trigger:Create(self.Lang.Ability.Panic[KBM.Lang], "playerDebuff", self.Joloral)
 	self.Joloral.Triggers.PanicDuration:AddAlert(self.Joloral.AlertsRef.PanicDuration)
+	self.Joloral.Triggers.PanicDuration:AddSpy(self.Joloral.MechRef.Panic)
 	
 	self.Joloral.CastBar = KBM.CastBar:Add(self, self.Joloral, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

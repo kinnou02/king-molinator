@@ -91,6 +91,7 @@ KM.Prince = {
 	HasCastFilters = true,
 	TimersRef = {},
 	AlertsRef = {},
+	-- MechRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
@@ -121,7 +122,12 @@ KM.Prince = {
 			Essence = KBM.Defaults.AlertObj.Create("yellow"),
 			Feedback = KBM.Defaults.AlertObj.Create("blue"),
 			FeedbackWarn = KBM.Defaults.AlertObj.Create("cyan"),
-		}
+		},
+		-- MechRef = {
+			-- Enabled = true,
+			-- Crushing = KBM.Defaults.MechObj.Create("cyan"),
+			-- Rend = KBM.Defaults.MechObj.Create("dark_green"),
+		-- }
 	}
 }
 KM.King = {
@@ -138,6 +144,7 @@ KM.King = {
 	Timers = {},
 	TimersRef = {},
 	AlertsRef = {},
+	-- MechRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
@@ -170,6 +177,10 @@ KM.King = {
 			FeedbackWarn = KBM.Defaults.AlertObj.Create("cyan"),
 			Shout = KBM.Defaults.AlertObj.Create("purple"),
 		},
+		-- MechRef = {
+			-- Enabled = true,
+			-- Shout = KBM.Defaults.MechObj.Create("purple"),
+		-- }
 	},
 }
 KM.King.Settings.CastBar.Pinned = true
@@ -308,6 +319,7 @@ function KM:InitVars()
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		MechTimer = KBM.Defaults.MechTimer(),
+		-- MechSpy = KBM.Defaults.MechSpy(),
 		Alerts = KBM.Defaults.Alerts(),
 		CastBar = {
 			Multi = true,
@@ -328,12 +340,14 @@ function KM:InitVars()
 			CastFilters = KM.King.Settings.Filters,
 			TimersRef = KM.King.Settings.TimersRef,
 			AlertsRef = KM.King.Settings.AlertsRef,
+			-- MechRef = KM.King.Settings.MechRef,
 		},
 		Prince = {
 			CastBar = KM.Prince.Settings.CastBar,
 			CastFilters = KM.Prince.Settings.Filters,
 			TimersRef = KM.Prince.Settings.TimersRef,
 			AlertsRef = KM.Prince.Settings.AlertsRef,
+			-- MechRef = KM.Prince.Settings.MechRef,
 		},
 	}
 	KM_Settings = self.Settings
@@ -856,54 +870,6 @@ end
 function KM:OptionsClose()
 end
 
-function KM.King:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function KM.King:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
-end
-
-function KM.Prince:SetTimers(bool)
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function KM.Prince:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
-end
-
 KM.Custom = {}
 KM.Custom.Encounter = {}
 function KM.Custom.Encounter.Menu(Menu)
@@ -986,6 +952,10 @@ function KM:Start()
 	self.King.TimersRef.Feedback = KBM.MechTimer:Add(KM.Lang.Ability.Feedback[KBM.Lang], 48)
 	KBM.Defaults.TimerObj.Assign(self.King)
 	
+	-- Add King's MechSpy
+	-- self.King.MechRef.Shout = KBM.MechSpy:Add(KM.Lang.Ability.Shout[KBM.Lang], 10, "playerBuff", self.King)
+	-- KBM.Defaults.MechObj.Assign(self.King)
+	
 	-- Add King's Alerts
 	self.King.AlertsRef.Cursed = KBM.Alert:Create(KM.Lang.Ability.Cursed[KBM.Lang], nil, false, true, "red")
 	self.King.AlertsRef.CursedDuration = KBM.Alert:Create(KM.Lang.Ability.Cursed[KBM.Lang], nil, true, true, "red")
@@ -1007,6 +977,10 @@ function KM:Start()
 	self.King.Triggers.Shout = KBM.Trigger:Create(KM.Lang.Ability.Shout[KBM.Lang], "cast", self.King)
 	self.King.Triggers.Shout:AddTimer(self.King.TimersRef.Shout)
 	self.King.Triggers.Shout:AddAlert(self.King.AlertsRef.Shout)
+	-- self.King.Triggers.ShoutBuff = KBM.Trigger:Create(KM.Lang.Ability.Shout[KBM.Lang], "playerBuff", self.King)
+	-- self.King.Triggers.ShoutBuff:AddSpy(self.King.MechRef.Shout)
+	-- self.King.Triggers.ShoutRemove = KBM.Trigger:Create(KM.Lang.Ability.Shout[KBM.Lang], "playerBuffRemove", self.King)
+	-- self.King.Triggers.ShoutRemove:AddStop(self.King.MechRef.Shout)
 	self.King.Triggers.Essence = KBM.Trigger:Create(KM.Lang.Ability.Essence[KBM.Lang], "cast", self.King)
 	self.King.Triggers.Essence:AddTimer(self.King.TimersRef.Essence)
 	self.King.Triggers.Essence:AddAlert(self.King.AlertsRef.Essence)
@@ -1040,11 +1014,22 @@ function KM:Start()
 	self.Prince.AlertsRef.Feedback = KBM.Alert:Create(KM.Lang.Ability.Feedback[KBM.Lang], nil, true, true, "blue")
 	self.Prince.AlertsRef.Feedback.MenuName = self.Lang.Menu.Feedback[KBM.Lang]
 	KBM.Defaults.AlertObj.Assign(self.Prince)
+
+	-- Add Prince's MechSpy
+	-- self.Prince.MechRef.Crushing = KBM.MechSpy:Add(KM.Lang.Ability.Crushing[KBM.Lang], nil, "playerBuff", self.Prince)
+	-- self.Prince.MechRef.Rend = KBM.MechSpy:Add(KM.Lang.Ability.Rend[KBM.Lang], 5, "cast", self.Prince)
+	-- KBM.Defaults.MechObj.Assign(self.Prince)
 	
 	-- Assign Prince's Mechanics to Triggers
 	self.Prince.Triggers.Terminate = KBM.Trigger:Create(KM.Lang.Ability.Terminate[KBM.Lang], "cast", self.Prince)
 	self.Prince.Triggers.Terminate:AddTimer(self.Prince.TimersRef.Terminate)
 	self.Prince.Triggers.Terminate:AddAlert(self.Prince.AlertsRef.Terminate)
+	-- self.Prince.Triggers.Rend = KBM.Trigger:Create(KM.Lang.Ability.Rend[KBM.Lang], "cast", self.Prince)
+	-- self.Prince.Triggers.Rend:AddSpy(self.Prince.MechRef.Rend)
+	-- self.Prince.Triggers.Crushing = KBM.Trigger:Create(KM.Lang.Ability.Crushing[KBM.Lang], "playerBuff", self.Prince)
+	-- self.Prince.Triggers.Crushing:AddSpy(self.Prince.MechRef.Crushing)
+	-- self.Prince.Triggers.CrushingRemove = KBM.Trigger:Create(KM.Lang.Ability.Crushing[KBM.Lang], "playerBuffRemove", self.Prince)
+	-- self.Prince.Triggers.CrushingRemove:AddStop(self.Prince.MechRef.Crushing)
 	self.Prince.Triggers.Essence = KBM.Trigger:Create(KM.Lang.Ability.Essence[KBM.Lang], "cast", self.Prince)
 	self.Prince.Triggers.Essence:AddTimer(self.Prince.TimersRef.Essence)
 	self.Prince.Triggers.Essence:AddAlert(self.Prince.AlertsRef.Essence)

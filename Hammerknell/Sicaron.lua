@@ -34,6 +34,7 @@ SN.Sicaron = {
 	Timers = {},
 	TimersRef = {},
 	AlertsRef = {},
+	MechRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
@@ -61,6 +62,12 @@ SN.Sicaron = {
 			Hex = KBM.Defaults.AlertObj.Create("purple"),
 			Decay = KBM.Defaults.AlertObj.Create("dark_green"),
 		},
+		MechRef = {
+			Enabled = true,
+			Buff = KBM.Defaults.MechObj.Create("blue"),
+			Debuff = KBM.Defaults.MechObj.Create("red"),
+			Soul = KBM.Defaults.MechObj.Create("orange"),
+		}
 	},
 }
 
@@ -103,6 +110,12 @@ SN.Lang.Debuff.Soul = KBM.Language:Add("Soul Harvest")
 SN.Lang.Debuff.Soul:SetGerman("Seelenernte")
 SN.Lang.Debuff.Soul:SetRussian("Сбор души")
 SN.Lang.Debuff.Soul:SetFrench("Récolte d'âme")
+SN.Lang.Debuff.Ravaged = KBM.Language:Add("Ravaged Soul")
+
+-- MechSpy Dictionary
+SN.Lang.MechSpy = {}
+SN.Lang.MechSpy.Buff = KBM.Language:Add("Buffed: Unholy Contract")
+SN.Lang.MechSpy.Debuff = KBM.Language:Add("Debuffed: Unholy Contract")
 
 function SN:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
@@ -118,11 +131,13 @@ function SN:InitVars()
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		CastFilters = self.Sicaron.Settings.Filters,
-		MechTimer = KBM.Defaults.MechTimer(),		
+		MechTimer = KBM.Defaults.MechTimer(),
+		MechSpy = KBM.Defaults.MechSpy(),
 		Alerts = KBM.Defaults.Alerts(),
 		CastBar = self.Sicaron.Settings.CastBar,
 		TimersRef = self.Sicaron.Settings.TimersRef,
 		AlertsRef = self.Sicaron.Settings.AlertsRef,
+		MechRef = self.Sicaron.Settings.MechRef,
 	}
 	KBMSN_Settings = self.Settings
 	chKBMSN_Settings = self.Settings	
@@ -257,30 +272,6 @@ function SN:Timer()
 	
 end
 
-function SN.Sicaron:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function SN.Sicaron:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
-end
-
 function SN:DefineMenu()
 	self.Menu = HK.Menu:CreateEncounter(self.Sicaron, self.Enabled)
 end
@@ -301,6 +292,12 @@ function SN:Start()
 	self.Sicaron.AlertsRef.Decay = KBM.Alert:Create(self.Lang.Ability.Decay[KBM.Lang], nil, true, true, "dark_green")
 	KBM.Defaults.AlertObj.Assign(self.Sicaron)
 	
+	-- Create Mechanic Spies
+	self.Sicaron.MechRef.Buff = KBM.MechSpy:Add(self.Lang.MechSpy.Buff[KBM.Lang], nil, "mechanic", self.Sicaron)
+	self.Sicaron.MechRef.Debuff = KBM.MechSpy:Add(self.Lang.MechSpy.Debuff[KBM.Lang], nil, "mechanic", self.Sicaron)
+	self.Sicaron.MechRef.Soul = KBM.MechSpy:Add(self.Lang.Debuff.Ravaged[KBM.Lang], nil, "debuff", self.Sicaron)
+	KBM.Defaults.MechObj.Assign(self.Sicaron)
+	
 	-- Assign Mechanics to Triggers
 	self.Sicaron.Triggers.Contract = KBM.Trigger:Create(self.Lang.Notify.Contract[KBM.Lang], "notify", self.Sicaron)
 	self.Sicaron.Triggers.Contract:AddTimer(self.Sicaron.TimersRef.Contract)
@@ -309,6 +306,11 @@ function SN:Start()
 	self.Sicaron.AlertsRef.ContractRed:Important()
 	self.Sicaron.AlertsRef.Contract:AlertEnd(self.Sicaron.AlertsRef.ContractRed)
 	self.Sicaron.Triggers.ContractBuff = KBM.Trigger:Create(self.Lang.Debuff.Contract[KBM.Lang], "playerBuff", self.Sicaron)
+	self.Sicaron.Triggers.ContractBuff:AddSpy(self.Sicaron.MechRef.Buff)
+	self.Sicaron.Triggers.ContractDebuff = KBM.Trigger:Create(self.Lang.Debuff.Contract[KBM.Lang], "playerDebuff", self.Sicaron)
+	self.Sicaron.Triggers.ContractDebuff:AddSpy(self.Sicaron.MechRef.Debuff)
+	self.Sicaron.Triggers.Ravaged = KBM.Trigger:Create(self.Lang.Debuff.Ravaged[KBM.Lang], "playerDebuff", self.Sicaron)
+	self.Sicaron.Triggers.Ravaged:AddSpy(self.Sicaron.MechRef.Soul)
 	self.Sicaron.Triggers.Hex = KBM.Trigger:Create(self.Lang.Ability.Hex[KBM.Lang], "cast", self.Sicaron)
 	self.Sicaron.Triggers.Hex:AddAlert(self.Sicaron.AlertsRef.Hex)
 	self.Sicaron.Triggers.Hex:AddTimer(self.Sicaron.TimersRef.Hex)

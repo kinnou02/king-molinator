@@ -58,12 +58,13 @@ MOD.Lang.Unit = {}
 MOD.Lang.Unit.Caelia = KBM.Language:Add(MOD.Caelia.Name)
 MOD.Lang.Unit.Caelia:SetGerman("Caelia die Sturmberührte") 
 MOD.Lang.Unit.Caelia:SetFrench("Caelia Stigmatempête")
--- MOD.Lang.Unit.Caelia:SetRussian("")
+MOD.Lang.Unit.Caelia:SetRussian("Кейлия Меченная Бурей")
 MOD.Caelia.Name = MOD.Lang.Unit.Caelia[KBM.Lang]
 MOD.Descript = MOD.Caelia.Name
 MOD.Lang.Unit.CaelShort = KBM.Language:Add("Caelia")
 MOD.Lang.Unit.CaelShort:SetGerman()
 MOD.Lang.Unit.CaelShort:SetFrench()
+MOD.Lang.Unit.CaelShort:SetRussian("Кейлия")
 MOD.Caelia.NameShort = MOD.Lang.Unit.CaelShort[KBM.Lang]
 
 -- Ability Dictionary

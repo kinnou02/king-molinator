@@ -239,6 +239,13 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Options.CastbarEnabled:SetGerman("Zauberbalken anzeigen")
 	KBM.Language.Options.CastbarEnabled:SetRussian("Кастбары разрешены")
 
+	-- MechSpy Options
+	KBM.Language.MechSpy = {}
+	KBM.Language.MechSpy.Name = KBM.Language:Add("Mechanic Spy")
+	KBM.Language.MechSpy.Enabled = KBM.Language:Add("Mechanic Spy Enabled")
+	KBM.Language.MechSpy.Show = KBM.Language:Add("Always show Mechanic Headers")
+	KBM.Language.MechSpy.Override = KBM.Language:Add("Mechanic Spy: Override")
+	
 	-- Timer Options
 	KBM.Language.Options.MechTimerOverride = KBM.Language:Add("Mechanic Timers: Override")
 	KBM.Language.Options.MechTimerOverride:SetGerman("separate Einstellungen")

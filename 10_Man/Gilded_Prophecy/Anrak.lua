@@ -31,7 +31,9 @@ AF.Anrak = {
 	Menu = {},
 	Dead = false,
 	Available = false,
+	TimersRef = {},
 	AlertsRef = {},
+	MechRef = {},
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
@@ -41,8 +43,16 @@ AF.Anrak = {
 			SpinesWarn = KBM.Defaults.AlertObj.Create("yellow"),
 			Spines = KBM.Defaults.AlertObj.Create("yellow"),
 			Strike = KBM.Defaults.AlertObj.Create("red"),
-			Call = KBM.Defaults.AlertObj.Create("dark_green"),
+			Call = KBM.Defaults.AlertObj.Create("cyan"),
 			Bond = KBM.Defaults.AlertObj.Create("orange"),
+		},
+		TimersRef = {
+			Enabled = true,
+			Venom = KBM.Defaults.TimerObj.Create("dark_green"),
+		},
+		MechRef = {
+			Enabled = true,
+			Venom = KBM.Defaults.MechObj.Create("dark_green"),
 		},
 	},
 }
@@ -84,6 +94,7 @@ AF.Lang.Debuff.Brittle = KBM.Language:Add("Brittle")
 AF.Lang.Debuff.Brittle:SetGerman("Brüchig")
 AF.Lang.Debuff.Brittle:SetFrench("Fragile")
 AF.Lang.Debuff.Brittle:SetRussian("Хрупкость")
+AF.Lang.Debuff.Venom = KBM.Language:Add("Explosive Venom")
 
 -- Menu Dictionary
 AF.Lang.Menu = {}
@@ -107,7 +118,11 @@ function AF:InitVars()
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		EncTimer = KBM.Defaults.EncTimer(),
 		Alerts = KBM.Defaults.Alerts(),
+		MechTimer = KBM.Defaults.MechTimer(),
+		MechSpy = KBM.Defaults.MechSpy(),
 		AlertsRef = self.Anrak.Settings.AlertsRef,
+		TimersRef = self.Anrak.Settings.TimersRef,
+		MechRef = self.Anrak.Settings.MechRef,
 	}
 	KBMGPAF_Settings = self.Settings
 	chKBMGPAF_Settings = self.Settings
@@ -236,6 +251,12 @@ end
 
 function AF:Start()
 	-- Create Timers
+	self.Anrak.TimersRef.Venom = KBM.MechTimer:Add(self.Lang.Debuff.Venom[KBM.Lang], 30)
+	KBM.Defaults.TimerObj.Assign(self.Anrak)
+	
+	-- Create Mechanic Spies
+	self.Anrak.MechRef.Venom = KBM.MechSpy:Add(self.Lang.Debuff.Venom[KBM.Lang], nil, "playerDebuff", self.Anrak)
+	KBM.Defaults.MechObj.Assign(self.Anrak)
 	
 	-- Create Alerts
 	self.Anrak.AlertsRef.SpinesWarn = KBM.Alert:Create(self.Lang.Ability.Spines[KBM.Lang], nil, false, true, "yellow")
@@ -257,6 +278,11 @@ function AF:Start()
 	self.Anrak.Triggers.Call:AddAlert(self.Anrak.AlertsRef.Call)
 	self.Anrak.Triggers.Bond = KBM.Trigger:Create(self.Lang.Ability.Bond[KBM.Lang], "cast", self.Anrak)
 	self.Anrak.Triggers.Bond:AddAlert(self.Anrak.AlertsRef.Bond)
+	self.Anrak.Triggers.Venom = KBM.Trigger:Create(self.Lang.Debuff.Venom[KBM.Lang], "playerDebuff", self.Anrak)
+	self.Anrak.Triggers.Venom:AddTimer(self.Anrak.TimersRef.Venom)
+	self.Anrak.Triggers.Venom:AddSpy(self.Anrak.MechRef.Venom)
+	self.Anrak.Triggers.VenomRemove = KBM.Trigger:Create(self.Lang.Debuff.Venom[KBM.Lang], "playerBuffRemove", self.Anrak)
+	self.Anrak.Triggers.VenomRemove:AddStop(self.Anrak.MechRef.Venom)
 	
 	self.Anrak.CastBar = KBM.CastBar:Add(self, self.Anrak)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

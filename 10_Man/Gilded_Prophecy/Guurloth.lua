@@ -29,6 +29,7 @@ GH.Guurloth = {
 	NameShort = "Guurloth",
 	TimersRef = {},
 	AlertsRef = {},
+	MechRef = {},
 	Menu = {},
 	Dead = false,
 	Available = false,
@@ -57,6 +58,10 @@ GH.Guurloth = {
 			ToilWarn = KBM.Defaults.AlertObj.Create("dark_green"),
 			Punish = KBM.Defaults.AlertObj.Create("red"),
 			Geyser = KBM.Defaults.AlertObj.Create("purple"),
+		},
+		MechRef = {
+			Enabled = true,
+			Punish = KBM.Defaults.MechObj.Create("red"),
 		},
 	},
 }
@@ -168,9 +173,11 @@ function GH:InitVars()
 		EncTimer = KBM.Defaults.EncTimer(),
 		Alerts = KBM.Defaults.Alerts(),
 		MechTimer = KBM.Defaults.MechTimer(),
+		MechSpy = KBM.Defaults.MechSpy(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		AlertsRef = self.Guurloth.Settings.AlertsRef,
 		TimersRef = self.Guurloth.Settings.TimersRef,
+		MechRef = self.Guurloth.Settings.MechRef,
 	}
 	KBMGPGH_Settings = self.Settings
 	chKBMGPGH_Settings = self.Settings
@@ -331,6 +338,10 @@ function GH:Start()
 	self.Guurloth.AlertsRef.Geyser = KBM.Alert:Create(self.Lang.Ability.Geyser[KBM.Lang], nil, false, true, "purple")
 	KBM.Defaults.AlertObj.Assign(self.Guurloth)
 	
+	-- Create Mechanic Spies
+	self.Guurloth.MechRef.Punish = KBM.MechSpy:Add(self.Lang.Debuff.Punish[KBM.Lang], nil, "playerDebuff", self.Guurloth)
+	KBM.Defaults.MechObj.Assign(self.Guurloth)
+	
 	-- Assign Timers and Alerts to Triggers
 	self.Guurloth.Triggers.OrbWarn = KBM.Trigger:Create(self.Lang.Ability.Orb[KBM.Lang], "cast", self.Guurloth)
 	self.Guurloth.Triggers.OrbWarn:AddAlert(self.Guurloth.AlertsRef.OrbWarn)
@@ -353,6 +364,7 @@ function GH:Start()
 	self.Guurloth.Triggers.Punish = KBM.Trigger:Create(self.Lang.Debuff.Punish[KBM.Lang], "playerBuff", self.Guurloth)
 	self.Guurloth.Triggers.Punish:AddAlert(self.Guurloth.AlertsRef.Punish, true)
 	self.Guurloth.Triggers.Punish:AddTimer(self.Guurloth.TimersRef.Punish)
+	self.Guurloth.Triggers.Punish:AddSpy(self.Guurloth.MechRef.Punish)
 	self.Guurloth.Triggers.Geyser = KBM.Trigger:Create(self.Lang.Ability.Geyser[KBM.Lang], "cast", self.Guurloth)
 	self.Guurloth.Triggers.Geyser:AddAlert(self.Guurloth.AlertsRef.Geyser)
 	self.Guurloth.Triggers.Geyser:AddTimer(self.Guurloth.TimersRef.Geyser)

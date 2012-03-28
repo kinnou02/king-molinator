@@ -35,6 +35,7 @@ AK.Jornaru = {
 	CastBar = nil,
 	TimersRef = {},
 	AlertsRef = {},
+	MechRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
@@ -58,6 +59,10 @@ AK.Jornaru = {
 			WaveWarnLong = KBM.Defaults.AlertObj.Create("cyan"),
 			Orb = KBM.Defaults.AlertObj.Create("orange"),
 		},
+		MechRef = {
+			Enabled = true,
+			Orb = KBM.Defaults.MechObj.Create("orange"),
+		},
 	},
 }
 
@@ -69,6 +74,7 @@ AK.Akylios = {
 	CastBar = nil,
 	TimersRef = {},
 	AlertsRef = {},
+	MechRef = {},
 	Dead = false,
 	Available = false,
 	PhaseObj = nil,
@@ -90,6 +96,10 @@ AK.Akylios = {
 			Breath = KBM.Defaults.AlertObj.Create("red"),
 			BreathWarn = KBM.Defaults.AlertObj.Create("red"),
 			Decay = KBM.Defaults.AlertObj.Create("purple"),
+		},
+		MechRef = {
+			Enabled = true,
+			Decay = KBM.Defaults.MechObj.Create("purple"),
 		},
 	},
 }
@@ -204,15 +214,15 @@ AK.Lang.Mechanic.Summon:SetRussian("Воззвание к глубинам")
 AK.Lang.Mechanic.Summon:SetFrench("Invoque les Abysses")
 AK.Lang.Mechanic.Emerge = KBM.Language:Add("Akylios emerges")
 AK.Lang.Mechanic.Emerge:SetGerman("Akylios taucht auf")
-AK.Lang.Mechanic.Emerge:SetRussian("КРАБ ВСПЛЫВАЕТ ПОСАНЫ!")
+AK.Lang.Mechanic.Emerge:SetRussian("Акилиос всплывает")
 AK.Lang.Mechanic.Emerge:SetFrench("Akylios émerge")
 AK.Lang.Mechanic.Submerge = KBM.Language:Add("Akylios submerges")
 AK.Lang.Mechanic.Submerge:SetGerman("Akylios taucht unter")
-AK.Lang.Mechanic.Submerge:SetRussian("КРАБ ПОГРУЖАЕЦЦО ПОСАНЫ!")
+AK.Lang.Mechanic.Submerge:SetRussian("Акилиос погружается")
 AK.Lang.Mechanic.Submerge:SetFrench("Akylios immerge")
-AK.Lang.Mechanic.Left = "Akylios rears to the left!"
-AK.Lang.Mechanic.Center = "Akylios rears backwards!"
-AK.Lang.Mechanic.Right = "Akylios rears to the right!"
+AK.Lang.Mechanic.Left = KBM.Language:Add("Akylios rears to the left!")
+AK.Lang.Mechanic.Center = KBM.Language:Add("Akylios rears backwards!")
+AK.Lang.Mechanic.Right = KBM.Language:Add("Akylios rears to the right!")
 
 -- Notify Dictionary
 AK.Lang.Notify = {}
@@ -232,15 +242,15 @@ AK.Lang.Say.PhaseTwo:SetFrench("Le plan a porté ses fruits, maître. Après un 
 AK.Lang.Phase = {}
 AK.Lang.Phase.Two = KBM.Language:Add("Phase 2 starting!")
 AK.Lang.Phase.Two:SetGerman("Phase 2 beginnt!")
-AK.Lang.Phase.Two:SetRussian("Началась 2ая фаза!")
+AK.Lang.Phase.Two:SetRussian("Началась вторая фаза!")
 AK.Lang.Phase.Two:SetFrench("Phase 2 débutée")
 AK.Lang.Phase.Three = KBM.Language:Add("Phase 3 starting!")
 AK.Lang.Phase.Three:SetGerman("Phase 3 beginnt!")
-AK.Lang.Phase.Three:SetRussian("Началась 3ья фаза!")
+AK.Lang.Phase.Three:SetRussian("Началась третья фаза!")
 AK.Lang.Phase.Three:SetFrench("Phase 3 débutée")
 AK.Lang.Phase.Four = KBM.Language:Add("Phase 4 starting!")
 AK.Lang.Phase.Four:SetGerman("Phase 4 beginnt!")
-AK.Lang.Phase.Four:SetRussian("Началась 4ая фаза!")
+AK.Lang.Phase.Four:SetRussian("Началась четвертая фаза!")
 AK.Lang.Phase.Four:SetFrench("Phase 4 débutée")
 AK.Lang.Phase.Final = KBM.Language:Add("Final phase starting, good luck!")
 AK.Lang.Phase.Final:SetGerman("Letzte Phase beginnt, viel Erfolg!")
@@ -252,11 +262,11 @@ AK.Lang.Options = {}
 AK.Lang.Options.WaveOne = KBM.Language:Add(AK.Lang.Mechanic.Wave[KBM.Lang].." (Phase 1)")
 AK.Lang.Options.WaveOne:SetGerman("Flutwelle (Phase 1)")
 AK.Lang.Options.WaveOne:SetFrench("Raz de marée (Phase 1)")
-AK.Lang.Options.WaveOne:SetRussian("Приливная волна (Фаза 1)")
+AK.Lang.Options.WaveOne:SetRussian("Приливная волна (фаза 1)")
 AK.Lang.Options.WaveFour = KBM.Language:Add(AK.Lang.Mechanic.Wave[KBM.Lang].." (Phase 4)")
 AK.Lang.Options.WaveFour:SetGerman("Flutwelle (Phase 4)")
 AK.Lang.Options.WaveFour:SetFrench("Raz de marée (Phase 4)")
-AK.Lang.Options.WaveFour:SetRussian("Приливная волна (Фаза 4)")
+AK.Lang.Options.WaveFour:SetRussian("Приливная волна (фаза 4)")
 AK.Lang.Options.WaveWarn = KBM.Language:Add("Warning for Waves at 5 seconds.")
 AK.Lang.Options.WaveWarn:SetGerman("Warnung für Flutwellen 5 Sekunden vorher.")
 AK.Lang.Options.WaveWarn:SetRussian("Предупреждение о волнах за 5 секунд.")
@@ -268,31 +278,32 @@ AK.Lang.Options.WaveWarnLong:SetFrench("Attention vague dans 10 secondes.")
 AK.Lang.Options.Summon = KBM.Language:Add(AK.Lang.Mechanic.Summon[KBM.Lang].." (Phase 1)")
 AK.Lang.Options.Summon:SetGerman("Beschwört den Abgrund! (Phase 1)")
 AK.Lang.Options.Summon:SetFrench("Invoque les Abysses (Phase 1)")
-AK.Lang.Options.Summon:SetRussian("Воззвание к глубинам (Фаза 1)")
+AK.Lang.Options.Summon:SetRussian("Призыв аддов (фаза 1)")
 AK.Lang.Options.SummonTwo = KBM.Language:Add(AK.Lang.Mechanic.Summon[KBM.Lang].." (Phase 2)")
 AK.Lang.Options.SummonTwo:SetGerman("Beschwört den Abgrund! (Phase 2)")
 AK.Lang.Options.SummonTwo:SetFrench("Invoque les Abysses (Phase 2)")
-AK.Lang.Options.SummonTwo:SetRussian("Воззвание к глубинам (Фаза 2)")
+AK.Lang.Options.SummonTwo:SetRussian("Призыв аддов (фаза 2)")
 AK.Lang.Options.Orb = KBM.Language:Add(AK.Lang.Mechanic.Orb[KBM.Lang].." (P2 First)")
 AK.Lang.Options.Orb:SetGerman(AK.Lang.Mechanic.Orb[KBM.Lang].." (Erste in P2)")
-AK.Lang.Options.Orb:SetRussian(AK.Lang.Mechanic.Orb[KBM.Lang].." (Первая во 2ой фазе)")
+AK.Lang.Options.Orb:SetRussian(AK.Lang.Mechanic.Orb[KBM.Lang].." (первая на 2ой фазе)")
 AK.Lang.Options.Orb:SetFrench(AK.Lang.Mechanic.Orb[KBM.Lang].." (P2 Premier)")
 AK.Lang.Options.Breath = KBM.Language:Add(AK.Lang.Ability.Breath[KBM.Lang].." duration.")
 AK.Lang.Options.Breath:SetGerman(AK.Lang.Ability.Breath[KBM.Lang].." Dauer.")
-AK.Lang.Options.Breath:SetRussian(AK.Lang.Ability.Breath[KBM.Lang].." Продолжительность.")
+AK.Lang.Options.Breath:SetRussian(AK.Lang.Ability.Breath[KBM.Lang].." (продолжит.)")
 AK.Lang.Options.Breath:SetFrench(AK.Lang.Ability.Breath[KBM.Lang].." durée.")
 AK.Lang.Options.Emerge = KBM.Language:Add("Emerge/Submerge Timers")
 AK.Lang.Options.Emerge:SetGerman("Auftauchen/Untertauchen Timer")
 AK.Lang.Options.Emerge:SetFrench("Timers Émerge/Immerge")
-AK.Lang.Options.Emerge:SetRussian("Таймеры погружения/всплытия")
+AK.Lang.Options.Emerge:SetRussian("Таймеры всплытия/погружения")
 AK.Lang.Options.BreathFirst = KBM.Language:Add("First Breath in Phase 3")
 AK.Lang.Options.BreathFirst:SetGerman("Erster Hauch in Phase 3")
 AK.Lang.Options.BreathFirst:SetFrench("Premier souffle de la Phase 3")
-AK.Lang.Options.BreathFirst:SetRussian("Первое дыхание в фазе 3")
+AK.Lang.Options.BreathFirst:SetRussian("Первое дыхание на фазе 3")
 AK.Lang.Options.Lasher = KBM.Language:Add("Second Lasher rises")
 AK.Lang.Options.Lasher:SetGerman("Zweiter Peitscher erscheint")
 AK.Lang.Options.Lasher:SetFrench("Second Fouetteur apparaît")
-AK.Lang.Options.Lasher:SetRussian("Второй Бичеватель спавнится")
+AK.Lang.Options.Lasher:SetRussian("Появление второго Бичевателя")
+AK.Lang.Options.Percent = KBM.Language:Add("Use percentage based trigger for Phase 2")
 
 AK.Descript = AK.Akylios.Name.." & "..AK.Jornaru.Name
 
@@ -319,6 +330,7 @@ function AK:InitVars()
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		MechTimer = KBM.Defaults.MechTimer(),
+		MechSpy = KBM.Defaults.MechSpy(),
 		Alerts = KBM.Defaults.Alerts(),
 		CastBar = {
 			Override = true,
@@ -328,11 +340,13 @@ function AK:InitVars()
 			CastBar = AK.Akylios.Settings.CastBar,
 			TimersRef = AK.Akylios.Settings.TimersRef,
 			AlertsRef = AK.Akylios.Settings.AlertsRef,
+			MechRef = AK.Akylios.Settings.MechRef,
 		},
 		Jornaru = {
 			CastBar = AK.Jornaru.Settings.CastBar,
 			TimersRef = AK.Jornaru.Settings.TimersRef,
 			AlertsRef = AK.Jornaru.Settings.AlertsRef,
+			MechRef = AK.Jornaru.Settings.MechRef,
 		},
 		Apostle = {
 			AlertsRef = AK.Apostle.Settings.AlertsRef,
@@ -515,7 +529,7 @@ function AK:UnitHPCheck(uDetails, unitID)
 					self.Akylios.UnitID = unitID
 					self.Akylios.Available = true
 					return self.Akylios
-				else
+				elseif self.EncounterRunning then
 					if not self.Bosses[uDetails.name].UnitList[unitID] then
 						SubBossObj = {
 							Mod = AK,
@@ -585,7 +599,7 @@ function AK.Custom.Encounter.Menu(Menu)
 		end
 	end
 
-	Header = Menu:CreateHeader("Use percentage based trigger for Phase 2", "check", "Encounter", "Main")
+	Header = Menu:CreateHeader(AK.Lang.Options.Percent[KBM.Lang], "check", "Encounter", "Main")
 	Header:SetChecked(AK.Settings.PhaseAlt)
 	Header:SetHook(Callbacks.Enabled)	
 end
@@ -731,7 +745,7 @@ function AK:Start()
 	self.Jornaru.AlertsRef.Orb = KBM.Alert:Create(AK.Lang.Mechanic.Orb[KBM.Lang], 8, false, true, "orange")
 	self.Jornaru.AlertsRef.Orb:Important()
 	-- Akylios
-	self.Akylios.AlertsRef.Decay = KBM.Alert:Create(AK.Lang.Ability.Decay[KBM.Lang], 10, false, true, "purple")
+	self.Akylios.AlertsRef.Decay = KBM.Alert:Create(AK.Lang.Ability.Decay[KBM.Lang], nil, false, true, "purple")
 	self.Akylios.AlertsRef.Decay:Important()
 	self.Akylios.AlertsRef.Breath = KBM.Alert:Create(AK.Lang.Ability.Breath[KBM.Lang], nil, false, true, "red")
 	self.Akylios.AlertsRef.Breath.MenuName = self.Lang.Options.Breath[KBM.Lang]
@@ -740,9 +754,16 @@ function AK:Start()
 	self.Apostle.AlertsRef.Storm = KBM.Alert:Create(AK.Lang.Ability.Storm[KBM.Lang], nil, false, true, "yellow")
 	self.Apostle.AlertsRef.Storm:Important()
 	
+	-- Create Mechanic Spies
+	self.Jornaru.MechRef.Orb = KBM.MechSpy:Add(AK.Lang.Mechanic.Orb[KBM.Lang], 8, "playerBuff", self.Jornaru)
+	self.Akylios.MechRef.Decay = KBM.MechSpy:Add(AK.Lang.Ability.Decay[KBM.Lang], nil, "playerBuff", self.Akylios)
+	
 	KBM.Defaults.AlertObj.Assign(self.Jornaru)
 	KBM.Defaults.AlertObj.Assign(self.Akylios)
 	KBM.Defaults.AlertObj.Assign(self.Apostle)
+	
+	KBM.Defaults.MechObj.Assign(self.Jornaru)
+	KBM.Defaults.MechObj.Assign(self.Akylios)
 	
 	KBM.Defaults.TimerObj.Assign(self.Jornaru)
 	KBM.Defaults.TimerObj.Assign(self.Akylios)
@@ -752,6 +773,7 @@ function AK:Start()
 	self.Jornaru.Triggers.Orb = KBM.Trigger:Create(AK.Lang.Notify.Orb[KBM.Lang], "notify", self.Jornaru)
 	self.Jornaru.Triggers.Orb:AddAlert(self.Jornaru.AlertsRef.Orb, true)
 	self.Jornaru.Triggers.Orb:AddTimer(self.Jornaru.TimersRef.Orb)
+	self.Jornaru.Triggers.Orb:AddSpy(self.Jornaru.MechRef.Orb)
 	self.Jornaru.Triggers.PhaseTwo = KBM.Trigger:Create(AK.Lang.Say.PhaseTwo[KBM.Lang], "say", self.Jornaru)
 	self.Jornaru.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
 	self.Jornaru.Triggers.PhaseTwoAlt = KBM.Trigger:Create(50, "percent", self.Jornaru)
@@ -768,8 +790,10 @@ function AK:Start()
 	self.Akylios.Triggers.PhaseFinal:AddPhase(self.PhaseFinal)
 	self.Akylios.Triggers.Decay = KBM.Trigger:Create(self.Lang.Ability.Decay[KBM.Lang], "playerBuff", self.Akylios)
 	self.Akylios.Triggers.Decay:AddAlert(self.Akylios.AlertsRef.Decay, true)
+	self.Akylios.Triggers.Decay:AddSpy(self.Akylios.MechRef.Decay)
 	self.Akylios.Triggers.DecayRemove = KBM.Trigger:Create(self.Lang.Ability.Decay[KBM.Lang], "playerBuffRemove", self.Akylios)
 	self.Akylios.Triggers.DecayRemove:AddStop(self.Akylios.AlertsRef.Decay, true)
+	self.Akylios.Triggers.DecayRemove:AddStop(self.Akylios.MechRef.Decay)
 	self.Akylios.Triggers.BreathWarn = KBM.Trigger:Create(AK.Lang.Ability.Breath[KBM.Lang], "cast", self.Akylios)
 	self.Akylios.Triggers.BreathWarn:AddTimer(AK.Akylios.TimersRef.Breath)
 	self.Akylios.Triggers.BreathWarn:AddAlert(AK.Akylios.AlertsRef.BreathWarn)

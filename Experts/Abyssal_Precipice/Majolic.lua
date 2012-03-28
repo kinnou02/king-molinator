@@ -58,12 +58,13 @@ MOD.Lang.Unit = {}
 MOD.Lang.Unit.Majolic = KBM.Language:Add(MOD.Majolic.Name)
 MOD.Lang.Unit.Majolic:SetGerman("Majolic der Blutwandler")
 MOD.Lang.Unit.Majolic:SetFrench("Majolic le Marchesang")
--- MOD.Lang.Unit.Majolic:SetRussian("")
+MOD.Lang.Unit.Majolic:SetRussian("Майолик Кровоход")
 MOD.Majolic.Name = MOD.Lang.Unit.Majolic[KBM.Lang]
 MOD.Descript = MOD.Majolic.Name
 MOD.Lang.Unit.MajShort = KBM.Language:Add("Majolic")
 MOD.Lang.Unit.MajShort:SetGerman()
 MOD.Lang.Unit.MajShort:SetFrench()
+MOD.Lang.Unit.MajShort:SetRussian("Майолик")
 MOD.Majolic.NameShort = MOD.Lang.Unit.MajShort[KBM.Lang]
 
 -- Ability Dictionary

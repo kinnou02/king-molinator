@@ -34,6 +34,7 @@ MZ.Matron = {
 	Timers = {},
 	TimersRef = {},
 	AlertsRef = {},
+	MechRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
@@ -56,6 +57,10 @@ MZ.Matron = {
 			Concussion = KBM.Defaults.AlertObj.Create("red"),
 			Blast = KBM.Defaults.AlertObj.Create("yellow"),
 			Mark = KBM.Defaults.AlertObj.Create("purple"),
+		},
+		MechRef = {
+			Enabled = true,
+			Mark = KBM.Defaults.MechObj.Create("purple"),
 		},
 	},
 }
@@ -142,11 +147,13 @@ function MZ:InitVars()
 		Enabled = true,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
-		MechTimer = KBM.Defaults.MechTimer(),		
+		MechTimer = KBM.Defaults.MechTimer(),
+		MechSpy = KBM.Defaults.MechSpy(),
 		Alerts = KBM.Defaults.Alerts(),
 		CastBar = self.Matron.Settings.CastBar,
 		TimersRef = self.Matron.Settings.TimersRef,
 		AlertsRef = self.Matron.Settings.AlertsRef,
+		MechRef = self.Matron.Settings.MechSpy,
 	}
 	KBMMZ_Settings = self.Settings
 	chKBMMZ_Settings = self.Settings
@@ -304,8 +311,12 @@ function MZ:Start()
 	self.Matron.AlertsRef.Blast = KBM.Alert:Create(self.Lang.Ability.Blast[KBM.Lang], nil, false, true, "yellow")
 	self.Matron.AlertsRef.Mark = KBM.Alert:Create(self.Lang.Ability.Mark[KBM.Lang], 4, false, true, "purple")
 
+	-- Create Mechanic Spies
+	self.Matron.MechRef.Mark = KBM.MechSpy:Add(self.Lang.Ability.Mark[KBM.Lang], 4, "mechanic", self.Matron)
+	
 	KBM.Defaults.TimerObj.Assign(self.Matron)
 	KBM.Defaults.AlertObj.Assign(self.Matron)
+	KBM.Defaults.MechObj.Assign(self.Matron)
 	
 	-- Assign Mechanics to Triggers
 	self.Matron.Triggers.Concussion = KBM.Trigger:Create(self.Lang.Ability.Concussion[KBM.Lang], "damage", self.Matron)
@@ -323,9 +334,11 @@ function MZ:Start()
 	if self.Lang.Notify.Mark.Translated[KBM.Lang] then
 		self.Matron.Triggers.MarkNotify = KBM.Trigger:Create(self.Lang.Notify.Mark[KBM.Lang], "notify", self.Matron)
 		self.Matron.Triggers.MarkNotify:AddAlert(self.Matron.AlertsRef.Mark, true)
+		self.Matron.Triggers.MarkNotify:AddSpy(self.Matron.MechRef.Mark)
 	else
 		self.Matron.Triggers.MarkDamage = KBM.Trigger:Create(self.Lang.Ability.Mark[KBM.Lang], "damage", self.Matron)
 		self.Matron.Triggers.MarkDamage:AddAlert(self.Matron.AlertsRef.Mark, true)
+		self.Matron.Triggers.MarkDamage:AddSpy(self.Matron.MechRef.Mark)
 	end
 	self.Matron.AlertsRef.Mark:Important()
 	self.Matron.Triggers.Shadow = KBM.Trigger:Create(self.Lang.Ability.Shadow[KBM.Lang], "damage", self.Matron)

@@ -190,6 +190,7 @@ function LG:UnitHPCheck(unitDetails, unitID)
 					self.Greenscale.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
 					self.Phase = 1
+					self.LastPhase = 1
 					self.PhaseObj:SetPhase(1)
 					self.PhaseObj.Objectives:AddPercent(self.Greenscale.Name, 75, 100)
 					self.Verdant.UnitID = nil
@@ -211,10 +212,31 @@ function LG:UnitHPCheck(unitDetails, unitID)
 	end
 end
 
-function LG.AirPhase()
-	LG.PhaseObj.Objectives:Remove()
-	LG.PhaseObj:SetPhase(KBM.Language.Options.Air[KBM.Lang])
-	LG.PhaseObj.Objectives:AddPercent(LG.Verdant.Name, 0, 100)
+function LG.AirPhaseOne()
+	if LG.Phase == 1 then
+		LG.PhaseObj.Objectives:Remove()
+		LG.PhaseObj:SetPhase(KBM.Language.Options.Air[KBM.Lang])
+		LG.PhaseObj.Objectives:AddPercent(LG.Greenscale.Name, 50, 75)
+		LG.PhaseObj.Objectives:AddPercent(LG.Verdant.Name, 0, 100)
+	end
+end
+
+function LG.AirPhaseTwo()
+	if LG.Phase == 2 then
+		LG.PhaseObj.Objectives:Remove()
+		LG.PhaseObj:SetPhase(KBM.Language.Options.Air[KBM.Lang])
+		LG.PhaseObj.Objectives:AddPercent(LG.Greenscale.Name, 25, 50)
+		LG.PhaseObj.Objectives:AddPercent(LG.Verdant.Name, 0, 100)
+	end
+end
+
+function LG.AirPhaseThree()
+	if LG.Phase == 3 then
+		LG.PhaseObj.Objectives:Remove()
+		LG.PhaseObj:SetPhase(KBM.Language.Options.Air[KBM.Lang])
+		LG.PhaseObj.Objectives:AddPercent(LG.Greenscale.Name, 0, 25)
+		LG.PhaseObj.Objectives:AddPercent(LG.Verdant.Name, 0, 100)
+	end
 end
 
 function LG.PhaseTwo()
@@ -338,11 +360,11 @@ function LG:Start()
 	self.Greenscale.Triggers.Fumes:AddTimer(self.Greenscale.TimersRef.Fumes)
 	self.Greenscale.Triggers.Fumes:AddAlert(self.Greenscale.AlertsRef.FumesWarn)
 	self.Greenscale.Triggers.PhaseTwo = KBM.Trigger:Create(75, "percent", self.Greenscale)
-	self.Greenscale.Triggers.PhaseTwo:AddPhase(self.AirPhase)
+	self.Greenscale.Triggers.PhaseTwo:AddPhase(self.AirPhaseOne)
 	self.Greenscale.Triggers.PhaseThree = KBM.Trigger:Create(50, "percent", self.Greenscale)
-	self.Greenscale.Triggers.PhaseThree:AddPhase(self.AirPhase)
+	self.Greenscale.Triggers.PhaseThree:AddPhase(self.AirPhaseTwo)
 	self.Greenscale.Triggers.PhaseFour = KBM.Trigger:Create(25, "percent", self.Greenscale)
-	self.Greenscale.Triggers.PhaseFour:AddPhase(self.AirPhase)
+	self.Greenscale.Triggers.PhaseFour:AddPhase(self.AirPhaseThree)
 	
 	self.Greenscale.CastBar = KBM.CastBar:Add(self, self.Greenscale)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

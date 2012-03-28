@@ -29,6 +29,7 @@ UK.Uruluuk = {
 	NameShort = "Uruluuk",
 	Menu = {},
 	AlertsRef = {},
+	MechRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
@@ -39,7 +40,11 @@ UK.Uruluuk = {
 			Enabled = true,
 			Fist = KBM.Defaults.AlertObj.Create("yellow"),
 			Storm = KBM.Defaults.AlertObj.Create("red"),
-			Crystal = KBM.Defaults.AlertObj.Create("blue"),	
+			Crystal = KBM.Defaults.AlertObj.Create("cyan"),	
+		},
+		MechRef = {
+			Enabled = true,
+			Crystal = KBM.Defaults.MechObj.Create("cyan"),
 		},
 	},
 }
@@ -98,9 +103,11 @@ function UK:InitVars()
 		Enabled = true,
 		CastBar = self.Uruluuk.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
+		MechSpy = KBM.Defaults.MechSpy(),
 		Alerts = KBM.Defaults.Alerts(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		AlertsRef = self.Uruluuk.Settings.AlertsRef,
+		MechRef = self.Uruluuk.Settings.MechRef,
 	}
 	KBMGPUK_Settings = self.Settings
 	chKBMGPUK_Settings = self.Settings
@@ -236,6 +243,10 @@ end
 function UK:Start()
 	-- Create Timers
 	
+	-- Create Mechanic Spies
+	self.Uruluuk.MechRef.Crystal = KBM.MechSpy:Add(self.Lang.Verbose.Crystal[KBM.Lang], 3, "playerEmote", self.Uruluuk)
+	KBM.Defaults.MechObj.Assign(self.Uruluuk)
+	
 	-- Create Alerts
 	self.Uruluuk.AlertsRef.Fist = KBM.Alert:Create(self.Lang.Ability.Fist[KBM.Lang], nil, false, true, "yellow")
 	self.Uruluuk.AlertsRef.Storm = KBM.Alert:Create(self.Lang.Ability.Storm[KBM.Lang], nil, true, true, "red")
@@ -251,6 +262,7 @@ function UK:Start()
 	self.Uruluuk.Triggers.Storm:AddAlert(self.Uruluuk.AlertsRef.Storm)
 	self.Uruluuk.Triggers.Crystal = KBM.Trigger:Create(self.Lang.Notify.Crystal[KBM.Lang], "notify", self.Uruluuk)
 	self.Uruluuk.Triggers.Crystal:AddAlert(self.Uruluuk.AlertsRef.Crystal, true)
+	self.Uruluuk.Triggers.Crystal:AddSpy(self.Uruluuk.MechRef.Crystal)
 	
 	self.Uruluuk.CastBar = KBM.CastBar:Add(self, self.Uruluuk)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

@@ -1,4 +1,71 @@
-﻿v0.9.9
+﻿v1.0.0
+New! Mechanic Spy
+* New: Options
+** New: Set up full options pages and customization settings.
+** New: Allows you to display a list of players effected by support mechanics with timers.
+** New: Options to show/hide any mechanics header which is enabled.
+** New: Options to enable/disable any individual mechanic.
+** New: Options to customize the color of any mechanic. Defaults are usually the same as existing timers/alerts for that mechanic.
+
+Engine
+* Triggers
+** New: Added a trigger method for Players gaining Debuffs only.
+** New: Added a trigger method for Units gaining buffs and debuffs via Unique Buff IDs.
+** Note: Buffs and Debuffs will be entirely separate eventually. This is a first case test used for Sicaron's Unholy Contract change.
+
+Options
+* Screen Alerts
+** Fixed: The option "Show Anchor (for positioning)" was not unlocking the text until you closed then re-opened the options screen.
+
+CastBars
+* Change: Castbars will no long be interactive while the Menu Screen is not open.
+
+Hammerknell Fortress
+* Matron Zamira
+** New: Mechanic Spy added for Mark of Oblivion.
+* Sicaron
+** New: Mechanic Spy added for Unholy Contract Buff. (uses new engine trigger, testing required)
+** New: Mechanic Spy added for Unholy Contract Debuff. (uses new engine trigger, testing required)
+** New: Mechanic Spy added for Ravaged Soul purge debuff. (uses new engine trigger, testing required)
+* Akylios & Jornaru
+** New: Mechanic Spy added for Mind Decay
+** New: Mechanic Spy added for Suffocating Orb
+
+River of Souls
+* Alsbeth the Discordant
+** New: Soul Destruction alert now stops as soon as interrupted.
+** Change: Dicordant Meteor now triggers from the notify message and not the cast.
+
+Greenscale's Blight
+* Lord Greenscale
+** New: Greenscale's HP monitoring in the Phase Monitor is now carried over during Air Phases.
+** Fixed: Added a clause in the Air Phase trigger. It would triggering twice when Greenscale was healed by adds.
+
+Gilded Prophecy
+* Anrak the Foul
+** New: Timer added for Explosive Venom.
+** New: Mechanic Spy added for Explosive Venom.
+* Guurloth
+** New: Mechanic Spy added for Earthern Punishment. (Stop cast debuff) 
+* Thalguur
+** New: Mechanic Spy added for Call of Gold. (Beam to Tower debuff).
+** New: Mechanic Spy added for Touch of the Core.
+** Fixed: Call of Gold will only alert the player tethered to the Tower.
+** Fixed: Call of Gold will no longer alert when you get the failed mechanic debuff.
+* Uruluuk
+** New: Mechanic Spy added for Crystal Imprisonment.
+
+Drowned Halls
+* Joloral Ragetide
+** New: Mechanic Spy added for Panic.
+
+Translations
+* New: Dictionary entries added. Type /kbmlocale in your native client for a complete listing.
+
+Russian Translations
+* Further additions for Russian native client support.
+----
+v0.9.9
 
 Translation System
 * New: A new "How To Translate" page is being written to help keep translations unified with the new system.

@@ -8,6 +8,42 @@ KBM.Scroller = {}
 
 KBM.MenuIDList = {}
 
+function KBM.SetBossTimers(Boss, bool)
+	if bool then
+		for TimerID, TimerObj in pairs(Boss.TimersRef) do
+			TimerObj.Enabled = TimerObj.Settings.Enabled
+		end
+	else
+		for TimerID, TimerObj in pairs(Boss.TimersRef) do
+			TimerObj.Enabled = false
+		end
+	end
+end
+
+function KBM.SetBossSpies(Boss, bool)
+	if bool then
+		for MechID, MechObj in pairs(Boss.MechRef) do
+			MechObj.Enabled = MechObj.Settings.Enabled
+		end
+	else
+		for MechID, MechObj in pairs(Boss.MechRef) do
+			MechObj.Enabled = false
+		end
+	end
+end
+
+function KBM.SetBossAlerts(Boss, bool)
+	if bool then
+		for AlertID, AlertObj in pairs(Boss.AlertsRef) do
+			AlertObj.Enabled = AlertObj.Settings.Enabled
+		end
+	else
+		for AlertID, AlertObj in pairs(Boss.AlertsRef) do
+			AlertObj.Enabled = false
+		end
+	end
+end
+
 function KBM.Scroller:Create(Type, Size, Parent, Callback)
 
 	local ScrollerObj = {}
@@ -1418,6 +1454,7 @@ function KBM.InitOptions()
 		KBM.MechTimer:ApplySettings()
 		KBM.PhaseMonitor:ApplySettings()
 		KBM.EncTimer:ApplySettings()
+		KBM.MechSpy:ApplySettings()
 		KBM.TankSwap.Anchor:SetVisible(false)
 		KBM.TankSwap.Anchor.Drag:SetVisible(false)
 		if KBM.PlugIn.Count > 0 then
@@ -1447,6 +1484,7 @@ function KBM.InitOptions()
 		KBM.MechTimer:ApplySettings()
 		KBM.PhaseMonitor:ApplySettings()
 		KBM.EncTimer:ApplySettings()
+		KBM.MechSpy:ApplySettings()
 		if KBM.Options.TankSwap.Visible then
 			KBM.TankSwap.Anchor:SetVisible(true)
 			KBM.TankSwap.Anchor.Drag:SetVisible(KBM.Options.TankSwap.Unlocked)
@@ -1821,6 +1859,13 @@ function KBM.InitOptions()
 					end
 				end
 				
+				if self.Boss.Mod.Settings.MechSpy then
+					if self.Boss.Mod.Settings.MechSpy.Override then
+						KBM.MechSpy.Settings = self.Boss.Mod.Settings.MechSpy
+						KBM.MechSpy:ApplySettings()
+					end
+				end
+				
 				if self.Boss.Mod.Settings.Alerts then
 					if self.Boss.Mod.Settings.Alerts.Override then
 						KBM.Alert.Settings = self.Boss.Mod.Settings.Alerts
@@ -1859,6 +1904,8 @@ function KBM.InitOptions()
 				KBM.MechTimer:ApplySettings()
 				KBM.Alert.Settings = KBM.Options.Alerts
 				KBM.Alert:ApplySettings()
+				KBM.MechSpy.Settings = KBM.Options.MechSpy
+				KBM.MechSpy:ApplySettings()
 				
 				if self.Boss.Mod.Settings.CastBar then
 					if self.Boss.Mod.Settings.CastBar.Multi then
@@ -2477,7 +2524,7 @@ function KBM.InitOptions()
 				local Callbacks = {}
 				Callbacks.Boss = self.Boss
 			
-				-- Mechanic Timer callbacks
+				-- Mechanic Timer and Mech Spy callbacks
 				function Callbacks:Override(bool)
 					self.Encounter.Boss.Mod.Settings.MechTimer.Override = bool
 					if bool then
@@ -2488,8 +2535,22 @@ function KBM.InitOptions()
 					KBM.MechTimer:ApplySettings()
 				end
 				
+				function Callbacks:MS_Override(bool)
+					self.Encounter.Boss.Mod.Settings.MechSpy.Override = bool
+					if bool then
+						KBM.MechSpy.Settings = self.Encounter.Boss.Mod.Settings.MechSpy
+					else
+						KBM.MechSpy.Settings = KBM.Options.MechSpy
+					end
+					KBM.MechSpy:ApplySettings()
+				end
+				
 				function Callbacks:Enabled(bool)
 					self.Header.Encounter.Boss.Mod.Settings.MechTimer.Enabled = bool
+				end
+
+				function Callbacks:MS_Enabled(bool)
+					self.Header.Encounter.Boss.Mod.Settings.MechSpy.Enabled = bool
 				end
 				
 				function Callbacks:Visible(bool)
@@ -2498,19 +2559,38 @@ function KBM.InitOptions()
 					KBM.MechTimer.Anchor:SetVisible(bool)
 					KBM.MechTimer.Anchor.Drag:SetVisible(bool)
 				end
+
+				function Callbacks:MS_Visible(bool)
+					self.Header.Encounter.Boss.Mod.Settings.MechSpy.Visible = bool
+					self.Header.Encounter.Boss.Mod.Settings.MechSpy.Unlocked = bool
+					KBM.MechSpy.Anchor:SetVisible(bool)
+					KBM.MechSpy.Anchor.Drag:SetVisible(bool)
+				end
 				
 				function Callbacks:Width(bool)
 					self.Header.Encounter.Boss.Mod.Settings.MechTimer.ScaleWidth = bool
+				end
+
+				function Callbacks:MS_Width(bool)
+					self.Header.Encounter.Boss.Mod.Settings.MechSpy.ScaleWidth = bool
 				end
 				
 				function Callbacks:Height(bool)
 					self.Header.Encounter.Boss.Mod.Settings.MechTimer.ScaleHeight = bool
 				end
+
+				function Callbacks:MS_Height(bool)
+					self.Header.Encounter.Boss.Mod.Settings.MechSpy.ScaleHeight = bool
+				end
 				
 				function Callbacks:Text(bool)
 					self.Header.Encounter.Boss.Mod.Settings.MechTimer.TextScale = bool
 				end
-			
+
+				function Callbacks:MS_Text(bool)
+					self.Header.Encounter.Boss.Mod.Settings.MechSpy.ScaleText = bool
+				end
+				
 				if self.Boss.Mod.Settings.MechTimer then
 					local Settings = self.Boss.Mod.Settings.MechTimer
 					Header = self:CreateHeader(KBM.Language.Options.MechTimerOverride[KBM.Lang], "check", "Timers", "Main")
@@ -2528,10 +2608,28 @@ function KBM.InitOptions()
 					Child:SetChecked(Settings.TextScale)
 				end
 				
+				if self.Boss.Mod.Settings.MechSpy then
+					local Settings = self.Boss.Mod.Settings.MechSpy
+					Header = self:CreateHeader(KBM.Language.MechSpy.Override[KBM.Lang], "check", "Timers", "Main")
+					Header:SetChecked(Settings.Override)
+					Header:SetHook(Callbacks.MS_Override)
+					Child = Header:CreateOption(KBM.Language.Options.Enabled[KBM.Lang], "check", Callbacks.MS_Enabled)
+					Child:SetChecked(Settings.Enabled)
+					Child = Header:CreateOption(KBM.Language.Options.ShowAnchor[KBM.Lang], "check", Callbacks.MS_Visible)
+					Child:SetChecked(Settings.Visible)
+					Child = Header:CreateOption(KBM.Language.Options.UnlockWidth[KBM.Lang], "check", Callbacks.MS_Width)
+					Child:SetChecked(Settings.ScaleWidth)
+					Child = Header:CreateOption(KBM.Language.Options.UnlockHeight[KBM.Lang], "check", Callbacks.MS_Height)
+					Child:SetChecked(Settings.ScaleHeight)
+					Child = Header:CreateOption(KBM.Language.Options.UnlockText[KBM.Lang], "check", Callbacks.MS_Text)
+					Child:SetChecked(Settings.ScaleText)
+				end
+				
 				function self:CreateOptions(BossObj)
 				
 					BossObj.Menu = {}
 					BossObj.Menu.Timers = {}
+					BossObj.Menu.Spies = {}
 
 					local Callbacks = {}
 					local MenuName = ""
@@ -2543,7 +2641,12 @@ function KBM.InitOptions()
 					
 					function Callbacks:Enabled(bool)
 						self.Boss.Settings.TimersRef.Enabled = bool
-						self.Boss:SetTimers(bool)
+						KBM.SetBossTimers(self.Boss, bool)
+					end
+					
+					function Callbacks:MS_Enabled(bool)
+						self.Boss.Settings.MechRef.Enabled = bool
+						KBM.SetBossSpies(self.Boss, bool)
 					end
 										
 					if BossObj.TimersRef then					
@@ -2617,11 +2720,85 @@ function KBM.InitOptions()
 							end
 						end
 					end
-				end
-				
-				local TimerCreated = false
+					
+					if BossObj.NameShort then
+						MenuName = BossObj.NameShort
+					else
+						MenuName = BossObj.Name
+					end
+					
+					if BossObj.MechRef then					
+						Header = self:CreateHeader(KBM.Language.MechSpy.Enabled[KBM.Lang].." ("..MenuName..")", "check", "Timers", "Main")
+						Header:SetChecked(BossObj.Settings.MechRef.Enabled)
+						Header:SetHook(Callbacks.MS_Enabled)
+						Header.Boss = BossObj
+						
+						for MechID, MechData in pairs(BossObj.MechRef) do
+							local Callbacks = {}
+							Callbacks.Option = self
+							
+							function Callbacks:Callback(bool)
+								self.Data.Enabled = bool
+								self.Data.Settings.Enabled = bool
+								self.Boss.Menu.Spies[self.Data.Settings.ID].ColorGUI:Enable(bool)
+								if not bool then
+									KBM.MechTimer:AddRemove(self.Data)
+								end
+							end
+							
+							function Callbacks:Enabled(bool)
+								self.Data.Enabled = bool
+								self.Data.Settings.Enabled = bool
+								self.Boss.Menu.Spies[self.Data.Settings.ID].ColorGUI:Enable(bool)
+								if not bool then
+									KBM.MechTimer:AddRemove(self.Data)
+								end
+							end
+							
+							function Callbacks:Color(bool, Color)							
+								if not Color then
+									self.Data.Settings.Custom = bool
+									self.GUI:SetEnabled(bool)
+									if bool then
+										self.GUI:SetColor(self.Data.Settings.Color)
+									else
+										self.GUI:SetColor(self.Data.Color)
+									end
+								elseif Color then
+									self.Manager.Data.Settings.Color = Color
+								end								
+							end
+						
+							MenuName = MechData.Name
+							if MechData.MenuName then
+								MenuName = MechData.MenuName
+							end
+						
+							Child = Header:CreateOption(MenuName, "excheck", Callbacks.Callback)
+							Child.Data = MechData
+							Child:SetChecked(MechData.Settings.Enabled)							
+							local SubHeader = Child:CreateHeader(MenuName, "plain")
+							SubHeader.Boss = BossObj
+							BossObj.Menu.Spies[MechID] = {}
+							BossObj.Menu.Spies[MechID].Enabled = SubHeader:CreateOption(KBM.Language.Options.Enabled[KBM.Lang], "check", Callbacks.Enabled)
+							BossObj.Menu.Spies[MechID].Enabled:SetChecked(MechData.Settings.Enabled)
+							BossObj.Menu.Spies[MechID].Enabled.Data = MechData
+							BossObj.Menu.Spies[MechID].Enabled.Controller = Child
+							Child.Controller = BossObj.Menu.Spies[MechID].Enabled
+							BossObj.Menu.Spies[MechID].ColorGUI = SubHeader:CreateOption(KBM.Language.Color.Custom[KBM.Lang], "color", Callbacks.Color)
+							BossObj.Menu.Spies[MechID].ColorGUI:SetChecked(MechData.Settings.Custom)
+							BossObj.Menu.Spies[MechID].ColorGUI.Enabled = MechData.Settings.Enabled
+							if MechData.Settings.Custom then
+								BossObj.Menu.Spies[MechID].ColorGUI.Color = MechData.Settings.Color
+							else
+								BossObj.Menu.Spies[MechID].ColorGUI.Color = MechData.Color
+							end
+							BossObj.Menu.Spies[MechID].ColorGUI.Data = MechData
+						end
+					end
+				end			
 				for BossName, BossObj in pairs(self.Boss.Mod.Bosses) do
-					if BossObj.TimersRef then
+					if BossObj.TimersRef or BossObj.MechRef then
 						self:CreateOptions(BossObj)
 						TimerCreated = true
 					end
@@ -2710,7 +2887,7 @@ function KBM.InitOptions()
 		
 					function Callbacks:Enabled(bool)
 						self.Boss.Settings.AlertsRef.Enabled = bool
-						self.Boss:SetAlerts(bool)
+						KBM.SetBossAlerts(self.Boss, bool)
 					end
 		
 					if BossObj.AlertsRef then
