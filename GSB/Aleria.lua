@@ -33,6 +33,7 @@ OA.Aleria = {
 	Menu = {},
 	AlertsRef = {},
 	TimersRef = {},
+	MechRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
@@ -46,6 +47,10 @@ OA.Aleria = {
 		TimersRef = {
 			Enabled = true,
 			Necrotic = KBM.Defaults.TimerObj.Create("purple"),
+		},
+		MechRef = {
+			Enabled = true,
+			Necrotic = KBM.Defaults.MechObj.Create("purple"),
 		},
 	},
 }
@@ -290,10 +295,15 @@ function OA:Start()
 	self.Aleria.TimersRef.Necrotic = KBM.MechTimer:Add(self.Lang.Debuff.Necrotic[KBM.Lang], 22, "purple")
 	KBM.Defaults.TimerObj.Assign(self.Aleria)
 
+	-- Create Mechanic Spies
+	self.Aleria.MechRef.Necrotic = KBM.MechSpy:Add(self.Lang.Debuff.Necrotic[KBM.Lang], nil, "playerDebuff", self.Aleria)
+	KBM.Defaults.MechObj.Assign(self.Aleria)
+	
 	-- Assign Alert to Trigger
 	self.Aleria.Triggers.Necrotic = KBM.Trigger:Create(self.Lang.Debuff.Necrotic[KBM.Lang], "playerBuff", self.Aleria)
 	self.Aleria.Triggers.Necrotic:AddAlert(self.Aleria.AlertsRef.Necrotic, true)
 	self.Aleria.Triggers.Necrotic:AddTimer(self.Aleria.TimersRef.Necrotic)
+	self.Aleria.Triggers.Necrotic:AddSpy(self.Aleria.MechRef.Necrotic)
 	
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()

@@ -2447,7 +2447,8 @@ function KBM.InitOptions()
 						end
 
 						local Settings = BossObj.Settings.Filters
-						Header = self:CreateHeader(KBM.Language.Menu.Enable[KBM.Lang].." "..MenuName.."'s "..KBM.Language.Menu.Filters[KBM.Lang], "check", "Castbars", "Main")
+						--Header = self:CreateHeader(KBM.Language.Menu.Enable[KBM.Lang].." "..MenuName.."'s "..KBM.Language.Menu.Filters[KBM.Lang], "check", "Castbars", "Main")
+						Header = self:CreateHeader(string.format(KBM.Language.Filters.EnableBoss[KBM.Lang], MenuName), "check", "Castbars", "Main")
 						Header:SetChecked(Settings.Enabled)
 						Header:SetHook(Callbacks.Enabled)
 						Header.Boss = BossObj

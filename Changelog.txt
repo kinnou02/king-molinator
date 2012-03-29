@@ -29,18 +29,40 @@ Hammerknell Fortress
 ** New: Mechanic Spy added for Unholy Contract Debuff. (uses new engine trigger, testing required)
 ** New: Mechanic Spy added for Ravaged Soul purge debuff. (uses new engine trigger, testing required)
 * Akylios & Jornaru
-** New: Mechanic Spy added for Mind Decay
-** New: Mechanic Spy added for Suffocating Orb
+** New: Mechanic Spy added for Mind Decay.
+** New: Mechanic Spy added for Suffocating Orb.
 
 River of Souls
+* Dark Foci
+** New: Mechanic Spy added for Destabilize Soul.
+* Warmaster Galenir
+** New: Mechanic Spy added for Essence Transfer.
+* Herald Gaurath
+** New: Mechanic Spy added for Tidings of Woe.
+* Plutonus the Immortal
+** New: Mechanic Spy added for Walking Sleep.
 * Alsbeth the Discordant
 ** New: Soul Destruction alert now stops as soon as interrupted.
+** New: Mechanic Spy added for Punish Soul.
+** New: Mechanic Spy added for Discordant Meteor.
 ** Change: Dicordant Meteor now triggers from the notify message and not the cast.
 
 Greenscale's Blight
+* Oracle Aleria
+** New: Mechanic Spy added for Necrotic Eruption.
 * Lord Greenscale
 ** New: Greenscale's HP monitoring in the Phase Monitor is now carried over during Air Phases.
 ** Fixed: Added a clause in the Air Phase trigger. It would triggering twice when Greenscale was healed by adds.
+
+Rise of the Pheonix
+* Ereandorn
+** New: Mechanic Spy added for Excitable Combustion.
+** Change: The alert for Excitable Combustion is now triggered by the debuff. (experimental)
+* General Silgen
+** New: Mechanic Spy added for Anchored in Flames.
+High Priest Arakhurn
+** New: Mechanic Spy added for Fiery Metamorphosis.
+** New: Mechanic Spy added for Ignited (double stacks - highly experimental)
 
 Gilded Prophecy
 * Anrak the Foul

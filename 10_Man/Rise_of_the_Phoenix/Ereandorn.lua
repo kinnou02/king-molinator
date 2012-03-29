@@ -32,6 +32,7 @@ EN.Ereandorn = {
 	CastFilters = {},
 	HasCastFilters = false,
 	AlertsRef = {},
+	MechRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
@@ -44,6 +45,10 @@ EN.Ereandorn = {
 			Combustion = KBM.Defaults.AlertObj.Create("red"),
 			Growth = KBM.Defaults.AlertObj.Create("red"),
 			Eruption = KBM.Defaults.AlertObj.Create("orange"),
+		},
+		MechRef = {
+			Enabled = true,
+			Combustion = KBM.Defaults.MechObj.Create("red"),
 		},
 	},
 }
@@ -102,9 +107,11 @@ function EN:InitVars()
 		Enabled = true,
 		CastBar = self.Ereandorn.Settings.CastBar,
 		AlertsRef = self.Ereandorn.Settings.AlertsRef,
+		MechRef = self.Ereandorn.Settings.MechRef,
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		EncTimer = KBM.Defaults.EncTimer(),
 		Alerts = KBM.Defaults.Alerts(),
+		MechSpy = KBM.Defaults.MechSpy(),
 	}
 	KBMROTPEN_Settings = self.Settings
 	chKBMROTPEN_Settings = self.Settings
@@ -228,14 +235,19 @@ end
 
 function EN:Start()
 	-- Alerts
-	self.Ereandorn.AlertsRef.Combustion = KBM.Alert:Create(self.Lang.Ability.Combustion[KBM.Lang], 5, true, false, "red")
+	self.Ereandorn.AlertsRef.Combustion = KBM.Alert:Create(self.Lang.Ability.Combustion[KBM.Lang], nil, true, false, "red")
 	self.Ereandorn.AlertsRef.Growth = KBM.Alert:Create(self.Lang.Ability.Growth[KBM.Lang], 8, true, true, "red")
 	self.Ereandorn.AlertsRef.Eruption = KBM.Alert:Create(self.Lang.Ability.Eruption[KBM.Lang], 5, true, false, "orange")
 	KBM.Defaults.AlertObj.Assign(self.Ereandorn)
+	
+	-- Create Mechanic Spies
+	self.Ereandorn.MechRef.Combustion = KBM.MechSpy:Add(self.Lang.Ability.Combustion[KBM.Lang], nil, "playerDebuff", self.Ereandorn)
+	KBM.Defaults.MechObj.Assign(self.Ereandorn)
 		
 	-- Assign mechanics to Triggers
-	self.Ereandorn.Triggers.Combustion = KBM.Trigger:Create(self.Lang.Notify.Combustion[KBM.Lang], "notify", self.Ereandorn)
+	self.Ereandorn.Triggers.Combustion = KBM.Trigger:Create(self.Lang.Ability.Combustion[KBM.Lang], "playerDebuff", self.Ereandorn)
 	self.Ereandorn.Triggers.Combustion:AddAlert(self.Ereandorn.AlertsRef.Combustion, true)
+	self.Ereandorn.Triggers.Combustion:AddSpy(self.Ereandorn.MechRef.Combustion)
 	self.Ereandorn.Triggers.Growth = KBM.Trigger:Create(self.Lang.Notify.Growth[KBM.Lang], "notify", self.Ereandorn)
 	self.Ereandorn.Triggers.Growth:AddAlert(self.Ereandorn.AlertsRef.Growth)
 	self.Ereandorn.Triggers.Eruption = KBM.Trigger:Create(self.Lang.Notify.Eruption[KBM.Lang], "notify", self.Ereandorn)

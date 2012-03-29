@@ -37,6 +37,7 @@ AD.Alsbeth = {
 	Dead = false,
 	TimersRef = {},
 	AlertsRef = {},
+	MechRef = {},
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
@@ -59,6 +60,11 @@ AD.Alsbeth = {
 			Ground = KBM.Defaults.AlertObj.Create("yellow"),
 			Meteor = KBM.Defaults.AlertObj.Create("orange"),
 			Shield = KBM.Defaults.AlertObj.Create("blue"),
+		},
+		MechRef = {
+			Enabled = true,
+			Punish = KBM.Defaults.MechObj.Create("purple"),
+			Meteor = KBM.Defaults.MechObj.Create("orange"),
 		},
 	},
 }
@@ -254,12 +260,14 @@ function AD:InitVars()
 		},
 		EncTimer = KBM.Defaults.EncTimer(),
 		MechTimer = KBM.Defaults.MechTimer(),
+		MechSpy = KBM.Defaults.MechSpy(),
 		Alerts = KBM.Defaults.Alerts(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		Alsbeth = {
 			CastBar = self.Alsbeth.Settings.CastBar,
 			TimersRef = self.Alsbeth.Settings.TimersRef,
 			AlertsRef = self.Alsbeth.Settings.AlertsRef,
+			MechRef = self.Alsbeth.Settings.MechRef,
 		},
 		Magus = {
 			CastBar = self.Magus.Settings.CastBar,
@@ -548,11 +556,18 @@ function AD:Start()
 	KBM.Defaults.AlertObj.Assign(self.Alsbeth)
 	KBM.Defaults.AlertObj.Assign(self.Magus)
 	
+	-- Create Mechanic Spies
+	self.Alsbeth.MechRef.Punish = KBM.MechSpy:Add(self.Lang.Ability.Punish[KBM.Lang], 1.5, "dynamic", self.Alsbeth)
+	self.Alsbeth.MechRef.Meteor = KBM.MechSpy:Add(self.Lang.Ability.Meteor[KBM.Lang], 12, "notify", self.Alsbeth)
+	KBM.Defaults.MechObj.Assign(self.Alsbeth)
+	
 	-- Assign Timers and Alerts to triggers.
 	self.Alsbeth.Triggers.PunishWarn = KBM.Trigger:Create(self.Lang.Notify.Punish[KBM.Lang], "notify", self.Alsbeth)
 	self.Alsbeth.Triggers.PunishWarn:AddAlert(self.Alsbeth.AlertsRef.PunishWarn, true)
+	self.Alsbeth.Triggers.PunishWarn:AddSpy(self.Alsbeth.MechRef.Punish)
 	self.Alsbeth.Triggers.Punish = KBM.Trigger:Create(self.Lang.Ability.Punish[KBM.Lang], "playerBuff", self.Alsbeth)
 	self.Alsbeth.Triggers.Punish:AddAlert(self.Alsbeth.AlertsRef.Punish, true)
+	self.Alsbeth.Triggers.Punish:AddSpy(self.Alsbeth.MechRef.Punish)
 	self.Alsbeth.Triggers.Final = KBM.Trigger:Create(20, "percent", self.Alsbeth)
 	self.Alsbeth.Triggers.Final:AddPhase(self.FinalPhase)
 	self.Alsbeth.Triggers.Blast = KBM.Trigger:Create(self.Lang.Ability.Blast[KBM.Lang], "cast", self.Alsbeth)
@@ -563,6 +578,7 @@ function AD:Start()
 	self.Alsbeth.Triggers.Meteor = KBM.Trigger:Create(self.Lang.Notify.Meteor[KBM.Lang], "notify", self.Alsbeth)
 	self.Alsbeth.Triggers.Meteor:AddTimer(self.Alsbeth.TimersRef.Meteor)
 	self.Alsbeth.Triggers.Meteor:AddAlert(self.Alsbeth.AlertsRef.Meteor)
+	self.Alsbeth.Triggers.Meteor:AddSpy(self.Alsbeth.MechRef.Meteor)
 	self.Alsbeth.Triggers.Shield = KBM.Trigger:Create(self.Lang.Buff.Shield[KBM.Lang], "buff", self.Alsbeth)
 	self.Alsbeth.Triggers.Shield:AddTimer(self.Alsbeth.TimersRef.Shield)
 	self.Alsbeth.Triggers.Shield:AddAlert(self.Alsbeth.AlertsRef.Shield)

@@ -38,6 +38,7 @@ HA.Arakhurn = {
 	Castbar = nil,
 	AlertsRef = {},
 	TimersRef = {},
+	MechRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
@@ -63,6 +64,11 @@ HA.Arakhurn = {
 			Fiery = KBM.Defaults.AlertObj.Create("orange"),
 			NovaWarn = KBM.Defaults.AlertObj.Create("red"),
 		},
+		MechRef = {
+			Enabled = true,
+			Ignited = KBM.Defaults.MechObj.Create("red"),
+			Fiery = KBM.Defaults.MechObj.Create("orange"),
+		}
 	}
 }
 
@@ -137,6 +143,7 @@ HA.Lang.Debuff.Armor = KBM.Language:Add("Armor Rip")
 HA.Lang.Debuff.Armor:SetGerman("Rüstung aufreißen")
 HA.Lang.Debuff.Armor:SetFrench("Déchirure d'armure")
 HA.Lang.Debuff.Armor:SetRussian("Раздиратель доспехов")
+HA.Lang.Debuff.Ignited = KBM.Language:Add("Ignited")
 
 -- Verbose Dictionary
 HA.Lang.Verbose = {}
@@ -221,10 +228,12 @@ function HA:InitVars()
 		CastBar = self.Arakhurn.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		Alerts = KBM.Defaults.Alerts(),
+		MechSpy = KBM.Defaults.MechSpy(),
 		MechTimer = KBM.Defaults.MechTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		AlertsRef = self.Arakhurn.Settings.AlertsRef,
 		TimersRef = self.Arakhurn.Settings.TimersRef,
+		MechRef = self.Arakhurn.Settings.Ignited,
 	}
 	KBMROTPHA_Settings = self.Settings
 	chKBMROTPHA_Settings = self.Settings
@@ -446,6 +455,11 @@ function HA:Start()
 	self.Arakhurn.TimersRef.NovaPThree:AddAlert(self.Arakhurn.AlertsRef.NovaWarn, 5)
 	KBM.Defaults.AlertObj.Assign(self.Arakhurn)
 	
+	-- Create Mechanic Spies
+	self.Arakhurn.MechRef.Ignited = KBM.MechSpy:Add(self.Lang.Debuff.Ignited[KBM.Lang], nil, "playerDebuff", self.Arakhurn)
+	self.Arakhurn.MechRef.Fiery = KBM.MechSpy:Add(self.Lang.Buff.Fiery[KBM.Lang], nil, "playerBuff", self.Arakhurn)
+	KBM.Defaults.MechObj.Assign(self.Arakhurn)
+	
 	-- Assign Timers and Alerts to Triggers
 	self.Arakhurn.Triggers.Stall = KBM.Trigger:Create(1, "percent", self.Arakhurn)
 	self.Arakhurn.Triggers.Stall:AddPhase(self.Stall)
@@ -455,11 +469,16 @@ function HA:Start()
 	self.Arakhurn.Triggers.Fiery = KBM.Trigger:Create(self.Lang.Buff.Fiery[KBM.Lang], "playerBuff", self.Arakhurn)
 	self.Arakhurn.Triggers.Fiery:AddTimer(self.Arakhurn.TimersRef.Fiery)
 	self.Arakhurn.Triggers.Fiery:AddAlert(self.Arakhurn.AlertsRef.Fiery, true)
+	self.Arakhurn.Triggers.Fiery:AddSpy(self.Arakhurn.MechRef.Fiery)
 	self.Arakhurn.Triggers.PhaseTwo = KBM.Trigger:Create(self.Lang.Chat.Death[KBM.Lang], "say", self.Arakhurn)
 	self.Arakhurn.Triggers.PhaseTwo:AddTimer(self.Arakhurn.TimersRef.Rise)
 	self.Arakhurn.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
 	self.Arakhurn.Triggers.PhaseThree = KBM.Trigger:Create(self.Lang.Notify.Respawn[KBM.Lang], "notify", self.Arakhurn)
 	self.Arakhurn.Triggers.PhaseThree:AddPhase(self.PhaseThree)
+	self.Arakhurn.Triggers.Ignited = KBM.Trigger:Create(self.Lang.Debuff.Ignited[KBM.Lang], "playerDebuff", self.Arakhurn)
+	self.Arakhurn.Triggers.Ignited:AddSpy(self.Arakhurn.MechRef.Ignited)
+	self.Arakhurn.Triggers.IgnitedRemoved = KBM.Trigger:Create(self.Lang.Debuff.Ignited[KBM.Lang], "playerBuffRemove", self.Arakhurn)
+	self.Arakhurn.Triggers.IgnitedRemoved:AddStop(self.Arakhurn.MechRef.Ignited)
 	
 	self.Arakhurn.CastBar = KBM.CastBar:Add(self, self.Arakhurn)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

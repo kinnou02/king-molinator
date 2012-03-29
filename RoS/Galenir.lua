@@ -33,6 +33,7 @@ WG.Galenir = {
 	Dead = false,
 	Available = false,
 	AlertsRef = {},
+	MechRef = {},
 	Menu = {},
 	UnitID = nil,
 	TimeOut = 5,
@@ -41,6 +42,10 @@ WG.Galenir = {
 		AlertsRef = {
 			Enabled = true,
 			Essence = KBM.Defaults.AlertObj.Create("red"),
+		},
+		MechRef = {
+			Enabled = true,
+			Essence = KBM.Defaults.MechObj.Create("red"),
 		},
 	},
 }
@@ -81,9 +86,11 @@ function WG:InitVars()
 	self.Settings = {
 		Enabled = true,
 		EncTimer = KBM.Defaults.EncTimer(),
+		MechSpy = KBM.Defaults.MechSpy(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		AlertsRef = self.Galenir.Settings.AlertsRef,
 		Alerts = KBM.Defaults.Alerts(),
+		MechRef = self.Galenir.Settings.MechRef,
 	}
 	KBMROSWG_Settings = self.Settings
 	chKBMROSWG_Settings = self.Settings
@@ -209,9 +216,14 @@ function WG:Start()
 	self.Galenir.AlertsRef.Essence = KBM.Alert:Create(self.Lang.Debuff.Essence[KBM.Lang], nil, false, true, "red")
 	KBM.Defaults.AlertObj.Assign(self.Galenir)
 	
+	-- Create Mechanic Spies
+	self.Galenir.MechRef.Essence = KBM.MechSpy:Add(self.Lang.Debuff.Essence[KBM.Lang], nil, "playerDebuff", self.Galenir)
+	KBM.Defaults.MechObj.Assign(self.Galenir)
+	
 	-- Assign Alerts and Timers to Triggers
 	self.Galenir.Triggers.Essence = KBM.Trigger:Create(self.Lang.Debuff.Essence[KBM.Lang], "playerBuff", self.Galenir)
 	self.Galenir.Triggers.Essence:AddAlert(self.Galenir.AlertsRef.Essence, true)
+	self.Galenir.Triggers.Essence:AddSpy(self.Galenir.MechRef.Essence)
 	
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()

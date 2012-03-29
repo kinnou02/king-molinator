@@ -34,6 +34,7 @@ PI.Plutonus = {
 	Available = false,
 	TimersRef = {},
 	AlertsRef = {},
+	MechRef = {},
 	Menu = {},
 	UnitID = nil,
 	TimeOut = 5,
@@ -51,6 +52,10 @@ PI.Plutonus = {
 			Thirty = KBM.Defaults.AlertObj.Create("yellow"),
 			Twenty = KBM.Defaults.AlertObj.Create("orange"),
 			Ten = KBM.Defaults.AlertObj.Create("red"),
+		},
+		MechRef = {
+			Enabled = true,
+			Sleep = KBM.Defaults.MechObj.Create("purple"),
 		},
 	},
 }
@@ -88,10 +93,12 @@ function PI:InitVars()
 		CastBar = self.Plutonus.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		Alerts = KBM.Defaults.Alerts(),
+		MechSpy = KBM.Defaults.MechSpy(),
 		MechTimer = KBM.Defaults.MechTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		TimersRef = self.Plutonus.Settings.TimersRef,
 		AlertsRef = self.Plutonus.Settings.AlertsRef,
+		MechRef = self.Plutonus.Settings.MechRef,
 	}
 	KBMROSPI_Settings = self.Settings
 	chKBMROSPI_Settings = self.Settings
@@ -227,8 +234,12 @@ function PI:Start()
 	self.Plutonus.TimersRef.Sleep = KBM.MechTimer:Add(self.Lang.Ability.Sleep[KBM.Lang], 23)
 	KBM.Defaults.TimerObj.Assign(self.Plutonus)
 
+	-- Create Mechanic Spies
+	self.Plutonus.MechRef.Sleep = KBM.MechSpy:Add(self.Lang.Ability.Sleep[KBM.Lang], nil, "playerBuff", self.Plutonus)
+	KBM.Defaults.MechObj.Assign(self.Plutonus)
+	
 	-- Create Alerts
-	self.Plutonus.AlertsRef.Sleep = KBM.Alert:Create(self.Lang.Ability.Sleep[KBM.Lang], 3, true, false, "purple")
+	self.Plutonus.AlertsRef.Sleep = KBM.Alert:Create(self.Lang.Ability.Sleep[KBM.Lang], nil, true, false, "purple")
 	self.Plutonus.AlertsRef.Forty = KBM.Alert:Create("40%", 3, true, false, "dark_green")
 	self.Plutonus.AlertsRef.Thirty = KBM.Alert:Create("30%", 3, true, false, "yellow")
 	self.Plutonus.AlertsRef.Twenty = KBM.Alert:Create("20%", 3, true, false, "orange")
@@ -236,9 +247,13 @@ function PI:Start()
 	KBM.Defaults.AlertObj.Assign(self.Plutonus)
 	
 	-- Assign Alerts to Triggers
-	self.Plutonus.Triggers.Sleep = KBM.Trigger:Create(self.Lang.Ability.Sleep[KBM.Lang], "cast", self.Plutonus)
+	self.Plutonus.Triggers.Sleep = KBM.Trigger:Create(self.Lang.Ability.Sleep[KBM.Lang], "playerBuff", self.Plutonus)
 	self.Plutonus.Triggers.Sleep:AddTimer(self.Plutonus.TimersRef.Sleep)
 	self.Plutonus.Triggers.Sleep:AddAlert(self.Plutonus.AlertsRef.Sleep)
+	self.Plutonus.Triggers.Sleep:AddSpy(self.Plutonus.MechRef.Sleep)
+	self.Plutonus.Triggers.SleepRemove = KBM.Trigger:Create(self.Lang.Ability.Sleep[KBM.Lang], "playerBuffRemove", self.Plutonus)
+	self.Plutonus.Triggers.SleepRemove:AddStop(self.Plutonus.AlertsRef.Sleep)
+	self.Plutonus.Triggers.SleepRemove:AddStop(self.Plutonus.MechRef.Sleep)
 	self.Plutonus.Triggers.PhaseTwo = KBM.Trigger:Create(50, "percent", self.Plutonus)
 	self.Plutonus.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
 	self.Plutonus.Triggers.Forty = KBM.Trigger:Create(40, "percent", self.Plutonus)

@@ -32,6 +32,7 @@ GS.Silgen = {
 	Dead = false,
 	TimersRef = {},
 	AlertsRef = {},
+	MechRef = {},
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
@@ -46,8 +47,12 @@ GS.Silgen = {
 		AlertsRef = {
 			Enabled = true,
 			Funnel = KBM.Defaults.AlertObj.Create("red"),
-			Anchor = KBM.Defaults.AlertObj.Create("orange"),
+			Anchor = KBM.Defaults.AlertObj.Create("blue"),
 			Incinerate = KBM.Defaults.AlertObj.Create("yellow"),
+		},
+		MechRef = {
+			Enabled = true,
+			Anchor = KBM.Defaults.MechObj.Create("orange"),
 		},
 	}
 }
@@ -95,10 +100,12 @@ function GS:InitVars()
 		CastBar = self.Silgen.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
+		MechSpy = KBM.Defaults.MechSpy(),
 		MechTimer = KBM.Defaults.MechTimer(),
 		Alerts = KBM.Defaults.Alerts(),
 		TimersRef = self.Silgen.Settings.TimersRef,
 		AlertsRef = self.Silgen.Settings.AlertsRef,
+		MechRef = self.Silgen.Settings.MechRef,
 	}
 	KBMROTPGS_Settings = self.Settings
 	chKBMROTPGS_Settings = self.Settings
@@ -235,14 +242,20 @@ function GS:Start()
 	self.Silgen.AlertsRef.Incinerate = KBM.Alert:Create(self.Lang.Ability.Incinerate[KBM.Lang], nil, true, true, "yellow")
 	KBM.Defaults.AlertObj.Assign(self.Silgen)
 	
+	-- Create Mechanic Spies
+	self.Silgen.MechRef.Anchor = KBM.MechSpy:Add(self.Lang.Debuff.Anchor[KBM.Lang], nil, "playerDebuff", self.Silgen)
+	KBM.Defaults.MechObj.Assign(self.Silgen)
+	
 	-- Assign Alerts and Timers to Triggers
 	self.Silgen.Triggers.Funnel = KBM.Trigger:Create(self.Lang.Ability.Funnel[KBM.Lang], "channel", self.Silgen)
 	self.Silgen.Triggers.Funnel:AddTimer(self.Silgen.TimersRef.Funnel)
 	self.Silgen.Triggers.Funnel:AddAlert(self.Silgen.AlertsRef.Funnel)
 	self.Silgen.Triggers.Anchor = KBM.Trigger:Create(self.Lang.Debuff.Anchor[KBM.Lang], "playerBuff", self.Silgen)
 	self.Silgen.Triggers.Anchor:AddAlert(self.Silgen.AlertsRef.Anchor, true)
+	self.Silgen.Triggers.Anchor:AddSpy(self.Silgen.MechRef.Anchor)
 	self.Silgen.Triggers.AnchorRemove = KBM.Trigger:Create(self.Lang.Debuff.Anchor[KBM.Lang], "playerBuffRemove", self.Silgen)
 	self.Silgen.Triggers.AnchorRemove:AddStop(self.Silgen.AlertsRef.Anchor)
+	self.Silgen.Triggers.AnchorRemove:AddStop(self.Silgen.MechRef.Anchor)
 	self.Silgen.Triggers.Incinerate = KBM.Trigger:Create(self.Lang.Ability.Incinerate[KBM.Lang], "channel", self.Silgen)
 	self.Silgen.Triggers.Incinerate:AddTimer(self.Silgen.TimersRef.Incinerate)
 	self.Silgen.Triggers.Incinerate:AddAlert(self.Silgen.AlertsRef.Incinerate)

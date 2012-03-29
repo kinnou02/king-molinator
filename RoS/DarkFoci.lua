@@ -34,6 +34,7 @@ DF.Foci = {
 	Menu = {},
 	AlertsRef = {},
 	TimersRef = {},
+	MechRef = {},
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
@@ -50,6 +51,10 @@ DF.Foci = {
 			Ground = KBM.Defaults.TimerObj.Create("red"),
 			Call = KBM.Defaults.TimerObj.Create("dark_green"),
 			Soul = KBM.Defaults.TimerObj.Create("purple"),
+		},
+		MechRef = {
+			Enabled = true,
+			Soul = KBM.Defaults.MechObj.Create("purple"),
 		},
 	},
 }
@@ -361,6 +366,10 @@ function DF:Start()
 	KBM.Defaults.AlertObj.Assign(self.Foci)
 	KBM.Defaults.AlertObj.Assign(self.Force)
 	
+	-- Create Mechanic Spies
+	self.Foci.MechRef.Soul = KBM.MechSpy:Add(self.Lang.Debuff.Soul[KBM.Lang], nil, "playerDebuff", self.Foci)
+	KBM.Defaults.MechObj.Assign(self.Foci)
+	
 	-- Assign Timers and Alerts to Triggers
 	self.Foci.Triggers.Ground = KBM.Trigger:Create(self.Lang.Ability.Ground[KBM.Lang], "cast", self.Foci)
 	self.Foci.Triggers.Ground:AddTimer(self.Foci.TimersRef.Ground)
@@ -372,6 +381,7 @@ function DF:Start()
 	self.Foci.Triggers.Soul = KBM.Trigger:Create(self.Lang.Debuff.Soul[KBM.Lang], "playerBuff", self.Foci)
 	self.Foci.Triggers.Soul:AddTimer(self.Foci.TimersRef.Soul)
 	self.Foci.Triggers.Soul:AddAlert(self.Foci.AlertsRef.Soul, true)
+	self.Foci.Triggers.Soul:AddSpy(self.Foci.MechRef.Soul)
 	
 	self.Foci.CastBar = KBM.CastBar:Add(self, self.Foci)
 	self.Force.CastBar = KBM.CastBar:Add(self, self.Force)

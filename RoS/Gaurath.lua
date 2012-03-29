@@ -35,6 +35,7 @@ HG.Gaurath = {
 	Available = false,
 	TimersRef = {},
 	AlertsRef = {},
+	MechRef = {},
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
@@ -50,6 +51,10 @@ HG.Gaurath = {
 			Breath = KBM.Defaults.AlertObj.Create("purple"),
 			Raise = KBM.Defaults.AlertObj.Create("dark_green"),
 			Tidings = KBM.Defaults.AlertObj.Create("orange"),
+		},
+		MechRef = {
+			Enabled = true,
+			Tidings = KBM.Defaults.MechObj.Create("orange"),
 		},
 	},
 }
@@ -109,10 +114,12 @@ function HG:InitVars()
 		CastBar = self.Gaurath.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		MechTimer = KBM.Defaults.MechTimer(),
+		MechSpy = KBM.Defaults.MechSpy(),
 		Alerts = KBM.Defaults.Alerts(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		TimersRef = self.Gaurath.Settings.TimersRef,
 		AlertsRef = self.Gaurath.Settings.AlertsRef,
+		MechRef = self.Gaurath.Settings.MechRef,
 	}
 	KBMROSHG_Settings = self.Settings
 	chKBMROSHG_Settings = self.Settings
@@ -265,6 +272,10 @@ function HG:Start()
 	self.Gaurath.TimersRef.Raise = KBM.MechTimer:Add(self.Lang.Verbose.Raise[KBM.Lang], 7)
 	KBM.Defaults.TimerObj.Assign(self.Gaurath)
 	
+	-- Create Mechanic Spies
+	self.Gaurath.MechRef.Tidings = KBM.MechSpy:Add(self.Lang.Ability.Tidings[KBM.Lang], 8, "mechanic", self.Gaurath)
+	KBM.Defaults.MechObj.Assign(self.Gaurath)
+	
 	-- Create Alerts
 	self.Gaurath.AlertsRef.Breath = KBM.Alert:Create(self.Lang.Ability.Breath[KBM.Lang], nil, false, true, "purple")
 	self.Gaurath.AlertsRef.Raise = KBM.Alert:Create(self.Lang.Ability.Raise[KBM.Lang], nil, true, true, "dark_green")
@@ -279,9 +290,11 @@ function HG:Start()
 	self.Gaurath.Triggers.Raise = KBM.Trigger:Create(self.Lang.Ability.Raise[KBM.Lang], "cast", self.Gaurath)
 	self.Gaurath.Triggers.Raise:AddAlert(self.Gaurath.AlertsRef.Raise)
 	self.Gaurath.Triggers.Raise:AddPhase(self.RaiseCount)
-	self.Gaurath.Triggers.Tidings = KBM.Trigger:Create(self.Lang.Ability.Tidings[KBM.Lang], "cast", self.Gaurath)
-	self.Gaurath.Triggers.Tidings:AddAlert(self.Gaurath.AlertsRef.Tidings)
-	self.Gaurath.Triggers.Tidings:AddPhase(self.GroundPhase)
+	self.Gaurath.Triggers.TidingsCast = KBM.Trigger:Create(self.Lang.Ability.Tidings[KBM.Lang], "cast", self.Gaurath)
+	self.Gaurath.Triggers.TidingsCast:AddAlert(self.Gaurath.AlertsRef.Tidings)
+	self.Gaurath.Triggers.TidingsCast:AddPhase(self.GroundPhase)
+	self.Gaurath.Triggers.Tidings = KBM.Trigger:Create(self.Lang.Notify.Tidings[KBM.Lang], "notify", self.Gaurath)
+	self.Gaurath.Triggers.Tidings:AddSpy(self.Gaurath.MechRef.Tidings)
 	
 	self.Gaurath.CastBar = KBM.CastBar:Add(self, self.Gaurath)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

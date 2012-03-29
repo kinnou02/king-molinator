@@ -443,6 +443,12 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Menu.Castbars:SetGerman("Zauberbalken")
 	KBM.Language.Menu.Castbars:SetRussian("Кастбары")
 	
+	-- Filter Options
+	KBM.Language.Filters = {}
+	KBM.Language.Filters.EnableBoss = KBM.Language:Add("Enable %s's filters")
+	KBM.Language.Filters.EnableBoss:SetFrench("Filtres sur %s Activé")
+	KBM.Language.Filters.EnableBoss:SetGerman("Aktiviere %s's Filter")
+	
 	-- Misc.
 	KBM.Language.Options.Character = KBM.Language:Add("Saving settings for this character only")
 	KBM.Language.Options.Character:SetGerman("Einstellungen nur für diesen Charakter speichern")
