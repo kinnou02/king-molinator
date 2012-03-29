@@ -95,6 +95,8 @@ AF.Lang.Debuff.Brittle:SetGerman("Brüchig")
 AF.Lang.Debuff.Brittle:SetFrench("Fragile")
 AF.Lang.Debuff.Brittle:SetRussian("Хрупкость")
 AF.Lang.Debuff.Venom = KBM.Language:Add("Explosive Venom")
+AF.Lang.Debuff.Venom:SetGerman("Explosives Gift")
+AF.Lang.Debuff.Venom:SetFrench("Venin explosif")
 
 -- Menu Dictionary
 AF.Lang.Menu = {}

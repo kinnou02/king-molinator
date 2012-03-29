@@ -6,6 +6,7 @@ New! Mechanic Spy
 ** New: Options to show/hide any mechanics header which is enabled.
 ** New: Options to enable/disable any individual mechanic.
 ** New: Options to customize the color of any mechanic. Defaults are usually the same as existing timers/alerts for that mechanic.
+** New: Mechanic Spy objects can now launch additional objects themselves. <SpyObj1>:SpyAfter(SpyObj2)
 
 Engine
 * Triggers
@@ -61,6 +62,12 @@ Drowned Halls
 
 Translations
 * New: Dictionary entries added. Type /kbmlocale in your native client for a complete listing.
+
+German Translations
+* New German Translations and minor fixes.
+
+French Translations
+* New French Translations and minor fixes.
 
 Russian Translations
 * Further additions for Russian native client support.

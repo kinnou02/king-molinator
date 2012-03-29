@@ -2734,66 +2734,68 @@ function KBM.InitOptions()
 						Header.Boss = BossObj
 						
 						for MechID, MechData in pairs(BossObj.MechRef) do
-							local Callbacks = {}
-							Callbacks.Option = self
-							
-							function Callbacks:Callback(bool)
-								self.Data.Enabled = bool
-								self.Data.Settings.Enabled = bool
-								self.Boss.Menu.Spies[self.Data.Settings.ID].ColorGUI:Enable(bool)
-								if not bool then
-									KBM.MechTimer:AddRemove(self.Data)
-								end
-							end
-							
-							function Callbacks:Enabled(bool)
-								self.Data.Enabled = bool
-								self.Data.Settings.Enabled = bool
-								self.Boss.Menu.Spies[self.Data.Settings.ID].ColorGUI:Enable(bool)
-								if not bool then
-									KBM.MechTimer:AddRemove(self.Data)
-								end
-							end
-							
-							function Callbacks:Color(bool, Color)							
-								if not Color then
-									self.Data.Settings.Custom = bool
-									self.GUI:SetEnabled(bool)
-									if bool then
-										self.GUI:SetColor(self.Data.Settings.Color)
-									else
-										self.GUI:SetColor(self.Data.Color)
+							if MechData.HasMenu then
+								local Callbacks = {}
+								Callbacks.Option = self
+								
+								function Callbacks:Callback(bool)
+									self.Data.Enabled = bool
+									self.Data.Settings.Enabled = bool
+									self.Boss.Menu.Spies[self.Data.Settings.ID].ColorGUI:Enable(bool)
+									if not bool then
+										KBM.MechTimer:AddRemove(self.Data)
 									end
-								elseif Color then
-									self.Manager.Data.Settings.Color = Color
-								end								
+								end
+								
+								function Callbacks:Enabled(bool)
+									self.Data.Enabled = bool
+									self.Data.Settings.Enabled = bool
+									self.Boss.Menu.Spies[self.Data.Settings.ID].ColorGUI:Enable(bool)
+									if not bool then
+										KBM.MechTimer:AddRemove(self.Data)
+									end
+								end
+								
+								function Callbacks:Color(bool, Color)							
+									if not Color then
+										self.Data.Settings.Custom = bool
+										self.GUI:SetEnabled(bool)
+										if bool then
+											self.GUI:SetColor(self.Data.Settings.Color)
+										else
+											self.GUI:SetColor(self.Data.Color)
+										end
+									elseif Color then
+										self.Manager.Data.Settings.Color = Color
+									end								
+								end
+							
+								MenuName = MechData.Name
+								if MechData.MenuName then
+									MenuName = MechData.MenuName
+								end
+							
+								Child = Header:CreateOption(MenuName, "excheck", Callbacks.Callback)
+								Child.Data = MechData
+								Child:SetChecked(MechData.Settings.Enabled)							
+								local SubHeader = Child:CreateHeader(MenuName, "plain")
+								SubHeader.Boss = BossObj
+								BossObj.Menu.Spies[MechID] = {}
+								BossObj.Menu.Spies[MechID].Enabled = SubHeader:CreateOption(KBM.Language.Options.Enabled[KBM.Lang], "check", Callbacks.Enabled)
+								BossObj.Menu.Spies[MechID].Enabled:SetChecked(MechData.Settings.Enabled)
+								BossObj.Menu.Spies[MechID].Enabled.Data = MechData
+								BossObj.Menu.Spies[MechID].Enabled.Controller = Child
+								Child.Controller = BossObj.Menu.Spies[MechID].Enabled
+								BossObj.Menu.Spies[MechID].ColorGUI = SubHeader:CreateOption(KBM.Language.Color.Custom[KBM.Lang], "color", Callbacks.Color)
+								BossObj.Menu.Spies[MechID].ColorGUI:SetChecked(MechData.Settings.Custom)
+								BossObj.Menu.Spies[MechID].ColorGUI.Enabled = MechData.Settings.Enabled
+								if MechData.Settings.Custom then
+									BossObj.Menu.Spies[MechID].ColorGUI.Color = MechData.Settings.Color
+								else
+									BossObj.Menu.Spies[MechID].ColorGUI.Color = MechData.Color
+								end
+								BossObj.Menu.Spies[MechID].ColorGUI.Data = MechData
 							end
-						
-							MenuName = MechData.Name
-							if MechData.MenuName then
-								MenuName = MechData.MenuName
-							end
-						
-							Child = Header:CreateOption(MenuName, "excheck", Callbacks.Callback)
-							Child.Data = MechData
-							Child:SetChecked(MechData.Settings.Enabled)							
-							local SubHeader = Child:CreateHeader(MenuName, "plain")
-							SubHeader.Boss = BossObj
-							BossObj.Menu.Spies[MechID] = {}
-							BossObj.Menu.Spies[MechID].Enabled = SubHeader:CreateOption(KBM.Language.Options.Enabled[KBM.Lang], "check", Callbacks.Enabled)
-							BossObj.Menu.Spies[MechID].Enabled:SetChecked(MechData.Settings.Enabled)
-							BossObj.Menu.Spies[MechID].Enabled.Data = MechData
-							BossObj.Menu.Spies[MechID].Enabled.Controller = Child
-							Child.Controller = BossObj.Menu.Spies[MechID].Enabled
-							BossObj.Menu.Spies[MechID].ColorGUI = SubHeader:CreateOption(KBM.Language.Color.Custom[KBM.Lang], "color", Callbacks.Color)
-							BossObj.Menu.Spies[MechID].ColorGUI:SetChecked(MechData.Settings.Custom)
-							BossObj.Menu.Spies[MechID].ColorGUI.Enabled = MechData.Settings.Enabled
-							if MechData.Settings.Custom then
-								BossObj.Menu.Spies[MechID].ColorGUI.Color = MechData.Settings.Color
-							else
-								BossObj.Menu.Spies[MechID].ColorGUI.Color = MechData.Color
-							end
-							BossObj.Menu.Spies[MechID].ColorGUI.Data = MechData
 						end
 					end
 				end			

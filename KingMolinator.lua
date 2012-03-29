@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r326"
+KBM.Alpha = ".r327"
 KBM.Event = {
 	Mark = {},
 	Unit = {
@@ -1993,6 +1993,7 @@ function KBM.MechSpy:Add(Name, Duration, Type, BossObj)
 	Mechanic.PhaseMax = 0
 	Mechanic.Type = "spy"
 	Mechanic.Custom = false
+	Mechanic.HasMenu = true
 	Mechanic.Color = KBM.MechSpy.Settings.Color
 	if type(Name) ~= "string" then
 		error("Expecting String for Name, got "..type(Name))
@@ -2076,6 +2077,13 @@ function KBM.MechSpy:Add(Name, Duration, Type, BossObj)
 		self:Hide()
 		table.insert(KBM.MechSpy.HeaderStore, self.GUI)
 		self.GUI = nil
+	end
+	
+	function Mechanic:SpyAfter(SpyObj)
+		if not self.SpyAfterList then
+			self.SpyAfterList = {}
+		end
+		table.insert(self.SpyAfterList, SpyObj)
 	end
 	
 	function Mechanic:Stop(Name)
@@ -2182,6 +2190,11 @@ function KBM.MechSpy:Add(Name, Duration, Type, BossObj)
 						end
 					end
 					table.insert(KBM.MechSpy.Store, self.GUI)
+					if self.Parent.SpyAfterList then
+						for i, SpyObj in ipairs(self.Parent.SpyAfterList) do
+							SpyObj:Start(self.Name)
+						end
+					end
 					self.Parent.Names[self.Name] = nil
 					self.Active = false
 					self.Remaining = 0
@@ -2222,6 +2235,12 @@ function KBM.MechSpy:Add(Name, Duration, Type, BossObj)
 		if self.Enabled then
 			self:AddStart(self, Duration)
 		end
+	end
+	
+	function Mechanic:NoMenu()
+		self.Enabled = true
+		self.NoMenu = true
+		self.HasMenu = false
 	end
 			
 	function Mechanic:SetPhase(Phase)
@@ -5751,8 +5770,15 @@ function KBM.Notify(data)
 							sStart, sEnd, Target = string.find(data.message, TriggerObj.Phrase)
 							if sStart then
 								unitID = nil
-								if Target == KBM.Player.Name then
-									unitID = KBM.Player.UnitID
+								if Target then
+									if KBM.Unit.List.Name[Target] then
+										for UnitID, UnitObj in pairs (KBM.Unit.List.Name[Target]) do
+											if UnitObj.Player then
+												unitID = UnitID
+												break
+											end
+										end
+									end
 								end
 								KBM.Trigger.Queue:Add(TriggerObj, nil, unitID)
 								break
@@ -6268,13 +6294,15 @@ end
 function KBM.MenuOptions.MechSpy:Options()
 	function self:Enabled(bool)
 		KBM.Options.MechSpy.Enabled = bool
+		KBM.MechSpy:ApplySettings()
 	end
 	function self:Show(bool)
 		KBM.Options.MechSpy.Show = bool
+		KBM.MechSpy:ApplySettings()
 	end
 	function self:Anchor(bool)
 		KBM.Options.MechSpy.Visible = bool
-		
+		KBM.MechSpy:ApplySettings()		
 	end
 	function self:Width(bool)
 		KBM.Options.MechSpy.ScaleWidth = bool
@@ -6504,7 +6532,7 @@ local function KBM_Start()
 			KBM.Unit:Add(Inspect.Unit.Detail(UnitID), UnitID)
 		end
 	end
-
+	
 end
 
 local function KBM_WaitReady(unitID, uDetails)
@@ -6538,7 +6566,7 @@ local function KBM_WaitReady(unitID, uDetails)
 				end
 			end
 		end
-	end		
+	end
 end
 
 KBM.PlugIn = {}

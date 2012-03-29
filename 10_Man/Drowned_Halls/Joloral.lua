@@ -261,6 +261,8 @@ function JR:Start()
 	self.Joloral.Triggers.PanicDuration = KBM.Trigger:Create(self.Lang.Ability.Panic[KBM.Lang], "playerDebuff", self.Joloral)
 	self.Joloral.Triggers.PanicDuration:AddAlert(self.Joloral.AlertsRef.PanicDuration)
 	self.Joloral.Triggers.PanicDuration:AddSpy(self.Joloral.MechRef.Panic)
+	self.Joloral.Triggers.PanicRemove = KBM.Trigger:Create(self.Lang.Ability.Panic[KBM.Lang], "playerBuffRemove", self.Joloral)
+	self.Joloral.Triggers.PanicRemove:AddStop(self.Joloral.MechRef.Panic)
 	
 	self.Joloral.CastBar = KBM.CastBar:Add(self, self.Joloral, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

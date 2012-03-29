@@ -135,6 +135,8 @@ AD.Lang.Notify.Punish:SetFrench("L'âme de (%a*) est ravagée par l'énergie !")
 AD.Lang.Notify.Punish:SetGerman("Die Seele von (%a*) wird mit Energie überladen!")
 AD.Lang.Notify.Punish:SetRussian("(%a*) чувствует, что его душа изувечена энергией!")
 AD.Lang.Notify.Meteor = KBM.Language:Add("Alsbeth the Discordant points at (%a*).")
+AD.Lang.Notify.Meteor:SetGerman("Alsbeth die Streitsuchende zeigt auf (%a*).")
+AD.Lang.Notify.Meteor:SetFrench("Alsbeth la Discordante pointe vers (%a*) !")
 
 -- Buff Dictionary
 AD.Lang.Buff = {}
