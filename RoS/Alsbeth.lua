@@ -557,7 +557,8 @@ function AD:Start()
 	KBM.Defaults.AlertObj.Assign(self.Magus)
 	
 	-- Create Mechanic Spies
-	self.Alsbeth.MechRef.Punish = KBM.MechSpy:Add(self.Lang.Ability.Punish[KBM.Lang], 1.5, "dynamic", self.Alsbeth)
+	self.Alsbeth.MechRef.Punish = KBM.MechSpy:Add(self.Lang.Ability.Punish[KBM.Lang], nil, "dynamic", self.Alsbeth)
+	self.Alsbeth.MechRef.Punish.Duration = 1.5
 	self.Alsbeth.MechRef.Meteor = KBM.MechSpy:Add(self.Lang.Ability.Meteor[KBM.Lang], 12, "notify", self.Alsbeth)
 	KBM.Defaults.MechObj.Assign(self.Alsbeth)
 	

@@ -13,6 +13,7 @@ Engine
 ** New: Added a trigger method for Players gaining Debuffs only.
 ** New: Added a trigger method for Units gaining buffs and debuffs via Unique Buff IDs.
 ** Note: Buffs and Debuffs will be entirely separate eventually. This is a first case test used for Sicaron's Unholy Contract change.
+** Fixed: A case where Triggers where could try and fire from non-important mobs before an encounter was established correctly.
 
 Options
 * Screen Alerts

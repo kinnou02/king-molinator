@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r330"
+KBM.Alpha = ".r331"
 KBM.Event = {
 	Mark = {},
 	Unit = {
@@ -3385,38 +3385,40 @@ function KBM.MobDamage(info)
 								KBM.BossID[tUnitID].HealthLast = KBM.BossID[tUnitID].Health
 								KBM.BossID[tUnitID].PercentRaw = (KBM.BossID[tUnitID].Health/KBM.BossID[tUnitID].HealthMax)*100
 								KBM.BossID[tUnitID].Percent = math.ceil(KBM.BossID[tUnitID].PercentRaw)
-								if KBM.BossID[tUnitID].Percent ~= KBM.BossID[tUnitID].PercentLast then
-									if KBM.Trigger.Percent[KBM.CurrentMod.ID] then
-										if KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name] then
-											if KBM.BossID[tUnitID].PercentLast - KBM.BossID[tUnitID].Percent > 1 then
-												for PCycle = KBM.BossID[tUnitID].PercentLast, KBM.BossID[tUnitID].Percent, -1 do
-													if KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name][PCycle] then
-														TriggerObj = KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name][PCycle]
+								if KBM.CurrentMod then
+									if KBM.BossID[tUnitID].Percent ~= KBM.BossID[tUnitID].PercentLast then
+										if KBM.Trigger.Percent[KBM.CurrentMod.ID] then
+											if KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name] then
+												if KBM.BossID[tUnitID].PercentLast - KBM.BossID[tUnitID].Percent > 1 then
+													for PCycle = KBM.BossID[tUnitID].PercentLast, KBM.BossID[tUnitID].Percent, -1 do
+														if KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name][PCycle] then
+															TriggerObj = KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name][PCycle]
+															KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
+														end
+													end
+												else
+													if KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name][KBM.BossID[tUnitID].Percent] then
+														TriggerObj = KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name][KBM.BossID[tUnitID].Percent]
 														KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
 													end
 												end
-											else
-												if KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name][KBM.BossID[tUnitID].Percent] then
-													TriggerObj = KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name][KBM.BossID[tUnitID].Percent]
-													KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
-												end
 											end
 										end
+										KBM.BossID[tUnitID].PercentLast = KBM.BossID[tUnitID].Percent
 									end
-									KBM.BossID[tUnitID].PercentLast = KBM.BossID[tUnitID].Percent
-								end
-								-- Update Phase Monitor accordingly.
-								if KBM.PhaseMonitor.Active then
-									if KBM.PhaseMonitor.Objectives.Lists.Percent[KBM.BossID[tUnitID].name] then
-										KBM.PhaseMonitor.Objectives.Lists.Percent[KBM.BossID[tUnitID].name]:Update(KBM.BossID[tUnitID].PercentRaw)
+									-- Update Phase Monitor accordingly.
+									if KBM.PhaseMonitor.Active then
+										if KBM.PhaseMonitor.Objectives.Lists.Percent[KBM.BossID[tUnitID].name] then
+											KBM.PhaseMonitor.Objectives.Lists.Percent[KBM.BossID[tUnitID].name]:Update(KBM.BossID[tUnitID].PercentRaw)
+										end
 									end
-								end
-								-- Check for Npc Based Triggers (Usually Dynamic: Eg - Failsafe for P4 start Akylios)
-								if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID] then
-									if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name] then
-										local TriggerObj = KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name]
-										if TriggerObj.Enabled then
-											KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
+									-- Check for Npc Based Triggers (Usually Dynamic: Eg - Failsafe for P4 start Akylios)
+									if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID] then
+										if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name] then
+											local TriggerObj = KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name]
+											if TriggerObj.Enabled then
+												KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
+											end
 										end
 									end
 								end
@@ -3487,38 +3489,40 @@ function KBM.RaidDamage(info)
 				KBM.BossID[tUnitID].HealthLast = tDetails.health
 				KBM.BossID[tUnitID].PercentRaw = (tDetails.health/tDetails.healthMax)*100
 				KBM.BossID[tUnitID].Percent = math.ceil(KBM.BossID[tUnitID].PercentRaw)
-				if KBM.BossID[tUnitID].Percent ~= KBM.BossID[tUnitID].PercentLast then
-					if KBM.Trigger.Percent[KBM.CurrentMod.ID] then
-						if KBM.Trigger.Percent[KBM.CurrentMod.ID][tDetails.name] then
-							if KBM.BossID[tUnitID].PercentLast - KBM.BossID[tUnitID].Percent > 1 then
-								for PCycle = KBM.BossID[tUnitID].PercentLast, KBM.BossID[tUnitID].Percent, -1 do
-									if KBM.Trigger.Percent[KBM.CurrentMod.ID][tDetails.name][PCycle] then
-										TriggerObj = KBM.Trigger.Percent[KBM.CurrentMod.ID][tDetails.name][PCycle]
+				if KBM.CurrentMod.ID then
+					if KBM.BossID[tUnitID].Percent ~= KBM.BossID[tUnitID].PercentLast then
+						if KBM.Trigger.Percent[KBM.CurrentMod.ID] then
+							if KBM.Trigger.Percent[KBM.CurrentMod.ID][tDetails.name] then
+								if KBM.BossID[tUnitID].PercentLast - KBM.BossID[tUnitID].Percent > 1 then
+									for PCycle = KBM.BossID[tUnitID].PercentLast, KBM.BossID[tUnitID].Percent, -1 do
+										if KBM.Trigger.Percent[KBM.CurrentMod.ID][tDetails.name][PCycle] then
+											TriggerObj = KBM.Trigger.Percent[KBM.CurrentMod.ID][tDetails.name][PCycle]
+											KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
+										end
+									end
+								else
+									if KBM.Trigger.Percent[KBM.CurrentMod.ID][tDetails.name][KBM.BossID[tUnitID].Percent] then
+										TriggerObj = KBM.Trigger.Percent[KBM.CurrentMod.ID][tDetails.name][KBM.BossID[tUnitID].Percent]
 										KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
 									end
 								end
-							else
-								if KBM.Trigger.Percent[KBM.CurrentMod.ID][tDetails.name][KBM.BossID[tUnitID].Percent] then
-									TriggerObj = KBM.Trigger.Percent[KBM.CurrentMod.ID][tDetails.name][KBM.BossID[tUnitID].Percent]
-									KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
-								end
 							end
 						end
+						KBM.BossID[tUnitID].PercentLast = KBM.BossID[tUnitID].Percent
 					end
-					KBM.BossID[tUnitID].PercentLast = KBM.BossID[tUnitID].Percent
-				end
-				-- Update Phase Monitor accordingly.
-				if KBM.PhaseMonitor.Active then
-					if KBM.PhaseMonitor.Objectives.Lists.Percent[tDetails.name] then
-						KBM.PhaseMonitor.Objectives.Lists.Percent[tDetails.name]:Update(KBM.BossID[tUnitID].PercentRaw)
+					-- Update Phase Monitor accordingly.
+					if KBM.PhaseMonitor.Active then
+						if KBM.PhaseMonitor.Objectives.Lists.Percent[tDetails.name] then
+							KBM.PhaseMonitor.Objectives.Lists.Percent[tDetails.name]:Update(KBM.BossID[tUnitID].PercentRaw)
+						end
 					end
-				end
-				-- Check for Npc Based Triggers (Usually Dynamic: Eg - Failsafe for P4 start Akylios)
-				if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID] then
-					if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][tDetails.name] then
-						local TriggerObj = KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][tDetails.name]
-						if TriggerObj.Enabled then
-							KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
+					-- Check for Npc Based Triggers (Usually Dynamic: Eg - Failsafe for P4 start Akylios)
+					if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID] then
+						if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][tDetails.name] then
+							local TriggerObj = KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][tDetails.name]
+							if TriggerObj.Enabled then
+								KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
+							end
 						end
 					end
 				end
@@ -3533,38 +3537,40 @@ function KBM.RaidDamage(info)
 							KBM.BossID[tUnitID].HealthLast = KBM.BossID[tUnitID].Health
 							KBM.BossID[tUnitID].PercentRaw = (KBM.BossID[tUnitID].Health/KBM.BossID[tUnitID].HealthMax)*100
 							KBM.BossID[tUnitID].Percent = math.ceil(KBM.BossID[tUnitID].PercentRaw)
-							if KBM.BossID[tUnitID].Percent ~= KBM.BossID[tUnitID].PercentLast then
-								if KBM.Trigger.Percent[KBM.CurrentMod.ID] then
-									if KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name] then
-										if KBM.BossID[tUnitID].PercentLast - KBM.BossID[tUnitID].Percent > 1 then
-											for PCycle = KBM.BossID[tUnitID].PercentLast, KBM.BossID[tUnitID].Percent, -1 do
-												if KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name][PCycle] then
-													TriggerObj = KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name][PCycle]
+							if KBM.CurrentMod then
+								if KBM.BossID[tUnitID].Percent ~= KBM.BossID[tUnitID].PercentLast then
+									if KBM.Trigger.Percent[KBM.CurrentMod.ID] then
+										if KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name] then
+											if KBM.BossID[tUnitID].PercentLast - KBM.BossID[tUnitID].Percent > 1 then
+												for PCycle = KBM.BossID[tUnitID].PercentLast, KBM.BossID[tUnitID].Percent, -1 do
+													if KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name][PCycle] then
+														TriggerObj = KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name][PCycle]
+														KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
+													end
+												end
+											else
+												if KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name][KBM.BossID[tUnitID].Percent] then
+													TriggerObj = KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name][KBM.BossID[tUnitID].Percent]
 													KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
 												end
 											end
-										else
-											if KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name][KBM.BossID[tUnitID].Percent] then
-												TriggerObj = KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name][KBM.BossID[tUnitID].Percent]
-												KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
-											end
 										end
 									end
+									KBM.BossID[tUnitID].PercentLast = KBM.BossID[tUnitID].Percent
 								end
-								KBM.BossID[tUnitID].PercentLast = KBM.BossID[tUnitID].Percent
-							end
-							-- Update Phase Monitor accordingly.
-							if KBM.PhaseMonitor.Active then
-								if KBM.PhaseMonitor.Objectives.Lists.Percent[KBM.BossID[tUnitID].name] then
-									KBM.PhaseMonitor.Objectives.Lists.Percent[KBM.BossID[tUnitID].name]:Update(KBM.BossID[tUnitID].PercentRaw)
+								-- Update Phase Monitor accordingly.
+								if KBM.PhaseMonitor.Active then
+									if KBM.PhaseMonitor.Objectives.Lists.Percent[KBM.BossID[tUnitID].name] then
+										KBM.PhaseMonitor.Objectives.Lists.Percent[KBM.BossID[tUnitID].name]:Update(KBM.BossID[tUnitID].PercentRaw)
+									end
 								end
-							end
-							-- Check for Npc Based Triggers (Usually Dynamic: Eg - Failsafe for P4 start Akylios)
-							if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID] then
-								if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name] then
-									local TriggerObj = KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name]
-									if TriggerObj.Enabled then
-										KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
+								-- Check for Npc Based Triggers (Usually Dynamic: Eg - Failsafe for P4 start Akylios)
+								if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID] then
+									if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name] then
+										local TriggerObj = KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name]
+										if TriggerObj.Enabled then
+											KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
+										end
 									end
 								end
 							end

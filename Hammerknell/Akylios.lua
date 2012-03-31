@@ -530,6 +530,17 @@ function AK:UnitHPCheck(uDetails, unitID)
 					self.Jornaru.Available = true
 					return self.Jornaru
 				elseif uDetails.name == self.Akylios.Name then
+					if not self.EncounterRunning then
+						self.EncounterRunning = true
+						self.StartTime = Inspect.Time.Real()
+						self.HeldTime = self.StartTime
+						self.TimeElapsed = 0
+						self.Phase = 3
+						self.Akylios.CastBar:Create(unitID)
+						self.PhaseObj.Objectives:AddPercent(self.Jornaru.Name, 0, 50)
+						self.PhaseObj:SetPhase(3)
+						self.PhaseObj:Start(self.StartTime)
+					end
 					if not self.Akylios.UnitID then
 						self.Akylios.CastBar:Create(unitID)
 					end

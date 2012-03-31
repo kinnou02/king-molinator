@@ -88,7 +88,7 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Welcome.Commands = KBM.Language:Add("/kbmhelp for a list of commands")
 	KBM.Language.Welcome.Commands:SetFrench("/kbmhelp pour la liste des commandes")
 	KBM.Language.Welcome.Options = KBM.Language:Add("/kbmoptions for options")
-	KBM.Language.Welcome.Options:SetFrench("/kbmoptions for la configuration")
+	KBM.Language.Welcome.Options:SetFrench("/kbmoptions pour la configuration")
 	
 	-- Command Listings
 	KBM.Language.Command = {}
