@@ -57,7 +57,7 @@ KBM.RegisterMod(RS.ID, RS)
 RS.Lang.Unit = {}
 RS.Lang.Unit.Rusila = KBM.Language:Add(RS.Rusila.Name)
 -- RS.Lang.Unit.Rusila:SetGerman("")
--- RS.Lang.Unit.Rusila:SetFrench("")
+RS.Lang.Unit.Rusila:SetFrench("Rusila Lame-lugubre")
 -- RS.Lang.Unit.Rusila:SetRussian("")
 
 -- Ability Dictionary

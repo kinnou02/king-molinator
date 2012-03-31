@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r328"
+KBM.Alpha = ".r329"
 KBM.Event = {
 	Mark = {},
 	Unit = {
@@ -2000,7 +2000,7 @@ function KBM.MechSpy:Add(Name, Duration, Type, BossObj)
 	end
 	
 	function Mechanic:Show()
-		if not self.Visible then
+		if self.Visible then
 			if not KBM.MechSpy.FirstHeader then
 				KBM.MechSpy.FirstHeader = self
 				KBM.MechSpy.LastHeader = self
@@ -2174,7 +2174,7 @@ function KBM.MechSpy:Add(Name, Duration, Type, BossObj)
 							if #self.Parent.Timers == 1 then
 								self.Parent.LastTimer = nil
 								self.Parent.GUI.Cradle:SetPoint("BOTTOM", self.Parent.GUI.Background, "BOTTOM")
-								if not KBM.MechSpy.Show then
+								if not KBM.MechSpy.Settings.Show then
 									self.Parent:Hide()
 								end
 							elseif i == 1 then
@@ -5746,13 +5746,13 @@ local function KBM_Death(UnitID)
 end
 
 local function KBM_Help()
-	print("King Boss Mods in game slash commands")
-	print("/kbmon -- Turns the Addon to it's on state.")
-	print("/kbmoff -- Switches the Addon off.")
-	print("/kbmreset -- Resets the current encounter.")
-	print("/kbmversion -- Displays the current version.")
-	print("/kbmoptions -- Toggles the GUI Options screen.")
-	print("/kbmhelp -- Displays what you're reading now :)")
+	print(KBM.Language.Command.Title[KBM.Lang])
+	print(KBM.Language.Command.On[KBM.Lang])
+	print(KBM.Language.Command.Off[KBM.Lang])
+	print(KBM.Language.Command.Reset[KBM.Lang])
+	print(KBM.Language.Command.Version[KBM.Lang])
+	print(KBM.Language.Command.Options[KBM.Lang])
+	print(KBM.Language.Command.Help[KBM.Lang])
 end
 
 function KBM.Notify(data)
@@ -5769,7 +5769,7 @@ function KBM.Notify(data)
 						for i, TriggerObj in ipairs(KBM.Trigger.Notify[KBM.CurrentMod.ID]) do
 							sStart, sEnd, Target = string.find(data.message, TriggerObj.Phrase)
 							if sStart then
-								unitID = nil
+								local unitID = nil
 								if Target then
 									if KBM.Unit.List.Name[Target] then
 										for UnitID, UnitObj in pairs (KBM.Unit.List.Name[Target]) do
@@ -6514,15 +6514,7 @@ local function KBM_Start()
 	table.insert(Command.Slash.Register("kbmoptions"), {KBM_Options, "KingMolinator", "KBM Open Options"})
 	table.insert(Command.Slash.Register("kbmdebug"), {KBM_Debug, "KingMolinator", "KBM Debug on/off"})
 	table.insert(Command.Slash.Register("kbmlocale"), {KBMLM.FindMissing, "KBMLocaleManager", "KBM Locale Finder"})
-	
-	if KBM.Alpha then
-		print("Welcome to King Boss Mods v"..AddonData.toc.Version..KBM.Alpha)	
-	else
-		print("Welcome to King Boss Mods v"..AddonData.toc.Version)
-	end
-	print("/kbmhelp for a list of commands.")
-	print("/kbmoptions for options.")
-	
+		
 	KBM.MenuOptions.Main:Options()
 	table.insert(Command.Slash.Register("kbmon"), {function() KBM.StateSwitch(true) end, "KingMolinator", "KBM On"})
 	table.insert(Command.Slash.Register("kbmoff"), {function() KBM.StateSwitch(false) end, "KingMolinator", "KBM Off"})
@@ -6567,6 +6559,14 @@ local function KBM_WaitReady(unitID, uDetails)
 			end
 		end
 	end
+
+	if KBM.Alpha then
+		print(KBM.Language.Welcome.Welcome[KBM.Lang]..AddonData.toc.Version..KBM.Alpha)	
+	else
+		print(KBM.Language.Welcome.Welcome[KBM.Lang]..AddonData.toc.Version)
+	end
+	print(KBM.Language.Welcome.Commands[KBM.Lang])
+	print(KBM.Language.Welcome.Options[KBM.Lang])
 end
 
 KBM.PlugIn = {}

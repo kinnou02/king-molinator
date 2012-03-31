@@ -92,9 +92,9 @@ HG.Lang.Verbose.Raise:SetRussian("Призыв аддов")
 
 -- Notify Dictionary
 HG.Lang.Notify = {}
-HG.Lang.Notify.Tidings = KBM.Language:Add("unleashes woeful tidings upon (%a*)")
-HG.Lang.Notify.Tidings:SetFrench("déchaîne son pouvoir sur (%a*)")
-HG.Lang.Notify.Tidings:SetGerman("entfesselt traurige Kunde auf (%a*)")
+HG.Lang.Notify.Tidings = KBM.Language:Add("Herald Gaurath unleashes woeful tidings upon (%a*)")
+HG.Lang.Notify.Tidings:SetFrench("Héraut Gaurath déchaîne son pouvoir sur (%a*)")
+HG.Lang.Notify.Tidings:SetGerman("Herold Gaurath entfesselt traurige Kunde auf (%a*)")
 HG.Lang.Notify.Tidings:SetRussian("Глашатай Гораф сообщает скорбные вести в надежде, что (%a*) придет в уныние.")
 
 HG.Gaurath.Name = HG.Lang.Unit.Gaurath[KBM.Lang]

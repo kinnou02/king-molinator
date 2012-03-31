@@ -144,6 +144,7 @@ HA.Lang.Debuff.Armor:SetGerman("Rüstung aufreißen")
 HA.Lang.Debuff.Armor:SetFrench("Déchirure d'armure")
 HA.Lang.Debuff.Armor:SetRussian("Раздиратель доспехов")
 HA.Lang.Debuff.Ignited = KBM.Language:Add("Ignited")
+HA.Lang.Debuff.Ignited:SetGerman("Entflammt")
 
 -- Verbose Dictionary
 HA.Lang.Verbose = {}

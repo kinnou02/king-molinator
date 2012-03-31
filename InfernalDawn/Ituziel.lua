@@ -56,9 +56,7 @@ KBM.RegisterMod(IZ.ID, IZ)
 -- Main Unit Dictionary
 IZ.Lang.Unit = {}
 IZ.Lang.Unit.Ituziel = KBM.Language:Add(IZ.Ituziel.Name)
--- IZ.Lang.Unit.Ituziel:SetGerman("")
--- IZ.Lang.Unit.Ituziel:SetFrench("")
--- IZ.Lang.Unit.Ituziel:SetRussian("")
+IZ.Lang.Unit.Ituziel:SetFrench()
 
 -- Ability Dictionary
 IZ.Lang.Ability = {}
@@ -71,6 +69,7 @@ function IZ:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Ituziel.Name] = self.Ituziel,
 	}
+	KBM_Boss[self.Ituziel.Name] = self.Ituzial
 end
 
 function IZ:InitVars()

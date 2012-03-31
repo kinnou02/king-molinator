@@ -60,7 +60,7 @@ Rise of the Pheonix
 ** Change: The alert for Excitable Combustion is now triggered by the debuff. (experimental)
 * General Silgen
 ** New: Mechanic Spy added for Anchored in Flames.
-High Priest Arakhurn
+* High Priest Arakhurn
 ** New: Mechanic Spy added for Fiery Metamorphosis.
 ** New: Mechanic Spy added for Ignited (double stacks - highly experimental)
 

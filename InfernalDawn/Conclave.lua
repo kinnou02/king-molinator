@@ -1,4 +1,4 @@
-﻿-- The Ember Conclave Boss Mod for King Boss Mods
+﻿-- The Ember.Szath Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --
@@ -19,16 +19,16 @@ local EC = {
 	Type = "20man",
 	HasPhases = true,
 	Lang = {},
-	ID = "The Ember Conclave",
+	ID = "The Ember.Szath",
 	Object = "EC",
 }
 
-EC.Conclave = {
+EC.Szath = {
 	Mod = EC,
 	Level = "??",
 	Active = false,
-	Name = "The Ember Conclave",
-	NameShort = "Conclave",
+	Name = "Witchlord Szath",
+	NameShort = "Szath",
 	Dead = false,
 	Available = false,
 	Menu = {},
@@ -55,34 +55,118 @@ KBM.RegisterMod(EC.ID, EC)
 
 -- Main Unit Dictionary
 EC.Lang.Unit = {}
-EC.Lang.Unit.Conclave = KBM.Language:Add(EC.Conclave.Name)
--- EC.Lang.Unit.Conclave:SetGerman("")
--- EC.Lang.Unit.Conclave:SetFrench("")
--- EC.Lang.Unit.Conclave:SetRussian("")
+EC.Lang.Unit.Szath = KBM.Language:Add(EC.Szath.Name)
+EC.Lang.Unit.Szath:SetFrench("Seigneur-sorcier Szath")
+EC.Lang.Unit.SzShort = KBM.Language:Add(EC.Szath.NameShort)
+EC.Lang.Unit.SzShort:SetFrench()
+EC.Lang.Unit.Nahoth = KBM.Language:Add("Packmaster Nahoth")
+EC.Lang.Unit.Nahoth:SetFrench("Maître-fourrier Nahoth")
+EC.Lang.Unit.NahShort = KBM.Language:Add("Nahoth")
+EC.Lang.Unit.NahShort:SetFrench()
+EC.Lang.Unit.Ereetu = KBM.Language:Add("Emberlord Ereetu")
+EC.Lang.Unit.Ereetu:SetFrench("Seigneur de Braise Ereetu")
+EC.Lang.Unit.EreShort = KBM.Language:Add("Ereetu")
+EC.Lang.Unit.EreShort:SetFrench()
+
+EC.Nahoth = {
+	Mod = EC,
+	Level = "??",
+	Active = false,
+	Name = EC.Lang.Unit.Nahoth[KBM.Lang],
+	NameShort = EC.Lang.Unit.NahShort[KBM.Lang],
+	Dead = false,
+	Available = false,
+	Menu = {},
+	UnitID = nil,
+	TimeOut = 5,
+	Castbar = nil,
+	-- TimersRef = {},
+	-- AlertsRef = {},
+	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+		-- TimersRef = {
+			-- Enabled = true,
+			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
+		-- },
+		-- AlertsRef = {
+			-- Enabled = true,
+			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
+		-- },
+	}
+}
+
+EC.Ereetu = {
+	Mod = EC,
+	Level = "??",
+	Active = false,
+	Name = EC.Lang.Unit.Ereetu[KBM.Lang],
+	NameShort = EC.Lang.Unit.EreShort[KBM.Lang],
+	Dead = false,
+	Available = false,
+	Menu = {},
+	UnitID = nil,
+	TimeOut = 5,
+	Castbar = nil,
+	-- TimersRef = {},
+	-- AlertsRef = {},
+	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+		-- TimersRef = {
+			-- Enabled = true,
+			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
+		-- },
+		-- AlertsRef = {
+			-- Enabled = true,
+			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
+		-- },
+	}
+}
 
 -- Ability Dictionary
 EC.Lang.Ability = {}
 
-EC.Conclave.Name = EC.Lang.Unit.Conclave[KBM.Lang]
-EC.Descript = EC.Conclave.Name
+-- Description Dictionary
+EC.Lang.Main = {}
+EC.Lang.Main.Descript = KBM.Language:Add("The Ember Conclave")
+EC.Lang.Main.Descript:SetFrench("Conclave de braise")
+
+EC.Szath.Name = EC.Lang.Unit.Szath[KBM.Lang]
+EC.Szath.NameShort = EC.Lang.Unit.SzShort[KBM.Lang]
+EC.Descript = EC.Lang.Main.Descript[KBM.Lang]
 
 function EC:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
-		[self.Conclave.Name] = self.Conclave,
+		[self.Szath.Name] = self.Szath,
+		[self.Nahoth.Name] = self.Nahoth,
+		[self.Ereetu.Name] = self.Ereetu,
 	}
+	KBM_Boss[self.Szath.Name] = self.Szath
+	KBM_Boss[self.Nahoth.Name] = self.Nahoth
+	KBM_Boss[self.Ereetu.Name] = self.Ereetu
+	
+	for BossName, BossObj in pairs(self.Bosses) do
+		if BossObj.Settings then
+			if BossObj.Settings.CastBar then
+				BossObj.Settings.CastBar.Override = true
+				BossObj.Settings.CastBar.Multi = true
+			end
+		end
+	end	
 end
 
 function EC:InitVars()
 	self.Settings = {
 		Enabled = true,
-		CastBar = self.Conclave.Settings.CastBar,
+		CastBar = self.Szath.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		-- MechTimer = KBM.Defaults.MechTimer(),
 		-- Alerts = KBM.Defaults.Alerts(),
-		-- TimersRef = self.Conclave.Settings.TimersRef,
-		-- AlertsRef = self.Conclave.Settings.AlertsRef,
+		-- TimersRef = self.Szath.Settings.TimersRef,
+		-- AlertsRef = self.Szath.Settings.AlertsRef,
 	}
 	KBMINDEC_Settings = self.Settings
 	chKBMINDEC_Settings = self.Settings
@@ -127,16 +211,16 @@ function EC:Castbar(units)
 end
 
 function EC:RemoveUnits(UnitID)
-	if self.Conclave.UnitID == UnitID then
-		self.Conclave.Available = false
+	if self.Szath.UnitID == UnitID then
+		self.Szath.Available = false
 		return true
 	end
 	return false
 end
 
 function EC:Death(UnitID)
-	if self.Conclave.UnitID == UnitID then
-		self.Conclave.Dead = true
+	if self.Szath.UnitID == UnitID then
+		self.Szath.Dead = true
 		return true
 	end
 	return false
@@ -145,23 +229,32 @@ end
 function EC:UnitHPCheck(unitDetails, unitID)	
 	if unitDetails and unitID then
 		if not unitDetails.player then
-			if unitDetails.name == self.Conclave.Name then
+			if self.Bosses[unitDetails.name] then
+				local BossObj = self.Bosses[unitDetails.name]
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
 					self.TimeElapsed = 0
-					self.Conclave.Dead = false
-					self.Conclave.Casting = false
-					self.Conclave.CastBar:Create(unitID)
+					BossObj.Dead = false
+					BossObj.Casting = false
+					BossObj.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase("Single")
-					self.PhaseObj.Objectives:AddPercent(self.Conclave.Name, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Szath.Name, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Nohath.Name, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Ereetu.Name, 0, 100)
 					self.Phase = 1
+				else
+					if not BossObj.CastBar.Active then
+						BossObj.CastBar:Create(unitID)
+					end
+					BossObj.Dead = false
+					BossObj.Casting = false
 				end
-				self.Conclave.UnitID = unitID
-				self.Conclave.Available = true
-				return self.Conclave
+				BossObj.UnitID = unitID
+				BossObj.Available = true
+				return BossObj
 			end
 		end
 	end
@@ -169,53 +262,33 @@ end
 
 function EC:Reset()
 	self.EncounterRunning = false
-	self.Conclave.Available = false
-	self.Conclave.UnitID = nil
-	self.Conclave.CastBar:Remove()
+	for Name, BossObj in pairs(self.Bosses) do
+		BossObj.Available = false
+		BossObj.UnitID = nil
+		BossObj.CastBar:Remove()
+	end
 	self.PhaseObj:End(Inspect.Time.Real())
 end
 
 function EC:Timer()	
 end
 
-function EC.Conclave:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function EC.Conclave:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
-end
-
 function EC:DefineMenu()
-	self.Menu = IND.Menu:CreateEncounter(self.Conclave, self.Enabled)
+	self.Menu = IND.Menu:CreateEncounter(self.Szath, self.Enabled)
 end
 
 function EC:Start()
 	-- Create Timers
-	-- KBM.Defaults.TimerObj.Assign(self.Conclave)
+	-- KBM.Defaults.TimerObj.Assign(self.Szath)
 	
 	-- Create Alerts
-	-- KBM.Defaults.AlertObj.Assign(self.Conclave)
+	-- KBM.Defaults.AlertObj.Assign(self.Szath)
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Conclave.CastBar = KBM.CastBar:Add(self, self.Conclave)
+	self.Szath.CastBar = KBM.CastBar:Add(self, self.Szath)
+	self.Nahoth.CastBar = KBM.CastBar:Add(self, self.Nahoth)
+	self.Ereetu.CastBar = KBM.CastBar:Add(self, self.Ereetu)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()
 end

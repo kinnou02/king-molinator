@@ -150,6 +150,7 @@ function DF:InitVars()
 		Enabled = true,
 		EncTimer = KBM.Defaults.EncTimer(),
 		MechTimer = KBM.Defaults.MechTimer(),
+		MechSpy = KBM.Defaults.MechSpy(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		Alerts = KBM.Defaults.Alerts(),
 		CastBar = {
@@ -160,6 +161,7 @@ function DF:InitVars()
 			CastBar = self.Foci.Settings.CastBar,
 			TimersRef = self.Foci.Settings.TimersRef,
 			AlertsRef = self.Foci.Settings.AlertsRef,
+			MechRef = self.Foci.Settings.MechRef,
 		},
 		Force = {
 			CastBar = self.Force.Settings.CastBar,
