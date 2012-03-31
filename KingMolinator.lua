@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r329"
+KBM.Alpha = ".r330"
 KBM.Event = {
 	Mark = {},
 	Unit = {
@@ -2000,7 +2000,7 @@ function KBM.MechSpy:Add(Name, Duration, Type, BossObj)
 	end
 	
 	function Mechanic:Show()
-		if self.Visible then
+		if not self.Visible then
 			if not KBM.MechSpy.FirstHeader then
 				KBM.MechSpy.FirstHeader = self
 				KBM.MechSpy.LastHeader = self
@@ -2060,12 +2060,12 @@ function KBM.MechSpy:Add(Name, Duration, Type, BossObj)
 			self.GUI:SetColor(KBM.Colors.List[KBM.MechSpy.Settings.Color].Red, KBM.Colors.List[KBM.MechSpy.Settings.Color].Green, KBM.Colors.List[KBM.MechSpy.Settings.Color].Blue, 0.33)
 		end
 		self.GUI:SetText(self.Name)
+		table.insert(KBM.MechSpy.List.Active, self)
 		if KBM.MechSpy.Settings.Show then
 			self:Show()
 		else
 			self:Hide()
 		end
-		table.insert(KBM.MechSpy.List.Active, self)
 	end
 	
 	function Mechanic:End()
