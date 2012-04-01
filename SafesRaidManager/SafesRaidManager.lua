@@ -243,6 +243,27 @@ local function SRM_SetSpecifier(Specifier)
 			end
 		end
 	end
+	
+	function Unit:Leave()
+		--print(SRM_Units[self.UnitID].name.." has left the group.")
+		SRM_Combat({[self.UnitID] = false})
+		if self.Dead then
+			LibSRM.Dead = LibSRM.Dead - 1
+		end
+		SRM_Raid.Populated = SRM_Raid.Populated - 1
+		SRM_Units[self.UnitID] = nil
+		self.SRM_Unit = nil
+		if self.PetID then
+			--print("Pet Removed!")
+			SRM_Units.Pets[self.PetID] = nil
+			SRM_Pet.Remove(self.PetID, self.UnitID)
+		end
+		SRM_Group.Leave(tostring(self.UnitID), self.Spec)
+		SRM_CheckGroupState()
+		self.UnitID = nil
+		self.PetID = nil
+		-- Send LEAVE message HERE
+	end
 
 	function Unit:Change(UID, pet)
 		--print("Unit Change Check: "..tostring(UID))
@@ -273,9 +294,24 @@ local function SRM_SetSpecifier(Specifier)
 			if UID then
 				if SRM_Units[UID] then
 					--print("Unit Changed position: "..SRM_Units[UID].name)
-					SRM_Group.Change(UID, SRM_Units[UID].Specifier, self.Spec)
+					if self.UnitID then
+						-- Check to see if a unit still exists here.
+						for i = 1, 20 do
+							cSpecifier = SRM_IndexToSpec(i)
+							cUnitID = Inspect.Unit.Lookup(cSpecifier)
+							if cUnitID == self.UnitID then
+								--print("Unit Changed ignoring leave message.")
+								self.UnitID = nil
+								self.PetID = nil
+								-- SEND NO MSG
+								return
+							end
+						end
+						self:Leave()
+					end
 					self.UnitID = UID
 					SRM_Units[UID].Specifier = self.Spec
+					SRM_Group.Change(UID, SRM_Units[UID].Specifier, self.Spec)
 					-- Send MOVE Message HERE
 				else
 					--print("Attempting to load new Unit: "..UID)
@@ -296,24 +332,7 @@ local function SRM_SetSpecifier(Specifier)
 						return
 					end
 				end
-				--print(SRM_Units[self.UnitID].name.." has left the group.")
-				SRM_Combat({[self.UnitID] = false})
-				if self.Dead then
-					LibSRM.Dead = LibSRM.Dead - 1
-				end
-				SRM_Group.Leave(self.UnitID, self.Spec)
-				SRM_Raid.Populated = SRM_Raid.Populated - 1
-				SRM_Units[self.UnitID] = nil
-				self.SRM_Unit = nil
-				if self.PetID then
-					--print("Pet Removed!")
-					SRM_Units.Pets[self.PetID] = nil
-					SRM_Pet.Remove(self.PetID, self.UnitID)
-				end
-				self.UnitID = nil
-				self.PetID = nil
-				SRM_CheckGroupState()
-				-- Send LEAVE message HERE
+				self:Leave()
 			end
 		end
 	end
@@ -597,18 +616,13 @@ local function SRM_InitRaid()
 end
 
 local function SRM_UnitAvailable(units)
-	if SRM_UnitQueue.Queued then
+	if (SRM_UnitQueue.Queued + SRM_PetQueue.Queued) > 0 then
 		for UnitID, Specifier in pairs(units) do
 			if SRM_UnitQueue[UnitID] then
 				SRM_UnitQueue[UnitID]:Load()
 				SRM_UnitQueue[UnitID] = nil
 				SRM_UnitQueue.Queued = SRM_UnitQueue.Queued - 1
-			end
-		end
-	end
-	if SRM_PetQueue.Queued then
-		for PetID, Specifier in pairs(units) do
-			if SRM_PetQueue[PetID] then
+			elseif SRM_PetQueue[PetID] then
 				--print("Pet found in queue, loading.")
 				if SRM_PetQueue[PetID].Group then
 					SRM_PetQueue[PetID].RaidUnit:PetLoad()

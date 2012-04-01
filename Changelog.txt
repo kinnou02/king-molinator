@@ -14,6 +14,10 @@ Engine
 ** New: Added a trigger method for Units gaining buffs and debuffs via Unique Buff IDs.
 ** Note: Buffs and Debuffs will be entirely separate eventually. This is a first case test used for Sicaron's Unholy Contract change.
 ** Fixed: A case where Triggers where could try and fire from non-important mobs before an encounter was established correctly.
+* Unit Tracking
+** MAJOR FIX: There was a hole in the Unit Death tracking system which caused CPU usage increase over time.
+* Slash Commands
+** New: Type /kbmcpu for a mini on-screen CPU report for all of the Addon-System + KBM breakdown.
 
 Options
 * Screen Alerts

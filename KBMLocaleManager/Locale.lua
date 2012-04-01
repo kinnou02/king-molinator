@@ -84,40 +84,59 @@ function KBMLM.SetMain_Lang()
 	-- Welcome Messages
 	KBM.Language.Welcome = {}
 	KBM.Language.Welcome.Welcome = KBM.Language:Add("Welcome to King Boss Mods v")
+	KBM.Language.Welcome.Welcome:SetGerman("Willkommen zu King Boss Mods v")
 	KBM.Language.Welcome.Welcome:SetFrench("Bienvenu sur King Boss Mods v")
 	KBM.Language.Welcome.Commands = KBM.Language:Add("/kbmhelp for a list of commands")
+	KBM.Language.Welcome.Commands:SetGerman("/kbmhelp für eine Liste möglicher Befehle")
 	KBM.Language.Welcome.Commands:SetFrench("/kbmhelp pour la liste des commandes")
 	KBM.Language.Welcome.Options = KBM.Language:Add("/kbmoptions for options")
 	KBM.Language.Welcome.Options:SetFrench("/kbmoptions pour la configuration")
+	KBM.Language.Welcome.Options:SetGerman("/kbmoptions für die Konfiguration")
+	
+	-- Version Info
+	KBM.Language.Version = {}
+	KBM.Language.Version.Title = KBM.Language:Add("You are running:")
+	KBM.Language.Version.Title:SetFrench("Vous exécuter ceci:")
 	
 	-- Command Listings
 	KBM.Language.Command = {}
 	KBM.Language.Command.Title = KBM.Language:Add("King Boss Mods in game slash commands")
+	KBM.Language.Command.Title:SetGerman("King Boss Mods - mögliche Befehle")
 	KBM.Language.Command.Title:SetFrench("King Boss Mods Commandes en jeu")
 	KBM.Language.Command.On = KBM.Language:Add("/kbmon -- Turns the Addon to it's on state.")
+	KBM.Language.Command.On:SetGerman("/kbmon -- Schaltet das Addon an.")
 	KBM.Language.Command.On:SetFrench("/kbmon – Activer l’Addon.")
 	KBM.Language.Command.Off = KBM.Language:Add("/kbmoff -- Switches the Addon off.")
+	KBM.Language.Command.Off:SetGerman("/kbmoff -- Schaltet das Addon aus.")
 	KBM.Language.Command.Off:SetFrench("/kbmoff – Désactiver l’Addon.")
 	KBM.Language.Command.Reset = KBM.Language:Add("/kbmreset -- Resets the current encounter.")
+	KBM.Language.Command.Reset:SetGerman("/kbmreset -- Setzt den aktuellen Kampf zurück.")
 	KBM.Language.Command.Reset:SetFrench("/kbmreset – Réanitialiser le combat en cours.")
 	KBM.Language.Command.Version = KBM.Language:Add("/kbmversion -- Displays the current version.")
-	KBM.Language.Command.Version:SetFrench("/kbmversion – Afficher la verssion courante.")
+	KBM.Language.Command.Version:SetFrench("/kbmversion - Afficher la version courante.")
 	KBM.Language.Command.Options = KBM.Language:Add("/kbmoptions -- Toggles the GUI Options screen.")
+	KBM.Language.Command.Options:SetGerman("/kbmoptions -- Blendet das Konfigurations-Fenster ein und aus.")
 	KBM.Language.Command.Options:SetFrench("/kbmoptions – Afficher l’écran de configuration de KBM.")
 	KBM.Language.Command.Help = KBM.Language:Add("/kbmhelp -- Displays what you're reading now :)")
+	KBM.Language.Command.Help:SetGerman("/kbmhelp -- Zeigt an, was du gerade liesst :)")
 	KBM.Language.Command.Help:SetFrench("/kbmhelp – Afficher ce que vous lisez en ce moment :)")
 	
 	-- Encounter Tabs
 	KBM.Language.Tabs = {}
 	KBM.Language.Tabs.Encounter = KBM.Language:Add("Encounter")
+	KBM.Language.Tabs.Encounter:SetGerman("Gegner")
 	KBM.Language.Tabs.Encounter:SetFrench("Combat")
 	KBM.Language.Tabs.Timers = KBM.Language:Add("Timers")
+	KBM.Language.Tabs.Timers:SetGerman("Timer")
 	KBM.Language.Tabs.Timers:SetFrench("Minuteries")
 	KBM.Language.Tabs.Alerts = KBM.Language:Add("Alerts")
+	KBM.Language.Tabs.Alerts:SetGerman("Alarmierungen")
 	KBM.Language.Tabs.Alerts:SetFrench("Alertes")
 	KBM.Language.Tabs.Castbars = KBM.Language:Add("Castbars")
+	KBM.Language.Tabs.Castbars:SetGerman("Zauberbalken")
 	KBM.Language.Tabs.Castbars:SetFrench("Barres-cast")
 	KBM.Language.Tabs.Records = KBM.Language:Add("Records")
+	KBM.Language.Tabs.Records:SetGerman("Bestzeiten")
 	KBM.Language.Tabs.Records:SetFrench("Archives")
 	
 	-- Encounter related messages
@@ -257,8 +276,6 @@ function KBMLM.SetMain_Lang()
 	-- Cast-bar related options
 	KBM.Language.Options = {}
 	KBMLM.SetGroupObject(KBM.Language.Options, "GroupObject", "General and Main options")
-	KBM.Language.Options.Title = KBM.Language:Add("King Boss Mods: Options")
-	KBM.Language.Options.Title:SetFrench("King Boss Mods: Configurations")
 	KBM.Language.Options.CastbarOverride = KBM.Language:Add("Castbar: Override")
 	KBM.Language.Options.CastbarOverride:SetGerman("separate Einstellungen")
 	KBM.Language.Options.CastbarOverride:SetFrench("Barre-cast: Substituer")
@@ -495,6 +512,9 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Filters.EnableBoss:SetGerman("Aktiviere %s's Filter")
 	
 	-- Misc.
+	KBM.Language.Options.Title = KBM.Language:Add("King Boss Mods: Options")
+	KBM.Language.Options.Title:SetGerman("King Boss Mods: Konfiguration") 
+	KBM.Language.Options.Title:SetFrench("King Boss Mods: Configurations")
 	KBM.Language.Options.Character = KBM.Language:Add("Saving settings for this character only")
 	KBM.Language.Options.Character:SetGerman("Einstellungen nur für diesen Charakter speichern")
 	KBM.Language.Options.Character:SetFrench("Sauvegarder paramètre pour ce personnage uniquement")
