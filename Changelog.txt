@@ -18,6 +18,10 @@ Engine
 ** MAJOR FIX: There was a hole in the Unit Death tracking system which caused CPU usage increase over time.
 * Slash Commands
 ** New: Type /kbmcpu for a mini on-screen CPU report for all of the Addon-System + KBM breakdown.
+* Events
+** New: UnitID = Unit.Death() - Event for managing Unit Deaths linked with the Unit Tracking Engine.
+** New: DataTable = Encounter.Start() - Event for managing encounter starts: At the moment DataTable is an undefined table layout.
+** New: DataTable = Encounter.End() - Event for managing encounter endings: At the moment DataTable is an undefined
 
 Options
 * Screen Alerts

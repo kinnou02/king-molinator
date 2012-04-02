@@ -179,7 +179,8 @@ KM.King = {
 		},
 		-- MechRef = {
 			-- Enabled = true,
-			-- Shout = KBM.Defaults.MechObj.Create("purple"),
+			-- Cursed = KBM.Defaults.MechObj.Create("red"),
+			-- CursedDuration = KBM.Defaults.MechObj.Create("blue"),
 		-- }
 	},
 }
@@ -953,7 +954,10 @@ function KM:Start()
 	KBM.Defaults.TimerObj.Assign(self.King)
 	
 	-- Add King's MechSpy
-	-- self.King.MechRef.Shout = KBM.MechSpy:Add(KM.Lang.Ability.Shout[KBM.Lang], 10, "playerBuff", self.King)
+	-- self.King.MechRef.Cursed = KBM.MechSpy:Add(KM.Lang.Ability.Cursed[KBM.Lang], 10, "cast", self.King)
+	-- self.King.MechRef.CursedDuration = KBM.MechSpy:Add(KM.Lang.Ability.Cursed[KBM.Lang], 10, "channel", self.King)
+	-- self.King.MechRef.CursedDuration:NoMenu()
+	-- self.King.MechRef.Cursed:SpyAfter(self.King.MechRef.CursedDuration)
 	-- KBM.Defaults.MechObj.Assign(self.King)
 	
 	-- Add King's Alerts
