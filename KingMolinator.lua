@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r335"
+KBM.Alpha = ".r336"
 KBM.Event = {
 	Mark = {},
 	Unit = {
@@ -1970,6 +1970,7 @@ function KBM.MechSpy:Init()
 	function self:End()
 		self.Active = false
 		for i, SpyObj in ipairs(self.List.Active) do
+			SpyObj.StopTimers = {}
 			SpyObj:End()
 		end
 		self.List.Active = {}
@@ -2180,40 +2181,42 @@ function KBM.MechSpy:Add(Name, Duration, Type, BossObj)
 				self.GUI.Cradle:SetPoint("BOTTOM", self.LastTimer.GUI.Background, "BOTTOM")
 				function Timer:Stop()
 					if not self.Deleting then
-						self.Deleting = true
-						self.GUI.Background:SetVisible(false)
-						for i, Timer in ipairs(self.Parent.Timers) do
-							if Timer == self then
-								if #self.Parent.Timers == 1 then
-									self.Parent.LastTimer = nil
-									self.Parent.GUI.Cradle:SetPoint("BOTTOM", self.Parent.GUI.Background, "BOTTOM")
-									if not KBM.MechSpy.Settings.Show then
-										self.Parent:Hide()
+						if self.Active then
+							self.Active = false
+							self.Deleting = true
+							self.GUI.Background:SetVisible(false)
+							for i, Timer in ipairs(self.Parent.Timers) do
+								if Timer == self then
+									if #self.Parent.Timers == 1 then
+										self.Parent.LastTimer = nil
+										self.Parent.GUI.Cradle:SetPoint("BOTTOM", self.Parent.GUI.Background, "BOTTOM")
+										if not KBM.MechSpy.Settings.Show then
+											self.Parent:Hide()
+										end
+									elseif i == 1 then
+										self.Parent.Timers[i+1].GUI.Background:SetPoint("TOP", self.Parent.GUI.Background, "BOTTOM", nil, 1)
+									elseif i == #self.Parent.Timers then
+										self.Parent.LastTimer = self.Parent.Timers[i-1]
+										self.Parent.GUI.Cradle:SetPoint("BOTTOM", self.Parent.LastTimer.GUI.Background, "BOTTOM")
+									else
+										self.Parent.Timers[i+1].GUI.Background:SetPoint("TOP", self.Parent.Timers[i-1].GUI.Background, "BOTTOM", nil, 1)
 									end
-								elseif i == 1 then
-									self.Parent.Timers[i+1].GUI.Background:SetPoint("TOP", self.Parent.GUI.Background, "BOTTOM", nil, 1)
-								elseif i == #self.Parent.Timers then
-									self.Parent.LastTimer = self.Parent.Timers[i-1]
-									self.Parent.GUI.Cradle:SetPoint("BOTTOM", self.Parent.LastTimer.GUI.Background, "BOTTOM")
-								else
-									self.Parent.Timers[i+1].GUI.Background:SetPoint("TOP", self.Parent.Timers[i-1].GUI.Background, "BOTTOM", nil, 1)
+									table.remove(self.Parent.Timers, i)
+									break
 								end
-								table.remove(self.Parent.Timers, i)
-								break
 							end
-						end
-						table.insert(KBM.MechSpy.Store, self.GUI)
-						self.Active = false
-						self.Remaining = 0
-						self.TimeStart = 0
-						self.GUI = nil
-						self.Removing = false
-						self.Deleting = false
-						self.Parent.Names[self.Name] = nil
-						if KBM.Encounter then
-							if self.Parent.SpyAfterList then
-								for i, SpyObj in ipairs(self.Parent.SpyAfterList) do
-									SpyObj:Start(self.Name)
+							table.insert(KBM.MechSpy.Store, self.GUI)
+							self.Remaining = 0
+							self.TimeStart = 0
+							self.GUI = nil
+							self.Removing = false
+							self.Deleting = false
+							self.Parent.Names[self.Name] = nil
+							if KBM.Encounter then
+								if self.Parent.SpyAfterList then
+									for i, SpyObj in ipairs(self.Parent.SpyAfterList) do
+										SpyObj:Start(self.Name)
+									end
 								end
 							end
 						end
@@ -3877,6 +3880,11 @@ function KBM.Unit:Create(uDetails, UnitID)
 				self.HealthMax = uDetails.healthMax
 				self.Health = uDetails.health
 				if self.HealthMax ~= nil and self.Health ~= nil and self.Name ~= nil then
+					if self.Health > 0 then
+						self.Dead = false
+					else
+						self.Dead = true
+					end
 					self.PercentRaw = (self.Health/self.HealthMax)*100
 					self.Percent = math.ceil(self.PercentRaw)
 					self.Loaded = true
@@ -4091,7 +4099,7 @@ function KBM.Unit:Idle(UnitID)
 		self.UIDs.Idle[UnitID] = self.List.UID[UnitID]
 		self.UIDs.Available[UnitID] = nil
 		self.UIDs.Idle[UnitID].Available = false
-		Number = math.floor((Inspect.Time.Real() + 600) / 60)
+		Number = math.floor((Inspect.Time.Real() + 120) / 60)
 		self.UIDs.Idle[UnitID].Time = Number
 		if not self.UIDs.Flush[Number] then
 			self.UIDs.Flush[Number] = {}
@@ -4110,7 +4118,7 @@ function KBM.Unit:Idle(UnitID)
 			if not self.UIDs.Idle[UnitID] then
 				self.UIDs.Idle[UnitID] = self.List.UID[UnitID]
 				self.UIDs.Idle[UnitID].Available = false
-				Number = math.floor((Inspect.Time.Real() + 600) / 60)
+				Number = math.floor((Inspect.Time.Real() + 120) / 60)
 				self.UIDs.Idle[UnitID].Time = Number
 				if not self.UIDs.Flush[Number] then
 					self.UIDs.Flush[Number] = {}
@@ -4118,12 +4126,13 @@ function KBM.Unit:Idle(UnitID)
 				self.UIDs.Flush[Number][UnitID] = self.List.UID[UnitID]
 				self.UIDs.Count.Idle = self.UIDs.Count.Idle + 1
 			end
+			KBM.Event.Unit.Unavailable(UnitID)
 			return self.List.UID[UnitID]
 		else
 			if not self.UIDs.Idle[UnitID] then
 				self.UIDs.Idle[UnitID] = self.List.UID[UnitID]
 				self.UIDs.Idle[UnitID].Available = false
-				Number = math.floor((Inspect.Time.Real() + 600) / 60)
+				Number = math.floor((Inspect.Time.Real() + 120) / 60)
 				self.UIDs.Idle[UnitID].Time = Number
 				if not self.UIDs.Flush[Number] then
 					self.UIDs.Flush[Number] = {}
@@ -4131,6 +4140,7 @@ function KBM.Unit:Idle(UnitID)
 				self.UIDs.Flush[Number][UnitID] = self.List.UID[UnitID]
 				self.UIDs.Count.Idle = self.UIDs.Count.Idle + 1				
 			end
+			KBM.Event.Unit.Unavailable(UnitID)
 			return self.List.UID[UnitID]
 		end
 	end
@@ -6034,10 +6044,12 @@ function KBM:BuffMonitor(unitID, Buffs, Type)
 							if KBM.Trigger.PlayerDebuff[KBM.CurrentMod.ID] ~= nil and bDetails.debuff == true then
 								if KBM.Trigger.PlayerDebuff[KBM.CurrentMod.ID][bDetails.name] then
 									TriggerObj = KBM.Trigger.PlayerDebuff[KBM.CurrentMod.ID][bDetails.name]
-									if LibSRM.Group.UnitExists(unitID) or unitID == KBM.Player.UnitID then
+									if LibSRM.Group.UnitExists(unitID) ~= nil or unitID == KBM.Player.UnitID then
 										if KBM.Debug then
 											print("Debuff Trigger matched: "..bDetails.name)
-											print("LibSRM Match: "..tostring(LibSRM.Group.UnitExists(unitID)))
+											if LibSRM.Grouped() then
+												print("LibSRM Match: "..tostring(LibSRM.Group.UnitExists(unitID)))
+											end
 											print("Player Match: "..KBM.Player.UnitID.." - "..unitID)
 											print("---------------")
 											dump(bDetails)
@@ -6049,10 +6061,12 @@ function KBM:BuffMonitor(unitID, Buffs, Type)
 							if KBM.Trigger.PlayerIDBuff[KBM.CurrentMod.ID] then
 								if KBM.Trigger.PlayerIDBuff[KBM.CurrentMod.ID][bDetails.type] then
 									TriggerObj = KBM.Trigger.PlayerIDBuff[KBM.CurrentMod.ID][bDetails.type]
-									if LibSRM.Group.UnitExists(unitID) or unitID == KBM.Player.UnitID then
+									if LibSRM.Group.UnitExists(unitID) ~= nil or unitID == KBM.Player.UnitID then
 										if KBM.Debug then
 											print("Debuff Trigger matched: "..bDetails.name)
-											print("LibSRM Match: "..tostring(LibSRM.Group.UnitExists(unitID)))
+											if LibSRM.Grouped() then
+												print("LibSRM Match: "..tostring(LibSRM.Group.UnitExists(unitID)))
+											end
 											print("Player Match: "..KBM.Player.UnitID.." - "..unitID)
 											print("---------------")
 											dump(bDetails)
@@ -6064,10 +6078,12 @@ function KBM:BuffMonitor(unitID, Buffs, Type)
 							if KBM.Trigger.PlayerBuff[KBM.CurrentMod.ID] then
 								if KBM.Trigger.PlayerBuff[KBM.CurrentMod.ID][bDetails.name] then
 									TriggerObj = KBM.Trigger.PlayerBuff[KBM.CurrentMod.ID][bDetails.name]
-									if LibSRM.Group.UnitExists(unitID) or unitID == KBM.Player.UnitID then
+									if LibSRM.Group.UnitExists(unitID) ~= nil or unitID == KBM.Player.UnitID then
 										if KBM.Debug then
 											print("Buff Trigger matched: "..bDetails.name)
-											print("LibSRM Match: "..tostring(LibSRM.Group.UnitExists(unitID)))
+											if LibSRM.Grouped() then
+												print("LibSRM Match: "..tostring(LibSRM.Group.UnitExists(unitID)))
+											end
 											print("Player Match: "..KBM.Player.UnitID.." - "..unitID)
 											print("---------------")
 											dump(bDetails)
