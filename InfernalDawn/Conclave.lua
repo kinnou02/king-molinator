@@ -57,16 +57,22 @@ KBM.RegisterMod(EC.ID, EC)
 EC.Lang.Unit = {}
 EC.Lang.Unit.Szath = KBM.Language:Add(EC.Szath.Name)
 EC.Lang.Unit.Szath:SetFrench("Seigneur-sorcier Szath")
+EC.Lang.Unit.Szath:SetGerman("Hexenmeister Szath")
 EC.Lang.Unit.SzShort = KBM.Language:Add(EC.Szath.NameShort)
 EC.Lang.Unit.SzShort:SetFrench()
+EC.Lang.Unit.SzShort:SetGerman()
 EC.Lang.Unit.Nahoth = KBM.Language:Add("Packmaster Nahoth")
 EC.Lang.Unit.Nahoth:SetFrench("Maître-fourrier Nahoth")
+EC.Lang.Unit.Nahoth:SetGerman("Rudelmeister Nahoth")
 EC.Lang.Unit.NahShort = KBM.Language:Add("Nahoth")
 EC.Lang.Unit.NahShort:SetFrench()
+EC.Lang.Unit.NahShort:SetGerman()
 EC.Lang.Unit.Ereetu = KBM.Language:Add("Emberlord Ereetu")
 EC.Lang.Unit.Ereetu:SetFrench("Seigneur de Braise Ereetu")
+EC.Lang.Unit.Ereetu:SetGerman("Glutfürst Ereetu")
 EC.Lang.Unit.EreShort = KBM.Language:Add("Ereetu")
 EC.Lang.Unit.EreShort:SetFrench()
+EC.Lang.Unit.EreShort:SetGerman()
 
 EC.Nahoth = {
 	Mod = EC,
@@ -131,6 +137,7 @@ EC.Lang.Ability = {}
 EC.Lang.Main = {}
 EC.Lang.Main.Descript = KBM.Language:Add("The Ember Conclave")
 EC.Lang.Main.Descript:SetFrench("Conclave de braise")
+EC.Lang.Main.Descript:SetGerman("Die Glutkonklave")
 
 EC.Szath.Name = EC.Lang.Unit.Szath[KBM.Lang]
 EC.Szath.NameShort = EC.Lang.Unit.SzShort[KBM.Lang]

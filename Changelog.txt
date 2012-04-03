@@ -20,6 +20,7 @@ Engine
 ** New: Type /kbmcpu for a mini on-screen CPU report for all of the Addon-System + KBM breakdown.
 * Events
 ** New: UnitID = Unit.Death() - Event for managing Unit Deaths linked with the Unit Tracking Engine.
+** New: UnitID, Name = Unit.Name() - Event for managing the name changing of certain Units.
 ** New: DataTable = Encounter.Start() - Event for managing encounter starts: At the moment DataTable is an undefined table layout.
 ** New: DataTable = Encounter.End() - Event for managing encounter endings: At the moment DataTable is an undefined
 

@@ -57,6 +57,7 @@ KBM.RegisterMod(IZ.ID, IZ)
 IZ.Lang.Unit = {}
 IZ.Lang.Unit.Ituziel = KBM.Language:Add(IZ.Ituziel.Name)
 IZ.Lang.Unit.Ituziel:SetFrench()
+IZ.Lang.Unit.Ituziel:SetGerman() 
 
 -- Ability Dictionary
 IZ.Lang.Ability = {}

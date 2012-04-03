@@ -56,7 +56,7 @@ KBM.RegisterMod(ML.ID, ML)
 -- Main Unit Dictionary
 ML.Lang.Unit = {}
 ML.Lang.Unit.Maklamos = KBM.Language:Add(ML.Maklamos.Name)
--- ML.Lang.Unit.Maklamos:SetGerman("")
+ML.Lang.Unit.Maklamos:SetGerman("Maklamos der Wahrsager")
 ML.Lang.Unit.Maklamos:SetFrench("Maklamos le Divin")
 -- ML.Lang.Unit.Maklamos:SetRussian("")
 

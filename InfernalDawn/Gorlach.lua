@@ -57,12 +57,16 @@ KBM.RegisterMod(GL.ID, GL)
 GL.Lang.Unit = {}
 GL.Lang.Unit.Gorlach = KBM.Language:Add(GL.Gorlach.Name)
 GL.Lang.Unit.Gorlach:SetFrench()
+GL.Lang.Unit.Gorlach:SetGerman()
 GL.Lang.Unit.GorlachShort = KBM.Language:Add("Gorlach")
 GL.Lang.Unit.GorlachShort:SetFrench()
+GL.Lang.Unit.GorlachShort:SetGerman()
 GL.Lang.Unit.Bouldergut = KBM.Language:Add("Bouldergut")
 GL.Lang.Unit.Bouldergut:SetFrench("Rochentraille")
+GL.Lang.Unit.Bouldergut:SetGerman("Felsbauch")
 GL.Lang.Unit.BouldergutShort = KBM.Language:Add("Bouldergut")
 GL.Lang.Unit.BouldergutShort:SetFrench("Rochentraille")
+GL.Lang.Unit.BouldergutShort:SetGerman("Felsbauch")
 
 -- Ability Dictionary
 GL.Lang.Ability = {}
@@ -71,6 +75,7 @@ GL.Lang.Ability = {}
 GL.Lang.Main = {}
 GL.Lang.Main.Descript = KBM.Language:Add("Gorlach & Bouldergut")
 GL.Lang.Main.Descript:SetFrench("Gorlach & Rochentraille")
+GL.Lang.Main.Descript:SetGerman("Gorlach & Felsbauch")
 GL.Descript = GL.Lang.Main.Descript[KBM.Lang]
 
 GL.Bouldergut = {

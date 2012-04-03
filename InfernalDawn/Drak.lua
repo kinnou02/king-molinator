@@ -57,6 +57,7 @@ KBM.RegisterMod(WD.ID, WD)
 WD.Lang.Unit = {}
 WD.Lang.Unit.Drak = KBM.Language:Add(WD.Drak.Name)
 WD.Lang.Unit.Drak:SetFrench("Chef de guerre Drak")
+WD.Lang.Unit.Drak:SetGerman("Kriegsboss Drak")
 
 -- Ability Dictionary
 WD.Lang.Ability = {}

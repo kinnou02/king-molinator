@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r333"
+KBM.Alpha = ".r334"
 KBM.Event = {
 	Mark = {},
 	Unit = {
@@ -20,6 +20,7 @@ KBM.Event = {
 		Available = {},
 		Unavailable = {},
 		Death = {},
+		Name = {},
 	},
 	Encounter = {
 		Start = {},
@@ -3658,6 +3659,7 @@ function KBM.CPU:Init()
 	function self:CreateTrack(ID, Name, R, G, B)
 		local TrackObj = {
 			GUI = {},
+			Current = "",
 		}
 		TrackObj.GUI.Frame = UI.CreateFrame("Frame", Name, self.GUI.Header)
 		TrackObj.GUI.Frame:SetBackgroundColor(0,0,0,0.33)
@@ -3675,14 +3677,18 @@ function KBM.CPU:Init()
 		TrackObj.GUI.Data:SetPoint("CENTERRIGHT", TrackObj.GUI.Frame, "CENTERRIGHT", -2, 0)
 		function TrackObj:UpdateDisplay(New)
 			New = tonumber(New) or 0
-			if New < 10 then
-				self.GUI.Data:SetFontColor(0.2, 0.9, 0.2)
-			elseif New < 30 then
-				self.GUI.Data:SetFontColor(0.9, 0.5, 0.35)
-			else
-				self.GUI.Data:SetFontColor(0.9, 0.2, 0.2)
+			NewString = string.format("%0.1f%%", New)
+			if NewString ~= self.Current then
+				if New < 10 then
+					self.GUI.Data:SetFontColor(0.2, 0.9, 0.2)
+				elseif New < 30 then
+					self.GUI.Data:SetFontColor(0.9, 0.5, 0.35)
+				else
+					self.GUI.Data:SetFontColor(0.9, 0.2, 0.2)
+				end
+				self.GUI.Data:SetText(NewString)
+				self.Current = NewString
 			end
-			self.GUI.Data:SetText(string.format("%0.1f%%", New))
 		end
 		self.GUI.Trackers[ID] = TrackObj
 		self.GUI.LastTracker = TrackObj.GUI.Frame
@@ -3760,89 +3766,83 @@ function KBM.Unit:Create(uDetails, UnitID)
 			UsedBy = {},
 			Type = "Unit",
 		}
-		function UnitObj:Update()
+		function UnitObj:Update(NewHP)
 			if self.Loaded then
-				if self.Available then
-					local uDetails = Inspect.Unit.Detail(self.UnitID)
-					if uDetails then
-						self.Details = uDetails
-					else
-						KBM.Unit:Idle(self.UnitID)
-						return
-					end
-					if not self.Details.health then
-						self.Health = 0
-					else
-						self.Health = self.Details.health
-					end				
-					if self.Details.healthMax then
-						self.HealthMax = self.Details.healthMax
-					end
+				self.Health = NewHP
+				if self.HealthMax then
 					self.PercentRaw = (self.Health/self.HealthMax)*100
-					self.Percent = math.ceil(self.PercentRaw)
-					if self.Mark ~= self.Details.mark then
-						self.Mark = self.Details.mark
-						KBM.Event.Mark(self.Mark, self.UnitID)
+					if self.PercentRaw ~= self.LastPercentRaw then
+						self.Percent = math.ceil(self.PercentRaw)
+						self.LastPercentRaw = self.PercentRaw
+						KBM.Event.Unit.PercentChange(self.UnitID)
+						KBM.UpdateHP(self)
 					end
-					KBM.Event.Unit.PercentChange(self.UnitID)
-					KBM.UpdateHP(self)
+				end
+			end
+		end
+		function UnitObj:SetHealthMax(NewMHP)
+			self.HealthMax = NewMHP
+			if NewMHP then
+				if NewMHP == true then
+					NewMHP = self.Health
+				end
+				if (self.Name and self.Health and self.HealthMax) ~= nil then
+					self.Loaded = true
+					self:Update(self.Health)
 				end
 			end
 		end
 		function UnitObj:DamageHandler(DamageObj)
-			if self.Loaded then
-				if not self.Available then
-					if self.Health > 0 then 
-						if DamageObj.damage then
-							self.Health = self.Health - DamageObj.damage
-							if self.Health < 0 then
+			if not self.Available then
+				if self.Loaded then
+					if self.Health then
+						if self.HealthMax then
+							if DamageObj.damage then
+								self.Health = self.Health - DamageObj.damage
+								if self.Health < 0 then
+									self.Health = 0
+								end
+							end
+							if DamageObj.overkill then
 								self.Health = 0
 							end
+							self.PercentRaw = (self.Health/self.HealthMax)*100
+							if self.PercentRaw ~= self.LastPercentRaw then
+								self.Percent = math.ceil(self.PercentRaw)
+								self.LastPercentRaw = self.PercentRaw
+								KBM.Event.Unit.PercentChange(self.UnitID)
+								KBM.UpdateHP(self)
+							end
 						end
-						if DamageObj.overkill then
-							self.Health = 0
-						end
-					end
-				else
-					self.Details = Inspect.Unit.Detail(self.UnitID)
-					if self.Details then
-						if not self.Details.health then
-							self.Health = 0
-						else
-							self.Health = self.Details.health
-						end
-					else
-						self.Health = self.Health - DamageObj.damage
-						if self.Health < 0 then 
-							self.Health = 0
-						end
-						KBM.Unit:Idle(self.UnitID)
 					end
 				end
-				self.PercentRaw = (self.Health/self.HealthMax)*100
-				self.Percent = math.ceil(self.PercentRaw)
-				KBM.Event.Unit.PercentChange(self.UnitID)
-				KBM.UpdateHP(self)
 			end
 		end
 		function UnitObj:HealHandler(HealObj)
-			if self.Loaded then
-				if not self.Available then
-					if not HealObj.heal then
-						HealObj.heal = 0
-						self.Health = self.Health + HealObj.heal
-						if self.Health > self.HealthMax then
-							self.Health = self.HealthMax
+			if not self.Available then
+				if self.Loaded then
+					if self.Health then
+						if self.HealthMax then
+							if not HealObj.heal then
+								HealObj.heal = 0
+								self.Health = self.Health + HealObj.heal
+								if self.Health > self.HealthMax then
+									self.Health = self.HealthMax
+								end
+							end
+							if self.Dead then
+								self.Dead = false
+							end
+							self.PercentRaw = (self.Health/self.HealthMax)*100
+							if self.PercentRaw ~= self.LastPercentRaw then
+								self.Percent = math.ceil(self.PercentRaw)
+								self.LastPercentRaw = self.PercentRaw
+								KBM.Event.Unit.PercentChange(self.UnitID)
+								KBM.UpdateHP(self)
+							end
 						end
 					end
-					if self.Dead then
-						self.Dead = false
-					end
 				end
-				self.PercentRaw = (self.Health/self.HealthMax)*100
-				self.Percent = math.ceil(self.PercentRaw)
-				KBM.Event.Unit.PercentChange(self.UnitID)
-				KBM.UpdateHP(self)
 			end
 		end
 		function UnitObj:UpdateData(uDetails)
@@ -3857,7 +3857,8 @@ function KBM.Unit:Create(uDetails, UnitID)
 					end
 					self.Relation = uDetails.relation
 				elseif self.Relation == nil then
-					self.Relation = "neutral"
+					self.Relation = "unknown"
+					self:SetGroup("Unknown")
 				end
 				self.Available = true
 				if uDetails.player then
@@ -3868,20 +3869,16 @@ function KBM.Unit:Create(uDetails, UnitID)
 					self.Player = false
 				end
 				self.Details = uDetails
-				if not self.Loaded then
-					self.HealthMax = uDetails.healthMax
-					self.Loaded = true
-				end
-				if self.Details.health then
-					self.Health = uDetails.health
-				else
-					self.Health = 0
-					if not self.HealthMax then
-						self.HealthMax = 1
+				self.HealthMax = uDetails.healthMax
+				self.Health = uDetails.health
+				if self.HealthMax ~= nil and self.Health ~= nil and self.Name ~= nil then
+					self.PercentRaw = (self.Health/self.HealthMax)*100
+					self.Percent = math.ceil(self.PercentRaw)
+					if self.Relation ~= "unknown" then
+						self.Loaded = true
+						KBM.Event.Unit.Available(self)
 					end
 				end
-				self.PercentRaw = (self.Health/self.HealthMax)*100
-				self.Percent = math.ceil(self.PercentRaw)
 				self:SetName(uDetails.name)
 			else
 				if not self.Group then
@@ -3925,6 +3922,11 @@ function KBM.Unit:Create(uDetails, UnitID)
 						KBM.Unit.List.Name[Name] = {}
 					end
 					KBM.Unit.List.Name[Name][self.UnitID] = self
+					if not self.Loaded then
+						self.Loaded = true
+						KBM.Event.Unit.Available(self)
+					end
+					KBM.Event.Unit.Name(self.UnitID, Name)
 				end
 			else
 				if self.Name == nil then
@@ -4047,7 +4049,6 @@ function KBM.Unit:Add(uDetails, UnitID)
 			if KBM.Debug then
 				self.Debug:UpdateAll()
 			end
-			KBM.Event.Unit.Available(UnitObj)
 			return UnitObj		
 		else			
 			if self.UIDs.Idle[UnitID] then				
@@ -4060,7 +4061,6 @@ function KBM.Unit:Add(uDetails, UnitID)
 				end
 				self.UIDs.Available[UnitID].Time = nil
 				self.UIDs.Available[UnitID].Available = true
-				KBM.Event.Unit.Available(self.List.UID[UnitID])
 			end
 			if KBM.Debug then
 				self.Debug:UpdateAll()
@@ -5704,9 +5704,6 @@ function KBM:Timer()
 		
 		if KBM.Options.Enabled then			
 			if diff >= 1 then				
-				for UnitID, UnitObj in pairs(KBM.Unit.UIDs.Available) do
-					UnitObj:Update()
-				end			
 				if KBM.Options.CPU.Enabled then
 					KBM.CPU:UpdateAll()
 				end
@@ -6590,6 +6587,7 @@ KBM.Event.Unit.PercentChange, KBM.Event.Unit.PercentChange.EventTable = Utility.
 KBM.Event.Unit.Available, KBM.Event.Unit.Available.EventTable = Utility.Event.Create("KingMolinator", "Unit.Available")
 KBM.Event.Unit.Unavailable, KBM.Event.Unit.Unavailable.EventTable = Utility.Event.Create("KingMolinator", "Unit.Unavailable")
 KBM.Event.Unit.Death, KBM.Event.Unit.Death.EventTable = Utility.Event.Create("KingMolinator", "Unit.Death")
+KBM.Event.Unit.Name, KBM.Event.Unit.Name.EventTable = Utility.Event.Create("KingMolinator", "Unit.Name")
 KBM.Event.Encounter.Start, KBM.Event.Encounter.Start.EventTable = Utility.Event.Create("KingMolinator", "Encounter.Start")
 KBM.Event.Encounter.End, KBM.Event.Encounter.End.EventTable = Utility.Event.Create("KingMolinator", "Encounter.End")
 
@@ -6639,6 +6637,34 @@ function KBM.RaidRes(data)
 		dump(data)
 		print("Total Dead: "..tostring(LibSRM.Dead).."/"..tostring(LibSRM.GroupCount()))
 		print("--------------")
+	end
+end
+
+function KBM.NameChange(data)
+	for UnitID, Name in pairs(data) do
+		if KBM.Unit.List.UID[UnitID] then
+			KBM.Unit.List.UID[UnitID]:SetName(Name)
+		end
+	end
+end
+
+function KBM.HealthChange(data)
+	for UnitID, Value in pairs(data) do
+		if KBM.Unit.List.UID[UnitID] then
+			if type(Value) == "number" then
+				KBM.Unit.List.UID[UnitID]:Update(Value)
+			end
+		end
+	end
+end
+
+function KBM.HealthMaxChange(data)
+	for UnitID, Value in pairs(data) do
+		if KBM.Unit.List.UID[UnitID] then
+			if type(Value) == "number" then
+				KBM.Unit.List.UID[UnitID]:SetHealthMax(Value)
+			end
+		end
 	end
 end
 
@@ -6692,6 +6718,9 @@ local function KBM_Start()
 	table.insert(Event.Unit.Unavailable, {KBM_UnitRemoved, "KingMolinator", "Unit Unavailable"})
 	table.insert(Event.Unit.Available, {KBM_UnitAvailable, "KingMolinator", "Unit Available"})
 	table.insert(Event.Unit.Detail.LocationName, {KBM.LocationChange, "KingMolinator", "Location Change"})
+	table.insert(Event.Unit.Detail.Health, {KBM.HealthChange, "KingMolinator", "Health Update"})
+	table.insert(Event.Unit.Detail.Name, {KBM.NameChange, "KingMolinator", "Name Update"})
+	table.insert(Event.Unit.Detail.HealthMax, {KBM.HealthMaxChange, "KingMolinator", "Health Max Update"})
 	table.insert(Event.System.Update.Begin, {function () KBM:Timer() end, "KingMolinator", "System Update"}) 
 	table.insert(Event.SafesRaidManager.Combat.Death, {KBM_Death, "KingMolinator", "Combat Death"})
 	table.insert(Event.SafesRaidManager.Combat.Enter, {KBM.CombatEnter, "KingMolinator", "Non raid combat enter"})

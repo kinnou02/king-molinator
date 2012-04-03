@@ -95,7 +95,7 @@ PH.Lang.Ability.Soul:SetGerman("Seelenfraktur")
 PH.Lang.Ability.Soul:SetFrench("Fracture de l'âme")
 PH.Lang.Ability.Soul:SetRussian("Распад души")
 PH.Lang.Ability.Cotton = KBM.Language:Add("Contagious Cottontail")
-PH.Lang.Ability.Cotton:SetGerman("Ansteckender Baumwollschwanz")
+PH.Lang.Ability.Cotton:SetGerman("Ansteckender Baumwollschweif")
 PH.Lang.Ability.Cotton:SetFrench("Queue de coton contagieuse")
 PH.Lang.Ability.Cotton:SetRussian("Заразный кролик")
 
