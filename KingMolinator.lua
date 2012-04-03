@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r334"
+KBM.Alpha = ".r335"
 KBM.Event = {
 	Mark = {},
 	Unit = {
@@ -2210,9 +2210,11 @@ function KBM.MechSpy:Add(Name, Duration, Type, BossObj)
 						self.Removing = false
 						self.Deleting = false
 						self.Parent.Names[self.Name] = nil
-						if self.Parent.SpyAfterList then
-							for i, SpyObj in ipairs(self.Parent.SpyAfterList) do
-								SpyObj:Start(self.Name)
+						if KBM.Encounter then
+							if self.Parent.SpyAfterList then
+								for i, SpyObj in ipairs(self.Parent.SpyAfterList) do
+									SpyObj:Start(self.Name)
+								end
 							end
 						end
 					end
@@ -3857,8 +3859,11 @@ function KBM.Unit:Create(uDetails, UnitID)
 					end
 					self.Relation = uDetails.relation
 				elseif self.Relation == nil then
-					self.Relation = "unknown"
-					self:SetGroup("Unknown")
+					if LibSRM.Group.UnitExists(self.UnitID) then
+						self.Relation = "friendly"
+					else
+						self.Relation = "unknown"
+					end
 				end
 				self.Available = true
 				if uDetails.player then
@@ -3874,10 +3879,8 @@ function KBM.Unit:Create(uDetails, UnitID)
 				if self.HealthMax ~= nil and self.Health ~= nil and self.Name ~= nil then
 					self.PercentRaw = (self.Health/self.HealthMax)*100
 					self.Percent = math.ceil(self.PercentRaw)
-					if self.Relation ~= "unknown" then
-						self.Loaded = true
-						KBM.Event.Unit.Available(self)
-					end
+					self.Loaded = true
+					KBM.Event.Unit.Available(self)
 				end
 				self:SetName(uDetails.name)
 			else
