@@ -88,6 +88,21 @@ Gilded Prophecy
 * Uruluuk
 ** New: Mechanic Spy added for Crystal Imprisonment.
 
+Realm of the Fae
+* Trickster Maelow
+** Fixed: Saved variables and records were not saving for this encounter.
+** Fixed: Added Lifeward Celoah to the Phase Monitor.
+* Luggodhan
+** Fixed: Saved variables and records were not saving for this encounter.
+* Grand Apairist Orban
+** Fixed: Saved variables and records were not saving for this encounter.
+* Battlemaster Atrophinius
+** Fixed: Saved variables and records were not saving for this encounter.
+* Winterfront
+** Fixed: Saved variables and records were not saving for this encounter.
+* Fae Lord Twyl
+** Fixed: Saved variables and records were not saving for this encounter.
+
 Drowned Halls
 * Joloral Ragetide
 ** New: Mechanic Spy added for Panic.

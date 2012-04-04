@@ -3,8 +3,8 @@
 -- Copyright 2011
 --
 
-KBMEXUROTFTM_Settings = nil
-chKBMEXUROTFTM_Settings = nil
+KBMEXROTFTM_Settings = nil
+chKBMEXROTFTM_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
@@ -134,42 +134,42 @@ function MOD:InitVars()
 		-- TimersRef = self.Maelow.Settings.TimersRef,
 		-- AlertsRef = self.Maelow.Settings.AlertsRef,
 	}
-	KBMEXUROTFTM_Settings = self.Settings
-	chKBMEXUROTFTM_Settings = self.Settings
+	KBMEXROTFTM_Settings = self.Settings
+	chKBMEXROTFTM_Settings = self.Settings
 	
 end
 
 function MOD:SwapSettings(bool)
 
 	if bool then
-		KBMEXUROTFTM_Settings = self.Settings
-		self.Settings = chKBMEXUROTFTM_Settings
+		KBMEXROTFTM_Settings = self.Settings
+		self.Settings = chKBMEXROTFTM_Settings
 	else
-		chKBMEXUROTFTM_Settings = self.Settings
-		self.Settings = KBMEXUROTFTM_Settings
+		chKBMEXROTFTM_Settings = self.Settings
+		self.Settings = KBMEXROTFTM_Settings
 	end
 
 end
 
 function MOD:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMEXUROTFTM_Settings, self.Settings)
+		KBM.LoadTable(chKBMEXROTFTM_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMEXUROTFTM_Settings, self.Settings)
+		KBM.LoadTable(KBMEXROTFTM_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMEXUROTFTM_Settings = self.Settings
+		chKBMEXROTFTM_Settings = self.Settings
 	else
-		KBMEXUROTFTM_Settings = self.Settings
+		KBMEXROTFTM_Settings = self.Settings
 	end	
 end
 
 function MOD:SaveVars()	
 	if KBM.Options.Character then
-		chKBMEXUROTFTM_Settings = self.Settings
+		chKBMEXROTFTM_Settings = self.Settings
 	else
-		KBMEXUROTFTM_Settings = self.Settings
+		KBMEXROTFTM_Settings = self.Settings
 	end	
 end
 
@@ -211,6 +211,7 @@ function MOD:UnitHPCheck(unitDetails, unitID)
 					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
 					self.PhaseObj.Objectives:AddPercent(self.Maelow.Name, 0, 100)
 					self.PhaseObj.Objectives:AddPercent(self.Brae.Name, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Celoah.Name, 0, 100)
 					self.Phase = 1
 				else
 					BossObj.Dead = false

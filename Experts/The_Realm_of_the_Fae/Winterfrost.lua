@@ -3,8 +3,8 @@
 -- Copyright 2011
 --
 
-KBMEXUROTFCW_Settings = nil
-chKBMEXUROTFCW_Settings = nil
+KBMEXROTFCW_Settings = nil
+chKBMEXROTFCW_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
@@ -88,42 +88,42 @@ function MOD:InitVars()
 		-- TimersRef = self.Winterfrost.Settings.TimersRef,
 		-- AlertsRef = self.Winterfrost.Settings.AlertsRef,
 	}
-	KBMEXUROTFCW_Settings = self.Settings
-	chKBMEXUROTFCW_Settings = self.Settings
+	KBMEXROTFCW_Settings = self.Settings
+	chKBMEXROTFCW_Settings = self.Settings
 	
 end
 
 function MOD:SwapSettings(bool)
 
 	if bool then
-		KBMEXUROTFCW_Settings = self.Settings
-		self.Settings = chKBMEXUROTFCW_Settings
+		KBMEXROTFCW_Settings = self.Settings
+		self.Settings = chKBMEXROTFCW_Settings
 	else
-		chKBMEXUROTFCW_Settings = self.Settings
-		self.Settings = KBMEXUROTFCW_Settings
+		chKBMEXROTFCW_Settings = self.Settings
+		self.Settings = KBMEXROTFCW_Settings
 	end
 
 end
 
 function MOD:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMEXUROTFCW_Settings, self.Settings)
+		KBM.LoadTable(chKBMEXROTFCW_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMEXUROTFCW_Settings, self.Settings)
+		KBM.LoadTable(KBMEXROTFCW_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMEXUROTFCW_Settings = self.Settings
+		chKBMEXROTFCW_Settings = self.Settings
 	else
-		KBMEXUROTFCW_Settings = self.Settings
+		KBMEXROTFCW_Settings = self.Settings
 	end	
 end
 
 function MOD:SaveVars()	
 	if KBM.Options.Character then
-		chKBMEXUROTFCW_Settings = self.Settings
+		chKBMEXROTFCW_Settings = self.Settings
 	else
-		KBMEXUROTFCW_Settings = self.Settings
+		KBMEXROTFCW_Settings = self.Settings
 	end	
 end
 

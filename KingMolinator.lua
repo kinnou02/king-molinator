@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r336"
+--KBM.Alpha = ".r338"
 KBM.Event = {
 	Mark = {},
 	Unit = {
@@ -5421,7 +5421,10 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 							if KBM.Trigger.Cast[bDetails.abilityName] then
 								if KBM.Trigger.Cast[bDetails.abilityName][self.Boss.Name] then
 									TriggerObj = KBM.Trigger.Cast[bDetails.abilityName][self.Boss.Name]
-									KBM.Trigger.Queue:Add(TriggerObj, nil, self.Boss.UnitID, bDetails.remaining)
+									if self.Boss.UnitID then
+										local TargetID = Inspect.Unit.Lookup(self.Boss.UnitID..".target")
+									end
+									KBM.Trigger.Queue:Add(TriggerObj, self.Boss.UnitID, self.Boss.UnitID, bDetails.remaining)
 								end
 							end
 						else
@@ -5430,7 +5433,10 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 								if KBM.Trigger.Channel[bDetails.abilityName] then
 									if KBM.Trigger.Channel[bDetails.abilityName][self.Boss.Name] then
 										TriggerObj = KBM.Trigger.Channel[bDetails.abilityName][self.Boss.Name]
-										KBM.Trigger.Queue:Add(TriggerObj, nil, self.Boss.UnitID, bDetails.remaining)
+										if self.Boss.UnitID then
+											local TargetID = Inspect.Unit.Lookup(self.Boss.UnitID..".target")
+										end
+										KBM.Trigger.Queue:Add(TriggerObj, self.Boss.UnitID, TargetID, bDetails.remaining)
 									end
 								end
 							end
@@ -5451,7 +5457,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 								if KBM.Trigger.Interrupt[self.CastObject.abilityName] then
 									if KBM.Trigger.Interrupt[self.CastObject.abilityName][self.Boss.Name] then
 										TriggerObj = KBM.Trigger.Interrupt[self.CastObject.abilityName][self.Boss.Name]
-										KBM.Trigger.Queue:Add(TriggerObj, nil, "interruptTarget", self.CastObject.remaining)
+										KBM.Trigger.Queue:Add(TriggerObj, self.Boss.UnitID, "interruptTarget", self.CastObject.remaining)
 									end
 								end
 								self.Interrupted = true

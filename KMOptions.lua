@@ -2799,9 +2799,10 @@ function KBM.InitOptions()
 							end
 						end
 					end
-				end			
+				end
+				local TimerCreated = false
 				for BossName, BossObj in pairs(self.Boss.Mod.Bosses) do
-					if BossObj.TimersRef or BossObj.MechRef then
+					if BossObj.TimersRef ~= nil or BossObj.MechRef ~= nil then
 						self:CreateOptions(BossObj)
 						TimerCreated = true
 					end

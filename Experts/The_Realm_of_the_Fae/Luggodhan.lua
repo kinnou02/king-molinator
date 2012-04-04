@@ -3,8 +3,8 @@
 -- Copyright 2011
 --
 
-KBMEXUROTFLN_Settings = nil
-chKBMEXUROTFLN_Settings = nil
+KBMEXROTFLN_Settings = nil
+chKBMEXROTFLN_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
@@ -83,42 +83,42 @@ function MOD:InitVars()
 		-- TimersRef = self.Loggodhan.Settings.TimersRef,
 		-- AlertsRef = self.Loggodhan.Settings.AlertsRef,
 	}
-	KBMEXUROTFLN_Settings = self.Settings
-	chKBMEXUROTFLN_Settings = self.Settings
+	KBMEXROTFLN_Settings = self.Settings
+	chKBMEXROTFLN_Settings = self.Settings
 	
 end
 
 function MOD:SwapSettings(bool)
 
 	if bool then
-		KBMEXUROTFLN_Settings = self.Settings
-		self.Settings = chKBMEXUROTFLN_Settings
+		KBMEXROTFLN_Settings = self.Settings
+		self.Settings = chKBMEXROTFLN_Settings
 	else
-		chKBMEXUROTFLN_Settings = self.Settings
-		self.Settings = KBMEXUROTFLN_Settings
+		chKBMEXROTFLN_Settings = self.Settings
+		self.Settings = KBMEXROTFLN_Settings
 	end
 
 end
 
 function MOD:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMEXUROTFLN_Settings, self.Settings)
+		KBM.LoadTable(chKBMEXROTFLN_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMEXUROTFLN_Settings, self.Settings)
+		KBM.LoadTable(KBMEXROTFLN_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMEXUROTFLN_Settings = self.Settings
+		chKBMEXROTFLN_Settings = self.Settings
 	else
-		KBMEXUROTFLN_Settings = self.Settings
+		KBMEXROTFLN_Settings = self.Settings
 	end	
 end
 
 function MOD:SaveVars()	
 	if KBM.Options.Character then
-		chKBMEXUROTFLN_Settings = self.Settings
+		chKBMEXROTFLN_Settings = self.Settings
 	else
-		KBMEXUROTFLN_Settings = self.Settings
+		KBMEXROTFLN_Settings = self.Settings
 	end	
 end
 

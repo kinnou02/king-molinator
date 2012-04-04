@@ -3,8 +3,8 @@
 -- Copyright 2011
 --
 
-KBMEXUROTFLT_Settings = nil
-chKBMEXUROTFLT_Settings = nil
+KBMEXROTFLT_Settings = nil
+chKBMEXROTFLT_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
@@ -17,7 +17,7 @@ local MOD = {
 	Instance = Instance.Name,
 	InstanceObj = Instance,
 	TimeoutOverride = false,
-	Timeout = 30,
+	Timeout = 60,
 	HasPhases = true,
 	Lang = {},
 	ID = "Twyl",
@@ -159,42 +159,42 @@ function MOD:InitVars()
 		-- TimersRef = self.Twyl.Settings.TimersRef,
 		-- AlertsRef = self.Twyl.Settings.AlertsRef,
 	}
-	KBMEXUROTFLT_Settings = self.Settings
-	chKBMEXUROTFLT_Settings = self.Settings
+	KBMEXROTFLT_Settings = self.Settings
+	chKBMEXROTFLT_Settings = self.Settings
 	
 end
 
 function MOD:SwapSettings(bool)
 
 	if bool then
-		KBMEXUROTFLT_Settings = self.Settings
-		self.Settings = chKBMEXUROTFLT_Settings
+		KBMEXROTFLT_Settings = self.Settings
+		self.Settings = chKBMEXROTFLT_Settings
 	else
-		chKBMEXUROTFLT_Settings = self.Settings
-		self.Settings = KBMEXUROTFLT_Settings
+		chKBMEXROTFLT_Settings = self.Settings
+		self.Settings = KBMEXROTFLT_Settings
 	end
 
 end
 
 function MOD:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMEXUROTFLT_Settings, self.Settings)
+		KBM.LoadTable(chKBMEXROTFLT_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMEXUROTFLT_Settings, self.Settings)
+		KBM.LoadTable(KBMEXROTFLT_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMEXUROTFLT_Settings = self.Settings
+		chKBMEXROTFLT_Settings = self.Settings
 	else
-		KBMEXUROTFLT_Settings = self.Settings
+		KBMEXROTFLT_Settings = self.Settings
 	end	
 end
 
 function MOD:SaveVars()	
 	if KBM.Options.Character then
-		chKBMEXUROTFLT_Settings = self.Settings
+		chKBMEXROTFLT_Settings = self.Settings
 	else
-		KBMEXUROTFLT_Settings = self.Settings
+		KBMEXROTFLT_Settings = self.Settings
 	end	
 end
 

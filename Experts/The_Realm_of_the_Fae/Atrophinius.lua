@@ -3,8 +3,8 @@
 -- Copyright 2011
 --
 
-KBMEXUROTFBA_Settings = nil
-chKBMEXUROTFBA_Settings = nil
+KBMEXROTFBA_Settings = nil
+chKBMEXROTFBA_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
@@ -88,42 +88,42 @@ function MOD:InitVars()
 		-- TimersRef = self.Atrophinius.Settings.TimersRef,
 		-- AlertsRef = self.Atrophinius.Settings.AlertsRef,
 	}
-	KBMEXUROTFBA_Settings = self.Settings
-	chKBMEXUROTFBA_Settings = self.Settings
+	KBMEXROTFBA_Settings = self.Settings
+	chKBMEXROTFBA_Settings = self.Settings
 	
 end
 
 function MOD:SwapSettings(bool)
 
 	if bool then
-		KBMEXUROTFBA_Settings = self.Settings
-		self.Settings = chKBMEXUROTFBA_Settings
+		KBMEXROTFBA_Settings = self.Settings
+		self.Settings = chKBMEXROTFBA_Settings
 	else
-		chKBMEXUROTFBA_Settings = self.Settings
-		self.Settings = KBMEXUROTFBA_Settings
+		chKBMEXROTFBA_Settings = self.Settings
+		self.Settings = KBMEXROTFBA_Settings
 	end
 
 end
 
 function MOD:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMEXUROTFBA_Settings, self.Settings)
+		KBM.LoadTable(chKBMEXROTFBA_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMEXUROTFBA_Settings, self.Settings)
+		KBM.LoadTable(KBMEXROTFBA_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMEXUROTFBA_Settings = self.Settings
+		chKBMEXROTFBA_Settings = self.Settings
 	else
-		KBMEXUROTFBA_Settings = self.Settings
+		KBMEXROTFBA_Settings = self.Settings
 	end	
 end
 
 function MOD:SaveVars()	
 	if KBM.Options.Character then
-		chKBMEXUROTFBA_Settings = self.Settings
+		chKBMEXROTFBA_Settings = self.Settings
 	else
-		KBMEXUROTFBA_Settings = self.Settings
+		KBMEXROTFBA_Settings = self.Settings
 	end	
 end
 
