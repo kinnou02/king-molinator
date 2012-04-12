@@ -354,10 +354,11 @@ function HA:UnitHPCheck(uDetails, unitID)
 						KBM.MechTimer:AddStart(self.Arakhurn.TimersRef.NovaFirst)
 						KBM.MechTimer:AddStart(self.Arakhurn.TimersRef.FieryFirst)
 					end
-					KBM.TankSwap:Start(self.Lang.Debuff.Armor[KBM.Lang])
+					KBM.TankSwap:Start(self.Lang.Debuff.Armor[KBM.Lang], unitID)
 				elseif self.Arakhurn.UnitID ~= unitID then
 					self.Arakhurn.Casting = false
 					self.Arakhurn.CastBar:Create(unitID)
+					KBM.TankSwap.Boss = KBM.Unit.List.UID[unitID]
 					if self.Arakhurn.AltID == uDetails.type then
 						self.PhaseThree()
 					end

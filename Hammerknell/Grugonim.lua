@@ -302,7 +302,7 @@ function GR:UnitHPCheck(uDetails, unitID)
 					self.HeldTime = self.StartTime
 					self.TimeElapsed = 0
 					self.Grugonim.CastBar:Create(unitID)
-					KBM.TankSwap:Start(self.Lang.Debuff.Toxin[KBM.Lang])
+					KBM.TankSwap:Start(self.Lang.Debuff.Toxin[KBM.Lang], unitID)
 					self.Phase = 1
 					self.Counts.Breaths = 0
 					self.Counts.Towers = 0

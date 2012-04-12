@@ -1,3 +1,11 @@
+v1.1.4
+* New: LibSRM initialization string now gives its Version number.
+* Engine Fixes
+** Fixed (By Mere): Changes made to new Unit match break code was epic fail.
+** Fixed (By Mere): Optimized condensed loop had incorrect UID variable name for Pet matching.
+** Fixed: Several non-local local variables are now local.
+** Removed: Redundant code from original engine.
+
 v1.1.3
 * Engine Tuning
 ** Change: Function SRM_UnitAvailable is now down to a single loop iteration when checking for queued units.

@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
---KBM.Alpha = ".r338"
+KBM.Alpha = ".r339"
 KBM.Event = {
 	Mark = {},
 	Unit = {
@@ -21,6 +21,12 @@ KBM.Event = {
 		Unavailable = {},
 		Death = {},
 		Name = {},
+		Relation = {},
+		Target = {},
+		Combat = {
+			Enter = {},
+			Leave = {},
+		},
 	},
 	Encounter = {
 		Start = {},
@@ -3318,11 +3324,18 @@ function KBM.CombatEnter(UnitID)
 			if not uDetails.player then
 				KBM.CheckActiveBoss(uDetails, UnitID)
 			end
+			KBM.Unit.List.UID[UnitID]:CheckTarget()
 		end
 	end	
 end
 
-function KBM.CombatLeave(UnitID)	
+function KBM.CombatLeave(UnitID)
+	if KBM.Options.Enabled then
+		uDetails = Inspect.Unit.Detail(UnitID)
+		if uDetails then
+			KBM.Unit.List.UID[UnitID]:CheckTarget()
+		end
+	end	
 end
 
 function KBM.MobDamage(info)
@@ -3765,6 +3778,7 @@ function KBM.Unit:Create(uDetails, UnitID)
 			Available = false,
 			Loaded = false,
 			UnitID = UnitID,
+			Name = "< Unknown >",
 			Details = uDetails,
 			Percent = 100,
 			PercentRaw = 100.0,
@@ -3772,10 +3786,12 @@ function KBM.Unit:Create(uDetails, UnitID)
 			Type = "Unit",
 		}
 		function UnitObj:Update(NewHP)
+			self:CheckTarget()
 			if self.Loaded then
 				self.Health = NewHP
 				if self.HealthMax then
-					self.PercentRaw = (self.Health/self.HealthMax)*100
+					self.PercentFlat = (self.Health/self.HealthMax)
+					self.PercentRaw = self.PercentFlat*100
 					if self.PercentRaw ~= self.LastPercentRaw then
 						self.Percent = math.ceil(self.PercentRaw)
 						self.LastPercentRaw = self.PercentRaw
@@ -3811,7 +3827,8 @@ function KBM.Unit:Create(uDetails, UnitID)
 							if DamageObj.overkill then
 								self.Health = 0
 							end
-							self.PercentRaw = (self.Health/self.HealthMax)*100
+							self.PercentFlat = (self.Health/self.HealthMax)
+							self.PercentRaw = self.PercentFlat*100
 							if self.PercentRaw ~= self.LastPercentRaw then
 								self.Percent = math.ceil(self.PercentRaw)
 								self.LastPercentRaw = self.PercentRaw
@@ -3838,7 +3855,8 @@ function KBM.Unit:Create(uDetails, UnitID)
 							if self.Dead then
 								self.Dead = false
 							end
-							self.PercentRaw = (self.Health/self.HealthMax)*100
+							self.PercentFlat = (self.Health/self.HealthMax)
+							self.PercentRaw = self.PercentFlat*100
 							if self.PercentRaw ~= self.LastPercentRaw then
 								self.Percent = math.ceil(self.PercentRaw)
 								self.LastPercentRaw = self.PercentRaw
@@ -3850,24 +3868,38 @@ function KBM.Unit:Create(uDetails, UnitID)
 				end
 			end
 		end
-		function UnitObj:UpdateData(uDetails)
-			if uDetails then
-				if (self.Relation ~= uDetails.relation) and uDetails.relation ~= nil then
-					if self.Group ~= nil then
-						if KBM.Unit[self.Group] then
-							if KBM.Unit[self.Group][self.Relation] then
-								KBM.Unit[self.Group][self.Relation][UnitID] = nil
-							end
+		function UnitObj:SetRelation(Relation)
+			if (self.Relation ~= Relation) and Relation ~= nil then
+				if self.Group ~= nil then
+					if KBM.Unit[self.Group] then
+						if KBM.Unit[self.Group][self.Relation] then
+							KBM.Unit[self.Group][self.Relation][UnitID] = nil
 						end
 					end
-					self.Relation = uDetails.relation
-				elseif self.Relation == nil then
-					if LibSRM.Group.UnitExists(self.UnitID) then
-						self.Relation = "friendly"
-					else
-						self.Relation = "unknown"
-					end
 				end
+				self.Relation = Relation
+				KBM.Event.Unit.Relation(UnitID, self.Relation)
+			elseif self.Relation == nil then
+				if LibSRM.Group.UnitExists(self.UnitID) then
+					self.Relation = "friendly"
+				else
+					self.Relation = "unknown"			
+				end
+				KBM.Event.Unit.Relation(UnitID, self.Relation)
+			end
+		end
+		function UnitObj:CheckTarget()
+			if self.UnitID ~= KBM.Player.UnitID then
+				local cTarget = Inspect.Unit.Lookup(self.UnitID..".target")
+				if cTarget ~= self.Target then
+					self.Target = cTarget
+					KBM.Event.Unit.Target(self.UnitID, self.Target)
+				end
+			end
+		end
+		function UnitObj:UpdateData(uDetails)
+			if uDetails then
+				self:SetRelation(uDetails.relation)
 				self.Available = true
 				if uDetails.player then
 					self:SetGroup("Player")
@@ -3885,11 +3917,13 @@ function KBM.Unit:Create(uDetails, UnitID)
 					else
 						self.Dead = true
 					end
-					self.PercentRaw = (self.Health/self.HealthMax)*100
+					self.PercentFlat = (self.Health/self.HealthMax)
+					self.PercentRaw = self.PercentFlat*100
 					self.Percent = math.ceil(self.PercentRaw)
 					self.Loaded = true
 					KBM.Event.Unit.Available(self)
 				end
+				self:CheckTarget()
 				self:SetName(uDetails.name)
 			else
 				if not self.Group then
@@ -3919,7 +3953,7 @@ function KBM.Unit:Create(uDetails, UnitID)
 			end
 		end
 		function UnitObj:SetName(Name)
-			if Name ~= nil then
+			if type(Name) == "string" and Name ~= "" then
 				if self.Name ~= Name then
 					if self.Name ~= nil then
 						if KBM.Unit.List.Name[self.Name] then
@@ -3942,7 +3976,7 @@ function KBM.Unit:Create(uDetails, UnitID)
 			else
 				if self.Name == nil then
 					self.Name = "<Unknown>"
-					Name = "<Unknown>"
+					Name = "< Unknown >"
 					if not KBM.Unit.List.Name[Name] then
 						KBM.Unit.List.Name[Name] = {}
 					end
@@ -4089,11 +4123,13 @@ end
 
 function KBM.Unit:Idle(UnitID)
 	local Number = 0
-	if type(UnitID) ~= "string" then
-		print("WARNING: "..dump(UnitID))
-	end
 	if UnitID == KBM.Player.UnitID then
 		return
+	end
+	if UnitID then
+		if self.List.UID[UnitID] then
+			self.List.UID[UnitID]:CheckTarget()
+		end
 	end
 	if self.UIDs.Available[UnitID] then
 		self.UIDs.Idle[UnitID] = self.List.UID[UnitID]
@@ -4187,6 +4223,7 @@ function KBM.Unit:Death(UnitID)
 		self.List.UID[UnitID].PercentRaw = 0
 		self.List.UID[UnitID].Percent = 0
 	end
+	self.List.UID[UnitID]:CheckTarget()
 	KBM.Event.Unit.Death(UnitID)
 end
 
@@ -4199,9 +4236,7 @@ local function KBM_UnitAvailable(units)
 				if not uDetails.player then					
 					KBM.CheckActiveBoss(uDetails, UnitID)
 				end
-				if uDetails.mark then
-					KBM.Event.Mark(uDetails.mark, UnitID)
-				end
+				KBM.Event.Mark(uDetails.mark, UnitID)
 			end
 		end
 	else
@@ -4278,19 +4313,29 @@ function KBM.TankSwap:Pull()
 	local GUI = {}
 	if #self.TankStore > 0 then
 		GUI = table.remove(self.TankStore)
+		GUI.DebuffFrame.Texture:SetVisible(false)
+		GUI.TankAggro.Texture:SetVisible(false)
+		GUI.DebuffFrame.Texture:SetTexture("Rift", self.DefaultTexture)
 	else
 		GUI.Frame = UI.CreateFrame("Frame", "TankSwap_Frame", KBM.Context)
 		GUI.Frame:SetLayer(1)
 		GUI.Frame:SetHeight(KBM.Options.TankSwap.h)
 		GUI.Frame:SetBackgroundColor(0,0,0,0.33)
-		-- GUI.Overlay = UI.CreateFrame("Texture", "TankSwap_Overlay", GUI.Frame)
-		-- GUI.Overlay:SetPoint("TOPLEFT", GUI.Frame, "TOPLEFT")
-		-- GUI.Overlay:SetPoint("BOTTOMRIGHT", GUI.Frame, "BOTTOMRIGHT")
-		-- GUI.Overlay:SetLayer(5)
-		-- GUI.Overlay:SetTexture("KingMolinator", "Media/BarSkin.png")
+		GUI.TankAggro = UI.CreateFrame("Frame", "TankSwap_Aggro_Frame", GUI.Frame)
+		GUI.TankAggro:SetPoint("TOPLEFT", GUI.Frame, "TOPLEFT")
+		GUI.TankAggro:SetHeight(math.floor(GUI.Frame:GetHeight() * 0.5))
+		GUI.TankAggro:SetWidth(GUI.TankAggro:GetHeight())
+		GUI.TankAggro:SetBackgroundColor(0,0,0,0)
+		GUI.TankAggro.Texture = UI.CreateFrame("Texture", "TankSwap_Aggro_Texture", GUI.TankAggro)
+		GUI.TankAggro.Texture:SetPoint("TOPLEFT", GUI.TankAggro, "TOPLEFT", 1, 1)
+		GUI.TankAggro.Texture:SetPoint("BOTTOMRIGHT", GUI.TankAggro, "BOTTOMRIGHT", -1, -1)
+		GUI.TankAggro.Texture:SetTexture("Rift", self.AggroTexture)
+		GUI.TankAggro.Texture:SetAlpha(0.66)
+		GUI.TankAggro.Texture:SetVisible(false)
 		GUI.TankFrame = UI.CreateFrame("Frame", "TankSwap_Tank_Frame", GUI.Frame)
-		GUI.TankFrame:SetPoint("TOPLEFT", GUI.Frame, "TOPLEFT")
-		GUI.TankFrame:SetPoint("BOTTOM", GUI.Frame, "CENTERY")
+		GUI.TankFrame:SetPoint("TOPLEFT", GUI.TankAggro, "TOPRIGHT")
+		GUI.TankFrame:SetPoint("BOTTOM", GUI.TankAggro, "BOTTOM")
+		GUI.TankFrame:SetPoint("RIGHT", GUI.Frame, "RIGHT")
 		GUI.TankHP = UI.CreateFrame("Texture", "TankSwap_Tank_HPFrame", GUI.TankFrame)
 		GUI.TankHP:SetTexture("KingMolinator", "Media/BarTexture.png")
 		GUI.TankHP:SetLayer(1)
@@ -4304,12 +4349,18 @@ function KBM.TankSwap:Pull()
 		GUI.TankText:SetFontSize(KBM.Options.TankSwap.TextSize)
 		GUI.TankShadow:SetPoint("TOPLEFT", GUI.TankText, "TOPLEFT", 1, 1)
 		GUI.TankText:SetPoint("CENTERLEFT", GUI.TankFrame, "CENTERLEFT", 2, 0)	
-		GUI.DebuffFrame = UI.CreateFrame("Texture", "TankSwap Debuff Frame", GUI.Frame)
-		GUI.DebuffFrame:SetPoint("TOPRIGHT", GUI.Frame, "TOPRIGHT")
-		GUI.DebuffFrame:SetPoint("BOTTOMRIGHT", GUI.Frame, "CENTERRIGHT")
-		GUI.DebuffFrame:SetPoint("LEFT", GUI.Frame, 0.8, nil)
-		GUI.DebuffFrame:SetBackgroundColor(0,0,0,0.33)
+		GUI.DebuffFrame = UI.CreateFrame("Frame", "TankSwap Debuff Frame", GUI.Frame)
+		GUI.DebuffFrame:SetPoint("BOTTOMLEFT", GUI.Frame, "BOTTOMLEFT")
+		GUI.DebuffFrame:SetWidth(math.floor(GUI.Frame:GetHeight() * 0.5))
+		GUI.DebuffFrame:SetHeight(GUI.DebuffFrame:GetWidth())
+		GUI.DebuffFrame:SetBackgroundColor(0,0,0,0)
 		GUI.DebuffFrame:SetLayer(1)
+		GUI.DebuffFrame.Texture = UI.CreateFrame("Texture", "TankSwap_Debuff_Texture", GUI.DebuffFrame)
+		GUI.DebuffFrame.Texture:SetPoint("TOPLEFT", GUI.DebuffFrame, "TOPLEFT")
+		GUI.DebuffFrame.Texture:SetPoint("BOTTOMRIGHT", GUI.DebuffFrame, "BOTTOMRIGHT")
+		GUI.DebuffFrame.Texture:SetAlpha(0.33)
+		GUI.DebuffFrame.Texture:SetTexture("Rift", self.DefaultTexture)
+		GUI.DebuffFrame.Texture:SetVisible(false)
 		GUI.DebuffFrame.Shadow = UI.CreateFrame("Text", "TankSwap_Debuff_Shadow", GUI.DebuffFrame)
 		GUI.DebuffFrame.Shadow:SetFontSize(KBM.Options.TankSwap.TextSize)
 		GUI.DebuffFrame.Shadow:SetFontColor(0,0,0)
@@ -4319,14 +4370,13 @@ function KBM.TankSwap:Pull()
 		GUI.DebuffFrame.Text:SetLayer(3)
 		GUI.DebuffFrame.Shadow:SetPoint("TOPLEFT", GUI.DebuffFrame.Text, "TOPLEFT", 1, 1)
 		GUI.DebuffFrame.Text:SetPoint("CENTER", GUI.DebuffFrame, "CENTER")
-		GUI.TankFrame:SetPoint("TOPRIGHT", GUI.DebuffFrame, "TOPLEFT")
 		GUI.TankHP:SetPoint("TOP", GUI.TankFrame, "TOP")
 		GUI.TankHP:SetPoint("LEFT", GUI.TankFrame, "LEFT")
 		GUI.TankHP:SetPoint("BOTTOM", GUI.TankFrame, "BOTTOM")
 		GUI.TankHP:SetWidth(GUI.TankFrame:GetWidth())
 		GUI.DeCoolFrame = UI.CreateFrame("Texture", "TankSwap_CDFrame", GUI.Frame)
-		GUI.DeCoolFrame:SetPoint("TOPLEFT", GUI.TankFrame, "BOTTOMLEFT")
-		GUI.DeCoolFrame:SetPoint("BOTTOM", GUI.Frame, "BOTTOM")
+		GUI.DeCoolFrame:SetPoint("TOPLEFT", GUI.DebuffFrame, "TOPRIGHT")
+		GUI.DeCoolFrame:SetPoint("BOTTOM", GUI.DebuffFrame, "BOTTOM")
 		GUI.DeCoolFrame:SetPoint("RIGHT", GUI.Frame, "RIGHT")
 		GUI.DeCoolFrame:SetBackgroundColor(0,0,0,0.33)
 		GUI.DeCool = UI.CreateFrame("Texture", "TankSwap_CD_Progress", GUI.DeCoolFrame)
@@ -4344,11 +4394,11 @@ function KBM.TankSwap:Pull()
 		GUI.DeCool.Shadow:SetPoint("TOPLEFT", GUI.DeCool.Text, "TOPLEFT", 1, 1)
 		GUI.DeCool.Text:SetPoint("CENTER", GUI.DeCoolFrame, "CENTER")
 		GUI.DeCool.Text:SetLayer(3)
-		GUI.Dead = UI.CreateFrame("Texture", "TankSwap_Dead", GUI.DebuffFrame)
+		GUI.Dead = UI.CreateFrame("Texture", "TankSwap_Dead", GUI.TankAggro)
 		GUI.Dead:SetTexture("KingMolinator", "Media/KBM_Death.png")
 		GUI.Dead:SetLayer(1)
-		GUI.Dead:SetPoint("TOPLEFT", GUI.DebuffFrame, "TOPLEFT", 4, 1)
-		GUI.Dead:SetPoint("BOTTOMRIGHT", GUI.DebuffFrame, "BOTTOMRIGHT", -4, -1)
+		GUI.Dead:SetPoint("TOPLEFT", GUI.TankAggro, "TOPLEFT", 1, 1)
+		GUI.Dead:SetPoint("BOTTOMRIGHT", GUI.TankAggro, "BOTTOMRIGHT", -1, -1)
 		GUI.Dead:SetAlpha(0.8)
 		function GUI:SetTank(Text)
 			self.TankShadow:SetText(Text)
@@ -4368,6 +4418,8 @@ function KBM.TankSwap:Pull()
 				self.DebuffFrame.Shadow:SetVisible(false)
 				self.DebuffFrame.Text:SetVisible(false)
 				self.Dead:SetVisible(true)
+				self.DebuffFrame.Texture:SetVisible(false)
+				self.TankAggro.Texture:SetVisible(false)
 				self.TankHP:SetVisible(false)
 				self.DeCoolFrame:SetVisible(false)
 			else
@@ -4386,12 +4438,15 @@ end
 function KBM.TankSwap:Init()
 	self.Tanks = {}
 	self.TankCount = 0
+	self.DefaultTexture = "Data/\\UI\\ability_icons\\generic_ability_001.dds"
+	self.AggroTexture = "Data/\\UI\\ability_icons\\weaponsmith1a.dds"
 	self.Active = false
 	self.DebuffID = nil
 	self.LastTank = nil
 	self.Test = false
 	self.TankStore = {}
 	self.Enabled = KBM.Options.TankSwap.Enabled
+	self.Settings = KBM.Options.TankSwap
 	
 	self.Anchor = UI.CreateFrame("Frame", "Tank-Swap Anchor", KBM.Context)
 	self.Anchor:SetWidth(KBM.Options.TankSwap.w * KBM.Options.TankSwap.wScale)
@@ -4421,7 +4476,7 @@ function KBM.TankSwap:Init()
 		self.Anchor:SetVisible(false)
 		self.Anchor.Drag:SetVisible(false)
 	end
-	
+			
 	function self:Add(UnitID, Test)		
 		if self.Test and not Test then
 			self:Remove()
@@ -4442,11 +4497,11 @@ function KBM.TankSwap:Init()
 			self.Test = true
 			TankObj.Dead = false
 		else
-			local uDetails = Inspect.Unit.Detail(UnitID)
-			if uDetails then
-				TankObj.Name = uDetails.name
-				if uDetails.health then
-					if uDetails.health > 0 then
+			TankObj.Unit = KBM.Unit.List.UID[UnitID]
+			if TankObj.Unit then
+				TankObj.Name = TankObj.Unit.Name
+				if TankObj.Unit.Dead then
+					if TankObj.Unit.Health > 0 then
 						TankObj.Dead = false
 					else
 						TankObj.Dead = true
@@ -4482,37 +4537,20 @@ function KBM.TankSwap:Init()
 		end
 		
 		function TankObj:UpdateHP()
-			local uDetails = Inspect.Unit.Detail(self.UnitID)
-			local HPMax = 1
-			local HPCurrent = 1
-			local HPPer = 1.0
-			if uDetails then
-				if uDetails.health then
-					HPCurrent = uDetails.health
-					if HPCurrent > 0 then
-						if self.Dead then
-							self.GUI:SetDeath(false)
-							self.Dead = false
-						end
-						--if uDetails.healthCap then
-						--	HPMax = uDetails.healthCap
-						--else
-							HPMax = uDetails.healthMax
-						--end
-						HPPer = HPCurrent / HPMax
-						self.GUI.TankHP:SetWidth(self.GUI.TankFrame:GetWidth() * HPPer)
-					else
-						if not self.Dead then
-							self:Death()
-						end
-					end
-				else
-					if not self.Dead then
-						self:Death()
-					end
+			
+			if self.Unit.Health > 0 then
+				if self.Dead then
+					self.GUI:SetDeath(false)
+					self.Dead = false
+				end
+				self.GUI.TankHP:SetWidth(math.ceil(self.GUI.TankFrame:GetWidth() * self.Unit.PercentFlat))
+			else
+				if not self.Dead then
+					self:Death()
 				end
 			end
 		end
+		
 		TankObj.GUI:SetDeath(TankObj.Dead)
 		if self.Test then
 			TankObj.GUI:SetStack("2")
@@ -4520,6 +4558,7 @@ function KBM.TankSwap:Init()
 			TankObj.GUI.DeCoolFrame:SetVisible(true)
 			TankObj.GUI.DeCool:SetWidth(TankObj.GUI.DeCoolFrame:GetWidth())
 			TankObj.GUI.TankHP:SetWidth(TankObj.GUI.TankFrame:GetWidth())
+			TankObj.GUI.DebuffFrame.Texture:SetVisible(true)
 		else
 			TankObj.GUI:SetStack("")
 			TankObj.GUI:SetDeCool("")
@@ -4528,12 +4567,14 @@ function KBM.TankSwap:Init()
 		return TankObj		
 	end
 	
-	function self:Start(DebuffName, DebuffID)	
-		if self.Enabled then
+	function self:Start(DebuffName, BossID)
+		if KBM.Options.TankSwap.Enabled then
 			local Spec = ""
 			local UnitID = ""
 			local uDetails = nil
-			self.DebuffID = DebuffID
+			self.CurrentTarget = nil
+			self.CurrentIcon = nil
+			self.Boss = KBM.Unit.List.UID[BossID]
 			self.DebuffName = DebuffName
 			if LibSRM.Grouped() then
 				for i = 1, 20 do
@@ -4569,6 +4610,12 @@ function KBM.TankSwap:Init()
 						TankObj.GUI.DeCool:SetWidth(TankObj.GUI.DeCoolFrame:GetWidth() * (TankObj.Remaining/TankObj.Duration))
 						TankObj.GUI.DeCoolFrame:SetVisible(true)
 						TankObj.GUI:SetStack(tostring(TankObj.Stacks))
+						if bDetails.icon then
+							TankObj.GUI.DebuffFrame.Texture:SetTexture("Rift", bDetails.icon)
+						else
+							TankObj.GUI.DebuffFrame.Texture:SetTexture("Rift", self.DefaultTexture)
+						end
+						TankObj.GUI.DebuffFrame.Texture:SetVisible(true)
 					end
 				else
 					TankObj.DebuffID = nil
@@ -4578,13 +4625,25 @@ function KBM.TankSwap:Init()
 					TankObj.GUI.DeCool:SetWidth(0)
 					TankObj.GUI:SetDeCool("")
 					TankObj.GUI:SetStack("")
+					TankObj.GUI.DebuffFrame.Texture:SetVisible(false)
 				end
 			end
 			TankObj:UpdateHP()
+			if self.Boss.Target then
+				if self.Tanks[self.Boss.Target] then
+					if self.Tanks[self.Boss.Target] ~= self.CurrentTarget then
+						if self.CurrentTarget then
+							self.CurrentTarget.GUI.TankAggro.Texture:SetVisible(false)
+						end
+						self.CurrentTarget = self.Tanks[self.Boss.Target]
+						self.CurrentTarget.GUI.TankAggro.Texture:SetVisible(true)
+					end
+				end
+			end
 		end	
 	end
 	
-	function self:Remove()	
+	function self:Remove()
 		for UnitID, TankObj in pairs(self.Tanks) do
 			table.insert(self.TankStore, TankObj.GUI)
 			TankObj.GUI.Frame:SetVisible(false)
@@ -4594,7 +4653,7 @@ function KBM.TankSwap:Init()
 		self.Tanks = {}
 		self.LastTank = nil
 		self.TankCount = 0
-		self.Test = false		
+		self.Test = false
 	end	
 end
 
@@ -5643,6 +5702,9 @@ function KBM:RaidCombatEnter()
 	if KBM.Idle.Combat.Wait then
 		KBM.Idle.Combat.Wait = false
 	end
+	for UnitID, UnitObj in pairs(KBM.Unit.UIDs.Available) do
+		UnitObj:CheckTarget()
+	end
 	
 end
 
@@ -5685,6 +5747,9 @@ function KBM:RaidCombatLeave()
 				KBM.Idle.Combat.Until = Inspect.Time.Real() + KBM.Idle.Combat.Duration
 			end
 			KBM.Idle.Combat.StoreTime = KBM.TimeElapsed
+		end
+		for UnitID, UnitObj in pairs(KBM.Unit.UIDs.Available) do
+			UnitObj:CheckTarget()
 		end
 	end
 	
@@ -6607,15 +6672,6 @@ function KBM_Debug()
 	end
 end
 
-KBM.Event.Mark, KBM.Event.Mark.EventTable = Utility.Event.Create("KingMolinator", "Mark")
-KBM.Event.Unit.PercentChange, KBM.Event.Unit.PercentChange.EventTable = Utility.Event.Create("KingMolinator", "Unit.PercentChange")
-KBM.Event.Unit.Available, KBM.Event.Unit.Available.EventTable = Utility.Event.Create("KingMolinator", "Unit.Available")
-KBM.Event.Unit.Unavailable, KBM.Event.Unit.Unavailable.EventTable = Utility.Event.Create("KingMolinator", "Unit.Unavailable")
-KBM.Event.Unit.Death, KBM.Event.Unit.Death.EventTable = Utility.Event.Create("KingMolinator", "Unit.Death")
-KBM.Event.Unit.Name, KBM.Event.Unit.Name.EventTable = Utility.Event.Create("KingMolinator", "Unit.Name")
-KBM.Event.Encounter.Start, KBM.Event.Encounter.Start.EventTable = Utility.Event.Create("KingMolinator", "Encounter.Start")
-KBM.Event.Encounter.End, KBM.Event.Encounter.End.EventTable = Utility.Event.Create("KingMolinator", "Encounter.End")
-
 function KBM.SecureEnter()
 end
 
@@ -6692,6 +6748,22 @@ function KBM.HealthMaxChange(data)
 		end
 	end
 end
+
+-- Define KBM Custom Event System
+-- Unit Related
+KBM.Event.Mark, KBM.Event.Mark.EventTable = Utility.Event.Create("KingMolinator", "Mark")
+KBM.Event.Unit.PercentChange, KBM.Event.Unit.PercentChange.EventTable = Utility.Event.Create("KingMolinator", "Unit.PercentChange")
+KBM.Event.Unit.Available, KBM.Event.Unit.Available.EventTable = Utility.Event.Create("KingMolinator", "Unit.Available")
+KBM.Event.Unit.Unavailable, KBM.Event.Unit.Unavailable.EventTable = Utility.Event.Create("KingMolinator", "Unit.Unavailable")
+KBM.Event.Unit.Death, KBM.Event.Unit.Death.EventTable = Utility.Event.Create("KingMolinator", "Unit.Death")
+KBM.Event.Unit.Name, KBM.Event.Unit.Name.EventTable = Utility.Event.Create("KingMolinator", "Unit.Name")
+KBM.Event.Unit.Relation, KBM.Event.Unit.Relation.EventTable = Utility.Event.Create("KingMolinator", "Unit.Relation")
+KBM.Event.Unit.Target, KBM.Event.Unit.Target.EventTable = Utility.Event.Create("KingMolinator", "Unit.Target")
+KBM.Event.Unit.Combat.Enter, KBM.Event.Unit.Combat.Enter = Utility.Event.Create("KingMolinator", "Unit.Combat.Enter")
+KBM.Event.Unit.Combat.Leave, KBM.Event.Unit.Combat.Leave = Utility.Event.Create("KingMolinator", "Unit.Combat.Leave")
+-- Encounter Related
+KBM.Event.Encounter.Start, KBM.Event.Encounter.Start.EventTable = Utility.Event.Create("KingMolinator", "Encounter.Start")
+KBM.Event.Encounter.End, KBM.Event.Encounter.End.EventTable = Utility.Event.Create("KingMolinator", "Encounter.End")
 
 local function KBM_Start()
 	KBM.InitOptions()

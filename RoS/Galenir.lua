@@ -162,7 +162,7 @@ function WG:UnitHPCheck(unitDetails, unitID)
 					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
 					self.PhaseObj.Objectives:AddPercent(self.Galenir.Name, 0, 100)
 					self.Phase = 1
-					KBM.TankSwap:Start(self.Lang.Debuff.Festering[KBM.Lang])
+					KBM.TankSwap:Start(self.Lang.Debuff.Festering[KBM.Lang], unitID)
 				end
 				self.Galenir.UnitID = unitID
 				self.Galenir.Available = true

@@ -245,7 +245,7 @@ function MZ:UnitHPCheck(unitDetails, unitID)
 					self.Matron.Dead = false
 					self.Matron.Casting = false
 					self.Matron.CastBar:Create(unitID)
-					KBM.TankSwap:Start(MZ.Lang.Debuff.Curse[KBM.Lang])
+					KBM.TankSwap:Start(MZ.Lang.Debuff.Curse[KBM.Lang], unitID)
 					self.PhaseObj.Objectives:AddPercent(self.Matron.Name, 40, 100)
 					self.PhaseObj:Start(self.StartTime)
 				end

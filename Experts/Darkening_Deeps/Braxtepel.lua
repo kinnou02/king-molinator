@@ -209,7 +209,7 @@ function MOD:UnitHPCheck(unitDetails, unitID)
 					if BossObj.Name == self.Braxtepel.Name then
 						BossObj.CastBar:Create(unitID)
 						self.PhaseObj:SetPhase("2")
-						self.PhaseObj.Objective:AddPercent(self.Braxtepel.Name, 0, 100)
+						self.PhaseObj.Objectives:AddPercent(self.Braxtepel.Name, 0, 100)
 						self.Phase = 1
 					else
 						self.PhaseObj:SetPhase("1")

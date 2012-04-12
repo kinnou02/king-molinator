@@ -1,4 +1,27 @@
-﻿v1.0.0
+﻿v1.0.1
+
+Engine
+* Events
+** New: UnitID, Relation = Unit.Relation() - Event for managing Unit Relation changes.
+* Unit Tracking
+** Change: Units which could have a false (boolean) or "" (empty string) value for .name are now handled better.
+
+Tank-Swap
+* New: Tank debuffs now display the appropriate icon.
+* New: The current tank holding the boss is now displayed.
+
+Expert Dungeons
+* Darkening Deeps
+** Braxtepel
+*** Fixed: Reference to try and index a nil value.
+
+Master Mode Dungeons
+* Darkening Deeps
+** Braxtepel
+*** Fixed: Reference to try and index a nil value.
+
+----
+v1.0.0
 New! Mechanic Spy
 * New: Options
 ** New: Set up full options pages and customization settings.

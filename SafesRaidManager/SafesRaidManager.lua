@@ -1,5 +1,6 @@
 -- Safes Raid Manager
 -- Written By Paul Snart
+-- Code Fixes by Mere
 -- Copyright Paul Snart 2011
 --
 
@@ -15,6 +16,8 @@ LibSRM.Dead = 0
 LibSRM.Group = {
 	Combat = 0,
 }
+
+LibSRM.AddonDetails = Inspect.Addon.Detail("SafesRaidManager")
 
 local SRM_HeldTime = Inspect.Time.Real()
 local SRM_Units = {}
@@ -296,22 +299,26 @@ local function SRM_SetSpecifier(Specifier)
 					--print("Unit Changed position: "..SRM_Units[UID].name)
 					if self.UnitID then
 						-- Check to see if a unit still exists here.
+						local stillInRaid = false
 						for i = 1, 20 do
-							cSpecifier = SRM_IndexToSpec(i)
-							cUnitID = Inspect.Unit.Lookup(cSpecifier)
+							local cSpecifier = SRM_IndexToSpec(i)
+							local cUnitID = Inspect.Unit.Lookup(cSpecifier)
 							if cUnitID == self.UnitID then
 								--print("Unit Changed ignoring leave message.")
 								self.UnitID = nil
 								self.PetID = nil
 								-- SEND NO MSG
-								return
+								stillInRaid = true
+								break
 							end
 						end
-						self:Leave()
+						if not stillInRaid then
+							self:Leave()
+						end
 					end
+					SRM_Group.Change(UID, SRM_Units[UID].Specifier, self.Spec)
 					self.UnitID = UID
 					SRM_Units[UID].Specifier = self.Spec
-					SRM_Group.Change(UID, SRM_Units[UID].Specifier, self.Spec)
 					-- Send MOVE Message HERE
 				else
 					--print("Attempting to load new Unit: "..UID)
@@ -322,8 +329,8 @@ local function SRM_SetSpecifier(Specifier)
 			else
 				--print("Unit possibly left group: "..SRM_Units[self.UnitID].name)
 				for i = 1, 20 do
-					cSpecifier = SRM_IndexToSpec(i)
-					cUnitID = Inspect.Unit.Lookup(cSpecifier)
+					local cSpecifier = SRM_IndexToSpec(i)
+					local cUnitID = Inspect.Unit.Lookup(cSpecifier)
 					if cUnitID == self.UnitID then
 						--print("Unit Changed ignoring leave message.")
 						self.UnitID = nil
@@ -381,7 +388,7 @@ local function SRM_SetSpecifier(Specifier)
 		end
 	end
 	
-	event = Library.LibUnitChange.Register(Specifier)
+	local event = Library.LibUnitChange.Register(Specifier)
 	table.insert(event, {function (data) Unit:Change(data, false) end, "SafesRaidManager", Specifier})
 	event = Library.LibUnitChange.Register(Specifier..".pet")
 	table.insert(event, {function (data) Unit:Change(data, true) end, "SafesRaidManager", Specifier})
@@ -622,11 +629,11 @@ local function SRM_UnitAvailable(units)
 				SRM_UnitQueue[UnitID]:Load()
 				SRM_UnitQueue[UnitID] = nil
 				SRM_UnitQueue.Queued = SRM_UnitQueue.Queued - 1
-			elseif SRM_PetQueue[PetID] then
+			elseif SRM_PetQueue[UnitID] then
 				--print("Pet found in queue, loading.")
-				if SRM_PetQueue[PetID].Group then
-					SRM_PetQueue[PetID].RaidUnit:PetLoad()
-					SRM_PetQueue[PetID] = nil
+				if SRM_PetQueue[UnitID].Group then
+					SRM_PetQueue[UnitID].RaidUnit:PetLoad()
+					SRM_PetQueue[UnitID] = nil
 					SRM_PetQueue.Queued = SRM_PetQueue.Queued - 1
 				else
 					
@@ -682,12 +689,11 @@ local function SRM_Stall()
 						LibSRM.Player.PetName = PetDetails.name
 					end
 				end
-				print(": Initialized")
+				print(": Initialized v"..LibSRM.AddonDetails.toc.Version)
 				SRM_InitRaid()
 				return
 			end
 		end
-		HP_HeldTime = current
 	end
 end
 table.insert(Event.System.Update.Begin, {SRM_Stall, "SafesRaidManager", "Event"})
