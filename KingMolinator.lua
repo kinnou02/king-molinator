@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r342"
+KBM.Alpha = ".r343"
 KBM.Event = {
 	Mark = {},
 	Unit = {
@@ -4554,8 +4554,7 @@ function KBM.TankSwap:Init()
 					end
 					self.GUI.TankHP:SetWidth(math.ceil(self.GUI.TankFrame:GetWidth() * self.Unit.PercentFlat))
 				elseif not self.Dead then
-						self:Death()
-					end
+					self:Death()
 				end
 			elseif not self.Dead then
 				self:Death()
