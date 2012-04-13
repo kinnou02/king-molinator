@@ -10,6 +10,9 @@ Tank-Swap
 * New: Tank debuffs now display the appropriate icon.
 * New: The current tank holding the boss is now displayed.
 
+Mechanic Spy
+* Fixed: The option to completely disable Mechanic Spy is now an option.
+
 Expert Dungeons
 * Darkening Deeps
 ** Braxtepel

@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r339"
+KBM.Alpha = ".r340"
 KBM.Event = {
 	Mark = {},
 	Unit = {
@@ -1949,11 +1949,13 @@ function KBM.MechSpy:Init()
 	self:ApplySettings()
 	
 	function self:Begin()
-		self.Active = true
-		for Name, BossObj in pairs(KBM.CurrentMod.Bosses) do
-			if BossObj.MechRef then
-				for ID, SpyObj in pairs(BossObj.MechRef) do
-					SpyObj:Begin()
+		if self.Settings.Enabled then
+			self.Active = true
+			for Name, BossObj in pairs(KBM.CurrentMod.Bosses) do
+				if BossObj.MechRef then
+					for ID, SpyObj in pairs(BossObj.MechRef) do
+						SpyObj:Begin()
+					end
 				end
 			end
 		end
@@ -2066,24 +2068,26 @@ function KBM.MechSpy:Add(Name, Duration, Type, BossObj)
 	end
 	
 	function Mechanic:Begin()
-		self.Active = true
-		self.Visible = false
-		self.GUI = KBM.MechSpy:PullHeader()
-		if self.Settings then
-			if self.Settings.Custom then
-				self.GUI:SetColor(KBM.Colors.List[self.Settings.Color].Red, KBM.Colors.List[self.Settings.Color].Green, KBM.Colors.List[self.Settings.Color].Blue, 0.33)
+		if KBM.MechSpy.Settings.Enabled then
+			self.Active = true
+			self.Visible = false
+			self.GUI = KBM.MechSpy:PullHeader()
+			if self.Settings then
+				if self.Settings.Custom then
+					self.GUI:SetColor(KBM.Colors.List[self.Settings.Color].Red, KBM.Colors.List[self.Settings.Color].Green, KBM.Colors.List[self.Settings.Color].Blue, 0.33)
+				else
+					self.GUI:SetColor(KBM.Colors.List[self.Color].Red, KBM.Colors.List[self.Color].Green, KBM.Colors.List[self.Color].Blue, 0.33)
+				end
 			else
-				self.GUI:SetColor(KBM.Colors.List[self.Color].Red, KBM.Colors.List[self.Color].Green, KBM.Colors.List[self.Color].Blue, 0.33)
+				self.GUI:SetColor(KBM.Colors.List[KBM.MechSpy.Settings.Color].Red, KBM.Colors.List[KBM.MechSpy.Settings.Color].Green, KBM.Colors.List[KBM.MechSpy.Settings.Color].Blue, 0.33)
 			end
-		else
-			self.GUI:SetColor(KBM.Colors.List[KBM.MechSpy.Settings.Color].Red, KBM.Colors.List[KBM.MechSpy.Settings.Color].Green, KBM.Colors.List[KBM.MechSpy.Settings.Color].Blue, 0.33)
-		end
-		self.GUI:SetText(self.Name)
-		table.insert(KBM.MechSpy.List.Active, self)
-		if KBM.MechSpy.Settings.Show then
-			self:Show()
-		else
-			self:Hide()
+			self.GUI:SetText(self.Name)
+			table.insert(KBM.MechSpy.List.Active, self)
+			if KBM.MechSpy.Settings.Show then
+				self:Show()
+			else
+				self:Hide()
+			end
 		end
 	end
 	
@@ -2115,150 +2119,154 @@ function KBM.MechSpy:Add(Name, Duration, Type, BossObj)
 		
 	function Mechanic:Start(Name, Duration)
 		if KBM.Encounter then
-			if self.Enabled == true and type(Name) == "string" then
-				if self.Names[Name] then
-					self.Names[Name]:Stop()
-				end
-				local CurrentTime = Inspect.Time.Real()
-				local Anchor = self.GUI.Background
-				if not self.Visible then
-					self:Show()
-				end
-				Timer = {}
-				Timer.Name = Name
-				Timer.GUI = KBM.MechSpy:Pull()
-				Timer.GUI.Background:SetHeight(KBM.MechSpy.Anchor:GetHeight())
-				Timer.TimeStart = CurrentTime
-				if not self.Dynamic then
-					Duration = self.Duration
-					Timer.Time = self.Time
-				else
-					if not Duration then
+			if KBM.MechSpy.Settings.Enabled then
+				if self.Enabled == true and type(Name) == "string" then
+					if self.Names[Name] then
+						self.Names[Name]:Stop()
+					end
+					local CurrentTime = Inspect.Time.Real()
+					local Anchor = self.GUI.Background
+					if not self.Visible then
+						self:Show()
+					end
+					Timer = {}
+					Timer.Name = Name
+					Timer.GUI = KBM.MechSpy:Pull()
+					Timer.GUI.Background:SetHeight(KBM.MechSpy.Anchor:GetHeight())
+					Timer.TimeStart = CurrentTime
+					if not self.Dynamic then
 						Duration = self.Duration
-					end
-					Timer.Time = Duration
-				end
-				Timer.Remaining = Duration
-				Timer.GUI:SetText(string.format(" %0.01f : ", Timer.Remaining)..Timer.Name)
-							
-				if self.Settings then
-					if self.Settings.Custom then
-						Timer.GUI.TimeBar:SetBackgroundColor(KBM.Colors.List[self.Settings.Color].Red, KBM.Colors.List[self.Settings.Color].Green, KBM.Colors.List[self.Settings.Color].Blue, 0.33)
+						Timer.Time = self.Time
 					else
-						Timer.GUI.TimeBar:SetBackgroundColor(KBM.Colors.List[self.Color].Red, KBM.Colors.List[self.Color].Green, KBM.Colors.List[self.Color].Blue, 0.33)
-					end
-				else
-					Timer.GUI.TimeBar:SetBackgroundColor(KBM.Colors.List[KBM.MechSpy.Settings.Color].Red, KBM.Colors.List[KBM.MechSpy.Settings.Color].Green, KBM.Colors.List[KBM.MechSpy.Settings.Color].Blue, 0.33)
-				end
-				
-				if #self.Timers > 0 then
-					for i, cTimer in ipairs(self.Timers) do
-						if Timer.Remaining < cTimer.Remaining then
-							Timer.Active = true
-							if i == 1 then
-								Timer.GUI.Background:SetPoint("TOP", self.GUI.Background, "BOTTOM", nil, 1)
-								cTimer.GUI.Background:SetPoint("TOP", Timer.GUI.Background, "BOTTOM", nil, 1)
-								self.FirstTimer = Timer
-							else
-								Timer.GUI.Background:SetPoint("TOP", self.Timers[i-1].GUI.Background, "BOTTOM", nil, 1)
-								cTimer.GUI.Background:SetPoint("TOP", Timer.GUI.Background, "BOTTOM", nil, 1)
-							end
-							table.insert(self.Timers, i, Timer)
-							break
+						if not Duration then
+							Duration = self.Duration
 						end
+						Timer.Time = Duration
 					end
-					if not Timer.Active then
-						Timer.GUI.Background:SetPoint("TOP", self.LastTimer.GUI.Background, "BOTTOM", nil, 1)
-						table.insert(self.Timers, Timer)
-						self.LastTimer = Timer
-						Timer.Active = true
-					end
-				else
-					Timer.GUI.Background:SetPoint("TOP", self.GUI.Background, "BOTTOM", nil, 1)
-					table.insert(self.Timers, Timer)
-					Timer.Active = true
-					self.LastTimer = Timer
-					self.FirstTimer = Timer
-				end
-				self.Names[Name] = Timer
-				Timer.GUI.Background:SetVisible(true)
-				Timer.Starting = false
-				Timer.Parent = self
-				self.GUI.Cradle:SetPoint("BOTTOM", self.LastTimer.GUI.Background, "BOTTOM")
-				function Timer:Stop()
-					if not self.Deleting then
-						if self.Active then
-							self.Active = false
-							self.Deleting = true
-							self.GUI.Background:SetVisible(false)
-							for i, Timer in ipairs(self.Parent.Timers) do
-								if Timer == self then
-									if #self.Parent.Timers == 1 then
-										self.Parent.LastTimer = nil
-										self.Parent.GUI.Cradle:SetPoint("BOTTOM", self.Parent.GUI.Background, "BOTTOM")
-										if not KBM.MechSpy.Settings.Show then
-											self.Parent:Hide()
-										end
-									elseif i == 1 then
-										self.Parent.Timers[i+1].GUI.Background:SetPoint("TOP", self.Parent.GUI.Background, "BOTTOM", nil, 1)
-									elseif i == #self.Parent.Timers then
-										self.Parent.LastTimer = self.Parent.Timers[i-1]
-										self.Parent.GUI.Cradle:SetPoint("BOTTOM", self.Parent.LastTimer.GUI.Background, "BOTTOM")
-									else
-										self.Parent.Timers[i+1].GUI.Background:SetPoint("TOP", self.Parent.Timers[i-1].GUI.Background, "BOTTOM", nil, 1)
-									end
-									table.remove(self.Parent.Timers, i)
-									break
-								end
-							end
-							table.insert(KBM.MechSpy.Store, self.GUI)
-							self.Remaining = 0
-							self.TimeStart = 0
-							self.GUI = nil
-							self.Removing = false
-							self.Deleting = false
-							self.Parent.Names[self.Name] = nil
-							if KBM.Encounter then
-								if self.Parent.SpyAfterList then
-									for i, SpyObj in ipairs(self.Parent.SpyAfterList) do
-										SpyObj:Start(self.Name)
-									end
-								end
-							end
-						end
-					end
-				end
-				function Timer:Update(CurrentTime)
-					local text = ""
-					if self.Active then
-						if self.Waiting then
-						
+					Timer.Remaining = Duration
+					Timer.GUI:SetText(string.format(" %0.01f : ", Timer.Remaining)..Timer.Name)
+								
+					if self.Settings then
+						if self.Settings.Custom then
+							Timer.GUI.TimeBar:SetBackgroundColor(KBM.Colors.List[self.Settings.Color].Red, KBM.Colors.List[self.Settings.Color].Green, KBM.Colors.List[self.Settings.Color].Blue, 0.33)
 						else
-							self.Remaining = self.Time - (CurrentTime - self.TimeStart)
-							if self.Remaining < 10 then
-								text = string.format(" %0.01f : ", self.Remaining)..self.Name
-							elseif self.Remaining >= 60 then
-								text = " "..KBM.ConvertTime(self.Remaining).." : "..self.Name
-							else
-								text = " "..math.floor(self.Remaining).." : "..self.Name
+							Timer.GUI.TimeBar:SetBackgroundColor(KBM.Colors.List[self.Color].Red, KBM.Colors.List[self.Color].Green, KBM.Colors.List[self.Color].Blue, 0.33)
+						end
+					else
+						Timer.GUI.TimeBar:SetBackgroundColor(KBM.Colors.List[KBM.MechSpy.Settings.Color].Red, KBM.Colors.List[KBM.MechSpy.Settings.Color].Green, KBM.Colors.List[KBM.MechSpy.Settings.Color].Blue, 0.33)
+					end
+					
+					if #self.Timers > 0 then
+						for i, cTimer in ipairs(self.Timers) do
+							if Timer.Remaining < cTimer.Remaining then
+								Timer.Active = true
+								if i == 1 then
+									Timer.GUI.Background:SetPoint("TOP", self.GUI.Background, "BOTTOM", nil, 1)
+									cTimer.GUI.Background:SetPoint("TOP", Timer.GUI.Background, "BOTTOM", nil, 1)
+									self.FirstTimer = Timer
+								else
+									Timer.GUI.Background:SetPoint("TOP", self.Timers[i-1].GUI.Background, "BOTTOM", nil, 1)
+									cTimer.GUI.Background:SetPoint("TOP", Timer.GUI.Background, "BOTTOM", nil, 1)
+								end
+								table.insert(self.Timers, i, Timer)
+								break
 							end
-							self.GUI:SetText(text)
-							self.GUI.TimeBar:SetWidth(math.ceil(self.GUI.Background:GetWidth() * (self.Remaining/self.Time)))
-							if self.Remaining <= 0 then
+						end
+						if not Timer.Active then
+							Timer.GUI.Background:SetPoint("TOP", self.LastTimer.GUI.Background, "BOTTOM", nil, 1)
+							table.insert(self.Timers, Timer)
+							self.LastTimer = Timer
+							Timer.Active = true
+						end
+					else
+						Timer.GUI.Background:SetPoint("TOP", self.GUI.Background, "BOTTOM", nil, 1)
+						table.insert(self.Timers, Timer)
+						Timer.Active = true
+						self.LastTimer = Timer
+						self.FirstTimer = Timer
+					end
+					self.Names[Name] = Timer
+					Timer.GUI.Background:SetVisible(true)
+					Timer.Starting = false
+					Timer.Parent = self
+					self.GUI.Cradle:SetPoint("BOTTOM", self.LastTimer.GUI.Background, "BOTTOM")
+					function Timer:Stop()
+						if not self.Deleting then
+							if self.Active then
+								self.Active = false
+								self.Deleting = true
+								self.GUI.Background:SetVisible(false)
+								for i, Timer in ipairs(self.Parent.Timers) do
+									if Timer == self then
+										if #self.Parent.Timers == 1 then
+											self.Parent.LastTimer = nil
+											self.Parent.GUI.Cradle:SetPoint("BOTTOM", self.Parent.GUI.Background, "BOTTOM")
+											if not KBM.MechSpy.Settings.Show then
+												self.Parent:Hide()
+											end
+										elseif i == 1 then
+											self.Parent.Timers[i+1].GUI.Background:SetPoint("TOP", self.Parent.GUI.Background, "BOTTOM", nil, 1)
+										elseif i == #self.Parent.Timers then
+											self.Parent.LastTimer = self.Parent.Timers[i-1]
+											self.Parent.GUI.Cradle:SetPoint("BOTTOM", self.Parent.LastTimer.GUI.Background, "BOTTOM")
+										else
+											self.Parent.Timers[i+1].GUI.Background:SetPoint("TOP", self.Parent.Timers[i-1].GUI.Background, "BOTTOM", nil, 1)
+										end
+										table.remove(self.Parent.Timers, i)
+										break
+									end
+								end
+								table.insert(KBM.MechSpy.Store, self.GUI)
 								self.Remaining = 0
-								table.insert(self.Parent.StopTimers, self)
+								self.TimeStart = 0
+								self.GUI = nil
+								self.Removing = false
+								self.Deleting = false
+								self.Parent.Names[self.Name] = nil
+								if KBM.Encounter then
+									if self.Parent.SpyAfterList then
+										for i, SpyObj in ipairs(self.Parent.SpyAfterList) do
+											SpyObj:Start(self.Name)
+										end
+									end
+								end
 							end
 						end
 					end
+					function Timer:Update(CurrentTime)
+						local text = ""
+						if self.Active then
+							if self.Waiting then
+							
+							else
+								self.Remaining = self.Time - (CurrentTime - self.TimeStart)
+								if self.Remaining < 10 then
+									text = string.format(" %0.01f : ", self.Remaining)..self.Name
+								elseif self.Remaining >= 60 then
+									text = " "..KBM.ConvertTime(self.Remaining).." : "..self.Name
+								else
+									text = " "..math.floor(self.Remaining).." : "..self.Name
+								end
+								self.GUI:SetText(text)
+								self.GUI.TimeBar:SetWidth(math.ceil(self.GUI.Background:GetWidth() * (self.Remaining/self.Time)))
+								if self.Remaining <= 0 then
+									self.Remaining = 0
+									table.insert(self.Parent.StopTimers, self)
+								end
+							end
+						end
+					end
+					Timer:Update(CurrentTime)
 				end
-				Timer:Update(CurrentTime)
 			end
 		end		
 	end
 	
 	function Mechanic:Queue(Duration)
-		if self.Enabled then
-			self:AddStart(self, Duration)
+		if KBM.MechSpy.Settings.Enabled then
+			if self.Enabled then
+				self:AddStart(self, Duration)
+			end
 		end
 	end
 	
