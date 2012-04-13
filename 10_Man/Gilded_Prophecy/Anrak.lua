@@ -198,9 +198,9 @@ function AF:UnitHPCheck(uDetails, unitID)
 					self.Anrak.CastBar:Create(unitID)
 					self.Phase = 1
 					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang], unitID)
+					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
 					self.PhaseObj.Objectives:AddPercent(self.Anrak.Name, 0, 100)
-					KBM.TankSwap:Start(self.Lang.Debuff.Brittle[KBM.Lang])
+					KBM.TankSwap:Start(self.Lang.Debuff.Brittle[KBM.Lang], unitID)
 				end
 				self.Anrak.UnitID = unitID
 				self.Anrak.Available = true
