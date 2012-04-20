@@ -1,5 +1,14 @@
 ﻿v1.0.1
 
+Rift Version
+* Updated: v1.8
+
+Locale Manager
+* Removed Global variable reference
+
+Messenger System
+* New: Module added to manage KBM to KBM messaging.
+ 
 Engine
 * Events
 ** New: UnitID, Relation = Unit.Relation() - Event for managing Unit Relation changes.
@@ -7,11 +16,23 @@ Engine
 ** Change: Units which could have a false (boolean) or "" (empty string) value for .name are now handled better.
 
 Tank-Swap
-* New: Tank debuffs now display the appropriate icon.
-* New: The current tank holding the boss is now displayed.
+* New: Tank debuffs now display the appropriate icon and are placed next to the duration timer.
+* New: The current tank with boss aggro is now displayed via a weapon icon next to their name.
 
 Mechanic Spy
 * Fixed: The option to completely disable Mechanic Spy is now an option.
+
+Infernal Dawn
+* Warboss Drak
+** New: Added Unit tracking for Azul Searbone.
+** New: Added Unit tracking for Natung Charstorm.
+** New: Added Unit tracking for Blazing Thrall.
+** New: Added Phase Monitor for all three phases.
+** New: Added Timer for First Blazing Thrall and each Blazing Thrall after.
+** New: Added Alerts for Blazing Thrall.
+** New: Added Timer for Molten Rejuvenation.
+** New: Added Alerts for Molten Rejuvenation cast, and it's duration.
+** New: Added Alerts for Scorching Torment cast.
 
 Expert Dungeons
 * Darkening Deeps

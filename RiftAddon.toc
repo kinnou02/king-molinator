@@ -12,7 +12,7 @@ Email = "snarty@gmail.com"
 
 Version = "1.0.1"
 
-Environment = "1.7"
+Environment = "1.8"
 
 RunOnStartup = {
 	"KingMolinator.lua",
@@ -167,8 +167,9 @@ RunOnStartup = {
 }
 
 Embed = {
-	["SafesRaidManager/"] = true,
-	["KBMLocaleManager/"] = true,
+	["SafesRaidManager"] = true,
+	["KBMLocaleManager"] = true,
+	["Modules/Messenger"] = true,
 }
 
 SavedVariables = {
@@ -473,5 +474,7 @@ SavedVariables = {
 Dependencies = {
 	SafesRaidManager = {"required", "before"},
 	KBMLocaleManager = {"required", "before"},
+	KBMMessenger = {"required", "after"},
 	KBMMarkIt = {"optional", "after"},
+	KBMAddWatch = {"optional", "after"},
 }

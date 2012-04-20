@@ -9,9 +9,9 @@ Author = "Paul Snart"
 Website = "http://twitter.com/#!/psnart"
 Email = "snarty@gmail.com"
 
-Version = "0.0.1"
+Version = "0.0.2"
 
-Environment = "1.7"
+Environment = "1.8"
 
 RunOnStartup = {
 	"Locale.lua",

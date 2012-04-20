@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r343"
+KBM.Alpha = ".r344"
 KBM.Event = {
 	Mark = {},
 	Unit = {
@@ -4681,24 +4681,34 @@ function KBM.Alert:Init()
 		self.Notify = self.Settings.Notify
 		self.Flash = self.Settings.Flash
 		self.Enabled = self.Settings.Enabled
-		self.AlertControl.Left:SetPoint("RIGHT", UIParent, 0.2 * self.Settings.fScale, nil)
-		self.AlertControl.Right:SetPoint("LEFT", UIParent, 1 - (0.2 * self.Settings.fScale), nil)
+		self.AlertControl.Left:SetPoint("RIGHT", UIParent, 0.2 * KBM.Alert.Settings.fScale, nil)
+		self.AlertControl.Right:SetPoint("LEFT", UIParent, 1 - (0.2 * KBM.Alert.Settings.fScale), nil)
+		self.AlertControl.Top:SetPoint("BOTTOM", UIParent, nil, 0.2 * KBM.Alert.Settings.fScale)
+		self.AlertControl.Bottom:SetPoint("TOP", UIParent, nil, 1 - (0.2 * KBM.Alert.Settings.fScale))
 		if KBM.MainWin:GetVisible() then
 			self.Anchor:SetVisible(self.Settings.Visible)
 			self.Anchor.Drag:SetVisible(self.Settings.Visible)
 			self.Left.red:SetVisible(self.Settings.Visible)
 			self.Right.red:SetVisible(self.Settings.Visible)
+			self.Top.red:SetVisible(self.Settings.Visible)
+			self.Bottom.red:SetVisible(self.Settings.Visible)
 			if self.Settings.Visible then
 				self.AlertControl.Left:SetVisible(self.Settings.FlashUnlocked)
 				self.AlertControl.Right:SetVisible(self.Settings.FlashUnlocked)
+				self.AlertControl.Top:SetVisible(self.Settings.FlashUnlocked)
+				self.AlertControl.Bottom:SetVisible(self.Settings.FlashUnlocked)
 			end
 		else
 			self.Anchor:SetVisible(false)
 			self.Anchor.Drag:SetVisible(false)
 			self.Left.red:SetVisible(false)
 			self.Right.red:SetVisible(false)
+			self.Top.red:SetVisible(false)
+			self.Bottom.red:SetVisible(false)
 			self.AlertControl.Left:SetVisible(false)
 			self.AlertControl.Right:SetVisible(false)
+			self.AlertControl.Top:SetVisible(false)
+			self.AlertControl.Bottom:SetVisible(false)
 		end
 	end
 
@@ -4722,6 +4732,8 @@ function KBM.Alert:Init()
 	self.ColorList = {"red", "blue", "cyan", "yellow", "orange", "purple", "dark_green"}
 	self.Left = {}
 	self.Right = {}
+	self.Top = {}
+	self.Bottom = {}
 	self.Count = 0
 	self.AlertControl = {}
 	self.AlertControl.Left = UI.CreateFrame("Frame", "Left_Alert_Controller", KBM.Context)
@@ -4734,6 +4746,16 @@ function KBM.Alert:Init()
 	self.AlertControl.Right:SetLayer(2)
 	self.AlertControl.Right:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT")
 	self.AlertControl.Right:SetPoint("BOTTOM", UIParent, "BOTTOM")
+	self.AlertControl.Top = UI.CreateFrame("Frame", "Top_Alert_Controller", KBM.Context)
+	self.AlertControl.Top:SetVisible(false)
+	self.AlertControl.Top:SetLayer(2)
+	self.AlertControl.Top:SetPoint("TOPLEFT", UIParent, "TOPLEFT")
+	self.AlertControl.Top:SetPoint("RIGHT", UIParent, "RIGHT")
+	self.AlertControl.Bottom = UI.CreateFrame("Frame", "Bottom_Alert_Controller", KBM.Context)
+	self.AlertControl.Bottom:SetVisible(false)
+	self.AlertControl.Bottom:SetLayer(2)
+	self.AlertControl.Bottom:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT")
+	self.AlertControl.Bottom:SetPoint("RIGHT", UIParent, "RIGHT")
 	
 	for _t, Color in ipairs(self.ColorList) do
 		self.Left[Color] = UI.CreateFrame("Texture", "Left_Alert "..Color, KBM.Context)
@@ -4746,10 +4768,22 @@ function KBM.Alert:Init()
 		self.Right[Color]:SetPoint("TOPLEFT", self.AlertControl.Right, "TOPLEFT")
 		self.Right[Color]:SetPoint("BOTTOMRIGHT", self.AlertControl.Right, "BOTTOMRIGHT")
 		self.Right[Color]:SetVisible(false)
+		self.Top[Color] = UI.CreateFrame("Texture", "Top_Alert "..Color, KBM.Context)
+		self.Top[Color]:SetTexture("KingMolinator", "Media/Alert_Top_"..Color..".png")
+		self.Top[Color]:SetPoint("TOPLEFT", self.AlertControl.Top, "TOPLEFT")
+		self.Top[Color]:SetPoint("BOTTOMRIGHT", self.AlertControl.Top, "BOTTOMRIGHT")
+		self.Top[Color]:SetVisible(false)
+		self.Bottom[Color] = UI.CreateFrame("Texture", "Bottom_Alert "..Color, KBM.Context)
+		self.Bottom[Color]:SetTexture("KingMolinator", "Media/Alert_Bottom_"..Color..".png")
+		self.Bottom[Color]:SetPoint("TOPLEFT", self.AlertControl.Bottom, "TOPLEFT")
+		self.Bottom[Color]:SetPoint("BOTTOMRIGHT", self.AlertControl.Bottom, "BOTTOMRIGHT")
+		self.Bottom[Color]:SetVisible(false)
 	end
 	
 	self.AlertControl.Left:SetPoint("RIGHT", UIParent, 0.2 * KBM.Alert.Settings.fScale, nil)
 	self.AlertControl.Right:SetPoint("LEFT", UIParent, 1 - (0.2 * KBM.Alert.Settings.fScale), nil)
+	self.AlertControl.Top:SetPoint("BOTTOM", UIParent, nil, 0.2 * KBM.Alert.Settings.fScale)
+	self.AlertControl.Bottom:SetPoint("TOP", UIParent, nil, 1 - (0.2 * KBM.Alert.Settings.fScale))
 	
 	function self.AlertControl:WheelBack()
 		if KBM.Alert.Settings.fScale < 1.5 then
@@ -4759,6 +4793,8 @@ function KBM.Alert:Init()
 			end
 			self.Left:SetPoint("RIGHT", UIParent, 0.2 * KBM.Alert.Settings.fScale, nil)
 			self.Right:SetPoint("LEFT", UIParent, 1 - (0.2 * KBM.Alert.Settings.fScale), nil)
+			self.Top:SetPoint("BOTTOM", UIParent, nil, 0.2 * KBM.Alert.Settings.fScale)
+			self.Bottom:SetPoint("TOP", UIParent, nil, 1 - (0.2 * KBM.Alert.Settings.fScale))
 		end
 	end
 	
@@ -4770,6 +4806,8 @@ function KBM.Alert:Init()
 			end
 			self.Left:SetPoint("RIGHT", UIParent, 0.2 * KBM.Alert.Settings.fScale, nil)
 			self.Right:SetPoint("LEFT", UIParent, 1 - (0.2 * KBM.Alert.Settings.fScale), nil)
+			self.Top:SetPoint("BOTTOM", UIParent, nil, 0.2 * KBM.Alert.Settings.fScale)
+			self.Bottom:SetPoint("TOP", UIParent, nil, 1 - (0.2 * KBM.Alert.Settings.fScale))
 		end	
 	end
 	

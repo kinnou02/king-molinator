@@ -270,9 +270,6 @@ function ID:AddBosses(KBM_Boss)
 	KBM.SubBossID[self.Slime.RaidID] = self.Slime
 	KBM.SubBossID[self.Warden.RaidID] = self.Warden
 	
-	self.Inwar.Settings.CastBar.Override = true
-	self.Inwar.Settings.CastBar.Multi = true
-
 	for BossName, BossObj in pairs(self.Bosses) do
 		if BossObj.Settings then
 			if BossObj.Settings.CastBar then

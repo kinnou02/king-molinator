@@ -4,7 +4,7 @@
 --
 
 local AddonData = Inspect.Addon.Detail("KBMLocaleManager")
-KBMLM = AddonData.data
+local KBMLM = AddonData.data
 KBMLM.Language = {
 	Phrases = {},
 }

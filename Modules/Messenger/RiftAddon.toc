@@ -1,0 +1,26 @@
+﻿Identifier = "KBMMessenger"
+
+Name = "King Boss Mods Message"
+NameShort = "KBM Messenger"
+
+Description = "King Boss Mods message management system."
+
+Author = "Paul Snart"
+Website = "http://twitter.com/#!/psnart"
+Email = "snarty@gmail.com"
+
+Version = "0.0.1"
+
+Environment = "1.8"
+
+RunOnStartup = {
+	"Messenger.lua",
+}
+
+SavedVariables = {
+	KBMMSG_Settings = "account",
+}
+
+Dependencies = {
+	KingMolinator = {"required", "before"},
+}
