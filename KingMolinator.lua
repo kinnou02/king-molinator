@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r348"
+KBM.Alpha = ".r349"
 KBM.Event = {
 	Mark = {},
 	Unit = {
@@ -4148,7 +4148,7 @@ function KBM.Unit:Update(uDetails, UnitID)
 	if self.List.UID[UnitID] then
 		return self.List.UID[UnitID]
 	else
-		self:Create(uDetails, UnitID)
+		return self:Create(uDetails, UnitID)
 	end
 end
 
@@ -4248,7 +4248,7 @@ function KBM.Unit:Death(UnitID)
 		self.List.UID[UnitID].PercentRaw = 0
 		self.List.UID[UnitID].Percent = 0
 	else
-		self:Add(Inspect.Unit.Detail(UnitID), UnitID)
+		self:Create(Inspect.Unit.Detail(UnitID), UnitID)
 		self.List.UID[UnitID].Dead = true
 		self.List.UID[UnitID].Health = 0
 		self.List.UID[UnitID].PercentRaw = 0
