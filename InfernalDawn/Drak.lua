@@ -307,22 +307,26 @@ function WD:UnitHPCheck(unitDetails, unitID)
 							self.Phase = 2
 						end
 					elseif BossObj.Type == "multi" then
-						if not self.Bosses[uDetails.name].UnitList[unitID] then
-							SubBossObj = {
-								Mod = WD,
-								Level = "??",
-								Name = uDetails.name,
-								Dead = false,
-								Casting = false,
-								UnitID = unitID,
-								Available = true,
-							}
-							self.Bosses[uDetails.name].UnitList[unitID] = SubBossObj
-						else
-							self.Bosses[uDetails.name].UnitList[unitID].Available = true
-							self.Bosses[uDetails.name].UnitList[unitID].UnitID = unitID
+						print(BossObj.Name)
+						print(tostring(unitID))
+						if BossObj.UnitList then
+							if not BossObj.UnitList[unitID] then
+								SubBossObj = {
+									Mod = WD,
+									Level = "??",
+									Name = uDetails.name,
+									Dead = false,
+									Casting = false,
+									UnitID = unitID,
+									Available = true,
+								}
+								BossObj.UnitList[unitID] = SubBossObj
+							else
+								BossObj.UnitList[unitID].Available = true
+								BossObj.UnitList[unitID].UnitID = unitID
+							end
+							return BossObj.UnitList[unitID]
 						end
-						return self.Bosses[uDetails.name].UnitList[unitID]					
 					end
 					BossObj.UnitID = unitID
 					BossObj.Available = true
@@ -341,6 +345,9 @@ function WD:Reset()
 		BossObj.UnitID = nil
 		if BossObj.CastBar then
 			BossObj.CastBar:Remove()
+		end
+		if BossObj.UnitList then
+			BossObj.UnitList = {}
 		end
 	end
 end
