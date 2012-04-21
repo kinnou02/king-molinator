@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r349"
+KBM.Alpha = ".r350"
 KBM.Event = {
 	Mark = {},
 	Unit = {
@@ -3837,7 +3837,7 @@ function KBM.Unit:Create(uDetails, UnitID)
 			end
 		end
 		function UnitObj:DamageHandler(DamageObj)
-			if not self.Available then
+		--	if not self.Available then
 				if self.Loaded then
 					if self.Health then
 						if self.HealthMax then
@@ -3861,10 +3861,10 @@ function KBM.Unit:Create(uDetails, UnitID)
 						end
 					end
 				end
-			end
+		--	end
 		end
 		function UnitObj:HealHandler(HealObj)
-			if not self.Available then
+			--if not self.Available then
 				if self.Loaded then
 					if self.Health then
 						if self.HealthMax then
@@ -3889,7 +3889,7 @@ function KBM.Unit:Create(uDetails, UnitID)
 						end
 					end
 				end
-			end
+			--end
 		end
 		function UnitObj:SetRelation(Relation)
 			if (self.Relation ~= Relation) and Relation ~= nil then
@@ -3944,7 +3944,6 @@ function KBM.Unit:Create(uDetails, UnitID)
 					self.PercentRaw = self.PercentFlat*100
 					self.Percent = math.ceil(self.PercentRaw)
 					self.Loaded = true
-					KBM.Event.Unit.Available(self)
 				end
 				self:CheckTarget()
 				self:SetName(uDetails.name)
@@ -3992,7 +3991,6 @@ function KBM.Unit:Create(uDetails, UnitID)
 					KBM.Unit.List.Name[Name][self.UnitID] = self
 					if not self.Loaded then
 						self.Loaded = true
-						KBM.Event.Unit.Available(self)
 					end
 					KBM.Event.Unit.Name(self.UnitID, Name)
 				end
@@ -4177,7 +4175,6 @@ function KBM.Unit:Idle(UnitID)
 		if KBM.Debug then
 			self.Debug:UpdateAll()
 		end
-		KBM.Event.Unit.Unavailable(UnitID)
 		return self.List.UID[UnitID]
 	else
 		if self.List.UID[UnitID] == nil then
@@ -4193,7 +4190,6 @@ function KBM.Unit:Idle(UnitID)
 				self.UIDs.Flush[Number][UnitID] = self.List.UID[UnitID]
 				self.UIDs.Count.Idle = self.UIDs.Count.Idle + 1
 			end
-			KBM.Event.Unit.Unavailable(UnitID)
 			return self.List.UID[UnitID]
 		else
 			if not self.UIDs.Idle[UnitID] then
@@ -4207,7 +4203,6 @@ function KBM.Unit:Idle(UnitID)
 				self.UIDs.Flush[Number][UnitID] = self.List.UID[UnitID]
 				self.UIDs.Count.Idle = self.UIDs.Count.Idle + 1				
 			end
-			KBM.Event.Unit.Unavailable(UnitID)
 			return self.List.UID[UnitID]
 		end
 	end
@@ -4243,10 +4238,12 @@ end
 
 function KBM.Unit:Death(UnitID)
 	if self.List.UID[UnitID] then
-		self.List.UID[UnitID].Dead = true
-		self.List.UID[UnitID].Health = 0
-		self.List.UID[UnitID].PercentRaw = 0
-		self.List.UID[UnitID].Percent = 0
+		if not self.List.UID[UnitID].Dead then
+			self.List.UID[UnitID].Dead = true
+			self.List.UID[UnitID].Health = 0
+			self.List.UID[UnitID].PercentRaw = 0
+			self.List.UID[UnitID].Percent = 0
+		end
 	else
 		self:Create(Inspect.Unit.Detail(UnitID), UnitID)
 		self.List.UID[UnitID].Dead = true
@@ -4255,14 +4252,14 @@ function KBM.Unit:Death(UnitID)
 		self.List.UID[UnitID].Percent = 0
 	end
 	self.List.UID[UnitID]:CheckTarget()
-	KBM.Event.Unit.Death(UnitID)
 end
 
 local function KBM_UnitAvailable(units)
 	if KBM.Encounter then
 		for UnitID, Specifier in pairs(units) do
 			uDetails = Inspect.Unit.Detail(UnitID)
-			KBM.Unit:Available(uDetails, UnitID)
+			UnitObj = KBM.Unit:Available(uDetails, UnitID)
+			KBM.Event.Unit.Available(UnitObj)
 			if uDetails then
 				if not uDetails.player then					
 					KBM.CheckActiveBoss(uDetails, UnitID)
@@ -4273,7 +4270,8 @@ local function KBM_UnitAvailable(units)
 	else
 		for UnitID, Specifier in pairs(units) do
 			uDetails = Inspect.Unit.Detail(UnitID)
-			KBM.Unit:Available(uDetails, UnitID)
+			UnitObj = KBM.Unit:Available(uDetails, UnitID)
+			KBM.Event.Unit.Available(UnitObj)
 			if uDetails then
 				if uDetails.mark then
 					KBM.Event.Mark(uDetails.mark, UnitID)
@@ -5985,11 +5983,13 @@ local function KBM_UnitRemoved(units)
 				KBM.BossID[UnitID].available = false
 			end
 			KBM.Event.Mark(false, UnitID)
+			KBM.Event.Unit.Unavailable(UnitID)
 		end
 	else
 		for UnitID, Specifier in pairs(units) do
 			KBM.Unit:Idle(UnitID)
 			KBM.Event.Mark(false, UnitID)
+			KBM.Event.Unit.Unavailable(UnitID)
 		end	
 	end	
 end
@@ -6017,6 +6017,7 @@ end
 local function KBM_Death(UnitID)	
 	if KBM.Options.Enabled then	
 		KBM.Unit:Death(UnitID)
+		KBM.Event.Unit.Death(UnitID)
 		if KBM.Encounter then
 			if UnitID then
 				if KBM.BossID[UnitID] then
