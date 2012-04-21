@@ -14,6 +14,7 @@ Engine
 ** New: UnitID, Relation = Unit.Relation() - Event for managing Unit Relation changes.
 * Unit Tracking
 ** Change: Units which could have a false (boolean) or "" (empty string) value for .name are now handled better.
+** Fixed: The Unit tracking system should now work far more smoothly with Rift v1.8.
 
 Tank-Swap
 * New: Tank debuffs now display the appropriate icon and are placed next to the duration timer.
@@ -43,6 +44,9 @@ Master Mode Dungeons
 * Darkening Deeps
 ** Braxtepel
 *** Fixed: Reference to try and index a nil value.
+
+French Translations
+* Syncronized French Translations for Infernal Dawn.
 
 ----
 v1.0.0

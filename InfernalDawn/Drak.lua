@@ -21,6 +21,7 @@ local WD = {
 	Lang = {},
 	ID = "Warboss Drak",
 	Object = "WD",
+	Enrage = 60 * 12,
 }
 
 WD.Drak = {
@@ -62,25 +63,33 @@ WD.Lang.Unit.Drak:SetGerman("Kriegsboss Drak")
 WD.Lang.Unit.Azul = KBM.Language:Add("Azul Searbone")
 WD.Lang.Unit.Stalwart = KBM.Language:Add("Warforged Stalwart")
 WD.Lang.Unit.Natung = KBM.Language:Add("Natung Charstorm")
+WD.Lang.Unit.Natung:SetFrench("Natung Charstorm")
 WD.Lang.Unit.Blazing = KBM.Language:Add("Blazing Thrall")
+WD.Lang.Unit.Blazing:SetFrench("Serf flamboyant")
 
 -- Notify Dictionary
 WD.Lang.Notify = {}
 WD.Lang.Notify.Blazing = KBM.Language:Add('Warboss Drak commands, "Give yourself to the flame and burn for Maelforge!"')
+WD.Lang.Notify.Blazing:SetFrench('Le Chef de guerre Drak ordonne : "Jetez-vous dans ces flammes et brûlez pour Maelforge !"')
 
 -- Ability Dictionary
 WD.Lang.Ability = {}
 WD.Lang.Ability.Molten = KBM.Language:Add("Molten Rejuvenation")
+WD.Lang.Ability.Molten:SetFrench("Rajeunissement en fusion")
 WD.Lang.Ability.Torment = KBM.Language:Add("Scorching Torment")
+WD.Lang.Ability.Torment:SetFrench("Tourment brûlant")
 
 -- Ability Buff
 WD.Lang.Buff = {}
 WD.Lang.Buff.Sacrifice = KBM.Language:Add("Wanton Sacrifice")
+WD.Lang.Buff.Sacrifice:SetFrench("Sacrifice incandescent")
 
 -- Menu Dictionary
 WD.Lang.Menu = {}
 WD.Lang.Menu.Molten = KBM.Language:Add("Molten Rejuventation duration")
+WD.Lang.Menu.Molten:SetFrench("Durée Rajeunissement en fusion")
 WD.Lang.Menu.BlazingFirst = KBM.Language:Add("First Blazing Thrall")
+WD.Lang.Menu.BlazingFirst:SetFrench("Premier Serf flamboyant")
 
 WD.Drak.Name = WD.Lang.Unit.Drak[KBM.Lang]
 WD.Descript = WD.Drak.Name

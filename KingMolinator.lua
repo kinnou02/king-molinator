@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r347"
+KBM.Alpha = ".r348"
 KBM.Event = {
 	Mark = {},
 	Unit = {
@@ -3356,11 +3356,11 @@ function KBM.MobDamage(info)
 		if cUnitID then
 			cDetails = Inspect.Unit.Detail(cUnitID)
 		end		if tUnitID then
-			UnitObj = KBM.Unit:Add(tDetails, tUnitID)
+			UnitObj = KBM.Unit:Update(tDetails, tUnitID)
 			UnitObj:DamageHandler(info)
 		end
 		if cUnitID then
-			KBM.Unit:Add(cDetails, cUnitID)
+			KBM.Unit:Update(cDetails, cUnitID)
 		end
 		if KBM.Encounter then
 			-- Check for damage done to the raid by Bosses
@@ -3494,11 +3494,11 @@ function KBM.MobHeal(info)
 		cDetails = Inspect.Unit.Detail(cUnitID)
 	end
 	if tUnitID then
-		UnitObj = KBM.Unit:Add(tDetails, tUnitID)
+		UnitObj = KBM.Unit:Update(tDetails, tUnitID)
 		UnitObj:HealHandler(info)
 	end
 	if cUnitID then
-		KBM.Unit:Add(cDetails, cUnitID)
+		KBM.Unit:Update(cDetails, cUnitID)
 	end	
 end
 
@@ -3515,12 +3515,12 @@ function KBM.RaidDamage(info)
 		end
 		if tUnitID then
 		--	print("KBM.RaidDamage() ---> Calling KBM.Unit:Add() -- "..tostring(tUnitID))
-			UnitObj = KBM.Unit:Add(tDetails, tUnitID)
+			UnitObj = KBM.Unit:Update(tDetails, tUnitID)
 			UnitObj:DamageHandler(info)
 		end
 		if cUnitID then
 		--	print("KBM.RaidDamage() ---> Calling KBM.Unit:Add() -- "..tostring(cUnitID))
-			UnitObj = KBM.Unit:Add(cDetails, cUnitID)
+			UnitObj = KBM.Unit:Update(cDetails, cUnitID)
 		end
 		if KBM.Encounter then
 			if KBM.BossID[tUnitID] then
@@ -3658,11 +3658,11 @@ function KBM.RaidHeal(info)
 		cDetails = Inspect.Unit.Detail(cUnitID)
 	end
 	if tUnitID then
-		UnitObj = KBM.Unit:Add(tDetails, tUnitID)
+		UnitObj = KBM.Unit:Update(tDetails, tUnitID)
 		UnitObj:HealHandler(info)
 	end
 	if cUnitID then
-		KBM.Unit:Add(cDetails, cUnitID)
+		KBM.Unit:Update(cDetails, cUnitID)
 	end	
 end
 
@@ -4096,8 +4096,7 @@ function KBM.Unit.Debug:DumpAvail()
 	end
 end
 
-function KBM.Unit:Add(uDetails, UnitID)
-	local UnitObj = nil
+function KBM.Unit:Available(uDetails, UnitID)
 	if uDetails then
 		if not self.List.UID[UnitID] then
 			UnitObj = self:Create(uDetails, UnitID)
@@ -4105,7 +4104,7 @@ function KBM.Unit:Add(uDetails, UnitID)
 			UnitObj = self.List.UID[UnitID]
 			UnitObj:UpdateData(uDetails)
 		end		
-		if (self.UIDs.Available[UnitID] == nil) and (self.UIDs.Idle[UnitID] == nil) then			
+		if (self.UIDs.Available[UnitID] == nil) and (self.UIDs.Idle[UnitID] == nil) then
 			self.UIDs.Available[UnitID] = UnitObj
 			self.UIDs.Count.Available = self.UIDs.Count.Available + 1
 			if uDetails.type then
@@ -4118,8 +4117,8 @@ function KBM.Unit:Add(uDetails, UnitID)
 				self.Debug:UpdateAll()
 			end
 			return UnitObj		
-		else			
-			if self.UIDs.Idle[UnitID] then				
+		else
+			if self.UIDs.Idle[UnitID] then
 				self.UIDs.Available[UnitID] = self.List.UID[UnitID]
 				self.UIDs.Idle[UnitID] = nil
 				self.UIDs.Count.Idle = self.UIDs.Count.Idle - 1
@@ -4141,6 +4140,15 @@ function KBM.Unit:Add(uDetails, UnitID)
 			self.Debug:UpdateAll()
 		end
 		return UnitObj
+	end
+
+end
+
+function KBM.Unit:Update(uDetails, UnitID)
+	if self.List.UID[UnitID] then
+		return self.List.UID[UnitID]
+	else
+		self:Create(uDetails, UnitID)
 	end
 end
 
@@ -4171,7 +4179,7 @@ function KBM.Unit:Idle(UnitID)
 		end
 		KBM.Event.Unit.Unavailable(UnitID)
 		return self.List.UID[UnitID]
-	else		
+	else
 		if self.List.UID[UnitID] == nil then
 			self:Create(nil, UnitID)
 			if not self.UIDs.Idle[UnitID] then
@@ -4233,7 +4241,7 @@ function KBM.Unit:CheckIdle(CurrentTime)
 	end
 end
 
-function KBM.Unit:Death(UnitID)	
+function KBM.Unit:Death(UnitID)
 	if self.List.UID[UnitID] then
 		self.List.UID[UnitID].Dead = true
 		self.List.UID[UnitID].Health = 0
@@ -4254,7 +4262,7 @@ local function KBM_UnitAvailable(units)
 	if KBM.Encounter then
 		for UnitID, Specifier in pairs(units) do
 			uDetails = Inspect.Unit.Detail(UnitID)
-			KBM.Unit:Add(uDetails, UnitID)
+			KBM.Unit:Available(uDetails, UnitID)
 			if uDetails then
 				if not uDetails.player then					
 					KBM.CheckActiveBoss(uDetails, UnitID)
@@ -4265,8 +4273,8 @@ local function KBM_UnitAvailable(units)
 	else
 		for UnitID, Specifier in pairs(units) do
 			uDetails = Inspect.Unit.Detail(UnitID)
-			KBM.Unit:Add(uDetails, UnitID)
-			if uDetails then				
+			KBM.Unit:Available(uDetails, UnitID)
+			if uDetails then
 				if uDetails.mark then
 					KBM.Event.Mark(uDetails.mark, UnitID)
 				end
@@ -6762,7 +6770,7 @@ end
 function KBM.GroupJoin(UnitID, Specifier)
 	if UnitID ~= KBM.Player.UnitID then
 		if not KBM.Unit.UIDs.Available[UnitID] then
-			KBM.Unit:Add(Inspect.Unit.Detail(UnitID), UnitID)
+			KBM.Unit:Available(Inspect.Unit.Detail(UnitID), UnitID)
 		end
 	end
 end
@@ -6908,7 +6916,7 @@ local function KBM_Start()
 	UnitList = Inspect.Unit.List()
 	if UnitList then
 		for UnitID, Specifier in pairs(UnitList) do
-			KBM.Unit:Add(Inspect.Unit.Detail(UnitID), UnitID)
+			KBM.Unit:Available(Inspect.Unit.Detail(UnitID), UnitID)
 		end
 	end
 	
