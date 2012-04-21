@@ -339,7 +339,9 @@ function WD:Reset()
 	for BossName, BossObj in pairs(self.Bosses) do
 		BossObj.Available = false
 		BossObj.UnitID = nil
-		BossObj.CastBar:Remove()
+		if BossObj.CastBar then
+			BossObj.CastBar:Remove()
+		end
 	end
 end
 
