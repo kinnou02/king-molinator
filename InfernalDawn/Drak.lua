@@ -73,6 +73,10 @@ WD.Lang.Ability = {}
 WD.Lang.Ability.Molten = KBM.Language:Add("Molten Rejuvenation")
 WD.Lang.Ability.Torment = KBM.Language:Add("Scorching Torment")
 
+-- Ability Buff
+WD.Lang.Buff = {}
+WD.Lang.Buff.Sacrifice = KBM.Language:Add("Wanton Sacrifice")
+
 -- Menu Dictionary
 WD.Lang.Menu = {}
 WD.Lang.Menu.Molten = KBM.Language:Add("Molten Rejuventation duration")
@@ -145,8 +149,17 @@ WD.Blazing = {
 	Level = "??",
 	Name = WD.Lang.Unit.Blazing[KBM.Lang],
 	UnitList = {},
+	Menu = {},
 	Ignore = true,
 	Type = "multi",
+	AlertsRef = {},
+	Settings = {
+		AlertsRef = {
+			Enabled = true,
+			Sacrifice = KBM.Defaults.AlertObj.Create("dark_green")
+		},
+	},
+	Triggers = {},
 }
 
 function WD:AddBosses(KBM_Boss)
@@ -195,6 +208,9 @@ function WD:InitVars()
 			CastBar = self.Azul.Settings.CastBar,
 			AlertsRef = self.Azul.Settings.AlertsRef,
 			TimersRef = self.Azul.Settings.TimersRef,
+		},
+		Blazing = {
+			AlertsRef = self.Blazing.Settings.AlertsRef,
 		},
 		MechTimer = KBM.Defaults.MechTimer(),
 		Alerts = KBM.Defaults.Alerts(),
@@ -307,8 +323,6 @@ function WD:UnitHPCheck(unitDetails, unitID)
 							self.Phase = 2
 						end
 					elseif BossObj.Type == "multi" then
-						print(BossObj.Name)
-						print(tostring(unitID))
 						if BossObj.UnitList then
 							if not BossObj.UnitList[unitID] then
 								SubBossObj = {
@@ -382,6 +396,9 @@ function WD:Start()
 	-- Natung
 	self.Natung.AlertsRef.Torment = KBM.Alert:Create(self.Lang.Ability.Torment[KBM.Lang], nil, true, true, "red")
 	KBM.Defaults.AlertObj.Assign(self.Natung)
+	-- Blazing Thrall
+	self.Blazing.AlertsRef.Sacrifice = KBM.Alert:Create(self.Lang.Buff.Sacrifice[KBM.Lang], nil, false, true, "dark_green")
+	KBM.Defaults.AlertObj.Assign(self.Blazing)
 	
 	-- Assign Alerts and Timers to Triggers
 	self.Azul.Triggers.Molten = KBM.Trigger:Create(self.Lang.Ability.Molten[KBM.Lang], "cast", self.Azul)
@@ -394,6 +411,8 @@ function WD:Start()
 	self.Drak.Triggers.Blazing = KBM.Trigger:Create(self.Lang.Notify.Blazing[KBM.Lang], "notify", self.Drak)
 	self.Drak.Triggers.Blazing:AddTimer(self.Drak.TimersRef.Blazing)
 	self.Drak.Triggers.Blazing:AddAlert(self.Drak.AlertsRef.Blazing)
+	self.Blazing.Triggers.Sacrifice = KBM.Trigger:Create(self.Lang.Buff.Sacrifice[KBM.Lang], "buff", self.Blazing)
+	self.Blazing.Triggers.Sacrifice:AddAlert(self.Blazing.AlertsRef.Sacrifice)
 	
 	self.Drak.CastBar = KBM.CastBar:Add(self, self.Drak)
 	self.Natung.CastBar = KBM.CastBar:Add(self, self.Natung)
