@@ -19,7 +19,7 @@ local EC = {
 	Type = "20man",
 	HasPhases = true,
 	Lang = {},
-	ID = "The Ember.Szath",
+	ID = "The Ember Conclave",
 	Object = "EC",
 }
 
@@ -167,13 +167,25 @@ end
 function EC:InitVars()
 	self.Settings = {
 		Enabled = true,
-		CastBar = self.Szath.Settings.CastBar,
+		CastBar = {
+			Override = true,
+			Multi = true,
+		},
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		-- MechTimer = KBM.Defaults.MechTimer(),
 		-- Alerts = KBM.Defaults.Alerts(),
 		-- TimersRef = self.Szath.Settings.TimersRef,
 		-- AlertsRef = self.Szath.Settings.AlertsRef,
+		Szath = {
+			CastBar = self.Szath.Settings.CastBar,
+		},
+		Nahoth = {
+			CastBar = self.Nahoth.Settings.CastBar,
+		},
+		Ereetu = {
+			CastBar = self.Ereetu.Settings.CastBar,
+		},
 	}
 	KBMINDEC_Settings = self.Settings
 	chKBMINDEC_Settings = self.Settings
@@ -228,7 +240,17 @@ end
 function EC:Death(UnitID)
 	if self.Szath.UnitID == UnitID then
 		self.Szath.Dead = true
-		return true
+	elseif self.Nahoth.UnitID == UnitID then
+		self.Nahoth.Dead = true
+	elseif self.Ereetu.UnitID == UnitID then
+		self.Ereetu.Dead = true
+	end
+	if self.Szath.Dead == true then
+		if self.Nahoth.Dead == true then
+			if self.Ereetu.Dead == true then
+				return true
+			end
+		end
 	end
 	return false
 end
@@ -247,13 +269,13 @@ function EC:UnitHPCheck(unitDetails, unitID)
 					BossObj.Casting = false
 					BossObj.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase("Single")
+					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
 					self.PhaseObj.Objectives:AddPercent(self.Szath.Name, 0, 100)
-					self.PhaseObj.Objectives:AddPercent(self.Nohath.Name, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Nahoth.Name, 0, 100)
 					self.PhaseObj.Objectives:AddPercent(self.Ereetu.Name, 0, 100)
 					self.Phase = 1
 				else
-					if not BossObj.CastBar.Active then
+					if not BossObj.CastBar then
 						BossObj.CastBar:Create(unitID)
 					end
 					BossObj.Dead = false
@@ -272,7 +294,10 @@ function EC:Reset()
 	for Name, BossObj in pairs(self.Bosses) do
 		BossObj.Available = false
 		BossObj.UnitID = nil
-		BossObj.CastBar:Remove()
+		BossObj.Dead = false
+		if BossObj.CastBar then
+			BossObj.CastBar:Remove()
+		end
 	end
 	self.PhaseObj:End(Inspect.Time.Real())
 end

@@ -63,11 +63,12 @@ WD.Lang.Unit.Drak:SetGerman("Kriegsboss Drak")
 WD.Lang.Unit.Azul = KBM.Language:Add("Azul Searbone")
 WD.Lang.Unit.Azul:SetFrench("Azul Flambos")
 WD.Lang.Unit.Stalwart = KBM.Language:Add("Warforged Stalwart")
-WD.Lang.Unit.Stalwart:SetFrench("Fidèle des forges de guerre")
+WD.Lang.Unit.Stalwart:SetFrench("Fidèle des Forges de guerre")
 WD.Lang.Unit.Natung = KBM.Language:Add("Natung Charstorm")
 WD.Lang.Unit.Natung:SetFrench("Natung Charstorm")
 WD.Lang.Unit.Blazing = KBM.Language:Add("Blazing Thrall")
 WD.Lang.Unit.Blazing:SetFrench("Serf flamboyant")
+WD.Lang.Unit.Thrall = KBM.Language:Add("Wanton Thrall")
 
 -- Notify Dictionary
 WD.Lang.Notify = {}
@@ -163,6 +164,16 @@ WD.Blazing = {
 	Menu = {},
 	Ignore = true,
 	Type = "multi",
+}
+
+WD.Thrall = {
+	Mod = WD,
+	Level = "??",
+	Name = WD.Lang.Unit.Thrall[KBM.Lang],
+	UnitList = {},
+	Menu = {},
+	Ignore = true,
+	Type = "multi",
 	AlertsRef = {},
 	Settings = {
 		AlertsRef = {
@@ -180,11 +191,13 @@ function WD:AddBosses(KBM_Boss)
 		[self.Azul.Name] = self.Azul,
 		[self.Natung.Name] = self.Natung,
 		[self.Blazing.Name] = self.Blazing,
+		[self.Thrall.Name] = self.Thrall,
 	}
 	KBM_Boss[self.Drak.Name] = self.Drak
 	KBM.SubBoss[self.Azul.Name] = self.Azul
 	KBM.SubBoss[self.Natung.Name] = self.Natung
 	KBM.SubBoss[self.Blazing.Name] = self.Blazing
+	KBM.SubBoss[self.Thrall.Name] = self.Thrall
 	
 	for BossName, BossObj in pairs(self.Bosses) do
 		if BossObj.Settings then
@@ -220,8 +233,8 @@ function WD:InitVars()
 			AlertsRef = self.Azul.Settings.AlertsRef,
 			TimersRef = self.Azul.Settings.TimersRef,
 		},
-		Blazing = {
-			AlertsRef = self.Blazing.Settings.AlertsRef,
+		Thrall = {
+			AlertsRef = self.Thrall.Settings.AlertsRef,
 		},
 		MechTimer = KBM.Defaults.MechTimer(),
 		Alerts = KBM.Defaults.Alerts(),
@@ -300,6 +313,8 @@ function WD:Death(UnitID)
 	elseif self.Natung.UnitID == UnitID then
 		self.Natung.Dead = true
 		self.PhaseFinal()
+	elseif self.Blazing.UnitID == UnitID then
+		KBM.Alert:Stop(self.Thrall.AlertsRef.Sacrifice)
 	end
 	return false
 end
@@ -407,9 +422,9 @@ function WD:Start()
 	-- Natung
 	self.Natung.AlertsRef.Torment = KBM.Alert:Create(self.Lang.Ability.Torment[KBM.Lang], nil, true, true, "red")
 	KBM.Defaults.AlertObj.Assign(self.Natung)
-	-- Blazing Thrall
-	self.Blazing.AlertsRef.Sacrifice = KBM.Alert:Create(self.Lang.Buff.Sacrifice[KBM.Lang], nil, false, true, "dark_green")
-	KBM.Defaults.AlertObj.Assign(self.Blazing)
+	-- Wanton Thrall
+	self.Thrall.AlertsRef.Sacrifice = KBM.Alert:Create(self.Lang.Buff.Sacrifice[KBM.Lang], nil, false, true, "dark_green")
+	KBM.Defaults.AlertObj.Assign(self.Thrall)
 	
 	-- Assign Alerts and Timers to Triggers
 	self.Azul.Triggers.Molten = KBM.Trigger:Create(self.Lang.Ability.Molten[KBM.Lang], "cast", self.Azul)
@@ -422,8 +437,8 @@ function WD:Start()
 	self.Drak.Triggers.Blazing = KBM.Trigger:Create(self.Lang.Notify.Blazing[KBM.Lang], "notify", self.Drak)
 	self.Drak.Triggers.Blazing:AddTimer(self.Drak.TimersRef.Blazing)
 	self.Drak.Triggers.Blazing:AddAlert(self.Drak.AlertsRef.Blazing)
-	self.Blazing.Triggers.Sacrifice = KBM.Trigger:Create(self.Lang.Buff.Sacrifice[KBM.Lang], "buff", self.Blazing)
-	self.Blazing.Triggers.Sacrifice:AddAlert(self.Blazing.AlertsRef.Sacrifice)
+	self.Thrall.Triggers.Sacrifice = KBM.Trigger:Create(self.Lang.Buff.Sacrifice[KBM.Lang], "buff", self.Thrall)
+	self.Thrall.Triggers.Sacrifice:AddAlert(self.Thrall.AlertsRef.Sacrifice)
 	
 	self.Drak.CastBar = KBM.CastBar:Add(self, self.Drak)
 	self.Natung.CastBar = KBM.CastBar:Add(self, self.Natung)

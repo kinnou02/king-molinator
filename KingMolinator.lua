@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
---KBM.Alpha = ".r352"
+KBM.Alpha = ".r353"
 KBM.Event = {
 	Mark = {},
 	Unit = {
@@ -707,6 +707,8 @@ KBM.Boss = {
 	Dungeon = {
 		List = {},
 	},
+	MasterID = {},
+	ExpertID = {},
 	Chronicle = {},
 	Rift = {},
 	ExRift = {},
@@ -717,8 +719,14 @@ function KBM.Boss.Dungeon:AddBoss(BossObj)
 	local BossID = nil
 	if BossObj.Mod.InstanceObj.Type == "Expert" then
 		BossID = BossObj.ExpertID
+		if BossID ~= "Expert" then
+			KBM.Boss.ExpertID[BossID] = BossObj
+		end
 	elseif BossObj.Mod.InstanceObj.Type == "Master" then
 		BossID = BossObj.MasterID
+		if BossID ~= "Master" then
+			KBM.Boss.MasterID[BossID] = BossObj
+		end
 	end
 	if not BossID then
 		print("Instance: "..BossObj.Mod.Instance)
@@ -3152,6 +3160,10 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 					if uDetails.type then
 						if KBM.SubBossID[uDetails.type] then
 							BossObj = KBM.SubBossID[uDetails.type]
+						elseif KBM.Boss.MasterID[uDetails.type] then
+							BossObj = KBM.Boss.Dungeon.List[uDetails.name]
+						elseif KBM.Boss.ExpertID[uDetails.type] then
+							BossObj = KBM.Boss.Dungeon.List[uDetails.name]
 						end
 					end
 					if not BossObj then
