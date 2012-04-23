@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r353"
+KBM.Alpha = ".r354"
 KBM.Event = {
 	Mark = {},
 	Unit = {
@@ -26,6 +26,11 @@ KBM.Event = {
 		Combat = {
 			Enter = {},
 			Leave = {},
+		},
+		Cast = {
+			Start = {},
+			End = {},
+			Interrupt = {},
 		},
 	},
 	Encounter = {
@@ -1349,6 +1354,7 @@ function KBM.Trigger:Init()
 	self.Say = {}
 	self.Damage = {}
 	self.Cast = {}
+	self.PersonalCast = {}
 	self.Percent = {}
 	self.Combat = {}
 	self.Start = {}
@@ -1363,6 +1369,7 @@ function KBM.Trigger:Init()
 	self.Time = {}
 	self.Channel = {}
 	self.Interrupt = {}
+	self.PersonalInterrupt = {}
 	self.NpcDamage = {}
 
 	function self.Queue:Add(TriggerObj, Caster, Target, Duration)	
@@ -1569,6 +1576,11 @@ function KBM.Trigger:Init()
 				self.Cast[Trigger] = {}
 			end
 			self.Cast[Trigger][Unit.Name] = TriggerObj
+		elseif Type == "personalCast" then
+			if not self.PersonalCast[Trigger] then
+				self.PersonalCast[Trigger] = {}
+			end
+			self.PersonalCast[Trigger][Unit.Name] = TriggerObj
 		elseif Type == "channel" then
 			if not self.Channel[Trigger] then
 				self.Channel[Trigger] = {}
@@ -1579,6 +1591,11 @@ function KBM.Trigger:Init()
 				self.Interrupt[Trigger] = {}
 			end
 			self.Interrupt[Trigger][Unit.Name] = TriggerObj
+		elseif Type == "personalInterrupt" then
+			if not self.PersonalInterrupt[Trigger] then
+				self.PersonalInterrupt[Trigger] = {}
+			end
+			self.PersonalInterrupt[Trigger][Unit.Name] = TriggerObj
 		elseif Type == "percent" then
 			if not self.Percent[Unit.Mod.ID] then
 				self.Percent[Unit.Mod.ID] = {}
@@ -3820,7 +3837,7 @@ function KBM.Unit:Create(uDetails, UnitID)
 			UsedBy = {},
 			Type = "Unit",
 		}
-		function UnitObj:Update(NewHP)
+		function UnitObj:Update(NewHP, uDetails)
 			self:CheckTarget()
 			if self.Loaded then
 				self.Health = NewHP
@@ -3832,6 +3849,12 @@ function KBM.Unit:Create(uDetails, UnitID)
 						self.LastPercentRaw = self.PercentRaw
 						KBM.Event.Unit.PercentChange(self.UnitID)
 						KBM.UpdateHP(self)
+					end
+				end
+				if uDetails then
+					if self.Mark ~= uDetails.mark then
+						self.Mark = uDetails.mark
+						KBM.Event.Mark(self.Mark, self.UnitID)
 					end
 				end
 			end
@@ -3849,59 +3872,67 @@ function KBM.Unit:Create(uDetails, UnitID)
 			end
 		end
 		function UnitObj:DamageHandler(DamageObj)
-		--	if not self.Available then
-				if self.Loaded then
-					if self.Health then
-						if self.HealthMax then
-							if DamageObj.damage then
-								self.Health = self.Health - DamageObj.damage
-								if self.Health < 0 then
-									self.Health = 0
-								end
-							end
-							if DamageObj.overkill then
+			if self.Loaded then
+				local uDetails = Inspect.Unit.Detail(self.UnitID)
+				if uDetails then
+					if uDetails.healthMax then
+						self.HealthMax = uDetails.healthMax
+					end
+					self:Update(uDetails.health or 0)
+				elseif self.Health then
+					if self.HealthMax then
+						if DamageObj.damage then
+							self.Health = self.Health - DamageObj.damage
+							if self.Health < 0 then
 								self.Health = 0
 							end
-							self.PercentFlat = (self.Health/self.HealthMax)
-							self.PercentRaw = self.PercentFlat*100
-							if self.PercentRaw ~= self.LastPercentRaw then
-								self.Percent = math.ceil(self.PercentRaw)
-								self.LastPercentRaw = self.PercentRaw
-								KBM.Event.Unit.PercentChange(self.UnitID)
-								KBM.UpdateHP(self)
-							end
+						end
+						if DamageObj.overkill then
+							self.Health = 0
+						end
+						self.PercentFlat = (self.Health/self.HealthMax)
+						self.PercentRaw = self.PercentFlat*100
+						if self.PercentRaw ~= self.LastPercentRaw then
+							self.Percent = math.ceil(self.PercentRaw)
+							self.LastPercentRaw = self.PercentRaw
+							KBM.Event.Unit.PercentChange(self.UnitID)
+							KBM.UpdateHP(self)
 						end
 					end
 				end
-		--	end
+			end
 		end
 		function UnitObj:HealHandler(HealObj)
-			--if not self.Available then
-				if self.Loaded then
-					if self.Health then
-						if self.HealthMax then
-							if not HealObj.heal then
-								HealObj.heal = 0
-								self.Health = self.Health + HealObj.heal
-								if self.Health > self.HealthMax then
-									self.Health = self.HealthMax
-								end
+			if self.Loaded then
+				local uDetails = Inspect.Unit.Detail(self.UnitID)
+				if uDetails then
+					if uDetails.healthMax then
+						self.HealthMax = uDetails.healthMax
+					end
+					self:Update(uDetails.health or 0)
+				elseif self.Health then
+					if self.HealthMax then
+						if not HealObj.heal then
+							HealObj.heal = 0
+							self.Health = self.Health + HealObj.heal
+							if self.Health > self.HealthMax then
+								self.Health = self.HealthMax
 							end
-							if self.Dead then
-								self.Dead = false
-							end
-							self.PercentFlat = (self.Health/self.HealthMax)
-							self.PercentRaw = self.PercentFlat*100
-							if self.PercentRaw ~= self.LastPercentRaw then
-								self.Percent = math.ceil(self.PercentRaw)
-								self.LastPercentRaw = self.PercentRaw
-								KBM.Event.Unit.PercentChange(self.UnitID)
-								KBM.UpdateHP(self)
-							end
+						end
+						if self.Dead then
+							self.Dead = false
+						end
+						self.PercentFlat = (self.Health/self.HealthMax)
+						self.PercentRaw = self.PercentFlat*100
+						if self.PercentRaw ~= self.LastPercentRaw then
+							self.Percent = math.ceil(self.PercentRaw)
+							self.LastPercentRaw = self.PercentRaw
+							KBM.Event.Unit.PercentChange(self.UnitID)
+							KBM.UpdateHP(self)
 						end
 					end
 				end
-			--end
+			end
 		end
 		function UnitObj:SetRelation(Relation)
 			if (self.Relation ~= Relation) and Relation ~= nil then
@@ -3957,6 +3988,7 @@ function KBM.Unit:Create(uDetails, UnitID)
 					self.Percent = math.ceil(self.PercentRaw)
 					self.Loaded = true
 				end
+				self.Mark = uDetails.mark
 				self:CheckTarget()
 				self:SetName(uDetails.name)
 			else
@@ -5454,6 +5486,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 		self.CastMod = 1
 		self.Interrupted = false
 		self.InterruptEnd = nil
+		KBM.Event.Unit.Cast.Start(self.UnitID)
 		if self.Enabled then
 			self.GUI.Frame:SetAlpha(1)
 			self.GUI.Frame:SetVisible(true)
@@ -5560,11 +5593,22 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 						if not bDetails.channeled then	
 							if KBM.Trigger.Cast[bDetails.abilityName] then
 								if KBM.Trigger.Cast[bDetails.abilityName][self.Boss.Name] then
-									TriggerObj = KBM.Trigger.Cast[bDetails.abilityName][self.Boss.Name]
+									local TriggerObj = KBM.Trigger.Cast[bDetails.abilityName][self.Boss.Name]
 									if self.Boss.UnitID then
 										local TargetID = Inspect.Unit.Lookup(self.Boss.UnitID..".target")
 									end
 									KBM.Trigger.Queue:Add(TriggerObj, self.Boss.UnitID, self.Boss.UnitID, bDetails.remaining)
+								end
+							elseif KBM.Trigger.PersonalCast[bDetails.abilityName] then
+								if KBM.Trigger.PersonalCast[bDetails.abilityName][self.Boss.Name] then
+									local TriggerObj = KBM.Trigger.PersonalCast[bDetails.abilityName][self.Boss.Name]
+									if self.UnitID then
+										local playerTarget = Inspect.Unit.Lookup("player.target")
+										local playerFocus = Inspect.Unit.Lookup("player.focus")
+										if self.UnitID == playerTarget or self.UnitID == playerFocus then
+											KBM.Trigger.Queue:Add(TriggerObj, self.UnitID, self.UnitID, bDetails.remaining)
+										end
+									end
 								end
 							end
 						else
@@ -5572,7 +5616,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 								self.Channeled = true
 								if KBM.Trigger.Channel[bDetails.abilityName] then
 									if KBM.Trigger.Channel[bDetails.abilityName][self.Boss.Name] then
-										TriggerObj = KBM.Trigger.Channel[bDetails.abilityName][self.Boss.Name]
+										local TriggerObj = KBM.Trigger.Channel[bDetails.abilityName][self.Boss.Name]
 										if self.Boss.UnitID then
 											local TargetID = Inspect.Unit.Lookup(self.Boss.UnitID..".target")
 										end
@@ -5596,8 +5640,19 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 								--- Do Cast Interrupt Triggers (if any)
 								if KBM.Trigger.Interrupt[self.CastObject.abilityName] then
 									if KBM.Trigger.Interrupt[self.CastObject.abilityName][self.Boss.Name] then
-										TriggerObj = KBM.Trigger.Interrupt[self.CastObject.abilityName][self.Boss.Name]
+										local TriggerObj = KBM.Trigger.Interrupt[self.CastObject.abilityName][self.Boss.Name]
 										KBM.Trigger.Queue:Add(TriggerObj, self.Boss.UnitID, "interruptTarget", self.CastObject.remaining)
+									end
+								elseif KBM.Trigger.PersonalInterrupt[self.CastObject.abilityName] then
+									if KBM.Trigger.PersonalInterrupt[self.CastObject.abilityName][self.Boss.Name] then
+										local TriggerObj = KBM.Trigger.PersonalInterrupt[self.CastObject.abilityName][self.Boss.Name]
+										if self.UnitID then
+											local playerTarget = Inspect.Unit.Lookup("player.target")
+											local playerFocus = Inspect.Unit.Lookup("player.focus")
+											if self.UnitID == playerTarget or self.UnitID == playerFocus then
+												KBM.Trigger.Queue:Add(TriggerObj, self.UnitID, "interruptTarget", self.CastObject.remaining)
+											end
+										end
 									end
 								end
 								self.Interrupted = true
@@ -5618,6 +5673,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 				self.InterruptEnd = nil
 				self.GUI:SetText(self.Boss.Name)
 				self.GUI.Frame:SetVisible(false)
+				KBM.Event.Unit.Cast.End(self.UnitID)
 			else
 				self.GUI.Frame:SetAlpha(self.InterruptEnd - Inspect.Time.Real())
 			end
@@ -5632,6 +5688,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 				self.GUI:SetText(self.Boss.Name)
 				self.GUI.Frame:SetVisible(false)
 			end
+			KBM.Event.Unit.Cast.End(self.UnitID)
 		else
 			if not self.InterruptEnd then
 				if self.GUI then
@@ -5645,7 +5702,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 		self.Duration = 0
 		self.CastTime = 0
 		self.CastStart = 0
-		self.Channeled = false		
+		self.Channeled = false	
 	end
 	
 	function CastBarObj:Hide()	
@@ -6833,6 +6890,15 @@ function KBM.HealthMaxChange(data)
 	end
 end
 
+function KBM.MarkChange(data)
+	for UnitID, Value in pairs(data) do
+		if KBM.Unit.List.UID[UnitID] then
+			KBM.Unit.List.UID[UnitID].Mark = Value
+			KBM.Event.Mark(Value, UnitID)
+		end
+	end
+end
+
 -- Define KBM Custom Event System
 -- Unit Related
 KBM.Event.Mark, KBM.Event.Mark.EventTable = Utility.Event.Create("KingMolinator", "Mark")
@@ -6843,6 +6909,8 @@ KBM.Event.Unit.Death, KBM.Event.Unit.Death.EventTable = Utility.Event.Create("Ki
 KBM.Event.Unit.Name, KBM.Event.Unit.Name.EventTable = Utility.Event.Create("KingMolinator", "Unit.Name")
 KBM.Event.Unit.Relation, KBM.Event.Unit.Relation.EventTable = Utility.Event.Create("KingMolinator", "Unit.Relation")
 KBM.Event.Unit.Target, KBM.Event.Unit.Target.EventTable = Utility.Event.Create("KingMolinator", "Unit.Target")
+KBM.Event.Unit.Cast.Start, KBM.Event.Unit.Cast.Start.EventTable = Utility.Event.Create("KingMolinator", "Unit.Cast.Start")
+KBM.Event.Unit.Cast.End, KBM.Event.Unit.Cast.End.EventTable = Utility.Event.Create("KingMolinator", "Unit.Cast.End")
 KBM.Event.Unit.Combat.Enter, KBM.Event.Unit.Combat.Enter = Utility.Event.Create("KingMolinator", "Unit.Combat.Enter")
 KBM.Event.Unit.Combat.Leave, KBM.Event.Unit.Combat.Leave = Utility.Event.Create("KingMolinator", "Unit.Combat.Leave")
 -- Encounter Related
@@ -6902,6 +6970,7 @@ local function KBM_Start()
 	table.insert(Event.Unit.Detail.Health, {KBM.HealthChange, "KingMolinator", "Health Update"})
 	table.insert(Event.Unit.Detail.Name, {KBM.NameChange, "KingMolinator", "Name Update"})
 	table.insert(Event.Unit.Detail.HealthMax, {KBM.HealthMaxChange, "KingMolinator", "Health Max Update"})
+	table.insert(Event.Unit.Detail.Mark, {KBM.MarkChange, "KingMolinator", "Mark Change Update"})
 	table.insert(Event.System.Update.Begin, {function () KBM:Timer() end, "KingMolinator", "System Update"}) 
 	table.insert(Event.SafesRaidManager.Combat.Death, {KBM_Death, "KingMolinator", "Combat Death"})
 	table.insert(Event.SafesRaidManager.Combat.Enter, {KBM.CombatEnter, "KingMolinator", "Non raid combat enter"})
@@ -6929,7 +6998,11 @@ local function KBM_Start()
 	UnitList = Inspect.Unit.List()
 	if UnitList then
 		for UnitID, Specifier in pairs(UnitList) do
-			KBM.Unit:Available(Inspect.Unit.Detail(UnitID), UnitID)
+			UnitObj = KBM.Unit:Available(Inspect.Unit.Detail(UnitID), UnitID)
+			KBM.Event.Unit.Available(UnitObj)
+			if UnitObj.Mark then
+				KBM.Event.Mark(UnitObj.Mark, UnitID)
+			end
 		end
 	end
 	

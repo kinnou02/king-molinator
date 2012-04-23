@@ -4,16 +4,40 @@ System
 * Boss Matching
 ** Change: Bosses with Known UID's will now be checked before the old Name methods to avoid overlapping bosses.
 
+Event System
+* Initiation
+** Fixed: Units available on loading or after a /reloadui were not being sent to the message queue.
+* Marks
+** New: Now tracks changes in Marked targets. Also attempts to track mark changes in unavailable Units via damage and heal events.
+* Casting
+** New: Event for when a castbar becomes visible.
+** New: Event for when a castbar is hidden.
+
+Trigger System
+* New: Personal Cast triggers are now available to boss mods. These will only trigger if the players target or focus is the current unit casting.
+* New: Personal Interrupt triggers are now available to boss mods. These will only trigger if the players target or focus is the current unit interrupted.
+
 Infernal Dawn
 * Change: Re-ordered Bosses in the menu to better reflect current state of Raid.
 * Warboss Drak
-** New: Added Unit tracking for Wanton Thrall. (see below)
-** Change: Trigger for Wanton Sacrifice changed from Blazing Thrall to Wanton Thrall.
+** New: Added Alert for Burning Will purges.
+** New: Added Personal Cast alert and Timer for Death Blow. Requires the target to be focused or targeted by the player.
+** New: Added Personal Interrupt Trigger for Death Blow alerts. Requires the target to be focused or targeted by the player.
+** New: Added Unit tracking for Warforged Thrall. (see below)
+** Change: Trigger for Wanton Sacrifice changed from Blazing Thrall to Warforged Thrall.
 * The Ember Conclave
 ** New: Each boss now has an adjustable castbar. (This will mean you'll need to set these up once)
 ** Fixed: The encounter will now only credit completion when all three bosses are dead, not just Szath.
 ** Fixed: Error on Encounter start for Nahoth.
 ** Fixed: Ereetu was forgetting where he is and triggering this encounter in FoLH.
+
+Expert Dungeons
+* Fall of Lantern Hook
+** Roft
+*** Fixed: This encounter will only end when Roft and his three dogs have been killed.
+
+German Translations
+* Additions for latest ID dictionary. (First cycle)
 
 French Translations
 * Fixes and additions.

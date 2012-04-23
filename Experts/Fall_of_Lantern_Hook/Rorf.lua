@@ -187,7 +187,21 @@ end
 function MOD:Death(UnitID)
 	if self.Rorf.UnitID == UnitID then
 		self.Rorf.Dead = true
-		return true
+	elseif self.Scratchy.UnitID == UnitID then
+		self.Scratchy.Dead = true
+	elseif self.Scary.UnitID == UnitID then
+		self.Scary.Dead = true
+	elseif self.Sneaky.UnitID == UnitID then
+		self.Sneaky.Dead = true
+	end
+	if self.Rorf.Dead == true then
+		if self.Scratchy.Dead == true then
+			if self.Scary.Dead == true then
+				if self.Sneaky.Dead == true then
+					return true
+				end
+			end
+		end
 	end
 	return false
 end
