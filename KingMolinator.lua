@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r354"
+KBM.Alpha = ".r355"
 KBM.Event = {
 	Mark = {},
 	Unit = {
@@ -6998,10 +6998,13 @@ local function KBM_Start()
 	UnitList = Inspect.Unit.List()
 	if UnitList then
 		for UnitID, Specifier in pairs(UnitList) do
-			UnitObj = KBM.Unit:Available(Inspect.Unit.Detail(UnitID), UnitID)
-			KBM.Event.Unit.Available(UnitObj)
-			if UnitObj.Mark then
-				KBM.Event.Mark(UnitObj.Mark, UnitID)
+			local uDetails = Inspect.Unit.Detail(UnitID)
+			if uDetails then
+				UnitObj = KBM.Unit:Available(Inspect.Unit.Detail(UnitID), UnitID)
+				KBM.Event.Unit.Available(UnitObj)
+				if UnitObj.Mark then
+					KBM.Event.Mark(UnitObj.Mark, UnitID)
+				end
 			end
 		end
 	end
