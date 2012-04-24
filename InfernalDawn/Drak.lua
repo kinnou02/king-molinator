@@ -80,7 +80,9 @@ WD.Lang.Unit.Blazing:SetGerman("Flammender Knecht")
 WD.Lang.Unit.BlaShort = KBM.Language:Add("B.Thrall")
 WD.Lang.Unit.Thrall = KBM.Language:Add("Warforged Thrall")
 WD.Lang.Unit.Thrall:SetGerman("Kriegsgeschmiedeter Knecht")
+WD.Lang.Unit.Thrall:SetFrench("Serf des Forges de guerre")
 WD.Lang.Unit.ThrShort = KBM.Language:Add("W.Thrall")
+WD.Lang.Unit.ThrShort:SetFrench("Serf.F")
 
 -- Notify Dictionary
 WD.Lang.Notify = {}
@@ -414,15 +416,15 @@ function WD:UnitHPCheck(unitDetails, unitID)
 								SubBossObj = {
 									Mod = WD,
 									Level = "??",
-									Name = uDetails.name,
+									Name = unitDetails.name,
 									Dead = false,
 									Casting = false,
 									UnitID = unitID,
 									Available = true,
 								}
 								BossObj.UnitList[unitID] = SubBossObj
-								if uDetails.name == self.Stalwart.Name then
-									SubBossObj.CastBar = KBM.CastBar:Add(self, self.Apostle, false, true)
+								if unitDetails.name == self.Stalwart.Name then
+									SubBossObj.CastBar = KBM.CastBar:Add(self, self.Stalwart, false, true)
 									SubBossObj.CastBar:Create(unitID)
 								end
 							else
