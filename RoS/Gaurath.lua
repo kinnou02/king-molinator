@@ -67,6 +67,7 @@ HG.Lang.Unit.Gaurath = KBM.Language:Add(HG.Gaurath.Name)
 HG.Lang.Unit.Gaurath:SetGerman("Herold Gaurath")
 HG.Lang.Unit.Gaurath:SetFrench("Héraut Gaurath")
 HG.Lang.Unit.Gaurath:SetRussian("Глашатай Гораф")
+HG.Lang.Unit.Defiler = KBM.Language:Add("Ancient Defiler")
 
 -- Ability Dictionary
 HG.Lang.Ability = {}
@@ -82,6 +83,7 @@ HG.Lang.Ability.Tidings = KBM.Language:Add("Tidings of Woe")
 HG.Lang.Ability.Tidings:SetGerman("Leidvolle Kunde")
 HG.Lang.Ability.Tidings:SetFrench("Nouvelles du Malheur")
 HG.Lang.Ability.Tidings:SetRussian("Плохие известия")
+HG.Lang.Ability.Storm = KBM.Language:Add("Defiling Storm")
 
 -- Verbose Dictionary
 HG.Lang.Verbose = {}
@@ -100,12 +102,32 @@ HG.Lang.Notify.Tidings:SetRussian("Глашатай Гораф сообщает 
 HG.Gaurath.Name = HG.Lang.Unit.Gaurath[KBM.Lang]
 HG.Descript = HG.Gaurath.Name
 
+HG.Defiler = {
+	Mod = HG,
+	Level = "??",
+	Name = HG.Lang.Unit.Defiler[KBM.Lang],
+	UnitList = {},
+	Menu = {},
+	AlertsRef = {},
+	Ignore = true,
+	Type = "multi",
+	Triggers = {},
+	Settings = {
+		AlertsRef = {
+			Enabled = true,
+			Storm = KBM.Defaults.AlertObj.Create("yellow"),
+		},
+	}
+}
+
 function HG:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Gaurath.Name] = self.Gaurath,
+		[self.Defiler.Name] = self.Defiler,
 	}
 	KBM_Boss[self.Gaurath.Name] = self.Gaurath	
+	KBM.SubBoss[self.Defiler.Name] = self.Defiler
 end
 
 function HG:InitVars()
@@ -117,9 +139,14 @@ function HG:InitVars()
 		MechSpy = KBM.Defaults.MechSpy(),
 		Alerts = KBM.Defaults.Alerts(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
-		TimersRef = self.Gaurath.Settings.TimersRef,
-		AlertsRef = self.Gaurath.Settings.AlertsRef,
-		MechRef = self.Gaurath.Settings.MechRef,
+		Gaurath = {
+			TimersRef = self.Gaurath.Settings.TimersRef,
+			AlertsRef = self.Gaurath.Settings.AlertsRef,
+			MechRef = self.Gaurath.Settings.MechRef,
+		},
+		Defiler = {
+			AlertsRef = self.Defiler.Settings.AlertsRef,
+		},
 	}
 	KBMROSHG_Settings = self.Settings
 	chKBMROSHG_Settings = self.Settings
@@ -172,6 +199,12 @@ function HG:Death(UnitID)
 	if self.Gaurath.UnitID == UnitID then
 		self.Gaurath.Dead = true
 		return true
+	elseif self.Defiler.UnitList[UnitID] then
+		if self.Defiler.UnitList[UnitID].CastBar then
+			self.Defiler.UnitList[UnitID].CastBar:Remove()
+		end
+		self.Defiler.UnitList[UnitID].Dead = true
+		self.Defiler.UnitList[UnitID].CastBar = nil
 	end
 	return false
 end
@@ -197,11 +230,11 @@ function HG.RaiseCount()
 	KBM.MechTimer:AddRemove(HG.Gaurath.TimersRef.Breath)
 end
 
-function HG:UnitHPCheck(unitDetails, unitID)
+function HG:UnitHPCheck(uDetails, unitID)
 	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if unitDetails.name == self.Gaurath.Name then
+	if uDetails and unitID then
+		if not uDetails.player then
+			if uDetails.name == self.Gaurath.Name then
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
@@ -219,6 +252,29 @@ function HG:UnitHPCheck(unitDetails, unitID)
 				self.Gaurath.UnitID = unitID
 				self.Gaurath.Available = true
 				return self.Gaurath
+			elseif self.EncounterRunning then
+				if self.Bosses[uDetails.name] then
+					if not self.Bosses[uDetails.name].UnitList[unitID] then
+						SubBossObj = {
+							Mod = HG,
+							Level = "??",
+							Name = uDetails.name,
+							Dead = false,
+							Casting = false,
+							UnitID = unitID,
+							Available = true,
+						}
+						self.Bosses[uDetails.name].UnitList[unitID] = SubBossObj
+						if uDetails.name == self.Defiler.Name then
+							SubBossObj.CastBar = KBM.CastBar:Add(self, self.Defiler, false, true)
+							SubBossObj.CastBar:Create(unitID)
+						end
+					else
+						self.Bosses[uDetails.name].UnitList[unitID].Available = true
+						self.Bosses[uDetails.name].UnitList[unitID].UnitID = unitID
+					end
+					return self.Bosses[uDetails.name].UnitList[unitID]
+				end
 			end
 		end
 	end
@@ -232,6 +288,12 @@ function HG:Reset()
 	self.Gaurath.Dead = false
 	self.RaiseObj = nil
 	self.RaiseCounter = 0
+	for UnitID, BossObj in pairs(self.Defiler.UnitList) do
+		if BossObj.CastBar then
+			BossObj.CastBar:Remove()
+			BossObj.CastBar = nil
+		end
+	end	
 	self.PhaseObj:End(Inspect.Time.Real())
 end
 
@@ -277,12 +339,16 @@ function HG:Start()
 	KBM.Defaults.MechObj.Assign(self.Gaurath)
 	
 	-- Create Alerts
+	-- Herald
 	self.Gaurath.AlertsRef.Breath = KBM.Alert:Create(self.Lang.Ability.Breath[KBM.Lang], nil, false, true, "purple")
 	self.Gaurath.AlertsRef.Raise = KBM.Alert:Create(self.Lang.Ability.Raise[KBM.Lang], nil, true, true, "dark_green")
 	self.Gaurath.AlertsRef.Raise:TimerEnd(self.Gaurath.TimersRef.Raise)
 	self.Gaurath.AlertsRef.Tidings = KBM.Alert:Create(self.Lang.Ability.Tidings[KBM.Lang], 8, false, true, "orange")
 	KBM.Defaults.AlertObj.Assign(self.Gaurath)
-	
+	-- Ancient Defiler
+	self.Defiler.AlertsRef.Storm = KBM.Alert:Create(self.Lang.Ability.Storm[KBM.Lang], nil, false, true, "yellow")
+	KBM.Defaults.AlertObj.Assign(self.Defiler)
+
 	-- Assign Timers and Alerts to Triggers
 	self.Gaurath.Triggers.Breath = KBM.Trigger:Create(self.Lang.Ability.Breath[KBM.Lang], "cast", self.Gaurath)
 	self.Gaurath.Triggers.Breath:AddTimer(self.Gaurath.TimersRef.Breath)
@@ -295,6 +361,10 @@ function HG:Start()
 	self.Gaurath.Triggers.TidingsCast:AddPhase(self.GroundPhase)
 	self.Gaurath.Triggers.Tidings = KBM.Trigger:Create(self.Lang.Notify.Tidings[KBM.Lang], "notify", self.Gaurath)
 	self.Gaurath.Triggers.Tidings:AddSpy(self.Gaurath.MechRef.Tidings)
+	self.Defiler.Triggers.Storm = KBM.Trigger:Create(self.Lang.Ability.Storm[KBM.Lang], "personalCast", self.Defiler)
+	self.Defiler.Triggers.Storm:AddAlert(self.Defiler.AlertsRef.Storm, true)
+	self.Defiler.Triggers.StormInt = KBM.Trigger:Create(self.Lang.Ability.Storm[KBM.Lang], "personalInterrupt", self.Defiler)
+	self.Defiler.Triggers.StormInt:AddStop(self.Defiler.AlertsRef.Storm)
 	
 	self.Gaurath.CastBar = KBM.CastBar:Add(self, self.Gaurath)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

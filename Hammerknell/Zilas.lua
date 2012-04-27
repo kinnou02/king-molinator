@@ -445,9 +445,9 @@ function SZ:Start()
 	self.Zilas.Triggers.PhaseFive:AddPhase(self.PhaseFive)
 	
 	-- Imps
-	self.Imp.Triggers.Cede = KBM.Trigger:Create(self.Lang.Ability.Cede[KBM.Lang], "cast", self.Imp)
+	self.Imp.Triggers.Cede = KBM.Trigger:Create(self.Lang.Ability.Cede[KBM.Lang], "personalCast", self.Imp)
 	self.Imp.Triggers.Cede:AddAlert(self.Imp.AlertsRef.Cede)
-	self.Imp.Triggers.CedeInt = KBM.Trigger:Create(self.Lang.Ability.Cede[KBM.Lang], "interrupt", self.Imp)
+	self.Imp.Triggers.CedeInt = KBM.Trigger:Create(self.Lang.Ability.Cede[KBM.Lang], "personalInterrupt", self.Imp)
 	self.Imp.Triggers.CedeInt:AddStop(self.Imp.AlertsRef.Cede)
 	
 	-- Spirits

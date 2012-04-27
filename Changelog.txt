@@ -6,7 +6,7 @@ System
 
 Event System
 * Initiation
-** Fixed: Units available on loading or after a /reloadui were not being sent to the message queue.
+** Fixed: Units available on loading or after a /reloadui were not being sent to the messege queue.
 * Marks
 ** New: Now tracks changes in Marked targets. Also attempts to track mark changes in unavailable Units via damage and heal events.
 * Casting
@@ -24,12 +24,25 @@ Infernal Dawn
 ** New: Added Personal Cast alert and Timer for Death Blow. Requires the target to be focused or targeted by the player.
 ** New: Added Personal Interrupt Trigger for Death Blow alerts. Requires the target to be focused or targeted by the player.
 ** New: Added Unit tracking for Warforged Thrall. (see below)
+** New: Added Personal Alert for Burning Sacrifice.
+** New: Added global timer for Burning Sacrifice.
+** New: Added Mechanic Spy object for Burning Sacrifice.
 ** Change: Trigger for Wanton Sacrifice changed from Blazing Thrall to Warforged Thrall.
 * The Ember Conclave
 ** New: Each boss now has an adjustable castbar. (This will mean you'll need to set these up once)
 ** Fixed: The encounter will now only credit completion when all three bosses are dead, not just Szath.
 ** Fixed: Error on Encounter start for Nahoth.
 ** Fixed: Ereetu was forgetting where he is and triggering this encounter in FoLH.
+
+Hammerknell Fortress
+* Soulrender Zilas
+** Change: Imp's Cede Spirit is now a Personal Interrupt alert, rather than global. Requires target/focus to trigger.
+
+River of Souls
+* Herald Gaurath
+** New: Added Unit tracking for Ancient Defiler
+** New: Added personal interrupt alert for Defiling Storm.
+** New: Added personal interrupt success alert cancel for Defiling Storm.
 
 Expert Dungeons
 * Fall of Lantern Hook

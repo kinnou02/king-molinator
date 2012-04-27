@@ -11,7 +11,7 @@ local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 local IND = KBM.BossMod["Infernal Dawn"]
 
-local GL = {
+local MK = {
 	Enabled = true,
 	Directory = IND.Directory,
 	File = "Muglak.lua",
@@ -20,11 +20,11 @@ local GL = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Muglak",
-	Object = "GL",
+	Object = "MK",
 }
 
-GL.Muglak = {
-	Mod = GL,
+MK.Muglak = {
+	Mod = MK,
 	Level = "??",
 	Active = false,
 	Name = "Muglak",
@@ -51,28 +51,28 @@ GL.Muglak = {
 	}
 }
 
-KBM.RegisterMod(GL.ID, GL)
+KBM.RegisterMod(MK.ID, MK)
 
 -- Main Unit Dictionary
-GL.Lang.Unit = {}
-GL.Lang.Unit.Muglak = KBM.Language:Add(GL.Muglak.Name)
-GL.Lang.Unit.Muglak:SetFrench()
-GL.Lang.Unit.Muglak:SetGerman()
-GL.Lang.Unit.MuglakShort = KBM.Language:Add("Muglak")
-GL.Lang.Unit.MuglakShort:SetFrench()
-GL.Lang.Unit.MuglakShort:SetGerman()
+MK.Lang.Unit = {}
+MK.Lang.Unit.Muglak = KBM.Language:Add(MK.Muglak.Name)
+MK.Lang.Unit.Muglak:SetFrench()
+MK.Lang.Unit.Muglak:SetGerman()
+MK.Lang.Unit.MuglakShort = KBM.Language:Add("Muglak")
+MK.Lang.Unit.MuglakShort:SetFrench()
+MK.Lang.Unit.MuglakShort:SetGerman()
 
 -- Ability Dictionary
-GL.Lang.Ability = {}
+MK.Lang.Ability = {}
 
 -- Description Dictionary
-GL.Lang.Main = {}
-GL.Lang.Main.Descript = KBM.Language:Add("Muglak")
-GL.Lang.Main.Descript:SetFrench("Muglak")
-GL.Lang.Main.Descript:SetGerman("Muglak")
-GL.Descript = GL.Lang.Main.Descript[KBM.Lang]
+MK.Lang.Main = {}
+MK.Lang.Main.Descript = KBM.Language:Add("Muglak")
+MK.Lang.Main.Descript:SetFrench("Muglak")
+MK.Lang.Main.Descript:SetGerman("Muglak")
+MK.Descript = MK.Lang.Main.Descript[KBM.Lang]
 
-function GL:AddBosses(KBM_Boss)
+function MK:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Muglak.Name] = self.Muglak,
@@ -80,7 +80,7 @@ function GL:AddBosses(KBM_Boss)
 	KBM_Boss[self.Muglak.Name] = self.Muglak
 end
 
-function GL:InitVars()
+function MK:InitVars()
 	self.Settings = {
 		Enabled = true,
 		CastBar = self.Muglak.Settings.CastBar,
@@ -96,7 +96,7 @@ function GL:InitVars()
 	
 end
 
-function GL:SwapSettings(bool)
+function MK:SwapSettings(bool)
 
 	if bool then
 		KBMINDMK_Settings = self.Settings
@@ -108,7 +108,7 @@ function GL:SwapSettings(bool)
 
 end
 
-function GL:LoadVars()	
+function MK:LoadVars()	
 	if KBM.Options.Character then
 		KBM.LoadTable(chKBMINDMK_Settings, self.Settings)
 	else
@@ -122,7 +122,7 @@ function GL:LoadVars()
 	end	
 end
 
-function GL:SaveVars()	
+function MK:SaveVars()	
 	if KBM.Options.Character then
 		chKBMINDMK_Settings = self.Settings
 	else
@@ -130,10 +130,10 @@ function GL:SaveVars()
 	end	
 end
 
-function GL:Castbar(units)
+function MK:Castbar(units)
 end
 
-function GL:RemoveUnits(UnitID)
+function MK:RemoveUnits(UnitID)
 	if self.Muglak.UnitID == UnitID then
 		self.Muglak.Available = false
 		return true
@@ -141,7 +141,7 @@ function GL:RemoveUnits(UnitID)
 	return false
 end
 
-function GL:Death(UnitID)
+function MK:Death(UnitID)
 	if self.Muglak.UnitID == UnitID then
 		self.Muglak.Dead = true
 		self.Muglak.CastBar:Remove()
@@ -150,7 +150,7 @@ function GL:Death(UnitID)
 	return false
 end
 
-function GL:UnitHPCheck(unitDetails, unitID)	
+function MK:UnitHPCheck(unitDetails, unitID)	
 	if unitDetails and unitID then
 		if not unitDetails.player then
 			if self.Bosses[unitDetails.name] then
@@ -184,7 +184,7 @@ function GL:UnitHPCheck(unitDetails, unitID)
 	end
 end
 
-function GL:Reset()
+function MK:Reset()
 	self.EncounterRunning = false
 	for BossName, BossObj in pairs(self.Bosses) do
 		BossObj.Available = false
@@ -196,10 +196,10 @@ function GL:Reset()
 	self.PhaseObj:End(Inspect.Time.Real())
 end
 
-function GL:Timer()	
+function MK:Timer()	
 end
 
-function GL.Muglak:SetTimers(bool)	
+function MK.Muglak:SetTimers(bool)	
 	if bool then
 		for TimerID, TimerObj in pairs(self.TimersRef) do
 			TimerObj.Enabled = TimerObj.Settings.Enabled
@@ -211,7 +211,7 @@ function GL.Muglak:SetTimers(bool)
 	end
 end
 
-function GL.Muglak:SetAlerts(bool)
+function MK.Muglak:SetAlerts(bool)
 	if bool then
 		for AlertID, AlertObj in pairs(self.AlertsRef) do
 			AlertObj.Enabled = AlertObj.Settings.Enabled
@@ -223,11 +223,11 @@ function GL.Muglak:SetAlerts(bool)
 	end
 end
 
-function GL:DefineMenu()
+function MK:DefineMenu()
 	self.Menu = IND.Menu:CreateEncounter(self.Muglak, self.Enabled)
 end
 
-function GL:Start()
+function MK:Start()
 	-- Create Timers
 	-- KBM.Defaults.TimerObj.Assign(self.Muglak)
 	

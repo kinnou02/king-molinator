@@ -488,7 +488,9 @@ function AK:Death(UnitID)
 			return true
 		end
 	elseif self.Apostle.UnitList[UnitID] then
-		self.Apostle.UnitList[UnitID].CastBar:Remove()
+		if self.Apostle.UnitList[UnitID].CastBar then
+			self.Apostle.UnitList[UnitID].CastBar:Remove()
+		end
 		self.Apostle.UnitList[UnitID].Dead = true
 		self.Apostle.UnitList[UnitID].CastBar = nil
 	else
@@ -819,9 +821,9 @@ function AK:Start()
 	self.Akylios.Triggers.Breath = KBM.Trigger:Create(self.Lang.Ability.Breath[KBM.Lang], "channel", self.Akylios)
 	self.Akylios.Triggers.Breath:AddAlert(self.Akylios.AlertsRef.Breath)
 	-- Apostle of Jornaru
-	self.Apostle.Triggers.Storm = KBM.Trigger:Create(self.Lang.Ability.Storm[KBM.Lang], "cast", self.Apostle)
+	self.Apostle.Triggers.Storm = KBM.Trigger:Create(self.Lang.Ability.Storm[KBM.Lang], "personalCast", self.Apostle)
 	self.Apostle.Triggers.Storm:AddAlert(self.Apostle.AlertsRef.Storm)
-	self.Apostle.Triggers.StormInt = KBM.Trigger:Create(self.Lang.Ability.Storm[KBM.Lang], "interrupt", self.Apostle)
+	self.Apostle.Triggers.StormInt = KBM.Trigger:Create(self.Lang.Ability.Storm[KBM.Lang], "personalInterrupt", self.Apostle)
 	self.Apostle.Triggers.StormInt:AddStop(self.Apostle.AlertsRef.Storm)
 	
 	self.Jornaru.CastBar = KBM.CastBar:Add(self, self.Jornaru)

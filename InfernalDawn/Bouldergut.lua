@@ -120,9 +120,12 @@ function BG:LoadVars()
 	else
 		KBMINDBG_Settings = self.Settings
 	end	
+	
+	self.Settings.Enabled = true
 end
 
 function BG:SaveVars()	
+	self.Enabled = true
 	if KBM.Options.Character then
 		chKBMINDBG_Settings = self.Settings
 	else

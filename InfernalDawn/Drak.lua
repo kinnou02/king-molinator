@@ -38,6 +38,7 @@ WD.Drak = {
 	Castbar = nil,
 	TimersRef = {},
 	AlertsRef = {},
+	MechRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -45,11 +46,17 @@ WD.Drak = {
 			Enabled = true,
 			BlazingFirst = KBM.Defaults.TimerObj.Create("dark_green"),
 			Blazing = KBM.Defaults.TimerObj.Create("dark_green"),
+			Burning = KBM.Defaults.TimerObj.Create("cyan"),
 		},
 		AlertsRef = {
 			Enabled = true,
 			Blazing = KBM.Defaults.AlertObj.Create("dark_green"),
 			Will = KBM.Defaults.AlertObj.Create("purple"),
+			Burning = KBM.Defaults.AlertObj.Create("cyan"),
+		},
+		MechRef = {
+			Enabled = true,
+			Burning = KBM.Defaults.MechObj.Create("cyan"),
 		},
 	}
 }
@@ -100,13 +107,16 @@ WD.Lang.Ability.Torment:SetFrench("Tourment brûlant")
 WD.Lang.Ability.Torment:SetGerman("Sengende Pein")
 WD.Lang.Ability.Blow = KBM.Language:Add("Death Blow")
 WD.Lang.Ability.Blow:SetGerman("Tödlicher Schlag")
+WD.Lang.Ability.Blow:SetFrench("Frappe de la Mort")
 
 -- Ability Buff
 WD.Lang.Buff = {}
 WD.Lang.Buff.Sacrifice = KBM.Language:Add("Wanton Sacrifice")
 WD.Lang.Buff.Sacrifice:SetFrench("Sacrifice incandescent")
 WD.Lang.Buff.Sacrifice:SetGerman("Frevler%-Opfer")
+WD.Lang.Buff.Burning = KBM.Language:Add("Burning Sacrifice")
 WD.Lang.Buff.Will = KBM.Language:Add("Burning Will")
+WD.Lang.Buff.Will:SetFrench("Volonté brûlante")
 WD.Lang.Buff.Will:SetGerman("Brennender Wille")
 
 -- Menu Dictionary
@@ -276,6 +286,7 @@ function WD:InitVars()
 			CastBar = self.Drak.Settings.CastBar,
 			AlertsRef = self.Drak.Settings.AlertsRef,
 			TimersRef = self.Drak.Settings.TimersRef,
+			MechRef = self.Drak.Settings.MechRef,
 		},
 		Natung = {
 			CastBar = self.Natung.Settings.CastBar,
@@ -295,6 +306,7 @@ function WD:InitVars()
 		},
 		MechTimer = KBM.Defaults.MechTimer(),
 		Alerts = KBM.Defaults.Alerts(),
+		MechSpy = KBM.Defaults.MechSpy(),
 	}
 	KBMINDWD_Settings = self.Settings
 	chKBMINDWD_Settings = self.Settings
@@ -377,15 +389,21 @@ function WD:Death(UnitID)
 		self.PhaseFinal()
 	elseif self.Blazing.UnitID == UnitID then
 		KBM.Alert:Stop(self.Thrall.AlertsRef.Sacrifice)
+	elseif self.Stalwart.UnitList[UnitID] then
+		if self.Stalwart.UnitList[UnitID].CastBar then
+			self.Stalwart.UnitList[UnitID].CastBar:Remove()
+		end
+		self.Stalwart.UnitList[UnitID].Dead = true
+		self.Stalwart.UnitList[UnitID].CastBar = nil
 	end
 	return false
 end
 
-function WD:UnitHPCheck(unitDetails, unitID)	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if self.Bosses[unitDetails.name] then
-				local BossObj = self.Bosses[unitDetails.name]
+function WD:UnitHPCheck(uDetails, unitID)	
+	if uDetails and unitID then
+		if not uDetails.player then
+			if self.Bosses[uDetails.name] then
+				local BossObj = self.Bosses[uDetails.name]
 				if BossObj then
 					if not self.EncounterRunning then
 						self.EncounterRunning = true
@@ -416,14 +434,14 @@ function WD:UnitHPCheck(unitDetails, unitID)
 								SubBossObj = {
 									Mod = WD,
 									Level = "??",
-									Name = unitDetails.name,
+									Name = uDetails.name,
 									Dead = false,
 									Casting = false,
 									UnitID = unitID,
 									Available = true,
 								}
 								BossObj.UnitList[unitID] = SubBossObj
-								if unitDetails.name == self.Stalwart.Name then
+								if uDetails.name == self.Stalwart.Name then
 									SubBossObj.CastBar = KBM.CastBar:Add(self, self.Stalwart, false, true)
 									SubBossObj.CastBar:Create(unitID)
 								end
@@ -477,6 +495,7 @@ function WD:Start()
 	self.Drak.TimersRef.BlazingFirst = KBM.MechTimer:Add(self.Lang.Unit.Blazing[KBM.Lang], 30)
 	self.Drak.TimersRef.BlazingFirst.MenuName = self.Lang.Menu.BlazingFirst[KBM.Lang]
 	self.Drak.TimersRef.Blazing = KBM.MechTimer:Add(self.Lang.Unit.Blazing[KBM.Lang], 45)
+	self.Drak.TimersRef.Burning = KBM.MechTimer:Add(self.Lang.Buff.Burning[KBM.Lang], 45)
 	KBM.Defaults.TimerObj.Assign(self.Drak)
 	-- Azul
 	self.Azul.TimersRef.Molten = KBM.MechTimer:Add(self.Lang.Ability.Molten[KBM.Lang], 25)
@@ -491,6 +510,8 @@ function WD:Start()
 	-- Drak
 	self.Drak.AlertsRef.Blazing = KBM.Alert:Create(self.Lang.Unit.Blazing[KBM.Lang], 2, true, true, "dark_green")
 	self.Drak.AlertsRef.Will = KBM.Alert:Create(self.Lang.Buff.Will[KBM.Lang], nil, false, true, "purple")
+	self.Drak.AlertsRef.Burning = KBM.Alert:Create(self.Lang.Buff.Burning[KBM.Lang], nil, false, false, "cyan")
+	self.Drak.AlertsRef.Burning:Important()
 	KBM.Defaults.AlertObj.Assign(self.Drak)
 	-- Azul
 	self.Azul.AlertsRef.Molten = KBM.Alert:Create(self.Lang.Ability.Molten[KBM.Lang], nil, true, true, "orange")
@@ -507,6 +528,11 @@ function WD:Start()
 	self.Stalwart.AlertsRef.Blow = KBM.Alert:Create(self.Lang.Ability.Blow[KBM.Lang], nil, false, true, "yellow")
 	KBM.Defaults.AlertObj.Assign(self.Stalwart)
 	
+	-- Create Spies
+	-- Drak
+	self.Drak.MechRef.Burning = KBM.MechSpy:Add(self.Lang.Buff.Burning[KBM.Lang], nil, "playerBuff", self.Drak)
+	KBM.Defaults.MechObj.Assign(self.Drak)
+	
 	-- Assign Alerts and Timers to Triggers
 	self.Azul.Triggers.Molten = KBM.Trigger:Create(self.Lang.Ability.Molten[KBM.Lang], "cast", self.Azul)
 	self.Azul.Triggers.Molten:AddAlert(self.Azul.AlertsRef.Molten)
@@ -522,6 +548,13 @@ function WD:Start()
 	self.Drak.Triggers.Will:AddAlert(self.Drak.AlertsRef.Will)
 	self.Drak.Triggers.WillRemove = KBM.Trigger:Create(self.Lang.Buff.Will[KBM.Lang], "buffRemove", self.Drak)
 	self.Drak.Triggers.WillRemove:AddStop(self.Drak.AlertsRef.Will)
+	self.Drak.Triggers.Burning = KBM.Trigger:Create(self.Lang.Buff.Burning[KBM.Lang], "cast", self.Drak)
+	self.Drak.Triggers.Burning:AddTimer(self.Drak.TimersRef.Burning)
+	self.Drak.Triggers.BurningDebuff = KBM.Trigger:Create(self.Lang.Buff.Burning[KBM.Lang], "playerBuff", self.Drak)
+	self.Drak.Triggers.BurningDebuff:AddAlert(self.Drak.AlertsRef.Burning, true)
+	self.Drak.Triggers.BurningDebuff:AddSpy(self.Drak.MechRef.Burning)
+	self.Drak.Triggers.BurningRemove = KBM.Trigger:Create(self.Lang.Buff.Burning[KBM.Lang], "playerBuffRemove", self.Drak)
+	self.Drak.Triggers.BurningRemove:AddStop(self.Drak.AlertsRef.Burning)
 	self.Thrall.Triggers.Sacrifice = KBM.Trigger:Create(self.Lang.Buff.Sacrifice[KBM.Lang], "buff", self.Thrall)
 	self.Thrall.Triggers.Sacrifice:AddAlert(self.Thrall.AlertsRef.Sacrifice)
 	self.Stalwart.Triggers.Blow = KBM.Trigger:Create(self.Lang.Ability.Blow[KBM.Lang], "personalCast", self.Stalwart)
