@@ -35,19 +35,19 @@ GL.Gorlach = {
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
-	-- TimersRef = {},
-	-- AlertsRef = {},
+	TimersRef = {},
+	AlertsRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		-- TimersRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
-		-- },
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
-		-- },
+		TimersRef = {
+			Enabled = true,
+			Fire = KBM.Defaults.TimerObj.Create("red"),
+		},
+		AlertsRef = {
+			Enabled = true,
+			Hot = KBM.Defaults.AlertObj.Create("purple"),
+		},
 	}
 }
 
@@ -64,6 +64,12 @@ GL.Lang.Unit.GorlachShort:SetGerman()
 
 -- Ability Dictionary
 GL.Lang.Ability = {}
+
+-- Debuff Dictionary
+GL.Lang.Debuff = {}
+GL.Lang.Debuff.Hot = KBM.Language:Add("Hot Foot")
+GL.Lang.Debuff.Fire = KBM.Language:Add("Fire Infusion")
+GL.Lang.Debuff.Flame = KBM.Language:Add("Flame Catapult")
 
 -- Description Dictionary
 GL.Lang.Main = {}
@@ -86,10 +92,10 @@ function GL:InitVars()
 		CastBar = self.Gorlach.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
-		-- MechTimer = KBM.Defaults.MechTimer(),
-		-- Alerts = KBM.Defaults.Alerts(),
-		-- TimersRef = self.Gorlach.Settings.TimersRef,
-		-- AlertsRef = self.Gorlach.Settings.AlertsRef,
+		MechTimer = KBM.Defaults.MechTimer(),
+		Alerts = KBM.Defaults.Alerts(),
+		TimersRef = self.Gorlach.Settings.TimersRef,
+		AlertsRef = self.Gorlach.Settings.AlertsRef,
 	}
 	KBMINDGL_Settings = self.Settings
 	chKBMINDGL_Settings = self.Settings
@@ -150,11 +156,11 @@ function GL:Death(UnitID)
 	return false
 end
 
-function GL:UnitHPCheck(unitDetails, unitID)	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if self.Bosses[unitDetails.name] then
-				local BossObj = self.Bosses[unitDetails.name]
+function GL:UnitHPCheck(uDetails, unitID)	
+	if uDetails and unitID then
+		if not uDetails.player then
+			if self.Bosses[uDetails.name] then
+				local BossObj = self.Bosses[uDetails.name]
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
@@ -168,6 +174,7 @@ function GL:UnitHPCheck(unitDetails, unitID)
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase("1")
 					self.PhaseObj.Objectives:AddPercent(self.Gorlach.Name, 0, 100)
+					KBM.TankSwap:Start(self.Lang.Debuff.Fire[KBM.Lang], unitID)
 					self.Phase = 1
 				else
 					BossObj.Dead = false
@@ -192,35 +199,11 @@ function GL:Reset()
 		BossObj.Dead = false
 		BossObj.Casting = false
 	end
-	self.Gorlach.CastBar:Remove()	
+	self.Gorlach.CastBar:Remove()
 	self.PhaseObj:End(Inspect.Time.Real())
 end
 
 function GL:Timer()	
-end
-
-function GL.Gorlach:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function GL.Gorlach:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
 end
 
 function GL:DefineMenu()
@@ -229,12 +212,18 @@ end
 
 function GL:Start()
 	-- Create Timers
-	-- KBM.Defaults.TimerObj.Assign(self.Gorlach)
+	self.Gorlach.TimersRef.Fire = KBM.MechTimer:Add(self.Lang.Debuff.Fire[KBM.Lang], 10)
+	KBM.Defaults.TimerObj.Assign(self.Gorlach)
 	
 	-- Create Alerts
-	-- KBM.Defaults.AlertObj.Assign(self.Gorlach)
+	self.Gorlach.AlertsRef.Hot = KBM.Alert:Create(self.Lang.Debuff.Hot[KBM.Lang], nil, true, true, "purple")
+	KBM.Defaults.AlertObj.Assign(self.Gorlach)
 	
 	-- Assign Alerts and Timers to Triggers
+	self.Gorlach.Triggers.Hot = KBM.Trigger:Create(self.Lang.Debuff.Hot[KBM.Lang], "playerDebuff", self.Gorlach)
+	self.Gorlach.Triggers.Hot:AddAlert(self.Gorlach.AlertsRef.Hot, true)
+	self.Gorlach.Triggers.Fire = KBM.Trigger:Create(self.Lang.Debuff.Fire[KBM.Lang], "playerDebuff", self.Gorlach)
+	self.Gorlach.Triggers.Fire:AddTimer(self.Gorlach.TimersRef.Fire)
 	
 	self.Gorlach.CastBar = KBM.CastBar:Add(self, self.Gorlach)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

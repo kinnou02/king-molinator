@@ -46,17 +46,17 @@ WD.Drak = {
 			Enabled = true,
 			BlazingFirst = KBM.Defaults.TimerObj.Create("dark_green"),
 			Blazing = KBM.Defaults.TimerObj.Create("dark_green"),
-			Burning = KBM.Defaults.TimerObj.Create("cyan"),
+			Burning = KBM.Defaults.TimerObj.Create("purple"),
 		},
 		AlertsRef = {
 			Enabled = true,
 			Blazing = KBM.Defaults.AlertObj.Create("dark_green"),
-			Will = KBM.Defaults.AlertObj.Create("purple"),
-			Burning = KBM.Defaults.AlertObj.Create("cyan"),
+			Will = KBM.Defaults.AlertObj.Create("orange"),
+			Burning = KBM.Defaults.AlertObj.Create("purple"),
 		},
 		MechRef = {
 			Enabled = true,
-			Burning = KBM.Defaults.MechObj.Create("cyan"),
+			Burning = KBM.Defaults.MechObj.Create("purple"),
 		},
 	}
 }
@@ -69,27 +69,38 @@ WD.Lang.Unit.Drak = KBM.Language:Add(WD.Drak.Name)
 WD.Lang.Unit.Drak:SetFrench("Chef de guerre Drak")
 WD.Lang.Unit.Drak:SetGerman("Kriegsboss Drak")
 WD.Lang.Unit.DrakShort = KBM.Language:Add("Drak")
+WD.Lang.Unit.DrakShort:SetGerman()
+WD.Lang.Unit.DrakShort:SetFrench()
 WD.Lang.Unit.Azul = KBM.Language:Add("Azul Searbone")
 WD.Lang.Unit.Azul:SetFrench("Azul Flambos")
 WD.Lang.Unit.Azul:SetGerman("Azul Sengknochen")
 WD.Lang.Unit.AzShort = KBM.Language:Add("Azul")
+WD.Lang.Unit.AzShort:SetFrench()
+WD.Lang.Unit.AzShort:SetGerman()
 WD.Lang.Unit.Stalwart = KBM.Language:Add("Warforged Stalwart")
 WD.Lang.Unit.Stalwart:SetFrench("Fidèle des Forges de guerre")
 WD.Lang.Unit.Stalwart:SetGerman("Kriegsgeschmiedeter Getreuer")
 WD.Lang.Unit.StShort = KBM.Language:Add("Stalwart")
+WD.Lang.Unit.StShort:SetGerman("Getreuer")
+WD.Lang.Unit.StShort:SetFrench("Fidèle")
 WD.Lang.Unit.Natung = KBM.Language:Add("Natung Charstorm")
 WD.Lang.Unit.Natung:SetFrench("Natung Charstorm")
 WD.Lang.Unit.Natung:SetGerman("Natung Schwärzsturm")
 WD.Lang.Unit.NatShort = KBM.Language:Add("Natung")
+WD.Lang.Unit.NatShort:SetGerman()
+WD.Lang.Unit.NatShort:SetFrench()
 WD.Lang.Unit.Blazing = KBM.Language:Add("Blazing Thrall")
 WD.Lang.Unit.Blazing:SetFrench("Serf flamboyant")
 WD.Lang.Unit.Blazing:SetGerman("Flammender Knecht")
 WD.Lang.Unit.BlaShort = KBM.Language:Add("B.Thrall")
+WD.Lang.Unit.BlaShort:SetGerman("F.Knecht")
+WD.Lang.Unit.BlaShort:SetFrench("Serf.Fl")
 WD.Lang.Unit.Thrall = KBM.Language:Add("Warforged Thrall")
 WD.Lang.Unit.Thrall:SetGerman("Kriegsgeschmiedeter Knecht")
 WD.Lang.Unit.Thrall:SetFrench("Serf des Forges de guerre")
 WD.Lang.Unit.ThrShort = KBM.Language:Add("W.Thrall")
 WD.Lang.Unit.ThrShort:SetFrench("Serf.F")
+WD.Lang.Unit.ThrShort:SetGerman("K.Knecht")
 
 -- Notify Dictionary
 WD.Lang.Notify = {}
@@ -115,6 +126,8 @@ WD.Lang.Buff.Sacrifice = KBM.Language:Add("Wanton Sacrifice")
 WD.Lang.Buff.Sacrifice:SetFrench("Sacrifice incandescent")
 WD.Lang.Buff.Sacrifice:SetGerman("Frevler%-Opfer")
 WD.Lang.Buff.Burning = KBM.Language:Add("Burning Sacrifice")
+WD.Lang.Buff.Burning:SetGerman("Brennendes Opfer")
+WD.Lang.Buff.Burning:SetFrench("Sacrifice incandescent")
 WD.Lang.Buff.Will = KBM.Language:Add("Burning Will")
 WD.Lang.Buff.Will:SetFrench("Volonté brûlante")
 WD.Lang.Buff.Will:SetGerman("Brennender Wille")
@@ -509,8 +522,8 @@ function WD:Start()
 	-- Create Alerts
 	-- Drak
 	self.Drak.AlertsRef.Blazing = KBM.Alert:Create(self.Lang.Unit.Blazing[KBM.Lang], 2, true, true, "dark_green")
-	self.Drak.AlertsRef.Will = KBM.Alert:Create(self.Lang.Buff.Will[KBM.Lang], nil, false, true, "purple")
-	self.Drak.AlertsRef.Burning = KBM.Alert:Create(self.Lang.Buff.Burning[KBM.Lang], nil, false, false, "cyan")
+	self.Drak.AlertsRef.Will = KBM.Alert:Create(self.Lang.Buff.Will[KBM.Lang], nil, false, true, "orange")
+	self.Drak.AlertsRef.Burning = KBM.Alert:Create(self.Lang.Buff.Burning[KBM.Lang], nil, false, false, "purple")
 	self.Drak.AlertsRef.Burning:Important()
 	KBM.Defaults.AlertObj.Assign(self.Drak)
 	-- Azul

@@ -68,6 +68,7 @@ HG.Lang.Unit.Gaurath:SetGerman("Herold Gaurath")
 HG.Lang.Unit.Gaurath:SetFrench("Héraut Gaurath")
 HG.Lang.Unit.Gaurath:SetRussian("Глашатай Гораф")
 HG.Lang.Unit.Defiler = KBM.Language:Add("Ancient Defiler")
+HG.Lang.Unit.Defiler:SetFrench("Profanateur ancien ")
 
 -- Ability Dictionary
 HG.Lang.Ability = {}

@@ -21,6 +21,7 @@ local IZ = {
 	Lang = {},
 	ID = "Ituziel",
 	Object = "IZ",
+	Enrage = (60 * 5) + 35,
 }
 
 IZ.Ituziel = {

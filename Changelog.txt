@@ -27,12 +27,18 @@ Infernal Dawn
 ** New: Added Personal Alert for Burning Sacrifice.
 ** New: Added global timer for Burning Sacrifice.
 ** New: Added Mechanic Spy object for Burning Sacrifice.
+** New: Added a 12.5 minute enrage timer.
 ** Change: Trigger for Wanton Sacrifice changed from Blazing Thrall to Warforged Thrall.
 * The Ember Conclave
 ** New: Each boss now has an adjustable castbar. (This will mean you'll need to set these up once)
 ** Fixed: The encounter will now only credit completion when all three bosses are dead, not just Szath.
 ** Fixed: Error on Encounter start for Nahoth.
 ** Fixed: Ereetu was forgetting where he is and triggering this encounter in FoLH.
+* Gorlach
+** New: Added personal alert for Hot Foot.
+** New: Added Tank-Swap for Fire Infusion.
+* Ituziel
+** New: Added a 5:35 enrage timer.
 
 Hammerknell Fortress
 * Soulrender Zilas
