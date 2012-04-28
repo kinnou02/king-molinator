@@ -38,7 +38,12 @@ Infernal Dawn
 ** New: Added personal alert for Hot Foot.
 ** New: Added Tank-Swap for Fire Infusion.
 * Ituziel
+** New: This encounter now triggers and has Records enabled.
 ** New: Added a 5:35 enrage timer.
+** New: Added alternating timer for Brimstone.
+** New: Added alert for Brimstone.
+** New: Added timer and alert for Word of Incineration.
+** New: Added Tank-Swap for Incinerating Curse.
 
 Hammerknell Fortress
 * Soulrender Zilas

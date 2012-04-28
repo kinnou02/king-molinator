@@ -44,6 +44,7 @@ IZ.Ituziel = {
 		TimersRef = {
 			Enabled = true,
 			Word = KBM.Defaults.TimerObj.Create("red"),
+			Brimstone = KBM.Defaults.TimerObj.Create("purple"),
 		},
 		AlertsRef = {
 			Enabled = true,
@@ -168,6 +169,7 @@ function IZ:UnitHPCheck(unitDetails, unitID)
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase("Single")
 					self.PhaseObj.Objectives:AddPercent(self.Ituziel.Name, 0, 100)
+					self.CurrentBrimstone = 12
 					KBM.TankSwap:Start(self.Lang.Debuff.Curse[KBM.Lang], unitID)
 					self.Phase = 1
 				end
@@ -187,6 +189,16 @@ function IZ:Reset()
 	self.PhaseObj:End(Inspect.Time.Real())
 end
 
+function IZ.BrimstoneChange()
+	if IZ.CurrentBrimstone == 14 then
+		IZ.CurrentBrimstone = 12
+		KBM.MechTimer:AddStart(IZ.Ituziel.TimersRef.Brimstone, 12)
+	else
+		IZ.CurrentBrimstone = 14
+		KBM.MechTimer:AddStart(IZ.Ituziel.TimersRef.Brimstone, 14)
+	end
+end
+
 function IZ:Timer()	
 end
 
@@ -196,7 +208,8 @@ end
 
 function IZ:Start()
 	-- Create Timers
-	self.Ituziel.TimersRef.Word = KBM.MechTimer:Add(self.Lang.Ability.Word[KBM.Lang], 28)
+	self.Ituziel.TimersRef.Word = KBM.MechTimer:Add(self.Lang.Ability.Word[KBM.Lang], 26)
+	self.Ituziel.TimersRef.Brimstone = KBM.MechTimer:Add(self.Lang.Buff.Brimstone[KBM.Lang], nil)
 	KBM.Defaults.TimerObj.Assign(self.Ituziel)
 	
 	-- Create Alerts
@@ -210,6 +223,7 @@ function IZ:Start()
 	self.Ituziel.Triggers.Word:AddTimer(self.Ituziel.TimersRef.Word)
 	self.Ituziel.Triggers.Brimstone = KBM.Trigger:Create(self.Lang.Buff.Brimstone[KBM.Lang], "buff", self.Ituziel)
 	self.Ituziel.Triggers.Brimstone:AddAlert(self.Ituziel.AlertsRef.Brimstone)
+	self.Ituziel.Triggers.Brimstone:AddPhase(self.BrimstoneChange)
 	self.Ituziel.Triggers.BrimRemove = KBM.Trigger:Create(self.Lang.Buff.Brimstone[KBM.Lang], "buffRemove", self.Ituziel)
 	self.Ituziel.Triggers.BrimRemove:AddStop(self.Ituziel.AlertsRef.Brimstone)
 	
