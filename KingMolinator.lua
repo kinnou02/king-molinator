@@ -3976,6 +3976,7 @@ function KBM.Unit:Create(uDetails, UnitID)
 					self:SetGroup("NPC")
 					self.Player = false
 				end
+				self.Offline = uDetails.offline
 				self.Details = uDetails
 				self.HealthMax = uDetails.healthMax
 				self.Health = uDetails.health
@@ -5414,7 +5415,9 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 		
 		if self.Settings.Enabled then
 			if KBM.MainWin:GetVisible() then
-				self.GUI.Frame:SetVisible(self.Settings.Visible)
+				if not self.Dynamic then
+					self.GUI.Frame:SetVisible(self.Settings.Visible)
+				end
 			else
 				self.GUI.Frame:SetVisible(false)
 			end
@@ -5422,7 +5425,9 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 		
 		if not self.Settings.Pinned then
 			if KBM.MainWin:GetVisible() then
-				self.GUI.Drag:SetVisible(self.Settings.Unlocked)
+				if not self.Dynamic then
+					self.GUI.Drag:SetVisible(self.Settings.Unlocked)
+				end
 			else
 				self.GUI.Drag:SetVisible(false)
 			end
@@ -6901,6 +6906,14 @@ function KBM.MarkChange(data)
 	end
 end
 
+function KBM.Offline(data)
+	for UnitID, Value in pairs(data) do
+		if KBM.Unit.List.UID[UnitID] then
+			KBM.Unit.List.UID[UnitID].Offline = Value
+		end
+	end	
+end
+
 -- Define KBM Custom Event System
 -- Unit Related
 KBM.Event.Mark, KBM.Event.Mark.EventTable = Utility.Event.Create("KingMolinator", "Mark")
@@ -6973,6 +6986,7 @@ local function KBM_Start()
 	table.insert(Event.Unit.Detail.Name, {KBM.NameChange, "KingMolinator", "Name Update"})
 	table.insert(Event.Unit.Detail.HealthMax, {KBM.HealthMaxChange, "KingMolinator", "Health Max Update"})
 	table.insert(Event.Unit.Detail.Mark, {KBM.MarkChange, "KingMolinator", "Mark Change Update"})
+	table.insert(Event.Unit.Detail.Offline, {KBM.Offline, "KingMolinator", "Offline Status Change"})
 	table.insert(Event.System.Update.Begin, {function () KBM:Timer() end, "KingMolinator", "System Update"}) 
 	table.insert(Event.SafesRaidManager.Combat.Death, {KBM_Death, "KingMolinator", "Combat Death"})
 	table.insert(Event.SafesRaidManager.Combat.Enter, {KBM.CombatEnter, "KingMolinator", "Non raid combat enter"})
