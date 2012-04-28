@@ -36,19 +36,20 @@ IZ.Ituziel = {
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
-	-- TimersRef = {},
-	-- AlertsRef = {},
+	TimersRef = {},
+	AlertsRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		-- TimersRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
-		-- },
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
-		-- },
+		TimersRef = {
+			Enabled = true,
+			Word = KBM.Defaults.TimerObj.Create("red"),
+		},
+		AlertsRef = {
+			Enabled = true,
+			Word = KBM.Defaults.AlertObj.Create("red"),
+			Brimstone = KBM.Defaults.AlertObj.Create("purple"),
+		},
 	}
 }
 
@@ -62,6 +63,15 @@ IZ.Lang.Unit.Ituziel:SetGerman()
 
 -- Ability Dictionary
 IZ.Lang.Ability = {}
+IZ.Lang.Ability.Word = KBM.Language:Add("Word of Incineration")
+
+-- Buff Dictionary
+IZ.Lang.Buff = {}
+IZ.Lang.Buff.Brimstone = KBM.Language:Add("Brimstone")
+
+-- Debuff Dictionary
+IZ.Lang.Debuff = {}
+IZ.Lang.Debuff.Curse = KBM.Language:Add("Incinerating Curse")
 
 IZ.Ituziel.Name = IZ.Lang.Unit.Ituziel[KBM.Lang]
 IZ.Descript = IZ.Ituziel.Name
@@ -71,7 +81,7 @@ function IZ:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Ituziel.Name] = self.Ituziel,
 	}
-	KBM_Boss[self.Ituziel.Name] = self.Ituzial
+	KBM_Boss[self.Ituziel.Name] = self.Ituziel
 end
 
 function IZ:InitVars()
@@ -80,10 +90,10 @@ function IZ:InitVars()
 		CastBar = self.Ituziel.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
-		-- MechTimer = KBM.Defaults.MechTimer(),
-		-- Alerts = KBM.Defaults.Alerts(),
-		-- TimersRef = self.Ituziel.Settings.TimersRef,
-		-- AlertsRef = self.Ituziel.Settings.AlertsRef,
+		MechTimer = KBM.Defaults.MechTimer(),
+		Alerts = KBM.Defaults.Alerts(),
+		TimersRef = self.Ituziel.Settings.TimersRef,
+		AlertsRef = self.Ituziel.Settings.AlertsRef,
 	}
 	KBMINDIZ_Settings = self.Settings
 	chKBMINDIZ_Settings = self.Settings
@@ -158,6 +168,7 @@ function IZ:UnitHPCheck(unitDetails, unitID)
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase("Single")
 					self.PhaseObj.Objectives:AddPercent(self.Ituziel.Name, 0, 100)
+					KBM.TankSwap:Start(self.Lang.Debuff.Curse[KBM.Lang], unitID)
 					self.Phase = 1
 				end
 				self.Ituziel.UnitID = unitID
@@ -179,42 +190,28 @@ end
 function IZ:Timer()	
 end
 
-function IZ.Ituziel:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function IZ.Ituziel:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
-end
-
 function IZ:DefineMenu()
 	self.Menu = IND.Menu:CreateEncounter(self.Ituziel, self.Enabled)
 end
 
 function IZ:Start()
 	-- Create Timers
-	-- KBM.Defaults.TimerObj.Assign(self.Ituziel)
+	self.Ituziel.TimersRef.Word = KBM.MechTimer:Add(self.Lang.Ability.Word[KBM.Lang], 28)
+	KBM.Defaults.TimerObj.Assign(self.Ituziel)
 	
 	-- Create Alerts
-	-- KBM.Defaults.AlertObj.Assign(self.Ituziel)
+	self.Ituziel.AlertsRef.Word = KBM.Alert:Create(self.Lang.Ability.Word[KBM.Lang], nil, false, true, "red")
+	self.Ituziel.AlertsRef.Brimstone = KBM.Alert:Create(self.Lang.Buff.Brimstone[KBM.Lang], nil, false, true, "purple")
+	KBM.Defaults.AlertObj.Assign(self.Ituziel)
 	
 	-- Assign Alerts and Timers to Triggers
+	self.Ituziel.Triggers.Word = KBM.Trigger:Create(self.Lang.Ability.Word[KBM.Lang], "cast", self.Ituziel)
+	self.Ituziel.Triggers.Word:AddAlert(self.Ituziel.AlertsRef.Word)
+	self.Ituziel.Triggers.Word:AddTimer(self.Ituziel.TimersRef.Word)
+	self.Ituziel.Triggers.Brimstone = KBM.Trigger:Create(self.Lang.Buff.Brimstone[KBM.Lang], "buff", self.Ituziel)
+	self.Ituziel.Triggers.Brimstone:AddAlert(self.Ituziel.AlertsRef.Brimstone)
+	self.Ituziel.Triggers.BrimRemove = KBM.Trigger:Create(self.Lang.Buff.Brimstone[KBM.Lang], "buffRemove", self.Ituziel)
+	self.Ituziel.Triggers.BrimRemove:AddStop(self.Ituziel.AlertsRef.Brimstone)
 	
 	self.Ituziel.CastBar = KBM.CastBar:Add(self, self.Ituziel)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
