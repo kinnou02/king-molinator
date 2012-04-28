@@ -69,6 +69,7 @@ HG.Lang.Unit.Gaurath:SetFrench("Héraut Gaurath")
 HG.Lang.Unit.Gaurath:SetRussian("Глашатай Гораф")
 HG.Lang.Unit.Defiler = KBM.Language:Add("Ancient Defiler")
 HG.Lang.Unit.Defiler:SetFrench("Profanateur ancien ")
+HG.Lang.Unit.Defiler:SetGerman("Alter Schänder")
 
 -- Ability Dictionary
 HG.Lang.Ability = {}
@@ -85,6 +86,7 @@ HG.Lang.Ability.Tidings:SetGerman("Leidvolle Kunde")
 HG.Lang.Ability.Tidings:SetFrench("Nouvelles du Malheur")
 HG.Lang.Ability.Tidings:SetRussian("Плохие известия")
 HG.Lang.Ability.Storm = KBM.Language:Add("Defiling Storm")
+HG.Lang.Ability.Storm:SetGerman("Schändender Sturm")
 
 -- Verbose Dictionary
 HG.Lang.Verbose = {}

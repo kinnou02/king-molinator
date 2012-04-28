@@ -37,6 +37,7 @@ GL.Gorlach = {
 	Castbar = nil,
 	TimersRef = {},
 	AlertsRef = {},
+	MechRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -47,6 +48,10 @@ GL.Gorlach = {
 		AlertsRef = {
 			Enabled = true,
 			Hot = KBM.Defaults.AlertObj.Create("purple"),
+		},
+		MechRef = {
+			Enabled = true,
+			Hot = KBM.Defaults.MechObj.Create("purple"),
 		},
 	}
 }
@@ -68,8 +73,11 @@ GL.Lang.Ability = {}
 -- Debuff Dictionary
 GL.Lang.Debuff = {}
 GL.Lang.Debuff.Hot = KBM.Language:Add("Hot Foot")
+GL.Lang.Debuff.Hot:SetGerman("Heißfuß")
 GL.Lang.Debuff.Fire = KBM.Language:Add("Fire Infusion")
+GL.Lang.Debuff.Fire:SetGerman("Feuer-Infusion")
 GL.Lang.Debuff.Flame = KBM.Language:Add("Flame Catapult")
+GL.Lang.Debuff.Flame:SetGerman("Flammenkatapult")
 
 -- Description Dictionary
 GL.Lang.Main = {}
@@ -96,6 +104,8 @@ function GL:InitVars()
 		Alerts = KBM.Defaults.Alerts(),
 		TimersRef = self.Gorlach.Settings.TimersRef,
 		AlertsRef = self.Gorlach.Settings.AlertsRef,
+		MechRef = self.Gorlach.Settings.MechRef,
+		MechSpy = KBM.Defaults.MechSpy(),
 	}
 	KBMINDGL_Settings = self.Settings
 	chKBMINDGL_Settings = self.Settings
@@ -219,9 +229,14 @@ function GL:Start()
 	self.Gorlach.AlertsRef.Hot = KBM.Alert:Create(self.Lang.Debuff.Hot[KBM.Lang], nil, true, true, "purple")
 	KBM.Defaults.AlertObj.Assign(self.Gorlach)
 	
+	-- Create Spies
+	self.Gorlach.MechRef.Hot = KBM.MechSpy:Add(self.Lang.Debuff.Hot[KBM.Lang], nil, "playerDebuff", self.Gorlach)
+	KBM.Defaults.MechObj.Assign(self.Gorlach)
+	
 	-- Assign Alerts and Timers to Triggers
 	self.Gorlach.Triggers.Hot = KBM.Trigger:Create(self.Lang.Debuff.Hot[KBM.Lang], "playerDebuff", self.Gorlach)
 	self.Gorlach.Triggers.Hot:AddAlert(self.Gorlach.AlertsRef.Hot, true)
+	self.Gorlach.Triggers.Hot:AddSpy(self.Gorlach.MechRef.Hot)
 	self.Gorlach.Triggers.Fire = KBM.Trigger:Create(self.Lang.Debuff.Fire[KBM.Lang], "playerDebuff", self.Gorlach)
 	self.Gorlach.Triggers.Fire:AddTimer(self.Gorlach.TimersRef.Fire)
 	

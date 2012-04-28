@@ -36,6 +36,7 @@ Infernal Dawn
 ** Fixed: Ereetu was forgetting where he is and triggering this encounter in FoLH.
 * Gorlach
 ** New: Added personal alert for Hot Foot.
+** New: Added Mechanic Spy for Hot Foot.
 ** New: Added Tank-Swap for Fire Infusion.
 * Ituziel
 ** New: This encounter now triggers and has Records enabled.
