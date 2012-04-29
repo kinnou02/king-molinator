@@ -3386,9 +3386,12 @@ function KBM.MobDamage(info)
 		local UnitObj = nil
 		if cUnitID then
 			cDetails = Inspect.Unit.Detail(cUnitID)
-		end		if tUnitID then
+		end	
+		if tUnitID then
 			UnitObj = KBM.Unit:Update(tDetails, tUnitID)
-			UnitObj:DamageHandler(info)
+			if UnitObj then
+				UnitObj:DamageHandler(info)
+			end
 		end
 		if cUnitID then
 			KBM.Unit:Update(cDetails, cUnitID)
@@ -3526,7 +3529,9 @@ function KBM.MobHeal(info)
 	end
 	if tUnitID then
 		UnitObj = KBM.Unit:Update(tDetails, tUnitID)
-		UnitObj:HealHandler(info)
+		if UnitObj then
+			UnitObj:HealHandler(info)
+		end
 	end
 	if cUnitID then
 		KBM.Unit:Update(cDetails, cUnitID)
@@ -3547,7 +3552,9 @@ function KBM.RaidDamage(info)
 		if tUnitID then
 		--	print("KBM.RaidDamage() ---> Calling KBM.Unit:Add() -- "..tostring(tUnitID))
 			UnitObj = KBM.Unit:Update(tDetails, tUnitID)
-			UnitObj:DamageHandler(info)
+			if UnitObj then
+				UnitObj:DamageHandler(info)
+			end
 		end
 		if cUnitID then
 		--	print("KBM.RaidDamage() ---> Calling KBM.Unit:Add() -- "..tostring(cUnitID))
@@ -3690,7 +3697,9 @@ function KBM.RaidHeal(info)
 	end
 	if tUnitID then
 		UnitObj = KBM.Unit:Update(tDetails, tUnitID)
-		UnitObj:HealHandler(info)
+		if UnitObj then
+			UnitObj:HealHandler(info)
+		end
 	end
 	if cUnitID then
 		KBM.Unit:Update(cDetails, cUnitID)
@@ -3843,6 +3852,22 @@ function KBM.Unit:Create(uDetails, UnitID)
 			UsedBy = {},
 			Type = "Unit",
 		}
+		function UnitObj:UpdateIdle(mode)
+			if self.Time then
+				if KBM.Unit.UIDs.Flush[self.Time][self.UnitID] then
+					KBM.Unit.UIDs.Flush[self.Time][self.UnitID] = nil
+				end
+				self.Time = nil
+			end
+			if not mode then
+				local Number = math.ceil(Inspect.Time.Real() / 60) + 1
+				self.Time = Number
+				if not KBM.Unit.UIDs.Flush[Number] then
+					KBM.Unit.UIDs.Flush[Number] = {}
+				end
+				KBM.Unit.UIDs.Flush[Number][UnitID] = self
+			end
+		end
 		function UnitObj:Update(NewHP, uDetails)
 			self:CheckTarget()
 			if self.Loaded then
@@ -3882,13 +3907,19 @@ function KBM.Unit:Create(uDetails, UnitID)
 		end
 		function UnitObj:DamageHandler(DamageObj)
 			if self.Loaded then
-				local uDetails = Inspect.Unit.Detail(self.UnitID)
-				if uDetails then
-					if uDetails.healthMax then
-						self.HealthMax = uDetails.healthMax
+				if self.Available == true then
+					local uDetails = Inspect.Unit.Detail(self.UnitID)
+					if uDetails ~= nil then
+						if uDetails.healthMax then
+							self.HealthMax = uDetails.healthMax
+						end
+						if uDetails.health then
+							self:Update(uDetails.health)
+							return
+						end
 					end
-					self:Update(uDetails.health or 0)
-				elseif self.Health then
+				end
+				if self.Health then
 					if self.HealthMax then
 						if DamageObj.damage then
 							self.Health = self.Health - DamageObj.damage
@@ -3913,13 +3944,19 @@ function KBM.Unit:Create(uDetails, UnitID)
 		end
 		function UnitObj:HealHandler(HealObj)
 			if self.Loaded then
-				local uDetails = Inspect.Unit.Detail(self.UnitID)
-				if uDetails then
-					if uDetails.healthMax then
-						self.HealthMax = uDetails.healthMax
+				if self.Available == true then
+					local uDetails = Inspect.Unit.Detail(self.UnitID)
+					if uDetails ~= nil or self.Available ~= false then
+						if uDetails.healthMax then
+							self.HealthMax = uDetails.healthMax
+						end
+						if uDetails.health then
+							self:Update(uDetails.health)
+							return
+						end
 					end
-					self:Update(uDetails.health or 0)
-				elseif self.Health then
+				end
+				if self.Health then
 					if self.HealthMax then
 						if not HealObj.heal then
 							HealObj.heal = 0
@@ -4168,6 +4205,7 @@ function KBM.Unit:Available(uDetails, UnitID)
 			if KBM.Debug then
 				self.Debug:UpdateAll()
 			end
+			self.UIDs.Available[UnitID].Available = true
 			KBM.Event.Unit.Available(UnitObj)
 			return UnitObj		
 		else
@@ -4176,9 +4214,7 @@ function KBM.Unit:Available(uDetails, UnitID)
 				self.UIDs.Idle[UnitID] = nil
 				self.UIDs.Count.Idle = self.UIDs.Count.Idle - 1
 				self.UIDs.Count.Available = self.UIDs.Count.Available + 1
-				if self.UIDs.Flush[self.UIDs.Available[UnitID].Time][UnitID] then
-					self.UIDs.Flush[self.UIDs.Available[UnitID].Time][UnitID] = nil
-				end
+				self.UIDs.Available[UnitID]:UpdateIdle(true)
 				self.UIDs.Available[UnitID].Time = nil
 				self.UIDs.Available[UnitID].Available = true
 				KBM.Event.Unit.Available(UnitObj)
@@ -4201,8 +4237,8 @@ end
 function KBM.Unit:Update(uDetails, UnitID)
 	if self.List.UID[UnitID] then
 		return self.List.UID[UnitID]
-	else
-		return self:Create(uDetails, UnitID)
+	-- else
+		-- return self:Create(uDetails, UnitID)
 	end
 end
 
@@ -4220,17 +4256,13 @@ function KBM.Unit:Idle(UnitID)
 		self.UIDs.Idle[UnitID] = self.List.UID[UnitID]
 		self.UIDs.Available[UnitID] = nil
 		self.UIDs.Idle[UnitID].Available = false
-		Number = math.floor((Inspect.Time.Real() + 120) / 60)
-		self.UIDs.Idle[UnitID].Time = Number
-		if not self.UIDs.Flush[Number] then
-			self.UIDs.Flush[Number] = {}
-		end
-		self.UIDs.Flush[Number][UnitID] = self.List.UID[UnitID]
 		self.UIDs.Count.Idle = self.UIDs.Count.Idle + 1
 		self.UIDs.Count.Available = self.UIDs.Count.Available - 1
 		if KBM.Debug then
 			self.Debug:UpdateAll()
 		end
+		self.UIDs.Idle[UnitID]:UpdateIdle()
+		KBM.Event.Mark(false, UnitID)
 		KBM.Event.Unit.Unavailable(UnitID)
 		return self.List.UID[UnitID]
 	else
@@ -4238,29 +4270,21 @@ function KBM.Unit:Idle(UnitID)
 			self:Create(nil, UnitID)
 			if not self.UIDs.Idle[UnitID] then
 				self.UIDs.Idle[UnitID] = self.List.UID[UnitID]
-				self.UIDs.Idle[UnitID].Available = false
-				Number = math.floor((Inspect.Time.Real() + 120) / 60)
-				self.UIDs.Idle[UnitID].Time = Number
-				if not self.UIDs.Flush[Number] then
-					self.UIDs.Flush[Number] = {}
-				end
-				self.UIDs.Flush[Number][UnitID] = self.List.UID[UnitID]
 				self.UIDs.Count.Idle = self.UIDs.Count.Idle + 1
 			end
+			self.UIDs.Idle[UnitID]:UpdateIdle()
+			self.UIDs.Idle[UnitID].Available = false
+			KBM.Event.Mark(false, UnitID)
 			KBM.Event.Unit.Unavailable(UnitID)
 			return self.List.UID[UnitID]
 		else
 			if not self.UIDs.Idle[UnitID] then
 				self.UIDs.Idle[UnitID] = self.List.UID[UnitID]
-				self.UIDs.Idle[UnitID].Available = false
-				Number = math.floor((Inspect.Time.Real() + 120) / 60)
-				self.UIDs.Idle[UnitID].Time = Number
-				if not self.UIDs.Flush[Number] then
-					self.UIDs.Flush[Number] = {}
-				end
-				self.UIDs.Flush[Number][UnitID] = self.List.UID[UnitID]
 				self.UIDs.Count.Idle = self.UIDs.Count.Idle + 1				
 			end
+			self.UIDs.Idle[UnitID].Available = false
+			self.UIDs.Idle[UnitID]:UpdateIdle()
+			KBM.Event.Mark(false, UnitID)
 			KBM.Event.Unit.Unavailable(UnitID)
 			return self.List.UID[UnitID]
 		end
@@ -4317,22 +4341,26 @@ end
 local function KBM_UnitAvailable(units)
 	if KBM.Encounter then
 		for UnitID, Specifier in pairs(units) do
-			uDetails = Inspect.Unit.Detail(UnitID)
-			UnitObj = KBM.Unit:Available(uDetails, UnitID)
-			if uDetails then
-				if not uDetails.player then					
-					KBM.CheckActiveBoss(uDetails, UnitID)
+			if Specifier then
+				uDetails = Inspect.Unit.Detail(UnitID)
+				UnitObj = KBM.Unit:Available(uDetails, UnitID)
+				if uDetails then
+					if not uDetails.player then					
+						KBM.CheckActiveBoss(uDetails, UnitID)
+					end
+					KBM.Event.Mark(uDetails.mark, UnitID)
 				end
-				KBM.Event.Mark(uDetails.mark, UnitID)
 			end
 		end
 	else
 		for UnitID, Specifier in pairs(units) do
-			uDetails = Inspect.Unit.Detail(UnitID)
-			UnitObj = KBM.Unit:Available(uDetails, UnitID)
-			if uDetails then
-				if uDetails.mark then
-					KBM.Event.Mark(uDetails.mark, UnitID)
+			if Specifier then
+				uDetails = Inspect.Unit.Detail(UnitID)
+				UnitObj = KBM.Unit:Available(uDetails, UnitID)
+				if uDetails then
+					if uDetails.mark then
+						KBM.Event.Mark(uDetails.mark, UnitID)
+					end
 				end
 			end
 		end	
@@ -4769,13 +4797,13 @@ function KBM.Alert:Init()
 			self.Anchor.Drag:SetVisible(self.Settings.Visible)
 			self.Left.red:SetVisible(self.Settings.Visible)
 			self.Right.red:SetVisible(self.Settings.Visible)
-			self.Top.red:SetVisible(self.Settings.Visible)
-			self.Bottom.red:SetVisible(self.Settings.Visible)
+			--self.Top.red:SetVisible(self.Settings.Visible)
+			--self.Bottom.red:SetVisible(self.Settings.Visible)
 			if self.Settings.Visible then
 				self.AlertControl.Left:SetVisible(self.Settings.FlashUnlocked)
 				self.AlertControl.Right:SetVisible(self.Settings.FlashUnlocked)
-				self.AlertControl.Top:SetVisible(self.Settings.FlashUnlocked)
-				self.AlertControl.Bottom:SetVisible(self.Settings.FlashUnlocked)
+				--self.AlertControl.Top:SetVisible(self.Settings.FlashUnlocked)
+				--self.AlertControl.Bottom:SetVisible(self.Settings.FlashUnlocked)
 			end
 		else
 			self.Anchor:SetVisible(false)
@@ -4903,6 +4931,22 @@ function KBM.Alert:Init()
 	end
 	
 	function self.AlertControl.Right.Event:WheelForward()
+		KBM.Alert.AlertControl:WheelForward()
+	end
+	
+	function self.AlertControl.Top.Event:WheelBack()
+		KBM.Alert.AlertControl:WheelBack()
+	end
+	
+	function self.AlertControl.Top.Event:WheelForward()
+		KBM.Alert.AlertControl:WheelForward()
+	end
+	
+	function self.AlertControl.Bottom.Event:WheelBack()
+		KBM.Alert.AlertControl:WheelBack()
+	end
+	
+	function self.AlertControl.Bottom.Event:WheelForward()
 		KBM.Alert.AlertControl:WheelForward()
 	end
 	
@@ -6069,12 +6113,10 @@ local function KBM_UnitRemoved(units)
 			if KBM.BossID[UnitID] then
 				KBM.BossID[UnitID].available = false
 			end
-			KBM.Event.Mark(false, UnitID)
 		end
 	else
 		for UnitID, Specifier in pairs(units) do
 			KBM.Unit:Idle(UnitID)
-			KBM.Event.Mark(false, UnitID)
 		end	
 	end	
 end
@@ -6675,32 +6717,44 @@ function KBM.MenuOptions.Alerts:Options()
 	end
 	function self:ShowAnchor(bool)
 		KBM.Options.Alerts.Visible = bool
-		KBM.Alert.Anchor:SetVisible(bool)
-		KBM.Alert.Anchor.Drag:SetVisible(bool)
-		KBM.Alert.Left.red:SetVisible(bool)
-		KBM.Alert.Right.red:SetVisible(bool)
+		-- KBM.Alert.Anchor:SetVisible(bool)
+		-- KBM.Alert.Anchor.Drag:SetVisible(bool)
+		-- KBM.Alert.Left.red:SetVisible(bool)
+		-- KBM.Alert.Right.red:SetVisible(bool)
+		-- KBM.Alert.Top.red:SetVisible(bool)
+		-- KBM.Alert.Bottom.red:SetVisible(bool)
 		if bool then
-			KBM.Alert.AlertControl.Left:SetVisible(KBM.Options.Alerts.FlashUnlocked)
-			KBM.Alert.AlertControl.Right:SetVisible(KBM.Options.Alerts.FlashUnlocked)
+			-- KBM.Alert.AlertControl.Left:SetVisible(KBM.Options.Alerts.FlashUnlocked)
+			-- KBM.Alert.AlertControl.Right:SetVisible(KBM.Options.Alerts.FlashUnlocked)
+			-- KBM.Alert.AlertControl.Top:SetVisible(KBM.Options.Alerts.FlashUnlocked)
+			-- KBM.Alert.AlertControl.Bottom:SetVisible(KBM.Options.Alerts.FlashUnlocked)
 		else
-			KBM.Alert.AlertControl.Left:SetVisible(false)
-			KBM.Alert.AlertControl.Right:SetVisible(false)
+			-- KBM.Alert.AlertControl.Left:SetVisible(false)
+			-- KBM.Alert.AlertControl.Right:SetVisible(false)
+			-- KBM.Alert.AlertControl.Top:SetVisible(false)
+			-- KBM.Alert.AlertControl.Bottom:SetVisible(false)
 		end
 		if bool then
 			KBM.Alert.Anchor:SetAlpha(1)
 			KBM.Alert.Left.red:SetAlpha(1)
 			KBM.Alert.Right.red:SetAlpha(1)
+			KBM.Alert.Top.red:SetAlpha(1)
+			KBM.Alert.Bottom.red:SetAlpha(1)
 		end
+		KBM.Alert:ApplySettings()
 	end
 	function self:ScaleText(bool)
 		KBM.Options.Alerts.ScaleText = bool
 	end
 	function self:UnlockFlash(bool)
 		KBM.Options.Alerts.FlashUnlocked = bool
-		if KBM.Options.Alerts.Visible then
-			KBM.Alert.AlertControl.Left:SetVisible(bool)
-			KBM.Alert.AlertControl.Right:SetVisible(bool)
-		end
+		-- if KBM.Options.Alerts.Visible then
+			-- KBM.Alert.AlertControl.Left:SetVisible(bool)
+			-- KBM.Alert.AlertControl.Right:SetVisible(bool)
+			-- KBM.Alert.AlertControl.Top:SetVisible(bool)
+			-- KBM.Alert.AlertControl.Bottom:SetVisible(bool)
+		-- end
+		KBM.Alert:ApplySettings()
 	end
 	function self:FlashEnabled(bool)
 		KBM.Options.Alerts.Flash = bool

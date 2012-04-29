@@ -57,6 +57,7 @@ KBM.RegisterMod(MF.ID, MF)
 MF.Lang.Unit = {}
 MF.Lang.Unit.Maelforge = KBM.Language:Add(MF.Maelforge.Name)
 MF.Lang.Unit.Maelforge:SetGerman("Flammenmaul")
+MF.Lang.Unit.Maelforge:SetFrench()
 MF.Lang.Unit.Maelforge:SetRussian("Маэлфорж")
 
 -- Ability Dictionary

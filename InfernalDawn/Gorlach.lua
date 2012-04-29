@@ -74,10 +74,13 @@ GL.Lang.Ability = {}
 GL.Lang.Debuff = {}
 GL.Lang.Debuff.Hot = KBM.Language:Add("Hot Foot")
 GL.Lang.Debuff.Hot:SetGerman("Heißfuß")
+GL.Lang.Debuff.Hot:SetFrench("Flammes de désorientation")
 GL.Lang.Debuff.Fire = KBM.Language:Add("Fire Infusion")
 GL.Lang.Debuff.Fire:SetGerman("Feuer-Infusion")
+GL.Lang.Debuff.Fire:SetFrench("Infusion de Feu")
 GL.Lang.Debuff.Flame = KBM.Language:Add("Flame Catapult")
 GL.Lang.Debuff.Flame:SetGerman("Flammenkatapult")
+GL.Lang.Debuff.Flame:SetFrench("Catapulte de flammes")
 
 -- Description Dictionary
 GL.Lang.Main = {}
@@ -234,10 +237,10 @@ function GL:Start()
 	KBM.Defaults.MechObj.Assign(self.Gorlach)
 	
 	-- Assign Alerts and Timers to Triggers
-	self.Gorlach.Triggers.Hot = KBM.Trigger:Create(self.Lang.Debuff.Hot[KBM.Lang], "playerDebuff", self.Gorlach)
+	self.Gorlach.Triggers.Hot = KBM.Trigger:Create(self.Lang.Debuff.Hot[KBM.Lang], "playerBuff", self.Gorlach)
 	self.Gorlach.Triggers.Hot:AddAlert(self.Gorlach.AlertsRef.Hot, true)
 	self.Gorlach.Triggers.Hot:AddSpy(self.Gorlach.MechRef.Hot)
-	self.Gorlach.Triggers.Fire = KBM.Trigger:Create(self.Lang.Debuff.Fire[KBM.Lang], "playerDebuff", self.Gorlach)
+	self.Gorlach.Triggers.Fire = KBM.Trigger:Create(self.Lang.Debuff.Fire[KBM.Lang], "playerBuff", self.Gorlach)
 	self.Gorlach.Triggers.Fire:AddTimer(self.Gorlach.TimersRef.Fire)
 	
 	self.Gorlach.CastBar = KBM.CastBar:Add(self, self.Gorlach)

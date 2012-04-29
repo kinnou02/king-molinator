@@ -13,6 +13,11 @@ Event System
 ** New: Event for when a castbar becomes visible.
 ** New: Event for when a castbar is hidden.
 
+Alerts
+* New: Horizontal alert bars along the Top and Bottom of the screen. (optional)
+* Change: Vertical alert bars can now be toggled on/off, leaving just the horizontal bars.
+* Note: You can have full 4 sides alerts by enabling both Horizontal and Vertical alert bars.
+
 Trigger System
 * New: Personal Cast triggers are now available to boss mods. These will only trigger if the players target or focus is the current unit casting.
 * New: Personal Interrupt triggers are now available to boss mods. These will only trigger if the players target or focus is the current unit interrupted.

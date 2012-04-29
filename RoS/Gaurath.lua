@@ -87,6 +87,7 @@ HG.Lang.Ability.Tidings:SetFrench("Nouvelles du Malheur")
 HG.Lang.Ability.Tidings:SetRussian("Плохие известия")
 HG.Lang.Ability.Storm = KBM.Language:Add("Defiling Storm")
 HG.Lang.Ability.Storm:SetGerman("Schändender Sturm")
+HG.Lang.Ability.Storm:SetFrench("Tempête profanatrice")
 
 -- Verbose Dictionary
 HG.Lang.Verbose = {}
