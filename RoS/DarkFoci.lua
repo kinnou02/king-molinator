@@ -91,7 +91,7 @@ DF.Lang.Ability.Blast:SetRussian("Черный луч")
 -- Debuff Dictionary
 DF.Lang.Debuff = {}
 DF.Lang.Debuff.Soul = KBM.Language:Add("Destabilize Soul")
-DF.Lang.Debuff.Soul:SetGerman("Seele destabilisieren")
+DF.Lang.Debuff.Soul:SetGerman("Seele destabilisieren ")
 DF.Lang.Debuff.Soul:SetFrench("Âme déstabilisée")
 DF.Lang.Debuff.Soul:SetRussian("Раскачать душу")
 

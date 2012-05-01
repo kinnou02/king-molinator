@@ -1,4 +1,17 @@
-﻿v1.0.2
+﻿v1.0.3
+
+Infernal Dawn
+* Maklamos the Scryer
+** New: Added appropriate Phase changes for when each add Activates.
+** New: Added personal screen alert for Azure Crystal (Blue)
+** New: Added personal screen alert for Emerald Crystal (Green)
+** New: Added personal screen alert for Scarlet Crystal (Red)
+** New: Added Tank-Swap support for Fractured Nature.
+** New: Added Mechanic Spy for orb intercept debuff, Crystalline Distortion.
+** New: Added personal screen alert for orb intercept debuff, Crystalline Distortion.
+
+----
+v1.0.2
 
 System
 * Boss Matching
@@ -6,7 +19,7 @@ System
 
 Event System
 * Initiation
-** Fixed: Units available on loading or after a /reloadui were not being sent to the messege queue.
+** Fixed: Units available on loading or after a /reloadui were not being sent to the message queue.
 * Marks
 ** New: Now tracks changes in Marked targets. Also attempts to track mark changes in unavailable Units via damage and heal events.
 * Casting
@@ -121,7 +134,7 @@ Master Mode Dungeons
 *** Fixed: Reference to try and index a nil value.
 
 French Translations
-* Syncronized French Translations for Infernal Dawn.
+* Synchronized French Translations for Infernal Dawn.
 
 ----
 v1.0.0
@@ -181,7 +194,7 @@ River of Souls
 ** New: Soul Destruction alert now stops as soon as interrupted.
 ** New: Mechanic Spy added for Punish Soul.
 ** New: Mechanic Spy added for Discordant Meteor.
-** Change: Dicordant Meteor now triggers from the notify message and not the cast.
+** Change: Discordant Meteor now triggers from the notify message and not the cast.
 
 Greenscale's Blight
 * Oracle Aleria
@@ -190,7 +203,7 @@ Greenscale's Blight
 ** New: Greenscale's HP monitoring in the Phase Monitor is now carried over during Air Phases.
 ** Fixed: Added a clause in the Air Phase trigger. It would triggering twice when Greenscale was healed by adds.
 
-Rise of the Pheonix
+Rise of the Phoenix
 * Ereandorn
 ** New: Mechanic Spy added for Excitable Combustion.
 ** Change: The alert for Excitable Combustion is now triggered by the debuff. (experimental)

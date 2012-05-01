@@ -78,7 +78,7 @@ SN.Lang.Unit = {}
 SN.Lang.Unit.Sicaron = KBM.Language:Add(SN.Sicaron.Name)
 SN.Lang.Unit.Sicaron:SetGerman("Sicaron")
 SN.Lang.Unit.Sicaron:SetFrench("Sicaron")
-SN.Lang.Unit.Sicaron:SetRussian("Сикарон")
+SN.Lang.Unit.Sicaron:SetRussian("Сикарон ")
 SN.Sicaron.Name = SN.Lang.Unit.Sicaron[KBM.Lang]
 SN.Descript = SN.Sicaron.Name
 

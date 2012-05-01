@@ -65,17 +65,20 @@ IZ.Lang.Unit.Ituziel:SetGerman()
 -- Ability Dictionary
 IZ.Lang.Ability = {}
 IZ.Lang.Ability.Word = KBM.Language:Add("Word of Incineration")
-IZ.Lang.Ability.Word:SetGerman("Wort der Verbrennung") 
+IZ.Lang.Ability.Word:SetGerman("Wort der Verbrennung")
+IZ.Lang.Ability.Word:SetFrench("Parole d'incinération")
 
 -- Buff Dictionary
 IZ.Lang.Buff = {}
 IZ.Lang.Buff.Brimstone = KBM.Language:Add("Brimstone")
 IZ.Lang.Buff.Brimstone:SetGerman("Schwefel")
+IZ.Lang.Buff.Brimstone:SetFrench("Soufre")
 
 -- Debuff Dictionary
 IZ.Lang.Debuff = {}
 IZ.Lang.Debuff.Curse = KBM.Language:Add("Incinerating Curse")
 IZ.Lang.Debuff.Curse:SetGerman("Einäschernder Fluch")
+IZ.Lang.Debuff.Curse:SetFrench("Malédiction d'incinération")
 
 IZ.Ituziel.Name = IZ.Lang.Unit.Ituziel[KBM.Lang]
 IZ.Descript = IZ.Ituziel.Name
