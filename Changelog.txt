@@ -1,5 +1,11 @@
 ﻿v1.0.3
 
+System
+* Messages
+** New: KBM will post your version to guild members when logging in an alert anyone who has an old version.
+** New: KBM will post your version to raid members when you join a raid and alert anyone who has an old version.
+** New: You will be notified if a new version of KBM is available if someone with a newer version does any of the above.
+
 Infernal Dawn
 * Maklamos the Scryer
 ** New: Added appropriate Phase changes for when each add Activates.

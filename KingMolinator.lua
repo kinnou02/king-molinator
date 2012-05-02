@@ -15,6 +15,9 @@ KBM.BossMod = {}
 KBM.Alpha = ".r367"
 KBM.Event = {
 	Mark = {},
+	System = {
+		Start = {},
+	},
 	Unit = {
 		PercentChange = {},
 		Available = {},
@@ -6977,6 +6980,8 @@ function KBM.Offline(data)
 end
 
 -- Define KBM Custom Event System
+-- System Related
+KBM.Event.System.Start, KBM.Event.System.Start.EventTable = Utility.Event.Create("KingMolinator", "System.Start")
 -- Unit Related
 KBM.Event.Mark, KBM.Event.Mark.EventTable = Utility.Event.Create("KingMolinator", "Mark")
 KBM.Event.Unit.PercentChange, KBM.Event.Unit.PercentChange.EventTable = Utility.Event.Create("KingMolinator", "Unit.PercentChange")
@@ -7073,6 +7078,7 @@ local function KBM_Start()
 	KBM.MenuOptions.Main:Options()
 	table.insert(Command.Slash.Register("kbmon"), {function() KBM.StateSwitch(true) end, "KingMolinator", "KBM On"})
 	table.insert(Command.Slash.Register("kbmoff"), {function() KBM.StateSwitch(false) end, "KingMolinator", "KBM Off"})
+		
 	UnitList = Inspect.Unit.List()
 	if UnitList then
 		for UnitID, Specifier in pairs(UnitList) do
@@ -7130,6 +7136,8 @@ local function KBM_WaitReady(unitID, uDetails)
 	print(KBM.Language.Welcome.Options[KBM.Lang])
 	
 	KBM.CPU:Toggle(true)
+	KBM.Event.System.Start(self)
+
 end
 
 KBM.PlugIn = {}
