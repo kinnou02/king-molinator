@@ -5,6 +5,8 @@ System
 ** New: KBM will post your version to guild members when logging in an alert anyone who has an old version.
 ** New: KBM will post your version to raid members when you join a raid and alert anyone who has an old version.
 ** New: You will be notified if a new version of KBM is available if someone with a newer version does any of the above.
+** New: Typing /kbmversion <player name> will return the version of KBM that player is using if available.
+
 
 Infernal Dawn
 * Maklamos the Scryer

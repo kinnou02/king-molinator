@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r369"
+KBM.Alpha = ".r370"
 KBM.Event = {
 	Mark = {},
 	System = {
@@ -173,6 +173,10 @@ function KBM.Version:Load()
 end
 
 KBM.Version:Load()
+
+function KBM.VersionToNumber(High, Mid, Low)
+	return (High * 10000) + (Mid * 100) + Low
+end
 
 function KBM.Version:Check(High, Mid, Low)
 	if High <= self.High then
@@ -6421,9 +6425,21 @@ function KBM:BuffMonitor(unitID, Buffs, Type)
 	
 end
 
-local function KBM_Version()
-	print(KBM.Language.Version.Title[KBM.Lang])
-	print("King Boss Mods v"..AddonData.toc.Version)
+function KBM.VersionReqCheck(name, failed, message)
+	if not failed then
+		print("Version request sent successfully!")
+	else
+		print("Version request failed for: "..tostring(name))
+	end
+end
+
+local function KBM_Version(name)
+	if type(name) == "string" then
+		Command.Message.Send(name, "KBMVerReq", "v", function (failed, message) KBM.VersionReqCheck(name, failed, message) end)
+	else
+		print(KBM.Language.Version.Title[KBM.Lang])
+		print("King Boss Mods v"..AddonData.toc.Version)
+	end
 end
 
 function KBM.StateSwitch(bool)
