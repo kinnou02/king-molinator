@@ -21,6 +21,8 @@ Infernal Dawn
 ** New: Added personal screen alert for Azure Crystal (Blue)
 ** New: Added personal screen alert for Emerald Crystal (Green)
 ** New: Added personal screen alert for Scarlet Crystal (Red)
+** New: Added buff remove triggers for Blue, Green and Red debuff alerts.
+** New: Added Mechanic Spy monitors for Blue, Green and Red debuffs.
 ** New: Added Tank-Swap support for Fractured Nature.
 ** New: Added Mechanic Spy for orb intercept debuff, Crystalline Distortion.
 ** New: Added personal screen alert for orb intercept debuff, Crystalline Distortion.

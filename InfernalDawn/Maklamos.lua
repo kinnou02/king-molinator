@@ -56,6 +56,9 @@ ML.Maklamos = {
 		MechRef = {
 			Enabled = true,
 			Distortion = KBM.Defaults.MechObj.Create("cyan"),
+			Green = KBM.Defaults.MechObj.Create("dark_green"),
+			Blue = KBM.Defaults.MechObj.Create("blue"),
+			Red = KBM.Defaults.MechObj.Create("red"),
 		},
 	}
 }
@@ -275,6 +278,9 @@ function ML:Start()
 	
 	-- Create Spies
 	self.Maklamos.MechRef.Distortion = KBM.MechSpy:Add(self.Lang.Debuff.Distortion[KBM.Lang], nil, "playerBuff", self.Maklamos)
+	self.Maklamos.MechRef.Green = KBM.MechSpy:Add(self.Lang.Debuff.Green[KBM.Lang], nil, "playerBuff", self.Maklamos)
+	self.Maklamos.MechRef.Blue = KBM.MechSpy:Add(self.Lang.Debuff.Blue[KBM.Lang], nil, "playerBuff", self.Maklamos)
+	self.Maklamos.MechRef.Red = KBM.MechSpy:Add(self.Lang.Debuff.Red[KBM.Lang], nil, "playerBuff", self.Maklamos)
 	KBM.Defaults.MechObj.Assign(self.Maklamos)
 	
 	-- Assign Alerts and Timers to Triggers
@@ -286,10 +292,22 @@ function ML:Start()
 	self.Maklamos.Triggers.PhaseFour:AddPhase(self.PhaseFour)
 	self.Maklamos.Triggers.Green = KBM.Trigger:Create(self.Lang.Debuff.Green[KBM.Lang], "playerBuff", self.Maklamos)
 	self.Maklamos.Triggers.Green:AddAlert(self.Maklamos.AlertsRef.Green, true)
+	self.Maklamos.Triggers.Green:AddSpy(self.Maklamos.MechRef.Green)
+	self.Maklamos.Triggers.GreenRem = KBM.Trigger:Create(self.Lang.Debuff.Green[KBM.Lang], "playerBuffRemove", self.Maklamos)
+	self.Maklamos.Triggers.GreenRem:AddStop(self.Maklamos.AlertsRef.Green)
+	self.Maklamos.Triggers.GreenRem:AddStop(self.Maklamos.MechRef.Green)
 	self.Maklamos.Triggers.Blue = KBM.Trigger:Create(self.Lang.Debuff.Blue[KBM.Lang], "playerBuff", self.Maklamos)
 	self.Maklamos.Triggers.Blue:AddAlert(self.Maklamos.AlertsRef.Blue, true)
+	self.Maklamos.Triggers.Blue:AddSpy(self.Maklamos.MechRef.Blue)
+	self.Maklamos.Triggers.BlueRem = KBM.Trigger:Create(self.Lang.Debuff.Blue[KBM.Lang], "playerBuffRemove", self.Maklamos)
+	self.Maklamos.Triggers.BlueRem:AddStop(self.Maklamos.AlertsRef.Blue)
+	self.Maklamos.Triggers.BlueRem:AddStop(self.Maklamos.MechRef.Blue)
 	self.Maklamos.Triggers.Red = KBM.Trigger:Create(self.Lang.Debuff.Red[KBM.Lang], "playerBuff", self.Maklamos)
 	self.Maklamos.Triggers.Red:AddAlert(self.Maklamos.AlertsRef.Red, true)
+	self.Maklamos.Triggers.Red:AddSpy(self.Maklamos.MechRef.Red, true)
+	self.Maklamos.Triggers.RedRem = KBM.Trigger:Create(self.Lang.Debuff.Red[KBM.Lang], "playerBuffRemove", self.Maklamos)
+	self.Maklamos.Triggers.RedRem:AddStop(self.Maklamos.AlertsRef.Red)
+	self.Maklamos.Triggers.RedRem:AddStop(self.Maklamos.MechRef.Red)
 	self.Maklamos.Triggers.Distortion = KBM.Trigger:Create(self.Lang.Debuff.Distortion, "playerBuff", self.Maklamos)
 	self.Maklamos.Triggers.Distortion:AddAlert(self.Maklamos.AlertsRef.Distortion, true)
 	self.Maklamos.Triggers.Distortion:AddSpy(self.Maklamos.MechRef.Distortion)
