@@ -2978,7 +2978,7 @@ function KBM.InitOptions()
 								function Callbacks:Border(bool)
 									self.Data.Settings.Border = bool
 								end
-								
+																
 								function Callbacks:Notify(bool)
 									self.Data.Settings.Notify = bool
 								end

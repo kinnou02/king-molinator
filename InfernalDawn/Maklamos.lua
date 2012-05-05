@@ -35,16 +35,16 @@ ML.Maklamos = {
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
-	-- TimersRef = {},
+	TimersRef = {},
 	AlertsRef = {},
 	MechRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		-- TimersRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
-		-- },
+		TimersRef = {
+			Enabled = true,
+			Desolation = KBM.Defaults.TimerObj.Create("cyan"),
+		},
 		AlertsRef = {
 			Enabled = true,
 			Power = KBM.Defaults.AlertObj.Create("yellow"),
@@ -71,20 +71,37 @@ ML.Lang.Unit.Maklamos = KBM.Language:Add(ML.Maklamos.Name)
 ML.Lang.Unit.Maklamos:SetGerman("Maklamos der Wahrsager")
 ML.Lang.Unit.Maklamos:SetFrench("Maklamos le Divin")
 ML.Lang.Unit.Jug = KBM.Language:Add("Ruthless Juggernaut")
+ML.Lang.Unit.Jug:SetGerman("Rücksichtsloser Gigant")
 ML.Lang.Unit.JugShort = KBM.Language:Add("Juggernaut")
+ML.Lang.Unit.JugShort:SetGerman("Gigant")
+ML.Lang.Unit.MonJug = KBM.Language:Add("Monstrous Juggernaut")
+ML.Lang.Unit.MonJug:SetGerman("Monströser Gigant")
+ML.Lang.Unit.MonShort = KBM.Language:Add("Monstrous")
+ML.Lang.Unit.MonShort:SetGerman("Monströser")
+ML.Lang.Unit.MerJug = KBM.Language:Add("Merciless Juggernaut")
+ML.Lang.Unit.MerJug:SetGerman("Gnadenloser Gigant")
+ML.Lang.Unit.MerShort = KBM.Language:Add("Merciless")
+ML.Lang.Unit.MerShort:SetGerman("Gnadenloser")
 
 -- Ability Dictionary
 ML.Lang.Ability = {}
 ML.Lang.Ability.Power = KBM.Language:Add("Returning Power")
+ML.Lang.Ability.Power:SetGerman("Wiederkehrende Kraft")
 ML.Lang.Ability.Crystal = KBM.Language:Add("Crystalline Desolation")
+ML.Lang.Ability.Crystal:SetGerman("Kristallöde") 
 
 -- Debuff Dictionary
 ML.Lang.Debuff = {}
 ML.Lang.Debuff.Nature = KBM.Language:Add("Fractured Nature")
+ML.Lang.Debuff.Nature:SetGerman("Gespaltene Natur")
 ML.Lang.Debuff.Green = KBM.Language:Add("Emerald Crystal Essence")
+ML.Lang.Debuff.Green:SetGerman("Smaragdkristallessenz")
 ML.Lang.Debuff.Blue = KBM.Language:Add("Azure Crystal Essence")
+ML.Lang.Debuff.Blue:SetGerman("Azurkristall-Essenz")
 ML.Lang.Debuff.Red = KBM.Language:Add("Scarlet Crystal Essence")
+ML.Lang.Debuff.Red:SetGerman("Essenz des feuerroten Kristalls")
 ML.Lang.Debuff.Distortion = KBM.Language:Add("Crystalline Distortion")
+ML.Lang.Debuff.Distortion:SetGerman("Kristallverzerrung")
 
 ML.Maklamos.Name = ML.Lang.Unit.Maklamos[KBM.Lang]
 ML.Descript = ML.Maklamos.Name
@@ -114,10 +131,10 @@ function ML:InitVars()
 		CastBar = self.Maklamos.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
-		-- MechTimer = KBM.Defaults.MechTimer(),
+		MechTimer = KBM.Defaults.MechTimer(),
 		Alerts = KBM.Defaults.Alerts(),
 		MechSpy = KBM.Defaults.MechSpy(),
-		-- TimersRef = self.Maklamos.Settings.TimersRef,
+		TimersRef = self.Maklamos.Settings.TimersRef,
 		AlertsRef = self.Maklamos.Settings.AlertsRef,
 		MechRef = self.Maklamos.Settings.MechRef,
 	}
@@ -267,7 +284,8 @@ end
 
 function ML:Start()
 	-- Create Timers
-	-- KBM.Defaults.TimerObj.Assign(self.Maklamos)
+	self.Maklamos.TimersRef.Desolation = KBM.MechTimer:Add(self.Lang.Ability.Crystal[KBM.Lang], 40)
+	KBM.Defaults.TimerObj.Assign(self.Maklamos)
 	
 	-- Create Alerts
 	self.Maklamos.AlertsRef.Green = KBM.Alert:Create(self.Lang.Debuff.Green[KBM.Lang], nil, false, true, "dark_green")
@@ -308,9 +326,11 @@ function ML:Start()
 	self.Maklamos.Triggers.RedRem = KBM.Trigger:Create(self.Lang.Debuff.Red[KBM.Lang], "playerBuffRemove", self.Maklamos)
 	self.Maklamos.Triggers.RedRem:AddStop(self.Maklamos.AlertsRef.Red)
 	self.Maklamos.Triggers.RedRem:AddStop(self.Maklamos.MechRef.Red)
-	self.Maklamos.Triggers.Distortion = KBM.Trigger:Create(self.Lang.Debuff.Distortion, "playerBuff", self.Maklamos)
+	self.Maklamos.Triggers.Distortion = KBM.Trigger:Create(self.Lang.Debuff.Distortion[KBM.Lang], "playerBuff", self.Maklamos)
 	self.Maklamos.Triggers.Distortion:AddAlert(self.Maklamos.AlertsRef.Distortion, true)
 	self.Maklamos.Triggers.Distortion:AddSpy(self.Maklamos.MechRef.Distortion)
+	self.Maklamos.Triggers.Desolation = KBM.Trigger:Create(self.Lang.Ability.Crystal[KBM.Lang], "cast", self.Maklamos)
+	self.Maklamos.Triggers.Desolation:AddTimer(self.Maklamos.TimersRef.Desolation)
 	
 	self.Maklamos.CastBar = KBM.CastBar:Add(self, self.Maklamos)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

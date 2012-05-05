@@ -17,6 +17,7 @@ Infernal Dawn
 ** New: Added a buff remove trigger for Burning Sacrifice in the Mechanic Spy.
 ** Change: The alert for Death Blow is now flagged as important.
 * Maklamos the Scryer
+** New: Added timer for Crystalline Desolation. (Minimum downtime, can be as much as 45s)
 ** New: Added appropriate Phase changes for when each add Activates.
 ** New: Added personal screen alert for Azure Crystal (Blue)
 ** New: Added personal screen alert for Emerald Crystal (Green)
@@ -26,6 +27,9 @@ Infernal Dawn
 ** New: Added Tank-Swap support for Fractured Nature.
 ** New: Added Mechanic Spy for orb intercept debuff, Crystalline Distortion.
 ** New: Added personal screen alert for orb intercept debuff, Crystalline Distortion.
+
+German Translations
+* Updated.
 
 ----
 v1.0.2

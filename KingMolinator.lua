@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r372"
+KBM.Alpha = ".r373"
 KBM.Event = {
 	Mark = {},
 	System = {
@@ -361,8 +361,6 @@ function KBM.Defaults.AlertObj.Create(Color, OldData)
 		Color = Color,
 		Custom = false,
 		Border = true,
-		Vertical = true,
-		Horizontal = false,
 		Notify = true,
 		Sound = true,
 	}
@@ -6776,23 +6774,6 @@ function KBM.MenuOptions.Alerts:Options()
 	end
 	function self:ShowAnchor(bool)
 		KBM.Options.Alerts.Visible = bool
-		-- KBM.Alert.Anchor:SetVisible(bool)
-		-- KBM.Alert.Anchor.Drag:SetVisible(bool)
-		-- KBM.Alert.Left.red:SetVisible(bool)
-		-- KBM.Alert.Right.red:SetVisible(bool)
-		-- KBM.Alert.Top.red:SetVisible(bool)
-		-- KBM.Alert.Bottom.red:SetVisible(bool)
-		if bool then
-			-- KBM.Alert.AlertControl.Left:SetVisible(KBM.Options.Alerts.FlashUnlocked)
-			-- KBM.Alert.AlertControl.Right:SetVisible(KBM.Options.Alerts.FlashUnlocked)
-			-- KBM.Alert.AlertControl.Top:SetVisible(KBM.Options.Alerts.FlashUnlocked)
-			-- KBM.Alert.AlertControl.Bottom:SetVisible(KBM.Options.Alerts.FlashUnlocked)
-		else
-			-- KBM.Alert.AlertControl.Left:SetVisible(false)
-			-- KBM.Alert.AlertControl.Right:SetVisible(false)
-			-- KBM.Alert.AlertControl.Top:SetVisible(false)
-			-- KBM.Alert.AlertControl.Bottom:SetVisible(false)
-		end
 		if bool then
 			KBM.Alert.Anchor:SetAlpha(1)
 			KBM.Alert.Left.red:SetAlpha(1)
