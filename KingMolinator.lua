@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r370"
+KBM.Alpha = ".r371"
 KBM.Event = {
 	Mark = {},
 	System = {
@@ -361,6 +361,8 @@ function KBM.Defaults.AlertObj.Create(Color, OldData)
 		Color = Color,
 		Custom = false,
 		Border = true,
+		Vertical = true,
+		Horizontal = false,
 		Notify = true,
 		Sound = true,
 	}
@@ -513,6 +515,8 @@ function KBM.Defaults.Alerts()
 		Visible = false,
 		Unlocked = false,
 		FlashUnlocked = false,
+		Vertical = true,
+		Horizontal = false,
 		ScaleText = false,
 		fScale = 0.2,
 		tScale = 1,
@@ -4802,15 +4806,29 @@ function KBM.Alert:Init()
 		if KBM.MainWin:GetVisible() then
 			self.Anchor:SetVisible(self.Settings.Visible)
 			self.Anchor.Drag:SetVisible(self.Settings.Visible)
-			self.Left.red:SetVisible(self.Settings.Visible)
-			self.Right.red:SetVisible(self.Settings.Visible)
-			--self.Top.red:SetVisible(self.Settings.Visible)
-			--self.Bottom.red:SetVisible(self.Settings.Visible)
+			if self.Settings.Vertical then
+				self.Left.red:SetVisible(self.Settings.Visible)
+				self.Right.red:SetVisible(self.Settings.Visible)
+			else
+				self.Left.red:SetVisible(false)
+				self.Right.red:SetVisible(false)
+			end
+			if self.Settings.Horizontal then
+				self.Top.red:SetVisible(self.Settings.Visible)
+				self.Bottom.red:SetVisible(self.Settings.Visible)
+			else
+				self.Top.red:SetVisible(false)
+				self.Bottom.red:SetVisible(false)
+			end
 			if self.Settings.Visible then
-				self.AlertControl.Left:SetVisible(self.Settings.FlashUnlocked)
-				self.AlertControl.Right:SetVisible(self.Settings.FlashUnlocked)
-				--self.AlertControl.Top:SetVisible(self.Settings.FlashUnlocked)
-				--self.AlertControl.Bottom:SetVisible(self.Settings.FlashUnlocked)
+				if self.Settings.Vertical then
+					self.AlertControl.Left:SetVisible(self.Settings.FlashUnlocked)
+					self.AlertControl.Right:SetVisible(self.Settings.FlashUnlocked)
+				end
+				if self.Settings.Horizontal then
+					self.AlertControl.Top:SetVisible(self.Settings.FlashUnlocked)
+					self.AlertControl.Bottom:SetVisible(self.Settings.FlashUnlocked)
+				end
 			end
 		else
 			self.Anchor:SetVisible(false)
@@ -5118,10 +5136,18 @@ function KBM.Alert:Init()
 						end
 					end
 					if AlertObj.Settings.Border then
-						self.Left[self.Color]:SetAlpha(1.0)
-						self.Left[self.Color]:SetVisible(true)
-						self.Right[self.Color]:SetAlpha(1.0)
-						self.Right[self.Color]:SetVisible(true)
+						if self.Settings.Vertical then
+							self.Left[self.Color]:SetAlpha(1.0)
+							self.Left[self.Color]:SetVisible(true)
+							self.Right[self.Color]:SetAlpha(1.0)
+							self.Right[self.Color]:SetVisible(true)
+						end
+						if self.Settings.Horizontal then
+							self.Top[self.Color]:SetAlpha(1.0)
+							self.Top[self.Color]:SetVisible(true)
+							self.Bottom[self.Color]:SetAlpha(1.0)
+							self.Bottom[self.Color]:SetVisible(true)						
+						end
 						self.Direction = false
 						self.FadeStart = CurrentTime
 					end
@@ -5155,6 +5181,8 @@ function KBM.Alert:Init()
 				self.Current.Stopping = true
 				self.Left[self.Color]:SetVisible(false)
 				self.Right[self.Color]:SetVisible(false)
+				self.Top[self.Color]:SetVisible(false)
+				self.Bottom[self.Color]:SetVisible(false)
 				self.Anchor:SetVisible(false)
 				self.Shadow:SetText(" Alert Anchor ")
 				self.Text:SetText(" Alert Anchor ")
@@ -5192,8 +5220,14 @@ function KBM.Alert:Init()
 				end
 				if self.Settings.Flash then
 					if self.Current.Settings.Border then
-						self.Left[self.Color]:SetAlpha(self.Alpha)
-						self.Right[self.Color]:SetAlpha(self.Alpha)
+						if self.Settings.Vertical then
+							self.Left[self.Color]:SetAlpha(self.Alpha)
+							self.Right[self.Color]:SetAlpha(self.Alpha)
+						end
+						if self.Settings.Horizontal then
+							self.Top[self.Color]:SetAlpha(self.Alpha)
+							self.Bottom[self.Color]:SetAlpha(self.Alpha)
+						end
 					end
 				end
 				if self.Settings.Notify then
@@ -5224,8 +5258,14 @@ function KBM.Alert:Init()
 								self.Alpha = 1.0 - (TimeDiff * 2)
 							end
 						end
-						self.Left[self.Color]:SetAlpha(self.Alpha)
-						self.Right[self.Color]:SetAlpha(self.Alpha)
+						if self.Settings.Vertical then
+							self.Left[self.Color]:SetAlpha(self.Alpha)
+							self.Right[self.Color]:SetAlpha(self.Alpha)
+						end
+						if self.Settings.Horizontal then
+							self.Top[self.Color]:SetAlpha(self.Alpha)
+							self.Bottom[self.Color]:SetAlpha(self.Alpha)
+						end
 					end
 				end
 			end
@@ -6434,7 +6474,7 @@ function KBM.VersionReqCheck(name, failed, message)
 end
 
 local function KBM_Version(name)
-	if type(name) == "string" then
+	if type(name) == "string" and name ~= "" then
 		Command.Message.Send(name, "KBMVerReq", "v", function (failed, message) KBM.VersionReqCheck(name, failed, message) end)
 	else
 		print(KBM.Language.Version.Title[KBM.Lang])
@@ -6778,6 +6818,14 @@ function KBM.MenuOptions.Alerts:Options()
 	function self:FlashEnabled(bool)
 		KBM.Options.Alerts.Flash = bool
 	end
+	function self:VertEnabled(bool)
+		KBM.Options.Alerts.Vertical = bool
+		KBM.Alert:ApplySettings()
+	end
+	function self:HorzEnabled(bool)
+		KBM.Options.Alerts.Horizontal = bool
+		KBM.Alert:ApplySettings()
+	end
 	function self:TextEnabled(bool)
 		KBM.Options.Alerts.Notify = bool
 	end
@@ -6786,11 +6834,13 @@ function KBM.MenuOptions.Alerts:Options()
 	Options:SetTitle()
 
 	local Alert = Options:AddHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], self.AlertEnabled, KBM.Options.Alerts.Enabled)
-	Alert:AddCheck(KBM.Language.Options.AlertFlash[KBM.Lang], self.FlashEnabled, KBM.Options.Alerts.Flash)
 	Alert:AddCheck(KBM.Language.Options.AlertText[KBM.Lang], self.TextEnabled, KBM.Options.Alerts.Notify)
 	Alert:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowAnchor, KBM.Options.Alerts.Visible)
 	Alert:AddCheck(KBM.Language.Options.UnlockText[KBM.Lang], self.ScaleText, KBM.Options.Alerts.ScaleText)
-	Alert:AddCheck(KBM.Language.Options.UnlockFlash[KBM.Lang], self.UnlockFlash, KBM.Options.Alerts.FlashUnlocked)	
+	Alert:AddCheck(KBM.Language.Options.UnlockFlash[KBM.Lang], self.UnlockFlash, KBM.Options.Alerts.FlashUnlocked)
+	local AlertBars = Options:AddHeader(KBM.Language.Options.AlertFlash[KBM.Lang], self.FlashEnabled, KBM.Options.Alerts.Flash)
+	AlertBars:AddCheck(KBM.Language.Options.AlertVert[KBM.Lang], self.VertEnabled, KBM.Options.Alerts.Vertical)
+	AlertBars:AddCheck(KBM.Language.Options.AlertHorz[KBM.Lang], self.HorzEnabled, KBM.Options.Alerts.Horizontal)	
 end
 
 -- Mechanic Spy Options

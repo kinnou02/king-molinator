@@ -7,8 +7,15 @@ System
 ** New: You will be notified if a new version of KBM is available if someone with a newer version does any of the above.
 ** New: Typing /kbmversion <player name> will return the version of KBM that player is using if available.
 
+Alerts (This time they're actually here)
+* New: Horizontal alert bars along the Top and Bottom of the screen. (optional)
+* Change: Vertical alert bars can now be toggled on/off, leaving just the horizontal bars.
+* Note: You can have full 4 sides alerts by enabling both Horizontal and Vertical alert bars.
 
 Infernal Dawn
+* Warboss Drak
+** New: Added a buff remove trigger for Burning Sacrifice in the Mechanic Spy.
+** Change: The alert for Death Blow is now flagged as important.
 * Maklamos the Scryer
 ** New: Added appropriate Phase changes for when each add Activates.
 ** New: Added personal screen alert for Azure Crystal (Blue)

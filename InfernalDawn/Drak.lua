@@ -524,7 +524,6 @@ function WD:Start()
 	self.Drak.AlertsRef.Blazing = KBM.Alert:Create(self.Lang.Unit.Blazing[KBM.Lang], 2, true, true, "dark_green")
 	self.Drak.AlertsRef.Will = KBM.Alert:Create(self.Lang.Buff.Will[KBM.Lang], nil, false, true, "orange")
 	self.Drak.AlertsRef.Burning = KBM.Alert:Create(self.Lang.Buff.Burning[KBM.Lang], nil, false, false, "purple")
-	self.Drak.AlertsRef.Burning:Important()
 	KBM.Defaults.AlertObj.Assign(self.Drak)
 	-- Azul
 	self.Azul.AlertsRef.Molten = KBM.Alert:Create(self.Lang.Ability.Molten[KBM.Lang], nil, true, true, "orange")
@@ -539,6 +538,7 @@ function WD:Start()
 	KBM.Defaults.AlertObj.Assign(self.Thrall)
 	-- Warforged Stalwart
 	self.Stalwart.AlertsRef.Blow = KBM.Alert:Create(self.Lang.Ability.Blow[KBM.Lang], nil, false, true, "yellow")
+	self.Stalwart.AlertsRef.Blow:Important()
 	KBM.Defaults.AlertObj.Assign(self.Stalwart)
 	
 	-- Create Spies
@@ -568,6 +568,7 @@ function WD:Start()
 	self.Drak.Triggers.BurningDebuff:AddSpy(self.Drak.MechRef.Burning)
 	self.Drak.Triggers.BurningRemove = KBM.Trigger:Create(self.Lang.Buff.Burning[KBM.Lang], "playerBuffRemove", self.Drak)
 	self.Drak.Triggers.BurningRemove:AddStop(self.Drak.AlertsRef.Burning)
+	self.Drak.Triggers.BurningRemove:AddStop(self.Drak.MechRef.Burning)
 	self.Thrall.Triggers.Sacrifice = KBM.Trigger:Create(self.Lang.Buff.Sacrifice[KBM.Lang], "buff", self.Thrall)
 	self.Thrall.Triggers.Sacrifice:AddAlert(self.Thrall.AlertsRef.Sacrifice)
 	self.Stalwart.Triggers.Blow = KBM.Trigger:Create(self.Lang.Ability.Blow[KBM.Lang], "personalCast", self.Stalwart)

@@ -1945,6 +1945,7 @@ function KBM.InitOptions()
 				Header.LastChild = nil
 				Header.ChildSize = 0
 				Header.Boss = self.Boss
+				Header.Links = {}
 				
 				if Side == "Sub" then
 					if not self.LastHeader then
@@ -1961,9 +1962,40 @@ function KBM.InitOptions()
 					self.Checked = bool					
 				end
 				
+				function Header:AddLink(lHeader)
+					table.insert(self.Links, lHeader)
+					lHeader.Linked = self
+				end
+				
+				function Header:Enable(bool)
+					if bool then
+						self.Enabled = true
+						if self.GUI then
+							self.GUI.Text:SetAlpha(1)
+							self.GUI.Check:SetEnabled(true)
+						end
+					else
+						self.Enabled = false
+						if self.GUI then
+							self.GUI.Text:SetAlpha(0.5)
+							self.GUI.Check:SetEnabled(false)
+							if self.Selected then
+								self:SubHide()
+								self.Tab.Selected = nil
+								self.Selected = false
+								self.GUI.Frame:SetBackgroundColor(0,0,0,0)
+							end
+						end
+					end
+					self:EnableChildren(bool)
+				end
+				
 				function Header:EnableChildren(bool)
 					for _, Child in ipairs(self.Children) do
 						Child:Enable(bool)
+					end
+					for i, Header in ipairs(self.Links) do
+						Header:Enable(bool)
 					end
 				end
 				
@@ -2033,7 +2065,10 @@ function KBM.InitOptions()
 						Child:Display()
 					end	
 					
-					KBM.Tabs.List[self.Tab]:AddSize(self.Side, self)					
+					KBM.Tabs.List[self.Tab]:AddSize(self.Side, self)
+					if self.Linked then
+						self:Enable(self.Linked.Checked)
+					end
 				end
 				
 				function Header:Hide()				
@@ -2834,7 +2869,18 @@ function KBM.InitOptions()
 				end
 				
 				function Callbacks:Flash(bool)
-					self.Header.Encounter.Boss.Mod.Settings.Alerts.Flash = bool
+					self.Encounter.Boss.Mod.Settings.Alerts.Flash = bool
+					KBM.Alert:ApplySettings()
+				end
+				
+				function Callbacks:Vert(bool)
+					self.Header.Encounter.Boss.Mod.Settings.Alerts.Vertical = bool
+					KBM.Alert:ApplySettings()
+				end
+				
+				function Callbacks:Horz(bool)
+					self.Header.Encounter.Boss.Mod.Settings.Alerts.Horizontal = bool
+					KBM.Alert:ApplySettings()
 				end
 				
 				function Callbacks:Notify(bool)
@@ -2865,8 +2911,6 @@ function KBM.InitOptions()
 					Header:SetHook(Callbacks.Override)
 					Child = Header:CreateOption(KBM.Language.Options.Enabled[KBM.Lang], "check", Callbacks.Enabled)
 					Child:SetChecked(Settings.Enabled)
-					Child = Header:CreateOption(KBM.Language.Options.AlertFlash[KBM.Lang], "check", Callbacks.Flash)
-					Child:SetChecked(Settings.Flash)
 					Child = Header:CreateOption(KBM.Language.Options.AlertText[KBM.Lang], "check", Callbacks.Notify)
 					Child:SetChecked(Settings.Notify)
 					Child = Header:CreateOption(KBM.Language.Options.ShowAnchor[KBM.Lang], "check", Callbacks.Visible)
@@ -2875,6 +2919,15 @@ function KBM.InitOptions()
 					Child:SetChecked(Settings.ScaleText)
 					Child = Header:CreateOption(KBM.Language.Options.UnlockFlash[KBM.Lang], "check", Callbacks.FlashUnlocked)
 					Child:SetChecked(Settings.FlashUnlocked)
+					local HeaderBar = self:CreateHeader(KBM.Language.Options.AlertFlash[KBM.Lang], "check", "Alerts", "Main")
+					HeaderBar:SetChecked(Settings.Flash)
+					HeaderBar:SetHook(Callbacks.Flash)
+					Child = HeaderBar:CreateOption(KBM.Language.Options.AlertVert[KBM.Lang], "check", Callbacks.Vert)
+					Child:SetChecked(Settings.Vertical)
+					Child = HeaderBar:CreateOption(KBM.Language.Options.AlertHorz[KBM.Lang], "check", Callbacks.Horz)
+					Child:SetChecked(Settings.Horizontal)
+					Header:AddLink(HeaderBar)
+					HeaderBar:Enable(Settings.Override)
 				end
 				
 				function self:CreateOptions(BossObj)
