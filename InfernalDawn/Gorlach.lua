@@ -63,9 +63,11 @@ GL.Lang.Unit = {}
 GL.Lang.Unit.Gorlach = KBM.Language:Add(GL.Gorlach.Name)
 GL.Lang.Unit.Gorlach:SetFrench()
 GL.Lang.Unit.Gorlach:SetGerman()
+GL.Lang.Unit.Gorlach:SetRussian("Горлах")
 GL.Lang.Unit.GorlachShort = KBM.Language:Add("Gorlach")
 GL.Lang.Unit.GorlachShort:SetFrench()
 GL.Lang.Unit.GorlachShort:SetGerman()
+GL.Lang.Unit.GorlachShort:SetRussian("Горлах")
 
 -- Ability Dictionary
 GL.Lang.Ability = {}
@@ -75,18 +77,22 @@ GL.Lang.Debuff = {}
 GL.Lang.Debuff.Hot = KBM.Language:Add("Hot Foot")
 GL.Lang.Debuff.Hot:SetGerman("Heißfuß")
 GL.Lang.Debuff.Hot:SetFrench("Flammes de désorientation")
+GL.Lang.Debuff.Hot:SetRussian("Горящие ноги")
 GL.Lang.Debuff.Fire = KBM.Language:Add("Fire Infusion")
 GL.Lang.Debuff.Fire:SetGerman("Feuer-Infusion")
 GL.Lang.Debuff.Fire:SetFrench("Infusion de Feu")
+GL.Lang.Debuff.Fire:SetRussian("Вливание огня")
 GL.Lang.Debuff.Flame = KBM.Language:Add("Flame Catapult")
 GL.Lang.Debuff.Flame:SetGerman("Flammenkatapult")
 GL.Lang.Debuff.Flame:SetFrench("Catapulte de flammes")
+GL.Lang.Debuff.Flame:SetRussian("Пламенная катапульта")
 
 -- Description Dictionary
 GL.Lang.Main = {}
 GL.Lang.Main.Descript = KBM.Language:Add("Gorlach")
 GL.Lang.Main.Descript:SetFrench("Gorlach")
 GL.Lang.Main.Descript:SetGerman("Gorlach")
+GL.Lang.Main.Descript:SetRussian("Горлах")
 GL.Descript = GL.Lang.Main.Descript[KBM.Lang]
 
 function GL:AddBosses(KBM_Boss)

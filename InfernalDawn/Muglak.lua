@@ -58,9 +58,11 @@ MK.Lang.Unit = {}
 MK.Lang.Unit.Muglak = KBM.Language:Add(MK.Muglak.Name)
 MK.Lang.Unit.Muglak:SetFrench()
 MK.Lang.Unit.Muglak:SetGerman()
+MK.Lang.Unit.Muglak:SetRussian("Маглак")
 MK.Lang.Unit.MuglakShort = KBM.Language:Add("Muglak")
 MK.Lang.Unit.MuglakShort:SetFrench()
 MK.Lang.Unit.MuglakShort:SetGerman()
+MK.Lang.Unit.MuglakShort:SetRussian("Маглак")
 
 -- Ability Dictionary
 MK.Lang.Ability = {}
@@ -70,7 +72,11 @@ MK.Lang.Main = {}
 MK.Lang.Main.Descript = KBM.Language:Add("Muglak")
 MK.Lang.Main.Descript:SetFrench("Muglak")
 MK.Lang.Main.Descript:SetGerman("Muglak")
+MK.Lang.Main.Descript:SetRussian("Маглак")
 MK.Descript = MK.Lang.Main.Descript[KBM.Lang]
+
+MK.Muglak.Name = MK.Lang.Unit.Muglak[KBM.Lang]
+MK.Muglak.NameShort = MK.Lang.Unit.MuglakShort[KBM.Lang]
 
 function MK:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript

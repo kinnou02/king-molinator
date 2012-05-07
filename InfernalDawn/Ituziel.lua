@@ -60,13 +60,15 @@ KBM.RegisterMod(IZ.ID, IZ)
 IZ.Lang.Unit = {}
 IZ.Lang.Unit.Ituziel = KBM.Language:Add(IZ.Ituziel.Name)
 IZ.Lang.Unit.Ituziel:SetFrench()
-IZ.Lang.Unit.Ituziel:SetGerman() 
+IZ.Lang.Unit.Ituziel:SetGerman()
+IZ.Lang.Unit.Ituziel:SetRussian("Итузиэль")
 
 -- Ability Dictionary
 IZ.Lang.Ability = {}
 IZ.Lang.Ability.Word = KBM.Language:Add("Word of Incineration")
 IZ.Lang.Ability.Word:SetGerman("Wort der Verbrennung")
 IZ.Lang.Ability.Word:SetFrench("Parole d'incinération")
+IZ.Lang.Ability.Word:SetRussian("Слово испепеления")
 
 -- Buff Dictionary
 IZ.Lang.Buff = {}
@@ -81,6 +83,7 @@ IZ.Lang.Debuff.Curse:SetGerman("Einäschernder Fluch")
 IZ.Lang.Debuff.Curse:SetFrench("Malédiction d'incinération")
 
 IZ.Ituziel.Name = IZ.Lang.Unit.Ituziel[KBM.Lang]
+IZ.Ituziel.NameShort = IZ.Lang.Unit.Ituziel[KBM.Lang]
 IZ.Descript = IZ.Ituziel.Name
 
 function IZ:AddBosses(KBM_Boss)

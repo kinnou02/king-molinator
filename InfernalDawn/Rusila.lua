@@ -58,7 +58,11 @@ RS.Lang.Unit = {}
 RS.Lang.Unit.Rusila = KBM.Language:Add(RS.Rusila.Name)
 RS.Lang.Unit.Rusila:SetGerman("Rusila Schreckensklinge")
 RS.Lang.Unit.Rusila:SetFrench("Rusila Lame-lugubre")
--- RS.Lang.Unit.Rusila:SetRussian("")
+RS.Lang.Unit.Rusila:SetRussian("Русила Жуткий Клинок")
+RS.Lang.Unit.RusShort = KBM.Language:Add("Rusila")
+RS.Lang.Unit.RusShort:SetGerman()
+RS.Lang.Unit.RusShort:SetFrench()
+RS.Lang.Unit.RusShort:SetRussian("Русила")
 
 -- Ability Dictionary
 RS.Lang.Ability = {}
@@ -85,6 +89,7 @@ RS.Lang.Ability.Chain:SetGerman("Stacheldrahtkette")
 -- RS.Lang.Ability.Chain:SetRussian("")
 
 RS.Rusila.Name = RS.Lang.Unit.Rusila[KBM.Lang]
+RS.Rusila.NameShort = RS.Lang.Unit.RusShort[KBM.Lang]
 RS.Descript = RS.Rusila.Name
 
 function RS:AddBosses(KBM_Boss)

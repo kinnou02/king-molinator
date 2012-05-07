@@ -58,9 +58,11 @@ BG.Lang.Unit = {}
 BG.Lang.Unit.Bouldergut = KBM.Language:Add("Bouldergut")
 BG.Lang.Unit.Bouldergut:SetFrench("Rochentraille")
 BG.Lang.Unit.Bouldergut:SetGerman("Felsbauch")
+BG.Lang.Unit.Bouldergut:SetRussian("Камнежор")
 BG.Lang.Unit.BouldergutShort = KBM.Language:Add("Bouldergut")
 BG.Lang.Unit.BouldergutShort:SetFrench("Rochentraille")
 BG.Lang.Unit.BouldergutShort:SetGerman("Felsbauch")
+BG.Lang.Unit.BouldergutShort:SetRussian("Камнежор")
 
 -- Ability Dictionary
 BG.Lang.Ability = {}
@@ -70,6 +72,7 @@ BG.Lang.Main = {}
 BG.Lang.Main.Descript = KBM.Language:Add("Bouldergut")
 BG.Lang.Main.Descript:SetFrench("Rochentraille")
 BG.Lang.Main.Descript:SetGerman("Felsbauch")
+BG.Lang.Main.Descript:SetRussian("Камнежор")
 BG.Descript = BG.Lang.Main.Descript[KBM.Lang]
 
 function BG:AddBosses(KBM_Boss)

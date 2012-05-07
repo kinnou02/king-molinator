@@ -64,6 +64,7 @@ MF.Lang.Unit.Maelforge:SetRussian("Маэлфорж")
 MF.Lang.Ability = {}
 
 MF.Maelforge.Name = MF.Lang.Unit.Maelforge[KBM.Lang]
+MF.Maelforge.NameShort = MF.Lang.Unit.Maelforge[KBM.Lang]
 MF.Descript = MF.Maelforge.Name
 
 function MF:AddBosses(KBM_Boss)

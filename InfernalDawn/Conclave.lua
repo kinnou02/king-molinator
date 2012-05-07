@@ -138,6 +138,7 @@ EC.Lang.Main = {}
 EC.Lang.Main.Descript = KBM.Language:Add("The Ember Conclave")
 EC.Lang.Main.Descript:SetFrench("Conclave de braise")
 EC.Lang.Main.Descript:SetGerman("Die Glutkonklave")
+EC.Lang.Main.Descript:SetRussian("Раскаленный Конклав")
 
 EC.Szath.Name = EC.Lang.Unit.Szath[KBM.Lang]
 EC.Szath.NameShort = EC.Lang.Unit.SzShort[KBM.Lang]

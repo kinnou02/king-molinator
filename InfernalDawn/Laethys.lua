@@ -64,6 +64,7 @@ LT.Lang.Unit.Laethys:SetRussian("Лаэтис")
 LT.Lang.Ability = {}
 
 LT.Laethys.Name = LT.Lang.Unit.Laethys[KBM.Lang]
+LT.Laethys.NameShort = LT.Lang.Unit.Laethys[KBM.Lang]
 LT.Descript = LT.Laethys.Name
 
 function LT:AddBosses(KBM_Boss)

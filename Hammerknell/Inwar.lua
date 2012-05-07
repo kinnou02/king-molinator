@@ -374,6 +374,7 @@ function ID.PhaseTwo()
 	ID.PhaseObj.Objectives:AddDeath(ID.Slime.Name, 3, ID.Slime.RaidID)
 	ID.PhaseObj.Objectives:AddDeath(ID.Wrangler.Name, 3)
 	ID.PhaseObj.Objectives:AddDeath(ID.Warden.Name, 2)
+	KBM.MechTimer:AddRemove(ID.Denizar.TimersRef.Freeze)
 	KBM.MechTimer:AddStart(ID.Inwar.TimersRef.GeyserFirst)
 end
 
@@ -584,7 +585,7 @@ end
 function ID:Start()
 
 	-- Create Denizar's Timers
-	self.Denizar.TimersRef.Freeze = KBM.MechTimer:Add(self.Lang.Ability.Freeze[KBM.Lang], 75)
+	self.Denizar.TimersRef.Freeze = KBM.MechTimer:Add(self.Lang.Ability.Freeze[KBM.Lang], 70)
 	KBM.Defaults.TimerObj.Assign(self.Denizar)
 	
 	-- Create Denizar's Alerts

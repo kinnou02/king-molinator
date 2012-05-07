@@ -12,16 +12,21 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r373"
+KBM.Alpha = ".r374"
 KBM.Event = {
 	Mark = {},
 	System = {
 		Start = {},
+		TankSwap = {
+			Start = {},
+			End = {},
+		},
 	},
 	Unit = {
 		PercentChange = {},
 		Available = {},
 		Unavailable = {},
+		Remove = {},
 		Death = {},
 		Name = {},
 		Relation = {},
@@ -3869,7 +3874,7 @@ function KBM.Unit:Create(uDetails, UnitID)
 				self.Time = nil
 			end
 			if not mode then
-				local Number = math.ceil(Inspect.Time.Real() / 60) + 1
+				local Number = math.ceil(Inspect.Time.Real() / 15) + 1
 				self.Time = Number
 				if not KBM.Unit.UIDs.Flush[Number] then
 					KBM.Unit.UIDs.Flush[Number] = {}
@@ -3923,10 +3928,12 @@ function KBM.Unit:Create(uDetails, UnitID)
 							self.HealthMax = uDetails.healthMax
 						end
 						if uDetails.health then
-							self:Update(uDetails.health)
+							self:Update(uDetails.health, uDetails)
 							return
 						end
 					end
+				elseif self.Time then
+					self:UpdateIdle()
 				end
 				if self.Health then
 					if self.HealthMax then
@@ -3949,6 +3956,8 @@ function KBM.Unit:Create(uDetails, UnitID)
 						end
 					end
 				end
+			elseif self.Time then
+				self:UpdateIdle()
 			end
 		end
 		function UnitObj:HealHandler(HealObj)
@@ -3960,10 +3969,12 @@ function KBM.Unit:Create(uDetails, UnitID)
 							self.HealthMax = uDetails.healthMax
 						end
 						if uDetails.health then
-							self:Update(uDetails.health)
+							self:Update(uDetails.health, uDetails)
 							return
 						end
 					end
+				elseif self.Time then
+					self:UpdateIdle()
 				end
 				if self.Health then
 					if self.HealthMax then
@@ -3987,6 +3998,8 @@ function KBM.Unit:Create(uDetails, UnitID)
 						end
 					end
 				end
+			elseif self.Time then
+				self:UpdateIdle()
 			end
 		end
 		function UnitObj:SetRelation(Relation)
@@ -4003,10 +4016,10 @@ function KBM.Unit:Create(uDetails, UnitID)
 			elseif self.Relation == nil then
 				if LibSRM.Group.UnitExists(self.UnitID) then
 					self.Relation = "friendly"
+					KBM.Event.Unit.Relation(UnitID, self.Relation)
 				else
 					self.Relation = "unknown"			
 				end
-				KBM.Event.Unit.Relation(UnitID, self.Relation)
 			end
 		end
 		function UnitObj:CheckTarget()
@@ -4021,7 +4034,6 @@ function KBM.Unit:Create(uDetails, UnitID)
 		function UnitObj:UpdateData(uDetails)
 			if uDetails then
 				self:SetRelation(uDetails.relation)
-				self.Available = true
 				if uDetails.player then
 					self:SetGroup("Player")
 					self.Player = true
@@ -4043,6 +4055,11 @@ function KBM.Unit:Create(uDetails, UnitID)
 					self.PercentRaw = self.PercentFlat*100
 					self.Percent = math.ceil(self.PercentRaw)
 					self.Loaded = true
+				else
+					self.Dead = true
+					self.PercentFlat = 0
+					self.PercentRaw = 0
+					self.Percent = 0
 				end
 				self.Mark = uDetails.mark
 				self:CheckTarget()
@@ -4246,8 +4263,8 @@ end
 function KBM.Unit:Update(uDetails, UnitID)
 	if self.List.UID[UnitID] then
 		return self.List.UID[UnitID]
-	-- else
-		-- return self:Create(uDetails, UnitID)
+	else
+		return self:Create(uDetails, UnitID)
 	end
 end
 
@@ -4301,7 +4318,7 @@ function KBM.Unit:Idle(UnitID)
 end
 
 function KBM.Unit:CheckIdle(CurrentTime)
-	local CompTime = math.floor(CurrentTime / 60)
+	local CompTime = math.floor(CurrentTime / 15)
 	if self.UIDs.Flush[CompTime] then
 		for UnitID, UnitObj in pairs(self.UIDs.Flush[CompTime]) do
 			if self.UIDs.Idle[UnitID] then
@@ -4319,6 +4336,7 @@ function KBM.Unit:CheckIdle(CurrentTime)
 					end
 				end
 				self.List.UID[UnitID] = nil
+				KBM.Event.Unit.Remove(UnitID)
 			end
 		end
 		self.UIDs.Flush[CompTime] = nil
@@ -4715,7 +4733,14 @@ function KBM.TankSwap:Init()
 					end
 				end
 			end
-		end		
+		end
+		local EventData = {
+			DebuffList = {
+				[DebuffName] = true,
+			},
+			Enabled = KBM.Options.TankSwap.Enabled,
+		}
+		KBM.Event.System.TankSwap.Start(EventData)
 	end
 	
 	function self:Update()	
@@ -4779,6 +4804,9 @@ function KBM.TankSwap:Init()
 		self.Tanks = {}
 		self.LastTank = nil
 		self.TankCount = 0
+		if not self.Test then
+			KBM.Event.System.TankSwap.End()
+		end
 		self.Test = false
 	end	
 end
@@ -6134,7 +6162,7 @@ function KBM:Timer()
 			end
 			KBM.QueuePage = nil
 		end		
-		if (current - KBM.ClearBuffers) > 60 then
+		if (current - KBM.ClearBuffers) > 15 then
 			KBM.ClearBuffers = current
 			KBM.Unit:CheckIdle(current)
 		end
@@ -7034,6 +7062,7 @@ KBM.Event.Mark, KBM.Event.Mark.EventTable = Utility.Event.Create("KingMolinator"
 KBM.Event.Unit.PercentChange, KBM.Event.Unit.PercentChange.EventTable = Utility.Event.Create("KingMolinator", "Unit.PercentChange")
 KBM.Event.Unit.Available, KBM.Event.Unit.Available.EventTable = Utility.Event.Create("KingMolinator", "Unit.Available")
 KBM.Event.Unit.Unavailable, KBM.Event.Unit.Unavailable.EventTable = Utility.Event.Create("KingMolinator", "Unit.Unavailable")
+KBM.Event.Unit.Remove, KBM.Event.Unit.Remove.EventTable = Utility.Event.Create("KingMolinator", "Unit.Remove")
 KBM.Event.Unit.Death, KBM.Event.Unit.Death.EventTable = Utility.Event.Create("KingMolinator", "Unit.Death")
 KBM.Event.Unit.Name, KBM.Event.Unit.Name.EventTable = Utility.Event.Create("KingMolinator", "Unit.Name")
 KBM.Event.Unit.Relation, KBM.Event.Unit.Relation.EventTable = Utility.Event.Create("KingMolinator", "Unit.Relation")
@@ -7042,6 +7071,8 @@ KBM.Event.Unit.Cast.Start, KBM.Event.Unit.Cast.Start.EventTable = Utility.Event.
 KBM.Event.Unit.Cast.End, KBM.Event.Unit.Cast.End.EventTable = Utility.Event.Create("KingMolinator", "Unit.Cast.End")
 KBM.Event.Unit.Combat.Enter, KBM.Event.Unit.Combat.Enter = Utility.Event.Create("KingMolinator", "Unit.Combat.Enter")
 KBM.Event.Unit.Combat.Leave, KBM.Event.Unit.Combat.Leave = Utility.Event.Create("KingMolinator", "Unit.Combat.Leave")
+KBM.Event.System.TankSwap.Start, KBM.Event.System.TankSwap.Start.EventTable = Utility.Event.Create("KingMolinator", "System.TankSwap.Start")
+KBM.Event.System.TankSwap.End, KBM.Event.System.TankSwap.End.EventTable = Utility.Event.Create("KingMolinator", "System.TankSwap.End")
 -- Encounter Related
 KBM.Event.Encounter.Start, KBM.Event.Encounter.Start.EventTable = Utility.Event.Create("KingMolinator", "Encounter.Start")
 KBM.Event.Encounter.End, KBM.Event.Encounter.End.EventTable = Utility.Event.Create("KingMolinator", "Encounter.End")

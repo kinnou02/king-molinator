@@ -70,6 +70,11 @@ ML.Lang.Unit = {}
 ML.Lang.Unit.Maklamos = KBM.Language:Add(ML.Maklamos.Name)
 ML.Lang.Unit.Maklamos:SetGerman("Maklamos der Wahrsager")
 ML.Lang.Unit.Maklamos:SetFrench("Maklamos le Divin")
+ML.Lang.Unit.Maklamos:SetRussian("Макламос Прорицатель")
+ML.Lang.Unit.MakShort = KBM.Language:Add("Maklamos")
+ML.Lang.Unit.MakShort:SetGerman()
+ML.Lang.Unit.MakShort:SetFrench()
+ML.Lang.Unit.MakShort:SetRussian("Макламос")
 ML.Lang.Unit.Jug = KBM.Language:Add("Ruthless Juggernaut")
 ML.Lang.Unit.Jug:SetGerman("Rücksichtsloser Gigant")
 ML.Lang.Unit.JugShort = KBM.Language:Add("Juggernaut")
@@ -104,6 +109,7 @@ ML.Lang.Debuff.Distortion = KBM.Language:Add("Crystalline Distortion")
 ML.Lang.Debuff.Distortion:SetGerman("Kristallverzerrung")
 
 ML.Maklamos.Name = ML.Lang.Unit.Maklamos[KBM.Lang]
+ML.Maklamos.NameShort = ML.Lang.Unit.MakShort[KBM.Lang]
 ML.Descript = ML.Maklamos.Name
 
 ML.Jug = {
