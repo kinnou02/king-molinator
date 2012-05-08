@@ -21,6 +21,7 @@ Infernal Dawn
 ** New: Added a buff remove trigger for Burning Sacrifice in the Mechanic Spy.
 ** Change: The alert for Death Blow is now flagged as important.
 * Maklamos the Scryer
+** New: Added 8 minute Enrage Timer.
 ** New: Added timer for Crystalline Desolation. (Minimum downtime, can be as much as 45s)
 ** New: Added appropriate Phase changes for when each add Activates.
 ** New: Added personal screen alert for Azure Crystal (Blue)

@@ -21,6 +21,7 @@ local ML = {
 	Lang = {},
 	ID = "Maklamos the Scryer",
 	Object = "ML",
+	Enrage = 8 * 60,
 }
 
 ML.Maklamos = {
