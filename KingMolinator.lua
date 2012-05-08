@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r374"
+KBM.Alpha = ".r375"
 KBM.Event = {
 	Mark = {},
 	System = {
@@ -31,6 +31,7 @@ KBM.Event = {
 		Name = {},
 		Relation = {},
 		Target = {},
+		TargetCount = {},
 		Combat = {
 			Enter = {},
 			Leave = {},
@@ -83,6 +84,9 @@ KBM.Unit = {
 		unknown = {},
 		Count = 0,
 	},
+	TargetQueue = {},
+	TargetRemove = {},
+	RaidTargets = {},
 	Names = {},
 	Dead = {
 		Count = 0,
@@ -3864,6 +3868,8 @@ function KBM.Unit:Create(uDetails, UnitID)
 			Percent = 100,
 			PercentRaw = 100.0,
 			UsedBy = {},
+			TargetCount = 0,
+			TargetList = {},
 			Type = "Unit",
 		}
 		function UnitObj:UpdateIdle(mode)
@@ -4219,6 +4225,21 @@ function KBM.Unit:Available(uDetails, UnitID)
 			UnitObj = self.List.UID[UnitID]
 			UnitObj:UpdateData(uDetails)
 		end		
+		if self.TargetQueue[UnitID] then
+			KBM.GroupTarget(self.TargetQueue[UnitID], UnitID)
+			self.TargetQueue[UnitID] = nil
+		-- else
+			-- if self.RaidTarget[UnitID] then
+				-- UnitObj.TargetCount = 0
+				-- for GroupID, bool in pairs(self.RaidTarget[UnitID]) do
+					-- if self.List.UID[GroupID] == UnitID then
+						-- UnitObj.TargetCount = UnitObj.TargetCount + 1
+					-- else
+						-- if 
+					-- end
+				-- end
+			-- end
+		end
 		if (self.UIDs.Available[UnitID] == nil) and (self.UIDs.Idle[UnitID] == nil) then
 			self.UIDs.Available[UnitID] = UnitObj
 			self.UIDs.Count.Available = self.UIDs.Count.Available + 1
@@ -4270,9 +4291,6 @@ end
 
 function KBM.Unit:Idle(UnitID)
 	local Number = 0
-	if UnitID == KBM.Player.UnitID then
-		return
-	end
 	if UnitID then
 		if self.List.UID[UnitID] then
 			self.List.UID[UnitID]:CheckTarget()
@@ -4322,21 +4340,25 @@ function KBM.Unit:CheckIdle(CurrentTime)
 	if self.UIDs.Flush[CompTime] then
 		for UnitID, UnitObj in pairs(self.UIDs.Flush[CompTime]) do
 			if self.UIDs.Idle[UnitID] then
-				self.UIDs.Idle[UnitID] = nil
-				self.UIDs.Count.Idle = self.UIDs.Count.Idle - 1
-				self[UnitObj.Group].Count = self[UnitObj.Group].Count - 1
-				self[UnitObj.Group][UnitObj.Relation][UnitID] = nil				
-				self[UnitObj.Group][UnitID] = nil
-				if self.List.Name[UnitObj.Name] then
-					self.List.Name[UnitObj.Name][UnitID] = nil
-				end
-				if UnitObj.Type then
-					if self.List.Type[UnitObj.Type] then
-						self.List.Type[UnitObj.Type][UnitID] = nil
+				if not self.RaidTargets[UnitID] then
+					self.UIDs.Idle[UnitID] = nil
+					self.UIDs.Count.Idle = self.UIDs.Count.Idle - 1
+					self[UnitObj.Group].Count = self[UnitObj.Group].Count - 1
+					self[UnitObj.Group][UnitObj.Relation][UnitID] = nil				
+					self[UnitObj.Group][UnitID] = nil
+					if self.List.Name[UnitObj.Name] then
+						self.List.Name[UnitObj.Name][UnitID] = nil
 					end
+					if UnitObj.Type then
+						if self.List.Type[UnitObj.Type] then
+							self.List.Type[UnitObj.Type][UnitID] = nil
+						end
+					end
+					self.List.UID[UnitID] = nil
+					KBM.Event.Unit.Remove(UnitID)
+				else
+					self.List.UID[UnitID]:UpdateIdle()
 				end
-				self.List.UID[UnitID] = nil
-				KBM.Event.Unit.Remove(UnitID)
 			end
 		end
 		self.UIDs.Flush[CompTime] = nil
@@ -4391,7 +4413,7 @@ local function KBM_UnitAvailable(units)
 				end
 			end
 		end	
-	end	
+	end
 end
 
 function KBM.AttachDragFrame(parent, hook, name, layer)
@@ -7000,6 +7022,44 @@ function KBM.GroupLeave(UnitID, Specifier)
 	end
 end
 
+function KBM.GroupTarget(UnitID, TargetID)
+	if KBM.Unit.List.UID[UnitID] then
+		local TargetStore = KBM.Unit.List.UID[UnitID].TargetID
+		if TargetStore ~= TargetID then
+			if TargetStore then
+				if KBM.Unit.List.UID[TargetStore] then
+					if KBM.Unit.List.UID[TargetStore].TargetList[UnitID] then
+						KBM.Unit.List.UID[TargetStore].TargetCount = KBM.Unit.List.UID[TargetStore].TargetCount - 1
+					end
+				else
+					KBM.Unit:Create(Inspect.Unit.Detail(TargetStore), TargetStore)
+				end
+				KBM.Unit.List.UID[UnitID].TargetID = false
+				KBM.Unit.List.UID[TargetStore].TargetList[UnitID] = nil
+				KBM.Event.Unit.TargetCount(TargetStore, KBM.Unit.List.UID[TargetStore].TargetCount)
+				if KBM.Unit.List.UID[TargetStore].TargetCount == 0 then
+					KBM.Unit.RaidTargets[TargetStore] = nil
+				end
+			end
+			if TargetID then
+				if not KBM.Unit.List.UID[TargetID] then
+					KBM.Unit:Create(Inspect.Unit.Detail(TargetID), TargetID)
+				end
+				if not KBM.Unit.List.UID[TargetID].TargetList[UnitID] then
+					KBM.Unit.List.UID[TargetID].TargetCount = KBM.Unit.List.UID[TargetID].TargetCount + 1
+					KBM.Unit.List.UID[TargetID].TargetList[UnitID] = true
+					KBM.Event.Unit.TargetCount(TargetID, KBM.Unit.List.UID[TargetID].TargetCount)
+					KBM.Unit.List.UID[UnitID].TargetID = TargetID
+				end
+				if not KBM.Unit.RaidTargets[TargetID] then
+					KBM.Unit.RaidTargets[TargetID] = {}
+				end
+				KBM.Unit.RaidTargets[TargetID][UnitID] = true
+			end
+		end
+	end
+end
+
 function KBM.RaidRes(data)
 	if KBM.Debug then
 		print("Raid Ressurect")
@@ -7067,6 +7127,7 @@ KBM.Event.Unit.Death, KBM.Event.Unit.Death.EventTable = Utility.Event.Create("Ki
 KBM.Event.Unit.Name, KBM.Event.Unit.Name.EventTable = Utility.Event.Create("KingMolinator", "Unit.Name")
 KBM.Event.Unit.Relation, KBM.Event.Unit.Relation.EventTable = Utility.Event.Create("KingMolinator", "Unit.Relation")
 KBM.Event.Unit.Target, KBM.Event.Unit.Target.EventTable = Utility.Event.Create("KingMolinator", "Unit.Target")
+KBM.Event.Unit.TargetCount, KBM.Event.Unit.TargetCount.EventTable = Utility.Event.Create("KingMolinator", "Unit.TargetCount")
 KBM.Event.Unit.Cast.Start, KBM.Event.Unit.Cast.Start.EventTable = Utility.Event.Create("KingMolinator", "Unit.Cast.Start")
 KBM.Event.Unit.Cast.End, KBM.Event.Unit.Cast.End.EventTable = Utility.Event.Create("KingMolinator", "Unit.Cast.End")
 KBM.Event.Unit.Combat.Enter, KBM.Event.Unit.Combat.Enter = Utility.Event.Create("KingMolinator", "Unit.Combat.Enter")
@@ -7140,8 +7201,9 @@ local function KBM_Start()
 	table.insert(Event.SafesRaidManager.Group.Combat.End, {KBM.RaidCombatLeave, "KingMolinator", "Raid Combat Leave"})
 	table.insert(Event.SafesRaidManager.Group.Combat.Start, {KBM.RaidCombatEnter, "KingMolinator", "Raid Combat Enter"})
 	table.insert(Event.SafesRaidManager.Group.Combat.Res, {KBM.RaidRes, "KingMolinator", "Raid Res"})
-	table.insert(Event.SafesRaidManager.Group.Join, {KBM.GroupJoin, "KingMolinator", "Raid Member Joins"})
-	table.insert(Event.SafesRaidManager.Group.Leave, {KBM.GroupLeave, "KingMolinator", "Raid Member Leave"})
+	table.insert(Event.SafesRaidManager.Group.Join, {KBM.GroupJoin, "KingMolinator", "Raid_Member_Joins"})
+	table.insert(Event.SafesRaidManager.Group.Leave, {KBM.GroupLeave, "KingMolinator", "Raid_Member_Leave"})
+	table.insert(Event.SafesRaidManager.Group.Target, {KBM.GroupTarget, "KingMolinator", "Raid_Member_Target"})
 	table.insert(Event.Unit.Castbar, {KBM_CastBar, "KingMolinator", "Cast Bar Event"})
 	table.insert(Event.System.Secure.Enter, {KBM.SecureEnter, "KingMolinator", "Secure Enter"})
 	table.insert(Event.System.Secure.Leave, {KBM.SecureLeave, "KingMolinator", "Secure Leave"})
@@ -7162,9 +7224,21 @@ local function KBM_Start()
 		for UnitID, Specifier in pairs(UnitList) do
 			local uDetails = Inspect.Unit.Detail(UnitID)
 			if uDetails then
-				UnitObj = KBM.Unit:Available(Inspect.Unit.Detail(UnitID), UnitID)
+				UnitObj = KBM.Unit:Available(uDetails, UnitID)
 				if UnitObj.Mark then
 					KBM.Event.Mark(UnitObj.Mark, UnitID)
+				end
+			end
+		end
+		-- Set up initial raid target counters
+		for i = 1, 20 do
+			local Spec, UID = LibSRM.Group.Inspect(i)
+			if UID then
+				local Target = LibSRM.Group.Target(UID)
+				if Target then
+					if KBM.Unit.List.UID[UID] then
+						KBM.GroupTarget(UID, Target)
+					end
 				end
 			end
 		end

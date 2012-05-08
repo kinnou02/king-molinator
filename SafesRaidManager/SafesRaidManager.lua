@@ -61,10 +61,12 @@ local SRM_Group = {
 	Join = {},
 	Leave = {},
 	Change = {},
+	Target = {},
 }
 SRM_Group.Join, SRM_Group.Join.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Join")
 SRM_Group.Leave, SRM_Group.Leave.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Leave")
 SRM_Group.Change, SRM_Group.Change.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Change")
+SRM_Group.Target, SRM_Group.Target.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Target")
 SRM_Group.Combat = {
 	Start = {},
 	End = {},
@@ -217,10 +219,11 @@ end
 
 local function SRM_SetSpecifier(Specifier)
 	SRM_Raid[Specifier] = {}
-	SRM_Raid[Specifier].UnitID = Inspect.Unit.Lookup(Specifier)
-	SRM_Raid[Specifier].PetID = Inspect.Unit.Lookup(Specifier..".pet")
-	SRM_Raid[Specifier].Spec = Specifier
 	local Unit = SRM_Raid[Specifier]
+	Unit.UnitID = Inspect.Unit.Lookup(Specifier)
+	Unit.PetID = Inspect.Unit.Lookup(Specifier..".pet")
+	Unit.Spec = Specifier
+	Unit.TargetID = Inspect.Unit.Lookup(Specifier..".target")
 	function Unit:PetLoad()
 		if self.PetID then
 			if not SRM_Units.Pets[self.PetID] then
@@ -343,6 +346,11 @@ local function SRM_SetSpecifier(Specifier)
 			end
 		end
 	end
+	
+	function Unit:Target(UID)
+		self.TargetID = UID
+		SRM_Group.Target(self.UnitID, UID)
+	end
 
 	function Unit:Load()
 		if self.UnitID then
@@ -389,9 +397,11 @@ local function SRM_SetSpecifier(Specifier)
 	end
 	
 	local event = Library.LibUnitChange.Register(Specifier)
-	table.insert(event, {function (data) Unit:Change(data, false) end, "SafesRaidManager", Specifier})
+	table.insert(event, {function (data) Unit:Change(data, false) end, "SafesRaidManager", Specifier.."_group"})
 	event = Library.LibUnitChange.Register(Specifier..".pet")
-	table.insert(event, {function (data) Unit:Change(data, true) end, "SafesRaidManager", Specifier})
+	table.insert(event, {function (data) Unit:Change(data, true) end, "SafesRaidManager", Specifier.."_pet"})
+	event = Library.LibUnitChange.Register(Specifier..".target")
+	table.insert(event, {function (data) Unit:Target(data, false) end, "SafesRaidManager", Specifier.."_target"})
 	Unit:Load()
 	Unit:PetLoad()
 end
@@ -642,7 +652,6 @@ local function SRM_UnitAvailable(units)
 		end
 	end
 end
-table.insert(Event.Unit.Available, {SRM_UnitAvailable, "SafesRaidManager", "Unit Available"})
 
 local function SRM_PlayerPet(PetUID)
 	if PetUID then
@@ -658,45 +667,46 @@ local function SRM_PlayerPet(PetUID)
 	end
 end
 
-local function SRM_Stall()
-	local current = Inspect.Time.Real()
-	if current - SRM_HeldTime > 1 then
-		local PlayerDets = {}
-		LibSRM.Player.ID = Inspect.Unit.Lookup("player")
-		LibSRM.Player.PetID = Inspect.Unit.Lookup("player.pet")
-		PlayerDets = Inspect.Unit.Detail(LibSRM.Player.ID)
-		if PlayerDets then
-			if PlayerDets.name then
-				-- Remove this Handler, start actual program
-				for i, n in ipairs(Event.System.Update.Begin) do
-					if n[2] == "SafesRaidManager" then
-						table.remove(Event.System.Update.Begin, i)
-						break
+local function SRM_Stall(Data)
+	local PlayerID = Inspect.Unit.Lookup("player")
+	for UnitID, Specifier in pairs(Data) do
+		if UnitID == PlayerID then
+			local PlayerDets = {}
+			LibSRM.Player.ID = PlayerID
+			LibSRM.Player.PetID = Inspect.Unit.Lookup("player.pet")
+			PlayerDets = Inspect.Unit.Detail(LibSRM.Player.ID)
+			if PlayerDets then
+				if PlayerDets.name then
+					-- Remove this Handler, start actual program
+					for i, n in ipairs(Event.Unit.Available) do
+						if n[2] == "SafesRaidManager" then
+							Event.Unit.Available[i] = {SRM_UnitAvailable, "SafesRaidManager", "Unit Available"}
+							break
+						end
 					end
-				end
-				LibSRM.Player.Loaded = true
-				SRM_System.Player.Ready(LibSRM.Player.ID, PlayerDets)
-				local event = Library.LibUnitChange.Register("player.pet")
-				table.insert(Event.Combat.Damage, {SRM_Damage, "SafesRaidManager", "Damage Monitor"})
-				table.insert(Event.Combat.Heal, {SRM_Heal, "SafesRaidManager", "Heal Monitor"})
-				table.insert(Event.Combat.Death, {SRM_Death, "SafesRaidManager", "Death Monitor"})
-				table.insert(Event.Unit.Detail.Combat, {SRM_Combat, "SafesRaidManager", "Combat Monitor"})
-				table.insert(event, {SRM_PlayerPet, "SafesRaidManager", "player.pet"})
-				if LibSRM.Player.PetID then
-					--print(": Players Pet Loaded.")
-					PetDetails = Inspect.Unit.Detail(LibSRM.Player.PetID)
-					if PetDetails then
-						LibSRM.Player.PetName = PetDetails.name
+					LibSRM.Player.Loaded = true
+					local event = Library.LibUnitChange.Register("player.pet")
+					table.insert(Event.Combat.Damage, {SRM_Damage, "SafesRaidManager", "Damage Monitor"})
+					table.insert(Event.Combat.Heal, {SRM_Heal, "SafesRaidManager", "Heal Monitor"})
+					table.insert(Event.Combat.Death, {SRM_Death, "SafesRaidManager", "Death Monitor"})
+					table.insert(Event.Unit.Detail.Combat, {SRM_Combat, "SafesRaidManager", "Combat Monitor"})
+					table.insert(event, {SRM_PlayerPet, "SafesRaidManager", "player.pet"})
+					if LibSRM.Player.PetID then
+						--print(": Players Pet Loaded.")
+						PetDetails = Inspect.Unit.Detail(LibSRM.Player.PetID)
+						if PetDetails then
+							LibSRM.Player.PetName = PetDetails.name
+						end
 					end
+					SRM_InitRaid()
+					print(": Initialized v"..LibSRM.AddonDetails.toc.Version)
+					SRM_System.Player.Ready(LibSRM.Player.ID, PlayerDets)
+					return
 				end
-				print(": Initialized v"..LibSRM.AddonDetails.toc.Version)
-				SRM_InitRaid()
-				return
 			end
 		end
 	end
 end
-table.insert(Event.System.Update.Begin, {SRM_Stall, "SafesRaidManager", "Event"})
 
 -- Public Functions
 function LibSRM.Group.Inspect(index)
@@ -708,6 +718,12 @@ function LibSRM.Group.Inspect(index)
 		end
 		--print("Returning: "..tostring(CheckSpec)..", "..tostring(UID))
 		return CheckSpec, UID
+	end
+end
+function LibSRM.Group.Target(UID)
+	if SRM_Units[UID] then
+		SRM_Units[UID].TargetID = Inspect.Unit.Lookup(UID..".target")
+		return SRM_Units[UID].TargetID
 	end
 end
 function LibSRM.Group.UnitExists(UID)
@@ -731,3 +747,4 @@ function LibSRM.Player.Ready()
 end
 
 print(": Loaded")
+table.insert(Event.Unit.Available, {SRM_Stall, "SafesRaidManager", "Event Stall"})

@@ -11,7 +11,7 @@ Email = "snarty@gmail.com"
 
 Version = "1.1.4"
 
-Environment = "1.7"
+Environment = "1.8"
 
 RunOnStartup = {
 	"SafesRaidManager.lua",

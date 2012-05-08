@@ -1,5 +1,10 @@
 v1.1.4
+* Rift Version
+* Change: Now compatible with 1.8.
 * New: LibSRM initialization string now gives its Version number.
+* Change: The player ready event (Stall) will now trigger only once the player is actually available.
+* Change: SRM now replaces its existing event table entry with a new one, rather than deleting it.
+* Change: SRM no longer runs an infinite Time check loop while waiting for Player available status.
 * Engine Fixes
 ** Fixed (By Mere): Changes made to new Unit match break code was epic fail.
 ** Fixed (By Mere): Optimized condensed loop had incorrect UID variable name for Pet matching.
