@@ -1,4 +1,10 @@
-﻿v1.0.3
+﻿v1.0.4
+
+URGENT FIX (if you're running ID)
+* Maklamos the Scryer
+** Removed: Command which was accidently left in from new alpha. (would cause instant error)
+----
+v1.0.3
 
 System
 * Messages
@@ -38,6 +44,12 @@ Hammerknell
 ** Change: Reduced the timer for Freezing Wave by 5 seconds.
 
 German Translations
+* Updated.
+
+French Translations
+* Updated.
+
+Russian Translations
 * Updated.
 
 ----

@@ -97,10 +97,12 @@ function PI.SendCheck(failed, message)
 end
 
 function PI.ReplyVersion(From)
-	if KBM.Alpha then
-		Command.Message.Send(From, "KBMVerInfo", KBMAddonData.toc.Version..KBM.Alpha, PI.SendCheck)
-	else
-		Command.Message.Send(From, "KBMVerInfo", KBMAddonData.toc.Version, PI.SendCheck)
+	if not PI.SendSilent then
+		if KBM.Alpha then
+			Command.Message.Send(From, "KBMVerInfo", KBMAddonData.toc.Version..KBM.Alpha, PI.SendCheck)
+		else
+			Command.Message.Send(From, "KBMVerInfo", KBMAddonData.toc.Version, PI.SendCheck)
+		end
 	end
 end
 
@@ -123,10 +125,12 @@ function PI.MessageHandler(From, Type, Channel, Identifier, Data)
 end
 
 function PI:SendVersion()
-	if KBM.Alpha then
-		Command.Message.Broadcast("guild", nil, "KBMVerInfo", KBMAddonData.toc.Version..KBM.Alpha, self.VersionAlert)
-	else
-		Command.Message.Broadcast("guild", nil, "KBMVerInfo", KBMAddonData.toc.Version, self.VersionAlert)
+	if not PI.SendSilent then
+		if KBM.Alpha then
+			Command.Message.Broadcast("guild", nil, "KBMVerInfo", KBMAddonData.toc.Version..KBM.Alpha, self.VersionAlert)
+		else
+			Command.Message.Broadcast("guild", nil, "KBMVerInfo", KBMAddonData.toc.Version, self.VersionAlert)
+		end
 	end
 end
 
@@ -143,4 +147,5 @@ function PI.Start()
 	PI:SendVersion()
 end
 
+PI.SendSilent = false
 table.insert(Event.KingMolinator.System.Start, {PI.Start, "KBMMessenger", "Syncronized Start"})

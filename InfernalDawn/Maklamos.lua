@@ -251,7 +251,7 @@ function ML:UnitHPCheck(uDetails, unitID)
 					self.Maklamos.Casting = false
 					self.Maklamos.CastBar:Create(unitID)
 					KBM.TankSwap:Start(self.Lang.Debuff.Nature[KBM.Lang], unitID)
-					KBM.TankSwap:AddDebuff(self.Lang.Debuff.Weak[KBM.Lang])
+					--KBM.TankSwap:AddDebuff(self.Lang.Debuff.Weak[KBM.Lang])
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase("1")
 					self.PhaseObj.Objectives:AddPercent(self.Maklamos.Name, 80, 100)
