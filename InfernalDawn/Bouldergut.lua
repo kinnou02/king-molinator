@@ -75,6 +75,10 @@ BG.Lang.Main.Descript:SetGerman("Felsbauch")
 BG.Lang.Main.Descript:SetRussian("Камнежор")
 BG.Descript = BG.Lang.Main.Descript[KBM.Lang]
 
+-- Assign Boss to Language Specific Dictionary
+BG.Bouldergut.Name = BG.Lang.Unit.Bouldergut[KBM.Lang]
+BG.Bouldergut.NameShort = BG.Lang.Unit.BouldergutShort[KBM.Lang]
+
 function BG:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {

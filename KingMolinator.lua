@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
---KBM.Alpha = ".r376"
+KBM.Alpha = ".r381"
 KBM.Event = {
 	Mark = {},
 	System = {
@@ -4477,9 +4477,12 @@ function KBM.TankSwap:Pull()
 	local GUI = {}
 	if #self.TankStore > 0 then
 		GUI = table.remove(self.TankStore)
-		GUI.DebuffFrame.Texture:SetVisible(false)
 		GUI.TankAggro.Texture:SetVisible(false)
-		GUI.DebuffFrame.Texture:SetTexture("Rift", self.DefaultTexture)
+		for i = 1, 2 do
+			GUI.DebuffFrame[i].Texture:SetVisible(false)
+			GUI.DebuffFrame[i].Texture:SetTexture("Rift", self.DefaultTexture)
+			GUI.DeCoolFrame[i]:SetVisible(false)
+		end
 	else
 		GUI.Frame = UI.CreateFrame("Frame", "TankSwap_Frame", KBM.Context)
 		GUI.Frame:SetLayer(1)
@@ -4496,6 +4499,12 @@ function KBM.TankSwap:Pull()
 		GUI.TankAggro.Texture:SetTexture("Rift", self.AggroTexture)
 		GUI.TankAggro.Texture:SetAlpha(0.66)
 		GUI.TankAggro.Texture:SetVisible(false)
+		GUI.Dead = UI.CreateFrame("Texture", "TankSwap_Dead", GUI.TankAggro)
+		GUI.Dead:SetTexture("KingMolinator", "Media/KBM_Death.png")
+		GUI.Dead:SetLayer(1)
+		GUI.Dead:SetPoint("TOPLEFT", GUI.TankAggro, "TOPLEFT", 1, 1)
+		GUI.Dead:SetPoint("BOTTOMRIGHT", GUI.TankAggro, "BOTTOMRIGHT", -1, -1)
+		GUI.Dead:SetAlpha(0.8)
 		GUI.TankFrame = UI.CreateFrame("Frame", "TankSwap_Tank_Frame", GUI.Frame)
 		GUI.TankFrame:SetPoint("TOPLEFT", GUI.TankAggro, "TOPRIGHT")
 		GUI.TankFrame:SetPoint("BOTTOM", GUI.TankAggro, "BOTTOM")
@@ -4504,6 +4513,10 @@ function KBM.TankSwap:Pull()
 		GUI.TankHP:SetTexture("KingMolinator", "Media/BarTexture.png")
 		GUI.TankHP:SetLayer(1)
 		GUI.TankHP:SetBackgroundColor(0,0.8,0,0.33)
+		GUI.TankHP:SetPoint("TOP", GUI.TankFrame, "TOP")
+		GUI.TankHP:SetPoint("LEFT", GUI.TankFrame, "LEFT")
+		GUI.TankHP:SetPoint("BOTTOM", GUI.TankFrame, "BOTTOM")
+		GUI.TankHP:SetWidth(GUI.TankFrame:GetWidth())
 		GUI.TankShadow = UI.CreateFrame("Text", "TankSwap_Tank_Shadow", GUI.TankFrame)
 		GUI.TankShadow:SetFontSize(KBM.Options.TankSwap.TextSize)
 		GUI.TankShadow:SetLayer(2)
@@ -4512,87 +4525,84 @@ function KBM.TankSwap:Pull()
 		GUI.TankText:SetLayer(3)
 		GUI.TankText:SetFontSize(KBM.Options.TankSwap.TextSize)
 		GUI.TankShadow:SetPoint("TOPLEFT", GUI.TankText, "TOPLEFT", 1, 1)
-		GUI.TankText:SetPoint("CENTERLEFT", GUI.TankFrame, "CENTERLEFT", 2, 0)	
-		GUI.DebuffFrame = UI.CreateFrame("Frame", "TankSwap Debuff Frame", GUI.Frame)
-		GUI.DebuffFrame:SetPoint("BOTTOMLEFT", GUI.Frame, "BOTTOMLEFT")
-		GUI.DebuffFrame:SetWidth(math.floor(GUI.Frame:GetHeight() * 0.5))
-		GUI.DebuffFrame:SetHeight(GUI.DebuffFrame:GetWidth())
-		GUI.DebuffFrame:SetBackgroundColor(0,0,0,0)
-		GUI.DebuffFrame:SetLayer(1)
-		GUI.DebuffFrame.Texture = UI.CreateFrame("Texture", "TankSwap_Debuff_Texture", GUI.DebuffFrame)
-		GUI.DebuffFrame.Texture:SetPoint("TOPLEFT", GUI.DebuffFrame, "TOPLEFT")
-		GUI.DebuffFrame.Texture:SetPoint("BOTTOMRIGHT", GUI.DebuffFrame, "BOTTOMRIGHT")
-		GUI.DebuffFrame.Texture:SetAlpha(0.33)
-		GUI.DebuffFrame.Texture:SetTexture("Rift", self.DefaultTexture)
-		GUI.DebuffFrame.Texture:SetVisible(false)
-		GUI.DebuffFrame.Shadow = UI.CreateFrame("Text", "TankSwap_Debuff_Shadow", GUI.DebuffFrame)
-		GUI.DebuffFrame.Shadow:SetFontSize(KBM.Options.TankSwap.TextSize)
-		GUI.DebuffFrame.Shadow:SetFontColor(0,0,0)
-		GUI.DebuffFrame.Shadow:SetLayer(2)
-		GUI.DebuffFrame.Text = UI.CreateFrame("Text", "TankSwap_Debuff_Text", GUI.DebuffFrame)
-		GUI.DebuffFrame.Text:SetFontSize(KBM.Options.TankSwap.TextSize)
-		GUI.DebuffFrame.Text:SetLayer(3)
-		GUI.DebuffFrame.Shadow:SetPoint("TOPLEFT", GUI.DebuffFrame.Text, "TOPLEFT", 1, 1)
-		GUI.DebuffFrame.Text:SetPoint("CENTER", GUI.DebuffFrame, "CENTER")
-		GUI.TankHP:SetPoint("TOP", GUI.TankFrame, "TOP")
-		GUI.TankHP:SetPoint("LEFT", GUI.TankFrame, "LEFT")
-		GUI.TankHP:SetPoint("BOTTOM", GUI.TankFrame, "BOTTOM")
-		GUI.TankHP:SetWidth(GUI.TankFrame:GetWidth())
-		GUI.DeCoolFrame = UI.CreateFrame("Texture", "TankSwap_CDFrame", GUI.Frame)
-		GUI.DeCoolFrame:SetPoint("TOPLEFT", GUI.DebuffFrame, "TOPRIGHT")
-		GUI.DeCoolFrame:SetPoint("BOTTOM", GUI.DebuffFrame, "BOTTOM")
-		GUI.DeCoolFrame:SetPoint("RIGHT", GUI.Frame, "RIGHT")
-		GUI.DeCoolFrame:SetBackgroundColor(0,0,0,0.33)
-		GUI.DeCool = UI.CreateFrame("Texture", "TankSwap_CD_Progress", GUI.DeCoolFrame)
-		GUI.DeCool:SetTexture("KingMolinator", "Media/BarTexture.png")
-		GUI.DeCool:SetPoint("TOPLEFT", GUI.DeCoolFrame, "TOPLEFT")
-		GUI.DeCool:SetPoint("BOTTOM", GUI.DeCoolFrame, "BOTTOM")
-		GUI.DeCool:SetWidth(0)
-		GUI.DeCool:SetBackgroundColor(0.5,0,8,0.33)
-		GUI.DeCool.Shadow = UI.CreateFrame("Text", "TankSwap_CD_Shadow", GUI.DeCoolFrame)
-		GUI.DeCool.Shadow:SetFontSize(KBM.Options.TankSwap.TextSize)
-		GUI.DeCool.Shadow:SetFontColor(0,0,0)
-		GUI.DeCool.Shadow:SetLayer(2)
-		GUI.DeCool.Text = UI.CreateFrame("Text", "TankSwap_CD_Text", GUI.DeCoolFrame)
-		GUI.DeCool.Text:SetFontSize(KBM.Options.TankSwap.TextSize)
-		GUI.DeCool.Shadow:SetPoint("TOPLEFT", GUI.DeCool.Text, "TOPLEFT", 1, 1)
-		GUI.DeCool.Text:SetPoint("CENTER", GUI.DeCoolFrame, "CENTER")
-		GUI.DeCool.Text:SetLayer(3)
-		GUI.Dead = UI.CreateFrame("Texture", "TankSwap_Dead", GUI.TankAggro)
-		GUI.Dead:SetTexture("KingMolinator", "Media/KBM_Death.png")
-		GUI.Dead:SetLayer(1)
-		GUI.Dead:SetPoint("TOPLEFT", GUI.TankAggro, "TOPLEFT", 1, 1)
-		GUI.Dead:SetPoint("BOTTOMRIGHT", GUI.TankAggro, "BOTTOMRIGHT", -1, -1)
-		GUI.Dead:SetAlpha(0.8)
+		GUI.TankText:SetPoint("CENTERLEFT", GUI.TankFrame, "CENTERLEFT", 2, 0)
+		GUI.DebuffFrame = {}
+		GUI.DeCoolFrame = {}
+		GUI.DeCool = {}
+		for i = 1, 2 do
+			GUI.DebuffFrame[i] = UI.CreateFrame("Frame", "TankSwap_Debuff_Frame_"..i, GUI.Frame)
+			GUI.DebuffFrame[i]:SetPoint("BOTTOMLEFT", GUI.Frame, "BOTTOMLEFT")
+			GUI.DebuffFrame[i]:SetWidth(math.floor(GUI.Frame:GetHeight() * 0.5))
+			GUI.DebuffFrame[i]:SetHeight(GUI.DebuffFrame[i]:GetWidth())
+			GUI.DebuffFrame[i]:SetBackgroundColor(0,0,0,0)
+			GUI.DebuffFrame[i]:SetLayer(1)
+			GUI.DebuffFrame[i].Texture = UI.CreateFrame("Texture", "TankSwap_Debuff_Texture_"..i, GUI.DebuffFrame[i])
+			GUI.DebuffFrame[i].Texture:SetPoint("TOPLEFT", GUI.DebuffFrame[i], "TOPLEFT")
+			GUI.DebuffFrame[i].Texture:SetPoint("BOTTOMRIGHT", GUI.DebuffFrame[i], "BOTTOMRIGHT")
+			GUI.DebuffFrame[i].Texture:SetAlpha(0.33)
+			GUI.DebuffFrame[i].Texture:SetTexture("Rift", self.DefaultTexture)
+			GUI.DebuffFrame[i].Texture:SetVisible(false)
+			GUI.DebuffFrame[i].Shadow = UI.CreateFrame("Text", "TankSwap_Debuff_Shadow_"..i, GUI.DebuffFrame[i])
+			GUI.DebuffFrame[i].Shadow:SetFontSize(KBM.Options.TankSwap.TextSize)
+			GUI.DebuffFrame[i].Shadow:SetFontColor(0,0,0)
+			GUI.DebuffFrame[i].Shadow:SetLayer(2)
+			GUI.DebuffFrame[i].Text = UI.CreateFrame("Text", "TankSwap_Debuff_Text_"..i, GUI.DebuffFrame[i])
+			GUI.DebuffFrame[i].Text:SetFontSize(KBM.Options.TankSwap.TextSize)
+			GUI.DebuffFrame[i].Text:SetLayer(3)
+			GUI.DebuffFrame[i].Shadow:SetPoint("TOPLEFT", GUI.DebuffFrame[i].Text, "TOPLEFT", 1, 1)
+			GUI.DebuffFrame[i].Text:SetPoint("CENTER", GUI.DebuffFrame[i], "CENTER")
+			GUI.DeCoolFrame[i] = UI.CreateFrame("Texture", "TankSwap_CDFrame", GUI.Frame)
+			GUI.DeCoolFrame[i]:SetPoint("TOPLEFT", GUI.DebuffFrame[i], "TOPRIGHT")
+			GUI.DeCoolFrame[i]:SetPoint("BOTTOM", GUI.DebuffFrame[i], "BOTTOM")
+			GUI.DeCoolFrame[i]:SetPoint("RIGHT", GUI.Frame, "RIGHT")
+			GUI.DeCoolFrame[i]:SetBackgroundColor(0,0,0,0.33)
+			GUI.DeCool[i] = UI.CreateFrame("Texture", "TankSwap_CD_Progress_"..i, GUI.DeCoolFrame[i])
+			GUI.DeCool[i]:SetTexture("KingMolinator", "Media/BarTexture.png")
+			GUI.DeCool[i]:SetPoint("TOPLEFT", GUI.DeCoolFrame[i], "TOPLEFT")
+			GUI.DeCool[i]:SetPoint("BOTTOM", GUI.DeCoolFrame[i], "BOTTOM")
+			GUI.DeCool[i]:SetWidth(0)
+			GUI.DeCool[i]:SetBackgroundColor(0.5,0,8,0.33)
+			GUI.DeCool[i].Shadow = UI.CreateFrame("Text", "TankSwap_CD_Shadow_"..i, GUI.DeCoolFrame[i])
+			GUI.DeCool[i].Shadow:SetFontSize(KBM.Options.TankSwap.TextSize)
+			GUI.DeCool[i].Shadow:SetFontColor(0,0,0)
+			GUI.DeCool[i].Shadow:SetLayer(2)
+			GUI.DeCool[i].Text = UI.CreateFrame("Text", "TankSwap_CD_Text_"..i, GUI.DeCoolFrame[i])
+			GUI.DeCool[i].Text:SetFontSize(KBM.Options.TankSwap.TextSize)
+			GUI.DeCool[i].Shadow:SetPoint("TOPLEFT", GUI.DeCool[i].Text, "TOPLEFT", 1, 1)
+			GUI.DeCool[i].Text:SetPoint("CENTER", GUI.DeCoolFrame[i], "CENTER")
+			GUI.DeCool[i].Text:SetLayer(3)
+		end
 		function GUI:SetTank(Text)
 			self.TankShadow:SetText(Text)
 			self.TankText:SetText(Text)
 		end
-		function GUI:SetDeCool(Text)
-			self.DeCool.Shadow:SetText(Text)
-			self.DeCool.Text:SetText(Text)
+		function GUI:SetDeCool(Text, iBuff)
+			self.DeCool[iBuff].Shadow:SetText(Text)
+			self.DeCool[iBuff].Text:SetText(Text)
 		end
-		function GUI:SetStack(Text)
-			self.DebuffFrame.Shadow:SetText(Text)
-			self.DebuffFrame.Text:SetText(Text)
+		function GUI:SetStack(Text, iBuff)
+			self.DebuffFrame[iBuff].Shadow:SetText(Text)
+			self.DebuffFrame[iBuff].Text:SetText(Text)
 		end
 		function GUI:SetDeath(bool)
 			if bool then
 				self.TankText:SetAlpha(0.5)
-				self.DebuffFrame.Shadow:SetVisible(false)
-				self.DebuffFrame.Text:SetVisible(false)
+				for i = 1, 2 do
+					self.DebuffFrame[i].Shadow:SetVisible(false)
+					self.DebuffFrame[i].Text:SetVisible(false)
+					self.DebuffFrame[i].Texture:SetVisible(false)
+					self.DeCoolFrame[i]:SetVisible(false)
+				end
 				self.Dead:SetVisible(true)
-				self.DebuffFrame.Texture:SetVisible(false)
 				self.TankAggro.Texture:SetVisible(false)
 				self.TankHP:SetVisible(false)
-				self.DeCoolFrame:SetVisible(false)
 			else
 				self.TankText:SetAlpha(1)
 				self.Dead:SetVisible(false)
-				self.DebuffFrame.Shadow:SetVisible(true)
-				self.DebuffFrame.Text:SetVisible(true)
+				self.DebuffFrame[1].Shadow:SetVisible(true)
+				self.DebuffFrame[1].Text:SetVisible(true)
 				self.TankHP:SetVisible(true)
-				self.DeCoolFrame:SetVisible(false)
+				self.DeCoolFrame[1]:SetVisible(false)
 			end			
 		end
 	end
@@ -4605,34 +4615,39 @@ function KBM.TankSwap:Init()
 	self.DefaultTexture = "Data/\\UI\\ability_icons\\generic_ability_001.dds"
 	self.AggroTexture = "Data/\\UI\\ability_icons\\weaponsmith1a.dds"
 	self.Active = false
-	self.DebuffID = nil
+	self.DebuffID = {}
+	self.Debuffs = 0
+	self.DebuffName = {}
 	self.LastTank = nil
 	self.Test = false
 	self.TankStore = {}
 	self.Enabled = KBM.Options.TankSwap.Enabled
 	self.Settings = KBM.Options.TankSwap
-	
 	self.Anchor = UI.CreateFrame("Frame", "Tank-Swap Anchor", KBM.Context)
 	self.Anchor:SetWidth(KBM.Options.TankSwap.w * KBM.Options.TankSwap.wScale)
 	self.Anchor:SetHeight(KBM.Options.TankSwap.h * KBM.Options.TankSwap.hScale)
 	self.Anchor:SetBackgroundColor(0,0,0,0.33)
 	self.Anchor:SetLayer(5)
+	
 	if KBM.Options.TankSwap.x then
 		self.Anchor:SetPoint("TOPLEFT", UIParent, "TOPLEFT", KBM.Options.TankSwap.x, KBM.Options.TankSwap.y)
 	else
 		self.Anchor:SetPoint("CENTER", UIParent, "CENTER")
 	end
+	
 	function self.Anchor:Update(uType)
 		if uType == "end" then
 			KBM.Options.TankSwap.x = self:GetLeft()
 			KBM.Options.TankSwap.y = self:GetTop()
 		end
 	end
+	
 	self.Anchor.Text = UI.CreateFrame("Text", "TankSwap info", self.Anchor)
 	self.Anchor.Text:SetText("Tank-Swap Anchor")
 	self.Anchor.Text:SetFontSize(KBM.Options.TankSwap.TextSize)
 	self.Anchor.Text:SetPoint("CENTER", self.Anchor, "CENTER")
 	self.Anchor.Drag = KBM.AttachDragFrame(self.Anchor, function(uType) self.Anchor:Update(uType) end, "TS Anchor Drag", 2)
+	
 	if KBM.MainWin:GetVisible() then
 		self.Anchor:SetVisible(KBM.Options.TankSwap.Visible)
 		self.Anchor.Drag:SetVisible(KBM.Options.TankSwap.Unlocked)
@@ -4648,11 +4663,18 @@ function KBM.TankSwap:Init()
 		end
 		local TankObj = {}
 		TankObj.UnitID = UnitID
-		TankObj.DebuffID = nil
+		TankObj.DebuffList = {}
+		TankObj.DebuffName = {}
 		TankObj.Test = Test
+		for i = 1, self.Debuffs do
+			TankObj.DebuffList[i] = {
+				ID = nil,
+				Stacks = 0,
+				Remaining = 0,
+			}
+			TankObj.DebuffName[self.DebuffList[i].Name] = TankObj.DebuffList[i]
+		end
 		self.Active = true
-		TankObj.Stacks = 0
-		TankObj.Remaining = 0
 		TankObj.Dead = false
 		
 		if Test then
@@ -4691,8 +4713,8 @@ function KBM.TankSwap:Init()
 		self.Tanks[TankObj.UnitID] = TankObj
 		self.TankCount = self.TankCount + 1
 		
-		function TankObj:BuffUpdate(DebuffID)
-			self.DebuffID = DebuffID
+		function TankObj:BuffUpdate(DebuffID, DebuffName)
+			self.DebuffName[DebuffName].ID = DebuffID
 		end
 		
 		function TankObj:Death()
@@ -4701,7 +4723,6 @@ function KBM.TankSwap:Init()
 		end
 		
 		function TankObj:UpdateHP()
-			
 			if self.Unit.Health then
 				if self.Unit.Health > 0 then
 					if self.Dead then
@@ -4719,21 +4740,38 @@ function KBM.TankSwap:Init()
 		
 		TankObj.GUI:SetDeath(TankObj.Dead)
 		if self.Test then
-			TankObj.GUI:SetStack("2")
-			TankObj.GUI:SetDeCool("99.9")
-			TankObj.GUI.DeCoolFrame:SetVisible(true)
-			TankObj.GUI.DeCool:SetWidth(TankObj.GUI.DeCoolFrame:GetWidth())
+			for i = 1, 2 do
+				local Visible = true
+				if i > 1 then
+					Visible = false
+				end
+				TankObj.GUI:SetStack("2", i)
+				TankObj.GUI:SetDeCool("99.9", i)
+				TankObj.GUI.DeCoolFrame[i]:SetVisible(Visible)
+				TankObj.GUI.DeCool[i]:SetWidth(TankObj.GUI.DeCoolFrame[1]:GetWidth())
+				TankObj.GUI.DebuffFrame[i].Texture:SetVisible(Visible)
+			end
 			TankObj.GUI.TankHP:SetWidth(TankObj.GUI.TankFrame:GetWidth())
-			TankObj.GUI.DebuffFrame.Texture:SetVisible(true)
 		else
-			TankObj.GUI:SetStack("")
-			TankObj.GUI:SetDeCool("")
+			for i = 1, 2 do
+				TankObj.GUI:SetStack("", i)
+				TankObj.GUI:SetDeCool("", i)
+				TankObj.GUI.DeCoolFrame[i]:SetVisible(false)
+				TankObj.GUI.DeCool[i]:SetWidth(TankObj.GUI.DeCoolFrame[1]:GetWidth())
+				TankObj.GUI.DebuffFrame[i].Texture:SetVisible(false)				
+			end
+			if self.Debuffs > 1 then
+				TankObj.GUI.DeCoolFrame[1]:SetPoint("RIGHT", TankObj.GUI.Frame, "CENTERX")
+				TankObj.GUI.DebuffFrame[2]:SetPoint("LEFT", TankObj.GUI.Frame, "CENTERX")
+			else
+				TankObj.GUI.DeCoolFrame[1]:SetPoint("RIGHT", TankObj.GUI.Frame, "RIGHT")
+			end
 		end
 		TankObj.GUI.Frame:SetVisible(true)
 		return TankObj		
 	end
 	
-	function self:Start(DebuffName, BossID)
+	function self:Start(DebuffName, BossID, Debuffs)
 		if KBM.Options.TankSwap.Enabled then
 			local Spec = ""
 			local UnitID = ""
@@ -4741,7 +4779,16 @@ function KBM.TankSwap:Init()
 			self.CurrentTarget = nil
 			self.CurrentIcon = nil
 			self.Boss = KBM.Unit.List.UID[BossID]
-			self.DebuffName = DebuffName
+			self.DebuffList = {}
+			self.DebuffName = {}
+			if type(DebuffName) == "table" then
+				for i, DebuffName in ipairs(DebuffName) do
+					self:AddDebuff(DebuffName, i)
+				end
+			else
+				self:AddDebuff(DebuffName, 1)
+			end
+			self.Debuffs = Debuffs or 1
 			if LibSRM.Grouped() then
 				for i = 1, 20 do
 					Spec, UnitID = LibSRM.Group.Inspect(i)
@@ -4757,48 +4804,58 @@ function KBM.TankSwap:Init()
 			end
 		end
 		local EventData = {
-			DebuffList = {
-				[DebuffName] = true,
-			},
+			DebuffList = self.DebuffName,
 			Enabled = KBM.Options.TankSwap.Enabled,
 		}
 		KBM.Event.System.TankSwap.Start(EventData)
 	end
 	
+	function self:AddDebuff(DebuffName, Index)
+		self.DebuffList[Index] = {
+			Name = DebuffName,
+			Index = Index,
+		}
+		self.DebuffName[DebuffName] = self.DebuffList[Index]
+	end
+		
 	function self:Update()	
 		local uDetails = ""
 		for UnitID, TankObj in pairs(self.Tanks) do
-			if TankObj.DebuffID then
-				bDetails = Inspect.Buff.Detail(UnitID, TankObj.DebuffID)
-				if bDetails then
-					if bDetails.name == self.DebuffName then
+			for i = 1, self.Debuffs do
+				if TankObj.DebuffList[i].ID then
+					local DebuffObj = TankObj.DebuffList[i]
+					bDetails = Inspect.Buff.Detail(UnitID, TankObj.DebuffList[i].ID)
+					if bDetails then
 						if bDetails.stack then
-							TankObj.Stacks = bDetails.stack
+							DebuffObj.Stacks = bDetails.stack
 						else
-							TankObj.Stacks = 1
+							DebuffObj.Stacks = 1
 						end
-						TankObj.Remaining = bDetails.remaining
-						TankObj.Duration = bDetails.duration
-						TankObj.GUI:SetDeCool(string.format("%0.01f", TankObj.Remaining))
-						TankObj.GUI.DeCool:SetWidth(TankObj.GUI.DeCoolFrame:GetWidth() * (TankObj.Remaining/TankObj.Duration))
-						TankObj.GUI.DeCoolFrame:SetVisible(true)
-						TankObj.GUI:SetStack(tostring(TankObj.Stacks))
+						DebuffObj.Remaining = bDetails.remaining
+						DebuffObj.Duration = bDetails.duration
 						if bDetails.icon then
-							TankObj.GUI.DebuffFrame.Texture:SetTexture("Rift", bDetails.icon)
+							DebuffObj.Icon = bDetails.icon
 						else
-							TankObj.GUI.DebuffFrame.Texture:SetTexture("Rift", self.DefaultTexture)
+							DebuffObj.Icon = self.DefaultTexture
 						end
-						TankObj.GUI.DebuffFrame.Texture:SetVisible(true)
+						if DebuffObj.Remaining > 9.94 then
+							TankObj.GUI:SetDeCool(KBM.ConvertTime(DebuffObj.Remaining), i)
+						else
+							TankObj.GUI:SetDeCool(string.format("%0.01f", DebuffObj.Remaining), i)
+						end
+						TankObj.GUI.DeCool[i]:SetWidth(math.ceil(TankObj.GUI.DeCoolFrame[i]:GetWidth() * (DebuffObj.Remaining/DebuffObj.Duration)))
+						TankObj.GUI:SetStack(tostring(DebuffObj.Stacks), i)
+						TankObj.GUI.DebuffFrame[i].Texture:SetTexture("Rift", DebuffObj.Icon)
+						TankObj.GUI.DebuffFrame[i].Texture:SetVisible(true)
+						TankObj.GUI.DeCoolFrame[i]:SetVisible(true)
+					else
+						TankObj.GUI.DeCoolFrame[i]:SetVisible(false)
+						TankObj.GUI.DeCool[i]:SetWidth(0)
+						TankObj.GUI:SetDeCool("", i)
+						TankObj.GUI:SetStack("", i)
+						TankObj.GUI.DebuffFrame[i].Texture:SetVisible(false)
+						TankObj.DebuffList[i].ID = nil
 					end
-				else
-					TankObj.DebuffID = nil
-					TankObj.Remaing = 0
-					TankObj.Duration = 0
-					TankObj.GUI.DeCoolFrame:SetVisible(false)
-					TankObj.GUI.DeCool:SetWidth(0)
-					TankObj.GUI:SetDeCool("")
-					TankObj.GUI:SetStack("")
-					TankObj.GUI.DebuffFrame.Texture:SetVisible(false)
 				end
 			end
 			TankObj:UpdateHP()
@@ -4823,6 +4880,8 @@ function KBM.TankSwap:Init()
 			TankObj.GUI = nil
 		end
 		self.Active = false
+		self.DebuffName = {}
+		self.DebuffID = {}
 		self.Tanks = {}
 		self.LastTank = nil
 		self.TankCount = 0
@@ -6458,8 +6517,8 @@ function KBM:BuffMonitor(unitID, Buffs, Type)
 							end
 							if KBM.TankSwap.Active then
 								if KBM.TankSwap.Tanks[unitID] then
-									if KBM.TankSwap.DebuffName == bDetails.name then
-										KBM.TankSwap.Tanks[unitID]:BuffUpdate(BuffID)
+									if KBM.TankSwap.DebuffName[bDetails.name] then
+										KBM.TankSwap.Tanks[unitID]:BuffUpdate(BuffID, bDetails.name)
 									end
 								end
 							end
@@ -7047,7 +7106,7 @@ function KBM.GroupTarget(UnitID, TargetID)
 				end
 				if not KBM.Unit.List.UID[TargetID].TargetList[UnitID] then
 					KBM.Unit.List.UID[TargetID].TargetCount = KBM.Unit.List.UID[TargetID].TargetCount + 1
-					KBM.Unit.List.UID[TargetID].TargetList[UnitID] = true
+					KBM.Unit.List.UID[TargetID].TargetList[UnitID] = KBM.Unit.List.UID[UnitID]
 					KBM.Event.Unit.TargetCount(TargetID, KBM.Unit.List.UID[TargetID].TargetCount)
 					KBM.Unit.List.UID[UnitID].TargetID = TargetID
 				end

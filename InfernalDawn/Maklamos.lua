@@ -122,6 +122,7 @@ ML.Lang.Debuff.Distortion = KBM.Language:Add("Crystalline Distortion")
 ML.Lang.Debuff.Distortion:SetGerman("Kristallverzerrung")
 ML.Lang.Debuff.Distortion:SetFrench("Distorsion cristalline")
 ML.Lang.Debuff.Weak = KBM.Language:Add("Weakness")
+ML.Lang.Debuff.Weak:SetFrench("Faiblesse")
 
 ML.Maklamos.Name = ML.Lang.Unit.Maklamos[KBM.Lang]
 ML.Maklamos.NameShort = ML.Lang.Unit.MakShort[KBM.Lang]
@@ -250,8 +251,11 @@ function ML:UnitHPCheck(uDetails, unitID)
 					self.Maklamos.Dead = false
 					self.Maklamos.Casting = false
 					self.Maklamos.CastBar:Create(unitID)
-					KBM.TankSwap:Start(self.Lang.Debuff.Nature[KBM.Lang], unitID)
-					--KBM.TankSwap:AddDebuff(self.Lang.Debuff.Weak[KBM.Lang])
+					local DebuffTable = {
+						[1] = self.Lang.Debuff.Nature[KBM.Lang],
+						[2] = self.Lang.Debuff.Weak[KBM.Lang],
+					}
+					KBM.TankSwap:Start(DebuffTable, unitID, 2)
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase("1")
 					self.PhaseObj.Objectives:AddPercent(self.Maklamos.Name, 80, 100)
