@@ -96,8 +96,8 @@ GL.Lang.Main.Descript:SetRussian("Горлах")
 GL.Descript = GL.Lang.Main.Descript[KBM.Lang]
 
 -- Assign Boss to Language Specific Dictionary
-GL.Gorlach.Name = BG.Lang.Unit.Gorlach[KBM.Lang]
-GL.Gorlach.NameShort = BG.Lang.Unit.GorlachShort[KBM.Lang]
+GL.Gorlach.Name = GL.Lang.Unit.Gorlach[KBM.Lang]
+GL.Gorlach.NameShort = GL.Lang.Unit.GorlachShort[KBM.Lang]
 
 function GL:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
