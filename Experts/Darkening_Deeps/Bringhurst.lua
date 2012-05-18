@@ -58,12 +58,13 @@ MOD.Lang.Unit = {}
 MOD.Lang.Unit.Bringhurst = KBM.Language:Add(MOD.Bringhurst.Name)
 MOD.Lang.Unit.Bringhurst:SetGerman("Michael Bringhurst") 
 MOD.Lang.Unit.Bringhurst:SetFrench("Michael Lèvecolline")
--- MOD.Lang.Unit.Bringhurst:SetRussian("")
+-- MOD.Lang.Unit.Bringhurst:SetRussian("Майкл Брингурст")
 MOD.Bringhurst.Name = MOD.Lang.Unit.Bringhurst[KBM.Lang]
 MOD.Descript = MOD.Bringhurst.Name
 MOD.Lang.Unit.BringShort = KBM.Language:Add("Bringhurst")
 MOD.Lang.Unit.BringShort:SetGerman()
 MOD.Lang.Unit.BringShort:SetFrench("Lèvecolline")
+MOD.Lang.Unit.BringShort:SetRussian("Брингурст")
 MOD.Bringhurst.NameShort = MOD.Lang.Unit.BringShort[KBM.Lang]
 
 -- Ability Dictionary

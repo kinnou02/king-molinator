@@ -58,12 +58,13 @@ MOD.Lang.Unit = {}
 MOD.Lang.Unit.Hergen = KBM.Language:Add(MOD.Hergen.Name)
 MOD.Lang.Unit.Hergen:SetGerman("Kronvasall Hergen")
 MOD.Lang.Unit.Hergen:SetFrench("Haut-baron Hergen")
--- MOD.Lang.Unit.Hergen:SetRussian("")
+MOD.Lang.Unit.Hergen:SetRussian("Верховный вождь Герген")
 MOD.Hergen.Name = MOD.Lang.Unit.Hergen[KBM.Lang]
 MOD.Descript = MOD.Hergen.Name
 MOD.Lang.Unit.HerShort = KBM.Language:Add("Hergen")
 MOD.Lang.Unit.HerShort:SetGerman()
 MOD.Lang.Unit.HerShort:SetFrench()
+MOD.Lang.Unit.HerShort:SetRussian("Герген")
 MOD.Hergen.NameShort = MOD.Lang.Unit.HerShort[KBM.Lang]
 
 -- Ability Dictionary

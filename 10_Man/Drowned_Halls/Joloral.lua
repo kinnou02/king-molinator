@@ -64,6 +64,7 @@ JR.Lang.Unit.Joloral:SetRussian("Йолорал Яролив")
 JR.Lang.Unit.Crippler = KBM.Language:Add("Plated Crippler")
 JR.Lang.Unit.Crippler:SetGerman("Plattenverkrüppler")
 JR.Lang.Unit.Crippler:SetFrench("Mutilateur cuirassé")
+JR.Lang.Unit.Crippler:SetRussian("Палач в латах")
 
 -- Ability Dictionary
 JR.Lang.Ability = {}

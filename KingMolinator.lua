@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r383"
+KBM.Alpha = ".r384"
 KBM.Event = {
 	Mark = {},
 	System = {
@@ -929,7 +929,7 @@ function KBM.MechTimer:Init()
 	end
 	
 	self.Anchor.Text = UI.CreateFrame("Text", "Timer Info", self.Anchor)
-	self.Anchor.Text:SetText(" 0.0 Timer Anchor")
+	self.Anchor.Text:SetText(" 0.0 "..KBM.Language.Anchors.Timers[KBM.Lang])
 	self.Anchor.Text:SetPoint("CENTERLEFT", self.Anchor, "CENTERLEFT")
 	self.Anchor.Drag = KBM.AttachDragFrame(self.Anchor, function(uType) self.Anchor:Update(uType) end, "Anchor_Drag", 5)
 	
@@ -1870,7 +1870,7 @@ function KBM.MechSpy:Init()
 	end
 	
 	self.Anchor.Shadow = UI.CreateFrame("Text", "Mechanic_Spy_Anchor_Shadow", self.Anchor)
-	self.Anchor.Shadow:SetText("Mechanic Spy Anchor")
+	self.Anchor.Shadow:SetText(KBM.Language.Anchors.MechSpy[KBM.Lang])
 	self.Anchor.Shadow:SetPoint("CENTERRIGHT", self.Anchor, "CENTERRIGHT", -1, 1)
 	self.Anchor.Shadow:SetFontColor(0,0,0)
 	self.Anchor.Shadow:SetLayer(2)
@@ -2391,11 +2391,11 @@ function KBM.PhaseMonitor:Init()
 	self.Anchor:SetBackgroundColor(0,0,0,0.33)
 	self.Anchor.Shadow = UI.CreateFrame("Text", "Phase_Anchor_Shadow", self.Anchor)
 	self.Anchor.Shadow:SetFontColor(0,0,0,1)
-	self.Anchor.Shadow:SetText("Phases and Objectives")
+	self.Anchor.Shadow:SetText(KBM.Language.Anchors.Phases[KBM.Lang])
 	self.Anchor.Shadow:SetPoint("CENTER", self.Anchor, "CENTER", 1, 1)
 	self.Anchor.Shadow:SetLayer(1)
 	self.Anchor.Text = UI.CreateFrame("Text", "Phase_Anchor_Text", self.Anchor)
-	self.Anchor.Text:SetText("Phases and Objectives")
+	self.Anchor.Text:SetText(KBM.Language.Anchors.Phases[KBM.Lang])
 	self.Anchor.Text:SetPoint("CENTER", self.Anchor, "CENTER")
 	self.Anchor.Text:SetLayer(2)
 
@@ -2949,8 +2949,8 @@ function KBM.EncTimer:Init()
 					self.Enrage.Text:SetText(self.Enrage.Shadow:GetText())
 					self.Enrage.Progress:SetWidth(self.Enrage.Frame:GetWidth()*(KBM.TimeElapsed/KBM.CurrentMod.Enrage))
 				else
-					self.Enrage.Shadow:SetText("!! Enraged !!")
-					self.Enrage.Text:SetText("!! Enraged !!")
+					self.Enrage.Shadow:SetText(KBM.Language.Timers.Enraged[KBM.Lang])
+					self.Enrage.Text:SetText(KBM.Language.Timers.Enraged[KBM.Lang])
 					self.Enrage.Progress:SetWidth(self.Enrage.Frame:GetWidth())
 				end
 			end
@@ -4964,7 +4964,7 @@ function KBM.Alert:Init()
 	self.Shadow:SetLayer(1)
 	self.Text = UI.CreateFrame("Text", "Alert Text", self.Anchor)
 	self.Shadow:SetPoint("CENTER", self.Text, "CENTER", 2, 2)
-	self.Text:SetText(" Alert Anchor ")
+	self.Text:SetText(KBM.Language.Anchors.AlertText[KBM.Lang])
 	self.Shadow:SetText(self.Text:GetText())
 	self.Shadow:SetFontSize(self.Text:GetFontSize())
 	self.Text:SetFontColor(1,1,1)
@@ -5546,7 +5546,7 @@ function KBM.CastBar:Init()
 		
 	end
 	
-	self.Anchor = self:Add(KBM, {Name = "Global Castbar"}, true)
+	self.Anchor = self:Add(KBM, {Name = KBM.Language.Anchors.Castbars[KBM.Lang]}, true)
 	self.Anchor.Anchor = true	
 end
 
@@ -6577,13 +6577,22 @@ end
 
 function KBM.VersionReqCheck(name, failed, message)
 	if not failed then
-		print("Version request sent successfully!")
+		print("Version request sent successfully for "..name.."!")
 	else
 		print("Version request failed for: "..tostring(name))
 	end
 end
 
 local function KBM_Version(name)
+	if string.find(name, "%t") then
+		local nameLU = Inspect.Unit.Lookup("player.target")
+		if nameLU then
+			nameLU_Details = Inspect.Unit.Detail(nameLU)
+			if nameLU_Details then
+				name = nameLU_Details.name
+			end
+		end
+	end
 	if type(name) == "string" and name ~= "" then
 		Command.Message.Send(name, "KBMVerReq", "v", function (failed, message) KBM.VersionReqCheck(name, failed, message) end)
 	else

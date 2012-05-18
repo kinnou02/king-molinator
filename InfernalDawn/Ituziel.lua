@@ -75,13 +75,13 @@ IZ.Lang.Buff = {}
 IZ.Lang.Buff.Brimstone = KBM.Language:Add("Brimstone")
 IZ.Lang.Buff.Brimstone:SetGerman("Schwefel")
 IZ.Lang.Buff.Brimstone:SetFrench("Soufre")
-
+IZ.Lang.Buff.Brimstone:SetRussian("Серный камень")
 -- Debuff Dictionary
 IZ.Lang.Debuff = {}
 IZ.Lang.Debuff.Curse = KBM.Language:Add("Incinerating Curse")
 IZ.Lang.Debuff.Curse:SetGerman("Einäschernder Fluch")
 IZ.Lang.Debuff.Curse:SetFrench("Malédiction d'incinération")
-
+IZ.Lang.Debuff.Curse:SetRussian("Испепеляющее проклятье")
 IZ.Ituziel.Name = IZ.Lang.Unit.Ituziel[KBM.Lang]
 IZ.Ituziel.NameShort = IZ.Lang.Unit.Ituziel[KBM.Lang]
 IZ.Descript = IZ.Ituziel.Name

@@ -4,6 +4,9 @@ Engine
 * Change: Some optimization work on how events are triggered.
 * Change: Internal Unit detail data cache is updated slightly more frequently.
 
+System
+* New: /kbmversion now excepts and parses marco variable '%t' for target. '/kbmversion %t' as a macro will inspect your targets KBM Version.
+
 Tank-Swap
 * New: Tank-Swap can now track 2 debuffs.
 * Change: Event.KingMolinator.System.TankSwap.Start(table = {DebuffList = table{[Debuff Name] = Index}, Enabled = bool})
@@ -22,6 +25,15 @@ Master Mode Dungeons
 *** New: Added UID for Squersh. If this encounter was triggered via Squersh it would not initiate correctly.
 ** Emissary Villizar
 *** New: Added UID for this Boss for faster encounter matching, and future proofing.
+
+Dictionary Entries
+* New: Mechanic Spy Anchor, Tank-Swap Anchor, Phases & Objectvies Anchor and Timer Anchor.
+* New: Global Castbar
+* New: Plug-In tab
+* New: !! Enraged !! Text
+
+Russian Translations
+* Updated.
 
 ----
 v1.0.4

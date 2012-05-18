@@ -58,14 +58,14 @@ MOD.Lang.Unit = {}
 MOD.Lang.Unit.Autoch = KBM.Language:Add(MOD.Autoch.Name)
 MOD.Lang.Unit.Autoch:SetGerman("Fleischfresser Autoch")
 MOD.Lang.Unit.Autoch:SetFrench("Autoch mangechair ")
--- MOD.Lang.Unit.Autoch:SetRussian("")
+MOD.Lang.Unit.Autoch:SetRussian("Аутох Пожиратель")
 MOD.Autoch.Name = MOD.Lang.Unit.Autoch[KBM.Lang]
 MOD.Descript = MOD.Autoch.Name
 -- Additional Unit Dictionary
 MOD.Lang.Unit.Mondrach = KBM.Language:Add("Soulflayer Mondrach")
 MOD.Lang.Unit.Mondrach:SetGerman("Seelenschinder Mondrach")
 MOD.Lang.Unit.Mondrach:SetFrench("Mondrach Écorche-âme")
-
+MOD.Lang.Unit.Mondrach:SetRussian("Душедер Мондрах")
 -- Ability Dictionary
 MOD.Lang.Ability = {}
 

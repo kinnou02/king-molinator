@@ -29,7 +29,7 @@ MOD.Lang.Main = {}
 MOD.Lang.Main.Name = KBM.Language:Add(MOD.Name)
 MOD.Lang.Main.Name:SetGerman("Obere Hermesstab-Anhöhe")
 MOD.Lang.Main.Name:SetFrench("Butte du Caducée supérieure")
--- MOD.Lang.Main.Name:SetRussian("")
+MOD.Lang.Main.Name:SetRussian("Верхняя часть Восхода Кадуцея")
 
 MOD.Name = MOD.Lang.Main.Name[KBM.Lang]
 MOD.Descript = MOD.Name

@@ -58,12 +58,13 @@ MOD.Lang.Unit = {}
 MOD.Lang.Unit.Black = KBM.Language:Add(MOD.Black.Name)
 MOD.Lang.Unit.Black:SetGerman("Kapitän Schwarzspuck")
 MOD.Lang.Unit.Black:SetFrench("Capitaine Crachenoir")
--- MOD.Lang.Unit.Black:SetRussian("")
+MOD.Lang.Unit.Black:SetRussian("Капитан Черный Плевок")
 MOD.Black.Name = MOD.Lang.Unit.Black[KBM.Lang]
 MOD.Descript = MOD.Black.Name
 MOD.Lang.Unit.BlackShort = KBM.Language:Add(MOD.Black.NameShort)
 MOD.Lang.Unit.BlackShort:SetGerman("Schwarzspuck")
 MOD.Lang.Unit.BlackShort:SetFrench("Crachenoir")
+MOD.Lang.Unit.BlackShort:SetRussian("Черный Плевок")
 MOD.Black.NameShort = MOD.Lang.Unit.BlackShort[KBM.Lang]
 
 -- Ability Dictionary

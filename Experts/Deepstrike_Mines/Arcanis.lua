@@ -58,7 +58,7 @@ MOD.Lang.Unit = {}
 MOD.Lang.Unit.Arcanis = KBM.Language:Add(MOD.Arcanis.Name)
 MOD.Lang.Unit.Arcanis:SetGerman("Wärter Arcanis") 
 MOD.Lang.Unit.Arcanis:SetFrench("Reliquaire Arcanis")
--- MOD.Lang.Unit.Arcanis:SetRussian("")
+MOD.Lang.Unit.Arcanis:SetRussian("Попечитель Арканис")
 MOD.Arcanis.Name = MOD.Lang.Unit.Arcanis[KBM.Lang]
 MOD.Descript = MOD.Arcanis.Name
 MOD.Lang.Unit.ArcShort = KBM.Language:Add("Arcanis")

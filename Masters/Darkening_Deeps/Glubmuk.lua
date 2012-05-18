@@ -58,7 +58,7 @@ MOD.Lang.Unit = {}
 MOD.Lang.Unit.Glubmuk = KBM.Language:Add(MOD.Glubmuk.Name)
 MOD.Lang.Unit.Glubmuk:SetGerman("Glubmuk")
 MOD.Lang.Unit.Glubmuk:SetFrench("Glubmuk")
--- MOD.Lang.Unit.Glubmuk:SetRussian("")
+MOD.Lang.Unit.Glubmuk:SetRussian("Глубмук")
 MOD.Glubmuk.Name = MOD.Lang.Unit.Glubmuk[KBM.Lang]
 MOD.Descript = MOD.Glubmuk.Name
 

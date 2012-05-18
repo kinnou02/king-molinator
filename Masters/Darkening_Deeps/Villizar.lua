@@ -58,12 +58,13 @@ MOD.Lang.Unit = {}
 MOD.Lang.Unit.Villizar = KBM.Language:Add(MOD.Villizar.Name)
 MOD.Lang.Unit.Villizar:SetGerman("Abgesandter Villizar") 
 MOD.Lang.Unit.Villizar:SetFrench("Émissaire Villizar")
--- MOD.Lang.Unit.Villizar:SetRussian("")
+MOD.Lang.Unit.Villizar:SetRussian("Посол Виллизар")
 MOD.Villizar.Name = MOD.Lang.Unit.Villizar[KBM.Lang]
 MOD.Descript = MOD.Villizar.Name
 MOD.Lang.Unit.VilShort = KBM.Language:Add("Villizar")
 MOD.Lang.Unit.VilShort:SetGerman()
 MOD.Lang.Unit.VilShort:SetFrench()
+MOD.Lang.Unit.VilShort:SetRussian("Виллизар")
 MOD.Villizar.NameShort = MOD.Lang.Unit.VilShort[KBM.Lang]
 
 -- Ability Dictionary

@@ -58,12 +58,13 @@ MOD.Lang.Unit = {}
 MOD.Lang.Unit.Suleng = KBM.Language:Add(MOD.Suleng.Name)
 MOD.Lang.Unit.Suleng:SetGerman("Jäger Suleng") 
 MOD.Lang.Unit.Suleng:SetFrench("Chasseur Suleng")
--- MOD.Lang.Unit.Suleng:SetRussian("")
+MOD.Lang.Unit.Suleng:SetRussian("Охотник Суленг")
 MOD.Suleng.Name = MOD.Lang.Unit.Suleng[KBM.Lang]
 MOD.Descript = MOD.Suleng.Name
 MOD.Lang.Unit.SuShort = KBM.Language:Add("Suleng")
 MOD.Lang.Unit.SuShort:SetGerman()
 MOD.Lang.Unit.SuShort:SetFrench()
+MOD.Lang.Unit.SuShort:SetRussian("Суленг")
 MOD.Suleng.NameShort = MOD.Lang.Unit.SuShort[KBM.Lang]
 
 -- Ability Dictionary

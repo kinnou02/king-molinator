@@ -58,7 +58,7 @@ MOD.Lang.Unit = {}
 MOD.Lang.Unit.Coalgut = KBM.Language:Add(MOD.Coalgut.Name)
 MOD.Lang.Unit.Coalgut:SetGerman("Kohlbauch")
 MOD.Lang.Unit.Coalgut:SetFrench("Orage de Cendres") 
--- MOD.Lang.Unit.Coalgut:SetRussian("")
+MOD.Lang.Unit.Coalgut:SetRussian("Угольное Брюхо")
 MOD.Coalgut.Name = MOD.Lang.Unit.Coalgut[KBM.Lang]
 MOD.Descript = MOD.Coalgut.Name
 

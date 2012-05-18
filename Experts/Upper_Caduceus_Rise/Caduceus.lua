@@ -58,7 +58,7 @@ MOD.Lang.Unit = {}
 MOD.Lang.Unit.Caduceus = KBM.Language:Add(MOD.Caduceus.Name)
 MOD.Lang.Unit.Caduceus:SetGerman("Hermesstab")
 MOD.Lang.Unit.Caduceus:SetFrench("Caducée")
--- MOD.Lang.Unit.Caduceus:SetRussian("")
+MOD.Lang.Unit.Caduceus:SetRussian("Кадуцей")
 MOD.Caduceus.Name = MOD.Lang.Unit.Caduceus[KBM.Lang]
 MOD.Descript = MOD.Caduceus.Name
 

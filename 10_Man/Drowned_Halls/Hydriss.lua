@@ -58,10 +58,11 @@ HH.Lang.Unit = {}
 HH.Lang.Unit.Hydriss = KBM.Language:Add(HH.Hydriss.Name)
 HH.Lang.Unit.Hydriss:SetGerman("Hohepriesterin Hydriss")
 HH.Lang.Unit.Hydriss:SetFrench("Grande prêtresse Hydriss")
-HH.Lang.Unit.Hydriss:SetRussian("Первосвященница Гайдрисс")
+HH.Lang.Unit.Hydriss:SetRussian("Первосвященница Гидрисс")
 HH.Lang.Unit.HydShort = KBM.Language:Add(HH.Hydriss.Name)
 HH.Lang.Unit.HydShort:SetGerman()
 HH.Lang.Unit.HydShort:SetFrench()
+HH.Lang.Unit.HydShort:SetRussian("Гидрисс")
 HH.Lang.Unit.Sea = KBM.Language:Add("Seaspawn")
 HH.Lang.Unit.Sea:SetGerman("Meeresbrut")
 HH.Lang.Unit.Sea:SetFrench("Engeance des mers")
@@ -69,7 +70,7 @@ HH.Lang.Unit.Sea:SetRussian("Порождение моря")
 HH.Lang.Unit.Hive = KBM.Language:Add("Seaclaw Hive")
 HH.Lang.Unit.Hive:SetFrench("Nid de griffemarées")
 HH.Lang.Unit.Hive:SetGerman("Seeklauennest")
-
+HH.Lang.Unit.Hive:SetRussian("Гнездо водолапов")
 -- Ability Dictionary
 HH.Lang.Ability = {}
 HH.Lang.Ability.Tsunami = KBM.Language:Add("Tsunami")
