@@ -97,7 +97,7 @@ MOD.Squersh = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	MasterID = "Master",
+	MasterID = "U1DEFC8A4336C527E",
 	TimeOut = 5,
 }
 

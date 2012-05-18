@@ -1,8 +1,34 @@
-﻿v1.0.4
+﻿v1.0.5
+
+Engine
+* Change: Some optimization work on how events are triggered.
+* Change: Internal Unit detail data cache is updated slightly more frequently.
+
+Tank-Swap
+* New: Tank-Swap can now track 2 debuffs.
+* Change: Event.KingMolinator.System.TankSwap.Start(table = {DebuffList = table{[Debuff Name] = Index}, Enabled = bool})
+
+Infernal Dawn
+* Muglak
+** New: Added an alert for Brilliant Inferno.
+** New: Added a timer for the first Brilliant Inferno.
+** New: Added timers for each Brilliant Inferno after the first.
+* Maklamos The Scryer
+** New: Added a secondary debuff tracker to Tank-Swap for Weakness.
+
+Master Mode Dungeons
+* Darkening Deeps
+** Alchemist Braxtepel
+*** New: Added UID for Squersh. If this encounter was triggered via Squersh it would not initiate correctly.
+** Emissary Villizar
+*** New: Added UID for this Boss for faster encounter matching, and future proofing.
+
+----
+v1.0.4
 
 URGENT FIX (if you're running ID)
 * Maklamos the Scryer
-** Removed: Command which was accidently left in from new alpha. (would cause instant error)
+** Removed: Command which was accidentally left in from new alpha. (would cause instant error)
 ----
 v1.0.3
 
@@ -209,7 +235,7 @@ Options
 * Screen Alerts
 ** Fixed: The option "Show Anchor (for positioning)" was not unlocking the text until you closed then re-opened the options screen.
 
-CastBars
+Castbars
 * Change: Castbars will no long be interactive while the Menu Screen is not open.
 
 Hammerknell Fortress
@@ -260,7 +286,7 @@ Gilded Prophecy
 ** New: Timer added for Explosive Venom.
 ** New: Mechanic Spy added for Explosive Venom.
 * Guurloth
-** New: Mechanic Spy added for Earthern Punishment. (Stop cast debuff) 
+** New: Mechanic Spy added for Earthen Punishment. (Stop cast debuff) 
 * Thalguur
 ** New: Mechanic Spy added for Call of Gold. (Beam to Tower debuff).
 ** New: Mechanic Spy added for Touch of the Core.

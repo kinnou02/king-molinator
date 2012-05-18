@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r382"
+KBM.Alpha = ".r383"
 KBM.Event = {
 	Mark = {},
 	System = {
@@ -3903,6 +3903,7 @@ function KBM.Unit:Create(uDetails, UnitID)
 					end
 				end
 				if uDetails then
+					self.Details = uDetails
 					if self.Mark ~= uDetails.mark then
 						self.Mark = uDetails.mark
 						KBM.Event.Mark(self.Mark, self.UnitID)
@@ -3930,6 +3931,7 @@ function KBM.Unit:Create(uDetails, UnitID)
 				if self.Available == true then
 					local uDetails = Inspect.Unit.Detail(self.UnitID)
 					if uDetails ~= nil then
+						self.Details = uDetails
 						if uDetails.healthMax then
 							self.HealthMax = uDetails.healthMax
 						end
@@ -3971,6 +3973,7 @@ function KBM.Unit:Create(uDetails, UnitID)
 				if self.Available == true then
 					local uDetails = Inspect.Unit.Detail(self.UnitID)
 					if uDetails ~= nil or self.Available ~= false then
+						self.Details = uDetails
 						if uDetails.healthMax then
 							self.HealthMax = uDetails.healthMax
 						end

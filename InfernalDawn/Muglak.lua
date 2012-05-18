@@ -35,19 +35,20 @@ MK.Muglak = {
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
-	-- TimersRef = {},
-	-- AlertsRef = {},
+	TimersRef = {},
+	AlertsRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		-- TimersRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
-		-- },
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
-		-- },
+		TimersRef = {
+			Enabled = true,
+			BrillFirst = KBM.Defaults.TimerObj.Create("red"),
+			Brill = KBM.Defaults.TimerObj.Create("red"),
+		},
+		AlertsRef = {
+			Enabled = true,
+			Brill = KBM.Defaults.AlertObj.Create("red"),
+		},
 	}
 }
 
@@ -66,6 +67,11 @@ MK.Lang.Unit.MuglakShort:SetRussian("Маглак")
 
 -- Ability Dictionary
 MK.Lang.Ability = {}
+MK.Lang.Ability.Brill = KBM.Language:Add("Brilliant Inferno")
+
+-- Menu Dictionary
+MK.Lang.Menu = {}
+MK.Lang.Menu.Brill = KBM.Language:Add("First Brilliant Inferno")
 
 -- Description Dictionary
 MK.Lang.Main = {}
@@ -92,10 +98,10 @@ function MK:InitVars()
 		CastBar = self.Muglak.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
-		-- MechTimer = KBM.Defaults.MechTimer(),
-		-- Alerts = KBM.Defaults.Alerts(),
-		-- TimersRef = self.Muglak.Settings.TimersRef,
-		-- AlertsRef = self.Muglak.Settings.AlertsRef,
+		MechTimer = KBM.Defaults.MechTimer(),
+		Alerts = KBM.Defaults.Alerts(),
+		TimersRef = self.Muglak.Settings.TimersRef,
+		AlertsRef = self.Muglak.Settings.AlertsRef,
 	}
 	KBMINDMK_Settings = self.Settings
 	chKBMINDMK_Settings = self.Settings
@@ -175,6 +181,7 @@ function MK:UnitHPCheck(unitDetails, unitID)
 					self.PhaseObj:SetPhase("1")
 					self.PhaseObj.Objectives:AddPercent(self.Muglak.Name, 0, 100)
 					self.Phase = 1
+					KBM.MechTimer:AddStart(self.Muglak.TimersRef.BrillFirst)
 				else
 					BossObj.Dead = false
 					BossObj.Casting = false
@@ -235,12 +242,19 @@ end
 
 function MK:Start()
 	-- Create Timers
-	-- KBM.Defaults.TimerObj.Assign(self.Muglak)
+	self.Muglak.TimersRef.BrillFirst = KBM.MechTimer:Add(self.Lang.Ability.Brill[KBM.Lang], 15)
+	self.Muglak.TimersRef.BrillFirst.MenuName = self.Lang.Menu.Brill[KBM.Lang]
+	self.Muglak.TimersRef.Brill = KBM.MechTimer:Add(self.Lang.Ability.Brill[KBM.Lang], 66)
+	KBM.Defaults.TimerObj.Assign(self.Muglak)
 	
 	-- Create Alerts
-	-- KBM.Defaults.AlertObj.Assign(self.Muglak)
+	self.Muglak.AlertsRef.Brill = KBM.Alert:Create(self.Lang.Ability.Brill[KBM.Lang], nil, false, true, "red")
+	KBM.Defaults.AlertObj.Assign(self.Muglak)	
 	
 	-- Assign Alerts and Timers to Triggers
+	self.Muglak.Triggers.Brill = KBM.Trigger:Create(self.Lang.Ability.Brill[KBM.Lang], "cast", self.Muglak)
+	self.Muglak.Triggers.Brill:AddAlert(self.Muglak.AlertsRef.Brill)
+	self.Muglak.Triggers.Brill:AddTimer(self.Muglak.TimersRef.Brill)
 	
 	self.Muglak.CastBar = KBM.CastBar:Add(self, self.Muglak)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
