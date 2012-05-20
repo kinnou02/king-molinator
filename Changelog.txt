@@ -35,6 +35,9 @@ Dictionary Entries
 Russian Translations
 * Updated.
 
+French Translations
+* Fixes.
+
 ----
 v1.0.4
 

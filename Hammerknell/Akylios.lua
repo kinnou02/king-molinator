@@ -223,13 +223,15 @@ AK.Lang.Mechanic.Submerge:SetFrench("Akylios immerge")
 AK.Lang.Mechanic.Left = KBM.Language:Add("Akylios rears to the left!")
 AK.Lang.Mechanic.Left:SetGerman("Akylios bäumt sich zu Eurer Linken auf!")
 AK.Lang.Mechanic.Left:SetFrench("Akylios se penche vers la gauche !")
+AK.Lang.Mechanic.Left:SetRussian("Акилиос отклоняется влево!")
 AK.Lang.Mechanic.Center = KBM.Language:Add("Akylios rears backwards!")
 AK.Lang.Mechanic.Center:SetGerman("Akylios bäumt sich hinter Euch auf!")
 AK.Lang.Mechanic.Center:SetFrench("Akylios se cabre !")
+AK.Lang.Mechanic.Center:SetRussian("Акилиос отклоняется назад!")
 AK.Lang.Mechanic.Right = KBM.Language:Add("Akylios rears to the right!")
 AK.Lang.Mechanic.Right:SetGerman("Akylios bäumt sich zu Eurer Rechten auf!")
 AK.Lang.Mechanic.Right:SetFrench("Akylios se penche vers la droite !")
-
+AK.Lang.Mechanic.Right:SetRussian("Акилиос отклоняется вправо!")
 -- Notify Dictionary
 AK.Lang.Notify = {}
 AK.Lang.Notify.Orb = KBM.Language:Add("Jornaru launches a suffocating orb at (%a*)")
@@ -312,7 +314,7 @@ AK.Lang.Options.Lasher:SetRussian("Появление второго Бичев�
 AK.Lang.Options.Percent = KBM.Language:Add("Use percentage based trigger for Phase 2")
 AK.Lang.Options.Percent:SetGerman("Prozent basierte Trigger in Phase 2 verwenden")
 AK.Lang.Options.Percent:SetFrench("Utilisez déclenchement basée sur les % pour la Phase 2")
-
+AK.Lang.Options.Percent:SetRussian("Использовать триггер по процентам для фазы 2")
 AK.Descript = AK.Akylios.Name.." & "..AK.Jornaru.Name
 
 function AK:AddBosses(KBM_Boss)

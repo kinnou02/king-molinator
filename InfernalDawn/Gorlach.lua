@@ -76,7 +76,7 @@ GL.Lang.Ability = {}
 GL.Lang.Debuff = {}
 GL.Lang.Debuff.Hot = KBM.Language:Add("Hot Foot")
 GL.Lang.Debuff.Hot:SetGerman("Heißfuß")
-GL.Lang.Debuff.Hot:SetFrench("Flammes de désorientation")
+GL.Lang.Debuff.Hot:SetFrench("À toute vitesse")
 GL.Lang.Debuff.Hot:SetRussian("Горящие ноги")
 GL.Lang.Debuff.Fire = KBM.Language:Add("Fire Infusion")
 GL.Lang.Debuff.Fire:SetGerman("Feuer-Infusion")
