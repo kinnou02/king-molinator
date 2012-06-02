@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r389"
+KBM.Alpha = ".r390"
 KBM.Event = {
 	Mark = {},
 	System = {
@@ -5842,10 +5842,11 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 							if KBM.Trigger.Cast[bDetails.abilityName] then
 								if KBM.Trigger.Cast[bDetails.abilityName][self.Boss.Name] then
 									local TriggerObj = KBM.Trigger.Cast[bDetails.abilityName][self.Boss.Name]
+									local TargetID = ""
 									if self.Boss.UnitID then
-										local TargetID = Inspect.Unit.Lookup(self.Boss.UnitID..".target")
+										TargetID = Inspect.Unit.Lookup(self.Boss.UnitID..".target")
 									end
-									KBM.Trigger.Queue:Add(TriggerObj, self.Boss.UnitID, self.Boss.UnitID, bDetails.remaining)
+									KBM.Trigger.Queue:Add(TriggerObj, TargetID, TargetID, bDetails.remaining)
 								end
 							elseif KBM.Trigger.PersonalCast[bDetails.abilityName] then
 								if KBM.Trigger.PersonalCast[bDetails.abilityName][self.Boss.Name] then
@@ -5865,10 +5866,11 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 								if KBM.Trigger.Channel[bDetails.abilityName] then
 									if KBM.Trigger.Channel[bDetails.abilityName][self.Boss.Name] then
 										local TriggerObj = KBM.Trigger.Channel[bDetails.abilityName][self.Boss.Name]
+										local TargetID = ""
 										if self.Boss.UnitID then
-											local TargetID = Inspect.Unit.Lookup(self.Boss.UnitID..".target")
+											TargetID = Inspect.Unit.Lookup(self.Boss.UnitID..".target")
 										end
-										KBM.Trigger.Queue:Add(TriggerObj, self.Boss.UnitID, TargetID, bDetails.remaining)
+										KBM.Trigger.Queue:Add(TriggerObj, TargetID, TargetID, bDetails.remaining)
 									end
 								end
 							end
