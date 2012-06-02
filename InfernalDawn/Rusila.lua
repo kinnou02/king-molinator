@@ -35,6 +35,7 @@ RS.Rusila = {
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
+	Ignore = true,
 	-- TimersRef = {},
 	-- AlertsRef = {},
 	Triggers = {},
@@ -63,40 +64,95 @@ RS.Lang.Unit.RusShort = KBM.Language:Add("Rusila")
 RS.Lang.Unit.RusShort:SetGerman()
 RS.Lang.Unit.RusShort:SetFrench()
 RS.Lang.Unit.RusShort:SetRussian("Русила")
+RS.Lang.Unit.Long = KBM.Language:Add("Dreaded Longshot")
+RS.Lang.Unit.LongShort = KBM.Language:Add("Longshot")
+RS.Lang.Unit.Heart = KBM.Language:Add("Heart of the Dread Fortune")
+RS.Lang.Unit.HeartShort = KBM.Language:Add("Heart")
 
 -- Ability Dictionary
 RS.Lang.Ability = {}
-
 RS.Lang.Ability.Saw = KBM.Language:Add("Buzz Saw")
 RS.Lang.Ability.Saw:SetGerman("Kreissäge")
 RS.Lang.Ability.Saw:SetFrench("Scie circulaire")
--- RS.Lang.Ability.Saw:SetRussian("")
 RS.Lang.Ability.DreadShot = KBM.Language:Add("Dread Shot")
 RS.Lang.Ability.DreadShot:SetGerman("Schreckangriff")
 RS.Lang.Ability.DreadShot:SetFrench("Tir terrifiant")
--- RS.Lang.Ability.DreadShot:SetRussian("")
 RS.Lang.Ability.Fist = KBM.Language:Add("Fist")
 RS.Lang.Ability.Fist:SetGerman("Faust")
 RS.Lang.Ability.Fist:SetFrench("Poing")
--- RS.Lang.Ability.Fist:SetRussian("")
 RS.Lang.Ability.Wrath = KBM.Language:Add("Iron Wrath")
 RS.Lang.Ability.Wrath:SetGerman("Eisenzorn")
 RS.Lang.Ability.Wrath:SetFrench("Courroux de fer")
--- RS.Lang.Ability.Wrath:SetRussian("")
 RS.Lang.Ability.Chain = KBM.Language:Add("Barbed Chain")
 RS.Lang.Ability.Chain:SetGerman("Stacheldrahtkette")
 RS.Lang.Ability.Chain:SetFrench("Chaîne barbelée")
--- RS.Lang.Ability.Chain:SetRussian("")
+
+-- Buff Dictionary
+RS.Lang.Buff = {}
+RS.Lang.Buff.Barrel = KBM.Language:Add("Barrel of Dragon's Breath")
 
 RS.Rusila.Name = RS.Lang.Unit.Rusila[KBM.Lang]
 RS.Rusila.NameShort = RS.Lang.Unit.RusShort[KBM.Lang]
 RS.Descript = RS.Rusila.Name
 
+RS.Long = {
+	Mod = RS,
+	Level = "??",
+	Name = RS.Lang.Unit.Long[KBM.Lang],
+	NameShort = RS.Lang.Unit.Long[KBM.Lang],
+	Location = "The Dread Fortune",
+	UnitList = {},
+	Menu = {},
+	Ignore = true,
+	Type = "multi",
+}
+
+RS.Heart = {
+	Mod = RS,
+	Level = "??",
+	Name = RS.Lang.Unit.Heart[KBM.Lang],
+	NameShort = RS.Lang.Unit.HeartShort[KBM.Lang],
+	Location = "The Dread Fortune",
+	Menu = {},
+	Ignore = true,
+}
+
+RS.Dummy = {
+	Mod = RS,
+	Active = false,
+	Level = "??",
+	Name = "Dummy Start",
+	NameShort = "Start",
+	Location = "The Dread Fortune",
+	UnitList = {},
+	Menu = {},
+	Type = "multi",
+	RaidID = "Rusila_DummyID",
+	Details = {
+		name = "Dummy Start",
+		combat = true,
+		level = "??",
+		tier = "raid",
+		location = "The Dread Fortune",
+		health = 10,
+		healthMax = 10,
+		["type"] = "Rusila_DummyID",
+	},
+}
+
+
 function RS:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Rusila.Name] = self.Rusila,
+		[self.Long.Name] = self.Long,
+		[self.Dummy.Name] = self.Dummy,
+		[self.Heart.Name] = self.Heart,
 	}
+	KBM_Boss[self.Rusila.Name] = self.Rusila
+	KBM_Boss[self.Dummy.Name] = self.Dummy
+	KBM.SubBoss[self.Long.Name] = self.Long
+	KBM.SubBoss[self.Heart.Name] = self.Heart
 end
 
 function RS:InitVars()
@@ -164,30 +220,60 @@ function RS:Death(UnitID)
 	if self.Rusila.UnitID == UnitID then
 		self.Rusila.Dead = true
 		return true
+	elseif self.Heart.UnitID == UnitID then
+		self.PhaseObj.Objectives:Remove()
+		self.PhaseObj.Objectives:AddPercent(self.Rusila.Name, 0, 100)
+		self.PhaseObj:SetPhase("Final")
+		self.Phase = 2
 	end
 	return false
 end
 
-function RS:UnitHPCheck(unitDetails, unitID)	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if unitDetails.name == self.Rusila.Name then
-				if not self.EncounterRunning then
-					self.EncounterRunning = true
-					self.StartTime = Inspect.Time.Real()
-					self.HeldTime = self.StartTime
-					self.TimeElapsed = 0
-					self.Rusila.Dead = false
-					self.Rusila.Casting = false
-					self.Rusila.CastBar:Create(unitID)
-					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase("Single")
-					self.PhaseObj.Objectives:AddPercent(self.Rusila.Name, 0, 100)
-					self.Phase = 1
+function RS:UnitHPCheck(uDetails, unitID)	
+	if uDetails and unitID then
+		if not uDetails.player then
+			if self.Bosses[uDetails.name] then
+				local BossObj = self.Bosses[uDetails.name]
+				if BossObj then
+					if not self.EncounterRunning and BossObj == self.Dummy then
+						self.EncounterRunning = true
+						self.StartTime = Inspect.Time.Real()
+						self.HeldTime = self.StartTime
+						self.TimeElapsed = 0
+						BossObj.Dead = false
+						self.PhaseObj:Start(self.StartTime)
+						if BossObj == self.Dummy then
+							self.PhaseObj:SetPhase("Heart")
+							self.PhaseObj.Objectives:AddPercent(self.Lang.Unit.Heart[KBM.Lang], 0, 100)
+							self.Phase = 1
+						end
+					elseif BossObj.Type == "multi" then
+						if BossObj.UnitList then
+							if not BossObj.UnitList[unitID] then
+								SubBossObj = {
+									Mod = RS,
+									Level = "??",
+									Name = uDetails.name,
+									Dead = false,
+									Casting = false,
+									UnitID = unitID,
+									Available = true,
+								}
+								BossObj.UnitList[unitID] = SubBossObj
+							else
+								BossObj.UnitList[unitID].Available = true
+								BossObj.UnitList[unitID].UnitID = unitID
+							end
+							return BossObj.UnitList[unitID]
+						end
+					end
+					if BossObj == self.Rusila then
+						self.Rusila.CastBar:Create(unitID)
+					end
+					BossObj.UnitID = unitID
+					BossObj.Available = true
+					return BossObj
 				end
-				self.Rusila.UnitID = unitID
-				self.Rusila.Available = true
-				return self.Rusila
 			end
 		end
 	end
@@ -240,6 +326,7 @@ function RS:Start()
 	-- KBM.Defaults.AlertObj.Assign(self.Rusila)
 	
 	-- Assign Alerts and Timers to Triggers
+	self.Rusila.Triggers.Barrel = KBM.Trigger:Create(self.Lang.Buff.Barrel[KBM.Lang], "playerBuff", self.Dummy, nil, true)
 	
 	self.Rusila.CastBar = KBM.CastBar:Add(self, self.Rusila)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

@@ -21,6 +21,7 @@ LibSRM.AddonDetails = Inspect.Addon.Detail("SafesRaidManager")
 
 local SRM_HeldTime = Inspect.Time.Real()
 local SRM_Units = {}
+local SRM_NameList = {}
 SRM_Units.Pets = {}
 local SRM_Raid = {}
 SRM_Raid.Populated = 0
@@ -62,11 +63,13 @@ local SRM_Group = {
 	Leave = {},
 	Change = {},
 	Target = {},
+	Offline = {},
 }
 SRM_Group.Join, SRM_Group.Join.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Join")
 SRM_Group.Leave, SRM_Group.Leave.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Leave")
 SRM_Group.Change, SRM_Group.Change.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Change")
 SRM_Group.Target, SRM_Group.Target.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Target")
+SRM_Group.Offline, SRM_Group.Offline.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Offline")
 SRM_Group.Combat = {
 	Start = {},
 	End = {},
@@ -258,6 +261,7 @@ local function SRM_SetSpecifier(Specifier)
 		end
 		SRM_Raid.Populated = SRM_Raid.Populated - 1
 		SRM_Units[self.UnitID] = nil
+		SRM_NameList[self.name] = nil
 		self.SRM_Unit = nil
 		if self.PetID then
 			--print("Pet Removed!")
@@ -361,6 +365,7 @@ local function SRM_SetSpecifier(Specifier)
 					SRM_Units[self.UnitID].Specifier = self.Spec
 					SRM_Units[self.UnitID].UnitID = self.UnitID
 					SRM_Units[self.UnitID].name = uDetails.name
+					SRM_Units[self.UnitID].calling = uDetails.calling
 					SRM_Units[self.UnitID].Loaded = true
 					if uDetails.combat then
 						SRM_Combat({[self.UnitID] = true})
@@ -386,6 +391,8 @@ local function SRM_SetSpecifier(Specifier)
 					end
 					-- Send JOIN message HERE
 					SRM_Group.Join(self.UnitID, self.Spec)
+					self.name = uDetails.name
+					SRM_NameList[self.name] = SRM_Units[self.UnitID]
 					--print("Unit joined group: "..uDetails.name)
 				else
 					-- Send JOIN-WAIT message HERE (maybe)
@@ -404,6 +411,15 @@ local function SRM_SetSpecifier(Specifier)
 	table.insert(event, {function (data) Unit:Target(data, false) end, "SafesRaidManager", Specifier.."_target"})
 	Unit:Load()
 	Unit:PetLoad()
+end
+
+local function SRM_Offline(data)
+	for UID, Value in pairs(data) do
+		if SRM_Units[UID] then
+			SRM_Units[UID].Offline = Value
+			SRM_Group.Offline(UID, Value)
+		end
+	end
 end
 
 local function SRM_Death(data)
@@ -689,6 +705,7 @@ local function SRM_Stall(Data)
 					table.insert(Event.Combat.Damage, {SRM_Damage, "SafesRaidManager", "Damage Monitor"})
 					table.insert(Event.Combat.Heal, {SRM_Heal, "SafesRaidManager", "Heal Monitor"})
 					table.insert(Event.Combat.Death, {SRM_Death, "SafesRaidManager", "Death Monitor"})
+					table.insert(Event.Unit.Detail.Offline, {SRM_Offline, "SafesRaidManager", "Offline Monitor"})
 					table.insert(Event.Unit.Detail.Combat, {SRM_Combat, "SafesRaidManager", "Combat Monitor"})
 					table.insert(event, {SRM_PlayerPet, "SafesRaidManager", "player.pet"})
 					if LibSRM.Player.PetID then
@@ -718,6 +735,11 @@ function LibSRM.Group.Inspect(index)
 		end
 		--print("Returning: "..tostring(CheckSpec)..", "..tostring(UID))
 		return CheckSpec, UID
+	end
+end
+function LibSRM.Group.NameSearch(Name)
+	if SRM_NameList[Name] then
+		return SRM_NameList[Name].Specifier, SRM_NameList[Name].UnitID
 	end
 end
 function LibSRM.Group.Target(UID)

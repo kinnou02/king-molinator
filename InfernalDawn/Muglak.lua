@@ -68,10 +68,14 @@ MK.Lang.Unit.MuglakShort:SetRussian("Маглак")
 -- Ability Dictionary
 MK.Lang.Ability = {}
 MK.Lang.Ability.Brill = KBM.Language:Add("Brilliant Inferno")
+MK.Lang.Ability.Brill:SetFrench("Brasier éclatant")
+MK.Lang.Ability.Brill:SetGerman("Blendendes Inferno")
 
 -- Menu Dictionary
 MK.Lang.Menu = {}
 MK.Lang.Menu.Brill = KBM.Language:Add("First Brilliant Inferno")
+MK.Lang.Menu.Brill:SetFrench("Premier Brasier éclatant")
+MK.Lang.Menu.Brill:SetGerman("Erstes Blendendes Inferno")
 
 -- Description Dictionary
 MK.Lang.Main = {}

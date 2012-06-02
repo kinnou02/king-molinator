@@ -83,6 +83,7 @@ function KBMLM.SetMain_Lang()
 	-- Main Addon Dictionary
 	-- Welcome Messages
 	KBM.Language.Welcome = {}
+	KBMLM.SetGroupObject(KBM.Language.Welcome, "GroupObject", "Welcome messages")
 	KBM.Language.Welcome.Welcome = KBM.Language:Add("Welcome to King Boss Mods v")
 	KBM.Language.Welcome.Welcome:SetGerman("Willkommen zu King Boss Mods v")
 	KBM.Language.Welcome.Welcome:SetFrench("Bienvenu sur King Boss Mods v")
@@ -95,12 +96,20 @@ function KBMLM.SetMain_Lang()
 	
 	-- Version Info
 	KBM.Language.Version = {}
+	KBMLM.SetGroupObject(KBM.Language.Version, "GroupObject", "Version Related Text")
 	KBM.Language.Version.Title = KBM.Language:Add("You are running:")
 	KBM.Language.Version.Title:SetFrench("Vous exécuter ceci:")
 	KBM.Language.Version.Title:SetGerman("Du benutzt:")
 	
+	-- Rez Master Dictionary
+	KBM.Language.RezMaster = {}
+	KBMLM.SetGroupObject(KBM.Language.RezMaster, "GroupObject", "Rez Master dictionary")
+	KBM.Language.RezMaster.Ready = KBM.Language:Add("Ready!")
+	KBM.Language.RezMaster.AnchorText = KBM.Language:Add("Rez Timer Anchor")
+	
 	-- Command Listings
 	KBM.Language.Command = {}
+	KBMLM.SetGroupObject(KBM.Language.Command, "GroupObject", "Slash Command dictionary")
 	KBM.Language.Command.Title = KBM.Language:Add("King Boss Mods in game slash commands")
 	KBM.Language.Command.Title:SetGerman("King Boss Mods - mögliche Befehle")
 	KBM.Language.Command.Title:SetFrench("King Boss Mods Commandes en jeu")
@@ -125,6 +134,7 @@ function KBMLM.SetMain_Lang()
 	
 	-- Encounter Tabs
 	KBM.Language.Tabs = {}
+	KBMLM.SetGroupObject(KBM.Language.Tabs, "GroupObject", "Option Tabs related")
 	KBM.Language.Tabs.Encounter = KBM.Language:Add("Encounter")
 	KBM.Language.Tabs.Encounter:SetGerman("Gegner")
 	KBM.Language.Tabs.Encounter:SetFrench("Combat")
@@ -146,6 +156,7 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Tabs.Records:SetFrench("Archives")
 	KBM.Language.Tabs.Records:SetRussian("Рекорды")
 	KBM.Language.Tabs.Plugins = KBM.Language:Add("Plug-Ins")
+	KBM.Language.Tabs.Plugins:SetGerman()
 	
 	-- Encounter related messages
 	KBM.Language.Encounter = {}
@@ -307,6 +318,7 @@ function KBMLM.SetMain_Lang()
 
 	-- MechSpy Options
 	KBM.Language.MechSpy = {}
+	KBMLM.SetGroupObject(KBM.Language.MechSpy, "GroupObject", "Mechanic Spy dictionary")
 	KBM.Language.MechSpy.Name = KBM.Language:Add("Mechanic Spy")
 	KBM.Language.MechSpy.Name:SetGerman("Mechanik Spion")
 	KBM.Language.MechSpy.Name:SetFrench("Espion de Mécanisme")
@@ -374,12 +386,19 @@ function KBMLM.SetMain_Lang()
 	
 	-- Anchor Text
 	KBM.Language.Anchors = {}
+	KBMLM.SetGroupObject(KBM.Language.Anchors, "GroupObject", "All anchor text")
 	KBM.Language.Anchors.MechSpy = KBM.Language:Add("Mechanic Spy Anchor")
+	KBM.Language.Anchors.MechSpy:SetGerman("Mechanik Spion Anker")
 	KBM.Language.Anchors.Timers = KBM.Language:Add("Timer Anchor")
+	KBM.Language.Anchors.Timers:SetGerman("Timer Anker")
 	KBM.Language.Anchors.TankSwap = KBM.Language:Add("Tank-Swap Anchor")
+	KBM.Language.Anchors.TankSwap:SetGerman("Tank Wechsel Anker")
 	KBM.Language.Anchors.Phases = KBM.Language:Add("Phases & Objectives")
+	KBM.Language.Anchors.Phases:SetGerman("Phasen Monitor Anker")
 	KBM.Language.Anchors.Castbars = KBM.Language:Add("Global Castbar")
+	KBM.Language.Anchors.Castbars:SetGerman("Zauberbalken Anker")
 	KBM.Language.Anchors.AlertText = KBM.Language:Add(" Alert Anchor ")
+	KBM.Language.Anchors.AlertText:SetGerman(" Alarmierungs Anker ")
 
 	-- Phase Monitor
 	KBM.Language.Options.PhaseMonOverride = KBM.Language:Add("Phase Monitor: Override")
@@ -525,6 +544,7 @@ function KBMLM.SetMain_Lang()
 
 	-- Main Options Dictionary
 	KBM.Language.Menu = {}
+	KBMLM.SetGroupObject(KBM.Language.Menu, "GroupObject", "Menu related dictionary")
 	KBM.Language.Menu.Global = KBM.Language:Add("Global Options")
 	KBM.Language.Menu.Global:SetGerman("Globale Einstellungen")
 	KBM.Language.Menu.Global:SetFrench("Options Globales")
@@ -548,6 +568,7 @@ function KBMLM.SetMain_Lang()
 	
 	-- Filter Options
 	KBM.Language.Filters = {}
+	KBMLM.SetGroupObject(KBM.Language.Filters, "GroupObject", "Filter related dictionary")
 	KBM.Language.Filters.EnableBoss = KBM.Language:Add("Enable %s's filters")
 	KBM.Language.Filters.EnableBoss:SetFrench("Filtres sur %s Activé")
 	KBM.Language.Filters.EnableBoss:SetGerman("Aktiviere %s's Filter")
@@ -595,6 +616,7 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Timers.Enrage:SetFrench("Enrage dans")
 	KBM.Language.Timers.Enrage:SetRussian("Энрейдж через")
 	KBM.Language.Timers.Enraged = KBM.Language:Add("!! Enraged !!")
+	KBM.Language.Timers.Enraged:SetGerman()
 
 	KBM.Numbers = {}
 	KBM.Numbers.Place = {}

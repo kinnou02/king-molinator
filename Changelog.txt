@@ -1,4 +1,39 @@
-﻿v1.0.5
+﻿v1.0.6
+
+System
+* Fixed: Version notifications where only triggering from guild members. Now works with raid members.
+
+Unit Tracker
+* Change: Improved tracking of non-seen units. This should improve CPU performance and accuracy of auxilary tracking.
+* Change: Unseen units are now correctly placed in the Idle queue until activity stops or they die.
+* Change: Improved engine so that conditional checks are grouped and ordered better. CPU performance boost.
+* Fixed: Removed units where not ungrouping correctly.
+
+New! Rez Master
+* New: Changing roles and logging in will check and begin to register available combat rezes.
+* New: Joining a raid, and reloading UI will request an update for all raid party members who may have a combat rez.
+* New: Timers for combat rezes display the appropriate icon.
+* New: Timers for combat rezes will display a ready state when off cool down.
+* New: Timers will attempt to order the shortest cool down combat rezes at the top.
+* New: Settings will be saved for position the Rez Master anchor.
+* Note: There is no menu options for this module at the moment. These will be incoming after initial public testing is complete.
+
+Tank-Swap
+* Fixed: Attempted to fix the second debuff stack display not showing.
+
+Infernal Dawn
+* Maklamos the Scryer
+** Change: Increased timer for Crystaline Desolation by 20 seconds. (This could change again, once the encounter is finished)
+* Rusila Dreadblade
+** New: Encounter start is now recognized when picking up a Barrel.
+** New: Phase change has been implimented for when Heart of the Dread Fortune is destroyed.
+
+Hammerknell Fortress
+* Estrode
+** New: Added personal alert for Neddra's Grasp.
+
+----
+v1.0.5
 
 Engine
 * Change: Some optimization work on how events are triggered.

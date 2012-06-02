@@ -11,6 +11,8 @@ local PI = KBMMSG
 local KBMAddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = KBMAddonData.data
 
+KBM.MSG = PI
+
 PI.History = {
 	Checked = false,
 	Time = 0,
@@ -113,6 +115,10 @@ function PI.MessageHandler(From, Type, Channel, Identifier, Data)
 				if Identifier == "KBMVerInfo" then
 					PI.VersionCheck(Data)
 				end
+			elseif Type == "raid" then
+				if Identifier == "KBMVerInfo" then
+					PI.VersionCheck(Data)
+				end
 			elseif Type == "send" then
 				if Identifier == "KBMVerReq" then
 					PI.ReplyVersion(From)
@@ -124,25 +130,34 @@ function PI.MessageHandler(From, Type, Channel, Identifier, Data)
 	end
 end
 
-function PI:SendVersion()
+function PI:SendVersion(Group)
 	if not PI.SendSilent then
 		if KBM.Alpha then
-			Command.Message.Broadcast("guild", nil, "KBMVerInfo", KBMAddonData.toc.Version..KBM.Alpha, self.VersionAlert)
+			if not Group then
+				Command.Message.Broadcast("guild", nil, "KBMVerInfo", KBMAddonData.toc.Version..KBM.Alpha, self.VersionAlert)
+			else
+				Command.Message.Broadcast("raid", nil, "KBMVerInfo", KBMAddonData.toc.Version..KBM.Alpha, self.VersionAlert)
+			end
 		else
-			Command.Message.Broadcast("guild", nil, "KBMVerInfo", KBMAddonData.toc.Version, self.VersionAlert)
+			if not Group then
+				Command.Message.Broadcast("guild", nil, "KBMVerInfo", KBMAddonData.toc.Version, self.VersionAlert)
+			else
+				Command.Message.Broadcast("raid", nil, "KBMVerInfo", KBMAddonData.toc.Version, self.VersionAlert)
+			end
 		end
 	end
 end
 
-function PI.GroupJoin()
-	PI:SendVersion()
+function PI.PlayerJoin()
+	PI:SendVersion(true)
 end
 
 function PI.Start()
 	Command.Message.Accept("guild", "KBMVerInfo")
+	Command.Message.Accept("raid", "KBMVerInfo")
 	Command.Message.Accept("send", "KBMVerReq")
 	Command.Message.Accept("send", "KBMVerInfo")
-	table.insert(Event.SafesRaidManager.Player.Join, {PI.GroupJoin, "KBMMessenger", "Group Join Event"})
+	table.insert(Event.SafesRaidManager.Player.Join, {PI.PlayerJoin, "KBMMessenger", "Player Join"})
 	table.insert(Event.Message.Receive, {PI.MessageHandler, "KBMMessenger", "Messenger Handler"})
 	PI:SendVersion()
 end

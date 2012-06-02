@@ -2,6 +2,9 @@ v1.1.4
 * Rift Version
 * Change: Now compatible with 1.8.
 * New: LibSRM initialization string now gives its Version number.
+* New: SRM will now maintain a Name List look-up table for quick name searches. See new command below.
+* New: Command - LibSRM.Group.NameSearch(UnitName) -- returns Specifier, UnitID if available or nil.
+* New: Event.SafesRaidManager.Group.Offline -- Group member is now off-line/on-line (true/false)
 * Change: The player ready event (Stall) will now trigger only once the player is actually available.
 * Change: SRM now replaces its existing event table entry with a new one, rather than deleting it.
 * Change: SRM no longer runs an infinite Time check loop while waiting for Player available status.

@@ -53,6 +53,7 @@ ML.Maklamos = {
 			Blue = KBM.Defaults.AlertObj.Create("blue"),
 			Red = KBM.Defaults.AlertObj.Create("red"),
 			Distortion = KBM.Defaults.AlertObj.Create("cyan"),
+			Desolation = KBM.Defaults.AlertObj.Create("cyan"),
 		},
 		MechRef = {
 			Enabled = true,
@@ -123,6 +124,7 @@ ML.Lang.Debuff.Distortion:SetGerman("Kristallverzerrung")
 ML.Lang.Debuff.Distortion:SetFrench("Distorsion cristalline")
 ML.Lang.Debuff.Weak = KBM.Language:Add("Weakness")
 ML.Lang.Debuff.Weak:SetFrench("Faiblesse")
+ML.Lang.Debuff.Weak:SetGerman("Schwäche")
 
 ML.Maklamos.Name = ML.Lang.Unit.Maklamos[KBM.Lang]
 ML.Maklamos.NameShort = ML.Lang.Unit.MakShort[KBM.Lang]
@@ -310,7 +312,7 @@ end
 
 function ML:Start()
 	-- Create Timers
-	self.Maklamos.TimersRef.Desolation = KBM.MechTimer:Add(self.Lang.Ability.Crystal[KBM.Lang], 40)
+	self.Maklamos.TimersRef.Desolation = KBM.MechTimer:Add(self.Lang.Ability.Crystal[KBM.Lang], 60)
 	KBM.Defaults.TimerObj.Assign(self.Maklamos)
 	
 	-- Create Alerts
@@ -318,6 +320,7 @@ function ML:Start()
 	self.Maklamos.AlertsRef.Blue = KBM.Alert:Create(self.Lang.Debuff.Blue[KBM.Lang], nil, false, true, "blue")
 	self.Maklamos.AlertsRef.Red = KBM.Alert:Create(self.Lang.Debuff.Red[KBM.Lang], nil, false, true, "red")
 	self.Maklamos.AlertsRef.Distortion = KBM.Alert:Create(self.Lang.Debuff.Distortion[KBM.Lang], nil, false, true, "cyan")
+	self.Maklamos.AlertsRef.Desolation = KBM.Alert:Create(self.Lang.Ability.Crystal[KBM.Lang], nil, true, true, "cyan")
 	KBM.Defaults.AlertObj.Assign(self.Maklamos)
 	
 	-- Create Spies

@@ -52,6 +52,7 @@ ES.Estrode = {
 			North = KBM.Defaults.AlertObj.Create("orange"),
 			Chastise = KBM.Defaults.AlertObj.Create("yellow"),
 			Rift = KBM.Defaults.AlertObj.Create("orange"),
+			Grasp = KBM.Defaults.AlertObj.Create("purple"),
 		},
 	},
 }
@@ -91,6 +92,10 @@ ES.Lang.Ability.Chastise:SetFrench("Châtiment")
 ES.Lang.Ability.Rift = KBM.Language:Add("Mistress of the Rift")
 ES.Lang.Ability.Rift:SetGerman("Herrin des Risses")
 ES.Lang.Ability.Rift:SetFrench("Avatar de la Faille")
+
+-- Debuff Dictionary
+ES.Lang.Debuff = {}
+ES.Lang.Debuff.Grasp = KBM.Language:Add("Neddra's Grasp")
 
 -- Speak Dictionary
 ES.Lang.Say = {}
@@ -259,6 +264,7 @@ function ES:Start()
 	self.Estrode.AlertsRef.North = KBM.Alert:Create(self.Lang.Ability.North[KBM.Lang], 2, true, false, "orange")
 	self.Estrode.AlertsRef.Chastise = KBM.Alert:Create(self.Lang.Ability.Chastise[KBM.Lang], nil, true, true, "yellow")
 	self.Estrode.AlertsRef.Rift = KBM.Alert:Create(self.Lang.Ability.Rift[KBM.Lang], 2, true, false, "orange")
+	self.Estrode.AlertsRef.Grasp = KBM.Alert:Create(self.Lang.Debuff.Grasp[KBM.Lang], nil, false, true, "purple")
 	
 	KBM.Defaults.TimerObj.Assign(self.Estrode)
 	KBM.Defaults.AlertObj.Assign(self.Estrode)
@@ -282,6 +288,10 @@ function ES:Start()
 	self.Estrode.Triggers.ChastiseInt:AddStop(self.Estrode.AlertsRef.Chastise)
 	self.Estrode.Triggers.Rift = KBM.Trigger:Create(self.Lang.Ability.Rift[KBM.Lang], "buff", self.Estrode)
 	self.Estrode.Triggers.Rift:AddAlert(self.Estrode.AlertsRef.Rift)
+	self.Estrode.Triggers.Grasp = KBM.Trigger:Create(self.Lang.Debuff.Grasp[KBM.Lang], "playerBuff", self.Estrode)
+	self.Estrode.Triggers.Grasp:AddAlert(self.Estrode.AlertsRef.Grasp, true)
+	self.Estrode.Triggers.Grasp = KBM.Trigger:Create(self.Lang.Debuff.Grasp[KBM.Lang], "playerBuffRemove", self.Estrode)
+	self.Estrode.Triggers.Grasp:AddStop(self.Estrode.AlertsRef.Grasp)
 	
 	self.Estrode.CastBar = KBM.CastBar:Add(self, self.Estrode, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

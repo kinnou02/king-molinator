@@ -7,16 +7,18 @@ NameShort = "KBM"
 Description = "Development of a fully fledged Raid and Dungeon encounter alert system."
 
 Author = "Paul Snart"
-Website = "http://www.facebook.com/pages/King-Boss-Mods/271482262893152"
+Website = "http://www.facebook.com/KingBossMods"
 Email = "snarty@gmail.com"
 
-Version = "1.0.5"
+Version = "1.0.6"
 
 Environment = "1.8"
 
 RunOnStartup = {
 	"KingMolinator.lua",
 	"KMOptions.lua",
+	"Modules/RezMaster.lua",
+	"Modules/PlayerControl.lua",
 	"InfernalDawn/INDHeader.lua",
 	"InfernalDawn/Drak.lua",
 	"InfernalDawn/Gorlach.lua",
