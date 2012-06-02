@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r386"
+KBM.Alpha = ".r387"
 KBM.Event = {
 	Mark = {},
 	System = {
@@ -20,6 +20,14 @@ KBM.Event = {
 		TankSwap = {
 			Start = {},
 			End = {},
+		},
+		Player = {
+			Join = {},
+			Leave = {},
+		},
+		Group = {
+			Join = {},
+			Leave = {},
 		},
 	},
 	Unit = {
@@ -95,7 +103,9 @@ KBM.Unit = {
 }
 KBM.CPU = {}
 KBM.Lang = Inspect.System.Language()
-KBM.Player = {}
+KBM.Player = {
+	Rezes = {}
+}
 KBM.ID = "KingMolinator"
 KBM.ModList = {}
 KBM.Testing = false
@@ -7148,20 +7158,25 @@ end
 
 function KBM.PlayerJoin()
 	KBM.Player.Grouped = true
-	print("You have joined a group")
+	KBM.Unit:Available(Inspect.Unit.Detail(KBM.Player.UnitID), KBM.Player.UnitID)
+	KBM.Event.System.Player.Join()
+	--print("You have joined a group")
 end
 
 function KBM.PlayerLeave()
 	KBM.Player.Grouped = false
-	print("You have left a group")
+	KBM.Event.System.Player.Leave()
+	--print("You have left a group")
 end
 
 function KBM.GroupJoin(UnitID, Specifier)
 	KBM.Unit:Available(Inspect.Unit.Detail(UnitID), UnitID)
+	KBM.Event.System.Group.Join(UnitID)
 end
 
 function KBM.GroupLeave(UnitID, Specifier)
 	KBM.Unit:Idle(UnitID)
+	KBM.Event.System.Group.Leave(UnitID)
 end
 
 function KBM.GroupTarget(UnitID, TargetID)
@@ -7279,6 +7294,10 @@ KBM.Event.Unit.Combat.Enter, KBM.Event.Unit.Combat.Enter = Utility.Event.Create(
 KBM.Event.Unit.Combat.Leave, KBM.Event.Unit.Combat.Leave = Utility.Event.Create("KingMolinator", "Unit.Combat.Leave")
 KBM.Event.System.TankSwap.Start, KBM.Event.System.TankSwap.Start.EventTable = Utility.Event.Create("KingMolinator", "System.TankSwap.Start")
 KBM.Event.System.TankSwap.End, KBM.Event.System.TankSwap.End.EventTable = Utility.Event.Create("KingMolinator", "System.TankSwap.End")
+KBM.Event.System.Player.Join, KBM.Event.System.Player.Join.EventTable = Utility.Event.Create("KingMolinator", "System.Player.Join")
+KBM.Event.System.Player.Leave, KBM.Event.System.Player.Leave.EventTable = Utility.Event.Create("KingMolinator", "System.Player.Leave")
+KBM.Event.System.Group.Join, KBM.Event.System.Group.Join.EventTable = Utility.Event.Create("KingMolinator", "System.Group.Join")
+KBM.Event.System.Group.Leave, KBM.Event.System.Group.Leave.EventTable = Utility.Event.Create("KingMolinator", "System.Group.Leave")
 -- Encounter Related
 KBM.Event.Encounter.Start, KBM.Event.Encounter.Start.EventTable = Utility.Event.Create("KingMolinator", "Encounter.Start")
 KBM.Event.Encounter.End, KBM.Event.Encounter.End.EventTable = Utility.Event.Create("KingMolinator", "Encounter.End")
@@ -7294,7 +7313,6 @@ local function KBM_Start()
 	KBM.PhaseMonitor:Init()
 	KBM.Trigger:Init()
 	KBM.MechSpy:Init()
-	KBM.RezMaster:Start()
 	if KBM.Debug then
 		KBM.Unit.Debug:Init()
 	end
@@ -7396,7 +7414,6 @@ local function KBM_Start()
 		end
 	end
 	
-	KBM.PlayerControl:Start()
 end
 
 local function KBM_WaitReady(unitID, uDetails)
@@ -7444,6 +7461,11 @@ local function KBM_WaitReady(unitID, uDetails)
 	
 	KBM.CPU:Toggle(true)
 	KBM.Event.System.Start(self)
+	KBM.RezMaster:Start()
+	KBM.PlayerControl:Start()
+	if KBM.Player.Grouped then
+		KBM.Event.System.Player.Join()
+	end
 
 end
 

@@ -197,149 +197,151 @@ end
 
 function RM.Rezes:Init()
 	function self:Add(Name, aID, aCD, aFull)
-		if RM.GUI.Settings.Enabled then
-			local aDetails = Inspect.Ability.Detail(aID)
-			if aDetails then
-				local Anchor = RM.GUI.Anchor
-				local Timer = {}
-				if self.Tracked[Name] then
-					if self.Tracked[Name][aID] then
-						self.Tracked[Name][aID]:Remove()
+		if KBM.Player.Grouped then
+			if RM.GUI.Settings.Enabled then
+				local aDetails = Inspect.Ability.Detail(aID)
+				if aDetails then
+					local Anchor = RM.GUI.Anchor
+					local Timer = {}
+					if self.Tracked[Name] then
+						if self.Tracked[Name][aID] then
+							self.Tracked[Name][aID]:Remove()
+						end
+					else
+						self.Tracked[Name] = {}
 					end
-				else
-					self.Tracked[Name] = {}
-				end
-				self.Tracked[Name][aID] = Timer
-				Timer.GUI = RM.GUI:Pull()
-				Timer.GUI.Background:SetHeight(Anchor:GetHeight())
-				Timer.GUI.CastInfo:SetFontSize(KBM.Constant.RezMaster.TextSize * RM.GUI.Settings.tScale)
-				Timer.GUI.Shadow:SetFontSize(Timer.GUI.CastInfo:GetFontSize())
-				Timer.GUI.Icon:SetTexture("Rift", aDetails.icon)
-				Timer.SetWidth = Timer.GUI.Background:GetWidth() - Timer.GUI.Background:GetHeight()
-				local Spec, UID = LibSRM.Group.NameSearch(Name)
-				local Class = KBM.Unit.List.UID[UID].Details.calling
-				if Class == "mage" then
-					Timer.GUI.TimeBar:SetBackgroundColor(0.8, 0.55, 1, 0.33)
-				elseif Class == "cleric" then
-					Timer.GUI.TimeBar:SetBackgroundColor(0.55, 1, 0.55, 0.33)
-				end
-				Timer.Duration = math.floor(tonumber(aFull))
-				Timer.Remaining = (aCD or 0)
-				Timer.TimeStart = Inspect.Time.Real() - (Timer.Duration - Timer.Remaining)
-				Timer.Player = Name
-				Timer.Name = aDetails.name
-				
-				--if KBM.MechTimer.Settings.Shadow then
-					Timer.GUI.Shadow:SetText(Timer.GUI.CastInfo:GetText())
-					Timer.GUI.Shadow:SetVisible(true)
-				--else
-					--self.GUI.Shadow:SetVisible(false)
-				--end
-				
-				--if KBM.MechTimer.Settings.Texture then
-					--Timer.GUI.Texture:SetVisible(true)
-				--else
-					--self.GUI.Texture:SetVisible(false)
-				--end
-				
-				
-				-- if self.Settings then
-					-- if self.Settings.Custom then
-						-- self.GUI.TimeBar:SetBackgroundColor(KBM.Colors.List[self.Settings.Color].Red, KBM.Colors.List[self.Settings.Color].Green, KBM.Colors.List[self.Settings.Color].Blue, 0.33)
+					self.Tracked[Name][aID] = Timer
+					Timer.GUI = RM.GUI:Pull()
+					Timer.GUI.Background:SetHeight(Anchor:GetHeight())
+					Timer.GUI.CastInfo:SetFontSize(KBM.Constant.RezMaster.TextSize * RM.GUI.Settings.tScale)
+					Timer.GUI.Shadow:SetFontSize(Timer.GUI.CastInfo:GetFontSize())
+					Timer.GUI.Icon:SetTexture("Rift", aDetails.icon)
+					Timer.SetWidth = Timer.GUI.Background:GetWidth() - Timer.GUI.Background:GetHeight()
+					local Spec, UID = LibSRM.Group.NameSearch(Name)
+					local Class = KBM.Unit.List.UID[UID].Details.calling
+					if Class == "mage" then
+						Timer.GUI.TimeBar:SetBackgroundColor(0.8, 0.55, 1, 0.33)
+					elseif Class == "cleric" then
+						Timer.GUI.TimeBar:SetBackgroundColor(0.55, 1, 0.55, 0.33)
+					end
+					Timer.Duration = math.floor(tonumber(aFull))
+					Timer.Remaining = (aCD or 0)
+					Timer.TimeStart = Inspect.Time.Real() - (Timer.Duration - Timer.Remaining)
+					Timer.Player = Name
+					Timer.Name = aDetails.name
+					
+					--if KBM.MechTimer.Settings.Shadow then
+						Timer.GUI.Shadow:SetText(Timer.GUI.CastInfo:GetText())
+						Timer.GUI.Shadow:SetVisible(true)
+					--else
+						--self.GUI.Shadow:SetVisible(false)
+					--end
+					
+					--if KBM.MechTimer.Settings.Texture then
+						--Timer.GUI.Texture:SetVisible(true)
+					--else
+						--self.GUI.Texture:SetVisible(false)
+					--end
+					
+					
+					-- if self.Settings then
+						-- if self.Settings.Custom then
+							-- self.GUI.TimeBar:SetBackgroundColor(KBM.Colors.List[self.Settings.Color].Red, KBM.Colors.List[self.Settings.Color].Green, KBM.Colors.List[self.Settings.Color].Blue, 0.33)
+						-- else
+							-- self.GUI.TimeBar:SetBackgroundColor(KBM.Colors.List[self.Color].Red, KBM.Colors.List[self.Color].Green, KBM.Colors.List[self.Color].Blue, 0.33)
+						-- end
 					-- else
-						-- self.GUI.TimeBar:SetBackgroundColor(KBM.Colors.List[self.Color].Red, KBM.Colors.List[self.Color].Green, KBM.Colors.List[self.Color].Blue, 0.33)
-					-- end
-				-- else
-					--self.GUI.TimeBar:SetBackgroundColor(KBM.Colors.List[KBM.MechTimer.Settings.Color].Red, KBM.Colors.List[KBM.MechTimer.Settings.Color].Green, KBM.Colors.List[KBM.MechTimer.Settings.Color].Blue, 0.33)
-				--end
-				
-				if #self.ActiveTimers > 0 then
-					for i, cTimer in ipairs(self.ActiveTimers) do
-						if (Timer.Remaining < cTimer.Remaining) or (Timer.Duration <= cTimer.Duration and Timer.Remaining == cTimer.Remaining) then
-							Timer.Active = true
-							if i == 1 then
-								Timer.GUI.Background:SetPoint("TOPLEFT", Anchor, "TOPLEFT")
-								cTimer.GUI.Background:SetPoint("TOPLEFT", Timer.GUI.Background, "BOTTOMLEFT", 0, 1)
-							else
-								Timer.GUI.Background:SetPoint("TOPLEFT", self.ActiveTimers[i-1].GUI.Background, "BOTTOMLEFT", 0, 1)
-								cTimer.GUI.Background:SetPoint("TOPLEFT", Timer.GUI.Background, "BOTTOMLEFT", 0, 1)
-							end
-							table.insert(self.ActiveTimers, i, Timer)
-							break
-						end
-					end
-					if not Timer.Active then
-						Timer.GUI.Background:SetPoint("TOPLEFT", self.LastTimer.GUI.Background, "BOTTOMLEFT", 0, 1)
-						table.insert(self.ActiveTimers, Timer)
-						self.LastTimer = Timer
-						Timer.Active = true
-					end
-				else
-					Timer.GUI.Background:SetPoint("TOPLEFT", Anchor, "TOPLEFT")
-					table.insert(self.ActiveTimers, Timer)
-					Timer.Active = true
-					self.LastTimer = Timer
-					if RM.GUI.Settings.Visible then
-						Anchor.Text:SetVisible(false)
-					end
-				end
-				Timer.GUI.Background:SetVisible(true)
-				Timer.Starting = false
-				
-				function Timer:Update(CurrentTime)
-					local text = ""
-					if self.Active then
-						if self.Waiting then
-						
-						else
-							self.Remaining = self.Duration - (CurrentTime - self.TimeStart)
-							--if self.Remaining < 10 then
-								--text = string.format(" %0.01f : ", self.Remaining)..self.Player
-							if self.Remaining >= 60 then
-								text = " "..KBM.ConvertTime(self.Remaining).." : "..self.Player
-							else
-								text = " "..math.floor(self.Remaining).." : "..self.Player
-							end
-							self.GUI.CastInfo:SetText(text)
-							self.GUI.Shadow:SetText(text)
-							self.GUI.TimeBar:SetWidth(self.SetWidth - (self.SetWidth * (self.Remaining/self.Duration)))
-							if self.Remaining <= 0 then
-								self.Remaining = 0
-								self.GUI.CastInfo:SetText(" "..self.Player.." "..KBM.Language.RezMaster.Ready[KBM.Lang])
-								self.GUI.Shadow:SetText(self.GUI.CastInfo:GetText())
-								self.GUI.TimeBar:SetWidth(self.SetWidth)
-								self.Waiting = true
-							end
-						end
-					end
-				end
-				
-				function Timer:Remove()
-					for i, iTimer in ipairs(RM.Rezes.ActiveTimers) do
-						if iTimer == self then
-							if #RM.Rezes.ActiveTimers == 1 then
-								RM.RezesLastTimer = nil
-								if RM.GUI.Settings.Visible then
-									RM.GUI.Anchor.Text:SetVisible(true)
+						--self.GUI.TimeBar:SetBackgroundColor(KBM.Colors.List[KBM.MechTimer.Settings.Color].Red, KBM.Colors.List[KBM.MechTimer.Settings.Color].Green, KBM.Colors.List[KBM.MechTimer.Settings.Color].Blue, 0.33)
+					--end
+					
+					if #self.ActiveTimers > 0 then
+						for i, cTimer in ipairs(self.ActiveTimers) do
+							if (Timer.Remaining < cTimer.Remaining) or (Timer.Duration <= cTimer.Duration and Timer.Remaining == cTimer.Remaining) then
+								Timer.Active = true
+								if i == 1 then
+									Timer.GUI.Background:SetPoint("TOPLEFT", Anchor, "TOPLEFT")
+									cTimer.GUI.Background:SetPoint("TOPLEFT", Timer.GUI.Background, "BOTTOMLEFT", 0, 1)
+								else
+									Timer.GUI.Background:SetPoint("TOPLEFT", self.ActiveTimers[i-1].GUI.Background, "BOTTOMLEFT", 0, 1)
+									cTimer.GUI.Background:SetPoint("TOPLEFT", Timer.GUI.Background, "BOTTOMLEFT", 0, 1)
 								end
-							elseif i == 1 then
-								RM.Rezes.ActiveTimers[i+1].GUI.Background:SetPoint("TOPLEFT", RM.GUI.Anchor, "TOPLEFT")
-							elseif i == #RM.Rezes.ActiveTimers then
-								RM.Rezes.LastTimer = RM.Rezes.ActiveTimers[i-1]
-							else
-								RM.Rezes.ActiveTimers[i+1].GUI.Background:SetPoint("TOPLEFT", RM.Rezes.ActiveTimers[i-1].GUI.Background, "BOTTOMLEFT", 0, 1)
+								table.insert(self.ActiveTimers, i, Timer)
+								break
 							end
-							table.remove(RM.Rezes.ActiveTimers, i)
-							self.GUI.Background:SetVisible(false)
-							self.GUI.Shadow:SetText("")
-							table.insert(RM.GUI.Store, self.GUI)
-							break
+						end
+						if not Timer.Active then
+							Timer.GUI.Background:SetPoint("TOPLEFT", self.LastTimer.GUI.Background, "BOTTOMLEFT", 0, 1)
+							table.insert(self.ActiveTimers, Timer)
+							self.LastTimer = Timer
+							Timer.Active = true
+						end
+					else
+						Timer.GUI.Background:SetPoint("TOPLEFT", Anchor, "TOPLEFT")
+						table.insert(self.ActiveTimers, Timer)
+						Timer.Active = true
+						self.LastTimer = Timer
+						if RM.GUI.Settings.Visible then
+							Anchor.Text:SetVisible(false)
 						end
 					end
-				end
-				Timer:Update(Inspect.Time.Real())
-			end	
-		end	
+					Timer.GUI.Background:SetVisible(true)
+					Timer.Starting = false
+					
+					function Timer:Update(CurrentTime)
+						local text = ""
+						if self.Active then
+							if self.Waiting then
+							
+							else
+								self.Remaining = self.Duration - (CurrentTime - self.TimeStart)
+								--if self.Remaining < 10 then
+									--text = string.format(" %0.01f : ", self.Remaining)..self.Player
+								if self.Remaining >= 60 then
+									text = " "..KBM.ConvertTime(self.Remaining).." : "..self.Player
+								else
+									text = " "..math.floor(self.Remaining).." : "..self.Player
+								end
+								self.GUI.CastInfo:SetText(text)
+								self.GUI.Shadow:SetText(text)
+								self.GUI.TimeBar:SetWidth(self.SetWidth - (self.SetWidth * (self.Remaining/self.Duration)))
+								if self.Remaining <= 0 then
+									self.Remaining = 0
+									self.GUI.CastInfo:SetText(" "..self.Player.." "..KBM.Language.RezMaster.Ready[KBM.Lang])
+									self.GUI.Shadow:SetText(self.GUI.CastInfo:GetText())
+									self.GUI.TimeBar:SetWidth(self.SetWidth)
+									self.Waiting = true
+								end
+							end
+						end
+					end
+					
+					function Timer:Remove()
+						for i, iTimer in ipairs(RM.Rezes.ActiveTimers) do
+							if iTimer == self then
+								if #RM.Rezes.ActiveTimers == 1 then
+									RM.RezesLastTimer = nil
+									if RM.GUI.Settings.Visible then
+										RM.GUI.Anchor.Text:SetVisible(true)
+									end
+								elseif i == 1 then
+									RM.Rezes.ActiveTimers[i+1].GUI.Background:SetPoint("TOPLEFT", RM.GUI.Anchor, "TOPLEFT")
+								elseif i == #RM.Rezes.ActiveTimers then
+									RM.Rezes.LastTimer = RM.Rezes.ActiveTimers[i-1]
+								else
+									RM.Rezes.ActiveTimers[i+1].GUI.Background:SetPoint("TOPLEFT", RM.Rezes.ActiveTimers[i-1].GUI.Background, "BOTTOMLEFT", 0, 1)
+								end
+								table.remove(RM.Rezes.ActiveTimers, i)
+								self.GUI.Background:SetVisible(false)
+								self.GUI.Shadow:SetText("")
+								table.insert(RM.GUI.Store, self.GUI)
+								break
+							end
+						end
+					end
+					Timer:Update(Inspect.Time.Real())
+				end	
+			end
+		end
 	end
 
 	function self:Clear(sPlayer)

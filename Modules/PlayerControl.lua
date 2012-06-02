@@ -57,6 +57,7 @@ function PC:GatherRaidInfo()
 		if uID then
 			if uID ~= KBM.Player.UnitID then
 				if KBM.Unit.List.UID[uID] then
+					print(KBM.Unit.List.UID[uID].Name..": "..tostring(KBM.Unit.List.UID[uID].Details.calling))
 					if KBM.Unit.List.UID[uID].Details.calling then
 						if self.RezBank[KBM.Unit.List.UID[uID].Details.calling] then
 							Command.Message.Send(KBM.Unit.List.UID[uID].Name, "KBMRezReq", "C", PC.MessageSent)
@@ -91,6 +92,7 @@ end
 function PC.AbilityAdd(aIDList)
 	local self = PC
 	local Count = 0
+	
 	if self.RezBank[KBM.Player.Calling] then
 		for crID, crTable in pairs (self.RezBank[KBM.Player.Calling]) do
 			if aIDList[crID] then
@@ -127,8 +129,23 @@ end
 
 function PC.PlayerJoin()
 	-- print("PC -- Player Join")
-	KBM.RezMaster.Broadcast.RezSet()
+	KBM.Player.Grouped = true
+	PC:GatherAbilities()
 	PC:GatherRaidInfo()
+end
+
+function PC.GroupJoin(uID)
+	if KBM.Player.Grouped then
+		if not KBM.RezMaster.Rezes.Tracked[KBM.Unit.List.UID[uID].Name] then
+			Command.Message.Send(KBM.Unit.List.UID[uID].Name, "KBMRezReq", "C", PC.MessageSent)
+		end
+	end
+end
+
+function PC.GroupLeave(uID)
+	if KBM.Player.Grouped then
+		KBM.RezMaster.Rezes:Remove(KBM.Unit.List.UID[uID].Name)
+	end
 end
 
 function PC.PlayerOffline(UID, Value)
@@ -140,18 +157,19 @@ end
 
 function PC.PlayerLeave()
 	-- Probably not going to use this.
+	KBM.Player.Grouped = false
 	KBM.RezMaster.Rezes:Clear()
 end
 
 function PC:Start()
 	self.MSG = KBM.MSG
-	self:GatherAbilities()
-	self:GatherRaidInfo()
 	table.insert(Event.Ability.Remove, {PC.AbilityRemove, "KingMolinator", "Ability Removed"})
 	table.insert(Event.Ability.Add, {PC.AbilityAdd, "KingMolinator", "Ability Add"})
 	table.insert(Event.Ability.Cooldown.Begin, {PC.AbilityCooldown, "KingMolinator", "Ability Cooldown"})
 	table.insert(Event.Ability.Cooldown.End, {PC.AbilityCooldown, "KingMolinator", "Ability Cooldown"})
-	table.insert(Event.SafesRaidManager.Player.Join, {PC.PlayerJoin, "KingMolinator", "Player Join"})
-	table.insert(Event.SafesRaidManager.Player.Leave, {PC.PlayerLeave, "KingMolinator", "Player Leave"})
+	table.insert(Event.KingMolinator.System.Player.Join, {PC.PlayerJoin, "KingMolinator", "Player Join"})
+	table.insert(Event.KingMolinator.System.Player.Leave, {PC.PlayerLeave, "KingMolinator", "Player Leave"})
+	table.insert(Event.KingMolinator.System.Group.Join, {PC.GroupJoin, "KingMolinator", "Group Member Join"})
+	table.insert(Event.KingMolinator.System.Group.Leave, {PC.GroupLeave, "KingMolinator", "Group Member Leave"})
 	table.insert(Event.SafesRaidManager.Group.Offline, {PC.PlayerOffline, "KingMolinator", "Player Offline"})
 end
