@@ -37,7 +37,7 @@ RS.Rusila = {
 	Castbar = nil,
 	Ignore = true,
 	-- TimersRef = {},
-	-- AlertsRef = {},
+	AlertsRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -45,10 +45,11 @@ RS.Rusila = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
 		-- },
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
-		-- },
+		AlertsRef = {
+			Enabled = true,
+			Dread = KBM.Defaults.AlertObj.Create("purple"),
+			DreadDur = KBM.Defaults.AlertObj.Create("yellow"),
+		},
 	}
 }
 
@@ -74,9 +75,9 @@ RS.Lang.Ability = {}
 RS.Lang.Ability.Saw = KBM.Language:Add("Buzz Saw")
 RS.Lang.Ability.Saw:SetGerman("Kreissäge")
 RS.Lang.Ability.Saw:SetFrench("Scie circulaire")
-RS.Lang.Ability.DreadShot = KBM.Language:Add("Dread Shot")
-RS.Lang.Ability.DreadShot:SetGerman("Schreckangriff")
-RS.Lang.Ability.DreadShot:SetFrench("Tir terrifiant")
+RS.Lang.Ability.Dread = KBM.Language:Add("Dread Shot")
+RS.Lang.Ability.Dread:SetGerman("Schreckangriff")
+RS.Lang.Ability.Dread:SetFrench("Tir terrifiant")
 RS.Lang.Ability.Fist = KBM.Language:Add("Fist")
 RS.Lang.Ability.Fist:SetGerman("Faust")
 RS.Lang.Ability.Fist:SetFrench("Poing")
@@ -90,6 +91,10 @@ RS.Lang.Ability.Chain:SetFrench("Chaîne barbelée")
 -- Buff Dictionary
 RS.Lang.Buff = {}
 RS.Lang.Buff.Barrel = KBM.Language:Add("Barrel of Dragon's Breath")
+
+-- Menu Dictionary
+RS.Lang.Menu = {}
+RS.Lang.Menu.Dread = KBM.Language:Add("Dread Shot duration")
 
 RS.Rusila.Name = RS.Lang.Unit.Rusila[KBM.Lang]
 RS.Rusila.NameShort = RS.Lang.Unit.RusShort[KBM.Lang]
@@ -162,9 +167,11 @@ function RS:InitVars()
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		-- MechTimer = KBM.Defaults.MechTimer(),
-		-- Alerts = KBM.Defaults.Alerts(),
+		Alerts = KBM.Defaults.Alerts(),
 		-- TimersRef = self.Rusila.Settings.TimersRef,
-		-- AlertsRef = self.Rusila.Settings.AlertsRef,
+		Rusila = {
+			AlertsRef = self.Rusila.Settings.AlertsRef,
+		},
 	}
 	KBMINDRS_Settings = self.Settings
 	chKBMINDRS_Settings = self.Settings
@@ -323,10 +330,17 @@ function RS:Start()
 	-- KBM.Defaults.TimerObj.Assign(self.Rusila)
 	
 	-- Create Alerts
-	-- KBM.Defaults.AlertObj.Assign(self.Rusila)
+	self.Rusila.AlertsRef.Dread = KBM.Alert:Create(self.Lang.Ability.Dread[KBM.Lang], nil, true, true, "purple")
+	self.Rusila.AlertsRef.DreadDur = KBM.Alert:Create(self.Lang.Ability.Dread[KBM.Lang], nil, false, true, "yellow")
+	self.Rusila.AlertsRef.DreadDur.MenuName = self.Lang.Menu.Dread[KBM.Lang]
+	KBM.Defaults.AlertObj.Assign(self.Rusila)
 	
 	-- Assign Alerts and Timers to Triggers
 	self.Rusila.Triggers.Barrel = KBM.Trigger:Create(self.Lang.Buff.Barrel[KBM.Lang], "playerBuff", self.Dummy, nil, true)
+	self.Rusila.Triggers.Dread = KBM.Trigger:Create(self.Lang.Ability.Dread[KBM.Lang], "cast", self.Rusila)
+	self.Rusila.Triggers.Dread:AddAlert(self.Rusila.AlertsRef.Dread, true)
+	self.Rusila.Triggers.DreadDur = KBM.Trigger:Create(self.Lang.Ability.Dread[KBM.Lang], "channel", self.Rusila)
+	self.Rusila.Triggers.DreadDur:AddAlert(self.Rusila.AlertsRef.DreadDur, true)
 	
 	self.Rusila.CastBar = KBM.CastBar:Add(self, self.Rusila)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

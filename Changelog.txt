@@ -27,6 +27,7 @@ Infernal Dawn
 * Rusila Dreadblade
 ** New: Encounter start is now recognized when picking up a Barrel.
 ** New: Phase change has been implimented for when Heart of the Dread Fortune is destroyed.
+** New: Personal Alert for both Cast and Channel of Dread Shot.
 
 Hammerknell Fortress
 * Estrode
