@@ -16,7 +16,7 @@ New! Rez Master
 * New: Timers for combat rezes will display a ready state when off cool down.
 * New: Timers will attempt to order the shortest cool down combat rezes at the top.
 * New: Settings will be saved for position the Rez Master anchor.
-* Note: There is no menu options for this module at the moment. These will be incoming after initial public testing is complete.
+* New: Added options to the main menu for Enabling/Disabling, moving and resizing the timer bars.
 
 Tank-Swap
 * Fixed: Attempted to fix the second debuff stack display not showing.
@@ -33,6 +33,8 @@ Hammerknell Fortress
 * Estrode
 ** New: Added personal alert for Neddra's Grasp.
 
+French Translations
+* Updated!
 ----
 v1.0.5
 

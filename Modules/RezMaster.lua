@@ -29,9 +29,9 @@ function RM.GUI:ApplySettings()
 	else
 		self.Anchor:SetPoint("BOTTOMRIGHT", UIParent, 0.9, 0.5)
 	end
-	self.Anchor:SetWidth(KBM.Constant.RezMaster.w * self.Settings.wScale)
-	self.Anchor:SetHeight(KBM.Constant.RezMaster.h * self.Settings.hScale)
-	self.Anchor.Text:SetFontSize(KBM.Constant.RezMaster.TextSize * self.Settings.tScale)
+	self.Anchor:SetWidth(math.ceil(KBM.Constant.RezMaster.w * self.Settings.wScale))
+	self.Anchor:SetHeight(math.ceil(KBM.Constant.RezMaster.h * self.Settings.hScale))
+	self.Anchor.Text:SetFontSize(math.ceil(KBM.Constant.RezMaster.TextSize * self.Settings.tScale))
 	if KBM.MainWin:GetVisible() then
 		self.Anchor:SetVisible(self.Settings.Visible)
 		self.Anchor.Drag:SetVisible(self.Settings.Unlocked)
@@ -65,13 +65,13 @@ function RM.GUI:Pull()
 		GUI.TimeBar:SetBackgroundColor(0,0,1,0.33)
 		GUI.TimeBar:SetMouseMasking("limited")
 		GUI.CastInfo = UI.CreateFrame("Text", "Timer_Text_Frame", GUI.Background)
-		GUI.CastInfo:SetFontSize(KBM.Constant.RezMaster.TextSize * RM.GUI.Settings.tScale)
+		GUI.CastInfo:SetFontSize(math.ceil(KBM.Constant.RezMaster.TextSize * RM.GUI.Settings.tScale))
 		GUI.CastInfo:SetPoint("CENTERLEFT", GUI.Icon, "CENTERRIGHT")
 		GUI.CastInfo:SetLayer(3)
 		GUI.CastInfo:SetFontColor(1,1,1)
 		GUI.CastInfo:SetMouseMasking("limited")
 		GUI.Shadow = UI.CreateFrame("Text", "Timer_Text_Shadow", GUI.Background)
-		GUI.Shadow:SetFontSize(KBM.Constant.RezMaster.TextSize * RM.GUI.Settings.tScale)
+		GUI.Shadow:SetFontSize(math.ceil(KBM.Constant.RezMaster.TextSize * RM.GUI.Settings.tScale))
 		GUI.Shadow:SetPoint("CENTER", GUI.CastInfo, "CENTER", 2, 2)
 		GUI.Shadow:SetLayer(2)
 		GUI.Shadow:SetFontColor(0,0,0)
@@ -113,7 +113,17 @@ function RM.GUI:Init()
 				if RM.GUI.Settings.wScale > 1.5 then
 					RM.GUI.Settings.wScale = 1.5
 				end
-				RM.GUI.Anchor:SetWidth(RM.GUI.Settings.wScale * KBM.Constant.RezMaster.w)
+				RM.GUI.Anchor:SetWidth(math.ceil(RM.GUI.Settings.wScale * KBM.Constant.RezMaster.w))
+				if #RM.Rezes.ActiveTimers > 0 then
+					for _, Timer in ipairs(RM.Rezes.ActiveTimers) do
+						Timer.SetWidth = RM.GUI.Anchor:GetWidth() - RM.GUI.Anchor:GetHeight()
+						if Timer.Waiting then
+							Timer.GUI.TimeBar:SetWidth(Timer.SetWidth)
+						else
+							Timer:Update()
+						end
+					end
+				end
 			end
 		end
 		
@@ -123,26 +133,33 @@ function RM.GUI:Init()
 				if RM.GUI.Settings.hScale > 1.5 then
 					RM.GUI.Settings.hScale = 1.5
 				end
-				RM.GUI.Anchor:SetHeight(RM.GUI.Settings.hScale * KBM.Constant.RezMaster.h)
+				RM.GUI.Anchor:SetHeight(math.ceil(RM.GUI.Settings.hScale * KBM.Constant.RezMaster.h))
 				if #RM.Rezes.ActiveTimers > 0 then
 					for _, Timer in ipairs(RM.Rezes.ActiveTimers) do
 						Timer.GUI.Background:SetHeight(RM.GUI.Anchor:GetHeight())
+						Timer.GUI.Icon:SetWidth(RM.GUI.Anchor:GetHeight())
+						Timer.SetWidth = RM.GUI.Anchor:GetWidth() - RM.GUI.Anchor:GetHeight()
+						if Timer.Waiting then
+							Timer.GUI.TimeBar:SetWidth(Timer.SetWidth)
+						else
+							Timer:Update()
+						end
 					end
 				end
 			end
 		end
 		
-		if RM.GUI.Settings.TextScale then
+		if RM.GUI.Settings.ScaleText then
 			if RM.GUI.Settings.tScale < 1.5 then
 				RM.GUI.Settings.tScale = RM.GUI.Settings.tScale + 0.025
 				if RM.GUI.Settings.tScale > 1.5 then
 					RM.GUI.Settings.tScale = 1.5
 				end
-				RM.GUI.Anchor.Text:SetFontSize(RM.GUI.Settings.TextSize * RM.GUI.Settings.tScale)
-				if #RM.Resez.ActiveTimers > 0 then
-					for _, Timer in ipairs(RM.Resez.ActiveTimers) do
-						Timer.GUI.CastInfo:SetFontSize(RM.GUI.Settings.tScale * RM.Constant.TextSize)
-						Timer.GUI.Shadow:SetFontSize(RM.GUI.Settings.tScale * RM.Constant.TextSize)
+				RM.GUI.Anchor.Text:SetFontSize(math.ceil(RM.GUI.Settings.tScale * KBM.Constant.RezMaster.TextSize))
+				if #RM.Rezes.ActiveTimers > 0 then
+					for _, Timer in ipairs(RM.Rezes.ActiveTimers) do
+						Timer.GUI.CastInfo:SetFontSize(RM.GUI.Anchor.Text:GetFontSize())
+						Timer.GUI.Shadow:SetFontSize(RM.GUI.Anchor.Text:GetFontSize())
 					end
 				end
 			end
@@ -156,7 +173,17 @@ function RM.GUI:Init()
 				if RM.GUI.Settings.wScale < 0.5 then
 					RM.GUI.Settings.wScale = 0.5
 				end
-				RM.GUI.Anchor:SetWidth(RM.GUI.Settings.wScale * RM.Constant.w)
+				RM.GUI.Anchor:SetWidth(math.ceil(RM.GUI.Settings.wScale * KBM.Constant.RezMaster.w))
+				if #RM.Rezes.ActiveTimers > 0 then
+					for _, Timer in ipairs(RM.Rezes.ActiveTimers) do
+						Timer.SetWidth = RM.GUI.Anchor:GetWidth() - RM.GUI.Anchor:GetHeight()
+						if Timer.Waiting then
+							Timer.GUI.TimeBar:SetWidth(Timer.SetWidth)
+						else
+							Timer:Update()
+						end
+					end
+				end
 			end
 		end
 		
@@ -166,26 +193,33 @@ function RM.GUI:Init()
 				if RM.GUI.Settings.hScale < 0.5 then
 					RM.GUI.Settings.hScale = 0.5
 				end
-				RM.GUI.Anchor:SetHeight(RM.GUI.Settings.hScale * RM.Constant.h)
+				RM.GUI.Anchor:SetHeight(math.ceil(RM.GUI.Settings.hScale * KBM.Constant.RezMaster.h))
 				if #RM.Rezes.ActiveTimers > 0 then
 					for _, Timer in ipairs(RM.Rezes.ActiveTimers) do
 						Timer.GUI.Background:SetHeight(RM.GUI.Anchor:GetHeight())
+						Timer.GUI.Icon:SetWidth(RM.GUI.Anchor:GetHeight())
+						Timer.SetWidth = RM.GUI.Anchor:GetWidth() - RM.GUI.Anchor:GetHeight()
+						if Timer.Waiting then
+							Timer.GUI.TimeBar:SetWidth(Timer.SetWidth)
+						else
+							Timer:Update()
+						end
 					end
 				end
 			end
 		end
 		
-		if RM.GUI.Settings.TextScale then
+		if RM.GUI.Settings.ScaleText then
 			if RM.GUI.Settings.tScale > 0.5 then
 				RM.GUI.Settings.tScale = RM.GUI.Settings.tScale - 0.025
 				if RM.GUI.Settings.tScale < 0.5 then
 					RM.GUI.Settings.tScale = 0.5
 				end
-				RM.GUI.Anchor.Text:SetFontSize(RM.GUI.Settings.tScale * KBM.Constant.RezMaster.TextSize)
+				RM.GUI.Anchor.Text:SetFontSize(math.ceil(RM.GUI.Settings.tScale * KBM.Constant.RezMaster.TextSize))
 				if #RM.Rezes.ActiveTimers > 0 then
 					for _, Timer in ipairs(RM.Rezes.ActiveTimers) do
-						Timer.GUI.CastInfo:SetFontSize(RM.GUI.Settings.tScale * KBM.Constant.RezMaster.TextSize)
-						Timer.GUI.Shadow:SetFontSize(RM.GUI.Settings.tScale * KBM.Constant.RezMaster.TextSize)
+						Timer.GUI.CastInfo:SetFontSize(RM.GUI.Anchor.Text:GetFontSize())
+						Timer.GUI.Shadow:SetFontSize(RM.GUI.Anchor.Text:GetFontSize())
 					end
 				end				
 			end
@@ -218,10 +252,21 @@ function RM.Rezes:Init()
 					Timer.GUI.Icon:SetTexture("Rift", aDetails.icon)
 					Timer.SetWidth = Timer.GUI.Background:GetWidth() - Timer.GUI.Background:GetHeight()
 					local Spec, UID = LibSRM.Group.NameSearch(Name)
-					local Class = KBM.Unit.List.UID[UID].Details.calling
-					if Class == "mage" then
+					Timer.Class = ""
+					if UID then
+						Timer.Class = KBM.Unit.List.UID[UID].Details.calling
+					else
+						if KBM.Unit.List.Name[Name] then
+							for UID, Object in pairs(KBM.Unit.List.Name[Name]) do
+								Timer.Class = Object.Details.calling
+								break
+							end
+						end
+					end					
+							
+					if Timer.Class == "mage" then
 						Timer.GUI.TimeBar:SetBackgroundColor(0.8, 0.55, 1, 0.33)
-					elseif Class == "cleric" then
+					elseif Timer.Class == "cleric" then
 						Timer.GUI.TimeBar:SetBackgroundColor(0.55, 1, 0.55, 0.33)
 					end
 					Timer.Duration = math.floor(tonumber(aFull))
@@ -287,11 +332,10 @@ function RM.Rezes:Init()
 					Timer.GUI.Background:SetVisible(true)
 					Timer.Starting = false
 					
-					function Timer:Update(CurrentTime)
+					function Timer:Update(CurrentTime, Force)
 						local text = ""
 						if self.Active then
 							if self.Waiting then
-							
 							else
 								self.Remaining = self.Duration - (CurrentTime - self.TimeStart)
 								--if self.Remaining < 10 then

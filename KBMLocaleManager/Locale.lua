@@ -104,8 +104,12 @@ function KBMLM.SetMain_Lang()
 	-- Rez Master Dictionary
 	KBM.Language.RezMaster = {}
 	KBMLM.SetGroupObject(KBM.Language.RezMaster, "GroupObject", "Rez Master dictionary")
+	KBM.Language.RezMaster.Name = KBM.Language:Add("Rez Master")
+	KBM.Language.RezMaster.Enabled = KBM.Language:Add("Enable Rez Master")
 	KBM.Language.RezMaster.Ready = KBM.Language:Add("Ready!")
+	KBM.Language.RezMaster.Ready:SetFrench("Prêt!")
 	KBM.Language.RezMaster.AnchorText = KBM.Language:Add("Rez Timer Anchor")
+	KBM.Language.RezMaster.AnchorText:SetFrench("Ancrage Minuterie Rez")
 	
 	-- Command Listings
 	KBM.Language.Command = {}
@@ -157,6 +161,7 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Tabs.Records:SetRussian("Рекорды")
 	KBM.Language.Tabs.Plugins = KBM.Language:Add("Plug-Ins")
 	KBM.Language.Tabs.Plugins:SetGerman()
+	KBM.Language.Tabs.Plugins:SetFrench()
 	
 	-- Encounter related messages
 	KBM.Language.Encounter = {}
@@ -389,16 +394,22 @@ function KBMLM.SetMain_Lang()
 	KBMLM.SetGroupObject(KBM.Language.Anchors, "GroupObject", "All anchor text")
 	KBM.Language.Anchors.MechSpy = KBM.Language:Add("Mechanic Spy Anchor")
 	KBM.Language.Anchors.MechSpy:SetGerman("Mechanik Spion Anker")
+	KBM.Language.Anchors.MechSpy:SetFrench("Ancrage Espion de Mécanisme")
 	KBM.Language.Anchors.Timers = KBM.Language:Add("Timer Anchor")
 	KBM.Language.Anchors.Timers:SetGerman("Timer Anker")
+	KBM.Language.Anchors.Timers:SetFrench("Ancrage Minuterie")
 	KBM.Language.Anchors.TankSwap = KBM.Language:Add("Tank-Swap Anchor")
 	KBM.Language.Anchors.TankSwap:SetGerman("Tank Wechsel Anker")
+	KBM.Language.Anchors.TankSwap:SetFrench("Ancrage Tank-Swap")
 	KBM.Language.Anchors.Phases = KBM.Language:Add("Phases & Objectives")
 	KBM.Language.Anchors.Phases:SetGerman("Phasen Monitor Anker")
+	KBM.Language.Anchors.Phases:SetFrench("Phases & Objectifs")
 	KBM.Language.Anchors.Castbars = KBM.Language:Add("Global Castbar")
 	KBM.Language.Anchors.Castbars:SetGerman("Zauberbalken Anker")
+	KBM.Language.Anchors.Castbars:SetFrench("Barre-cast Globale")
 	KBM.Language.Anchors.AlertText = KBM.Language:Add(" Alert Anchor ")
 	KBM.Language.Anchors.AlertText:SetGerman(" Alarmierungs Anker ")
+	KBM.Language.Anchors.AlertText:SetFrench(" Ancrage Alerte ")
 
 	-- Phase Monitor
 	KBM.Language.Options.PhaseMonOverride = KBM.Language:Add("Phase Monitor: Override")
@@ -617,6 +628,7 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Timers.Enrage:SetRussian("Энрейдж через")
 	KBM.Language.Timers.Enraged = KBM.Language:Add("!! Enraged !!")
 	KBM.Language.Timers.Enraged:SetGerman()
+	KBM.Language.Timers.Enraged:SetFrench("!! Enragé !!")
 
 	KBM.Numbers = {}
 	KBM.Numbers.Place = {}

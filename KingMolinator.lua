@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r390"
+KBM.Alpha = ".r391"
 KBM.Event = {
 	Mark = {},
 	System = {
@@ -134,6 +134,7 @@ KBM.MenuOptions = {
 	Alerts = {},
 	Phases = {},
 	MechSpy = {},
+	RezMaster = {},
 	Main = {},
 	Enabled = true,
 	Handler = nil,
@@ -6678,7 +6679,11 @@ local function KBM_Version(name)
 		Command.Message.Send(name, "KBMVerReq", "v", function (failed, message) KBM.VersionReqCheck(name, failed, message) end)
 	else
 		print(KBM.Language.Version.Title[KBM.Lang])
-		print("King Boss Mods v"..AddonData.toc.Version)
+		if not KBM.Alpha then
+			print("King Boss Mods v"..AddonData.toc.Version)
+		else
+			print("King Boss Mods v"..AddonData.toc.Version..KBM.Alpha)
+		end
 	end
 end
 
@@ -7108,6 +7113,35 @@ function KBM.MenuOptions.Main:Options()
 	Button:AddCheck(KBM.Language.Options.LockButton[KBM.Lang], self.LockButton, KBM.Options.Button.Unlocked)
 end
 
+-- Rez Master Options
+function KBM.MenuOptions.RezMaster:Options()
+	function self:Enabled(bool)
+		KBM.Options.RezMaster.Enabled = bool
+	end
+	function self:Visible(bool)
+		KBM.Options.RezMaster.Visible = bool
+		KBM.Options.RezMaster.Unlocked = bool
+		KBM.RezMaster.GUI:ApplySettings()
+	end
+	function self:Width(bool)
+		KBM.Options.RezMaster.ScaleWidth = bool
+	end
+	function self:Height(bool)
+		KBM.Options.RezMaster.ScaleHeight = bool
+	end
+	function self:Text(bool)
+		KBM.Options.RezMaster.ScaleText = bool
+	end
+	
+	local Options = self.MenuItem.Options
+	Options:SetTitle()
+	local RezMaster = Options:AddHeader(KBM.Language.RezMaster.Enabled[KBM.Lang], self.Enabled, KBM.Options.RezMaster.Enabled)
+	RezMaster:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.Visible, KBM.Options.RezMaster.Visible)
+	RezMaster:AddCheck(KBM.Language.Options.UnlockWidth[KBM.Lang], self.Width, KBM.Options.RezMaster.ScaleWidth)
+	RezMaster:AddCheck(KBM.Language.Options.UnlockHeight[KBM.Lang], self.Height, KBM.Options.RezMaster.ScaleHeight)
+	RezMaster:AddCheck(KBM.Language.Options.UnlockText[KBM.Lang], self.Text, KBM.Options.RezMaster.ScaleText)
+end
+
 function KBM.ApplySettings()
 	KBM.TankSwap.Enabled = KBM.Options.TankSwap.Enabled
 end
@@ -7342,6 +7376,9 @@ local function KBM_Start()
 	KBM.MenuOptions.TankSwap.MenuItem.Check:SetEnabled(false)
 	KBM.MenuOptions.MechSpy.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.MechSpy.Name[KBM.Lang], KBM.MenuOptions.MechSpy, true, Header)
 	KBM.MenuOptions.MechSpy.MenuItem.Check:SetEnabled(false)
+	KBM.MenuOptions.RezMaster.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.RezMaster.Name[KBM.Lang], KBM.MenuOptions.RezMaster, true, Header)
+	KBM.MenuOptions.RezMaster.MenuItem.Check:SetEnabled(false)
+	
 	table.insert(Command.Slash.Register("kbmreset"), {KBM_Reset, "KingMolinator", "KBM Reset"})
 	table.insert(Event.Chat.Notify, {KBM.Notify, "KingMolinator", "Notify Event"})
 	table.insert(Event.Chat.Npc, {KBM.NPCChat, "KingMolinator", "NPC Chat"})
@@ -7423,6 +7460,7 @@ local function KBM_WaitReady(unitID, uDetails)
 	KBM.Player.Name = uDetails.name
 	KBM.Player.Details = uDetails
 	KBM.Player.Calling = uDetails.calling
+	KBM.Player.Rezes.List = {}
 	KBM_Start()
 	KBM.Player.Grouped = LibSRM.Grouped()
 	for _, Mod in ipairs(KBM.ModList) do
