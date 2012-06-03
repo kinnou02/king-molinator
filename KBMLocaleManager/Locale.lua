@@ -105,6 +105,8 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.RezMaster = {}
 	KBMLM.SetGroupObject(KBM.Language.RezMaster, "GroupObject", "Rez Master dictionary")
 	KBM.Language.RezMaster.Name = KBM.Language:Add("Rez Master")
+	KBM.Language.RezMaster.Name:SetFrench("Suivi des Rez")
+	KBM.Language.RezMaster.Enabled:SetFrench("Activer Suivi des Rez")
 	KBM.Language.RezMaster.Enabled = KBM.Language:Add("Enable Rez Master")
 	KBM.Language.RezMaster.Ready = KBM.Language:Add("Ready!")
 	KBM.Language.RezMaster.Ready:SetFrench("Prêt!")

@@ -254,15 +254,25 @@ function RM.Rezes:Init()
 					local Spec, UID = LibSRM.Group.NameSearch(Name)
 					Timer.Class = ""
 					if UID then
-						Timer.Class = KBM.Unit.List.UID[UID].Details.calling
+						Timer.Class = KBM.Unit.List.UID[UID].Details.calling or ""
 					else
 						if KBM.Unit.List.Name[Name] then
 							for UID, Object in pairs(KBM.Unit.List.Name[Name]) do
-								Timer.Class = Object.Details.calling
+								Timer.Class = Object.Details.calling or ""
 								break
 							end
 						end
-					end					
+					end
+
+					if Timer.Class == "" then
+						for Calling, AbilityList in pairs(KBM.PlayerControl.RezBank) do
+							if AbilityList[aID] then
+								Timer.Class = Calling
+								KBM.Unit.List.UID[UID].Details.calling = Calling
+								break
+							end
+						end
+					end
 							
 					if Timer.Class == "mage" then
 						Timer.GUI.TimeBar:SetBackgroundColor(0.8, 0.55, 1, 0.33)
@@ -412,8 +422,7 @@ function RM.Rezes:Init()
 	end
 end
 
-function RM.MessageSent(From, Data)
-
+function RM.MessageSent(Failed, Message)
 end
 
 function RM.Broadcast.RezSet(toName, crID)
@@ -496,6 +505,9 @@ function RM.MessageHandler(From, Type, Channel, Identifier, Data)
 				elseif Identifier == "KBMRezReq" then
 					--print("Rez list request from: "..From)
 					RM.Broadcast.RezSet(From)
+					if Data == "C" then
+						Command.Message.Send(From, "KBMRezReq", "R", RM.MessageSent)
+					end
 				end
 			end
 		end

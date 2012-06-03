@@ -260,7 +260,7 @@ local function SRM_SetSpecifier(Specifier)
 			LibSRM.Dead = LibSRM.Dead - 1
 		end
 		SRM_Raid.Populated = SRM_Raid.Populated - 1
-		SRM_NameList[SRM_Units[self.UnitID].name] = nil
+		SRM_NameList[self.name] = nil
 		SRM_Units[self.UnitID] = nil
 		self.SRM_Unit = nil
 		if self.PetID then
@@ -361,41 +361,39 @@ local function SRM_SetSpecifier(Specifier)
 			if not SRM_Units[self.UnitID] then
 				local uDetails = Inspect.Unit.Detail(self.UnitID)
 				if uDetails then
-					if uDetails.calling then
-						SRM_Units[self.UnitID] = {}
-						SRM_Units[self.UnitID].Specifier = self.Spec
-						SRM_Units[self.UnitID].UnitID = self.UnitID
-						SRM_Units[self.UnitID].name = uDetails.name
-						SRM_Units[self.UnitID].calling = uDetails.calling
-						SRM_Units[self.UnitID].Loaded = true
-						if uDetails.combat then
-							SRM_Combat({[self.UnitID] = true})
-						end
-						SRM_Units[self.UnitID].Location = uDetails.location
-						SRM_Units[self.UnitID].PetID = Inspect.Unit.Lookup(self.Spec..".pet")
-						if uDetails.health == 0 then
-							SRM_Units[self.UnitID].Dead = true
-							LibSRM.Dead = LibSRM.Dead + 1
-						end
-						SRM_Raid.Populated = SRM_Raid.Populated + 1
-						self.name = uDetails.name
-						SRM_NameList[self.name] = SRM_Units[self.UnitID]
-						SRM_CheckGroupState()
-						if SRM_Units[self.UnitID].PetID then
-							if SRM_PetQueue.OwnerWait.Queued then
-								if SRM_PetQueue.OwnerWait[SRM_Units[self.UnitID].PetID] then
-									SRM_PetQueue.OwnerWait[SRM_Units[self.UnitID].PetID] = nil
-									SRM_PetQueue.OwnerWait.Queued = SRM_PetQueue.OwnerWait.Queued - 1
-									SRM_Units.Pets[SRM_Units[self.UnitID].PetID].OwnerID = self.UnitID
-									--print("Unit's Pet loaded!")
-									SRM_Pet.Add(self.PetID, self.UnitID)
-								end
+					SRM_Units[self.UnitID] = {}
+					SRM_Units[self.UnitID].Specifier = self.Spec
+					SRM_Units[self.UnitID].UnitID = self.UnitID
+					SRM_Units[self.UnitID].name = uDetails.name
+					SRM_Units[self.UnitID].calling = uDetails.calling
+					SRM_Units[self.UnitID].Loaded = true
+					if uDetails.combat then
+						SRM_Combat({[self.UnitID] = true})
+					end
+					SRM_Units[self.UnitID].Location = uDetails.location
+					SRM_Units[self.UnitID].PetID = Inspect.Unit.Lookup(self.Spec..".pet")
+					if uDetails.health == 0 then
+						SRM_Units[self.UnitID].Dead = true
+						LibSRM.Dead = LibSRM.Dead + 1
+					end
+					SRM_Raid.Populated = SRM_Raid.Populated + 1
+					self.name = uDetails.name
+					SRM_NameList[self.name] = SRM_Units[self.UnitID]
+					SRM_CheckGroupState()
+					if SRM_Units[self.UnitID].PetID then
+						if SRM_PetQueue.OwnerWait.Queued then
+							if SRM_PetQueue.OwnerWait[SRM_Units[self.UnitID].PetID] then
+								SRM_PetQueue.OwnerWait[SRM_Units[self.UnitID].PetID] = nil
+								SRM_PetQueue.OwnerWait.Queued = SRM_PetQueue.OwnerWait.Queued - 1
+								SRM_Units.Pets[SRM_Units[self.UnitID].PetID].OwnerID = self.UnitID
+								--print("Unit's Pet loaded!")
+								SRM_Pet.Add(self.PetID, self.UnitID)
 							end
 						end
-						-- Send JOIN message HERE
-						SRM_Group.Join(self.UnitID, self.Spec)
-						--print("Unit joined group: "..uDetails.name)
 					end
+					-- Send JOIN message HERE
+					SRM_Group.Join(self.UnitID, self.Spec)
+					--print("Unit joined group: "..uDetails.name)
 				else
 					-- Send JOIN-WAIT message HERE (maybe)
 					SRM_UnitQueue:Add(self)

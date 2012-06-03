@@ -6,7 +6,9 @@
 local KBMTable = Inspect.Addon.Detail("KingMolinator")
 local KBM = KBMTable.data
 
-local PC = {}
+local PC = {
+	Queue = {},
+}
 
 PC.RezBank = {
 	["cleric"] = {
@@ -24,10 +26,6 @@ KBM.PlayerControl = PC
 
 function PC:GatherAbilities()
 	KBM.Player.AbilityTable = Inspect.Ability.List()
-	KBM.Player.Rezes = {
-		Count = 0,
-		List = {},
-	}
 	local Count = 0
 	if self.RezBank[KBM.Player.Calling] then
 		-- print("You are a calling with possible Combat Rezes... Checking.")
@@ -62,6 +60,8 @@ function PC:GatherRaidInfo()
 						if self.RezBank[KBM.Unit.List.UID[uID].Details.calling] then
 							Command.Message.Send(KBM.Unit.List.UID[uID].Name, "KBMRezReq", "C", PC.MessageSent)
 						end
+					else
+						self.Queue[uID] = true
 					end
 				end
 			end
@@ -134,6 +134,12 @@ function PC.PlayerJoin()
 	PC:GatherRaidInfo()
 end
 
+function PC.CallingChange(uID, Calling)
+	if PC.Queue[uID] then
+		PC.Queue[uID] = nil
+	end
+end
+
 function PC.GroupJoin(uID)
 	if KBM.Player.Grouped then
 		if not KBM.RezMaster.Rezes.Tracked[KBM.Unit.List.UID[uID].Name] then
@@ -171,5 +177,6 @@ function PC:Start()
 	table.insert(Event.KingMolinator.System.Player.Leave, {PC.PlayerLeave, "KingMolinator", "Player Leave"})
 	table.insert(Event.KingMolinator.System.Group.Join, {PC.GroupJoin, "KingMolinator", "Group Member Join"})
 	table.insert(Event.KingMolinator.System.Group.Leave, {PC.GroupLeave, "KingMolinator", "Group Member Leave"})
+	table.insert(Event.KingMolinator.Unit.Calling, {PC.CallingChange, "KingMolinator", "Group member calling change"})
 	table.insert(Event.SafesRaidManager.Group.Offline, {PC.PlayerOffline, "KingMolinator", "Player Offline"})
 end

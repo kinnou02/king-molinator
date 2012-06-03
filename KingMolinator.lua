@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r391"
+KBM.Alpha = ".r392"
 KBM.Event = {
 	Mark = {},
 	System = {
@@ -38,6 +38,7 @@ KBM.Event = {
 		Death = {},
 		Name = {},
 		Relation = {},
+		Calling = {},
 		Target = {},
 		TargetCount = {},
 		Offline = {},
@@ -3948,6 +3949,12 @@ function KBM.Unit:Create(uDetails, UnitID)
 					if self.Relation ~= uDetails.relation then
 						self:SetRelation(uDetails.relation)
 					end
+					if self.Calling ~= uDetails.calling then
+						if uDetails.calling then
+							self.Calling = uDetails.calling
+							KBM.Event.Unit.Calling(self.UnitID, uDetails.calling)
+						end
+					end
 				end
 			end
 		end
@@ -4108,6 +4115,12 @@ function KBM.Unit:Create(uDetails, UnitID)
 					self.Percent = 0
 				end
 				self.Mark = uDetails.mark
+				if self.Calling ~= uDetails.calling then
+					if uDetails.calling then
+						self.Calling = uDetails.calling
+						KBM.Event.Unit.Calling(self.UnitID, self.Calling)
+					end
+				end
 				self:CheckTarget()
 				self:SetName(uDetails.name)
 			else
@@ -7322,6 +7335,7 @@ KBM.Event.Unit.Offline, KBM.Event.Unit.Offline.EventTable = Utility.Event.Create
 KBM.Event.Unit.Death, KBM.Event.Unit.Death.EventTable = Utility.Event.Create("KingMolinator", "Unit.Death")
 KBM.Event.Unit.Name, KBM.Event.Unit.Name.EventTable = Utility.Event.Create("KingMolinator", "Unit.Name")
 KBM.Event.Unit.Relation, KBM.Event.Unit.Relation.EventTable = Utility.Event.Create("KingMolinator", "Unit.Relation")
+KBM.Event.Unit.Calling, KBM.Event.Unit.Calling.EventTable = Utility.Event.Create("KingMolinator", "Unit.Calling")
 KBM.Event.Unit.Target, KBM.Event.Unit.Target.EventTable = Utility.Event.Create("KingMolinator", "Unit.Target")
 KBM.Event.Unit.TargetCount, KBM.Event.Unit.TargetCount.EventTable = Utility.Event.Create("KingMolinator", "Unit.TargetCount")
 KBM.Event.Unit.Cast.Start, KBM.Event.Unit.Cast.Start.EventTable = Utility.Event.Create("KingMolinator", "Unit.Cast.Start")
@@ -7460,7 +7474,10 @@ local function KBM_WaitReady(unitID, uDetails)
 	KBM.Player.Name = uDetails.name
 	KBM.Player.Details = uDetails
 	KBM.Player.Calling = uDetails.calling
-	KBM.Player.Rezes.List = {}
+	KBM.Player.Rezes = {
+		List = {},
+		Count = 0,
+	}
 	KBM_Start()
 	KBM.Player.Grouped = LibSRM.Grouped()
 	for _, Mod in ipairs(KBM.ModList) do
