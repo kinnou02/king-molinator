@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r393"
+KBM.Alpha = ".r394"
 KBM.Event = {
 	Mark = {},
 	System = {
@@ -3425,6 +3425,7 @@ function KBM.CombatEnter(UnitID)
 	if KBM.Options.Enabled then
 		uDetails = Inspect.Unit.Detail(UnitID)
 		if uDetails then
+			KBM.Unit:Update(uDetails, UnitID)
 			if not uDetails.player then
 				KBM.CheckActiveBoss(uDetails, UnitID)
 			end
@@ -3437,6 +3438,7 @@ function KBM.CombatLeave(UnitID)
 	if KBM.Options.Enabled then
 		uDetails = Inspect.Unit.Detail(UnitID)
 		if uDetails then
+			KBM.Unit:Update(uDetails, UnitID)
 			KBM.Unit.List.UID[UnitID]:CheckTarget()
 		end
 	end	
