@@ -105,13 +105,17 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.RezMaster = {}
 	KBMLM.SetGroupObject(KBM.Language.RezMaster, "GroupObject", "Rez Master dictionary")
 	KBM.Language.RezMaster.Name = KBM.Language:Add("Rez Master")
+	KBM.Language.RezMaster.Name:SetGerman("Rez Meister")
 	KBM.Language.RezMaster.Name:SetFrench("Suivi des Rez")
 	KBM.Language.RezMaster.Enabled = KBM.Language:Add("Enable Rez Master")
 	KBM.Language.RezMaster.Enabled:SetFrench("Activer Suivi des Rez")
+	KBM.Language.RezMaster.Enabled:SetGerman("Rez Meister anzeigen")
 	KBM.Language.RezMaster.Ready = KBM.Language:Add("Ready!")
 	KBM.Language.RezMaster.Ready:SetFrench("Prêt!")
+	KBM.Language.RezMaster.Ready:SetGerman("Bereit!")
 	KBM.Language.RezMaster.AnchorText = KBM.Language:Add("Rez Timer Anchor")
 	KBM.Language.RezMaster.AnchorText:SetFrench("Ancrage Minuterie Rez")
+	KBM.Language.RezMaster.AnchorText:SetGerman("Rez Meister Anker")
 	
 	-- Command Listings
 	KBM.Language.Command = {}

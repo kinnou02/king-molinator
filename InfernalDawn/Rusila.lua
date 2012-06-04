@@ -69,6 +69,7 @@ RS.Lang.Unit.Long = KBM.Language:Add("Dreaded Longshot")
 RS.Lang.Unit.LongShort = KBM.Language:Add("Longshot")
 RS.Lang.Unit.Heart = KBM.Language:Add("Heart of the Dread Fortune")
 RS.Lang.Unit.HeartShort = KBM.Language:Add("Heart")
+RS.Lang.Unit.HeartShort:SetGerman("Herz")
 
 -- Ability Dictionary
 RS.Lang.Ability = {}
@@ -95,6 +96,7 @@ RS.Lang.Buff.Barrel = KBM.Language:Add("Barrel of Dragon's Breath")
 -- Menu Dictionary
 RS.Lang.Menu = {}
 RS.Lang.Menu.Dread = KBM.Language:Add("Dread Shot duration")
+RS.Lang.Menu.Dread:SetGerman("Schreckangriff Dauer")
 
 RS.Rusila.Name = RS.Lang.Unit.Rusila[KBM.Lang]
 RS.Rusila.NameShort = RS.Lang.Unit.RusShort[KBM.Lang]
