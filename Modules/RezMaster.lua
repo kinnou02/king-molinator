@@ -238,20 +238,22 @@ function RM.Rezes:Init()
 					local Anchor = RM.GUI.Anchor
 					local Timer = {}
 					if self.Tracked[Name] then
-						if self.Tracked[Name][aID] then
-							self.Tracked[Name][aID]:Remove()
+						if self.Tracked[Name].Timers[aID] then
+							self.Tracked[Name].Timers[aID]:Remove()
 						end
 					else
-						self.Tracked[Name] = {}
+						self.Tracked[Name] = {
+							Timers = {},
+						}
 					end
-					self.Tracked[Name][aID] = Timer
+					self.Tracked[Name].Timers[aID] = Timer
 					Timer.GUI = RM.GUI:Pull()
 					Timer.GUI.Background:SetHeight(Anchor:GetHeight())
 					Timer.GUI.CastInfo:SetFontSize(KBM.Constant.RezMaster.TextSize * RM.GUI.Settings.tScale)
 					Timer.GUI.Shadow:SetFontSize(Timer.GUI.CastInfo:GetFontSize())
 					Timer.GUI.Icon:SetTexture("Rift", aDetails.icon)
 					Timer.SetWidth = Timer.GUI.Background:GetWidth() - Timer.GUI.Background:GetHeight()
-					local Spec, UID = LibSRM.Group.NameSearch(Name)
+					local UID = self.Tracked[Name].UnitID
 					Timer.Class = ""
 					if UID then
 						Timer.Class = KBM.Unit.List.UID[UID].Details.calling or ""
@@ -406,7 +408,7 @@ function RM.Rezes:Init()
 				end
 			end
 		elseif self.Tracked[sPlayer] then
-			for aID, Timer in pairs(self.Tracked[sPlayer]) do
+			for aID, Timer in pairs(self.Tracked[sPlayer].Timers) do
 				Timer:Remove()
 			end
 		end
@@ -416,7 +418,7 @@ function RM.Rezes:Init()
 		if not self.Tracked[Name] then
 			return
 		end
-		local Timer = self.Tracked[Name][aID]
+		local Timer = self.Tracked[Name].Timers[aID]
 		if Timer then
 			Timer:Remove()
 		end
@@ -454,9 +456,9 @@ function RM.Broadcast.RezRem(crID)
 		-- print("Sending: "..crID.." remove message")
 		Command.Message.Broadcast("raid", nil, "KBMRezRem", crID)
 		if RM.Rezes.Tracked[KBM.Player.Name] then
-			if RM.Rezes.Tracked[KBM.Player.Name][crID] then
-				RM.Rezes.Tracked[KBM.Player.Name][crID]:Remove()
-				RM.Rezes.Tracked[KBM.Player.Name][crID] = nil
+			if RM.Rezes.Tracked[KBM.Player.Name].Timers[crID] then
+				RM.Rezes.Tracked[KBM.Player.Name].Timers[crID]:Remove()
+				RM.Rezes.Tracked[KBM.Player.Name].Timers[crID] = nil
 			end
 		end
 	end
@@ -490,8 +492,8 @@ function RM.MessageHandler(From, Type, Channel, Identifier, Data)
 					end
 				elseif Identifier == "KBMRezRem" then
 					if RM.Rezes.Tracked[From] then
-						if RM.Rezes.Tracked[From][Data] then
-							RM.Rezes.Tracked[From][Data]:Remove()
+						if RM.Rezes.Tracked[From].Timers[Data] then
+							RM.Rezes.Tracked[From].Timers[Data]:Remove()
 						end
 					end
 					-- print("Remove "..From.."'s CR/BR states")

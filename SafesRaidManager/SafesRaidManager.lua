@@ -193,8 +193,8 @@ local function SRM_CheckGroupState(force)
 		end
 	else
 		SRM_Groups.Mode = "party"
-		LibSRM.Player.Grouped = false
 		if LibSRM.Player.Grouped or force then
+			LibSRM.Player.Grouped = false
 			SRM_Group.Mode(SRM_Groups.Mode)
 			SRM_System.Player.Leave()
 			--print("You have left a group. Group mode reset to Party")
