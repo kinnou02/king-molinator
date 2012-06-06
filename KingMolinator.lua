@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r395"
+KBM.Alpha = ".r396"
 KBM.Event = {
 	Mark = {},
 	System = {
@@ -7482,6 +7482,7 @@ local function KBM_WaitReady(unitID, uDetails)
 	}
 	KBM_Start()
 	KBM.Player.Grouped = LibSRM.Grouped()
+	KBM.Player.Mode = LibSRM.Player.Mode
 	for _, Mod in ipairs(KBM.ModList) do
 		Mod:AddBosses(KBM_Boss)
 		if Mod.InstanceObj then

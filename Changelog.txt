@@ -32,6 +32,13 @@ Infernal Dawn
 Hammerknell Fortress
 * Estrode
 ** New: Added personal alert for Neddra's Grasp.
+* Inwar Darktide
+** Fixed: Another attempt at the fail-safe to ensure that phase 4 (Inwar himself) triggers correctly all of the time.
+
+Expert Dungeons
+* The Realm of the Fae
+** Fae Lord Twyl
+*** Change: Increased the Time-Out timer further to prevent the encounter ending early.
 
 French Translations
 * Updated!

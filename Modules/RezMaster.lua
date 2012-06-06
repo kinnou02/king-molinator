@@ -418,6 +418,7 @@ function RM.Rezes:Init()
 		end
 		local Timer = self.Tracked[Name][aID]
 		if Timer then
+			Timer:Remove()
 		end
 	end
 end
@@ -438,12 +439,12 @@ function RM.Broadcast.RezSet(toName, crID)
 				-- print("Sending: "..Details.name.." to raid")
 				KBM.Player.Rezes.List[crID] = Inspect.Ability.Detail(crID)
 				Details = KBM.Player.Rezes.List[crID]
-				Command.Message.Broadcast("raid", nil, "KBMRezSet", crID..","..tostring(Details.currentCooldownRemaining)..","..tostring(Details.cooldown))
+				Command.Message.Broadcast(KBM.Player.Mode, nil, "KBMRezSet", crID..","..tostring(Details.currentCooldownRemaining)..","..tostring(Details.cooldown))
 			end
 		else
 			KBM.Player.Rezes.List[crID] = Inspect.Ability.Detail(crID)
 			local Details = KBM.Player.Rezes.List[crID]
-			Command.Message.Broadcast("raid", nil, "KBMRezSet", crID..","..tostring(Details.currentCooldownRemaining)..","..tostring(Details.cooldown))
+			Command.Message.Broadcast(KBM.Player.Mode, nil, "KBMRezSet", crID..","..tostring(Details.currentCooldownRemaining)..","..tostring(Details.cooldown))
 		end
 	end
 end
@@ -455,6 +456,7 @@ function RM.Broadcast.RezRem(crID)
 		if RM.Rezes.Tracked[KBM.Player.Name] then
 			if RM.Rezes.Tracked[KBM.Player.Name][crID] then
 				RM.Rezes.Tracked[KBM.Player.Name][crID]:Remove()
+				RM.Rezes.Tracked[KBM.Player.Name][crID] = nil
 			end
 		end
 	end
@@ -463,7 +465,7 @@ end
 function RM.Broadcast.RezClear()
 	if KBM.Player.Grouped then
 		-- print("Sending: Can no longer BR/CR message")
-		Command.Message.Broadcast("raid", nil, "KBMRezClear", KBM.Player.UnitID)
+		Command.Message.Broadcast(KBM.Player.Mode, nil, "KBMRezClear", KBM.Player.UnitID)
 		RM.Rezes:Clear(KBM.Player.Name)
 	end
 end

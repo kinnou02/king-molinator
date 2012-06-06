@@ -89,6 +89,10 @@ RS.Lang.Ability.Chain = KBM.Language:Add("Barbed Chain")
 RS.Lang.Ability.Chain:SetGerman("Stacheldrahtkette")
 RS.Lang.Ability.Chain:SetFrench("Chaîne barbelée")
 
+-- Notify Dictionary
+RS.Lang.Notify = {}
+RS.Lang.Notify.Fall = KBM.Language:Add("If The Dread Fortune falls, you'll be joining her.")
+
 -- Buff Dictionary
 RS.Lang.Buff = {}
 RS.Lang.Buff.Barrel = KBM.Language:Add("Barrel of Dragon's Breath")
@@ -225,15 +229,19 @@ function RS:RemoveUnits(UnitID)
 	return false
 end
 
+function RS.PhaseTwo()
+	RS.PhaseObj.Objectives:Remove()
+	RS.PhaseObj.Objectives:AddPercent(RS.Rusila.Name, 0, 100)
+	RS.PhaseObj:SetPhase("Final")
+	RS.Phase = 2
+end
+
 function RS:Death(UnitID)
 	if self.Rusila.UnitID == UnitID then
 		self.Rusila.Dead = true
 		return true
 	elseif self.Heart.UnitID == UnitID then
-		self.PhaseObj.Objectives:Remove()
-		self.PhaseObj.Objectives:AddPercent(self.Rusila.Name, 0, 100)
-		self.PhaseObj:SetPhase("Final")
-		self.Phase = 2
+		RS.PhaseTwo()
 	end
 	return false
 end
@@ -343,6 +351,8 @@ function RS:Start()
 	self.Rusila.Triggers.Dread:AddAlert(self.Rusila.AlertsRef.Dread, true)
 	self.Rusila.Triggers.DreadDur = KBM.Trigger:Create(self.Lang.Ability.Dread[KBM.Lang], "channel", self.Rusila)
 	self.Rusila.Triggers.DreadDur:AddAlert(self.Rusila.AlertsRef.DreadDur, true)
+	self.Rusila.Triggers.Fall = KBM.Trigger:Create(self.Lang.Notify.Fall[KBM.Lang], "notify", self.Rusila)
+	self.Rusila.Triggers.Fall:AddPhase(self.PhaseTwo)
 	
 	self.Rusila.CastBar = KBM.CastBar:Add(self, self.Rusila)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

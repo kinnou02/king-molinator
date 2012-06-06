@@ -474,7 +474,7 @@ function ID:UnitHPCheck(uDetails, unitID)
 						if uDetails.name == self.Rotjaw.Name or uDetails.name == self.Undertow.Name then
 							self.PhaseThree()
 						end
-					elseif Phase == 3 then
+					elseif self.Phase < 4 then
 						if uDetails.name == self.Inwar.Name then
 							self.PhaseFour()
 						end

@@ -77,7 +77,7 @@ function PC.AbilityRemove(aIDList)
 			if aIDList[crID] == false then
 				self.RezBank[KBM.Player.Calling][crID] = Inspect.Ability.Detail(crID)
 				KBM.Player.Rezes.List[crID] = nil
-				-- print(Count..": "..self.RezBank[KBM.Player.Calling][crID].name.." < Removed")
+				--print(Count..": "..self.RezBank[KBM.Player.Calling][crID].name.." < Removed")
 				KBM.RezMaster.Broadcast.RezRem(crID)
 				Count = Count - 1
 			end
@@ -143,6 +143,7 @@ end
 function PC.GroupJoin(uID)
 	if KBM.Player.Grouped then
 		if not KBM.RezMaster.Rezes.Tracked[KBM.Unit.List.UID[uID].Name] then
+			--print("New player has joined: Requesting BR list")
 			Command.Message.Send(KBM.Unit.List.UID[uID].Name, "KBMRezReq", "C", PC.MessageSent)
 		end
 	end
@@ -150,7 +151,8 @@ end
 
 function PC.GroupLeave(uID)
 	if KBM.Player.Grouped then
-		KBM.RezMaster.Rezes:Remove(KBM.Unit.List.UID[uID].Name)
+		KBM.RezMaster.Rezes:Clear(KBM.Unit.List.UID[uID].Name)
+		KBM.RezMaster.Rezes.Tracked[KBM.Unit.List.UID[uID].Name] = nil
 	end
 end
 
@@ -167,6 +169,10 @@ function PC.PlayerLeave()
 	KBM.RezMaster.Rezes:Clear()
 end
 
+function PC.PlayerMode(Mode)
+	KBM.Player.Mode = Mode
+end
+
 function PC:Start()
 	self.MSG = KBM.MSG
 	table.insert(Event.Ability.Remove, {PC.AbilityRemove, "KingMolinator", "Ability Removed"})
@@ -179,4 +185,5 @@ function PC:Start()
 	table.insert(Event.KingMolinator.System.Group.Leave, {PC.GroupLeave, "KingMolinator", "Group Member Leave"})
 	table.insert(Event.KingMolinator.Unit.Calling, {PC.CallingChange, "KingMolinator", "Group member calling change"})
 	table.insert(Event.SafesRaidManager.Group.Offline, {PC.PlayerOffline, "KingMolinator", "Player Offline"})
+	table.insert(Event.SafesRaidManager.Group.Mode, {PC.PlayerMode, "KingMolinator", "Player Group Mode"})
 end

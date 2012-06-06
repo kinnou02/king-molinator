@@ -11,6 +11,7 @@ LibSRM.Player.ID = Inspect.Unit.Detail("player")
 LibSRM.Player.Grouped = false
 LibSRM.Player.Loaded = false
 LibSRM.Player.Combat = false
+LibSRM.Player.Mode = "party"
 LibSRM.Dead = 0
 
 LibSRM.Group = {
@@ -25,6 +26,33 @@ local SRM_NameList = {}
 SRM_Units.Pets = {}
 local SRM_Raid = {}
 SRM_Raid.Populated = 0
+local SRM_Groups = {
+	Mode = "party",
+	group01 = 1,
+	group02 = 1,
+	group03 = 1,
+	group04 = 1,
+	group05 = 1,
+	group06 = 2,
+	group07 = 2,
+	group08 = 2,
+	group09 = 2,
+	group10 = 2,
+	group11 = 3,
+	group12 = 3,
+	group13 = 3,
+	group14 = 3,
+	group15 = 3,
+	group16 = 4,
+	group17 = 4,
+	group18 = 4,
+	group19 = 4,
+	group20 = 4,
+	[1] = 0,
+	[2] = 0,
+	[3] = 0,
+	[4] = 0,
+}
 local SRM_UnitQueue = {}
 SRM_UnitQueue.Queued = 0
 function SRM_UnitQueue:Add(RaidUnit)
@@ -64,12 +92,14 @@ local SRM_Group = {
 	Change = {},
 	Target = {},
 	Offline = {},
+	Mode = {},
 }
 SRM_Group.Join, SRM_Group.Join.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Join")
 SRM_Group.Leave, SRM_Group.Leave.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Leave")
 SRM_Group.Change, SRM_Group.Change.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Change")
 SRM_Group.Target, SRM_Group.Target.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Target")
 SRM_Group.Offline, SRM_Group.Offline.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Offline")
+SRM_Group.Mode, SRM_Group.Mode.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Mode")
 SRM_Group.Combat = {
 	Start = {},
 	End = {},
@@ -137,19 +167,38 @@ SRM_System.Combat.Death, SRM_System.Combat.Death.EventTable = Utility.Event.Crea
 SRM_System.Combat.Heal, SRM_System.Combat.Heal.EventTable = Utility.Event.Create("SafesRaidManager", "Combat.Heal")
 
 local function SRM_CheckGroupState(force)
-	--print(SRM_Raid.Populated)
+	--print("Checking Group States: "..SRM_Raid.Populated)
 	if SRM_Raid.Populated > 0 then
+		SRM_Groups.Populated = 0
+		for i = 1, 4 do
+			if SRM_Groups[i] > 0 then
+				SRM_Groups.Populated = SRM_Groups.Populated + 1
+			end
+		end
+		if SRM_Groups.Populated > 1 or (SRM_Groups.Populated == 1 and SRM_Groups[1] == 0) then
+			if SRM_Groups.Mode ~= "raid" then
+				SRM_Groups.Mode = "raid"
+				SRM_Group.Mode(SRM_Groups.Mode)
+			end
+		else
+			if SRM_Groups.Mode ~= "party" then
+				SRM_Groups.Mode = "party"
+				SRM_Group.Mode(SRM_Groups.Mode)
+			end
+		end
+		LibSRM.Player.Mode = SRM_Groups.Mode
 		if (not LibSRM.Player.Grouped) or force then
+			LibSRM.Player.Grouped = true
 			SRM_System.Player.Join()
-			--print("You have joined a group.")
 		end
-		LibSRM.Player.Grouped = true
 	else
-		if LibSRM.Player.Grouped or force then
-			SRM_System.Player.Leave()
-			--print("You have left a group.")
-		end
+		SRM_Groups.Mode = "party"
 		LibSRM.Player.Grouped = false
+		if LibSRM.Player.Grouped or force then
+			SRM_Group.Mode(SRM_Groups.Mode)
+			SRM_System.Player.Leave()
+			--print("You have left a group. Group mode reset to Party")
+		end
 	end
 end
 
@@ -259,8 +308,9 @@ local function SRM_SetSpecifier(Specifier)
 		if self.Dead then
 			LibSRM.Dead = LibSRM.Dead - 1
 		end
+		SRM_Groups[SRM_Groups[self.Spec]] = SRM_Groups[SRM_Groups[self.Spec]] - 1
 		SRM_Raid.Populated = SRM_Raid.Populated - 1
-		SRM_NameList[self.name] = nil
+		SRM_NameList[SRM_Units[self.UnitID].name] = nil
 		SRM_Units[self.UnitID] = nil
 		self.SRM_Unit = nil
 		if self.PetID then
@@ -325,7 +375,10 @@ local function SRM_SetSpecifier(Specifier)
 					end
 					SRM_Group.Change(UID, SRM_Units[UID].Specifier, self.Spec)
 					self.UnitID = UID
+					SRM_Groups[SRM_Groups[SRM_Units[UID].Specifier]] = SRM_Groups[SRM_Groups[SRM_Units[UID].Specifier]] - 1
 					SRM_Units[UID].Specifier = self.Spec
+					SRM_Groups[SRM_Groups[self.Spec]] = SRM_Groups[SRM_Groups[self.Spec]] + 1
+					SRM_CheckGroupState()
 					-- Send MOVE Message HERE
 				else
 					--print("Attempting to load new Unit: "..UID)
@@ -376,6 +429,7 @@ local function SRM_SetSpecifier(Specifier)
 						SRM_Units[self.UnitID].Dead = true
 						LibSRM.Dead = LibSRM.Dead + 1
 					end
+					SRM_Groups[SRM_Groups[self.Spec]] = SRM_Groups[SRM_Groups[self.Spec]] + 1
 					SRM_Raid.Populated = SRM_Raid.Populated + 1
 					self.name = uDetails.name
 					SRM_NameList[self.name] = SRM_Units[self.UnitID]
