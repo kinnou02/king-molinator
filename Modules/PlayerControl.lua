@@ -56,6 +56,7 @@ function PC:GatherRaidInfo()
 			if uID ~= KBM.Player.UnitID then
 				if KBM.Unit.List.UID[uID] then
 					--print(KBM.Unit.List.UID[uID].Name..": "..tostring(KBM.Unit.List.UID[uID].Details.calling))
+					KBM.Unit.List.UID[uID].Details = Inspect.Unit.Detail(uID)
 					if KBM.Unit.List.UID[uID].Details.calling then
 						if self.RezBank[KBM.Unit.List.UID[uID].Details.calling] then
 							Command.Message.Send(KBM.Unit.List.UID[uID].Name, "KBMRezReq", "C", PC.MessageSent)

@@ -259,19 +259,23 @@ function RM.Rezes:Init()
 						Timer.Class = KBM.Unit.List.UID[UID].Details.calling or ""
 					else
 						if KBM.Unit.List.Name[Name] then
-							for UID, Object in pairs(KBM.Unit.List.Name[Name]) do
+							for lUID, Object in pairs(KBM.Unit.List.Name[Name]) do
 								Timer.Class = Object.Details.calling or ""
+								self.Tracked[Name].UnitID = lUID
+								UID = lUID
 								break
 							end
 						end
 					end
 
-					if Timer.Class == "" then
-						for Calling, AbilityList in pairs(KBM.PlayerControl.RezBank) do
-							if AbilityList[aID] then
-								Timer.Class = Calling
-								KBM.Unit.List.UID[UID].Details.calling = Calling
-								break
+					if UID then 
+						if Timer.Class == "" then
+							for Calling, AbilityList in pairs(KBM.PlayerControl.RezBank) do
+								if AbilityList[aID] then
+									Timer.Class = Calling
+									KBM.Unit.List.UID[UID].Details.calling = Calling
+									break
+								end
 							end
 						end
 					end
