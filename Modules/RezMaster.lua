@@ -434,19 +434,25 @@ function RM.Broadcast.RezSet(toName, crID)
 			for crID, Details in pairs(KBM.Player.Rezes.List) do
 				KBM.Player.Rezes.List[crID] = Inspect.Ability.Detail(crID)
 				Details = KBM.Player.Rezes.List[crID]
-				Command.Message.Send(toName, "KBMRezSet", crID..","..tostring(Details.currentCooldownRemaining)..","..tostring(Details.cooldown), RM.MessageSent)
+				if Details then
+					Command.Message.Send(toName, "KBMRezSet", crID..","..tostring(Details.currentCooldownRemaining)..","..tostring(Details.cooldown), RM.MessageSent)
+				end
 			end
 		elseif not crID then
 			for crID, Details in pairs(KBM.Player.Rezes.List) do
 				-- print("Sending: "..Details.name.." to raid")
 				KBM.Player.Rezes.List[crID] = Inspect.Ability.Detail(crID)
 				Details = KBM.Player.Rezes.List[crID]
-				Command.Message.Broadcast(KBM.Player.Mode, nil, "KBMRezSet", crID..","..tostring(Details.currentCooldownRemaining)..","..tostring(Details.cooldown))
+				if Details then
+					Command.Message.Broadcast(KBM.Player.Mode, nil, "KBMRezSet", crID..","..tostring(Details.currentCooldownRemaining)..","..tostring(Details.cooldown))
+				end
 			end
 		else
 			KBM.Player.Rezes.List[crID] = Inspect.Ability.Detail(crID)
 			local Details = KBM.Player.Rezes.List[crID]
-			Command.Message.Broadcast(KBM.Player.Mode, nil, "KBMRezSet", crID..","..tostring(Details.currentCooldownRemaining)..","..tostring(Details.cooldown))
+			if Details then
+				Command.Message.Broadcast(KBM.Player.Mode, nil, "KBMRezSet", crID..","..tostring(Details.currentCooldownRemaining)..","..tostring(Details.cooldown))
+			end
 		end
 	end
 end
