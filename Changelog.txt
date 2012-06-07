@@ -20,6 +20,7 @@ New! Rez Master
 
 Tank-Swap
 * Fixed: Attempted to fix the second debuff stack display not showing.
+* Fixed: Tank-Swap could error with Off-line tanks.
 
 Infernal Dawn
 * Maklamos the Scryer

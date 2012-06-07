@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r399"
+KBM.Alpha = ".r400"
 KBM.Event = {
 	Mark = {},
 	System = {
@@ -4734,7 +4734,7 @@ function KBM.TankSwap:Init()
 			TankObj.Unit = KBM.Unit.List.UID[UnitID]
 			if TankObj.Unit then
 				TankObj.Name = TankObj.Unit.Name
-				if TankObj.Unit.Dead then
+				if TankObj.Unit.Dead and TankObj.Unit.Health then
 					if TankObj.Unit.Health > 0 then
 						TankObj.Dead = false
 					else
