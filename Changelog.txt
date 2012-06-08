@@ -1,4 +1,15 @@
-﻿v1.0.6
+﻿v1.0.7
+
+System
+* Change: Re-ordered the initialization system.
+* New: On start-up the KBM event system now fires Player Join events if you're already in a group (for both /reloadui, and log-in).
+
+Rez Master
+* New: Enabling RezMaster (from a disabled state) will re-inspect your raid and retrieve fresh Rez data. Useful before a pull if anything seems amiss.
+* Fixed: Errors sometimes triggering on leaving a dungeon.
+* Fixed: Enable/Disable option now works.
+----
+v1.0.6
 
 System
 * Fixed: Version notifications where only triggering from guild members. Now works with raid members.

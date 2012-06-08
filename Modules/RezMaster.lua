@@ -22,7 +22,6 @@ local RM = {
 KBM.RezMaster = RM
 
 function RM.GUI:ApplySettings()
-	self.Settings.Enabled = true
 	self.Anchor:ClearAll()
 	if self.Settings.x then
 		self.Anchor:SetPoint("TOPLEFT", UIParent, "TOPLEFT", self.Settings.x, self.Settings.y)
@@ -247,6 +246,7 @@ function RM.Rezes:Init()
 						}
 					end
 					self.Tracked[Name].Timers[aID] = Timer
+					Timer.aID = aID
 					Timer.GUI = RM.GUI:Pull()
 					Timer.GUI.Background:SetHeight(Anchor:GetHeight())
 					Timer.GUI.CastInfo:SetFontSize(KBM.Constant.RezMaster.TextSize * RM.GUI.Settings.tScale)
@@ -290,6 +290,8 @@ function RM.Rezes:Init()
 					Timer.TimeStart = Inspect.Time.Real() - (Timer.Duration - Timer.Remaining)
 					Timer.Player = Name
 					Timer.Name = aDetails.name
+					
+					--print("Adding Ability for "..Timer.Player.." - "..Timer.Name)
 					
 					--if KBM.MechTimer.Settings.Shadow then
 						Timer.GUI.Shadow:SetText(Timer.GUI.CastInfo:GetText())
@@ -376,6 +378,11 @@ function RM.Rezes:Init()
 					end
 					
 					function Timer:Remove()
+						if self.UnitID then
+							if RM.RezMaster.Rezes.Tracked[KBM.Unit.List.UID[self.UnitID].Name] then
+								RM.Rezes.Tracked[KBM.Unit.List.UID[self.UnitID].Name].Timers[self.aID] = nil
+							end
+						end
 						for i, iTimer in ipairs(RM.Rezes.ActiveTimers) do
 							if iTimer == self then
 								if #RM.Rezes.ActiveTimers == 1 then
@@ -407,14 +414,16 @@ function RM.Rezes:Init()
 	function self:Clear(sPlayer)
 		if not sPlayer then
 			for Player, TimerList in pairs(self.Tracked) do
-				for aID, Timer in pairs(TimerList) do
+				for aID, Timer in pairs(TimerList.Timers) do
 					Timer:Remove()
 				end
+				self.Tracked[Player] = nil
 			end
 		elseif self.Tracked[sPlayer] then
 			for aID, Timer in pairs(self.Tracked[sPlayer].Timers) do
 				Timer:Remove()
 			end
+			self.Tracked[sPlayer] = nil
 		end
 	end
 	

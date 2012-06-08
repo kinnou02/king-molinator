@@ -129,7 +129,7 @@ function PC.AbilityCooldown(aIDList)
 end
 
 function PC.PlayerJoin()
-	-- print("PC -- Player Join")
+	--print("PC -- You Join")
 	KBM.RezMaster.Rezes.Tracked[KBM.Player.Name] = {
 		UnitID = KBM.Player.UnitID,
 		Timers = {},
@@ -146,7 +146,9 @@ function PC.CallingChange(uID, Calling)
 end
 
 function PC.GroupJoin(uID)
+	--print("Player joining: "..KBM.Unit.List.UID[uID].Name)
 	if KBM.Player.Grouped then
+		--print("and you are in a Group")
 		if not KBM.RezMaster.Rezes.Tracked[KBM.Unit.List.UID[uID].Name] then
 			--print("New player has joined: Requesting BR list")
 			KBM.RezMaster.Rezes.Tracked[KBM.Unit.List.UID[uID].Name] = {
@@ -155,13 +157,14 @@ function PC.GroupJoin(uID)
 			}
 			Command.Message.Send(KBM.Unit.List.UID[uID].Name, "KBMRezReq", "C", PC.MessageSent)
 		end
+	else
+		--print("you are not currently grouped")
 	end
 end
 
 function PC.GroupLeave(uID)
 	if KBM.Player.Grouped then
 		KBM.RezMaster.Rezes:Clear(KBM.Unit.List.UID[uID].Name)
-		KBM.RezMaster.Rezes.Tracked[KBM.Unit.List.UID[uID].Name] = nil
 	end
 end
 
@@ -174,9 +177,9 @@ end
 
 function PC.PlayerLeave()
 	-- Probably not going to use this.
+	--print("Rez Master group leave message")
 	KBM.Player.Grouped = false
 	KBM.RezMaster.Rezes:Clear()
-	KBM.RezMaster.Rezes.Tracked[KBM.Player.Name] = nil
 end
 
 function PC.PlayerMode(Mode)

@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
---KBM.Alpha = ".r400"
+KBM.Alpha = ".r402"
 KBM.Event = {
 	Mark = {},
 	System = {
@@ -7132,6 +7132,12 @@ end
 function KBM.MenuOptions.RezMaster:Options()
 	function self:Enabled(bool)
 		KBM.Options.RezMaster.Enabled = bool
+		if bool then
+			KBM.PlayerControl:GatherAbilities(true)
+			KBM.PlayerControl:GatherRaidInfo()
+		else
+			KBM.RezMaster.Rezes:Clear()
+		end
 	end
 	function self:Visible(bool)
 		KBM.Options.RezMaster.Visible = bool
@@ -7443,32 +7449,7 @@ local function KBM_Start()
 	KBM.MenuOptions.Main:Options()
 	table.insert(Command.Slash.Register("kbmon"), {function() KBM.StateSwitch(true) end, "KingMolinator", "KBM On"})
 	table.insert(Command.Slash.Register("kbmoff"), {function() KBM.StateSwitch(false) end, "KingMolinator", "KBM Off"})
-		
-	UnitList = Inspect.Unit.List()
-	if UnitList then
-		for UnitID, Specifier in pairs(UnitList) do
-			local uDetails = Inspect.Unit.Detail(UnitID)
-			if uDetails then
-				UnitObj = KBM.Unit:Available(uDetails, UnitID)
-				if UnitObj.Mark then
-					KBM.Event.Mark(UnitObj.Mark, UnitID)
-				end
-			end
-		end
-		-- Set up initial raid target counters
-		for i = 1, 20 do
-			local Spec, UID = LibSRM.Group.Inspect(i)
-			if UID then
-				local Target = LibSRM.Group.Target(UID)
-				if Target then
-					if KBM.Unit.List.UID[UID] then
-						KBM.GroupTarget(UID, Target)
-					end
-				end
-			end
-		end
-	end
-	
+			
 end
 
 local function KBM_WaitReady(unitID, uDetails)
@@ -7524,9 +7505,30 @@ local function KBM_WaitReady(unitID, uDetails)
 	KBM.RezMaster:Start()
 	KBM.PlayerControl:Start()
 	if KBM.Player.Grouped then
-		KBM.Event.System.Player.Join()
+		KBM.PlayerJoin()
 	end
-
+	UnitList = Inspect.Unit.List()
+	if UnitList then
+		for UnitID, Specifier in pairs(UnitList) do
+			local uDetails = Inspect.Unit.Detail(UnitID)
+			if uDetails then
+				UnitObj = KBM.Unit:Available(uDetails, UnitID)
+				if UnitObj.Mark then
+					KBM.Event.Mark(UnitObj.Mark, UnitID)
+				end
+			end
+			local Spec = LibSRM.Group.UnitExists(UnitID)
+			if Spec then
+				local Target = LibSRM.Group.Target(UnitID)
+				if Target then
+					if KBM.Unit.List.UID[UnitID] then
+						KBM.GroupTarget(UnitID, Target)
+					end
+				end
+				KBM.GroupJoin(UnitID, Spec)
+			end
+		end
+	end
 end
 
 KBM.PlugIn = {}
