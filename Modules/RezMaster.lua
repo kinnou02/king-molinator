@@ -319,7 +319,17 @@ function RM.Rezes:Init()
 					
 					if #self.ActiveTimers > 0 then
 						for i, cTimer in ipairs(self.ActiveTimers) do
-							if (Timer.Remaining < cTimer.Remaining) or (Timer.Duration <= cTimer.Duration and Timer.Remaining == cTimer.Remaining) then
+							local Insert = false
+							if (Timer.Remaining < cTimer.Remaining) then
+								Insert = true
+							elseif (Timer.Duration <= cTimer.Duration and Timer.Remaining <= cTimer.Remaining) then
+								if (self.Class == "cleric" and cTimer.Class ~= "mage") or self.Class == "mage" then
+									if self.Player <= cTimer.Player then
+										Insert = true
+									end
+								end
+							end
+							if Insert then
 								Timer.Active = true
 								if i == 1 then
 									Timer.GUI.Background:SetPoint("TOPLEFT", Anchor, "TOPLEFT")
