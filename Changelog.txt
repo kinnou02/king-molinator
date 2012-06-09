@@ -15,7 +15,7 @@ System
 * Fixed: Version notifications where only triggering from guild members. Now works with raid members.
 
 Unit Tracker
-* Change: Improved tracking of non-seen units. This should improve CPU performance and accuracy of auxilary tracking.
+* Change: Improved tracking of non-seen units. This should improve CPU performance and accuracy of auxiliary tracking.
 * Change: Unseen units are now correctly placed in the Idle queue until activity stops or they die.
 * Change: Improved engine so that conditional checks are grouped and ordered better. CPU performance boost.
 * Fixed: Removed units where not ungrouping correctly.
