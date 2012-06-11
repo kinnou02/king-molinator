@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
---KBM.Alpha = ".r404"
+KBM.Alpha = ".r405"
 KBM.Event = {
 	Mark = {},
 	System = {
@@ -1761,23 +1761,36 @@ function KBM.Button:Init()
 			KBM.Options.Button.y = self.Texture:GetTop()
 		end	
 	end
-	
+	function KBM.Button.Texture.Event.MouseIn()
+		KBM.Button.Texture:SetTexture("KingMolinator", "Media/Options_Button_Over.png")
+	end
+	function KBM.Button.Texture.Event.MouseOut()
+		KBM.Button.Texture:SetTexture("KingMolinator", "Media/Options_Button.png")
+	end
+	function KBM.Button.Texture.Event.LeftDown()
+		KBM.Button.Texture:SetTexture("KingMolinator", "Media/Options_Button_Down.png")
+	end
+	function KBM.Button.Texture.Event.LeftUp()
+		KBM.Button.Texture:SetTexture("KingMolinator", "Media/Options_Button_Over.png")
+	end
 	function KBM.Button.Texture.Event.LeftClick()
 		KBM_Options()
 	end
-	
+			
 	KBM.Button.Drag = KBM.AttachDragFrame(KBM.Button.Texture, function (uType) self:UpdateMove(uType) end, "Button Drag", 6)
 	KBM.Button.Drag.Event.RightDown = KBM.Button.Drag.Event.LeftDown
 	KBM.Button.Drag.Event.RightUp = KBM.Button.Drag.Event.LeftUp
 	KBM.Button.Drag.Event.LeftDown = nil
 	KBM.Button.Drag.Event.LeftUp = nil
+	KBM.Button.Drag.Event.MouseIn = KBM.Button.Texture.Event.MouseIn
+	KBM.Button.Drag.Event.MouseOut = KBM.Button.Texture.Event.MouseOut
 	KBM.Button.Drag:SetMouseMasking("limited")
 	if not KBM.Options.Button.Unlocked then
 		KBM.Button.Drag:SetVisible(false)
 	end
 	if not KBM.Options.Button.Visible then
 		KBM.Button.Texture:SetVisible(false)
-	end	
+	end
 end
 
 function KBM.MechSpy:Pull()

@@ -66,10 +66,14 @@ RS.Lang.Unit.RusShort:SetGerman()
 RS.Lang.Unit.RusShort:SetFrench()
 RS.Lang.Unit.RusShort:SetRussian("Русила")
 RS.Lang.Unit.Long = KBM.Language:Add("Dreaded Longshot")
+RS.Lang.Unit.Long:SetFrench("Tireur d'élite terrifiant")
 RS.Lang.Unit.LongShort = KBM.Language:Add("Longshot")
+RS.Lang.Unit.LongShort:SetFrench("Tireur d'élite")
 RS.Lang.Unit.Heart = KBM.Language:Add("Heart of the Dread Fortune")
+RS.Lang.Unit.Heart:SetFrench("Cœur de la Fortune funeste")
 RS.Lang.Unit.HeartShort = KBM.Language:Add("Heart")
 RS.Lang.Unit.HeartShort:SetGerman("Herz")
+RS.Lang.Unit.HeartShort:SetFrench("Cœur")
 
 -- Ability Dictionary
 RS.Lang.Ability = {}
@@ -92,15 +96,18 @@ RS.Lang.Ability.Chain:SetFrench("Chaîne barbelée")
 -- Notify Dictionary
 RS.Lang.Notify = {}
 RS.Lang.Notify.Fall = KBM.Language:Add("If The Dread Fortune falls, you'll be joining her.")
+RS.Lang.Notify.Fall:SetFrench("Si le Fortune funeste venait à couler, vous sombreriez avec lui.")
 
 -- Buff Dictionary
 RS.Lang.Buff = {}
 RS.Lang.Buff.Barrel = KBM.Language:Add("Barrel of Dragon's Breath")
+RS.Lang.Buff.Barrel:SetFrench("Baril de Souffle de dragon")
 
 -- Menu Dictionary
 RS.Lang.Menu = {}
 RS.Lang.Menu.Dread = KBM.Language:Add("Dread Shot duration")
 RS.Lang.Menu.Dread:SetGerman("Schreckangriff Dauer")
+RS.Lang.Menu.Dread:SetFrench("Durée Tir terrifiant")
 
 RS.Rusila.Name = RS.Lang.Unit.Rusila[KBM.Lang]
 RS.Rusila.NameShort = RS.Lang.Unit.RusShort[KBM.Lang]

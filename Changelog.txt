@@ -1,4 +1,19 @@
-﻿v1.0.7
+﻿v1.0.8
+
+Options
+* New: The options/mini-map button is now more buttony
+
+Rez Master
+* Change: Adjusted how Cool down begin messages are filtered.
+* Change: Once a rez has completed its cool down, Rez Master will re-sort the list placing Mages at the top.
+
+French Translations
+* Updated!
+
+Russian Translations
+* Updates and Fixes
+----
+v1.0.7
 
 System
 * Change: Re-ordered the initialization system.

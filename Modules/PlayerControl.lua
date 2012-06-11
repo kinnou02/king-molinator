@@ -117,7 +117,7 @@ function PC.AbilityCooldown(aIDList)
 			local aDetails = Inspect.Ability.Detail(rID)
 			--print(math.floor(aDetails.currentCooldownDuration).." - "..math.floor(rDetails.cooldown))
 			if aDetails.currentCooldownDuration then
-				if math.floor(aDetails.currentCooldownDuration) == math.floor(aDetails.cooldown) then
+				if math.floor(aDetails.currentCooldownDuration) > 2 then
 					--print("Rez Matched!")
 					KBM.Player.Rezes.List[rID] = aDetails
 					KBM.RezMaster.Rezes:Add(KBM.Player.Name, rID, aDetails.currentCooldownRemaining, aDetails.cooldown)

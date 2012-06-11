@@ -97,6 +97,7 @@ ES.Lang.Ability.Rift:SetFrench("Avatar de la Faille")
 ES.Lang.Debuff = {}
 ES.Lang.Debuff.Grasp = KBM.Language:Add("Neddra's Grasp")
 ES.Lang.Debuff.Grasp:SetGerman("Neddras Griff")
+ES.Lang.Debuff.Grasp:SetFrench("Poigne de Neddra")
 
 -- Speak Dictionary
 ES.Lang.Say = {}

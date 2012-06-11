@@ -322,9 +322,9 @@ function RM.Rezes:Init()
 							local Insert = false
 							if (Timer.Remaining < cTimer.Remaining) then
 								Insert = true
-							elseif (Timer.Duration <= cTimer.Duration and Timer.Remaining <= cTimer.Remaining) then
-								if (self.Class == "cleric" and cTimer.Class ~= "mage") or self.Class == "mage" then
-									if self.Player <= cTimer.Player then
+							elseif Timer.Duration <= cTimer.Duration then
+								if (Timer.Class == "cleric" and cTimer.Class ~= "mage") or Timer.Class == "mage" then
+									if Timer.Player <= cTimer.Player then
 										Insert = true
 									end
 								end
@@ -363,15 +363,12 @@ function RM.Rezes:Init()
 					function Timer:Update(CurrentTime, Force)
 						local text = ""
 						if self.Active then
-							if self.Waiting then
-							else
-								self.Remaining = self.Duration - (CurrentTime - self.TimeStart)
-								--if self.Remaining < 10 then
-									--text = string.format(" %0.01f : ", self.Remaining)..self.Player
+							if not self.Waiting then
+								self.Remaining = math.ceil(self.Duration - (CurrentTime - self.TimeStart))
 								if self.Remaining >= 60 then
 									text = " "..KBM.ConvertTime(self.Remaining).." : "..self.Player
 								else
-									text = " "..math.floor(self.Remaining).." : "..self.Player
+									text = " "..self.Remaining.." : "..self.Player
 								end
 								self.GUI.CastInfo:SetText(text)
 								self.GUI.Shadow:SetText(text)
@@ -381,7 +378,7 @@ function RM.Rezes:Init()
 									self.GUI.CastInfo:SetText(" "..self.Player.." "..KBM.Language.RezMaster.Ready[KBM.Lang])
 									self.GUI.Shadow:SetText(self.GUI.CastInfo:GetText())
 									self.GUI.TimeBar:SetWidth(self.SetWidth)
-									self.Waiting = true
+									RM.Rezes:Add(self.Player, self.aID, 0, self.Duration)
 								end
 							end
 						end
@@ -414,7 +411,15 @@ function RM.Rezes:Init()
 								break
 							end
 						end
+					end				
+					
+					if Timer.Remaining == 0 then
+						Timer.GUI.CastInfo:SetText(" "..Timer.Player.." "..KBM.Language.RezMaster.Ready[KBM.Lang])
+						Timer.GUI.Shadow:SetText(Timer.GUI.CastInfo:GetText())
+						Timer.GUI.TimeBar:SetWidth(Timer.SetWidth)
+						Timer.Waiting = true
 					end
+					
 					Timer:Update(Inspect.Time.Real())
 				end	
 			end

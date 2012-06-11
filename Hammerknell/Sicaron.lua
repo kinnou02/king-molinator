@@ -78,7 +78,7 @@ SN.Lang.Unit = {}
 SN.Lang.Unit.Sicaron = KBM.Language:Add(SN.Sicaron.Name)
 SN.Lang.Unit.Sicaron:SetGerman("Sicaron")
 SN.Lang.Unit.Sicaron:SetFrench("Sicaron")
-SN.Lang.Unit.Sicaron:SetRussian("Сикарон ")
+SN.Lang.Unit.Sicaron:SetRussian("Сикарон")
 SN.Sicaron.Name = SN.Lang.Unit.Sicaron[KBM.Lang]
 SN.Descript = SN.Sicaron.Name
 
@@ -113,15 +113,18 @@ SN.Lang.Debuff.Soul:SetFrench("Récolte d'âme")
 SN.Lang.Debuff.Ravaged = KBM.Language:Add("Ravaged Soul")
 SN.Lang.Debuff.Ravaged:SetGerman("Verwüstete Seele")
 SN.Lang.Debuff.Ravaged:SetFrench("Âme ravagée")
+SN.Lang.Debuff.Ravaged:SetRussian("Растерзанная душа")
 
 -- MechSpy Dictionary
 SN.Lang.MechSpy = {}
 SN.Lang.MechSpy.Buff = KBM.Language:Add("Buffed: Unholy Contract")
 SN.Lang.MechSpy.Buff:SetGerman("Buffed: Unheiliger Vertrag")
 SN.Lang.MechSpy.Buff:SetFrench("Buffed: Contrat impie")
+SN.Lang.MechSpy.Buff:SetRussian("Баф: Контракт")
 SN.Lang.MechSpy.Debuff = KBM.Language:Add("Debuffed: Unholy Contract")
 SN.Lang.MechSpy.Debuff:SetGerman("Debuffed: Unheiliger Vertrag")
 SN.Lang.MechSpy.Debuff:SetFrench("Débuffed: Contrat impie")
+SN.Lang.MechSpy.Debuff:SetRussian("Дебаф: Контракт")
 
 function SN:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
