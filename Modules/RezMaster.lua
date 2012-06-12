@@ -321,7 +321,7 @@ function RM.Rezes:Init()
 					if #self.ActiveTimers > 0 then
 						for i, cTimer in ipairs(self.ActiveTimers) do
 							local Insert = false
-							if (Timer.Remaining <= cTimer.Remaining) and Timer.Remaining ~= 0 then
+							if Timer.Remaining < cTimer.Remaining then
 								--print("Inserting via Remaing Time: "..Timer.Remaining)
 								Insert = true
 							elseif Timer.Duration < cTimer.Duration then
