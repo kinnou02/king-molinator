@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r407"
+KBM.Alpha = ".r408"
 KBM.Event = {
 	Mark = {},
 	System = {
@@ -149,6 +149,27 @@ KBM.Defaults = {}
 KBM.Constant = {}
 KBM.Buffs = {}
 KBM.Buffs.Active = {}
+
+function KBM.AlphaComp(Comp, With)
+	if type(Comp) == "string" and type(With) == "string" then
+		local CompLen = string.len(Comp)
+		local WithLen = string.len(With)
+		for i = 1, CompLen do
+			if i > WithLen then
+				return true
+			end
+			local cByte = string.byte(Comp, i)
+			local wByte = string.byte(With, i)
+			if cByte ~= wByte then
+				if cByte < wByte then
+					return true
+				else
+					return false
+				end
+			end
+		end
+	end
+end
 
 function KBM.Defaults.EncTimer()
 	local EncTimer = {

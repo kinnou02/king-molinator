@@ -256,11 +256,11 @@ function RM.Rezes:Init()
 					local UID = self.Tracked[Name].UnitID
 					Timer.Class = ""
 					if UID then
-						Timer.Class = KBM.Unit.List.UID[UID].Details.calling or ""
+						Timer.Class = KBM.Unit.List.UID[UID].Calling or ""
 					else
 						if KBM.Unit.List.Name[Name] then
 							for lUID, Object in pairs(KBM.Unit.List.Name[Name]) do
-								Timer.Class = Object.Details.calling or ""
+								Timer.Class = Object.Calling or ""
 								self.Tracked[Name].UnitID = lUID
 								UID = lUID
 								break
@@ -274,6 +274,7 @@ function RM.Rezes:Init()
 								if AbilityList[aID] then
 									Timer.Class = Calling
 									KBM.Unit.List.UID[UID].Details.calling = Calling
+									KBM.Unit.List.UID[UID].Calling = Calling
 									break
 								end
 							end
@@ -320,14 +321,27 @@ function RM.Rezes:Init()
 					if #self.ActiveTimers > 0 then
 						for i, cTimer in ipairs(self.ActiveTimers) do
 							local Insert = false
-							if (Timer.Remaining < cTimer.Remaining) then
+							if (Timer.Remaining <= cTimer.Remaining) and Timer.Remaining ~= 0 then
+								--print("Inserting via Remaing Time: "..Timer.Remaining)
 								Insert = true
-							elseif Timer.Duration <= cTimer.Duration then
-								if (Timer.Class == "cleric" and cTimer.Class ~= "mage") or Timer.Class == "mage" then
-									if Timer.Player <= cTimer.Player then
-										Insert = true
-									end
+							elseif Timer.Duration < cTimer.Duration then
+								--print("Inserting via Duration: "..Timer.Duration)
+								Insert = true
+							elseif Timer.Class == "mage" and cTimer.Class == "cleric" then
+								--print("Inserting because current is Mage and other is Cleric")
+								Insert = true
+							elseif Timer.Class == "mage" then
+								if KBM.AlphaComp(Timer.Player, cTimer.Player) then
+									--print("Inserting because Unit is a Mage and target is a Mage (Alpha Name Order)")
+									Insert = true
 								end
+							elseif Timer.Class == "cleric" and cTimer.Class == "cleric" then
+								if KBM.AlphaComp(Timer.Player, cTimer.Player) then
+									--print("Inserting because Unit is a Cleric and target is a Cleric (Alpha Name Order)")
+									Insert = true
+								end
+							--else
+								--print("No match")
 							end
 							if Insert then
 								Timer.Active = true
