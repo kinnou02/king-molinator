@@ -117,12 +117,18 @@ function PC.AbilityCooldown(aIDList)
 			local aDetails = Inspect.Ability.Detail(rID)
 			--print(math.floor(aDetails.currentCooldownDuration).." - "..math.floor(rDetails.cooldown))
 			if aDetails.currentCooldownDuration then
-				if math.floor(aDetails.currentCooldownDuration) > 2 then
-					--print("aDetails.currentCooldownDuration")
-					--print("Rez Matched!")
-					KBM.Player.Rezes.List[rID] = aDetails
-					KBM.RezMaster.Rezes:Add(KBM.Player.Name, rID, aDetails.currentCooldownRemaining, aDetails.cooldown)
-					KBM.RezMaster.Broadcast.RezSet(nil, rID)
+				if aDetails.currentCooldownDuration > 2 then
+					if not KBM.Player.Rezes.Resume[rID] then
+						KBM.Player.Rezes.Resume[rID] = 0
+					end
+					if KBM.Player.Rezes.Resume[rID] <= Inspect.Time.Real() then
+						--print("aDetails.currentCooldownDuration")
+						--print("Rez Matched!")
+						KBM.Player.Rezes.List[rID] = aDetails
+						KBM.Player.Rezes.Resume[rID] = aDetails.currentCooldownBegin + aDetails.currentCooldownRemaining
+						KBM.RezMaster.Rezes:Add(KBM.Player.Name, rID, aDetails.currentCooldownRemaining, aDetails.cooldown)
+						KBM.RezMaster.Broadcast.RezSet(nil, rID)
+					end
 				end
 			end
 		end
@@ -141,6 +147,9 @@ function PC.PlayerJoin()
 end
 
 function PC.CallingChange(uID, Calling)
+	if uID == KBM.Player.UnitID then
+		PC:GatherAbilities()
+	end
 	if PC.Queue[uID] then
 		PC.Queue[uID] = nil
 	end

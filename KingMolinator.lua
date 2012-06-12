@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r410"
+KBM.Alpha = ".r411"
 KBM.Event = {
 	Mark = {},
 	System = {
@@ -105,7 +105,8 @@ KBM.Unit = {
 KBM.CPU = {}
 KBM.Lang = Inspect.System.Language()
 KBM.Player = {
-	Rezes = {}
+	Rezes = {},
+	Resume = {},
 }
 KBM.ID = "KingMolinator"
 KBM.ModList = {}
@@ -7496,6 +7497,7 @@ local function KBM_WaitReady(unitID, uDetails)
 		Count = 0,
 	}
 	KBM_Start()
+	KBM.Player.Level = uDetails.level
 	KBM.Player.Grouped = LibSRM.Grouped()
 	KBM.Player.Mode = LibSRM.Player.Mode
 	for _, Mod in ipairs(KBM.ModList) do
