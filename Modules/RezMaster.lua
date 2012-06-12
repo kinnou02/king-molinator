@@ -321,27 +321,29 @@ function RM.Rezes:Init()
 					if #self.ActiveTimers > 0 then
 						for i, cTimer in ipairs(self.ActiveTimers) do
 							local Insert = false
+							--print("Checking via Remaing Time: "..Timer.Remaining.." - "..cTimer.Remaining)
 							if Timer.Remaining < cTimer.Remaining then
-								--print("Inserting via Remaing Time: "..Timer.Remaining)
 								Insert = true
-							elseif Timer.Duration < cTimer.Duration then
+							elseif Timer.Remaining == cTimer.Remaining and cTimer.Remaining == 0 then
+								if Timer.Duration < cTimer.Duration then
 								--print("Inserting via Duration: "..Timer.Duration)
-								Insert = true
-							elseif Timer.Class == "mage" and cTimer.Class == "cleric" then
-								--print("Inserting because current is Mage and other is Cleric")
-								Insert = true
-							elseif Timer.Class == "mage" then
-								if KBM.AlphaComp(Timer.Player, cTimer.Player) then
-									--print("Inserting because Unit is a Mage and target is a Mage (Alpha Name Order)")
 									Insert = true
-								end
-							elseif Timer.Class == "cleric" and cTimer.Class == "cleric" then
-								if KBM.AlphaComp(Timer.Player, cTimer.Player) then
-									--print("Inserting because Unit is a Cleric and target is a Cleric (Alpha Name Order)")
+								elseif Timer.Class == "mage" and cTimer.Class == "cleric" then
+									--print("Inserting because current is Mage and other is Cleric")
 									Insert = true
+								elseif Timer.Class == "mage" then
+									if KBM.AlphaComp(Timer.Player, cTimer.Player) then
+										--print("Inserting because Unit is a Mage and target is a Mage (Alpha Name Order)")
+										Insert = true
+									end
+								elseif Timer.Class == "cleric" and cTimer.Class == "cleric" then
+									if KBM.AlphaComp(Timer.Player, cTimer.Player) then
+										--print("Inserting because Unit is a Cleric and target is a Cleric (Alpha Name Order)")
+										Insert = true
+									end
+								--else
+									--print("No match")
 								end
-							--else
-								--print("No match")
 							end
 							if Insert then
 								Timer.Active = true
