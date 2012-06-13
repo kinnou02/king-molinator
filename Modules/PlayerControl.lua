@@ -19,6 +19,7 @@ PC.RezBank = {
 	},
 	["mage"] = {
 		["a000000004AE33670"] = {},
+		["a000000002D3F2123"] = {},
 	},
 }
 
@@ -56,9 +57,9 @@ function PC:GatherRaidInfo()
 			if uID ~= KBM.Player.UnitID then
 				if KBM.Unit.List.UID[uID] then
 					--print(KBM.Unit.List.UID[uID].Name..": "..tostring(KBM.Unit.List.UID[uID].Details.calling))
-					KBM.Unit.List.UID[uID].Details = Inspect.Unit.Detail(uID)
-					if KBM.Unit.List.UID[uID].Details.calling then
-						if self.RezBank[KBM.Unit.List.UID[uID].Details.calling] then
+					--KBM.Unit.List.UID[uID].Details = Inspect.Unit.Detail(uID)
+					if KBM.Unit.List.UID[uID].Calling then
+						if self.RezBank[KBM.Unit.List.UID[uID].Calling] then
 							Command.Message.Send(KBM.Unit.List.UID[uID].Name, "KBMRezReq", "C", PC.MessageSent)
 						end
 					else
@@ -142,13 +143,17 @@ function PC.PlayerJoin()
 		Timers = {},
 	}
 	KBM.Player.Grouped = true
-	PC:GatherAbilities()
+	if KBM.Player.Calling then
+		PC:GatherAbilities()
+	end
 	PC:GatherRaidInfo()
 end
 
 function PC.CallingChange(uID, Calling)
 	if uID == KBM.Player.UnitID then
-		PC:GatherAbilities()
+		if KBM.Player.Calling then
+			--PC:GatherAbilities()
+		end
 	end
 	if PC.Queue[uID] then
 		PC.Queue[uID] = nil

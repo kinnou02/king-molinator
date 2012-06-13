@@ -7,8 +7,22 @@ Options
 * New: The options/mini-map button is now more buttony
 
 Rez Master
+* New: Added support for the Mage Storm Caller BR/CR - Spark of Life.
 * Change: Adjusted how Cool down begin messages are filtered.
 * Change: Once a rez has completed its cool down, Rez Master will re-sort the list placing Mages at the top.
+
+Infernal Dawn 
+* Laethys (Added by Ciladan)
+** New: Added Timer for Storm of Treasure, including first.
+** New: Added Timer for Metallic Orb, including first.
+** New: Added Timer for Molten Gold, including first.
+** New: Added Timer for Add spawns, including first.
+** New: Added Timer for Annihilating Flare, including first.
+** New: Added Timer for Golden Breath.
+** New: Added Alert for Annihilating Flare.
+** New: Added Alert for Metallic Orb.
+** New: Added Alert for Storm of Treasure.
+** New: Added Phase change monitoring and display.
 
 French Translations
 * Updated!

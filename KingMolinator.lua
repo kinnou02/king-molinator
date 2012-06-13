@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r412"
+KBM.Alpha = ".r413"
 KBM.Event = {
 	Mark = {},
 	System = {
