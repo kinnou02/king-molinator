@@ -45,11 +45,14 @@ IZ.Ituziel = {
 			Enabled = true,
 			Word = KBM.Defaults.TimerObj.Create("red"),
 			Brimstone = KBM.Defaults.TimerObj.Create("purple"),
+			WaveFirst = KBM.Defaults.TimerObj.Create("orange"),
+			Wave = KBM.Defaults.TimerObj.Create("orange"),
 		},
 		AlertsRef = {
 			Enabled = true,
 			Word = KBM.Defaults.AlertObj.Create("red"),
 			Brimstone = KBM.Defaults.AlertObj.Create("purple"),
+			Wave = KBM.Defaults.AlertObj.Create("orange"),
 		},
 	}
 }
@@ -76,6 +79,15 @@ IZ.Lang.Buff.Brimstone = KBM.Language:Add("Brimstone")
 IZ.Lang.Buff.Brimstone:SetGerman("Schwefel")
 IZ.Lang.Buff.Brimstone:SetFrench("Soufre")
 IZ.Lang.Buff.Brimstone:SetRussian("Серный камень")
+
+-- Mechanic Dictionary
+IZ.Lang.Mechanic = {}
+IZ.Lang.Mechanic.Wave = KBM.Language:Add("Flame Waves")
+
+-- Menu Dictionary
+IZ.Lang.Menu = {}
+IZ.Lang.Menu.Wave = KBM.Language:Add("First Flame Wave")
+
 -- Debuff Dictionary
 IZ.Lang.Debuff = {}
 IZ.Lang.Debuff.Curse = KBM.Language:Add("Incinerating Curse")
@@ -179,6 +191,7 @@ function IZ:UnitHPCheck(unitDetails, unitID)
 					self.PhaseObj:SetPhase("Single")
 					self.PhaseObj.Objectives:AddPercent(self.Ituziel.Name, 0, 100)
 					self.CurrentBrimstone = 12
+					KBM.MechTimer:AddStart(self.Ituziel.TimersRef.WaveFirst)
 					KBM.TankSwap:Start(self.Lang.Debuff.Curse[KBM.Lang], unitID)
 					self.Phase = 1
 				end
@@ -218,12 +231,19 @@ end
 function IZ:Start()
 	-- Create Timers
 	self.Ituziel.TimersRef.Word = KBM.MechTimer:Add(self.Lang.Ability.Word[KBM.Lang], 26)
+	self.Ituziel.TimersRef.Wave = KBM.MechTimer:Add(self.Lang.Mechanic.Wave[KBM.Lang], 36, true)
+	self.Ituziel.TimersRef.WaveFirst = KBM.MechTimer:Add(self.Lang.Mechanic.Wave[KBM.Lang], 22)
+	self.Ituziel.TimersRef.WaveFirst.MenuName = self.Lang.Menu.Wave[KBM.Lang]
+	self.Ituziel.TimersRef.WaveFirst:AddTimer(self.Ituziel.TimersRef.Wave, 0)
 	self.Ituziel.TimersRef.Brimstone = KBM.MechTimer:Add(self.Lang.Buff.Brimstone[KBM.Lang], nil)
 	KBM.Defaults.TimerObj.Assign(self.Ituziel)
 	
 	-- Create Alerts
 	self.Ituziel.AlertsRef.Word = KBM.Alert:Create(self.Lang.Ability.Word[KBM.Lang], nil, false, true, "red")
 	self.Ituziel.AlertsRef.Brimstone = KBM.Alert:Create(self.Lang.Buff.Brimstone[KBM.Lang], nil, false, true, "purple")
+	self.Ituziel.AlertsRef.Wave = KBM.Alert:Create(self.Lang.Mechanic.Wave[KBM.Lang], 5, false, true, "orange")
+	self.Ituziel.TimersRef.WaveFirst:AddAlert(self.Ituziel.AlertsRef.Wave, 5)
+	self.Ituziel.TimersRef.Wave:AddAlert(self.Ituziel.AlertsRef.Wave, 5)
 	KBM.Defaults.AlertObj.Assign(self.Ituziel)
 	
 	-- Assign Alerts and Timers to Triggers

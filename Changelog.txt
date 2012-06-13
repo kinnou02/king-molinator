@@ -12,6 +12,9 @@ Rez Master
 * Change: Once a rez has completed its cool down, Rez Master will re-sort the list placing Mages at the top.
 
 Infernal Dawn 
+* Ituziel
+** New: Added Timer for Flame Waves, including first.
+** New: Added Alert for Flame Waves, 5 second warning.
 * Laethys (Added by Ciladan)
 ** New: Added Timer for Storm of Treasure, including first.
 ** New: Added Timer for Metallic Orb, including first.
