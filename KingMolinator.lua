@@ -7363,8 +7363,13 @@ function KBM.PowerChange(data, PowerMode)
 	for UnitID, Value in pairs(data) do
 		if KBM.Unit.List.UID[UnitID] then
 			if type(Value) == "number" then
-				KBM.Unit.List.UID[UnitID].Details[PowerMode] = Value
-				KBM.Event.Unit.Power(UnitID, Value)
+				if not KBM.Unit.List.UID[UnitID].Details then
+					KBM.Unit.List.UID[UnitID]:UpdateData(Inspect.Unit.Detail(UnitID))
+				end
+				if KBM.Unit.List.UID[UnitID].Details then
+					KBM.Unit.List.UID[UnitID].Details[PowerMode] = Value
+					KBM.Event.Unit.Power(UnitID, Value)
+				end
 			end
 		end
 	end
