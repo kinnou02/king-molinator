@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r416"
+KBM.Alpha = ".r417"
 KBM.Event = {
 	Mark = {},
 	System = {
@@ -7515,6 +7515,7 @@ local function KBM_WaitReady(unitID, uDetails)
 	KBM.Player.Calling = uDetails.calling
 	KBM.Player.Rezes = {
 		List = {},
+		Resume = {},
 		Count = 0,
 	}
 	KBM_Start()
