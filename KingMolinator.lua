@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r411"
+KBM.Alpha = ".r412"
 KBM.Event = {
 	Mark = {},
 	System = {
@@ -42,6 +42,7 @@ KBM.Event = {
 		Target = {},
 		TargetCount = {},
 		Offline = {},
+		Power = {},
 		Combat = {
 			Enter = {},
 			Leave = {},
@@ -7358,6 +7359,17 @@ end
 function KBM.RoleChange(data)
 end
 
+function KBM.PowerChange(data, PowerMode)
+	for UnitID, Value in pairs(data) do
+		if KBM.Unit.List.UID[UnitID] then
+			if type(Value) == "number" then
+				KBM.Unit.List.UID[UnitID].Details[PowerMode] = Value
+				KBM.Event.Unit.Power(UnitID, Value)
+			end
+		end
+	end
+end
+
 function KBM.Offline(UnitID, Value)
 	if KBM.Unit.List.UID[UnitID] then
 		KBM.Unit.List.UID[UnitID].Offline = Value
@@ -7383,8 +7395,9 @@ KBM.Event.Unit.Target, KBM.Event.Unit.Target.EventTable = Utility.Event.Create("
 KBM.Event.Unit.TargetCount, KBM.Event.Unit.TargetCount.EventTable = Utility.Event.Create("KingMolinator", "Unit.TargetCount")
 KBM.Event.Unit.Cast.Start, KBM.Event.Unit.Cast.Start.EventTable = Utility.Event.Create("KingMolinator", "Unit.Cast.Start")
 KBM.Event.Unit.Cast.End, KBM.Event.Unit.Cast.End.EventTable = Utility.Event.Create("KingMolinator", "Unit.Cast.End")
-KBM.Event.Unit.Combat.Enter, KBM.Event.Unit.Combat.Enter = Utility.Event.Create("KingMolinator", "Unit.Combat.Enter")
-KBM.Event.Unit.Combat.Leave, KBM.Event.Unit.Combat.Leave = Utility.Event.Create("KingMolinator", "Unit.Combat.Leave")
+KBM.Event.Unit.Combat.Enter, KBM.Event.Unit.Combat.Enter.EventTable = Utility.Event.Create("KingMolinator", "Unit.Combat.Enter")
+KBM.Event.Unit.Combat.Leave, KBM.Event.Unit.Combat.Leave.EventTable = Utility.Event.Create("KingMolinator", "Unit.Combat.Leave")
+KBM.Event.Unit.Power, KBM.Event.Unit.Power.EventTable = Utility.Event.Create("KingMolinator", "Unit.Power")
 KBM.Event.System.TankSwap.Start, KBM.Event.System.TankSwap.Start.EventTable = Utility.Event.Create("KingMolinator", "System.TankSwap.Start")
 KBM.Event.System.TankSwap.End, KBM.Event.System.TankSwap.End.EventTable = Utility.Event.Create("KingMolinator", "System.TankSwap.End")
 KBM.Event.System.Player.Join, KBM.Event.System.Player.Join.EventTable = Utility.Event.Create("KingMolinator", "System.Player.Join")
@@ -7451,6 +7464,9 @@ local function KBM_Start()
 	table.insert(Event.Unit.Detail.Mark, {KBM.MarkChange, "KingMolinator", "Mark Change Update"})
 	table.insert(Event.Unit.Detail.Role, {KBM.RoleChange, "KingMolinator", "Role changed"})
 	table.insert(Event.Unit.Castbar, {KBM_CastBar, "KingMolinator", "Cast Bar Event"})
+	table.insert(Event.Unit.Detail.Power, {function (List) KBM.PowerChange(List, "power") end, "KingMolinator", "Power Change"})
+	table.insert(Event.Unit.Detail.Energy, {function (List) KBM.PowerChange(List, "energy") end, "KingMolinator", "Energy Change"})
+	table.insert(Event.Unit.Detail.Mana, {function (List) KBM.PowerChange(List, "mana") end, "KingMolinator", "Mana Change"})
 	-- **
 	-- Safes Raid Manager Events
 	table.insert(Event.SafesRaidManager.Player.Join, {KBM.PlayerJoin, "KingMolinator", "Joined Group"})

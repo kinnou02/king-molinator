@@ -1,5 +1,8 @@
 ﻿v1.0.8
 
+Event System
+* New: Event.KingMolinator.Unit.Power = (UnitID, PowerType ("mana", "energy" or "power"))
+
 Options
 * New: The options/mini-map button is now more buttony
 
