@@ -29,6 +29,7 @@ DH.Lang.Main.DH = KBM.Language:Add(DH.Name)
 DH.Lang.Main.DH:SetGerman("Überflutete Hallen")
 DH.Lang.Main.DH:SetFrench("Salles englouties")
 DH.Lang.Main.DH:SetRussian("Затопленные Залы")
+DH.Lang.Main.DH:SetKorean("수중 전당")
 DH.Name = DH.Lang.Main.DH[KBM.Lang]
 DH.Descript = DH.Name
 

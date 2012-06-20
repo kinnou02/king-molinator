@@ -59,12 +59,14 @@ MOD.Lang.Unit.Arcanis = KBM.Language:Add(MOD.Arcanis.Name)
 MOD.Lang.Unit.Arcanis:SetGerman("Wärter Arcanis") 
 MOD.Lang.Unit.Arcanis:SetFrench("Reliquaire Arcanis")
 MOD.Lang.Unit.Arcanis:SetRussian("Попечитель Арканис")
+MOD.Lang.Unit.Arcanis:SetKorean("관리인 아르카니스")
 MOD.Arcanis.Name = MOD.Lang.Unit.Arcanis[KBM.Lang]
 MOD.Descript = MOD.Arcanis.Name
 MOD.Lang.Unit.ArcShort = KBM.Language:Add("Arcanis")
 MOD.Lang.Unit.ArcShort:SetGerman("Arcanis")
 MOD.Lang.Unit.ArcShort:SetFrench("Arcanis")
 MOD.Lang.Unit.ArcShort:SetRussian("Арканис")
+MOD.Lang.Unit.ArcShort:SetKorean("아르카니스")
 MOD.Arcanis.NameShort = MOD.Lang.Unit.ArcShort[KBM.Lang]
 
 -- Ability Dictionary

@@ -55,6 +55,7 @@ DL.Lang.Unit.Letareus = KBM.Language:Add(DL.Letareus.Name)
 DL.Lang.Unit.Letareus:SetGerman("Herzog Letareus")
 DL.Lang.Unit.Letareus:SetFrench("Duc Letareus")
 DL.Lang.Unit.Letareus:SetRussian("Герцог Летареус")
+DL.Lang.Unit.Letareus:SetKorean("레타레우스 공작")
 DL.Letareus.Name = DL.Lang.Unit.Letareus[KBM.Lang]
 
 -- Ability Dictionary
@@ -63,6 +64,7 @@ DL.Lang.Ability.Wrath = KBM.Language:Add("Duke's Wrath")
 DL.Lang.Ability.Wrath:SetGerman("Zorn des Herzogs")
 DL.Lang.Ability.Wrath:SetFrench("Colère du Duc")
 DL.Lang.Ability.Wrath:SetRussian("Ярость герцога")
+DL.Lang.Ability.Wrath:SetKorean("공작의 진노")
 
 -- Mechanic Dictionary
 DL.Lang.Mechanic = {}
@@ -70,14 +72,17 @@ DL.Lang.Mechanic.TankPhase = KBM.Language:Add("Tank Phase")
 DL.Lang.Mechanic.TankPhase:SetRussian("Фаза танкования")
 DL.Lang.Mechanic.TankPhase:SetFrench("Phase Tank")
 DL.Lang.Mechanic.TankPhase:SetGerman("Tank Phase")
+DL.Lang.Mechanic.TankPhase:SetKorean("탱킹 단계")
 DL.Lang.Mechanic.Tank = KBM.Language:Add("Tank")
 DL.Lang.Mechanic.Tank:SetRussian("Танкуем")
 DL.Lang.Mechanic.Tank:SetGerman()
 DL.Lang.Mechanic.Tank:SetFrench()
+DL.Lang.Mechanic.Tank:SetKorean("탱킹")
 DL.Lang.Mechanic.Kite = KBM.Language:Add("Kite")
 DL.Lang.Mechanic.Kite:SetRussian("Кайтим")
 DL.Lang.Mechanic.Kite:SetFrench("Kiting")
 DL.Lang.Mechanic.Kite:SetGerman("Kite")
+DL.Lang.Mechanic.Kite:SetKorean("보스몰이")
 
 DL.Descript = DL.Letareus.Name
 

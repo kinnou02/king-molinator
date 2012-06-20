@@ -70,10 +70,12 @@ MOD.Lang.Unit.Lesch = KBM.Language:Add("Lesch")
 MOD.Lang.Unit.Lesch:SetGerman("Lesch")
 MOD.Lang.Unit.Lesch:SetFrench("Lesch")
 MOD.Lang.Unit.Lesch:SetRussian("Леш")
+MOD.Lang.Unit.Lesch:SetKorean("레쉬")
 MOD.Lang.Unit.Gurze = KBM.Language:Add("Gurze")
 MOD.Lang.Unit.Gurze:SetGerman("Gurze")
 MOD.Lang.Unit.Gurze:SetFrench("Gurze")
 MOD.Lang.Unit.Gurze:SetRussian("Гурз")
+MOD.Lang.Unit.Gurze:SetKorean("구르제")
 
 MOD.Lesch = {
 	Mod = MOD,

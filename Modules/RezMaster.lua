@@ -1,4 +1,4 @@
--- King Boss Mods Rez Master
+﻿-- King Boss Mods Rez Master
 -- Written By Paul Snart
 -- Copyright 2012
 --

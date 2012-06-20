@@ -59,12 +59,14 @@ MOD.Lang.Unit.Markus = KBM.Language:Add(MOD.Markus.Name)
 MOD.Lang.Unit.Markus:SetGerman("Aufseher Markus") 
 MOD.Lang.Unit.Markus:SetFrench("Superviseur Markus")
 MOD.Lang.Unit.Markus:SetRussian("Надзиратель Маркус")
+MOD.Lang.Unit.Markus:SetKorean("감독관 마르쿠스")
 MOD.Markus.Name = MOD.Lang.Unit.Markus[KBM.Lang]
 MOD.Descript = MOD.Markus.Name
 MOD.Lang.Unit.MarkShort = KBM.Language:Add("Markus")
 MOD.Lang.Unit.MarkShort:SetGerman()
 MOD.Lang.Unit.MarkShort:SetFrench()
 MOD.Lang.Unit.MarkShort:SetRussian("Маркус")
+MOD.Lang.Unit.MarkShort:SetKorean("마르쿠스")
 MOD.Markus.Name = MOD.Lang.Unit.MarkShort[KBM.Lang]
 
 -- Ability Dictionary

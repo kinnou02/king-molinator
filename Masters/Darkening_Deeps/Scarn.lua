@@ -59,6 +59,7 @@ MOD.Lang.Unit.Scarn = KBM.Language:Add(MOD.Scarn.Name)
 MOD.Lang.Unit.Scarn:SetGerman("Scarn")
 MOD.Lang.Unit.Scarn:SetFrench("Scarn")
 MOD.Lang.Unit.Scarn:SetRussian("Скарн")
+MOD.Lang.Unit.Scarn:SetKorean("스카른")
 MOD.Scarn.Name = MOD.Lang.Unit.Scarn[KBM.Lang]
 MOD.Descript = MOD.Scarn.Name
 

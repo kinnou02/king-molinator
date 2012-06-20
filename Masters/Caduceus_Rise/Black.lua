@@ -59,12 +59,14 @@ MOD.Lang.Unit.Black = KBM.Language:Add(MOD.Black.Name)
 MOD.Lang.Unit.Black:SetGerman("Kapitän Schwarzspuck") 
 MOD.Lang.Unit.Black:SetFrench("Capitaine Crachenoir")
 MOD.Lang.Unit.Black:SetRussian("Капитан Черный Плевок")
+MOD.Lang.Unit.Black:SetKorean("블랙 스핏 대장")
 MOD.Black.Name = MOD.Lang.Unit.Black[KBM.Lang]
 MOD.Descript = MOD.Black.Name
 MOD.Lang.Unit.BlackShort = KBM.Language:Add("Black Spit")
 MOD.Lang.Unit.BlackShort:SetGerman("Schwarzspuck")
 MOD.Lang.Unit.BlackShort:SetFrench("Crachenoir")
 MOD.Lang.Unit.BlackShort:SetRussian("Черный Плевок")
+MOD.Lang.Unit.BlackShort:SetKorean("블랙 스핏")
 MOD.Black.NameShort = MOD.Lang.Unit.BlackShort[KBM.Lang]
 
 -- Ability Dictionary

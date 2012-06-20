@@ -59,12 +59,14 @@ MOD.Lang.Unit.Fetlorn = KBM.Language:Add(MOD.Fetlorn.Name)
 MOD.Lang.Unit.Fetlorn:SetGerman("Knochenfürst Fetlorn")
 MOD.Lang.Unit.Fetlorn:SetFrench("Seigner des ossements Fetlorn")
 MOD.Lang.Unit.Fetlorn:SetRussian("Костяной владыка Фетлорн")
+MOD.Lang.Unit.Fetlorn:SetKorean("해골군주 펫론")
 MOD.Fetlorn.Name = MOD.Lang.Unit.Fetlorn[KBM.Lang]
 MOD.Descript = MOD.Fetlorn.Name
 MOD.Lang.Unit.FetShort = KBM.Language:Add("Fetlorn")
 MOD.Lang.Unit.FetShort:SetGerman("Fetlorn")
 MOD.Lang.Unit.FetShort:SetFrench("Fetlorn")
 MOD.Lang.Unit.FetShort:SetRussian("Фетлорн")
+MOD.Lang.Unit.FetShort:SetKorean("펫론")
 MOD.Fetlorn.NameShort = MOD.Lang.Unit.FetShort[KBM.Lang]
 
 -- Ability Dictionary

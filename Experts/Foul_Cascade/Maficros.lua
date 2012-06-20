@@ -59,6 +59,7 @@ MOD.Lang.Unit.Maficros = KBM.Language:Add(MOD.Maficros.Name)
 MOD.Lang.Unit.Maficros:SetGerman("Tephraherrscher Maficros")
 MOD.Lang.Unit.Maficros:SetFrench("Seigneur Tephra Maficros")
 MOD.Lang.Unit.Maficros:SetRussian("Повелитель пепла Мафикрос")
+MOD.Lang.Unit.Maficros:SetKorean("테프라 군주 마피크로스")
 MOD.Maficros.Name = MOD.Lang.Unit.Maficros[KBM.Lang]
 MOD.Descript = MOD.Maficros.Name
 

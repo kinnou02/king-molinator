@@ -30,6 +30,7 @@ MOD.Lang.Main.Name = KBM.Language:Add(MOD.Name)
 MOD.Lang.Main.Name:SetGerman("Tiefschlagmine") 
 MOD.Lang.Main.Name:SetFrench("Mines de Couprofond")
 MOD.Lang.Main.Name:SetRussian("Глубинные Копи")
+MOD.Lang.Main.Name:SetKorean("황천 광산")
 
 MOD.Name = MOD.Lang.Main.Name[KBM.Lang]
 MOD.Descript = MOD.Name

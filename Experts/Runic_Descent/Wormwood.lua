@@ -59,6 +59,7 @@ MOD.Lang.Unit.Wormwood = KBM.Language:Add(MOD.Wormwood.Name)
 MOD.Lang.Unit.Wormwood:SetGerman("Wurmholz")
 MOD.Lang.Unit.Wormwood:SetFrench("Verbois")
 MOD.Lang.Unit.Wormwood:SetRussian("Черводрев")
+MOD.Lang.Unit.Wormwood:SetKorean("웜우드")
 MOD.Wormwood.Name = MOD.Lang.Unit.Wormwood[KBM.Lang]
 MOD.Descript = MOD.Wormwood.Name
 

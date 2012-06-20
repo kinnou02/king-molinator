@@ -62,28 +62,34 @@ MOD.Lang.Unit.Laric = KBM.Language:Add(MOD.Laric.Name)
 MOD.Lang.Unit.Laric:SetGerman("Laric der Fromme")
 MOD.Lang.Unit.Laric:SetFrench("Laric l'Ascendant")
 MOD.Lang.Unit.Laric:SetRussian("Лэрик Вознесенный")
+MOD.Lang.Unit.Laric:SetKorean("어센드 라릭")
 MOD.Laric.Name = MOD.Lang.Unit.Laric[KBM.Lang]
 MOD.Lang.Unit.LaricShort = KBM.Language:Add(MOD.Laric.NameShort)
 MOD.Lang.Unit.LaricShort:SetGerman("Laric")
 MOD.Lang.Unit.LaricShort:SetFrench("Laric")
 MOD.Lang.Unit.LaricShort:SetRussian("Лэрик")
+MOD.Lang.Unit.LaricShort:SetKorean("라릭")
 MOD.Laric.NameShort = MOD.Lang.Unit.LaricShort[KBM.Lang]
 MOD.Lang.Unit.Derribec = KBM.Language:Add("Derribec the Magus")
 MOD.Lang.Unit.Derribec:SetGerman("Derribec der Magier")
 MOD.Lang.Unit.Derribec:SetFrench("Derribec le Magus")
 MOD.Lang.Unit.Derribec:SetRussian("Волхв Деррибек")
+MOD.Lang.Unit.Derribec:SetKorean("점성술사 데리벡")
 MOD.Lang.Unit.DerribecShort = KBM.Language:Add("Derribec")
 MOD.Lang.Unit.DerribecShort:SetGerman("Derribec")
 MOD.Lang.Unit.DerribecShort:SetFrench("Derribec")
 MOD.Lang.Unit.DerribecShort:SetRussian("Деррибек")
+MOD.Lang.Unit.DerribecShort:SetKorean("데리벡")
 MOD.Lang.Unit.Humbart = KBM.Language:Add("Humbart the Bold")
 MOD.Lang.Unit.Humbart:SetGerman("Humbart der Verwegene")
 MOD.Lang.Unit.Humbart:SetFrench("Humbart l'Audacieux")
 MOD.Lang.Unit.Humbart:SetRussian("Гумбарт Смелый")
+MOD.Lang.Unit.Humbart:SetKorean("대담한 험버트")
 MOD.Lang.Unit.HumbartShort = KBM.Language:Add("Humbart")
 MOD.Lang.Unit.HumbartShort:SetGerman("Humbart")
 MOD.Lang.Unit.HumbartShort:SetFrench("Humbart")
 MOD.Lang.Unit.HumbartShort:SetRussian("Гумбарт")
+MOD.Lang.Unit.HumbartShort:SetKorean("험버트")
 
 -- Mod Description
 MOD.Lang.Verbose = {}
@@ -91,6 +97,7 @@ MOD.Lang.Verbose.Descript = KBM.Language:Add("The Three Kings")
 MOD.Lang.Verbose.Descript:SetGerman("Die drei Könige")
 MOD.Lang.Verbose.Descript:SetFrench("les Trois Rois")
 MOD.Lang.Verbose.Descript:SetRussian("Три короля")
+MOD.Lang.Verbose.Descript:SetKorean("세 명의 왕")
 MOD.Descript = MOD.Lang.Verbose.Descript[KBM.Lang]
 
 -- Ability Dictionary

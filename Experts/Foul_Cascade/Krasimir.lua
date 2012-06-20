@@ -59,6 +59,7 @@ MOD.Lang.Unit.Krasimir = KBM.Language:Add(MOD.Krasimir.Name)
 MOD.Lang.Unit.Krasimir:SetGerman("Krasimir Barionov")
 MOD.Lang.Unit.Krasimir:SetFrench("Krasimir Barionov")
 MOD.Lang.Unit.Krasimir:SetRussian("Красимир Барионов")
+MOD.Lang.Unit.Krasimir:SetKorean("크라시미르 바리오노프")
 MOD.Krasimir.Name = MOD.Lang.Unit.Krasimir[KBM.Lang]
 MOD.Descript = MOD.Krasimir.Name
 

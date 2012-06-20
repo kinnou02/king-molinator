@@ -62,6 +62,7 @@ MOD.Lang.Unit.Bonehew = KBM.Language:Add(MOD.Bonehew.Name)
 MOD.Lang.Unit.Bonehew:SetGerman("Bonehew der Donnerer")
 MOD.Lang.Unit.Bonehew:SetFrench("Taille-os le Tonnant")
 MOD.Lang.Unit.Bonehew:SetRussian("Костеруб Сотресатель")
+MOD.Lang.Unit.Bonehew:SetKorean("번개대왕 본휴")
 MOD.Bonehew.Name = MOD.Lang.Unit.Bonehew[KBM.Lang]
 MOD.Descript = MOD.Bonehew.Name
 -- Additional Unit Dictionary
@@ -69,6 +70,7 @@ MOD.Lang.Unit.Fragment = KBM.Language:Add("Fragmented Bonehew")
 MOD.Lang.Unit.Fragment:SetGerman("Fragmentierter Bonehew")
 MOD.Lang.Unit.Fragment:SetFrench("Taille-os en morceaux ")
 MOD.Lang.Unit.Fragment:SetRussian("Разломанный косторуб")
+MOD.Lang.Unit.Fragment:SetKorean("갈라진 본휴")
 -- Ability Dictionary
 MOD.Lang.Ability = {}
 

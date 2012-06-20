@@ -59,6 +59,7 @@ MOD.Lang.Unit.Surin = KBM.Language:Add(MOD.Surin.Name)
 MOD.Lang.Unit.Surin:SetGerman("Gräfin Surin Skenobar")
 MOD.Lang.Unit.Surin:SetFrench("Comtesse Surin Skenobar")
 MOD.Lang.Unit.Surin:SetRussian("Графиня Сурин Скенобар")
+MOD.Lang.Unit.Surin:SetKorean("수린 스케노바")
 MOD.Surin.Name = MOD.Lang.Unit.Surin[KBM.Lang]
 MOD.Descript = MOD.Surin.Name
 

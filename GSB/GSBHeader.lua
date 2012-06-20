@@ -18,6 +18,7 @@ local GSB = {
 	Name = "Greenscale's Blight",
 	Type = "20man",
 	ID = "GSB",
+	Object = "GSB",
 }
 
 KBM.RegisterMod("Greenscales Blight", GSB)
@@ -29,6 +30,7 @@ GSB.Lang.Main.GSB = KBM.Language:Add(GSB.Name)
 GSB.Lang.Main.GSB:SetGerman("Grünschuppes Pesthauch")
 GSB.Lang.Main.GSB:SetFrench("Fl\195\169au de Vert\195\169caille")
 GSB.Lang.Main.GSB:SetRussian("Темница Зеленокожа")
+GSB.Lang.Main.GSB:SetKorean("그린스케일 황무지")
 GSB.Name = GSB.Lang.Main.GSB[KBM.Lang]
 GSB.Descript = GSB.Name
 

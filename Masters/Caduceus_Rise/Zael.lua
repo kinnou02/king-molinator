@@ -59,12 +59,14 @@ MOD.Lang.Unit.Zael = KBM.Language:Add(MOD.Zael.Name)
 MOD.Lang.Unit.Zael:SetGerman("Ascherufer Zael")
 MOD.Lang.Unit.Zael:SetFrench("Zael le Mande-cendres")
 MOD.Lang.Unit.Zael:SetRussian("Заклинатель Пепла Заэль")
+MOD.Lang.Unit.Zael:SetKorean("잿빛소환사 질")
 MOD.Zael.Name = MOD.Lang.Unit.Zael[KBM.Lang]
 MOD.Descript = MOD.Zael.Name
 MOD.Lang.Unit.ZaelShort = KBM.Language:Add("Zael")
 MOD.Lang.Unit.ZaelShort:SetGerman("Zael")
 MOD.Lang.Unit.ZaelShort:SetFrench("Zael")
 MOD.Lang.Unit.ZaelShort:SetRussian("Заэль")
+MOD.Lang.Unit.ZaelShort:SetKorean("질")
 MOD.Zael.NameShort = MOD.Lang.Unit.ZaelShort[KBM.Lang]
 
 -- Ability Dictionary

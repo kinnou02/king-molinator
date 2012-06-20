@@ -67,8 +67,6 @@ function PI.VersionCheck(Data)
 					end
 				end
 			end
-		else
-			Checked = true
 		end
 	end
 	if not Checked then

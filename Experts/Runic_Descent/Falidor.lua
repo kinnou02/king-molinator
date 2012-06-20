@@ -59,12 +59,14 @@ MOD.Lang.Unit.Falidor = KBM.Language:Add(MOD.Falidor.Name)
 MOD.Lang.Unit.Falidor:SetGerman("Bewahrer Falidor") 
 MOD.Lang.Unit.Falidor:SetFrench("Garde Falidor")
 MOD.Lang.Unit.Falidor:SetRussian("Страж Фалидор")
+MOD.Lang.Unit.Falidor:SetKorean("수호자 펠리도르")
 MOD.Falidor.Name = MOD.Lang.Unit.Falidor[KBM.Lang]
 MOD.Descript = MOD.Falidor.Name
 MOD.Lang.Unit.FalShort = KBM.Language:Add("Falidor")
 MOD.Lang.Unit.FalShort:SetGerman("Falidor")
 MOD.Lang.Unit.FalShort:SetFrench("Falidor")
 MOD.Lang.Unit.FalShort:SetRussian("Фалидор")
+MOD.Lang.Unit.FalShort:SetKorean("펠리도르")
 MOD.Falidor.NameShort = MOD.Lang.Unit.FalShort[KBM.Lang]
 
 -- Ability Dictionary

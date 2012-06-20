@@ -59,12 +59,14 @@ VP.Lang.Unit.Prime = KBM.Language:Add(VP.Prime.Name)
 VP.Lang.Unit.Prime:SetGerman()
 VP.Lang.Unit.Prime:SetFrench()
 VP.Lang.Unit.Prime:SetRussian("Владмал Прайм")
+VP.Lang.Unit.Prime:SetKorean("블라드말 프라임")
 VP.Prime.Name = VP.Lang.Unit.Prime[KBM.Lang]
 VP.Descript = VP.Prime.Name
 VP.Lang.Unit.PrimeShort = KBM.Language:Add("Vladmal")
 VP.Lang.Unit.PrimeShort:SetGerman()
 VP.Lang.Unit.PrimeShort:SetFrench()
 VP.Lang.Unit.PrimeShort:SetRussian("Владмал")
+VP.Lang.Unit.PrimeShort:SetKorean("블라드말")
 VP.Prime.NameShort = VP.Lang.Unit.PrimeShort[KBM.Lang]
 
 -- Ability Dictionary
@@ -73,6 +75,7 @@ VP.Lang.Ability.Flames = KBM.Language:Add("Ancient Flames")
 VP.Lang.Ability.Flames:SetFrench("Flammes anciennes")
 VP.Lang.Ability.Flames:SetGerman("Uralte Flammen")
 VP.Lang.Ability.Flames:SetRussian("Древние огни")
+VP.Lang.Ability.Flames:SetKorean("고대 불꽃")
 
 function VP:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript

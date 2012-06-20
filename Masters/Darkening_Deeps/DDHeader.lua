@@ -31,6 +31,7 @@ MOD.Lang.Main.Name = KBM.Language:Add(MOD.Name)
 MOD.Lang.Main.Name:SetGerman("Finstere Tiefen")
 MOD.Lang.Main.Name:SetFrench("Profondeurs Insondables")
 MOD.Lang.Main.Name:SetRussian("Сумрачные пещеры")
+MOD.Lang.Main.Name:SetKorean("칠흑의 심연")
 
 MOD.Name = MOD.Lang.Main.Name[KBM.Lang]
 MOD.Descript = MOD.Name

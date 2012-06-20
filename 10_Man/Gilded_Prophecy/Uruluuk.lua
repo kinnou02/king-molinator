@@ -57,6 +57,7 @@ UK.Lang.Unit.Uruluuk = KBM.Language:Add(UK.Uruluuk.Name)
 UK.Lang.Unit.Uruluuk:SetGerman()
 UK.Lang.Unit.Uruluuk:SetFrench()
 UK.Lang.Unit.Uruluuk:SetRussian("Улуруук")
+UK.Lang.Unit.Uruluuk:SetKorean("우룰루크")
 UK.Uruluuk.Name = UK.Lang.Unit.Uruluuk[KBM.Lang]
 
 -- Ability Dictionary
@@ -65,14 +66,17 @@ UK.Lang.Ability.Fist = KBM.Language:Add("Fist of Laethys")
 UK.Lang.Ability.Fist:SetGerman("Faust von Laethys")
 UK.Lang.Ability.Fist:SetFrench("Poing de Laethys")
 UK.Lang.Ability.Fist:SetRussian("Кулак Лэтис")
+UK.Lang.Ability.Fist:SetKorean("레시스의 주먹")
 UK.Lang.Ability.Storm = KBM.Language:Add("Storm of Force")
 UK.Lang.Ability.Storm:SetGerman("Sturm der Stärke")
 UK.Lang.Ability.Storm:SetFrench("Tempête de Force")
 UK.Lang.Ability.Storm:SetRussian("Буря силы")
+UK.Lang.Ability.Storm:SetKorean("힘의 폭풍")
 UK.Lang.Ability.Crystal = KBM.Language:Add("Crystal Imprisonment")
 UK.Lang.Ability.Crystal:SetGerman("Kristallgefängnis")
 UK.Lang.Ability.Crystal:SetFrench("Prison de cristal")
 UK.Lang.Ability.Crystal:SetRussian("Заключение в кристалл")
+UK.Lang.Ability.Crystal:SetKorean("수정 감금")
 
 -- Verbose Dictionary
 UK.Lang.Verbose = {}
@@ -80,6 +84,7 @@ UK.Lang.Verbose.Crystal = KBM.Language:Add("Crystal on YOU soon!")
 UK.Lang.Verbose.Crystal:SetGerman("Achtung, du wirst zum Kristall")
 UK.Lang.Verbose.Crystal:SetFrench("Emprisonnement de cristal sur vous bientôt!")
 UK.Lang.Verbose.Crystal:SetRussian("Вы скоро превратитесь в кристалл!")
+UK.Lang.Verbose.Crystal:SetKorean("당신에게 크리스탈!")
 
 -- Notify Dictionary
 UK.Lang.Notify = {}
@@ -87,6 +92,7 @@ UK.Lang.Notify.Crystal = KBM.Language:Add("Uruluuk points at (%a*)!")
 UK.Lang.Notify.Crystal:SetGerman("Uruluuk zeigt auf (%a*)!")
 UK.Lang.Notify.Crystal:SetFrench("Uruluuk montre (%a*) du doigt !")
 UK.Lang.Notify.Crystal:SetRussian("Улуруук указывает туда, где стоит (%a*)!")
+UK.Lang.Notify.Crystal:SetKorean("우룰루크가 (%a*)를 가리킵니다!")
 
 UK.Descript = UK.Uruluuk.Name
 

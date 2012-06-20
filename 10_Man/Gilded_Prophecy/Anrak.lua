@@ -65,7 +65,7 @@ AF.Lang.Unit.Anrak = KBM.Language:Add(AF.Anrak.Name)
 AF.Lang.Unit.Anrak:SetGerman("Anrak der Üble")
 AF.Lang.Unit.Anrak:SetFrench("Anrak l'ignoble")
 AF.Lang.Unit.Anrak:SetRussian("Анрак Скверный")
-
+AF.Lang.Unit.Anrak:SetKorean("악독한 안라크")
 AF.Anrak.Name = AF.Lang.Unit.Anrak[KBM.Lang]
 AF.Descript = AF.Anrak.Name
 
@@ -75,18 +75,22 @@ AF.Lang.Ability.Spines = KBM.Language:Add("Spines of Earth")
 AF.Lang.Ability.Spines:SetGerman("Stacheln der Erde")
 AF.Lang.Ability.Spines:SetFrench("Épines de Terre")
 AF.Lang.Ability.Spines:SetRussian("Гребни Земли")
+AF.Lang.Ability.Spines:SetKorean("대지의 척추")
 AF.Lang.Ability.Strike = KBM.Language:Add("Vicious Tail Strike")
 AF.Lang.Ability.Strike:SetGerman("Bösartiger Schweifschlag")
 AF.Lang.Ability.Strike:SetFrench("Coup de queue retors")
 AF.Lang.Ability.Strike:SetRussian("Злобный удар хвостом")
+AF.Lang.Ability.Strike:SetKorean("포악한 꼬리 일격")
 AF.Lang.Ability.Call = KBM.Language:Add("Call of Anrak")
 AF.Lang.Ability.Call:SetGerman("Ruf von Anrak")
 AF.Lang.Ability.Call:SetFrench("L'appel d'Anrak")
 AF.Lang.Ability.Call:SetRussian("Зов Анрака")
+AF.Lang.Ability.Call:SetKorean("안라크의 부름")
 AF.Lang.Ability.Bond = KBM.Language:Add("Bond of the Earth")
 AF.Lang.Ability.Bond:SetGerman("Bande der Erde")
 AF.Lang.Ability.Bond:SetFrench("Lien de la Terre")
 AF.Lang.Ability.Bond:SetRussian("Земляное усиление")
+AF.Lang.Ability.Bond:SetKorean("대지의 결속")
 
 -- Debuff Dictionary
 AF.Lang.Debuff = {}
@@ -97,6 +101,7 @@ AF.Lang.Debuff.Brittle:SetRussian("Хрупкость")
 AF.Lang.Debuff.Venom = KBM.Language:Add("Explosive Venom")
 AF.Lang.Debuff.Venom:SetGerman("Explosives Gift")
 AF.Lang.Debuff.Venom:SetFrench("Venin explosif")
+AF.Lang.Debuff.Venom:SetKorean("독화살")
 
 -- Menu Dictionary
 AF.Lang.Menu = {}
@@ -104,6 +109,7 @@ AF.Lang.Menu.Spines = KBM.Language:Add("Spines cast warning")
 AF.Lang.Menu.Spines:SetGerman("Stacheln Zauber Warnung")
 AF.Lang.Menu.Spines:SetFrench("Avertissement Épines de Terre")
 AF.Lang.Menu.Spines:SetRussian("Каст гребней земли")
+AF.Lang.Menu.Spines:SetKorean("꼬리치기 경고")
 
 function AF:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript

@@ -64,6 +64,7 @@ TR.Lang.Unit.Thalguur = KBM.Language:Add(TR.Thalguur.Name)
 TR.Lang.Unit.Thalguur:SetGerman()
 TR.Lang.Unit.Thalguur:SetFrench()
 TR.Lang.Unit.Thalguur:SetRussian("Талгуур")
+TR.Lang.Unit.Thalguur:SetKorean("살구르")
 TR.Thalguur.Name = TR.Lang.Unit.Thalguur[KBM.Lang]
 
 -- Ability Dictionary
@@ -72,10 +73,12 @@ TR.Lang.Ability.Touch = KBM.Language:Add("Touch of the Core")
 TR.Lang.Ability.Touch:SetGerman("Berührung des Kerns")
 TR.Lang.Ability.Touch:SetFrench("Contact du Noyau")
 TR.Lang.Ability.Touch:SetRussian("Прикосновение ядра")
+TR.Lang.Ability.Touch:SetKorean("코어의 손길")
 TR.Lang.Ability.Power = KBM.Language:Add("Absorb Power")
 TR.Lang.Ability.Power:SetGerman("Kraft absorbieren")
 TR.Lang.Ability.Power:SetFrench("Absorption de Pouvoir ")
 TR.Lang.Ability.Power:SetRussian("Поглощение силы")
+TR.Lang.Ability.Power:SetKorean("기력 흡수")
 
 -- Debuff Dictionary
 TR.Lang.Debuff = {}
@@ -87,6 +90,7 @@ TR.Lang.Debuff.Curse = KBM.Language:Add("Curse of Greed")
 TR.Lang.Debuff.Curse:SetGerman("Fluch der Gier")
 TR.Lang.Debuff.Curse:SetFrench("Malédiction d'avidité")
 TR.Lang.Debuff.Curse:SetRussian("Проклятие жадности")
+TR.Lang.Debuff.Curse:SetKorean("탐욕의 저주")
 
 TR.Descript = TR.Thalguur.Name
 

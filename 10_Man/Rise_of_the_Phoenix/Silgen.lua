@@ -65,6 +65,7 @@ GS.Lang.Unit.Silgen = KBM.Language:Add(GS.Silgen.Name)
 GS.Lang.Unit.Silgen:SetGerman("General Silgen")
 GS.Lang.Unit.Silgen:SetFrench("Général Silgen")
 GS.Lang.Unit.Silgen:SetRussian("Генерал Силген")
+GS.Lang.Unit.Silgen:SetKorean("실젠 장군")
 GS.Silgen.Name = GS.Lang.Unit.Silgen[KBM.Lang]
 GS.Descript = GS.Silgen.Name
 
@@ -74,10 +75,12 @@ GS.Lang.Ability.Funnel = KBM.Language:Add("Heat Funnel")
 GS.Lang.Ability.Funnel:SetGerman("Hitzetrichter")
 GS.Lang.Ability.Funnel:SetRussian("Раскаленный горн")
 GS.Lang.Ability.Funnel:SetFrench("Conduit de chaleur")
+GS.Lang.Ability.Funnel:SetKorean("열기 깔때기")
 GS.Lang.Ability.Incinerate = KBM.Language:Add("Incinerate")
 GS.Lang.Ability.Incinerate:SetGerman("Verbrennen")
 GS.Lang.Ability.Incinerate:SetRussian("Кремация")
 GS.Lang.Ability.Incinerate:SetFrench("Incinération")
+GS.Lang.Ability.Incinerate:SetKorean("소각")
 
 -- Debuff Dictionary
 GS.Lang.Debuff = {}
@@ -85,6 +88,7 @@ GS.Lang.Debuff.Anchor = KBM.Language:Add("Anchored in Flames")
 GS.Lang.Debuff.Anchor:SetGerman("In Flammen verankert")
 GS.Lang.Debuff.Anchor:SetRussian("Защита огня")
 GS.Lang.Debuff.Anchor:SetFrench("Ancrage de flammes")
+GS.Lang.Debuff.Anchor:SetKorean("불꽃 고정")
 
 function GS:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
@@ -239,6 +243,7 @@ function GS:Start()
 	-- Create Alerts
 	self.Silgen.AlertsRef.Funnel = KBM.Alert:Create(self.Lang.Ability.Funnel[KBM.Lang], nil, true, true, "red")
 	self.Silgen.AlertsRef.Anchor = KBM.Alert:Create(self.Lang.Debuff.Anchor[KBM.Lang], nil, true, true, "orange")
+	self.Silgen.AlertsRef.Anchor:Important()
 	self.Silgen.AlertsRef.Incinerate = KBM.Alert:Create(self.Lang.Ability.Incinerate[KBM.Lang], nil, true, true, "yellow")
 	KBM.Defaults.AlertObj.Assign(self.Silgen)
 	

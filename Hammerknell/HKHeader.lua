@@ -29,6 +29,7 @@ HK.Lang.Main.Hammerknell = KBM.Language:Add(HK.Name)
 HK.Lang.Main.Hammerknell:SetFrench("Glasmarteau")
 HK.Lang.Main.Hammerknell:SetGerman("Festung Hammerhall")
 HK.Lang.Main.Hammerknell:SetRussian("Крепость Молотозвона")
+HK.Lang.Main.Hammerknell:SetKorean("망치소리 요새")
 HK.Name = HK.Lang.Main.Hammerknell[KBM.Lang]
 HK.Descript = HK.Name
 

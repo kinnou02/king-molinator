@@ -59,17 +59,20 @@ MOD.Lang.Unit.Vallnara = KBM.Language:Add(MOD.Vallnara.Name)
 MOD.Lang.Unit.Vallnara:SetGerman("Königin Vallnara")
 MOD.Lang.Unit.Vallnara:SetFrench("Reine Vallnara")
 MOD.Lang.Unit.Vallnara:SetRussian("Королева Вальнара")
+MOD.Lang.Unit.Vallnara:SetKorean("발나라 여왕")
 MOD.Vallnara.Name = MOD.Lang.Unit.Vallnara[KBM.Lang]
 MOD.Descript = MOD.Vallnara.Name
 MOD.Lang.Unit.ValShort = KBM.Language:Add("Vallnara")
 MOD.Lang.Unit.ValShort:SetGerman("Vallnara")
 MOD.Lang.Unit.ValShort:SetFrench("Vallnara")
 MOD.Lang.Unit.ValShort:SetRussian("Вальнара")
+MOD.Lang.Unit.ValShort:SetKorean("발나라")
 MOD.Vallnara.NameShort = MOD.Lang.Unit.ValShort[KBM.Lang]
 MOD.Lang.Unit.CorruptQueen = KBM.Language:Add("Corrupted Queen Vallnara")
 MOD.Lang.Unit.CorruptQueen:SetGerman("Verdorbene Königin Vallnara")
 MOD.Lang.Unit.CorruptQueen:SetFrench("Reine Corrompue Vallnara")
 MOD.Lang.Unit.CorruptQueen:SetRussian("Измененная королева Вальнара")
+MOD.Lang.Unit.CorruptQueen:SetKorean("타락한 여왕 발나라")
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}

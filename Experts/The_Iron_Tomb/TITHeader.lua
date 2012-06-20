@@ -30,6 +30,7 @@ MOD.Lang.Main.Name = KBM.Language:Add(MOD.Name)
 MOD.Lang.Main.Name:SetGerman("Das Eisengrab")
 MOD.Lang.Main.Name:SetFrench("La Tombe de fer")
 MOD.Lang.Main.Name:SetRussian("Железная Гробница")
+MOD.Lang.Main.Name:SetKorean("무쇠 무덤")
 
 MOD.Name = MOD.Lang.Main.Name[KBM.Lang]
 MOD.Descript = MOD.Name

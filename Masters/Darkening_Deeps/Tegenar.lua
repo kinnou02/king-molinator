@@ -59,12 +59,14 @@ MOD.Lang.Unit.Tegenar = KBM.Language:Add(MOD.Tegenar.Name)
 MOD.Lang.Unit.Tegenar:SetGerman("Tegenar Tiefzahn")
 MOD.Lang.Unit.Tegenar:SetFrench("Tegenar Long-croc")
 MOD.Lang.Unit.Tegenar:SetRussian("Тегенар Глубоклык")
+MOD.Lang.Unit.Tegenar:SetKorean("깊은송곳니 테게나르")
 MOD.Tegenar.Name = MOD.Lang.Unit.Tegenar[KBM.Lang]
 MOD.Descript = MOD.Tegenar.Name
 MOD.Lang.Unit.TegShort = KBM.Language:Add("Tegenar")
 MOD.Lang.Unit.TegShort:SetGerman("Tegenar")
 MOD.Lang.Unit.TegShort:SetFrench("Tegenar")
 MOD.Lang.Unit.TegShort:SetRussian("Тегенар")
+MOD.Lang.Unit.TegShort:SetKorean("테게나르")
 MOD.Tegenar.NameShort = MOD.Lang.Unit.TegShort[KBM.Lang]
 
 -- Ability Dictionary

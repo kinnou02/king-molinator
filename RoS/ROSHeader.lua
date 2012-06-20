@@ -18,6 +18,7 @@ local ROS = {
 	Name = "River of Souls",
 	Type = "20man",
 	ID = "ROS",
+	Object = "ROS",
 }
 
 KBM.RegisterMod("River of Souls", ROS)
@@ -29,6 +30,7 @@ ROS.Lang.Main.ROS = KBM.Language:Add(ROS.Name)
 ROS.Lang.Main.ROS:SetGerman("Seelenfluss")
 ROS.Lang.Main.ROS:SetFrench("Fleuves des \195\130mes")
 ROS.Lang.Main.ROS:SetRussian("Река Душ")
+ROS.Lang.Main.ROS:SetKorean("영혼의 강")
 
 ROS.Name = ROS.Lang.Main.ROS[KBM.Lang]
 ROS.Descript = ROS.Name

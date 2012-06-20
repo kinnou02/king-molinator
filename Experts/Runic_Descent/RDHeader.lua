@@ -30,6 +30,7 @@ MOD.Lang.Main.Name = KBM.Language:Add(MOD.Name)
 MOD.Lang.Main.Name:SetGerman("Runental")
 MOD.Lang.Main.Name:SetFrench("Descente runique")
 MOD.Lang.Main.Name:SetRussian("Рунная Расщелина")
+MOD.Lang.Main.Name:SetKorean("고대문자의 비탈길")
 
 MOD.Name = MOD.Lang.Main.Name[KBM.Lang]
 MOD.Descript = MOD.Name

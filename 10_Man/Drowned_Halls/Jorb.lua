@@ -56,10 +56,12 @@ AJ.Lang.Unit.Jorb = KBM.Language:Add(AJ.Jorb.Name)
 AJ.Lang.Unit.Jorb:SetGerman("Überfallkommandant Jorb")
 AJ.Lang.Unit.Jorb:SetFrench("Commandant d'assaut Jorb")
 AJ.Lang.Unit.Jorb:SetRussian("Командир штурмовой группы Йорб")
+AJ.Lang.Unit.Jorb:SetKorean("공격 지휘관 조브")
 AJ.Lang.Unit.JorbShort = KBM.Language:Add("Jorb")
 AJ.Lang.Unit.JorbShort:SetGerman()
 AJ.Lang.Unit.JorbShort:SetFrench()
 AJ.Lang.Unit.JorbShort:SetRussian("Йорб")
+AJ.Lang.Unit.JorbShort:SetKorean("조브")
 
 -- Ability Dictionary
 AJ.Lang.Ability = {}
@@ -74,6 +76,7 @@ AJ.Lang.Notify.Stand = KBM.Language:Add("(%a*), stand to attention!")
 AJ.Lang.Notify.Stand:SetGerman("(%a*), Stillgestanden!")
 AJ.Lang.Notify.Stand:SetFrench("Gardez les yeux bien ouverts, (%a*) !")
 AJ.Lang.Notify.Stand:SetRussian("(%a*), внимание!")
+AJ.Lang.Notify.Stand:SetKorean("(%a*), 차렷 자세를 취하십시오!")
 
 -- Debuff Dictionary
 AJ.Lang.Debuff = {}

@@ -55,15 +55,18 @@ IJ.Lang.Unit.Johlen = KBM.Language:Add(IJ.Johlen.Name)
 IJ.Lang.Unit.Johlen:SetFrench("Infiltrateur Johlen")
 IJ.Lang.Unit.Johlen:SetGerman("Infiltrator Johlen")
 IJ.Lang.Unit.Johlen:SetRussian("Лазутчик Джохлен")
+IJ.Lang.Unit.Johlen:SetKorean("인필트레이터 졸렌")
 IJ.Lang.Unit.JohlenShort = KBM.Language:Add("Johlen")
 IJ.Lang.Unit.JohlenShort:SetFrench("Johlen")
 IJ.Lang.Unit.JohlenShort:SetGerman("Johlen")
 IJ.Lang.Unit.JohlenShort:SetRussian("Джохлен")
+IJ.Lang.Unit.JohlenShort:SetKorean("졸렌")
 -- Addtional Unit Dictionary
 IJ.Lang.Unit.Bomb = KBM.Language:Add("Devastating Bomb")
 IJ.Lang.Unit.Bomb:SetGerman("Vernichtende Bombe")
 IJ.Lang.Unit.Bomb:SetFrench("Bombe dévastatrice")
 IJ.Lang.Unit.Bomb:SetRussian("Разрушительная бомба")
+IJ.Lang.Unit.Bomb:SetKorean("위력적인 폭탄")
 
 -- Ability Dictionary
 IJ.Lang.Ability = {}
@@ -71,6 +74,7 @@ IJ.Lang.Ability.Blinding = KBM.Language:Add("Blinding Bomb")
 IJ.Lang.Ability.Blinding:SetGerman("Blendbombe")
 IJ.Lang.Ability.Blinding:SetFrench("Bombe aveuglante")
 IJ.Lang.Ability.Blinding:SetRussian("Ослепляющая бомба")
+IJ.Lang.Ability.Blinding:SetKorean("실명 폭탄")
 
 -- Verbose Dictionary 
 IJ.Lang.Verbose = {}
@@ -78,6 +82,7 @@ IJ.Lang.Verbose.Bomb = KBM.Language:Add("Devastation")
 IJ.Lang.Verbose.Bomb:SetGerman("Vernichtung")
 IJ.Lang.Verbose.Bomb:SetFrench("Dévastation")
 IJ.Lang.Verbose.Bomb:SetRussian("Разрушение")
+IJ.Lang.Verbose.Bomb:SetKorean("지진폭탄")
 
 -- Phase Monitor Dictionary
 IJ.Lang.Phase = {}
@@ -85,6 +90,7 @@ IJ.Lang.Phase.Bomb = KBM.Language:Add("Bomb")
 IJ.Lang.Phase.Bomb:SetGerman("Bombe")
 IJ.Lang.Phase.Bomb:SetFrench("Bombe")
 IJ.Lang.Phase.Bomb:SetRussian("бомба")
+IJ.Lang.Phase.Bomb:SetKorean("폭탄")
 
 IJ.Johlen.Name = IJ.Lang.Unit.Johlen[KBM.Lang]
 IJ.Descript = IJ.Johlen.Name

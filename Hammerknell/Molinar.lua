@@ -195,23 +195,28 @@ KM.Lang.Unit.Molinar = KBM.Language:Add(KM.King.Name)
 KM.Lang.Unit.Molinar:SetGerman("Runenkönig Molinar")
 KM.Lang.Unit.Molinar:SetFrench("Roi runique Molinar")
 KM.Lang.Unit.Molinar:SetRussian("Рунный король Молинар")
+KM.Lang.Unit.Molinar:SetKorean("룬 제왕 몰리나")
 KM.Lang.Unit.MolinarShort = KBM.Language:Add("Molinar")
 KM.Lang.Unit.MolinarShort:SetGerman("Molinar")
 KM.Lang.Unit.MolinarShort:SetFrench("Molinar")
 KM.Lang.Unit.MolinarShort:SetRussian("Король")
+KM.Lang.Unit.MolinarShort:SetKorean("몰리나")
 KM.Lang.Unit.Dollin = KBM.Language:Add(KM.Prince.Name)
 KM.Lang.Unit.Dollin:SetGerman("Prinz Dollin")
 KM.Lang.Unit.Dollin:SetFrench("Prince Dollin")
 KM.Lang.Unit.Dollin:SetRussian("Принц Доллин")
+KM.Lang.Unit.Dollin:SetKorean("돌린 왕자")
 KM.Lang.Unit.DollinShort = KBM.Language:Add("Dollin")
 KM.Lang.Unit.DollinShort:SetGerman("Dollin")
 KM.Lang.Unit.DollinShort:SetFrench("Dollin")
 KM.Lang.Unit.DollinShort:SetRussian("Принц")
+KM.Lang.Unit.DollinShort:SetKorean("돌린")
 -- Additional Units Dictionary
 KM.Lang.Unit.Revenant = KBM.Language:Add("Incorporeal Revenant")
 KM.Lang.Unit.Revenant:SetFrench("Revenant chimérique")
 KM.Lang.Unit.Revenant:SetGerman("Unkörperlicher Wiedergänger")
 KM.Lang.Unit.Revenant:SetRussian("Бестелесный восставший")
+KM.Lang.Unit.Revenant:SetKorean("형태없는 망령")
 
 -- Ability Dictionary
 KM.Lang.Ability = {}
@@ -219,34 +224,42 @@ KM.Lang.Ability.Rend = KBM.Language:Add("Rend Life")
 KM.Lang.Ability.Rend:SetFrench("Déchire-Vie")
 KM.Lang.Ability.Rend:SetGerman("Leben entreißen")
 KM.Lang.Ability.Rend:SetRussian("Расколотая жизнь")
+KM.Lang.Ability.Rend:SetKorean("생명 분쇄")
 KM.Lang.Ability.Terminate = KBM.Language:Add("Terminate Life")
 KM.Lang.Ability.Terminate:SetFrench("Achèvement de Vie")
 KM.Lang.Ability.Terminate:SetGerman("Leben auslöschen")
 KM.Lang.Ability.Terminate:SetRussian("Прервать жизнь")
+KM.Lang.Ability.Terminate:SetKorean("생명 박탈")
 KM.Lang.Ability.Essence = KBM.Language:Add("Consuming Essence")
 KM.Lang.Ability.Essence:SetFrench("Combustion d'essence")
 KM.Lang.Ability.Essence:SetGerman("Verschlingende Essenz")
 KM.Lang.Ability.Essence:SetRussian("Поглощающая сущность")
+KM.Lang.Ability.Essence:SetKorean("정수 흡수")
 KM.Lang.Ability.Feedback = KBM.Language:Add("Runic Feedback")
 KM.Lang.Ability.Feedback:SetFrench("Réaction runique")
 KM.Lang.Ability.Feedback:SetGerman("Runen-Resonanz")
 KM.Lang.Ability.Feedback:SetRussian("Рунический отзыв")
+KM.Lang.Ability.Feedback:SetKorean("주문술 반응")
 KM.Lang.Ability.Crushing = KBM.Language:Add("Crushing Regret")
 KM.Lang.Ability.Crushing:SetGerman("Erdrückendes Bedauern")
 KM.Lang.Ability.Crushing:SetFrench("Blasphème infect")
 KM.Lang.Ability.Crushing:SetRussian("Давящее сожаление")
+KM.Lang.Ability.Crushing:SetKorean("Crushing Regret")
 KM.Lang.Ability.Forked = KBM.Language:Add("Forked Blast")
 KM.Lang.Ability.Forked:SetGerman("Gabelstoß")
 KM.Lang.Ability.Forked:SetFrench("Explosion fourchue")
 KM.Lang.Ability.Forked:SetRussian("Раздвоенный взрыв")
+KM.Lang.Ability.Forked:SetKorean("갈래 폭발")
 KM.Lang.Ability.Shout = KBM.Language:Add("Frightening Shout")
 KM.Lang.Ability.Shout:SetFrench("Flammes maudites")
 KM.Lang.Ability.Shout:SetGerman("Verängstigender Schrei")
 KM.Lang.Ability.Shout:SetRussian("Пугающий крик")
+KM.Lang.Ability.Shout:SetKorean("위협의 외침")
 KM.Lang.Ability.Cursed = KBM.Language:Add("Cursed Blows")
 KM.Lang.Ability.Cursed:SetFrench("Frappes maudites")
 KM.Lang.Ability.Cursed:SetGerman("Verfluchte Schläge")
 KM.Lang.Ability.Cursed:SetRussian("Проклятые удары")
+KM.Lang.Ability.Cursed:SetKorean("저주받은 강타")
 
 -- Notify Dictionary
 KM.Lang.Notify = {}
@@ -261,10 +274,12 @@ KM.Lang.Menu.Cursed = KBM.Language:Add(KM.Lang.Ability.Cursed[KBM.Lang].." durat
 KM.Lang.Menu.Cursed:SetGerman(KM.Lang.Ability.Cursed[KBM.Lang].." Dauer.")
 KM.Lang.Menu.Cursed:SetRussian(KM.Lang.Ability.Cursed[KBM.Lang].." длительность.")
 KM.Lang.Menu.Cursed:SetFrench(KM.Lang.Ability.Cursed[KBM.Lang].." durée.")
+KM.Lang.Menu.Cursed:SetKorean("저주받은 강타 지속시간.")
 KM.Lang.Menu.Feedback = KBM.Language:Add(KM.Lang.Ability.Feedback[KBM.Lang].." duration.")
 KM.Lang.Menu.Feedback:SetGerman(KM.Lang.Ability.Feedback[KBM.Lang].." Dauer.")
 KM.Lang.Menu.Feedback:SetRussian(KM.Lang.Ability.Feedback[KBM.Lang].." длительность.")
 KM.Lang.Menu.Feedback:SetFrench(KM.Lang.Ability.Feedback[KBM.Lang].." durée.")
+KM.Lang.Menu.Feedback:SetKorean("룬 반응 지속시간.")
 
 -- King's Options page Dictionary
 KM.Lang.Options = {}
@@ -272,14 +287,17 @@ KM.Lang.Options.Enabled = KBM.Language:Add("Enable Percentage Monitor.")
 KM.Lang.Options.Enabled:SetFrench("Montrer Moniteur Pct.")
 KM.Lang.Options.Enabled:SetGerman("Prozent Monitor anzeigen.")
 KM.Lang.Options.Enabled:SetRussian("Включить монитор хп боссов в процентах.")
+KM.Lang.Options.Enabled:SetKorean("퍼센트 보니터링 활성.")
 KM.Lang.Options.Visible = KBM.Language:Add("Show Monitor (for positioning).")
 KM.Lang.Options.Visible:SetFrench("Cacher avant début du combat.")
 KM.Lang.Options.Visible:SetGerman("Verbergen bis zum Kampfbeginn.")
 KM.Lang.Options.Visible:SetRussian("Показать монитор (для смены позици).")
+KM.Lang.Options.Visible:SetKorean("모니터링 보기 (위치선정용).")
 KM.Lang.Options.Compact = KBM.Language:Add("Compact Mode.")
 KM.Lang.Options.Compact:SetFrench("Mode Compact.")
 KM.Lang.Options.Compact:SetGerman("Kompakte Anzeige.")
 KM.Lang.Options.Compact:SetRussian("Сделать компактным.")
+KM.Lang.Options.Compact:SetKorean("미니 모드.")
 
 -- Verbose Dictionary
 KM.Lang.Verbose = {}
@@ -287,10 +305,12 @@ KM.Lang.Verbose.King = KBM.Language:Add("King")
 KM.Lang.Verbose.King:SetRussian("Король")
 KM.Lang.Verbose.King:SetFrench("Roi")
 KM.Lang.Verbose.King:SetGerman("König")
+KM.Lang.Verbose.King:SetKorean("왕")
 KM.Lang.Verbose.Prince = KBM.Language:Add("Prince")
 KM.Lang.Verbose.Prince:SetGerman("Prinz")
 KM.Lang.Verbose.Prince:SetFrench("Prince")
 KM.Lang.Verbose.Prince:SetRussian("Принц")
+KM.Lang.Verbose.Prince:SetKorean("왕자")
 
 -- Assign Translations to Units
 KM.King.Name = KM.Lang.Unit.Molinar[KBM.Lang]
@@ -735,7 +755,7 @@ end
 function KM:BuildDisplay()
 	self.FrameBase = UI.CreateFrame("Frame", "FrameBase", KBM.Context)
 	self.FrameBase:SetVisible(false)
-	self.FrameBase:SetLayer(2)
+	self.FrameBase:SetLayer(3)
 	if not self.Settings.PercentMonitor.x then
 		self.FrameBase:SetPoint("CENTER", UIParent, "CENTER")
 	else
@@ -833,12 +853,12 @@ function KM.Prince:PinCastBar()
 	self.CastBar.GUI.Frame:SetPoint("TOPLEFT", KM.FrameBase, "BOTTOMLEFT")
 	self.CastBar.GUI.Frame:SetPoint("TOPRIGHT", KM.FrameBase, "BOTTOMRIGHT")
 	self.CastBar.GUI.Frame:SetHeight(KM.IconSize)
-	if KM.Settings.Compact then
-		self.CastBar.GUI.Text:SetFontSize(16)
-		self.CastBar.GUI.Shadow:SetFontSize(16)
+	if KM.Settings.PercentMonitor.Compact then
+		self.CastBar.GUI.Text:SetFontSize(14)
+		self.CastBar.GUI.Shadow:SetFontSize(14)
 	else
-		self.CastBar.GUI.Text:SetFontSize(20)
-		self.CastBar.GUI.Shadow:SetFontSize(20)
+		self.CastBar.GUI.Text:SetFontSize(18)
+		self.CastBar.GUI.Shadow:SetFontSize(18)
 	end	
 end
 
@@ -847,12 +867,12 @@ function KM.King:PinCastBar()
 	self.CastBar.GUI.Frame:SetPoint("BOTTOMLEFT", KM.FrameBase, "TOPLEFT")
 	self.CastBar.GUI.Frame:SetPoint("BOTTOMRIGHT", KM.FrameBase, "TOPRIGHT")
 	self.CastBar.GUI.Frame:SetHeight(KM.IconSize)
-	if KM.Settings.Compact then
-		self.CastBar.GUI.Text:SetFontSize(16)
-		self.CastBar.GUI.Shadow:SetFontSize(16)
+	if KM.Settings.PercentMonitor.Compact then
+		self.CastBar.GUI.Text:SetFontSize(14)
+		self.CastBar.GUI.Shadow:SetFontSize(14)
 	else
-		self.CastBar.GUI.Text:SetFontSize(20)
-		self.CastBar.GUI.Shadow:SetFontSize(20)
+		self.CastBar.GUI.Text:SetFontSize(18)
+		self.CastBar.GUI.Shadow:SetFontSize(18)
 	end		
 end
 

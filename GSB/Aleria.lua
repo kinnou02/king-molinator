@@ -63,16 +63,19 @@ OA.Lang.Unit.Aleria = KBM.Language:Add(OA.Aleria.Name)
 OA.Lang.Unit.Aleria:SetGerman("Orakel Aleria")
 OA.Lang.Unit.Aleria:SetFrench("Aleria l'Oracle")
 OA.Lang.Unit.Aleria:SetRussian("Оракул Алерия")
+OA.Lang.Unit.Aleria:SetKorean("제사장 알레리아")
 OA.Descript = OA.Lang.Unit.Aleria[KBM.Lang]
 -- Additional Unit Dictionary
 OA.Lang.Unit.Primal = KBM.Language:Add("Primal Werewolf")
 OA.Lang.Unit.Primal:SetGerman("Ur-Werwolf")
 OA.Lang.Unit.Primal:SetFrench("Loup-garou primaire")
 OA.Lang.Unit.Primal:SetRussian("Первобытный оборотень")
+OA.Lang.Unit.Primal:SetKorean("원시 늑대인간")
 OA.Lang.Unit.Necrotic = KBM.Language:Add("Necrotic Werewolf")
 OA.Lang.Unit.Necrotic:SetGerman("Nekrotischer Werwolf")
 OA.Lang.Unit.Necrotic:SetFrench("Loup-garou nécrotique")
 OA.Lang.Unit.Necrotic:SetRussian("Разлагающийся оборотень")
+OA.Lang.Unit.Necrotic:SetKorean("괴사 늑대인간")
 
 -- Debuff Dictionary
 OA.Lang.Debuff = {}
@@ -80,6 +83,7 @@ OA.Lang.Debuff.Necrotic = KBM.Language:Add("Necrotic Eruption")
 OA.Lang.Debuff.Necrotic:SetGerman("Nekrotischer Ausbruch")
 OA.Lang.Debuff.Necrotic:SetFrench("Énergie nécrotique")
 OA.Lang.Debuff.Necrotic:SetRussian("Умервщляющий взрыв")
+OA.Lang.Debuff.Necrotic:SetKorean("괴사 에너지")
 
 OA.Primal = {
 	Mod = OA,

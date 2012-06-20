@@ -74,6 +74,7 @@ MX.Lang.Unit.Murdantix = KBM.Language:Add(MX.Murd.Name)
 MX.Lang.Unit.Murdantix:SetGerman("Murdantix")
 MX.Lang.Unit.Murdantix:SetFrench("Murdantix")
 MX.Lang.Unit.Murdantix:SetRussian("Мурдантикс")
+MX.Lang.Unit.Murdantix:SetKorean("머단틱스")
 MX.Murd.Name = MX.Lang.Unit.Murdantix[KBM.Lang]
 MX.Descript = MX.Lang.Unit.Murdantix[KBM.Lang]
 
@@ -83,18 +84,22 @@ MX.Lang.Ability.Crush = KBM.Language:Add("Mangling Crush")
 MX.Lang.Ability.Crush:SetFrench("Essorage")
 MX.Lang.Ability.Crush:SetGerman("Erdrückender Stoss")
 MX.Lang.Ability.Crush:SetRussian("Калечащий удар")
+MX.Lang.Ability.Crush:SetKorean("훼손 분쇄")
 MX.Lang.Ability.Pound = KBM.Language:Add("Ferocious Pound")
 MX.Lang.Ability.Pound:SetFrench("Poids féroce")
 MX.Lang.Ability.Pound:SetGerman("Wildes Zuschlagen")
 MX.Lang.Ability.Pound:SetRussian("Свирепый удар")
+MX.Lang.Ability.Pound:SetKorean("흉포한 맹타")
 MX.Lang.Ability.Blast = KBM.Language:Add("Demonic Blast")
 MX.Lang.Ability.Blast:SetFrench("Explosion démoniaque")
 MX.Lang.Ability.Blast:SetGerman("Dämonische Explosion")
 MX.Lang.Ability.Blast:SetRussian("Демонический Взрыв")
+MX.Lang.Ability.Blast:SetKorean("악마의 폭발")
 MX.Lang.Ability.Trauma = KBM.Language:Add("Soul Trauma")
 MX.Lang.Ability.Trauma:SetFrench("Traumatisme d'âme")
 MX.Lang.Ability.Trauma:SetGerman("Seelentrauma")
 MX.Lang.Ability.Trauma:SetRussian("Травма души")
+MX.Lang.Ability.Trauma:SetKorean("영혼 트라우마")
 
 -- Debuff Dictionary
 MX.Lang.Debuff = {}
@@ -102,6 +107,7 @@ MX.Lang.Debuff.Mangled = KBM.Language:Add("Mangled")
 MX.Lang.Debuff.Mangled:SetGerman("Üble Blessur")
 MX.Lang.Debuff.Mangled:SetFrench("Estropié")
 MX.Lang.Debuff.Mangled:SetRussian("Искалечен")
+MX.Lang.Debuff.Mangled:SetKorean("훼손")
 
 function MX:AddBosses(KBM_Boss)
 	self.MenuName = self.Murd.Name

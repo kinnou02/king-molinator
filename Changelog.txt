@@ -1,4 +1,33 @@
-﻿v1.0.8
+﻿v1.0.9
+
+Castbars
+* New: There is now a new Castbar Option for Rift/KBM style switching.
+* New: Boss Castbars now default to a new Rift style. These bars show interruptible skills as cyan, otherwise they are gold.
+* New: You may now choose to let KBM handle the player castbar.
+* New: Player castbars handled by KBM can mimic the position of the Rift castbar. (You'll need to manually disable the Rift one for now)
+
+Infernal Dawn
+* Laethys
+** New: Added Unit tracking for Wizened Stoneseer.
+** New: Added Timer and Alert for Stoneseer's Wizened Restoration. (Personal - Target/Focus required)
+** Change: Molten Gold is now a 30s looping timer. (Feedback on accuracy and usefulness required)
+
+Hammerknell Fortress
+* Rune King Molinar
+** Change: The compact mode percentage monitor finally has the intended smaller font castbar text.
+
+Rise of the Pheonix
+* General Silgen
+** Change: Anchored in Flames is now marked as important.
+
+Korean Translations
+* Added Korean Translations for many encounters.
+
+Russian Translations
+* Updated
+
+----
+v1.0.8
 
 Event System
 * New: Event.KingMolinator.Unit.Power = (UnitID, PowerType ("mana", "energy" or "power"))

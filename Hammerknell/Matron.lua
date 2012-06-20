@@ -73,10 +73,12 @@ MZ.Lang.Unit.Matron = KBM.Language:Add(MZ.Matron.Name)
 MZ.Lang.Unit.Matron:SetGerman("Matrone Zamira")
 MZ.Lang.Unit.Matron:SetFrench("Matrone Zamira")
 MZ.Lang.Unit.Matron:SetRussian("Старуха Замира")
+MZ.Lang.Unit.Matron:SetKorean("메이트런 자미라")
 MZ.Lang.Unit.MatronShort = KBM.Language:Add("Zamira")
 MZ.Lang.Unit.MatronShort:SetGerman("Zamira")
 MZ.Lang.Unit.MatronShort:SetFrench("Zamira")
 MZ.Lang.Unit.MatronShort:SetRussian("Замира")
+MZ.Lang.Unit.MatronShort:SetKorean("자미라")
 
 -- Ability Dictionary
 MZ.Lang.Ability = {}
@@ -84,6 +86,7 @@ MZ.Lang.Ability.Concussion = KBM.Language:Add("Dark Concussion")
 MZ.Lang.Ability.Concussion:SetGerman("Dunkle Erschütterung")
 MZ.Lang.Ability.Concussion:SetFrench("Concussion sombre")
 MZ.Lang.Ability.Concussion:SetRussian("Темное сотрясение")
+MZ.Lang.Ability.Concussion:SetKorean("암흑 진동")
 MZ.Lang.Ability.Blast = KBM.Language:Add("Hideous Blast")
 MZ.Lang.Ability.Blast:SetGerman("Schrecklicher Schlag")
 MZ.Lang.Ability.Blast:SetFrench("Explosion atroce")
@@ -92,10 +95,12 @@ MZ.Lang.Ability.Mark = KBM.Language:Add("Mark of Oblivion")
 MZ.Lang.Ability.Mark:SetGerman("Zeichen der Vergessenheit")
 MZ.Lang.Ability.Mark:SetFrench("Marque de l'oubli")
 MZ.Lang.Ability.Mark:SetRussian("Знак забвения")
+MZ.Lang.Ability.Mark:SetKorean("망각의 표식")
 MZ.Lang.Ability.Shadow = KBM.Language:Add("Shadow Strike")
 MZ.Lang.Ability.Shadow:SetGerman("Schattenschlag")
 MZ.Lang.Ability.Shadow:SetFrench("Barrage de l'ombre")
 MZ.Lang.Ability.Shadow:SetRussian("Поражение тенью")
+MZ.Lang.Ability.Shadow:SetKorean("그림자 일격")
 MZ.Lang.Ability.Ichor = KBM.Language:Add("Revolting Ichor")
 MZ.Lang.Ability.Ichor:SetGerman("Abscheulicher Eiter")
 MZ.Lang.Ability.Ichor:SetRussian("Омерзительный гной")
@@ -106,6 +111,7 @@ MZ.Lang.Notify = {}
 MZ.Lang.Notify.Mark = KBM.Language:Add("Matron Zamira places the Mark of Oblivion upon (%a*).")
 MZ.Lang.Notify.Mark:SetGerman("Matrone Zamira belegt (%a*) mit dem Zeichen der Vergessenheit.")
 MZ.Lang.Notify.Mark:SetFrench("Matrone Zamira place la Marque de l'oubli sur (%a*).")
+MZ.Lang.Notify.Mark:SetKorean("메이트런 자미라이(가) (%a*)에게 망각의 표식을 남깁니다.")
 
 -- Debuff Dictionary
 MZ.Lang.Debuff = {}
@@ -113,10 +119,12 @@ MZ.Lang.Debuff.Curse = KBM.Language:Add("Matron's Curse")
 MZ.Lang.Debuff.Curse:SetGerman("Fluch der Matrone")
 MZ.Lang.Debuff.Curse:SetFrench("Mal\195\169diction de la matrone")
 MZ.Lang.Debuff.Curse:SetRussian("Проклятие старухи")
+MZ.Lang.Debuff.Curse:SetKorean("메이트런의 저주")
 MZ.Lang.Debuff.Spiritual = KBM.Language:Add("Spiritual Exhaustion")
 MZ.Lang.Debuff.Spiritual:SetGerman("Spirituelle Erschöpfung")
 MZ.Lang.Debuff.Spiritual:SetRussian("Духовное истощение")
 MZ.Lang.Debuff.Spiritual:SetFrench("Esprit cauchemardesque")
+MZ.Lang.Debuff.Spiritual:SetKorean("영혼 탈진")
 
 -- Verbose Dictionary
 MZ.Lang.Verbose = {}
@@ -124,10 +132,12 @@ MZ.Lang.Verbose.Adds = KBM.Language:Add("Adds spawn")
 MZ.Lang.Verbose.Adds:SetGerman("Adds spawnen")
 MZ.Lang.Verbose.Adds:SetRussian("Призыв аддов")
 MZ.Lang.Verbose.Adds:SetFrench("Pop des Adds")
+MZ.Lang.Verbose.Adds:SetKorean("대량의 쫄들 출현")
 MZ.Lang.Verbose.Spiritual = KBM.Language:Add(MZ.Lang.Debuff.Spiritual[KBM.Lang].." fades")
 MZ.Lang.Verbose.Spiritual:SetGerman(MZ.Lang.Debuff.Spiritual[KBM.Lang].." ausgelaufen!")
 MZ.Lang.Verbose.Spiritual:SetRussian(MZ.Lang.Debuff.Spiritual[KBM.Lang].." заканчивается")
 MZ.Lang.Verbose.Spiritual:SetFrench(MZ.Lang.Debuff.Spiritual[KBM.Lang].." s'estompe")
+MZ.Lang.Verbose.Spiritual:SetKorean("영혼탈진이 사라짐")
 
 -- Define Translated Names
 MZ.Matron.Name = MZ.Lang.Unit.Matron[KBM.Lang]

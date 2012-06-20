@@ -1412,7 +1412,10 @@ function KBM.InitOptions()
 		end	
 		if KBM.Options.CastBar.Visible then
 			KBM.CastBar.Anchor:Hide()
-		end		
+		end
+		if KBM.Player.CastBar.Settings.CastBar.Visible then
+			KBM.Player.CastBar.CastObj:Hide()
+		end
 		if KBM.Encounter then
 			if KBM.CurrentMod.Settings.Alerts then
 				if KBM.CurrentMod.Settings.Alerts.Override then
@@ -1471,6 +1474,9 @@ function KBM.InitOptions()
 		KBM.MainWin:SetVisible(true)
 		if KBM.Options.CastBar.Visible then
 			KBM.CastBar.Anchor:Display()
+		end
+		if KBM.Player.CastBar.Settings.CastBar.Visible then
+			KBM.Player.CastBar.CastObj:Display()
 		end
 		if KBM.MainWin.CurrentPage then
 			if KBM.MainWin.CurrentPage.Type == "encounter" then
@@ -2393,6 +2399,15 @@ function KBM.InitOptions()
 						function Callbacks:Text(bool)
 							self.Header.Boss.Settings.CastBar.TextScale = bool
 						end
+						function Callbacks:Style(bool)
+							self.Boss.CastBar:Hide(true)
+							if bool then
+								self.Header.Boss.Settings.CastBar.Style = "rift"
+							else
+								self.Header.Boss.Settings.CastBar.Style = "kbm"
+							end
+							self.Boss.CastBar:Display()
+						end
 						
 						local Settings = BossObj.Settings.CastBar
 						Header = self:CreateHeader(KBM.Language.Menu.Enable[KBM.Lang].." "..MenuName.."'s "..KBM.Language.Menu.Castbars[KBM.Lang]..".", "check", "Castbars", "Main")
@@ -2402,6 +2417,12 @@ function KBM.InitOptions()
 						if BossObj.PinCastBar then
 							Child = Header:CreateOption(BossObj.Settings.PinMenu, "check", Callbacks.Pinned)
 							Child:SetChecked(Settings.Pinned)
+						end
+						Child = Header:CreateOption(KBM.Language.Options.CastbarStyle[KBM.Lang], "check", Callbacks.Style)
+						if Settings.Style == "rift" then
+							Child:SetChecked(true)
+						else
+							Child:SetChecked(false)
 						end
 						Child = Header:CreateOption(KBM.Language.Options.ShowAnchor[KBM.Lang], "check", Callbacks.Visible)
 						Child:SetChecked(Settings.Visible)

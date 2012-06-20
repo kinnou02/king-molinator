@@ -59,28 +59,34 @@ HH.Lang.Unit.Hydriss = KBM.Language:Add(HH.Hydriss.Name)
 HH.Lang.Unit.Hydriss:SetGerman("Hohepriesterin Hydriss")
 HH.Lang.Unit.Hydriss:SetFrench("Grande prêtresse Hydriss")
 HH.Lang.Unit.Hydriss:SetRussian("Первосвященница Гидрисс")
+HH.Lang.Unit.Hydriss:SetKorean("상급 여사제 히드리스")
 HH.Lang.Unit.HydShort = KBM.Language:Add(HH.Hydriss.Name)
 HH.Lang.Unit.HydShort:SetGerman()
 HH.Lang.Unit.HydShort:SetFrench()
 HH.Lang.Unit.HydShort:SetRussian("Гидрисс")
+HH.Lang.Unit.HydShort:SetKorean("상급 여사제 히드리스")
 HH.Lang.Unit.Sea = KBM.Language:Add("Seaspawn")
 HH.Lang.Unit.Sea:SetGerman("Meeresbrut")
 HH.Lang.Unit.Sea:SetFrench("Engeance des mers")
 HH.Lang.Unit.Sea:SetRussian("Порождение моря")
+HH.Lang.Unit.Sea:SetKorean("바다혈족")
 HH.Lang.Unit.Hive = KBM.Language:Add("Seaclaw Hive")
 HH.Lang.Unit.Hive:SetFrench("Nid de griffemarées")
 HH.Lang.Unit.Hive:SetGerman("Seeklauennest")
 HH.Lang.Unit.Hive:SetRussian("Гнездо водолапов")
+HH.Lang.Unit.Hive:SetKorean("바다발톱 벌집")
 -- Ability Dictionary
 HH.Lang.Ability = {}
 HH.Lang.Ability.Tsunami = KBM.Language:Add("Tsunami")
 HH.Lang.Ability.Tsunami:SetGerman()
 HH.Lang.Ability.Tsunami:SetFrench()
 HH.Lang.Ability.Tsunami:SetRussian("Цунами")
+HH.Lang.Ability.Tsunami:SetKorean("쓰나미")
 HH.Lang.Ability.Shock = KBM.Language:Add("Hydrostatic Shock")
 HH.Lang.Ability.Shock:SetRussian("Гидростатический удар")
 HH.Lang.Ability.Shock:SetFrench("Choc hydrostatique")
-HH.Lang.Ability.Shock:SetGerman("Hydrostatischer Schock") 
+HH.Lang.Ability.Shock:SetGerman("Hydrostatischer Schock")
+HH.Lang.Ability.Shock:SetKorean("수압 충격")
 
 -- Mechanic Dictionary
 HH.Lang.Mechanic = {}
@@ -88,6 +94,7 @@ HH.Lang.Mechanic.Air = KBM.Language:Add("Air Phase")
 HH.Lang.Mechanic.Air:SetGerman("Flug Phase")
 HH.Lang.Mechanic.Air:SetFrench("Phase Air")
 HH.Lang.Mechanic.Air:SetRussian("Воздушная фаза")
+HH.Lang.Mechanic.Air:SetKorean("공중 단계")
 
 HH.Seaspawn = {
 	Mod = HH,

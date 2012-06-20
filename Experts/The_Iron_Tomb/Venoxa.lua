@@ -59,6 +59,7 @@ MOD.Lang.Unit.Venoxa = KBM.Language:Add(MOD.Venoxa.Name)
 MOD.Lang.Unit.Venoxa:SetGerman("Brutmutter Venoxa")
 MOD.Lang.Unit.Venoxa:SetFrench("Matriarche Venoxa")
 MOD.Lang.Unit.Venoxa:SetRussian("Праматерь Венокса")
+MOD.Lang.Unit.Venoxa:SetKorean("여왕거미 베녹사")
 MOD.Venoxa.Name = MOD.Lang.Unit.Venoxa[KBM.Lang]
 MOD.Descript = MOD.Venoxa.Name
 

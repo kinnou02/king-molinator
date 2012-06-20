@@ -1,4 +1,4 @@
--- King Boss Mods Player Control System
+﻿-- King Boss Mods Player Control System
 -- Written By Paul Snart
 -- Copyright 2012
 --

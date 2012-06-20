@@ -60,11 +60,13 @@ JR.Lang.Unit.Joloral = KBM.Language:Add(JR.Joloral.Name)
 JR.Lang.Unit.Joloral:SetGerman("Joloral Wutflut")
 JR.Lang.Unit.Joloral:SetFrench("Joloral Ragemar\195\169e")
 JR.Lang.Unit.Joloral:SetRussian("Йолорал Яролив")
+JR.Lang.Unit.Joloral:SetKorean("폭풍분노 졸로랄")
 -- Additional Unit Dictionary
 JR.Lang.Unit.Crippler = KBM.Language:Add("Plated Crippler")
 JR.Lang.Unit.Crippler:SetGerman("Plattenverkrüppler")
 JR.Lang.Unit.Crippler:SetFrench("Mutilateur cuirassé")
 JR.Lang.Unit.Crippler:SetRussian("Палач в латах")
+JR.Lang.Unit.Crippler:SetKorean("판금 절름발이")
 
 -- Ability Dictionary
 JR.Lang.Ability = {}
@@ -72,18 +74,21 @@ JR.Lang.Ability.Panic = KBM.Language:Add("Panic Attack")
 JR.Lang.Ability.Panic:SetGerman("Panikattacke")
 JR.Lang.Ability.Panic:SetFrench("Crise de panique")
 JR.Lang.Ability.Panic:SetRussian("Приступ паники")
+JR.Lang.Ability.Panic:SetKorean("공황 공격")
 
 -- Notify Dictionary
 JR.Lang.Notify = {}
 JR.Lang.Notify.Panic = KBM.Language:Add("Joloral Ragetide glares at (%a*)")
 JR.Lang.Notify.Panic:SetGerman("Joloral Wutflut starrt (%a*) an!")
 JR.Lang.Notify.Panic:SetFrench("Joloral Ragemarée lance un regard furieux à (%a*)")
+JR.Lang.Notify.Panic:SetKorean("폭풍분노 졸로랄이(가) (%a*)을(를) 노려봅니다!")
 
 -- Verbose Dictionary
 JR.Lang.Verbose = {}
 JR.Lang.Verbose.Crippler = KBM.Language:Add(JR.Lang.Unit.Crippler[KBM.Lang].." enters the battle")
 JR.Lang.Verbose.Crippler:SetGerman(JR.Lang.Unit.Crippler[KBM.Lang].." greift in den Kampf ein!")
 JR.Lang.Verbose.Crippler:SetFrench("Mutilateur cuirassé entre en combat")
+JR.Lang.Verbose.Crippler:SetKorean("판금 절름발이가 전투에 참여합니다.")
 
 -- Menu Dictionary
 JR.Lang.Menu = {}
@@ -91,6 +96,7 @@ JR.Lang.Menu.Panic = KBM.Language:Add(JR.Lang.Ability.Panic[KBM.Lang].." duratio
 JR.Lang.Menu.Panic:SetGerman(JR.Lang.Ability.Panic[KBM.Lang].." Dauer.")
 JR.Lang.Menu.Panic:SetFrench("Durée des Crise de panique.")
 JR.Lang.Menu.Panic:SetRussian("Длительность "..JR.Lang.Ability.Panic[KBM.Lang])
+JR.Lang.Menu.Panic:SetKorean("공황 공격 지속시간.")
 
 JR.Joloral.Name = JR.Lang.Unit.Joloral[KBM.Lang]
 JR.Descript = JR.Joloral.Name

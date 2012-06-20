@@ -67,9 +67,11 @@ HG.Lang.Unit.Gaurath = KBM.Language:Add(HG.Gaurath.Name)
 HG.Lang.Unit.Gaurath:SetGerman("Herold Gaurath")
 HG.Lang.Unit.Gaurath:SetFrench("Héraut Gaurath")
 HG.Lang.Unit.Gaurath:SetRussian("Глашатай Гораф")
+HG.Lang.Unit.Gaurath:SetKorean("헤럴드 고라스")
 HG.Lang.Unit.Defiler = KBM.Language:Add("Ancient Defiler")
 HG.Lang.Unit.Defiler:SetFrench("Profanateur ancien ")
 HG.Lang.Unit.Defiler:SetGerman("Alter Schänder")
+HG.Lang.Unit.Defiler:SetKorean("고대 모독자")
 
 -- Ability Dictionary
 HG.Lang.Ability = {}
@@ -77,17 +79,21 @@ HG.Lang.Ability.Breath = KBM.Language:Add("Breath of the Void")
 HG.Lang.Ability.Breath:SetGerman("Odem der Leere")
 HG.Lang.Ability.Breath:SetFrench("Souffle du Néant")
 HG.Lang.Ability.Breath:SetRussian("Дыхание Пустоты")
+HG.Lang.Ability.Breath:SetKorean("공허의 숨결")
 HG.Lang.Ability.Raise = KBM.Language:Add("Raise the Dead")
 HG.Lang.Ability.Raise:SetGerman("Erweckung der Toten")
 HG.Lang.Ability.Raise:SetFrench("Résurrection des Morts")
 HG.Lang.Ability.Raise:SetRussian("Поднять мертвых")
+HG.Lang.Ability.Raise:SetKorean("죽은 자 살리기")
 HG.Lang.Ability.Tidings = KBM.Language:Add("Tidings of Woe")
 HG.Lang.Ability.Tidings:SetGerman("Leidvolle Kunde")
 HG.Lang.Ability.Tidings:SetFrench("Nouvelles du Malheur")
 HG.Lang.Ability.Tidings:SetRussian("Плохие известия")
+HG.Lang.Ability.Tidings:SetKorean("고뇌의 소식")
 HG.Lang.Ability.Storm = KBM.Language:Add("Defiling Storm")
 HG.Lang.Ability.Storm:SetGerman("Schändender Sturm")
 HG.Lang.Ability.Storm:SetFrench("Tempête profanatrice")
+HG.Lang.Ability.Storm:SetKorean("모독의 폭풍")
 
 -- Verbose Dictionary
 HG.Lang.Verbose = {}
@@ -95,6 +101,7 @@ HG.Lang.Verbose.Raise = KBM.Language:Add("Death group rise")
 HG.Lang.Verbose.Raise:SetGerman("Erweckung der Toten")
 HG.Lang.Verbose.Raise:SetFrench("Résurrection des Morts")
 HG.Lang.Verbose.Raise:SetRussian("Призыв аддов")
+HG.Lang.Verbose.Raise:SetKorean("죽은자들이 되살아납니다!")
 
 -- Notify Dictionary
 HG.Lang.Notify = {}
@@ -102,6 +109,7 @@ HG.Lang.Notify.Tidings = KBM.Language:Add("Herald Gaurath unleashes woeful tidin
 HG.Lang.Notify.Tidings:SetFrench("Héraut Gaurath déchaîne son pouvoir sur (%a*)")
 HG.Lang.Notify.Tidings:SetGerman("Herold Gaurath entfesselt traurige Kunde auf (%a*)")
 HG.Lang.Notify.Tidings:SetRussian("Глашатай Гораф сообщает скорбные вести в надежде, что (%a*) придет в уныние.")
+HG.Lang.Notify.Tidings:SetKorean("헤럴드 고라스가 (%a*)에게 비통한 소식을 풀어놓습니다.")
 
 HG.Gaurath.Name = HG.Lang.Unit.Gaurath[KBM.Lang]
 HG.Descript = HG.Gaurath.Name

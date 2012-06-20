@@ -59,12 +59,14 @@ MOD.Lang.Unit.Ragnoth = KBM.Language:Add(MOD.Ragnoth.Name)
 MOD.Lang.Unit.Ragnoth:SetGerman("Ragnoth der Brandschatzer")
 MOD.Lang.Unit.Ragnoth:SetFrench("Ragnoth le Dévastateur")
 MOD.Lang.Unit.Ragnoth:SetRussian("Рагнот Разоритель")
+MOD.Lang.Unit.Ragnoth:SetKorean("박탈자 라그노스")
 MOD.Ragnoth.Name = MOD.Lang.Unit.Ragnoth[KBM.Lang]
 MOD.Descript = MOD.Ragnoth.Name
 MOD.Lang.Unit.RagShort = KBM.Language:Add("Ragnoth")
 MOD.Lang.Unit.RagShort:SetGerman("Ragnoth")
 MOD.Lang.Unit.RagShort:SetFrench("Ragnoth")
 MOD.Lang.Unit.RagShort:SetRussian("Рагнот")
+MOD.Lang.Unit.RagShort:SetKorean("라그노스")
 MOD.Ragnoth.NameShort = MOD.Lang.Unit.RagShort[KBM.Lang]
 
 -- Ability Dictionary
