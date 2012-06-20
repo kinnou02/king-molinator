@@ -291,9 +291,7 @@ function RM.Rezes:Init()
 					Timer.TimeStart = Inspect.Time.Real() - (Timer.Duration - Timer.Remaining)
 					Timer.Player = Name
 					Timer.Name = aDetails.name
-					
-					--print("Adding Ability for "..Timer.Player.." - "..Timer.Name)
-					
+										
 					--if KBM.MechTimer.Settings.Shadow then
 						Timer.GUI.Shadow:SetText(Timer.GUI.CastInfo:GetText())
 						Timer.GUI.Shadow:SetVisible(true)
@@ -321,28 +319,21 @@ function RM.Rezes:Init()
 					if #self.ActiveTimers > 0 then
 						for i, cTimer in ipairs(self.ActiveTimers) do
 							local Insert = false
-							--print("Checking via Remaing Time: "..Timer.Remaining.." - "..cTimer.Remaining)
 							if Timer.Remaining < cTimer.Remaining then
 								Insert = true
 							elseif Timer.Remaining == cTimer.Remaining and cTimer.Remaining == 0 then
 								if Timer.Duration < cTimer.Duration then
-								--print("Inserting via Duration: "..Timer.Duration)
 									Insert = true
 								elseif Timer.Class == "mage" and cTimer.Class == "cleric" then
-									--print("Inserting because current is Mage and other is Cleric")
 									Insert = true
 								elseif Timer.Class == "mage" then
 									if KBM.AlphaComp(Timer.Player, cTimer.Player) then
-										--print("Inserting because Unit is a Mage and target is a Mage (Alpha Name Order)")
 										Insert = true
 									end
 								elseif Timer.Class == "cleric" and cTimer.Class == "cleric" then
 									if KBM.AlphaComp(Timer.Player, cTimer.Player) then
-										--print("Inserting because Unit is a Cleric and target is a Cleric (Alpha Name Order)")
 										Insert = true
 									end
-								--else
-									--print("No match")
 								end
 							end
 							if Insert then
@@ -484,7 +475,6 @@ function RM.Broadcast.RezSet(toName, crID)
 			end
 		elseif not crID then
 			for crID, Details in pairs(KBM.Player.Rezes.List) do
-				-- print("Sending: "..Details.name.." to raid")
 				KBM.Player.Rezes.List[crID] = Inspect.Ability.Detail(crID)
 				Details = KBM.Player.Rezes.List[crID]
 				if Details then
@@ -503,7 +493,6 @@ end
 
 function RM.Broadcast.RezRem(crID)
 	if KBM.Player.Grouped then
-		-- print("Sending: "..crID.." remove message")
 		Command.Message.Broadcast("raid", nil, "KBMRezRem", crID)
 		if RM.Rezes.Tracked[KBM.Player.Name] then
 			if RM.Rezes.Tracked[KBM.Player.Name].Timers[crID] then
@@ -516,7 +505,6 @@ end
 
 function RM.Broadcast.RezClear()
 	if KBM.Player.Grouped then
-		-- print("Sending: Can no longer BR/CR message")
 		Command.Message.Broadcast(KBM.Player.Mode, nil, "KBMRezClear", KBM.Player.UnitID)
 		RM.Rezes:Clear(KBM.Player.Name)
 	end
@@ -533,31 +521,19 @@ function RM.MessageHandler(From, Type, Channel, Identifier, Data)
 					local aDR = math.floor(tonumber(string.sub(Data, st + 1)))
 					local aDets = Inspect.Ability.Detail(aID)
 					RM.Rezes:Add(From, aID, aCD, aDR)
-					-- print("Initiate "..From.."'s CR/BR state for "..aDets.name)
-					-- print("Data retrieved: "..aID)
-					if aCD > 0 then
-						-- print("On cooldown: remaining "..tostring(aCD))
-					else
-						-- print("Is available for use")
-					end
 				elseif Identifier == "KBMRezRem" then
 					if RM.Rezes.Tracked[From] then
 						if RM.Rezes.Tracked[From].Timers[Data] then
 							RM.Rezes.Tracked[From].Timers[Data]:Remove()
 						end
 					end
-					-- print("Remove "..From.."'s CR/BR states")
-					-- print("Data retrieved: "..Data)
 				elseif Identifier == "KBMRezClear" then
 					RM.Rezes:Clear(From)
-					--print("Remove all Rez Timers for "..From)
 				end
 			elseif Type == "send" then
 				if Identifier == "KBMRezSet" then
-					--print("Private Rez details sent by: "..From)
 					RM.MessageHandler(From, "raid", nil, Identifier, Data)
 				elseif Identifier == "KBMRezReq" then
-					--print("Rez list request from: "..From)
 					RM.Broadcast.RezSet(From)
 					if Data == "C" then
 						Command.Message.Send(From, "KBMRezReq", "R", RM.MessageSent)

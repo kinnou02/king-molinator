@@ -12,6 +12,7 @@ local KBMAddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = KBMAddonData.data
 
 KBM.MSG = PI
+local KBMLM = KBM.LocaleManager
 
 PI.History = {
 	Checked = false,
@@ -24,14 +25,12 @@ PI.History = {
 	UpdateReq = false,
 }
 
--- Messenger Dictionary
-PI.Lang = {}
 -- Version related Dictionary
-PI.Lang.Version = {}
-PI.Lang.Version.Old = KBM.Language:Add("There is a newer version of KBM available, please update!")
-PI.Lang.Version.OldInfo = KBM.Language:Add("The most recent version seen is v")
-PI.Lang.Version.Alpha = KBM.Language:Add("There is a newer Alpha build of KBM available, please update!")
-PI.Lang.Version.AlphaInfo = KBM.Language:Add("You are running r%d, there is at least build r%d in circulation.")
+KBMLM.SetGroupObject(KBM.Language.Version, "GroupObject", "Update Messages")
+KBM.Language.Version.Old = KBM.Language:Add("There is a newer version of KBM available, please update!")
+KBM.Language.Version.OldInfo = KBM.Language:Add("The most recent version seen is v")
+KBM.Language.Version.Alpha = KBM.Language:Add("There is a newer Alpha build of KBM available, please update!")
+KBM.Language.Version.AlphaInfo = KBM.Language:Add("You are running r%d, there is at least build r%d in circulation.")
 
 function PI.VersionAlert(failed, message)
 end
@@ -53,8 +52,8 @@ function PI.VersionCheck(Data)
 				if Inspect.Time.Real() - PI.History.Alpha > 900 or PI.History.Checked == false then
 					if KBM.Version:Check(High, Mid, Low) then
 						if l_Alpha < Alpha then
-							print(PI.Lang.Version.Alpha[KBM.Lang])
-							print(string.format(PI.Lang.Version.AlphaInfo[KBM.Lang], l_Alpha, Alpha))
+							print(KBM.Language.Version.Alpha[KBM.Lang])
+							print(string.format(KBM.Language.Version.AlphaInfo[KBM.Lang], l_Alpha, Alpha))
 							Checked = true
 							PI.History.Checked = true
 							PI.History.Time = Inspect.Time.Real()
@@ -67,14 +66,15 @@ function PI.VersionCheck(Data)
 					end
 				end
 			end
+			Checked = true
 		end
 	end
 	if not Checked then
-		if KBM.VersionToNumber(High, Mid, Low) > PI.History.nVersion or PI.History.Checked == false then
+		if KBM.VersionToNumber(High, Mid, Low) >= PI.History.nVersion or PI.History.Checked == false then
 			if Inspect.Time.Real() - PI.History.Time  > 900 or PI.History.Checked == false then
 				if not KBM.Version:Check(High, Mid, Low) then
-					print(PI.Lang.Version.Old[KBM.Lang])
-					print(PI.Lang.Version.OldInfo[KBM.Lang]..High.."."..Mid.."."..Low)
+					print(KBM.Language.Version.Old[KBM.Lang])
+					print(KBM.Language.Version.OldInfo[KBM.Lang]..High.."."..Mid.."."..Low)
 					PI.History.Checked = true
 					PI.History.Time = Inspect.Time.Real()
 					PI.History.High = High
@@ -82,6 +82,20 @@ function PI.VersionCheck(Data)
 					PI.History.Low = Low
 					PI.History.nVersion = KBM.VersionToNumber(High, Mid, Low)
 					PI.History.Alpha = 0
+				elseif KBM.Alpha then
+					if not Alpha then
+						if KBM.VersionToNumber(High, Mid, Low) >= KBM.VersionToNumber(KBM.Version.High, KBM.Version.Mid, KBM.Version.Low) then
+							print(KBM.Language.Version.Old[KBM.Lang])
+							print(KBM.Language.Version.OldInfo[KBM.Lang]..High.."."..Mid.."."..Low)
+							PI.History.Checked = true
+							PI.History.Time = Inspect.Time.Real()
+							PI.History.High = High
+							PI.History.Mid = Mid
+							PI.History.Low = Low
+							PI.History.nVersion = KBM.VersionToNumber(High, Mid, Low)
+							PI.History.Alpha = 0
+						end
+					end
 				end
 			end
 		end

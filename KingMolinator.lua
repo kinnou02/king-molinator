@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r420"
+KBM.Alpha = ".r421"
 KBM.Event = {
 	Mark = {},
 	System = {
@@ -5715,8 +5715,12 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 	CastBarObj.Filters = Boss.CastFilters
 	CastBarObj.HasFilters = Boss.HasCastFilters
 	CastBarObj.IsBoss = true
-	if Boss.Settings then
-		CastBarObj.Settings = Boss.Settings.CastBar
+	if Dynamic then
+		CastBarObj.Settings = KBM.Defaults.CastBar()
+	else
+		if Boss.Settings then
+			CastBarObj.Settings = Boss.Settings.CastBar
+		end
 	end
 	
 	if not CastBarObj.Settings then
@@ -5752,18 +5756,20 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 	
 	function CastBarObj:ManageSettings()
 		if not self.Anchor then
-			if self.Boss.Settings then
-				if self.Boss.Settings.CastBar then
-					if self.Boss.Settings.CastBar.Override then
-						self.Settings = self.Boss.Settings.CastBar
+			if not self.Dynamic then
+				if self.Boss.Settings then
+					if self.Boss.Settings.CastBar then
+						if self.Boss.Settings.CastBar.Override then
+							self.Settings = self.Boss.Settings.CastBar
+						else
+							self.Settings = KBM.Options.CastBar
+						end
 					else
 						self.Settings = KBM.Options.CastBar
 					end
 				else
 					self.Settings = KBM.Options.CastBar
 				end
-			else
-				self.Settings = KBM.Options.CastBar
 			end
 		else
 			self.Settings = KBM.Options.CastBar
@@ -6157,9 +6163,13 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 		end
 		self.UnitID = nil
 		self.Active = false
-		if not self.Settings.Visible or not KBM.MainWin:GetVisible() then
-			if self.GUI then
-				self.GUI = KBM.CastBar:Push(self.GUI)
+		if self.Dynamic then
+			self.GUI = KBM.CastBar:Push(self.GUI)
+		else
+			if not self.Settings.Visible or not KBM.MainWin:GetVisible() then
+				if self.GUI then
+					self.GUI = KBM.CastBar:Push(self.GUI)
+				end
 			end
 		end
 	end
@@ -7443,6 +7453,24 @@ function KBM.LocationChange(LocationList)
 	end
 end
 
+function KBM.ZoneChange(ZoneList)
+	if ZoneList then
+		for UnitID, ZoneID in pairs(ZoneList) do
+			if UnitID == KBM.Player.UnitID then
+				if not ZoneID then
+					if KBM.Debug then
+						print("Zone unavailable")
+					end
+				else
+					if KBM.Debug then
+						dump(Inspect.Zone.Detail(ZoneID))
+					end
+				end
+			end
+		end
+	end
+end
+
 function KBM.PlayerJoin()
 	KBM.Player.Grouped = true
 	KBM.Unit:Available(Inspect.Unit.Detail(KBM.Player.UnitID), KBM.Player.UnitID)
@@ -7657,6 +7685,7 @@ local function KBM_Start()
 	table.insert(Event.Unit.Unavailable, {KBM_UnitRemoved, "KingMolinator", "Unit Unavailable"})
 	table.insert(Event.Unit.Available, {KBM_UnitAvailable, "KingMolinator", "Unit Available"})
 	table.insert(Event.Unit.Detail.LocationName, {KBM.LocationChange, "KingMolinator", "Location Change"})
+	table.insert(Event.Unit.Detail.Zone, {KBM.ZoneChange, "KingMolinator", "Zone Change"})
 	table.insert(Event.Unit.Detail.Health, {KBM.HealthChange, "KingMolinator", "Health Update"})
 	table.insert(Event.Unit.Detail.Name, {KBM.NameChange, "KingMolinator", "Name Update"})
 	table.insert(Event.Unit.Detail.HealthMax, {KBM.HealthMaxChange, "KingMolinator", "Health Max Update"})

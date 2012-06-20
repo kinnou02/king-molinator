@@ -1,5 +1,9 @@
 ﻿v1.0.9
 
+System
+* Change: You will now receive version notifications for Release candidates over Alpha versions.
+* Fixed: Notification messages were not triggering again after the timeout elapsed.
+
 Castbars
 * New: There is now a new Castbar Option for Rift/KBM style switching.
 * New: Boss Castbars now default to a new Rift style. These bars show interruptible skills as cyan, otherwise they are gold.
@@ -16,7 +20,7 @@ Hammerknell Fortress
 * Rune King Molinar
 ** Change: The compact mode percentage monitor finally has the intended smaller font castbar text.
 
-Rise of the Pheonix
+Rise of the Phoenix
 * General Silgen
 ** Change: Anchored in Flames is now marked as important.
 

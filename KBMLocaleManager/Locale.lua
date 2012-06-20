@@ -771,6 +771,7 @@ function KBMLM.Start(KBM)
 	KBM.Language = KBMLM.Language
 	KBMLM.KBMAddonData = Inspect.Addon.Detail("KingMolinator")
 	KBMLM.SetMain_Lang()
+	KBM.LocaleManager = KBMLM
 	print("Locale Manager Sync")
 end
 
