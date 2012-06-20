@@ -351,7 +351,9 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.CastBar.Interrupt:SetRussian("Прерван")
 	KBM.Language.CastBar.Interrupt:SetKorean("방해받음")
 	KBM.Language.CastBar.Player = KBM.Language:Add("Enable player Castbar")
+	KBM.Language.CastBar.Player:SetFrench("Activer Barre-cast Joueur")
 	KBM.Language.CastBar.Mimic = KBM.Language:Add("Mimic Rift's player castbar position")
+	KBM.Language.CastBar.Mimic:SetFrench("Imiter la position Barre-cast Joueur")
 
 	-- Cast-bar related options
 	KBM.Language.Options = {}
@@ -381,6 +383,7 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Options.CastbarEnabled:SetRussian("Включить кастбары")
 	KBM.Language.Options.CastbarEnabled:SetKorean("캐스터-바 적용")
 	KBM.Language.Options.CastbarStyle = KBM.Language:Add("Use Rift style cast-bars")
+	KBM.Language.Options.CastbarStyle:SetFrench("Utiliser style Barres-casts de Rift")
 
 	-- MechSpy Options
 	KBM.Language.MechSpy = {}

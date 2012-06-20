@@ -14,7 +14,7 @@ Infernal Dawn
 * Laethys
 ** New: Added Unit tracking for Wizened Stoneseer.
 ** New: Added Timer and Alert for Stoneseer's Wizened Restoration. (Personal - Target/Focus required)
-** Change: Molten Gold is now a 30s looping timer. (Feedback on accuracy and usefulness required)
+** Change: Molten Gold is now a 30s damage based timer. (Feedback on accuracy and usefulness required)
 
 Hammerknell Fortress
 * Rune King Molinar
