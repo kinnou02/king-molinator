@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r426"
+KBM.Alpha = ".r427"
 KBM.Event = {
 	Mark = {},
 	System = {
@@ -6623,7 +6623,15 @@ function KBM:Timer()
 end
 
 local function KBM_CastBar(units)
-	
+	for UnitID, Status in pairs(units) do
+		if KBM.CastBar.ActiveCastBars[UnitID] then
+			local Trigger = true
+			for ID, CastBarObj in pairs(KBM.CastBar.ActiveCastBars[UnitID].List) do
+				CastBarObj:Update(Trigger)
+				Trigger = false
+			end
+		end
+	end
 end
 
 local function KM_ToggleEnabled(result)
