@@ -9,6 +9,7 @@ Castbars
 * New: Boss Castbars now default to a new Rift style. These bars show interruptible skills as cyan, otherwise they are gold.
 * New: You may now choose to let KBM handle the player castbar.
 * New: Player castbars handled by KBM can mimic the position of the Rift castbar. (You'll need to manually disable the Rift one for now)
+* Change: The castbar rendering engine has be improved slightly to provide even greater performance!
 
 Infernal Dawn
 * Laethys
