@@ -30,6 +30,9 @@ Korean Translations
 Russian Translations
 * Updated
 
+German Translations
+* Updates and Fixes
+
 ----
 v1.0.8
 

@@ -83,12 +83,14 @@ IZ.Lang.Buff.Brimstone:SetRussian("Серный камень")
 -- Mechanic Dictionary
 IZ.Lang.Mechanic = {}
 IZ.Lang.Mechanic.Wave = KBM.Language:Add("Flame Waves")
+IZ.Lang.Mechanic.Wave:SetFrench("Vagues de flammes")
 IZ.Lang.Mechanic.Wave:SetRussian("Огненная волна")
 IZ.Lang.Mechanic.Wave:SetGerman("Flammenwelle")
 
 -- Menu Dictionary
 IZ.Lang.Menu = {}
 IZ.Lang.Menu.Wave = KBM.Language:Add("First Flame Wave")
+IZ.Lang.Menu.Wave:SetFrench("Première Vague de flammes")
 IZ.Lang.Menu.Wave:SetRussian("Первая Огненная волна")
 IZ.Lang.Menu.Wave:SetGerman("Erste Flammenwelle")
 

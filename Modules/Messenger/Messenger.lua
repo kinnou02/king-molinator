@@ -28,9 +28,13 @@ PI.History = {
 -- Version related Dictionary
 KBMLM.SetGroupObject(KBM.Language.Version, "GroupObject", "Update Messages")
 KBM.Language.Version.Old = KBM.Language:Add("There is a newer version of KBM available, please update!")
+KBM.Language.Version.Old:SetGerman("Es ist eine neuere King Boss Mods Version verfügbar, bitte updaten!")
 KBM.Language.Version.OldInfo = KBM.Language:Add("The most recent version seen is v")
+KBM.Language.Version.OldInfo:SetGerman("Die neueste Version ist v")
 KBM.Language.Version.Alpha = KBM.Language:Add("There is a newer Alpha build of KBM available, please update!")
+KBM.Language.Version.Alpha:SetGerman("Es ist eine neuere Alpha Version verfügbar, bitte updaten!")
 KBM.Language.Version.AlphaInfo = KBM.Language:Add("You are running r%d, there is at least build r%d in circulation.")
+KBM.Language.Version.AlphaInfo:SetGerman("Du benutzt r%d, es gibt bereits eine neue Version r%d.")
 
 function PI.VersionAlert(failed, message)
 end

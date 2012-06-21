@@ -352,8 +352,10 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.CastBar.Interrupt:SetKorean("방해받음")
 	KBM.Language.CastBar.Player = KBM.Language:Add("Enable player Castbar")
 	KBM.Language.CastBar.Player:SetFrench("Activer Barre-cast Joueur")
+	KBM.Language.CastBar.Player:SetGerman("Aktiviere Spieler Zauberbalken")
 	KBM.Language.CastBar.Mimic = KBM.Language:Add("Mimic Rift's player castbar position")
 	KBM.Language.CastBar.Mimic:SetFrench("Imiter la position Barre-cast Joueur")
+	KBM.Language.CastBar.Mimic:SetGerman("Benutze Rift's Spieler Zauberbalken Position")
 
 	-- Cast-bar related options
 	KBM.Language.Options = {}
@@ -384,6 +386,7 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Options.CastbarEnabled:SetKorean("캐스터-바 적용")
 	KBM.Language.Options.CastbarStyle = KBM.Language:Add("Use Rift style cast-bars")
 	KBM.Language.Options.CastbarStyle:SetFrench("Utiliser style Barres-casts de Rift")
+	KBM.Language.Options.CastbarStyle:SetGerman("Benutze Rift-Style Zauberbalken")
 
 	-- MechSpy Options
 	KBM.Language.MechSpy = {}
@@ -705,7 +708,7 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Filters.EnableBoss = KBM.Language:Add("Enable %s's filters")
 	KBM.Language.Filters.EnableBoss:SetFrench("Filtres sur %s Activé")
 	KBM.Language.Filters.EnableBoss:SetGerman("Aktiviere %s's Filter")
-	KBM.Language.Filters.EnableBoss:SetGerman("%s: включить фильтры")
+	KBM.Language.Filters.EnableBoss:SetRussian("%s: включить фильтры")
 	
 	-- Misc.
 	KBM.Language.Options.Title = KBM.Language:Add("King Boss Mods: Options")
