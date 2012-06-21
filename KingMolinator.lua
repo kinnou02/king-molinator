@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r425"
+KBM.Alpha = ".r426"
 KBM.Event = {
 	Mark = {},
 	System = {
@@ -5547,7 +5547,7 @@ function KBM.CastBar:Init()
 		GUI.Mask = UI.CreateFrame("Mask", "CastBar_Mask", GUI.Frame)
 		if Style == "rift" then
 			GUI.Mask:SetPoint("TOPLEFT", GUI.Frame, 0.03, 0.2)
-			GUI.Mask:SetPoint("BOTTOM", GUI.Frame, nil, 0.8)			
+			GUI.Mask:SetPoint("BOTTOM", GUI.Frame, nil, 0.8)
 		else
 			GUI.Mask:SetPoint("TOPLEFT", GUI.Frame, "TOPLEFT")
 			GUI.Mask:SetPoint("BOTTOM", GUI.Frame, "BOTTOM")
@@ -5555,10 +5555,10 @@ function KBM.CastBar:Init()
 		
 		-- Handle Style types to account for API Texture issues	for the Progress Texture/Frame	
 		if Style == "rift" then
-			GUI.Progress = UI.CreateFrame("Texture", "CastBar_Progress_Texture", GUI.Mask)			
+			GUI.Progress = UI.CreateFrame("Texture", "CastBar_Progress_Texture", GUI.Mask)
 			GUI.Progress:SetTexture("KingMolinator", "Media/Castbar_Cyan.png")
 			GUI.Progress:SetPoint("TOPLEFT", GUI.Frame, 0.03, 0.2)
-			GUI.Progress:SetPoint("BOTTOMRIGHT", GUI.Frame, 0.97, 0.8)			
+			GUI.Progress:SetPoint("BOTTOMRIGHT", GUI.Frame, 0.97, 0.8)
 		else
 			GUI.Progress = UI.CreateFrame("Frame", "Castbar_Progress_Frame", GUI.Mask)
 			GUI.Progress:SetPoint("TOPLEFT", GUI.Frame, "TOPLEFT")
@@ -5593,6 +5593,11 @@ function KBM.CastBar:Init()
 				GUI.Texture:SetPoint("TOPLEFT", GUI.Frame, "TOPLEFT")
 				GUI.Texture:SetPoint("BOTTOMRIGHT", GUI.Frame, "BOTTOMRIGHT")
 			end
+			GUI.Highlight = UI.CreateFrame("Texture", "Completion_Highlight", GUI.Texture)
+			GUI.Highlight:SetTexture("KingMolinator", "Media/Castbar_Complete.png")
+			GUI.Highlight:SetPoint("TOPLEFT", GUI.Frame, "TOPLEFT")
+			GUI.Highlight:SetPoint("BOTTOMRIGHT", GUI.Frame, "BOTTOMRIGHT")
+			GUI.Highlight:SetAlpha(0)
 		else
 			GUI.Texture:SetTexture("KingMolinator", "Media/BarSkin.png")
 			GUI.Texture:SetPoint("TOPLEFT", GUI.Frame, "TOPLEFT")
@@ -5838,6 +5843,9 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 				self.GUI.Shadow:SetAlpha(1)
 				self.GUI.Text:SetAlpha(1)
 				self.GUI.Texture:SetAlpha(1)
+				if self.Settings.Style == "rift" then
+					self.GUI.Highlight:SetAlpha(0)
+				end
 			end
 		end
 	end
@@ -5866,12 +5874,14 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 		self.Active = true		
 	end
 	
-	function CastBarObj:Start()	
+	function CastBarObj:Start()
 		self.Casting = true
 		self.CastMod = 1
 		self.Interrupted = false
 		self.InterruptEnd = nil
-		KBM.Event.Unit.Cast.Start(self.UnitID)
+		self.Complete = false
+		self.CompleteEnd = nil
+		self.CompleteFade = false
 		if self.Enabled then
 			if self.Settings.Style == "rift" then
 				if self.Uninterruptible then
@@ -5880,6 +5890,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 					self.GUI.Progress:SetTexture("KingMolinator", "Media/Castbar_Cyan.png")
 				end
 				self.GUI.Progress:SetAlpha(0.75)
+				self.GUI.Highlight:SetAlpha(0)
 			else
 				self.GUI.Progress:SetAlpha(1)
 			end
@@ -5889,6 +5900,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 			self.GUI.Frame:SetVisible(true)
 			self.GUI.Progress:SetVisible(true)
 		end
+		KBM.Event.Unit.Cast.Start(self.UnitID)
 	end
 	
 	function CastBarObj:Update(Trigger)	
@@ -5897,6 +5909,49 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 			if bDetails then
 				if bDetails.abilityName then
 					if self.Settings.Enabled then
+						if self.LastStart ~= bDetails.begin then
+							self.LastStart = bDetails.begin
+							if not bDetails.channeled then	
+								if KBM.Trigger.Cast[bDetails.abilityName] then
+									if KBM.Trigger.Cast[bDetails.abilityName][self.Boss.Name] then
+										local TriggerObj = KBM.Trigger.Cast[bDetails.abilityName][self.Boss.Name]
+										local TargetID = ""
+										if self.Boss.UnitID then
+											TargetID = Inspect.Unit.Lookup(self.Boss.UnitID..".target")
+										end
+										KBM.Trigger.Queue:Add(TriggerObj, TargetID, TargetID, bDetails.remaining)
+									end
+								elseif KBM.Trigger.PersonalCast[bDetails.abilityName] then
+									if KBM.Trigger.PersonalCast[bDetails.abilityName][self.Boss.Name] then
+										local TriggerObj = KBM.Trigger.PersonalCast[bDetails.abilityName][self.Boss.Name]
+										if self.UnitID then
+											local playerTarget = Inspect.Unit.Lookup("player.target")
+											local playerFocus = Inspect.Unit.Lookup("focus")
+											if self.UnitID == playerTarget or self.UnitID == playerFocus then
+												KBM.Trigger.Queue:Add(TriggerObj, self.UnitID, self.UnitID, bDetails.remaining)
+											end
+										end
+									end
+								end
+							else
+								if not self.Channeled then
+									self.Channeled = true
+									if KBM.Trigger.Channel[bDetails.abilityName] then
+										if KBM.Trigger.Channel[bDetails.abilityName][self.Boss.Name] then
+											local TriggerObj = KBM.Trigger.Channel[bDetails.abilityName][self.Boss.Name]
+											local TargetID = ""
+											if self.Boss.UnitID then
+												TargetID = Inspect.Unit.Lookup(self.Boss.UnitID..".target")
+											end
+											KBM.Trigger.Queue:Add(TriggerObj, TargetID, TargetID, bDetails.remaining)
+										end
+									end
+								end
+							end
+							if self.Casting then
+								self:Stop()
+							end
+						end
 						if self.HasFilters then
 							if self.Filters[bDetails.abilityName] then
 								FilterObj = self.Filters[bDetails.abilityName]
@@ -5929,6 +5984,12 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 										end
 										self.CastTime = bDetails.duration
 										self.Progress = bDetails.remaining
+										if self.Settings.Style == "rift" then
+											if bDetails.remaining <= 0.5 then
+												self.CompleteAlpha = 0.5 - bDetails.remaining
+												self.GUI.Highlight:SetAlpha(self.CompleteAlpha)
+											end
+										end
 										if bDetails.channeled then
 											local newWidth = math.ceil(self.GUI.Progress:GetWidth() * (self.Progress/self.CastTime))
 											if newWidth ~= self.GUI.Mask:GetWidth() then
@@ -5944,8 +6005,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 									else
 										self.CastTime = bDetails.duration
 										self.Progress = bDetails.remaining
-										if bDetails.channeled then
-											
+										if bDetails.channeled then										
 											self.GUI.Mask:SetWidth(math.ceil(self.GUI.Progress:GetWidth() * (self.Progress/self.CastTime)))
 										else
 											self.GUI.Mask:SetWidth(math.floor(self.GUI.Progress:GetWidth() * (1-(self.Progress/self.CastTime))))
@@ -5953,7 +6013,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 										self.GUI:SetText(string.format("%0.01f", self.Progress).." - "..FilterObj.Prefix..bDetails.abilityName)	
 									end
 								elseif self.Casting then
-									if not self.Interrupted then
+									if not self.Interrupted and not self.Complete then
 										self:Stop()
 									end
 								end
@@ -5971,6 +6031,12 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 								end
 								self.CastTime = bDetails.duration
 								self.Progress = bDetails.remaining
+								if self.Settings.Style == "rift" then
+									if bDetails.remaining <= 0.5 then
+										self.CompleteAlpha = 0.5 - bDetails.remaining
+										self.GUI.Highlight:SetAlpha(self.CompleteAlpha)
+									end
+								end
 								if bDetails.channeled then
 									local newWidth = math.ceil(self.GUI.Progress:GetWidth() * (self.Progress/self.CastTime))
 									if newWidth ~= self.GUI.Mask:GetWidth() then
@@ -5998,6 +6064,12 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 							end
 							self.CastTime = bDetails.duration
 							self.Progress = bDetails.remaining
+							if self.Settings.Style == "rift" then
+								if bDetails.remaining <= 0.5 then
+									self.CompleteAlpha = 0.5 - bDetails.remaining
+									self.GUI.Highlight:SetAlpha(self.CompleteAlpha)
+								end
+							end
 							if bDetails.channeled then
 								local newWidth = math.ceil(self.GUI.Progress:GetWidth() * (self.Progress/self.CastTime))
 								if newWidth ~= self.GUI.Mask:GetWidth() then
@@ -6065,7 +6137,11 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 				if self.LastStart then
 					if Inspect.Unit.Lookup(self.UnitID) then
 						if self.CastObject then
-							if self.CastObject.remaining > 0.06 and not self.CastObject.uninterruptible then
+							local Scope = 0.03
+							if self.Channeled then
+								Scope = 0.1
+							end
+							if self.CastObject.remaining > Scope and not self.CastObject.uninterruptible then
 								--- Do Cast Interrupt Triggers (if any)
 								if KBM.Trigger.Interrupt[self.CastObject.abilityName] then
 									if KBM.Trigger.Interrupt[self.CastObject.abilityName][self.Boss.Name] then
@@ -6087,6 +6163,10 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 								self.Interrupted = true
 							else
 								--- Do Cast End Triggers (if any)
+								if self.Settings.Style == "rift" then
+									self.Complete = true
+									self.GUI:SetText(self.CastObject.abilityName)
+								end
 							end
 							self.CastObject = nil
 						end
@@ -6110,6 +6190,9 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 				self.GUI.Text:SetAlpha(1)
 				self.GUI.Texture:SetAlpha(1)
 				self.GUI.Mask:SetWidth(0)
+				if self.Settings.Style == "rift" then
+					self.GUI.Highlight:SetAlpha(0)
+				end
 				KBM.Event.Unit.Cast.End(self.UnitID)
 			else
 				local AlphaVal = self.InterruptEnd - Inspect.Time.Real()
@@ -6120,13 +6203,49 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 					self.GUI.Texture:SetAlpha(AlphaVal * 4)
 				end
 			end
+		elseif self.Complete then
+			if self.CompleteEnd < Inspect.Time.Real() and self.CompleteFade == true then
+				self.Complete = false
+				self.CompleteEnd = nil
+				self.CompleteFade = false
+				if KBM.MainWin:GetVisible() then
+					self.GUI.Frame:SetVisible(self.Settings.Visible)
+				else
+					self.GUI.Frame:SetVisible(false)
+				end
+				self.GUI:SetText(self.Boss.Name)
+				self.GUI.Shadow:SetAlpha(1)
+				self.GUI.Text:SetAlpha(1)
+				self.GUI.Texture:SetAlpha(1)
+				self.GUI.Mask:SetWidth(0)
+				if self.Settings.Style == "rift" then
+					self.GUI.Highlight:SetAlpha(0)
+				end
+				KBM.Event.Unit.Cast.End(self.UnitID)
+			else
+				if not self.CompleteFade then
+					self.CompleteAlpha = 1 - (self.CompleteEnd - Inspect.Time.Real())
+					if self.CompleteAlpha < 1 then
+						self.GUI.Highlight:SetAlpha(self.CompleteAlpha * 4)
+					else
+						self.CompleteFade = true
+						self.CompleteEnd = Inspect.Time.Real() + 0.5
+					end
+				else
+					self.CompleteAlpha = (self.CompleteEnd - Inspect.Time.Real()) * 2
+					self.GUI.Texture:SetAlpha(self.CompleteAlpha)
+					self.GUI.Progress:SetAlpha(self.CompleteAlpha)
+					self.GUI.Shadow:SetAlpha(self.CompleteAlpha)
+					self.GUI.Text:SetAlpha(self.CompleteAlpha)
+				end
+			end
 		end			
 	end
 	
-	function CastBarObj:Stop()	
+	function CastBarObj:Stop()
 		self.Casting = false
 		self.LastCast = ""
-		if not self.Interrupted then
+		if not self.Interrupted and not self.Complete then
 			if self.GUI then
 				if KBM.MainWin:GetVisible() then
 					self.GUI.Frame:SetVisible(self.Settings.Visible)
@@ -6138,10 +6257,13 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 				self.GUI.Text:SetAlpha(1)
 				self.GUI.Texture:SetAlpha(1)
 				self.GUI.Mask:SetWidth(0)
+				if self.Settings.Style == "rift" then
+					self.GUI.Highlight:SetAlpha(0)
+				end
 			end
 			KBM.Event.Unit.Cast.End(self.UnitID)
 		else
-			if not self.InterruptEnd then
+			if not self.InterruptEnd and self.Interrupted then
 				if self.GUI then
 					self.GUI:SetText(KBM.Language.CastBar.Interrupt[KBM.Lang])
 					self.InterruptEnd = Inspect.Time.Real() + 1
@@ -6152,6 +6274,9 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 					end
 					self.GUI.Mask:SetWidth(self.GUI.Progress:GetWidth())
 				end
+			elseif not self.CompleteEnd and self.Complete then
+				self.CompleteEnd = Inspect.Time.Real() + 0.5
+				self.CompleteFade = false
 			end
 		end
 		self.Duration = 0
