@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r423"
+KBM.Alpha = ".r424"
 KBM.Event = {
 	Mark = {},
 	System = {
@@ -5930,18 +5930,25 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 										self.CastTime = bDetails.duration
 										self.Progress = bDetails.remaining
 										if bDetails.channeled then
-											self.GUI.Mask:SetWidth(self.GUI.Progress:GetWidth() * (self.Progress/self.CastTime))								
+											local newWidth = math.ceil(self.GUI.Progress:GetWidth() * (self.Progress/self.CastTime))
+											if newWidth ~= self.GUI.Mask:GetWidth() then
+												self.GUI.Mask:SetWidth(newWidth)
+											end
 										else
-											self.GUI.Mask:SetWidth(self.GUI.Progress:GetWidth() * (1-(self.Progress/self.CastTime)))
+											local newWidth = math.floor(self.GUI.Progress:GetWidth() * (1-(self.Progress/self.CastTime)))
+											if newWidth ~= self.GUI.Mask:GetWidth() then
+												self.GUI.Mask:SetWidth(newWidth)
+											end
 										end
 										self.GUI:SetText(string.format("%0.01f", self.Progress).." - "..FilterObj.Prefix..bDetails.abilityName)
 									else
 										self.CastTime = bDetails.duration
 										self.Progress = bDetails.remaining
 										if bDetails.channeled then
-											self.GUI.Mask:SetWidth(self.GUI.Progress:GetWidth() * (self.Progress/self.CastTime))								
+											
+											self.GUI.Mask:SetWidth(math.ceil(self.GUI.Progress:GetWidth() * (self.Progress/self.CastTime)))
 										else
-											self.GUI.Mask:SetWidth(self.GUI.Progress:GetWidth() * (1-(self.Progress/self.CastTime)))
+											self.GUI.Mask:SetWidth(math.floor(self.GUI.Progress:GetWidth() * (1-(self.Progress/self.CastTime))))
 										end
 										self.GUI:SetText(string.format("%0.01f", self.Progress).." - "..FilterObj.Prefix..bDetails.abilityName)	
 									end
@@ -5965,9 +5972,15 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 								self.CastTime = bDetails.duration
 								self.Progress = bDetails.remaining
 								if bDetails.channeled then
-									self.GUI.Mask:SetWidth(self.GUI.Progress:GetWidth() * (self.Progress/self.CastTime))								
+									local newWidth = math.ceil(self.GUI.Progress:GetWidth() * (self.Progress/self.CastTime))
+									if newWidth ~= self.GUI.Mask:GetWidth() then
+										self.GUI.Mask:SetWidth(newWidth)
+									end
 								else
-									self.GUI.Mask:SetWidth(self.GUI.Progress:GetWidth() * (1-(self.Progress/self.CastTime)))
+									local newWidth = math.floor(self.GUI.Progress:GetWidth() * (1-(self.Progress/self.CastTime)))
+									if newWidth ~= self.GUI.Mask:GetWidth() then
+										self.GUI.Mask:SetWidth(newWidth)
+									end
 								end
 								self.GUI:SetText(string.format("%0.01f", self.Progress).." - "..bDetails.abilityName)
 							end
@@ -5986,11 +5999,20 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 							self.CastTime = bDetails.duration
 							self.Progress = bDetails.remaining
 							if bDetails.channeled then
-								self.GUI.Mask:SetWidth(self.GUI.Progress:GetWidth() * (self.Progress/self.CastTime))								
+								local newWidth = math.ceil(self.GUI.Progress:GetWidth() * (self.Progress/self.CastTime))
+								if newWidth ~= self.GUI.Mask:GetWidth() then
+									self.GUI.Mask:SetWidth(newWidth)
+								end
 							else
-								self.GUI.Mask:SetWidth(self.GUI.Progress:GetWidth() * (1-(self.Progress/self.CastTime)))
+								local newWidth = math.floor(self.GUI.Progress:GetWidth() * (1-(self.Progress/self.CastTime)))
+								if newWidth ~= self.GUI.Mask:GetWidth() then
+									self.GUI.Mask:SetWidth(newWidth)
+								end
 							end
-							self.GUI:SetText(string.format("%0.01f", self.Progress).." - "..bDetails.abilityName)
+							local newText = string.format("%0.01f", self.Progress).." - "..bDetails.abilityName
+							if newText ~= self.GUI.Text:GetText() then
+								self.GUI:SetText(string.format("%0.01f", self.Progress).." - "..bDetails.abilityName)
+							end
 						end
 					end
 					self.CastObject = bDetails
@@ -6043,7 +6065,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 				if self.LastStart then
 					if Inspect.Unit.Lookup(self.UnitID) then
 						if self.CastObject then
-							if self.CastObject.remaining > 0.05 and not self.CastObject.uninterruptible then
+							if self.CastObject.remaining > 0.06 and not self.CastObject.uninterruptible then
 								--- Do Cast Interrupt Triggers (if any)
 								if KBM.Trigger.Interrupt[self.CastObject.abilityName] then
 									if KBM.Trigger.Interrupt[self.CastObject.abilityName][self.Boss.Name] then
@@ -6106,12 +6128,12 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 		self.LastCast = ""
 		if not self.Interrupted then
 			if self.GUI then
-				self.GUI:SetText(self.Boss.Name)
 				if KBM.MainWin:GetVisible() then
 					self.GUI.Frame:SetVisible(self.Settings.Visible)
 				else
 					self.GUI.Frame:SetVisible(false)
 				end
+				self.GUI:SetText(self.Boss.Name)
 				self.GUI.Shadow:SetAlpha(1)
 				self.GUI.Text:SetAlpha(1)
 				self.GUI.Texture:SetAlpha(1)
@@ -6452,7 +6474,8 @@ function KBM:Timer()
 				for UnitID, CastCheck in pairs(KBM.CastBar.ActiveCastBars) do
 					local Trigger = true
 					for ID, CastBarObj in pairs(CastCheck.List) do
-						CastBarObj:Update(true)
+						CastBarObj:Update(Trigger)
+						Trigger = false
 					end
 				end
 			end
@@ -7845,7 +7868,6 @@ local function KBM_WaitReady(unitID, uDetails)
 	end
 	KBM.Player.CastBar.Settings.CastBar.Override = true
 	KBM.Player.CastBar.Settings.CastBar.Multi = true
-	KBM.Player.CastBar.Settings.CastBar.Pinned = true
 	KBM.Player.CastBar.CastObj = KBM.CastBar:Add(KBM.Player, KBM.Player.CastBar)
 	KBM.Player.CastBar.CastObj:SetBoss(false)
 	KBM.Player.CastBar.Target.CastObj = KBM.CastBar:Add(KBM.Player.CastBar.Target, KBM.Player.CastBar.Target)
