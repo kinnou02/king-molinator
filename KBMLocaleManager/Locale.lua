@@ -104,6 +104,18 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Version.Title:SetFrench("Vous exécuter ceci:")
 	KBM.Language.Version.Title:SetGerman("Du benutzt:")
 	KBM.Language.Version.Title:SetKorean("현재 실행중입니다:")
+	KBM.Language.Version.Old = KBM.Language:Add("There is a newer version of KBM available, please update!")
+	KBM.Language.Version.Old:SetGerman("Es ist eine neuere King Boss Mods Version verfügbar, bitte updaten!")
+	KBM.Language.Version.Old:SetFrench("Il existe une version plus récente de KBM disponible, svp mettre-à-jour!")
+	KBM.Language.Version.OldInfo = KBM.Language:Add("The most recent version seen is v")
+	KBM.Language.Version.OldInfo:SetGerman("Die neueste Version ist v")
+	KBM.Language.Version.OldInfo:SetFrench("La version la plus récente vue est v")
+	KBM.Language.Version.Alpha = KBM.Language:Add("There is a newer Alpha build of KBM available, please update!")
+	KBM.Language.Version.Alpha:SetGerman("Es ist eine neuere Alpha Version verfügbar, bitte updaten!")
+	KBM.Language.Version.Alpha:SetFrench("Il y a un nouveau build Alpha de KBM disponible, svp mettre-à-jour!")
+	KBM.Language.Version.AlphaInfo = KBM.Language:Add("You are running r%d, there is at least build r%d in circulation.")
+	KBM.Language.Version.AlphaInfo:SetGerman("Du benutzt r%d, es gibt bereits eine neue Version r%d.")
+	KBM.Language.Version.AlphaInfo:SetFrench("Vous exécutez r%d, il y a le build r%d de KBM en circulation.")
 	
 	-- Rez Master Dictionary
 	KBM.Language.RezMaster = {}

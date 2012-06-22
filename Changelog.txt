@@ -1,5 +1,11 @@
 ﻿v1.0.9
 
+Version
+* New: Alpha versions will now be signed with KBM.Alpha = true as opposed to KBM.Alpha = "rXXX"
+* Change: KBM will now use a streamline version numbering system. All Release and Alpha candidates will include the following structure. High.Med.Low.Rev
+* Note: With this change Alpha versions will be signified by a A: before the version and Release version by a R:
+* Note: These changes will ensure that version update notifications in game will span over both release and alpha.
+
 System
 * Change: You will now receive version notifications for Release candidates over Alpha versions.
 * Fixed: Notification messages were not triggering again after the timeout elapsed.

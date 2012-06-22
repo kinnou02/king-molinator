@@ -12,7 +12,6 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r428"
 KBM.Event = {
 	Mark = {},
 	System = {
@@ -113,6 +112,7 @@ KBM.ID = "KingMolinator"
 KBM.ModList = {}
 KBM.Testing = false
 KBM.ValidTime = false
+KBM.IsAlpha = true
 KBM.Debug = false
 KBM.TestFilters = {}
 KBM.IgnoreList = {}
@@ -199,7 +199,7 @@ end
 
 KBM.Version = {}
 function KBM.Version:Load()
-	s, e, self.High, self.Mid, self.Low = string.find(AddonData.toc.Version, "(%d+).(%d+).(%d+)")
+	s, e, self.High, self.Mid, self.Low, self.Revision = string.find(AddonData.toc.Version, "(%d+).(%d+).(%d+).(%d+)")
 	if self.High then
 		self.High = tonumber(self.High)
 	else
@@ -215,35 +215,48 @@ function KBM.Version:Load()
 	else
 		self.Low = 0
 	end
+	if self.Revision then
+		self.Revision = tonumber(self.Revision)
+	else
+		self.Revision = 0
+	end
 end
 
 KBM.Version:Load()
 
-function KBM.VersionToNumber(High, Mid, Low)
-	return (High * 10000) + (Mid * 100) + Low
+function KBM.VersionToNumber(High, Mid, Low, Rev)
+	return Rev
 end
 
-function KBM.Version:Check(High, Mid, Low)
-	if High <= self.High then
-		if High < self.High then
-			return true
+function KBM.Version:Check(High, Mid, Low, Revision)
+	if Revision then
+		if Revision < self.Revision then
+			return false
 		else
-			if Mid <= self.Mid then
-				if Mid < self.Mid then
-					return true
-				else
-					if Low <= self.Low then
-						return true
-					else
-						return false
-					end
-				end
-			else
-				return
-			end
+			return true
 		end
 	else
-		return false
+		if High <= self.High then
+			if High < self.High then
+				return true
+			else
+				if Mid <= self.Mid then
+					if Mid < self.Mid then
+						return true
+					else
+						if Low <= self.Low then
+							return true
+						else
+							return false
+						end
+					end
+				else
+					return
+				end
+			end
+		else
+			return false
+		end
 	end
 end
 
@@ -7012,13 +7025,13 @@ local function KBM_Version(name)
 		end
 	end
 	if type(name) == "string" and name ~= "" then
-		Command.Message.Send(name, "KBMVerReq", "v", function (failed, message) KBM.VersionReqCheck(name, failed, message) end)
+		Command.Message.Send(name, "KBMVerReq", "V", function (failed, message) KBM.VersionReqCheck(name, failed, message) end)
 	else
 		print(KBM.Language.Version.Title[KBM.Lang])
-		if not KBM.Alpha then
-			print("King Boss Mods v"..AddonData.toc.Version)
+		if KBM.IsAlpha then
+			print("King Boss Mods v"..AddonData.toc.Version.." Alpha")
 		else
-			print("King Boss Mods v"..AddonData.toc.Version..KBM.Alpha)
+			print("King Boss Mods v"..AddonData.toc.Version)
 		end
 	end
 end
@@ -7518,8 +7531,12 @@ function KBM.MenuOptions.Main:Options()
 
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
-	local Character = Options:AddHeader(KBM.Language.Options.Character[KBM.Lang], self.Character, KBM.Options.Character)
-	local Enabled = Options:AddHeader(KBM.Language.Options.ModEnabled[KBM.Lang], self.Enabled, KBM.Options.Enabled)
+	Options:AddHeader(KBM.Language.Options.Character[KBM.Lang], self.Character, KBM.Options.Character)
+	if KBM.IsAlpha then
+		Options:AddHeader(KBM.Language.Options.ModEnabled[KBM.Lang].." Alpha", self.Enabled, KBM.Options.Enabled)
+	else
+		Options:AddHeader(KBM.Language.Options.ModEnabled[KBM.Lang], self.Enabled, KBM.Options.Enabled)
+	end
 	local Button = Options:AddHeader(KBM.Language.Options.Button[KBM.Lang], self.ButtonVisible, KBM.Options.Button.Visible)
 	Button:AddCheck(KBM.Language.Options.LockButton[KBM.Lang], self.LockButton, KBM.Options.Button.Unlocked)
 end
@@ -7936,8 +7953,8 @@ local function KBM_WaitReady(unitID, uDetails)
 		end
 	end
 
-	if KBM.Alpha then
-		print(KBM.Language.Welcome.Welcome[KBM.Lang]..AddonData.toc.Version..KBM.Alpha)	
+	if KBM.IsAlpha then
+		print(KBM.Language.Welcome.Welcome[KBM.Lang]..AddonData.toc.Version.." Alpha")
 	else
 		print(KBM.Language.Welcome.Welcome[KBM.Lang]..AddonData.toc.Version)
 	end
