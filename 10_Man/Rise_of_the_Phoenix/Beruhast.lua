@@ -62,6 +62,7 @@ BT.Lang.Unit.Beruhast = KBM.Language:Add(BT.Beruhast.Name)
 BT.Lang.Unit.Beruhast:SetGerman("Beruhast")
 BT.Lang.Unit.Beruhast:SetFrench("Beruhast")
 BT.Lang.Unit.Beruhast:SetRussian("Беругаст")
+BT.Lang.Unit.Beruhast:SetKorean("베루하스트")
 BT.Beruhast.Name = BT.Lang.Unit.Beruhast[KBM.Lang]
 BT.Descript = BT.Beruhast.Name
 -- Additional Unit Dictionary
@@ -69,13 +70,14 @@ BT.Lang.Unit.Summon = KBM.Language:Add("Summoned Flame")
 BT.Lang.Unit.Summon:SetGerman("Beschworene Flamme")
 BT.Lang.Unit.Summon:SetRussian("Призванный огонь")
 BT.Lang.Unit.Summon:SetFrench("Flamme invoquée")
-
+BT.Lang.Unit.Summon:SetKorean("소환된 불꽃")
 -- Ability Dictionary
 BT.Lang.Ability = {}
 BT.Lang.Ability.Inferno = KBM.Language:Add("Inferno Lash")
 BT.Lang.Ability.Inferno:SetFrench("Fouet des limbes")
 BT.Lang.Ability.Inferno:SetGerman("Infernopeitsche")
 BT.Lang.Ability.Inferno:SetRussian("Адская плеть")
+BT.Lang.Ability.Inferno:SetKorean("화염지옥 후려치기")
 BT.Lang.Ability.Flame = KBM.Language:Add("Leaping Flame")
 BT.Lang.Ability.Flame:SetFrench("Flamme bondissante")
 BT.Lang.Ability.Flame:SetGerman("Springende Flamme")
@@ -84,7 +86,7 @@ BT.Lang.Ability.Vortex = KBM.Language:Add("Flaming Vortex")
 BT.Lang.Ability.Vortex:SetFrench("Embrasement")
 BT.Lang.Ability.Vortex:SetGerman("Flammenwirbel")
 BT.Lang.Ability.Vortex:SetRussian("Огненный вихрь")
-
+BT.Lang.Ability.Vortex:SetKorean("불꽃 소용돌이")
 -- Notify Dictionary
 BT.Lang.Notify = {}
 BT.Lang.Notify.Summon = KBM.Language:Add('Beruhast says, "A pet from Maelforge should keep you warm."')
@@ -98,14 +100,14 @@ BT.Lang.Menu.Flame = KBM.Language:Add("First "..BT.Lang.Ability.Flame[KBM.Lang])
 BT.Lang.Menu.Flame:SetGerman("Erste "..BT.Lang.Ability.Flame[KBM.Lang])
 BT.Lang.Menu.Flame:SetRussian("Первый "..BT.Lang.Ability.Flame[KBM.Lang])
 BT.Lang.Menu.Flame:SetFrench("Première "..BT.Lang.Ability.Flame[KBM.Lang])
-
+BT.Lang.Menu.Flame:SetKorean("첫번째 불길 전이")
 -- Verbose Dictionary
 BT.Lang.Verbose = {}
 BT.Lang.Verbose.Until = KBM.Language:Add(" (Until first)")
 BT.Lang.Verbose.Until:SetRussian(" (первое)")
 BT.Lang.Verbose.Until:SetFrench(" (jusqu'à la première)")
 BT.Lang.Verbose.Until:SetGerman(" (bis zum ersten)")
-
+BT.Lang.Verbose.Until:SetKorean(" (첫번째 까지)")
 function BT:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {

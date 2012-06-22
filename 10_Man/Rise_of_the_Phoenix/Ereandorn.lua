@@ -61,6 +61,7 @@ EN.Lang.Unit.Ereandorn = KBM.Language:Add(EN.Ereandorn.Name)
 EN.Lang.Unit.Ereandorn:SetGerman()
 EN.Lang.Unit.Ereandorn:SetFrench()
 EN.Lang.Unit.Ereandorn:SetRussian("Эреандорн")
+EN.Lang.Unit.Ereandorn:SetKorean("에레안도른")
 EN.Ereandorn.Name = EN.Lang.Unit.Ereandorn[KBM.Lang]
 EN.Descript = EN.Ereandorn.Name
 
@@ -70,30 +71,34 @@ EN.Lang.Notify.Combustion = KBM.Language:Add('Ereandorn says, "(%a*), how does i
 EN.Lang.Notify.Combustion:SetGerman('Ereandorn sagt: "(%a*), wie fühlt es sich an, zu verbrennen?"')
 EN.Lang.Notify.Combustion:SetFrench('Ereandorn dit : "Cà vous fait quel effet de brûler, (%a*) ?"')
 EN.Lang.Notify.Combustion:SetRussian('Эреандорн спрашивает: "Ну как, (%a*), нравится тебе гореть?"')
+EN.Lang.Notify.Combustion:SetKorean('에레안도른이 "(%a*), 타오르는 느낌이 어떠냐?"라고 말합니다.')
 EN.Lang.Notify.Growth = KBM.Language:Add("The corpse of (%a*) will fuel our conquest")
 EN.Lang.Notify.Growth:SetGerman("Der Leichnam von (%a*) wird unsere Eroberung vorantreiben")
 EN.Lang.Notify.Growth:SetFrench("Le cadavre de (%a*) alimentera notre conquête !")
 EN.Lang.Notify.Growth:SetRussian("(%a*) - вот чей труп поможет нам в нашем вторжении!")
+EN.Lang.Notify.Growth:SetKorean("(%a*)의 시체는 우리 승리의 토대가 될 것이다!")
 EN.Lang.Notify.Eruption = KBM.Language:Add("I will rebuild this world in flames!")
 EN.Lang.Notify.Eruption:SetGerman("Ich werde diese Welt in Flammen neu formen!")
 EN.Lang.Notify.Eruption:SetFrench("Je rebâtirai ce monde dans les flammes !")
 EN.Lang.Notify.Eruption:SetRussian("Я предам этот мир огню!")
-
+EN.Lang.Notify.Eruption:SetKorean("이 세계를 불꽃으로 재건할 것이다!")
 -- Ability Dictionary
 EN.Lang.Ability = {}
 EN.Lang.Ability.Combustion = KBM.Language:Add("Excitable Combustion")
 EN.Lang.Ability.Combustion:SetGerman("Anregbare Verbrennung")
 EN.Lang.Ability.Combustion:SetRussian("Опасное сгорание")
 EN.Lang.Ability.Combustion:SetFrench("Combustion tendue")
+EN.Lang.Ability.Combustion:SetKorean("촉발성 연소")
 EN.Lang.Ability.Growth = KBM.Language:Add("Molten Growth")
 EN.Lang.Ability.Growth:SetGerman("Geschmolzener Wuchs")
 EN.Lang.Ability.Growth:SetRussian("Извержение лавы")
 EN.Lang.Ability.Growth:SetFrench("Éruption liquide")
+EN.Lang.Ability.Growth:SetKorean("고온용암 성장")
 EN.Lang.Ability.Eruption = KBM.Language:Add("Volcanic Eruption")
 EN.Lang.Ability.Eruption:SetGerman("Vulkanausbruch")
 EN.Lang.Ability.Eruption:SetRussian("Извержение вулкана")
 EN.Lang.Ability.Eruption:SetFrench("Éruption volcanique")
-
+EN.Lang.Ability.Eruption:SetKorean("화산 폭발")
 function EN:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {

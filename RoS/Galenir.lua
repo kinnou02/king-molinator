@@ -58,18 +58,19 @@ WG.Lang.Unit.Galenir = KBM.Language:Add(WG.Galenir.Name)
 WG.Lang.Unit.Galenir:SetGerman("Kriegsmeister Galenir")
 WG.Lang.Unit.Galenir:SetFrench("Maître de guerre Galenir")
 WG.Lang.Unit.Galenir:SetRussian("Воевода Галенир")
-
+WG.Lang.Unit.Galenir:SetKorean("전투대가 갈레니르")
 -- Debuff Dictionary
 WG.Lang.Debuff = {}
 WG.Lang.Debuff.Festering = KBM.Language:Add("Festering Infection")
 WG.Lang.Debuff.Festering:SetGerman("Eitriger Infekt")
 WG.Lang.Debuff.Festering:SetFrench("Frappe infectieuse")
 WG.Lang.Debuff.Festering:SetRussian("Гнойное заражение")
+WG.Lang.Debuff.Festering:SetKorean("곪는 감염")
 WG.Lang.Debuff.Essence = KBM.Language:Add("Essence Transfer")
 WG.Lang.Debuff.Essence:SetGerman("Essenztransfer")
 WG.Lang.Debuff.Essence:SetFrench("Transfert d'essence")
 WG.Lang.Debuff.Essence:SetRussian("Передача сущности")
-
+WG.Lang.Debuff.Essence:SetKorean("정수 훔치기")
 WG.Galenir.Name = WG.Lang.Unit.Galenir[KBM.Lang]
 WG.Descript = WG.Galenir.Name
 

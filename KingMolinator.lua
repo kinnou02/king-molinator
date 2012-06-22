@@ -12,7 +12,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 KBMLM.Start(KBM)
 KBM.BossMod = {}
-KBM.Alpha = ".r427"
+KBM.Alpha = ".r428"
 KBM.Event = {
 	Mark = {},
 	System = {
@@ -6137,7 +6137,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 				if self.LastStart then
 					if Inspect.Unit.Lookup(self.UnitID) then
 						if self.CastObject then
-							local Scope = 0.03
+							local Scope = 0.05
 							if self.Channeled then
 								Scope = 0.1
 							end

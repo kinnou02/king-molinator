@@ -67,18 +67,20 @@ DF.Lang.Unit.Foci = KBM.Language:Add(DF.Foci.Name)
 DF.Lang.Unit.Foci:SetGerman("Finsterer Fokus")
 DF.Lang.Unit.Foci:SetFrench("Balise ténébreuse")
 DF.Lang.Unit.Foci:SetRussian("Темное средоточия")
+DF.Lang.Unit.Foci:SetKorean("암흑 집중")
 -- Additional Unit Dictionary
 DF.Lang.Unit.Force = KBM.Language:Add("Force of Corruption")
 DF.Lang.Unit.Force:SetGerman("Verderbende Kraft")
 DF.Lang.Unit.Force:SetFrench("Force de corruption")
 DF.Lang.Unit.Force:SetRussian("Сила искажения")
-
+DF.Lang.Unit.Force:SetKorean("타락의 힘")
 -- Ability Dictionary
 DF.Lang.Ability = {}
 DF.Lang.Ability.Ground = KBM.Language:Add("Unhallowed Ground")
 DF.Lang.Ability.Ground:SetGerman("Unheiliger Boden")
 DF.Lang.Ability.Ground:SetFrench("Sol non consacré")
 DF.Lang.Ability.Ground:SetRussian("Земля нечестивости")
+DF.Lang.Ability.Ground:SetKorean("더럽혀진 지면")
 DF.Lang.Ability.Call = KBM.Language:Add("Call Darkness")
 DF.Lang.Ability.Call:SetGerman("Finsternis rufen")
 DF.Lang.Ability.Call:SetFrench("Appel des ténèbres")
@@ -94,18 +96,19 @@ DF.Lang.Debuff.Soul = KBM.Language:Add("Destabilize Soul")
 DF.Lang.Debuff.Soul:SetGerman("Seele destabilisieren ")
 DF.Lang.Debuff.Soul:SetFrench("Âme déstabilisée")
 DF.Lang.Debuff.Soul:SetRussian("Раскачать душу")
-
+DF.Lang.Debuff.Soul:SetKorean("영혼 불안정화")
 -- Phase Monitor Dictionary
 DF.Lang.Phase = {}
 DF.Lang.Phase.Force = KBM.Language:Add("Force")
 DF.Lang.Phase.Force:SetGerman("Kraft")
 DF.Lang.Phase.Force:SetFrench()
 DF.Lang.Phase.Force:SetRussian("Адд")
+DF.Lang.Phase.Force:SetKorean("힘")
 DF.Lang.Phase.Foci = KBM.Language:Add("Foci")
 DF.Lang.Phase.Foci:SetGerman("Fokus")
 DF.Lang.Phase.Foci:SetFrench("Balise")
 DF.Lang.Phase.Foci:SetRussian("Босс")
-
+DF.Lang.Phase.Foci:SetKorean("집중이")
 DF.Foci.NameShort = DF.Lang.Phase.Foci[KBM.Lang]
 
 DF.Force = {

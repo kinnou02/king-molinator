@@ -68,14 +68,14 @@ PI.Lang.Unit.Plutonus = KBM.Language:Add(PI.Plutonus.Name)
 PI.Lang.Unit.Plutonus:SetGerman("Plutonus der Unsterbliche")
 PI.Lang.Unit.Plutonus:SetFrench("Plutonus l'Immortel")
 PI.Lang.Unit.Plutonus:SetRussian("Плутон Бессмертный")
-
+PI.Lang.Unit.Plutonus:SetKorean("불멸의 플루토누스")
 -- Ability Dictionary
 PI.Lang.Ability = {}
 PI.Lang.Ability.Sleep = KBM.Language:Add("Walking Sleep")
 PI.Lang.Ability.Sleep:SetGerman("Wandelnder Schlaf")
 PI.Lang.Ability.Sleep:SetFrench("Somnambulisme")
 PI.Lang.Ability.Sleep:SetRussian("Сон на ходу")
-
+PI.Lang.Ability.Sleep:SetKorean("몽유병")
 PI.Plutonus.Name = PI.Lang.Unit.Plutonus[KBM.Lang]
 PI.Descript = PI.Plutonus.Name
 
