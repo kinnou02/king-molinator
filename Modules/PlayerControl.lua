@@ -28,21 +28,23 @@ KBM.PlayerControl = PC
 function PC:GatherAbilities()
 	KBM.Player.AbilityTable = Inspect.Ability.List()
 	local Count = 0
-	if self.RezBank[KBM.Player.Calling] then
-		-- print("You are a calling with possible Combat Rezes... Checking.")
-		for crID, crTable in pairs (self.RezBank[KBM.Player.Calling]) do
-			if KBM.Player.AbilityTable[crID] then
-				Count = Count + 1
-				crTable = Inspect.Ability.Detail(crID)
-				self.RezBank[KBM.Player.Calling][crID] = crTable
-				KBM.Player.Rezes.List[crID] = self.RezBank[KBM.Player.Calling][crID]
-				KBM.RezMaster.Rezes:Add(KBM.Player.Name, crID, crTable.currentCooldownRemaining, crTable.cooldown)
-				-- print(Count..": "..self.RezBank[KBM.Player.Calling][crID].name)
+	if KBM.Player.AbilityTable then
+		if self.RezBank[KBM.Player.Calling] then
+			-- print("You are a calling with possible Combat Rezes... Checking.")
+			for crID, crTable in pairs (self.RezBank[KBM.Player.Calling]) do
+				if KBM.Player.AbilityTable[crID] then
+					Count = Count + 1
+					crTable = Inspect.Ability.Detail(crID)
+					self.RezBank[KBM.Player.Calling][crID] = crTable
+					KBM.Player.Rezes.List[crID] = self.RezBank[KBM.Player.Calling][crID]
+					KBM.RezMaster.Rezes:Add(KBM.Player.Name, crID, crTable.currentCooldownRemaining, crTable.cooldown)
+					-- print(Count..": "..self.RezBank[KBM.Player.Calling][crID].name)
+				end
 			end
+			KBM.Player.Rezes.Count = Count
+		else
+			-- print("Your calling is not able to Combat Rez, lucky you!")
 		end
-		KBM.Player.Rezes.Count = Count
-	else
-		-- print("Your calling is not able to Combat Rez, lucky you!")
 	end
 end
 

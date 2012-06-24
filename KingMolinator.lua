@@ -6193,27 +6193,31 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 			if self.InterruptEnd < Inspect.Time.Real() then
 				self.Interrupted = false
 				self.InterruptEnd = nil
-				self.GUI:SetText(self.Boss.Name)
-				if KBM.MainWin:GetVisible() then
-					self.GUI.Frame:SetVisible(self.Settings.Visible)
-				else
-					self.GUI.Frame:SetVisible(false)
-				end
-				self.GUI.Shadow:SetAlpha(1)
-				self.GUI.Text:SetAlpha(1)
-				self.GUI.Texture:SetAlpha(1)
-				self.GUI.Mask:SetWidth(0)
-				if self.Settings.Style == "rift" then
-					self.GUI.Highlight:SetAlpha(0)
-				end
+				if self.GUI then
+					self.GUI:SetText(self.Boss.Name)
+					if KBM.MainWin:GetVisible() then
+						self.GUI.Frame:SetVisible(self.Settings.Visible)
+					else
+						self.GUI.Frame:SetVisible(false)
+					end
+					self.GUI.Shadow:SetAlpha(1)
+					self.GUI.Text:SetAlpha(1)
+					self.GUI.Texture:SetAlpha(1)
+					self.GUI.Mask:SetWidth(0)
+					if self.Settings.Style == "rift" then
+						self.GUI.Highlight:SetAlpha(0)
+					end
 				KBM.Event.Unit.Cast.End(self.UnitID)
+				end
 			else
 				local AlphaVal = self.InterruptEnd - Inspect.Time.Real()
-				self.GUI.Progress:SetAlpha(AlphaVal)
-				self.GUI.Shadow:SetAlpha(AlphaVal)
-				self.GUI.Text:SetAlpha(AlphaVal)
-				if AlphaVal < 0.25 then
-					self.GUI.Texture:SetAlpha(AlphaVal * 4)
+				if self.GUI then
+					self.GUI.Progress:SetAlpha(AlphaVal)
+					self.GUI.Shadow:SetAlpha(AlphaVal)
+					self.GUI.Text:SetAlpha(AlphaVal)
+					if AlphaVal < 0.25 then
+						self.GUI.Texture:SetAlpha(AlphaVal * 4)
+					end
 				end
 			end
 		elseif self.Complete then
@@ -6221,35 +6225,41 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 				self.Complete = false
 				self.CompleteEnd = nil
 				self.CompleteFade = false
-				if KBM.MainWin:GetVisible() then
-					self.GUI.Frame:SetVisible(self.Settings.Visible)
-				else
-					self.GUI.Frame:SetVisible(false)
-				end
-				self.GUI:SetText(self.Boss.Name)
-				self.GUI.Shadow:SetAlpha(1)
-				self.GUI.Text:SetAlpha(1)
-				self.GUI.Texture:SetAlpha(1)
-				self.GUI.Mask:SetWidth(0)
-				if self.Settings.Style == "rift" then
-					self.GUI.Highlight:SetAlpha(0)
+				if self.GUI then
+					if KBM.MainWin:GetVisible() then
+						self.GUI.Frame:SetVisible(self.Settings.Visible)
+					else
+						self.GUI.Frame:SetVisible(false)
+					end
+					self.GUI:SetText(self.Boss.Name)
+					self.GUI.Shadow:SetAlpha(1)
+					self.GUI.Text:SetAlpha(1)
+					self.GUI.Texture:SetAlpha(1)
+					self.GUI.Mask:SetWidth(0)
+					if self.Settings.Style == "rift" then
+						self.GUI.Highlight:SetAlpha(0)
+					end
 				end
 				KBM.Event.Unit.Cast.End(self.UnitID)
 			else
 				if not self.CompleteFade then
 					self.CompleteAlpha = 1 - (self.CompleteEnd - Inspect.Time.Real())
 					if self.CompleteAlpha < 1 then
-						self.GUI.Highlight:SetAlpha(self.CompleteAlpha * 4)
+						if self.GUI then
+							self.GUI.Highlight:SetAlpha(self.CompleteAlpha * 4)
+						end
 					else
 						self.CompleteFade = true
 						self.CompleteEnd = Inspect.Time.Real() + 0.5
 					end
 				else
 					self.CompleteAlpha = (self.CompleteEnd - Inspect.Time.Real()) * 2
-					self.GUI.Texture:SetAlpha(self.CompleteAlpha)
-					self.GUI.Progress:SetAlpha(self.CompleteAlpha)
-					self.GUI.Shadow:SetAlpha(self.CompleteAlpha)
-					self.GUI.Text:SetAlpha(self.CompleteAlpha)
+					if self.GUI then
+						self.GUI.Texture:SetAlpha(self.CompleteAlpha)
+						self.GUI.Progress:SetAlpha(self.CompleteAlpha)
+						self.GUI.Shadow:SetAlpha(self.CompleteAlpha)
+						self.GUI.Text:SetAlpha(self.CompleteAlpha)
+					end
 				end
 			end
 		end			
@@ -6302,10 +6312,14 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 		if self.Visible then
 			self.Visible = false
 			if not self.Active or Force then
-				self.GUI = KBM.CastBar:Push(self.GUI)
+				if self.GUI then
+					self.GUI = KBM.CastBar:Push(self.GUI)
+				end
 			elseif not self.Casting then
-				self.GUI.Frame:SetVisible(false)
-				self.GUI.Drag:SetVisible(false)
+				if self.GUI then
+					self.GUI.Frame:SetVisible(false)
+					self.GUI.Drag:SetVisible(false)
+				end
 			end
 		end	
 	end
@@ -6324,7 +6338,9 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 		self.UnitID = nil
 		self.Active = false
 		if self.Dynamic then
-			self.GUI = KBM.CastBar:Push(self.GUI)
+			if self.GUI then
+				self.GUI = KBM.CastBar:Push(self.GUI)
+			end
 		else
 			if not self.Settings.Visible or not KBM.MainWin:GetVisible() then
 				if self.GUI then
