@@ -112,7 +112,7 @@ KBM.ID = "KingMolinator"
 KBM.ModList = {}
 KBM.Testing = false
 KBM.ValidTime = false
-KBM.IsAlpha = true
+KBM.IsAlpha = false
 KBM.Debug = false
 KBM.TestFilters = {}
 KBM.IgnoreList = {}
@@ -6652,15 +6652,15 @@ function KBM:Timer()
 end
 
 local function KBM_CastBar(units)
-	for UnitID, Status in pairs(units) do
-		if KBM.CastBar.ActiveCastBars[UnitID] then
-			local Trigger = true
-			for ID, CastBarObj in pairs(KBM.CastBar.ActiveCastBars[UnitID].List) do
-				CastBarObj:Update(Trigger)
-				Trigger = false
-			end
-		end
-	end
+	-- for UnitID, Status in pairs(units) do
+		-- if KBM.CastBar.ActiveCastBars[UnitID] then
+			-- local Trigger = true
+			-- for ID, CastBarObj in pairs(KBM.CastBar.ActiveCastBars[UnitID].List) do
+				-- CastBarObj:Update(Trigger)
+				-- Trigger = false
+			-- end
+		-- end
+	-- end
 end
 
 local function KM_ToggleEnabled(result)
