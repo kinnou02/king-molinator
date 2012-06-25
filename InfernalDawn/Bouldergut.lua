@@ -59,10 +59,12 @@ BG.Lang.Unit.Bouldergut = KBM.Language:Add("Bouldergut")
 BG.Lang.Unit.Bouldergut:SetFrench("Rochentraille")
 BG.Lang.Unit.Bouldergut:SetGerman("Felsbauch")
 BG.Lang.Unit.Bouldergut:SetRussian("Камнежор")
+BG.Lang.Unit.Bouldergut:SetKorean("보울더굿")
 BG.Lang.Unit.BouldergutShort = KBM.Language:Add("Bouldergut")
 BG.Lang.Unit.BouldergutShort:SetFrench("Rochentraille")
 BG.Lang.Unit.BouldergutShort:SetGerman("Felsbauch")
 BG.Lang.Unit.BouldergutShort:SetRussian("Камнежор")
+BG.Lang.Unit.BouldergutShort:SetKorean("보울더굿")
 
 -- Ability Dictionary
 BG.Lang.Ability = {}
@@ -73,6 +75,7 @@ BG.Lang.Main.Descript = KBM.Language:Add("Bouldergut")
 BG.Lang.Main.Descript:SetFrench("Rochentraille")
 BG.Lang.Main.Descript:SetGerman("Felsbauch")
 BG.Lang.Main.Descript:SetRussian("Камнежор")
+BG.Lang.Main.Descript:SetKorean("보울더굿")
 BG.Descript = BG.Lang.Main.Descript[KBM.Lang]
 
 -- Assign Boss to Language Specific Dictionary

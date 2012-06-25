@@ -59,6 +59,7 @@ MOD.Lang.Unit.Icetalon = KBM.Language:Add(MOD.Icetalon.Name)
 MOD.Lang.Unit.Icetalon:SetGerman("Eiskralle") 
 MOD.Lang.Unit.Icetalon:SetFrench("Serre de glace")
 MOD.Lang.Unit.Icetalon:SetRussian("Ледяной коготь")
+MOD.Lang.Unit.Icetalon:SetKorean("얼음갈고리발톱")
 MOD.Icetalon.Name = MOD.Lang.Unit.Icetalon[KBM.Lang]
 MOD.Descript = MOD.Icetalon.Name
 

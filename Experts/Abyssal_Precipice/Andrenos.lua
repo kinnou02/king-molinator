@@ -59,12 +59,14 @@ MOD.Lang.Unit.Andrenos = KBM.Language:Add(MOD.Andrenos.Name)
 MOD.Lang.Unit.Andrenos:SetGerman()
 MOD.Lang.Unit.Andrenos:SetFrench()
 MOD.Lang.Unit.Andrenos:SetRussian("Калер Андренос")
+MOD.Lang.Unit.Andrenos:SetKorean("케일러 안드레노스")
 MOD.Andrenos.Name = MOD.Lang.Unit.Andrenos[KBM.Lang]
 MOD.Descript = MOD.Andrenos.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Andrenos")
 MOD.Lang.Unit.AndShort:SetGerman()
 MOD.Lang.Unit.AndShort:SetFrench()
 MOD.Lang.Unit.AndShort:SetRussian("Андренос")
+MOD.Lang.Unit.AndShort:SetKorean("안드레노스")
 MOD.Andrenos.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary

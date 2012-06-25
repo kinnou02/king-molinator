@@ -98,10 +98,11 @@ AF.Lang.Debuff.Brittle = KBM.Language:Add("Brittle")
 AF.Lang.Debuff.Brittle:SetGerman("Brüchig")
 AF.Lang.Debuff.Brittle:SetFrench("Fragile")
 AF.Lang.Debuff.Brittle:SetRussian("Хрупкость")
+AF.Lang.Debuff.Brittle:SetKorean("깨지기 쉬움")
 AF.Lang.Debuff.Venom = KBM.Language:Add("Explosive Venom")
 AF.Lang.Debuff.Venom:SetGerman("Explosives Gift")
 AF.Lang.Debuff.Venom:SetFrench("Venin explosif")
-AF.Lang.Debuff.Venom:SetKorean("독화살")
+AF.Lang.Debuff.Venom:SetKorean("폭발성 맹독")
 
 -- Menu Dictionary
 AF.Lang.Menu = {}

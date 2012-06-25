@@ -59,12 +59,14 @@ MOD.Lang.Unit.Alraj = KBM.Language:Add(MOD.Alraj.Name)
 MOD.Lang.Unit.Alraj:SetGerman("Bruchwandler Alraj")
 MOD.Lang.Unit.Alraj:SetFrench("Alraj l'Éclopé")
 MOD.Lang.Unit.Alraj:SetRussian("Альрадж Хромой")
+MOD.Lang.Unit.Alraj:SetKorean("폴트워커 알라즈")
 MOD.Alraj.Name = MOD.Lang.Unit.Alraj[KBM.Lang]
 MOD.Descript = MOD.Alraj.Name
 MOD.Lang.Unit.AlShort = KBM.Language:Add("Alraj")
 MOD.Lang.Unit.AlShort:SetGerman()
 MOD.Lang.Unit.AlShort:SetFrench()
 MOD.Lang.Unit.AlShort:SetRussian("Альрадж")
+MOD.Lang.Unit.AlShort:SetKorean("알라즈")
 MOD.Alraj.NameShort = MOD.Lang.Unit.AlShort[KBM.Lang]
 
 -- Ability Dictionary

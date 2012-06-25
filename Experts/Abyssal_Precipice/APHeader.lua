@@ -30,6 +30,7 @@ MOD.Lang.Main.Name = KBM.Language:Add(MOD.Name)
 MOD.Lang.Main.Name:SetGerman("Abgründige Kluft") 
 MOD.Lang.Main.Name:SetFrench("Précipice abyssal")
 MOD.Lang.Main.Name:SetRussian("Обрыв Глубинных")
+MOD.Lang.Main.Name:SetKorean("심연의 벼랑")
 
 MOD.Name = MOD.Lang.Main.Name[KBM.Lang]
 MOD.Descript = MOD.Name

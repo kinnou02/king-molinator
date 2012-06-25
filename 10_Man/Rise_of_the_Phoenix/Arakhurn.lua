@@ -80,22 +80,26 @@ HA.Lang.Unit.Arakhurn = KBM.Language:Add(HA.Arakhurn.Name)
 HA.Lang.Unit.Arakhurn:SetGerman("Hohepriester Arakhurn")
 HA.Lang.Unit.Arakhurn:SetFrench("Grand-prêtre Arakhurn")
 HA.Lang.Unit.Arakhurn:SetRussian("Первосвященник Аракурн")
+HA.Lang.Unit.Arakhurn:SetKorean("상급 성직자 아라쿠른")
 HA.Arakhurn.Name = HA.Lang.Unit.Arakhurn[KBM.Lang]
 HA.Descript = HA.Arakhurn.Name
 HA.Lang.Unit.ArakhurnShort = KBM.Language:Add("Arakhurn")
 HA.Lang.Unit.ArakhurnShort:SetGerman("Arakhurn")
 HA.Lang.Unit.ArakhurnShort:SetFrench("Arakhurn")
 HA.Lang.Unit.ArakhurnShort:SetRussian("Аракурн")
+HA.Lang.Unit.ArakhurnShort:SetKorean("아라쿠른")
 HA.Arakhurn.NameShort = HA.Lang.Unit.ArakhurnShort[KBM.Lang]
--- Unit Dictionary
+-- Additional Unit Dictionary
 HA.Lang.Unit.Spawn = KBM.Language:Add("Spawn of Arakhurn")
 HA.Lang.Unit.Spawn:SetGerman("Brut von Arakhurn")
 HA.Lang.Unit.Spawn:SetFrench("Rejeton d'Arakhurn")
 HA.Lang.Unit.Spawn:SetRussian("Отродье Арахурна")
+HA.Lang.Unit.Spawn:SetKorean("아라쿠른 혈족")
 HA.Lang.Unit.Enraged = KBM.Language:Add("Enraged Spawn of Arakhurn")
 HA.Lang.Unit.Enraged:SetGerman("Zornige Brut von Arakhurn")
 HA.Lang.Unit.Enraged:SetFrench("Rejeton enragé d'Arakhurn")
 HA.Lang.Unit.Enraged:SetRussian("Взбесившееся порождение Арахурна")
+HA.Lang.Unit.Enraged:SetKorean("격분한 아라쿠른 혈족")
 
 -- Ability Dictionary
 HA.Lang.Ability = {}
@@ -103,6 +107,7 @@ HA.Lang.Ability.Nova = KBM.Language:Add("Fire Nova")
 HA.Lang.Ability.Nova:SetGerman("Feuernova")
 HA.Lang.Ability.Nova:SetRussian("Огненная сверхновая")
 HA.Lang.Ability.Nova:SetFrench("Nova de flammes")
+HA.Lang.Ability.Nova:SetKorean("화염 신성")
 
 -- Notify Dictionary
 HA.Lang.Notify = {}
@@ -110,14 +115,17 @@ HA.Lang.Notify.Nova = KBM.Language:Add("High Priest Arakhurn releases the fiery 
 HA.Lang.Notify.Nova:SetGerman("Hohepriester Arakhurn lässt die feurige Energie seines Inneren frei.")
 HA.Lang.Notify.Nova:SetFrench("Grand-prêtre Arakhurn commence à libèrer l'énergie ardente qui réside en lui")
 HA.Lang.Notify.Nova:SetRussian("Первосвященник Аракурн высвобождает скрытую внутри яростную энергию.")
+HA.Lang.Notify.Nova:SetKorean("상급 성직자 아라쿠른이(가) 자신 내부의 화염 에너지를 쏟아 냅니다.")
 HA.Lang.Notify.Respawn = KBM.Language:Add("The lava churns violently as a large shadow moves beneath it and then rushes to the surface")
 HA.Lang.Notify.Respawn:SetGerman("Die Lava brodelt gewaltig, während sich ein großer Schatten unter ihr bewegt und dann an die Oberfläche schnellt.")
 HA.Lang.Notify.Respawn:SetRussian("Лава бурлит; под ней движется огромная тень, стремительно всплывая к поверхности.")
 HA.Lang.Notify.Respawn:SetFrench("La lave s'agite violemment, tandis qu'une grande ombre bouge dans ses profondeurs et se précipite ensuite vers la surface.")
+HA.Lang.Notify.Respawn:SetKorean("미친 듯이 들끓는 용암 아래에서 거대한 그림자가 움직이더니 갑자기 용암 표면 위로 솟아오릅니다.")
 HA.Lang.Notify.Death = KBM.Language:Add("As Arakhurn turns to ash, something stirs beneath the molten lava.")
 HA.Lang.Notify.Death:SetGerman("Als Arakhurn zu Asche zerfällt, regt sich etwas unter der schwelenden Lava.")
 HA.Lang.Notify.Death:SetRussian("По мере того, как Аракурн превращается в пепел, что-то пробуждается под раскаленной лавой.")
 HA.Lang.Notify.Death:SetFrench("Tandis qu'Arakhurn se consume, on distingue un mouvement sous la lave en fusion.")
+HA.Lang.Notify.Death:SetKorean("아라크룬이 잿더미가 되자 고온용암 용암 아래에서 무언가 꿈틀거립니다.")
 
 -- Chat Dictionary
 HA.Lang.Chat = {}
@@ -125,6 +133,7 @@ HA.Lang.Chat.Respawn = KBM.Language:Add("Come to me, my children.")
 HA.Lang.Chat.Respawn:SetGerman("Kommt zu mir, meine Kinder.")
 HA.Lang.Chat.Respawn:SetFrench("Venez à moi, mes enfants.")
 HA.Lang.Chat.Respawn:SetRussian("Ко мне, дети мои.")
+HA.Lang.Chat.Respawn:SetKorean("이리 와라, 나의 아이들아.")
 HA.Lang.Chat.Death = KBM.Language:Add("The fire within me weakens. I must regain the power of the flame.")
 HA.Lang.Chat.Death:SetGerman("Das Feuer in mir wird schwächer. Ich muss die Kraft der Flamme zurückgewinnen.")
 HA.Lang.Chat.Death:SetFrench("Le feu faiblit en moi. Je dois retrouver le pouvoir de la flamme.")
@@ -136,6 +145,7 @@ HA.Lang.Buff.Fiery = KBM.Language:Add("Fiery Metamorphosis")
 HA.Lang.Buff.Fiery:SetGerman("Feurige Metamorphose")
 HA.Lang.Buff.Fiery:SetFrench("Métamorphose ardente")
 HA.Lang.Buff.Fiery:SetRussian("Огненное превращение")
+HA.Lang.Buff.Fiery:SetKorean("화염 변형")
 
 -- Debuff Dictionary
 HA.Lang.Debuff = {}
@@ -143,9 +153,11 @@ HA.Lang.Debuff.Armor = KBM.Language:Add("Armor Rip")
 HA.Lang.Debuff.Armor:SetGerman("Rüstung aufreißen")
 HA.Lang.Debuff.Armor:SetFrench("Déchirure d'armure")
 HA.Lang.Debuff.Armor:SetRussian("Раздиратель доспехов")
+HA.Lang.Debuff.Armor:SetKorean("방어구 찢기")
 HA.Lang.Debuff.Ignited = KBM.Language:Add("Ignited")
 HA.Lang.Debuff.Ignited:SetGerman("Entflammt")
 HA.Lang.Debuff.Ignited:SetFrench("Enflammé")
+HA.Lang.Debuff.Ignited:SetKorean("점화")
 
 -- Verbose Dictionary
 HA.Lang.Verbose = {}
@@ -153,10 +165,12 @@ HA.Lang.Verbose.Nova = KBM.Language:Add("until "..HA.Lang.Ability.Nova[KBM.Lang]
 HA.Lang.Verbose.Nova:SetGerman("bis "..HA.Lang.Ability.Nova[KBM.Lang])
 HA.Lang.Verbose.Nova:SetFrench("jusqu'à Nova de flammes")
 HA.Lang.Verbose.Nova:SetRussian("до "..HA.Lang.Ability.Nova[KBM.Lang])
+HA.Lang.Verbose.Nova:SetKorean("화염 신성까지")
 HA.Lang.Verbose.Rise = KBM.Language:Add(HA.Lang.Unit.Arakhurn[KBM.Lang].." rises")
 HA.Lang.Verbose.Rise:SetGerman(HA.Lang.Unit.Arakhurn[KBM.Lang].." erscheint")
 HA.Lang.Verbose.Rise:SetFrench("Grand-Prêtre Arakhurn revit")
 HA.Lang.Verbose.Rise:SetRussian(HA.Lang.Unit.Arakhurn[KBM.Lang].." оживает")
+HA.Lang.Verbose.Rise:SetKorean("고위 성직자 아라쿠른 비상")
 
 -- Phase Monitor Dictionary
 HA.Lang.Phase = {}
@@ -164,6 +178,7 @@ HA.Lang.Phase.Adds = KBM.Language:Add("Adds")
 HA.Lang.Phase.Adds:SetGerman()
 HA.Lang.Phase.Adds:SetFrench()
 HA.Lang.Phase.Adds:SetRussian("Адды")
+HA.Lang.Phase.Adds:SetKorean("쫄들")
 
 -- Menu Dictionary
 HA.Lang.Menu = {}
@@ -171,26 +186,32 @@ HA.Lang.Menu.FieryFirst = KBM.Language:Add("First "..HA.Lang.Buff.Fiery[KBM.Lang
 HA.Lang.Menu.FieryFirst:SetGerman("Erste "..HA.Lang.Buff.Fiery[KBM.Lang])
 HA.Lang.Menu.FieryFirst:SetFrench("Première Métamorphose ardente")
 HA.Lang.Menu.FieryFirst:SetRussian("Первое "..HA.Lang.Buff.Fiery[KBM.Lang])
+HA.Lang.Menu.FieryFirst:SetKorean("첫번째 화염 변형")
 HA.Lang.Menu.FieryPThree = KBM.Language:Add("First "..HA.Lang.Buff.Fiery[KBM.Lang].." (Phase 3)")
 HA.Lang.Menu.FieryPThree:SetGerman("Erste "..HA.Lang.Buff.Fiery[KBM.Lang].." (Phase 3)")
 HA.Lang.Menu.FieryPThree:SetFrench("Première Métamorphose ardente (Phase 3)")
 HA.Lang.Menu.FieryPThree:SetRussian("Первое "..HA.Lang.Buff.Fiery[KBM.Lang].." (Фаза 3)")
+HA.Lang.Menu.FieryPThree:SetKorean("첫번째 화염 변형 (Phase 3)")
 HA.Lang.Menu.NovaFirst = KBM.Language:Add("First "..HA.Lang.Ability.Nova[KBM.Lang])
 HA.Lang.Menu.NovaFirst:SetGerman("Erste "..HA.Lang.Ability.Nova[KBM.Lang])
 HA.Lang.Menu.NovaFirst:SetFrench("Premier Nova de flammes")
 HA.Lang.Menu.NovaFirst:SetRussian("Первая "..HA.Lang.Ability.Nova[KBM.Lang])
+HA.Lang.Menu.NovaFirst:SetKorean("첫번째 화염 신성")
 HA.Lang.Menu.NovaPThree = KBM.Language:Add("First "..HA.Lang.Ability.Nova[KBM.Lang].." (Phase 3)")
 HA.Lang.Menu.NovaPThree:SetGerman("Erste "..HA.Lang.Ability.Nova[KBM.Lang].." (Phase 3)")
 HA.Lang.Menu.NovaPThree:SetFrench("Premier Nova de flammes (Phase 3)")
 HA.Lang.Menu.NovaPThree:SetRussian("Первая "..HA.Lang.Ability.Nova[KBM.Lang].." (Фаза 3)")
+HA.Lang.Menu.NovaPThree:SetKorean("첫번째 화염 신성 (Phase 3)")
 HA.Lang.Menu.AddFirst = KBM.Language:Add("First "..HA.Lang.Unit.Enraged[KBM.Lang])
 HA.Lang.Menu.AddFirst:SetGerman("Erste "..HA.Lang.Unit.Enraged[KBM.Lang])
 HA.Lang.Menu.AddFirst:SetFrench("Premier Rejeton enragé d'Arakhurn")
 HA.Lang.Menu.AddFirst:SetRussian("Первое "..HA.Lang.Unit.Enraged[KBM.Lang])
+HA.Lang.Menu.AddFirst:SetKorean("첫번째 격분한 아라쿠른 혈족")
 HA.Lang.Menu.NovaWarn = KBM.Language:Add("5 second warning for "..HA.Lang.Ability.Nova[KBM.Lang])
 HA.Lang.Menu.NovaWarn:SetGerman("5 Sekunden bis "..HA.Lang.Ability.Nova[KBM.Lang])
 HA.Lang.Menu.NovaWarn:SetFrench("5 secondes avertissement pour Nova de flammes")
 HA.Lang.Menu.NovaWarn:SetRussian("5 Секунд до "..HA.Lang.Ability.Nova[KBM.Lang])
+HA.Lang.Menu.NovaWarn:SetKorean("화염 신성까지 5초전")
 
 HA.Enraged = {
 	Mod = HA,

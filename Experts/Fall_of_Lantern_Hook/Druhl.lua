@@ -59,13 +59,14 @@ MOD.Lang.Unit.Druhl = KBM.Language:Add(MOD.Druhl.Name)
 MOD.Lang.Unit.Druhl:SetGerman("Flammenbringer Druhl") 
 MOD.Lang.Unit.Druhl:SetFrench("Druhl le Porte-flammes")
 MOD.Lang.Unit.Druhl:SetRussian("Пламедув Друл")
--- MOD.Lang.Unit.Druhl:SetRussian("")
+MOD.Lang.Unit.Druhl:SetKorean("불을 가진 드루흘")
 MOD.Druhl.Name = MOD.Lang.Unit.Druhl[KBM.Lang]
 MOD.Descript = MOD.Druhl.Name
 MOD.Lang.Unit.DruShort = KBM.Language:Add("Druhl")
 MOD.Lang.Unit.DruShort:SetGerman()
 MOD.Lang.Unit.DruShort:SetFrench()
 MOD.Lang.Unit.DruShort:SetRussian("Друл")
+MOD.Lang.Unit.DruShort:SetKorean("드루흘")
 MOD.Druhl.NameShort = MOD.Lang.Unit.DruShort[KBM.Lang]
 
 -- Ability Dictionary

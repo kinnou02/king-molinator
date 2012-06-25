@@ -59,12 +59,14 @@ MOD.Lang.Unit.Ryka = KBM.Language:Add(MOD.Ryka.Name)
 MOD.Lang.Unit.Ryka:SetGerman()
 MOD.Lang.Unit.Ryka:SetFrench()
 MOD.Lang.Unit.Ryka:SetRussian("Рика Дарвос")
+MOD.Lang.Unit.Ryka:SetKorean("리카 다브로스")
 MOD.Ryka.Name = MOD.Lang.Unit.Ryka[KBM.Lang]
 MOD.Descript = MOD.Ryka.Name
 MOD.Lang.Unit.RykaShort = KBM.Language:Add("Ryka")
 MOD.Lang.Unit.RykaShort:SetGerman()
 MOD.Lang.Unit.RykaShort:SetFrench()
 MOD.Lang.Unit.RykaShort:SetRussian("Рика")
+MOD.Lang.Unit.RykaShort:SetKorean("리카")
 MOD.Ryka.NameShort = MOD.Lang.Unit.RykaShort[KBM.Lang]
 
 -- Ability Dictionary

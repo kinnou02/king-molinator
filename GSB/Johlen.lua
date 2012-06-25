@@ -82,7 +82,7 @@ IJ.Lang.Verbose.Bomb = KBM.Language:Add("Devastation")
 IJ.Lang.Verbose.Bomb:SetGerman("Vernichtung")
 IJ.Lang.Verbose.Bomb:SetFrench("Dévastation")
 IJ.Lang.Verbose.Bomb:SetRussian("Разрушение")
-IJ.Lang.Verbose.Bomb:SetKorean("지진폭탄")
+IJ.Lang.Verbose.Bomb:SetKorean("위력폭탄")
 
 -- Phase Monitor Dictionary
 IJ.Lang.Phase = {}

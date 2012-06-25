@@ -27,6 +27,7 @@ IND.Lang.Main.IND = KBM.Language:Add(IND.Name)
 IND.Lang.Main.IND:SetGerman("Höllendämmerung")
 IND.Lang.Main.IND:SetFrench("Aurore infernale")
 IND.Lang.Main.IND:SetRussian("Пламенный Восход")
+IND.Lang.Main.IND:SetKorean("화염지옥 여명지")
 IND.Name = IND.Lang.Main.IND[KBM.Lang]
 IND.Descript = IND.Name
 

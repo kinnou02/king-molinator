@@ -69,6 +69,7 @@ AJ.Lang.Ability.Impact = KBM.Language:Add("Forceful Impact")
 AJ.Lang.Ability.Impact:SetGerman("Machtvoller Schlag")
 AJ.Lang.Ability.Impact:SetFrench("Impact énergique")
 AJ.Lang.Ability.Impact:SetRussian("Сильный удар")
+AJ.Lang.Ability.Impact:SetKorean("강력한 충돌")
 
 -- Notify Dictionary
 AJ.Lang.Notify = {}
@@ -84,6 +85,7 @@ AJ.Lang.Debuff.Grasp = KBM.Language:Add("Paralyzing Grasp")
 AJ.Lang.Debuff.Grasp:SetGerman("Lähmender Griff")
 AJ.Lang.Debuff.Grasp:SetFrench("Poigne paralysante")
 AJ.Lang.Debuff.Grasp:SetRussian("Парализующая хватка")
+AJ.Lang.Debuff.Grasp:SetKorean("마비의 손아귀")
 
 AJ.Jorb.Name = AJ.Lang.Unit.Jorb[KBM.Lang]
 AJ.Jorb.NameShort = AJ.Lang.Unit.JorbShort[KBM.Lang]

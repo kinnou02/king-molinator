@@ -59,6 +59,7 @@ MOD.Lang.Unit.Ravalos = KBM.Language:Add(MOD.Ravalos.Name)
 MOD.Lang.Unit.Ravalos:SetGerman()
 MOD.Lang.Unit.Ravalos:SetFrench()
 MOD.Lang.Unit.Ravalos:SetRussian("Равалос")
+MOD.Lang.Unit.Ravalos:SetKorean("라발로스")
 MOD.Ravalos.Name = MOD.Lang.Unit.Ravalos[KBM.Lang]
 MOD.Descript = MOD.Ravalos.Name
 

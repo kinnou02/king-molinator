@@ -74,7 +74,7 @@ HH.Lang.Unit.Hive = KBM.Language:Add("Seaclaw Hive")
 HH.Lang.Unit.Hive:SetFrench("Nid de griffemarées")
 HH.Lang.Unit.Hive:SetGerman("Seeklauennest")
 HH.Lang.Unit.Hive:SetRussian("Гнездо водолапов")
-HH.Lang.Unit.Hive:SetKorean("바다발톱 벌집")
+HH.Lang.Unit.Hive:SetKorean("바다발톱 소굴")
 -- Ability Dictionary
 HH.Lang.Ability = {}
 HH.Lang.Ability.Tsunami = KBM.Language:Add("Tsunami")

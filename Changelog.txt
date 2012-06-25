@@ -1,4 +1,15 @@
-﻿v1.0.9
+﻿v1.1.0
+
+* Note
+** This cycle of KBM is mainly for final updates for native Korean clients which will be running Rift 1.8 for some months
+** English/French/German/Russian clients do not need to update. Although, there is no harm in doing so.
+** KBM updates for Rift 1.9 will not start until Wed 27th June 2012, as the scope of KBM requires testing to be carried out on live servers.
+
+Korean Translations
+* On-going updates and fixes for Korean native client support.
+
+----
+v1.0.9
 
 Version
 * New: Alpha versions will now be signed with KBM.Alpha = true as opposed to KBM.Alpha = "rXXX"

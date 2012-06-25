@@ -30,6 +30,7 @@ MOD.Lang.Main.Name = KBM.Language:Add(MOD.Name)
 MOD.Lang.Main.Name:SetGerman("Königsbresche")
 MOD.Lang.Main.Name:SetFrench("Voie Royale")
 MOD.Lang.Main.Name:SetRussian("Королевский Пролом")
+MOD.Lang.Main.Name:SetKorean("제왕의 결계")
 
 MOD.Name = MOD.Lang.Main.Name[KBM.Lang]
 MOD.Descript = MOD.Name

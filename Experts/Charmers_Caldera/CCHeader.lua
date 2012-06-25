@@ -30,6 +30,7 @@ MOD.Lang.Main.Name = KBM.Language:Add(MOD.Name)
 MOD.Lang.Main.Name:SetGerman("Zaubererkessel")
 MOD.Lang.Main.Name:SetFrench("Caldera du Charmeur")
 MOD.Lang.Main.Name:SetRussian("Воронка Заклинателя")
+MOD.Lang.Main.Name:SetKorean("현혹의 칼데라")
 
 MOD.Name = MOD.Lang.Main.Name[KBM.Lang]
 MOD.Descript = MOD.Name

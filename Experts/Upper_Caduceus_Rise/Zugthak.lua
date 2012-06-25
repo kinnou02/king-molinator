@@ -58,6 +58,7 @@ MOD.Lang.Unit.Zugthak = KBM.Language:Add(MOD.Zugthak.Name)
 MOD.Lang.Unit.Zugthak:SetGerman("Zugthak")
 MOD.Lang.Unit.Zugthak:SetFrench("Zugthak")
 MOD.Lang.Unit.Zugthak:SetRussian("Загтак")
+MOD.Lang.Unit.Zugthak:SetKorean("주그타크")
 MOD.Zugthak.Name = MOD.Lang.Unit.Zugthak[KBM.Lang]
 MOD.Descript = MOD.Zugthak.Name
 

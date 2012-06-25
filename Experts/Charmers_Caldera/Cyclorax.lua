@@ -58,6 +58,7 @@ MOD.Lang.Unit.Cyclorax = KBM.Language:Add(MOD.Cyclorax.Name)
 MOD.Lang.Unit.Cyclorax:SetGerman()
 MOD.Lang.Unit.Cyclorax:SetFrench()
 MOD.Lang.Unit.Cyclorax:SetRussian("Циклоракс")
+MOD.Lang.Unit.Cyclorax:SetKorean("사이클로락스")
 MOD.Cyclorax.Name = MOD.Lang.Unit.Cyclorax[KBM.Lang]
 MOD.Descript = MOD.Cyclorax.Name
 

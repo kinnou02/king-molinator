@@ -437,13 +437,17 @@ function RM.Rezes:Init()
 		if not sPlayer then
 			for Player, TimerList in pairs(self.Tracked) do
 				for aID, Timer in pairs(TimerList.Timers) do
-					Timer:Remove()
+					if Timer.Remove then
+						Timer:Remove()
+					end
 				end
 				self.Tracked[Player] = nil
 			end
 		elseif self.Tracked[sPlayer] then
 			for aID, Timer in pairs(self.Tracked[sPlayer].Timers) do
-				Timer:Remove()
+				if Timer.Remove then
+					Timer:Remove()
+				end
 			end
 			self.Tracked[sPlayer] = nil
 		end

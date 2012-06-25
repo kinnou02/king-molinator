@@ -64,10 +64,12 @@ GL.Lang.Unit.Gorlach = KBM.Language:Add(GL.Gorlach.Name)
 GL.Lang.Unit.Gorlach:SetFrench()
 GL.Lang.Unit.Gorlach:SetGerman()
 GL.Lang.Unit.Gorlach:SetRussian("Горлах")
+GL.Lang.Unit.Gorlach:SetKorean("골라크")
 GL.Lang.Unit.GorlachShort = KBM.Language:Add("Gorlach")
 GL.Lang.Unit.GorlachShort:SetFrench()
 GL.Lang.Unit.GorlachShort:SetGerman()
 GL.Lang.Unit.GorlachShort:SetRussian("Горлах")
+GL.Lang.Unit.GorlachShort:SetKorean("골라크")
 
 -- Ability Dictionary
 GL.Lang.Ability = {}
@@ -93,6 +95,7 @@ GL.Lang.Main.Descript = KBM.Language:Add("Gorlach")
 GL.Lang.Main.Descript:SetFrench("Gorlach")
 GL.Lang.Main.Descript:SetGerman("Gorlach")
 GL.Lang.Main.Descript:SetRussian("Горлах")
+GL.Lang.Main.Descript:SetKorean("골라크")
 GL.Descript = GL.Lang.Main.Descript[KBM.Lang]
 
 -- Assign Boss to Language Specific Dictionary

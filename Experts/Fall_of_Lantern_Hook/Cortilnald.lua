@@ -59,13 +59,14 @@ MOD.Lang.Unit.Cortilnald = KBM.Language:Add(MOD.Cortilnald.Name)
 MOD.Lang.Unit.Cortilnald:SetGerman("Feuermeister Cortilnald") 
 MOD.Lang.Unit.Cortilnald:SetFrench("Pyromaître Cortilnald")
 MOD.Lang.Unit.Cortilnald:SetRussian("Пиромастер Кортильнальд")
--- MOD.Lang.Unit.Cortilnald:SetRussian("")
+MOD.Lang.Unit.Cortilnald:SetKorean("파이로맨서 코르틸날드")
 MOD.Cortilnald.Name = MOD.Lang.Unit.Cortilnald[KBM.Lang]
 MOD.Descript = MOD.Cortilnald.Name
 MOD.Lang.Unit.CortShort = KBM.Language:Add("Cortilnald")
 MOD.Lang.Unit.CortShort:SetGerman()
 MOD.Lang.Unit.CortShort:SetFrench()
 MOD.Lang.Unit.CortShort:SetRussian("Кортильнальд")
+MOD.Lang.Unit.CortShort:SetKorean("코르틸날드")
 MOD.Cortilnald.NameShort = MOD.Lang.Unit.CortShort[KBM.Lang]
 
 -- Ability Dictionary

@@ -59,12 +59,14 @@ MOD.Lang.Unit.Orban = KBM.Language:Add(MOD.Orban.Name)
 MOD.Lang.Unit.Orban:SetGerman("Orban der große Imker")
 MOD.Lang.Unit.Orban:SetFrench("Grand Apiculteur Orban")
 MOD.Lang.Unit.Orban:SetRussian("Старший пчеловод Орбан")
+MOD.Lang.Unit.Orban:SetKorean("위대한 양봉가 오번")
 MOD.Orban.Name = MOD.Lang.Unit.Orban[KBM.Lang]
 MOD.Descript = MOD.Orban.Name
 MOD.Lang.Unit.OrbanShort = KBM.Language:Add(MOD.Orban.NameShort)
 MOD.Lang.Unit.OrbanShort:SetGerman()
 MOD.Lang.Unit.OrbanShort:SetFrench()
 MOD.Lang.Unit.OrbanShort:SetRussian("Орбан")
+MOD.Lang.Unit.OrbanShort:SetKorean("오번")
 MOD.Orban.NameShort = MOD.Lang.Unit.OrbanShort[KBM.Lang]
 
 -- Ability Dictionary

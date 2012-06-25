@@ -82,6 +82,7 @@ IL.Lang.Ability.Wave = KBM.Language:Add("Glacial Wave")
 IL.Lang.Ability.Wave:SetGerman("Gletscherwelle")
 IL.Lang.Ability.Wave:SetFrench("Vague glaciale")
 IL.Lang.Ability.Wave:SetRussian("Ледяная волна")
+IL.Lang.Ability.Wave:SetKorean("빙하 파도")
 
 -- Mechanic Dictionary
 IL.Lang.Mechanic = {}
@@ -99,7 +100,7 @@ IL.Lang.Mechanic.Clock = KBM.Language:Add("Clockwise")
 IL.Lang.Mechanic.Clock:SetGerman("Im Uhrzeigersinn")
 IL.Lang.Mechanic.Clock:SetFrench("Sens horaire")
 IL.Lang.Mechanic.Clock:SetRussian("По часовой")
-IL.Lang.Mechanic.Clock:SetKorean("시게방향")
+IL.Lang.Mechanic.Clock:SetKorean("시계방향")
 IL.Lang.Mechanic.WhirlpoolEnd = KBM.Language:Add("Whirlpool ends")
 IL.Lang.Mechanic.WhirlpoolEnd:SetGerman("Whirlpool beendet")
 IL.Lang.Mechanic.WhirlpoolEnd:SetFrench("Tourbillon d'eau terminé")
@@ -117,7 +118,7 @@ IL.Lang.Notify.Whirlpool = KBM.Language:Add("Go with the current %- or die!")
 IL.Lang.Notify.Whirlpool:SetGerman("Folgt dem Strom, oder sterbt!")
 IL.Lang.Notify.Whirlpool:SetFrench("Suivez le courant... ou disparaissez !")
 IL.Lang.Notify.Whirlpool:SetRussian("Плывите по течению")
-IL.Lang.Notify.Whirlpool:SetKorean("흐름을 따르십시오. %- 그러지 않으면 죽게 됩니다!")
+IL.Lang.Notify.Whirlpool:SetKorean("흐름을 따르십시오. 그러지 않으면 죽게 됩니다!")
 IL.Lang.Notify.Reverse = KBM.Language:Add("You're going the wrong way, fools!")
 IL.Lang.Notify.Reverse:SetGerman("Ihr Narren geht in die falsche Richtung!")
 IL.Lang.Notify.Reverse:SetFrench("Vous allez dans le mauvais direction, pauvres fous !")
@@ -145,7 +146,7 @@ IL.Lang.Verbose.DanceEnd = KBM.Language:Add("Dance sequence ends")
 IL.Lang.Verbose.DanceEnd:SetRussian("Бег закончен")
 IL.Lang.Verbose.DanceEnd:SetFrench("Fin séquence de la dance")
 IL.Lang.Verbose.DanceEnd:SetGerman("Tanz Sequenz beendet")
-IL.Lang.Verbose.DanceEnd:SetKorean("똥물댄스 단게 끝")
+IL.Lang.Verbose.DanceEnd:SetKorean("똥물댄스 단계 끝")
 
 -- Menu Dictionary
 IL.Lang.Menu = {}
@@ -153,7 +154,7 @@ IL.Lang.Menu.WhirlpoolFirst = KBM.Language:Add("First "..IL.Lang.Mechanic.Whirlp
 IL.Lang.Menu.WhirlpoolFirst:SetGerman("Erster "..IL.Lang.Mechanic.Whirlpool[KBM.Lang])
 IL.Lang.Menu.WhirlpoolFirst:SetRussian("Первый "..IL.Lang.Mechanic.Whirlpool[KBM.Lang])
 IL.Lang.Menu.WhirlpoolFirst:SetFrench("Premier Tourbillon d'eau")
-IL.Lang.Menu.WhirlpoolFirst:SetKorean("첫번재 세탁기")
+IL.Lang.Menu.WhirlpoolFirst:SetKorean("첫번째 세탁기")
 
 IL.Isskal.Name = IL.Lang.Unit.Isskal[KBM.Lang]
 IL.Descript = IL.Isskal.Name

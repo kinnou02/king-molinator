@@ -30,6 +30,7 @@ MOD.Lang.Main.Name = KBM.Language:Add(MOD.Name)
 MOD.Lang.Main.Name:SetGerman("Das Reich der Feen")
 MOD.Lang.Main.Name:SetFrench("Le Royaume des Fées")
 MOD.Lang.Main.Name:SetRussian("Королевство Фей")
+MOD.Lang.Main.Name:SetKorean("파에 왕국")
 
 MOD.Name = MOD.Lang.Main.Name[KBM.Lang]
 MOD.Descript = MOD.Name

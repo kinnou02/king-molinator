@@ -58,6 +58,7 @@ MOD.Lang.Unit.Rodiafel = KBM.Language:Add(MOD.Rodiafel.Name)
 MOD.Lang.Unit.Rodiafel:SetGerman("Rodiafel")
 MOD.Lang.Unit.Rodiafel:SetFrench("Rodiafel")
 MOD.Lang.Unit.Rodiafel:SetRussian("Родиафель")
+MOD.Lang.Unit.Rodiafel:SetKorean("로디아펠")
 MOD.Rodiafel.Name = MOD.Lang.Unit.Rodiafel[KBM.Lang]
 MOD.Descript = MOD.Rodiafel.Name
 

@@ -58,21 +58,27 @@ EC.Lang.Unit = {}
 EC.Lang.Unit.Szath = KBM.Language:Add(EC.Szath.Name)
 EC.Lang.Unit.Szath:SetFrench("Seigneur-sorcier Szath")
 EC.Lang.Unit.Szath:SetGerman("Hexenmeister Szath")
+EC.Lang.Unit.Szath:SetKorean("대마녀 스자스")
 EC.Lang.Unit.SzShort = KBM.Language:Add(EC.Szath.NameShort)
 EC.Lang.Unit.SzShort:SetFrench()
 EC.Lang.Unit.SzShort:SetGerman()
+EC.Lang.Unit.SzShort:SetKorean("스자스")
 EC.Lang.Unit.Nahoth = KBM.Language:Add("Packmaster Nahoth")
 EC.Lang.Unit.Nahoth:SetFrench("Maître-fourrier Nahoth")
 EC.Lang.Unit.Nahoth:SetGerman("Rudelmeister Nahoth")
+EC.Lang.Unit.Nahoth:SetKorean("무리 대장 나호스")
 EC.Lang.Unit.NahShort = KBM.Language:Add("Nahoth")
 EC.Lang.Unit.NahShort:SetFrench()
 EC.Lang.Unit.NahShort:SetGerman()
+EC.Lang.Unit.NahShort:SetKorean("나호스")
 EC.Lang.Unit.Ereetu = KBM.Language:Add("Emberlord Ereetu")
 EC.Lang.Unit.Ereetu:SetFrench("Seigneur de Braise Ereetu")
 EC.Lang.Unit.Ereetu:SetGerman("Glutfürst Ereetu")
+EC.Lang.Unit.Ereetu:SetKorean("불씨군주 에리두")
 EC.Lang.Unit.EreShort = KBM.Language:Add("Ereetu")
 EC.Lang.Unit.EreShort:SetFrench()
 EC.Lang.Unit.EreShort:SetGerman()
+EC.Lang.Unit.EreShort:SetKorean("에리두")
 
 EC.Nahoth = {
 	Mod = EC,
@@ -139,6 +145,7 @@ EC.Lang.Main.Descript = KBM.Language:Add("The Ember Conclave")
 EC.Lang.Main.Descript:SetFrench("Conclave de braise")
 EC.Lang.Main.Descript:SetGerman("Die Glutkonklave")
 EC.Lang.Main.Descript:SetRussian("Раскаленный Конклав")
+EC.Lang.Main.Descript:SetKorean("불씨 결사단")
 
 EC.Szath.Name = EC.Lang.Unit.Szath[KBM.Lang]
 EC.Szath.NameShort = EC.Lang.Unit.SzShort[KBM.Lang]

@@ -99,12 +99,12 @@ PH.Lang.Ability.Soul = KBM.Language:Add("Soul Fracture")
 PH.Lang.Ability.Soul:SetGerman("Seelenfraktur")
 PH.Lang.Ability.Soul:SetFrench("Fracture de l'âme")
 PH.Lang.Ability.Soul:SetRussian("Распад души")
-PH.Lang.Ability.Soul:SetKorean("영혼 균열")
+PH.Lang.Ability.Soul:SetKorean("혼 균열")
 PH.Lang.Ability.Cotton = KBM.Language:Add("Contagious Cottontail")
 PH.Lang.Ability.Cotton:SetGerman("Ansteckender Baumwollschweif")
 PH.Lang.Ability.Cotton:SetFrench("Queue de coton contagieuse")
 PH.Lang.Ability.Cotton:SetRussian("Заразный кролик")
-PH.Lang.Ability.Cotton:SetKorean("전염성 꼬리토끼")
+PH.Lang.Ability.Cotton:SetKorean("전염성 솜꼬리토끼")
 
 -- Buff Dictionary
 PH.Lang.Buff = {}
@@ -128,7 +128,7 @@ PH.Lang.Verbose.Reanimate = KBM.Language:Add(" is reanimated")
 PH.Lang.Verbose.Reanimate:SetRussian(" оживает")
 PH.Lang.Verbose.Reanimate:SetFrench(" est réanimé")
 PH.Lang.Verbose.Reanimate:SetGerman(" ist auferstanden")
-PH.Lang.Verbose.Reanimate:SetKorean(" 가 되살아났습니다!")
+PH.Lang.Verbose.Reanimate:SetKorean(" 이(가) 되살아났습니다!")
 
 PH.Hylas.Name = PH.Lang.Unit.Hylas[KBM.Lang]
 PH.Descript = PH.Hylas.Name

@@ -65,6 +65,7 @@ IZ.Lang.Unit.Ituziel = KBM.Language:Add(IZ.Ituziel.Name)
 IZ.Lang.Unit.Ituziel:SetFrench()
 IZ.Lang.Unit.Ituziel:SetGerman()
 IZ.Lang.Unit.Ituziel:SetRussian("Итузиэль")
+IZ.Lang.Unit.Ituziel:SetKorean("이투지엘")
 
 -- Ability Dictionary
 IZ.Lang.Ability = {}
@@ -79,6 +80,7 @@ IZ.Lang.Buff.Brimstone = KBM.Language:Add("Brimstone")
 IZ.Lang.Buff.Brimstone:SetGerman("Schwefel")
 IZ.Lang.Buff.Brimstone:SetFrench("Soufre")
 IZ.Lang.Buff.Brimstone:SetRussian("Серный камень")
+IZ.Lang.Buff.Brimstone:SetKorean("유황석")
 
 -- Mechanic Dictionary
 IZ.Lang.Mechanic = {}
@@ -86,6 +88,7 @@ IZ.Lang.Mechanic.Wave = KBM.Language:Add("Flame Waves")
 IZ.Lang.Mechanic.Wave:SetFrench("Vagues de flammes")
 IZ.Lang.Mechanic.Wave:SetRussian("Огненная волна")
 IZ.Lang.Mechanic.Wave:SetGerman("Flammenwelle")
+IZ.Lang.Mechanic.Wave:SetKorean("불꽃 파도들")
 
 -- Menu Dictionary
 IZ.Lang.Menu = {}
@@ -93,6 +96,7 @@ IZ.Lang.Menu.Wave = KBM.Language:Add("First Flame Wave")
 IZ.Lang.Menu.Wave:SetFrench("Première Vague de flammes")
 IZ.Lang.Menu.Wave:SetRussian("Первая Огненная волна")
 IZ.Lang.Menu.Wave:SetGerman("Erste Flammenwelle")
+IZ.Lang.Menu.Wave:SetKorean("첫번재 불꽃 파도")
 
 -- Debuff Dictionary
 IZ.Lang.Debuff = {}
@@ -100,6 +104,7 @@ IZ.Lang.Debuff.Curse = KBM.Language:Add("Incinerating Curse")
 IZ.Lang.Debuff.Curse:SetGerman("Einäschernder Fluch")
 IZ.Lang.Debuff.Curse:SetFrench("Malédiction d'incinération")
 IZ.Lang.Debuff.Curse:SetRussian("Испепеляющее проклятье")
+IZ.Lang.Debuff.Curse:SetKorean("소각 저주")
 IZ.Ituziel.Name = IZ.Lang.Unit.Ituziel[KBM.Lang]
 IZ.Ituziel.NameShort = IZ.Lang.Unit.Ituziel[KBM.Lang]
 IZ.Descript = IZ.Ituziel.Name

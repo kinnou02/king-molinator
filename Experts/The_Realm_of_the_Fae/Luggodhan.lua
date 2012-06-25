@@ -59,6 +59,7 @@ MOD.Lang.Unit.Loggodhan = KBM.Language:Add(MOD.Loggodhan.Name)
 MOD.Lang.Unit.Loggodhan:SetGerman("Luggodhan")
 MOD.Lang.Unit.Loggodhan:SetFrench("Luggodhan")
 MOD.Lang.Unit.Loggodhan:SetRussian("Луггодан")
+MOD.Lang.Unit.Loggodhan:SetKorean("루고단")
 MOD.Loggodhan.Name = MOD.Lang.Unit.Loggodhan[KBM.Lang]
 MOD.Descript = MOD.Loggodhan.Name
 

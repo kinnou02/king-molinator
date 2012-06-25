@@ -76,6 +76,7 @@ LT.Lang.Unit.Laethys = KBM.Language:Add(LT.Laethys.Name)
 LT.Lang.Unit.Laethys:SetGerman()
 LT.Lang.Unit.Laethys:SetFrench()
 LT.Lang.Unit.Laethys:SetRussian("Лаэтис")
+LT.Lang.Unit.Laethys:SetKorean("레시스")
 -- Additional Units
 LT.Lang.Unit.Seer = KBM.Language:Add("Wizened Stoneseer")
 LT.Lang.Unit.Seer:SetGerman("Verschrumpelter Steindeuter")
@@ -101,6 +102,7 @@ LT.Lang.Ability.Resto:SetGerman("Verschrumpelte Wiederherstellung")
 LT.Lang.Mechanic = {}
 LT.Lang.Mechanic.Adds = KBM.Language:Add("Adds spawn")
 LT.Lang.Mechanic.Adds:SetGerman("Add Spawn")
+LT.Lang.Mechanic.Adds:SetKorean("쫄들 소환")
 
 -- Buff Dictionary
 LT.Lang.Buff = {}

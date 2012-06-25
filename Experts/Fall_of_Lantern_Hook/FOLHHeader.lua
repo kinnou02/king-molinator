@@ -30,6 +30,7 @@ MOD.Lang.Main.Name = KBM.Language:Add(MOD.Name)
 MOD.Lang.Main.Name:SetGerman("Untergang von Laternenhaken") 
 MOD.Lang.Main.Name:SetFrench("Chute de Saillant de Lanterne")
 MOD.Lang.Main.Name:SetRussian("Павший Фонарный Утес")
+MOD.Lang.Main.Name:SetKorean("불갈고리의 멸망")
 
 MOD.Name = MOD.Lang.Main.Name[KBM.Lang]
 MOD.Descript = MOD.Name

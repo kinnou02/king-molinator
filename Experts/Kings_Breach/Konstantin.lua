@@ -59,6 +59,7 @@ MOD.Lang.Unit.Konstantin = KBM.Language:Add(MOD.Konstantin.Name)
 MOD.Lang.Unit.Konstantin:SetGerman()
 MOD.Lang.Unit.Konstantin:SetFrench()
 MOD.Lang.Unit.Konstantin:SetRussian("Константин")
+MOD.Lang.Unit.Konstantin:SetKorean("콘스탄틴")
 MOD.Konstantin.Name = MOD.Lang.Unit.Konstantin[KBM.Lang]
 MOD.Descript = MOD.Konstantin.Name
 

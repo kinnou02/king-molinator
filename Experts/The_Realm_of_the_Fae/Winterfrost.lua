@@ -59,12 +59,14 @@ MOD.Lang.Unit.Winterfrost = KBM.Language:Add(MOD.Winterfrost.Name)
 MOD.Lang.Unit.Winterfrost:SetGerman("Chillblains Winterfrost")
 MOD.Lang.Unit.Winterfrost:SetFrench("Perniose le Chaleureux")
 MOD.Lang.Unit.Winterfrost:SetRussian("Знобящий Морозник")
+MOD.Lang.Unit.Winterfrost:SetKorean("냉수포 겨울서리")
 MOD.Winterfrost.Name = MOD.Lang.Unit.Winterfrost[KBM.Lang]
 MOD.Descript = MOD.Winterfrost.Name
 MOD.Lang.Unit.WinShort = KBM.Language:Add("Winterfrost")
 MOD.Lang.Unit.WinShort:SetGerman()
 MOD.Lang.Unit.WinShort:SetFrench("Chaleureux")
 MOD.Lang.Unit.WinShort:SetRussian("Морозник")
+MOD.Lang.Unit.WinShort:SetKorean("겨울서리")
 MOD.Winterfrost.NameShort = MOD.Lang.Unit.WinShort[KBM.Lang]
 
 -- Ability Dictionary

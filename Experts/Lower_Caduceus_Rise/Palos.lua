@@ -59,12 +59,14 @@ MOD.Lang.Unit.Palos = KBM.Language:Add(MOD.Palos.Name)
 MOD.Lang.Unit.Palos:SetGerman("Hakenmeister Palos") 
 MOD.Lang.Unit.Palos:SetFrench("Maître-crochet Palos")
 MOD.Lang.Unit.Palos:SetRussian("Повелитель крюков Палос")
+MOD.Lang.Unit.Palos:SetKorean("갈고리대가 팔로스")
 MOD.Palos.Name = MOD.Lang.Unit.Palos[KBM.Lang]
 MOD.Descript = MOD.Palos.Name
 MOD.Lang.Unit.PalShort = KBM.Language:Add("Palos")
 MOD.Lang.Unit.PalShort:SetGerman()
 MOD.Lang.Unit.PalShort:SetFrench()
 MOD.Lang.Unit.PalShort:SetRussian("Палос")
+MOD.Lang.Unit.PalShort:SetKorean("팔로스")
 MOD.Palos.NameShort = MOD.Lang.Unit.PalShort[KBM.Lang]
 
 -- Ability Dictionary

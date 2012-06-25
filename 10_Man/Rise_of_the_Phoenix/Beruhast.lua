@@ -82,6 +82,7 @@ BT.Lang.Ability.Flame = KBM.Language:Add("Leaping Flame")
 BT.Lang.Ability.Flame:SetFrench("Flamme bondissante")
 BT.Lang.Ability.Flame:SetGerman("Springende Flamme")
 BT.Lang.Ability.Flame:SetRussian("Мечущееся пламя")
+BT.Lang.Ability.Flame:SetKorean("도약하는 불꽃")
 BT.Lang.Ability.Vortex = KBM.Language:Add("Flaming Vortex")
 BT.Lang.Ability.Vortex:SetFrench("Embrasement")
 BT.Lang.Ability.Vortex:SetGerman("Flammenwirbel")
@@ -93,6 +94,7 @@ BT.Lang.Notify.Summon = KBM.Language:Add('Beruhast says, "A pet from Maelforge s
 BT.Lang.Notify.Summon:SetGerman('Beruhast sagt: "Ein Begleiter von Flammenmaul sollte Euch warmhalten."')
 BT.Lang.Notify.Summon:SetRussian('Беругаст говорит: "питомец Маэлфорджа вас согреет."')
 BT.Lang.Notify.Summon:SetFrench('Beruhast dit : "Un familier de Maelforge devrait vous tenir au chaud."')
+BT.Lang.Notify.Summon:SetKorean('마엘포지의 소환수가 널 따뜻하게 데워줄 것이다."라고 말합니다."')
 
 -- Menu Dictionary
 BT.Lang.Menu = {}

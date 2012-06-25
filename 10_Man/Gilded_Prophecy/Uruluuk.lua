@@ -92,7 +92,7 @@ UK.Lang.Notify.Crystal = KBM.Language:Add("Uruluuk points at (%a*)!")
 UK.Lang.Notify.Crystal:SetGerman("Uruluuk zeigt auf (%a*)!")
 UK.Lang.Notify.Crystal:SetFrench("Uruluuk montre (%a*) du doigt !")
 UK.Lang.Notify.Crystal:SetRussian("Улуруук указывает туда, где стоит (%a*)!")
-UK.Lang.Notify.Crystal:SetKorean("우룰루크가 (%a*)를 가리킵니다!")
+UK.Lang.Notify.Crystal:SetKorean("우룰루크가 (%a*)을(를) 가리킵니다!")
 
 UK.Descript = UK.Uruluuk.Name
 
