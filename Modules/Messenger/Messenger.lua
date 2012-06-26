@@ -32,7 +32,7 @@ function PI.VersionAlert(failed, message)
 end
 
 function PI.VersionCheck(Data)
-	local s, e, High, Mid, Low, Alpha
+	local s, e, High, Mid, Low, Revision
 	local Checked = false
 	s, e, vType, High, Mid, Low, Revision = string.find(Data, "(%u)(%d+).(%d+).(%d+).(%d+)")
 	High = tonumber(High)
@@ -46,7 +46,6 @@ function PI.VersionCheck(Data)
 					if KBM.Version.Revision < Revision then
 						print(KBM.Language.Version.Alpha[KBM.Lang])
 						print(string.format(KBM.Language.Version.AlphaInfo[KBM.Lang], KBM.Version.Revision, Revision))
-						Checked = true
 						PI.History.Checked = true
 						PI.History.Time = Inspect.Time.Real()
 						PI.History.High = High
@@ -57,8 +56,8 @@ function PI.VersionCheck(Data)
 					end
 				end
 			end
-			Checked = true
 		end
+		Checked = true	
 	end
 	if not Checked then
 		if Revision >= PI.History.Revision or PI.History.Checked == false then
@@ -97,7 +96,7 @@ function PI.ReplyVersion(From, rType)
 			Command.Message.Send(From, "KBMVerInfo", KBM.Version.High.."."..KBM.Version.Mid.."."..KBM.Version.Low, PI.SendCheck)
 		end
 	else
-		if KBM.Alpha then
+		if KBM.IsAlpha then
 			Command.Message.Send(From, "KBMVersion", "A"..KBMAddonData.toc.Version, PI.SendCheck)			
 		else
 			Command.Message.Send(From, "KBMVersion", "R"..KBMAddonData.toc.Version, PI.SendCheck)		

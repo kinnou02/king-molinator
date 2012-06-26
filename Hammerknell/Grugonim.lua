@@ -88,7 +88,7 @@ GR.Lang.Unit.Tower = KBM.Language:Add(GR.Tower.Name)
 GR.Lang.Unit.Tower:SetGerman("Manifestierter Tod")
 GR.Lang.Unit.Tower:SetFrench("Mort manifestée")
 GR.Lang.Unit.Tower:SetRussian("Материализованная Смерть")
-GR.Lang.Unit.Tower:SetKorean("드러난 죽음 탑")
+GR.Lang.Unit.Tower:SetKorean("드러난 죽음")
 GR.Tower.Name = GR.Lang.Unit.Tower[KBM.Lang]
 GR.Descript = GR.Grugonim.Name
 
@@ -98,7 +98,7 @@ GR.Lang.Ability.Decay = KBM.Language:Add("Rampant Decay")
 GR.Lang.Ability.Decay:SetGerman("Wilder Verfall")
 GR.Lang.Ability.Decay:SetFrench("Pourriture rampante")
 GR.Lang.Ability.Decay:SetRussian("Бурное разложение")
-GR.Lang.Ability.Decay:SetKorean("만연한 부패")
+GR.Lang.Ability.Decay:SetKorean("광란의 쇠락")
 GR.Lang.Ability.Bile = KBM.Language:Add("Corrosive Bile")
 GR.Lang.Ability.Bile:SetGerman("Ätzende Galle")
 GR.Lang.Ability.Bile:SetFrench("Vase corrosive")
@@ -118,7 +118,7 @@ GR.Lang.Ability.Swarm = KBM.Language:Add("Parasite Swarm")
 GR.Lang.Ability.Swarm:SetGerman("Parasitenschwarm")
 GR.Lang.Ability.Swarm:SetFrench("Nuée parasite")
 GR.Lang.Ability.Swarm:SetRussian("Выводок паразитов")
-GR.Lang.Ability.Swarm:SetKorean("기생충 떼")
+GR.Lang.Ability.Swarm:SetKorean("기생 벌 떼")
 
 -- Debuff Dictionary
 GR.Lang.Debuff = {}
@@ -126,7 +126,7 @@ GR.Lang.Debuff.Toxin = KBM.Language:Add("Heart Stopping Toxin")
 GR.Lang.Debuff.Toxin:SetFrench("Toxine d'arrêt cardiaque")
 GR.Lang.Debuff.Toxin:SetGerman("Herzstillstandsgift")
 GR.Lang.Debuff.Toxin:SetRussian("Останавливающий сердце яд")
-GR.Lang.Debuff.Toxin:SetKorean("심장마비 독")
+GR.Lang.Debuff.Toxin:SetKorean("심장 정지 독소")
 
 -- Menu Dictionary
 GR.Lang.Menu = {}

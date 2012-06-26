@@ -7,7 +7,7 @@ KBMEXCC_Settings = nil
 chKBMEXCC_Settings = nil
 
 local MOD = {
-	Directory = "Experts\Charmers_Caldera",
+	Directory = "Experts/Charmers_Caldera/",
 	File = "CCHeader.lua",
 	Header = nil,
 	Enabled = true,

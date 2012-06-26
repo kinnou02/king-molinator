@@ -89,12 +89,12 @@ SN.Lang.Ability.Hex = KBM.Language:Add("Excruciating Hex")
 SN.Lang.Ability.Hex:SetGerman("Quälende Verhexung")
 SN.Lang.Ability.Hex:SetRussian("Смертоностное проклятие")
 SN.Lang.Ability.Hex:SetFrench("Maléfice accablant")
-SN.Lang.Ability.Hex:SetKorean("고통의 저주")
+SN.Lang.Ability.Hex:SetKorean("고문 마법")
 SN.Lang.Ability.Decay = KBM.Language:Add("Moldering Decay")
 SN.Lang.Ability.Decay:SetGerman("Zerfallende Verwesung")
 SN.Lang.Ability.Decay:SetRussian("Тлеющее увядание")
 SN.Lang.Ability.Decay:SetFrench("Putréfaction")
-SN.Lang.Ability.Decay:SetKorean("문드러지는 부패")
+SN.Lang.Ability.Decay:SetKorean("허물어지는 쇠락")
 
 -- Notify Dictionary
 SN.Lang.Notify = {}
@@ -102,7 +102,7 @@ SN.Lang.Notify.Contract = KBM.Language:Add("Sicaron forces (%a*) into an unholy 
 SN.Lang.Notify.Contract:SetGerman("Sicaron zwingt (%a*) in einen unheiligen Pakt")
 SN.Lang.Notify.Contract:SetRussian("Сикарон заключает дьявольский контракт. Партнер %- (%a*).")
 SN.Lang.Notify.Contract:SetFrench("Sicaron fait passer à (%a*) un contrat impie.")
-
+SN.Lang.Notify.Contract:SetKorean("시카론이(가) (%a*)에게 부정한 계약을 강요합니다.")
 -- Debuff Dictionary
 SN.Lang.Debuff = {}
 SN.Lang.Debuff.Contract = KBM.Language:Add("Unholy Contract")
@@ -119,7 +119,7 @@ SN.Lang.Debuff.Ravaged = KBM.Language:Add("Ravaged Soul")
 SN.Lang.Debuff.Ravaged:SetGerman("Verwüstete Seele")
 SN.Lang.Debuff.Ravaged:SetFrench("Âme ravagée")
 SN.Lang.Debuff.Ravaged:SetRussian("Растерзанная душа")
-
+SN.Lang.Debuff.Ravaged:SetKorean("유린된 영혼")
 -- MechSpy Dictionary
 SN.Lang.MechSpy = {}
 SN.Lang.MechSpy.Buff = KBM.Language:Add("Buffed: Unholy Contract")

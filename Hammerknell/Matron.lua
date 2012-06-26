@@ -91,6 +91,7 @@ MZ.Lang.Ability.Blast = KBM.Language:Add("Hideous Blast")
 MZ.Lang.Ability.Blast:SetGerman("Schrecklicher Schlag")
 MZ.Lang.Ability.Blast:SetFrench("Explosion atroce")
 MZ.Lang.Ability.Blast:SetRussian("Мерзейший взрыв")
+MZ.Lang.Ability.Blast:SetGerman("소름 끼치는 폭발")
 MZ.Lang.Ability.Mark = KBM.Language:Add("Mark of Oblivion")
 MZ.Lang.Ability.Mark:SetGerman("Zeichen der Vergessenheit")
 MZ.Lang.Ability.Mark:SetFrench("Marque de l'oubli")
@@ -105,7 +106,7 @@ MZ.Lang.Ability.Ichor = KBM.Language:Add("Revolting Ichor")
 MZ.Lang.Ability.Ichor:SetGerman("Abscheulicher Eiter")
 MZ.Lang.Ability.Ichor:SetRussian("Омерзительный гной")
 MZ.Lang.Ability.Ichor:SetFrench("Ichor répugnant")
-
+MZ.Lang.Ability.Ichor:SetKorean("몸서리나는 영액")
 -- Notify Dictionary
 MZ.Lang.Notify = {}
 MZ.Lang.Notify.Mark = KBM.Language:Add("Matron Zamira places the Mark of Oblivion upon (%a*).")

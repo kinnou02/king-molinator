@@ -1,9 +1,19 @@
 ﻿v1.1.0
 
+Version Checking
+* Fixed: Release versions were incorrectly receiving Alpha version update notifications.
+
+Infernal Dawn
+* Ember Conclave
+** Fixed: Only the first active boss was initializing their castbar correctly.
+
+Experts
+* Charmers Calderer
+** Fixed: 1.9 only error with string formating.
+
 * Note
 ** This cycle of KBM is mainly for final updates for native Korean clients which will be running Rift 1.8 for some months
-** English/French/German/Russian clients do not need to update. Although, there is no harm in doing so.
-** KBM updates for Rift 1.9 will not start until Wed 27th June 2012, as the scope of KBM requires testing to be carried out on live servers.
+** There will also be minor fixes to ensure KBM is partially viable with Rift 1.9.
 
 Korean Translations
 * On-going updates and fixes for Korean native client support.
