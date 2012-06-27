@@ -283,7 +283,7 @@ function EC:UnitHPCheck(unitDetails, unitID)
 					self.PhaseObj.Objectives:AddPercent(self.Ereetu.Name, 0, 100)
 					self.Phase = 1
 				else
-					if BossObj.CastBar then
+					if not BossObj.CastBar.Active then
 						BossObj.CastBar:Create(unitID)
 					end
 					BossObj.Dead = false
@@ -303,7 +303,7 @@ function EC:Reset()
 		BossObj.Available = false
 		BossObj.UnitID = nil
 		BossObj.Dead = false
-		if BossObj.CastBar then
+		if BossObj.CastBar.Active then
 			BossObj.CastBar:Remove()
 		end
 	end
