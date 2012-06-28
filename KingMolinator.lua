@@ -112,7 +112,7 @@ KBM.ID = "KingMolinator"
 KBM.ModList = {}
 KBM.Testing = false
 KBM.ValidTime = false
-KBM.IsAlpha = false
+KBM.IsAlpha = true
 KBM.Debug = false
 KBM.TestFilters = {}
 KBM.IgnoreList = {}
@@ -772,7 +772,7 @@ local function KBM_LoadVars(AddonID)
 		end
 		
 		KBM.Debug = KBM.Options.Debug
-		
+		KBM.InitVars()		
 	elseif KBM.PlugIn.List[AddonID] then
 		KBM.PlugIn.List[AddonID]:LoadVars()
 	end
@@ -7824,7 +7824,7 @@ KBM.Event.System.Group.Leave, KBM.Event.System.Group.Leave.EventTable = Utility.
 KBM.Event.Encounter.Start, KBM.Event.Encounter.Start.EventTable = Utility.Event.Create("KingMolinator", "Encounter.Start")
 KBM.Event.Encounter.End, KBM.Event.Encounter.End.EventTable = Utility.Event.Create("KingMolinator", "Encounter.End")
 
-local function KBM_Start()
+function KBM.InitVars()
 	KBM.InitOptions()
 	KBM.Button:Init()
 	KBM.TankSwap:Init()
@@ -7838,15 +7838,10 @@ local function KBM_Start()
 	if KBM.Debug then
 		KBM.Unit.Debug:Init()
 	end
-	
-	if KBM.PlugIn.Count > 0 then
-		for ID, PlugIn in pairs(KBM.PlugIn.List) do
-			if PlugIn.Start then
-				PlugIn:Start()
-			end
-		end
-	end
-	
+	KBM.InitMenus()
+end
+
+function KBM.InitMenus()
 	local Header = KBM.MainWin.Menu:CreateHeader(KBM.Language.Menu.Global[KBM.Lang], nil, nil, nil, "Main")
 	KBM.MenuOptions.Main.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.Settings[KBM.Lang], KBM.MenuOptions.Main, nil, Header)
 	KBM.MenuOptions.Main.MenuItem.Check:SetEnabled(false)
@@ -7865,6 +7860,45 @@ local function KBM_Start()
 	KBM.MenuOptions.RezMaster.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.RezMaster.Name[KBM.Lang], KBM.MenuOptions.RezMaster, true, Header)
 	KBM.MenuOptions.RezMaster.MenuItem.Check:SetEnabled(false)
 	
+	-- Compile Boss Menus
+	for _, Mod in ipairs(KBM.ModList) do
+		Mod:AddBosses(KBM_Boss)
+		if Mod.InstanceObj then
+			for BossName, BossObj in pairs(Mod.Bosses) do
+				KBM.Boss.Dungeon:AddBoss(BossObj)
+				if BossObj.AltBossList then
+					for i, aBossObj in pairs(BossObj.AltBossList) do
+						KBM.Boss.Dungeon:AddBoss(aBossObj)
+					end
+				end
+			end
+		end
+		Mod:Start(KBM_MainWin)
+	end
+	
+	KBM.MainWin.Scroller.Instance:SetPosition(0)
+	for MenuID, MenuObj in pairs(KBM.MenuIDList) do
+		if MenuObj.Settings then
+			if MenuObj.Settings.Collapse then
+				if MenuObj.Type == "instance" then
+					MenuObj.GUI.Check:SetChecked(false)
+				else
+					MenuObj.Check:SetChecked(false)
+				end
+			end
+		end
+	end
+end
+
+local function KBM_Start()
+	if KBM.PlugIn.Count > 0 then
+		for ID, PlugIn in pairs(KBM.PlugIn.List) do
+			if PlugIn.Start then
+				PlugIn:Start()
+			end
+		end
+	end
+
 	table.insert(Command.Slash.Register("kbmreset"), {KBM_Reset, "KingMolinator", "KBM Reset"})
 	table.insert(Event.Chat.Notify, {KBM.Notify, "KingMolinator", "Notify Event"})
 	table.insert(Event.Chat.Npc, {KBM.NPCChat, "KingMolinator", "NPC Chat"})
@@ -7916,8 +7950,7 @@ local function KBM_Start()
 		
 	KBM.MenuOptions.Main:Options()
 	table.insert(Command.Slash.Register("kbmon"), {function() KBM.StateSwitch(true) end, "KingMolinator", "KBM On"})
-	table.insert(Command.Slash.Register("kbmoff"), {function() KBM.StateSwitch(false) end, "KingMolinator", "KBM Off"})
-			
+	table.insert(Command.Slash.Register("kbmoff"), {function() KBM.StateSwitch(false) end, "KingMolinator", "KBM Off"})			
 end
 
 local function KBM_WaitReady(unitID, uDetails)
@@ -7941,33 +7974,7 @@ local function KBM_WaitReady(unitID, uDetails)
 	KBM.Player.Level = uDetails.level
 	KBM.Player.Grouped = LibSRM.Grouped()
 	KBM.Player.Mode = LibSRM.Player.Mode
-	for _, Mod in ipairs(KBM.ModList) do
-		Mod:AddBosses(KBM_Boss)
-		if Mod.InstanceObj then
-			for BossName, BossObj in pairs(Mod.Bosses) do
-				KBM.Boss.Dungeon:AddBoss(BossObj)
-				if BossObj.AltBossList then
-					for i, aBossObj in pairs(BossObj.AltBossList) do
-						KBM.Boss.Dungeon:AddBoss(aBossObj)
-					end
-				end
-			end
-		end
-		Mod:Start(KBM_MainWin)
-	end
 	KBM.ApplySettings()
-	KBM.MainWin.Scroller.Instance:SetPosition(0)
-	for MenuID, MenuObj in pairs(KBM.MenuIDList) do
-		if MenuObj.Settings then
-			if MenuObj.Settings.Collapse then
-				if MenuObj.Type == "instance" then
-					MenuObj.GUI.Check:SetChecked(false)
-				else
-					MenuObj.Check:SetChecked(false)
-				end
-			end
-		end
-	end
 
 	if KBM.IsAlpha then
 		print(KBM.Language.Welcome.Welcome[KBM.Lang]..AddonData.toc.Version.." Alpha")
@@ -8039,7 +8046,6 @@ local function KBM_WaitReady(unitID, uDetails)
 	KBM.Player.CastBar.Target.CastObj = KBM.CastBar:Add(KBM.Player.CastBar.Target, KBM.Player.CastBar.Target)
 	KBM.Player.CastBar.Focus.CastObj = KBM.CastBar:Add(KBM.Player.CastBar.Focus, KBM.Player.CastBar.Focus)
 	KBM.Player.CastBar.CastObj:Create(KBM.Player.UnitID)
-		
 end
 
 KBM.PlugIn = {}

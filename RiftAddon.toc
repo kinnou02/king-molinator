@@ -10,9 +10,9 @@ Author = "Paul Snart"
 Website = "http://www.facebook.com/KingBossMods"
 Email = "snarty@gmail.com"
 
-Version = "1.1.0.436"
+Version = "1.1.1.437"
 
-Environment = "1.8"
+Environment = "1.9"
 
 RunOnStartup = {
 	"KingMolinator.lua",

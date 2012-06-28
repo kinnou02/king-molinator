@@ -1,4 +1,14 @@
-﻿v1.1.0
+﻿v1.1.1
+
+Rift Version
+* Change: Now compatible with Rift 1.9
+
+System
+* Initialization
+** Fixed: Adjusted how and when certain KBM elements initialize themselves on start-up and linking.
+
+----
+v1.1.0
 
 * Note
 ** This cycle of KBM is mainly for final updates for native Korean clients which will be running Rift 1.8 for some months

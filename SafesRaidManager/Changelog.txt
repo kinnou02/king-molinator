@@ -1,3 +1,15 @@
+v1.1.5
+
+Rift Version
+* Change: Now compatible with 1.9.
+
+System
+* Initialization
+** Change: Now uses the new Event.Unit.Availability.Full event to initialize the start-up procedure.
+* Units
+** Change: Now uses the new Event.Unit.Availability.Full event to Load unit details.
+
+----
 v1.1.4
 * Rift Version
 * Change: Now compatible with 1.8.

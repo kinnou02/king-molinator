@@ -739,41 +739,39 @@ end
 
 local function SRM_Stall(Data)
 	local PlayerID = Inspect.Unit.Lookup("player")
-	for UnitID, Specifier in pairs(Data) do
-		if UnitID == PlayerID then
-			local PlayerDets = {}
-			LibSRM.Player.ID = PlayerID
-			LibSRM.Player.PetID = Inspect.Unit.Lookup("player.pet")
-			PlayerDets = Inspect.Unit.Detail(LibSRM.Player.ID)
-			if PlayerDets then
-				if PlayerDets.name then
-					-- Remove this Handler, start actual program
-					for i, n in ipairs(Event.Unit.Available) do
-						if n[2] == "SafesRaidManager" then
-							Event.Unit.Available[i] = {SRM_UnitAvailable, "SafesRaidManager", "Unit Available"}
-							break
-						end
+	if Data[PlayerID] then
+		local PlayerDets = {}
+		LibSRM.Player.ID = PlayerID
+		LibSRM.Player.PetID = Inspect.Unit.Lookup("player.pet")
+		PlayerDets = Inspect.Unit.Detail(LibSRM.Player.ID)
+		if PlayerDets then
+			if PlayerDets.name then
+				-- Remove this Handler, start actual program
+				for i, n in ipairs(Event.Unit.Available) do
+					if n[2] == "SafesRaidManager" then
+						Event.Unit.Availability.Full[i] = {SRM_UnitAvailable, "SafesRaidManager", "Unit Available"}
+						break
 					end
-					LibSRM.Player.Loaded = true
-					local event = Library.LibUnitChange.Register("player.pet")
-					table.insert(Event.Combat.Damage, {SRM_Damage, "SafesRaidManager", "Damage Monitor"})
-					table.insert(Event.Combat.Heal, {SRM_Heal, "SafesRaidManager", "Heal Monitor"})
-					table.insert(Event.Combat.Death, {SRM_Death, "SafesRaidManager", "Death Monitor"})
-					table.insert(Event.Unit.Detail.Offline, {SRM_Offline, "SafesRaidManager", "Offline Monitor"})
-					table.insert(Event.Unit.Detail.Combat, {SRM_Combat, "SafesRaidManager", "Combat Monitor"})
-					table.insert(event, {SRM_PlayerPet, "SafesRaidManager", "player.pet"})
-					if LibSRM.Player.PetID then
-						--print(": Players Pet Loaded.")
-						PetDetails = Inspect.Unit.Detail(LibSRM.Player.PetID)
-						if PetDetails then
-							LibSRM.Player.PetName = PetDetails.name
-						end
-					end
-					SRM_InitRaid()
-					print(": Initialized v"..LibSRM.AddonDetails.toc.Version)
-					SRM_System.Player.Ready(LibSRM.Player.ID, PlayerDets)
-					return
 				end
+				LibSRM.Player.Loaded = true
+				local event = Library.LibUnitChange.Register("player.pet")
+				table.insert(Event.Combat.Damage, {SRM_Damage, "SafesRaidManager", "Damage Monitor"})
+				table.insert(Event.Combat.Heal, {SRM_Heal, "SafesRaidManager", "Heal Monitor"})
+				table.insert(Event.Combat.Death, {SRM_Death, "SafesRaidManager", "Death Monitor"})
+				table.insert(Event.Unit.Detail.Offline, {SRM_Offline, "SafesRaidManager", "Offline Monitor"})
+				table.insert(Event.Unit.Detail.Combat, {SRM_Combat, "SafesRaidManager", "Combat Monitor"})
+				table.insert(event, {SRM_PlayerPet, "SafesRaidManager", "player.pet"})
+				if LibSRM.Player.PetID then
+					--print(": Players Pet Loaded.")
+					PetDetails = Inspect.Unit.Detail(LibSRM.Player.PetID)
+					if PetDetails then
+						LibSRM.Player.PetName = PetDetails.name
+					end
+				end
+				SRM_InitRaid()
+				print(": Initialized v"..LibSRM.AddonDetails.toc.Version)
+				SRM_System.Player.Ready(LibSRM.Player.ID, PlayerDets)
+				return
 			end
 		end
 	end
@@ -823,4 +821,4 @@ function LibSRM.Player.Ready()
 end
 
 print(": Loaded")
-table.insert(Event.Unit.Available, {SRM_Stall, "SafesRaidManager", "Event Stall"})
+table.insert(Event.Unit.Availability.Full, {SRM_Stall, "SafesRaidManager", "Event Stall"})
