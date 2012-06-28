@@ -7,6 +7,10 @@ System
 * Initialization
 ** Fixed: Adjusted how and when certain KBM elements initialize themselves on start-up and linking.
 
+Infernal Dawn
+* Maklamos The Scryer
+** Change: Reverted Crystalline Desolation back to a 28s timer.
+
 ----
 v1.1.0
 

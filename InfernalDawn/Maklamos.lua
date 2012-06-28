@@ -302,7 +302,7 @@ end
 
 function ML:Start()
 	-- Create Timers
-	self.Maklamos.TimersRef.Desolation = KBM.MechTimer:Add(self.Lang.Ability.Crystal[KBM.Lang], 60)
+	self.Maklamos.TimersRef.Desolation = KBM.MechTimer:Add(self.Lang.Ability.Crystal[KBM.Lang], 28)
 	KBM.Defaults.TimerObj.Assign(self.Maklamos)
 	
 	-- Create Alerts
