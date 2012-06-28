@@ -747,7 +747,7 @@ local function SRM_Stall(Data)
 		if PlayerDets then
 			if PlayerDets.name then
 				-- Remove this Handler, start actual program
-				for i, n in ipairs(Event.Unit.Available) do
+				for i, n in ipairs(Event.Unit.Availability.Full) do
 					if n[2] == "SafesRaidManager" then
 						Event.Unit.Availability.Full[i] = {SRM_UnitAvailable, "SafesRaidManager", "Unit Available"}
 						break
