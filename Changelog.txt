@@ -7,6 +7,11 @@ Unit Tracking
 * Change: Major change in how unit tracking works. Removed lots of Inspect calls and instead push them directly to Idle.
 * Change: Once a unit is officially *seen* by the group, it'll pull the unit from the Idle bin and assign it appropriately.
 
+Infernal Dawn
+* Warboss Drak
+** Fixed: Drak and his Castbar were not initializing correctly.
+** Fixed: Natung and his Castbar were not initializing correctly.
+
 ----
 v1.1.1
 

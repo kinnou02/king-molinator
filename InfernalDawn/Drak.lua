@@ -407,17 +407,21 @@ function WD:RemoveUnits(UnitID)
 end
 
 function WD.PhaseTwo()
-	WD.PhaseObj.Objectives:Remove()
-	WD.PhaseObj:SetPhase("2")
-	WD.PhaseObj.Objectives:AddPercent(WD.Natung.Name, 0, 100)
-	WD.Phase = 2
+	if WD.Phase < 2 then
+		WD.PhaseObj.Objectives:Remove()
+		WD.PhaseObj:SetPhase("2")
+		WD.PhaseObj.Objectives:AddPercent(WD.Natung.Name, 0, 100)
+		WD.Phase = 2
+	end
 end
 
 function WD.PhaseFinal()
-	WD.PhaseObj.Objectives:Remove()
-	WD.PhaseObj:SetPhase("Final")
-	WD.PhaseObj.Objectives:AddPercent(WD.Drak.Name, 0, 100)
-	WD.Phase = 3
+	if WD.Phase < 3 then
+		WD.PhaseObj.Objectives:Remove()
+		WD.PhaseObj:SetPhase("Final")
+		WD.PhaseObj.Objectives:AddPercent(WD.Drak.Name, 0, 100)
+		WD.Phase = 3
+	end
 end
 
 function WD:Death(UnitID)
@@ -494,6 +498,22 @@ function WD:UnitHPCheck(uDetails, unitID)
 							end
 							return BossObj.UnitList[unitID]
 						end
+					else
+						if BossObj == self.Azul then
+							if not BossObj.CastBar.Active then
+								BossObj.CastBar:Create(unitID)
+							end
+						elseif BossObj == self.Drak then
+							if not BossObj.CastBar.Active then
+								BossObj.CastBar:Create(unitID)
+							end
+							self.PhaseThree()
+						elseif BossObj == self.Natung then
+							if not BossObj.CastBar.Active then
+								BossObj.CastBar:Create(unitID)
+							end
+							self.PhaseTwo()
+						end						
 					end
 					BossObj.UnitID = unitID
 					BossObj.Available = true

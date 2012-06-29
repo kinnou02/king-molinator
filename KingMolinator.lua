@@ -3506,12 +3506,10 @@ function KBM.MobDamage(info)
 		if UnitObj then
 			tDetails = UnitObj.Details
 		else
-			tDetails = Inspect.Unit.Detail(tUnitID)
 			UnitObj = KBM.Unit:Idle(tUnitID)
 		end
 		local cUnitID = info.caster
 		local cDetails = nil
-		local UnitObj = nil
 		if cUnitID then
 			if KBM.Unit.List.UID[cUnitID] then
 				cDetails = KBM.Unit.List.UID[cUnitID].Details
