@@ -8,6 +8,9 @@ chKBMEXROTFBA_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
+if not KBM.BossMod then
+	return
+end
 local Instance = KBM.BossMod["The Realm of the Fae"]
 
 local MOD = {

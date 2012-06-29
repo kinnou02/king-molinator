@@ -53,30 +53,36 @@ local SRM_Groups = {
 	[3] = 0,
 	[4] = 0,
 }
-local SRM_UnitQueue = {}
-SRM_UnitQueue.Queued = 0
-function SRM_UnitQueue:Add(RaidUnit)
-	self[RaidUnit.UnitID] = RaidUnit
-	self.Queued = self.Queued + 1
-end
-local SRM_PetQueue = {}
-SRM_PetQueue.OwnerWait = {}
-SRM_PetQueue.OwnerWait.Queued = 0
-SRM_PetQueue.Queued = 0
+local SRM_UnitQueue = {
+	Queued = 0,
+	List = {},
+	Add = function (RaidUnit)
+		self.List[RaidUnit.UnitID] = RaidUnit
+		self.Queued = self.Queued + 1
+	end,
+}
+local SRM_PetQueue = {
+	OwnerWait = {
+		Queued = 0,
+		List = {},
+	},
+	Queued = 0,
+	List = {},
+}
 function SRM_PetQueue:Add(RaidUnit, OwnerWait)
 	if OwnerWait then
 		-- Waiting for owner to load
-		--print("Pet waiting for owner to load.")
-		self.OwnerWait[RaidUnit.PetID] = {}
-		self.OwnerWait[RaidUnit.PetID].UID = RaidUnit.PetID
+		-- print("Pet waiting for owner to load.")
+		self.OwnerWait.List[RaidUnit.PetID] = {}
+		self.OwnerWait.List[RaidUnit.PetID].UID = RaidUnit.PetID
 		self.OwnerWait.Queued = self.OwnerWait.Queued + 1
 	else
 		-- Waiting for self to become available
-		--print("Pet waiting for self to become available.")
-		self[RaidUnit.PetID] = {}
-		self[RaidUnit.PetID].UID = RaidUnit.PetUID
-		self[RaidUnit.PetID].RaidUnit = RaidUnit
-		self[RaidUnit.PetID].Group = true
+		-- print("Pet waiting for self to become available.")
+		self.List[RaidUnit.PetID] = {}
+		self.List[RaidUnit.PetID].UID = RaidUnit.PetUID
+		self.List[RaidUnit.PetID].RaidUnit = RaidUnit
+		self.List[RaidUnit.PetID].Group = true
 		self.Queued = self.Queued + 1
 	end
 end
@@ -89,6 +95,7 @@ end
 local SRM_Group = {
 	Join = {},
 	Leave = {},
+	Reload = {},
 	Change = {},
 	Target = {},
 	Offline = {},
@@ -96,6 +103,7 @@ local SRM_Group = {
 }
 SRM_Group.Join, SRM_Group.Join.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Join")
 SRM_Group.Leave, SRM_Group.Leave.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Leave")
+SRM_Group.Reload, SRM_Group.Reload.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Reload")
 SRM_Group.Change, SRM_Group.Change.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Change")
 SRM_Group.Target, SRM_Group.Target.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Target")
 SRM_Group.Offline, SRM_Group.Offline.EventTable = Utility.Event.Create("SafesRaidManager", "Group.Offline")
@@ -197,7 +205,7 @@ local function SRM_CheckGroupState(force)
 			LibSRM.Player.Grouped = false
 			SRM_Group.Mode(SRM_Groups.Mode)
 			SRM_System.Player.Leave()
-			--print("You have left a group. Group mode reset to Party")
+			-- print("You have left a group. Group mode reset to Party")
 		end
 	end
 end
@@ -276,26 +284,27 @@ local function SRM_SetSpecifier(Specifier)
 	Unit.PetID = Inspect.Unit.Lookup(Specifier..".pet")
 	Unit.Spec = Specifier
 	Unit.TargetID = Inspect.Unit.Lookup(Specifier..".target")
-	function Unit:PetLoad()
+	function Unit:PetLoad(Avail)
 		if self.PetID then
 			if not SRM_Units.Pets[self.PetID] then
 				local petDetails = Inspect.Unit.Detail(self.PetID)
 				if petDetails then
-					--print("New pet added!")
+					-- print("New pet added!")
 					SRM_Units.Pets[self.PetID] = {}
 					SRM_Units.Pets[self.PetID].Name = petDetails.name
 					SRM_Units.Pets[self.PetID].UID = self.PetID
 					SRM_Units.Pets[self.PetID].OwnerUID = self.UnitID
 					SRM_Units.Pets[self.PetID].Specifier = self.Spec
+					SRM_Units.Pets[self.PetID].Avail = Avail
 					if not self.UnitID then
-						--- Wait for Owner to load before sending message
+						-- Wait for Owner to load before sending message
 						SRM_PetQueue:Add(self, true)
 					else
-						--print("Unit's Pet Loaded! (Pet Load)")
+						-- print("Unit's Pet Loaded! (Pet Load)")
 						SRM_Pet.Add(self.PetID, self.UnitID)
 					end
 				else
-					--- Queued for owner ID association
+					-- Queued for owner ID association
 					SRM_PetQueue:Add(self)
 				end
 			end
@@ -303,7 +312,7 @@ local function SRM_SetSpecifier(Specifier)
 	end
 	
 	function Unit:Leave()
-		--print(SRM_Units[self.UnitID].name.." has left the group.")
+		-- print(SRM_Units[self.UnitID].name.." has left the group.")
 		SRM_Combat({[self.UnitID] = false})
 		if self.Dead then
 			LibSRM.Dead = LibSRM.Dead - 1
@@ -314,7 +323,7 @@ local function SRM_SetSpecifier(Specifier)
 		SRM_Units[self.UnitID] = nil
 		self.SRM_Unit = nil
 		if self.PetID then
-			--print("Pet Removed!")
+			-- print("Pet Removed!")
 			SRM_Units.Pets[self.PetID] = nil
 			SRM_Pet.Remove(self.PetID, self.UnitID)
 		end
@@ -408,8 +417,32 @@ local function SRM_SetSpecifier(Specifier)
 		self.TargetID = UID
 		SRM_Group.Target(self.UnitID, UID)
 	end
+	
+	function Unit:LoadFull()
+		local uDetails = Inspect.Unit.Detail(self.UnitID)
+		if uDetails then
+			SRM_Units[self.UnitID].name = uDetails.name
+			SRM_Units[self.UnitID].calling = uDetails.calling
+			SRM_Units[self.UnitID].avail = "full"
+			SRM_Units[self.UnitID].Loaded = true
+			if uDetails.combat then
+				SRM_Combat({[self.UnitID] = true})
+			end
+			SRM_Units[self.UnitID].Location = uDetails.location
+			SRM_Units[self.UnitID].PetID = Inspect.Unit.Lookup(self.Spec.."pet")
+			if uDetails.health == 0 then
+				if not SRM_Units[self.UnitID].Dead then
+					SRM_Units[self.UnitID].Dead = true
+					LibSRM.Dead = LibSRM.Dead + 1
+				end
+			end
+			self.name = uDetails.name
+			SRM_NameList[self.name] = SRM_Units[self.UnitID]
+			SRM_Group.Reload(self.UnitID, self.Spec)
+		end
+	end
 
-	function Unit:Load()
+	function Unit:Load(Avail)
 		if self.UnitID then
 			if not SRM_Units[self.UnitID] then
 				local uDetails = Inspect.Unit.Detail(self.UnitID)
@@ -419,7 +452,10 @@ local function SRM_SetSpecifier(Specifier)
 					SRM_Units[self.UnitID].UnitID = self.UnitID
 					SRM_Units[self.UnitID].name = uDetails.name
 					SRM_Units[self.UnitID].calling = uDetails.calling
-					SRM_Units[self.UnitID].Loaded = true
+					SRM_Units[self.UnitID].avail = Avail
+					if Avail == "full" then
+						SRM_Units[self.UnitID].Loaded = true
+					end
 					if uDetails.combat then
 						SRM_Combat({[self.UnitID] = true})
 					end
@@ -436,8 +472,8 @@ local function SRM_SetSpecifier(Specifier)
 					SRM_CheckGroupState()
 					if SRM_Units[self.UnitID].PetID then
 						if SRM_PetQueue.OwnerWait.Queued then
-							if SRM_PetQueue.OwnerWait[SRM_Units[self.UnitID].PetID] then
-								SRM_PetQueue.OwnerWait[SRM_Units[self.UnitID].PetID] = nil
+							if SRM_PetQueue.OwnerWait.List[SRM_Units[self.UnitID].PetID] then
+								SRM_PetQueue.OwnerWait.List[SRM_Units[self.UnitID].PetID] = nil
 								SRM_PetQueue.OwnerWait.Queued = SRM_PetQueue.OwnerWait.Queued - 1
 								SRM_Units.Pets[SRM_Units[self.UnitID].PetID].OwnerID = self.UnitID
 								--print("Unit's Pet loaded!")
@@ -447,12 +483,14 @@ local function SRM_SetSpecifier(Specifier)
 					end
 					-- Send JOIN message HERE
 					SRM_Group.Join(self.UnitID, self.Spec)
-					--print("Unit joined group: "..uDetails.name)
+					-- print("Unit joined group: "..uDetails.name.." Load Level: "..uDetails.availability)
 				else
 					-- Send JOIN-WAIT message HERE (maybe)
 					SRM_UnitQueue:Add(self)
-					--print("Unit joined group, details not loaded.")
+					-- print("Unit joined group, details not loaded.")
 				end
+			else
+				self:LoadFull()
 			end
 		end
 	end
@@ -702,21 +740,44 @@ local function SRM_InitRaid()
 	end
 end
 
-local function SRM_UnitAvailable(units)
+local function SRM_UnitLoadPartial(units)
 	if (SRM_UnitQueue.Queued + SRM_PetQueue.Queued) > 0 then
-		for UnitID, Specifier in pairs(units) do
-			if SRM_UnitQueue[UnitID] then
-				SRM_UnitQueue[UnitID]:Load()
-				SRM_UnitQueue[UnitID] = nil
+		for UnitID, UnitObj in pairs(SRM_UnitQueue.List) do
+			if units[UnitID] then
+				UnitObj:Load("partial")
+				SRM_UnitQueue.List[UnitID] = nil
 				SRM_UnitQueue.Queued = SRM_UnitQueue.Queued - 1
-			elseif SRM_PetQueue[UnitID] then
-				--print("Pet found in queue, loading.")
-				if SRM_PetQueue[UnitID].Group then
-					SRM_PetQueue[UnitID].RaidUnit:PetLoad()
-					SRM_PetQueue[UnitID] = nil
+			end
+		end
+		for PetID, PetObj in pairs(SRM_PetQueue.List) do
+			if units[PetID] then
+				-- print("Pet found in queue, loading.")
+				if PetObj.Group then
+					PetObj.RaidUnit:PetLoad()
+					SRM_PetQueue.List[PetID] = nil
 					SRM_PetQueue.Queued = SRM_PetQueue.Queued - 1
-				else
-					
+				end
+			end
+		end
+	end
+end
+
+local function SRM_UnitLoadFull(units)
+	if (SRM_UnitQueue.Queued + SRM_PetQueue.Queued) > 0 then
+		for UnitID, UnitObj in pairs(SRM_UnitQueue.List) do
+			if units[UnitID] then
+				UnitObj:Load("full")
+				SRM_UnitQueue.List[UnitID] = nil
+				SRM_UnitQueue.Queued = SRM_UnitQueue.Queued - 1
+			end
+		end
+		for PetID, PetObj in pairs(SRM_PetQueue.List) do
+			if units[PetID] then
+				-- print("Pet found in queue, loading.")
+				if PetObj.Group then
+					PetObj.RaidUnit:PetLoad()
+					SRM_PetQueue.List[PetID] = nil
+					SRM_PetQueue.Queued = SRM_PetQueue.Queued - 1
 				end
 			end
 		end
@@ -749,7 +810,8 @@ local function SRM_Stall(Data)
 				-- Remove this Handler, start actual program
 				for i, n in ipairs(Event.Unit.Availability.Full) do
 					if n[2] == "SafesRaidManager" then
-						Event.Unit.Availability.Full[i] = {SRM_UnitAvailable, "SafesRaidManager", "Unit Available"}
+						Event.Unit.Availability.Full[i] = {SRM_UnitLoadFull, "SafesRaidManager", "Unit Full"}
+						table.insert(Event.Unit.Availability.Partial, {SRM_UnitLoadPartial, "SafesRaidManager", "Unit Partial"})
 						break
 					end
 				end
@@ -820,5 +882,4 @@ function LibSRM.Player.Ready()
 	return LibSRM.Player.Loaded
 end
 
-print(": Loaded")
 table.insert(Event.Unit.Availability.Full, {SRM_Stall, "SafesRaidManager", "Event Stall"})

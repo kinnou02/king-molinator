@@ -9,6 +9,9 @@ chKBMROSWG_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
+if not KBM.BossMod then
+	return
+end
 local ROS = KBM.BossMod["River of Souls"]
 
 local WG = {

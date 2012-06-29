@@ -19,6 +19,9 @@ local IND = {
 
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
+if not KBM.BossMod then
+	return
+end
 KBM.RegisterMod("Infernal Dawn", IND)
 
 IND.Lang = {}

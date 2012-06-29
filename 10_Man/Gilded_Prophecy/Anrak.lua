@@ -9,6 +9,9 @@ chKBMGPAF_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
+if not KBM.BossMod then
+	return
+end
 local GP = KBM.BossMod["Gilded Prophecy"]
 
 local AF = {

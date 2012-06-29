@@ -10,6 +10,9 @@ local PI = KBMMSG
 
 local KBMAddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = KBMAddonData.data
+if not KBM.BossMod then
+	return
+end
 
 KBM.MSG = PI
 local KBMLM = KBM.LocaleManager

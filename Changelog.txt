@@ -1,4 +1,14 @@
-﻿v1.1.1
+﻿v1.1.2
+
+System
+* Change: Each Boss Mod will now catch any errors if KBM doesn't fully start for any reason. This will prevent it running and spamming errors.
+
+Unit Tracking
+* Change: Major change in how unit tracking works. Removed lots of Inspect calls and instead push them directly to Idle.
+* Change: Once a unit is officially *seen* by the group, it'll pull the unit from the Idle bin and assign it appropriately.
+
+----
+v1.1.1
 
 Rift Version
 * Change: Now compatible with Rift 1.9

@@ -20,6 +20,9 @@ local DH = {
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
+if not KBM.BossMod then
+	return
+end
 KBM.RegisterMod("Drowned Halls", DH)
 
 -- Header Dictionary

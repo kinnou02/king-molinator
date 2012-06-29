@@ -112,7 +112,7 @@ KBM.ID = "KingMolinator"
 KBM.ModList = {}
 KBM.Testing = false
 KBM.ValidTime = false
-KBM.IsAlpha = false
+KBM.IsAlpha = true
 KBM.Debug = false
 KBM.TestFilters = {}
 KBM.IgnoreList = {}
@@ -3502,19 +3502,25 @@ end
 function KBM.MobDamage(info)
 	if KBM.Options.Enabled then
 		local tUnitID = info.target
-		local tDetails = Inspect.Unit.Detail(tUnitID)
+		local UnitObj = KBM.Unit.List.UID[tUnitID]
+		if UnitObj then
+			tDetails = UnitObj.Details
+		else
+			tDetails = Inspect.Unit.Detail(tUnitID)
+			UnitObj = KBM.Unit:Idle(tUnitID)
+		end
 		local cUnitID = info.caster
 		local cDetails = nil
 		local UnitObj = nil
 		if cUnitID then
-			cDetails = Inspect.Unit.Detail(cUnitID)
-			KBM.Unit:Update(cDetails, cUnitID)
-		end	
-		if tUnitID then
-			UnitObj = KBM.Unit:Update(tDetails, tUnitID)
-			if UnitObj then
-				UnitObj:DamageHandler(info)
+			if KBM.Unit.List.UID[cUnitID] then
+				cDetails = KBM.Unit.List.UID[cUnitID].Details
+			else
+				KBM.Unit:Idle(cUnitID)
 			end
+		end	
+		if UnitObj then
+			UnitObj:DamageHandler(info)
 		end
 		if KBM.Encounter then
 			-- Check for damage done to the raid by Bosses
@@ -3640,17 +3646,19 @@ end
 
 function KBM.MobHeal(info)
 	local tUnitID = info.target
-	local tDetails = Inspect.Unit.Detail(tUnitID)
+	local tDetails = nil
 	local cUnitID = info.caster
 	local cDetails = nil
 	local UnitObj = nil
 	if cUnitID then
-		cDetails = Inspect.Unit.Detail(cUnitID)
-		KBM.Unit:Update(cDetails, cUnitID)
+		if not KBM.Unit.List.UID[cUnitID] then
+			KBM.Unit:Idle(cUnitID)
+		end
 	end
 	if tUnitID then
-		UnitObj = KBM.Unit:Update(tDetails, tUnitID)
-		if UnitObj then
+		UnitObj = KBM.Unit.List.UID[tUnitID]
+		if not UnitObj then
+			UnitObj = KBM.Unit:Idle(tUnitID)
 			UnitObj:HealHandler(info)
 		end
 	end
@@ -3660,20 +3668,24 @@ function KBM.RaidDamage(info)
 	-- Will be used for DPS Monitoring
 	if KBM.Options.Enabled then
 		local tUnitID = info.target
-		local tDetails = Inspect.Unit.Detail(tUnitID)
+		local tDetails = nil
 		local cUnitID = info.caster
 		local cDetails = nil
 		local UnitObj = nil
 		if cUnitID then
-			cDetails = Inspect.Unit.Detail(cUnitID)
-			UnitObj = KBM.Unit:Update(cDetails, cUnitID)
+			if KBM.Unit.List.UID[cUnitID] then
+				cDetails = KBM.Unit.List.UID[cUnitID]
+			else
+				KBM.Unit:Idle(cUnitID)
+			end
 		end
 		if tUnitID then
 		--	print("KBM.RaidDamage() ---> Calling KBM.Unit:Add() -- "..tostring(tUnitID))
-			UnitObj = KBM.Unit:Update(tDetails, tUnitID)
-			if UnitObj then
-				UnitObj:DamageHandler(info)
+			UnitObj = KBM.Unit.List.UID[tUnitID]
+			if not UnitObj then
+				UnitObj = KBM.Unit:Idle(tUnitID)
 			end
+			UnitObj:DamageHandler(info)
 		end
 		if KBM.Encounter then
 			if KBM.BossID[tUnitID] then
@@ -3803,19 +3815,21 @@ end
 
 function KBM.RaidHeal(info)
 	local tUnitID = info.target
-	local tDetails = Inspect.Unit.Detail(tUnitID)
+	local tDetails = nil
 	local cUnitID = info.caster
 	local cDetails = nil
 	local UnitObj = nil
 	if cUnitID then
-		cDetails = Inspect.Unit.Detail(cUnitID)
-		KBM.Unit:Update(cDetails, cUnitID)
+		if not KBM.Unit.List.UID[cUnitID] then
+			KBM.Unit:Idle(cUnitID)
+		end
 	end
 	if tUnitID then
-		UnitObj = KBM.Unit:Update(tDetails, tUnitID)
-		if UnitObj then
-			UnitObj:HealHandler(info)
+		UnitObj = KBM.Unit.List.UID[tUnitID]
+		if not UnitObj then
+			UnitObj = KBM.Unit:Idle(tUnitID)
 		end
+		UnitObj:HealHandler(info)
 	end
 end
 
@@ -4030,41 +4044,41 @@ function KBM.Unit:Create(uDetails, UnitID)
 		function UnitObj:DamageHandler(DamageObj)
 			if self.Loaded then
 				if self.Available == true then
-					local uDetails = Inspect.Unit.Detail(self.UnitID)
-					if uDetails ~= nil then
-						self.Details = uDetails
-						if uDetails.healthMax then
-							self.HealthMax = uDetails.healthMax
-						end
-						if uDetails.health then
-							self:Update(uDetails.health, uDetails)
-							return
-						end
-					end
+					-- local uDetails = Inspect.Unit.Detail(self.UnitID)
+					-- if uDetails ~= nil then
+						-- self.Details = uDetails
+						-- if uDetails.healthMax then
+							-- self.HealthMax = uDetails.healthMax
+						-- end
+						-- if uDetails.health then
+							-- self:Update(uDetails.health, uDetails)
+							-- return
+						-- end
+					-- end
 				elseif self.Time then
 					self:UpdateIdle()
 				end
-				if self.Health then
-					if self.HealthMax then
-						if DamageObj.damage then
-							self.Health = self.Health - DamageObj.damage
-							if self.Health < 0 then
-								self.Health = 0
-							end
-						end
-						if DamageObj.overkill then
-							self.Health = 0
-						end
-						self.PercentFlat = (self.Health/self.HealthMax)
-						self.PercentRaw = self.PercentFlat*100
-						if self.PercentRaw ~= self.LastPercentRaw then
-							self.Percent = math.ceil(self.PercentRaw)
-							self.LastPercentRaw = self.PercentRaw
-							KBM.Event.Unit.PercentChange(self.UnitID)
-							KBM.UpdateHP(self)
-						end
-					end
-				end
+				-- if self.Health then
+					-- if self.HealthMax then
+						-- if DamageObj.damage then
+							-- self.Health = self.Health - DamageObj.damage
+							-- if self.Health < 0 then
+								-- self.Health = 0
+							-- end
+						-- end
+						-- if DamageObj.overkill then
+							-- self.Health = 0
+						-- end
+						-- self.PercentFlat = (self.Health/self.HealthMax)
+						-- self.PercentRaw = self.PercentFlat*100
+						-- if self.PercentRaw ~= self.LastPercentRaw then
+							-- self.Percent = math.ceil(self.PercentRaw)
+							-- self.LastPercentRaw = self.PercentRaw
+							-- KBM.Event.Unit.PercentChange(self.UnitID)
+							-- KBM.UpdateHP(self)
+						-- end
+					-- end
+				-- end
 			elseif self.Time then
 				self:UpdateIdle()
 			end
@@ -4072,42 +4086,42 @@ function KBM.Unit:Create(uDetails, UnitID)
 		function UnitObj:HealHandler(HealObj)
 			if self.Loaded then
 				if self.Available == true then
-					local uDetails = Inspect.Unit.Detail(self.UnitID)
-					if uDetails ~= nil or self.Available ~= false then
-						self.Details = uDetails
-						if uDetails.healthMax then
-							self.HealthMax = uDetails.healthMax
-						end
-						if uDetails.health then
-							self:Update(uDetails.health, uDetails)
-							return
-						end
-					end
+					-- local uDetails = Inspect.Unit.Detail(self.UnitID)
+					-- if uDetails ~= nil or self.Available ~= false then
+						-- self.Details = uDetails
+						-- if uDetails.healthMax then
+							-- self.HealthMax = uDetails.healthMax
+						-- end
+						-- if uDetails.health then
+							-- self:Update(uDetails.health, uDetails)
+							-- return
+						-- end
+					-- end
 				elseif self.Time then
 					self:UpdateIdle()
 				end
-				if self.Health then
-					if self.HealthMax then
-						if not HealObj.heal then
-							HealObj.heal = 0
-							self.Health = self.Health + HealObj.heal
-							if self.Health > self.HealthMax then
-								self.Health = self.HealthMax
-							end
-						end
-						if self.Dead then
-							self.Dead = false
-						end
-						self.PercentFlat = (self.Health/self.HealthMax)
-						self.PercentRaw = self.PercentFlat*100
-						if self.PercentRaw ~= self.LastPercentRaw then
-							self.Percent = math.ceil(self.PercentRaw)
-							self.LastPercentRaw = self.PercentRaw
-							KBM.Event.Unit.PercentChange(self.UnitID)
-							KBM.UpdateHP(self)
-						end
-					end
-				end
+				-- if self.Health then
+					-- if self.HealthMax then
+						-- if not HealObj.heal then
+							-- HealObj.heal = 0
+							-- self.Health = self.Health + HealObj.heal
+							-- if self.Health > self.HealthMax then
+								-- self.Health = self.HealthMax
+							-- end
+						-- end
+						-- if self.Dead then
+							-- self.Dead = false
+						-- end
+						-- self.PercentFlat = (self.Health/self.HealthMax)
+						-- self.PercentRaw = self.PercentFlat*100
+						-- if self.PercentRaw ~= self.LastPercentRaw then
+							-- self.Percent = math.ceil(self.PercentRaw)
+							-- self.LastPercentRaw = self.PercentRaw
+							-- KBM.Event.Unit.PercentChange(self.UnitID)
+							-- KBM.UpdateHP(self)
+						-- end
+					-- end
+				-- end
 			elseif self.Time then
 				self:UpdateIdle()
 			end
@@ -4155,6 +4169,9 @@ function KBM.Unit:Create(uDetails, UnitID)
 				self.Details = uDetails
 				self.HealthMax = uDetails.healthMax
 				self.Health = uDetails.health
+				self.Availability = uDetails.availability
+				self.Available = true
+				self.Loaded = true
 				if self.HealthMax ~= nil and self.Health ~= nil and self.Name ~= nil then
 					if self.Health > 0 then
 						self.Dead = false
@@ -4164,7 +4181,6 @@ function KBM.Unit:Create(uDetails, UnitID)
 					self.PercentFlat = (self.Health/self.HealthMax)
 					self.PercentRaw = self.PercentFlat*100
 					self.Percent = math.ceil(self.PercentRaw)
-					self.Loaded = true
 				else
 					self.Dead = true
 					self.PercentFlat = 0
@@ -4172,6 +4188,7 @@ function KBM.Unit:Create(uDetails, UnitID)
 					self.Percent = 0
 				end
 				self.Mark = uDetails.mark
+				KBM.Event.Mark(uDetails.mark, UnitID)
 				if self.Calling ~= uDetails.calling then
 					if uDetails.calling then
 						self.Calling = uDetails.calling
@@ -4478,7 +4495,7 @@ function KBM.Unit:Death(UnitID)
 			self.List.UID[UnitID].Percent = 0
 		end
 	else
-		self:Create(Inspect.Unit.Detail(UnitID), UnitID)
+		self:Idle(UnitID)
 		self.List.UID[UnitID].Dead = true
 		self.List.UID[UnitID].Health = 0
 		self.List.UID[UnitID].PercentRaw = 0
@@ -4492,26 +4509,20 @@ local function KBM_UnitAvailable(units)
 	if KBM.Encounter then
 		for UnitID, Specifier in pairs(units) do
 			if Specifier then
-				uDetails = Inspect.Unit.Detail(UnitID)
-				UnitObj = KBM.Unit:Available(uDetails, UnitID)
+				local uDetails = Inspect.Unit.Detail(UnitID)
+				local UnitObj = KBM.Unit:Available(uDetails, UnitID)
 				if uDetails then
 					if not uDetails.player then					
 						KBM.CheckActiveBoss(uDetails, UnitID)
 					end
-					KBM.Event.Mark(uDetails.mark, UnitID)
 				end
 			end
 		end
 	else
 		for UnitID, Specifier in pairs(units) do
 			if Specifier then
-				uDetails = Inspect.Unit.Detail(UnitID)
-				UnitObj = KBM.Unit:Available(uDetails, UnitID)
-				if uDetails then
-					if uDetails.mark then
-						KBM.Event.Mark(uDetails.mark, UnitID)
-					end
-				end
+				local uDetails = Inspect.Unit.Detail(UnitID)
+				local UnitObj = KBM.Unit:Available(uDetails, UnitID)
 			end
 		end	
 	end
@@ -7693,7 +7704,7 @@ function KBM.GroupTarget(UnitID, TargetID)
 						KBM.Unit.List.UID[TargetStore].TargetCount = KBM.Unit.List.UID[TargetStore].TargetCount - 1
 					end
 				else
-					KBM.Unit:Create(Inspect.Unit.Detail(TargetStore), TargetStore)
+					KBM.Unit:Idle(TargetStore)
 				end
 				KBM.Unit.List.UID[UnitID].TargetID = false
 				KBM.Unit.List.UID[TargetStore].TargetList[UnitID] = nil
@@ -7704,7 +7715,7 @@ function KBM.GroupTarget(UnitID, TargetID)
 			end
 			if TargetID then
 				if not KBM.Unit.List.UID[TargetID] then
-					KBM.Unit:Create(Inspect.Unit.Detail(TargetID), TargetID)
+					KBM.Unit:Idle(TargetID)
 				end
 				if not KBM.Unit.List.UID[TargetID].TargetList[UnitID] then
 					KBM.Unit.List.UID[TargetID].TargetCount = KBM.Unit.List.UID[TargetID].TargetCount + 1
@@ -7774,9 +7785,9 @@ function KBM.PowerChange(data, PowerMode)
 	for UnitID, Value in pairs(data) do
 		if KBM.Unit.List.UID[UnitID] then
 			if type(Value) == "number" then
-				if not KBM.Unit.List.UID[UnitID].Details then
-					KBM.Unit.List.UID[UnitID]:UpdateData(Inspect.Unit.Detail(UnitID))
-				end
+				-- if not KBM.Unit.List.UID[UnitID].Details then
+					-- KBM.Unit.List.UID[UnitID]:UpdateData(Inspect.Unit.Detail(UnitID))
+				-- end
 				if KBM.Unit.List.UID[UnitID].Details then
 					KBM.Unit.List.UID[UnitID].Details[PowerMode] = Value
 					KBM.Event.Unit.Power(UnitID, Value)
@@ -7905,8 +7916,9 @@ local function KBM_Start()
 	table.insert(Event.Buff.Add, {function (unitID, Buffs) KBM:BuffMonitor(unitID, Buffs, "new") end, "KingMolinator", "Buff Monitor (Add)"})
 	table.insert(Event.Buff.Change, {function (unitID, Buffs) KBM:BuffMonitor(unitID, Buffs, "change") end, "KingMolinator", "Buff Monitor (change)"})
 	table.insert(Event.Buff.Remove, {function (unitID, Buffs) KBM:BuffMonitor(unitID, Buffs, "remove") end, "KingMolinator", "Buff Monitor (remove)"})
-	table.insert(Event.Unit.Unavailable, {KBM_UnitRemoved, "KingMolinator", "Unit Unavailable"})
-	table.insert(Event.Unit.Available, {KBM_UnitAvailable, "KingMolinator", "Unit Available"})
+	table.insert(Event.Unit.Availability.None, {KBM_UnitRemoved, "KingMolinator", "Unit Unavailable"})
+	table.insert(Event.Unit.Availability.Partial, {KBM_UnitAvailable, "KingMolinator", "Unit Available"})
+	table.insert(Event.Unit.Availability.Full, {KBM_UnitAvailable, "KingMolinator", "Unit Available"})
 	table.insert(Event.Unit.Detail.LocationName, {KBM.LocationChange, "KingMolinator", "Location Change"})
 	table.insert(Event.Unit.Detail.Zone, {KBM.ZoneChange, "KingMolinator", "Zone Change"})
 	table.insert(Event.Unit.Detail.Health, {KBM.HealthChange, "KingMolinator", "Health Update"})

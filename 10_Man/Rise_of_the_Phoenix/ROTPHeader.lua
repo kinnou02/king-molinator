@@ -19,6 +19,9 @@ local ROTP = {
 
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
+if not KBM.BossMod then
+	return
+end
 KBM.RegisterMod("Rise of the Phoenix", ROTP)
 
 -- Header Dictionary

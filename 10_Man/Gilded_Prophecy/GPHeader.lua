@@ -5,6 +5,13 @@
 
 KBMGP_Settings = {}
 
+-- Link Mods
+local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = AddonData.data
+if not KBM.BossMod then
+	return
+end
+
 local GP = {
 	Directory = "10_Man/Gilded_Prophecy/",
 	File = "GPHeader.lua",
@@ -17,9 +24,6 @@ local GP = {
 	Object = "GP",
 }
 
--- Link Mods
-local AddonData = Inspect.Addon.Detail("KingMolinator")
-local KBM = AddonData.data
 KBM.RegisterMod("Gilded Prophecy", GP)
 
 -- Header Dictionary
