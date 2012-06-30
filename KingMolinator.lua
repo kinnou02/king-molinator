@@ -3506,7 +3506,8 @@ function KBM.MobDamage(info)
 		if UnitObj then
 			tDetails = UnitObj.Details
 		else
-			UnitObj = KBM.Unit:Idle(tUnitID)
+			tDetails = Inspect.Unit.Detail(tUnitID)
+			UnitObj = KBM.Unit:Idle(tUnitID, tDetails)
 		end
 		local cUnitID = info.caster
 		local cDetails = nil
@@ -3674,14 +3675,17 @@ function KBM.RaidDamage(info)
 			if KBM.Unit.List.UID[cUnitID] then
 				cDetails = KBM.Unit.List.UID[cUnitID]
 			else
+				
 				KBM.Unit:Idle(cUnitID)
 			end
 		end
 		if tUnitID then
-		--	print("KBM.RaidDamage() ---> Calling KBM.Unit:Add() -- "..tostring(tUnitID))
 			UnitObj = KBM.Unit.List.UID[tUnitID]
 			if not UnitObj then
+				tDetails = Inspect.Unit.Detail(tUnitID)
 				UnitObj = KBM.Unit:Idle(tUnitID)
+			else
+				tDetails = UnitObj.Detail
 			end
 			UnitObj:DamageHandler(info)
 		end
@@ -4405,7 +4409,7 @@ function KBM.Unit:Update(uDetails, UnitID)
 	end
 end
 
-function KBM.Unit:Idle(UnitID)
+function KBM.Unit:Idle(UnitID, Details)
 	local Number = 0
 	if UnitID then
 		if self.List.UID[UnitID] then
@@ -4427,7 +4431,7 @@ function KBM.Unit:Idle(UnitID)
 		return self.List.UID[UnitID]
 	else
 		if self.List.UID[UnitID] == nil then
-			self:Create(nil, UnitID)
+			self:Create(Details, UnitID)
 			if not self.UIDs.Idle[UnitID] then
 				self.UIDs.Idle[UnitID] = self.List.UID[UnitID]
 				self.UIDs.Count.Idle = self.UIDs.Count.Idle + 1
