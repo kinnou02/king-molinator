@@ -467,6 +467,12 @@ end
 function RM.MessageSent(Failed, Message)
 end
 
+function RM.RezSetCheck(name, DataSend, failed, message)
+	if failed then
+		Command.Message.Broadcast("tell", name, "KBMRezSet", DataSend, RM.MessageSent)
+	end
+end
+
 function RM.Broadcast.RezSet(toName, crID)
 	if KBM.Player.Grouped then
 		if toName then
@@ -474,7 +480,8 @@ function RM.Broadcast.RezSet(toName, crID)
 				KBM.Player.Rezes.List[crID] = Inspect.Ability.Detail(crID)
 				Details = KBM.Player.Rezes.List[crID]
 				if Details then
-					Command.Message.Send(toName, "KBMRezSet", crID..","..tostring(Details.currentCooldownRemaining)..","..tostring(Details.cooldown), RM.MessageSent)
+					local DataSend = crID..","..tostring(Details.currentCooldownRemaining)..","..tostring(Details.cooldown)
+					Command.Message.Send(toName, "KBMRezSet", DataSend, function(failed, message) RM.RezSetCheck(toName, DataSend, failed, message) end)
 				end
 			end
 		elseif not crID then
@@ -514,7 +521,19 @@ function RM.Broadcast.RezClear()
 	end
 end
 
+function RM.RezMReq(name, failed, message)
+	if failed then
+		Command.Message.Broadcast("tell", name, "KBMRezReq", "R", RM.MessageSent)
+	end
+end
+
 function RM.MessageHandler(From, Type, Channel, Identifier, Data)
+	-- print("Data received from: "..tostring(From))
+	-- print("Type: "..tostring(Type))
+	-- print("Channel: "..tostring(Channel))
+	-- print("ID: "..tostring(Identifier))
+	-- print("Data: "..tostring(Data))
+	-- print("--------------------------------")
 	if From ~= KBM.Player.Name and Data ~= nil then
 		if Type then
 			if Type == "raid" or Type == "party" then
@@ -534,13 +553,18 @@ function RM.MessageHandler(From, Type, Channel, Identifier, Data)
 				elseif Identifier == "KBMRezClear" then
 					RM.Rezes:Clear(From)
 				end
-			elseif Type == "send" then
+			elseif Type == "send" or Type == "tell" then
 				if Identifier == "KBMRezSet" then
-					RM.MessageHandler(From, "raid", nil, Identifier, Data)
+					local aID = string.sub(Data, 1, 17)
+					local st = string.find(Data, ",", 19)
+					local aCD = math.ceil(tonumber(string.sub(Data, 19, st - 1)) or 0)
+					local aDR = math.floor(tonumber(string.sub(Data, st + 1)))
+					local aDets = Inspect.Ability.Detail(aID)
+					RM.Rezes:Add(From, aID, aCD, aDR)
 				elseif Identifier == "KBMRezReq" then
 					RM.Broadcast.RezSet(From)
 					if Data == "C" then
-						Command.Message.Send(From, "KBMRezReq", "R", RM.MessageSent)
+						Command.Message.Send(From, "KBMRezReq", "R", function(failed, message) RM.RezMReq(From, failed, message) end)
 					end
 				end
 			end
@@ -553,13 +577,13 @@ function RM:Start()
 	self.MSG = KBM.MSG
 	self.GUI:Init()
 	self.Rezes:Init()
-	Command.Message.Accept("raid", "KBMRezSet")
-	Command.Message.Accept("raid", "KBMRezRem")
-	Command.Message.Accept("raid", "KBMRezClear")
-	Command.Message.Accept("party", "KBMRezSet")
-	Command.Message.Accept("party", "KBMRezRem")
-	Command.Message.Accept("party", "KBMRezClear")
-	Command.Message.Accept("send", "KBMRezSet")
-	Command.Message.Accept("send", "KBMRezReq")
+	Command.Message.Accept(nil, "KBMRezSet")
+	Command.Message.Accept(nil, "KBMRezRem")
+	Command.Message.Accept(nil, "KBMRezClear")
+	--Command.Message.Accept("party", "KBMRezSet")
+	--Command.Message.Accept("party", "KBMRezRem")
+	--Command.Message.Accept("party", "KBMRezClear")
+	--Command.Message.Accept("send", "KBMRezSet")
+	Command.Message.Accept(nil, "KBMRezReq")
 	table.insert(Event.Message.Receive, {RM.MessageHandler, "KingMolinator", "Message Parse"})
 end

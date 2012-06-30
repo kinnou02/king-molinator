@@ -4405,7 +4405,10 @@ function KBM.Unit:Update(uDetails, UnitID)
 		self.List.UID[UnitID]:UpdateData(uDetails)
 		return self.List.UID[UnitID]
 	else
-		return self:Idle(UnitID)
+		if not uDetails then
+			uDetails = Inspect.Unit.Detail(UnitID)
+		end
+		return self:Idle(UnitID, uDetails)
 	end
 end
 
@@ -7035,11 +7038,19 @@ function KBM:BuffMonitor(unitID, Buffs, Type)
 	
 end
 
-function KBM.VersionReqCheck(name, failed, message)
+function KBM.VersionReqCheckb(name, failed, message)
 	if not failed then
 		print("Version request sent successfully for "..name.."!")
 	else
 		print("Version request failed for: "..tostring(name))
+	end
+end
+
+function KBM.VersionReqCheck(name, failed, message)
+	if not failed then
+		print("Version request sent successfully for "..name.."!")
+	else
+		Command.Message.Broadcast("tell", name, "KBMVerReq", "V", function (failed, message) KBM.VersionReqCheckb(name, failed, message) end)
 	end
 end
 

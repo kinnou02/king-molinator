@@ -62,9 +62,11 @@ function PC:GatherRaidInfo()
 					--KBM.Unit.List.UID[uID].Details = Inspect.Unit.Detail(uID)
 					if KBM.Unit.List.UID[uID].Calling then
 						if self.RezBank[KBM.Unit.List.UID[uID].Calling] then
-							Command.Message.Send(KBM.Unit.List.UID[uID].Name, "KBMRezReq", "C", PC.MessageSent)
+							Command.Message.Broadcast("tell", KBM.Unit.List.UID[uID].Name, "KBMRezReq", "C", PC.MessageSent)
+							--Command.Message.Send(KBM.Unit.List.UID[uID].Name, "KBMRezReq", "C", PC.MessageSent)
 						end
 					else
+						--print("Adding player to queue (Unknown Calling): "..KBM.Unit.List.UID[uID].Name)
 						self.Queue[uID] = true
 					end
 				end
@@ -148,7 +150,7 @@ function PC.PlayerJoin()
 	if KBM.Player.Calling then
 		PC:GatherAbilities()
 	end
-	PC:GatherRaidInfo()
+	--PC:GatherRaidInfo()
 end
 
 function PC.CallingChange(uID, Calling)
@@ -162,20 +164,26 @@ function PC.CallingChange(uID, Calling)
 	end
 end
 
+function PC.RezMReq(name, failed, message)
+	if failed then
+		Command.Message.Broadcast("tell", name, "KBMRezReq", "C", PC.MessageSent)
+	end
+end
+
 function PC.GroupJoin(uID)
 	--print("Player joining: "..KBM.Unit.List.UID[uID].Name)
 	if KBM.Player.Grouped then
-		--print("and you are in a Group")
+	--	print("and you are in a Group")
 		if not KBM.RezMaster.Rezes.Tracked[KBM.Unit.List.UID[uID].Name] then
 			--print("New player has joined: Requesting BR list")
 			KBM.RezMaster.Rezes.Tracked[KBM.Unit.List.UID[uID].Name] = {
 				UnitID = uID,
 				Timers = {},
 			}
-			Command.Message.Send(KBM.Unit.List.UID[uID].Name, "KBMRezReq", "C", PC.MessageSent)
+			Command.Message.Send(KBM.Unit.List.UID[uID].Name, "KBMRezReq", "C", function(failed, message) PC.RezMReq(KBM.Unit.List.UID[uID].Name, failed, message) end)
 		end
 	else
-		--print("you are not currently grouped")
+	--	print("you are not currently grouped")
 	end
 end
 

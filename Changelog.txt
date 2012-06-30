@@ -3,6 +3,12 @@
 System
 * Change: Each Boss Mod will now catch any errors if KBM doesn't fully start for any reason. This will prevent it running and spamming errors.
 
+RezMaster
+* Change: Messages are now handled for both .Send and .Broadcast to account for any issues with the API (such as this week).
+
+Version Messages
+* Change: See RezMaster.
+
 Unit Tracking
 * Change: Major change in how unit tracking works. Removed lots of Inspect calls and instead push them directly to Idle.
 * Change: Once a unit is officially *seen* by the group, it'll pull the unit from the Idle bin and assign it appropriately.

@@ -94,15 +94,19 @@ end
 function PI.ReplyVersion(From, rType)
 	if rType == "v" then
 		if KBM.IsAlpha then
-			Command.Message.Send(From, "KBMVerInfo", KBM.Version.High.."."..KBM.Version.Mid.."."..KBM.Version.Low..".r"..KBM.Version.Revision, PI.SendCheck)
+			Command.Message.Broadcast("tell", From, "KBMVerInfo", KBM.Version.High.."."..KBM.Version.Mid.."."..KBM.Version.Low..".r"..KBM.Version.Revision, PI.SendCheck)
+			--Command.Message.Send(From, "KBMVerInfo", KBM.Version.High.."."..KBM.Version.Mid.."."..KBM.Version.Low..".r"..KBM.Version.Revision, PI.SendCheck)
 		else
-			Command.Message.Send(From, "KBMVerInfo", KBM.Version.High.."."..KBM.Version.Mid.."."..KBM.Version.Low, PI.SendCheck)
+			Command.Message.Broadcast("tell", From, "KBMVerInfo", KBM.Version.High.."."..KBM.Version.Mid.."."..KBM.Version.Low, PI.SendCheck)
+			--Command.Message.Send(From, "KBMVerInfo", KBM.Version.High.."."..KBM.Version.Mid.."."..KBM.Version.Low, PI.SendCheck)
 		end
 	else
 		if KBM.IsAlpha then
-			Command.Message.Send(From, "KBMVersion", "A"..KBMAddonData.toc.Version, PI.SendCheck)			
+			Command.Message.Broadcast("tell", From, "KBMVersion", "A"..KBMAddonData.toc.Version, PI.SendCheck)			
+			--Command.Message.Send(From, "KBMVersion", "A"..KBMAddonData.toc.Version, PI.SendCheck)			
 		else
-			Command.Message.Send(From, "KBMVersion", "R"..KBMAddonData.toc.Version, PI.SendCheck)		
+			Command.Message.Broadcast("tell", From, "KBMVersion", "R"..KBMAddonData.toc.Version, PI.SendCheck)		
+			--Command.Message.Send(From, "KBMVersion", "R"..KBMAddonData.toc.Version, PI.SendCheck)		
 		end
 	end
 end
@@ -120,7 +124,7 @@ function PI.MessageHandler(From, Type, Channel, Identifier, Data)
 				if Identifier == "KBMVersion" then
 					PI.VersionCheck(Data)
 				end
-			elseif Type == "send" then
+			elseif Type == "send" or Type == "tell" then
 				if Identifier == "KBMVerReq" then
 					PI.ReplyVersion(From, Data)
 				elseif Identifier == "KBMVerInfo" then
@@ -169,11 +173,11 @@ function PI.PlayerJoin()
 end
 
 function PI.Start()
-	Command.Message.Accept("guild", "KBMVersion")
-	Command.Message.Accept("raid", "KBMVersion")
-	Command.Message.Accept("send", "KBMVerReq")
-	Command.Message.Accept("send", "KBMVersion")
-	Command.Message.Accept("send", "KBMVerInfo")
+	Command.Message.Accept(nil, "KBMVersion")
+	--Command.Message.Accept("raid", "KBMVersion")
+	Command.Message.Accept(nil, "KBMVerReq")
+	--Command.Message.Accept("send", "KBMVersion")
+	Command.Message.Accept(nil, "KBMVerInfo")
 	table.insert(Event.SafesRaidManager.Player.Join, {PI.PlayerJoin, "KBMMessenger", "Player Join"})
 	table.insert(Event.Message.Receive, {PI.MessageHandler, "KBMMessenger", "Messenger Handler"})
 	PI:SendVersion()
