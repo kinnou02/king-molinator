@@ -112,7 +112,7 @@ KBM.ID = "KingMolinator"
 KBM.ModList = {}
 KBM.Testing = false
 KBM.ValidTime = false
-KBM.IsAlpha = true
+KBM.IsAlpha = false
 KBM.Debug = false
 KBM.TestFilters = {}
 KBM.IgnoreList = {}
@@ -705,6 +705,7 @@ local function KBM_DefineVars(AddonID)
 		}
 		KBM_GlobalOptions = KBM.Options
 		chKBM_GlobalOptions = KBM.Options
+		KBM.Options.Player.CastBar.Enabled = false
 		for _, Mod in ipairs(KBM.ModList) do
 			Mod:InitVars()
 			if not Mod.IsInstance then

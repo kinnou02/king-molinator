@@ -3,6 +3,10 @@
 System
 * Change: Each Boss Mod will now catch any errors if KBM doesn't fully start for any reason. This will prevent it running and spamming errors.
 
+Player Castbar
+* Change: This will now default to disabled. Enable it via KBM > Global Options > Cast-bars > Enable Player Castbar
+* Note: This will not effect existing settings.
+
 RezMaster
 * Change: Messages are now handled for both .Send and .Broadcast to account for any issues with the API (such as this week).
 
