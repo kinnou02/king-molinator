@@ -1402,9 +1402,14 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 				else
 					text = " "..math.floor(self.Remaining).." : "..self.Name
 				end
-				self.GUI.CastInfo:SetText(text)
-				self.GUI.Shadow:SetText(text)
-				self.GUI.TimeBar:SetWidth(self.GUI.Background:GetWidth() * (self.Remaining/self.Time))
+				if text ~= self.GUI.CastInfo:GetText() then
+					self.GUI.CastInfo:SetText(text)
+					self.GUI.Shadow:SetText(text)
+				end
+				newWidth = math.floor(self.GUI.Background:GetWidth() * (self.Remaining/self.Time))
+				if self.GUI.TimerBar:GetWidth() ~= newWidth then
+					self.GUI.TimeBar:SetWidth(self.GUI.Background:GetWidth() * (self.Remaining/self.Time))
+				end
 				if self.Remaining <= 0 then
 					self.Remaining = 0
 					KBM.MechTimer:AddRemove(self)

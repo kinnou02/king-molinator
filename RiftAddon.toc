@@ -10,7 +10,7 @@ Author = "Paul Snart"
 Website = "http://www.facebook.com/KingBossMods"
 Email = "snarty@gmail.com"
 
-Version = "1.1.2.443"
+Version = "1.1.2.444"
 
 Environment = "1.9"
 
@@ -54,6 +54,12 @@ RunOnStartup = {
 	"GSB/Aleria.lua",
 	"GSB/Hylas.lua",
 	"GSB/Greenscale.lua",
+	"10_Man/Primeval_Feast/PFHeader.lua",
+	"10_Man/Primeval_Feast/Anchors.lua",
+	"10_Man/Primeval_Feast/Atrophinius.lua",
+	"10_Man/Primeval_Feast/Alltha.lua",
+	"10_Man/Primeval_Feast/Khargorth.lua",
+	"10_Man/Primeval_Feast/Twyl.lua",
 	"10_Man/Rise_of_the_Phoenix/ROTPHeader.lua",
 	"10_Man/Rise_of_the_Phoenix/Ereandorn.lua",
 	"10_Man/Rise_of_the_Phoenix/Beruhast.lua",
@@ -212,6 +218,12 @@ SavedVariables = {
 	KBMGSBOA_Settings = "account",
 	KBMGSBPH_Settings = "account",
 	KBMGSBLG_Settings = "account",
+	KBMPF_Settings = "account",
+	KBMPFLA_Settings = "account",
+	KBMPFAN_Settings = "account",
+	KBMPFAR_Settings = "account",
+	KBMPFSK_Settings = "account",
+	KBMPFLT_Settings = "account",
 	KBMROTP_Settings = "account",
 	KBMROTPEN_Settings = "account",
 	KBMROTPHA_Settings = "account",
@@ -363,6 +375,12 @@ SavedVariables = {
 	chKBMGSBOA_Settings = "character",
 	chKBMGSBPH_Settings = "character",
 	chKBMGSBLG_Settings = "character",
+	chKBMPF_Settings = "character",
+	chKBMPFLA_Settings = "character",
+	chKBMPFAN_Settings = "character",
+	chKBMPFAR_Settings = "character",
+	chKBMPFSK_Settings = "character",
+	chKBMPFLT_Settings = "character",
 	chKBMROTP_Settings = "character",
 	chKBMROTPEN_Settings = "character",
 	chKBMROTPHA_Settings = "character",

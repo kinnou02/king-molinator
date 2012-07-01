@@ -9,6 +9,9 @@ RezMaster
 Version Messages
 * Change: See RezMaster.
 
+Mechanic Timers
+* Change: Adjusted mechanic timers to only re-render their progress or text if it has changed.
+
 Unit Tracking
 * Change: Major change in how unit tracking works. Removed lots of Inspect calls and instead push them directly to Idle.
 * Change: Once a unit is officially *seen* by the group, it'll pull the unit from the Idle bin and assign it appropriately.
@@ -17,6 +20,14 @@ Infernal Dawn
 * Warboss Drak
 ** Fixed: Drak and his Castbar were not initializing correctly.
 ** Fixed: Natung and his Castbar were not initializing correctly.
+
+Primeval Feast
+* New: Added Template and menu option.
+* New: Life Anchors Template.
+* New: Atrophinius Template.
+* New: Alltha the Reaper Template.
+* New: Swarmlord Khargorth
+* New: Lord Twyl
 
 ----
 v1.1.1
