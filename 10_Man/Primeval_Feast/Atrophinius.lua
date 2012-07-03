@@ -28,7 +28,7 @@ AN.Atrophinius = {
 	Mod = AN,
 	Level = "??",
 	Active = false,
-	Name = "Atrophinius",
+	Name = "Grandmaster Atrophinius",
 	NameShort = "Atrophinius",
 	Menu = {},
 	Dead = false,
@@ -47,7 +47,9 @@ KBM.RegisterMod(AN.ID, AN)
 -- Main Unit Dictionary
 AN.Lang.Unit = {}
 AN.Lang.Unit.Atrophinius = KBM.Language:Add(AN.Atrophinius.Name)
+AN.Lang.Unit.Atrophinius:SetGerman("Großmeister Atrophinius")
 AN.Lang.Unit.AtrophiniusShort = KBM.Language:Add("Atrophinius")
+AN.Lang.Unit.AtrophiniusShort:SetGerman("Atrophinius")
 
 AN.Atrophinius.Name = AN.Lang.Unit.Atrophinius[KBM.Lang]
 AN.Atrophinius.NameShort = AN.Lang.Unit.AtrophiniusShort[KBM.Lang]

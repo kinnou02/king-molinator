@@ -1,4 +1,17 @@
-﻿v1.1.2
+﻿v1.1.3
+
+Infernal Dawn
+* Warboss Drak
+** Fixed: Final Phase error.
+
+Primeval Feast
+* Fixed: Atrophinius gains his missing title of Grandmaster.
+
+German Translations
+* Updated for Primeval Feast.
+
+----
+v1.1.2
 
 System
 * Change: Each Boss Mod will now catch any errors if KBM doesn't fully start for any reason. This will prevent it running and spamming errors.

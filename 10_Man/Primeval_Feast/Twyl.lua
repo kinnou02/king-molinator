@@ -47,7 +47,9 @@ KBM.RegisterMod(LT.ID, LT)
 -- Main Unit Dictionary
 LT.Lang.Unit = {}
 LT.Lang.Unit.Twyl = KBM.Language:Add(LT.Twyl.Name)
+LT.Lang.Unit.Twyl:SetGerman("Fürst Twyl")
 LT.Lang.Unit.TwylShort = KBM.Language:Add("Twyl")
+LT.Lang.Unit.TwylShort:SetGerman("Twyl")
 
 LT.Twyl.Name = LT.Lang.Unit.Twyl[KBM.Lang]
 LT.Twyl.NameShort = LT.Lang.Unit.TwylShort[KBM.Lang]

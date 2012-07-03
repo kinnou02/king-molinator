@@ -29,6 +29,7 @@ KBM.RegisterMod(PF.Name, PF)
 PF.Lang = {}
 PF.Lang.Main = {}
 PF.Lang.Main.PF = KBM.Language:Add(PF.Name)
+PF.Lang.Main.PF:SetGerman("Urzeitlicher Schmaus")
 PF.Name = PF.Lang.Main.PF[KBM.Lang]
 PF.Descript = PF.Name
 

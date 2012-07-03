@@ -47,7 +47,9 @@ KBM.RegisterMod(LA.ID, LA)
 -- Main Unit Dictionary
 LA.Lang.Unit = {}
 LA.Lang.Unit.Anchor = KBM.Language:Add(LA.Anchor.Name)
+LA.Lang.Unit.Anchor:SetGerman("Lebensanker")
 LA.Lang.Unit.AnchorShort = KBM.Language:Add("Anchor")
+LA.Lang.Unit.AnchorShort:SetGerman("Anker")
 
 LA.Anchor.Name = LA.Lang.Unit.Anchor[KBM.Lang]
 LA.Anchor.NameShort = LA.Lang.Unit.AnchorShort[KBM.Lang]
@@ -55,6 +57,7 @@ LA.Anchor.NameShort = LA.Lang.Unit.AnchorShort[KBM.Lang]
 -- Description
 LA.Lang.Main = {}
 LA.Lang.Main.Descript = KBM.Language:Add("Life Anchors")
+LA.Lang.Main.Descript:SetGerman("Lebensanker")
 LA.Descript = LA.Lang.Main.Descript[KBM.Lang]
 
 function LA:AddBosses(KBM_Boss)
