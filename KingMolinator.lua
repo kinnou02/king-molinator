@@ -652,6 +652,10 @@ local function KBM_DefineVars(AddonID)
 					sCount = 0,
 					Sessions = {},
 				},
+				Avail = {
+					sCount = 0,
+					Sessions = {},
+				},
 			},
 			CPU = {
 				Enabled = false,
@@ -754,22 +758,33 @@ function KBM.LoadTable(Source, Target)
 	end
 end
 
-local function KBM_LoadVars(AddonID)
-	local TargetLoad = nil
-	if AddonID == "KingMolinator" then		
+function KBM.InitDiagnostics()
+	KBM.Watchdog.AreaList = {
+		["Buffs"] = true,
+		["Avail"] = true,
+	}
+	for diaID, bool in pairs(KBM.Watchdog.AreaList) do
 		local tCount = 0
+		local tStart = 1
 		if chKBM_GlobalOptions.Character then
 			if chKBM_GlobalOptions.Watchdog then
-				tCount = chKBM_GlobalOptions.Watchdog.Buffs.sCount
+				if chKBM_GlobalOptions.Watchdog[diaID] then
+					tCount = chKBM_GlobalOptions.Watchdog[diaID].sCount
+				end
 			end
 		else
 			if KBM_GlobalOptions.Watchdog then
-				tCount = KBM_GlobalOptions.Watchdog.Buffs.sCount
+				if KBM_GlobalOptions.Watchdog[diaID] then
+					tCount = KBM_GlobalOptions.Watchdog[diaID].sCount
+				end
 			end
 		end
 		if tCount > 0 then
-			for Index = 1, tCount do
-				KBM.Options.Watchdog.Buffs.Sessions[Index] = {
+			if tCount > 10 then
+				tStart = tCount - 10
+			end
+			for Index = tStart, tCount do
+				KBM.Options.Watchdog[diaID].Sessions[Index] = {
 					Total = 0,
 					Average = 0,
 					Peak = 0,
@@ -777,6 +792,14 @@ local function KBM_LoadVars(AddonID)
 				}
 			end
 		end
+	end
+end
+
+local function KBM_LoadVars(AddonID)
+	local TargetLoad = nil
+	if AddonID == "KingMolinator" then		
+		
+		KBM.InitDiagnostics()
 		
 		if chKBM_GlobalOptions.Character then
 			KBM.LoadTable(chKBM_GlobalOptions, KBM.Options)
@@ -802,14 +825,16 @@ local function KBM_LoadVars(AddonID)
 		
 		KBM.Debug = KBM.Options.Debug
 		KBM.InitVars()
-		KBM.Options.Watchdog.Buffs.sCount = KBM.Options.Watchdog.Buffs.sCount + 1
-		KBM.Options.Watchdog.Buffs.Sessions[KBM.Options.Watchdog.Buffs.sCount] = {
-			Total = 0,
-			Average = 0,
-			Peak = 0,
-			Count = 0,
-		}
-		KBM.Watchdog.Buffs = KBM.Options.Watchdog.Buffs.Sessions[KBM.Options.Watchdog.Buffs.sCount]
+		for diaID, bool in pairs(KBM.Watchdog.AreaList) do
+			KBM.Options.Watchdog[diaID].sCount = KBM.Options.Watchdog[diaID].sCount + 1
+			KBM.Options.Watchdog[diaID].Sessions[KBM.Options.Watchdog[diaID].sCount] = {
+				Total = 0,
+				Average = 0,
+				Count = 0,
+				Peak = 0,
+			}
+			KBM.Watchdog[diaID] = KBM.Options.Watchdog[diaID].Sessions[KBM.Options.Watchdog[diaID].sCount]
+		end
 	elseif KBM.PlugIn.List[AddonID] then
 		KBM.PlugIn.List[AddonID]:LoadVars()
 	end
@@ -4553,6 +4578,7 @@ function KBM.Unit:Death(UnitID)
 end
 
 local function KBM_UnitAvailable(units)
+	local TimeStore = Inspect.Time.Real()
 	if KBM.Encounter then
 		for UnitID, Specifier in pairs(units) do
 			if Specifier then
@@ -4573,6 +4599,12 @@ local function KBM_UnitAvailable(units)
 			end
 		end	
 	end
+	local TimeEllapsed = tonumber(string.format("%0.5f", Inspect.Time.Real() - TimeStore))
+	KBM.Watchdog.Avail.Count = KBM.Watchdog.Avail.Count + 1
+	KBM.Watchdog.Avail.Total = KBM.Watchdog.Avail.Total + TimeEllapsed
+	if KBM.Watchdog.Avail.Peak < TimeEllapsed then
+		KBM.Watchdog.Avail.Peak = TimeEllapsed
+	end	
 end
 
 function KBM.AttachDragFrame(parent, hook, name, layer)
@@ -7081,7 +7113,6 @@ function KBM:BuffMonitor_OldMode(unitID, Buffs, Type)
 	local TimeEllapsed = tonumber(string.format("%0.5f", Inspect.Time.Real() - TimeStore))
 	KBM.Watchdog.Buffs.Count = KBM.Watchdog.Buffs.Count + 1
 	KBM.Watchdog.Buffs.Total = KBM.Watchdog.Buffs.Total + TimeEllapsed
-	KBM.Watchdog.Buffs.Average = tonumber(string.format("%0.5f", KBM.Watchdog.Buffs.Total / KBM.Watchdog.Buffs.Count))
 	if KBM.Watchdog.Buffs.Peak < TimeEllapsed then
 		KBM.Watchdog.Buffs.Peak = TimeEllapsed
 	end
@@ -7267,44 +7298,45 @@ function KBM:BuffMonitor(unitID, Buffs, Type)
 	local TimeEllapsed = tonumber(string.format("%0.5f", Inspect.Time.Real() - TimeStore))
 	KBM.Watchdog.Buffs.Count = KBM.Watchdog.Buffs.Count + 1
 	KBM.Watchdog.Buffs.Total = KBM.Watchdog.Buffs.Total + TimeEllapsed
-	KBM.Watchdog.Buffs.Average = tonumber(string.format("%0.5f", KBM.Watchdog.Buffs.Total / KBM.Watchdog.Buffs.Count))
 	if KBM.Watchdog.Buffs.Peak < TimeEllapsed then
 		KBM.Watchdog.Buffs.Peak = TimeEllapsed
 	end
 	
 end
 
-function KBM.Watchdog.BuffDisplay(Var)
+function KBM.Watchdog.Display(Type, Var)
 	if Var == "all" then
-		for Index, wdBuffObj in pairs(KBM.Options.Watchdog.Buffs.Sessions) do
+		for Index, wdObj in pairs(KBM.Options.Watchdog[Type].Sessions) do
+			wdObj.Average = tonumber(string.format("%0.6f", wdObj.Total / wdObj.Count)) or 0
 			print("Session Index: "..tostring(Index))
-			print("Total Time: "..wdBuffObj.Total.."s")
-			print("Average Execution Time: "..wdBuffObj.Average.."s")
-			print("Peak Execution Time: "..wdBuffObj.Peak.."s")
-			print("Total Calls: "..wdBuffObj.Count)	
+			print("Total Time: "..wdObj.Total.."s")
+			print("Average Execution Time: "..wdObj.Average.."s")
+			print("Peak Execution Time: "..wdObj.Peak.."s")
+			print("Total Calls: "..wdObj.Count)	
 			print("--------------------------------")
 		end
 	elseif Var == "clear" then
 		print("Clearing Session History")
-		KBM.Watchdog.ClearBuffs()
+		KBM.Watchdog.Clear(Type)
 	else
-		print("Total Time: "..KBM.Watchdog.Buffs.Total.."s")
-		print("Average Execution Time: "..KBM.Watchdog.Buffs.Average.."s")
-		print("Peak Execution Time: "..KBM.Watchdog.Buffs.Peak.."s")
-		print("Total Calls: "..KBM.Watchdog.Buffs.Count)
+		KBM.Watchdog[Type].Average = tonumber(string.format("%0.6f", KBM.Watchdog[Type].Total / KBM.Watchdog[Type].Count)) or 0	
+		print("Total Time: "..KBM.Watchdog[Type].Total.."s")
+		print("Average Execution Time: "..KBM.Watchdog[Type].Average.."s")
+		print("Peak Execution Time: "..KBM.Watchdog[Type].Peak.."s")
+		print("Total Calls: "..KBM.Watchdog[Type].Count)
 	end
 end
 
-function KBM.Watchdog.ClearBuffs()
-	KBM.Options.Watchdog.Buffs.sCount = 1
-	KBM.Options.Watchdog.Buffs.Sessions = {}
-	KBM.Options.Watchdog.Buffs.Sessions[1] = {
+function KBM.Watchdog.Clear(Type)
+	KBM.Options.Watchdog[Type].sCount = 1
+	KBM.Options.Watchdog[Type].Sessions = {}
+	KBM.Options.Watchdog[Type].Sessions[1] = {
 		Total = 0,
 		Average = 0,
 		Peak = 0,
 		Count = 0,
 	}
-	KBM.Watchdog.Buffs = KBM.Options.Watchdog.Buffs.Sessions[1]
+	KBM.Watchdog[Type] = KBM.Options.Watchdog[Type].Sessions[1]
 end
 
 function KBM.VersionReqCheckb(name, failed, message)
@@ -8190,8 +8222,11 @@ local function KBM_Start()
 				PlugIn:Start()
 			end
 		end
-	end
+	end		
+	KBM.MenuOptions.Main:Options()
+end
 
+function KBM.InitEvents()
 	table.insert(Command.Slash.Register("kbmreset"), {KBM_Reset, "KingMolinator", "KBM Reset"})
 	table.insert(Event.Chat.Notify, {KBM.Notify, "KingMolinator", "Notify Event"})
 	table.insert(Event.Chat.Npc, {KBM.NPCChat, "KingMolinator", "NPC Chat"})
@@ -8243,9 +8278,8 @@ local function KBM_Start()
 	table.insert(Command.Slash.Register("kbmlocale"), {KBMLM.FindMissing, "KBMLocaleManager", "KBM Locale Finder"})
 	table.insert(Command.Slash.Register("kbmcpu"), {function () KBM.CPU:Toggle() end, "KingMolinator", "KBM CPU Monitor"})
 	table.insert(Command.Slash.Register("kbmdumpavail"), {KBM.Unit.Debug.DumpAvail, "KingMolinator", "KBM Debug Avail"})
-	table.insert(Command.Slash.Register("kbmwdbuffs"), {KBM.Watchdog.BuffDisplay, "KingMolinator", "Watchdog Trakcing: Buff Display"})
-		
-	KBM.MenuOptions.Main:Options()
+	table.insert(Command.Slash.Register("kbmwdbuffs"), {function (...) KBM.Watchdog.Display("Buffs", ...) end, "KingMolinator", "Watchdog Tracking: Buff Display"})
+	table.insert(Command.Slash.Register("kbmwdavail"), {function (...) KBM.Watchdog.Display("Avail", ...) end, "KingMolinator", "Watchdog Tracking: Unit Available"})
 	table.insert(Command.Slash.Register("kbmon"), {function() KBM.StateSwitch(true) end, "KingMolinator", "KBM On"})
 	table.insert(Command.Slash.Register("kbmoff"), {function() KBM.StateSwitch(false) end, "KingMolinator", "KBM Off"})			
 end
@@ -8343,6 +8377,8 @@ local function KBM_WaitReady(unitID, uDetails)
 	KBM.Player.CastBar.Target.CastObj = KBM.CastBar:Add(KBM.Player.CastBar.Target, KBM.Player.CastBar.Target)
 	KBM.Player.CastBar.Focus.CastObj = KBM.CastBar:Add(KBM.Player.CastBar.Focus, KBM.Player.CastBar.Focus)
 	KBM.Player.CastBar.CastObj:Create(KBM.Player.UnitID)
+	
+	KBM.InitEvents()
 end
 
 KBM.PlugIn = {}
