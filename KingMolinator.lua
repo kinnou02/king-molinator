@@ -112,10 +112,11 @@ KBM.ID = "KingMolinator"
 KBM.ModList = {}
 KBM.Testing = false
 KBM.ValidTime = false
-KBM.IsAlpha = false
+KBM.IsAlpha = true
 KBM.Debug = false
 KBM.TestFilters = {}
 KBM.IgnoreList = {}
+KBM.Watchdog = {}
 KBM.Idle = {
 	Until = 0,
 	Duration = 5,
@@ -646,6 +647,12 @@ local function KBM_DefineVars(AddonID)
 			Enabled = true,
 			Debug = false,
 			Menu = {},
+			Watchdog = {
+				Buffs = {
+					sCount = 0,
+					Sessions = {},
+				},
+			},
 			CPU = {
 				Enabled = false,
 				x = false,
@@ -750,12 +757,30 @@ end
 local function KBM_LoadVars(AddonID)
 	local TargetLoad = nil
 	if AddonID == "KingMolinator" then
+		
+		local tCount = 0
+		if chKBM_GlobalOptions.Character then
+			tCount = chKBM_GlobalOptions.Watchdog.Buffs.sCount
+		else
+			tCount = KBM_GlobalOptions.Watchdog.Buffs.sCount
+		end
+		if tCount > 0 then
+			for Index = 1, tCount do
+				KBM.Options.Watchdog.Buffs.Sessions[Index] = {
+					Total = 0,
+					Average = 0,
+					Peak = 0,
+					Count = 0,
+				}
+			end
+		end
+		
 		if chKBM_GlobalOptions.Character then
 			KBM.LoadTable(chKBM_GlobalOptions, KBM.Options)
 		else
 			KBM.LoadTable(KBM_GlobalOptions, KBM.Options)
 		end		
-				
+		
 		if KBM.Options.Character then
 			if chKBM_GlobalOptions.Menu then
 				KBM.Options.Menu = chKBM_GlobalOptions.Menu
@@ -773,7 +798,15 @@ local function KBM_LoadVars(AddonID)
 		end
 		
 		KBM.Debug = KBM.Options.Debug
-		KBM.InitVars()		
+		KBM.InitVars()
+		KBM.Options.Watchdog.Buffs.sCount = KBM.Options.Watchdog.Buffs.sCount + 1
+		KBM.Options.Watchdog.Buffs.Sessions[KBM.Options.Watchdog.Buffs.sCount] = {
+			Total = 0,
+			Average = 0,
+			Peak = 0,
+			Count = 0,
+		}
+		KBM.Watchdog.Buffs = KBM.Options.Watchdog.Buffs.Sessions[KBM.Options.Watchdog.Buffs.sCount]
 	elseif KBM.PlugIn.List[AddonID] then
 		KBM.PlugIn.List[AddonID]:LoadVars()
 	end
@@ -6867,15 +6900,16 @@ function KBM.NPCChat(data)
 	end
 end
 
-function KBM:BuffMonitor(unitID, Buffs, Type)
-
+function KBM:BuffMonitor_OldMode(unitID, Buffs, Type)
 	-- Used to manage Triggers and soon Tank-Swap managing.
+	local TimeStore = Inspect.Time.Real()
+	
 	if KBM.Options.Enabled then
 		if KBM.Encounter then
 			if Type == "new" then
 				if unitID then
 					for BuffID, bool in pairs(Buffs) do
-						bDetails = Inspect.Buff.Detail(unitID, BuffID)
+						local bDetails = Inspect.Buff.Detail(unitID, BuffID)
 						if bDetails then
 							if not KBM.Buffs.Active[unitID] then
 								KBM.Buffs.Active[unitID] = {
@@ -7000,7 +7034,7 @@ function KBM:BuffMonitor(unitID, Buffs, Type)
 			if Type == "new" then
 				if unitID then
 					for BuffID, bool in pairs(Buffs) do
-						bDetails = Inspect.Buff.Detail(unitID, BuffID)
+						local bDetails = Inspect.Buff.Detail(unitID, BuffID)
 						if bDetails then
 							if not KBM.Buffs.Active[unitID] then
 								KBM.Buffs.Active[unitID] = {
@@ -7041,7 +7075,233 @@ function KBM:BuffMonitor(unitID, Buffs, Type)
 			end		
 		end
 	end
+	local TimeEllapsed = tonumber(string.format("%0.5f", Inspect.Time.Real() - TimeStore))
+	KBM.Watchdog.Buffs.Count = KBM.Watchdog.Buffs.Count + 1
+	KBM.Watchdog.Buffs.Total = KBM.Watchdog.Buffs.Total + TimeEllapsed
+	KBM.Watchdog.Buffs.Average = tonumber(string.format("%0.5f", KBM.Watchdog.Buffs.Total / KBM.Watchdog.Buffs.Count))
+	if KBM.Watchdog.Buffs.Peak < TimeEllapsed then
+		KBM.Watchdog.Buffs.Peak = TimeEllapsed
+	end
 	
+end
+
+function KBM:BuffMonitor(unitID, Buffs, Type)
+
+	-- Used to manage Triggers and soon Tank-Swap managing.
+	local TimeStore = Inspect.Time.Real()
+	
+	if KBM.Options.Enabled then
+		if KBM.Encounter then
+			if Type == "new" then
+				if unitID then
+					local bDetailsTable = Inspect.Buff.Detail(unitID, Buffs)
+					for BuffID, bDetails in pairs(bDetailsTable) do
+						if bDetails then
+							if not KBM.Buffs.Active[unitID] then
+								KBM.Buffs.Active[unitID] = {
+									Buff_Count = 1,
+								}
+							else
+								KBM.Buffs.Active[unitID].Buff_Count = KBM.Buffs.Active[unitID].Buff_Count + 1
+							end
+							KBM.Buffs.Active[unitID][BuffID] = bDetails
+							if KBM.Trigger.Buff[KBM.CurrentMod.ID] then
+								if KBM.Trigger.Buff[KBM.CurrentMod.ID][bDetails.name] then
+									TriggerObj = KBM.Trigger.Buff[KBM.CurrentMod.ID][bDetails.name]
+									if TriggerObj.Unit.UnitID == unitID then
+										KBM.Trigger.Queue:Add(TriggerObj, unitID, unitID, bDetails.remaining)
+									end
+								end
+							end
+							if KBM.Trigger.PlayerDebuff[KBM.CurrentMod.ID] ~= nil and bDetails.debuff == true then
+								if KBM.Trigger.PlayerDebuff[KBM.CurrentMod.ID][bDetails.name] then
+									TriggerObj = KBM.Trigger.PlayerDebuff[KBM.CurrentMod.ID][bDetails.name]
+									if LibSRM.Group.UnitExists(unitID) ~= nil or unitID == KBM.Player.UnitID then
+										if KBM.Debug then
+											print("Debuff Trigger matched: "..bDetails.name)
+											if LibSRM.Grouped() then
+												print("LibSRM Match: "..tostring(LibSRM.Group.UnitExists(unitID)))
+											end
+											print("Player Match: "..KBM.Player.UnitID.." - "..unitID)
+											print("---------------")
+											dump(bDetails)
+										end
+										KBM.Trigger.Queue:Add(TriggerObj, unitID, unitID, bDetails.remaining)
+									end
+								end
+							end
+							if KBM.Trigger.PlayerIDBuff[KBM.CurrentMod.ID] then
+								if KBM.Trigger.PlayerIDBuff[KBM.CurrentMod.ID][bDetails.type] then
+									TriggerObj = KBM.Trigger.PlayerIDBuff[KBM.CurrentMod.ID][bDetails.type]
+									if LibSRM.Group.UnitExists(unitID) ~= nil or unitID == KBM.Player.UnitID then
+										if KBM.Debug then
+											print("Debuff Trigger matched: "..bDetails.name)
+											if LibSRM.Grouped() then
+												print("LibSRM Match: "..tostring(LibSRM.Group.UnitExists(unitID)))
+											end
+											print("Player Match: "..KBM.Player.UnitID.." - "..unitID)
+											print("---------------")
+											dump(bDetails)
+										end
+										KBM.Trigger.Queue:Add(TriggerObj, unitID, unitID, bDetails.remaining)
+									end
+								end
+							end
+							if KBM.Trigger.PlayerBuff[KBM.CurrentMod.ID] then
+								if KBM.Trigger.PlayerBuff[KBM.CurrentMod.ID][bDetails.name] then
+									TriggerObj = KBM.Trigger.PlayerBuff[KBM.CurrentMod.ID][bDetails.name]
+									if LibSRM.Group.UnitExists(unitID) ~= nil or unitID == KBM.Player.UnitID then
+										if KBM.Debug then
+											print("Buff Trigger matched: "..bDetails.name)
+											if LibSRM.Grouped() then
+												print("LibSRM Match: "..tostring(LibSRM.Group.UnitExists(unitID)))
+											end
+											print("Player Match: "..KBM.Player.UnitID.." - "..unitID)
+											print("---------------")
+											dump(bDetails)
+										end
+										KBM.Trigger.Queue:Add(TriggerObj, unitID, unitID, bDetails.remaining)
+									end
+								end
+							end
+							if KBM.TankSwap.Active then
+								if KBM.TankSwap.Tanks[unitID] then
+									if KBM.TankSwap.DebuffName[bDetails.name] then
+										KBM.TankSwap.Tanks[unitID]:BuffUpdate(BuffID, bDetails.name)
+									end
+								end
+							end
+						end
+					end
+				end
+			elseif Type == "remove" then
+				if unitID then
+					if KBM.Buffs.Active[unitID] then
+						for BuffID, bool in pairs(Buffs) do
+							if BuffID then
+								if KBM.Buffs.Active[unitID][BuffID] then
+									bDetails = KBM.Buffs.Active[unitID][BuffID]
+									if KBM.Trigger.BuffRemove[KBM.CurrentMod.ID] then
+										if KBM.Trigger.BuffRemove[KBM.CurrentMod.ID][bDetails.name] then
+											TriggerObj = KBM.Trigger.BuffRemove[KBM.CurrentMod.ID][bDetails.name]
+											if TriggerObj.Unit.UnitID == unitID then
+												KBM.Trigger.Queue:Add(TriggerObj, nil, unitID, nil)
+											end
+										end
+									end
+									if KBM.Trigger.PlayerBuffRemove[KBM.CurrentMod.ID] then
+										if KBM.Trigger.PlayerBuffRemove[KBM.CurrentMod.ID][bDetails.name] then
+											TriggerObj = KBM.Trigger.PlayerBuffRemove[KBM.CurrentMod.ID][bDetails.name]
+											if LibSRM.Group.UnitExists(unitID) or unitID == KBM.Player.UnitID then
+												KBM.Trigger.Queue:Add(TriggerObj, nil, unitID, nil)
+											end
+										end
+									end
+									if KBM.Trigger.PlayerIDBuffRemove[KBM.CurrentMod.ID] then
+										if KBM.Trigger.PlayerIDBuffRemove[KBM.CurrentMod.ID][bDetails.type] then
+											TriggerObj = KBM.Trigger.PlayerIDBuffRemove[KBM.CurrentMod.ID][bDetails.type]
+											if LibSRM.Group.UnitExists(unitID) or unitID == KBM.Player.UnitID then
+												KBM.Trigger.Queue:Add(TriggerObj, nil, unitID, nil)
+											end
+										end
+									end
+									KBM.Buffs.Active[unitID][BuffID] = nil
+									KBM.Buffs.Active[unitID].Buff_Count = KBM.Buffs.Active[unitID].Buff_Count - 1
+									if KBM.Buffs.Active[unitID].Buff_Count == 0 then
+										KBM.Buffs.Active[unitID] = nil
+									end
+								end
+							end
+						end
+					end
+				end
+			end
+		else
+			if Type == "new" then
+				if unitID then
+					local bDetailsTable = Inspect.Buff.Detail(unitID, Buffs)
+					for BuffID, bDetails in pairs(bDetailsTable) do
+						if bDetails then
+							if not KBM.Buffs.Active[unitID] then
+								KBM.Buffs.Active[unitID] = {
+									Buff_Count = 1,
+								}
+							else
+								KBM.Buffs.Active[unitID].Buff_Count = KBM.Buffs.Active[unitID].Buff_Count + 1
+							end
+							KBM.Buffs.Active[unitID][BuffID] = bDetails
+							if KBM.Trigger.EncStart["playerBuff"] then
+								if KBM.Trigger.EncStart["playerBuff"][bDetails.name] then
+									TriggerMod = KBM.Trigger.EncStart["playerBuff"][bDetails.name]
+									if TriggerMod.Dummy then
+										KBM.CheckActiveBoss(TriggerMod.Dummy.Details, "Dummy")
+									end
+								end
+							end
+						end
+					end
+				end
+			elseif Type == "remove" then
+				if unitID then
+					if KBM.Buffs.Active[unitID] then
+						for BuffID, bool in pairs(Buffs) do
+							if BuffID then
+								if KBM.Buffs.Active[unitID][BuffID] then
+									bDetails = KBM.Buffs.Active[unitID][BuffID]
+									KBM.Buffs.Active[unitID][BuffID] = nil
+									KBM.Buffs.Active[unitID].Buff_Count = KBM.Buffs.Active[unitID].Buff_Count - 1
+									if KBM.Buffs.Active[unitID].Buff_Count == 0 then
+										KBM.Buffs.Active[unitID] = nil
+									end
+								end
+							end
+						end
+					end
+				end
+			end		
+		end
+	end
+	local TimeEllapsed = tonumber(string.format("%0.5f", Inspect.Time.Real() - TimeStore))
+	KBM.Watchdog.Buffs.Count = KBM.Watchdog.Buffs.Count + 1
+	KBM.Watchdog.Buffs.Total = KBM.Watchdog.Buffs.Total + TimeEllapsed
+	KBM.Watchdog.Buffs.Average = tonumber(string.format("%0.5f", KBM.Watchdog.Buffs.Total / KBM.Watchdog.Buffs.Count))
+	if KBM.Watchdog.Buffs.Peak < TimeEllapsed then
+		KBM.Watchdog.Buffs.Peak = TimeEllapsed
+	end
+	
+end
+
+function KBM.Watchdog.BuffDisplay(Var)
+	if Var == "all" then
+		for Index, wdBuffObj in pairs(KBM.Options.Watchdog.Buffs.Sessions) do
+			print("Session Index: "..tostring(Index))
+			print("Total Time: "..wdBuffObj.Total.."s")
+			print("Average Execution Time: "..wdBuffObj.Average.."s")
+			print("Peak Execution Time: "..wdBuffObj.Peak.."s")
+			print("Total Calls: "..wdBuffObj.Count)	
+			print("--------------------------------")
+		end
+	elseif Var == "clear" then
+		print("Clearing Session History")
+		KBM.Watchdog.ClearBuffs()
+	else
+		print("Total Time: "..KBM.Watchdog.Buffs.Total.."s")
+		print("Average Execution Time: "..KBM.Watchdog.Buffs.Average.."s")
+		print("Peak Execution Time: "..KBM.Watchdog.Buffs.Peak.."s")
+		print("Total Calls: "..KBM.Watchdog.Buffs.Count)
+	end
+end
+
+function KBM.Watchdog.ClearBuffs()
+	KBM.Options.Watchdog.Buffs.sCount = 1
+	KBM.Options.Watchdog.Buffs.Sessions = {}
+	KBM.Options.Watchdog.Buffs.Sessions[1] = {
+		Total = 0,
+		Average = 0,
+		Peak = 0,
+		Count = 0,
+	}
+	KBM.Watchdog.Buffs = KBM.Options.Watchdog.Buffs.Sessions[1]
 end
 
 function KBM.VersionReqCheckb(name, failed, message)
@@ -7933,7 +8193,7 @@ local function KBM_Start()
 	table.insert(Event.Chat.Notify, {KBM.Notify, "KingMolinator", "Notify Event"})
 	table.insert(Event.Chat.Npc, {KBM.NPCChat, "KingMolinator", "NPC Chat"})
 	table.insert(Event.Buff.Add, {function (unitID, Buffs) KBM:BuffMonitor(unitID, Buffs, "new") end, "KingMolinator", "Buff Monitor (Add)"})
-	table.insert(Event.Buff.Change, {function (unitID, Buffs) KBM:BuffMonitor(unitID, Buffs, "change") end, "KingMolinator", "Buff Monitor (change)"})
+	--table.insert(Event.Buff.Change, {function (unitID, Buffs) KBM:BuffMonitor(unitID, Buffs, "change") end, "KingMolinator", "Buff Monitor (change)"})
 	table.insert(Event.Buff.Remove, {function (unitID, Buffs) KBM:BuffMonitor(unitID, Buffs, "remove") end, "KingMolinator", "Buff Monitor (remove)"})
 	table.insert(Event.Unit.Availability.None, {KBM_UnitRemoved, "KingMolinator", "Unit Unavailable"})
 	table.insert(Event.Unit.Availability.Partial, {KBM_UnitAvailable, "KingMolinator", "Unit Available"})
@@ -7971,6 +8231,8 @@ local function KBM_Start()
 	table.insert(Event.System.Update.Begin, {function () KBM:Timer() end, "KingMolinator", "System Update"}) 
 	table.insert(Event.System.Secure.Enter, {KBM.SecureEnter, "KingMolinator", "Secure Enter"})
 	table.insert(Event.System.Secure.Leave, {KBM.SecureLeave, "KingMolinator", "Secure Leave"})
+	
+	-- Slash Commands
 	table.insert(Command.Slash.Register("kbmhelp"), {KBM_Help, "KingMolinator", "KBM Help"})
 	table.insert(Command.Slash.Register("kbmversion"), {KBM_Version, "KingMolinator", "KBM Version Info"})
 	table.insert(Command.Slash.Register("kbmoptions"), {KBM_Options, "KingMolinator", "KBM Open Options"})
@@ -7978,6 +8240,7 @@ local function KBM_Start()
 	table.insert(Command.Slash.Register("kbmlocale"), {KBMLM.FindMissing, "KBMLocaleManager", "KBM Locale Finder"})
 	table.insert(Command.Slash.Register("kbmcpu"), {function () KBM.CPU:Toggle() end, "KingMolinator", "KBM CPU Monitor"})
 	table.insert(Command.Slash.Register("kbmdumpavail"), {KBM.Unit.Debug.DumpAvail, "KingMolinator", "KBM Debug Avail"})
+	table.insert(Command.Slash.Register("kbmwdbuffs"), {KBM.Watchdog.BuffDisplay, "KingMolinator", "Watchdog Trakcing: Buff Display"})
 		
 	KBM.MenuOptions.Main:Options()
 	table.insert(Command.Slash.Register("kbmon"), {function() KBM.StateSwitch(true) end, "KingMolinator", "KBM On"})

@@ -1,4 +1,12 @@
-﻿v1.1.3
+﻿v1.1.4
+
+Watchdog Diagnostics (temporary alpha addition)
+* New: /kbmwdbuffs - Displays current session diagnostic data
+* New: /kbmwdbuffs all - Lists all history for saved sessions including current
+* New: /kbmwdbuffs clear - Clears session saved history and current session data.
+
+----
+v1.1.3
 
 Infernal Dawn
 * Warboss Drak
