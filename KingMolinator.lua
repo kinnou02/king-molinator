@@ -756,13 +756,16 @@ end
 
 local function KBM_LoadVars(AddonID)
 	local TargetLoad = nil
-	if AddonID == "KingMolinator" then
-		
+	if AddonID == "KingMolinator" then		
 		local tCount = 0
 		if chKBM_GlobalOptions.Character then
-			tCount = chKBM_GlobalOptions.Watchdog.Buffs.sCount
+			if chKBM_GlobalOptions.Watchdog then
+				tCount = chKBM_GlobalOptions.Watchdog.Buffs.sCount
+			end
 		else
-			tCount = KBM_GlobalOptions.Watchdog.Buffs.sCount
+			if KBM_GlobalOptions.Watchdog then
+				tCount = KBM_GlobalOptions.Watchdog.Buffs.sCount
+			end
 		end
 		if tCount > 0 then
 			for Index = 1, tCount do

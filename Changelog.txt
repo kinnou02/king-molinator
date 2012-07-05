@@ -4,6 +4,7 @@ Watchdog Diagnostics (temporary alpha addition)
 * New: /kbmwdbuffs - Displays current session diagnostic data
 * New: /kbmwdbuffs all - Lists all history for saved sessions including current
 * New: /kbmwdbuffs clear - Clears session saved history and current session data.
+* Fixed: Start-up error with Watchdog variable.
 
 ----
 v1.1.3
