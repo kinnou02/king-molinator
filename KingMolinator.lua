@@ -6077,49 +6077,6 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 			if bDetails then
 				if bDetails.abilityName then
 					if self.Settings.Enabled then
-						if self.LastStart ~= bDetails.begin then
-							self.LastStart = bDetails.begin
-							if not bDetails.channeled then	
-								if KBM.Trigger.Cast[bDetails.abilityName] then
-									if KBM.Trigger.Cast[bDetails.abilityName][self.Boss.Name] then
-										local TriggerObj = KBM.Trigger.Cast[bDetails.abilityName][self.Boss.Name]
-										local TargetID = ""
-										if self.Boss.UnitID then
-											TargetID = Inspect.Unit.Lookup(self.Boss.UnitID..".target")
-										end
-										KBM.Trigger.Queue:Add(TriggerObj, TargetID, TargetID, bDetails.remaining)
-									end
-								elseif KBM.Trigger.PersonalCast[bDetails.abilityName] then
-									if KBM.Trigger.PersonalCast[bDetails.abilityName][self.Boss.Name] then
-										local TriggerObj = KBM.Trigger.PersonalCast[bDetails.abilityName][self.Boss.Name]
-										if self.UnitID then
-											local playerTarget = Inspect.Unit.Lookup("player.target")
-											local playerFocus = Inspect.Unit.Lookup("focus")
-											if self.UnitID == playerTarget or self.UnitID == playerFocus then
-												KBM.Trigger.Queue:Add(TriggerObj, self.UnitID, self.UnitID, bDetails.remaining)
-											end
-										end
-									end
-								end
-							else
-								if not self.Channeled then
-									self.Channeled = true
-									if KBM.Trigger.Channel[bDetails.abilityName] then
-										if KBM.Trigger.Channel[bDetails.abilityName][self.Boss.Name] then
-											local TriggerObj = KBM.Trigger.Channel[bDetails.abilityName][self.Boss.Name]
-											local TargetID = ""
-											if self.Boss.UnitID then
-												TargetID = Inspect.Unit.Lookup(self.Boss.UnitID..".target")
-											end
-											KBM.Trigger.Queue:Add(TriggerObj, TargetID, TargetID, bDetails.remaining)
-										end
-									end
-								end
-							end
-							if self.Casting then
-								self:Stop()
-							end
-						end
 						if self.HasFilters then
 							if self.Filters[bDetails.abilityName] then
 								FilterObj = self.Filters[bDetails.abilityName]

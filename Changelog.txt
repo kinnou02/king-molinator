@@ -6,6 +6,9 @@ Mechanic Timers
 Mechanic Spy
 * New: There is now an accumulating timer which is constant until a remove is called.
 
+Castbars
+* Fixed: Not running Add-Watch/Mark-It would ignore Casts/Triggers if they were the hidden dynamic type. (such as Death Blow on Warboss Drak)
+
 Watchdog Diagnostics (temporary alpha addition)
 * New: /kbmwdbuffs - Displays current session diagnostic data for Buff.Add/Remove handlers.
 * New: /kbmwdbuffs all - Lists all history for saved sessions including current
