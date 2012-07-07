@@ -39,19 +39,24 @@ EC.Szath = {
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
-	-- TimersRef = {},
-	-- AlertsRef = {},
+	TimersRef = {},
+	AlertsRef = {},
+	MechRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		-- TimersRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
-		-- },
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
-		-- },
+		TimersRef = {
+			Enabled = true,
+			Blood = KBM.Defaults.TimerObj.Create("purple"),
+		},
+		AlertsRef = {
+			Enabled = true,
+			Blood = KBM.Defaults.AlertObj.Create("purple"),
+		},
+		MechRef = {
+			Enabled = true,
+			Blood = KBM.Defaults.MechObj.Create("purple"),
+		},
 	}
 }
 
@@ -144,6 +149,11 @@ EC.Ereetu = {
 EC.Lang.Ability = {}
 EC.Lang.Ability.Dark = KBM.Language:Add("Dark Invocation")
 
+-- Ability Dictionary
+EC.Lang.Debuff = {}
+EC.Lang.Debuff.Hem = KBM.Language:Add("Profuse Hemorrhage")
+EC.Lang.Debuff.Blood = KBM.Language:Add("Traitorous Blood")
+
 -- Description Dictionary
 EC.Lang.Main = {}
 EC.Lang.Main.Descript = KBM.Language:Add("The Ember Conclave")
@@ -186,10 +196,12 @@ function EC:InitVars()
 		},
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
+		MechSpy = KBM.Defaults.MechSpy(),
 		Szath = {
 			CastBar = self.Szath.Settings.CastBar,
-			-- TimersRef = self.Szath.Settings.TimersRef,
-			-- AlertsRef = self.Szath.Settings.AlertsRef,
+			TimersRef = self.Szath.Settings.TimersRef,
+			AlertsRef = self.Szath.Settings.AlertsRef,
+			MechRef = self.Szath.Settings.MechRef,
 		},
 		Nahoth = {
 			CastBar = self.Nahoth.Settings.CastBar,
@@ -275,6 +287,10 @@ function EC.PhaseTwo()
 	EC.PhaseObj.Objectives:Remove()
 	EC.PhaseObj:SetPhase(PhaseText)
 	EC.SetBossObj()
+	if EC.Szeth.Dead == false then
+		KBM.TankSwap:Start(EC.Lang.Debuff.Hem[KBM.Lang], EC.Szeth.UnitID)
+	end	
+	
 end
 
 function EC.PhaseFinal()
@@ -286,6 +302,9 @@ function EC.PhaseFinal()
 	EC.PhaseObj.Objectives:Remove()
 	EC.PhaseObj:SetPhase(PhaseText)
 	EC.SetBossObj()
+	if KBM.TankSwap.Active then
+		KBM.TankSwap:Remove()
+	end	
 end
 
 function EC:Death(UnitID)
@@ -394,9 +413,21 @@ function EC:Start()
 	self.Ereetu.TimersRef.Dark = KBM.MechTimer:Add(self.Lang.Ability.Dark[KBM.Lang], 15)
 	KBM.Defaults.TimerObj.Assign(self.Ereetu)
 	
+	-- Create Timers (Szath)
+	self.Szath.TimersRef.Blood = KBM.MechTimer:Add(self.Lang.Debuff.Blood[KBM.Lang], 40)
+	KBM.Defaults.TimerObj.Assign(self.Szath)
+	
 	-- Create Alerts (Ereetu)
 	self.Ereetu.AlertsRef.Dark = KBM.Alert:Create(self.Lang.Ability.Dark[KBM.Lang], nil, false, true, "yellow")
 	KBM.Defaults.AlertObj.Assign(self.Ereetu)
+	
+	-- Create Alerts (Szath)
+	self.Szath.AlertsRef.Blood = KBM.Alert:Create(self.Lang.Debuff.Blood[KBM.Lang], 2, true, false, "purple")
+	KBM.Defaults.AlertObj.Assign(self.Szath)
+	
+	-- Create Mechanic Spies (Szath)
+	self.Szath.MechRef.Blood = KBM.MechSpy:Add(self.Lang.Debuff.Blood[KBM.Lang], -1, "playerDebuff", self.Szath)
+	KBM.Defaults.MechObj.Assign(self.Szath)
 	
 	-- Assign Alerts and Timers to Triggers
 	self.Ereetu.Triggers.Dark = KBM.Trigger:Create(self.Lang.Ability.Dark[KBM.Lang], "cast", self.Ereetu)
@@ -404,6 +435,12 @@ function EC:Start()
 	self.Ereetu.Triggers.Dark:AddAlert(self.Ereetu.AlertsRef.Dark)
 	self.Ereetu.Triggers.DarkInt = KBM.Trigger:Create(self.Lang.Ability.Dark[KBM.Lang], "interrupt", self.Ereetu)
 	self.Ereetu.Triggers.DarkInt:AddStop(self.Ereetu.AlertsRef.Dark)
+	self.Szath.Triggers.Blood = KBM.Trigger:Create("B04039E99174644055", "playerIDBuff", self.Szath)
+	self.Szath.Triggers.Blood:AddAlert(self.Szath.AlertsRef.Blood)
+	self.Szath.Triggers.Blood:AddSpy(self.Szath.MechRef.Blood)
+	self.Szath.Triggers.Blood:AddTimer(self.Szath.TimersRef.Blood)
+	self.Szath.Triggers.BloodRem = KBM.Trigger:Create("B04039E99174644055", "playerIDBuffRemove", self.Szath)
+	self.Szath.Triggers.Blood:AddStop(self.Szath.MechRef.Blood)
 	
 	self.Szath.CastBar = KBM.CastBar:Add(self, self.Szath)
 	self.Nahoth.CastBar = KBM.CastBar:Add(self, self.Nahoth)

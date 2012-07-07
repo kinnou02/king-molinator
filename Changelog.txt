@@ -3,6 +3,9 @@
 Mechanic Timers
 * New: Timer UI objects are now stagger pre-fetched and cached on start-up based on the maximum number of timers possible during one encounter.
 
+Mechanic Spy
+* New: There is now an accumulating timer which is constant until a remove is called.
+
 Watchdog Diagnostics (temporary alpha addition)
 * New: /kbmwdbuffs - Displays current session diagnostic data for Buff.Add/Remove handlers.
 * New: /kbmwdbuffs all - Lists all history for saved sessions including current
@@ -20,6 +23,9 @@ Infernal Dawn
 ** New: Added Hard Mode detection.
 ** New: Added Alert and Timer for Dark Invocation.
 ** New: Added Enrage Timer.
+** New: Added Tank-Swap monitor for Szath in Phase 2.
+** New: Added Mechanic Spy for Traitorous Blood. (Mind Control Debuff)
+** New: Added a Timer for Traitorous Blood.
 
 ----
 v1.1.3

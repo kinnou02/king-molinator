@@ -117,7 +117,26 @@ KBM.Debug = false
 KBM.Aux = {}
 KBM.TestFilters = {}
 KBM.IgnoreList = {}
-KBM.Watchdog = {}
+KBM.Watchdog = {
+	Buffs = {
+		Count = 0,
+		Total = 0,
+		Peak = 0,
+		Average = 0,
+	},
+	Avail = {
+		Count = 0,
+		Total = 0,
+		Peak = 0,
+		Average = 0,
+	},
+	Main = {
+		Count = 0,
+		Total = 0,
+		Peak = 0,
+		Averahe = 0,
+	},
+}
 KBM.Idle = {
 	Until = 0,
 	Duration = 5,
@@ -2241,6 +2260,9 @@ function KBM.MechSpy:Add(Name, Duration, Type, BossObj)
 		Mechanic.Time = Duration
 		Mechanic.Dynamic = false
 		Mechanic.Duration = Duration
+		if Duration == -1 then
+			Mechanic.Static = true
+		end
 	end
 	Mechanic.Enabled = true
 	Mechanic.Name = Name
@@ -2352,9 +2374,15 @@ function KBM.MechSpy:Add(Name, Duration, Type, BossObj)
 	end
 		
 	function Mechanic:Start(Name, Duration)
+		if KBM.Debug then
+			print("Mechanic Spy Called")
+		end
 		if KBM.Encounter then
 			if KBM.MechSpy.Settings.Enabled then
 				if self.Enabled == true and type(Name) == "string" then
+					if KBM.Debug then
+						print("Mechanic Spy launching Timer: "..Name)
+					end
 					if self.Names[Name] then
 						self.Names[Name]:Stop()
 					end
@@ -2368,14 +2396,21 @@ function KBM.MechSpy:Add(Name, Duration, Type, BossObj)
 					Timer.GUI = KBM.MechSpy:Pull()
 					Timer.GUI.Background:SetHeight(KBM.MechSpy.Anchor:GetHeight())
 					Timer.TimeStart = CurrentTime
-					if not self.Dynamic then
-						Duration = self.Duration
-						Timer.Time = self.Time
+					if self.Static then
+						Timer.Remaining = 0
+						Timer.Static = true
+						Timer.GUI.TimeBar:SetWidth(math.ceil(Timer.GUI.Background:GetWidth()))
 					else
-						if not Duration then
+						Timer.Static = false
+						if not self.Dynamic then
 							Duration = self.Duration
+							Timer.Time = self.Time
+						else
+							if Duration == nil or Duration < 1 then
+								Duration = self.Duration
+							end
+							Timer.Time = Duration
 						end
-						Timer.Time = Duration
 					end
 					Timer.Remaining = Duration
 					Timer.GUI:SetText(string.format(" %0.01f : ", Timer.Remaining)..Timer.Name)
@@ -2473,7 +2508,11 @@ function KBM.MechSpy:Add(Name, Duration, Type, BossObj)
 							if self.Waiting then
 							
 							else
-								self.Remaining = self.Time - (CurrentTime - self.TimeStart)
+								if self.Static then
+									self.Remaining = self.Time - (CurrentTime - self.TimeStart)
+								else
+									self.Remaining = CurrentTime - self.TimeStart
+								end
 								if self.Remaining < 10 then
 									text = string.format(" %0.01f : ", self.Remaining)..self.Name
 								elseif self.Remaining >= 60 then
@@ -2482,10 +2521,12 @@ function KBM.MechSpy:Add(Name, Duration, Type, BossObj)
 									text = " "..math.floor(self.Remaining).." : "..self.Name
 								end
 								self.GUI:SetText(text)
-								self.GUI.TimeBar:SetWidth(math.ceil(self.GUI.Background:GetWidth() * (self.Remaining/self.Time)))
-								if self.Remaining <= 0 then
-									self.Remaining = 0
-									table.insert(self.Parent.StopTimers, self)
+								if not self.Static then
+									self.GUI.TimeBar:SetWidth(math.ceil(self.GUI.Background:GetWidth() * (self.Remaining/self.Time)))
+									if self.Remaining <= 0 then
+										self.Remaining = 0
+										table.insert(self.Parent.StopTimers, self)
+									end
 								end
 							end
 						end
