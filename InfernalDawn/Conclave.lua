@@ -24,6 +24,7 @@ local EC = {
 	Lang = {},
 	ID = "The Ember Conclave",
 	Object = "EC",
+	Enrage = 7.5 * 60,
 }
 
 EC.Szath = {
@@ -123,24 +124,25 @@ EC.Ereetu = {
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
-	-- TimersRef = {},
-	-- AlertsRef = {},
+	TimersRef = {},
+	AlertsRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		-- TimersRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
-		-- },
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
-		-- },
+		TimersRef = {
+			Enabled = true,
+			Dark = KBM.Defaults.TimerObj.Create("yellow"),
+		},
+		AlertsRef = {
+			Enabled = true,
+			Dark = KBM.Defaults.AlertObj.Create("yellow"),
+		},
 	}
 }
 
 -- Ability Dictionary
 EC.Lang.Ability = {}
+EC.Lang.Ability.Dark = KBM.Language:Add("Dark Invocation")
 
 -- Description Dictionary
 EC.Lang.Main = {}
@@ -184,19 +186,23 @@ function EC:InitVars()
 		},
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
-		-- MechTimer = KBM.Defaults.MechTimer(),
-		-- Alerts = KBM.Defaults.Alerts(),
-		-- TimersRef = self.Szath.Settings.TimersRef,
-		-- AlertsRef = self.Szath.Settings.AlertsRef,
 		Szath = {
 			CastBar = self.Szath.Settings.CastBar,
+			-- TimersRef = self.Szath.Settings.TimersRef,
+			-- AlertsRef = self.Szath.Settings.AlertsRef,
 		},
 		Nahoth = {
 			CastBar = self.Nahoth.Settings.CastBar,
+			-- TimersRef = self.Nahoth.Settings.TimersRef,
+			-- AlertsRef = self.Nahoth.Settings.AlertsRef,
 		},
 		Ereetu = {
 			CastBar = self.Ereetu.Settings.CastBar,
+			TimersRef = self.Ereetu.Settings.TimersRef,
+			AlertsRef = self.Ereetu.Settings.AlertsRef,
 		},
+		MechTimer = KBM.Defaults.MechTimer(),
+		Alerts = KBM.Defaults.Alerts(),
 	}
 	KBMINDEC_Settings = self.Settings
 	chKBMINDEC_Settings = self.Settings
@@ -248,12 +254,73 @@ function EC:RemoveUnits(UnitID)
 	return false
 end
 
+function EC.SetBossObj()
+	if EC.Ereetu.Dead == false then
+		EC.PhaseObj.Objectives:AddPercent(EC.Ereetu.Name, 0, 100)
+	end
+	if EC.Szath.Dead == false then
+		EC.PhaseObj.Objectives:AddPercent(EC.Szath.Name, 0, 100)
+	end
+	if EC.Nahoth.Dead == false then
+		EC.PhaseObj.Objectives:AddPercent(EC.Nahoth.Name, 0, 100)
+	end
+end
+
+function EC.PhaseTwo()
+	local PhaseText = "2"
+	if EC.HardMode then
+		PhaseText = PhaseText.." (HM)"
+	end
+	EC.Phase = 2
+	EC.PhaseObj.Objectives:Remove()
+	EC.PhaseObj:SetPhase(PhaseText)
+	EC.SetBossObj()
+end
+
+function EC.PhaseFinal()
+	local PhaseText = "Final"
+	EC.Phase = 3
+	if EC.HardMode then
+		PhaseText = PhaseText.." (HM)"
+	end
+	EC.PhaseObj.Objectives:Remove()
+	EC.PhaseObj:SetPhase(PhaseText)
+	EC.SetBossObj()
+end
+
 function EC:Death(UnitID)
 	if self.Szath.UnitID == UnitID then
+		if self.Ereetu.Dead == false then
+			self.HardMode = true
+		else
+			self.HardMode = false
+		end
+		if self.Phase == 1 then
+			self.PhaseTwo()
+		else
+			self.PhaseFinal()
+		end
 		self.Szath.Dead = true
 	elseif self.Nahoth.UnitID == UnitID then
+		if self.Ereetu.Dead == false then
+			self.HardMode = true
+		else
+			self.HardMode = false
+		end
+		if self.Phase == 1 then
+			self.PhaseTwo()
+		else
+			self.PhaseFinal()
+		end
 		self.Nahoth.Dead = true
 	elseif self.Ereetu.UnitID == UnitID then
+		if self.Phase == 1 then
+			self.HardMode = false
+			self.PhaseTwo()
+		elseif self.Phase == 2 then
+			self.HardMode = false
+			self.PhaseFinal()
+		end
 		self.Ereetu.Dead = true
 	end
 	if self.Szath.Dead == true then
@@ -280,7 +347,7 @@ function EC:UnitHPCheck(unitDetails, unitID)
 					BossObj.Casting = false
 					BossObj.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
+					self.PhaseObj:SetPhase("1 (HM)")
 					self.PhaseObj.Objectives:AddPercent(self.Szath.Name, 0, 100)
 					self.PhaseObj.Objectives:AddPercent(self.Nahoth.Name, 0, 100)
 					self.PhaseObj.Objectives:AddPercent(self.Ereetu.Name, 0, 100)
@@ -311,6 +378,8 @@ function EC:Reset()
 		end
 	end
 	self.PhaseObj:End(Inspect.Time.Real())
+	self.HardMode = true
+	self.Phase = 1
 end
 
 function EC:Timer()	
@@ -321,13 +390,20 @@ function EC:DefineMenu()
 end
 
 function EC:Start()
-	-- Create Timers
-	-- KBM.Defaults.TimerObj.Assign(self.Szath)
+	-- Create Timers (Ereetu)
+	self.Ereetu.TimersRef.Dark = KBM.MechTimer:Add(self.Lang.Ability.Dark[KBM.Lang], 15)
+	KBM.Defaults.TimerObj.Assign(self.Ereetu)
 	
-	-- Create Alerts
-	-- KBM.Defaults.AlertObj.Assign(self.Szath)
+	-- Create Alerts (Ereetu)
+	self.Ereetu.AlertsRef.Dark = KBM.Alert:Create(self.Lang.Ability.Dark[KBM.Lang], nil, false, true, "yellow")
+	KBM.Defaults.AlertObj.Assign(self.Ereetu)
 	
 	-- Assign Alerts and Timers to Triggers
+	self.Ereetu.Triggers.Dark = KBM.Trigger:Create(self.Lang.Ability.Dark[KBM.Lang], "cast", self.Ereetu)
+	self.Ereetu.Triggers.Dark:AddTimer(self.Ereetu.TimersRef.Dark)
+	self.Ereetu.Triggers.Dark:AddAlert(self.Ereetu.AlertsRef.Dark)
+	self.Ereetu.Triggers.DarkInt = KBM.Trigger:Create(self.Lang.Ability.Dark[KBM.Lang], "interrupt", self.Ereetu)
+	self.Ereetu.Triggers.DarkInt:AddStop(self.Ereetu.AlertsRef.Dark)
 	
 	self.Szath.CastBar = KBM.CastBar:Add(self, self.Szath)
 	self.Nahoth.CastBar = KBM.CastBar:Add(self, self.Nahoth)

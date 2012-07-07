@@ -1,14 +1,25 @@
 ﻿v1.1.4
 
+Mechanic Timers
+* New: Timer UI objects are now stagger pre-fetched and cached on start-up based on the maximum number of timers possible during one encounter.
+
 Watchdog Diagnostics (temporary alpha addition)
-* New: /kbmwdbuffs - Displays current session diagnostic data for Buff handlers.
+* New: /kbmwdbuffs - Displays current session diagnostic data for Buff.Add/Remove handlers.
 * New: /kbmwdbuffs all - Lists all history for saved sessions including current
 * New: /kbmwdbuffs clear - Clears session saved history and current session data.
-* New: /kbmwdavail - Displays current session diagnostic data for Unit Available handlers (all/clear as above).
+* New: /kbmwdavail - Displays current session diagnostic data for Unit.Availability handlers (all/clear as above).
+* New: /kbmwdmain - Displays current session diagnostic data for System.Update.Begin handlers (all/clear as above).
 * Fixed: Start-up error with Watchdog variable.
 * Change: History will now only save up to 10 sessions for all diagnostics data.
 * Change: Increased accuracy of Average times by 1 place.
 * Change: Removed Average time calculations from the handlers, this is now calculated when calling the data via commands.
+
+Infernal Dawn
+* Ember Conclave
+** New: Added Phase Tracking.
+** New: Added Hard Mode detection.
+** New: Added Alert and Timer for Dark Invocation.
+** New: Added Enrage Timer.
 
 ----
 v1.1.3
