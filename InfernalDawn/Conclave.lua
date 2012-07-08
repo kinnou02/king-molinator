@@ -101,15 +101,15 @@ EC.Nahoth = {
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
-	-- TimersRef = {},
+	TimersRef = {},
 	-- AlertsRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		-- TimersRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
-		-- },
+		TimersRef = {
+			Enabled = true,
+			Wounds = KBM.Defaults.TimerObj.Create("dark_green"),
+		},
 		-- AlertsRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
@@ -137,6 +137,7 @@ EC.Ereetu = {
 		TimersRef = {
 			Enabled = true,
 			Dark = KBM.Defaults.TimerObj.Create("yellow"),
+			Shard = KBM.Defaults.TimerObj.Create("orange"),
 		},
 		AlertsRef = {
 			Enabled = true,
@@ -148,11 +149,17 @@ EC.Ereetu = {
 -- Ability Dictionary
 EC.Lang.Ability = {}
 EC.Lang.Ability.Dark = KBM.Language:Add("Dark Invocation")
+EC.Lang.Ability.Shard = KBM.Language:Add("Summon Scorching Shard")
+EC.Lang.Ability.Shard:SetRussian("Призвать пылающий осколок")
 
 -- Ability Dictionary
 EC.Lang.Debuff = {}
 EC.Lang.Debuff.Hem = KBM.Language:Add("Profuse Hemorrhage")
 EC.Lang.Debuff.Blood = KBM.Language:Add("Traitorous Blood")
+EC.Lang.Debuff.Blood:SetRussian("Предательская кровь")
+EC.Lang.Debuff.Wounds = KBM.Language:Add("Infected Wounds")
+EC.Lang.Debuff.Wounds:SetRussian("Зараженные раны")
+
 
 -- Description Dictionary
 EC.Lang.Main = {}
@@ -205,7 +212,7 @@ function EC:InitVars()
 		},
 		Nahoth = {
 			CastBar = self.Nahoth.Settings.CastBar,
-			-- TimersRef = self.Nahoth.Settings.TimersRef,
+			TimersRef = self.Nahoth.Settings.TimersRef,
 			-- AlertsRef = self.Nahoth.Settings.AlertsRef,
 		},
 		Ereetu = {
@@ -287,8 +294,8 @@ function EC.PhaseTwo()
 	EC.PhaseObj.Objectives:Remove()
 	EC.PhaseObj:SetPhase(PhaseText)
 	EC.SetBossObj()
-	if EC.Szeth.Dead == false then
-		KBM.TankSwap:Start(EC.Lang.Debuff.Hem[KBM.Lang], EC.Szeth.UnitID)
+	if EC.Szath.Dead == false then
+		KBM.TankSwap:Start(EC.Lang.Debuff.Hem[KBM.Lang], EC.Szath.UnitID)
 	end	
 	
 end
@@ -410,12 +417,17 @@ end
 
 function EC:Start()
 	-- Create Timers (Ereetu)
-	self.Ereetu.TimersRef.Dark = KBM.MechTimer:Add(self.Lang.Ability.Dark[KBM.Lang], 15)
+	self.Ereetu.TimersRef.Dark = KBM.MechTimer:Add(self.Lang.Ability.Dark[KBM.Lang], 16)
+	self.Ereetu.TimersRef.Shard = KBM.MechTimer:Add(self.Lang.Ability.Shard[KBM.Lang], 17)
 	KBM.Defaults.TimerObj.Assign(self.Ereetu)
 	
 	-- Create Timers (Szath)
-	self.Szath.TimersRef.Blood = KBM.MechTimer:Add(self.Lang.Debuff.Blood[KBM.Lang], 40)
+	self.Szath.TimersRef.Blood = KBM.MechTimer:Add(self.Lang.Debuff.Blood[KBM.Lang], 41)
 	KBM.Defaults.TimerObj.Assign(self.Szath)
+	
+	-- Create Timers (Nahoth)
+	self.Nahoth.TimersRef.Wounds = KBM.MechTimer:Add(self.Lang.Debuff.Wounds[KBM.Lang], 17)
+	KBM.Defaults.TimerObj.Assign(self.Nahoth)
 	
 	-- Create Alerts (Ereetu)
 	self.Ereetu.AlertsRef.Dark = KBM.Alert:Create(self.Lang.Ability.Dark[KBM.Lang], nil, false, true, "yellow")
@@ -435,12 +447,18 @@ function EC:Start()
 	self.Ereetu.Triggers.Dark:AddAlert(self.Ereetu.AlertsRef.Dark)
 	self.Ereetu.Triggers.DarkInt = KBM.Trigger:Create(self.Lang.Ability.Dark[KBM.Lang], "interrupt", self.Ereetu)
 	self.Ereetu.Triggers.DarkInt:AddStop(self.Ereetu.AlertsRef.Dark)
+	self.Ereetu.Triggers.Shard = KBM.Trigger:Create(self.Lang.Ability.Shard[KBM.Lang], "cast", self.Ereetu)
+	self.Ereetu.Triggers.Shard:AddTimer(self.Ereetu.TimersRef.Shard)
+	
 	self.Szath.Triggers.Blood = KBM.Trigger:Create("B04039E99174644055", "playerIDBuff", self.Szath)
 	self.Szath.Triggers.Blood:AddAlert(self.Szath.AlertsRef.Blood)
-	self.Szath.Triggers.Blood:AddSpy(self.Szath.MechRef.Blood)
 	self.Szath.Triggers.Blood:AddTimer(self.Szath.TimersRef.Blood)
+	self.Szath.Triggers.Blood:AddSpy(self.Szath.MechRef.Blood)
 	self.Szath.Triggers.BloodRem = KBM.Trigger:Create("B04039E99174644055", "playerIDBuffRemove", self.Szath)
 	self.Szath.Triggers.Blood:AddStop(self.Szath.MechRef.Blood)
+
+	self.Nahoth.Triggers.Wounds = KBM.Trigger:Create(self.Lang.Debuff.Wounds[KBM.Lang], "playerBuff", self.Nahoth)
+	self.Nahoth.Triggers.Wounds:AddTimer(self.Nahoth.TimersRef.Wounds)
 	
 	self.Szath.CastBar = KBM.CastBar:Add(self, self.Szath)
 	self.Nahoth.CastBar = KBM.CastBar:Add(self, self.Nahoth)

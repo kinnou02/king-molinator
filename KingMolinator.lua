@@ -2368,6 +2368,9 @@ function KBM.MechSpy:Add(Name, Duration, Type, BossObj)
 	function Mechanic:Stop(Name)
 		if Name then
 			if self.Names[Name] then
+				if KBM.Debug then
+					print("Mechanic Spy stopping: "..Name)
+				end
 				self.Names[Name]:Stop()
 			end
 		end
@@ -2890,7 +2893,7 @@ function KBM.PhaseMonitor:Init()
 						if KBM.BossID[KBM.CurrentMod.Bosses[PercentObj.Name].UnitID] then
 							PercentObj.PercentRaw = KBM.BossID[KBM.CurrentMod.Bosses[PercentObj.Name].UnitID].PercentRaw
 							PercentObj.Percent = KBM.BossID[KBM.CurrentMod.Bosses[PercentObj.Name].UnitID].Percent
-							Currnet = PercentObj.Percent
+							Current = PercentObj.Percent
 						end
 					end
 				end
@@ -3632,26 +3635,30 @@ function KBM.CombatLeave(UnitID)
 end
 
 function KBM.MobDamage(info)
+	-- Damage done by a Non Raid Member to Anything.
 	if KBM.Options.Enabled then
 		local tUnitID = info.target
 		local UnitObj = KBM.Unit.List.UID[tUnitID]
-		if UnitObj then
-			tDetails = UnitObj.Details
-		else
+		if not UnitObj then
 			tDetails = Inspect.Unit.Detail(tUnitID)
 			UnitObj = KBM.Unit:Idle(tUnitID, tDetails)
+		else
+			tDetails = Inspect.Unit.Detail(tUnitID)
 		end
 		local cUnitID = info.caster
 		local cDetails = nil
 		if cUnitID then
-			if KBM.Unit.List.UID[cUnitID] then
-				cDetails = KBM.Unit.List.UID[cUnitID].Details
+			cDetails = Inspect.Unit.Detail(cUnitID)
+			if not KBM.Unit.List.UID[cUnitID] then
+				KBM.Unit:Idle(cUnitID, cDetails)
 			else
-				KBM.Unit:Idle(cUnitID)
+				if cDetails then
+					KBM.Unit.List.UID[cUnitID]:Update(cDetails.health, cDetails)
+				end
 			end
 		end	
 		if UnitObj then
-			UnitObj:DamageHandler(info)
+			UnitObj:DamageHandler(info, tDetails)
 		end
 		if KBM.Encounter then
 			-- Check for damage done to the raid by Bosses
@@ -3797,6 +3804,7 @@ end
 
 function KBM.RaidDamage(info)
 	-- Will be used for DPS Monitoring
+	-- Damage done by a Raid member to a Unit
 	if KBM.Options.Enabled then
 		local tUnitID = info.target
 		local tDetails = nil
@@ -3804,22 +3812,22 @@ function KBM.RaidDamage(info)
 		local cDetails = nil
 		local UnitObj = nil
 		if cUnitID then
+			cDetails = Inspect.Unit.Detail(cUnitID)
 			if KBM.Unit.List.UID[cUnitID] then
-				cDetails = KBM.Unit.List.UID[cUnitID]
+				if cDetails then
+					KBM.Unit.List.UID[cUnitID]:Update(cDetails.health, cDetails)
+				end
 			else
-				
-				KBM.Unit:Idle(cUnitID)
+				KBM.Unit:Idle(cUnitID, cDetails)
 			end
 		end
 		if tUnitID then
 			UnitObj = KBM.Unit.List.UID[tUnitID]
+			tDetails = Inspect.Unit.Detail(tUnitID)
 			if not UnitObj then
-				tDetails = Inspect.Unit.Detail(tUnitID)
-				UnitObj = KBM.Unit:Idle(tUnitID)
-			else
-				tDetails = UnitObj.Detail
+				UnitObj = KBM.Unit:Idle(tUnitID, tDetails)
 			end
-			UnitObj:DamageHandler(info)
+			UnitObj:DamageHandler(info, tDetails)
 		end
 		if KBM.Encounter then
 			if KBM.BossID[tUnitID] then
@@ -3829,10 +3837,10 @@ function KBM.RaidDamage(info)
 				-- *** TO BE CHANGED DUE TO UNIT TRACKER NOW MONITORING HEALTH DATA ***
 				-- ********************************************************************
 				if tDetails then
-					KBM.BossID[tUnitID].Health = tDetails.health
-					KBM.BossID[tUnitID].HealthLast = tDetails.health
-					KBM.BossID[tUnitID].PercentRaw = (tDetails.health/tDetails.healthMax)*100
-					KBM.BossID[tUnitID].Percent = math.ceil(KBM.BossID[tUnitID].PercentRaw)
+					KBM.BossID[tUnitID].Health = UnitObj.Health
+					KBM.BossID[tUnitID].HealthLast = UnitObj.Health
+					KBM.BossID[tUnitID].PercentRaw = UnitObj.PercentRaw
+					KBM.BossID[tUnitID].Percent = UnitObj.Percent
 					if KBM.CurrentMod.ID then
 						if KBM.BossID[tUnitID].Percent ~= KBM.BossID[tUnitID].PercentLast then
 							if KBM.Trigger.Percent[KBM.CurrentMod.ID] then
@@ -4164,11 +4172,11 @@ function KBM.Unit:Create(uDetails, UnitID)
 			end
 		end
 		function UnitObj:SetHealthMax(NewMHP)
-			self.HealthMax = NewMHP
 			if NewMHP then
 				if NewMHP == true then
 					NewMHP = self.Health
 				end
+				self.HealthMax = NewMHP
 				if (self.Name and self.Health and self.HealthMax) ~= nil then
 					self.Loaded = true
 					self:Update(self.Health)
@@ -6692,9 +6700,6 @@ function KBM:Timer()
 				end
 				if udiff >= 0.075 then
 					for i, Timer in ipairs(self.MechTimer.ActiveTimers) do
-						Timer:Update(current)
-					end
-					for i, Timer in ipairs(self.RezMaster.Rezes.ActiveTimers) do
 						Timer:Update(current)
 					end
 					KBM.MechSpy:Update(current)

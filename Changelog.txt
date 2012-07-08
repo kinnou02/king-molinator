@@ -23,12 +23,14 @@ Watchdog Diagnostics (temporary alpha addition)
 Infernal Dawn
 * Ember Conclave
 ** New: Added Phase Tracking.
-** New: Added Hard Mode detection.
+** New: Added Hard Mode detection. (HM)
 ** New: Added Alert and Timer for Dark Invocation.
 ** New: Added Enrage Timer.
 ** New: Added Tank-Swap monitor for Szath in Phase 2.
 ** New: Added Mechanic Spy for Traitorous Blood. (Mind Control Debuff)
-** New: Added a Timer for Traitorous Blood.
+** New: Added Timer for Traitorous Blood.
+** New: Added Timer for Infected Wounds.
+** New: Added Timer for Scorching Shards.
 
 ----
 v1.1.3
