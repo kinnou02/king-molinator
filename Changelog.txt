@@ -32,6 +32,13 @@ Infernal Dawn
 ** New: Added Timer for Infected Wounds.
 ** New: Added Timer for Scorching Shards.
 
+Primeval Feast
+* Grandmaster Atrophinius
+** New: Added Phase tracking.
+** New: Added Alert for Rampage duration with countdown.
+** New: Added Enrage Timer.
+** New: Added Timer for Rampage.
+
 ----
 v1.1.3
 

@@ -19,7 +19,7 @@ local AN = {
 	Enabled = true,
 	Instance = PF.Name,
 	Lang = {},
-	--Enrage = 5 * 60,
+	Enrage = 6 * 60,
 	ID = "PF_Atrophinius",
 	Object = "AN",
 }
@@ -32,13 +32,21 @@ AN.Atrophinius = {
 	NameShort = "Atrophinius",
 	Menu = {},
 	Dead = false,
-	-- AlertsRef = {},
-	-- TimersRef = {},
+	AlertsRef = {},
+	TimersRef = {},
 	Available = false,
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
+		AlertsRef = {
+			Enabled = true,
+			Rampage = KBM.Defaults.AlertObj.Create("red")
+		},
+		TimersRef = {
+			Enabled = true,
+			Rampage = KBM.Defaults.TimerObj.Create("red")
+		},
 	},
 }
 
@@ -50,10 +58,32 @@ AN.Lang.Unit.Atrophinius = KBM.Language:Add(AN.Atrophinius.Name)
 AN.Lang.Unit.Atrophinius:SetGerman("Großmeister Atrophinius")
 AN.Lang.Unit.AtrophiniusShort = KBM.Language:Add("Atrophinius")
 AN.Lang.Unit.AtrophiniusShort:SetGerman("Atrophinius")
+AN.Lang.Unit.Cask = KBM.Language:Add("Green Label Cask")
+
+-- Buff Dictionary
+AN.Lang.Buff = {}
+AN.Lang.Buff.Rampage = KBM.Language:Add("Rampage")
 
 AN.Atrophinius.Name = AN.Lang.Unit.Atrophinius[KBM.Lang]
 AN.Atrophinius.NameShort = AN.Lang.Unit.AtrophiniusShort[KBM.Lang]
 AN.Descript = AN.Atrophinius.Name
+
+AN.Cask = {
+	Mod = AN,
+	Level = "??",
+	Active = false,
+	Name = AN.Lang.Unit.Cask[KBM.Lang],
+	Dead = false, 
+	Available = false,
+	Ignore = true,
+	UnitID = nil,
+	Primary = false,
+	Required = 1,
+	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+	}
+}
 
 function AN:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
@@ -69,8 +99,10 @@ function AN:InitVars()
 		CastBar = self.Atrophinius.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
-		-- AlertsRef = self.Atrophinius.Settings.AlertsRef,
-		-- TimersRef = self.Atrophinius.Settings.TimersRef,
+		MechTimer = KBM.Defaults.MechTimer(),
+		Alerts = KBM.Defaults.Alerts(),
+		AlertsRef = self.Atrophinius.Settings.AlertsRef,
+		TimersRef = self.Atrophinius.Settings.TimersRef,
 	}
 	KBMPFAN_Settings = self.Settings
 	chKBMPFAN_Settings = self.Settings
@@ -129,6 +161,13 @@ function AN:Death(UnitID)
 	return false
 end
 
+function AN.PhaseTwo()
+	AN.PhaseObj.Objectives:Remove()
+	AN.PhaseObj.Objectives:AddPercent(AN.Atrophinius.Name, 0, 75)
+	AN.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
+	AN.Phase = 2
+end
+
 function AN:UnitHPCheck(uDetails, unitID)
 	
 	if uDetails and unitID then
@@ -143,13 +182,31 @@ function AN:UnitHPCheck(uDetails, unitID)
 					self.Atrophinius.Casting = false
 					self.Atrophinius.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
-					self.PhaseObj.Objectives:AddPercent(self.Atrophinius.Name, 0, 100)
-					self.Phase = 1					
+					self.PhaseObj:SetPhase("1")
+					self.PhaseObj.Objectives:AddPercent(self.Atrophinius.Name, 75, 100)
+					self.PhaseObj.Objectives:AddDeath(self.Cask.Name, 3)
+					self.Phase = 1
 				end
 				self.Atrophinius.UnitID = unitID
 				self.Atrophinius.Available = true
 				return self.Atrophinius
+			else
+				if not self.Bosses[uDetails.name].UnitList[unitID] then
+					SubBossObj = {
+						Mod = AN,
+						Level = "??",
+						Name = uDetails.name,
+						Dead = false,
+						Casting = false,
+						UnitID = unitID,
+						Available = true,
+					}
+					self.Bosses[uDetails.name].UnitList[unitID] = SubBossObj
+				else
+					self.Bosses[uDetails.name].UnitList[unitID].Available = true
+					self.Bosses[uDetails.name].UnitList[unitID].UnitID = unitID
+				end
+				return self.Bosses[uDetails.name].UnitList[unitID]							
 			end
 		end
 	end
@@ -157,10 +214,20 @@ end
 
 function AN:Reset()
 	self.EncounterRunning = false
-	self.Atrophinius.Available = false
-	self.Atrophinius.UnitID = nil
-	self.Atrophinius.Dead = false
-	self.Atrophinius.CastBar:Remove()
+	for BossName, BossObj in pairs(self.Bosses) do
+		if BossObj.Type == "multi" then
+			BossObj.UnitList = {}
+		else
+			BossObj.Available = false
+			BossObj.UnitID = nil
+			BossObj.Dead = false
+			if BossObj.CastBar then
+				if BossObj.CastBar.Active then
+					BossObj.CastBar:Remove()
+				end
+			end
+		end
+	end
 	self.PhaseObj:End(Inspect.Time.Real())	
 end
 
@@ -198,10 +265,19 @@ end
 
 function AN:Start()
 	-- Create Timers
+	self.Atrophinius.TimersRef.Rampage = KBM.MechTimer:Add(self.Lang.Buff.Rampage[KBM.Lang], 46)
+	KBM.Defaults.TimerObj.Assign(self.Atrophinius)
 
 	-- Create Alerts
+	self.Atrophinius.AlertsRef.Rampage = KBM.Alert:Create(self.Lang.Buff.Rampage[KBM.Lang], nil, false, true, "red")
+	KBM.Defaults.AlertObj.Assign(self.Atrophinius)
 	
 	-- Assign Alerts and Timers to Triggers
+	self.Atrophinius.Triggers.PhaseTwo = KBM.Trigger:Create(75, "percent", self.Atrophinius)
+	self.Atrophinius.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
+	self.Atrophinius.Triggers.Rampage = KBM.Trigger:Create(self.Lang.Buff.Rampage[KBM.Lang], "buff", self.Atrophinius)
+	self.Atrophinius.Triggers.Rampage:AddAlert(self.Atrophinius.AlertsRef.Rampage)
+	self.Atrophinius.Triggers.Rampage:AddTimer(self.Atrophinius.TimersRef.Rampage)
 	
 	self.Atrophinius.CastBar = KBM.CastBar:Add(self, self.Atrophinius, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
