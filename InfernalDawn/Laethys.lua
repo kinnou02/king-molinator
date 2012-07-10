@@ -47,6 +47,7 @@ LT.Laethys = {
 		CastBar = KBM.Defaults.CastBar(),
 		 TimersRef = {
 			Enabled = true,
+			PhaseTwoTrans = KBM.Defaults.TimerObj.Create("dark_green"),
 			Funnel = KBM.Defaults.TimerObj.Create("red"),
 			StormFirst = KBM.Defaults.TimerObj.Create("red"),
 		  	Storm = KBM.Defaults.TimerObj.Create("red"),
@@ -106,11 +107,17 @@ LT.Lang.Mechanic = {}
 LT.Lang.Mechanic.Adds = KBM.Language:Add("Adds spawn")
 LT.Lang.Mechanic.Adds:SetGerman("Add Spawn")
 LT.Lang.Mechanic.Adds:SetKorean("쫄들 소환")
+LT.Lang.Mechanic.PhaseTwoTrans = KBM.Language:Add("until Phase 2 begins!")
 
 -- Buff Dictionary
 LT.Lang.Buff = {}
 LT.Lang.Buff.Wisdom = KBM.Language:Add("Stoneseers Wisdom")
 LT.Lang.Buff.Wisdom:SetGerman("Weisheit des Steindeuters")
+
+-- Notify Dictionary
+LT.Lang.Notify = {}
+LT.Lang.Notify.PhaseTwoTrans = KBM.Language:Add('Laethys roars, "How dare you scuff at my beautiful form?! You will pay for this..."')
+LT.Lang.Notify.PhaseTwoStart = KBM.Language:Add('Laethys says, "Behold your doom! Put down your weapons and I shall grant you a swift demise!"')
 
 -- Menu Dictionary
 LT.Lang.Menu = {}
@@ -337,7 +344,8 @@ function LT:Start()
 	self.Laethys.TimersRef.GoldFirst.MenuName = self.Lang.Menu.Gold[KBM.Lang]
  	self.Laethys.TimersRef.Gold = KBM.MechTimer:Add(self.Lang.Ability.Gold[KBM.Lang], 30)
  	self.Laethys.TimersRef.AddsFirst = KBM.MechTimer:Add(self.Lang.Menu.Adds[KBM.Lang],34)
- 	self.Laethys.TimersRef.Adds = KBM.MechTimer:Add(self.Lang.Mechanic.Adds[KBM.Lang], 81)	 
+ 	self.Laethys.TimersRef.Adds = KBM.MechTimer:Add(self.Lang.Mechanic.Adds[KBM.Lang], 81)
+	self.Laethys.TimersRef.PhaseTwoTrans = KBM.MechTimer:Add(self.Lang.Mechanic.PhaseTwoTrans[KBM.Lang], 40)
 	KBM.Defaults.TimerObj.Assign(self.Laethys)
 	
 	-- Create Timer for Stoneseer
@@ -364,8 +372,10 @@ function LT:Start()
 	self.Seer.Triggers.RestoInt:AddStop(self.Seer.AlertsRef.Resto)
 	
 	-- Laethys
-	self.Laethys.Triggers.PhaseTwo = KBM.Trigger:Create(50, "percent", self.Laethys)
-	self.Laethys.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
+	self.Laethys.Triggers.PhaseTwoTrans = KBM.Trigger:Create(self.Lang.Notify.PhaseTwoTrans[KBM.Lang], "notify", self.Laethys)
+	self.Laethys.Triggers.PhaseTwoTrans:AddPhase(self.PhaseTwo)
+	self.Laethys.Triggers.PhaseTwoTrans:AddTimer(self.Laethys.TimersRef.PhaseTwoTrans)
+	self.Laethys.Triggers.PhaseTwoStart = KBM.Trigger:Create(self.Lang.Notify.PhaseTwoStart[KBM.Lang], "notify", self.Laethys)
 	
 	self.Laethys.Triggers.Adds = KBM.Trigger:Create(34, "time", self.Laethys)
 	self.Laethys.Triggers.Adds:AddTimer(self.Laethys.TimersRef.Adds)

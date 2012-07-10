@@ -1,4 +1,24 @@
-﻿v1.1.4
+﻿v1.1.5
+
+Mechanic Spy
+* Fixed: Timers were not activating correctly.
+
+Unit Tracker
+* Fixed: Accuracy was out too much to be reliable.
+
+Infernal Dawn
+* Laeyths
+** Change: Phase 2 now triggers from the emote, not a percantage.
+** New: Added Timer for the Phase Two transition period. Until Phase Two combat begins.
+
+Primeval Feast
+* Grandmaster Atrophinius
+** New: Added Phase tracking.
+** New: Added Alert for Rampage duration with countdown.
+** New: Added Enrage Timer.
+** New: Added Timer for Rampage.
+
+v1.1.4
 
 Mechanic Timers
 * New: Timer UI objects are now stagger pre-fetched and cached on start-up based on the maximum number of timers possible during one encounter.
@@ -31,13 +51,9 @@ Infernal Dawn
 ** New: Added Timer for Traitorous Blood.
 ** New: Added Timer for Infected Wounds.
 ** New: Added Timer for Scorching Shards.
-
-Primeval Feast
-* Grandmaster Atrophinius
-** New: Added Phase tracking.
-** New: Added Alert for Rampage duration with countdown.
-** New: Added Enrage Timer.
-** New: Added Timer for Rampage.
+* Laeyths
+** Change: Phase 2 now triggers from the emote, not a percantage.
+** New: Added Timer for the Phase Two transition period. Until Phase Two combat begins.
 
 ----
 v1.1.3

@@ -123,18 +123,21 @@ KBM.Watchdog = {
 		Total = 0,
 		Peak = 0,
 		Average = 0,
+		wTime = 99,
 	},
 	Avail = {
 		Count = 0,
 		Total = 0,
 		Peak = 0,
 		Average = 0,
+		wTime = 99,
 	},
 	Main = {
 		Count = 0,
 		Total = 0,
 		Peak = 0,
 		Averahe = 0,
+		wTime = 99,
 	},
 }
 KBM.Idle = {
@@ -814,6 +817,7 @@ function KBM.InitDiagnostics()
 					Average = 0,
 					Peak = 0,
 					Count = 0,
+					wTime = 0,
 				}
 			end
 		end
@@ -857,6 +861,7 @@ local function KBM_LoadVars(AddonID)
 				Average = 0,
 				Count = 0,
 				Peak = 0,
+				wTime = 99,
 			}
 			KBM.Watchdog[diaID] = KBM.Options.Watchdog[diaID].Sessions[KBM.Options.Watchdog[diaID].sCount]
 		end
@@ -2511,7 +2516,7 @@ function KBM.MechSpy:Add(Name, Duration, Type, BossObj)
 							if self.Waiting then
 							
 							else
-								if self.Static then
+								if self.Static == false then
 									self.Remaining = self.Time - (CurrentTime - self.TimeStart)
 								else
 									self.Remaining = CurrentTime - self.TimeStart
@@ -2524,7 +2529,7 @@ function KBM.MechSpy:Add(Name, Duration, Type, BossObj)
 									text = " "..math.floor(self.Remaining).." : "..self.Name
 								end
 								self.GUI:SetText(text)
-								if not self.Static then
+								if self.Static == false then
 									self.GUI.TimeBar:SetWidth(math.ceil(self.GUI.Background:GetWidth() * (self.Remaining/self.Time)))
 									if self.Remaining <= 0 then
 										self.Remaining = 0
@@ -2534,7 +2539,7 @@ function KBM.MechSpy:Add(Name, Duration, Type, BossObj)
 							end
 						end
 					end
-					Timer:Update(CurrentTime)
+					Timer:Update(Inspect.Time.Real())
 				end
 			end
 		end		
@@ -4678,6 +4683,10 @@ local function KBM_UnitAvailable(units)
 	if KBM.Watchdog.Avail.Peak < TimeEllapsed then
 		KBM.Watchdog.Avail.Peak = TimeEllapsed
 	end	
+	local TimeLeft = Inspect.System.Watchdog()
+	if KBM.Watchdog.Avail.wTime > TimeLeft then
+		KBM.Watchdog.Avail.wTime = TimeLeft
+	end
 end
 
 function KBM.AttachDragFrame(parent, hook, name, layer)
@@ -7103,11 +7112,15 @@ function KBM:BuffAdd(unitID, Buffs)
 			end
 		end
 	end
-	local TimeEllapsed = tonumber(string.format("%0.5f", Inspect.Time.Real() - TimeStore))
+	local TimeEllapsed = tonumber(string.format("%0.05f", Inspect.Time.Real() - TimeStore))
+	local TimeLeft = Inspect.System.Watchdog()
 	KBM.Watchdog.Buffs.Count = KBM.Watchdog.Buffs.Count + 1
 	KBM.Watchdog.Buffs.Total = KBM.Watchdog.Buffs.Total + TimeEllapsed
 	if KBM.Watchdog.Buffs.Peak < TimeEllapsed then
 		KBM.Watchdog.Buffs.Peak = TimeEllapsed
+	end
+	if KBM.Watchdog.Buffs.wTime > TimeLeft then
+		KBM.Watchdog.Buffs.wTime = TimeLeft
 	end
 	
 end
@@ -7178,193 +7191,8 @@ function KBM:BuffRemove(unitID, Buffs)
 
 end
 
-function KBM:BuffMonitor(unitID, Buffs, Type)
-
-	-- Used to manage Triggers and soon Tank-Swap managing.
-	local TimeStore = Inspect.Time.Real()
-	
-	if KBM.Options.Enabled then
-		if KBM.Encounter then
-			if Type == "new" then
-				if unitID then
-					local bDetailsTable = Inspect.Buff.Detail(unitID, Buffs)
-					for BuffID, bDetails in pairs(bDetailsTable) do
-						if bDetails then
-							if not KBM.Buffs.Active[unitID] then
-								KBM.Buffs.Active[unitID] = {
-									Buff_Count = 1,
-								}
-							else
-								KBM.Buffs.Active[unitID].Buff_Count = KBM.Buffs.Active[unitID].Buff_Count + 1
-							end
-							KBM.Buffs.Active[unitID][BuffID] = bDetails
-							if KBM.Trigger.Buff[KBM.CurrentMod.ID] then
-								if KBM.Trigger.Buff[KBM.CurrentMod.ID][bDetails.name] then
-									TriggerObj = KBM.Trigger.Buff[KBM.CurrentMod.ID][bDetails.name]
-									if TriggerObj.Unit.UnitID == unitID then
-										KBM.Trigger.Queue:Add(TriggerObj, unitID, unitID, bDetails.remaining)
-									end
-								end
-							end
-							if KBM.Trigger.PlayerDebuff[KBM.CurrentMod.ID] ~= nil and bDetails.debuff == true then
-								if KBM.Trigger.PlayerDebuff[KBM.CurrentMod.ID][bDetails.name] then
-									TriggerObj = KBM.Trigger.PlayerDebuff[KBM.CurrentMod.ID][bDetails.name]
-									if LibSRM.Group.UnitExists(unitID) ~= nil or unitID == KBM.Player.UnitID then
-										if KBM.Debug then
-											print("Debuff Trigger matched: "..bDetails.name)
-											if LibSRM.Grouped() then
-												print("LibSRM Match: "..tostring(LibSRM.Group.UnitExists(unitID)))
-											end
-											print("Player Match: "..KBM.Player.UnitID.." - "..unitID)
-											print("---------------")
-											dump(bDetails)
-										end
-										KBM.Trigger.Queue:Add(TriggerObj, unitID, unitID, bDetails.remaining)
-									end
-								end
-							end
-							if KBM.Trigger.PlayerIDBuff[KBM.CurrentMod.ID] then
-								if KBM.Trigger.PlayerIDBuff[KBM.CurrentMod.ID][bDetails.type] then
-									TriggerObj = KBM.Trigger.PlayerIDBuff[KBM.CurrentMod.ID][bDetails.type]
-									if LibSRM.Group.UnitExists(unitID) ~= nil or unitID == KBM.Player.UnitID then
-										if KBM.Debug then
-											print("Debuff Trigger matched: "..bDetails.name)
-											if LibSRM.Grouped() then
-												print("LibSRM Match: "..tostring(LibSRM.Group.UnitExists(unitID)))
-											end
-											print("Player Match: "..KBM.Player.UnitID.." - "..unitID)
-											print("---------------")
-											dump(bDetails)
-										end
-										KBM.Trigger.Queue:Add(TriggerObj, unitID, unitID, bDetails.remaining)
-									end
-								end
-							end
-							if KBM.Trigger.PlayerBuff[KBM.CurrentMod.ID] then
-								if KBM.Trigger.PlayerBuff[KBM.CurrentMod.ID][bDetails.name] then
-									TriggerObj = KBM.Trigger.PlayerBuff[KBM.CurrentMod.ID][bDetails.name]
-									if LibSRM.Group.UnitExists(unitID) ~= nil or unitID == KBM.Player.UnitID then
-										if KBM.Debug then
-											print("Buff Trigger matched: "..bDetails.name)
-											if LibSRM.Grouped() then
-												print("LibSRM Match: "..tostring(LibSRM.Group.UnitExists(unitID)))
-											end
-											print("Player Match: "..KBM.Player.UnitID.." - "..unitID)
-											print("---------------")
-											dump(bDetails)
-										end
-										KBM.Trigger.Queue:Add(TriggerObj, unitID, unitID, bDetails.remaining)
-									end
-								end
-							end
-							if KBM.TankSwap.Active then
-								if KBM.TankSwap.Tanks[unitID] then
-									if KBM.TankSwap.DebuffName[bDetails.name] then
-										KBM.TankSwap.Tanks[unitID]:BuffUpdate(BuffID, bDetails.name)
-									end
-								end
-							end
-						end
-					end
-				end
-			elseif Type == "remove" then
-				if unitID then
-					if KBM.Buffs.Active[unitID] then
-						for BuffID, bool in pairs(Buffs) do
-							if BuffID then
-								if KBM.Buffs.Active[unitID][BuffID] then
-									bDetails = KBM.Buffs.Active[unitID][BuffID]
-									if KBM.Trigger.BuffRemove[KBM.CurrentMod.ID] then
-										if KBM.Trigger.BuffRemove[KBM.CurrentMod.ID][bDetails.name] then
-											TriggerObj = KBM.Trigger.BuffRemove[KBM.CurrentMod.ID][bDetails.name]
-											if TriggerObj.Unit.UnitID == unitID then
-												KBM.Trigger.Queue:Add(TriggerObj, nil, unitID, nil)
-											end
-										end
-									end
-									if KBM.Trigger.PlayerBuffRemove[KBM.CurrentMod.ID] then
-										if KBM.Trigger.PlayerBuffRemove[KBM.CurrentMod.ID][bDetails.name] then
-											TriggerObj = KBM.Trigger.PlayerBuffRemove[KBM.CurrentMod.ID][bDetails.name]
-											if LibSRM.Group.UnitExists(unitID) or unitID == KBM.Player.UnitID then
-												KBM.Trigger.Queue:Add(TriggerObj, nil, unitID, nil)
-											end
-										end
-									end
-									if KBM.Trigger.PlayerIDBuffRemove[KBM.CurrentMod.ID] then
-										if KBM.Trigger.PlayerIDBuffRemove[KBM.CurrentMod.ID][bDetails.type] then
-											TriggerObj = KBM.Trigger.PlayerIDBuffRemove[KBM.CurrentMod.ID][bDetails.type]
-											if LibSRM.Group.UnitExists(unitID) or unitID == KBM.Player.UnitID then
-												KBM.Trigger.Queue:Add(TriggerObj, nil, unitID, nil)
-											end
-										end
-									end
-									KBM.Buffs.Active[unitID][BuffID] = nil
-									KBM.Buffs.Active[unitID].Buff_Count = KBM.Buffs.Active[unitID].Buff_Count - 1
-									if KBM.Buffs.Active[unitID].Buff_Count == 0 then
-										KBM.Buffs.Active[unitID] = nil
-									end
-								end
-							end
-						end
-					end
-				end
-			end
-		else
-			if Type == "new" then
-				if unitID then
-					local bDetailsTable = Inspect.Buff.Detail(unitID, Buffs)
-					for BuffID, bDetails in pairs(bDetailsTable) do
-						if bDetails then
-							if not KBM.Buffs.Active[unitID] then
-								KBM.Buffs.Active[unitID] = {
-									Buff_Count = 1,
-								}
-							else
-								KBM.Buffs.Active[unitID].Buff_Count = KBM.Buffs.Active[unitID].Buff_Count + 1
-							end
-							KBM.Buffs.Active[unitID][BuffID] = bDetails
-							if KBM.Trigger.EncStart["playerBuff"] then
-								if KBM.Trigger.EncStart["playerBuff"][bDetails.name] then
-									TriggerMod = KBM.Trigger.EncStart["playerBuff"][bDetails.name]
-									if TriggerMod.Dummy then
-										KBM.CheckActiveBoss(TriggerMod.Dummy.Details, "Dummy")
-									end
-								end
-							end
-						end
-					end
-				end
-			elseif Type == "remove" then
-				if unitID then
-					if KBM.Buffs.Active[unitID] then
-						for BuffID, bool in pairs(Buffs) do
-							if BuffID then
-								if KBM.Buffs.Active[unitID][BuffID] then
-									bDetails = KBM.Buffs.Active[unitID][BuffID]
-									KBM.Buffs.Active[unitID][BuffID] = nil
-									KBM.Buffs.Active[unitID].Buff_Count = KBM.Buffs.Active[unitID].Buff_Count - 1
-									if KBM.Buffs.Active[unitID].Buff_Count == 0 then
-										KBM.Buffs.Active[unitID] = nil
-									end
-								end
-							end
-						end
-					end
-				end
-			end		
-		end
-	end
-	local TimeEllapsed = tonumber(string.format("%0.5f", Inspect.Time.Real() - TimeStore))
-	KBM.Watchdog.Buffs.Count = KBM.Watchdog.Buffs.Count + 1
-	KBM.Watchdog.Buffs.Total = KBM.Watchdog.Buffs.Total + TimeEllapsed
-	if KBM.Watchdog.Buffs.Peak < TimeEllapsed then
-		KBM.Watchdog.Buffs.Peak = TimeEllapsed
-	end
-	
-end
-
 function KBM.FormatPrecision(Val)
-	if Val < 0.000001 then
+	if Val < 0.000001 or Val == nil then
 		return "Too Low"
 	else
 		return string.format("%0.6fs", Val)
@@ -7378,7 +7206,8 @@ function KBM.Watchdog.Display(Type, Var)
 			print("Session Index: "..tostring(Index))
 			print("Total Time: "..KBM.FormatPrecision(wdObj.Total))
 			print("Average Execution Time: "..KBM.FormatPrecision(wdObj.Average))
-			print("Peak Execution Time: "..KBM.FormatPrecision(wdObj.Peak).."s")
+			print("Peak Execution Time: "..KBM.FormatPrecision(wdObj.Peak))
+			print("Lowest Remaining Watching Time: "..KBM.FormatPrecision(wdObj.wTime))
 			print("Total Calls: "..wdObj.Count)	
 			print("--------------------------------")
 		end
@@ -7390,6 +7219,7 @@ function KBM.Watchdog.Display(Type, Var)
 		print("Total Time: "..KBM.FormatPrecision(KBM.Watchdog[Type].Total))
 		print("Average Execution Time: "..KBM.FormatPrecision(KBM.Watchdog[Type].Average))
 		print("Peak Execution Time: "..KBM.FormatPrecision(KBM.Watchdog[Type].Peak))
+		print("Lowest Remaining Watching Time: "..KBM.FormatPrecision(KBM.Watchdog[Type].wTime))
 		print("Total Calls: "..KBM.Watchdog[Type].Count)
 	end
 end
