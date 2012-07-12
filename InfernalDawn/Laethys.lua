@@ -60,6 +60,8 @@ LT.Laethys = {
 		  	Gold = KBM.Defaults.TimerObj.Create("yellow"),
 		 	AddsFirst = KBM.Defaults.TimerObj.Create("purple"),
 		 	Adds = KBM.Defaults.TimerObj.Create("purple"),
+			LiqGoldFirst = KBM.Defaults.TimerObj.Create("yellow"),
+			LiqGold = KBM.Defaults.TimerObj.Create("yellow"),
 		  
 		 },
 		 AlertsRef = {
@@ -68,6 +70,7 @@ LT.Laethys = {
 			Storm = KBM.Defaults.AlertObj.Create("red"),
 			Orb = KBM.Defaults.AlertObj.Create("dark_green"),
 			Flare = KBM.Defaults.AlertObj.Create("cyan"),
+			LiqGold = KBM.Defaults.AlertObj.Create("yellow"),
 		 },
 	}
 }
@@ -91,23 +94,32 @@ LT.Lang.Unit.SeerShort:SetGerman("Steindeuter")
 LT.Lang.Ability = {}
 LT.Lang.Ability.Breath = KBM.Language:Add("Golden Breath")
 LT.Lang.Ability.Breath:SetGerman("Goldatem")
+LT.Lang.Ability.Breath:SetFrench("Souffle d'or")
 LT.Lang.Ability.Storm = KBM.Language:Add("Storm of Treasure")
 LT.Lang.Ability.Storm:SetGerman("Sturm der Schätze")
+LT.Lang.Ability.Storm:SetFrench("Tempête de trésor")
 LT.Lang.Ability.Flare = KBM.Language:Add("Annihilating Flare")
 LT.Lang.Ability.Flare:SetGerman("Auslöschende Fackel")
+LT.Lang.Ability.Flare:SetFrench("Flamboiement d'annihilation")
 LT.Lang.Ability.Orb = KBM.Language:Add("Metallic Orb")
 LT.Lang.Ability.Orb:SetGerman("Metallische Kugel")
+LT.Lang.Ability.Orb:SetFrench("Orbe métallique")
 LT.Lang.Ability.Gold = KBM.Language:Add("Molten Gold")
 LT.Lang.Ability.Gold:SetGerman("Geschmolzenes Gold")
+LT.Lang.Ability.Gold:SetFrench("Or en fusion")
 LT.Lang.Ability.Resto = KBM.Language:Add("Wizened Restoration")
 LT.Lang.Ability.Resto:SetGerman("Verschrumpelte Wiederherstellung")
+LT.Lang.Ability.Resto:SetFrench("Restauration d'avidité")
+LT.Lang.Ability.LiqGold = KBM.Language:Add("Laethic Gold")
 
 -- Mechanic Dictionary
 LT.Lang.Mechanic = {}
 LT.Lang.Mechanic.Adds = KBM.Language:Add("Adds spawn")
+LT.Lang.Mechanic.Adds:SetFrench("Pop des Adds")
 LT.Lang.Mechanic.Adds:SetGerman("Add Spawn")
 LT.Lang.Mechanic.Adds:SetKorean("쫄들 소환")
 LT.Lang.Mechanic.PhaseTwoTrans = KBM.Language:Add("until Phase 2 begins!")
+LT.Lang.Mechanic.PhaseTwoTrans:SetFrench("jusqu'au démarrage de la phase 2 !")
 
 -- Buff Dictionary
 LT.Lang.Buff = {}
@@ -118,19 +130,26 @@ LT.Lang.Buff.Wisdom:SetGerman("Weisheit des Steindeuters")
 LT.Lang.Notify = {}
 LT.Lang.Notify.PhaseTwoTrans = KBM.Language:Add('Laethys roars, "How dare you scuff at my beautiful form?! You will pay for this..."')
 LT.Lang.Notify.PhaseTwoStart = KBM.Language:Add('Laethys says, "Behold your doom! Put down your weapons and I shall grant you a swift demise!"')
+LT.Lang.Notify.LiqGold = KBM.Language:Add("Laethys unleashes a wave of liquid gold.")
 
 -- Menu Dictionary
 LT.Lang.Menu = {}
 LT.Lang.Menu.Storm = KBM.Language:Add("First Storm of Treasure")
 LT.Lang.Menu.Storm:SetGerman("Erste Sturm der Schätze")
+LT.Lang.Menu.Storm:SetFrench("Première Tempête de trésor")
 LT.Lang.Menu.Flare = KBM.Language:Add("First Annihilating Flare")
 LT.Lang.Menu.Flare:SetGerman("Erste Auslöschende Fackel")
+LT.Lang.Menu.Flare:SetFrench("Premier Flamboiement d'annihilation")
 LT.Lang.Menu.Orb = KBM.Language:Add("First Metallic Orb")
 LT.Lang.Menu.Orb:SetGerman("Erste Metallische Kugel")
+LT.Lang.Menu.Orb:SetFrench("Premier Orbe métallique")
 LT.Lang.Menu.Gold = KBM.Language:Add("First Molten Gold")
 LT.Lang.Menu.Gold:SetGerman("Erste Geschmolzenes Gold")
+LT.Lang.Menu.Gold:SetFrench("Premier Or en fusion")
 LT.Lang.Menu.Adds = KBM.Language:Add("First Adds spawn")
 LT.Lang.Menu.Adds:SetGerman("Erster Add Spawn")
+LT.Lang.Menu.Adds:SetFrench("Premier Pop des Adds")
+LT.Lang.Menu.LiqGold = KBM.Language:Add("First Laethic Gold")
 
 LT.Laethys.Name = LT.Lang.Unit.Laethys[KBM.Lang]
 LT.Laethys.NameShort = LT.Lang.Unit.Laethys[KBM.Lang]
@@ -345,7 +364,10 @@ function LT:Start()
  	self.Laethys.TimersRef.Gold = KBM.MechTimer:Add(self.Lang.Ability.Gold[KBM.Lang], 30)
  	self.Laethys.TimersRef.AddsFirst = KBM.MechTimer:Add(self.Lang.Menu.Adds[KBM.Lang],34)
  	self.Laethys.TimersRef.Adds = KBM.MechTimer:Add(self.Lang.Mechanic.Adds[KBM.Lang], 81)
+	-- Phase Two
 	self.Laethys.TimersRef.PhaseTwoTrans = KBM.MechTimer:Add(self.Lang.Mechanic.PhaseTwoTrans[KBM.Lang], 40)
+	self.Laethys.TimersRef.LiqGoldFirst = KBM.MechTimer:Add(self.Lang.Menu.LiqGold[KBM.Lang], 70)
+	self.Laethys.TimersRef.LiqGold = KBM.MechTimer:Add(self.Lang.Ability.LiqGold[KBM.Lang], 100)
 	KBM.Defaults.TimerObj.Assign(self.Laethys)
 	
 	-- Create Timer for Stoneseer
@@ -356,6 +378,10 @@ function LT:Start()
 	self.Laethys.AlertsRef.Storm = KBM.Alert:Create(self.Lang.Ability.Storm[KBM.Lang], nil, false, true, "red")
 	self.Laethys.AlertsRef.Orb = KBM.Alert:Create(self.Lang.Ability.Orb[KBM.Lang], nil, false, true, "dark_green")
 	self.Laethys.AlertsRef.Flare = KBM.Alert:Create(self.Lang.Ability.Flare[KBM.Lang], nil, false, true, "cyan")
+	-- Phase Two
+	self.Laethys.AlertsRef.LiqGold = KBM.Alert:Create(self.Lang.Ability.LiqGold[KBM.Lang], 5, true, true, "yellow")
+	self.Laethys.TimersRef.LiqGoldFirst:AddAlert(self.Laethys.AlertsRef.LiqGold, 5)
+	self.Laethys.TimersRef.LiqGold:AddAlert(self.Laethys.AlertsRef.LiqGold, 5)
 	KBM.Defaults.AlertObj.Assign(self.Laethys)
 	
 	-- Create Alert for Stoneseer
@@ -376,6 +402,10 @@ function LT:Start()
 	self.Laethys.Triggers.PhaseTwoTrans:AddPhase(self.PhaseTwo)
 	self.Laethys.Triggers.PhaseTwoTrans:AddTimer(self.Laethys.TimersRef.PhaseTwoTrans)
 	self.Laethys.Triggers.PhaseTwoStart = KBM.Trigger:Create(self.Lang.Notify.PhaseTwoStart[KBM.Lang], "notify", self.Laethys)
+	self.Laethys.Triggers.PhaseTwoStart:AddTimer(self.Laethys.TimersRef.LiqGoldFirst)
+	
+	self.Laethys.Triggers.LiqGold = KBM.Trigger:Create(self.Lang.Notify.LiqGold[KBM.Lang], "notify", self.Laethys)
+	self.Laethys.Triggers.LiqGold:AddTimer(self.Laethys.TimersRef.LiqGold)
 	
 	self.Laethys.Triggers.Adds = KBM.Trigger:Create(34, "time", self.Laethys)
 	self.Laethys.Triggers.Adds:AddTimer(self.Laethys.TimersRef.Adds)

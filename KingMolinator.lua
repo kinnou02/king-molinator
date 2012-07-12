@@ -827,7 +827,6 @@ end
 local function KBM_LoadVars(AddonID)
 	local TargetLoad = nil
 	if AddonID == "KingMolinator" then		
-		
 		KBM.InitDiagnostics()
 		
 		if chKBM_GlobalOptions.Character then
@@ -4148,14 +4147,16 @@ function KBM.Unit:Create(uDetails, UnitID)
 			self:CheckTarget()
 			if self.Loaded then
 				self.Health = NewHP
-				if self.HealthMax then
-					self.PercentFlat = (self.Health/self.HealthMax)
-					self.PercentRaw = self.PercentFlat*100
-					if self.PercentRaw ~= self.LastPercentRaw then
-						self.Percent = math.ceil(self.PercentRaw)
-						self.LastPercentRaw = self.PercentRaw
-						KBM.Event.Unit.PercentChange(self.UnitID)
-						KBM.UpdateHP(self)
+				if NewHP then
+					if self.HealthMax then
+						self.PercentFlat = (self.Health/self.HealthMax)
+						self.PercentRaw = self.PercentFlat*100
+						if self.PercentRaw ~= self.LastPercentRaw then
+							self.Percent = math.ceil(self.PercentRaw)
+							self.LastPercentRaw = self.PercentRaw
+							KBM.Event.Unit.PercentChange(self.UnitID)
+							KBM.UpdateHP(self)
+						end
 					end
 				end
 				if uDetails then
@@ -5051,9 +5052,12 @@ function KBM.TankSwap:Init()
 			local Spec = ""
 			local UnitID = ""
 			local uDetails = nil
+			self.Boss = KBM.Unit.List.UID[BossID]
+			if not self.Boss then
+				return
+			end
 			self.CurrentTarget = nil
 			self.CurrentIcon = nil
-			self.Boss = KBM.Unit.List.UID[BossID]
 			self.DebuffList = {}
 			self.DebuffName = {}
 			if type(DebuffName) == "table" then
@@ -5134,14 +5138,16 @@ function KBM.TankSwap:Init()
 				end
 			end
 			TankObj:UpdateHP()
-			if self.Boss.Target then
-				if self.Tanks[self.Boss.Target] then
-					if self.Tanks[self.Boss.Target] ~= self.CurrentTarget then
-						if self.CurrentTarget then
-							self.CurrentTarget.GUI.TankAggro.Texture:SetVisible(false)
+			if self.Boss then
+				if self.Boss.Target then
+					if self.Tanks[self.Boss.Target] then
+						if self.Tanks[self.Boss.Target] ~= self.CurrentTarget then
+							if self.CurrentTarget then
+								self.CurrentTarget.GUI.TankAggro.Texture:SetVisible(false)
+							end
+							self.CurrentTarget = self.Tanks[self.Boss.Target]
+							self.CurrentTarget.GUI.TankAggro.Texture:SetVisible(true)
 						end
-						self.CurrentTarget = self.Tanks[self.Boss.Target]
-						self.CurrentTarget.GUI.TankAggro.Texture:SetVisible(true)
 					end
 				end
 			end
@@ -6784,27 +6790,6 @@ function KBM:Timer()
 	
 end
 
-function KBM.Aux.MechLoad()
-	if KBM.MechTimer.Cached < KBM.Trigger.High.Timers then
-		KBM.MechTimer.Cached = KBM.MechTimer.Cached + 1
-		local TempGUI = KBM.MechTimer:Pull()
-		TempGUI.Background:SetVisible(false)
-		table.insert(KBM.MechTimer.TempGUI, TempGUI)
-	else
-		for i, n in ipairs(Event.System.Update.End) do
-			if n[2] == "KingMolinator" then
-				n[1] = function() end
-				n[3] = "Dummy"
-				break
-			end
-		end
-		for n, GUIObj in ipairs(KBM.MechTimer.TempGUI) do
-			table.insert(KBM.MechTimer.Store, GUIObj)
-		end
-		KBM.MechTimer.TempGUI = {}
-	end
-end
-
 local function KBM_CastBar(units)
 	-- for UnitID, Status in pairs(units) do
 		-- if KBM.CastBar.ActiveCastBars[UnitID] then
@@ -8124,7 +8109,6 @@ local function KBM_Start()
 end
 
 function KBM.InitEvents()
-	table.insert(Command.Slash.Register("kbmreset"), {KBM_Reset, "KingMolinator", "KBM Reset"})
 	table.insert(Event.Chat.Notify, {KBM.Notify, "KingMolinator", "Notify Event"})
 	table.insert(Event.Chat.Npc, {KBM.NPCChat, "KingMolinator", "NPC Chat"})
 	table.insert(Event.Buff.Add, {function (unitID, Buffs) KBM:BuffAdd(unitID, Buffs) end, "KingMolinator", "Buff Monitor (Add)"})
@@ -8164,11 +8148,11 @@ function KBM.InitEvents()
 	table.insert(Event.SafesRaidManager.Group.Offline, {KBM.Offline, "KingMolinator", "Offline Status Change"})
 	-- **
 	table.insert(Event.System.Update.Begin, {function () KBM:Timer() end, "KingMolinator", "System Update"})
-	table.insert(Event.System.Update.End, {KBM.Aux.MechLoad, "KingMolinator", "Auxiliary Update"})
 	table.insert(Event.System.Secure.Enter, {KBM.SecureEnter, "KingMolinator", "Secure Enter"})
 	table.insert(Event.System.Secure.Leave, {KBM.SecureLeave, "KingMolinator", "Secure Leave"})
 	
 	-- Slash Commands
+	table.insert(Command.Slash.Register("kbmreset"), {KBM_Reset, "KingMolinator", "KBM Reset"})
 	table.insert(Command.Slash.Register("kbmhelp"), {KBM_Help, "KingMolinator", "KBM Help"})
 	table.insert(Command.Slash.Register("kbmversion"), {KBM_Version, "KingMolinator", "KBM Version Info"})
 	table.insert(Command.Slash.Register("kbmoptions"), {KBM_Options, "KingMolinator", "KBM Open Options"})
@@ -8201,23 +8185,12 @@ local function KBM_WaitReady(unitID, uDetails)
 		Count = 0,
 	}
 	KBM_Start()
+	KBM.RezMaster:Start()
+	KBM.PlayerControl:Start()	
 	KBM.Player.Level = uDetails.level
 	KBM.Player.Grouped = LibSRM.Grouped()
 	KBM.Player.Mode = LibSRM.Player.Mode
-	KBM.ApplySettings()
-
-	if KBM.IsAlpha then
-		print(KBM.Language.Welcome.Welcome[KBM.Lang]..AddonData.toc.Version.." Alpha")
-	else
-		print(KBM.Language.Welcome.Welcome[KBM.Lang]..AddonData.toc.Version)
-	end
-	print(KBM.Language.Welcome.Commands[KBM.Lang])
-	print(KBM.Language.Welcome.Options[KBM.Lang])
-	
-	KBM.CPU:Toggle(true)
 	KBM.Event.System.Start(self)
-	KBM.RezMaster:Start()
-	KBM.PlayerControl:Start()
 	if KBM.Player.Grouped then
 		KBM.PlayerJoin()
 	end
@@ -8307,7 +8280,62 @@ function KBM.RegisterMod(ModID, Mod)
 	end
 end
 
-table.insert(Event.Addon.SavedVariables.Load.Begin, {KBM_DefineVars, "KingMolinator", "Pre Load"})
-table.insert(Event.Addon.SavedVariables.Load.End, {KBM_LoadVars, "KingMolinator", "Event"})
-table.insert(Event.Addon.SavedVariables.Save.Begin, {KBM_SaveVars, "KingMolinator", "Event"})
+function KBM.InitKBM(ModID)	
+	if ModID == "KingMolinator" then
+		KBM.ApplySettings()
+		local TempGUIList = {}
+		for Cached = 1, KBM.Trigger.High.Timers do
+			local TempGUI = KBM.MechTimer:Pull()
+			TempGUI.Background:SetVisible(false)
+			table.insert(TempGUIList, TempGUI)
+		end
+		for n, GUIObj in ipairs(TempGUIList) do
+			table.insert(KBM.MechTimer.Store, GUIObj)
+		end
+		TempGUIList = {}
+		TempCastBarList = {}
+		TempCastBarBoss = {}
+		for Cached = 1, 20 do
+			local TempGUI = KBM.CastBar:Pull("kbm")
+			TempGUI.Frame:SetVisible(false)
+			table.insert(TempGUIList, TempGUI)
+		end
+		for n, GUIObj in ipairs(TempGUIList) do
+			table.insert(KBM.CastBar.Stores.KBM, GUIObj)
+		end
+		TempGUIList = {}
+		for Cached = 1, 20 do
+			local TempGUICB = KBM.CastBar:Pull("rift")
+			TempGUICB.Frame:SetVisible(false)
+			table.insert(TempCastBarList, TempGUICB)		
+		end
+		for n, GUIObj in ipairs(TempCastBarList) do
+			table.insert(KBM.CastBar.Stores.Rift, GUIObj)
+		end
+		TempCastBarList = {}
+		for Cached = 1, 20 do
+			local TempGUICBB = KBM.CastBar:Pull("rift", true)
+			TempGUICBB.Frame:SetVisible(false)
+			table.insert(TempCastBarBoss, TempGUICBB)		
+		end
+		for n, GUIObj in ipairs(TempCastBarBoss) do
+			table.insert(KBM.CastBar.Stores.Boss, GUIObj)
+		end
+		TempCastBarBoss = {}
+		KBM.CPU:Toggle(true)
+
+		if KBM.IsAlpha then
+			print(KBM.Language.Welcome.Welcome[KBM.Lang]..AddonData.toc.Version.." Alpha")
+		else
+			print(KBM.Language.Welcome.Welcome[KBM.Lang]..AddonData.toc.Version)
+		end
+		print(KBM.Language.Welcome.Commands[KBM.Lang])
+		print(KBM.Language.Welcome.Options[KBM.Lang])
+	end
+end
+
+table.insert(Event.Addon.SavedVariables.Load.Begin, {KBM_DefineVars, "KingMolinator", "Load Begin"})
+table.insert(Event.Addon.SavedVariables.Load.End, {KBM_LoadVars, "KingMolinator", "Load End"})
+table.insert(Event.Addon.SavedVariables.Save.Begin, {KBM_SaveVars, "KingMolinator", "Save Begin"})
+table.insert(Event.Addon.Load.End, {KBM.InitKBM, "KingMolinator", "Begin Init Sequence"})
 table.insert(Event.SafesRaidManager.Player.Ready, {KBM_WaitReady, "KingMolinator", "Sync Wait"})

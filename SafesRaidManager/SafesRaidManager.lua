@@ -1,4 +1,4 @@
--- Safes Raid Manager
+﻿-- Safes Raid Manager
 -- Written By Paul Snart
 -- Code Fixes by Mere
 -- Copyright Paul Snart 2011
@@ -319,7 +319,9 @@ local function SRM_SetSpecifier(Specifier)
 		end
 		SRM_Groups[SRM_Groups[self.Spec]] = SRM_Groups[SRM_Groups[self.Spec]] - 1
 		SRM_Raid.Populated = SRM_Raid.Populated - 1
-		SRM_NameList[SRM_Units[self.UnitID].name] = nil
+		if self.name then
+			SRM_NameList[self.name] = nil
+		end
 		SRM_Units[self.UnitID] = nil
 		self.SRM_Unit = nil
 		if self.PetID then

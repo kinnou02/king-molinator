@@ -38,10 +38,10 @@ function PI.VersionCheck(Data)
 	local s, e, High, Mid, Low, Revision
 	local Checked = false
 	s, e, vType, High, Mid, Low, Revision = string.find(Data, "(%u)(%d+).(%d+).(%d+).(%d+)")
-	High = tonumber(High)
-	Mid = tonumber(Mid)
-	Low = tonumber(Low)
-	Revision = tonumber(Revision)
+	High = tonumber(High) or 0
+	Mid = tonumber(Mid) or 0
+	Low = tonumber(Low) or 0
+	Revision = tonumber(Revision) or 0
 	if vType == "A" then
 		if KBM.IsAlpha then
 			if Revision >= PI.History.Revision or PI.History.Checked == false then

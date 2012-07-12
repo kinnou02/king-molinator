@@ -418,7 +418,7 @@ end
 function WD.PhaseFinal()
 	if WD.Phase < 3 then
 		WD.PhaseObj.Objectives:Remove()
-		WD.PhaseObj:SetPhase("Final")
+		WD.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
 		WD.PhaseObj.Objectives:AddPercent(WD.Drak.Name, 0, 100)
 		WD.Phase = 3
 	end

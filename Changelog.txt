@@ -1,4 +1,23 @@
-﻿v1.1.5
+﻿v1.1.6
+
+System
+* Change: Start-up order has changed again slightly.
+
+Tank-Swap
+* Fixed: (Rare) error where Boss objects could become nil.
+
+Unit Tracking
+* Fixed: (Rare) error could be thrown in the Unit Tracker's Unit:Update() with nil values for Health. (This could cause inconsistency)
+
+Infernal Dawn.
+* New: Added Trigger for the start of Phase 2 combat.
+* New: Added Timers for first and second Laethic Gold.
+* New: Added 5 second warning for the start of Laethic Gold's cast.
+
+French Translations
+* Updated!
+----
+v1.1.5
 
 Mechanic Spy
 * Fixed: Timers were not activating correctly.
@@ -18,6 +37,7 @@ Primeval Feast
 ** New: Added Enrage Timer.
 ** New: Added Timer for Rampage.
 
+----
 v1.1.4
 
 Mechanic Timers

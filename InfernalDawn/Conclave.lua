@@ -301,7 +301,7 @@ function EC.PhaseTwo()
 end
 
 function EC.PhaseFinal()
-	local PhaseText = "Final"
+	local PhaseText = tostring(KBM.Language.Options.Final[KBM.Lang])
 	EC.Phase = 3
 	if EC.HardMode then
 		PhaseText = PhaseText.." (HM)"
@@ -369,7 +369,6 @@ function EC:UnitHPCheck(unitDetails, unitID)
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
 					self.TimeElapsed = 0
-					BossObj.Dead = false
 					BossObj.Casting = false
 					BossObj.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
@@ -382,7 +381,6 @@ function EC:UnitHPCheck(unitDetails, unitID)
 					if not BossObj.CastBar.Active then
 						BossObj.CastBar:Create(unitID)
 					end
-					BossObj.Dead = false
 					BossObj.Casting = false
 				end
 				BossObj.UnitID = unitID
