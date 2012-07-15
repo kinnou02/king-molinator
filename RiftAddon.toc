@@ -10,7 +10,7 @@ Author = "Paul Snart"
 Website = "http://www.facebook.com/KingBossMods"
 Email = "snarty@gmail.com"
 
-Version = "1.1.7.463"
+Version = "1.1.8.464"
 
 Environment = "1.9"
 
@@ -180,6 +180,7 @@ Embed = {
 	["SafesRaidManager"] = true,
 	["KBMLocaleManager"] = true,
 	["Modules/Messenger"] = true,
+	["Modules/TextureHandler"] = true,
 }
 
 SavedVariables = {
@@ -502,6 +503,7 @@ SavedVariables = {
 Dependencies = {
 	SafesRaidManager = {"required", "before"},
 	KBMLocaleManager = {"required", "before"},
+	KBMTextureHandler = {"required", "before"},
 	KBMMessenger = {"required", "after"},
 	KBMMarkIt = {"optional", "after"},
 	KBMAddWatch = {"optional", "after"},

@@ -112,7 +112,7 @@ KBM.ID = "KingMolinator"
 KBM.ModList = {}
 KBM.Testing = false
 KBM.ValidTime = false
-KBM.IsAlpha = false
+KBM.IsAlpha = true
 KBM.Debug = false
 KBM.Aux = {}
 KBM.TestFilters = {}
@@ -827,8 +827,6 @@ end
 local function KBM_LoadVars(AddonID)
 	local TargetLoad = nil
 	if AddonID == "KingMolinator" then		
-		-- KBM.InitDiagnostics()
-		
 		if chKBM_GlobalOptions.Character then
 			KBM.LoadTable(chKBM_GlobalOptions, KBM.Options)
 		else
@@ -853,17 +851,6 @@ local function KBM_LoadVars(AddonID)
 		
 		KBM.Debug = KBM.Options.Debug
 		KBM.InitVars()
-		-- for diaID, bool in pairs(KBM.Watchdog.AreaList) do
-			-- KBM.Options.Watchdog[diaID].sCount = KBM.Options.Watchdog[diaID].sCount + 1
-			-- KBM.Options.Watchdog[diaID].Sessions[KBM.Options.Watchdog[diaID].sCount] = {
-				-- Total = 0,
-				-- Average = 0,
-				-- Count = 0,
-				-- Peak = 0,
-				-- wTime = 99,
-			-- }
-			-- KBM.Watchdog[diaID] = KBM.Options.Watchdog[diaID].Sessions[KBM.Options.Watchdog[diaID].sCount]
-		-- end
 	elseif KBM.PlugIn.List[AddonID] then
 		KBM.PlugIn.List[AddonID]:LoadVars()
 	end
@@ -1201,7 +1188,7 @@ function KBM.MechTimer:Pull()
 		GUI.Background:SetBackgroundColor(0,0,0,0.33)
 		GUI.Background:SetMouseMasking("limited")
 		GUI.TimeBar = UI.CreateFrame("Frame", "Timer_Progress_Frame", GUI.Background)
-		--GUI.TimeBar:SetTexture("KingMolinator", "Media/BarTexture2.png")
+		--KBM.LoadTexture(GUI.TimeBar, "KingMolinator", "Media/BarTexture2.png")
 		GUI.TimeBar:SetWidth(KBM.MechTimer.Anchor:GetWidth())
 		GUI.TimeBar:SetPoint("BOTTOM", GUI.Background, "BOTTOM")
 		GUI.TimeBar:SetPoint("TOPLEFT", GUI.Background, "TOPLEFT")
@@ -1221,7 +1208,7 @@ function KBM.MechTimer:Pull()
 		GUI.Shadow:SetFontColor(0,0,0)
 		GUI.Shadow:SetMouseMasking("limited")
 		GUI.Texture = UI.CreateFrame("Texture", "Timer_Skin", GUI.Background)
-		GUI.Texture:SetTexture("KingMolinator", "Media/BarSkin.png")
+		KBM.LoadTexture(GUI.Texture, "KingMolinator", "Media/BarSkin.png")
 		GUI.Texture:SetAlpha(KBM.MechTimer.Settings.TextureAlpha)
 		GUI.Texture:SetPoint("TOPLEFT", GUI.Background, "TOPLEFT")
 		GUI.Texture:SetPoint("BOTTOMRIGHT", GUI.Background, "BOTTOMRIGHT")
@@ -1903,7 +1890,7 @@ end
 
 function KBM.Button:Init()
 	KBM.Button.Texture = UI.CreateFrame("Texture", "Button Texture", KBM.Context)
-	KBM.Button.Texture:SetTexture("KingMolinator", "Media/Options_Button.png")
+	KBM.LoadTexture(KBM.Button.Texture, "KingMolinator", "Media/Options_Button.png")
 	if not KBM.Options.Button.x then
 		KBM.Button.Texture:SetPoint("CENTER", UIParent, "CENTER")
 	else
@@ -1918,16 +1905,16 @@ function KBM.Button:Init()
 		end	
 	end
 	function KBM.Button.Texture.Event.MouseIn()
-		KBM.Button.Texture:SetTexture("KingMolinator", "Media/Options_Button_Over.png")
+		KBM.LoadTexture(KBM.Button.Texture, "KingMolinator", "Media/Options_Button_Over.png")
 	end
 	function KBM.Button.Texture.Event.MouseOut()
-		KBM.Button.Texture:SetTexture("KingMolinator", "Media/Options_Button.png")
+		KBM.LoadTexture(KBM.Button.Texture, "KingMolinator", "Media/Options_Button.png")
 	end
 	function KBM.Button.Texture.Event.LeftDown()
-		KBM.Button.Texture:SetTexture("KingMolinator", "Media/Options_Button_Down.png")
+		KBM.LoadTexture(KBM.Button.Texture, "KingMolinator", "Media/Options_Button_Down.png")
 	end
 	function KBM.Button.Texture.Event.LeftUp()
-		KBM.Button.Texture:SetTexture("KingMolinator", "Media/Options_Button_Over.png")
+		KBM.LoadTexture(KBM.Button.Texture, "KingMolinator", "Media/Options_Button_Over.png")
 	end
 	function KBM.Button.Texture.Event.LeftClick()
 		KBM_Options()
@@ -1980,7 +1967,7 @@ function KBM.MechSpy:Pull()
 		GUI.Text:SetFontColor(1,1,1)
 		GUI.Text:SetMouseMasking("limited")
 		GUI.Texture = UI.CreateFrame("Texture", "Spy_Skin", GUI.Background)
-		GUI.Texture:SetTexture("KingMolinator", "Media/BarSkin.png")
+		KBM.LoadTexture(GUI.Texture, "KingMolinator", "Media/BarSkin.png")
 		GUI.Texture:SetAlpha(KBM.Constant.MechSpy.TextureAlpha)
 		GUI.Texture:SetPoint("TOPLEFT", GUI.Background, "TOPLEFT")
 		GUI.Texture:SetPoint("BOTTOMRIGHT", GUI.Background, "BOTTOMRIGHT")
@@ -2011,7 +1998,7 @@ function KBM.MechSpy:PullHeader()
 		GUI.Cradle:SetPoint("RIGHT", GUI.Background, "RIGHT")
 		GUI.Cradle:SetPoint("BOTTOM", GUI.Background, "BOTTOM")
 		GUI.Texture = UI.CreateFrame("Texture", "MechSpy_Header_Texture", GUI.Background)
-		GUI.Texture:SetTexture("KingMolinator", "Media/MSpy_Texture.png")
+		KBM.LoadTexture(GUI.Texture, "KingMolinator", "Media/MSpy_Texture.png")
 		GUI.Texture:SetPoint("TOPLEFT", GUI.Background, "TOPLEFT")
 		GUI.Texture:SetPoint("BOTTOMRIGHT", GUI.Background, "BOTTOMRIGHT")
 		GUI.Texture:SetLayer(1)
@@ -2070,7 +2057,7 @@ function KBM.MechSpy:Init()
 	self.Anchor:SetLayer(5)
 	self.Anchor:SetBackgroundColor(0,0,0,0.33)
 	self.Texture = UI.CreateFrame("Texture", "MechSpy_Anchor_Texture", self.Anchor)
-	self.Texture:SetTexture("KingMolinator", "Media/MSpy_Texture.png")
+	KBM.LoadTexture(self.Texture, "KingMolinator", "Media/MSpy_Texture.png")
 	self.Texture:SetPoint("TOPLEFT", self.Anchor, "TOPLEFT")
 	self.Texture:SetPoint("BOTTOMRIGHT", self.Anchor, "BOTTOMRIGHT")
 	self.Texture:SetLayer(1)
@@ -2583,7 +2570,7 @@ function KBM.PhaseMonitor:PullObjective()
 		GUI.Progress = UI.CreateFrame("Texture", "Percentage_Progress", GUI.Frame)
 		GUI.Progress:SetPoint("TOPRIGHT", GUI.Frame, "TOPRIGHT")
 		GUI.Progress:SetPoint("BOTTOM", GUI.Frame, "BOTTOM")
-		GUI.Progress:SetTexture("KingMolinator", "Media/BarTexture.png")
+		KBM.LoadTexture(GUI.Progress, "KingMolinator", "Media/BarTexture.png")
 		GUI.Progress:SetWidth(GUI.Frame:GetWidth())
 		GUI.Progress:SetBackgroundColor(0, 0.5, 0, 0.33)
 		GUI.Progress:SetVisible(false)
@@ -2649,7 +2636,7 @@ function KBM.PhaseMonitor:Init()
 
 	self.Frame = UI.CreateFrame("Texture", "Phase Monitor", KBM.Context)
 	self.Frame:SetLayer(5)
-	self.Frame:SetTexture("KingMolinator", "Media/BarTexture.png")
+	KBM.LoadTexture(self.Frame, "KingMolinator", "Media/BarTexture.png")
 	self.Frame:SetBackgroundColor(0,0,0.9,0.33)
 	self.Frame:SetPoint("LEFT", self.Anchor, "LEFT")
 	self.Frame:SetPoint("RIGHT", self.Anchor, "RIGHT")
@@ -3124,7 +3111,7 @@ function KBM.EncTimer:Init()
 	self.Enrage.Text:SetPoint("CENTER", self.Enrage.Frame, "CENTER")
 	self.Enrage.Text:SetLayer(3)
 	self.Enrage.Progress = UI.CreateFrame("Texture", "Enrage Progress", self.Enrage.Frame)
-	self.Enrage.Progress:SetTexture("KingMolinator", "Media/BarTexture.png")
+	KBM.LoadTexture(self.Enrage.Progress, "KingMolinator", "Media/BarTexture.png")
 	self.Enrage.Progress:SetPoint("TOPLEFT", self.Enrage.Frame, "TOPLEFT")
 	self.Enrage.Progress:SetPoint("BOTTOM", self.Enrage.Frame, "BOTTOM")
 	self.Enrage.Progress:SetWidth(0)
@@ -3425,7 +3412,10 @@ end
 
 function KBM.CheckActiveBoss(uDetails, UnitID)
 	local current = Inspect.Time.Real()
-	if KBM.Options.Enabled and not KBM.IgnoreList[UnitID] then
+	if KBM.IgnoreList[UnitID] then
+		return
+	end
+	if KBM.Options.Enabled then
 		if (not KBM.Idle.Wait or (KBM.Idle.Wait == true and KBM.Idle.Until < current)) or KBM.Encounter then
 			local BossObj = nil
 			KBM.Idle.Wait = false
@@ -3454,47 +3444,58 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 						end
 					end
 					BossObj = KBM.MatchType(uDetails, BossObj)
+					local ModBossObj = nil
 					if BossObj then
-						if (BossObj.Ignore == nil and KBM.Encounter == false) or KBM.Encounter == true then
-							if KBM.Debug then
-								print("Boss found Checking: Tier = "..tostring(uDetails.tier).." "..tostring(uDetails.level).." ("..type(uDetails.level)..")")
-								print("Players location: "..Inspect.Unit.Detail(KBM.Player.UnitID).locationName)
-								print("Unit Type: "..tostring(uDetails.type))
-								print("Unit Name: "..tostring(uDetails.name))
-								print("------------------------------------")
+						if KBM.Encounter then
+							if BossObj.Mod.ID == KBM.CurrentMod.ID then
+								ModBossObj = KBM.CurrentMod:UnitHPCheck(uDetails, UnitID)
 							end
-							if uDetails.combat then
-								-- if KBM.Debug then
-									-- print("Boss matched checking encounter start")
-								-- end
-								if KBM.EncounterMode == "normal" or (KBM.EncounterMode == "chronicle" and BossObj.Mod.Settings.Chronicle) then
-									KBM.BossID[UnitID] = {}
-									KBM.BossID[UnitID].name = uDetails.name
-									KBM.BossID[UnitID].monitor = true
-									KBM.BossID[UnitID].Mod = BossObj.Mod
-									KBM.BossID[UnitID].IdleSince = false
-									if uDetails.health > 0 then
-										if KBM.Debug then
-											print("Boss is alive and in combat, activating.")
-										end
-										KBM.BossID[UnitID].Combat = true
-										KBM.BossID[UnitID].dead = false
-										KBM.BossID[UnitID].available = true
-										KBM.BossID[UnitID].Health = uDetails.health
-										KBM.BossID[UnitID].HealthLast = uDetails.health
-										KBM.BossID[UnitID].HealthMax = uDetails.healthMax
-										KBM.BossID[UnitID].PercentRaw = (uDetails.health/uDetails.healthMax)*100
-										KBM.BossID[UnitID].Percent = math.ceil(KBM.BossID[UnitID].PercentRaw)
-										KBM.BossID[UnitID].PercentLast = KBM.BossID[UnitID].Percent
-										if not KBM.Encounter then
-											-- if KBM.Debug then
-												-- print("New encounter, starting")
-											-- end
-											KBM.Encounter = true
-											KBM.CurrentBoss = UnitID
-											KBM_CurrentBossName = uDetails.name
-											KBM.CurrentMod = KBM.BossID[UnitID].Mod
-											if not KBM.CurrentMod.EncounterRunning then
+						else
+							if not BossObj.Ignore then
+								ModBossObj = BossObj.Mod:UnitHPCheck(uDetails, UnitID)
+							end
+						end
+						if ModBossObj then
+							if (BossObj.Ignore == nil and KBM.Encounter == false) or KBM.Encounter == true then
+								if KBM.Debug then
+									print("Boss found Checking: Tier = "..tostring(uDetails.tier).." "..tostring(uDetails.level).." ("..type(uDetails.level)..")")
+									print("Players location: "..Inspect.Unit.Detail(KBM.Player.UnitID).locationName)
+									print("Unit Type: "..tostring(uDetails.type))
+									print("Unit Name: "..tostring(uDetails.name))
+									print("------------------------------------")
+								end
+								if uDetails.combat then
+									-- if KBM.Debug then
+										-- print("Boss matched checking encounter start")
+									-- end
+									if KBM.EncounterMode == "normal" or (KBM.EncounterMode == "chronicle" and BossObj.Mod.Settings.Chronicle) then
+										KBM.BossID[UnitID] = {}
+										KBM.BossID[UnitID].name = uDetails.name
+										KBM.BossID[UnitID].monitor = true
+										KBM.BossID[UnitID].Mod = BossObj.Mod
+										KBM.BossID[UnitID].IdleSince = false
+										KBM.BossID[UnitID].Boss = ModBossObj
+										if uDetails.health > 0 then
+											if KBM.Debug then
+												print("Boss is alive and in combat, activating.")
+											end
+											KBM.BossID[UnitID].Combat = true
+											KBM.BossID[UnitID].dead = false
+											KBM.BossID[UnitID].available = true
+											KBM.BossID[UnitID].Health = uDetails.health
+											KBM.BossID[UnitID].HealthLast = uDetails.health
+											KBM.BossID[UnitID].HealthMax = uDetails.healthMax
+											KBM.BossID[UnitID].PercentRaw = (uDetails.health/uDetails.healthMax)*100
+											KBM.BossID[UnitID].Percent = math.ceil(KBM.BossID[UnitID].PercentRaw)
+											KBM.BossID[UnitID].PercentLast = KBM.BossID[UnitID].Percent
+											if not KBM.Encounter then
+												-- if KBM.Debug then
+													-- print("New encounter, starting")
+												-- end
+												KBM.Encounter = true
+												KBM.CurrentBoss = UnitID
+												KBM_CurrentBossName = uDetails.name
+												KBM.CurrentMod = KBM.BossID[UnitID].Mod
 												local PercentOver = 99
 												if KBM.EncounterMode == "chronicle" then
 													if KBM.CurrentMod.ChroniclePOver then
@@ -3577,20 +3578,19 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 												KBM.MechSpy:Begin()
 												KBM.Event.Encounter.Start({Type = "start"})
 											end
+										else
+											KBM.BossID[UnitID].Combat = false
+											KBM.BossID[UnitID].dead = true
+											KBM.BossID[UnitID].available = true
 										end
-										if BossObj.Mod.ID == KBM.CurrentMod.ID then
-											KBM.BossID[UnitID].Boss = KBM.CurrentMod:UnitHPCheck(uDetails, UnitID)
-										end
-									else
-										KBM.BossID[UnitID].Combat = false
-										KBM.BossID[UnitID].dead = true
-										KBM.BossID[UnitID].available = true
 									end
+								else
+									--print("Not in combat!")
 								end
-							else
-								--print("Not in combat!")
 							end
 						end
+					else
+						KBM.IgnoreList[UnitID] = true
 					end
 				end
 			else
@@ -3879,7 +3879,7 @@ function KBM.CPU:Init()
 	self.GUI.Header = UI.CreateFrame("Texture", "CPU_Monitor_Header", KBM.Context)
 	self.GUI.Header:SetWidth(self.Constant.Width)
 	self.GUI.Header:SetHeight(self.Constant.Height)
-	self.GUI.Header:SetTexture("KingMolinator", "Media/BarTexture.png")
+	KBM.LoadTexture(self.GUI.Header, "KingMolinator", "Media/BarTexture.png")
 	self.GUI.Header:SetBackgroundColor(0, 0.35, 0, 0.75)
 	if not KBM.Options.CPU.x then
 		self.GUI.Header:SetPoint("CENTER", UIParent, "CENTER")
@@ -4337,7 +4337,7 @@ function KBM.Unit.Debug:Init()
 	self.GUI.Header = UI.CreateFrame("Texture", "Unit_Tracking_Debug_Header", KBM.Context)
 	self.GUI.Header:SetWidth(self.Constant.Width)
 	self.GUI.Header:SetHeight(self.Constant.Height)
-	self.GUI.Header:SetTexture("KingMolinator", "Media/BarTexture.png")
+	KBM.LoadTexture(self.GUI.Header, "KingMolinator", "Media/BarTexture.png")
 	self.GUI.Header:SetBackgroundColor(0.5, 0, 0, 0.75)
 	if not KBM.Options.DebugSettings.x then
 		self.GUI.Header:SetPoint("CENTER", UIParent, "CENTER")
@@ -4525,6 +4525,7 @@ function KBM.Unit:CheckIdle(CurrentTime)
 				self[UnitObj.Group].Count = self[UnitObj.Group].Count - 1
 				self[UnitObj.Group][UnitObj.Relation][UnitID] = nil				
 				self[UnitObj.Group][UnitID] = nil
+				KBM.IgnoreList[UnitID] = nil
 				if self.List.Name[UnitObj.Name] then
 					self.List.Name[UnitObj.Name][UnitID] = nil
 				end
@@ -4663,7 +4664,7 @@ function KBM.TankSwap:Pull()
 		GUI.TankAggro.Texture:SetVisible(false)
 		for i = 1, 2 do
 			GUI.DebuffFrame[i].Texture:SetVisible(false)
-			GUI.DebuffFrame[i].Texture:SetTexture("Rift", self.DefaultTexture)
+			KBM.LoadTexture(GUI.DebuffFrame[i].Texture, "Rift", self.DefaultTexture)
 			GUI.DeCoolFrame[i]:SetVisible(false)
 		end
 	else
@@ -4679,11 +4680,11 @@ function KBM.TankSwap:Pull()
 		GUI.TankAggro.Texture = UI.CreateFrame("Texture", "TankSwap_Aggro_Texture", GUI.TankAggro)
 		GUI.TankAggro.Texture:SetPoint("TOPLEFT", GUI.TankAggro, "TOPLEFT", 1, 1)
 		GUI.TankAggro.Texture:SetPoint("BOTTOMRIGHT", GUI.TankAggro, "BOTTOMRIGHT", -1, -1)
-		GUI.TankAggro.Texture:SetTexture("Rift", self.AggroTexture)
+		KBM.LoadTexture(GUI.TankAggro.Texture, "Rift", self.AggroTexture)
 		GUI.TankAggro.Texture:SetAlpha(0.66)
 		GUI.TankAggro.Texture:SetVisible(false)
 		GUI.Dead = UI.CreateFrame("Texture", "TankSwap_Dead", GUI.TankAggro)
-		GUI.Dead:SetTexture("KingMolinator", "Media/KBM_Death.png")
+		KBM.LoadTexture(GUI.Dead, "KingMolinator", "Media/KBM_Death.png")
 		GUI.Dead:SetLayer(1)
 		GUI.Dead:SetPoint("TOPLEFT", GUI.TankAggro, "TOPLEFT", 1, 1)
 		GUI.Dead:SetPoint("BOTTOMRIGHT", GUI.TankAggro, "BOTTOMRIGHT", -1, -1)
@@ -4693,7 +4694,7 @@ function KBM.TankSwap:Pull()
 		GUI.TankFrame:SetPoint("BOTTOM", GUI.TankAggro, "BOTTOM")
 		GUI.TankFrame:SetPoint("RIGHT", GUI.Frame, "RIGHT")
 		GUI.TankHP = UI.CreateFrame("Texture", "TankSwap_Tank_HPFrame", GUI.TankFrame)
-		GUI.TankHP:SetTexture("KingMolinator", "Media/BarTexture.png")
+		KBM.LoadTexture(GUI.TankHP, "KingMolinator", "Media/BarTexture.png")
 		GUI.TankHP:SetLayer(1)
 		GUI.TankHP:SetBackgroundColor(0,0.8,0,0.33)
 		GUI.TankHP:SetPoint("TOP", GUI.TankFrame, "TOP")
@@ -4723,7 +4724,7 @@ function KBM.TankSwap:Pull()
 			GUI.DebuffFrame[i].Texture:SetPoint("TOPLEFT", GUI.DebuffFrame[i], "TOPLEFT")
 			GUI.DebuffFrame[i].Texture:SetPoint("BOTTOMRIGHT", GUI.DebuffFrame[i], "BOTTOMRIGHT")
 			GUI.DebuffFrame[i].Texture:SetAlpha(0.33)
-			GUI.DebuffFrame[i].Texture:SetTexture("Rift", self.DefaultTexture)
+			KBM.LoadTexture(GUI.DebuffFrame[i].Texture, "Rift", self.DefaultTexture)
 			GUI.DebuffFrame[i].Texture:SetVisible(false)
 			GUI.DebuffFrame[i].Shadow = UI.CreateFrame("Text", "TankSwap_Debuff_Shadow_"..i, GUI.DebuffFrame[i])
 			GUI.DebuffFrame[i].Shadow:SetFontSize(KBM.Options.TankSwap.TextSize)
@@ -4740,7 +4741,7 @@ function KBM.TankSwap:Pull()
 			GUI.DeCoolFrame[i]:SetPoint("RIGHT", GUI.Frame, "RIGHT")
 			GUI.DeCoolFrame[i]:SetBackgroundColor(0,0,0,0.33)
 			GUI.DeCool[i] = UI.CreateFrame("Texture", "TankSwap_CD_Progress_"..i, GUI.DeCoolFrame[i])
-			GUI.DeCool[i]:SetTexture("KingMolinator", "Media/BarTexture.png")
+			KBM.LoadTexture(GUI.DeCool[i], "KingMolinator", "Media/BarTexture.png")
 			GUI.DeCool[i]:SetPoint("TOPLEFT", GUI.DeCoolFrame[i], "TOPLEFT")
 			GUI.DeCool[i]:SetPoint("BOTTOM", GUI.DeCoolFrame[i], "BOTTOM")
 			GUI.DeCool[i]:SetWidth(0)
@@ -5033,7 +5034,7 @@ function KBM.TankSwap:Init()
 						end
 						TankObj.GUI.DeCool[i]:SetWidth(math.ceil(TankObj.GUI.DeCoolFrame[i]:GetWidth() * (DebuffObj.Remaining/DebuffObj.Duration)))
 						TankObj.GUI:SetStack(tostring(DebuffObj.Stacks), i)
-						TankObj.GUI.DebuffFrame[i].Texture:SetTexture("Rift", DebuffObj.Icon)
+						KBM.LoadTexture(TankObj.GUI.DebuffFrame[i].Texture, "Rift", DebuffObj.Icon)
 						TankObj.GUI.DebuffFrame[i].Texture:SetVisible(true)
 						TankObj.GUI.DeCoolFrame[i]:SetVisible(true)
 					else
@@ -5188,22 +5189,22 @@ function KBM.Alert:Init()
 	
 	for _t, Color in ipairs(self.ColorList) do
 		self.Left[Color] = UI.CreateFrame("Texture", "Left_Alert "..Color, KBM.Context)
-		self.Left[Color]:SetTexture("KingMolinator", "Media/Alert_Left_"..Color..".png")
+		KBM.LoadTexture(self.Left[Color], "KingMolinator", "Media/Alert_Left_"..Color..".png")
 		self.Left[Color]:SetPoint("TOPLEFT", self.AlertControl.Left, "TOPLEFT")
 		self.Left[Color]:SetPoint("BOTTOMRIGHT", self.AlertControl.Left, "BOTTOMRIGHT")
 		self.Left[Color]:SetVisible(false)
 		self.Right[Color] = UI.CreateFrame("Texture", "Right_Alert"..Color, KBM.Context)
-		self.Right[Color]:SetTexture("KingMolinator", "Media/Alert_Right_"..Color..".png")
+		KBM.LoadTexture(self.Right[Color], "KingMolinator", "Media/Alert_Right_"..Color..".png")
 		self.Right[Color]:SetPoint("TOPLEFT", self.AlertControl.Right, "TOPLEFT")
 		self.Right[Color]:SetPoint("BOTTOMRIGHT", self.AlertControl.Right, "BOTTOMRIGHT")
 		self.Right[Color]:SetVisible(false)
 		self.Top[Color] = UI.CreateFrame("Texture", "Top_Alert "..Color, KBM.Context)
-		self.Top[Color]:SetTexture("KingMolinator", "Media/Alert_Top_"..Color..".png")
+		KBM.LoadTexture(self.Top[Color], "KingMolinator", "Media/Alert_Top_"..Color..".png")
 		self.Top[Color]:SetPoint("TOPLEFT", self.AlertControl.Top, "TOPLEFT")
 		self.Top[Color]:SetPoint("BOTTOMRIGHT", self.AlertControl.Top, "BOTTOMRIGHT")
 		self.Top[Color]:SetVisible(false)
 		self.Bottom[Color] = UI.CreateFrame("Texture", "Bottom_Alert "..Color, KBM.Context)
-		self.Bottom[Color]:SetTexture("KingMolinator", "Media/Alert_Bottom_"..Color..".png")
+		KBM.LoadTexture(self.Bottom[Color], "KingMolinator", "Media/Alert_Bottom_"..Color..".png")
 		self.Bottom[Color]:SetPoint("TOPLEFT", self.AlertControl.Bottom, "TOPLEFT")
 		self.Bottom[Color]:SetPoint("BOTTOMRIGHT", self.AlertControl.Bottom, "BOTTOMRIGHT")
 		self.Bottom[Color]:SetVisible(false)
@@ -5656,7 +5657,7 @@ function KBM.CastBar:Init()
 		-- Handle Style types to account for API Texture issues	for the Progress Texture/Frame	
 		if Style == "rift" then
 			GUI.Progress = UI.CreateFrame("Texture", "CastBar_Progress_Texture", GUI.Mask)
-			GUI.Progress:SetTexture("KingMolinator", "Media/Castbar_Cyan.png")
+			KBM.LoadTexture(GUI.Progress, "KingMolinator", "Media/Castbar_Cyan.png")
 			GUI.Progress:SetPoint("TOPLEFT", GUI.Frame, 0.03, 0.2)
 			GUI.Progress:SetPoint("BOTTOMRIGHT", GUI.Frame, 0.97, 0.8)
 		else
@@ -5685,21 +5686,21 @@ function KBM.CastBar:Init()
 		-- Handle Style types to account for API Texture issues
 		if Style == "rift" then
 			if IsBoss then
-				GUI.Texture:SetTexture("KingMolinator", "Media/Castbar_Boss.png")
+				KBM.LoadTexture(GUI.Texture, "KingMolinator", "Media/Castbar_Boss.png")
 				GUI.Texture:SetPoint("TOPLEFT", GUI.Frame, -0.075, -0.5)
 				GUI.Texture:SetPoint("BOTTOMRIGHT", GUI.Frame, 1.075, 1.5)
 			else
-				GUI.Texture:SetTexture("KingMolinator", "Media/Castbar_Outline.png")
+				KBM.LoadTexture(GUI.Texture, "KingMolinator", "Media/Castbar_Outline.png")
 				GUI.Texture:SetPoint("TOPLEFT", GUI.Frame, "TOPLEFT")
 				GUI.Texture:SetPoint("BOTTOMRIGHT", GUI.Frame, "BOTTOMRIGHT")
 			end
 			GUI.Highlight = UI.CreateFrame("Texture", "Completion_Highlight", GUI.Texture)
-			GUI.Highlight:SetTexture("KingMolinator", "Media/Castbar_Complete.png")
+			KBM.LoadTexture(GUI.Highlight, "KingMolinator", "Media/Castbar_Complete.png")
 			GUI.Highlight:SetPoint("TOPLEFT", GUI.Frame, "TOPLEFT")
 			GUI.Highlight:SetPoint("BOTTOMRIGHT", GUI.Frame, "BOTTOMRIGHT")
 			GUI.Highlight:SetAlpha(0)
 		else
-			GUI.Texture:SetTexture("KingMolinator", "Media/BarSkin.png")
+			KBM.LoadTexture(GUI.Texture, "KingMolinator", "Media/BarSkin.png")
 			GUI.Texture:SetPoint("TOPLEFT", GUI.Frame, "TOPLEFT")
 			GUI.Texture:SetPoint("BOTTOMRIGHT", GUI.Frame, "BOTTOMRIGHT")
 		end
@@ -5985,9 +5986,9 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 		if self.Enabled then
 			if self.Settings.Style == "rift" then
 				if self.Uninterruptible then
-					self.GUI.Progress:SetTexture("KingMolinator", "Media/Castbar_Yellow.png")
+					KBM.LoadTexture(self.GUI.Progress, "KingMolinator", "Media/Castbar_Yellow.png")
 				else
-					self.GUI.Progress:SetTexture("KingMolinator", "Media/Castbar_Cyan.png")
+					KBM.LoadTexture(self.GUI.Progress, "KingMolinator", "Media/Castbar_Cyan.png")
 				end
 				self.GUI.Progress:SetAlpha(0.75)
 				self.GUI.Highlight:SetAlpha(0)
@@ -6337,7 +6338,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 					if self.Settings.Style == "kbm" then
 						self.GUI.Progress:SetBackgroundColor(0,7,7,0.33)
 					else
-						self.GUI.Progress:SetTexture("KingMolinator", "Media/Castbar_Red.png")
+						KBM.LoadTexture(self.GUI.Progress, "KingMolinator", "Media/Castbar_Red.png")
 					end
 					self.GUI.Mask:SetWidth(self.GUI.Progress:GetWidth())
 				end
@@ -8248,3 +8249,6 @@ table.insert(Event.Addon.SavedVariables.Load.End, {KBM_LoadVars, "KingMolinator"
 table.insert(Event.Addon.SavedVariables.Save.Begin, {KBM_SaveVars, "KingMolinator", "Save Begin"})
 table.insert(Event.Addon.Load.End, {KBM.InitKBM, "KingMolinator", "Begin Init Sequence"})
 table.insert(Event.SafesRaidManager.Player.Ready, {KBM_WaitReady, "KingMolinator", "Sync Wait"})
+
+local AddonDetails = Inspect.Addon.Detail("KBMTextureHandler")
+KBM.LoadTexture = AddonDetails.data.LoadTexture

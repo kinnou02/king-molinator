@@ -1,4 +1,17 @@
-﻿v1.1.7
+﻿v1.1.8
+
+System
+* Encounters
+** Change: The encounter start specifics have now changed. Mods now have direct control over starting encounters.
+** New: The Ignore List for untracked units is back, this should increase performance in many encounters.
+* Textures
+** New: New system added which engages after initial caching of Textures. This handles all Texture Loading during game play.
+
+Unit Tracking
+* New: When removing units from the tracking system, they will also be removed from the Ignore List to prevent Memory leaking over time.
+
+----
+v1.1.7
 
 Unit Tracking
 * Change: Moved Percent triggers in to a unified location within Unit:Update()

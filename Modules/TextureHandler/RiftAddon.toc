@@ -1,0 +1,26 @@
+﻿Identifier = "KBMTextureHandler"
+
+Name = "KBM Texture Handler"
+NameShort = "KBM-TH"
+
+Description = "King Boss Mods texture service for managing textures during run-time only."
+
+Author = "Paul Snart"
+Website = "http://twitter.com/#!/psnart"
+Email = "snarty@gmail.com"
+
+Version = "0.0.1"
+
+Environment = "1.9"
+
+RunOnStartup = {
+	"TextureHandler.lua",
+}
+
+SavedVariables = {
+	KBMTH_Settings = "account",
+}
+
+Dependencies = {
+	KingMolinator = {"required", "after"},
+}
