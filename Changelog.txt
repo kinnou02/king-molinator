@@ -1,4 +1,18 @@
-﻿v1.1.6
+﻿v1.1.7
+
+Unit Tracking
+* Change: Moved Percent triggers in to a unified location within Unit:Update()
+
+System
+* Removed: All Watchdog diagnosis tracking and saving have been removed including associated commands.
+* Fixed: Errors related to the diagnostic tools will now be gone.
+
+Hammerknell Fortress
+* Akylios
+** Change: Removed P2 percentage trigger and replaced with the more reliable Emote trigger.
+
+----
+v1.1.6
 
 System
 * Change: Start-up order has changed again slightly.
@@ -10,9 +24,10 @@ Unit Tracking
 * Fixed: (Rare) error could be thrown in the Unit Tracker's Unit:Update() with nil values for Health. (This could cause inconsistency)
 
 Infernal Dawn.
-* New: Added Trigger for the start of Phase 2 combat.
-* New: Added Timers for first and second Laethic Gold.
-* New: Added 5 second warning for the start of Laethic Gold's cast.
+* Laethys
+** New: Added Trigger for the start of Phase 2 combat.
+** New: Added Timers for first and second Laethic Gold.
+** New: Added 5 second warning for the start of Laethic Gold's cast.
 
 French Translations
 * Updated!

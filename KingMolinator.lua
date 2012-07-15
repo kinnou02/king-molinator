@@ -670,20 +670,20 @@ local function KBM_DefineVars(AddonID)
 			Enabled = true,
 			Debug = false,
 			Menu = {},
-			Watchdog = {
-				Buffs = {
-					sCount = 0,
-					Sessions = {},
-				},
-				Avail = {
-					sCount = 0,
-					Sessions = {},
-				},
-				Main = {
-					sCount = 0,
-					Sessions = {},
-				},
-			},
+			-- Watchdog = {
+				-- Buffs = {
+					-- sCount = 0,
+					-- Sessions = {},
+				-- },
+				-- Avail = {
+					-- sCount = 0,
+					-- Sessions = {},
+				-- },
+				-- Main = {
+					-- sCount = 0,
+					-- Sessions = {},
+				-- },
+			-- },
 			CPU = {
 				Enabled = false,
 				x = false,
@@ -786,48 +786,48 @@ function KBM.LoadTable(Source, Target)
 end
 
 function KBM.InitDiagnostics()
-	KBM.Watchdog.AreaList = {
-		["Buffs"] = true,
-		["Avail"] = true,
-		["Main"] = true,
-	}
-	for diaID, bool in pairs(KBM.Watchdog.AreaList) do
-		local tCount = 0
-		local tStart = 1
-		if chKBM_GlobalOptions.Character then
-			if chKBM_GlobalOptions.Watchdog then
-				if chKBM_GlobalOptions.Watchdog[diaID] then
-					tCount = chKBM_GlobalOptions.Watchdog[diaID].sCount
-				end
-			end
-		else
-			if KBM_GlobalOptions.Watchdog then
-				if KBM_GlobalOptions.Watchdog[diaID] then
-					tCount = KBM_GlobalOptions.Watchdog[diaID].sCount
-				end
-			end
-		end
-		if tCount > 0 then
-			if tCount > 10 then
-				tStart = tCount - 10
-			end
-			for Index = tStart, tCount do
-				KBM.Options.Watchdog[diaID].Sessions[Index] = {
-					Total = 0,
-					Average = 0,
-					Peak = 0,
-					Count = 0,
-					wTime = 0,
-				}
-			end
-		end
-	end
+	-- KBM.Watchdog.AreaList = {
+		-- ["Buffs"] = true,
+		-- ["Avail"] = true,
+		-- ["Main"] = true,
+	-- }
+	-- for diaID, bool in pairs(KBM.Watchdog.AreaList) do
+		-- local tCount = 0
+		-- local tStart = 1
+		-- if chKBM_GlobalOptions.Character then
+			-- if chKBM_GlobalOptions.Watchdog then
+				-- if chKBM_GlobalOptions.Watchdog[diaID] then
+					-- tCount = chKBM_GlobalOptions.Watchdog[diaID].sCount
+				-- end
+			-- end
+		-- else
+			-- if KBM_GlobalOptions.Watchdog then
+				-- if KBM_GlobalOptions.Watchdog[diaID] then
+					-- tCount = KBM_GlobalOptions.Watchdog[diaID].sCount
+				-- end
+			-- end
+		-- end
+		-- if tCount > 0 then
+			-- if tCount > 10 then
+				-- tStart = tCount - 10
+			-- end
+			-- for Index = tStart, tCount do
+				-- KBM.Options.Watchdog[diaID].Sessions[Index] = {
+					-- Total = 0,
+					-- Average = 0,
+					-- Peak = 0,
+					-- Count = 0,
+					-- wTime = 0,
+				-- }
+			-- end
+		-- end
+	-- end
 end
 
 local function KBM_LoadVars(AddonID)
 	local TargetLoad = nil
 	if AddonID == "KingMolinator" then		
-		KBM.InitDiagnostics()
+		-- KBM.InitDiagnostics()
 		
 		if chKBM_GlobalOptions.Character then
 			KBM.LoadTable(chKBM_GlobalOptions, KBM.Options)
@@ -853,17 +853,17 @@ local function KBM_LoadVars(AddonID)
 		
 		KBM.Debug = KBM.Options.Debug
 		KBM.InitVars()
-		for diaID, bool in pairs(KBM.Watchdog.AreaList) do
-			KBM.Options.Watchdog[diaID].sCount = KBM.Options.Watchdog[diaID].sCount + 1
-			KBM.Options.Watchdog[diaID].Sessions[KBM.Options.Watchdog[diaID].sCount] = {
-				Total = 0,
-				Average = 0,
-				Count = 0,
-				Peak = 0,
-				wTime = 99,
-			}
-			KBM.Watchdog[diaID] = KBM.Options.Watchdog[diaID].Sessions[KBM.Options.Watchdog[diaID].sCount]
-		end
+		-- for diaID, bool in pairs(KBM.Watchdog.AreaList) do
+			-- KBM.Options.Watchdog[diaID].sCount = KBM.Options.Watchdog[diaID].sCount + 1
+			-- KBM.Options.Watchdog[diaID].Sessions[KBM.Options.Watchdog[diaID].sCount] = {
+				-- Total = 0,
+				-- Average = 0,
+				-- Count = 0,
+				-- Peak = 0,
+				-- wTime = 99,
+			-- }
+			-- KBM.Watchdog[diaID] = KBM.Options.Watchdog[diaID].Sessions[KBM.Options.Watchdog[diaID].sCount]
+		-- end
 	elseif KBM.PlugIn.List[AddonID] then
 		KBM.PlugIn.List[AddonID]:LoadVars()
 	end
@@ -3676,30 +3676,6 @@ function KBM.MobDamage(info)
 							end
 						end
 						if KBM.BossID[tUnitID] then
-							KBM.BossID[tUnitID].Health = UnitObj.Health
-							KBM.BossID[tUnitID].HealthLast = UnitObj.Health
-							KBM.BossID[tUnitID].PercentRaw = UnitObj.PercentRaw
-							KBM.BossID[tUnitID].Percent = UnitObj.Percent
-							if KBM.BossID[tUnitID].Percent ~= KBM.BossID[tUnitID].PercentLast then
-								if KBM.Trigger.Percent[KBM.CurrentMod.ID] then
-									if KBM.Trigger.Percent[KBM.CurrentMod.ID][tDetails.name] then
-										if KBM.BossID[tUnitID].PercentLast - KBM.BossID[tUnitID].Percent > 1 then
-											for PCycle = KBM.BossID[tUnitID].PercentLast, KBM.BossID[tUnitID].Percent, -1 do
-												if KBM.Trigger.Percent[KBM.CurrentMod.ID][tDetails.name][PCycle] then
-													TriggerObj = KBM.Trigger.Percent[KBM.CurrentMod.ID][tDetails.name][PCycle]
-													KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
-												end
-											end
-										else
-											if KBM.Trigger.Percent[KBM.CurrentMod.ID][tDetails.name][KBM.BossID[tUnitID].Percent] then
-												TriggerObj = KBM.Trigger.Percent[KBM.CurrentMod.ID][tDetails.name][KBM.BossID[tUnitID].Percent]
-												KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
-											end
-										end
-									end
-								end
-								KBM.BossID[tUnitID].PercentLast = KBM.BossID[tUnitID].Percent
-							end
 							-- Update Phase Monitor accordingly.
 							if KBM.PhaseMonitor.Active then
 								if KBM.PhaseMonitor.Objectives.Lists.Percent[tDetails.name] then
@@ -3729,26 +3705,7 @@ function KBM.MobDamage(info)
 								KBM.BossID[tUnitID].PercentRaw = (KBM.BossID[tUnitID].Health/KBM.BossID[tUnitID].HealthMax)*100
 								KBM.BossID[tUnitID].Percent = math.ceil(KBM.BossID[tUnitID].PercentRaw)
 								if KBM.CurrentMod then
-									if KBM.BossID[tUnitID].Percent ~= KBM.BossID[tUnitID].PercentLast then
-										if KBM.Trigger.Percent[KBM.CurrentMod.ID] then
-											if KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name] then
-												if KBM.BossID[tUnitID].PercentLast - KBM.BossID[tUnitID].Percent > 1 then
-													for PCycle = KBM.BossID[tUnitID].PercentLast, KBM.BossID[tUnitID].Percent, -1 do
-														if KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name][PCycle] then
-															TriggerObj = KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name][PCycle]
-															KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
-														end
-													end
-												else
-													if KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name][KBM.BossID[tUnitID].Percent] then
-														TriggerObj = KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name][KBM.BossID[tUnitID].Percent]
-														KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
-													end
-												end
-											end
-										end
-										KBM.BossID[tUnitID].PercentLast = KBM.BossID[tUnitID].Percent
-									end
+									KBM.BossID[tUnitID].PercentLast = KBM.BossID[tUnitID].Percent
 									-- Update Phase Monitor accordingly.
 									if KBM.PhaseMonitor.Active then
 										if KBM.PhaseMonitor.Objectives.Lists.Percent[KBM.BossID[tUnitID].name] then
@@ -3798,11 +3755,12 @@ function KBM.MobHeal(info)
 		end
 	end
 	if tUnitID then
+		tDetails = Inspect.Unit.Detail(tUnitID)
 		UnitObj = KBM.Unit.List.UID[tUnitID]
 		if not UnitObj then
-			UnitObj = KBM.Unit:Idle(tUnitID)
-			UnitObj:HealHandler(info)
+			UnitObj = KBM.Unit:Idle(tUnitID, tDetails)
 		end
+		UnitObj:HealHandler(info, tDetails)
 	end
 end
 
@@ -3832,6 +3790,8 @@ function KBM.RaidDamage(info)
 				UnitObj = KBM.Unit:Idle(tUnitID, tDetails)
 			end
 			UnitObj:DamageHandler(info, tDetails)
+		else
+			return
 		end
 		if KBM.Encounter then
 			if KBM.BossID[tUnitID] then
@@ -3840,96 +3800,19 @@ function KBM.RaidDamage(info)
 				-- ********************************************************************
 				-- *** TO BE CHANGED DUE TO UNIT TRACKER NOW MONITORING HEALTH DATA ***
 				-- ********************************************************************
-				if tDetails then
-					KBM.BossID[tUnitID].Health = UnitObj.Health
-					KBM.BossID[tUnitID].HealthLast = UnitObj.Health
-					KBM.BossID[tUnitID].PercentRaw = UnitObj.PercentRaw
-					KBM.BossID[tUnitID].Percent = UnitObj.Percent
-					if KBM.CurrentMod.ID then
-						if KBM.BossID[tUnitID].Percent ~= KBM.BossID[tUnitID].PercentLast then
-							if KBM.Trigger.Percent[KBM.CurrentMod.ID] then
-								if KBM.Trigger.Percent[KBM.CurrentMod.ID][tDetails.name] then
-									if KBM.BossID[tUnitID].PercentLast - KBM.BossID[tUnitID].Percent > 1 then
-										for PCycle = KBM.BossID[tUnitID].PercentLast, KBM.BossID[tUnitID].Percent, -1 do
-											if KBM.Trigger.Percent[KBM.CurrentMod.ID][tDetails.name][PCycle] then
-												TriggerObj = KBM.Trigger.Percent[KBM.CurrentMod.ID][tDetails.name][PCycle]
-												KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
-											end
-										end
-									else
-										if KBM.Trigger.Percent[KBM.CurrentMod.ID][tDetails.name][KBM.BossID[tUnitID].Percent] then
-											TriggerObj = KBM.Trigger.Percent[KBM.CurrentMod.ID][tDetails.name][KBM.BossID[tUnitID].Percent]
-											KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
-										end
-									end
-								end
-							end
-							KBM.BossID[tUnitID].PercentLast = KBM.BossID[tUnitID].Percent
-						end
-						-- Update Phase Monitor accordingly.
-						if KBM.PhaseMonitor.Active then
-							if KBM.PhaseMonitor.Objectives.Lists.Percent[tDetails.name] then
-								KBM.PhaseMonitor.Objectives.Lists.Percent[tDetails.name]:Update(KBM.BossID[tUnitID].PercentRaw)
-							end
-						end
-						-- Check for Npc Based Triggers (Usually Dynamic: Eg - Failsafe for P4 start Akylios)
-						if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID] then
-							if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][tDetails.name] then
-								local TriggerObj = KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][tDetails.name]
-								if TriggerObj.Enabled then
-									KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
-								end
-							end
+				if KBM.CurrentMod.ID then
+					-- Update Phase Monitor accordingly.
+					if KBM.PhaseMonitor.Active then
+						if KBM.PhaseMonitor.Objectives.Lists.Percent[UnitObj.Name] then
+							KBM.PhaseMonitor.Objectives.Lists.Percent[UnitObj.Name]:Update(KBM.BossID[tUnitID].PercentRaw)
 						end
 					end
-				else
-					if KBM.BossID[tUnitID] then
-						if not KBM.BossID[tUnitID].Dead then
-							if info.damage then
-								KBM.BossID[tUnitID].Health = KBM.BossID[tUnitID].HealthLast - info.damage
-								if info.Overkill then
-									KBM.BossID[tUnitID].Health = 0
-								end
-								KBM.BossID[tUnitID].HealthLast = KBM.BossID[tUnitID].Health
-								KBM.BossID[tUnitID].PercentRaw = (KBM.BossID[tUnitID].Health/KBM.BossID[tUnitID].HealthMax)*100
-								KBM.BossID[tUnitID].Percent = math.ceil(KBM.BossID[tUnitID].PercentRaw)
-								if KBM.CurrentMod then
-									if KBM.BossID[tUnitID].Percent ~= KBM.BossID[tUnitID].PercentLast then
-										if KBM.Trigger.Percent[KBM.CurrentMod.ID] then
-											if KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name] then
-												if KBM.BossID[tUnitID].PercentLast - KBM.BossID[tUnitID].Percent > 1 then
-													for PCycle = KBM.BossID[tUnitID].PercentLast, KBM.BossID[tUnitID].Percent, -1 do
-														if KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name][PCycle] then
-															TriggerObj = KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name][PCycle]
-															KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
-														end
-													end
-												else
-													if KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name][KBM.BossID[tUnitID].Percent] then
-														TriggerObj = KBM.Trigger.Percent[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name][KBM.BossID[tUnitID].Percent]
-														KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
-													end
-												end
-											end
-										end
-										KBM.BossID[tUnitID].PercentLast = KBM.BossID[tUnitID].Percent
-									end
-									-- Update Phase Monitor accordingly.
-									if KBM.PhaseMonitor.Active then
-										if KBM.PhaseMonitor.Objectives.Lists.Percent[KBM.BossID[tUnitID].name] then
-											KBM.PhaseMonitor.Objectives.Lists.Percent[KBM.BossID[tUnitID].name]:Update(KBM.BossID[tUnitID].PercentRaw)
-										end
-									end
-									-- Check for Npc Based Triggers (Usually Dynamic: Eg - Failsafe for P4 start Akylios)
-									if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID] then
-										if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name] then
-											local TriggerObj = KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name]
-											if TriggerObj.Enabled then
-												KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
-											end
-										end
-									end
-								end
+					-- Check for Npc Based Triggers (Usually Dynamic: Eg - Failsafe for P4 start Akylios)
+					if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID] then
+						if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][UnitObj.Name] then
+							local TriggerObj = KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][UnitObj.Name]
+							if TriggerObj.Enabled then
+								KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
 							end
 						end
 					end
@@ -4175,6 +4058,34 @@ function KBM.Unit:Create(uDetails, UnitID)
 						end
 					end
 				end
+				if KBM.Encounter then
+					if KBM.BossID[self.UnitID] then
+						KBM.BossID[self.UnitID].Health = self.Health
+						KBM.BossID[self.UnitID].HealthLast = self.Health
+						KBM.BossID[self.UnitID].PercentRaw = self.PercentRaw
+						KBM.BossID[self.UnitID].Percent = self.Percent
+						if KBM.BossID[self.UnitID].Percent ~= KBM.BossID[self.UnitID].PercentLast then
+							if KBM.Trigger.Percent[KBM.CurrentMod.ID] then
+								if KBM.Trigger.Percent[KBM.CurrentMod.ID][self.Name] then
+									if KBM.BossID[self.UnitID].PercentLast - KBM.BossID[self.UnitID].Percent > 1 then
+										for PCycle = KBM.BossID[self.UnitID].PercentLast, KBM.BossID[self.UnitID].Percent, -1 do
+											if KBM.Trigger.Percent[KBM.CurrentMod.ID][self.Name][PCycle] then
+												TriggerObj = KBM.Trigger.Percent[KBM.CurrentMod.ID][self.Name][PCycle]
+												KBM.Trigger.Queue:Add(TriggerObj, nil, self.UnitID)
+											end
+										end
+									else
+										if KBM.Trigger.Percent[KBM.CurrentMod.ID][self.Name][self.Percent] then
+											TriggerObj = KBM.Trigger.Percent[KBM.CurrentMod.ID][self.Name][self.Percent]
+											KBM.Trigger.Queue:Add(TriggerObj, nil, self.UnitID)
+										end
+									end
+								end
+							end
+							KBM.BossID[self.UnitID].PercentLast = KBM.BossID[self.UnitID].Percent
+						end
+					end
+				end
 			end
 		end
 		function UnitObj:SetHealthMax(NewMHP)
@@ -4189,20 +4100,19 @@ function KBM.Unit:Create(uDetails, UnitID)
 				end
 			end
 		end
-		function UnitObj:DamageHandler(DamageObj)
+		function UnitObj:DamageHandler(DamageObj, uDetails)
 			if self.Loaded then
 				if self.Available == true then
-					-- local uDetails = Inspect.Unit.Detail(self.UnitID)
-					-- if uDetails ~= nil then
-						-- self.Details = uDetails
-						-- if uDetails.healthMax then
-							-- self.HealthMax = uDetails.healthMax
-						-- end
-						-- if uDetails.health then
-							-- self:Update(uDetails.health, uDetails)
-							-- return
-						-- end
-					-- end
+					if uDetails then
+						self.Details = uDetails
+						if uDetails.healthMax then
+							self.HealthMax = uDetails.healthMax
+						end
+						if uDetails.health then
+							self:Update(uDetails.health, uDetails)
+							return
+						end
+					end
 				elseif self.Time then
 					self:UpdateIdle()
 				end
@@ -4231,20 +4141,19 @@ function KBM.Unit:Create(uDetails, UnitID)
 				self:UpdateIdle()
 			end
 		end
-		function UnitObj:HealHandler(HealObj)
+		function UnitObj:HealHandler(HealObj, uDetails)
 			if self.Loaded then
 				if self.Available == true then
-					-- local uDetails = Inspect.Unit.Detail(self.UnitID)
-					-- if uDetails ~= nil or self.Available ~= false then
-						-- self.Details = uDetails
-						-- if uDetails.healthMax then
-							-- self.HealthMax = uDetails.healthMax
-						-- end
-						-- if uDetails.health then
-							-- self:Update(uDetails.health, uDetails)
-							-- return
-						-- end
-					-- end
+					if uDetails then
+						self.Details = uDetails
+						if uDetails.healthMax then
+							self.HealthMax = uDetails.healthMax
+						end
+						if uDetails.health then
+							self:Update(uDetails.health, uDetails)
+							return
+						end
+					end
 				elseif self.Time then
 					self:UpdateIdle()
 				end
@@ -4657,7 +4566,7 @@ function KBM.Unit:Death(UnitID)
 end
 
 local function KBM_UnitAvailable(units)
-	local TimeStore = Inspect.Time.Real()
+	-- local TimeStore = Inspect.Time.Real()
 	if KBM.Encounter then
 		for UnitID, Specifier in pairs(units) do
 			if Specifier then
@@ -4678,16 +4587,16 @@ local function KBM_UnitAvailable(units)
 			end
 		end	
 	end
-	local TimeEllapsed = tonumber(string.format("%0.5f", Inspect.Time.Real() - TimeStore))
-	KBM.Watchdog.Avail.Count = KBM.Watchdog.Avail.Count + 1
-	KBM.Watchdog.Avail.Total = KBM.Watchdog.Avail.Total + TimeEllapsed
-	if KBM.Watchdog.Avail.Peak < TimeEllapsed then
-		KBM.Watchdog.Avail.Peak = TimeEllapsed
-	end	
-	local TimeLeft = Inspect.System.Watchdog()
-	if KBM.Watchdog.Avail.wTime > TimeLeft then
-		KBM.Watchdog.Avail.wTime = TimeLeft
-	end
+	-- local TimeEllapsed = tonumber(string.format("%0.5f", Inspect.Time.Real() - TimeStore))
+	-- KBM.Watchdog.Avail.Count = KBM.Watchdog.Avail.Count + 1
+	-- KBM.Watchdog.Avail.Total = KBM.Watchdog.Avail.Total + TimeEllapsed
+	-- if KBM.Watchdog.Avail.Peak < TimeEllapsed then
+		-- KBM.Watchdog.Avail.Peak = TimeEllapsed
+	-- end	
+	-- local TimeLeft = Inspect.System.Watchdog()
+	-- if KBM.Watchdog.Avail.wTime > TimeLeft then
+		-- KBM.Watchdog.Avail.wTime = TimeLeft
+	-- end
 end
 
 function KBM.AttachDragFrame(parent, hook, name, layer)
@@ -6781,12 +6690,12 @@ function KBM:Timer()
 		KBM.Updating = false
 	end
 	
-	local TimeEllapsed = tonumber(string.format("%0.5f", Inspect.Time.Real() - current))
-	KBM.Watchdog.Main.Count = KBM.Watchdog.Main.Count + 1
-	KBM.Watchdog.Main.Total = KBM.Watchdog.Main.Total + TimeEllapsed
-	if KBM.Watchdog.Main.Peak < TimeEllapsed then
-		KBM.Watchdog.Main.Peak = TimeEllapsed
-	end	
+	-- local TimeEllapsed = tonumber(string.format("%0.5f", Inspect.Time.Real() - current))
+	-- KBM.Watchdog.Main.Count = KBM.Watchdog.Main.Count + 1
+	-- KBM.Watchdog.Main.Total = KBM.Watchdog.Main.Total + TimeEllapsed
+	-- if KBM.Watchdog.Main.Peak < TimeEllapsed then
+		-- KBM.Watchdog.Main.Peak = TimeEllapsed
+	-- end	
 	
 end
 
@@ -6986,7 +6895,7 @@ end
 
 function KBM:BuffAdd(unitID, Buffs)
 	-- Used to manage Triggers and soon Tank-Swap managing.
-	local TimeStore = Inspect.Time.Real()
+	-- local TimeStore = Inspect.Time.Real()
 	
 	if KBM.Options.Enabled then
 		if KBM.Encounter then
@@ -7097,16 +7006,16 @@ function KBM:BuffAdd(unitID, Buffs)
 			end
 		end
 	end
-	local TimeEllapsed = tonumber(string.format("%0.05f", Inspect.Time.Real() - TimeStore))
-	local TimeLeft = Inspect.System.Watchdog()
-	KBM.Watchdog.Buffs.Count = KBM.Watchdog.Buffs.Count + 1
-	KBM.Watchdog.Buffs.Total = KBM.Watchdog.Buffs.Total + TimeEllapsed
-	if KBM.Watchdog.Buffs.Peak < TimeEllapsed then
-		KBM.Watchdog.Buffs.Peak = TimeEllapsed
-	end
-	if KBM.Watchdog.Buffs.wTime > TimeLeft then
-		KBM.Watchdog.Buffs.wTime = TimeLeft
-	end
+	-- local TimeEllapsed = tonumber(string.format("%0.05f", Inspect.Time.Real() - TimeStore))
+	-- local TimeLeft = Inspect.System.Watchdog()
+	-- KBM.Watchdog.Buffs.Count = KBM.Watchdog.Buffs.Count + 1
+	-- KBM.Watchdog.Buffs.Total = KBM.Watchdog.Buffs.Total + TimeEllapsed
+	-- if KBM.Watchdog.Buffs.Peak < TimeEllapsed then
+		-- KBM.Watchdog.Buffs.Peak = TimeEllapsed
+	-- end
+	-- if KBM.Watchdog.Buffs.wTime > TimeLeft then
+		-- KBM.Watchdog.Buffs.wTime = TimeLeft
+	-- end
 	
 end
 
@@ -7185,28 +7094,28 @@ function KBM.FormatPrecision(Val)
 end
 
 function KBM.Watchdog.Display(Type, Var)
-	if Var == "all" then
-		for Index, wdObj in pairs(KBM.Options.Watchdog[Type].Sessions) do
-			wdObj.Average = tonumber(string.format("%0.6f", wdObj.Total / wdObj.Count)) or 0
-			print("Session Index: "..tostring(Index))
-			print("Total Time: "..KBM.FormatPrecision(wdObj.Total))
-			print("Average Execution Time: "..KBM.FormatPrecision(wdObj.Average))
-			print("Peak Execution Time: "..KBM.FormatPrecision(wdObj.Peak))
-			print("Lowest Remaining Watching Time: "..KBM.FormatPrecision(wdObj.wTime))
-			print("Total Calls: "..wdObj.Count)	
-			print("--------------------------------")
-		end
-	elseif Var == "clear" then
-		print("Clearing Session History")
-		KBM.Watchdog.Clear(Type)
-	else
-		KBM.Watchdog[Type].Average = tonumber(string.format("%0.6f", KBM.Watchdog[Type].Total / KBM.Watchdog[Type].Count)) or 0	
-		print("Total Time: "..KBM.FormatPrecision(KBM.Watchdog[Type].Total))
-		print("Average Execution Time: "..KBM.FormatPrecision(KBM.Watchdog[Type].Average))
-		print("Peak Execution Time: "..KBM.FormatPrecision(KBM.Watchdog[Type].Peak))
-		print("Lowest Remaining Watching Time: "..KBM.FormatPrecision(KBM.Watchdog[Type].wTime))
-		print("Total Calls: "..KBM.Watchdog[Type].Count)
-	end
+	-- if Var == "all" then
+		-- for Index, wdObj in pairs(KBM.Options.Watchdog[Type].Sessions) do
+			-- wdObj.Average = tonumber(string.format("%0.6f", wdObj.Total / wdObj.Count)) or 0
+			-- print("Session Index: "..tostring(Index))
+			-- print("Total Time: "..KBM.FormatPrecision(wdObj.Total))
+			-- print("Average Execution Time: "..KBM.FormatPrecision(wdObj.Average))
+			-- print("Peak Execution Time: "..KBM.FormatPrecision(wdObj.Peak))
+			-- print("Lowest Remaining Watching Time: "..KBM.FormatPrecision(wdObj.wTime))
+			-- print("Total Calls: "..wdObj.Count)	
+			-- print("--------------------------------")
+		-- end
+	-- elseif Var == "clear" then
+		-- print("Clearing Session History")
+		-- KBM.Watchdog.Clear(Type)
+	-- else
+		-- KBM.Watchdog[Type].Average = tonumber(string.format("%0.6f", KBM.Watchdog[Type].Total / KBM.Watchdog[Type].Count)) or 0	
+		-- print("Total Time: "..KBM.FormatPrecision(KBM.Watchdog[Type].Total))
+		-- print("Average Execution Time: "..KBM.FormatPrecision(KBM.Watchdog[Type].Average))
+		-- print("Peak Execution Time: "..KBM.FormatPrecision(KBM.Watchdog[Type].Peak))
+		-- print("Lowest Remaining Watching Time: "..KBM.FormatPrecision(KBM.Watchdog[Type].wTime))
+		-- print("Total Calls: "..KBM.Watchdog[Type].Count)
+	-- end
 end
 
 function KBM.Watchdog.Clear(Type)
@@ -8160,9 +8069,9 @@ function KBM.InitEvents()
 	table.insert(Command.Slash.Register("kbmlocale"), {KBMLM.FindMissing, "KBMLocaleManager", "KBM Locale Finder"})
 	table.insert(Command.Slash.Register("kbmcpu"), {function () KBM.CPU:Toggle() end, "KingMolinator", "KBM CPU Monitor"})
 	table.insert(Command.Slash.Register("kbmdumpavail"), {KBM.Unit.Debug.DumpAvail, "KingMolinator", "KBM Debug Avail"})
-	table.insert(Command.Slash.Register("kbmwdbuffs"), {function (...) KBM.Watchdog.Display("Buffs", ...) end, "KingMolinator", "Watchdog Tracking: Buff Add Remove Display"})
-	table.insert(Command.Slash.Register("kbmwdavail"), {function (...) KBM.Watchdog.Display("Avail", ...) end, "KingMolinator", "Watchdog Tracking: Unit Available"})
-	table.insert(Command.Slash.Register("kbmwdmain"), {function (...) KBM.Watchdog.Display("Main", ...) end, "KingMolinator", "Watchdog Tracking: System Update Begin"})
+	--table.insert(Command.Slash.Register("kbmwdbuffs"), {function (...) KBM.Watchdog.Display("Buffs", ...) end, "KingMolinator", "Watchdog Tracking: Buff Add Remove Display"})
+	--table.insert(Command.Slash.Register("kbmwdavail"), {function (...) KBM.Watchdog.Display("Avail", ...) end, "KingMolinator", "Watchdog Tracking: Unit Available"})
+	--table.insert(Command.Slash.Register("kbmwdmain"), {function (...) KBM.Watchdog.Display("Main", ...) end, "KingMolinator", "Watchdog Tracking: System Update Begin"})
 	table.insert(Command.Slash.Register("kbmon"), {function() KBM.StateSwitch(true) end, "KingMolinator", "KBM On"})
 	table.insert(Command.Slash.Register("kbmoff"), {function() KBM.StateSwitch(false) end, "KingMolinator", "KBM Off"})	
 end
