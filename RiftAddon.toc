@@ -10,7 +10,7 @@ Author = "Paul Snart"
 Website = "http://www.facebook.com/KingBossMods"
 Email = "snarty@gmail.com"
 
-Version = "1.1.8.465"
+Version = "1.1.8.466"
 
 Environment = "1.9"
 
@@ -30,6 +30,7 @@ RunOnStartup = {
 	"InfernalDawn/Rusila.lua",
 	"InfernalDawn/Laethys.lua",
 	"InfernalDawn/Maelforge.lua",
+	"InfernalDawn/Maelforge_Final.lua",
 	"Hammerknell/HKHeader.lua",
 	"Hammerknell/Murdantix.lua",
 	"Hammerknell/Matron.lua",
@@ -196,6 +197,7 @@ SavedVariables = {
 	KBMINDEC_Settings = "account",
 	KBMINDLT_Settings = "account",
 	KBMINDMF_Settings = "account",
+	KBMINDMFF_Settings = "account",
 	KBMAK_Settings = "account",
 	KBMGU_Settings = "account",
 	KBMMX_Settings = "account",
@@ -352,7 +354,8 @@ SavedVariables = {
 	chKBMINDIZ_Settings = "character",
 	chKBMINDEC_Settings = "character",
 	chKBMINDLT_Settings = "character",
-	chKBMINDMF_Settings = "character",	
+	chKBMINDMF_Settings = "character",
+	chKBMINDMFF_Settings = "character",
 	chKBMAK_Settings = "character",
 	chKBMGU_Settings = "character",
 	chKBMMX_Settings = "character",

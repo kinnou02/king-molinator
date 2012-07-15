@@ -4,11 +4,21 @@ System
 * Encounters
 ** Change: The encounter start specifics have now changed. Mods now have direct control over starting encounters.
 ** New: The Ignore List for untracked units is back, this should increase performance in many encounters.
+** New: Added Location name as a possible check condition when launching encounters.
 * Textures
 ** New: New system added which engages after initial caching of Textures. This handles all Texture Loading during game play.
 
 Unit Tracking
 * New: When removing units from the tracking system, they will also be removed from the Ignore List to prevent Memory leaking over time.
+
+Infernal Dawn
+* Maelforge - Dragon Eggs
+** New: This encounter should now trigger.
+* Maelforge - Final
+** New: This encounter should now trigger.
+** New: Added Personal Alert, Mechanic Spy and Timer for Hellfire.
+** New: Added Personal Alert for Earthen Fissure.
+** New: Added Personal Alert for Fiery Fissure.
 
 ----
 v1.1.7

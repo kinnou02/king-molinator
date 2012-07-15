@@ -919,6 +919,7 @@ end
 KBM.SubBoss = {}
 KBM.SubBossID = {}
 KBM.BossID = {}
+KBM.BossLocation = {}
 KBM.Encounter = false
 KBM.HeaderList = {}
 KBM.CurrentBoss = ""
@@ -3421,26 +3422,36 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 			KBM.Idle.Wait = false
 			if not KBM.BossID[UnitID] then
 				if uDetails then
-					if uDetails.type then
-						if KBM.SubBossID[uDetails.type] then
-							BossObj = KBM.SubBossID[uDetails.type]
-						elseif KBM.Boss.MasterID[uDetails.type] then
-							BossObj = KBM.Boss.Dungeon.List[uDetails.name]
-						elseif KBM.Boss.ExpertID[uDetails.type] then
-							BossObj = KBM.Boss.Dungeon.List[uDetails.name]
+					if KBM.Player.Location then
+						local uLoc = string.upper(KBM.Player.Location)
+						if KBM.BossLocation[uLoc] then
+							if KBM.BossLocation[uLoc][uDetails.name] then
+								BossObj = KBM.BossLocation[uLoc][uDetails.name]
+							end
 						end
 					end
 					if not BossObj then
-						if KBM_Boss[uDetails.name] then
-							BossObj = KBM_Boss[uDetails.name]
-							if BossObj.IgnoreID == uDetails.type then
-								BossObj = nil
-								KBM.IgnoreList[UnitID] = true
+						if uDetails.type then
+							if KBM.SubBossID[uDetails.type] then
+								BossObj = KBM.SubBossID[uDetails.type]
+							elseif KBM.Boss.MasterID[uDetails.type] then
+								BossObj = KBM.Boss.Dungeon.List[uDetails.name]
+							elseif KBM.Boss.ExpertID[uDetails.type] then
+								BossObj = KBM.Boss.Dungeon.List[uDetails.name]
 							end
-						elseif KBM.SubBoss[uDetails.name] then
-							BossObj = KBM.SubBoss[uDetails.name]
-						elseif KBM.Boss.Dungeon.List[uDetails.name] then
-							BossObj = KBM.Boss.Dungeon.List[uDetails.name]
+						end
+						if not BossObj then
+							if KBM_Boss[uDetails.name] then
+								BossObj = KBM_Boss[uDetails.name]
+								if BossObj.IgnoreID == uDetails.type then
+									BossObj = nil
+									KBM.IgnoreList[UnitID] = true
+								end
+							elseif KBM.SubBoss[uDetails.name] then
+								BossObj = KBM.SubBoss[uDetails.name]
+							elseif KBM.Boss.Dungeon.List[uDetails.name] then
+								BossObj = KBM.Boss.Dungeon.List[uDetails.name]
+							end
 						end
 					end
 					BossObj = KBM.MatchType(uDetails, BossObj)
@@ -7753,6 +7764,7 @@ function KBM.LocationChange(LocationList)
 					if KBM.Debug then
 						print("New location: "..Location)
 					end
+					KBM.Player.Location = Location
 				end
 			end
 		end

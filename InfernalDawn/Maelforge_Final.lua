@@ -1,10 +1,10 @@
-﻿-- Maelforge Boss Mod for King Boss Mods
+﻿-- Maelforge Final Encounter Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2011
 --
 
-KBMINDMF_Settings = nil
-chKBMINDMF_Settings = nil
+KBMINDMFF_Settings = nil
+chKBMINDMFF_Settings = nil
 
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
@@ -17,12 +17,12 @@ local IND = KBM.BossMod["Infernal Dawn"]
 local MF = {
 	Enabled = true,
 	Directory = IND.Directory,
-	File = "Maelforge.lua",
+	File = "Maelforge_Final.lua",
 	Instance = IND.Name,
 	Type = "20man",
 	HasPhases = true,
 	Lang = {},
-	ID = "Maelforge",
+	ID = "Maelforge_Final",
 	Object = "MF",
 }
 
@@ -38,19 +38,26 @@ MF.Maelforge = {
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
-	-- TimersRef = {},
-	-- AlertsRef = {},
+	TimersRef = {},
+	AlertsRef = {},
+	MechRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		-- TimersRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
-		-- },
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
-		-- },
+		TimersRef = {
+			Enabled = true,
+			Hell = KBM.Defaults.TimerObj.Create("purple"),
+		},
+		MechRef = {
+			Enabled = true,
+			Hell = KBM.Defaults.MechObj.Create("purple"),
+		},
+		AlertsRef = {
+			Enabled = true,
+			Hell = KBM.Defaults.AlertObj.Create("purple"),
+			Fiery = KBM.Defaults.AlertObj.Create("red"),
+			Earthen = KBM.Defaults.AlertObj.Create("yellow"),
+		},
 	}
 }
 
@@ -64,15 +71,26 @@ MF.Lang.Unit.Maelforge:SetFrench()
 MF.Lang.Unit.Maelforge:SetRussian("Маэлфорж")
 MF.Lang.Unit.Maelforge:SetKorean("마엘포지")
 
+-- Location Dictionary
+MF.Lang.Location = {}
+MF.Lang.Location.Spires = KBM.Language:Add("SPIRES OF SACRIFICE")
+
+-- Debuff Dictionary
+MF.Lang.Debuff = {}
+MF.Lang.Debuff.Hell = KBM.Language:Add("Hellfire")
+MF.Lang.Debuff.Earthen = KBM.Language:Add("Earthen Fissure")
+MF.Lang.Debuff.Fiery = KBM.Language:Add("Fiery Fissure")
+
 -- Ability Dictionary
 MF.Lang.Ability = {}
 
--- Description Dictionary
+-- Description
 MF.Lang.Descript = {}
-MF.Lang.Descript.Main = KBM.Language:Add("Maelforge - Dragon Eggs")
+MF.Lang.Descript.Main = KBM.Language:Add("Maelforge - Final")
 
 MF.Maelforge.Name = MF.Lang.Unit.Maelforge[KBM.Lang]
 MF.Maelforge.NameShort = MF.Lang.Unit.Maelforge[KBM.Lang]
+MF.Maelforge.LocationReq = MF.Lang.Location.Spires[KBM.Lang]
 MF.Descript = MF.Lang.Descript.Main[KBM.Lang]
 
 function MF:AddBosses(KBM_Boss)
@@ -80,7 +98,10 @@ function MF:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Maelforge.Name] = self.Maelforge,
 	}
-	KBM_Boss[self.Maelforge.Name] = self.Maelforge
+	KBM.BossLocation[self.Maelforge.LocationReq] = {
+		[self.Maelforge.Name] = self.Maelforge,
+	}
+	
 end
 
 function MF:InitVars()
@@ -89,47 +110,49 @@ function MF:InitVars()
 		CastBar = self.Maelforge.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
-		-- MechTimer = KBM.Defaults.MechTimer(),
-		-- Alerts = KBM.Defaults.Alerts(),
-		-- TimersRef = self.Maelforge.Settings.TimersRef,
-		-- AlertsRef = self.Maelforge.Settings.AlertsRef,
+		MechTimer = KBM.Defaults.MechTimer(),
+		MechSpy = KBM.Defaults.MechSpy(),
+		Alerts = KBM.Defaults.Alerts(),
+		TimersRef = self.Maelforge.Settings.TimersRef,
+		MechRef = self.Maelforge.Settings.MechRef,
+		AlertsRef = self.Maelforge.Settings.AlertsRef,
 	}
-	KBMINDMF_Settings = self.Settings
-	chKBMINDMF_Settings = self.Settings
+	KBMINDMFF_Settings = self.Settings
+	chKBMINDMFF_Settings = self.Settings
 	
 end
 
 function MF:SwapSettings(bool)
 
 	if bool then
-		KBMINDMF_Settings = self.Settings
-		self.Settings = chKBMINDMF_Settings
+		KBMINDMFF_Settings = self.Settings
+		self.Settings = chKBMINDMFF_Settings
 	else
-		chKBMINDMF_Settings = self.Settings
-		self.Settings = KBMINDMF_Settings
+		chKBMINDMFF_Settings = self.Settings
+		self.Settings = KBMINDMFF_Settings
 	end
 
 end
 
 function MF:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMINDMF_Settings, self.Settings)
+		KBM.LoadTable(chKBMINDMFF_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMINDMF_Settings, self.Settings)
+		KBM.LoadTable(KBMINDMFF_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMINDMF_Settings = self.Settings
+		chKBMINDMFF_Settings = self.Settings
 	else
-		KBMINDMF_Settings = self.Settings
+		KBMINDMFF_Settings = self.Settings
 	end	
 end
 
 function MF:SaveVars()	
 	if KBM.Options.Character then
-		chKBMINDMF_Settings = self.Settings
+		chKBMINDMFF_Settings = self.Settings
 	else
-		KBMINDMF_Settings = self.Settings
+		KBMINDMFF_Settings = self.Settings
 	end	
 end
 
@@ -188,42 +211,34 @@ end
 function MF:Timer()	
 end
 
-function MF.Maelforge:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function MF.Maelforge:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
-end
-
 function MF:DefineMenu()
 	self.Menu = IND.Menu:CreateEncounter(self.Maelforge, self.Enabled)
 end
 
 function MF:Start()
 	-- Create Timers
-	-- KBM.Defaults.TimerObj.Assign(self.Maelforge)
+	self.Maelforge.TimersRef.Hell = KBM.MechTimer:Add(self.Lang.Debuff.Hell[KBM.Lang], 50)
+	KBM.Defaults.TimerObj.Assign(self.Maelforge)
+	
+	-- Create Spies
+	self.Maelforge.MechRef.Hell = KBM.MechSpy:Add(self.Lang.Debuff.Hell[KBM.Lang], nil, "playerDebuff", self.Maelforge)
+	KBM.Defaults.MechObj.Assign(self.Maelforge)
 	
 	-- Create Alerts
-	-- KBM.Defaults.AlertObj.Assign(self.Maelforge)
+	self.Maelforge.AlertsRef.Hell = KBM.Alert:Create(self.Lang.Debuff.Hell[KBM.Lang], nil, true, true, "purple")
+	self.Maelforge.AlertsRef.Fiery = KBM.Alert:Create(self.Lang.Debuff.Fiery[KBM.Lang], nil, false, true, "red")
+	self.Maelforge.AlertsRef.Earthen = KBM.Alert:Create(self.Lang.Debuff.Earthen[KBM.Lang], nil, false, true, "yellow")
+	KBM.Defaults.AlertObj.Assign(self.Maelforge)
 	
 	-- Assign Alerts and Timers to Triggers
+	self.Maelforge.Triggers.Hell = KBM.Trigger:Create(self.Lang.Debuff.Hell[KBM.Lang], "playerBuff", self.Maelforge)
+	self.Maelforge.Triggers.Hell:AddAlert(self.Maelforge.AlertsRef.Hell, true)
+	self.Maelforge.Triggers.Hell:AddTimer(self.Maelforge.TimersRef.Hell)
+	self.Maelforge.Triggers.Hell:AddSpy(self.Maelforge.MechRef.Hell)
+	self.Maelforge.Triggers.Fiery = KBM.Trigger:Create(self.Lang.Debuff.Fiery[KBM.Lang], "playerBuff", self.Maelforge)
+	self.Maelforge.Triggers.Fiery:AddAlert(self.Maelforge.AlertsRef.Fiery, true)
+	self.Maelforge.Triggers.Earthen = KBM.Trigger:Create(self.Lang.Debuff.Earthen[KBM.Lang], "playerBuff", self.Maelforge)
+	self.Maelforge.Triggers.Earthen:AddAlert(self.Maelforge.AlertsRef.Earthen, true)
 	
 	self.Maelforge.CastBar = KBM.CastBar:Add(self, self.Maelforge)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
