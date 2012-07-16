@@ -67,9 +67,17 @@ end
 function PI.CycleLoad()
 	if PI.Queue.Count > 0 then
 		--print("Items in Queue: loading")
+		local TimeStart = Inspect.Time.Real()
+		local Count = 0
 		repeat
 			PI.Queue.First.Texture:SetTexture(PI.Queue.First.Location, PI.Queue.First.File)
 			PI.Queue:Pop(PI.Queue.First)
+			Count = Count + 1
+			local Duration = Inspect.Time.Real() - TimeStart
+			local Average = Duration / Count
+			if (Average * (Count + 1)) > 0.05 then
+				break
+			end
 		until Inspect.System.Watchdog() < 0.05 or PI.Queue.Count == 0
 	end
 end
