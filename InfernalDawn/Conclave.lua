@@ -149,17 +149,20 @@ EC.Ereetu = {
 -- Ability Dictionary
 EC.Lang.Ability = {}
 EC.Lang.Ability.Dark = KBM.Language:Add("Dark Invocation")
+EC.Lang.Ability.Dark:SetFrench("Invocation sombre")
 EC.Lang.Ability.Shard = KBM.Language:Add("Summon Scorching Shard")
 EC.Lang.Ability.Shard:SetRussian("Призвать пылающий осколок")
+EC.Lang.Ability.Shard:SetFrench("Trait explosif")
 
 -- Ability Dictionary
 EC.Lang.Debuff = {}
 EC.Lang.Debuff.Hem = KBM.Language:Add("Profuse Hemorrhage")
 EC.Lang.Debuff.Blood = KBM.Language:Add("Traitorous Blood")
 EC.Lang.Debuff.Blood:SetRussian("Предательская кровь")
+EC.Lang.Debuff.Blood:SetFrench("Sang de traître")
 EC.Lang.Debuff.Wounds = KBM.Language:Add("Infected Wounds")
 EC.Lang.Debuff.Wounds:SetRussian("Зараженные раны")
-
+EC.Lang.Debuff.Wounds:SetFrench("Plaies infectées")
 
 -- Description Dictionary
 EC.Lang.Main = {}

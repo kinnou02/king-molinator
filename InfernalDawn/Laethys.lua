@@ -87,8 +87,10 @@ LT.Lang.Unit.Laethys:SetKorean("레시스")
 -- Additional Units
 LT.Lang.Unit.Seer = KBM.Language:Add("Wizened Stoneseer")
 LT.Lang.Unit.Seer:SetGerman("Verschrumpelter Steindeuter")
+LT.Lang.Unit.Seer:SetFrench("Oracle de pierre ratatiné")
 LT.Lang.Unit.SeerShort = KBM.Language:Add("Stoneseer")
 LT.Lang.Unit.SeerShort:SetGerman("Steindeuter")
+LT.Lang.Unit.SeerShort:SetFrench("Oracle")
 
 -- Ability Dictionary
 LT.Lang.Ability = {}
@@ -109,7 +111,7 @@ LT.Lang.Ability.Gold:SetGerman("Geschmolzenes Gold")
 LT.Lang.Ability.Gold:SetFrench("Or en fusion")
 LT.Lang.Ability.Resto = KBM.Language:Add("Wizened Restoration")
 LT.Lang.Ability.Resto:SetGerman("Verschrumpelte Wiederherstellung")
-LT.Lang.Ability.Resto:SetFrench("Restauration d'avidité")
+LT.Lang.Ability.Resto:SetFrench("Restauration ratatinée")
 LT.Lang.Ability.LiqGold = KBM.Language:Add("Laethic Gold")
 
 -- Mechanic Dictionary
@@ -125,11 +127,14 @@ LT.Lang.Mechanic.PhaseTwoTrans:SetFrench("jusqu'au démarrage de la phase 2 !")
 LT.Lang.Buff = {}
 LT.Lang.Buff.Wisdom = KBM.Language:Add("Stoneseers Wisdom")
 LT.Lang.Buff.Wisdom:SetGerman("Weisheit des Steindeuters")
+LT.Lang.Buff.Wisdom:SetFrench("Sagesse de l'oracle de pierre")
 
 -- Notify Dictionary
 LT.Lang.Notify = {}
 LT.Lang.Notify.PhaseTwoTrans = KBM.Language:Add('Laethys roars, "How dare you scuff at my beautiful form?! You will pay for this..."')
+LT.Lang.Notify.PhaseTwoTrans:SetFrench('Laethys rugit : "Comment osez-vous vous en prendre à tant de beauté ? Vous me le paierez..."')
 LT.Lang.Notify.PhaseTwoStart = KBM.Language:Add('Laethys says, "Behold your doom! Put down your weapons and I shall grant you a swift demise!"')
+LT.Lang.Notify.PhaseTwoStart:SetFrench('Laethys dit : "Nul ne peut échapper à son destin ! Rendez les armes et je vous accorderai un léger sursis."')
 LT.Lang.Notify.LiqGold = KBM.Language:Add("Laethys unleashes a wave of liquid gold.")
 
 -- Menu Dictionary

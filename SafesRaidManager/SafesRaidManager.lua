@@ -231,9 +231,12 @@ local function SRM_Combat(units)
 					LibSRM.Player.Combat = true
 					SRM_System.Player.Combat.Enter()
 					if not sent then
-						SRM_Group.Combat.Start()
+						if not LibSRM.Player.Grouped then
+							SRM_Group.Combat.Start()
+						end
 					end
 					sent = true
+					return
 				end
 			end
 			if not sent then
@@ -261,9 +264,12 @@ local function SRM_Combat(units)
 					LibSRM.Player.Combat = false
 					SRM_System.Player.Combat.Leave()
 					if not sent then
-						SRM_Group.Combat.End()
+						if not LibSRM.Player.Grouped then
+							SRM_Group.Combat.End()
+						end
 					end
 					sent = true
+					return
 				end
 			end
 			if not sent then
@@ -427,9 +433,7 @@ local function SRM_SetSpecifier(Specifier)
 			SRM_Units[self.UnitID].calling = uDetails.calling
 			SRM_Units[self.UnitID].avail = "full"
 			SRM_Units[self.UnitID].Loaded = true
-			if uDetails.combat then
-				SRM_Combat({[self.UnitID] = true})
-			end
+			SRM_Combat({[self.UnitID] = uDetails.combat})
 			SRM_Units[self.UnitID].Location = uDetails.location
 			SRM_Units[self.UnitID].PetID = Inspect.Unit.Lookup(self.Spec.."pet")
 			if uDetails.health == 0 then
@@ -458,9 +462,7 @@ local function SRM_SetSpecifier(Specifier)
 					if Avail == "full" then
 						SRM_Units[self.UnitID].Loaded = true
 					end
-					if uDetails.combat then
-						SRM_Combat({[self.UnitID] = true})
-					end
+					SRM_Combat({[self.UnitID] = uDetails.combat})
 					SRM_Units[self.UnitID].Location = uDetails.location
 					SRM_Units[self.UnitID].PetID = Inspect.Unit.Lookup(self.Spec..".pet")
 					if uDetails.health == 0 then
@@ -511,6 +513,9 @@ local function SRM_Offline(data)
 	for UID, Value in pairs(data) do
 		if SRM_Units[UID] then
 			SRM_Units[UID].Offline = Value
+			if Value == true then
+				SRM_Combat({[self.UnitID] = false})
+			end
 			SRM_Group.Offline(UID, Value)
 		end
 	end

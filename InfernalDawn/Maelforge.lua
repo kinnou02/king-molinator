@@ -63,24 +63,60 @@ MF.Lang.Unit.Maelforge:SetGerman("Flammenmaul")
 MF.Lang.Unit.Maelforge:SetFrench()
 MF.Lang.Unit.Maelforge:SetRussian("Маэлфорж")
 MF.Lang.Unit.Maelforge:SetKorean("마엘포지")
+MF.Lang.Unit.Cannon = KBM.Language:Add("Magma Cannon")
+MF.Lang.Unit.CanShort = KBM.Language:Add("Cannon")
+MF.Lang.Unit.Egg = KBM.Language:Add("Ember Egg")
+MF.Lang.Unit.EggShort = KBM.Language:Add("Egg")
 
 -- Ability Dictionary
 MF.Lang.Ability = {}
 
+-- Notify Dictionary
+MF.Lang.Notify = {}
+MF.Lang.Notify.PhaseTwo = KBM.Language:Add("Maelforge: Carcera, I will break you and spill your doom across this world. These weaklings shall be the first to die.")
+MF.Lang.Notify.PhaseFinal = KBM.Language:Add("Maelforge: My children will taste your flesh. You whet the appetite of apocalypse.")
+MF.Lang.Notify.Victory = KBM.Language:Add("Carcera: This world is saved from abomination, but its doom rises on ashen wings.")
+
 -- Description Dictionary
 MF.Lang.Descript = {}
-MF.Lang.Descript.Main = KBM.Language:Add("Maelforge - Dragon Eggs")
+MF.Lang.Descript.Main = KBM.Language:Add("Maelforge - Ember Eggs")
 
 MF.Maelforge.Name = MF.Lang.Unit.Maelforge[KBM.Lang]
 MF.Maelforge.NameShort = MF.Lang.Unit.Maelforge[KBM.Lang]
 MF.Descript = MF.Lang.Descript.Main[KBM.Lang]
 
+MF.Cannon = {
+	Mod = MF,
+	Level = "??",
+	Name = MF.Lang.Unit.Cannon[KBM.Lang],
+	NameShort = MF.Lang.Unit.CanShort[KBM.Lang],
+	UnitList = {},
+	Menu = {},
+	Ignore = true,
+	Type = "multi",
+}
+
+MF.Egg = {
+	Mod = MF,
+	Level = "??",
+	Name = MF.Lang.Unit.Egg[KBM.Lang],
+	NameShort = MF.Lang.Unit.EggShort[KBM.Lang],
+	UnitList = {},
+	Menu = {},
+	Ignore = true,
+	Type = "multi",
+}
+
 function MF:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Maelforge.Name] = self.Maelforge,
+		[self.Cannon.Name] = self.Cannon,
+		[self.Egg.Name] = self.Egg,
 	}
 	KBM_Boss[self.Maelforge.Name] = self.Maelforge
+	KBM.SubBoss[self.Cannon.Name] = self.Cannon
+	KBM.SubBoss[self.Egg.Name] = self.Egg
 end
 
 function MF:InitVars()
@@ -144,34 +180,88 @@ function MF:RemoveUnits(UnitID)
 	return false
 end
 
+function MF.PhaseTwo()
+	if MF.Phase == 1 then
+		MF.PhaseObj.Objectives:Remove()
+		MF.PhaseObj:SetPhase("2")
+		MF.PhaseObj.Objectives:AddDeath(MF.Cannon.Name, 6)
+		MF.Phase = 2
+	end
+end
+
+function MF.PhaseFinal()
+	if MF.Phase < 3 then
+		MF.PhaseObj.Objectives:Remove()
+		MF.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
+		MF.PhaseObj.Objectives:AddDeath(MF.Egg.Name, 3)
+		MF.Phase = 3
+	end
+end
+
 function MF:Death(UnitID)
-	if self.Maelforge.UnitID == UnitID then
-		self.Maelforge.Dead = true
-		return true
+	if self.Cannon.UnitList[UnitID] then
+		if self.Cannon.UnitList[UnitID].Dead == false then
+			self.CannonCount = self.CannonCount + 1
+			self.Cannon.UnitList[UnitID].Dead = true
+			if self.CannonCount == 6 then
+				self.PhaseFinal()
+			end
+		end
 	end
 	return false
 end
 
-function MF:UnitHPCheck(unitDetails, unitID)	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if unitDetails.name == self.Maelforge.Name then
-				if not self.EncounterRunning then
-					self.EncounterRunning = true
-					self.StartTime = Inspect.Time.Real()
-					self.HeldTime = self.StartTime
-					self.TimeElapsed = 0
-					self.Maelforge.Dead = false
-					self.Maelforge.Casting = false
-					self.Maelforge.CastBar:Create(unitID)
-					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase("Single")
-					self.PhaseObj.Objectives:AddPercent(self.Maelforge.Name, 0, 100)
-					self.Phase = 1
+function MF:UnitHPCheck(uDetails, unitID)	
+	if uDetails and unitID then
+		if not uDetails.player then
+			local BossObj = self.Bosses[uDetails.name]
+			if BossObj then
+				if self.BossObj == self.Maelforge then
+					if not self.EncounterRunning then
+						self.EncounterRunning = true
+						self.StartTime = Inspect.Time.Real()
+						self.HeldTime = self.StartTime
+						self.TimeElapsed = 0
+						self.Maelforge.Dead = false
+						self.Maelforge.Casting = false
+						self.Maelforge.CastBar:Create(unitID)
+						self.PhaseObj:Start(self.StartTime)
+						self.PhaseObj:SetPhase("1")
+						self.PhaseObj.Objectives:AddPercent(self.Maelforge.Name, 50, 100)
+						self.Phase = 1
+					end
+					self.Maelforge.UnitID = unitID
+					self.Maelforge.Available = true
+					return self.Maelforge
+				elseif BossObj.UnitList then
+					if not BossObj.UnitList[unitID] then
+						SubBossObj = {
+							Mod = MF,
+							Level = "??",
+							Name = uDetails.name,
+							Dead = false,
+							Casting = false,
+							UnitID = unitID,
+							Available = true,
+						}
+						BossObj.UnitList[unitID] = SubBossObj
+						if BossObj == self.Cannon then
+							if self.Phase == 1 then
+								self.PhaseTwo()
+								SubBossObj.CastBar = KBM.CastBar:Add(self, self.Cannon, false, true)
+								SubBossObj.CastBar:Create(unitID)
+							end
+						elseif BossObj == self.Egg then
+							if self.Phase < 3 then
+								self.PhaseFinal()
+							end
+						end
+					else
+						BossObj.UnitList[unitID].Available = true
+						BossObj.UnitList[unitID].UnitID = unitID
+					end
+					return BossObj.UnitList[unitID]
 				end
-				self.Maelforge.UnitID = unitID
-				self.Maelforge.Available = true
-				return self.Maelforge
 			end
 		end
 	end
@@ -179,10 +269,25 @@ end
 
 function MF:Reset()
 	self.EncounterRunning = false
-	self.Maelforge.Available = false
-	self.Maelforge.UnitID = nil
-	self.Maelforge.CastBar:Remove()
 	self.PhaseObj:End(Inspect.Time.Real())
+	self.Phase = 1
+	self.CannonCount = 0
+	for UnitID, BossObj in pairs(self.Cannon.UnitList) do
+		if BossObj.CastBar then
+			BossObj.CastBar:Remove()
+			BossObj.CastBar = nil
+		end
+	end
+	for BossName, BossObj in pairs(self.Bosses) do
+		BossObj.Available = false
+		BossObj.UnitID = nil
+		if BossObj.CastBar then
+			BossObj.CastBar:Remove()
+		end
+		if BossObj.UnitList then
+			BossObj.UnitList = {}
+		end		
+	end
 end
 
 function MF:Timer()	
@@ -224,6 +329,14 @@ function MF:Start()
 	-- KBM.Defaults.AlertObj.Assign(self.Maelforge)
 	
 	-- Assign Alerts and Timers to Triggers
+	self.Maelforge.Triggers.PhaseTwo = KBM.Trigger:Create(50, "percent", self.Maelforge)
+	self.Maelforge.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
+	self.Maelforge.Triggers.PhaseTwoN = KBM.Trigger:Create(self.Lang.Notify.PhaseTwo[KBM.Lang], "notify", self.Maelforge)
+	self.Maelforge.Triggers.PhaseTwoN:AddPhase(self.PhaseTwo)
+	self.Maelforge.Triggers.PhaseFinal = KBM.Trigger:Create(self.Lang.Notify.PhaseFinal[KBM.Lang], "notify", self.Maelforge)
+	self.Maelforge.Triggers.PhaseFinal:AddPhase(self.PhaseFinal)
+	self.Maelforge.Triggers.Victory = KBM.Trigger:Create(self.Lang.Notify.Victory[KBM.Lang], "notify", self.Maelforge)
+	self.Maelforge.Triggers.Victory:SetVictory()
 	
 	self.Maelforge.CastBar = KBM.CastBar:Add(self, self.Maelforge)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

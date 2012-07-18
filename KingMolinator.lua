@@ -1677,6 +1677,10 @@ function KBM.Trigger:Init()
 			self.ModStart = Mod
 		end
 		
+		function TriggerObj:SetVictory()
+			self.Victory = true
+		end
+		
 		function TriggerObj:AddStop(Object, Player)
 			if type(Object) ~= "table" then
 				error("Expecting at least table: Got "..tostring(type(Object)))
@@ -1689,6 +1693,10 @@ function KBM.Trigger:Init()
 		function TriggerObj:Activate(Caster, Target, Data)
 			local Triggered = false
 			local current = Inspect.Time.Real()
+			if self.Victory == true then
+				KBM:Victory()
+				return
+			end
 			if self.Type == "damage" then
 				for i, Timer in ipairs(self.Timers) do
 					if Timer.Active then
@@ -3422,14 +3430,6 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 			KBM.Idle.Wait = false
 			if not KBM.BossID[UnitID] then
 				if uDetails then
-					if KBM.Player.Location then
-						local uLoc = string.upper(KBM.Player.Location)
-						if KBM.BossLocation[uLoc] then
-							if KBM.BossLocation[uLoc][uDetails.name] then
-								BossObj = KBM.BossLocation[uLoc][uDetails.name]
-							end
-						end
-					end
 					if not BossObj then
 						if uDetails.type then
 							if KBM.SubBossID[uDetails.type] then
@@ -3470,9 +3470,12 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 							if (BossObj.Ignore == nil and KBM.Encounter == false) or KBM.Encounter == true then
 								if KBM.Debug then
 									print("Boss found Checking: Tier = "..tostring(uDetails.tier).." "..tostring(uDetails.level).." ("..type(uDetails.level)..")")
-									print("Players location: "..Inspect.Unit.Detail(KBM.Player.UnitID).locationName)
+									print("Players location: "..tostring(KBM.Player.Location))
 									print("Unit Type: "..tostring(uDetails.type))
 									print("Unit Name: "..tostring(uDetails.name))
+									print("Unit X: "..tostring(uDetails.coordX))
+									print("Unit Y: "..tostring(uDetails.coordY))
+									print("Unit Z: "..tostring(uDetails.coordZ))
 									print("------------------------------------")
 								end
 								if uDetails.combat then
@@ -6762,6 +6765,59 @@ function KBM.GroupDeath(DeathObj)
 	end
 end
 
+function KBM.Victory()
+	print(KBM.Language.Encounter.Victory[KBM.Lang])
+	if KBM.EncounterMode == "normal" then
+		if KBM.ValidTime then
+			if KBM.CurrentMod.Settings.Records.Best == 0 or (KBM.TimeElapsed < KBM.CurrentMod.Settings.Records.Best) then
+				print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
+				if KBM.CurrentMod.Settings.Records.Best ~= 0 then
+					print(KBM.Language.Records.Previous[KBM.Lang]..KBM.ConvertTime(KBM.CurrentMod.Settings.Records.Best))
+					print(KBM.Language.Records.BeatRecord[KBM.Lang])
+				else
+					print(KBM.Language.Records.NewRecord[KBM.Lang])
+				end
+				KBM.CurrentMod.Settings.Records.Best = KBM.TimeElapsed
+				KBM.CurrentMod.Settings.Records.Date = tostring(os.date())
+				KBM.CurrentMod.Settings.Records.Kills = KBM.CurrentMod.Settings.Records.Kills + 1
+			else
+				print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
+				print(KBM.Language.Records.Current[KBM.Lang]..KBM.ConvertTime(KBM.CurrentMod.Settings.Records.Best))
+				KBM.CurrentMod.Settings.Records.Kills = KBM.CurrentMod.Settings.Records.Kills + 1
+			end
+		else
+			print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
+			print(KBM.Language.Records.Invalid[KBM.Lang])
+			KBM.CurrentMod.Settings.Records.Kills = KBM.CurrentMod.Settings.Records.Kills + 1
+		end
+	elseif KBM.EncounterMode == "chronicle" then
+		if KBM.ValidTime then
+			if KBM.CurrentMod.Settings.Records.Chronicle.Best == 0 or KBM.TimeElapsed < KBM.CurrentMod.Settings.Records.Chronicle.Best then
+				print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
+				if KBM.CurrentMod.Settings.Records.Chronicle.Best ~= 0 then
+					print(KBM.Language.Records.Previous[KBM.Lang]..KBM.ConvertTime(KBM.CurrentMod.Settings.Records.Chronicle.Best))
+					print(KBM.Language.Records.BeatChrRecord[KBM.Lang])
+				else
+					print(KBM.Language.Records.NewChrRecord[KBM.Lang])
+				end
+				KBM.CurrentMod.Settings.Records.Chronicle.Best = KBM.TimeElapsed
+				KBM.CurrentMod.Settings.Records.Chronicle.Date = tostring(os.date())
+				KBM.CurrentMod.Settings.Records.Chronicle.Kills = KBM.CurrentMod.Settings.Records.Chronicle.Kills + 1
+			else
+				print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))								
+				print(KBM.Language.Records.Current[KBM.Lang]..KBM.ConvertTime(KBM.CurrentMod.Settings.Records.Chronicle.Best))
+				KBM.CurrentMod.Settings.Records.Kills = KBM.CurrentMod.Settings.Records.Kills + 1
+			end
+		else
+			print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
+			print(KBM.Language.Records.Invalid[KBM.Lang])
+			KBM.CurrentMod.Settings.Records.Chronicle.Kills = KBM.CurrentMod.Settings.Records.Kills + 1
+		end
+	end
+	KBM_Reset()
+	KBM.Event.Encounter.End({Type = "victory"})
+end
+
 local function KBM_Death(UnitID)	
 	if KBM.Options.Enabled then	
 		KBM.Unit:Death(UnitID)
@@ -6775,56 +6831,7 @@ local function KBM_Death(UnitID)
 						end
 					end
 					if KBM.CurrentMod:Death(UnitID) then
-						print(KBM.Language.Encounter.Victory[KBM.Lang])
-						if KBM.EncounterMode == "normal" then
-							if KBM.ValidTime then
-								if KBM.CurrentMod.Settings.Records.Best == 0 or (KBM.TimeElapsed < KBM.CurrentMod.Settings.Records.Best) then
-									print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
-									if KBM.CurrentMod.Settings.Records.Best ~= 0 then
-										print(KBM.Language.Records.Previous[KBM.Lang]..KBM.ConvertTime(KBM.CurrentMod.Settings.Records.Best))
-										print(KBM.Language.Records.BeatRecord[KBM.Lang])
-									else
-										print(KBM.Language.Records.NewRecord[KBM.Lang])
-									end
-									KBM.CurrentMod.Settings.Records.Best = KBM.TimeElapsed
-									KBM.CurrentMod.Settings.Records.Date = tostring(os.date())
-									KBM.CurrentMod.Settings.Records.Kills = KBM.CurrentMod.Settings.Records.Kills + 1
-								else
-									print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
-									print(KBM.Language.Records.Current[KBM.Lang]..KBM.ConvertTime(KBM.CurrentMod.Settings.Records.Best))
-									KBM.CurrentMod.Settings.Records.Kills = KBM.CurrentMod.Settings.Records.Kills + 1
-								end
-							else
-								print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
-								print(KBM.Language.Records.Invalid[KBM.Lang])
-								KBM.CurrentMod.Settings.Records.Kills = KBM.CurrentMod.Settings.Records.Kills + 1
-							end
-						elseif KBM.EncounterMode == "chronicle" then
-							if KBM.ValidTime then
-								if KBM.CurrentMod.Settings.Records.Chronicle.Best == 0 or KBM.TimeElapsed < KBM.CurrentMod.Settings.Records.Chronicle.Best then
-									print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
-									if KBM.CurrentMod.Settings.Records.Chronicle.Best ~= 0 then
-										print(KBM.Language.Records.Previous[KBM.Lang]..KBM.ConvertTime(KBM.CurrentMod.Settings.Records.Chronicle.Best))
-										print(KBM.Language.Records.BeatChrRecord[KBM.Lang])
-									else
-										print(KBM.Language.Records.NewChrRecord[KBM.Lang])
-									end
-									KBM.CurrentMod.Settings.Records.Chronicle.Best = KBM.TimeElapsed
-									KBM.CurrentMod.Settings.Records.Chronicle.Date = tostring(os.date())
-									KBM.CurrentMod.Settings.Records.Chronicle.Kills = KBM.CurrentMod.Settings.Records.Chronicle.Kills + 1
-								else
-									print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))								
-									print(KBM.Language.Records.Current[KBM.Lang]..KBM.ConvertTime(KBM.CurrentMod.Settings.Records.Chronicle.Best))
-									KBM.CurrentMod.Settings.Records.Kills = KBM.CurrentMod.Settings.Records.Kills + 1
-								end
-							else
-								print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
-								print(KBM.Language.Records.Invalid[KBM.Lang])
-								KBM.CurrentMod.Settings.Records.Chronicle.Kills = KBM.CurrentMod.Settings.Records.Kills + 1
-							end
-						end
-						KBM_Reset()
-						KBM.Event.Encounter.End({Type = "victory"})
+						KBM:Victory()
 					end
 				end
 			end

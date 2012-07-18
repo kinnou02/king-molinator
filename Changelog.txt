@@ -4,7 +4,8 @@ System
 * Encounters
 ** Change: The encounter start specifics have now changed. Mods now have direct control over starting encounters.
 ** New: The Ignore List for untracked units is back, this should increase performance in many encounters.
-** New: Added Location name as a possible check condition when launching encounters.
+** New: New Condition added to each trigger type for possible victories. (Not only Unit deaths can trigger a victory condition)
+** New: Debug output now includes the X, Y, Z location of the trigger unit when combat started.
 * Textures
 ** New: New system added which engages after initial caching of Textures. This handles all Texture Loading during game play.
 
@@ -14,12 +15,16 @@ Unit Tracking
 Infernal Dawn
 * Maelforge - Dragon Eggs
 ** New: This encounter should now trigger.
+** New: Added trigger for Phase Two (Magma Cannons)
+** New: Added trigger for Final Phase (Dragon Eggs)
 * Maelforge - Final
 ** New: This encounter should now trigger.
 ** New: Added Personal Alert, Mechanic Spy and Timer for Hellfire.
 ** New: Added Personal Alert for Earthen Fissure.
 ** New: Added Personal Alert for Fiery Fissure.
 
+Translations
+* French updates
 ----
 v1.1.7
 

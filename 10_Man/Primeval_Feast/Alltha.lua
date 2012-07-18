@@ -48,8 +48,10 @@ KBM.RegisterMod(AR.ID, AR)
 AR.Lang.Unit = {}
 AR.Lang.Unit.Alltha = KBM.Language:Add(AR.Alltha.Name)
 AR.Lang.Unit.Alltha:SetGerman("Alltha die Schnitterin")
+AR.Lang.Unit.Alltha:SetFrench("Alltha la Faucheuse")
 AR.Lang.Unit.AllthaShort = KBM.Language:Add("Alltha")
 AR.Lang.Unit.AllthaShort:SetGerman("Alltha")
+AR.Lang.Unit.AllthaShort:SetFrench("Alltha")
 
 AR.Alltha.Name = AR.Lang.Unit.Alltha[KBM.Lang]
 AR.Alltha.NameShort = AR.Lang.Unit.AllthaShort[KBM.Lang]

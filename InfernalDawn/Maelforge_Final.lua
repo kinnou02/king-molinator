@@ -37,6 +37,7 @@ MF.Maelforge = {
 	Menu = {},
 	UnitID = nil,
 	TimeOut = 5,
+	RaidID = "U22D6DD797E7A5F87",
 	Castbar = nil,
 	TimersRef = {},
 	AlertsRef = {},
@@ -73,7 +74,7 @@ MF.Lang.Unit.Maelforge:SetKorean("마엘포지")
 
 -- Location Dictionary
 MF.Lang.Location = {}
-MF.Lang.Location.Spires = KBM.Language:Add("SPIRES OF SACRIFICE")
+MF.Lang.Location.Spires = KBM.Language:Add("Spires of Sacrifice")
 
 -- Debuff Dictionary
 MF.Lang.Debuff = {}
@@ -98,10 +99,8 @@ function MF:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Maelforge.Name] = self.Maelforge,
 	}
-	KBM.BossLocation[self.Maelforge.LocationReq] = {
-		[self.Maelforge.Name] = self.Maelforge,
-	}
-	
+	KBM.SubBossID[self.Maelforge.RaidID] = self.Maelforge
+
 end
 
 function MF:InitVars()

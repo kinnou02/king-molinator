@@ -75,7 +75,7 @@ function PI.CycleLoad()
 			Count = Count + 1
 			local Duration = Inspect.Time.Real() - TimeStart
 			local Average = Duration / Count
-			if (Average * (Count + 1)) > 0.05 then
+			if (Average * (Count + 1)) > 0.04 then
 				break
 			end
 		until Inspect.System.Watchdog() < 0.05 or PI.Queue.Count == 0

@@ -1,3 +1,10 @@
+v1.1.7
+
+Unit Tracking
+* Change: Offline Party/Raid members are now forced out of combat.
+* Change: Combat states are now monitored and updated more aggressively, but with less CPU overhead.
+
+----
 v1.1.6
 
 Unit Tracking

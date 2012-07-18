@@ -56,13 +56,17 @@ KBM.RegisterMod(AN.ID, AN)
 AN.Lang.Unit = {}
 AN.Lang.Unit.Atrophinius = KBM.Language:Add(AN.Atrophinius.Name)
 AN.Lang.Unit.Atrophinius:SetGerman("Großmeister Atrophinius")
+AN.Lang.Unit.Atrophinius:SetFrench("Grand maître Atrophinius")
 AN.Lang.Unit.AtrophiniusShort = KBM.Language:Add("Atrophinius")
 AN.Lang.Unit.AtrophiniusShort:SetGerman("Atrophinius")
+AN.Lang.Unit.AtrophiniusShort:SetFrench("Atrophinius")
 AN.Lang.Unit.Cask = KBM.Language:Add("Green Label Cask")
+AN.Lang.Unit.Cask:SetFrench("Tonneau de Label Vert")
 
 -- Buff Dictionary
 AN.Lang.Buff = {}
 AN.Lang.Buff.Rampage = KBM.Language:Add("Rampage")
+AN.Lang.Buff.Rampage:SetFrench("Déchaînement")
 
 AN.Atrophinius.Name = AN.Lang.Unit.Atrophinius[KBM.Lang]
 AN.Atrophinius.NameShort = AN.Lang.Unit.AtrophiniusShort[KBM.Lang]

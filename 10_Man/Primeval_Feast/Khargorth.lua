@@ -48,8 +48,10 @@ KBM.RegisterMod(SK.ID, SK)
 SK.Lang.Unit = {}
 SK.Lang.Unit.Khargroth = KBM.Language:Add(SK.Khargroth.Name)
 SK.Lang.Unit.Khargroth:SetGerman("Schwarmherr Khargroth")
+SK.Lang.Unit.Khargroth:SetFrench("Seigneur de l'Essaim Khargroth")
 SK.Lang.Unit.KhargrothShort = KBM.Language:Add("Khargroth")
 SK.Lang.Unit.KhargrothShort:SetGerman("Khargroth")
+SK.Lang.Unit.KhargrothShort:SetFrench("Khargroth")
 
 SK.Khargroth.Name = SK.Lang.Unit.Khargroth[KBM.Lang]
 SK.Khargroth.NameShort = SK.Lang.Unit.KhargrothShort[KBM.Lang]
