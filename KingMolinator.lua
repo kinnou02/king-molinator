@@ -891,6 +891,7 @@ KBM.Boss = {
 	RaidRift = {},
 	World = {},
 }
+
 function KBM.Boss.Dungeon:AddBoss(BossObj)
 	local BossID = nil
 	if BossObj.Mod.InstanceObj.Type == "Expert" then

@@ -514,7 +514,7 @@ local function SRM_Offline(data)
 		if SRM_Units[UID] then
 			SRM_Units[UID].Offline = Value
 			if Value == true then
-				SRM_Combat({[self.UnitID] = false})
+				SRM_Combat({[SRM_Units[UID].UnitID] = false})
 			end
 			SRM_Group.Offline(UID, Value)
 		end
