@@ -765,11 +765,16 @@ function KBM.InitOptions()
 	KBM.MainWin:SetWidth(820)
 	KBM.MainWin:SetHeight(580)
 	KBM.MainWin:SetTitle(KBM.Language.Options.Title[KBM.Lang])
-				
-	if not KBM.Options.Frame.x then
-		KBM.MainWin:SetPoint("CENTER", UIParent, "CENTER")
-	else
-		KBM.MainWin:SetPoint("TOPLEFT", UIParent, "TOPLEFT", KBM.Options.Frame.x, KBM.Options.Frame.y)
+	KBM.MainWin.Silent = false
+	
+	function KBM.MainWin:ApplySettings()
+		self:ClearPoint("CENTER")
+		self:ClearPoint("TOPLEFT")
+		if not KBM.Options.Frame.x then
+			self:SetPoint("CENTER", UIParent, "CENTER")
+		else
+			self:SetPoint("TOPLEFT", UIParent, "TOPLEFT", KBM.Options.Frame.x, KBM.Options.Frame.y)
+		end
 	end
 	
 	KBM.MainWin.Border = KBM.MainWin:GetBorder()
@@ -2037,7 +2042,9 @@ function KBM.InitOptions()
 							if self.Header then
 								if self.Header.Hook then
 									self.Header.Checked = self:GetChecked()
-									self.Header:Hook(self.Header.Checked)					
+									if not KBM.Header.Silent then
+										self.Header:Hook(self.Header.Checked)					
+									end
 									self.Header:EnableChildren(self:GetChecked())
 								end
 							end							
@@ -2175,20 +2182,22 @@ function KBM.InitOptions()
 							self:SubDisplay()
 						end
 						
-						function self.GUI.Check.Event:CheckboxChange()							
-							if self.Child then
-								if self.Child.Hook then
-									self.Child.Checked = self:GetChecked()
-									self.Child:Hook(self.Child.Checked)
-									if self.Child.Controller then
-										if self.Child.Controller.GUI then
-											self.Child.Controller.GUI.Check:SetChecked(self:GetChecked())
-										else
-											self.Child.Controller.Checked = self:GetChecked()
+						function self.GUI.Check.Event:CheckboxChange()
+							if not KBM.MainWin.Silent then
+								if self.Child then
+									if self.Child.Hook then
+										self.Child.Checked = self:GetChecked()
+										self.Child:Hook(self.Child.Checked)
+										if self.Child.Controller then
+											if self.Child.Controller.GUI then
+												self.Child.Controller.GUI.Check:SetChecked(self:GetChecked())
+											else
+												self.Child.Controller.Checked = self:GetChecked()
+											end
 										end
 									end
 								end
-							end							
+							end
 						end
 						
 						function self.GUI.Frame.Event:MouseIn()
@@ -3344,9 +3353,11 @@ function KBM.InitOptions()
 			end
 		end
 		function Child.Check.Event:CheckboxChange()
-			if self.Child.Enabled then
-				if self.Hook then
-					self:Hook(self:GetChecked())
+			if not KBM.MainWin.Silent then
+				if self.Child.Enabled then
+					if self.Hook then
+						self:Hook(self:GetChecked())
+					end
 				end
 			end
 		end
@@ -3452,8 +3463,10 @@ function KBM.InitOptions()
 				HeaderObj.GUI.Check.Callback = Callback
 				function HeaderObj.GUI.Check.Event:CheckboxChange()
 					if self.Header.Loaded then
-						if self.Callback then
-							self:Callback(self:GetChecked())
+						if not KBM.MainWin.Silent then
+							if self.Callback then
+								self:Callback(self:GetChecked())
+							end
 						end
 						if self:GetChecked() then
 							self.Header:EnableChildren()
@@ -3500,18 +3513,20 @@ function KBM.InitOptions()
 				CheckObj.GUI.Frame:SetHeight(CheckObj.GUI.Text:GetHeight())
 				table.insert(self.Children, CheckObj)
 				function CheckObj.GUI.Check.Event:CheckboxChange()
-					if self.Base.Loaded then
-						local bool = self:GetChecked()
-						if self.Callback then
-							if self.SliderObj then
-								self:Callback(bool, CheckObj)
-								if bool then
-									self.SliderObj:Enable()
+					if not KBM.MainWin.Silent then
+						if self.Base.Loaded then
+							local bool = self:GetChecked()
+							if self.Callback then
+								if self.SliderObj then
+									self:Callback(bool, CheckObj)
+									if bool then
+										self.SliderObj:Enable()
+									else
+										self.SliderObj:Disable()
+									end
 								else
-									self.SliderObj:Disable()
+									self:Callback(bool)
 								end
-							else
-								self:Callback(bool)
 							end
 						end
 					end
@@ -3584,5 +3599,5 @@ function KBM.InitOptions()
 		Header:AddChildSize(Child)
 		return Child
 	end
-			
+	KBM.MainWin:ApplySettings()
 end

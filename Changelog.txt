@@ -1,5 +1,11 @@
 ﻿v1.1.8
 
+Commands
+* New: /kbmdefault will now reset the position of both the Menu Button and Menu Window to central.
+* New: The /kbmdefault command will also enable the Menu Button as visible and unlocked for positioning (Right Mouse Drag).
+* Note: The /kbmdefault command will eventually be expanded upon to accept arguments, such as All, Button, Window, Timers, Alerts etc...
+* Note: The Menu Window itself will soon gain "Default" and "Default All" buttons in various areas to compliment the new /kbmdefault command.
+
 System
 * Encounters
 ** Change: The encounter start specifics have now changed. Mods now have direct control over starting encounters.

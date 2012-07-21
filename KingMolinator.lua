@@ -660,6 +660,16 @@ function KBM.Defaults.Menu(ID)
 
 end
 
+function KBM.Defaults.Button()
+	local ButtonObj = {
+		x = false,
+		y = false,
+		Unlocked = true,
+		Visible = true,
+	}
+	return ButtonObj
+end
+
 local function KBM_DefineVars(AddonID)
 	if AddonID == "KingMolinator" then
 		KBM.Options = {
@@ -670,20 +680,6 @@ local function KBM_DefineVars(AddonID)
 			Enabled = true,
 			Debug = false,
 			Menu = {},
-			-- Watchdog = {
-				-- Buffs = {
-					-- sCount = 0,
-					-- Sessions = {},
-				-- },
-				-- Avail = {
-					-- sCount = 0,
-					-- Sessions = {},
-				-- },
-				-- Main = {
-					-- sCount = 0,
-					-- Sessions = {},
-				-- },
-			-- },
 			CPU = {
 				Enabled = false,
 				x = false,
@@ -697,12 +693,7 @@ local function KBM_DefineVars(AddonID)
 				x = false,
 				y = false,
 			},
-			Button = {
-				x = false,
-				y = false,
-				Unlocked = true,
-				Visible = true,
-			},
+			Button = KBM.Defaults.Button(),
 			Alerts = KBM.Defaults.Alerts(),
 			EncTimer = KBM.Defaults.EncTimer(),
 			PhaseMon = KBM.Defaults.PhaseMon(),
@@ -1901,49 +1892,53 @@ end
 function KBM.Button:Init()
 	KBM.Button.Texture = UI.CreateFrame("Texture", "Button Texture", KBM.Context)
 	KBM.LoadTexture(KBM.Button.Texture, "KingMolinator", "Media/Options_Button.png")
-	if not KBM.Options.Button.x then
-		KBM.Button.Texture:SetPoint("CENTER", UIParent, "CENTER")
-	else
-		KBM.Button.Texture:SetPoint("TOPLEFT", UIParent, "TOPLEFT", KBM.Options.Button.x, KBM.Options.Button.y)
-	end
-	KBM.Button.Texture:SetLayer(5)
 	
-	function KBM.Button:UpdateMove(uType)
+	function self:ApplySettings()
+		self.Texture:ClearPoint("CENTER")
+		self.Texture:ClearPoint("TOPLEFT")
+		if not KBM.Options.Button.x then
+			self.Texture:SetPoint("CENTER", UIParent, "CENTER")
+		else
+			self.Texture:SetPoint("TOPLEFT", UIParent, "TOPLEFT", KBM.Options.Button.x, KBM.Options.Button.y)
+		end
+		self.Texture:SetLayer(5)
+		self.Drag:SetVisible(KBM.Options.Button.Unlocked)
+		self.Texture:SetVisible(KBM.Options.Button.Visible)
+	end
+	
+	function self:UpdateMove(uType)
 		if uType == "end" then
 			KBM.Options.Button.x = self.Texture:GetLeft()
 			KBM.Options.Button.y = self.Texture:GetTop()
 		end	
 	end
-	function KBM.Button.Texture.Event.MouseIn()
+	function self.Texture.Event.MouseIn()
 		KBM.LoadTexture(KBM.Button.Texture, "KingMolinator", "Media/Options_Button_Over.png")
 	end
-	function KBM.Button.Texture.Event.MouseOut()
+	function self.Texture.Event.MouseOut()
 		KBM.LoadTexture(KBM.Button.Texture, "KingMolinator", "Media/Options_Button.png")
 	end
-	function KBM.Button.Texture.Event.LeftDown()
+	function self.Texture.Event.LeftDown()
 		KBM.LoadTexture(KBM.Button.Texture, "KingMolinator", "Media/Options_Button_Down.png")
 	end
-	function KBM.Button.Texture.Event.LeftUp()
+	function self.Texture.Event.LeftUp()
 		KBM.LoadTexture(KBM.Button.Texture, "KingMolinator", "Media/Options_Button_Over.png")
 	end
-	function KBM.Button.Texture.Event.LeftClick()
+	function self.Texture.Event.LeftClick()
 		KBM_Options()
 	end
 			
-	KBM.Button.Drag = KBM.AttachDragFrame(KBM.Button.Texture, function (uType) self:UpdateMove(uType) end, "Button Drag", 6)
-	KBM.Button.Drag.Event.RightDown = KBM.Button.Drag.Event.LeftDown
-	KBM.Button.Drag.Event.RightUp = KBM.Button.Drag.Event.LeftUp
-	KBM.Button.Drag.Event.LeftDown = nil
-	KBM.Button.Drag.Event.LeftUp = nil
-	KBM.Button.Drag.Event.MouseIn = KBM.Button.Texture.Event.MouseIn
-	KBM.Button.Drag.Event.MouseOut = KBM.Button.Texture.Event.MouseOut
-	KBM.Button.Drag:SetMouseMasking("limited")
-	if not KBM.Options.Button.Unlocked then
-		KBM.Button.Drag:SetVisible(false)
-	end
-	if not KBM.Options.Button.Visible then
-		KBM.Button.Texture:SetVisible(false)
-	end
+	self.Drag = KBM.AttachDragFrame(self.Texture, function (uType) self:UpdateMove(uType) end, "Button Drag", 6)
+	self.Drag.Event.RightDown = self.Drag.Event.LeftDown
+	self.Drag.Event.RightUp = self.Drag.Event.LeftUp
+	self.Drag.Event.LeftDown = nil
+	self.Drag.Event.LeftUp = nil
+	self.Drag.Event.MouseIn = self.Texture.Event.MouseIn
+	self.Drag.Event.MouseOut = self.Texture.Event.MouseOut
+	self.Drag:SetMouseMasking("limited")
+	
+	self:ApplySettings()
+	
 end
 
 function KBM.MechSpy:Pull()
@@ -7978,6 +7973,28 @@ function KBM.InitVars()
 	KBM.InitMenus()
 end
 
+KBM.SetDefault = {}
+function KBM.SetDefault.Button()
+	KBM.Options.Button = KBM.Defaults.Button()
+	KBM.Options.Frame.x = false
+	KBM.Options.Frame.y = false
+	KBM.Button:ApplySettings()
+	KBM.MainWin:ApplySettings()
+	KBM.QueuePage = KBM.MenuOptions.Main.MenuItem
+end
+
+function KBM.SlashDefault(Args)
+	-- Will eventually have different options that will link to default buttons in UI
+	-- For now it'll reset the Options Menu Button to its default settings. (Central, Visible and Unlocked)
+	Args = string.upper(Args)
+	if Args == "BUTTON" then
+	
+	else
+	
+	end
+	KBM.SetDefault.Button()
+end
+
 function KBM.InitMenus()
 	local Header = KBM.MainWin.Menu:CreateHeader(KBM.Language.Menu.Global[KBM.Lang], nil, nil, nil, "Main")
 	KBM.MenuOptions.Main.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.Settings[KBM.Lang], KBM.MenuOptions.Main, nil, Header)
@@ -8094,7 +8111,8 @@ function KBM.InitEvents()
 	--table.insert(Command.Slash.Register("kbmwdavail"), {function (...) KBM.Watchdog.Display("Avail", ...) end, "KingMolinator", "Watchdog Tracking: Unit Available"})
 	--table.insert(Command.Slash.Register("kbmwdmain"), {function (...) KBM.Watchdog.Display("Main", ...) end, "KingMolinator", "Watchdog Tracking: System Update Begin"})
 	table.insert(Command.Slash.Register("kbmon"), {function() KBM.StateSwitch(true) end, "KingMolinator", "KBM On"})
-	table.insert(Command.Slash.Register("kbmoff"), {function() KBM.StateSwitch(false) end, "KingMolinator", "KBM Off"})	
+	table.insert(Command.Slash.Register("kbmoff"), {function() KBM.StateSwitch(false) end, "KingMolinator", "KBM Off"})
+	table.insert(Command.Slash.Register("kbmdefault"), {KBM.SlashDefault, "KingMolinator", "Default settings handler"})
 end
 
 local function KBM_WaitReady(unitID, uDetails)
