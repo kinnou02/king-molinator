@@ -19,7 +19,7 @@ local SK = {
 	Enabled = true,
 	Instance = PF.Name,
 	Lang = {},
-	--Enrage = 5 * 60,
+	Enrage = 5.5 * 60,
 	ID = "PF_Khargroth",
 	Object = "SK",
 }
@@ -32,13 +32,22 @@ SK.Khargroth = {
 	NameShort = "Khargroth",
 	Menu = {},
 	Dead = false,
-	-- AlertsRef = {},
-	-- TimersRef = {},
+	AlertsRef = {},
+	TimersRef = {},
 	Available = false,
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
+		TimersRef = {
+			Enabled = true,
+			Spray = KBM.Defaults.TimerObj.Create("dark_green")
+		},
+		AlertsRef = {
+			Enabled = true,
+			Acid = KBM.Defaults.AlertObj.Create("purple"),
+			Spray = KBM.Defaults.AlertObj.Create("dark_green"),
+		},
 	},
 }
 
@@ -52,6 +61,17 @@ SK.Lang.Unit.Khargroth:SetFrench("Seigneur de l'Essaim Khargroth")
 SK.Lang.Unit.KhargrothShort = KBM.Language:Add("Khargroth")
 SK.Lang.Unit.KhargrothShort:SetGerman("Khargroth")
 SK.Lang.Unit.KhargrothShort:SetFrench("Khargroth")
+
+-- Ability Dictionary
+SK.Lang.Ability = {}
+SK.Lang.Ability.Spray = KBM.Language:Add("Poison Spray")
+
+-- Notify Dictionary
+SK.Lang.Notify = {}
+
+-- Debuff Dictionary
+SK.Lang.Debuff = {}
+SK.Lang.Debuff.Acid = KBM.Language:Add("Acidic Vapors")
 
 SK.Khargroth.Name = SK.Lang.Unit.Khargroth[KBM.Lang]
 SK.Khargroth.NameShort = SK.Lang.Unit.KhargrothShort[KBM.Lang]
@@ -71,8 +91,8 @@ function SK:InitVars()
 		CastBar = self.Khargroth.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
-		-- AlertsRef = self.Khargroth.Settings.AlertsRef,
-		-- TimersRef = self.Khargroth.Settings.TimersRef,
+		AlertsRef = self.Khargroth.Settings.AlertsRef,
+		TimersRef = self.Khargroth.Settings.TimersRef,
 	}
 	KBMPFSK_Settings = self.Settings
 	chKBMPFSK_Settings = self.Settings
@@ -200,10 +220,20 @@ end
 
 function SK:Start()
 	-- Create Timers
+	self.Khargroth.TimersRef.Spray = KBM.MechTimer:Add(self.Lang.Ability.Spray[KBM.Lang], 11)
+	KBM.Defaults.TimerObj.Assign(self.Khargroth)
 
 	-- Create Alerts
+	self.Khargroth.AlertsRef.Acid = KBM.Alert:Create(self.Lang.Debuff.Acid[KBM.Lang], nil, false, true, "purple")
+	self.Khargroth.AlertsRef.Spray = KBM.Alert:Create(self.Lang.Ability.Spray[KBM.Lang], nil, false, true, "dark_green")
+	KBM.Defaults.AlertObj.Assign(self.Khargroth)
 	
 	-- Assign Alerts and Timers to Triggers
+	self.Khargroth.Triggers.Acid = KBM.Trigger:Create(self.Lang.Debuff.Acid[KBM.Lang], "playerBuff", self.Khargroth)
+	self.Khargroth.Triggers.Acid:AddAlert(self.Khargroth.AlertsRef.Acid, true)
+	self.Khargroth.Triggers.Spray = KBM.Trigger:Create(self.Lang.Ability.Spray[KBM.Lang], "cast", self.Khargroth)
+	self.Khargroth.Triggers.Spray:AddTimer(self.Khargroth.TimersRef.Spray)
+	self.Khargroth.Triggers.Spray:AddAlert(self.Khargroth.AlertsRef.Spray)
 	
 	self.Khargroth.CastBar = KBM.CastBar:Add(self, self.Khargroth, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

@@ -29,6 +29,12 @@ Infernal Dawn
 ** New: Added Personal Alert for Earthen Fissure.
 ** New: Added Personal Alert for Fiery Fissure.
 
+Primeval Feast
+* Swarmlord Khargroth
+** New: Added Enrage Timer.
+** New: Added personal alert for Acidic Vapors duration with countdown.
+** New: Added Minimum CD timer for Poison Spray
+
 Translations
 * French updates
 ----
