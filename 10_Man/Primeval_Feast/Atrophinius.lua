@@ -34,6 +34,7 @@ AN.Atrophinius = {
 	Dead = false,
 	AlertsRef = {},
 	TimersRef = {},
+	MechRef = {},
 	Available = false,
 	UnitID = nil,
 	Triggers = {},
@@ -41,11 +42,16 @@ AN.Atrophinius = {
 		CastBar = KBM.Defaults.CastBar(),
 		AlertsRef = {
 			Enabled = true,
-			Rampage = KBM.Defaults.AlertObj.Create("red")
+			Rampage = KBM.Defaults.AlertObj.Create("red"),
+			Anguish = KBM.Defaults.AlertObj.Create("purple"),
 		},
 		TimersRef = {
 			Enabled = true,
-			Rampage = KBM.Defaults.TimerObj.Create("red")
+			Rampage = KBM.Defaults.TimerObj.Create("red"),
+		},
+		MechRef = {
+			Enabled = true,
+			Anguish = KBM.Defaults.MechObj.Create("purple"),
 		},
 	},
 }
@@ -67,6 +73,10 @@ AN.Lang.Unit.Cask:SetFrench("Tonneau de Label Vert")
 AN.Lang.Buff = {}
 AN.Lang.Buff.Rampage = KBM.Language:Add("Rampage")
 AN.Lang.Buff.Rampage:SetFrench("Déchaînement")
+
+-- Ability Dictionary
+AN.Lang.Ability = {}
+AN.Lang.Ability.Anguish = KBM.Language:Add("Song of Anguish")
 
 AN.Atrophinius.Name = AN.Lang.Unit.Atrophinius[KBM.Lang]
 AN.Atrophinius.NameShort = AN.Lang.Unit.AtrophiniusShort[KBM.Lang]
@@ -104,9 +114,11 @@ function AN:InitVars()
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		MechTimer = KBM.Defaults.MechTimer(),
+		MechSpy = KBM.Defaults.MechSpy(),
 		Alerts = KBM.Defaults.Alerts(),
 		AlertsRef = self.Atrophinius.Settings.AlertsRef,
 		TimersRef = self.Atrophinius.Settings.TimersRef,
+		MechRef = self.Atrophinius.Settings.MechRef,
 	}
 	KBMPFAN_Settings = self.Settings
 	chKBMPFAN_Settings = self.Settings
@@ -274,7 +286,12 @@ function AN:Start()
 
 	-- Create Alerts
 	self.Atrophinius.AlertsRef.Rampage = KBM.Alert:Create(self.Lang.Buff.Rampage[KBM.Lang], nil, false, true, "red")
+	self.Atrophinius.AlertsRef.Anguish = KBM.Alert:Create(self.Lang.Ability.Anguish[KBM.Lang], nil, true, true, "purple")
 	KBM.Defaults.AlertObj.Assign(self.Atrophinius)
+	
+	-- Create Spies
+	self.Atrophinius.MechRef.Anguish = KBM.MechSpy:Add(self.Lang.Ability.Anguish[KBM.Lang], nil, "playerDebuff", self.Atrophinius)
+	KBM.Defaults.MechObj.Assign(self.Atrophinius)
 	
 	-- Assign Alerts and Timers to Triggers
 	self.Atrophinius.Triggers.PhaseTwo = KBM.Trigger:Create(75, "percent", self.Atrophinius)
@@ -282,6 +299,10 @@ function AN:Start()
 	self.Atrophinius.Triggers.Rampage = KBM.Trigger:Create(self.Lang.Buff.Rampage[KBM.Lang], "buff", self.Atrophinius)
 	self.Atrophinius.Triggers.Rampage:AddAlert(self.Atrophinius.AlertsRef.Rampage)
 	self.Atrophinius.Triggers.Rampage:AddTimer(self.Atrophinius.TimersRef.Rampage)
+	self.Atrophinius.Triggers.AnguishWarn = KBM.Trigger:Create(self.Lang.Ability.Anguish[KBM.Lang], "cast", self.Atrophinius)
+	self.Atrophinius.Triggers.AnguishWarn:AddAlert(self.Atrophinius.AlertsRef.Anguish)
+	self.Atrophinius.Triggers.Anguish = KBM.Trigger:Create(self.Lang.Ability.Anguish[KBM.Lang], "playerBuff", self.Atrophinius)
+	self.Atrophinius.Triggers.Anguish:AddSpy(self.Atrophinius.MechRef.Anguish)
 	
 	self.Atrophinius.CastBar = KBM.CastBar:Add(self, self.Atrophinius, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

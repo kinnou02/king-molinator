@@ -30,13 +30,24 @@ Infernal Dawn
 ** New: Added Personal Alert for Fiery Fissure.
 
 Primeval Feast
+* Grandmaster Atrophinius
+** New: Added Alert for Song of Anguish cast start.
+** New: Added Mechanic Spy for Song of Anguish
 * Swarmlord Khargroth
 ** New: Added Enrage Timer.
-** New: Added personal alert for Acidic Vapors duration with countdown.
-** New: Added Minimum CD timer for Poison Spray
+** New: Added Personal Alert for Acidic Vapors warning and duration with countdown.
+** New: Added Minimum CD Timer for Poison Spray.
+** New: Added Personal Alert for Chase mechanic.
+** New: Added Mechanic Spy for Chase mechanic.
+** New: Added Mechanic Spy for Acidic Vapors.
+** New: Added Minimum CD Timer for Acidic Vapors
+** New: Added Timer for vanish phase transition. (Experimental 30 second duration)
+** New: Added Phase Tracking for disaperance phases at 85%, 55% and 35% and associated stop triggers.
+** New: Added Phase Tracking for final phase at 30%.
 
 Translations
 * French updates
+* Russian updates and fixes.
 ----
 v1.1.7
 

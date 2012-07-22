@@ -34,6 +34,7 @@ SK.Khargroth = {
 	Dead = false,
 	AlertsRef = {},
 	TimersRef = {},
+	MechRef = {},
 	Available = false,
 	UnitID = nil,
 	Triggers = {},
@@ -41,12 +42,21 @@ SK.Khargroth = {
 		CastBar = KBM.Defaults.CastBar(),
 		TimersRef = {
 			Enabled = true,
-			Spray = KBM.Defaults.TimerObj.Create("dark_green")
+			Spray = KBM.Defaults.TimerObj.Create("dark_green"),
+			Return = KBM.Defaults.TimerObj.Create("blue"),
+			Acid = KBM.Defaults.TimerObj.Create("purple"),
 		},
 		AlertsRef = {
 			Enabled = true,
 			Acid = KBM.Defaults.AlertObj.Create("purple"),
+			AcidWarn = KBM.Defaults.AlertObj.Create("purple"),
 			Spray = KBM.Defaults.AlertObj.Create("dark_green"),
+			Crawl = KBM.Defaults.AlertObj.Create("red"),
+		},
+		MechRef = {
+			Enabled = true,
+			Crawl = KBM.Defaults.MechObj.Create("red"),
+			Acid = KBM.Defaults.MechObj.Create("purple"),
 		},
 	},
 }
@@ -68,10 +78,18 @@ SK.Lang.Ability.Spray = KBM.Language:Add("Poison Spray")
 
 -- Notify Dictionary
 SK.Lang.Notify = {}
+SK.Lang.Notify.Acid = KBM.Language:Add("Swarmlord Khargroth sends a swirling cloud of acid at (%a*)!")
+SK.Lang.Notify.Crawl = KBM.Language:Add("The Crawler Juggernaut chases after (%a*)!")
 
 -- Debuff Dictionary
 SK.Lang.Debuff = {}
 SK.Lang.Debuff.Acid = KBM.Language:Add("Acidic Vapors")
+
+-- Verbose Dictionary
+SK.Lang.Verbose = {}
+SK.Lang.Verbose.Return = KBM.Language:Add("Swarmlord Khargroth returns")
+SK.Lang.Verbose.Acid = KBM.Language:Add("Warning! Acidic Vapors")
+SK.Lang.Verbose.Crawl = KBM.Language:Add("Chased")
 
 SK.Khargroth.Name = SK.Lang.Unit.Khargroth[KBM.Lang]
 SK.Khargroth.NameShort = SK.Lang.Unit.KhargrothShort[KBM.Lang]
@@ -91,8 +109,10 @@ function SK:InitVars()
 		CastBar = self.Khargroth.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
+		MechSpy = KBM.Defaults.MechSpy(),
 		AlertsRef = self.Khargroth.Settings.AlertsRef,
 		TimersRef = self.Khargroth.Settings.TimersRef,
+		MechRef = self.Khargroth.Settings.MechRef,
 	}
 	KBMPFSK_Settings = self.Settings
 	chKBMPFSK_Settings = self.Settings
@@ -143,6 +163,49 @@ function SK:RemoveUnits(UnitID)
 	return false
 end
 
+function SK:StopTimers()
+	KBM.MechTimer:AddRemove(self.Khargroth.TimersRef.Spray)
+end
+
+function SK.PhaseTwo()
+	if SK.Phase == 1 then
+		SK.Phase = 2
+		SK.PhaseObj:SetPhase("2")
+		SK.PhaseObj.Objectives:Remove()
+		SK.PhaseObj.Objectives:AddPercent(SK.Khargroth.Name, 55, 85)
+		SK:StopTimers()
+	end
+end
+
+function SK.PhaseThree()
+	if SK.Phase < 3 then
+		SK.Phase = 3
+		SK.PhaseObj:SetPhase("3")
+		SK.PhaseObj.Objectives:Remove()
+		SK.PhaseObj.Objectives:AddPercent(SK.Khargroth.Name, 35, 55)
+		SK:StopTimers()
+	end
+end
+
+function SK.PhaseFour()
+	if SK.Phase < 4 then
+		SK.Phase = 4
+		SK.PhaseObj:SetPhase("4")
+		SK.PhaseObj.Objectives:Remove()
+		SK.PhaseObj.Objectives:AddPercent(SK.Khargroth.Name, 30, 35)
+		SK:StopTimers()
+	end
+end
+
+function SK.PhaseFinal()
+	if SK.Phase < 5 then
+		SK.Phase = 5
+		SK.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
+		SK.PhaseObj.Objectives:Remove()
+		SK.PhaseObj.Objectives:AddPercent(SK.Khargroth.Name, 0, 30)
+	end
+end
+
 function SK:Death(UnitID)
 	if self.Khargroth.UnitID == UnitID then
 		self.Khargroth.Dead = true
@@ -165,9 +228,9 @@ function SK:UnitHPCheck(uDetails, unitID)
 					self.Khargroth.Casting = false
 					self.Khargroth.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
-					self.PhaseObj.Objectives:AddPercent(self.Khargroth.Name, 0, 100)
-					self.Phase = 1					
+					self.PhaseObj:SetPhase("1")
+					self.PhaseObj.Objectives:AddPercent(self.Khargroth.Name, 85, 100)
+					self.Phase = 1
 				end
 				self.Khargroth.UnitID = unitID
 				self.Khargroth.Available = true
@@ -221,19 +284,48 @@ end
 function SK:Start()
 	-- Create Timers
 	self.Khargroth.TimersRef.Spray = KBM.MechTimer:Add(self.Lang.Ability.Spray[KBM.Lang], 11)
+	self.Khargroth.TimersRef.Return = KBM.MechTimer:Add(self.Lang.Verbose.Return[KBM.Lang], 30)
+	self.Khargroth.TimersRef.Acid = KBM.MechTimer:Add(self.Lang.Debuff.Acid[KBM.Lang], 45)
 	KBM.Defaults.TimerObj.Assign(self.Khargroth)
 
 	-- Create Alerts
 	self.Khargroth.AlertsRef.Acid = KBM.Alert:Create(self.Lang.Debuff.Acid[KBM.Lang], nil, false, true, "purple")
+	self.Khargroth.AlertsRef.Acid:Important()
+	self.Khargroth.AlertsRef.AcidWarn = KBM.Alert:Create(self.Lang.Verbose.Acid[KBM.Lang], 1.5, true, true, "purple")
+	self.Khargroth.AlertsRef.AcidWarn:Important()
 	self.Khargroth.AlertsRef.Spray = KBM.Alert:Create(self.Lang.Ability.Spray[KBM.Lang], nil, false, true, "dark_green")
+	self.Khargroth.AlertsRef.Crawl = KBM.Alert:Create(self.Lang.Verbose.Crawl[KBM.Lang], 6, false, true, "red")
 	KBM.Defaults.AlertObj.Assign(self.Khargroth)
+	
+	-- Create Spies
+	self.Khargroth.MechRef.Crawl = KBM.MechSpy:Add(self.Lang.Verbose.Crawl[KBM.Lang], 6, "mechanic", self.Khargroth)
+	self.Khargroth.MechRef.Acid = KBM.MechSpy:Add(self.Lang.Debuff.Acid[KBM.Lang], nil, "playerDebuff", self.Khargroth)
+	KBM.Defaults.MechObj.Assign(self.Khargroth)
 	
 	-- Assign Alerts and Timers to Triggers
 	self.Khargroth.Triggers.Acid = KBM.Trigger:Create(self.Lang.Debuff.Acid[KBM.Lang], "playerBuff", self.Khargroth)
 	self.Khargroth.Triggers.Acid:AddAlert(self.Khargroth.AlertsRef.Acid, true)
+	self.Khargroth.Triggers.Acid:AddSpy(self.Khargroth.MechRef.Acid)
+	self.Khargroth.Triggers.AcidWarn = KBM.Trigger:Create(self.Lang.Notify.Acid[KBM.Lang], "notify", self.Khargroth)
+	self.Khargroth.Triggers.AcidWarn:AddAlert(self.Khargroth.AlertsRef.AcidWarn, true)
+	self.Khargroth.Triggers.AcidWarn:AddTimer(self.Khargroth.TimersRef.Acid)
 	self.Khargroth.Triggers.Spray = KBM.Trigger:Create(self.Lang.Ability.Spray[KBM.Lang], "cast", self.Khargroth)
 	self.Khargroth.Triggers.Spray:AddTimer(self.Khargroth.TimersRef.Spray)
 	self.Khargroth.Triggers.Spray:AddAlert(self.Khargroth.AlertsRef.Spray)
+	self.Khargroth.Triggers.Crawl = KBM.Trigger:Create(self.Lang.Notify.Crawl[KBM.Lang], "notify", self.Khargroth)
+	self.Khargroth.Triggers.Crawl:AddSpy(self.Khargroth.MechRef.Crawl)
+	self.Khargroth.Triggers.Crawl:AddAlert(self.Khargroth.AlertsRef.Crawl, true)
+	self.Khargroth.Triggers.PhaseTwo = KBM.Trigger:Create(85, "percent", self.Khargroth)
+	self.Khargroth.Triggers.PhaseTwo:AddTimer(self.Khargroth.TimersRef.Return)
+	self.Khargroth.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
+	self.Khargroth.Triggers.PhaseThree = KBM.Trigger:Create(55, "percent", self.Khargroth)
+	self.Khargroth.Triggers.PhaseThree:AddTimer(self.Khargroth.TimersRef.Return)
+	self.Khargroth.Triggers.PhaseThree:AddPhase(self.PhaseThree)
+	self.Khargroth.Triggers.PhaseFour = KBM.Trigger:Create(35, "percent", self.Khargroth)
+	self.Khargroth.Triggers.PhaseFour:AddTimer(self.Khargroth.TimersRef.Return)
+	self.Khargroth.Triggers.PhaseFour:AddPhase(self.PhaseFour)
+	self.Khargroth.Triggers.PhaseFinal = KBM.Trigger:Create(30, "percent", self.Khargroth)
+	self.Khargroth.Triggers.PhaseFinal:AddPhase(self.PhaseFinal)
 	
 	self.Khargroth.CastBar = KBM.CastBar:Add(self, self.Khargroth, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
