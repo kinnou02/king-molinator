@@ -2042,7 +2042,7 @@ function KBM.InitOptions()
 							if self.Header then
 								if self.Header.Hook then
 									self.Header.Checked = self:GetChecked()
-									if not KBM.Header.Silent then
+									if not KBM.Silent then
 										self.Header:Hook(self.Header.Checked)					
 									end
 									self.Header:EnableChildren(self:GetChecked())
