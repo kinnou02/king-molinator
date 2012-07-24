@@ -34,11 +34,16 @@ AR.Alltha = {
 	Dead = false,
 	-- AlertsRef = {},
 	-- TimersRef = {},
+	MechRef = {},
 	Available = false,
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
+		MechRef = {
+			Enabled = true,
+			Spore = KBM.Defaults.MechObj.Create("purple"),
+		},
 	},
 }
 
@@ -52,6 +57,12 @@ AR.Lang.Unit.Alltha:SetFrench("Alltha la Faucheuse")
 AR.Lang.Unit.AllthaShort = KBM.Language:Add("Alltha")
 AR.Lang.Unit.AllthaShort:SetGerman("Alltha")
 AR.Lang.Unit.AllthaShort:SetFrench("Alltha")
+
+-- Debuff Dictionary
+AR.Lang.Debuff = {}
+AR.Lang.Debuff.Spore = KBM.Language:Add("Toxic Spore")
+AR.Lang.Debuff.Spore:SetFrench("Spore toxique")
+AR.Lang.Debuff.Spore:SetGerman("Giftige Spore")
 
 AR.Alltha.Name = AR.Lang.Unit.Alltha[KBM.Lang]
 AR.Alltha.NameShort = AR.Lang.Unit.AllthaShort[KBM.Lang]
@@ -71,8 +82,10 @@ function AR:InitVars()
 		CastBar = self.Alltha.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
+		MechSpy = KBM.Defaults.MechSpy(),
 		-- AlertsRef = self.Alltha.Settings.AlertsRef,
 		-- TimersRef = self.Alltha.Settings.TimersRef,
+		MechRef = self.Alltha.Settings.MechRef,
 	}
 	KBMPFAR_Settings = self.Settings
 	chKBMPFAR_Settings = self.Settings
@@ -203,7 +216,15 @@ function AR:Start()
 
 	-- Create Alerts
 	
+	-- Create Spies
+	self.Alltha.MechRef.Spore = KBM.MechSpy:Add(self.Lang.Debuff.Spore[KBM.Lang], nil, "playerDebuff", self.Alltha)
+	KBM.Defaults.MechObj.Assign(self.Alltha)
+	
 	-- Assign Alerts and Timers to Triggers
+	self.Alltha.Triggers.Spore = KBM.Trigger:Create(self.Lang.Debuff.Spore[KBM.Lang], "playerBuff", self.Alltha)
+	self.Alltha.Triggers.Spore:AddSpy(self.Alltha.MechRef.Spore)
+	self.Alltha.Triggers.SporeRem = KBM.Trigger:Create(self.Lang.Debuff.Spore[KBM.Lang], "playerBuffRemove", self.Alltha)
+	self.Alltha.Triggers.SporeRem:AddStop(self.Alltha.MechRef.Spore)
 	
 	self.Alltha.CastBar = KBM.CastBar:Add(self, self.Alltha, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

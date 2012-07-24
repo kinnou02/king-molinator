@@ -75,6 +75,8 @@ SK.Lang.Unit.KhargrothShort:SetFrench("Khargroth")
 -- Ability Dictionary
 SK.Lang.Ability = {}
 SK.Lang.Ability.Spray = KBM.Language:Add("Poison Spray")
+SK.Lang.Ability.Spray:SetGerman("Gift-Sprühnebel")
+SK.Lang.Ability.Spray:SetFrench("Atomiseur de Poison")
 
 -- Notify Dictionary
 SK.Lang.Notify = {}
@@ -84,11 +86,14 @@ SK.Lang.Notify.Crawl = KBM.Language:Add("The Crawler Juggernaut chases after (%a
 -- Debuff Dictionary
 SK.Lang.Debuff = {}
 SK.Lang.Debuff.Acid = KBM.Language:Add("Acidic Vapors")
+SK.Lang.Debuff.Acid:SetGerman("Säure-Dämpfe")
+SK.Lang.Debuff.Acid:SetFrench("Vapeurs acides")
 
 -- Verbose Dictionary
 SK.Lang.Verbose = {}
 SK.Lang.Verbose.Return = KBM.Language:Add("Swarmlord Khargroth returns")
 SK.Lang.Verbose.Acid = KBM.Language:Add("Warning! Acidic Vapors")
+SK.Lang.Verbose.Acid:SetGerman("Achtung! Säure-Dämpfe")
 SK.Lang.Verbose.Crawl = KBM.Language:Add("Chased")
 
 SK.Khargroth.Name = SK.Lang.Unit.Khargroth[KBM.Lang]

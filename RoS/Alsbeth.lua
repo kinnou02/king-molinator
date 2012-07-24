@@ -263,7 +263,7 @@ function AD:AddBosses(KBM_Boss)
 		[self.Magus.Name] = self.Magus,
 		[self.Pillar.Name] = self.Pillar,
 	}
-	KBM_Boss[self.Alsbeth.Name] = self.Alsbeth	
+	KBM.SubBossID[self.Alsbeth.RaidID] = self.Alsbeth
 	KBM.SubBoss[self.Harbinger.Name] = self.Harbinger
 	KBM.SubBoss[self.Thief.Name] = self.Thief
 	KBM.SubBoss[self.Magus.Name] = self.Magus

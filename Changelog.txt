@@ -44,10 +44,17 @@ Primeval Feast
 ** New: Added Timer for vanish phase transition. (Experimental 30 second duration)
 ** New: Added Phase Tracking for disaperance phases at 85%, 55% and 35% and associated stop triggers.
 ** New: Added Phase Tracking for final phase at 30%.
+* Alltha the Reaper
+** New: Added Mechanic Spy for Toxic Spore.
+
+River of Souls
+* Alsbeth the Discordant
+** Change: Alsbeth now uses her Raid ID for triggering this encounter.
 
 Translations
 * French updates
 * Russian updates and fixes.
+* German partial updates.
 ----
 v1.1.7
 

@@ -536,6 +536,7 @@ local function SRM_Death(data)
 					SRM_Units[data.target].Dead = true
 					LibSRM.Dead = LibSRM.Dead + 1
 				end
+				SRM_Combat({[data.target] = false})
 				data.specifier = SRM_Units[data.target].Specifier
 				SRM_Group.Combat.Death(data)
 				sent = true

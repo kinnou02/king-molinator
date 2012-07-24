@@ -68,15 +68,18 @@ AN.Lang.Unit.AtrophiniusShort:SetGerman("Atrophinius")
 AN.Lang.Unit.AtrophiniusShort:SetFrench("Atrophinius")
 AN.Lang.Unit.Cask = KBM.Language:Add("Green Label Cask")
 AN.Lang.Unit.Cask:SetFrench("Tonneau de Label Vert")
+AN.Lang.Unit.Cask:SetGerman("Fass mit Grünem Siegel")
 
 -- Buff Dictionary
 AN.Lang.Buff = {}
 AN.Lang.Buff.Rampage = KBM.Language:Add("Rampage")
 AN.Lang.Buff.Rampage:SetFrench("Déchaînement")
+AN.Lang.Buff.Rampage:SetGerman("Amoklauf")
 
 -- Ability Dictionary
 AN.Lang.Ability = {}
 AN.Lang.Ability.Anguish = KBM.Language:Add("Song of Anguish")
+AN.Lang.Ability.Anguish:SetGerman("Lied der Seelenqual")
 
 AN.Atrophinius.Name = AN.Lang.Unit.Atrophinius[KBM.Lang]
 AN.Atrophinius.NameShort = AN.Lang.Unit.AtrophiniusShort[KBM.Lang]
