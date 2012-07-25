@@ -120,6 +120,7 @@ LT.Lang.Ability.Resto = KBM.Language:Add("Wizened Restoration")
 LT.Lang.Ability.Resto:SetGerman("Verschrumpelte Wiederherstellung")
 LT.Lang.Ability.Resto:SetFrench("Restauration ratatinée")
 LT.Lang.Ability.LiqGold = KBM.Language:Add("Laethic Gold")
+LT.Lang.Ability.LiqGold:SetGerman("Laethic-Gold")
 
 -- Mechanic Dictionary
 LT.Lang.Mechanic = {}
@@ -131,6 +132,8 @@ LT.Lang.Mechanic.Adds:SetRussian("Адды")
 LT.Lang.Mechanic.PhaseTwoTrans = KBM.Language:Add("until Phase 2 begins!")
 LT.Lang.Mechanic.PhaseTwoTrans:SetFrench("jusqu'au démarrage de la phase 2 !")
 LT.Lang.Mechanic.PhaseTwoTrans:SetRussian("до фазы 2!")
+LT.Lang.Mechanic.PhaseTwoTrans:SetGerman("bis Phase 2 beginnt!")
+
 -- Buff Dictionary
 LT.Lang.Buff = {}
 LT.Lang.Buff.Wisdom = KBM.Language:Add("Stoneseers Wisdom")
@@ -141,9 +144,12 @@ LT.Lang.Buff.Wisdom:SetFrench("Sagesse de l'oracle de pierre")
 LT.Lang.Notify = {}
 LT.Lang.Notify.PhaseTwoTrans = KBM.Language:Add('Laethys roars, "How dare you scuff at my beautiful form?! You will pay for this..."')
 LT.Lang.Notify.PhaseTwoTrans:SetFrench('Laethys rugit : "Comment osez-vous vous en prendre à tant de beauté ? Vous me le paierez..."')
+LT.Lang.Notify.PhaseTwoTrans:SetGerman('Laethys brüllt: "Wie könnt Ihr es wagen, meiner wunderschönen Gestalt zu schaden. Dafür werdet Ihr büßen ..."')
 LT.Lang.Notify.PhaseTwoStart = KBM.Language:Add('Laethys says, "Behold your doom! Put down your weapons and I shall grant you a swift demise!"')
 LT.Lang.Notify.PhaseTwoStart:SetFrench('Laethys dit : "Nul ne peut échapper à son destin ! Rendez les armes et je vous accorderai un léger sursis."')
+LT.Lang.Notify.PhaseTwoStart:SetGerman('Laethys sagt: "Seht Eurem Untergang entgegen! Legt Eure Waffen nieder und ich gewähre Euch ein schnelles Ende ... vielleicht!"')
 LT.Lang.Notify.LiqGold = KBM.Language:Add("Laethys unleashes a wave of liquid gold.")
+LT.Lang.Notify.LiqGold:SetGerman("Laethys entfesselt eine Welle aus flüssigem Gold.")
 
 -- Menu Dictionary
 LT.Lang.Menu = {}
@@ -168,6 +174,7 @@ LT.Lang.Menu.Adds:SetGerman("Erster Add Spawn")
 LT.Lang.Menu.Adds:SetFrench("Premier Pop des Adds")
 LT.Lang.Menu.Adds:SetRussian("Первые Адды")
 LT.Lang.Menu.LiqGold = KBM.Language:Add("First Laethic Gold")
+LT.Lang.Menu.LiqGold:SetGerman("Erste Laethic-Gold")
 
 LT.Laethys.Name = LT.Lang.Unit.Laethys[KBM.Lang]
 LT.Laethys.NameShort = LT.Lang.Unit.Laethys[KBM.Lang]

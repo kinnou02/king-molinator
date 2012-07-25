@@ -81,7 +81,11 @@ SK.Lang.Ability.Spray:SetFrench("Atomiseur de Poison")
 -- Notify Dictionary
 SK.Lang.Notify = {}
 SK.Lang.Notify.Acid = KBM.Language:Add("Swarmlord Khargroth sends a swirling cloud of acid at (%a*)!")
+SK.Lang.Notify.Acid:SetGerman("Schwarmherr Khargroth schickt (%a*) eine wirbelnde Säurewolke entgegen!")
+SK.Lang.Notify.Acid:SetFrench("Seigneur de l'Essaim Khargroth envoie un nuage d'acide tourbillonnant sur (%a*) !")
 SK.Lang.Notify.Crawl = KBM.Language:Add("The Crawler Juggernaut chases after (%a*)!")
+SK.Lang.Notify.Crawl:SetGerman("Giganten-Kriecher jagt (%a*)!")
+SK.Lang.Notify.Crawl:SetFrench("Rampant mastodonte poursuit (%a*) !")
 
 -- Debuff Dictionary
 SK.Lang.Debuff = {}
@@ -92,9 +96,14 @@ SK.Lang.Debuff.Acid:SetFrench("Vapeurs acides")
 -- Verbose Dictionary
 SK.Lang.Verbose = {}
 SK.Lang.Verbose.Return = KBM.Language:Add("Swarmlord Khargroth returns")
+SK.Lang.Verbose.Return:SetGerman("Schwarmherr Khargroth kehrt zurück")
+SK.Lang.Verbose.Return:SetFrench("Seigneur de l'Essaim Khargroth reviens")
 SK.Lang.Verbose.Acid = KBM.Language:Add("Warning! Acidic Vapors")
 SK.Lang.Verbose.Acid:SetGerman("Achtung! Säure-Dämpfe")
+SK.Lang.Verbose.Acid:SetFrench("Avertissement! Vapeurs acides")
 SK.Lang.Verbose.Crawl = KBM.Language:Add("Chased")
+SK.Lang.Verbose.Crawl:SetGerman("Gejagt")
+SK.Lang.Verbose.Crawl:SetFrench("Chased")
 
 SK.Khargroth.Name = SK.Lang.Unit.Khargroth[KBM.Lang]
 SK.Khargroth.NameShort = SK.Lang.Unit.KhargrothShort[KBM.Lang]

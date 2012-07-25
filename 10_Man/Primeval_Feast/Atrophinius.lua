@@ -80,6 +80,7 @@ AN.Lang.Buff.Rampage:SetGerman("Amoklauf")
 AN.Lang.Ability = {}
 AN.Lang.Ability.Anguish = KBM.Language:Add("Song of Anguish")
 AN.Lang.Ability.Anguish:SetGerman("Lied der Seelenqual")
+AN.Lang.Ability.Anguish:SetFrench("Chant de l'angoisse")
 
 AN.Atrophinius.Name = AN.Lang.Unit.Atrophinius[KBM.Lang]
 AN.Atrophinius.NameShort = AN.Lang.Unit.AtrophiniusShort[KBM.Lang]
