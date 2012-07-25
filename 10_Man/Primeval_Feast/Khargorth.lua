@@ -103,7 +103,7 @@ SK.Lang.Verbose.Acid:SetGerman("Achtung! Säure-Dämpfe")
 SK.Lang.Verbose.Acid:SetFrench("Avertissement! Vapeurs acides")
 SK.Lang.Verbose.Crawl = KBM.Language:Add("Chased")
 SK.Lang.Verbose.Crawl:SetGerman("Gejagt")
-SK.Lang.Verbose.Crawl:SetFrench("Chased")
+SK.Lang.Verbose.Crawl:SetFrench("Poursuivi")
 
 SK.Khargroth.Name = SK.Lang.Unit.Khargroth[KBM.Lang]
 SK.Khargroth.NameShort = SK.Lang.Unit.KhargrothShort[KBM.Lang]

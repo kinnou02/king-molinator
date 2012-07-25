@@ -225,8 +225,8 @@ function MF:Start()
 	
 	-- Create Alerts
 	self.Maelforge.AlertsRef.Hell = KBM.Alert:Create(self.Lang.Debuff.Hell[KBM.Lang], nil, true, true, "purple")
-	self.Maelforge.AlertsRef.Fiery = KBM.Alert:Create(self.Lang.Debuff.Fiery[KBM.Lang], 18, false, true, "red")
-	self.Maelforge.AlertsRef.Earthen = KBM.Alert:Create(self.Lang.Debuff.Earthen[KBM.Lang], 18, false, true, "yellow")
+	self.Maelforge.AlertsRef.Fiery = KBM.Alert:Create(self.Lang.Debuff.Fiery[KBM.Lang], nil, false, true, "red")
+	self.Maelforge.AlertsRef.Earthen = KBM.Alert:Create(self.Lang.Debuff.Earthen[KBM.Lang], nil, false, true, "yellow")
 	KBM.Defaults.AlertObj.Assign(self.Maelforge)
 	
 	-- Assign Alerts and Timers to Triggers

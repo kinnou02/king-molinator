@@ -19,6 +19,9 @@ Unit Tracking
 * New: When removing units from the tracking system, they will also be removed from the Ignore List to prevent Memory leaking over time.
 
 Infernal Dawn
+* Ember Conclave
+** Fixed: Assigned Traitorous Blood Mechanic Spy remove action to the correct Trigger (Thanks to Ivnedar@Laethys)
+** Fixed: Corrected Type ID for Traitorous Blood. (This should now trigger as designed)
 * Maelforge - Dragon Eggs
 ** New: This encounter should now trigger.
 ** New: Added trigger for Phase Two (Magma Cannons)
