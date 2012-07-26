@@ -3223,7 +3223,7 @@ function KBM.InitOptions()
 					Settings.Attempts = Settings.Attempts + Adjust
 				end
 				if Settings.Wipes ~= (Settings.Attempts - Settings.Kills) then
-					Settings.Kills = (Settings.Attempts - Settings.Wipes)
+					Settings.Wipes = (Settings.Attempts - Settings.Kills)
 				end
 				self.Boss.Mod.MenuStore.Records.Attempts.Name = KBM.Language.Records.Attempts[KBM.Lang]..Settings.Attempts
 				self.Boss.Mod.MenuStore.Records.Kills.Name = KBM.Language.Records.Kills[KBM.Lang]..Settings.Kills

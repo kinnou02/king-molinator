@@ -387,8 +387,8 @@ function LT:Start()
  	self.Laethys.TimersRef.GoldFirst = KBM.MechTimer:Add(self.Lang.Ability.Gold[KBM.Lang],20)
 	self.Laethys.TimersRef.GoldFirst.MenuName = self.Lang.Menu.Gold[KBM.Lang]
  	self.Laethys.TimersRef.Gold = KBM.MechTimer:Add(self.Lang.Ability.Gold[KBM.Lang], 30)
- 	self.Laethys.TimersRef.AddsFirst = KBM.MechTimer:Add(self.Lang.Menu.Adds[KBM.Lang],34)
- 	self.Laethys.TimersRef.Adds = KBM.MechTimer:Add(self.Lang.Mechanic.Adds[KBM.Lang], 81)
+ 	self.Laethys.TimersRef.AddsFirst = KBM.MechTimer:Add(self.Lang.Menu.Adds[KBM.Lang], 34)
+ 	self.Laethys.TimersRef.Adds = KBM.MechTimer:Add(self.Lang.Mechanic.Adds[KBM.Lang], 90, true)
 	-- Phase Two
 	self.Laethys.TimersRef.PhaseTwoTrans = KBM.MechTimer:Add(self.Lang.Mechanic.PhaseTwoTrans[KBM.Lang], 40)
 	self.Laethys.TimersRef.LiqGoldFirst = KBM.MechTimer:Add(self.Lang.Menu.LiqGold[KBM.Lang], 70)
@@ -435,8 +435,8 @@ function LT:Start()
 	self.Laethys.Triggers.Adds = KBM.Trigger:Create(34, "time", self.Laethys)
 	self.Laethys.Triggers.Adds:AddTimer(self.Laethys.TimersRef.Adds)
 	
-	self.Laethys.Triggers.Adds2 = KBM.Trigger:Create(115, "time", self.Laethys)
-	self.Laethys.Triggers.Adds2:AddTimer(self.Laethys.TimersRef.Adds)
+	-- self.Laethys.Triggers.Adds2 = KBM.Trigger:Create(115, "time", self.Laethys)
+	-- self.Laethys.Triggers.Adds2:AddTimer(self.Laethys.TimersRef.Adds)
 	
 	self.Laethys.Triggers.Gold = KBM.Trigger:Create(self.Lang.Ability.Gold[KBM.Lang], "damage", self.Laethys)
 	self.Laethys.Triggers.Gold:AddTimer(self.Laethys.TimersRef.Gold)

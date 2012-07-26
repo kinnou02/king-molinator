@@ -92,6 +92,7 @@ SK.Lang.Debuff = {}
 SK.Lang.Debuff.Acid = KBM.Language:Add("Acidic Vapors")
 SK.Lang.Debuff.Acid:SetGerman("Säure-Dämpfe")
 SK.Lang.Debuff.Acid:SetFrench("Vapeurs acides")
+SK.Lang.Debuff.Venom = KBM.Language:Add("Lethargic Venom")
 
 -- Verbose Dictionary
 SK.Lang.Verbose = {}
@@ -244,6 +245,7 @@ function SK:UnitHPCheck(uDetails, unitID)
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase("1")
 					self.PhaseObj.Objectives:AddPercent(self.Khargroth.Name, 85, 100)
+					KBM.TankSwap:Start(self.Lang.Debuff.Venom[KBM.Lang], unitID)
 					self.Phase = 1
 				end
 				self.Khargroth.UnitID = unitID

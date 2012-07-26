@@ -108,6 +108,7 @@ IZ.Lang.Debuff.Curse:SetGerman("Einäschernder Fluch")
 IZ.Lang.Debuff.Curse:SetFrench("Malédiction d'incinération")
 IZ.Lang.Debuff.Curse:SetRussian("Испепеляющее проклятье")
 IZ.Lang.Debuff.Curse:SetKorean("소각 저주")
+IZ.Lang.Debuff.Wave = KBM.Language:Add("Flame Wave")
 IZ.Ituziel.Name = IZ.Lang.Unit.Ituziel[KBM.Lang]
 IZ.Ituziel.NameShort = IZ.Lang.Unit.Ituziel[KBM.Lang]
 IZ.Descript = IZ.Ituziel.Name
@@ -181,6 +182,15 @@ function IZ:RemoveUnits(UnitID)
 	return false
 end
 
+function IZ.PhaseTwo()
+	if IZ.Phase == 1 then
+		IZ.PhaseObj.Objectives:Remove()
+		IZ.PhaseObj.Objectives:AddPercent(IZ.Ituziel.Name, 0, 33)
+		IZ.Phase = 2
+		IZ.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
+	end
+end
+
 function IZ:Death(UnitID)
 	if self.Ituziel.UnitID == UnitID then
 		self.Ituziel.Dead = true
@@ -202,11 +212,15 @@ function IZ:UnitHPCheck(unitDetails, unitID)
 					self.Ituziel.Casting = false
 					self.Ituziel.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase("Single")
-					self.PhaseObj.Objectives:AddPercent(self.Ituziel.Name, 0, 100)
+					self.PhaseObj:SetPhase("1")
+					self.PhaseObj.Objectives:AddPercent(self.Ituziel.Name, 33, 100)
 					self.CurrentBrimstone = 12
 					KBM.MechTimer:AddStart(self.Ituziel.TimersRef.WaveFirst)
-					KBM.TankSwap:Start(self.Lang.Debuff.Curse[KBM.Lang], unitID)
+					local DebuffTable = {
+							[1] = self.Lang.Debuff.Curse[KBM.Lang],
+							[2] = self.Lang.Debuff.Wave[KBM.Lang],
+					}
+					KBM.TankSwap:Start(DebuffTable, unitID, 2)					
 					self.Phase = 1
 				end
 				self.Ituziel.UnitID = unitID

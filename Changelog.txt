@@ -20,9 +20,14 @@ Unit Tracking
 * New: When removing units from the tracking system, they will also be removed from the Ignore List to prevent Memory leaking over time.
 
 Infernal Dawn
+* Ituziel
+** New: Added Phase tracking.
+** New: Added a secondary Flame Wave debuff watch for Tank-Swap. (Know for sure if a tank is double-tapped by waves)
 * Ember Conclave
-** Fixed: Assigned Traitorous Blood Mechanic Spy remove action to the correct Trigger (Thanks to Ivnedar@Laethys)
+** Fixed: Assigned Traitorous Blood Mechanic Spy remove action to the correct Trigger. (Thanks to Ivnedar@Laethys)
 ** Fixed: Corrected Type ID for Traitorous Blood. (This should now trigger as designed)
+* Laethys
+** Change: Timer for Adds after the first has increased by 10 seconds.
 * Maelforge - Dragon Eggs
 ** New: This encounter should now trigger.
 ** New: Added trigger for Phase Two (Magma Cannons)
@@ -44,6 +49,7 @@ Primeval Feast
 ** New: Added Personal Alert for Chase mechanic.
 ** New: Added Mechanic Spy for Chase mechanic.
 ** New: Added Mechanic Spy for Acidic Vapors.
+** New: Added Tank-Swap for Lethargic Venom.
 ** New: Added Minimum CD Timer for Acidic Vapors
 ** New: Added Timer for vanish phase transition. (Experimental 30 second duration)
 ** New: Added Phase Tracking for disaperance phases at 85%, 55% and 35% and associated stop triggers.
