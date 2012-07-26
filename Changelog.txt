@@ -12,6 +12,7 @@ System
 ** New: The Ignore List for untracked units is back, this should increase performance in many encounters.
 ** New: New Condition added to each trigger type for possible victories. (Not only Unit deaths can trigger a victory condition)
 ** New: Debug output now includes the X, Y, Z location of the trigger unit when combat started.
+** Fixed: Added a new method to account for bosses with differing Type-ID's within the same encounter.
 * Textures
 ** New: New system added which engages after initial caching of Textures. This handles all Texture Loading during game play.
 

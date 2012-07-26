@@ -3426,28 +3426,26 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 			KBM.Idle.Wait = false
 			if not KBM.BossID[UnitID] then
 				if uDetails then
-					if not BossObj then
-						if uDetails.type then
-							if KBM.SubBossID[uDetails.type] then
-								BossObj = KBM.SubBossID[uDetails.type]
-							elseif KBM.Boss.MasterID[uDetails.type] then
-								BossObj = KBM.Boss.Dungeon.List[uDetails.name]
-							elseif KBM.Boss.ExpertID[uDetails.type] then
-								BossObj = KBM.Boss.Dungeon.List[uDetails.name]
-							end
+					if uDetails.type then
+						if KBM.SubBossID[uDetails.type] then
+							BossObj = KBM.SubBossID[uDetails.type]
+						elseif KBM.Boss.MasterID[uDetails.type] then
+							BossObj = KBM.Boss.Dungeon.List[uDetails.name]
+						elseif KBM.Boss.ExpertID[uDetails.type] then
+							BossObj = KBM.Boss.Dungeon.List[uDetails.name]
 						end
-						if not BossObj then
-							if KBM_Boss[uDetails.name] then
-								BossObj = KBM_Boss[uDetails.name]
-								if BossObj.IgnoreID == uDetails.type then
-									BossObj = nil
-									KBM.IgnoreList[UnitID] = true
-								end
-							elseif KBM.SubBoss[uDetails.name] then
-								BossObj = KBM.SubBoss[uDetails.name]
-							elseif KBM.Boss.Dungeon.List[uDetails.name] then
-								BossObj = KBM.Boss.Dungeon.List[uDetails.name]
+					end
+					if not BossObj then
+						if KBM_Boss[uDetails.name] then
+							BossObj = KBM_Boss[uDetails.name]
+							if BossObj.IgnoreID == uDetails.type then
+								BossObj = nil
+								KBM.IgnoreList[UnitID] = true
 							end
+						elseif KBM.SubBoss[uDetails.name] then
+							BossObj = KBM.SubBoss[uDetails.name]
+						elseif KBM.Boss.Dungeon.List[uDetails.name] then
+							BossObj = KBM.Boss.Dungeon.List[uDetails.name]
 						end
 					end
 					BossObj = KBM.MatchType(uDetails, BossObj)
@@ -3456,6 +3454,13 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 						if KBM.Encounter then
 							if BossObj.Mod.ID == KBM.CurrentMod.ID then
 								ModBossObj = KBM.CurrentMod:UnitHPCheck(uDetails, UnitID)
+							else
+								if KBM.CurrentMod.Bosses then
+									if KBM.CurrentMod.Bosses[uDetails.name] then
+										ModBossObj = KBM.CurrentMod:UnitHPCheck(uDetails, UnitID)
+										BossObj = KBM.CurrentMod.Bosses[uDetails.name]
+									end
+								end
 							end
 						else
 							if not BossObj.Ignore then
