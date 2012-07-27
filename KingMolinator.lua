@@ -2396,7 +2396,8 @@ function KBM.MechSpy:Add(Name, Duration, Type, BossObj)
 					Timer.GUI.Background:SetHeight(KBM.MechSpy.Anchor:GetHeight())
 					Timer.TimeStart = CurrentTime
 					if self.Static then
-						Timer.Remaining = 0
+						Duration = 0
+						Timer.Time = 0
 						Timer.Static = true
 						Timer.GUI.TimeBar:SetWidth(math.ceil(Timer.GUI.Background:GetWidth()))
 					else

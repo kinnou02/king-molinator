@@ -1,4 +1,14 @@
-﻿v1.1.8
+﻿v1.1.9
+
+Mechanic Spy
+* Fixed: Issue with new Static type timers attempting to initialize as nil rather than 0.
+
+Infernal Dawn
+* Ituziel
+** Fixed: Trigger actually added to switch Ituziel's Phase Monitor to final phase.
+
+----
+v1.1.8
 
 Commands
 * New: /kbmdefault will now reset the position of both the Menu Button and Menu Window to central.

@@ -48,10 +48,12 @@ v1.1.4
 ** Fixed: Several non-local local variables are now local.
 ** Removed: Redundant code from original engine.
 
+----
 v1.1.3
 * Engine Tuning
 ** Change: Function SRM_UnitAvailable is now down to a single loop iteration when checking for queued units.
 
+----
 v1.1.2
 * Player Ready
 ** Change: The .Player.Ready event will now only fire once the players name is available.
@@ -59,9 +61,12 @@ v1.1.2
 ** Fixed: New group members now correctly add to LibSRM.Dead
 ** Change: Adjusted how .combat state is registered for new group members.
 
+----
 v1.1.1
 * Directory Structure
 ** Change: Addons only require that SafesRaidManager be Embedded or be a dependency.
+
+----
 v1.1.0
 * Engine
 ** Various engine improvements and tweaks

@@ -275,6 +275,8 @@ function IZ:Start()
 	KBM.Defaults.AlertObj.Assign(self.Ituziel)
 	
 	-- Assign Alerts and Timers to Triggers
+	self.Ituziel.Triggers.PhaseTwo = KBM.Trigger:Create(33, "percent", self.Ituziel)
+	self.Ituziel.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
 	self.Ituziel.Triggers.Word = KBM.Trigger:Create(self.Lang.Ability.Word[KBM.Lang], "cast", self.Ituziel)
 	self.Ituziel.Triggers.Word:AddAlert(self.Ituziel.AlertsRef.Word)
 	self.Ituziel.Triggers.Word:AddTimer(self.Ituziel.TimersRef.Word)
