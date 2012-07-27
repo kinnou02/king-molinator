@@ -36,9 +36,9 @@ v1.1.4
 * Change: Now compatible with 1.8.
 * New: LibSRM initialization string now gives its Version number.
 * New: SRM will now maintain a Name List look-up table for quick name searches. See new command below.
-* New: Command - LibSRM.Group.NameSearch(UnitName) -- returns Specifier, UnitID if available or nil.
-* New: Event.SafesRaidManager.Group.Mode -- string("raid"/"party"). This is an educated guys on if you're in a raid or party.
-* New: Event.SafesRaidManager.Group.Offline -- Group member is now off-line/on-line (true/false)
+* New: Command - LibSRM.Group.NameSearch(UnitName) - returns Specifier, UnitID if available or nil.
+* New: Event.SafesRaidManager.Group.Mode - string("raid"/"party"). This is an educated guys on if you're in a raid or party.
+* New: Event.SafesRaidManager.Group.Offline - Group member is now off-line/on-line (true/false)
 * Change: The player ready event (Stall) will now trigger only once the player is actually available.
 * Change: SRM now replaces its existing event table entry with a new one, rather than deleting it.
 * Change: SRM no longer runs an infinite Time check loop while waiting for Player available status.
@@ -71,23 +71,23 @@ v1.1.0
 * Engine
 ** Various engine improvements and tweaks
 * Group Events
-** New: Event.SafesRaidManager.Group.Combat.Enter	-- Single Group member enters combat
-** New: Event.SafesRaidManager.Group.Combat.Leave	-- Single Group member leaves combat
-** New: Event.SafesRaidManager.Group.Combat.Start	-- Group now flagged as in combat
-** New: Event.SafesRaidManager.Group.Combat.End		-- Group now flagged as out of combat
-** New: Event.SafesRaidManager.Group.Combat.Damage	-- Group damage done
-** New: Event.SafesRaidManager.Group.Combat.Heal	-- Group healing done
-** New: Event.SafesRaidManager.Group.Combat.Death	-- Group member deaths
-** New: Event.SafesRaidManager.Group.Combat.Res		-- Group resurrects
+** New: Event.SafesRaidManager.Group.Combat.Enter	- Single Group member enters combat
+** New: Event.SafesRaidManager.Group.Combat.Leave	- Single Group member leaves combat
+** New: Event.SafesRaidManager.Group.Combat.Start	- Group now flagged as in combat
+** New: Event.SafesRaidManager.Group.Combat.End		- Group now flagged as out of combat
+** New: Event.SafesRaidManager.Group.Combat.Damage	- Group damage done
+** New: Event.SafesRaidManager.Group.Combat.Heal	- Group healing done
+** New: Event.SafesRaidManager.Group.Combat.Death	- Group member deaths
+** New: Event.SafesRaidManager.Group.Combat.Res		- Group resurrects
 * Player Events
-** New: Event.SafesRaidManager.Player.Combat.Enter	-- Player enters combat
-** New: Event.SafesRaidManager.Player.Combat.Leave	-- Player leaves combat
+** New: Event.SafesRaidManager.Player.Combat.Enter	- Player enters combat
+** New: Event.SafesRaidManager.Player.Combat.Leave	- Player leaves combat
 * System Events
-** New: Event.SafesRaidManager.Combat.Enter		-- Non-Raid/group unit enters combat
-** New: Event.SafesRaidManager.Combat.Leave		-- Non-Raid/group unit leaves combat
-** New: Event.SafesRaidManager.Combat.Death		-- Non-Raid/group unit deaths
-** New: Event.SafesRaidManager.Combat.Heal		-- Non-Raid/group unit Heals
-** New: Event.SafesRaidManager.Combat.Damage		-- Non-Raid/group unit damage
+** New: Event.SafesRaidManager.Combat.Enter		- Non-Raid/group unit enters combat
+** New: Event.SafesRaidManager.Combat.Leave		- Non-Raid/group unit leaves combat
+** New: Event.SafesRaidManager.Combat.Death		- Non-Raid/group unit deaths
+** New: Event.SafesRaidManager.Combat.Heal		- Non-Raid/group unit Heals
+** New: Event.SafesRaidManager.Combat.Damage		- Non-Raid/group unit damage
 ----
 v1.0.0
 * Status pushed to stable release.

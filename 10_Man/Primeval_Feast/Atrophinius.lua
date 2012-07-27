@@ -307,6 +307,8 @@ function AN:Start()
 	self.Atrophinius.Triggers.AnguishWarn:AddAlert(self.Atrophinius.AlertsRef.Anguish)
 	self.Atrophinius.Triggers.Anguish = KBM.Trigger:Create(self.Lang.Ability.Anguish[KBM.Lang], "playerBuff", self.Atrophinius)
 	self.Atrophinius.Triggers.Anguish:AddSpy(self.Atrophinius.MechRef.Anguish)
+	self.Atrophinius.Triggers.AnguishRem = KBM.Trigger:Create(self.Lang.Ability.Anguish[KBM.Lang], "playerBuffRemove", self.Atrophinius)
+	self.Atrophinius.Triggers.AnguishRem:AddStop(self.Atrophinius.MechRef.Anguish)
 	
 	self.Atrophinius.CastBar = KBM.CastBar:Add(self, self.Atrophinius, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

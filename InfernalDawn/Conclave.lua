@@ -94,6 +94,7 @@ EC.Lang.Unit.EreShort:SetFrench()
 EC.Lang.Unit.EreShort:SetGerman()
 EC.Lang.Unit.EreShort:SetKorean("에리두")
 EC.Lang.Unit.EreShort:SetRussian("Эриту")
+
 EC.Nahoth = {
 	Mod = EC,
 	Level = "??",
@@ -162,6 +163,7 @@ EC.Lang.Ability.Shard:SetFrench("Trait explosif")
 -- Ability Dictionary
 EC.Lang.Debuff = {}
 EC.Lang.Debuff.Hem = KBM.Language:Add("Profuse Hemorrhage")
+EC.Lang.Debuff.Hem:SetFrench("Hémorragie")
 EC.Lang.Debuff.Blood = KBM.Language:Add("Traitorous Blood")
 EC.Lang.Debuff.Blood:SetRussian("Предательская кровь")
 EC.Lang.Debuff.Blood:SetFrench("Sang de traître")
@@ -329,25 +331,26 @@ function EC:Death(UnitID)
 		else
 			self.HardMode = false
 		end
+		self.Szath.Dead = true
 		if self.Phase == 1 then
 			self.PhaseTwo()
 		else
 			self.PhaseFinal()
 		end
-		self.Szath.Dead = true
 	elseif self.Nahoth.UnitID == UnitID then
 		if self.Ereetu.Dead == false then
 			self.HardMode = true
 		else
 			self.HardMode = false
 		end
+		self.Nahoth.Dead = true
 		if self.Phase == 1 then
 			self.PhaseTwo()
 		else
 			self.PhaseFinal()
 		end
-		self.Nahoth.Dead = true
 	elseif self.Ereetu.UnitID == UnitID then
+		self.Ereetu.Dead = true
 		if self.Phase == 1 then
 			self.HardMode = false
 			self.PhaseTwo()
@@ -355,7 +358,6 @@ function EC:Death(UnitID)
 			self.HardMode = false
 			self.PhaseFinal()
 		end
-		self.Ereetu.Dead = true
 	end
 	if self.Szath.Dead == true then
 		if self.Nahoth.Dead == true then

@@ -93,6 +93,8 @@ SK.Lang.Debuff.Acid = KBM.Language:Add("Acidic Vapors")
 SK.Lang.Debuff.Acid:SetGerman("Säure-Dämpfe")
 SK.Lang.Debuff.Acid:SetFrench("Vapeurs acides")
 SK.Lang.Debuff.Venom = KBM.Language:Add("Lethargic Venom")
+SK.Lang.Debuff.Venom:SetFrench("Venin léthargique")
+SK.Lang.Debuff.Venom:SetGerman("Lethargisches Gift")
 
 -- Verbose Dictionary
 SK.Lang.Verbose = {}

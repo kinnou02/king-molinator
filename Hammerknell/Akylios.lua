@@ -410,20 +410,22 @@ function AK:Castbar(units)
 end
 
 function AK.PhaseTwo(Type)
-	if Type == "say" then
-		if AK.Phase == 1 then
-			AK.PhaseObj.Objectives:Remove()
-			AK.Phase = 2
-			AK.PhaseObj:SetPhase(2)
-			AK.PhaseObj.Objectives:AddDeath(AK.Stinger.Name, 8)
-			AK.PhaseObj.Objectives:AddDeath(AK.Lasher.Name, 4)
-			KBM.MechTimer:AddRemove(AK.Jornaru.TimersRef.WaveOne)
-			KBM.MechTimer:AddRemove(AK.Jornaru.TimersRef.Summon)
-			KBM.MechTimer:AddStart(AK.Jornaru.TimersRef.SummonTwoFirst)
-			KBM.MechTimer:AddStart(AK.Jornaru.TimersRef.OrbFirst)
-			AK.Jornaru.CastBar:Remove()
-			print(AK.Lang.Phase.Two[KBM.Lang])
-		end
+	if KBM.Debug then
+		print("Phase Two trigger Type: "..tostring(Type))
+		print("Phase current set as: "..tostring(AK.Phase))
+	end
+	if AK.Phase == 1 then
+		AK.PhaseObj.Objectives:Remove()
+		AK.Phase = 2
+		AK.PhaseObj:SetPhase(2)
+		AK.PhaseObj.Objectives:AddDeath(AK.Stinger.Name, 8)
+		AK.PhaseObj.Objectives:AddDeath(AK.Lasher.Name, 4)
+		KBM.MechTimer:AddRemove(AK.Jornaru.TimersRef.WaveOne)
+		KBM.MechTimer:AddRemove(AK.Jornaru.TimersRef.Summon)
+		KBM.MechTimer:AddStart(AK.Jornaru.TimersRef.SummonTwoFirst)
+		KBM.MechTimer:AddStart(AK.Jornaru.TimersRef.OrbFirst)
+		AK.Jornaru.CastBar:Remove()
+		print(AK.Lang.Phase.Two[KBM.Lang])
 	end
 end
 
@@ -646,9 +648,9 @@ function AK:Start()
 	self.Jornaru.TimersRef.WaveFourFirst.MenuName = AK.Lang.Options.WaveFour[KBM.Lang]
 	self.Jornaru.TimersRef.WaveFourFirst:AddTimer(self.Jornaru.TimersRef.WaveFour, 0)
 	--if not self.Settings.PhaseAlt then
-	self.Jornaru.TimersRef.OrbFirst = KBM.MechTimer:Add(AK.Lang.Mechanic.Orb[KBM.Lang], 50)
+	-- self.Jornaru.TimersRef.OrbFirst = KBM.MechTimer:Add(AK.Lang.Mechanic.Orb[KBM.Lang], 50)
 	--else
-	--	self.Jornaru.TimersRef.OrbFirst = KBM.MechTimer:Add(AK.Lang.Mechanic.Orb[KBM.Lang], 65)
+	self.Jornaru.TimersRef.OrbFirst = KBM.MechTimer:Add(AK.Lang.Mechanic.Orb[KBM.Lang], 65)
 	--end
 	self.Jornaru.TimersRef.OrbFirst.MenuName = AK.Lang.Options.Orb[KBM.Lang]
 	self.Jornaru.TimersRef.Orb = KBM.MechTimer:Add(AK.Lang.Mechanic.Orb[KBM.Lang], 30)
@@ -659,9 +661,9 @@ function AK:Start()
 	self.Jornaru.TimersRef.SummonTwo:SetPhase(2)
 	self.Jornaru.TimersRef.SummonTwo:NoMenu()
 	--if not self.Settings.PhaseAlt then
-	self.Jornaru.TimersRef.SummonTwoFirst = KBM.MechTimer:Add(AK.Lang.Mechanic.Summon[KBM.Lang], 45)
+	-- self.Jornaru.TimersRef.SummonTwoFirst = KBM.MechTimer:Add(AK.Lang.Mechanic.Summon[KBM.Lang], 45)
 	--else
-	--	self.Jornaru.TimersRef.SummonTwoFirst = KBM.MechTimer:Add(AK.Lang.Mechanic.Summon[KBM.Lang], 58)
+	self.Jornaru.TimersRef.SummonTwoFirst = KBM.MechTimer:Add(AK.Lang.Mechanic.Summon[KBM.Lang], 58)
 	--end
 	self.Jornaru.TimersRef.SummonTwoFirst:AddTimer(self.Jornaru.TimersRef.SummonTwo, 0)
 	self.Jornaru.TimersRef.SummonTwoFirst.MenuName = AK.Lang.Options.SummonTwo[KBM.Lang]
@@ -728,10 +730,10 @@ function AK:Start()
 	self.Jornaru.Triggers.Orb:AddAlert(self.Jornaru.AlertsRef.Orb, true)
 	self.Jornaru.Triggers.Orb:AddTimer(self.Jornaru.TimersRef.Orb)
 	self.Jornaru.Triggers.Orb:AddSpy(self.Jornaru.MechRef.Orb)
-	self.Jornaru.Triggers.PhaseTwo = KBM.Trigger:Create(AK.Lang.Say.PhaseTwo[KBM.Lang], "say", self.Jornaru)
+	-- self.Jornaru.Triggers.PhaseTwo = KBM.Trigger:Create(AK.Lang.Say.PhaseTwo[KBM.Lang], "say", self.Jornaru)
+	-- self.Jornaru.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
+	self.Jornaru.Triggers.PhaseTwo = KBM.Trigger:Create(50, "percent", self.Jornaru)
 	self.Jornaru.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
-	-- self.Jornaru.Triggers.PhaseTwoAlt = KBM.Trigger:Create(50, "percent", self.Jornaru)
-	-- self.Jornaru.Triggers.PhaseTwoAlt:AddPhase(self.PhaseTwo)
 	self.Jornaru.Triggers.Summon = KBM.Trigger:Create(self.Lang.Mechanic.Summon[KBM.Lang], "cast", self.Jornaru)
 	self.Jornaru.Triggers.Summon:AddTimer(self.Jornaru.TimersRef.Summon)
 	self.Jornaru.Triggers.AltPhaseFour = KBM.Trigger:Create("", "npcDamage", self.Jornaru)

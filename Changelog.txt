@@ -1,4 +1,23 @@
-﻿v1.1.9
+﻿v1.2.0
+
+Infernal Dawn
+* Ember Conclave
+** Change: Dead Bosses will no longer show up in the Phase Monitor once the phase has transitioned.
+
+Primeval Feast
+* Atrophinius
+** New: Added buff remove triggers for Mechanic Spy's Anguish timers.
+
+Hammerknell Fortress
+* Akylios
+** Change: Changed back to the percentage trigger for P2, removing any conditional checks for Type methods.
+
+Translations
+* French Updated.
+* German Updated.
+
+----
+v1.1.9
 
 Mechanic Spy
 * Fixed: Issue with new Static type timers attempting to initialize as nil rather than 0.
