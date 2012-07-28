@@ -3,6 +3,10 @@
 Infernal Dawn
 * Ember Conclave
 ** Change: Dead Bosses will no longer show up in the Phase Monitor once the phase has transitioned.
+* Maelforge Final
+** New: Added Unit Type ID for P2 version of Maelforge.
+** New: Added Phase Tracking for all three phases. (Initial)
+** Change: Adjusted the personal alert default colors for both versions of Hellfire debuff.
 
 Primeval Feast
 * Atrophinius
