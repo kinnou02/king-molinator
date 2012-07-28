@@ -21,6 +21,7 @@ local MF = {
 	Instance = IND.Name,
 	Type = "20man",
 	HasPhases = true,
+	Enrage = 15 * 60,
 	Lang = {},
 	ID = "Maelforge_Final",
 	Object = "MF",
