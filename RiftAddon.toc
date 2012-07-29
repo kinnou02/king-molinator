@@ -10,7 +10,7 @@ Author = "Paul Snart"
 Website = "http://www.facebook.com/KingBossMods"
 Email = "snarty@gmail.com"
 
-Version = "1.2.0.483"
+Version = "1.2.0.484"
 
 Environment = "1.9"
 
@@ -510,4 +510,5 @@ Dependencies = {
 	KBMMessenger = {"required", "after"},
 	KBMMarkIt = {"optional", "after"},
 	KBMAddWatch = {"optional", "after"},
+	BuffInfo = {"optional", "after"},
 }

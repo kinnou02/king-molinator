@@ -1,5 +1,8 @@
 ﻿v1.2.0
 
+System
+* New: Added measures to prevent changes to Inspect.Buff.Detail core API command from other addons.
+
 RezMaster
 * Fixed: Possible nil value with unassigned Unit cache.
 

@@ -2,6 +2,8 @@
 -- Written By Paul Snart
 -- Copyright 2011
 
+local IBDReserved = Inspect.Buff.Detail
+
 KBM_GlobalOptions = nil
 chKBM_GlobalOptions = nil
 
@@ -5029,7 +5031,7 @@ function KBM.TankSwap:Init()
 			for i = 1, self.Debuffs do
 				if TankObj.DebuffList[i].ID then
 					local DebuffObj = TankObj.DebuffList[i]
-					bDetails = Inspect.Buff.Detail(UnitID, TankObj.DebuffList[i].ID)
+					local bDetails = Inspect.Buff.Detail(UnitID, TankObj.DebuffList[i].ID)
 					if bDetails then
 						if bDetails.stack then
 							DebuffObj.Stacks = bDetails.stack
@@ -6716,6 +6718,9 @@ function KBM:Timer()
 	
 end
 
+function KBM:AuxTimer()
+end
+
 local function KBM_CastBar(units)
 	-- for UnitID, Status in pairs(units) do
 		-- if KBM.CastBar.ActiveCastBars[UnitID] then
@@ -8100,7 +8105,8 @@ function KBM.InitEvents()
 	table.insert(Event.SafesRaidManager.Group.Target, {KBM.GroupTarget, "KingMolinator", "Raid_Member_Target"})
 	table.insert(Event.SafesRaidManager.Group.Offline, {KBM.Offline, "KingMolinator", "Offline Status Change"})
 	-- **
-	table.insert(Event.System.Update.Begin, {function () KBM:Timer() end, "KingMolinator", "System Update"})
+	table.insert(Event.System.Update.Begin, {function () KBM:Timer() end, "KingMolinator", "System Update Begin"})
+	table.insert(Event.System.Update.End, {function () KBM:AuxTimer() end, "KingMolinator", "System Update End"})
 	table.insert(Event.System.Secure.Enter, {KBM.SecureEnter, "KingMolinator", "Secure Enter"})
 	table.insert(Event.System.Secure.Leave, {KBM.SecureLeave, "KingMolinator", "Secure Leave"})
 	
@@ -8285,6 +8291,11 @@ function KBM.InitKBM(ModID)
 		end
 		print(KBM.Language.Welcome.Commands[KBM.Lang])
 		print(KBM.Language.Welcome.Options[KBM.Lang])
+	else
+		if Inspect.Buff.Detail ~= IBDReserved then
+			print(tostring(ModID).." changed internal command: Restoring Inspect.Buff.Detail")
+			Inspect.Buff.Detail = IBDReserved
+		end
 	end
 end
 

@@ -111,6 +111,8 @@ RS.Lang.Notify = {}
 RS.Lang.Notify.Fall = KBM.Language:Add("If The Dread Fortune falls, you'll be joining her.")
 RS.Lang.Notify.Fall:SetFrench("Si le Fortune funeste venait à couler, vous sombreriez avec lui.")
 RS.Lang.Notify.Fall:SetGerman("Wenn die Fortuna Fatalis untergeht, ist das auch Euer Untergang.")
+RS.Lang.Notify.Over = KBM.Language:Add("Rusila Dreadblade grins, 'Careful not to fall overboard, Ascended!'")
+RS.Lang.Notify.Over:SetRussian("Русила Жуткий Клинок, ухмыляясь: «Не свалитесь за борт, Вознесенные!»")
 
 -- Buff Dictionary
 RS.Lang.Buff = {}
