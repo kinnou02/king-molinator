@@ -49,10 +49,11 @@ LT.Lang.Unit = {}
 LT.Lang.Unit.Twyl = KBM.Language:Add(LT.Twyl.Name)
 LT.Lang.Unit.Twyl:SetGerman("Fürst Twyl")
 LT.Lang.Unit.Twyl:SetFrench("Seigneur des Fées Twyl")
+LT.Lang.Unit.Twyl:SetRussian("Повелитель Твил")
 LT.Lang.Unit.TwylShort = KBM.Language:Add("Twyl")
 LT.Lang.Unit.TwylShort:SetGerman("Twyl")
 LT.Lang.Unit.TwylShort:SetFrench("Twyl")
-
+LT.Lang.Unit.TwylShort:SetRussian("Твил")
 LT.Twyl.Name = LT.Lang.Unit.Twyl[KBM.Lang]
 LT.Twyl.NameShort = LT.Lang.Unit.TwylShort[KBM.Lang]
 LT.Descript = LT.Twyl.Name

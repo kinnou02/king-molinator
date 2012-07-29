@@ -1,5 +1,8 @@
 ﻿v1.2.0
 
+RezMaster
+* Fixed: Possible nil value with unassigned Unit cache.
+
 Infernal Dawn
 * Ember Conclave
 ** Change: Dead Bosses will no longer show up in the Phase Monitor once the phase has transitioned.
@@ -20,6 +23,7 @@ Hammerknell Fortress
 Translations
 * French Updated.
 * German Updated.
+* Russian Updated.
 
 ----
 v1.1.9

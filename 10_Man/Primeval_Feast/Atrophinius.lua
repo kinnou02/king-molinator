@@ -63,25 +63,27 @@ AN.Lang.Unit = {}
 AN.Lang.Unit.Atrophinius = KBM.Language:Add(AN.Atrophinius.Name)
 AN.Lang.Unit.Atrophinius:SetGerman("Großmeister Atrophinius")
 AN.Lang.Unit.Atrophinius:SetFrench("Grand maître Atrophinius")
+AN.Lang.Unit.Atrophinius:SetRussian("Великий мастер Атрофиний")
 AN.Lang.Unit.AtrophiniusShort = KBM.Language:Add("Atrophinius")
 AN.Lang.Unit.AtrophiniusShort:SetGerman("Atrophinius")
 AN.Lang.Unit.AtrophiniusShort:SetFrench("Atrophinius")
+AN.Lang.Unit.AtrophiniusShort:SetRussian("Атрофиний")
 AN.Lang.Unit.Cask = KBM.Language:Add("Green Label Cask")
 AN.Lang.Unit.Cask:SetFrench("Tonneau de Label Vert")
 AN.Lang.Unit.Cask:SetGerman("Fass mit Grünem Siegel")
-
+AN.Lang.Unit.Cask:SetRussian("Бочонок Зеленой Марки")
 -- Buff Dictionary
 AN.Lang.Buff = {}
 AN.Lang.Buff.Rampage = KBM.Language:Add("Rampage")
 AN.Lang.Buff.Rampage:SetFrench("Déchaînement")
 AN.Lang.Buff.Rampage:SetGerman("Amoklauf")
-
+AN.Lang.Buff.Rampage:SetRussian("Неистовство")
 -- Ability Dictionary
 AN.Lang.Ability = {}
 AN.Lang.Ability.Anguish = KBM.Language:Add("Song of Anguish")
 AN.Lang.Ability.Anguish:SetGerman("Lied der Seelenqual")
 AN.Lang.Ability.Anguish:SetFrench("Chant de l'angoisse")
-
+AN.Lang.Ability.Anguish:SetRussian("Песнь тоски")
 AN.Atrophinius.Name = AN.Lang.Unit.Atrophinius[KBM.Lang]
 AN.Atrophinius.NameShort = AN.Lang.Unit.AtrophiniusShort[KBM.Lang]
 AN.Descript = AN.Atrophinius.Name

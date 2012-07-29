@@ -31,6 +31,7 @@ PF.Lang.Main = {}
 PF.Lang.Main.PF = KBM.Language:Add(PF.Name)
 PF.Lang.Main.PF:SetGerman("Urzeitlicher Schmaus")
 PF.Lang.Main.PF:SetFrench("Festin primitif")
+PF.Lang.Main.PF:SetRussian("Первобытное пиршество")
 PF.Name = PF.Lang.Main.PF[KBM.Lang]
 PF.Descript = PF.Name
 

@@ -256,7 +256,9 @@ function RM.Rezes:Init()
 					local UID = self.Tracked[Name].UnitID
 					Timer.Class = ""
 					if UID then
-						Timer.Class = KBM.Unit.List.UID[UID].Calling or ""
+						if KBM.Unit.List.UID[UID] then
+							Timer.Class = KBM.Unit.List.UID[UID].Calling or ""
+						end
 					else
 						if KBM.Unit.List.Name[Name] then
 							for lUID, Object in pairs(KBM.Unit.List.Name[Name]) do

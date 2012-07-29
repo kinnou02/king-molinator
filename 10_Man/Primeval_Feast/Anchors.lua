@@ -49,10 +49,11 @@ LA.Lang.Unit = {}
 LA.Lang.Unit.Anchor = KBM.Language:Add(LA.Anchor.Name)
 LA.Lang.Unit.Anchor:SetGerman("Lebensanker")
 LA.Lang.Unit.Anchor:SetFrench("Ancre vitale")
+LA.Lang.Unit.Anchor:SetRussian("Якорь Жизни")
 LA.Lang.Unit.AnchorShort = KBM.Language:Add("Anchor")
 LA.Lang.Unit.AnchorShort:SetGerman("Anker")
 LA.Lang.Unit.AnchorShort:SetFrench("Ancre")
-
+LA.Lang.Unit.AnchorShort:SetRussian("Якорь")
 LA.Anchor.Name = LA.Lang.Unit.Anchor[KBM.Lang]
 LA.Anchor.NameShort = LA.Lang.Unit.AnchorShort[KBM.Lang]
 
@@ -61,6 +62,7 @@ LA.Lang.Main = {}
 LA.Lang.Main.Descript = KBM.Language:Add("Life Anchors")
 LA.Lang.Main.Descript:SetGerman("Lebensanker")
 LA.Lang.Main.Descript:SetFrench("Ancre vitale")
+LA.Lang.Main.Descript:SetRussian("Якоря Жизни")
 LA.Descript = LA.Lang.Main.Descript[KBM.Lang]
 
 function LA:AddBosses(KBM_Boss)
