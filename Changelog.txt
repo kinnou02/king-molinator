@@ -3,6 +3,7 @@
 System
 * New: Added measures to prevent changes to Inspect.Buff.Detail core API command from other addons.
 * Fixed: Prevented incorrect Boss objects from triggering nil errors when no Mod link is defined.
+* Fixed: Changed global references s and e to locals, within KBM.Version:Load.
 
 Phase Monitor
 * Fixed: Possible nil value with Type ID reliant deaths.

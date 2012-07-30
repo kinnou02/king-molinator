@@ -225,6 +225,8 @@ end
 
 KBM.Version = {}
 function KBM.Version:Load()
+	local s = 0
+	local e = 0
 	s, e, self.High, self.Mid, self.Low, self.Revision = string.find(AddonData.toc.Version, "(%d+).(%d+).(%d+).(%d+)")
 	if self.High then
 		self.High = tonumber(self.High)
