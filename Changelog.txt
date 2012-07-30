@@ -2,6 +2,10 @@
 
 System
 * New: Added measures to prevent changes to Inspect.Buff.Detail core API command from other addons.
+* Fixed: Prevented incorrect Boss objects from triggering nil errors when no Mod link is defined.
+
+Phase Monitor
+* Fixed: Possible nil value with Type ID reliant deaths.
 
 RezMaster
 * Fixed: Possible nil value with unassigned Unit cache.

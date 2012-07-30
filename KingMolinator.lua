@@ -2859,12 +2859,18 @@ function KBM.PhaseMonitor:Init()
 			
 			function DeathObj:Kill(UnitObj)
 				if self.Count < Total then
-					if (self.uType ~= nil and (self.uType == UnitObj.Details.type)) or self.uType == nil then
+					if self.uType == nil then
 						self.Count = self.Count + 1
 						self.GUI:SetObjective(self.Count.."/"..self.Total)
+					elseif UnitObj.Details then
+						if self.uType == UnitObj.Details.type then
+							self.Count = self.Count + 1
+							self.GUI:SetObjective(self.Count.."/"..self.Total)
+						end
 					end
 				end
 			end
+			
 			function DeathObj:Remove()
 				KBM.PhaseMonitor.Objectives.Lists:Remove(self)
 			end
@@ -3454,156 +3460,158 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 					BossObj = KBM.MatchType(uDetails, BossObj)
 					local ModBossObj = nil
 					if BossObj then
-						if KBM.Encounter then
-							if BossObj.Mod.ID == KBM.CurrentMod.ID then
-								ModBossObj = KBM.CurrentMod:UnitHPCheck(uDetails, UnitID)
-							else
-								if KBM.CurrentMod.Bosses then
-									if KBM.CurrentMod.Bosses[uDetails.name] then
-										ModBossObj = KBM.CurrentMod:UnitHPCheck(uDetails, UnitID)
-										BossObj = KBM.CurrentMod.Bosses[uDetails.name]
+						if BossObj.Mod then
+							if KBM.Encounter then
+								if BossObj.Mod.ID == KBM.CurrentMod.ID then
+									ModBossObj = KBM.CurrentMod:UnitHPCheck(uDetails, UnitID)
+								else
+									if KBM.CurrentMod.Bosses then
+										if KBM.CurrentMod.Bosses[uDetails.name] then
+											ModBossObj = KBM.CurrentMod:UnitHPCheck(uDetails, UnitID)
+											BossObj = KBM.CurrentMod.Bosses[uDetails.name]
+										end
 									end
 								end
-							end
-						else
-							if not BossObj.Ignore then
-								ModBossObj = BossObj.Mod:UnitHPCheck(uDetails, UnitID)
-							end
-						end
-						if ModBossObj then
-							if (BossObj.Ignore == nil and KBM.Encounter == false) or KBM.Encounter == true then
-								if KBM.Debug then
-									print("Boss found Checking: Tier = "..tostring(uDetails.tier).." "..tostring(uDetails.level).." ("..type(uDetails.level)..")")
-									print("Players location: "..tostring(KBM.Player.Location))
-									print("Unit Type: "..tostring(uDetails.type))
-									print("Unit Name: "..tostring(uDetails.name))
-									print("Unit X: "..tostring(uDetails.coordX))
-									print("Unit Y: "..tostring(uDetails.coordY))
-									print("Unit Z: "..tostring(uDetails.coordZ))
-									print("------------------------------------")
+							else
+								if not BossObj.Ignore then
+									ModBossObj = BossObj.Mod:UnitHPCheck(uDetails, UnitID)
 								end
-								if uDetails.combat then
-									-- if KBM.Debug then
-										-- print("Boss matched checking encounter start")
-									-- end
-									if KBM.EncounterMode == "normal" or (KBM.EncounterMode == "chronicle" and BossObj.Mod.Settings.Chronicle) then
-										KBM.BossID[UnitID] = {}
-										KBM.BossID[UnitID].name = uDetails.name
-										KBM.BossID[UnitID].monitor = true
-										KBM.BossID[UnitID].Mod = BossObj.Mod
-										KBM.BossID[UnitID].IdleSince = false
-										KBM.BossID[UnitID].Boss = ModBossObj
-										if uDetails.health > 0 then
-											if KBM.Debug then
-												print("Boss is alive and in combat, activating.")
-											end
-											KBM.BossID[UnitID].Combat = true
-											KBM.BossID[UnitID].dead = false
-											KBM.BossID[UnitID].available = true
-											KBM.BossID[UnitID].Health = uDetails.health
-											KBM.BossID[UnitID].HealthLast = uDetails.health
-											KBM.BossID[UnitID].HealthMax = uDetails.healthMax
-											KBM.BossID[UnitID].PercentRaw = (uDetails.health/uDetails.healthMax)*100
-											KBM.BossID[UnitID].Percent = math.ceil(KBM.BossID[UnitID].PercentRaw)
-											KBM.BossID[UnitID].PercentLast = KBM.BossID[UnitID].Percent
-											if not KBM.Encounter then
-												-- if KBM.Debug then
-													-- print("New encounter, starting")
-												-- end
-												KBM.Encounter = true
-												KBM.CurrentBoss = UnitID
-												KBM_CurrentBossName = uDetails.name
-												KBM.CurrentMod = KBM.BossID[UnitID].Mod
-												local PercentOver = 99
-												if KBM.EncounterMode == "chronicle" then
-													if KBM.CurrentMod.ChroniclePOver then
-														PercentOver = KBM.CurrentMod.ChroniclePOver
-													end
-													print(KBM.Language.Encounter.Start[KBM.Lang].." "..KBM.CurrentMod.Descript.." (Chronicles)")
-													if KBM.BossID[UnitID].Percent >= PercentOver then 
-														KBM.CurrentMod.Settings.Records.Chronicle.Attempts = KBM.CurrentMod.Settings.Records.Chronicle.Attempts + 1
-													end
-												else
-													print(KBM.Language.Encounter.Start[KBM.Lang].." "..KBM.CurrentMod.Descript)
-													if KBM.BossID[UnitID].Percent >= PercentOver then
-														KBM.CurrentMod.Settings.Records.Attempts = KBM.CurrentMod.Settings.Records.Attempts + 1
-													end
+							end
+							if ModBossObj then
+								if (BossObj.Ignore == nil and KBM.Encounter == false) or KBM.Encounter == true then
+									if KBM.Debug then
+										print("Boss found Checking: Tier = "..tostring(uDetails.tier).." "..tostring(uDetails.level).." ("..type(uDetails.level)..")")
+										print("Players location: "..tostring(KBM.Player.Location))
+										print("Unit Type: "..tostring(uDetails.type))
+										print("Unit Name: "..tostring(uDetails.name))
+										print("Unit X: "..tostring(uDetails.coordX))
+										print("Unit Y: "..tostring(uDetails.coordY))
+										print("Unit Z: "..tostring(uDetails.coordZ))
+										print("------------------------------------")
+									end
+									if uDetails.combat then
+										-- if KBM.Debug then
+											-- print("Boss matched checking encounter start")
+										-- end
+										if KBM.EncounterMode == "normal" or (KBM.EncounterMode == "chronicle" and BossObj.Mod.Settings.Chronicle) then
+											KBM.BossID[UnitID] = {}
+											KBM.BossID[UnitID].name = uDetails.name
+											KBM.BossID[UnitID].monitor = true
+											KBM.BossID[UnitID].Mod = BossObj.Mod
+											KBM.BossID[UnitID].IdleSince = false
+											KBM.BossID[UnitID].Boss = ModBossObj
+											if uDetails.health > 0 then
+												if KBM.Debug then
+													print("Boss is alive and in combat, activating.")
 												end
-												if KBM.BossID[UnitID].Percent < PercentOver then
-													KBM.ValidTime = false
-												else
-													KBM.ValidTime = true
-												end
-												print(KBM.Language.Encounter.GLuck[KBM.Lang])
-												KBM.TimeElapsed = 0
-												KBM.StartTime = math.floor(current)
-												KBM.CurrentMod.Phase = 1
-												KBM.Phase = 1
-												if KBM.CurrentMod.Settings.EncTimer then
-													if KBM.CurrentMod.Settings.EncTimer.Override then
-														KBM.EncTimer.Settings = KBM.CurrentMod.Settings.EncTimer
+												KBM.BossID[UnitID].Combat = true
+												KBM.BossID[UnitID].dead = false
+												KBM.BossID[UnitID].available = true
+												KBM.BossID[UnitID].Health = uDetails.health
+												KBM.BossID[UnitID].HealthLast = uDetails.health
+												KBM.BossID[UnitID].HealthMax = uDetails.healthMax
+												KBM.BossID[UnitID].PercentRaw = (uDetails.health/uDetails.healthMax)*100
+												KBM.BossID[UnitID].Percent = math.ceil(KBM.BossID[UnitID].PercentRaw)
+												KBM.BossID[UnitID].PercentLast = KBM.BossID[UnitID].Percent
+												if not KBM.Encounter then
+													-- if KBM.Debug then
+														-- print("New encounter, starting")
+													-- end
+													KBM.Encounter = true
+													KBM.CurrentBoss = UnitID
+													KBM_CurrentBossName = uDetails.name
+													KBM.CurrentMod = KBM.BossID[UnitID].Mod
+													local PercentOver = 99
+													if KBM.EncounterMode == "chronicle" then
+														if KBM.CurrentMod.ChroniclePOver then
+															PercentOver = KBM.CurrentMod.ChroniclePOver
+														end
+														print(KBM.Language.Encounter.Start[KBM.Lang].." "..KBM.CurrentMod.Descript.." (Chronicles)")
+														if KBM.BossID[UnitID].Percent >= PercentOver then 
+															KBM.CurrentMod.Settings.Records.Chronicle.Attempts = KBM.CurrentMod.Settings.Records.Chronicle.Attempts + 1
+														end
+													else
+														print(KBM.Language.Encounter.Start[KBM.Lang].." "..KBM.CurrentMod.Descript)
+														if KBM.BossID[UnitID].Percent >= PercentOver then
+															KBM.CurrentMod.Settings.Records.Attempts = KBM.CurrentMod.Settings.Records.Attempts + 1
+														end
+													end
+													if KBM.BossID[UnitID].Percent < PercentOver then
+														KBM.ValidTime = false
+													else
+														KBM.ValidTime = true
+													end
+													print(KBM.Language.Encounter.GLuck[KBM.Lang])
+													KBM.TimeElapsed = 0
+													KBM.StartTime = math.floor(current)
+													KBM.CurrentMod.Phase = 1
+													KBM.Phase = 1
+													if KBM.CurrentMod.Settings.EncTimer then
+														if KBM.CurrentMod.Settings.EncTimer.Override then
+															KBM.EncTimer.Settings = KBM.CurrentMod.Settings.EncTimer
+														else
+															KBM.EncTimer.Settings = KBM.Options.EncTimer
+														end
 													else
 														KBM.EncTimer.Settings = KBM.Options.EncTimer
 													end
-												else
-													KBM.EncTimer.Settings = KBM.Options.EncTimer
-												end
-												if KBM.CurrentMod.Settings.PhaseMon then
-													if KBM.CurrentMod.Settings.PhaseMon.Override then
-														KBM.PhaseMonitor.Settings = KBM.CurrentMod.Settings.PhaseMon
+													if KBM.CurrentMod.Settings.PhaseMon then
+														if KBM.CurrentMod.Settings.PhaseMon.Override then
+															KBM.PhaseMonitor.Settings = KBM.CurrentMod.Settings.PhaseMon
+														else
+															KBM.PhaseMonitor.Settings = KBM.Options.PhaseMon
+														end
 													else
 														KBM.PhaseMonitor.Settings = KBM.Options.PhaseMon
 													end
-												else
-													KBM.PhaseMonitor.Settings = KBM.Options.PhaseMon
-												end
-												if KBM.CurrentMod.Settings.MechTimer then
-													if KBM.CurrentMod.Settings.MechTimer.Override then
-														KBM.MechTimer.Settings = KBM.CurrentMod.Settings.MechTimer
+													if KBM.CurrentMod.Settings.MechTimer then
+														if KBM.CurrentMod.Settings.MechTimer.Override then
+															KBM.MechTimer.Settings = KBM.CurrentMod.Settings.MechTimer
+														else
+															KBM.MechTimer.Settings = KBM.Options.MechTimer
+														end
 													else
-														KBM.MechTimer.Settings = KBM.Options.MechTimer
+														KBM.MechTimer.Setting = KBM.Options.MechTimer
 													end
-												else
-													KBM.MechTimer.Setting = KBM.Options.MechTimer
-												end
-												if KBM.CurrentMod.Settings.Alerts then
-													if KBM.CurrentMod.Settings.Alerts.Override then
-														KBM.Alert.Settings = KBM.CurrentMod.Settings.Alerts
+													if KBM.CurrentMod.Settings.Alerts then
+														if KBM.CurrentMod.Settings.Alerts.Override then
+															KBM.Alert.Settings = KBM.CurrentMod.Settings.Alerts
+														else
+															KBM.Alert.Settings = KBM.Options.Alerts
+														end
 													else
 														KBM.Alert.Settings = KBM.Options.Alerts
 													end
-												else
-													KBM.Alert.Settings = KBM.Options.Alerts
-												end
-												if KBM.CurrentMod.Settings.MechSpy then
-													if KBM.CurrentMod.Settings.MechSpy.Override then
-														KBM.MechSpy.Settings = KBM.CurrentMod.Settings.MechSpy
+													if KBM.CurrentMod.Settings.MechSpy then
+														if KBM.CurrentMod.Settings.MechSpy.Override then
+															KBM.MechSpy.Settings = KBM.CurrentMod.Settings.MechSpy
+														else
+															KBM.MechSpy.Settings = KBM.Options.MechSpy
+														end
 													else
 														KBM.MechSpy.Settings = KBM.Options.MechSpy
 													end
-												else
-													KBM.MechSpy.Settings = KBM.Options.MechSpy
+													KBM.EncTimer:ApplySettings()
+													KBM.PhaseMonitor:ApplySettings()
+													KBM.MechTimer:ApplySettings()
+													KBM.Alert:ApplySettings()
+													KBM.MechSpy:ApplySettings()
+													if KBM.CurrentMod.Enrage then
+														KBM.EnrageTime = KBM.StartTime + KBM.CurrentMod.Enrage
+													end
+													KBM.EncTimer:Start(KBM.StartTime)
+													KBM.MechSpy:Begin()
+													KBM.Event.Encounter.Start({Type = "start"})
 												end
-												KBM.EncTimer:ApplySettings()
-												KBM.PhaseMonitor:ApplySettings()
-												KBM.MechTimer:ApplySettings()
-												KBM.Alert:ApplySettings()
-												KBM.MechSpy:ApplySettings()
-												if KBM.CurrentMod.Enrage then
-													KBM.EnrageTime = KBM.StartTime + KBM.CurrentMod.Enrage
-												end
-												KBM.EncTimer:Start(KBM.StartTime)
-												KBM.MechSpy:Begin()
-												KBM.Event.Encounter.Start({Type = "start"})
+											else
+												KBM.BossID[UnitID].Combat = false
+												KBM.BossID[UnitID].dead = true
+												KBM.BossID[UnitID].available = true
 											end
-										else
-											KBM.BossID[UnitID].Combat = false
-											KBM.BossID[UnitID].dead = true
-											KBM.BossID[UnitID].available = true
 										end
+									else
+										--print("Not in combat!")
 									end
-								else
-									--print("Not in combat!")
 								end
 							end
 						end
