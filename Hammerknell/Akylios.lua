@@ -52,9 +52,11 @@ AK.Jornaru = {
 			WaveFourFirst = KBM.Defaults.TimerObj.Create("blue"),
 			Orb = KBM.Defaults.TimerObj.Create("orange"),
 			OrbFirst = KBM.Defaults.TimerObj.Create("orange"),
+			OrbFirstSay = KBM.Defaults.TimerObj.Create("orange"),
 			Summon = KBM.Defaults.TimerObj.Create("dark_green"),
 			SummonTwo = KBM.Defaults.TimerObj.Create("dark_green"),
 			SummonTwoFirst = KBM.Defaults.TimerObj.Create("dark_green"),
+			SummonTwoFirstSay = KBM.Defaults.TimerObj.Create("dark_green"),
 		},
 		AlertsRef = {
 			Enabled = true,
@@ -429,6 +431,22 @@ function AK.PhaseTwo(Type)
 	end
 end
 
+function AK.PhaseTwoSay()
+	if AK.Phase == 1 then
+		AK.PhaseObj.Objectives:Remove()
+		AK.Phase = 2
+		AK.PhaseObj:SetPhase(2)
+		AK.PhaseObj.Objectives:AddDeath(AK.Stinger.Name, 8)
+		AK.PhaseObj.Objectives:AddDeath(AK.Lasher.Name, 4)
+		KBM.MechTimer:AddRemove(AK.Jornaru.TimersRef.WaveOne)
+		KBM.MechTimer:AddRemove(AK.Jornaru.TimersRef.Summon)
+		KBM.MechTimer:AddStart(AK.Jornaru.TimersRef.SummonTwoFirstSay)
+		KBM.MechTimer:AddStart(AK.Jornaru.TimersRef.OrbFirstSay)
+		AK.Jornaru.CastBar:Remove()
+		print(AK.Lang.Phase.Two[KBM.Lang])
+	end
+end
+
 function AK.PhaseThree()
 	AK.PhaseObj.Objectives:Remove()
 	AK.Phase = 3
@@ -611,29 +629,9 @@ end
 function AK:Timer()
 end
 
--- AK.Custom = {}
--- AK.Custom.Encounter = {}
--- function AK.Custom.Encounter.Menu(Menu)
-	-- local Callbacks = {}
-
-	-- function Callbacks:Enabled(bool)
-		-- AK.Settings.PhaseAlt = bool
-		-- if bool then
-			-- AK.Jornaru.TimersRef.OrbFirst.Time = 65
-			-- AK.Jornaru.TimersRef.SummonTwoFirst.Time = 58
-		-- else
-			-- AK.Jornaru.TimersRef.OrbFirst.Time = 50
-			-- AK.Jornaru.TimersRef.SummonTwoFirst.Time = 45
-		-- end
-	-- end
-
-	-- Header = Menu:CreateHeader(AK.Lang.Options.Percent[KBM.Lang], "check", "Encounter", "Main")
-	-- Header:SetChecked(AK.Settings.PhaseAlt)
-	-- Header:SetHook(Callbacks.Enabled)	
--- end
-
 function AK:DefineMenu()
 	self.Menu = HK.Menu:CreateEncounter(self.Akylios, self.Enabled)
+	self.Jornaru.Menu.Timers.SummonTwoFirst.Child:SetHookEx(self.SummonTwoLink)
 end
 
 function AK:Start()	
@@ -647,12 +645,9 @@ function AK:Start()
 	self.Jornaru.TimersRef.WaveFourFirst = KBM.MechTimer:Add(AK.Lang.Mechanic.Wave[KBM.Lang], 54)
 	self.Jornaru.TimersRef.WaveFourFirst.MenuName = AK.Lang.Options.WaveFour[KBM.Lang]
 	self.Jornaru.TimersRef.WaveFourFirst:AddTimer(self.Jornaru.TimersRef.WaveFour, 0)
-	--if not self.Settings.PhaseAlt then
-	-- self.Jornaru.TimersRef.OrbFirst = KBM.MechTimer:Add(AK.Lang.Mechanic.Orb[KBM.Lang], 50)
-	--else
+	self.Jornaru.TimersRef.OrbFirstSay = KBM.MechTimer:Add(AK.Lang.Mechanic.Orb[KBM.Lang], 50)
 	self.Jornaru.TimersRef.OrbFirst = KBM.MechTimer:Add(AK.Lang.Mechanic.Orb[KBM.Lang], 65)
-	--end
-	self.Jornaru.TimersRef.OrbFirst.MenuName = AK.Lang.Options.Orb[KBM.Lang]
+	self.Jornaru.TimersRef.OrbFirst.MenuName = self.Lang.Options.Orb[KBM.Lang]
 	self.Jornaru.TimersRef.Orb = KBM.MechTimer:Add(AK.Lang.Mechanic.Orb[KBM.Lang], 30)
 	self.Jornaru.TimersRef.Summon = KBM.MechTimer:Add(AK.Lang.Mechanic.Summon[KBM.Lang], 70)
 	self.Jornaru.TimersRef.Summon:SetPhase(1)
@@ -660,11 +655,9 @@ function AK:Start()
 	self.Jornaru.TimersRef.SummonTwo = KBM.MechTimer:Add(AK.Lang.Mechanic.Summon[KBM.Lang], 80, true)
 	self.Jornaru.TimersRef.SummonTwo:SetPhase(2)
 	self.Jornaru.TimersRef.SummonTwo:NoMenu()
-	--if not self.Settings.PhaseAlt then
-	-- self.Jornaru.TimersRef.SummonTwoFirst = KBM.MechTimer:Add(AK.Lang.Mechanic.Summon[KBM.Lang], 45)
-	--else
+	self.Jornaru.TimersRef.SummonTwoFirstSay = KBM.MechTimer:Add(AK.Lang.Mechanic.Summon[KBM.Lang], 45)
+	self.Jornaru.TimersRef.SummonTwoFirstSay:AddTimer(self.Jornaru.TimersRef.SummonTwo, 0)
 	self.Jornaru.TimersRef.SummonTwoFirst = KBM.MechTimer:Add(AK.Lang.Mechanic.Summon[KBM.Lang], 58)
-	--end
 	self.Jornaru.TimersRef.SummonTwoFirst:AddTimer(self.Jornaru.TimersRef.SummonTwo, 0)
 	self.Jornaru.TimersRef.SummonTwoFirst.MenuName = AK.Lang.Options.SummonTwo[KBM.Lang]
 	-- Akylios
@@ -724,14 +717,18 @@ function AK:Start()
 	KBM.Defaults.TimerObj.Assign(self.Jornaru)
 	KBM.Defaults.TimerObj.Assign(self.Akylios)
 	
+	-- Timer Linking MUST appear after settings have been initialized.
+	self.Jornaru.TimersRef.SummonTwoFirst:SetLink(self.Jornaru.TimersRef.SummonTwoFirstSay)
+	self.Jornaru.TimersRef.OrbFirst:SetLink(self.Jornaru.TimersRef.OrbFirstSay)
+	
 	-- Assign Mechanics to Triggers
 	-- Jornaru
 	self.Jornaru.Triggers.Orb = KBM.Trigger:Create(AK.Lang.Notify.Orb[KBM.Lang], "notify", self.Jornaru)
 	self.Jornaru.Triggers.Orb:AddAlert(self.Jornaru.AlertsRef.Orb, true)
 	self.Jornaru.Triggers.Orb:AddTimer(self.Jornaru.TimersRef.Orb)
 	self.Jornaru.Triggers.Orb:AddSpy(self.Jornaru.MechRef.Orb)
-	-- self.Jornaru.Triggers.PhaseTwo = KBM.Trigger:Create(AK.Lang.Say.PhaseTwo[KBM.Lang], "say", self.Jornaru)
-	-- self.Jornaru.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
+	self.Jornaru.Triggers.PhaseTwoSay = KBM.Trigger:Create(AK.Lang.Say.PhaseTwo[KBM.Lang], "say", self.Jornaru)
+	self.Jornaru.Triggers.PhaseTwoSay:AddPhase(self.PhaseTwoSay)
 	self.Jornaru.Triggers.PhaseTwo = KBM.Trigger:Create(50, "percent", self.Jornaru)
 	self.Jornaru.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
 	self.Jornaru.Triggers.Summon = KBM.Trigger:Create(self.Lang.Mechanic.Summon[KBM.Lang], "cast", self.Jornaru)

@@ -5,6 +5,13 @@ System
 * Fixed: Prevented incorrect Boss objects from triggering nil errors when no Mod link is defined.
 * Fixed: Changed global references s and e to locals, within KBM.Version:Load.
 
+Encounter Timer
+* Enrage Timer
+** New: Enrage Timers can now be initially paused and start at any time during an encounter.
+
+Mechanic Timers
+* New: Mechanic Timers can now link to hidden alternate versions sharing Settings.
+
 Phase Monitor
 * Fixed: Possible nil value with Type ID reliant deaths.
 
@@ -12,8 +19,14 @@ RezMaster
 * Fixed: Possible nil value with unassigned Unit cache.
 
 Infernal Dawn
+* Rusila Dreadblade
+** New: Added Enrage timer which begins counting down at the start of Phase 2.
 * Ember Conclave
 ** Change: Dead Bosses will no longer show up in the Phase Monitor once the phase has transitioned.
+* Laeyths
+** New: Added Enrage timer to Laethys. (10 minutes, unconfirmed)
+** Change: Add Timer is now limited to appearing in Phase 1 only.
+** Change: Reduced Timer for Liquid Gold (after initial)
 * Maelforge Final
 ** New: Added Enrage timer.
 ** New: Added Unit Type ID for P2 version of Maelforge.
@@ -26,7 +39,8 @@ Primeval Feast
 
 Hammerknell Fortress
 * Akylios
-** Change: Changed back to the percentage trigger for P2, removing any conditional checks for Type methods.
+** Change: Both types of Phase 2 triggers are enabled by default.
+** Note: You can enable both Triggers as KBM will only ever use one. If the percentage trigger fails, KBM will wait for the Emote.
 
 Translations
 * French Updated.

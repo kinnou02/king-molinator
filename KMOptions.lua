@@ -2113,6 +2113,10 @@ function KBM.InitOptions()
 						self.Checked = bool
 					end
 					
+					function Option:SetHookEx(Hook)
+						self.HookEx = Hook
+					end
+					
 					function Option:CreateHeader(Name, Type)
 						Header = self.Header.Encounter:CreateHeader(Name, Type, self.Header.Tab, "Sub")
 						table.insert(self.SubHeaders, Header)
@@ -2365,8 +2369,8 @@ function KBM.InitOptions()
 					end
 					BossObj.Menu.Filters = {}
 				
-					local Child = nil
-					local Header = nil
+					local Child = {}
+					local Header = {}
 					local Callbacks = {}
 					Callbacks.Boss = BossObj
 					local MenuName = ""
@@ -2587,8 +2591,8 @@ function KBM.InitOptions()
 			end
 
 			function Encounter:MechTimer()
-				local Child = nil
-				local Header = nil
+				local Child = {}
+				local Header = {}
 				local Callbacks = {}
 				Callbacks.Boss = self.Boss
 			
@@ -2731,24 +2735,41 @@ function KBM.InitOptions()
 								function Callbacks:Callback(bool)
 									self.Data.Enabled = bool
 									self.Data.Settings.Enabled = bool
+									if self.Data.Link then
+										self.Data.Link.Enabled = bool
+										self.Data.Link.Settings.Enabled = bool
+									end
 									self.Boss.Menu.Timers[self.Data.Settings.ID].ColorGUI:Enable(bool)
 									if not bool then
 										KBM.MechTimer:AddRemove(self.Data)
+										if self.Data.Link then
+											KBM.MechTimer:AddRemove(self.Data.Link)
+										end
 									end
 								end
 								
 								function Callbacks:Enabled(bool)
 									self.Data.Enabled = bool
 									self.Data.Settings.Enabled = bool
+									if self.Data.Link then
+										self.Data.Link.Enabled = bool
+										self.Data.Link.Settings.Enabled = bool
+									end
 									self.Boss.Menu.Timers[self.Data.Settings.ID].ColorGUI:Enable(bool)
 									if not bool then
 										KBM.MechTimer:AddRemove(self.Data)
+										if self.Link then
+											KBM.MechTimer:AddRemove(self.Data.Link)
+										end
 									end
 								end
 								
 								function Callbacks:Color(bool, Color)							
 									if not Color then
 										self.Data.Settings.Custom = bool
+										if self.Data.Link then
+											self.Data.Link.Settings.Custom = bool
+										end
 										self.GUI:SetEnabled(bool)
 										if bool then
 											self.GUI:SetColor(self.Data.Settings.Color)
@@ -2757,6 +2778,9 @@ function KBM.InitOptions()
 										end
 									elseif Color then
 										self.Manager.Data.Settings.Color = Color
+										if self.Manager.Data.Link then
+											self.Manager.Data.Link.Settings.Color = Color
+										end
 									end								
 								end
 							
@@ -2765,12 +2789,13 @@ function KBM.InitOptions()
 									MenuName = TimerData.MenuName
 								end
 							
-								Child = Header:CreateOption(MenuName, "excheck", Callbacks.Callback)
+								local Child = Header:CreateOption(MenuName, "excheck", Callbacks.Callback)
 								Child.Data = TimerData
 								Child:SetChecked(TimerData.Settings.Enabled)							
 								local SubHeader = Child:CreateHeader(MenuName, "plain")
 								SubHeader.Boss = BossObj
 								BossObj.Menu.Timers[TimerID] = {}
+								BossObj.Menu.Timers[TimerID].Child = Child
 								BossObj.Menu.Timers[TimerID].Enabled = SubHeader:CreateOption(KBM.Language.Options.Enabled[KBM.Lang], "check", Callbacks.Enabled)
 								BossObj.Menu.Timers[TimerID].Enabled:SetChecked(TimerData.Settings.Enabled)
 								BossObj.Menu.Timers[TimerID].Enabled.Data = TimerData
@@ -2880,8 +2905,8 @@ function KBM.InitOptions()
 			end		
 
 			function Encounter:Alerts()
-				local Child = nil
-				local Header = nil
+				local Child = {}
+				local Header = {}
 				local Callbacks = {}
 				Callbacks.Boss = self.Boss
 						
@@ -3080,8 +3105,8 @@ function KBM.InitOptions()
 			end		
 			
 			function Encounter:PhaseMon()			
-				local Child = nil
-				local Header = nil
+				local Child = {}
+				local Header = {}
 				local Callbacks = {}
 				Callbacks.Boss = self.Boss
 				
@@ -3146,8 +3171,8 @@ function KBM.InitOptions()
 			end
 			
 			function Encounter:EncTimer()			
-				local Child = nil
-				local Header = nil
+				local Child = {}
+				local Header = {}
 				local Callbacks = {}
 				Callbacks.Boss = self.Boss
 			
@@ -3236,8 +3261,8 @@ function KBM.InitOptions()
 			end
 			
 			function Encounter:Records()
-				local Child = nil
-				local Header = nil
+				local Child = {}
+				local Header = {}
 				local Callbacks = {}
 				Callbacks.Boss = self.Boss
 				if not self.Boss.Mod.MenuStore then

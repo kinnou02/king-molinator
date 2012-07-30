@@ -20,6 +20,8 @@ local RS = {
 	File = "Rusila.lua",
 	Instance = IND.Name,
 	Type = "20man",
+	Enrage = 4 * 60,
+	EnragePaused = true,
 	HasPhases = true,
 	Lang = {},
 	ID = "Rusila Dreadblade",
@@ -255,10 +257,13 @@ function RS:RemoveUnits(UnitID)
 end
 
 function RS.PhaseTwo()
-	RS.PhaseObj.Objectives:Remove()
-	RS.PhaseObj.Objectives:AddPercent(RS.Rusila.Name, 0, 100)
-	RS.PhaseObj:SetPhase("Final")
-	RS.Phase = 2
+	if RS.Phase < 2 then
+		RS.PhaseObj.Objectives:Remove()
+		RS.PhaseObj.Objectives:AddPercent(RS.Rusila.Name, 0, 100)
+		RS.PhaseObj:SetPhase("Final")
+		RS.Phase = 2
+		KBM.EncTimer:Unpause()
+	end
 end
 
 function RS:Death(UnitID)

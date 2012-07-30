@@ -22,6 +22,7 @@ local LT = {
 	Type = "20man",
 	HasPhases = true,
 	Phase = 1,
+	Enrage = 10 * 60,
 	Lang = {},
 	ID = "Laethys",
 	Object = "LT",
@@ -389,10 +390,11 @@ function LT:Start()
  	self.Laethys.TimersRef.Gold = KBM.MechTimer:Add(self.Lang.Ability.Gold[KBM.Lang], 30)
  	self.Laethys.TimersRef.AddsFirst = KBM.MechTimer:Add(self.Lang.Menu.Adds[KBM.Lang], 34)
  	self.Laethys.TimersRef.Adds = KBM.MechTimer:Add(self.Lang.Mechanic.Adds[KBM.Lang], 90, true)
+	self.Laethys.TimersRef.Adds:SetPhase(1)
 	-- Phase Two
 	self.Laethys.TimersRef.PhaseTwoTrans = KBM.MechTimer:Add(self.Lang.Mechanic.PhaseTwoTrans[KBM.Lang], 40)
 	self.Laethys.TimersRef.LiqGoldFirst = KBM.MechTimer:Add(self.Lang.Menu.LiqGold[KBM.Lang], 70)
-	self.Laethys.TimersRef.LiqGold = KBM.MechTimer:Add(self.Lang.Ability.LiqGold[KBM.Lang], 100)
+	self.Laethys.TimersRef.LiqGold = KBM.MechTimer:Add(self.Lang.Ability.LiqGold[KBM.Lang], 92)
 	KBM.Defaults.TimerObj.Assign(self.Laethys)
 	
 	-- Create Timer for Stoneseer

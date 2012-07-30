@@ -1515,6 +1515,24 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 		self.Enabled = true
 	end
 	
+	function Timer:SetLink(Timer)
+		if type(Timer) == "table" then
+			if Timer.Type ~= "timer" then
+				error("Supplied Object is not a Timer, got: "..tostring(Timer.Type))
+			else
+				self.Link = Timer
+				self.Link:NoMenu()
+				for SettingID, Value in pairs(self.Settings) do
+					if SettingID ~= "ID" then
+						self.Link.Settings[SettingID] = Value
+					end
+				end
+			end
+		else
+			error("Expecting at least a table got: "..type(Timer))
+		end
+	end
+	
 	return Timer
 	
 end
@@ -3185,27 +3203,43 @@ function KBM.EncTimer:Init()
 		
 		if self.Settings.Enrage then
 			if KBM.CurrentMod.Enrage then
-				if current < KBM.EnrageTime then
-					EnrageString = KBM.ConvertTime(KBM.EnrageTime - current + 1)
-					self.Enrage.Shadow:SetText(KBM.Language.Timers.Enrage[KBM.Lang].." "..EnrageString)
-					self.Enrage.Text:SetText(self.Enrage.Shadow:GetText())
-					self.Enrage.Progress:SetWidth(self.Enrage.Frame:GetWidth()*(KBM.TimeElapsed/KBM.CurrentMod.Enrage))
+				if self.Paused then
+					EnrageString = KBM.ConvertTime(KBM.CurrentMod.Enrage)
 				else
-					self.Enrage.Shadow:SetText(KBM.Language.Timers.Enraged[KBM.Lang])
-					self.Enrage.Text:SetText(KBM.Language.Timers.Enraged[KBM.Lang])
-					self.Enrage.Progress:SetWidth(self.Enrage.Frame:GetWidth())
+					if current < KBM.EnrageTime then
+						EnrageString = KBM.ConvertTime(KBM.EnrageTime - current + 1)
+						self.Enrage.Shadow:SetText(KBM.Language.Timers.Enrage[KBM.Lang].." "..EnrageString)
+						self.Enrage.Text:SetText(self.Enrage.Shadow:GetText())
+						self.Enrage.Progress:SetWidth(math.floor(self.Enrage.Frame:GetWidth()*((KBM.TimeElapsed - KBM.EnrageStart)/KBM.CurrentMod.Enrage)))
+					else
+						self.Enrage.Shadow:SetText(KBM.Language.Timers.Enraged[KBM.Lang])
+						self.Enrage.Text:SetText(KBM.Language.Timers.Enraged[KBM.Lang])
+						self.Enrage.Progress:SetWidth(self.Enrage.Frame:GetWidth())
+					end
 				end
 			end
 		end		
 	end
 	
-	function self:Start(Time)		if self.Settings.Enabled then
+	function self:Unpause()
+		self.EnrageStart = KBM.TimeElapsed
+		KBM.EnrageTime = Inspect.Time.Real() + KBM.CurrentMod.Enrage
+		self.Paused = false
+	end
+	
+	function self:Start(Time)
+		self.IsEnraged = false
+		self.EnrageStart = 0
+		if self.Settings.Enabled then
 			if self.Settings.Duration then
 				self.Frame:SetVisible(true)
 				self.Active = true
 			end
 			if self.Settings.Enrage then
 				if KBM.CurrentMod.Enrage then
+					if KBM.CurrentMod.EnragePaused then
+						self.Paused = true
+					end
 					self.Enrage.Frame:SetVisible(true)
 					self.Enrage.Progress:SetWidth(0)
 					self.Enrage.Progress:SetVisible(true)
@@ -3223,6 +3257,7 @@ function KBM.EncTimer:Init()
 	
 	function self:End()	
 		self.Active = false
+		self.IsEnraged = false
 		self.Enrage.Shadow:SetText(KBM.Language.Timers.Enrage[KBM.Lang].." 00:00")
 		self.Enrage.Text:SetText(KBM.Language.Timers.Enrage[KBM.Lang].." 00:00")
 		self.Frame.Shadow:SetText(KBM.Language.Timers.Time[KBM.Lang].." 00:00")
