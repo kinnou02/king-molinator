@@ -3210,7 +3210,7 @@ function KBM.EncTimer:Init()
 						EnrageString = KBM.ConvertTime(KBM.EnrageTime - current + 1)
 						self.Enrage.Shadow:SetText(KBM.Language.Timers.Enrage[KBM.Lang].." "..EnrageString)
 						self.Enrage.Text:SetText(self.Enrage.Shadow:GetText())
-						self.Enrage.Progress:SetWidth(math.floor(self.Enrage.Frame:GetWidth()*((KBM.TimeElapsed - KBM.EnrageStart)/KBM.CurrentMod.Enrage)))
+						self.Enrage.Progress:SetWidth(math.floor(self.Enrage.Frame:GetWidth()*((KBM.TimeElapsed - self.EnrageStart)/KBM.CurrentMod.Enrage)))
 					else
 						self.Enrage.Shadow:SetText(KBM.Language.Timers.Enraged[KBM.Lang])
 						self.Enrage.Text:SetText(KBM.Language.Timers.Enraged[KBM.Lang])
