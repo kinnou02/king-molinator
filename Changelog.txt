@@ -31,6 +31,7 @@ Infernal Dawn
 ** New: Added Enrage timer.
 ** New: Added Unit Type ID for P2 version of Maelforge.
 ** New: Added Phase Tracking for all three phases. (Initial)
+** New: Added Timer for Earthen and Fiery Fissures.
 ** Change: Adjusted the personal alert default colors for both versions of Hellfire debuff.
 
 Primeval Feast

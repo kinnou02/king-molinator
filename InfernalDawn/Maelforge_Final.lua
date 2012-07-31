@@ -50,6 +50,7 @@ MF.Maelforge = {
 		TimersRef = {
 			Enabled = true,
 			Hell = KBM.Defaults.TimerObj.Create("purple"),
+			Fissure = KBM.Defaults.TimerObj.Create("orange"),
 		},
 		MechRef = {
 			Enabled = true,
@@ -84,6 +85,14 @@ MF.Lang.Debuff = {}
 MF.Lang.Debuff.Hell = KBM.Language:Add("Hellfire")
 MF.Lang.Debuff.Earthen = KBM.Language:Add("Earthen Fissure")
 MF.Lang.Debuff.Fiery = KBM.Language:Add("Fiery Fissure")
+
+-- Notify Dictionary
+MF.Lang.Notify = {}
+MF.Lang.Notify.Fissure = KBM.Language:Add("Hellfire feeds on your agony!")
+
+-- Mechanic Dictionary
+MF.Lang.Mechanic = {}
+MF.Lang.Mechanic.Fissure = KBM.Language:Add("Fissures")
 
 -- Ability Dictionary
 MF.Lang.Ability = {}
@@ -213,7 +222,7 @@ function MF:UnitHPCheck(uDetails, unitID)
 					self.Maelforge.Casting = false
 					self.Maelforge.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
-					if uDetails.type == self.RaidID then
+					if uDetails.type == self.Maelforge.RaidID then
 						self.PhaseObj:SetPhase(1)
 						self.PhaseObj.Objectives:AddPercent(self.Maelforge.Name, 65, 100)
 						self.Phase = 1
@@ -246,6 +255,7 @@ end
 function MF:Start()
 	-- Create Timers
 	self.Maelforge.TimersRef.Hell = KBM.MechTimer:Add(self.Lang.Debuff.Hell[KBM.Lang], 50)
+	self.Maelforge.TimersRef.Fissure = KBM.MechTimer:Add(self.Lang.Mechanic.Fissure[KBM.Lang], 60)
 	KBM.Defaults.TimerObj.Assign(self.Maelforge)
 	
 	-- Create Spies
@@ -267,6 +277,8 @@ function MF:Start()
 	self.Maelforge.Triggers.Hell_Green = KBM.Trigger:Create("B0E7E2D5A0A251BA2", "playerIDBuff", self.Maelforge)
 	self.Maelforge.Triggers.Hell_Green:AddAlert(self.Maelforge.AlertsRef.Hell_Green, true)
 	self.Maelforge.Triggers.Hell_Green:AddSpy(self.Maelforge.MechRef.Hell)
+	self.Maelforge.Triggers.Fissure = KBM.Trigger:Create(self.Lang.Notify.Fissure[KBM.Lang], "notify", self.Maelforge)
+	self.Maelforge.Triggers.Fissure:AddTimer(self.Maelforge.TimersRef.Fissure)
 	self.Maelforge.Triggers.Fiery = KBM.Trigger:Create(self.Lang.Debuff.Fiery[KBM.Lang], "playerBuff", self.Maelforge)
 	self.Maelforge.Triggers.Fiery:AddAlert(self.Maelforge.AlertsRef.Fiery, true)
 	self.Maelforge.Triggers.Earthen = KBM.Trigger:Create(self.Lang.Debuff.Earthen[KBM.Lang], "playerBuff", self.Maelforge)
