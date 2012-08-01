@@ -10,7 +10,7 @@ Author = "Paul Snart"
 Website = "http://www.facebook.com/KingBossMods"
 Email = "snarty@gmail.com"
 
-Version = "1.2.0.489"
+Version = "1.2.0.490"
 
 Environment = "1.9"
 

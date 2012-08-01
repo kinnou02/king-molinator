@@ -212,7 +212,6 @@ function MF:UnitHPCheck(uDetails, unitID)
 	if uDetails and unitID then
 		if not uDetails.player then
 			if uDetails.name == self.Maelforge.Name then
-				self.Maelforge.UnitID = unitID
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
@@ -222,14 +221,15 @@ function MF:UnitHPCheck(uDetails, unitID)
 					self.Maelforge.Casting = false
 					self.Maelforge.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
-					if uDetails.type == self.Maelforge.RaidID then
+					if uDetails.type == self.Maelforge.RaidID_P2 then
+						self.PhaseTwo()
+					else
 						self.PhaseObj:SetPhase(1)
 						self.PhaseObj.Objectives:AddPercent(self.Maelforge.Name, 65, 100)
 						self.Phase = 1
-					else
-						self.PhaseTwo()
 					end
 				end
+				self.Maelforge.UnitID = unitID
 				self.Maelforge.Available = true
 				return self.Maelforge
 			end
