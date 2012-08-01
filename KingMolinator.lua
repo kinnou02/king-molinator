@@ -114,7 +114,7 @@ KBM.ID = "KingMolinator"
 KBM.ModList = {}
 KBM.Testing = false
 KBM.ValidTime = false
-KBM.IsAlpha = true
+KBM.IsAlpha = false
 KBM.Debug = false
 KBM.Aux = {}
 KBM.TestFilters = {}
@@ -3655,6 +3655,13 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 					else
 						if uDetails.availability == "full" then
 							if uDetails.type then
+								if KBM.Debug then
+									if not KBM.IgnoreList[UnitID] then
+										print("New Unit Added to Ignore:")
+										dump(uDetails)
+										print("----------")
+									end
+								end
 								KBM.IgnoreList[UnitID] = true
 							end
 						end

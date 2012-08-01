@@ -23,6 +23,9 @@ RezMaster
 Infernal Dawn
 * Rusila Dreadblade
 ** New: Added Enrage timer which begins counting down at the start of Phase 2.
+** New: Added Alert and Timer for when the Left Longshot enters the battle.
+** New: Added Alert and Timer for when the Right Longshot enters the battle.
+** Thanks to Ivnedar@Laethys for initial testing and implementation of the Longshot additions.
 * Ember Conclave
 ** Change: Dead Bosses will no longer show up in the Phase Monitor once the phase has transitioned.
 * Laeyths

@@ -41,19 +41,22 @@ RS.Rusila = {
 	TimeOut = 5,
 	Castbar = nil,
 	Ignore = true,
-	-- TimersRef = {},
+	TimersRef = {},
 	AlertsRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		-- TimersRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
-		-- },
+		TimersRef = {
+			Enabled = true,
+			LeftLongshot = KBM.Defaults.TimerObj.Create("blue"),
+			RightLongshot = KBM.Defaults.TimerObj.Create("blue"),
+		},
 		AlertsRef = {
 			Enabled = true,
 			Dread = KBM.Defaults.AlertObj.Create("purple"),
 			DreadDur = KBM.Defaults.AlertObj.Create("yellow"),
+			LeftLongshot = KBM.Defaults.AlertObj.Create("blue"),
+			RightLongshot = KBM.Defaults.AlertObj.Create("blue"),
 		},
 	}
 }
@@ -84,6 +87,8 @@ RS.Lang.Unit.Heart:SetGerman("Herz der Fortuna Fatalis")
 RS.Lang.Unit.HeartShort = KBM.Language:Add("Heart")
 RS.Lang.Unit.HeartShort:SetGerman("Herz")
 RS.Lang.Unit.HeartShort:SetFrench("Cœur")
+RS.Lang.Unit.LeftLong = KBM.Language:Add("Left Longshot")
+RS.Lang.Unit.RightLong = KBM.Language:Add("Right Longshot")
 
 -- Ability Dictionary
 RS.Lang.Ability = {}
@@ -128,6 +133,13 @@ RS.Lang.Menu.Dread = KBM.Language:Add("Dread Shot duration")
 RS.Lang.Menu.Dread:SetGerman("Schreckangriff Dauer")
 RS.Lang.Menu.Dread:SetFrench("Durée Tir terrifiant")
 RS.Lang.Menu.Dread:SetKorean("공포의 사격 지소깃간")
+
+-- Verbose Dictionary
+RS.Lang.Verbose = {}
+RS.Lang.Verbose.LeftLSSpawn = KBM.Language:Add("Left Longshot joins the battle!")
+RS.Lang.Verbose.LeftLSDied = KBM.Language:Add("Left Longshot died.")
+RS.Lang.Verbose.RightLSSpawn = KBM.Language:Add("Right Longshot joins the battle!")
+RS.Lang.Verbose.RightLSDied = KBM.Language:Add("Right Longshot died.")
 
 RS.Rusila.Name = RS.Lang.Unit.Rusila[KBM.Lang]
 RS.Rusila.NameShort = RS.Lang.Unit.RusShort[KBM.Lang]
@@ -199,11 +211,11 @@ function RS:InitVars()
 		CastBar = self.Rusila.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
-		-- MechTimer = KBM.Defaults.MechTimer(),
+		MechTimer = KBM.Defaults.MechTimer(),
 		Alerts = KBM.Defaults.Alerts(),
-		-- TimersRef = self.Rusila.Settings.TimersRef,
 		Rusila = {
 			AlertsRef = self.Rusila.Settings.AlertsRef,
+			TimersRef = self.Rusila.Settings.TimersRef,
 		},
 	}
 	KBMINDRS_Settings = self.Settings
@@ -272,6 +284,18 @@ function RS:Death(UnitID)
 		return true
 	elseif self.Heart.UnitID == UnitID then
 		RS.PhaseTwo()
+	elseif self.Long.UnitList[UnitID] then
+		if self.Long.UnitList[UnitID].Side then
+			if self.Long.UnitList[UnitID].Side == "Left" then
+				KBM.MechTimer:AddStart(self.Rusila.TimersRef.LeftLongshot)
+				print(self.Lang.Verbose.LeftLSDied[KBM.Lang])
+			else
+				KBM.MechTimer:AddStart(self.Rusila.TimersRef.RightLongshot)
+				print(self.Lang.Verbose.RightLSDied[KBM.Lang])
+			end			
+		else
+			--print("Longshot died.")
+		end
 	end
 	return false
 end
@@ -306,7 +330,16 @@ function RS:UnitHPCheck(uDetails, unitID)
 									UnitID = unitID,
 									Available = true,
 								}
-								BossObj.UnitList[unitID] = SubBossObj
+								if uDetails.coordZ < 1573 then
+									SubBossObj.Side = "Left"
+									print(self.Lang.Verbose.LeftLSSpawn[KBM.Lang])
+									KBM.Alert:Start(self.Rusila.AlertsRef.LeftLongshot)
+								else
+									SubBossObj.Side = "Right"
+									print(self.Lang.Verbose.RightLSSpawn[KBM.Lang])
+									KBM.Alert:Start(self.Rusila.AlertsRef.RightLongshot)
+									BossObj.UnitList[unitID] = SubBossObj
+								end
 							else
 								BossObj.UnitList[unitID].Available = true
 								BossObj.UnitList[unitID].UnitID = unitID
@@ -367,12 +400,16 @@ end
 
 function RS:Start()
 	-- Create Timers
-	-- KBM.Defaults.TimerObj.Assign(self.Rusila)
+	self.Rusila.TimersRef.LeftLongshot = KBM.MechTimer:Add(self.Lang.Unit.LeftLong[KBM.Lang], 30)
+	self.Rusila.TimersRef.RightLongshot = KBM.MechTimer:Add(self.Lang.Unit.RightLong[KBM.Lang], 30)
+	KBM.Defaults.TimerObj.Assign(self.Rusila)
 	
 	-- Create Alerts
 	self.Rusila.AlertsRef.Dread = KBM.Alert:Create(self.Lang.Ability.Dread[KBM.Lang], nil, true, true, "purple")
 	self.Rusila.AlertsRef.DreadDur = KBM.Alert:Create(self.Lang.Ability.Dread[KBM.Lang], nil, false, true, "yellow")
 	self.Rusila.AlertsRef.DreadDur.MenuName = self.Lang.Menu.Dread[KBM.Lang]
+	self.Rusila.AlertsRef.LeftLongshot = KBM.Alert:Create(self.Lang.Verbose.LeftLSSpawn[KBM.Lang], 3, false, false, "blue")
+	self.Rusila.AlertsRef.RightLongshot = KBM.Alert:Create(self.Lang.Verbose.RightLSSpawn[KBM.Lang], 3, false, false, "blue")
 	KBM.Defaults.AlertObj.Assign(self.Rusila)
 	
 	-- Assign Alerts and Timers to Triggers
