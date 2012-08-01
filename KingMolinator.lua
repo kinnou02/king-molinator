@@ -3653,7 +3653,11 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 							end
 						end
 					else
-						KBM.IgnoreList[UnitID] = true
+						if uDetails.availability == "full" then
+							if uDetails.type then
+								KBM.IgnoreList[UnitID] = true
+							end
+						end
 					end
 				end
 			else
