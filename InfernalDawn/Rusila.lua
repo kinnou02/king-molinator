@@ -338,8 +338,8 @@ function RS:UnitHPCheck(uDetails, unitID)
 									SubBossObj.Side = "Right"
 									print(self.Lang.Verbose.RightLSSpawn[KBM.Lang])
 									KBM.Alert:Start(self.Rusila.AlertsRef.RightLongshot)
-									BossObj.UnitList[unitID] = SubBossObj
 								end
+								BossObj.UnitList[unitID] = SubBossObj
 							else
 								BossObj.UnitList[unitID].Available = true
 								BossObj.UnitList[unitID].UnitID = unitID

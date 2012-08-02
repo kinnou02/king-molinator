@@ -143,7 +143,7 @@ LT.Lang.Buff.Wisdom:SetFrench("Sagesse de l'oracle de pierre")
 
 -- Notify Dictionary
 LT.Lang.Notify = {}
-LT.Lang.Notify.PhaseTwoTrans = KBM.Language:Add('Laethys roars, "How dare you scuff at my beautiful form?! You will pay for this..."')
+LT.Lang.Notify.PhaseTwoTrans = KBM.Language:Add('Laethys roars, "How dare you scuff my beautiful form?! You will pay for this..."')
 LT.Lang.Notify.PhaseTwoTrans:SetFrench('Laethys rugit : "Comment osez-vous vous en prendre à tant de beauté ? Vous me le paierez..."')
 LT.Lang.Notify.PhaseTwoTrans:SetGerman('Laethys brüllt: "Wie könnt Ihr es wagen, meiner wunderschönen Gestalt zu schaden. Dafür werdet Ihr büßen ..."')
 LT.Lang.Notify.PhaseTwoStart = KBM.Language:Add('Laethys says, "Behold your doom! Put down your weapons and I shall grant you a swift demise!"')

@@ -1,4 +1,13 @@
-﻿v1.2.0
+﻿v1.2.1 
+
+Infernal Dawn
+* Rusila
+** Fixed: Stopped spam from when the Left Longshot enters the battle.
+* Laethys
+** Fixed: Corrected emote for Phase Two trigger.
+
+----
+v1.2.0
 
 System
 * New: Added measures to prevent changes to Inspect.Buff.Detail core API command from other addons.
