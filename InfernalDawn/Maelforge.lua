@@ -64,9 +64,13 @@ MF.Lang.Unit.Maelforge:SetFrench()
 MF.Lang.Unit.Maelforge:SetRussian("Маэлфорж")
 MF.Lang.Unit.Maelforge:SetKorean("마엘포지")
 MF.Lang.Unit.Cannon = KBM.Language:Add("Magma Cannon")
+MF.Lang.Unit.Cannon:SetGerman("Magmakanone")
 MF.Lang.Unit.CanShort = KBM.Language:Add("Cannon")
+MF.Lang.Unit.CanShort:SetGerman("Kanone")
 MF.Lang.Unit.Egg = KBM.Language:Add("Ember Egg")
+MF.Lang.Unit.Egg:SetGerman("Glutei")
 MF.Lang.Unit.EggShort = KBM.Language:Add("Egg")
+MF.Lang.Unit.EggShort:SetGerman("Ei")
 
 -- Ability Dictionary
 MF.Lang.Ability = {}
@@ -80,6 +84,7 @@ MF.Lang.Notify.Victory = KBM.Language:Add("Carcera: This world is saved from abo
 -- Description Dictionary
 MF.Lang.Descript = {}
 MF.Lang.Descript.Main = KBM.Language:Add("Maelforge - Ember Eggs")
+MF.Lang.Descript.Main:SetGerman("Maelforge - Gluteier")
 
 MF.Maelforge.Name = MF.Lang.Unit.Maelforge[KBM.Lang]
 MF.Maelforge.NameShort = MF.Lang.Unit.Maelforge[KBM.Lang]

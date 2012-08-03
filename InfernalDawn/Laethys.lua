@@ -120,6 +120,7 @@ LT.Lang.Ability.Gold:SetRussian("Расплавленное золото")
 LT.Lang.Ability.Resto = KBM.Language:Add("Wizened Restoration")
 LT.Lang.Ability.Resto:SetGerman("Verschrumpelte Wiederherstellung")
 LT.Lang.Ability.Resto:SetFrench("Restauration ratatinée")
+LT.Lang.Ability.Resto:SetRussian("Иссохшее восстановление")
 LT.Lang.Ability.LiqGold = KBM.Language:Add("Laethic Gold")
 LT.Lang.Ability.LiqGold:SetGerman("Laethic-Gold")
 
@@ -140,7 +141,7 @@ LT.Lang.Buff = {}
 LT.Lang.Buff.Wisdom = KBM.Language:Add("Stoneseers Wisdom")
 LT.Lang.Buff.Wisdom:SetGerman("Weisheit des Steindeuters")
 LT.Lang.Buff.Wisdom:SetFrench("Sagesse de l'oracle de pierre")
-
+LT.Lang.Buff.Wisdom:SetRussian("Мудрость прорицателя")
 -- Notify Dictionary
 LT.Lang.Notify = {}
 LT.Lang.Notify.PhaseTwoTrans = KBM.Language:Add('Laethys roars, "How dare you scuff my beautiful form?! You will pay for this..."')

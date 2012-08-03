@@ -110,6 +110,7 @@ IZ.Lang.Debuff.Curse:SetRussian("Испепеляющее проклятье")
 IZ.Lang.Debuff.Curse:SetKorean("소각 저주")
 IZ.Lang.Debuff.Wave = KBM.Language:Add("Flame Wave")
 IZ.Lang.Debuff.Wave:SetFrench("Vague de flamme")
+IZ.Lang.Debuff.Wave:SetGerman("Flammenwellen")
 
 -- Assign Translated Versions
 IZ.Ituziel.Name = IZ.Lang.Unit.Ituziel[KBM.Lang]

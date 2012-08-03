@@ -1,4 +1,18 @@
-﻿v1.2.1 
+﻿v1.2.2
+
+Infernal Dawn
+* Rusila
+** Change: When disabling the Left/Right Longshot alerts, the corresponding output to chat is also disabled.
+* Maelforge Final
+** Change: Separated both versions of Hellfire when displayed in the Mechanic Spy. These are now color coded based on the in-game bubble.
+
+Translations
+* Russian Updated.
+* French Updated.
+* German Updated.
+
+----
+v1.2.1
 
 Infernal Dawn
 * Rusila

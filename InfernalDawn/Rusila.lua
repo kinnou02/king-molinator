@@ -78,17 +78,27 @@ RS.Lang.Unit.RusShort:SetKorean("루실라")
 RS.Lang.Unit.Long = KBM.Language:Add("Dreaded Longshot")
 RS.Lang.Unit.Long:SetFrench("Tireur d'élite terrifiant")
 RS.Lang.Unit.Long:SetGerman("Gefürchtete Distanzschützin")
+RS.Lang.Unit.Long:SetRussian("Жуткий стрелок")
 RS.Lang.Unit.LongShort = KBM.Language:Add("Longshot")
 RS.Lang.Unit.LongShort:SetFrench("Tireur d'élite")
 RS.Lang.Unit.LongShort:SetGerman("Schütze")
+RS.Lang.Unit.LongShort:SetRussian("Стрелок")
 RS.Lang.Unit.Heart = KBM.Language:Add("Heart of the Dread Fortune")
 RS.Lang.Unit.Heart:SetFrench("Cœur de la Fortune funeste")
 RS.Lang.Unit.Heart:SetGerman("Herz der Fortuna Fatalis")
+RS.Lang.Unit.Heart:SetRussian("Сердце «Жуткого Богатства»")
 RS.Lang.Unit.HeartShort = KBM.Language:Add("Heart")
 RS.Lang.Unit.HeartShort:SetGerman("Herz")
 RS.Lang.Unit.HeartShort:SetFrench("Cœur")
+RS.Lang.Unit.HeartShort:SetRussian("Сердце")
 RS.Lang.Unit.LeftLong = KBM.Language:Add("Left Longshot")
+RS.Lang.Unit.LeftLong:SetRussian("Левый Стрелок")
+RS.Lang.Unit.LeftLong:SetGerman("Linker Schütze")
+RS.Lang.Unit.LeftLong:SetFrench("Tireur d'élite Gauche")
 RS.Lang.Unit.RightLong = KBM.Language:Add("Right Longshot")
+RS.Lang.Unit.RightLong:SetRussian("Правый Стрелок")
+RS.Lang.Unit.RightLong:SetGerman("Rechter Schütze")
+RS.Lang.Unit.RightLong:SetFrench("Tireur d'élite Droite")
 
 -- Ability Dictionary
 RS.Lang.Ability = {}
@@ -96,36 +106,45 @@ RS.Lang.Ability.Saw = KBM.Language:Add("Buzz Saw")
 RS.Lang.Ability.Saw:SetGerman("Kreissäge")
 RS.Lang.Ability.Saw:SetFrench("Scie circulaire")
 RS.Lang.Ability.Saw:SetKorean("둥근 톱")
+RS.Lang.Ability.Saw:SetRussian("Циркулярная пила")
 RS.Lang.Ability.Dread = KBM.Language:Add("Dread Shot")
 RS.Lang.Ability.Dread:SetGerman("Schreckangriff")
 RS.Lang.Ability.Dread:SetFrench("Tir terrifiant")
 RS.Lang.Ability.Dread:SetKorean("공포의 사격")
+RS.Lang.Ability.Dread:SetRussian("Жуткий выстрел")
 RS.Lang.Ability.Fist = KBM.Language:Add("Fist")
 RS.Lang.Ability.Fist:SetGerman("Faust")
 RS.Lang.Ability.Fist:SetFrench("Poing")
 RS.Lang.Ability.Fist:SetKorean("주먹")
+RS.Lang.Ability.Fist:SetRussian("Сдавливание")
 RS.Lang.Ability.Wrath = KBM.Language:Add("Iron Wrath")
 RS.Lang.Ability.Wrath:SetGerman("Eisenzorn")
 RS.Lang.Ability.Wrath:SetFrench("Courroux de fer")
 RS.Lang.Ability.Wrath:SetKorean("무쇠 진노")
+RS.Lang.Ability.Wrath:SetRussian("Железный гнев")
 RS.Lang.Ability.Chain = KBM.Language:Add("Barbed Chain")
 RS.Lang.Ability.Chain:SetGerman("Stacheldrahtkette")
 RS.Lang.Ability.Chain:SetFrench("Chaîne barbelée")
 RS.Lang.Ability.Chain:SetKorean("갈고리 사슬")
+RS.Lang.Ability.Chain:SetRussian("Шипастая цепь")
 
 -- Notify Dictionary
 RS.Lang.Notify = {}
 RS.Lang.Notify.Fall = KBM.Language:Add("If The Dread Fortune falls, you'll be joining her.")
 RS.Lang.Notify.Fall:SetFrench("Si le Fortune funeste venait à couler, vous sombreriez avec lui.")
 RS.Lang.Notify.Fall:SetGerman("Wenn die Fortuna Fatalis untergeht, ist das auch Euer Untergang.")
-RS.Lang.Notify.Over = KBM.Language:Add("Rusila Dreadblade grins, 'Careful not to fall overboard, Ascended!'")
+RS.Lang.Notify.Fall:SetRussian("«Если «Жуткое Богатство» падет, вы - вместе с ним».")
+RS.Lang.Notify.Over = KBM.Language:Add('Rusila Dreadblade grins, "Careful not to fall overboard, Ascended!"')
 RS.Lang.Notify.Over:SetRussian("Русила Жуткий Клинок, ухмыляясь: «Не свалитесь за борт, Вознесенные!»")
+RS.Lang.Notify.Over:SetGerman('Rusila Schreckensklinge grinst und sagt: "Vorsicht, fallt nicht über Bord, Auserwählter!"')
+RS.Lang.Notify.Over:SetFrench('Rusila Lame-lugubre dit avec un sourire : "Attention à ne pas basculer par-dessus bord, êtres Élus !"')
 
 -- Buff Dictionary
 RS.Lang.Buff = {}
 RS.Lang.Buff.Barrel = KBM.Language:Add("Barrel of Dragon's Breath")
 RS.Lang.Buff.Barrel:SetFrench("Baril de Souffle de dragon")
 RS.Lang.Buff.Barrel:SetGerman("Fass mit Drachenatem")
+RS.Lang.Buff.Barrel:SetRussian("Бочонок «Дыхания дракона»")
 
 -- Menu Dictionary
 RS.Lang.Menu = {}
@@ -133,14 +152,26 @@ RS.Lang.Menu.Dread = KBM.Language:Add("Dread Shot duration")
 RS.Lang.Menu.Dread:SetGerman("Schreckangriff Dauer")
 RS.Lang.Menu.Dread:SetFrench("Durée Tir terrifiant")
 RS.Lang.Menu.Dread:SetKorean("공포의 사격 지소깃간")
+RS.Lang.Menu.Dread:SetRussian("Длительность Жуткого выстрела")
 
 -- Verbose Dictionary
 RS.Lang.Verbose = {}
 RS.Lang.Verbose.LeftLSSpawn = KBM.Language:Add("Left Longshot joins the battle!")
+RS.Lang.Verbose.LeftLSSpawn:SetRussian("Левый Стрелок вступает в бой!")
+RS.Lang.Verbose.LeftLSSpawn:SetGerman("Linker Schütze ... greift ein!")
+RS.Lang.Verbose.LeftLSSpawn:SetFrench("Tireur d'élite Gauche joint la bataille!")
 RS.Lang.Verbose.LeftLSDied = KBM.Language:Add("Left Longshot died.")
+RS.Lang.Verbose.LeftLSDied:SetRussian("Левый Стрелок умирает.")
+RS.Lang.Verbose.LeftLSDied:SetGerman("Linker Schütze ... tot.")
+RS.Lang.Verbose.LeftLSDied:SetFrench("Tireur d'élite Gauche mort.")
 RS.Lang.Verbose.RightLSSpawn = KBM.Language:Add("Right Longshot joins the battle!")
+RS.Lang.Verbose.RightLSSpawn:SetRussian("Правый Стрелок вступает в бой!")
+RS.Lang.Verbose.RightLSSpawn:SetGerman("Rechter Schütze ... greift ein!")
+RS.Lang.Verbose.RightLSSpawn:SetFrench("Tireur d'élite Droite joint la bataille!")
 RS.Lang.Verbose.RightLSDied = KBM.Language:Add("Right Longshot died.")
-
+RS.Lang.Verbose.RightLSDied:SetRussian("Правый Стрелок умирает.")
+RS.Lang.Verbose.RightLSDied:SetGerman("Rechter Schütze ... tot.")
+RS.Lang.Verbose.RightLSDied:SetFrench("Tireur d'élite Droite mort.")
 RS.Rusila.Name = RS.Lang.Unit.Rusila[KBM.Lang]
 RS.Rusila.NameShort = RS.Lang.Unit.RusShort[KBM.Lang]
 RS.Descript = RS.Rusila.Name
@@ -332,12 +363,16 @@ function RS:UnitHPCheck(uDetails, unitID)
 								}
 								if uDetails.coordZ < 1573 then
 									SubBossObj.Side = "Left"
-									print(self.Lang.Verbose.LeftLSSpawn[KBM.Lang])
-									KBM.Alert:Start(self.Rusila.AlertsRef.LeftLongshot)
+									if self.Rusila.AlertsRef.LeftLongshot.Enabled then
+										print(self.Lang.Verbose.LeftLSSpawn[KBM.Lang])
+										KBM.Alert:Start(self.Rusila.AlertsRef.LeftLongshot)
+									end
 								else
 									SubBossObj.Side = "Right"
-									print(self.Lang.Verbose.RightLSSpawn[KBM.Lang])
-									KBM.Alert:Start(self.Rusila.AlertsRef.RightLongshot)
+									if self.Rusila.AlertsRef.RightLongshot.Enabled then
+										print(self.Lang.Verbose.RightLSSpawn[KBM.Lang])
+										KBM.Alert:Start(self.Rusila.AlertsRef.RightLongshot)
+									end
 								end
 								BossObj.UnitList[unitID] = SubBossObj
 							else

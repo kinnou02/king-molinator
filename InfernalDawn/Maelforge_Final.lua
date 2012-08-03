@@ -54,7 +54,8 @@ MF.Maelforge = {
 		},
 		MechRef = {
 			Enabled = true,
-			Hell = KBM.Defaults.MechObj.Create("purple"),
+			Hell_Yellow = KBM.Defaults.MechObj.Create("yellow"),
+			Hell_Green = KBM.Defaults.MechObj.Create("dark_green"),
 		},
 		AlertsRef = {
 			Enabled = true,
@@ -79,20 +80,26 @@ MF.Lang.Unit.Maelforge:SetKorean("마엘포지")
 -- Location Dictionary
 MF.Lang.Location = {}
 MF.Lang.Location.Spires = KBM.Language:Add("Spires of Sacrifice")
+MF.Lang.Location.Spires:SetGerman("Spitze der Opfergabe")
 
 -- Debuff Dictionary
 MF.Lang.Debuff = {}
 MF.Lang.Debuff.Hell = KBM.Language:Add("Hellfire")
+MF.Lang.Debuff.Hell:SetGerman("Höllenfeuer")
 MF.Lang.Debuff.Earthen = KBM.Language:Add("Earthen Fissure")
+MF.Lang.Debuff.Earthen:SetGerman("Erdspalte")
 MF.Lang.Debuff.Fiery = KBM.Language:Add("Fiery Fissure")
+MF.Lang.Debuff.Fiery:SetGerman("Feuriger Spalt") 
 
 -- Notify Dictionary
 MF.Lang.Notify = {}
 MF.Lang.Notify.Fissure = KBM.Language:Add("Hellfire feeds on your agony!")
+MF.Lang.Notify.Fissure:SetGerman("Eure Angst nährt das Flammeninferno!")
 
 -- Mechanic Dictionary
 MF.Lang.Mechanic = {}
 MF.Lang.Mechanic.Fissure = KBM.Language:Add("Fissures")
+MF.Lang.Mechanic.Fissure:SetGerman("Spalten")
 
 -- Ability Dictionary
 MF.Lang.Ability = {}
@@ -100,11 +107,14 @@ MF.Lang.Ability = {}
 -- Menu Dictionary
 MF.Lang.Menu = {}
 MF.Lang.Menu.Hell_Green = KBM.Language:Add("Hellfire (Green)")
+MF.Lang.Menu.Hell_Green:SetGerman("Höllenfeuer (Grün)")
 MF.Lang.Menu.Hell_Yellow = KBM.Language:Add("Hellfire (Yellow)")
+MF.Lang.Menu.Hell_Yellow:SetGerman("Höllenfeuer (Gelb)")
 
 -- Description
 MF.Lang.Descript = {}
 MF.Lang.Descript.Main = KBM.Language:Add("Maelforge - Final")
+MF.Lang.Descript.Main:SetGerman("Flammenmaul - Finale")
 
 MF.Maelforge.Name = MF.Lang.Unit.Maelforge[KBM.Lang]
 MF.Maelforge.NameShort = MF.Lang.Unit.Maelforge[KBM.Lang]
@@ -259,7 +269,10 @@ function MF:Start()
 	KBM.Defaults.TimerObj.Assign(self.Maelforge)
 	
 	-- Create Spies
-	self.Maelforge.MechRef.Hell = KBM.MechSpy:Add(self.Lang.Debuff.Hell[KBM.Lang], nil, "playerDebuff", self.Maelforge)
+	self.Maelforge.MechRef.Hell_Yellow = KBM.MechSpy:Add(self.Lang.Debuff.Hell[KBM.Lang], nil, "playerDebuff", self.Maelforge)
+	self.Maelforge.MechRef.Hell_Yellow.MenuName = self.Lang.Menu.Hell_Yellow[KBM.Lang]
+	self.Maelforge.MechRef.Hell_Green = KBM.MechSpy:Add(self.Lang.Debuff.Hell[KBM.Lang], nil, "playerDebuff", self.Maelforge)
+	self.Maelforge.MechRef.Hell_Green.MenuName = self.Lang.Menu.Hell_Green[KBM.Lang]
 	KBM.Defaults.MechObj.Assign(self.Maelforge)
 	
 	-- Create Alerts
@@ -273,10 +286,10 @@ function MF:Start()
 	self.Maelforge.Triggers.Hell_Yellow = KBM.Trigger:Create("B58F6969FA32C3353", "playerIDBuff", self.Maelforge)
 	self.Maelforge.Triggers.Hell_Yellow:AddAlert(self.Maelforge.AlertsRef.Hell_Yellow, true)
 	self.Maelforge.Triggers.Hell_Yellow:AddTimer(self.Maelforge.TimersRef.Hell)
-	self.Maelforge.Triggers.Hell_Yellow:AddSpy(self.Maelforge.MechRef.Hell)
+	self.Maelforge.Triggers.Hell_Yellow:AddSpy(self.Maelforge.MechRef.Hell_Yellow)
 	self.Maelforge.Triggers.Hell_Green = KBM.Trigger:Create("B0E7E2D5A0A251BA2", "playerIDBuff", self.Maelforge)
 	self.Maelforge.Triggers.Hell_Green:AddAlert(self.Maelforge.AlertsRef.Hell_Green, true)
-	self.Maelforge.Triggers.Hell_Green:AddSpy(self.Maelforge.MechRef.Hell)
+	self.Maelforge.Triggers.Hell_Green:AddSpy(self.Maelforge.MechRef.Hell_Green)
 	self.Maelforge.Triggers.Fissure = KBM.Trigger:Create(self.Lang.Notify.Fissure[KBM.Lang], "notify", self.Maelforge)
 	self.Maelforge.Triggers.Fissure:AddTimer(self.Maelforge.TimersRef.Fissure)
 	self.Maelforge.Triggers.Fiery = KBM.Trigger:Create(self.Lang.Debuff.Fiery[KBM.Lang], "playerBuff", self.Maelforge)
