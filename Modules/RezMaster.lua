@@ -258,6 +258,12 @@ function RM.Rezes:Init()
 					if UID then
 						if KBM.Unit.List.UID[UID] then
 							Timer.Class = KBM.Unit.List.UID[UID].Calling or ""
+						else
+							local TempDetails = Inspect.Unit.Detail(UID)
+							KBM.Unit:Idle(UID, TempDetail)
+							if TempDetail then
+								Timer.Class = TempDetail.calling
+							end
 						end
 					else
 						if KBM.Unit.List.Name[Name] then
@@ -275,9 +281,11 @@ function RM.Rezes:Init()
 							for Calling, AbilityList in pairs(KBM.PlayerControl.RezBank) do
 								if AbilityList[aID] then
 									Timer.Class = Calling
-									KBM.Unit.List.UID[UID].Details.calling = Calling
-									KBM.Unit.List.UID[UID].Calling = Calling
-									break
+									if KBM.Unit.List.UID[UID] then
+										KBM.Unit.List.UID[UID].Details.calling = Calling
+										KBM.Unit.List.UID[UID].Calling = Calling
+										break
+									end
 								end
 							end
 						end

@@ -141,6 +141,11 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.RezMaster.AnchorText:SetGerman("Rez Meister Anker")
 	KBM.Language.RezMaster.AnchorText:SetKorean("부활 시간 앵커")
 	
+	-- Chat Objects
+	KBM.Language.Chat = {}
+	KBMLM.SetGroupObject(KBM.Language.Chat, "GroupObject", "Chat based dictionary")
+	KBM.Language.Chat.Enabled = KBM.Language:Add("Enable chat output")
+	
 	-- Command Listings
 	KBM.Language.Command = {}
 	KBMLM.SetGroupObject(KBM.Language.Command, "GroupObject", "Slash Command dictionary")

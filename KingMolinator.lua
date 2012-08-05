@@ -452,7 +452,6 @@ function KBM.Defaults.AlertObj.Create(Color, OldData)
 	}
 	return AlertObj
 end
-
 function KBM.Defaults.AlertObj.Assign(BossObj)
 	for ID, Data in pairs(BossObj.AlertsRef) do
 		if BossObj.Settings.AlertsRef[ID] then
@@ -482,6 +481,61 @@ function KBM.Defaults.AlertObj.Assign(BossObj)
 			end
 		else
 			error(	"Warning: "..ID.." is undefined in AlertsRef"..
+					"\nfor boss: "..BossObj.Name)
+		end
+	end
+end
+
+KBM.Defaults.ChatObj = {}
+function KBM.Defaults.ChatObj.Create(Color)
+	if not Color then
+		Color = "red"
+	end
+	if not KBM.Colors.List[Color] then
+		print("Warning: Color error for ChatObj.Create ("..Color..")")
+		print("Color Index does not exist, setting to Red")
+		Color = "red"
+	end
+	if OldData ~= nil then
+		error("Incorrect Format: ChatObj.Create.HasMenu no longer a setting")
+	end
+	local ChatObj = {
+		ID = nil,
+		Enabled = true,
+		Color = Color,
+		Custom = false,
+	}
+	return ChatObj
+end
+function KBM.Defaults.ChatObj.Assign(BossObj)
+	for ID, Data in pairs(BossObj.ChatRef) do
+		if BossObj.Settings.ChatRef[ID] then
+			if type(BossObj.Settings.ChatRef[ID]) == "table" then
+				Data.ID = ID
+				if BossObj.Settings.ChatRef.Enabled then
+					Data.Enabled = BossObj.Settings.ChatRef[ID].Enabled
+				else
+					Data.Enabled = false
+				end
+				Data.Settings = BossObj.Settings.ChatRef[ID]
+				if not Data.HasMenu then
+					Data.Enabled = true
+					Data.Settings.Enabled = true
+				end
+				if KBM.Colors.List[Data.Settings.Color] then
+					if Data.Settings.Custom then
+						Data.Color = Data.Settings.Color
+					end
+				else
+					error(	"ChatObj Assign Error: "..Data.ID..
+							"/nColor Index ("..Data.Settings.Color..") does not exist, ignoring settings."..
+							"/nFor: "..BossObj.Name)
+					Data.Settings.Color = Data.Color
+				end
+				BossObj.Settings.ChatRef[ID].ID = ID
+			end
+		else
+			error(	"Warning: "..ID.." is undefined in ChatRef"..
 					"\nfor boss: "..BossObj.Name)
 		end
 	end
@@ -704,6 +758,9 @@ local function KBM_DefineVars(AddonID)
 			CastBar = KBM.Defaults.CastBar(),
 			MechTimer = KBM.Defaults.MechTimer(),
 			MechSpy = KBM.Defaults.MechSpy(),
+			Chat = {
+				Enabled = true,
+			},
 			RezMaster = {
 				Enabled = true,
 				x = false,
@@ -976,6 +1033,7 @@ KBM.PhaseMonitor = {}
 KBM.Trigger = {}
 KBM.Alert = {}
 KBM.MechSpy = {}
+KBM.Chat = {}
 
 function KBM.Numbers.GetPlace(Number)
 	local Check = 0
@@ -1961,6 +2019,25 @@ function KBM.Button:Init()
 	
 	self:ApplySettings()
 	
+end
+
+function KBM.Chat:Init()
+	self.Enabled = true
+end
+
+function KBM.Chat:Create(Text)
+	local ChatObj = {}
+	ChatObj.Text = Text
+	ChatObj.Enabled = true
+	ChatObj.Color = "yellow"
+	ChatObj.HasMenu = true
+	ChatObj.Custom = false
+	function self:Display(ChatObj)
+		if ChatObj.Enabled then
+			print(tostring(ChatObj.Text))
+		end
+	end
+	return ChatObj
 end
 
 function KBM.MechSpy:Pull()

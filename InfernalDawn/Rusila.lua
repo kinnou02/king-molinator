@@ -43,6 +43,7 @@ RS.Rusila = {
 	Ignore = true,
 	TimersRef = {},
 	AlertsRef = {},
+	ChatRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -57,6 +58,13 @@ RS.Rusila = {
 			DreadDur = KBM.Defaults.AlertObj.Create("yellow"),
 			LeftLongshot = KBM.Defaults.AlertObj.Create("blue"),
 			RightLongshot = KBM.Defaults.AlertObj.Create("blue"),
+		},
+		ChatRef = {
+			Enabled = true,
+			LeftLSSpawn = KBM.Defaults.ChatObj.Create("yellow"),
+			LeftLSDied = KBM.Defaults.ChatObj.Create("yellow"),
+			RightLSSpawn = KBM.Defaults.ChatObj.Create("yellow"),
+			RightLSDied = KBM.Defaults.ChatObj.Create("yellow"),
 		},
 	}
 }
@@ -364,15 +372,15 @@ function RS:UnitHPCheck(uDetails, unitID)
 								if uDetails.coordZ < 1573 then
 									SubBossObj.Side = "Left"
 									if self.Rusila.AlertsRef.LeftLongshot.Enabled then
-										print(self.Lang.Verbose.LeftLSSpawn[KBM.Lang])
 										KBM.Alert:Start(self.Rusila.AlertsRef.LeftLongshot)
 									end
+									KBM.Chat:Display(self.Rusila.ChatRef.LeftLSSpawn)
 								else
 									SubBossObj.Side = "Right"
 									if self.Rusila.AlertsRef.RightLongshot.Enabled then
-										print(self.Lang.Verbose.RightLSSpawn[KBM.Lang])
 										KBM.Alert:Start(self.Rusila.AlertsRef.RightLongshot)
 									end
+									KBM.Chat:Display(self.Rusila.ChatRef.RightLSSpawn)
 								end
 								BossObj.UnitList[unitID] = SubBossObj
 							else
@@ -400,33 +408,10 @@ function RS:Reset()
 	self.Rusila.UnitID = nil
 	self.Rusila.CastBar:Remove()
 	self.PhaseObj:End(Inspect.Time.Real())
+	self.Phase = 1
 end
 
 function RS:Timer()	
-end
-
-function RS.Rusila:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function RS.Rusila:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
 end
 
 function RS:DefineMenu()
@@ -446,6 +431,13 @@ function RS:Start()
 	self.Rusila.AlertsRef.LeftLongshot = KBM.Alert:Create(self.Lang.Verbose.LeftLSSpawn[KBM.Lang], 3, false, false, "blue")
 	self.Rusila.AlertsRef.RightLongshot = KBM.Alert:Create(self.Lang.Verbose.RightLSSpawn[KBM.Lang], 3, false, false, "blue")
 	KBM.Defaults.AlertObj.Assign(self.Rusila)
+	
+	-- Create Chat Objects
+	self.Rusila.ChatRef.LeftLSSpawn = KBM.Chat:Create(self.Lang.Verbose.LeftLSSpawn[KBM.Lang])
+	self.Rusila.ChatRef.LeftLSDied = KBM.Chat:Create(self.Lang.Verbose.LeftLSDied[KBM.Lang])
+	self.Rusila.ChatRef.RightLSSpawn = KBM.Chat:Create(self.Lang.Verbose.RightLSSpawn[KBM.Lang])
+	self.Rusila.ChatRef.RightLSDied = KBM.Chat:Create(self.Lang.Verbose.RightLSDied[KBM.Lang])
+	KBM.Defaults.ChatObj.Assign(self.Rusila)
 	
 	-- Assign Alerts and Timers to Triggers
 	self.Rusila.Triggers.Barrel = KBM.Trigger:Create(self.Lang.Buff.Barrel[KBM.Lang], "playerBuff", self.Dummy, nil, true)

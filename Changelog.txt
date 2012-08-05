@@ -1,10 +1,30 @@
 ﻿v1.2.2
 
+Chat Output
+* New: Chat Objects have been added to KBM. These are created and managed in the same way as Alerts, Timers and Mechanic Spies.
+* New: Newly created and converted Chat Object will have various settings, so they can be individually enabled/disabled.
+* New: Chat Objects have a Color option, this is not yet available, but once available all settings will be automatically applied.
+* Note: This system will be expanded upon, and will include options in the global menu to assign which Tabs KBM output can display to.
+* Note: Once the Chat Tab options are available, custom and default colors already defined will be applied.
+
+Rez Master
+* New: If the Unit cache does not have an entry yet for the player in question, KBM will temporary assign one.
+* Fixed: Another possible unassigned Unit Cache nil entry. (This is possibly a Warfront/Conquest related issue)
+
 Infernal Dawn
 * Rusila
+** Change: Longshot chat outputs are now assigned to Chat Objects and can be enabled/disabled individually.
 ** Change: When disabling the Left/Right Longshot alerts, the corresponding output to chat is also disabled.
 * Maelforge Final
 ** Change: Separated both versions of Hellfire when displayed in the Mechanic Spy. These are now color coded based on the in-game bubble.
+
+River of Souls
+* Dark Foci
+** Change: Attempt to stop these from triggering after the encounter has ended.
+
+Greenscale's Blight
+* Oracle Aleria
+** Change: Adjusted the Boss object records for the initial Werewolves to us new ID based storage and trigger.
 
 Translations
 * Russian Updated.

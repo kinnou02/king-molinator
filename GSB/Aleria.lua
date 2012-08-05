@@ -128,8 +128,10 @@ function OA:AddBosses(KBM_Boss)
 		[self.Necrotic.Name] = self.Necrotic,
 	}
 	KBM_Boss[self.Aleria.Name] = self.Aleria
-	KBM.SubBoss[self.Primal.Name] = self.Primal
-	KBM.SubBoss[self.Necrotic.Name] = self.Necrotic
+	KBM.SubBossID[self.Primal.RaidID] = self.Primal
+	KBM.SubBossID[self.Necrotic.RaidID] = self.Necrotic
+	KBM.SubBossID[self.Primal.ChronicleID] = self.Primal
+	KBM.SubBossID[self.Necrotic.ChronicleID] = self.Necrotic
 end
 
 function OA:InitVars()

@@ -278,13 +278,15 @@ function DF:UnitHPCheck(uDetails, unitID)
 				self.Foci.Available = true
 				return self.Foci
 			elseif uDetails.name == self.Force.Name then
-				if not self.Force.UnitID then
-					self.Force.Casting = false
-					self.Force.Dead = false
-					self.Force.UnitID = unitID
-					self.Force.Available = true
-					self.Force.CastBar:Create(unitID)
-					return self.Force
+				if self.EncounterRunning == true then
+					if not self.Force.UnitID then
+						self.Force.Casting = false
+						self.Force.Dead = false
+						self.Force.UnitID = unitID
+						self.Force.Available = true
+						self.Force.CastBar:Create(unitID)
+						return self.Force
+					end
 				end
 			end
 		end

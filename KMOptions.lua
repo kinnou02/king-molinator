@@ -44,6 +44,18 @@ function KBM.SetBossAlerts(Boss, bool)
 	end
 end
 
+function KBM.SetBossChat(Boss, bool)
+	if bool then
+		for ChatID, ChatObj in pairs(Boss.ChatRef) do
+			ChatObj.Enabled = ChatObj.Settings.Enabled
+		end
+	else
+		for ChatID, ChatObj in pairs(Boss.ChatRef) do
+			ChatObj.Enabled = false
+		end
+	end
+end
+
 function KBM.Scroller:Create(Type, Size, Parent, Callback)
 
 	local ScrollerObj = {}
@@ -3092,13 +3104,93 @@ function KBM.InitOptions()
 					end
 				end
 				
+				function self:CreateChatOptions(BossObj)
+					BossObj.Menu.Chat = {}
+
+					local Callbacks = {}
+					local MenuName = ""
+					if BossObj.NameShort then
+						MenuName = BossObj.NameShort
+					else
+						MenuName = BossObj.Name
+					end
+		
+					function Callbacks:Enabled(bool)
+						self.Boss.Settings.ChatRef.Enabled = bool
+						KBM.SetBossChat(self.Boss, bool)
+					end
+		
+					if BossObj.ChatRef then
+					
+						Header = self:CreateHeader(KBM.Language.Chat.Enabled[KBM.Lang].." ("..MenuName..")", "check", "Alerts", "Main")
+						Header:SetChecked(BossObj.Settings.ChatRef.Enabled)
+						Header:SetHook(Callbacks.Enabled)
+						Header.Boss = BossObj
+						
+						for ChatID, ChatData in pairs(BossObj.ChatRef) do
+							if ChatData.HasMenu then
+								local Callbacks = {}
+								Callbacks.Option = self
+								
+								function Callbacks:Callback(bool)
+									self.Data.Enabled = bool
+									self.Data.Settings.Enabled = bool
+									self.Boss.Menu.Chat[self.Data.Settings.ID].ColorGUI:Enable(bool)
+								end
+								
+								function Callbacks:Enabled(bool)
+									self.Data.Enabled = bool
+									self.Data.Settings.Enabled = bool
+									self.Boss.Menu.Chat[self.Data.Settings.ID].ColorGUI:Enable(bool)
+								end
+																
+								function Callbacks:Color(bool, Color)							
+									if not Color then
+										self.Data.Settings.Custom = bool
+										self.GUI:SetEnabled(bool)
+									elseif Color then
+										self.Manager.Data.Settings.Color = Color
+										self.Manager.Color = Color
+									end								
+								end
+
+								local MenuName = ChatData.Text
+								if ChatData.MenuName then
+									MenuName = ChatData.MenuName
+								end
+								
+								Child = Header:CreateOption(MenuName, "excheck", Callbacks.Callback)
+								Child.Data = ChatData
+								Child:SetChecked(ChatData.Settings.Enabled)							
+								local SubHeader = Child:CreateHeader(MenuName, "plain")
+								SubHeader.Boss = BossObj
+								BossObj.Menu.Chat[ChatID] = {}
+								BossObj.Menu.Chat[ChatID].Enabled = SubHeader:CreateOption(KBM.Language.Options.Enabled[KBM.Lang], "check", Callbacks.Enabled)
+								BossObj.Menu.Chat[ChatID].Enabled:SetChecked(ChatData.Settings.Enabled)
+								BossObj.Menu.Chat[ChatID].Enabled.Data = ChatData
+								BossObj.Menu.Chat[ChatID].Enabled.Controller = Child
+								Child.Controller = BossObj.Menu.Chat[ChatID].Enabled
+								BossObj.Menu.Chat[ChatID].ColorGUI = SubHeader:CreateOption(KBM.Language.Color.Custom[KBM.Lang], "color", Callbacks.Color)
+								BossObj.Menu.Chat[ChatID].ColorGUI:SetChecked(ChatData.Settings.Custom)
+								BossObj.Menu.Chat[ChatID].ColorGUI.Enabled = ChatData.Settings.Enabled
+								BossObj.Menu.Chat[ChatID].ColorGUI.Color = ChatData.Settings.Color
+								BossObj.Menu.Chat[ChatID].ColorGUI.Data = ChatData
+							end
+						end
+					end				
+				end
+				
 				local AlertCreated = false
 				for BossName, BossObj in pairs(self.Boss.Mod.Bosses) do
 					if BossObj.AlertsRef then
 						self:CreateOptions(BossObj)
 						AlertCreated = true
 					end
-				end								
+					if BossObj.ChatRef then
+						self:CreateChatOptions(BossObj)
+						AlertCreated = true
+					end
+				end
 				if not AlertCreated then
 					self.Pages.Tabs.Alerts.Enabled = false
 				end
