@@ -145,6 +145,7 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Chat = {}
 	KBMLM.SetGroupObject(KBM.Language.Chat, "GroupObject", "Chat based dictionary")
 	KBM.Language.Chat.Enabled = KBM.Language:Add("Enable chat output")
+	KBM.Language.Chat.Enabled:SetFrench("Activer redirection vers le chat")
 	
 	-- Command Listings
 	KBM.Language.Command = {}
@@ -365,7 +366,9 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Color.Purple:SetFrench("Violet")
 	KBM.Language.Color.Purple:SetKorean("보라")
 	KBM.Language.Color.Pink = KBM.Language:Add("Pink")
+	KBM.Language.Color.Pink:SetFrench("Rose")
 	KBM.Language.Color.Dark_Grey = KBM.Language:Add("Dark Grey")
+	KBM.Language.Color.Dark_Grey:SetFrench("Gris Foncé")
 
 	-- Castbar Action Dictionary
 	KBM.Language.CastBar = {}

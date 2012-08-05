@@ -6030,6 +6030,11 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 					if self.Boss.Settings.CastBar then
 						if self.Boss.Settings.CastBar.Override then
 							self.Settings = self.Boss.Settings.CastBar
+							if self.Boss.Mod then
+								if self.Boss.Mod.Instance then
+									self.Settings.Style = KBM.Options.CastBar.Style
+								end
+							end
 						else
 							self.Settings = KBM.Options.CastBar
 						end
@@ -6047,6 +6052,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 	
 	function CastBarObj:ApplySettings()
 		if self.GUI then
+			self:ManageSettings()
 			self.GUI.Frame:ClearAll()
 			if not self.Settings.x then
 				self.GUI.Frame:SetPoint("CENTER", UIParent, 0.5, 0.7)
@@ -6415,8 +6421,8 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 					if self.Settings.Style == "rift" then
 						self.GUI.Highlight:SetAlpha(0)
 					end
-				KBM.Event.Unit.Cast.End(self.UnitID)
 				end
+				KBM.Event.Unit.Cast.End(self.UnitID)
 			else
 				local AlphaVal = self.InterruptEnd - Inspect.Time.Real()
 				if self.GUI then

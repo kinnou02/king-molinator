@@ -1,5 +1,8 @@
 ﻿v1.2.2
 
+Castbars
+* Change: All Boss castbars now inherit the global Style setting (KBM or Rift).
+
 Colors
 * New: Added Pink to the list of available colors for Alerts, Timers, Text and Mechanic Spies.
 * New: Added Dark Grey to the list of available colors for Alerts, Timers, Text and Mechanic Spies.
@@ -26,6 +29,11 @@ Primeval Feast
 * Alltha the Reaper
 ** New: Added personal alert for Toxic Spores
 ** New: Added a 6 minute enrage timer.
+** New: Added phase tracking to show Portals or Puddles.
+** New: Added Timer for Repear's Rage.
+** New: Added Timer for Nature's Fury.
+** New: Added Timer for Fae Torrent. (Portal Phase)
+** New: Added Alert for Fae Torrent. (Portal Phase)
 
 River of Souls
 * Dark Foci

@@ -1315,23 +1315,7 @@ function KBM.InitOptions()
 		
 	KBM.MainWin.Menu = {}
 		
-	--function KBM.MainWin.Scrollback(value)
-		--KBM.MainWin.FirstItem:SetPoint("TOP", KBM.MainWin.Menu, "TOP", nil, -value)
-	--end	
-	-- KBM.MainWin.Scroller = KBM.Scroller:Create("V", KBM.MainWin.Menu:GetHeight(), KBM.MainWin, KBM.MainWin.Scrollback)
-	-- KBM.MainWin.Scroller.Frame:SetPoint("TOPRIGHT", KBM.MainWin.SplitFrame, "TOPLEFT")
 	local OptionsWidth = ContentW - KBM.MainWin.MenuArea:GetWidth() - KBM.MainWin.SplitFrame:GetWidth() - 10
-	-- KBM.MainWin.Menu:ClearWidth()
-	-- KBM.MainWin.Menu:SetPoint("TOPRIGHT", KBM.MainWin.Scroller.Frame, "TOPLEFT")
-
-	--function KBM.MainWin.Menu.Event:WheelForward()
-		-- KBM.MainWin.Scroller:SetPosition(-20)
-	--end
-	--function KBM.MainWin.Menu.Event:WheelBack()
-		-- KBM.MainWin.Scroller:SetPosition(20)
-	--end
-	
-	-- KBM.MainWin.Scroller.Frame:SetVisible(false)
 	
 	KBM.MainWin.Options.Mask = UI.CreateFrame("Mask", "KBM Options Mask", KBM.MainWin)
 	KBM.MainWin.Options.Mask:SetMouseMasking("limited")
@@ -2424,15 +2408,6 @@ function KBM.InitOptions()
 						function Callbacks:Text(bool)
 							self.Header.Boss.Settings.CastBar.TextScale = bool
 						end
-						function Callbacks:Style(bool)
-							self.Boss.CastBar:Hide(true)
-							if bool then
-								self.Header.Boss.Settings.CastBar.Style = "rift"
-							else
-								self.Header.Boss.Settings.CastBar.Style = "kbm"
-							end
-							self.Boss.CastBar:Display()
-						end
 						
 						local Settings = BossObj.Settings.CastBar
 						Header = self:CreateHeader(KBM.Language.Menu.Enable[KBM.Lang].." "..MenuName.."'s "..KBM.Language.Menu.Castbars[KBM.Lang]..".", "check", "Castbars", "Main")
@@ -2442,12 +2417,6 @@ function KBM.InitOptions()
 						if BossObj.PinCastBar then
 							Child = Header:CreateOption(BossObj.Settings.PinMenu, "check", Callbacks.Pinned)
 							Child:SetChecked(Settings.Pinned)
-						end
-						Child = Header:CreateOption(KBM.Language.Options.CastbarStyle[KBM.Lang], "check", Callbacks.Style)
-						if Settings.Style == "rift" then
-							Child:SetChecked(true)
-						else
-							Child:SetChecked(false)
 						end
 						Child = Header:CreateOption(KBM.Language.Options.ShowAnchor[KBM.Lang], "check", Callbacks.Visible)
 						Child:SetChecked(Settings.Visible)

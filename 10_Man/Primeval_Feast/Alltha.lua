@@ -33,7 +33,7 @@ AR.Alltha = {
 	Menu = {},
 	Dead = false,
 	AlertsRef = {},
-	-- TimersRef = {},
+	TimersRef = {},
 	MechRef = {},
 	Available = false,
 	UnitID = nil,
@@ -47,6 +47,13 @@ AR.Alltha = {
 		AlertsRef = {
 			Enabled = true,
 			Spore = KBM.Defaults.AlertObj.Create("purple"),
+			Fae = KBM.Defaults.AlertObj.Create("cyan"),
+		},
+		TimersRef = {
+			Enabled = true,
+			Reapers = KBM.Defaults.TimerObj.Create("red"),
+			Natures = KBM.Defaults.TimerObj.Create("dark_green"),
+			Fae = KBM.Defaults.TimerObj.Create("cyan"),
 		},
 	},
 }
@@ -64,15 +71,31 @@ AR.Lang.Unit.AllthaShort:SetGerman("Alltha")
 AR.Lang.Unit.AllthaShort:SetFrench("Alltha")
 AR.Lang.Unit.AllthaShort:SetRussian("Алльта")
 
+-- Ability Dictionary
+AR.Lang.Ability = {}
+AR.Lang.Ability.Fae = KBM.Language:Add("Fae Torrent")
+
 -- Debuff Dictionary
 AR.Lang.Debuff = {}
 AR.Lang.Debuff.Spore = KBM.Language:Add("Toxic Spore")
 AR.Lang.Debuff.Spore:SetFrench("Spore toxique")
 AR.Lang.Debuff.Spore:SetGerman("Giftige Spore")
 AR.Lang.Debuff.Spore:SetRussian("Ядовитая спора")
+
+-- Buff Dictionary
+AR.Lang.Buff = {}
+AR.Lang.Buff.Reapers = KBM.Language:Add("Reaper's Rage")
+AR.Lang.Buff.Natures = KBM.Language:Add("Nature's Fury")
+
+-- Phase Dictionary
+AR.Lang.Phase = {}
+AR.Lang.Phase.Portals = KBM.Language:Add("Portals")
+AR.Lang.Phase.Puddles = KBM.Language:Add("Puddles")
+
 AR.Alltha.Name = AR.Lang.Unit.Alltha[KBM.Lang]
 AR.Alltha.NameShort = AR.Lang.Unit.AllthaShort[KBM.Lang]
 AR.Descript = AR.Alltha.Name
+
 
 function AR:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
@@ -89,9 +112,10 @@ function AR:InitVars()
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		MechSpy = KBM.Defaults.MechSpy(),
+		MechTimer = KBM.Defaults.MechTimer(),
 		Alerts = KBM.Defaults.Alerts(),
 		AlertsRef = self.Alltha.Settings.AlertsRef,
-		-- TimersRef = self.Alltha.Settings.TimersRef,
+		TimersRef = self.Alltha.Settings.TimersRef,
 		MechRef = self.Alltha.Settings.MechRef,
 	}
 	KBMPFAR_Settings = self.Settings
@@ -135,6 +159,14 @@ end
 function AR:Castbar(units)
 end
 
+function AR.PhasePortals()
+	AR.PhaseObj:SetPhase(AR.Lang.Phase.Portals[KBM.Lang])
+end
+
+function AR.PhasePuddles()
+	AR.PhaseObj:SetPhase(AR.Lang.Phase.Puddles[KBM.Lang])
+end
+
 function AR:RemoveUnits(UnitID)
 	if self.Alltha.UnitID == UnitID then
 		self.Alltha.Available = false
@@ -165,7 +197,7 @@ function AR:UnitHPCheck(uDetails, unitID)
 					self.Alltha.Casting = false
 					self.Alltha.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
+					self.PhaseObj:SetPhase(self.Lang.Phase.Portals[KBM.Lang])
 					self.PhaseObj.Objectives:AddPercent(self.Alltha.Name, 0, 100)
 					self.Phase = 1					
 				end
@@ -190,39 +222,20 @@ function AR:Timer()
 	
 end
 
-function AR.Alltha:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function AR.Alltha:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
-end
-
 function AR:DefineMenu()
 	self.Menu = PF.Menu:CreateEncounter(self.Alltha, self.Enabled)
 end
 
 function AR:Start()
 	-- Create Timers
-
+	self.Alltha.TimersRef.Natures = KBM.MechTimer:Add(self.Lang.Buff.Natures[KBM.Lang], 35)
+	self.Alltha.TimersRef.Reapers = KBM.MechTimer:Add(self.Lang.Buff.Reapers[KBM.Lang], 55)
+	self.Alltha.TimersRef.Fae = KBM.MechTimer:Add(self.Lang.Ability.Fae[KBM.Lang], 8)
+	KBM.Defaults.TimerObj.Assign(self.Alltha)
+	
 	-- Create Alerts
 	self.Alltha.AlertsRef.Spore = KBM.Alert:Create(self.Lang.Debuff.Spore[KBM.Lang], nil, false, true, "purple")
+	self.Alltha.AlertsRef.Fae = KBM.Alert:Create(self.Lang.Ability.Fae[KBM.Lang], nil, true, true, "cyan")
 	KBM.Defaults.AlertObj.Assign(self.Alltha)
 	
 	-- Create Spies
@@ -235,6 +248,16 @@ function AR:Start()
 	self.Alltha.Triggers.Spore:AddAlert(self.Alltha.AlertsRef.Spore, true)
 	self.Alltha.Triggers.SporeRem = KBM.Trigger:Create(self.Lang.Debuff.Spore[KBM.Lang], "playerBuffRemove", self.Alltha)
 	self.Alltha.Triggers.SporeRem:AddStop(self.Alltha.MechRef.Spore)
+	self.Alltha.Triggers.Reapers = KBM.Trigger:Create(self.Lang.Buff.Reapers[KBM.Lang], "buff", self.Alltha)
+	self.Alltha.Triggers.Reapers:AddTimer(self.Alltha.TimersRef.Natures)
+	self.Alltha.Triggers.Reapers:AddPhase(self.PhasePortals)
+	self.Alltha.Triggers.Reapers:AddTimer(self.Alltha.TimersRef.Fae)
+	self.Alltha.Triggers.Natures = KBM.Trigger:Create(self.Lang.Buff.Natures[KBM.Lang], "buff", self.Alltha)
+	self.Alltha.Triggers.Natures:AddTimer(self.Alltha.TimersRef.Reapers)
+	self.Alltha.Triggers.Natures:AddPhase(self.PhasePuddles)
+	self.Alltha.Triggers.Fae = KBM.Trigger:Create(self.Lang.Ability.Fae[KBM.Lang], "cast", self.Alltha)
+	self.Alltha.Triggers.Fae:AddTimer(self.Alltha.TimersRef.Fae)
+	self.Alltha.Triggers.Fae:AddAlert(self.Alltha.AlertsRef.Fae)
 	
 	self.Alltha.CastBar = KBM.CastBar:Add(self, self.Alltha, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
