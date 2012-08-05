@@ -364,6 +364,8 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Color.Purple:SetRussian("Фиолетовый")
 	KBM.Language.Color.Purple:SetFrench("Violet")
 	KBM.Language.Color.Purple:SetKorean("보라")
+	KBM.Language.Color.Pink = KBM.Language:Add("Pink")
+	KBM.Language.Color.Dark_Grey = KBM.Language:Add("Dark Grey")
 
 	-- Castbar Action Dictionary
 	KBM.Language.CastBar = {}

@@ -1050,7 +1050,7 @@ end
 -- Main Color Library.
 -- Colors will remain preset based to avoid ugly videos :)
 KBM.Colors = {
-	Count = 6,
+	Count = 8,
 	List = {
 		red = {
 			Name = KBM.Language.Color.Red[KBM.Lang],
@@ -1090,9 +1090,21 @@ KBM.Colors = {
 		},
 		purple = {
 			Name = KBM.Language.Color.Purple[KBM.Lang],
-			Red = 0.85,
+			Red = 0.5,
 			Green = 0,
+			Blue = 0.38,
+		},
+		pink = {
+			Name = KBM.Language.Color.Pink[KBM.Lang],
+			Red = 0.93,
+			Green = 0.36,
 			Blue = 0.65,
+		},
+		dark_grey = {
+			Name = KBM.Language.Color.Dark_Grey[KBM.Lang],
+			Red = 0.3,
+			Green = 0.3,
+			Blue = 0.3,
 		},
 	}
 }
@@ -5310,7 +5322,7 @@ function KBM.Alert:Init()
 	self.Text:SetPoint("CENTER", self.Anchor, "CENTER")
 	self.Text:SetLayer(2)
 	self.Anchor:SetVisible(self.Settings.Visible)
-	self.ColorList = {"red", "blue", "cyan", "yellow", "orange", "purple", "dark_green"}
+	self.ColorList = {"red", "blue", "cyan", "yellow", "orange", "purple", "dark_green", "pink", "dark_grey"}
 	self.Left = {}
 	self.Right = {}
 	self.Top = {}

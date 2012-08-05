@@ -73,12 +73,14 @@ SK.Lang.Unit.KhargrothShort = KBM.Language:Add("Khargroth")
 SK.Lang.Unit.KhargrothShort:SetGerman("Khargroth")
 SK.Lang.Unit.KhargrothShort:SetFrench("Khargroth")
 SK.Lang.Unit.KhargrothShort:SetRussian("Харгрот")
+
 -- Ability Dictionary
 SK.Lang.Ability = {}
 SK.Lang.Ability.Spray = KBM.Language:Add("Poison Spray")
 SK.Lang.Ability.Spray:SetGerman("Gift-Sprühnebel")
 SK.Lang.Ability.Spray:SetFrench("Atomiseur de Poison")
 SK.Lang.Ability.Spray:SetRussian("Распыление яда")
+
 -- Notify Dictionary
 SK.Lang.Notify = {}
 SK.Lang.Notify.Acid = KBM.Language:Add("Swarmlord Khargroth sends a swirling cloud of acid at (%a*)!")
@@ -89,6 +91,7 @@ SK.Lang.Notify.Crawl = KBM.Language:Add("The Crawler Juggernaut chases after (%a
 SK.Lang.Notify.Crawl:SetGerman("Giganten-Kriecher jagt (%a*)!")
 SK.Lang.Notify.Crawl:SetFrench("Rampant mastodonte poursuit (%a*) !")
 SK.Lang.Notify.Crawl:SetRussian("(%a*) убегает, но Ползун-фанатик не отстает!")
+
 -- Debuff Dictionary
 SK.Lang.Debuff = {}
 SK.Lang.Debuff.Acid = KBM.Language:Add("Acidic Vapors")
@@ -133,6 +136,7 @@ function SK:InitVars()
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		MechSpy = KBM.Defaults.MechSpy(),
+		Alerts = KBM.Defaults.Alerts(),
 		AlertsRef = self.Khargroth.Settings.AlertsRef,
 		TimersRef = self.Khargroth.Settings.TimersRef,
 		MechRef = self.Khargroth.Settings.MechRef,

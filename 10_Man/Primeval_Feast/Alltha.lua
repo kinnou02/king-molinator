@@ -19,7 +19,7 @@ local AR = {
 	Enabled = true,
 	Instance = PF.Name,
 	Lang = {},
-	--Enrage = 5 * 60,
+	Enrage = 6 * 60,
 	ID = "PF_Alltha",
 	Object = "AR",
 }
@@ -32,7 +32,7 @@ AR.Alltha = {
 	NameShort = "Alltha",
 	Menu = {},
 	Dead = false,
-	-- AlertsRef = {},
+	AlertsRef = {},
 	-- TimersRef = {},
 	MechRef = {},
 	Available = false,
@@ -43,6 +43,10 @@ AR.Alltha = {
 		MechRef = {
 			Enabled = true,
 			Spore = KBM.Defaults.MechObj.Create("purple"),
+		},
+		AlertsRef = {
+			Enabled = true,
+			Spore = KBM.Defaults.AlertObj.Create("purple"),
 		},
 	},
 }
@@ -59,6 +63,7 @@ AR.Lang.Unit.AllthaShort = KBM.Language:Add("Alltha")
 AR.Lang.Unit.AllthaShort:SetGerman("Alltha")
 AR.Lang.Unit.AllthaShort:SetFrench("Alltha")
 AR.Lang.Unit.AllthaShort:SetRussian("Алльта")
+
 -- Debuff Dictionary
 AR.Lang.Debuff = {}
 AR.Lang.Debuff.Spore = KBM.Language:Add("Toxic Spore")
@@ -84,7 +89,8 @@ function AR:InitVars()
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		MechSpy = KBM.Defaults.MechSpy(),
-		-- AlertsRef = self.Alltha.Settings.AlertsRef,
+		Alerts = KBM.Defaults.Alerts(),
+		AlertsRef = self.Alltha.Settings.AlertsRef,
 		-- TimersRef = self.Alltha.Settings.TimersRef,
 		MechRef = self.Alltha.Settings.MechRef,
 	}
@@ -216,6 +222,8 @@ function AR:Start()
 	-- Create Timers
 
 	-- Create Alerts
+	self.Alltha.AlertsRef.Spore = KBM.Alert:Create(self.Lang.Debuff.Spore[KBM.Lang], nil, false, true, "purple")
+	KBM.Defaults.AlertObj.Assign(self.Alltha)
 	
 	-- Create Spies
 	self.Alltha.MechRef.Spore = KBM.MechSpy:Add(self.Lang.Debuff.Spore[KBM.Lang], nil, "playerDebuff", self.Alltha)
@@ -224,6 +232,7 @@ function AR:Start()
 	-- Assign Alerts and Timers to Triggers
 	self.Alltha.Triggers.Spore = KBM.Trigger:Create(self.Lang.Debuff.Spore[KBM.Lang], "playerBuff", self.Alltha)
 	self.Alltha.Triggers.Spore:AddSpy(self.Alltha.MechRef.Spore)
+	self.Alltha.Triggers.Spore:AddAlert(self.Alltha.AlertsRef.Spore, true)
 	self.Alltha.Triggers.SporeRem = KBM.Trigger:Create(self.Lang.Debuff.Spore[KBM.Lang], "playerBuffRemove", self.Alltha)
 	self.Alltha.Triggers.SporeRem:AddStop(self.Alltha.MechRef.Spore)
 	

@@ -482,9 +482,9 @@ function KBM.InitTabs()
 				for ColorID, ColorData in pairs(KBM.Colors.List) do
 					GUI.ColorObj[ColorID] = {}
 					GUI.ColorObj[ColorID].Frame = UI.CreateFrame("Frame", "ColorObj_"..ColorData.Name, GUI.Frame)
-					GUI.ColorObj[ColorID].Frame:SetHeight(28)
+					GUI.ColorObj[ColorID].Frame:SetHeight(27)
 					GUI.ColorObj[ColorID].Frame:SetPoint("RIGHT", GUI.Frame, "RIGHT")
-					GUI.ColorObj[ColorID].Frame:SetPoint("TOPLEFT", Last, "BOTTOMLEFT", 0, 4)
+					GUI.ColorObj[ColorID].Frame:SetPoint("TOPLEFT", Last, "BOTTOMLEFT", 0, 3)
 					GUI.ColorObj[ColorID].Frame:SetBackgroundColor(ColorData.Red, ColorData.Green, ColorData.Blue, 0.33)
 					GUI.ColorObj[ColorID].Texture = UI.CreateFrame("Texture", "ColorObj_Texture_"..ColorData.Name, GUI.ColorObj[ColorID].Frame)
 					KBM.LoadTexture(GUI.ColorObj[ColorID].Texture, "KingMolinator", "Media/BarSkin.png")

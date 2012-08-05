@@ -1,5 +1,10 @@
 ﻿v1.2.2
 
+Colors
+* New: Added Pink to the list of available colors for Alerts, Timers, Text and Mechanic Spies.
+* New: Added Dark Grey to the list of available colors for Alerts, Timers, Text and Mechanic Spies.
+* Change: Purple is now... more purple.
+
 Chat Output
 * New: Chat Objects have been added to KBM. These are created and managed in the same way as Alerts, Timers and Mechanic Spies.
 * New: Newly created and converted Chat Object will have various settings, so they can be individually enabled/disabled.
@@ -8,15 +13,19 @@ Chat Output
 * Note: Once the Chat Tab options are available, custom and default colors already defined will be applied.
 
 Rez Master
-* New: If the Unit cache does not have an entry yet for the player in question, KBM will temporary assign one.
+* New: If the Unit cache does not have an entry yet for the player in question, KBM will temporarily assign one.
 * Fixed: Another possible unassigned Unit Cache nil entry. (This is possibly a Warfront/Conquest related issue)
 
 Infernal Dawn
 * Rusila
 ** Change: Longshot chat outputs are now assigned to Chat Objects and can be enabled/disabled individually.
-** Change: When disabling the Left/Right Longshot alerts, the corresponding output to chat is also disabled.
 * Maelforge Final
 ** Change: Separated both versions of Hellfire when displayed in the Mechanic Spy. These are now color coded based on the in-game bubble.
+
+Primeval Feast
+* Alltha the Reaper
+** New: Added personal alert for Toxic Spores
+** New: Added a 6 minute enrage timer.
 
 River of Souls
 * Dark Foci
@@ -24,7 +33,7 @@ River of Souls
 
 Greenscale's Blight
 * Oracle Aleria
-** Change: Adjusted the Boss object records for the initial Werewolves to us new ID based storage and trigger.
+** Change: Adjusted the Boss object records for the initial Werewolves to use new ID based storage and trigger.
 
 Translations
 * Russian Updated.
