@@ -74,6 +74,8 @@ AR.Lang.Unit.AllthaShort:SetRussian("Алльта")
 -- Ability Dictionary
 AR.Lang.Ability = {}
 AR.Lang.Ability.Fae = KBM.Language:Add("Fae Torrent")
+AR.Lang.Ability.Fae:SetGerman("Feen-Strom")
+AR.Lang.Ability.Fae:SetFrench("Torrent de fée")
 
 -- Debuff Dictionary
 AR.Lang.Debuff = {}
@@ -85,12 +87,20 @@ AR.Lang.Debuff.Spore:SetRussian("Ядовитая спора")
 -- Buff Dictionary
 AR.Lang.Buff = {}
 AR.Lang.Buff.Reapers = KBM.Language:Add("Reaper's Rage")
+AR.Lang.Buff.Reapers:SetGerman("Schnitter's Wut")
+AR.Lang.Buff.Reapers:SetFrench("Force Sauvage")
 AR.Lang.Buff.Natures = KBM.Language:Add("Nature's Fury")
+AR.Lang.Buff.Natures:SetGerman("Zorn der Natur")
+AR.Lang.Buff.Natures:SetFrench("Fureur de la nature")
 
 -- Phase Dictionary
 AR.Lang.Phase = {}
 AR.Lang.Phase.Portals = KBM.Language:Add("Portals")
+AR.Lang.Phase.Portals:SetGerman("Portale")
+AR.Lang.Phase.Portals:SetFrench("Portails")
 AR.Lang.Phase.Puddles = KBM.Language:Add("Puddles")
+AR.Lang.Phase.Puddles:SetGerman("Pfützen")
+AR.Lang.Phase.Puddles:SetFrench("Tornades")
 
 AR.Alltha.Name = AR.Lang.Unit.Alltha[KBM.Lang]
 AR.Alltha.NameShort = AR.Lang.Unit.AllthaShort[KBM.Lang]

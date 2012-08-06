@@ -84,7 +84,7 @@ MF.Lang.Notify.Victory = KBM.Language:Add("Carcera: This world is saved from abo
 -- Description Dictionary
 MF.Lang.Descript = {}
 MF.Lang.Descript.Main = KBM.Language:Add("Maelforge - Ember Eggs")
-MF.Lang.Descript.Main:SetGerman("Maelforge - Gluteier")
+MF.Lang.Descript.Main:SetGerman("Flammenmaul - Gluteier")
 
 MF.Maelforge.Name = MF.Lang.Unit.Maelforge[KBM.Lang]
 MF.Maelforge.NameShort = MF.Lang.Unit.Maelforge[KBM.Lang]

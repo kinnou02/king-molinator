@@ -146,6 +146,7 @@ function KBMLM.SetMain_Lang()
 	KBMLM.SetGroupObject(KBM.Language.Chat, "GroupObject", "Chat based dictionary")
 	KBM.Language.Chat.Enabled = KBM.Language:Add("Enable chat output")
 	KBM.Language.Chat.Enabled:SetFrench("Activer redirection vers le chat")
+	KBM.Language.Chat.Enabled:SetGerman("Aktiviere Chat Ausgabe")
 	
 	-- Command Listings
 	KBM.Language.Command = {}
@@ -367,8 +368,10 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Color.Purple:SetKorean("보라")
 	KBM.Language.Color.Pink = KBM.Language:Add("Pink")
 	KBM.Language.Color.Pink:SetFrench("Rose")
+	KBM.Language.Color.Pink:SetGerman("Pink")
 	KBM.Language.Color.Dark_Grey = KBM.Language:Add("Dark Grey")
 	KBM.Language.Color.Dark_Grey:SetFrench("Gris Foncé")
+	KBM.Language.Color.Dark_Grey:SetGerman("Dunkelgrau")
 
 	-- Castbar Action Dictionary
 	KBM.Language.CastBar = {}
@@ -664,7 +667,7 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Options.AlertHorzShort:SetRussian("Горизонтальные полосы")
 	KBM.Language.Options.AlertHorzShort:SetKorean("수직 바")
 	KBM.Language.Options.UnlockFlash = KBM.Language:Add("Unlock alert border for scaling")
-	KBM.Language.Options.UnlockFlash:SetGerman("Alarmierungs Ränder sind änderbar.")
+	KBM.Language.Options.UnlockFlash:SetGerman("Alarmierungs Ränder sind änderbar")
 	KBM.Language.Options.UnlockFlash:SetRussian("Разблокировать рамку предупреждения")
 	KBM.Language.Options.UnlockFlash:SetFrench("Débloquer bordure alerte pour ajustement")
 	KBM.Language.Options.UnlockFlash:SetKorean("크기 변경을 위해 경고 테두리 잠금해제")
