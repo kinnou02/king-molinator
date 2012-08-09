@@ -114,7 +114,7 @@ KBM.ID = "KingMolinator"
 KBM.ModList = {}
 KBM.Testing = false
 KBM.ValidTime = false
-KBM.IsAlpha = false
+KBM.IsAlpha = true
 KBM.Debug = false
 KBM.Aux = {}
 KBM.TestFilters = {}
@@ -165,6 +165,7 @@ KBM.MenuOptions = {
 	MechSpy = {},
 	RezMaster = {},
 	Main = {},
+	ReadyCheck = {},
 	Enabled = true,
 	Handler = nil,
 	Options = nil,
@@ -3515,7 +3516,11 @@ function KBM.MatchType(uDetails, BossObj)
 						if KBM.Debug then
 							print("Chronicle mode active via ID")
 						end
-						return BossObj
+						if BossObj.Mod.Settings.Chronicle then
+							return BossObj
+						else
+							return
+						end
 					else
 						KBM.EncounterMode = "normal"
 						if KBM.Debug then
@@ -3532,7 +3537,11 @@ function KBM.MatchType(uDetails, BossObj)
 						if KBM.Debug then
 							print("Chronicle mode active via HP")
 						end
-						return BossObj
+						if BossObj.Mod.Settings.Chronicle then
+							return BossObj
+						else
+							return
+						end
 					else
 						KBM.EncounterMode = "normal"
 						if KBM.Debug then
@@ -7885,6 +7894,21 @@ function KBM.MenuOptions.RezMaster:Options()
 	RezMaster:AddCheck(KBM.Language.Options.UnlockText[KBM.Lang], self.Text, KBM.Options.RezMaster.ScaleText)
 end
 
+-- KBM Ready Check Options
+function KBM.MenuOptions.ReadyCheck:Options()
+	function self:Enabled(bool)
+		KBM.Ready.Settings.Enabled = bool
+		if bool then
+		else
+		end
+	end
+	
+	local Options = self.MenuItem.Options
+	Options:SetTitle()
+	local RezMaster = Options:AddHeader(KBM.Language.Options.Enabled[KBM.Lang], self.Enabled, KBM.Ready.Settings.Enabled)
+end
+
+
 function KBM.ApplySettings()
 	KBM.TankSwap.Enabled = KBM.Options.TankSwap.Enabled
 end
@@ -8169,10 +8193,13 @@ function KBM.InitMenus()
 	KBM.MenuOptions.CastBars.MenuItem.Check:SetEnabled(false)
 	KBM.MenuOptions.Alerts.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.Alert[KBM.Lang], KBM.MenuOptions.Alerts, true, Header)
 	KBM.MenuOptions.Alerts.MenuItem.Check:SetEnabled(false)
-	KBM.MenuOptions.TankSwap.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.TankSwap[KBM.Lang], KBM.MenuOptions.TankSwap, true, Header)	
-	KBM.MenuOptions.TankSwap.MenuItem.Check:SetEnabled(false)
 	KBM.MenuOptions.MechSpy.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.MechSpy.Name[KBM.Lang], KBM.MenuOptions.MechSpy, true, Header)
 	KBM.MenuOptions.MechSpy.MenuItem.Check:SetEnabled(false)
+	local Header = KBM.MainWin.Menu:CreateHeader(KBM.Language.Menu.Mods[KBM.Lang], nil, nil, nil, "Main")
+	KBM.MenuOptions.TankSwap.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.TankSwap[KBM.Lang], KBM.MenuOptions.TankSwap, true, Header)	
+	KBM.MenuOptions.TankSwap.MenuItem.Check:SetEnabled(false)
+	KBM.MenuOptions.ReadyCheck.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.ReadyCheck.Name[KBM.Lang], KBM.MenuOptions.ReadyCheck, true, Header)
+	KBM.MenuOptions.ReadyCheck.MenuItem.Check:SetEnabled(false)
 	KBM.MenuOptions.RezMaster.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.RezMaster.Name[KBM.Lang], KBM.MenuOptions.RezMaster, true, Header)
 	KBM.MenuOptions.RezMaster.MenuItem.Check:SetEnabled(false)
 	

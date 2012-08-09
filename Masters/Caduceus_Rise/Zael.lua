@@ -75,6 +75,22 @@ MOD.Zael.NameShort = MOD.Lang.Unit.ZaelShort[KBM.Lang]
 -- Ability Dictionary
 MOD.Lang.Ability = {}
 
+MOD.ZaelAdd = {
+	Mod = MOD,
+	Multi = true,
+	Level = "??",
+	Active = false,
+	Name = MOD.Lang.Unit.Zael[KBM.Lang],
+	NameShort = MOD.Lang.Unit.ZaelShort[KBM.Lang],
+	Menu = {},
+	Dead = false,
+	Available = false,
+	UnitID = nil,
+	MasterID = "U148113994CD9DCE0",
+	TimeOut = 5,
+}
+
+
 function MOD:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
@@ -151,26 +167,28 @@ function MOD:Death(UnitID)
 	return false
 end
 
-function MOD:UnitHPCheck(unitDetails, unitID)	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if unitDetails.name == self.Zael.Name then
-				if not self.EncounterRunning then
-					self.EncounterRunning = true
-					self.StartTime = Inspect.Time.Real()
-					self.HeldTime = self.StartTime
-					self.TimeElapsed = 0
-					self.Zael.Dead = false
-					self.Zael.Casting = false
-					self.Zael.CastBar:Create(unitID)
-					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase("Single")
-					self.PhaseObj.Objectives:AddPercent(self.Zael.Name, 0, 100)
-					self.Phase = 1
+function MOD:UnitHPCheck(uDetails, unitID)	
+	if uDetails and unitID then
+		if not uDetails.player then
+			if uDetails.type ~= self.ZaelAdd.MasterID then
+				if uDetails.name == self.Zael.Name then
+					if not self.EncounterRunning then
+						self.EncounterRunning = true
+						self.StartTime = Inspect.Time.Real()
+						self.HeldTime = self.StartTime
+						self.TimeElapsed = 0
+						self.Zael.Dead = false
+						self.Zael.Casting = false
+						self.Zael.CastBar:Create(unitID)
+						self.PhaseObj:Start(self.StartTime)
+						self.PhaseObj:SetPhase("Single")
+						self.PhaseObj.Objectives:AddPercent(self.Zael.Name, 0, 100)
+						self.Phase = 1
+					end
+					self.Zael.UnitID = unitID
+					self.Zael.Available = true
+					return self.Zael
 				end
-				self.Zael.UnitID = unitID
-				self.Zael.Available = true
-				return self.Zael
 			end
 		end
 	end

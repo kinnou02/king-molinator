@@ -1,4 +1,17 @@
-﻿v1.2.2
+﻿v1.2.3
+
+Rez Master
+* Fixed: Actually applied the fix correctly from the last Revision this time.
+
+Master Mode Caduceus Rise
+* Ashcaller Zael
+** Fixed: Stopped the smaller Adds from overwriting the bosses UID, enabling the encounter to finally trigger a victory.
+
+Chronicles
+* Fixed: Disabled Chronicles will no longer partially initialize, and will instead be completely ignored.
+
+----
+v1.2.2
 
 Castbars
 * Change: All Boss castbars now inherit the global Style setting (KBM or Rift).

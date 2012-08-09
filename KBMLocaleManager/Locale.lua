@@ -121,6 +121,11 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Version.AlphaInfo:SetFrench("Vous exécutez r%d, il y a le build r%d de KBM en circulation.")
 	KBM.Language.Version.AlphaInfo:SetKorean("현재 버전은 r%d, 버전 r%d 에 새로운 릴리즈가 있을겁니다.")
 	
+	-- Ready Check Dictionary
+	KBM.Language.ReadyCheck = {}
+	KBMLM.SetGroupObject(KBM.Language.ReadyCheck, "GroupObject", "Ready Check Dictionary")
+	KBM.Language.ReadyCheck.Name = KBM.Language:Add("Ready Check")
+	
 	-- Rez Master Dictionary
 	KBM.Language.RezMaster = {}
 	KBMLM.SetGroupObject(KBM.Language.RezMaster, "GroupObject", "Rez Master dictionary")
@@ -737,6 +742,7 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Menu.Castbars:SetGerman("Zauberbalken")
 	KBM.Language.Menu.Castbars:SetRussian("кастбары")
 	KBM.Language.Menu.Castbars:SetKorean("캐스터바")
+	KBM.Language.Menu.Mods = KBM.Language:Add("Modules")
 	
 	-- Filter Options
 	KBM.Language.Filters = {}

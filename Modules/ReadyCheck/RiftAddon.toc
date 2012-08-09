@@ -1,0 +1,26 @@
+﻿Identifier = "KBMReadyCheck"
+
+Name = "King Boss Mods Ready Check"
+NameShort = "KBM Ready Check"
+
+Description = "King Boss Mods Ready Check module for Raiding."
+
+Author = "Paul Snart"
+Website = "http://twitter.com/#!/psnart"
+Email = "snarty@gmail.com"
+
+Version = "0.0.1"
+
+Environment = "1.9"
+
+RunOnStartup = {
+	"ReadyCheck.lua",
+}
+
+SavedVariables = {
+	KBMRCM_Settings = "global",
+}
+
+Dependencies = {
+	KingMolinator = {"required", "before"},
+}

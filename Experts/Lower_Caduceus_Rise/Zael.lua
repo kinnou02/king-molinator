@@ -151,10 +151,10 @@ function MOD:Death(UnitID)
 	return false
 end
 
-function MOD:UnitHPCheck(unitDetails, unitID)	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if unitDetails.name == self.Zael.Name then
+function MOD:UnitHPCheck(uDetails, unitID)	
+	if uDetails and unitID then
+		if not uDetails.player then
+			if uDetails.type == self.Zael.ExpertID then
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
@@ -185,30 +185,6 @@ function MOD:Reset()
 end
 
 function MOD:Timer()	
-end
-
-function MOD.Zael:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function MOD.Zael:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
 end
 
 function MOD:DefineMenu()
