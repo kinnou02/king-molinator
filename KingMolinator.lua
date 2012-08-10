@@ -104,6 +104,16 @@ KBM.Unit = {
 		Count = 0,
 	},
 }
+KBM.Layer = {
+	ReadyCheck = 11,
+	DragActive = 99,
+	DragInactive = 90,
+	Alerts = 8,
+	Timers = 9,
+	Castbars = 15,
+	Info = 10,
+	Menu = 1,
+}
 KBM.CPU = {}
 KBM.Lang = Inspect.System.Language()
 KBM.Player = {
@@ -1255,6 +1265,7 @@ function KBM.MechTimer:Pull()
 		GUI.Background:SetHeight(KBM.MechTimer.Anchor:GetHeight())
 		GUI.Background:SetBackgroundColor(0,0,0,0.33)
 		GUI.Background:SetMouseMasking("limited")
+		GUI.Background:SetLayer(KBM.Layer.Timers)
 		GUI.TimeBar = UI.CreateFrame("Frame", "Timer_Progress_Frame", GUI.Background)
 		--KBM.LoadTexture(GUI.TimeBar, "KingMolinator", "Media/BarTexture2.png")
 		GUI.TimeBar:SetWidth(KBM.MechTimer.Anchor:GetWidth())
@@ -4784,6 +4795,8 @@ function KBM.AttachDragFrame(parent, hook, name, layer)
 	Drag.Frame.MouseDown = false
 	Drag.Frame:SetLayer(layer)
 	Drag.hook = hook
+	Drag.Layer = parent:GetLayer()
+	Drag.Parent = parent
 	
 	function Drag.Frame.Event:LeftDown()
 		self.MouseDown = true
@@ -4802,6 +4815,7 @@ function KBM.AttachDragFrame(parent, hook, name, layer)
 		self.parent:SetHeight(tempH)
 		self:SetBackgroundColor(0,0,0,0.5)
 		Drag.hook("start")
+		Drag.Parent:SetLayer(KBM.Layer.DragActive)
 	end
 	
 	function Drag.Frame.Event:MouseMove(mouseX, mouseY)
@@ -4815,6 +4829,7 @@ function KBM.AttachDragFrame(parent, hook, name, layer)
 			self.MouseDown = false
 			self:SetBackgroundColor(0,0,0,0)
 			Drag.hook("end")
+			Drag.Parent:SetLayer(Drag.Layer)
 		end
 	end
 	
@@ -5318,7 +5333,7 @@ function KBM.Alert:Init()
 	self.Settings = KBM.Options.Alerts
 	self.Anchor = UI.CreateFrame("Frame", "Alert Text Anchor", KBM.Context)
 	self.Anchor:SetBackgroundColor(0,0,0,0)
-	self.Anchor:SetLayer(5)
+	self.Anchor:SetLayer(KBM.Layer.DragInactive)
 	self.Shadow = UI.CreateFrame("Text", "Alert Text Outline", self.Anchor)
 	self.Shadow:SetFontColor(0,0,0)
 	self.Shadow:SetLayer(1)
@@ -5340,22 +5355,22 @@ function KBM.Alert:Init()
 	self.AlertControl = {}
 	self.AlertControl.Left = UI.CreateFrame("Frame", "Left_Alert_Controller", KBM.Context)
 	self.AlertControl.Left:SetVisible(false)
-	self.AlertControl.Left:SetLayer(2)
+	self.AlertControl.Left:SetLayer(KBM.Layer.DragInactive)
 	self.AlertControl.Left:SetPoint("TOPLEFT", UIParent, "TOPLEFT")
 	self.AlertControl.Left:SetPoint("BOTTOM", UIParent, "BOTTOM")
 	self.AlertControl.Right = UI.CreateFrame("Frame", "Right_Alert_Controller", KBM.Context)
 	self.AlertControl.Right:SetVisible(false)
-	self.AlertControl.Right:SetLayer(2)
+	self.AlertControl.Right:SetLayer(KBM.Layer.DragInactive)
 	self.AlertControl.Right:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT")
 	self.AlertControl.Right:SetPoint("BOTTOM", UIParent, "BOTTOM")
 	self.AlertControl.Top = UI.CreateFrame("Frame", "Top_Alert_Controller", KBM.Context)
 	self.AlertControl.Top:SetVisible(false)
-	self.AlertControl.Top:SetLayer(2)
+	self.AlertControl.Top:SetLayer(KBM.Layer.DragInactive)
 	self.AlertControl.Top:SetPoint("TOPLEFT", UIParent, "TOPLEFT")
 	self.AlertControl.Top:SetPoint("RIGHT", UIParent, "RIGHT")
 	self.AlertControl.Bottom = UI.CreateFrame("Frame", "Bottom_Alert_Controller", KBM.Context)
 	self.AlertControl.Bottom:SetVisible(false)
-	self.AlertControl.Bottom:SetLayer(2)
+	self.AlertControl.Bottom:SetLayer(KBM.Layer.DragInactive)
 	self.AlertControl.Bottom:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT")
 	self.AlertControl.Bottom:SetPoint("RIGHT", UIParent, "RIGHT")
 	
@@ -5365,21 +5380,25 @@ function KBM.Alert:Init()
 		self.Left[Color]:SetPoint("TOPLEFT", self.AlertControl.Left, "TOPLEFT")
 		self.Left[Color]:SetPoint("BOTTOMRIGHT", self.AlertControl.Left, "BOTTOMRIGHT")
 		self.Left[Color]:SetVisible(false)
+		self.Left[Color]:SetLayer(KBM.Layer.Alerts)
 		self.Right[Color] = UI.CreateFrame("Texture", "Right_Alert"..Color, KBM.Context)
 		KBM.LoadTexture(self.Right[Color], "KingMolinator", "Media/Alert_Right_"..Color..".png")
 		self.Right[Color]:SetPoint("TOPLEFT", self.AlertControl.Right, "TOPLEFT")
 		self.Right[Color]:SetPoint("BOTTOMRIGHT", self.AlertControl.Right, "BOTTOMRIGHT")
 		self.Right[Color]:SetVisible(false)
+		self.Right[Color]:SetLayer(KBM.Layer.Alerts)
 		self.Top[Color] = UI.CreateFrame("Texture", "Top_Alert "..Color, KBM.Context)
 		KBM.LoadTexture(self.Top[Color], "KingMolinator", "Media/Alert_Top_"..Color..".png")
 		self.Top[Color]:SetPoint("TOPLEFT", self.AlertControl.Top, "TOPLEFT")
 		self.Top[Color]:SetPoint("BOTTOMRIGHT", self.AlertControl.Top, "BOTTOMRIGHT")
 		self.Top[Color]:SetVisible(false)
+		self.Top[Color]:SetLayer(KBM.Layer.Alerts)
 		self.Bottom[Color] = UI.CreateFrame("Texture", "Bottom_Alert "..Color, KBM.Context)
 		KBM.LoadTexture(self.Bottom[Color], "KingMolinator", "Media/Alert_Bottom_"..Color..".png")
 		self.Bottom[Color]:SetPoint("TOPLEFT", self.AlertControl.Bottom, "TOPLEFT")
 		self.Bottom[Color]:SetPoint("BOTTOMRIGHT", self.AlertControl.Bottom, "BOTTOMRIGHT")
 		self.Bottom[Color]:SetVisible(false)
+		self.Bottom[Color]:SetLayer(KBM.Layer.Alerts)
 	end
 	
 	self.AlertControl.Left:SetPoint("RIGHT", UIParent, 0.2 * KBM.Alert.Settings.fScale, nil)
@@ -5462,7 +5481,6 @@ function KBM.Alert:Init()
 	end
 	
 	self.Anchor.Drag = KBM.AttachDragFrame(self.Anchor, function(uType) self.Anchor:Update(uType) end, "Alert Anchor Drag", 2)
-	self.Anchor.Drag:SetLayer(3)
 	self.Anchor.Drag:ClearAll()
 	self.Anchor.Drag:SetPoint("TOPRIGHT", self.Text, "TOPRIGHT")
 	self.Anchor.Drag:SetPoint("BOTTOMLEFT", self.Text, "BOTTOMLEFT")
@@ -5814,7 +5832,7 @@ function KBM.CastBar:Init()
 		GUI.Frame = UI.CreateFrame("Frame", "CastBar Frame", KBM.Context)
 		GUI.Frame:SetWidth(math.ceil(KBM.Constant.CastBar.w * self.Settings.wScale))
 		GUI.Frame:SetHeight(math.ceil(KBM.Constant.CastBar.h * self.Settings.hScale))
-		GUI.Frame:SetLayer(2)
+		GUI.Frame:SetLayer(KBM.Layer.Castbars)
 		
 		-- Handle Style types to account for API Texture issues	for the Progress Mask
 		GUI.Mask = UI.CreateFrame("Mask", "CastBar_Mask", GUI.Frame)
@@ -6812,11 +6830,6 @@ function KBM:Timer()
 							KBM.TankSwap:Update()
 						end
 					end
-					-- for UnitID, BossObj in pairs(self.BossID) do
-						-- if BossObj.available then
-							-- self:UpdateHP(UnitID)
-						-- end
-					-- end
 				end
 				self.Trigger.Queue:Activate()
 				if self.MechTimer.RemoveCount > 0 then
@@ -7898,16 +7911,14 @@ end
 function KBM.MenuOptions.ReadyCheck:Options()
 	function self:Enabled(bool)
 		KBM.Ready.Settings.Enabled = bool
-		if bool then
-		else
-		end
+		KBM.Ready.Enabled = bool
+		KBM.Ready.GUI:ApplySettings()
 	end
-	
+		
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
-	local RezMaster = Options:AddHeader(KBM.Language.Options.Enabled[KBM.Lang], self.Enabled, KBM.Ready.Settings.Enabled)
+	local ReadyCheck = Options:AddHeader(KBM.Language.Options.Enabled[KBM.Lang], self.Enabled, KBM.Ready.Settings.Enabled)
 end
-
 
 function KBM.ApplySettings()
 	KBM.TankSwap.Enabled = KBM.Options.TankSwap.Enabled

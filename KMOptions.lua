@@ -778,6 +778,7 @@ function KBM.InitOptions()
 	KBM.MainWin:SetHeight(580)
 	KBM.MainWin:SetTitle(KBM.Language.Options.Title[KBM.Lang])
 	KBM.MainWin.Silent = false
+	KBM.MainWin:SetLayer(KBM.Layer.Menu)
 	
 	function KBM.MainWin:ApplySettings()
 		self:ClearPoint("CENTER")
@@ -1473,6 +1474,7 @@ function KBM.InitOptions()
 	
 	function KBM.MainWin.Options.Open()
 		KBM.MainWin:SetVisible(true)
+		KBM.MainWin:SetLayer(KBM.Layer.Menu)
 		if KBM.Options.CastBar.Visible then
 			KBM.CastBar.Anchor:Display()
 		end

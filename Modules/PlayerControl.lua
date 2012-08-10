@@ -21,6 +21,17 @@ PC.RezBank = {
 		["a000000004AE33670"] = {},
 		["a000000002D3F2123"] = {},
 	},
+-- New Abilities to be applied later.
+	-- ["cleric"] = {
+		-- ["A2942FF34A490A22D"] = {},
+		-- ["A74C19819577CEA4D"] = {},
+		-- ["A4D4EFA27574FDC9A"] = {},
+		-- ["A26862464D9EECBE7"] = {},
+	-- },
+	-- ["mage"] = {
+		-- ["A2D3F2123EE93DE49"] = {},
+		-- ["A4AE33670A72C0F45"] = {},
+	-- },
 }
 
 KBM.PlayerControl = PC
