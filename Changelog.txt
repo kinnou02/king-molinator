@@ -1,5 +1,16 @@
 ﻿v1.2.3
 
+New: Ready Check
+* New: Lists all Raid/Party members Health and Mana/Power/Energy.
+* New: Lists KBM versions for each Raid/Party member (if available.)
+* New: Lists Soul Vitality for each Raid/Party member.
+* New: Lists Current and Max Planar charges for each Raid/Party member.
+* New: Option to disable/enable the display in the options window.
+* New: Toggle the display via the slash command /kbmreadycheck.
+
+Tank-Swap
+* Fixed: Very rare case where Debuff.remaining could return nil. (Generally due to lag)
+
 Rez Master
 * Fixed: Actually applied the fix correctly from the last Revision this time.
 

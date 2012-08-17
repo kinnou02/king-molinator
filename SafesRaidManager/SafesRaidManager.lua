@@ -444,7 +444,7 @@ local function SRM_SetSpecifier(Specifier)
 			end
 			self.name = uDetails.name
 			SRM_NameList[self.name] = SRM_Units[self.UnitID]
-			SRM_Group.Reload(self.UnitID, self.Spec)
+			SRM_Group.Reload(self.UnitID, self.Spec, uDetails)
 		end
 	end
 
@@ -459,9 +459,9 @@ local function SRM_SetSpecifier(Specifier)
 					SRM_Units[self.UnitID].name = uDetails.name
 					SRM_Units[self.UnitID].calling = uDetails.calling
 					SRM_Units[self.UnitID].avail = Avail
-					if Avail == "full" then
+					--if Avail == "full" then
 						SRM_Units[self.UnitID].Loaded = true
-					end
+					--end
 					SRM_Combat({[self.UnitID] = uDetails.combat})
 					SRM_Units[self.UnitID].Location = uDetails.location
 					SRM_Units[self.UnitID].PetID = Inspect.Unit.Lookup(self.Spec..".pet")
@@ -486,7 +486,7 @@ local function SRM_SetSpecifier(Specifier)
 						end
 					end
 					-- Send JOIN message HERE
-					SRM_Group.Join(self.UnitID, self.Spec)
+					SRM_Group.Join(self.UnitID, self.Spec, uDetails)
 					-- print("Unit joined group: "..uDetails.name.." Load Level: "..uDetails.availability)
 				else
 					-- Send JOIN-WAIT message HERE (maybe)
@@ -601,6 +601,14 @@ local function SRM_Heal(data)
 				SRM_Group.Combat.Heal(data)
 				sent = true
 			else
+				if data.target then
+					if SRM_Units[data.target] then
+						if SRM_Units[data.target].Dead then
+							SRM_Res(data.target, data.caster)
+							return
+						end
+					end
+				end
 				PetOwnerID = Inspect.Unit.Lookup(data.caster..".owner")
 				if PetOwnerID then
 					if SRM_Units[PetOwnerID] then
@@ -624,6 +632,13 @@ local function SRM_Heal(data)
 				data.pet = false
 				data.owner = nil
 				data.player = true
+				if data.target == LibSRM.Player.ID then
+					if SRM_Units[data.target] then
+						if SRM_Units[data.target].Dead then
+							SRM_Res(data.target, data.caster)
+						end
+					end
+				end
 				SRM_Group.Combat.Heal(data)
 				sent = true
 			elseif data.caster == LibSRM.Player.PetID then
@@ -633,6 +648,13 @@ local function SRM_Heal(data)
 				data.player = true
 				SRM_Group.Combat.Heal(data)
 				sent = true
+			elseif data.target == LibSRM.Player.ID and data.target ~= nil then
+				if SRM_Units[data.target] then
+					if SRM_Units[data.target].Dead then
+						-- Player was previously dead, this SHOULD be a res skill.
+						SRM_Res(data.target, data.caster)
+					end
+				end	
 			else
 				PetOwnerID = Inspect.Unit.Lookup(data.caster..".owner")
 				if PetOwnerID == LibSRM.Player.ID then
@@ -651,7 +673,6 @@ local function SRM_Heal(data)
 				if SRM_Units[data.target].Dead then
 					-- Player was previously dead, this SHOULD be a res skill.
 					SRM_Res(data.target, data.target)
-					sent = true
 				end
 			end
 		end
@@ -828,8 +849,6 @@ local function SRM_Stall(Data)
 				table.insert(Event.Combat.Damage, {SRM_Damage, "SafesRaidManager", "Damage Monitor"})
 				table.insert(Event.Combat.Heal, {SRM_Heal, "SafesRaidManager", "Heal Monitor"})
 				table.insert(Event.Combat.Death, {SRM_Death, "SafesRaidManager", "Death Monitor"})
-				table.insert(Event.Unit.Detail.Offline, {SRM_Offline, "SafesRaidManager", "Offline Monitor"})
-				table.insert(Event.Unit.Detail.Combat, {SRM_Combat, "SafesRaidManager", "Combat Monitor"})
 				table.insert(event, {SRM_PlayerPet, "SafesRaidManager", "player.pet"})
 				if LibSRM.Player.PetID then
 					--print(": Players Pet Loaded.")
@@ -891,3 +910,5 @@ function LibSRM.Player.Ready()
 end
 
 table.insert(Event.Unit.Availability.Full, {SRM_Stall, "SafesRaidManager", "Event Stall"})
+table.insert(Event.Unit.Detail.Offline, {SRM_Offline, "SafesRaidManager", "Offline Monitor"})
+table.insert(Event.Unit.Detail.Combat, {SRM_Combat, "SafesRaidManager", "Combat Monitor"})

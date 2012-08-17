@@ -43,6 +43,9 @@ KBM.Event = {
 		Target = {},
 		TargetCount = {},
 		Offline = {},
+		Planar = {},
+		PlanarMax = {},
+		Vitality = {},
 		Power = {},
 		Combat = {
 			Enter = {},
@@ -4410,6 +4413,11 @@ function KBM.Unit:Create(uDetails, UnitID)
 				self.HealthMax = uDetails.healthMax
 				self.Health = uDetails.health
 				self.Availability = uDetails.availability
+				self.Planar = uDetails.planar
+				if self.Availability == "full" then
+					self.PlanarMax = uDetails.planarMax
+				end
+				self.Vitality = uDetails.vitality
 				self.Available = true
 				self.Loaded = true
 				if self.HealthMax ~= nil and self.Health ~= nil and self.Name ~= nil then
@@ -4621,6 +4629,8 @@ function KBM.Unit:Available(uDetails, UnitID)
 				self.UIDs.Available[UnitID]:UpdateIdle(true)
 				self.UIDs.Available[UnitID].Time = nil
 				self.UIDs.Available[UnitID].Available = true
+				KBM.Event.Unit.Available(UnitObj)
+			elseif self.UIDs.Available[UnitID] then
 				KBM.Event.Unit.Available(UnitObj)
 			end
 			if KBM.Debug then
@@ -5207,8 +5217,8 @@ function KBM.TankSwap:Init()
 						else
 							DebuffObj.Stacks = 1
 						end
-						DebuffObj.Remaining = bDetails.remaining
-						DebuffObj.Duration = bDetails.duration
+						DebuffObj.Remaining = (bDetails.remaining or 0.0)
+						DebuffObj.Duration = (bDetails.duration or 1.0)
 						if bDetails.icon then
 							DebuffObj.Icon = bDetails.icon
 						else
@@ -5216,10 +5226,14 @@ function KBM.TankSwap:Init()
 						end
 						if DebuffObj.Remaining > 9.94 then
 							TankObj.GUI:SetDeCool(KBM.ConvertTime(DebuffObj.Remaining), i)
-						else
+							TankObj.GUI.DeCool[i]:SetWidth(math.ceil(TankObj.GUI.DeCoolFrame[i]:GetWidth() * (DebuffObj.Remaining/DebuffObj.Duration)))
+						elseif DebuffObj.Remaining > 0 then
 							TankObj.GUI:SetDeCool(string.format("%0.01f", DebuffObj.Remaining), i)
+							TankObj.GUI.DeCool[i]:SetWidth(math.ceil(TankObj.GUI.DeCoolFrame[i]:GetWidth() * (DebuffObj.Remaining/DebuffObj.Duration)))
+						else
+							TankObj.GUI:SetDeCool("-", i)
+							TankObj.GUI.DeCool[i]:SetWidth(0)
 						end
-						TankObj.GUI.DeCool[i]:SetWidth(math.ceil(TankObj.GUI.DeCoolFrame[i]:GetWidth() * (DebuffObj.Remaining/DebuffObj.Duration)))
 						TankObj.GUI:SetStack(tostring(DebuffObj.Stacks), i)
 						KBM.LoadTexture(TankObj.GUI.DebuffFrame[i].Texture, "Rift", DebuffObj.Icon)
 						TankObj.GUI.DebuffFrame[i].Texture:SetVisible(true)
@@ -7910,9 +7924,8 @@ end
 -- KBM Ready Check Options
 function KBM.MenuOptions.ReadyCheck:Options()
 	function self:Enabled(bool)
-		KBM.Ready.Settings.Enabled = bool
 		KBM.Ready.Enabled = bool
-		KBM.Ready.GUI:ApplySettings()
+		KBM.ReadyCheck.Enable(bool)
 	end
 		
 	local Options = self.MenuItem.Options
@@ -8002,8 +8015,8 @@ function KBM.PlayerLeave()
 	--print("You have left a group")
 end
 
-function KBM.GroupJoin(UnitID, Specifier)
-	KBM.Unit:Available(Inspect.Unit.Detail(UnitID), UnitID)
+function KBM.GroupJoin(UnitID, Specifier, Details)
+	KBM.Unit:Available(Details, UnitID)
 	KBM.Event.System.Group.Join(UnitID)
 end
 
@@ -8115,10 +8128,44 @@ function KBM.PowerChange(data, PowerMode)
 	end
 end
 
+function KBM.PlanarChange(data)
+	for UnitID, Value in pairs(data) do
+		if KBM.Unit.List.UID[UnitID] then
+			KBM.Unit.List.UID[UnitID].Details.planar = Value
+			KBM.Unit.List.UID[UnitID].Planar = Value
+			KBM.Event.Unit.Planar(Value, UnitID)
+		end
+	end	
+end
+
+function KBM.PlanarMaxChange(data)
+	for UnitID, Value in pairs(data) do
+		if KBM.Unit.List.UID[UnitID] then
+			KBM.Unit.List.UID[UnitID].Details.planarMax = Value
+			KBM.Unit.List.UID[UnitID].PlanarMax = Value
+			KBM.Event.Unit.PlanarMax(Value, UnitID)
+		end
+	end	
+end
+
+function KBM.VitalityChange(data)
+	for UnitID, Value in pairs(data) do
+		if KBM.Unit.List.UID[UnitID] then
+			KBM.Unit.List.UID[UnitID].Details.vitality = Value
+			KBM.Unit.List.UID[UnitID].Vitality = Value
+			KBM.Event.Unit.Vitality(Value, UnitID)
+		end
+	end		
+end
+
 function KBM.Offline(UnitID, Value)
-	if KBM.Unit.List.UID[UnitID] then
-		KBM.Unit.List.UID[UnitID].Offline = Value
-		KBM.Event.Unit.Offline(Value)
+	local UnitObj = KBM.Unit.List.UID[UnitID]
+	if not UnitObj then
+		UnitObj = KBM.Unit:Idle(UnitID, Inspect.Unit.Detail(UnitID))
+	end
+	if UnitObj then
+		UnitObj.Offline = Value
+		KBM.Event.Unit.Offline(Value, UnitID)
 	end
 end
 
@@ -8143,6 +8190,9 @@ KBM.Event.Unit.Cast.End, KBM.Event.Unit.Cast.End.EventTable = Utility.Event.Crea
 KBM.Event.Unit.Combat.Enter, KBM.Event.Unit.Combat.Enter.EventTable = Utility.Event.Create("KingMolinator", "Unit.Combat.Enter")
 KBM.Event.Unit.Combat.Leave, KBM.Event.Unit.Combat.Leave.EventTable = Utility.Event.Create("KingMolinator", "Unit.Combat.Leave")
 KBM.Event.Unit.Power, KBM.Event.Unit.Power.EventTable = Utility.Event.Create("KingMolinator", "Unit.Power")
+KBM.Event.Unit.Vitality, KBM.Event.Unit.Vitality.EventTable = Utility.Event.Create("KingMolinator", "Unit.Vitality")
+KBM.Event.Unit.Planar, KBM.Event.Unit.Planar.EventTable = Utility.Event.Create("KingMolinator", "Unit.Planar")
+KBM.Event.Unit.PlanarMax, KBM.Event.Unit.PlanarMax.EventTable = Utility.Event.Create("KingMolinator", "Unit.PlanarMax")
 KBM.Event.System.TankSwap.Start, KBM.Event.System.TankSwap.Start.EventTable = Utility.Event.Create("KingMolinator", "System.TankSwap.Start")
 KBM.Event.System.TankSwap.End, KBM.Event.System.TankSwap.End.EventTable = Utility.Event.Create("KingMolinator", "System.TankSwap.End")
 KBM.Event.System.Player.Join, KBM.Event.System.Player.Join.EventTable = Utility.Event.Create("KingMolinator", "System.Player.Join")
@@ -8275,6 +8325,9 @@ function KBM.InitEvents()
 	table.insert(Event.Unit.Detail.Power, {function (List) KBM.PowerChange(List, "power") end, "KingMolinator", "Power Change"})
 	table.insert(Event.Unit.Detail.Energy, {function (List) KBM.PowerChange(List, "energy") end, "KingMolinator", "Energy Change"})
 	table.insert(Event.Unit.Detail.Mana, {function (List) KBM.PowerChange(List, "mana") end, "KingMolinator", "Mana Change"})
+	table.insert(Event.Unit.Detail.Vitality, {KBM.VitalityChange, "KingMolinator", "Vitality Change"})
+	table.insert(Event.Unit.Detail.Planar, {KBM.PlanarChange, "KingMolinator", "Planar Change"})
+	table.insert(Event.Unit.Detail.PlanarMax, {KBM.PlanarMaxChange, "KingMolinator", "PlanarMax Change"})
 	-- **
 	-- Safes Raid Manager Events
 	table.insert(Event.SafesRaidManager.Player.Join, {KBM.PlayerJoin, "KingMolinator", "Joined Group"})
@@ -8339,6 +8392,7 @@ local function KBM_WaitReady(unitID, uDetails)
 	KBM.Player.Level = uDetails.level
 	KBM.Player.Grouped = LibSRM.Grouped()
 	KBM.Player.Mode = LibSRM.Player.Mode
+	KBM.InitEvents()
 	KBM.Event.System.Start(self)
 	if KBM.Player.Grouped then
 		KBM.PlayerJoin()
@@ -8398,8 +8452,6 @@ local function KBM_WaitReady(unitID, uDetails)
 	KBM.Player.CastBar.Target.CastObj = KBM.CastBar:Add(KBM.Player.CastBar.Target, KBM.Player.CastBar.Target)
 	KBM.Player.CastBar.Focus.CastObj = KBM.CastBar:Add(KBM.Player.CastBar.Focus, KBM.Player.CastBar.Focus)
 	KBM.Player.CastBar.CastObj:Create(KBM.Player.UnitID)
-	
-	KBM.InitEvents()
 end
 
 KBM.PlugIn = {}

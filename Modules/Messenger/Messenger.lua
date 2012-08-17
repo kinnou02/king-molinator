@@ -14,7 +14,6 @@ if not KBM.BossMod then
 	return
 end
 
-KBM.MSG = PI
 local KBMLM = KBM.LocaleManager
 
 PI.History = {
@@ -28,20 +27,32 @@ PI.History = {
 	UpdateReq = false,
 	NameStore = {},
 }
+KBM.MSG = PI
+
+PI.Events = {
+	Version = {},
+}
 
 -- Dictionary moved to Locale file.
 
 function PI.VersionAlert(failed, message)
 end
 
-function PI.VersionCheck(Data)
-	local s, e, High, Mid, Low, Revision
+function PI.ParseVersion(Data)
+	local s, e, vType, High, Mid, Low, Revision
 	local Checked = false
 	s, e, vType, High, Mid, Low, Revision = string.find(Data, "(%u)(%d+).(%d+).(%d+).(%d+)")
 	High = tonumber(High) or 0
 	Mid = tonumber(Mid) or 0
 	Low = tonumber(Low) or 0
 	Revision = tonumber(Revision) or 0
+	return vType, High, Mid, Low, Revision
+end
+
+function PI.VersionCheck(Data)
+	local vType, High, Mid, Low, Revision
+	local Checked = false
+	vType, High, Mid, Low, Revision = PI.ParseVersion(Data)
 	if vType == "A" then
 		if KBM.IsAlpha then
 			if Revision >= PI.History.Revision or PI.History.Checked == false then
@@ -115,23 +126,26 @@ function PI.MessageHandler(From, Type, Channel, Identifier, Data)
 	if From ~= KBM.Player.Name and Data ~= nil then
 		if Type then
 			if Type == "guild" then
-				PI.History.NameStore[From] = Data
 				if Identifier == "KBMVersion" then
+					PI.History.NameStore[From] = {Full = Data}
 					PI.VersionCheck(Data)
+					PI.Events.Version(From)
 				end
-			elseif Type == "raid" then
-				PI.History.NameStore[From] = Data
+			elseif Type == "raid" or Type == "group" then
 				if Identifier == "KBMVersion" then
+					PI.History.NameStore[From] = {Full = Data}
 					PI.VersionCheck(Data)
+					PI.Events.Version(From)
 				end
 			elseif Type == "send" or Type == "tell" then
 				if Identifier == "KBMVerReq" then
 					PI.ReplyVersion(From, Data)
 				elseif Identifier == "KBMVerInfo" then
-					PI.History.NameStore[From] = Data
+					PI.History.NameStore[From] = {Full = Data}
+					PI.Events.Version(From)
 					print(From.." is using KBM v"..Data)
 				elseif Identifier == "KBMVersion" then
-					PI.History.NameStore[From] = Data
+					PI.History.NameStore[From] = {Full = Data}
 					local vType = string.sub(Data, 1, 1)
 					local Version = string.sub(Data, 2)
 					if vType == "A" then
@@ -140,6 +154,7 @@ function PI.MessageHandler(From, Type, Channel, Identifier, Data)
 						vType = ""
 					end
 					print(From.." is using KBM v"..Version..vType)
+					PI.Events.Version(From)
 				end
 			end
 		end
@@ -180,8 +195,12 @@ function PI.Start()
 	Command.Message.Accept(nil, "KBMVerInfo")
 	table.insert(Event.SafesRaidManager.Player.Join, {PI.PlayerJoin, "KBMMessenger", "Player Join"})
 	table.insert(Event.Message.Receive, {PI.MessageHandler, "KBMMessenger", "Messenger Handler"})
+	PI.History.NameStore[KBM.Player.Name] = {
+		Full = "P"..KBMAddonData.toc.Version,
+	}
 	PI:SendVersion()
 end
 
 PI.SendSilent = false
+PI.Events.Version, PI.Events.Version.EventTable = Utility.Event.Create("KBMMessenger", "Version")
 table.insert(Event.KingMolinator.System.Start, {PI.Start, "KBMMessenger", "Syncronized Start"})
