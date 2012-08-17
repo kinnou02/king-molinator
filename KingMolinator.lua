@@ -4426,7 +4426,7 @@ function KBM.Unit:Create(uDetails, UnitID)
 					else
 						self.Dead = true
 					end
-					self.PercentFlat = (self.Health/self.HealthMax)
+					self.PercentFlat = (self.Health/self.HealthMax) or 0
 					self.PercentRaw = self.PercentFlat*100
 					self.Percent = math.ceil(self.PercentRaw)
 				else

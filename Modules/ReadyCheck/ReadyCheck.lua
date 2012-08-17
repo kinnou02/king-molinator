@@ -207,7 +207,8 @@ function PI.GUI:Init()
 	function self.Rows:Update(Index)
 		if self[Index].Enabled then
 			if self[Index].Unit then
-				self[Index].HPMask:SetWidth(math.ceil(PI.GUI.Texture:GetWidth() * self[Index].Unit.PercentFlat))
+				local PF = self[Index].Unit.PercentFlat or 0
+				self[Index].HPMask:SetWidth(math.ceil(PI.GUI.Texture:GetWidth() * PF))
 				self[Index].MPMask:SetWidth(math.ceil(PI.GUI.Texture:GetWidth()))
 				self[Index]:SetData(self[Index].Unit.Name)
 			end
