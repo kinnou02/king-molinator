@@ -7925,7 +7925,7 @@ end
 function KBM.MenuOptions.ReadyCheck:Options()
 	function self:Enabled(bool)
 		KBM.Ready.Enabled = bool
-		KBM.ReadyCheck.Enable(bool)
+		KBM.Ready.Enable(bool)
 	end
 		
 	local Options = self.MenuItem.Options

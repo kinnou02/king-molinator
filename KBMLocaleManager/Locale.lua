@@ -125,6 +125,7 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.ReadyCheck = {}
 	KBMLM.SetGroupObject(KBM.Language.ReadyCheck, "GroupObject", "Ready Check Dictionary")
 	KBM.Language.ReadyCheck.Name = KBM.Language:Add("Ready Check")
+	KBM.Language.ReadyCheck.Name:SetGerman()
 	
 	-- Rez Master Dictionary
 	KBM.Language.RezMaster = {}
@@ -743,6 +744,7 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Menu.Castbars:SetRussian("кастбары")
 	KBM.Language.Menu.Castbars:SetKorean("캐스터바")
 	KBM.Language.Menu.Mods = KBM.Language:Add("Modules")
+	KBM.Language.Menu.Mods:SetGerman("Module")
 	
 	-- Filter Options
 	KBM.Language.Filters = {}
