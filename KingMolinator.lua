@@ -4125,6 +4125,7 @@ function KBM.CPU:Init()
 	if KBM.PlugIn.List["KBMAddWatch"] then
 		self:CreateTrack("KBMAddWatch", "KBM: AddWatch", 0.9, 0.5, 0.35)
 	end
+	self:CreateTrack("KBMReadyCheck", "KBM:RC", 0.9, 0.5, 0.35)
 	self:CreateTrack("NonKBM", "Other Addons", 0.9, 0.5, 0.35)
 	function self:UpdateAll()
 		local CPUTable = Inspect.Addon.Cpu()
@@ -4154,7 +4155,6 @@ function KBM.CPU:Init()
 		end
 		self.GUI.Trackers["NonKBM"]:UpdateDisplay(Others * 100)
 	end
-	local CPUTable = Inspect.Addon.Cpu()
 end
 
 function KBM.CPU:Toggle(Silent)
@@ -8017,7 +8017,7 @@ end
 
 function KBM.GroupJoin(UnitID, Specifier, Details)
 	KBM.Unit:Available(Details, UnitID)
-	KBM.Event.System.Group.Join(UnitID)
+	KBM.Event.System.Group.Join(UnitID, Specifier, Details)
 end
 
 function KBM.GroupLeave(UnitID, Specifier)
@@ -8415,7 +8415,7 @@ local function KBM_WaitReady(unitID, uDetails)
 						KBM.GroupTarget(UnitID, Target)
 					end
 				end
-				KBM.GroupJoin(UnitID, Spec)
+				KBM.GroupJoin(UnitID, Spec, uDetails)
 			end
 		end
 	end

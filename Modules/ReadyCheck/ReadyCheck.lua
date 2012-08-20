@@ -19,6 +19,7 @@ KBM.Ready = PI
 PI.Enabled = true
 PI.Displayed = true
 PI.GUI = {}
+PI.Context = UI.CreateContext("KBMReadyCheck")
 PI.DetailUpdates = {}
 PI.Queue = {
 	Add = {},
@@ -143,7 +144,7 @@ function PI.GUI:ApplySettings()
 end
 
 function PI.GUI:Init()
-	self.Cradle = UI.CreateFrame("Frame", "ReadyCheck Cradle", KBM.Context)
+	self.Cradle = UI.CreateFrame("Frame", "ReadyCheck Cradle", PI.Context)
 	self.Cradle:SetLayer(KBM.Layer.ReadyCheck)
 	self.Header = UI.CreateFrame("Frame", "ReadyCheck Header", self.Cradle)
 	self.Header:SetLayer(1)
@@ -263,7 +264,18 @@ function PI.GUI:Init()
 			if self[Index].Unit then
 				local Vitality = self[Index].Unit.Vitality
 				if Vitality then
-					self[Index].Columns.Vitality:SetData(tostring(self[Index].Unit.Vitality).."%")
+					if Vitality > 80 then
+						self[Index].Columns.Vitality.Text:SetFontColor(0.1, 0.9, 0.1)
+					elseif Vitality > 60 then
+						self[Index].Columns.Vitality.Text:SetFontColor(0.5, 0.9, 0.1)					
+					elseif Vitality > 40 then
+						self[Index].Columns.Vitality.Text:SetFontColor(0.9, 0.9, 0.1)					
+					elseif Vitality > 20 then
+						self[Index].Columns.Vitality.Text:SetFontColor(0.9, 0.5, 0.1)
+					else
+						self[Index].Columns.Vitality.Text:SetFontColor(0.9, 0.1, 0.1)
+					end
+					self[Index].Columns.Vitality:SetData(tostring(Vitality).."%")
 				else
 					self[Index].Columns.Vitality:SetData("-")
 				end
@@ -278,10 +290,28 @@ function PI.GUI:Init()
 			if self[Index].Unit then
 				if self[Index].Unit.Name then
 					if KBM.MSG.History.NameStore[self[Index].Unit.Name] then
-						local v = string.sub(KBM.MSG.History.NameStore[self[Index].Unit.Name].Full, 2)
-						self[Index].Columns.KBM:SetData(v)
+						local v
+						if KBM.MSG.History.NameStore[self[Index].Unit.Name].None then
+							v = "x"
+							self[Index].Columns.KBM.Text:SetFontColor(0.9, 0.1, 0.1)
+						else
+							self[Index].Columns.KBM.Text:SetFontColor(1, 1, 1)
+							if KBM.MSG.History.NameStore[self[Index].Unit.Name].Sent then
+								if KBM.MSG.History.NameStore[self[Index].Unit.Name].Recieved then
+									v = string.sub(KBM.MSG.History.NameStore[self[Index].Unit.Name].Full, 2)
+								else
+									self[Index].Columns.KBM.Text:SetFontColor(1, 0.9, 0.5)
+									v = ".*.*."
+								end
+							else
+								self[Index].Columns.KBM.Text:SetFontColor(0.9, 0.7, 0.2)
+								v = "...."
+							end
+						end
+						self[Index].Columns.KBM:SetData(v)						
 					else
-						self[Index].Columns.KBM:SetData("n/a")
+						self[Index].Columns.KBM.Text:SetFontColor(0.9, 0.5, 0.1)
+						self[Index].Columns.KBM:SetData("..*..")
 					end
 				end
 			end

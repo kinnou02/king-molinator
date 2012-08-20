@@ -7,6 +7,13 @@ New: Ready Check
 * New: Lists Current and Max Planar charges for each Raid/Party member.
 * New: Option to disable/enable the display in the options window.
 * New: Toggle the display via the slash command /kbmreadycheck.
+* New: Staggered KBM Version retrieval if a player's version has not already been cached.
+* New: Color added to various states of KBM Version status.
+* New: Color added to Soul Vatility display.
+* Change: Moved Ready Check window to its own context.
+
+CPU Monitor
+* New: Added support for Ready Check CPU tracking.
 
 Tank-Swap
 * Fixed: Very rare case where Debuff.remaining could return nil. (Generally due to lag)

@@ -23,15 +23,62 @@ PI.History = {
 	Mid = 0,
 	Low = 0,
 	vType = "R",
+	LastQuery = 0,
 	Revision = 0,
 	UpdateReq = false,
-	NameStore = {},
+	NameStore = {
+	},
+	Create = function(self, Name)
+		self.NameStore[Name] = {
+			Sent = false,
+		}
+		--print("Created new Name-Store Entry for: "..Name)
+	end,
+	SetFull = function(self, Name, vFull)
+		if not self.NameStore[Name] then
+			self:Create(Name)
+		end
+		self.NameStore[Name].Full = vFull
+	end,
+	SetSent = function(self, Name, bool)
+		if not self.NameStore[Name] then
+			self:Create(Name)
+		end
+		self.NameStore[Name].Sent = bool
+		if not bool then
+			self.NameStore[Name].Queued = true
+		else
+			PI.Events.Version(Name)		
+		end
+	end,
+	SetRecieved = function(self, Name)
+		if not self.NameStore[Name] then
+			self:Create(Name)
+		end
+		self.NameStore[Name].Sent = true
+		self.NameStore[Name].Recieved = true
+		self.NameStore[Name].Queued = nil
+		if self.Queue[Name] then
+			self.Queue[Name] = nil
+			--print("Recieved Data removing: "..Name)
+		end
+	end,
+	SetNone = function(self, Name)
+		if not self.NameStore[Name] then
+			self:Create(Name)
+		end
+		self.NameStore[Name].None = true
+		self.NameStore[Name].Queue = nil
+		PI.Events.Version(Name)
+	end,
+	Queue = {},
 }
 KBM.MSG = PI
 
 PI.Events = {
 	Version = {},
 }
+PI.Mode = "party"
 
 -- Dictionary moved to Locale file.
 
@@ -127,13 +174,15 @@ function PI.MessageHandler(From, Type, Channel, Identifier, Data)
 		if Type then
 			if Type == "guild" then
 				if Identifier == "KBMVersion" then
-					PI.History.NameStore[From] = {Full = Data}
+					PI.History:SetFull(From, Data)
+					PI.History:SetRecieved(From)
 					PI.VersionCheck(Data)
 					PI.Events.Version(From)
 				end
-			elseif Type == "raid" or Type == "group" then
+			elseif Type == "raid" or Type == "party" then
 				if Identifier == "KBMVersion" then
-					PI.History.NameStore[From] = {Full = Data}
+					PI.History:SetFull(From, Data)
+					PI.History:SetRecieved(From)
 					PI.VersionCheck(Data)
 					PI.Events.Version(From)
 				end
@@ -141,11 +190,27 @@ function PI.MessageHandler(From, Type, Channel, Identifier, Data)
 				if Identifier == "KBMVerReq" then
 					PI.ReplyVersion(From, Data)
 				elseif Identifier == "KBMVerInfo" then
-					PI.History.NameStore[From] = {Full = Data}
+					local Silent = false
+					if PI.History.NameStore[From] then
+						if PI.History.NameStore[From].Queued then
+							Silent = true
+						end
+					end
+					PI.History:SetFull(From, Data)
+					PI.History:SetRecieved(From)
+					if not Silent then
+						print(From.." is using KBM v"..Data)
+					end
 					PI.Events.Version(From)
-					print(From.." is using KBM v"..Data)
 				elseif Identifier == "KBMVersion" then
-					PI.History.NameStore[From] = {Full = Data}
+					local Silent = false
+					if PI.History.NameStore[From] then
+						if PI.History.NameStore[From].Queued then
+							Silent = true
+						end
+					end
+					PI.History:SetFull(From, Data)
+					PI.History:SetRecieved(From)
 					local vType = string.sub(Data, 1, 1)
 					local Version = string.sub(Data, 2)
 					if vType == "A" then
@@ -153,7 +218,9 @@ function PI.MessageHandler(From, Type, Channel, Identifier, Data)
 					else
 						vType = ""
 					end
-					print(From.." is using KBM v"..Version..vType)
+					if not Silent then
+						print(From.." is using KBM v"..Version..vType)
+					end
 					PI.Events.Version(From)
 				end
 			end
@@ -166,18 +233,18 @@ function PI:SendVersion(Group)
 		if KBM.IsAlpha then
 			if not Group then
 				Command.Message.Broadcast("guild", nil, "KBMVersion", "A"..KBMAddonData.toc.Version, self.VersionAlert)
-				Command.Message.Broadcast("guild", nil, "KBMVerInfo", KBM.Version.High.."."..KBM.Version.Mid.."."..KBM.Version.Low..".r"..KBM.Version.Revision, self.VersionAlert)
+				--Command.Message.Broadcast("guild", nil, "KBMVerInfo", KBM.Version.High.."."..KBM.Version.Mid.."."..KBM.Version.Low..".r"..KBM.Version.Revision, self.VersionAlert)
 			else
-				Command.Message.Broadcast("raid", nil, "KBMVersion", "A"..KBMAddonData.toc.Version, self.VersionAlert)
-				Command.Message.Broadcast("raid", nil, "KBMVerInfo", KBM.Version.High.."."..KBM.Version.Mid.."."..KBM.Version.Low..".r"..KBM.Version.Revision, self.VersionAlert)
+				Command.Message.Broadcast(PI.Mode, nil, "KBMVersion", "A"..KBMAddonData.toc.Version, self.VersionAlert)
+				--Command.Message.Broadcast("raid", nil, "KBMVerInfo", KBM.Version.High.."."..KBM.Version.Mid.."."..KBM.Version.Low..".r"..KBM.Version.Revision, self.VersionAlert)
 			end
 		else
 			if not Group then
 				Command.Message.Broadcast("guild", nil, "KBMVersion", "R"..KBMAddonData.toc.Version, self.VersionAlert)
-				Command.Message.Broadcast("guild", nil, "KBMVerInfo", KBM.Version.High.."."..KBM.Version.Mid.."."..KBM.Version.Low, self.VersionAlert)
+				--Command.Message.Broadcast("guild", nil, "KBMVerInfo", KBM.Version.High.."."..KBM.Version.Mid.."."..KBM.Version.Low, self.VersionAlert)
 			else
-				Command.Message.Broadcast("raid", nil, "KBMVersion", "R"..KBMAddonData.toc.Version, self.VersionAlert)
-				Command.Message.Broadcast("raid", nil, "KBMVerInfo", KBM.Version.High.."."..KBM.Version.Mid.."."..KBM.Version.Low, self.VersionAlert)
+				Command.Message.Broadcast(PI.Mode, nil, "KBMVersion", "R"..KBMAddonData.toc.Version, self.VersionAlert)
+				--Command.Message.Broadcast("raid", nil, "KBMVerInfo", KBM.Version.High.."."..KBM.Version.Mid.."."..KBM.Version.Low, self.VersionAlert)
 			end
 		end
 	end
@@ -187,17 +254,62 @@ function PI.PlayerJoin()
 	PI:SendVersion(true)
 end
 
+function PI.GroupJoin(UnitID, Specificer, uDetails)
+	if uDetails then
+		if uDetails.name then
+			if not PI.History.NameStore[uDetails.name] then
+				if KBM.Debug then
+					print("Player joined without Version info Queuing: "..uDetails.name)
+				end
+				PI.History:SetSent(uDetails.name, false)
+				PI.History.Queue[uDetails.name] = true
+			end
+		end
+	end
+end
+
+function PI.GroupMode(Mode)
+	if Mode then
+		PI.Mode = Mode
+	end
+end
+
+function PI.VersionReqCheck(name, failed, message)
+end
+
+function PI.ManageQueues()
+	local current = Inspect.Time.Real()
+	if PI.History.LastQuery < current then
+		if PI.History.Current then
+			PI.History.Queue[PI.History.Current] = nil
+			if not PI.History.NameStore[PI.History.Current].Recieved then
+				PI.History:SetNone(PI.History.Current)
+			end
+			--print("Removing from Queue: "..PI.History.Current)
+			PI.History.Current = nil
+		else
+			if next(PI.History.Queue) then
+				PI.History.Current = next(PI.History.Queue)
+				--print("Current set to: "..PI.History.Current)
+				PI.History.LastQuery = current + 10
+				PI.History:SetSent(PI.History.Current, true)
+				Command.Message.Send(PI.History.Current, "KBMVerReq", "V", function (failed, message) PI.VersionReqCheck(PI.History.Current, failed, message) end)
+			end
+		end
+	end
+end
+
 function PI.Start()
 	Command.Message.Accept(nil, "KBMVersion")
-	--Command.Message.Accept("raid", "KBMVersion")
 	Command.Message.Accept(nil, "KBMVerReq")
-	--Command.Message.Accept("send", "KBMVersion")
 	Command.Message.Accept(nil, "KBMVerInfo")
-	table.insert(Event.SafesRaidManager.Player.Join, {PI.PlayerJoin, "KBMMessenger", "Player Join"})
+	table.insert(Event.KingMolinator.System.Player.Join, {PI.PlayerJoin, "KBMMessenger", "Player Join"})
+	table.insert(Event.SafesRaidManager.Group.Mode, {PI.GroupMode, "KBMMessenger", "Group Mode Changed"})
+	table.insert(Event.KingMolinator.System.Group.Join, {PI.GroupJoin, "KBMMessenger", "Group Member Joins"})
 	table.insert(Event.Message.Receive, {PI.MessageHandler, "KBMMessenger", "Messenger Handler"})
-	PI.History.NameStore[KBM.Player.Name] = {
-		Full = "P"..KBMAddonData.toc.Version,
-	}
+	table.insert(Event.System.Update.End, {PI.ManageQueues, "KBMMessenger", "Cycle Version Queue"})
+	PI.History:SetFull(KBM.Player.Name, "P"..KBMAddonData.toc.Version)
+	PI.History:SetRecieved(KBM.Player.Name)
 	PI:SendVersion()
 end
 
