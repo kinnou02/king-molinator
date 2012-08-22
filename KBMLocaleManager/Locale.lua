@@ -126,6 +126,8 @@ function KBMLM.SetMain_Lang()
 	KBMLM.SetGroupObject(KBM.Language.ReadyCheck, "GroupObject", "Ready Check Dictionary")
 	KBM.Language.ReadyCheck.Name = KBM.Language:Add("Ready Check")
 	KBM.Language.ReadyCheck.Name:SetGerman()
+	KBM.Language.ReadyCheck.Combat = KBM.Language:Add("Hide while in combat.")
+	KBM.Language.ReadyCheck.Solo = KBM.Language:Add("Hide while playing solo.")
 	
 	-- Rez Master Dictionary
 	KBM.Language.RezMaster = {}

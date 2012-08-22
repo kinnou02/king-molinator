@@ -1,6 +1,8 @@
 ﻿v1.2.3
 
 New: Ready Check
+* New: Added option to auto-hide/show while in combat.
+* New: Added option to auto-hide/show while playing solo.
 * New: Lists all Raid/Party members Health and Mana/Power/Energy.
 * New: Lists KBM versions for each Raid/Party member (if available.)
 * New: Lists Soul Vitality for each Raid/Party member.

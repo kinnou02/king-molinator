@@ -285,13 +285,17 @@ function PI.ManageQueues()
 			if not PI.History.NameStore[PI.History.Current].Recieved then
 				PI.History:SetNone(PI.History.Current)
 			end
-			print("Removing from Queue: "..PI.History.Current)
+			if KBM.Debug then
+				print("Removing from Queue: "..PI.History.Current)
+			end
 			PI.History.Current = nil
 			PI.Events.Version(From)
 		else
 			if next(PI.History.Queue) then
 				PI.History.Current = next(PI.History.Queue)
-				print("Current set to: "..PI.History.Current)
+				if KBM.Debug then
+					print("Current set to: "..PI.History.Current)
+				end
 				PI.History.LastQuery = current + 10
 				PI.History:SetSent(PI.History.Current, true)
 				Command.Message.Send(PI.History.Current, "KBMVerReq", "V", function (failed, message) PI.VersionReqCheck(PI.History.Current, failed, message) end)

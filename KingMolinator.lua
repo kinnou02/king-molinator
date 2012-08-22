@@ -7927,10 +7927,20 @@ function KBM.MenuOptions.ReadyCheck:Options()
 		KBM.Ready.Enabled = bool
 		KBM.Ready.Enable(bool)
 	end
+	function self:Combat(bool)
+		KBM.Ready.Settings.Combat = bool
+		KBM.Ready.UpdateSMode()
+	end
+	function self:Solo(bool)
+		KBM.Ready.Settings.Solo = bool
+		KBM.Ready.UpdateSMode()
+	end
 		
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
 	local ReadyCheck = Options:AddHeader(KBM.Language.Options.Enabled[KBM.Lang], self.Enabled, KBM.Ready.Settings.Enabled)
+	ReadyCheck:AddCheck(KBM.Language.ReadyCheck.Combat[KBM.Lang], self.Combat, KBM.Ready.Settings.Combat)
+	ReadyCheck:AddCheck(KBM.Language.ReadyCheck.Solo[KBM.Lang], self.Solo, KBM.Ready.Settings.Solo)
 end
 
 function KBM.ApplySettings()

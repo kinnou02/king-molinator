@@ -24,6 +24,7 @@ PI.DetailUpdates = {}
 PI.Queue = {
 	Add = {},
 	Remove = {},
+	reQueue = {},
 	Total = 0,
 }
 PI.Icons = {
@@ -44,6 +45,8 @@ PI.Icons = {
 }
 PI.Settings = {
 	Enabled = true,
+	Combat = true,
+	Solo = true,
 	x = false,
 	y = false,
 	wScale = 1,
@@ -496,26 +499,80 @@ function PI.Update()
 			if not PI.GUI.Rows.Units[UnitID] then
 				PI.GUI.Rows:Add(UnitID)
 			end
+		else
+			PI.Queue.reQueue[UnitID] = true
 		end
 	end
+	PI.Queue.Add = {}
 	for UnitID, bool in pairs(PI.Queue.Remove) do
 		PI.Queue.Remove[UnitID] = nil
 		if UnitID ~= KBM.Player.UnitID then
 			PI.GUI.Rows:Remove(UnitID)
 		end
 	end
+	PI.Queue.Remove = {}
+end
+
+function PI.Update_End()
+	for UnitID, bool in pairs(PI.Queue.reQueue) do
+		PI.Queue.Add[UnitID] = true
+	end
+	PI.Queue.reQueue = {}
 end
 
 function PI.Start()
 	PI.Queue.Add[KBM.Player.UnitID] = true
 	PI.Queue.Total = PI.Queue.Total + 1
+	PI.Combat = Inspect.System.Secure()
 	-- Rift API Events
 	table.insert(Event.System.Update.Begin, {PI.Update, "KBMReadyCheck", "Update Loop"})
+	table.insert(Event.System.Update.End, {PI.Update_End, "KBMReadyCheck", "Clean-up Loop"})
+	table.insert(Event.System.Secure.Enter, {PI.SecureEnter, "KBMReadyCheck", "Combat Enter"})
+	table.insert(Event.System.Secure.Leave, {PI.SecureLeave, "KBMReadyCheck", "Combat Leave"})
 	table.insert(Event.Unit.Detail.Planar, {PI.DetailUpdates.Planar, "KBMReadyCheck", "Update Planar Charges"})
 	table.insert(Event.Unit.Detail.PlanarMax, {PI.DetailUpdates.PlanarMax, "KBMReadyCheck", "Update Planar Max"})
 	table.insert(Event.Unit.Detail.Vitality, {PI.DetailUpdates.Vitality, "KBMReadyCheck", "Update Vitality"})
 	table.insert(Event.Unit.Availability.Full, {PI.DetailUpdates.Availability, "KBMReadyCheck", "Update Full"})
 	table.insert(Event.Unit.Availability.Partial, {PI.DetailUpdates.Availability, "KBMReadyCheck", "Update Full"})
+	PI.UpdateSMode()
+end
+
+function PI.UpdateSMode()
+	if PI.Settings.Solo then
+		if KBM.Player.Grouped then
+			PI.Displayed = true
+		else
+			PI.Displayed = false
+			PI.GUI:ApplySettings()
+			return
+		end
+	else
+		PI.Displayed = true
+	end
+	if PI.Settings.Combat then
+		if PI.Combat then
+			PI.Displayed = false
+		else
+			PI.Displayed = true
+		end
+	else
+		PI.Displayed = true
+	end
+	PI.GUI:ApplySettings()	
+end
+
+function PI.SecureEnter()
+	if PI.Settings.Combat then
+		PI.Combat = true
+		PI.UpdateSMode()
+	end
+end
+
+function PI.SecureLeave()
+	if PI.Settings.Combat then
+		PI.Combat = false
+		PI.UpdateSMode()
+	end
 end
 
 function PI.GroupJoin(UnitID)
@@ -593,7 +650,7 @@ end
 
 function PI.Enable(bool)
 	PI.Settings.Enabled = bool
-	PI.GUI:ApplySettings()
+	PI.UpdateSMode()
 end
 
 function PI.Init(ModID)
