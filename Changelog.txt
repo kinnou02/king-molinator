@@ -21,6 +21,12 @@ Tank-Swap
 Rez Master
 * Fixed: Actually applied the fix correctly from the last Revision this time.
 
+Infernal Dawn
+* Laethys
+** Fixed: Corrected Phase Two Start trigger.
+** Change: Added the % (pattern matching escape code) before ? in an attempt to get this to trigger the Phase Two Transition capture.
+** Change: Phase 1 objective now reads 51% rather than the incorrect 50%.
+
 Master Mode Caduceus Rise
 * Ashcaller Zael
 ** Fixed: Stopped the smaller Adds from overwriting the bosses UID, enabling the encounter to finally trigger a victory.

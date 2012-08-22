@@ -312,7 +312,14 @@ function PI.GUI:Init()
 					else
 						self[Index].Columns.KBM.Text:SetFontColor(0.9, 0.5, 0.1)
 						self[Index].Columns.KBM:SetData("..*..")
+						if not KBM.MSG.History.Queue[self[Index].Unit.Name] then
+							KBM.MSG.History:SetSent(self[Index].Unit.Name, false)
+							KBM.MSG.History.Queue[self[Index].Unit.Name] = true
+						end
 					end
+				else
+					self[Index].Columns.KBM.Text:SetFontColor(0.9, 0.5, 0.1)
+					self[Index].Columns.KBM:SetData("*.*.*")				
 				end
 			end
 		else
@@ -560,8 +567,10 @@ function PI.DetailUpdates.Availability(Units)
 end
 
 function PI.DetailUpdates.Version(From)
-	if PI.GUI.Rows.Names[From] then
-		PI.GUI.Rows:Update_KBM(PI.GUI.Rows.Names[From].Index)
+	if From then
+		if PI.GUI.Rows.Names[From] then
+			PI.GUI.Rows:Update_KBM(PI.GUI.Rows.Names[From].Index)
+		end
 	end
 end
 
