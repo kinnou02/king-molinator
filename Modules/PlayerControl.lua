@@ -12,32 +12,27 @@ local PC = {
 
 PC.RezBank = {
 	["cleric"] = {
-		["a0000000026862464"] = {},
-		["a000000004D4EFA27"] = {},
-		["a000000002942FF34"] = {},
-		["a0000000074C19819"] = {},
+		--["a0000000026862464"] = {},
+		--["a000000004D4EFA27"] = {},
+		--["a000000002942FF34"] = {},
+		--["a0000000074C19819"] = {},
+		["A2942FF34A490A22D"] = {}, 
+		["A74C19819577CEA4D"] = {},
+		["A4D4EFA27574FDC9A"] = {},
+		["A26862464D9EECBE7"] = {},
 	},
 	["mage"] = {
-		["a000000004AE33670"] = {},
-		["a000000002D3F2123"] = {},
+		--["a000000004AE33670"] = {},
+		--["a000000002D3F2123"] = {},
+		["A2D3F2123EE93DE49"] = {},
+		["A4AE33670A72C0F45"] = {},
 	},
--- New Abilities to be applied later.
-	-- ["cleric"] = {
-		-- ["A2942FF34A490A22D"] = {},
-		-- ["A74C19819577CEA4D"] = {},
-		-- ["A4D4EFA27574FDC9A"] = {},
-		-- ["A26862464D9EECBE7"] = {},
-	-- },
-	-- ["mage"] = {
-		-- ["A2D3F2123EE93DE49"] = {},
-		-- ["A4AE33670A72C0F45"] = {},
-	-- },
 }
 
 KBM.PlayerControl = PC
 
 function PC:GatherAbilities()
-	KBM.Player.AbilityTable = Inspect.Ability.List()
+	KBM.Player.AbilityTable = Inspect.Ability.New.List()
 	local Count = 0
 	if KBM.Player.AbilityTable then
 		if self.RezBank[KBM.Player.Calling] then
@@ -45,7 +40,7 @@ function PC:GatherAbilities()
 			for crID, crTable in pairs (self.RezBank[KBM.Player.Calling]) do
 				if KBM.Player.AbilityTable[crID] then
 					Count = Count + 1
-					crTable = Inspect.Ability.Detail(crID)
+					crTable = Inspect.Ability.New.Detail(crID)
 					self.RezBank[KBM.Player.Calling][crID] = crTable
 					KBM.Player.Rezes.List[crID] = self.RezBank[KBM.Player.Calling][crID]
 					KBM.RezMaster.Rezes:Add(KBM.Player.Name, crID, crTable.currentCooldownRemaining, crTable.cooldown)
@@ -73,7 +68,7 @@ function PC:GatherRaidInfo()
 					--KBM.Unit.List.UID[uID].Details = Inspect.Unit.Detail(uID)
 					if KBM.Unit.List.UID[uID].Calling then
 						if self.RezBank[KBM.Unit.List.UID[uID].Calling] then
-							Command.Message.Broadcast("tell", KBM.Unit.List.UID[uID].Name, "KBMRezReq", "C", PC.MessageSent)
+							Command.Message.Broadcast("tell", KBM.Unit.List.UID[uID].Name, "KBMRezReq", "C", function(failed, message) PC.RezMReq(KBM.Unit.List.UID[uID].Name, failed, message) end)
 							--Command.Message.Send(KBM.Unit.List.UID[uID].Name, "KBMRezReq", "C", PC.MessageSent)
 						end
 					else
@@ -92,7 +87,7 @@ function PC.AbilityRemove(aIDList)
 	if self.RezBank[KBM.Player.Calling] then
 		for crID, crTable in pairs (self.RezBank[KBM.Player.Calling]) do
 			if aIDList[crID] == false then
-				self.RezBank[KBM.Player.Calling][crID] = Inspect.Ability.Detail(crID)
+				self.RezBank[KBM.Player.Calling][crID] = Inspect.Ability.New.Detail(crID)
 				KBM.Player.Rezes.List[crID] = nil
 				--print(Count..": "..self.RezBank[KBM.Player.Calling][crID].name.." < Removed")
 				KBM.RezMaster.Broadcast.RezRem(crID)
@@ -101,7 +96,7 @@ function PC.AbilityRemove(aIDList)
 		end
 		KBM.Player.Rezes.Count = Count
 		if KBM.Player.Rezes.Count == 0 then
-			KBM.RezMaster.Broadcast.RezClear()
+			--KBM.RezMaster.Broadcast.RezClear()
 		end
 	end
 end
@@ -114,15 +109,15 @@ function PC.AbilityAdd(aIDList)
 		for crID, crTable in pairs (self.RezBank[KBM.Player.Calling]) do
 			if aIDList[crID] then
 				Count = Count + 1
-				local aDetails = Inspect.Ability.Detail(crID)
+				local aDetails = Inspect.Ability.New.Detail(crID)
 				self.RezBank[KBM.Player.Calling][crID] = aDetails
 				KBM.Player.Rezes.List[crID] = self.RezBank[KBM.Player.Calling][crID]
 				KBM.RezMaster.Rezes:Add(KBM.Player.Name, crID, aDetails.currentCooldownRemaining, aDetails.cooldown)
+				KBM.RezMaster.Broadcast.RezSet(nil, crID)
 				-- print(Count..": "..self.RezBank[KBM.Player.Calling][crID].name.." < Added")
 			end
 		end
 		KBM.Player.Rezes.Count = Count
-		KBM.RezMaster.Broadcast.RezSet()
 	end
 end
 
@@ -130,7 +125,7 @@ function PC.AbilityCooldown(aIDList)
 	local self = PC
 	for rID, rDetails in pairs(KBM.Player.Rezes.List) do
 		if aIDList[rID] then
-			local aDetails = Inspect.Ability.Detail(rID)
+			local aDetails = Inspect.Ability.New.Detail(rID)
 			--print(math.floor(aDetails.currentCooldownDuration).." - "..math.floor(rDetails.cooldown))
 			if aDetails.currentCooldownDuration then
 				if aDetails.currentCooldownDuration > 2 then
@@ -181,6 +176,10 @@ function PC.RezMReq(name, failed, message)
 	end
 end
 
+function PC.RezRReq(name, failed, message)
+
+end
+
 function PC.GroupJoin(uID)
 	--print("Player joining: "..KBM.Unit.List.UID[uID].Name)
 	if KBM.Player.Grouped then
@@ -224,10 +223,10 @@ end
 
 function PC:Start()
 	self.MSG = KBM.MSG
-	table.insert(Event.Ability.Remove, {PC.AbilityRemove, "KingMolinator", "Ability Removed"})
-	table.insert(Event.Ability.Add, {PC.AbilityAdd, "KingMolinator", "Ability Add"})
-	table.insert(Event.Ability.Cooldown.Begin, {PC.AbilityCooldown, "KingMolinator", "Ability Cooldown"})
-	table.insert(Event.Ability.Cooldown.End, {PC.AbilityCooldown, "KingMolinator", "Ability Cooldown"})
+	table.insert(Event.Ability.New.Remove, {PC.AbilityRemove, "KingMolinator", "Ability Removed"})
+	table.insert(Event.Ability.New.Add, {PC.AbilityAdd, "KingMolinator", "Ability Add"})
+	table.insert(Event.Ability.New.Cooldown.Begin, {PC.AbilityCooldown, "KingMolinator", "Ability Cooldown"})
+	table.insert(Event.Ability.New.Cooldown.End, {PC.AbilityCooldown, "KingMolinator", "Ability Cooldown"})
 	table.insert(Event.KingMolinator.System.Player.Join, {PC.PlayerJoin, "KingMolinator", "Player Join"})
 	table.insert(Event.KingMolinator.System.Player.Leave, {PC.PlayerLeave, "KingMolinator", "Player Leave"})
 	table.insert(Event.KingMolinator.System.Group.Join, {PC.GroupJoin, "KingMolinator", "Group Member Join"})

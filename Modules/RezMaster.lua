@@ -232,7 +232,7 @@ function RM.Rezes:Init()
 	function self:Add(Name, aID, aCD, aFull)
 		if KBM.Player.Grouped then
 			if RM.GUI.Settings.Enabled then
-				local aDetails = Inspect.Ability.Detail(aID)
+				local aDetails = Inspect.Ability.New.Detail(aID)
 				if aDetails then
 					local Anchor = RM.GUI.Anchor
 					local Timer = {}
@@ -487,7 +487,7 @@ function RM.Broadcast.RezSet(toName, crID)
 	if KBM.Player.Grouped then
 		if toName then
 			for crID, Details in pairs(KBM.Player.Rezes.List) do
-				KBM.Player.Rezes.List[crID] = Inspect.Ability.Detail(crID)
+				KBM.Player.Rezes.List[crID] = Inspect.Ability.New.Detail(crID)
 				Details = KBM.Player.Rezes.List[crID]
 				if Details then
 					local DataSend = crID..","..tostring(Details.currentCooldownRemaining)..","..tostring(Details.cooldown)
@@ -496,14 +496,14 @@ function RM.Broadcast.RezSet(toName, crID)
 			end
 		elseif not crID then
 			for crID, Details in pairs(KBM.Player.Rezes.List) do
-				KBM.Player.Rezes.List[crID] = Inspect.Ability.Detail(crID)
+				KBM.Player.Rezes.List[crID] = Inspect.Ability.New.Detail(crID)
 				Details = KBM.Player.Rezes.List[crID]
 				if Details then
 					Command.Message.Broadcast(KBM.Player.Mode, nil, "KBMRezSet", crID..","..tostring(Details.currentCooldownRemaining)..","..tostring(Details.cooldown))
 				end
 			end
 		else
-			KBM.Player.Rezes.List[crID] = Inspect.Ability.Detail(crID)
+			KBM.Player.Rezes.List[crID] = Inspect.Ability.New.Detail(crID)
 			local Details = KBM.Player.Rezes.List[crID]
 			if Details then
 				Command.Message.Broadcast(KBM.Player.Mode, nil, "KBMRezSet", crID..","..tostring(Details.currentCooldownRemaining)..","..tostring(Details.cooldown))
@@ -552,7 +552,6 @@ function RM.MessageHandler(From, Type, Channel, Identifier, Data)
 					local st = string.find(Data, ",", 19)
 					local aCD = math.ceil(tonumber(string.sub(Data, 19, st - 1)) or 0)
 					local aDR = math.floor(tonumber(string.sub(Data, st + 1)))
-					local aDets = Inspect.Ability.Detail(aID)
 					RM.Rezes:Add(From, aID, aCD, aDR)
 				elseif Identifier == "KBMRezRem" then
 					if RM.Rezes.Tracked[From] then
@@ -569,7 +568,6 @@ function RM.MessageHandler(From, Type, Channel, Identifier, Data)
 					local st = string.find(Data, ",", 19)
 					local aCD = math.ceil(tonumber(string.sub(Data, 19, st - 1)) or 0)
 					local aDR = math.floor(tonumber(string.sub(Data, st + 1)))
-					local aDets = Inspect.Ability.Detail(aID)
 					RM.Rezes:Add(From, aID, aCD, aDR)
 				elseif Identifier == "KBMRezReq" then
 					RM.Broadcast.RezSet(From)

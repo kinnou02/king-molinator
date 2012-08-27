@@ -7125,13 +7125,30 @@ function KBM:BuffAdd(unitID, Buffs)
 							KBM.Buffs.Active[unitID].Buff_Count = KBM.Buffs.Active[unitID].Buff_Count + 1
 						end
 						KBM.Buffs.Active[unitID][BuffID] = bDetails
+						-- if KBM.Debug then
+							-- print("---------------")
+							-- print(tostring(bDetails.name))
+						-- end
 						if bDetails.type then
+							bDetails.kbmType = bDetails.type
 							KBM.Buffs.Active[unitID].Buff_Types[bDetails.type] = bDetails
+							-- if KBM.Debug then
+								-- print("Added via type: "..bDetails.type)
+							-- end
 						else
-							if bDetails.ability then
-								KBM.Buffs.Active[unitID].Buff_Types[bDetails.ability] = bDetails
-								if KBM.Debug then
-								--print("No .type field for: "..bDetails.name)
+							if bDetails.abilityNew then
+								bDetails.kbmType = bDetails.abilityNew
+								KBM.Buffs.Active[unitID].Buff_Types[bDetails.abilityNew] = bDetails
+								-- if KBM.Debug then
+									-- print("Added via Ability New ID: "..bDetails.abilityNew)
+								-- end
+							else
+								if bDetails.rune then
+									bDetails.kbmType = bDetails.rune
+									KBM.Buffs.Active[unitID].Buff_Types[bDetails.rune] = bDetails
+									-- if KBM.Debug then
+										-- print("Added via rune ID: "..bDetails.rune)
+									-- end
 								end
 							end
 						end
@@ -7225,14 +7242,31 @@ function KBM:BuffAdd(unitID, Buffs)
 								KBM.Buffs.Active[unitID].Buff_Count = KBM.Buffs.Active[unitID].Buff_Count + 1
 							end
 							KBM.Buffs.Active[unitID][BuffID] = bDetails
+							-- if KBM.Debug then
+								-- print("---------------")
+								-- print(tostring(bDetails.name))
+							-- end
 							if bDetails.type then
+								bDetails.kbmType = bDetails.type
 								KBM.Buffs.Active[unitID].Buff_Types[bDetails.type] = bDetails
+								-- if KBM.Debug then
+									-- print("Added via type: "..bDetails.type)
+								-- end
 							else
-								if KBM.Buffs.Active[unitID].Buff_Types[bDetails.ability] then
-									KBM.Buffs.Active[unitID].Buff_Types[bDetails.ability] = bDetails
-								end
-								if KBM.Debug then
-								--	print("No .type field for: "..bDetails.name)
+								if bDetails.abilityNew then
+									bDetails.kbmType = bDetails.abilityNew
+									KBM.Buffs.Active[unitID].Buff_Types[bDetails.abilityNew] = bDetails
+									-- if KBM.Debug then
+										-- print("Added via Ability New ID: "..bDetails.abilityNew)
+									-- end
+								else
+									if bDetails.rune then
+										bDetails.kbmType = bDetails.rune
+										KBM.Buffs.Active[unitID].Buff_Types[bDetails.rune] = bDetails
+										-- if KBM.Debug then
+											-- print("Added via rune ID: "..bDetails.rune)
+										-- end
+									end
 								end
 							end
 							if KBM.Trigger.EncStart["playerBuff"] then
@@ -7301,12 +7335,16 @@ function KBM:BuffRemove(unitID, Buffs)
 									end
 								end
 								if bDetails then
-									if not bDetails.type then
-										if KBM.Buffs.Active[unitID].Buff_Types[bDetails.ability] then
-											KBM.Buffs.Active[unitID].Buff_Types[bDetails.ability] = nil
-										end
-									else
+									if bDetails.type then
 										KBM.Buffs.Active[unitID].Buff_Types[bDetails.type] = nil
+									else
+										if bDetails.abilityNew then
+											KBM.Buffs.Active[unitID].Buff_Types[bDetails.abilityNew] = nil
+										else
+											if bDetails.rune then
+												KBM.Buffs.Active[unitID].Buff_Types[bDetails.rune] = nil
+											end
+										end
 									end
 								end
 								KBM.Buffs.Active[unitID][BuffID] = nil
@@ -7327,12 +7365,16 @@ function KBM:BuffRemove(unitID, Buffs)
 							if KBM.Buffs.Active[unitID][BuffID] then
 								local bDetails = KBM.Buffs.Active[unitID][BuffID]
 								if bDetails then
-									if not bDetails.type then
-										if KBM.Buffs.Active[unitID].Buff_Types[bDetails.ability] then
-											KBM.Buffs.Active[unitID].Buff_Types[bDetails.ability] = nil
-										end
-									else
+									if bDetails.type then
 										KBM.Buffs.Active[unitID].Buff_Types[bDetails.type] = nil
+									else
+										if bDetails.abilityNew then
+											KBM.Buffs.Active[unitID].Buff_Types[bDetails.abilityNew] = nil
+										else
+											if bDetails.rune then
+												KBM.Buffs.Active[unitID].Buff_Types[bDetails.rune] = nil
+											end
+										end
 									end
 								end
 								KBM.Buffs.Active[unitID][BuffID] = nil
@@ -7348,6 +7390,39 @@ function KBM:BuffRemove(unitID, Buffs)
 		end
 	end
 
+end
+
+function KBM.SlashInspectBuffs(Name)
+	if Name == "" then
+		Name = KBM.Player.Name
+	elseif Name == "%t" then
+		local tDetails = Inspect.Unit.Detail("player.target")
+		if tDetails then
+			Name = tDetails.name
+		else
+			Name = KBM.Player.Name
+		end
+	end
+	if KBM.Unit.List.Name[Name] then
+		print("----------------")
+		print("Inspecting Buffs for: "..tostring(Name))
+		for UnitID, Object in pairs(KBM.Unit.List.Name[Name]) do
+			local buffList = Inspect.Buff.List(UnitID)
+			KBM:BuffAdd(UnitID, buffList)
+			for buffID, bDetails in pairs(KBM.Buffs.Active[UnitID]) do
+				if bDetails then
+					if type(bDetails) == "table" then
+						if buffID ~= "Buff_Types" then
+							print(tostring(bDetails.name).." : "..tostring(bDetails.kbmType))
+						end
+					end
+				end
+			end
+			print("----------------")
+		end
+	else
+		print("No Buff data available for: "..tostring(Name))
+	end
 end
 
 function KBM.FormatPrecision(Val)
@@ -8428,6 +8503,7 @@ function KBM.InitEvents()
 	table.insert(Command.Slash.Register("kbmlocale"), {KBMLM.FindMissing, "KBMLocaleManager", "KBM Locale Finder"})
 	table.insert(Command.Slash.Register("kbmcpu"), {function () KBM.CPU:Toggle() end, "KingMolinator", "KBM CPU Monitor"})
 	table.insert(Command.Slash.Register("kbmdumpavail"), {KBM.Unit.Debug.DumpAvail, "KingMolinator", "KBM Debug Avail"})
+	table.insert(Command.Slash.Register("kbmbuffs"), {KBM.SlashInspectBuffs, "KingMolinator", "Slash Command for Buff Listing"})
 	--table.insert(Command.Slash.Register("kbmwdbuffs"), {function (...) KBM.Watchdog.Display("Buffs", ...) end, "KingMolinator", "Watchdog Tracking: Buff Add Remove Display"})
 	--table.insert(Command.Slash.Register("kbmwdavail"), {function (...) KBM.Watchdog.Display("Avail", ...) end, "KingMolinator", "Watchdog Tracking: Unit Available"})
 	--table.insert(Command.Slash.Register("kbmwdmain"), {function (...) KBM.Watchdog.Display("Main", ...) end, "KingMolinator", "Watchdog Tracking: System Update Begin"})

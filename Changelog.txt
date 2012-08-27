@@ -6,6 +6,9 @@ New: Ready Check
 * New: Lists all Raid/Party members Health and Mana/Power/Energy.
 * New: Lists KBM versions for each Raid/Party member (if available.)
 * New: Lists Soul Vitality for each Raid/Party member.
+* New: Lists Food buffs on each Raid/Party member. (See available Food types - to be expanded)
+* New: Lists Potions/Vials used by each Raid/Party member. (See available Potions - to be expanded)
+* New: Lists Weapon Stones used by each Raid/Party member. (See available Stones - to be expanded)
 * New: Lists Current and Max Planar charges for each Raid/Party member.
 * New: Option to disable/enable the display in the options window.
 * New: Toggle the display via the slash command /kbmreadycheck.
@@ -14,8 +17,19 @@ New: Ready Check
 * New: Color added to Soul Vatility display.
 * Change: Moved Ready Check window to its own context.
 
+Ready Check Available Tracking
+* Food
+** Farclan Cherry Cake (Mage, Cleric) - Medium
+* Weapon Stones
+** Burning Powerstone (Mage, Cleric) - High
+** Flaring Glyph (Mage, Cleric) - Medium
+* Potions/Vials
+** Herioc Brightsurge Vial (Mage, Cleric) - High
+
 System
-* Changed: Buff Add events triggered for already cached buffs are now ignored.
+* New: Added a new slash command /kbmbuffs. You can macro this with %t or manually type a name to return a list of buffs with KBM ID's on that Unit. (Players or NPC's)
+* Change: Ability IDs have been changed to the new format for Rift 1.9 and above. This will cause compatibility issues with older KBMs.
+* Change: Buff Add events triggered for already cached buffs are now ignored.
 * Removed: Global reference to bDetails in Buff Remove handlers.
 * Removed: Global reference to TriggerObj in Buff Remove handlers.
 * Removed: Global reference to TriggerObj in Buff Add handlers.

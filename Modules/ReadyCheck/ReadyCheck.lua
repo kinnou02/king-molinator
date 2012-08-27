@@ -21,6 +21,7 @@ PI.Displayed = true
 PI.GUI = {}
 PI.Context = UI.CreateContext("KBMReadyCheck")
 PI.DetailUpdates = {}
+PI.Buffs = {}
 PI.Queue = {
 	Add = {},
 	Remove = {},
@@ -56,6 +57,7 @@ PI.Icons = {
 		File = "Media/RC_FoodIcon.png",
 	},
 }
+
 PI.Settings = {
 	Enabled = true,
 	Unlocked = true,
@@ -67,6 +69,7 @@ PI.Settings = {
 	hScale = 1,
 	fScale = 1,
 	Alpha = 1,
+	Tracking = {},
 	Columns = {
 		Planar = {
 			Enabled = true,
@@ -102,32 +105,68 @@ PI.Constants = {
 	w = 150,
 	h = 32,
 	FontSize = 14,
+	Lookup = {
+		Full = {},
+	},
 	Columns = {
 		Planar = {
 			w = 36,
 		},
 		Stone = {
 			w = 36,
-			Grade = {
-				High = {},
-				Med = {},
-				Low = {},
+			Icons = true,
+			List = {
+				["r624A5FA52756B277"] = { -- Burning Powerstone
+					Grade = "High",
+					Callings = {
+						cleric = true,
+						mage = true,
+					},
+				},
+				["r70D23CD31E59DD77"] = { -- Flaring Glyph
+					Grade = "Med",
+					Callings = {
+						cleric = true,
+						mage = true,
+					},
+				},
 			},
 		},
 		Food = {
 			w = 36,
-			Grade = {
-				High = {},
-				Med = {},
-				Low = {},
+			Icons = true,
+			List = {
+				["B3CD06443A7FD7C18"] = { -- Farclan Cherry Cake
+					Grade = "Med",
+					Callings = {
+						cleric = true,
+						mage = true,
+					},
+				},
 			},
 		},
 		Potion = {
 			w = 36,
-			Grade = {
-				High = {},
-				Med = {},
-				Low = {},
+			Icons = true,
+			List = {
+				["B1C51B12CC359AA77"] = { -- Herioc Brightsurge Vial
+					Grade = "High",
+					Callings = {
+						cleric = true,
+						mage = true,
+					},
+				},
+			},
+		},
+		Other = {
+			Icons = true,
+			List = {
+				["r4003D6A12E212CFF"] = { -- Cushioned Insoles
+					Grade = "High",
+					Callings = {
+						all = true,
+					},
+				},
 			},
 		},
 		Vitality = {
@@ -142,6 +181,18 @@ PI.Constants = {
 		FontSize = 14,
 	},
 }
+-- Generate Lookup
+for ID, Obj in pairs(PI.Constants.Columns) do
+	if Obj.List then
+		for buffID, buffObj in pairs(Obj.List) do
+			PI.Constants.Lookup.Full[buffID] = {
+				Object = PI.Constants.Columns[ID][buffID],
+				Column = ID,
+			}
+			PI.Settings.Tracking[buffID] = true
+		end
+	end
+end
 
 -- Dictionary in Global Locale file.
 
@@ -197,6 +248,8 @@ function PI.GUI:ApplySettings()
 			for ID, CObject in pairs(Object.Columns) do
 				CObject.Shadow:SetFontSize(math.ceil(PI.Constants.Rows.FontSize * PI.Settings.fScale))
 				CObject.Text:SetFontSize(math.ceil(PI.Constants.Rows.FontSize * PI.Settings.fScale))
+				CObject.Icon:SetHeight(math.ceil(PI.Constants.Rows.h * PI.Settings.hScale) - 4)
+				CObject.Icon:SetWidth(CObject.Icon:GetHeight())
 			end
 		end
 		self.Drag:SetVisible(PI.Settings.Unlocked)
@@ -330,6 +383,93 @@ function PI.GUI:Init()
 			self[Index].Columns.Planar:SetData("n/a")
 		end	
 	end
+	
+	function self.Rows:Update_Stone(Index)
+		if self[Index].Enabled then
+			local Object = self[Index].Columns.Stone.Object
+			if Object then
+				if Object.icon then
+					self[Index].Columns.Stone.Icon:SetTexture("Rift", Object.icon)
+					self[Index].Columns.Stone.Icon:SetVisible(true)
+					self[Index].Columns.Stone.Shadow:SetVisible(false)
+				else
+					self[Index].Columns.Stone.Text:SetFontColor(0.15, 0.9, 0.15)
+					self[Index].Columns.Stone:SetData("?")
+					self[Index].Columns.Stone.Icon:SetVisible(false)
+					self[Index].Columns.Stone.Shadow:SetVisible(true)
+				end
+			else
+				self[Index].Columns.Stone.Text:SetFontColor(0.9, 0.15, 0.15)
+				self[Index].Columns.Stone:SetData("x")
+				self[Index].Columns.Stone.Icon:SetVisible(false)
+				self[Index].Columns.Stone.Shadow:SetVisible(true)
+			end
+		else
+			self[Index].Columns.Stone.Text:SetFontColor(0.9, 0.15, 0.15)
+			self[Index].Columns.Stone:SetData("x")
+			self[Index].Columns.Stone.Icon:SetVisible(false)
+			self[Index].Columns.Stone.Shadow:SetVisible(true)
+		end
+	end
+	PI.Constants.Columns.Stone.Hook = function(...) self.Rows:Update_Stone(...) end
+	
+	function self.Rows:Update_Food(Index)
+		if self[Index].Enabled then
+			local Object = self[Index].Columns.Food.Object
+			if Object then
+				if Object.icon then
+					self[Index].Columns.Food.Icon:SetTexture("Rift", Object.icon)
+					self[Index].Columns.Food.Icon:SetVisible(true)
+					self[Index].Columns.Food.Shadow:SetVisible(false)
+				else
+					self[Index].Columns.Food.Text:SetFontColor(0.15, 0.9, 0.15)
+					self[Index].Columns.Food:SetData("?")
+					self[Index].Columns.Food.Icon:SetVisible(false)
+					self[Index].Columns.Food.Shadow:SetVisible(true)
+				end
+			else
+				self[Index].Columns.Food.Text:SetFontColor(0.9, 0.15, 0.15)
+				self[Index].Columns.Food:SetData("x")
+				self[Index].Columns.Food.Icon:SetVisible(false)
+				self[Index].Columns.Food.Shadow:SetVisible(true)
+			end
+		else
+			self[Index].Columns.Food.Text:SetFontColor(0.9, 0.15, 0.15)
+			self[Index].Columns.Food:SetData("x")
+			self[Index].Columns.Food.Icon:SetVisible(false)
+			self[Index].Columns.Food.Shadow:SetVisible(true)
+		end	
+	end
+	PI.Constants.Columns.Food.Hook = function(...) self.Rows:Update_Food(...) end
+	
+	function self.Rows:Update_Potion(Index)
+		if self[Index].Enabled then
+			local Object = self[Index].Columns.Potion.Object
+			if Object then
+				if Object.icon then
+					self[Index].Columns.Potion.Icon:SetTexture("Rift", Object.icon)
+					self[Index].Columns.Potion.Icon:SetVisible(true)
+					self[Index].Columns.Potion.Shadow:SetVisible(false)
+				else
+					self[Index].Columns.Potion.Text:SetFontColor(0.15, 0.9, 0.15)
+					self[Index].Columns.Potion:SetData("?")
+					self[Index].Columns.Potion.Icon:SetVisible(false)
+					self[Index].Columns.Potion.Shadow:SetVisible(true)
+				end
+			else
+				self[Index].Columns.Potion.Text:SetFontColor(0.9, 0.15, 0.15)
+				self[Index].Columns.Potion:SetData("x")
+				self[Index].Columns.Potion.Icon:SetVisible(false)
+				self[Index].Columns.Potion.Shadow:SetVisible(true)
+			end
+		else
+			self[Index].Columns.Potion.Text:SetFontColor(0.9, 0.15, 0.15)
+			self[Index].Columns.Potion:SetData("x")
+			self[Index].Columns.Potion.Icon:SetVisible(false)
+			self[Index].Columns.Potion.Shadow:SetVisible(true)
+		end	
+	end
+	PI.Constants.Columns.Potion.Hook = function(...) self.Rows:Update_Potion(...) end
 		
 	function self.Rows:Update_Soul(Index)
 		if self[Index].Enabled then
@@ -413,6 +553,7 @@ function PI.GUI:Init()
 					self[Index].MPBar:SetVisible(false)
 					self[Index].Columns.Planar:SetData("-/-")
 					self[Index].Columns.Vitality:SetData("-")
+					self[Index].Columns.Stone:SetData("-")
 				else
 					self[Index].HPBar:SetVisible(true)
 					self[Index].MPBar:SetVisible(true)
@@ -428,6 +569,9 @@ function PI.GUI:Init()
 		self:Update_Planar(Index)
 		self:Update_Soul(Index)
 		self:Update_KBM(Index)
+		self:Update_Stone(Index)
+		self:Update_Potion(Index)
+		self:Update_Food(Index)
 	end
 	
 	function self.Rows:Add(UnitID)
@@ -449,7 +593,10 @@ function PI.GUI:Init()
 				self[self.Populated].Enabled = true
 				self[self.Populated].Cradle:SetVisible(true)
 				for i = self.Populated, Index + 1, -1 do
-					self[i].Unit = self[i-1].Unit
+					self[i].Unit = self[i - 1].Unit
+					self[i].Columns.Stone.Object = self[i - 1].Columns.Stone.Object
+					self[i].Columns.Potion.Object = self[i - 1].Columns.Potion.Object
+					self[i].Columns.Food.Object = self[i - 1].Columns.Food.Object
 					if self[i].Unit then
 						self.Units[self[i].Unit.UnitID] = self[i]
 						self.Names[self[i].Unit.Name] = self[i]
@@ -461,6 +608,9 @@ function PI.GUI:Init()
 		self[Index].Cradle:SetVisible(true)
 		self[Index].Enabled = true
 		self[Index].Unit = KBM.Unit.List.UID[UnitID]
+		self[Index].Columns.Food.Object = nil
+		self[Index].Columns.Potion.Object = nil
+		self[Index].Columns.Stone.Object = nil
 		self.Units[UnitID] = self[Index]
 		self.Names[self[Index].Unit.Name] = self[Index]
 		self:Set_Offline(Index)
@@ -473,6 +623,9 @@ function PI.GUI:Init()
 		if Index < self.Populated then
 			for i = Index, self.Populated - 1 do
 				self[i].Unit = self[i + 1].Unit
+				self[i].Columns.Stone.Object = self[i + 1].Columns.Stone.Object
+				self[i].Columns.Food.Object = self[i + 1].Columns.Food.Object
+				self[i].Columns.Potion.Object = self[i + 1].Columns.Potion.Object
 				if self[i].Unit then
 					self.Units[self[i].Unit.UnitID] = self[i]
 					self.Names[self[i].Unit.Name] = self[i]
@@ -483,6 +636,9 @@ function PI.GUI:Init()
 		self[self.Populated].Enabled = false
 		self[self.Populated].Cradle:SetVisible(false)
 		self[self.Populated].Unit = nil
+		self[self.Populated].Columns.Stone.Object = nil
+		self[self.Populated].Columns.Food.Object = nil
+		self[self.Populated].Columns.Potion.Object = nil
 		self.Populated = self.Populated - 1
 	end
 	
@@ -540,8 +696,13 @@ function PI.GUI:Init()
 			self.Rows[Row].Columns[ID].Shadow = UI.CreateFrame("Text", "Row "..Row.." Shadow for "..ID, self.Rows[Row].Columns[ID].Cradle)
 			self.Rows[Row].Columns[ID].Shadow:SetFontColor(0,0,0)
 			self.Rows[Row].Columns[ID].Shadow:SetPoint("CENTER", self.Rows[Row].Columns[ID].Cradle, "CENTER", 1, 1)
+			self.Rows[Row].Columns[ID].Shadow:SetLayer(2)
 			self.Rows[Row].Columns[ID].Text = UI.CreateFrame("Text", "Row "..Row.." Text for "..ID, self.Rows[Row].Columns[ID].Shadow)
 			self.Rows[Row].Columns[ID].Text:SetPoint("TOPLEFT", self.Rows[Row].Columns[ID].Shadow, "TOPLEFT", -1, -1)
+			self.Rows[Row].Columns[ID].Icon = UI.CreateFrame("Texture", "Row "..Row.." Icon for "..ID, self.Rows[Row].Columns[ID].Cradle)
+			self.Rows[Row].Columns[ID].Icon:SetLayer(1)
+			self.Rows[Row].Columns[ID].Icon:SetPoint("CENTER", self.Rows[Row].Columns[ID].Cradle, "CENTER")
+			self.Rows[Row].Columns[ID].Icon:SetVisible(false)
 			local DataObject = self.Rows[Row].Columns[ID]
 			function DataObject:SetData(Text)
 				Text = tostring(Text)
@@ -574,6 +735,8 @@ function PI.Update()
 			PI.Queue.Total = PI.Queue.Total - 1
 			if not PI.GUI.Rows.Units[UnitID] then
 				PI.GUI.Rows:Add(UnitID)
+				PI.Buffs[UnitID] = {}
+				PI.BuffAdd(UnitID, Inspect.Buff.List(UnitID))
 			end
 		else
 			PI.Queue.reQueue[UnitID] = true
@@ -583,6 +746,7 @@ function PI.Update()
 	for UnitID, bool in pairs(PI.Queue.Remove) do
 		PI.Queue.Remove[UnitID] = nil
 		if UnitID ~= KBM.Player.UnitID then
+			PI.Buffs[UnitID] = nil
 			PI.GUI.Rows:Remove(UnitID)
 		end
 	end
@@ -597,27 +761,52 @@ function PI.Update_End()
 end
 
 function PI.BuffAdd(UnitID, Buffs)
-	if KBM.Buffs.Active[UnitID] then
-		for BuffID, bool in pairs(Buffs) do
-			if KBM.Buffs.Active[UnitID][BuffID] then
-				if KBM.Debug then
-					print("Buff added: "..KBM.Buffs.Active[UnitID][BuffID].name)
-				end
-			else
-				if KBM.Debug then
-					print("No buff cache for: "..BuffID)
+	if PI.GUI.Rows.Units[UnitID] then
+		if KBM.Buffs.Active[UnitID] then
+			for BuffID, bool in pairs(Buffs) do
+				local bDetails = KBM.Buffs.Active[UnitID][BuffID]
+				if bDetails.kbmType then
+					if PI.Constants.Lookup.Full[bDetails.kbmType] then
+						local ID = PI.Constants.Lookup.Full[bDetails.kbmType].Column
+						local Index = PI.GUI.Rows.Units[UnitID].Index
+						if ID then
+							PI.GUI.Rows[Index].Columns[ID].Object = bDetails
+							PI.Buffs[UnitID][BuffID] = bDetails
+							if PI.Constants.Columns[ID] then
+								PI.Constants.Columns[ID].Hook(Index)
+							end
+						end
+						
+					end
 				end
 			end
-		end
-	else
-		if KBM.Debug then
-			print("No Buffs cached for: "..UnitID)
 		end
 	end
 end
 
 function PI.BuffRemove(UnitID, Buffs)
-
+	if PI.GUI.Rows.Units[UnitID] then
+		if PI.Buffs[UnitID] then
+			for BuffID, bool in pairs(Buffs) do
+				if PI.Buffs[UnitID][BuffID] then
+					local bDetails = PI.Buffs[UnitID][BuffID]
+					if bDetails.kbmType then
+						if PI.Constants.Lookup.Full[bDetails.kbmType] then
+							local ID = PI.Constants.Lookup.Full[bDetails.kbmType].Column
+							local Index = PI.GUI.Rows.Units[UnitID].Index
+							if ID then
+								PI.GUI.Rows[Index].Columns[ID].Object = nil
+								if PI.Constants.Columns[ID] then
+									PI.Constants.Columns[ID].Hook(Index)
+								end
+							end
+						end
+					end
+					PI.Buffs[UnitID][BuffID] = nil
+				end
+			end
+		end
+	end	
 end
 
 function PI.Start()
