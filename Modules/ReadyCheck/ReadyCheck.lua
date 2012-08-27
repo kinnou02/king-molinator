@@ -42,9 +42,23 @@ PI.Icons = {
 		Type = "KingMolinator",
 		File = "Media/KBMLogo_Icon.png",
 	},
+	Stone = {
+		Type = "KingMolinator",
+		File = "Media/Weap_Stones.png",
+	},
+	Potion = {
+		Type = "KingMolinator",
+		File = "Media/RC_PotionIcon.png",
+	},
+
+	Food = {
+		Type = "KingMolinator",
+		File = "Media/RC_FoodIcon.png",
+	},
 }
 PI.Settings = {
 	Enabled = true,
+	Unlocked = true,
 	Combat = true,
 	Solo = true,
 	x = false,
@@ -52,8 +66,21 @@ PI.Settings = {
 	wScale = 1,
 	hScale = 1,
 	fScale = 1,
+	Alpha = 1,
 	Columns = {
 		Planar = {
+			Enabled = true,
+			wScale = 1,
+		},
+		Stone = {
+			Enabled = true,
+			wScale = 1,
+		},
+		Food = {
+			Enabled = true,
+			wScale = 1,
+		},
+		Potion = {
 			Enabled = true,
 			wScale = 1,
 		},
@@ -70,6 +97,7 @@ PI.Settings = {
 		hScale = 1,
 	},
 }
+
 PI.Constants = {
 	w = 150,
 	h = 32,
@@ -78,15 +106,40 @@ PI.Constants = {
 		Planar = {
 			w = 36,
 		},
-		Vitality = {
+		Stone = {
 			w = 36,
+			Grade = {
+				High = {},
+				Med = {},
+				Low = {},
+			},
+		},
+		Food = {
+			w = 36,
+			Grade = {
+				High = {},
+				Med = {},
+				Low = {},
+			},
+		},
+		Potion = {
+			w = 36,
+			Grade = {
+				High = {},
+				Med = {},
+				Low = {},
+			},
+		},
+		Vitality = {
+			w = 38,
 		},
 		KBM = {
-			w = 70,
+			w = 72,
 		},
 	},
 	Rows = {
-		h = 24,
+		h = 26,
+		FontSize = 14,
 	},
 }
 
@@ -139,8 +192,14 @@ function PI.GUI:ApplySettings()
 		for Index, Object in ipairs(self.Rows) do
 			Object.Cradle:SetHeight(math.ceil(PI.Constants.Rows.h * PI.Settings.Rows.hScale))
 			Object.HPBar:SetHeight(math.ceil(Object.Cradle:GetHeight() * 0.7))
-			PI.GUI.Rows:Update(Index)
+			Object.Shadow:SetFontSize(math.ceil(PI.Constants.Rows.FontSize * PI.Settings.fScale))
+			Object.Text:SetFontSize(math.ceil(PI.Constants.Rows.FontSize * PI.Settings.fScale))
+			for ID, CObject in pairs(Object.Columns) do
+				CObject.Shadow:SetFontSize(math.ceil(PI.Constants.Rows.FontSize * PI.Settings.fScale))
+				CObject.Text:SetFontSize(math.ceil(PI.Constants.Rows.FontSize * PI.Settings.fScale))
+			end
 		end
+		self.Drag:SetVisible(PI.Settings.Unlocked)
 	else
 		self.Cradle:SetVisible(false)
 	end
@@ -153,7 +212,7 @@ function PI.GUI:Init()
 	self.Header:SetLayer(1)
 	self.Texture = UI.CreateFrame("Texture", "ReadyCheck Texture", self.Header)
 	KBM.LoadTexture(self.Texture, "KingMolinator", "Media/MSpy_Texture.png")
-	self.Texture:SetBackgroundColor(0,0.38,0,0.33)
+	self.Texture:SetBackgroundColor(0,0.38,0,0.5)
 	self.Texture:SetPoint("TOPLEFT", self.Header, "TOPLEFT")
 	self.Texture:SetPoint("BOTTOM", self.Header, "BOTTOM")
 	self.Texture:SetLayer(1)
@@ -174,15 +233,25 @@ function PI.GUI:Init()
 		List = {
 			Planar = {},
 			Vitality = {},
+			Stone = {},
+			Food = {},
+			Potion = {},
 			KBM = {},
 		},
 		First = nil,
 		Last = nil,
+		Order = {},
 	}
+	table.insert(self.Columns.Order, "Planar")
+	table.insert(self.Columns.Order, "Stone")
+	table.insert(self.Columns.Order, "Food")
+	table.insert(self.Columns.Order, "Vitality")
+	table.insert(self.Columns.Order, "Potion")
+	table.insert(self.Columns.Order, "KBM")
 	
 	function self.Columns:Create(ID)
 		self.List[ID].Header = UI.CreateFrame("Frame", ID.." Header", PI.GUI.Cradle)
-		self.List[ID].Header:SetBackgroundColor(0,0,0,0.33)
+		self.List[ID].Header:SetBackgroundColor(0,0,0,0.5)
 		self.List[ID].Icon = UI.CreateFrame("Texture", ID.." Icon", self.List[ID].Header)
 		self.List[ID].Icon:SetTexture(PI.Icons[ID].Type, PI.Icons[ID].File)
 		self.List[ID].Icon:SetPoint("CENTER", self.List[ID].Header, "CENTER")
@@ -198,7 +267,7 @@ function PI.GUI:Init()
 		end
 	end
 	
-	for ID, Object in pairs(self.Columns.List) do
+	for i, ID in pairs(self.Columns.Order) do
 		self.Columns:Create(ID)
 	end
 	
@@ -309,6 +378,10 @@ function PI.GUI:Init()
 							else
 								self[Index].Columns.KBM.Text:SetFontColor(0.9, 0.7, 0.2)
 								v = "...."
+								if not KBM.MSG.History.Queue[self[Index].Unit.Name] then
+									KBM.MSG.History:SetSent(self[Index].Unit.Name, false)
+									KBM.MSG.History.Queue[self[Index].Unit.Name] = true
+								end
 							end
 						end
 						self[Index].Columns.KBM:SetData(v)						
@@ -488,7 +561,10 @@ function PI.GUI:Init()
 	end
 	
 	self.Drag = KBM.AttachDragFrame(self.Header, function(uType) self:UpdateDrag(uType) end, "ReadyCheck_Drag_Bar")
-	self:ApplySettings()
+end
+
+function PI.SetLock()
+	PI.GUI.Drag:SetVisible(PI.Settings.Unlocked)
 end
 
 function PI.Update()
@@ -520,6 +596,30 @@ function PI.Update_End()
 	PI.Queue.reQueue = {}
 end
 
+function PI.BuffAdd(UnitID, Buffs)
+	if KBM.Buffs.Active[UnitID] then
+		for BuffID, bool in pairs(Buffs) do
+			if KBM.Buffs.Active[UnitID][BuffID] then
+				if KBM.Debug then
+					print("Buff added: "..KBM.Buffs.Active[UnitID][BuffID].name)
+				end
+			else
+				if KBM.Debug then
+					print("No buff cache for: "..BuffID)
+				end
+			end
+		end
+	else
+		if KBM.Debug then
+			print("No Buffs cached for: "..UnitID)
+		end
+	end
+end
+
+function PI.BuffRemove(UnitID, Buffs)
+
+end
+
 function PI.Start()
 	PI.Queue.Add[KBM.Player.UnitID] = true
 	PI.Queue.Total = PI.Queue.Total + 1
@@ -534,16 +634,25 @@ function PI.Start()
 	table.insert(Event.Unit.Detail.Vitality, {PI.DetailUpdates.Vitality, "KBMReadyCheck", "Update Vitality"})
 	table.insert(Event.Unit.Availability.Full, {PI.DetailUpdates.Availability, "KBMReadyCheck", "Update Full"})
 	table.insert(Event.Unit.Availability.Partial, {PI.DetailUpdates.Availability, "KBMReadyCheck", "Update Full"})
-	PI.UpdateSMode()
+	table.insert(Event.Buff.Add, {PI.BuffAdd, "KBMReadyCheck", "Buff Add"})
+	table.insert(Event.Buff.Remove, {PI.BuffRemove, "KBMReadyCheck", "Buff Remove"})
 end
 
-function PI.UpdateSMode()
+function PI.UpdateSMode(Silent)
 	if PI.Settings.Solo then
 		if KBM.Player.Grouped then
 			PI.Displayed = true
 		else
 			PI.Displayed = false
-			PI.GUI:ApplySettings()
+			if not Silent then
+				PI.GUI:ApplySettings()
+			else
+				if PI.Enabled then
+					PI.GUI.Cradle:SetVisible(PI.Displayed)
+				else
+					PI.GUI.Cradle:SetVisible(false)
+				end
+			end
 			return
 		end
 	else
@@ -558,7 +667,15 @@ function PI.UpdateSMode()
 	else
 		PI.Displayed = true
 	end
-	PI.GUI:ApplySettings()	
+	if not Silent then
+		PI.GUI:ApplySettings()
+	else
+		if PI.Enabled then
+			PI.GUI.Cradle:SetVisible(PI.Displayed)
+		else
+			PI.GUI.Cradle:SetVisible(false)
+		end
+	end
 end
 
 function PI.SecureEnter()
@@ -573,6 +690,14 @@ function PI.SecureLeave()
 		PI.Combat = false
 		PI.UpdateSMode()
 	end
+end
+
+function PI.PlayerJoin()
+	PI.UpdateSMode(true)
+end
+
+function PI.PlayerLeave()
+	PI.UpdateSMode(true)
 end
 
 function PI.GroupJoin(UnitID)
@@ -649,6 +774,7 @@ function PI.SlashEnable()
 end
 
 function PI.Enable(bool)
+	PI.Enabled = bool
 	PI.Settings.Enabled = bool
 	PI.UpdateSMode()
 end
@@ -658,12 +784,15 @@ function PI.Init(ModID)
 		PI.GUI:Init()
 		-- KBM Events
 		table.insert(Event.KingMolinator.Unit.Offline, {PI.DetailUpdates.Offline, "KBMReadyCheck", "Offline Toggle"})
+		table.insert(Event.KingMolinator.System.Player.Join, {PI.PlayerJoin, "KBMReadyCheck", "Player Joins"})
+		table.insert(Event.KingMolinator.System.Player.Leave, {PI.PlayerLeave, "KBMReadyCheck", "Player Leaves"})
 		table.insert(Event.KingMolinator.System.Group.Join, {PI.GroupJoin, "KBMReadyCheck", "Group Member joins"})
 		table.insert(Event.KingMolinator.System.Group.Leave, {PI.GroupLeave, "KBMReadyCheck", "Group Member leaves"})
 		table.insert(Event.KingMolinator.Unit.PercentChange, {PI.DetailUpdates.HPChange, "KBMReadyCheck", "Update HP"})
 		table.insert(Event.KBMMessenger.Version, {PI.DetailUpdates.Version, "KBMReadyCheck", "Update Version"})
 		-- Slash Commands
 		table.insert(Command.Slash.Register("kbmreadycheck"), {PI.SlashEnable, "KBMReadyCheck", "Toggle Visible"})
+		PI.UpdateSMode()
 	end
 end
 

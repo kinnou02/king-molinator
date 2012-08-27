@@ -14,6 +14,13 @@ New: Ready Check
 * New: Color added to Soul Vatility display.
 * Change: Moved Ready Check window to its own context.
 
+System
+* Changed: Buff Add events triggered for already cached buffs are now ignored.
+* Removed: Global reference to bDetails in Buff Remove handlers.
+* Removed: Global reference to TriggerObj in Buff Remove handlers.
+* Removed: Global reference to TriggerObj in Buff Add handlers.
+* Removed: Global reference to TriggerMod in Buff Add handlers.
+
 CPU Monitor
 * New: Added support for Ready Check CPU tracking.
 
@@ -25,6 +32,7 @@ Rez Master
 
 Infernal Dawn
 * Laethys
+** New: Added Touch of Gold personal alert for P3. This will only show your timer.
 ** Fixed: Corrected Phase Two Start trigger.
 ** Change: Added the % (pattern matching escape code) before ? in an attempt to get this to trigger the Phase Two Transition capture.
 ** Change: Phase 1 objective now reads 51% rather than the incorrect 50%.
@@ -35,6 +43,9 @@ Master Mode Caduceus Rise
 
 Chronicles
 * Fixed: Disabled Chronicles will no longer partially initialize, and will instead be completely ignored.
+
+Russian Translations
+* Updated
 
 ----
 v1.2.2

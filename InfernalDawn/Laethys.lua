@@ -72,6 +72,7 @@ LT.Laethys = {
 			Orb = KBM.Defaults.AlertObj.Create("dark_green"),
 			Flare = KBM.Defaults.AlertObj.Create("cyan"),
 			LiqGold = KBM.Defaults.AlertObj.Create("yellow"),
+			TGold = KBM.Defaults.AlertObj.Create("purple"),
 		 },
 	}
 }
@@ -143,14 +144,18 @@ LT.Lang.Buff.Wisdom:SetGerman("Weisheit des Steindeuters")
 LT.Lang.Buff.Wisdom:SetFrench("Sagesse de l'oracle de pierre")
 LT.Lang.Buff.Wisdom:SetRussian("Мудрость прорицателя")
 
+-- Debuff Dictionary
+LT.Lang.Debuff = {}
+LT.Lang.Debuff.Gold = KBM.Language:Add("Touch of Gold")
+
 -- Notify Dictionary
 LT.Lang.Notify = {}
 LT.Lang.Notify.PhaseTwoTrans = KBM.Language:Add("Laethys roars, \"How dare you scuff my beautiful form%?! You will pay for this...\"")
-LT.Lang.Notify.PhaseTwoTrans:SetFrench('Laethys rugit : "Comment osez-vous vous en prendre à tant de beauté ? Vous me le paierez..."')
-LT.Lang.Notify.PhaseTwoTrans:SetGerman('Laethys brüllt: "Wie könnt Ihr es wagen, meiner wunderschönen Gestalt zu schaden. Dafür werdet Ihr büßen ..."')
+LT.Lang.Notify.PhaseTwoTrans:SetFrench("Laethys rugit : \"Comment osez-vous vous en prendre à tant de beauté %? Vous me le paierez...\"")
+LT.Lang.Notify.PhaseTwoTrans:SetGerman("Laethys brüllt: \"Wie könnt Ihr es wagen, meiner wunderschönen Gestalt zu schaden. Dafür werdet Ihr büßen ...\"")
 LT.Lang.Notify.PhaseTwoStart = KBM.Language:Add("Laethys says, \"Behold your doom! Put down your weapons and perhaps I shall grant you a swift demise!\"")
-LT.Lang.Notify.PhaseTwoStart:SetFrench('Laethys dit : "Nul ne peut échapper à son destin ! Rendez les armes et je vous accorderai un léger sursis."')
-LT.Lang.Notify.PhaseTwoStart:SetGerman('Laethys sagt: "Seht Eurem Untergang entgegen! Legt Eure Waffen nieder und ich gewähre Euch ein schnelles Ende ... vielleicht!"')
+LT.Lang.Notify.PhaseTwoStart:SetFrench("Laethys dit : \"Nul ne peut échapper à son destin ! Rendez les armes et je vous accorderai un léger sursis.\"")
+LT.Lang.Notify.PhaseTwoStart:SetGerman("Laethys sagt: \"Seht Eurem Untergang entgegen! Legt Eure Waffen nieder und ich gewähre Euch ein schnelles Ende ... vielleicht!\"")
 LT.Lang.Notify.LiqGold = KBM.Language:Add("Laethys unleashes a wave of liquid gold.")
 LT.Lang.Notify.LiqGold:SetGerman("Laethys entfesselt eine Welle aus flüssigem Gold.")
 
@@ -407,6 +412,7 @@ function LT:Start()
 	self.Laethys.AlertsRef.Storm = KBM.Alert:Create(self.Lang.Ability.Storm[KBM.Lang], nil, false, true, "red")
 	self.Laethys.AlertsRef.Orb = KBM.Alert:Create(self.Lang.Ability.Orb[KBM.Lang], nil, false, true, "dark_green")
 	self.Laethys.AlertsRef.Flare = KBM.Alert:Create(self.Lang.Ability.Flare[KBM.Lang], nil, false, true, "cyan")
+	self.Laethys.AlertsRef.TGold = KBM.Alert:Create(self.Lang.Debuff.Gold[KBM.Lang], nil, false, true, "purple")
 	-- Phase Two
 	self.Laethys.AlertsRef.LiqGold = KBM.Alert:Create(self.Lang.Ability.LiqGold[KBM.Lang], 5, true, true, "yellow")
 	self.Laethys.TimersRef.LiqGoldFirst:AddAlert(self.Laethys.AlertsRef.LiqGold, 5)
@@ -438,6 +444,9 @@ function LT:Start()
 	
 	self.Laethys.Triggers.Adds = KBM.Trigger:Create(34, "time", self.Laethys)
 	self.Laethys.Triggers.Adds:AddTimer(self.Laethys.TimersRef.Adds)
+	
+	self.Laethys.Triggers.TGold = KBM.Trigger:Create(self.Lang.Debuff.Gold[KBM.Lang], "playerDebuff", self.Laethys)
+	self.Laethys.Triggers.TGold:AddAlert(self.Laethys.AlertsRef.TGold, true)
 	
 	-- self.Laethys.Triggers.Adds2 = KBM.Trigger:Create(115, "time", self.Laethys)
 	-- self.Laethys.Triggers.Adds2:AddTimer(self.Laethys.TimersRef.Adds)
