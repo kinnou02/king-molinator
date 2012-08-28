@@ -136,7 +136,27 @@ PI.Constants = {
 			w = 36,
 			Icons = true,
 			List = {
+				["B174CBFBAEB6DFCAC"] = { -- Feast of Cooperation
+					Grade = "High",
+					Callings = {
+						all = true,
+					},
+				},
 				["B3CD06443A7FD7C18"] = { -- Farclan Cherry Cake
+					Grade = "Med",
+					Callings = {
+						cleric = true,
+						mage = true,
+					},
+				},
+				["B55D71860C42C1B75"] = { -- Kelari Expedition Chocolate Cake
+					Grade = "Med",
+					Callings = {
+						warrior = true,
+						rogue = true,
+					},
+				},
+				["B358E4BC49852C7E6"] = { -- Kelari Expedition Cherry Cake
 					Grade = "Med",
 					Callings = {
 						cleric = true,
@@ -161,6 +181,12 @@ PI.Constants = {
 		Other = {
 			Icons = true,
 			List = {
+				["r0BBA6691632B040C"] = { -- Performance Insoles
+					Grade = "High",
+					Callings = {
+						all = true,
+					},
+				},
 				["r4003D6A12E212CFF"] = { -- Cushioned Insoles
 					Grade = "High",
 					Callings = {
@@ -763,20 +789,22 @@ end
 function PI.BuffAdd(UnitID, Buffs)
 	if PI.GUI.Rows.Units[UnitID] then
 		if KBM.Buffs.Active[UnitID] then
-			for BuffID, bool in pairs(Buffs) do
-				local bDetails = KBM.Buffs.Active[UnitID][BuffID]
-				if bDetails.kbmType then
-					if PI.Constants.Lookup.Full[bDetails.kbmType] then
-						local ID = PI.Constants.Lookup.Full[bDetails.kbmType].Column
-						local Index = PI.GUI.Rows.Units[UnitID].Index
-						if ID then
-							PI.GUI.Rows[Index].Columns[ID].Object = bDetails
-							PI.Buffs[UnitID][BuffID] = bDetails
-							if PI.Constants.Columns[ID] then
-								PI.Constants.Columns[ID].Hook(Index)
+			if Buffs then
+				for BuffID, bool in pairs(Buffs) do
+					local bDetails = KBM.Buffs.Active[UnitID][BuffID]
+					if bDetails.kbmType then
+						if PI.Constants.Lookup.Full[bDetails.kbmType] then
+							local ID = PI.Constants.Lookup.Full[bDetails.kbmType].Column
+							local Index = PI.GUI.Rows.Units[UnitID].Index
+							if ID then
+								PI.GUI.Rows[Index].Columns[ID].Object = bDetails
+								PI.Buffs[UnitID][BuffID] = bDetails
+								if PI.Constants.Columns[ID] then
+									PI.Constants.Columns[ID].Hook(Index)
+								end
 							end
+							
 						end
-						
 					end
 				end
 			end

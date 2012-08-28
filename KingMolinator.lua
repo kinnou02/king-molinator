@@ -7223,64 +7223,66 @@ function KBM:BuffAdd(unitID, Buffs)
 			end
 		else
 			if unitID then
-				for BuffID, bool in pairs(Buffs) do
-					local ignore = false
-					if KBM.Buffs.Active[unitID] then
-						if KBM.Buffs.Active[unitID][BuffID] then
-							ignore = true
-						end
-					end
-					if not ignore then
-						local bDetails = Inspect.Buff.Detail(unitID, BuffID)
-						if bDetails then
-							if not KBM.Buffs.Active[unitID] then
-								KBM.Buffs.Active[unitID] = {
-									Buff_Count = 1,
-									Buff_Types = {},
-								}
-							else
-								KBM.Buffs.Active[unitID].Buff_Count = KBM.Buffs.Active[unitID].Buff_Count + 1
+				if Buffs then
+					for BuffID, bool in pairs(Buffs) do
+						local ignore = false
+						if KBM.Buffs.Active[unitID] then
+							if KBM.Buffs.Active[unitID][BuffID] then
+								ignore = true
 							end
-							KBM.Buffs.Active[unitID][BuffID] = bDetails
-							-- if KBM.Debug then
-								-- print("---------------")
-								-- print(tostring(bDetails.name))
-							-- end
-							if bDetails.type then
-								bDetails.kbmType = bDetails.type
-								KBM.Buffs.Active[unitID].Buff_Types[bDetails.type] = bDetails
+						end
+						if not ignore then
+							local bDetails = Inspect.Buff.Detail(unitID, BuffID)
+							if bDetails then
+								if not KBM.Buffs.Active[unitID] then
+									KBM.Buffs.Active[unitID] = {
+										Buff_Count = 1,
+										Buff_Types = {},
+									}
+								else
+									KBM.Buffs.Active[unitID].Buff_Count = KBM.Buffs.Active[unitID].Buff_Count + 1
+								end
+								KBM.Buffs.Active[unitID][BuffID] = bDetails
 								-- if KBM.Debug then
-									-- print("Added via type: "..bDetails.type)
+									-- print("---------------")
+									-- print(tostring(bDetails.name))
 								-- end
-							else
-								if bDetails.abilityNew then
-									bDetails.kbmType = bDetails.abilityNew
-									KBM.Buffs.Active[unitID].Buff_Types[bDetails.abilityNew] = bDetails
+								if bDetails.type then
+									bDetails.kbmType = bDetails.type
+									KBM.Buffs.Active[unitID].Buff_Types[bDetails.type] = bDetails
 									-- if KBM.Debug then
-										-- print("Added via Ability New ID: "..bDetails.abilityNew)
+										-- print("Added via type: "..bDetails.type)
 									-- end
 								else
-									if bDetails.rune then
-										bDetails.kbmType = bDetails.rune
-										KBM.Buffs.Active[unitID].Buff_Types[bDetails.rune] = bDetails
+									if bDetails.abilityNew then
+										bDetails.kbmType = bDetails.abilityNew
+										KBM.Buffs.Active[unitID].Buff_Types[bDetails.abilityNew] = bDetails
 										-- if KBM.Debug then
-											-- print("Added via rune ID: "..bDetails.rune)
+											-- print("Added via Ability New ID: "..bDetails.abilityNew)
 										-- end
+									else
+										if bDetails.rune then
+											bDetails.kbmType = bDetails.rune
+											KBM.Buffs.Active[unitID].Buff_Types[bDetails.rune] = bDetails
+											-- if KBM.Debug then
+												-- print("Added via rune ID: "..bDetails.rune)
+											-- end
+										end
+									end
+								end
+								if KBM.Trigger.EncStart["playerBuff"] then
+									if KBM.Trigger.EncStart["playerBuff"][bDetails.name] then
+										local TriggerMod = KBM.Trigger.EncStart["playerBuff"][bDetails.name]
+										if TriggerMod.Dummy then
+											KBM.CheckActiveBoss(TriggerMod.Dummy.Details, "Dummy")
+										end
 									end
 								end
 							end
-							if KBM.Trigger.EncStart["playerBuff"] then
-								if KBM.Trigger.EncStart["playerBuff"][bDetails.name] then
-									local TriggerMod = KBM.Trigger.EncStart["playerBuff"][bDetails.name]
-									if TriggerMod.Dummy then
-										KBM.CheckActiveBoss(TriggerMod.Dummy.Details, "Dummy")
-									end
-								end
-							end
-						end
-					else
-						if KBM.Debug then
-							--print("Buff ignored, already cached: "..KBM.Buffs.Active[unitID][BuffID].name)
+						else
+							-- if KBM.Debug then
+								-- print("Buff ignored, already cached: "..KBM.Buffs.Active[unitID][BuffID].name)
+							-- end
 						end
 					end
 				end
