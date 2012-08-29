@@ -130,6 +130,20 @@ PI.Constants = {
 						mage = true,
 					},
 				},
+				["r717189072932CD29"] = { -- Exquisite Whetstone
+					Grade = "High",
+					Callings = {
+						warrior = true,
+						rogue = true,
+					},
+				},
+				["r7521BA00400F6038"] = { -- Fine Whetstone
+					Grade = "Med",
+					Callings = {
+						warrior = true,
+						rogue = true,
+					},
+				},				
 			},
 		},
 		Food = {
@@ -176,6 +190,13 @@ PI.Constants = {
 						mage = true,
 					},
 				},
+				["B798FC1E26E38815F"] = { -- Heroic Powersurge Vial
+					Grade = "High",
+					Callings = {
+						warrior = true,
+						rogue = true,
+					},
+				},				
 			},
 		},
 		Other = {

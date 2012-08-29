@@ -26,8 +26,11 @@ Ready Check Available Tracking
 * Weapon Stones
 ** Burning Powerstone (Mage, Cleric) - High
 ** Flaring Glyph (Mage, Cleric) - Medium
+** Exquisite Whetstone (Warrior, Rogue) - High
+** Fine Whetstone (Warrior, Rogue) - Medium
 * Potions/Vials
 ** Herioc Brightsurge Vial (Mage, Cleric) - High
+** Herioc Powersurge Vial (Warrior, Rogue) - High
 * Other/Armor
 ** Performance Insoles (All) - High
 ** Cusioned Insoles (All) - High
