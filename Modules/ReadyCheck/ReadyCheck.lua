@@ -791,23 +791,24 @@ function PI.BuffAdd(UnitID, Buffs)
 		if KBM.Buffs.Active[UnitID] then
 			if Buffs then
 				for BuffID, bool in pairs(Buffs) do
-					local bDetails = KBM.Buffs.Active[UnitID][BuffID]
-					if bDetails.kbmType then
-						if PI.Constants.Lookup.Full[bDetails.kbmType] then
-							local ID = PI.Constants.Lookup.Full[bDetails.kbmType].Column
-							local Index = PI.GUI.Rows.Units[UnitID].Index
-							if ID then
-								if PI.GUI.Rows[Index] then
-									if PI.GUI.Rows[Index].Columns[ID] then
-										PI.GUI.Rows[Index].Columns[ID].Object = bDetails
-										PI.Buffs[UnitID][BuffID] = bDetails
-										if PI.Constants.Columns[ID] then
-											PI.Constants.Columns[ID].Hook(Index)
+					if KBM.Buffs.Active[UnitID][BuffID] then
+						local bDetails = KBM.Buffs.Active[UnitID][BuffID]
+						if bDetails.kbmType then
+							if PI.Constants.Lookup.Full[bDetails.kbmType] then
+								local ID = PI.Constants.Lookup.Full[bDetails.kbmType].Column
+								local Index = PI.GUI.Rows.Units[UnitID].Index
+								if ID then
+									if PI.GUI.Rows[Index] then
+										if PI.GUI.Rows[Index].Columns[ID] then
+											PI.GUI.Rows[Index].Columns[ID].Object = bDetails
+											PI.Buffs[UnitID][BuffID] = bDetails
+											if PI.Constants.Columns[ID] then
+												PI.Constants.Columns[ID].Hook(Index)
+											end
 										end
 									end
 								end
 							end
-							
 						end
 					end
 				end
