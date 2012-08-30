@@ -52,12 +52,11 @@ local function process(changes)
   end
 end
 
-function Library.LibUnitChange.Register(identifier)
-  if lookups[identifier] then
-    return lookups[identifier]
+local function registerWorker(identifier)
+  if registered[identifier] then
+    return
   end
   
-  if not id[false] then id[false] = {} end
   id[false][identifier] = true
   current[identifier] = false
         
@@ -76,6 +75,26 @@ function Library.LibUnitChange.Register(identifier)
   end
     
   registered[identifier], lookups[identifier] = Utility.Event.Create("LibUnitChange", identifier .. ".Change")
+end
+
+function Library.LibUnitChange.Register(identifier)
+  if registered[identifier] then
+    return registered[identifier]
+  end
+  
+  if not id[false] then id[false] = {} end
+  
+  -- need to register every item that leads up to this also
+  local acum = nil
+  for subset in identifier:gmatch("[^.]+") do
+    if acum then
+      acum = acum .. "." .. subset
+    else
+      acum = subset
+    end
+    
+    registerWorker(acum)
+  end
   
   process({[false] = false}) -- It's a fake message, but it's one that will get us to poll *everything*, which is exactly what we need right now.
   

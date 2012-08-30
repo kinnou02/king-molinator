@@ -649,6 +649,7 @@ function PI.GUI:Init()
 						self.Names[self[i].Unit.Name] = self[i]
 					end
 					self:Set_Offline(i)
+					self:Update_All(i)
 				end
 			end
 		end
@@ -661,6 +662,7 @@ function PI.GUI:Init()
 		self.Units[UnitID] = self[Index]
 		self.Names[self[Index].Unit.Name] = self[Index]
 		self:Set_Offline(Index)
+		self:Update_All(Index)
 	end
 	
 	function self.Rows:Remove(UnitID)
@@ -677,6 +679,7 @@ function PI.GUI:Init()
 					self.Units[self[i].Unit.UnitID] = self[i]
 					self.Names[self[i].Unit.Name] = self[i]
 					self:Set_Offline(i)
+					self:Update_All(i)
 				end
 			end
 		end
@@ -1024,6 +1027,13 @@ function PI.Enable(bool)
 	PI.Enabled = bool
 	PI.Settings.Enabled = bool
 	PI.UpdateSMode()
+	for i = 1, 20 do
+		if PI.GUI.Rows[i].Enabled then
+			PI.GUI.Rows:Update_All(i)
+		else
+			break
+		end
+	end
 end
 
 function PI.Init(ModID)

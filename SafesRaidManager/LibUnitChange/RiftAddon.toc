@@ -11,7 +11,7 @@ Author = "ZorbaTHut / Ben Wilhelm / Trion Worlds"
 Website = "http://www.riftgame.com"
 Email = "bwilhelm@trionworlds.com"
 
-Version = "2.0"
+Version = "2.1"
 
 Environment = "1.5"
 

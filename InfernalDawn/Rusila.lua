@@ -49,15 +49,15 @@ RS.Rusila = {
 		CastBar = KBM.Defaults.CastBar(),
 		TimersRef = {
 			Enabled = true,
-			LeftLongshot = KBM.Defaults.TimerObj.Create("blue"),
-			RightLongshot = KBM.Defaults.TimerObj.Create("blue"),
+			LeftLongshot = KBM.Defaults.TimerObj.Create("pink"),
+			RightLongshot = KBM.Defaults.TimerObj.Create("pink"),
 		},
 		AlertsRef = {
 			Enabled = true,
 			Dread = KBM.Defaults.AlertObj.Create("purple"),
 			DreadDur = KBM.Defaults.AlertObj.Create("yellow"),
-			LeftLongshot = KBM.Defaults.AlertObj.Create("blue"),
-			RightLongshot = KBM.Defaults.AlertObj.Create("blue"),
+			LeftLongshot = KBM.Defaults.AlertObj.Create("pink"),
+			RightLongshot = KBM.Defaults.AlertObj.Create("pink"),
 		},
 		ChatRef = {
 			Enabled = true,
@@ -428,8 +428,8 @@ function RS:Start()
 	self.Rusila.AlertsRef.Dread = KBM.Alert:Create(self.Lang.Ability.Dread[KBM.Lang], nil, true, true, "purple")
 	self.Rusila.AlertsRef.DreadDur = KBM.Alert:Create(self.Lang.Ability.Dread[KBM.Lang], nil, false, true, "yellow")
 	self.Rusila.AlertsRef.DreadDur.MenuName = self.Lang.Menu.Dread[KBM.Lang]
-	self.Rusila.AlertsRef.LeftLongshot = KBM.Alert:Create(self.Lang.Verbose.LeftLSSpawn[KBM.Lang], 3, false, false, "blue")
-	self.Rusila.AlertsRef.RightLongshot = KBM.Alert:Create(self.Lang.Verbose.RightLSSpawn[KBM.Lang], 3, false, false, "blue")
+	self.Rusila.AlertsRef.LeftLongshot = KBM.Alert:Create(self.Lang.Verbose.LeftLSSpawn[KBM.Lang], 3, false, false, "pink")
+	self.Rusila.AlertsRef.RightLongshot = KBM.Alert:Create(self.Lang.Verbose.RightLSSpawn[KBM.Lang], 3, false, false, "pink")
 	KBM.Defaults.AlertObj.Assign(self.Rusila)
 	
 	-- Create Chat Objects

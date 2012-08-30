@@ -127,8 +127,11 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.ReadyCheck.Name = KBM.Language:Add("Ready Check")
 	KBM.Language.ReadyCheck.Name:SetGerman()
 	KBM.Language.ReadyCheck.Combat = KBM.Language:Add("Hide while in combat.")
+	KBM.Language.ReadyCheck.Combat:SetGerman("Im Kampf verstecken.")
 	KBM.Language.ReadyCheck.Solo = KBM.Language:Add("Hide while playing solo.")
+	KBM.Language.ReadyCheck.Solo:SetGerman("Im Solospiel verstecken.")
 	KBM.Language.ReadyCheck.Unlock = KBM.Language:Add("Unlock Icon Bar.")
+	KBM.Language.ReadyCheck.Unlock:SetGerman("Fenster ist verschiebbar.")
 	
 	-- Rez Master Dictionary
 	KBM.Language.RezMaster = {}
