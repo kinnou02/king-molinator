@@ -132,6 +132,7 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.ReadyCheck.Solo:SetGerman("Im Solospiel verstecken.")
 	KBM.Language.ReadyCheck.Unlock = KBM.Language:Add("Unlock Icon Bar.")
 	KBM.Language.ReadyCheck.Unlock:SetGerman("Fenster ist verschiebbar.")
+	KBM.Language.ReadyCheck.Hidden = KBM.Language:Add("Only show during Rift Ready Checks")
 	
 	-- Rez Master Dictionary
 	KBM.Language.RezMaster = {}

@@ -3,6 +3,7 @@
 New: Ready Check
 * New: Added option to auto-hide/show while in combat.
 * New: Added option to auto-hide/show while playing solo.
+* New: Added option to auto-hide/show when a Rift Ready Check is in progress.
 * New: Lists all Raid/Party members Health and Mana/Power/Energy.
 * New: Lists KBM versions for each Raid/Party member (if available.)
 * New: Lists Soul Vitality for each Raid/Party member.

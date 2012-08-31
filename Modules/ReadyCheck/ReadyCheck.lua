@@ -17,6 +17,12 @@ end
 KBM.Ready = PI
 
 PI.Enabled = true
+PI.Ready = {
+	Replied = 0,
+	Yes = 0,
+	No = 0, 
+	State = false,
+}
 PI.Displayed = true
 PI.GUI = {}
 PI.Context = UI.CreateContext("KBMReadyCheck")
@@ -62,6 +68,7 @@ PI.Settings = {
 	Enabled = true,
 	Unlocked = true,
 	Combat = true,
+	Hidden = true,
 	Solo = true,
 	x = false,
 	y = false,
@@ -787,6 +794,11 @@ function PI.Update()
 				PI.GUI.Rows:Add(UnitID)
 				PI.Buffs[UnitID] = {}
 				PI.BuffAdd(UnitID, Inspect.Buff.List(UnitID))
+				if KBM.Unit.List.UID[UnitID].Details then
+					if KBM.Unit.List.UID[UnitID].Details.ready ~= "nil" then
+						PI.ReadyState({[UnitID] = KBM.Unit.List.UID[UnitID].Details.ready})
+					end
+				end
 			end
 		else
 			PI.Queue.reQueue[UnitID] = true
@@ -917,6 +929,13 @@ function PI.UpdateSMode(Silent)
 	else
 		PI.Displayed = true
 	end
+	if PI.Settings.Hidden then
+		if PI.Ready.State then
+			PI.Displayed = true
+		else
+			PI.Displayed = false
+		end
+	end
 	if not Silent then
 		PI.GUI:ApplySettings()
 	else
@@ -1036,6 +1055,38 @@ function PI.Enable(bool)
 	end
 end
 
+function PI.ReadyState(Units)
+	for UnitID, bool in pairs(Units) do
+		if bool == true then
+			if PI.Ready.State == false then
+				PI.Ready.Replied = 0
+				PI.Ready.Yes = 0
+				PI.Ready.No = 0
+				PI.Ready.State = true
+				PI.UpdateSMode()
+			end
+			PI.Ready.Yes = PI.Ready.Yes + 1
+			PI.Ready.Replied = PI.Ready.Replied + 1
+		else
+			if bool == "nil" then
+				PI.Ready.State = false
+				PI.UpdateSMode()
+				break
+			elseif bool == false then
+				if PI.Ready.State == false then
+					PI.Ready.Replied = 0
+					PI.Ready.Yes = 0
+					PI.Ready.No = 0
+					PI.Ready.State = true
+					PI.UpdateSMode()
+				end
+				PI.Ready.No = PI.Ready.No + 1
+				PI.Ready.Replied = PI.Ready.Replied + 1
+			end
+		end
+	end
+end
+
 function PI.Init(ModID)
 	if ModID == AddonData.id then
 		PI.GUI:Init()
@@ -1046,6 +1097,7 @@ function PI.Init(ModID)
 		table.insert(Event.KingMolinator.System.Group.Join, {PI.GroupJoin, "KBMReadyCheck", "Group Member joins"})
 		table.insert(Event.KingMolinator.System.Group.Leave, {PI.GroupLeave, "KBMReadyCheck", "Group Member leaves"})
 		table.insert(Event.KingMolinator.Unit.PercentChange, {PI.DetailUpdates.HPChange, "KBMReadyCheck", "Update HP"})
+		table.insert(Event.Unit.Detail.Ready, {PI.ReadyState, "KBMReadyCheck", "Update HP"})
 		table.insert(Event.KBMMessenger.Version, {PI.DetailUpdates.Version, "KBMReadyCheck", "Update Version"})
 		-- Slash Commands
 		table.insert(Command.Slash.Register("kbmreadycheck"), {PI.SlashEnable, "KBMReadyCheck", "Toggle Visible"})

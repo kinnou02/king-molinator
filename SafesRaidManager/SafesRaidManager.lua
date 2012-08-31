@@ -827,6 +827,10 @@ local function SRM_PlayerPet(PetUID)
 	end
 end
 
+local function SRM_Test()
+
+end
+
 local function SRM_Stall(Data)
 	local PlayerID = Inspect.Unit.Lookup("player")
 	if Data[PlayerID] then
