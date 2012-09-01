@@ -1412,9 +1412,7 @@ function KBM.InitOptions()
 				end
 			end
 		end	
-		if KBM.Options.CastBar.Visible then
-			KBM.CastBar.Anchor:Hide()
-		end
+		KBM.CastBar.Anchor:Hide()
 		if KBM.Player.CastBar.Settings.CastBar.Visible then
 			KBM.Player.CastBar.CastObj:Hide()
 		end

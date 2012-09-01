@@ -6113,10 +6113,14 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 			if self.Settings.Enabled then
 				if KBM.MainWin:GetVisible() then
 					if not self.Dynamic then
-						self.GUI.Frame:SetVisible(self.Settings.Visible)
+						if not self.Casting then
+							self.GUI.Frame:SetVisible(self.Settings.Visible)
+						end
 					end
 				else
-					self.GUI.Frame:SetVisible(false)
+					if not self.Casting then
+						self.GUI.Frame:SetVisible(false)
+					end
 				end
 			end
 			
@@ -6383,6 +6387,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 						else
 							if not self.Channeled then
 								self.Channeled = true
+								self.Casting = false
 								if KBM.Trigger.Channel[bDetails.abilityName] then
 									if KBM.Trigger.Channel[bDetails.abilityName][self.Boss.Name] then
 										local TriggerObj = KBM.Trigger.Channel[bDetails.abilityName][self.Boss.Name]
@@ -7411,7 +7416,7 @@ function KBM.SlashInspectBuffs(Name)
 		for UnitID, Object in pairs(KBM.Unit.List.Name[Name]) do
 			local buffList = Inspect.Buff.List(UnitID)
 			KBM:BuffAdd(UnitID, buffList)
-			for buffID, bDetails in pairs(KBM.Buffs.Active[UnitID]) do
+			for buffID, bDetails in pairs(KBM.Buffs.Active[UnitID] or {}) do
 				if bDetails then
 					if type(bDetails) == "table" then
 						if buffID ~= "Buff_Types" then

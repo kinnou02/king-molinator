@@ -32,9 +32,12 @@ Ready Check Available Tracking
 * Potions/Vials
 ** Herioc Brightsurge Vial (Mage, Cleric) - High
 ** Herioc Powersurge Vial (Warrior, Rogue) - High
+** Mighty Powersurge Vial (Warrior, Rogue) - Medium
 * Other/Armor
 ** Performance Insoles (All) - High
 ** Cusioned Insoles (All) - High
+** Planar Protection (All) - High
+** Thick Armor Plating (Warrior, Rogue, Cleric : Tank) - High
 
 System
 * New: Added a new slash command /kbmbuffs. You can macro this with %t or manually type a name to return a list of buffs with KBM ID's on that Unit. (Players or NPC's)
@@ -45,6 +48,10 @@ System
 * Removed: Global reference to TriggerObj in Buff Remove handlers.
 * Removed: Global reference to TriggerObj in Buff Add handlers.
 * Removed: Global reference to TriggerMod in Buff Add handlers.
+
+Cast Bars
+* Change: Addressed an issue where same name abilities progressing from Cast to Channel would display end-cast highlights for Rift Style bars.
+* Fixed: Forced the Castbar Anchor to be hidden when the Options screen is closed during an encounter.
 
 CPU Monitor
 * New: Added support for Ready Check CPU tracking.

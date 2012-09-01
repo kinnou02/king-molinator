@@ -157,10 +157,18 @@ PI.Constants = {
 			w = 36,
 			Icons = true,
 			List = {
-				["B174CBFBAEB6DFCAC"] = { -- Feast of Cooperation
+				["B174CBFBAEB6DFCAC"] = { -- Feast of Cooperation (SP)
 					Grade = "High",
 					Callings = {
-						all = true,
+						mage = true,
+						cleric = true,
+					},
+				},
+				["B5182E376478EEE9C"] = { -- Feast of Cooperation (AP)
+					Grade = "High",
+					Callings = {
+						warrior = true,
+						rogue = true,
 					},
 				},
 				["B3CD06443A7FD7C18"] = { -- Farclan Cherry Cake
@@ -203,7 +211,14 @@ PI.Constants = {
 						warrior = true,
 						rogue = true,
 					},
-				},				
+				},
+				["B0B2B52E09FA082DE"] = { -- Mighty Powersurge Vial
+					Grade = "Med",
+					Callings = {
+						warrior = true,
+						rogue = true,
+					},
+				},
 			},
 		},
 		Other = {
@@ -219,6 +234,23 @@ PI.Constants = {
 					Grade = "High",
 					Callings = {
 						all = true,
+					},
+				},
+				["B724E352BBAA3E897"] = { -- Planar Protection
+					Grade = "High",
+					Callings = {
+						all = true,
+					},
+				},
+				["r4057380E26CC6760"] = { -- Thick Armor Plating
+					Grade = "High",
+					Callings = {
+						warrior = true,
+						rogue = true,
+						cleric = true,
+					},
+					Role = {
+						tank = true,
 					},
 				},
 			},
