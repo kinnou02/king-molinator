@@ -130,6 +130,13 @@ PI.Constants = {
 						mage = true,
 					},
 				},
+				["r440B155B5AF22AF8"] = { -- Ancient Burning Powerstone
+					Grade = "High",
+					Callings = {
+						cleric = true,
+						mage = true,
+					},
+				},
 				["r70D23CD31E59DD77"] = { -- Flaring Glyph
 					Grade = "Med",
 					Callings = {
@@ -137,8 +144,29 @@ PI.Constants = {
 						mage = true,
 					},
 				},
+				["r55A04A4D500636BF"] = { -- Exquisite Oilstone
+					Grade = "High",
+					Callings = {
+						warrior = true,
+						rogue = true,
+					},
+				},
+				["r139805221FB5E557"] = { -- Ancient Exquisite Oilstone
+					Grade = "High",
+					Callings = {
+						warrior = true,
+						rogue = true,
+					},
+				},
 				["r717189072932CD29"] = { -- Exquisite Whetstone
 					Grade = "High",
+					Callings = {
+						warrior = true,
+						rogue = true,
+					},
+				},
+				["r68FE8ED5065752C2"] = { -- Lightning Glyph
+					Grade = "Medium",
 					Callings = {
 						warrior = true,
 						rogue = true,
@@ -312,6 +340,13 @@ PI.Constants = {
 					},
 					Role = {
 						tank = true,
+					},
+				},
+				["r4C9A818733580794"] = { -- Poisonous Coating
+					Grade = "High",
+					Callings = {
+						warrior = true,
+						rogue = true,
 					},
 				},
 			},
@@ -656,7 +691,7 @@ function PI.GUI:Init()
 						else
 							self[Index].Columns.KBM.Text:SetFontColor(1, 1, 1)
 							if KBM.MSG.History.NameStore[self[Index].Unit.Name].Sent then
-								if KBM.MSG.History.NameStore[self[Index].Unit.Name].Recieved then
+								if KBM.MSG.History.NameStore[self[Index].Unit.Name].Received then
 									v = string.sub(KBM.MSG.History.NameStore[self[Index].Unit.Name].Full, 2)
 								else
 									self[Index].Columns.KBM.Text:SetFontColor(1, 0.9, 0.5)
@@ -886,7 +921,11 @@ function PI.Update()
 			if not PI.GUI.Rows.Units[UnitID] then
 				PI.GUI.Rows:Add(UnitID)
 				PI.Buffs[UnitID] = {}
-				PI.BuffAdd(UnitID, Inspect.Buff.List(UnitID))
+				local buffList = Inspect.Buff.List(UnitID)
+				if buffList then
+					KBM:BuffAdd(UnitID, buffList)
+					PI.BuffAdd(UnitID, buffList)
+				end
 				if KBM.Unit.List.UID[UnitID].Details then
 					if KBM.Unit.List.UID[UnitID].Details.ready ~= "nil" then
 						PI.ReadyState({[UnitID] = KBM.Unit.List.UID[UnitID].Details.ready})

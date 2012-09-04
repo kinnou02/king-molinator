@@ -7111,6 +7111,49 @@ function KBM.NPCChat(data)
 	end
 end
 
+function KBM:BuffCache(unitID, BuffID)
+	local bDetails = Inspect.Buff.Detail(unitID, BuffID)
+	if bDetails then
+		if not KBM.Buffs.Active[unitID] then
+			KBM.Buffs.Active[unitID] = {
+				Buff_Count = 1,
+				Buff_Types = {},
+			}
+		else
+			KBM.Buffs.Active[unitID].Buff_Count = KBM.Buffs.Active[unitID].Buff_Count + 1
+		end
+		KBM.Buffs.Active[unitID][BuffID] = bDetails
+		-- if KBM.Debug then
+			-- print("---------------")
+			-- print(tostring(bDetails.name))
+		-- end
+		if bDetails.type then
+			bDetails.kbmType = bDetails.type
+			KBM.Buffs.Active[unitID].Buff_Types[bDetails.type] = bDetails
+			-- if KBM.Debug then
+				-- print("Added via type: "..bDetails.type)
+			-- end
+		else
+			if bDetails.abilityNew then
+				bDetails.kbmType = bDetails.abilityNew
+				KBM.Buffs.Active[unitID].Buff_Types[bDetails.abilityNew] = bDetails
+				-- if KBM.Debug then
+					-- print("Added via Ability New ID: "..bDetails.abilityNew)
+				-- end
+			else
+				if bDetails.rune then
+					bDetails.kbmType = bDetails.rune
+					KBM.Buffs.Active[unitID].Buff_Types[bDetails.rune] = bDetails
+					-- if KBM.Debug then
+						-- print("Added via rune ID: "..bDetails.rune)
+					-- end
+				end
+			end
+		end
+	end
+	return bDetails
+end
+
 function KBM:BuffAdd(unitID, Buffs)
 	-- Used to manage Triggers and soon Tank-Swap managing.
 	-- local TimeStore = Inspect.Time.Real()
@@ -7119,44 +7162,8 @@ function KBM:BuffAdd(unitID, Buffs)
 		if KBM.Encounter then
 			if unitID then
 				for BuffID, bool in pairs(Buffs) do
-					local bDetails = Inspect.Buff.Detail(unitID, BuffID)
+					bDetails = KBM:BuffCache(unitID, BuffID)
 					if bDetails then
-						if not KBM.Buffs.Active[unitID] then
-							KBM.Buffs.Active[unitID] = {
-								Buff_Count = 1,
-								Buff_Types = {},
-							}
-						else
-							KBM.Buffs.Active[unitID].Buff_Count = KBM.Buffs.Active[unitID].Buff_Count + 1
-						end
-						KBM.Buffs.Active[unitID][BuffID] = bDetails
-						-- if KBM.Debug then
-							-- print("---------------")
-							-- print(tostring(bDetails.name))
-						-- end
-						if bDetails.type then
-							bDetails.kbmType = bDetails.type
-							KBM.Buffs.Active[unitID].Buff_Types[bDetails.type] = bDetails
-							-- if KBM.Debug then
-								-- print("Added via type: "..bDetails.type)
-							-- end
-						else
-							if bDetails.abilityNew then
-								bDetails.kbmType = bDetails.abilityNew
-								KBM.Buffs.Active[unitID].Buff_Types[bDetails.abilityNew] = bDetails
-								-- if KBM.Debug then
-									-- print("Added via Ability New ID: "..bDetails.abilityNew)
-								-- end
-							else
-								if bDetails.rune then
-									bDetails.kbmType = bDetails.rune
-									KBM.Buffs.Active[unitID].Buff_Types[bDetails.rune] = bDetails
-									-- if KBM.Debug then
-										-- print("Added via rune ID: "..bDetails.rune)
-									-- end
-								end
-							end
-						end
 						if KBM.Trigger.Buff[KBM.CurrentMod.ID] then
 							if KBM.Trigger.Buff[KBM.CurrentMod.ID][bDetails.name] then
 								local TriggerObj = KBM.Trigger.Buff[KBM.CurrentMod.ID][bDetails.name]
@@ -7237,44 +7244,8 @@ function KBM:BuffAdd(unitID, Buffs)
 							end
 						end
 						if not ignore then
-							local bDetails = Inspect.Buff.Detail(unitID, BuffID)
+							local bDetails = KBM:BuffCache(unitID, BuffID)
 							if bDetails then
-								if not KBM.Buffs.Active[unitID] then
-									KBM.Buffs.Active[unitID] = {
-										Buff_Count = 1,
-										Buff_Types = {},
-									}
-								else
-									KBM.Buffs.Active[unitID].Buff_Count = KBM.Buffs.Active[unitID].Buff_Count + 1
-								end
-								KBM.Buffs.Active[unitID][BuffID] = bDetails
-								-- if KBM.Debug then
-									-- print("---------------")
-									-- print(tostring(bDetails.name))
-								-- end
-								if bDetails.type then
-									bDetails.kbmType = bDetails.type
-									KBM.Buffs.Active[unitID].Buff_Types[bDetails.type] = bDetails
-									-- if KBM.Debug then
-										-- print("Added via type: "..bDetails.type)
-									-- end
-								else
-									if bDetails.abilityNew then
-										bDetails.kbmType = bDetails.abilityNew
-										KBM.Buffs.Active[unitID].Buff_Types[bDetails.abilityNew] = bDetails
-										-- if KBM.Debug then
-											-- print("Added via Ability New ID: "..bDetails.abilityNew)
-										-- end
-									else
-										if bDetails.rune then
-											bDetails.kbmType = bDetails.rune
-											KBM.Buffs.Active[unitID].Buff_Types[bDetails.rune] = bDetails
-											-- if KBM.Debug then
-												-- print("Added via rune ID: "..bDetails.rune)
-											-- end
-										end
-									end
-								end
 								if KBM.Trigger.EncStart["playerBuff"] then
 									if KBM.Trigger.EncStart["playerBuff"][bDetails.name] then
 										local TriggerMod = KBM.Trigger.EncStart["playerBuff"][bDetails.name]
@@ -7501,6 +7472,8 @@ local function KBM_Version(name)
 			if nameLU_Details then
 				name = nameLU_Details.name
 			end
+		else
+			name = ""
 		end
 	end
 	if type(name) == "string" and name ~= "" then

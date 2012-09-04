@@ -39,6 +39,9 @@ PI.History = {
 			self:Create(Name)
 		end
 		self.NameStore[Name].Full = vFull
+		if vFull then
+			self.NameStore[Name].None = nil
+		end
 	end,
 	SetSent = function(self, Name, bool)
 		if not self.NameStore[Name] then
@@ -51,24 +54,18 @@ PI.History = {
 			PI.Events.Version(Name)		
 		end
 	end,
-	SetRecieved = function(self, Name)
+	SetReceived = function(self, Name)
 		if not self.NameStore[Name] then
 			self:Create(Name)
 		end
 		self.NameStore[Name].Sent = true
-		self.NameStore[Name].Recieved = true
-		self.NameStore[Name].Queued = nil
-		if self.Queue[Name] then
-			self.Queue[Name] = nil
-			--print("Recieved Data removing: "..Name)
-		end
+		self.NameStore[Name].Received = true
 	end,
 	SetNone = function(self, Name)
 		if not self.NameStore[Name] then
 			self:Create(Name)
 		end
 		self.NameStore[Name].None = true
-		self.NameStore[Name].Queue = nil
 		PI.Events.Version(Name)
 	end,
 	Queue = {},
@@ -175,14 +172,14 @@ function PI.MessageHandler(From, Type, Channel, Identifier, Data)
 			if Type == "guild" then
 				if Identifier == "KBMVersion" then
 					PI.History:SetFull(From, Data)
-					PI.History:SetRecieved(From)
+					PI.History:SetReceived(From)
 					PI.VersionCheck(Data)
 					PI.Events.Version(From)
 				end
 			elseif Type == "raid" or Type == "party" then
 				if Identifier == "KBMVersion" then
 					PI.History:SetFull(From, Data)
-					PI.History:SetRecieved(From)
+					PI.History:SetReceived(From)
 					PI.VersionCheck(Data)
 					PI.Events.Version(From)
 				end
@@ -196,8 +193,8 @@ function PI.MessageHandler(From, Type, Channel, Identifier, Data)
 							Silent = true
 						end
 					end
-					PI.History:SetFull(From, Data)
-					PI.History:SetRecieved(From)
+					PI.History:SetFull(From, "R"..Data)
+					PI.History:SetReceived(From)
 					if not Silent then
 						print(From.." is using KBM v"..Data)
 					end
@@ -210,7 +207,7 @@ function PI.MessageHandler(From, Type, Channel, Identifier, Data)
 						end
 					end
 					PI.History:SetFull(From, Data)
-					PI.History:SetRecieved(From)
+					PI.History:SetReceived(From)
 					local vType = string.sub(Data, 1, 1)
 					local Version = string.sub(Data, 2)
 					if vType == "A" then
@@ -282,12 +279,13 @@ function PI.ManageQueues()
 	if PI.History.LastQuery < current then
 		if PI.History.Current then
 			PI.History.Queue[PI.History.Current] = nil
-			if not PI.History.NameStore[PI.History.Current].Recieved then
+			if not PI.History.NameStore[PI.History.Current].Received then
 				PI.History:SetNone(PI.History.Current)
 			end
 			if KBM.Debug then
 				print("Removing from Queue: "..PI.History.Current)
 			end
+			PI.History.NameStore[PI.History.Current].Queued = nil
 			PI.History.Current = nil
 			PI.Events.Version(From)
 		else
@@ -314,7 +312,7 @@ function PI.Start()
 	table.insert(Event.Message.Receive, {PI.MessageHandler, "KBMMessenger", "Messenger Handler"})
 	table.insert(Event.System.Update.End, {PI.ManageQueues, "KBMMessenger", "Cycle Version Queue"})
 	PI.History:SetFull(KBM.Player.Name, "P"..KBMAddonData.toc.Version)
-	PI.History:SetRecieved(KBM.Player.Name)
+	PI.History:SetReceived(KBM.Player.Name)
 	PI:SendVersion()
 end
 
