@@ -22,6 +22,7 @@ PI.Ready = {
 	Yes = 0,
 	No = 0, 
 	State = false,
+	Units = {},
 }
 PI.Displayed = true
 PI.GUI = {}
@@ -454,6 +455,7 @@ function PI.GUI:ApplySettings()
 		end
 		for Index, Object in ipairs(self.Rows) do
 			Object.Cradle:SetHeight(math.ceil(PI.Constants.Rows.h * PI.Settings.Rows.hScale))
+			Object.Ready.Cradle:SetWidth(Object.Ready.Cradle:GetHeight())
 			Object.HPBar:SetHeight(math.ceil(Object.Cradle:GetHeight() * 0.7))
 			Object.Shadow:SetFontSize(math.ceil(PI.Constants.Rows.FontSize * PI.Settings.fScale))
 			Object.Text:SetFontSize(math.ceil(PI.Constants.Rows.FontSize * PI.Settings.fScale))
@@ -462,6 +464,15 @@ function PI.GUI:ApplySettings()
 				CObject.Text:SetFontSize(math.ceil(PI.Constants.Rows.FontSize * PI.Settings.fScale))
 				CObject.Icon:SetHeight(math.ceil(PI.Constants.Rows.h * PI.Settings.hScale) - 4)
 				CObject.Icon:SetWidth(CObject.Icon:GetHeight())
+			end
+			if PI.Ready.State then
+				Object.Shadow:ClearPoint("LEFT")
+				Object.Shadow:SetPoint("LEFT", Object.Ready.Cradle, "RIGHT", -4, nil)
+				Object.Ready.Cradle:SetVisible(true)
+			else
+				Object.Shadow:ClearPoint("LEFT")
+				Object.Shadow:SetPoint("LEFT", Object.Cradle, "LEFT", 5, nil)
+				Object.Ready.Cradle:SetVisible(false)
 			end
 		end
 		self.Drag:SetVisible(PI.Settings.Unlocked)
@@ -872,6 +883,7 @@ function PI.GUI:Init()
 		end
 		self.Rows[Row].Cradle:SetPoint("LEFT", PI.GUI.Header, "LEFT")
 		self.Rows[Row].Cradle:SetPoint("RIGHT", PI.GUI.Header, "RIGHT")
+		self.Rows[Row].Ready = {}
 		self.Rows[Row].HPMask = UI.CreateFrame("Mask", "Row HP Mask "..Row, self.Rows[Row].Cradle)
 		self.Rows[Row].HPMask:SetPoint("TOPLEFT", self.Rows[Row].Cradle, "TOPLEFT")
 		self.Rows[Row].HPBar = UI.CreateFrame("Texture", "Row HP Texture "..Row, self.Rows[Row].HPMask)
@@ -887,8 +899,27 @@ function PI.GUI:Init()
 		self.Rows[Row].MPBar:SetPoint("BOTTOMRIGHT", self.Rows[Row].Cradle, "BOTTOMRIGHT")
 		self.Rows[Row].MPBar:SetTexture("KingMolinator", "Media/BarTexture.png")
 		self.Rows[Row].MPBar:SetBackgroundColor(0, 0, 0.5, 0.5)
+		self.Rows[Row].Ready.Cradle = UI.CreateFrame("Frame", "Row "..Row.." Ready Cradle", self.Rows[Row].Cradle)
+		self.Rows[Row].Ready.Cradle:SetPoint("TOPLEFT", self.Rows[Row].Cradle, "TOPLEFT", 2, 1)
+		self.Rows[Row].Ready.Cradle:SetPoint("BOTTOM", self.Rows[Row].Cradle, "BOTTOM", nil, -1)
+		self.Rows[Row].Ready.Cradle:SetLayer(2)
+		self.Rows[Row].Ready.Cradle:SetAlpha(0.75)
+		self.Rows[Row].Ready.Check = UI.CreateFrame("Texture", "Row "..Row.." Ready Check", self.Rows[Row].Ready.Cradle)
+		self.Rows[Row].Ready.Check:SetPoint("TOPLEFT", self.Rows[Row].Ready.Cradle, "TOPLEFT")
+		self.Rows[Row].Ready.Check:SetPoint("BOTTOMRIGHT", self.Rows[Row].Ready.Cradle, "BOTTOMRIGHT")
+		self.Rows[Row].Ready.Check:SetTexture("KingMolinator", "Media/RC_Check.png")
+		self.Rows[Row].Ready.Check:SetVisible(false)
+		self.Rows[Row].Ready.Cross = UI.CreateFrame("Texture", "Row "..Row.." Ready Cross", self.Rows[Row].Ready.Cradle)
+		self.Rows[Row].Ready.Cross:SetPoint("TOPLEFT", self.Rows[Row].Ready.Cradle, "TOPLEFT")
+		self.Rows[Row].Ready.Cross:SetPoint("BOTTOMRIGHT", self.Rows[Row].Ready.Cradle, "BOTTOMRIGHT")
+		self.Rows[Row].Ready.Cross:SetTexture("KingMolinator", "Media/RC_Cross.png")
+		self.Rows[Row].Ready.Cross:SetVisible(false)
+		self.Rows[Row].Ready.Question = UI.CreateFrame("Texture", "Row "..Row.." Ready Question", self.Rows[Row].Ready.Cradle)
+		self.Rows[Row].Ready.Question:SetPoint("TOPLEFT", self.Rows[Row].Ready.Cradle, "TOPLEFT")
+		self.Rows[Row].Ready.Question:SetPoint("BOTTOMRIGHT", self.Rows[Row].Ready.Cradle, "BOTTOMRIGHT")
+		self.Rows[Row].Ready.Question:SetTexture("KingMolinator", "Media/RC_Question.png")
 		self.Rows[Row].Shadow = UI.CreateFrame("Text", "Row "..Row.." Name Shadow", self.Rows[Row].Cradle)
-		self.Rows[Row].Shadow:SetLayer(2)
+		self.Rows[Row].Shadow:SetLayer(3)
 		self.Rows[Row].Shadow:SetFontColor(0,0,0)
 		self.Rows[Row].Shadow:SetPoint("CENTERLEFT", self.Rows[Row].Cradle, "CENTERLEFT", 5, -1)
 		self.Rows[Row].Text = UI.CreateFrame("Text", "Row "..Row.." Name", self.Rows[Row].Shadow)
@@ -959,6 +990,8 @@ function PI.Update()
 				if KBM.Unit.List.UID[UnitID].Details then
 					if KBM.Unit.List.UID[UnitID].Details.ready ~= "nil" then
 						PI.ReadyState({[UnitID] = KBM.Unit.List.UID[UnitID].Details.ready})
+					else
+						PI.ReadyState({[UnitID] = "nil"})
 					end
 				end
 			end
@@ -971,6 +1004,7 @@ function PI.Update()
 		PI.Queue.Remove[UnitID] = nil
 		if UnitID ~= KBM.Player.UnitID then
 			PI.Buffs[UnitID] = nil
+			PI.Ready.Units[UnitID] = nil
 			PI.GUI.Rows:Remove(UnitID)
 		end
 	end
@@ -1218,6 +1252,7 @@ function PI.Enable(bool)
 end
 
 function PI.ReadyState(Units)
+	local HoldState = PI.Ready.State
 	for UnitID, bool in pairs(Units) do
 		if bool == true then
 			if PI.Ready.State == false then
@@ -1225,27 +1260,44 @@ function PI.ReadyState(Units)
 				PI.Ready.Yes = 0
 				PI.Ready.No = 0
 				PI.Ready.State = true
-				PI.UpdateSMode()
+			end
+			PI.Ready.Units[UnitID] = "true"
+			if PI.GUI.Rows.Units[UnitID] then
+				PI.GUI.Rows.Units[UnitID].Ready.Check:SetVisible(true)
+				PI.GUI.Rows.Units[UnitID].Ready.Question:SetVisible(false)
+				PI.GUI.Rows.Units[UnitID].Ready.Cross:SetVisible(false)
 			end
 			PI.Ready.Yes = PI.Ready.Yes + 1
 			PI.Ready.Replied = PI.Ready.Replied + 1
 		else
-			if bool == "nil" then
-				PI.Ready.State = false
-				PI.UpdateSMode()
-				break
-			elseif bool == false then
+			if bool == false then
 				if PI.Ready.State == false then
 					PI.Ready.Replied = 0
 					PI.Ready.Yes = 0
 					PI.Ready.No = 0
 					PI.Ready.State = true
-					PI.UpdateSMode()
+				end
+				PI.Ready.Units[UnitID] = "false"
+				if PI.GUI.Rows.Units[UnitID] then
+					PI.GUI.Rows.Units[UnitID].Ready.Check:SetVisible(false)
+					PI.GUI.Rows.Units[UnitID].Ready.Question:SetVisible(false)
+					PI.GUI.Rows.Units[UnitID].Ready.Cross:SetVisible(true)
 				end
 				PI.Ready.No = PI.Ready.No + 1
 				PI.Ready.Replied = PI.Ready.Replied + 1
+			else
+				PI.Ready.State = false
+				PI.Ready.Units[UnitID] = "nil"
+				if PI.GUI.Rows.Units[UnitID] then
+					PI.GUI.Rows.Units[UnitID].Ready.Check:SetVisible(false)
+					PI.GUI.Rows.Units[UnitID].Ready.Question:SetVisible(true)
+					PI.GUI.Rows.Units[UnitID].Ready.Cross:SetVisible(false)
+				end
 			end
 		end
+	end
+	if HoldState ~= PI.Ready.State then
+		PI.UpdateSMode()
 	end
 end
 
