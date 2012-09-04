@@ -295,7 +295,37 @@ PI.Constants = {
 						rogue = true,
 					},
 				},
+				["B175939E807F0707F"] = { -- Herioc Enduring Vial
+					Grade = "High",
+					Callings = {
+						all = true,
+					},
+				},
+				["B3028494ABDF72791"] = { -- Herioc Fortified Vial
+					Grade = "High",
+					Callings = {
+						all = true,
+					},
+				},
 				["B2099ACE7DB4C2342"] = { -- Vial of Earth Resistance
+					Grade = "High",
+					Callings = {
+						all = true,
+					},
+				},
+				["B1928DC9D0D875B36"] = { -- Vial of Water Resistance
+					Grade = "High",
+					Callings = {
+						all = true,
+					},
+				},
+				["B4D75A15E32976412"] = { -- Vial of Fire Resistance
+					Grade = "High",
+					Callings = {
+						all = true,
+					},
+				},
+				["B0B554EAC804EE17F"] = { -- Vial of Death Resistance
 					Grade = "High",
 					Callings = {
 						all = true,

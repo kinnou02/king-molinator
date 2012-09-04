@@ -43,7 +43,12 @@ Ready Check Available Tracking
 ** Ancient Herioc Brightsurge Vial (Mage, Cleric) - High
 ** Herioc Powersurge Vial (Warrior, Rogue) - High
 ** Ancient Herioc Powersurge Vial (Warrior, Rogue) - High
+** Herioc Enduring Vial (All) - High
+** Ancient Herioc Enduring Vial (All) - High
 ** Vial of Earth Resistance (All) - High
+** Vial of Fire Resistance (All) - High
+** Vial of Water Resistance (All) - High
+** Vial of Death Resistance (All) - High
 ** Mighty Powersurge Vial (Warrior, Rogue) - Medium
 * Other/Armor
 ** Performance Insoles (All) - High
