@@ -21,9 +21,14 @@ New: Ready Check
 Ready Check Available Tracking
 * Food
 ** Feast of Cooperation (All) - High
+** Dwarven Goulash (Tanks) - High
+** Kelari Spicey Pome (Tanks) - High
+** Feast of Aptitude (Cleric, Mage) - High
+** Feast of Expertise (Warrior, Rogue) - High
 ** Kelari Expedition Cherry Cake (Mage, Cleric) - Medium
 ** Kelari Expedition Chocolate Cake (Warrior, Rogue) - Medium
 ** Farclan Cherry Cake (Mage, Cleric) - Medium
+** Farclan Chocolate Cake (Warrior, Rogue) - Medium
 * Weapon Stones
 ** Burning Powerstone (Mage, Cleric) - High
 ** Flaring Glyph (Mage, Cleric) - Medium
@@ -32,6 +37,7 @@ Ready Check Available Tracking
 * Potions/Vials
 ** Herioc Brightsurge Vial (Mage, Cleric) - High
 ** Herioc Powersurge Vial (Warrior, Rogue) - High
+** Vial of Earth Resistance (All) - High
 ** Mighty Powersurge Vial (Warrior, Rogue) - Medium
 * Other/Armor
 ** Performance Insoles (All) - High

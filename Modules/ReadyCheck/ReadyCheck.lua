@@ -157,6 +157,34 @@ PI.Constants = {
 			w = 36,
 			Icons = true,
 			List = {
+				--///////////--
+				-- Tank Food --
+				--///////////--
+				["B5234CE85DD7FE093"] = { -- Kelari Spicey Pome
+					Grade = "High",
+					Callings = {
+						warrior = true,
+						rogue = true,
+						cleric = true,
+					},
+					Role = {
+						tank = true,
+					},
+				},
+				["B795C4023DAAEA180"] = { -- Dwarven Goulash
+					Grade = "High",
+					Callings = {
+						warrior = true,
+						rogue = true,
+						cleric = true,
+					},
+					Role = {
+						tank = true,
+					},
+				},
+				--/////////////////--
+				-- High Grade Food --
+				--/////////////////--
 				["B174CBFBAEB6DFCAC"] = { -- Feast of Cooperation (SP)
 					Grade = "High",
 					Callings = {
@@ -171,11 +199,35 @@ PI.Constants = {
 						rogue = true,
 					},
 				},
+				["B5658FDFA5532AE4E"] = { -- Feast of Efficiency
+					Grade = "High",
+					Callings = {
+						warrior = true,
+						rogue = true,
+					},
+				},
+				["B54B43DE1D3EC1EB3"] = { -- Feast of Aptitude
+					Grade = "High",
+					Callings = {
+						cleric = true,
+						mage = true,
+					},
+				},
+				--///////////////////--
+				-- Medium Grade Food --
+				--///////////////////--
 				["B3CD06443A7FD7C18"] = { -- Farclan Cherry Cake
 					Grade = "Med",
 					Callings = {
 						cleric = true,
 						mage = true,
+					},
+				},
+				["B2BEA306A6F0C0257"] = { -- Farclan Chocolate Cake
+					Grade = "Med",
+					Callings = {
+						warrior = true,
+						rogue = true,
 					},
 				},
 				["B55D71860C42C1B75"] = { -- Kelari Expedition Chocolate Cake
@@ -192,6 +244,9 @@ PI.Constants = {
 						mage = true,
 					},
 				},
+				--////////////////--
+				-- Low Grade Food --
+				--////////////////--
 			},
 		},
 		Potion = {
@@ -210,6 +265,12 @@ PI.Constants = {
 					Callings = {
 						warrior = true,
 						rogue = true,
+					},
+				},
+				["B2099ACE7DB4C2342"] = { -- Vial of Earth Resistance
+					Grade = "High",
+					Callings = {
+						all = true,
 					},
 				},
 				["B0B2B52E09FA082DE"] = { -- Mighty Powersurge Vial

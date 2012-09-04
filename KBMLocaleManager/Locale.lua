@@ -125,14 +125,19 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.ReadyCheck = {}
 	KBMLM.SetGroupObject(KBM.Language.ReadyCheck, "GroupObject", "Ready Check Dictionary")
 	KBM.Language.ReadyCheck.Name = KBM.Language:Add("Ready Check")
+	KBM.Language.ReadyCheck.Name:SetFrench()
 	KBM.Language.ReadyCheck.Name:SetGerman()
 	KBM.Language.ReadyCheck.Combat = KBM.Language:Add("Hide while in combat.")
 	KBM.Language.ReadyCheck.Combat:SetGerman("Im Kampf verstecken.")
+	KBM.Language.ReadyCheck.Combat:SetFrench("Cacher en combat.")
 	KBM.Language.ReadyCheck.Solo = KBM.Language:Add("Hide while playing solo.")
 	KBM.Language.ReadyCheck.Solo:SetGerman("Im Solospiel verstecken.")
+	KBM.Language.ReadyCheck.Solo:SetFrench("Cacher en jouage solo.")
 	KBM.Language.ReadyCheck.Unlock = KBM.Language:Add("Unlock Icon Bar.")
 	KBM.Language.ReadyCheck.Unlock:SetGerman("Fenster ist verschiebbar.")
+	KBM.Language.ReadyCheck.Unlock:SetFrench("Débloquer Bar Icone.")
 	KBM.Language.ReadyCheck.Hidden = KBM.Language:Add("Only show during Rift Ready Checks")
+	KBM.Language.ReadyCheck.Hidden:SetFrench("Afficher seulement durant Rift Ready Checks")
 	
 	-- Rez Master Dictionary
 	KBM.Language.RezMaster = {}
@@ -752,6 +757,7 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Menu.Castbars:SetKorean("캐스터바")
 	KBM.Language.Menu.Mods = KBM.Language:Add("Modules")
 	KBM.Language.Menu.Mods:SetGerman("Module")
+	KBM.Language.Menu.Mods:SetFrench()
 	
 	-- Filter Options
 	KBM.Language.Filters = {}
