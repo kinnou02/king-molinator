@@ -39,6 +39,7 @@ Ready Check Available Tracking
 ** Exquisite Whetstone (Warrior, Rogue) - High
 ** Fine Whetstone (Warrior, Rogue) - Medium
 ** Lightning Glyph (Warrior, Rogue) - Medium
+** Storm Glyph (Warrior) - Medium
 * Potions/Vials
 ** Herioc Brightsurge Vial (Mage, Cleric) - High
 ** Ancient Herioc Brightsurge Vial (Mage, Cleric) - High
@@ -50,6 +51,8 @@ Ready Check Available Tracking
 ** Vial of Fire Resistance (All) - High
 ** Vial of Water Resistance (All) - High
 ** Vial of Death Resistance (All) - High
+** Vial of Air Resistance (All) - High
+** Vial of Life Resistance (All) - High
 ** Mighty Powersurge Vial (Warrior, Rogue) - Medium
 * Other/Armor
 ** Performance Insoles (All) - High
@@ -62,7 +65,7 @@ System
 * New: Added a new slash command /kbmbuffs. You can macro this with %t or manually type a name to return a list of buffs with KBM ID's on that Unit. (Players or NPC's)
 * Change: Ability IDs have been changed to the new format for Rift 1.9 and above. This will cause compatibility issues with older KBMs.
 * Change: Buff Add events triggered for already cached buffs are now ignored.
-* Change: Updated LibSRM to 1.2.0 which now includes LibUnitChange 2.1
+* Change: Updated LibSRM to 1.2.0 which now includes LibUnitChange 2.2
 * Removed: Global reference to bDetails in Buff Remove handlers.
 * Removed: Global reference to TriggerObj in Buff Remove handlers.
 * Removed: Global reference to TriggerObj in Buff Add handlers.

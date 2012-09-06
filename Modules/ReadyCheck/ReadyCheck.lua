@@ -173,6 +173,12 @@ PI.Constants = {
 						rogue = true,
 					},
 				},
+				["r4552DA1F7B7A9D42"] = { -- Storm Glyph
+					Grade = "Medium",
+					Callings = {
+						warrior = true,
+					},
+				},
 				["r7521BA00400F6038"] = { -- Fine Whetstone
 					Grade = "Med",
 					Callings = {
@@ -327,6 +333,18 @@ PI.Constants = {
 					},
 				},
 				["B0B554EAC804EE17F"] = { -- Vial of Death Resistance
+					Grade = "High",
+					Callings = {
+						all = true,
+					},
+				},
+				["B769F65AA45A72C2B"] = { -- Vial of Air Resistance
+					Grade = "High",
+					Callings = {
+						all = true,
+					},
+				},
+				["B5F5153125385DC4E"] = { -- Vial of Life Resistance
 					Grade = "High",
 					Callings = {
 						all = true,

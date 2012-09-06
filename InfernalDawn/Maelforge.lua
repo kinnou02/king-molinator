@@ -65,12 +65,16 @@ MF.Lang.Unit.Maelforge:SetRussian("Маэлфорж")
 MF.Lang.Unit.Maelforge:SetKorean("마엘포지")
 MF.Lang.Unit.Cannon = KBM.Language:Add("Magma Cannon")
 MF.Lang.Unit.Cannon:SetGerman("Magmakanone")
+MF.Lang.Unit.Cannon:SetFrench("Canon à magma")
 MF.Lang.Unit.CanShort = KBM.Language:Add("Cannon")
 MF.Lang.Unit.CanShort:SetGerman("Kanone")
+MF.Lang.Unit.CanShort:SetFrench("Canon")
 MF.Lang.Unit.Egg = KBM.Language:Add("Ember Egg")
 MF.Lang.Unit.Egg:SetGerman("Glutei")
+MF.Lang.Unit.Egg:SetFrench("Œuf de braise")
 MF.Lang.Unit.EggShort = KBM.Language:Add("Egg")
 MF.Lang.Unit.EggShort:SetGerman("Ei")
+MF.Lang.Unit.EggShort:SetFrench("Œuf")
 
 -- Ability Dictionary
 MF.Lang.Ability = {}
@@ -78,13 +82,17 @@ MF.Lang.Ability = {}
 -- Notify Dictionary
 MF.Lang.Notify = {}
 MF.Lang.Notify.PhaseTwo = KBM.Language:Add("Maelforge: Carcera, I will break you and spill your doom across this world. These weaklings shall be the first to die.")
+MF.Lang.Notify.PhaseTwo:SetFrench("Maelforge : Carcera, je vous anéantirai et répandrai vos restes sur ce monde. Ces misérables seront les premiers à périr.")
 MF.Lang.Notify.PhaseFinal = KBM.Language:Add("Maelforge: My children will taste your flesh. You whet the appetite of apocalypse.")
+MF.Lang.Notify.PhaseFinal:SetFrench("Maelforge : Ma descendance se repaîtra de votre chair. Vous aiguiserez la voracité de l'apocalypse.")
 MF.Lang.Notify.Victory = KBM.Language:Add("Carcera: This world is saved from abomination, but its doom rises on ashen wings.")
+MF.Lang.Notify.Victory:SetFrench("Carcera : Le monde est sauvé de ces abominations, mais son destin se construit sur une terre en cendres. Ce lieu était autrefois le foyer sacré de mes adorateurs qui, avant que je ne tombe dans l'oubli, exécutaient des sacrifices en mon honneur. Ces roches réveillent en moi le souvenir de l'odeur du sang et de la chair calcinée.")
 
 -- Description Dictionary
 MF.Lang.Descript = {}
 MF.Lang.Descript.Main = KBM.Language:Add("Maelforge - Ember Eggs")
 MF.Lang.Descript.Main:SetGerman("Flammenmaul - Gluteier")
+MF.Lang.Descript.Main:SetFrench("Maelforge - Œufs de braise")
 
 MF.Maelforge.Name = MF.Lang.Unit.Maelforge[KBM.Lang]
 MF.Maelforge.NameShort = MF.Lang.Unit.Maelforge[KBM.Lang]

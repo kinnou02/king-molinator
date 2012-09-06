@@ -125,6 +125,7 @@ LT.Lang.Ability.Resto:SetFrench("Restauration ratatinée")
 LT.Lang.Ability.Resto:SetRussian("Иссохшее восстановление")
 LT.Lang.Ability.LiqGold = KBM.Language:Add("Laethic Gold")
 LT.Lang.Ability.LiqGold:SetGerman("Laethic-Gold")
+LT.Lang.Ability.LiqGold:SetFrench("Or laethique")
 
 -- Mechanic Dictionary
 LT.Lang.Mechanic = {}
@@ -148,6 +149,7 @@ LT.Lang.Buff.Wisdom:SetRussian("Мудрость прорицателя")
 -- Debuff Dictionary
 LT.Lang.Debuff = {}
 LT.Lang.Debuff.Gold = KBM.Language:Add("Touch of Gold")
+LT.Lang.Debuff.Gold:SetFrench("Toucher de l'or")
 --LT.Lang.Debuff.TGold = KBM.Language:Add("Use ability soon!")
 
 -- Notify Dictionary
@@ -160,6 +162,7 @@ LT.Lang.Notify.PhaseTwoStart:SetFrench("Laethys dit : \"Nul ne peut échapper à
 LT.Lang.Notify.PhaseTwoStart:SetGerman("Laethys sagt: \"Seht Eurem Untergang entgegen! Legt Eure Waffen nieder und ich gewähre Euch ein schnelles Ende ... vielleicht!\"")
 LT.Lang.Notify.LiqGold = KBM.Language:Add("Laethys unleashes a wave of liquid gold.")
 LT.Lang.Notify.LiqGold:SetGerman("Laethys entfesselt eine Welle aus flüssigem Gold.")
+LT.Lang.Notify.LiqGold:SetFrench("Laethys lance une vague d'or liquide.")
 
 -- Menu Dictionary
 LT.Lang.Menu = {}
@@ -185,6 +188,7 @@ LT.Lang.Menu.Adds:SetFrench("Premier Pop des Adds")
 LT.Lang.Menu.Adds:SetRussian("Первые Адды")
 LT.Lang.Menu.LiqGold = KBM.Language:Add("First Laethic Gold")
 LT.Lang.Menu.LiqGold:SetGerman("Erste Laethic-Gold")
+LT.Lang.Menu.LiqGold:SetFrench("Premier Or laethique")
 --LT.Lang.Menu.TGold = KBM.Language:Add("Touch of Gold 5 second warning")
 
 LT.Laethys.Name = LT.Lang.Unit.Laethys[KBM.Lang]

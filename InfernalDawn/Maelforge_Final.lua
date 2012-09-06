@@ -81,25 +81,31 @@ MF.Lang.Unit.Maelforge:SetKorean("마엘포지")
 MF.Lang.Location = {}
 MF.Lang.Location.Spires = KBM.Language:Add("Spires of Sacrifice")
 MF.Lang.Location.Spires:SetGerman("Spitze der Opfergabe")
+MF.Lang.Location.Spires:SetFrench("Aiguilles de Sacrifice")
 
 -- Debuff Dictionary
 MF.Lang.Debuff = {}
 MF.Lang.Debuff.Hell = KBM.Language:Add("Hellfire")
 MF.Lang.Debuff.Hell:SetGerman("Höllenfeuer")
+MF.Lang.Debuff.Hell:SetFrench("Hellfire")
 MF.Lang.Debuff.Earthen = KBM.Language:Add("Earthen Fissure")
 MF.Lang.Debuff.Earthen:SetGerman("Erdspalte")
+MF.Lang.Debuff.Earthen:SetFrench("Fissure terrestre")
 MF.Lang.Debuff.Fiery = KBM.Language:Add("Fiery Fissure")
-MF.Lang.Debuff.Fiery:SetGerman("Feuriger Spalt") 
+MF.Lang.Debuff.Fiery:SetGerman("Feuriger Spalt")
+MF.Lang.Debuff.Fiery:SetFrench("Fissure flamboyante")
 
 -- Notify Dictionary
 MF.Lang.Notify = {}
 MF.Lang.Notify.Fissure = KBM.Language:Add("Hellfire feeds on your agony!")
 MF.Lang.Notify.Fissure:SetGerman("Eure Angst nährt das Flammeninferno!")
+MF.Lang.Notify.Fissure:SetFrench("Les feux de l'enfer se nourrissent de votre agonie !")
 
 -- Mechanic Dictionary
 MF.Lang.Mechanic = {}
 MF.Lang.Mechanic.Fissure = KBM.Language:Add("Fissures")
 MF.Lang.Mechanic.Fissure:SetGerman("Spalten")
+MF.Lang.Mechanic.Fissure:SetFrench("Fissures")
 
 -- Ability Dictionary
 MF.Lang.Ability = {}
@@ -108,13 +114,16 @@ MF.Lang.Ability = {}
 MF.Lang.Menu = {}
 MF.Lang.Menu.Hell_Green = KBM.Language:Add("Hellfire (Green)")
 MF.Lang.Menu.Hell_Green:SetGerman("Höllenfeuer (Grün)")
+MF.Lang.Menu.Hell_Green:SetFrench("Hellfire (Foncé)")
 MF.Lang.Menu.Hell_Yellow = KBM.Language:Add("Hellfire (Yellow)")
 MF.Lang.Menu.Hell_Yellow:SetGerman("Höllenfeuer (Gelb)")
+MF.Lang.Menu.Hell_Yellow:SetFrench("Hellfire (Jaune)")
 
 -- Description
 MF.Lang.Descript = {}
 MF.Lang.Descript.Main = KBM.Language:Add("Maelforge - Final")
 MF.Lang.Descript.Main:SetGerman("Flammenmaul - Finale")
+MF.Lang.Descript.Main:SetFrench("Maelforge - Final")
 
 MF.Maelforge.Name = MF.Lang.Unit.Maelforge[KBM.Lang]
 MF.Maelforge.NameShort = MF.Lang.Unit.Maelforge[KBM.Lang]

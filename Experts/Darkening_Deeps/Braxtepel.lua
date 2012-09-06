@@ -60,7 +60,7 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Braxtepel = KBM.Language:Add(MOD.Braxtepel.Name)
 MOD.Lang.Unit.Braxtepel:SetGerman("Alchemist Braxtepel")
-MOD.Lang.Unit.Braxtepel:SetFrench("Alchemiste Braxtepel")
+MOD.Lang.Unit.Braxtepel:SetFrench("Braxtepel l'Alchimiste")
 MOD.Lang.Unit.Braxtepel:SetRussian("Алхимик Бракстепль")
 MOD.Lang.Unit.Braxtepel:SetKorean("연금술사 브락스테펠")
 MOD.Braxtepel.Name = MOD.Lang.Unit.Braxtepel[KBM.Lang]
