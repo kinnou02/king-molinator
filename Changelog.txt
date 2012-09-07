@@ -5,6 +5,7 @@ New: Ready Check
 * New: Added option to auto-hide/show while playing solo.
 * New: Added option to auto-hide/show when a Rift Ready Check is in progress.
 * New: Displays Rift Ready Check status before the players name when a Ready Check is in progress.
+* New: Adjust the size of the Ready Check display using the mouse-wheel.
 * New: Lists all Raid/Party members Health and Mana/Power/Energy.
 * New: Lists KBM versions for each Raid/Party member (if available.)
 * New: Lists Soul Vitality for each Raid/Party member.
@@ -13,7 +14,7 @@ New: Ready Check
 * New: Lists Weapon Stones used by each Raid/Party member. (See available Stones - to be expanded)
 * New: Lists Current and Max Planar charges for each Raid/Party member.
 * New: Option to disable/enable the display in the options window.
-* New: Toggle the display via the slash command /kbmreadycheck.
+* New: Toggle the Ready Check enabled/display state via the slash command /kbmreadycheck.
 * New: Staggered KBM Version retrieval if a player's version has not already been cached.
 * New: Color added to various states of KBM Version status.
 * New: Color added to Soul Vatility display.
@@ -92,6 +93,19 @@ Infernal Dawn
 ** Change: Phase 1 objective now reads 51% rather than the incorrect 50%.
 * Maelforge Ember Eggs
 ** Fixed: Issue with my brain when writing the checking code (a nil BossObj variable to see if it's a viable match). Excellent!
+
+Primeval Feast
+* Lord Twyl (Added by Ivnedar@Laethys)
+** New: Phase tracking support.
+** New: Objective tracking.
+** New: Timer and Alert for Flickering Fire (Including Duration).
+** New: Timer for Alert Frozen Nova.
+** New: Personal Alert for Primeval Quake.
+** New: Mechanic Spy for Harvest Sacrifice.
+** New: Personal Alert and Mechanic Spy for target of Ravenous Wolf.
+** New: Personal Alert and Mechanic Spy for target of Rapacious Spider.
+** New: Personal Alert and Mechanic Spy for target of Voracious Tiger.
+** New: Mechanic Spy for Spinning Swarm.
 
 Master Mode Caduceus Rise
 * Ashcaller Zael

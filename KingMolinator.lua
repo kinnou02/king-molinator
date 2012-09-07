@@ -8057,11 +8057,16 @@ function KBM.MenuOptions.ReadyCheck:Options()
 		KBM.Ready.Settings.Hidden = bool
 		KBM.Ready.UpdateSMode()
 	end
+	function self:Size(bool)
+		KBM.Ready.Settings.Scale = bool
+		KBM.Ready.GUI:ApplySettings()
+	end
 		
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
 	local ReadyCheck = Options:AddHeader(KBM.Language.Options.Enabled[KBM.Lang], self.Enabled, KBM.Ready.Settings.Enabled)
 	ReadyCheck:AddCheck(KBM.Language.ReadyCheck.Unlock[KBM.Lang], self.Unlock, KBM.Ready.Settings.Unlocked)
+	ReadyCheck:AddCheck(KBM.Language.ReadyCheck.Size[KBM.Lang], self.Size, KBM.Ready.Settings.Scale)
 	ReadyCheck:AddCheck(KBM.Language.ReadyCheck.Hidden[KBM.Lang], self.Hidden, KBM.Ready.Settings.Hidden)
 	ReadyCheck:AddCheck(KBM.Language.ReadyCheck.Combat[KBM.Lang], self.Combat, KBM.Ready.Settings.Combat)
 	ReadyCheck:AddCheck(KBM.Language.ReadyCheck.Solo[KBM.Lang], self.Solo, KBM.Ready.Settings.Solo)

@@ -75,6 +75,7 @@ PI.Settings = {
 	y = false,
 	wScale = 1,
 	hScale = 1,
+	Scale = true,
 	fScale = 1,
 	Alpha = 1,
 	Tracking = {},
@@ -446,6 +447,13 @@ end
 
 function PI.GUI:ApplySettings()
 	if PI.Enabled then
+		if PI.Settings.Scale then
+			self.Cradle.Event.WheelForward = self.WheelForward
+			self.Cradle.Event.WheelBack = self.WheelBack
+		else
+			self.Cradle.Event.WheelForward = nil
+			self.Cradle.Event.WheelBack = nil
+		end
 		self.Header:ClearAll()
 		self.Cradle:SetVisible(PI.Displayed)
 		if not PI.Settings.x then
@@ -469,7 +477,7 @@ function PI.GUI:ApplySettings()
 			end
 			Object.Icon:SetWidth(self.Header:GetHeight() - Offset)
 			Object.Icon:SetHeight(self.Header:GetHeight() - Offset)
-			Object.Header:SetWidth(math.ceil(PI.Constants.Columns[ID].w * PI.Settings.Columns[ID].wScale))
+			Object.Header:SetWidth(math.ceil(PI.Constants.Columns[ID].w * PI.Settings.wScale))
 		end
 		for Index, Object in ipairs(self.Rows) do
 			Object.Cradle:SetHeight(math.ceil(PI.Constants.Rows.h * PI.Settings.Rows.hScale))
@@ -492,6 +500,7 @@ function PI.GUI:ApplySettings()
 				Object.Shadow:SetPoint("LEFT", Object.Cradle, "LEFT", 5, nil)
 				Object.Ready.Cradle:SetVisible(false)
 			end
+			self.Rows:Update(Index)
 		end
 		self.Drag:SetVisible(PI.Settings.Unlocked)
 	else
@@ -523,6 +532,28 @@ function PI.GUI:Init()
 	self.Cradle:SetPoint("LEFT", self.Header, "LEFT")
 	self.Cradle:SetPoint("RIGHT", self.Header, "RIGHT")
 
+	function self.WheelForward()
+		PI.Settings.wScale = PI.Settings.wScale + 0.025
+		if PI.Settings.wScale > 1.5 then
+			PI.Settings.wScale = 1.5
+		end
+		PI.Settings.hScale = PI.Settings.wScale
+		PI.Settings.fScale = PI.Settings.wScale
+		PI.Settings.Rows.hScale = PI.Settings.wScale
+		PI.GUI:ApplySettings()
+	end
+	
+	function self.WheelBack()
+		PI.Settings.wScale = PI.Settings.wScale - 0.025
+		if PI.Settings.wScale < 0.5 then
+			PI.Settings.wScale = 0.5
+		end
+		PI.Settings.hScale = PI.Settings.wScale
+		PI.Settings.fScale = PI.Settings.wScale
+		PI.Settings.Rows.hScale = PI.Settings.wScale
+		PI.GUI:ApplySettings()
+	end
+	
 	self.Columns = {
 		List = {
 			Planar = {},
