@@ -90,6 +90,8 @@ Infernal Dawn
 ** Fixed: Corrected Phase Two Start trigger.
 ** Change: Added the % (pattern matching escape code) before ? in an attempt to get this to trigger the Phase Two Transition capture.
 ** Change: Phase 1 objective now reads 51% rather than the incorrect 50%.
+* Maelforge Ember Eggs
+** Fixed: Issue with my brain when writing the checking code (a nil BossObj variable to see if it's a viable match). Excellent!
 
 Master Mode Caduceus Rise
 * Ashcaller Zael

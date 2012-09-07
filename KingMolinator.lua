@@ -3458,7 +3458,7 @@ end
 
 function KBM.MatchType(uDetails, BossObj)
 	if not BossObj then
-		return false
+		return
 	end
 	if KBM.Encounter then
 		-- Already established type
@@ -3569,7 +3569,7 @@ function KBM.MatchType(uDetails, BossObj)
 				return BossObj
 			end
 		end
-		return false
+		return
 	end
 end
 
@@ -3596,9 +3596,14 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 					if not BossObj then
 						if KBM_Boss[uDetails.name] then
 							BossObj = KBM_Boss[uDetails.name]
-							if BossObj.IgnoreID == uDetails.type then
-								BossObj = nil
-								KBM.IgnoreList[UnitID] = true
+							if uDetails.type then
+								if BossObj.IgnoreID == uDetails.type then
+									BossObj = nil
+									KBM.IgnoreList[UnitID] = true
+									if KBM.Debug then
+										print("Boss Ignored via ID: "..tostring(uDetails.name))
+									end
+								end
 							end
 						elseif KBM.SubBoss[uDetails.name] then
 							BossObj = KBM.SubBoss[uDetails.name]
@@ -3627,7 +3632,7 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 								end
 							end
 							if ModBossObj then
-								if (BossObj.Ignore == nil and KBM.Encounter == false) or KBM.Encounter == true then
+								if (BossObj.Ignore ~= true and KBM.Encounter ~= true) or KBM.Encounter == true then
 									if KBM.Debug then
 										print("Boss found Checking: Tier = "..tostring(uDetails.tier).." "..tostring(uDetails.level).." ("..type(uDetails.level)..")")
 										print("Players location: "..tostring(KBM.Player.Location))
@@ -3767,14 +3772,16 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 					else
 						if uDetails.availability == "full" then
 							if uDetails.type then
-								if KBM.Debug then
-									if not KBM.IgnoreList[UnitID] then
-										print("New Unit Added to Ignore:")
-										dump(uDetails)
-										print("----------")
+								if not KBM_Boss[uDetails.name] then
+									if KBM.Debug then
+										if not KBM.IgnoreList[UnitID] then
+											print("New Unit Added to Ignore:")
+											dump(uDetails)
+											print("----------")
+										end
 									end
+									KBM.IgnoreList[UnitID] = true
 								end
-								KBM.IgnoreList[UnitID] = true
 							end
 						end
 					end

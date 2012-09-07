@@ -229,7 +229,7 @@ function MF:UnitHPCheck(uDetails, unitID)
 		if not uDetails.player then
 			local BossObj = self.Bosses[uDetails.name]
 			if BossObj then
-				if self.BossObj == self.Maelforge then
+				if BossObj == self.Maelforge then
 					if not self.EncounterRunning then
 						self.EncounterRunning = true
 						self.StartTime = Inspect.Time.Real()
