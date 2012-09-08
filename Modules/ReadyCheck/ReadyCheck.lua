@@ -26,6 +26,7 @@ PI.Ready = {
 }
 PI.Displayed = true
 PI.GUI = {}
+PI.Button = {}
 PI.Context = UI.CreateContext("KBMReadyCheck")
 PI.DetailUpdates = {}
 PI.Buffs = {}
@@ -79,6 +80,12 @@ PI.Settings = {
 	fScale = 1,
 	Alpha = 1,
 	Tracking = {},
+	Button = {
+		x = false,
+		y = false,
+		Unlocked = true,
+		Visible = true,
+	},
 	Columns = {
 		Planar = {
 			Enabled = true,
@@ -427,6 +434,72 @@ for ID, Obj in pairs(PI.Constants.Columns) do
 end
 
 -- Dictionary in Global Locale file.
+
+function PI.Button:Init()
+	self.Texture = UI.CreateFrame("Texture", "Ready Check Button Texture", KBM.Context)
+	KBM.LoadTexture(self.Texture, "KingMolinator", "Media/Check_Button.png")
+	self.Texture:SetWidth(KBM.Constant.Button.s)
+	self.Texture:SetHeight(KBM.Button.Texture:GetWidth())
+	self.Highlight = UI.CreateFrame("Texture", "Ready Check Button Highlight", KBM.Context)
+	KBM.LoadTexture(self.Highlight, "KingMolinator", "Media/New_Options_Button_Over.png")
+	self.Highlight:SetPoint("TOPLEFT", self.Texture, "TOPLEFT")
+	self.Highlight:SetPoint("BOTTOMRIGHT", self.Texture, "BOTTOMRIGHT")
+	self.Highlight:SetVisible(false)
+
+	function self:ApplySettings()
+		self.Texture:ClearPoint("CENTER")
+		self.Texture:ClearPoint("TOPLEFT")
+		if not PI.Settings.Button.x then
+			self.Texture:SetPoint("CENTER", UIParent, "CENTER")
+		else
+			self.Texture:SetPoint("TOPLEFT", UIParent, "TOPLEFT", PI.Settings.Button.x, PI.Settings.Button.y)
+		end
+		self.Texture:SetLayer(5)
+		self.Highlight:SetLayer(6)
+		self.Drag:SetVisible(PI.Settings.Button.Unlocked)
+		if PI.Enabled then
+			self.Texture:SetVisible(PI.Settings.Button.Visible)
+		else
+			self.Texture:SetVisible(false)
+		end
+	end
+	
+	function self:UpdateMove(uType)
+		if uType == "end" then
+			PI.Settings.Button.x = self.Texture:GetLeft()
+			PI.Settings.Button.y = self.Texture:GetTop()
+		end	
+	end
+	function self.Texture.Event.MouseIn()
+		PI.Button.Highlight:SetVisible(true)
+	end
+	function self.Texture.Event.MouseOut()
+		KBM.LoadTexture(PI.Button.Texture, "KingMolinator", "Media/Check_Button.png")
+		PI.Button.Highlight:SetVisible(false)
+	end
+	function self.Texture.Event.LeftDown()
+		KBM.LoadTexture(PI.Button.Texture, "KingMolinator", "Media/Check_Button_Down.png")
+		PI.Button.Highlight:SetVisible(false)
+	end
+	function self.Texture.Event.LeftUp()
+		KBM.LoadTexture(PI.Button.Texture, "KingMolinator", "Media/Check_Button.png")
+		PI.Button.Highlight:SetVisible(true)
+	end
+	function self.Texture.Event.LeftClick()
+		PI.SlashEnable()
+	end
+	
+	self.Drag = KBM.AttachDragFrame(self.Texture, function (uType) self:UpdateMove(uType) end, "Button Drag", 7)
+	self.Drag.Event.RightDown = self.Drag.Event.LeftDown
+	self.Drag.Event.RightUp = self.Drag.Event.LeftUp
+	self.Drag.Event.LeftDown = nil
+	self.Drag.Event.LeftUp = nil
+	self.Drag.Event.MouseIn = self.Texture.Event.MouseIn
+	self.Drag.Event.MouseOut = self.Texture.Event.MouseOut
+	self.Drag:SetMouseMasking("limited")
+	
+	self:ApplySettings()	
+end
 
 function PI.LoadVars(ModID)
 	if ModID == AddonData.id then
@@ -1279,12 +1352,13 @@ function PI.DetailUpdates.Offline(Value, UnitID)
 end
 
 function PI.SlashEnable()
-	if PI.Enabled then
-		PI.Enabled = false
+	if PI.Displayed then
+		PI.GUI.Cradle:SetVisible(false)
+		PI.Displayed = false
 	else
-		PI.Enabled = true
+		PI.GUI.Cradle:SetVisible(true)
+		PI.Displayed = true
 	end
-	PI.Enable(PI.Enabled)
 end
 
 function PI.Enable(bool)
@@ -1352,6 +1426,7 @@ end
 
 function PI.Init(ModID)
 	if ModID == AddonData.id then
+		PI.Button:Init()
 		PI.GUI:Init()
 		-- KBM Events
 		table.insert(Event.KingMolinator.Unit.Offline, {PI.DetailUpdates.Offline, "KBMReadyCheck", "Offline Toggle"})

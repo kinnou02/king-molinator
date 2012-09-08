@@ -636,6 +636,9 @@ function KBM.Constant:Init()
 		h = 32,
 		TextSize = 14,
 	}
+	self.Button = {
+		s = 32,
+	}
 end
 
 KBM.Constant:Init()
@@ -1998,7 +2001,14 @@ end
 
 function KBM.Button:Init()
 	KBM.Button.Texture = UI.CreateFrame("Texture", "Button Texture", KBM.Context)
-	KBM.LoadTexture(KBM.Button.Texture, "KingMolinator", "Media/Options_Button.png")
+	KBM.LoadTexture(KBM.Button.Texture, "KingMolinator", "Media/New_Options_Button.png")
+	KBM.Button.Texture:SetWidth(KBM.Constant.Button.s)
+	KBM.Button.Texture:SetHeight(KBM.Button.Texture:GetWidth())
+	KBM.Button.Highlight = UI.CreateFrame("Texture", "Button Texture Highlight", KBM.Context)
+	KBM.LoadTexture(KBM.Button.Highlight, "KingMolinator", "Media/New_Options_Button_Over.png")
+	KBM.Button.Highlight:SetPoint("TOPLEFT", KBM.Button.Texture, "TOPLEFT")
+	KBM.Button.Highlight:SetPoint("BOTTOMRIGHT", KBM.Button.Texture, "BOTTOMRIGHT")
+	KBM.Button.Highlight:SetVisible(false)
 	
 	function self:ApplySettings()
 		self.Texture:ClearPoint("CENTER")
@@ -2009,6 +2019,7 @@ function KBM.Button:Init()
 			self.Texture:SetPoint("TOPLEFT", UIParent, "TOPLEFT", KBM.Options.Button.x, KBM.Options.Button.y)
 		end
 		self.Texture:SetLayer(5)
+		self.Highlight:SetLayer(6)
 		self.Drag:SetVisible(KBM.Options.Button.Unlocked)
 		self.Texture:SetVisible(KBM.Options.Button.Visible)
 	end
@@ -2020,16 +2031,21 @@ function KBM.Button:Init()
 		end	
 	end
 	function self.Texture.Event.MouseIn()
-		KBM.LoadTexture(KBM.Button.Texture, "KingMolinator", "Media/Options_Button_Over.png")
+		--KBM.LoadTexture(KBM.Button.Texture, "KingMolinator", "Media/Options_Button_Over.png")
+		KBM.Button.Highlight:SetVisible(true)
 	end
 	function self.Texture.Event.MouseOut()
-		KBM.LoadTexture(KBM.Button.Texture, "KingMolinator", "Media/Options_Button.png")
+		KBM.LoadTexture(KBM.Button.Texture, "KingMolinator", "Media/New_Options_Button.png")
+		KBM.Button.Highlight:SetVisible(false)
 	end
 	function self.Texture.Event.LeftDown()
-		KBM.LoadTexture(KBM.Button.Texture, "KingMolinator", "Media/Options_Button_Down.png")
+		KBM.LoadTexture(KBM.Button.Texture, "KingMolinator", "Media/New_Options_Button_Down.png")
+		KBM.Button.Highlight:SetVisible(false)
 	end
 	function self.Texture.Event.LeftUp()
-		KBM.LoadTexture(KBM.Button.Texture, "KingMolinator", "Media/Options_Button_Over.png")
+		--KBM.LoadTexture(KBM.Button.Texture, "KingMolinator", "Media/Options_Button_Over.png")
+		KBM.LoadTexture(KBM.Button.Texture, "KingMolinator", "Media/New_Options_Button.png")
+		KBM.Button.Highlight:SetVisible(true)
 	end
 	function self.Texture.Event.LeftClick()
 		KBM_Options()
@@ -8040,6 +8056,7 @@ function KBM.MenuOptions.ReadyCheck:Options()
 	function self:Enabled(bool)
 		KBM.Ready.Enabled = bool
 		KBM.Ready.Enable(bool)
+		KBM.Ready.Button:ApplySettings()
 	end
 	function self:Combat(bool)
 		KBM.Ready.Settings.Combat = bool
@@ -8061,6 +8078,14 @@ function KBM.MenuOptions.ReadyCheck:Options()
 		KBM.Ready.Settings.Scale = bool
 		KBM.Ready.GUI:ApplySettings()
 	end
+	function self:ButtonVisible(bool)
+		KBM.Ready.Settings.Button.Visible = bool
+		KBM.Ready.Button:ApplySettings()
+	end
+	function self:LockButton(bool)
+		KBM.Ready.Settings.Button.Unlocked = bool
+		KBM.Ready.Button:ApplySettings()
+	end
 		
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
@@ -8070,6 +8095,10 @@ function KBM.MenuOptions.ReadyCheck:Options()
 	ReadyCheck:AddCheck(KBM.Language.ReadyCheck.Hidden[KBM.Lang], self.Hidden, KBM.Ready.Settings.Hidden)
 	ReadyCheck:AddCheck(KBM.Language.ReadyCheck.Combat[KBM.Lang], self.Combat, KBM.Ready.Settings.Combat)
 	ReadyCheck:AddCheck(KBM.Language.ReadyCheck.Solo[KBM.Lang], self.Solo, KBM.Ready.Settings.Solo)
+	
+	local Button = Options:AddHeader(KBM.Language.Options.Button[KBM.Lang], self.ButtonVisible, KBM.Ready.Settings.Button.Visible)
+	Button:AddCheck(KBM.Language.Options.LockButton[KBM.Lang], self.LockButton, KBM.Ready.Settings.Button.Unlocked)
+	
 end
 
 function KBM.ApplySettings()

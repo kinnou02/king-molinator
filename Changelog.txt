@@ -14,7 +14,8 @@ New: Ready Check
 * New: Lists Weapon Stones used by each Raid/Party member. (See available Stones - to be expanded)
 * New: Lists Current and Max Planar charges for each Raid/Party member.
 * New: Option to disable/enable the display in the options window.
-* New: Toggle the Ready Check enabled/display state via the slash command /kbmreadycheck.
+* New: Toggle the Ready Check display state via the slash command /kbmreadycheck. (This will not change auto-settings, but instead change its current display state)
+* New: Toggle the Ready Check display via its own Mini-Map button. (This will not change auto-settings, but instead change its current display state)
 * New: Staggered KBM Version retrieval if a player's version has not already been cached.
 * New: Color added to various states of KBM Version status.
 * New: Color added to Soul Vatility display.
