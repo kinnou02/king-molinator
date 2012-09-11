@@ -127,7 +127,7 @@ KBM.ID = "KingMolinator"
 KBM.ModList = {}
 KBM.Testing = false
 KBM.ValidTime = false
-KBM.IsAlpha = false
+KBM.IsAlpha = true
 KBM.Debug = false
 KBM.Aux = {}
 KBM.TestFilters = {}
@@ -1843,9 +1843,13 @@ function KBM.Trigger:Init()
 					KBM.Alert:Stop(Obj)
 					Triggered = true
 				elseif Obj.Type == "spy" then
-					for UID, bool in pairs(self.Target) do
-						if KBM.Unit.List.UID[UID] then
-							Obj:Stop(KBM.Unit.List.UID[UID].Name)
+					if self.Type == "death" then
+						Obj:Stop()
+					else
+						for UID, bool in pairs(self.Target) do
+							if KBM.Unit.List.UID[UID] then
+								Obj:Stop(KBM.Unit.List.UID[UID].Name)
+							end
 						end
 					end
 				end
@@ -1922,7 +1926,10 @@ function KBM.Trigger:Init()
 			end
 			table.insert(self.Start[Unit.Mod.ID], TriggerObj)
 		elseif Type == "death" then
-			self.Death[Trigger] = TriggerObj
+			if not self.Death[Unit.Mod.ID] then
+				self.Death[Unit.Mod.ID] = {}
+			end
+			self.Death[Unit.Mod.ID][Trigger] = TriggerObj
 		elseif Type == "buff" then
 			if not self.Buff[Unit.Mod.ID] then
 				self.Buff[Unit.Mod.ID] = {}
@@ -1954,7 +1961,7 @@ function KBM.Trigger:Init()
 			end
 			self.PlayerIDBuff[Unit.Mod.ID][Trigger] = TriggerObj
 		elseif Type == "playerIDBuffRemove" then
-			if not self.PlayerDebuff[Unit.Mod.ID] then
+			if not self.PlayerIDBuffRemove[Unit.Mod.ID] then
 				self.PlayerIDBuffRemove[Unit.Mod.ID] = {}
 			end
 			self.PlayerIDBuffRemove[Unit.Mod.ID][Trigger] = TriggerObj			
@@ -2510,6 +2517,10 @@ function KBM.MechSpy:Add(Name, Duration, Type, BossObj)
 					print("Mechanic Spy stopping: "..Name)
 				end
 				self.Names[Name]:Stop()
+			end
+		else
+			for Name, Timer in pairs(self.Names) do
+				Timer:Stop()
 			end
 		end
 	end
@@ -7045,6 +7056,18 @@ local function KBM_Death(UnitID)
 		KBM.Unit:Death(UnitID)
 		if KBM.Encounter then
 			if UnitID then
+				if KBM.CurrentMod then
+					if KBM.CurrentMod.ID then
+						if KBM.Trigger.Death[KBM.CurrentMod.ID] then
+							if KBM.Unit.List.UID[UnitID] then
+								local TriggerObj = KBM.Trigger.Death[KBM.CurrentMod.ID][KBM.Unit.List.UID[UnitID].Name]
+								if TriggerObj then
+									KBM.Trigger.Queue:Add(TriggerObj, nil, UnitID)
+								end
+							end
+						end
+					end
+				end
 				if KBM.BossID[UnitID] then
 					KBM.BossID[UnitID].dead = true
 					if KBM.PhaseMonitor.Active then
@@ -7135,16 +7158,19 @@ function KBM.NPCChat(data)
 end
 
 function KBM:BuffCache(unitID, BuffID)
+	if KBM.Buffs.Active[unitID] then
+		if KBM.Buffs.Active[unitID][BuffID] then
+			return KBM.Buffs.Active[unitID][BuffID]
+		end
+	else
+		KBM.Buffs.Active[unitID] = {
+			Buff_Count = 1,
+			Buff_Types = {},
+		}
+	end
 	local bDetails = Inspect.Buff.Detail(unitID, BuffID)
 	if bDetails then
-		if not KBM.Buffs.Active[unitID] then
-			KBM.Buffs.Active[unitID] = {
-				Buff_Count = 1,
-				Buff_Types = {},
-			}
-		else
-			KBM.Buffs.Active[unitID].Buff_Count = KBM.Buffs.Active[unitID].Buff_Count + 1
-		end
+		KBM.Buffs.Active[unitID].Buff_Count = KBM.Buffs.Active[unitID].Buff_Count + 1
 		KBM.Buffs.Active[unitID][BuffID] = bDetails
 		-- if KBM.Debug then
 			-- print("---------------")

@@ -410,30 +410,6 @@ function LT:Timer()
 	
 end
 
-function LT.Twyl:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function LT.Twyl:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
-end
-
 function LT:DefineMenu()
 	self.Menu = PF.Menu:CreateEncounter(self.Twyl, self.Enabled)
 end
@@ -464,13 +440,13 @@ function LT:Start()
 	self.Twyl.MechRef.Spider = KBM.MechSpy:Add(self.Lang.Debuff.Spider[KBM.Lang], nil, "playerDebuff", self.Twyl)
 	KBM.Defaults.MechObj.Assign(self.Twyl)
 
-	self.Wolf.MechRef.Critter = KBM.MechSpy:Add(self.Lang.Debuff.Critter[KBM.Lang], nil, "playerDebuff", self.Wolf)
+	self.Wolf.MechRef.Critter = KBM.MechSpy:Add(self.Lang.Debuff.Critter[KBM.Lang], -1, "playerDebuff", self.Wolf)
 	KBM.Defaults.MechObj.Assign(self.Wolf)
 
-	self.Tiger.MechRef.Critter = KBM.MechSpy:Add(self.Lang.Debuff.Critter[KBM.Lang], nil, "playerDebuff", self.Tiger)
+	self.Tiger.MechRef.Critter = KBM.MechSpy:Add(self.Lang.Debuff.Critter[KBM.Lang], -1, "playerDebuff", self.Tiger)
 	KBM.Defaults.MechObj.Assign(self.Tiger)
 
-	self.Spider.MechRef.Critter = KBM.MechSpy:Add(self.Lang.Debuff.Critter[KBM.Lang], nil, "playerDebuff", self.Spider)
+	self.Spider.MechRef.Critter = KBM.MechSpy:Add(self.Lang.Debuff.Critter[KBM.Lang], -1, "playerDebuff", self.Spider)
 	KBM.Defaults.MechObj.Assign(self.Spider)
 
 
@@ -506,18 +482,26 @@ function LT:Start()
 	self.Twyl.Triggers.Nova = KBM.Trigger:Create(self.Lang.Ability.Nova[KBM.Lang], "cast", self.Twyl)
 	self.Twyl.Triggers.Nova:AddAlert(self.Twyl.AlertsRef.Nova)
 	self.Twyl.Triggers.Nova:AddTimer(self.Twyl.TimersRef.Nova)
+	self.Twyl.Triggers.NovaInt = KBM.Trigger:Create(self.Lang.Ability.Nova[KBM.Lang], "interrupt", self.Twyl)
+	self.Twyl.Triggers.NovaInt:AddStop(self.Twyl.AlertsRef.Nova)
 
 	self.Wolf.Triggers.Critter = KBM.Trigger:Create(self.Lang.Debuff.Critter[KBM.Lang], "playerDebuff", self.Wolf)
 	self.Wolf.Triggers.Critter:AddAlert(self.Wolf.AlertsRef.Critter, true)
 	self.Wolf.Triggers.Critter:AddSpy(self.Wolf.MechRef.Critter)
+	self.Wolf.Triggers.Critter = KBM.Trigger:Create(self.Wolf.Name, "death", self.Wolf)
+	self.Wolf.Triggers.Critter:AddStop(self.Wolf.MechRef.Critter)
 
 	self.Tiger.Triggers.Critter = KBM.Trigger:Create(self.Lang.Debuff.Critter[KBM.Lang], "playerDebuff", self.Tiger)
 	self.Tiger.Triggers.Critter:AddAlert(self.Tiger.AlertsRef.Critter, true)
 	self.Tiger.Triggers.Critter:AddSpy(self.Tiger.MechRef.Critter)
+	self.Tiger.Triggers.Critter = KBM.Trigger:Create(self.Tiger.Name, "death", self.Tiger)
+	self.Tiger.Triggers.Critter:AddStop(self.Tiger.MechRef.Critter)
 
 	self.Spider.Triggers.Critter = KBM.Trigger:Create(self.Lang.Debuff.Critter[KBM.Lang], "playerDebuff", self.Spider)
 	self.Spider.Triggers.Critter:AddAlert(self.Spider.AlertsRef.Critter, true)
 	self.Spider.Triggers.Critter:AddSpy(self.Spider.MechRef.Critter)
+	self.Spider.Triggers.Critter = KBM.Trigger:Create(self.Spider.Name, "death", self.Spider)
+	self.Spider.Triggers.Critter:AddStop(self.Spider.MechRef.Critter)
 	
 	self.Twyl.CastBar = KBM.CastBar:Add(self, self.Twyl, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

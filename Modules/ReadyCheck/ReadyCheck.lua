@@ -675,71 +675,84 @@ function PI.GUI:Init()
 		Names = {},
 	}
 	
-	function self.Rows:Update(Index)
-		if self[Index].Enabled then
-			if self[Index].Unit then
-				local PF = self[Index].Unit.PercentFlat or 0
-				self[Index].HPMask:SetWidth(math.ceil(PI.GUI.Texture:GetWidth() * PF))
-				self[Index].MPMask:SetWidth(math.ceil(PI.GUI.Texture:GetWidth()))
-				self[Index]:SetData(self[Index].Unit.Name)
-			end
-		else
-			self[Index].HPMask:SetWidth(PI.GUI.Texture:GetWidth())
-			self[Index].MPMask:SetWidth(PI.GUI.Texture:GetWidth())
-		end
-	end
-	
-	function self.Rows:Update_Name(Index)
-		if self[Index].Enabled then
-			if self[Index].Unit then
-				local Class = self[Index].Unit.Calling
-				if self[Index].Unit.Availability == "partial" then
-					if self[Index].Unit.Offline then
-						self[Index].Text:SetFontColor(0.75,0.75,0.75,1)
-					else
-						self[Index].Text:SetFontColor(1,1,1,1)
-					end
-				else
-					if Class == "mage" then
-						self[Index].Text:SetFontColor(0.8, 0.55, 1, 1)
-					elseif Class == "cleric" then
-						self[Index].Text:SetFontColor(0.55, 1, 0.55, 1)
-					elseif Class == "warrior" then
-						self[Index].Text:SetFontColor(1, 0.55, 0.55, 1)
-					elseif Class == "rogue" then
-						self[Index].Text:SetFontColor(1, 1, 0.55, 1)
-					else
-						self[Index].Text:SetFontColor(1,1,1,1)
-					end
+	function self.Rows:Update(Index, Force)
+		if PI.Enabled or Force then
+			if self[Index].Enabled then
+				if self[Index].Unit then
+					local PF = self[Index].Unit.PercentFlat or 0
+					self[Index].HPMask:SetWidth(math.ceil(PI.GUI.Texture:GetWidth() * PF))
+					self[Index].MPMask:SetWidth(math.ceil(PI.GUI.Texture:GetWidth()))
+					self[Index]:SetData(self[Index].Unit.Name)
 				end
-				self[Index]:SetData(self[Index].Unit.Name)
+			else
+				self[Index].HPMask:SetWidth(PI.GUI.Texture:GetWidth())
+				self[Index].MPMask:SetWidth(PI.GUI.Texture:GetWidth())
 			end
 		end
 	end
 	
-	function self.Rows:Update_Planar(Index)
-		if self[Index].Enabled then
-			if self[Index].Unit then
-				local Planar = self[Index].Unit.Planar or "-"
-				local PlanarMax = self[Index].Unit.PlanarMax or "-"
-				self[Index].Columns.Planar:SetData(Planar.."/"..PlanarMax)
+	function self.Rows:Update_Name(Index, Force)
+		if PI.Enabled or Force then
+			if self[Index].Enabled then
+				if self[Index].Unit then
+					local Class = self[Index].Unit.Calling
+					if self[Index].Unit.Availability == "partial" then
+						if self[Index].Unit.Offline then
+							self[Index].Text:SetFontColor(0.75,0.75,0.75,1)
+						else
+							self[Index].Text:SetFontColor(1,1,1,1)
+						end
+					else
+						if Class == "mage" then
+							self[Index].Text:SetFontColor(0.8, 0.55, 1, 1)
+						elseif Class == "cleric" then
+							self[Index].Text:SetFontColor(0.55, 1, 0.55, 1)
+						elseif Class == "warrior" then
+							self[Index].Text:SetFontColor(1, 0.55, 0.55, 1)
+						elseif Class == "rogue" then
+							self[Index].Text:SetFontColor(1, 1, 0.55, 1)
+						else
+							self[Index].Text:SetFontColor(1,1,1,1)
+						end
+					end
+					self[Index]:SetData(self[Index].Unit.Name)
+				end
 			end
-		else
-			self[Index].Columns.Planar:SetData("n/a")
-		end	
+		end
 	end
 	
-	function self.Rows:Update_Stone(Index)
-		if self[Index].Enabled then
-			local Object = self[Index].Columns.Stone.Object
-			if Object then
-				if Object.icon then
-					self[Index].Columns.Stone.Icon:SetTexture("Rift", Object.icon)
-					self[Index].Columns.Stone.Icon:SetVisible(true)
-					self[Index].Columns.Stone.Shadow:SetVisible(false)
+	function self.Rows:Update_Planar(Index, Force)
+		if PI.Enabled or Force then
+			if self[Index].Enabled then
+				if self[Index].Unit then
+					local Planar = self[Index].Unit.Planar or "-"
+					local PlanarMax = self[Index].Unit.PlanarMax or "-"
+					self[Index].Columns.Planar:SetData(Planar.."/"..PlanarMax)
+				end
+			else
+				self[Index].Columns.Planar:SetData("n/a")
+			end
+		end
+	end
+	
+	function self.Rows:Update_Stone(Index, Force)
+		if PI.Enabled or Force then
+			if self[Index].Enabled then
+				local Object = self[Index].Columns.Stone.Object
+				if Object then
+					if Object.icon then
+						self[Index].Columns.Stone.Icon:SetTexture("Rift", Object.icon)
+						self[Index].Columns.Stone.Icon:SetVisible(true)
+						self[Index].Columns.Stone.Shadow:SetVisible(false)
+					else
+						self[Index].Columns.Stone.Text:SetFontColor(0.15, 0.9, 0.15)
+						self[Index].Columns.Stone:SetData("?")
+						self[Index].Columns.Stone.Icon:SetVisible(false)
+						self[Index].Columns.Stone.Shadow:SetVisible(true)
+					end
 				else
-					self[Index].Columns.Stone.Text:SetFontColor(0.15, 0.9, 0.15)
-					self[Index].Columns.Stone:SetData("?")
+					self[Index].Columns.Stone.Text:SetFontColor(0.9, 0.15, 0.15)
+					self[Index].Columns.Stone:SetData("x")
 					self[Index].Columns.Stone.Icon:SetVisible(false)
 					self[Index].Columns.Stone.Shadow:SetVisible(true)
 				end
@@ -749,26 +762,28 @@ function PI.GUI:Init()
 				self[Index].Columns.Stone.Icon:SetVisible(false)
 				self[Index].Columns.Stone.Shadow:SetVisible(true)
 			end
-		else
-			self[Index].Columns.Stone.Text:SetFontColor(0.9, 0.15, 0.15)
-			self[Index].Columns.Stone:SetData("x")
-			self[Index].Columns.Stone.Icon:SetVisible(false)
-			self[Index].Columns.Stone.Shadow:SetVisible(true)
 		end
 	end
 	PI.Constants.Columns.Stone.Hook = function(...) self.Rows:Update_Stone(...) end
 	
-	function self.Rows:Update_Food(Index)
-		if self[Index].Enabled then
-			local Object = self[Index].Columns.Food.Object
-			if Object then
-				if Object.icon then
-					self[Index].Columns.Food.Icon:SetTexture("Rift", Object.icon)
-					self[Index].Columns.Food.Icon:SetVisible(true)
-					self[Index].Columns.Food.Shadow:SetVisible(false)
+	function self.Rows:Update_Food(Index, Force)
+		if PI.Enabled or Force then
+			if self[Index].Enabled then
+				local Object = self[Index].Columns.Food.Object
+				if Object then
+					if Object.icon then
+						self[Index].Columns.Food.Icon:SetTexture("Rift", Object.icon)
+						self[Index].Columns.Food.Icon:SetVisible(true)
+						self[Index].Columns.Food.Shadow:SetVisible(false)
+					else
+						self[Index].Columns.Food.Text:SetFontColor(0.15, 0.9, 0.15)
+						self[Index].Columns.Food:SetData("?")
+						self[Index].Columns.Food.Icon:SetVisible(false)
+						self[Index].Columns.Food.Shadow:SetVisible(true)
+					end
 				else
-					self[Index].Columns.Food.Text:SetFontColor(0.15, 0.9, 0.15)
-					self[Index].Columns.Food:SetData("?")
+					self[Index].Columns.Food.Text:SetFontColor(0.9, 0.15, 0.15)
+					self[Index].Columns.Food:SetData("x")
 					self[Index].Columns.Food.Icon:SetVisible(false)
 					self[Index].Columns.Food.Shadow:SetVisible(true)
 				end
@@ -778,26 +793,28 @@ function PI.GUI:Init()
 				self[Index].Columns.Food.Icon:SetVisible(false)
 				self[Index].Columns.Food.Shadow:SetVisible(true)
 			end
-		else
-			self[Index].Columns.Food.Text:SetFontColor(0.9, 0.15, 0.15)
-			self[Index].Columns.Food:SetData("x")
-			self[Index].Columns.Food.Icon:SetVisible(false)
-			self[Index].Columns.Food.Shadow:SetVisible(true)
-		end	
+		end
 	end
 	PI.Constants.Columns.Food.Hook = function(...) self.Rows:Update_Food(...) end
 	
-	function self.Rows:Update_Potion(Index)
-		if self[Index].Enabled then
-			local Object = self[Index].Columns.Potion.Object
-			if Object then
-				if Object.icon then
-					self[Index].Columns.Potion.Icon:SetTexture("Rift", Object.icon)
-					self[Index].Columns.Potion.Icon:SetVisible(true)
-					self[Index].Columns.Potion.Shadow:SetVisible(false)
+	function self.Rows:Update_Potion(Index, Force)
+		if PI.Enabled or Force then
+			if self[Index].Enabled then
+				local Object = self[Index].Columns.Potion.Object
+				if Object then
+					if Object.icon then
+						self[Index].Columns.Potion.Icon:SetTexture("Rift", Object.icon)
+						self[Index].Columns.Potion.Icon:SetVisible(true)
+						self[Index].Columns.Potion.Shadow:SetVisible(false)
+					else
+						self[Index].Columns.Potion.Text:SetFontColor(0.15, 0.9, 0.15)
+						self[Index].Columns.Potion:SetData("?")
+						self[Index].Columns.Potion.Icon:SetVisible(false)
+						self[Index].Columns.Potion.Shadow:SetVisible(true)
+					end
 				else
-					self[Index].Columns.Potion.Text:SetFontColor(0.15, 0.9, 0.15)
-					self[Index].Columns.Potion:SetData("?")
+					self[Index].Columns.Potion.Text:SetFontColor(0.9, 0.15, 0.15)
+					self[Index].Columns.Potion:SetData("x")
 					self[Index].Columns.Potion.Icon:SetVisible(false)
 					self[Index].Columns.Potion.Shadow:SetVisible(true)
 				end
@@ -807,116 +824,113 @@ function PI.GUI:Init()
 				self[Index].Columns.Potion.Icon:SetVisible(false)
 				self[Index].Columns.Potion.Shadow:SetVisible(true)
 			end
-		else
-			self[Index].Columns.Potion.Text:SetFontColor(0.9, 0.15, 0.15)
-			self[Index].Columns.Potion:SetData("x")
-			self[Index].Columns.Potion.Icon:SetVisible(false)
-			self[Index].Columns.Potion.Shadow:SetVisible(true)
-		end	
+		end
 	end
 	PI.Constants.Columns.Potion.Hook = function(...) self.Rows:Update_Potion(...) end
 		
-	function self.Rows:Update_Soul(Index)
-		if self[Index].Enabled then
-			if self[Index].Unit then
-				local Vitality = self[Index].Unit.Vitality
-				if Vitality then
-					if Vitality > 80 then
-						self[Index].Columns.Vitality.Text:SetFontColor(0.1, 0.9, 0.1)
-					elseif Vitality > 60 then
-						self[Index].Columns.Vitality.Text:SetFontColor(0.5, 0.9, 0.1)					
-					elseif Vitality > 40 then
-						self[Index].Columns.Vitality.Text:SetFontColor(0.9, 0.9, 0.1)					
-					elseif Vitality > 20 then
-						self[Index].Columns.Vitality.Text:SetFontColor(0.9, 0.5, 0.1)
+	function self.Rows:Update_Soul(Index, Force)
+		if PI.Enabled or Force then
+			if self[Index].Enabled then
+				if self[Index].Unit then
+					local Vitality = self[Index].Unit.Vitality
+					if Vitality then
+						if Vitality > 80 then
+							self[Index].Columns.Vitality.Text:SetFontColor(0.1, 0.9, 0.1)
+						elseif Vitality > 60 then
+							self[Index].Columns.Vitality.Text:SetFontColor(0.5, 0.9, 0.1)					
+						elseif Vitality > 40 then
+							self[Index].Columns.Vitality.Text:SetFontColor(0.9, 0.9, 0.1)					
+						elseif Vitality > 20 then
+							self[Index].Columns.Vitality.Text:SetFontColor(0.9, 0.5, 0.1)
+						else
+							self[Index].Columns.Vitality.Text:SetFontColor(0.9, 0.1, 0.1)
+						end
+						self[Index].Columns.Vitality:SetData(tostring(Vitality).."%")
 					else
-						self[Index].Columns.Vitality.Text:SetFontColor(0.9, 0.1, 0.1)
+						self[Index].Columns.Vitality:SetData("-")
 					end
-					self[Index].Columns.Vitality:SetData(tostring(Vitality).."%")
-				else
-					self[Index].Columns.Vitality:SetData("-")
 				end
+			else
+				self[Index].Columns.Vitality:SetData("n/a")
 			end
-		else
-			self[Index].Columns.Vitality:SetData("n/a")
-		end		
+		end
 	end
 		
 	function self.Rows:Update_KBM(Index)
-		if self[Index].Enabled then
-			if self[Index].Unit then
-				if self[Index].Unit.Name then
-					if KBM.MSG.History.NameStore[self[Index].Unit.Name] then
-						local v
-						if KBM.MSG.History.NameStore[self[Index].Unit.Name].None then
-							v = "x"
-							self[Index].Columns.KBM.Text:SetFontColor(0.9, 0.1, 0.1)
-						else
-							self[Index].Columns.KBM.Text:SetFontColor(1, 1, 1)
-							if KBM.MSG.History.NameStore[self[Index].Unit.Name].Sent then
-								if KBM.MSG.History.NameStore[self[Index].Unit.Name].Received then
-									v = string.sub(KBM.MSG.History.NameStore[self[Index].Unit.Name].Full, 2)
-								else
-									self[Index].Columns.KBM.Text:SetFontColor(1, 0.9, 0.5)
-									v = ".*.*."
-								end
+		if self[Index].Unit then
+			if self[Index].Unit.Name then
+				if KBM.MSG.History.NameStore[self[Index].Unit.Name] then
+					local v
+					if KBM.MSG.History.NameStore[self[Index].Unit.Name].None then
+						v = "x"
+						self[Index].Columns.KBM.Text:SetFontColor(0.9, 0.1, 0.1)
+					else
+						self[Index].Columns.KBM.Text:SetFontColor(1, 1, 1)
+						if KBM.MSG.History.NameStore[self[Index].Unit.Name].Sent then
+							if KBM.MSG.History.NameStore[self[Index].Unit.Name].Received then
+								v = string.sub(KBM.MSG.History.NameStore[self[Index].Unit.Name].Full, 2)
 							else
-								self[Index].Columns.KBM.Text:SetFontColor(0.9, 0.7, 0.2)
-								v = "...."
-								if not KBM.MSG.History.Queue[self[Index].Unit.Name] then
-									KBM.MSG.History:SetSent(self[Index].Unit.Name, false)
-									KBM.MSG.History.Queue[self[Index].Unit.Name] = true
-								end
+								self[Index].Columns.KBM.Text:SetFontColor(1, 0.9, 0.5)
+								v = ".*.*."
+							end
+						else
+							self[Index].Columns.KBM.Text:SetFontColor(0.9, 0.7, 0.2)
+							v = "...."
+							if not KBM.MSG.History.Queue[self[Index].Unit.Name] then
+								KBM.MSG.History:SetSent(self[Index].Unit.Name, false)
+								KBM.MSG.History.Queue[self[Index].Unit.Name] = true
 							end
 						end
-						self[Index].Columns.KBM:SetData(v)						
-					else
-						self[Index].Columns.KBM.Text:SetFontColor(0.9, 0.5, 0.1)
-						self[Index].Columns.KBM:SetData("..*..")
-						if not KBM.MSG.History.Queue[self[Index].Unit.Name] then
-							KBM.MSG.History:SetSent(self[Index].Unit.Name, false)
-							KBM.MSG.History.Queue[self[Index].Unit.Name] = true
-						end
 					end
+					self[Index].Columns.KBM:SetData(v)						
 				else
 					self[Index].Columns.KBM.Text:SetFontColor(0.9, 0.5, 0.1)
-					self[Index].Columns.KBM:SetData("*.*.*")				
+					self[Index].Columns.KBM:SetData("..*..")
+					if not KBM.MSG.History.Queue[self[Index].Unit.Name] then
+						KBM.MSG.History:SetSent(self[Index].Unit.Name, false)
+						KBM.MSG.History.Queue[self[Index].Unit.Name] = true
+					end
 				end
+			else
+				self[Index].Columns.KBM.Text:SetFontColor(0.9, 0.5, 0.1)
+				self[Index].Columns.KBM:SetData("*.*.*")				
 			end
-		else
-			self[Index].Columns.KBM:SetData("n/a")
 		end
 	end
 	
 	function self.Rows:Set_Offline(Index)
-		if self[Index].Enabled then
-			if self[Index].Unit then
-				if self[Index].Unit.Offline then
-					self:Update_Name(Index)
-					self:Update_KBM(Index)
-					self[Index].HPBar:SetVisible(false)
-					self[Index].MPBar:SetVisible(false)
-					self[Index].Columns.Planar:SetData("-/-")
-					self[Index].Columns.Vitality:SetData("-")
-					self[Index].Columns.Stone:SetData("-")
-				else
-					self[Index].HPBar:SetVisible(true)
-					self[Index].MPBar:SetVisible(true)
-					self:Update_All(Index)
+		if PI.Enabled then
+			if self[Index].Enabled then
+				if self[Index].Unit then
+					if self[Index].Unit.Offline then
+						self:Update_Name(Index)
+						self:Update_KBM(Index)
+						self[Index].HPBar:SetVisible(false)
+						self[Index].MPBar:SetVisible(false)
+						self[Index].Columns.Planar:SetData("-/-")
+						self[Index].Columns.Vitality:SetData("-")
+						self[Index].Columns.Stone:SetData("-")
+					else
+						self[Index].HPBar:SetVisible(true)
+						self[Index].MPBar:SetVisible(true)
+						self:Update_All(Index)
+					end
 				end
 			end
-		end	
+		end
 	end
 	
-	function self.Rows:Update_All(Index)
-		self:Update_Name(Index)
-		self:Update(Index)
-		self:Update_Planar(Index)
-		self:Update_Soul(Index)
-		self:Update_KBM(Index)
-		self:Update_Stone(Index)
-		self:Update_Potion(Index)
-		self:Update_Food(Index)
+	function self.Rows:Update_All(Index, Force)
+		if PI.Enabled or Force then
+			self:Update_Name(Index, Force)
+			self:Update(Index, Force)
+			self:Update_Planar(Index, Force)
+			self:Update_Soul(Index, Force)
+			self:Update_KBM(Index, Force)
+			self:Update_Stone(Index, Force)
+			self:Update_Potion(Index, Force)
+			self:Update_Food(Index, Force)
+		end
 	end
 	
 	function self.Rows:Add(UnitID)
@@ -960,7 +974,7 @@ function PI.GUI:Init()
 		self.Units[UnitID] = self[Index]
 		self.Names[self[Index].Unit.Name] = self[Index]
 		self:Set_Offline(Index)
-		self:Update_All(Index)
+		self:Update_All(Index, true)
 	end
 	
 	function self.Rows:Remove(UnitID)

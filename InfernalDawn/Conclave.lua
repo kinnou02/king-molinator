@@ -108,7 +108,7 @@ EC.Nahoth = {
 	TimeOut = 5,
 	Castbar = nil,
 	TimersRef = {},
-	-- AlertsRef = {},
+	AlertsRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -116,10 +116,10 @@ EC.Nahoth = {
 			Enabled = true,
 			Wounds = KBM.Defaults.TimerObj.Create("dark_green"),
 		},
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
-		-- },
+		AlertsRef = {
+			Enabled = true,
+			Wounds = KBM.Defaults.AlertObj.Create("dark_green"),
+		},
 	}
 }
 
@@ -454,6 +454,10 @@ function EC:Start()
 	self.Szath.MechRef.Blood = KBM.MechSpy:Add(self.Lang.Debuff.Blood[KBM.Lang], -1, "playerDebuff", self.Szath)
 	KBM.Defaults.MechObj.Assign(self.Szath)
 	
+	-- Create Alerts (Nahoth)
+	self.Nahoth.AlertsRef.Wounds = KBM.Alert:Create(self.Lang.Debuff.Wounds[KBM.Lang], nil, false, true, "dark_green")
+	KBM.Defaults.AlertObj.Assign(self.Nahoth)
+	
 	-- Assign Alerts and Timers to Triggers
 	self.Ereetu.Triggers.Dark = KBM.Trigger:Create(self.Lang.Ability.Dark[KBM.Lang], "cast", self.Ereetu)
 	self.Ereetu.Triggers.Dark:AddTimer(self.Ereetu.TimersRef.Dark)
@@ -472,6 +476,9 @@ function EC:Start()
 
 	self.Nahoth.Triggers.Wounds = KBM.Trigger:Create(self.Lang.Debuff.Wounds[KBM.Lang], "playerBuff", self.Nahoth)
 	self.Nahoth.Triggers.Wounds:AddTimer(self.Nahoth.TimersRef.Wounds)
+	self.Nahoth.Triggers.Wounds:AddAlert(self.Nahoth.AlertsRef.Wounds)
+	self.Nahoth.Triggers.WoundsRem = KBM.Trigger:Create(self.Lang.Debuff.Wounds[KBM.Lang], "playerBuffRemove", self.Nahoth)
+	self.Nahoth.Triggers.WoundsRem:AddStop(self.Nahoth.AlertsRef.Wounds)
 	
 	self.Szath.CastBar = KBM.CastBar:Add(self, self.Szath)
 	self.Nahoth.CastBar = KBM.CastBar:Add(self, self.Nahoth)

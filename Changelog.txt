@@ -1,4 +1,26 @@
-﻿v1.2.3
+﻿v1.2.4
+
+System
+* Triggers
+** Fixed: An issues with "playerIDBuffRemove" styles not initializing correctly. (I have no idea how this didn't error during Conclave)
+* Buffs
+** Change: Cached buffs will no longer retrieve their data lists more than once. (CPU Optimization)
+
+Ready Check
+* Change: Optimized CPU usage while the Ready Check system is disabled.
+* Change: Optimized CPU usage while the Ready Check display is hidden.
+
+Infernal Dawn
+* Ember Conclave
+** New: Alert added for Infected Wounds.
+
+Primeval Feast
+* Lord Twyl
+** New: Added a stop trigger to Frozen Nova interrupts.
+** Change: Mechanic Spy now displays the player targetted at the start of the encounter for the duration.
+
+----
+v1.2.3
 
 New: Ready Check
 * New: Added option to auto-hide/show while in combat.
@@ -37,18 +59,18 @@ Ready Check Available Tracking
 ** Ancient Burning Powerstone (Mage, Cleric) - High
 ** Flaring Glyph (Mage, Cleric) - Medium
 ** Exquisite Oilstone (Warrior, Rogue) - High
-** Ancient Equisite Oilstone (Warrior, Rogue) - High
+** Ancient Exquisite Oilstone (Warrior, Rogue) - High
 ** Exquisite Whetstone (Warrior, Rogue) - High
 ** Fine Whetstone (Warrior, Rogue) - Medium
 ** Lightning Glyph (Warrior, Rogue) - Medium
 ** Storm Glyph (Warrior) - Medium
 * Potions/Vials
-** Herioc Brightsurge Vial (Mage, Cleric) - High
-** Ancient Herioc Brightsurge Vial (Mage, Cleric) - High
-** Herioc Powersurge Vial (Warrior, Rogue) - High
-** Ancient Herioc Powersurge Vial (Warrior, Rogue) - High
-** Herioc Enduring Vial (All) - High
-** Ancient Herioc Enduring Vial (All) - High
+** Heroic Brightsurge Vial (Mage, Cleric) - High
+** Ancient Heroic Brightsurge Vial (Mage, Cleric) - High
+** Heroic Powersurge Vial (Warrior, Rogue) - High
+** Ancient Heroic Powersurge Vial (Warrior, Rogue) - High
+** Heroic Enduring Vial (All) - High
+** Ancient Heroic Enduring Vial (All) - High
 ** Vial of Earth Resistance (All) - High
 ** Vial of Fire Resistance (All) - High
 ** Vial of Water Resistance (All) - High
@@ -58,7 +80,7 @@ Ready Check Available Tracking
 ** Mighty Powersurge Vial (Warrior, Rogue) - Medium
 * Other/Armor
 ** Performance Insoles (All) - High
-** Cusioned Insoles (All) - High
+** Cushioned Insoles (All) - High
 ** Planar Protection (All) - High
 ** Thick Armor Plating (Warrior, Rogue, Cleric : Tank) - High
 ** Poisonous Coating (Warrior, Rogue) - High
