@@ -228,7 +228,7 @@ function EC:InitVars()
 		Nahoth = {
 			CastBar = self.Nahoth.Settings.CastBar,
 			TimersRef = self.Nahoth.Settings.TimersRef,
-			-- AlertsRef = self.Nahoth.Settings.AlertsRef,
+			AlertsRef = self.Nahoth.Settings.AlertsRef,
 		},
 		Ereetu = {
 			CastBar = self.Ereetu.Settings.CastBar,
@@ -311,8 +311,10 @@ function EC.PhaseTwo()
 	EC.SetBossObj()
 	if EC.Szath.Dead == false then
 		KBM.TankSwap:Start(EC.Lang.Debuff.Hem[KBM.Lang], EC.Szath.UnitID)
-	end	
-	
+	end
+	if EC.Nahoth.Dead == false then
+		-- Placeholder for Nahoth's tank-swap.
+	end
 end
 
 function EC.PhaseFinal()

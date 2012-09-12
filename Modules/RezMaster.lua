@@ -486,6 +486,7 @@ end
 function RM.Broadcast.RezSet(toName, crID)
 	if KBM.Player.Grouped then
 		if toName then
+			--print("Rez List send via name Started!")
 			for crID, Details in pairs(KBM.Player.Rezes.List) do
 				KBM.Player.Rezes.List[crID] = Inspect.Ability.New.Detail(crID)
 				Details = KBM.Player.Rezes.List[crID]
@@ -495,10 +496,12 @@ function RM.Broadcast.RezSet(toName, crID)
 				end
 			end
 		elseif not crID then
+			--print("Rez List send started")
 			for crID, Details in pairs(KBM.Player.Rezes.List) do
 				KBM.Player.Rezes.List[crID] = Inspect.Ability.New.Detail(crID)
 				Details = KBM.Player.Rezes.List[crID]
 				if Details then
+					--print("Sending Rez Add Message via: "..tostring(KBM.Player.Mode))
 					Command.Message.Broadcast(KBM.Player.Mode, nil, "KBMRezSet", crID..","..tostring(Details.currentCooldownRemaining)..","..tostring(Details.cooldown))
 				end
 			end
@@ -506,6 +509,7 @@ function RM.Broadcast.RezSet(toName, crID)
 			KBM.Player.Rezes.List[crID] = Inspect.Ability.New.Detail(crID)
 			local Details = KBM.Player.Rezes.List[crID]
 			if Details then
+				--print("Sending Rez Add Message via: "..tostring(KBM.Player.Mode))
 				Command.Message.Broadcast(KBM.Player.Mode, nil, "KBMRezSet", crID..","..tostring(Details.currentCooldownRemaining)..","..tostring(Details.cooldown))
 			end
 		end

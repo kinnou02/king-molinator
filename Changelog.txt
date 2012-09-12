@@ -2,13 +2,20 @@
 
 System
 * Triggers
+** New: Unit Deaths can now perform triggers with the trigger ID "death".
 ** Fixed: An issues with "playerIDBuffRemove" styles not initializing correctly. (I have no idea how this didn't error during Conclave)
 * Buffs
 ** Change: Cached buffs will no longer retrieve their data lists more than once. (CPU Optimization)
 
 Ready Check
+* Change: Ready Check saved variables are now either Account or per Character as set via Saving per character option.
 * Change: Optimized CPU usage while the Ready Check system is disabled.
 * Change: Optimized CPU usage while the Ready Check display is hidden.
+* Change: Hide while in combat is now more aggressive and will overwrite any Ready Check state.
+* Fixed: Only show during Rift Ready Checks.
+
+Mechanic Spy
+* New: Supplying a nil name for a Mechanic Spy Object:Stop() will clear all objects without removing the Header.
 
 Infernal Dawn
 * Ember Conclave

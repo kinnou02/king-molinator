@@ -7998,22 +7998,17 @@ function KBM.MenuOptions.Main:Options()
 		if bool then
 			KBM_GlobalOptions = KBM.Options
 			KBM.Options = chKBM_GlobalOptions
-			KBM.Options.Character = true
-			for _, Mod in ipairs(KBM.ModList) do
-				if Mod.SwapSettings then
-					Mod:SwapSettings(bool)
-				end
-			end
 		else
 			chKBM_GlobalOptions = KBM.Options
 			KBM.Options = KBM_GlobalOptions
-			KBM.Options.Character = false
-			for _, Mod in ipairs(KBM.ModList) do
-				if Mod.SwapSettings then
-					Mod:SwapSettings(bool)
-				end
+		end
+		KBM.Options.Character = bool
+		for _, Mod in ipairs(KBM.ModList) do
+			if Mod.SwapSettings then
+				Mod:SwapSettings(bool)
 			end
 		end
+		KBM.Ready:SwapSettings(bool)
 	end
 
 	function self:Enabled(bool)

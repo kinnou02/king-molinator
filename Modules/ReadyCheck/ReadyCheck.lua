@@ -225,6 +225,16 @@ PI.Constants = {
 						tank = true,
 					},
 				},
+				["B15CE4940834B42CB"] = { -- Ember Steak
+					Grade = "High",
+					Callings = {
+						warrior = true,
+						rogue = true,
+					},
+					Role = {
+						tank = true,
+					},
+				},
 				--/////////////////--
 				-- High Grade Food --
 				--/////////////////--
@@ -365,6 +375,13 @@ PI.Constants = {
 						rogue = true,
 					},
 				},
+				["B1EE0CFCC0280BE3A"] = { -- Mighty Brightsurge Vial
+					Grade = "Med",
+					Callings = {
+						cleric = true,
+						mage = true,
+					},
+				},
 			},
 		},
 		Other = {
@@ -501,20 +518,46 @@ function PI.Button:Init()
 	self:ApplySettings()	
 end
 
+function PI:SwapSettings(bool)
+
+	if bool then
+		chKBMRCM_Settings = self.Settings
+		self.Settings = chKBMRCM_Settings
+	else
+		chKBMRCM_Settings = self.Settings
+		self.Settings = KBMRCM_Settings
+	end
+
+end
+
 function PI.LoadVars(ModID)
 	if ModID == AddonData.id then
-		if not KBMRCM_Settings then
-			KBMRCM_Settings = {}
+		if KBM.Options.Character then
+			if not chKBMRCM_Settings then
+				chKBMRCM_Settings = {}
+			else
+				KBM.LoadTable(chKBMRCM_Settings, PI.Settings)
+			end
 		else
-			KBM.LoadTable(KBMRCM_Settings, PI.Settings)
+			if not KBMRCM_Settings then
+				KBMRCM_Settings = {}
+			else
+				KBM.LoadTable(KBMRCM_Settings, PI.Settings)
+			end		
 		end
 		PI.Enabled = PI.Settings.Enabled
+		PI.Button:Init()
+		PI.GUI:Init()
 	end
 end
 
 function PI.SaveVars(ModID)
 	if ModID == AddonData.id then
-		KBMRCM_Settings = PI.Settings
+		if KBM.Options.Character then
+			chKBMRCM_Settings = PI.Settings
+		else
+			KBMRCM_Settings = PI.Settings
+		end
 	end
 end
 
@@ -1112,27 +1155,23 @@ end
 
 function PI.Update()
 	for UnitID, bool in pairs(PI.Queue.Add) do
-		if KBM.Unit.List.UID[UnitID] then
-			PI.Queue.Add[UnitID] = nil
-			PI.Queue.Total = PI.Queue.Total - 1
-			if not PI.GUI.Rows.Units[UnitID] then
-				PI.GUI.Rows:Add(UnitID)
-				PI.Buffs[UnitID] = {}
-				local buffList = Inspect.Buff.List(UnitID)
-				if buffList then
-					KBM:BuffAdd(UnitID, buffList)
-					PI.BuffAdd(UnitID, buffList)
-				end
-				if KBM.Unit.List.UID[UnitID].Details then
-					if KBM.Unit.List.UID[UnitID].Details.ready ~= "nil" then
-						PI.ReadyState({[UnitID] = KBM.Unit.List.UID[UnitID].Details.ready})
-					else
-						PI.ReadyState({[UnitID] = "nil"})
-					end
+		PI.Queue.Add[UnitID] = nil
+		PI.Queue.Total = PI.Queue.Total - 1
+		if not PI.GUI.Rows.Units[UnitID] then
+			PI.GUI.Rows:Add(UnitID)
+			PI.Buffs[UnitID] = {}
+			local buffList = Inspect.Buff.List(UnitID)
+			if buffList then
+				KBM:BuffAdd(UnitID, buffList)
+				PI.BuffAdd(UnitID, buffList)
+			end
+			if KBM.Unit.List.UID[UnitID].Details then
+				if KBM.Unit.List.UID[UnitID].Details.ready ~= "nil" then
+					PI.ReadyState({[UnitID] = KBM.Unit.List.UID[UnitID].Details.ready})
+				else
+					PI.ReadyState({[UnitID] = "nil"})
 				end
 			end
-		else
-			PI.Queue.reQueue[UnitID] = true
 		end
 	end
 	PI.Queue.Add = {}
@@ -1148,10 +1187,6 @@ function PI.Update()
 end
 
 function PI.Update_End()
-	for UnitID, bool in pairs(PI.Queue.reQueue) do
-		PI.Queue.Add[UnitID] = true
-	end
-	PI.Queue.reQueue = {}
 end
 
 function PI.BuffAdd(UnitID, Buffs)
@@ -1233,34 +1268,42 @@ function PI.Start()
 end
 
 function PI.UpdateSMode(Silent)
+	local function Update(Silent)
+		if not Silent then
+			PI.GUI:ApplySettings()
+		else
+			if PI.Enabled then
+				PI.GUI.Cradle:SetVisible(PI.Displayed)
+			else
+				PI.GUI.Cradle:SetVisible(false)
+			end
+		end
+	end
+	
 	if PI.Settings.Solo then
 		if KBM.Player.Grouped then
 			PI.Displayed = true
 		else
 			PI.Displayed = false
-			if not Silent then
-				PI.GUI:ApplySettings()
-			else
-				if PI.Enabled then
-					PI.GUI.Cradle:SetVisible(PI.Displayed)
-				else
-					PI.GUI.Cradle:SetVisible(false)
-				end
-			end
+			Update(Silent)
 			return
 		end
 	else
 		PI.Displayed = true
 	end
+	
 	if PI.Settings.Combat then
 		if PI.Combat then
 			PI.Displayed = false
+			Update(Silent)
+			return
 		else
 			PI.Displayed = true
 		end
 	else
 		PI.Displayed = true
 	end
+	
 	if PI.Settings.Hidden then
 		if PI.Ready.State then
 			PI.Displayed = true
@@ -1268,15 +1311,8 @@ function PI.UpdateSMode(Silent)
 			PI.Displayed = false
 		end
 	end
-	if not Silent then
-		PI.GUI:ApplySettings()
-	else
-		if PI.Enabled then
-			PI.GUI.Cradle:SetVisible(PI.Displayed)
-		else
-			PI.GUI.Cradle:SetVisible(false)
-		end
-	end
+
+	Update(Silent)
 end
 
 function PI.SecureEnter()
@@ -1434,14 +1470,14 @@ function PI.ReadyState(Units)
 		end
 	end
 	if HoldState ~= PI.Ready.State then
-		PI.UpdateSMode()
+		if PI.Settings.Hidden then
+			PI.UpdateSMode()
+		end
 	end
 end
 
 function PI.Init(ModID)
 	if ModID == AddonData.id then
-		PI.Button:Init()
-		PI.GUI:Init()
 		-- KBM Events
 		table.insert(Event.KingMolinator.Unit.Offline, {PI.DetailUpdates.Offline, "KBMReadyCheck", "Offline Toggle"})
 		table.insert(Event.KingMolinator.System.Player.Join, {PI.PlayerJoin, "KBMReadyCheck", "Player Joins"})
