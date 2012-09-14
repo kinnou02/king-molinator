@@ -89,8 +89,10 @@ MF.Lang.Ability = {}
 MF.Lang.Notify = {}
 MF.Lang.Notify.PhaseTwo = KBM.Language:Add("Maelforge: Carcera, I will break you and spill your doom across this world. These weaklings shall be the first to die.")
 MF.Lang.Notify.PhaseTwo:SetFrench("Maelforge : Carcera, je vous anéantirai et répandrai vos restes sur ce monde. Ces misérables seront les premiers à périr.")
+MF.Lang.Notify.PhaseTwo:SetGerman("Flammenmaul: Carcera, ich werde Euch zerbrechen und Unheil über diese Welt bringen. Diese Schwächlinge werden als Erste sterben.")
 MF.Lang.Notify.PhaseFinal = KBM.Language:Add("Maelforge: My children will taste your flesh. You whet the appetite of apocalypse.")
 MF.Lang.Notify.PhaseFinal:SetFrench("Maelforge : Ma descendance se repaîtra de votre chair. Vous aiguiserez la voracité de l'apocalypse.")
+MF.Lang.Notify.PhaseFinal:SetGerman("Flammenmaul: Meine Brut wird Euer Fleisch kosten. Ihr nährt das Verlangen der Apokalypse.")
 MF.Lang.Notify.Victory = KBM.Language:Add("Carcera: This world is saved from abomination, but its doom rises on ashen wings.")
 MF.Lang.Notify.Victory:SetFrench("Carcera : Le monde est sauvé de ces abominations, mais son destin se construit sur une terre en cendres. Ce lieu était autrefois le foyer sacré de mes adorateurs qui, avant que je ne tombe dans l'oubli, exécutaient des sacrifices en mon honneur. Ces roches réveillent en moi le souvenir de l'odeur du sang et de la chair calcinée.")
 

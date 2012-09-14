@@ -138,7 +138,10 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.ReadyCheck.Unlock:SetFrench("Débloquer la barre d'icône.")
 	KBM.Language.ReadyCheck.Hidden = KBM.Language:Add("Only show during Rift Ready Checks")
 	KBM.Language.ReadyCheck.Hidden:SetFrench("Afficher seulement durant Rift Ready Checks")
+	KBM.Language.ReadyCheck.Hidden:SetGerman("Nur anzeigen während Rift Ready Checks")
 	KBM.Language.ReadyCheck.Size = KBM.Language:Add("Unlock Size scaling (Mouse-Wheel)")
+	KBM.Language.ReadyCheck.Size:SetFrench("Débloquer Ajustement Taille (Molette souris)")
+	KBM.Language.ReadyCheck.Size:SetGerman("Größe ist änderbar (Mausrad)")
 	
 	-- Rez Master Dictionary
 	KBM.Language.RezMaster = {}
