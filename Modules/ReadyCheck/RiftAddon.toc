@@ -11,7 +11,7 @@ Email = "snarty@gmail.com"
 
 Version = "0.1.0"
 
-Environment = "1.9"
+Environment = "1.9", "1.10"
 
 RunOnStartup = {
 	"ReadyCheck.lua",

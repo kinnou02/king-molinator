@@ -435,7 +435,7 @@ local function SRM_SetSpecifier(Specifier)
 			SRM_Units[self.UnitID].Loaded = true
 			SRM_Combat({[self.UnitID] = uDetails.combat})
 			SRM_Units[self.UnitID].Location = uDetails.location
-			SRM_Units[self.UnitID].PetID = Inspect.Unit.Lookup(self.Spec.."pet")
+			SRM_Units[self.UnitID].PetID = Inspect.Unit.Lookup(self.Spec..".pet")
 			if uDetails.health == 0 then
 				if not SRM_Units[self.UnitID].Dead then
 					SRM_Units[self.UnitID].Dead = true

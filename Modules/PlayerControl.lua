@@ -161,8 +161,15 @@ end
 
 function PC.CallingChange(uID, Calling)
 	if uID == KBM.Player.UnitID then
-		if KBM.Player.Calling then
-			--PC:GatherAbilities()
+		local UnitObj = KBM.Unit.List.UID[uID]
+		if UnitObj then
+			if KBM.RezMaster.Rezes.Tracked[UnitObj.Name] then
+				if KBM.RezMaster.Reses.Tracked[UnitObj.Name].Class ~= Calling then
+					for aID, Timer in pairs(KBM.RezMaster.Rezes.Tracked[UnitObj.Name].Timers) do
+						KBM.RezMaster.Rezes:Add(UnitObj.Name, aID, Timer.Remaining, Timer.Duration)
+					end					
+				end
+			end
 		end
 	end
 	if PC.Queue[uID] then
@@ -172,7 +179,7 @@ end
 
 function PC.RezMReq(name, failed, message)
 	if failed then
-		print("Message Failed for "..tostring(name)..": "..tostring(message))
+		--print("Message Failed for "..tostring(name)..": "..tostring(message))
 		Command.Message.Broadcast("tell", name, "KBMRezReq", "C", PC.MessageSent)
 	end
 end
@@ -181,18 +188,26 @@ function PC.RezRReq(name, failed, message)
 
 end
 
-function PC.GroupJoin(uID)
+function PC.GroupJoin(uID, Spec, Details)
 	--print("Player joining: "..KBM.Unit.List.UID[uID].Name)
 	if KBM.Player.Grouped then
 	--	print("and you are in a Group")
-		if not KBM.RezMaster.Rezes.Tracked[KBM.Unit.List.UID[uID].Name] then
-			if not KBM.Unit.List.UID[uID].Offline then
+		if not KBM.RezMaster.Rezes.Tracked[Details.name] then
+			if not Details.offline then
 				-- print("New player has joined: Requesting BR list")
-				KBM.RezMaster.Rezes.Tracked[KBM.Unit.List.UID[uID].Name] = {
+				KBM.RezMaster.Rezes.Tracked[Details.name] = {
 					UnitID = uID,
 					Timers = {},
 				}
-				Command.Message.Send(KBM.Unit.List.UID[uID].Name, "KBMRezReq", "C", function(failed, message) PC.RezMReq(KBM.Unit.List.UID[uID].Name, failed, message) end)
+				Command.Message.Send(Details.name, "KBMRezReq", "C", function(failed, message) PC.RezMReq(Details.name, failed, message) end)
+			end
+		else
+			if Details.calling then
+				if KBM.RezMaster.Rezes.Tracked[Details.name].Class ~= Details.calling then
+					for aID, Timer in pairs(KBM.RezMaster.Rezes.Tracked[Details.name].Timers) do
+						KBM.RezMaster.Rezes:Add(Details.name, aID, Timer.Remaining, Timer.Duration)
+					end
+				end
 			end
 		end
 	else

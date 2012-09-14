@@ -24,6 +24,7 @@ local MF = {
 	Lang = {},
 	ID = "Maelforge",
 	Object = "MF",
+	CannonCount = 0,	
 }
 
 MF.Maelforge = {
@@ -39,7 +40,8 @@ MF.Maelforge = {
 	TimeOut = 5,
 	Castbar = nil,
 	-- TimersRef = {},
-	-- AlertsRef = {},
+	MechRef = {},
+	AlertsRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -47,10 +49,14 @@ MF.Maelforge = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
 		-- },
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
-		-- },
+		AlertsRef = {
+			Enabled = true,
+			Hellfire = KBM.Defaults.AlertObj.Create("purple"),
+		},
+		MechRef = {
+			Enabled = true,
+			Hellfire = KBM.Defaults.MechObj.Create("purple"),
+		},
 	}
 }
 
@@ -87,6 +93,12 @@ MF.Lang.Notify.PhaseFinal = KBM.Language:Add("Maelforge: My children will taste 
 MF.Lang.Notify.PhaseFinal:SetFrench("Maelforge : Ma descendance se repaîtra de votre chair. Vous aiguiserez la voracité de l'apocalypse.")
 MF.Lang.Notify.Victory = KBM.Language:Add("Carcera: This world is saved from abomination, but its doom rises on ashen wings.")
 MF.Lang.Notify.Victory:SetFrench("Carcera : Le monde est sauvé de ces abominations, mais son destin se construit sur une terre en cendres. Ce lieu était autrefois le foyer sacré de mes adorateurs qui, avant que je ne tombe dans l'oubli, exécutaient des sacrifices en mon honneur. Ces roches réveillent en moi le souvenir de l'odeur du sang et de la chair calcinée.")
+
+-- Debuff Dictionary
+MF.Lang.Debuff = {}
+MF.Lang.Debuff.Hell = KBM.Language:Add("Hellfire")
+MF.Lang.Debuff.Hell:SetGerman("Höllenfeuer")
+MF.Lang.Debuff.Hell:SetFrench("Hellfire")
 
 -- Description Dictionary
 MF.Lang.Descript = {}
@@ -139,9 +151,11 @@ function MF:InitVars()
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		-- MechTimer = KBM.Defaults.MechTimer(),
-		-- Alerts = KBM.Defaults.Alerts(),
+		Alerts = KBM.Defaults.Alerts(),
+		MechSpy = KBM.Defaults.MechSpy(),
 		-- TimersRef = self.Maelforge.Settings.TimersRef,
-		-- AlertsRef = self.Maelforge.Settings.AlertsRef,
+		AlertsRef = self.Maelforge.Settings.AlertsRef,
+		MechRef = self.Maelforge.Settings.MechRef,
 	}
 	KBMINDMF_Settings = self.Settings
 	chKBMINDMF_Settings = self.Settings
@@ -306,30 +320,6 @@ end
 function MF:Timer()	
 end
 
-function MF.Maelforge:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function MF.Maelforge:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
-end
-
 function MF:DefineMenu()
 	self.Menu = IND.Menu:CreateEncounter(self.Maelforge, self.Enabled)
 end
@@ -339,9 +329,17 @@ function MF:Start()
 	-- KBM.Defaults.TimerObj.Assign(self.Maelforge)
 	
 	-- Create Alerts
-	-- KBM.Defaults.AlertObj.Assign(self.Maelforge)
+	self.Maelforge.AlertsRef.Hellfire = KBM.Alert:Create(self.Lang.Debuff.Hell[KBM.Lang], nil, false, true, "purple")
+	KBM.Defaults.AlertObj.Assign(self.Maelforge)
+	
+	-- Create Spies
+	self.Maelforge.MechRef.Hellfire = KBM.MechSpy:Add(self.Lang.Debuff.Hell[KBM.Lang], nil, "playerDebuff", self.Maelforge)
+	KBM.Defaults.MechObj.Assign(self.Maelforge)
 	
 	-- Assign Alerts and Timers to Triggers
+	self.Maelforge.Triggers.Hellfire = KBM.Trigger:Create(self.Lang.Debuff.Hell[KBM.Lang], "playerDebuff", self.Maelforge)
+	self.Maelforge.Triggers.Hellfire:AddAlert(self.Maelforge.AlertsRef.Hellfire, true)
+	self.Maelforge.Triggers.Hellfire:AddSpy(self.Maelforge.MechRef.Hellfire)
 	self.Maelforge.Triggers.PhaseTwo = KBM.Trigger:Create(50, "percent", self.Maelforge)
 	self.Maelforge.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
 	self.Maelforge.Triggers.PhaseTwoN = KBM.Trigger:Create(self.Lang.Notify.PhaseTwo[KBM.Lang], "notify", self.Maelforge)

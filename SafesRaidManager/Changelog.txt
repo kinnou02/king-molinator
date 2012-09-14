@@ -1,3 +1,18 @@
+v1.2.3
+
+Rift Version
+* Update: Rift 1.10
+
+Tracking
+* Fixed: Pet details via Load Full missing period.
+
+----
+v1.2.2
+
+System
+* Update: LibUnitChange now v2.2
+
+----
 v1.1.9
 
 System

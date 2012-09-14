@@ -1,11 +1,17 @@
 ﻿v1.2.4
 
+Rift Version
+* Change: Now supports Rift 1.10
+
 System
 * Triggers
 ** New: Unit Deaths can now perform triggers with the trigger ID "death".
 ** Fixed: An issues with "playerIDBuffRemove" styles not initializing correctly. (I have no idea how this didn't error during Conclave)
 * Buffs
+** New: You can now turn on Sheep Protection via the main menu (Global Options > Settings).
 ** Change: Cached buffs will no longer retrieve their data lists more than once. (CPU Optimization)
+* Unit Tracking
+** Fixed: Issue where Details field could initialize as nil, this will now initialize as Details Table or an Empty Table.
 
 Ready Check
 * Change: Ready Check saved variables are now either Account or per Character as set via Saving per character option.
@@ -14,12 +20,22 @@ Ready Check
 * Change: Hide while in combat is now more aggressive and will overwrite any Ready Check state.
 * Fixed: Only show during Rift Ready Checks.
 
+Ready Check Available Tracking
+* Food
+** Ember Steak
+* Potion
+** Mighty Brightsurge Vial
+
 Mechanic Spy
 * New: Supplying a nil name for a Mechanic Spy Object:Stop() will clear all objects without removing the Header.
 
 Infernal Dawn
 * Ember Conclave
 ** New: Alert added for Infected Wounds.
+** New: Timer added for Ember Rain.
+* Maelforge Ember Eggs
+** New: Personal Alert and Mechanic Spy added for Hellfire.
+** Fixed: Error with CannonCount not being initialized on encounter start.
 
 Primeval Feast
 * Lord Twyl

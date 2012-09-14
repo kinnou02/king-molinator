@@ -440,7 +440,7 @@ function RS:Start()
 	KBM.Defaults.ChatObj.Assign(self.Rusila)
 	
 	-- Assign Alerts and Timers to Triggers
-	self.Rusila.Triggers.Barrel = KBM.Trigger:Create(self.Lang.Buff.Barrel[KBM.Lang], "playerBuff", self.Dummy, nil, true)
+	self.Rusila.Triggers.Barrel = KBM.Trigger:Create(self.Lang.Buff.Barrel[KBM.Lang], "playerBuff", self.Dummy, nil, "EncStart")
 	self.Rusila.Triggers.Dread = KBM.Trigger:Create(self.Lang.Ability.Dread[KBM.Lang], "cast", self.Rusila)
 	self.Rusila.Triggers.Dread:AddAlert(self.Rusila.AlertsRef.Dread, true)
 	self.Rusila.Triggers.DreadDur = KBM.Trigger:Create(self.Lang.Ability.Dread[KBM.Lang], "channel", self.Rusila)

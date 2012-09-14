@@ -805,7 +805,8 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Options.Texture:SetRussian("Включить функцию наложения текстур")
 	KBM.Language.Options.Texture:SetFrench("Activer overlay textures")
 	KBM.Language.Options.Texture:SetKorean("텍스쳐 오버레이 적용")
-
+	KBM.Language.Options.Sheep = KBM.Language:Add("Auto remove Sheep/Shambler effects.")
+	
 	-- Timer Dictionary
 	KBM.Language.Timers = {}
 	KBMLM.SetGroupObject(KBM.Language.Timers, "GroupObject", "Timer related")	

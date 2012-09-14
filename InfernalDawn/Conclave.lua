@@ -48,6 +48,7 @@ EC.Szath = {
 		TimersRef = {
 			Enabled = true,
 			Blood = KBM.Defaults.TimerObj.Create("purple"),
+			Ember = KBM.Defaults.TimerObj.Create("blue"),
 		},
 		AlertsRef = {
 			Enabled = true,
@@ -161,6 +162,7 @@ EC.Lang.Ability.Shard = KBM.Language:Add("Summon Scorching Shard")
 EC.Lang.Ability.Shard:SetRussian("Призвать пылающий осколок")
 EC.Lang.Ability.Shard:SetFrench("Trait explosif")
 EC.Lang.Ability.Shard:SetGerman("Sengscherbe beschwören")
+EC.Lang.Ability.Ember = KBM.Language:Add("Ember Rain")
 
 -- Ability Dictionary
 EC.Lang.Debuff = {}
@@ -438,6 +440,7 @@ function EC:Start()
 	
 	-- Create Timers (Szath)
 	self.Szath.TimersRef.Blood = KBM.MechTimer:Add(self.Lang.Debuff.Blood[KBM.Lang], 41)
+	self.Szath.TimersRef.Ember = KBM.MechTimer:Add(self.Lang.Ability.Ember[KBM.Lang], 16)
 	KBM.Defaults.TimerObj.Assign(self.Szath)
 	
 	-- Create Timers (Nahoth)
@@ -475,6 +478,8 @@ function EC:Start()
 	self.Szath.Triggers.Blood:AddSpy(self.Szath.MechRef.Blood)
 	self.Szath.Triggers.BloodRem = KBM.Trigger:Create("B04039E9917464055", "playerIDBuffRemove", self.Szath)
 	self.Szath.Triggers.BloodRem:AddStop(self.Szath.MechRef.Blood)
+	self.Szath.Triggers.Ember = KBM.Trigger:Create(self.Lang.Ability.Ember[KBM.Lang], "cast", self.Szath)
+	self.Szath.Triggers.Ember:AddTimer(self.Szath.TimersRef.Ember)
 
 	self.Nahoth.Triggers.Wounds = KBM.Trigger:Create(self.Lang.Debuff.Wounds[KBM.Lang], "playerBuff", self.Nahoth)
 	self.Nahoth.Triggers.Wounds:AddTimer(self.Nahoth.TimersRef.Wounds)

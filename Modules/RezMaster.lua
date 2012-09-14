@@ -277,7 +277,7 @@ function RM.Rezes:Init()
 					end
 
 					if UID then 
-						if Timer.Class == "" then
+						if Timer.Class == "" or Timer.Class == nil then
 							for Calling, AbilityList in pairs(KBM.PlayerControl.RezBank) do
 								if AbilityList[aID] then
 									Timer.Class = Calling
@@ -301,6 +301,7 @@ function RM.Rezes:Init()
 					Timer.TimeStart = Inspect.Time.Real() - (Timer.Duration - Timer.Remaining)
 					Timer.Player = Name
 					Timer.Name = aDetails.name
+					self.Tracked[Name].Class = Timer.Class
 										
 					--if KBM.MechTimer.Settings.Shadow then
 						Timer.GUI.Shadow:SetText(Timer.GUI.CastInfo:GetText())
@@ -583,7 +584,6 @@ function RM.MessageHandler(From, Type, Channel, Identifier, Data)
 		end
 	end
 end
-
 
 function RM:Start()
 	self.MSG = KBM.MSG

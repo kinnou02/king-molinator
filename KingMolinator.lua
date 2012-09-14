@@ -191,6 +191,7 @@ KBM.Defaults = {}
 KBM.Constant = {}
 KBM.Buffs = {}
 KBM.Buffs.Active = {}
+KBM.Buffs.WatchID = {}
 
 function KBM.AlphaComp(Comp, With)
 	if type(Comp) == "string" and type(With) == "string" then
@@ -808,6 +809,9 @@ local function KBM_DefineVars(AddonID)
 				Unlocked = true,
 			},
 			BestTimes = {
+			},
+			Sheep = {
+				Protect = false,
 			},
 		}
 		KBM_GlobalOptions = KBM.Options
@@ -1653,6 +1657,7 @@ function KBM.Trigger:Init()
 	self.PersonalInterrupt = {}
 	self.NpcDamage = {}
 	self.EncStart = {}
+	self.CustomBuffRemove = {}
 	self.Max = {
 		Timers = {},
 		Spies = {},
@@ -1706,7 +1711,7 @@ function KBM.Trigger:Init()
 		self.Queued = false		
 	end
 	
-	function self:Create(Trigger, Type, Unit, Hook, EncStart)	
+	function self:Create(Trigger, Type, Unit, Hook, NonEncounter)	
 		TriggerObj = {}
 		TriggerObj.Timers = {}
 		TriggerObj.Alerts = {}
@@ -1722,6 +1727,7 @@ function KBM.Trigger:Init()
 		TriggerObj.Trigger = Trigger
 		TriggerObj.LastTrigger = 0
 		TriggerObj.Enabled = true
+		TriggerObj.Extended = NonEncounter
 		
 		function TriggerObj:AddTimer(TimerObj)
 			if not TimerObj then
@@ -1854,10 +1860,17 @@ function KBM.Trigger:Init()
 					end
 				end
 			end
-			if KBM.Encounter then
+			if self.Extended == "CustomBuffRemove" then
 				if self.Phase then
-					self.Phase(self.Type)
+					self.Phase(Data, Target)
 					Triggered = true
+				end
+			else
+				if KBM.Encounter then
+					if self.Phase then
+						self.Phase(self.Type)
+						Triggered = true
+					end
 				end
 			end
 			if Triggered then
@@ -1866,119 +1879,124 @@ function KBM.Trigger:Init()
 			end
 		end
 		
-		if Type == "notify" then
-			TriggerObj.Phrase = Trigger
-			if not self.Notify[Unit.Mod.ID] then
-				self.Notify[Unit.Mod.ID] = {}
+		if not NonEncounter then
+			if Type == "notify" then
+				TriggerObj.Phrase = Trigger
+				if not self.Notify[Unit.Mod.ID] then
+					self.Notify[Unit.Mod.ID] = {}
+				end
+				table.insert(self.Notify[Unit.Mod.ID], TriggerObj)
+			elseif Type == "say" then
+				TriggerObj.Phrase = Trigger
+				if not self.Say[Unit.Mod.ID] then
+					self.Say[Unit.Mod.ID] = {}
+				end
+				table.insert(self.Say[Unit.Mod.ID], TriggerObj)
+			elseif Type == "npcDamage" then
+				if not self.NpcDamage[Unit.Mod.ID] then
+					self.NpcDamage[Unit.Mod.ID] = {}
+				end
+				self.NpcDamage[Unit.Mod.ID][Unit.Name] = TriggerObj
+			elseif Type == "damage" then
+				self.Damage[Trigger] = TriggerObj
+			elseif Type == "cast" then
+				if not self.Cast[Trigger] then
+					self.Cast[Trigger] = {}
+				end
+				self.Cast[Trigger][Unit.Name] = TriggerObj
+			elseif Type == "personalCast" then
+				if not self.PersonalCast[Trigger] then
+					self.PersonalCast[Trigger] = {}
+				end
+				self.PersonalCast[Trigger][Unit.Name] = TriggerObj
+			elseif Type == "channel" then
+				if not self.Channel[Trigger] then
+					self.Channel[Trigger] = {}
+				end
+				self.Channel[Trigger][Unit.Name] = TriggerObj
+			elseif Type == "interrupt" then
+				if not self.Interrupt[Trigger] then
+					self.Interrupt[Trigger] = {}
+				end
+				self.Interrupt[Trigger][Unit.Name] = TriggerObj
+			elseif Type == "personalInterrupt" then
+				if not self.PersonalInterrupt[Trigger] then
+					self.PersonalInterrupt[Trigger] = {}
+				end
+				self.PersonalInterrupt[Trigger][Unit.Name] = TriggerObj
+			elseif Type == "percent" then
+				if not self.Percent[Unit.Mod.ID] then
+					self.Percent[Unit.Mod.ID] = {}
+				end
+				if not self.Percent[Unit.Mod.ID][Unit.Name] then
+					self.Percent[Unit.Mod.ID][Unit.Name] = {}
+				end
+				self.Percent[Unit.Mod.ID][Unit.Name][Trigger] = TriggerObj
+			elseif Type == "combat" then
+				self.Combat[Trigger] = TriggerObj
+			elseif Type == "start" then
+				if not self.Start[Unit.Mod.ID] then
+					self.Start[Unit.Mod.ID] = {}
+				end
+				table.insert(self.Start[Unit.Mod.ID], TriggerObj)
+			elseif Type == "death" then
+				if not self.Death[Unit.Mod.ID] then
+					self.Death[Unit.Mod.ID] = {}
+				end
+				self.Death[Unit.Mod.ID][Trigger] = TriggerObj
+			elseif Type == "buff" then
+				if not self.Buff[Unit.Mod.ID] then
+					self.Buff[Unit.Mod.ID] = {}
+				end
+				self.Buff[Unit.Mod.ID][Trigger] = TriggerObj
+			elseif Type == "buffRemove" then
+				if not self.BuffRemove[Unit.Mod.ID] then
+					self.BuffRemove[Unit.Mod.ID] = {}
+				end
+				self.BuffRemove[Unit.Mod.ID][Trigger] = TriggerObj
+			elseif Type == "playerBuff" then
+				if not self.PlayerBuff[Unit.Mod.ID] then
+					self.PlayerBuff[Unit.Mod.ID] = {}
+				end
+				self.PlayerBuff[Unit.Mod.ID][Trigger] = TriggerObj
+			elseif Type == "playerBuffRemove" then
+				if not self.PlayerBuffRemove[Unit.Mod.ID] then
+					self.PlayerBuffRemove[Unit.Mod.ID] = {}
+				end
+				self.PlayerBuffRemove[Unit.Mod.ID][Trigger] = TriggerObj
+			elseif Type == "playerDebuff" then
+				if not self.PlayerDebuff[Unit.Mod.ID] then
+					self.PlayerDebuff[Unit.Mod.ID] = {}
+				end
+				self.PlayerDebuff[Unit.Mod.ID][Trigger] = TriggerObj
+			elseif Type == "playerIDBuff" then
+				if not self.PlayerIDBuff[Unit.Mod.ID] then
+					self.PlayerIDBuff[Unit.Mod.ID] = {}
+				end
+				self.PlayerIDBuff[Unit.Mod.ID][Trigger] = TriggerObj
+			elseif Type == "playerIDBuffRemove" then
+				if not self.PlayerIDBuffRemove[Unit.Mod.ID] then
+					self.PlayerIDBuffRemove[Unit.Mod.ID] = {}
+				end
+				self.PlayerIDBuffRemove[Unit.Mod.ID][Trigger] = TriggerObj			
+			elseif Type == "time" then
+				if not self.Time[Unit.Mod.ID] then
+					self.Time[Unit.Mod.ID] = {}
+				end
+				self.Time[Unit.Mod.ID][Trigger] = TriggerObj
+			else
+				error("Unknown trigger type: "..tostring(Type))
 			end
-			table.insert(self.Notify[Unit.Mod.ID], TriggerObj)
-		elseif Type == "say" then
-			TriggerObj.Phrase = Trigger
-			if not self.Say[Unit.Mod.ID] then
-				self.Say[Unit.Mod.ID] = {}
-			end
-			table.insert(self.Say[Unit.Mod.ID], TriggerObj)
-		elseif Type == "npcDamage" then
-			if not self.NpcDamage[Unit.Mod.ID] then
-				self.NpcDamage[Unit.Mod.ID] = {}
-			end
-			self.NpcDamage[Unit.Mod.ID][Unit.Name] = TriggerObj
-		elseif Type == "damage" then
-			self.Damage[Trigger] = TriggerObj
-		elseif Type == "cast" then
-			if not self.Cast[Trigger] then
-				self.Cast[Trigger] = {}
-			end
-			self.Cast[Trigger][Unit.Name] = TriggerObj
-		elseif Type == "personalCast" then
-			if not self.PersonalCast[Trigger] then
-				self.PersonalCast[Trigger] = {}
-			end
-			self.PersonalCast[Trigger][Unit.Name] = TriggerObj
-		elseif Type == "channel" then
-			if not self.Channel[Trigger] then
-				self.Channel[Trigger] = {}
-			end
-			self.Channel[Trigger][Unit.Name] = TriggerObj
-		elseif Type == "interrupt" then
-			if not self.Interrupt[Trigger] then
-				self.Interrupt[Trigger] = {}
-			end
-			self.Interrupt[Trigger][Unit.Name] = TriggerObj
-		elseif Type == "personalInterrupt" then
-			if not self.PersonalInterrupt[Trigger] then
-				self.PersonalInterrupt[Trigger] = {}
-			end
-			self.PersonalInterrupt[Trigger][Unit.Name] = TriggerObj
-		elseif Type == "percent" then
-			if not self.Percent[Unit.Mod.ID] then
-				self.Percent[Unit.Mod.ID] = {}
-			end
-			if not self.Percent[Unit.Mod.ID][Unit.Name] then
-				self.Percent[Unit.Mod.ID][Unit.Name] = {}
-			end
-			self.Percent[Unit.Mod.ID][Unit.Name][Trigger] = TriggerObj
-		elseif Type == "combat" then
-			self.Combat[Trigger] = TriggerObj
-		elseif Type == "start" then
-			if not self.Start[Unit.Mod.ID] then
-				self.Start[Unit.Mod.ID] = {}
-			end
-			table.insert(self.Start[Unit.Mod.ID], TriggerObj)
-		elseif Type == "death" then
-			if not self.Death[Unit.Mod.ID] then
-				self.Death[Unit.Mod.ID] = {}
-			end
-			self.Death[Unit.Mod.ID][Trigger] = TriggerObj
-		elseif Type == "buff" then
-			if not self.Buff[Unit.Mod.ID] then
-				self.Buff[Unit.Mod.ID] = {}
-			end
-			self.Buff[Unit.Mod.ID][Trigger] = TriggerObj
-		elseif Type == "buffRemove" then
-			if not self.BuffRemove[Unit.Mod.ID] then
-				self.BuffRemove[Unit.Mod.ID] = {}
-			end
-			self.BuffRemove[Unit.Mod.ID][Trigger] = TriggerObj
-		elseif Type == "playerBuff" then
-			if not self.PlayerBuff[Unit.Mod.ID] then
-				self.PlayerBuff[Unit.Mod.ID] = {}
-			end
-			self.PlayerBuff[Unit.Mod.ID][Trigger] = TriggerObj
-		elseif Type == "playerBuffRemove" then
-			if not self.PlayerBuffRemove[Unit.Mod.ID] then
-				self.PlayerBuffRemove[Unit.Mod.ID] = {}
-			end
-			self.PlayerBuffRemove[Unit.Mod.ID][Trigger] = TriggerObj
-		elseif Type == "playerDebuff" then
-			if not self.PlayerDebuff[Unit.Mod.ID] then
-				self.PlayerDebuff[Unit.Mod.ID] = {}
-			end
-			self.PlayerDebuff[Unit.Mod.ID][Trigger] = TriggerObj
-		elseif Type == "playerIDBuff" then
-			if not self.PlayerIDBuff[Unit.Mod.ID] then
-				self.PlayerIDBuff[Unit.Mod.ID] = {}
-			end
-			self.PlayerIDBuff[Unit.Mod.ID][Trigger] = TriggerObj
-		elseif Type == "playerIDBuffRemove" then
-			if not self.PlayerIDBuffRemove[Unit.Mod.ID] then
-				self.PlayerIDBuffRemove[Unit.Mod.ID] = {}
-			end
-			self.PlayerIDBuffRemove[Unit.Mod.ID][Trigger] = TriggerObj			
-		elseif Type == "time" then
-			if not self.Time[Unit.Mod.ID] then
-				self.Time[Unit.Mod.ID] = {}
-			end
-			self.Time[Unit.Mod.ID][Trigger] = TriggerObj
 		else
-			error("Unknown trigger type: "..tostring(Type))
-		end
-		
-		if EncStart then
-			if not self.EncStart[Type] then
-				self.EncStart[Type] = {}
+			if not self[NonEncounter][Type] then
+				self[NonEncounter][Type] = {}
 			end
-			self.EncStart[Type][Trigger] = Unit.Mod
+			if NonEncounter == "EncStart" then
+				self[NonEncounter][Type][Trigger] = Unit.Mod
+			elseif NonEncounter == "CustomBuffRemove" then
+				self[NonEncounter][Type][Trigger] = TriggerObj
+				KBM.Buffs.WatchID[Trigger] = true
+			end
 		end
 		
 		table.insert(self.List, TriggerObj)
@@ -3861,26 +3879,27 @@ end
 function KBM.MobDamage(info)
 	-- Damage done by a Non Raid Member to Anything.
 	if KBM.Options.Enabled then
+		local tDetails, UnitObj
+		local cDetails
 		local tUnitID = info.target
-		local UnitObj = KBM.Unit.List.UID[tUnitID]
-		if not UnitObj then
-			tDetails = Inspect.Unit.Detail(tUnitID)
-			UnitObj = KBM.Unit:Idle(tUnitID, tDetails)
-		else
-			tDetails = Inspect.Unit.Detail(tUnitID)
-		end
 		local cUnitID = info.caster
-		local cDetails = nil
 		if cUnitID then
-			cDetails = Inspect.Unit.Detail(cUnitID)
 			if not KBM.Unit.List.UID[cUnitID] then
+				cDetails = Inspect.Unit.Detail(cUnitID)
 				KBM.Unit:Idle(cUnitID, cDetails)
 			else
-				if cDetails then
-					KBM.Unit.List.UID[cUnitID]:Update(cDetails.health, cDetails)
-				end
+				cDetails = KBM.Unit.List.UID[cUnitID].Details
 			end
 		end	
+		UnitObj = KBM.Unit.List.UID[tUnitID]
+		tDetails = Inspect.Unit.Detail(tUnitID)
+		if not UnitObj then
+			UnitObj = KBM.Unit:Idle(tUnitID, tDetails)
+		else
+			if tDetails then
+				KBM.Unit.List.UID[tUnitID]:UpdateData(tDetails)
+			end
+		end
 		if UnitObj then
 			UnitObj:DamageHandler(info, tDetails)
 		end
@@ -3954,28 +3973,26 @@ function KBM.MobDamage(info)
 				if not cDetails.player then
 					if cDetails.combat then
 						if cDetails.health > 0 then
-							KBM.CheckActiveBoss(cDetails, cUnitID)
+							KBM.CheckActiveBoss(cDetails, tUnitID)
 						end
 					end
 				end
-			end		
+			end
 		end
 	end
 end
 
 function KBM.MobHeal(info)
 	local tUnitID = info.target
-	local tDetails = nil
 	local cUnitID = info.caster
-	local cDetails = nil
-	local UnitObj = nil
+	local UnitObj
 	if cUnitID then
 		if not KBM.Unit.List.UID[cUnitID] then
-			KBM.Unit:Idle(cUnitID)
+			KBM.Unit:Idle(cUnitID, Inspect.Unit.Detail(cUnitID))
 		end
 	end
 	if tUnitID then
-		tDetails = Inspect.Unit.Detail(tUnitID)
+		local tDetails = Inspect.Unit.Detail(tUnitID)
 		UnitObj = KBM.Unit.List.UID[tUnitID]
 		if not UnitObj then
 			UnitObj = KBM.Unit:Idle(tUnitID, tDetails)
@@ -3989,23 +4006,19 @@ function KBM.RaidDamage(info)
 	-- Damage done by a Raid member to a Unit
 	if KBM.Options.Enabled then
 		local tUnitID = info.target
-		local tDetails = nil
 		local cUnitID = info.caster
-		local cDetails = nil
-		local UnitObj = nil
+		local tDetails, UnitObj
 		if cUnitID then
-			cDetails = Inspect.Unit.Detail(cUnitID)
-			if KBM.Unit.List.UID[cUnitID] then
-				if cDetails then
-					KBM.Unit.List.UID[cUnitID]:Update(cDetails.health, cDetails)
-				end
-			else
-				KBM.Unit:Idle(cUnitID, cDetails)
+			if not KBM.Unit.List.UID[cUnitID] then
+				KBM.Unit:Idle(cUnitID, Inspect.Unit.Detail(cUnitID))
 			end
 		end
 		if tUnitID then
-			UnitObj = KBM.Unit.List.UID[tUnitID]
 			tDetails = Inspect.Unit.Detail(tUnitID)
+			if not tDetails then
+				return
+			end
+			UnitObj = KBM.Unit.List.UID[tUnitID]
 			if not UnitObj then
 				UnitObj = KBM.Unit:Idle(tUnitID, tDetails)
 			end
@@ -4064,21 +4077,20 @@ end
 
 function KBM.RaidHeal(info)
 	local tUnitID = info.target
-	local tDetails = nil
 	local cUnitID = info.caster
-	local cDetails = nil
-	local UnitObj = nil
+	local UnitObj
 	if cUnitID then
 		if not KBM.Unit.List.UID[cUnitID] then
-			KBM.Unit:Idle(cUnitID)
+			KBM.Unit:Idle(cUnitID, Inspect.Unit.Detail[cUnitID])
 		end
 	end
 	if tUnitID then
 		UnitObj = KBM.Unit.List.UID[tUnitID]
 		if not UnitObj then
-			UnitObj = KBM.Unit:Idle(tUnitID)
+			tDetails = Inspect.Unit.Details(cUnitID)
+			UnitObj = KBM.Unit:Idle(tUnitID, tDetails)
 		end
-		UnitObj:HealHandler(info)
+		UnitObj:HealHandler(info, tDetails)
 	end
 end
 
@@ -4222,7 +4234,7 @@ function KBM.Unit:Create(uDetails, UnitID)
 			Loaded = false,
 			UnitID = UnitID,
 			Name = "< Unknown >",
-			Details = uDetails,
+			Details = uDetails or {},
 			Percent = 100,
 			PercentRaw = 100.0,
 			UsedBy = {},
@@ -4471,7 +4483,7 @@ function KBM.Unit:Create(uDetails, UnitID)
 				end
 				self.Mark = uDetails.mark
 				KBM.Event.Mark(uDetails.mark, UnitID)
-				if self.Calling ~= uDetails.calling then
+				if self.Calling ~= uDetails.calling or self.Calling == nil then
 					if uDetails.calling then
 						self.Calling = uDetails.calling
 						KBM.Event.Unit.Calling(self.UnitID, self.Calling)
@@ -4797,22 +4809,18 @@ local function KBM_UnitAvailable(units)
 	-- local TimeStore = Inspect.Time.Real()
 	if KBM.Encounter then
 		for UnitID, Specifier in pairs(units) do
-			if Specifier then
-				local uDetails = Inspect.Unit.Detail(UnitID)
-				local UnitObj = KBM.Unit:Available(uDetails, UnitID)
-				if uDetails then
-					if not uDetails.player then					
-						KBM.CheckActiveBoss(uDetails, UnitID)
-					end
+			local uDetails = Inspect.Unit.Detail(UnitID)
+			local UnitObj = KBM.Unit:Available(uDetails, UnitID)
+			if uDetails then
+				if not uDetails.player then					
+					KBM.CheckActiveBoss(uDetails, UnitID)
 				end
 			end
 		end
 	else
 		for UnitID, Specifier in pairs(units) do
-			if Specifier then
-				local uDetails = Inspect.Unit.Detail(UnitID)
-				local UnitObj = KBM.Unit:Available(uDetails, UnitID)
-			end
+			local uDetails = Inspect.Unit.Detail(UnitID)
+			local UnitObj = KBM.Unit:Available(uDetails, UnitID)
 		end	
 	end
 	-- local TimeEllapsed = tonumber(string.format("%0.5f", Inspect.Time.Real() - TimeStore))
@@ -7272,6 +7280,16 @@ function KBM:BuffAdd(unitID, Buffs)
 								end
 							end
 						end
+						if unitID == KBM.Player.UnitID then
+							if KBM.Buffs.WatchID[bDetails.kbmType] then
+								if KBM.Trigger.CustomBuffRemove["playerBuffID"] then
+									if KBM.Trigger.CustomBuffRemove["playerBuffID"][bDetails.kbmType] then
+										local Trigger = KBM.Trigger.CustomBuffRemove["playerBuffID"][bDetails.kbmType]
+										Trigger:Activate(unitID, bDetails.caster, BuffID)
+									end
+								end
+							end
+						end
 						if KBM.TankSwap.Active then
 							if KBM.TankSwap.Tanks[unitID] then
 								if KBM.TankSwap.DebuffName[bDetails.name] then
@@ -7285,7 +7303,7 @@ function KBM:BuffAdd(unitID, Buffs)
 		else
 			if unitID then
 				if Buffs then
-					for BuffID, bool in pairs(Buffs) do
+					for BuffID, BuffType in pairs(Buffs) do
 						local ignore = false
 						if KBM.Buffs.Active[unitID] then
 							if KBM.Buffs.Active[unitID][BuffID] then
@@ -7300,6 +7318,16 @@ function KBM:BuffAdd(unitID, Buffs)
 										local TriggerMod = KBM.Trigger.EncStart["playerBuff"][bDetails.name]
 										if TriggerMod.Dummy then
 											KBM.CheckActiveBoss(TriggerMod.Dummy.Details, "Dummy")
+										end
+									end
+								end
+								if unitID == KBM.Player.UnitID then
+									if KBM.Buffs.WatchID[bDetails.kbmType] then
+										if KBM.Trigger.CustomBuffRemove["playerBuffID"] then
+											if KBM.Trigger.CustomBuffRemove["playerBuffID"][bDetails.kbmType] then
+												local Trigger = KBM.Trigger.CustomBuffRemove["playerBuffID"][bDetails.kbmType]
+												Trigger:Activate(unitID, bDetails.caster, BuffID)
+											end
 										end
 									end
 								end
@@ -8024,15 +8052,30 @@ function KBM.MenuOptions.Main:Options()
 		KBM.Options.Button.Unlocked = bool
 		KBM.Button.Drag:SetVisible(bool)
 	end
+	
+	function self:Sheep(bool)
+		KBM.Options.Sheep.Protect = bool
+		if bool then
+			if KBM.Buffs.Active[KBM.Player.UnitID] then
+				for SheepID, bool in pairs(KBM.SheepProtection.SheepList) do
+					if KBM.Buffs.Active[KBM.Player.UnitID].Buff_Types[SheepID] then
+						KBM.SheepProtection.Remove(KBM.Buffs.Active[KBM.Player.UnitID].Buff_Types[SheepID].id, KBM.Buffs.Active[KBM.Player.UnitID].Buff_Types[SheepID].caster)
+					end
+				end
+			end
+		end
+	end
 
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
 	Options:AddHeader(KBM.Language.Options.Character[KBM.Lang], self.Character, KBM.Options.Character)
+	local Main
 	if KBM.IsAlpha then
-		Options:AddHeader(KBM.Language.Options.ModEnabled[KBM.Lang].." Alpha", self.Enabled, KBM.Options.Enabled)
+		Main = Options:AddHeader(KBM.Language.Options.ModEnabled[KBM.Lang].." Alpha", self.Enabled, KBM.Options.Enabled)
 	else
-		Options:AddHeader(KBM.Language.Options.ModEnabled[KBM.Lang], self.Enabled, KBM.Options.Enabled)
+		Main = Options:AddHeader(KBM.Language.Options.ModEnabled[KBM.Lang], self.Enabled, KBM.Options.Enabled)
 	end
+	Main:AddCheck(KBM.Language.Options.Sheep[KBM.Lang], self.Sheep, KBM.Options.Sheep.Protect)
 	local Button = Options:AddHeader(KBM.Language.Options.Button[KBM.Lang], self.ButtonVisible, KBM.Options.Button.Visible)
 	Button:AddCheck(KBM.Language.Options.LockButton[KBM.Lang], self.LockButton, KBM.Options.Button.Unlocked)
 end
@@ -8193,7 +8236,7 @@ end
 
 function KBM.PlayerJoin()
 	KBM.Player.Grouped = true
-	KBM.Unit:Available(Inspect.Unit.Detail(KBM.Player.UnitID), KBM.Player.UnitID)
+	--KBM.Unit:Available(Inspect.Unit.Detail(KBM.Player.UnitID), KBM.Player.UnitID)
 	KBM.Event.System.Player.Join()
 	--print("You have joined a group")
 end
@@ -8407,6 +8450,7 @@ function KBM.InitVars()
 		KBM.Unit.Debug:Init()
 	end
 	KBM.InitMenus()
+	KBM.SheepProtection:Init()
 end
 
 KBM.SetDefault = {}
@@ -8492,6 +8536,34 @@ local function KBM_Start()
 		end
 	end		
 	KBM.MenuOptions.Main:Options()
+end
+
+KBM.SheepProtection = {}
+function KBM.SheepProtection:Init()
+	self.SheepList = {
+		["B2C7F2ABFDAD20E1D"] = "Shambler",
+		["B69270855B9A593AC"] = "Sheep",
+	}
+	function self.Remove(BuffID, CasterID)
+		if KBM.Options.Sheep.Protect then
+			local Name
+			if CasterID then
+				if KBM.Unit.List.UID[CasterID] then
+					Name = KBM.Unit.List.UID[CasterID].Name
+				end
+			end
+			if Name then
+				print("Auto removing Polymorph effects cast by "..Name.."!")
+			else
+				print("Auto removing Polymorph effects!")
+			end
+			Command.Buff.Cancel(BuffID)
+		end
+	end
+	for ID, bool in pairs(self.SheepList) do
+		local Trigger = KBM.Trigger:Create(ID, "playerBuffID", nil, nil, "CustomBuffRemove")
+		Trigger:AddPhase(self.Remove)
+	end
 end
 
 function KBM.InitEvents()
@@ -8655,6 +8727,18 @@ function KBM.PlugIn.Register(PlugIn)
 		else
 			KBM.PlugIn.List[PlugIn.ID] = PlugIn
 			KBM.PlugIn.Count = KBM.PlugIn.Count + 1
+			if KBM.CPU.CreateTrack then
+				if KBM.PlugIn.List["KBMMarkIt"] then
+					if PlugIn.ID == "KBMMarkIt" then
+						KBM.CPU:CreateTrack("KBMMarkIt", "KBM: Mark-It", 0.9, 0.5, 0.35)
+					end
+				end
+				if KBM.PlugIn.List["KBMAddWatch"] then
+					if PlugIn.ID == "KBMAddWatch" then
+						KBM.CPU:CreateTrack("KBMAddWatch", "KBM: AddWatch", 0.9, 0.5, 0.35)
+					end
+				end
+			end
 		end
 	else
 		print("Attempted Plug-In load failed. Incorrect parameters <PlugIn>")
