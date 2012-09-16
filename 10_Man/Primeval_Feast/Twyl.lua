@@ -44,7 +44,8 @@ LT.Twyl = {
 		AlertsRef = {
 			Enabled = true,
 			Quake = KBM.Defaults.AlertObj.Create("yellow"),
-			Fire = KBM.Defaults.AlertObj.Create("red"),
+			Fire = KBM.Defaults.AlertObj.Create("orange"),
+			FireWarn = KBM.Defaults.AlertObj.Create("red"),
 			Nova = KBM.Defaults.AlertObj.Create("cyan"),
 		},
 		TimersRef = {
@@ -55,7 +56,7 @@ LT.Twyl = {
 		MechRef = {
 			Enabled = true,
 			Sacrifice = KBM.Defaults.MechObj.Create("dark_green"),
-			Spider = KBM.Defaults.MechObj.Create("orange"),
+			Spider = KBM.Defaults.MechObj.Create("dark_grey"),
 		},
 	},
 }
@@ -101,6 +102,7 @@ LT.Lang.Unit.FiendShort = KBM.Language:Add("Fiend")
 LT.Lang.Unit.FiendShort:SetFrench("Démon")
 LT.Lang.Unit.FiendShort:SetGerman("Geist")
 
+-- Ability Dictionary
 LT.Lang.Ability = {}
 LT.Lang.Ability.Fire = KBM.Language:Add("Flickering Fire")
 LT.Lang.Ability.Fire:SetFrench("Feu vascillant")
@@ -114,6 +116,7 @@ LT.Lang.Ability.Pyre = KBM.Language:Add("Wicker Pyre")
 LT.Lang.Ability.Pyre:SetFrench("Bûcher en osier")
 LT.Lang.Ability.Pyre:SetGerman("Weiden-Scheiterhaufen")
 
+-- Debuff Dictionary
 LT.Lang.Debuff = {}
 LT.Lang.Debuff.Quake = KBM.Language:Add("Primeval Quake")
 LT.Lang.Debuff.Quake:SetFrench("Tremblement primitif")
@@ -123,6 +126,11 @@ LT.Lang.Debuff.Sacrifice = KBM.Language:Add("Harvest Sacrifice")
 LT.Lang.Debuff.Sacrifice:SetFrench("Sacrifice des moissons")
 LT.Lang.Debuff.Spider = KBM.Language:Add("Spinning Swarm")
 
+-- Verbose Dictionary
+LT.Lang.Verbose = {}
+LT.Lang.Verbose.Fire = KBM.Language:Add("until Flickering Fire!")
+
+-- Say Dictionary
 LT.Lang.Say = {}
 LT.Lang.Say.Spring = KBM.Language:Add("Such a lovely Spring day! Warm blood never tasted better, my dear.")
 LT.Lang.Say.Spring:SetFrench("Quelle belle journée de printemps ! Jamais le sang chaud n'a été aussi délectable.")
@@ -463,8 +471,10 @@ function LT:Start()
 	-- Create Alerts
 	self.Twyl.AlertsRef.Quake = KBM.Alert:Create(self.Lang.Debuff.Quake[KBM.Lang], 6, false, true, "yellow")
 	self.Twyl.AlertsRef.Quake:Important()
-	self.Twyl.AlertsRef.Fire = KBM.Alert:Create(self.Lang.Ability.Fire[KBM.Lang], 10, false, false, "red")
-	self.Twyl.AlertsRef.Nova = KBM.Alert:Create(self.Lang.Ability.Nova[KBM.Lang], 3, false, false, "blue")
+	self.Twyl.AlertsRef.Fire = KBM.Alert:Create(self.Lang.Verbose.Fire[KBM.Lang], nil, false, true, "orange")
+	self.Twyl.AlertsRef.FireWarn = KBM.Alert:Create(self.Lang.Ability.Fire[KBM.Lang], nil, false, true, "red")
+	self.Twyl.AlertsRef.Nova = KBM.Alert:Create(self.Lang.Ability.Nova[KBM.Lang], 3, false, true, "blue")
+	self.Twyl.AlertsRef.Nova:Important()
 	KBM.Defaults.AlertObj.Assign(self.Twyl)
 
 	self.Wolf.AlertsRef.Critter = KBM.Alert:Create(self.Lang.Debuff.Critter[KBM.Lang], nil, false, false, "red")
@@ -511,7 +521,7 @@ function LT:Start()
 	self.Twyl.Triggers.PhaseFinal:AddPhase(self.PhaseFinal)
 
 	self.Twyl.Triggers.Fire = KBM.Trigger:Create(self.Lang.Ability.Fire[KBM.Lang], "cast", self.Twyl)
-	self.Twyl.Triggers.Fire:AddAlert(self.Twyl.AlertsRef.Fire)
+	self.Twyl.Triggers.Fire:AddAlert(self.Twyl.AlertsRef.FireWarn)
 	self.Twyl.Triggers.Fire:AddTimer(self.Twyl.TimersRef.Fire)
 	
 	self.Twyl.Triggers.FireUp = KBM.Trigger:Create(self.Lang.Ability.Fire[KBM.Lang], "buff", self.Twyl)
@@ -528,20 +538,20 @@ function LT:Start()
 	self.Wolf.Triggers.Critter = KBM.Trigger:Create(self.Lang.Debuff.Critter[KBM.Lang], "playerDebuff", self.Wolf)
 	self.Wolf.Triggers.Critter:AddAlert(self.Wolf.AlertsRef.Critter, true)
 	self.Wolf.Triggers.Critter:AddSpy(self.Wolf.MechRef.Critter)
-	self.Wolf.Triggers.Critter = KBM.Trigger:Create(self.Wolf.Name, "death", self.Wolf)
-	self.Wolf.Triggers.Critter:AddStop(self.Wolf.MechRef.Critter)
+	self.Wolf.Triggers.CritterRem = KBM.Trigger:Create(self.Lang.Debuff.Critter[KBM.Lang], "playerBuffRemove", self.Wolf)
+	self.Wolf.Triggers.CritterRem:AddStop(self.Wolf.MechRef.Critter)
 
 	self.Tiger.Triggers.Critter = KBM.Trigger:Create(self.Lang.Debuff.Critter[KBM.Lang], "playerDebuff", self.Tiger)
 	self.Tiger.Triggers.Critter:AddAlert(self.Tiger.AlertsRef.Critter, true)
 	self.Tiger.Triggers.Critter:AddSpy(self.Tiger.MechRef.Critter)
-	self.Tiger.Triggers.Critter = KBM.Trigger:Create(self.Tiger.Name, "death", self.Tiger)
-	self.Tiger.Triggers.Critter:AddStop(self.Tiger.MechRef.Critter)
+	self.Tiger.Triggers.CritterRem = KBM.Trigger:Create(self.Lang.Debuff.Critter[KBM.Lang], "playerBuffRemove", self.Tiger)
+	self.Tiger.Triggers.CritterRem:AddStop(self.Tiger.MechRef.Critter)
 
 	self.Spider.Triggers.Critter = KBM.Trigger:Create(self.Lang.Debuff.Critter[KBM.Lang], "playerDebuff", self.Spider)
 	self.Spider.Triggers.Critter:AddAlert(self.Spider.AlertsRef.Critter, true)
 	self.Spider.Triggers.Critter:AddSpy(self.Spider.MechRef.Critter)
-	self.Spider.Triggers.Critter = KBM.Trigger:Create(self.Spider.Name, "death", self.Spider)
-	self.Spider.Triggers.Critter:AddStop(self.Spider.MechRef.Critter)
+	self.Spider.Triggers.CritterRem = KBM.Trigger:Create(self.Lang.Debuff.Critter[KBM.Lang], "playerBuffRemove", self.Spider)
+	self.Spider.Triggers.CritterRem:AddStop(self.Spider.MechRef.Critter)
 	
 	self.Twyl.CastBar = KBM.CastBar:Add(self, self.Twyl, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

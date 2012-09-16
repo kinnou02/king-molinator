@@ -537,9 +537,7 @@ function KM:Reset()
 	self.KingHPP = "100%"
 	self.PrinceHPP = "100%"
 	self.KingPText:SetText("100%")
-	self.KingPText:SetWidth(self.KingPText:GetFullWidth())
 	self.PrincePText:SetText("100%")
-	self.PrincePText:SetWidth(self.PrincePText:GetFullWidth())
 	self.CurrentSwing = 0
 	self.KingPerc = 1
 	self.PrincePerc = 1

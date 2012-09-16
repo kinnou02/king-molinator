@@ -851,6 +851,10 @@ end
 function KBMLM.CheckLangTable(LangTable, Counter)
 end
 
+function KBMLM.Print(Text)
+	Command.Console.Display("general", true, Text, false)
+end
+
 function KBMLM.FindMissing(TempLang)
 
 	KBMLM.Store = KBMLM.InitStore()
@@ -922,9 +926,9 @@ function KBMLM.FindMissing(TempLang)
 										local PhraseObj = tostring(ModObj.Object)..".Lang."..ID.."."..PhraseID..":Set"..LangID..'("'..Phrase.English..'")'
 										table.insert(CountObj.List[ModObj.Directory].File[ModObj.File].Group[ID].Phrases, PhraseObj)
 									else
-										print("Mod layout error for: "..ModObj.ID)
-										print("Mod ID: "..ModID)
-										print("Instance: "..tostring(ModObj.Instance.Name))
+										KBMLM.Print("Mod layout error for: "..ModObj.ID)
+										KBMLM.Print("Mod ID: "..ModID)
+										KBMLM.Print("Instance: "..tostring(ModObj.Instance.Name))
 									end
 								end
 							end
@@ -933,7 +937,7 @@ function KBMLM.FindMissing(TempLang)
 				end
 			end
 		else
-			print("Mod: "..ModID.." does not have a translation table.")
+			KBMLM.Print("Mod: "..ModID.." does not have a translation table.")
 		end
 	end
 	-- Now check for Plug-In Translations
@@ -941,44 +945,44 @@ function KBMLM.FindMissing(TempLang)
 	if TempLang == "" then
 		TempLang = KBM.Lang
 	end
-	print("Total Dictionary Entries: "..KBMLM.TotalPhrases.." (Includes non-tracked Plug-In Translations)")
+	KBMLM.Print("Total Dictionary Entries: "..KBMLM.TotalPhrases.." (Includes non-tracked Plug-In Translations)")
 	for LangID, Object in pairs(KBMLM.Store) do
-		print(LangID..": "..Object.Total)
+		KBMLM.Print(LangID..": "..Object.Total)
 	end
 	if KBMLM.Store[TempLang] then
-		print_raw("-- KBM Automated Translation output")
-		print_raw("-- Language: "..TempLang)
+		KBMLM.Print("-- KBM Automated Translation output")
+		KBMLM.Print("-- Language: "..TempLang)
 		for ID, Object in pairs(KBMLM.Store[TempLang].List) do
-			print_raw("--")
-			print_raw("-- Group ID: "..tostring(ID))
-			print_raw("-- Directory: "..Object.Directory)
+			KBMLM.Print("--")
+			KBMLM.Print("-- Group ID: "..tostring(ID))
+			KBMLM.Print("-- Directory: "..Object.Directory)
 			for FileID, FileObj in pairs(Object.File) do
-				print_raw("-- File: "..FileID)
+				KBMLM.Print("-- File: "..FileID)
 				for GroupID, GroupObj in pairs(FileObj.Group) do
-					print_raw("-- Sub Type: "..GroupObj.Title)
+					KBMLM.Print("-- Sub Type: "..GroupObj.Title)
 					for i, Phrase in ipairs(GroupObj.Phrases) do
-						print_raw(Phrase)
+						KBMLM.Print(Phrase)
 					end
 				end
-				print_raw("-- Group list End ****")
-				print_raw("--")
+				KBMLM.Print("-- Group list End ****")
+				KBMLM.Print("--")
 			end
-			print_raw("-- File List End ******")
-			print_raw("--")
+			KBMLM.Print("-- File List End ******")
+			KBMLM.Print("--")
 		end
-		print_raw("--")
-		print_raw("-- Report complete.")
+		KBMLM.Print("--")
+		KBMLM.Print("-- Report complete.")
 	else
-		print("Attempt to produce report for: "..tostring(TempLang))
+		KBMLM.Print("Attempt to produce report for: "..tostring(TempLang))
 		if TempLang == "English" then
-			print("Please use /kbmlocale [language] to report on a non-English language")
+			KBMLM.Print("Please use /kbmlocale [language] to report on a non-English language")
 		else
-			print("Unsupported Language: No report can be generated")
+			KBMLM.Print("Unsupported Language: No report can be generated")
 		end
 		local TempStr = "Supported translations are: "
 		for LangID, Object in pairs(KBMLM.Store) do
 			TempStr = TempStr..LangID..", "
 		end
-		print(TempStr)
+		KBMLM.Print(TempStr)
 	end
 end

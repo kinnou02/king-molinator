@@ -1,4 +1,22 @@
-﻿v1.2.4
+﻿v1.2.5
+
+Hammerknell
+* Rune King Molinar
+** Removed: Depreciated API commands have been removed from Reset code.
+
+Primeval Feast
+* Lord Twyl
+** New: Added a separate cast warning Alert for Flickering Fire which can be customized individually from the Purge alert.
+** Fixed: Corrected the triggers for Mechanic Spy tracking, for Phase 1 critters.
+** Change: The Alert for the cast portion of Flickering Fire is now separated from the Debuff.
+** Change: Frozen Nova now has a countdown timer on the alert text.
+** Change: Frozen Nova is now marked as Important.
+
+Translations
+* Fixed: The output no longer uses print_raw.
+
+----
+v1.2.4
 
 Rift Version
 * Change: Now supports Rift 1.10
@@ -41,6 +59,9 @@ Primeval Feast
 * Lord Twyl
 ** New: Added a stop trigger to Frozen Nova interrupts.
 ** Change: Mechanic Spy now displays the player targetted at the start of the encounter for the duration.
+
+Translations
+* French and German updates.
 
 ----
 v1.2.3
