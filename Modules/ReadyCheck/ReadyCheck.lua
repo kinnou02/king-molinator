@@ -31,11 +31,18 @@ PI.Context = UI.CreateContext("KBMReadyCheck")
 PI.DetailUpdates = {}
 PI.Buffs = {}
 PI.Queue = {
-	Add = {},
-	Remove = {},
-	reQueue = {},
+	List = {},
+	Adding = {},
+	Removing = {},
 	Total = 0,
 }
+function PI.Queue:Add(UnitID, qType)
+	local qObject = {
+		UnitID = UnitID,
+		Type = qType,
+	}
+	table.insert(self.List, qObject)
+end
 PI.Icons = {
 	Planar = {
 		--Type = "Rift",
@@ -1047,7 +1054,7 @@ function PI.GUI:Init()
 		self.Populated = self.Populated - 1
 	end
 	
-	for Row = 1, 20 do
+	for Row = 1, 21 do
 		self.Rows[Row] = {}
 		self.Rows.Units[tostring(Row)] = Row
 		self.Rows[Row].Enabled = false
@@ -1154,36 +1161,38 @@ function PI.SetLock()
 end
 
 function PI.Update()
-	for UnitID, bool in pairs(PI.Queue.Add) do
-		PI.Queue.Add[UnitID] = nil
-		PI.Queue.Total = PI.Queue.Total - 1
-		if not PI.GUI.Rows.Units[UnitID] then
-			PI.GUI.Rows:Add(UnitID)
-			PI.Buffs[UnitID] = {}
-			local buffList = Inspect.Buff.List(UnitID)
-			if buffList then
-				KBM:BuffAdd(UnitID, buffList)
-				PI.BuffAdd(UnitID, buffList)
+	for _, qObject in pairs(PI.Queue.List) do
+		local UnitID = qObject.UnitID
+		if qObject.Type == "Add" then
+			if UnitID then
+				if not PI.GUI.Rows.Units[UnitID] then
+					PI.GUI.Rows:Add(UnitID)
+					PI.Buffs[UnitID] = {}
+					local buffList = Inspect.Buff.List(UnitID)
+					if buffList then
+						KBM:BuffAdd(UnitID, buffList)
+						PI.BuffAdd(UnitID, buffList)
+					end
+					if KBM.Unit.List.UID[UnitID].Details then
+						if KBM.Unit.List.UID[UnitID].Details.ready ~= "nil" then
+							PI.ReadyState({[UnitID] = KBM.Unit.List.UID[UnitID].Details.ready})
+						else
+							PI.ReadyState({[UnitID] = "nil"})
+						end
+					end
+				end
 			end
-			if KBM.Unit.List.UID[UnitID].Details then
-				if KBM.Unit.List.UID[UnitID].Details.ready ~= "nil" then
-					PI.ReadyState({[UnitID] = KBM.Unit.List.UID[UnitID].Details.ready})
-				else
-					PI.ReadyState({[UnitID] = "nil"})
+		else
+			if UnitID ~= KBM.Player.UnitID then
+				PI.Buffs[UnitID] = nil
+				PI.Ready.Units[UnitID] = nil
+				if PI.GUI.Rows.Units[UnitID] then
+					PI.GUI.Rows:Remove(UnitID)
 				end
 			end
 		end
 	end
-	PI.Queue.Add = {}
-	for UnitID, bool in pairs(PI.Queue.Remove) do
-		PI.Queue.Remove[UnitID] = nil
-		if UnitID ~= KBM.Player.UnitID then
-			PI.Buffs[UnitID] = nil
-			PI.Ready.Units[UnitID] = nil
-			PI.GUI.Rows:Remove(UnitID)
-		end
-	end
-	PI.Queue.Remove = {}
+	PI.Queue.List = {}
 end
 
 function PI.Update_End()
@@ -1250,8 +1259,7 @@ function PI.BuffRemove(UnitID, Buffs)
 end
 
 function PI.Start()
-	PI.Queue.Add[KBM.Player.UnitID] = true
-	PI.Queue.Total = PI.Queue.Total + 1
+	PI.Queue:Add(KBM.Player.UnitID, "Add")
 	PI.Combat = Inspect.System.Secure()
 	-- Rift API Events
 	table.insert(Event.System.Update.Begin, {PI.Update, "KBMReadyCheck", "Update Loop"})
@@ -1338,12 +1346,11 @@ function PI.PlayerLeave()
 end
 
 function PI.GroupJoin(UnitID)
-	PI.Queue.Add[UnitID] = true
-	PI.Queue.Total = PI.Queue.Total + 1
+	PI.Queue:Add(UnitID, "Add")
 end
 
 function PI.GroupLeave(UnitID)
-	PI.Queue.Remove[UnitID] = true
+	PI.Queue:Add(UnitID, "Remove")
 end
 
 function PI.DetailUpdates.Planar(Units)

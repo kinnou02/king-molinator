@@ -1,4 +1,17 @@
-﻿v1.2.5
+﻿v1.2.6
+
+Rez Master
+* Fixed: Typo with one of the class tracking variables.
+
+Ready Check
+* Change: The queue system has changed to account for some lag and Instanced PvP issues.
+
+Infernal Dawn
+* Laethys
+** Fixed: Re-initialized the Laethys castbar in Phase 2 with the new Unit ID.
+
+----
+v1.2.5
 
 Hammerknell
 * Rune King Molinar

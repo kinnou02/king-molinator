@@ -164,10 +164,12 @@ function PC.CallingChange(uID, Calling)
 		local UnitObj = KBM.Unit.List.UID[uID]
 		if UnitObj then
 			if KBM.RezMaster.Rezes.Tracked[UnitObj.Name] then
-				if KBM.RezMaster.Reses.Tracked[UnitObj.Name].Class ~= Calling then
-					for aID, Timer in pairs(KBM.RezMaster.Rezes.Tracked[UnitObj.Name].Timers) do
-						KBM.RezMaster.Rezes:Add(UnitObj.Name, aID, Timer.Remaining, Timer.Duration)
-					end					
+				if KBM.RezMaster.Rezes.Tracked[UnitObj.Name].Class ~= Calling then
+					if Calling ~= "" and Calling ~= nil then
+						for aID, Timer in pairs(KBM.RezMaster.Rezes.Tracked[UnitObj.Name].Timers) do
+							KBM.RezMaster.Rezes:Add(UnitObj.Name, aID, Timer.Remaining, Timer.Duration)
+						end
+					end
 				end
 			end
 		end

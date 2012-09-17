@@ -326,6 +326,9 @@ function LT:UnitHPCheck(uDetails, unitID)
 					KBM.MechTimer:AddStart(self.Laethys.TimersRef.FlareFirst)
 					KBM.MechTimer:AddStart(self.Laethys.TimersRef.GoldFirst)
 					KBM.MechTimer:AddStart(self.Laethys.TimersRef.AddsFirst)
+				elseif unitID ~= self.Laethys.UnitID then
+					self.Laethys.Castbar:Remove()
+					self.Laethys.Castbar:Create(unitID)
 				end
 				self.Laethys.UnitID = unitID
 				self.Laethys.Available = true
