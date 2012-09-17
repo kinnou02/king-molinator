@@ -1,7 +1,9 @@
 ﻿v1.2.6
 
 Rez Master
+* Change: Prevented clients sending Ability Remove messages while the player is in combat.
 * Fixed: Typo with one of the class tracking variables.
+* Fixed: The Rez list was not updating correctly if you log in while in a Party/Raid.
 
 Ready Check
 * Change: The queue system has changed to account for some lag and Instanced PvP issues.

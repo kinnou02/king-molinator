@@ -8649,8 +8649,6 @@ local function KBM_WaitReady(unitID, uDetails)
 		Count = 0,
 	}
 	KBM_Start()
-	KBM.RezMaster:Start()
-	KBM.PlayerControl:Start()	
 	KBM.Player.Level = uDetails.level
 	KBM.Player.Grouped = LibSRM.Grouped()
 	KBM.Player.Mode = LibSRM.Player.Mode
@@ -8806,6 +8804,8 @@ function KBM.InitKBM(ModID)
 		end
 		print(KBM.Language.Welcome.Commands[KBM.Lang])
 		print(KBM.Language.Welcome.Options[KBM.Lang])
+		KBM.RezMaster:Start()
+		KBM.PlayerControl:Start()	
 	else
 		if Inspect.Buff.Detail ~= IBDReserved then
 			print(tostring(ModID).." changed internal command: Restoring Inspect.Buff.Detail")

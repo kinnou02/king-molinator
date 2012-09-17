@@ -82,21 +82,23 @@ function PC:GatherRaidInfo()
 end
 
 function PC.AbilityRemove(aIDList)
-	local self = PC
-	local Count = KBM.Player.Rezes.Count
-	if self.RezBank[KBM.Player.Calling] then
-		for crID, crTable in pairs (self.RezBank[KBM.Player.Calling]) do
-			if aIDList[crID] == false then
-				self.RezBank[KBM.Player.Calling][crID] = Inspect.Ability.New.Detail(crID)
-				KBM.Player.Rezes.List[crID] = nil
-				--print(Count..": "..self.RezBank[KBM.Player.Calling][crID].name.." < Removed")
-				KBM.RezMaster.Broadcast.RezRem(crID)
-				Count = Count - 1
+	if not Inspect.System.Secure() then
+		local self = PC
+		local Count = KBM.Player.Rezes.Count
+		if self.RezBank[KBM.Player.Calling] then
+			for crID, crTable in pairs (self.RezBank[KBM.Player.Calling]) do
+				if aIDList[crID] == false then
+					self.RezBank[KBM.Player.Calling][crID] = Inspect.Ability.New.Detail(crID)
+					KBM.Player.Rezes.List[crID] = nil
+					--print(Count..": "..self.RezBank[KBM.Player.Calling][crID].name.." < Removed")
+					KBM.RezMaster.Broadcast.RezRem(crID)
+					Count = Count - 1
+				end
 			end
-		end
-		KBM.Player.Rezes.Count = Count
-		if KBM.Player.Rezes.Count == 0 then
-			--KBM.RezMaster.Broadcast.RezClear()
+			KBM.Player.Rezes.Count = Count
+			if KBM.Player.Rezes.Count == 0 then
+				--KBM.RezMaster.Broadcast.RezClear()
+			end
 		end
 	end
 end
