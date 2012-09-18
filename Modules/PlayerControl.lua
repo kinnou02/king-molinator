@@ -16,16 +16,16 @@ PC.RezBank = {
 		--["a000000004D4EFA27"] = {},
 		--["a000000002942FF34"] = {},
 		--["a0000000074C19819"] = {},
-		["A2942FF34A490A22D"] = {}, 
-		["A74C19819577CEA4D"] = {},
-		["A4D4EFA27574FDC9A"] = {},
-		["A26862464D9EECBE7"] = {},
+		["A2942FF34A490A22D"] = {}, -- River of Life
+		["A74C19819577CEA4D"] = {}, -- Flash of the Phoenix
+		["A4D4EFA27574FDC9A"] = {}, -- Absolution
+		["A26862464D9EECBE7"] = {}, -- Life's Return
 	},
 	["mage"] = {
 		--["a000000004AE33670"] = {},
 		--["a000000002D3F2123"] = {},
-		["A2D3F2123EE93DE49"] = {},
-		["A4AE33670A72C0F45"] = {},
+		["A2D3F2123EE93DE48"] = {}, -- Spark of Life
+		["A4AE33670A72C0F45"] = {}, -- Soul Tether
 	},
 }
 
@@ -90,7 +90,7 @@ function PC.AbilityRemove(aIDList)
 				if aIDList[crID] == false then
 					self.RezBank[KBM.Player.Calling][crID] = Inspect.Ability.New.Detail(crID)
 					KBM.Player.Rezes.List[crID] = nil
-					--print(Count..": "..self.RezBank[KBM.Player.Calling][crID].name.." < Removed")
+					-- print(Count..": "..self.RezBank[KBM.Player.Calling][crID].name.." < Removed")
 					KBM.RezMaster.Broadcast.RezRem(crID)
 					Count = Count - 1
 				end
@@ -121,6 +121,11 @@ function PC.AbilityAdd(aIDList)
 		end
 		KBM.Player.Rezes.Count = Count
 	end
+	
+	-- for crID, bool in pairs(aIDList) do
+		-- local aDetails = Inspect.Ability.New.Detail(crID)
+		-- print(aDetails.name.." = "..crID)
+	-- end
 end
 
 function PC.AbilityCooldown(aIDList)

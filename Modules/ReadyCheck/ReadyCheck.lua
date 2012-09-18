@@ -174,6 +174,13 @@ PI.Constants = {
 						rogue = true,
 					},
 				},
+				["r57585B8C3DB1BEF1"] = { -- Ancient Equisite Whetstone
+					Grade = "High",
+					Callings = {
+						warrior = true,
+						rogue = true,
+					},
+				},
 				["r717189072932CD29"] = { -- Exquisite Whetstone
 					Grade = "High",
 					Callings = {
@@ -336,9 +343,31 @@ PI.Constants = {
 				["B3028494ABDF72791"] = { -- Herioc Fortified Vial
 					Grade = "High",
 					Callings = {
+						warrior = true,
+						rogue = true,
+						cleric = true,
+					},
+					Role = {
+						tanke = true,
+					},
+				},
+				["B72807CC529E275FD"] = { -- Mighty Enduring Vial
+					Grade = "Med",
+					Callings = {
 						all = true,
 					},
 				},
+				["B26300F4BDE63286A"] = { -- Mighty Fortified Vial
+					Grade = "Med",
+					Callings = {
+						warrior = true,
+						rogue = true,
+						cleric = true,
+					},
+					Role = {
+						tank = true,
+					},
+				},				
 				["B2099ACE7DB4C2342"] = { -- Vial of Earth Resistance
 					Grade = "High",
 					Callings = {

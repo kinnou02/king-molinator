@@ -4,9 +4,18 @@ Rez Master
 * Change: Prevented clients sending Ability Remove messages while the player is in combat.
 * Fixed: Typo with one of the class tracking variables.
 * Fixed: The Rez list was not updating correctly if you log in while in a Party/Raid.
+* Fixed: Spark of Life now shows once again. (Adjusted ID for Rift 1.10)
+* Fixed: Battle Rez removing now works while in a Party and you change roles.
 
 Ready Check
 * Change: The queue system has changed to account for some lag and Instanced PvP issues.
+
+Ready Track Available Tracking
+* Potion
+** Mighty Fortified Vial (Rogue, Warrior, Cleric - Tank - Medium)
+** Mighty Enduring Vial (All - Medium)
+* Weapon Stones
+** Ancient Exquisite Whetstone
 
 Infernal Dawn
 * Laethys

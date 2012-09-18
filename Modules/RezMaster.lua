@@ -519,7 +519,7 @@ end
 
 function RM.Broadcast.RezRem(crID)
 	if KBM.Player.Grouped then
-		Command.Message.Broadcast("raid", nil, "KBMRezRem", crID)
+		Command.Message.Broadcast(KBM.Player.Mode, nil, "KBMRezRem", crID)
 		if RM.Rezes.Tracked[KBM.Player.Name] then
 			if RM.Rezes.Tracked[KBM.Player.Name].Timers[crID] then
 				RM.Rezes.Tracked[KBM.Player.Name].Timers[crID]:Remove()
