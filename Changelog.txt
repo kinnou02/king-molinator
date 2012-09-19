@@ -1,4 +1,13 @@
-﻿v1.2.6
+﻿v1.2.7 - Hotfix
+
+Infernal Dawn
+* Laethys
+** Fixed: Castbar should read CastBar...
+* Maelforge - Ember Eggs
+** Change: Added a time-out of 20 seconds to allow for the victory message while out of combat.
+
+---
+v1.2.6
 
 Rez Master
 * Change: Prevented clients sending Ability Remove messages while the player is in combat.

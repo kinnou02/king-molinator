@@ -348,7 +348,7 @@ PI.Constants = {
 						cleric = true,
 					},
 					Role = {
-						tanke = true,
+						tank = true,
 					},
 				},
 				["B72807CC529E275FD"] = { -- Mighty Enduring Vial
