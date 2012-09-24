@@ -507,12 +507,10 @@ function WD:UnitHPCheck(uDetails, unitID)
 							if not BossObj.CastBar.Active then
 								BossObj.CastBar:Create(unitID)
 							end
-							self.PhaseFinal()
 						elseif BossObj == self.Natung then
 							if not BossObj.CastBar.Active then
 								BossObj.CastBar:Create(unitID)
 							end
-							self.PhaseTwo()
 						end						
 					end
 					BossObj.UnitID = unitID

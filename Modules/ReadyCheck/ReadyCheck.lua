@@ -34,9 +34,10 @@ PI.Queue = {
 	List = {},
 	Adding = {},
 	Removing = {},
+	Buffer = {},
 	Total = 0,
 }
-function PI.Queue:Add(UnitID, qType)
+function PI.Queue:Add(UnitID, qType, Specifier)
 	local qObject = {
 		UnitID = UnitID,
 		Type = qType,
@@ -632,27 +633,29 @@ function PI.GUI:ApplySettings()
 			Object.Header:SetWidth(math.ceil(PI.Constants.Columns[ID].w * PI.Settings.wScale))
 		end
 		for Index, Object in ipairs(self.Rows) do
-			Object.Cradle:SetHeight(math.ceil(PI.Constants.Rows.h * PI.Settings.Rows.hScale))
-			Object.Ready.Cradle:SetWidth(Object.Ready.Cradle:GetHeight())
-			Object.HPBar:SetHeight(math.ceil(Object.Cradle:GetHeight() * 0.7))
-			Object.Shadow:SetFontSize(math.ceil(PI.Constants.Rows.FontSize * PI.Settings.fScale))
-			Object.Text:SetFontSize(math.ceil(PI.Constants.Rows.FontSize * PI.Settings.fScale))
-			for ID, CObject in pairs(Object.Columns) do
-				CObject.Shadow:SetFontSize(math.ceil(PI.Constants.Rows.FontSize * PI.Settings.fScale))
-				CObject.Text:SetFontSize(math.ceil(PI.Constants.Rows.FontSize * PI.Settings.fScale))
-				CObject.Icon:SetHeight(math.ceil(PI.Constants.Rows.h * PI.Settings.hScale) - 4)
-				CObject.Icon:SetWidth(CObject.Icon:GetHeight())
+			if Index < 21 then
+				Object.Cradle:SetHeight(math.ceil(PI.Constants.Rows.h * PI.Settings.Rows.hScale))
+				Object.Ready.Cradle:SetWidth(Object.Ready.Cradle:GetHeight())
+				Object.HPBar:SetHeight(math.ceil(Object.Cradle:GetHeight() * 0.7))
+				Object.Shadow:SetFontSize(math.ceil(PI.Constants.Rows.FontSize * PI.Settings.fScale))
+				Object.Text:SetFontSize(math.ceil(PI.Constants.Rows.FontSize * PI.Settings.fScale))
+				for ID, CObject in pairs(Object.Columns) do
+					CObject.Shadow:SetFontSize(math.ceil(PI.Constants.Rows.FontSize * PI.Settings.fScale))
+					CObject.Text:SetFontSize(math.ceil(PI.Constants.Rows.FontSize * PI.Settings.fScale))
+					CObject.Icon:SetHeight(math.ceil(PI.Constants.Rows.h * PI.Settings.hScale) - 4)
+					CObject.Icon:SetWidth(CObject.Icon:GetHeight())
+				end
+				if PI.Ready.State then
+					Object.Shadow:ClearPoint("LEFT")
+					Object.Shadow:SetPoint("LEFT", Object.Ready.Cradle, "RIGHT", -4, nil)
+					Object.Ready.Cradle:SetVisible(true)
+				else
+					Object.Shadow:ClearPoint("LEFT")
+					Object.Shadow:SetPoint("LEFT", Object.Cradle, "LEFT", 5, nil)
+					Object.Ready.Cradle:SetVisible(false)
+				end
+				self.Rows:Update(Index)
 			end
-			if PI.Ready.State then
-				Object.Shadow:ClearPoint("LEFT")
-				Object.Shadow:SetPoint("LEFT", Object.Ready.Cradle, "RIGHT", -4, nil)
-				Object.Ready.Cradle:SetVisible(true)
-			else
-				Object.Shadow:ClearPoint("LEFT")
-				Object.Shadow:SetPoint("LEFT", Object.Cradle, "LEFT", 5, nil)
-				Object.Ready.Cradle:SetVisible(false)
-			end
-			self.Rows:Update(Index)
 		end
 		self.Drag:SetVisible(PI.Settings.Unlocked)
 	else
@@ -752,9 +755,13 @@ function PI.GUI:Init()
 		Populated = 0,
 		Units = {},
 		Names = {},
+		Specifiers = {},
 	}
 	
 	function self.Rows:Update(Index, Force)
+		if Index > 20 then 
+			return
+		end
 		if PI.Enabled or Force then
 			if self[Index].Enabled then
 				if self[Index].Unit then
@@ -771,6 +778,9 @@ function PI.GUI:Init()
 	end
 	
 	function self.Rows:Update_Name(Index, Force)
+		if Index > 20 then 
+			return
+		end
 		if PI.Enabled or Force then
 			if self[Index].Enabled then
 				if self[Index].Unit then
@@ -801,6 +811,9 @@ function PI.GUI:Init()
 	end
 	
 	function self.Rows:Update_Planar(Index, Force)
+		if Index > 20 then 
+			return
+		end
 		if PI.Enabled or Force then
 			if self[Index].Enabled then
 				if self[Index].Unit then
@@ -815,6 +828,9 @@ function PI.GUI:Init()
 	end
 	
 	function self.Rows:Update_Stone(Index, Force)
+		if Index > 20 then
+			return
+		end
 		if PI.Enabled or Force then
 			if self[Index].Enabled then
 				local Object = self[Index].Columns.Stone.Object
@@ -846,6 +862,9 @@ function PI.GUI:Init()
 	PI.Constants.Columns.Stone.Hook = function(...) self.Rows:Update_Stone(...) end
 	
 	function self.Rows:Update_Food(Index, Force)
+		if Index > 20 then 
+			return
+		end
 		if PI.Enabled or Force then
 			if self[Index].Enabled then
 				local Object = self[Index].Columns.Food.Object
@@ -877,6 +896,9 @@ function PI.GUI:Init()
 	PI.Constants.Columns.Food.Hook = function(...) self.Rows:Update_Food(...) end
 	
 	function self.Rows:Update_Potion(Index, Force)
+		if Index > 20 then 
+			return
+		end
 		if PI.Enabled or Force then
 			if self[Index].Enabled then
 				local Object = self[Index].Columns.Potion.Object
@@ -908,6 +930,9 @@ function PI.GUI:Init()
 	PI.Constants.Columns.Potion.Hook = function(...) self.Rows:Update_Potion(...) end
 		
 	function self.Rows:Update_Soul(Index, Force)
+		if Index > 20 then
+			return
+		end
 		if PI.Enabled or Force then
 			if self[Index].Enabled then
 				if self[Index].Unit then
@@ -936,6 +961,9 @@ function PI.GUI:Init()
 	end
 		
 	function self.Rows:Update_KBM(Index)
+		if Index > 20 then
+			return
+		end
 		if self[Index].Unit then
 			if self[Index].Unit.Name then
 				if KBM.MSG.History.NameStore[self[Index].Unit.Name] then
@@ -978,6 +1006,9 @@ function PI.GUI:Init()
 	end
 	
 	function self.Rows:Set_Offline(Index)
+		if Index > 20 then
+			return
+		end
 		if PI.Enabled then
 			if self[Index].Enabled then
 				if self[Index].Unit then
@@ -1000,6 +1031,9 @@ function PI.GUI:Init()
 	end
 	
 	function self.Rows:Update_All(Index, Force)
+		if Index > 20 then
+			return
+		end
 		if PI.Enabled or Force then
 			self:Update_Name(Index, Force)
 			self:Update(Index, Force)
@@ -1029,7 +1063,9 @@ function PI.GUI:Init()
 			end
 			if Index < self.Populated then
 				self[self.Populated].Enabled = true
-				self[self.Populated].Cradle:SetVisible(true)
+				if self[self.Populated].Cradle then
+					self[self.Populated].Cradle:SetVisible(true)
+				end
 				for i = self.Populated, Index + 1, -1 do
 					self[i].Unit = self[i - 1].Unit
 					self[i].Columns.Stone.Object = self[i - 1].Columns.Stone.Object
@@ -1039,12 +1075,13 @@ function PI.GUI:Init()
 						self.Units[self[i].Unit.UnitID] = self[i]
 						self.Names[self[i].Unit.Name] = self[i]
 					end
-					self:Set_Offline(i)
-					self:Update_All(i)
+					if i < 21 then
+						self:Set_Offline(i)
+						self:Update_All(i)
+					end
 				end
 			end
 		end
-		self[Index].Cradle:SetVisible(true)
 		self[Index].Enabled = true
 		self[Index].Unit = KBM.Unit.List.UID[UnitID]
 		self[Index].Columns.Food.Object = nil
@@ -1052,8 +1089,11 @@ function PI.GUI:Init()
 		self[Index].Columns.Stone.Object = nil
 		self.Units[UnitID] = self[Index]
 		self.Names[self[Index].Unit.Name] = self[Index]
-		self:Set_Offline(Index)
-		self:Update_All(Index, true)
+		if Index < 21 then
+			self[Index].Cradle:SetVisible(true)
+			self:Set_Offline(Index)
+			self:Update_All(Index, true)
+		end
 	end
 	
 	function self.Rows:Remove(UnitID)
@@ -1069,110 +1109,118 @@ function PI.GUI:Init()
 				if self[i].Unit then
 					self.Units[self[i].Unit.UnitID] = self[i]
 					self.Names[self[i].Unit.Name] = self[i]
-					self:Set_Offline(i)
-					self:Update_All(i)
+					if i < 21 then
+						self:Set_Offline(i)
+						self:Update_All(i)
+					end
 				end
 			end
 		end
 		self[self.Populated].Enabled = false
-		self[self.Populated].Cradle:SetVisible(false)
 		self[self.Populated].Unit = nil
 		self[self.Populated].Columns.Stone.Object = nil
 		self[self.Populated].Columns.Food.Object = nil
 		self[self.Populated].Columns.Potion.Object = nil
 		self.Populated = self.Populated - 1
+		if self.Populated < 21 then
+			self[self.Populated].Cradle:SetVisible(false)		
+		end
 	end
 	
-	for Row = 1, 21 do
+	for Row = 1, 40 do
 		self.Rows[Row] = {}
-		self.Rows.Units[tostring(Row)] = Row
+		--self.Rows.Units[tostring(Row)] = Row
 		self.Rows[Row].Enabled = false
 		self.Rows[Row].Index = Row
 		self.Rows[Row].Unit = nil
-		self.Rows[Row].Cradle = UI.CreateFrame("Frame", "Row Cradle "..Row, PI.GUI.Cradle)
-		self.Rows[Row].Cradle:SetBackgroundColor(0,0,0,0.33)
-		if Row > 1 then
-			self.Rows[Row].Cradle:SetPoint("TOP", self.Rows[Row - 1].Cradle, "BOTTOM")
-		else
-			self.Rows[Row].Cradle:SetPoint("TOP", PI.GUI.Texture, "BOTTOM")
-		end
-		self.Rows[Row].Cradle:SetPoint("LEFT", PI.GUI.Header, "LEFT")
-		self.Rows[Row].Cradle:SetPoint("RIGHT", PI.GUI.Header, "RIGHT")
-		self.Rows[Row].Ready = {}
-		self.Rows[Row].HPMask = UI.CreateFrame("Mask", "Row HP Mask "..Row, self.Rows[Row].Cradle)
-		self.Rows[Row].HPMask:SetPoint("TOPLEFT", self.Rows[Row].Cradle, "TOPLEFT")
-		self.Rows[Row].HPBar = UI.CreateFrame("Texture", "Row HP Texture "..Row, self.Rows[Row].HPMask)
-		self.Rows[Row].HPBar:SetPoint("TOPLEFT", self.Rows[Row].Cradle, "TOPLEFT")
-		self.Rows[Row].HPBar:SetPoint("RIGHT", self.Rows[Row].Cradle, "RIGHT")
-		self.Rows[Row].HPBar:SetTexture("KingMolinator", "Media/BarTexture.png")
-		self.Rows[Row].HPBar:SetBackgroundColor(0,0.5,0,0.5)
-		self.Rows[Row].MPMask = UI.CreateFrame("Mask", "Row MP Mask "..Row, self.Rows[Row].Cradle)
-		self.Rows[Row].MPMask:SetPoint("TOPLEFT", self.Rows[Row].HPBar, "BOTTOMLEFT")
-		self.Rows[Row].MPMask:SetPoint("BOTTOM", self.Rows[Row].Cradle, "BOTTOM")
-		self.Rows[Row].MPBar = UI.CreateFrame("Texture", "Row MP Texture "..Row, self.Rows[Row].MPMask)
-		self.Rows[Row].MPBar:SetPoint("TOPLEFT", self.Rows[Row].HPBar, "BOTTOMLEFT")
-		self.Rows[Row].MPBar:SetPoint("BOTTOMRIGHT", self.Rows[Row].Cradle, "BOTTOMRIGHT")
-		self.Rows[Row].MPBar:SetTexture("KingMolinator", "Media/BarTexture.png")
-		self.Rows[Row].MPBar:SetBackgroundColor(0, 0, 0.5, 0.5)
-		self.Rows[Row].Ready.Cradle = UI.CreateFrame("Frame", "Row "..Row.." Ready Cradle", self.Rows[Row].Cradle)
-		self.Rows[Row].Ready.Cradle:SetPoint("TOPLEFT", self.Rows[Row].Cradle, "TOPLEFT", 2, 1)
-		self.Rows[Row].Ready.Cradle:SetPoint("BOTTOM", self.Rows[Row].Cradle, "BOTTOM", nil, -1)
-		self.Rows[Row].Ready.Cradle:SetLayer(2)
-		self.Rows[Row].Ready.Cradle:SetAlpha(0.75)
-		self.Rows[Row].Ready.Check = UI.CreateFrame("Texture", "Row "..Row.." Ready Check", self.Rows[Row].Ready.Cradle)
-		self.Rows[Row].Ready.Check:SetPoint("TOPLEFT", self.Rows[Row].Ready.Cradle, "TOPLEFT")
-		self.Rows[Row].Ready.Check:SetPoint("BOTTOMRIGHT", self.Rows[Row].Ready.Cradle, "BOTTOMRIGHT")
-		self.Rows[Row].Ready.Check:SetTexture("KingMolinator", "Media/RC_Check.png")
-		self.Rows[Row].Ready.Check:SetVisible(false)
-		self.Rows[Row].Ready.Cross = UI.CreateFrame("Texture", "Row "..Row.." Ready Cross", self.Rows[Row].Ready.Cradle)
-		self.Rows[Row].Ready.Cross:SetPoint("TOPLEFT", self.Rows[Row].Ready.Cradle, "TOPLEFT")
-		self.Rows[Row].Ready.Cross:SetPoint("BOTTOMRIGHT", self.Rows[Row].Ready.Cradle, "BOTTOMRIGHT")
-		self.Rows[Row].Ready.Cross:SetTexture("KingMolinator", "Media/RC_Cross.png")
-		self.Rows[Row].Ready.Cross:SetVisible(false)
-		self.Rows[Row].Ready.Question = UI.CreateFrame("Texture", "Row "..Row.." Ready Question", self.Rows[Row].Ready.Cradle)
-		self.Rows[Row].Ready.Question:SetPoint("TOPLEFT", self.Rows[Row].Ready.Cradle, "TOPLEFT")
-		self.Rows[Row].Ready.Question:SetPoint("BOTTOMRIGHT", self.Rows[Row].Ready.Cradle, "BOTTOMRIGHT")
-		self.Rows[Row].Ready.Question:SetTexture("KingMolinator", "Media/RC_Question.png")
-		self.Rows[Row].Shadow = UI.CreateFrame("Text", "Row "..Row.." Name Shadow", self.Rows[Row].Cradle)
-		self.Rows[Row].Shadow:SetLayer(3)
-		self.Rows[Row].Shadow:SetFontColor(0,0,0)
-		self.Rows[Row].Shadow:SetPoint("CENTERLEFT", self.Rows[Row].Cradle, "CENTERLEFT", 5, -1)
-		self.Rows[Row].Text = UI.CreateFrame("Text", "Row "..Row.." Name", self.Rows[Row].Shadow)
-		self.Rows[Row].Text:SetPoint("TOPLEFT", self.Rows[Row].Shadow, "TOPLEFT", -1, -2)
-		local DataObject = self.Rows[Row]
-		function DataObject:SetData(Text)
-			Text = tostring(Text)
-			self.Shadow:SetText(Text)
-			self.Text:SetText(Text)
-		end
-		self.Rows[Row]:SetData("")
-		self.Rows[Row].Columns = {}
-		for ID, Object in pairs(self.Columns.List) do
-			self.Rows[Row].Columns[ID] = {}
-			self.Rows[Row].Columns[ID].Cradle = UI.CreateFrame("Frame", "Row "..Row.." Data for "..ID, self.Rows[Row].Cradle)
-			self.Rows[Row].Columns[ID].Cradle:SetPoint("TOP", self.Rows[Row].Cradle, "TOP")
-			self.Rows[Row].Columns[ID].Cradle:SetPoint("LEFT", Object.Header, "LEFT")
-			self.Rows[Row].Columns[ID].Cradle:SetPoint("RIGHT", Object.Header, "RIGHT")
-			self.Rows[Row].Columns[ID].Cradle:SetPoint("BOTTOM", self.Rows[Row].Cradle, "BOTTOM")
-			self.Rows[Row].Columns[ID].Shadow = UI.CreateFrame("Text", "Row "..Row.." Shadow for "..ID, self.Rows[Row].Columns[ID].Cradle)
-			self.Rows[Row].Columns[ID].Shadow:SetFontColor(0,0,0)
-			self.Rows[Row].Columns[ID].Shadow:SetPoint("CENTER", self.Rows[Row].Columns[ID].Cradle, "CENTER", 1, 1)
-			self.Rows[Row].Columns[ID].Shadow:SetLayer(2)
-			self.Rows[Row].Columns[ID].Text = UI.CreateFrame("Text", "Row "..Row.." Text for "..ID, self.Rows[Row].Columns[ID].Shadow)
-			self.Rows[Row].Columns[ID].Text:SetPoint("TOPLEFT", self.Rows[Row].Columns[ID].Shadow, "TOPLEFT", -1, -1)
-			self.Rows[Row].Columns[ID].Icon = UI.CreateFrame("Texture", "Row "..Row.." Icon for "..ID, self.Rows[Row].Columns[ID].Cradle)
-			self.Rows[Row].Columns[ID].Icon:SetLayer(1)
-			self.Rows[Row].Columns[ID].Icon:SetPoint("CENTER", self.Rows[Row].Columns[ID].Cradle, "CENTER")
-			self.Rows[Row].Columns[ID].Icon:SetVisible(false)
-			local DataObject = self.Rows[Row].Columns[ID]
+		if Row < 21 then
+			self.Rows[Row].Cradle = UI.CreateFrame("Frame", "Row Cradle "..Row, PI.GUI.Cradle)
+			self.Rows[Row].Cradle:SetBackgroundColor(0,0,0,0.33)
+			if Row > 1 then
+				self.Rows[Row].Cradle:SetPoint("TOP", self.Rows[Row - 1].Cradle, "BOTTOM")
+			else
+				self.Rows[Row].Cradle:SetPoint("TOP", PI.GUI.Texture, "BOTTOM")
+			end
+			self.Rows[Row].Cradle:SetPoint("LEFT", PI.GUI.Header, "LEFT")
+			self.Rows[Row].Cradle:SetPoint("RIGHT", PI.GUI.Header, "RIGHT")
+			self.Rows[Row].Ready = {}
+			self.Rows[Row].HPMask = UI.CreateFrame("Mask", "Row HP Mask "..Row, self.Rows[Row].Cradle)
+			self.Rows[Row].HPMask:SetPoint("TOPLEFT", self.Rows[Row].Cradle, "TOPLEFT")
+			self.Rows[Row].HPBar = UI.CreateFrame("Texture", "Row HP Texture "..Row, self.Rows[Row].HPMask)
+			self.Rows[Row].HPBar:SetPoint("TOPLEFT", self.Rows[Row].Cradle, "TOPLEFT")
+			self.Rows[Row].HPBar:SetPoint("RIGHT", self.Rows[Row].Cradle, "RIGHT")
+			self.Rows[Row].HPBar:SetTexture("KingMolinator", "Media/BarTexture.png")
+			self.Rows[Row].HPBar:SetBackgroundColor(0,0.5,0,0.5)
+			self.Rows[Row].MPMask = UI.CreateFrame("Mask", "Row MP Mask "..Row, self.Rows[Row].Cradle)
+			self.Rows[Row].MPMask:SetPoint("TOPLEFT", self.Rows[Row].HPBar, "BOTTOMLEFT")
+			self.Rows[Row].MPMask:SetPoint("BOTTOM", self.Rows[Row].Cradle, "BOTTOM")
+			self.Rows[Row].MPBar = UI.CreateFrame("Texture", "Row MP Texture "..Row, self.Rows[Row].MPMask)
+			self.Rows[Row].MPBar:SetPoint("TOPLEFT", self.Rows[Row].HPBar, "BOTTOMLEFT")
+			self.Rows[Row].MPBar:SetPoint("BOTTOMRIGHT", self.Rows[Row].Cradle, "BOTTOMRIGHT")
+			self.Rows[Row].MPBar:SetTexture("KingMolinator", "Media/BarTexture.png")
+			self.Rows[Row].MPBar:SetBackgroundColor(0, 0, 0.5, 0.5)
+			self.Rows[Row].Ready.Cradle = UI.CreateFrame("Frame", "Row "..Row.." Ready Cradle", self.Rows[Row].Cradle)
+			self.Rows[Row].Ready.Cradle:SetPoint("TOPLEFT", self.Rows[Row].Cradle, "TOPLEFT", 2, 1)
+			self.Rows[Row].Ready.Cradle:SetPoint("BOTTOM", self.Rows[Row].Cradle, "BOTTOM", nil, -1)
+			self.Rows[Row].Ready.Cradle:SetLayer(2)
+			self.Rows[Row].Ready.Cradle:SetAlpha(0.75)
+			self.Rows[Row].Ready.Check = UI.CreateFrame("Texture", "Row "..Row.." Ready Check", self.Rows[Row].Ready.Cradle)
+			self.Rows[Row].Ready.Check:SetPoint("TOPLEFT", self.Rows[Row].Ready.Cradle, "TOPLEFT")
+			self.Rows[Row].Ready.Check:SetPoint("BOTTOMRIGHT", self.Rows[Row].Ready.Cradle, "BOTTOMRIGHT")
+			self.Rows[Row].Ready.Check:SetTexture("KingMolinator", "Media/RC_Check.png")
+			self.Rows[Row].Ready.Check:SetVisible(false)
+			self.Rows[Row].Ready.Cross = UI.CreateFrame("Texture", "Row "..Row.." Ready Cross", self.Rows[Row].Ready.Cradle)
+			self.Rows[Row].Ready.Cross:SetPoint("TOPLEFT", self.Rows[Row].Ready.Cradle, "TOPLEFT")
+			self.Rows[Row].Ready.Cross:SetPoint("BOTTOMRIGHT", self.Rows[Row].Ready.Cradle, "BOTTOMRIGHT")
+			self.Rows[Row].Ready.Cross:SetTexture("KingMolinator", "Media/RC_Cross.png")
+			self.Rows[Row].Ready.Cross:SetVisible(false)
+			self.Rows[Row].Ready.Question = UI.CreateFrame("Texture", "Row "..Row.." Ready Question", self.Rows[Row].Ready.Cradle)
+			self.Rows[Row].Ready.Question:SetPoint("TOPLEFT", self.Rows[Row].Ready.Cradle, "TOPLEFT")
+			self.Rows[Row].Ready.Question:SetPoint("BOTTOMRIGHT", self.Rows[Row].Ready.Cradle, "BOTTOMRIGHT")
+			self.Rows[Row].Ready.Question:SetTexture("KingMolinator", "Media/RC_Question.png")
+			self.Rows[Row].Shadow = UI.CreateFrame("Text", "Row "..Row.." Name Shadow", self.Rows[Row].Cradle)
+			self.Rows[Row].Shadow:SetLayer(3)
+			self.Rows[Row].Shadow:SetFontColor(0,0,0)
+			self.Rows[Row].Shadow:SetPoint("CENTERLEFT", self.Rows[Row].Cradle, "CENTERLEFT", 5, -1)
+			self.Rows[Row].Text = UI.CreateFrame("Text", "Row "..Row.." Name", self.Rows[Row].Shadow)
+			self.Rows[Row].Text:SetPoint("TOPLEFT", self.Rows[Row].Shadow, "TOPLEFT", -1, -2)
+			local DataObject = self.Rows[Row]
 			function DataObject:SetData(Text)
 				Text = tostring(Text)
 				self.Shadow:SetText(Text)
 				self.Text:SetText(Text)
 			end
-			self.Rows[Row].Columns[ID]:SetData("n/a")
+			self.Rows[Row]:SetData("")
+			self.Rows[Row].Cradle:SetVisible(false)
 		end
-		self.Rows[Row].Cradle:SetVisible(false)
+		self.Rows[Row].Columns = {}
+		for ID, Object in pairs(self.Columns.List) do
+			self.Rows[Row].Columns[ID] = {}
+			if Row < 21 then
+				self.Rows[Row].Columns[ID].Cradle = UI.CreateFrame("Frame", "Row "..Row.." Data for "..ID, self.Rows[Row].Cradle)
+				self.Rows[Row].Columns[ID].Cradle:SetPoint("TOP", self.Rows[Row].Cradle, "TOP")
+				self.Rows[Row].Columns[ID].Cradle:SetPoint("LEFT", Object.Header, "LEFT")
+				self.Rows[Row].Columns[ID].Cradle:SetPoint("RIGHT", Object.Header, "RIGHT")
+				self.Rows[Row].Columns[ID].Cradle:SetPoint("BOTTOM", self.Rows[Row].Cradle, "BOTTOM")
+				self.Rows[Row].Columns[ID].Shadow = UI.CreateFrame("Text", "Row "..Row.." Shadow for "..ID, self.Rows[Row].Columns[ID].Cradle)
+				self.Rows[Row].Columns[ID].Shadow:SetFontColor(0,0,0)
+				self.Rows[Row].Columns[ID].Shadow:SetPoint("CENTER", self.Rows[Row].Columns[ID].Cradle, "CENTER", 1, 1)
+				self.Rows[Row].Columns[ID].Shadow:SetLayer(2)
+				self.Rows[Row].Columns[ID].Text = UI.CreateFrame("Text", "Row "..Row.." Text for "..ID, self.Rows[Row].Columns[ID].Shadow)
+				self.Rows[Row].Columns[ID].Text:SetPoint("TOPLEFT", self.Rows[Row].Columns[ID].Shadow, "TOPLEFT", -1, -1)
+				self.Rows[Row].Columns[ID].Icon = UI.CreateFrame("Texture", "Row "..Row.." Icon for "..ID, self.Rows[Row].Columns[ID].Cradle)
+				self.Rows[Row].Columns[ID].Icon:SetLayer(1)
+				self.Rows[Row].Columns[ID].Icon:SetPoint("CENTER", self.Rows[Row].Columns[ID].Cradle, "CENTER")
+				self.Rows[Row].Columns[ID].Icon:SetVisible(false)
+				local DataObject = self.Rows[Row].Columns[ID]
+				function DataObject:SetData(Text)
+					Text = tostring(Text)
+					self.Shadow:SetText(Text)
+					self.Text:SetText(Text)
+				end
+				self.Rows[Row].Columns[ID]:SetData("n/a")
+			end
+		end
 	end
 	
 	function self:UpdateDrag(uType)
@@ -1187,6 +1235,16 @@ end
 
 function PI.SetLock()
 	PI.GUI.Drag:SetVisible(PI.Settings.Unlocked)
+end
+
+function PI.UnitRemove(UnitID)
+	if UnitID ~= KBM.Player.UnitID then
+		PI.Buffs[UnitID] = nil
+		PI.Ready.Units[UnitID] = nil
+		if PI.GUI.Rows.Units[UnitID] then
+			PI.GUI.Rows:Remove(UnitID)
+		end
+	end
 end
 
 function PI.Update()
@@ -1212,13 +1270,7 @@ function PI.Update()
 				end
 			end
 		else
-			if UnitID ~= KBM.Player.UnitID then
-				PI.Buffs[UnitID] = nil
-				PI.Ready.Units[UnitID] = nil
-				if PI.GUI.Rows.Units[UnitID] then
-					PI.GUI.Rows:Remove(UnitID)
-				end
-			end
+			PI.UnitRemove(UnitID)
 		end
 	end
 	PI.Queue.List = {}
@@ -1374,8 +1426,8 @@ function PI.PlayerLeave()
 	PI.UpdateSMode(true)
 end
 
-function PI.GroupJoin(UnitID)
-	PI.Queue:Add(UnitID, "Add")
+function PI.GroupJoin(UnitID, Specifier, Details)
+	PI.Queue:Add(UnitID, "Add", Specifier)
 end
 
 function PI.GroupLeave(UnitID)

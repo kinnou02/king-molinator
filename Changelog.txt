@@ -1,4 +1,16 @@
-﻿v1.2.7 - Hotfix
+﻿v1.2.8
+
+Ready Check
+* New: Buffering System added when new units join en masse. This will allow for all player leave messages to be processed as a priority.
+* Change: The system can now handle 40 players. The last 20 of which are not linked with a UI element and are only there for buffering.
+* Fixed: Prevented Units being added as a UI element while the list is at maximum population. They will instead be added as non-UI buffer elements.
+
+Infernal Dawn
+* Warboss Drak
+** Fixed: Prevented the encounter sometimes skipping either of the first two bosses.
+
+----
+v1.2.7 - Hotfix
 
 Infernal Dawn
 * Laethys
@@ -6,7 +18,7 @@ Infernal Dawn
 * Maelforge - Ember Eggs
 ** Change: Added a time-out of 20 seconds to allow for the victory message while out of combat.
 
----
+----
 v1.2.6
 
 Rez Master
