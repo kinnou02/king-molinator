@@ -189,6 +189,16 @@ PI.Constants = {
 						rogue = true,
 					},
 				},
+				["r669DCD997490AEF8"] = { -- Wind Glyph
+					Grade = "Medium",
+					Callings = {
+						cleric = true,
+						mage = true,
+					},
+					Role = {
+						tank = true,
+					},
+				},
 				["r68FE8ED5065752C2"] = { -- Lightning Glyph
 					Grade = "Medium",
 					Callings = {

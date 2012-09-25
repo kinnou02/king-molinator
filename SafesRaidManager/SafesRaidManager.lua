@@ -320,7 +320,7 @@ local function SRM_SetSpecifier(Specifier)
 	function Unit:Leave()
 		-- print(SRM_Units[self.UnitID].name.." has left the group.")
 		SRM_Combat({[self.UnitID] = false})
-		if self.Dead then
+		if SRM_Units[self.UnitID].Dead then
 			LibSRM.Dead = LibSRM.Dead - 1
 		end
 		SRM_Groups[SRM_Groups[self.Spec]] = SRM_Groups[SRM_Groups[self.Spec]] - 1
@@ -441,6 +441,11 @@ local function SRM_SetSpecifier(Specifier)
 					SRM_Units[self.UnitID].Dead = true
 					LibSRM.Dead = LibSRM.Dead + 1
 				end
+			elseif uDetails.health > 0 then
+				if SRM_Units[self.UnitID].Dead then
+					SRM_Units[self.UnitID].Dead = false
+					LibSRM.Dead = LibSRM.Dead - 1
+				end
 			end
 			self.name = uDetails.name
 			SRM_NameList[self.name] = SRM_Units[self.UnitID]
@@ -459,21 +464,22 @@ local function SRM_SetSpecifier(Specifier)
 					SRM_Units[self.UnitID].name = uDetails.name
 					SRM_Units[self.UnitID].calling = uDetails.calling
 					SRM_Units[self.UnitID].avail = Avail
-					--if Avail == "full" then
-						SRM_Units[self.UnitID].Loaded = true
-					--end
-					SRM_Combat({[self.UnitID] = uDetails.combat})
+					SRM_Units[self.UnitID].Loaded = true
 					SRM_Units[self.UnitID].Location = uDetails.location
 					SRM_Units[self.UnitID].PetID = Inspect.Unit.Lookup(self.Spec..".pet")
+					SRM_Units[self.UnitID].Object = self
 					if uDetails.health == 0 then
 						SRM_Units[self.UnitID].Dead = true
 						LibSRM.Dead = LibSRM.Dead + 1
+					elseif uDetails.health then
+						SRM_Units[self.UnitID].Dead = false
 					end
 					SRM_Groups[SRM_Groups[self.Spec]] = SRM_Groups[SRM_Groups[self.Spec]] + 1
 					SRM_Raid.Populated = SRM_Raid.Populated + 1
 					self.name = uDetails.name
 					SRM_NameList[self.name] = SRM_Units[self.UnitID]
 					SRM_CheckGroupState()
+					SRM_Combat({[self.UnitID] = uDetails.combat})
 					if SRM_Units[self.UnitID].PetID then
 						if SRM_PetQueue.OwnerWait.Queued then
 							if SRM_PetQueue.OwnerWait.List[SRM_Units[self.UnitID].PetID] then
@@ -514,7 +520,7 @@ local function SRM_Offline(data)
 		if SRM_Units[UID] then
 			SRM_Units[UID].Offline = Value
 			if Value == true then
-				SRM_Combat({[SRM_Units[UID].UnitID] = false})
+				SRM_Combat({[UID] = false})
 			end
 			SRM_Group.Offline(UID, Value)
 		end
@@ -560,6 +566,7 @@ local function SRM_Res(TargetID, CasterID)
 	if SRM_Units[TargetID].Dead then
 		SRM_Units[TargetID].Dead = false
 		LibSRM.Dead = LibSRM.Dead - 1
+		CasterID = CasterID or TargetID
 		SRM_Group.Combat.Res(TargetID, CasterID)
 	end
 end
@@ -808,6 +815,12 @@ local function SRM_UnitLoadFull(units)
 					SRM_PetQueue.List[PetID] = nil
 					SRM_PetQueue.Queued = SRM_PetQueue.Queued - 1
 				end
+			end
+		end
+	else
+		for UnitID, UnitObj in pairs(SRM_Units) do
+			if units[UnitID] then
+				UnitObj.Object:LoadFull("full")
 			end
 		end
 	end

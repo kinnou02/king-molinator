@@ -1,9 +1,16 @@
 ﻿v1.2.8
 
+LibSRM
+* Change: Updated to LibSRM 1.2.4 (Includes various improvements to Combat and Death states)
+
 Ready Check
 * New: Buffering System added when new units join en masse. This will allow for all player leave messages to be processed as a priority.
 * Change: The system can now handle 40 players. The last 20 of which are not linked with a UI element and are only there for buffering.
 * Fixed: Prevented Units being added as a UI element while the list is at maximum population. They will instead be added as non-UI buffer elements.
+
+Ready Check Available Tracking
+* Weapon Stones
+** Wind Glyph (Cleric, Mage - Tank - Medium)
 
 Infernal Dawn
 * Warboss Drak

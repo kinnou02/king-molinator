@@ -256,7 +256,7 @@ function PI.GroupJoin(UnitID, Specificer, uDetails)
 		if uDetails.name then
 			if not PI.History.NameStore[uDetails.name] then
 				if KBM.Debug then
-					print("Player joined without Version info Queuing: "..uDetails.name)
+					--print("Player joined without Version info Queuing: "..uDetails.name)
 				end
 				PI.History:SetSent(uDetails.name, false)
 				PI.History.Queue[uDetails.name] = true

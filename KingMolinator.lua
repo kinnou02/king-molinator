@@ -3820,9 +3820,9 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 								if not KBM_Boss[uDetails.name] then
 									if KBM.Debug then
 										if not KBM.IgnoreList[UnitID] then
-											print("New Unit Added to Ignore:")
-											dump(uDetails)
-											print("----------")
+											-- print("New Unit Added to Ignore:")
+											-- dump(uDetails)
+											-- print("----------")
 										end
 									end
 									KBM.IgnoreList[UnitID] = true
@@ -3862,6 +3862,9 @@ function KBM.CombatEnter(UnitID)
 				KBM.CheckActiveBoss(uDetails, UnitID)
 			end
 			KBM.Unit.List.UID[UnitID]:CheckTarget()
+			if KBM.Debug then
+				KBM.Unit.Debug:UpdateCombat()
+			end
 		end
 	end	
 end
@@ -3872,6 +3875,9 @@ function KBM.CombatLeave(UnitID)
 		if uDetails then
 			KBM.Unit:Update(uDetails, UnitID)
 			KBM.Unit.List.UID[UnitID]:CheckTarget()
+		end
+		if KBM.Debug then
+			KBM.Unit.Debug:UpdateCombat()
 		end
 	end	
 end
@@ -4620,6 +4626,8 @@ function KBM.Unit.Debug:Init()
 	self:CreateTrack("NPCs", 0.7, 0.7, 1)
 	self:CreateTrack("Total Groups", 1, 1, 1)
 	self:CreateTrack("Raid Size", 0, 0.9, 0)
+	self:CreateTrack("In Combat", 0, 0.9, 0)
+	self:CreateTrack("Dead", 0, 0.9, 0)
 	function self:UpdateAll()
 		self.GUI.Trackers["Idle"]:UpdateDisplay(KBM.Unit.UIDs.Count.Idle)
 		self.GUI.Trackers["Available"]:UpdateDisplay(KBM.Unit.UIDs.Count.Available)		
@@ -4628,7 +4636,14 @@ function KBM.Unit.Debug:Init()
 		self.GUI.Trackers["Players"]:UpdateDisplay(KBM.Unit.Player.Count)
 		self.GUI.Trackers["NPCs"]:UpdateDisplay(KBM.Unit.NPC.Count)		
 		self.GUI.Trackers["Total Groups"]:UpdateDisplay(KBM.Unit.Unknown.Count + KBM.Unit.Player.Count + KBM.Unit.NPC.Count)
-		self.GUI.Trackers["Raid Size"]:UpdateDisplay(tostring(LibSRM.GroupCount()) or 0)
+		self.GUI.Trackers["Raid Size"]:UpdateDisplay(tostring(LibSRM.GroupCount() or 0))
+		self.GUI.Trackers["Dead"]:UpdateDisplay(tostring(LibSRM.Dead or 0))
+	end
+	function self:UpdateCombat()
+		self.GUI.Trackers["In Combat"]:UpdateDisplay(tostring(LibSRM.Group.Combat or 0))	
+	end
+	function self:UpdateDeath()
+		self.GUI.Trackers["Dead"]:UpdateDisplay(tostring(LibSRM.Dead or 0))	
 	end
 end
 
@@ -6745,6 +6760,7 @@ function KBM:RaidCombatEnter()
 
 	if KBM.Debug then
 		print("Raid has entered combat: Number in combat = "..LibSRM.Group.Combat)
+		KBM.Unit.Debug:UpdateCombat()
 	end
 	if KBM.Idle.Combat.Wait then
 		KBM.Idle.Combat.Wait = false
@@ -6777,10 +6793,17 @@ function KBM.WipeIt(Force)
 	
 end
 
+function KBM.RaidCombatUpdate()
+	if KBM.Debug then
+		KBM.Unit.Debug:UpdateCombat()
+	end
+end
+
 function KBM:RaidCombatLeave()
 
 	if KBM.Debug then
 		print("Raid has left combat")
+		KBM.Unit.Debug:UpdateCombat()
 	end
 	if KBM.Options.Enabled then
 		if KBM.Encounter then
@@ -7002,6 +7025,9 @@ function KBM.GroupDeath(DeathObj)
 					KBM.WipeIt(true)
 				end
 			end
+		end
+		if KBM.Debug then
+			KBM.Unit.Debug:UpdateDeath()
 		end
 	end
 end
@@ -8601,6 +8627,8 @@ function KBM.InitEvents()
 	table.insert(Event.SafesRaidManager.Group.Combat.Death, {KBM.GroupDeath, "KingMolinator", "Group Death"})
 	table.insert(Event.SafesRaidManager.Group.Combat.End, {KBM.RaidCombatLeave, "KingMolinator", "Raid Combat Leave"})
 	table.insert(Event.SafesRaidManager.Group.Combat.Start, {KBM.RaidCombatEnter, "KingMolinator", "Raid Combat Enter"})
+	table.insert(Event.SafesRaidManager.Group.Combat.Enter, {KBM.RaidCombatUpdate, "KingMolinator", "Raid Combat Enter Update"})
+	table.insert(Event.SafesRaidManager.Group.Combat.Leave, {KBM.RaidCombatUpdate, "KingMolinator", "Raid Combat Leave Update"})
 	table.insert(Event.SafesRaidManager.Group.Combat.Res, {KBM.RaidRes, "KingMolinator", "Raid Res"})
 	table.insert(Event.SafesRaidManager.Group.Combat.Damage, {KBM.RaidDamage, "KingMolinator", "Raid Damage"})
 	table.insert(Event.SafesRaidManager.Group.Join, {KBM.GroupJoin, "KingMolinator", "Raid_Member_Joins"})
@@ -8712,6 +8740,11 @@ local function KBM_WaitReady(unitID, uDetails)
 	KBM.Player.CastBar.Target.CastObj = KBM.CastBar:Add(KBM.Player.CastBar.Target, KBM.Player.CastBar.Target)
 	KBM.Player.CastBar.Focus.CastObj = KBM.CastBar:Add(KBM.Player.CastBar.Focus, KBM.Player.CastBar.Focus)
 	KBM.Player.CastBar.CastObj:Create(KBM.Player.UnitID)
+	if LibSRM.Group.Combat > 0 then
+		KBM:RaidCombatEnter()
+	else
+		KBM:RaidCombatLeave()
+	end
 end
 
 KBM.PlugIn = {}
