@@ -778,7 +778,6 @@ function PI.GUI:Init()
 					local PF = self[Index].Unit.PercentFlat or 0
 					self[Index].HPMask:SetWidth(math.ceil(PI.GUI.Texture:GetWidth() * PF))
 					self[Index].MPMask:SetWidth(math.ceil(PI.GUI.Texture:GetWidth()))
-					self[Index]:SetData(self[Index].Unit.Name)
 				end
 			else
 				self[Index].HPMask:SetWidth(PI.GUI.Texture:GetWidth())
@@ -1073,7 +1072,7 @@ function PI.GUI:Init()
 			end
 			if Index < self.Populated then
 				self[self.Populated].Enabled = true
-				if self[self.Populated].Cradle then
+				if Index < 21 then
 					self[self.Populated].Cradle:SetVisible(true)
 				end
 				for i = self.Populated, Index + 1, -1 do
@@ -1131,10 +1130,10 @@ function PI.GUI:Init()
 		self[self.Populated].Columns.Stone.Object = nil
 		self[self.Populated].Columns.Food.Object = nil
 		self[self.Populated].Columns.Potion.Object = nil
-		self.Populated = self.Populated - 1
 		if self.Populated < 21 then
 			self[self.Populated].Cradle:SetVisible(false)		
 		end
+		self.Populated = self.Populated - 1
 	end
 	
 	for Row = 1, 40 do

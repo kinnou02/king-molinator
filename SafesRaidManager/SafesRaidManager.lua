@@ -394,6 +394,7 @@ local function SRM_SetSpecifier(Specifier)
 					self.UnitID = UID
 					SRM_Groups[SRM_Groups[SRM_Units[UID].Specifier]] = SRM_Groups[SRM_Groups[SRM_Units[UID].Specifier]] - 1
 					SRM_Units[UID].Specifier = self.Spec
+					SRM_Units[UID].Object = self
 					SRM_Groups[SRM_Groups[self.Spec]] = SRM_Groups[SRM_Groups[self.Spec]] + 1
 					SRM_CheckGroupState()
 					-- Send MOVE Message HERE
