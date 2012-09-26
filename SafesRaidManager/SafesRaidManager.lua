@@ -428,30 +428,32 @@ local function SRM_SetSpecifier(Specifier)
 	end
 	
 	function Unit:LoadFull()
-		local uDetails = Inspect.Unit.Detail(self.UnitID)
-		if uDetails then
-			SRM_Units[self.UnitID].name = uDetails.name
-			SRM_Units[self.UnitID].calling = uDetails.calling
-			SRM_Units[self.UnitID].avail = "full"
-			SRM_Units[self.UnitID].Loaded = true
-			SRM_Combat({[self.UnitID] = uDetails.combat})
-			SRM_Units[self.UnitID].Location = uDetails.location
-			SRM_Units[self.UnitID].PetID = Inspect.Unit.Lookup(self.Spec..".pet")
-			uDetails.health = uDetails.health or 0
-			if uDetails.health == 0 then
-				if not SRM_Units[self.UnitID].Dead then
-					SRM_Units[self.UnitID].Dead = true
-					LibSRM.Dead = LibSRM.Dead + 1
+		if self.UnitID then
+			local uDetails = Inspect.Unit.Detail(self.UnitID)
+			if uDetails then
+				SRM_Units[self.UnitID].name = uDetails.name
+				SRM_Units[self.UnitID].calling = uDetails.calling
+				SRM_Units[self.UnitID].avail = "full"
+				SRM_Units[self.UnitID].Loaded = true
+				SRM_Combat({[self.UnitID] = uDetails.combat})
+				SRM_Units[self.UnitID].Location = uDetails.location
+				SRM_Units[self.UnitID].PetID = Inspect.Unit.Lookup(self.Spec..".pet")
+				uDetails.health = uDetails.health or 0
+				if uDetails.health == 0 then
+					if not SRM_Units[self.UnitID].Dead then
+						SRM_Units[self.UnitID].Dead = true
+						LibSRM.Dead = LibSRM.Dead + 1
+					end
+				elseif uDetails.health > 0 then
+					if SRM_Units[self.UnitID].Dead then
+						SRM_Units[self.UnitID].Dead = false
+						LibSRM.Dead = LibSRM.Dead - 1
+					end
 				end
-			elseif uDetails.health > 0 then
-				if SRM_Units[self.UnitID].Dead then
-					SRM_Units[self.UnitID].Dead = false
-					LibSRM.Dead = LibSRM.Dead - 1
-				end
+				self.name = uDetails.name
+				SRM_NameList[self.name] = SRM_Units[self.UnitID]
+				SRM_Group.Reload(self.UnitID, self.Spec, uDetails)
 			end
-			self.name = uDetails.name
-			SRM_NameList[self.name] = SRM_Units[self.UnitID]
-			SRM_Group.Reload(self.UnitID, self.Spec, uDetails)
 		end
 	end
 
@@ -823,7 +825,7 @@ local function SRM_UnitLoadFull(units)
 	else
 		for UnitID, UnitObj in pairs(SRM_Units) do
 			if units[UnitID] then
-				UnitObj.Object:LoadFull("full")
+				UnitObj.Object:LoadFull()
 			end
 		end
 	end

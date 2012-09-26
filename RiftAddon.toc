@@ -10,7 +10,7 @@ Author = "Paul Snart"
 Website = "http://www.facebook.com/KingBossMods"
 Email = "snarty@gmail.com"
 
-Version = "1.2.8.540"
+Version = "1.2.8.541"
 
 Environment = "1.9", "1.10"
 
@@ -178,6 +178,7 @@ RunOnStartup = {
 }
 
 Embed = {
+	["Modules/SafesTableLib"] = true,
 	["SafesRaidManager"] = true,
 	["KBMLocaleManager"] = true,
 	["Modules/Messenger"] = true,
@@ -505,6 +506,7 @@ SavedVariables = {
 }
 
 Dependencies = {
+	SafesTableLib = {"required", "before"},
 	SafesRaidManager = {"required", "before"},
 	KBMLocaleManager = {"required", "before"},
 	KBMTextureHandler = {"required", "before"},
