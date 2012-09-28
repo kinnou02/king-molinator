@@ -1072,7 +1072,7 @@ function PI.GUI:Init()
 			end
 			if Index < self.Populated then
 				self[self.Populated].Enabled = true
-				if Index < 21 then
+				if self.Populated < 21 then
 					self[self.Populated].Cradle:SetVisible(true)
 				end
 				for i = self.Populated, Index + 1, -1 do
