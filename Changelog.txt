@@ -16,6 +16,13 @@ Infernal Dawn
 * Warboss Drak
 ** Fixed: Prevented the encounter sometimes skipping either of the first two bosses.
 
+Primeval Feast
+* Lord Twyl
+** Change: Consolodated the Critter Mechanic Spy in to one tracker.
+
+Translations
+* French updates.
+
 ----
 v1.2.7 - Hotfix
 

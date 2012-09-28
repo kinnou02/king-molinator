@@ -163,6 +163,7 @@ EC.Lang.Ability.Shard:SetRussian("Призвать пылающий осколо
 EC.Lang.Ability.Shard:SetFrench("Trait explosif")
 EC.Lang.Ability.Shard:SetGerman("Sengscherbe beschwören")
 EC.Lang.Ability.Ember = KBM.Language:Add("Ember Rain")
+EC.Lang.Ability.Ember:SetFrench("Pluie de braise")
 
 -- Ability Dictionary
 EC.Lang.Debuff = {}
