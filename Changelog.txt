@@ -1,7 +1,7 @@
 ﻿v1.2.8
 
 LibSRM
-* Change: Updated to LibSRM 1.2.4 (Includes various improvements to Combat and Death states)
+* Change: Updated to LibSRM 1.2.5 (Includes various improvements to Combat and Death states)
 
 Ready Check
 * New: Buffering System added when new units join en masse. This will allow for all player leave messages to be processed as a priority.

@@ -70,7 +70,9 @@ function PI.CycleLoad()
 		local TimeStart = Inspect.Time.Real()
 		local Count = 0
 		repeat
-			PI.Queue.First.Texture:SetTexture(PI.Queue.First.Location, PI.Queue.First.File)
+			if PI.Queue.First.Texture.SetTexture then
+				PI.Queue.First.Texture:SetTexture(PI.Queue.First.Location, PI.Queue.First.File)
+			end
 			PI.Queue:Pop(PI.Queue.First)
 			Count = Count + 1
 			local Duration = Inspect.Time.Real() - TimeStart

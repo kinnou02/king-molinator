@@ -195,9 +195,13 @@ function LibSata:Create()
 			end
 			local currentObj = startObject or self._first
 			if currentObj then
+				local breakLoop
 				repeat
 					local nextObj = currentObj._after
-					callback(currentObj._data, currentObj)
+					breakLoop = callback(currentObj._data, currentObj)
+					if breakLoop then
+						break
+					end
 					currentObj = nextObj
 				until not currentObj
 			end

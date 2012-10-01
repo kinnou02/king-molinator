@@ -810,6 +810,7 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Options.Texture:SetKorean("텍스쳐 오버레이 적용")
 	KBM.Language.Options.Sheep = KBM.Language:Add("Auto remove Sheep/Shambler effects.")
 	KBM.Language.Options.Sheep:SetFrench("Enlever effets Auto Mouton/Traînard.")
+	KBM.Language.Options.Sheep:SetGerman("automatisches Entfernen von Schaf/Watschler-Effekten.")
 	
 	-- Timer Dictionary
 	KBM.Language.Timers = {}

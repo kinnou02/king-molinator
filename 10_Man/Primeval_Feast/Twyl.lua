@@ -132,7 +132,10 @@ LT.Lang.Debuff.Spider:SetFrench("Tranchage rotatif")
 LT.Lang.Verbose = {}
 LT.Lang.Verbose.Fire = KBM.Language:Add("until Flickering Fire!")
 LT.Lang.Verbose.Fire:SetFrench("jusqu'à Feu vascillant!")
+LT.Lang.Verbose.Fire:SetGerman("bis zum Flackerndes Feuer!")
 LT.Lang.Verbose.Critter = KBM.Language:Add("Critter")
+LT.Lang.Verbose.Critter:SetFrench("Créature")
+LT.Lang.Verbose.Critter:SetGerman("Tierchen") 
 
 -- Say Dictionary
 LT.Lang.Say = {}

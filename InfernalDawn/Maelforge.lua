@@ -95,6 +95,7 @@ MF.Lang.Notify.PhaseFinal:SetFrench("Maelforge : Ma descendance se repaîtra de 
 MF.Lang.Notify.PhaseFinal:SetGerman("Flammenmaul: Meine Brut wird Euer Fleisch kosten. Ihr nährt das Verlangen der Apokalypse.")
 MF.Lang.Notify.Victory = KBM.Language:Add("Carcera: This world is saved from abomination, but its doom rises on ashen wings.")
 MF.Lang.Notify.Victory:SetFrench("Carcera : Le monde est sauvé de ces abominations, mais son destin se construit sur une terre en cendres. Ce lieu était autrefois le foyer sacré de mes adorateurs qui, avant que je ne tombe dans l'oubli, exécutaient des sacrifices en mon honneur. Ces roches réveillent en moi le souvenir de l'odeur du sang et de la chair calcinée.")
+MF.Lang.Notify.Victory:SetGerman("Carcera: Diese Welt wurde vor Schrecken bewahrt, aber das Unheil erhebt sich auf äschernen Schwingen. Diese Kammer war einst eine heilige Stätte, wo ich angebetet wurde. Sie brachten mir zu Ehren Opfer dar, bevor ich in Vergessenheit geriet. Diese Felsen erinnern den Geruch von kochendem Blut und brennendem Fleisch.") 
 
 -- Debuff Dictionary
 MF.Lang.Debuff = {}
