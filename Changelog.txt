@@ -1,4 +1,10 @@
-﻿v1.2.8
+﻿v1.2.9
+
+Ready Check
+* Fixed: Added a catch for a rare error during a ready check when switching Raid types.
+
+----
+v1.2.8
 
 LibSRM
 * Change: Updated to LibSRM 1.2.5 (Includes various improvements to Combat and Death states)
@@ -18,10 +24,11 @@ Infernal Dawn
 
 Primeval Feast
 * Lord Twyl
-** Change: Consolodated the Critter Mechanic Spy in to one tracker.
+** Change: Consolidated the Critter Mechanic Spy in to one tracker.
 
 Translations
 * French updates.
+* German updates.
 
 ----
 v1.2.7 - Hotfix

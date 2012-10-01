@@ -1533,9 +1533,11 @@ function PI.ReadyState(Units)
 			end
 			PI.Ready.Units[UnitID] = "true"
 			if PI.GUI.Rows.Units[UnitID] then
-				PI.GUI.Rows.Units[UnitID].Ready.Check:SetVisible(true)
-				PI.GUI.Rows.Units[UnitID].Ready.Question:SetVisible(false)
-				PI.GUI.Rows.Units[UnitID].Ready.Cross:SetVisible(false)
+				if PI.GUI.Rows.Units[UnitID].Index < 21 then
+					PI.GUI.Rows.Units[UnitID].Ready.Check:SetVisible(true)
+					PI.GUI.Rows.Units[UnitID].Ready.Question:SetVisible(false)
+					PI.GUI.Rows.Units[UnitID].Ready.Cross:SetVisible(false)
+				end
 			end
 			PI.Ready.Yes = PI.Ready.Yes + 1
 			PI.Ready.Replied = PI.Ready.Replied + 1
@@ -1549,9 +1551,11 @@ function PI.ReadyState(Units)
 				end
 				PI.Ready.Units[UnitID] = "false"
 				if PI.GUI.Rows.Units[UnitID] then
-					PI.GUI.Rows.Units[UnitID].Ready.Check:SetVisible(false)
-					PI.GUI.Rows.Units[UnitID].Ready.Question:SetVisible(false)
-					PI.GUI.Rows.Units[UnitID].Ready.Cross:SetVisible(true)
+					if PI.GUI.Rows.Units[UnitID].Index < 21 then
+						PI.GUI.Rows.Units[UnitID].Ready.Check:SetVisible(false)
+						PI.GUI.Rows.Units[UnitID].Ready.Question:SetVisible(false)
+						PI.GUI.Rows.Units[UnitID].Ready.Cross:SetVisible(true)
+					end
 				end
 				PI.Ready.No = PI.Ready.No + 1
 				PI.Ready.Replied = PI.Ready.Replied + 1
@@ -1559,9 +1563,11 @@ function PI.ReadyState(Units)
 				PI.Ready.State = false
 				PI.Ready.Units[UnitID] = "nil"
 				if PI.GUI.Rows.Units[UnitID] then
-					PI.GUI.Rows.Units[UnitID].Ready.Check:SetVisible(false)
-					PI.GUI.Rows.Units[UnitID].Ready.Question:SetVisible(true)
-					PI.GUI.Rows.Units[UnitID].Ready.Cross:SetVisible(false)
+					if PI.GUI.Rows.Units[UnitID].Index < 21 then
+						PI.GUI.Rows.Units[UnitID].Ready.Check:SetVisible(false)
+						PI.GUI.Rows.Units[UnitID].Ready.Question:SetVisible(true)
+						PI.GUI.Rows.Units[UnitID].Ready.Cross:SetVisible(false)
+					end
 				end
 			end
 		end
