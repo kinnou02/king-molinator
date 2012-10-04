@@ -39,16 +39,11 @@ MF.Maelforge = {
 	UnitID = nil,
 	TimeOut = 20,
 	Castbar = nil,
-	-- TimersRef = {},
 	MechRef = {},
 	AlertsRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		-- TimersRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
-		-- },
 		AlertsRef = {
 			Enabled = true,
 			Hellfire = KBM.Defaults.AlertObj.Create("purple"),
@@ -84,6 +79,7 @@ MF.Lang.Unit.EggShort:SetFrench("Œuf")
 
 -- Ability Dictionary
 MF.Lang.Ability = {}
+MF.Lang.Ability.Blast = KBM.Language:Add("Magma Blast")
 
 -- Notify Dictionary
 MF.Lang.Notify = {}
@@ -122,6 +118,14 @@ MF.Cannon = {
 	Menu = {},
 	Ignore = true,
 	Type = "multi",
+	AlertsRef = {},
+	Triggers = {},
+	Settings = {
+		AlertsRef = {
+			Enabled = true,
+			Blast = KBM.Defaults.AlertObj.Create("yellow"),
+		},
+	},	
 }
 
 MF.Egg = {
@@ -157,8 +161,13 @@ function MF:InitVars()
 		Alerts = KBM.Defaults.Alerts(),
 		MechSpy = KBM.Defaults.MechSpy(),
 		-- TimersRef = self.Maelforge.Settings.TimersRef,
-		AlertsRef = self.Maelforge.Settings.AlertsRef,
-		MechRef = self.Maelforge.Settings.MechRef,
+		Maelforge = {
+			AlertsRef = self.Maelforge.Settings.AlertsRef,
+			MechRef = self.Maelforge.Settings.MechRef,
+		},
+		Cannon = {
+			AlertsRef = self.Cannon.Settings.AlertsRef,
+		},
 	}
 	KBMINDMF_Settings = self.Settings
 	chKBMINDMF_Settings = self.Settings
@@ -331,9 +340,13 @@ function MF:Start()
 	-- Create Timers
 	-- KBM.Defaults.TimerObj.Assign(self.Maelforge)
 	
-	-- Create Alerts
+	-- Create Alerts (Maelforge)
 	self.Maelforge.AlertsRef.Hellfire = KBM.Alert:Create(self.Lang.Debuff.Hell[KBM.Lang], nil, false, true, "purple")
 	KBM.Defaults.AlertObj.Assign(self.Maelforge)
+	
+	-- Create Alerts (Cannons)
+	self.Cannon.AlertsRef.Blast = KBM.Alert:Create(self.Lang.Ability.Blast[KBM.Lang], nil, false, true, "yellow")
+	KBM.Defaults.AlertObj.Assign(self.Cannon)
 	
 	-- Create Spies
 	self.Maelforge.MechRef.Hellfire = KBM.MechSpy:Add(self.Lang.Debuff.Hell[KBM.Lang], nil, "playerDebuff", self.Maelforge)
@@ -351,6 +364,12 @@ function MF:Start()
 	self.Maelforge.Triggers.PhaseFinal:AddPhase(self.PhaseFinal)
 	self.Maelforge.Triggers.Victory = KBM.Trigger:Create(self.Lang.Notify.Victory[KBM.Lang], "notify", self.Maelforge)
 	self.Maelforge.Triggers.Victory:SetVictory()
+	
+	-- Assign Alerts to Cannon Triggers
+	self.Cannon.Triggers.Blast = KBM.Trigger:Create(self.Lang.Ability.Blast[KBM.Lang], "personalCast", self.Cannon)
+	self.Cannon.Triggers.Blast:AddAlert(self.Cannon.AlertsRef.Blast)
+	self.Cannon.Triggers.BlastInt = KBM.Trigger:Create(self.Lang.Ability.Blast[KBM.Lang], "personalInterrupt", self.Cannon)
+	self.Cannon.Triggers.BlastInt:AddStop(self.Cannon.AlertsRef.Blast)
 	
 	self.Maelforge.CastBar = KBM.CastBar:Add(self, self.Maelforge)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

@@ -243,7 +243,8 @@ function HA:AddBosses(KBM_Boss)
 		[self.Enraged.Name] = self.Enraged,
 		[self.Spawn.Name] = self.Spawn,
 	}
-	KBM_Boss[self.Arakhurn.Name] = self.Arakhurn
+	KBM.Boss.Raid[self.Arakhurn.RaidID] = self.Arakhurn
+	KBM.Boss.Raid[self.Arakhurn.AltID] = self.Arakhurn
 	KBM.SubBoss[self.Enraged.Name] = self.Enraged
 	KBM.SubBoss[self.Spawn.Name] = self.Spawn
 end

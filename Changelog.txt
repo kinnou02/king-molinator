@@ -1,4 +1,26 @@
-﻿v1.2.9
+﻿v1.3.0
+
+Infernal Dawn
+* Laethys
+** New: The final phase debuff [Touch of Gold] is now flagged as important.
+** New: Added Tank-Swap support for Eye of Laethys.
+* Maelforge Ember Eggs
+** New: Added personal interrupt alert and stop trigger for the Cannons' Magma Blast.
+* Maelforge Final
+** New: Added initial timer for Fissures in Phase 1.
+** New: Added tracking for Magma Cannons.
+** New: Added an initial timer for the first Hellfire after the last Cannon has been destroyed.
+** New: Added Phase 3, with Cannon kill count objective.
+** New: Added personal interrupt alert and stop trigger for the Cannons' Magma Blast.
+** Change: The Hellfire timer during Cannon Phase will now stop after the 4th Cannon is destroyed.
+** Change: "Phase: Final" now refers to Phase 4. Maelforge from 30% after last Cannon is destroyed.
+
+Rise of the Phoenix
+* High Priest Arakhurn
+** Change: Updated the Trigger methods for both Boss versions to be the new TID. This should prevent incorrect encounter starts during RP.
+
+----
+v1.2.9
 
 Ready Check
 * Fixed: Added a catch for a rare error during a ready check when switching Raid types.

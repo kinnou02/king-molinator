@@ -127,7 +127,7 @@ KBM.ID = "KingMolinator"
 KBM.ModList = {}
 KBM.Testing = false
 KBM.ValidTime = false
-KBM.IsAlpha = false
+KBM.IsAlpha = true
 KBM.Debug = false
 KBM.Aux = {}
 KBM.TestFilters = {}
@@ -166,7 +166,7 @@ KBM.Idle = {
 		StoreTime = 0,
 	},
 	Trigger = {
-		Duration = 0, 
+		Duration = 5, 
 	}
 }
 KBM.MenuOptions = {
@@ -3630,7 +3630,9 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 			if not KBM.BossID[UnitID] then
 				if uDetails then
 					if uDetails.type then
-						if KBM.SubBossID[uDetails.type] then
+						if KBM.Boss.Raid[uDetails.type] then
+							BossObj = KBM.Boss.Raid[uDetails.type]
+						elseif KBM.SubBossID[uDetails.type] then
 							BossObj = KBM.SubBossID[uDetails.type]
 						elseif KBM.Boss.MasterID[uDetails.type] then
 							BossObj = KBM.Boss.Dungeon.List[uDetails.name]

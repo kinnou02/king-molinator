@@ -151,6 +151,7 @@ LT.Lang.Debuff = {}
 LT.Lang.Debuff.Gold = KBM.Language:Add("Touch of Gold")
 LT.Lang.Debuff.Gold:SetFrench("Toucher de l'or")
 LT.Lang.Debuff.Gold:SetGerman("Berührung des Goldes")
+LT.Lang.Debuff.Eye = KBM.Language:Add("Eye of Laethys")
 --LT.Lang.Debuff.TGold = KBM.Language:Add("Use ability soon!")
 
 -- Notify Dictionary
@@ -326,9 +327,14 @@ function LT:UnitHPCheck(uDetails, unitID)
 					KBM.MechTimer:AddStart(self.Laethys.TimersRef.FlareFirst)
 					KBM.MechTimer:AddStart(self.Laethys.TimersRef.GoldFirst)
 					KBM.MechTimer:AddStart(self.Laethys.TimersRef.AddsFirst)
+					KBM.TankSwap:Start(self.Lang.Debuff.Eye[KBM.Lang], unitID)
 				elseif unitID ~= self.Laethys.UnitID then
 					self.Laethys.CastBar:Remove()
 					self.Laethys.CastBar:Create(unitID)
+					if KBM.TankSwap.Active then
+						KBM.TankSwap:Remove()
+						KBM.TankSwap:Start(self.Lang.Debuff.Eye[KBM.Lang], unitID)
+					end
 				end
 				self.Laethys.UnitID = unitID
 				self.Laethys.Available = true
@@ -424,6 +430,7 @@ function LT:Start()
 	self.Laethys.AlertsRef.Orb = KBM.Alert:Create(self.Lang.Ability.Orb[KBM.Lang], nil, false, true, "dark_green")
 	self.Laethys.AlertsRef.Flare = KBM.Alert:Create(self.Lang.Ability.Flare[KBM.Lang], nil, false, true, "cyan")
 	self.Laethys.AlertsRef.TGold = KBM.Alert:Create(self.Lang.Debuff.Gold[KBM.Lang], nil, false, true, "purple")
+	self.Laethys.AlertsRef.TGold:Important()
 	--self.Laethys.AlertsRef.TGoldWarn = KBM.Alert:Create(self.Lang.Debuff.TGold[KBM.Lang], 5, false, true, "dark_grey")
 	--self.Laethys.AlertsRef.TGold:AddAlert(self.Laethys.AlertsRef.TGoldWarn, 5)
 	--self.Laethys.AlertsRef.TGold.MenuName = self.Lang.Menu.TGold[KBM.Lang]

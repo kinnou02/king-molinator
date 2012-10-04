@@ -25,6 +25,7 @@ local MF = {
 	Lang = {},
 	ID = "Maelforge_Final",
 	Object = "MF",
+	CannonCount = 0,
 }
 
 MF.Maelforge = {
@@ -50,6 +51,7 @@ MF.Maelforge = {
 		TimersRef = {
 			Enabled = true,
 			Hell = KBM.Defaults.TimerObj.Create("purple"),
+			Hell_P3First = KBM.Defaults.TimerObj.Create("purple"),
 			Fissure = KBM.Defaults.TimerObj.Create("orange"),
 		},
 		MechRef = {
@@ -76,12 +78,22 @@ MF.Lang.Unit.Maelforge:SetGerman("Flammenmaul")
 MF.Lang.Unit.Maelforge:SetFrench()
 MF.Lang.Unit.Maelforge:SetRussian("Маэлфорж")
 MF.Lang.Unit.Maelforge:SetKorean("마엘포지")
+MF.Lang.Unit.Cannon = KBM.Language:Add("Magma Cannon")
+MF.Lang.Unit.Cannon:SetGerman("Magmakanone")
+MF.Lang.Unit.Cannon:SetFrench("Canon à magma")
+MF.Lang.Unit.CanShort = KBM.Language:Add("Cannon")
+MF.Lang.Unit.CanShort:SetGerman("Kanone")
+MF.Lang.Unit.CanShort:SetFrench("Canon")
 
 -- Location Dictionary
 MF.Lang.Location = {}
 MF.Lang.Location.Spires = KBM.Language:Add("Spires of Sacrifice")
 MF.Lang.Location.Spires:SetGerman("Spitze der Opfergabe")
 MF.Lang.Location.Spires:SetFrench("Aiguilles de Sacrifice")
+
+-- Ability Dictionary
+MF.Lang.Ability = {}
+MF.Lang.Ability.Blast = KBM.Language:Add("Magma Blast")
 
 -- Debuff Dictionary
 MF.Lang.Debuff = {}
@@ -107,9 +119,6 @@ MF.Lang.Mechanic.Fissure = KBM.Language:Add("Fissures")
 MF.Lang.Mechanic.Fissure:SetGerman("Spalten")
 MF.Lang.Mechanic.Fissure:SetFrench("Fissures")
 
--- Ability Dictionary
-MF.Lang.Ability = {}
-
 -- Menu Dictionary
 MF.Lang.Menu = {}
 MF.Lang.Menu.Hell_Green = KBM.Language:Add("Hellfire (Green)")
@@ -118,6 +127,7 @@ MF.Lang.Menu.Hell_Green:SetFrench("Hellfire (Foncé)")
 MF.Lang.Menu.Hell_Yellow = KBM.Language:Add("Hellfire (Yellow)")
 MF.Lang.Menu.Hell_Yellow:SetGerman("Höllenfeuer (Gelb)")
 MF.Lang.Menu.Hell_Yellow:SetFrench("Hellfire (Jaune)")
+MF.Lang.Menu.Hell_P3First = KBM.Language:Add("First Hellfire (Final Phase)")
 
 -- Description
 MF.Lang.Descript = {}
@@ -130,13 +140,34 @@ MF.Maelforge.NameShort = MF.Lang.Unit.Maelforge[KBM.Lang]
 MF.Maelforge.LocationReq = MF.Lang.Location.Spires[KBM.Lang]
 MF.Descript = MF.Lang.Descript.Main[KBM.Lang]
 
+MF.Cannon = {
+	Mod = MF,
+	Level = "??",
+	Name = MF.Lang.Unit.Cannon[KBM.Lang],
+	NameShort = MF.Lang.Unit.CanShort[KBM.Lang],
+	UnitList = {},
+	Menu = {},
+	Ignore = true,
+	Type = "multi",
+	AlertsRef = {},
+	Triggers = {},
+	Settings = {
+		AlertsRef = {
+			Enabled = true,
+			Blast = KBM.Defaults.AlertObj.Create("yellow"),
+		},
+	},	
+}
+
 function MF:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Maelforge.Name] = self.Maelforge,
+		[self.Cannon.Name] = self.Cannon,
 	}
-	KBM.SubBossID[self.Maelforge.RaidID] = self.Maelforge
-	KBM.SubBossID[self.Maelforge.RaidID_P2] = self.Maelforge
+	KBM.Boss.Raid[self.Maelforge.RaidID] = self.Maelforge
+	KBM.Boss.Raid[self.Maelforge.RaidID_P2] = self.Maelforge
+	KBM.SubBoss[self.Cannon.Name] = self.Cannon
 
 end
 
@@ -149,9 +180,14 @@ function MF:InitVars()
 		MechTimer = KBM.Defaults.MechTimer(),
 		MechSpy = KBM.Defaults.MechSpy(),
 		Alerts = KBM.Defaults.Alerts(),
-		TimersRef = self.Maelforge.Settings.TimersRef,
-		MechRef = self.Maelforge.Settings.MechRef,
-		AlertsRef = self.Maelforge.Settings.AlertsRef,
+		Maelforge = {
+			TimersRef = self.Maelforge.Settings.TimersRef,
+			MechRef = self.Maelforge.Settings.MechRef,
+			AlertsRef = self.Maelforge.Settings.AlertsRef,
+		},
+		Cannon = {
+			AlertsRef = self.Cannon.Settings.AlertsRef,
+		},
 	}
 	KBMINDMFF_Settings = self.Settings
 	chKBMINDMFF_Settings = self.Settings
@@ -212,17 +248,36 @@ function MF.PhaseTwo()
 	end
 end
 
+function MF.PhaseCannons()
+	MF.PhaseObj.Objectives:Remove()
+	MF.PhaseObj.Objectives:AddPercent(MF.Maelforge.Name, 0, 30)
+	MF.PhaseObj.Objectives:AddDeath(MF.Cannon.Name, 4)
+	MF.PhaseObj:SetPhase("3")
+	MF.Phase = 3
+	MF.CannonCount = 0	
+end
+
 function MF.PhaseFinal()
 	MF.PhaseObj.Objectives:Remove()
 	MF.PhaseObj.Objectives:AddPercent(MF.Maelforge.Name, 0, 30)
 	MF.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
-	MF.Phase = 3
+	MF.Phase = 4
+	KBM.MechTimer:AddStop(self.Maelforge.TimersRef.Hell)
+	KBM.MechTimer:AddStart(self.Maelforge.TimersRef.Hell_P3First)
 end
 
 function MF:Death(UnitID)
 	if self.Maelforge.UnitID == UnitID then
 		self.Maelforge.Dead = true
 		return true
+	elseif self.Cannon.UnitList[UnitID] then
+		if not self.Cannon.UnitList[UnitID].Dead then
+			self.Cannon.UnitList[UnitID].Dead = true
+			self.CannonCount = self.CannonCount + 1
+			if self.CannonCount == 4 then
+				MF.PhaseFinal()
+			end
+		end
 	end
 	return false
 end
@@ -230,7 +285,8 @@ end
 function MF:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
 		if not uDetails.player then
-			if uDetails.name == self.Maelforge.Name then
+			local BossObj = self.Bosses[uDetails.name]
+			if BossObj == self.Maelforge then
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
@@ -245,12 +301,30 @@ function MF:UnitHPCheck(uDetails, unitID)
 					else
 						self.PhaseObj:SetPhase(1)
 						self.PhaseObj.Objectives:AddPercent(self.Maelforge.Name, 65, 100)
+						KBM.MechTimer:AddStart(self.Maelforge.TimersRef.Fissure)
 						self.Phase = 1
 					end
 				end
 				self.Maelforge.UnitID = unitID
 				self.Maelforge.Available = true
 				return self.Maelforge
+			elseif BossObj.UnitList then
+				if not BossObj.UnitList[unitID] then
+					SubBossObj = {
+						Mod = MF,
+						Level = "??",
+						Name = uDetails.name,
+						Dead = false,
+						Casting = false,
+						UnitID = unitID,
+						Available = true,
+					}
+					BossObj.UnitList[unitID] = SubBossObj
+				else
+					BossObj.UnitList[unitID].Available = true
+					BossObj.UnitList[unitID].UnitID = unitID
+				end
+				return BossObj.UnitList[unitID]
 			end
 		end
 	end
@@ -262,6 +336,16 @@ function MF:Reset()
 	self.Maelforge.UnitID = nil
 	self.Maelforge.CastBar:Remove()
 	self.PhaseObj:End(Inspect.Time.Real())
+	self.CannonCount = 0
+	for UnitID, BossObj in pairs(self.Cannon.UnitList) do
+		if BossObj.CastBar then
+			BossObj.CastBar:Remove()
+			BossObj.CastBar = nil
+		end
+	end
+	self.Cannon.UnitList = {}
+	self.Cannon.Available = false
+	self.Cannon.Dead = false
 end
 
 function MF:Timer()	
@@ -274,6 +358,8 @@ end
 function MF:Start()
 	-- Create Timers
 	self.Maelforge.TimersRef.Hell = KBM.MechTimer:Add(self.Lang.Debuff.Hell[KBM.Lang], 50)
+	self.Maelforge.TimersRef.Hell_P3First = KBM.MechTimer:Add(self.Lang.Debuff.Hell[KBM.Lang], 44)
+	self.Maelforge.TimersRef.Hell_P3First.MenuName = self.Lang.Menu.Hell_P3First[KBM.Lang]
 	self.Maelforge.TimersRef.Fissure = KBM.MechTimer:Add(self.Lang.Mechanic.Fissure[KBM.Lang], 60)
 	KBM.Defaults.TimerObj.Assign(self.Maelforge)
 	
@@ -284,12 +370,16 @@ function MF:Start()
 	self.Maelforge.MechRef.Hell_Green.MenuName = self.Lang.Menu.Hell_Green[KBM.Lang]
 	KBM.Defaults.MechObj.Assign(self.Maelforge)
 	
-	-- Create Alerts
+	-- Create Alerts (Maelforge)
 	self.Maelforge.AlertsRef.Hell_Yellow = KBM.Alert:Create(self.Lang.Menu.Hell_Yellow[KBM.Lang], nil, false, true, "yellow")
 	self.Maelforge.AlertsRef.Hell_Green = KBM.Alert:Create(self.Lang.Menu.Hell_Green[KBM.Lang], nil, false, true, "dark_green")
 	self.Maelforge.AlertsRef.Fiery = KBM.Alert:Create(self.Lang.Debuff.Fiery[KBM.Lang], nil, false, true, "red")
 	self.Maelforge.AlertsRef.Earthen = KBM.Alert:Create(self.Lang.Debuff.Earthen[KBM.Lang], nil, false, true, "yellow")
 	KBM.Defaults.AlertObj.Assign(self.Maelforge)
+
+	-- Create Alerts (Cannons)
+	self.Cannon.AlertsRef.Blast = KBM.Alert:Create(self.Lang.Ability.Blast[KBM.Lang], nil, false, true, "yellow")
+	KBM.Defaults.AlertObj.Assign(self.Cannon)
 	
 	-- Assign Alerts and Timers to Triggers
 	self.Maelforge.Triggers.Hell_Yellow = KBM.Trigger:Create("B58F6969FA32C3353", "playerIDBuff", self.Maelforge)
@@ -308,8 +398,14 @@ function MF:Start()
 	self.Maelforge.Triggers.PhaseTwo = KBM.Trigger:Create(65, "percent", self.Maelforge)
 	self.Maelforge.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
 	self.Maelforge.Triggers.PhaseFinal = KBM.Trigger:Create(30, "percent", self.Maelforge)
-	self.Maelforge.Triggers.PhaseFinal:AddPhase(self.PhaseFinal)
+	self.Maelforge.Triggers.PhaseFinal:AddPhase(self.PhaseCannons)
 	
+	-- Assign Alerts to Cannon Triggers
+	self.Cannon.Triggers.Blast = KBM.Trigger:Create(self.Lang.Ability.Blast[KBM.Lang], "personalCast", self.Cannon)
+	self.Cannon.Triggers.Blast:AddAlert(self.Cannon.AlertsRef.Blast)
+	self.Cannon.Triggers.BlastInt = KBM.Trigger:Create(self.Lang.Ability.Blast[KBM.Lang], "personalInterrupt", self.Cannon)
+	self.Cannon.Triggers.BlastInt:AddStop(self.Cannon.AlertsRef.Blast)
+		
 	self.Maelforge.CastBar = KBM.CastBar:Add(self, self.Maelforge)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()
