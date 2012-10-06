@@ -1,0 +1,26 @@
+﻿Identifier = "SafesGUILib"
+
+Name = "Safe's GUI Library"
+NameShort = "LibSGui"
+
+Description = "Dynamic GUI management library."
+
+Author = "Paul Snart"
+Website = "http://twitter.com/#!/psnart"
+Email = "snarty@gmail.com"
+
+Version = "0.0.1"
+
+Environment = "1.10"
+
+RunOnStartup = {
+	"LibSGui.lua",
+}
+
+Embed = {
+	["SafesTableLib"] = true,
+}
+
+Dependencies = {
+	SafesTableLib = {"required", "before"},
+}

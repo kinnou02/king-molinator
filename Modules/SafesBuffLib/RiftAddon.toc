@@ -1,0 +1,26 @@
+﻿Identifier = "SafesBuffLib"
+
+Name = "Safe's Buff Library"
+NameShort = "LibSBuff"
+
+Description = "Watchdog aware Buff Event queue and cache."
+
+Author = "Paul Snart"
+Website = "http://twitter.com/#!/psnart"
+Email = "snarty@gmail.com"
+
+Version = "0.0.1"
+
+Environment = "1.10"
+
+RunOnStartup = {
+	"LibSBuff.lua",
+}
+
+Embed = {
+	SafesTableLib = true,
+}
+
+Dependencies = {
+	SafesTableLib = {"required", "before"}
+}

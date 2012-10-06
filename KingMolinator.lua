@@ -12,6 +12,9 @@ local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
+
+local LibSGui = Inspect.Addon.Detail("SafesGUILib").data
+
 KBMLM.Start(KBM)
 KBM.BossMod = {}
 KBM.Event = {
@@ -6845,7 +6848,15 @@ function KBM:Timer()
 	local current = Inspect.Time.Real()
 	local diff = (current - self.HeldTime)
 	local udiff = (current - self.UpdateTime)
-	
+
+	-- local testWindow = LibSGui:CreateWindow("Test 1", KBM.Context)
+	-- testWindow.base.cradle:SetBackgroundColor(1,1,1,0.5)
+	-- local testWindow2 = LibSGui:CreateWindow("Test 2", KBM.Context)
+	-- testWindow2.base.cradle:SetBackgroundColor(1,0,1,0.5)
+	-- testWindow2.base.cradle:SetPoint("LEFT", testWindow.base.cradle, "RIGHT")
+	-- testWindow:Remove()
+	-- testWindow2:Remove()
+
 	if not KBM.Updating then
 		KBM.Updating = true
 		if KBM.QueuePage then
@@ -6867,6 +6878,7 @@ function KBM:Timer()
 					Timer:Update(current)
 				end
 				self.HeldTime = current
+								
 			end
 			if KBM.Encounter then
 				if KBM.CurrentMod then

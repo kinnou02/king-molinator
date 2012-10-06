@@ -5,6 +5,8 @@
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 KBM.Scroller = {}
+local LibSata = Inspect.Addon.Detail("SafesTableLib").data
+local LibSGui = Inspect.Addon.Detail("SafesGUILib").data
 
 KBM.MenuIDList = {}
 

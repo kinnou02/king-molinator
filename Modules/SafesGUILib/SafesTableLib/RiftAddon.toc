@@ -1,0 +1,18 @@
+﻿Identifier = "SafesTableLib"
+
+Name = "Safe's Table Library"
+NameShort = "LibSata"
+
+Description = "Dynamic safe removal Table library."
+
+Author = "Paul Snart"
+Website = "http://twitter.com/#!/psnart"
+Email = "snarty@gmail.com"
+
+Version = "0.0.3"
+
+Environment = "1.10"
+
+RunOnStartup = {
+	"LibSata.lua",
+}
