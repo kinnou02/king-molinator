@@ -8355,25 +8355,41 @@ function KBM.InitVars()
 end
 
 KBM.SetDefault = {}
-function KBM.SetDefault.Button()
-	KBM.Options.Button = KBM.Defaults.Button()
+function KBM.SetDefault.menu()
 	KBM.Options.Frame.x = false
 	KBM.Options.Frame.y = false
-	KBM.Button:ApplySettings()
 	KBM.MainWin:ApplySettings()
-	KBM.QueuePage = KBM.MenuOptions.Main.MenuItem
+end
+
+function KBM.SetDefault.button()
+	KBM.Options.Button = KBM.Defaults.Button()
+	KBM.Button:ApplySettings()
+end
+
+function KBM.SetDefault.rcbutton()
+	KBM.Ready.Button:Defaults()
 end
 
 function KBM.SlashDefault(Args)
 	-- Will eventually have different options that will link to default buttons in UI
 	-- For now it'll reset the Options Menu Button to its default settings. (Central, Visible and Unlocked)
-	Args = string.upper(Args)
-	if Args == "BUTTON" then
-	
-	else
-	
+	Args = string.lower(Args or "")
+	if Args == "all" then
+		for ID, _function in pairs(KBM.SetDefault) do
+			_function()
+		end
+		KBM.QueuePage = KBM.MenuOptions.Main.MenuItem
+	elseif KBM.SetDefault[Args] then
+		KBM.SetDefault[Args]()
+		KBM.QueuePage = KBM.MenuOptions.Main.MenuItem
+	else 
+		print("Bellow are a list of commands for: /kbmdefault")
+		print("All\t\t: Will reset all of the below.")
+		print("Button\t: Resets KBM's Mini-map button.")
+		print("RCButton\t: Resets Ready Check's mini-map button.")
+		print("Menu\t: Resets KBM's Menu Option window.")
+		print("For exmaple: /kbmdefault button")
 	end
-	KBM.SetDefault.Button()
 end
 
 function KBM.InitMenus()

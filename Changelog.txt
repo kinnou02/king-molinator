@@ -5,10 +5,19 @@ System
 * New: Added Safe's Table Library (LibSata)
 * New: Added Safe's GUI Library (LibSGui)
 
+Slash Commands
+* /kbmdefault
+** Change: This command now requires a command. Commands are NOT case sensitive.
+** New: All = This will reset all the defaults for supported commands below, and future commands.
+** New: RCButton = Resets the Ready Check mini-map button.
+** New: Button = Resets the KBM mini-map button.
+** New: Menu = Resets the KBM Menu Window positioning.
+
 Buff System
 * Change: The entire Buff system and Tracking has switched over to LibSBuff
 
 Ready Check
+* New: Typing /kbmdefault will also reset the position of the Ready Check button.
 * Change: Now uses LibSBuff instead of KBM's old Buff system.
 
 Tank Swap

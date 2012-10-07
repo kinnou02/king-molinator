@@ -510,6 +510,14 @@ function PI.Button:Init()
 	self.Highlight:SetPoint("TOPLEFT", self.Texture, "TOPLEFT")
 	self.Highlight:SetPoint("BOTTOMRIGHT", self.Texture, "BOTTOMRIGHT")
 	self.Highlight:SetVisible(false)
+	
+	function self:Defaults()
+		PI.Settings.Button.x = false
+		PI.Settings.Button.y = false
+		PI.Settings.Button.Unlocked = true
+		PI.Settings.Button.Visible = true
+		self:ApplySettings()
+	end
 
 	function self:ApplySettings()
 		self.Texture:ClearPoint("CENTER")
