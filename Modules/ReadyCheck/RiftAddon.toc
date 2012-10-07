@@ -9,7 +9,7 @@ Author = "Paul Snart"
 Website = "http://twitter.com/#!/psnart"
 Email = "snarty@gmail.com"
 
-Version = "0.1.5"
+Version = "0.1.6"
 
 Environment = "1.9", "1.10"
 
@@ -23,5 +23,6 @@ SavedVariables = {
 }
 
 Dependencies = {
+	SafesBuffLib = {"required", "before"},
 	KingMolinator = {"required", "before"},
 }

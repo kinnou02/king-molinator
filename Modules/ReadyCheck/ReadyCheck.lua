@@ -5,6 +5,7 @@
 
 local AddonData = Inspect.Addon.Detail("KBMReadyCheck")
 local KBMRC = AddonData.data
+local LibSBuff = Inspect.Addon.Detail("SafesBuffLib").data
 
 local PI = KBMRC
 
@@ -1264,11 +1265,7 @@ function PI.Update()
 				if not PI.GUI.Rows.Units[UnitID] then
 					PI.GUI.Rows:Add(UnitID)
 					PI.Buffs[UnitID] = {}
-					local buffList = Inspect.Buff.List(UnitID)
-					if buffList then
-						KBM:BuffAdd(UnitID, buffList)
-						PI.BuffAdd(UnitID, buffList)
-					end
+					LibSBuff:BuffUpdate(UnitID)
 					if KBM.Unit.List.UID[UnitID].Details then
 						if KBM.Unit.List.UID[UnitID].Details.ready ~= "nil" then
 							PI.ReadyState({[UnitID] = KBM.Unit.List.UID[UnitID].Details.ready})
@@ -1288,28 +1285,19 @@ end
 function PI.Update_End()
 end
 
-function PI.BuffAdd(UnitID, Buffs)
+function PI.BuffAdd(UnitID, BuffID, bDetails)
 	if PI.GUI.Rows.Units[UnitID] then
-		if KBM.Buffs.Active[UnitID] then
-			if Buffs then
-				for BuffID, bool in pairs(Buffs) do
-					if KBM.Buffs.Active[UnitID][BuffID] then
-						local bDetails = KBM.Buffs.Active[UnitID][BuffID]
-						if bDetails.kbmType then
-							if PI.Constants.Lookup.Full[bDetails.kbmType] then
-								local ID = PI.Constants.Lookup.Full[bDetails.kbmType].Column
-								local Index = PI.GUI.Rows.Units[UnitID].Index
-								if ID then
-									if PI.GUI.Rows[Index] then
-										if PI.GUI.Rows[Index].Columns[ID] then
-											PI.GUI.Rows[Index].Columns[ID].Object = bDetails
-											PI.Buffs[UnitID][BuffID] = bDetails
-											if PI.Constants.Columns[ID] then
-												PI.Constants.Columns[ID].Hook(Index)
-											end
-										end
-									end
-								end
+		if bDetails.LibSBuffType then
+			if PI.Constants.Lookup.Full[bDetails.LibSBuffType] then
+				local ID = PI.Constants.Lookup.Full[bDetails.LibSBuffType].Column
+				local Index = PI.GUI.Rows.Units[UnitID].Index
+				if ID then
+					if PI.GUI.Rows[Index] then
+						if PI.GUI.Rows[Index].Columns[ID] then
+							PI.GUI.Rows[Index].Columns[ID].Object = bDetails
+							PI.Buffs[UnitID][BuffID] = bDetails
+							if PI.Constants.Columns[ID] then
+								PI.Constants.Columns[ID].Hook(Index)
 							end
 						end
 					end
@@ -1319,15 +1307,15 @@ function PI.BuffAdd(UnitID, Buffs)
 	end
 end
 
-function PI.BuffRemove(UnitID, Buffs)
+function PI.BuffRemove(UnitID, BuffID)
 	if PI.GUI.Rows.Units[UnitID] then
 		if PI.Buffs[UnitID] then
-			for BuffID, bool in pairs(Buffs) do
+			--for BuffID, bool in pairs(Buffs) do
 				if PI.Buffs[UnitID][BuffID] then
 					local bDetails = PI.Buffs[UnitID][BuffID]
-					if bDetails.kbmType then
-						if PI.Constants.Lookup.Full[bDetails.kbmType] then
-							local ID = PI.Constants.Lookup.Full[bDetails.kbmType].Column
+					if bDetails.LibSBuffType then
+						if PI.Constants.Lookup.Full[bDetails.LibSBuffType] then
+							local ID = PI.Constants.Lookup.Full[bDetails.LibSBuffType].Column
 							local Index = PI.GUI.Rows.Units[UnitID].Index
 							if ID then
 								if PI.GUI.Rows[Index] then
@@ -1343,7 +1331,7 @@ function PI.BuffRemove(UnitID, Buffs)
 					end
 					PI.Buffs[UnitID][BuffID] = nil
 				end
-			end
+			--end
 		end
 	end	
 end
@@ -1361,8 +1349,8 @@ function PI.Start()
 	table.insert(Event.Unit.Detail.Vitality, {PI.DetailUpdates.Vitality, "KBMReadyCheck", "Update Vitality"})
 	table.insert(Event.Unit.Availability.Full, {PI.DetailUpdates.Availability, "KBMReadyCheck", "Update Full"})
 	table.insert(Event.Unit.Availability.Partial, {PI.DetailUpdates.Availability, "KBMReadyCheck", "Update Full"})
-	table.insert(Event.Buff.Add, {PI.BuffAdd, "KBMReadyCheck", "Buff Add"})
-	table.insert(Event.Buff.Remove, {PI.BuffRemove, "KBMReadyCheck", "Buff Remove"})
+	table.insert(Event.SafesBuffLib.Buff.Add, {PI.BuffAdd, "KBMReadyCheck", "Buff Add"})
+	table.insert(Event.SafesBuffLib.Buff.Remove, {PI.BuffRemove, "KBMReadyCheck", "Buff Remove"})
 end
 
 function PI.UpdateSMode(Silent)

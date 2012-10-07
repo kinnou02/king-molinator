@@ -14,6 +14,7 @@ local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
 
 local LibSGui = Inspect.Addon.Detail("SafesGUILib").data
+local LibSBuff = Inspect.Addon.Detail("SafesBuffLib").data
 
 KBMLM.Start(KBM)
 KBM.BossMod = {}
@@ -7205,7 +7206,7 @@ function KBM.NPCChat(data)
 	end
 end
 
-function KBM:BuffCache(unitID, BuffID)
+function KBM:xBuffCache(unitID, BuffID)
 	if KBM.Buffs.Active[unitID] then
 		if KBM.Buffs.Active[unitID][BuffID] then
 			return KBM.Buffs.Active[unitID][BuffID]
@@ -7251,131 +7252,107 @@ function KBM:BuffCache(unitID, BuffID)
 	return bDetails
 end
 
-function KBM:BuffAdd(unitID, Buffs)
+function KBM:BuffAdd(unitID, BuffID, bDetails)
 	-- Used to manage Triggers and soon Tank-Swap managing.
 	-- local TimeStore = Inspect.Time.Real()
 	
 	if KBM.Options.Enabled then
 		if KBM.Encounter then
-			if unitID then
-				for BuffID, bool in pairs(Buffs) do
-					bDetails = KBM:BuffCache(unitID, BuffID)
-					if bDetails then
-						if KBM.Trigger.Buff[KBM.CurrentMod.ID] then
-							if KBM.Trigger.Buff[KBM.CurrentMod.ID][bDetails.name] then
-								local TriggerObj = KBM.Trigger.Buff[KBM.CurrentMod.ID][bDetails.name]
-								if TriggerObj.Unit.UnitID == unitID then
-									KBM.Trigger.Queue:Add(TriggerObj, unitID, unitID, bDetails.remaining)
+			if bDetails then
+				if KBM.Trigger.Buff[KBM.CurrentMod.ID] then
+					if KBM.Trigger.Buff[KBM.CurrentMod.ID][bDetails.name] then
+						local TriggerObj = KBM.Trigger.Buff[KBM.CurrentMod.ID][bDetails.name]
+						if TriggerObj.Unit.UnitID == unitID then
+							KBM.Trigger.Queue:Add(TriggerObj, unitID, unitID, bDetails.remaining)
+						end
+					end
+				end
+				if KBM.Trigger.PlayerDebuff[KBM.CurrentMod.ID] ~= nil and bDetails.debuff == true then
+					if KBM.Trigger.PlayerDebuff[KBM.CurrentMod.ID][bDetails.name] then
+						local TriggerObj = KBM.Trigger.PlayerDebuff[KBM.CurrentMod.ID][bDetails.name]
+						if LibSRM.Group.UnitExists(unitID) ~= nil or unitID == KBM.Player.UnitID then
+							if KBM.Debug then
+								print("Debuff Trigger matched: "..bDetails.name)
+								if LibSRM.Grouped() then
+									print("LibSRM Match: "..tostring(LibSRM.Group.UnitExists(unitID)))
 								end
+								print("Player Match: "..KBM.Player.UnitID.." - "..unitID)
+								print("---------------")
+								dump(bDetails)
+							end
+							KBM.Trigger.Queue:Add(TriggerObj, unitID, unitID, bDetails.remaining)
+						end
+					end
+				end
+				if KBM.Trigger.PlayerIDBuff[KBM.CurrentMod.ID] then
+					if KBM.Trigger.PlayerIDBuff[KBM.CurrentMod.ID][bDetails.type] then
+						local TriggerObj = KBM.Trigger.PlayerIDBuff[KBM.CurrentMod.ID][bDetails.type]
+						if LibSRM.Group.UnitExists(unitID) ~= nil or unitID == KBM.Player.UnitID then
+							if KBM.Debug then
+								print("Debuff Trigger matched: "..bDetails.name)
+								if LibSRM.Grouped() then
+									print("LibSRM Match: "..tostring(LibSRM.Group.UnitExists(unitID)))
+								end
+								print("Player Match: "..KBM.Player.UnitID.." - "..unitID)
+								print("---------------")
+								dump(bDetails)
+							end
+							KBM.Trigger.Queue:Add(TriggerObj, unitID, unitID, bDetails.remaining)
+						end
+					end
+				end
+				if KBM.Trigger.PlayerBuff[KBM.CurrentMod.ID] then
+					if KBM.Trigger.PlayerBuff[KBM.CurrentMod.ID][bDetails.name] then
+						local TriggerObj = KBM.Trigger.PlayerBuff[KBM.CurrentMod.ID][bDetails.name]
+						if LibSRM.Group.UnitExists(unitID) ~= nil or unitID == KBM.Player.UnitID then
+							if KBM.Debug then
+								print("Buff Trigger matched: "..bDetails.name)
+								if LibSRM.Grouped() then
+									print("LibSRM Match: "..tostring(LibSRM.Group.UnitExists(unitID)))
+								end
+								print("Player Match: "..KBM.Player.UnitID.." - "..unitID)
+								print("---------------")
+								dump(bDetails)
+							end
+							KBM.Trigger.Queue:Add(TriggerObj, unitID, unitID, bDetails.remaining)
+						end
+					end
+				end
+				if unitID == KBM.Player.UnitID then
+					if KBM.Buffs.WatchID[bDetails.LibSBuffType] then
+						if KBM.Trigger.CustomBuffRemove["playerBuffID"] then
+							if KBM.Trigger.CustomBuffRemove["playerBuffID"][bDetails.LibSBuffType] then
+								local Trigger = KBM.Trigger.CustomBuffRemove["playerBuffID"][bDetails.LibSBuffType]
+								Trigger:Activate(unitID, bDetails.caster, BuffID)
 							end
 						end
-						if KBM.Trigger.PlayerDebuff[KBM.CurrentMod.ID] ~= nil and bDetails.debuff == true then
-							if KBM.Trigger.PlayerDebuff[KBM.CurrentMod.ID][bDetails.name] then
-								local TriggerObj = KBM.Trigger.PlayerDebuff[KBM.CurrentMod.ID][bDetails.name]
-								if LibSRM.Group.UnitExists(unitID) ~= nil or unitID == KBM.Player.UnitID then
-									if KBM.Debug then
-										print("Debuff Trigger matched: "..bDetails.name)
-										if LibSRM.Grouped() then
-											print("LibSRM Match: "..tostring(LibSRM.Group.UnitExists(unitID)))
-										end
-										print("Player Match: "..KBM.Player.UnitID.." - "..unitID)
-										print("---------------")
-										dump(bDetails)
-									end
-									KBM.Trigger.Queue:Add(TriggerObj, unitID, unitID, bDetails.remaining)
-								end
-							end
-						end
-						if KBM.Trigger.PlayerIDBuff[KBM.CurrentMod.ID] then
-							if KBM.Trigger.PlayerIDBuff[KBM.CurrentMod.ID][bDetails.type] then
-								local TriggerObj = KBM.Trigger.PlayerIDBuff[KBM.CurrentMod.ID][bDetails.type]
-								if LibSRM.Group.UnitExists(unitID) ~= nil or unitID == KBM.Player.UnitID then
-									if KBM.Debug then
-										print("Debuff Trigger matched: "..bDetails.name)
-										if LibSRM.Grouped() then
-											print("LibSRM Match: "..tostring(LibSRM.Group.UnitExists(unitID)))
-										end
-										print("Player Match: "..KBM.Player.UnitID.." - "..unitID)
-										print("---------------")
-										dump(bDetails)
-									end
-									KBM.Trigger.Queue:Add(TriggerObj, unitID, unitID, bDetails.remaining)
-								end
-							end
-						end
-						if KBM.Trigger.PlayerBuff[KBM.CurrentMod.ID] then
-							if KBM.Trigger.PlayerBuff[KBM.CurrentMod.ID][bDetails.name] then
-								local TriggerObj = KBM.Trigger.PlayerBuff[KBM.CurrentMod.ID][bDetails.name]
-								if LibSRM.Group.UnitExists(unitID) ~= nil or unitID == KBM.Player.UnitID then
-									if KBM.Debug then
-										print("Buff Trigger matched: "..bDetails.name)
-										if LibSRM.Grouped() then
-											print("LibSRM Match: "..tostring(LibSRM.Group.UnitExists(unitID)))
-										end
-										print("Player Match: "..KBM.Player.UnitID.." - "..unitID)
-										print("---------------")
-										dump(bDetails)
-									end
-									KBM.Trigger.Queue:Add(TriggerObj, unitID, unitID, bDetails.remaining)
-								end
-							end
-						end
-						if unitID == KBM.Player.UnitID then
-							if KBM.Buffs.WatchID[bDetails.kbmType] then
-								if KBM.Trigger.CustomBuffRemove["playerBuffID"] then
-									if KBM.Trigger.CustomBuffRemove["playerBuffID"][bDetails.kbmType] then
-										local Trigger = KBM.Trigger.CustomBuffRemove["playerBuffID"][bDetails.kbmType]
-										Trigger:Activate(unitID, bDetails.caster, BuffID)
-									end
-								end
-							end
-						end
-						if KBM.TankSwap.Active then
-							if KBM.TankSwap.Tanks[unitID] then
-								if KBM.TankSwap.DebuffName[bDetails.name] then
-									KBM.TankSwap.Tanks[unitID]:BuffUpdate(BuffID, bDetails.name)
-								end
-							end
+					end
+				end
+				if KBM.TankSwap.Active then
+					if KBM.TankSwap.Tanks[unitID] then
+						if KBM.TankSwap.DebuffName[bDetails.name] then
+							KBM.TankSwap.Tanks[unitID]:BuffUpdate(BuffID, bDetails.name)
 						end
 					end
 				end
 			end
 		else
-			if unitID then
-				if Buffs then
-					for BuffID, BuffType in pairs(Buffs) do
-						local ignore = false
-						if KBM.Buffs.Active[unitID] then
-							if KBM.Buffs.Active[unitID][BuffID] then
-								ignore = true
-							end
+			if bDetails then
+				if KBM.Trigger.EncStart["playerBuff"] then
+					if KBM.Trigger.EncStart["playerBuff"][bDetails.name] then
+						local TriggerMod = KBM.Trigger.EncStart["playerBuff"][bDetails.name]
+						if TriggerMod.Dummy then
+							KBM.CheckActiveBoss(TriggerMod.Dummy.Details, "Dummy")
 						end
-						if not ignore then
-							local bDetails = KBM:BuffCache(unitID, BuffID)
-							if bDetails then
-								if KBM.Trigger.EncStart["playerBuff"] then
-									if KBM.Trigger.EncStart["playerBuff"][bDetails.name] then
-										local TriggerMod = KBM.Trigger.EncStart["playerBuff"][bDetails.name]
-										if TriggerMod.Dummy then
-											KBM.CheckActiveBoss(TriggerMod.Dummy.Details, "Dummy")
-										end
-									end
-								end
-								if unitID == KBM.Player.UnitID then
-									if KBM.Buffs.WatchID[bDetails.kbmType] then
-										if KBM.Trigger.CustomBuffRemove["playerBuffID"] then
-											if KBM.Trigger.CustomBuffRemove["playerBuffID"][bDetails.kbmType] then
-												local Trigger = KBM.Trigger.CustomBuffRemove["playerBuffID"][bDetails.kbmType]
-												Trigger:Activate(unitID, bDetails.caster, BuffID)
-											end
-										end
-									end
-								end
+					end
+				end
+				if unitID == KBM.Player.UnitID then
+					if KBM.Buffs.WatchID[bDetails.LibSBuffType] then
+						if KBM.Trigger.CustomBuffRemove["playerBuffID"] then
+							if KBM.Trigger.CustomBuffRemove["playerBuffID"][bDetails.LibSBuffType] then
+								local Trigger = KBM.Trigger.CustomBuffRemove["playerBuffID"][bDetails.LibSBuffType]
+								Trigger:Activate(unitID, bDetails.caster, BuffID)
 							end
-						else
-							-- if KBM.Debug then
-								-- print("Buff ignored, already cached: "..KBM.Buffs.Active[unitID][BuffID].name)
-							-- end
 						end
 					end
 				end
@@ -7395,93 +7372,38 @@ function KBM:BuffAdd(unitID, Buffs)
 	
 end
 
-function KBM:BuffRemove(unitID, Buffs)
+function KBM:BuffRemove(unitID, BuffID, bDetails)
 	
 	if KBM.Options.Enabled then
 		if KBM.Encounter then
-			if unitID then
-				if KBM.Buffs.Active[unitID] then
-					for BuffID, bool in pairs(Buffs) do
-						if BuffID then
-							if KBM.Buffs.Active[unitID][BuffID] then
-								local bDetails = KBM.Buffs.Active[unitID][BuffID]
-								if KBM.Trigger.BuffRemove[KBM.CurrentMod.ID] then
-									if KBM.Trigger.BuffRemove[KBM.CurrentMod.ID][bDetails.name] then
-										local TriggerObj = KBM.Trigger.BuffRemove[KBM.CurrentMod.ID][bDetails.name]
-										if TriggerObj.Unit.UnitID == unitID then
-											KBM.Trigger.Queue:Add(TriggerObj, nil, unitID, nil)
-										end
-									end
-								end
-								if KBM.Trigger.PlayerBuffRemove[KBM.CurrentMod.ID] then
-									if KBM.Trigger.PlayerBuffRemove[KBM.CurrentMod.ID][bDetails.name] then
-										local TriggerObj = KBM.Trigger.PlayerBuffRemove[KBM.CurrentMod.ID][bDetails.name]
-										if LibSRM.Group.UnitExists(unitID) or unitID == KBM.Player.UnitID then
-											KBM.Trigger.Queue:Add(TriggerObj, nil, unitID, nil)
-										end
-									end
-								end
-								if KBM.Trigger.PlayerIDBuffRemove[KBM.CurrentMod.ID] then
-									if KBM.Trigger.PlayerIDBuffRemove[KBM.CurrentMod.ID][bDetails.type] then
-										local TriggerObj = KBM.Trigger.PlayerIDBuffRemove[KBM.CurrentMod.ID][bDetails.type]
-										if LibSRM.Group.UnitExists(unitID) or unitID == KBM.Player.UnitID then
-											KBM.Trigger.Queue:Add(TriggerObj, nil, unitID, nil)
-										end
-									end
-								end
-								if bDetails then
-									if bDetails.type then
-										KBM.Buffs.Active[unitID].Buff_Types[bDetails.type] = nil
-									else
-										if bDetails.abilityNew then
-											KBM.Buffs.Active[unitID].Buff_Types[bDetails.abilityNew] = nil
-										else
-											if bDetails.rune then
-												KBM.Buffs.Active[unitID].Buff_Types[bDetails.rune] = nil
-											end
-										end
-									end
-								end
-								KBM.Buffs.Active[unitID][BuffID] = nil
-								KBM.Buffs.Active[unitID].Buff_Count = KBM.Buffs.Active[unitID].Buff_Count - 1
-								if KBM.Buffs.Active[unitID].Buff_Count == 0 then
-									KBM.Buffs.Active[unitID] = nil
-								end
-							end
+			if bDetails then
+				if KBM.Trigger.BuffRemove[KBM.CurrentMod.ID] then
+					if KBM.Trigger.BuffRemove[KBM.CurrentMod.ID][bDetails.name] then
+						local TriggerObj = KBM.Trigger.BuffRemove[KBM.CurrentMod.ID][bDetails.name]
+						if TriggerObj.Unit.UnitID == unitID then
+							KBM.Trigger.Queue:Add(TriggerObj, nil, unitID, nil)
+						end
+					end
+				end
+				if KBM.Trigger.PlayerBuffRemove[KBM.CurrentMod.ID] then
+					if KBM.Trigger.PlayerBuffRemove[KBM.CurrentMod.ID][bDetails.name] then
+						local TriggerObj = KBM.Trigger.PlayerBuffRemove[KBM.CurrentMod.ID][bDetails.name]
+						if LibSRM.Group.UnitExists(unitID) or unitID == KBM.Player.UnitID then
+							KBM.Trigger.Queue:Add(TriggerObj, nil, unitID, nil)
+						end
+					end
+				end
+				if KBM.Trigger.PlayerIDBuffRemove[KBM.CurrentMod.ID] then
+					if KBM.Trigger.PlayerIDBuffRemove[KBM.CurrentMod.ID][bDetails.type] then
+						local TriggerObj = KBM.Trigger.PlayerIDBuffRemove[KBM.CurrentMod.ID][bDetails.type]
+						if LibSRM.Group.UnitExists(unitID) or unitID == KBM.Player.UnitID then
+							KBM.Trigger.Queue:Add(TriggerObj, nil, unitID, nil)
 						end
 					end
 				end
 			end
-		else
-			if unitID then
-				if KBM.Buffs.Active[unitID] then
-					for BuffID, bool in pairs(Buffs) do
-						if BuffID then
-							if KBM.Buffs.Active[unitID][BuffID] then
-								local bDetails = KBM.Buffs.Active[unitID][BuffID]
-								if bDetails then
-									if bDetails.type then
-										KBM.Buffs.Active[unitID].Buff_Types[bDetails.type] = nil
-									else
-										if bDetails.abilityNew then
-											KBM.Buffs.Active[unitID].Buff_Types[bDetails.abilityNew] = nil
-										else
-											if bDetails.rune then
-												KBM.Buffs.Active[unitID].Buff_Types[bDetails.rune] = nil
-											end
-										end
-									end
-								end
-								KBM.Buffs.Active[unitID][BuffID] = nil
-								KBM.Buffs.Active[unitID].Buff_Count = KBM.Buffs.Active[unitID].Buff_Count - 1
-								if KBM.Buffs.Active[unitID].Buff_Count == 0 then
-									KBM.Buffs.Active[unitID] = nil
-								end
-							end
-						end
-					end
-				end
-			end
+		-- else
+			
 		end
 	end
 
@@ -8609,9 +8531,9 @@ end
 function KBM.InitEvents()
 	table.insert(Event.Chat.Notify, {KBM.Notify, "KingMolinator", "Notify Event"})
 	table.insert(Event.Chat.Npc, {KBM.NPCChat, "KingMolinator", "NPC Chat"})
-	table.insert(Event.Buff.Add, {function (unitID, Buffs) KBM:BuffAdd(unitID, Buffs) end, "KingMolinator", "Buff Monitor (Add)"})
+	table.insert(Event.SafesBuffLib.Buff.Add, {function (...) KBM:BuffAdd(...) end, "KingMolinator", "Buff Monitor (Add)"})
 	--table.insert(Event.Buff.Change, {function (unitID, Buffs) KBM:BuffMonitor(unitID, Buffs, "change") end, "KingMolinator", "Buff Monitor (change)"})
-	table.insert(Event.Buff.Remove, {function (unitID, Buffs) KBM:BuffRemove(unitID, Buffs) end, "KingMolinator", "Buff Monitor (remove)"})
+	table.insert(Event.SafesBuffLib.Buff.Remove, {function (...) KBM:BuffRemove(...) end, "KingMolinator", "Buff Monitor (remove)"})
 	table.insert(Event.Unit.Availability.None, {KBM_UnitRemoved, "KingMolinator", "Unit Unavailable"})
 	table.insert(Event.Unit.Availability.Partial, {KBM_UnitAvailable, "KingMolinator", "Unit Available"})
 	table.insert(Event.Unit.Availability.Full, {KBM_UnitAvailable, "KingMolinator", "Unit Available"})

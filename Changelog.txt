@@ -1,5 +1,19 @@
 ﻿v1.3.0
 
+System
+* New: Added Safe's Buff Library (LibSBuff)
+* New: Added Safe's Table Library (LibSata)
+* New: Added Safe's GUI Library (LibSGui)
+
+Buff System
+* Change: The entire Buff system and Tracking has switched over to LibSBuff
+
+Ready Check
+* Change: Now uses LibSBuff instead of KBM's old Buff system.
+
+Tank Swap
+* Note: This still uses direct Buff polling, but will eventually be moved over to exclusively use LibSBuff.
+
 Infernal Dawn
 * Laethys
 ** New: The final phase debuff [Touch of Gold] is now flagged as important.
