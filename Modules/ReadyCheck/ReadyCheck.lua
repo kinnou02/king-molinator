@@ -1351,6 +1351,7 @@ function PI.Start()
 	table.insert(Event.Unit.Availability.Partial, {PI.DetailUpdates.Availability, "KBMReadyCheck", "Update Full"})
 	table.insert(Event.SafesBuffLib.Buff.Add, {PI.BuffAdd, "KBMReadyCheck", "Buff Add"})
 	table.insert(Event.SafesBuffLib.Buff.Remove, {PI.BuffRemove, "KBMReadyCheck", "Buff Remove"})
+	table.insert(Event.SafesBuffLib.Buff.Change, {PI.BuffAdd, "KBMReadyCheck", "Buff Change/Add"})
 end
 
 function PI.UpdateSMode(Silent)

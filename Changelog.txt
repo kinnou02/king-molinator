@@ -33,6 +33,10 @@ Rise of the Phoenix
 * High Priest Arakhurn
 ** Change: Updated the Trigger methods for both Boss versions to be the new TID. This should prevent incorrect encounter starts during RP.
 
+Greenscale's Blight
+* Lord Greenscale
+** Fixed: The phase monitor should now continue to progress even with excessive DPS.
+
 ----
 v1.2.9
 

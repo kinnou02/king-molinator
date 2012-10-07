@@ -7181,8 +7181,8 @@ end
 
 function KBM.NPCChat(data)
 	if KBM.Debug then
-		--print("Chat Capture;")
-		--dump(data)
+		print("Chat Capture;")
+		dump(data)
 	end
 
 	if KBM.Options.Enabled then
@@ -7204,52 +7204,6 @@ function KBM.NPCChat(data)
 			end
 		end
 	end
-end
-
-function KBM:xBuffCache(unitID, BuffID)
-	if KBM.Buffs.Active[unitID] then
-		if KBM.Buffs.Active[unitID][BuffID] then
-			return KBM.Buffs.Active[unitID][BuffID]
-		end
-	else
-		KBM.Buffs.Active[unitID] = {
-			Buff_Count = 1,
-			Buff_Types = {},
-		}
-	end
-	local bDetails = Inspect.Buff.Detail(unitID, BuffID)
-	if bDetails then
-		KBM.Buffs.Active[unitID].Buff_Count = KBM.Buffs.Active[unitID].Buff_Count + 1
-		KBM.Buffs.Active[unitID][BuffID] = bDetails
-		-- if KBM.Debug then
-			-- print("---------------")
-			-- print(tostring(bDetails.name))
-		-- end
-		if bDetails.type then
-			bDetails.kbmType = bDetails.type
-			KBM.Buffs.Active[unitID].Buff_Types[bDetails.type] = bDetails
-			-- if KBM.Debug then
-				-- print("Added via type: "..bDetails.type)
-			-- end
-		else
-			if bDetails.abilityNew then
-				bDetails.kbmType = bDetails.abilityNew
-				KBM.Buffs.Active[unitID].Buff_Types[bDetails.abilityNew] = bDetails
-				-- if KBM.Debug then
-					-- print("Added via Ability New ID: "..bDetails.abilityNew)
-				-- end
-			else
-				if bDetails.rune then
-					bDetails.kbmType = bDetails.rune
-					KBM.Buffs.Active[unitID].Buff_Types[bDetails.rune] = bDetails
-					-- if KBM.Debug then
-						-- print("Added via rune ID: "..bDetails.rune)
-					-- end
-				end
-			end
-		end
-	end
-	return bDetails
 end
 
 function KBM:BuffAdd(unitID, BuffID, bDetails)
@@ -7359,21 +7313,9 @@ function KBM:BuffAdd(unitID, BuffID, bDetails)
 			end
 		end
 	end
-	-- local TimeEllapsed = tonumber(string.format("%0.05f", Inspect.Time.Real() - TimeStore))
-	-- local TimeLeft = Inspect.System.Watchdog()
-	-- KBM.Watchdog.Buffs.Count = KBM.Watchdog.Buffs.Count + 1
-	-- KBM.Watchdog.Buffs.Total = KBM.Watchdog.Buffs.Total + TimeEllapsed
-	-- if KBM.Watchdog.Buffs.Peak < TimeEllapsed then
-		-- KBM.Watchdog.Buffs.Peak = TimeEllapsed
-	-- end
-	-- if KBM.Watchdog.Buffs.wTime > TimeLeft then
-		-- KBM.Watchdog.Buffs.wTime = TimeLeft
-	-- end
-	
 end
 
 function KBM:BuffRemove(unitID, BuffID, bDetails)
-	
 	if KBM.Options.Enabled then
 		if KBM.Encounter then
 			if bDetails then
@@ -7402,11 +7344,8 @@ function KBM:BuffRemove(unitID, BuffID, bDetails)
 					end
 				end
 			end
-		-- else
-			
 		end
 	end
-
 end
 
 function KBM.SlashInspectBuffs(Name)

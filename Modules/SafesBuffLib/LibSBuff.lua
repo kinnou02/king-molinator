@@ -238,6 +238,23 @@ function _int:UnitRemoved(Units)
 	end
 end
 
+function _int.DumpCache(params)
+	local Count = 0
+	local uCount = 0
+	for UnitID, UnitCache in pairs(LibSBuff.Cache) do
+		uCount = uCount + 1
+		print(uCount..": Buff Cache for: "..UnitID)
+		for BuffID, BuffData in pairs(UnitCache.BuffID) do
+			Count = Count + 1
+			print(Count..": "..tostring(BuffData.name))
+		end
+	end
+	print("Total Units tracked: "..uCount)
+	print("Total Buffs cached: "..Count)
+end
+
+-- Debug Commands
+table.insert(Command.Slash.Register("libsbuff"), {_int.DumpCache, "SafesBuffLib", "Dump current cache to Console"})
 -- Unit Related Events
 table.insert(Event.Unit.Availability.Full, {function(...) _int:UnitAvailable(...) end, AddonIni.id, "Unit Available Handler"})
 table.insert(Event.Unit.Availability.None, {function(...) _int:UnitRemoved(...) end, AddonIni.id, "Unit Removed Handler"})

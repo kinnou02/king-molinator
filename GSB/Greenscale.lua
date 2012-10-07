@@ -228,7 +228,7 @@ function LG.AirPhaseOne()
 end
 
 function LG.AirPhaseTwo()
-	if LG.Phase == 2 then
+	if LG.Phase < 3 then
 		LG.PhaseObj.Objectives:Remove()
 		LG.PhaseObj:SetPhase(KBM.Language.Options.Air[KBM.Lang])
 		LG.PhaseObj.Objectives:AddPercent(LG.Greenscale.Name, 25, 50)
@@ -237,7 +237,7 @@ function LG.AirPhaseTwo()
 end
 
 function LG.AirPhaseThree()
-	if LG.Phase == 3 then
+	if LG.Phase < 4 then
 		LG.PhaseObj.Objectives:Remove()
 		LG.PhaseObj:SetPhase(KBM.Language.Options.Air[KBM.Lang])
 		LG.PhaseObj.Objectives:AddPercent(LG.Greenscale.Name, 0, 25)
