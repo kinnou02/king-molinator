@@ -262,7 +262,7 @@ function MF.PhaseFinal()
 	MF.PhaseObj.Objectives:AddPercent(MF.Maelforge.Name, 0, 30)
 	MF.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
 	MF.Phase = 4
-	KBM.MechTimer:AddStop(MF.Maelforge.TimersRef.Hell)
+	KBM.MechTimer:AddRemove(MF.Maelforge.TimersRef.Hell)
 	KBM.MechTimer:AddStart(MF.Maelforge.TimersRef.Hell_P3First)
 end
 
