@@ -79,7 +79,8 @@ MF.Lang.Unit.EggShort:SetFrench("Œuf")
 
 -- Ability Dictionary
 MF.Lang.Ability = {}
-MF.Lang.Ability.Blast = KBM.Language:Add("Magma Blast")
+MF.Lang.Ability.Blast = KBM.Language:Add("Molten Blast")
+MF.Lang.Ability.Blast:SetGerman("Geschmolzene Explosion")
 
 -- Notify Dictionary
 MF.Lang.Notify = {}

@@ -152,6 +152,7 @@ LT.Lang.Debuff.Gold = KBM.Language:Add("Touch of Gold")
 LT.Lang.Debuff.Gold:SetFrench("Toucher de l'or")
 LT.Lang.Debuff.Gold:SetGerman("Berührung des Goldes")
 LT.Lang.Debuff.Eye = KBM.Language:Add("Eye of Laethys")
+LT.Lang.Debuff.Eye:SetGerman("Auge von Laethys")
 --LT.Lang.Debuff.TGold = KBM.Language:Add("Use ability soon!")
 
 -- Notify Dictionary

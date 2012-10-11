@@ -1,4 +1,16 @@
-﻿v1.3.0
+﻿v1.3.1
+
+Infernal Dawn
+* Maelforge - Ember Eggs
+** Fixed: Corrected skill name Molten Blast.
+* Maelforge - Final
+** Fixed: Corrected skill name Molten Blast.
+
+Translations
+* German additions.
+
+----
+v1.3.0
 
 System
 * New: Added Safe's Buff Library (LibSBuff)

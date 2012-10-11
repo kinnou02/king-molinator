@@ -93,7 +93,8 @@ MF.Lang.Location.Spires:SetFrench("Aiguilles de Sacrifice")
 
 -- Ability Dictionary
 MF.Lang.Ability = {}
-MF.Lang.Ability.Blast = KBM.Language:Add("Magma Blast")
+MF.Lang.Ability.Blast = KBM.Language:Add("Molten Blast")
+MF.Lang.Ability.Blast:SetGerman("Geschmolzene Explosion")
 
 -- Debuff Dictionary
 MF.Lang.Debuff = {}
@@ -128,6 +129,7 @@ MF.Lang.Menu.Hell_Yellow = KBM.Language:Add("Hellfire (Yellow)")
 MF.Lang.Menu.Hell_Yellow:SetGerman("Höllenfeuer (Gelb)")
 MF.Lang.Menu.Hell_Yellow:SetFrench("Hellfire (Jaune)")
 MF.Lang.Menu.Hell_P3First = KBM.Language:Add("First Hellfire (Final Phase)")
+MF.Lang.Menu.Hell_P3First:SetGerman("Erste Höllenfeuer (Letzte Phase)") 
 
 -- Description
 MF.Lang.Descript = {}
