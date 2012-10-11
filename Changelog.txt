@@ -46,6 +46,9 @@ Greenscale's Blight
 * Lord Greenscale
 ** Fixed: The phase monitor should now continue to progress even with excessive DPS.
 
+Translations
+* German Fixed
+
 ----
 v1.2.9
 
