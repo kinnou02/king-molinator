@@ -126,6 +126,7 @@ LT.Lang.Ability.Resto:SetRussian("Иссохшее восстановление"
 LT.Lang.Ability.LiqGold = KBM.Language:Add("Laethic Gold")
 LT.Lang.Ability.LiqGold:SetGerman("Laethic-Gold")
 LT.Lang.Ability.LiqGold:SetFrench("Or laethique")
+LT.Lang.Ability.LiqGold:SetRussian("Золото Лэтис")
 
 -- Mechanic Dictionary
 LT.Lang.Mechanic = {}
@@ -151,8 +152,11 @@ LT.Lang.Debuff = {}
 LT.Lang.Debuff.Gold = KBM.Language:Add("Touch of Gold")
 LT.Lang.Debuff.Gold:SetFrench("Toucher de l'or")
 LT.Lang.Debuff.Gold:SetGerman("Berührung des Goldes")
+LT.Lang.Debuff.Gold:SetRussian("Золотое прикосновение")
 LT.Lang.Debuff.Eye = KBM.Language:Add("Eye of Laethys")
 LT.Lang.Debuff.Eye:SetGerman("Auge von Laethys")
+LT.Lang.Debuff.Eye:SetFrench("Œil de Laethys")
+LT.Lang.Debuff.Eye:SetRussian("Око Лэтис")
 --LT.Lang.Debuff.TGold = KBM.Language:Add("Use ability soon!")
 
 -- Notify Dictionary
@@ -160,13 +164,15 @@ LT.Lang.Notify = {}
 LT.Lang.Notify.PhaseTwoTrans = KBM.Language:Add("Laethys roars, \"How dare you scuff my beautiful form%?! You will pay for this...\"")
 LT.Lang.Notify.PhaseTwoTrans:SetFrench("Laethys rugit : \"Comment osez-vous vous en prendre à tant de beauté %? Vous me le paierez...\"")
 LT.Lang.Notify.PhaseTwoTrans:SetGerman("Laethys brüllt: \"Wie könnt Ihr es wagen, meiner wunderschönen Gestalt zu schaden. Dafür werdet Ihr büßen ...\"")
+LT.Lang.Notify.PhaseTwoTrans:SetRussian("Лэтис: «Как смеете вы осквернять мою красоту%?! Вы заплатите за это!».")
 LT.Lang.Notify.PhaseTwoStart = KBM.Language:Add("Laethys says, \"Behold your doom! Put down your weapons and perhaps I shall grant you a swift demise!\"")
 LT.Lang.Notify.PhaseTwoStart:SetFrench("Laethys dit : \"Nul ne peut échapper à son destin ! Rendez les armes et je vous accorderai un léger sursis.\"")
 LT.Lang.Notify.PhaseTwoStart:SetGerman("Laethys sagt: \"Seht Eurem Untergang entgegen! Legt Eure Waffen nieder und ich gewähre Euch ein schnelles Ende ... vielleicht!\"")
+LT.Lang.Notify.PhaseTwoStart:SetRussian("Лэтис: «Ваша судьба предрешена! Сложите оружие, и, быть может, я дарую вам быструю смерть!»")
 LT.Lang.Notify.LiqGold = KBM.Language:Add("Laethys unleashes a wave of liquid gold.")
 LT.Lang.Notify.LiqGold:SetGerman("Laethys entfesselt eine Welle aus flüssigem Gold.")
 LT.Lang.Notify.LiqGold:SetFrench("Laethys lance une vague d'or liquide.")
-
+LT.Lang.Notify.LiqGold:SetRussian("Лэтис сотворяет волну расплавленного золота.")
 -- Menu Dictionary
 LT.Lang.Menu = {}
 LT.Lang.Menu.Storm = KBM.Language:Add("First Storm of Treasure")
@@ -192,6 +198,7 @@ LT.Lang.Menu.Adds:SetRussian("Первые Адды")
 LT.Lang.Menu.LiqGold = KBM.Language:Add("First Laethic Gold")
 LT.Lang.Menu.LiqGold:SetGerman("Erste Laethic-Gold")
 LT.Lang.Menu.LiqGold:SetFrench("Premier Or laethique")
+LT.Lang.Menu.LiqGold:SetRussian("Первое Золото Лэтис")
 --LT.Lang.Menu.TGold = KBM.Language:Add("Touch of Gold 5 second warning")
 
 LT.Laethys.Name = LT.Lang.Unit.Laethys[KBM.Lang]

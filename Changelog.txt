@@ -1,4 +1,11 @@
-﻿v1.3.1
+﻿v1.3.2
+
+Translations
+* French addition for Laethys Tank-Swap.
+* Russian additions for Laethys encounter.
+
+----
+v1.3.1
 
 Infernal Dawn
 * Maelforge - Ember Eggs
