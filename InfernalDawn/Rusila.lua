@@ -51,6 +51,7 @@ RS.Rusila = {
 			Enabled = true,
 			LeftLongshot = KBM.Defaults.TimerObj.Create("pink"),
 			RightLongshot = KBM.Defaults.TimerObj.Create("pink"),
+			Chains = KBM.Defaults.TimerObj.Create("purple"),
 		},
 		AlertsRef = {
 			Enabled = true,
@@ -146,6 +147,7 @@ RS.Lang.Notify.Over = KBM.Language:Add('Rusila Dreadblade grins, "Careful not to
 RS.Lang.Notify.Over:SetRussian("Русила Жуткий Клинок, ухмыляясь: «Не свалитесь за борт, Вознесенные!»")
 RS.Lang.Notify.Over:SetGerman('Rusila Schreckensklinge grinst und sagt: "Vorsicht, fallt nicht über Bord, Auserwählter!"')
 RS.Lang.Notify.Over:SetFrench('Rusila Lame-lugubre dit avec un sourire : "Attention à ne pas basculer par-dessus bord, êtres Élus !"')
+RS.Lang.Notify.Chain = KBM.Language:Add("Rusila Dreadblade says, \"Punishment for mutiny aboard my vessel, Ascended, is to have your flesh peeled from your bones.\"")
 
 -- Buff Dictionary
 RS.Lang.Buff = {}
@@ -255,6 +257,7 @@ function RS:InitVars()
 		Rusila = {
 			AlertsRef = self.Rusila.Settings.AlertsRef,
 			TimersRef = self.Rusila.Settings.TimersRef,
+			ChatRef = self.Rusila.Settings.ChatRef,
 		},
 	}
 	KBMINDRS_Settings = self.Settings
@@ -327,10 +330,10 @@ function RS:Death(UnitID)
 		if self.Long.UnitList[UnitID].Side then
 			if self.Long.UnitList[UnitID].Side == "Left" then
 				KBM.MechTimer:AddStart(self.Rusila.TimersRef.LeftLongshot)
-				print(self.Lang.Verbose.LeftLSDied[KBM.Lang])
+				KBM.Chat:Display(self.Rusila.ChatRef.LeftLSDied)
 			else
 				KBM.MechTimer:AddStart(self.Rusila.TimersRef.RightLongshot)
-				print(self.Lang.Verbose.RightLSDied[KBM.Lang])
+				KBM.Chat:Display(self.Rusila.ChatRef.RightLSDied)
 			end			
 		else
 			--print("Longshot died.")
@@ -422,6 +425,7 @@ function RS:Start()
 	-- Create Timers
 	self.Rusila.TimersRef.LeftLongshot = KBM.MechTimer:Add(self.Lang.Unit.LeftLong[KBM.Lang], 30)
 	self.Rusila.TimersRef.RightLongshot = KBM.MechTimer:Add(self.Lang.Unit.RightLong[KBM.Lang], 30)
+	self.Rusila.TimersRef.Chains = KBM.MechTimer:Add(self.Lang.Ability.Chain[KBM.Lang], 46)
 	KBM.Defaults.TimerObj.Assign(self.Rusila)
 	
 	-- Create Alerts
@@ -447,6 +451,8 @@ function RS:Start()
 	self.Rusila.Triggers.DreadDur:AddAlert(self.Rusila.AlertsRef.DreadDur, true)
 	self.Rusila.Triggers.Fall = KBM.Trigger:Create(self.Lang.Notify.Fall[KBM.Lang], "notify", self.Rusila)
 	self.Rusila.Triggers.Fall:AddPhase(self.PhaseTwo)
+	self.Rusila.Triggers.Chains = KBM.Trigger:Create(self.Lang.Notify.Chain[KBM.Lang], "notify", self.Rusila)
+	self.Rusila.Triggers.Chains:AddTimer(self.Rusila.TimersRef.Chains)
 	
 	self.Rusila.CastBar = KBM.CastBar:Add(self, self.Rusila)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

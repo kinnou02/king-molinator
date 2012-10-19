@@ -1,5 +1,23 @@
 ﻿v1.3.2
 
+LibSBuff
+* Change: Full Buff list calls on units changing to Availability. Full are now forced in to a post cache mode.
+* Change: BuffUpdate no longer calls BuffAdd for full Buff lists. This Method will now queue the entire Buff list for processing.
+
+RezMaster
+* Fixed: Scaling Rez Master with active timers should no longer throw errors.
+
+Menus
+* Fixed: Scrollable views will now clamp to the last item in the list, rather than add additional empty space.
+* Fixed: List views will now align themselves with the scrollbar position after collapsing and expanding Menu items.
+* Fixed: Collapsing a Menu item which then disables the Scrollbar will reset the view so all items are visible.
+* Fixed: Introduced a check to ensure new Scrollbar positions fall within the excepted range.
+
+Infernal Dawn
+* Rusila Dreadblade
+** New: Barbed chains timer.
+** Fixed: Left and Right Dreadshot death messages are now correctly linked to their options.
+
 Translations
 * French addition for Laethys Tank-Swap.
 * Russian additions for Laethys encounter.

@@ -380,6 +380,7 @@ function RM.Rezes:Init()
 					
 					function Timer:Update(CurrentTime, Force)
 						local text = ""
+						CurrentTime = CurrentTime or Inspect.Time.Real()
 						if self.Active then
 							if not self.Waiting then
 								self.Remaining = math.ceil(self.Duration - (CurrentTime - self.TimeStart))

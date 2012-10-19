@@ -1040,12 +1040,30 @@ function KBM.InitOptions()
 		if Tab == self.Selected.Main or Tab == self.Selected.Instance then
 			if self[Tab].MenuSize < self[Tab].Menu:GetHeight() then
 				self[Tab].Scroller:SetEnabled(false)
+				if self[Tab].FirstItem then
+					if self[Tab].FirstItem.GUI then
+						self[Tab].FirstItem.GUI.Frame:SetPoint("TOP", self[Tab].Menu, "TOP")
+					else
+						self[Tab].FirstItem:SetPoint("TOP", self[Tab].Menu, "TOP")
+					end
+				end
 			else
+				local _repos = false
 				if not self[Tab].Scroller:GetEnabled() then
 					self[Tab].Scroller:SetEnabled(true)
+					_repos = true
 				end
 				local Max = self[Tab].MenuSize - self[Tab].Menu:GetHeight()
 				self[Tab].Scroller:SetRange(0, Max / self[Tab].Multiplier)
+				if _repos then
+					if self[Tab].FirstItem then
+						if self[Tab].FirstItem.GUI then
+							self[Tab].FirstItem.GUI.Frame:SetPoint("TOP", self[Tab].Menu, "TOP", nil, -self[Tab].Scroller:GetPosition() * self[Tab].Multiplier)
+						else
+							self[Tab].FirstItem:SetPoint("TOP", self[Tab].Menu, "TOP", nil, -self[Tab].Scroller:GetPosition() * self[Tab].Multiplier)						
+						end
+					end
+				end
 			end
 		end	
 	end
@@ -1112,7 +1130,15 @@ function KBM.InitOptions()
 				end
 				KBM.MainWin.Tabs:UpdateScroller(self.ID)
 				if self.Parent.Scroller:GetEnabled() then
+					local _min, _max = self.Parent.Scroller:GetRange()
+					if self.Position > _max then
+						self.Position = _max
+					elseif self.Position < _min then
+						self.Position = _min
+					end
 					self.Parent.Scroller:SetPosition(self.Position)
+				else
+					self.Position = 0
 				end
 			end
 		end
@@ -1376,7 +1402,7 @@ function KBM.InitOptions()
 		
 	function KBM.MainWin:AddSize(Frame, Tab)
 		Tab = Tab or "Main"
-		self.Tabs[Tab].MenuSize = self.Tabs[Tab].MenuSize + Frame:GetHeight()
+		self.Tabs[Tab].MenuSize = self.Tabs[Tab].MenuSize + math.ceil(Frame:GetHeight())
 		self.Tabs:UpdateScroller(Tab)
 	end
 	function KBM.MainWin:SubSize(Size)
@@ -1385,6 +1411,10 @@ function KBM.InitOptions()
 	end
 	function KBM.MainWin.Tabs:SubSize(Size, Tab)
 		self[Tab].MenuSize = self[Tab].MenuSize - Size
+		self:UpdateScroller(Tab)
+	end
+	function KBM.MainWin.Tabs:AddSize(Size, Tab)
+		self[Tab].MenuSize = self[Tab].MenuSize + Size
 		self:UpdateScroller(Tab)
 	end
 	
@@ -1587,14 +1617,14 @@ function KBM.InitOptions()
 					Child:SetVisible(true)
 				end
 				self:GetParent().LastChild:SetPoint("TOP", self:GetParent().LastChild.Prev, "BOTTOM")
-				KBM.MainWin.Tabs:SubSize(-self:GetParent().ChildSize, Header.Tab)
+				KBM.MainWin.Tabs:AddSize(self:GetParent().ChildSize + 4, Header.Tab)
 			else
 				self.Header.Settings.Collapse = true
 				for _, Child in ipairs(self:GetParent().Children) do
 					Child:SetVisible(false)
 				end
 				self:GetParent().LastChild:SetPoint("TOP", self:GetParent(), "TOP")
-				KBM.MainWin.Tabs:SubSize(self:GetParent().ChildSize, Header.Tab)
+				KBM.MainWin.Tabs:SubSize(self:GetParent().ChildSize + 4, Header.Tab)
 			end
 		end
 		function Header.Event:MouseIn()
@@ -1666,8 +1696,9 @@ function KBM.InitOptions()
 		Instance.GUI.Text:SetFontSize(16)
 		Instance.GUI.Text:SetLayer(2)
 		Instance.Enabled = true
-		Instance.GUI.Text:SetHeight(Instance.GUI.Text:GetHeight())
+		--Instance.GUI.Text:SetHeight(Instance.GUI.Text:GetHeight())
 		Instance.GUI.Frame:SetHeight(Instance.GUI.Text:GetHeight())
+		--Instance.GUI.Frame:SetHeight(22)
 		Instance.GUI.TextShadow:SetPoint("CENTERLEFT", Instance.GUI.Check, "CENTERRIGHT", 1, 1)
 		Instance.GUI.Text:SetPoint("CENTERLEFT", Instance.GUI.Check, "CENTERRIGHT")
 		Instance.Type = "instance"
@@ -1703,14 +1734,14 @@ function KBM.InitOptions()
 						Child.GUI.Frame:SetVisible(true)
 					end
 					self.Instance.LastChild.GUI.Frame:SetPoint("TOP", self.Instance.LastChild.Prev.GUI.Frame, "BOTTOM")
-					KBM.MainWin.Tabs:SubSize(-self.Instance.ChildSize, self.Instance.Tab)
+					KBM.MainWin.Tabs:AddSize(self.Instance.ChildSize + 4, self.Instance.Tab)
 				else
 					self.Instance.Settings.Collapse = true
 					for _, Child in ipairs(self.Instance.Children) do
 						Child.GUI.Frame:SetVisible(false)
 					end
 					self.Instance.LastChild.GUI.Frame:SetPoint("TOP", self.Instance.GUI.Frame, "TOP")
-					KBM.MainWin.Tabs:SubSize(self.Instance.ChildSize, self.Instance.Tab)
+					KBM.MainWin.Tabs:SubSize(self.Instance.ChildSize + 4, self.Instance.Tab)
 				end
 			end			
 		end
@@ -1738,7 +1769,7 @@ function KBM.InitOptions()
 		end
 		
 		function Instance:AddChildSize(Child)
-			self.ChildSize = self.ChildSize + Child:GetHeight()
+			self.ChildSize = self.ChildSize + math.ceil(Child:GetHeight())
 		end
 		
 		KBM.MainWin:AddSize(Instance.GUI.Frame, Tab)
@@ -1779,6 +1810,7 @@ function KBM.InitOptions()
 			Encounter.GUI.Text:SetFontColor(1,1,1)
 			Encounter.GUI.Text:SetLayer(2)
 			Encounter.GUI.Frame:SetHeight(Encounter.GUI.Text:GetHeight())
+			--Encounter.GUI.Frame:SetHeight(19)
 			Encounter.GUI.TextShadow:SetPoint("TOPLEFT", Encounter.GUI.Text, "TOPLEFT", 1 ,1)
 			Encounter.GUI.Text:SetPoint("CENTERLEFT", Encounter.GUI.Check, "CENTERRIGHT")
 			table.insert(self.Children, Encounter)

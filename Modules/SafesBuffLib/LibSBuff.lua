@@ -73,7 +73,10 @@ function LibSBuff:BuffUpdate(UnitID)
 						end
 					end
 				else
-					_int:BuffAdd(UnitID, Buffs)
+					-- Place all the new buffs in the Queue to be added for this Unit
+					for BuffID, BuffType in pairs(Buffs) do
+						_int.Queue:Add({Unit = UnitID, Buff = BuffID, Add = true})
+					end
 				end
 				return true
 			else
