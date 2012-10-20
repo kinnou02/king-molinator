@@ -34,7 +34,7 @@ function _int:ClearBuffs(UnitID, Silent)
 	if Silent then
 		-- Dump all Buff caching for this Unit without Events
 		if LibSBuff.Cache[UnitID] then
-			for BuffID, bDetails in pairs(LibSBuff.Cache[UnitID]) do
+			for BuffID, bDetails in pairs(LibSBuff.Cache[UnitID].BuffID) do
 				LibSBuff.Lookup[BuffID] = nil
 			end
 			LibSBuff.Cache[UnitID] = nil
@@ -43,7 +43,7 @@ function _int:ClearBuffs(UnitID, Silent)
 	else
 		-- Dump all Buff caching for this Unit with Events
 		if LibSBuff.Cache[UnitID] then
-			for BuffID, bDetails in pairs(LibSBuff.Cache[UnitID]) do
+			for BuffID, bDetails in pairs(LibSBuff.Cache[UnitID].BuffID) do
 				self.Queue:Add({Unit = UnitID, Buff = BuffID, Remove = true})
 			end
 		end
@@ -59,7 +59,7 @@ function LibSBuff:BuffUpdate(UnitID)
 			if next(Buffs) then
 				if self.Cache[UnitID] then
 					-- First check for missed Buff Remove events.
-					for BuffID, bDetails in pairs(self.Cache[UnitID]) do
+					for BuffID, bDetails in pairs(self.Cache[UnitID].BuffID) do
 						if not Buffs[BuffID] then
 							-- A cached Buff is no longer on this Unit - Queue for Removal with Event.
 							_int.Queue:Add({Unit = UnitID, Buff = BuffID, Remove = true})

@@ -3,6 +3,11 @@
 LibSBuff
 * Change: Full Buff list calls on units changing to Availability. Full are now forced in to a post cache mode.
 * Change: BuffUpdate no longer calls BuffAdd for full Buff lists. This Method will now queue the entire Buff list for processing.
+* Fixed: Corrected BuffUpdate not checking against the correct active Buff Cache.
+* Fixed: Corrected BuffClear not checking against the correct active Buff Cache.
+
+Ready Check Available Tracking
+* New: Added Razor Edge.
 
 RezMaster
 * Fixed: Scaling Rez Master with active timers should no longer throw errors.
@@ -15,7 +20,8 @@ Menus
 
 Infernal Dawn
 * Rusila Dreadblade
-** New: Barbed chains timer.
+** New: Added Barbed Chains timer.
+** New: Added Fists timer.
 ** Fixed: Left and Right Dreadshot death messages are now correctly linked to their options.
 
 Translations

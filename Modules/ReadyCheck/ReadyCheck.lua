@@ -207,6 +207,13 @@ PI.Constants = {
 						rogue = true,
 					},
 				},
+				["r1F97418336CC3C87"] = { -- Razor Edge
+					Grade = "Medium",
+					Callings = {
+						warrior = true,
+						rogue = true,
+					},
+				},
 				["r4552DA1F7B7A9D42"] = { -- Storm Glyph
 					Grade = "Medium",
 					Callings = {

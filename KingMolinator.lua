@@ -7363,18 +7363,20 @@ function KBM.SlashInspectBuffs(Name)
 		print("----------------")
 		print("Inspecting Buffs for: "..tostring(Name))
 		for UnitID, Object in pairs(KBM.Unit.List.Name[Name]) do
-			local buffList = Inspect.Buff.List(UnitID)
-			KBM:BuffAdd(UnitID, buffList)
-			for buffID, bDetails in pairs(KBM.Buffs.Active[UnitID] or {}) do
-				if bDetails then
-					if type(bDetails) == "table" then
-						if buffID ~= "Buff_Types" then
-							print(tostring(bDetails.name).." : "..tostring(bDetails.kbmType))
+			if UnitID then
+				if LibSBuff.Cache[UnitID] then
+					for buffID, bDetails in pairs(LibSBuff.Cache[UnitID].BuffID or {}) do
+						if bDetails then
+							if type(bDetails) == "table" then
+								if buffID ~= "Buff_Types" then
+									print(tostring(bDetails.name).." : "..tostring(bDetails.LibSBuffType))
+								end
+							end
 						end
 					end
+					print("----------------")
 				end
 			end
-			print("----------------")
 		end
 	else
 		print("No Buff data available for: "..tostring(Name))

@@ -51,7 +51,8 @@ RS.Rusila = {
 			Enabled = true,
 			LeftLongshot = KBM.Defaults.TimerObj.Create("pink"),
 			RightLongshot = KBM.Defaults.TimerObj.Create("pink"),
-			Chains = KBM.Defaults.TimerObj.Create("purple"),
+			Chains = KBM.Defaults.TimerObj.Create("red"),
+			Fists = KBM.Defaults.TimerObj.Create("purple"),
 		},
 		AlertsRef = {
 			Enabled = true,
@@ -148,6 +149,7 @@ RS.Lang.Notify.Over:SetRussian("Русила Жуткий Клинок, ухмы
 RS.Lang.Notify.Over:SetGerman('Rusila Schreckensklinge grinst und sagt: "Vorsicht, fallt nicht über Bord, Auserwählter!"')
 RS.Lang.Notify.Over:SetFrench('Rusila Lame-lugubre dit avec un sourire : "Attention à ne pas basculer par-dessus bord, êtres Élus !"')
 RS.Lang.Notify.Chain = KBM.Language:Add("Rusila Dreadblade says, \"Punishment for mutiny aboard my vessel, Ascended, is to have your flesh peeled from your bones.\"")
+RS.Lang.Notify.Fist = KBM.Language:Add("Rusila Dreadblade grins, \"Careful not to fall overboard, Ascended!\"")
 
 -- Buff Dictionary
 RS.Lang.Buff = {}
@@ -426,6 +428,7 @@ function RS:Start()
 	self.Rusila.TimersRef.LeftLongshot = KBM.MechTimer:Add(self.Lang.Unit.LeftLong[KBM.Lang], 30)
 	self.Rusila.TimersRef.RightLongshot = KBM.MechTimer:Add(self.Lang.Unit.RightLong[KBM.Lang], 30)
 	self.Rusila.TimersRef.Chains = KBM.MechTimer:Add(self.Lang.Ability.Chain[KBM.Lang], 46)
+	self.Rusila.TimersRef.Fists = KBM.MechTimer:Add(self.Lang.Ability.Fist[KBM.Lang], 46)
 	KBM.Defaults.TimerObj.Assign(self.Rusila)
 	
 	-- Create Alerts
@@ -453,6 +456,8 @@ function RS:Start()
 	self.Rusila.Triggers.Fall:AddPhase(self.PhaseTwo)
 	self.Rusila.Triggers.Chains = KBM.Trigger:Create(self.Lang.Notify.Chain[KBM.Lang], "notify", self.Rusila)
 	self.Rusila.Triggers.Chains:AddTimer(self.Rusila.TimersRef.Chains)
+	self.Rusila.Triggers.Fists = KBM.Trigger:Create(self.Lang.Notify.Fist[KBM.Lang], "notify", self.Rusila)
+	self.Rusila.Triggers.Fists:AddTimer(self.Rusila.TimersRef.Fists)
 	
 	self.Rusila.CastBar = KBM.CastBar:Add(self, self.Rusila)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
