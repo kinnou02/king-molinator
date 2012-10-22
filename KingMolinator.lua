@@ -131,7 +131,7 @@ KBM.ID = "KingMolinator"
 KBM.ModList = {}
 KBM.Testing = false
 KBM.ValidTime = false
-KBM.IsAlpha = true
+KBM.IsAlpha = false
 KBM.Debug = false
 KBM.Aux = {}
 KBM.TestFilters = {}
@@ -811,6 +811,7 @@ local function KBM_DefineVars(AddonID)
 				Enabled = true,
 				Visible = true,
 				Unlocked = true,
+				Tank = false,
 			},
 			BestTimes = {
 			},
@@ -5219,44 +5220,46 @@ function KBM.TankSwap:Init()
 	
 	function self:Start(DebuffName, BossID, Debuffs)
 		if KBM.Options.TankSwap.Enabled then
-			local Spec = ""
-			local UnitID = ""
-			local uDetails = nil
-			self.Boss = KBM.Unit.List.UID[BossID]
-			if not self.Boss then
-				return
-			end
-			self.CurrentTarget = nil
-			self.CurrentIcon = nil
-			self.DebuffList = {}
-			self.DebuffName = {}
-			if type(DebuffName) == "table" then
-				for i, DebuffName in ipairs(DebuffName) do
-					self:AddDebuff(DebuffName, i)
+			if (KBM.Player.Role == "tank" and KBM.Options.TankSwap.Tank == true) or KBM.Options.TankSwap.Tank == false then
+				local Spec = ""
+				local UnitID = ""
+				local uDetails = nil
+				self.Boss = KBM.Unit.List.UID[BossID]
+				if not self.Boss then
+					return
 				end
-			else
-				self:AddDebuff(DebuffName, 1)
-			end
-			self.Debuffs = Debuffs or 1
-			if LibSRM.Grouped() then
-				for i = 1, 20 do
-					Spec, UnitID = LibSRM.Group.Inspect(i)
-					if UnitID then
-						uDetails = Inspect.Unit.Detail(UnitID)
-						if uDetails then
-							if uDetails.role == "tank" then
-								self:Add(UnitID)
+				self.CurrentTarget = nil
+				self.CurrentIcon = nil
+				self.DebuffList = {}
+				self.DebuffName = {}
+				if type(DebuffName) == "table" then
+					for i, DebuffName in ipairs(DebuffName) do
+						self:AddDebuff(DebuffName, i)
+					end
+				else
+					self:AddDebuff(DebuffName, 1)
+				end
+				self.Debuffs = Debuffs or 1
+				if LibSRM.Grouped() then
+					for i = 1, 20 do
+						Spec, UnitID = LibSRM.Group.Inspect(i)
+						if UnitID then
+							uDetails = Inspect.Unit.Detail(UnitID)
+							if uDetails then
+								if uDetails.role == "tank" then
+									self:Add(UnitID)
+								end
 							end
 						end
 					end
 				end
 			end
+			local EventData = {
+				DebuffList = self.DebuffName,
+				Enabled = KBM.Options.TankSwap.Enabled,
+			}
+			KBM.Event.System.TankSwap.Start(EventData)
 		end
-		local EventData = {
-			DebuffList = self.DebuffName,
-			Enabled = KBM.Options.TankSwap.Enabled,
-		}
-		KBM.Event.System.TankSwap.Start(EventData)
 	end
 	
 	function self:AddDebuff(DebuffName, Index)
@@ -7630,21 +7633,23 @@ end
 
 -- Tank Swap options.
 function KBM.MenuOptions.TankSwap:Options()
-
 	function self:Enabled(bool)
 		KBM.Options.TankSwap.Enabled = bool
 		KBM.TankSwap.Enabled = bool
 	end
+	
 	function self:ShowAnchor(bool)
 		KBM.Options.TankSwap.Visible = bool
 		if not KBM.TankSwap.Active then
 			KBM.TankSwap.Anchor:SetVisible(bool)
 		end
 	end
+	
 	function self:LockAnchor(bool)
 		KBM.Options.TankSwap.Unlocked = bool
 		KBM.TankSwap.Anchor.Drag:SetVisible(bool)
 	end
+	
 	function self:ScaleWidth(bool, Check)
 		KBM.Options.TankSwap.ScaleWidth = bool
 		if not bool then
@@ -7653,10 +7658,12 @@ function KBM.MenuOptions.TankSwap:Options()
 			KBM.TankSwap.Anchor:SetWidth(KBM.Options.TankSwap.w)
 		end
 	end
+	
 	function self:wScaleChange(value)
 		KBM.Options.TankSwap.wScale = value * 0.01
 		KBM.TankSwap.Anchor:SetWidth(KBM.Options.TankSwap.w * KBM.Options.TankSwap.wScale)
 	end
+	
 	function self:ScaleHeight(bool, Check)
 		KBM.Options.TankSwap.ScaleHeight = bool
 		if not bool then
@@ -7665,10 +7672,12 @@ function KBM.MenuOptions.TankSwap:Options()
 			KBM.TankSwap.Anchor:SetHeight(KBM.Options.TankSwap.h)
 		end
 	end
+	
 	function self:hScaleChange(value)
 		KBM.Options.TankSwap.hScale = value * 0.01
 		KBM.TankSwap.Anchor:SetHeight(KBM.Options.TankSwap.h * KBM.Options.TankSwap.hScale)
 	end
+	
 	function self:TextSize(bool, Check)
 		KBM.Options.TankSwap.TextScale = bool
 		if not bool then
@@ -7677,10 +7686,16 @@ function KBM.MenuOptions.TankSwap:Options()
 			KBM.TankSwap.Anchor.Text:SetFontSize(KBM.Options.TankSwap.TextSize)
 		end
 	end
+	
 	function self:TextChange(value)
 		KBM.Options.TankSwap.TextSize = value
 		KBM.CastBar.Anchor.Text:SetFontSize(KBM.Options.TankSwap.TextSize)
 	end
+	
+	function self:Tank(bool)
+		KBM.Options.TankSwap.Tank = bool
+	end
+	
 	function self:ShowTest(bool)
 		if bool then
 			KBM.TankSwap:Add("Dummy", "Tank A")
@@ -7692,15 +7707,16 @@ function KBM.MenuOptions.TankSwap:Options()
 			KBM.TankSwap.Anchor:SetVisible(KBM.Options.TankSwap.Visible)
 		end
 	end
+	
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
 
 	-- Tank-Swap Options. 
-	local TankSwap = Options:AddHeader(KBM.Language.Options.TankSwapEnabled[KBM.Lang], self.Enabled, KBM.Options.TankSwap.Enabled)
+	local TankSwap = Options:AddHeader(KBM.Language.TankSwap.Enabled[KBM.Lang], self.Enabled, KBM.Options.TankSwap.Enabled)
 	TankSwap:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowAnchor, KBM.Options.TankSwap.Visible)
 	TankSwap:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.LockAnchor, KBM.Options.TankSwap.Unlocked)
-	self.TestCheck = TankSwap:AddCheck(KBM.Language.Options.Tank[KBM.Lang], self.ShowTest, false)
-
+	TankSwap:AddCheck(KBM.Language.TankSwap.Tank[KBM.Lang], self.Tank, KBM.Options.TankSwap.Tank)
+	self.TestCheck = TankSwap:AddCheck(KBM.Language.TankSwap.Test[KBM.Lang], self.ShowTest, false)
 end
 
 -- Castbar options
@@ -8245,6 +8261,14 @@ function KBM.MarkChange(data)
 end
 
 function KBM.RoleChange(data)
+	if type(data) == "table" then
+		--for UnitID, Role in pairs(data) do
+			
+		--end
+		if data[KBM.Player.UnitID] then
+			KBM.Player.Role = data[KBM.Player.UnitID]
+		end
+	end
 end
 
 function KBM.PowerChange(data, PowerMode)
@@ -8409,7 +8433,7 @@ function KBM.InitMenus()
 	KBM.MenuOptions.MechSpy.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.MechSpy.Name[KBM.Lang], KBM.MenuOptions.MechSpy, true, Header)
 	KBM.MenuOptions.MechSpy.MenuItem.Check:SetEnabled(false)
 	local Header = KBM.MainWin.Menu:CreateHeader(KBM.Language.Menu.Mods[KBM.Lang], nil, nil, nil, "Main")
-	KBM.MenuOptions.TankSwap.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.TankSwap[KBM.Lang], KBM.MenuOptions.TankSwap, true, Header)	
+	KBM.MenuOptions.TankSwap.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.TankSwap.Title[KBM.Lang], KBM.MenuOptions.TankSwap, true, Header)	
 	KBM.MenuOptions.TankSwap.MenuItem.Check:SetEnabled(false)
 	KBM.MenuOptions.ReadyCheck.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.ReadyCheck.Name[KBM.Lang], KBM.MenuOptions.ReadyCheck, true, Header)
 	KBM.MenuOptions.ReadyCheck.MenuItem.Check:SetEnabled(false)
@@ -8573,6 +8597,7 @@ local function KBM_WaitReady(unitID, uDetails)
 	KBM.Player.Level = uDetails.level
 	KBM.Player.Grouped = LibSRM.Grouped()
 	KBM.Player.Mode = LibSRM.Player.Mode
+	KBM.Player.Role = uDetails.role
 	KBM.InitEvents()
 	KBM.Event.System.Start(self)
 	if KBM.Player.Grouped then

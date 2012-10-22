@@ -527,7 +527,7 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Options.LockAnchor:SetGerman("Anker ist verschiebbar")
 	KBM.Language.Options.LockAnchor:SetRussian("Разблокировать якорь")
 	KBM.Language.Options.LockAnchor:SetKorean("앵커 잠금해제")
-	
+		
 	-- Anchor Text
 	KBM.Language.Anchors = {}
 	KBMLM.SetGroupObject(KBM.Language.Anchors, "GroupObject", "All anchor text")
@@ -626,21 +626,24 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Options.LockButton:SetKorean("버튼 잠금해제 (우클릭으로 이동가능)")
 
 	-- Tank Swap related
-	KBM.Language.Options.TankSwap = KBM.Language:Add("Tank-Swaps")
-	KBM.Language.Options.TankSwap:SetFrench("Tank-Swaps")
-	KBM.Language.Options.TankSwap:SetGerman("Tank Wechsel")
-	KBM.Language.Options.TankSwap:SetRussian("Смена Танков")
-	KBM.Language.Options.TankSwap:SetKorean("탱크 스왑")
-	KBM.Language.Options.Tank = KBM.Language:Add("Show Test Tanks")
-	KBM.Language.Options.Tank:SetFrench("Afficher Test Tanks")
-	KBM.Language.Options.Tank:SetGerman("Zeige Test-Tanks-Fenster")
-	KBM.Language.Options.Tank:SetRussian("Показать тестовых танков")
-	KBM.Language.Options.Tank:SetKorean("테스트 탱커들 표시")
-	KBM.Language.Options.TankSwapEnabled = KBM.Language:Add("Tank-Swaps enabled")
-	KBM.Language.Options.TankSwapEnabled:SetGerman("Tank Wechsel anzeigen")
-	KBM.Language.Options.TankSwapEnabled:SetRussian("Включить Смену танков")
-	KBM.Language.Options.TankSwapEnabled:SetFrench("Tank-Swaps activé")
-	KBM.Language.Options.TankSwapEnabled:SetKorean("탱커스왑 적용")
+	KBM.Language.TankSwap = {}
+	KBMLM.SetGroupObject(KBM.Language.TankSwap, "GroupObject", "Tank-SWap Related")
+	KBM.Language.TankSwap.Title = KBM.Language:Add("Tank-Swaps")
+	KBM.Language.TankSwap.Title:SetFrench("Tank-Swaps")
+	KBM.Language.TankSwap.Title:SetGerman("Tank Wechsel")
+	KBM.Language.TankSwap.Title:SetRussian("Смена Танков")
+	KBM.Language.TankSwap.Title:SetKorean("탱크 스왑")
+	KBM.Language.TankSwap.Test = KBM.Language:Add("Show Test Tanks")
+	KBM.Language.TankSwap.Test:SetFrench("Afficher Test Tanks")
+	KBM.Language.TankSwap.Test:SetGerman("Zeige Test-Tanks-Fenster")
+	KBM.Language.TankSwap.Test:SetRussian("Показать тестовых танков")
+	KBM.Language.TankSwap.Test:SetKorean("테스트 탱커들 표시")
+	KBM.Language.TankSwap.Enabled = KBM.Language:Add("Tank-Swaps enabled")
+	KBM.Language.TankSwap.Enabled:SetGerman("Tank Wechsel anzeigen")
+	KBM.Language.TankSwap.Enabled:SetRussian("Включить Смену танков")
+	KBM.Language.TankSwap.Enabled:SetFrench("Tank-Swaps activé")
+	KBM.Language.TankSwap.Enabled:SetKorean("탱커스왑 적용")
+	KBM.Language.TankSwap.Tank = KBM.Language:Add("Show only when Tanking")
 
 	-- Alert related
 	KBM.Language.Options.AlertsOverride = KBM.Language:Add("Alerts: Override")

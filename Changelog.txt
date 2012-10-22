@@ -12,6 +12,9 @@ Ready Check Available Tracking
 RezMaster
 * Fixed: Scaling Rez Master with active timers should no longer throw errors.
 
+Tank-Swap
+* New: An option is available to only show Tank-Swap if you are Tanking.
+
 Menus
 * Fixed: Scrollable views will now clamp to the last item in the list, rather than add additional empty space.
 * Fixed: List views will now align themselves with the scrollbar position after collapsing and expanding Menu items.
