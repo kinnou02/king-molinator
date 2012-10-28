@@ -28,6 +28,14 @@ function KBMLM.InitStore()
 			Total = 0,
 			List = {},
 		},
+		Taiwanese = {
+			Total = 0,
+			List = {},
+		},
+		Chinese = {
+			Total = 0,
+			List = {},
+		},
 	}
 	return Store
 end
@@ -41,6 +49,8 @@ function KBMLM.Language:Add(Phrase)
 	SetPhrase.German = Phrase
 	SetPhrase.Russian = Phrase
 	SetPhrase.Korean = Phrase
+	SetPhrase.Taiwanese = Phrase
+	SetPhrase.Chinese = Phrase
 	SetPhrase.Type = "Phrase"
 	SetPhrase.Translated = {English = true}
 	function SetPhrase:SetFrench(frPhrase)
@@ -66,6 +76,18 @@ function KBMLM.Language:Add(Phrase)
 			self.Korean = koPhrase
 		end
 		self.Translated.Korean = true
+	end
+	function SetPhrase:SetTaiwanese(twPhrase)
+		if twPhrase then
+			self.Taiwanese = twPhrase
+		end
+		self.Translated.Taiwanese = true
+	end
+	function SetPhrase:SetChinese(chPhrase)
+		if chPhrase then
+			self.Chinese = chPhrase
+		end
+		self.Translated.Chinese = true
 	end
 	KBMLM.TotalPhrases = KBMLM.TotalPhrases + 1
 	return SetPhrase

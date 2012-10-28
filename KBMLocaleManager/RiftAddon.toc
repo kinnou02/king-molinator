@@ -9,7 +9,7 @@ Author = "Paul Snart"
 Website = "http://twitter.com/#!/psnart"
 Email = "snarty@gmail.com"
 
-Version = "0.0.7"
+Version = "0.0.8"
 
 Environment = "1.9", "1.10"
 
@@ -22,6 +22,8 @@ SavedVariables = {
 	KBMLM_French = "account",
 	KBMLM_Russian = "account",
 	KBMLM_Korean = "account",
+	KBMLM_Taiwanese = "account",
+	KBMLM_Chinese = "account",
 }
 
 Dependencies = {

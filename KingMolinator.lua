@@ -131,7 +131,7 @@ KBM.ID = "KingMolinator"
 KBM.ModList = {}
 KBM.Testing = false
 KBM.ValidTime = false
-KBM.IsAlpha = false
+KBM.IsAlpha = true
 KBM.Debug = false
 KBM.Aux = {}
 KBM.TestFilters = {}
@@ -6847,20 +6847,14 @@ function KBM:UpdateHP(UnitObj)
 end
 
 KBM.ClearBuffers = 0
+
 function KBM:Timer()
 
 	local current = Inspect.Time.Real()
 	local diff = (current - self.HeldTime)
 	local udiff = (current - self.UpdateTime)
 
-	-- local testWindow = LibSGui:CreateWindow("Test 1", KBM.Context)
-	-- testWindow.base.cradle:SetBackgroundColor(1,1,1,0.5)
-	-- local testWindow2 = LibSGui:CreateWindow("Test 2", KBM.Context)
-	-- testWindow2.base.cradle:SetBackgroundColor(1,0,1,0.5)
-	-- testWindow2.base.cradle:SetPoint("LEFT", testWindow.base.cradle, "RIGHT")
-	-- testWindow:Remove()
-	-- testWindow2:Remove()
-
+	
 	if not KBM.Updating then
 		KBM.Updating = true
 		if KBM.QueuePage then
@@ -8468,6 +8462,18 @@ function KBM.InitMenus()
 			end
 		end
 	end
+	
+	-- local winMain
+	-- winMain = LibSGui:CreateWindow("King Boss Mods", KBM.Context, {Visible = true, Close = true})
+	-- winMain = winMain:Remove()
+	-- winMain = LibSGui:CreateWindow("KBM: Options", KBM.Context, {Visible = true, Close = true})
+	-- winMain:SetWidth(600)
+	-- winMain:SetHeight(500)
+	-- local function Close(self)
+		-- print('"'..self.Title..'" close activated')
+	-- end
+	-- winMain:SetCloseCallback(Close)
+	
 end
 
 local function KBM_Start()

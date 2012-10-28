@@ -9,12 +9,13 @@ Author = "Paul Snart"
 Website = "http://twitter.com/#!/psnart"
 Email = "snarty@gmail.com"
 
-Version = "0.0.1"
+Version = "0.0.2"
 
 Environment = "1.10"
 
 RunOnStartup = {
 	"LibSGui.lua",
+	"Objects/Window.lua",
 }
 
 Embed = {

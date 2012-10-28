@@ -93,7 +93,13 @@ function LibSBuff:BuffUpdate(UnitID)
 end
 
 function _int:CacheAdd(UnitID, BuffID)
+	local _startTime = Inspect.Time.Real()
 	local bDetails = Inspect.Buff.Detail(UnitID, BuffID)
+	local _duration = Inspect.Time.Real() - _startTime
+	if _duration > 0.045 then
+		print("Performance Warning: LibSBuff has noticed the Rift Client is running slow.")
+		print(string.format("Time taken to call internal Rift command Inspect.Buff.Detail - %0.03f", _duration))
+	end
 	if bDetails then
 		if not LibSBuff.Cache[UnitID] then
 			LibSBuff.Cache[UnitID] = {
@@ -125,6 +131,9 @@ function _int:CacheAdd(UnitID, BuffID)
 end
 
 function _int:UpdateCycle()
+	if not Inspect.System.Secure() then
+		Command.System.Watchdog.Quiet()
+	end
 	local _startTime = Inspect.Time.Real()
 	if self.Queue:Count() > 0 then
 		repeat
@@ -170,12 +179,15 @@ function _int:UpdateCycle()
 			end
 			-- If none of the above match, Item is removed regardless to prevent Queue polution.
 			self.Queue:Remove(QueueObj)
-		until (Inspect.Time.Real() - _startTime) > 0.05
+		until (Inspect.Time.Real() - _startTime) > 0.045
 		-- print("Queue udpate completed")
 	end
 end
 
 function _int:BuffAdd(UnitID, Buffs)
+	if not Inspect.System.Secure() then
+		Command.System.Watchdog.Quiet()
+	end
 	local _startTime = Inspect.Time.Real()
 	local cache = true
 	for BuffID, BuffType in pairs(Buffs) do
@@ -191,7 +203,7 @@ function _int:BuffAdd(UnitID, Buffs)
 				self.Queue:Add({Unit = UnitID, Buff = BuffID, Add = true})
 			end
 		end
-		if Inspect.Time.Real() - _startTime > 0.05 then
+		if Inspect.Time.Real() - _startTime > 0.045 then
 			cache = false
 		end
 	end
