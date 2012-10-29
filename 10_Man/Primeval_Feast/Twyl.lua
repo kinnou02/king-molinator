@@ -113,6 +113,7 @@ LT.Lang.Ability.Nova:SetFrench("Nova givrée")
 LT.Lang.Ability.Nova:SetGerman("Gefrorene Nova") 
 LT.Lang.Ability.Blast = KBM.Language:Add("Dark Moon Blast")
 LT.Lang.Ability.Blast:SetFrench("Volée de la lune noire")
+LT.Lang.Ability.Blast:SetGerman("Dunkler Mond-Schlag") 
 LT.Lang.Ability.Pyre = KBM.Language:Add("Wicker Pyre")
 LT.Lang.Ability.Pyre:SetFrench("Bûcher en osier")
 LT.Lang.Ability.Pyre:SetGerman("Weiden-Scheiterhaufen")
@@ -121,12 +122,15 @@ LT.Lang.Ability.Pyre:SetGerman("Weiden-Scheiterhaufen")
 LT.Lang.Debuff = {}
 LT.Lang.Debuff.Quake = KBM.Language:Add("Primeval Quake")
 LT.Lang.Debuff.Quake:SetFrench("Tremblement primitif")
+LT.Lang.Debuff.Quake:SetGerman("Urzeitliches Beben")
 LT.Lang.Debuff.Critter = KBM.Language:Add("Tasty Critter")
 LT.Lang.Debuff.Critter:SetFrench("Délicieuse créature")
 LT.Lang.Debuff.Sacrifice = KBM.Language:Add("Harvest Sacrifice")
 LT.Lang.Debuff.Sacrifice:SetFrench("Sacrifice des moissons")
+LT.Lang.Debuff.Sacrifice:SetGerman("Erntedank-Opfer")
 LT.Lang.Debuff.Spider = KBM.Language:Add("Spinning Swarm")
 LT.Lang.Debuff.Spider:SetFrench("Tranchage rotatif")
+LT.Lang.Debuff.Spider:SetGerman("Drehschwarm ")
 
 -- Verbose Dictionary
 LT.Lang.Verbose = {}

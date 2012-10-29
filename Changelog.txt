@@ -4,11 +4,14 @@ LibSBuff
 * New: This system will now output a warning to Chat if a single call to Inspect.Buff.Detail takes longer than 0.045 seconds.
 * New: The update cycle will enable Watchdog.Quiet whenever the player is out of combat.
 * New: Buff Add calls will also enable Watchdog.Quiet whenever the player is out of combat.
+* Change: BuffUpdate will no longer trigger Buff.Change events when cycling through a Unit's buff list.
 * Change: Reduced the time before Buff caching will break from the main loop for both cycling and addtions.
 
 Translations
 * French
 ** Fixed: Adjusted Phase 2 transition trigger to include escape code (%) for hyphen.
+* German
+** New: Updates to Twyl and Rusila.
 * Taiwanese
 ** New: Added Dictionary support.
 * Chinese

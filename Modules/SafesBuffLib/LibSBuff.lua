@@ -66,9 +66,7 @@ function LibSBuff:BuffUpdate(UnitID)
 						end
 					end
 					for BuffID, BuffType in pairs(Buffs) do
-						if self.Cache[UnitID].BuffID[BuffID] then
-							_int.Queue:Add({Unit = UnitID, Buff = BuffID, Change = true})
-						else
+						if not self.Cache[UnitID].BuffID[BuffID] then
 							_int.Queue:Add({Unit = UnitID, Buff = BuffID, Add = true})
 						end
 					end

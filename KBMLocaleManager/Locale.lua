@@ -666,6 +666,7 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.TankSwap.Enabled:SetFrench("Tank-Swaps activé")
 	KBM.Language.TankSwap.Enabled:SetKorean("탱커스왑 적용")
 	KBM.Language.TankSwap.Tank = KBM.Language:Add("Show only when Tanking")
+	KBM.Language.TankSwap.Tank:SetGerman("Nur anzeigen beim Tanken") 
 
 	-- Alert related
 	KBM.Language.Options.AlertsOverride = KBM.Language:Add("Alerts: Override")

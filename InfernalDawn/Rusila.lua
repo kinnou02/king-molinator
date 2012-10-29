@@ -149,7 +149,9 @@ RS.Lang.Notify.Over:SetRussian("Русила Жуткий Клинок, ухмы
 RS.Lang.Notify.Over:SetGerman('Rusila Schreckensklinge grinst und sagt: "Vorsicht, fallt nicht über Bord, Auserwählter!"')
 RS.Lang.Notify.Over:SetFrench('Rusila Lame-lugubre dit avec un sourire : "Attention à ne pas basculer par-dessus bord, êtres Élus !"')
 RS.Lang.Notify.Chain = KBM.Language:Add("Rusila Dreadblade says, \"Punishment for mutiny aboard my vessel, Ascended, is to have your flesh peeled from your bones.\"")
+RS.Lang.Notify.Chain:SetGerman("Rusila Schreckensklinge sagt: \"Auserwählte, an Bord meines Schiffes steht auf Meuterei: Das Fleisch wird Meuterern von den Knochen geschält.\"")
 RS.Lang.Notify.Fist = KBM.Language:Add("Rusila Dreadblade grins, \"Careful not to fall overboard, Ascended!\"")
+RS.Lang.Notify.Fist:SetGerman("Rusila Schreckensklinge grinst und sagt: \"Vorsicht, fallt nicht über Bord, Auserwählter!\"")
 
 -- Buff Dictionary
 RS.Lang.Buff = {}
