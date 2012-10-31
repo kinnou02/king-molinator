@@ -159,7 +159,7 @@ MF.Cannon = {
 	Settings = {
 		AlertsRef = {
 			Enabled = true,
-			Blast = KBM.Defaults.AlertObj.Create("yellow"),
+			Blast = KBM.Defaults.AlertObj.Create("cyan"),
 		},
 	},	
 }
@@ -395,13 +395,15 @@ function MF:Start()
 	
 	-- Create Alerts (Maelforge)
 	self.Maelforge.AlertsRef.Hell_Yellow = KBM.Alert:Create(self.Lang.Menu.Hell_Yellow[KBM.Lang], nil, false, true, "yellow")
+	self.Maelforge.AlertsRef.Hell_Yellow:Important()
 	self.Maelforge.AlertsRef.Hell_Green = KBM.Alert:Create(self.Lang.Menu.Hell_Green[KBM.Lang], nil, false, true, "dark_green")
+	self.Maelforge.AlertsRef.Hell_Green:Important()
 	self.Maelforge.AlertsRef.Fiery = KBM.Alert:Create(self.Lang.Debuff.Fiery[KBM.Lang], nil, false, true, "red")
 	self.Maelforge.AlertsRef.Earthen = KBM.Alert:Create(self.Lang.Debuff.Earthen[KBM.Lang], nil, false, true, "yellow")
 	KBM.Defaults.AlertObj.Assign(self.Maelforge)
 
 	-- Create Alerts (Cannons)
-	self.Cannon.AlertsRef.Blast = KBM.Alert:Create(self.Lang.Ability.Blast[KBM.Lang], nil, false, true, "yellow")
+	self.Cannon.AlertsRef.Blast = KBM.Alert:Create(self.Lang.Ability.Blast[KBM.Lang], nil, false, true, "cyan")
 	KBM.Defaults.AlertObj.Assign(self.Cannon)
 	
 	-- Assign Alerts and Timers to Triggers

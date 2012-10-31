@@ -22,6 +22,7 @@ Infernal Dawn
 * Maelforge - Final
 ** New: Add Tank-Swap for Melt Armor.
 ** New: Timer Added for First Hellfire in the Cannon phase.
+** Change: Hellfire Alerts are now flagged as Important.
 ** Fixed: Cannons now have an internal CastBar for associated Molten Blast alerts.
 
 Translations
