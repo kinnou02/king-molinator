@@ -257,7 +257,8 @@ function MF.PhaseCannons()
 	MF.PhaseObj.Objectives:AddDeath(MF.Cannon.Name, 4)
 	MF.PhaseObj:SetPhase("3")
 	MF.Phase = 3
-	MF.CannonCount = 0	
+	MF.CannonCount = 0
+	KBM.MechTimer:AddStart(MF.Maelforge.TimersRef.Hell_P3First)
 end
 
 function MF.PhaseFinal()

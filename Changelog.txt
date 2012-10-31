@@ -21,6 +21,7 @@ Infernal Dawn
 ** Change: Final Phase will now only Trigger after all Cannons have been destroyed.
 * Maelforge - Final
 ** New: Add Tank-Swap for Melt Armor.
+** New: Timer Added for First Hellfire in the Cannon phase.
 ** Fixed: Cannons now have an internal CastBar for associated Molten Blast alerts.
 
 Translations
