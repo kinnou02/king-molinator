@@ -19,7 +19,7 @@ local PI = {
 	Directory = ROS.Directory,
 	File = "Plutonus.lua",
 	Instance = ROS.Name,
-	Type = "20man",
+	InstanceObj = ROS,
 	HasPhases = true,
 	Lang = {},
 	ID = "Plutonus",
@@ -87,7 +87,6 @@ function PI:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Plutonus.Name] = self.Plutonus,
 	}
-	KBM_Boss[self.Plutonus.Name] = self.Plutonus	
 end
 
 function PI:InitVars()
@@ -202,30 +201,6 @@ function PI:Reset()
 end
 
 function PI:Timer()	
-end
-
-function PI.Plutonus:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function PI.Plutonus:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
 end
 
 function PI:DefineMenu()

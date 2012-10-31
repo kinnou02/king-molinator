@@ -6,13 +6,13 @@
 KBMPF_Settings = {}
 
 local PF = {
-	Directory = "10_Man/Primeval_Feast/",
+	Directory = "Slivers/Primeval_Feast/",
 	File = "PFHeader.lua",
 	Header = nil,
 	Enabled = true,
 	IsInstance = true,
 	Name = "Primeval Feast",
-	Type = "10man",
+	Type = "Sliver",
 	ID = "PF",
 	Object = "PF",
 }

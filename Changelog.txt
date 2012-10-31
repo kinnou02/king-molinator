@@ -14,6 +14,13 @@ LibSBuff
 * Change: All three Buff Events now return a table of tables in the form: Key = (string)UnitID, Value = {(table)BuffTable {Key = (string)BuffID, Value = (table)BuffDetails}}
 * Removed: LibSBuff:UpdateBuffs(UnitID) is now handled internally.
 
+Instances General
+* New: Tracked Units without the correct Unique Type ID, will now display a message with both Unit Name and Type ID.
+* Note: Please take the time to help complete these a soon as possibly by supplying the new ID to myself, so I may start converting existing code.
+* Note: All Units will eventually have this Unique Type ID as it's Key when filtering Units for encounter starts.
+* Note: Units without this ID will either be using Old Name matching system (soon to be removed) or an intentional Template Encounter to gather this data.
+* Note: Units which are not tracked via name, but are found to be required for an encounter will need to be added to the template.
+
 Infernal Dawn
 * Rusila Dreadblade
 ** New: Added stop methods for Fist and Chains timers at the start of the final phase.
@@ -24,6 +31,19 @@ Infernal Dawn
 ** New: Timer Added for First Hellfire in the Cannon phase.
 ** Change: Hellfire Alerts are now flagged as Important.
 ** Fixed: Cannons now have an internal CastBar for associated Molten Blast alerts.
+
+Normal Dungeons
+* Exodus of the Storm Queen
+** New: Added Template for Chekaroth
+** New: Added Template for Dominax
+** New: Added Template for General Grim
+** New: Added Template for Valthundr
+
+Instances Converted to New Unit system.
+* Drowned Halls
+** All Bosses
+* Rise of the Pheonix
+** High Priest Arakhurn P1/P2
 
 Translations
 * French

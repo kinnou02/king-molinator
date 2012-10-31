@@ -19,6 +19,7 @@ local PH = {
 	Directory = GSB.Directory,
 	File = "Hylas.lua",
 	Instance = GSB.Name,
+	InstanceObj = GSB,
 	HasPhases = true,
 	Lang = {},
 	ID = "Hylas",
@@ -33,6 +34,7 @@ PH.Hylas = {
 	Name = "Prince Hylas",
 	NameShort = "Hylas",
 	ChronicleID = "U48BA191868D74700",
+	RaidID = "Raid",
 	Menu = {},
 	Castbar = nil,
 	TimersRef = {},
@@ -287,30 +289,6 @@ function PH:Reset()
 end
 
 function PH:Timer()	
-end
-
-function PH.Hylas:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function PH.Hylas:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
 end
 
 function PH:DefineMenu()

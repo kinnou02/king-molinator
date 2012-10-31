@@ -6,13 +6,13 @@
 KBMDH_Settings = {}
 
 local DH = {
-	Directory = "10_Man/Drowned_Halls/",
+	Directory = "Sliver/Drowned_Halls/",
 	File = "DHHeader.lua",
 	Header = nil,
 	Enabled = true,
 	IsInstance = true,
 	Name = "Drowned Halls",
-	Type = "10man",
+	Type = "Sliver",
 	ID = "DH",
 	Object = "DH",
 }

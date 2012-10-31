@@ -18,6 +18,7 @@ local LA = {
 	File = "Anchors.lua",
 	Enabled = true,
 	Instance = PF.Name,
+	InstanceObj = PF,
 	Lang = {},
 	--Enrage = 5 * 60,
 	ID = "PF_Anchors",
@@ -30,6 +31,7 @@ LA.Anchor = {
 	Active = false,
 	Name = "Life Anchor",
 	NameShort = "Anchor",
+	SliverID = "Sliver",
 	Menu = {},
 	Dead = false,
 	-- AlertsRef = {},
@@ -176,30 +178,6 @@ end
 
 function LA:Timer()
 	
-end
-
-function LA.Anchor:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function LA.Anchor:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
 end
 
 function LA:DefineMenu()

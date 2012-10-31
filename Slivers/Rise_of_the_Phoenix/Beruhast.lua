@@ -18,6 +18,7 @@ local BT = {
 	File = "Beruhast.lua",
 	Enabled = true,
 	Instance = ROTP.Name,
+	InstanceObj = ROTP,
 	HasPhases = false,
 	Lang = {},
 	ID = "Beruhast",
@@ -38,6 +39,7 @@ BT.Beruhast = {
 	AlertsRef = {},
 	Dead = false,
 	Available = false,
+	SliverID = "Sliver",
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
@@ -223,30 +225,6 @@ function BT:Reset()
 end
 
 function BT:Timer()
-end
-
-function BT.Beruhast:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function BT.Beruhast:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
 end
 
 function BT:DefineMenu()

@@ -19,6 +19,7 @@ local GH = {
 	File = "Guurloth.lua",
 	Enabled = true,
 	Instance = GP.Name,
+	InstanceObj = GP,
 	Lang = {},
 	ID = "Guurloth",
 	Object = "GH",
@@ -34,6 +35,7 @@ GH.Guurloth = {
 	AlertsRef = {},
 	MechRef = {},
 	Menu = {},
+	SliverID = "Sliver",
 	Dead = false,
 	Available = false,
 	UnitID = nil,
@@ -296,30 +298,6 @@ end
 
 function GH:Timer()
 	
-end
-
-function GH.Guurloth:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function GH.Guurloth:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
 end
 
 function GH:DefineMenu()

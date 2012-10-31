@@ -18,6 +18,7 @@ local GU = {
 	Directory = HK.Directory,
 	File = "Garau.lua",
 	Instance = HK.Name,
+	InstanceObj = HK,
 	Lang = {},
 	Enrage = 60 * 12,
 	ID = "Garau",
@@ -34,6 +35,7 @@ GU.Garau = {
 	AlertsRef = {},
 	Dead = false,
 	Available = false,
+	RaidID = "Raid",
 	UnitID = nil,
 	Descript = "Inquisitor Garau",
 	TimeOut = 3,
@@ -234,30 +236,6 @@ function GU:Reset()
 end
 
 function GU:Timer()	
-end
-
-function GU.Garau:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function GU.Garau:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
 end
 
 function GU:DefineMenu()

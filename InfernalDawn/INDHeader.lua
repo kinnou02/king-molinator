@@ -12,7 +12,7 @@ local IND = {
 	Enabled = true,
 	IsInstance = true,
 	Name = "Infernal Dawn",
-	Type = "20man",
+	Type = "Raid",
 	ID = "IND",
 	Object = "IND",
 }

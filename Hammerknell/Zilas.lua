@@ -17,6 +17,7 @@ local SZ = {
 	Directory = HK.Directory,
 	File = "Zilas.lua",
 	Instance = HK.Name,
+	InstanceObj = HK,
 	PhaseObj = nil,
 	Phase = 1,
 	Timers = {},
@@ -36,6 +37,7 @@ SZ.Zilas = {
 	AlertsRef = {},
 	Dead = false,
 	Available = false,
+	RaidID = "Raid",
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
@@ -124,6 +126,7 @@ SZ.Imp = {
 	NameShort = SZ.Lang.Unit.ImpShort[KBM.Lang],
 	UnitList = {},
 	Menu = {},
+	RaidID = "Raid",
 	AlertsRef = {},
 	Ignore = true,
 	Type = "multi",
@@ -144,6 +147,7 @@ SZ.Spirit = {
 	UnitList = {},
 	Menu = {},
 	AlertsRef = {},
+	RaidID = "Raid",
 	Ignore = true,
 	Type = "multi",
 	Triggers = {},
@@ -365,54 +369,6 @@ function SZ:Reset()
 end
 
 function SZ:Timer()
-end
-
-function SZ.Zilas:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function SZ.Zilas:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
-end
-
-function SZ.Imp:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
-end
-
-function SZ.Spirit:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
 end
 
 function SZ:DefineMenu()

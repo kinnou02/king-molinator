@@ -963,11 +963,14 @@ KBM.Boss = {
 	},
 	MasterID = {},
 	ExpertID = {},
+	NormalID = {},
 	Chronicle = {},
 	Rift = {},
 	ExRift = {},
 	RaidRift = {},
 	World = {},
+	Trash = {},
+	TypeList = {},
 }
 
 function KBM.Boss.Dungeon:AddBoss(BossObj)
@@ -977,18 +980,27 @@ function KBM.Boss.Dungeon:AddBoss(BossObj)
 		BossID = BossObj.ExpertID
 		if BossID ~= "Expert" then
 			KBM.Boss.ExpertID[BossID] = BossObj
+			KBM.Boss.TypeList[BossID] = BossObj
 			Warning = false
 		end
 	elseif BossObj.Mod.InstanceObj.Type == "Master" then
 		BossID = BossObj.MasterID
 		if BossID ~= "Master" then
 			KBM.Boss.MasterID[BossID] = BossObj
+			KBM.Boss.TypeList[BossID] = BossObj
+			Warning = false
+		end
+	elseif BossObj.Mod.InstanceObj.Type == "Normal" then
+		BossID = BossObj.NormalID
+		if BossID ~= "Normal" then
+			KBM.Boss.NormalID[BossID] = BossObj
+			KBM.Boss.TypeList[BossID] = BossObj
 			Warning = false
 		end
 	end
 	if not BossID then
 		print("Instance: "..BossObj.Mod.Instance)
-		error("Missing ExpertID or MasterID for "..BossObj.Name)
+		error("Missing NormalID, ExpertID or MasterID for "..BossObj.Name)
 	end
 	if Warning then
 		if KBM.Debug then
@@ -3529,7 +3541,9 @@ function KBM.MatchType(uDetails, BossObj)
 					print("Unique ID not set: "..uDetails.name)
 					print("Unique ID: "..uDetails.type)
 				end
-				if KBM.DungeonMode == "expert" then
+				if KBM.DungeonMode == "normal" then
+					return BossObj.Normal
+				elseif KBM.DungeonMode == "expert" then
 					return BossObj.Expert
 				else
 					return BossObj.Master
@@ -3545,7 +3559,9 @@ function KBM.MatchType(uDetails, BossObj)
 			if BossObj[uDetails.type] then
 				BossObj = BossObj[uDetails.type]
 			else
-				if BossObj.Expert then
+				if BossObj.Normal then
+					BossObj = BossObj.Normal
+				elseif BossObj.Expert then
 					BossObj = BossObj.Expert
 				elseif BossObj.Master then
 					BossObj = BossObj.Master
@@ -3558,7 +3574,16 @@ function KBM.MatchType(uDetails, BossObj)
 				end
 			end
 			if BossObj.Mod.InstanceObj then
-				if BossObj.Mod.InstanceObj.Type == "Expert" then
+				if BossObj.Mod.InstanceObj.Type == "Normal" then
+					if KBM.Debug then
+						print("Normal Dungeon mode active")
+						KBM.EncounterMode = "normal"
+						KBM.DungeonMode = "normal"
+						return BossObj
+					else
+						return false
+					end
+				elseif BossObj.Mod.InstanceObj.Type == "Expert" then
 					if uDetails.level == 52 or uDetails.level == "??" then
 						if KBM.Debug then 
 							print("Expert Dungeon mode active")
@@ -3636,6 +3661,7 @@ end
 
 function KBM.CheckActiveBoss(uDetails, UnitID)
 	local current = Inspect.Time.Real()
+	local style = "new"
 	if KBM.IgnoreList[UnitID] then
 		return
 	end
@@ -3646,17 +3672,24 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 			if not KBM.BossID[UnitID] then
 				if uDetails then
 					if uDetails.type then
-						if KBM.Boss.Raid[uDetails.type] then
-							BossObj = KBM.Boss.Raid[uDetails.type]
-						elseif KBM.SubBossID[uDetails.type] then
-							BossObj = KBM.SubBossID[uDetails.type]
-						elseif KBM.Boss.MasterID[uDetails.type] then
-							BossObj = KBM.Boss.Dungeon.List[uDetails.name]
-						elseif KBM.Boss.ExpertID[uDetails.type] then
-							BossObj = KBM.Boss.Dungeon.List[uDetails.name]
+						if KBM.Boss.TypeList[uDetails.type] then
+							BossObj = KBM.Boss.TypeList[uDetails.type]
+							if KBM.Boss.MasterID[uDetails.type] then
+								KBM.DungeonMode = "master"
+								KBM.EncounterMode = "normal"
+							elseif KBM.Boss.ExpertID[uDetails.type] then
+								KBM.DungeonMode = "expert"
+								KBM.EncounterMode = "normal"
+							elseif KBM.Boss.NormalID[uDetails.type] then
+								KBM.DungeonMode = "normal"
+								KBM.EncounterMode = "normal"
+							elseif KBM.Boss.Chronicle[uDetails.type] then
+								KBM.EncounterMode = "chronicle"
+							end
 						end
 					end
 					if not BossObj then
+						-- Old Method Checking (This will be phased out entirely)
 						if KBM_Boss[uDetails.name] then
 							BossObj = KBM_Boss[uDetails.name]
 							if uDetails.type then
@@ -3673,8 +3706,11 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 						elseif KBM.Boss.Dungeon.List[uDetails.name] then
 							BossObj = KBM.Boss.Dungeon.List[uDetails.name]
 						end
+						if BossObj then
+							style = "old"
+							BossObj = KBM.MatchType(uDetails, BossObj)
+						end
 					end
-					BossObj = KBM.MatchType(uDetails, BossObj)
 					local ModBossObj = nil
 					if BossObj then
 						if BossObj.Mod then
@@ -3695,6 +3731,21 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 								end
 							end
 							if ModBossObj then
+								if style == "old" then
+									if KBM.EncounterMode == "normal" then
+										if not KBM.BossID[UnitID] then
+											print("--------------------------------------")
+											print("Old Style Encounter found, or possible Template Encounter")
+											print("Please note down and supply the following, or send/post as a screen-shot")
+											print("Also state if this Encounter is one of the following:")
+											print("Raid, Sliver, Master Dungeon, Expert Dungeon, Normal Dungeon or Chronicle")
+											print("Boss Name: "..tostring(uDetails.name))
+											print("Boss Type: "..tostring(uDetails.type))
+											print("--------------------------------------")
+											print("Thank you in advance for using KBM and helping its development")
+										end
+									end
+								end
 								if (BossObj.Ignore ~= true and KBM.Encounter ~= true) or KBM.Encounter == true then
 									if KBM.Debug then
 										print("Boss found Checking: Tier = "..tostring(uDetails.tier).." "..tostring(uDetails.level).." ("..type(uDetails.level)..")")
@@ -8462,13 +8513,38 @@ function KBM.InitMenus()
 		Mod:AddBosses(KBM_Boss)
 		if Mod.InstanceObj then
 			for BossName, BossObj in pairs(Mod.Bosses) do
-				KBM.Boss.Dungeon:AddBoss(BossObj)
-				if BossObj.AltBossList then
-					for i, aBossObj in pairs(BossObj.AltBossList) do
-						KBM.Boss.Dungeon:AddBoss(aBossObj)
+				if BossObj.RaidID then
+					if BossObj.RaidID ~= "Raid" then
+						KBM.Boss.Raid[BossObj.RaidID] = BossObj
+						KBM.Boss.TypeList[BossObj.RaidID] = BossObj
+						--print("Raid Boss: "..BossObj.Name.." initizialized successfully: "..BossObj.RaidID)
+					end
+				elseif BossObj.SliverID then
+					if BossObj.SliverID ~= "Sliver" then
+						KBM.Boss.Sliver[BossObj.SliverID] = BossObj
+						KBM.Boss.TypeList[BossObj.SliverID] = BossObj
+						--print("Sliver Boss: "..BossObj.Name.." initizialized successfully: "..BossObj.SliverID)
+					end
+				else
+					if Mod.InstanceObj.Type == "Normal" or Mod.InstanceObj.Type == "Expert" or Mod.InstanceObj.Type == "Master" then
+						KBM.Boss.Dungeon:AddBoss(BossObj)
+						if BossObj.AltBossList then
+							for i, aBossObj in pairs(BossObj.AltBossList) do
+								KBM.Boss.Dungeon:AddBoss(aBossObj)
+							end
+						end
+					else
+						print("Instance: "..BossObj.Mod.Instance)
+						error("Missing RaidID or SliverID for "..BossObj.Name)
 					end
 				end
+				if BossObj.ChronicleID then
+					KBM.Boss.Chronicle[BossObj.ChronicleID] = BossObj
+					KBM.Boss.TypeList[BossObj.ChronicleID] = BossObj
+				end
 			end
+		elseif not Mod.IsInstance then
+			error(tostring(Mod.ID).." is missing required field: InstanceObj")
 		end
 		Mod:Start(KBM_MainWin)
 	end

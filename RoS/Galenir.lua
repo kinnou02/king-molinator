@@ -19,7 +19,7 @@ local WG = {
 	Directory = ROS.Directory,
 	File = "Galenir.lua",
 	Instance = ROS.Name,
-	Type = "20man",
+	InstanceObj = ROS,
 	HasPhases = true,
 	Lang = {},
 	Enrage = 60 * 5.5,
@@ -38,6 +38,7 @@ WG.Galenir = {
 	AlertsRef = {},
 	MechRef = {},
 	Menu = {},
+	RaidID = "Raid",
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
@@ -185,30 +186,6 @@ function WG:Reset()
 end
 
 function WG:Timer()	
-end
-
-function WG.Galenir:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function WG.Galenir:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
 end
 
 function WG:DefineMenu()

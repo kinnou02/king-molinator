@@ -17,6 +17,7 @@ local HK = KBM.BossMod["Hammerknell"]
 local KM = {
 	Enabled = true,
 	Instance = HK.Name,
+	InstanceObj = HK,
 	Directory = HK.Directory,
 	File = "Molinar.lua",
 	HasPhases = true,
@@ -88,6 +89,7 @@ KM.Prince = {
 	Name = "Prince Dollin",
 	NameShort = "Dollin",
 	ChronicleID = "U618202936FFA60A2",
+	RaidID = "Raid",
 	CastBar = nil,
 	CastFilters = {},
 	Casting = false,
@@ -140,6 +142,7 @@ KM.King = {
 	Name = "Rune King Molinar",
 	NameShort = "Molinar",
 	ChronicleID = "U4B987C125BF33A69",
+	RaidID = "Raid",
 	CastBar = nil,
 	CastFilters = {},
 	Casting = false,
@@ -326,12 +329,12 @@ KM.Descript = KM.King.Name.." & "..KM.Prince.Name
 function KM:AddBosses(KBM_Boss)
 
 	self.MenuName = self.King.Name
-	KBM_Boss[self.Prince.Name] = self.Prince
-	KBM_Boss[self.King.Name] = self.King
 	self.Bosses = {
 		[self.King.Name] = self.King,
 		[self.Prince.Name] = self.Prince,
 	}
+	KBM_Boss[self.Prince.Name] = self.Prince
+	KBM_Boss[self.King.Name] = self.King
 	
 end
 

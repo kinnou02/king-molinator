@@ -19,6 +19,7 @@ local TR = {
 	File = "Thalguur.lua",
 	Enabled = true,
 	Instance = GP.Name,
+	InstanceObj = GP,
 	Lang = {},
 	ID = "Thalguur",
 	Object = "TR",
@@ -35,6 +36,7 @@ TR.Thalguur = {
 	AlertsRef = {},
 	MechRef = {},
 	Dead = false,
+	SliverID = "Sliver",
 	Available = false,
 	UnitID = nil,
 	Triggers = {},
@@ -248,30 +250,6 @@ end
 
 function TR:Timer()
 	
-end
-
-function TR.Thalguur:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function TR.Thalguur:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
 end
 
 function TR:DefineMenu()

@@ -19,6 +19,7 @@ local AF = {
 	File = "Anrak.lua",
 	Enabled = true,
 	Instance = GP.Name,
+	InstanceObj = GP,
 	Lang = {},
 	ID = "Anrak",
 	Enrage = 60 * 7,
@@ -36,6 +37,7 @@ AF.Anrak = {
 	Available = false,
 	TimersRef = {},
 	AlertsRef = {},
+	SliverID = "Sliver",
 	MechRef = {},
 	UnitID = nil,
 	Triggers = {},
@@ -231,30 +233,6 @@ end
 
 function AF:Timer()
 	
-end
-
-function AF.Anrak:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function AF.Anrak:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
 end
 
 function AF:DefineMenu()

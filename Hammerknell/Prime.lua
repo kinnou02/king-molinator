@@ -18,6 +18,7 @@ local VP = {
 	Directory = HK.Directory,
 	File = "Prime.lua",
 	Instance = HK.Name,
+	InstanceObj = HK,
 	Lang = {},
 	Enrage = 60 * 11,
 	Phase = 1,
@@ -38,6 +39,7 @@ VP.Prime = {
 	AlertsRef = {},
 	Dead = false,
 	Available = false,
+	RaidID = "Raid",
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
@@ -192,30 +194,6 @@ function VP:Reset()
 end
 
 function VP:Timer()	
-end
-
-function VP.Prime:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function VP.Prime:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
 end
 
 function VP:DefineMenu()

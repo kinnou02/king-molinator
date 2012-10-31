@@ -17,6 +17,7 @@ local ES = {
 	Directory = HK.Directory,
 	File = "Estrode.lua",
 	Instance = HK.Name,
+	InstanceObj = HK,
 	HasPhases = true,
 	PhaseType = "percentage",
 	PhaseList = {},
@@ -36,6 +37,7 @@ ES.Estrode = {
 	TimersRef = {},
 	AlertsRef = {},
 	Dead = false,
+	RaidID = "Raid",
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
@@ -232,30 +234,6 @@ end
 
 function ES:Timer()
 	
-end
-
-function ES.Estrode:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function ES.Estrode:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
 end
 
 function ES:DefineMenu()

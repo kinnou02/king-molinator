@@ -19,6 +19,7 @@ local UK = {
 	File = "Uruluuk.lua",
 	Enabled = true,
 	Instance = GP.Name,
+	InstanceObj = GP,
 	Lang = {},
 	ID = "Uruluuk",
 	Object = "UK",
@@ -35,6 +36,7 @@ UK.Uruluuk = {
 	MechRef = {},
 	Dead = false,
 	Available = false,
+	SliverID = "Sliver",
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
@@ -219,30 +221,6 @@ end
 
 function UK:Timer()
 	
-end
-
-function UK.Uruluuk:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function UK.Uruluuk:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
 end
 
 function UK:DefineMenu()

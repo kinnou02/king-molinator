@@ -19,7 +19,7 @@ local LT = {
 	Directory = IND.Directory,
 	File = "Laethys.lua",
 	Instance = IND.Name,
-	Type = "20man",
+	InstanceObj = IND,
 	HasPhases = true,
 	Phase = 1,
 	Enrage = 10 * 60,
@@ -38,6 +38,7 @@ LT.Laethys = {
 	Dead = false,
 	Available = false,
 	Menu = {},
+	RaidID = "Raid",
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
@@ -215,6 +216,7 @@ LT.Seer = {
 	AlertsRef = {},
 	TimersRef = {},
 	Ignore = true,
+	RaidID = "Raid",
 	Type = "multi",
 	Triggers = {},
 	Settings = {
@@ -337,12 +339,12 @@ function LT:UnitHPCheck(uDetails, unitID)
 					KBM.MechTimer:AddStart(self.Laethys.TimersRef.AddsFirst)
 					KBM.TankSwap:Start(self.Lang.Debuff.Eye[KBM.Lang], unitID)
 				elseif unitID ~= self.Laethys.UnitID then
-					self.Laethys.CastBar:Remove()
-					self.Laethys.CastBar:Create(unitID)
 					if KBM.TankSwap.Active then
 						KBM.TankSwap:Remove()
 						KBM.TankSwap:Start(self.Lang.Debuff.Eye[KBM.Lang], unitID)
 					end
+					self.Laethys.CastBar:Remove()
+					self.Laethys.CastBar:Create(unitID)
 				end
 				self.Laethys.UnitID = unitID
 				self.Laethys.Available = true

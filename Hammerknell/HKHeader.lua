@@ -14,7 +14,7 @@ local HK = {
 	Enabled = true,
 	IsInstance = true,
 	Name = "Hammerknell Fortress",
-	Type = "20man",
+	Type = "Raid",
 	ID = "HK",
 	Object = "HK",
 }

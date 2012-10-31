@@ -19,7 +19,7 @@ local GSB = {
 	Enabled = true,
 	IsInstance = true,
 	Name = "Greenscale's Blight",
-	Type = "20man",
+	Type = "Raid",
 	ID = "GSB",
 	Object = "GSB",
 }

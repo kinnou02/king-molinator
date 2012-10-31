@@ -19,6 +19,7 @@ local DL = {
 	Directory = GSB.Directory,
 	File = "Letareus.lua",
 	Instance = GSB.Name,
+	InstanceObj = GSB,
 	HasPhases = true,
 	Lang = {},
 	ID = "Letareus",
@@ -94,7 +95,6 @@ function DL:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Letareus.Name] = self.Letareus,
 	}
-	KBM_Boss[self.Letareus.Name] = self.Letareus	
 end
 
 function DL:InitVars()
@@ -230,30 +230,6 @@ function DL:Reset()
 end
 
 function DL:Timer()
-end
-
-function DL.Letareus:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function DL.Letareus:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
 end
 
 function DL:DefineMenu()

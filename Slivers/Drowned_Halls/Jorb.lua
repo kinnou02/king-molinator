@@ -18,6 +18,7 @@ local AJ = {
 	File = "Jorb.lua",
 	Enabled = true,
 	Instance = DH.Name,
+	InstanceObj = DH,
 	Lang = {},
 	Enrage = 5 * 60,
 	ID = "Jorb",
@@ -35,6 +36,7 @@ AJ.Jorb = {
 	AlertsRef = {},
 	TimersRef = {},
 	Available = false,
+	RaidID = "U334F9578028DF50F",
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
@@ -99,7 +101,6 @@ function AJ:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Jorb.Name] = self.Jorb,
 	}
-	KBM_Boss[self.Jorb.Name] = self.Jorb	
 end
 
 function AJ:InitVars()
@@ -205,30 +206,6 @@ end
 
 function AJ:Timer()
 	
-end
-
-function AJ.Jorb:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function AJ.Jorb:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
 end
 
 function AJ:DefineMenu()

@@ -19,7 +19,7 @@ local MF = {
 	Directory = IND.Directory,
 	File = "Maelforge_Final.lua",
 	Instance = IND.Name,
-	Type = "20man",
+	InstanceObj = IND,
 	HasPhases = true,
 	Enrage = 15 * 60,
 	Lang = {},
@@ -154,6 +154,7 @@ MF.Cannon = {
 	Menu = {},
 	Ignore = true,
 	Type = "multi",
+	RaidID = "Raid",
 	AlertsRef = {},
 	Triggers = {},
 	Settings = {
@@ -170,8 +171,8 @@ function MF:AddBosses(KBM_Boss)
 		[self.Maelforge.Name] = self.Maelforge,
 		[self.Cannon.Name] = self.Cannon,
 	}
-	KBM.Boss.Raid[self.Maelforge.RaidID] = self.Maelforge
 	KBM.Boss.Raid[self.Maelforge.RaidID_P2] = self.Maelforge
+	KBM.Boss.TypeList[self.Maelforge.RaidID_P2] = self.Maelforge
 	KBM.SubBoss[self.Cannon.Name] = self.Cannon
 
 end
@@ -314,12 +315,10 @@ function MF:UnitHPCheck(uDetails, unitID)
 						self.Phase = 1
 					end
 				end
-				if uDetails.type == self.Maelforge.RaidID_P2 then
-					if self.Maelforge.UnitID ~= unitID then
-						if KBM.TankSwap.Active then
-							KBM.TankSwap:Remove()
-							KBM.TankSwap:Start(self.Lang.Debuff.Melt[KBM.Lang], unitID)
-						end
+				if self.Maelforge.UnitID ~= unitID then
+					if KBM.TankSwap.Active then
+						KBM.TankSwap:Remove()
+						KBM.TankSwap:Start(self.Lang.Debuff.Melt[KBM.Lang], unitID)
 					end
 				end
 				self.Maelforge.UnitID = unitID

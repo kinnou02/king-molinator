@@ -19,6 +19,7 @@ local MX = {
 	File = "Murdantix.lua",
 	Enabled = true,
 	Instance = HK.Name,
+	InstanceObj = HK,
 	Phase = 1,
 	HasPhases = true,
 	Lang = {},
@@ -37,6 +38,7 @@ MX.Murd = {
 	Active = false,
 	Name = "Murdantix",
 	ChronicleID = "U6B8A9FEF19F94B1F",
+	RaidID = "Raid",
 	Castbar = nil,
 	CastFilters = {},
 	HasCastFilters = true,
@@ -251,30 +253,6 @@ function MX:Reset()
 end
 
 function MX:Timer()	
-end
-
-function MX.Murd:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function MX.Murd:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
 end
 
 function MX:DefineMenu()

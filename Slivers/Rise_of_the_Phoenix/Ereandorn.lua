@@ -17,6 +17,7 @@ local EN = {
 	File = "Ereandorn.lua",
 	Enabled = true,
 	Instance = ROTP.Name,
+	InstanceObj = ROTP,
 	HasPhases = false,
 	Lang = {},
 	TankSwap = false,
@@ -38,6 +39,7 @@ EN.Ereandorn = {
 	MechRef = {},
 	Dead = false,
 	Available = false,
+	SliverID = "Sliver",
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
@@ -102,6 +104,7 @@ EN.Lang.Ability.Eruption:SetGerman("Vulkanausbruch")
 EN.Lang.Ability.Eruption:SetRussian("Извержение вулкана")
 EN.Lang.Ability.Eruption:SetFrench("Éruption volcanique")
 EN.Lang.Ability.Eruption:SetKorean("화산 폭발")
+
 function EN:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {

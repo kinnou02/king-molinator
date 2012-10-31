@@ -17,6 +17,7 @@ local AK = {
 	Directory = HK.Directory,
 	File = "Akylios.lua",
 	Instance = HK.Name,
+	InstanceObj = HK,
 	HasPhases = true,
 	Phase = 1,
 	Counts = {
@@ -41,6 +42,7 @@ AK.Jornaru = {
 	MechRef = {},
 	Dead = false,
 	Available = false,
+	RaidID = "Raid",
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
@@ -83,6 +85,7 @@ AK.Akylios = {
 	Dead = false,
 	Available = false,
 	PhaseObj = nil,
+	RaidID = "Raid",
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
@@ -116,6 +119,7 @@ AK.Stinger = {
 	UnitList = {},
 	Ignore = true,
 	Type = "multi",
+	RaidID = "Raid",
 }
 
 AK.Lasher = {
@@ -125,6 +129,7 @@ AK.Lasher = {
 	UnitList = {},
 	Ignore = true,
 	Type = "multi",
+	RaidID = "Raid",
 }
 
 AK.Apostle = {
@@ -133,6 +138,7 @@ AK.Apostle = {
 	Name = "Apostle of Jornaru",
 	UnitList = {},
 	Menu = {},
+	RaidID = "Raid",
 	AlertsRef = {},
 	Ignore = true,
 	Type = "multi",

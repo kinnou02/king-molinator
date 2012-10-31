@@ -17,6 +17,7 @@ local GR = {
 	Directory = HK.Directory,
 	File = "Grugonim.lua",
 	Instance = HK.Name,
+	InstanceObj = HK,
 	Timers = {},
 	Lang = {},
 	Phase = 1,
@@ -40,6 +41,7 @@ GR.Grugonim = {
 	Timers = {},
 	TimersRef = {},
 	AlertsRef = {},
+	RaidID = "Raid",
 	Dead = false,
 	Available = false,
 	UnitID = nil,
@@ -75,6 +77,7 @@ GR.Tower = {
 	UnitList = {},
 	Ignore = true,
 	Type = "multi",
+	RaidID = "Raid",
 }
 
 KBM.RegisterMod(GR.ID, GR)
@@ -367,30 +370,6 @@ end
 
 function GR:Timer()
 	
-end
-
-function GR.Grugonim:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function GR.Grugonim:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
 end
 
 function GR:DefineMenu()

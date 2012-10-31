@@ -19,7 +19,7 @@ local DF = {
 	Directory = ROS.Directory,
 	File = "DarkFoci.lua",
 	Instance = ROS.Name,
-	Type = "20man",
+	InstanceObj = ROS,
 	HasPhases = true,
 	Lang = {},
 	ID = "Dark_Foci",
@@ -38,6 +38,7 @@ DF.Foci = {
 	AlertsRef = {},
 	TimersRef = {},
 	MechRef = {},
+	RaidID = "Raid",
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
@@ -123,6 +124,7 @@ DF.Force = {
 	Dead = false,
 	Available = false,
 	AlertsRef = {},
+	RaidID = "Raid",
 	UnitID = nil,
 	Timout = 5,
 	Triggers = {},
@@ -306,54 +308,6 @@ function DF:Reset()
 end
 
 function DF:Timer()	
-end
-
-function DF.Foci:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function DF.Foci:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
-end
-
-function DF.Force:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function DF.Force:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
 end
 
 function DF:DefineMenu()

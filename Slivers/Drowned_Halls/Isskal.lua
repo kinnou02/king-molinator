@@ -18,6 +18,7 @@ local IL = {
 	File = "Isskal.lua",
 	Enabled = true,
 	Instance = DH.Name,
+	InstanceObj = DH,
 	Lang = {},
 	ID = "Isskal",
 	Object = "IL",
@@ -34,6 +35,7 @@ IL.Isskal = {
 	AlertsRef = {},
 	TimersRef = {},
 	UnitID = nil,
+	RaidID = "U69C09B877E075E64",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -167,7 +169,6 @@ function IL:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Isskal.Name] = self.Isskal,
 	}
-	KBM_Boss[self.Isskal.Name] = self.Isskal	
 end
 
 function IL:InitVars()
@@ -277,30 +278,6 @@ end
 
 function IL:Timer()
 	
-end
-
-function IL.Isskal:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function IL.Isskal:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
 end
 
 function IL:DefineMenu()

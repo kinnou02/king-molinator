@@ -19,7 +19,7 @@ local ROS = {
 	Enabled = true,
 	IsInstance = true,
 	Name = "River of Souls",
-	Type = "20man",
+	Type = "Raid",
 	ID = "ROS",
 	Object = "ROS",
 }

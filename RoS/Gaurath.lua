@@ -19,7 +19,7 @@ local HG = {
 	Directory = ROS.Directory,
 	File = "Gaurath",
 	Instance = ROS.Name,
-	Type = "20man",
+	InstanceObj = ROS,
 	HasPhases = true,
 	Lang = {},
 	RaiseCounter = 0,
@@ -39,6 +39,7 @@ HG.Gaurath = {
 	TimersRef = {},
 	AlertsRef = {},
 	MechRef = {},
+	RaidID = "Raid",
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
@@ -125,6 +126,7 @@ HG.Defiler = {
 	Menu = {},
 	AlertsRef = {},
 	Ignore = true,
+	RaidID = "Raid",
 	Type = "multi",
 	Triggers = {},
 	Settings = {
@@ -313,30 +315,6 @@ function HG:Reset()
 end
 
 function HG:Timer()	
-end
-
-function HG.Gaurath:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function HG.Gaurath:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
 end
 
 function HG:DefineMenu()

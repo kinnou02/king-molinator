@@ -6,13 +6,13 @@
 KBMROTP_Settings = {}
 
 local ROTP = {
-	Directory = "10_Man/Rise_of_the_Phoenix/",
+	Directory = "Sliver/Rise_of_the_Phoenix/",
 	File = "ROTPHeader.lua",
 	Header = nil,
 	Enabled = true,
 	IsInstance = true,
 	Name = "Rise of the Phoenix",
-	Type = "10man",
+	Type = "Sliver",
 	ID = "ROTP",
 	Object = "ROTP",
 }

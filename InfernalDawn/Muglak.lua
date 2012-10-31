@@ -19,7 +19,7 @@ local MK = {
 	Directory = IND.Directory,
 	File = "Muglak.lua",
 	Instance = IND.Name,
-	Type = "20man",
+	InstanceObj = IND,
 	HasPhases = true,
 	Lang = {},
 	ID = "Muglak",
@@ -35,6 +35,7 @@ MK.Muglak = {
 	Dead = false,
 	Available = false,
 	Menu = {},
+	RaidID = "Raid",
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
@@ -217,30 +218,6 @@ function MK:Reset()
 end
 
 function MK:Timer()	
-end
-
-function MK.Muglak:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function MK.Muglak:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
 end
 
 function MK:DefineMenu()

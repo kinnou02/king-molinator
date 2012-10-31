@@ -19,7 +19,7 @@ local ML = {
 	Directory = IND.Directory,
 	File = "Maklamos.lua",
 	Instance = IND.Name,
-	Type = "20man",
+	InstanceObj = IND,
 	HasPhases = true,
 	Lang = {},
 	ID = "Maklamos the Scryer",
@@ -36,6 +36,7 @@ ML.Maklamos = {
 	Dead = false,
 	Available = false,
 	Menu = {},
+	RaidID = "Raid",
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
@@ -155,6 +156,7 @@ ML.Jug = {
 	UnitList = {},
 	Menu = {},
 	Ignore = true,
+	RaidID = "Raid",
 	Type = "multi",
 }
 

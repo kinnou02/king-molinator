@@ -18,6 +18,7 @@ local JR = {
 	File = "Joloral.lua",
 	Enabled = true,
 	Instance = DH.Name,
+	InstanceObj = DH,
 	Lang = {},
 	ID = "Joloral",
 	Object = "JR",
@@ -35,6 +36,7 @@ JR.Joloral = {
 	MechRef = {},
 	Dead = false,
 	Available = false,
+	SliverID = "U4EEBB06F655086B5",
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
@@ -109,7 +111,6 @@ function JR:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Joloral.Name] = self.Joloral,
 	}
-	KBM_Boss[self.Joloral.Name] = self.Joloral	
 end
 
 function JR:InitVars()
@@ -219,30 +220,6 @@ end
 
 function JR:Timer()
 	
-end
-
-function JR.Joloral:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function JR.Joloral:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
 end
 
 function JR:DefineMenu()

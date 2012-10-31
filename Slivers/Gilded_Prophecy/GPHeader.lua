@@ -13,13 +13,13 @@ if not KBM.BossMod then
 end
 
 local GP = {
-	Directory = "10_Man/Gilded_Prophecy/",
+	Directory = "Sliver/Gilded_Prophecy/",
 	File = "GPHeader.lua",
 	Header = nil,
 	Enabled = true,
 	IsInstance = true,
 	Name = "Gilded Prophecy",
-	Type = "10man",
+	Type = "Sliver",
 	ID = "GP",
 	Object = "GP",
 }

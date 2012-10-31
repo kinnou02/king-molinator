@@ -23,6 +23,7 @@ local ID = {
 		Wardens = 0,
 	},
 	Instance = HK.Name,
+	InstanceObj = HK,
 	HasPhases = true,
 	Phase = 1,
 	Lang = {},
@@ -41,6 +42,7 @@ ID.Inwar = {
 	AlertsRef = {},
 	Menu = {},
 	UnitID = nil,
+	RaidID = "Raid",
 	Primary = true,
 	Required = 1,
 	Triggers = {},
@@ -73,6 +75,7 @@ ID.Denizar = {
 	Available = false,
 	TimersRef = {},
 	AlertsRef = {},
+	RaidID = "Raid",
 	UnitID = nil,
 	Primary = false,
 	Required = 1,
@@ -97,6 +100,7 @@ ID.Aqualix = {
 	Name = "Aqualix",
 	Dead = false, 
 	Available = false,
+	RaidID = "Raid",
 	UnitID = nil,
 	Primary = false,
 	Required = 1,
@@ -114,6 +118,7 @@ ID.Undertow = {
 	Dead = false, 
 	Available = false,
 	UnitID = nil,
+	RaidID = "Raid",
 	Primary = false,
 	Required = 1,
 	Triggers = {},
@@ -130,6 +135,7 @@ ID.Rotjaw = {
 	Dead = false, 
 	Available = false,
 	UnitID = nil,
+	RaidID = "Raid",
 	Primary = false,
 	Required = 1,
 	Triggers = {},
@@ -152,6 +158,7 @@ ID.Wrangler = {
 	Mod = ID,
 	Level = "??",
 	Name = "Scuttle Claw Wrangler",
+	RaidID = "Raid",
 	UnitList = {},
 	Ignore = true,
 	Type = "multi",
@@ -267,11 +274,7 @@ function ID:AddBosses(KBM_Boss)
 	KBM.SubBoss[self.Aqualix.Name] = self.Aqualix
 	KBM.SubBoss[self.Undertow.Name] = self.Undertow
 	KBM.SubBoss[self.Rotjaw.Name] = self.Rotjaw
-	KBM.SubBoss[self.Slime.Name] = self.Slime
 	KBM.SubBoss[self.Wrangler.Name] = self.Wrangler
-	KBM.SubBoss[self.Warden.Name] = self.Warden
-	KBM.SubBossID[self.Slime.RaidID] = self.Slime
-	KBM.SubBossID[self.Warden.RaidID] = self.Warden
 	
 	for BossName, BossObj in pairs(self.Bosses) do
 		if BossObj.Settings then
@@ -531,55 +534,6 @@ end
 
 function ID:Timer()	
 end
-
-function ID.Inwar:SetTimers(bool)
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function ID.Inwar:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
-end
-
-function ID.Denizar:SetTimers(bool)
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function ID.Denizar:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
-end
-
 
 function ID:DefineMenu()
 	self.Menu = HK.Menu:CreateEncounter(self.Inwar, self.Enabled)

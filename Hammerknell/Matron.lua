@@ -18,6 +18,7 @@ local MZ = {
 	File = "Matron.lua",
 	Enabled = true,
 	Instance = HK.Name,
+	InstanceObj = HK,
 	HasPhases = true,
 	PhaseObj = nil,
 	Timers = {},
@@ -40,6 +41,7 @@ MZ.Matron = {
 	MechRef = {},
 	Dead = false,
 	Available = false,
+	RaidID = "Raid",
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
@@ -280,30 +282,6 @@ function MZ:Reset()
 end
 
 function MZ:Timer()	
-end
-
-function MZ.Matron:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function MZ.Matron:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
 end
 
 function MZ:DefineMenu()

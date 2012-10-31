@@ -17,6 +17,7 @@ local GS = {
 	File = "Silgen.lua",
 	Enabled = true,
 	Instance = ROTP.Name,
+	InstanceObj = ROTP,
 	HasPhases = true,
 	Lang = {},
 	ID = "Silgen",
@@ -37,6 +38,7 @@ GS.Silgen = {
 	AlertsRef = {},
 	MechRef = {},
 	Available = false,
+	SliverID = "Sliver",
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
@@ -207,30 +209,6 @@ function GS:Reset()
 end
 
 function GS:Timer()	
-end
-
-function GS.Silgen:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function GS.Silgen:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
 end
 
 function GS:DefineMenu()

@@ -19,7 +19,7 @@ local AD = {
 	Directory = ROS.Directory,
 	File = "Alsbeth.lua",
 	Instance = ROS.Name,
-	Type = "20man",
+	InstanceObj = ROS,
 	HasPhases = true,
 	Lang = {},
 	Enrage = 60 * 18,
@@ -200,6 +200,7 @@ AD.Harbinger = {
 	UnitID = nil,
 	Ignore = true,
 	Triggers = {},
+	RaidID = "Raid",
 }
 
 AD.Thief = {
@@ -213,6 +214,7 @@ AD.Thief = {
 	UnitID = nil,
 	Ignore = true,
 	Triggers = {},
+	RaidID = "Raid",
 }
 
 AD.Magus = {
@@ -225,6 +227,7 @@ AD.Magus = {
 	AlertsRef = {},
 	Dead = false,
 	Available = false,
+	RaidID = "Raid",
 	UnitID = nil,
 	Ignore = true,
 	Triggers = {},
@@ -249,6 +252,7 @@ AD.Pillar = {
 	UnitList = {},
 	Ignore = true,
 	Type = "multi",
+	RaidID = "Raid",
 }
 
 AD.Alsbeth.Name = AD.Lang.Unit.Alsbeth[KBM.Lang]
@@ -263,7 +267,6 @@ function AD:AddBosses(KBM_Boss)
 		[self.Magus.Name] = self.Magus,
 		[self.Pillar.Name] = self.Pillar,
 	}
-	KBM.SubBossID[self.Alsbeth.RaidID] = self.Alsbeth
 	KBM.SubBoss[self.Harbinger.Name] = self.Harbinger
 	KBM.SubBoss[self.Thief.Name] = self.Thief
 	KBM.SubBoss[self.Magus.Name] = self.Magus
@@ -495,54 +498,6 @@ function AD:Reset()
 end
 
 function AD:Timer()	
-end
-
-function AD.Alsbeth:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function AD.Alsbeth:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
-end
-
-function AD.Magus:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function AD.Magus:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
 end
 
 function AD:DefineMenu()

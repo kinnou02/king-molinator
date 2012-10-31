@@ -18,6 +18,7 @@ local HH = {
 	File = "Hydriss.lua",
 	Enabled = true,
 	Instance = DH.Name,
+	InstanceObj = DH,
 	Lang = {},
 	ID = "Hydriss",
 	PhaseObjects = {},
@@ -38,6 +39,7 @@ HH.Hydriss = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
+	RaidID = "U01904C0A16F7CCB8",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -124,7 +126,6 @@ function HH:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Hydriss.Name] = self.Hydriss,
 	}
-	KBM_Boss[self.Hydriss.Name] = self.Hydriss	
 end
 
 function HH:InitVars()
@@ -245,30 +246,6 @@ end
 
 function HH:Timer()
 	
-end
-
-function HH.Hydriss:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function HH.Hydriss:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
 end
 
 function HH:DefineMenu()

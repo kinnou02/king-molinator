@@ -19,6 +19,7 @@ local OA = {
 	Directory = GSB.Directory,
 	File = "Aleria.lua",
 	Instance = GSB.Name,
+	InstanceObj = GSB,
 	HasPhases = true,
 	Lang = {},
 	ID = "Aleria",
@@ -127,11 +128,6 @@ function OA:AddBosses(KBM_Boss)
 		[self.Primal.Name] = self.Primal,
 		[self.Necrotic.Name] = self.Necrotic,
 	}
-	KBM_Boss[self.Aleria.Name] = self.Aleria
-	KBM.SubBossID[self.Primal.RaidID] = self.Primal
-	KBM.SubBossID[self.Necrotic.RaidID] = self.Necrotic
-	KBM.SubBossID[self.Primal.ChronicleID] = self.Primal
-	KBM.SubBossID[self.Necrotic.ChronicleID] = self.Necrotic
 end
 
 function OA:InitVars()

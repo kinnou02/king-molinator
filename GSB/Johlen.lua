@@ -19,6 +19,7 @@ local IJ = {
 	Directory = GSB.Directory,
 	File = "Johlen.lua",
 	Instance = GSB.Name,
+	InstanceObj = GSB,
 	HasPhases = true,
 	Lang = {},
 	ID = "Johlen",
@@ -33,6 +34,7 @@ IJ.Johlen = {
 	Name = "Infiltrator Johlen",
 	NameShort = "Johlen",
 	ChronicleID = "U24253CDD6002C8D5",
+	RaidID = "Raid",
 	Menu = {},
 	AlertsRef = {},
 	Dead = false,
@@ -105,6 +107,7 @@ IJ.Bomb = {
 	UnitList = {},
 	Ignore = true,
 	Type = "multi",
+	RaidID = "Raid",
 }
 
 function IJ:AddBosses(KBM_Boss)
@@ -272,30 +275,6 @@ function IJ:Reset()
 end
 
 function IJ:Timer()	
-end
-
-function IJ.Johlen:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function IJ.Johlen:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
 end
 
 function IJ:DefineMenu()

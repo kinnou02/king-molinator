@@ -19,6 +19,7 @@ local LG = {
 	Directory = GSB.Directory,
 	File = "Greenscale.lua",
 	Instance = GSB.Name,
+	InstanceObj = GSB,
 	HasPhases = true,
 	Lang = {},
 	Enrage = 60 * 14.5,	
@@ -33,14 +34,14 @@ LG.Greenscale = {
 	Active = false,
 	Name = "Lord Greenscale",
 	NameShort = "Greenscale",
-	ChronicleID = "U1930C7F350FEC7B3",
-	RaidID = "U633EAF7811771C3D",
 	Menu = {},
 	Castbar = nil,
 	Dead = false,
 	AlertsRef = {},
 	TimersRef = {},
 	Available = false,
+	ChronicleID = "U1930C7F350FEC7B3",
+	RaidID = "U633EAF7811771C3D",
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
@@ -106,12 +107,12 @@ LG.Verdant = {
 	Name = LG.Lang.Unit.Verdant[KBM.Lang],
 	Dead = false, 
 	Available = false,
+	RaidID = "U52347B1D400FD113",
 	UnitID = nil,
 	Primary = false,
 	Required = 1,
 	Ignore = true,
 	Triggers = {},
-	RaidID = "U52347B1D400FD113",
 }
 
 function LG:AddBosses(KBM_Boss)
@@ -120,8 +121,6 @@ function LG:AddBosses(KBM_Boss)
 		[self.Greenscale.Name] = self.Greenscale,
 		[self.Verdant.Name] = self.Verdant,
 	}
-	KBM_Boss[self.Greenscale.Name] = self.Greenscale
-	KBM.SubBoss[self.Verdant.Name] = self.Verdant
 end
 
 function LG:InitVars()
@@ -297,30 +296,6 @@ function LG:Reset()
 end
 
 function LG:Timer()	
-end
-
-function LG.Greenscale:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function LG.Greenscale:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
 end
 
 function LG:DefineMenu()
