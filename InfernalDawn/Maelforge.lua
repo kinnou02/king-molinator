@@ -99,6 +99,7 @@ MF.Lang.Debuff = {}
 MF.Lang.Debuff.Hell = KBM.Language:Add("Hellfire")
 MF.Lang.Debuff.Hell:SetGerman("Höllenfeuer")
 MF.Lang.Debuff.Hell:SetFrench("Hellfire")
+MF.Lang.Debuff.Melt = KBM.Language:Add("Melt Armor")
 
 -- Description Dictionary
 MF.Lang.Descript = {}
@@ -242,6 +243,8 @@ function MF:Death(UnitID)
 	if self.Cannon.UnitList[UnitID] then
 		if self.Cannon.UnitList[UnitID].Dead == false then
 			self.CannonCount = self.CannonCount + 1
+			self.Cannon.UnitList[UnitID].CastBar:Remove()
+			self.Cannon.UnitList[UnitID].CastBar = nil
 			self.Cannon.UnitList[UnitID].Dead = true
 			if self.CannonCount == 6 then
 				self.PhaseFinal()
@@ -288,13 +291,9 @@ function MF:UnitHPCheck(uDetails, unitID)
 						if BossObj == self.Cannon then
 							if self.Phase == 1 then
 								self.PhaseTwo()
-								SubBossObj.CastBar = KBM.CastBar:Add(self, self.Cannon, false, true)
-								SubBossObj.CastBar:Create(unitID)
 							end
-						elseif BossObj == self.Egg then
-							if self.Phase < 3 then
-								self.PhaseFinal()
-							end
+							SubBossObj.CastBar = KBM.CastBar:Add(self, self.Cannon, false, true)
+							SubBossObj.CastBar:Create(unitID)
 						end
 					else
 						BossObj.UnitList[unitID].Available = true

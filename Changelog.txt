@@ -4,8 +4,24 @@ LibSBuff
 * New: This system will now output a warning to Chat if a single call to Inspect.Buff.Detail takes longer than 0.045 seconds.
 * New: The update cycle will enable Watchdog.Quiet whenever the player is out of combat.
 * New: Buff Add calls will also enable Watchdog.Quiet whenever the player is out of combat.
+* New: LibSBuff:GetBuffTable(UnitID) - returns a Buff Table in the form: Key = (string)BuffID, Value = (table)BuffDetails
+* New: New Units will automatically be scanned for Buffs. If this buff is already being monitored, the details table will be pulled from there and .remaining recalculated.
+* New: Units which have lost focus (Unit.Availability.None), that have timed Buffs (.duration and .begin fields) will now have those buffs monitored.
+* New: Buffs pulled from the Monitor on refocusing will not give a Buff.Add event.
+* New: Buffs which are being Monitored and then reach their duration will now give a Buff.Expired event.
 * Change: BuffUpdate will no longer trigger Buff.Change events when cycling through a Unit's buff list.
 * Change: Reduced the time before Buff caching will break from the main loop for both cycling and addtions.
+* Change: All three Buff Events now return a table of tables in the form: Key = (string)UnitID, Value = {(table)BuffTable {Key = (string)BuffID, Value = (table)BuffDetails}}
+* Removed: LibSBuff:UpdateBuffs(UnitID) is now handled internally.
+
+Infernal Dawn
+* Rusila Dreadblade
+** New: Added stop methods for Fist and Chains timers at the start of the final phase.
+* Maelforge - Ember Eggs
+** Change: Final Phase will now only Trigger after all Cannons have been destroyed.
+* Maelforge - Final
+** New: Add Tank-Swap for Melt Armor.
+** Fixed: Cannons now have an internal CastBar for associated Molten Blast alerts.
 
 Translations
 * French

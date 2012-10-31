@@ -1280,7 +1280,10 @@ function PI.Update()
 				if not PI.GUI.Rows.Units[UnitID] then
 					PI.GUI.Rows:Add(UnitID)
 					PI.Buffs[UnitID] = {}
-					LibSBuff:BuffUpdate(UnitID)
+					local Buffs = LibSBuff:GetBuffTable(UnitID)
+					if Buffs then
+						PI.BuffAdd({[UnitID] = Buffs})
+					end
 					if KBM.Unit.List.UID[UnitID].Details then
 						if KBM.Unit.List.UID[UnitID].Details.ready ~= "nil" then
 							PI.ReadyState({[UnitID] = KBM.Unit.List.UID[UnitID].Details.ready})
@@ -1300,20 +1303,24 @@ end
 function PI.Update_End()
 end
 
-function PI.BuffAdd(UnitID, BuffID, bDetails)
-	if PI.GUI.Rows.Units[UnitID] then
-		if bDetails then
-			if bDetails.LibSBuffType then
-				if PI.Constants.Lookup.Full[bDetails.LibSBuffType] then
-					local ID = PI.Constants.Lookup.Full[bDetails.LibSBuffType].Column
-					local Index = PI.GUI.Rows.Units[UnitID].Index
-					if ID then
-						if PI.GUI.Rows[Index] then
-							if PI.GUI.Rows[Index].Columns[ID] then
-								PI.GUI.Rows[Index].Columns[ID].Object = bDetails
-								PI.Buffs[UnitID][BuffID] = bDetails
-								if PI.Constants.Columns[ID] then
-									PI.Constants.Columns[ID].Hook(Index)
+function PI.BuffAdd(Units)
+	for UnitID, BuffTable in pairs(Units) do
+		if PI.GUI.Rows.Units[UnitID] then
+			for BuffID, bDetails in pairs(BuffTable) do
+				if bDetails then
+					if bDetails.LibSBuffType then
+						if PI.Constants.Lookup.Full[bDetails.LibSBuffType] then
+							local ID = PI.Constants.Lookup.Full[bDetails.LibSBuffType].Column
+							local Index = PI.GUI.Rows.Units[UnitID].Index
+							if ID then
+								if PI.GUI.Rows[Index] then
+									if PI.GUI.Rows[Index].Columns[ID] then
+										PI.GUI.Rows[Index].Columns[ID].Object = bDetails
+										PI.Buffs[UnitID][BuffID] = bDetails
+										if PI.Constants.Columns[ID] then
+											PI.Constants.Columns[ID].Hook(Index)
+										end
+									end
 								end
 							end
 						end
@@ -1324,32 +1331,36 @@ function PI.BuffAdd(UnitID, BuffID, bDetails)
 	end
 end
 
-function PI.BuffRemove(UnitID, BuffID, bDetails)
-	if PI.GUI.Rows.Units[UnitID] then
-		if PI.Buffs[UnitID] then
-			if PI.Buffs[UnitID][BuffID] then
-				if bDetails then
-					if bDetails.LibSBuffType then
-						if PI.Constants.Lookup.Full[bDetails.LibSBuffType] then
-							local ID = PI.Constants.Lookup.Full[bDetails.LibSBuffType].Column
-							local Index = PI.GUI.Rows.Units[UnitID].Index
-							if ID then
-								if PI.GUI.Rows[Index] then
-									if PI.GUI.Rows[Index].Columns[ID] then
-										PI.GUI.Rows[Index].Columns[ID].Object = nil
-										if PI.Constants.Columns[ID] then
-											PI.Constants.Columns[ID].Hook(Index)
+function PI.BuffRemove(Units)
+	for UnitID, BuffTable in pairs(Units) do
+		if PI.GUI.Rows.Units[UnitID] then
+			if PI.Buffs[UnitID] then
+				for BuffID, bDetails in pairs(BuffTable) do
+					if PI.Buffs[UnitID][BuffID] then
+						if bDetails then
+							if bDetails.LibSBuffType then
+								if PI.Constants.Lookup.Full[bDetails.LibSBuffType] then
+									local ID = PI.Constants.Lookup.Full[bDetails.LibSBuffType].Column
+									local Index = PI.GUI.Rows.Units[UnitID].Index
+									if ID then
+										if PI.GUI.Rows[Index] then
+											if PI.GUI.Rows[Index].Columns[ID] then
+												PI.GUI.Rows[Index].Columns[ID].Object = nil
+												if PI.Constants.Columns[ID] then
+													PI.Constants.Columns[ID].Hook(Index)
+												end
+											end
 										end
 									end
 								end
 							end
+							PI.Buffs[UnitID][BuffID] = nil
 						end
 					end
-					PI.Buffs[UnitID][BuffID] = nil
 				end
 			end
 		end
-	end	
+	end
 end
 
 function PI.Start()

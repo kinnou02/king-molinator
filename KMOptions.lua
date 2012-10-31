@@ -967,6 +967,7 @@ function KBM.InitOptions()
 		Raid = KBM.MainWin.DefaultTabs(),
 		Sliver = KBM.MainWin.DefaultTabs(),
 		Master = KBM.MainWin.DefaultTabs(),
+		Expert = KBM.MainWin.DefaultTabs(),
 		Group = KBM.MainWin.DefaultTabs(),
 		Selected = {
 			Main = "Main",
@@ -1012,7 +1013,7 @@ function KBM.InitOptions()
 	local MenuWidth = KBM.MainWin.MenuArea:GetWidth() - KBM.MainWin.SplitFrame:GetWidth() - KBM.MainWin.Scroller.Main:GetWidth() - 6
 	local TabWidth = {
 		Main = (MenuWidth + KBM.MainWin.Scroller.Main:GetWidth()) * 0.5,
-		Instance = ((MenuWidth + KBM.MainWin.Scroller.Main:GetWidth()) * 0.25),
+		Instance = ((MenuWidth + KBM.MainWin.Scroller.Main:GetWidth()) * 0.20),
 	}
 
 	-- Tab & Scroller Functions
@@ -1266,8 +1267,26 @@ function KBM.InitOptions()
 	KBM.MainWin.Tabs.Master.Icon:SetWidth(IconSize_Idle)
 	KBM.MainWin.Tabs.Master.Icon:SetAlpha(0.5)
 	KBM.MainWin.Tabs.Master.Icon:SetLayer(2)
+	KBM.MainWin.Tabs.Expert.Tab = UI.CreateFrame("Frame", "KBM_Expert_Tab", KBM.MainWin.MenuArea)
+	KBM.MainWin.Tabs.Expert.Tab:SetPoint("BOTTOMLEFT", KBM.MainWin.Tabs.Master.Tab, "BOTTOMRIGHT", 1, 0)
+	KBM.MainWin.Tabs.Expert.Tab:SetWidth(TabWidth.Instance)
+	KBM.MainWin.Tabs.Expert.Tab:SetHeight(TabHeight_Idle)
+	KBM.MainWin.Tabs.Expert.Scroller = KBM.MainWin.Scroller.Instance
+	KBM.MainWin.Tabs.Expert.Type = "Instance"
+	KBM.MainWin.Tabs.Expert.Multiplier = 10
+	KBM.MainWin.Tabs.Expert.Texture = UI.CreateFrame("Texture", "KBM_Expert_Texture", KBM.MainWin.Tabs.Expert.Tab)
+	KBM.LoadTexture(KBM.MainWin.Tabs.Expert.Texture, "KingMolinator", "Media/Tabber_Off.png")
+	KBM.MainWin.Tabs.Expert.Texture:SetPoint("TOPLEFT", KBM.MainWin.Tabs.Expert.Tab, "TOPLEFT")
+	KBM.MainWin.Tabs.Expert.Texture:SetPoint("BOTTOMRIGHT", KBM.MainWin.Tabs.Expert.Tab, "BOTTOMRIGHT")
+	KBM.MainWin.Tabs.Expert.Icon = UI.CreateFrame("Texture", "KBM_Expert_Icon", KBM.MainWin.Tabs.Expert.Tab)
+	KBM.LoadTexture(KBM.MainWin.Tabs.Expert.Icon, "KingMolinator", "Media/Group_Icon.png")
+	KBM.MainWin.Tabs.Expert.Icon:SetPoint("CENTER", KBM.MainWin.Tabs.Expert.Tab, "CENTER")
+	KBM.MainWin.Tabs.Expert.Icon:SetHeight(IconSize_Idle)
+	KBM.MainWin.Tabs.Expert.Icon:SetWidth(IconSize_Idle)
+	KBM.MainWin.Tabs.Expert.Icon:SetAlpha(0.5)
+	KBM.MainWin.Tabs.Expert.Icon:SetLayer(2)
 	KBM.MainWin.Tabs.Group.Tab = UI.CreateFrame("Frame", "KBM_Group_Tab", KBM.MainWin.MenuArea)
-	KBM.MainWin.Tabs.Group.Tab:SetPoint("BOTTOMLEFT", KBM.MainWin.Tabs.Master.Tab, "BOTTOMRIGHT", 1, 0)
+	KBM.MainWin.Tabs.Group.Tab:SetPoint("BOTTOMLEFT", KBM.MainWin.Tabs.Expert.Tab, "BOTTOMRIGHT", 1, 0)
 	KBM.MainWin.Tabs.Group.Tab:SetWidth(TabWidth.Instance)
 	KBM.MainWin.Tabs.Group.Tab:SetHeight(TabHeight_Idle)
 	KBM.MainWin.Tabs.Group.Scroller = KBM.MainWin.Scroller.Instance
@@ -1312,6 +1331,12 @@ function KBM.InitOptions()
 	KBM.MainWin.Tabs.Master.Menu:SetPoint("BOTTOMRIGHT", KBM.MainWin.Masks.Instance, "BOTTOMRIGHT")
 	KBM.MainWin.Tabs.Master.Menu:SetVisible(false)
 	KBM.MainWin.Tabs:CreateFunctions("Master")
+	KBM.MainWin.Tabs.Expert.Menu = UI.CreateFrame("Frame", "KBM_Expert_Menu", KBM.MainWin.Masks.Instance)
+	KBM.MainWin.Tabs.Expert.Menu:SetMouseMasking("limited")
+	KBM.MainWin.Tabs.Expert.Menu:SetPoint("TOPLEFT", KBM.MainWin.Masks.Instance, "TOPLEFT")
+	KBM.MainWin.Tabs.Expert.Menu:SetPoint("BOTTOMRIGHT", KBM.MainWin.Masks.Instance, "BOTTOMRIGHT")
+	KBM.MainWin.Tabs.Expert.Menu:SetVisible(false)
+	KBM.MainWin.Tabs:CreateFunctions("Expert")	
 	KBM.MainWin.Tabs.Group.Menu = UI.CreateFrame("Frame", "KBM_Group_Menu", KBM.MainWin.Masks.Instance)
 	KBM.MainWin.Tabs.Group.Menu:SetMouseMasking("limited")
 	KBM.MainWin.Tabs.Group.Menu:SetPoint("TOPLEFT", KBM.MainWin.Masks.Instance, "TOPLEFT")

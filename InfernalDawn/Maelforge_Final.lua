@@ -107,6 +107,7 @@ MF.Lang.Debuff.Earthen:SetFrench("Fissure terrestre")
 MF.Lang.Debuff.Fiery = KBM.Language:Add("Fiery Fissure")
 MF.Lang.Debuff.Fiery:SetGerman("Feuriger Spalt")
 MF.Lang.Debuff.Fiery:SetFrench("Fissure flamboyante")
+MF.Lang.Debuff.Melt = KBM.Language:Add("Melt Armor")
 
 -- Notify Dictionary
 MF.Lang.Notify = {}
@@ -275,6 +276,8 @@ function MF:Death(UnitID)
 	elseif self.Cannon.UnitList[UnitID] then
 		if not self.Cannon.UnitList[UnitID].Dead then
 			self.Cannon.UnitList[UnitID].Dead = true
+			self.Cannon.UnitList[UnitID].CastBar:Remove()
+			self.Cannon.UnitList[UnitID].CastBar = nil
 			self.CannonCount = self.CannonCount + 1
 			if self.CannonCount == 4 then
 				MF.PhaseFinal()
@@ -300,9 +303,14 @@ function MF:UnitHPCheck(uDetails, unitID)
 					self.PhaseObj:Start(self.StartTime)
 					if uDetails.type == self.Maelforge.RaidID_P2 then
 						self.PhaseTwo()
+						if KBM.TankSwap.Active then
+							KBM.TankSwap:Remove()
+							KBM.TankSwap:Start(self.Lang.Debuff.Melt[KBM.Lang], unitID)
+						end
 					else
 						self.PhaseObj:SetPhase(1)
 						self.PhaseObj.Objectives:AddPercent(self.Maelforge.Name, 65, 100)
+						KBM.TankSwap:Start(self.Lang.Debuff.Melt[KBM.Lang], unitID)
 						KBM.MechTimer:AddStart(self.Maelforge.TimersRef.Fissure)
 						self.Phase = 1
 					end
@@ -322,6 +330,10 @@ function MF:UnitHPCheck(uDetails, unitID)
 						Available = true,
 					}
 					BossObj.UnitList[unitID] = SubBossObj
+					if BossObj == self.Cannon then
+						SubBossObj.CastBar = KBM.CastBar:Add(self, self.Cannon, false, true)
+						SubBossObj.CastBar:Create(unitID)
+					end
 				else
 					BossObj.UnitList[unitID].Available = true
 					BossObj.UnitList[unitID].UnitID = unitID
