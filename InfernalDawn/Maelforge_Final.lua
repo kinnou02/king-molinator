@@ -303,16 +303,20 @@ function MF:UnitHPCheck(uDetails, unitID)
 					self.PhaseObj:Start(self.StartTime)
 					if uDetails.type == self.Maelforge.RaidID_P2 then
 						self.PhaseTwo()
-						if KBM.TankSwap.Active then
-							KBM.TankSwap:Remove()
-							KBM.TankSwap:Start(self.Lang.Debuff.Melt[KBM.Lang], unitID)
-						end
 					else
 						self.PhaseObj:SetPhase(1)
 						self.PhaseObj.Objectives:AddPercent(self.Maelforge.Name, 65, 100)
 						KBM.TankSwap:Start(self.Lang.Debuff.Melt[KBM.Lang], unitID)
 						KBM.MechTimer:AddStart(self.Maelforge.TimersRef.Fissure)
 						self.Phase = 1
+					end
+				end
+				if uDetails.type == self.Maelforge.RaidID_P2 then
+					if self.Maelforge.UnitID ~= unitID then
+						if KBM.TankSwap.Active then
+							KBM.TankSwap:Remove()
+							KBM.TankSwap:Start(self.Lang.Debuff.Melt[KBM.Lang], unitID)
+						end
 					end
 				end
 				self.Maelforge.UnitID = unitID
