@@ -52,6 +52,7 @@ MF.Maelforge = {
 			Enabled = true,
 			Hell = KBM.Defaults.TimerObj.Create("purple"),
 			Hell_P3First = KBM.Defaults.TimerObj.Create("purple"),
+			Hell_Can = KBM.Defaults.TimerObj.Create("purple"),
 			Fissure = KBM.Defaults.TimerObj.Create("orange"),
 		},
 		MechRef = {
@@ -130,7 +131,8 @@ MF.Lang.Menu.Hell_Yellow = KBM.Language:Add("Hellfire (Yellow)")
 MF.Lang.Menu.Hell_Yellow:SetGerman("Höllenfeuer (Gelb)")
 MF.Lang.Menu.Hell_Yellow:SetFrench("Hellfire (Jaune)")
 MF.Lang.Menu.Hell_P3First = KBM.Language:Add("First Hellfire (Final Phase)")
-MF.Lang.Menu.Hell_P3First:SetGerman("Erste Höllenfeuer (Letzte Phase)") 
+MF.Lang.Menu.Hell_P3First:SetGerman("Erste Höllenfeuer (Letzte Phase)")
+MF.Lang.Menu.Hell_Can = KBM.Language:Add("First Hellfire (Cannon Phase)")
 
 -- Description
 MF.Lang.Descript = {}
@@ -258,7 +260,7 @@ function MF.PhaseCannons()
 	MF.PhaseObj:SetPhase("3")
 	MF.Phase = 3
 	MF.CannonCount = 0
-	KBM.MechTimer:AddStart(MF.Maelforge.TimersRef.Hell_P3First)
+	KBM.MechTimer:AddStart(MF.Maelforge.TimersRef.Hell_Can)
 end
 
 function MF.PhaseFinal()
@@ -379,6 +381,8 @@ function MF:Start()
 	self.Maelforge.TimersRef.Hell = KBM.MechTimer:Add(self.Lang.Debuff.Hell[KBM.Lang], 50)
 	self.Maelforge.TimersRef.Hell_P3First = KBM.MechTimer:Add(self.Lang.Debuff.Hell[KBM.Lang], 44)
 	self.Maelforge.TimersRef.Hell_P3First.MenuName = self.Lang.Menu.Hell_P3First[KBM.Lang]
+	self.Maelforge.TimersRef.Hell_Can = KBM.MechTimer:Add(self.Lang.Debuff.Hell[KBM.Lang], 35)
+	self.Maelforge.TimersRef.Hell_Can.MenuName = self.Lang.Menu.Hell_Can[KBM.Lang]
 	self.Maelforge.TimersRef.Fissure = KBM.MechTimer:Add(self.Lang.Mechanic.Fissure[KBM.Lang], 60)
 	KBM.Defaults.TimerObj.Assign(self.Maelforge)
 	
