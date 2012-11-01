@@ -147,6 +147,7 @@ RS.Lang.Notify.Fall:SetGerman("Wenn die Fortuna Fatalis untergeht, ist das auch 
 RS.Lang.Notify.Fall:SetRussian("«Если «Жуткое Богатство» падет, вы %- вместе с ним».")
 RS.Lang.Notify.Chain = KBM.Language:Add("Rusila Dreadblade says, \"Punishment for mutiny aboard my vessel, Ascended, is to have your flesh peeled from your bones.\"")
 RS.Lang.Notify.Chain:SetGerman("Rusila Schreckensklinge sagt: \"Auserwählte, an Bord meines Schiffes steht auf Meuterei: Das Fleisch wird Meuterern von den Knochen geschält.\"")
+RS.Lang.Notify.Chain:SetFrench('Rusila Lame-Lugubre dit : "Être Élus, pour votre mutinerie à bord de mon navire, vous serez écorchés vifs !"')
 RS.Lang.Notify.Fist = KBM.Language:Add("Rusila Dreadblade grins, \"Careful not to fall overboard, Ascended!\"")
 RS.Lang.Notify.Fist:SetGerman("Rusila Schreckensklinge grinst und sagt: \"Vorsicht, fallt nicht über Bord, Auserwählter!\"")
 RS.Lang.Notify.Fist:SetRussian("Русила Жуткий Клинок, ухмыляясь: «Не свалитесь за борт, Вознесенные!»")

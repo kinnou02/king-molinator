@@ -30,7 +30,8 @@ KBM.RegisterMod(MOD.Name, MOD)
 MOD.Lang = {}
 MOD.Lang.Main = {}
 MOD.Lang.Main.Name = KBM.Language:Add(MOD.Name)
-MOD.Lang.Main.Name:SetGerman("Exodus der Sturmkönigin") 
+MOD.Lang.Main.Name:SetGerman("Exodus der Sturmkönigin")
+MOD.Lang.Main.Name:SetFrench("Exode de la Reine de la Tempête")
 
 MOD.Name = MOD.Lang.Main.Name[KBM.Lang]
 MOD.Descript = MOD.Name

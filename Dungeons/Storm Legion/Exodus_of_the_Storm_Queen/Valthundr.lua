@@ -61,10 +61,12 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Valthundr = KBM.Language:Add(MOD.Valthundr.Name)
 MOD.Lang.Unit.Valthundr:SetGerman()
+MOD.Lang.Unit.Valthundr:SetFrench()
 MOD.Valthundr.Name = MOD.Lang.Unit.Valthundr[KBM.Lang]
 MOD.Descript = MOD.Valthundr.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Valthundr")
 MOD.Lang.Unit.AndShort:SetGerman()
+MOD.Lang.Unit.AndShort:SetFrench()
 MOD.Valthundr.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary

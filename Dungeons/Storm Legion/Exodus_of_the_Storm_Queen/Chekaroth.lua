@@ -61,10 +61,12 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Chekaroth = KBM.Language:Add(MOD.Chekaroth.Name)
 MOD.Lang.Unit.Chekaroth:SetGerman()
+MOD.Lang.Unit.Chekaroth:SetFrench()
 MOD.Chekaroth.Name = MOD.Lang.Unit.Chekaroth[KBM.Lang]
 MOD.Descript = MOD.Chekaroth.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Chekaroth")
 MOD.Lang.Unit.AndShort:SetGerman()
+MOD.Lang.Unit.AndShort:SetFrench()
 MOD.Chekaroth.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary

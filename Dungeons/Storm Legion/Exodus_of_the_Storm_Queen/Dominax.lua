@@ -60,10 +60,12 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Dominax = KBM.Language:Add(MOD.Dominax.Name)
 MOD.Lang.Unit.Dominax:SetGerman()
+MOD.Lang.Unit.Dominax:SetFrench()
 MOD.Dominax.Name = MOD.Lang.Unit.Dominax[KBM.Lang]
 MOD.Descript = MOD.Dominax.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Dominax")
 MOD.Lang.Unit.AndShort:SetGerman()
+MOD.Lang.Unit.AndShort:SetFrench()
 MOD.Dominax.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary
