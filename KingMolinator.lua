@@ -3838,12 +3838,24 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 													print("--------------------------------------")
 													print("Old Style Encounter found, or possible Template Encounter")
 													print("Boss Name: "..tostring(uDetails.name).." added to Cache")
+													local Zone = {
+														id = "n/a",
+														name = "unavailable",
+														["type"] = "n/a",
+													}
+													if not uDetails.zone then
+														if KBM.Player.zone then
+															Zone = Inspact.Zone.Detail(KBM.Player.Zone)
+														end
+													else
+														Zone = Inspect.Zone.Detail(uDetails.zone)
+													end
 													KBM.Options.UnitCache.List[uDetails.name][uDetails.type] = {
 														Location = tostring(KBM.Player.Location),
 														Tier = tostring(uDetails.tier),
-														Level = tostring(uDetails.level).." ("..type(uDetails.levle)..")",
+														Level = tostring(uDetails.level).." ("..type(uDetails.level)..")",
 														XYZ = tostring(uDetails.coordX)..","..tostring(uDetails.coordY)..","..tostring(uDetails.coordZ),
-														Zone = Inspect.Zone.Detail(tostring(uDetails.zone)),
+														Zone = Zone,
 													}
 													KBM.Options.UnitTotal = KBM.Options.UnitTotal + 1
 												end
@@ -8312,6 +8324,7 @@ function KBM.ZoneChange(ZoneList)
 	if ZoneList then
 		for UnitID, ZoneID in pairs(ZoneList) do
 			if UnitID == KBM.Player.UnitID then
+				KBM.Player.Zone = uDetails.zone
 				if not ZoneID then
 					if KBM.Debug then
 						print("Zone unavailable")
@@ -8591,6 +8604,31 @@ function KBM.SlashDefault(Args)
 	end
 end
 
+function KBM.SlashUnitCache()
+	if KBM.Options.UnitTotal > 0 then
+		print("You have found "..KBM.Options.UnitTotal.." missing UTIDs")
+		print("----------------")
+		for UnitName, TypeList in pairs(KBM.Options.UnitCache.List) do
+			print("Matches for: "..UnitName)
+			for TypeID, Details in pairs(TypeList) do
+				print("----------------")
+				for ID, Value in pairs(Details) do
+					if ID ~= "Zone" then
+						print(tostring(ID).." : "..tostring(Value))
+					else
+						print("Zone ID: "..Value.id)
+						print("Zone Name: "..Value.name)
+						print("Zone Type: "..Value.type)
+					end
+				end
+			end
+			print("----------------")
+		end
+	else
+		print("You have not found any missing UTIDs")
+	end
+end
+
 function KBM.InitMenus()
 	local Header = KBM.MainWin.Menu:CreateHeader(KBM.Language.Menu.Global[KBM.Lang], nil, nil, nil, "Main")
 	KBM.MenuOptions.Main.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.Settings[KBM.Lang], KBM.MenuOptions.Main, nil, Header)
@@ -8827,6 +8865,7 @@ function KBM.InitEvents()
 	table.insert(Command.Slash.Register("kbmon"), {function() KBM.StateSwitch(true) end, "KingMolinator", "KBM On"})
 	table.insert(Command.Slash.Register("kbmoff"), {function() KBM.StateSwitch(false) end, "KingMolinator", "KBM Off"})
 	table.insert(Command.Slash.Register("kbmdefault"), {KBM.SlashDefault, "KingMolinator", "Default settings handler"})
+	table.insert(Command.Slash.Register("kbmunitcache"), {KBM.SlashUnitCache, "KingMolinator", "Unit Data mining output"})
 end
 
 local function KBM_WaitReady(unitID, uDetails)
