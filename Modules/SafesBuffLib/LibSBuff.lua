@@ -124,14 +124,18 @@ function _int:BuffUpdate(UnitID)
 						if not Buffs[BuffID] then
 							if not self.Queued.Remove[BuffID] then
 								-- A cached Buff is no longer on this Unit - Queue for Removal with Event.
+								--self:DebugUnit("[BuffUpdate] Removing: "..bDetails.name.." ("..BuffID..") | ", UnitID)
 								self.Queue:Add({Unit = UnitID, Buff = BuffID, Remove = true})
 								self.Queued.Remove[BuffID] = true
+							--else
+								--self:DebugUnit("[BuffUpdate] Skipping Remove: "..bDetails.name.." ("..BuffID..") | ", UnitID)
 							end
 						end
 					end
 					for BuffID, BuffType in pairs(Buffs) do
 						if not LibSBuff.Cache[UnitID].BuffID[BuffID] then
 							if not self.Queued.Add[BuffID] then
+								--self:DebugUnit("[BuffUpdate] Queuing: "..bDetails.name.."("..BuffID..") | ", UnitID)
 								self.Queue:Add({Unit = UnitID, Buff = BuffID, Add = true})
 								self.Queued.Add[BuffID] = true
 							end
@@ -139,14 +143,17 @@ function _int:BuffUpdate(UnitID)
 					end
 				else
 					-- Place all the new buffs in the Queue to be added for this Unit
+					--self:DebugUnit("Creating full Buff List for: ", UnitID)
 					for BuffID, BuffType in pairs(Buffs) do
 						if not self.Queued.Add[BuffID] then
 							if self.Monitor.Buffs[BuffID] then
 								-- Cache silently as this buff has already been seen.
+								--print("[Monitor] Adding: "..self.Monitor.Units[UnitID][BuffID].name)
 								self:CacheAdd(UnitID, BuffID, self.Monitor.Units[UnitID][BuffID])
 								self.Monitor:RemoveBuff(BuffID)
 							else
 								-- More than likely a new Buff, create an event and cache trigger.
+								--print("[Queue] Adding: "..BuffID)
 								self.Queue:Add({Unit = UnitID, Buff = BuffID, Add = true})
 								self.Queued.Add[BuffID] = true
 							end
@@ -207,7 +214,7 @@ function _int:CacheAdd(UnitID, BuffID, bDetails)
 		if bDetails.begin and bDetails.duration then
 			bDetails.remaining = (bDetails.begin + bDetails.duration) - Inspect.Time.Frame()
 		end
-		-- print("Buff Cached: "..bDetails.name.." ("..bDetails.id..")")
+		--self:DebugUnit("Buff Loaded: "..bDetails.name.." ("..bDetails.id..") | ", UnitID)
 	end
 end
 
@@ -357,6 +364,8 @@ function _int:BuffAdd(UnitID, Buffs)
 						self.Queue:Add({Unit = UnitID, Buff = BuffID, Add = true})
 					end
 					self.Queued.Add[BuffID] = true
+				-- else
+					-- self:DebugUnit("[BuffAdd] Skipping, already Queued: "..BuffID.." | ", UnitID)
 				end
 			end
 		end
@@ -369,15 +378,37 @@ end
 function _int:BuffRemove(UnitID, Buffs)
 	for BuffID, BuffType in pairs(Buffs) do
 		if not self.Queued.Remove[BuffID] then
+			-- if LibSBuff.Lookup[BuffID] then
+				-- self:DebugUnit("[BuffRemove] Called for: "..LibSBuff.Lookup[BuffID].name.." | ", UnitID)
+			-- else
+				-- self:DebugUnit("[BuffRemove] (Untracked) Called for: "..BuffID.." | ", UnitID)
+			-- end
 			self.Queue:Add({Unit = UnitID, Buff = BuffID, Remove = true})
 			self.Queued.Remove[BuffID] = true
+		-- else
+			-- self:DebugUnit("[BuffRemove] Skipping call for: "..LibSBuff.Lookup[BuffID].name.." | ", UnitID)
 		end
+	end
+end
+
+function _int:DebugUnit(Message, UnitID)
+	local uDetails
+	if not UnitID then
+		UnitID = "No Unit Specified"
+	else
+		uDetails = Inspect.Unit.Detail(UnitID)
+	end
+	if uDetails then
+		print(Message..": "..tostring(uDetails.name).." ("..UnitID..")")
+	else
+		print(Message..": "..UnitID..")")
 	end
 end
 
 function _int:BuffChange(UnitID, Buffs)
 	local _startTime = Inspect.Time.Real()
 	local cache = true
+	self:DebugUnit("BuffChange called for: ", UnitID)
 	for BuffID, BuffType in pairs(Buffs) do
 		if not self.Queued.Change[BuffID] then
 			if BuffID then
@@ -404,8 +435,10 @@ function _int:UnitAvailable(Units)
 	-- If you require an active cache for a new Unit, use the commands: 
 	-- BuffTable = LibSBuff:GetBuffTable(UnitID)
 	for UnitID, _ in pairs(Units) do
-		_int:BuffUpdate(UnitID)
-		_int.Monitor:ClearUnit(UnitID)
+		--self:DebugUnit("Renewing Buffs for: ", UnitID)
+		self:BuffUpdate(UnitID)
+		self.Monitor:ClearUnit(UnitID)
+		--print("----------------")
 	end
 end
 
@@ -414,7 +447,9 @@ function _int:UnitRemoved(Units)
 	-- No Remove events are given for this, to avoid false positives when dealing with your own Buff tracking.
 	if Units then
 		for UnitID, _ in pairs(Units) do
+			--self:DebugUnit("Clearing Buffs for: ", UnitID)
 			self:ClearBuffs(UnitID)
+			--print("----------------")
 		end
 	end
 end
@@ -459,6 +494,7 @@ end
 table.insert(Command.Slash.Register("libsbuff"), {_int.DumpCache, "SafesBuffLib", "Dump current cache to Console"})
 -- Unit Related Events
 table.insert(Event.Unit.Availability.Full, {function(...) _int:UnitAvailable(...) end, AddonIni.id, "Unit Available Handler"})
+table.insert(Event.Unit.Availability.Partial, {function(...) _int:UnitAvailable(...) end, AddonIni.id, "Unit Available Handler"})
 table.insert(Event.Unit.Availability.None, {function(...) _int:UnitRemoved(...) end, AddonIni.id, "Unit Removed Handler"})
 -- Buff Related Events
 table.insert(Event.Buff.Remove, {function(...) _int:BuffRemove(...) end, AddonIni.id, "Buff Remove Handler"})

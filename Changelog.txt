@@ -15,7 +15,8 @@ LibSBuff
 * Removed: LibSBuff:UpdateBuffs(UnitID) is now handled internally.
 
 Instances General
-* New: Tracked Units without the correct Unique Type ID, will now display a message with both Unit Name and Type ID.
+* New: Tracked Units without the correct Unique Type ID, will now display a message with both Unit Name, and added to an internal Cache which is saved.
+* New: /kbmunitcache will list all seen units with missing UTIDs for output to log.txt (/log) in My Documents/Rift/
 * Note: Please take the time to help complete these a soon as possibly by supplying the new ID to myself, so I may start converting existing code.
 * Note: All Units will eventually have this Unique Type ID as it's Key when filtering Units for encounter starts.
 * Note: Units without this ID will either be using Old Name matching system (soon to be removed) or an intentional Template Encounter to gather this data.
@@ -25,6 +26,7 @@ Infernal Dawn
 * Rusila Dreadblade
 ** New: Added stop methods for Fist and Chains timers at the start of the final phase.
 * Maelforge - Ember Eggs
+** Change: This encounter will now flag a victory after 3 Ember Eggs have been destroyed, not via say/notify messages.
 ** Change: Final Phase will now only Trigger after all Cannons have been destroyed.
 * Maelforge - Final
 ** New: Add Tank-Swap for Melt Armor.

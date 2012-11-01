@@ -3845,7 +3845,7 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 													}
 													if not uDetails.zone then
 														if KBM.Player.Zone then
-															Zone = Inspact.Zone.Detail(KBM.Player.Zone)
+															Zone = Inspect.Zone.Detail(KBM.Player.Zone)
 														end
 													else
 														Zone = Inspect.Zone.Detail(uDetails.zone)
@@ -4041,7 +4041,7 @@ end
 
 function KBM.CombatEnter(UnitID)
 	if KBM.Options.Enabled then
-		uDetails = Inspect.Unit.Detail(UnitID)
+		local uDetails = Inspect.Unit.Detail(UnitID)
 		if uDetails then
 			KBM.Unit:Update(uDetails, UnitID)
 			if not uDetails.player then
@@ -4057,7 +4057,7 @@ end
 
 function KBM.CombatLeave(UnitID)
 	if KBM.Options.Enabled then
-		uDetails = Inspect.Unit.Detail(UnitID)
+		local uDetails = Inspect.Unit.Detail(UnitID)
 		if uDetails then
 			KBM.Unit:Update(uDetails, UnitID)
 			KBM.Unit.List.UID[UnitID]:CheckTarget()
@@ -8324,7 +8324,7 @@ function KBM.ZoneChange(ZoneList)
 	if ZoneList then
 		for UnitID, ZoneID in pairs(ZoneList) do
 			if UnitID == KBM.Player.UnitID then
-				KBM.Player.Zone = uDetails.zone
+				KBM.Player.Zone = ZoneID
 				if not ZoneID then
 					if KBM.Debug then
 						print("Zone unavailable")
@@ -8612,6 +8612,7 @@ function KBM.SlashUnitCache()
 			print("Matches for: "..UnitName)
 			for TypeID, Details in pairs(TypeList) do
 				print("----------------")
+				print("UTID: "..tostring(TypeID))
 				for ID, Value in pairs(Details) do
 					if ID ~= "Zone" then
 						print(tostring(ID).." : "..tostring(Value))

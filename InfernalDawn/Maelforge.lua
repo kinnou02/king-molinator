@@ -24,7 +24,8 @@ local MF = {
 	Lang = {},
 	ID = "Maelforge",
 	Object = "MF",
-	CannonCount = 0,	
+	CannonCount = 0,
+	EggCount = 0,
 }
 
 MF.Maelforge = {
@@ -253,6 +254,14 @@ function MF:Death(UnitID)
 				self.PhaseFinal()
 			end
 		end
+	elseif self.Egg.UnitList[UnitID] then
+		if self.Egg.UnitList[UnitID].Dead == false then
+			self.EggCount = self.EggCount + 1
+			self.Egg.UnitList[UnitID].Dead = true
+			if self.EggCount == 3 then
+				return true
+			end
+		end
 	end
 	return false
 end
@@ -314,6 +323,7 @@ function MF:Reset()
 	self.PhaseObj:End(Inspect.Time.Real())
 	self.Phase = 1
 	self.CannonCount = 0
+	self.EggCount = 0
 	for UnitID, BossObj in pairs(self.Cannon.UnitList) do
 		if BossObj.CastBar then
 			BossObj.CastBar:Remove()
@@ -365,8 +375,10 @@ function MF:Start()
 	self.Maelforge.Triggers.PhaseTwoN:AddPhase(self.PhaseTwo)
 	self.Maelforge.Triggers.PhaseFinal = KBM.Trigger:Create(self.Lang.Notify.PhaseFinal[KBM.Lang], "notify", self.Maelforge)
 	self.Maelforge.Triggers.PhaseFinal:AddPhase(self.PhaseFinal)
-	self.Maelforge.Triggers.Victory = KBM.Trigger:Create(self.Lang.Notify.Victory[KBM.Lang], "notify", self.Maelforge)
-	self.Maelforge.Triggers.Victory:SetVictory()
+	-- self.Maelforge.Triggers.Victory = KBM.Trigger:Create(self.Lang.Notify.Victory[KBM.Lang], "notify", self.Maelforge)
+	-- self.Maelforge.Triggers.Victory:SetVictory()
+	-- self.Maelforge.Triggers.Victory = KBM.Trigger:Create(self.Lang.Notify.Victory[KBM.Lang], "say", self.Maelforge)
+	-- self.Maelforge.Triggers.Victory:SetVictory()
 	
 	-- Assign Alerts to Cannon Triggers
 	self.Cannon.Triggers.Blast = KBM.Trigger:Create(self.Lang.Ability.Blast[KBM.Lang], "personalCast", self.Cannon)
