@@ -36,7 +36,7 @@ ML.Maklamos = {
 	Dead = false,
 	Available = false,
 	Menu = {},
-	RaidID = "Raid",
+	RaidID = "U6D6AA149570398D0",
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
@@ -160,12 +160,41 @@ ML.Jug = {
 	Type = "multi",
 }
 
+ML.MonJug = {
+	Mod = ML,
+	Level = "??",
+	Name = ML.Lang.Unit.MonJug[KBM.Lang],
+	NameShort = ML.Lang.Unit.MonShort[KBM.Lang],
+	UnitList = {},
+	Menu = {},
+	Ignore = true,
+	RaidID = "Raid",
+	Type = "multi",
+}
+
+ML.MerJug = {
+	Mod = ML,
+	Level = "??",
+	Name = ML.Lang.Unit.MerJug[KBM.Lang],
+	NameShort = ML.Lang.Unit.MerShort[KBM.Lang],
+	UnitList = {},
+	Menu = {},
+	Ignore = true,
+	RaidID = "Raid",
+	Type = "multi",
+}
+
 function ML:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Maklamos.Name] = self.Maklamos,
+		[self.Jug.Name] = self.Jug,
+		[self.MonJug.Name] = self.MonJug,
+		[self.MerJug.Name] = self.MerJug,
 	}
-	KBM_Boss[self.Maklamos.Name] = self.Maklamos
+	KBM.SubBoss[self.Jug.Name] = self.Jug
+	KBM.SubBoss[self.MonJug.Name] = self.MonJug
+	KBM.SubBoss[self.MerJug.Name] = self.MerJug
 end
 
 function ML:InitVars()

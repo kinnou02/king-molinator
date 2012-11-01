@@ -155,7 +155,7 @@ MF.Cannon = {
 	Menu = {},
 	Ignore = true,
 	Type = "multi",
-	RaidID = "Raid",
+	RaidID = "U7F3FFE0C35C496F8",
 	AlertsRef = {},
 	Triggers = {},
 	Settings = {
@@ -174,8 +174,6 @@ function MF:AddBosses(KBM_Boss)
 	}
 	KBM.Boss.Raid[self.Maelforge.RaidID_P2] = self.Maelforge
 	KBM.Boss.TypeList[self.Maelforge.RaidID_P2] = self.Maelforge
-	KBM.SubBoss[self.Cannon.Name] = self.Cannon
-
 end
 
 function MF:InitVars()

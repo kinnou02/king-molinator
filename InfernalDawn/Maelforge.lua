@@ -26,6 +26,7 @@ local MF = {
 	Object = "MF",
 	CannonCount = 0,
 	EggCount = 0,
+	TimeOut = 20,
 }
 
 MF.Maelforge = {
@@ -37,9 +38,8 @@ MF.Maelforge = {
 	Dead = false,
 	Available = false,
 	Menu = {},
-	RaidID = "Raid",
+	RaidID = "U35BDBE1C0B7EB642",
 	UnitID = nil,
-	TimeOut = 20,
 	Castbar = nil,
 	MechRef = {},
 	AlertsRef = {},
@@ -122,7 +122,7 @@ MF.Cannon = {
 	Menu = {},
 	Ignore = true,
 	Type = "multi",
-	RaidID = "Raid",
+	RaidID = "U3C2D87970BEC0FB4",
 	AlertsRef = {},
 	Triggers = {},
 	Settings = {
@@ -140,7 +140,7 @@ MF.Egg = {
 	NameShort = MF.Lang.Unit.EggShort[KBM.Lang],
 	UnitList = {},
 	Menu = {},
-	RaidID = "Raid",
+	RaidID = "U4DF4DB2D235CD05C",
 	Ignore = true,
 	Type = "multi",
 }
@@ -152,9 +152,6 @@ function MF:AddBosses(KBM_Boss)
 		[self.Cannon.Name] = self.Cannon,
 		[self.Egg.Name] = self.Egg,
 	}
-	KBM_Boss[self.Maelforge.Name] = self.Maelforge
-	KBM.SubBoss[self.Cannon.Name] = self.Cannon
-	KBM.SubBoss[self.Egg.Name] = self.Egg
 end
 
 function MF:InitVars()

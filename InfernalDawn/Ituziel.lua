@@ -36,7 +36,7 @@ IZ.Ituziel = {
 	Dead = false,
 	Available = false,
 	Menu = {},
-	RaidID = "Raid",
+	RaidID = "U2548A17D2D0E9F2F",
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
@@ -123,7 +123,6 @@ function IZ:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Ituziel.Name] = self.Ituziel,
 	}
-	KBM_Boss[self.Ituziel.Name] = self.Ituziel
 end
 
 function IZ:InitVars()

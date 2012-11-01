@@ -59,8 +59,7 @@ KBM.RegisterMod(MOD.ID, MOD)
 -- Main Unit Dictionary
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Caor = KBM.Language:Add(MOD.Caor.Name)
-MOD.Lang.Unit.Caor:SetGerman("Caor Ashstone")
-MOD.Lang.Unit.Caor:SetFrench("Caor Ashstone")
+MOD.Lang.Unit.Caor:SetGerman("Caor Aschstein")
 MOD.Lang.Unit.Caor:SetRussian("Кер Пепельник")
 MOD.Lang.Unit.Caor:SetKorean("카오르 애시스톤")
 MOD.Caor.Name = MOD.Lang.Unit.Caor[KBM.Lang]

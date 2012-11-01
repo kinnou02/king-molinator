@@ -1008,6 +1008,14 @@ function KBM.Boss.Dungeon:AddBoss(BossObj)
 					end
 				end
 			end
+			if KBM.Options.UnitCache.Expert[Mod.Instance] then
+				if KBM.Options.UnitCache.Expert[Mod.Instance][BossObj.Name] then
+					KBM.Options.UnitCache.Expert[Mod.Instance][BossObj.Name] = nil
+				end
+				if not next(KBM.Options.UnitCache.Expert[Mod.Instance]) then
+					KBM.Options.UnitCache.Expert[Mod.Instance] = nil
+				end
+			end
 		else
 			if not KBM.Options.UnitCache.Expert[Mod.Instance] then
 				KBM.Options.UnitCache.Expert[Mod.Instance] = {}
@@ -1029,6 +1037,14 @@ function KBM.Boss.Dungeon:AddBoss(BossObj)
 					if not next(KBM.Options.UnitCache.List[BossObj.Name]) then
 						KBM.Options.UnitCache.List[BossObj.Name] = nil
 					end
+				end
+			end
+			if KBM.Options.UnitCache.Master[Mod.Instance] then
+				if KBM.Options.UnitCache.Master[Mod.Instance][BossObj.Name] then
+					KBM.Options.UnitCache.Master[Mod.Instance][BossObj.Name] = nil
+				end
+				if not next(KBM.Options.UnitCache.Master[Mod.Instance]) then
+					KBM.Options.UnitCache.Master[Mod.Instance] = nil
 				end
 			end
 		else
@@ -1054,6 +1070,14 @@ function KBM.Boss.Dungeon:AddBoss(BossObj)
 					end
 				end
 			end
+			if KBM.Options.UnitCache.Normal[Mod.Instance] then
+				if KBM.Options.UnitCache.Normal[Mod.Instance][BossObj.Name] then
+					KBM.Options.UnitCache.Normal[Mod.Instance][BossObj.Name] = nil
+				end
+				if not next(KBM.Options.UnitCache.Normal[Mod.Instance]) then
+					KBM.Options.UnitCache.Normal[Mod.Instance] = nil
+				end
+			end
 		else
 			if not KBM.Options.UnitCache.Normal[Mod.Instance] then
 				KBM.Options.UnitCache.Normal[Mod.Instance] = {}
@@ -1074,12 +1098,12 @@ function KBM.Boss.Dungeon:AddBoss(BossObj)
 			print("Boss: "..BossObj.Name)
 			print("No Valid UID for this Unit")
 		end
-	end
-	if self.List[BossObj.Name] then
-		self.List[BossObj.Name][BossID] = BossObj
-	else
-		self.List[BossObj.Name] = {}
-		self.List[BossObj.Name][BossID] = BossObj
+		if self.List[BossObj.Name] then
+			self.List[BossObj.Name][BossID] = BossObj
+		else
+			self.List[BossObj.Name] = {}
+			self.List[BossObj.Name][BossID] = BossObj
+		end
 	end
 end
 
@@ -8675,6 +8699,14 @@ function KBM.InitMenus()
 									end
 								end
 							end
+							if KBM.Options.UnitCache.Raid[Mod.Instance] then
+								if KBM.Options.UnitCache.Raid[Mod.Instance][BossObj.Name] then
+									KBM.Options.UnitCache.Raid[Mod.Instance][BossObj.Name] = nil
+								end
+								if not next(KBM.Options.UnitCache.Raid[Mod.Instance]) then
+									KBM.Options.UnitCache.Raid[Mod.Instance] = nil
+								end
+							end
 							--print("Raid Boss: "..BossObj.Name.." initizialized successfully: "..BossObj.RaidID)
 						else
 							print("WARNING: "..BossObj.Name.." ID Length not correct, required Length 17")
@@ -8701,6 +8733,14 @@ function KBM.InitMenus()
 									if not next(KBM.Options.UnitCache.List[BossObj.Name]) then
 										KBM.Options.UnitCache.List[BossObj.Name] = nil
 									end
+								end
+							end
+							if KBM.Options.UnitCache.Sliver[Mod.Instance] then
+								if KBM.Options.UnitCache.Sliver[Mod.Instance][BossObj.Name] then
+									KBM.Options.UnitCache.Sliver[Mod.Instance][BossObj.Name] = nil
+								end
+								if not next(KBM.Options.UnitCache.Sliver[Mod.Instance]) then
+									KBM.Options.UnitCache.Sliver[Mod.Instance] = nil
 								end
 							end
 						else

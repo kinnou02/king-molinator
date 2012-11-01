@@ -35,7 +35,7 @@ BG.Bouldergut = {
 	Dead = false,
 	Available = false,
 	Menu = {},
-	RaidID = "Raid",
+	RaidID = "U2D9D1FA518516BA1",
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
@@ -91,7 +91,6 @@ function BG:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Bouldergut.Name] = self.Bouldergut,
 	}
-	KBM_Boss[self.Bouldergut.Name] = self.Bouldergut
 end
 
 function BG:InitVars()

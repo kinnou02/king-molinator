@@ -35,7 +35,7 @@ GH.Guurloth = {
 	AlertsRef = {},
 	MechRef = {},
 	Menu = {},
-	SliverID = "Sliver",
+	SliverID = "U361E2A4F51715F59",
 	Dead = false,
 	Available = false,
 	UnitID = nil,
@@ -186,7 +186,6 @@ function GH:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Guurloth.Name] = self.Guurloth,
 	}
-	KBM_Boss[self.Guurloth.Name] = self.Guurloth	
 end
 
 function GH:InitVars()

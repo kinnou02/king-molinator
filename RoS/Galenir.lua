@@ -38,7 +38,7 @@ WG.Galenir = {
 	AlertsRef = {},
 	MechRef = {},
 	Menu = {},
-	RaidID = "Raid",
+	RaidID = "U2AA79A7D56B6548D",
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
@@ -84,7 +84,6 @@ function WG:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Galenir.Name] = self.Galenir,
 	}
-	KBM_Boss[self.Galenir.Name] = self.Galenir	
 end
 
 function WG:InitVars()

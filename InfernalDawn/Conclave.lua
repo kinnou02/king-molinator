@@ -36,7 +36,7 @@ EC.Szath = {
 	Dead = false,
 	Available = false,
 	Menu = {},
-	RaidID = "Raid",
+	RaidID = "U7962F5A3045CF825",
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
@@ -106,7 +106,7 @@ EC.Nahoth = {
 	Dead = false,
 	Available = false,
 	Menu = {},
-	RaidID = "Raid",
+	RaidID = "U620576EA54C3FF37",
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
@@ -135,7 +135,7 @@ EC.Ereetu = {
 	Dead = false,
 	Available = false,
 	Menu = {},
-	RaidID = "Raid",
+	RaidID = "U31C736BE640487EB",
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
@@ -202,9 +202,6 @@ function EC:AddBosses(KBM_Boss)
 		[self.Nahoth.Name] = self.Nahoth,
 		[self.Ereetu.Name] = self.Ereetu,
 	}
-	KBM_Boss[self.Szath.Name] = self.Szath
-	KBM_Boss[self.Nahoth.Name] = self.Nahoth
-	KBM_Boss[self.Ereetu.Name] = self.Ereetu
 	
 	for BossName, BossObj in pairs(self.Bosses) do
 		if BossObj.Settings then

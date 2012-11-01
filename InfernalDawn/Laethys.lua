@@ -38,7 +38,8 @@ LT.Laethys = {
 	Dead = false,
 	Available = false,
 	Menu = {},
-	RaidID = "Raid",
+	RaidID = "U58811C1B004A9BD0",
+	RaidID_P2 = "U7C80B6005E92811F",
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
@@ -216,7 +217,7 @@ LT.Seer = {
 	AlertsRef = {},
 	TimersRef = {},
 	Ignore = true,
-	RaidID = "Raid",
+	RaidID = "U5A9D4AA35D7CCF20",
 	Type = "multi",
 	Triggers = {},
 	Settings = {
@@ -237,8 +238,8 @@ function LT:AddBosses(KBM_Boss)
 		[self.Laethys.Name] = self.Laethys,
 		[self.Seer.Name] = self.Seer,
 	}
-	KBM_Boss[self.Laethys.Name] = self.Laethys
-	KBM.SubBoss[self.Seer.Name] = self.Seer
+	KBM.Boss.Raid[self.Laethys.RaidID_P2] = self.Laethys
+	KBM.Boss.TypeList[self.Laethys.RaidID_P2] = self.Laethys
 end
 
 function LT:InitVars()

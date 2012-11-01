@@ -38,7 +38,7 @@ DF.Foci = {
 	AlertsRef = {},
 	TimersRef = {},
 	MechRef = {},
-	RaidID = "Raid",
+	RaidID = "U3091373D6ECF0E20",
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
@@ -124,7 +124,7 @@ DF.Force = {
 	Dead = false,
 	Available = false,
 	AlertsRef = {},
-	RaidID = "Raid",
+	RaidID = "U2ED530771105D249",
 	UnitID = nil,
 	Timout = 5,
 	Triggers = {},
@@ -149,8 +149,6 @@ function DF:AddBosses(KBM_Boss)
 		[self.Foci.Name] = self.Foci,
 		[self.Force.Name] = self.Force,
 	}
-	KBM_Boss[self.Foci.Name] = self.Foci
-	KBM.SubBoss[self.Force.Name] = self.Force
 end
 
 function DF:InitVars()

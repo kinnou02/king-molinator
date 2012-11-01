@@ -36,7 +36,7 @@ WD.Drak = {
 	Dead = false,
 	Available = false,
 	Menu = {},
-	RaidID = "Raid",
+	RaidID = "U00BF999D1AD12EF7",
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
@@ -216,7 +216,7 @@ WD.Natung = {
 	Dead = false,
 	Available = false,
 	Menu = {},
-	RaidID = "Raid",
+	RaidID = "U0570D41A51ED8A7B",
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
@@ -257,7 +257,7 @@ WD.Thrall = {
 	Menu = {},
 	Ignore = true,
 	Type = "multi",
-	RaidID = "Raid",
+	RaidID = "U56D75D2F20C4EEAB",
 	AlertsRef = {},
 	Settings = {
 		AlertsRef = {
@@ -277,7 +277,7 @@ WD.Stalwart = {
 	Menu = {},
 	Ignore = true,
 	Type = "multi",
-	RaidID = "Raid",
+	RaidID = "U7FE56E6902CC3B45",
 	AlertsRef = {},
 	TimersRef = {},
 	Settings = {
@@ -303,11 +303,7 @@ function WD:AddBosses(KBM_Boss)
 		[self.Thrall.Name] = self.Thrall,
 		[self.Stalwart.Name] = self.Stalwart,
 	}
-	KBM_Boss[self.Drak.Name] = self.Drak
-	KBM.SubBoss[self.Natung.Name] = self.Natung
 	KBM.SubBoss[self.Blazing.Name] = self.Blazing
-	KBM.SubBoss[self.Thrall.Name] = self.Thrall
-	KBM.SubBoss[self.Stalwart.Name] = self.Stalwart
 	
 	for BossName, BossObj in pairs(self.Bosses) do
 		if BossObj.Settings then

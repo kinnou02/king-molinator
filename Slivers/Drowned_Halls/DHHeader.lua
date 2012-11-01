@@ -6,7 +6,7 @@
 KBMDH_Settings = {}
 
 local DH = {
-	Directory = "Sliver/Drowned_Halls/",
+	Directory = "Slivers/Drowned_Halls/",
 	File = "DHHeader.lua",
 	Header = nil,
 	Enabled = true,

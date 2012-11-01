@@ -42,7 +42,7 @@ MOD.Laric = {
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
-	ExpertID = "Expert",
+	ExpertID = "U3067AFE412397B1E",
 	-- MasterID = "U024CAD61448FED64",
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -116,7 +116,7 @@ MOD.Derribec = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	ExpertID = "Expert",
+	ExpertID = "U5794318834A5C715",
 	TimeOut = 5,
 }
 
@@ -130,7 +130,7 @@ MOD.Humbart = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	ExpertID = "Expert",
+	ExpertID = "U40A6C8CE27638FFE",
 	TimeOut = 5,
 }
 

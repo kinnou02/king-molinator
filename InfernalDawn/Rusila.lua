@@ -38,7 +38,7 @@ RS.Rusila = {
 	Available = false,
 	Menu = {},
 	UnitID = nil,
-	RaidID = "Raid",
+	RaidID = "U175A020043177B26",
 	TimeOut = 5,
 	Castbar = nil,
 	Ignore = true,
@@ -196,7 +196,7 @@ RS.Long = {
 	NameShort = RS.Lang.Unit.Long[KBM.Lang],
 	Location = "The Dread Fortune",
 	UnitList = {},
-	RaidID = "Raid",
+	RaidID = "U15AF32C402742F9B",
 	Menu = {},
 	Ignore = true,
 	Type = "multi",
@@ -208,7 +208,7 @@ RS.Heart = {
 	Name = RS.Lang.Unit.Heart[KBM.Lang],
 	NameShort = RS.Lang.Unit.HeartShort[KBM.Lang],
 	Location = "The Dread Fortune",
-	RaidID = "Raid",
+	RaidID = "U6AA84B235AEB7988",
 	Menu = {},
 	Ignore = true,
 }
@@ -245,10 +245,6 @@ function RS:AddBosses(KBM_Boss)
 		[self.Dummy.Name] = self.Dummy,
 		[self.Heart.Name] = self.Heart,
 	}
-	KBM_Boss[self.Rusila.Name] = self.Rusila
-	KBM_Boss[self.Dummy.Name] = self.Dummy
-	KBM.SubBoss[self.Long.Name] = self.Long
-	KBM.SubBoss[self.Heart.Name] = self.Heart
 end
 
 function RS:InitVars()

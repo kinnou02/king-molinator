@@ -36,7 +36,7 @@ UK.Uruluuk = {
 	MechRef = {},
 	Dead = false,
 	Available = false,
-	SliverID = "Sliver",
+	SliverID = "U361E2A4D3722D17A",
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
@@ -106,7 +106,6 @@ function UK:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Uruluuk.Name] = self.Uruluuk,
 	}
-	KBM_Boss[self.Uruluuk.Name] = self.Uruluuk	
 end
 
 function UK:InitVars()

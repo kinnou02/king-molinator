@@ -35,7 +35,7 @@ MK.Muglak = {
 	Dead = false,
 	Available = false,
 	Menu = {},
-	RaidID = "Raid",
+	RaidID = "U01EE2F8E24A0BDE0",
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
@@ -97,7 +97,6 @@ function MK:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Muglak.Name] = self.Muglak,
 	}
-	KBM_Boss[self.Muglak.Name] = self.Muglak
 end
 
 function MK:InitVars()

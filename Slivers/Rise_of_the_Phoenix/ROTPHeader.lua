@@ -6,7 +6,7 @@
 KBMROTP_Settings = {}
 
 local ROTP = {
-	Directory = "Sliver/Rise_of_the_Phoenix/",
+	Directory = "Slivers/Rise_of_the_Phoenix/",
 	File = "ROTPHeader.lua",
 	Header = nil,
 	Enabled = true,

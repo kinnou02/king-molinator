@@ -35,7 +35,7 @@ GL.Gorlach = {
 	Dead = false,
 	Available = false,
 	Menu = {},
-	RaidID = "Raid",
+	RaidID = "U622B89D96CD2E2D9",
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
@@ -111,7 +111,6 @@ function GL:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Gorlach.Name] = self.Gorlach,
 	}
-	KBM_Boss[self.Gorlach.Name] = self.Gorlach
 end
 
 function GL:InitVars()

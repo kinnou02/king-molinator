@@ -116,7 +116,7 @@ MOD.Autumn = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	ExpertID = "Expert",
+	ExpertID = "U372CCD771C23195F",
 	TimeOut = 5,
 }
 
@@ -130,7 +130,7 @@ MOD.Summer = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	ExpertID = "Expert",
+	ExpertID = "U1220566F5B67A9EC",
 	TimeOut = 5,
 }
 

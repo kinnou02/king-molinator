@@ -39,7 +39,7 @@ HG.Gaurath = {
 	TimersRef = {},
 	AlertsRef = {},
 	MechRef = {},
-	RaidID = "Raid",
+	RaidID = "U2BFD68933FB9413B",
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
@@ -126,7 +126,7 @@ HG.Defiler = {
 	Menu = {},
 	AlertsRef = {},
 	Ignore = true,
-	RaidID = "Raid",
+	RaidID = "U526CBA854CF60818",
 	Type = "multi",
 	Triggers = {},
 	Settings = {
@@ -143,8 +143,6 @@ function HG:AddBosses(KBM_Boss)
 		[self.Gaurath.Name] = self.Gaurath,
 		[self.Defiler.Name] = self.Defiler,
 	}
-	KBM_Boss[self.Gaurath.Name] = self.Gaurath	
-	KBM.SubBoss[self.Defiler.Name] = self.Defiler
 end
 
 function HG:InitVars()

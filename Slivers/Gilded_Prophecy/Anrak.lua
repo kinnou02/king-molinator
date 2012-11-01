@@ -37,7 +37,7 @@ AF.Anrak = {
 	Available = false,
 	TimersRef = {},
 	AlertsRef = {},
-	SliverID = "Sliver",
+	SliverID = "U361E2A4C26F42E75",
 	MechRef = {},
 	UnitID = nil,
 	Triggers = {},
@@ -122,7 +122,6 @@ function AF:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Anrak.Name] = self.Anrak,
 	}
-	KBM_Boss[self.Anrak.Name] = self.Anrak	
 end
 
 function AF:InitVars()

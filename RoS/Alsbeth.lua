@@ -227,7 +227,7 @@ AD.Magus = {
 	AlertsRef = {},
 	Dead = false,
 	Available = false,
-	RaidID = "Raid",
+	RaidID = "U37D4CCEA74E0BB39",
 	UnitID = nil,
 	Ignore = true,
 	Triggers = {},
@@ -252,7 +252,7 @@ AD.Pillar = {
 	UnitList = {},
 	Ignore = true,
 	Type = "multi",
-	RaidID = "Raid",
+	RaidID = "U76026D384D081D9F",
 }
 
 AD.Alsbeth.Name = AD.Lang.Unit.Alsbeth[KBM.Lang]
@@ -269,8 +269,6 @@ function AD:AddBosses(KBM_Boss)
 	}
 	KBM.SubBoss[self.Harbinger.Name] = self.Harbinger
 	KBM.SubBoss[self.Thief.Name] = self.Thief
-	KBM.SubBoss[self.Magus.Name] = self.Magus
-	KBM.SubBoss[self.Pillar.Name] = self.Pillar
 end
 
 function AD:InitVars()
