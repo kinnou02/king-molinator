@@ -109,6 +109,7 @@ MF.Lang.Debuff.Fiery = KBM.Language:Add("Fiery Fissure")
 MF.Lang.Debuff.Fiery:SetGerman("Feuriger Spalt")
 MF.Lang.Debuff.Fiery:SetFrench("Fissure flamboyante")
 MF.Lang.Debuff.Melt = KBM.Language:Add("Melt Armor")
+MF.Lang.Debuff.Melt:SetFrench("Fonte d'armure")
 
 -- Notify Dictionary
 MF.Lang.Notify = {}

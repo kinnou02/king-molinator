@@ -49,6 +49,7 @@ Instances Converted to New Unit system.
 
 Translations
 * French
+** New: Additions to Maelforge and various other encounters/menus.
 ** Fixed: Adjusted Phase 2 transition trigger to include escape code (%) for hyphen.
 * German
 ** New: Updates to Twyl and Rusila.
