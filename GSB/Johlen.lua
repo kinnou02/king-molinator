@@ -34,7 +34,7 @@ IJ.Johlen = {
 	Name = "Infiltrator Johlen",
 	NameShort = "Johlen",
 	ChronicleID = "U24253CDD6002C8D5",
-	RaidID = "Raid",
+	RaidID = "U11DFBF8C2A3FA156",
 	Menu = {},
 	AlertsRef = {},
 	Dead = false,
@@ -107,7 +107,7 @@ IJ.Bomb = {
 	UnitList = {},
 	Ignore = true,
 	Type = "multi",
-	RaidID = "Raid",
+	RaidID = "U3F7C52390EFF515F",
 }
 
 function IJ:AddBosses(KBM_Boss)

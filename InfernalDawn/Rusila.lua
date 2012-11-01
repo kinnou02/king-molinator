@@ -223,7 +223,7 @@ RS.Dummy = {
 	UnitList = {},
 	Menu = {},
 	Type = "multi",
-	RaidID = "Rusila_DummyID",
+	RaidID = "URusila_DummyIDXX",
 	Details = {
 		name = "Dummy Start",
 		combat = true,
@@ -232,7 +232,7 @@ RS.Dummy = {
 		location = "The Dread Fortune",
 		health = 10,
 		healthMax = 10,
-		["type"] = "Rusila_DummyID",
+		["type"] = "URusila_DummyIDXX",
 	},
 }
 

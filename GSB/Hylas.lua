@@ -14,6 +14,8 @@ if not KBM.BossMod then
 end
 local GSB = KBM.BossMod["Greenscales Blight"]
 
+-- Johlen ID: "U5AD8D9DA23FAED8C"
+
 local PH = {
 	Enabled = true,
 	Directory = GSB.Directory,
@@ -34,7 +36,7 @@ PH.Hylas = {
 	Name = "Prince Hylas",
 	NameShort = "Hylas",
 	ChronicleID = "U48BA191868D74700",
-	RaidID = "Raid",
+	RaidID = "U208C136962074729",
 	Menu = {},
 	Castbar = nil,
 	TimersRef = {},
@@ -138,12 +140,27 @@ PH.Lang.Verbose.Reanimate:SetKorean(" 이(가) 되살아났습니다!")
 PH.Hylas.Name = PH.Lang.Unit.Hylas[KBM.Lang]
 PH.Descript = PH.Hylas.Name
 
+PH.Johlen = {
+	Mod = PH,
+	Level = "52",
+	Active = false,
+	Name = PH.Lang.Unit.Johlen[KBM.Lang],
+	NameShort = PH.Lang.Unit.Johlen[KBM.Lang],
+	RaidID = "U5AD8D9DA23FAED8C",
+	Castbar = nil,
+	Dead = false,
+	Available = false,
+	UnitID = nil,
+	TimeOut = 5,
+	Ignore = true,
+}
+
 function PH:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Hylas.Name] = self.Hylas,
+		[self.Johlen.Name] = self.Johlen,
 	}
-	KBM_Boss[self.Hylas.Name] = self.Hylas
 end
 
 function PH:InitVars()
