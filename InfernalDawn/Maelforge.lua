@@ -100,7 +100,7 @@ MF.Lang.Notify.Victory:SetGerman("Carcera: Diese Welt wurde vor Schrecken bewahr
 MF.Lang.Debuff = {}
 MF.Lang.Debuff.Hell = KBM.Language:Add("Hellfire")
 MF.Lang.Debuff.Hell:SetGerman("Höllenfeuer")
-MF.Lang.Debuff.Hell:SetFrench("Hellfire")
+MF.Lang.Debuff.Hell:SetFrench("Feux de l'enfer")
 MF.Lang.Debuff.Melt = KBM.Language:Add("Melt Armor")
 
 -- Description Dictionary

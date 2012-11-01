@@ -101,7 +101,7 @@ MF.Lang.Ability.Blast:SetGerman("Geschmolzene Explosion")
 MF.Lang.Debuff = {}
 MF.Lang.Debuff.Hell = KBM.Language:Add("Hellfire")
 MF.Lang.Debuff.Hell:SetGerman("Höllenfeuer")
-MF.Lang.Debuff.Hell:SetFrench("Hellfire")
+MF.Lang.Debuff.Hell:SetFrench("Feux de l'enfer")
 MF.Lang.Debuff.Earthen = KBM.Language:Add("Earthen Fissure")
 MF.Lang.Debuff.Earthen:SetGerman("Erdspalte")
 MF.Lang.Debuff.Earthen:SetFrench("Fissure terrestre")
