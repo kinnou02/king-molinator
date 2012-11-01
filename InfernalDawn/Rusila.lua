@@ -322,8 +322,8 @@ function RS.PhaseTwo()
 		RS.PhaseObj:SetPhase("Final")
 		RS.Phase = 2
 		KBM.EncTimer:Unpause()
-		KBM.MechTimer:AddRemove(RS.Rusila.TimersRef.Fist)
-		KBM.MechTimer:AddRemove(RS.Rusila.TimersRef.Chain)
+		KBM.MechTimer:AddRemove(RS.Rusila.TimersRef.Fists)
+		KBM.MechTimer:AddRemove(RS.Rusila.TimersRef.Chains)
 	end
 end
 
