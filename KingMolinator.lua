@@ -3844,7 +3844,7 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 														["type"] = "n/a",
 													}
 													if not uDetails.zone then
-														if KBM.Player.zone then
+														if KBM.Player.Zone then
 															Zone = Inspact.Zone.Detail(KBM.Player.Zone)
 														end
 													else
@@ -8616,9 +8616,13 @@ function KBM.SlashUnitCache()
 					if ID ~= "Zone" then
 						print(tostring(ID).." : "..tostring(Value))
 					else
-						print("Zone ID: "..Value.id)
-						print("Zone Name: "..Value.name)
-						print("Zone Type: "..Value.type)
+						if type(Value) == "table" then
+							print("Zone ID: "..tostring(Value.id))
+							print("Zone Name: "..tostring(Value.name))
+							print("Zone Type: "..tostring(Value.type))
+						else
+							print("Zone: Malformed Data")
+						end
 					end
 				end
 			end
