@@ -155,12 +155,46 @@ PH.Johlen = {
 	Ignore = true,
 }
 
+PH.Duke = {
+	Mod = PH,
+	Level = "52",
+	Active = false,
+	Name = PH.Lang.Unit.Duke[KBM.Lang],
+	NameShort = PH.Lang.Unit.Duke[KBM.Lang],
+	RaidID = "Raid",
+	Castbar = nil,
+	Dead = false,
+	Available = false,
+	UnitID = nil,
+	TimeOut = 5,
+	Ignore = true,
+}
+
+PH.Aleria = {
+	Mod = PH,
+	Level = "52",
+	Active = false,
+	Name = PH.Lang.Unit.Aleria[KBM.Lang],
+	NameShort = PH.Lang.Unit.Aleria[KBM.Lang],
+	RaidID = "Raid",
+	Castbar = nil,
+	Dead = false,
+	Available = false,
+	UnitID = nil,
+	TimeOut = 5,
+	Ignore = true,
+}
+
 function PH:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Hylas.Name] = self.Hylas,
 		[self.Johlen.Name] = self.Johlen,
+		[self.Duke.Name] = self.Duke,
+		[self.Aleria.Name] = self.Aleria,
 	}
+	KBM.SubBoss[self.Duke.Name] = self.Duke
+	KBM.SubBoss[self.Aleria.Name] = self.Aleria
 end
 
 function PH:InitVars()

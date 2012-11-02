@@ -102,6 +102,7 @@ MF.Lang.Debuff.Hell = KBM.Language:Add("Hellfire")
 MF.Lang.Debuff.Hell:SetGerman("Höllenfeuer")
 MF.Lang.Debuff.Hell:SetFrench("Feux de l'enfer")
 MF.Lang.Debuff.Melt = KBM.Language:Add("Melt Armor")
+MF.Lang.Debuff.Melt:SetFrench("Fonte d'armure")
 
 -- Description Dictionary
 MF.Lang.Descript = {}
@@ -224,6 +225,9 @@ end
 
 function MF.PhaseTwo()
 	if MF.Phase == 1 then
+		if KBM.TankSwap.Active then
+			KBM.TankSwap:Remove()
+		end
 		MF.PhaseObj.Objectives:Remove()
 		MF.PhaseObj:SetPhase("2")
 		MF.PhaseObj.Objectives:AddDeath(MF.Cannon.Name, 6)
@@ -281,6 +285,7 @@ function MF:UnitHPCheck(uDetails, unitID)
 						self.PhaseObj:SetPhase("1")
 						self.PhaseObj.Objectives:AddPercent(self.Maelforge.Name, 50, 100)
 						self.Phase = 1
+						KBM.TankSwap:Start(self.Lang.Debuff.Melt[KBM.Lang], unitID)
 					end
 					self.Maelforge.UnitID = unitID
 					self.Maelforge.Available = true

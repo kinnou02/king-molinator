@@ -26,13 +26,23 @@ Infernal Dawn
 * Rusila Dreadblade
 ** New: Added stop methods for Fist and Chains timers at the start of the final phase.
 * Maelforge - Ember Eggs
+** New: Added Tank-Swap for Melt Armor.
 ** Change: This encounter will now flag a victory after 3 Ember Eggs have been destroyed, not via say/notify messages.
 ** Change: Final Phase will now only Trigger after all Cannons have been destroyed.
 * Maelforge - Final
-** New: Add Tank-Swap for Melt Armor.
+** New: Added Tank-Swap for Melt Armor.
 ** New: Timer Added for First Hellfire in the Cannon phase.
 ** Change: Hellfire Alerts are now flagged as Important.
 ** Fixed: Cannons now have an internal CastBar for associated Molten Blast alerts.
+
+Greenscale's Blight
+* Prince Hylas
+** New: The three sub bosses from previous encounters are now tracked again.
+** Fixed: Due to the above, the Phase Monitor should begin working again.
+
+Gilded Prophecy
+* Guurloth
+** Change: Earthen Punishment personal alert now flagged as Important.
 
 Normal Dungeons
 * Exodus of the Storm Queen
