@@ -8406,12 +8406,7 @@ function KBM.AllocateBoss(Mod, BossObj, UTID)
 		if not KBM.Options.UnitCache[iType][Mod.Instance][BossObj.Name] then
 			KBM.Options.UnitCache[iType][Mod.Instance][BossObj.Name] = true
 		end
-		if not KBM.Boss.Template[BossObj.Name] then
-			KBM.Boss.Template[BossObj.Name] = {
-				Object = BossObj,
-			}
-		end
-		KBM.Boss.Template[BossObj.Name][iType] = true
+		KBM.Boss.Template[BossObj.Name] = BossObj
 	end
 end
 
