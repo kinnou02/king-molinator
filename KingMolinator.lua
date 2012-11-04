@@ -8354,6 +8354,7 @@ function KBM.SlashUnitCache(arg)
 	if arg == "CLEAR" then
 		print("Unit Cache has been cleared. /reloadui to save changes.")
 		KBM.Options.UnitCache.List = {}
+		KBM.Options.UnitTotal = 0
 	elseif arg == "TOTAL" then
 		print("You have found "..KBM.Options.UnitTotal.." missing UTIDs")
 	elseif KBM.Options.UnitTotal > 0 then
