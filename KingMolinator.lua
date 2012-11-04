@@ -3582,6 +3582,15 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 													Zone = Zone,
 													Mod = BossObj.Mod.Descript,
 												}
+												if not KBM.Encounter then
+													KBM.Options.UnitCache.List[uDetails.name][uDetails.type].Time = "Start"
+												else
+													if type(KBM.TimeElapsed) == "number" then
+														KBM.Options.UnitCache.List[uDetails.name][uDetails.type].Time = KBM.ConvertTime(KBM.TimeElapsed)
+													else
+														KBM.Options.UnitCache.List[uDetails.name][uDetails.type] = tostring(KBM.TimeElapsed)
+													end
+												end
 												KBM.Options.UnitTotal = KBM.Options.UnitTotal + 1
 											end
 										end
@@ -8338,8 +8347,16 @@ function KBM.SlashDefault(Args)
 	end
 end
 
-function KBM.SlashUnitCache()
-	if KBM.Options.UnitTotal > 0 then
+function KBM.SlashUnitCache(arg)
+	if type(arg) == "string" then
+		arg = string.upper(arg)
+	end
+	if arg == "CLEAR" then
+		print("Unit Cache has been cleared. /reloadui to save changes.")
+		KBM.Options.UnitCache.List = {}
+	elseif arg == "TOTAL" then
+		print("You have found "..KBM.Options.UnitTotal.." missing UTIDs")
+	elseif KBM.Options.UnitTotal > 0 then
 		print("You have found "..KBM.Options.UnitTotal.." missing UTIDs")
 		print("----------------")
 		for UnitName, TypeList in pairs(KBM.Options.UnitCache.List) do
