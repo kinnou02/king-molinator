@@ -112,6 +112,7 @@ MF.Lang.Debuff.Fiery:SetGerman("Feuriger Spalt")
 MF.Lang.Debuff.Fiery:SetFrench("Fissure flamboyante")
 MF.Lang.Debuff.Melt = KBM.Language:Add("Melt Armor")
 MF.Lang.Debuff.Melt:SetFrench("Fonte d'armure")
+MF.Lang.Debuff.Melt:SetGerman("Geschmolzene Rüstung")
 
 -- Notify Dictionary
 MF.Lang.Notify = {}
@@ -136,6 +137,7 @@ MF.Lang.Menu.Hell_Yellow:SetFrench("Hellfire (Jaune)")
 MF.Lang.Menu.Hell_P3First = KBM.Language:Add("First Hellfire (Final Phase)")
 MF.Lang.Menu.Hell_P3First:SetGerman("Erste Höllenfeuer (Letzte Phase)")
 MF.Lang.Menu.Hell_Can = KBM.Language:Add("First Hellfire (Cannon Phase)")
+MF.Lang.Menu.Hell_Can:SetGerman("Erste Höllenfeuer (Kanonen Phase)")
 
 -- Description
 MF.Lang.Descript = {}

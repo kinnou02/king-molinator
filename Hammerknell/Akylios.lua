@@ -42,7 +42,7 @@ AK.Jornaru = {
 	MechRef = {},
 	Dead = false,
 	Available = false,
-	UTID = "none",
+	UTID = "U030F252702F89F4C",
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
@@ -85,7 +85,7 @@ AK.Akylios = {
 	Dead = false,
 	Available = false,
 	PhaseObj = nil,
-	UTID = "none",
+	UTID = "U123C414D761DB493",
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
@@ -119,7 +119,7 @@ AK.Stinger = {
 	UnitList = {},
 	Ignore = true,
 	Type = "multi",
-	UTID = "none",
+	UTID = "U3C90F47E69737F30",
 }
 
 AK.Lasher = {
@@ -129,7 +129,7 @@ AK.Lasher = {
 	UnitList = {},
 	Ignore = true,
 	Type = "multi",
-	UTID = "none",
+	UTID = "U185ED5BF42C66F17",
 }
 
 AK.Apostle = {
@@ -138,7 +138,7 @@ AK.Apostle = {
 	Name = "Apostle of Jornaru",
 	UnitList = {},
 	Menu = {},
-	UTID = "none",
+	UTID = "U4C42FB2022EEE7C7",
 	AlertsRef = {},
 	Ignore = true,
 	Type = "multi",

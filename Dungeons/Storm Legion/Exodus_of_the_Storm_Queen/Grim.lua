@@ -61,9 +61,12 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Grim = KBM.Language:Add(MOD.Grim.Name)
 MOD.Lang.Unit.Grim:SetFrench("Général Grim")
-MOD.Grim.Name = MOD.Lang.Unit.Grim[KBM.Lang]
+MOD.Lang.Unit.Grim:SetGerman("General Grim")
 MOD.Lang.Unit.GrimShort = KBM.Language:Add("Grim")
 MOD.Lang.Unit.GrimShort:SetFrench()
+MOD.Lang.Unit.GrimShort:SetGerman("Grim")
+
+MOD.Grim.Name = MOD.Lang.Unit.Grim[KBM.Lang]
 MOD.Grim.NameShort = MOD.Lang.Unit.GrimShort[KBM.Lang]
 
 -- Ability Dictionary

@@ -85,6 +85,7 @@ MF.Lang.Ability = {}
 MF.Lang.Ability.Blast = KBM.Language:Add("Molten Blast")
 MF.Lang.Ability.Blast:SetGerman("Geschmolzene Explosion")
 MF.Lang.Ability.Heat = KBM.Language:Add("Blinding Heat")
+MF.Lang.Ability.Heat:SetGerman("Blendende Hitze") 
 
 -- Notify Dictionary
 MF.Lang.Notify = {}
@@ -105,6 +106,7 @@ MF.Lang.Debuff.Hell:SetGerman("Höllenfeuer")
 MF.Lang.Debuff.Hell:SetFrench("Feux de l'enfer")
 MF.Lang.Debuff.Melt = KBM.Language:Add("Melt Armor")
 MF.Lang.Debuff.Melt:SetFrench("Fonte d'armure")
+MF.Lang.Debuff.Melt:SetGerman("Geschmolzene Rüstung")
 
 -- Description Dictionary
 MF.Lang.Descript = {}
