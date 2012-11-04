@@ -36,8 +36,10 @@ HA.Arakhurn = {
 	Active = false,
 	Name = "High Priest Arakhurn",
 	NameShort = "Arakhurn",
-	SliverID = "U43EF6C163A601193",
-	SliverID_P2 = "U31F97C9762B01F83",
+	UTID = {
+		[1] = "U43EF6C163A601193",
+		[2] = "U31F97C9762B01F83",
+	},
 	Menu = {},
 	Castbar = nil,
 	AlertsRef = {},
@@ -222,7 +224,7 @@ HA.Enraged = {
 	Level = "??",
 	Name = HA.Lang.Unit.Enraged[KBM.Lang],
 	NameShort = "Enraged Spawn",
-	SliverID = "Sliver",
+	UTID = "none",
 	UnitList = {},
 	Ignore = true,
 	Type = "multi",
@@ -233,7 +235,7 @@ HA.Spawn = {
 	Level = "??",
 	Name = HA.Lang.Unit.Spawn[KBM.Lang],
 	NameShort = "Spawn",
-	SliverID = "Sliver",
+	UTID = "none",
 	UnitList = {},
 	Ignore = true,
 	Type = "multi",
@@ -246,10 +248,6 @@ function HA:AddBosses(KBM_Boss)
 		[self.Enraged.Name] = self.Enraged,
 		[self.Spawn.Name] = self.Spawn,
 	}
-	KBM.Boss.Sliver[self.Arakhurn.SliverID_P2] = self.Arakhurn
-	KBM.Boss.TypeList[self.Arakhurn.SliverID_P2] = self.Arakhurn
-	KBM.SubBoss[self.Enraged.Name] = self.Enraged
-	KBM.SubBoss[self.Spawn.Name] = self.Spawn
 end
 
 function HA:InitVars()
@@ -370,7 +368,7 @@ function HA:UnitHPCheck(uDetails, unitID)
 					self.Arakhurn.Dead = false
 					self.Arakhurn.Casting = false
 					self.Arakhurn.CastBar:Create(unitID)
-					if self.Arakhurn.SliverID_P2 == uDetails.type then
+					if self.Arakhurn.UTID[2] == uDetails.type then
 						self.PhaseObj:Start(self.StartTime)
 						KBM.ValidTime = false
 						self.PhaseThree()
@@ -387,7 +385,7 @@ function HA:UnitHPCheck(uDetails, unitID)
 					self.Arakhurn.Casting = false
 					self.Arakhurn.CastBar:Create(unitID)
 					KBM.TankSwap.Boss = KBM.Unit.List.UID[unitID]
-					if self.Arakhurn.SliverID_P2 == uDetails.type then
+					if self.Arakhurn.UTID[2] == uDetails.type then
 						self.PhaseThree()
 					end
 				end

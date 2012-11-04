@@ -39,7 +39,7 @@ HH.Hydriss = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	RaidID = "U01904C0A16F7CCB8",
+	UTID = "U01904C0A16F7CCB8",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -111,6 +111,7 @@ HH.Seaspawn = {
 	Ignore = true,
 	Available = false,
 	UnitID = nil,
+	UTID = "none",
 }
 
 HH.Hive = {

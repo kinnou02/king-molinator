@@ -35,7 +35,7 @@ AD.Alsbeth = {
 	Active = false,
 	Name = "Alsbeth the Discordant",
 	NameShort = "Alsbeth",
-	RaidID = "U54832B5406F7E5EF",
+	UTID = "U54832B5406F7E5EF",
 	IgnoreID = "U210226B462CFF74C",
 	Dead = false,
 	TimersRef = {},
@@ -189,6 +189,7 @@ AD.Lang.Verbose.Meteor:SetGerman(AD.Lang.Ability.Meteor[KBM.Lang].." (Erste in P
 AD.Lang.Verbose.Meteor:SetFrench("Météore discordant (Premier en phase 2)")
 AD.Lang.Verbose.Meteor:SetRussian(AD.Lang.Ability.Meteor[KBM.Lang].." (первый на фазе 2)")
 AD.Lang.Verbose.Meteor:SetKorean("부조화의 운석 (2단계 초기)")
+
 AD.Harbinger = {
 	Mod = AD,
 	Level = "??",
@@ -200,7 +201,7 @@ AD.Harbinger = {
 	UnitID = nil,
 	Ignore = true,
 	Triggers = {},
-	RaidID = "Raid",
+	UTID = "none",
 }
 
 AD.Thief = {
@@ -214,7 +215,7 @@ AD.Thief = {
 	UnitID = nil,
 	Ignore = true,
 	Triggers = {},
-	RaidID = "Raid",
+	UTID = "none",
 }
 
 AD.Magus = {
@@ -227,7 +228,7 @@ AD.Magus = {
 	AlertsRef = {},
 	Dead = false,
 	Available = false,
-	RaidID = "U37D4CCEA74E0BB39",
+	UTID = "U37D4CCEA74E0BB39",
 	UnitID = nil,
 	Ignore = true,
 	Triggers = {},
@@ -252,7 +253,7 @@ AD.Pillar = {
 	UnitList = {},
 	Ignore = true,
 	Type = "multi",
-	RaidID = "U76026D384D081D9F",
+	UTID = "U76026D384D081D9F",
 }
 
 AD.Alsbeth.Name = AD.Lang.Unit.Alsbeth[KBM.Lang]
@@ -267,8 +268,6 @@ function AD:AddBosses(KBM_Boss)
 		[self.Magus.Name] = self.Magus,
 		[self.Pillar.Name] = self.Pillar,
 	}
-	KBM.SubBoss[self.Harbinger.Name] = self.Harbinger
-	KBM.SubBoss[self.Thief.Name] = self.Thief
 end
 
 function AD:InitVars()

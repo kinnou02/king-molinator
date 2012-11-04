@@ -31,7 +31,7 @@ LA.Anchor = {
 	Active = false,
 	Name = "Life Anchor",
 	NameShort = "Anchor",
-	SliverID = "Sliver",
+	UTID = "U3A5C60571364ED18",
 	Menu = {},
 	Dead = false,
 	-- AlertsRef = {},
@@ -72,7 +72,6 @@ function LA:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Anchor.Name] = self.Anchor,
 	}
-	KBM_Boss[self.Anchor.Name] = self.Anchor	
 end
 
 function LA:InitVars()

@@ -972,14 +972,15 @@ end
 KBM.MenuGroup = {}
 local KBM_Boss = {}
 KBM.Boss = {
+	Template = {},
 	Raid = {},
 	Sliver = {},
 	Dungeon = {
 		List = {},
 	},
-	MasterID = {},
-	ExpertID = {},
-	NormalID = {},
+	Master = {},
+	Expert = {},
+	Normal = {},
 	Chronicle = {},
 	Rift = {},
 	ExRift = {},
@@ -988,124 +989,6 @@ KBM.Boss = {
 	Trash = {},
 	TypeList = {},
 }
-
-function KBM.Boss.Dungeon:AddBoss(BossObj)
-	local BossID = nil
-	local Warning = true
-	local Mod = BossObj.Mod
-	if Mod.InstanceObj.Type == "Expert" then
-		BossID = BossObj.ExpertID
-		if BossID ~= "Expert" then
-			KBM.Boss.ExpertID[BossID] = BossObj
-			KBM.Boss.TypeList[BossID] = BossObj
-			Warning = false
-			if KBM.Options.UnitCache.List[BossObj.Name] then
-				if KBM.Options.UnitCache.List[BossObj.Name][BossObj.ExpertID] then
-					KBM.Options.UnitCache.List[BossObj.Name][BossObj.ExpertID] = nil
-					KBM.Options.UnitTotal = KBM.Options.UnitTotal - 1
-					if not next(KBM.Options.UnitCache.List[BossObj.Name]) then
-						KBM.Options.UnitCache.List[BossObj.Name] = nil
-					end
-				end
-			end
-			if KBM.Options.UnitCache.Expert[Mod.Instance] then
-				if KBM.Options.UnitCache.Expert[Mod.Instance][BossObj.Name] then
-					KBM.Options.UnitCache.Expert[Mod.Instance][BossObj.Name] = nil
-				end
-				if not next(KBM.Options.UnitCache.Expert[Mod.Instance]) then
-					KBM.Options.UnitCache.Expert[Mod.Instance] = nil
-				end
-			end
-		else
-			if not KBM.Options.UnitCache.Expert[Mod.Instance] then
-				KBM.Options.UnitCache.Expert[Mod.Instance] = {}
-			end
-			if not KBM.Options.UnitCache.Expert[Mod.Instance][BossObj.Name] then
-				KBM.Options.UnitCache.Expert[Mod.Instance][BossObj.Name] = true
-			end	
-		end
-	elseif Mod.InstanceObj.Type == "Master" then
-		BossID = BossObj.MasterID
-		if BossID ~= "Master" then
-			KBM.Boss.MasterID[BossID] = BossObj
-			KBM.Boss.TypeList[BossID] = BossObj
-			Warning = false
-			if KBM.Options.UnitCache.List[BossObj.Name] then
-				if KBM.Options.UnitCache.List[BossObj.Name][BossObj.MasterID] then
-					KBM.Options.UnitCache.List[BossObj.Name][BossObj.MasterID] = nil
-					KBM.Options.UnitTotal = KBM.Options.UnitTotal - 1
-					if not next(KBM.Options.UnitCache.List[BossObj.Name]) then
-						KBM.Options.UnitCache.List[BossObj.Name] = nil
-					end
-				end
-			end
-			if KBM.Options.UnitCache.Master[Mod.Instance] then
-				if KBM.Options.UnitCache.Master[Mod.Instance][BossObj.Name] then
-					KBM.Options.UnitCache.Master[Mod.Instance][BossObj.Name] = nil
-				end
-				if not next(KBM.Options.UnitCache.Master[Mod.Instance]) then
-					KBM.Options.UnitCache.Master[Mod.Instance] = nil
-				end
-			end
-		else
-			if not KBM.Options.UnitCache.Master[Mod.Instance] then
-				KBM.Options.UnitCache.Master[Mod.Instance] = {}
-			end
-			if not KBM.Options.UnitCache.Master[Mod.Instance][BossObj.Name] then
-				KBM.Options.UnitCache.Master[Mod.Instance][BossObj.Name] = true
-			end			
-		end
-	elseif Mod.InstanceObj.Type == "Normal" then
-		BossID = BossObj.NormalID
-		if BossID ~= "Normal" then
-			KBM.Boss.NormalID[BossID] = BossObj
-			KBM.Boss.TypeList[BossID] = BossObj
-			Warning = false
-			if KBM.Options.UnitCache.List[BossObj.Name] then
-				if KBM.Options.UnitCache.List[BossObj.Name][BossObj.NormalID] then
-					KBM.Options.UnitCache.List[BossObj.Name][BossObj.NormalID] = nil
-					KBM.Options.UnitTotal = KBM.Options.UnitTotal - 1
-					if not next(KBM.Options.UnitCache.List[BossObj.Name]) then
-						KBM.Options.UnitCache.List[BossObj.Name] = nil
-					end
-				end
-			end
-			if KBM.Options.UnitCache.Normal[Mod.Instance] then
-				if KBM.Options.UnitCache.Normal[Mod.Instance][BossObj.Name] then
-					KBM.Options.UnitCache.Normal[Mod.Instance][BossObj.Name] = nil
-				end
-				if not next(KBM.Options.UnitCache.Normal[Mod.Instance]) then
-					KBM.Options.UnitCache.Normal[Mod.Instance] = nil
-				end
-			end
-		else
-			if not KBM.Options.UnitCache.Normal[Mod.Instance] then
-				KBM.Options.UnitCache.Normal[Mod.Instance] = {}
-			end
-			if not KBM.Options.UnitCache.Normal[Mod.Instance][BossObj.Name] then
-				KBM.Options.UnitCache.Normal[Mod.Instance][BossObj.Name] = true
-			end			
-		end
-	end
-	if not BossID then
-		print("Instance: "..BossObj.Mod.Instance)
-		error("Missing NormalID, ExpertID or MasterID for "..BossObj.Name)
-	end
-	if Warning then
-		if KBM.Debug then
-			print("--------------------------")
-			print("Instance: "..BossObj.Mod.Instance.." : "..BossObj.Mod.InstanceObj.Type)
-			print("Boss: "..BossObj.Name)
-			print("No Valid UID for this Unit")
-		end
-		if self.List[BossObj.Name] then
-			self.List[BossObj.Name][BossID] = BossObj
-		else
-			self.List[BossObj.Name] = {}
-			self.List[BossObj.Name][BossID] = BossObj
-		end
-	end
-end
 
 KBM.SubBoss = {}
 KBM.SubBossID = {}
@@ -3618,136 +3501,6 @@ function KBM.EncTimer:Init()
 	self:ApplySettings()	
 end
 
-function KBM.MatchType(uDetails, BossObj)
-	if not BossObj then
-		return
-	end
-	if KBM.Encounter then
-		-- Already established type
-		if KBM.DungeonMode then
-			if not BossObj[uDetails.type] then
-				if KBM.Debug then
-					print("Unique ID not set: "..uDetails.name)
-					print("Unique ID: "..uDetails.type)
-				end
-				if KBM.DungeonMode == "normal" then
-					return BossObj.Normal
-				elseif KBM.DungeonMode == "expert" then
-					return BossObj.Expert
-				else
-					return BossObj.Master
-				end
-			else
-				return BossObj[uDetails.type]
-			end
-		else
-			return BossObj
-		end
-	else
-		if not BossObj.Mod then
-			if BossObj[uDetails.type] then
-				BossObj = BossObj[uDetails.type]
-			else
-				if BossObj.Normal then
-					BossObj = BossObj.Normal
-				elseif BossObj.Expert then
-					BossObj = BossObj.Expert
-				elseif BossObj.Master then
-					BossObj = BossObj.Master
-				else
-					if KBM.Debug then
-						print("Unhandled Unit: "..uDetails.name)
-						print("Unique ID: "..uDetails.type)
-					end
-					return false
-				end
-			end
-			if BossObj.Mod.InstanceObj then
-				if BossObj.Mod.InstanceObj.Type == "Normal" then
-					if KBM.Debug then
-						print("Normal Dungeon mode active")
-						KBM.EncounterMode = "normal"
-						KBM.DungeonMode = "normal"
-						return BossObj
-					else
-						return false
-					end
-				elseif BossObj.Mod.InstanceObj.Type == "Expert" then
-					if uDetails.level == 52 or uDetails.level == "??" then
-						if KBM.Debug then 
-							print("Expert Dungeon mode active")
-						end
-						KBM.EncounterMode = "normal"
-						KBM.DungeonMode = "expert"
-						return BossObj
-					else
-						return false
-					end
-				elseif BossObj.Mod.InstanceObj.Type == "Master" then
-					if uDetails.level == 52 or uDetails.level == "??" then
-						if KBM.Debug then
-							print("Master Mode Dungeon mode active")
-						end
-						KBM.EncounterMode = "normal"
-						KBM.DungeonMode = "master"
-						return BossObj
-					else
-						return false
-					end
-				end
-			end
-		else
-			KBM.DungeonMode = false
-			if BossObj.Mod.HasChronicle then
-				if BossObj.ChronicleID then
-					if uDetails.type == BossObj.ChronicleID then
-						KBM.EncounterMode = "chronicle"
-						if KBM.Debug then
-							print("Chronicle mode active via ID")
-						end
-						if BossObj.Mod.Settings.Chronicle then
-							return BossObj
-						else
-							return
-						end
-					else
-						KBM.EncounterMode = "normal"
-						if KBM.Debug then
-							print("Normal mode active via ID")
-						end
-						return BossObj
-					end
-				else
-					if KBM.Debug then
-						print("Undefined Chronicle ID, using HP checking method")
-					end
-					if uDetails.healthMax < 1500000 then
-						KBM.EncounterMode = "chronicle"
-						if KBM.Debug then
-							print("Chronicle mode active via HP")
-						end
-						if BossObj.Mod.Settings.Chronicle then
-							return BossObj
-						else
-							return
-						end
-					else
-						KBM.EncounterMode = "normal"
-						if KBM.Debug then
-							print("Normal mode active via HP")
-						end
-						return BossObj
-					end
-				end
-			else
-				KBM.EncounterMode = "normal"
-				return BossObj
-			end
-		end
-		return
-	end
-end
-
 function KBM.CheckActiveBoss(uDetails, UnitID)
 	local current = Inspect.Time.Real()
 	local style = "new"
@@ -3763,69 +3516,24 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 					if uDetails.type then
 						if KBM.Boss.TypeList[uDetails.type] then
 							BossObj = KBM.Boss.TypeList[uDetails.type]
-							if KBM.Boss.MasterID[uDetails.type] then
+							if KBM.Boss.Chronicle[uDetails.type] then
 								if not KBM.Encounter then
-									KBM.DungeonMode = "master"
-									KBM.EncounterMode = "normal"
-								end
-							elseif KBM.Boss.ExpertID[uDetails.type] then
-								if not KBM.Encounter then
-									KBM.DungeonMode = "expert"
-									KBM.EncounterMode = "normal"
-								end
-							elseif KBM.Boss.NormalID[uDetails.type] then
-								if not KBM.Encounter then
-									KBM.DungeonMode = "normal"
-									KBM.EncounterMode = "normal"
-								end
-							elseif KBM.Boss.Chronicle[uDetails.type] then
-								if not KBM.Encounter then
-									KBM.EncounterMode = "chronicle"
+									KBM.EncounterMode = "Chronicle"
 								end
 							else
 								if not KBM.Encounter then
-									KBM.EncounterMode = "normal"
-									KBM.DungeonMode = false
+									KBM.EncounterMode = BossObj.Mod.InstanceObj.Type
 								end
 							end
-						elseif KBM.Boss.Raid[uDetails.type] then
-							BossObj = KBM.Boss.Raid[uDetails.type]
-							print("No Type List for Raid: "..BossObj.Name)
-						elseif KBM.Boss.Sliver[uDetails.type] then
-							BossObj = KBM.Boss.Sliver[uDetails.type]
-							print("No Type List for Sliver: "..BossObj.Name)
-						elseif KBM.Boss.MasterID[uDetails.type] then
-							BossObj = KBM.Boss.MasterID[uDetails.type]
-							print("No Type List for Master: "..BossObj.Name)
-						elseif KBM.Boss.ExpertID[uDetails.type] then
-							BossObj = KBM.Boss.ExpertID[uDetails.type]
-							print("No Type List for Expert: "..BossObj.Name)
-						elseif KBM.Boss.NormalID[uDetails.type] then
-							BossObj = KBM.Boss.NormalID[uDetails.type]
-							print("No Type List for Normal: "..BossObj.Name)
 						end
 					end
 					if not BossObj then
-						-- Old Method Checking (This will be phased out entirely)
-						if KBM_Boss[uDetails.name] then
-							BossObj = KBM_Boss[uDetails.name]
-							if uDetails.type then
-								if BossObj.IgnoreID == uDetails.type then
-									BossObj = nil
-									KBM.IgnoreList[UnitID] = true
-									if KBM.Debug then
-										print("Boss Ignored via ID: "..tostring(uDetails.name))
-									end
-								end
-							end
-						elseif KBM.SubBoss[uDetails.name] then
-							BossObj = KBM.SubBoss[uDetails.name]
-						elseif KBM.Boss.Dungeon.List[uDetails.name] then
-							BossObj = KBM.Boss.Dungeon.List[uDetails.name]
-						end
+						-- Check if Unit is currently in Template form.
+						BossObj = KBM.Boss.Template[uDetails.name]
 						if BossObj then
-							style = "old"
-							BossObj = KBM.MatchType(uDetails, BossObj)
+							if not KBM.Encounter then
+								KBM.EncounterMode = "Template"
+							end
 						end
 					end
 					local ModBossObj = nil
@@ -3834,13 +3542,6 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 							if KBM.Encounter then
 								if BossObj.Mod.ID == KBM.CurrentMod.ID then
 									ModBossObj = KBM.CurrentMod:UnitHPCheck(uDetails, UnitID)
-								else
-									if KBM.CurrentMod.Bosses then
-										if KBM.CurrentMod.Bosses[uDetails.name] then
-											ModBossObj = KBM.CurrentMod:UnitHPCheck(uDetails, UnitID)
-											BossObj = KBM.CurrentMod.Bosses[uDetails.name]
-										end
-									end
 								end
 							else
 								if not BossObj.Ignore then
@@ -3848,41 +3549,40 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 								end
 							end
 							if ModBossObj then
-								if style == "old" then
-									if KBM.EncounterMode == "normal" then
-										if not KBM.BossID[UnitID] then
-											if uDetails.type then
-												if not KBM.Options.UnitCache.List then
-													KBM.Options.UnitCache.List = {}
-												end
-												if not KBM.Options.UnitCache.List[uDetails.name] then
-													KBM.Options.UnitCache.List[uDetails.name] = {}
-												end
-												if not KBM.Options.UnitCache.List[uDetails.name][uDetails.type] then
-													print("--------------------------------------")
-													print("Old Style Encounter found, or possible Template Encounter")
-													print("Boss Name: "..tostring(uDetails.name).." added to Cache")
-													local Zone = {
-														id = "n/a",
-														name = "unavailable",
-														["type"] = "n/a",
-													}
-													if not uDetails.zone then
-														if KBM.Player.Zone then
-															Zone = Inspect.Zone.Detail(KBM.Player.Zone)
-														end
-													else
-														Zone = Inspect.Zone.Detail(uDetails.zone)
+								if ModBossObj.UTID == "none" then
+									if not KBM.BossID[UnitID] then
+										if uDetails.type then
+											if not KBM.Options.UnitCache.List then
+												KBM.Options.UnitCache.List = {}
+											end
+											if not KBM.Options.UnitCache.List[uDetails.name] then
+												KBM.Options.UnitCache.List[uDetails.name] = {}
+											end
+											if not KBM.Options.UnitCache.List[uDetails.name][uDetails.type] then
+												print("--------------------------------------")
+												print("Old Style Encounter found, or possible Template Unit/Encounter")
+												print("Boss Name: "..tostring(uDetails.name).." added to Cache")
+												local Zone = {
+													id = "n/a",
+													name = "unavailable",
+													["type"] = "n/a",
+												}
+												if not uDetails.zone then
+													if KBM.Player.Zone then
+														Zone = Inspect.Zone.Detail(KBM.Player.Zone)
 													end
-													KBM.Options.UnitCache.List[uDetails.name][uDetails.type] = {
-														Location = tostring(KBM.Player.Location),
-														Tier = tostring(uDetails.tier),
-														Level = tostring(uDetails.level).." ("..type(uDetails.level)..")",
-														XYZ = tostring(uDetails.coordX)..","..tostring(uDetails.coordY)..","..tostring(uDetails.coordZ),
-														Zone = Zone,
-													}
-													KBM.Options.UnitTotal = KBM.Options.UnitTotal + 1
+												else
+													Zone = Inspect.Zone.Detail(uDetails.zone)
 												end
+												KBM.Options.UnitCache.List[uDetails.name][uDetails.type] = {
+													Location = tostring(KBM.Player.Location),
+													Tier = tostring(uDetails.tier),
+													Level = tostring(uDetails.level).." ("..type(uDetails.level)..")",
+													XYZ = tostring(uDetails.coordX)..","..tostring(uDetails.coordY)..","..tostring(uDetails.coordZ),
+													Zone = Zone,
+													Mod = BossObj.Mod.Descript,
+												}
+												KBM.Options.UnitTotal = KBM.Options.UnitTotal + 1
 											end
 										end
 									end
@@ -3902,7 +3602,7 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 										-- if KBM.Debug then
 											-- print("Boss matched checking encounter start")
 										-- end
-										if KBM.EncounterMode == "normal" or (KBM.EncounterMode == "chronicle" and BossObj.Mod.Settings.Chronicle) then
+										if KBM.EncounterMode ~= "Chronicle" or (KBM.EncounterMode == "Chronicle" and BossObj.Mod.Settings.Chronicle) then
 											KBM.BossID[UnitID] = {}
 											KBM.BossID[UnitID].name = uDetails.name
 											KBM.BossID[UnitID].monitor = true
@@ -3931,7 +3631,7 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 													KBM_CurrentBossName = uDetails.name
 													KBM.CurrentMod = KBM.BossID[UnitID].Mod
 													local PercentOver = 99
-													if KBM.EncounterMode == "chronicle" then
+													if KBM.EncounterMode == "Chronicle" then
 														if KBM.CurrentMod.ChroniclePOver then
 															PercentOver = KBM.CurrentMod.ChroniclePOver
 														end
@@ -3939,6 +3639,8 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 														if KBM.BossID[UnitID].Percent >= PercentOver then 
 															KBM.CurrentMod.Settings.Records.Chronicle.Attempts = KBM.CurrentMod.Settings.Records.Chronicle.Attempts + 1
 														end
+													elseif KBM.EncounterMode == "Template" then
+														print("Template Mode actived, no record tracking available.")
 													else
 														print(KBM.Language.Encounter.Start[KBM.Lang].." "..KBM.CurrentMod.Descript)
 														if KBM.BossID[UnitID].Percent >= PercentOver then
@@ -5039,6 +4741,12 @@ local function KBM_UnitAvailable(units)
 			if uDetails then
 				if not uDetails.player then					
 					KBM.CheckActiveBoss(uDetails, UnitID)
+				else
+					if UnitID == KBM.Player.UnitID then
+						if uDetails.zone then
+							KBM.Player.Zone = uDetails.zone
+						end
+					end
 				end
 			end
 		end
@@ -6994,9 +6702,9 @@ function KBM.WipeIt(Force)
 			print(KBM.Language.Encounter.Wipe[KBM.Lang])
 		end
 		print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
-		if KBM.EncounterMode == "chronicle" then
+		if KBM.EncounterMode == "Chronicle" then
 			KBM.CurrentMod.Settings.Records.Chronicle.Wipes = KBM.CurrentMod.Settings.Records.Chronicle.Wipes + 1
-		else
+		elseif KBM.EncounterMode ~= "Template" then
 			KBM.CurrentMod.Settings.Records.Wipes = KBM.CurrentMod.Settings.Records.Wipes + 1
 		end
 		KBM_Reset()
@@ -7249,30 +6957,7 @@ end
 
 function KBM.Victory()
 	print(KBM.Language.Encounter.Victory[KBM.Lang])
-	if KBM.EncounterMode == "normal" then
-		if KBM.ValidTime then
-			if KBM.CurrentMod.Settings.Records.Best == 0 or (KBM.TimeElapsed < KBM.CurrentMod.Settings.Records.Best) then
-				print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
-				if KBM.CurrentMod.Settings.Records.Best ~= 0 then
-					print(KBM.Language.Records.Previous[KBM.Lang]..KBM.ConvertTime(KBM.CurrentMod.Settings.Records.Best))
-					print(KBM.Language.Records.BeatRecord[KBM.Lang])
-				else
-					print(KBM.Language.Records.NewRecord[KBM.Lang])
-				end
-				KBM.CurrentMod.Settings.Records.Best = KBM.TimeElapsed
-				KBM.CurrentMod.Settings.Records.Date = tostring(os.date())
-				KBM.CurrentMod.Settings.Records.Kills = KBM.CurrentMod.Settings.Records.Kills + 1
-			else
-				print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
-				print(KBM.Language.Records.Current[KBM.Lang]..KBM.ConvertTime(KBM.CurrentMod.Settings.Records.Best))
-				KBM.CurrentMod.Settings.Records.Kills = KBM.CurrentMod.Settings.Records.Kills + 1
-			end
-		else
-			print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
-			print(KBM.Language.Records.Invalid[KBM.Lang])
-			KBM.CurrentMod.Settings.Records.Kills = KBM.CurrentMod.Settings.Records.Kills + 1
-		end
-	elseif KBM.EncounterMode == "chronicle" then
+	if KBM.EncounterMode == "Chronicle" then
 		if KBM.ValidTime then
 			if KBM.CurrentMod.Settings.Records.Chronicle.Best == 0 or KBM.TimeElapsed < KBM.CurrentMod.Settings.Records.Chronicle.Best then
 				print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
@@ -7294,6 +6979,31 @@ function KBM.Victory()
 			print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
 			print(KBM.Language.Records.Invalid[KBM.Lang])
 			KBM.CurrentMod.Settings.Records.Chronicle.Kills = KBM.CurrentMod.Settings.Records.Kills + 1
+		end
+	elseif KBM.EncounterMode == "Template" then
+		print("Template Mode activated. Recording cancelled.")
+	else
+		if KBM.ValidTime then
+			if KBM.CurrentMod.Settings.Records.Best == 0 or (KBM.TimeElapsed < KBM.CurrentMod.Settings.Records.Best) then
+				print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
+				if KBM.CurrentMod.Settings.Records.Best ~= 0 then
+					print(KBM.Language.Records.Previous[KBM.Lang]..KBM.ConvertTime(KBM.CurrentMod.Settings.Records.Best))
+					print(KBM.Language.Records.BeatRecord[KBM.Lang])
+				else
+					print(KBM.Language.Records.NewRecord[KBM.Lang])
+				end
+				KBM.CurrentMod.Settings.Records.Best = KBM.TimeElapsed
+				KBM.CurrentMod.Settings.Records.Date = tostring(os.date())
+				KBM.CurrentMod.Settings.Records.Kills = KBM.CurrentMod.Settings.Records.Kills + 1
+			else
+				print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
+				print(KBM.Language.Records.Current[KBM.Lang]..KBM.ConvertTime(KBM.CurrentMod.Settings.Records.Best))
+				KBM.CurrentMod.Settings.Records.Kills = KBM.CurrentMod.Settings.Records.Kills + 1
+			end
+		else
+			print(KBM.Language.Timers.Time[KBM.Lang].." "..KBM.ConvertTime(KBM.TimeElapsed))
+			print(KBM.Language.Records.Invalid[KBM.Lang])
+			KBM.CurrentMod.Settings.Records.Kills = KBM.CurrentMod.Settings.Records.Kills + 1
 		end
 	end
 	KBM_Reset()
@@ -8645,6 +8355,7 @@ function KBM.SlashUnitCache()
 							print("Zone ID: "..tostring(Value.id))
 							print("Zone Name: "..tostring(Value.name))
 							print("Zone Type: "..tostring(Value.type))
+							print("Mod: "..tostring(Value.Mod))
 						else
 							print("Zone: Malformed Data")
 						end
@@ -8655,6 +8366,52 @@ function KBM.SlashUnitCache()
 		end
 	else
 		print("You have not found any missing UTIDs")
+	end
+end
+
+function KBM.AllocateBoss(Mod, BossObj, UTID)
+	local iType = Mod.InstanceObj.Type
+	if UTID ~= "none" then
+		if string.len(UTID) == 17 then
+			KBM.Boss[iType][UTID] = BossObj
+			KBM.Boss.TypeList[UTID] = BossObj
+			if KBM.Options.UnitCache.List[BossObj.Name] then
+				if KBM.Options.UnitCache.List[BossObj.Name][BossObj.RaidID] then
+					KBM.Options.UnitCache.List[BossObj.Name][BossObj.RaidID] = nil
+					KBM.Options.UnitTotal = KBM.Options.UnitTotal - 1
+					if not next(KBM.Options.UnitCache.List[BossObj.Name]) then
+						KBM.Options.UnitCache.List[BossObj.Name] = nil
+					end
+				end
+			end
+			if KBM.Options.UnitCache[iType][Mod.Instance] then
+				if KBM.Options.UnitCache[iType][Mod.Instance][BossObj.Name] then
+					KBM.Options.UnitCache[iType][Mod.Instance][BossObj.Name] = nil
+				end
+				if not next(KBM.Options.UnitCache[iType][Mod.Instance]) then
+					KBM.Options.UnitCache[iType][Mod.Instance] = nil
+				end
+			end
+			--print("Raid Boss: "..BossObj.Name.." initizialized successfully: "..BossObj.RaidID)
+		else
+			print("WARNING: "..BossObj.Name.." ID Length not correct, required Length 17")
+			print("Instance: "..BossObj.Mod.Instance)
+			print("ID: "..BossObj.UTID)
+			print("Instance Type: "..iType)
+		end
+	else
+		if not KBM.Options.UnitCache[iType][Mod.Instance] then
+			KBM.Options.UnitCache[iType][Mod.Instance] = {}
+		end
+		if not KBM.Options.UnitCache[iType][Mod.Instance][BossObj.Name] then
+			KBM.Options.UnitCache[iType][Mod.Instance][BossObj.Name] = true
+		end
+		if not KBM.Boss.Template[BossObj.Name] then
+			KBM.Boss.Template[BossObj.Name] = {
+				Object = BossObj,
+			}
+		end
+		KBM.Boss.Template[BossObj.Name][iType] = true
 	end
 end
 
@@ -8684,86 +8441,31 @@ function KBM.InitMenus()
 	for _, Mod in ipairs(KBM.ModList) do
 		Mod:AddBosses(KBM_Boss)
 		if Mod.InstanceObj then
+			if not KBM.Boss[Mod.InstanceObj.Type] then
+				print("WARNING: Encounter "..Mod.InstanceObj.Name.." has an incorrect Type value of "..tostring(Mod.InstanceObj.Type))
+			end
 			for BossName, BossObj in pairs(Mod.Bosses) do
-				if BossObj.RaidID then
-					if BossObj.RaidID ~= "Raid" then
-						if string.len(BossObj.RaidID) == 17 then
-							KBM.Boss.Raid[BossObj.RaidID] = BossObj
-							KBM.Boss.TypeList[BossObj.RaidID] = BossObj
-							if KBM.Options.UnitCache.List[BossObj.Name] then
-								if KBM.Options.UnitCache.List[BossObj.Name][BossObj.RaidID] then
-									KBM.Options.UnitCache.List[BossObj.Name][BossObj.RaidID] = nil
-									KBM.Options.UnitTotal = KBM.Options.UnitTotal - 1
-									if not next(KBM.Options.UnitCache.List[BossObj.Name]) then
-										KBM.Options.UnitCache.List[BossObj.Name] = nil
-									end
-								end
-							end
-							if KBM.Options.UnitCache.Raid[Mod.Instance] then
-								if KBM.Options.UnitCache.Raid[Mod.Instance][BossObj.Name] then
-									KBM.Options.UnitCache.Raid[Mod.Instance][BossObj.Name] = nil
-								end
-								if not next(KBM.Options.UnitCache.Raid[Mod.Instance]) then
-									KBM.Options.UnitCache.Raid[Mod.Instance] = nil
-								end
-							end
-							--print("Raid Boss: "..BossObj.Name.." initizialized successfully: "..BossObj.RaidID)
-						else
-							print("WARNING: "..BossObj.Name.." ID Length not correct, required Length 17")
-							print("Instance: "..BossObj.Mod.Instance)
-							print("ID: "..BossObj.RaidID)
+				if BossObj.UTID then
+					if type(BossObj.UTID) == "table" then
+						for i, UTID in pairs(BossObj.UTID) do
+							KBM.AllocateBoss(Mod, BossObj, UTID)
 						end
+					elseif type(BossObj.UTID) == "string" then
+						KBM.AllocateBoss(Mod, BossObj, BossObj.UTID)
 					else
-						if not KBM.Options.UnitCache.Raid[Mod.Instance] then
-							KBM.Options.UnitCache.Raid[Mod.Instance] = {}
-						end
-						if not KBM.Options.UnitCache.Raid[Mod.Instance][BossObj.Name] then
-							KBM.Options.UnitCache.Raid[Mod.Instance][BossObj.Name] = true
-						end
+						print("Error: UTID for "..BossObj.Name.." is an incorrect type (string/table)")
+						error("Type is: "..type(UTID))
 					end
+				elseif BossObj.RaidID then
+					print("WARNING: Old style RaidID field used for: "..BossObj.Name)
+					print("in Encounter: "..Mod.InstanceObj.Name)
 				elseif BossObj.SliverID then
-					if BossObj.SliverID ~= "Sliver" then
-						if string.len(BossObj.SliverID) == 17 then
-							KBM.Boss.Sliver[BossObj.SliverID] = BossObj
-							KBM.Boss.TypeList[BossObj.SliverID] = BossObj
-							if KBM.Options.UnitCache.List[BossObj.Name] then
-								if KBM.Options.UnitCache.List[BossObj.Name][BossObj.SliverID] then
-									KBM.Options.UnitCache.List[BossObj.Name][BossObj.SliverID] = nil
-									KBM.Options.UnitTotal = KBM.Options.UnitTotal - 1
-									if not next(KBM.Options.UnitCache.List[BossObj.Name]) then
-										KBM.Options.UnitCache.List[BossObj.Name] = nil
-									end
-								end
-							end
-							if KBM.Options.UnitCache.Sliver[Mod.Instance] then
-								if KBM.Options.UnitCache.Sliver[Mod.Instance][BossObj.Name] then
-									KBM.Options.UnitCache.Sliver[Mod.Instance][BossObj.Name] = nil
-								end
-								if not next(KBM.Options.UnitCache.Sliver[Mod.Instance]) then
-									KBM.Options.UnitCache.Sliver[Mod.Instance] = nil
-								end
-							end
-						else
-							print("WARNING: "..BossObj.Name.." ID Length not correct, required length 17")
-							print("Instance: "..BossObj.Mod.Instance)
-							print("ID: "..BossObj.SliverID)
-						end
-					else
-						if not KBM.Options.UnitCache.Sliver[Mod.Instance] then
-							KBM.Options.UnitCache.Sliver[Mod.Instance] = {}
-						end
-						if not KBM.Options.UnitCache.Sliver[Mod.Instance][BossObj.Name] then
-							KBM.Options.UnitCache.Sliver[Mod.Instance][BossObj.Name] = true
-						end
-					end
+					print("WARNING: Old style SliverID field used for: "..BossObj.Name)
+					print("in Encounter: "..Mod.InstanceObj.Name)					
 				else
 					if Mod.InstanceObj.Type == "Normal" or Mod.InstanceObj.Type == "Expert" or Mod.InstanceObj.Type == "Master" then
-						KBM.Boss.Dungeon:AddBoss(BossObj)
-						if BossObj.AltBossList then
-							for i, aBossObj in pairs(BossObj.AltBossList) do
-								KBM.Boss.Dungeon:AddBoss(aBossObj)
-							end
-						end
+						print(string.format("WARNING: Old style %sID field used for: "..BossObj.Name, Mod.InstanceObj.Type))
+						print("in Encounter: "..Mod.InstanceObj.Name)					
 					else
 						print("Instance: "..BossObj.Mod.Instance)
 						error("Missing RaidID or SliverID for "..BossObj.Name)
@@ -8772,6 +8474,15 @@ function KBM.InitMenus()
 				if BossObj.ChronicleID then
 					KBM.Boss.Chronicle[BossObj.ChronicleID] = BossObj
 					KBM.Boss.TypeList[BossObj.ChronicleID] = BossObj
+				end
+				if KBM_Boss[BossObj.Name] then
+					print("WARNING: Boss "..BossObj.Name.." assigning old style KBM_Boss table entry")
+					print("Instance: "..Mod.InstanceObj.Name.." ("..Mod.InstanceObj.Type..")")
+					print("Encounter: "..Mod.Descript)
+				elseif KBM.SubBoss[BossObj.Name] then
+					print("WARNING: Boss "..BossObj.Name.." assigning old style KBM.SubBoss table entry")
+					print("Instance: "..Mod.InstanceObj.Name.." ("..Mod.InstanceObj.Type..")")				
+					print("Encounter: "..Mod.Descript)
 				end
 			end
 		elseif not Mod.IsInstance then

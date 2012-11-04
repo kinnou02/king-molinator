@@ -36,7 +36,7 @@ ML.Maklamos = {
 	Dead = false,
 	Available = false,
 	Menu = {},
-	RaidID = "U6D6AA149570398D0",
+	UTID = "U6D6AA149570398D0",
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
@@ -156,7 +156,7 @@ ML.Jug = {
 	UnitList = {},
 	Menu = {},
 	Ignore = true,
-	RaidID = "Raid",
+	UTID = "none",
 	Type = "multi",
 }
 
@@ -168,7 +168,7 @@ ML.MonJug = {
 	UnitList = {},
 	Menu = {},
 	Ignore = true,
-	RaidID = "Raid",
+	UTID = "none",
 	Type = "multi",
 }
 
@@ -180,7 +180,7 @@ ML.MerJug = {
 	UnitList = {},
 	Menu = {},
 	Ignore = true,
-	RaidID = "Raid",
+	UTID = "none",
 	Type = "multi",
 }
 
@@ -192,9 +192,6 @@ function ML:AddBosses(KBM_Boss)
 		[self.MonJug.Name] = self.MonJug,
 		[self.MerJug.Name] = self.MerJug,
 	}
-	KBM.SubBoss[self.Jug.Name] = self.Jug
-	KBM.SubBoss[self.MonJug.Name] = self.MonJug
-	KBM.SubBoss[self.MerJug.Name] = self.MerJug
 end
 
 function ML:InitVars()

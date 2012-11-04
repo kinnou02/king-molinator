@@ -39,7 +39,7 @@ MOD.Autoch = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
-	ExpertID = "U73AE97FB0C802D2F",
+	UTID = "U73AE97FB0C802D2F",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -84,7 +84,7 @@ MOD.Mondrach = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
-	ExpertID = "U374DD918789A5603",
+	UTID = "U374DD918789A5603",
 }
 
 function MOD:AddBosses(KBM_Boss)

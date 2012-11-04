@@ -39,7 +39,7 @@ MOD.Alraj = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
-	ExpertID = "U320EF7A3715CF920",
+	UTID = "U320EF7A3715CF920",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -80,7 +80,6 @@ function MOD:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Alraj.Name] = self.Alraj,
 	}
-	KBM_Boss[self.Alraj.Name] = self.Alraj	
 end
 
 function MOD:InitVars()

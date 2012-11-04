@@ -38,7 +38,7 @@ MF.Maelforge = {
 	Dead = false,
 	Available = false,
 	Menu = {},
-	RaidID = "U35BDBE1C0B7EB642",
+	UTID = "U35BDBE1C0B7EB642",
 	UnitID = nil,
 	Castbar = nil,
 	MechRef = {},
@@ -49,6 +49,7 @@ MF.Maelforge = {
 		AlertsRef = {
 			Enabled = true,
 			Hellfire = KBM.Defaults.AlertObj.Create("purple"),
+			Heat = KBM.Defaults.AlertObj.Create("blue"),
 		},
 		MechRef = {
 			Enabled = true,
@@ -83,6 +84,7 @@ MF.Lang.Unit.EggShort:SetFrench("Œuf")
 MF.Lang.Ability = {}
 MF.Lang.Ability.Blast = KBM.Language:Add("Molten Blast")
 MF.Lang.Ability.Blast:SetGerman("Geschmolzene Explosion")
+MF.Lang.Ability.Heat = KBM.Language:Add("Blinding Heat")
 
 -- Notify Dictionary
 MF.Lang.Notify = {}
@@ -123,7 +125,7 @@ MF.Cannon = {
 	Menu = {},
 	Ignore = true,
 	Type = "multi",
-	RaidID = "U3C2D87970BEC0FB4",
+	UTID = "U3C2D87970BEC0FB4",
 	AlertsRef = {},
 	Triggers = {},
 	Settings = {
@@ -141,7 +143,7 @@ MF.Egg = {
 	NameShort = MF.Lang.Unit.EggShort[KBM.Lang],
 	UnitList = {},
 	Menu = {},
-	RaidID = "U4DF4DB2D235CD05C",
+	UTID = "U4DF4DB2D235CD05C",
 	Ignore = true,
 	Type = "multi",
 }
@@ -357,6 +359,7 @@ function MF:Start()
 	
 	-- Create Alerts (Maelforge)
 	self.Maelforge.AlertsRef.Hellfire = KBM.Alert:Create(self.Lang.Debuff.Hell[KBM.Lang], nil, false, true, "purple")
+	self.Maelforge.AlertsRef.Heat = KBM.Alert:Create(self.Lang.Ability.Heat[KBM.Lang], nil, false, true, "blue")
 	KBM.Defaults.AlertObj.Assign(self.Maelforge)
 	
 	-- Create Alerts (Cannons)
@@ -377,6 +380,8 @@ function MF:Start()
 	self.Maelforge.Triggers.PhaseTwoN:AddPhase(self.PhaseTwo)
 	self.Maelforge.Triggers.PhaseFinal = KBM.Trigger:Create(self.Lang.Notify.PhaseFinal[KBM.Lang], "notify", self.Maelforge)
 	self.Maelforge.Triggers.PhaseFinal:AddPhase(self.PhaseFinal)
+	self.Maelforge.Triggers.Heat = KBM.Trigger:Create(self.Lang.Ability.Heat[KBM.Lang], "channel", self.Cannon)
+	self.Maelforge.Triggers.Heat:AddAlert(self.Maelforge.AlertsRef.Heat)
 	-- self.Maelforge.Triggers.Victory = KBM.Trigger:Create(self.Lang.Notify.Victory[KBM.Lang], "notify", self.Maelforge)
 	-- self.Maelforge.Triggers.Victory:SetVictory()
 	-- self.Maelforge.Triggers.Victory = KBM.Trigger:Create(self.Lang.Notify.Victory[KBM.Lang], "say", self.Maelforge)

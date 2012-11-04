@@ -38,7 +38,7 @@ GS.Silgen = {
 	AlertsRef = {},
 	MechRef = {},
 	Available = false,
-	SliverID = "Sliver",
+	UTID = "none",
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
@@ -100,7 +100,6 @@ function GS:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Silgen.Name] = self.Silgen,
 	}
-	KBM_Boss[self.Silgen.Name] = self.Silgen	
 end
 
 function GS:InitVars()

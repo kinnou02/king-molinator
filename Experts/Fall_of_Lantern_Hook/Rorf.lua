@@ -38,7 +38,7 @@ MOD.Rorf = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
-	ExpertID = "U3D2A3DFB62F9918E",
+	UTID = "U3D2A3DFB62F9918E",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -92,7 +92,7 @@ MOD.Sneaky = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	ExpertID = "U33669D29566B5422",
+	UTID = "U33669D29566B5422",
 	TimeOut = 5,
 }
 
@@ -105,7 +105,7 @@ MOD.Scratchy = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	ExpertID = "U34C933EA1FEF2E22",
+	UTID = "U34C933EA1FEF2E22",
 	TimeOut = 5,
 }
 
@@ -118,7 +118,7 @@ MOD.Scary = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	ExpertID = "U43A11D5109B90B36",
+	UTID = "U43A11D5109B90B36",
 	TimeOut = 5,
 }
 

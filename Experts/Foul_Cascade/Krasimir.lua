@@ -39,7 +39,10 @@ MOD.Krasimir = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
-	ExpertID = "U5AC4C2CB54AAAE6C",
+	UTID = {
+		[1] = "U5AC4C2CB54AAAE6C",
+		[2] = "U31EE805D62BE070F",
+	},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -68,23 +71,6 @@ MOD.Descript = MOD.Krasimir.Name
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}
-
-MOD.KrasPhaseTwo = {
-	Mod = MOD,
-	Level = 52,
-	Active = false,
-	Name = MOD.Lang.Unit.Krasimir[KBM.Lang],
-	Menu = {},
-	Dead = false,
-	Available = false,
-	UnitID = nil,
-	ExpertID = "U31EE805D62BE070F",
-	TimeOut = 5,
-}
-
-MOD.Krasimir.AltBossList = {
-	[1] = MOD.KrasPhaseTwo,
-}
 
 function MOD:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
@@ -161,6 +147,7 @@ function MOD:Death(UnitID)
 			return true
 		else
 			self.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
+			self.Phase = 2
 		end
 	end
 	return false
@@ -181,10 +168,10 @@ function MOD:UnitHPCheck(unitDetails, unitID)
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj.Objectives:AddPercent(self.Krasimir.Name, 0, 100)
 				end
-				if self.Krasimir.ExpertID == unitDetails.type then
+				if self.Krasimir.UTID[1] == unitDetails.type then
 					self.PhaseObj:SetPhase(1)
 					self.Phase = 1
-				elseif self.KrasPhaseTwo.ExpertID == unitDetails.type then
+				elseif self.Krasimir.UTID[2] == unitDetails.type then
 					self.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
 					self.Phase = 2
 				end

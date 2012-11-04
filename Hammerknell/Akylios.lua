@@ -42,7 +42,7 @@ AK.Jornaru = {
 	MechRef = {},
 	Dead = false,
 	Available = false,
-	RaidID = "Raid",
+	UTID = "none",
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
@@ -85,7 +85,7 @@ AK.Akylios = {
 	Dead = false,
 	Available = false,
 	PhaseObj = nil,
-	RaidID = "Raid",
+	UTID = "none",
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
@@ -119,7 +119,7 @@ AK.Stinger = {
 	UnitList = {},
 	Ignore = true,
 	Type = "multi",
-	RaidID = "Raid",
+	UTID = "none",
 }
 
 AK.Lasher = {
@@ -129,7 +129,7 @@ AK.Lasher = {
 	UnitList = {},
 	Ignore = true,
 	Type = "multi",
-	RaidID = "Raid",
+	UTID = "none",
 }
 
 AK.Apostle = {
@@ -138,7 +138,7 @@ AK.Apostle = {
 	Name = "Apostle of Jornaru",
 	UnitList = {},
 	Menu = {},
-	RaidID = "Raid",
+	UTID = "none",
 	AlertsRef = {},
 	Ignore = true,
 	Type = "multi",
@@ -337,11 +337,6 @@ function AK:AddBosses(KBM_Boss)
 		[self.Lasher.Name] = self.Lasher,
 		[self.Apostle.Name] = self.Apostle,
 	}
-	KBM_Boss[self.Jornaru.Name] = self.Jornaru
-	KBM_Boss[self.Akylios.Name] = self.Akylios
-	KBM.SubBoss[self.Stinger.Name] = self.Stinger
-	KBM.SubBoss[self.Lasher.Name] = self.Lasher
-	KBM.SubBoss[self.Apostle.Name] = self.Apostle
 end
 
 function AK:InitVars()

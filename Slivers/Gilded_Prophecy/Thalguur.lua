@@ -36,7 +36,7 @@ TR.Thalguur = {
 	AlertsRef = {},
 	MechRef = {},
 	Dead = false,
-	SliverID = "U361E2A4E40189448",
+	UTID = "U361E2A4E40189448",
 	Available = false,
 	UnitID = nil,
 	Triggers = {},
@@ -105,7 +105,6 @@ function TR:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Thalguur.Name] = self.Thalguur,
 	}
-	KBM_Boss[self.Thalguur.Name] = self.Thalguur	
 end
 
 function TR:InitVars()

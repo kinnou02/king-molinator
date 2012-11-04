@@ -40,7 +40,7 @@ MOD.Twyl = {
 	-- AlertsRef = {},
 	Available = false,
 	UnitID = nil,
-	ExpertID = "U283A2AEA5D374F37",
+	UTID = "U283A2AEA5D374F37",
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
@@ -116,7 +116,7 @@ MOD.Autumn = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	ExpertID = "U372CCD771C23195F",
+	UTID = "U372CCD771C23195F",
 	TimeOut = 5,
 }
 
@@ -130,7 +130,7 @@ MOD.Summer = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	ExpertID = "U1220566F5B67A9EC",
+	UTID = "U1220566F5B67A9EC",
 	TimeOut = 5,
 }
 
@@ -144,7 +144,7 @@ MOD.Spring = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	ExpertID = "U2A3DD96624187F57",
+	UTID = "U2A3DD96624187F57",
 	TimeOut = 5,
 }
 

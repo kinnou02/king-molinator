@@ -38,7 +38,7 @@ MOD.Maelow = {
 	-- AlertsRef = {},
 	Available = false,
 	UnitID = nil,
-	ExpertID = "U2093D5D83C2D0D66",
+	UTID = "U2093D5D83C2D0D66",
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
@@ -105,7 +105,7 @@ MOD.Brae = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	ExpertID = "U7682C75012E9382B",
+	UTID = "U7682C75012E9382B",
 	TimeOut = 5,
 }
 
@@ -119,7 +119,7 @@ MOD.Celoah = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	ExpertID = "U7A5FB4E314BA32F1",
+	UTID = "U7A5FB4E314BA32F1",
 	TimeOut = 5,
 }
 

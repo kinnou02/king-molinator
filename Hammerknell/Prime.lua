@@ -39,7 +39,7 @@ VP.Prime = {
 	AlertsRef = {},
 	Dead = false,
 	Available = false,
-	RaidID = "Raid",
+	UTID = "none",
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
@@ -87,7 +87,6 @@ function VP:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Prime.Name] = self.Prime,
 	}
-	KBM_Boss[self.Prime.Name] = self.Prime	
 end
 
 function VP:InitVars()

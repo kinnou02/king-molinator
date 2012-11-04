@@ -37,7 +37,7 @@ SZ.Zilas = {
 	AlertsRef = {},
 	Dead = false,
 	Available = false,
-	RaidID = "Raid",
+	UTID = "U5CF8188C40343C2C",
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
@@ -126,7 +126,7 @@ SZ.Imp = {
 	NameShort = SZ.Lang.Unit.ImpShort[KBM.Lang],
 	UnitList = {},
 	Menu = {},
-	RaidID = "Raid",
+	UTID = "U5CF8188F72B16D13",
 	AlertsRef = {},
 	Ignore = true,
 	Type = "multi",
@@ -147,7 +147,7 @@ SZ.Spirit = {
 	UnitList = {},
 	Menu = {},
 	AlertsRef = {},
-	RaidID = "Raid",
+	UTID = "U41A6D8C45BFC7890",
 	Ignore = true,
 	Type = "multi",
 	Triggers = {},
@@ -166,9 +166,6 @@ function SZ:AddBosses(KBM_Boss)
 		[self.Imp.Name] = self.Imp,
 		[self.Spirit.Name] = self.Spirit
 	}
-	KBM_Boss[self.Zilas.Name] = self.Zilas
-	KBM.SubBoss[self.Imp.Name] = self.Imp
-	KBM.SubBoss[self.Spirit.Name] = self.Spirit
 end
 
 function SZ:InitVars()

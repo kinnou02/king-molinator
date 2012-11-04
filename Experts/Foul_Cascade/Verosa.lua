@@ -38,7 +38,7 @@ MOD.Verosa = {
 	-- AlertsRef = {},
 	Available = false,
 	UnitID = nil,
-	ExpertID = "U22D5027D3A7FDA7C",
+	UTID = "U22D5027D3A7FDA7C",
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
@@ -89,7 +89,7 @@ MOD.Lesch = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	ExpertID = "Expert",
+	UTID = "none",
 	TimeOut = 5,
 }
 
@@ -102,7 +102,7 @@ MOD.Gurze = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	ExpertID = "Expert",
+	UTID = "none",
 	TimeOut = 5,
 }
 

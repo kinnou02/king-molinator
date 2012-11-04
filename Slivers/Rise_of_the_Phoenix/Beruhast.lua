@@ -39,7 +39,7 @@ BT.Beruhast = {
 	AlertsRef = {},
 	Dead = false,
 	Available = false,
-	SliverID = "Sliver",
+	UTID = "none",
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
@@ -120,7 +120,6 @@ function BT:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Beruhast.Name] = self.Beruhast,
 	}
-	KBM_Boss[self.Beruhast.Name] = self.Beruhast	
 end
 
 function BT:InitVars()

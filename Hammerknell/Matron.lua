@@ -41,7 +41,7 @@ MZ.Matron = {
 	MechRef = {},
 	Dead = false,
 	Available = false,
-	RaidID = "Raid",
+	UTID = "none",
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
@@ -155,7 +155,6 @@ function MZ:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Matron.Name] = self.Matron,
 	}
-	KBM_Boss[self.Matron.Name] = self.Matron	
 end
 
 function MZ:InitVars()

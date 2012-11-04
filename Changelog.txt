@@ -27,6 +27,7 @@ Infernal Dawn
 ** New: Added stop methods for Fist and Chains timers at the start of the final phase.
 * Maelforge - Ember Eggs
 ** New: Added Tank-Swap for Melt Armor.
+** New: Added Alert for Blinding Heat.
 ** Change: This encounter will now flag a victory after 3 Ember Eggs have been destroyed, not via say/notify messages.
 ** Change: Final Phase will now only Trigger after all Cannons have been destroyed.
 * Maelforge - Final
@@ -36,6 +37,8 @@ Infernal Dawn
 ** Fixed: Cannons now have an internal CastBar for associated Molten Blast alerts.
 
 Greenscale's Blight
+* Oracle Aleria
+** Fixed: Corrected Aleria's UTID.
 * Prince Hylas
 ** New: The three sub bosses from previous encounters are now tracked again.
 ** Fixed: Due to the above, the Phase Monitor should begin working again.

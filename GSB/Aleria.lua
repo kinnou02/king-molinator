@@ -33,7 +33,7 @@ OA.Aleria = {
 	Active = false,
 	Name = "Oracle Aleria",
 	ChronicleID = "U76F49CD858530EEA",
-	RaidID = "U6D36D79B7B3CF7B3",
+	UTID = "U6D36D79B7B3CF783",
 	Menu = {},
 	AlertsRef = {},
 	TimersRef = {},
@@ -101,7 +101,7 @@ OA.Primal = {
 	TimeOut = 5,
 	Triggers = {},
 	ChronicleID = "U279898FC4D7B39ED",
-	RaidID = "U5EC70B376208CAC3",
+	UTID = "U5EC70B376208CAC3",
 }
 
 OA.Necrotic = {
@@ -116,7 +116,7 @@ OA.Necrotic = {
 	TimeOut = 5,
 	Triggers = {},
 	ChronicleID = "U676937B70D146F9F",
-	RaidID = "U2ED1EB3228891BA6",
+	UTID = "U2ED1EB3228891BA6",
 }
 
 OA.Aleria.Name = OA.Lang.Unit.Aleria[KBM.Lang]

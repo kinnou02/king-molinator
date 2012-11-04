@@ -40,7 +40,7 @@ MOD.Nuggo = {
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
-	ExpertID = "U43E685D74CAA6694",
+	UTID = "U43E685D74CAA6694",
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
 		-- TimersRef = {
@@ -113,7 +113,7 @@ MOD.Swedge = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	ExpertID = "Expert",
+	UTID = "none",
 	TimeOut = 5,
 }
 
@@ -127,7 +127,7 @@ MOD.Gerbik = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	ExpertID = "Expert",
+	UTID = "none",
 	TimeOut = 5,
 }
 

@@ -39,7 +39,7 @@ MOD.Zael = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
-	MasterID = "Master",
+	UTID = "none",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -86,7 +86,7 @@ MOD.ZaelAdd = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	MasterID = "U148113994CD9DCE0",
+	UTID = "U148113994CD9DCE0",
 	TimeOut = 5,
 }
 
@@ -170,7 +170,7 @@ end
 function MOD:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
 		if not uDetails.player then
-			if uDetails.type ~= self.ZaelAdd.MasterID then
+			if uDetails.type ~= self.ZaelAdd.UTID then
 				if uDetails.name == self.Zael.Name then
 					if not self.EncounterRunning then
 						self.EncounterRunning = true

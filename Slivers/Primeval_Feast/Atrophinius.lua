@@ -37,7 +37,7 @@ AN.Atrophinius = {
 	TimersRef = {},
 	MechRef = {},
 	Available = false,
-	SliverID = "Sliver",
+	UTID = "U65E63A1E5537990D",
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
@@ -98,6 +98,7 @@ AN.Cask = {
 	Dead = false, 
 	Available = false,
 	Ignore = true,
+	UTID = "none",
 	UnitID = nil,
 	Primary = false,
 	Required = 1,
@@ -111,8 +112,8 @@ function AN:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Atrophinius.Name] = self.Atrophinius,
+		[self.Cask.Name] = self.Cask,
 	}
-	KBM_Boss[self.Atrophinius.Name] = self.Atrophinius	
 end
 
 function AN:InitVars()
@@ -215,15 +216,17 @@ function AN:UnitHPCheck(uDetails, unitID)
 				self.Atrophinius.Available = true
 				return self.Atrophinius
 			else
+				local BossObj = self.Bosses[uDetails.name]
 				if not self.Bosses[uDetails.name].UnitList[unitID] then
 					SubBossObj = {
-						Mod = AN,
+						Mod = BossObj.Mod,
 						Level = "??",
 						Name = uDetails.name,
 						Dead = false,
 						Casting = false,
 						UnitID = unitID,
 						Available = true,
+						UTID = BossObj.UTID,
 					}
 					self.Bosses[uDetails.name].UnitList[unitID] = SubBossObj
 				else

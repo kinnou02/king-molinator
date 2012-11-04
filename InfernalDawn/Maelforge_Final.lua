@@ -39,8 +39,10 @@ MF.Maelforge = {
 	Menu = {},
 	UnitID = nil,
 	TimeOut = 5,
-	RaidID = "U22D6DD797E7A5F87",
-	RaidID_P2 = "U35BDBE1D14577953",
+	UTID = {
+		[1] = "U22D6DD797E7A5F87",
+		[2] = "U35BDBE1D14577953",
+	},
 	Castbar = nil,
 	TimersRef = {},
 	AlertsRef = {},
@@ -155,7 +157,7 @@ MF.Cannon = {
 	Menu = {},
 	Ignore = true,
 	Type = "multi",
-	RaidID = "U7F3FFE0C35C496F8",
+	UTID = "U7F3FFE0C35C496F8",
 	AlertsRef = {},
 	Triggers = {},
 	Settings = {
@@ -172,8 +174,6 @@ function MF:AddBosses(KBM_Boss)
 		[self.Maelforge.Name] = self.Maelforge,
 		[self.Cannon.Name] = self.Cannon,
 	}
-	KBM.Boss.Raid[self.Maelforge.RaidID_P2] = self.Maelforge
-	KBM.Boss.TypeList[self.Maelforge.RaidID_P2] = self.Maelforge
 end
 
 function MF:InitVars()
@@ -304,7 +304,7 @@ function MF:UnitHPCheck(uDetails, unitID)
 					self.Maelforge.Casting = false
 					self.Maelforge.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
-					if uDetails.type == self.Maelforge.RaidID_P2 then
+					if uDetails.type == self.Maelforge.UTID[2] then
 						self.PhaseTwo()
 					else
 						self.PhaseObj:SetPhase(1)

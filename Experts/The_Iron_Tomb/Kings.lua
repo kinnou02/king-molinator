@@ -36,24 +36,13 @@ MOD.Laric = {
 	Menu = {},
 	Castbar = nil,
 	Dead = false,
-	-- TimersRef = {},
-	-- AlertsRef = {},
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
-	ExpertID = "U3067AFE412397B1E",
-	-- MasterID = "U024CAD61448FED64",
+	UTID = "U3067AFE412397B1E",
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		-- TimersRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
-		-- },
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
-		-- },
 	}
 }
 
@@ -116,7 +105,7 @@ MOD.Derribec = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	ExpertID = "U5794318834A5C715",
+	UTID = "U5794318834A5C715",
 	TimeOut = 5,
 }
 
@@ -130,7 +119,7 @@ MOD.Humbart = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	ExpertID = "U40A6C8CE27638FFE",
+	UTID = "U40A6C8CE27638FFE",
 	TimeOut = 5,
 }
 

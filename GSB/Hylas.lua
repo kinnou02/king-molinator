@@ -36,7 +36,7 @@ PH.Hylas = {
 	Name = "Prince Hylas",
 	NameShort = "Hylas",
 	ChronicleID = "U48BA191868D74700",
-	RaidID = "U208C136962074729",
+	UTID = "U208C136962074729",
 	Menu = {},
 	Castbar = nil,
 	TimersRef = {},
@@ -146,7 +146,7 @@ PH.Johlen = {
 	Active = false,
 	Name = PH.Lang.Unit.Johlen[KBM.Lang],
 	NameShort = PH.Lang.Unit.Johlen[KBM.Lang],
-	RaidID = "U5AD8D9DA23FAED8C",
+	UTID = "U5AD8D9DA23FAED8C",
 	Castbar = nil,
 	Dead = false,
 	Available = false,
@@ -161,7 +161,7 @@ PH.Duke = {
 	Active = false,
 	Name = PH.Lang.Unit.Duke[KBM.Lang],
 	NameShort = PH.Lang.Unit.Duke[KBM.Lang],
-	RaidID = "Raid",
+	UTID = "none",
 	Castbar = nil,
 	Dead = false,
 	Available = false,
@@ -176,7 +176,7 @@ PH.Aleria = {
 	Active = false,
 	Name = PH.Lang.Unit.Aleria[KBM.Lang],
 	NameShort = PH.Lang.Unit.Aleria[KBM.Lang],
-	RaidID = "Raid",
+	UTID = "none",
 	Castbar = nil,
 	Dead = false,
 	Available = false,
@@ -193,8 +193,6 @@ function PH:AddBosses(KBM_Boss)
 		[self.Duke.Name] = self.Duke,
 		[self.Aleria.Name] = self.Aleria,
 	}
-	KBM.SubBoss[self.Duke.Name] = self.Duke
-	KBM.SubBoss[self.Aleria.Name] = self.Aleria
 end
 
 function PH:InitVars()

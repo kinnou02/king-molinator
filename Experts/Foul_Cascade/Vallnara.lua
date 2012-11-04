@@ -39,7 +39,7 @@ MOD.Vallnara = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
-	ExpertID = "Expert",
+	UTID = "none",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -90,7 +90,7 @@ MOD.CorruptQueen = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	ExpertID = "Expert",
+	UTID = "none",
 	TimeOut = 5,
 }
 

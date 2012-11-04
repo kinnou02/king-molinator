@@ -35,7 +35,7 @@ GU.Garau = {
 	AlertsRef = {},
 	Dead = false,
 	Available = false,
-	RaidID = "Raid",
+	UTID = "none",
 	UnitID = nil,
 	Descript = "Inquisitor Garau",
 	TimeOut = 3,
@@ -132,7 +132,6 @@ function GU:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Garau.Name] = self.Garau,
 	}
-	KBM_Boss[self.Garau.Name] = self.Garau	
 end
 
 function GU:InitVars()

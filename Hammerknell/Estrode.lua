@@ -37,7 +37,7 @@ ES.Estrode = {
 	TimersRef = {},
 	AlertsRef = {},
 	Dead = false,
-	RaidID = "Raid",
+	UTID = "U4EC512E31DB9E18A",
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
@@ -129,7 +129,6 @@ function ES:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Estrode.Name] = self.Estrode,
 	}
-	KBM_Boss[self.Estrode.Name] = self.Estrode	
 end
 
 function ES:InitVars()

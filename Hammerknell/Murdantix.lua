@@ -38,7 +38,7 @@ MX.Murd = {
 	Active = false,
 	Name = "Murdantix",
 	ChronicleID = "U6B8A9FEF19F94B1F",
-	RaidID = "Raid",
+	UTID = "U7F19EEA52A744F51",
 	Castbar = nil,
 	CastFilters = {},
 	HasCastFilters = true,
@@ -116,7 +116,6 @@ MX.Lang.Debuff.Mangled:SetKorean("훼손")
 
 function MX:AddBosses(KBM_Boss)
 	self.MenuName = self.Murd.Name
-	KBM_Boss[self.Murd.Name] = self.Murd
 	self.Bosses = {
 		[self.Murd.Name] = self.Murd
 	}

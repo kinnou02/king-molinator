@@ -41,7 +41,7 @@ GR.Grugonim = {
 	Timers = {},
 	TimersRef = {},
 	AlertsRef = {},
-	RaidID = "Raid",
+	UTID = "none",
 	Dead = false,
 	Available = false,
 	UnitID = nil,
@@ -77,7 +77,7 @@ GR.Tower = {
 	UnitList = {},
 	Ignore = true,
 	Type = "multi",
-	RaidID = "Raid",
+	UTID = "none",
 }
 
 KBM.RegisterMod(GR.ID, GR)
@@ -156,8 +156,6 @@ function GR:AddBosses(KBM_Boss)
 		[self.Grugonim.Name] = self.Grugonim,
 		[self.Tower.Name] = self.Tower,
 	}
-	KBM_Boss[self.Grugonim.Name] = self.Grugonim
-	KBM.SubBoss[self.Tower.Name] = self.Tower	
 end
 
 function GR:InitVars()	

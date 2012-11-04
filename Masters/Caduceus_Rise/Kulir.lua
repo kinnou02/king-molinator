@@ -38,7 +38,7 @@ MOD.Kulir = {
 	-- AlertsRef = {},
 	Available = false,
 	UnitID = nil,
-	MasterID = "Master",
+	UTID = "none",
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
@@ -94,7 +94,7 @@ MOD.Varash = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	MasterID = "Master",
+	UTID = "none",
 	TimeOut = 5,
 }
 

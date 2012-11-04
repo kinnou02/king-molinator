@@ -38,7 +38,7 @@ LT.Twyl = {
 	TimersRef = {},
 	MechRef = {},
 	Available = false,
-	SliverID = "Sliver",
+	UTID = "U3632819C5A272D2F",
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
@@ -174,7 +174,7 @@ LT.Wolf = {
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
-	SliverID = "Sliver",
+	UTID = "U74875F18200AA52C",
 	AlertsRef = {},
 	Triggers = {},
 	Settings = {
@@ -194,7 +194,7 @@ LT.Tiger = {
 	Dead = false,
 	Available = false,
 	Menu = {},
-	SliverID = "Sliver",
+	UTID = "U74875F193163683D",
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
@@ -217,7 +217,7 @@ LT.Spider = {
 	Dead = false,
 	Available = false,
 	Menu = {},
-	SliverID = "Sliver",
+	UTID = "U74875F1A42591303",
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
@@ -237,7 +237,7 @@ LT.Shaman = {
 	Name = LT.Lang.Unit.Shaman[KBM.Lang],
 	UnitList = {},
 	Ignore = true,
-	SliverID = "Sliver",
+	UTID = "U74875F1B52B7D610",
 	Type = "multi",
 }
 	
@@ -251,11 +251,6 @@ function LT:AddBosses(KBM_Boss)
 		[self.Spider.Name] = self.Spider,
 		[self.Shaman.Name] = self.Shaman,
 	}
-	KBM_Boss[self.Twyl.Name] = self.Twyl
-	KBM.SubBoss[self.Wolf.Name] = self.Wolf
-	KBM.SubBoss[self.Tiger.Name] = self.Tiger
-	KBM.SubBoss[self.Spider.Name] = self.Spider
-	KBM.SubBoss[self.Shaman.Name] = self.Shaman
 end
 
 function LT:InitVars()

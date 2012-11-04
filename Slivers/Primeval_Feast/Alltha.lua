@@ -37,7 +37,7 @@ AR.Alltha = {
 	TimersRef = {},
 	MechRef = {},
 	Available = false,
-	SliverID = "Sliver",
+	UTID = "U27E0FA90317A133B",
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
@@ -114,7 +114,6 @@ function AR:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Alltha.Name] = self.Alltha,
 	}
-	KBM_Boss[self.Alltha.Name] = self.Alltha	
 end
 
 function AR:InitVars()

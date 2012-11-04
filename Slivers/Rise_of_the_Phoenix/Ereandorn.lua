@@ -39,7 +39,7 @@ EN.Ereandorn = {
 	MechRef = {},
 	Dead = false,
 	Available = false,
-	SliverID = "Sliver",
+	UTID = "U3F8B7916402E8F10",
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
@@ -110,7 +110,6 @@ function EN:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Ereandorn.Name] = self.Ereandorn,
 	}
-	KBM_Boss[self.Ereandorn.Name] = self.Ereandorn	
 end
 
 function EN:InitVars()

@@ -89,7 +89,7 @@ KM.Prince = {
 	Name = "Prince Dollin",
 	NameShort = "Dollin",
 	ChronicleID = "U618202936FFA60A2",
-	RaidID = "Raid",
+	UTID = "U6248E23D499F248B",
 	CastBar = nil,
 	CastFilters = {},
 	Casting = false,
@@ -142,7 +142,7 @@ KM.King = {
 	Name = "Rune King Molinar",
 	NameShort = "Molinar",
 	ChronicleID = "U4B987C125BF33A69",
-	RaidID = "Raid",
+	UTID = "U3E41C64554E0F83A",
 	CastBar = nil,
 	CastFilters = {},
 	Casting = false,
@@ -332,10 +332,7 @@ function KM:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.King.Name] = self.King,
 		[self.Prince.Name] = self.Prince,
-	}
-	KBM_Boss[self.Prince.Name] = self.Prince
-	KBM_Boss[self.King.Name] = self.King
-	
+	}	
 end
 
 function KM:InitVars()

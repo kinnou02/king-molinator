@@ -41,7 +41,7 @@ SN.Sicaron = {
 	MechRef = {},
 	Dead = false,
 	Available = false,
-	RaidID = "Raid",
+	UTID = "none",
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
@@ -143,7 +143,6 @@ function SN:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Sicaron.Name] = self.Sicaron,
 	}
-	KBM_Boss[self.Sicaron.Name] = self.Sicaron	
 end
 
 function SN:InitVars()

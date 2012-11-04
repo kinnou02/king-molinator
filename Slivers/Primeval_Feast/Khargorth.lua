@@ -37,7 +37,7 @@ SK.Khargroth = {
 	TimersRef = {},
 	MechRef = {},
 	Available = false,
-	SliverID = "Sliver",
+	UTID = "U443DEDB15D439E17",
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
@@ -128,7 +128,6 @@ function SK:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Khargroth.Name] = self.Khargroth,
 	}
-	KBM_Boss[self.Khargroth.Name] = self.Khargroth	
 end
 
 function SK:InitVars()

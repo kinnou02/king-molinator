@@ -39,7 +39,7 @@ MOD.Falidor = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
-	ExpertID = "U76E6B91B7D0F7456",
+	UTID = "U76E6B91B7D0F7456",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -80,7 +80,6 @@ function MOD:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Falidor.Name] = self.Falidor,
 	}
-	KBM_Boss[self.Falidor.Name] = self.Falidor	
 end
 
 function MOD:InitVars()

@@ -38,7 +38,7 @@ MOD.Kulir = {
 	-- AlertsRef = {},
 	Available = false,
 	UnitID = nil,
-	ExpertID = "U452F8AA01E563111",
+	UTID = "U452F8AA01E563111",
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
@@ -95,7 +95,7 @@ MOD.Varash = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	ExpertID = "U1823DEF80C90B637",
+	UTID = "U1823DEF80C90B637",
 	TimeOut = 5,
 }
 
