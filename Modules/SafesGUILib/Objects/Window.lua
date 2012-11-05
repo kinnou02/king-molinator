@@ -1,4 +1,4 @@
-﻿-- Window Objects
+﻿-- Window Object
 -- Written by Paul Snart
 -- Copyright 2012
 --

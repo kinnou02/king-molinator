@@ -4383,6 +4383,8 @@ function KBM.Unit:Create(uDetails, UnitID)
 				end
 				self.Offline = uDetails.offline
 				self.Details = uDetails
+				self.Location = uDetails.location
+				self.Zone = uDetails.zone
 				self.HealthMax = uDetails.healthMax
 				self.Health = uDetails.health
 				self.Availability = uDetails.availability
@@ -4754,6 +4756,9 @@ local function KBM_UnitAvailable(units)
 					if UnitID == KBM.Player.UnitID then
 						if uDetails.zone then
 							KBM.Player.Zone = uDetails.zone
+						end
+						if uDetails.location then
+							KBM.Player.Location = uDetails.location
 						end
 					end
 				end
