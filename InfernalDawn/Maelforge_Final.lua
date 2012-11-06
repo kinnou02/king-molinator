@@ -317,11 +317,12 @@ function MF:UnitHPCheck(uDetails, unitID)
 						KBM.MechTimer:AddStart(self.Maelforge.TimersRef.Fissure)
 						self.Phase = 1
 					end
-				end
-				if self.Maelforge.UnitID ~= unitID then
-					if KBM.TankSwap.Active then
-						KBM.TankSwap:Remove()
-						KBM.TankSwap:Start(self.Lang.Debuff.Melt[KBM.Lang], unitID)
+				else
+					if self.Maelforge.UnitID ~= unitID then
+						if KBM.TankSwap.Active then
+							KBM.TankSwap:Remove()
+							KBM.TankSwap:Start(self.Lang.Debuff.Melt[KBM.Lang], unitID)
+						end
 					end
 				end
 				self.Maelforge.UnitID = unitID
