@@ -3549,7 +3549,7 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 								end
 							end
 							if ModBossObj then
-								if ModBossObj.UTID == "none" then
+								if BossObj.UTID == "none" then
 									if not KBM.BossID[UnitID] then
 										if uDetails.type then
 											if not KBM.Options.UnitCache.List then
@@ -4768,6 +4768,16 @@ local function KBM_UnitAvailable(units)
 		for UnitID, Specifier in pairs(units) do
 			local uDetails = Inspect.Unit.Detail(UnitID)
 			local UnitObj = KBM.Unit:Available(uDetails, UnitID)
+			if uDetails then
+				if not uDetails.player then
+					if uDetails.zone then
+						KBM.Player.Zone = uDetails.zone
+					end
+					if uDetails.location then
+						KBM.Player.Location = uDetails.location
+					end
+				end
+			end
 		end	
 	end
 	-- local TimeEllapsed = tonumber(string.format("%0.5f", Inspect.Time.Real() - TimeStore))
@@ -8399,8 +8409,8 @@ function KBM.AllocateBoss(Mod, BossObj, UTID)
 			KBM.Boss[iType][UTID] = BossObj
 			KBM.Boss.TypeList[UTID] = BossObj
 			if KBM.Options.UnitCache.List[BossObj.Name] then
-				if KBM.Options.UnitCache.List[BossObj.Name][BossObj.RaidID] then
-					KBM.Options.UnitCache.List[BossObj.Name][BossObj.RaidID] = nil
+				if KBM.Options.UnitCache.List[BossObj.Name][BossObj.UTID] then
+					KBM.Options.UnitCache.List[BossObj.Name][BossObj.UTID] = nil
 					KBM.Options.UnitTotal = KBM.Options.UnitTotal - 1
 					if not next(KBM.Options.UnitCache.List[BossObj.Name]) then
 						KBM.Options.UnitCache.List[BossObj.Name] = nil

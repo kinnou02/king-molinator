@@ -136,8 +136,10 @@ MF.Lang.Menu.Hell_Yellow:SetGerman("Höllenfeuer (Gelb)")
 MF.Lang.Menu.Hell_Yellow:SetFrench("Hellfire (Jaune)")
 MF.Lang.Menu.Hell_P3First = KBM.Language:Add("First Hellfire (Final Phase)")
 MF.Lang.Menu.Hell_P3First:SetGerman("Erste Höllenfeuer (Letzte Phase)")
+MF.Lang.Menu.Hell_P3First:SetFrench("Premier Feux de l'enfer (Phase Finale)")
 MF.Lang.Menu.Hell_Can = KBM.Language:Add("First Hellfire (Cannon Phase)")
 MF.Lang.Menu.Hell_Can:SetGerman("Erste Höllenfeuer (Kanonen Phase)")
+MF.Lang.Menu.Hell_Can:SetFrench("Premier Feux de l'enfer (Phase Canon)")
 
 -- Description
 MF.Lang.Descript = {}

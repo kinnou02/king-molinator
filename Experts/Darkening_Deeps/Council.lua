@@ -34,8 +34,6 @@ MOD.Nuggo = {
 	Menu = {},
 	Castbar = nil,
 	Dead = false,
-	-- TimersRef = {},
-	-- AlertsRef = {},
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
@@ -43,14 +41,6 @@ MOD.Nuggo = {
 	UTID = "U43E685D74CAA6694",
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		-- TimersRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
-		-- },
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
-		-- },
 	}
 }
 
@@ -101,7 +91,6 @@ MOD.Lang.Main.Descript:SetFrench("Le Conclave des Gedlos")
 MOD.Lang.Main.Descript:SetRussian("Конклав Гедло")
 MOD.Lang.Main.Descript:SetKorean("제들로 결사단")
 MOD.Descript = MOD.Lang.Main.Descript[KBM.Lang]
-
 
 MOD.Swedge = {
 	Mod = MOD,
@@ -260,7 +249,7 @@ function MOD:UnitHPCheck(unitDetails, unitID)
 				end
 				BossObj.UnitID = unitID
 				BossObj.Available = true
-				return self.Nuggo
+				return BossObj
 			end
 		end
 	end
@@ -279,30 +268,6 @@ function MOD:Reset()
 end
 
 function MOD:Timer()	
-end
-
-function MOD.Nuggo:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function MOD.Nuggo:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
 end
 
 function MOD:DefineMenu()
