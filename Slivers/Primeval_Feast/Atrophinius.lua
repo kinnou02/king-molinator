@@ -102,12 +102,12 @@ AN.Cask = {
 	UnitID = nil,
 	Primary = false,
 	Required = 3,
-	Multi = true,
+	Type = "multi",
 	UnitList = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-	}
+	},
 }
 
 function AN:AddBosses(KBM_Boss)
