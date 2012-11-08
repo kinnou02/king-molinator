@@ -34,23 +34,13 @@ MOD.Fetlorn = {
 	Menu = {},
 	Castbar = nil,
 	Dead = false,
-	-- TimersRef = {},
-	-- AlertsRef = {},
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
-	UTID = "none",
+	UTID = "U2FB196D076D553D2",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		-- TimersRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
-		-- },
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
-		-- },
 	}
 }
 
@@ -59,7 +49,7 @@ KBM.RegisterMod(MOD.ID, MOD)
 -- Main Unit Dictionary
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Fetlorn = KBM.Language:Add(MOD.Fetlorn.Name)
-MOD.Lang.Unit.Fetlorn:SetGerman("Knochenfürst Fetlorn")
+MOD.Lang.Unit.Fetlorn:SetGerman("Knochenlord Fetlorn")
 MOD.Lang.Unit.Fetlorn:SetFrench("Seigner des ossements Fetlorn")
 MOD.Lang.Unit.Fetlorn:SetRussian("Костяной владыка Фетлорн")
 MOD.Lang.Unit.Fetlorn:SetKorean("해골군주 펫론")

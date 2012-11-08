@@ -34,23 +34,13 @@ MOD.Totek = {
 	Menu = {},
 	Castbar = nil,
 	Dead = false,
-	-- TimersRef = {},
-	-- AlertsRef = {},
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
-	UTID = "none",
+	UTID = "U4282FD9E79CF7348",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		-- TimersRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
-		-- },
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
-		-- },
 	}
 }
 
@@ -59,7 +49,7 @@ KBM.RegisterMod(MOD.ID, MOD)
 -- Main Unit Dictionary
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Totek = KBM.Language:Add(MOD.Totek.Name)
-MOD.Lang.Unit.Totek:SetGerman("Totek der Alte") 
+MOD.Lang.Unit.Totek:SetGerman("Totek der Uralte") 
 MOD.Lang.Unit.Totek:SetFrench("Totek l'Ancient")
 MOD.Lang.Unit.Totek:SetRussian("Тотек Древний")
 MOD.Lang.Unit.Totek:SetKorean("고대인 토테크")
@@ -179,30 +169,6 @@ function MOD:Reset()
 end
 
 function MOD:Timer()	
-end
-
-function MOD.Totek:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function MOD.Totek:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
 end
 
 function MOD:DefineMenu()

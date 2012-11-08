@@ -34,23 +34,16 @@ MOD.Zael = {
 	Menu = {},
 	Castbar = nil,
 	Dead = false,
-	-- TimersRef = {},
-	-- AlertsRef = {},
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
-	UTID = "none",
+	UTID = {
+		[1] = "none",
+		[2] = "U148113994CD9DCE0", -- Fragment
+	},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		-- TimersRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
-		-- },
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
-		-- },
 	}
 }
 
@@ -74,22 +67,6 @@ MOD.Zael.NameShort = MOD.Lang.Unit.ZaelShort[KBM.Lang]
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}
-
-MOD.ZaelAdd = {
-	Mod = MOD,
-	Multi = true,
-	Level = "??",
-	Active = false,
-	Name = MOD.Lang.Unit.Zael[KBM.Lang],
-	NameShort = MOD.Lang.Unit.ZaelShort[KBM.Lang],
-	Menu = {},
-	Dead = false,
-	Available = false,
-	UnitID = nil,
-	UTID = "U148113994CD9DCE0",
-	TimeOut = 5,
-}
-
 
 function MOD:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
@@ -170,23 +147,25 @@ end
 function MOD:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
 		if not uDetails.player then
-			if uDetails.type ~= self.ZaelAdd.UTID then
-				if uDetails.name == self.Zael.Name then
-					if not self.EncounterRunning then
-						self.EncounterRunning = true
-						self.StartTime = Inspect.Time.Real()
-						self.HeldTime = self.StartTime
-						self.TimeElapsed = 0
-						self.Zael.Dead = false
-						self.Zael.Casting = false
-						self.Zael.CastBar:Create(unitID)
-						self.PhaseObj:Start(self.StartTime)
-						self.PhaseObj:SetPhase("Single")
-						self.PhaseObj.Objectives:AddPercent(self.Zael.Name, 0, 100)
-						self.Phase = 1
-					end
-					self.Zael.UnitID = unitID
-					self.Zael.Available = true
+			if uDetails.type ~= self.Zael.UTID[2] then
+				if not self.EncounterRunning then
+					self.EncounterRunning = true
+					self.StartTime = Inspect.Time.Real()
+					self.HeldTime = self.StartTime
+					self.TimeElapsed = 0
+					self.Zael.Dead = false
+					self.Zael.Casting = false
+					self.Zael.CastBar:Create(unitID)
+					self.PhaseObj:Start(self.StartTime)
+					self.PhaseObj:SetPhase("Single")
+					self.PhaseObj.Objectives:AddPercent(self.Zael.Name, 0, 100)
+					self.Phase = 1
+				end
+				self.Zael.UnitID = unitID
+				self.Zael.Available = true
+				return self.Zael
+			elseif uDetails.type == self.Zael.UTID[2] then
+				if self.EncounterRunning then
 					return self.Zael
 				end
 			end

@@ -34,23 +34,16 @@ MOD.Zael = {
 	Menu = {},
 	Castbar = nil,
 	Dead = false,
-	-- TimersRef = {},
-	-- AlertsRef = {},
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
-	UTID = "U40AB35D43F4C1B09",
+	UTID = {
+		[1] = "U40AB35D43F4C1B09",
+		[2] = "U6C35576F45597735",
+	},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		-- TimersRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
-		-- },
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
-		-- },
 	}
 }
 
@@ -154,7 +147,7 @@ end
 function MOD:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
 		if not uDetails.player then
-			if uDetails.type == self.Zael.ExpertID then
+			if uDetails.type == self.Zael.UTID[1] then
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
@@ -171,6 +164,10 @@ function MOD:UnitHPCheck(uDetails, unitID)
 				self.Zael.UnitID = unitID
 				self.Zael.Available = true
 				return self.Zael
+			elseif uDetails.type == self.Zael.UTID[2] then
+				if self.EncounterRunning then
+					return self.Zael
+				end
 			end
 		end
 	end

@@ -3513,6 +3513,7 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 			KBM.Idle.Wait = false
 			if not KBM.BossID[UnitID] then
 				if uDetails then
+					local skipCache = false
 					if uDetails.type then
 						if KBM.Boss.TypeList[uDetails.type] then
 							BossObj = KBM.Boss.TypeList[uDetails.type]
@@ -3535,6 +3536,8 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 								KBM.EncounterMode = "Template"
 							end
 						end
+					else
+						skipCache = true
 					end
 					local ModBossObj = nil
 					if BossObj then
@@ -3549,7 +3552,28 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 								end
 							end
 							if ModBossObj then
-								if BossObj.UTID == "none" then
+								local hasUTID = false
+								if skipCache == false then
+									if not KBM.BossID[UnitID] then
+										if uDetails.type then
+											if type(BossObj.UTID) == "string" then
+												if BossObj.UTID == uDetails.type then
+													hasUTID = true
+												end
+											elseif type(BossObj.UTID) == "table" then
+												for i, UTID in pairs(BossObj.UTID) do
+													if UTID == uDetails.type then
+														hasUTID = true
+														break
+													end
+												end
+											end
+										end
+									end
+								else
+									hasUTID = true
+								end
+								if hasUTID == false then
 									if not KBM.BossID[UnitID] then
 										if uDetails.type then
 											if not KBM.Options.UnitCache.List then
@@ -3581,15 +3605,10 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 													XYZ = tostring(uDetails.coordX)..","..tostring(uDetails.coordY)..","..tostring(uDetails.coordZ),
 													Zone = Zone,
 													Mod = BossObj.Mod.Descript,
+													Time = "Start",
 												}
-												if not KBM.Encounter then
-													KBM.Options.UnitCache.List[uDetails.name][uDetails.type].Time = "Start"
-												else
-													if type(KBM.TimeElapsed) == "number" then
-														KBM.Options.UnitCache.List[uDetails.name][uDetails.type].Time = KBM.ConvertTime(KBM.TimeElapsed)
-													else
-														KBM.Options.UnitCache.List[uDetails.name][uDetails.type] = tostring(KBM.TimeElapsed)
-													end
+												if KBM.Encounter then
+													KBM.Options.UnitCache.List[uDetails.name][uDetails.type].Time = KBM.ConvertTime(KBM.TimeElapsed)
 												end
 												KBM.Options.UnitTotal = KBM.Options.UnitTotal + 1
 											end
@@ -8388,7 +8407,6 @@ function KBM.SlashUnitCache(arg)
 							print("Zone ID: "..tostring(Value.id))
 							print("Zone Name: "..tostring(Value.name))
 							print("Zone Type: "..tostring(Value.type))
-							print("Mod: "..tostring(Value.Mod))
 						else
 							print("Zone: Malformed Data")
 						end
@@ -8402,7 +8420,7 @@ function KBM.SlashUnitCache(arg)
 	end
 end
 
-function KBM.AllocateBoss(Mod, BossObj, UTID)
+function KBM.AllocateBoss(Mod, BossObj, UTID, tableIndex)
 	local iType = Mod.InstanceObj.Type
 	if UTID ~= "none" then
 		if string.len(UTID) == 17 then
@@ -8419,7 +8437,13 @@ function KBM.AllocateBoss(Mod, BossObj, UTID)
 			end
 			if KBM.Options.UnitCache[iType][Mod.Instance] then
 				if KBM.Options.UnitCache[iType][Mod.Instance][BossObj.Name] then
-					KBM.Options.UnitCache[iType][Mod.Instance][BossObj.Name] = nil
+					if tableIndex then
+						if tableIndex == KBM.Options.UnitCache[iType][Mod.Instance][BossObj.Name] then
+							KBM.Options.UnitCache[iType][Mod.Instance][BossObj.Name] = nil
+						end
+					else
+						KBM.Options.UnitCache[iType][Mod.Instance][BossObj.Name] = nil
+					end
 				end
 				if not next(KBM.Options.UnitCache[iType][Mod.Instance]) then
 					KBM.Options.UnitCache[iType][Mod.Instance] = nil
@@ -8437,7 +8461,7 @@ function KBM.AllocateBoss(Mod, BossObj, UTID)
 			KBM.Options.UnitCache[iType][Mod.Instance] = {}
 		end
 		if not KBM.Options.UnitCache[iType][Mod.Instance][BossObj.Name] then
-			KBM.Options.UnitCache[iType][Mod.Instance][BossObj.Name] = true
+			KBM.Options.UnitCache[iType][Mod.Instance][BossObj.Name] = tableIndex or true
 		end
 		KBM.Boss.Template[BossObj.Name] = BossObj
 	end
@@ -8476,7 +8500,7 @@ function KBM.InitMenus()
 				if BossObj.UTID then
 					if type(BossObj.UTID) == "table" then
 						for i, UTID in pairs(BossObj.UTID) do
-							KBM.AllocateBoss(Mod, BossObj, UTID)
+							KBM.AllocateBoss(Mod, BossObj, UTID, i)
 						end
 					elseif type(BossObj.UTID) == "string" then
 						KBM.AllocateBoss(Mod, BossObj, BossObj.UTID)
