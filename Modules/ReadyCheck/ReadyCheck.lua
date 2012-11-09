@@ -214,6 +214,12 @@ PI.Constants = {
 						rogue = true,
 					},
 				},
+				["r27FEA7C466DC68EE"] = { -- Keen Edge
+					Grade = "Medium",
+					Callings = {
+						warrior = true,
+					},
+				},
 				["r4552DA1F7B7A9D42"] = { -- Storm Glyph
 					Grade = "Medium",
 					Callings = {

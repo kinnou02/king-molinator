@@ -962,6 +962,12 @@ function KBM.InitOptions()
 
 	-- Define Menu related holders
 	KBM.MainWin.Tabs = {
+		-- Main
+		Main = KBM.MainWin.DefaultTabs(),
+		Plug = KBM.MainWin.DefaultTabs(),
+		Base = KBM.MainWin.DefaultTabs(),
+		SL = KBM.MainWin.DefaultTabs(),
+		-- Base
 		Main = KBM.MainWin.DefaultTabs(),
 		Plug = KBM.MainWin.DefaultTabs(),
 		Raid = KBM.MainWin.DefaultTabs(),
@@ -969,9 +975,16 @@ function KBM.InitOptions()
 		Master = KBM.MainWin.DefaultTabs(),
 		Expert = KBM.MainWin.DefaultTabs(),
 		Group = KBM.MainWin.DefaultTabs(),
+		-- Storm Legion
+		SLRaid = KBM.MainWin.DefaultTabs(),
+		SLSliver = KBM.MainWin.DefaultTabs(),
+		SLMaster = KBM.MainWin.DefaultTabs(),
+		SLExpert = KBM.MainWin.DefaultTabs(),
+		SLGroup = KBM.MainWin.DefaultTabs(),		
 		Selected = {
 			Main = "Main",
 			Instance = "Raid",
+			Expac = "Base",
 		}
 	}
 	KBM.MainWin.Masks = {}
@@ -980,7 +993,7 @@ function KBM.InitOptions()
 	-- Initialize Left Panel
 	KBM.MainWin.MenuArea = UI.CreateFrame("Frame", "KBM_Menu_Area", KBM.MainWin)
 	KBM.MainWin.MenuArea:SetPoint("TOPLEFT", KBM.MainWin.Content, "TOPLEFT")
-	KBM.MainWin.MenuArea:SetPoint("BOTTOMRIGHT", KBM.MainWin.Content, 0.3, 1)
+	KBM.MainWin.MenuArea:SetPoint("BOTTOMRIGHT", KBM.MainWin.Content, 0.3, 0.93)
 	
 	-- Initialize Content Splitter
 	KBM.MainWin.SplitFrame = UI.CreateFrame("Frame", "KBM_Splitter", KBM.MainWin)
@@ -998,10 +1011,13 @@ function KBM.InitOptions()
 	local IconSize = 24
 	local IconSize_Idle = 17
 	local IconSize_High = 20
+	local LogoSize = {w = 42, h = 27}
+	local LogoSize_Idle = {w = 34, h = 23}
+	local LogoSize_High = {w = 38, h = 25}
 	local FontSize = 16
 	local FontSize_Idle = 12
 	local FontSize_High = 14
-	local MainHeight = KBM.MainWin.MenuArea:GetHeight() * 0.35
+	local MainHeight = math.ceil(KBM.MainWin.MenuArea:GetHeight() * 0.30)
 
 	-- Initialize Left Panel Scrollbars
 	KBM.MainWin.Scroller.Main = UI.CreateFrame("RiftScrollbar", "KBM_Main_Scroller", KBM.MainWin.MenuArea)
@@ -1083,6 +1099,10 @@ function KBM.InitOptions()
 					self.Parent.Icon:SetAlpha(1)
 					self.Parent.Icon:SetWidth(IconSize_High)
 					self.Parent.Icon:SetHeight(IconSize_High)
+				elseif self.Parent.Type == "Expac" then
+					self.Parent.Icon:SetAlpha(1)
+					self.Parent.Icon:SetWidth(LogoSize_High.w)
+					self.Parent.Icon:SetHeight(LogoSize_High.h)				
 				else
 					self.Parent.Shadow:SetAlpha(1)
 					self.Parent.Shadow:SetFontSize(FontSize_High)
@@ -1096,6 +1116,10 @@ function KBM.InitOptions()
 					self.Parent.Icon:SetAlpha(0.5)
 					self.Parent.Icon:SetWidth(IconSize_Idle)
 					self.Parent.Icon:SetHeight(IconSize_Idle)
+				elseif self.Parent.Type == "Expac" then
+					self.Parent.Icon:SetAlpha(0.5)
+					self.Parent.Icon:SetWidth(LogoSize_Idle.w)
+					self.Parent.Icon:SetHeight(LogoSize_Idle.h)				
 				else
 					self.Parent.Shadow:SetAlpha(0.6)
 					self.Parent.Shadow:SetFontSize(FontSize_Idle)
@@ -1107,12 +1131,22 @@ function KBM.InitOptions()
 			if KBM.MainWin.Tabs.Selected[self.Parent.Type] ~= self.ID then
 				local Current = KBM.MainWin.Tabs[KBM.MainWin.Tabs.Selected[self.Parent.Type]]
 				Current.Menu:SetVisible(false)
-				KBM.LoadTexture(Current.Texture, "KingMolinator", "Media/Tabber_Off.png")
-				Current.Tab:SetHeight(TabHeight_Idle)
-				Current.Tab.Position = Current.Scroller:GetPosition()
+				if self.Parent.Type == "Expac" then
+					KBM.LoadTexture(Current.Texture, "KingMolinator", "Media/Bottom_Tabber_Off.png")
+					Current.Tab:SetHeight(TabHeight_Idle)
+					KBM.LoadTexture(self.Parent.Texture, "KingMolinator", "Media/Bottom_Tabber.png")
+					self.Parent.Instance.Event.LeftClick(self.Parent.Instance)
+				else
+					KBM.LoadTexture(Current.Texture, "KingMolinator", "Media/Tabber_Off.png")
+					Current.Tab:SetHeight(TabHeight_Idle)
+					Current.Tab.Position = Current.Scroller:GetPosition()
+					KBM.LoadTexture(self.Parent.Texture, "KingMolinator", "Media/Tabber.png")
+					if self.Parent.Type == "Instance" then
+						KBM.MainWin.Tabs[self.Parent.Expac].Instance = self
+					end
+				end
 				KBM.MainWin.Tabs.Selected[self.Parent.Type] = self.ID
 				self.Parent.Menu:SetVisible(true)
-				KBM.LoadTexture(self.Parent.Texture, "KingMolinator", "Media/Tabber.png")
 				self.Parent.Tab:SetHeight(TabHeight)
 				if self.Parent.Type == "Instance" then
 					self.Parent.Icon:SetAlpha(1)
@@ -1121,25 +1155,36 @@ function KBM.InitOptions()
 					Current.Icon:SetAlpha(0.5)
 					Current.Icon:SetWidth(IconSize_Idle)
 					Current.Icon:SetHeight(IconSize_Idle)
+				elseif self.Parent.Type == "Expac" then
+					self.Parent.Icon:SetAlpha(1)
+					self.Parent.Icon:SetWidth(LogoSize.w)
+					self.Parent.Icon:SetHeight(LogoSize.h)
+					Current.Icon:SetAlpha(0.5)
+					Current.Icon:SetWidth(LogoSize_Idle.w)
+					Current.Icon:SetHeight(LogoSize_Idle.h)				
 				else
 					self.Parent.Shadow:SetAlpha(1)
 					self.Parent.Shadow:SetFontSize(FontSize)
 					self.Parent.Text:SetFontSize(FontSize)
 					Current.Shadow:SetAlpha(0.6)
 					Current.Shadow:SetFontSize(FontSize_Idle)
-					Current.Text:SetFontSize(FontSize_Idle)
+					Current.Text:SetFontSize(FontSize_Idle)					
 				end
-				KBM.MainWin.Tabs:UpdateScroller(self.ID)
-				if self.Parent.Scroller:GetEnabled() then
-					local _min, _max = self.Parent.Scroller:GetRange()
-					if self.Position > _max then
-						self.Position = _max
-					elseif self.Position < _min then
-						self.Position = _min
-					end
-					self.Parent.Scroller:SetPosition(self.Position)
+				if self.Parent.Type == "Expac" then
+					--KBM.MainWin.Tabs:UpdateScroller(self.Parent.Instance.ID)
 				else
-					self.Position = 0
+					KBM.MainWin.Tabs:UpdateScroller(self.ID)
+					if self.Parent.Scroller:GetEnabled() then
+						local _min, _max = self.Parent.Scroller:GetRange()
+						if self.Position > _max then
+							self.Position = _max
+						elseif self.Position < _min then
+							self.Position = _min
+						end
+						self.Parent.Scroller:SetPosition(self.Position)
+					else
+						self.Position = 0
+					end
 				end
 			end
 		end
@@ -1213,7 +1258,10 @@ function KBM.InitOptions()
 	KBM.MainWin.Tabs.Plug.Menu:SetVisible(false)
 	
 	-- Initialize Instance Tabs
-	KBM.MainWin.Tabs.Raid.Tab = UI.CreateFrame("Frame", "KBM_Raid_Tab", KBM.MainWin.MenuArea)
+	-- Rift Base 
+	KBM.MainWin.TabGroup = {}
+	KBM.MainWin.TabGroup.Base = UI.CreateFrame("Frame", "KBM_Base_Group", KBM.MainWin.MenuArea)
+	KBM.MainWin.Tabs.Raid.Tab = UI.CreateFrame("Frame", "KBM_Raid_Tab", KBM.MainWin.TabGroup.Base)
 	KBM.MainWin.Tabs.Raid.Tab:SetPoint("LEFT", KBM.MainWin.MenuArea, "LEFT", 4, nil)
 	KBM.MainWin.Tabs.Raid.Tab:SetPoint("BOTTOM", KBM.MainWin.Masks.Main, "BOTTOM", nil, TabHeight + 4)
 	KBM.MainWin.Tabs.Raid.Tab:SetWidth(TabWidth.Instance)
@@ -1230,10 +1278,11 @@ function KBM.InitOptions()
 	KBM.MainWin.Tabs.Raid.Icon:SetHeight(IconSize)
 	KBM.MainWin.Tabs.Raid.Icon:SetWidth(IconSize)
 	KBM.MainWin.Tabs.Raid.Icon:SetLayer(2)
+	KBM.MainWin.Tabs.Raid.Expac = "Base"
 	KBM.MainWin.Scroller.Instance:ClearPoint("TOP")
 	KBM.MainWin.Scroller.Instance:SetPoint("TOP", KBM.MainWin.Tabs.Raid.Tab, "BOTTOM", nil, 3)
 	KBM.MainWin.Scroller.Instance:SetPoint("BOTTOM", KBM.MainWin.MenuArea, "BOTTOM")
-	KBM.MainWin.Tabs.Sliver.Tab = UI.CreateFrame("Frame", "KBM_Sliver_Tab", KBM.MainWin.MenuArea)
+	KBM.MainWin.Tabs.Sliver.Tab = UI.CreateFrame("Frame", "KBM_Sliver_Tab", KBM.MainWin.TabGroup.Base)
 	KBM.MainWin.Tabs.Sliver.Tab:SetPoint("BOTTOMLEFT", KBM.MainWin.Tabs.Raid.Tab, "BOTTOMRIGHT", 1, 0)
 	KBM.MainWin.Tabs.Sliver.Tab:SetWidth(TabWidth.Instance)
 	KBM.MainWin.Tabs.Sliver.Tab:SetHeight(TabHeight_Idle)
@@ -1250,7 +1299,8 @@ function KBM.InitOptions()
 	KBM.MainWin.Tabs.Sliver.Icon:SetWidth(IconSize_Idle)
 	KBM.MainWin.Tabs.Sliver.Icon:SetAlpha(0.5)
 	KBM.MainWin.Tabs.Sliver.Icon:SetLayer(2)
-	KBM.MainWin.Tabs.Master.Tab = UI.CreateFrame("Frame", "KBM_Master_Tab", KBM.MainWin.MenuArea)
+	KBM.MainWin.Tabs.Sliver.Expac = "Base"
+	KBM.MainWin.Tabs.Master.Tab = UI.CreateFrame("Frame", "KBM_Master_Tab", KBM.MainWin.TabGroup.Base)
 	KBM.MainWin.Tabs.Master.Tab:SetPoint("BOTTOMLEFT", KBM.MainWin.Tabs.Sliver.Tab, "BOTTOMRIGHT", 1, 0)
 	KBM.MainWin.Tabs.Master.Tab:SetWidth(TabWidth.Instance)
 	KBM.MainWin.Tabs.Master.Tab:SetHeight(TabHeight_Idle)
@@ -1267,7 +1317,8 @@ function KBM.InitOptions()
 	KBM.MainWin.Tabs.Master.Icon:SetWidth(IconSize_Idle)
 	KBM.MainWin.Tabs.Master.Icon:SetAlpha(0.5)
 	KBM.MainWin.Tabs.Master.Icon:SetLayer(2)
-	KBM.MainWin.Tabs.Expert.Tab = UI.CreateFrame("Frame", "KBM_Expert_Tab", KBM.MainWin.MenuArea)
+	KBM.MainWin.Tabs.Master.Expac = "Base"
+	KBM.MainWin.Tabs.Expert.Tab = UI.CreateFrame("Frame", "KBM_Expert_Tab", KBM.MainWin.TabGroup.Base)
 	KBM.MainWin.Tabs.Expert.Tab:SetPoint("BOTTOMLEFT", KBM.MainWin.Tabs.Master.Tab, "BOTTOMRIGHT", 1, 0)
 	KBM.MainWin.Tabs.Expert.Tab:SetWidth(TabWidth.Instance)
 	KBM.MainWin.Tabs.Expert.Tab:SetHeight(TabHeight_Idle)
@@ -1285,7 +1336,8 @@ function KBM.InitOptions()
 	KBM.MainWin.Tabs.Expert.Icon:SetWidth(IconSize_Idle)
 	KBM.MainWin.Tabs.Expert.Icon:SetAlpha(0.5)
 	KBM.MainWin.Tabs.Expert.Icon:SetLayer(2)
-	KBM.MainWin.Tabs.Group.Tab = UI.CreateFrame("Frame", "KBM_Group_Tab", KBM.MainWin.MenuArea)
+	KBM.MainWin.Tabs.Expert.Expac = "Base"
+	KBM.MainWin.Tabs.Group.Tab = UI.CreateFrame("Frame", "KBM_Group_Tab", KBM.MainWin.TabGroup.Base)
 	KBM.MainWin.Tabs.Group.Tab:SetPoint("BOTTOMLEFT", KBM.MainWin.Tabs.Expert.Tab, "BOTTOMRIGHT", 1, 0)
 	KBM.MainWin.Tabs.Group.Tab:SetWidth(TabWidth.Instance)
 	KBM.MainWin.Tabs.Group.Tab:SetHeight(TabHeight_Idle)
@@ -1303,7 +1355,104 @@ function KBM.InitOptions()
 	KBM.MainWin.Tabs.Group.Icon:SetWidth(IconSize_Idle)
 	KBM.MainWin.Tabs.Group.Icon:SetAlpha(0.5)
 	KBM.MainWin.Tabs.Group.Icon:SetLayer(2)
+	KBM.MainWin.Tabs.Group.Expac = "Base"
+	
+	-- Rift: Storm Legion
+	KBM.MainWin.TabGroup.SL = UI.CreateFrame("Frame", "KBM_SL_Group", KBM.MainWin.MenuArea)
+	KBM.MainWin.Tabs.SLRaid.Tab = UI.CreateFrame("Frame", "KBM_SLRaid_Tab", KBM.MainWin.TabGroup.SL)
+	KBM.MainWin.Tabs.SLRaid.Tab:SetPoint("LEFT", KBM.MainWin.MenuArea, "LEFT", 4, nil)
+	KBM.MainWin.Tabs.SLRaid.Tab:SetPoint("BOTTOM", KBM.MainWin.Masks.Main, "BOTTOM", nil, TabHeight + 4)
+	KBM.MainWin.Tabs.SLRaid.Tab:SetWidth(TabWidth.Instance)
+	KBM.MainWin.Tabs.SLRaid.Tab:SetHeight(TabHeight)
+	KBM.MainWin.Tabs.SLRaid.Scroller = KBM.MainWin.Scroller.Instance
+	KBM.MainWin.Tabs.SLRaid.Type = "Instance"
+	KBM.MainWin.Tabs.SLRaid.Texture = UI.CreateFrame("Texture", "KBM_SLRaid_Texture", KBM.MainWin.Tabs.SLRaid.Tab)
+	KBM.LoadTexture(KBM.MainWin.Tabs.Raid.Texture, "KingMolinator", "Media/Tabber.png")
+	KBM.MainWin.Tabs.SLRaid.Texture:SetPoint("TOPLEFT", KBM.MainWin.Tabs.SLRaid.Tab, "TOPLEFT")
+	KBM.MainWin.Tabs.SLRaid.Texture:SetPoint("BOTTOMRIGHT", KBM.MainWin.Tabs.SLRaid.Tab, "BOTTOMRIGHT")
+	KBM.MainWin.Tabs.SLRaid.Icon = UI.CreateFrame("Texture", "KBM_SLRaid_Icon", KBM.MainWin.Tabs.SLRaid.Tab)
+	KBM.LoadTexture(KBM.MainWin.Tabs.SLRaid.Icon, "KingMolinator", "Media/Raid_Icon.png")
+	KBM.MainWin.Tabs.SLRaid.Icon:SetPoint("CENTER", KBM.MainWin.Tabs.SLRaid.Tab, "CENTER")
+	KBM.MainWin.Tabs.SLRaid.Icon:SetHeight(IconSize)
+	KBM.MainWin.Tabs.SLRaid.Icon:SetWidth(IconSize)
+	KBM.MainWin.Tabs.SLRaid.Icon:SetLayer(2)
+	KBM.MainWin.Tabs.SLRaid.Expac = "SL"
+	KBM.MainWin.Tabs.SLSliver.Tab = UI.CreateFrame("Frame", "KBM_SLSliver_Tab", KBM.MainWin.TabGroup.SL)
+	KBM.MainWin.Tabs.SLSliver.Tab:SetPoint("BOTTOMLEFT", KBM.MainWin.Tabs.SLRaid.Tab, "BOTTOMRIGHT", 1, 0)
+	KBM.MainWin.Tabs.SLSliver.Tab:SetWidth(TabWidth.Instance)
+	KBM.MainWin.Tabs.SLSliver.Tab:SetHeight(TabHeight_Idle)
+	KBM.MainWin.Tabs.SLSliver.Scroller = KBM.MainWin.Scroller.Instance
+	KBM.MainWin.Tabs.SLSliver.Type = "Instance"
+	KBM.MainWin.Tabs.SLSliver.Texture = UI.CreateFrame("Texture", "KBM_SLSliver_Texture", KBM.MainWin.Tabs.SLSliver.Tab)
+	KBM.LoadTexture(KBM.MainWin.Tabs.SLSliver.Texture, "KingMolinator", "Media/Tabber_Off.png")
+	KBM.MainWin.Tabs.SLSliver.Texture:SetPoint("TOPLEFT", KBM.MainWin.Tabs.SLSliver.Tab, "TOPLEFT")
+	KBM.MainWin.Tabs.SLSliver.Texture:SetPoint("BOTTOMRIGHT", KBM.MainWin.Tabs.SLSliver.Tab, "BOTTOMRIGHT")
+	KBM.MainWin.Tabs.SLSliver.Icon = UI.CreateFrame("Texture", "KBM_SLSliver_Icon", KBM.MainWin.Tabs.SLSliver.Tab)
+	KBM.LoadTexture(KBM.MainWin.Tabs.SLSliver.Icon, "KingMolinator", "Media/Sliver_Icon.png")
+	KBM.MainWin.Tabs.SLSliver.Icon:SetPoint("CENTER", KBM.MainWin.Tabs.SLSliver.Tab, "CENTER")
+	KBM.MainWin.Tabs.SLSliver.Icon:SetHeight(IconSize_Idle)
+	KBM.MainWin.Tabs.SLSliver.Icon:SetWidth(IconSize_Idle)
+	KBM.MainWin.Tabs.SLSliver.Icon:SetAlpha(0.5)
+	KBM.MainWin.Tabs.SLSliver.Icon:SetLayer(2)
+	KBM.MainWin.Tabs.SLSliver.Expac = "SL"
+	KBM.MainWin.Tabs.SLMaster.Tab = UI.CreateFrame("Frame", "KBM_SLMaster_Tab", KBM.MainWin.TabGroup.SL)
+	KBM.MainWin.Tabs.SLMaster.Tab:SetPoint("BOTTOMLEFT", KBM.MainWin.Tabs.SLSliver.Tab, "BOTTOMRIGHT", 1, 0)
+	KBM.MainWin.Tabs.SLMaster.Tab:SetWidth(TabWidth.Instance)
+	KBM.MainWin.Tabs.SLMaster.Tab:SetHeight(TabHeight_Idle)
+	KBM.MainWin.Tabs.SLMaster.Scroller = KBM.MainWin.Scroller.Instance
+	KBM.MainWin.Tabs.SLMaster.Type = "Instance"
+	KBM.MainWin.Tabs.SLMaster.Texture = UI.CreateFrame("Texture", "KBM_SLMaster_Texture", KBM.MainWin.Tabs.SLMaster.Tab)
+	KBM.LoadTexture(KBM.MainWin.Tabs.SLMaster.Texture, "KingMolinator", "Media/Tabber_Off.png")
+	KBM.MainWin.Tabs.SLMaster.Texture:SetPoint("TOPLEFT", KBM.MainWin.Tabs.SLMaster.Tab, "TOPLEFT")
+	KBM.MainWin.Tabs.SLMaster.Texture:SetPoint("BOTTOMRIGHT", KBM.MainWin.Tabs.SLMaster.Tab, "BOTTOMRIGHT")
+	KBM.MainWin.Tabs.SLMaster.Icon = UI.CreateFrame("Texture", "KBM_SLMaster_Icon", KBM.MainWin.Tabs.SLMaster.Tab)
+	KBM.LoadTexture(KBM.MainWin.Tabs.SLMaster.Icon, "KingMolinator", "Media/Master_Icon.png")
+	KBM.MainWin.Tabs.SLMaster.Icon:SetPoint("CENTER", KBM.MainWin.Tabs.SLMaster.Tab, "CENTER")
+	KBM.MainWin.Tabs.SLMaster.Icon:SetHeight(IconSize_Idle)
+	KBM.MainWin.Tabs.SLMaster.Icon:SetWidth(IconSize_Idle)
+	KBM.MainWin.Tabs.SLMaster.Icon:SetAlpha(0.5)
+	KBM.MainWin.Tabs.SLMaster.Icon:SetLayer(2)
+	KBM.MainWin.Tabs.SLMaster.Expac = "SL"
+	KBM.MainWin.Tabs.SLExpert.Tab = UI.CreateFrame("Frame", "KBM_SLExpert_Tab", KBM.MainWin.TabGroup.SL)
+	KBM.MainWin.Tabs.SLExpert.Tab:SetPoint("BOTTOMLEFT", KBM.MainWin.Tabs.SLMaster.Tab, "BOTTOMRIGHT", 1, 0)
+	KBM.MainWin.Tabs.SLExpert.Tab:SetWidth(TabWidth.Instance)
+	KBM.MainWin.Tabs.SLExpert.Tab:SetHeight(TabHeight_Idle)
+	KBM.MainWin.Tabs.SLExpert.Scroller = KBM.MainWin.Scroller.Instance
+	KBM.MainWin.Tabs.SLExpert.Type = "Instance"
+	KBM.MainWin.Tabs.SLExpert.Multiplier = 10
+	KBM.MainWin.Tabs.SLExpert.Texture = UI.CreateFrame("Texture", "KBM_SLExpert_Texture", KBM.MainWin.Tabs.SLExpert.Tab)
+	KBM.LoadTexture(KBM.MainWin.Tabs.SLExpert.Texture, "KingMolinator", "Media/Tabber_Off.png")
+	KBM.MainWin.Tabs.SLExpert.Texture:SetPoint("TOPLEFT", KBM.MainWin.Tabs.SLExpert.Tab, "TOPLEFT")
+	KBM.MainWin.Tabs.SLExpert.Texture:SetPoint("BOTTOMRIGHT", KBM.MainWin.Tabs.SLExpert.Tab, "BOTTOMRIGHT")
+	KBM.MainWin.Tabs.SLExpert.Icon = UI.CreateFrame("Texture", "KBM_SLExpert_Icon", KBM.MainWin.Tabs.SLExpert.Tab)
+	KBM.LoadTexture(KBM.MainWin.Tabs.SLExpert.Icon, "KingMolinator", "Media/Expert_Icon.png")
+	KBM.MainWin.Tabs.SLExpert.Icon:SetPoint("CENTER", KBM.MainWin.Tabs.SLExpert.Tab, "CENTER")
+	KBM.MainWin.Tabs.SLExpert.Icon:SetHeight(IconSize_Idle)
+	KBM.MainWin.Tabs.SLExpert.Icon:SetWidth(IconSize_Idle)
+	KBM.MainWin.Tabs.SLExpert.Icon:SetAlpha(0.5)
+	KBM.MainWin.Tabs.SLExpert.Icon:SetLayer(2)
+	KBM.MainWin.Tabs.SLExpert.Expac = "SL"
+	KBM.MainWin.Tabs.SLGroup.Tab = UI.CreateFrame("Frame", "KBM_SLGroup_Tab", KBM.MainWin.TabGroup.SL)
+	KBM.MainWin.Tabs.SLGroup.Tab:SetPoint("BOTTOMLEFT", KBM.MainWin.Tabs.SLExpert.Tab, "BOTTOMRIGHT", 1, 0)
+	KBM.MainWin.Tabs.SLGroup.Tab:SetWidth(TabWidth.Instance)
+	KBM.MainWin.Tabs.SLGroup.Tab:SetHeight(TabHeight_Idle)
+	KBM.MainWin.Tabs.SLGroup.Scroller = KBM.MainWin.Scroller.Instance
+	KBM.MainWin.Tabs.SLGroup.Type = "Instance"
+	KBM.MainWin.Tabs.SLGroup.Multiplier = 10
+	KBM.MainWin.Tabs.SLGroup.Texture = UI.CreateFrame("Texture", "KBM_SLGroup_Texture", KBM.MainWin.Tabs.SLGroup.Tab)
+	KBM.LoadTexture(KBM.MainWin.Tabs.SLGroup.Texture, "KingMolinator", "Media/Tabber_Off.png")
+	KBM.MainWin.Tabs.SLGroup.Texture:SetPoint("TOPLEFT", KBM.MainWin.Tabs.SLGroup.Tab, "TOPLEFT")
+	KBM.MainWin.Tabs.SLGroup.Texture:SetPoint("BOTTOMRIGHT", KBM.MainWin.Tabs.SLGroup.Tab, "BOTTOMRIGHT")
+	KBM.MainWin.Tabs.SLGroup.Icon = UI.CreateFrame("Texture", "KBM_SLGroup_Icon", KBM.MainWin.Tabs.SLGroup.Tab)
+	KBM.LoadTexture(KBM.MainWin.Tabs.SLGroup.Icon, "KingMolinator", "Media/Group_Icon.png")
+	KBM.MainWin.Tabs.SLGroup.Icon:SetPoint("CENTER", KBM.MainWin.Tabs.SLGroup.Tab, "CENTER")
+	KBM.MainWin.Tabs.SLGroup.Icon:SetHeight(IconSize_Idle)
+	KBM.MainWin.Tabs.SLGroup.Icon:SetWidth(IconSize_Idle)
+	KBM.MainWin.Tabs.SLGroup.Icon:SetAlpha(0.5)
+	KBM.MainWin.Tabs.SLGroup.Icon:SetLayer(2)
+	KBM.MainWin.Tabs.SLGroup.Expac = "SL"
 
+	KBM.MainWin.TabGroup.SL:SetVisible(false)
 	local InstanceHeight = KBM.MainWin.Scroller.Instance:GetHeight()
 	
 	-- Initialize Instance Mask
@@ -1314,6 +1463,7 @@ function KBM.InitOptions()
 	KBM.MainWin.Masks.Instance:SetPoint("TOPLEFT", KBM.MainWin.Tabs.Raid.Tab, "BOTTOMLEFT", 0, 5)
 	
 	-- Initialize Instance Tabs Pages
+	-- Rift Base
 	KBM.MainWin.Tabs.Raid.Menu = UI.CreateFrame("Frame", "KBM_Raid_Menu", KBM.MainWin.Masks.Instance)
 	KBM.MainWin.Tabs.Raid.Menu:SetMouseMasking("limited")
 	KBM.MainWin.Tabs.Raid.Menu:SetPoint("TOPLEFT", KBM.MainWin.Masks.Instance, "TOPLEFT")
@@ -1343,7 +1493,83 @@ function KBM.InitOptions()
 	KBM.MainWin.Tabs.Group.Menu:SetPoint("BOTTOMRIGHT", KBM.MainWin.Masks.Instance, "BOTTOMRIGHT")
 	KBM.MainWin.Tabs.Group.Menu:SetVisible(false)
 	KBM.MainWin.Tabs:CreateFunctions("Group")
-	
+	-- Rift: Storm Legion
+	KBM.MainWin.Tabs.SLRaid.Menu = UI.CreateFrame("Frame", "KBM_SLRaid_Menu", KBM.MainWin.Masks.Instance)
+	KBM.MainWin.Tabs.SLRaid.Menu:SetMouseMasking("limited")
+	KBM.MainWin.Tabs.SLRaid.Menu:SetPoint("TOPLEFT", KBM.MainWin.Masks.Instance, "TOPLEFT")
+	KBM.MainWin.Tabs.SLRaid.Menu:SetPoint("BOTTOMRIGHT", KBM.MainWin.Masks.Instance, "BOTTOMRIGHT")
+	KBM.MainWin.Tabs.SLRaid.Menu:SetVisible(false)
+	KBM.MainWin.Tabs:CreateFunctions("SLRaid")
+	KBM.MainWin.Tabs.SLSliver.Menu = UI.CreateFrame("Frame", "KBM_SLSliver_Menu", KBM.MainWin.Masks.Instance)
+	KBM.MainWin.Tabs.SLSliver.Menu:SetMouseMasking("limited")
+	KBM.MainWin.Tabs.SLSliver.Menu:SetPoint("TOPLEFT", KBM.MainWin.Masks.Instance, "TOPLEFT")
+	KBM.MainWin.Tabs.SLSliver.Menu:SetPoint("BOTTOMRIGHT", KBM.MainWin.Masks.Instance, "BOTTOMRIGHT")
+	KBM.MainWin.Tabs.SLSliver.Menu:SetVisible(false)
+	KBM.MainWin.Tabs:CreateFunctions("SLSliver")
+	KBM.MainWin.Tabs.SLMaster.Menu = UI.CreateFrame("Frame", "KBM_SLMaster_Menu", KBM.MainWin.Masks.Instance)
+	KBM.MainWin.Tabs.SLMaster.Menu:SetMouseMasking("limited")
+	KBM.MainWin.Tabs.SLMaster.Menu:SetPoint("TOPLEFT", KBM.MainWin.Masks.Instance, "TOPLEFT")
+	KBM.MainWin.Tabs.SLMaster.Menu:SetPoint("BOTTOMRIGHT", KBM.MainWin.Masks.Instance, "BOTTOMRIGHT")
+	KBM.MainWin.Tabs.SLMaster.Menu:SetVisible(false)
+	KBM.MainWin.Tabs:CreateFunctions("SLMaster")
+	KBM.MainWin.Tabs.SLExpert.Menu = UI.CreateFrame("Frame", "KBM_SLExpert_Menu", KBM.MainWin.Masks.Instance)
+	KBM.MainWin.Tabs.SLExpert.Menu:SetMouseMasking("limited")
+	KBM.MainWin.Tabs.SLExpert.Menu:SetPoint("TOPLEFT", KBM.MainWin.Masks.Instance, "TOPLEFT")
+	KBM.MainWin.Tabs.SLExpert.Menu:SetPoint("BOTTOMRIGHT", KBM.MainWin.Masks.Instance, "BOTTOMRIGHT")
+	KBM.MainWin.Tabs.SLExpert.Menu:SetVisible(false)
+	KBM.MainWin.Tabs:CreateFunctions("SLExpert")	
+	KBM.MainWin.Tabs.SLGroup.Menu = UI.CreateFrame("Frame", "KBM_SLGroup_Menu", KBM.MainWin.Masks.Instance)
+	KBM.MainWin.Tabs.SLGroup.Menu:SetMouseMasking("limited")
+	KBM.MainWin.Tabs.SLGroup.Menu:SetPoint("TOPLEFT", KBM.MainWin.Masks.Instance, "TOPLEFT")
+	KBM.MainWin.Tabs.SLGroup.Menu:SetPoint("BOTTOMRIGHT", KBM.MainWin.Masks.Instance, "BOTTOMRIGHT")
+	KBM.MainWin.Tabs.SLGroup.Menu:SetVisible(false)
+	KBM.MainWin.Tabs:CreateFunctions("SLGroup")
+		
+	-- Expac Tabs
+	KBM.MainWin.Tabs.Base.Tab = UI.CreateFrame("Frame", "KBM_Tab_Base", KBM.MainWin.MenuArea)
+	KBM.MainWin.Tabs.Base.Tab:SetPoint("TOPLEFT", KBM.MainWin.MenuArea, "BOTTOMLEFT", 4, 4)
+	KBM.MainWin.Tabs.Base.Tab:SetWidth(TabWidth.Main)
+	KBM.MainWin.Tabs.Base.Tab:SetHeight(TabHeight)
+	KBM.MainWin.Tabs.Base.Type = "Expac"
+	KBM.MainWin.Tabs.Base.Texture = UI.CreateFrame("Texture", "KBM_Base_Texture", KBM.MainWin.Tabs.Base.Tab)
+	KBM.LoadTexture(KBM.MainWin.Tabs.Base.Texture, "KingMolinator", "Media/Bottom_Tabber.png")
+	KBM.MainWin.Tabs.Base.Texture:SetPoint("TOPLEFT", KBM.MainWin.Tabs.Base.Tab, "TOPLEFT")
+	KBM.MainWin.Tabs.Base.Texture:SetPoint("BOTTOMRIGHT", KBM.MainWin.Tabs.Base.Tab, "BOTTOMRIGHT")
+	KBM.MainWin.Tabs.Base.Icon = UI.CreateFrame("Texture", "KBM_Base_Icon", KBM.MainWin.Tabs.Base.Tab)
+	KBM.LoadTexture(KBM.MainWin.Tabs.Base.Icon, "KingMolinator", "Media/RIFTlogo.png")
+	KBM.MainWin.Tabs.Base.Icon:SetPoint("CENTER", KBM.MainWin.Tabs.Base.Tab, "CENTER")
+	KBM.MainWin.Tabs.Base.Icon:SetHeight(LogoSize.h)
+	KBM.MainWin.Tabs.Base.Icon:SetWidth(LogoSize.w)
+	KBM.MainWin.Tabs.Base.Icon:SetLayer(2)
+	KBM.MainWin.Tabs:CreateFunctions("Base")
+	KBM.MainWin.Tabs.SL.Tab = UI.CreateFrame("Frame", "KBM_Tab_SL", KBM.MainWin.MenuArea)
+	KBM.MainWin.Tabs.SL.Tab:SetPoint("TOPLEFT", KBM.MainWin.Tabs.Base.Tab, "TOPRIGHT", 2, 0)
+	KBM.MainWin.Tabs.SL.Tab:SetWidth(TabWidth.Main)
+	KBM.MainWin.Tabs.SL.Tab:SetHeight(TabHeight_Idle)
+	KBM.MainWin.Tabs.SL.Type = "Expac"
+	KBM.MainWin.Tabs.SL.Texture = UI.CreateFrame("Texture", "KBM_SL_Texture", KBM.MainWin.Tabs.SL.Tab)
+	KBM.LoadTexture(KBM.MainWin.Tabs.SL.Texture, "KingMolinator", "Media/Bottom_Tabber_Off.png")
+	KBM.MainWin.Tabs.SL.Texture:SetPoint("TOPLEFT", KBM.MainWin.Tabs.SL.Tab, "TOPLEFT")
+	KBM.MainWin.Tabs.SL.Texture:SetPoint("BOTTOMRIGHT", KBM.MainWin.Tabs.SL.Tab, "BOTTOMRIGHT")
+	KBM.MainWin.Tabs.SL.Icon = UI.CreateFrame("Texture", "KBM_Base_Icon", KBM.MainWin.Tabs.SL.Tab)
+	KBM.LoadTexture(KBM.MainWin.Tabs.SL.Icon, "KingMolinator", "Media/stormlegionlogo.png")
+	KBM.MainWin.Tabs.SL.Icon:SetPoint("CENTER", KBM.MainWin.Tabs.SL.Tab, "CENTER")
+	KBM.MainWin.Tabs.SL.Icon:SetHeight(LogoSize_Idle.h)
+	KBM.MainWin.Tabs.SL.Icon:SetWidth(LogoSize_Idle.w)
+	KBM.MainWin.Tabs.SL.Icon:SetAlpha(0.5)
+	KBM.MainWin.Tabs.SL.Icon:SetLayer(2)
+	KBM.MainWin.Tabs:CreateFunctions("SL")	
+
+	-- Link to Group Tabs
+	KBM.MainWin.Tabs.Base.Menu = KBM.MainWin.TabGroup.Base
+	KBM.MainWin.Tabs.Base.Instance = KBM.MainWin.Tabs.Raid.Tab
+	KBM.MainWin.Tabs.Base.Menu:SetMouseMasking("limited")
+	KBM.MainWin.Tabs.Base.Scroller = KBM.MainWin.Scroller.Instance
+	KBM.MainWin.Tabs.SL.Menu = KBM.MainWin.TabGroup.SL
+	KBM.MainWin.Tabs.SL.Menu:SetVisible(false)
+	KBM.MainWin.Tabs.SL.Instance = KBM.MainWin.Tabs.SLRaid.Tab
+	KBM.MainWin.Tabs.SL.Scroller = KBM.MainWin.Scroller.Instance
+
 	-- Define Functions
 	function KBM.MainWin.Masks.Main.Event:WheelForward()
 		if KBM.MainWin.Scroller.Main:GetEnabled() then
