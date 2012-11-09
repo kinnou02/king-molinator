@@ -51,7 +51,7 @@ Gilded Prophecy
 Normal Dungeons
 * Exodus of the Storm Queen
 ** New: Added Template for Chekaroth
-** New: Added Template for Dominax
+** New: Added Template for Dominax (Requires UTIDs)
 ** New: Added Template for General Grim
 ** New: Added Template for Valthundr
 

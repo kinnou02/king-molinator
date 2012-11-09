@@ -131,7 +131,7 @@ KBM.ID = "KingMolinator"
 KBM.ModList = {}
 KBM.Testing = false
 KBM.ValidTime = false
-KBM.IsAlpha = true
+KBM.IsAlpha = false
 KBM.Debug = false
 KBM.Aux = {}
 KBM.TestFilters = {}
@@ -3584,7 +3584,7 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 											end
 											if not KBM.Options.UnitCache.List[uDetails.name][uDetails.type] then
 												print("--------------------------------------")
-												print("Old Style Encounter found, or possible Template Unit/Encounter")
+												print("Template Unit/Encounter found.")
 												print("Boss Name: "..tostring(uDetails.name).." added to Cache")
 												local Zone = {
 													id = "n/a",
@@ -4402,14 +4402,14 @@ function KBM.Unit:Create(uDetails, UnitID)
 				end
 				self.Offline = uDetails.offline
 				self.Details = uDetails
-				self.Location = uDetails.location
-				self.Zone = uDetails.zone
 				self.HealthMax = uDetails.healthMax
 				self.Health = uDetails.health
 				self.Availability = uDetails.availability
 				self.Planar = uDetails.planar
 				if self.Availability == "full" then
 					self.PlanarMax = uDetails.planarMax
+					self.Location = uDetails.location
+					self.Zone = uDetails.zone
 				end
 				self.Vitality = uDetails.vitality
 				self.Available = true
@@ -7314,33 +7314,41 @@ function KBM:BuffRemove(Units)
 end
 
 function KBM.SlashInspectBuffs(Name)
+	local UnitID = ""
 	if Name == "" then
 		Name = KBM.Player.Name
+		UnitID = KBM.Player.UnitID
 	elseif Name == "%t" then
 		local tDetails = Inspect.Unit.Detail("player.target")
 		if tDetails then
-			Name = tDetails.name
+			if tDetails.id then
+				Name = tDetails.name
+				UnitID = tDetails.id 
+			end
 		else
 			Name = KBM.Player.Name
+			UnitID = KBM.Player.UnitID
+		end
+	else
+		if KBM.Unit.List.Name[Name] then
+			for lUnitID, Object in pairs(KBM.Unit.List.Name[Name]) do
+				UnitID = lUnitID
+			end
 		end
 	end
-	if KBM.Unit.List.Name[Name] then
+	if UnitID ~= "" then
 		print("----------------")
 		print("Inspecting Buffs for: "..tostring(Name))
-		for UnitID, Object in pairs(KBM.Unit.List.Name[Name]) do
-			if UnitID then
-				if LibSBuff.Cache[UnitID] then
-					for buffID, bDetails in pairs(LibSBuff.Cache[UnitID].BuffID or {}) do
-						if bDetails then
-							if type(bDetails) == "table" then
-								if buffID ~= "Buff_Types" then
-									print(tostring(bDetails.name).." : "..tostring(bDetails.LibSBuffType))
-								end
-							end
+		if UnitID then
+			if LibSBuff.Cache[UnitID] then
+				for buffID, bDetails in pairs(LibSBuff.Cache[UnitID].BuffID or {}) do
+					if bDetails then
+						if type(bDetails) == "table" then
+							print(tostring(bDetails.name).." : "..tostring(bDetails.LibSBuffType))
 						end
 					end
-					print("----------------")
 				end
+				print("----------------")
 			end
 		end
 	else
