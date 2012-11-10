@@ -3,8 +3,8 @@
 -- Copyright 2012
 --
 
-KBMSLEXSQVR_Settings = nil
-chKBMSLEXSQVR_Settings = nil
+KBMSLNMSQVR_Settings = nil
+chKBMSLNMSQVR_Settings = nil
 
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
@@ -80,42 +80,42 @@ function MOD:InitVars()
 		-- TimersRef = self.Valthundr.Settings.TimersRef,
 		-- AlertsRef = self.Valthundr.Settings.AlertsRef,
 	}
-	KBMSLEXSQVR_Settings = self.Settings
-	chKBMSLEXSQVR_Settings = self.Settings
+	KBMSLNMSQVR_Settings = self.Settings
+	chKBMSLNMSQVR_Settings = self.Settings
 	
 end
 
 function MOD:SwapSettings(bool)
 
 	if bool then
-		KBMSLEXSQVR_Settings = self.Settings
-		self.Settings = chKBMSLEXSQVR_Settings
+		KBMSLNMSQVR_Settings = self.Settings
+		self.Settings = chKBMSLNMSQVR_Settings
 	else
-		chKBMSLEXSQVR_Settings = self.Settings
-		self.Settings = KBMSLEXSQVR_Settings
+		chKBMSLNMSQVR_Settings = self.Settings
+		self.Settings = KBMSLNMSQVR_Settings
 	end
 
 end
 
 function MOD:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMSLEXSQVR_Settings, self.Settings)
+		KBM.LoadTable(chKBMSLNMSQVR_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMSLEXSQVR_Settings, self.Settings)
+		KBM.LoadTable(KBMSLNMSQVR_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMSLEXSQVR_Settings = self.Settings
+		chKBMSLNMSQVR_Settings = self.Settings
 	else
-		KBMSLEXSQVR_Settings = self.Settings
+		KBMSLNMSQVR_Settings = self.Settings
 	end	
 end
 
 function MOD:SaveVars()	
 	if KBM.Options.Character then
-		chKBMSLEXSQVR_Settings = self.Settings
+		chKBMSLNMSQVR_Settings = self.Settings
 	else
-		KBMSLEXSQVR_Settings = self.Settings
+		KBMSLNMSQVR_Settings = self.Settings
 	end	
 end
 
@@ -138,10 +138,10 @@ function MOD:Death(UnitID)
 	return false
 end
 
-function MOD:UnitHPCheck(unitDetails, unitID)	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if unitDetails.name == self.Valthundr.Name then
+function MOD:UnitHPCheck(uDetails, unitID)	
+	if uDetails and unitID then
+		if not uDetails.player then
+			if uDetails.name == self.Valthundr.Name then
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()

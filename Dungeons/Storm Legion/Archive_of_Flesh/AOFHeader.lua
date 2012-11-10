@@ -1,20 +1,20 @@
-﻿-- Exodus of the Storm Queen Header for King Boss Mods
+﻿-- Archive of Flesh Header for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2012
 --
 
-KBMSLNMSQ_Settings = nil
-chKBMSLNMSQ_Settings = nil
+KBMSLNMAOF_Settings = nil
+chKBMSLNMAOF_Settings = nil
 
 local MOD = {
-	Directory = "Dungeons/Storm Legion/Exodus_of_the_Storm_Queen/",
-	File = "ESQHeader.lua",
+	Directory = "Dungeons/Storm Legion/Archive_of_Flesh/",
+	File = "AOFHeader.lua",
 	Header = nil,
 	Enabled = true,
 	IsInstance = true,
-	Name = "Exodus of the Storm Queen",
+	Name = "Archive of Flesh",
 	Type = "Normal",
-	ID = "NExodus_of_the_Storm_Queen",
+	ID = "NArchive_of_Flesh",
 	Object = "MOD",
 }
 
@@ -30,8 +30,7 @@ KBM.RegisterMod(MOD.Name, MOD)
 MOD.Lang = {}
 MOD.Lang.Main = {}
 MOD.Lang.Main.Name = KBM.Language:Add(MOD.Name)
-MOD.Lang.Main.Name:SetGerman("Exodus der Sturmkönigin")
-MOD.Lang.Main.Name:SetFrench("Exode de la Reine de la Tempête")
+MOD.Lang.Main.Name:SetGerman("Fleisch-Archiv") 
 
 MOD.Name = MOD.Lang.Main.Name[KBM.Lang]
 MOD.Descript = MOD.Name

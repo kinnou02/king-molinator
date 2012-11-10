@@ -1,4 +1,54 @@
-﻿v1.3.3
+﻿v1.3.4
+
+Greenscale's Blight
+* Lord Greenscale
+** Fixed: Error with uDetails during Air phase.
+
+Rift:Storm Legion
+Normal Dungeons
+* Archive of Flesh
+** Ahzrius
+** Cahail
+** Emphalea
+** Tzul
+* Empyrean Core
+** Baird Bringhurst
+** Kaliban's Bodyguards
+** Core Meltdown
+** Doctor Perfidus
+** Prince Kaliban
+* Golem Foundry
+** Locomotive Bulwark
+** C1-0N3
+** Subversionary Liaz
+** Manslaughter
+** UV-315
+* Storm Breaker Protocol
+** Sandswarm Onslaught
+** Baron Slagstorm
+** Telaphalon
+** Vellion the Pestilent
+** Citybreaker Zidae
+* Tower of the Shattered
+** Overseer Cowel
+** Kronox
+** Psychophage Primakov
+** General Thunderscar
+** Commissar Varoniss
+* Unhallowed Boneforge
+** Ahgnox
+** Avoxcia
+** Bruzhail
+** Forgelord Helix
+** Necrotic Throne
+
+Matched UTIDs
+* Experts
+** Foul Cascade
+*** Sparkwing
+
+----
+v1.3.3
 
 LibSBuff
 * New: This system will now output a warning to Chat if a single call to Inspect.Buff.Detail takes longer than 0.045 seconds.

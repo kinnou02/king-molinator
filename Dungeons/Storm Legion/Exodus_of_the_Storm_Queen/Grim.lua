@@ -3,8 +3,8 @@
 -- Copyright 2012
 --
 
-KBMSLEXSQGG_Settings = nil
-chKBMSLEXSQGG_Settings = nil
+KBMSLNMSQGG_Settings = nil
+chKBMSLNMSQGG_Settings = nil
 
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
@@ -82,42 +82,42 @@ function MOD:InitVars()
 		-- TimersRef = self.Grim.Settings.TimersRef,
 		-- AlertsRef = self.Grim.Settings.AlertsRef,
 	}
-	KBMSLEXSQGG_Settings = self.Settings
-	chKBMSLEXSQGG_Settings = self.Settings
+	KBMSLNMSQGG_Settings = self.Settings
+	chKBMSLNMSQGG_Settings = self.Settings
 	
 end
 
 function MOD:SwapSettings(bool)
 
 	if bool then
-		KBMSLEXSQGG_Settings = self.Settings
-		self.Settings = chKBMSLEXSQGG_Settings
+		KBMSLNMSQGG_Settings = self.Settings
+		self.Settings = chKBMSLNMSQGG_Settings
 	else
-		chKBMSLEXSQGG_Settings = self.Settings
-		self.Settings = KBMSLEXSQGG_Settings
+		chKBMSLNMSQGG_Settings = self.Settings
+		self.Settings = KBMSLNMSQGG_Settings
 	end
 
 end
 
 function MOD:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMSLEXSQGG_Settings, self.Settings)
+		KBM.LoadTable(chKBMSLNMSQGG_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMSLEXSQGG_Settings, self.Settings)
+		KBM.LoadTable(KBMSLNMSQGG_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMSLEXSQGG_Settings = self.Settings
+		chKBMSLNMSQGG_Settings = self.Settings
 	else
-		KBMSLEXSQGG_Settings = self.Settings
+		KBMSLNMSQGG_Settings = self.Settings
 	end	
 end
 
 function MOD:SaveVars()	
 	if KBM.Options.Character then
-		chKBMSLEXSQGG_Settings = self.Settings
+		chKBMSLNMSQGG_Settings = self.Settings
 	else
-		KBMSLEXSQGG_Settings = self.Settings
+		KBMSLNMSQGG_Settings = self.Settings
 	end	
 end
 
@@ -140,10 +140,10 @@ function MOD:Death(UnitID)
 	return false
 end
 
-function MOD:UnitHPCheck(unitDetails, unitID)	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if unitDetails.name == self.Grim.Name then
+function MOD:UnitHPCheck(uDetails, unitID)	
+	if uDetails and unitID then
+		if not uDetails.player then
+			if uDetails.name == self.Grim.Name then
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()

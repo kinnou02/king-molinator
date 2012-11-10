@@ -34,8 +34,6 @@ MOD.Verosa = {
 	Menu = {},
 	Castbar = nil,
 	Dead = false,
-	-- TimersRef = {},
-	-- AlertsRef = {},
 	Available = false,
 	UnitID = nil,
 	UTID = "U22D5027D3A7FDA7C",
@@ -43,14 +41,6 @@ MOD.Verosa = {
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		-- TimersRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
-		-- },
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
-		-- },
 	}
 }
 
@@ -89,7 +79,7 @@ MOD.Lesch = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = "none",
+	UTID = "U49AC50157CCFB190",
 	TimeOut = 5,
 }
 
@@ -102,7 +92,7 @@ MOD.Gurze = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = "none",
+	UTID = "U0F8EA515041F4557",
 	TimeOut = 5,
 }
 
@@ -231,30 +221,6 @@ function MOD:Reset()
 end
 
 function MOD:Timer()	
-end
-
-function MOD.Verosa:SetTimers(bool)	
-	if bool then
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(self.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function MOD.Verosa:SetAlerts(bool)
-	if bool then
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(self.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
 end
 
 function MOD:DefineMenu()

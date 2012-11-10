@@ -1,41 +1,39 @@
-﻿-- Dominax Boss Mod for King Boss Mods
+﻿-- Vorka Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2012
 --
 
-KBMSLNMSQDX_Settings = nil
-chKBMSLNMSQDX_Settings = nil
+KBMSLNMAOFVRK_Settings = nil
+chKBMSLNMAOFVRK_Settings = nil
 
 -- Link Mods
 local AddonData, KBM = ...
 if not KBM.BossMod then
 	return
 end
-local Instance = KBM.BossMod["Exodus of the Storm Queen"]
+local Instance = KBM.BossMod["Archive of Flesh"]
 
 local MOD = {
 	Directory = Instance.Directory,
-	File = "Dominax.lua",
+	File = "Vorka.lua",
 	Enabled = true,
 	Instance = Instance.Name,
 	InstanceObj = Instance,
 	HasPhases = true,
 	Lang = {},
-	ID = "Norm_Dominax",
+	ID = "Norm_Vorka",
 	Object = "MOD",
 }
 
-MOD.Dominax = {
+MOD.Vorka = {
 	Mod = MOD,
 	Level = "52",
 	Active = false,
-	Name = "Dominax",
-	NameShort = "Dominax",
+	Name = "Vorka",
+	NameShort = "Vorka",
 	Menu = {},
 	Castbar = nil,
 	Dead = false,
-	-- TimersRef = {},
-	-- AlertsRef = {},
 	Available = false,
 	UnitID = nil,
 	UTID = "none",
@@ -58,15 +56,13 @@ KBM.RegisterMod(MOD.ID, MOD)
 
 -- Main Unit Dictionary
 MOD.Lang.Unit = {}
-MOD.Lang.Unit.Dominax = KBM.Language:Add(MOD.Dominax.Name)
-MOD.Lang.Unit.Dominax:SetGerman()
-MOD.Lang.Unit.Dominax:SetFrench()
-MOD.Dominax.Name = MOD.Lang.Unit.Dominax[KBM.Lang]
-MOD.Descript = MOD.Dominax.Name
-MOD.Lang.Unit.AndShort = KBM.Language:Add("Dominax")
+MOD.Lang.Unit.Vorka = KBM.Language:Add(MOD.Vorka.Name)
+MOD.Lang.Unit.Vorka:SetGerman()
+MOD.Vorka.Name = MOD.Lang.Unit.Vorka[KBM.Lang]
+MOD.Descript = MOD.Vorka.Name
+MOD.Lang.Unit.AndShort = KBM.Language:Add("Vorka")
 MOD.Lang.Unit.AndShort:SetGerman()
-MOD.Lang.Unit.AndShort:SetFrench()
-MOD.Dominax.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
+MOD.Vorka.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}
@@ -74,57 +70,57 @@ MOD.Lang.Ability = {}
 function MOD:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
-		[self.Dominax.Name] = self.Dominax,
+		[self.Vorka.Name] = self.Vorka,
 	}
 end
 
 function MOD:InitVars()
 	self.Settings = {
 		Enabled = true,
-		CastBar = self.Dominax.Settings.CastBar,
+		CastBar = self.Vorka.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		-- MechTimer = KBM.Defaults.MechTimer(),
 		-- Alerts = KBM.Defaults.Alerts(),
-		-- TimersRef = self.Dominax.Settings.TimersRef,
-		-- AlertsRef = self.Dominax.Settings.AlertsRef,
+		-- TimersRef = self.Vorka.Settings.TimersRef,
+		-- AlertsRef = self.Vorka.Settings.AlertsRef,
 	}
-	KBMSLNMSQDX_Settings = self.Settings
-	chKBMSLNMSQDX_Settings = self.Settings
+	KBMSLNMAOFVRK_Settings = self.Settings
+	chKBMSLNMAOFVRK_Settings = self.Settings
 	
 end
 
 function MOD:SwapSettings(bool)
 
 	if bool then
-		KBMSLNMSQDX_Settings = self.Settings
-		self.Settings = chKBMSLNMSQDX_Settings
+		KBMSLNMAOFVRK_Settings = self.Settings
+		self.Settings = chKBMSLNMAOFVRK_Settings
 	else
-		chKBMSLNMSQDX_Settings = self.Settings
-		self.Settings = KBMSLNMSQDX_Settings
+		chKBMSLNMAOFVRK_Settings = self.Settings
+		self.Settings = KBMSLNMAOFVRK_Settings
 	end
 
 end
 
 function MOD:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMSLNMSQDX_Settings, self.Settings)
+		KBM.LoadTable(chKBMSLNMAOFVRK_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMSLNMSQDX_Settings, self.Settings)
+		KBM.LoadTable(KBMSLNMAOFVRK_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMSLNMSQDX_Settings = self.Settings
+		chKBMSLNMAOFVRK_Settings = self.Settings
 	else
-		KBMSLNMSQDX_Settings = self.Settings
+		KBMSLNMAOFVRK_Settings = self.Settings
 	end	
 end
 
 function MOD:SaveVars()	
 	if KBM.Options.Character then
-		chKBMSLNMSQDX_Settings = self.Settings
+		chKBMSLNMAOFVRK_Settings = self.Settings
 	else
-		KBMSLNMSQDX_Settings = self.Settings
+		KBMSLNMAOFVRK_Settings = self.Settings
 	end	
 end
 
@@ -132,16 +128,16 @@ function MOD:Castbar(units)
 end
 
 function MOD:RemoveUnits(UnitID)
-	if self.Dominax.UnitID == UnitID then
-		self.Dominax.Available = false
+	if self.Vorka.UnitID == UnitID then
+		self.Vorka.Available = false
 		return true
 	end
 	return false
 end
 
 function MOD:Death(UnitID)
-	if self.Dominax.UnitID == UnitID then
-		self.Dominax.Dead = true
+	if self.Vorka.UnitID == UnitID then
+		self.Vorka.Dead = true
 		return true
 	end
 	return false
@@ -150,23 +146,23 @@ end
 function MOD:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
 		if not uDetails.player then
-			if uDetails.name == self.Dominax.Name then
+			if uDetails.name == self.Vorka.Name then
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
 					self.TimeElapsed = 0
-					self.Dominax.Dead = false
-					self.Dominax.Casting = false
-					self.Dominax.CastBar:Create(unitID)
+					self.Vorka.Dead = false
+					self.Vorka.Casting = false
+					self.Vorka.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
-					self.PhaseObj.Objectives:AddPercent(self.Dominax.Name, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Vorka.Name, 0, 100)
 					self.Phase = 1
 				end
-				self.Dominax.UnitID = unitID
-				self.Dominax.Available = true
-				return self.Dominax
+				self.Vorka.UnitID = unitID
+				self.Vorka.Available = true
+				return self.Vorka
 			end
 		end
 	end
@@ -174,9 +170,9 @@ end
 
 function MOD:Reset()
 	self.EncounterRunning = false
-	self.Dominax.Available = false
-	self.Dominax.UnitID = nil
-	self.Dominax.CastBar:Remove()
+	self.Vorka.Available = false
+	self.Vorka.UnitID = nil
+	self.Vorka.CastBar:Remove()
 	self.PhaseObj:End(Inspect.Time.Real())
 end
 
@@ -184,19 +180,19 @@ function MOD:Timer()
 end
 
 function MOD:DefineMenu()
-	self.Menu = Instance.Menu:CreateEncounter(self.Dominax, self.Enabled)
+	self.Menu = Instance.Menu:CreateEncounter(self.Vorka, self.Enabled)
 end
 
 function MOD:Start()
 	-- Create Timers
-	--KBM.Defaults.TimerObj.Assign(self.Dominax)
+	--KBM.Defaults.TimerObj.Assign(self.Vorka)
 	
 	-- Create Alerts
-	--KBM.Defaults.AlertObj.Assign(self.Dominax)
+	--KBM.Defaults.AlertObj.Assign(self.Vorka)
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Dominax.CastBar = KBM.CastBar:Add(self, self.Dominax)
+	self.Vorka.CastBar = KBM.CastBar:Add(self, self.Vorka)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()
 end

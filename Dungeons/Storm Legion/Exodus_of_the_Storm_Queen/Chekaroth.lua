@@ -3,8 +3,8 @@
 -- Copyright 2012
 --
 
-KBMSLEXSQCH_Settings = nil
-chKBMSLEXSQCH_Settings = nil
+KBMSLNMSQCH_Settings = nil
+chKBMSLNMSQCH_Settings = nil
 
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
@@ -80,42 +80,42 @@ function MOD:InitVars()
 		-- TimersRef = self.Chekaroth.Settings.TimersRef,
 		-- AlertsRef = self.Chekaroth.Settings.AlertsRef,
 	}
-	KBMSLEXSQCH_Settings = self.Settings
-	chKBMSLEXSQCH_Settings = self.Settings
+	KBMSLNMSQCH_Settings = self.Settings
+	chKBMSLNMSQCH_Settings = self.Settings
 	
 end
 
 function MOD:SwapSettings(bool)
 
 	if bool then
-		KBMSLEXSQCH_Settings = self.Settings
-		self.Settings = chKBMSLEXSQCH_Settings
+		KBMSLNMSQCH_Settings = self.Settings
+		self.Settings = chKBMSLNMSQCH_Settings
 	else
-		chKBMSLEXSQCH_Settings = self.Settings
-		self.Settings = KBMSLEXSQCH_Settings
+		chKBMSLNMSQCH_Settings = self.Settings
+		self.Settings = KBMSLNMSQCH_Settings
 	end
 
 end
 
 function MOD:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMSLEXSQCH_Settings, self.Settings)
+		KBM.LoadTable(chKBMSLNMSQCH_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMSLEXSQCH_Settings, self.Settings)
+		KBM.LoadTable(KBMSLNMSQCH_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMSLEXSQCH_Settings = self.Settings
+		chKBMSLNMSQCH_Settings = self.Settings
 	else
-		KBMSLEXSQCH_Settings = self.Settings
+		KBMSLNMSQCH_Settings = self.Settings
 	end	
 end
 
 function MOD:SaveVars()	
 	if KBM.Options.Character then
-		chKBMSLEXSQCH_Settings = self.Settings
+		chKBMSLNMSQCH_Settings = self.Settings
 	else
-		KBMSLEXSQCH_Settings = self.Settings
+		KBMSLNMSQCH_Settings = self.Settings
 	end	
 end
 
@@ -138,10 +138,10 @@ function MOD:Death(UnitID)
 	return false
 end
 
-function MOD:UnitHPCheck(unitDetails, unitID)	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if unitDetails.name == self.Chekaroth.Name then
+function MOD:UnitHPCheck(uDetails, unitID)	
+	if uDetails and unitID then
+		if not uDetails.player then
+			if uDetails.name == self.Chekaroth.Name then
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()

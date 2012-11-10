@@ -1,20 +1,20 @@
-﻿-- Exodus of the Storm Queen Header for King Boss Mods
+﻿-- Storm Breaker Protocol Header for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2012
 --
 
-KBMSLNMSQ_Settings = nil
-chKBMSLNMSQ_Settings = nil
+KBMSLNMSBP_Settings = nil
+chKBMSLNMSBP_Settings = nil
 
 local MOD = {
-	Directory = "Dungeons/Storm Legion/Exodus_of_the_Storm_Queen/",
-	File = "ESQHeader.lua",
+	Directory = "Dungeons/Storm Legion/Storm_Breaker_Protocol/",
+	File = "SBPHeader.lua",
 	Header = nil,
 	Enabled = true,
 	IsInstance = true,
-	Name = "Exodus of the Storm Queen",
+	Name = "Storm Breaker Protocol",
 	Type = "Normal",
-	ID = "NExodus_of_the_Storm_Queen",
+	ID = "NStorm_Breaker_Protocol",
 	Object = "MOD",
 }
 
@@ -30,8 +30,7 @@ KBM.RegisterMod(MOD.Name, MOD)
 MOD.Lang = {}
 MOD.Lang.Main = {}
 MOD.Lang.Main.Name = KBM.Language:Add(MOD.Name)
-MOD.Lang.Main.Name:SetGerman("Exodus der Sturmkönigin")
-MOD.Lang.Main.Name:SetFrench("Exode de la Reine de la Tempête")
+MOD.Lang.Main.Name:SetGerman("Sturmbrecher-Protokoll") 
 
 MOD.Name = MOD.Lang.Main.Name[KBM.Lang]
 MOD.Descript = MOD.Name

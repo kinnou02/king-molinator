@@ -182,10 +182,10 @@ function LG:RemoveUnits(UnitID)
 	return false
 end
 
-function LG:UnitHPCheck(unitDetails, unitID)	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if unitDetails.name == self.Greenscale.Name then
+function LG:UnitHPCheck(uDetails, unitID)	
+	if uDetails and unitID then
+		if not uDetails.player then
+			if uDetails.name == self.Greenscale.Name then
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
@@ -198,9 +198,7 @@ function LG:UnitHPCheck(unitDetails, unitID)
 					self.LastPhase = 1
 					self.PhaseObj:SetPhase(1)
 					self.PhaseObj.Objectives:AddPercent(self.Greenscale.Name, 75, 100)
-					self.Verdant.UnitID = nil
 				end
-				self.Greenscale.Casting = false
 				self.Greenscale.UnitID = unitID
 				self.Greenscale.Available = true
 				return self.Greenscale
