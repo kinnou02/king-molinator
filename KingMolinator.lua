@@ -3606,6 +3606,7 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 													Zone = Zone,
 													Mod = BossObj.Mod.Descript,
 													Time = "Start",
+													System = tostring(os.date()),
 												}
 												if KBM.Encounter then
 													KBM.Options.UnitCache.List[uDetails.name][uDetails.type].Time = KBM.ConvertTime(KBM.TimeElapsed)

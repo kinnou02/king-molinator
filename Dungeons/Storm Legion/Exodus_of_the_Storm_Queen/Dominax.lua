@@ -38,7 +38,10 @@ MOD.Dominax = {
 	-- AlertsRef = {},
 	Available = false,
 	UnitID = nil,
-	UTID = "none",
+	UTID = {
+		[1] = "UFD1CF44625E9D7D8",
+		[2] = "UFD86E1980386C4F2",
+	},
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
@@ -131,6 +134,13 @@ end
 function MOD:Castbar(units)
 end
 
+function MOD.PhaseFinal()
+	MOD.PhaseObj.Objectives:Remove()
+	MOD.PhaseObj.Objectives:AddPercent(MOD.Dominax.Name, 0, 100)
+	MOD.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
+	MOD.Phase = 2
+end
+
 function MOD:RemoveUnits(UnitID)
 	if self.Dominax.UnitID == UnitID then
 		self.Dominax.Available = false
@@ -141,8 +151,10 @@ end
 
 function MOD:Death(UnitID)
 	if self.Dominax.UnitID == UnitID then
-		self.Dominax.Dead = true
-		return true
+		if self.Dominax.Type == self.Dominax.UTID[2] then
+			self.Dominax.Dead = true
+			return true
+		end
 	end
 	return false
 end
@@ -158,13 +170,26 @@ function MOD:UnitHPCheck(uDetails, unitID)
 					self.TimeElapsed = 0
 					self.Dominax.Dead = false
 					self.Dominax.Casting = false
-					self.Dominax.CastBar:Create(unitID)
-					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
-					self.PhaseObj.Objectives:AddPercent(self.Dominax.Name, 0, 100)
-					self.Phase = 1
+					if self.Dominax.UTID[1] == uDetails.type then
+						self.PhaseObj:Start(self.StartTime)
+						self.PhaseObj:SetPhase("1")
+						self.PhaseObj.Objectives:AddPercent(self.Dominax.Name, 0, 100)
+						self.Phase = 1
+					end
 				end
-				self.Dominax.UnitID = unitID
+				self.Dominax.Type = uDetails.type
+				if self.Dominax.Type == self.Dominax.UTID[2] then
+					if self.Phase == 1 then
+						self.PhaseFinal()
+					end
+				end
+				if self.Dominax.UnitID ~= unitID then
+					if self.Dominax.CastBar.Active then
+						self.Dominax.CastBar:Remove()
+					end
+					self.Dominax.CastBar:Create(unitID)
+					self.Dominax.UnitID = unitID
+				end
 				self.Dominax.Available = true
 				return self.Dominax
 			end
@@ -178,6 +203,7 @@ function MOD:Reset()
 	self.Dominax.UnitID = nil
 	self.Dominax.CastBar:Remove()
 	self.PhaseObj:End(Inspect.Time.Real())
+	self.Phase = 1
 end
 
 function MOD:Timer()	

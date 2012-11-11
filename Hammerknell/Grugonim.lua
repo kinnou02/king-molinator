@@ -41,7 +41,7 @@ GR.Grugonim = {
 	Timers = {},
 	TimersRef = {},
 	AlertsRef = {},
-	UTID = "none",
+	UTID = "U06D86F7755372BAD",
 	Dead = false,
 	Available = false,
 	UnitID = nil,
@@ -77,7 +77,7 @@ GR.Tower = {
 	UnitList = {},
 	Ignore = true,
 	Type = "multi",
-	UTID = "none",
+	UTID = "U527E676D5030A186",
 }
 
 KBM.RegisterMod(GR.ID, GR)
