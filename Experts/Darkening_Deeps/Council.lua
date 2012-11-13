@@ -102,7 +102,7 @@ MOD.Swedge = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = "none",
+	UTID = "U39767336691AE0E1",
 	TimeOut = 5,
 }
 
@@ -116,7 +116,7 @@ MOD.Gerbik = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = "none",
+	UTID = "U12D2BFD12F5E8AE4",
 	TimeOut = 5,
 }
 

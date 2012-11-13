@@ -90,7 +90,7 @@ MOD.CorruptQueen = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = "none",
+	UTID = "U67D0662718C381EE",
 	TimeOut = 5,
 }
 

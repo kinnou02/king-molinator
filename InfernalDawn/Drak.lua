@@ -244,7 +244,7 @@ WD.Blazing = {
 	UnitList = {},
 	Menu = {},
 	Ignore = true,
-	UTID = "none",
+	UTID = "U7614731F4A92D979",
 	Type = "multi",
 }
 
