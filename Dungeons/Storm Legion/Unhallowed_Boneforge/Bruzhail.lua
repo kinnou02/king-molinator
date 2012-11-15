@@ -29,14 +29,14 @@ MOD.Bruzhail = {
 	Mod = MOD,
 	Level = "52",
 	Active = false,
-	Name = "Bruzhail",
+	Name = "Bruzhail the Black Chariot",
 	NameShort = "Bruzhail",
 	Menu = {},
 	Castbar = nil,
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = "none",
+	UTID = "U21674AA91A8728DA",
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
@@ -49,7 +49,6 @@ KBM.RegisterMod(MOD.ID, MOD)
 -- Main Unit Dictionary
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Bruzhail = KBM.Language:Add(MOD.Bruzhail.Name)
-MOD.Lang.Unit.Bruzhail:SetGerman()
 MOD.Bruzhail.Name = MOD.Lang.Unit.Bruzhail[KBM.Lang]
 MOD.Descript = MOD.Bruzhail.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Bruzhail")

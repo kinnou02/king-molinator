@@ -1,4 +1,33 @@
-﻿v1.3.4
+﻿v1.3.5
+
+Phase Monitor
+* Change: The Phase Monitor has been adjusted to allow for tracking of multiple units with the same name.
+
+Encounter Checking
+* Change: Phase Monitor linking now occurs when a new Encounter Unit is detected.
+
+Unit Cache
+* Change: Reference Lists for missing UTIDs are compiled fresh each run.
+
+Rift:Storm Legion
+Normal Dungeons
+* Unhallowed Boneforge
+** Ahgnox the Corpsekeeper
+*** New: UTID updated.
+*** Fixed: Name corrected.
+** Avoxcia
+*** New: UTID updated.
+** Bruzhail the Black Chariot
+*** New: UTID updated.
+*** Fixed: Name corrected.
+** Forgelord Helix
+*** New: UTID updated.
+** Necrotic Throne
+*** New: UTID updated for main Throne.
+*** New: Sub Units with appropriate UTIDs added for left and right Throne sections.
+
+----
+v1.3.4
 
 Greenscale's Blight
 * Lord Greenscale

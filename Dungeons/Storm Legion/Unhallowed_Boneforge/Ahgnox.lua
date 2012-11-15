@@ -29,14 +29,14 @@ MOD.Ahgnox = {
 	Mod = MOD,
 	Level = "52",
 	Active = false,
-	Name = "Ahgnox",
+	Name = "Ahgnox the Corpsekeeper",
 	NameShort = "Ahgnox",
 	Menu = {},
 	Castbar = nil,
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = "none",
+	UTID = "U5D23B71F1A138FF6",
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
@@ -49,7 +49,6 @@ KBM.RegisterMod(MOD.ID, MOD)
 -- Main Unit Dictionary
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Ahgnox = KBM.Language:Add(MOD.Ahgnox.Name)
-MOD.Lang.Unit.Ahgnox:SetGerman()
 MOD.Ahgnox.Name = MOD.Lang.Unit.Ahgnox[KBM.Lang]
 MOD.Descript = MOD.Ahgnox.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Ahgnox")

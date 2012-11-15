@@ -2924,6 +2924,9 @@ function KBM.PhaseMonitor:Init()
 			Object.GUI.Frame:SetVisible(false)
 			table.insert(KBM.PhaseMonitor.ObjectiveStore, Object.GUI)
 			self[Object.Type][Object.Name] = nil
+			if Object.UnitID then
+				self[Object.Type][Object.UnitID] = nil
+			end
 			self[Object.Type] = {}
 			self.All = {}
 			Object = nil
@@ -2947,7 +2950,18 @@ function KBM.PhaseMonitor:Init()
 				Object.Previous.Next = nil
 				self.LastObjective = Object.Previous
 			end
-			self[Object.Type][Object.Name] = nil
+			if Object.UnitID then
+			
+			else
+				if Object.Type == "Percent" then
+					self[Object.Type][Object.Name][tostring(Object)] = nil
+					if not next(self[Object.Type][Object.Name]) then
+						self[Object.Type][Object.Name] = nil
+					end
+				else
+					self[Object.Type][Object.Name] = nil
+				end
+			end
 			table.remove(self.All, Object.Index)
 			-- Re-Index list
 			for Index, Object in ipairs(self.All) do
@@ -3055,28 +3069,36 @@ function KBM.PhaseMonitor:Init()
 			return DeathObj
 		end
 		
-		function PhaseObj.Objectives:AddPercent(Name, Target, Current)		
+		function PhaseObj.Objectives:AddPercent(Object, Target, Current)
 			local PercentObj = {}
-			PercentObj.Name = Name
 			PercentObj.Target = Target
 			PercentObj.PercentRaw = Current
 			PercentObj.Percent = math.ceil(Current)
-			if KBM.CurrentMod then
-				if KBM.CurrentMod.Bosses[PercentObj.Name] then
-					if KBM.CurrentMod.Bosses[PercentObj.Name].UnitID then
-						if KBM.BossID[KBM.CurrentMod.Bosses[PercentObj.Name].UnitID] then
-							PercentObj.PercentRaw = KBM.BossID[KBM.CurrentMod.Bosses[PercentObj.Name].UnitID].PercentRaw
-							PercentObj.Percent = KBM.BossID[KBM.CurrentMod.Bosses[PercentObj.Name].UnitID].Percent
-							Current = PercentObj.Percent
+			if type(Object) == "string" then
+				PercentObj.Name = Object
+				if KBM.CurrentMod then
+					if KBM.CurrentMod.Bosses[PercentObj.Name] then
+						if KBM.CurrentMod.Bosses[PercentObj.Name].UnitID then
+							if KBM.BossID[KBM.CurrentMod.Bosses[PercentObj.Name].UnitID] then
+								PercentObj.PercentRaw = KBM.BossID[KBM.CurrentMod.Bosses[PercentObj.Name].UnitID].PercentRaw
+								PercentObj.Percent = KBM.BossID[KBM.CurrentMod.Bosses[PercentObj.Name].UnitID].Percent
+								Current = PercentObj.Percent
+							end
 						end
+						PercentObj.UnitObj = KBM.CurrentMod.Bosses[PercentObj.Name]
+						PercentObj.UnitID = PercentObj.UnitObj.UnitID
 					end
 				end
+			else
+				PercentObj.Name = Object.Name
+				PercentObj.UnitObj = Object
+				PercentObj.UnitID = Object.UnitID
 			end
 			PercentObj.Dead = false
 			PercentObj.GUI = KBM.PhaseMonitor:PullObjective()
 			PercentObj.GUI.Progress:SetWidth(PercentObj.GUI.Frame:GetWidth() * (PercentObj.PercentRaw * 0.01))
 			PercentObj.GUI.Progress:SetVisible(true)
-			PercentObj.GUI:SetName(Name)
+			PercentObj.GUI:SetName(PercentObj.Name)
 			if Target == 0 then
 				PercentObj.GUI:SetObjective(PercentObj.Percent.."%")
 			else
@@ -3112,8 +3134,35 @@ function KBM.PhaseMonitor:Init()
 			function PercentObj:Remove()
 				KBM.PhaseMonitor.Objectives.Lists:Remove(self)
 			end
+			function PercentObj:UpdateID(UnitID)
+				if self.UnitID then
+					KBM.PhaseMonitor.Objectives.Lists.Percent[self.UnitID] = nil
+				else
+					if KBM.PhaseMonitor.Objectives.Lists.Percent[self.Name] then
+						if KBM.PhaseMonitor.Objectives.Lists.Percent[self.Name][tostring(self)] then
+							KBM.PhaseMonitor.Objectives.Lists.Percent[self.Name][tostring(self)] = nil
+							if not next(KBM.PhaseMonitor.Objectives.Lists.Percent[self.Name]) then
+								KBM.PhaseMonitor.Objectives.Lists.Percent[self.Name] = nil
+							end
+						end
+					end
+				end
+				self.UnitID = UnitID
+				if self.UnitID then
+					KBM.PhaseMonitor.Objectives.Lists.Percent[self.UnitID] = self
+				else
+				
+				end
+			end
 			
-			KBM.PhaseMonitor.Objectives.Lists.Percent[Name] = PercentObj
+			if PercentObj.UnitID then
+				KBM.PhaseMonitor.Objectives.Lists.Percent[PercentObj.UnitID] = PercentObj
+			else
+				if not KBM.PhaseMonitor.Objectives.Lists.Percent[PercentObj.Name] then
+					KBM.PhaseMonitor.Objectives.Lists.Percent[PercentObj.Name] = {}
+				end
+				KBM.PhaseMonitor.Objectives.Lists.Percent[PercentObj.Name][tostring(PercentObj)] = PercentObj
+			end
 			KBM.PhaseMonitor.Objectives.Lists:Add(PercentObj)
 			
 			if KBM.PhaseMonitor.Settings.Enabled then
@@ -3743,6 +3792,16 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 													KBM.MechSpy:Begin()
 													KBM.Event.Encounter.Start({Type = "start"})
 												end
+												if KBM.PhaseMonitor.Objectives.Lists.Percent[uDetails.name] then
+													local _, PhaseObj = next(KBM.PhaseMonitor.Objectives.Lists.Percent[uDetails.name])
+													KBM.BossID[UnitID].PhaseObj = PhaseObj
+													PhaseObj:UpdateID(UnitID)
+													PhaseObj:Update(KBM.BossID[UnitID].PercentRaw)
+												elseif KBM.PhaseMonitor.Objectives.Lists.Percent[UnitID] then
+													KBM.BossID[UnitID].PhaseObj = KBM.PhaseMonitor.Objectives.List.Percent[UnitID]
+												elseif KBM.BossID[UnitID].PhaseObj then
+													KBM.BossID[UnitID].PhaseObj:UpdateID(UnitID)
+												end
 											else
 												KBM.BossID[UnitID].Combat = false
 												KBM.BossID[UnitID].dead = true
@@ -3864,8 +3923,8 @@ function KBM.MobDamage(info)
 						if KBM.BossID[tUnitID] then
 							-- Update Phase Monitor accordingly.
 							if KBM.PhaseMonitor.Active then
-								if KBM.PhaseMonitor.Objectives.Lists.Percent[tDetails.name] then
-									KBM.PhaseMonitor.Objectives.Lists.Percent[tDetails.name]:Update(KBM.BossID[tUnitID].PercentRaw)
+								if KBM.PhaseMonitor.Objectives.Lists.Percent[tUnitID] then
+									KBM.PhaseMonitor.Objectives.Lists.Percent[tUnitID]:Update(KBM.BossID[tUnitID].PercentRaw)
 								end
 							end
 							-- Check for Npc Based Triggers (Usually Dynamic: Eg - Failsafe for P4 start Akylios)
@@ -3894,8 +3953,8 @@ function KBM.MobDamage(info)
 									KBM.BossID[tUnitID].PercentLast = KBM.BossID[tUnitID].Percent
 									-- Update Phase Monitor accordingly.
 									if KBM.PhaseMonitor.Active then
-										if KBM.PhaseMonitor.Objectives.Lists.Percent[KBM.BossID[tUnitID].name] then
-											KBM.PhaseMonitor.Objectives.Lists.Percent[KBM.BossID[tUnitID].name]:Update(KBM.BossID[tUnitID].PercentRaw)
+										if KBM.PhaseMonitor.Objectives.Lists.Percent[tUnitID] then
+											KBM.PhaseMonitor.Objectives.Lists.Percent[tUnitID]:Update(KBM.BossID[tUnitID].PercentRaw)
 										end
 									end
 									-- Check for Npc Based Triggers (Usually Dynamic: Eg - Failsafe for P4 start Akylios)
@@ -3983,8 +4042,8 @@ function KBM.RaidDamage(info)
 				if KBM.CurrentMod.ID then
 					-- Update Phase Monitor accordingly.
 					if KBM.PhaseMonitor.Active then
-						if KBM.PhaseMonitor.Objectives.Lists.Percent[UnitObj.Name] then
-							KBM.PhaseMonitor.Objectives.Lists.Percent[UnitObj.Name]:Update(KBM.BossID[tUnitID].PercentRaw)
+						if KBM.PhaseMonitor.Objectives.Lists.Percent[tUnitID] then
+							KBM.PhaseMonitor.Objectives.Lists.Percent[tUnitID]:Update(KBM.BossID[tUnitID].PercentRaw)
 						end
 					end
 					-- Check for Npc Based Triggers (Usually Dynamic: Eg - Failsafe for P4 start Akylios)
@@ -8497,6 +8556,14 @@ function KBM.InitMenus()
 	KBM.MenuOptions.ReadyCheck.MenuItem.Check:SetEnabled(false)
 	KBM.MenuOptions.RezMaster.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.RezMaster.Name[KBM.Lang], KBM.MenuOptions.RezMaster, true, Header)
 	KBM.MenuOptions.RezMaster.MenuItem.Check:SetEnabled(false)
+
+	-- Reset References for missing UTIDs
+	-- These are compiled fresh each run.
+	KBM.Options.UnitCache.Raid = {}
+	KBM.Options.UnitCache.Sliver = {}
+	KBM.Options.UnitCache.Master = {}
+	KBM.Options.UnitCache.Expert = {}
+	KBM.Options.UnitCache.Normal = {}
 	
 	-- Compile Boss Menus
 	for _, Mod in ipairs(KBM.ModList) do

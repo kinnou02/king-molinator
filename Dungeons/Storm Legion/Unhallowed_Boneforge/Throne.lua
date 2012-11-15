@@ -36,7 +36,7 @@ MOD.Throne = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = "none",
+	UTID = "U52ADD1E218AEA8F1",
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
@@ -50,6 +50,8 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Throne = KBM.Language:Add(MOD.Throne.Name)
 MOD.Lang.Unit.Throne:SetGerman("Nekrotischer Thron")
+MOD.Lang.Unit.ThroneL = KBM.Language:Add("Left Throne")
+MOD.Lang.Unit.ThroneR = KBM.Language:Add("Right Throne")
 MOD.Throne.Name = MOD.Lang.Unit.Throne[KBM.Lang]
 MOD.Descript = MOD.Throne.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Throne")
@@ -59,10 +61,50 @@ MOD.Throne.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 -- Ability Dictionary
 MOD.Lang.Ability = {}
 
+MOD.ThroneL = {
+	Mod = MOD,
+	Level = "52",
+	Active = false,
+	Name = MOD.Lang.Unit.ThroneL[KBM.Lang],
+	NameShort = "Throne",
+	Menu = {},
+	Castbar = nil,
+	Dead = false,
+	Available = false,
+	UnitID = nil,
+	UTID = "UFCB7B9AC32357792",
+	TimeOut = 5,
+	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+	}
+}
+
+MOD.ThroneR = {
+	Mod = MOD,
+	Level = "52",
+	Active = false,
+	Name = MOD.Lang.Unit.ThroneR[KBM.Lang],
+	NameShort = "Throne",
+	Menu = {},
+	Castbar = nil,
+	Dead = false,
+	Available = false,
+	UnitID = nil,
+	UTID = "U4DF68627120121D0",
+	TimeOut = 5,
+	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+	}
+}
+
 function MOD:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Throne.Name] = self.Throne,
+		[self.ThroneL.Name] = self.ThroneL,
+		[self.ThroneR.Name] = self.ThroneR,
 	}
 end
 
@@ -138,23 +180,33 @@ end
 function MOD:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
 		if not uDetails.player then
-			if uDetails.name == self.Throne.Name then
+			local BossObj
+			if uDetails.type == self.Throne.UTID then
+				BossObj = self.Throne
+			elseif uDetails.type == self.ThroneL.UTID then
+				BossObj = self.ThroneL
+			elseif uDetails.type == self.ThroneR.UTID then
+				BossObj = self.ThroneR
+			end
+			if BossObj then
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
 					self.TimeElapsed = 0
-					self.Throne.Dead = false
-					self.Throne.Casting = false
-					self.Throne.CastBar:Create(unitID)
+					BossObj.Dead = false
+					BossObj.Casting = false
+					BossObj.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
 					self.PhaseObj.Objectives:AddPercent(self.Throne.Name, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.ThroneL, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.ThroneR, 0, 100)
 					self.Phase = 1
 				end
-				self.Throne.UnitID = unitID
-				self.Throne.Available = true
-				return self.Throne
+				BossObj.UnitID = unitID
+				BossObj.Available = true
+				return BossObj
 			end
 		end
 	end
