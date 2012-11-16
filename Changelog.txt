@@ -25,6 +25,17 @@ Normal Dungeons
 ** Necrotic Throne
 *** New: UTID updated for main Throne.
 *** New: Sub Units with appropriate UTIDs added for left and right Throne sections.
+* Storm Breaker Protocol
+** Citybreaker Zidae
+*** New: UTID updated.
+** Telaphalon
+*** New: UTID updated.
+** Vellion the Pestilent
+*** New: UTID updated for Body segment.
+*** New: Added Vellion's Left Trunk as a Unit Object.
+*** New: Added Vellion's Right Trunk as a Unit Object.
+*** New: Added Pestilence Spewer as a Unit Object.
+*** New: Added all Body segments to Phase Monitor.
 
 ----
 v1.3.4
