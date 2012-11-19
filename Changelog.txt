@@ -11,6 +11,7 @@ Unit Cache
 
 Rift:Storm Legion
 Normal Dungeons
+
 * Unhallowed Boneforge
 ** Ahgnox the Corpsekeeper
 *** New: UTID updated.
@@ -25,6 +26,7 @@ Normal Dungeons
 ** Necrotic Throne
 *** New: UTID updated for main Throne.
 *** New: Sub Units with appropriate UTIDs added for left and right Throne sections.
+
 * Storm Breaker Protocol
 ** Citybreaker Zidae
 *** New: UTID updated.
@@ -36,6 +38,44 @@ Normal Dungeons
 *** New: Added Vellion's Right Trunk as a Unit Object.
 *** New: Added Pestilence Spewer as a Unit Object.
 *** New: Added all Body segments to Phase Monitor.
+
+* Archive of Flesh
+** Tzul
+*** New: UTID updated.
+** Emphalea
+*** New: UTID updated.
+** Ahzrius
+*** New: UTID updated.
+** Filth Gorger Vorka
+*** New: UTID updated.
+*** Fixed: Name corrected.
+** Animator Cahail
+*** New: UTID updated.
+*** Fixed: Name corrected.
+
+* Empyrean Core
+** Baird Bringhurst
+*** New: UTID updated.
+** Kaliban's Bodyguards
+*** New: Mercutial's UTID updated.
+*** New: Strauz's UTID updated.
+** Doctor Perfidus
+*** New: UTID updated.
+** Prince Kaliban
+*** New: UTID updated.
+
+* Tower of the Shattered
+** Kronox
+*** New: UTID updated.
+** Psychophage Primakov
+*** New: UTID updated.
+** Overseer Cowel
+*** New: UTID updated.
+** General Thunderscar
+*** New: UTID updated.
+** Commissar Typhiria
+*** New: UTID updated.
+*** Fixed: Name corrected, file changed.
 
 ----
 v1.3.4

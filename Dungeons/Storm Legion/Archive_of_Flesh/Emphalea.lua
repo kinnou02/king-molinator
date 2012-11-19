@@ -27,7 +27,7 @@ local MOD = {
 
 MOD.Emphalea = {
 	Mod = MOD,
-	Level = "52",
+	Level = "59",
 	Active = false,
 	Name = "Emphalea",
 	NameShort = "Emphalea",
@@ -36,7 +36,7 @@ MOD.Emphalea = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = "none",
+	UTID = "UFFDAFE516E2DAA41",
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {

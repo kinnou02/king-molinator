@@ -27,7 +27,7 @@ local MOD = {
 
 MOD.Primakov = {
 	Mod = MOD,
-	Level = "52",
+	Level = "60",
 	Active = false,
 	Name = "Psychophage Primakov",
 	NameShort = "Primakov",
@@ -36,7 +36,7 @@ MOD.Primakov = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = "none",
+	UTID = "UFCEC40614DF9BAB4",
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {

@@ -1,4 +1,4 @@
-﻿-- Commissar Varoniss Boss Mod for King Boss Mods
+﻿-- Commissar Typhiria Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2012
 --
@@ -15,28 +15,28 @@ local Instance = KBM.BossMod["Tower of the Shattered"]
 
 local MOD = {
 	Directory = Instance.Directory,
-	File = "Varoniss.lua",
+	File = "Typhiria.lua",
 	Enabled = true,
 	Instance = Instance.Name,
 	InstanceObj = Instance,
 	HasPhases = true,
 	Lang = {},
-	ID = "Norm_Varoniss",
+	ID = "Norm_Typhiria",
 	Object = "MOD",
 }
 
-MOD.Varoniss = {
+MOD.Typhiria = {
 	Mod = MOD,
-	Level = "52",
+	Level = "60",
 	Active = false,
-	Name = "Commissar Varoniss",
-	NameShort = "Varoniss",
+	Name = "Commissar Typhiria",
+	NameShort = "Typhiria",
 	Menu = {},
 	Castbar = nil,
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = "none",
+	UTID = "UFCF34012207DFE61",
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
@@ -48,13 +48,13 @@ KBM.RegisterMod(MOD.ID, MOD)
 
 -- Main Unit Dictionary
 MOD.Lang.Unit = {}
-MOD.Lang.Unit.Varoniss = KBM.Language:Add(MOD.Varoniss.Name)
-MOD.Lang.Unit.Varoniss:SetGerman("Kommissarin Varoniss")
-MOD.Varoniss.Name = MOD.Lang.Unit.Varoniss[KBM.Lang]
-MOD.Descript = MOD.Varoniss.Name
-MOD.Lang.Unit.AndShort = KBM.Language:Add("Varoniss")
+MOD.Lang.Unit.Typhiria = KBM.Language:Add(MOD.Typhiria.Name)
+MOD.Lang.Unit.Typhiria:SetGerman("Kommissarin Typhiria")
+MOD.Typhiria.Name = MOD.Lang.Unit.Typhiria[KBM.Lang]
+MOD.Descript = MOD.Typhiria.Name
+MOD.Lang.Unit.AndShort = KBM.Language:Add("Typhiria")
 MOD.Lang.Unit.AndShort:SetGerman()
-MOD.Varoniss.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
+MOD.Typhiria.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}
@@ -62,20 +62,20 @@ MOD.Lang.Ability = {}
 function MOD:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
-		[self.Varoniss.Name] = self.Varoniss,
+		[self.Typhiria.Name] = self.Typhiria,
 	}
 end
 
 function MOD:InitVars()
 	self.Settings = {
 		Enabled = true,
-		CastBar = self.Varoniss.Settings.CastBar,
+		CastBar = self.Typhiria.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		-- MechTimer = KBM.Defaults.MechTimer(),
 		-- Alerts = KBM.Defaults.Alerts(),
-		-- TimersRef = self.Varoniss.Settings.TimersRef,
-		-- AlertsRef = self.Varoniss.Settings.AlertsRef,
+		-- TimersRef = self.Typhiria.Settings.TimersRef,
+		-- AlertsRef = self.Typhiria.Settings.AlertsRef,
 	}
 	KBMSLNMTOSCVS_Settings = self.Settings
 	chKBMSLNMTOSCVS_Settings = self.Settings
@@ -120,16 +120,16 @@ function MOD:Castbar(units)
 end
 
 function MOD:RemoveUnits(UnitID)
-	if self.Varoniss.UnitID == UnitID then
-		self.Varoniss.Available = false
+	if self.Typhiria.UnitID == UnitID then
+		self.Typhiria.Available = false
 		return true
 	end
 	return false
 end
 
 function MOD:Death(UnitID)
-	if self.Varoniss.UnitID == UnitID then
-		self.Varoniss.Dead = true
+	if self.Typhiria.UnitID == UnitID then
+		self.Typhiria.Dead = true
 		return true
 	end
 	return false
@@ -138,23 +138,23 @@ end
 function MOD:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
 		if not uDetails.player then
-			if uDetails.name == self.Varoniss.Name then
+			if uDetails.name == self.Typhiria.Name then
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
 					self.TimeElapsed = 0
-					self.Varoniss.Dead = false
-					self.Varoniss.Casting = false
-					self.Varoniss.CastBar:Create(unitID)
+					self.Typhiria.Dead = false
+					self.Typhiria.Casting = false
+					self.Typhiria.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
-					self.PhaseObj.Objectives:AddPercent(self.Varoniss.Name, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Typhiria.Name, 0, 100)
 					self.Phase = 1
 				end
-				self.Varoniss.UnitID = unitID
-				self.Varoniss.Available = true
-				return self.Varoniss
+				self.Typhiria.UnitID = unitID
+				self.Typhiria.Available = true
+				return self.Typhiria
 			end
 		end
 	end
@@ -162,9 +162,9 @@ end
 
 function MOD:Reset()
 	self.EncounterRunning = false
-	self.Varoniss.Available = false
-	self.Varoniss.UnitID = nil
-	self.Varoniss.CastBar:Remove()
+	self.Typhiria.Available = false
+	self.Typhiria.UnitID = nil
+	self.Typhiria.CastBar:Remove()
 	self.PhaseObj:End(Inspect.Time.Real())
 end
 
@@ -172,19 +172,19 @@ function MOD:Timer()
 end
 
 function MOD:DefineMenu()
-	self.Menu = Instance.Menu:CreateEncounter(self.Varoniss, self.Enabled)
+	self.Menu = Instance.Menu:CreateEncounter(self.Typhiria, self.Enabled)
 end
 
 function MOD:Start()
 	-- Create Timers
-	--KBM.Defaults.TimerObj.Assign(self.Varoniss)
+	--KBM.Defaults.TimerObj.Assign(self.Typhiria)
 	
 	-- Create Alerts
-	--KBM.Defaults.AlertObj.Assign(self.Varoniss)
+	--KBM.Defaults.AlertObj.Assign(self.Typhiria)
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Varoniss.CastBar = KBM.CastBar:Add(self, self.Varoniss)
+	self.Typhiria.CastBar = KBM.CastBar:Add(self, self.Typhiria)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()
 end

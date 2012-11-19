@@ -10,7 +10,7 @@ Author = "Paul Snart"
 Website = "http://www.facebook.com/KingBossMods"
 Email = "snarty@gmail.com"
 
-Version = "1.3.5.597"
+Version = "1.3.5.598"
 
 Environment = "1.9", "1.10", "1.11", "2.0"
 
@@ -51,7 +51,7 @@ RunOnStartup = {
 	"Dungeons/Storm Legion/Tower_of_the_Shattered/TOSHeader.lua",
 	"Dungeons/Storm Legion/Tower_of_the_Shattered/Kronox.lua",
 	"Dungeons/Storm Legion/Tower_of_the_Shattered/Cowel.lua",
-	"Dungeons/Storm Legion/Tower_of_the_Shattered/Varoniss.lua",
+	"Dungeons/Storm Legion/Tower_of_the_Shattered/Typhiria.lua",
 	"Dungeons/Storm Legion/Tower_of_the_Shattered/Primakov.lua",
 	"Dungeons/Storm Legion/Tower_of_the_Shattered/Thunderscar.lua",
 	"Dungeons/Storm Legion/Unhallowed_Boneforge/UBFHeader.lua",

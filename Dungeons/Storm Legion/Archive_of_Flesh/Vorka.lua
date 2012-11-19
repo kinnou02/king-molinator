@@ -29,14 +29,14 @@ MOD.Vorka = {
 	Mod = MOD,
 	Level = "52",
 	Active = false,
-	Name = "Vorka",
+	Name = "Filth Gorger Vorka",
 	NameShort = "Vorka",
 	Menu = {},
 	Castbar = nil,
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = "none",
+	UTID = "UFA805A2F75812FC9",
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
@@ -57,7 +57,6 @@ KBM.RegisterMod(MOD.ID, MOD)
 -- Main Unit Dictionary
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Vorka = KBM.Language:Add(MOD.Vorka.Name)
-MOD.Lang.Unit.Vorka:SetGerman()
 MOD.Vorka.Name = MOD.Lang.Unit.Vorka[KBM.Lang]
 MOD.Descript = MOD.Vorka.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Vorka")

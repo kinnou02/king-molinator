@@ -27,7 +27,7 @@ local MOD = {
 
 MOD.Kronox = {
 	Mod = MOD,
-	Level = "52",
+	Level = "60",
 	Active = false,
 	Name = "Kronox",
 	NameShort = "Kronox",
@@ -36,7 +36,7 @@ MOD.Kronox = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = "none",
+	UTID = "UFB583E4179B3DE06",
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {

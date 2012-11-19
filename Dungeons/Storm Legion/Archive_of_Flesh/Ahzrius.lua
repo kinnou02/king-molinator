@@ -27,7 +27,7 @@ local MOD = {
 
 MOD.Ahzrius = {
 	Mod = MOD,
-	Level = "52",
+	Level = "59",
 	Active = false,
 	Name = "Ahzrius",
 	NameShort = "Ahzrius",
@@ -36,7 +36,7 @@ MOD.Ahzrius = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = "none",
+	UTID = "UFABA25291969FB5C",
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {

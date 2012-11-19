@@ -27,7 +27,7 @@ local MOD = {
 
 MOD.Tzul = {
 	Mod = MOD,
-	Level = "52",
+	Level = "59",
 	Active = false,
 	Name = "Tzul",
 	NameShort = "Tzul",
@@ -36,7 +36,7 @@ MOD.Tzul = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = "none",
+	UTID = "UFDEF1C3552D0B261",
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
