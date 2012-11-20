@@ -10,6 +10,28 @@ Unit Cache
 * Change: Reference Lists for missing UTIDs are compiled fresh each run.
 
 Rift:Storm Legion
+
+Raids
+* Endless Eclipse
+** Dread Lord Goloch
+** Matriarch of Pestilence
+** Progenitor
+** Kain the Reaper
+
+* Frozen Tempest
+** Gangnum
+** Gelidra
+** Kolmasveli and Toinenveli
+** Zaviel
+** Crucia
+
+Slivers
+* Triumph of the Dragon Queen
+** Grand Falconer Zoles
+** General Typhiria
+** Jultharin
+** Cyril
+
 Expert Dungeons
 * Archive of Flesh
 ** Ahzrius
