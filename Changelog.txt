@@ -10,8 +10,60 @@ Unit Cache
 * Change: Reference Lists for missing UTIDs are compiled fresh each run.
 
 Rift:Storm Legion
-Normal Dungeons
+Expert Dungeons
+* Archive of Flesh
+** Ahzrius
+** Cahail
+** Emphalea
+** Tzul
 
+* Empyrean Core
+** Baird Bringhurst
+** Kaliban's Bodyguards
+** Core Meltdown
+** Doctor Perfidus
+** Prince Kaliban
+
+* Golem Foundry
+** Locomotive Bulwark
+*** New: UTID updated.
+** C1-0N3
+*** New: UTID updated for main C1-0N3
+*** New: Added 2 addtional UTIDs found for other versions, left 1 open should there be more.
+** Subversionary Liaz
+*** New: UTID updated.
+** Manslaughter
+*** New: UTID updated.
+** UV-315
+*** New: UTID updated.
+
+* Storm Breaker Protocol
+** Sandswarm Onslaught
+** Baron Slagstorm
+** Telaphalon
+** Vellion the Pestilent
+** Citybreaker Zidae
+
+* Tower of the Shattered
+** Overseer Cowel
+*** New: UTID updated.
+** Kronox
+*** New: UTID updated.
+** Psychophage Primakov
+*** New: UTID udpated.
+** General Thunderscar
+*** New: UTID updated.
+** Commissar Varoniss
+*** New: UTID updated.
+
+* Unhallowed Boneforge
+** Ahgnox
+** Avoxcia
+** Bruzhail
+** Forgelord Helix
+** Necrotic Throne
+
+Normal Dungeons
 * Unhallowed Boneforge
 ** Ahgnox the Corpsekeeper
 *** New: UTID updated.
@@ -63,6 +115,8 @@ Normal Dungeons
 *** New: UTID updated.
 ** Prince Kaliban
 *** New: UTID updated.
+*** Fixed: Due to the UTID update, this encounter will no longer trigger during the quest in City Core.
+*** Note: The expert version will still fire until the expert UTID is updated.
 
 * Tower of the Shattered
 ** Kronox

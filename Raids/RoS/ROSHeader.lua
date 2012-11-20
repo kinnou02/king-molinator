@@ -13,7 +13,7 @@ if not KBM.BossMod then
 end
 
 local ROS = {
-	Directory = "RoS",
+	Directory = "Raids/RoS/",
 	File = "ROSHeader.lua",
 	Header = nil,
 	Enabled = true,

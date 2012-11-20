@@ -6,7 +6,7 @@
 KBMIND_Settings = {}
 
 local IND = {
-	Directory = "InfernalDawn/",
+	Directory = "Raids/InfernalDawn/",
 	File = "INDHeader.lua",
 	Header = nil,
 	Enabled = true,

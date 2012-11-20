@@ -7,7 +7,7 @@ KBMHK_Settings = {}
 chKBMHK_Settings = {}
 
 local HK = {
-	Directory = "Hammerknell/",
+	Directory = "Raids/Hammerknell/",
 	File = "HKHeader.lua",
 	Header = nil,
 	Menu = nil,

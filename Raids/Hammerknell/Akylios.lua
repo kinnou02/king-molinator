@@ -578,7 +578,7 @@ function AK:UnitHPCheck(uDetails, unitID)
 					return self.Akylios
 				elseif self.EncounterRunning then
 					if not self.Bosses[uDetails.name].UnitList[unitID] then
-						SubBossObj = {
+						local SubBossObj = {
 							Mod = AK,
 							Level = "??",
 							Name = uDetails.name,

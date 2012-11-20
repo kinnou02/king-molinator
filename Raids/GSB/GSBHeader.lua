@@ -13,7 +13,7 @@ if not KBM.BossMod then
 end
 
 local GSB = {
-	Directory = "GSB",
+	Directory = "Raids/GSB/",
 	File = "GSBHeader",
 	Header = nil,
 	Enabled = true,
