@@ -9,6 +9,9 @@ Encounter Checking
 Unit Cache
 * Change: Reference Lists for missing UTIDs are compiled fresh each run.
 
+Misc
+* New: Add command /kbmability : This will list all abilities available to your character along with their Ability ID.
+
 Rift:Storm Legion
 
 Raids
@@ -35,6 +38,7 @@ Slivers
 Expert Dungeons
 * Archive of Flesh
 ** Ahzrius
+*** New: Alert added for Drastic Renovations.
 ** Cahail
 ** Emphalea
 ** Tzul

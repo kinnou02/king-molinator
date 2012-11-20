@@ -27,7 +27,7 @@ local MOD = {
 
 MOD.Ahzrius = {
 	Mod = MOD,
-	Level = "59",
+	Level = "62",
 	Active = false,
 	Name = "Ahzrius",
 	NameShort = "Ahzrius",
@@ -39,16 +39,17 @@ MOD.Ahzrius = {
 	UTID = "none",
 	TimeOut = 5,
 	Triggers = {},
+	AlertsRef = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
 		-- },
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
-		-- },
+		AlertsRef = {
+			Enabled = true,
+			Drastic = KBM.Defaults.AlertObj.Create("purple"),
+		},
 	}
 }
 
@@ -66,6 +67,7 @@ MOD.Ahzrius.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}
+MOD.Lang.Ability.Drastic = KBM.Language:Add("Drastic Renovations")
 
 function MOD:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
@@ -81,9 +83,9 @@ function MOD:InitVars()
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		-- MechTimer = KBM.Defaults.MechTimer(),
-		-- Alerts = KBM.Defaults.Alerts(),
+		Alerts = KBM.Defaults.Alerts(),
 		-- TimersRef = self.Ahzrius.Settings.TimersRef,
-		-- AlertsRef = self.Ahzrius.Settings.AlertsRef,
+		AlertsRef = self.Ahzrius.Settings.AlertsRef,
 	}
 	KBMSLEXAOFAHZ_Settings = self.Settings
 	chKBMSLEXAOFAHZ_Settings = self.Settings
@@ -188,9 +190,12 @@ function MOD:Start()
 	--KBM.Defaults.TimerObj.Assign(self.Ahzrius)
 	
 	-- Create Alerts
-	--KBM.Defaults.AlertObj.Assign(self.Ahzrius)
+	self.Ahzrius.AlertsRef.Drastic = KBM.Alert:Create(self.Lang.Ability.Drastic[KBM.Lang], nil, true, true, "purple")
+	KBM.Defaults.AlertObj.Assign(self.Ahzrius)
 	
 	-- Assign Alerts and Timers to Triggers
+	self.Ahzrius.Triggers.Drastic = KBM.Trigger:Create(self.Lang.Ability.Drastic[KBM.Lang], "cast", self.Ahzrius)
+	self.Ahzrius.Triggers.Drastic:AddAlert(self.Ahzrius.AlertsRef.Drastic)
 	
 	self.Ahzrius.CastBar = KBM.CastBar:Add(self, self.Ahzrius)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

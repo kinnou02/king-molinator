@@ -121,11 +121,14 @@ function PC.AbilityAdd(aIDList)
 		end
 		KBM.Player.Rezes.Count = Count
 	end
-	
-	-- for crID, bool in pairs(aIDList) do
-		-- local aDetails = Inspect.Ability.New.Detail(crID)
-		-- print(aDetails.name.." = "..crID)
-	-- end
+end
+
+function PC.SlashAbility()
+	local aIDList = Inspect.Ability.New.List()
+	for crID, bool in pairs(aIDList) do
+		local aDetails = Inspect.Ability.New.Detail(crID)
+		print(aDetails.name.." = "..crID)
+	end
 end
 
 function PC.AbilityCooldown(aIDList)
@@ -261,4 +264,5 @@ function PC:Start()
 	table.insert(Event.KingMolinator.Unit.Calling, {PC.CallingChange, "KingMolinator", "Group member calling change"})
 	table.insert(Event.SafesRaidManager.Group.Offline, {PC.PlayerOffline, "KingMolinator", "Player Offline"})
 	table.insert(Event.SafesRaidManager.Group.Mode, {PC.PlayerMode, "KingMolinator", "Player Group Mode"})
+	table.insert(Command.Slash.Register("kbmability"), {PC.SlashAbility, "KingMolinator", "Player Ability List"})
 end
