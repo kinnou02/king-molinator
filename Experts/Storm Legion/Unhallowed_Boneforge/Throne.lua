@@ -27,7 +27,7 @@ local MOD = {
 
 MOD.Throne = {
 	Mod = MOD,
-	Level = "52",
+	Level = "??",
 	Active = false,
 	Name = "Necrotic Throne",
 	NameShort = "Throne",
@@ -36,11 +36,7 @@ MOD.Throne = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = {
-		[1] = "none",
-		[2] = "none",
-		[3] = "none",
-	},
+	UTID = "U6F967AD57D6C3A8D",
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
@@ -56,6 +52,8 @@ MOD.Lang.Unit.Throne = KBM.Language:Add(MOD.Throne.Name)
 MOD.Lang.Unit.Throne:SetGerman("Nekrotischer Thron")
 MOD.Lang.Unit.ThroneL = KBM.Language:Add("Left Throne")
 MOD.Lang.Unit.ThroneR = KBM.Language:Add("Right Throne")
+MOD.Lang.Unit.Titan = KBM.Language:Add("Necro Titan")
+MOD.Lang.Unit.TitanShort = KBM.Language:Add("Titan")
 MOD.Throne.Name = MOD.Lang.Unit.Throne[KBM.Lang]
 MOD.Descript = MOD.Throne.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Throne")
@@ -67,16 +65,16 @@ MOD.Lang.Ability = {}
 
 MOD.ThroneL = {
 	Mod = MOD,
-	Level = "52",
+	Level = "??",
 	Active = false,
 	Name = MOD.Lang.Unit.ThroneL[KBM.Lang],
-	NameShort = "Throne",
+	NameShort = MOD.Lang.Unit.AndShort[KBM.Lang],
 	Menu = {},
 	Castbar = nil,
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = "none",
+	UTID = "U7B674D141EFCC6A4",
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
@@ -86,16 +84,16 @@ MOD.ThroneL = {
 
 MOD.ThroneR = {
 	Mod = MOD,
-	Level = "52",
+	Level = "??",
 	Active = false,
 	Name = MOD.Lang.Unit.ThroneR[KBM.Lang],
-	NameShort = "Throne",
+	NameShort = MOD.Lang.Unit.AndShort[KBM.Lang],
 	Menu = {},
 	Castbar = nil,
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = "none",
+	UTID = "U179D29017C7BB2EB",
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
@@ -103,12 +101,32 @@ MOD.ThroneR = {
 	}
 }
 
+MOD.Titan = {
+	Mod = MOD,
+	Level = "62",
+	Active = false,
+	Name = MOD.Lang.Unit.Titan[KBM.Lang],
+	NameShort = MOD.Lang.Unit.TitanShort[KBM.Lang],
+	Menu = {},
+	Castbar = nil,
+	Dead = false,
+	Available = false,
+	UnitID = nil,
+	UTID = "U022652E030366411",
+	TimeOut = 5,
+	Triggers = {},
+	Multi = true,
+	UnitList = {},
+}
+
+
 function MOD:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Throne.Name] = self.Throne,
-		--[self.ThroneL.Name] = self.ThroneL,
-		--[self.ThroneR.Name] = self.ThroneR,
+		[self.ThroneL.Name] = self.ThroneL,
+		[self.ThroneR.Name] = self.ThroneR,
+		[self.Titan.Name] = self.Titan,
 	}
 end
 
@@ -203,7 +221,7 @@ function MOD:UnitHPCheck(uDetails, unitID)
 					BossObj.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
-					self.PhaseObj.Objectives:AddPercent(self.Throne.Name, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Throne, 0, 100)
 					self.PhaseObj.Objectives:AddPercent(self.ThroneL, 0, 100)
 					self.PhaseObj.Objectives:AddPercent(self.ThroneR, 0, 100)
 					self.Phase = 1

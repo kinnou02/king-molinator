@@ -1,7 +1,7 @@
 ﻿v1.3.5
 
 Rez Master
-* New: Added Death's Embrace combet res. (Thanks Arisae!)
+* New: Cleric, Added Defiler's Death's Embrace combet res. (Thanks Arisae!)
 
 Phase Monitor
 * Change: The Phase Monitor has been adjusted to allow for tracking of multiple units with the same name.
@@ -48,10 +48,17 @@ Expert Dungeons
 
 * Empyrean Core
 ** Baird Bringhurst
+*** New: UTID updated.
 ** Kaliban's Bodyguards
+*** New: UTID updated for both Bodyguards.
 ** Core Meltdown
+*** New: UTID updated for new Units.
+*** Change: Unit changed to Irradiated Monster. 
+*** Change: Phase Tracking changed to Death Count, this will change again one a new system is tested.
 ** Doctor Perfidus
+*** New: UTID updated.
 ** Prince Kaliban
+*** New: UTID updated.
 
 * Golem Foundry
 ** Locomotive Bulwark
@@ -87,10 +94,15 @@ Expert Dungeons
 
 * Unhallowed Boneforge
 ** Ahgnox
+*** New: UTID updated.
 ** Avoxcia
 ** Bruzhail
+*** New: UTID updated.
 ** Forgelord Helix
 ** Necrotic Throne
+*** New: Necrotic Throne UTID updated.
+*** New: Left and Right Throne UTIDs updated.
+*** New: Necro Titan Unit template added with UTID.
 
 Normal Dungeons
 * Unhallowed Boneforge
