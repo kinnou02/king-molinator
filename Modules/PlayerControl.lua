@@ -20,6 +20,7 @@ PC.RezBank = {
 		["A74C19819577CEA4D"] = {}, -- Flash of the Phoenix
 		["A4D4EFA27574FDC9A"] = {}, -- Absolution
 		["A26862464D9EECBE7"] = {}, -- Life's Return
+		["AFDD327BDD0828E57"] = {}, -- Death's Embrace
 	},
 	["mage"] = {
 		--["a000000004AE33670"] = {},

@@ -1,5 +1,8 @@
 ﻿v1.3.5
 
+Rez Master
+* New: Added Death's Embrace combet res. (Thanks Arisae!)
+
 Phase Monitor
 * Change: The Phase Monitor has been adjusted to allow for tracking of multiple units with the same name.
 
