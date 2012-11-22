@@ -106,14 +106,34 @@ function MOD:AddBosses(KBM_Boss)
 		[self.ThroneL.Name] = self.ThroneL,
 		[self.ThroneR.Name] = self.ThroneR,
 	}
+	
+	for Boss, BossObj in pairs(self.Bosses) do
+		if BossObj.Settings then
+			if BossObj.Settings.CastBar then
+				BossObj.Settings.CastBar.Multi = true
+				BossObj.Settings.CastBar.Override = true
+			end
+		end
+	end
+	
 end
 
 function MOD:InitVars()
 	self.Settings = {
 		Enabled = true,
-		CastBar = self.Throne.Settings.CastBar,
+		CastBar = {
+			Multi = true,
+			Override = true,
+		},
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
+		Throne = {
+			CastBar = self.Throne.Settings.CastBar,
+		},
+		ThroneL = {
+		},
+		ThroneR = {
+		},
 		-- MechTimer = KBM.Defaults.MechTimer(),
 		-- Alerts = KBM.Defaults.Alerts(),
 		-- TimersRef = self.Throne.Settings.TimersRef,
@@ -196,7 +216,9 @@ function MOD:UnitHPCheck(uDetails, unitID)
 					self.TimeElapsed = 0
 					BossObj.Dead = false
 					BossObj.Casting = false
-					BossObj.CastBar:Create(unitID)
+					if BossObj.CastBar then
+						BossObj.CastBar:Create(unitID)
+					end
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
 					self.PhaseObj.Objectives:AddPercent(self.Throne.Name, 0, 100)
@@ -237,6 +259,8 @@ function MOD:Start()
 	-- Assign Alerts and Timers to Triggers
 	
 	self.Throne.CastBar = KBM.CastBar:Add(self, self.Throne)
+	self.ThroneL.CastBar = KBM.CastBar:Add(self, self.ThroneL)
+	self.ThroneR.CastBar = KBM.CastBar:Add(self, self.ThroneR)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()
 end

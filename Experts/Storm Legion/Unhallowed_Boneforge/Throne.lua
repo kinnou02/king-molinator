@@ -128,6 +128,15 @@ function MOD:AddBosses(KBM_Boss)
 		[self.ThroneR.Name] = self.ThroneR,
 		[self.Titan.Name] = self.Titan,
 	}
+	
+	for Boss, BossObj in pairs(self.Bosses) do
+		if BossObj.Settings then
+			if BossObj.Settings.CastBar then
+				BossObj.Settings.CastBar.Multi = true
+				BossObj.Settings.CastBar.Override = true
+			end
+		end
+	end
 end
 
 function MOD:InitVars()
@@ -136,6 +145,15 @@ function MOD:InitVars()
 		CastBar = self.Throne.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
+		Throne = {
+			CastBar = self.Throne.Settings.CastBar,
+		},
+		ThroneL = {
+			CastBar = self.ThroneL.Settings.CastBar,
+		},
+		ThroneR = {
+			CastBar = self.ThroneR.Settings.CastBar,
+		},
 		-- MechTimer = KBM.Defaults.MechTimer(),
 		-- Alerts = KBM.Defaults.Alerts(),
 		-- TimersRef = self.Throne.Settings.TimersRef,
@@ -218,7 +236,9 @@ function MOD:UnitHPCheck(uDetails, unitID)
 					self.TimeElapsed = 0
 					BossObj.Dead = false
 					BossObj.Casting = false
-					BossObj.CastBar:Create(unitID)
+					if BossObj.CastBar then
+						BossObj.CastBar:Create(unitID)
+					end
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
 					self.PhaseObj.Objectives:AddPercent(self.Throne, 0, 100)
@@ -236,9 +256,16 @@ end
 
 function MOD:Reset()
 	self.EncounterRunning = false
-	self.Throne.Available = false
-	self.Throne.UnitID = nil
-	self.Throne.CastBar:Remove()
+	for Boss, BossObj in pairs(self.Bosses) do
+		BossObj.Available = false
+		BossObj.UnitID = nil
+		if BossObj.CastBar then
+			if BossObj.CastBar.Active then
+				BossObj.CastBar:Remove()
+			end
+		end
+	end
+	self.Titan.UnitList = {}
 	self.PhaseObj:End(Inspect.Time.Real())
 end
 
@@ -259,6 +286,8 @@ function MOD:Start()
 	-- Assign Alerts and Timers to Triggers
 	
 	self.Throne.CastBar = KBM.CastBar:Add(self, self.Throne)
+	self.ThroneL.CastBar = KBM.CastBar:Add(self, self.ThroneL)
+	self.ThroneR.CastBar = KBM.CastBar:Add(self, self.ThroneR)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()
 end
