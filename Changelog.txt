@@ -9,6 +9,11 @@ Phase Monitor
 Encounter Checking
 * Change: Phase Monitor linking now occurs when a new Encounter Unit is detected.
 
+Unit Tracking
+* Change: Units now attempt to activate as idle regardless of their "seen" state. This includes them doing damage, and receiving indirect AoE.
+* Change: Units in the Idle state "unseen", should now update their HP values based on Heal/Damage/Death events via UID.
+* Note: The above changes directly effect the Plug-in KBM:Add-Watch, and you should now see HP updates for faded (unseen) units in an encounter.
+
 Unit Cache
 * Change: Reference Lists for missing UTIDs are compiled fresh each run.
 

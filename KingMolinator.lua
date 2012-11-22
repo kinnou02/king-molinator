@@ -3911,8 +3911,8 @@ function KBM.MobDamage(info)
 		end
 		if KBM.Encounter then
 			-- Check for damage done to the raid by Bosses
-			if tUnitID then
-				if tDetails then
+			if cUnitID then
+				if cDetails then
 					if KBM.CurrentMod then
 						if info.abilityName then
 							if KBM.Trigger.Damage[info.abilityName] then
@@ -3920,19 +3920,19 @@ function KBM.MobDamage(info)
 								KBM.Trigger.Queue:Add(TriggerObj, cUnitID, tUnitID)
 							end
 						end
-						if KBM.BossID[tUnitID] then
+						if KBM.BossID[cUnitID] then
 							-- Update Phase Monitor accordingly.
 							if KBM.PhaseMonitor.Active then
-								if KBM.PhaseMonitor.Objectives.Lists.Percent[tUnitID] then
-									KBM.PhaseMonitor.Objectives.Lists.Percent[tUnitID]:Update(KBM.BossID[tUnitID].PercentRaw)
+								if KBM.PhaseMonitor.Objectives.Lists.Percent[cUnitID] then
+									KBM.PhaseMonitor.Objectives.Lists.Percent[cUnitID]:Update(KBM.BossID[cUnitID].PercentRaw)
 								end
 							end
 							-- Check for Npc Based Triggers (Usually Dynamic: Eg - Failsafe for P4 start Akylios)
 							if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID] then
-								if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][tDetails.name] then
-									local TriggerObj = KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][tDetails.name]
+								if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][cDetails.name] then
+									local TriggerObj = KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][cDetails.name]
 									if TriggerObj.Enabled then
-										KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
+										KBM.Trigger.Queue:Add(TriggerObj, cUnitID, tUnitID)
 									end
 								end
 							end
@@ -4020,15 +4020,20 @@ function KBM.RaidDamage(info)
 			end
 		end
 		if tUnitID then
-			tDetails = Inspect.Unit.Detail(tUnitID)
-			if not tDetails then
-				return
-			end
 			UnitObj = KBM.Unit.List.UID[tUnitID]
 			if not UnitObj then
-				UnitObj = KBM.Unit:Idle(tUnitID, tDetails)
+				tDetails = Inspect.Unit.Detail(tUnitID)
+				if not tDetails then
+					return
+				end
+				UnitObj = KBM.Unit.List.UID[tUnitID]
+				if not UnitObj then
+					UnitObj = KBM.Unit:Idle(tUnitID, tDetails)
+				end
+				UnitObj:DamageHandler(info, tDetails)
+			else
+				UnitObj:DamageHandler(info)
 			end
-			UnitObj:DamageHandler(info, tDetails)
 		else
 			return
 		end
@@ -4348,33 +4353,34 @@ function KBM.Unit:Create(uDetails, UnitID)
 						end
 						if uDetails.health then
 							self:Update(uDetails.health, uDetails)
-							return
 						end
 					end
+					return
 				elseif self.Time then
 					self:UpdateIdle()
 				end
-				-- if self.Health then
-					-- if self.HealthMax then
-						-- if DamageObj.damage then
-							-- self.Health = self.Health - DamageObj.damage
-							-- if self.Health < 0 then
-								-- self.Health = 0
-							-- end
-						-- end
-						-- if DamageObj.overkill then
-							-- self.Health = 0
-						-- end
-						-- self.PercentFlat = (self.Health/self.HealthMax)
-						-- self.PercentRaw = self.PercentFlat*100
-						-- if self.PercentRaw ~= self.LastPercentRaw then
-							-- self.Percent = math.ceil(self.PercentRaw)
-							-- self.LastPercentRaw = self.PercentRaw
-							-- KBM.Event.Unit.PercentChange(self.UnitID)
-							-- KBM.UpdateHP(self)
-						-- end
-					-- end
-				-- end
+				if self.Health then
+					if self.HealthMax then
+						if DamageObj.damage then
+							self.Health = self.Health - DamageObj.damage
+							if self.Health < 0 then
+								self.Health = 0
+							end
+						end
+						if DamageObj.overkill then
+							self.Health = 0
+						end
+						self.Details.health = self.Health
+						self.PercentFlat = (self.Health/self.HealthMax)
+						self.PercentRaw = self.PercentFlat*100
+						if self.PercentRaw ~= self.LastPercentRaw then
+							self.Percent = math.ceil(self.PercentRaw)
+							self.LastPercentRaw = self.PercentRaw
+							KBM.Event.Unit.PercentChange(self.UnitID)
+							KBM.UpdateHP(self)
+						end
+					end
+				end
 			elseif self.Time then
 				self:UpdateIdle()
 			end
@@ -4389,34 +4395,35 @@ function KBM.Unit:Create(uDetails, UnitID)
 						end
 						if uDetails.health then
 							self:Update(uDetails.health, uDetails)
-							return
 						end
 					end
+					return
 				elseif self.Time then
 					self:UpdateIdle()
 				end
-				-- if self.Health then
-					-- if self.HealthMax then
-						-- if not HealObj.heal then
-							-- HealObj.heal = 0
-							-- self.Health = self.Health + HealObj.heal
-							-- if self.Health > self.HealthMax then
-								-- self.Health = self.HealthMax
-							-- end
-						-- end
-						-- if self.Dead then
-							-- self.Dead = false
-						-- end
-						-- self.PercentFlat = (self.Health/self.HealthMax)
-						-- self.PercentRaw = self.PercentFlat*100
-						-- if self.PercentRaw ~= self.LastPercentRaw then
-							-- self.Percent = math.ceil(self.PercentRaw)
-							-- self.LastPercentRaw = self.PercentRaw
-							-- KBM.Event.Unit.PercentChange(self.UnitID)
-							-- KBM.UpdateHP(self)
-						-- end
-					-- end
-				-- end
+				if self.Health then
+					if self.HealthMax then
+						if not HealObj.heal then
+							HealObj.heal = 0
+							self.Health = self.Health + HealObj.heal
+							if self.Health > self.HealthMax then
+								self.Health = self.HealthMax
+							end
+						end
+						if self.Dead then
+							self.Dead = false
+						end
+						self.Details.health = self.Health
+						self.PercentFlat = (self.Health/self.HealthMax)
+						self.PercentRaw = self.PercentFlat*100
+						if self.PercentRaw ~= self.LastPercentRaw then
+							self.Percent = math.ceil(self.PercentRaw)
+							self.LastPercentRaw = self.PercentRaw
+							KBM.Event.Unit.PercentChange(self.UnitID)
+							KBM.UpdateHP(self)
+						end
+					end
+				end
 			elseif self.Time then
 				self:UpdateIdle()
 			end
