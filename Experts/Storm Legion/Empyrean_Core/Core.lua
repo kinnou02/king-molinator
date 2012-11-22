@@ -27,7 +27,7 @@ local MOD = {
 
 MOD.Core = {
 	Mod = MOD,
-	Level = "62",
+	Level = "??",
 	Active = false,
 	Name = "Irradiated Monster",
 	NameShort = "Core",
@@ -58,6 +58,10 @@ MOD.Core.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}
+
+-- Say Dictionary
+MOD.Lang.Say = {}
+MOD.Lang.Say.Victory = KBM.Language:Add("Core instability within acceptable limits... Aborting lockdown sequences.")
 
 -- Main Dictionary
 MOD.Lang.Main = {}
@@ -138,7 +142,6 @@ end
 function MOD:Death(UnitID)
 	if self.Core.UnitID == UnitID then
 		self.Core.Dead = true
-		return true
 	end
 	return false
 end
@@ -191,6 +194,8 @@ function MOD:Start()
 	--KBM.Defaults.AlertObj.Assign(self.Core)
 	
 	-- Assign Alerts and Timers to Triggers
+	self.Core.Triggers.Victory = KBM.Trigger:Add(self.Lang.Say.Victory[KBM.Lang], "say", self.Core)
+	self.Core.Triggers.Victory:SetVictory()
 	
 	self.Core.CastBar = KBM.CastBar:Add(self, self.Core)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

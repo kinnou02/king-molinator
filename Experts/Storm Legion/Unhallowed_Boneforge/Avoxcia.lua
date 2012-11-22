@@ -27,7 +27,7 @@ local MOD = {
 
 MOD.Avoxcia = {
 	Mod = MOD,
-	Level = "52",
+	Level = "??",
 	Active = false,
 	Name = "Avoxcia",
 	NameShort = "Avoxcia",
@@ -36,7 +36,7 @@ MOD.Avoxcia = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = "none",
+	UTID = "UFF56F8262890B7B9",
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {

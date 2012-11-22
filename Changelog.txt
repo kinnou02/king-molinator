@@ -41,10 +41,16 @@ Slivers
 Expert Dungeons
 * Archive of Flesh
 ** Ahzrius
+*** New: UTID updated.
 *** New: Alert added for Drastic Renovations.
-** Cahail
+** Animator Cahail
+*** New: UTID updated.
 ** Emphalea
+*** New: UTID updated.
 ** Tzul
+*** New: UTID updated.
+** Filth Gorger Vorka
+*** New: UTID updated.
 
 * Empyrean Core
 ** Baird Bringhurst
@@ -96,9 +102,11 @@ Expert Dungeons
 ** Ahgnox
 *** New: UTID updated.
 ** Avoxcia
+*** New: UTID udpated.
 ** Bruzhail
 *** New: UTID updated.
 ** Forgelord Helix
+*** New: UTID udpated.
 ** Necrotic Throne
 *** New: Necrotic Throne UTID updated.
 *** New: Left and Right Throne UTIDs updated.
