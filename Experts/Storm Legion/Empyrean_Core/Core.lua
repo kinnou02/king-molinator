@@ -194,7 +194,7 @@ function MOD:Start()
 	--KBM.Defaults.AlertObj.Assign(self.Core)
 	
 	-- Assign Alerts and Timers to Triggers
-	self.Core.Triggers.Victory = KBM.Trigger:Add(self.Lang.Say.Victory[KBM.Lang], "say", self.Core)
+	self.Core.Triggers.Victory = KBM.Trigger:Create(self.Lang.Say.Victory[KBM.Lang], "say", self.Core)
 	self.Core.Triggers.Victory:SetVictory()
 	
 	self.Core.CastBar = KBM.CastBar:Add(self, self.Core)
