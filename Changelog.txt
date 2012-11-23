@@ -133,6 +133,14 @@ Normal Dungeons
 *** New: UTID updated for main Throne.
 *** New: Sub Units with appropriate UTIDs added for left and right Throne sections.
 
+* Golem Foundry
+** C1-0N3
+*** New: UTID updated.
+** Subversionary Lia
+*** New: UTID updated.
+** UV-315
+*** New: UTID updated.
+
 * Storm Breaker Protocol
 ** Citybreaker Zidae
 *** New: UTID updated.

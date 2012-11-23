@@ -36,7 +36,10 @@ MOD.C10N3 = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = "none",
+	UTID = "UFB10B04610D6EDD5",
+	-- Other Clones
+	-- A - UFBC947FA216CCDB6
+	-- B - UFFACB3E76933F1D0
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {

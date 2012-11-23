@@ -57,6 +57,7 @@ KBM.RegisterMod(MOD.ID, MOD)
 -- Main Unit Dictionary
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Vorka = KBM.Language:Add(MOD.Vorka.Name)
+MOD.Lang.Unit.Vorka:SetGerman("Dreckschlucker Vorka")
 MOD.Vorka.Name = MOD.Lang.Unit.Vorka[KBM.Lang]
 MOD.Descript = MOD.Vorka.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Vorka")
