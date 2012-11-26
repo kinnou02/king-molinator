@@ -28,7 +28,7 @@ local MOD = {
 
 MOD.Grim = {
 	Mod = MOD,
-	Level = "52",
+	Level = "62",
 	Active = false,
 	Name = "General Grim",
 	NameShort = "Grim",
@@ -37,7 +37,7 @@ MOD.Grim = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = "none",
+	UTID = "UFF8A125640A277BB",
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
@@ -142,25 +142,23 @@ end
 
 function MOD:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		if not uDetails.player then
-			if uDetails.name == self.Grim.Name then
-				if not self.EncounterRunning then
-					self.EncounterRunning = true
-					self.StartTime = Inspect.Time.Real()
-					self.HeldTime = self.StartTime
-					self.TimeElapsed = 0
-					self.Grim.Dead = false
-					self.Grim.Casting = false
-					self.Grim.CastBar:Create(unitID)
-					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
-					self.PhaseObj.Objectives:AddPercent(self.Grim.Name, 0, 100)
-					self.Phase = 1
-				end
-				self.Grim.UnitID = unitID
-				self.Grim.Available = true
-				return self.Grim
+		if uDetails.type == self.Grim.UTID then
+			if not self.EncounterRunning then
+				self.EncounterRunning = true
+				self.StartTime = Inspect.Time.Real()
+				self.HeldTime = self.StartTime
+				self.TimeElapsed = 0
+				self.Grim.Dead = false
+				self.Grim.Casting = false
+				self.Grim.CastBar:Create(unitID)
+				self.PhaseObj:Start(self.StartTime)
+				self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
+				self.PhaseObj.Objectives:AddPercent(self.Grim.Name, 0, 100)
+				self.Phase = 1
 			end
+			self.Grim.UnitID = unitID
+			self.Grim.Available = true
+			return self.Grim
 		end
 	end
 end

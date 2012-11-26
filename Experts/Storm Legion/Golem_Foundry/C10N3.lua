@@ -197,13 +197,22 @@ function MOD:UnitHPCheck(uDetails, unitID)
 				self.C10N3.Available = true
 				return self.C10N3
 			else 
-				local BossObj
-				if uDetails.type == self.C10N3a.UTID then
-					BossObj = self.C10N3a
-				elseif uDetails.type == self.C10N3b.UTID then
-					BossObj = self.C10N3b
-				else
+				local BossObj = self.Bosses[uDetails.type]
+				if not BossObj then
 					return
+				end
+				if not self.EncounterRunning then
+					self.EncounterRunning = true
+					self.StartTime = Inspect.Time.Real()
+					self.HeldTime = self.StartTime
+					self.TimeElapsed = 0
+					self.C10N3.Dead = false
+					self.C10N3.Casting = false
+					self.C10N3.CastBar:Create(unitID)
+					self.PhaseObj:Start(self.StartTime)
+					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
+					self.PhaseObj.Objectives:AddPercent(self.C10N3.Name, 0, 100)
+					self.Phase = 1					
 				end
 				if not BossObj.UnitList[unitID] then
 					local SubBossObj = {

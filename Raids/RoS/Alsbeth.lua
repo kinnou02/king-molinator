@@ -415,7 +415,7 @@ function AD:UnitHPCheck(uDetails, unitID)
 	if uDetails and unitID then
 		if not uDetails.player then
 			if uDetails.name == self.Alsbeth.Name then
-				if not self.Alsbeth.UnitID then
+				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime

@@ -39,9 +39,16 @@ Raids
 Slivers
 * Triumph of the Dragon Queen
 ** Grand Falconer Zoles
+*** New: UTID updated for Zoles.
+*** New: Enrage time added.
+*** New: Skyscream Unit added for tracking.
 ** General Typhiria
 ** Jultharin
+*** New: UTID updated.
+*** New: Enrage time added.
 ** Cyril
+*** New: UTID updated.
+*** New: Enrage time added.
 
 Expert Dungeons
 * Archive of Flesh
@@ -71,6 +78,16 @@ Expert Dungeons
 ** Prince Kaliban
 *** New: UTID updated.
 
+* Exodus of the Storm Queen
+** Dominax
+*** New: UTID updated.
+** Chekaroth
+*** New: UTID updated.
+** Valthundr
+*** New: UTID updated.
+** General Grim
+*** New: UTID updated.
+
 * Golem Foundry
 ** Locomotive Bulwark
 *** New: UTID updated.
@@ -87,9 +104,12 @@ Expert Dungeons
 * Storm Breaker Protocol
 ** Sandswarm Onslaught
 ** Baron Slagstorm
+*** New: UTID updated.
 ** Telaphalon
+*** New: UTID updated.
 ** Vellion the Pestilent
 ** Citybreaker Zidae
+*** New: UTID updated.
 
 * Tower of the Shattered
 ** Overseer Cowel

@@ -28,7 +28,7 @@ local MOD = {
 
 MOD.Chekaroth = {
 	Mod = MOD,
-	Level = "52",
+	Level = "62",
 	Active = false,
 	Name = "Chekaroth",
 	NameShort = "Chekaroth",
@@ -37,7 +37,7 @@ MOD.Chekaroth = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = "none",
+	UTID = "UFCDC312C0499CB1B",
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
@@ -140,25 +140,23 @@ end
 
 function MOD:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		if not uDetails.player then
-			if uDetails.name == self.Chekaroth.Name then
-				if not self.EncounterRunning then
-					self.EncounterRunning = true
-					self.StartTime = Inspect.Time.Real()
-					self.HeldTime = self.StartTime
-					self.TimeElapsed = 0
-					self.Chekaroth.Dead = false
-					self.Chekaroth.Casting = false
-					self.Chekaroth.CastBar:Create(unitID)
-					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
-					self.PhaseObj.Objectives:AddPercent(self.Chekaroth.Name, 0, 100)
-					self.Phase = 1
-				end
-				self.Chekaroth.UnitID = unitID
-				self.Chekaroth.Available = true
-				return self.Chekaroth
+		if uDetails.type == self.Chekaroth.UTID then
+			if not self.EncounterRunning then
+				self.EncounterRunning = true
+				self.StartTime = Inspect.Time.Real()
+				self.HeldTime = self.StartTime
+				self.TimeElapsed = 0
+				self.Chekaroth.Dead = false
+				self.Chekaroth.Casting = false
+				self.Chekaroth.CastBar:Create(unitID)
+				self.PhaseObj:Start(self.StartTime)
+				self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
+				self.PhaseObj.Objectives:AddPercent(self.Chekaroth.Name, 0, 100)
+				self.Phase = 1
 			end
+			self.Chekaroth.UnitID = unitID
+			self.Chekaroth.Available = true
+			return self.Chekaroth
 		end
 	end
 end

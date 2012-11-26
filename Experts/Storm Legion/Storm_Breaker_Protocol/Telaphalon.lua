@@ -27,7 +27,7 @@ local MOD = {
 
 MOD.Telaphalon = {
 	Mod = MOD,
-	Level = "52",
+	Level = "62",
 	Active = false,
 	Name = "Telaphalon",
 	NameShort = "Telaphalon",
@@ -36,7 +36,7 @@ MOD.Telaphalon = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = "none",
+	UTID = "UFFD3D7004348DBAD",
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
@@ -138,7 +138,7 @@ end
 function MOD:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
 		if not uDetails.player then
-			if uDetails.name == self.Telaphalon.Name then
+			if uDetails.type == self.Telaphalon.UTID then
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()

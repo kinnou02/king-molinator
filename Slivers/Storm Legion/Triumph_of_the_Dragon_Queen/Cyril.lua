@@ -20,7 +20,7 @@ local CRL = {
 	Instance = TDQ.Name,
 	InstanceObj = TDQ,
 	Lang = {},
-	--Enrage = 5 * 60,
+	Enrage = 6 * 60,
 	ID = "Cyril",
 	Object = "CRL",
 }
@@ -54,7 +54,7 @@ CRL.Cyril = {
 	-- AlertsRef = {},
 	-- TimersRef = {},
 	Available = false,
-	UTID = "none",
+	UTID = "UFBF4C45669116886",
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
@@ -149,36 +149,35 @@ function CRL:Death(UnitID)
 	return false
 end
 
-function CRL:UnitHPCheck(unitDetails, unitID)	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if self.Bosses[unitDetails.name] then
-				local BossObj = self.Bosses[unitDetails.name]
-				if not self.EncounterRunning then
-					self.EncounterRunning = true
-					self.StartTime = Inspect.Time.Real()
-					self.HeldTime = self.StartTime
-					self.TimeElapsed = 0
-					BossObj.Dead = false
-					BossObj.Casting = false
-					if BossObj.Name == self.Cyril.Name then
-						BossObj.CastBar:Create(unitID)
-					end
-					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SeCRLase("1")
-					self.PhaseObj.Objectives:AddPercent(self.Cyril.Name, 0, 100)
-					self.Phase = 1
-				else
-					BossObj.Dead = false
-					BossObj.Casting = false
-					if BossObj.Name == self.Cyril.Name then
-						BossObj.CastBar:Create(unitID)
-					end
+function CRL:UnitHPCheck(uDetails, unitID)	
+	if uDetails and unitID then
+		local BossObj = self.Bosses[uDetails.type]
+		if BossObj then
+			if not self.EncounterRunning then
+				self.EncounterRunning = true
+				self.StartTime = Inspect.Time.Real()
+				self.HeldTime = self.StartTime
+				self.TimeElapsed = 0
+				BossObj.Dead = false
+				BossObj.Casting = false
+				if BossObj == self.Cyril then
+					BossObj.CastBar:Create(unitID)
 				end
-				BossObj.UnitID = unitID
-				BossObj.Available = true
-				return self.Cyril
+				self.PhaseObj:Start(self.StartTime)
+				self.PhaseObj:SetPhase("1")
+				self.PhaseObj.Objectives:AddPercent(self.Cyril.Name, 0, 100)
+				self.Phase = 1
+			else
+				BossObj.Dead = false
+				BossObj.Casting = false
+				if BossObj == self.Cyril then
+					BossObj.CastBar:Remove()
+					BossObj.CastBar:Create(unitID)
+				end
 			end
+			BossObj.UnitID = unitID
+			BossObj.Available = true
+			return self.Cyril
 		end
 	end
 end

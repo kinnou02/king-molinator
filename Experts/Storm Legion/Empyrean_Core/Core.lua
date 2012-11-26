@@ -140,33 +140,44 @@ function MOD:RemoveUnits(UnitID)
 end
 
 function MOD:Death(UnitID)
-	if self.Core.UnitID == UnitID then
-		self.Core.Dead = true
+	if self.Core.UnitList[UnitID] then
+		self.Core.UnitList[UnitID].Dead = true
 	end
 	return false
 end
 
 function MOD:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		if not uDetails.player then
-			if uDetails.type == self.Core.UTID then
-				if not self.EncounterRunning then
-					self.EncounterRunning = true
-					self.StartTime = Inspect.Time.Real()
-					self.HeldTime = self.StartTime
-					self.TimeElapsed = 0
-					self.Core.Dead = false
-					self.Core.Casting = false
-					self.Core.CastBar:Create(unitID)
-					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
-					self.PhaseObj.Objectives:AddDeath(self.Core.Name, 3) -- will be changing this possibly
-					self.Phase = 1
-				end
-				self.Core.UnitID = unitID
-				self.Core.Available = true
-				return self.Core
+		if uDetails.type == self.Core.UTID then
+			if not self.EncounterRunning then
+				self.EncounterRunning = true
+				self.StartTime = Inspect.Time.Real()
+				self.HeldTime = self.StartTime
+				self.TimeElapsed = 0
+				self.Core.Dead = false
+				self.Core.Casting = false
+				self.Core.CastBar:Create(unitID)
+				self.PhaseObj:Start(self.StartTime)
+				self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
+				self.PhaseObj.Objectives:AddDeath(self.Core.Name, 3) -- will be changing this possibly
+				self.Phase = 1
 			end
+			if not self.Core.UnitList[unitID] then
+				local SubBossObj = {
+					Mod = MOD,
+					Level = "??",
+					Active = true,
+					Name = "Irradiated Monster",
+					NameShort = "Core",
+					Menu = {},
+					Dead = false,
+					Available = true,
+					UnitID = unitID,
+					UTID = "UFCAEDA3D70CEDFD8",
+				}
+				self.Core.UnitList[unitID] = SubBossObj
+			end
+			return self.Core
 		end
 	end
 end

@@ -137,25 +137,23 @@ end
 
 function MOD:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		if not uDetails.player then
-			if uDetails.name == self.Doctor.Name then
-				if not self.EncounterRunning then
-					self.EncounterRunning = true
-					self.StartTime = Inspect.Time.Real()
-					self.HeldTime = self.StartTime
-					self.TimeElapsed = 0
-					self.Doctor.Dead = false
-					self.Doctor.Casting = false
-					self.Doctor.CastBar:Create(unitID)
-					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
-					self.PhaseObj.Objectives:AddPercent(self.Doctor.Name, 0, 100)
-					self.Phase = 1
-				end
-				self.Doctor.UnitID = unitID
-				self.Doctor.Available = true
-				return self.Doctor
+		if uDetails.type == self.Doctor.UTID then
+			if not self.EncounterRunning then
+				self.EncounterRunning = true
+				self.StartTime = Inspect.Time.Real()
+				self.HeldTime = self.StartTime
+				self.TimeElapsed = 0
+				self.Doctor.Dead = false
+				self.Doctor.Casting = false
+				self.Doctor.CastBar:Create(unitID)
+				self.PhaseObj:Start(self.StartTime)
+				self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
+				self.PhaseObj.Objectives:AddPercent(self.Doctor.Name, 0, 100)
+				self.Phase = 1
 			end
+			self.Doctor.UnitID = unitID
+			self.Doctor.Available = true
+			return self.Doctor
 		end
 	end
 end

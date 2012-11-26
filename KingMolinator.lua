@@ -8584,9 +8584,11 @@ function KBM.InitMenus()
 					if type(BossObj.UTID) == "table" then
 						for i, UTID in pairs(BossObj.UTID) do
 							KBM.AllocateBoss(Mod, BossObj, UTID, i)
+							Mod.Bosses[UTID] = BossObj
 						end
 					elseif type(BossObj.UTID) == "string" then
 						KBM.AllocateBoss(Mod, BossObj, BossObj.UTID)
+						Mod.Bosses[BossObj.UTID] = BossObj
 					else
 						print("Error: UTID for "..BossObj.Name.." is an incorrect type (string/table)")
 						error("Type is: "..type(UTID))

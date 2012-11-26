@@ -148,25 +148,23 @@ end
 
 function MOD:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		if not uDetails.player then
-			if uDetails.name == self.Ahzrius.Name then
-				if not self.EncounterRunning then
-					self.EncounterRunning = true
-					self.StartTime = Inspect.Time.Real()
-					self.HeldTime = self.StartTime
-					self.TimeElapsed = 0
-					self.Ahzrius.Dead = false
-					self.Ahzrius.Casting = false
-					self.Ahzrius.CastBar:Create(unitID)
-					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
-					self.PhaseObj.Objectives:AddPercent(self.Ahzrius.Name, 0, 100)
-					self.Phase = 1
-				end
-				self.Ahzrius.UnitID = unitID
-				self.Ahzrius.Available = true
-				return self.Ahzrius
+		if uDetails.type == self.Ahzrius.UTID then
+			if not self.EncounterRunning then
+				self.EncounterRunning = true
+				self.StartTime = Inspect.Time.Real()
+				self.HeldTime = self.StartTime
+				self.TimeElapsed = 0
+				self.Ahzrius.Dead = false
+				self.Ahzrius.Casting = false
+				self.Ahzrius.CastBar:Create(unitID)
+				self.PhaseObj:Start(self.StartTime)
+				self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
+				self.PhaseObj.Objectives:AddPercent(self.Ahzrius.Name, 0, 100)
+				self.Phase = 1
 			end
+			self.Ahzrius.UnitID = unitID
+			self.Ahzrius.Available = true
+			return self.Ahzrius
 		end
 	end
 end

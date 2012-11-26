@@ -186,30 +186,28 @@ end
 
 function MOD:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		if not uDetails.player then
-			if uDetails.name then
-				local BossObj = self.Bosses[uDetails.name]
-				if BossObj then
-					if not self.EncounterRunning then
-						self.EncounterRunning = true
-						self.StartTime = Inspect.Time.Real()
-						self.HeldTime = self.StartTime
-						self.TimeElapsed = 0
-						BossObj.Dead = false
-						BossObj.Casting = false
-						self.PhaseObj:Start(self.StartTime)
-						self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
-						self.PhaseObj.Objectives:AddPercent(self.Strauz.Name, 0, 100)
-						self.PhaseObj.Objectives:AddPercent(self.Mercutial.Name, 0, 100)
-						self.Phase = 1
-					end
-					if not BossObj.CastBar.Active then
-						BossObj.CastBar:Create(unitID)
-					end
-					BossObj.UnitID = unitID
-					BossObj.Available = true
-					return BossObj
+		if uDetails.type then
+			local BossObj = self.Bosses[uDetails.type]
+			if BossObj then
+				if not self.EncounterRunning then
+					self.EncounterRunning = true
+					self.StartTime = Inspect.Time.Real()
+					self.HeldTime = self.StartTime
+					self.TimeElapsed = 0
+					BossObj.Dead = false
+					BossObj.Casting = false
+					self.PhaseObj:Start(self.StartTime)
+					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
+					self.PhaseObj.Objectives:AddPercent(self.Strauz.Name, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Mercutial.Name, 0, 100)
+					self.Phase = 1
 				end
+				if not BossObj.CastBar.Active then
+					BossObj.CastBar:Create(unitID)
+				end
+				BossObj.UnitID = unitID
+				BossObj.Available = true
+				return BossObj
 			end
 		end
 	end

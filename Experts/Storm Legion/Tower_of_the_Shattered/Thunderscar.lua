@@ -137,25 +137,23 @@ end
 
 function MOD:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		if not uDetails.player then
-			if uDetails.name == self.Thunderscar.Name then
-				if not self.EncounterRunning then
-					self.EncounterRunning = true
-					self.StartTime = Inspect.Time.Real()
-					self.HeldTime = self.StartTime
-					self.TimeElapsed = 0
-					self.Thunderscar.Dead = false
-					self.Thunderscar.Casting = false
-					self.Thunderscar.CastBar:Create(unitID)
-					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
-					self.PhaseObj.Objectives:AddPercent(self.Thunderscar.Name, 0, 100)
-					self.Phase = 1
-				end
-				self.Thunderscar.UnitID = unitID
-				self.Thunderscar.Available = true
-				return self.Thunderscar
+		if uDetails.type == self.Thunderscar.UTID then
+			if not self.EncounterRunning then
+				self.EncounterRunning = true
+				self.StartTime = Inspect.Time.Real()
+				self.HeldTime = self.StartTime
+				self.TimeElapsed = 0
+				self.Thunderscar.Dead = false
+				self.Thunderscar.Casting = false
+				self.Thunderscar.CastBar:Create(unitID)
+				self.PhaseObj:Start(self.StartTime)
+				self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
+				self.PhaseObj.Objectives:AddPercent(self.Thunderscar.Name, 0, 100)
+				self.Phase = 1
 			end
+			self.Thunderscar.UnitID = unitID
+			self.Thunderscar.Available = true
+			return self.Thunderscar
 		end
 	end
 end

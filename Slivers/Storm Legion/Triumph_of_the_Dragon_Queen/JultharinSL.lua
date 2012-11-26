@@ -20,7 +20,7 @@ local JUL = {
 	Instance = TDQ.Name,
 	InstanceObj = TDQ,
 	Lang = {},
-	Enrage = 5 * 60,
+	Enrage = 5 * 60 + 15,
 	ID = "SJultharinSL",
 	Object = "JUL",
 }
@@ -54,7 +54,7 @@ JUL.Jultharin = {
 	-- AlertsRef = {},
 	-- TimersRef = {},
 	Available = false,
-	UTID = "none",
+	UTID = "U3F2331475EA6C7B3",
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
@@ -149,36 +149,37 @@ function JUL:Death(UnitID)
 	return false
 end
 
-function JUL:UnitHPCheck(unitDetails, unitID)	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if self.Bosses[unitDetails.name] then
-				local BossObj = self.Bosses[unitDetails.name]
-				if not self.EncounterRunning then
-					self.EncounterRunning = true
-					self.StartTime = Inspect.Time.Real()
-					self.HeldTime = self.StartTime
-					self.TimeElapsed = 0
-					BossObj.Dead = false
-					BossObj.Casting = false
-					if BossObj.Name == self.Jultharin.Name then
-						BossObj.CastBar:Create(unitID)
-					end
-					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SeJULase("1")
-					self.PhaseObj.Objectives:AddPercent(self.Jultharin.Name, 0, 100)
-					self.Phase = 1
-				else
-					BossObj.Dead = false
-					BossObj.Casting = false
-					if BossObj.Name == self.Jultharin.Name then
+function JUL:UnitHPCheck(uDetails, unitID)	
+	if uDetails and unitID then
+		local BossObj = self.Bosses[uDetails.type]
+		if BossObj then
+			if not self.EncounterRunning then
+				self.EncounterRunning = true
+				self.StartTime = Inspect.Time.Real()
+				self.HeldTime = self.StartTime
+				self.TimeElapsed = 0
+				BossObj.Dead = false
+				BossObj.Casting = false
+				if BossObj == self.Jultharin then
+					BossObj.CastBar:Create(unitID)
+				end
+				self.PhaseObj:Start(self.StartTime)
+				self.PhaseObj:SetPhase("1")
+				self.PhaseObj.Objectives:AddPercent(self.Jultharin.Name, 0, 100)
+				self.Phase = 1
+			else
+				BossObj.Dead = false
+				BossObj.Casting = false
+				if BossObj.UnitID ~= unitID then
+					if BossObj == self.Jultharin then
+						BossObj.CastBar:Remove()
 						BossObj.CastBar:Create(unitID)
 					end
 				end
-				BossObj.UnitID = unitID
-				BossObj.Available = true
-				return self.Jultharin
 			end
+			BossObj.UnitID = unitID
+			BossObj.Available = true
+			return self.Jultharin
 		end
 	end
 end

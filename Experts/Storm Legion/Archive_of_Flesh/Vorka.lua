@@ -145,25 +145,23 @@ end
 
 function MOD:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		if not uDetails.player then
-			if uDetails.name == self.Vorka.Name then
-				if not self.EncounterRunning then
-					self.EncounterRunning = true
-					self.StartTime = Inspect.Time.Real()
-					self.HeldTime = self.StartTime
-					self.TimeElapsed = 0
-					self.Vorka.Dead = false
-					self.Vorka.Casting = false
-					self.Vorka.CastBar:Create(unitID)
-					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
-					self.PhaseObj.Objectives:AddPercent(self.Vorka.Name, 0, 100)
-					self.Phase = 1
-				end
-				self.Vorka.UnitID = unitID
-				self.Vorka.Available = true
-				return self.Vorka
+		if uDetails.type == self.Vorka.UTID then
+			if not self.EncounterRunning then
+				self.EncounterRunning = true
+				self.StartTime = Inspect.Time.Real()
+				self.HeldTime = self.StartTime
+				self.TimeElapsed = 0
+				self.Vorka.Dead = false
+				self.Vorka.Casting = false
+				self.Vorka.CastBar:Create(unitID)
+				self.PhaseObj:Start(self.StartTime)
+				self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
+				self.PhaseObj.Objectives:AddPercent(self.Vorka.Name, 0, 100)
+				self.Phase = 1
 			end
+			self.Vorka.UnitID = unitID
+			self.Vorka.Available = true
+			return self.Vorka
 		end
 	end
 end

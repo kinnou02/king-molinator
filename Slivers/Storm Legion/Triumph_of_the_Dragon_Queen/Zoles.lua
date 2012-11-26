@@ -20,7 +20,7 @@ local GFZ = {
 	Instance = TDQ.Name,
 	InstanceObj = TDQ,
 	Lang = {},
-	--Enrage = 5 * 60,
+	Enrage = 5 * 60,
 	ID = "SGrand_Falconer_Zoles",
 	Object = "GFZ",
 }
@@ -33,6 +33,8 @@ GFZ.Lang.Unit.Zoles = KBM.Language:Add("Grand Falconer Zoles")
 GFZ.Lang.Unit.Zoles:SetGerman("Großfalkner Zoles")
 GFZ.Lang.Unit.ZolesShort = KBM.Language:Add("Zoles")
 GFZ.Lang.Unit.ZolesShort:SetGerman("Zoles")
+GFZ.Lang.Unit.Sky = KBM.Language:Add("Skyscream")
+GFZ.Lang.Unit.SkyShort = KBM.Language:Add("Skyscream")
 
 -- Ability Dictionary
 GFZ.Lang.Ability = {}
@@ -54,7 +56,7 @@ GFZ.Zoles = {
 	-- AlertsRef = {},
 	-- TimersRef = {},
 	Available = false,
-	UTID = "none",
+	UTID = "UFA77D6F8684E047C",
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
@@ -70,10 +72,38 @@ GFZ.Zoles = {
 	}
 }
 
+GFZ.Sky = {
+	Mod = GFZ,
+	Level = "??",
+	Active = false,
+	Name = GFZ.Lang.Unit.Sky[KBM.Lang],
+	NameShort = GFZ.Lang.Unit.SkyShort[KBM.Lang],
+	Menu = {},
+	Dead = false,
+	-- AlertsRef = {},
+	-- TimersRef = {},
+	Available = false,
+	UTID = "none",
+	UnitID = nil,
+	Triggers = {},
+	Settings = {
+		-- TimersRef = {
+			-- Enabled = true,
+			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
+		-- },
+		-- AlertsRef = {
+			-- Enabled = true,
+			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
+		-- },
+	}
+}
+
+
 function GFZ:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Zoles.Name] = self.Zoles,
+		[self.Sky.Name] = self.Sky,
 	}
 end
 
@@ -149,36 +179,40 @@ function GFZ:Death(UnitID)
 	return false
 end
 
-function GFZ:UnitHPCheck(unitDetails, unitID)	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if self.Bosses[unitDetails.name] then
-				local BossObj = self.Bosses[unitDetails.name]
-				if not self.EncounterRunning then
-					self.EncounterRunning = true
-					self.StartTime = Inspect.Time.Real()
-					self.HeldTime = self.StartTime
-					self.TimeElapsed = 0
-					BossObj.Dead = false
-					BossObj.Casting = false
-					if BossObj.Name == self.Zoles.Name then
-						BossObj.CastBar:Create(unitID)
-					end
-					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase("1")
-					self.PhaseObj.Objectives:AddPercent(self.Zoles.Name, 0, 100)
-					self.Phase = 1
-				else
-					BossObj.Dead = false
-					BossObj.Casting = false
-					if BossObj.Name == self.Zoles.Name then
+function GFZ:UnitHPCheck(uDetails, unitID)	
+	if uDetails and unitID then
+		local BossObj = self.Bosses[uDetails.type]
+		if not BossObj then
+			BossObj = self.Bosses[uDetails.name]
+		end
+		if BossObj then
+			if not self.EncounterRunning then
+				self.EncounterRunning = true
+				self.StartTime = Inspect.Time.Real()
+				self.HeldTime = self.StartTime
+				self.TimeElapsed = 0
+				BossObj.Dead = false
+				BossObj.Casting = false
+				if BossObj == self.Zoles then
+					BossObj.CastBar:Create(unitID)
+				end
+				self.PhaseObj:Start(self.StartTime)
+				self.PhaseObj:SetPhase("1")
+				self.PhaseObj.Objectives:AddPercent(self.Zoles.Name, 0, 100)
+				self.Phase = 1
+			else
+				BossObj.Dead = false
+				BossObj.Casting = false
+				if BossObj.UnitID ~= unitID then
+					if BossObj == self.Zoles then
+						BossObj.CastBar:Remove()
 						BossObj.CastBar:Create(unitID)
 					end
 				end
-				BossObj.UnitID = unitID
-				BossObj.Available = true
-				return self.Zoles
 			end
+			BossObj.UnitID = unitID
+			BossObj.Available = true
+			return self.Zoles
 		end
 	end
 end

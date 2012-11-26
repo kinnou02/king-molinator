@@ -137,25 +137,23 @@ end
 
 function MOD:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		if not uDetails.player then
-			if uDetails.name == self.UV315.Name then
-				if not self.EncounterRunning then
-					self.EncounterRunning = true
-					self.StartTime = Inspect.Time.Real()
-					self.HeldTime = self.StartTime
-					self.TimeElapsed = 0
-					self.UV315.Dead = false
-					self.UV315.Casting = false
-					self.UV315.CastBar:Create(unitID)
-					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
-					self.PhaseObj.Objectives:AddPercent(self.UV315.Name, 0, 100)
-					self.Phase = 1
-				end
-				self.UV315.UnitID = unitID
-				self.UV315.Available = true
-				return self.UV315
+		if uDetails.type == self.UV315.UTID then
+			if not self.EncounterRunning then
+				self.EncounterRunning = true
+				self.StartTime = Inspect.Time.Real()
+				self.HeldTime = self.StartTime
+				self.TimeElapsed = 0
+				self.UV315.Dead = false
+				self.UV315.Casting = false
+				self.UV315.CastBar:Create(unitID)
+				self.PhaseObj:Start(self.StartTime)
+				self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
+				self.PhaseObj.Objectives:AddPercent(self.UV315.Name, 0, 100)
+				self.Phase = 1
 			end
+			self.UV315.UnitID = unitID
+			self.UV315.Available = true
+			return self.UV315
 		end
 	end
 end

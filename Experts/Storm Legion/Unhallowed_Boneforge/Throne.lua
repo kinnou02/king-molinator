@@ -221,37 +221,31 @@ end
 
 function MOD:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		if not uDetails.player then
-			local BossObj
-			if uDetails.type == self.Throne.UTID then
-				BossObj = self.Throne
-			elseif uDetails.type == self.ThroneL.UTID then
-				BossObj = self.ThroneL
-			elseif uDetails.type == self.ThroneR.UTID then
-				BossObj = self.ThroneR
-			end
-			if BossObj then
-				if not self.EncounterRunning then
-					self.EncounterRunning = true
-					self.StartTime = Inspect.Time.Real()
-					self.HeldTime = self.StartTime
-					self.TimeElapsed = 0
-					BossObj.Dead = false
-					BossObj.Casting = false
-					if BossObj.CastBar then
-						BossObj.CastBar:Create(unitID)
-					end
-					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
-					self.PhaseObj.Objectives:AddPercent(self.Throne, 0, 100)
-					self.PhaseObj.Objectives:AddPercent(self.ThroneL, 0, 100)
-					self.PhaseObj.Objectives:AddPercent(self.ThroneR, 0, 100)
-					self.Phase = 1
+		local BossObj = self.Bosses[uDetails.type]
+		if BossObj == nil or BossObj == self.Titan then
+			return
+		end
+		if BossObj then
+			if not self.EncounterRunning then
+				self.EncounterRunning = true
+				self.StartTime = Inspect.Time.Real()
+				self.HeldTime = self.StartTime
+				self.TimeElapsed = 0
+				BossObj.Dead = false
+				BossObj.Casting = false
+				if BossObj.CastBar then
+					BossObj.CastBar:Create(unitID)
 				end
-				BossObj.UnitID = unitID
-				BossObj.Available = true
-				return BossObj
+				self.PhaseObj:Start(self.StartTime)
+				self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
+				self.PhaseObj.Objectives:AddPercent(self.Throne, 0, 100)
+				self.PhaseObj.Objectives:AddPercent(self.ThroneL, 0, 100)
+				self.PhaseObj.Objectives:AddPercent(self.ThroneR, 0, 100)
+				self.Phase = 1
 			end
+			BossObj.UnitID = unitID
+			BossObj.Available = true
+			return BossObj
 		end
 	end
 end

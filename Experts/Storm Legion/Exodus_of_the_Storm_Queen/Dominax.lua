@@ -37,8 +37,8 @@ MOD.Dominax = {
 	Available = false,
 	UnitID = nil,
 	UTID = {
-		[1] = "none",
-		[2] = "none",
+		[1] = "UFB5AF69560243152",
+		[2] = "UFF5EE926628FA414",
 	},
 	TimeOut = 5,
 	Triggers = {},
@@ -159,38 +159,36 @@ end
 
 function MOD:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		if not uDetails.player then
-			if uDetails.name == self.Dominax.Name then
-				if not self.EncounterRunning then
-					self.EncounterRunning = true
-					self.StartTime = Inspect.Time.Real()
-					self.HeldTime = self.StartTime
-					self.TimeElapsed = 0
-					self.Dominax.Dead = false
-					self.Dominax.Casting = false
-					if self.Dominax.UTID[1] == uDetails.type then
-						self.PhaseObj:Start(self.StartTime)
-						self.PhaseObj:SetPhase("1")
-						self.PhaseObj.Objectives:AddPercent(self.Dominax.Name, 0, 100)
-						self.Phase = 1
-					end
+		if uDetails.type == self.Dominax.UTID[1] or uDetails.type == self.Dominax.UTID[2] then
+			if not self.EncounterRunning then
+				self.EncounterRunning = true
+				self.StartTime = Inspect.Time.Real()
+				self.HeldTime = self.StartTime
+				self.TimeElapsed = 0
+				self.Dominax.Dead = false
+				self.Dominax.Casting = false
+				if self.Dominax.UTID[1] == uDetails.type then
+					self.PhaseObj:Start(self.StartTime)
+					self.PhaseObj:SetPhase("1")
+					self.PhaseObj.Objectives:AddPercent(self.Dominax.Name, 0, 100)
+					self.Phase = 1
 				end
-				self.Dominax.Type = uDetails.type
-				if self.Dominax.Type == self.Dominax.UTID[2] then
-					if self.Phase == 1 then
-						self.PhaseFinal()
-					end
-				end
-				if self.Dominax.UnitID ~= unitID then
-					if self.Dominax.CastBar.Active then
-						self.Dominax.CastBar:Remove()
-					end
-					self.Dominax.CastBar:Create(unitID)
-					self.Dominax.UnitID = unitID
-				end
-				self.Dominax.Available = true
-				return self.Dominax
 			end
+			self.Dominax.Type = uDetails.type
+			if self.Dominax.Type == self.Dominax.UTID[2] then
+				if self.Phase == 1 then
+					self.PhaseFinal()
+				end
+			end
+			if self.Dominax.UnitID ~= unitID then
+				if self.Dominax.CastBar.Active then
+					self.Dominax.CastBar:Remove()
+				end
+				self.Dominax.CastBar:Create(unitID)
+				self.Dominax.UnitID = unitID
+			end
+			self.Dominax.Available = true
+			return self.Dominax
 		end
 	end
 end

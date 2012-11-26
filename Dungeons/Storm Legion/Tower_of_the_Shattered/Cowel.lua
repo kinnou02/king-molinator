@@ -36,7 +36,10 @@ MOD.Cowel = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = "UFF556A1B57BBDD77",
+	UTID = {
+		[1] = "UFF556A1B57BBDD77",
+		[2] = "none",
+	},
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
@@ -137,25 +140,23 @@ end
 
 function MOD:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		if not uDetails.player then
-			if uDetails.name == self.Cowel.Name then
-				if not self.EncounterRunning then
-					self.EncounterRunning = true
-					self.StartTime = Inspect.Time.Real()
-					self.HeldTime = self.StartTime
-					self.TimeElapsed = 0
-					self.Cowel.Dead = false
-					self.Cowel.Casting = false
-					self.Cowel.CastBar:Create(unitID)
-					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
-					self.PhaseObj.Objectives:AddPercent(self.Cowel.Name, 0, 100)
-					self.Phase = 1
-				end
-				self.Cowel.UnitID = unitID
-				self.Cowel.Available = true
-				return self.Cowel
+		if uDetails.name == self.Cowel.Name then
+			if not self.EncounterRunning then
+				self.EncounterRunning = true
+				self.StartTime = Inspect.Time.Real()
+				self.HeldTime = self.StartTime
+				self.TimeElapsed = 0
+				self.Cowel.Dead = false
+				self.Cowel.Casting = false
+				self.Cowel.CastBar:Create(unitID)
+				self.PhaseObj:Start(self.StartTime)
+				self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
+				self.PhaseObj.Objectives:AddPercent(self.Cowel.Name, 0, 100)
+				self.Phase = 1
 			end
+			self.Cowel.UnitID = unitID
+			self.Cowel.Available = true
+			return self.Cowel
 		end
 	end
 end

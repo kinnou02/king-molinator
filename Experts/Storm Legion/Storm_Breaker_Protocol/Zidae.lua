@@ -27,7 +27,7 @@ local MOD = {
 
 MOD.Zidae = {
 	Mod = MOD,
-	Level = "52",
+	Level = "??",
 	Active = false,
 	Name = "Citybreaker Zidae",
 	NameShort = "Zidae",
@@ -36,7 +36,7 @@ MOD.Zidae = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = "none",
+	UTID = "UFFE6ECC319528969",
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
@@ -138,7 +138,7 @@ end
 function MOD:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
 		if not uDetails.player then
-			if uDetails.name == self.Zidae.Name then
+			if uDetails.type == self.Zidae.UTID then
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()

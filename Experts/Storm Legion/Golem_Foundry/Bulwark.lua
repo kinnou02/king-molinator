@@ -137,25 +137,23 @@ end
 
 function MOD:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		if not uDetails.player then
-			if uDetails.name == self.Bulwark.Name then
-				if not self.EncounterRunning then
-					self.EncounterRunning = true
-					self.StartTime = Inspect.Time.Real()
-					self.HeldTime = self.StartTime
-					self.TimeElapsed = 0
-					self.Bulwark.Dead = false
-					self.Bulwark.Casting = false
-					self.Bulwark.CastBar:Create(unitID)
-					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
-					self.PhaseObj.Objectives:AddPercent(self.Bulwark.Name, 0, 100)
-					self.Phase = 1
-				end
-				self.Bulwark.UnitID = unitID
-				self.Bulwark.Available = true
-				return self.Bulwark
+		if uDetails.type == self.Bulwark.UTID then
+			if not self.EncounterRunning then
+				self.EncounterRunning = true
+				self.StartTime = Inspect.Time.Real()
+				self.HeldTime = self.StartTime
+				self.TimeElapsed = 0
+				self.Bulwark.Dead = false
+				self.Bulwark.Casting = false
+				self.Bulwark.CastBar:Create(unitID)
+				self.PhaseObj:Start(self.StartTime)
+				self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
+				self.PhaseObj.Objectives:AddPercent(self.Bulwark.Name, 0, 100)
+				self.Phase = 1
 			end
+			self.Bulwark.UnitID = unitID
+			self.Bulwark.Available = true
+			return self.Bulwark
 		end
 	end
 end

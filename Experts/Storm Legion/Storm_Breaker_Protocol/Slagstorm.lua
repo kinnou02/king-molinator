@@ -27,7 +27,7 @@ local MOD = {
 
 MOD.Slagstorm = {
 	Mod = MOD,
-	Level = "52",
+	Level = "62",
 	Active = false,
 	Name = "Baron Slagstorm",
 	NameShort = "Slagstorm",
@@ -36,7 +36,7 @@ MOD.Slagstorm = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = "none",
+	UTID = "UFC6AD6177783513B",
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
@@ -138,7 +138,7 @@ end
 function MOD:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
 		if not uDetails.player then
-			if uDetails.name == self.Slagstorm.Name then
+			if uDetails.type == self.Slagstorm.UTID then
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
