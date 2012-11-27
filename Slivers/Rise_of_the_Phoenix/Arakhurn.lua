@@ -394,7 +394,7 @@ function HA:UnitHPCheck(uDetails, unitID)
 				return self.Arakhurn
 			else
 				if not self.Bosses[uDetails.name].UnitList[unitID] then
-					SubBossObj = {
+					local SubBossObj = {
 						Mod = HA,
 						Level = "??",
 						Name = uDetails.name,

@@ -215,10 +215,10 @@ function MX.PhaseFour()
 	MX.PhaseObj.Objectives:AddPercent(MX.Murd.Name, 0, 25)	
 end
 
-function MX:UnitHPCheck(unitDetails, unitID)	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if unitDetails.name == self.Murd.Name then
+function MX:UnitHPCheck(uDetails, unitID)	
+	if uDetails and unitID then
+		if not uDetails.player then
+			if uDetails.name == self.Murd.Name then
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()

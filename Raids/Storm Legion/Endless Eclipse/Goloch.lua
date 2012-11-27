@@ -160,7 +160,7 @@ function DLG:UnitHPCheck(uDetails, unitID)
 	if uDetails and unitID then
 		if not uDetails.player then
 			if self.Bosses[uDetails.name] then
-				local BossObj = self.Bosses[unitDetails.name]
+				local BossObj = self.Bosses[uDetails.name]
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()

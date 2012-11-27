@@ -164,11 +164,11 @@ function PI.PhaseTwo()
 	PI.PhaseObj.Objectives:AddPercent(PI.Plutonus.Name, 0, 50)
 end
 
-function PI:UnitHPCheck(unitDetails, unitID)
+function PI:UnitHPCheck(uDetails, unitID)
 	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if unitDetails.name == self.Plutonus.Name then
+	if uDetails and unitID then
+		if not uDetails.player then
+			if uDetails.name == self.Plutonus.Name then
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()

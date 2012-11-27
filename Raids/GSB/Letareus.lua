@@ -152,11 +152,11 @@ function DL:Death(UnitID)
 	return false
 end
 
-function DL:UnitHPCheck(unitDetails, unitID)
+function DL:UnitHPCheck(uDetails, unitID)
 	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if unitDetails.name == self.Letareus.Name then
+	if uDetails and unitID then
+		if not uDetails.player then
+			if uDetails.name == self.Letareus.Name then
 				if not self.Letareus.UnitID then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()

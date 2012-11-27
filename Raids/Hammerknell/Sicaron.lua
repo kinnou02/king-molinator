@@ -223,10 +223,10 @@ function SN:Death(UnitID)
 	return false
 end
 
-function SN:UnitHPCheck(unitDetails, unitID)
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if unitDetails.name == self.Sicaron.Name then
+function SN:UnitHPCheck(uDetails, unitID)
+	if uDetails and unitID then
+		if not uDetails.player then
+			if uDetails.name == self.Sicaron.Name then
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()

@@ -152,11 +152,11 @@ function PRO:Death(UnitID)
 	return false
 end
 
-function PRO:UnitHPCheck(unitDetails, unitID)	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if self.Bosses[unitDetails.name] then
-				local BossObj = self.Bosses[unitDetails.name]
+function PRO:UnitHPCheck(uDetails, unitID)	
+	if uDetails and unitID then
+		if not uDetails.player then
+			if self.Bosses[uDetails.name] then
+				local BossObj = self.Bosses[uDetails.name]
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()

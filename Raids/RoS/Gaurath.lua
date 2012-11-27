@@ -270,7 +270,7 @@ function HG:UnitHPCheck(uDetails, unitID)
 			elseif self.EncounterRunning then
 				if self.Bosses[uDetails.name] then
 					if not self.Bosses[uDetails.name].UnitList[unitID] then
-						SubBossObj = {
+						local SubBossObj = {
 							Mod = HG,
 							Level = "??",
 							Name = uDetails.name,

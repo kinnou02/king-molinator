@@ -29,8 +29,8 @@ MOD.Core = {
 	Mod = MOD,
 	Level = "60",
 	Active = false,
-	Name = "Core Meltdown",
-	NameShort = "Core",
+	Name = "Irradiated Monster",
+	NameShort = "Monster",
 	Menu = {},
 	Castbar = nil,
 	Dead = false,
@@ -38,6 +38,8 @@ MOD.Core = {
 	UnitID = nil,
 	UTID = "none",
 	TimeOut = 5,
+	Multi = true,
+	UnitList = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -49,15 +51,23 @@ KBM.RegisterMod(MOD.ID, MOD)
 -- Main Unit Dictionary
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Core = KBM.Language:Add(MOD.Core.Name)
-MOD.Lang.Unit.Core:SetGerman("Kernschmelze")
 MOD.Core.Name = MOD.Lang.Unit.Core[KBM.Lang]
 MOD.Descript = MOD.Core.Name
-MOD.Lang.Unit.AndShort = KBM.Language:Add("Core")
-MOD.Lang.Unit.AndShort:SetGerman("Kern")
+MOD.Lang.Unit.AndShort = KBM.Language:Add("Monster")
 MOD.Core.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}
+
+-- Say Dictionary
+MOD.Lang.Say = {}
+MOD.Lang.Say.Victory = KBM.Language:Add("Core instability within acceptable limits... Aborting lockdown sequences.")
+
+-- Main Dictionary
+MOD.Lang.Main = {}
+MOD.Lang.Main.Descript = KBM.Language:Add("Core Meltdown")
+MOD.Lang.Main.Descript:SetGerman("Kernschmelze")
+
 
 function MOD:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
@@ -137,25 +147,36 @@ end
 
 function MOD:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		if not uDetails.player then
-			if uDetails.name == self.Core.Name then
-				if not self.EncounterRunning then
-					self.EncounterRunning = true
-					self.StartTime = Inspect.Time.Real()
-					self.HeldTime = self.StartTime
-					self.TimeElapsed = 0
-					self.Core.Dead = false
-					self.Core.Casting = false
-					self.Core.CastBar:Create(unitID)
-					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
-					self.PhaseObj.Objectives:AddPercent(self.Core.Name, 0, 100)
-					self.Phase = 1
-				end
-				self.Core.UnitID = unitID
-				self.Core.Available = true
-				return self.Core
+		if uDetails.name == self.Core.Name then
+			if not self.EncounterRunning then
+				self.EncounterRunning = true
+				self.StartTime = Inspect.Time.Real()
+				self.HeldTime = self.StartTime
+				self.TimeElapsed = 0
+				self.Core.Dead = false
+				self.Core.Casting = false
+				self.Core.CastBar:Create(unitID)
+				self.PhaseObj:Start(self.StartTime)
+				self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
+				self.PhaseObj.Objectives:AddDeath(self.Core.Name, 3) -- will be changing this possibly
+				self.Phase = 1
 			end
+			if not self.Core.UnitList[unitID] then
+				local SubBossObj = {
+					Mod = MOD,
+					Level = "60",
+					Active = true,
+					Name = "Irradiated Monster",
+					NameShort = "Monster",
+					Menu = {},
+					Dead = false,
+					Available = true,
+					UnitID = unitID,
+					UTID = "none",
+				}
+				self.Core.UnitList[unitID] = SubBossObj
+			end
+			return self.Core.UnitList[unitID]
 		end
 	end
 end
@@ -183,6 +204,8 @@ function MOD:Start()
 	--KBM.Defaults.AlertObj.Assign(self.Core)
 	
 	-- Assign Alerts and Timers to Triggers
+	self.Core.Triggers.Victory = KBM.Trigger:Create(self.Lang.Say.Victory[KBM.Lang], "say", self.Core)
+	self.Core.Triggers.Victory:SetVictory()
 	
 	self.Core.CastBar = KBM.CastBar:Add(self, self.Core)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

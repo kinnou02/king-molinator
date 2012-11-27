@@ -367,7 +367,7 @@ function RS:UnitHPCheck(uDetails, unitID)
 					elseif BossObj.Type == "multi" then
 						if BossObj.UnitList then
 							if not BossObj.UnitList[unitID] then
-								SubBossObj = {
+								local SubBossObj = {
 									Mod = RS,
 									Level = "??",
 									Name = uDetails.name,

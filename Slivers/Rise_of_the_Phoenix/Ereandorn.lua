@@ -179,10 +179,10 @@ function EN:Death(UnitID)
 	return false
 end
 
-function EN:UnitHPCheck(unitDetails, unitID)	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if unitDetails.name == self.Ereandorn.Name then
+function EN:UnitHPCheck(uDetails, unitID)	
+	if uDetails and unitID then
+		if not uDetails.player then
+			if uDetails.name == self.Ereandorn.Name then
 				if not self.Ereandorn.UnitID then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()

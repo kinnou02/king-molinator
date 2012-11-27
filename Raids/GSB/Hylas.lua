@@ -302,10 +302,10 @@ function PH.PhaseFive()
 	PH.PhaseObj.Objectives:AddPercent(PH.Hylas.Name, 0, 50)
 end
 
-function PH:UnitHPCheck(unitDetails, unitID)	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if unitDetails.name == self.Hylas.Name then
+function PH:UnitHPCheck(uDetails, unitID)	
+	if uDetails and unitID then
+		if not uDetails.player then
+			if uDetails.name == self.Hylas.Name then
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()

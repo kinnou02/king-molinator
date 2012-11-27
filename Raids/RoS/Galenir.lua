@@ -151,11 +151,11 @@ function WG:Death(UnitID)
 	return false
 end
 
-function WG:UnitHPCheck(unitDetails, unitID)
+function WG:UnitHPCheck(uDetails, unitID)
 	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if unitDetails.name == self.Galenir.Name then
+	if uDetails and unitID then
+		if not uDetails.player then
+			if uDetails.name == self.Galenir.Name then
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()

@@ -151,7 +151,7 @@ end
 
 function CRL:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		local BossObj = self.Bosses[uDetails.type]
+		local BossObj = self.UTID[uDetails.type]
 		if BossObj then
 			if not self.EncounterRunning then
 				self.EncounterRunning = true

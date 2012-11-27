@@ -188,11 +188,11 @@ function BT:Death(UnitID)
 	return false
 end
 
-function BT:UnitHPCheck(unitDetails, unitID)
+function BT:UnitHPCheck(uDetails, unitID)
 	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if unitDetails.name == self.Beruhast.Name then
+	if uDetails and unitID then
+		if not uDetails.player then
+			if uDetails.name == self.Beruhast.Name then
 				if not self.Beruhast.UnitID then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()

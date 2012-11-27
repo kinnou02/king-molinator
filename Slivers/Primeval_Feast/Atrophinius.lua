@@ -220,7 +220,7 @@ function AN:UnitHPCheck(uDetails, unitID)
 			else
 				local BossObj = self.Bosses[uDetails.name]
 				if not self.Bosses[uDetails.name].UnitList[unitID] then
-					SubBossObj = {
+					local SubBossObj = {
 						Mod = BossObj.Mod,
 						Level = "??",
 						Name = uDetails.name,

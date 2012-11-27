@@ -296,7 +296,7 @@ function MF:UnitHPCheck(uDetails, unitID)
 					return self.Maelforge
 				elseif BossObj.UnitList then
 					if not BossObj.UnitList[unitID] then
-						SubBossObj = {
+						local SubBossObj = {
 							Mod = MF,
 							Level = "??",
 							Name = uDetails.name,

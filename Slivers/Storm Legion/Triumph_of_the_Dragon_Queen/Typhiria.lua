@@ -20,7 +20,7 @@ local TPH = {
 	Instance = TDQ.Name,
 	InstanceObj = TDQ,
 	Lang = {},
-	--Enrage = 5 * 60,
+	Enrage = 5 * 60,
 	ID = "STyphiria",
 	Object = "TPH",
 }
@@ -54,7 +54,10 @@ TPH.Typhiria = {
 	-- AlertsRef = {},
 	-- TimersRef = {},
 	Available = false,
-	UTID = "none",
+	UTID = {
+		[1] = "UFF3F6A944C22C40E", -- P1
+		[2] = "UFE4A0A54405C6904", -- P2
+	},
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
@@ -149,36 +152,37 @@ function TPH:Death(UnitID)
 	return false
 end
 
-function TPH:UnitHPCheck(unitDetails, unitID)	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if self.Bosses[unitDetails.name] then
-				local BossObj = self.Bosses[unitDetails.name]
-				if not self.EncounterRunning then
-					self.EncounterRunning = true
-					self.StartTime = Inspect.Time.Real()
-					self.HeldTime = self.StartTime
-					self.TimeElapsed = 0
-					BossObj.Dead = false
-					BossObj.Casting = false
-					if BossObj.Name == self.Typhiria.Name then
-						BossObj.CastBar:Create(unitID)
-					end
-					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase("1")
-					self.PhaseObj.Objectives:AddPercent(self.Typhiria.Name, 0, 100)
-					self.Phase = 1
-				else
-					BossObj.Dead = false
-					BossObj.Casting = false
-					if BossObj.Name == self.Typhiria.Name then
+function TPH:UnitHPCheck(uDetails, unitID)	
+	if uDetails and unitID then
+		local BossObj = self.UTID[uDetails.type]
+		if BossObj then
+			if not self.EncounterRunning then
+				self.EncounterRunning = true
+				self.StartTime = Inspect.Time.Real()
+				self.HeldTime = self.StartTime
+				self.TimeElapsed = 0
+				BossObj.Dead = false
+				BossObj.Casting = false
+				if BossObj == self.Typhiria then
+					BossObj.CastBar:Create(unitID)
+				end
+				self.PhaseObj:Start(self.StartTime)
+				self.PhaseObj:SetPhase("1")
+				self.PhaseObj.Objectives:AddPercent(self.Typhiria.Name, 0, 100)
+				self.Phase = 1
+			else
+				BossObj.Dead = false
+				BossObj.Casting = false
+				if BossObj == self.Typhiria then
+					if BossObj.UnitID ~= unitID then
+						BossObj.CastBar:Remove()
 						BossObj.CastBar:Create(unitID)
 					end
 				end
-				BossObj.UnitID = unitID
-				BossObj.Available = true
-				return self.Typhiria
 			end
+			BossObj.UnitID = unitID
+			BossObj.Available = true
+			return self.Typhiria
 		end
 	end
 end

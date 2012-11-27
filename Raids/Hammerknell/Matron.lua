@@ -248,10 +248,10 @@ function MZ.PhaseThree()
 	MZ.PhaseObj.Objectives:AddPercent(MZ.Matron.Name, 0, 30)	
 end
 
-function MZ:UnitHPCheck(unitDetails, unitID)	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if unitDetails.name == self.Matron.Name then
+function MZ:UnitHPCheck(uDetails, unitID)	
+	if uDetails and unitID then
+		if not uDetails.player then
+			if uDetails.name == self.Matron.Name then
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()

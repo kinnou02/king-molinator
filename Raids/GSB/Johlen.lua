@@ -216,7 +216,7 @@ function IJ:UnitHPCheck(uDetails, unitID)
 				return self.Johlen
 			else
 				if not self.Bosses[uDetails.name].UnitList[unitID] then
-					SubBossObj = {
+					local SubBossObj = {
 						Mod = IJ,
 						Level = "??",
 						Name = uDetails.name,

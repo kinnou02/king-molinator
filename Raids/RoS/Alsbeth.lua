@@ -436,7 +436,7 @@ function AD:UnitHPCheck(uDetails, unitID)
 			elseif uDetails.name == self.Pillar.Name then
 				if self.Phase < 3 then
 					if not self.Bosses[uDetails.name].UnitList[unitID] then
-						SubBossObj = {
+						local SubBossObj = {
 							Mod = AD,
 							Level = "??",
 							Name = uDetails.name,

@@ -352,7 +352,7 @@ function LT:UnitHPCheck(uDetails, unitID)
 				return self.Laethys
 			elseif self.EncounterRunning then
 				if not self.Bosses[uDetails.name].UnitList[unitID] then
-					SubBossObj = {
+					local SubBossObj = {
 						Mod = LT,
 						Level = "??",
 						Name = uDetails.name,

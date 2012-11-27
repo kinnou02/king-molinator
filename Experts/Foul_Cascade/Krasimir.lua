@@ -153,10 +153,10 @@ function MOD:Death(UnitID)
 	return false
 end
 
-function MOD:UnitHPCheck(unitDetails, unitID)	
-	if unitDetails and unitID then
-		if not unitDetails.player then
-			if unitDetails.name == self.Krasimir.Name then
+function MOD:UnitHPCheck(uDetails, unitID)	
+	if uDetails and unitID then
+		if not uDetails.player then
+			if uDetails.name == self.Krasimir.Name then
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
@@ -168,10 +168,10 @@ function MOD:UnitHPCheck(unitDetails, unitID)
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj.Objectives:AddPercent(self.Krasimir.Name, 0, 100)
 				end
-				if self.Krasimir.UTID[1] == unitDetails.type then
+				if self.Krasimir.UTID[1] == uDetails.type then
 					self.PhaseObj:SetPhase(1)
 					self.Phase = 1
-				elseif self.Krasimir.UTID[2] == unitDetails.type then
+				elseif self.Krasimir.UTID[2] == uDetails.type then
 					self.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
 					self.Phase = 2
 				end

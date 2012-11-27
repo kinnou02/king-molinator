@@ -199,7 +199,7 @@ function MOD:UnitHPCheck(uDetails, unitID)
 				return self.Bonehew
 			else
 				if not self.Bosses[uDetails.name].UnitList[unitID] then
-					SubBossObj = {
+					local SubBossObj = {
 						Mod = MOD,
 						Level = 52,
 						Name = uDetails.name,

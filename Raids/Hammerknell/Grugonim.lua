@@ -333,7 +333,7 @@ function GR:UnitHPCheck(uDetails, unitID)
 				return self.Grugonim
 			else
 				if not self.Bosses[uDetails.name].UnitList[unitID] then
-					SubBossObj = {
+					local SubBossObj = {
 						Mod = GR,
 						Level = "??",
 						Name = uDetails.name,

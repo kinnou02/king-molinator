@@ -3790,7 +3790,7 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 													end
 													KBM.EncTimer:Start(KBM.StartTime)
 													KBM.MechSpy:Begin()
-													KBM.Event.Encounter.Start({Type = "start"})
+													KBM.Event.Encounter.Start({Type = "start", Mod = KBM.CurrentMod})
 												end
 												if KBM.PhaseMonitor.Objectives.Lists.Percent[uDetails.name] then
 													local _, PhaseObj = next(KBM.PhaseMonitor.Objectives.Lists.Percent[uDetails.name])
@@ -4748,7 +4748,7 @@ function KBM.Unit:Idle(UnitID, Details)
 		end
 		self.UIDs.Idle[UnitID]:UpdateIdle()
 		KBM.Event.Mark(false, UnitID)
-		KBM.Event.Unit.Unavailable(UnitID)
+		KBM.Event.Unit.Unavailable(UnitID, Details)
 		return self.List.UID[UnitID]
 	else
 		if self.List.UID[UnitID] == nil then
@@ -4760,7 +4760,7 @@ function KBM.Unit:Idle(UnitID, Details)
 			self.UIDs.Idle[UnitID]:UpdateIdle()
 			self.UIDs.Idle[UnitID].Available = false
 			KBM.Event.Mark(false, UnitID)
-			KBM.Event.Unit.Unavailable(UnitID)
+			KBM.Event.Unit.Unavailable(UnitID, Details)
 			return self.List.UID[UnitID]
 		else
 			if not self.UIDs.Idle[UnitID] then
@@ -4770,7 +4770,7 @@ function KBM.Unit:Idle(UnitID, Details)
 			self.UIDs.Idle[UnitID].Available = false
 			self.UIDs.Idle[UnitID]:UpdateIdle()
 			KBM.Event.Mark(false, UnitID)
-			KBM.Event.Unit.Unavailable(UnitID)
+			KBM.Event.Unit.Unavailable(UnitID, Details)
 			return self.List.UID[UnitID]
 		end
 	end
@@ -6817,8 +6817,8 @@ function KBM.WipeIt(Force)
 		elseif KBM.EncounterMode ~= "Template" then
 			KBM.CurrentMod.Settings.Records.Wipes = KBM.CurrentMod.Settings.Records.Wipes + 1
 		end
+		KBM.Event.Encounter.End({Type = "wipe", Mod = KBM.CurrentMod})
 		KBM_Reset()
-		KBM.Event.Encounter.End({Type = "wipe"})
 	end
 	
 end
@@ -7116,8 +7116,8 @@ function KBM.Victory()
 			KBM.CurrentMod.Settings.Records.Kills = KBM.CurrentMod.Settings.Records.Kills + 1
 		end
 	end
+	KBM.Event.Encounter.End({Type = "victory", KBM.CurrentMod})
 	KBM_Reset()
-	KBM.Event.Encounter.End({Type = "victory"})
 end
 
 local function KBM_Death(UnitID)	
@@ -8579,16 +8579,17 @@ function KBM.InitMenus()
 			if not KBM.Boss[Mod.InstanceObj.Type] then
 				print("WARNING: Encounter "..Mod.InstanceObj.Name.." has an incorrect Type value of "..tostring(Mod.InstanceObj.Type))
 			end
+			Mod.UTID = {}
 			for BossName, BossObj in pairs(Mod.Bosses) do
 				if BossObj.UTID then
 					if type(BossObj.UTID) == "table" then
 						for i, UTID in pairs(BossObj.UTID) do
 							KBM.AllocateBoss(Mod, BossObj, UTID, i)
-							Mod.Bosses[UTID] = BossObj
+							Mod.UTID[UTID] = BossObj
 						end
 					elseif type(BossObj.UTID) == "string" then
 						KBM.AllocateBoss(Mod, BossObj, BossObj.UTID)
-						Mod.Bosses[BossObj.UTID] = BossObj
+						Mod.UTID[BossObj.UTID] = BossObj
 					else
 						print("Error: UTID for "..BossObj.Name.." is an incorrect type (string/table)")
 						error("Type is: "..type(UTID))

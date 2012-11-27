@@ -284,7 +284,7 @@ function SZ:UnitHPCheck(uDetails, unitID)
 			else
 				if self.Bosses[uDetails.name] then
 					if not self.Bosses[uDetails.name].UnitList[unitID] then
-						SubBossObj = {
+						local SubBossObj = {
 							Mod = SZ,
 							Level = "??",
 							Name = uDetails.name,

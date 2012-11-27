@@ -30,7 +30,7 @@ MOD.Core = {
 	Level = "??",
 	Active = false,
 	Name = "Irradiated Monster",
-	NameShort = "Core",
+	NameShort = "Monster",
 	Menu = {},
 	Castbar = nil,
 	Dead = false,
@@ -52,8 +52,7 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Core = KBM.Language:Add(MOD.Core.Name)
 MOD.Core.Name = MOD.Lang.Unit.Core[KBM.Lang]
-MOD.Lang.Unit.AndShort = KBM.Language:Add("Core")
-MOD.Lang.Unit.AndShort:SetGerman("Kern")
+MOD.Lang.Unit.AndShort = KBM.Language:Add("Monster")
 MOD.Core.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary
@@ -177,7 +176,7 @@ function MOD:UnitHPCheck(uDetails, unitID)
 				}
 				self.Core.UnitList[unitID] = SubBossObj
 			end
-			return self.Core
+			return self.Core.UnitList[unitID]
 		end
 	end
 end
