@@ -8,6 +8,9 @@ Phase Monitor
 
 Encounter Checking
 * Change: Phase Monitor linking now occurs when a new Encounter Unit is detected.
+* Change: Event.KingMolinator.Encounter.Start/End now send the Mod in the encounter table. {Type = String, Mod = ModObj}
+* Note: All relevant data can be extrapolated from the ModObj.
+* Note: Type will be "start" for .Start and "wipe" or "victory" for .End
 
 Unit Tracking
 * Change: Units now attempt to activate as idle regardless of their "seen" state. This includes them doing damage, and receiving indirect AoE.
@@ -43,6 +46,7 @@ Slivers
 *** New: Enrage time added.
 *** New: Skyscream Unit added for tracking.
 ** General Typhiria
+*** New: UTID updated for both versions.
 ** Jultharin
 *** New: UTID updated.
 *** New: Enrage time added.
@@ -77,6 +81,7 @@ Expert Dungeons
 *** New: UTID updated.
 ** Prince Kaliban
 *** New: UTID updated.
+*** Fixed: Due to the UTID update, this encounter will no longer trigger during the quest in City Core.
 
 * Exodus of the Storm Queen
 ** Dominax
@@ -198,7 +203,6 @@ Normal Dungeons
 ** Prince Kaliban
 *** New: UTID updated.
 *** Fixed: Due to the UTID update, this encounter will no longer trigger during the quest in City Core.
-*** Note: The expert version will still fire until the expert UTID is updated.
 
 * Tower of the Shattered
 ** Kronox

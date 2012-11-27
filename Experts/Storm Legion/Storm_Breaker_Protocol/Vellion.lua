@@ -191,47 +191,47 @@ end
 
 function MOD:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		if not uDetails.player then
-			if self.Bosses[uDetails.name] then
-				local BossObj = self.Bosses[uDetails.name]
-				if BossObj then
-					if not self.EncounterRunning then
-						self.EncounterRunning = true
-						self.StartTime = Inspect.Time.Real()
-						self.HeldTime = self.StartTime
-						self.TimeElapsed = 0
-						BossObj.Dead = false
-						BossObj.Casting = false
-						self.PhaseObj:Start(self.StartTime)
-						self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
-						self.PhaseObj.Objectives:AddPercent(self.Vellion.Name, 0, 100)
-						self.PhaseObj.Objectives:AddPercent(self.VellionLT.Name, 0, 100)
-						self.PhaseObj.Objectives:AddPercent(self.VellionRT.Name, 0, 100)
-						self.PhaseObj.Objectives:AddPercent(self.VellionPS.Name, 0, 100)
-						self.Phase = 1
+		local BossObj = self.Bosses[uDetails.name]
+		if BossObj then
+			if not self.EncounterRunning then
+				self.EncounterRunning = true
+				self.StartTime = Inspect.Time.Real()
+				self.HeldTime = self.StartTime
+				self.TimeElapsed = 0
+				BossObj.Dead = false
+				BossObj.Casting = false
+				self.PhaseObj:Start(self.StartTime)
+				self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
+				self.PhaseObj.Objectives:AddPercent(self.Vellion.Name, 0, 100)
+				self.PhaseObj.Objectives:AddPercent(self.VellionLT.Name, 0, 100)
+				self.PhaseObj.Objectives:AddPercent(self.VellionRT.Name, 0, 100)
+				self.PhaseObj.Objectives:AddPercent(self.VellionPS.Name, 0, 100)
+				self.Phase = 1
+			end
+			if BossObj == self.VellionPS then
+				if BossObj.UnitID ~= unitID then
+					if BossObj.CastBar.Active then
+						BossObj.CastBar:Remove()
 					end
-					if BossObj == self.VellionPS then
-						if BossObj.UnitID ~= unitID then
-							if BossObj.CastBar.Active then
-								BossObj.CastBar:Remove()
-							end
-							BossObj.CastBar:Create(unitID)
-						end
-					end
-					BossObj.UnitID = unitID
-					BossObj.Available = true
-					return BossObj
+					BossObj.CastBar:Create(unitID)
 				end
 			end
+			BossObj.UnitID = unitID
+			BossObj.Available = true
+			return BossObj
 		end
 	end
 end
 
 function MOD:Reset()
 	self.EncounterRunning = false
-	self.Vellion.Available = false
-	self.Vellion.UnitID = nil
-	self.Vellion.CastBar:Remove()
+	for Name, BossObj in pairs(self.Bosses) do
+		BossObj.Available = false
+		BossObj.UnitID = nil
+		if BossObj.CastBar then
+			BossObj.CastBar:Remove()
+		end
+	end
 	self.PhaseObj:End(Inspect.Time.Real())
 end
 
