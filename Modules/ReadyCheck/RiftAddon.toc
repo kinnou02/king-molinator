@@ -7,7 +7,7 @@ Description = "King Boss Mods Ready Check module for Raiding."
 
 Author = "Paul Snart"
 Website = "http://twitter.com/#!/psnart"
-Email = "snarty@gmail.com"
+Email = "kingbossmods@gmail.com"
 
 Version = "0.2.0"
 

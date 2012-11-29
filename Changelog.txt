@@ -1,7 +1,35 @@
-﻿v1.3.5
+﻿v1.3.6
+
+Unit Tracking
+* New: Idle states are now refreshed when an unseen unit causes damage, previously only recieving damage would do this.
+* Change: Adjusted how and when idle units are checked for damage. Now sent through primary update method.
+* Change: Adjusted how and when idle units are checked for healing. Now sent through primary update method.
+* Change: Removed double calls to the Phase Monitor's update method.
+* Change: Removed duplicate calculations of new percentages. Perfomance boost.
+
+Encounter Tracking
+* Fixed: Incorrect encounter start UnitID passed when checking for starts via NPC damage source to a raid member.
+
+Phase Monitor
+* Fixed: Removed incorrect calls to the Phase Monitor's percent based objectives for unseen units.
+
+Ready Check
+* New: Added Fish Hot Pot (Cleric, Mage, Medium, 60)
+* New: Added Feast of Cooperation (Cleric, Mage, High, 60)
+
+Frozen Tempest
+* Crucia
+** New: Added Tempest Assault Frame unit tracking.
+** New: Added Stormcore Annihilator unit tracking.
+
+Empyrean Core (Normal)
+* Core Meltown
+** Fixed: Corrected name of Encounter.
+
+v1.3.5
 
 Rez Master
-* New: Cleric, Added Defiler's Death's Embrace combet res. (Thanks Arisae!)
+* New: Cleric, Added Defiler's Death's Embrace combat res. (Thanks Arisae!)
 
 Phase Monitor
 * Change: The Phase Monitor has been adjusted to allow for tracking of multiple units with the same name.
@@ -98,7 +126,7 @@ Expert Dungeons
 *** New: UTID updated.
 ** C1-0N3
 *** New: UTID updated for main C1-0N3
-*** New: Added 2 addtional UTIDs found for other versions, left 1 open should there be more.
+*** New: Added 2 additional UTIDs found for other versions, left 1 open should there be more.
 ** Subversionary Liaz
 *** New: UTID updated.
 ** Manslaughter
@@ -122,7 +150,7 @@ Expert Dungeons
 ** Kronox
 *** New: UTID updated.
 ** Psychophage Primakov
-*** New: UTID udpated.
+*** New: UTID updated.
 ** General Thunderscar
 *** New: UTID updated.
 ** Commissar Varoniss
@@ -132,11 +160,11 @@ Expert Dungeons
 ** Ahgnox
 *** New: UTID updated.
 ** Avoxcia
-*** New: UTID udpated.
+*** New: UTID updated.
 ** Bruzhail
 *** New: UTID updated.
 ** Forgelord Helix
-*** New: UTID udpated.
+*** New: UTID updated.
 ** Necrotic Throne
 *** New: Necrotic Throne UTID updated.
 *** New: Left and Right Throne UTIDs updated.

@@ -143,6 +143,7 @@ PI.Constants = {
 			List = {
 				["r624A5FA52756B277"] = { -- Burning Powerstone
 					Grade = "High",
+					Level = 50,
 					Callings = {
 						cleric = true,
 						mage = true,
@@ -150,6 +151,7 @@ PI.Constants = {
 				},
 				["r440B155B5AF22AF8"] = { -- Ancient Burning Powerstone
 					Grade = "High",
+					Level = 50,
 					Callings = {
 						cleric = true,
 						mage = true,
@@ -157,6 +159,7 @@ PI.Constants = {
 				},
 				["r70D23CD31E59DD77"] = { -- Flaring Glyph
 					Grade = "Med",
+					Level = 50,
 					Callings = {
 						cleric = true,
 						mage = true,
@@ -164,6 +167,7 @@ PI.Constants = {
 				},
 				["r55A04A4D500636BF"] = { -- Exquisite Oilstone
 					Grade = "High",
+					Level = 50,
 					Callings = {
 						warrior = true,
 						rogue = true,
@@ -171,6 +175,7 @@ PI.Constants = {
 				},
 				["r139805221FB5E557"] = { -- Ancient Exquisite Oilstone
 					Grade = "High",
+					Level = 50,
 					Callings = {
 						warrior = true,
 						rogue = true,
@@ -178,6 +183,7 @@ PI.Constants = {
 				},
 				["r57585B8C3DB1BEF1"] = { -- Ancient Equisite Whetstone
 					Grade = "High",
+					Level = 50,
 					Callings = {
 						warrior = true,
 						rogue = true,
@@ -185,6 +191,7 @@ PI.Constants = {
 				},
 				["r717189072932CD29"] = { -- Exquisite Whetstone
 					Grade = "High",
+					Level = 50,
 					Callings = {
 						warrior = true,
 						rogue = true,
@@ -192,6 +199,7 @@ PI.Constants = {
 				},
 				["r669DCD997490AEF8"] = { -- Wind Glyph
 					Grade = "Medium",
+					Level = 50,
 					Callings = {
 						cleric = true,
 						mage = true,
@@ -202,6 +210,7 @@ PI.Constants = {
 				},
 				["r68FE8ED5065752C2"] = { -- Lightning Glyph
 					Grade = "Medium",
+					Level = 50,
 					Callings = {
 						warrior = true,
 						rogue = true,
@@ -209,6 +218,7 @@ PI.Constants = {
 				},
 				["r1F97418336CC3C87"] = { -- Razor Edge
 					Grade = "Medium",
+					Level = 50,
 					Callings = {
 						warrior = true,
 						rogue = true,
@@ -216,18 +226,21 @@ PI.Constants = {
 				},
 				["r27FEA7C466DC68EE"] = { -- Keen Edge
 					Grade = "Medium",
+					Level = 50,
 					Callings = {
 						warrior = true,
 					},
 				},
 				["r4552DA1F7B7A9D42"] = { -- Storm Glyph
 					Grade = "Medium",
+					Level = 50,
 					Callings = {
 						warrior = true,
 					},
 				},
 				["r7521BA00400F6038"] = { -- Fine Whetstone
 					Grade = "Med",
+					Level = 50,
 					Callings = {
 						warrior = true,
 						rogue = true,
@@ -239,11 +252,40 @@ PI.Constants = {
 			w = 36,
 			Icons = true,
 			List = {
+				--//////////////--
+				-- SL Tank Food --
+				--//////////////--
+				--////////////////////--
+				-- SL High Grade Food --
+				--////////////////////--
+				["B0A0A47828BC4BC5E"] = { -- Feast of Domination (SP)
+					Grade = "High",
+					Level = 60,
+					Callings = {
+						mage = true,
+						cleric = true,
+					},
+				},
+				--//////////////////////--
+				-- SL Medium Grade Food --
+				--//////////////////////--
+				["B3460FDF62FD0E525"] = { -- Fish Hot Pot
+					Grade = "Medium",
+					Level = 60,
+					Callings = {
+						mage = true,
+						cleric = true,
+					},
+				},
+				--///////////////////--
+				-- SL Low Grade Food --
+				--///////////////////--
 				--///////////--
 				-- Tank Food --
 				--///////////--
 				["B5234CE85DD7FE093"] = { -- Kelari Spicey Pome
 					Grade = "High",
+					Level = 50,
 					Callings = {
 						warrior = true,
 						rogue = true,
@@ -255,6 +297,7 @@ PI.Constants = {
 				},
 				["B795C4023DAAEA180"] = { -- Dwarven Goulash
 					Grade = "High",
+					Level = 50,
 					Callings = {
 						warrior = true,
 						rogue = true,
@@ -266,6 +309,7 @@ PI.Constants = {
 				},
 				["B15CE4940834B42CB"] = { -- Ember Steak
 					Grade = "High",
+					Level = 50,
 					Callings = {
 						warrior = true,
 						rogue = true,
@@ -279,6 +323,7 @@ PI.Constants = {
 				--/////////////////--
 				["B174CBFBAEB6DFCAC"] = { -- Feast of Cooperation (SP)
 					Grade = "High",
+					Level = 50,
 					Callings = {
 						mage = true,
 						cleric = true,
@@ -286,6 +331,7 @@ PI.Constants = {
 				},
 				["B5182E376478EEE9C"] = { -- Feast of Cooperation (AP)
 					Grade = "High",
+					Level = 50,
 					Callings = {
 						warrior = true,
 						rogue = true,
@@ -293,6 +339,7 @@ PI.Constants = {
 				},
 				["B5658FDFA5532AE4E"] = { -- Feast of Efficiency
 					Grade = "High",
+					Level = 50,
 					Callings = {
 						warrior = true,
 						rogue = true,
@@ -300,6 +347,7 @@ PI.Constants = {
 				},
 				["B54B43DE1D3EC1EB3"] = { -- Feast of Aptitude
 					Grade = "High",
+					Level = 50,
 					Callings = {
 						cleric = true,
 						mage = true,
@@ -310,6 +358,7 @@ PI.Constants = {
 				--///////////////////--
 				["B3CD06443A7FD7C18"] = { -- Farclan Cherry Cake
 					Grade = "Med",
+					Level = 50,
 					Callings = {
 						cleric = true,
 						mage = true,
@@ -317,6 +366,7 @@ PI.Constants = {
 				},
 				["B2BEA306A6F0C0257"] = { -- Farclan Chocolate Cake
 					Grade = "Med",
+					Level = 50,
 					Callings = {
 						warrior = true,
 						rogue = true,
@@ -324,6 +374,7 @@ PI.Constants = {
 				},
 				["B55D71860C42C1B75"] = { -- Kelari Expedition Chocolate Cake
 					Grade = "Med",
+					Level = 50,
 					Callings = {
 						warrior = true,
 						rogue = true,
@@ -331,6 +382,7 @@ PI.Constants = {
 				},
 				["B358E4BC49852C7E6"] = { -- Kelari Expedition Cherry Cake
 					Grade = "Med",
+					Level = 50,
 					Callings = {
 						cleric = true,
 						mage = true,
@@ -347,6 +399,7 @@ PI.Constants = {
 			List = {
 				["B1C51B12CC359AA77"] = { -- Herioc Brightsurge Vial
 					Grade = "High",
+					Level = 50,
 					Callings = {
 						cleric = true,
 						mage = true,
@@ -354,6 +407,7 @@ PI.Constants = {
 				},
 				["B798FC1E26E38815F"] = { -- Heroic Powersurge Vial
 					Grade = "High",
+					Level = 50,
 					Callings = {
 						warrior = true,
 						rogue = true,
@@ -361,12 +415,14 @@ PI.Constants = {
 				},
 				["B175939E807F0707F"] = { -- Herioc Enduring Vial
 					Grade = "High",
+					Level = 50,
 					Callings = {
 						all = true,
 					},
 				},
 				["B3028494ABDF72791"] = { -- Herioc Fortified Vial
 					Grade = "High",
+					Level = 50,
 					Callings = {
 						warrior = true,
 						rogue = true,
@@ -378,12 +434,14 @@ PI.Constants = {
 				},
 				["B72807CC529E275FD"] = { -- Mighty Enduring Vial
 					Grade = "Med",
+					Level = 50,
 					Callings = {
 						all = true,
 					},
 				},
 				["B26300F4BDE63286A"] = { -- Mighty Fortified Vial
 					Grade = "Med",
+					Level = 50,
 					Callings = {
 						warrior = true,
 						rogue = true,
@@ -395,42 +453,49 @@ PI.Constants = {
 				},				
 				["B2099ACE7DB4C2342"] = { -- Vial of Earth Resistance
 					Grade = "High",
+					Level = 50,
 					Callings = {
 						all = true,
 					},
 				},
 				["B1928DC9D0D875B36"] = { -- Vial of Water Resistance
 					Grade = "High",
+					Level = 50,
 					Callings = {
 						all = true,
 					},
 				},
 				["B4D75A15E32976412"] = { -- Vial of Fire Resistance
 					Grade = "High",
+					Level = 50,
 					Callings = {
 						all = true,
 					},
 				},
 				["B0B554EAC804EE17F"] = { -- Vial of Death Resistance
 					Grade = "High",
+					Level = 50,
 					Callings = {
 						all = true,
 					},
 				},
 				["B769F65AA45A72C2B"] = { -- Vial of Air Resistance
 					Grade = "High",
+					Level = 50,
 					Callings = {
 						all = true,
 					},
 				},
 				["B5F5153125385DC4E"] = { -- Vial of Life Resistance
 					Grade = "High",
+					Level = 50,
 					Callings = {
 						all = true,
 					},
 				},
 				["B0B2B52E09FA082DE"] = { -- Mighty Powersurge Vial
 					Grade = "Med",
+					Level = 50,
 					Callings = {
 						warrior = true,
 						rogue = true,
@@ -438,6 +503,7 @@ PI.Constants = {
 				},
 				["B1EE0CFCC0280BE3A"] = { -- Mighty Brightsurge Vial
 					Grade = "Med",
+					Level = 50,
 					Callings = {
 						cleric = true,
 						mage = true,
@@ -450,24 +516,28 @@ PI.Constants = {
 			List = {
 				["r0BBA6691632B040C"] = { -- Performance Insoles
 					Grade = "High",
+					Level = 50,
 					Callings = {
 						all = true,
 					},
 				},
 				["r4003D6A12E212CFF"] = { -- Cushioned Insoles
 					Grade = "High",
+					Level = 50,
 					Callings = {
 						all = true,
 					},
 				},
 				["B724E352BBAA3E897"] = { -- Planar Protection
 					Grade = "High",
+					Level = 50,
 					Callings = {
 						all = true,
 					},
 				},
 				["r4057380E26CC6760"] = { -- Thick Armor Plating
 					Grade = "High",
+					Level = 50,
 					Callings = {
 						warrior = true,
 						rogue = true,
@@ -479,6 +549,7 @@ PI.Constants = {
 				},
 				["r4C9A818733580794"] = { -- Poisonous Coating
 					Grade = "High",
+					Level = 50,
 					Callings = {
 						warrior = true,
 						rogue = true,

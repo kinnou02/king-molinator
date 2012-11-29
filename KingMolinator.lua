@@ -131,7 +131,7 @@ KBM.ID = "KingMolinator"
 KBM.ModList = {}
 KBM.Testing = false
 KBM.ValidTime = false
-KBM.IsAlpha = false
+KBM.IsAlpha = true
 KBM.Debug = false
 KBM.Aux = {}
 KBM.TestFilters = {}
@@ -3890,11 +3890,16 @@ function KBM.MobDamage(info)
 		local tUnitID = info.target
 		local cUnitID = info.caster
 		if cUnitID then
-			if not KBM.Unit.List.UID[cUnitID] then
+			local cUnitObj = KBM.Unit.List.UID[cUnitID]
+			if not cUnitObj then
 				cDetails = Inspect.Unit.Detail(cUnitID)
-				KBM.Unit:Idle(cUnitID, cDetails)
+				cUnitObj = KBM.Unit:Idle(cUnitID, cDetails)
+				cUnitObj:UpdateIdle()
 			else
-				cDetails = KBM.Unit.List.UID[cUnitID].Details
+				cDetails = cUnitObj.Details
+				if cUnitObj.Time then
+					cUnitObj:UpdateIdle()
+				end
 			end
 		end	
 		UnitObj = KBM.Unit.List.UID[tUnitID]
@@ -3921,12 +3926,6 @@ function KBM.MobDamage(info)
 							end
 						end
 						if KBM.BossID[cUnitID] then
-							-- Update Phase Monitor accordingly.
-							if KBM.PhaseMonitor.Active then
-								if KBM.PhaseMonitor.Objectives.Lists.Percent[cUnitID] then
-									KBM.PhaseMonitor.Objectives.Lists.Percent[cUnitID]:Update(KBM.BossID[cUnitID].PercentRaw)
-								end
-							end
 							-- Check for Npc Based Triggers (Usually Dynamic: Eg - Failsafe for P4 start Akylios)
 							if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID] then
 								if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][cDetails.name] then
@@ -3951,12 +3950,6 @@ function KBM.MobDamage(info)
 								KBM.BossID[tUnitID].Percent = math.ceil(KBM.BossID[tUnitID].PercentRaw)
 								if KBM.CurrentMod then
 									KBM.BossID[tUnitID].PercentLast = KBM.BossID[tUnitID].Percent
-									-- Update Phase Monitor accordingly.
-									if KBM.PhaseMonitor.Active then
-										if KBM.PhaseMonitor.Objectives.Lists.Percent[tUnitID] then
-											KBM.PhaseMonitor.Objectives.Lists.Percent[tUnitID]:Update(KBM.BossID[tUnitID].PercentRaw)
-										end
-									end
 									-- Check for Npc Based Triggers (Usually Dynamic: Eg - Failsafe for P4 start Akylios)
 									if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID] then
 										if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name] then
@@ -3979,7 +3972,7 @@ function KBM.MobDamage(info)
 				if not cDetails.player then
 					if cDetails.combat then
 						if cDetails.health > 0 then
-							KBM.CheckActiveBoss(cDetails, tUnitID)
+							KBM.CheckActiveBoss(cDetails, cUnitID)
 						end
 					end
 				end
@@ -4015,8 +4008,9 @@ function KBM.RaidDamage(info)
 		local cUnitID = info.caster
 		local tDetails, UnitObj
 		if cUnitID then
-			if not KBM.Unit.List.UID[cUnitID] then
-				KBM.Unit:Idle(cUnitID, Inspect.Unit.Detail(cUnitID))
+			local cUnitObj = KBM.Unit.List.UID[cUnitID]
+			if not cUnitObj then
+				cUnitObj = KBM.Unit:Idle(cUnitID, Inspect.Unit.Detail(cUnitID))
 			end
 		end
 		if tUnitID then
@@ -4045,12 +4039,6 @@ function KBM.RaidDamage(info)
 				-- *** TO BE CHANGED DUE TO UNIT TRACKER NOW MONITORING HEALTH DATA ***
 				-- ********************************************************************
 				if KBM.CurrentMod.ID then
-					-- Update Phase Monitor accordingly.
-					if KBM.PhaseMonitor.Active then
-						if KBM.PhaseMonitor.Objectives.Lists.Percent[tUnitID] then
-							KBM.PhaseMonitor.Objectives.Lists.Percent[tUnitID]:Update(KBM.BossID[tUnitID].PercentRaw)
-						end
-					end
 					-- Check for Npc Based Triggers (Usually Dynamic: Eg - Failsafe for P4 start Akylios)
 					if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID] then
 						if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][UnitObj.Name] then
@@ -4281,7 +4269,6 @@ function KBM.Unit:Create(uDetails, UnitID)
 							self.Percent = math.ceil(self.PercentRaw)
 							self.LastPercentRaw = self.PercentRaw
 							KBM.Event.Unit.PercentChange(self.UnitID)
-							KBM.UpdateHP(self)
 						end
 					end
 				end
@@ -4326,6 +4313,7 @@ function KBM.Unit:Create(uDetails, UnitID)
 								end
 							end
 							KBM.BossID[self.UnitID].PercentLast = KBM.BossID[self.UnitID].Percent
+							KBM:UpdateHP(self)
 						end
 					end
 				end
@@ -4349,10 +4337,12 @@ function KBM.Unit:Create(uDetails, UnitID)
 					if uDetails then
 						self.Details = uDetails
 						if uDetails.healthMax then
-							self.HealthMax = uDetails.healthMax
-						end
-						if uDetails.health then
-							self:Update(uDetails.health, uDetails)
+							if uDetails.healthMax ~= self.HealthMax then
+								self.HealthMax = uDetails.healthMax
+								if uDetails.health then
+									self:Update(uDetails.health, uDetails)
+								end
+							end
 						end
 					end
 					return
@@ -4370,15 +4360,7 @@ function KBM.Unit:Create(uDetails, UnitID)
 						if DamageObj.overkill then
 							self.Health = 0
 						end
-						self.Details.health = self.Health
-						self.PercentFlat = (self.Health/self.HealthMax)
-						self.PercentRaw = self.PercentFlat*100
-						if self.PercentRaw ~= self.LastPercentRaw then
-							self.Percent = math.ceil(self.PercentRaw)
-							self.LastPercentRaw = self.PercentRaw
-							KBM.Event.Unit.PercentChange(self.UnitID)
-							KBM.UpdateHP(self)
-						end
+						self:Update(self.Health, uDetails)
 					end
 				end
 			elseif self.Time then
@@ -4413,15 +4395,7 @@ function KBM.Unit:Create(uDetails, UnitID)
 						if self.Dead then
 							self.Dead = false
 						end
-						self.Details.health = self.Health
-						self.PercentFlat = (self.Health/self.HealthMax)
-						self.PercentRaw = self.PercentFlat*100
-						if self.PercentRaw ~= self.LastPercentRaw then
-							self.Percent = math.ceil(self.PercentRaw)
-							self.LastPercentRaw = self.PercentRaw
-							KBM.Event.Unit.PercentChange(self.UnitID)
-							KBM.UpdateHP(self)
-						end
+						self:Update(self.Health, uDetails)
 					end
 				end
 			elseif self.Time then
@@ -4748,7 +4722,7 @@ function KBM.Unit:Idle(UnitID, Details)
 		end
 		self.UIDs.Idle[UnitID]:UpdateIdle()
 		KBM.Event.Mark(false, UnitID)
-		KBM.Event.Unit.Unavailable(UnitID, Details)
+		KBM.Event.Unit.Unavailable(UnitID, Details, self.List.UID[UnitID])
 		return self.List.UID[UnitID]
 	else
 		if self.List.UID[UnitID] == nil then
@@ -4760,7 +4734,7 @@ function KBM.Unit:Idle(UnitID, Details)
 			self.UIDs.Idle[UnitID]:UpdateIdle()
 			self.UIDs.Idle[UnitID].Available = false
 			KBM.Event.Mark(false, UnitID)
-			KBM.Event.Unit.Unavailable(UnitID, Details)
+			KBM.Event.Unit.Unavailable(UnitID, Details, self.List.UID[UnitID])
 			return self.List.UID[UnitID]
 		else
 			if not self.UIDs.Idle[UnitID] then
@@ -4770,7 +4744,7 @@ function KBM.Unit:Idle(UnitID, Details)
 			self.UIDs.Idle[UnitID].Available = false
 			self.UIDs.Idle[UnitID]:UpdateIdle()
 			KBM.Event.Mark(false, UnitID)
-			KBM.Event.Unit.Unavailable(UnitID, Details)
+			KBM.Event.Unit.Unavailable(UnitID, Details, self.List.UID[UnitID])
 			return self.List.UID[UnitID]
 		end
 	end
@@ -4876,6 +4850,21 @@ local function KBM_UnitAvailable(units)
 	-- if KBM.Watchdog.Avail.wTime > TimeLeft then
 		-- KBM.Watchdog.Avail.wTime = TimeLeft
 	-- end
+end
+
+local function KBM_UnitRemoved(units)
+	if KBM.Encounter then
+		for UnitID, Specifier in pairs(units) do
+			KBM.Unit:Idle(UnitID)
+			if KBM.BossID[UnitID] then
+				KBM.BossID[UnitID].available = false
+			end
+		end
+	else
+		for UnitID, Specifier in pairs(units) do
+			KBM.Unit:Idle(UnitID)
+		end	
+	end	
 end
 
 function KBM.AttachDragFrame(parent, hook, name, layer)
@@ -6859,8 +6848,8 @@ function KBM:UpdateHP(UnitObj)
 	if KBM.Encounter then
 		if UnitObj then
 			if KBM.PhaseMonitor.Active then
-				if KBM.PhaseMonitor.Objectives.Lists.Percent[UnitObj.Name] then
-					KBM.PhaseMonitor.Objectives.Lists.Percent[UnitObj.Name]:Update(UnitObj.PercentRaw)
+				if KBM.PhaseMonitor.Objectives.Lists.Percent[UnitObj.UnitID] then
+					KBM.PhaseMonitor.Objectives.Lists.Percent[UnitObj.UnitID]:Update(UnitObj.PercentRaw)
 				end
 			end
 		end
@@ -6875,7 +6864,6 @@ function KBM:Timer()
 	local diff = (current - self.HeldTime)
 	local udiff = (current - self.UpdateTime)
 
-	
 	if not KBM.Updating then
 		KBM.Updating = true
 		if KBM.QueuePage then
@@ -6905,7 +6893,7 @@ function KBM:Timer()
 				end
 				if diff >= 1 then
 					self.LastElapsed = self.TimeElapsed
-					self.TimeElapsed = math.floor(current) - self.StartTime
+					self.TimeElapsed = math.floor(current - self.StartTime)
 					if not KBM.Testing then
 						if KBM.CurrentMod.Enrage then
 							self.EnrageTimer = self.EnrageTime - math.floor(current)
@@ -7025,21 +7013,6 @@ end
 
 local function KM_ToggleEnabled(result)
 	
-end
-
-local function KBM_UnitRemoved(units)
-	if KBM.Encounter then
-		for UnitID, Specifier in pairs(units) do
-			KBM.Unit:Idle(UnitID)
-			if KBM.BossID[UnitID] then
-				KBM.BossID[UnitID].available = false
-			end
-		end
-	else
-		for UnitID, Specifier in pairs(units) do
-			KBM.Unit:Idle(UnitID)
-		end	
-	end	
 end
 
 function KBM.GroupDeath(DeathObj)

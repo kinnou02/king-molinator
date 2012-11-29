@@ -68,6 +68,7 @@ MOD.Lang.Main = {}
 MOD.Lang.Main.Descript = KBM.Language:Add("Core Meltdown")
 MOD.Lang.Main.Descript:SetGerman("Kernschmelze")
 
+MOD.Descript = MOD.Lang.Main.Descript[KBM.Lang]
 
 function MOD:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript

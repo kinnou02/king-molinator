@@ -22,6 +22,7 @@ local CRC = {
 	InstanceObj = FT,
 	HasPhases = true,
 	Lang = {},
+	Enrage = 12 * 60,
 	ID = "Crucia",
 	Object = "CRC",
 }
@@ -34,6 +35,10 @@ CRC.Lang.Unit.Crucia = KBM.Language:Add("Crucia")
 CRC.Lang.Unit.Crucia:SetGerman("Crucia")
 CRC.Lang.Unit.CruciaShort = KBM.Language:Add("Crucia")
 CRC.Lang.Unit.CruciaShort:SetGerman("Crucia")
+CRC.Lang.Unit.Tempest = KBM.Language:Add("Tempest Assault Frame")
+CRC.Lang.Unit.TempestShort = KBM.Language:Add("Tempest")
+CRC.Lang.Unit.Storm = KBM.Language:Add("Stormcore Annihilator")
+CRC.Lang.Unit.StormShort = KBM.Language:Add("Stormcore")
 
 -- Ability Dictionary
 CRC.Lang.Ability = {}
@@ -53,7 +58,10 @@ CRC.Crucia = {
 	Dead = false,
 	Available = false,
 	Menu = {},
-	UTID = "none",
+	UTID = {
+		[1] = "none",
+		[2] = "none",
+	},
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
@@ -64,7 +72,8 @@ CRC.Crucia = {
 		CastBar = KBM.Defaults.CastBar(),
 		-- TimersRef = {
 			-- Enabled = true,
-			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
+			-- LBreath = KBM.Defaults.TimerObj.Create("red"),
+			-- OStrike = KBM.Defaults.TimerObj.Create("blue"),
 		-- },
 		-- AlertsRef = {
 			-- Enabled = true,
@@ -73,23 +82,103 @@ CRC.Crucia = {
 	}
 }
 
+CRC.Tempest = {
+	Mod = CRC,
+	Level = "??",
+	Active = false,
+	Name = CRC.Lang.Unit.Tempest[KBM.Lang],
+	NameShort = CRC.Lang.Unit.TempestShort[KBM.Lang],
+	Dead = false,
+	Available = false,
+	Menu = {},
+	UTID = "none",
+	UnitID = nil,
+	TimeOut = 5,
+	Castbar = nil,
+	Multi = true,
+	UnitList = {},
+	-- TimersRef = {},
+	-- AlertsRef = {},
+	Triggers = {},
+	Settings = {
+		-- TimersRef = {
+			-- Enabled = true,
+		-- },
+		-- AlertsRef = {
+			-- Enabled = true,
+			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
+		-- },
+	}
+}
+
+CRC.Storm = {
+	Mod = CRC,
+	Level = "??",
+	Active = false,
+	Name = CRC.Lang.Unit.Storm[KBM.Lang],
+	NameShort = CRC.Lang.Unit.StormShort[KBM.Lang],
+	Dead = false,
+	Available = false,
+	Menu = {},
+	UTID = "none",
+	UnitID = nil,
+	TimeOut = 5,
+	Castbar = nil,
+	Multi = true,
+	UnitList = {},
+	-- TimersRef = {},
+	-- AlertsRef = {},
+	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+		-- TimersRef = {
+			-- Enabled = true,
+		-- },
+		-- AlertsRef = {
+			-- Enabled = true,
+			-- Pulse = KBM.Defaults.AlertObj.Create("yellow"),
+		-- },
+	}
+}
+
 function CRC:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Crucia.Name] = self.Crucia,
+		[self.Tempest.Name] = self.Tempest,
+		[self.Storm.Name] = self.Storm,
 	}
+
+	for BossName, BossObj in pairs(self.Bosses) do
+		if BossObj.Settings then
+			if BossObj.Settings.CastBar then
+				BossObj.Settings.CastBar.Override = true
+				BossObj.Settings.CastBar.Multi = true
+			end
+		end
+	end	
 end
 
 function CRC:InitVars()
 	self.Settings = {
 		Enabled = true,
-		CastBar = self.Crucia.Settings.CastBar,
+		CastBar = {
+			Multi = true,
+			Override = true,
+		},
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
-		-- MechTimer = KBM.Defaults.MechTimer(),
-		-- Alerts = KBM.Defaults.Alerts(),
-		-- TimersRef = self.Crucia.Settings.TimersRef,
-		-- AlertsRef = self.Crucia.Settings.AlertsRef,
+		MechTimer = KBM.Defaults.MechTimer(),
+		Crucia = {
+			CastBar = self.Crucia.Settings.CastBar,
+			-- Alerts = KBM.Defaults.Alerts(),
+			TimersRef = self.Crucia.Settings.TimersRef,
+			-- AlertsRef = self.Crucia.Settings.AlertsRef,
+		},
+		Storm = {
+			CastBar = self.Storm.Settings.CastBar,
+			AlertsRef = self.Storm.Settings.AlertsRef,
+		},
 	}
 	KBMSLRDFTCR_Settings = self.Settings
 	chKBMSLRDFTCR_Settings = self.Settings
@@ -162,10 +251,29 @@ function CRC:UnitHPCheck(uDetails, unitID)
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
 					self.TimeElapsed = 0
-					BossObj.Dead = false
-					BossObj.Casting = false
-					if BossObj.Name == self.Crucia.Name then
-						BossObj.CastBar:Create(unitID)
+					if BossObj.Multi then
+						if not BossObj.UnitList[unitID] then
+							local SubBossObj = {
+								Mod = MOD,
+								Level = "??",
+								Active = true,
+								Name = BossObj.Name,
+								NameShort = BossObj.NameShort,
+								Menu = {},
+								Dead = false,
+								Available = true,
+								UnitID = unitID,
+								UTID = "none",
+							}
+							BossObj.UnitList[unitID] = SubBossObj
+							return SubBossObj
+						end
+					else
+						BossObj.Dead = false
+						BossObj.Casting = false
+						if BossObj.CastBar then
+							BossObj.CastBar:Create(unitID)
+						end
 					end
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase("1")
@@ -174,13 +282,35 @@ function CRC:UnitHPCheck(uDetails, unitID)
 				else
 					BossObj.Dead = false
 					BossObj.Casting = false
-					if BossObj.Name == self.Crucia.Name then
-						BossObj.CastBar:Create(unitID)
+					if BossObj.Multi then
+						if not BossObj.UnitList[unitID] then
+							local SubBossObj = {
+								Mod = MOD,
+								Level = "??",
+								Active = true,
+								Name = BossObj.Name,
+								NameShort = BossObj.NameShort,
+								Menu = {},
+								Dead = false,
+								Available = true,
+								UnitID = unitID,
+								UTID = "none",
+							}
+							BossObj.UnitList[unitID] = SubBossObj
+							return SubBossObj
+						end
+					else
+						if BossObj.CastBar then
+							if BossObj.UnitID ~= unitID then
+								BossObj.CastBar:Remove()
+								BossObj.CastBar:Create(unitID)
+							end
+						end
 					end
 				end
 				BossObj.UnitID = unitID
 				BossObj.Available = true
-				return self.Crucia
+				return BossObj
 			end
 		end
 	end
@@ -193,8 +323,13 @@ function CRC:Reset()
 		BossObj.UnitID = nil
 		BossObj.Dead = false
 		BossObj.Casting = false
-	end
-	self.Crucia.CastBar:Remove()	
+		if BossObj.Multi then
+			BossObj.UnitList = {}
+		end
+		if BossObj.CastBar then
+			BossObj.CastBar:Remove()
+		end
+	end	
 	self.PhaseObj:End(Inspect.Time.Real())
 end
 
@@ -211,10 +346,14 @@ function CRC:Start()
 	
 	-- Create Alerts
 	-- KBM.Defaults.AlertObj.Assign(self.Crucia)
+	-- KBM.Defaults.AlertObj.Assign(self.Storm)
 	
 	-- Assign Alerts and Timers to Triggers
+	-- Crucia Triggers
+	-- Stormcore Triggers
 	
 	self.Crucia.CastBar = KBM.CastBar:Add(self, self.Crucia)
+	self.Storm.CastBar = KBM.CastBar:Add(self, self.Storm)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()
 end
