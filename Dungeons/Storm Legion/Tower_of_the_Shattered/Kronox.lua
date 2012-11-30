@@ -50,10 +50,12 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Kronox = KBM.Language:Add(MOD.Kronox.Name)
 MOD.Lang.Unit.Kronox:SetGerman()
+MOD.Lang.Unit.Kronox:SetFrench()
 MOD.Kronox.Name = MOD.Lang.Unit.Kronox[KBM.Lang]
 MOD.Descript = MOD.Kronox.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Kronox")
 MOD.Lang.Unit.AndShort:SetGerman()
+MOD.Lang.Unit.AndShort:SetFrench()
 MOD.Kronox.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary

@@ -25,12 +25,30 @@ local MOD = {
 	Object = "MOD",
 }
 
+KBM.RegisterMod(MOD.ID, MOD)
+
+-- Main Unit Dictionary
+MOD.Lang.Unit = {}
+MOD.Lang.Unit.Strauz = KBM.Language:Add("Strauz")
+MOD.Lang.Unit.Strauz:SetGerman()
+MOD.Lang.Unit.Strauz:SetFrench()
+MOD.Lang.Unit.StrShort = KBM.Language:Add("Strauz")
+MOD.Lang.Unit.StrShort:SetGerman()
+MOD.Lang.Unit.StrShort:SetFrench()
+MOD.Lang.Unit.Mercutial = KBM.Language:Add("Mercutial")
+MOD.Lang.Unit.Mercutial:SetGerman()
+MOD.Lang.Unit.Mercutial:SetFrench()
+MOD.Lang.Unit.MerShort = KBM.Language:Add("Mercutial")
+MOD.Lang.Unit.MerShort:SetGerman()
+MOD.Lang.Unit.MerShort:SetFrench()
+
 MOD.Strauz = {
 	Mod = MOD,
 	Level = "60",
 	Active = false,
-	Name = "Strauz",
-	NameShort = "Strauz",
+	Name = MOD.Lang.Unit.Strauz[KBM.Lang],
+	NameShort = MOD.Lang.Unit.StrShort[KBM.Lang],
+	Dictionary = MOD.Lang.Unit.Strauz,
 	Menu = {},
 	Castbar = nil,
 	Dead = false,
@@ -44,25 +62,13 @@ MOD.Strauz = {
 	}
 }
 
-KBM.RegisterMod(MOD.ID, MOD)
-
--- Main Unit Dictionary
-MOD.Lang.Unit = {}
-MOD.Lang.Unit.Strauz = KBM.Language:Add(MOD.Strauz.Name)
-MOD.Lang.Unit.Strauz:SetGerman("Strauz")
-MOD.Lang.Unit.StrShort = KBM.Language:Add("Strauz")
-MOD.Lang.Unit.StrShort:SetGerman()
-MOD.Lang.Unit.Mercutial = KBM.Language:Add("Mercutial")
-MOD.Lang.Unit.Mercutial:SetGerman()
-MOD.Lang.Unit.MerShort = KBM.Language:Add("Mercutial")
-MOD.Lang.Unit.MerShort:SetGerman()
-
 MOD.Mercutial = {
 	Mod = MOD,
 	Level = "60",
 	Active = false,
 	Name = MOD.Lang.Unit.Mercutial[KBM.Lang],
 	NameShort = MOD.Lang.Unit.MerShort[KBM.Lang],
+	Dictionary = MOD.Lang.Unit.Mercutial,
 	Menu = {},
 	Castbar = nil,
 	Dead = false,
@@ -83,10 +89,9 @@ MOD.Lang.Ability = {}
 MOD.Lang.Main = {}
 MOD.Lang.Main.Descript = KBM.Language:Add("Kaliban's Bodyguards")
 MOD.Lang.Main.Descript:SetGerman("Kalibans Leibwachen")
-MOD.Descript = MOD.Lang.Main.Descript[KBM.Lang]
+MOD.Lang.Main.Descript:SetFrench("Gardes du corps de Kaliban")
 
-MOD.Strauz.Name = MOD.Lang.Unit.Strauz[KBM.Lang]
-MOD.Strauz.NameShort = MOD.Lang.Unit.StrShort[KBM.Lang]
+MOD.Descript = MOD.Lang.Main.Descript[KBM.Lang]
 
 function MOD:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript

@@ -50,10 +50,12 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Doctor = KBM.Language:Add(MOD.Doctor.Name)
 MOD.Lang.Unit.Doctor:SetGerman("Doktor Perfidus")
+MOD.Lang.Unit.Doctor:SetFrench("Docteur fou")
 MOD.Doctor.Name = MOD.Lang.Unit.Doctor[KBM.Lang]
 MOD.Descript = MOD.Doctor.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Doctor")
 MOD.Lang.Unit.AndShort:SetGerman("Doktor")
+MOD.Lang.Unit.AndShort:SetFrench("Docteur")
 MOD.Doctor.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary

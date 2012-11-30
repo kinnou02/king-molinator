@@ -49,10 +49,12 @@ KBM.RegisterMod(MOD.ID, MOD)
 -- Main Unit Dictionary
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Ahgnox = KBM.Language:Add(MOD.Ahgnox.Name)
+MOD.Lang.Unit.Ahgnox:SetGerman("Ahgnox der Leichenhüter")
 MOD.Ahgnox.Name = MOD.Lang.Unit.Ahgnox[KBM.Lang]
 MOD.Descript = MOD.Ahgnox.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Ahgnox")
 MOD.Lang.Unit.AndShort:SetGerman()
+MOD.Lang.Unit.AndShort:SetFrench()
 MOD.Ahgnox.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary

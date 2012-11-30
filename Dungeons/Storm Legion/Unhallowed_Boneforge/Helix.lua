@@ -50,10 +50,12 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Helix = KBM.Language:Add(MOD.Helix.Name)
 MOD.Lang.Unit.Helix:SetGerman("Schmiedefürst Helix")
+MOD.Lang.Unit.Helix:SetFrench("Seigneur de la forge Helix")
 MOD.Helix.Name = MOD.Lang.Unit.Helix[KBM.Lang]
 MOD.Descript = MOD.Helix.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Helix")
 MOD.Lang.Unit.AndShort:SetGerman()
+MOD.Lang.Unit.AndShort:SetFrench()
 MOD.Helix.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary

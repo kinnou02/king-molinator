@@ -54,6 +54,7 @@ MOD.Cahail.Name = MOD.Lang.Unit.Cahail[KBM.Lang]
 MOD.Descript = MOD.Cahail.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Cahail")
 MOD.Lang.Unit.AndShort:SetGerman()
+MOD.Lang.Unit.AndShort:SetFrench()
 MOD.Cahail.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary

@@ -50,10 +50,12 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Emphalea = KBM.Language:Add(MOD.Emphalea.Name)
 MOD.Lang.Unit.Emphalea:SetGerman()
+MOD.Lang.Unit.Emphalea:SetFrench()
 MOD.Emphalea.Name = MOD.Lang.Unit.Emphalea[KBM.Lang]
 MOD.Descript = MOD.Emphalea.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Emphalea")
 MOD.Lang.Unit.AndShort:SetGerman()
+MOD.Lang.Unit.AndShort:SetFrench()
 MOD.Emphalea.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary

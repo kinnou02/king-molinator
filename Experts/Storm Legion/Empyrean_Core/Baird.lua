@@ -54,6 +54,7 @@ MOD.Baird.Name = MOD.Lang.Unit.Baird[KBM.Lang]
 MOD.Descript = MOD.Baird.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Baird")
 MOD.Lang.Unit.AndShort:SetGerman()
+MOD.Lang.Unit.AndShort:SetFrench()
 MOD.Baird.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary

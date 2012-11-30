@@ -123,14 +123,23 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Marks = {}
 	KBMLM.SetGroupObject(KBM.Language.Marks, "GroupObject", "Raid Mark Related Text")
 	KBM.Language.Marks.Tank = KBM.Language:Add("Tank")
+	KBM.Language.Marks.Tank:SetFrench()
 	KBM.Language.Marks.Heal = KBM.Language:Add("Heal")
+	KBM.Language.Marks.Heal:SetFrench("Soins")
 	KBM.Language.Marks.Damage = KBM.Language:Add("Damage")
+	KBM.Language.Marks.Damage:SetFrench("Dégats")
 	KBM.Language.Marks.Support = KBM.Language:Add("Support")
+	KBM.Language.Marks.Support:SetFrench()
 	KBM.Language.Marks.Arrow = KBM.Language:Add("Arrow")
+	KBM.Language.Marks.Arrow:SetFrench("Flèche")
 	KBM.Language.Marks.Skull = KBM.Language:Add("Skull")
+	KBM.Language.Marks.Skull:SetFrench("Crâne")
 	KBM.Language.Marks.Avoid = KBM.Language:Add("Avoid")
+	KBM.Language.Marks.Avoid:SetFrench("Esquive")
 	KBM.Language.Marks.Smile = KBM.Language:Add("Smile")
+	KBM.Language.Marks.Smile:SetFrench("Sourire")
 	KBM.Language.Marks.Squirrel = KBM.Language:Add("Squirrel")
+	KBM.Language.Marks.Squirrel:SetFrench("Écureuil")
 	
 	-- Version Info
 	KBM.Language.Version = {}

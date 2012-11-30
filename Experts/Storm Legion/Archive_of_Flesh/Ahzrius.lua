@@ -59,10 +59,12 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Ahzrius = KBM.Language:Add(MOD.Ahzrius.Name)
 MOD.Lang.Unit.Ahzrius:SetGerman()
+MOD.Lang.Unit.Ahzrius:SetFrench()
 MOD.Ahzrius.Name = MOD.Lang.Unit.Ahzrius[KBM.Lang]
 MOD.Descript = MOD.Ahzrius.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Ahzrius")
 MOD.Lang.Unit.AndShort:SetGerman()
+MOD.Lang.Unit.AndShort:SetFrench()
 MOD.Ahzrius.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary

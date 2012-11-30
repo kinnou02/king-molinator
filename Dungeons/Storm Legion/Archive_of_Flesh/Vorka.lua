@@ -62,6 +62,7 @@ MOD.Vorka.Name = MOD.Lang.Unit.Vorka[KBM.Lang]
 MOD.Descript = MOD.Vorka.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Vorka")
 MOD.Lang.Unit.AndShort:SetGerman()
+MOD.Lang.Unit.AndShort:SetFrench()
 MOD.Vorka.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary

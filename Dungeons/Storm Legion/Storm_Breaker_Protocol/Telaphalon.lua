@@ -50,10 +50,12 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Telaphalon = KBM.Language:Add(MOD.Telaphalon.Name)
 MOD.Lang.Unit.Telaphalon:SetGerman()
+MOD.Lang.Unit.Telaphalon:SetFrench("Télaphalon")
 MOD.Telaphalon.Name = MOD.Lang.Unit.Telaphalon[KBM.Lang]
 MOD.Descript = MOD.Telaphalon.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Telaphalon")
 MOD.Lang.Unit.AndShort:SetGerman()
+MOD.Lang.Unit.AndShort:SetFrench("Télaphalon")
 MOD.Telaphalon.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary

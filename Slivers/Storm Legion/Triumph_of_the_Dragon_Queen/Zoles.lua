@@ -34,7 +34,9 @@ GFZ.Lang.Unit.Zoles:SetGerman("Großfalkner Zoles")
 GFZ.Lang.Unit.ZolesShort = KBM.Language:Add("Zoles")
 GFZ.Lang.Unit.ZolesShort:SetGerman("Zoles")
 GFZ.Lang.Unit.Sky = KBM.Language:Add("Skyscream")
+GFZ.Lang.Unit.Sky:SetGerman("Himmelsschrei") 
 GFZ.Lang.Unit.SkyShort = KBM.Language:Add("Skyscream")
+GFZ.Lang.Unit.SkyShort:SetGerman("Himmelsschrei")
 
 -- Ability Dictionary
 GFZ.Lang.Ability = {}

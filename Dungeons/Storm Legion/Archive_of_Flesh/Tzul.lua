@@ -50,10 +50,12 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Tzul = KBM.Language:Add(MOD.Tzul.Name)
 MOD.Lang.Unit.Tzul:SetGerman()
+MOD.Lang.Unit.Tzul:SetFrench()
 MOD.Tzul.Name = MOD.Lang.Unit.Tzul[KBM.Lang]
 MOD.Descript = MOD.Tzul.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Tzul")
 MOD.Lang.Unit.AndShort:SetGerman()
+MOD.Lang.Unit.AndShort:SetFrench()
 MOD.Tzul.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary

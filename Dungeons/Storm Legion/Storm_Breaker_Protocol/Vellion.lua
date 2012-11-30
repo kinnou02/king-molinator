@@ -30,13 +30,19 @@ KBM.RegisterMod(MOD.ID, MOD)
 -- Main Unit Dictionary
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Vellion = KBM.Language:Add("Vellion the Pestilent")
-MOD.Lang.Unit.Vellion:SetGerman("Vellion die Pestilente")
+MOD.Lang.Unit.Vellion:SetGerman("Vellion der Pestilente")
+MOD.Lang.Unit.Vellion:SetFrench("Vellion la Pestilente")
 MOD.Lang.Unit.VellionLT = KBM.Language:Add("Vellion's Left Trunk")
+MOD.Lang.Unit.VellionLT:SetGerman("Vellions linker Rumpfschutz")
 MOD.Lang.Unit.VellionRT = KBM.Language:Add("Vellion's Right Trunk")
+MOD.Lang.Unit.VellionRT:SetGerman("Vellions rechter Brustschutz")
 MOD.Lang.Unit.VellionPS = KBM.Language:Add("Pestilence Spewer")
+MOD.Lang.Unit.VellionPS:SetGerman("Pestilenz-Speier")
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Vellion")
-MOD.Lang.Unit.AndShort:SetGerman("Vellion")
+MOD.Lang.Unit.AndShort:SetGerman()
+MOD.Lang.Unit.AndShort:SetFrench()
 MOD.Lang.Unit.PSShort = KBM.Language:Add("Spewer")
+MOD.Lang.Unit.PSShort:SetGerman("Speier")
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}

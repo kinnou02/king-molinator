@@ -50,10 +50,12 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Thunderscar = KBM.Language:Add(MOD.Thunderscar.Name)
 MOD.Lang.Unit.Thunderscar:SetGerman("General Donnernarbe")
+MOD.Lang.Unit.Thunderscar:SetFrench("général Cicatonnerre")
 MOD.Thunderscar.Name = MOD.Lang.Unit.Thunderscar[KBM.Lang]
 MOD.Descript = MOD.Thunderscar.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Thunderscar")
 MOD.Lang.Unit.AndShort:SetGerman("Donnernarbe")
+MOD.Lang.Unit.AndShort:SetFrench("Cicatonnerre")
 MOD.Thunderscar.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary

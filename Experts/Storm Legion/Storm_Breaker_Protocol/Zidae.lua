@@ -50,10 +50,12 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Zidae = KBM.Language:Add(MOD.Zidae.Name)
 MOD.Lang.Unit.Zidae:SetGerman("Stadtbrecher Zidae")
+MOD.Lang.Unit.Zidae:SetFrench("Casseur Zidae")
 MOD.Zidae.Name = MOD.Lang.Unit.Zidae[KBM.Lang]
 MOD.Descript = MOD.Zidae.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Zidae")
-MOD.Lang.Unit.AndShort:SetGerman("Zidae")
+MOD.Lang.Unit.AndShort:SetGerman()
+MOD.Lang.Unit.AndShort:SetFrench()
 MOD.Zidae.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary

@@ -3798,7 +3798,7 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 													PhaseObj:UpdateID(UnitID)
 													PhaseObj:Update(KBM.BossID[UnitID].PercentRaw)
 												elseif KBM.PhaseMonitor.Objectives.Lists.Percent[UnitID] then
-													KBM.BossID[UnitID].PhaseObj = KBM.PhaseMonitor.Objectives.List.Percent[UnitID]
+													KBM.BossID[UnitID].PhaseObj = KBM.PhaseMonitor.Objectives.Lists.Percent[UnitID]
 												elseif KBM.BossID[UnitID].PhaseObj then
 													KBM.BossID[UnitID].PhaseObj:UpdateID(UnitID)
 												end
@@ -4644,7 +4644,9 @@ function KBM.Unit:Available(uDetails, UnitID)
 			UnitObj = self:Create(uDetails, UnitID)
 		else
 			UnitObj = self.List.UID[UnitID]
-			UnitObj:UpdateData(uDetails)
+			if UnitObj.Availability ~= "full" then
+				UnitObj:UpdateData(uDetails)
+			end
 		end		
 		if self.TargetQueue[UnitID] then
 			KBM.GroupTarget(self.TargetQueue[UnitID], UnitID)
@@ -8170,6 +8172,20 @@ function KBM.ZoneChange(ZoneList)
 	end
 end
 
+function KBM.LevelChange(data)
+	for UnitID, Level in pairs(data) do
+		if Level then
+			if UnitID == KBM.Player.UnitID then
+				KBM.Player.Level = Level
+			end
+			if KBM.Unit.List.UID[UnitID] then
+				KBM.Unit.List.UID[UnitID].Details.level = Level
+				KBM.Unit.List.UID[UnitID].Level = Level
+			end
+		end
+	end
+end
+
 function KBM.PlayerJoin()
 	KBM.Player.Grouped = true
 	--KBM.Unit:Available(Inspect.Unit.Detail(KBM.Player.UnitID), KBM.Player.UnitID)
@@ -8689,6 +8705,7 @@ function KBM.InitEvents()
 	table.insert(Event.Unit.Detail.HealthMax, {KBM.HealthMaxChange, "KingMolinator", "Health Max Update"})
 	table.insert(Event.Unit.Detail.Mark, {KBM.MarkChange, "KingMolinator", "Mark Change Update"})
 	table.insert(Event.Unit.Detail.Role, {KBM.RoleChange, "KingMolinator", "Role changed"})
+	table.insert(Event.Unit.Detail.Level, {KBM.LevelChange, "KingMolinator", "Level Changed"})
 	table.insert(Event.Unit.Castbar, {KBM_CastBar, "KingMolinator", "Cast Bar Event"})
 	table.insert(Event.Unit.Detail.Power, {function (List) KBM.PowerChange(List, "power") end, "KingMolinator", "Power Change"})
 	table.insert(Event.Unit.Detail.Energy, {function (List) KBM.PowerChange(List, "energy") end, "KingMolinator", "Energy Change"})

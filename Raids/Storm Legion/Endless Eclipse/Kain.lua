@@ -31,6 +31,7 @@ KBM.RegisterMod(KR.ID, KR)
 -- Main Unit Dictionary
 KR.Lang.Unit = {}
 KR.Lang.Unit.Kain = KBM.Language:Add("Kain the Reaper")
+KR.Lang.Unit.Kain:SetGerman("Kain der Schnitter")
 KR.Lang.Unit.KainShort = KBM.Language:Add("Kain")
 KR.Lang.Unit.KainShort:SetGerman("Kain")
 

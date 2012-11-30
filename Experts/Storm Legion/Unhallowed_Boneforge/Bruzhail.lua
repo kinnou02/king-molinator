@@ -49,10 +49,12 @@ KBM.RegisterMod(MOD.ID, MOD)
 -- Main Unit Dictionary
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Bruzhail = KBM.Language:Add(MOD.Bruzhail.Name)
+MOD.Lang.Unit.Bruzhail:SetGerman("Bruzhail der Schwarze Streitwagen")
 MOD.Bruzhail.Name = MOD.Lang.Unit.Bruzhail[KBM.Lang]
 MOD.Descript = MOD.Bruzhail.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Bruzhail")
 MOD.Lang.Unit.AndShort:SetGerman()
+MOD.Lang.Unit.AndShort:SetFrench()
 MOD.Bruzhail.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary

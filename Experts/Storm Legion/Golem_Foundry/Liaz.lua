@@ -50,10 +50,12 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Liaz = KBM.Language:Add(MOD.Liaz.Name)
 MOD.Lang.Unit.Liaz:SetGerman("Liaz der Umstürzler")
+MOD.Lang.Unit.Liaz:SetFrench("Liaz le Subversif")
 MOD.Liaz.Name = MOD.Lang.Unit.Liaz[KBM.Lang]
 MOD.Descript = MOD.Liaz.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Liaz")
 MOD.Lang.Unit.AndShort:SetGerman()
+MOD.Lang.Unit.AndShort:SetFrench()
 MOD.Liaz.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary

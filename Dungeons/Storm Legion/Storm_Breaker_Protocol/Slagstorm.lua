@@ -50,10 +50,12 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Slagstorm = KBM.Language:Add(MOD.Slagstorm.Name)
 MOD.Lang.Unit.Slagstorm:SetGerman("Baron Schlackensturm")
+MOD.Lang.Unit.Slagstorm:SetFrench("Baron Volescories")
 MOD.Slagstorm.Name = MOD.Lang.Unit.Slagstorm[KBM.Lang]
 MOD.Descript = MOD.Slagstorm.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Slagstorm")
 MOD.Lang.Unit.AndShort:SetGerman("Schlackensturm")
+MOD.Lang.Unit.AndShort:SetFrench("Volescories")
 MOD.Slagstorm.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary

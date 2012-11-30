@@ -50,16 +50,20 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Throne = KBM.Language:Add(MOD.Throne.Name)
 MOD.Lang.Unit.Throne:SetGerman("Nekrotischer Thron")
+MOD.Lang.Unit.Throne:SetFrench("Trône nécrotique")
 MOD.Lang.Unit.ThroneL = KBM.Language:Add("Left Throne")
 MOD.Lang.Unit.ThroneL:SetGerman("Linker Thron")
 MOD.Lang.Unit.ThroneR = KBM.Language:Add("Right Throne")
 MOD.Lang.Unit.ThroneR:SetGerman("Rechter Thron")
 MOD.Lang.Unit.Titan = KBM.Language:Add("Necro Titan")
+MOD.Lang.Unit.Titan:SetGerman("Nekrotitan")
 MOD.Lang.Unit.TitanShort = KBM.Language:Add("Titan")
+MOD.Lang.Unit.TitanShort:SetGerman("Titan")
 MOD.Throne.Name = MOD.Lang.Unit.Throne[KBM.Lang]
 MOD.Descript = MOD.Throne.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Throne")
 MOD.Lang.Unit.AndShort:SetGerman("Thron")
+MOD.Lang.Unit.AndShort:SetFrench("Trône")
 MOD.Throne.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary

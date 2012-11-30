@@ -50,10 +50,12 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.UV315 = KBM.Language:Add(MOD.UV315.Name)
 MOD.Lang.Unit.UV315:SetGerman()
+MOD.Lang.Unit.UV315:SetFrench()
 MOD.UV315.Name = MOD.Lang.Unit.UV315[KBM.Lang]
 MOD.Descript = MOD.UV315.Name
-MOD.Lang.Unit.AndShort = KBM.Language:Add("UV315")
+MOD.Lang.Unit.AndShort = KBM.Language:Add("UV-315")
 MOD.Lang.Unit.AndShort:SetGerman()
+MOD.Lang.Unit.AndShort:SetFrench()
 MOD.UV315.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary

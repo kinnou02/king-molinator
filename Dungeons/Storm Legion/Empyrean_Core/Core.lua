@@ -52,7 +52,6 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Core = KBM.Language:Add(MOD.Core.Name)
 MOD.Core.Name = MOD.Lang.Unit.Core[KBM.Lang]
-MOD.Descript = MOD.Core.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Monster")
 MOD.Core.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
@@ -67,6 +66,7 @@ MOD.Lang.Say.Victory = KBM.Language:Add("Core instability within acceptable limi
 MOD.Lang.Main = {}
 MOD.Lang.Main.Descript = KBM.Language:Add("Core Meltdown")
 MOD.Lang.Main.Descript:SetGerman("Kernschmelze")
+MOD.Lang.Main.Descript:SetFrench("Fusion du Noyau")
 
 MOD.Descript = MOD.Lang.Main.Descript[KBM.Lang]
 

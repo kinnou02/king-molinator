@@ -49,10 +49,12 @@ KBM.RegisterMod(MOD.ID, MOD)
 -- Main Unit Dictionary
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Bruzhail = KBM.Language:Add(MOD.Bruzhail.Name)
+MOD.Lang.Unit.Bruzhail:SetGerman("Bruzhail der Schwarze Streitwagen")
 MOD.Bruzhail.Name = MOD.Lang.Unit.Bruzhail[KBM.Lang]
 MOD.Descript = MOD.Bruzhail.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Bruzhail")
 MOD.Lang.Unit.AndShort:SetGerman()
+MOD.Lang.Unit.AndShort:SetFrench()
 MOD.Bruzhail.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary
@@ -136,25 +138,24 @@ end
 
 function MOD:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		if not uDetails.player then
-			if uDetails.name == self.Bruzhail.Name then
-				if not self.EncounterRunning then
-					self.EncounterRunning = true
-					self.StartTime = Inspect.Time.Real()
-					self.HeldTime = self.StartTime
-					self.TimeElapsed = 0
-					self.Bruzhail.Dead = false
-					self.Bruzhail.Casting = false
-					self.Bruzhail.CastBar:Create(unitID)
-					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
-					self.PhaseObj.Objectives:AddPercent(self.Bruzhail.Name, 0, 100)
-					self.Phase = 1
-				end
-				self.Bruzhail.UnitID = unitID
-				self.Bruzhail.Available = true
-				return self.Bruzhail
+		local BossObj = self.UTID[uDetails.type]
+		if BossObj then
+			if not self.EncounterRunning then
+				self.EncounterRunning = true
+				self.StartTime = Inspect.Time.Real()
+				self.HeldTime = self.StartTime
+				self.TimeElapsed = 0
+				BossObj.Dead = false
+				BossObj.Casting = false
+				Bossobj.CastBar:Create(unitID)
+				self.PhaseObj:Start(self.StartTime)
+				self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
+				self.PhaseObj.Objectives:AddPercent(self.Bruzhail.Name, 0, 100)
+				self.Phase = 1
 			end
+			BossObj.UnitID = unitID
+			BossObj.Available = true
+			return BossObj
 		end
 	end
 end

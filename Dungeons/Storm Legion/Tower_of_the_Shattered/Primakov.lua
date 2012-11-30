@@ -50,10 +50,12 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Primakov = KBM.Language:Add(MOD.Primakov.Name)
 MOD.Lang.Unit.Primakov:SetGerman()
+MOD.Lang.Unit.Primakov:SetFrench("Primakov le Psychophage")
 MOD.Primakov.Name = MOD.Lang.Unit.Primakov[KBM.Lang]
 MOD.Descript = MOD.Primakov.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Primakov")
 MOD.Lang.Unit.AndShort:SetGerman()
+MOD.Lang.Unit.AndShort:SetFrench()
 MOD.Primakov.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary

@@ -50,10 +50,12 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Manslaughter = KBM.Language:Add(MOD.Manslaughter.Name)
 MOD.Lang.Unit.Manslaughter:SetGerman()
+MOD.Lang.Unit.Manslaughter:SetFrench("Massacre")
 MOD.Manslaughter.Name = MOD.Lang.Unit.Manslaughter[KBM.Lang]
 MOD.Descript = MOD.Manslaughter.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Manslaughter")
 MOD.Lang.Unit.AndShort:SetGerman()
+MOD.Lang.Unit.AndShort:SetFrench("Massacre")
 MOD.Manslaughter.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary

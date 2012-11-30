@@ -1,11 +1,15 @@
 ﻿v1.3.6
 
 Raid Marks
-* New: Icons added.
-* New: Names added.
+* New: Small Icons added. (see KBM.Marks.File[<number>])
+* New: Large Icons added. (see KBM.Marks.FileFull[<number>])
+* New: Names added. (see KBM.Marks.Name[<number>])
+* New: Translation dictionary for Names.
 
 Unit Tracking
 * New: Idle states are now refreshed when an unseen unit causes damage, previously only recieving damage would do this.
+* New: Added support for mentoring level adjustments, and level changes. This will also effect KBM:Add-Watch.
+* New: A players recorded level will now update accordingly.
 * Change: Adjusted how and when idle units are checked for damage. Now sent through primary update method.
 * Change: Adjusted how and when idle units are checked for healing. Now sent through primary update method.
 * Change: Removed double calls to the Phase Monitor's update method.
@@ -13,13 +17,14 @@ Unit Tracking
 
 Encounter Tracking
 * Fixed: Incorrect encounter start UnitID passed when checking for starts via NPC damage source to a raid member.
+* Fixed: Incorrect reference to List, should be Lists.
 
 Phase Monitor
 * Fixed: Removed incorrect calls to the Phase Monitor's percent based objectives for unseen units.
 
 Ready Check
 * New: Added Fish Hot Pot (Cleric, Mage, Medium, 60)
-* New: Added Feast of Cooperation (Cleric, Mage, High, 60)
+* New: Added Feast of Domination SP (Cleric, Mage, High, 60)
 
 Frozen Tempest
 * Crucia
@@ -30,6 +35,11 @@ Empyrean Core (Normal)
 * Core Meltown
 ** Fixed: Corrected name of Encounter.
 
+Translations
+* German SL Boss updates.
+* French SL Boss updates.
+
+----
 v1.3.5
 
 Rez Master

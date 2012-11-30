@@ -66,6 +66,7 @@ MOD.Lang.Say.Victory = KBM.Language:Add("Core instability within acceptable limi
 MOD.Lang.Main = {}
 MOD.Lang.Main.Descript = KBM.Language:Add("Core Meltdown")
 MOD.Lang.Main.Descript:SetGerman("Kernschmelze")
+MOD.Lang.Unit.Core:SetFrench("Fusion du Noyau")
 
 MOD.Descript = MOD.Lang.Main.Descript[KBM.Lang]
 

@@ -50,10 +50,12 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Avoxcia = KBM.Language:Add(MOD.Avoxcia.Name)
 MOD.Lang.Unit.Avoxcia:SetGerman()
+MOD.Lang.Unit.Avoxcia:SetFrench()
 MOD.Avoxcia.Name = MOD.Lang.Unit.Avoxcia[KBM.Lang]
 MOD.Descript = MOD.Avoxcia.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Avoxcia")
 MOD.Lang.Unit.AndShort:SetGerman()
+MOD.Lang.Unit.AndShort:SetFrench()
 MOD.Avoxcia.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary

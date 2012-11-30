@@ -30,7 +30,8 @@ KBM.RegisterMod(MOD.Name, MOD)
 MOD.Lang = {}
 MOD.Lang.Main = {}
 MOD.Lang.Main.Name = KBM.Language:Add(MOD.Name)
-MOD.Lang.Main.Name:SetGerman("Golem-Gießerei") 
+MOD.Lang.Main.Name:SetGerman("Golem-Gießerei")
+MOD.Lang.Main.Name:SetFrench("Fabrique de Golems")
 
 MOD.Name = MOD.Lang.Main.Name[KBM.Lang]
 MOD.Descript = MOD.Name

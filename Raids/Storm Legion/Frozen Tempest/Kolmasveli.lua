@@ -31,11 +31,13 @@ KBM.RegisterMod(KT.ID, KT)
 -- Main Unit Dictionary
 KT.Lang.Unit = {}
 KT.Lang.Unit.Kolmasveli = KBM.Language:Add("Kolmasveli")
-KT.Lang.Unit.Kolmasveli:SetGerman("Veliyksi")
+KT.Lang.Unit.Kolmasveli:SetGerman()
 KT.Lang.Unit.KolmasveliShort = KBM.Language:Add("Kolmasveli")
-KT.Lang.Unit.KolmasveliShort:SetGerman("Veliyksi")
+KT.Lang.Unit.KolmasveliShort:SetGerman()
 KT.Lang.Unit.Toinenveli = KBM.Language:Add("Toinenveli")
+KT.Lang.Unit.Toinenveli:SetGerman()
 KT.Lang.Unit.ToinenveliShort = KBM.Language:Add("Toinenveli")
+KT.Lang.Unit.ToinenveliShort:SetGerman()
 
 -- Ability Dictionary
 KT.Lang.Ability = {}
@@ -43,7 +45,7 @@ KT.Lang.Ability = {}
 -- Description Dictionary
 KT.Lang.Main = {}
 KT.Lang.Main.Descript = KBM.Language:Add("Kolmasveli and Toinenveli")
-KT.Lang.Main.Descript:SetGerman("Veliyksi und Velikaksi")
+KT.Lang.Main.Descript:SetGerman("Kolmasveli und Toinenveli")
 KT.Descript = KT.Lang.Main.Descript[KBM.Lang]
 
 -- Assign Boss to Language Specific Dictionary
