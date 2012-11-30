@@ -4639,6 +4639,7 @@ end
 
 function KBM.Unit:Available(uDetails, UnitID)
 	if uDetails then
+		local UnitObj
 		if not self.List.UID[UnitID] then
 			UnitObj = self:Create(uDetails, UnitID)
 		else
@@ -4715,6 +4716,7 @@ function KBM.Unit:Idle(UnitID, Details)
 		self.UIDs.Idle[UnitID] = self.List.UID[UnitID]
 		self.UIDs.Available[UnitID] = nil
 		self.UIDs.Idle[UnitID].Available = false
+		self.UIDs.Idle[UnitID].Availability = "none"
 		self.UIDs.Count.Idle = self.UIDs.Count.Idle + 1
 		self.UIDs.Count.Available = self.UIDs.Count.Available - 1
 		if KBM.Debug then
@@ -4733,6 +4735,7 @@ function KBM.Unit:Idle(UnitID, Details)
 			end
 			self.UIDs.Idle[UnitID]:UpdateIdle()
 			self.UIDs.Idle[UnitID].Available = false
+			self.UIDs.Idle[UnitID].Availability = "none"
 			KBM.Event.Mark(false, UnitID)
 			KBM.Event.Unit.Unavailable(UnitID, Details, self.List.UID[UnitID])
 			return self.List.UID[UnitID]
@@ -4742,6 +4745,7 @@ function KBM.Unit:Idle(UnitID, Details)
 				self.UIDs.Count.Idle = self.UIDs.Count.Idle + 1				
 			end
 			self.UIDs.Idle[UnitID].Available = false
+			self.UIDs.Idle[UnitID].Availability = "none"
 			self.UIDs.Idle[UnitID]:UpdateIdle()
 			KBM.Event.Mark(false, UnitID)
 			KBM.Event.Unit.Unavailable(UnitID, Details, self.List.UID[UnitID])
@@ -4803,8 +4807,10 @@ function KBM.Unit:Death(UnitID)
 	KBM.Event.Unit.Death(UnitID)
 end
 
-local function KBM_UnitAvailable(units)
+local function KBM_UnitAvailable(units, State)
 	-- local TimeStore = Inspect.Time.Real()
+	local State = State or "Full"
+	-- print("KBM_UnitAvailable call: "..State)
 	if KBM.Encounter then
 		for UnitID, Specifier in pairs(units) do
 			local uDetails = Inspect.Unit.Detail(UnitID)
@@ -4829,7 +4835,7 @@ local function KBM_UnitAvailable(units)
 			local uDetails = Inspect.Unit.Detail(UnitID)
 			local UnitObj = KBM.Unit:Available(uDetails, UnitID)
 			if uDetails then
-				if not uDetails.player then
+				if UnitID == KBM.Player.UnitID then
 					if uDetails.zone then
 						KBM.Player.Zone = uDetails.zone
 					end
@@ -8674,7 +8680,7 @@ function KBM.InitEvents()
 	--table.insert(Event.Buff.Change, {function (unitID, Buffs) KBM:BuffMonitor(unitID, Buffs, "change") end, "KingMolinator", "Buff Monitor (change)"})
 	table.insert(Event.SafesBuffLib.Buff.Remove, {function (...) KBM:BuffRemove(...) end, "KingMolinator", "Buff Monitor (remove)"})
 	table.insert(Event.Unit.Availability.None, {KBM_UnitRemoved, "KingMolinator", "Unit Unavailable"})
-	table.insert(Event.Unit.Availability.Partial, {KBM_UnitAvailable, "KingMolinator", "Unit Available"})
+	table.insert(Event.Unit.Availability.Partial, {function (units) KBM_UnitAvailable(units, "Partial") end, "KingMolinator", "Unit Available"})
 	table.insert(Event.Unit.Availability.Full, {KBM_UnitAvailable, "KingMolinator", "Unit Available"})
 	table.insert(Event.Unit.Detail.LocationName, {KBM.LocationChange, "KingMolinator", "Location Change"})
 	table.insert(Event.Unit.Detail.Zone, {KBM.ZoneChange, "KingMolinator", "Zone Change"})
@@ -8916,6 +8922,71 @@ function KBM.InitKBM(ModID)
 		print(KBM.Language.Welcome.Options[KBM.Lang])
 		KBM.RezMaster:Start()
 		KBM.PlayerControl:Start()	
+		KBM.Marks = {
+			File = {
+				[1] = "vfx_ui_mob_tag_01_mini.png.dds",
+				[2] = "vfx_ui_mob_tag_02_mini.png.dds",
+				[3] = "vfx_ui_mob_tag_03_mini.png.dds",
+				[4] = "vfx_ui_mob_tag_04_mini.png.dds",
+				[5] = "vfx_ui_mob_tag_05_mini.png.dds",
+				[6] = "vfx_ui_mob_tag_06_mini.png.dds",
+				[7] = "vfx_ui_mob_tag_07_mini.png.dds",
+				[8] = "vfx_ui_mob_tag_08_mini.png.dds",
+				[9] = "vfx_ui_mob_tag_tank_mini.png.dds",
+				[10] = "vfx_ui_mob_tag_heal_mini.png.dds",
+				[11] = "vfx_ui_mob_tag_damage_mini.png.dds",
+				[12] = "vfx_ui_mob_tag_support_mini.png.dds",
+				[13] = "vfx_ui_mob_tag_arrow_mini.png.dds",
+				[14] = "vfx_ui_mob_tag_skull_mini.png.dds",
+				[15] = "vfx_ui_mob_tag_no_mini.png.dds",
+				[16] = "vfx_ui_mob_tag_smile_mini.png.dds",
+				[17] = "vfx_ui_mob_tag_squirrel_mini.png.dds",	
+			},
+			FileFull = {
+				[1] = "vfx_ui_mob_tag_01.png.dds",
+				[2] = "vfx_ui_mob_tag_02.png.dds",
+				[3] = "vfx_ui_mob_tag_03.png.dds",
+				[4] = "vfx_ui_mob_tag_04.png.dds",
+				[5] = "vfx_ui_mob_tag_05.png.dds",
+				[6] = "vfx_ui_mob_tag_06.png.dds",
+				[7] = "vfx_ui_mob_tag_07.png.dds",
+				[8] = "vfx_ui_mob_tag_08.png.dds",
+				[9] = "vfx_ui_mob_tag_tank.png.dds",
+				[10] = "vfx_ui_mob_tag_heal.png.dds",
+				[11] = "vfx_ui_mob_tag_damage.png.dds",
+				[12] = "vfx_ui_mob_tag_support.png.dds",
+				[13] = "vfx_ui_mob_tag_arrow.png.dds",
+				[14] = "vfx_ui_mob_tag_skull.png.dds",
+				[15] = "vfx_ui_mob_tag_no.png.dds",
+				[16] = "vfx_ui_mob_tag_smile.png.dds",
+				[17] = "vfx_ui_mob_tag_squirrel.png.dds",	
+			},			
+			Icon = {},
+			Name = {
+				[1] = "1",
+				[2] = "2",
+				[3] = "3",
+				[4] = "4",
+				[5] = "5",
+				[6] = "6",
+				[7] = "7",
+				[8] = "8",
+				[9] = KBM.Language.Marks.Tank[KBM.Lang],
+				[10] = KBM.Language.Marks.Heal[KBM.Lang],
+				[11] = KBM.Language.Marks.Damage[KBM.Lang],
+				[12] = KBM.Language.Marks.Support[KBM.Lang],
+				[13] = KBM.Language.Marks.Arrow[KBM.Lang],
+				[14] = KBM.Language.Marks.Skull[KBM.Lang],
+				[15] = KBM.Language.Marks.Avoid[KBM.Lang],
+				[16] = KBM.Language.Marks.Smile[KBM.Lang],
+				[17] = KBM.Language.Marks.Squirrel[KBM.Lang],
+			},
+		}
+		for i, File in pairs(KBM.Marks.File) do
+			KBM.Marks.Icon[i] = UI.CreateFrame("Texture", File, KBM.Context)
+			KBM.Marks.Icon[i]:SetTexture("Rift", File)
+			KBM.Marks.Icon[i]:SetVisible(false)
+		end
 	else
 		if Inspect.Buff.Detail ~= IBDReserved then
 			print(tostring(ModID).." changed internal command: Restoring Inspect.Buff.Detail")

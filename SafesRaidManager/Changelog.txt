@@ -1,10 +1,19 @@
+v1.2.5
+
+Rift Version
+* Change: Updated to support Rift 1.9 through to 2.0
+
+General 
+* New: Improvements for accuracy and performance.
+
+----
 v1.2.4
 
 Res Event
 * Change: If the there is no Caster ID for a heal directly from death state. The Target ID is used (self Res of some form).
 
 Death States
-* New: Death states are now recaptured and updated during a Availability.Full events.
+* New: Death states are now recaptured and updated during Availability.Full events.
 
 ----
 v1.2.3

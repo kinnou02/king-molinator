@@ -7,11 +7,11 @@ Description = "King Boss Mods and locale management system."
 
 Author = "Paul Snart"
 Website = "http://twitter.com/#!/psnart"
-Email = "snarty@gmail.com"
+Email = "kingbossmods@gmail.com"
 
-Version = "0.0.8"
+Version = "0.0.9"
 
-Environment = "1.9", "1.10"
+Environment = "1.9", "1.10", "1.11", "2.0"
 
 RunOnStartup = {
 	"Locale.lua",

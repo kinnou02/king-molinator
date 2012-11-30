@@ -119,6 +119,19 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Welcome.Options:SetGerman("/kbmoptions für die Konfiguration")
 	KBM.Language.Welcome.Options:SetKorean("옵션은 /kbmoptions 을 사용하시면 됩니다.")
 	
+	-- Raid Marks
+	KBM.Language.Marks = {}
+	KBMLM.SetGroupObject(KBM.Language.Marks, "GroupObject", "Raid Mark Related Text")
+	KBM.Language.Marks.Tank = KBM.Language:Add("Tank")
+	KBM.Language.Marks.Heal = KBM.Language:Add("Heal")
+	KBM.Language.Marks.Damage = KBM.Language:Add("Damage")
+	KBM.Language.Marks.Support = KBM.Language:Add("Support")
+	KBM.Language.Marks.Arrow = KBM.Language:Add("Arrow")
+	KBM.Language.Marks.Skull = KBM.Language:Add("Skull")
+	KBM.Language.Marks.Avoid = KBM.Language:Add("Avoid")
+	KBM.Language.Marks.Smile = KBM.Language:Add("Smile")
+	KBM.Language.Marks.Squirrel = KBM.Language:Add("Squirrel")
+	
 	-- Version Info
 	KBM.Language.Version = {}
 	KBMLM.SetGroupObject(KBM.Language.Version, "GroupObject", "Version Related Text")

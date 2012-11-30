@@ -1,5 +1,9 @@
 ﻿v1.3.6
 
+Raid Marks
+* New: Icons added.
+* New: Names added.
+
 Unit Tracking
 * New: Idle states are now refreshed when an unseen unit causes damage, previously only recieving damage would do this.
 * Change: Adjusted how and when idle units are checked for damage. Now sent through primary update method.
