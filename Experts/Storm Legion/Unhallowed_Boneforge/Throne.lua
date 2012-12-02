@@ -148,7 +148,10 @@ end
 function MOD:InitVars()
 	self.Settings = {
 		Enabled = true,
-		CastBar = self.Throne.Settings.CastBar,
+		CastBar = {
+			Multi = true,
+			Override = true,
+		},
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		Throne = {

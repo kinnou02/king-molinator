@@ -1,4 +1,22 @@
-﻿v1.3.6
+﻿v1.3.7
+
+Storm Legion
+
+Exodus of the Storm Queen
+* Dominax (Expert/Normal)
+** Fixed: Both versions of Dominax should now have a castbar again (if enabled).
+
+Empyrean Core (Expert/Normal)
+* Kaliban's Bodyguards
+** New: Added Alert for Siphoning Vortex.
+** New: Added Stop trigger for Siphoning Vortex successful interrupts.
+
+Storm Breaker Protocol (Expert/Normal)
+* Vellion the Pestilent
+** New: Added Vellion's Exposed Viscera as a unit for death tracking.
+
+----
+v1.3.6
 
 Raid Marks
 * New: Small Icons added. (see KBM.Marks.File[<number>])
@@ -42,6 +60,7 @@ Empyrean Core (Normal)
 Translations
 * German SL Boss updates.
 * French SL Boss updates.
+* Russian Update for Maelforge encounters.
 
 ----
 v1.3.5

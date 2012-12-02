@@ -56,9 +56,14 @@ MOD.Strauz = {
 	UnitID = nil,
 	UTID = "UFC71504711EB92F4",
 	TimeOut = 5,
+	AlertsRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
+		AlertsRef = {
+			Enabled = true,
+			Vortex = KBM.Defaults.AlertObj.Create("yellow")
+		},
 	}
 }
 
@@ -84,6 +89,7 @@ MOD.Mercutial = {
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}
+MOD.Lang.Ability.Vortex = KBM.Language:Add("Siphoning Vortex")
 
 -- Description
 MOD.Lang.Main = {}
@@ -120,8 +126,10 @@ function MOD:InitVars()
 		},
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
+		Alerts = KBM.Defaults.Alerts(),
 		Strauz = {
 			CastBar = self.Strauz.Settings.CastBar,
+			AlertsRef = self.Strauz.Settings.AlertsRef,
 		},
 		Mercutial = {
 			CastBar = self.Mercutial.Settings.CastBar,
@@ -191,31 +199,27 @@ end
 
 function MOD:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		if not uDetails.player then
-			if uDetails.name then
-				local BossObj = self.Bosses[uDetails.name]
-				if BossObj then
-					if not self.EncounterRunning then
-						self.EncounterRunning = true
-						self.StartTime = Inspect.Time.Real()
-						self.HeldTime = self.StartTime
-						self.TimeElapsed = 0
-						BossObj.Dead = false
-						BossObj.Casting = false
-						self.PhaseObj:Start(self.StartTime)
-						self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
-						self.PhaseObj.Objectives:AddPercent(self.Strauz.Name, 0, 100)
-						self.PhaseObj.Objectives:AddPercent(self.Mercutial.Name, 0, 100)
-						self.Phase = 1
-					end
-					if not BossObj.CastBar.Active then
-						BossObj.CastBar:Create(unitID)
-					end
-					BossObj.UnitID = unitID
-					BossObj.Available = true
-					return BossObj
-				end
+		local BossObj = self.UTID[uDetails.type]
+		if BossObj then
+			if not self.EncounterRunning then
+				self.EncounterRunning = true
+				self.StartTime = Inspect.Time.Real()
+				self.HeldTime = self.StartTime
+				self.TimeElapsed = 0
+				BossObj.Dead = false
+				BossObj.Casting = false
+				self.PhaseObj:Start(self.StartTime)
+				self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
+				self.PhaseObj.Objectives:AddPercent(self.Strauz, 0, 100)
+				self.PhaseObj.Objectives:AddPercent(self.Mercutial, 0, 100)
+				self.Phase = 1
 			end
+			if not BossObj.CastBar.Active then
+				BossObj.CastBar:Create(unitID)
+			end
+			BossObj.UnitID = unitID
+			BossObj.Available = true
+			return BossObj
 		end
 	end
 end
@@ -243,9 +247,16 @@ function MOD:Start()
 	--KBM.Defaults.TimerObj.Assign(self.Strauz)
 	
 	-- Create Alerts
-	--KBM.Defaults.AlertObj.Assign(self.Strauz)
+	self.Strauz.AlertsRef.Vortex = KBM.Alert:Create(self.Lang.Ability.Vortex[KBM.Lang], nil, false, true, "yellow")
+	KBM.Defaults.AlertObj.Assign(self.Strauz)
 	
 	-- Assign Alerts and Timers to Triggers
+	self.Strauz.Triggers.VortexCast = KBM.Trigger:Create(self.Lang.Ability.Vortex[KBM.Lang], "cast", self.Strauz)
+	self.Strauz.Triggers.VortexCast:AddAlert(self.Strauz.AlertsRef.Vortex)
+	self.Strauz.Triggers.VortexChannel = KBM.Trigger:Create(self.Lang.Ability.Vortex[KBM.Lang], "channel", self.Strauz)
+	self.Strauz.Triggers.VortexChannel:AddAlert(self.Strauz.AlertsRef.Vortex)
+	self.Strauz.Triggers.VortexInt = KBM.Trigger:Create(self.Lang.Ability.Vortex[KBM.Lang], "interrupt", self.Strauz)
+	self.Strauz.Triggers.VortexInt:AddStop(self.Strauz.AlertsRef.Vortex)
 	
 	self.Strauz.CastBar = KBM.CastBar:Add(self, self.Strauz)
 	self.Mercutial.CastBar = KBM.CastBar:Add(self, self.Mercutial)

@@ -135,8 +135,10 @@ function MOD:InitVars()
 			CastBar = self.Throne.Settings.CastBar,
 		},
 		ThroneL = {
+			CastBar = self.ThroneL.Settings.CastBar,
 		},
 		ThroneR = {
+			CastBar = self.ThroneR.Settings.CastBar,
 		},
 		-- MechTimer = KBM.Defaults.MechTimer(),
 		-- Alerts = KBM.Defaults.Alerts(),
@@ -234,9 +236,13 @@ end
 
 function MOD:Reset()
 	self.EncounterRunning = false
-	self.Throne.Available = false
-	self.Throne.UnitID = nil
-	self.Throne.CastBar:Remove()
+	for Name, BossObj in pairs(self.Bosses) do
+		BossObj.Available = false
+		BossObj.UnitID = nil
+		if BossObj.CastBar then
+			self.Throne.CastBar:Remove()
+		end
+	end
 	self.PhaseObj:End(Inspect.Time.Real())
 end
 

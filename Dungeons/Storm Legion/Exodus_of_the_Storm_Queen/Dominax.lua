@@ -164,6 +164,12 @@ function MOD:UnitHPCheck(uDetails, unitID)
 		local BossObj = self.UTID[uDetails.type]
 		if BossObj then
 			BossObj.Type = uDetails.type
+			if BossObj.UnitID ~= unitID then
+				if BossObj.CastBar.Active then
+					BossObj.CastBar:Remove()
+				end
+				BossObj.CastBar:Create(unitID)
+			end
 			BossObj.UnitID = unitID
 			if not self.EncounterRunning then
 				self.EncounterRunning = true
@@ -185,12 +191,6 @@ function MOD:UnitHPCheck(uDetails, unitID)
 					self.PhaseFinal()
 					self.Timeout = 0
 				end
-			end
-			if BossObj.UnitID ~= unitID then
-				if BossObj.CastBar.Active then
-					BossObj.CastBar:Remove()
-				end
-				BossObj.CastBar:Create(unitID)
 			end
 			BossObj.Available = true
 			return BossObj

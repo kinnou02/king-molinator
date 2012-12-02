@@ -38,6 +38,7 @@ MOD.Lang.Unit.VellionRT = KBM.Language:Add("Vellion's Right Trunk")
 MOD.Lang.Unit.VellionRT:SetGerman("Vellions rechter Brustschutz")
 MOD.Lang.Unit.VellionPS = KBM.Language:Add("Pestilence Spewer")
 MOD.Lang.Unit.VellionPS:SetGerman("Pestilenz-Speier")
+MOD.Lang.Unit.VellionEV = KBM.Language:Add("Vellion's Exposed Viscera")
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Vellion")
 MOD.Lang.Unit.AndShort:SetGerman()
 MOD.Lang.Unit.AndShort:SetFrench()
@@ -49,9 +50,25 @@ MOD.Lang.Ability = {}
 
 MOD.Vellion = {
 	Mod = MOD,
-	Level = "52",
+	Level = "62",
 	Active = false,
 	Name = MOD.Lang.Unit.Vellion[KBM.Lang],
+	NameShort = MOD.Lang.Unit.AndShort[KBM.Lang],
+	Menu = {},
+	Castbar = nil,
+	Dead = false,
+	Available = false,
+	UnitID = nil,
+	UTID = "UFED0887768D8CF74",
+	TimeOut = 5,
+	Triggers = {},
+}
+
+MOD.VellionEV = {
+	Mod = MOD,
+	Level = "62",
+	Active = false,
+	Name = MOD.Lang.Unit.VellionEV[KBM.Lang],
 	NameShort = MOD.Lang.Unit.AndShort[KBM.Lang],
 	Menu = {},
 	Castbar = nil,
@@ -65,7 +82,7 @@ MOD.Vellion = {
 
 MOD.VellionPS = {
 	Mod = MOD,
-	Level = "52",
+	Level = "62",
 	Active = false,
 	Name = MOD.Lang.Unit.VellionPS[KBM.Lang],
 	NameShort = MOD.Lang.Unit.PSShort[KBM.Lang],
@@ -84,7 +101,7 @@ MOD.VellionPS = {
 
 MOD.VellionLT = {
 	Mod = MOD,
-	Level = "52",
+	Level = "62",
 	Active = false,
 	Name = MOD.Lang.Unit.VellionLT[KBM.Lang],
 	NameShort = MOD.Lang.Unit.VellionLT[KBM.Lang],
@@ -100,7 +117,7 @@ MOD.VellionLT = {
 
 MOD.VellionRT = {
 	Mod = MOD,
-	Level = "52",
+	Level = "62",
 	Active = false,
 	Name = MOD.Lang.Unit.VellionRT[KBM.Lang],
 	NameShort = MOD.Lang.Unit.VellionRT[KBM.Lang],
@@ -120,6 +137,7 @@ function MOD:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Vellion.Name] = self.Vellion,
+		[self.VellionEV.Name] = self.VellionEV,
 		[self.VellionLT.Name] = self.VellionLT,
 		[self.VellionRT.Name] = self.VellionRT,
 		[self.VellionPS.Name] = self.VellionPS,
@@ -188,8 +206,8 @@ function MOD:RemoveUnits(UnitID)
 end
 
 function MOD:Death(UnitID)
-	if self.Vellion.UnitID == UnitID then
-		self.Vellion.Dead = true
+	if self.VellionEV.UnitID == UnitID then
+		self.VellionEV.Dead = true
 		return true
 	end
 	return false
@@ -208,10 +226,10 @@ function MOD:UnitHPCheck(uDetails, unitID)
 				BossObj.Casting = false
 				self.PhaseObj:Start(self.StartTime)
 				self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
-				self.PhaseObj.Objectives:AddPercent(self.Vellion.Name, 0, 100)
-				self.PhaseObj.Objectives:AddPercent(self.VellionLT.Name, 0, 100)
-				self.PhaseObj.Objectives:AddPercent(self.VellionRT.Name, 0, 100)
-				self.PhaseObj.Objectives:AddPercent(self.VellionPS.Name, 0, 100)
+				self.PhaseObj.Objectives:AddPercent(self.VellionEV, 0, 100)
+				self.PhaseObj.Objectives:AddPercent(self.VellionLT, 0, 100)
+				self.PhaseObj.Objectives:AddPercent(self.VellionRT, 0, 100)
+				self.PhaseObj.Objectives:AddPercent(self.VellionPS, 0, 100)
 				self.Phase = 1
 			end
 			if BossObj == self.VellionPS then
