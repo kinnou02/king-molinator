@@ -31,6 +31,10 @@ Frozen Tempest
 ** New: Added Tempest Assault Frame unit tracking.
 ** New: Added Stormcore Annihilator unit tracking.
 
+Exodus of the Storm Queen (Normal & Expert)
+* Dominax
+** New: Added a 25 second timeout for P1 to prevent premature endings.
+
 Empyrean Core (Normal)
 * Core Meltown
 ** Fixed: Corrected name of Encounter.

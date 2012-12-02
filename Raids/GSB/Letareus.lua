@@ -155,24 +155,23 @@ end
 function DL:UnitHPCheck(uDetails, unitID)
 	
 	if uDetails and unitID then
-		if not uDetails.player then
-			if uDetails.name == self.Letareus.Name then
-				if not self.Letareus.UnitID then
-					self.EncounterRunning = true
-					self.StartTime = Inspect.Time.Real()
-					self.HeldTime = self.StartTime
-					self.TimeElapsed = 0
-					self.Phase = 1
-					self.Letareus.CastBar:Create(unitID)
-					self.PhaseObj:SetPhase(DL.Lang.Mechanic.Tank[KBM.Lang])
-					self.PhaseObj.Objectives:AddPercent(self.Letareus.Name, 86, 100)
-					self.PhaseObj:Start(self.StartTime)
-				end
-				self.Letareus.Casting = false
+		if uDetails.name == self.Letareus.Name then
+			if not self.Letareus.UnitID then
+				self.EncounterRunning = true
+				self.StartTime = Inspect.Time.Real()
+				self.HeldTime = self.StartTime
+				self.TimeElapsed = 0
+				self.Phase = 1
+				self.Letareus.CastBar:Create(unitID)
 				self.Letareus.UnitID = unitID
-				self.Letareus.Available = true
-				return self.Letareus
+				self.PhaseObj:SetPhase(DL.Lang.Mechanic.Tank[KBM.Lang])
+				self.PhaseObj.Objectives:AddPercent(self.Letareus, 86, 100)
+				self.PhaseObj:Start(self.StartTime)
 			end
+			self.Letareus.Casting = false
+			self.Letareus.UnitID = unitID
+			self.Letareus.Available = true
+			return self.Letareus
 		end
 	end
 	
@@ -181,43 +180,43 @@ end
 function DL:PhaseTwo()
 	DL.PhaseObj.Objectives:Remove()
 	DL.PhaseObj:SetPhase(DL.Lang.Mechanic.Kite[KBM.Lang])
-	DL.PhaseObj.Objectives:AddPercent(DL.Letareus.Name, 76, 86)	
+	DL.PhaseObj.Objectives:AddPercent(DL.Letareus, 76, 86)	
 end
 
 function DL:PhaseThree()
 	DL.PhaseObj.Objectives:Remove()
 	DL.PhaseObj:SetPhase(DL.Lang.Mechanic.Tank[KBM.Lang])
-	DL.PhaseObj.Objectives:AddPercent(DL.Letareus.Name, 61, 76)
+	DL.PhaseObj.Objectives:AddPercent(DL.Letareus, 61, 76)
 end
 
 function DL:PhaseFour()
 	DL.PhaseObj.Objectives:Remove()
 	DL.PhaseObj:SetPhase(DL.Lang.Mechanic.Kite[KBM.Lang])
-	DL.PhaseObj.Objectives:AddPercent(DL.Letareus.Name, 51, 61)
+	DL.PhaseObj.Objectives:AddPercent(DL.Letareus, 51, 61)
 end
 
 function DL:PhaseFive()
 	DL.PhaseObj.Objectives:Remove()
 	DL.PhaseObj:SetPhase(DL.Lang.Mechanic.Tank[KBM.Lang])
-	DL.PhaseObj.Objectives:AddPercent(DL.Letareus.Name, 36, 51)
+	DL.PhaseObj.Objectives:AddPercent(DL.Letareus, 36, 51)
 end
 
 function DL:PhaseSix()
 	DL.PhaseObj.Objectives:Remove()
 	DL.PhaseObj:SetPhase(DL.Lang.Mechanic.Kite[KBM.Lang])
-	DL.PhaseObj.Objectives:AddPercent(DL.Letareus.Name, 26, 36)
+	DL.PhaseObj.Objectives:AddPercent(DL.Letareus, 26, 36)
 end
 
 function DL.PhaseSeven()
 	DL.PhaseObj.Objectives:Remove()
 	DL.PhaseObj:SetPhase(DL.Lang.Mechanic.Tank[KBM.Lang])
-	DL.PhaseObj.Objectives:AddPercent(DL.Letareus.Name, 11, 26)
+	DL.PhaseObj.Objectives:AddPercent(DL.Letareus, 11, 26)
 end
 
 function DL.PhaseEight()
 	DL.PhaseObj.Objectives:Remove()
 	DL.PhaseObj:SetPhase(DL.Lang.Mechanic.Kite[KBM.Lang])
-	DL.PhaseObj.Objectives:AddPercent(DL.Letareus.Name, 0, 11)
+	DL.PhaseObj.Objectives:AddPercent(DL.Letareus, 0, 11)
 end
 
 function DL:Reset()

@@ -23,6 +23,7 @@ local MOD = {
 	Lang = {},
 	ID = "Ex_Dominax",
 	Object = "MOD",
+	Timeout = 25,
 }
 
 MOD.Dominax = {
@@ -134,7 +135,7 @@ end
 
 function MOD.PhaseFinal()
 	MOD.PhaseObj.Objectives:Remove()
-	MOD.PhaseObj.Objectives:AddPercent(MOD.Dominax.Name, 0, 100)
+	MOD.PhaseObj.Objectives:AddPercent(MOD.Dominax, 0, 100)
 	MOD.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
 	MOD.Phase = 2
 end
@@ -159,36 +160,39 @@ end
 
 function MOD:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		if uDetails.type == self.Dominax.UTID[1] or uDetails.type == self.Dominax.UTID[2] then
+		local BossObj = self.UTID[uDetails.type]
+		if BossObj then
+			BossObj.Type = uDetails.type
+			BossObj.UnitID = unitID
 			if not self.EncounterRunning then
 				self.EncounterRunning = true
 				self.StartTime = Inspect.Time.Real()
 				self.HeldTime = self.StartTime
 				self.TimeElapsed = 0
-				self.Dominax.Dead = false
-				self.Dominax.Casting = false
+				BossObj.Dead = false
+				BossObj.Casting = false
+				self.Timeout = 25
 				if self.Dominax.UTID[1] == uDetails.type then
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase("1")
-					self.PhaseObj.Objectives:AddPercent(self.Dominax.Name, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Dominax, 0, 100)
 					self.Phase = 1
 				end
 			end
-			self.Dominax.Type = uDetails.type
-			if self.Dominax.Type == self.Dominax.UTID[2] then
+			if BossObj.Type == self.Dominax.UTID[2] then
 				if self.Phase == 1 then
 					self.PhaseFinal()
+					self.Timeout = 0
 				end
 			end
-			if self.Dominax.UnitID ~= unitID then
-				if self.Dominax.CastBar.Active then
-					self.Dominax.CastBar:Remove()
+			if BossObj.UnitID ~= unitID then
+				if BossObj.CastBar.Active then
+					BossObj.CastBar:Remove()
 				end
-				self.Dominax.CastBar:Create(unitID)
-				self.Dominax.UnitID = unitID
+				BossObj.CastBar:Create(unitID)
 			end
-			self.Dominax.Available = true
-			return self.Dominax
+			BossObj.Available = true
+			return BossObj
 		end
 	end
 end

@@ -79,20 +79,23 @@ MF.Lang.Unit = {}
 MF.Lang.Unit.Maelforge = KBM.Language:Add(MF.Maelforge.Name)
 MF.Lang.Unit.Maelforge:SetGerman("Flammenmaul")
 MF.Lang.Unit.Maelforge:SetFrench()
-MF.Lang.Unit.Maelforge:SetRussian("Маэлфорж")
+MF.Lang.Unit.Maelforge:SetRussian("Маэлфордж")
 MF.Lang.Unit.Maelforge:SetKorean("마엘포지")
 MF.Lang.Unit.Cannon = KBM.Language:Add("Magma Cannon")
 MF.Lang.Unit.Cannon:SetGerman("Magmakanone")
 MF.Lang.Unit.Cannon:SetFrench("Canon à magma")
+MF.Lang.Unit.Cannon:SetRussian("Магмовая пушка")
 MF.Lang.Unit.CanShort = KBM.Language:Add("Cannon")
 MF.Lang.Unit.CanShort:SetGerman("Kanone")
 MF.Lang.Unit.CanShort:SetFrench("Canon")
+MF.Lang.Unit.CanShort:SetRussian("Пушка")
 
 -- Location Dictionary
 MF.Lang.Location = {}
 MF.Lang.Location.Spires = KBM.Language:Add("Spires of Sacrifice")
 MF.Lang.Location.Spires:SetGerman("Spitze der Opfergabe")
 MF.Lang.Location.Spires:SetFrench("Aiguilles de Sacrifice")
+MF.Lang.Location.Spires:SetRussian("Жертвенные Шпили")
 
 -- Ability Dictionary
 MF.Lang.Ability = {}
@@ -104,12 +107,15 @@ MF.Lang.Debuff = {}
 MF.Lang.Debuff.Hell = KBM.Language:Add("Hellfire")
 MF.Lang.Debuff.Hell:SetGerman("Höllenfeuer")
 MF.Lang.Debuff.Hell:SetFrench("Feux de l'enfer")
+MF.Lang.Debuff.Hell:SetRussian("Адское пламя")
 MF.Lang.Debuff.Earthen = KBM.Language:Add("Earthen Fissure")
 MF.Lang.Debuff.Earthen:SetGerman("Erdspalte")
 MF.Lang.Debuff.Earthen:SetFrench("Fissure terrestre")
+MF.Lang.Debuff.Earthen:SetRussian("Земной пролом")
 MF.Lang.Debuff.Fiery = KBM.Language:Add("Fiery Fissure")
 MF.Lang.Debuff.Fiery:SetGerman("Feuriger Spalt")
 MF.Lang.Debuff.Fiery:SetFrench("Fissure flamboyante")
+MF.Lang.Debuff.Fiery:SetRussian("Огненный пролом")
 MF.Lang.Debuff.Melt = KBM.Language:Add("Melt Armor")
 MF.Lang.Debuff.Melt:SetFrench("Fonte d'armure")
 MF.Lang.Debuff.Melt:SetGerman("Geschmolzene Rüstung")
@@ -119,33 +125,40 @@ MF.Lang.Notify = {}
 MF.Lang.Notify.Fissure = KBM.Language:Add("Hellfire feeds on your agony!")
 MF.Lang.Notify.Fissure:SetGerman("Eure Angst nährt das Flammeninferno!")
 MF.Lang.Notify.Fissure:SetFrench("Les feux de l'enfer se nourrissent de votre agonie !")
+MF.Lang.Notify.Fissure:SetRussian("Адское пламя питается вашей агонией!")
 
 -- Mechanic Dictionary
 MF.Lang.Mechanic = {}
 MF.Lang.Mechanic.Fissure = KBM.Language:Add("Fissures")
 MF.Lang.Mechanic.Fissure:SetGerman("Spalten")
 MF.Lang.Mechanic.Fissure:SetFrench("Fissures")
+MF.Lang.Mechanic.Fissure:SetRussian("Проломы")
 
 -- Menu Dictionary
 MF.Lang.Menu = {}
 MF.Lang.Menu.Hell_Green = KBM.Language:Add("Hellfire (Green)")
 MF.Lang.Menu.Hell_Green:SetGerman("Höllenfeuer (Grün)")
 MF.Lang.Menu.Hell_Green:SetFrench("Hellfire (Foncé)")
+MF.Lang.Menu.Hell_Green:SetRussian("Адское пламя (зеленое)")
 MF.Lang.Menu.Hell_Yellow = KBM.Language:Add("Hellfire (Yellow)")
 MF.Lang.Menu.Hell_Yellow:SetGerman("Höllenfeuer (Gelb)")
 MF.Lang.Menu.Hell_Yellow:SetFrench("Hellfire (Jaune)")
+MF.Lang.Menu.Hell_Yellow:SetRussian("Адское пламя (желтое)")
 MF.Lang.Menu.Hell_P3First = KBM.Language:Add("First Hellfire (Final Phase)")
 MF.Lang.Menu.Hell_P3First:SetGerman("Erste Höllenfeuer (Letzte Phase)")
+MF.Lang.Menu.Hell_P3First:SetRussian("Первое адское пламя (3я фаза)") 
 MF.Lang.Menu.Hell_P3First:SetFrench("Premier Feux de l'enfer (Phase Finale)")
 MF.Lang.Menu.Hell_Can = KBM.Language:Add("First Hellfire (Cannon Phase)")
 MF.Lang.Menu.Hell_Can:SetGerman("Erste Höllenfeuer (Kanonen Phase)")
 MF.Lang.Menu.Hell_Can:SetFrench("Premier Feux de l'enfer (Phase Canon)")
+MF.Lang.Menu.Hell_Can:SetRussian("Первое адское пламя (фаза пушек)")
 
 -- Description
 MF.Lang.Descript = {}
 MF.Lang.Descript.Main = KBM.Language:Add("Maelforge - Final")
 MF.Lang.Descript.Main:SetGerman("Flammenmaul - Finale")
 MF.Lang.Descript.Main:SetFrench("Maelforge - Final")
+MF.Lang.Descript.Main:SetRussian("Маэлфордж")
 
 MF.Maelforge.Name = MF.Lang.Unit.Maelforge[KBM.Lang]
 MF.Maelforge.NameShort = MF.Lang.Unit.Maelforge[KBM.Lang]

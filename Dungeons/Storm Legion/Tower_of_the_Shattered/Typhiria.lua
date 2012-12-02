@@ -49,7 +49,8 @@ KBM.RegisterMod(MOD.ID, MOD)
 -- Main Unit Dictionary
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Typhiria = KBM.Language:Add(MOD.Typhiria.Name)
-MOD.Lang.Unit.Typhiria:SetGerman("Kommissarin Typhiria")
+MOD.Lang.Unit.Typhiria:SetGerman("Generalin Typhiria")
+MOD.Lang.Unit.Typhiria:SetFrench("commissaire Typhiria")
 MOD.Typhiria.Name = MOD.Lang.Unit.Typhiria[KBM.Lang]
 MOD.Descript = MOD.Typhiria.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Typhiria")
@@ -137,25 +138,24 @@ end
 
 function MOD:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		if not uDetails.player then
-			if uDetails.name == self.Typhiria.Name then
-				if not self.EncounterRunning then
-					self.EncounterRunning = true
-					self.StartTime = Inspect.Time.Real()
-					self.HeldTime = self.StartTime
-					self.TimeElapsed = 0
-					self.Typhiria.Dead = false
-					self.Typhiria.Casting = false
-					self.Typhiria.CastBar:Create(unitID)
-					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
-					self.PhaseObj.Objectives:AddPercent(self.Typhiria.Name, 0, 100)
-					self.Phase = 1
-				end
-				self.Typhiria.UnitID = unitID
-				self.Typhiria.Available = true
-				return self.Typhiria
+		local BossObj = self.UTID[uDetails.type] 
+		if BossObj then
+			if not self.EncounterRunning then
+				self.EncounterRunning = true
+				self.StartTime = Inspect.Time.Real()
+				self.HeldTime = self.StartTime
+				self.TimeElapsed = 0
+				BossObj.Dead = false
+				BossObj.Casting = false
+				BossObj.CastBar:Create(unitID)
+				self.PhaseObj:Start(self.StartTime)
+				self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
+				self.PhaseObj.Objectives:AddPercent(self.Typhiria, 0, 100)
+				self.Phase = 1
 			end
+			self.Typhiria.UnitID = unitID
+			self.Typhiria.Available = true
+			return self.Typhiria
 		end
 	end
 end

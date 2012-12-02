@@ -85,7 +85,7 @@ GFZ.Sky = {
 	-- AlertsRef = {},
 	-- TimersRef = {},
 	Available = false,
-	UTID = "none",
+	UTID = "UFE96189109B11387",
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
@@ -200,7 +200,7 @@ function GFZ:UnitHPCheck(uDetails, unitID)
 				end
 				self.PhaseObj:Start(self.StartTime)
 				self.PhaseObj:SetPhase("1")
-				self.PhaseObj.Objectives:AddPercent(self.Zoles.Name, 0, 100)
+				self.PhaseObj.Objectives:AddPercent(self.Zoles, 0, 100)
 				self.Phase = 1
 			else
 				BossObj.Dead = false
