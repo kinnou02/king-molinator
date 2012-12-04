@@ -6703,8 +6703,11 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 	return CastBarObj
 end
 
-local function KBM_Reset()
+local function KBM_Reset(Forced)
 	if KBM.Encounter then
+		if Forced then
+			KBM.Event.Encounter.End({Type = "reset", Mod = KBM.CurrentMod})
+		end
 		KBM.Idle.Wait = true
 		KBM.Idle.Until = Inspect.Time.Real() + KBM.Idle.Duration
 		KBM.Idle.Combat.Wait = false
@@ -8740,7 +8743,7 @@ function KBM.InitEvents()
 	table.insert(Event.System.Secure.Leave, {KBM.SecureLeave, "KingMolinator", "Secure Leave"})
 	
 	-- Slash Commands
-	table.insert(Command.Slash.Register("kbmreset"), {KBM_Reset, "KingMolinator", "KBM Reset"})
+	table.insert(Command.Slash.Register("kbmreset"), {function () KBM_Reset(true) end, "KingMolinator", "KBM Reset"})
 	table.insert(Command.Slash.Register("kbmhelp"), {KBM_Help, "KingMolinator", "KBM Help"})
 	table.insert(Command.Slash.Register("kbmversion"), {KBM_Version, "KingMolinator", "KBM Version Info"})
 	table.insert(Command.Slash.Register("kbmoptions"), {KBM_Options, "KingMolinator", "KBM Open Options"})

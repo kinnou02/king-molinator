@@ -262,7 +262,7 @@ function RM.Rezes:Init()
 							local TempDetails = Inspect.Unit.Detail(UID)
 							KBM.Unit:Idle(UID, TempDetails)
 							if TempDetails then
-								Timer.Class = TempDetails.calling
+								Timer.Class = TempDetails.calling or ""
 							end
 						end
 					else

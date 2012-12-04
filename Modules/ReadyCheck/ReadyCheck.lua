@@ -266,6 +266,14 @@ PI.Constants = {
 						cleric = true,
 					},
 				},
+				["B0A0A478464C0BADE"] = { -- Feast of Domination (AP)
+					Grade = "High",
+					Level = 60,
+					Callings = {
+						warrior = true,
+						rogue = true,
+					},
+				},
 				--//////////////////////--
 				-- SL Medium Grade Food --
 				--//////////////////////--
@@ -397,6 +405,20 @@ PI.Constants = {
 			w = 36,
 			Icons = true,
 			List = {
+				--//////////////////////--
+				-- Storm Legion Potions --
+				--//////////////////////--				
+				["BFF3177D56B3A82D6"] = { -- Stellar Powersurge Vial
+					Grade = "High",
+					Level = 60,
+					Callings = {
+						warrior = true,
+						rogue = true,
+					},
+				},
+				--/////////////////--
+				-- Classic Potions --
+				--/////////////////--				
 				["B1C51B12CC359AA77"] = { -- Herioc Brightsurge Vial
 					Grade = "High",
 					Level = 50,
@@ -514,6 +536,13 @@ PI.Constants = {
 		Other = {
 			Icons = true,
 			List = {
+				["r3BD9C00A2128287F"] = { -- Comfortable Insoles
+					Grade = "High",
+					Level = 60,
+					Callings = {
+						all = true,
+					},
+				},
 				["r0BBA6691632B040C"] = { -- Performance Insoles
 					Grade = "High",
 					Level = 50,

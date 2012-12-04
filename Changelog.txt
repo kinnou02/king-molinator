@@ -1,10 +1,24 @@
 ﻿v1.3.7
 
+Encounters
+* New: The slash command /kbmreset will now provide an Event.KingMolinator.Encounter.End trigger (Type = "reset").
+
+Ready Check
+* New: Feast of Domination AP (Warrior, Rogue, High, 60)
+* New: Stellar Powersurge Vial (Warrior, Rogue, High, 60)
+
 Storm Legion
 
 Exodus of the Storm Queen
 * Dominax (Expert/Normal)
+** New: Timer and Alert for Decimate (including stop trigger)
+** New: Alert for Red Mist cast and channel.
+** New: Added a 25 second timeout in order to catch encounter endings.
+** New: Added a catch for the message announced when completing the encounter as a victory state.
 ** Fixed: Both versions of Dominax should now have a castbar again (if enabled).
+* Valthundr (Expert/Normal)
+** New: Alert added for Frost Bound (Move in mechanic).
+** New: Alert added for Winter's Fury (Hide mechanic).
 
 Empyrean Core (Expert/Normal)
 * Kaliban's Bodyguards
@@ -13,7 +27,7 @@ Empyrean Core (Expert/Normal)
 
 Storm Breaker Protocol (Expert/Normal)
 * Vellion the Pestilent
-** New: Added Vellion's Exposed Viscera as a unit for death tracking.
+** New: Added Vellion's Exposed Viscera as a unit for death tracking, and victory state.
 
 ----
 v1.3.6
@@ -25,13 +39,13 @@ Raid Marks
 * New: Translation dictionary for Names.
 
 Unit Tracking
-* New: Idle states are now refreshed when an unseen unit causes damage, previously only recieving damage would do this.
+* New: Idle states are now refreshed when an unseen unit causes damage, previously only receiving damage would do this.
 * New: Added support for mentoring level adjustments, and level changes. This will also effect KBM:Add-Watch.
 * New: A players recorded level will now update accordingly.
 * Change: Adjusted how and when idle units are checked for damage. Now sent through primary update method.
 * Change: Adjusted how and when idle units are checked for healing. Now sent through primary update method.
 * Change: Removed double calls to the Phase Monitor's update method.
-* Change: Removed duplicate calculations of new percentages. Perfomance boost.
+* Change: Removed duplicate calculations of new percentages. Performance boost.
 
 Encounter Tracking
 * Fixed: Incorrect encounter start UnitID passed when checking for starts via NPC damage source to a raid member.
@@ -54,7 +68,7 @@ Exodus of the Storm Queen (Normal & Expert)
 ** New: Added a 25 second timeout for P1 to prevent premature endings.
 
 Empyrean Core (Normal)
-* Core Meltown
+* Core Meltdown
 ** Fixed: Corrected name of Encounter.
 
 Translations

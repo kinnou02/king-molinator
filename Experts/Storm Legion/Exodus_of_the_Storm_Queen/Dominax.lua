@@ -42,17 +42,21 @@ MOD.Dominax = {
 		[2] = "UFF5EE926628FA414",
 	},
 	TimeOut = 5,
+	AlertsRef = {},
+	TimersRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		-- TimersRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
-		-- },
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
-		-- },
+		TimersRef = {
+			Enabled = true,
+			Decimate = KBM.Defaults.TimerObj.Create("yellow"),
+		},
+		AlertsRef = {
+			Enabled = true,
+			Decimate = KBM.Defaults.AlertObj.Create("yellow"),
+			MistWarn = KBM.Defaults.AlertObj.Create("orange"),
+			Mist = KBM.Defaults.AlertObj.Create("red"),
+		},
 	}
 }
 
@@ -72,6 +76,16 @@ MOD.Dominax.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}
+MOD.Lang.Ability.Decimate = KBM.Language:Add("Decimator")
+MOD.Lang.Ability.Mist = KBM.Language:Add("Red Mist")
+
+-- Verbose Dictionary
+MOD.Lang.Verbose = {}
+MOD.Lang.Verbose.Mist = KBM.Language:Add("Preparing Red Mist")
+
+-- Notify Dictionary
+MOD.Lang.Notify = {}
+MOD.Lang.Notify.Victory = KBM.Language:Add('Icewatch Protector pleas, "Quickly, Ascended! We need you downstairs!"')
 
 function MOD:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
@@ -86,10 +100,10 @@ function MOD:InitVars()
 		CastBar = self.Dominax.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
-		-- MechTimer = KBM.Defaults.MechTimer(),
-		-- Alerts = KBM.Defaults.Alerts(),
-		-- TimersRef = self.Dominax.Settings.TimersRef,
-		-- AlertsRef = self.Dominax.Settings.AlertsRef,
+		MechTimer = KBM.Defaults.MechTimer(),
+		Alerts = KBM.Defaults.Alerts(),
+		TimersRef = self.Dominax.Settings.TimersRef,
+		AlertsRef = self.Dominax.Settings.AlertsRef,
 	}
 	KBMSLEXSQDX_Settings = self.Settings
 	chKBMSLEXSQDX_Settings = self.Settings
@@ -135,7 +149,7 @@ end
 
 function MOD.PhaseFinal()
 	MOD.PhaseObj.Objectives:Remove()
-	MOD.PhaseObj.Objectives:AddPercent(MOD.Dominax, 0, 100)
+	MOD.PhaseObj.Objectives:AddPercent(MOD.Dominax, 10, 100)
 	MOD.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
 	MOD.Phase = 2
 end
@@ -162,6 +176,9 @@ function MOD:UnitHPCheck(uDetails, unitID)
 	if uDetails and unitID then
 		local BossObj = self.UTID[uDetails.type]
 		if BossObj then
+			if uDetails.name ~= BossObj.Name then 
+				return
+			end
 			if BossObj.UnitID ~= unitID then
 				if BossObj.CastBar.Active then
 					BossObj.CastBar:Remove()
@@ -177,7 +194,6 @@ function MOD:UnitHPCheck(uDetails, unitID)
 				self.TimeElapsed = 0
 				BossObj.Dead = false
 				BossObj.Casting = false
-				self.Timeout = 25
 				if self.Dominax.UTID[1] == uDetails.type then
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase("1")
@@ -188,7 +204,6 @@ function MOD:UnitHPCheck(uDetails, unitID)
 			if BossObj.Type == self.Dominax.UTID[2] then
 				if self.Phase == 1 then
 					self.PhaseFinal()
-					self.Timeout = 0
 				end
 			end
 			BossObj.Available = true
@@ -215,12 +230,27 @@ end
 
 function MOD:Start()
 	-- Create Timers
-	--KBM.Defaults.TimerObj.Assign(self.Dominax)
+	self.Dominax.TimersRef.Decimate = KBM.MechTimer:Add(self.Lang.Ability.Decimate[KBM.Lang], 30)
+	KBM.Defaults.TimerObj.Assign(self.Dominax)
 	
 	-- Create Alerts
-	--KBM.Defaults.AlertObj.Assign(self.Dominax)
+	self.Dominax.AlertsRef.Decimate = KBM.Alert:Create(self.Lang.Ability.Decimate[KBM.Lang], nil, false, true, "yellow")
+	self.Dominax.AlertsRef.MistWarn = KBM.Alert:Create(self.Lang.Verbose.Mist[KBM.Lang], nil, false, true, "orange")
+	self.Dominax.AlertsRef.Mist = KBM.Alert:Create(self.Lang.Ability.Mist[KBM.Lang], nil, true, true, "red")
+	KBM.Defaults.AlertObj.Assign(self.Dominax)
 	
 	-- Assign Alerts and Timers to Triggers
+	self.Dominax.Triggers.Decimate = KBM.Trigger:Create(self.Lang.Ability.Decimate[KBM.Lang], "cast", self.Dominax)
+	self.Dominax.Triggers.Decimate:AddAlert(self.Dominax.AlertsRef.Decimate)
+	self.Dominax.Triggers.Decimate:AddTimer(self.Dominax.TimersRef.Decimate)
+	self.Dominax.Triggers.DecimateInt = KBM.Trigger:Create(self.Lang.Ability.Decimate[KBM.Lang], "interrupt", self.Dominax)
+	self.Dominax.Triggers.DecimateInt:AddStop(self.Dominax.AlertsRef.Decimate)
+	self.Dominax.Triggers.MistWarn = KBM.Trigger:Create(self.Lang.Ability.Mist[KBM.Lang], "cast", self.Dominax)
+	self.Dominax.Triggers.MistWarn:AddAlert(self.Dominax.AlertsRef.MistWarn)
+	self.Dominax.Triggers.Mist = KBM.Trigger:Create(self.Lang.Ability.Mist[KBM.Lang], "channel", self.Dominax)
+	self.Dominax.Triggers.Mist:AddAlert(self.Dominax.AlertsRef.Mist)
+	self.Dominax.Triggers.Victory = KBM.Trigger:Create(self.Lang.Notify.Victory[KBM.Lang], "notify", self.Dominax)
+	self.Dominax.Triggers.Victory:SetVictory()
 	
 	self.Dominax.CastBar = KBM.CastBar:Add(self, self.Dominax)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

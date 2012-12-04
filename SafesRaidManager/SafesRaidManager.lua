@@ -490,7 +490,11 @@ local function SRM_SetSpecifier(Specifier)
 							if SRM_PetQueue.OwnerWait.List[SRM_Units[self.UnitID].PetID] then
 								SRM_PetQueue.OwnerWait.List[SRM_Units[self.UnitID].PetID] = nil
 								SRM_PetQueue.OwnerWait.Queued = SRM_PetQueue.OwnerWait.Queued - 1
-								SRM_Units.Pets[SRM_Units[self.UnitID].PetID].OwnerID = self.UnitID
+								if not SRM_Units.Pets[SRM_Units[self.UnitID].PetID] then
+									self:PetLoad()
+								else
+									SRM_Units.Pets[SRM_Units[self.UnitID].PetID].OwnerUID = self.UnitID
+								end
 								--print("Unit's Pet loaded!")
 								SRM_Pet.Add(self.PetID, self.UnitID)
 							end
@@ -578,6 +582,7 @@ end
 
 local function SRM_Heal(data)
 	local sent = false
+	local PetOwnerID
 	if data.caster then
 		if LibSRM.Player.Grouped then
 			if SRM_Units[data.caster] then
@@ -602,13 +607,13 @@ local function SRM_Heal(data)
 				sent = true
 			elseif SRM_Units.Pets[data.caster] then
 				-- Group member's pet healing. Usually only Cleric Fairy
-				if SRM_Units.Pets[data.caster].OwnerID == LibSRM.Player.ID then
+				if SRM_Units.Pets[data.caster].OwnerUID == LibSRM.Player.ID then
 					data.player = true
 				else
 					data.player = false
 				end
 				data.pet = true
-				data.owner = SRM_Units.Pets[data.caster].OwnerID
+				data.owner = SRM_Units.Pets[data.caster].OwnerUID
 				data.specifier = SRM_Units.Pets[data.caster].Specifier
 				SRM_Group.Combat.Heal(data)
 				sent = true
@@ -696,6 +701,7 @@ end
 
 local function SRM_Damage(data)
 	local sent = false
+	local PetOwnerID
 	if data.caster then
 		if LibSRM.Player.Grouped then
 			if SRM_Units[data.caster] then
@@ -712,13 +718,13 @@ local function SRM_Damage(data)
 				sent = true
 			elseif SRM_Units.Pets[data.caster] then
 				-- Group member's pet damage
-				if SRM_Units.Pets[data.caster].OwnerID == LibSRM.Player.ID then
+				if SRM_Units.Pets[data.caster].OwnerUID == LibSRM.Player.ID then
 					data.player = true
 				else
 					data.player = false
 				end
 				data.pet = true
-				data.owner = SRM_Units.Pets[data.caster].OwnerID
+				data.owner = SRM_Units.Pets[data.caster].OwnerUID
 				data.specifier = SRM_Units.Pets[data.caster].Specifier
 				SRM_Group.Combat.Damage(data)
 				sent = true

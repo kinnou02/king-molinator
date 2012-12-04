@@ -147,7 +147,7 @@ function MOD:UnitHPCheck(uDetails, unitID)
 				self.TimeElapsed = 0
 				BossObj.Dead = false
 				BossObj.Casting = false
-				Bossobj.CastBar:Create(unitID)
+				BossObj.CastBar:Create(unitID)
 				self.PhaseObj:Start(self.StartTime)
 				self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
 				self.PhaseObj.Objectives:AddPercent(self.Bruzhail.Name, 0, 100)

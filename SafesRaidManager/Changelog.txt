@@ -1,3 +1,11 @@
+v1.2.6
+
+Pets
+* Fixed: Aligned OwnerUID correctly. Changed references to OwnerID.
+* Fixed: Removed global reference to PetOwnerID.
+* Fixed: Added a PetLoad() call for summoned pets.
+
+----
 v1.2.5
 
 Rift Version
