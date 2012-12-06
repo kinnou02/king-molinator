@@ -24,6 +24,7 @@ local MOD = {
 	ID = "Ex_Dominax",
 	Object = "MOD",
 	Timeout = 25,
+	TimeoutOverride = true,
 }
 
 MOD.Dominax = {

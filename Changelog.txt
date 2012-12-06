@@ -3,6 +3,10 @@
 Encounters
 * New: The slash command /kbmreset will now provide an Event.KingMolinator.Encounter.End trigger (Type = "reset").
 
+Phase Monitor
+* New: Percent style objectives. Added DisplayName field check for bosses with verbose style names.
+* Note: Name should always be the actual Unit name, DisplayName field should be added if you wish this to be something different.
+
 Ready Check
 * New: Feast of Domination AP (Warrior, Rogue, High, 60)
 * New: Stellar Powersurge Vial (Warrior, Rogue, High, 60)

@@ -3098,7 +3098,11 @@ function KBM.PhaseMonitor:Init()
 			PercentObj.GUI = KBM.PhaseMonitor:PullObjective()
 			PercentObj.GUI.Progress:SetWidth(PercentObj.GUI.Frame:GetWidth() * (PercentObj.PercentRaw * 0.01))
 			PercentObj.GUI.Progress:SetVisible(true)
-			PercentObj.GUI:SetName(PercentObj.Name)
+			if Object.DisplayName then
+				PercentObj.GUI:SetName(Object.DisplayName)
+			else
+				PercentObj.GUI:SetName(PercentObj.Name)
+			end
 			if Target == 0 then
 				PercentObj.GUI:SetObjective(PercentObj.Percent.."%")
 			else
