@@ -3093,13 +3093,22 @@ function KBM.PhaseMonitor:Init()
 				PercentObj.Name = Object.Name
 				PercentObj.UnitObj = Object
 				PercentObj.UnitID = Object.UnitID
+				PercentObj.UnitObj.PhaseObj = PercentObj
+				if KBM.Unit.List.UID[Object.UnitID] then
+					PercentObj.PercentRaw = KBM.Unit.List.UID[Object.UnitID].PercentRaw
+					PercentObj.Percent = KBM.Unit.List.UID[Object.UnitID].Percent
+				end
 			end
 			PercentObj.Dead = false
 			PercentObj.GUI = KBM.PhaseMonitor:PullObjective()
 			PercentObj.GUI.Progress:SetWidth(PercentObj.GUI.Frame:GetWidth() * (PercentObj.PercentRaw * 0.01))
 			PercentObj.GUI.Progress:SetVisible(true)
-			if PercentObj.UnitObj.DisplayName then
-				PercentObj.GUI:SetName(PercentObj.UnitObj.DisplayName)
+			if PercentObj.UnitObj then
+				if PercentObj.UnitObj.DisplayName then
+					PercentObj.GUI:SetName(PercentObj.UnitObj.DisplayName)
+				else
+					PercentObj.GUI:SetName(PercentObj.Name)
+				end
 			else
 				PercentObj.GUI:SetName(PercentObj.Name)
 			end
@@ -3142,7 +3151,9 @@ function KBM.PhaseMonitor:Init()
 				if self.UnitID then
 					KBM.PhaseMonitor.Objectives.Lists.Percent[self.UnitID] = nil
 				else
-					if KBM.PhaseMonitor.Objectives.Lists.Percent[self.Name] then
+					if KBM.PhaseMonitor.Objectives.Lists.Percent[tostring(self.UnitObj)] then
+						KBM.PhaseMonitor.Objectives.Lists.Percent[tostring(self.UnitObj)] = nil
+					elseif KBM.PhaseMonitor.Objectives.Lists.Percent[self.Name] then
 						if KBM.PhaseMonitor.Objectives.Lists.Percent[self.Name][tostring(self)] then
 							KBM.PhaseMonitor.Objectives.Lists.Percent[self.Name][tostring(self)] = nil
 							if not next(KBM.PhaseMonitor.Objectives.Lists.Percent[self.Name]) then
@@ -3161,11 +3172,13 @@ function KBM.PhaseMonitor:Init()
 			
 			if PercentObj.UnitID then
 				KBM.PhaseMonitor.Objectives.Lists.Percent[PercentObj.UnitID] = PercentObj
-			else
+			elseif not PercentObj.UnitObj then
 				if not KBM.PhaseMonitor.Objectives.Lists.Percent[PercentObj.Name] then
 					KBM.PhaseMonitor.Objectives.Lists.Percent[PercentObj.Name] = {}
 				end
-				KBM.PhaseMonitor.Objectives.Lists.Percent[PercentObj.Name][tostring(PercentObj.UnitObj)] = PercentObj
+				KBM.PhaseMonitor.Objectives.Lists.Percent[PercentObj.Name][tostring(PercentObj)] = PercentObj
+			else
+				KBM.PhaseMonitor.Objectives.Lists.Percent[tostring(PercentObj.UnitObj)] = true
 			end
 			KBM.PhaseMonitor.Objectives.Lists:Add(PercentObj)
 			
@@ -3691,6 +3704,7 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 											KBM.BossID[UnitID].Mod = BossObj.Mod
 											KBM.BossID[UnitID].IdleSince = false
 											KBM.BossID[UnitID].Boss = ModBossObj
+											KBM.BossID[UnitID].PhaseObj = ModBossObj.PhaseObj
 											if uDetails.health > 0 then
 												if KBM.Debug then
 													print("Boss is alive and in combat, activating.")
@@ -3698,12 +3712,22 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 												KBM.BossID[UnitID].Combat = true
 												KBM.BossID[UnitID].dead = false
 												KBM.BossID[UnitID].available = true
-												KBM.BossID[UnitID].Health = uDetails.health
-												KBM.BossID[UnitID].HealthLast = uDetails.health
-												KBM.BossID[UnitID].HealthMax = uDetails.healthMax
-												KBM.BossID[UnitID].PercentRaw = (uDetails.health/uDetails.healthMax)*100
-												KBM.BossID[UnitID].Percent = math.ceil(KBM.BossID[UnitID].PercentRaw)
-												KBM.BossID[UnitID].PercentLast = KBM.BossID[UnitID].Percent
+												local CacheUnit = KBM.Unit.List.UID[UnitID]
+												if CacheUnit then
+													KBM.BossID[UnitID].Health = CacheUnit.Health
+													KBM.BossID[UnitID].HealthLast = CacheUnit.Health
+													KBM.BossID[UnitID].HealthMax = CacheUnit.HealthMax
+													KBM.BossID[UnitID].PercentRaw = CacheUnit.PercentRaw
+													KBM.BossID[UnitID].Percent = CacheUnit.Percent
+													KBM.BossID[UnitID].PercentLast = CacheUnit.Percent
+												else
+													KBM.BossID[UnitID].Health = uDetails.health
+													KBM.BossID[UnitID].HealthLast = uDetails.health
+													KBM.BossID[UnitID].HealthMax = uDetails.healthMax
+													KBM.BossID[UnitID].PercentRaw = (uDetails.health/uDetails.healthMax)*100
+													KBM.BossID[UnitID].Percent = math.ceil(KBM.BossID[UnitID].PercentRaw)
+													KBM.BossID[UnitID].PercentLast = KBM.BossID[UnitID].Percent
+												end
 												if not KBM.Encounter then
 													-- if KBM.Debug then
 														-- print("New encounter, starting")
@@ -3796,17 +3820,27 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 													KBM.MechSpy:Begin()
 													KBM.Event.Encounter.Start({Type = "start", Mod = KBM.CurrentMod})
 												end
-												if KBM.PhaseMonitor.Objectives.Lists.Percent[uDetails.name] then
-													local PhaseObj = KBM.PhaseMonitor.Objectives.Lists.Percent[uDetails.name][tostring(BossObj)]
+												if KBM.PhaseMonitor.Objectives.Lists.Percent[tostring(ModBossObj)] then
+													local PhaseObj = ModBossObj.PhaseObj
 													if PhaseObj then
 														KBM.BossID[UnitID].PhaseObj = PhaseObj
+														PhaseObj:UpdateID(UnitID)
+														PhaseObj:Update(KBM.BossID[UnitID].PercentRaw)														
+													end
+												elseif KBM.PhaseMonitor.Objectives.Lists.Percent[uDetails.name] then
+													local _, PhaseObj = next(KBM.PhaseMonitor.Objectives.Lists.Percent[uDetails.name])
+													if PhaseObj then
+														KBM.BossID[UnitID].PhaseObj = PhaseObj
+														PhaseObj.UnitObj = ModBossObj
 														PhaseObj:UpdateID(UnitID)
 														PhaseObj:Update(KBM.BossID[UnitID].PercentRaw)
 													end
 												elseif KBM.PhaseMonitor.Objectives.Lists.Percent[UnitID] then
 													KBM.BossID[UnitID].PhaseObj = KBM.PhaseMonitor.Objectives.Lists.Percent[UnitID]
+													KBM.BossID[UnitID].PhaseObj:Update(KBM.BossID[UnitID].PercentRaw)
 												elseif KBM.BossID[UnitID].PhaseObj then
 													KBM.BossID[UnitID].PhaseObj:UpdateID(UnitID)
+													KBM.BossID[UnitID].PhaseObj:Update(KBM.BossID[UnitID].PercentRaw)
 												end
 											else
 												KBM.BossID[UnitID].Combat = false
@@ -3909,13 +3943,13 @@ function KBM.MobDamage(info)
 			end
 		end	
 		UnitObj = KBM.Unit.List.UID[tUnitID]
-		tDetails = Inspect.Unit.Detail(tUnitID)
 		if not UnitObj then
+			tDetails = Inspect.Unit.Detail(tUnitID)
 			UnitObj = KBM.Unit:Idle(tUnitID, tDetails)
-		else
-			if tDetails then
-				KBM.Unit.List.UID[tUnitID]:UpdateData(tDetails)
-			end
+		-- else
+			-- if tDetails then
+				-- KBM.Unit.List.UID[tUnitID]:UpdateData(tDetails)
+			-- end
 		end
 		if UnitObj then
 			UnitObj:DamageHandler(info, tDetails)
@@ -3925,13 +3959,13 @@ function KBM.MobDamage(info)
 			if cUnitID then
 				if cDetails then
 					if KBM.CurrentMod then
-						if info.abilityName then
-							if KBM.Trigger.Damage[info.abilityName] then
-								TriggerObj = KBM.Trigger.Damage[info.abilityName]
-								KBM.Trigger.Queue:Add(TriggerObj, cUnitID, tUnitID)
-							end
-						end
 						if KBM.BossID[cUnitID] then
+							if info.abilityName then
+								if KBM.Trigger.Damage[info.abilityName] then
+									TriggerObj = KBM.Trigger.Damage[info.abilityName]
+									KBM.Trigger.Queue:Add(TriggerObj, cUnitID, tUnitID)
+								end
+							end
 							-- Check for Npc Based Triggers (Usually Dynamic: Eg - Failsafe for P4 start Akylios)
 							if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID] then
 								if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][cDetails.name] then
@@ -3941,28 +3975,31 @@ function KBM.MobDamage(info)
 									end
 								end
 							end
+						else
+							if not cDetails.player then
+								if cDetails.combat then
+									if cDetails.health > 0 then
+										KBM.CheckActiveBoss(cDetails, cUnitID)
+									end
+								end
+							end
 						end
-					end	
+					end
 				else
 					if KBM.BossID[tUnitID] then
 						if not KBM.BossID[tUnitID].Dead then
-							if info.damage then
-								KBM.BossID[tUnitID].Health = KBM.BossID[tUnitID].HealthLast - info.damage
-								if info.Overkill then
-									KBM.BossID[tUnitID].Health = 0
-								end
-								KBM.BossID[tUnitID].HealthLast = KBM.BossID[tUnitID].Health
-								KBM.BossID[tUnitID].PercentRaw = (KBM.BossID[tUnitID].Health/KBM.BossID[tUnitID].HealthMax)*100
-								KBM.BossID[tUnitID].Percent = math.ceil(KBM.BossID[tUnitID].PercentRaw)
-								if KBM.CurrentMod then
-									KBM.BossID[tUnitID].PercentLast = KBM.BossID[tUnitID].Percent
-									-- Check for Npc Based Triggers (Usually Dynamic: Eg - Failsafe for P4 start Akylios)
-									if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID] then
-										if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name] then
-											local TriggerObj = KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name]
-											if TriggerObj.Enabled then
-												KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
-											end
+							KBM.BossID[tUnitID].Health = UnitObj.Health
+							KBM.BossID[tUnitID].HealthLast = UnitObj.Health
+							KBM.BossID[tUnitID].PercentRaw = UnitObj.PercentRaw
+							KBM.BossID[tUnitID].Percent = UnitObj.Percent
+							if KBM.CurrentMod then
+								KBM.BossID[tUnitID].PercentLast = UnitObj.Percent
+								-- Check for Npc Based Triggers (Usually Dynamic: Eg - Failsafe for P4 start Akylios)
+								if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID] then
+									if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name] then
+										local TriggerObj = KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name]
+										if TriggerObj.Enabled then
+											KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
 										end
 									end
 								end
@@ -4023,13 +4060,7 @@ function KBM.RaidDamage(info)
 			UnitObj = KBM.Unit.List.UID[tUnitID]
 			if not UnitObj then
 				tDetails = Inspect.Unit.Detail(tUnitID)
-				if not tDetails then
-					return
-				end
-				UnitObj = KBM.Unit.List.UID[tUnitID]
-				if not UnitObj then
-					UnitObj = KBM.Unit:Idle(tUnitID, tDetails)
-				end
+				UnitObj = KBM.Unit:Idle(tUnitID, tDetails)
 				UnitObj:DamageHandler(info, tDetails)
 			else
 				UnitObj:DamageHandler(info)

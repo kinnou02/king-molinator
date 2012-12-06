@@ -221,11 +221,15 @@ end
 
 function DL:Reset()
 	self.EncounterRunning = false
-	self.Letareus.Available = false
-	self.Letareus.UnitID = nil
-	self.Letareus.CastBar:Remove()
+	for Name, BossObj in pairs(self.Bosses) do
+		BossObj.Available = false
+		BossObj.UnitID = nil
+		if BossObj.CastBar then
+			BossObj.CastBar:Remove()
+		end
+	end
 	self.Phase = 1
-	self.PhaseObj:End()	
+	self.PhaseObj:End()
 end
 
 function DL:Timer()
