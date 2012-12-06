@@ -10,6 +10,8 @@ Phase Monitor
 Ready Check
 * New: Feast of Domination AP (Warrior, Rogue, High, 60)
 * New: Stellar Powersurge Vial (Warrior, Rogue, High, 60)
+* New: Luminescent Powerstone (Cleric, Mage, High, 60)
+* New: Stellar Brightsurge Vial (Cleric, Mage, High, 60)
 
 Storm Legion
 

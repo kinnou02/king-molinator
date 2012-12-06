@@ -141,6 +141,14 @@ PI.Constants = {
 			w = 36,
 			Icons = true,
 			List = {
+				["r3A5D56170B3171F5"] = { -- Luminescent Powerstone
+					Grade = "High",
+					Level = 60,
+					Callings = {
+						cleric = true,
+						mage = true,
+					},
+				},
 				["r624A5FA52756B277"] = { -- Burning Powerstone
 					Grade = "High",
 					Level = 50,
@@ -414,6 +422,14 @@ PI.Constants = {
 					Callings = {
 						warrior = true,
 						rogue = true,
+					},
+				},
+				["BFBD8A9BDCF3270E6"] = { -- Stellar Brightsurge Vial
+					Grade = "High",
+					Level = 60,
+					Callings = {
+						cleric = true,
+						mage = true,
 					},
 				},
 				--/////////////////--

@@ -3098,8 +3098,8 @@ function KBM.PhaseMonitor:Init()
 			PercentObj.GUI = KBM.PhaseMonitor:PullObjective()
 			PercentObj.GUI.Progress:SetWidth(PercentObj.GUI.Frame:GetWidth() * (PercentObj.PercentRaw * 0.01))
 			PercentObj.GUI.Progress:SetVisible(true)
-			if Object.DisplayName then
-				PercentObj.GUI:SetName(Object.DisplayName)
+			if PercentObj.UnitObj.DisplayName then
+				PercentObj.GUI:SetName(PercentObj.UnitObj.DisplayName)
 			else
 				PercentObj.GUI:SetName(PercentObj.Name)
 			end
@@ -3165,7 +3165,7 @@ function KBM.PhaseMonitor:Init()
 				if not KBM.PhaseMonitor.Objectives.Lists.Percent[PercentObj.Name] then
 					KBM.PhaseMonitor.Objectives.Lists.Percent[PercentObj.Name] = {}
 				end
-				KBM.PhaseMonitor.Objectives.Lists.Percent[PercentObj.Name][tostring(PercentObj)] = PercentObj
+				KBM.PhaseMonitor.Objectives.Lists.Percent[PercentObj.Name][tostring(PercentObj.UnitObj)] = PercentObj
 			end
 			KBM.PhaseMonitor.Objectives.Lists:Add(PercentObj)
 			
@@ -3797,10 +3797,12 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 													KBM.Event.Encounter.Start({Type = "start", Mod = KBM.CurrentMod})
 												end
 												if KBM.PhaseMonitor.Objectives.Lists.Percent[uDetails.name] then
-													local _, PhaseObj = next(KBM.PhaseMonitor.Objectives.Lists.Percent[uDetails.name])
-													KBM.BossID[UnitID].PhaseObj = PhaseObj
-													PhaseObj:UpdateID(UnitID)
-													PhaseObj:Update(KBM.BossID[UnitID].PercentRaw)
+													local PhaseObj = KBM.PhaseMonitor.Objectives.Lists.Percent[uDetails.name][tostring(BossObj)]
+													if PhaseObj then
+														KBM.BossID[UnitID].PhaseObj = PhaseObj
+														PhaseObj:UpdateID(UnitID)
+														PhaseObj:Update(KBM.BossID[UnitID].PercentRaw)
+													end
 												elseif KBM.PhaseMonitor.Objectives.Lists.Percent[UnitID] then
 													KBM.BossID[UnitID].PhaseObj = KBM.PhaseMonitor.Objectives.Lists.Percent[UnitID]
 												elseif KBM.BossID[UnitID].PhaseObj then
