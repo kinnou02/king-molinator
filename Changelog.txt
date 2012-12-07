@@ -15,6 +15,13 @@ Ready Check
 
 Storm Legion
 
+Triumph of the Dragon Queen
+* Grand Falconer Zoles
+** New: Added Alert and Stop trigger for Static Empowerment interrupt.
+** New: Added Timers for First and following Void Spawn phases.
+* Jultharin
+** New: Added Timer, Alert and Stop trigger for Deranging Tempest interrupt.
+
 Exodus of the Storm Queen
 * Dominax (Expert/Normal)
 ** New: Timer and Alert for Decimate (including stop trigger)
@@ -34,6 +41,9 @@ Empyrean Core (Expert/Normal)
 Storm Breaker Protocol (Expert/Normal)
 * Vellion the Pestilent
 ** New: Added Vellion's Exposed Viscera as a unit for death tracking, and victory state.
+
+Translations
+* German Updates.
 
 ----
 v1.3.6

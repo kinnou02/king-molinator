@@ -36,6 +36,8 @@ JUL.Lang.Unit.JultharinShort:SetGerman("Jultharin")
 
 -- Ability Dictionary
 JUL.Lang.Ability = {}
+JUL.Lang.Ability.Tempest = KBM.Language:Add("Deranging Tempest")
+JUL.Lang.Ability.Tempest:SetGerman("Verwirrender Sturm")
 
 -- Description Dictionary
 JUL.Lang.Main = {}
@@ -51,22 +53,22 @@ JUL.Jultharin = {
 	NameShort = JUL.Lang.Unit.JultharinShort[KBM.Lang],
 	Menu = {},
 	Dead = false,
-	-- AlertsRef = {},
-	-- TimersRef = {},
+	AlertsRef = {},
+	TimersRef = {},
 	Available = false,
 	UTID = "U3F2331475EA6C7B3",
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		-- TimersRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
-		-- },
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
-		-- },
+		TimersRef = {
+			Enabled = true,
+			Tempest = KBM.Defaults.TimerObj.Create("yellow"),
+		},
+		AlertsRef = {
+			Enabled = true,
+			Tempest = KBM.Defaults.AlertObj.Create("yellow"),
+		},
 	}
 }
 
@@ -83,10 +85,10 @@ function JUL:InitVars()
 		CastBar = self.Jultharin.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
-		-- MechTimer = KBM.Defaults.MechTimer(),
-		-- Alerts = KBM.Defaults.Alerts(),
-		-- TimersRef = self.Jultharin.Settings.TimersRef,
-		-- AlertsRef = self.Jultharin.Settings.AlertsRef,
+		MechTimer = KBM.Defaults.MechTimer(),
+		Alerts = KBM.Defaults.Alerts(),
+		TimersRef = self.Jultharin.Settings.TimersRef,
+		AlertsRef = self.Jultharin.Settings.AlertsRef,
 	}
 	KBMSLSLTQJN_Settings = self.Settings
 	chKBMSLSLTQJN_Settings = self.Settings
@@ -205,12 +207,20 @@ end
 
 function JUL:Start()
 	-- Create Timers
-	-- KBM.Defaults.TimerObj.Assign(self.Jultharin)
+	self.Jultharin.TimersRef.Tempest = KBM.MechTimer:Add(self.Lang.Ability.Tempest[KBM.Lang], 22)
+	KBM.Defaults.TimerObj.Assign(self.Jultharin)
 	
 	-- Create Alerts
-	-- KBM.Defaults.AlertObj.Assign(self.Jultharin)
+	self.Jultharin.AlertsRef.Tempest = KBM.Alert:Create(self.Lang.Ability.Tempest[KBM.Lang], nil, false, true, "yellow")
+	self.Jultharin.AlertsRef.Tempest:Important()
+	KBM.Defaults.AlertObj.Assign(self.Jultharin)
 	
 	-- Assign Alerts and Timers to Triggers
+	self.Jultharin.Triggers.Tempest = KBM.Trigger:Create(self.Lang.Ability.Tempest[KBM.Lang], "cast", self.Jultharin)
+	self.Jultharin.Triggers.Tempest:AddAlert(self.Jultharin.AlertsRef.Tempest)
+	self.Jultharin.Triggers.Tempest:AddTimer(self.Jultharin.TimersRef.Tempest)
+	self.Jultharin.Triggers.TempestInt = KBM.Trigger:Create(self.Lang.Ability.Tempest[KBM.Lang], "interrupt", self.Jultharin)
+	self.Jultharin.Triggers.TempestInt:AddStop(self.Jultharin.AlertsRef.Tempest)
 	
 	self.Jultharin.CastBar = KBM.CastBar:Add(self, self.Jultharin)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

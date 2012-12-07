@@ -39,6 +39,7 @@ MOD.Lang.Unit.VellionRT:SetGerman("Vellions rechter Brustschutz")
 MOD.Lang.Unit.VellionPS = KBM.Language:Add("Pestilence Spewer")
 MOD.Lang.Unit.VellionPS:SetGerman("Pestilenz-Speier")
 MOD.Lang.Unit.VellionEV = KBM.Language:Add("Vellion's Exposed Viscera")
+MOD.Lang.Unit.VellionEV:SetGerman("Vellions Entblößte Eingeweide")
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Vellion")
 MOD.Lang.Unit.AndShort:SetGerman()
 MOD.Lang.Unit.AndShort:SetFrench()
@@ -91,7 +92,7 @@ MOD.VellionPS = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = "none",
+	UTID = "UFB64832C19D102E7",
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
@@ -110,7 +111,7 @@ MOD.VellionLT = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = "none",
+	UTID = "UFE0D344F1E45C44C",
 	TimeOut = 5,
 	Triggers = {},
 }
@@ -126,7 +127,7 @@ MOD.VellionRT = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = "none",
+	UTID = "UFD30EDED68E25407",
 	TimeOut = 5,
 	Triggers = {},
 }

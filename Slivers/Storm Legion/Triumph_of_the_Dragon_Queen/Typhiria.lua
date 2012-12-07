@@ -30,7 +30,7 @@ KBM.RegisterMod(TPH.ID, TPH)
 -- Main Unit Dictionary
 TPH.Lang.Unit = {}
 TPH.Lang.Unit.Typhiria = KBM.Language:Add("General Typhiria")
-TPH.Lang.Unit.Typhiria:SetGerman("General Typhiria")
+TPH.Lang.Unit.Typhiria:SetGerman("Generalin Typhiria")
 TPH.Lang.Unit.TyphiriaShort = KBM.Language:Add("Typhiria")
 TPH.Lang.Unit.TyphiriaShort:SetGerman("Typhiria")
 

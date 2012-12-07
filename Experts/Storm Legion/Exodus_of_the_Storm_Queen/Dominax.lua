@@ -78,11 +78,14 @@ MOD.Dominax.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 -- Ability Dictionary
 MOD.Lang.Ability = {}
 MOD.Lang.Ability.Decimate = KBM.Language:Add("Decimator")
+MOD.Lang.Ability.Decimate:SetGerman("Dezimierer")
 MOD.Lang.Ability.Mist = KBM.Language:Add("Red Mist")
+MOD.Lang.Ability.Mist:SetGerman("Roter Nebel")
 
 -- Verbose Dictionary
 MOD.Lang.Verbose = {}
 MOD.Lang.Verbose.Mist = KBM.Language:Add("Preparing Red Mist")
+MOD.Lang.Verbose.Mist:SetGerman("Verstecken!")
 
 -- Notify Dictionary
 MOD.Lang.Notify = {}

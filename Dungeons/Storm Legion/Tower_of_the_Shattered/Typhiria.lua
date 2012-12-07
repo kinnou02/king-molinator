@@ -49,7 +49,7 @@ KBM.RegisterMod(MOD.ID, MOD)
 -- Main Unit Dictionary
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Typhiria = KBM.Language:Add(MOD.Typhiria.Name)
-MOD.Lang.Unit.Typhiria:SetGerman("Generalin Typhiria")
+MOD.Lang.Unit.Typhiria:SetGerman("Kommissarin Typhiria")
 MOD.Lang.Unit.Typhiria:SetFrench("commissaire Typhiria")
 MOD.Typhiria.Name = MOD.Lang.Unit.Typhiria[KBM.Lang]
 MOD.Descript = MOD.Typhiria.Name

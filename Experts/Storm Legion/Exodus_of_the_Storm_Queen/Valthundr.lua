@@ -69,12 +69,16 @@ MOD.Valthundr.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 -- Ability Dictionary
 MOD.Lang.Ability = {}
 MOD.Lang.Ability.Frost = KBM.Language:Add("Frost Bound")
+MOD.Lang.Ability.Frost:SetGerman("Frostfessel")
 MOD.Lang.Ability.Winter = KBM.Language:Add("Winter's Fury")
+MOD.Lang.Ability.Winter:SetGerman("Raserei des Winters") 
 
 -- Verbose Dictionary
 MOD.Lang.Verbose = {}
 MOD.Lang.Verbose.WinterWarn = KBM.Language:Add("Find a pillar and hide!")
+MOD.Lang.Verbose.WinterWarn:SetGerman("Säule suchen und verstecken!")
 MOD.Lang.Verbose.Winter = KBM.Language:Add("Stay hidden!")
+MOD.Lang.Verbose.Winter:SetGerman("Bleib ausser Sicht!")
 
 function MOD:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript

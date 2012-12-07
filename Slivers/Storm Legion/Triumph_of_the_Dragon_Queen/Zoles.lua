@@ -40,6 +40,14 @@ GFZ.Lang.Unit.SkyShort:SetGerman("Himmelsschrei")
 
 -- Ability Dictionary
 GFZ.Lang.Ability = {}
+GFZ.Lang.Ability.Static = KBM.Language:Add("Static Empowerment")
+GFZ.Lang.Ability.Static:SetGerman("Statische Ermächtigung")
+
+-- Verbose Dictionary
+GFZ.Lang.Verbose = {}
+GFZ.Lang.Verbose.Void = KBM.Language:Add("Voids spawn soon!")
+GFZ.Lang.Verbose.VoidFirst = KBM.Language:Add("First Voids spawn")
+GFZ.Lang.Verbose.VoidSpawn = KBM.Language:Add("Void spawns")
 
 -- Description Dictionary
 GFZ.Lang.Main = {}
@@ -55,22 +63,24 @@ GFZ.Zoles = {
 	NameShort = GFZ.Lang.Unit.ZolesShort[KBM.Lang],
 	Menu = {},
 	Dead = false,
-	-- AlertsRef = {},
-	-- TimersRef = {},
+	AlertsRef = {},
+	TimersRef = {},
 	Available = false,
 	UTID = "UFA77D6F8684E047C",
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		-- TimersRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
-		-- },
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
-		-- },
+		TimersRef = {
+			Enabled = true,
+			VoidFirst = KBM.Defaults.TimerObj.Create("red"),
+			Void = KBM.Defaults.TimerObj.Create("red"),
+		},
+		AlertsRef = {
+			Enabled = true,
+			Void = KBM.Defaults.AlertObj.Create("red"),
+			Static = KBM.Defaults.AlertObj.Create("yellow"),
+		},
 	}
 }
 
@@ -116,9 +126,9 @@ function GFZ:InitVars()
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		-- MechTimer = KBM.Defaults.MechTimer(),
-		-- Alerts = KBM.Defaults.Alerts(),
+		Alerts = KBM.Defaults.Alerts(),
 		-- TimersRef = self.Zoles.Settings.TimersRef,
-		-- AlertsRef = self.Zoles.Settings.AlertsRef,
+		AlertsRef = self.Zoles.Settings.AlertsRef,
 	}
 	KBMSLSLTQGZ_Settings = self.Settings
 	chKBMSLSLTQGZ_Settings = self.Settings
@@ -202,6 +212,7 @@ function GFZ:UnitHPCheck(uDetails, unitID)
 				self.PhaseObj:SetPhase("1")
 				self.PhaseObj.Objectives:AddPercent(self.Zoles, 0, 100)
 				self.Phase = 1
+				KBM.MechTimer:AddStart(self.Zoles.TimersRef.VoidFirst)
 			else
 				BossObj.Dead = false
 				BossObj.Casting = false
@@ -240,12 +251,26 @@ end
 
 function GFZ:Start()
 	-- Create Timers
-	-- KBM.Defaults.TimerObj.Assign(self.Zoles)
+	self.Zoles.TimersRef.VoidFirst = KBM.MechTimer:Add(self.Lang.Verbose.VoidFirst[KBM.Lang], 60)
+	self.Zoles.TimersRef.Void = KBM.MechTimer:Add(self.Lang.Verbose.VoidSpawn[KBM.Lang], 75, true)
+	KBM.Defaults.TimerObj.Assign(self.Zoles)
 	
 	-- Create Alerts
-	-- KBM.Defaults.AlertObj.Assign(self.Zoles)
+	self.Zoles.AlertsRef.Static = KBM.Alert:Create(self.Lang.Ability.Static[KBM.Lang], nil, false, true, "yellow")
+	self.Zoles.AlertsRef.Static:Important()
+	self.Zoles.AlertsRef.Void = KBM.Alert:Create(self.Lang.Verbose.Void[KBM.Lang], 5, false, true, "red")
+	KBM.Defaults.AlertObj.Assign(self.Zoles)
+	
+	-- Link Alerts to Timers
+	self.Zoles.TimersRef.VoidFirst:AddAlert(self.Zoles.AlertsRef.Void, 5)
+	self.Zoles.TimersRef.VoidFirst:AddTimer(self.Zoles.TimersRef.Void, 0)
+	self.Zoles.TimersRef.Void:AddAlert(self.Zoles.AlertsRef.Void, 5)
 	
 	-- Assign Alerts and Timers to Triggers
+	self.Zoles.Triggers.Static = KBM.Trigger:Create(self.Lang.Ability.Static[KBM.Lang], "cast", self.Zoles)
+	self.Zoles.Triggers.Static:AddAlert(self.Zoles.AlertsRef.Static)
+	self.Zoles.Triggers.StaticInt = KBM.Trigger:Create(self.Lang.Ability.Static[KBM.Lang], "interrupt", self.Zoles)
+	self.Zoles.Triggers.StaticInt:AddStop(self.Zoles.AlertsRef.Static)
 	
 	self.Zoles.CastBar = KBM.CastBar:Add(self, self.Zoles)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
