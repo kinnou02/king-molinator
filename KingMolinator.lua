@@ -2950,19 +2950,23 @@ function KBM.PhaseMonitor:Init()
 				Object.Previous.Next = nil
 				self.LastObjective = Object.Previous
 			end
-			if Object.UnitID then
-			
-			else
-				if Object.Type == "Percent" then
+			if Object.Type == "Percent" then
+				if self[Object.Type][Object.Name] then
 					self[Object.Type][Object.Name][tostring(Object)] = nil
 					if not next(self[Object.Type][Object.Name]) then
 						self[Object.Type][Object.Name] = nil
 					end
 				else
-					self[Object.Type][Object.Name] = nil
+					if self[Object.Type][tostring(Object)] then
+						self[Object.Type][tostring(Object)] = nil
+					elseif self[Object.Type][self.Object.UnitID] then
+						self[Object.Type][self.Object.UnitID] = nil
+					end
 				end
+			else
+				self[Object.Type][Object.Name] = nil
 			end
-			table.remove(self.All, Object.Index)
+		table.remove(self.All, Object.Index)
 			-- Re-Index list
 			for Index, Object in ipairs(self.All) do
 				Object.Index = Index

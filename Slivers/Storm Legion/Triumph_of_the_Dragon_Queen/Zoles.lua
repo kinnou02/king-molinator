@@ -46,8 +46,16 @@ GFZ.Lang.Ability.Static:SetGerman("Statische Ermächtigung")
 -- Verbose Dictionary
 GFZ.Lang.Verbose = {}
 GFZ.Lang.Verbose.Void = KBM.Language:Add("Voids spawn soon!")
+GFZ.Lang.Verbose.Void:SetGerman("Void Spawn gleich!")
 GFZ.Lang.Verbose.VoidFirst = KBM.Language:Add("First Voids spawn")
+GFZ.Lang.Verbose.VoidFirst:SetGerman("Erster Void Spawn")
 GFZ.Lang.Verbose.VoidSpawn = KBM.Language:Add("Void spawns")
+GFZ.Lang.Verbose.VoidSpawn:SetGerman("Achtung Voids!")
+
+-- Debuff Dictionary
+GFZ.Lang.Debuff = {}
+GFZ.Lang.Debuff.Strikes = KBM.Language:Add("Bleeding Strikes")
+GFZ.Lang.Debuff.Strikes:SetGerman("Blutige Angriffe")
 
 -- Description Dictionary
 GFZ.Lang.Main = {}
@@ -213,7 +221,15 @@ function GFZ:UnitHPCheck(uDetails, unitID)
 				self.PhaseObj.Objectives:AddPercent(self.Zoles, 0, 100)
 				self.Phase = 1
 				KBM.MechTimer:AddStart(self.Zoles.TimersRef.VoidFirst)
+				if BossObj == self.Zoles then
+					KBM.TankSwap:Start(self.Lang.Debuff.Strikes[KBM.Lang], unitID)
+				end
 			else
+				if BossObj == self.Zoles then
+					if not KBM.TanksSwap.Active then
+						KBM.TankSwap:Start(self.Lang.Debuff.Strikes[KBM.Lang], unitID)
+					end
+				end
 				BossObj.Dead = false
 				BossObj.Casting = false
 				if BossObj.UnitID ~= unitID then

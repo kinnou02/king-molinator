@@ -19,6 +19,7 @@ Triumph of the Dragon Queen
 * Grand Falconer Zoles
 ** New: Added Alert and Stop trigger for Static Empowerment interrupt.
 ** New: Added Timers for First and following Void Spawn phases.
+** New: Added Tank-Swap monitoring for Bleeding Strikes. (Possibly the healing debuff)
 * Jultharin
 ** New: Added Timer, Alert and Stop trigger for Deranging Tempest interrupt.
 
