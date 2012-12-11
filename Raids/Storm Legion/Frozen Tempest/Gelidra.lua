@@ -23,6 +23,7 @@ local GLD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Gelidra",
+	Enrage = (6 * 60) + 20,
 	Object = "GLD",
 }
 
@@ -34,12 +35,26 @@ GLD.Lang.Unit.Gelidra = KBM.Language:Add("Gelidra")
 GLD.Lang.Unit.Gelidra:SetGerman("Gelidra")
 GLD.Lang.Unit.GelidraShort = KBM.Language:Add("Gelidra")
 GLD.Lang.Unit.GelidraShort:SetGerman("Gelidra")
+GLD.Lang.Unit.Vortex = KBM.Language:Add("Shrouding Vortex")
+GLD.Lang.Unit.VortexShort = KBM.Language:Add("Vortex")
 
 -- Ability Dictionary
 GLD.Lang.Ability = {}
+GLD.Lang.Ability.Cyclonic = KBM.Language:Add("Cyclonic Destruction")
+GLD.Lang.Ability.Cascade = KBM.Language:Add("Lacerating Cascade")
 
 -- Description Dictionary
 GLD.Lang.Main = {}
+
+-- Debuff Dictionary
+GLD.Lang.Debuff = {}
+GLD.Lang.Debuff.Hoar = KBM.Language:Add("Hoarfrost")
+GLD.Lang.Debuff.Rime = KBM.Language:Add("Glacial Rime")
+GLD.Lang.Debuff.Spasm = KBM.Language:Add("Voltaic Spasms")
+
+GLD.Lang.Messages = {}
+GLD.Lang.Messages.Phase2 = KBM.Language:Add("Phase 2 starts")
+GLD.Lang.Messages.FirstP2 = KBM.Language:Add("First Phase 2")
 
 GLD.Descript = GLD.Lang.Unit.Gelidra[KBM.Lang]
 
@@ -57,19 +72,52 @@ GLD.Gelidra = {
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
-	-- TimersRef = {},
-	-- AlertsRef = {},
+	TimersRef = {},
+	AlertsRef = {},
+	MechRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
+		TimersRef = {
+			Enabled = true,
+			FirstP2 = KBM.Defaults.TimerObj.Create("dark_green"),
+			Phase2 = KBM.Defaults.TimerObj.Create("dark_green"),
+			Cascade = KBM.Defaults.TimerObj.Create("red"),
+		},
+		AlertsRef = {
+			Enabled = true,
+			Cascade = KBM.Defaults.AlertObj.Create("red"),
+		},
+		MechRef = {
+			Enabled = true,
+			Rime = KBM.Defaults.MechObj.Create("purple"),
+		},
+	}
+}
+
+GLD.Vortex = {
+	Mod = GLD,
+	Level = "??",
+	Active = false,
+	Name = GLD.Lang.Unit.Vortex[KBM.Lang],
+	NameShort = GLD.Lang.Unit.VortexShort[KBM.Lang],
+	Menu = {},
+	Dead = false,
+	AlertsRef = {},
+	-- TimersRef = {},
+	Available = false,
+	UTID = "UFB17379E4CB69B1A",
+	UnitID = nil,
+	Triggers = {},
+	Settings = {
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
 		-- },
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
-		-- },
+		AlertsRef = {
+			Enabled = true,
+			Cyclonic = KBM.Defaults.AlertObj.Create("yellow"),
+		},
 	}
 }
 
@@ -77,19 +125,41 @@ function GLD:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Gelidra.Name] = self.Gelidra,
+		[self.Vortex.Name] = self.Vortex,
 	}
+
+	for BossName, BossObj in pairs(self.Bosses) do
+		if BossObj.Settings then
+			if BossObj.Settings.CastBar then
+				BossObj.Settings.CastBar.Override = true
+				BossObj.Settings.CastBar.Multi = true
+			end
+		end
+	end	
 end
 
 function GLD:InitVars()
 	self.Settings = {
 		Enabled = true,
-		CastBar = self.Gelidra.Settings.CastBar,
+		CastBar = {
+			Override = true,
+			Multi = true,
+		},
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
-		-- MechTimer = KBM.Defaults.MechTimer(),
-		-- Alerts = KBM.Defaults.Alerts(),
-		-- TimersRef = self.Gelidra.Settings.TimersRef,
-		-- AlertsRef = self.Gelidra.Settings.AlertsRef,
+		MechSpy = KBM.Defaults.MechSpy(),
+		Gelidra = {
+			CastBar = self.Gelidra.Settings.CastBar,
+			AlertsRef = self.Gelidra.Settings.AlertsRef,
+			TimersRef = self.Gelidra.Settings.TimersRef,
+			MechRef = self.Gelidra.Settings.MechRef,
+		},
+		Vortex = {
+			CastBar = self.Vortex.Settings.CastBar,
+			AlertsRef = self.Vortex.Settings.AlertsRef,
+		},
+		MechTimer = KBM.Defaults.MechTimer(),
+		Alerts = KBM.Defaults.Alerts(),
 	}
 	KBMSLRDFTGA_Settings = self.Settings
 	chKBMSLRDFTGA_Settings = self.Settings
@@ -149,6 +219,13 @@ function GLD:Death(UnitID)
 		self.Gelidra.Dead = true
 		return true
 	end
+	if self.Vortex.UnitID == UnitID then
+		self.PhaseObj.Objectives:Remove()
+		self.Vortex.UnitID = nil
+		self.PhaseObj:SetPhase("1")
+		self.PhaseObj.Objectives:AddPercent(self.Gelidra, 0, 100)
+		KBM.MechTimer:AddStart(self.Gelidra.TimersRef.Phase2)
+	end
 	return false
 end
 
@@ -170,16 +247,27 @@ function GLD:UnitHPCheck(uDetails, unitID)
 				self.PhaseObj:SetPhase("1")
 				self.PhaseObj.Objectives:AddPercent(self.Gelidra, 0, 100)
 				self.Phase = 1
+				local DebuffTable = {
+						[1] = self.Lang.Debuff.Hoar[KBM.Lang],
+						[2] = self.Lang.Debuff.Spasm[KBM.Lang],
+				}
+				KBM.TankSwap:Start(DebuffTable, unitID, 2)
+				KBM.MechTimer:AddStart(self.Gelidra.TimersRef.FirstP2)
 			else
 				BossObj.Dead = false
 				BossObj.Casting = false
-				if BossObj == self.Gelidra then
+				if BossObj.UnitID ~= unitID then
+					BossObj.CastBar:Remove()
 					BossObj.CastBar:Create(unitID)
+					if BossObj == self.Vortex then
+						self.PhaseObj:SetPhase("2")
+						self.PhaseObj.Objectives:AddPercent(self.Vortex, 0, 100)
+					end
 				end
 			end
 			BossObj.UnitID = unitID
 			BossObj.Available = true
-			return self.Gelidra
+			return BossObj
 		end
 	end
 end
@@ -192,7 +280,8 @@ function GLD:Reset()
 		BossObj.Dead = false
 		BossObj.Casting = false
 	end
-	self.Gelidra.CastBar:Remove()	
+	self.Gelidra.CastBar:Remove()
+	self.Vortex.CastBar:Remove()	
 	self.PhaseObj:End(Inspect.Time.Real())
 end
 
@@ -205,14 +294,41 @@ end
 
 function GLD:Start()
 	-- Create Timers
-	-- KBM.Defaults.TimerObj.Assign(self.Gelidra)
+	self.Gelidra.TimersRef.Cascade = KBM.MechTimer:Add(self.Lang.Ability.Cascade[KBM.Lang], 11, false)
+	self.Gelidra.TimersRef.FirstP2 = KBM.MechTimer:Add(self.Lang.Messages.Phase2[KBM.Lang], 40, false)
+	self.Gelidra.TimersRef.FirstP2.MenuName = self.Lang.Messages.FirstP2[KBM.Lang]
+	self.Gelidra.TimersRef.Phase2 = KBM.MechTimer:Add(self.Lang.Messages.Phase2[KBM.Lang], 75, false)
+	KBM.Defaults.TimerObj.Assign(self.Gelidra)
 	
 	-- Create Alerts
-	-- KBM.Defaults.AlertObj.Assign(self.Gelidra)
+
+	self.Gelidra.AlertsRef.Cascade = KBM.Alert:Create(self.Lang.Ability.Cascade[KBM.Lang], nil, true, true, "red")
+	KBM.Defaults.AlertObj.Assign(self.Gelidra)
+
+	self.Vortex.AlertsRef.Cyclonic = KBM.Alert:Create(self.Lang.Ability.Cyclonic[KBM.Lang], nil, true, true, "yellow")
+	KBM.Defaults.AlertObj.Assign(self.Vortex)
+
+	-- Create Mechanic Spies (Gelidra)
+	self.Gelidra.MechRef.Rime = KBM.MechSpy:Add(self.Lang.Debuff.Rime[KBM.Lang], nil, "playerDebuff", self.Gelidra)
+	KBM.Defaults.MechObj.Assign(self.Gelidra)
 	
 	-- Assign Alerts and Timers to Triggers
+
+	self.Gelidra.Triggers.Cascade = KBM.Trigger:Create(self.Lang.Ability.Cascade[KBM.Lang], "cast", self.Gelidra)
+	self.Gelidra.Triggers.Cascade:AddAlert(self.Gelidra.AlertsRef.Cascade)
+	self.Gelidra.Triggers.Cascade:AddTimer(self.Gelidra.TimersRef.Cascade)
+	self.Gelidra.Triggers.Rime = KBM.Trigger:Create(self.Lang.Debuff.Rime[KBM.Lang], "playerBuff", self.Gelidra)
+	self.Gelidra.Triggers.Rime:AddSpy(self.Gelidra.MechRef.Rime)
+	self.Gelidra.Triggers.RimeRem = KBM.Trigger:Create(self.Lang.Debuff.Rime[KBM.Lang], "playerBuffRemove", self.Gelidra)
+	self.Gelidra.Triggers.RimeRem:AddStop(self.Gelidra.MechRef.Rime)
+
+	self.Vortex.Triggers.Cyclonic = KBM.Trigger:Create(self.Lang.Ability.Cyclonic[KBM.Lang], "cast", self.Vortex)
+	self.Vortex.Triggers.Cyclonic:AddAlert(self.Vortex.AlertsRef.Cyclonic)
+	self.Vortex.Triggers.CyclonicInt = KBM.Trigger:Create(self.Lang.Ability.Cyclonic[KBM.Lang], "interrupt", self.Vortex)
+	self.Vortex.Triggers.CyclonicInt:AddStop(self.Vortex.AlertsRef.Cyclonic)
 	
 	self.Gelidra.CastBar = KBM.CastBar:Add(self, self.Gelidra)
+	self.Vortex.CastBar = KBM.CastBar:Add(self, self.Vortex)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()
 end

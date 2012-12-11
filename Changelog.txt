@@ -15,6 +15,15 @@ Ready Check
 
 Storm Legion
 
+Frozen Tempest
+* Galidra
+** New: Added dual Tank-Swap monitoring for Hoarfrost and Voltaic Spasms.
+** New: Added Unit Tracking for Shrouding Vortex.
+** New: Added a Timer for tracking Phase 1 durations, and first Phase 2.
+** New: Added Mechanic Spy for Glacial Rime.
+** New: Added Alert and stop trigger for Cyclonic Destruction interrupt.
+** New: Added Alert and Timer for Lacerating Cascade.
+
 Triumph of the Dragon Queen
 * Grand Falconer Zoles
 ** New: Added Alert and Stop trigger for Static Empowerment interrupt.
