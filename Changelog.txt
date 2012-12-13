@@ -12,6 +12,8 @@ Ready Check
 * New: Stellar Powersurge Vial (Warrior, Rogue, High, 60)
 * New: Luminescent Powerstone (Cleric, Mage, High, 60)
 * New: Stellar Brightsurge Vial (Cleric, Mage, High, 60)
+* New: Stellar Enduring Vial (Warrior, Rogue, Cleric, High, Tank, 60)
+* New: Remarkable Whetstone (Warrior, Rogue, High, 60)
 
 Storm Legion
 

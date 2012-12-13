@@ -131,7 +131,7 @@ KBM.ID = "KingMolinator"
 KBM.ModList = {}
 KBM.Testing = false
 KBM.ValidTime = false
-KBM.IsAlpha = true
+KBM.IsAlpha = false
 KBM.Debug = false
 KBM.Aux = {}
 KBM.TestFilters = {}
@@ -8534,6 +8534,12 @@ function KBM.SlashUnitCache(arg)
 	end
 end
 
+function KBM.SlashZone()
+	zDetails = Inspect.Zone.Detail(KBM.Player.Zone)
+	print(zDetails.name)
+	print(zDetails.id)
+end
+
 function KBM.AllocateBoss(Mod, BossObj, UTID, tableIndex)
 	local iType = Mod.InstanceObj.Type
 	if UTID ~= "none" then
@@ -8800,6 +8806,7 @@ function KBM.InitEvents()
 	table.insert(Command.Slash.Register("kbmoff"), {function() KBM.StateSwitch(false) end, "KingMolinator", "KBM Off"})
 	table.insert(Command.Slash.Register("kbmdefault"), {KBM.SlashDefault, "KingMolinator", "Default settings handler"})
 	table.insert(Command.Slash.Register("kbmunitcache"), {KBM.SlashUnitCache, "KingMolinator", "Unit Data mining output"})
+	table.insert(Command.Slash.Register("kbmzone"), {KBM.SlashZone, "KingMolinator", "KBM On"})
 end
 
 local function KBM_WaitReady(unitID, uDetails)

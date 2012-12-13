@@ -90,6 +90,7 @@ MOD.Lang.Verbose.Mist:SetGerman("Verstecken!")
 -- Notify Dictionary
 MOD.Lang.Notify = {}
 MOD.Lang.Notify.Victory = KBM.Language:Add('Icewatch Protector pleas, "Quickly, Ascended! We need you downstairs!"')
+MOD.Lang.Notify.Victory:SetGerman('Der Eiswacht-Beschützer bittet: "Beeilt Euch, Auserwählte! Wir brauchen Euch hier unten!"') 
 
 function MOD:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
@@ -198,6 +199,7 @@ function MOD:UnitHPCheck(uDetails, unitID)
 				self.TimeElapsed = 0
 				BossObj.Dead = false
 				BossObj.Casting = false
+				self.Timeout = 3
 				if self.Dominax.UTID[1] == uDetails.type then
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase("1")
@@ -208,6 +210,7 @@ function MOD:UnitHPCheck(uDetails, unitID)
 			if BossObj.Type == self.Dominax.UTID[2] then
 				if self.Phase == 1 then
 					self.PhaseFinal()
+					self.Timeout = 25
 				end
 			end
 			BossObj.Available = true

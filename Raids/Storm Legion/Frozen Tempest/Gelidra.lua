@@ -36,12 +36,16 @@ GLD.Lang.Unit.Gelidra:SetGerman("Gelidra")
 GLD.Lang.Unit.GelidraShort = KBM.Language:Add("Gelidra")
 GLD.Lang.Unit.GelidraShort:SetGerman("Gelidra")
 GLD.Lang.Unit.Vortex = KBM.Language:Add("Shrouding Vortex")
+GLD.Lang.Unit.Vortex:SetGerman("Verhüllender Wirbel")
 GLD.Lang.Unit.VortexShort = KBM.Language:Add("Vortex")
+GLD.Lang.Unit.VortexShort:SetGerman("Wirbel")
 
 -- Ability Dictionary
 GLD.Lang.Ability = {}
 GLD.Lang.Ability.Cyclonic = KBM.Language:Add("Cyclonic Destruction")
+GLD.Lang.Ability.Cyclonic:SetGerman("Zyklonische Zerstörung")
 GLD.Lang.Ability.Cascade = KBM.Language:Add("Lacerating Cascade")
+GLD.Lang.Ability.Cascade:SetGerman("Reißende Kaskade")
 
 -- Description Dictionary
 GLD.Lang.Main = {}
@@ -49,12 +53,17 @@ GLD.Lang.Main = {}
 -- Debuff Dictionary
 GLD.Lang.Debuff = {}
 GLD.Lang.Debuff.Hoar = KBM.Language:Add("Hoarfrost")
+GLD.Lang.Debuff.Hoar:SetGerman("Raureif")
 GLD.Lang.Debuff.Rime = KBM.Language:Add("Glacial Rime")
+GLD.Lang.Debuff.Rime:SetGerman("Gletscherreif")
 GLD.Lang.Debuff.Spasm = KBM.Language:Add("Voltaic Spasms")
+GLD.Lang.Debuff.Spasm:SetGerman("Voltaische Krämpfe")
 
 GLD.Lang.Messages = {}
 GLD.Lang.Messages.Phase2 = KBM.Language:Add("Phase 2 starts")
+GLD.Lang.Messages.Phase2:SetGerman("Phase 2 beginnt")
 GLD.Lang.Messages.FirstP2 = KBM.Language:Add("First Phase 2")
+GLD.Lang.Messages.FirstP2:SetGerman("Erste Phase 2")
 
 GLD.Descript = GLD.Lang.Unit.Gelidra[KBM.Lang]
 

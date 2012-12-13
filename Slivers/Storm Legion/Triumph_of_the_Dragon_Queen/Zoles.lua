@@ -226,7 +226,7 @@ function GFZ:UnitHPCheck(uDetails, unitID)
 				end
 			else
 				if BossObj == self.Zoles then
-					if not KBM.TanksSwap.Active then
+					if not KBM.TankSwap.Active then
 						KBM.TankSwap:Start(self.Lang.Debuff.Strikes[KBM.Lang], unitID)
 					end
 				end

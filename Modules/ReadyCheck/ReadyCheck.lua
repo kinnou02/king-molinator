@@ -149,6 +149,14 @@ PI.Constants = {
 						mage = true,
 					},
 				},
+				["r5812508956871CF3"] = { -- Remarkable Whetstone
+					Grade = "High",
+					Level = 60,
+					Callings = {
+						rogue = true,
+						warrior = true,
+					},
+				},
 				["r624A5FA52756B277"] = { -- Burning Powerstone
 					Grade = "High",
 					Level = 50,
@@ -415,7 +423,7 @@ PI.Constants = {
 			List = {
 				--//////////////////////--
 				-- Storm Legion Potions --
-				--//////////////////////--				
+				--//////////////////////--		
 				["BFF3177D56B3A82D6"] = { -- Stellar Powersurge Vial
 					Grade = "High",
 					Level = 60,
@@ -430,6 +438,18 @@ PI.Constants = {
 					Callings = {
 						cleric = true,
 						mage = true,
+					},
+				},
+				["BFAF68C1FC68ED75A"] = { -- Stellar Enduring Vial
+					Grade = "High",
+					Level = 60,
+					Callings = {
+						rogue = true,
+						warrior = true,
+						cleric = true,
+					},
+					Role = {
+						tank = true,
 					},
 				},
 				--/////////////////--
