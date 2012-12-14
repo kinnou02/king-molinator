@@ -177,7 +177,7 @@ function CRL:UnitHPCheck(uDetails, unitID)
 				self.PhaseObj:SetPhase("1")
 				self.PhaseObj.Objectives:AddPercent(self.Cyril.Name, 0, 100)
 				self.Phase = 1
-				KBM.TankSwap:Start(self.Lang.Debuff.Mental[KBM.Lang]
+				KBM.TankSwap:Start(self.Lang.Debuff.Mental[KBM.Lang])
 			else
 				BossObj.Dead = false
 				BossObj.Casting = false
@@ -214,7 +214,7 @@ end
 
 function CRL:Start()
 	-- Create Timers
-	self.Cyril.TimersRef.Crushing = KBM.Timer:Create(self.Lang.Ability.Crushing[KBM.Lang], 30)
+	self.Cyril.TimersRef.Crushing = KBM.MechTimer:Add(self.Lang.Ability.Crushing[KBM.Lang], 30)
 	KBM.Defaults.TimerObj.Assign(self.Cyril)
 	
 	-- Create Alerts
