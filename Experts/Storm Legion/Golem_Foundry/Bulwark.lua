@@ -49,7 +49,7 @@ KBM.RegisterMod(MOD.ID, MOD)
 -- Main Unit Dictionary
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Bulwark = KBM.Language:Add(MOD.Bulwark.Name)
-MOD.Lang.Unit.Bulwark:SetGerman("Mobile Bollwerk")
+MOD.Lang.Unit.Bulwark:SetGerman("Mobiles Bollwerk")
 MOD.Lang.Unit.Bulwark:SetFrench("Rempart locomoteur")
 MOD.Bulwark.Name = MOD.Lang.Unit.Bulwark[KBM.Lang]
 MOD.Descript = MOD.Bulwark.Name

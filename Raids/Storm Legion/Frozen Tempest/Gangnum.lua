@@ -38,14 +38,17 @@ GGM.Lang.Unit.GangnumShort:SetGerman("Gangnum")
 -- Ability Dictionary
 GGM.Lang.Ability = {}
 GGM.Lang.Ability.Blind = KBM.Language:Add("Blinding Surge")
+GGM.Lang.Ability.Blind:SetGerman("Blendender Schub")
 
 -- Debuff Dictionary
 GGM.Lang.Debuff = {}
 GGM.Lang.Debuff.Wrath = KBM.Language:Add("Tempest Wrath")
+GGM.Lang.Debuff.Wrath:SetGerman("Sturmherr-Zorn")
 
 -- Verbose Dictionary
 GGM.Lang.Verbose = {}
 GGM.Lang.Verbose.Wrath = KBM.Language:Add("Move away!")
+GGM.Lang.Verbose.Wrath:SetGerman("Lauf raus!")
 
 -- Description Dictionary
 GGM.Lang.Main = {}
@@ -172,34 +175,33 @@ end
 
 function GGM:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		if not uDetails.player then
-			if self.Bosses[uDetails.name] then
-				local BossObj = self.Bosses[uDetails.name]
-				if not self.EncounterRunning then
-					self.EncounterRunning = true
-					self.StartTime = Inspect.Time.Real()
-					self.HeldTime = self.StartTime
-					self.TimeElapsed = 0
-					BossObj.Dead = false
-					BossObj.Casting = false
-					if BossObj.Name == self.Gangnum.Name then
-						BossObj.CastBar:Create(unitID)
-					end
-					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase("1")
-					self.PhaseObj.Objectives:AddPercent(self.Gangnum, 0, 100)
-					self.Phase = 1
-				else
-					BossObj.Dead = false
-					BossObj.Casting = false
-					if BossObj.Name == self.Gangnum.Name then
-						BossObj.CastBar:Create(unitID)
-					end
+		local BossObj = self.UTID[uDetails.type]
+		if BossObj then
+			if not self.EncounterRunning then
+				self.EncounterRunning = true
+				self.StartTime = Inspect.Time.Real()
+				self.HeldTime = self.StartTime
+				self.TimeElapsed = 0
+				BossObj.Dead = false
+				BossObj.Casting = false
+				if BossObj == self.Gangnum then
+					BossObj.CastBar:Create(unitID)
 				end
-				BossObj.UnitID = unitID
-				BossObj.Available = true
-				return self.Gangnum
+				self.PhaseObj:Start(self.StartTime)
+				self.PhaseObj:SetPhase("1")
+				self.PhaseObj.Objectives:AddPercent(self.Gangnum, 0, 100)
+				self.Phase = 1
+			else
+				BossObj.Dead = false
+				BossObj.Casting = false
+				if BossObj == self.Gangnum then
+					BossObj.CastBar:Remove()
+					BossObj.CastBar:Create(unitID)
+				end
 			end
+			BossObj.UnitID = unitID
+			BossObj.Available = true
+			return self.Gangnum
 		end
 	end
 end

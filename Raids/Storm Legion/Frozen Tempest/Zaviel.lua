@@ -30,26 +30,33 @@ KBM.RegisterMod(ZVL.ID, ZVL)
 
 -- Main Unit Dictionary
 ZVL.Lang.Unit = {}
-ZVL.Lang.Unit.Zaviel = KBM.Language:Add("Zaviel")
-ZVL.Lang.Unit.Zaviel:SetGerman("Zaviel")
+ZVL.Lang.Unit.Zaviel = KBM.Language:Add("Artifex Zaviel")
+ZVL.Lang.Unit.Zaviel:SetGerman("Artifex Zaviel")
 ZVL.Lang.Unit.ZavielShort = KBM.Language:Add("Zaviel")
 ZVL.Lang.Unit.ZavielShort:SetGerman("Zaviel")
 
 -- Ability Dictionary
 ZVL.Lang.Ability = {}
 ZVL.Lang.Ability.Conduit = KBM.Language:Add("Energy Conduit")
+ZVL.Lang.Ability.Conduit:SetGerman("Energieleitung")
 ZVL.Lang.Ability.Jolt = KBM.Language:Add("Ensnaring Jolt")
+ZVL.Lang.Ability.Jolt:SetGerman("Verlangsamender Stromschlag")
 
 -- Debuff Dictionary
 ZVL.Lang.Debuff = {}
 ZVL.Lang.Debuff.Arc = KBM.Language:Add("Arc Weld")
+ZVL.Lang.Debuff.Arc:SetGerman("Bogenverschweißung")
 ZVL.Lang.Debuff.Vitality = KBM.Language:Add("Dissonant Vitality")
+ZVL.Lang.Debuff.Vitality:SetGerman("Dissonante Vitalität")
 
 -- Verbose Dictionary
 ZVL.Lang.Verbose = {}
 ZVL.Lang.Verbose.ConduitWarn = KBM.Language:Add("Casting: Energy Conduit")
+ZVL.Lang.Verbose.ConduitWarn:SetGerman("Achtung: Energieleitung")
 ZVL.Lang.Verbose.Conduit = KBM.Language:Add("Cleanse Energy Conduit!")
+ZVL.Lang.Verbose.Conduit:SetGerman("Energieleitung dispellen!")
 ZVL.Lang.Verbose.Jolt = KBM.Language:Add("Run around!")
+ZVL.Lang.Verbose.Jolt:SetGerman("Laufen!")
 
 -- Description Dictionary
 ZVL.Lang.Main = {}

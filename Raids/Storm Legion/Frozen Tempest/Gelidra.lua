@@ -249,7 +249,7 @@ function GLD:UnitHPCheck(uDetails, unitID)
 				self.TimeElapsed = 0
 				BossObj.Dead = false
 				BossObj.Casting = false
-				if BossObj.Name == self.Gelidra.Name then
+				if BossObj == self.Gelidra then
 					BossObj.CastBar:Create(unitID)
 				end
 				self.PhaseObj:Start(self.StartTime)

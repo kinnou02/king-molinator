@@ -144,6 +144,16 @@ function TPH:RemoveUnits(UnitID)
 	return false
 end
 
+function TPH.PhaseTwo()
+	if TPH.Phase == 1 then
+		TPH.Phase = 2
+		TPH.PhaseObj.Objectives:Remove()
+		TPH.Typhiria.UnitID = nil
+		TPH.PhaseObj.Objectives:AddPercent(TPH.Typhiria, 0, 100)
+		TPH.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
+	end
+end
+
 function TPH:Death(UnitID)
 	if self.Typhiria.UnitID == UnitID then
 		self.Typhiria.Dead = true
@@ -168,7 +178,7 @@ function TPH:UnitHPCheck(uDetails, unitID)
 				end
 				self.PhaseObj:Start(self.StartTime)
 				self.PhaseObj:SetPhase("1")
-				self.PhaseObj.Objectives:AddPercent(self.Typhiria.Name, 0, 100)
+				self.PhaseObj.Objectives:AddPercent(self.Typhiria, 15, 100)
 				self.Phase = 1
 			else
 				BossObj.Dead = false
@@ -182,7 +192,7 @@ function TPH:UnitHPCheck(uDetails, unitID)
 			end
 			BossObj.UnitID = unitID
 			BossObj.Available = true
-			return self.Typhiria
+			return BossObj
 		end
 	end
 end
@@ -214,6 +224,8 @@ function TPH:Start()
 	-- KBM.Defaults.AlertObj.Assign(self.Typhiria)
 	
 	-- Assign Alerts and Timers to Triggers
+	self.Typhiria.Triggers.PhaseTwo = KBM.Trigger:Create(15, "percent", self.Typhiria)
+	self.Typhiria.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
 	
 	self.Typhiria.CastBar = KBM.CastBar:Add(self, self.Typhiria)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

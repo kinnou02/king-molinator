@@ -1,4 +1,4 @@
-﻿-- Progenitor Boss Mod for King Boss Mods
+﻿-- Progenitor Saetos Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2012
 --
@@ -30,10 +30,10 @@ KBM.RegisterMod(PRO.ID, PRO)
 
 -- Main Unit Dictionary
 PRO.Lang.Unit = {}
-PRO.Lang.Unit.Progenitor = KBM.Language:Add("Progenitor")
-PRO.Lang.Unit.Progenitor:SetGerman("Progenitor")
-PRO.Lang.Unit.ProgenitorShort = KBM.Language:Add("Progenitor")
-PRO.Lang.Unit.ProgenitorShort:SetGerman("Progenitor")
+PRO.Lang.Unit.Progenitor = KBM.Language:Add("Progenitor Saetos")
+PRO.Lang.Unit.Progenitor:SetGerman("Erzeuger Saetos")
+PRO.Lang.Unit.ProgenitorShort = KBM.Language:Add("Saetos")
+PRO.Lang.Unit.ProgenitorShort:SetGerman("Saetos")
 
 -- Ability Dictionary
 PRO.Lang.Ability = {}

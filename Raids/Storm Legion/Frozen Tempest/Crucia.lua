@@ -36,9 +36,13 @@ CRC.Lang.Unit.Crucia:SetGerman("Crucia")
 CRC.Lang.Unit.CruciaShort = KBM.Language:Add("Crucia")
 CRC.Lang.Unit.CruciaShort:SetGerman("Crucia")
 CRC.Lang.Unit.Tempest = KBM.Language:Add("Tempest Assault Frame")
+CRC.Lang.Unit.Tempest:SetGerman("Sturmherr-Sturmrüstung")
 CRC.Lang.Unit.TempestShort = KBM.Language:Add("Tempest")
+CRC.Lang.Unit.TempestShort:SetGerman("Sturmherr")
 CRC.Lang.Unit.Storm = KBM.Language:Add("Stormcore Annihilator")
+CRC.Lang.Unit.Storm:SetGerman("Sturmkern-Auslöscher")
 CRC.Lang.Unit.StormShort = KBM.Language:Add("Stormcore")
+CRC.Lang.Unit.StormShort:SetGerman("Sturmkern")
 
 -- Ability Dictionary
 CRC.Lang.Ability = {}

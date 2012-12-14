@@ -37,14 +37,17 @@ CRL.Lang.Unit.CyrilShort:SetGerman("Cyril")
 -- Ability Dictionary
 CRL.Lang.Ability = {}
 CRL.Lang.Ability.Crushing = KBM.Language:Add("Crushing Burden")
+CRL.Lang.Ability.Crushing:SetGerman("Zermalmende Bürde")
 
 -- Debuff Dictionary
 CRL.Lang.Debuff = {}
 CRL.Lang.Debuff.Mental = KBM.Language:Add("Mental Anguish")
+CRL.Lang.Debuff.Mental:SetGerman("Mentale Pein")
 
 -- Buff Dictionary
 CRL.Lang.Buff = {}
 CRL.Lang.Buff.Mien = KBM.Language:Add("Mien of Supremacy")
+CRL.Lang.Buff.Mien:SetGerman("Geste der Vormachtstellung")
 
 -- Description Dictionary
 CRL.Lang.Main = {}
@@ -175,7 +178,7 @@ function CRL:UnitHPCheck(uDetails, unitID)
 				end
 				self.PhaseObj:Start(self.StartTime)
 				self.PhaseObj:SetPhase("1")
-				self.PhaseObj.Objectives:AddPercent(self.Cyril.Name, 0, 100)
+				self.PhaseObj.Objectives:AddPercent(self.Cyril, 0, 100)
 				self.Phase = 1
 				KBM.TankSwap:Start(self.Lang.Debuff.Mental[KBM.Lang])
 			else
