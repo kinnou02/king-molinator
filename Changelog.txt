@@ -1,4 +1,31 @@
-﻿v1.3.7
+﻿v1.3.8
+
+Storm Legion
+
+Frozen Tempest
+* Menu
+** Change: Re-ordered Menu items to better portray progress.
+* Gangnum
+** New: Added Mechanic Spy for Tempest Wrath.
+** New: Added personal Alert for Tempest Wrath debuff.
+** New: Added personal Alert for Move away from the Tempest after debuff drops.
+** New: Added Alert for Blinding Surge.
+* Zaviel
+** New: Added personal Alert for Arc Weld mechanic.
+** New: Added Mechanic Spy for Arc Weld.
+** New: Added Alert for Energy Conduit cast warning.
+** New: Added Alert for debuff duration of Energy Conduit.
+** New: Added Tank-Swap monitor for both Dissonant Vitality and Energy Conduit.
+** New: Added Phase Tracking.
+** New: Added warning Alert and duration Alert for Ensnaring Jolt.
+
+Triumph of the Dragon Queen
+* Cyril
+** New: Added Tank-Swap monitoring for Mental Anguish.
+** New: Added Alert for Mien of Supremacy purge. After looking through the logs not entirely sure this work first time, it should though.
+
+----
+v1.3.7
 
 Encounters
 * New: The slash command /kbmreset will now provide an Event.KingMolinator.Encounter.End trigger (Type = "reset").

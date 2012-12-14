@@ -37,6 +37,15 @@ GGM.Lang.Unit.GangnumShort:SetGerman("Gangnum")
 
 -- Ability Dictionary
 GGM.Lang.Ability = {}
+GGM.Lang.Ability.Blind = KBM.Language:Add("Blinding Surge")
+
+-- Debuff Dictionary
+GGM.Lang.Debuff = {}
+GGM.Lang.Debuff.Wrath = KBM.Language:Add("Tempest Wrath")
+
+-- Verbose Dictionary
+GGM.Lang.Verbose = {}
+GGM.Lang.Verbose.Wrath = KBM.Language:Add("Move away!")
 
 -- Description Dictionary
 GGM.Lang.Main = {}
@@ -58,7 +67,8 @@ GGM.Gangnum = {
 	TimeOut = 5,
 	Castbar = nil,
 	-- TimersRef = {},
-	-- AlertsRef = {},
+	AlertsRef = {},
+	MechRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -66,10 +76,16 @@ GGM.Gangnum = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
 		-- },
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
-		-- },
+		AlertsRef = {
+			Enabled = true,
+			Wrath = KBM.Defaults.AlertObj.Create("purple"),
+			WrathRem = KBM.Defaults.AlertObj.Create("red"),
+			Blind = KBM.Defaults.AlertObj.Create("cyan"),
+		},
+		MechRef = {
+			Enabled = true,
+			Wrath = KBM.Defaults.MechObj.Create("purple"),
+		},
 	}
 }
 
@@ -87,9 +103,11 @@ function GGM:InitVars()
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		-- MechTimer = KBM.Defaults.MechTimer(),
-		-- Alerts = KBM.Defaults.Alerts(),
+		Alerts = KBM.Defaults.Alerts(),
+		MechSpy = KBM.Defaults.MechSpy(),
 		-- TimersRef = self.Gangnum.Settings.TimersRef,
-		-- AlertsRef = self.Gangnum.Settings.AlertsRef,
+		AlertsRef = self.Gangnum.Settings.AlertsRef,
+		MechRef = self.Gangnum.Settings.MechRef,
 	}
 	KBMSLRDFTGM_Settings = self.Settings
 	chKBMSLRDFTGM_Settings = self.Settings
@@ -210,9 +228,23 @@ function GGM:Start()
 	-- KBM.Defaults.TimerObj.Assign(self.Gangnum)
 	
 	-- Create Alerts
-	-- KBM.Defaults.AlertObj.Assign(self.Gangnum)
+	self.Gangnum.AlertsRef.Wrath = KBM.Alert:Create(self.Lang.Debuff.Wrath[KBM.Lang], nil, false, true, "purple")
+	self.Gangnum.AlertsRef.WrathRem = KBM.Alert:Create(self.Lang.Verbose.Wrath[KBM.Lang], 3, true, false, "red")
+	self.Gangnum.AlertsRef.Blind = KBM.Alert:Create(self.Lang.Ability.Blind[KBM.Lang], nil, true, true, "cyan")
+	KBM.Defaults.AlertObj.Assign(self.Gangnum)
+	
+	-- Create Spies
+	self.Gangnum.MechRef.Wrath = KBM.MechSpy:Add(self.Lang.Debuff.Wrath[KBM.Lang], nil, "playerDebuff", self.Gangnum)
+	KBM.Defaults.MechObj.Assign(self.Gangnum)
 	
 	-- Assign Alerts and Timers to Triggers
+	self.Gangnum.Triggers.Wrath = KBM.Trigger:Create(self.Lang.Debuff.Wrath[KBM.Lang], "playerBuff", self.Gangnum)
+	self.Gangnum.Triggers.Wrath:AddAlert(self.Gangnum.AlertsRef.Wrath, true)
+	self.Gangnum.Triggers.Wrath:AddSpy(self.Gangnum.MechRef.Wrath)
+	self.Gangnum.Triggers.WrathRem = KBM.Trigger:Create(self.Lang.Debuff.Wrath[KBM.Lang], "playerBuffRemove", self.Gangnum)
+	self.Gangnum.Triggers.WrathRem:AddAlert(self.Gangnum.AlertsRef.WrathRem, true)
+	self.Gangnum.Triggers.Blind = KBM.Trigger:Create(self.Lang.Ability.Blind[KBM.Lang], "channel", self.Gangnum)
+	self.Gangnum.Triggers.Blind:AddAlert(self.Gangnum.AlertsRef.Blind)
 	
 	self.Gangnum.CastBar = KBM.CastBar:Add(self, self.Gangnum)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

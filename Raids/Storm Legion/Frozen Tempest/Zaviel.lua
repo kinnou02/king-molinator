@@ -37,6 +37,19 @@ ZVL.Lang.Unit.ZavielShort:SetGerman("Zaviel")
 
 -- Ability Dictionary
 ZVL.Lang.Ability = {}
+ZVL.Lang.Ability.Conduit = KBM.Language:Add("Energy Conduit")
+ZVL.Lang.Ability.Jolt = KBM.Language:Add("Ensnaring Jolt")
+
+-- Debuff Dictionary
+ZVL.Lang.Debuff = {}
+ZVL.Lang.Debuff.Arc = KBM.Language:Add("Arc Weld")
+ZVL.Lang.Debuff.Vitality = KBM.Language:Add("Dissonant Vitality")
+
+-- Verbose Dictionary
+ZVL.Lang.Verbose = {}
+ZVL.Lang.Verbose.ConduitWarn = KBM.Language:Add("Casting: Energy Conduit")
+ZVL.Lang.Verbose.Conduit = KBM.Language:Add("Cleanse Energy Conduit!")
+ZVL.Lang.Verbose.Jolt = KBM.Language:Add("Run around!")
 
 -- Description Dictionary
 ZVL.Lang.Main = {}
@@ -58,7 +71,8 @@ ZVL.Zaviel = {
 	TimeOut = 5,
 	Castbar = nil,
 	-- TimersRef = {},
-	-- AlertsRef = {},
+	MechRef = {},
+	AlertsRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -66,10 +80,18 @@ ZVL.Zaviel = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
 		-- },
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
-		-- },
+		AlertsRef = {
+			Enabled = true,
+			Arc = KBM.Defaults.AlertObj.Create("purple"),
+			ConduitWarn = KBM.Defaults.AlertObj.Create("orange"),
+			Conduit = KBM.Defaults.AlertObj.Create("orange"),
+			JoltWarn = KBM.Defaults.AlertObj.Create("red"),
+			Jolt = KBM.Defaults.AlertObj.Create("red"),
+		},
+		MechRef = {
+			Enabled = true,
+			Arc = KBM.Defaults.MechObj.Create("purple"),
+		},
 	}
 }
 
@@ -87,9 +109,11 @@ function ZVL:InitVars()
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		-- MechTimer = KBM.Defaults.MechTimer(),
-		-- Alerts = KBM.Defaults.Alerts(),
+		MechSpy = KBM.Defaults.MechSpy(),
+		Alerts = KBM.Defaults.Alerts(),
 		-- TimersRef = self.Zaviel.Settings.TimersRef,
-		-- AlertsRef = self.Zaviel.Settings.AlertsRef,
+		AlertsRef = self.Zaviel.Settings.AlertsRef,
+		MechRef = self.Zaviel.Settings.MechRef,
 	}
 	KBMSLRDFTZL_Settings = self.Settings
 	chKBMSLRDFTZL_Settings = self.Settings
@@ -144,6 +168,15 @@ function ZVL:RemoveUnits(UnitID)
 	return false
 end
 
+function ZVL.PhaseTwo()
+	if ZVL.Phase == 1 then
+		ZVL.Phase = 1
+		ZVL.PhaseObj.Objectives:Remove()
+		ZVL.PhaseObj.Objectives:AddPercent(ZVL.Zaviel, 0, 50)
+		ZVL.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
+	end
+end
+
 function ZVL:Death(UnitID)
 	if self.Zaviel.UnitID == UnitID then
 		self.Zaviel.Dead = true
@@ -169,8 +202,13 @@ function ZVL:UnitHPCheck(uDetails, unitID)
 					end
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase("1")
-					self.PhaseObj.Objectives:AddPercent(self.Zaviel.Name, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Zaviel, 50, 100)
 					self.Phase = 1
+					local DebuffTable = {
+							[1] = self.Lang.Debuff.Vitality[KBM.Lang],
+							[2] = self.Lang.Debuff.Conduit[KBM.Lang],
+					}
+					KBM.TankSwap:Start(DebuffTable, unitID, 2)
 				else
 					BossObj.Dead = false
 					BossObj.Casting = false
@@ -210,9 +248,37 @@ function ZVL:Start()
 	-- KBM.Defaults.TimerObj.Assign(self.Zaviel)
 	
 	-- Create Alerts
-	-- KBM.Defaults.AlertObj.Assign(self.Zaviel)
+	self.Zaviel.AlertsRef.Arc = KBM.Alert:Create(self.Lang.Debuff.Arc[KBM.Lang], nil, true, false, "purple")
+	self.Zaviel.AlertsRef.ConduitWarn = KBM.Alert:Create(self.Lang.Verbose.ConduitWarn[KBM.Lang], nil, true, true, "orange")
+	self.Zaviel.AlertsRef.Conduit = KBM.Alert:Create(self.Lang.Verbose.Conduit[KBM.Lang], nil, false, true, "orange")
+	self.Zaviel.AlertsRef.JoltWarn = KBM.Alert:Create(self.Lang.Ability.Jolt[KBM.Lang], nil, false, true, "red")
+	self.Zaviel.AlertsRef.Jolt = KBM.Alert:Create(self.Lang.Verbose.Jolt[KBM.Lang], nil, true, true, "red")
+	KBM.Defaults.AlertObj.Assign(self.Zaviel)
+	
+	-- Create Spies
+	self.Zaviel.MechRef.Arc = KBM.MechSpy:Add(self.Lang.Debuff.Arc[KBM.Lang], nil, "playerBuff", self.Zaviel)
+	KBM.Defaults.MechObj.Assign(self.Zaviel)
 	
 	-- Assign Alerts and Timers to Triggers
+	self.Zaviel.Triggers.Arc = KBM.Trigger:Create(self.Lang.Debuff.Arc[KBM.Lang], "playerBuff", self.Zaviel)
+	self.Zaviel.Triggers.Arc:AddAlert(self.Zaviel.AlertsRef.Arc, true)
+	self.Zaviel.Triggers.Arc:AddSpy(self.Zaviel.MechRef.Arc)
+	self.Zaviel.Triggers.ArcRem = KBM.Trigger:Create(self.Lang.Debuff.Arc[KBM.Lang], "playerBuffRemove", self.Zaviel)
+	self.Zaviel.Triggers.ArcRem:AddStop(self.Zaviel.AlertsRef.Arc)
+	self.Zaviel.Triggers.ArcRem:AddStop(self.Zaviel.MechRef.Arc)
+	self.Zaviel.Triggers.ConduitWarn = KBM.Trigger:Create(self.Lang.Ability.Conduit[KBM.Lang], "cast", self.Zaviel)
+	self.Zaviel.Triggers.ConduitWarn:AddAlert(self.Zaviel.AlertsRef.ConduitWarn)
+	self.Zaviel.Triggers.Conduit = KBM.Trigger:Create(self.Lang.Ability.Conduit[KBM.Lang], "playerBuff", self.Zaviel)
+	self.Zaviel.Triggers.Conduit:AddAlert(self.Zaviel.AlertsRef.Conduit)
+	self.Zaviel.Triggers.ConduitRem = KBM.Trigger:Create(self.Lang.Ability.Conduit[KBM.Lang], "playerBuffRemove", self.Zaviel)
+	self.Zaviel.Triggers.ConduitRem:AddStop(self.Zaviel.AlertsRef.Conduit)
+	self.Zaviel.Triggers.JoltWarn = KBM.Trigger:Create(self.Lang.Ability.Jolt[KBM.Lang], "cast", self.Zaviel)
+	self.Zaviel.Triggers.JoltWarn:AddAlert(self.Zaviel.AlertsRef.JoltWarn)
+	self.Zaviel.Triggers.Jolt = KBM.Trigger:Create(self.Lang.Ability.Jolt[KBM.Lang], "buff", self.Zaviel)
+	self.Zaviel.Triggers.Jolt:AddAlert(self.Zaviel.AlertsRef.Jolt)
+	-- Phase
+	self.Zaviel.Triggers.PhaseTwo = KBM.Trigger:Create(50, "percent", self.Zaviel)
+	self.Zaviel.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
 	
 	self.Zaviel.CastBar = KBM.CastBar:Add(self, self.Zaviel)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

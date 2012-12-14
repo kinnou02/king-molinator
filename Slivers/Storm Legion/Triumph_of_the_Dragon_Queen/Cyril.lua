@@ -36,6 +36,15 @@ CRL.Lang.Unit.CyrilShort:SetGerman("Cyril")
 
 -- Ability Dictionary
 CRL.Lang.Ability = {}
+CRL.Lang.Ability.Crushing = KBM.Language:Add("Crushing Burden")
+
+-- Debuff Dictionary
+CRL.Lang.Debuff = {}
+CRL.Lang.Debuff.Mental = KBM.Language:Add("Mental Anguish")
+
+-- Buff Dictionary
+CRL.Lang.Buff = {}
+CRL.Lang.Buff.Mien = KBM.Language:Add("Mien of Supremacy")
 
 -- Description Dictionary
 CRL.Lang.Main = {}
@@ -51,22 +60,23 @@ CRL.Cyril = {
 	NameShort = CRL.Lang.Unit.CyrilShort[KBM.Lang],
 	Menu = {},
 	Dead = false,
-	-- AlertsRef = {},
-	-- TimersRef = {},
+	AlertsRef = {},
+	TimersRef = {},
 	Available = false,
 	UTID = "UFBF4C45669116886",
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		-- TimersRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
-		-- },
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
-		-- },
+		TimersRef = {
+			Enabled = true,
+			Crushing = KBM.Defaults.TimerObj.Create("red"),
+		},
+		AlertsRef = {
+			Enabled = true,
+			Crushing = KBM.Defaults.AlertObj.Create("red"),
+			Mien = KBM.Defaults.AlertObj.Create("purple"),
+		},
 	}
 }
 
@@ -83,10 +93,10 @@ function CRL:InitVars()
 		CastBar = self.Cyril.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
-		-- MechTimer = KBM.Defaults.MechTimer(),
-		-- Alerts = KBM.Defaults.Alerts(),
-		-- TimersRef = self.Cyril.Settings.TimersRef,
-		-- AlertsRef = self.Cyril.Settings.AlertsRef,
+		MechTimer = KBM.Defaults.MechTimer(),
+		Alerts = KBM.Defaults.Alerts(),
+		TimersRef = self.Cyril.Settings.TimersRef,
+		AlertsRef = self.Cyril.Settings.AlertsRef,
 	}
 	KBMSLSLTQCL_Settings = self.Settings
 	chKBMSLSLTQCL_Settings = self.Settings
@@ -167,6 +177,7 @@ function CRL:UnitHPCheck(uDetails, unitID)
 				self.PhaseObj:SetPhase("1")
 				self.PhaseObj.Objectives:AddPercent(self.Cyril.Name, 0, 100)
 				self.Phase = 1
+				KBM.TankSwap:Start(self.Lang.Debuff.Mental[KBM.Lang]
 			else
 				BossObj.Dead = false
 				BossObj.Casting = false
@@ -203,12 +214,22 @@ end
 
 function CRL:Start()
 	-- Create Timers
-	-- KBM.Defaults.TimerObj.Assign(self.Cyril)
+	self.Cyril.TimersRef.Crushing = KBM.Timer:Create(self.Lang.Ability.Crushing[KBM.Lang], 30)
+	KBM.Defaults.TimerObj.Assign(self.Cyril)
 	
 	-- Create Alerts
-	-- KBM.Defaults.AlertObj.Assign(self.Cyril)
+	self.Cyril.AlertsRef.Crushing = KBM.Alert:Create(self.Lang.Ability.Crushing[KBM.Lang], nil, true, true, "red")
+	self.Cyril.AlertsRef.Mien = KBM.Alert:Create(self.Lang.Buff.Mien[KBM.Lang], nil, false, true, "purple")
+	KBM.Defaults.AlertObj.Assign(self.Cyril)
 	
 	-- Assign Alerts and Timers to Triggers
+	self.Cyril.Triggers.Crushing = KBM.Trigger:Create(self.Lang.Ability.Crushing[KBM.Lang], "cast", self.Cyril)
+	self.Cyril.Triggers.Crushing:AddAlert(self.Cyril.AlertsRef.Crushing)
+	self.Cyril.Triggers.Crushing:AddTimer(self.Cyril.TimersRef.Crushing)
+	self.Cyril.Triggers.Mien = KBM.Trigger:Create(self.Lang.Buff.Mien[KBM.Lang], "buff", self.Cyril)
+	self.Cyril.Triggers.Mien:AddAlert(self.Cyril.AlertsRef.Mien)
+	self.Cyril.Triggers.MienRem = KBM.Trigger:Create(self.Lang.Buff.Mien[KBM.Lang], "buffRemove", self.Cyril)
+	self.Cyril.Triggers.MienRem:AddStop(self.Cyril.AlertsRef.Mien)
 	
 	self.Cyril.CastBar = KBM.CastBar:Add(self, self.Cyril)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

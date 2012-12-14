@@ -310,7 +310,6 @@ function GLD:Start()
 	KBM.Defaults.TimerObj.Assign(self.Gelidra)
 	
 	-- Create Alerts
-
 	self.Gelidra.AlertsRef.Cascade = KBM.Alert:Create(self.Lang.Ability.Cascade[KBM.Lang], nil, true, true, "red")
 	KBM.Defaults.AlertObj.Assign(self.Gelidra)
 
