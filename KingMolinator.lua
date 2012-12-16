@@ -2959,14 +2959,14 @@ function KBM.PhaseMonitor:Init()
 				else
 					if self[Object.Type][tostring(Object)] then
 						self[Object.Type][tostring(Object)] = nil
-					elseif self[Object.Type][self.Object.UnitID] then
-						self[Object.Type][self.Object.UnitID] = nil
+					elseif self[Object.Type][Object.UnitID] then
+						self[Object.Type][Object.UnitID] = nil
 					end
 				end
 			else
 				self[Object.Type][Object.Name] = nil
 			end
-		table.remove(self.All, Object.Index)
+			table.remove(self.All, Object.Index)
 			-- Re-Index list
 			for Index, Object in ipairs(self.All) do
 				Object.Index = Index

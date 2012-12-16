@@ -1,5 +1,8 @@
 ﻿v1.3.8
 
+* Percentage Monitor
+** Fixed: UnitID Percent refence object error. (2962)
+
 Storm Legion
 
 Endless Eclipse
