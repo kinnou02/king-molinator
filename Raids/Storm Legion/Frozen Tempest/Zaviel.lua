@@ -213,7 +213,7 @@ function ZVL:UnitHPCheck(uDetails, unitID)
 					self.Phase = 1
 					local DebuffTable = {
 							[1] = self.Lang.Debuff.Vitality[KBM.Lang],
-							[2] = self.Lang.Debuff.Conduit[KBM.Lang],
+							[2] = self.Lang.Ability.Conduit[KBM.Lang],
 					}
 					KBM.TankSwap:Start(DebuffTable, unitID, 2)
 				else

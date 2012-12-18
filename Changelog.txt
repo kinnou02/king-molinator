@@ -8,6 +8,7 @@ Storm Legion
 Endless Eclipse
 * New: Regulos Template
 * Progenitor Saetos
+** New: Added 4 additional units for ID capture and encounter launching.
 ** Fixed: Corrected name.
 
 Frozen Tempest

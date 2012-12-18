@@ -34,6 +34,10 @@ PRO.Lang.Unit.Progenitor = KBM.Language:Add("Progenitor Saetos")
 PRO.Lang.Unit.Progenitor:SetGerman("Erzeuger Saetos")
 PRO.Lang.Unit.ProgenitorShort = KBM.Language:Add("Saetos")
 PRO.Lang.Unit.ProgenitorShort:SetGerman("Saetos")
+PRO.Lang.Unit.Ebassi = KBM.Language:Add("Ebassi")
+PRO.Lang.Unit.Arebus = KBM.Language:Add("Arebus")
+PRO.Lang.Unit.Rhu = KBM.Language:Add("Rhu'Megar")
+PRO.Lang.Unit.Juntun = KBM.Language:Add("Juntun")
 
 -- Ability Dictionary
 PRO.Lang.Ability = {}
@@ -73,10 +77,126 @@ PRO.Progenitor = {
 	}
 }
 
+PRO.Ebassi = {
+	Mod = PRO,
+	Level = "??",
+	Active = false,
+	Name = PRO.Lang.Unit.Ebassi[KBM.Lang],
+	Dead = false,
+	Available = false,
+	Menu = {},
+	UTID = "none",
+	UnitID = nil,
+	TimeOut = 5,
+	Castbar = nil,
+	-- TimersRef = {},
+	-- AlertsRef = {},
+	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+		-- TimersRef = {
+			-- Enabled = true,
+			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
+		-- },
+		-- AlertsRef = {
+			-- Enabled = true,
+			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
+		-- },
+	}
+}
+
+PRO.Arebus = {
+	Mod = PRO,
+	Level = "??",
+	Active = false,
+	Name = PRO.Lang.Unit.Arebus[KBM.Lang],
+	Dead = false,
+	Available = false,
+	Menu = {},
+	UTID = "none",
+	UnitID = nil,
+	TimeOut = 5,
+	Castbar = nil,
+	-- TimersRef = {},
+	-- AlertsRef = {},
+	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+		-- TimersRef = {
+			-- Enabled = true,
+			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
+		-- },
+		-- AlertsRef = {
+			-- Enabled = true,
+			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
+		-- },
+	}
+}
+
+PRO.Rhu = {
+	Mod = PRO,
+	Level = "??",
+	Active = false,
+	Name = PRO.Lang.Unit.Rhu[KBM.Lang],
+	Dead = false,
+	Available = false,
+	Menu = {},
+	UTID = "none",
+	UnitID = nil,
+	TimeOut = 5,
+	Castbar = nil,
+	-- TimersRef = {},
+	-- AlertsRef = {},
+	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+		-- TimersRef = {
+			-- Enabled = true,
+			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
+		-- },
+		-- AlertsRef = {
+			-- Enabled = true,
+			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
+		-- },
+	}
+}
+
+PRO.Juntun = {
+	Mod = PRO,
+	Level = "??",
+	Active = false,
+	Name = PRO.Lang.Unit.Juntun[KBM.Lang],
+	Dead = false,
+	Available = false,
+	Menu = {},
+	UTID = "none",
+	UnitID = nil,
+	TimeOut = 5,
+	Castbar = nil,
+	-- TimersRef = {},
+	-- AlertsRef = {},
+	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+		-- TimersRef = {
+			-- Enabled = true,
+			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
+		-- },
+		-- AlertsRef = {
+			-- Enabled = true,
+			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
+		-- },
+	}
+}
+
 function PRO:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Progenitor.Name] = self.Progenitor,
+		[self.Ebassi.Name] = self.Ebassi,
+		[self.Arebus.Name] = self.Arebus,
+		[self.Rhu.Name] = self.Rhu,
+		[self.Juntun.Name] = self.Juntun,
 	}
 end
 
@@ -154,34 +274,32 @@ end
 
 function PRO:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		if not uDetails.player then
-			if self.Bosses[uDetails.name] then
-				local BossObj = self.Bosses[uDetails.name]
-				if not self.EncounterRunning then
-					self.EncounterRunning = true
-					self.StartTime = Inspect.Time.Real()
-					self.HeldTime = self.StartTime
-					self.TimeElapsed = 0
-					BossObj.Dead = false
-					BossObj.Casting = false
-					if BossObj.Name == self.Progenitor.Name then
-						BossObj.CastBar:Create(unitID)
-					end
-					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase("1")
-					self.PhaseObj.Objectives:AddPercent(self.Progenitor.Name, 0, 100)
-					self.Phase = 1
-				else
-					BossObj.Dead = false
-					BossObj.Casting = false
-					if BossObj.Name == self.Progenitor.Name then
-						BossObj.CastBar:Create(unitID)
-					end
+		if self.Bosses[uDetails.name] then
+			local BossObj = self.Bosses[uDetails.name]
+			if not self.EncounterRunning then
+				self.EncounterRunning = true
+				self.StartTime = Inspect.Time.Real()
+				self.HeldTime = self.StartTime
+				self.TimeElapsed = 0
+				BossObj.Dead = false
+				BossObj.Casting = false
+				if BossObj == self.Progenitor then
+					BossObj.CastBar:Create(unitID)
 				end
-				BossObj.UnitID = unitID
-				BossObj.Available = true
-				return self.Progenitor
+				self.PhaseObj:Start(self.StartTime)
+				self.PhaseObj:SetPhase("1")
+				self.PhaseObj.Objectives:AddPercent(self.Progenitor, 0, 100)
+				self.Phase = 1
+			else
+				BossObj.Dead = false
+				BossObj.Casting = false
+				if BossObj == self.Progenitor then
+					BossObj.CastBar:Create(unitID)
+				end
 			end
+			BossObj.UnitID = unitID
+			BossObj.Available = true
+			return self.Progenitor
 		end
 	end
 end
