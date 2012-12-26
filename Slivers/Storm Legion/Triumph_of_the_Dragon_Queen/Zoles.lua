@@ -241,7 +241,7 @@ function GFZ:UnitHPCheck(uDetails, unitID)
 			end
 			BossObj.UnitID = unitID
 			BossObj.Available = true
-			return self.Zoles
+			return BossObj
 		end
 	end
 end

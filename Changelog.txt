@@ -1,4 +1,14 @@
-﻿v1.3.8
+﻿v1.3.9
+
+* New: Safes Unit Library (LibSUnit)
+** Note: This is still classed as alpha and subject to change. (Although, I would say the event layout is pretty much final)
+
+Triumph of the Dragon Queen
+* Grand Falconer Zoles
+** Fixed: Should now return the correct Unit Object during new add spawns.
+
+----
+v1.3.8
 
 * Percentage Monitor
 ** Fixed: UnitID Percent refence object error. (2962)

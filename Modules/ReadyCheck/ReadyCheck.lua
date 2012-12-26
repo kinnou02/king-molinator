@@ -15,6 +15,9 @@ if not KBM.BossMod then
 	return
 end
 
+local LSUIni = Inspect.Addon.Detail("SafesUnitLib")
+local LibSUnit = LSUIni.data
+
 KBM.Ready = PI
 
 PI.Enabled = true
@@ -933,7 +936,7 @@ function PI.GUI:Init()
 		if PI.Enabled or Force then
 			if self[Index].Enabled then
 				if self[Index].Unit then
-					local PF = self[Index].Unit.PercentFlat or 0
+					local PF = self[Index].Unit.PercentRaw or 1
 					self[Index].HPMask:SetWidth(math.ceil(PI.GUI.Texture:GetWidth() * PF))
 					self[Index].MPMask:SetWidth(math.ceil(PI.GUI.Texture:GetWidth()))
 				end
@@ -1219,7 +1222,7 @@ function PI.GUI:Init()
 		if self.Populated > 1 then
 			for i = 1, self.Populated - 1 do
 				if self[i].Unit then
-					if KBM.AlphaComp(KBM.Unit.List.UID[UnitID].Name, self[i].Unit.Name)	then
+					if KBM.AlphaComp(LibSUnit.Lookup.UID[UnitID].Name, self[i].Unit.Name) then
 						Index = i
 						break
 					end
@@ -1250,7 +1253,7 @@ function PI.GUI:Init()
 			end
 		end
 		self[Index].Enabled = true
-		self[Index].Unit = KBM.Unit.List.UID[UnitID]
+		self[Index].Unit = LibSUnit.Lookup.UID[UnitID]
 		self[Index].Columns.Food.Object = nil
 		self[Index].Columns.Potion.Object = nil
 		self[Index].Columns.Stone.Object = nil
@@ -1426,9 +1429,9 @@ function PI.Update()
 					if Buffs then
 						PI.BuffAdd({[UnitID] = Buffs})
 					end
-					if KBM.Unit.List.UID[UnitID].Details then
-						if KBM.Unit.List.UID[UnitID].Details.ready ~= "nil" then
-							PI.ReadyState({[UnitID] = KBM.Unit.List.UID[UnitID].Details.ready})
+					if LibSUnit.Lookup.UID[UnitID] then
+						if LibSUnit.Lookup.UID[UnitID].Ready ~= "nil" then
+							PI.ReadyState({[UnitID] = LibSUnit.Lookup.Ready})
 						else
 							PI.ReadyState({[UnitID] = "nil"})
 						end
@@ -1513,11 +1516,9 @@ function PI.Start()
 	table.insert(Event.System.Update.End, {PI.Update_End, "KBMReadyCheck", "Clean-up Loop"})
 	table.insert(Event.System.Secure.Enter, {PI.SecureEnter, "KBMReadyCheck", "Combat Enter"})
 	table.insert(Event.System.Secure.Leave, {PI.SecureLeave, "KBMReadyCheck", "Combat Leave"})
-	table.insert(Event.Unit.Detail.Planar, {PI.DetailUpdates.Planar, "KBMReadyCheck", "Update Planar Charges"})
-	table.insert(Event.Unit.Detail.PlanarMax, {PI.DetailUpdates.PlanarMax, "KBMReadyCheck", "Update Planar Max"})
-	table.insert(Event.Unit.Detail.Vitality, {PI.DetailUpdates.Vitality, "KBMReadyCheck", "Update Vitality"})
-	table.insert(Event.Unit.Availability.Full, {PI.DetailUpdates.Availability, "KBMReadyCheck", "Update Full"})
-	table.insert(Event.Unit.Availability.Partial, {PI.DetailUpdates.Availability, "KBMReadyCheck", "Update Full"})
+	table.insert(Event.SafesUnitLib.Unit.New.Full, {PI.DetailUpdates.Availability, "KBMReadyCheck", "Update Full"})
+	table.insert(Event.SafesUnitLib.Unit.Full, {PI.DetailUpdates.Availability, "KBMReadyCheck", "Update Full"})
+	table.insert(Event.SafesUnitLib.Unit.New.Partial, {PI.DetailUpdates.Availability, "KBMReadyCheck", "Update Full"})
 	table.insert(Event.SafesBuffLib.Buff.Add, {PI.BuffAdd, "KBMReadyCheck", "Buff Add"})
 	table.insert(Event.SafesBuffLib.Buff.Remove, {PI.BuffRemove, "KBMReadyCheck", "Buff Remove"})
 	table.insert(Event.SafesBuffLib.Buff.Change, {PI.BuffAdd, "KBMReadyCheck", "Buff Change/Add"})
@@ -1537,7 +1538,7 @@ function PI.UpdateSMode(Silent)
 	end
 	
 	if PI.Settings.Solo then
-		if KBM.Player.Grouped then
+		if LibSUnit.Raid.Grouped then
 			PI.Displayed = true
 		else
 			PI.Displayed = false
@@ -1593,16 +1594,16 @@ function PI.PlayerLeave()
 	PI.UpdateSMode(true)
 end
 
-function PI.GroupJoin(UnitID, Specifier, Details)
-	PI.Queue:Add(UnitID, "Add", Specifier)
+function PI.GroupJoin(UnitObj, Specifier)
+	PI.Queue:Add(UnitObj.UnitID, "Add", Specifier)
 end
 
-function PI.GroupLeave(UnitID)
-	PI.Queue:Add(UnitID, "Remove")
+function PI.GroupLeave(UnitObj)
+	PI.Queue:Add(UnitObj.UnitID, "Remove")
 end
 
 function PI.DetailUpdates.Planar(Units)
-	for UnitID, Value in pairs(Units) do
+	for UnitID, UnitObj in pairs(Units) do
 		if PI.GUI.Rows.Units[UnitID] then
 			PI.GUI.Rows:Update_Planar(PI.GUI.Rows.Units[UnitID].Index)
 		end
@@ -1610,7 +1611,7 @@ function PI.DetailUpdates.Planar(Units)
 end
 
 function PI.DetailUpdates.PlanarMax(Units)
-	for UnitID, Value in pairs(Units) do
+	for UnitID, UnitObj in pairs(Units) do
 		if PI.GUI.Rows.Units[UnitID] then
 			PI.GUI.Rows:Update_Planar(PI.GUI.Rows.Units[UnitID].Index)
 		end
@@ -1618,25 +1619,23 @@ function PI.DetailUpdates.PlanarMax(Units)
 end
 
 function PI.DetailUpdates.Vitality(Units)
-	for UnitID, Value in pairs(Units) do
+	for UnitID, UnitObj in pairs(Units) do
 		if PI.GUI.Rows.Units[UnitID] then
 			PI.GUI.Rows:Update_Soul(PI.GUI.Rows.Units[UnitID].Index)
 		end
 	end
 end
 
-function PI.DetailUpdates.HPChange(UnitID)
-	if PI.GUI.Rows.Units[UnitID] then
-		PI.GUI.Rows:Update(PI.GUI.Rows.Units[UnitID].Index)
+function PI.DetailUpdates.HPChange(UnitObj)
+	if PI.GUI.Rows.Units[UnitObj.UnitID] then
+		PI.GUI.Rows:Update(PI.GUI.Rows.Units[UnitObj.UnitID].Index)
 	end	
 end
 
-function PI.DetailUpdates.Availability(Units)
-	for UnitID, Value in pairs(Units) do
-		if PI.GUI.Rows.Units[UnitID] then
-			PI.GUI.Rows.Units[UnitID].Unit = KBM.Unit.List.UID[UnitID]
-			PI.GUI.Rows:Set_Offline(PI.GUI.Rows.Units[UnitID].Index)
-		end
+function PI.DetailUpdates.Availability(UnitObj)
+	if PI.GUI.Rows.Units[UnitObj.UnitID] then
+		PI.GUI.Rows.Units[UnitObj.UnitID].Unit = UnitObj
+		PI.GUI.Rows:Set_Offline(PI.GUI.Rows.Units[UnitObj.UnitID].Index)
 	end
 end
 
@@ -1648,10 +1647,12 @@ function PI.DetailUpdates.Version(From)
 	end
 end
 
-function PI.DetailUpdates.Offline(Value, UnitID)
-	if PI.GUI.Rows.Units[UnitID] then
-		if PI.GUI.Rows.Units[UnitID].Unit then
-			PI.GUI.Rows:Set_Offline(PI.GUI.Rows.Units[UnitID].Index)
+function PI.DetailUpdates.Offline(Units)
+	for UnitID, UnitObj in pairs(Units) do
+		if PI.GUI.Rows.Units[UnitID] then
+			if PI.GUI.Rows.Units[UnitID].Unit then
+				PI.GUI.Rows:Set_Offline(PI.GUI.Rows.Units[UnitID].Index)
+			end
 		end
 	end
 end
@@ -1681,7 +1682,8 @@ end
 
 function PI.ReadyState(Units)
 	local HoldState = PI.Ready.State
-	for UnitID, bool in pairs(Units) do
+	for UnitID, UnitObj in pairs(Units) do
+		local bool = UnitObj.Ready
 		if bool == true then
 			if PI.Ready.State == false then
 				PI.Ready.Replied = 0
@@ -1739,14 +1741,17 @@ end
 
 function PI.Init(ModID)
 	if ModID == AddonData.id then
-		-- KBM Events
-		table.insert(Event.KingMolinator.Unit.Offline, {PI.DetailUpdates.Offline, "KBMReadyCheck", "Offline Toggle"})
-		table.insert(Event.KingMolinator.System.Player.Join, {PI.PlayerJoin, "KBMReadyCheck", "Player Joins"})
-		table.insert(Event.KingMolinator.System.Player.Leave, {PI.PlayerLeave, "KBMReadyCheck", "Player Leaves"})
-		table.insert(Event.KingMolinator.System.Group.Join, {PI.GroupJoin, "KBMReadyCheck", "Group Member joins"})
-		table.insert(Event.KingMolinator.System.Group.Leave, {PI.GroupLeave, "KBMReadyCheck", "Group Member leaves"})
-		table.insert(Event.KingMolinator.Unit.PercentChange, {PI.DetailUpdates.HPChange, "KBMReadyCheck", "Update HP"})
-		table.insert(Event.Unit.Detail.Ready, {PI.ReadyState, "KBMReadyCheck", "Update HP"})
+		-- LibSUnit Events
+		table.insert(Event.SafesUnitLib.Raid.Join, {PI.PlayerJoin, "KBMReadyCheck", "Player Joins"})
+		table.insert(Event.SafesUnitLib.Raid.Leave, {PI.PlayerLeave, "KBMReadyCheck", "Player Leaves"})
+		table.insert(Event.SafesUnitLib.Raid.Member.Join, {PI.GroupJoin, "KBMReadyCheck", "Group Member joins"})
+		table.insert(Event.SafesUnitLib.Raid.Member.Leave, {PI.GroupLeave, "KBMReadyCheck", "Group Member leaves"})
+		table.insert(Event.SafesUnitLib.Unit.Detail.Planar, {PI.DetailUpdates.Planar, "KBMReadyCheck", "Update Planar Charges"})
+		table.insert(Event.SafesUnitLib.Unit.Detail.PlanarMax, {PI.DetailUpdates.PlanarMax, "KBMReadyCheck", "Update Planar Max"})
+		table.insert(Event.SafesUnitLib.Unit.Detail.Vitality, {PI.DetailUpdates.Vitality, "KBMReadyCheck", "Update Vitality"})
+		table.insert(Event.SafesUnitLib.Unit.Detail.Percent, {PI.DetailUpdates.HPChange, "KBMReadyCheck", "Update HP"})
+		table.insert(Event.SafesUnitLib.Unit.Detail.Ready, {PI.ReadyState, "KBMReadyCheck", "Update HP"})
+		table.insert(Event.SafesUnitLib.Unit.Detail.Offline, {PI.DetailUpdates.Offline, "KBMReadyCheck", "Offline Toggle"})
 		table.insert(Event.KBMMessenger.Version, {PI.DetailUpdates.Version, "KBMReadyCheck", "Update Version"})
 		-- Slash Commands
 		table.insert(Command.Slash.Register("kbmreadycheck"), {PI.SlashEnable, "KBMReadyCheck", "Toggle Visible"})
@@ -1757,4 +1762,4 @@ end
 table.insert(Event.Addon.Load.End, {PI.Init, "KBMReadyCheck", "Syncronized Start"})
 table.insert(Event.Addon.SavedVariables.Load.End, {PI.LoadVars, "KBMReadyCheck", "Load Settings"})
 table.insert(Event.Addon.SavedVariables.Save.Begin, {PI.SaveVars, "KBMReadyCheck", "Save Settings"})
-table.insert(Event.KingMolinator.System.Start, {PI.Start, "KBMReadyCheck", "Start-up"})
+table.insert(Event.SafesUnitLib.System.Start, {PI.Start, "KBMReadyCheck", "Start-up"})

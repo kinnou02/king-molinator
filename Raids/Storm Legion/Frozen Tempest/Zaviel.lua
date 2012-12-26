@@ -225,7 +225,7 @@ function ZVL:UnitHPCheck(uDetails, unitID)
 				end
 				BossObj.UnitID = unitID
 				BossObj.Available = true
-				return self.Zaviel
+				return BossObj
 			end
 		end
 	end

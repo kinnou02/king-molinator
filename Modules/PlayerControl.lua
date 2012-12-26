@@ -6,6 +6,9 @@
 local KBMTable = Inspect.Addon.Detail("KingMolinator")
 local KBM = KBMTable.data
 
+local LSUIni = Inspect.Addon.Detail("SafesUnitLib")
+local LibSUnit = LSUIni.data
+
 local PC = {
 	Queue = {},
 }
@@ -170,19 +173,23 @@ function PC.PlayerJoin()
 	-- PC:GatherRaidInfo()
 end
 
-function PC.CallingChange(uID, Calling)
-	if uID == KBM.Player.UnitID then
-		local UnitObj = KBM.Unit.List.UID[uID]
-		if UnitObj then
-			if KBM.RezMaster.Rezes.Tracked[UnitObj.Name] then
-				if KBM.RezMaster.Rezes.Tracked[UnitObj.Name].Class ~= Calling then
-					if Calling ~= "" and Calling ~= nil then
-						for aID, Timer in pairs(KBM.RezMaster.Rezes.Tracked[UnitObj.Name].Timers) do
-							KBM.RezMaster.Rezes:Add(UnitObj.Name, aID, Timer.Remaining, Timer.Duration)
-						end
-					end
+function PC.CallingChange(UnitObj)
+	if KBM.RezMaster.Rezes.Tracked[UnitObj.Name] then
+		if KBM.RezMaster.Rezes.Tracked[UnitObj.Name].Class ~= UnitObj.Calling then
+			if UnitObj.Calling ~= "" and UnitObj.Calling ~= nil then
+				for aID, Timer in pairs(KBM.RezMaster.Rezes.Tracked[UnitObj.Name].Timers) do
+					KBM.RezMaster.Rezes:Add(UnitObj.Name, aID, Timer.Remaining, Timer.Duration)
 				end
 			end
+		end
+	else
+		-- Request BR
+		if UnitObj.Calling == "mage" or UnitObj.Calling == "cleric" then
+			KBM.RezMaster.Rezes.Tracked[UnitObj.Name] = {
+				UnitID = UnitObj.UnitID,
+				Timers = {},
+			}
+			Command.Message.Send(UnitObj.Name, "KBMRezReq", "C", function(failed, message) PC.RezMReq(UnitObj.Name, failed, message) end)
 		end
 	end
 	if PC.Queue[uID] then
@@ -201,24 +208,23 @@ function PC.RezRReq(name, failed, message)
 
 end
 
-function PC.GroupJoin(uID, Spec, Details)
-	--print("Player joining: "..KBM.Unit.List.UID[uID].Name)
+function PC.GroupJoin(UnitObj, Spec)
 	if KBM.Player.Grouped then
-	--	print("and you are in a Group")
-		if not KBM.RezMaster.Rezes.Tracked[Details.name] then
-			if not Details.offline then
-				-- print("New player has joined: Requesting BR list")
-				KBM.RezMaster.Rezes.Tracked[Details.name] = {
-					UnitID = uID,
-					Timers = {},
-				}
-				Command.Message.Send(Details.name, "KBMRezReq", "C", function(failed, message) PC.RezMReq(Details.name, failed, message) end)
+		if not KBM.RezMaster.Rezes.Tracked[UnitObj.Name] then
+			if not UnitObj.Offline then
+				if UnitObj.Calling == "mage" or UnitObj.Calling == "cleric" then
+					KBM.RezMaster.Rezes.Tracked[UnitObj.Name] = {
+						UnitID = UnitObj.UnitID,
+						Timers = {},
+					}
+					Command.Message.Send(UnitObj.Name, "KBMRezReq", "C", function(failed, message) PC.RezMReq(UnitObj.Name, failed, message) end)
+				end
 			end
 		else
-			if Details.calling then
-				if KBM.RezMaster.Rezes.Tracked[Details.name].Class ~= Details.calling then
-					for aID, Timer in pairs(KBM.RezMaster.Rezes.Tracked[Details.name].Timers) do
-						KBM.RezMaster.Rezes:Add(Details.name, aID, Timer.Remaining, Timer.Duration)
+			if UnitObj.Calling then
+				if KBM.RezMaster.Rezes.Tracked[UnitObj.Name].Class ~= UnitObj.Calling then
+					for aID, Timer in pairs(KBM.RezMaster.Rezes.Tracked[UnitObj.Name].Timers) do
+						KBM.RezMaster.Rezes:Add(UnitObj.Name, aID, Timer.Remaining, Timer.Duration)
 					end
 				end
 			end
@@ -228,16 +234,18 @@ function PC.GroupJoin(uID, Spec, Details)
 	end
 end
 
-function PC.GroupLeave(uID)
+function PC.GroupLeave(UnitObj)
 	if KBM.Player.Grouped then
-		KBM.RezMaster.Rezes:Clear(KBM.Unit.List.UID[uID].Name)
+		KBM.RezMaster.Rezes:Clear(UnitObj.Name)
 	end
 end
 
-function PC.PlayerOffline(UID, Value)
-	if Value then
-		-- print("Player is offline, if they have CR/BR list, disable/remove them here")
-		KBM.RezMaster.Rezes:Clear(KBM.Unit.List.UID[UID].Name)
+function PC.PlayerOffline(Units)
+	for UnitID, UnitObj in pairs(Units) do
+		if UnitObj.Offline then
+			-- print("Player is offline, if they have CR/BR list, disable/remove them here")
+			KBM.RezMaster.Rezes:Clear(UnitObj.Name)
+		end
 	end
 end
 
@@ -258,12 +266,12 @@ function PC:Start()
 	table.insert(Event.Ability.New.Add, {PC.AbilityAdd, "KingMolinator", "Ability Add"})
 	table.insert(Event.Ability.New.Cooldown.Begin, {PC.AbilityCooldown, "KingMolinator", "Ability Cooldown"})
 	table.insert(Event.Ability.New.Cooldown.End, {PC.AbilityCooldown, "KingMolinator", "Ability Cooldown"})
-	table.insert(Event.KingMolinator.System.Player.Join, {PC.PlayerJoin, "KingMolinator", "Player Join"})
-	table.insert(Event.KingMolinator.System.Player.Leave, {PC.PlayerLeave, "KingMolinator", "Player Leave"})
-	table.insert(Event.KingMolinator.System.Group.Join, {PC.GroupJoin, "KingMolinator", "Group Member Join"})
-	table.insert(Event.KingMolinator.System.Group.Leave, {PC.GroupLeave, "KingMolinator", "Group Member Leave"})
-	table.insert(Event.KingMolinator.Unit.Calling, {PC.CallingChange, "KingMolinator", "Group member calling change"})
-	table.insert(Event.SafesRaidManager.Group.Offline, {PC.PlayerOffline, "KingMolinator", "Player Offline"})
+	table.insert(Event.SafesUnitLib.Raid.Join, {PC.PlayerJoin, "KingMolinator", "Player Join"})
+	table.insert(Event.SafesUnitLib.Raid.Leave, {PC.PlayerLeave, "KingMolinator", "Player Leave"})
+	table.insert(Event.SafesUnitLib.Raid.Member.Join, {PC.GroupJoin, "KingMolinator", "Group Member Join"})
+	table.insert(Event.SafesUnitLib.Raid.Member.Leave, {PC.GroupLeave, "KingMolinator", "Group Member Leave"})
+	table.insert(Event.SafesUnitLib.Unit.Detail.Calling, {PC.CallingChange, "KingMolinator", "Group member calling change"})
+	table.insert(Event.SafesUnitLib.Unit.Detail.Offline, {PC.PlayerOffline, "KingMolinator", "Player Offline"})
 	table.insert(Event.SafesRaidManager.Group.Mode, {PC.PlayerMode, "KingMolinator", "Player Group Mode"})
 	table.insert(Command.Slash.Register("kbmability"), {PC.SlashAbility, "KingMolinator", "Player Ability List"})
 end

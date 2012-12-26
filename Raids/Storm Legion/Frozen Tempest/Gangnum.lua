@@ -47,7 +47,7 @@ GGM.Lang.Debuff.Wrath:SetGerman("Sturmherr-Zorn")
 
 -- Verbose Dictionary
 GGM.Lang.Verbose = {}
-GGM.Lang.Verbose.Wrath = KBM.Language:Add("Move away!")
+GGM.Lang.Verbose.Wrath = KBM.Language:Add("Move back!")
 GGM.Lang.Verbose.Wrath:SetGerman("Lauf raus!")
 
 -- Description Dictionary

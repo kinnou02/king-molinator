@@ -17,6 +17,10 @@
 local AddonIni, LibSBuff = ...
 local LibSata = Inspect.Addon.Detail("SafesTableLib").data
 
+if not LibSata then
+	return
+end
+
 -- Initialize Internal Structure
 local _int = {
 	Event = {
@@ -234,7 +238,8 @@ function _int:UpdateCycle()
 	if self.Queue:Count() > 0 then
 		repeat
 			-- print("----------")
-			local QueueObj, BuffObj = self.Queue:First()
+			local QueueObj, BuffObj 
+			QueueObj, BuffObj = self.Queue:First()
 			if not QueueObj then
 				-- print("Queue Empty: Breaking Loop")
 				break
