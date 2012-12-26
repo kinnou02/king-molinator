@@ -1010,8 +1010,8 @@ function _lsu:UpdateSegment(_tSeg)
 			if UnitObj.Name then
 				if _lookup.Name[UnitObj.Name] then
 					_lookup.Name[UnitObj.Name][UID] = nil
-					if not next(_lookup.Name[UnitObj.Details.name]) then
-						_lookup.Name[UnitObj.Details.name] = nil
+					if not next(_lookup.Name[UnitObj.Name]) then
+						_lookup.Name[UnitObj.Name] = nil
 					end
 				end
 			end
