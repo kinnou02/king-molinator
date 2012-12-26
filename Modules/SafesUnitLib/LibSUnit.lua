@@ -533,15 +533,6 @@ function _lsu.Unit.Planar(uList)
 	_lsu.Event.Unit.Detail.Planar(uList)	
 end
 
-function _lsu.Unit.Planar(uList)
-	local _cache = LibSUnit.Lookup.UID
-	for UID, Mark in pairs(uList) do
-		_cache[UID].Mark = Mark
-		uList[UID] = _cache[UID]
-	end
-	_lsu.Event.Unit.Detail.Mark(uList)	
-end
-
 function _lsu.Unit.PlanarMax(uList)
 	local _cache = LibSUnit.Lookup.UID
 	for UID, PlanarMax in pairs(uList) do
