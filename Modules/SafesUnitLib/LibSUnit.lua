@@ -129,6 +129,7 @@ LibSUnit._internal = {
 			Removed = Utility.Event.Create(AddonIni.id, "Unit.Removed"),
 			Detail = {
 				Percent = Utility.Event.Create(AddonIni.id, "Unit.Detail.Percent"),
+				PercentFlat = Utility.Event.Create(AddonIni.id, "Unit.Detail.PercentFlat"),
 				Health = Utility.Event.Create(AddonIni.id, "Unit.Detail.Health"),
 				HealthMax = Utility.Event.Create(AddonIni.id, "Unit.Detail.HealthMax"),
 				Mark = Utility.Event.Create(AddonIni.id, "Unit.Mark"),
@@ -276,11 +277,19 @@ function _lsu.Unit:CalcPerc(UnitObj)
 	end
 	UnitObj.Percent = tonumber(string.format("%0.2f", UnitObj.PercentRaw * 100))
 	UnitObj.PercentFlat = math.ceil(UnitObj.Percent)
-	if UnitObj.PercentFlat ~= UnitObj.PercentLast then
-		-- Fire a Percent change Event.
+	
+	if UnitObj.PercentLast ~= UnitObj.Percent then
+		-- Fire Percent (2 decimal place) change.
 		_lsu.Event.Unit.Detail.Percent(UnitObj)
 		-- Store change.
-		UnitObj.PercentLast = UnitObj.PercentFlat
+		UnitObj.PercentLast = UnitObj.Percent
+		
+		if UnitObj.PercentFlat ~= UnitObj.PercentLast then
+			-- Fire a Percent Flat change Event.
+			_lsu.Event.Unit.Detail.PercentFlat(UnitObj)
+			-- Store change.
+			UnitObj.PercentFlatLast = UnitObj.PercentFlat
+		end
 	end
 end
 
@@ -380,30 +389,39 @@ function _lsu:Create(UID, uDetails, Type)
 		else
 			_name[UnitObj.Name] = {UID = true}
 		end
-		_UID[UID].Loaded = true
-		_calc(self.Unit, _UID[UID])
-		_lsu.Unit:UpdateTarget(_UID[UID])
+		-- Unit has been fully loaded at some point. Flag this here to ensure safe Detail reading of all fields.
+		UnitObj.Loaded = true
+		-- Calculate initial percentages, bypassing related events to avoid garbage results.
+		UnitObj.PercentRaw = UnitObj.Health/UnitObj.HealthMax
+		if UnitObj.PercentRaw > 1 then
+			UnitObj.PercentRaw = 1
+		end
+		UnitObj.Percent = tonumber(string.format("%0.2f", UnitObj.PercentRaw * 100))
+		UnitObj.PercentLast = UnitObj.Percent -- Ensure the last recorded percentage is initialized.
+		UnitObj.PercentFlat = math.ceil(UnitObj.Percent)
+		UnitObj.PercentFlatLast = UnitObj.PercentFlat -- Ensure the last recorded flat percentage is initialized.
+		_lsu.Unit:UpdateTarget(UnitObj)
 		if Type == "Avail" then
 			-- Fire Unit New Full Event
-			_lsu.Event.Unit.New.Full(_UID[UID])
+			_lsu.Event.Unit.New.Full(UnitObj)
 		else
 			-- Fire Unit Idle Full Event
-			_lsu.Event.Unit.New.Idle(_UID[UID])
+			_lsu.Event.Unit.New.Idle(UnitObj)
 		end
 	else
 		if Type == "Avail" then
 			-- Fire Unit New Partial Event
-			_lsu.Event.Unit.New.Partial(_UID[UID])
+			_lsu.Event.Unit.New.Partial(UnitObj)
 		else
 			-- Fire Unit Idle Partial Event
-			_lsu.Event.Unit.New.Partial(_UID[UID])
+			_lsu.Event.Unit.New.Partial(UnitObj)
 		end
 	end
 	if LibSUnit.Raid.Queue[UID] then
 		_lsu.Raid.Change(UID, LibSUnit.Raid.Queue[UID])
 		LibSUnit.Raid.Queue[UID] = nil
 	end
-	return _UID[UID]
+	return UnitObj
 end
 
 -- Details Updates
@@ -438,14 +456,20 @@ end
 function _lsu.Unit.Health(uList)
 	local _cache = LibSUnit.Lookup.UID
 	for UID, Health in pairs(uList) do
-		Health = tonumber(Health) or 0
+		Health = tonumber(Health)
+		if not Health then
+			--print("Adjusted HP to "..tostring(Health))
+			Health = 0
+		end
 		_cache[UID].Health = Health
 		_lsu.Unit:CalcPerc(_cache[UID])
 		uList[UID] = _cache[UID]
-		if Health == 0 and UnitObj.Dead == false then
-			_lsu.Raid.ManageDeath(UnitObj, true)
-		else
-			if Health > 0 and UnitObj.Dead then
+		if Health == 0 then
+			if not UnitObj.Dead then
+				_lsu.Raid.ManageDeath(UnitObj, true)
+			end
+		elseif Health > 0 then
+			if UnitObj.Dead then
 				_lsu.Raid.ManageDeath(UnitObj, false)
 			end
 		end
@@ -552,7 +576,7 @@ function _lsu.Unit.Combat(uList, Silent)
 					LibSUnit.Raid.CombatTotal = LibSUnit.Raid.CombatTotal + 1
 					if not LibSUnit.Raid.Combat then
 						LibSUnit.Raid.Combat = true
-						print("Raid Entered Combat")
+						--print("Raid Entered Combat")
 						_lsu.Event.Raid.Combat.Enter()
 					end
 					if _lsu.Settings.Debug then
@@ -563,7 +587,7 @@ function _lsu.Unit.Combat(uList, Silent)
 					if LibSUnit.Raid.Combat then
 						if LibSUnit.Raid.CombatTotal == 0 then
 							LibSUnit.Raid.Combat = false
-							print("Raid Left Combat")
+							--print("Raid Left Combat")
 							_lsu.Event.Raid.Combat.Leave()
 						end
 					end
@@ -627,6 +651,16 @@ function _lsu.Unit.Details(UnitObj, uDetails)
 		end
 		_lsu.Unit:CalcPerc(UnitObj)
 		UnitObj.Details = uDetails
+		UnitObj.Loaded = true
+		if UnitObj.Health == 0 then
+			if not UnitObj.Dead then
+				_lsu.Raid.ManageDeath(UnitObj, true)
+			end
+		elseif UnitObj.Health > 0 then
+			if UnitObj.Dead then
+				_lsu.Raid.ManageDeath(UnitObj, false)
+			end
+		end
 	end
 end
 
@@ -761,28 +795,38 @@ end
 -- Raid Management
 _lsu.Raid = {}
 function _lsu.Raid.ManageDeath(UnitObj, Dead)
-	if LibSUnit.Raid.UID[UnitObj.UnitID] then
-		if Dead then
-			LibSUnit.Raid.DeadTotal = LibSUnit.Raid.DeadTotal + 1
-			if LibSUnit.Raid.DeadTotal == LibSUnit.Raid.Members then
-				if not LibSUnit.Raid.Wiped then
-					LibSUnit.Raid.Wiped = true
-					_lsu.Event.Raid.Wipe()
+	if UnitObj.Loaded then
+		if UnitObj.CurrentKey ~= "Partial" then
+			if LibSUnit.Raid.UID[UnitObj.UnitID] then
+				if Dead then 
+					if not UnitObj.Dead then
+						LibSUnit.Raid.DeadTotal = LibSUnit.Raid.DeadTotal + 1
+						--print(">>> "..UnitObj.Name.." has died")
+						if LibSUnit.Raid.DeadTotal == LibSUnit.Raid.Members then
+							if not LibSUnit.Raid.Wiped then
+								LibSUnit.Raid.Wiped = true
+								_lsu.Event.Raid.Wipe()
+							end
+						end
+						if _lsu.Settings.Debug then
+							_lsu.Debug:UpdateDeath()
+						end
+					end
+				else
+					if UnitObj.Dead then
+						--print("<<< "..UnitObj.Name.." has is now alive")
+						LibSUnit.Raid.DeadTotal = LibSUnit.Raid.DeadTotal - 1
+						LibSUnit.Raid.Wiped = false
+						_lsu.Event.Raid.Res(targetObj, sourceObj)
+						if _lsu.Settings.Debug then
+							_lsu.Debug:UpdateDeath()
+						end
+					end
 				end
 			end
-			if _lsu.Settings.Debug then
-				_lsu.Debug:UpdateDeath()
-			end
-		else
-			LibSUnit.Raid.DeadTotal = LibSUnit.Raid.DeadTotal - 1
-			LibSUnit.Raid.Wiped = false
-			_lsu.Event.Raid.Res(targetObj, sourceObj)
-			if _lsu.Settings.Debug then
-				_lsu.Debug:UpdateDeath()
-			end
+			UnitObj.Dead = Dead	
 		end
 	end
-	UnitObj.Dead = Dead	
 end
 
 function _lsu.Raid.Check(UnitID, skipSpec)
@@ -823,9 +867,6 @@ function _lsu.Raid.Change(UnitID, Spec)
 						LibSUnit.Raid.Combat = false
 						_lsu.Event.Raid.Combat.Leave()
 					end
-					if _lsu.Settings.Debug then
-						_lsu.Debug:UpdateCombat()
-					end
 				end
 				LibSUnit.Raid.Lookup[Spec].Unit = nil
 				LibSUnit.Raid.Members = LibSUnit.Raid.Members - 1
@@ -833,6 +874,13 @@ function _lsu.Raid.Change(UnitID, Spec)
 				UnitObj.RaidLoc = nil
 				if UnitObj.Dead then
 					LibSUnit.Raid.DeadTotal = LibSUnit.Raid.DeadTotal - 1
+					--print(UnitObj.Name.." has left the Raid and removed death count")
+				end
+				_lsu.Event.Raid.Member.Leave(UnitObj, Spec)
+				if LibSUnit.Raid.Members == 0 then
+					LibSUnit.Grouped = false
+					_lsu.Event.Raid.Leave()
+				elseif LibSUnit.Raid.Members > 1 then
 					if LibSUnit.Raid.Members == LibSUnit.Raid.DeadTotal then
 						if not LibSUnit.Raid.Wiped then
 							LibSUnit.Raid.Wiped = true
@@ -840,16 +888,12 @@ function _lsu.Raid.Change(UnitID, Spec)
 						end
 					else
 						LibSUnit.Raid.Wiped = false
-					end
-					if _lsu.Settings.Debug then
-						_lsu.Debug:UpdateDeath()
-					end
+					end				
 				end
-				_lsu.Event.Raid.Member.Leave(UnitObj, Spec)
-				if LibSUnit.Raid.Members == 0 then
-					LibSUnit.Grouped = false
-					_lsu.Event.Raid.Leave()
-				end
+				if _lsu.Settings.Debug then
+					_lsu.Debug:UpdateDeath()
+					_lsu.Debug:UpdateCombat()
+				end			
 			else
 				-- Unit Still exists, wait for appropriate Join message.
 				LibSUnit.Raid.Move[UnitObj.UnitID] = Spec
@@ -882,25 +926,24 @@ function _lsu.Raid.Change(UnitID, Spec)
 							LibSUnit.Raid.Combat = true
 							_lsu.Event.Raid.Combat.Enter()
 						end
-						if _lsu.Settings.Debug then
-							_lsu.Debug:UpdateCombat()
-						end
 					end
 					if UnitObj.Dead then
 						LibSUnit.Raid.DeadTotal = LibSUnit.Raid.DeadTotal + 1
-						if LibSUnit.Raid.Members == LibSUnit.Raid.DeadTotal then
-							if not LibSUnit.Raid.Wiped then
-								LibSUnit.Raid.Wiped = true
-								_lsu.Event.Raid.Wipe()
-							end
-						else
-							if LibSUnit.Raid.Wiped then
-								LibSUnit.Raid.Wiped = false
-							end
+						--print(UnitObj.Name.." joined and marked as Dead")
+					end
+					if LibSUnit.Raid.Members == LibSUnit.Raid.DeadTotal then
+						if not LibSUnit.Raid.Wiped then
+							LibSUnit.Raid.Wiped = true
+							_lsu.Event.Raid.Wipe()
 						end
-						if _lsu.Settings.Debug then
-							_lsu.Debug:UpdateDeath()
+					else
+						if LibSUnit.Raid.Wiped then
+							LibSUnit.Raid.Wiped = false
 						end
+					end
+					if _lsu.Settings.Debug then
+						_lsu.Debug:UpdateDeath()
+						_lsu.Debug:UpdateCombat()
 					end
 				else
 					-- Raid Member duplicate, wait for appropriate leave message.

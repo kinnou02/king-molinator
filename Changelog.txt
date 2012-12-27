@@ -1,7 +1,19 @@
 ﻿v1.3.9
 
-* New: Safes Unit Library (LibSUnit)
+* New: Safe's Unit Library (LibSUnit)
 ** Note: This is still classed as alpha and subject to change. (Although, I would say the event layout is pretty much final)
+
+Endless Eclipse
+* Progenitor Saetos
+** New: UTID updated.
+* Juntun
+** New: UTID udpated.
+* Ebassi
+** New: UTID updated.
+* Arebus
+** New: UTID udpated.
+* Rhu'Megar
+** New: UTID updated.
 
 Triumph of the Dragon Queen
 * Grand Falconer Zoles
