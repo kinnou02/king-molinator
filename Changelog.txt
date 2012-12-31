@@ -8,6 +8,10 @@ Unit Tracking
 * Change: All previous Unit Detail lookups and comparisons have been replaced by Events with Unit Objects.
 * Note: This may take some time to iron out any glitches in the system (major overhaul).
 
+Plug-Ins
+* New: KBM now had the ability to check for a Min version for any Plug-Ins.
+* Change: Plug-Ins now require a .Version table, which includes at least Version:Load() and Version:Check(Revision)
+
 Endless Eclipse
 * Progenitor Saetos
 ** New: UTID updated.

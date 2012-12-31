@@ -209,7 +209,6 @@ function KBM.Version:Load()
 		self.Revision = 0
 	end
 end
-
 KBM.Version:Load()
 
 function KBM.VersionToNumber(High, Mid, Low, Rev)
@@ -2041,12 +2040,19 @@ function KBM.Chat:Create(Text)
 	ChatObj.Color = "yellow"
 	ChatObj.HasMenu = true
 	ChatObj.Custom = false
+	ChatObj.Html = false
 	function self:Display(ChatObj)
 		if ChatObj.Enabled then
-			print(tostring(ChatObj.Text))
+			Command.Console.Display("general", false, tostring(ChatObj.Text), ChatObj.Html)
 		end
 	end
 	return ChatObj
+end
+
+function KBM.Chat.Out(Text, Html, prefix)
+	prefix = prefix or false
+	Html = Html or false
+	Command.Console.Display("general", prefix, Text, Html)
 end
 
 function KBM.MechSpy:Pull()
@@ -3105,13 +3111,6 @@ function KBM.PhaseMonitor:Init()
 				else
 					if KBM.PhaseMonitor.Objectives.Lists.Percent[tostring(self.BossObj)] then
 						KBM.PhaseMonitor.Objectives.Lists.Percent[tostring(self.BossObj)] = nil
-					elseif KBM.PhaseMonitor.Objectives.Lists.Percent[self.Name] then
-						if KBM.PhaseMonitor.Objectives.Lists.Percent[self.Name][tostring(self)] then
-							KBM.PhaseMonitor.Objectives.Lists.Percent[self.Name][tostring(self)] = nil
-							if not next(KBM.PhaseMonitor.Objectives.Lists.Percent[self.Name]) then
-								KBM.PhaseMonitor.Objectives.Lists.Percent[self.Name] = nil
-							end
-						end
 					end
 				end
 				
@@ -3130,7 +3129,7 @@ function KBM.PhaseMonitor:Init()
 				if not KBM.PhaseMonitor.Objectives.Lists.Percent[PercentObj.Name] then
 					KBM.PhaseMonitor.Objectives.Lists.Percent[PercentObj.Name] = {}
 				end
-				KBM.PhaseMonitor.Objectives.Lists.Percent[PercentObj.Name][tostring(PercentObj)] = PercentObj
+				table.insert(KBM.PhaseMonitor.Objectives.Lists.Percent[PercentObj.Name], PercentObj)
 			else
 				KBM.PhaseMonitor.Objectives.Lists.Percent[tostring(PercentObj.BossObj)] = true
 			end
@@ -3766,7 +3765,7 @@ function KBM.CheckActiveBoss(UnitObj)
 														PhaseObj:Update()														
 													end
 												elseif KBM.PhaseMonitor.Objectives.Lists.Percent[UnitObj.Name] then
-													local _, PhaseObj = next(KBM.PhaseMonitor.Objectives.Lists.Percent[UnitObj.Name])
+													PhaseObj = table.remove(KBM.PhaseMonitor.Objectives.Lists.Percent[UnitObj.Name])
 													if PhaseObj then
 														KBM.BossID[UnitID].PhaseObj = PhaseObj
 														PhaseObj.BossObj = ModBossObj
@@ -7560,10 +7559,37 @@ function KBM.InitMenus()
 end
 
 local function KBM_Start()
+	local MinVer = {
+		["KBMAddWatch"] = {
+			High = 0,
+			Mid = 2,
+			Low = 0,
+			Rev = 59,
+		},
+	}
+
 	if KBM.PlugIn.Count > 0 then
 		for ID, PlugIn in pairs(KBM.PlugIn.List) do
-			if PlugIn.Start then
-				PlugIn:Start()
+			if type(PlugIn.Version) == "table" then
+				if PlugIn.Version.Check then
+					local Comp = true
+					local VerString = "0.0.0.0"
+					if MinVer[ID] then
+						Comp = PlugIn.Version:Check(MinVer[ID].Rev)
+						VerString = string.format("%d.%d.%d.%d", MinVer[ID].High, MinVer[ID].Mid, MinVer[ID].Low, MinVer[ID].Rev)
+					end
+					if Comp then
+						if PlugIn.Start then
+							PlugIn:Start()
+						end
+					else
+						KBM.Chat.Out(string.format('<font color="#ffff00">Plug-In <font color="#a0a0ff">%s <font color="#ffff00">version not supported. Please download at least Version %s', ID, VerString), true)
+					end
+				else
+					KBM.Chat.Out(string.format('<font color="#ffff00">Plug-In <font color="#a0a0ff">%s <font color="#ffff00">is incompatible. Please check for a newer version.', ID), true)
+				end
+			else
+				KBM.Chat.Out(string.format('<font color="#ffff00">Plug-In <font color="#a0a0ff">%s <font color="#ffff00">is incompatible. Please check for a newer version.', ID), true)
 			end
 		end
 	end		
