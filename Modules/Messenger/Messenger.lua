@@ -14,6 +14,9 @@ if not KBM.BossMod then
 	return
 end
 
+local LSUIni = Inspect.Addon.Detail("SafesUnitLib")
+local LibSUnit = LSUIni.data
+
 local KBMLM = KBM.LocaleManager
 
 PI.History = {
@@ -265,9 +268,9 @@ function PI.GroupJoin(UnitID, Specificer, uDetails)
 	end
 end
 
-function PI.GroupMode(Mode)
+function PI.GroupMode()
 	if Mode then
-		PI.Mode = Mode
+		PI.Mode = LibSUnit.Raid.Mode
 	end
 end
 
@@ -306,9 +309,9 @@ function PI.Start()
 	Command.Message.Accept(nil, "KBMVersion")
 	Command.Message.Accept(nil, "KBMVerReq")
 	Command.Message.Accept(nil, "KBMVerInfo")
-	table.insert(Event.KingMolinator.System.Player.Join, {PI.PlayerJoin, "KBMMessenger", "Player Join"})
-	table.insert(Event.SafesRaidManager.Group.Mode, {PI.GroupMode, "KBMMessenger", "Group Mode Changed"})
-	table.insert(Event.KingMolinator.System.Group.Join, {PI.GroupJoin, "KBMMessenger", "Group Member Joins"})
+	table.insert(Event.SafesUnitLib.Raid.Join, {PI.PlayerJoin, "KBMMessenger", "Player Join"})
+	table.insert(Event.SafesUnitLib.Raid.Mode, {PI.GroupMode, "KBMMessenger", "Group Mode Changed"})
+	table.insert(Event.SafesUnitLib.Raid.Member.Join, {PI.GroupJoin, "KBMMessenger", "Group Member Joins"})
 	table.insert(Event.Message.Receive, {PI.MessageHandler, "KBMMessenger", "Messenger Handler"})
 	table.insert(Event.System.Update.End, {PI.ManageQueues, "KBMMessenger", "Cycle Version Queue"})
 	PI.History:SetFull(KBM.Player.Name, "P"..KBMAddonData.toc.Version)

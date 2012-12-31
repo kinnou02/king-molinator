@@ -1,4 +1,4 @@
-﻿-- Zaviel Boss Mod for King Boss Mods
+﻿-- Artifex Zaviel Boss Mod for King Boss Mods
 -- Written by Paul Snart
 -- Copyright 2012
 --
@@ -24,6 +24,7 @@ local ZVL = {
 	Lang = {},
 	ID = "Zaviel",
 	Object = "ZVL",
+	Enrage = 7 * 60,
 }
 
 KBM.RegisterMod(ZVL.ID, ZVL)

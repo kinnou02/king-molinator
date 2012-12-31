@@ -188,7 +188,7 @@ function OA.PhaseTwo()
 	OA.PhaseObj.Objectives:Remove()
 	OA.Phase = 2
 	OA.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
-	OA.PhaseObj.Objectives:AddPercent(OA.Aleria.Name, 0, 100)
+	OA.PhaseObj.Objectives:AddPercent(OA.Aleria, 0, 100)
 end
 
 function OA:Death(UnitID)
@@ -220,8 +220,8 @@ function OA:UnitHPCheck(uDetails, unitID)
 					self.Phase = 1
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase(1)
-					self.PhaseObj.Objectives:AddPercent(self.Primal.Name, 0, 100)
-					self.PhaseObj.Objectives:AddPercent(self.Necrotic.Name, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Primal, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Necrotic, 0, 100)
 				end
 				if not self.Bosses[uDetails.name].UnitID then
 					self.Bosses[uDetails.name].Dead = false

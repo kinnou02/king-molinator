@@ -23,6 +23,7 @@ local MOD = {
 	Lang = {},
 	ID = "Ex_Baird",
 	Object = "MOD",
+	Enarge = 13.5 * 60,
 }
 
 MOD.Baird = {

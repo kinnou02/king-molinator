@@ -16,6 +16,9 @@ local KBMLM = LocaleManager.data
 local LibSGui = Inspect.Addon.Detail("SafesGUILib").data
 local LibSBuff = Inspect.Addon.Detail("SafesBuffLib").data
 
+local LSUIni = Inspect.Addon.Detail("SafesUnitLib")
+local LibSUnit = LSUIni.data
+
 KBMLM.Start(KBM)
 KBM.BossMod = {}
 KBM.Event = {
@@ -36,25 +39,6 @@ KBM.Event = {
 		},
 	},
 	Unit = {
-		PercentChange = {},
-		Available = {},
-		Unavailable = {},
-		Remove = {},
-		Death = {},
-		Name = {},
-		Relation = {},
-		Calling = {},
-		Target = {},
-		TargetCount = {},
-		Offline = {},
-		Planar = {},
-		PlanarMax = {},
-		Vitality = {},
-		Power = {},
-		Combat = {
-			Enter = {},
-			Leave = {},
-		},
 		Cast = {
 			Start = {},
 			End = {},
@@ -66,51 +50,7 @@ KBM.Event = {
 		End = {},
 	}
 }
-KBM.Unit = {	
-	UIDs = {		
-		Available = {},
-		Idle = {},
-		Flush = {},
-		Count = {
-			Available = 0,
-			Idle = 0,
-		},	
-	},
-	List = {
-		UID = {},
-		Type = {},
-		Name = {},
-	},	
-	NPC = {
-		friendly = {},
-		hostile = {},
-		neutral = {},
-		unknown = {},
-		Count = 0,
-	},
-	Player = {
-		friendly = {},
-		hostile = {},
-		neutral = {},
-		unknown = {},
-		Count = 0,
-	},
-	Unknown = {
-		List = {},
-		neutral = {},
-		hostile = {},
-		friendly = {},
-		unknown = {},
-		Count = 0,
-	},
-	TargetQueue = {},
-	TargetRemove = {},
-	RaidTargets = {},
-	Names = {},
-	Dead = {
-		Count = 0,
-	},
-}
+KBM.Unit = {}
 KBM.Layer = {
 	ReadyCheck = 11,
 	DragActive = 99,
@@ -127,6 +67,7 @@ KBM.Player = {
 	Rezes = {},
 	Resume = {},
 }
+KBM.Raid = {}
 KBM.ID = "KingMolinator"
 KBM.ModList = {}
 KBM.Testing = false
@@ -3050,7 +2991,7 @@ function KBM.PhaseMonitor:Init()
 						self.Count = self.Count + 1
 						self.GUI:SetObjective(self.Count.."/"..self.Total)
 					elseif UnitObj.Details then
-						if self.uType == UnitObj.Details.type then
+						if self.uType == UnitObj.Type then
 							self.Count = self.Count + 1
 							self.GUI:SetObjective(self.Count.."/"..self.Total)
 						end
@@ -3076,40 +3017,42 @@ function KBM.PhaseMonitor:Init()
 		function PhaseObj.Objectives:AddPercent(Object, Target, Current)
 			local PercentObj = {}
 			PercentObj.Target = Target
-			PercentObj.PercentRaw = Current
-			PercentObj.Percent = math.ceil(Current)
+			PercentObj.PercentRaw = Current * 0.01
+			PercentObj.PercentFlat = math.ceil(Current)
+			PercentObj.Percent = PercentObj.PercentFlat
 			if type(Object) == "string" then
 				PercentObj.Name = Object
 				if KBM.CurrentMod then
 					if KBM.CurrentMod.Bosses[PercentObj.Name] then
-						if KBM.CurrentMod.Bosses[PercentObj.Name].UnitID then
-							if KBM.BossID[KBM.CurrentMod.Bosses[PercentObj.Name].UnitID] then
-								PercentObj.PercentRaw = KBM.BossID[KBM.CurrentMod.Bosses[PercentObj.Name].UnitID].PercentRaw
-								PercentObj.Percent = KBM.BossID[KBM.CurrentMod.Bosses[PercentObj.Name].UnitID].Percent
-								Current = PercentObj.Percent
-							end
+						PercentObj.BossObj = KBM.CurrentMod.Bosses[PercentObj.Name]
+						PercentObj.UnitObj = PercentObj.BossObj.UnitObj
+						PercentObj.UnitID = PercentObj.BossObj.UnitID
+						if PercentObj.UnitObj then
+							PercentObj.PercentRaw = PercentObj.UnitObj.PercentRaw
+							PercentObj.Percent = PercentObj.UnitObj.Percent
+							PercentObj.PercentFlat = PercentObj.UnitObj.PercentFlat
 						end
-						PercentObj.UnitObj = KBM.CurrentMod.Bosses[PercentObj.Name]
-						PercentObj.UnitID = PercentObj.UnitObj.UnitID
 					end
 				end
 			else
 				PercentObj.Name = Object.Name
-				PercentObj.UnitObj = Object
+				PercentObj.BossObj = Object
+				PercentObj.UnitObj = Object.UnitObj
 				PercentObj.UnitID = Object.UnitID
-				PercentObj.UnitObj.PhaseObj = PercentObj
-				if KBM.Unit.List.UID[Object.UnitID] then
-					PercentObj.PercentRaw = KBM.Unit.List.UID[Object.UnitID].PercentRaw
-					PercentObj.Percent = KBM.Unit.List.UID[Object.UnitID].Percent
+				PercentObj.BossObj.PhaseObj = PercentObj
+				if PercentObj.UnitObj then
+					PercentObj.PercentRaw = Object.UnitObj.PercentRaw
+					PercentObj.Percent = Object.UnitObj.Percent
+					PercentObj.PercentFlat = Object.UnitObj.PercentFlat
 				end
 			end
 			PercentObj.Dead = false
 			PercentObj.GUI = KBM.PhaseMonitor:PullObjective()
-			PercentObj.GUI.Progress:SetWidth(PercentObj.GUI.Frame:GetWidth() * (PercentObj.PercentRaw * 0.01))
+			PercentObj.GUI.Progress:SetWidth(PercentObj.GUI.Frame:GetWidth() * PercentObj.PercentRaw)
 			PercentObj.GUI.Progress:SetVisible(true)
-			if PercentObj.UnitObj then
-				if PercentObj.UnitObj.DisplayName then
-					PercentObj.GUI:SetName(PercentObj.UnitObj.DisplayName)
+			if PercentObj.BossObj then
+				if PercentObj.BossObj.DisplayName then
+					PercentObj.GUI:SetName(PercentObj.BossObj.DisplayName)
 				else
 					PercentObj.GUI:SetName(PercentObj.Name)
 				end
@@ -3117,46 +3060,51 @@ function KBM.PhaseMonitor:Init()
 				PercentObj.GUI:SetName(PercentObj.Name)
 			end
 			if Target == 0 then
-				PercentObj.GUI:SetObjective(PercentObj.Percent.."%")
+				PercentObj.GUI:SetObjective(PercentObj.PercentFlat.."%")
 			else
-				PercentObj.GUI:SetObjective(PercentObj.Percent.."%/"..PercentObj.Target.."%")
+				PercentObj.GUI:SetObjective(PercentObj.PercentFlat.."%/"..PercentObj.Target.."%")
 			end	
 			PercentObj.Type = "Percent"
 			
-			function PercentObj:Update(PercentRaw)
+			function PercentObj:Update()
 				if self.Dead then
 					return
 				end
-				self.PercentRaw = PercentRaw
-				self.Percent = math.ceil(PercentRaw)
-				if self.Percent == 0 then
+				if self.UnitObj then
+					self.PercentRaw = self.UnitObj.PercentRaw
+					self.Percent = self.UnitObj.Percent
+					self.PercentFlat = self.UnitObj.PercentFlat
+				end
+				if self.PercentFlat == 0 then
 					self.GUI:SetObjective(KBM.Language.Options.Dead[KBM.Lang])
 					self.GUI.Progress:SetVisible(false)
 					self.Dead = true
 				else
-					if self.Percent >= self.Target then
+					if self.PercentFlat >= self.Target then
 						if self.Target == 0 then
-							if self.PercentRaw < 3 then
-								self.GUI:SetObjective(string.format("%0.02f", self.PercentRaw).."%")
+							if self.PercentFlat < 3 then
+								self.GUI:SetObjective(tostring(self.Percent).."%")
 							else
-								self.GUI:SetObjective(self.Percent.."%")
+								self.GUI:SetObjective(self.PercentFlat.."%")
 							end
 						else
-							self.GUI:SetObjective(self.Percent.."%/"..self.Target.."%")
+							self.GUI:SetObjective(self.PercentFlat.."%/"..self.Target.."%")
 						end
-						self.GUI.Progress:SetWidth(self.GUI.Frame:GetWidth() * (self.PercentRaw * 0.01))
+						self.GUI.Progress:SetWidth(self.GUI.Frame:GetWidth() * self.PercentRaw)
 					end
 				end
 			end
+			
 			function PercentObj:Remove()
 				KBM.PhaseMonitor.Objectives.Lists:Remove(self)
 			end
+			
 			function PercentObj:UpdateID(UnitID)
 				if self.UnitID then
 					KBM.PhaseMonitor.Objectives.Lists.Percent[self.UnitID] = nil
 				else
-					if KBM.PhaseMonitor.Objectives.Lists.Percent[tostring(self.UnitObj)] then
-						KBM.PhaseMonitor.Objectives.Lists.Percent[tostring(self.UnitObj)] = nil
+					if KBM.PhaseMonitor.Objectives.Lists.Percent[tostring(self.BossObj)] then
+						KBM.PhaseMonitor.Objectives.Lists.Percent[tostring(self.BossObj)] = nil
 					elseif KBM.PhaseMonitor.Objectives.Lists.Percent[self.Name] then
 						if KBM.PhaseMonitor.Objectives.Lists.Percent[self.Name][tostring(self)] then
 							KBM.PhaseMonitor.Objectives.Lists.Percent[self.Name][tostring(self)] = nil
@@ -3166,8 +3114,10 @@ function KBM.PhaseMonitor:Init()
 						end
 					end
 				end
+				
 				self.UnitID = UnitID
 				if self.UnitID then
+					self.UnitObj = LibSUnit.Lookup.UID[UnitID]
 					KBM.PhaseMonitor.Objectives.Lists.Percent[self.UnitID] = self
 				else
 				
@@ -3176,13 +3126,13 @@ function KBM.PhaseMonitor:Init()
 			
 			if PercentObj.UnitID then
 				KBM.PhaseMonitor.Objectives.Lists.Percent[PercentObj.UnitID] = PercentObj
-			elseif not PercentObj.UnitObj then
+			elseif not PercentObj.BossObj then
 				if not KBM.PhaseMonitor.Objectives.Lists.Percent[PercentObj.Name] then
 					KBM.PhaseMonitor.Objectives.Lists.Percent[PercentObj.Name] = {}
 				end
 				KBM.PhaseMonitor.Objectives.Lists.Percent[PercentObj.Name][tostring(PercentObj)] = PercentObj
 			else
-				KBM.PhaseMonitor.Objectives.Lists.Percent[tostring(PercentObj.UnitObj)] = true
+				KBM.PhaseMonitor.Objectives.Lists.Percent[tostring(PercentObj.BossObj)] = true
 			end
 			KBM.PhaseMonitor.Objectives.Lists:Add(PercentObj)
 			
@@ -3571,9 +3521,11 @@ function KBM.EncTimer:Init()
 	self:ApplySettings()	
 end
 
-function KBM.CheckActiveBoss(uDetails, UnitID)
+function KBM.CheckActiveBoss(UnitObj)
 	local current = Inspect.Time.Real()
 	local style = "new"
+	local UnitID = UnitObj.UnitID
+	local uDetails = UnitObj.Details
 	if KBM.IgnoreList[UnitID] then
 		return
 	end
@@ -3582,12 +3534,12 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 			local BossObj = nil
 			KBM.Idle.Wait = false
 			if not KBM.BossID[UnitID] then
-				if uDetails then
+				if UnitObj.Loaded then
 					local skipCache = false
-					if uDetails.type then
-						if KBM.Boss.TypeList[uDetails.type] then
-							BossObj = KBM.Boss.TypeList[uDetails.type]
-							if KBM.Boss.Chronicle[uDetails.type] then
+					if UnitObj.Type then
+						if KBM.Boss.TypeList[UnitObj.Type] then
+							BossObj = KBM.Boss.TypeList[UnitObj.Type]
+							if KBM.Boss.Chronicle[UnitObj.Type] then
 								if not KBM.Encounter then
 									KBM.EncounterMode = "Chronicle"
 								end
@@ -3600,7 +3552,7 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 					end
 					if not BossObj then
 						-- Check if Unit is currently in Template form.
-						BossObj = KBM.Boss.Template[uDetails.name]
+						BossObj = KBM.Boss.Template[UnitObj.Name]
 						if BossObj then
 							if not KBM.Encounter then
 								KBM.EncounterMode = "Template"
@@ -3625,14 +3577,14 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 								local hasUTID = false
 								if skipCache == false then
 									if not KBM.BossID[UnitID] then
-										if uDetails.type then
+										if UnitObj.Type then
 											if type(BossObj.UTID) == "string" then
-												if BossObj.UTID == uDetails.type then
+												if BossObj.UTID == UnitObj.Type then
 													hasUTID = true
 												end
 											elseif type(BossObj.UTID) == "table" then
 												for i, UTID in pairs(BossObj.UTID) do
-													if UTID == uDetails.type then
+													if UTID == UnitObj.Type then
 														hasUTID = true
 														break
 													end
@@ -3645,41 +3597,41 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 								end
 								if hasUTID == false then
 									if not KBM.BossID[UnitID] then
-										if uDetails.type then
+										if UnitObj.Type then
 											if not KBM.Options.UnitCache.List then
 												KBM.Options.UnitCache.List = {}
 											end
-											if not KBM.Options.UnitCache.List[uDetails.name] then
-												KBM.Options.UnitCache.List[uDetails.name] = {}
+											if not KBM.Options.UnitCache.List[UnitObj.Name] then
+												KBM.Options.UnitCache.List[UnitObj.Name] = {}
 											end
-											if not KBM.Options.UnitCache.List[uDetails.name][uDetails.type] then
+											if not KBM.Options.UnitCache.List[UnitObj.Name][UnitObj.Type] then
 												print("--------------------------------------")
 												print("Template Unit/Encounter found.")
-												print("Boss Name: "..tostring(uDetails.name).." added to Cache")
+												print("Boss Name: "..tostring(UnitObj.Name).." added to Cache")
 												local Zone = {
 													id = "n/a",
 													name = "unavailable",
 													["type"] = "n/a",
 												}
-												if not uDetails.zone then
-													if KBM.Player.Zone then
-														Zone = Inspect.Zone.Detail(KBM.Player.Zone)
+												if not UnitObj.Zone then
+													if LibSUnit.Player.Zone then
+														Zone = Inspect.Zone.Detail(LibSUnit.Player.Zone)
 													end
 												else
 													Zone = Inspect.Zone.Detail(uDetails.zone)
 												end
-												KBM.Options.UnitCache.List[uDetails.name][uDetails.type] = {
+												KBM.Options.UnitCache.List[UnitObj.Name][UnitObj.Type] = {
 													Location = tostring(KBM.Player.Location),
-													Tier = tostring(uDetails.tier),
-													Level = tostring(uDetails.level).." ("..type(uDetails.level)..")",
-													XYZ = tostring(uDetails.coordX)..","..tostring(uDetails.coordY)..","..tostring(uDetails.coordZ),
+													Tier = tostring(UnitObj.Tier),
+													Level = tostring(UnitObj.Level).." ("..type(UnitObj.Level)..")",
+													XYZ = tostring(UnitObj.Position.X)..","..tostring(UnitObj.Position.Y)..","..tostring(UnitObj.Position.Z),
 													Zone = Zone,
 													Mod = BossObj.Mod.Descript,
 													Time = "Start",
 													System = tostring(os.date()),
 												}
 												if KBM.Encounter then
-													KBM.Options.UnitCache.List[uDetails.name][uDetails.type].Time = KBM.ConvertTime(KBM.TimeElapsed)
+													KBM.Options.UnitCache.List[UnitObj.Name][UnitObj.Type].Time = KBM.ConvertTime(KBM.TimeElapsed)
 												end
 												KBM.Options.UnitTotal = KBM.Options.UnitTotal + 1
 											end
@@ -3688,57 +3640,39 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 								end
 								if (BossObj.Ignore ~= true and KBM.Encounter ~= true) or KBM.Encounter == true then
 									if KBM.Debug then
-										print("Boss found Checking: Tier = "..tostring(uDetails.tier).." "..tostring(uDetails.level).." ("..type(uDetails.level)..")")
-										print("Players location: "..tostring(KBM.Player.Location))
-										print("Unit Type: "..tostring(uDetails.type))
-										print("Unit Name: "..tostring(uDetails.name))
-										print("Unit X: "..tostring(uDetails.coordX))
-										print("Unit Y: "..tostring(uDetails.coordY))
-										print("Unit Z: "..tostring(uDetails.coordZ))
+										print("Boss found Checking: Tier = "..tostring(UnitObj.Tier).." "..tostring(UnitObj.Level).." ("..type(UnitObj.Level)..")")
+										print("Players location: "..tostring(LibSUnit.Player.Location))
+										print("Unit Type: "..tostring(UnitObj.Type))
+										print("Unit Name: "..tostring(UnitObj.Name))
+										print("Unit X: "..tostring(UnitObj.Position.X))
+										print("Unit Y: "..tostring(UnitObj.Position.Y))
+										print("Unit Z: "..tostring(UnitObj.Position.Z))
 										print("------------------------------------")
 									end
-									if uDetails.combat then
+									if UnitObj.Combat then
 										-- if KBM.Debug then
 											-- print("Boss matched checking encounter start")
 										-- end
 										if KBM.EncounterMode ~= "Chronicle" or (KBM.EncounterMode == "Chronicle" and BossObj.Mod.Settings.Chronicle) then
 											KBM.BossID[UnitID] = {}
-											KBM.BossID[UnitID].name = uDetails.name
-											KBM.BossID[UnitID].monitor = true
+											KBM.BossID[UnitID].UnitObj = UnitObj
+											KBM.BossID[UnitID].Monitor = true
 											KBM.BossID[UnitID].Mod = BossObj.Mod
 											KBM.BossID[UnitID].IdleSince = false
 											KBM.BossID[UnitID].Boss = ModBossObj
 											KBM.BossID[UnitID].PhaseObj = ModBossObj.PhaseObj
-											if uDetails.health > 0 then
+											ModBossObj.UnitObj = UnitObj
+											if UnitObj.Health > 0 then
 												if KBM.Debug then
 													print("Boss is alive and in combat, activating.")
 												end
-												KBM.BossID[UnitID].Combat = true
-												KBM.BossID[UnitID].dead = false
-												KBM.BossID[UnitID].available = true
-												local CacheUnit = KBM.Unit.List.UID[UnitID]
-												if CacheUnit then
-													KBM.BossID[UnitID].Health = CacheUnit.Health
-													KBM.BossID[UnitID].HealthLast = CacheUnit.Health
-													KBM.BossID[UnitID].HealthMax = CacheUnit.HealthMax
-													KBM.BossID[UnitID].PercentRaw = CacheUnit.PercentRaw
-													KBM.BossID[UnitID].Percent = CacheUnit.Percent
-													KBM.BossID[UnitID].PercentLast = CacheUnit.Percent
-												else
-													KBM.BossID[UnitID].Health = uDetails.health
-													KBM.BossID[UnitID].HealthLast = uDetails.health
-													KBM.BossID[UnitID].HealthMax = uDetails.healthMax
-													KBM.BossID[UnitID].PercentRaw = (uDetails.health/uDetails.healthMax)*100
-													KBM.BossID[UnitID].Percent = math.ceil(KBM.BossID[UnitID].PercentRaw)
-													KBM.BossID[UnitID].PercentLast = KBM.BossID[UnitID].Percent
-												end
+												KBM.BossID[UnitID].Dead = false
+												KBM.BossID[UnitID].Available = true
 												if not KBM.Encounter then
 													-- if KBM.Debug then
 														-- print("New encounter, starting")
 													-- end
 													KBM.Encounter = true
-													KBM.CurrentBoss = UnitID
-													KBM_CurrentBossName = uDetails.name
 													KBM.CurrentMod = KBM.BossID[UnitID].Mod
 													local PercentOver = 99
 													if KBM.EncounterMode == "Chronicle" then
@@ -3746,18 +3680,18 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 															PercentOver = KBM.CurrentMod.ChroniclePOver
 														end
 														print(KBM.Language.Encounter.Start[KBM.Lang].." "..KBM.CurrentMod.Descript.." (Chronicles)")
-														if KBM.BossID[UnitID].Percent >= PercentOver then 
+														if UnitObj.PercentFlat >= PercentOver then 
 															KBM.CurrentMod.Settings.Records.Chronicle.Attempts = KBM.CurrentMod.Settings.Records.Chronicle.Attempts + 1
 														end
 													elseif KBM.EncounterMode == "Template" then
 														print("Template Mode actived, no record tracking available.")
 													else
 														print(KBM.Language.Encounter.Start[KBM.Lang].." "..KBM.CurrentMod.Descript)
-														if KBM.BossID[UnitID].Percent >= PercentOver then
+														if UnitObj.PercentFlat >= PercentOver then
 															KBM.CurrentMod.Settings.Records.Attempts = KBM.CurrentMod.Settings.Records.Attempts + 1
 														end
 													end
-													if KBM.BossID[UnitID].Percent < PercentOver then
+													if UnitObj.PercentFlat < PercentOver then
 														KBM.ValidTime = false
 													else
 														KBM.ValidTime = true
@@ -3829,27 +3763,27 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 													if PhaseObj then
 														KBM.BossID[UnitID].PhaseObj = PhaseObj
 														PhaseObj:UpdateID(UnitID)
-														PhaseObj:Update(KBM.BossID[UnitID].PercentRaw)														
+														PhaseObj:Update()														
 													end
-												elseif KBM.PhaseMonitor.Objectives.Lists.Percent[uDetails.name] then
-													local _, PhaseObj = next(KBM.PhaseMonitor.Objectives.Lists.Percent[uDetails.name])
+												elseif KBM.PhaseMonitor.Objectives.Lists.Percent[UnitObj.Name] then
+													local _, PhaseObj = next(KBM.PhaseMonitor.Objectives.Lists.Percent[UnitObj.Name])
 													if PhaseObj then
 														KBM.BossID[UnitID].PhaseObj = PhaseObj
-														PhaseObj.UnitObj = ModBossObj
+														PhaseObj.BossObj = ModBossObj
 														PhaseObj:UpdateID(UnitID)
-														PhaseObj:Update(KBM.BossID[UnitID].PercentRaw)
+														PhaseObj:Update()
 													end
 												elseif KBM.PhaseMonitor.Objectives.Lists.Percent[UnitID] then
 													KBM.BossID[UnitID].PhaseObj = KBM.PhaseMonitor.Objectives.Lists.Percent[UnitID]
-													KBM.BossID[UnitID].PhaseObj:Update(KBM.BossID[UnitID].PercentRaw)
+													KBM.BossID[UnitID].PhaseObj.UnitObj = UnitObj
+													KBM.BossID[UnitID].PhaseObj:Update()
 												elseif KBM.BossID[UnitID].PhaseObj then
 													KBM.BossID[UnitID].PhaseObj:UpdateID(UnitID)
-													KBM.BossID[UnitID].PhaseObj:Update(KBM.BossID[UnitID].PercentRaw)
+													KBM.BossID[UnitID].PhaseObj:Update()
 												end
 											else
-												KBM.BossID[UnitID].Combat = false
-												KBM.BossID[UnitID].dead = true
-												KBM.BossID[UnitID].available = true
+												KBM.BossID[UnitID].Dead = true
+												KBM.BossID[UnitID].Available = true
 											end
 										end
 									else
@@ -3859,9 +3793,9 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 							end
 						end
 					else
-						if uDetails.availability == "full" then
-							if uDetails.type then
-								if not KBM_Boss[uDetails.name] then
+						if UnitObj.CurrentKey ~= "Partial" then
+							if UnitObj.Type then
+								if not KBM_Boss[UnitObj.Name] then
 									if KBM.Debug then
 										if not KBM.IgnoreList[UnitID] then
 											-- print("New Unit Added to Ignore:")
@@ -3897,241 +3831,114 @@ function KBM.CheckActiveBoss(uDetails, UnitID)
 	end	
 end
 
-function KBM.CombatEnter(UnitID)
+function KBM.CombatEnter(uList)
 	if KBM.Options.Enabled then
-		local uDetails = Inspect.Unit.Detail(UnitID)
-		if uDetails then
-			KBM.Unit:Update(uDetails, UnitID)
-			if not uDetails.player then
-				KBM.CheckActiveBoss(uDetails, UnitID)
-			end
-			KBM.Unit.List.UID[UnitID]:CheckTarget()
-			if KBM.Debug then
-				KBM.Unit.Debug:UpdateCombat()
+		for UnitID, UnitObj in pairs(uList) do
+			if not UnitObj.Player then
+				KBM.CheckActiveBoss(UnitObj)
 			end
 		end
 	end	
 end
 
-function KBM.CombatLeave(UnitID)
-	if KBM.Options.Enabled then
-		local uDetails = Inspect.Unit.Detail(UnitID)
-		if uDetails then
-			KBM.Unit:Update(uDetails, UnitID)
-			KBM.Unit.List.UID[UnitID]:CheckTarget()
-		end
-		if KBM.Debug then
-			KBM.Unit.Debug:UpdateCombat()
-		end
-	end	
-end
-
-function KBM.MobDamage(info)
+function KBM.Damage(info)
 	-- Damage done by a Non Raid Member to Anything.
 	if KBM.Options.Enabled then
-		local tDetails, UnitObj
-		local cDetails
-		local tUnitID = info.target
-		local cUnitID = info.caster
-		if cUnitID then
-			local cUnitObj = KBM.Unit.List.UID[cUnitID]
-			if not cUnitObj then
-				cDetails = Inspect.Unit.Detail(cUnitID)
-				cUnitObj = KBM.Unit:Idle(cUnitID, cDetails)
-				cUnitObj:UpdateIdle()
-			else
-				cDetails = cUnitObj.Details
-				if cUnitObj.Time then
-					cUnitObj:UpdateIdle()
-				end
-			end
-		end	
-		UnitObj = KBM.Unit.List.UID[tUnitID]
-		if not UnitObj then
-			tDetails = Inspect.Unit.Detail(tUnitID)
-			UnitObj = KBM.Unit:Idle(tUnitID, tDetails)
-		-- else
-			-- if tDetails then
-				-- KBM.Unit.List.UID[tUnitID]:UpdateData(tDetails)
-			-- end
-		end
-		if UnitObj then
-			UnitObj:DamageHandler(info, tDetails)
-		end
-		if KBM.Encounter then
-			-- Check for damage done to the raid by Bosses
-			if cUnitID then
-				if cDetails then
+		if info.targetObj and info.sourceObj then
+			local tarObj = info.targetObj
+			local srcObj = info.sourceObj
+			if KBM.Encounter then
+				-- Damage done by a Boss Object to the Raid [DURING ENCOUNTER]
+				local PlayerObj = LibSUnit.Raid.UID[tarObj.UnitID]
+				if PlayerObj then
+					local BossObj = KBM.BossID[srcObj.UnitID]
 					if KBM.CurrentMod then
-						if KBM.BossID[cUnitID] then
+						if BossObj then
 							if info.abilityName then
 								if KBM.Trigger.Damage[info.abilityName] then
 									TriggerObj = KBM.Trigger.Damage[info.abilityName]
-									KBM.Trigger.Queue:Add(TriggerObj, cUnitID, tUnitID)
+									KBM.Trigger.Queue:Add(TriggerObj, BossObj.UnitID, PlayerObj.UnitID)
 								end
 							end
 							-- Check for Npc Based Triggers (Usually Dynamic: Eg - Failsafe for P4 start Akylios)
 							if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID] then
-								if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][cDetails.name] then
-									local TriggerObj = KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][cDetails.name]
+								if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][BossObj.Name] then
+									local TriggerObj = KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][BossObj.Name]
 									if TriggerObj.Enabled then
-										KBM.Trigger.Queue:Add(TriggerObj, cUnitID, tUnitID)
+										KBM.Trigger.Queue:Add(TriggerObj, BossObj.UnitID, PlayerObj.UnitID)
 									end
 								end
 							end
 						else
-							if not cDetails.player then
-								if cDetails.combat then
-									if cDetails.health > 0 then
-										KBM.CheckActiveBoss(cDetails, cUnitID)
+							if not LibSUnit.Raid.UID[srcObj.UnitID] then
+								if srcObj.Combat then
+									if not srcObj.Dead then
+										KBM.CheckActiveBoss(srcObj)
 									end
 								end
 							end
 						end
 					end
 				else
-					if KBM.BossID[tUnitID] then
-						if not KBM.BossID[tUnitID].Dead then
-							KBM.BossID[tUnitID].Health = UnitObj.Health
-							KBM.BossID[tUnitID].HealthLast = UnitObj.Health
-							KBM.BossID[tUnitID].PercentRaw = UnitObj.PercentRaw
-							KBM.BossID[tUnitID].Percent = UnitObj.Percent
-							if KBM.CurrentMod then
-								KBM.BossID[tUnitID].PercentLast = UnitObj.Percent
-								-- Check for Npc Based Triggers (Usually Dynamic: Eg - Failsafe for P4 start Akylios)
-								if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID] then
-									if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name] then
-										local TriggerObj = KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][KBM.BossID[tUnitID].name]
-										if TriggerObj.Enabled then
-											KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
+					-- Damage by the Raid to a Boss Object [DURING ENCOUNTER]
+					local PlayerObj = LibSUnit.Raid.UID[srcObj.UnitID]
+					if PlayerObj then
+						local BossObj = KBM.BossID[tarObj.UnitID]
+						if BossObj then
+							if not BossObj.Dead then
+								if KBM.CurrentMod then
+									-- Check for Npc Based Triggers (Usually Dynamic: Eg - Failsafe for P4 start Akylios)
+									if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID] then
+										if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][BossObj.Name] then
+											local TriggerObj = KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][BossObj.Name]
+											if TriggerObj.Enabled then
+												KBM.Trigger.Queue:Add(TriggerObj, nil, BossObj.UnitID)
+											end
 										end
+									end
+								end
+							end
+						else
+							if not LibSUnit.Raid.UID[tarObj.UnitID] then
+								if tarObj.Combat then
+									if not tarObj.Dead then
+										KBM.CheckActiveBoss(tarObj)
 									end
 								end
 							end
 						end
 					end
-				end
-			end			
-		else
-			-- Encounter state is idle, check triggering methods.
-			-- This is a fail-safe, and not usually used for Encounter starts.
-			if cDetails then
-				if not cDetails.player then
-					if cDetails.combat then
-						if cDetails.health > 0 then
-							KBM.CheckActiveBoss(cDetails, cUnitID)
-						end
-					end
-				end
-			end
-		end
-	end
-end
-
-function KBM.MobHeal(info)
-	local tUnitID = info.target
-	local cUnitID = info.caster
-	local UnitObj
-	if cUnitID then
-		if not KBM.Unit.List.UID[cUnitID] then
-			KBM.Unit:Idle(cUnitID, Inspect.Unit.Detail(cUnitID))
-		end
-	end
-	if tUnitID then
-		local tDetails = Inspect.Unit.Detail(tUnitID)
-		UnitObj = KBM.Unit.List.UID[tUnitID]
-		if not UnitObj then
-			UnitObj = KBM.Unit:Idle(tUnitID, tDetails)
-		end
-		UnitObj:HealHandler(info, tDetails)
-	end
-end
-
-function KBM.RaidDamage(info)
-	-- Will be used for DPS Monitoring
-	-- Damage done by a Raid member to a Unit
-	if KBM.Options.Enabled then
-		local tUnitID = info.target
-		local cUnitID = info.caster
-		local tDetails, UnitObj
-		if cUnitID then
-			local cUnitObj = KBM.Unit.List.UID[cUnitID]
-			if not cUnitObj then
-				cUnitObj = KBM.Unit:Idle(cUnitID, Inspect.Unit.Detail(cUnitID))
-			end
-		end
-		if tUnitID then
-			UnitObj = KBM.Unit.List.UID[tUnitID]
-			if not UnitObj then
-				tDetails = Inspect.Unit.Detail(tUnitID)
-				UnitObj = KBM.Unit:Idle(tUnitID, tDetails)
-				UnitObj:DamageHandler(info, tDetails)
+				end			
 			else
-				UnitObj:DamageHandler(info)
-			end
-		else
-			return
-		end
-		if KBM.Encounter then
-			if KBM.BossID[tUnitID] then
-				-- Damage inflicted to a Boss Unit by the Raid.
-				-- Update Health etc, checks done to bypass Unit.Health requiring available state.
-				-- ********************************************************************
-				-- *** TO BE CHANGED DUE TO UNIT TRACKER NOW MONITORING HEALTH DATA ***
-				-- ********************************************************************
-				if KBM.CurrentMod.ID then
-					-- Check for Npc Based Triggers (Usually Dynamic: Eg - Failsafe for P4 start Akylios)
-					if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID] then
-						if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][UnitObj.Name] then
-							local TriggerObj = KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][UnitObj.Name]
-							if TriggerObj.Enabled then
-								KBM.Trigger.Queue:Add(TriggerObj, nil, tUnitID)
+				-- Encounter state is idle, check triggering methods.
+				-- This is a fail-safe, and not usually used for Encounter starts.
+				local PlayerObj = LibSUnit.Raid.UID[srcObj.UnitID]
+				if PlayerObj then
+					if not LibSUnit.Raid.UID[tarObj.UnitID] then
+						if tarObj.Combat then
+							if not tarObj.Dead then
+								KBM.CheckActiveBoss(tarObj)
 							end
 						end
 					end
-				end
-			else
-				if tDetails then
-					if not tDetails.player then
-						if tDetails.combat then
-							if tDetails.health > 0 then
-								KBM.CheckActiveBoss(tDetails, tUnitID)
+				else
+					PlayerObj = LibSUnit.Raid.UID[tarObj.UnitID]
+					if PlayerObj then
+						if not LibSUnit.Raid.UID[srcObj.UnitID] then
+							if srcObj.Combat then
+								if not srcObj.Dead then
+									KBM.CheckActiveBoss(srcObj)
+								end
 							end
 						end
 					end
 				end
 			end
-		else
-			if tDetails then
-				if not tDetails.player then
-					if tDetails.combat then
-						if tDetails.health > 0 then
-							KBM.CheckActiveBoss(tDetails, tUnitID)
-						end
-					end
-				end
-			end
 		end
-	end	
+	end
 end
 
-function KBM.RaidHeal(info)
-	local tUnitID = info.target
-	local cUnitID = info.caster
-	local UnitObj
-	if cUnitID then
-		if not KBM.Unit.List.UID[cUnitID] then
-			KBM.Unit:Idle(cUnitID, Inspect.Unit.Detail[cUnitID])
-		end
-	end
-	if tUnitID then
-		UnitObj = KBM.Unit.List.UID[tUnitID]
-		if not UnitObj then
-			tDetails = Inspect.Unit.Details(cUnitID)
-			UnitObj = KBM.Unit:Idle(tUnitID, tDetails)
-		end
-		UnitObj:HealHandler(info, tDetails)
-	end
+function KBM.Heal(info)
 end
 
 function KBM.CPU:Init()
@@ -4263,657 +4070,46 @@ function KBM.CPU:Toggle(Silent)
 	end
 end
 
-function KBM.Unit:GetObject(UnitID)
-	return KBM.Unit.List.UID[UnitID]
-end
-
-function KBM.Unit:Create(uDetails, UnitID)
-	if type(UnitID) == "string" then
-		local UnitObj = {
-			Available = false,
-			Loaded = false,
-			UnitID = UnitID,
-			Name = "< Unknown >",
-			Details = uDetails or {},
-			Percent = 100,
-			PercentRaw = 100.0,
-			UsedBy = {},
-			TargetCount = 0,
-			TargetList = {},
-			Type = "Unit",
-		}
-		function UnitObj:UpdateIdle(mode)
-			if self.Time then
-				if KBM.Unit.UIDs.Flush[self.Time][self.UnitID] then
-					KBM.Unit.UIDs.Flush[self.Time][self.UnitID] = nil
-				end
-				self.Time = nil
-			end
-			if not mode then
-				local Number = math.ceil(Inspect.Time.Real() / 15) + 1
-				self.Time = Number
-				if not KBM.Unit.UIDs.Flush[Number] then
-					KBM.Unit.UIDs.Flush[Number] = {}
-				end
-				KBM.Unit.UIDs.Flush[Number][UnitID] = self
-			end
-		end
-		function UnitObj:Update(NewHP, uDetails)
-			self:CheckTarget()
-			if self.Loaded then
-				self.Health = NewHP
-				if NewHP then
-					if self.HealthMax then
-						self.PercentFlat = (self.Health/self.HealthMax)
-						self.PercentRaw = self.PercentFlat*100
-						if self.PercentRaw ~= self.LastPercentRaw then
-							self.Percent = math.ceil(self.PercentRaw)
-							self.LastPercentRaw = self.PercentRaw
-							KBM.Event.Unit.PercentChange(self.UnitID)
-						end
-					end
-				end
-				if uDetails then
-					self.Details = uDetails
-					if self.Mark ~= uDetails.mark then
-						self.Mark = uDetails.mark
-						KBM.Event.Mark(self.Mark, self.UnitID)
-					end
-					if self.Relation ~= uDetails.relation then
-						self:SetRelation(uDetails.relation)
-					end
-					if self.Calling ~= uDetails.calling then
-						if uDetails.calling then
-							self.Calling = uDetails.calling
-							KBM.Event.Unit.Calling(self.UnitID, uDetails.calling)
-						end
-					end
-				end
-				if KBM.Encounter then
-					if KBM.BossID[self.UnitID] then
-						KBM.BossID[self.UnitID].Health = self.Health
-						KBM.BossID[self.UnitID].HealthLast = self.Health
-						KBM.BossID[self.UnitID].PercentRaw = self.PercentRaw
-						KBM.BossID[self.UnitID].Percent = self.Percent
-						if KBM.BossID[self.UnitID].Percent ~= KBM.BossID[self.UnitID].PercentLast then
-							if KBM.Trigger.Percent[KBM.CurrentMod.ID] then
-								if KBM.Trigger.Percent[KBM.CurrentMod.ID][self.Name] then
-									if KBM.BossID[self.UnitID].PercentLast - KBM.BossID[self.UnitID].Percent > 1 then
-										for PCycle = KBM.BossID[self.UnitID].PercentLast, KBM.BossID[self.UnitID].Percent, -1 do
-											if KBM.Trigger.Percent[KBM.CurrentMod.ID][self.Name][PCycle] then
-												TriggerObj = KBM.Trigger.Percent[KBM.CurrentMod.ID][self.Name][PCycle]
-												KBM.Trigger.Queue:Add(TriggerObj, nil, self.UnitID)
-											end
-										end
-									else
-										if KBM.Trigger.Percent[KBM.CurrentMod.ID][self.Name][self.Percent] then
-											TriggerObj = KBM.Trigger.Percent[KBM.CurrentMod.ID][self.Name][self.Percent]
-											KBM.Trigger.Queue:Add(TriggerObj, nil, self.UnitID)
-										end
-									end
+function KBM.Unit.Percent(UnitObj)
+	if KBM.Encounter then
+		local BossObj = KBM.BossID[UnitObj.UnitID]
+		if BossObj then
+			if UnitObj.PercentFlat ~= UnitObj.PercentFlatLast then
+				if KBM.Trigger.Percent[KBM.CurrentMod.ID] then
+					if KBM.Trigger.Percent[KBM.CurrentMod.ID][UnitObj.Name] then
+						if UnitObj.PercentFlatLast - UnitObj.PercentFlat > 1 then
+							for PCycle = UnitObj.PercentFlatLast, UnitObj.PercentFlat, -1 do
+								if KBM.Trigger.Percent[KBM.CurrentMod.ID][UnitObj.Name][PCycle] then
+									TriggerObj = KBM.Trigger.Percent[KBM.CurrentMod.ID][UnitObj.Name][PCycle]
+									KBM.Trigger.Queue:Add(TriggerObj, nil, UnitObj.UnitID)
 								end
 							end
-							KBM.BossID[self.UnitID].PercentLast = KBM.BossID[self.UnitID].Percent
-							KBM:UpdateHP(self)
-						end
-					end
-				end
-			end
-		end
-		function UnitObj:SetHealthMax(NewMHP)
-			if NewMHP then
-				if NewMHP == true then
-					NewMHP = self.Health
-				end
-				self.HealthMax = NewMHP
-				if (self.Name and self.Health and self.HealthMax) ~= nil then
-					self.Loaded = true
-					self:Update(self.Health)
-				end
-			end
-		end
-		function UnitObj:DamageHandler(DamageObj, uDetails)
-			if self.Loaded then
-				if self.Available == true then
-					if uDetails then
-						self.Details = uDetails
-						if uDetails.healthMax then
-							if uDetails.healthMax ~= self.HealthMax then
-								self.HealthMax = uDetails.healthMax
-								if uDetails.health then
-									self:Update(uDetails.health, uDetails)
-								end
+						else
+							if KBM.Trigger.Percent[KBM.CurrentMod.ID][UnitObj.Name][UnitObj.PercentFlat] then
+								TriggerObj = KBM.Trigger.Percent[KBM.CurrentMod.ID][UnitObj.Name][UnitObj.PercentFlat]
+								KBM.Trigger.Queue:Add(TriggerObj, nil, UnitObj.UnitID)
 							end
 						end
 					end
-					return
-				elseif self.Time then
-					self:UpdateIdle()
-				end
-				if self.Health then
-					if self.HealthMax then
-						if DamageObj.damage then
-							self.Health = self.Health - DamageObj.damage
-							if self.Health < 0 then
-								self.Health = 0
-							end
-						end
-						if DamageObj.overkill then
-							self.Health = 0
-						end
-						self:Update(self.Health, uDetails)
-					end
-				end
-			elseif self.Time then
-				self:UpdateIdle()
-			end
-		end
-		function UnitObj:HealHandler(HealObj, uDetails)
-			if self.Loaded then
-				if self.Available == true then
-					if uDetails then
-						self.Details = uDetails
-						if uDetails.healthMax then
-							self.HealthMax = uDetails.healthMax
-						end
-						if uDetails.health then
-							self:Update(uDetails.health, uDetails)
-						end
-					end
-					return
-				elseif self.Time then
-					self:UpdateIdle()
-				end
-				if self.Health then
-					if self.HealthMax then
-						if not HealObj.heal then
-							HealObj.heal = 0
-							self.Health = self.Health + HealObj.heal
-							if self.Health > self.HealthMax then
-								self.Health = self.HealthMax
-							end
-						end
-						if self.Dead then
-							self.Dead = false
-						end
-						self:Update(self.Health, uDetails)
-					end
-				end
-			elseif self.Time then
-				self:UpdateIdle()
-			end
-		end
-		function UnitObj:SetRelation(Relation)
-			if (self.Relation ~= Relation) and Relation ~= nil then
-				if self.Group ~= nil then
-					if KBM.Unit[self.Group] then
-						if KBM.Unit[self.Group][self.Relation] then
-							KBM.Unit[self.Group][self.Relation][UnitID] = nil
-						end
-					end
-				end
-				self.Relation = Relation
-				KBM.Event.Unit.Relation(UnitID, self.Relation)
-			elseif self.Relation == nil then
-				if LibSRM.Group.UnitExists(self.UnitID) then
-					self.Relation = "friendly"
-					KBM.Event.Unit.Relation(UnitID, self.Relation)
-				else
-					self.Relation = "unknown"			
 				end
 			end
-		end
-		function UnitObj:CheckTarget()
-			if self.UnitID ~= KBM.Player.UnitID then
-				local cTarget = Inspect.Unit.Lookup(self.UnitID..".target")
-				if cTarget ~= self.Target then
-					self.Target = cTarget
-					KBM.Event.Unit.Target(self.UnitID, self.Target)
+			if KBM.PhaseMonitor.Active then
+				if KBM.PhaseMonitor.Objectives.Lists.Percent[UnitObj.UnitID] then
+					KBM.PhaseMonitor.Objectives.Lists.Percent[UnitObj.UnitID]:Update()
 				end
 			end
-		end
-		function UnitObj:UpdateData(uDetails)
-			if uDetails then
-				self:SetRelation(uDetails.relation)
-				if uDetails.player then
-					self:SetGroup("Player")
-					self.Player = true
-				else
-					self:SetGroup("NPC")
-					self.Player = false
-				end
-				self.Offline = uDetails.offline
-				self.Details = uDetails
-				self.HealthMax = uDetails.healthMax
-				self.Health = uDetails.health
-				self.Availability = uDetails.availability
-				self.Planar = uDetails.planar
-				if self.Availability == "full" then
-					self.PlanarMax = uDetails.planarMax
-					self.Location = uDetails.location
-					self.Zone = uDetails.zone
-				end
-				self.Vitality = uDetails.vitality
-				self.Available = true
-				self.Loaded = true
-				if self.HealthMax ~= nil and self.Health ~= nil and self.Name ~= nil then
-					if self.Health > 0 then
-						self.Dead = false
-					else
-						self.Dead = true
-					end
-					self.PercentFlat = (self.Health/self.HealthMax) or 0
-					self.PercentRaw = self.PercentFlat*100
-					self.Percent = math.ceil(self.PercentRaw)
-				else
-					self.Dead = true
-					self.PercentFlat = 0
-					self.PercentRaw = 0
-					self.Percent = 0
-				end
-				self.Mark = uDetails.mark
-				KBM.Event.Mark(uDetails.mark, UnitID)
-				if self.Calling ~= uDetails.calling or self.Calling == nil then
-					if uDetails.calling then
-						self.Calling = uDetails.calling
-						KBM.Event.Unit.Calling(self.UnitID, self.Calling)
-					end
-				end
-				self:CheckTarget()
-				self:SetName(uDetails.name)
-			else
-				if not self.Group then
-					if self.Relation ~= "unknown" then
-						if self.Relation == nil then
-							self.Relation = "unknown"
-						end
-					end
-					self:SetGroup()
-					self:SetName()
-				end
-			end
-		end
-		function UnitObj:SetGroup(Group)
-			if not Group then
-				Group = "Unknown"
-			end
-			if self.Group ~= Group then
-				if self.Group ~= nil then
-					KBM.Unit[self.Group].Count = KBM.Unit[self.Group].Count - 1
-					KBM.Unit[self.Group][self.Relation][self.UnitID] = nil					
-					KBM.Unit[self.Group][self.UnitID] = nil
-				end
-				self.Group = Group
-				KBM.Unit[Group][self.Relation][self.UnitID] = self				
-				KBM.Unit[Group][self.UnitID] = self
-				KBM.Unit[Group].Count = KBM.Unit[Group].Count + 1
-			end
-		end
-		function UnitObj:SetName(Name)
-			if type(Name) == "string" and Name ~= "" then
-				if self.Name ~= Name then
-					if self.Name ~= nil then
-						if KBM.Unit.List.Name[self.Name] then
-							if KBM.Unit.List.Name[self.Name][self.UnitID] then
-								KBM.Unit.List.Name[self.Name][self.UnitID] = nil
-							end
-						end
-					end
-					self.Name = Name
-					if not KBM.Unit.List.Name[Name] then
-						KBM.Unit.List.Name[Name] = {}
-					end
-					KBM.Unit.List.Name[Name][self.UnitID] = self
-					if not self.Loaded then
-						self.Loaded = true
-					end
-					KBM.Event.Unit.Name(self.UnitID, Name)
-				end
-			else
-				if self.Name == nil then
-					self.Name = "<Unknown>"
-					Name = "< Unknown >"
-					if not KBM.Unit.List.Name[Name] then
-						KBM.Unit.List.Name[Name] = {}
-					end
-					KBM.Unit.List.Name[Name][self.UnitID] = self
-				end
-			end
-		end
-		self.List.UID[UnitID] = UnitObj
-		UnitObj:UpdateData(uDetails)
-		return UnitObj
-	end
-end
-
-KBM.Unit.Debug = {}
-function KBM.Unit.Debug:Init()
-	self.Constant = {
-		Width = 150,
-		Height = 20,
-		Text = 12,
-	}
-	self.Callbacks = {}
-	function self.Callbacks.Position(Type)
-		if Type == "end" then
-			KBM.Options.DebugSettings.x = KBM.Unit.Debug.GUI.Header:GetLeft()
-			KBM.Options.DebugSettings.y = KBM.Unit.Debug.GUI.Header:GetTop()
-		end
-	end
-	self.GUI = {}
-	self.GUI.Header = UI.CreateFrame("Texture", "Unit_Tracking_Debug_Header", KBM.Context)
-	self.GUI.Header:SetWidth(self.Constant.Width)
-	self.GUI.Header:SetHeight(self.Constant.Height)
-	KBM.LoadTexture(self.GUI.Header, "KingMolinator", "Media/BarTexture.png")
-	self.GUI.Header:SetBackgroundColor(0.5, 0, 0, 0.75)
-	if not KBM.Options.DebugSettings.x then
-		self.GUI.Header:SetPoint("CENTER", UIParent, "CENTER")
-	else
-		self.GUI.Header:SetPoint("TOPLEFT", UIParent, "TOPLEFT", KBM.Options.DebugSettings.x, KBM.Options.DebugSettings.y)
-	end
-	self.GUI.HeadText = UI.CreateFrame("Text", "Unit_Tracking_Debug_HText", self.GUI.Header)
-	self.GUI.HeadText:SetFontSize(self.Constant.Text)
-	self.GUI.HeadText:SetText("Unit Tracker")
-	self.GUI.HeadText:SetPoint("CENTER", self.GUI.Header, "CENTER")
-	self.GUI.DragFrame = KBM.AttachDragFrame(self.GUI.Header, self.Callbacks.Position, 5)
-	self.GUI.Trackers = {}
-	self.GUI.LastTracker = self.GUI.Header
-	function self:CreateTrack(Name, R, G, B)
-		local TrackObj = {
-			GUI = {},
-		}
-		TrackObj.GUI.Frame = UI.CreateFrame("Frame", Name, self.GUI.Header)
-		TrackObj.GUI.Frame:SetBackgroundColor(0,0,0,0.33)
-		TrackObj.GUI.Frame:SetPoint("TOPLEFT", self.GUI.LastTracker, "BOTTOMLEFT")
-		TrackObj.GUI.Frame:SetPoint("RIGHT", self.GUI.LastTracker, "RIGHT")
-		TrackObj.GUI.Frame:SetHeight(self.Constant.Height)
-		TrackObj.GUI.Text = UI.CreateFrame("Text", Name.."_Text", TrackObj.GUI.Frame)
-		TrackObj.GUI.Text:SetText(Name)
-		TrackObj.GUI.Text:SetFontSize(self.Constant.Text)
-		TrackObj.GUI.Text:SetPoint("CENTERLEFT", TrackObj.GUI.Frame, "CENTERLEFT", 2, 0)
-		TrackObj.GUI.Data = UI.CreateFrame("Text", Name.."_Data", TrackObj.GUI.Frame)
-		TrackObj.GUI.Data:SetText("0")
-		TrackObj.GUI.Data:SetFontColor(R, G, B)
-		TrackObj.GUI.Data:SetFontSize(self.Constant.Text)
-		TrackObj.GUI.Data:SetPoint("CENTERRIGHT", TrackObj.GUI.Frame, "CENTERRIGHT", -2, 0)
-		function TrackObj:UpdateDisplay(New)
-			self.GUI.Data:SetText(tostring(New))
-		end
-		self.GUI.Trackers[Name] = TrackObj
-		self.GUI.LastTracker = TrackObj.GUI.Frame
-	end
-	self:CreateTrack("Idle", 0.9, 0.5, 0.35)
-	self:CreateTrack("Available", 0, 0.9, 0)
-	self:CreateTrack("Total States", 1, 1, 1)
-	self:CreateTrack("Unknown", 1, 0.7, 0.7)
-	self:CreateTrack("Players", 0.7, 1, 0.7)
-	self:CreateTrack("NPCs", 0.7, 0.7, 1)
-	self:CreateTrack("Total Groups", 1, 1, 1)
-	self:CreateTrack("Raid Size", 0, 0.9, 0)
-	self:CreateTrack("In Combat", 0, 0.9, 0)
-	self:CreateTrack("Dead", 0, 0.9, 0)
-	function self:UpdateAll()
-		self.GUI.Trackers["Idle"]:UpdateDisplay(KBM.Unit.UIDs.Count.Idle)
-		self.GUI.Trackers["Available"]:UpdateDisplay(KBM.Unit.UIDs.Count.Available)		
-		self.GUI.Trackers["Total States"]:UpdateDisplay(KBM.Unit.UIDs.Count.Idle + KBM.Unit.UIDs.Count.Available)
-		self.GUI.Trackers["Unknown"]:UpdateDisplay(KBM.Unit.Unknown.Count)
-		self.GUI.Trackers["Players"]:UpdateDisplay(KBM.Unit.Player.Count)
-		self.GUI.Trackers["NPCs"]:UpdateDisplay(KBM.Unit.NPC.Count)		
-		self.GUI.Trackers["Total Groups"]:UpdateDisplay(KBM.Unit.Unknown.Count + KBM.Unit.Player.Count + KBM.Unit.NPC.Count)
-		self.GUI.Trackers["Raid Size"]:UpdateDisplay(tostring(LibSRM.GroupCount() or 0))
-		self.GUI.Trackers["Dead"]:UpdateDisplay(tostring(LibSRM.Dead or 0))
-	end
-	function self:UpdateCombat()
-		self.GUI.Trackers["In Combat"]:UpdateDisplay(tostring(LibSRM.Group.Combat or 0))	
-	end
-	function self:UpdateDeath()
-		self.GUI.Trackers["Dead"]:UpdateDisplay(tostring(LibSRM.Dead or 0))	
-	end
-end
-
-function KBM.Unit.Debug:DumpAvail()
-	for UnitID, UnitObj in pairs(KBM.Unit.UIDs.Available) do
-		print(tostring(UnitID)..": "..tostring(UnitObj.Name))
-		dump(UnitObj.Details.name)
-	end
-end
-
-function KBM.Unit:Available(uDetails, UnitID)
-	if uDetails then
-		local UnitObj
-		if not self.List.UID[UnitID] then
-			UnitObj = self:Create(uDetails, UnitID)
-		else
-			UnitObj = self.List.UID[UnitID]
-			if UnitObj.Availability ~= "full" then
-				UnitObj:UpdateData(uDetails)
-			end
-		end		
-		if self.TargetQueue[UnitID] then
-			KBM.GroupTarget(self.TargetQueue[UnitID], UnitID)
-			self.TargetQueue[UnitID] = nil
-		end
-		if (self.UIDs.Available[UnitID] == nil) and (self.UIDs.Idle[UnitID] == nil) then
-			self.UIDs.Available[UnitID] = UnitObj
-			self.UIDs.Count.Available = self.UIDs.Count.Available + 1
-			if uDetails.type then
-				if not self.List.Type[uDetails.type] then
-					self.List.Type[uDetails.type] = {}
-				end
-				self.List.Type[uDetails.type][UnitID] = UnitObj
-			end
-			if KBM.Debug then
-				self.Debug:UpdateAll()
-			end
-			self.UIDs.Available[UnitID].Available = true
-			KBM.Event.Unit.Available(UnitObj)
-			return UnitObj		
-		else
-			if self.UIDs.Idle[UnitID] then
-				self.UIDs.Available[UnitID] = self.List.UID[UnitID]
-				self.UIDs.Idle[UnitID] = nil
-				self.UIDs.Count.Idle = self.UIDs.Count.Idle - 1
-				self.UIDs.Count.Available = self.UIDs.Count.Available + 1
-				self.UIDs.Available[UnitID]:UpdateIdle(true)
-				self.UIDs.Available[UnitID].Time = nil
-				self.UIDs.Available[UnitID].Available = true
-				KBM.Event.Unit.Available(UnitObj)
-			elseif self.UIDs.Available[UnitID] then
-				KBM.Event.Unit.Available(UnitObj)
-			end
-			if KBM.Debug then
-				self.Debug:UpdateAll()
-			end
-			return UnitObj		
-		end	
-	else
-		UnitObj = self:Idle(UnitID)
-		if KBM.Debug then
-			self.Debug:UpdateAll()
-		end
-		return UnitObj
-	end
-
-end
-
-function KBM.Unit:Update(uDetails, UnitID)
-	if self.List.UID[UnitID] then
-		self.List.UID[UnitID]:UpdateData(uDetails)
-		return self.List.UID[UnitID]
-	else
-		if not uDetails then
-			uDetails = Inspect.Unit.Detail(UnitID)
-		end
-		return self:Idle(UnitID, uDetails)
-	end
-end
-
-function KBM.Unit:Idle(UnitID, Details)
-	local Number = 0
-	if UnitID then
-		if self.List.UID[UnitID] then
-			self.List.UID[UnitID]:CheckTarget()
-		end
-	end
-	if self.UIDs.Available[UnitID] then
-		self.UIDs.Idle[UnitID] = self.List.UID[UnitID]
-		self.UIDs.Available[UnitID] = nil
-		self.UIDs.Idle[UnitID].Available = false
-		self.UIDs.Idle[UnitID].Availability = "none"
-		self.UIDs.Count.Idle = self.UIDs.Count.Idle + 1
-		self.UIDs.Count.Available = self.UIDs.Count.Available - 1
-		if KBM.Debug then
-			self.Debug:UpdateAll()
-		end
-		self.UIDs.Idle[UnitID]:UpdateIdle()
-		KBM.Event.Mark(false, UnitID)
-		KBM.Event.Unit.Unavailable(UnitID, Details, self.List.UID[UnitID])
-		return self.List.UID[UnitID]
-	else
-		if self.List.UID[UnitID] == nil then
-			self:Create(Details, UnitID)
-			if not self.UIDs.Idle[UnitID] then
-				self.UIDs.Idle[UnitID] = self.List.UID[UnitID]
-				self.UIDs.Count.Idle = self.UIDs.Count.Idle + 1
-			end
-			self.UIDs.Idle[UnitID]:UpdateIdle()
-			self.UIDs.Idle[UnitID].Available = false
-			self.UIDs.Idle[UnitID].Availability = "none"
-			KBM.Event.Mark(false, UnitID)
-			KBM.Event.Unit.Unavailable(UnitID, Details, self.List.UID[UnitID])
-			return self.List.UID[UnitID]
-		else
-			if not self.UIDs.Idle[UnitID] then
-				self.UIDs.Idle[UnitID] = self.List.UID[UnitID]
-				self.UIDs.Count.Idle = self.UIDs.Count.Idle + 1				
-			end
-			self.UIDs.Idle[UnitID].Available = false
-			self.UIDs.Idle[UnitID].Availability = "none"
-			self.UIDs.Idle[UnitID]:UpdateIdle()
-			KBM.Event.Mark(false, UnitID)
-			KBM.Event.Unit.Unavailable(UnitID, Details, self.List.UID[UnitID])
-			return self.List.UID[UnitID]
 		end
 	end
 end
 
-function KBM.Unit:CheckIdle(CurrentTime)
-	local CompTime = math.floor(CurrentTime / 15)
-	if self.UIDs.Flush[CompTime] then
-		for UnitID, UnitObj in pairs(self.UIDs.Flush[CompTime]) do
-			if not self.RaidTargets[UnitID] then
-				if self.UIDs.Idle[UnitID] then
-						self.UIDs.Idle[UnitID] = nil
-						self.UIDs.Count.Idle = self.UIDs.Count.Idle - 1
-				end
-				self[UnitObj.Group].Count = self[UnitObj.Group].Count - 1
-				self[UnitObj.Group][UnitObj.Relation][UnitID] = nil				
-				self[UnitObj.Group][UnitID] = nil
-				KBM.IgnoreList[UnitID] = nil
-				if self.List.Name[UnitObj.Name] then
-					self.List.Name[UnitObj.Name][UnitID] = nil
-				end
-				if UnitObj.Type then
-					if self.List.Type[UnitObj.Type] then
-						self.List.Type[UnitObj.Type][UnitID] = nil
-					end
-				end
-				self.List.UID[UnitID] = nil
-				KBM.Event.Unit.Remove(UnitID)
-			else
-				self.List.UID[UnitID]:UpdateIdle()
-			end
-		end
-		self.UIDs.Flush[CompTime] = nil
-		if KBM.Debug then
-			self.Debug:UpdateAll()
-		end
-	end
-end
-
-function KBM.Unit:Death(UnitID)
-	if self.List.UID[UnitID] then
-		if not self.List.UID[UnitID].Dead then
-			self.List.UID[UnitID].Dead = true
-			self.List.UID[UnitID].Health = 0
-			self.List.UID[UnitID].PercentRaw = 0
-			self.List.UID[UnitID].Percent = 0
-		end
-	else
-		self:Idle(UnitID)
-		self.List.UID[UnitID].Dead = true
-		self.List.UID[UnitID].Health = 0
-		self.List.UID[UnitID].PercentRaw = 0
-		self.List.UID[UnitID].Percent = 0
-	end
-	self.List.UID[UnitID]:CheckTarget()
-	KBM.Event.Unit.Death(UnitID)
-end
-
-local function KBM_UnitAvailable(units, State)
-	-- local TimeStore = Inspect.Time.Real()
-	local State = State or "Full"
-	-- print("KBM_UnitAvailable call: "..State)
+function KBM.Unit.Available(UnitObj)
 	if KBM.Encounter then
-		for UnitID, Specifier in pairs(units) do
-			local uDetails = Inspect.Unit.Detail(UnitID)
-			local UnitObj = KBM.Unit:Available(uDetails, UnitID)
-			if uDetails then
-				if not uDetails.player then					
-					KBM.CheckActiveBoss(uDetails, UnitID)
-				else
-					if UnitID == KBM.Player.UnitID then
-						if uDetails.zone then
-							KBM.Player.Zone = uDetails.zone
-						end
-						if uDetails.location then
-							KBM.Player.Location = uDetails.location
-						end
-					end
-				end
+		if UnitObj.Loaded then
+			if not UnitObj.Player then					
+				KBM.CheckActiveBoss(UnitObj)
 			end
 		end
-	else
-		for UnitID, Specifier in pairs(units) do
-			local uDetails = Inspect.Unit.Detail(UnitID)
-			local UnitObj = KBM.Unit:Available(uDetails, UnitID)
-			if uDetails then
-				if UnitID == KBM.Player.UnitID then
-					if uDetails.zone then
-						KBM.Player.Zone = uDetails.zone
-					end
-					if uDetails.location then
-						KBM.Player.Location = uDetails.location
-					end
-				end
-			end
-		end	
 	end
-	-- local TimeEllapsed = tonumber(string.format("%0.5f", Inspect.Time.Real() - TimeStore))
-	-- KBM.Watchdog.Avail.Count = KBM.Watchdog.Avail.Count + 1
-	-- KBM.Watchdog.Avail.Total = KBM.Watchdog.Avail.Total + TimeEllapsed
-	-- if KBM.Watchdog.Avail.Peak < TimeEllapsed then
-		-- KBM.Watchdog.Avail.Peak = TimeEllapsed
-	-- end	
-	-- local TimeLeft = Inspect.System.Watchdog()
-	-- if KBM.Watchdog.Avail.wTime > TimeLeft then
-		-- KBM.Watchdog.Avail.wTime = TimeLeft
-	-- end
-end
-
-local function KBM_UnitRemoved(units)
-	if KBM.Encounter then
-		for UnitID, Specifier in pairs(units) do
-			KBM.Unit:Idle(UnitID)
-			if KBM.BossID[UnitID] then
-				KBM.BossID[UnitID].available = false
-			end
-		end
-	else
-		for UnitID, Specifier in pairs(units) do
-			KBM.Unit:Idle(UnitID)
-		end	
-	end	
 end
 
 function KBM.AttachDragFrame(parent, hook, name, layer)
@@ -5235,7 +4431,7 @@ function KBM.TankSwap:Init()
 						self.GUI:SetDeath(false)
 						self.Dead = false
 					end
-					self.GUI.TankHP:SetWidth(math.ceil(self.GUI.TankFrame:GetWidth() * self.Unit.PercentFlat))
+					self.GUI.TankHP:SetWidth(math.ceil(self.GUI.TankFrame:GetWidth() * self.Unit.PercentRaw))
 				elseif not self.Dead then
 					self:Death()
 				end
@@ -6827,17 +6023,13 @@ function KBM.ConvertTime(Time)
 	return TimeString
 end
 
-function KBM:RaidCombatEnter()
+function KBM.Raid.CombatEnter()
 
 	if KBM.Debug then
 		print("Raid has entered combat: Number in combat = "..LibSRM.Group.Combat)
-		KBM.Unit.Debug:UpdateCombat()
 	end
 	if KBM.Idle.Combat.Wait then
 		KBM.Idle.Combat.Wait = false
-	end
-	for UnitID, UnitObj in pairs(KBM.Unit.UIDs.Available) do
-		UnitObj:CheckTarget()
 	end
 	
 end
@@ -6864,17 +6056,10 @@ function KBM.WipeIt(Force)
 	
 end
 
-function KBM.RaidCombatUpdate()
-	if KBM.Debug then
-		KBM.Unit.Debug:UpdateCombat()
-	end
-end
-
-function KBM:RaidCombatLeave()
+function KBM.Raid.CombatLeave()
 
 	if KBM.Debug then
 		print("Raid has left combat")
-		KBM.Unit.Debug:UpdateCombat()
 	end
 	if KBM.Options.Enabled then
 		if KBM.Encounter then
@@ -6889,23 +6074,8 @@ function KBM:RaidCombatLeave()
 			end
 			KBM.Idle.Combat.StoreTime = KBM.TimeElapsed
 		end
-		for UnitID, UnitObj in pairs(KBM.Unit.UIDs.Available) do
-			UnitObj:CheckTarget()
-		end
 	end
 	
-end
-
-function KBM:UpdateHP(UnitObj)
-	if KBM.Encounter then
-		if UnitObj then
-			if KBM.PhaseMonitor.Active then
-				if KBM.PhaseMonitor.Objectives.Lists.Percent[UnitObj.UnitID] then
-					KBM.PhaseMonitor.Objectives.Lists.Percent[UnitObj.UnitID]:Update(UnitObj.PercentRaw)
-				end
-			end
-		end
-	end
 end
 
 KBM.ClearBuffers = 0
@@ -6936,9 +6106,9 @@ function KBM:Timer()
 				for i, Timer in ipairs(self.RezMaster.Rezes.ActiveTimers) do
 					Timer:Update(current)
 				end
-				self.HeldTime = current
-								
+				self.HeldTime = current								
 			end
+			
 			if KBM.Encounter then
 				if KBM.CurrentMod then
 					KBM.CurrentMod:Timer(current, diff)
@@ -6946,22 +6116,18 @@ function KBM:Timer()
 				if diff >= 1 then
 					self.LastElapsed = self.TimeElapsed
 					self.TimeElapsed = math.floor(current - self.StartTime)
-					if not KBM.Testing then
-						if KBM.CurrentMod.Enrage then
-							self.EnrageTimer = self.EnrageTime - math.floor(current)
-						end
-						if self.Options.EncTimer.Enabled then
-							self.EncTimer:Update(current)
-						end
+					if KBM.CurrentMod.Enrage then
+						self.EnrageTimer = self.EnrageTime - math.floor(current)
+					end
+					if self.Options.EncTimer.Enabled then
+						self.EncTimer:Update(current)
 					end
 					self.HeldTime = current - (diff - math.floor(diff))
 					self.UpdateTime = current
-					if not KBM.Testing then
-						if self.Trigger.Time[KBM.CurrentMod.ID] then
-							for TimeCheck = (self.LastElapsed + 1), self.TimeElapsed do
-								if self.Trigger.Time[KBM.CurrentMod.ID][TimeCheck] then
-									self.Trigger.Time[KBM.CurrentMod.ID][TimeCheck]:Activate(current)
-								end
+					if self.Trigger.Time[KBM.CurrentMod.ID] then
+						for TimeCheck = (self.LastElapsed + 1), self.TimeElapsed do
+							if self.Trigger.Time[KBM.CurrentMod.ID][TimeCheck] then
+								self.Trigger.Time[KBM.CurrentMod.ID][TimeCheck]:Activate(current)
 							end
 						end
 					end
@@ -7015,6 +6181,7 @@ function KBM:Timer()
 				for ID, PlugIn in pairs(self.PlugIn.List) do
 					PlugIn:Timer(current)
 				end
+				
 				for UnitID, CastCheck in pairs(KBM.CastBar.ActiveCastBars) do
 					local Trigger = true
 					for ID, CastBarObj in pairs(CastCheck.List) do
@@ -7024,6 +6191,7 @@ function KBM:Timer()
 				end
 			end
 		end
+		
 		if KBM.QueuePage then
 			if KBM.QueuePage.Type == "encounter" then
 				KBM.QueuePage:SetPage()
@@ -7032,20 +6200,8 @@ function KBM:Timer()
 			end
 			KBM.QueuePage = nil
 		end		
-		if (current - KBM.ClearBuffers) > 15 then
-			KBM.ClearBuffers = current
-			KBM.Unit:CheckIdle(current)
-		end
 		KBM.Updating = false
-	end
-	
-	-- local TimeEllapsed = tonumber(string.format("%0.5f", Inspect.Time.Real() - current))
-	-- KBM.Watchdog.Main.Count = KBM.Watchdog.Main.Count + 1
-	-- KBM.Watchdog.Main.Total = KBM.Watchdog.Main.Total + TimeEllapsed
-	-- if KBM.Watchdog.Main.Peak < TimeEllapsed then
-		-- KBM.Watchdog.Main.Peak = TimeEllapsed
-	-- end	
-	
+	end	
 end
 
 function KBM:AuxTimer()
@@ -7065,29 +6221,6 @@ end
 
 local function KM_ToggleEnabled(result)
 	
-end
-
-function KBM.GroupDeath(DeathObj)
-	if KBM.Options.Enabled then
-		KBM.Unit:Death(DeathObj.target)
-		if KBM.Encounter then
-			if KBM.TankSwap.Active then
-				if KBM.TankSwap.Tanks[DeathObj.target] then
-					KBM.TankSwap.Tanks[DeathObj.target]:Death()
-				end
-			end
-			if LibSRM.Dead == LibSRM.GroupCount() then
-				if KBM.Debug then
-					print("All dead, definate wipe")
-					KBM.Idle.Combat.StoreTime = KBM.TimeElapsed
-					KBM.WipeIt(true)
-				end
-			end
-		end
-		if KBM.Debug then
-			KBM.Unit.Debug:UpdateDeath()
-		end
-	end
 end
 
 function KBM.Victory()
@@ -7145,32 +6278,45 @@ function KBM.Victory()
 	KBM_Reset()
 end
 
-local function KBM_Death(UnitID)	
+function KBM.Unit.Death(info)	
 	if KBM.Options.Enabled then	
-		KBM.Unit:Death(UnitID)
 		if KBM.Encounter then
-			if UnitID then
-				if KBM.CurrentMod then
-					if KBM.CurrentMod.ID then
-						if KBM.Trigger.Death[KBM.CurrentMod.ID] then
-							if KBM.Unit.List.UID[UnitID] then
-								local TriggerObj = KBM.Trigger.Death[KBM.CurrentMod.ID][KBM.Unit.List.UID[UnitID].Name]
+			local UnitObj = info.targetObj
+			if UnitObj then
+				if LibSUnit.Raid.UID[UnitObj.UnitID] then
+					if KBM.TankSwap.Active then
+						if KBM.TankSwap.Tanks[DeathObj.target] then
+							KBM.TankSwap.Tanks[DeathObj.target]:Death()
+						end
+					end
+					if LibSUnit.Raid.Wiped then
+						if KBM.Debug then
+							print("All dead, definite wipe (Experimental)")
+							KBM.Idle.Combat.StoreTime = KBM.TimeElapsed
+							KBM.WipeIt(true)
+						end
+					end
+				else
+					if KBM.CurrentMod then
+						if KBM.CurrentMod.ID then
+							if KBM.Trigger.Death[KBM.CurrentMod.ID] then
+								local TriggerObj = KBM.Trigger.Death[KBM.CurrentMod.ID][UnitObj.Name]
 								if TriggerObj then
-									KBM.Trigger.Queue:Add(TriggerObj, nil, UnitID)
+									KBM.Trigger.Queue:Add(TriggerObj, nil, UnitObj.UnitID)
 								end
 							end
 						end
 					end
-				end
-				if KBM.BossID[UnitID] then
-					KBM.BossID[UnitID].dead = true
-					if KBM.PhaseMonitor.Active then
-						if KBM.PhaseMonitor.Objectives.Lists.Death[KBM.BossID[UnitID].name] then
-							KBM.PhaseMonitor.Objectives.Lists.Death[KBM.BossID[UnitID].name]:Kill(KBM.Unit.List.UID[UnitID])
+					if KBM.BossID[UnitObj.UnitID] then
+						KBM.BossID[UnitObj.UnitID].Dead = true
+						if KBM.PhaseMonitor.Active then
+							if KBM.PhaseMonitor.Objectives.Lists.Death[UnitObj.Name] then
+								KBM.PhaseMonitor.Objectives.Lists.Death[UnitObj.Name]:Kill(UnitObj)
+							end
 						end
-					end
-					if KBM.CurrentMod:Death(UnitID) then
-						KBM:Victory()
+						if KBM.CurrentMod:Death(UnitObj.UnitID) then
+							KBM:Victory()
+						end
 					end
 				end
 			end
@@ -7454,43 +6600,6 @@ function KBM.FormatPrecision(Val)
 	else
 		return string.format("%0.6fs", Val)
 	end
-end
-
-function KBM.Watchdog.Display(Type, Var)
-	-- if Var == "all" then
-		-- for Index, wdObj in pairs(KBM.Options.Watchdog[Type].Sessions) do
-			-- wdObj.Average = tonumber(string.format("%0.6f", wdObj.Total / wdObj.Count)) or 0
-			-- print("Session Index: "..tostring(Index))
-			-- print("Total Time: "..KBM.FormatPrecision(wdObj.Total))
-			-- print("Average Execution Time: "..KBM.FormatPrecision(wdObj.Average))
-			-- print("Peak Execution Time: "..KBM.FormatPrecision(wdObj.Peak))
-			-- print("Lowest Remaining Watching Time: "..KBM.FormatPrecision(wdObj.wTime))
-			-- print("Total Calls: "..wdObj.Count)	
-			-- print("--------------------------------")
-		-- end
-	-- elseif Var == "clear" then
-		-- print("Clearing Session History")
-		-- KBM.Watchdog.Clear(Type)
-	-- else
-		-- KBM.Watchdog[Type].Average = tonumber(string.format("%0.6f", KBM.Watchdog[Type].Total / KBM.Watchdog[Type].Count)) or 0	
-		-- print("Total Time: "..KBM.FormatPrecision(KBM.Watchdog[Type].Total))
-		-- print("Average Execution Time: "..KBM.FormatPrecision(KBM.Watchdog[Type].Average))
-		-- print("Peak Execution Time: "..KBM.FormatPrecision(KBM.Watchdog[Type].Peak))
-		-- print("Lowest Remaining Watching Time: "..KBM.FormatPrecision(KBM.Watchdog[Type].wTime))
-		-- print("Total Calls: "..KBM.Watchdog[Type].Count)
-	-- end
-end
-
-function KBM.Watchdog.Clear(Type)
-	KBM.Options.Watchdog[Type].sCount = 1
-	KBM.Options.Watchdog[Type].Sessions = {}
-	KBM.Options.Watchdog[Type].Sessions[1] = {
-		Total = 0,
-		Average = 0,
-		Peak = 0,
-		Count = 0,
-	}
-	KBM.Watchdog[Type] = KBM.Options.Watchdog[Type].Sessions[1]
 end
 
 function KBM.VersionReqCheckb(name, failed, message)
@@ -8155,20 +7264,10 @@ function KBM_Debug()
 		print("Debugging disabled")
 		KBM.Debug = false
 		KBM.Options.Debug = false
-		if KBM.Unit.Debug.GUI.Header then
-			KBM.Unit.Debug.GUI.Header:SetVisible(false)
-		end
 	else
 		print("Debugging enabled")
 		KBM.Debug = true
 		KBM.Options.Debug = true
-		if KBM.Unit.Debug.GUI then
-			KBM.Unit.Debug.GUI.Header:SetVisible(true)
-			KBM.Unit.Debug:UpdateAll()
-		else
-			KBM.Unit.Debug:Init()
-			KBM.Unit.Debug:UpdateAll()
-		end
 	end
 end
 
@@ -8176,118 +7275,8 @@ function KBM.SecureEnter()
 end
 
 function KBM.SecureLeave()
-end
-
-function KBM.LocationChange(LocationList)
-	if LocationList then
-		for UnitID, Location in pairs(LocationList) do
-			if UnitID == KBM.Player.UnitID then
-				if not Location then
-					if KBM.Debug then
-						print("Location unavailable")
-					end
-				else
-					if KBM.Debug then
-						print("New location: "..Location)
-					end
-					KBM.Player.Location = Location
-				end
-			end
-		end
-	end
-end
-
-function KBM.ZoneChange(ZoneList)
-	if ZoneList then
-		for UnitID, ZoneID in pairs(ZoneList) do
-			if UnitID == KBM.Player.UnitID then
-				KBM.Player.Zone = ZoneID
-				if not ZoneID then
-					if KBM.Debug then
-						print("Zone unavailable")
-					end
-				else
-					if KBM.Debug then
-						dump(Inspect.Zone.Detail(ZoneID))
-					end
-				end
-			end
-		end
-	end
-end
-
-function KBM.LevelChange(data)
-	for UnitID, Level in pairs(data) do
-		if Level then
-			if UnitID == KBM.Player.UnitID then
-				KBM.Player.Level = Level
-			end
-			if KBM.Unit.List.UID[UnitID] then
-				KBM.Unit.List.UID[UnitID].Details.level = Level
-				KBM.Unit.List.UID[UnitID].Level = Level
-			end
-		end
-	end
-end
-
-function KBM.PlayerJoin()
-	KBM.Player.Grouped = true
-	--KBM.Unit:Available(Inspect.Unit.Detail(KBM.Player.UnitID), KBM.Player.UnitID)
-	KBM.Event.System.Player.Join()
-	--print("You have joined a group")
-end
-
-function KBM.PlayerLeave()
-	KBM.Player.Grouped = false
-	KBM.Event.System.Player.Leave()
-	--print("You have left a group")
-end
-
-function KBM.GroupJoin(UnitID, Specifier, Details)
-	KBM.Unit:Available(Details, UnitID)
-	KBM.Event.System.Group.Join(UnitID, Specifier, Details)
-end
-
-function KBM.GroupLeave(UnitID, Specifier)
-	KBM.Unit:Idle(UnitID)
-	KBM.Event.System.Group.Leave(UnitID)
-end
-
-function KBM.GroupTarget(UnitID, TargetID)
-	if KBM.Unit.List.UID[UnitID] then
-		local TargetStore = KBM.Unit.List.UID[UnitID].TargetID
-		if TargetStore ~= TargetID then
-			if TargetStore then
-				if KBM.Unit.List.UID[TargetStore] then
-					if KBM.Unit.List.UID[TargetStore].TargetList[UnitID] then
-						KBM.Unit.List.UID[TargetStore].TargetCount = KBM.Unit.List.UID[TargetStore].TargetCount - 1
-					end
-				else
-					KBM.Unit:Idle(TargetStore)
-				end
-				KBM.Unit.List.UID[UnitID].TargetID = false
-				KBM.Unit.List.UID[TargetStore].TargetList[UnitID] = nil
-				KBM.Event.Unit.TargetCount(TargetStore, KBM.Unit.List.UID[TargetStore].TargetCount)
-				if KBM.Unit.List.UID[TargetStore].TargetCount == 0 then
-					KBM.Unit.RaidTargets[TargetStore] = nil
-				end
-			end
-			if TargetID then
-				if not KBM.Unit.List.UID[TargetID] then
-					KBM.Unit:Idle(TargetID)
-				end
-				if not KBM.Unit.List.UID[TargetID].TargetList[UnitID] then
-					KBM.Unit.List.UID[TargetID].TargetCount = KBM.Unit.List.UID[TargetID].TargetCount + 1
-					KBM.Unit.List.UID[TargetID].TargetList[UnitID] = KBM.Unit.List.UID[UnitID]
-					KBM.Event.Unit.TargetCount(TargetID, KBM.Unit.List.UID[TargetID].TargetCount)
-					KBM.Unit.List.UID[UnitID].TargetID = TargetID
-				end
-				if not KBM.Unit.RaidTargets[TargetID] then
-					KBM.Unit.RaidTargets[TargetID] = {}
-				end
-				KBM.Unit.RaidTargets[TargetID][UnitID] = true
-			end
-		end
+	if not LibSUnit.Raid.Grouped then
+		KBM.Raid.CombatLeave()
 	end
 end
 
@@ -8300,141 +7289,14 @@ function KBM.RaidRes(data)
 	end
 end
 
-function KBM.NameChange(data)
-	for UnitID, Name in pairs(data) do
-		if KBM.Unit.List.UID[UnitID] then
-			KBM.Unit.List.UID[UnitID]:SetName(Name)
-		end
-	end
-end
-
-function KBM.HealthChange(data)
-	for UnitID, Value in pairs(data) do
-		if KBM.Unit.List.UID[UnitID] then
-			if type(Value) == "number" then
-				KBM.Unit.List.UID[UnitID]:Update(Value)
-			end
-		end
-	end
-end
-
-function KBM.HealthMaxChange(data)
-	for UnitID, Value in pairs(data) do
-		if KBM.Unit.List.UID[UnitID] then
-			if type(Value) == "number" then
-				KBM.Unit.List.UID[UnitID]:SetHealthMax(Value)
-			end
-		end
-	end
-end
-
-function KBM.MarkChange(data)
-	for UnitID, Value in pairs(data) do
-		if KBM.Unit.List.UID[UnitID] then
-			KBM.Unit.List.UID[UnitID].Mark = Value
-			KBM.Event.Mark(Value, UnitID)
-		end
-	end
-end
-
-function KBM.RoleChange(data)
-	if type(data) == "table" then
-		--for UnitID, Role in pairs(data) do
-			
-		--end
-		if data[KBM.Player.UnitID] then
-			KBM.Player.Role = data[KBM.Player.UnitID]
-		end
-	end
-end
-
-function KBM.PowerChange(data, PowerMode)
-	for UnitID, Value in pairs(data) do
-		if KBM.Unit.List.UID[UnitID] then
-			if type(Value) == "number" then
-				-- if not KBM.Unit.List.UID[UnitID].Details then
-					-- KBM.Unit.List.UID[UnitID]:UpdateData(Inspect.Unit.Detail(UnitID))
-				-- end
-				if KBM.Unit.List.UID[UnitID].Details then
-					KBM.Unit.List.UID[UnitID].Details[PowerMode] = Value
-					KBM.Event.Unit.Power(UnitID, Value)
-				end
-			end
-		end
-	end
-end
-
-function KBM.PlanarChange(data)
-	for UnitID, Value in pairs(data) do
-		if KBM.Unit.List.UID[UnitID] then
-			KBM.Unit.List.UID[UnitID].Details.planar = Value
-			KBM.Unit.List.UID[UnitID].Planar = Value
-			KBM.Event.Unit.Planar(Value, UnitID)
-		end
-	end	
-end
-
-function KBM.PlanarMaxChange(data)
-	for UnitID, Value in pairs(data) do
-		if KBM.Unit.List.UID[UnitID] then
-			KBM.Unit.List.UID[UnitID].Details.planarMax = Value
-			KBM.Unit.List.UID[UnitID].PlanarMax = Value
-			KBM.Event.Unit.PlanarMax(Value, UnitID)
-		end
-	end	
-end
-
-function KBM.VitalityChange(data)
-	for UnitID, Value in pairs(data) do
-		if KBM.Unit.List.UID[UnitID] then
-			KBM.Unit.List.UID[UnitID].Details.vitality = Value
-			KBM.Unit.List.UID[UnitID].Vitality = Value
-			KBM.Event.Unit.Vitality(Value, UnitID)
-		end
-	end		
-end
-
-function KBM.Offline(UnitID, Value)
-	local UnitObj = KBM.Unit.List.UID[UnitID]
-	if not UnitObj then
-		UnitObj = KBM.Unit:Idle(UnitID, Inspect.Unit.Detail(UnitID))
-	end
-	if UnitObj then
-		UnitObj.Offline = Value
-		KBM.Event.Unit.Offline(Value, UnitID)
-	end
-end
-
 -- Define KBM Custom Event System
 -- System Related
 KBM.Event.System.Start, KBM.Event.System.Start.EventTable = Utility.Event.Create("KingMolinator", "System.Start")
 -- Unit Related
-KBM.Event.Mark, KBM.Event.Mark.EventTable = Utility.Event.Create("KingMolinator", "Mark")
-KBM.Event.Unit.PercentChange, KBM.Event.Unit.PercentChange.EventTable = Utility.Event.Create("KingMolinator", "Unit.PercentChange")
-KBM.Event.Unit.Available, KBM.Event.Unit.Available.EventTable = Utility.Event.Create("KingMolinator", "Unit.Available")
-KBM.Event.Unit.Unavailable, KBM.Event.Unit.Unavailable.EventTable = Utility.Event.Create("KingMolinator", "Unit.Unavailable")
-KBM.Event.Unit.Remove, KBM.Event.Unit.Remove.EventTable = Utility.Event.Create("KingMolinator", "Unit.Remove")
-KBM.Event.Unit.Offline, KBM.Event.Unit.Offline.EventTable = Utility.Event.Create("KingMolinator", "Unit.Offline")
-KBM.Event.Unit.Death, KBM.Event.Unit.Death.EventTable = Utility.Event.Create("KingMolinator", "Unit.Death")
-KBM.Event.Unit.Name, KBM.Event.Unit.Name.EventTable = Utility.Event.Create("KingMolinator", "Unit.Name")
-KBM.Event.Unit.Relation, KBM.Event.Unit.Relation.EventTable = Utility.Event.Create("KingMolinator", "Unit.Relation")
-KBM.Event.Unit.Calling, KBM.Event.Unit.Calling.EventTable = Utility.Event.Create("KingMolinator", "Unit.Calling")
-KBM.Event.Unit.Target, KBM.Event.Unit.Target.EventTable = Utility.Event.Create("KingMolinator", "Unit.Target")
-KBM.Event.Unit.TargetCount, KBM.Event.Unit.TargetCount.EventTable = Utility.Event.Create("KingMolinator", "Unit.TargetCount")
 KBM.Event.Unit.Cast.Start, KBM.Event.Unit.Cast.Start.EventTable = Utility.Event.Create("KingMolinator", "Unit.Cast.Start")
 KBM.Event.Unit.Cast.End, KBM.Event.Unit.Cast.End.EventTable = Utility.Event.Create("KingMolinator", "Unit.Cast.End")
-KBM.Event.Unit.Combat.Enter, KBM.Event.Unit.Combat.Enter.EventTable = Utility.Event.Create("KingMolinator", "Unit.Combat.Enter")
-KBM.Event.Unit.Combat.Leave, KBM.Event.Unit.Combat.Leave.EventTable = Utility.Event.Create("KingMolinator", "Unit.Combat.Leave")
-KBM.Event.Unit.Power, KBM.Event.Unit.Power.EventTable = Utility.Event.Create("KingMolinator", "Unit.Power")
-KBM.Event.Unit.Vitality, KBM.Event.Unit.Vitality.EventTable = Utility.Event.Create("KingMolinator", "Unit.Vitality")
-KBM.Event.Unit.Planar, KBM.Event.Unit.Planar.EventTable = Utility.Event.Create("KingMolinator", "Unit.Planar")
-KBM.Event.Unit.PlanarMax, KBM.Event.Unit.PlanarMax.EventTable = Utility.Event.Create("KingMolinator", "Unit.PlanarMax")
 KBM.Event.System.TankSwap.Start, KBM.Event.System.TankSwap.Start.EventTable = Utility.Event.Create("KingMolinator", "System.TankSwap.Start")
 KBM.Event.System.TankSwap.End, KBM.Event.System.TankSwap.End.EventTable = Utility.Event.Create("KingMolinator", "System.TankSwap.End")
-KBM.Event.System.Player.Join, KBM.Event.System.Player.Join.EventTable = Utility.Event.Create("KingMolinator", "System.Player.Join")
-KBM.Event.System.Player.Leave, KBM.Event.System.Player.Leave.EventTable = Utility.Event.Create("KingMolinator", "System.Player.Leave")
-KBM.Event.System.Group.Join, KBM.Event.System.Group.Join.EventTable = Utility.Event.Create("KingMolinator", "System.Group.Join")
-KBM.Event.System.Group.Leave, KBM.Event.System.Group.Leave.EventTable = Utility.Event.Create("KingMolinator", "System.Group.Leave")
 -- Encounter Related
 KBM.Event.Encounter.Start, KBM.Event.Encounter.Start.EventTable = Utility.Event.Create("KingMolinator", "Encounter.Start")
 KBM.Event.Encounter.End, KBM.Event.Encounter.End.EventTable = Utility.Event.Create("KingMolinator", "Encounter.End")
@@ -8450,9 +7312,6 @@ function KBM.InitVars()
 	KBM.PhaseMonitor:Init()
 	KBM.Trigger:Init()
 	KBM.MechSpy:Init()
-	if KBM.Debug then
-		KBM.Unit.Debug:Init()
-	end
 	KBM.InitMenus()
 	KBM.SheepProtection:Init()
 end
@@ -8535,7 +7394,7 @@ function KBM.SlashUnitCache(arg)
 end
 
 function KBM.SlashZone()
-	zDetails = Inspect.Zone.Detail(KBM.Player.Zone)
+	zDetails = Inspect.Zone.Detail(LibSUnit.Player.Zone)
 	print(zDetails.name)
 	print(zDetails.id)
 end
@@ -8740,54 +7599,32 @@ function KBM.SheepProtection:Init()
 end
 
 function KBM.InitEvents()
+	-- Addon API Events
+	-- Chat
 	table.insert(Event.Chat.Notify, {KBM.Notify, "KingMolinator", "Notify Event"})
 	table.insert(Event.Chat.Npc, {KBM.NPCChat, "KingMolinator", "NPC Chat"})
-	table.insert(Event.SafesBuffLib.Buff.Add, {function (...) KBM:BuffAdd(...) end, "KingMolinator", "Buff Monitor (Add)"})
-	--table.insert(Event.Buff.Change, {function (unitID, Buffs) KBM:BuffMonitor(unitID, Buffs, "change") end, "KingMolinator", "Buff Monitor (change)"})
-	table.insert(Event.SafesBuffLib.Buff.Remove, {function (...) KBM:BuffRemove(...) end, "KingMolinator", "Buff Monitor (remove)"})
-	table.insert(Event.Unit.Availability.None, {KBM_UnitRemoved, "KingMolinator", "Unit Unavailable"})
-	table.insert(Event.Unit.Availability.Partial, {function (units) KBM_UnitAvailable(units, "Partial") end, "KingMolinator", "Unit Available"})
-	table.insert(Event.Unit.Availability.Full, {KBM_UnitAvailable, "KingMolinator", "Unit Available"})
-	table.insert(Event.Unit.Detail.LocationName, {KBM.LocationChange, "KingMolinator", "Location Change"})
-	table.insert(Event.Unit.Detail.Zone, {KBM.ZoneChange, "KingMolinator", "Zone Change"})
-	table.insert(Event.Unit.Detail.Health, {KBM.HealthChange, "KingMolinator", "Health Update"})
-	table.insert(Event.Unit.Detail.Name, {KBM.NameChange, "KingMolinator", "Name Update"})
-	table.insert(Event.Unit.Detail.HealthMax, {KBM.HealthMaxChange, "KingMolinator", "Health Max Update"})
-	table.insert(Event.Unit.Detail.Mark, {KBM.MarkChange, "KingMolinator", "Mark Change Update"})
-	table.insert(Event.Unit.Detail.Role, {KBM.RoleChange, "KingMolinator", "Role changed"})
-	table.insert(Event.Unit.Detail.Level, {KBM.LevelChange, "KingMolinator", "Level Changed"})
+	-- Units
 	table.insert(Event.Unit.Castbar, {KBM_CastBar, "KingMolinator", "Cast Bar Event"})
-	table.insert(Event.Unit.Detail.Power, {function (List) KBM.PowerChange(List, "power") end, "KingMolinator", "Power Change"})
-	table.insert(Event.Unit.Detail.Energy, {function (List) KBM.PowerChange(List, "energy") end, "KingMolinator", "Energy Change"})
-	table.insert(Event.Unit.Detail.Mana, {function (List) KBM.PowerChange(List, "mana") end, "KingMolinator", "Mana Change"})
-	table.insert(Event.Unit.Detail.Vitality, {KBM.VitalityChange, "KingMolinator", "Vitality Change"})
-	table.insert(Event.Unit.Detail.Planar, {KBM.PlanarChange, "KingMolinator", "Planar Change"})
-	table.insert(Event.Unit.Detail.PlanarMax, {KBM.PlanarMaxChange, "KingMolinator", "PlanarMax Change"})
-	-- **
-	-- Safes Raid Manager Events
-	table.insert(Event.SafesRaidManager.Player.Join, {KBM.PlayerJoin, "KingMolinator", "Joined Group"})
-	table.insert(Event.SafesRaidManager.Player.Leave, {KBM.PlayerLeave, "KingMolinator", "Left Group"})
-	table.insert(Event.SafesRaidManager.Combat.Heal, {KBM.MobHeal, "KingMolinator", "Combat Heal"})
-	table.insert(Event.SafesRaidManager.Combat.Death, {KBM_Death, "KingMolinator", "Combat Death"})
-	table.insert(Event.SafesRaidManager.Combat.Enter, {KBM.CombatEnter, "KingMolinator", "Non raid combat enter"})
-	table.insert(Event.SafesRaidManager.Combat.Leave, {KBM.CombatLeave, "KingMolinator", "Non raid combat leave"})
-	table.insert(Event.SafesRaidManager.Combat.Damage, {KBM.MobDamage, "KingMolinator", "Combat Damage"})
-	table.insert(Event.SafesRaidManager.Group.Combat.Death, {KBM.GroupDeath, "KingMolinator", "Group Death"})
-	table.insert(Event.SafesRaidManager.Group.Combat.End, {KBM.RaidCombatLeave, "KingMolinator", "Raid Combat Leave"})
-	table.insert(Event.SafesRaidManager.Group.Combat.Start, {KBM.RaidCombatEnter, "KingMolinator", "Raid Combat Enter"})
-	table.insert(Event.SafesRaidManager.Group.Combat.Enter, {KBM.RaidCombatUpdate, "KingMolinator", "Raid Combat Enter Update"})
-	table.insert(Event.SafesRaidManager.Group.Combat.Leave, {KBM.RaidCombatUpdate, "KingMolinator", "Raid Combat Leave Update"})
-	table.insert(Event.SafesRaidManager.Group.Combat.Res, {KBM.RaidRes, "KingMolinator", "Raid Res"})
-	table.insert(Event.SafesRaidManager.Group.Combat.Damage, {KBM.RaidDamage, "KingMolinator", "Raid Damage"})
-	table.insert(Event.SafesRaidManager.Group.Join, {KBM.GroupJoin, "KingMolinator", "Raid_Member_Joins"})
-	table.insert(Event.SafesRaidManager.Group.Leave, {KBM.GroupLeave, "KingMolinator", "Raid_Member_Leave"})
-	table.insert(Event.SafesRaidManager.Group.Target, {KBM.GroupTarget, "KingMolinator", "Raid_Member_Target"})
-	table.insert(Event.SafesRaidManager.Group.Offline, {KBM.Offline, "KingMolinator", "Offline Status Change"})
-	-- **
+	-- System
 	table.insert(Event.System.Update.Begin, {function () KBM:Timer() end, "KingMolinator", "System Update Begin"})
 	table.insert(Event.System.Update.End, {function () KBM:AuxTimer() end, "KingMolinator", "System Update End"})
 	table.insert(Event.System.Secure.Enter, {KBM.SecureEnter, "KingMolinator", "Secure Enter"})
 	table.insert(Event.System.Secure.Leave, {KBM.SecureLeave, "KingMolinator", "Secure Leave"})
+	
+	-- Safe's Buff Library Events
+	table.insert(Event.SafesBuffLib.Buff.Add, {function (...) KBM:BuffAdd(...) end, "KingMolinator", "Buff Monitor (Add)"})
+	table.insert(Event.SafesBuffLib.Buff.Remove, {function (...) KBM:BuffRemove(...) end, "KingMolinator", "Buff Monitor (Remove)"})
+	
+	-- Safe's Unit Library Events
+	table.insert(Event.SafesUnitLib.Unit.New.Full, {KBM.Unit.Available, "KingMolinator", "Unit Available"})
+	table.insert(Event.SafesUnitLib.Unit.Full, {KBM.Unit.Available, "KingMolinator", "Unit Available"})
+	table.insert(Event.SafesUnitLib.Unit.Detail.Combat, {KBM.CombatEnter, "KingMolinator", "Unit Combat Enter"})
+	table.insert(Event.SafesUnitLib.Raid.Combat.Enter, {KBM.Raid.CombatEnter, "KingMolinator", "Raid Combat Enter"})
+	table.insert(Event.SafesUnitLib.Raid.Combat.Leave, {KBM.Raid.CombatLeave, "KingMolinator", "Raid Combat Leave"})
+	table.insert(Event.SafesUnitLib.Unit.Detail.Percent, {KBM.Unit.Percent, "KingMolinator", "Unit Percent Change"})
+	table.insert(Event.SafesUnitLib.Combat.Damage, {KBM.Damage, "KingMolinator", "Unit Damage"})
+	table.insert(Event.SafesUnitLib.Combat.Heal, {KBM.Heal, "KingMolinator", "Unit Heal"})
+	table.insert(Event.SafesUnitLib.Combat.Death, {KBM.Unit.Death, "KingMolinator", "Unit Death"})
 	
 	-- Slash Commands
 	table.insert(Command.Slash.Register("kbmreset"), {function () KBM_Reset(true) end, "KingMolinator", "KBM Reset"})
@@ -8797,11 +7634,7 @@ function KBM.InitEvents()
 	table.insert(Command.Slash.Register("kbmdebug"), {KBM_Debug, "KingMolinator", "KBM Debug on/off"})
 	table.insert(Command.Slash.Register("kbmlocale"), {KBMLM.FindMissing, "KBMLocaleManager", "KBM Locale Finder"})
 	table.insert(Command.Slash.Register("kbmcpu"), {function () KBM.CPU:Toggle() end, "KingMolinator", "KBM CPU Monitor"})
-	table.insert(Command.Slash.Register("kbmdumpavail"), {KBM.Unit.Debug.DumpAvail, "KingMolinator", "KBM Debug Avail"})
 	table.insert(Command.Slash.Register("kbmbuffs"), {KBM.SlashInspectBuffs, "KingMolinator", "Slash Command for Buff Listing"})
-	--table.insert(Command.Slash.Register("kbmwdbuffs"), {function (...) KBM.Watchdog.Display("Buffs", ...) end, "KingMolinator", "Watchdog Tracking: Buff Add Remove Display"})
-	--table.insert(Command.Slash.Register("kbmwdavail"), {function (...) KBM.Watchdog.Display("Avail", ...) end, "KingMolinator", "Watchdog Tracking: Unit Available"})
-	--table.insert(Command.Slash.Register("kbmwdmain"), {function (...) KBM.Watchdog.Display("Main", ...) end, "KingMolinator", "Watchdog Tracking: System Update Begin"})
 	table.insert(Command.Slash.Register("kbmon"), {function() KBM.StateSwitch(true) end, "KingMolinator", "KBM On"})
 	table.insert(Command.Slash.Register("kbmoff"), {function() KBM.StateSwitch(false) end, "KingMolinator", "KBM Off"})
 	table.insert(Command.Slash.Register("kbmdefault"), {KBM.SlashDefault, "KingMolinator", "Default settings handler"})
@@ -8809,12 +7642,11 @@ function KBM.InitEvents()
 	table.insert(Command.Slash.Register("kbmzone"), {KBM.SlashZone, "KingMolinator", "KBM On"})
 end
 
-local function KBM_WaitReady(unitID, uDetails)
-	KBM.Player.UnitID = unitID
+function KBM.WaitReady()
+	KBM.Player.UnitObj = LibSUnit.Player
 	KBM.Player.ID = "KBM_Player"
-	KBM.Player.Name = uDetails.name
-	KBM.Player.Details = uDetails
-	KBM.Player.Calling = uDetails.calling
+	KBM.Player.Name = LibSUnit.Player.Name
+	KBM.Player.UnitID = LibSUnit.Player.UnitID
 	KBM.Player.Settings = {
 		CastBar = {
 			Override = true,
@@ -8827,37 +7659,8 @@ local function KBM_WaitReady(unitID, uDetails)
 		Count = 0,
 	}
 	KBM_Start()
-	KBM.Player.Level = uDetails.level
-	KBM.Player.Grouped = LibSRM.Grouped()
-	KBM.Player.Mode = LibSRM.Player.Mode
-	KBM.Player.Role = uDetails.role
 	KBM.InitEvents()
 	KBM.Event.System.Start(self)
-	if KBM.Player.Grouped then
-		KBM.PlayerJoin()
-	end
-	UnitList = Inspect.Unit.List()
-	if UnitList then
-		for UnitID, Specifier in pairs(UnitList) do
-			local uDetails = Inspect.Unit.Detail(UnitID)
-			if uDetails then
-				UnitObj = KBM.Unit:Available(uDetails, UnitID)
-				if UnitObj.Mark then
-					KBM.Event.Mark(UnitObj.Mark, UnitID)
-				end
-			end
-			local Spec = LibSRM.Group.UnitExists(UnitID)
-			if Spec then
-				local Target = LibSRM.Group.Target(UnitID)
-				if Target then
-					if KBM.Unit.List.UID[UnitID] then
-						KBM.GroupTarget(UnitID, Target)
-					end
-				end
-				KBM.GroupJoin(UnitID, Spec, uDetails)
-			end
-		end
-	end
 	KBM.Player.CastBar = {
 		Mod = KBM.Player,
 		ID = "KBM_Player",
@@ -8891,11 +7694,6 @@ local function KBM_WaitReady(unitID, uDetails)
 	KBM.Player.CastBar.Target.CastObj = KBM.CastBar:Add(KBM.Player.CastBar.Target, KBM.Player.CastBar.Target)
 	KBM.Player.CastBar.Focus.CastObj = KBM.CastBar:Add(KBM.Player.CastBar.Focus, KBM.Player.CastBar.Focus)
 	KBM.Player.CastBar.CastObj:Create(KBM.Player.UnitID)
-	if LibSRM.Group.Combat > 0 then
-		KBM:RaidCombatEnter()
-	else
-		KBM:RaidCombatLeave()
-	end
 end
 
 KBM.PlugIn = {}
@@ -9067,7 +7865,7 @@ table.insert(Event.Addon.SavedVariables.Load.Begin, {KBM_DefineVars, "KingMolina
 table.insert(Event.Addon.SavedVariables.Load.End, {KBM_LoadVars, "KingMolinator", "Load End"})
 table.insert(Event.Addon.SavedVariables.Save.Begin, {KBM_SaveVars, "KingMolinator", "Save Begin"})
 table.insert(Event.Addon.Load.End, {KBM.InitKBM, "KingMolinator", "Begin Init Sequence"})
-table.insert(Event.SafesRaidManager.Player.Ready, {KBM_WaitReady, "KingMolinator", "Sync Wait"})
+table.insert(Event.SafesUnitLib.System.Start, {KBM.WaitReady, "KingMolinator", "Sync Wait"})
 
 local AddonDetails = Inspect.Addon.Detail("KBMTextureHandler")
 KBM.LoadTexture = AddonDetails.data.LoadTexture

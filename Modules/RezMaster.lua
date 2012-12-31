@@ -6,6 +6,9 @@
 local KBMTable = Inspect.Addon.Detail("KingMolinator")
 local KBM = KBMTable.data
 
+local LSUIni = Inspect.Addon.Detail("SafesUnitLib")
+local LibSUnit = LSUIni.data
+
 local RM = {
 	Broadcast = {
 		LastSent = Inspect.Time.Real()
@@ -230,7 +233,7 @@ end
 
 function RM.Rezes:Init()
 	function self:Add(Name, aID, aCD, aFull)
-		if KBM.Player.Grouped then
+		if LibSUnit.Raid.Grouped then
 			if RM.GUI.Settings.Enabled then
 				local aDetails = Inspect.Ability.New.Detail(aID)
 				if aDetails then
@@ -256,18 +259,12 @@ function RM.Rezes:Init()
 					local UID = self.Tracked[Name].UnitID
 					Timer.Class = ""
 					if UID then
-						if KBM.Unit.List.UID[UID] then
-							Timer.Class = KBM.Unit.List.UID[UID].Calling or ""
-						else
-							local TempDetails = Inspect.Unit.Detail(UID)
-							KBM.Unit:Idle(UID, TempDetails)
-							if TempDetails then
-								Timer.Class = TempDetails.calling or ""
-							end
+						if LibSUnit.Lookup.UID[UID] then
+							Timer.Class = LibSUnit.Lookup.UID[UID].Calling or ""
 						end
 					else
-						if KBM.Unit.List.Name[Name] then
-							for lUID, Object in pairs(KBM.Unit.List.Name[Name]) do
+						if LibSUnit.Lookup.Name[Name] then
+							for lUID, Object in pairs(LibSUnit.Lookup.Name[Name]) do
 								Timer.Class = Object.Calling or ""
 								self.Tracked[Name].UnitID = lUID
 								UID = lUID
@@ -281,11 +278,6 @@ function RM.Rezes:Init()
 							for Calling, AbilityList in pairs(KBM.PlayerControl.RezBank) do
 								if AbilityList[aID] then
 									Timer.Class = Calling
-									if KBM.Unit.List.UID[UID] then
-										KBM.Unit.List.UID[UID].Details.calling = Calling
-										KBM.Unit.List.UID[UID].Calling = Calling
-										break
-									end
 								end
 							end
 						end
@@ -405,8 +397,8 @@ function RM.Rezes:Init()
 					
 					function Timer:Remove()
 						if self.UnitID then
-							if RM.RezMaster.Rezes.Tracked[KBM.Unit.List.UID[self.UnitID].Name] then
-								RM.Rezes.Tracked[KBM.Unit.List.UID[self.UnitID].Name].Timers[self.aID] = nil
+							if RM.RezMaster.Rezes.Tracked[LibSUnit.Lookup.UID[self.UnitID].Name] then
+								RM.Rezes.Tracked[LibSUnit.Lookup.UID[self.UnitID].Name].Timers[self.aID] = nil
 							end
 						end
 						for i, iTimer in ipairs(RM.Rezes.ActiveTimers) do
@@ -486,7 +478,7 @@ function RM.RezSetCheck(name, DataSend, failed, message)
 end
 
 function RM.Broadcast.RezSet(toName, crID)
-	if KBM.Player.Grouped then
+	if LibSUnit.Raid.Grouped then
 		if toName then
 			--print("Rez List send via name Started!")
 			for crID, Details in pairs(KBM.Player.Rezes.List) do
@@ -503,37 +495,37 @@ function RM.Broadcast.RezSet(toName, crID)
 				KBM.Player.Rezes.List[crID] = Inspect.Ability.New.Detail(crID)
 				Details = KBM.Player.Rezes.List[crID]
 				if Details then
-					--print("Sending Rez Add Message via: "..tostring(KBM.Player.Mode))
-					Command.Message.Broadcast(KBM.Player.Mode, nil, "KBMRezSet", crID..","..tostring(Details.currentCooldownRemaining)..","..tostring(Details.cooldown))
+					--print("Sending Rez Add Message via: "..tostring(LibSUnit.Raid.Mode))
+					Command.Message.Broadcast(LibSUnit.Raid.Mode, nil, "KBMRezSet", crID..","..tostring(Details.currentCooldownRemaining)..","..tostring(Details.cooldown))
 				end
 			end
 		else
 			KBM.Player.Rezes.List[crID] = Inspect.Ability.New.Detail(crID)
 			local Details = KBM.Player.Rezes.List[crID]
 			if Details then
-				--print("Sending Rez Add Message via: "..tostring(KBM.Player.Mode))
-				Command.Message.Broadcast(KBM.Player.Mode, nil, "KBMRezSet", crID..","..tostring(Details.currentCooldownRemaining)..","..tostring(Details.cooldown))
+				--print("Sending Rez Add Message via: "..tostring(LibSUnit.Raid.Mode))
+				Command.Message.Broadcast(LibSUnit.Raid.Mode, nil, "KBMRezSet", crID..","..tostring(Details.currentCooldownRemaining)..","..tostring(Details.cooldown))
 			end
 		end
 	end
 end
 
 function RM.Broadcast.RezRem(crID)
-	if KBM.Player.Grouped then
-		Command.Message.Broadcast(KBM.Player.Mode, nil, "KBMRezRem", crID)
-		if RM.Rezes.Tracked[KBM.Player.Name] then
-			if RM.Rezes.Tracked[KBM.Player.Name].Timers[crID] then
-				RM.Rezes.Tracked[KBM.Player.Name].Timers[crID]:Remove()
-				RM.Rezes.Tracked[KBM.Player.Name].Timers[crID] = nil
+	if LibSUnit.Raid.Grouped then
+		Command.Message.Broadcast(LibSUnit.Raid.Mode, nil, "KBMRezRem", crID)
+		if RM.Rezes.Tracked[LibSUnit.Player.Name] then
+			if RM.Rezes.Tracked[LibSUnit.Player.Name].Timers[crID] then
+				RM.Rezes.Tracked[LibSUnit.Player.Name].Timers[crID]:Remove()
+				RM.Rezes.Tracked[LibSUnit.Player.Name].Timers[crID] = nil
 			end
 		end
 	end
 end
 
 function RM.Broadcast.RezClear()
-	if KBM.Player.Grouped then
-		Command.Message.Broadcast(KBM.Player.Mode, nil, "KBMRezClear", KBM.Player.UnitID)
-		RM.Rezes:Clear(KBM.Player.Name)
+	if LibSUnit.Raid.Grouped then
+		Command.Message.Broadcast(LibSUnit.Raid.Mode, nil, "KBMRezClear", LibSUnit.Player.UnitID)
+		RM.Rezes:Clear(LibSUnit.Player.Name)
 	end
 end
 
@@ -550,7 +542,7 @@ function RM.MessageHandler(From, Type, Channel, Identifier, Data)
 	-- print("ID: "..tostring(Identifier))
 	-- print("Data: "..tostring(Data))
 	-- print("--------------------------------")
-	if From ~= KBM.Player.Name and Data ~= nil then
+	if From ~= LibSUnit.Player.Name and Data ~= nil then
 		if Type then
 			if Type == "raid" or Type == "party" then
 				if Identifier == "KBMRezSet" then

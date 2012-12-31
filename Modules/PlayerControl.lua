@@ -36,19 +36,19 @@ PC.RezBank = {
 KBM.PlayerControl = PC
 
 function PC:GatherAbilities()
-	KBM.Player.AbilityTable = Inspect.Ability.New.List()
+	LibSUnit.Player.AbilityTable = Inspect.Ability.New.List()
 	local Count = 0
-	if KBM.Player.AbilityTable then
-		if self.RezBank[KBM.Player.Calling] then
+	if LibSUnit.Player.AbilityTable then
+		if self.RezBank[LibSUnit.Player.Calling] then
 			-- print("You are a calling with possible Combat Rezes... Checking.")
-			for crID, crTable in pairs (self.RezBank[KBM.Player.Calling]) do
-				if KBM.Player.AbilityTable[crID] then
+			for crID, crTable in pairs (self.RezBank[LibSUnit.Player.Calling]) do
+				if LibSUnit.Player.AbilityTable[crID] then
 					Count = Count + 1
 					crTable = Inspect.Ability.New.Detail(crID)
-					self.RezBank[KBM.Player.Calling][crID] = crTable
-					KBM.Player.Rezes.List[crID] = self.RezBank[KBM.Player.Calling][crID]
-					KBM.RezMaster.Rezes:Add(KBM.Player.Name, crID, crTable.currentCooldownRemaining, crTable.cooldown)
-					-- print(Count..": "..self.RezBank[KBM.Player.Calling][crID].name)
+					self.RezBank[LibSUnit.Player.Calling][crID] = crTable
+					KBM.Player.Rezes.List[crID] = self.RezBank[LibSUnit.Player.Calling][crID]
+					KBM.RezMaster.Rezes:Add(LibSUnit.Player.Name, crID, crTable.currentCooldownRemaining, crTable.cooldown)
+					-- print(Count..": "..self.RezBank[LibSUnit.Player.Calling][crID].name)
 				end
 			end
 			KBM.Player.Rezes.Count = Count
@@ -66,7 +66,7 @@ function PC:GatherRaidInfo()
 	for index = 1, 20 do
 		local specifier, uID = LibSRM.Group.Inspect(index)
 		if uID then
-			if uID ~= KBM.Player.UnitID then
+			if uID ~= LibSUnit.Player.UnitID then
 				if KBM.Unit.List.UID[uID] then
 					--print(KBM.Unit.List.UID[uID].Name..": "..tostring(KBM.Unit.List.UID[uID].Details.calling))
 					--KBM.Unit.List.UID[uID].Details = Inspect.Unit.Detail(uID)
@@ -89,12 +89,12 @@ function PC.AbilityRemove(aIDList)
 	if not Inspect.System.Secure() then
 		local self = PC
 		local Count = KBM.Player.Rezes.Count
-		if self.RezBank[KBM.Player.Calling] then
-			for crID, crTable in pairs (self.RezBank[KBM.Player.Calling]) do
+		if self.RezBank[LibSUnit.Player.Calling] then
+			for crID, crTable in pairs (self.RezBank[LibSUnit.Player.Calling]) do
 				if aIDList[crID] == false then
-					self.RezBank[KBM.Player.Calling][crID] = Inspect.Ability.New.Detail(crID)
+					self.RezBank[LibSUnit.Player.Calling][crID] = Inspect.Ability.New.Detail(crID)
 					KBM.Player.Rezes.List[crID] = nil
-					-- print(Count..": "..self.RezBank[KBM.Player.Calling][crID].name.." < Removed")
+					-- print(Count..": "..self.RezBank[LibSUnit.Player.Calling][crID].name.." < Removed")
 					KBM.RezMaster.Broadcast.RezRem(crID)
 					Count = Count - 1
 				end
@@ -111,16 +111,16 @@ function PC.AbilityAdd(aIDList)
 	local self = PC
 	local Count = 0
 	
-	if self.RezBank[KBM.Player.Calling] then
-		for crID, crTable in pairs (self.RezBank[KBM.Player.Calling]) do
+	if self.RezBank[LibSUnit.Player.Calling] then
+		for crID, crTable in pairs (self.RezBank[LibSUnit.Player.Calling]) do
 			if aIDList[crID] then
 				Count = Count + 1
 				local aDetails = Inspect.Ability.New.Detail(crID)
-				self.RezBank[KBM.Player.Calling][crID] = aDetails
-				KBM.Player.Rezes.List[crID] = self.RezBank[KBM.Player.Calling][crID]
-				KBM.RezMaster.Rezes:Add(KBM.Player.Name, crID, aDetails.currentCooldownRemaining, aDetails.cooldown)
+				self.RezBank[LibSUnit.Player.Calling][crID] = aDetails
+				KBM.Player.Rezes.List[crID] = self.RezBank[LibSUnit.Player.Calling][crID]
+				KBM.RezMaster.Rezes:Add(LibSUnit.Player.Name, crID, aDetails.currentCooldownRemaining, aDetails.cooldown)
 				KBM.RezMaster.Broadcast.RezSet(nil, crID)
-				-- print(Count..": "..self.RezBank[KBM.Player.Calling][crID].name.." < Added")
+				-- print(Count..": "..self.RezBank[LibSUnit.Player.Calling][crID].name.." < Added")
 			end
 		end
 		KBM.Player.Rezes.Count = Count
@@ -151,7 +151,7 @@ function PC.AbilityCooldown(aIDList)
 						--print("Rez Matched!")
 						KBM.Player.Rezes.List[rID] = aDetails
 						KBM.Player.Rezes.Resume[rID] = aDetails.currentCooldownBegin + aDetails.currentCooldownRemaining
-						KBM.RezMaster.Rezes:Add(KBM.Player.Name, rID, aDetails.currentCooldownRemaining, aDetails.cooldown)
+						KBM.RezMaster.Rezes:Add(LibSUnit.Player.Name, rID, aDetails.currentCooldownRemaining, aDetails.cooldown)
 						KBM.RezMaster.Broadcast.RezSet(nil, rID)
 					end
 				end
@@ -162,12 +162,12 @@ end
 
 function PC.PlayerJoin()
 	--print("PC -- You Join")
-	KBM.RezMaster.Rezes.Tracked[KBM.Player.Name] = {
-		UnitID = KBM.Player.UnitID,
+	KBM.RezMaster.Rezes.Tracked[LibSUnit.Player.Name] = {
+		UnitID = LibSUnit.Player.UnitID,
 		Timers = {},
 	}
-	KBM.Player.Grouped = true
-	if KBM.Player.Calling then
+	LibSUnit.Raid.Grouped = true
+	if LibSUnit.Player.Calling then
 		PC:GatherAbilities()
 	end
 	-- PC:GatherRaidInfo()
@@ -209,22 +209,24 @@ function PC.RezRReq(name, failed, message)
 end
 
 function PC.GroupJoin(UnitObj, Spec)
-	if KBM.Player.Grouped then
-		if not KBM.RezMaster.Rezes.Tracked[UnitObj.Name] then
-			if not UnitObj.Offline then
-				if UnitObj.Calling == "mage" or UnitObj.Calling == "cleric" then
-					KBM.RezMaster.Rezes.Tracked[UnitObj.Name] = {
-						UnitID = UnitObj.UnitID,
-						Timers = {},
-					}
-					Command.Message.Send(UnitObj.Name, "KBMRezReq", "C", function(failed, message) PC.RezMReq(UnitObj.Name, failed, message) end)
+	if LibSUnit.Raid.Grouped then
+		if UnitObj.Name ~= LibSUnit.Player.Name then
+			if not KBM.RezMaster.Rezes.Tracked[UnitObj.Name] then
+				if not UnitObj.Offline then
+					if UnitObj.Calling == "mage" or UnitObj.Calling == "cleric" then
+						KBM.RezMaster.Rezes.Tracked[UnitObj.Name] = {
+							UnitID = UnitObj.UnitID,
+							Timers = {},
+						}
+						Command.Message.Send(UnitObj.Name, "KBMRezReq", "C", function(failed, message) PC.RezMReq(UnitObj.Name, failed, message) end)
+					end
 				end
-			end
-		else
-			if UnitObj.Calling then
-				if KBM.RezMaster.Rezes.Tracked[UnitObj.Name].Class ~= UnitObj.Calling then
-					for aID, Timer in pairs(KBM.RezMaster.Rezes.Tracked[UnitObj.Name].Timers) do
-						KBM.RezMaster.Rezes:Add(UnitObj.Name, aID, Timer.Remaining, Timer.Duration)
+			else
+				if UnitObj.Calling then
+					if KBM.RezMaster.Rezes.Tracked[UnitObj.Name].Class ~= UnitObj.Calling then
+						for aID, Timer in pairs(KBM.RezMaster.Rezes.Tracked[UnitObj.Name].Timers) do
+							KBM.RezMaster.Rezes:Add(UnitObj.Name, aID, Timer.Remaining, Timer.Duration)
+						end
 					end
 				end
 			end
@@ -234,8 +236,8 @@ function PC.GroupJoin(UnitObj, Spec)
 	end
 end
 
-function PC.GroupLeave(UnitObj)
-	if KBM.Player.Grouped then
+function PC.GroupLeave(UnitObj, Spec)
+	if LibSUnit.Raid.Grouped then
 		KBM.RezMaster.Rezes:Clear(UnitObj.Name)
 	end
 end
@@ -244,7 +246,9 @@ function PC.PlayerOffline(Units)
 	for UnitID, UnitObj in pairs(Units) do
 		if UnitObj.Offline then
 			-- print("Player is offline, if they have CR/BR list, disable/remove them here")
-			KBM.RezMaster.Rezes:Clear(UnitObj.Name)
+			if KBM.RezMaster.Rezes.Tracked[UnitObj.Name] then
+				KBM.RezMaster.Rezes:Clear(UnitObj.Name)
+			end
 		end
 	end
 end
@@ -252,12 +256,7 @@ end
 function PC.PlayerLeave()
 	-- Probably not going to use this.
 	--print("Rez Master group leave message")
-	KBM.Player.Grouped = false
 	KBM.RezMaster.Rezes:Clear()
-end
-
-function PC.PlayerMode(Mode)
-	KBM.Player.Mode = Mode
 end
 
 function PC:Start()
@@ -272,6 +271,5 @@ function PC:Start()
 	table.insert(Event.SafesUnitLib.Raid.Member.Leave, {PC.GroupLeave, "KingMolinator", "Group Member Leave"})
 	table.insert(Event.SafesUnitLib.Unit.Detail.Calling, {PC.CallingChange, "KingMolinator", "Group member calling change"})
 	table.insert(Event.SafesUnitLib.Unit.Detail.Offline, {PC.PlayerOffline, "KingMolinator", "Player Offline"})
-	table.insert(Event.SafesRaidManager.Group.Mode, {PC.PlayerMode, "KingMolinator", "Player Group Mode"})
 	table.insert(Command.Slash.Register("kbmability"), {PC.SlashAbility, "KingMolinator", "Player Ability List"})
 end

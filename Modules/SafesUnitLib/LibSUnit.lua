@@ -63,7 +63,7 @@ LibSUnit.Raid = {
 	Move = {},
 	Pets = {},
 	Members = 0,
-	Groups = {
+	Group = {
 		[1] = 0,
 		[2] = 0,
 		[3] = 0,
@@ -75,6 +75,7 @@ LibSUnit.Raid = {
 	Wiped = false,
 	DeadTotal = 0,
 	Offline = 0,
+	Mode = "party",
 }
 
 local _AvailFullTable = {function() end, AddonIni.id, "Unit Availability Full Handler"}
@@ -101,6 +102,8 @@ LibSUnit.Total = {
 	Players = 0,
 	NPC = 0,
 }
+
+LibSUnit.Player = {}
 
 LibSUnit._internal = {
 	Avail = {},
@@ -145,6 +148,9 @@ LibSUnit._internal = {
 				PlanarMax = Utility.Event.Create(AddonIni.id, "Unit.Detail.PlanarMax"),
 				Ready = Utility.Event.Create(AddonIni.id, "Unit.Detail.Ready"),
 				Vitality = Utility.Event.Create(AddonIni.id, "Unit.Detail.Vitality"),
+				Level = Utility.Event.Create(AddonIni.id, "Unit.Detail.Level"),
+				Zone = Utility.Event.Create(AddonIni.id, "Unit.Detail.Zone"),
+				Location = Utility.Event.Create(AddonIni.id, "Unit.Detail.Location"),
 			},
 			Target = Utility.Event.Create(AddonIni.id, "Unit.Target"),
 			TargetCount = Utility.Event.Create(AddonIni.id, "Unit.TargetCount"),
@@ -171,7 +177,8 @@ LibSUnit._internal = {
 				Leave = Utility.Event.Create(AddonIni.id, "Raid.Combat.Leave"),
 			},
 			Wipe = Utility.Event.Create(AddonIni.id, "Raid.Wipe"),
-			Res = Utility.Event.Create(AddonIni.id, "Raid Ressurect"),
+			Res = Utility.Event.Create(AddonIni.id, "Raid.Res"),
+			Mode = Utility.Event.Create(AddonIni.id, "Raid.Mode"),
 		},
 		System = {
 			Start = Utility.Event.Create(AddonIni.id, "System.Start"),
@@ -202,46 +209,6 @@ function _lsu.Save(AddonId)
 end
 
 -- Unit Management Event Handlers and Functions
-function _lsu.Unit:DamageIn(UnitObj, info)
-	if UnitObj.Loaded then
-		if UnitObj.CurrentKey == "Idle" then
-			if info.damage > 0 then
-				UnitObj.Health = UnitObj.Health - info.damage
-				self:CalcPerc(UnitObj)
-			end
-			self:UpdateSegment(UnitObj, _idleSeg + _lastSeg)
-		end
-	end
-end
-
-function _lsu.Unit:DamageOut(UnitObj)
-	if UnitObj.Loaded then
-		if UnitObj.CurrentKey == "Idle" then
-			self:UpdateSegment(UnitObj, _idleSeg + _lastSeg)
-		end
-	end
-end
-
-function _lsu.Unit:HealIn(UnitObj, info)
-	if UnitObj.Loaded then
-		if UnitObj.CurrentKey == "Idle" then
-			if info.heal > 0 then
-				UnitObj.Health = UnitObj.Health + info.heal
-				self:CalcPerc(UnitObj)
-			end
-			self:UpdateSegment(UnitObj, _idleSeg + _lastSeg)
-		end
-	end
-end
-
-function _lsu.Unit:HealOut(UnitObj)
-	if UnitObj.Loaded then
-		if UnitObj.CurrentKey == "Idle" then
-			self:UpdateSegment(UnitObj, _idleSeg + _lastSeg)
-		end
-	end
-end
-
 function _lsu.Unit:UpdateTarget(UnitObj, newTar)
 	if newTar == nil then
 		newTar = Inspect.Unit.Lookup(UnitObj.UnitID..".target")
@@ -275,38 +242,48 @@ function _lsu.Unit:CalcPerc(UnitObj)
 	if UnitObj.PercentRaw > 1 then
 		UnitObj.PercentRaw = 1
 	end
-	UnitObj.Percent = tonumber(string.format("%0.2f", UnitObj.PercentRaw * 100))
+	UnitObj.Percent = UnitObj.PercentRaw * 100
 	UnitObj.PercentFlat = math.ceil(UnitObj.Percent)
+	UnitObj.Percent = tonumber(string.format("%0.2f", UnitObj.Percent))
 	
 	if UnitObj.PercentLast ~= UnitObj.Percent then
 		-- Fire Percent (2 decimal place) change.
 		_lsu.Event.Unit.Detail.Percent(UnitObj)
-		-- Store change.
-		UnitObj.PercentLast = UnitObj.Percent
 		
-		if UnitObj.PercentFlat ~= UnitObj.PercentLast then
+		if UnitObj.PercentFlat ~= UnitObj.PercentFlatLast then
 			-- Fire a Percent Flat change Event.
 			_lsu.Event.Unit.Detail.PercentFlat(UnitObj)
 			-- Store change.
 			UnitObj.PercentFlatLast = UnitObj.PercentFlat
 		end
+		-- Store change.
+		UnitObj.PercentLast = UnitObj.Percent
 	end
 end
 
 function _lsu.Unit:UpdateSegment(UnitObj, New, uDetails)
 	-- Adjust Idle segment placement
 	if UnitObj.IdleSegment then
-		_lsu.Segment[UnitObj.IdleSegment][UnitObj.Details.id] = nil
+		_lsu.Segment[UnitObj.IdleSegment][UnitObj.UnitID] = nil
 	end
 	if New then
 		if _lsu.Segment[New] then
-			_lsu.Segment[New][UnitObj.Details.id] = UnitObj
+			_lsu.Segment[New][UnitObj.UnitID] = UnitObj
 		else
-			_lsu.Segment[New] = {[UnitObj.Details.id] = UnitObj}
+			_lsu.Segment[New] = {[UnitObj.UnitID] = UnitObj}
 		end
 		UnitObj.IdleSegment = New
 		if uDetails then
-			self.Details(UnitObj, uDetails)
+			--self.Details(UnitObj, uDetails)
+			if UnitObj.Health ~= uDetails.health then
+				UnitObj.Health = uDetails.health or 0
+				self:CalcPerc(UnitObj)
+			end
+			if uDetails.name then
+				if UnitObj.Name ~= uDetails.name then
+					_lsu.Unit.Name({[UnitObj.UnitID] = uDetails.name})
+				end
+			end
 		end
 	else
 		UnitObj.IdleSegment = false	
@@ -331,6 +308,10 @@ function _lsu:Create(UID, uDetails, Type)
 		IdleSegment = false,
 		CurrentTable = _type,
 		CurrentKey = Type,
+		Type = uDetails.type,
+		Tier = uDetails.tier,
+		Level = uDetails.level,
+		Player = uDetails.player,
 		Mark = uDetails.mark,
 		Relation = uDetails.relation,
 		HealthMax = uDetails.healthMax or 1,
@@ -343,6 +324,8 @@ function _lsu:Create(UID, uDetails, Type)
 		Planar = uDetails.planar,
 		PlanarMax = uDetails.planarMax,
 		Vitality = uDetails.vitality,
+		Zone = uDetails.zone,
+		Location = uDetails.locationName,
 		Target = nil,
 		UnitID = UID,
 		OwnerID = uDetails.ownerID,
@@ -351,9 +334,9 @@ function _lsu:Create(UID, uDetails, Type)
 		TargetCount = 0,
 		TargetList = {},
 		Position = {
-			x = uDetails.coordX or 0,
-			y = uDetails.coordY or 0,
-			z = uDetails.coordZ or 0,
+			X = uDetails.coordX or 0,
+			Y = uDetails.coordY or 0,
+			Z = uDetails.coordZ or 0,
 		},
 	}
 	
@@ -381,13 +364,13 @@ function _lsu:Create(UID, uDetails, Type)
 		if UnitObj.Health == 0 then
 			UnitObj.Dead = true
 		end
-		if not UnitObj.Name then
+		if not UnitObj.Name or UnitObj.Name == "" then
 			UnitObj.Name = "<Unknown>"
 		end
 		if _name[UnitObj.Name] then
-			_name[UnitObj.Name][UID] = true
+			_name[UnitObj.Name][UID] = UnitObj
 		else
-			_name[UnitObj.Name] = {UID = true}
+			_name[UnitObj.Name] = {[UID] = UnitObj}
 		end
 		-- Unit has been fully loaded at some point. Flag this here to ensure safe Detail reading of all fields.
 		UnitObj.Loaded = true
@@ -443,9 +426,9 @@ function _lsu.Unit.Name(uList)
 			UnitObj.Details.name = Name
 			UnitObj.Name = Name
 			if _lookup[UnitObj.Name] then
-				_lookup[UnitObj.Name][UID] = true
+				_lookup[UnitObj.Name][UID] = UnitObj
 			else
-				_lookup[UnitObj.Name] = {UID = true}
+				_lookup[UnitObj.Name] = {[UID] = UnitObj}
 			end
 			nList[UID] = UnitObj
 		end
@@ -456,14 +439,11 @@ end
 function _lsu.Unit.Health(uList)
 	local _cache = LibSUnit.Lookup.UID
 	for UID, Health in pairs(uList) do
-		Health = tonumber(Health)
-		if not Health then
-			--print("Adjusted HP to "..tostring(Health))
-			Health = 0
-		end
-		_cache[UID].Health = Health
-		_lsu.Unit:CalcPerc(_cache[UID])
-		uList[UID] = _cache[UID]
+		Health = tonumber(Health) or 0
+		local UnitObj = _cache[UID]
+		UnitObj.Health = Health
+		_lsu.Unit:CalcPerc(UnitObj)
+		uList[UID] = UnitObj
 		if Health == 0 then
 			if not UnitObj.Dead then
 				_lsu.Raid.ManageDeath(UnitObj, true)
@@ -557,6 +537,33 @@ function _lsu.Unit.Planar(uList)
 	_lsu.Event.Unit.Detail.Planar(uList)	
 end
 
+function _lsu.Unit.Level(uList)
+	local _cache = LibSUnit.Lookup.UID
+	for UID, Level in pairs(uList) do
+		_cache[UID].Level = Level
+		uList[UID] = _cache[UID]
+	end
+	_lsu.Event.Unit.Detail.Level(uList)	
+end
+
+function _lsu.Unit.Zone(uList)
+	local _cache = LibSUnit.Lookup.UID
+	for UID, Zone in pairs(uList) do
+		_cache[UID].Zone = Zone
+		uList[UID] = _cache[UID]
+	end
+	_lsu.Event.Unit.Detail.Zone(uList)	
+end
+
+function _lsu.Unit.Location(uList)
+	local _cache = LibSUnit.Lookup.UID
+	for UID, Location in pairs(uList) do
+		_cache[UID].Location = Location or "Unavailable"
+		uList[UID] = _cache[UID]
+	end
+	_lsu.Event.Unit.Detail.Location(uList)	
+end
+
 function _lsu.Unit.PlanarMax(uList)
 	local _cache = LibSUnit.Lookup.UID
 	for UID, PlanarMax in pairs(uList) do
@@ -609,6 +616,16 @@ function _lsu.Unit.Details(UnitObj, uDetails)
 	if UnitObj.CurrentKey == "Partial" then
 		
 	else
+		UnitObj.Type = uDetails.type
+		UnitObj.Tier = uDetails.tier
+		UnitObj.Player = uDetails.player
+		UnitObj.Zone = uDetails.zone
+		UnitObj.Location = uDetails.locationName
+		if uDetails.name then
+			if UnitObj.Name ~= uDetails.name then
+				_lsu.Unit.Name({[UnitObj.UnitID] = uDetails.name})
+			end
+		end
 		if UnitObj.Mark ~= uDetails.mark then
 			UnitObj.Mark = uDetails.mark
 			_lsu.Event.Unit.Detail.Mark({[UnitObj.UnitID] = UnitObj})
@@ -636,6 +653,11 @@ function _lsu.Unit.Details(UnitObj, uDetails)
 		if uDetails.healthMax then
 			if uDetails.healthMax ~= UnitObj.HealthMax then
 				UnitObj.HealthMax = uDetails.healthMax
+			end
+		end
+		if uDetails.level then
+			if uDetails.level ~= UnitObj.Level then
+				UnitObj.Level = uDetails.level
 			end
 		end
 		UnitObj.Health = uDetails.health or 0
@@ -728,10 +750,10 @@ function _lsu.Avail.Full(uList)
 	-- Manage Units.
 	for UID, Spec in pairs(uList) do
 		local UnitObj = _lookup[UID]
-		if not _lookup[UID] then
+		if not UnitObj then
 			_create(_lsu, UID, _inspect(UID), "Avail")
 		else
-			_lsu:Available(_lookup[UID], _inspect(UID))
+			_lsu:Available(UnitObj, _inspect(UID))
 		end
 	end
 	
@@ -751,7 +773,7 @@ function _lsu.Avail.Partial(uList)
 	-- Manage Units.
 	for UID, Spec in pairs(uList) do
 		if not _lookup[UID] then
-			_create(_lsu, UID, _inspect(UID), "Avail")
+			_create(_lsu, UID, _inspect(UID), "Partial")
 		else
 			_part(_lsu, _lookup[UID], _inspect(UID))
 		end
@@ -795,6 +817,7 @@ end
 -- Raid Management
 _lsu.Raid = {}
 function _lsu.Raid.ManageDeath(UnitObj, Dead)
+	--print("Checking Death State for: "..UnitObj.Name)
 	if UnitObj.Loaded then
 		if UnitObj.CurrentKey ~= "Partial" then
 			if LibSUnit.Raid.UID[UnitObj.UnitID] then
@@ -814,7 +837,7 @@ function _lsu.Raid.ManageDeath(UnitObj, Dead)
 					end
 				else
 					if UnitObj.Dead then
-						--print("<<< "..UnitObj.Name.." has is now alive")
+					--	print("<<< "..UnitObj.Name.." has is now alive")
 						LibSUnit.Raid.DeadTotal = LibSUnit.Raid.DeadTotal - 1
 						LibSUnit.Raid.Wiped = false
 						_lsu.Event.Raid.Res(targetObj, sourceObj)
@@ -844,20 +867,23 @@ function _lsu.Raid.Check(UnitID, skipSpec)
 end
 
 function _lsu.Raid.Change(UnitID, Spec)
-	local UnitObj
-	UnitObj = LibSUnit.Raid.Lookup[Spec].Unit
+	local UnitObj = LibSUnit.Raid.Lookup[Spec].Unit
+	local Changed = false
 	if UnitObj then
 		if LibSUnit.Raid.Move[UnitObj.UnitID] then
 			-- Raid Member Moved Process Move with Event
 			local newSpec = LibSUnit.Raid.Move[UnitObj.UnitID]
 			LibSUnit.Raid.Lookup[newSpec].Unit = UnitObj
+			LibSUnit.Raid.Group[LibSUnit.Raid.Lookup[newSpec].Group] = LibSUnit.Raid.Group[LibSUnit.Raid.Lookup[newSpec].Group] + 1
 			LibSUnit.Raid.UID[UnitObj.UnitID] = newSpec
 			UnitObj.RaidLoc = newSpec
 			if not UnitID then
 				LibSUnit.Raid.Lookup[Spec].Unit = nil
+				LibSUnit.Raid.Group[LibSUnit.Raid.Lookup[Spec].Group] = LibSUnit.Raid.Group[LibSUnit.Raid.Lookup[Spec].Group] - 1
 			end
 			_lsu.Event.Raid.Member.Move(UnitObj, Spec, newSpec)
 			LibSUnit.Raid.Move[UnitObj.UnitID] = nil
+			Changed = true
 		else
 			if not _lsu.Raid.Check(UnitObj.UnitID, Spec) then
 				-- Raid Member Leave
@@ -870,6 +896,7 @@ function _lsu.Raid.Change(UnitID, Spec)
 				end
 				LibSUnit.Raid.Lookup[Spec].Unit = nil
 				LibSUnit.Raid.Members = LibSUnit.Raid.Members - 1
+				LibSUnit.Raid.Group[LibSUnit.Raid.Lookup[Spec].Group] = LibSUnit.Raid.Group[LibSUnit.Raid.Lookup[Spec].Group] - 1
 				LibSUnit.Raid.UID[UnitObj.UnitID] = nil
 				UnitObj.RaidLoc = nil
 				if UnitObj.Dead then
@@ -879,6 +906,7 @@ function _lsu.Raid.Change(UnitID, Spec)
 				_lsu.Event.Raid.Member.Leave(UnitObj, Spec)
 				if LibSUnit.Raid.Members == 0 then
 					LibSUnit.Grouped = false
+					LibSUnit.Raid.Wiped = false
 					_lsu.Event.Raid.Leave()
 				elseif LibSUnit.Raid.Members > 1 then
 					if LibSUnit.Raid.Members == LibSUnit.Raid.DeadTotal then
@@ -893,7 +921,8 @@ function _lsu.Raid.Change(UnitID, Spec)
 				if _lsu.Settings.Debug then
 					_lsu.Debug:UpdateDeath()
 					_lsu.Debug:UpdateCombat()
-				end			
+				end
+				Changed = true
 			else
 				-- Unit Still exists, wait for appropriate Join message.
 				LibSUnit.Raid.Move[UnitObj.UnitID] = Spec
@@ -907,10 +936,12 @@ function _lsu.Raid.Change(UnitID, Spec)
 		-- Raid Member Join
 		UnitObj = LibSUnit.Lookup.UID[UnitID]
 		if UnitObj then
+			Changed = true
 			if not LibSUnit.Raid.Move[UnitID] then
 				if not LibSUnit.Raid.UID[UnitID] then
 					LibSUnit.Raid.Members = LibSUnit.Raid.Members + 1
 					LibSUnit.Raid.Lookup[Spec].Unit = UnitObj
+					LibSUnit.Raid.Group[LibSUnit.Raid.Lookup[Spec].Group] = LibSUnit.Raid.Group[LibSUnit.Raid.Lookup[Spec].Group] + 1
 					LibSUnit.Raid.UID[UnitID] = Spec
 					UnitObj.RaidLoc = Spec
 					if LibSUnit.Raid.Members == 1 then
@@ -962,6 +993,25 @@ function _lsu.Raid.Change(UnitID, Spec)
 			LibSUnit.Raid.Queue[UnitID] = Spec
 		end
 	end
+	if Changed then
+		local Groups = 0
+		for Group, Value in pairs(LibSUnit.Raid.Group) do
+			if Value > 0 then
+				Groups = Groups + 1
+			end
+		end
+		if Groups > 1 then
+			if LibSUnit.Raid.Mode ~= "raid" then
+				LibSUnit.Raid.Mode = "raid"
+				_lsu.Event.Raid.Mode()
+			end
+		else
+			if LibSUnit.Raid.Mode ~= "party" then
+				LibSUnit.Raid.Mode = "party"
+				_lsu.Event.Raid.Mode()
+			end
+		end
+	end
 	if _lsu.Settings.Debug then
 		_lsu.Debug:UpdateAll()
 	end
@@ -988,19 +1038,29 @@ function _lsu.Combat.stdHandler(UID, segPlus)
 end
 
 function _lsu.Combat.Damage(info)
+	--local startTime = Inspect.Time.Real()
 	local _stdHandler = _lsu.Combat.stdHandler
 	local targetObj, sourceObj
 	info.damage = info.damage or 0
 	targetObj = _stdHandler(info.target, _idleSeg)
-	if targetObj then
-		_lsu.Unit:DamageIn(targetObj, info)
-	end
+	-- if targetObj then
+		-- if targetObj.CurrentKey == "Idle" then		
+			-- if info.damage then
+				-- targetObj.Health = targetObj.Health - info.damage
+				-- _lsu.Unit:CalcPerc(targetObj)
+			-- end
+			-- _lsu.Unit:UpdateSegment(targetObj, _idleSeg + _lastSeg, _inspect(targetObj.UnitID))
+		--end
+	--end
 	sourceObj = _stdHandler(info.caster, _idleSeg)
-	if sourceObj then
-		_lsu.Unit:DamageOut(sourceObj, info)
-	end
+	-- if sourceObj then
+		-- if sourceObj.CurrentKey == "Idle" then
+			-- _lsu.Unit:UpdateSegment(UnitObj, _idleSeg + _lastSeg, _inspect(sourceObj.UnitID))			
+		-- end
+	-- end
 	info.targetObj = targetObj
 	info.sourceObj = sourceObj
+	--print(string.format("Time Taken: %0.5f", Inspect.Time.Real() - startTime))
 	_lsu.Event.Combat.Damage(info)
 end
 
@@ -1009,16 +1069,11 @@ function _lsu.Combat.Heal(info)
 	local targetObj, sourceObj
 	info.heal = info.heal or 0
 	targetObj = _stdHandler(info.target, _idleSeg)
-	if targetObj then
-		_lsu.Unit:HealIn(targetObj, info)
-		if targetObj.Dead then
-			_lsu.Raid.ManageDeath(targetObj, false)
-		end
-	end
+	-- if targetObj then
+	-- end
 	sourceObj = _stdHandler(info.caster, _idleSeg)
-	if sourceObj then
-		_lsu.Unit:HealOut(sourceObj, info)
-	end
+	-- if sourceObj then
+	-- end
 	info.targetObj = targetObj
 	info.sourceObj = sourceObj
 	_lsu.Event.Combat.Heal(info)
@@ -1082,6 +1137,10 @@ end
 
 function _lsu.Wait(uList)
 	if uList[_lsu.PlayerID] then
+		-- Initialize Player Data
+		_lsu.Avail.Full({[_lsu.PlayerID] = "player"})
+		LibSUnit.Player = LibSUnit.Lookup.UID[_lsu.PlayerID]
+		
 		_lsu.Event.System.Start()
 		
 		-- Check current availability list.
@@ -1097,6 +1156,7 @@ function _lsu.Wait(uList)
 		-- Unit Data Change
 		table.insert(Event.Unit.Detail.Health, {_lsu.Unit.Health, AddonIni.id, "Unit HP Change"})
 		table.insert(Event.Unit.Detail.Name, {_lsu.Unit.Name, AddonIni.id, "Unit Name Change"})
+		table.insert(Event.Unit.Detail.Level, {_lsu.Unit.Level, AddonIni.id, "Unit Level Change"})
 		table.insert(Event.Unit.Detail.HealthMax, {_lsu.Unit.HealthMax, AddonIni.id, "Unit HP Max Change"})
 		table.insert(Event.Unit.Detail.Power, {function (List) _lsu.Unit.Power(List, "power") end, AddonIni.id, "Power Change"})
 		table.insert(Event.Unit.Detail.Energy, {function (List) _lsu.Unit.Power(List, "energy") end, AddonIni.id, "Energy Change"})
@@ -1108,6 +1168,8 @@ function _lsu.Wait(uList)
 		table.insert(Event.Unit.Detail.Ready, {_lsu.Unit.Ready, AddonIni.id, "Unit Ready State Change"})
 		table.insert(Event.Unit.Detail.Vitality, {_lsu.Unit.Vitality, AddonIni.id, "Unit Vitality Change"})
 		table.insert(Event.Unit.Detail.Mark, {_lsu.Unit.Mark, AddonIni.id, "Unit Mark Change"})
+		table.insert(Event.Unit.Detail.Zone, {_lsu.Unit.Zone, AddonIni.id, "Unit Zone Change"})
+		table.insert(Event.Unit.Detail.LocationName, {_lsu.Unit.Location, AddonIni.id, "Unit Location Change"})
 		
 		-- Unit Combat Events
 		table.insert(Event.Combat.Damage, {_lsu.Combat.Damage, AddonIni.id, "Unit Combat Damage"})

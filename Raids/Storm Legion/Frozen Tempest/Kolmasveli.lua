@@ -24,6 +24,7 @@ local KT = {
 	Lang = {},
 	ID = "RKolmasveli",
 	Object = "KT",
+	Enrage = 7 * 60,
 }
 
 KBM.RegisterMod(KT.ID, KT)
@@ -41,6 +42,11 @@ KT.Lang.Unit.ToinenveliShort:SetGerman()
 
 -- Ability Dictionary
 KT.Lang.Ability = {}
+
+-- Debuff Dictionary
+KT.Lang.Debuff = {}
+KT.Lang.Debuff.KolIre = KBM.Language:Add("Kolmasveli's Ire")
+KT.Lang.Debuff.ToiIre = KBM.Language:Add("Toinenveli's Ire")
 
 -- Description Dictionary
 KT.Lang.Main = {}
@@ -206,6 +212,11 @@ function KT:UnitHPCheck(uDetails, unitID)
 					self.PhaseObj:SetPhase("1")
 					self.PhaseObj.Objectives:AddPercent(self.Kolmasveli.Name, 0, 100)
 					self.Phase = 1
+					local DebuffTable = {
+							[1] = self.Lang.Debuff.KolIre[KBM.Lang],
+							[2] = self.Lang.Debuff.ToiIre[KBM.Lang],
+					}
+					KBM.TankSwap:Start(DebuffTable, unitID, 2)
 				else
 					BossObj.Dead = false
 					BossObj.Casting = false
