@@ -36,13 +36,13 @@ PC.RezBank = {
 KBM.PlayerControl = PC
 
 function PC:GatherAbilities()
-	LibSUnit.Player.AbilityTable = Inspect.Ability.New.List()
+	KBM.Player.AbilityTable = Inspect.Ability.New.List()
 	local Count = 0
 	if LibSUnit.Player.AbilityTable then
 		if self.RezBank[LibSUnit.Player.Calling] then
 			-- print("You are a calling with possible Combat Rezes... Checking.")
 			for crID, crTable in pairs (self.RezBank[LibSUnit.Player.Calling]) do
-				if LibSUnit.Player.AbilityTable[crID] then
+				if KBM.Player.AbilityTable[crID] then
 					Count = Count + 1
 					crTable = Inspect.Ability.New.Detail(crID)
 					self.RezBank[LibSUnit.Player.Calling][crID] = crTable
@@ -60,29 +60,6 @@ end
 
 function PC.MessageSent(failed, message)
 	--print(tostring(failed).." "..tostring(message))
-end
-
-function PC:GatherRaidInfo()
-	for index = 1, 20 do
-		local specifier, uID = LibSRM.Group.Inspect(index)
-		if uID then
-			if uID ~= LibSUnit.Player.UnitID then
-				if KBM.Unit.List.UID[uID] then
-					--print(KBM.Unit.List.UID[uID].Name..": "..tostring(KBM.Unit.List.UID[uID].Details.calling))
-					--KBM.Unit.List.UID[uID].Details = Inspect.Unit.Detail(uID)
-					if KBM.Unit.List.UID[uID].Calling then
-						if self.RezBank[KBM.Unit.List.UID[uID].Calling] then
-							Command.Message.Broadcast("tell", KBM.Unit.List.UID[uID].Name, "KBMRezReq", "C", function(failed, message) PC.RezMReq(KBM.Unit.List.UID[uID].Name, failed, message) end)
-							--Command.Message.Send(KBM.Unit.List.UID[uID].Name, "KBMRezReq", "C", PC.MessageSent)
-						end
-					else
-						--print("Adding player to queue (Unknown Calling): "..KBM.Unit.List.UID[uID].Name)
-						self.Queue[uID] = true
-					end
-				end
-			end
-		end
-	end
 end
 
 function PC.AbilityRemove(aIDList)
@@ -142,7 +119,7 @@ function PC.AbilityCooldown(aIDList)
 			local aDetails = Inspect.Ability.New.Detail(rID)
 			--print(math.floor(aDetails.currentCooldownDuration).." - "..math.floor(rDetails.cooldown))
 			if aDetails.currentCooldownDuration then
-				if aDetails.currentCooldownDuration > 2 then
+				if aDetails.currentCooldownDuration > 2 and aDetails.currentCooldownRemaining > 2 then
 					if not KBM.Player.Rezes.Resume[rID] then
 						KBM.Player.Rezes.Resume[rID] = 0
 					end

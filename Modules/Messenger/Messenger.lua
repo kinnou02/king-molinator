@@ -170,7 +170,7 @@ function PI.ReplyVersion(From, rType)
 end
 
 function PI.MessageHandler(From, Type, Channel, Identifier, Data)
-	if From ~= KBM.Player.Name and Data ~= nil then
+	if From ~= LibSUnit.Player.Name and Data ~= nil then
 		if Type then
 			if Type == "guild" then
 				if Identifier == "KBMVersion" then
@@ -254,16 +254,14 @@ function PI.PlayerJoin()
 	PI:SendVersion(true)
 end
 
-function PI.GroupJoin(UnitID, Specificer, uDetails)
-	if uDetails then
-		if uDetails.name then
-			if not PI.History.NameStore[uDetails.name] then
-				if KBM.Debug then
-					--print("Player joined without Version info Queuing: "..uDetails.name)
-				end
-				PI.History:SetSent(uDetails.name, false)
-				PI.History.Queue[uDetails.name] = true
+function PI.GroupJoin(UnitObj, Specificer)
+	if UnitObj.Name then
+		if not PI.History.NameStore[UnitObj.Name] then
+			if KBM.Debug then
+				--print("Player joined without Version info Queuing: "..uDetails.name)
 			end
+			PI.History:SetSent(UnitObj.Name, false)
+			PI.History.Queue[UnitObj.Name] = true
 		end
 	end
 end
@@ -314,8 +312,8 @@ function PI.Start()
 	table.insert(Event.SafesUnitLib.Raid.Member.Join, {PI.GroupJoin, "KBMMessenger", "Group Member Joins"})
 	table.insert(Event.Message.Receive, {PI.MessageHandler, "KBMMessenger", "Messenger Handler"})
 	table.insert(Event.System.Update.End, {PI.ManageQueues, "KBMMessenger", "Cycle Version Queue"})
-	PI.History:SetFull(KBM.Player.Name, "P"..KBMAddonData.toc.Version)
-	PI.History:SetReceived(KBM.Player.Name)
+	PI.History:SetFull(LibSUnit.Player.Name, "P"..KBMAddonData.toc.Version)
+	PI.History:SetReceived(LibSUnit.Player.Name)
 	PI:SendVersion()
 end
 
