@@ -38,7 +38,7 @@ KBM.PlayerControl = PC
 function PC:GatherAbilities()
 	KBM.Player.AbilityTable = Inspect.Ability.New.List()
 	local Count = 0
-	if LibSUnit.Player.AbilityTable then
+	if KBM.Player.AbilityTable then
 		if self.RezBank[LibSUnit.Player.Calling] then
 			-- print("You are a calling with possible Combat Rezes... Checking.")
 			for crID, crTable in pairs (self.RezBank[LibSUnit.Player.Calling]) do
@@ -143,7 +143,6 @@ function PC.PlayerJoin()
 		UnitID = LibSUnit.Player.UnitID,
 		Timers = {},
 	}
-	LibSUnit.Raid.Grouped = true
 	if LibSUnit.Player.Calling then
 		PC:GatherAbilities()
 	end
@@ -208,8 +207,6 @@ function PC.GroupJoin(UnitObj, Spec)
 				end
 			end
 		end
-	else
-	--	print("you are not currently grouped")
 	end
 end
 
@@ -222,7 +219,6 @@ end
 function PC.PlayerOffline(Units)
 	for UnitID, UnitObj in pairs(Units) do
 		if UnitObj.Offline then
-			-- print("Player is offline, if they have CR/BR list, disable/remove them here")
 			if KBM.RezMaster.Rezes.Tracked[UnitObj.Name] then
 				KBM.RezMaster.Rezes:Clear(UnitObj.Name)
 			end
@@ -231,8 +227,6 @@ function PC.PlayerOffline(Units)
 end
 
 function PC.PlayerLeave()
-	-- Probably not going to use this.
-	--print("Rez Master group leave message")
 	KBM.RezMaster.Rezes:Clear()
 end
 

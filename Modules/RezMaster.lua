@@ -283,11 +283,6 @@ function RM.Rezes:Init()
 						end
 					end
 							
-					if Timer.Class == "mage" then
-						Timer.GUI.TimeBar:SetBackgroundColor(0.8, 0.55, 1, 0.33)
-					elseif Timer.Class == "cleric" then
-						Timer.GUI.TimeBar:SetBackgroundColor(0.55, 1, 0.55, 0.33)
-					end
 					Timer.Duration = math.floor(tonumber(aFull))
 					Timer.Remaining = (aCD or 0)
 					Timer.TimeStart = Inspect.Time.Real() - (Timer.Duration - Timer.Remaining)
@@ -370,6 +365,15 @@ function RM.Rezes:Init()
 					Timer.GUI.Background:SetVisible(true)
 					Timer.Starting = false
 					
+					function Timer:SetClass(Class)
+						self.Class = Class
+						if self.Class == "mage" then
+							self.GUI.TimeBar:SetBackgroundColor(0.8, 0.55, 1, 0.33)
+						elseif self.Class == "cleric" then
+							self.GUI.TimeBar:SetBackgroundColor(0.55, 1, 0.55, 0.33)
+						end
+					end
+					
 					function Timer:Update(CurrentTime, Force)
 						local text = ""
 						CurrentTime = CurrentTime or Inspect.Time.Real()
@@ -431,6 +435,7 @@ function RM.Rezes:Init()
 						Timer.Waiting = true
 					end
 					
+					Timer:SetClass(Timer.Class)
 					Timer:Update(Inspect.Time.Real())
 				end	
 			end
@@ -445,8 +450,8 @@ function RM.Rezes:Init()
 						Timer:Remove()
 					end
 				end
-				self.Tracked[Player] = nil
 			end
+			self.Tracked = {}
 		elseif self.Tracked[sPlayer] then
 			for aID, Timer in pairs(self.Tracked[sPlayer].Timers) do
 				if Timer.Remove then

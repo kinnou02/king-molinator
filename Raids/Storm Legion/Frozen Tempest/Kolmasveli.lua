@@ -46,7 +46,9 @@ KT.Lang.Ability = {}
 -- Debuff Dictionary
 KT.Lang.Debuff = {}
 KT.Lang.Debuff.KolIre = KBM.Language:Add("Kolmasveli's Ire")
+KT.Lang.Debuff.KolIre:SetGerman("Kolmasvelis Grimm")
 KT.Lang.Debuff.ToiIre = KBM.Language:Add("Toinenveli's Ire")
+KT.Lang.Debuff.ToiIre:SetGerman("Toinenvelis Grimm")
 
 -- Description Dictionary
 KT.Lang.Main = {}

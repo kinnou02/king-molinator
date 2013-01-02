@@ -35,9 +35,13 @@ PRO.Lang.Unit.Progenitor:SetGerman("Erzeuger Saetos")
 PRO.Lang.Unit.ProgenitorShort = KBM.Language:Add("Saetos")
 PRO.Lang.Unit.ProgenitorShort:SetGerman("Saetos")
 PRO.Lang.Unit.Ebassi = KBM.Language:Add("Ebassi")
+PRO.Lang.Unit.Ebassi:SetGerman()
 PRO.Lang.Unit.Arebus = KBM.Language:Add("Arebus")
+PRO.Lang.Unit.Arebus:SetGerman() 
 PRO.Lang.Unit.Rhu = KBM.Language:Add("Rhu'Megar")
+PRO.Lang.Unit.Rhu:SetGerman()
 PRO.Lang.Unit.Juntun = KBM.Language:Add("Juntun")
+PRO.Lang.Unit.Juntun:SetGerman()
 
 -- Ability Dictionary
 PRO.Lang.Ability = {}

@@ -905,7 +905,7 @@ function _lsu.Raid.Change(UnitID, Spec)
 				end
 				_lsu.Event.Raid.Member.Leave(UnitObj, Spec)
 				if LibSUnit.Raid.Members == 0 then
-					LibSUnit.Grouped = false
+					LibSUnit.Raid.Grouped = false
 					LibSUnit.Raid.Wiped = false
 					_lsu.Event.Raid.Leave()
 				elseif LibSUnit.Raid.Members > 1 then
@@ -946,7 +946,7 @@ function _lsu.Raid.Change(UnitID, Spec)
 					UnitObj.RaidLoc = Spec
 					if LibSUnit.Raid.Members == 1 then
 						--print("You have joined a Raid or Group")
-						LibSUnit.Grouped = true
+						LibSUnit.Raid.Grouped = true
 						_lsu.Event.Raid.Join()
 					end
 					--print("New Player Joined Raid: "..UnitObj.Name)
