@@ -358,7 +358,7 @@ function _lsu:Create(UID, uDetails, Type)
 		UnitObj.PowerMax = 1
 		UnitObj.Power = 1
 	end
-	
+		
 	UnitObj.Power = uDetails[PowerMode]
 	
 	_type[UID] = UnitObj
@@ -406,6 +406,9 @@ function _lsu:Create(UID, uDetails, Type)
 	if LibSUnit.Raid.Queue[UID] then
 		_lsu.Raid.Change(UID, LibSUnit.Raid.Queue[UID])
 		LibSUnit.Raid.Queue[UID] = nil
+	end
+	if UnitObj.Mark then
+		_lsu.Event.Unit.Detail.Mark({[UID] = UnitObj})
 	end
 	return UnitObj
 end
@@ -1226,7 +1229,14 @@ function _lsu.SlashHandler(cmd)
 		else
 			_lsu.Settings.Debug = true
 			_lsu.Debug.GUI.Header:SetVisible(true)
+			_lsu.Debug:UpdateAll()
 		end
+	elseif cmd == "listidle" then
+		for UnitID, UnitObj in pairs(LibSUnit.Cache.Idle) do
+			print(UnitID..": "..UnitObj.Name.." - Seg: "..UnitObj.IdleSegment)
+		end
+		print("----")
+		print("Current Segment: ".._lastSeg)
 	end
 end
 

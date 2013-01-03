@@ -6284,8 +6284,8 @@ function KBM.Unit.Death(info)
 			if UnitObj then
 				if LibSUnit.Raid.UID[UnitObj.UnitID] then
 					if KBM.TankSwap.Active then
-						if KBM.TankSwap.Tanks[DeathObj.target] then
-							KBM.TankSwap.Tanks[DeathObj.target]:Death()
+						if KBM.TankSwap.Tanks[UnitObj.UnitID] then
+							KBM.TankSwap.Tanks[UnitObj.UnitID]:Death()
 						end
 					end
 					if LibSUnit.Raid.Wiped then
