@@ -1765,14 +1765,14 @@ function KBM.Trigger:Init()
 			end
 			for i, SpyObj in ipairs(self.Spies) do
 				for UID, bool in pairs(self.Target) do
-					if KBM.Unit.List.UID[UID] then
-						SpyObj:Start(KBM.Unit.List.UID[UID].Name, Data)
+					if LibSUnit.Lookup.UID[UID] then
+						SpyObj:Start(LibSUnit.Lookup.UID[UID].Name, Data)
 					end
 				end
 			end
 			for i, AlertObj in ipairs(self.Alerts) do
 				if AlertObj.Player then
-					if self.Target[KBM.Player.UnitID] then
+					if self.Target[LibSUnit.Player.UnitID] then
 						KBM.Alert:Start(AlertObj, Inspect.Time.Real(), Data)
 						Triggered = true
 					end
@@ -1793,8 +1793,8 @@ function KBM.Trigger:Init()
 						Obj:Stop()
 					else
 						for UID, bool in pairs(self.Target) do
-							if KBM.Unit.List.UID[UID] then
-								Obj:Stop(KBM.Unit.List.UID[UID].Name)
+							if LibSUnit.Lookup.UID[UID] then
+								Obj:Stop(LibSUnit.Lookup.UID[UID].Name)
 							end
 						end
 					end
@@ -4384,7 +4384,7 @@ function KBM.TankSwap:Init()
 			self.Test = true
 			TankObj.Dead = false
 		else
-			TankObj.Unit = KBM.Unit.List.UID[UnitID]
+			TankObj.Unit = LibSUnit.Lookup.UID[UnitID]
 			if TankObj.Unit then
 				TankObj.Name = TankObj.Unit.Name
 				if TankObj.Unit.Dead and TankObj.Unit.Health then
@@ -4478,7 +4478,7 @@ function KBM.TankSwap:Init()
 				local Spec = ""
 				local UnitID = ""
 				local uDetails = nil
-				self.Boss = KBM.Unit.List.UID[BossID]
+				self.Boss = LibSUnit.Lookup.UID[BossID]
 				if not self.Boss then
 					return
 				end
@@ -7566,6 +7566,12 @@ local function KBM_Start()
 			Low = 0,
 			Rev = 59,
 		},
+		["KBMMarkIt"] = {
+			High = 0,
+			Mid = 1,
+			Low = 5,
+			Rev = 36,
+		},
 	}
 
 	if KBM.PlugIn.Count > 0 then
@@ -7606,8 +7612,8 @@ function KBM.SheepProtection:Init()
 		if KBM.Options.Sheep.Protect then
 			local Name
 			if CasterID then
-				if KBM.Unit.List.UID[CasterID] then
-					Name = KBM.Unit.List.UID[CasterID].Name
+				if LibSUnit.Lookup.UID[CasterID] then
+					Name = LibSUnit.Lookup.UID[CasterID].Name
 				end
 			end
 			if Name then
