@@ -131,6 +131,7 @@ ID.Rotjaw = {
 	Mod = ID,
 	Level = "??",
 	Active = false,
+	ID = "Rot Jaw",
 	Name = "Rot Jaw",
 	Dead = false, 
 	Available = false,
@@ -264,7 +265,7 @@ function ID:AddBosses(KBM_Boss)
 		[self.Denizar.Name] = self.Denizar,
 		[self.Aqualix.Name] = self.Aqualix,
 		[self.Undertow.Name] = self.Undertow,
-		[self.Rotjaw.Name] = self.Rotjaw,
+		[self.Rotjaw.ID] = self.Rotjaw,
 		[self.Slime.Name] = self.Slime,
 		[self.Wrangler.Name] = self.Wrangler,
 		[self.Warden.Name] = self.Warden,
@@ -382,8 +383,8 @@ function ID.PhaseThree()
 	ID.Phase = 3
 	ID.PhaseObj.Objectives:Remove()
 	ID.PhaseObj:SetPhase(3)
-	ID.PhaseObj.Objectives:AddPercent(ID.Undertow.Name, 0, 100)
-	ID.PhaseObj.Objectives:AddPercent(ID.Rotjaw.Name, 0, 100)
+	ID.PhaseObj.Objectives:AddPercent(ID.Undertow, 0, 100)
+	ID.PhaseObj.Objectives:AddPercent(ID.Rotjaw, 0, 100)
 end
 
 function ID.PhaseFour()
@@ -391,7 +392,7 @@ function ID.PhaseFour()
 	KBM.MechTimer:AddRemove(ID.Inwar.TimersRef.Geyser)
 	ID.PhaseObj.Objectives:Remove()
 	ID.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
-	ID.PhaseObj.Objectives:AddPercent(ID.Inwar.Name, 0, 100)
+	ID.PhaseObj.Objectives:AddPercent(ID.Inwar, 0, 100)
 end
 
 function ID:Death(UnitID)
@@ -446,58 +447,57 @@ end
 function ID:UnitHPCheck(uDetails, unitID)
 	
 	if uDetails and unitID then
-		if not uDetails.player then
-			if self.Bosses[uDetails.name] then
-				if not self.EncounterRunning then
-					self.EncounterRunning = true
-					self.StartTime = Inspect.Time.Real()
-					self.HeldTime = self.StartTime
-					self.TimeElapsed = 0
-					self.Phase = 1
-					self.Counts.Wardens = 0
-					self.Counts.Slimes = 0
-					self.Counts.Wranglers = 0
-					self.PhaseObj.Objectives:AddPercent(self.Aqualix.Name, 0, 100)
-					self.PhaseObj.Objectives:AddPercent(self.Denizar.Name, 0, 100)
-					self.PhaseObj:Start(self.StartTime)
+		local BossObj = self.UTID[uDetails.type]
+		if BossObj then
+			if not self.EncounterRunning then
+				self.EncounterRunning = true
+				self.StartTime = Inspect.Time.Real()
+				self.HeldTime = self.StartTime
+				self.TimeElapsed = 0
+				self.Phase = 1
+				self.Counts.Wardens = 0
+				self.Counts.Slimes = 0
+				self.Counts.Wranglers = 0
+				self.PhaseObj.Objectives:AddPercent(self.Aqualix, 0, 100)
+				self.PhaseObj.Objectives:AddPercent(self.Denizar, 0, 100)
+				self.PhaseObj:Start(self.StartTime)
+			end
+			if BossObj.Type ~= "multi" then
+				if BossObj.CastBar then
+					if not BossObj.CastBar.Active then
+						BossObj.CastBar:Create(unitID)			
+					end
 				end
-				if self.Type ~= "multi" then
-					if self.Bosses[uDetails.name].CastBar then
-						if not self.Bosses[uDetails.name].CastBar.Active then
-							self.Bosses[uDetails.name].CastBar:Create(unitID)			
-						end
+				BossObj.Casting = false
+				BossObj.UnitID = unitID
+				BossObj.Available = true
+				if self.Phase > 1 then
+					if BossObj == self.Rotjaw or BossObj == self.Undertow then
+						self.PhaseThree()
 					end
-					self.Bosses[uDetails.name].Casting = false
-					self.Bosses[uDetails.name].UnitID = unitID
-					self.Bosses[uDetails.name].Available = true
-					if self.Phase > 1 then
-						if uDetails.name == self.Rotjaw.Name or uDetails.name == self.Undertow.Name then
-							self.PhaseThree()
-						end
-					elseif self.Phase < 4 then
-						if uDetails.name == self.Inwar.Name then
-							self.PhaseFour()
-						end
+				elseif self.Phase < 4 then
+					if BossObj == self.Inwar then
+						self.PhaseFour()
 					end
-					return self.Bosses[uDetails.name]
+				end
+				return BossObj
+			else
+				if not BossObj.UnitList[unitID] then
+					local SubBossObj = {
+						Mod = ID,
+						Level = "??",
+						Name = uDetails.name,
+						Dead = false,
+						Casting = false,
+						UnitID = unitID,
+						Available = true,
+					}
+					BossObj.UnitList[unitID] = SubBossObj
 				else
-					if not self.Bosses[uDetails.name].UnitList[unitID] then
-						local SubBossObj = {
-							Mod = ID,
-							Level = "??",
-							Name = uDetails.name,
-							Dead = false,
-							Casting = false,
-							UnitID = unitID,
-							Available = true,
-						}
-						self.Bosses[uDetails.name].UnitList[unitID] = SubBossObj
-					else
-						self.Bosses[uDetails.name].UnitList[unitID].Available = true
-						self.Bosses[uDetails.name].UnitList[unitID].UnitID = unitID
-					end
-					return self.Bosses[uDetails.name].UnitList[unitID]				
+					BossObj.UnitList[unitID].Available = true
+					BosSObj.UnitList[unitID].UnitID = unitID
 				end
+				return BossObj.UnitList[unitID]				
 			end
 		end
 	end
