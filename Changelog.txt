@@ -2,6 +2,7 @@
 
 New: Safe's Unit Library (LibSUnit)
 * Note: This is still classed as alpha and subject to change. (Although, I would say the event layout is pretty much final)
+* Removed: Safe's Raid Manager (LibSRM - Depreciated)
 
 Unit Tracking
 * Removed: All related code to unit tracking has been removed and replaced by LibSUnit.
@@ -30,6 +31,11 @@ Frozen Tempest
 * Kolmasveli and Toinenveli
 ** New: Enrage timer added for 7 minutes.
 ** New: Tank-Swap enabled for both Ire debuffs.
+** New: Added Alert for Kolmasveli's Glimpse of Infinity channel. (Verbose "Hide from Kolmasveli!")
+** New: Added Alert for Toinenveli's Glimpse of Infinity channel. (Verbose "Hide from Toinenveli!")
+** Change: This encounter will now correctly trigger a victory only after both bosses have died, not just Kolmasveli.
+** New: Added a persistent Castbar for Toinenveli.
+** New: Phase Tracking for 50%, 30% and 10% added for both bosses. Intiatial system, may be revised.
 
 Triumph of the Dragon Queen
 * Grand Falconer Zoles

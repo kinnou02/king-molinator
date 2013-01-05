@@ -812,45 +812,6 @@ function KBM.LoadTable(Source, Target)
 	end
 end
 
-function KBM.InitDiagnostics()
-	-- KBM.Watchdog.AreaList = {
-		-- ["Buffs"] = true,
-		-- ["Avail"] = true,
-		-- ["Main"] = true,
-	-- }
-	-- for diaID, bool in pairs(KBM.Watchdog.AreaList) do
-		-- local tCount = 0
-		-- local tStart = 1
-		-- if chKBM_GlobalOptions.Character then
-			-- if chKBM_GlobalOptions.Watchdog then
-				-- if chKBM_GlobalOptions.Watchdog[diaID] then
-					-- tCount = chKBM_GlobalOptions.Watchdog[diaID].sCount
-				-- end
-			-- end
-		-- else
-			-- if KBM_GlobalOptions.Watchdog then
-				-- if KBM_GlobalOptions.Watchdog[diaID] then
-					-- tCount = KBM_GlobalOptions.Watchdog[diaID].sCount
-				-- end
-			-- end
-		-- end
-		-- if tCount > 0 then
-			-- if tCount > 10 then
-				-- tStart = tCount - 10
-			-- end
-			-- for Index = tStart, tCount do
-				-- KBM.Options.Watchdog[diaID].Sessions[Index] = {
-					-- Total = 0,
-					-- Average = 0,
-					-- Peak = 0,
-					-- Count = 0,
-					-- wTime = 0,
-				-- }
-			-- end
-		-- end
-	-- end
-end
-
 local function KBM_LoadVars(AddonID)
 	local TargetLoad = nil
 	if AddonID == "KingMolinator" then		
@@ -4494,15 +4455,11 @@ function KBM.TankSwap:Init()
 					self:AddDebuff(DebuffName, 1)
 				end
 				self.Debuffs = Debuffs or 1
-				if LibSRM.Grouped() then
-					for i = 1, 20 do
-						Spec, UnitID = LibSRM.Group.Inspect(i)
+				if LibSUnit.Raid.Grouped then
+					for UnitID, UnitObj in pairs(LibSUnit.Raid.UID) do
 						if UnitID then
-							uDetails = Inspect.Unit.Detail(UnitID)
-							if uDetails then
-								if uDetails.role == "tank" then
-									self:Add(UnitID)
-								end
+							if UnitObj.Role == "tank" then
+								self:Add(UnitID)
 							end
 						end
 					end
@@ -6025,7 +5982,7 @@ end
 function KBM.Raid.CombatEnter()
 
 	if KBM.Debug then
-		print("Raid has entered combat: Number in combat = "..LibSRM.Group.Combat)
+		print("Raid has entered combat: Number in combat = "..LibSUnit.Raid.CombatTotal)
 	end
 	if KBM.Idle.Combat.Wait then
 		KBM.Idle.Combat.Wait = false
@@ -6416,13 +6373,13 @@ function KBM:BuffAdd(Units)
 						if KBM.Trigger.PlayerDebuff[KBM.CurrentMod.ID] ~= nil and bDetails.debuff == true then
 							if KBM.Trigger.PlayerDebuff[KBM.CurrentMod.ID][bDetails.name] then
 								local TriggerObj = KBM.Trigger.PlayerDebuff[KBM.CurrentMod.ID][bDetails.name]
-								if LibSRM.Group.UnitExists(unitID) ~= nil or unitID == KBM.Player.UnitID then
+								if LibSUnit.Raid.UID[unitID] ~= nil or unitID == LibSUnit.Player.UnitID then
 									if KBM.Debug then
 										print("Debuff Trigger matched: "..bDetails.name)
-										if LibSRM.Grouped() then
-											print("LibSRM Match: "..tostring(LibSRM.Group.UnitExists(unitID)))
+										if LibSUnit.Raid.Grouped then
+											print("LibSUnit Match: "..tostring(LibSUnit.Raid.UID[unitID]))
 										end
-										print("Player Match: "..KBM.Player.UnitID.." - "..unitID)
+										print("Player Match: "..LibSUnit.Player.UnitID.." - "..unitID)
 										print("---------------")
 										dump(bDetails)
 									end
@@ -6433,13 +6390,13 @@ function KBM:BuffAdd(Units)
 						if KBM.Trigger.PlayerIDBuff[KBM.CurrentMod.ID] then
 							if KBM.Trigger.PlayerIDBuff[KBM.CurrentMod.ID][bDetails.type] then
 								local TriggerObj = KBM.Trigger.PlayerIDBuff[KBM.CurrentMod.ID][bDetails.type]
-								if LibSRM.Group.UnitExists(unitID) ~= nil or unitID == KBM.Player.UnitID then
+								if LibSUnit.Raid.UID[unitID] ~= nil or unitID == LibSUnit.Player.UnitID then
 									if KBM.Debug then
 										print("Debuff Trigger matched: "..bDetails.name)
-										if LibSRM.Grouped() then
-											print("LibSRM Match: "..tostring(LibSRM.Group.UnitExists(unitID)))
+										if LibSUnit.Raid.Grouped then
+											print("LibSUnit Match: "..tostring(LibSUnit.Raid.UID[unitID]))
 										end
-										print("Player Match: "..KBM.Player.UnitID.." - "..unitID)
+										print("Player Match: "..LibSUnit.Player.UnitID.." - "..unitID)
 										print("---------------")
 										dump(bDetails)
 									end
@@ -6450,13 +6407,13 @@ function KBM:BuffAdd(Units)
 						if KBM.Trigger.PlayerBuff[KBM.CurrentMod.ID] then
 							if KBM.Trigger.PlayerBuff[KBM.CurrentMod.ID][bDetails.name] then
 								local TriggerObj = KBM.Trigger.PlayerBuff[KBM.CurrentMod.ID][bDetails.name]
-								if LibSRM.Group.UnitExists(unitID) ~= nil or unitID == KBM.Player.UnitID then
+								if LibSUnit.Raid.UID[unitID] ~= nil or unitID == LibSUnit.Player.UnitID then
 									if KBM.Debug then
 										print("Buff Trigger matched: "..bDetails.name)
-										if LibSRM.Grouped() then
-											print("LibSRM Match: "..tostring(LibSRM.Group.UnitExists(unitID)))
+										if LibSUnit.Raid.Grouped then
+											print("LibSUnit Match: "..tostring(LibSUnit.Raid.UID[unitID]))
 										end
-										print("Player Match: "..KBM.Player.UnitID.." - "..unitID)
+										print("Player Match: "..LibSUnit.Player.UnitID.." - "..unitID)
 										print("---------------")
 										dump(bDetails)
 									end
@@ -6464,7 +6421,7 @@ function KBM:BuffAdd(Units)
 								end
 							end
 						end
-						if unitID == KBM.Player.UnitID then
+						if unitID == LibSUnit.Player.UnitID then
 							if KBM.Buffs.WatchID[bDetails.LibSBuffType] then
 								if KBM.Trigger.CustomBuffRemove["playerBuffID"] then
 									if KBM.Trigger.CustomBuffRemove["playerBuffID"][bDetails.LibSBuffType] then
@@ -6530,7 +6487,7 @@ function KBM:BuffRemove(Units)
 						if KBM.Trigger.PlayerBuffRemove[KBM.CurrentMod.ID] then
 							if KBM.Trigger.PlayerBuffRemove[KBM.CurrentMod.ID][bDetails.name] then
 								local TriggerObj = KBM.Trigger.PlayerBuffRemove[KBM.CurrentMod.ID][bDetails.name]
-								if LibSRM.Group.UnitExists(unitID) or unitID == KBM.Player.UnitID then
+								if LibSUnit.Raid.UID[unitID] or unitID == LibSUnit.Player.UnitID then
 									KBM.Trigger.Queue:Add(TriggerObj, nil, unitID, nil)
 								end
 							end
@@ -6538,7 +6495,7 @@ function KBM:BuffRemove(Units)
 						if KBM.Trigger.PlayerIDBuffRemove[KBM.CurrentMod.ID] then
 							if KBM.Trigger.PlayerIDBuffRemove[KBM.CurrentMod.ID][bDetails.type] then
 								local TriggerObj = KBM.Trigger.PlayerIDBuffRemove[KBM.CurrentMod.ID][bDetails.type]
-								if LibSRM.Group.UnitExists(unitID) or unitID == KBM.Player.UnitID then
+								if LibSUnit.Raid.UID[unitID] or unitID == LibSUnit.Player.UnitID then
 									KBM.Trigger.Queue:Add(TriggerObj, nil, unitID, nil)
 								end
 							end
@@ -7283,7 +7240,7 @@ function KBM.RaidRes(data)
 	if KBM.Debug then
 		print("Raid Ressurect")
 		dump(data)
-		print("Total Dead: "..tostring(LibSRM.Dead).."/"..tostring(LibSRM.GroupCount()))
+		print("Total Dead: "..tostring(LibSUnit.Raid.DeadTotal).."/"..tostring(LibSUnit.Raid.Members))
 		print("--------------")
 	end
 end

@@ -238,9 +238,8 @@ function _int:UpdateCycle()
 	if self.Queue:Count() > 0 then
 		repeat
 			-- print("----------")
-			local QueueObj, BuffObj 
-			QueueObj, BuffObj = self.Queue:First()
-			if not QueueObj then
+			local QueueObj, BuffObj = self.Queue:First()
+			if not QueueObj or not BuffObj then
 				-- print("Queue Empty: Breaking Loop")
 				break
 			end
