@@ -3817,7 +3817,7 @@ function KBM.Damage(info)
 							if info.abilityName then
 								if KBM.Trigger.Damage[info.abilityName] then
 									TriggerObj = KBM.Trigger.Damage[info.abilityName]
-									KBM.Trigger.Queue:Add(TriggerObj, BossObj.UnitID, PlayerObj.UnitID)
+									KBM.Trigger.Queue:Add(TriggerObj, srcObj.UnitID, PlayerObj.UnitID)
 								end
 							end
 							-- Check for Npc Based Triggers (Usually Dynamic: Eg - Failsafe for P4 start Akylios)
@@ -3825,7 +3825,7 @@ function KBM.Damage(info)
 								if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][BossObj.Name] then
 									local TriggerObj = KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][BossObj.Name]
 									if TriggerObj.Enabled then
-										KBM.Trigger.Queue:Add(TriggerObj, BossObj.UnitID, PlayerObj.UnitID)
+										KBM.Trigger.Queue:Add(TriggerObj, srcObj.UnitID, PlayerObj.UnitID)
 									end
 								end
 							end
@@ -3852,7 +3852,7 @@ function KBM.Damage(info)
 										if KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][BossObj.Name] then
 											local TriggerObj = KBM.Trigger.NpcDamage[KBM.CurrentMod.ID][BossObj.Name]
 											if TriggerObj.Enabled then
-												KBM.Trigger.Queue:Add(TriggerObj, nil, BossObj.UnitID)
+												KBM.Trigger.Queue:Add(TriggerObj, srcObj.UnitID, tarObj.UnitID)
 											end
 										end
 									end
@@ -6306,8 +6306,8 @@ function KBM.Notify(data)
 							if sStart then
 								local unitID = nil
 								if Target then
-									if KBM.Unit.List.Name[Target] then
-										for UnitID, UnitObj in pairs (KBM.Unit.List.Name[Target]) do
+									if LibSUnit.Lookup.Name[Target] then
+										for UnitID, UnitObj in pairs (LibSUnit.Lookup.Name[Target]) do
 											if UnitObj.Player then
 												unitID = UnitID
 												break
