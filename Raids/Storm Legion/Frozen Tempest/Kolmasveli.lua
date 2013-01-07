@@ -43,6 +43,7 @@ KT.Lang.Unit.ToinenveliShort:SetGerman()
 -- Ability Dictionary
 KT.Lang.Ability = {}
 KT.Lang.Ability.Glimpse = KBM.Language:Add("Glimpse of Infinity")
+KT.Lang.Ability.Glimpse:SetGerman("Blick in die Ewigkeit")
 
 -- Debuff Dictionary
 KT.Lang.Debuff = {}
@@ -54,7 +55,9 @@ KT.Lang.Debuff.ToiIre:SetGerman("Toinenvelis Grimm")
 -- Verbose Dictionary
 KT.Lang.Verbose = {}
 KT.Lang.Verbose.GlimpseKol = KBM.Language:Add("Hide from Kolmasveli!")
+KT.Lang.Verbose.GlimpseKol:SetGerman("Verstecken vor Kolmasveli!")
 KT.Lang.Verbose.GlimpseToi = KBM.Language:Add("Hide from Toinenveli!")
+KT.Lang.Verbose.GlimpseToi:SetGerman("Verstecken vor Toinenveli!")
 
 -- Description Dictionary
 KT.Lang.Main = {}

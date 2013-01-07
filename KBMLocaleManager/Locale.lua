@@ -222,6 +222,10 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Chat.Enabled = KBM.Language:Add("Enable chat output")
 	KBM.Language.Chat.Enabled:SetFrench("Activer redirection vers le chat")
 	KBM.Language.Chat.Enabled:SetGerman("Aktiviere Chat Ausgabe")
+	KBM.Language.Chat.PlugVer = KBM.Language:Add('<font color="#ffff00">Plug-In <font color="#a0a0ff">%s <font color="#ffff00">version not supported. Please download at least Version %s')
+	KBM.Language.Chat.PlugVer:SetGerman('<font color="#ffff00">Plug-In <font color="#a0a0ff">%s <font color="#ffff00">Version wird nicht unterstützt. Ladet bitte mindestens Version %s')
+	KBM.Language.Chat.PlugInc = KBM.Language:Add('<font color="#ffff00">Plug-In <font color="#a0a0ff">%s <font color="#ffff00">is incompatible. Please check for a newer version.')
+	KBM.Language.Chat.PlugInc:SetGerman('<font color="#ffff00">Plug-In <font color="#a0a0ff">%s <font color="#ffff00">ist nicht kompatibel. Prüft bitte eine neuere Version.')
 	
 	-- Command Listings
 	KBM.Language.Command = {}

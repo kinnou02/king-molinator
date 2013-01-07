@@ -4435,7 +4435,7 @@ function KBM.TankSwap:Init()
 	
 	function self:Start(DebuffName, BossID, Debuffs)
 		if KBM.Options.TankSwap.Enabled then
-			if (KBM.Player.Role == "tank" and KBM.Options.TankSwap.Tank == true) or KBM.Options.TankSwap.Tank == false then
+			if (LibSUnit.Player.Role == "tank" and KBM.Options.TankSwap.Tank == true) or KBM.Options.TankSwap.Tank == false then
 				local Spec = ""
 				local UnitID = ""
 				local uDetails = nil
@@ -7500,19 +7500,7 @@ function KBM.InitMenus()
 				end
 			end
 		end
-	end
-	
-	-- local winMain
-	-- winMain = LibSGui:CreateWindow("King Boss Mods", KBM.Context, {Visible = true, Close = true})
-	-- winMain = winMain:Remove()
-	-- winMain = LibSGui:CreateWindow("KBM: Options", KBM.Context, {Visible = true, Close = true})
-	-- winMain:SetWidth(600)
-	-- winMain:SetHeight(500)
-	-- local function Close(self)
-		-- print('"'..self.Title..'" close activated')
-	-- end
-	-- winMain:SetCloseCallback(Close)
-	
+	end	
 end
 
 local function KBM_Start()
@@ -7546,13 +7534,13 @@ local function KBM_Start()
 							PlugIn:Start()
 						end
 					else
-						KBM.Chat.Out(string.format('<font color="#ffff00">Plug-In <font color="#a0a0ff">%s <font color="#ffff00">version not supported. Please download at least Version %s', ID, VerString), true)
+						KBM.Chat.Out(string.format(KBM.Language.Chat.PlugVer[KBM.Lang], ID, VerString), true)
 					end
 				else
-					KBM.Chat.Out(string.format('<font color="#ffff00">Plug-In <font color="#a0a0ff">%s <font color="#ffff00">is incompatible. Please check for a newer version.', ID), true)
+					KBM.Chat.Out(string.format(KBM.Language.Chat.PlugInc[KBM.Lang], ID), true)
 				end
 			else
-				KBM.Chat.Out(string.format('<font color="#ffff00">Plug-In <font color="#a0a0ff">%s <font color="#ffff00">is incompatible. Please check for a newer version.', ID), true)
+				KBM.Chat.Out(string.format(KBM.Language.Chat.PlugInc[KBM.Lang], ID), true)
 			end
 		end
 	end		

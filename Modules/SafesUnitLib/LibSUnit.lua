@@ -140,6 +140,7 @@ LibSUnit._internal = {
 				Role = Utility.Event.Create(AddonIni.id, "Unit.Detail.Role"),
 				Name = Utility.Event.Create(AddonIni.id, "Unit.Detail.Name"),
 				Power = Utility.Event.Create(AddonIni.id, "Unit.Detail.Power"),
+				PowerMax = Utility.Event.Create(AddonIni.id, "Unit.Detail.PowerMax"),
 				PowerMode = Utility.Event.Create(AddonIni.id, "Unit.Detail.PowerMode"),
 				Calling = Utility.Event.Create(AddonIni.id, "Unit.Detail.Calling"),
 				Combat = Utility.Event.Create(AddonIni.id, "Unit.Detail.Combat"),
@@ -417,7 +418,7 @@ end
 function _lsu.Unit.Name(uList)
 	local _lookup = LibSUnit.Lookup.Name
 	local _cache = LibSUnit.Lookup.UID
-	local nList = {}
+	local newList = {}
 	for UID, Name in pairs(uList) do
 		if Name then
 			local UnitObj = _cache[UID]
@@ -436,20 +437,21 @@ function _lsu.Unit.Name(uList)
 			else
 				_lookup[UnitObj.Name] = {[UID] = UnitObj}
 			end
-			nList[UID] = UnitObj
+			newList[UID] = UnitObj
 		end
 	end
-	_lsu.Event.Unit.Detail.Name(nList)	
+	_lsu.Event.Unit.Detail.Name(newList)	
 end
 
 function _lsu.Unit.Health(uList)
 	local _cache = LibSUnit.Lookup.UID
+	local newList = {}
 	for UID, Health in pairs(uList) do
 		Health = tonumber(Health) or 0
 		local UnitObj = _cache[UID]
 		UnitObj.Health = Health
 		_lsu.Unit:CalcPerc(UnitObj)
-		uList[UID] = UnitObj
+		newList[UID] = UnitObj
 		if Health == 0 then
 			if not UnitObj.Dead then
 				_lsu.Raid.ManageDeath(UnitObj, true)
@@ -460,28 +462,28 @@ function _lsu.Unit.Health(uList)
 			end
 		end
 	end
-	_lsu.Event.Unit.Detail.Health(uList)	
+	_lsu.Event.Unit.Detail.Health(newList)
 end
 
 function _lsu.Unit.HealthMax(uList)
 	local _cache = LibSUnit.Lookup.UID
-	local nList = {}
+	local newList = {}
 	for UID, HealthMax in pairs(uList) do
 		HealthMax = tonumber(HealthMax)
 		if HealthMax then
 			if HealthMax ~= _cache[UID].HealthMax then
 				_cache[UID].HealthMax = HealthMax
 				_lsu.Unit:CalcPerc(_cache[UID])
-				nList[UID] = _cache[UID]
+				newList[UID] = _cache[UID]
 			end
 		end
 	end
-	_lsu.Event.Unit.Detail.HealthMax(nList)	
+	_lsu.Event.Unit.Detail.HealthMax(newList)	
 end
 
 function _lsu.Unit.Power(uList, PowerMode)
 	local _cache = LibSUnit.Lookup.UID
-	local nList = {}
+	local newList = {}
 	for UID, Power in pairs(uList) do
 		if Power then
 			if Power ~= _cache[UID].Power then
@@ -489,98 +491,137 @@ function _lsu.Unit.Power(uList, PowerMode)
 					_cache[UID].PowerMode = PowerMode
 					_lsu.Event.Unit.Detail.PowerMode(_cache[UID])
 				end
-				_cache[UID].Details[PowerMode] = Power
 				_cache[UID].Power = Power
-				nList[UID] = _cache[UID]
+				newList[UID] = _cache[UID]
 			end
 		end
 	end
-	_lsu.Event.Unit.Detail.Power(nList)	
+	_lsu.Event.Unit.Detail.Power(newList)	
+end
+
+function _lsu.Unit.PowerMax(uList, PowerMode)
+	local _cache = LibSUnit.Lookup.UID
+	local newList = {}
+	for UID, PowerMax in pairs(uList) do
+		if PowerMax then
+			if PowerMax ~= _cache[UID].PowerMax then
+				if PowerMode ~= _cache[UID].PowerMode then
+					_cache[UID].PowerMode = PowerMode
+					_lsu.Event.Unit.Detail.PowerMode(_cache[UID])
+				end
+				_cache[UID].PowerMax = PowerMax
+				newList[UID] = _cache[UID]
+			end
+		end
+	end
+	_lsu.Event.Unit.Detail.PowerMax(newList)	
 end
 
 function _lsu.Unit.Offline(uList)
 	local _cache = LibSUnit.Lookup.UID
+	local newList = {}
 	for UID, Offline in pairs(uList) do
 		_cache[UID].Offline = Offline
-		uList[UID] = _cache[UID]
+		newList[UID] = _cache[UID]
 	end
-	_lsu.Event.Unit.Detail.Offline(uList)	
+	_lsu.Event.Unit.Detail.Offline(newList)
 end
 
 function _lsu.Unit.Vitality(uList)
 	local _cache = LibSUnit.Lookup.UID
+	local newList = {}
 	for UID, Vitality in pairs(uList) do
 		_cache[UID].Vitality = Vitality
-		uList[UID] = _cache[UID]
+		newList[UID] = _cache[UID]
 	end
-	_lsu.Event.Unit.Detail.Vitality(uList)	
+	_lsu.Event.Unit.Detail.Vitality(newList)	
 end
 
 function _lsu.Unit.Ready(uList)
 	local _cache = LibSUnit.Lookup.UID
+	local newList = {}
 	for UID, Ready in pairs(uList) do
 		_cache[UID].Ready = Ready
-		uList[UID] = _cache[UID]
+		newList[UID] = _cache[UID]
 	end
-	_lsu.Event.Unit.Detail.Ready(uList)	
+	_lsu.Event.Unit.Detail.Ready(newList)
 end
 
 function _lsu.Unit.Mark(uList)
 	local _cache = LibSUnit.Lookup.UID
+	local newList = {}
 	for UID, Mark in pairs(uList) do
 		_cache[UID].Mark = Mark
-		uList[UID] = _cache[UID]
+		newList[UID] = _cache[UID]
 	end
-	_lsu.Event.Unit.Detail.Mark(uList)	
+	_lsu.Event.Unit.Detail.Mark(newList)
 end
 
 function _lsu.Unit.Planar(uList)
 	local _cache = LibSUnit.Lookup.UID
+	local newList = {}
 	for UID, Planar in pairs(uList) do
 		_cache[UID].Planar = Planar
-		uList[UID] = _cache[UID]
+		newList[UID] = _cache[UID]
 	end
-	_lsu.Event.Unit.Detail.Planar(uList)	
+	_lsu.Event.Unit.Detail.Planar(newList)
 end
 
 function _lsu.Unit.Level(uList)
 	local _cache = LibSUnit.Lookup.UID
+	local newList = {}
 	for UID, Level in pairs(uList) do
 		_cache[UID].Level = Level
-		uList[UID] = _cache[UID]
+		newList[UID] = _cache[UID]
 	end
-	_lsu.Event.Unit.Detail.Level(uList)	
+	_lsu.Event.Unit.Detail.Level(newList)	
 end
 
 function _lsu.Unit.Zone(uList)
 	local _cache = LibSUnit.Lookup.UID
+	local newList = {}
 	for UID, Zone in pairs(uList) do
 		_cache[UID].Zone = Zone
-		uList[UID] = _cache[UID]
+		newList[UID] = _cache[UID]
 	end
-	_lsu.Event.Unit.Detail.Zone(uList)	
+	_lsu.Event.Unit.Detail.Zone(newList)	
 end
 
 function _lsu.Unit.Location(uList)
 	local _cache = LibSUnit.Lookup.UID
+	local newList = {}
 	for UID, Location in pairs(uList) do
 		_cache[UID].Location = Location or "Unavailable"
-		uList[UID] = _cache[UID]
+		newList[UID] = _cache[UID]
 	end
-	_lsu.Event.Unit.Detail.Location(uList)	
+	_lsu.Event.Unit.Detail.Location(newList)
+end
+
+function _lsu.Unit.Role(uList)
+	local _cache = LibSUnit.Lookup.UID
+	local newList = {}
+	for UID, Role in pairs(uList) do
+		if Role then
+			_cache[UID].Role = Role
+			newList[UID] = _cache[UID]
+		end
+	end
+	_lsu.Event.Unit.Detail.Role(newList)
 end
 
 function _lsu.Unit.PlanarMax(uList)
 	local _cache = LibSUnit.Lookup.UID
+	local newList = {}
 	for UID, PlanarMax in pairs(uList) do
 		_cache[UID].PlanarMax = PlanarMax
-		uList[UID] = _cache[UID]		
+		newList[UID] = _cache[UID]
 	end
-	_lsu.Event.Unit.Detail.PlanarMax(uList)
+	_lsu.Event.Unit.Detail.PlanarMax(newList)
 end
 
 function _lsu.Unit.Combat(uList, Silent)
 	local _cache = LibSUnit.Lookup.UID
+	local newList = {}
 	for UID, Combat in pairs(uList) do
 		if LibSUnit.Raid.UID[UID] then
 			-- Adjust Raid Combat State
@@ -611,10 +652,10 @@ function _lsu.Unit.Combat(uList, Silent)
 			end
 		end
 		_cache[UID].Combat = Combat
-		uList[UID] = _cache[UID]
+		newList[UID] = _cache[UID]
 	end
 	if not Silent then
-		_lsu.Event.Unit.Detail.Combat(uList)
+		_lsu.Event.Unit.Detail.Combat(newList)
 	end
 end
 
@@ -627,6 +668,9 @@ function _lsu.Unit.Details(UnitObj, uDetails)
 		UnitObj.Player = uDetails.player
 		UnitObj.Zone = uDetails.zone
 		UnitObj.Location = uDetails.locationName
+		if uDetails.role then
+			UnitObj.Role = uDetails.role
+		end
 		if uDetails.name then
 			if UnitObj.Name ~= uDetails.name then
 				_lsu.Unit.Name({[UnitObj.UnitID] = uDetails.name})
@@ -669,6 +713,18 @@ function _lsu.Unit.Details(UnitObj, uDetails)
 		UnitObj.Health = uDetails.health or 0
 		if uDetails.health ~= UnitObj.Health then
 			UnitObj.Health = uDetails.health
+		end
+		if UnitObj.PowerMode then
+			if UnitObj.PowerMode == "mana" then
+				UnitObj.Power = uDetails.mana
+				UnitObj.PowerMax = uDetails.manaMax
+			elseif UnitObj.PowerMode == "power" then
+				UnitObj.Power = uDetails.power
+				UnitObj.PowerMax = 100
+			elseif UnitObj.PowerMode == "energy" then
+				UnitObj.Power = uDetails.energy
+				UnitObj.PowerMax = uDetails.energyMax
+			end
 		end
 		UnitObj.Planar = uDetails.planar
 		UnitObj.PlanarMax = uDetails.planarMax
@@ -881,7 +937,7 @@ function _lsu.Raid.Change(UnitID, Spec)
 			local newSpec = LibSUnit.Raid.Move[UnitObj.UnitID]
 			LibSUnit.Raid.Lookup[newSpec].Unit = UnitObj
 			LibSUnit.Raid.Group[LibSUnit.Raid.Lookup[newSpec].Group] = LibSUnit.Raid.Group[LibSUnit.Raid.Lookup[newSpec].Group] + 1
-			LibSUnit.Raid.UID[UnitObj.UnitID] = newSpec
+			LibSUnit.Raid.UID[UnitObj.UnitID] = UnitObj
 			UnitObj.RaidLoc = newSpec
 			if not UnitID then
 				LibSUnit.Raid.Lookup[Spec].Unit = nil
@@ -948,7 +1004,7 @@ function _lsu.Raid.Change(UnitID, Spec)
 					LibSUnit.Raid.Members = LibSUnit.Raid.Members + 1
 					LibSUnit.Raid.Lookup[Spec].Unit = UnitObj
 					LibSUnit.Raid.Group[LibSUnit.Raid.Lookup[Spec].Group] = LibSUnit.Raid.Group[LibSUnit.Raid.Lookup[Spec].Group] + 1
-					LibSUnit.Raid.UID[UnitID] = Spec
+					LibSUnit.Raid.UID[UnitID] = UnitObj
 					UnitObj.RaidLoc = Spec
 					if LibSUnit.Raid.Members == 1 then
 						--print("You have joined a Raid or Group")
@@ -989,7 +1045,7 @@ function _lsu.Raid.Change(UnitID, Spec)
 			else
 				-- Raid Member Moved Process Move with Event
 				LibSUnit.Raid.Lookup[Spec].Unit = UnitObj
-				LibSUnit.Raid.UID[UnitID] = Spec
+				LibSUnit.Raid.UID[UnitID] = UnitObj
 				UnitObj.RaidLoc = Spec
 				_lsu.Event.Raid.Member.Move(UnitObj, LibSUnit.Raid.Move[UnitID], Spec)
 				LibSUnit.Raid.Move[UnitID] = nil
@@ -1167,6 +1223,8 @@ function _lsu.Wait(uList)
 		table.insert(Event.Unit.Detail.Power, {function (List) _lsu.Unit.Power(List, "power") end, AddonIni.id, "Power Change"})
 		table.insert(Event.Unit.Detail.Energy, {function (List) _lsu.Unit.Power(List, "energy") end, AddonIni.id, "Energy Change"})
 		table.insert(Event.Unit.Detail.Mana, {function (List) _lsu.Unit.Power(List, "mana") end, AddonIni.id, "Mana Change"})
+		table.insert(Event.Unit.Detail.EnergyMax, {function (List) _lsu.Unit.PowerMax(List, "energy") end, AddonIni.id, "Energy Max Change"})
+		table.insert(Event.Unit.Detail.ManaMax, {function (List) _lsu.Unit.PowerMax(List, "mana") end, AddonIni.id, "Mana Max Change"})
 		table.insert(Event.Unit.Detail.Offline, {_lsu.Unit.Offline, AddonIni.id, "Unit Offline state Change"})
 		table.insert(Event.Unit.Detail.Combat, {_lsu.Unit.Combat, AddonIni.id, "Unit Combat state Change"})
 		table.insert(Event.Unit.Detail.Planar, {_lsu.Unit.Planar, AddonIni.id, "Unit Planar Chanage"})
@@ -1176,6 +1234,7 @@ function _lsu.Wait(uList)
 		table.insert(Event.Unit.Detail.Mark, {_lsu.Unit.Mark, AddonIni.id, "Unit Mark Change"})
 		table.insert(Event.Unit.Detail.Zone, {_lsu.Unit.Zone, AddonIni.id, "Unit Zone Change"})
 		table.insert(Event.Unit.Detail.LocationName, {_lsu.Unit.Location, AddonIni.id, "Unit Location Change"})
+		table.insert(Event.Unit.Detail.Role, {_lsu.Unit.Role, AddonIni.id, "Unit Role Change"})
 		
 		-- Unit Combat Events
 		table.insert(Event.Combat.Damage, {_lsu.Combat.Damage, AddonIni.id, "Unit Combat Damage"})
