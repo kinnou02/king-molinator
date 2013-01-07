@@ -4328,6 +4328,7 @@ function KBM.TankSwap:Init()
 		TankObj.DebuffList = {}
 		TankObj.DebuffName = {}
 		TankObj.Test = Test
+		TankObj.TargetCount = 0
 		for i = 1, self.Debuffs do
 			TankObj.DebuffList[i] = {
 				ID = nil,
@@ -4433,16 +4434,19 @@ function KBM.TankSwap:Init()
 		return TankObj		
 	end
 	
+	function self:AddBoss(UnitID)
+		self.Boss[UnitID] = false
+	end
+	
 	function self:Start(DebuffName, BossID, Debuffs)
 		if KBM.Options.TankSwap.Enabled then
 			if (LibSUnit.Player.Role == "tank" and KBM.Options.TankSwap.Tank == true) or KBM.Options.TankSwap.Tank == false then
 				local Spec = ""
 				local UnitID = ""
 				local uDetails = nil
-				self.Boss = LibSUnit.Lookup.UID[BossID]
-				if not self.Boss then
-					return
-				end
+				self.Boss = {
+					[BossID] = false,
+				}
 				self.CurrentTarget = nil
 				self.CurrentIcon = nil
 				self.DebuffList = {}
@@ -4526,15 +4530,22 @@ function KBM.TankSwap:Init()
 				end
 			end
 			TankObj:UpdateHP()
-			if self.Boss then
-				if self.Boss.Target then
-					if self.Tanks[self.Boss.Target] then
-						if self.Tanks[self.Boss.Target] ~= self.CurrentTarget then
-							if self.CurrentTarget then
-								self.CurrentTarget.GUI.TankAggro.Texture:SetVisible(false)
+			for UnitID, CurrentTarget in pairs(self.Boss) do
+				local BossObj = LibSUnit.Lookup.UID[UnitID]
+				if BossObj then
+					if BossObj.Target then
+						if self.Tanks[BossObj.Target] then
+							if self.Tanks[BossObj.Target] ~= CurrentTarget then
+								if CurrentTarget then
+									CurrentTarget.TargetCount = CurrentTarget.TargetCount - 1
+									if CurrentTarget.TargetCount == 0 then
+										CurrentTarget.GUI.TankAggro.Texture:SetVisible(false)
+									end
+								end
+								self.Boss[UnitID] = self.Tanks[BossObj.Target]
+								self.Boss[UnitID].GUI.TankAggro.Texture:SetVisible(true)
+								self.Boss[UnitID].TargetCount = self.Boss[UnitID].TargetCount + 1
 							end
-							self.CurrentTarget = self.Tanks[self.Boss.Target]
-							self.CurrentTarget.GUI.TankAggro.Texture:SetVisible(true)
 						end
 					end
 				end
@@ -4554,6 +4565,7 @@ function KBM.TankSwap:Init()
 		self.Tanks = {}
 		self.LastTank = nil
 		self.TankCount = 0
+		self.Boss = {}
 		if not self.Test then
 			KBM.Event.System.TankSwap.End()
 		end

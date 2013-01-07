@@ -28,6 +28,7 @@ local _lastTick = _timeReal()
 local _tSegThrottle = 15
 local _idleSeg = 3
 local _deadSeg = 12
+local _reserveSeg = 120
 -- Variable
 local _lastSeg = math.floor(_lastTick / _tSegThrottle)
 
@@ -99,6 +100,7 @@ LibSUnit.Total = {
 	Avail = 0,
 	Partial = 0,
 	Idle = 0,
+	Reserved = 0,
 	Players = 0,
 	NPC = 0,
 }
@@ -266,6 +268,10 @@ function _lsu.Unit:UpdateSegment(UnitObj, New, uDetails)
 	-- Adjust Idle segment placement
 	if UnitObj.IdleSegment then
 		_lsu.Segment[UnitObj.IdleSegment][UnitObj.UnitID] = nil
+		if UnitObj.Reserved then
+			UnitObj.Reserved = false
+			LibSUnit.Total.Reserved = LibSUnit.Total.Reserved - 1
+		end
 	end
 	if New then
 		if _lsu.Segment[New] then
@@ -336,6 +342,7 @@ function _lsu:Create(UID, uDetails, Type)
 		Dead = false,
 		Name = uDetails.name,
 		TargetCount = 0,
+		Reserved = false,
 		TargetList = {},
 		Position = {
 			X = uDetails.coordX or 0,
@@ -1165,18 +1172,25 @@ function _lsu:UpdateSegment(_tSeg)
 	if self.Segment[_tSeg] then
 		local RemoveList = {}
 		for UID, UnitObj in pairs(self.Segment[_tSeg]) do
-			RemoveList[UID] = UnitObj
-			_lookup.UID[UID] = nil
-			if UnitObj.Name then
-				if _lookup.Name[UnitObj.Name] then
-					_lookup.Name[UnitObj.Name][UID] = nil
-					if not next(_lookup.Name[UnitObj.Name]) then
-						_lookup.Name[UnitObj.Name] = nil
+			if UnitObj.Reserved then
+				_lookup.UID[UID] = nil
+				if UnitObj.Name then
+					if _lookup.Name[UnitObj.Name] then
+						_lookup.Name[UnitObj.Name][UID] = nil
+						if not next(_lookup.Name[UnitObj.Name]) then
+							_lookup.Name[UnitObj.Name] = nil
+						end
 					end
 				end
+				_cache.Idle[UID] = nil
+				_total.Idle = _total.Idle - 1
+				LibSUnit.Total.Reserved = LibSUnit.Total.Reserved - 1
+			else
+				RemoveList[UID] = UnitObj
+				_lsu.Unit:UpdateSegment(UnitObj, _reserveSeg + _lastSeg)
+				UnitObj.Reserved = true
+				LibSUnit.Total.Reserved = LibSUnit.Total.Reserved + 1
 			end
-			_cache.Idle[UID] = nil
-			_total.Idle = _total.Idle - 1
 		end
 		self.Event.Unit.Removed(RemoveList)
 	end
@@ -1431,7 +1445,7 @@ function _lsu.Debug:Init()
 	self:CreateTrack("Partial", 0.75, 0.75, 0.37)
 	self:CreateTrack("Available", 0, 0.9, 0)
 	self:CreateTrack("Total States", 1, 1, 1)
-	--self:CreateTrack("Unknown", 1, 0.7, 0.7)
+	self:CreateTrack("Reserved", 1, 0.7, 0.7)
 	--self:CreateTrack("Players", 0.7, 1, 0.7)
 	--self:CreateTrack("NPCs", 0.7, 0.7, 1)
 	--self:CreateTrack("Total Groups", 1, 1, 1)
@@ -1440,11 +1454,11 @@ function _lsu.Debug:Init()
 	self:CreateTrack("Dead", 0, 0.9, 0)
 	self:CreateTrack("Wiped", 0.9, 0.9, 0)
 	function self:UpdateAll()
-		self.GUI.Trackers["Idle"]:UpdateDisplay(LibSUnit.Total.Idle)
+		self.GUI.Trackers["Idle"]:UpdateDisplay(LibSUnit.Total.Idle - LibSUnit.Total.Reserved)
 		self.GUI.Trackers["Partial"]:UpdateDisplay(LibSUnit.Total.Partial)
 		self.GUI.Trackers["Available"]:UpdateDisplay(LibSUnit.Total.Avail)		
-		self.GUI.Trackers["Total States"]:UpdateDisplay(LibSUnit.Total.Idle + LibSUnit.Total.Partial + LibSUnit.Total.Avail)
-		--self.GUI.Trackers["Unknown"]:UpdateDisplay(KBM.Unit.Unknown.Count)
+		self.GUI.Trackers["Total States"]:UpdateDisplay(LibSUnit.Total.Idle + LibSUnit.Total.Partial + LibSUnit.Total.Avail - LibSUnit.Total.Reserved)
+		self.GUI.Trackers["Reserved"]:UpdateDisplay(LibSUnit.Total.Reserved)
 		--self.GUI.Trackers["Players"]:UpdateDisplay(KBM.Unit.Player.Count)
 		--self.GUI.Trackers["NPCs"]:UpdateDisplay(KBM.Unit.NPC.Count)		
 		--self.GUI.Trackers["Total Groups"]:UpdateDisplay(KBM.Unit.Unknown.Count + KBM.Unit.Player.Count + KBM.Unit.NPC.Count)

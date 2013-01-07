@@ -39,11 +39,14 @@ KT.Lang.Unit.Toinenveli = KBM.Language:Add("Toinenveli")
 KT.Lang.Unit.Toinenveli:SetGerman()
 KT.Lang.Unit.ToinenveliShort = KBM.Language:Add("Toinenveli")
 KT.Lang.Unit.ToinenveliShort:SetGerman()
+KT.Lang.Unit.Vortex = KBM.Language:Add("Energy Vortex")
+KT.Lang.Unit.VortexShort = KBM.Language:Add("Vortex")
 
 -- Ability Dictionary
 KT.Lang.Ability = {}
 KT.Lang.Ability.Glimpse = KBM.Language:Add("Glimpse of Infinity")
 KT.Lang.Ability.Glimpse:SetGerman("Blick in die Ewigkeit")
+KT.Lang.Ability.Flare = KBM.Language:Add("Tempest Flare")
 
 -- Debuff Dictionary
 KT.Lang.Debuff = {}
@@ -51,6 +54,7 @@ KT.Lang.Debuff.KolIre = KBM.Language:Add("Kolmasveli's Ire")
 KT.Lang.Debuff.KolIre:SetGerman("Kolmasvelis Grimm")
 KT.Lang.Debuff.ToiIre = KBM.Language:Add("Toinenveli's Ire")
 KT.Lang.Debuff.ToiIre:SetGerman("Toinenvelis Grimm")
+KT.Lang.Debuff.Eruption = KBM.Language:Add("Sparking Eruption")
 
 -- Verbose Dictionary
 KT.Lang.Verbose = {}
@@ -81,6 +85,7 @@ KT.Kolmasveli = {
 	Castbar = nil,
 	-- TimersRef = {},
 	AlertsRef = {},
+	MechRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -90,7 +95,12 @@ KT.Kolmasveli = {
 		-- },
 		AlertsRef = {
 			Enabled = true,
+			Eruption = KBM.Defaults.AlertObj.Create("dark_green"),
 			Glimpse = KBM.Defaults.AlertObj.Create("red"),
+		},
+		MechRef = {
+			Enabled = true,
+			Eruption = KBM.Defaults.MechObj.Create("dark_green"),
 		},
 	}
 }
@@ -124,11 +134,35 @@ KT.Toinenveli = {
 	}
 }
 
+KT.Vortex = {
+	Mod = KT,
+	Level = "??",
+	Active = false,
+	Name = KT.Lang.Unit.Vortex[KBM.Lang],
+	NameShort = KT.Lang.Unit.VortexShort[KBM.Lang],
+	Dead = false,
+	Available = false,
+	Menu = {},
+	UTID = "none",
+	UnitID = nil,
+	Castbar = nil,
+	AlertsRef = {},
+	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+		AlertsRef = {
+			Enabled = true,
+			Flare = KBM.Defaults.AlertObj.Create("cyan"),
+		},
+	},
+}
+
 function KT:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Kolmasveli.Name] = self.Kolmasveli,
 		[self.Toinenveli.Name] = self.Toinenveli,
+		[self.Vortex.Name] = self.Vortex,
 	}
 	for BossName, BossObj in pairs(self.Bosses) do
 		if BossObj.Settings then
@@ -150,14 +184,21 @@ function KT:InitVars()
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		Alerts = KBM.Defaults.Alerts(),
+		MechSpy = KBM.Defaults.MechSpy(),
 		-- MechTimer = KBM.Defaults.MechTimer(),
-		Toinenveli = {
-			CastBar = self.Toinenveli.Settings.CastBar,
-			AlertsRef = self.Toinenveli.Settings.AlertsRef,
-		},
 		Kolmasveli = {
 			CastBar = self.Kolmasveli.Settings.CastBar,
 			AlertsRef = self.Kolmasveli.Settings.AlertsRef,
+			MechRef = self.Kolmasveli.Settings.MechRef,
+		},
+		Toinenveli = {
+			CastBar = self.Toinenveli.Settings.CastBar,
+			AlertsRef = self.Toinenveli.Settings.AlertsRef,
+			MechRef = self.Toinenveli.Settings.MechRef,
+		},
+		Vortex = {
+			CastBar = self.Vortex.Settings.CastBar,
+			AlertsRef = self.Vortex.Settings.AlertsRef,
 		},
 	}
 	KBMSLRDFTKT_Settings = self.Settings
@@ -213,11 +254,14 @@ end
 function KT:Death(UnitID)
 	if self.Kolmasveli.UnitID == UnitID then
 		self.Kolmasveli.Dead = true
+		if self.Toinenveli.Dead then
+			return true
+		end
 	elseif self.Toinenveli.UnitID == UnitID then
 		self.Toinenveli.Dead = true
-	end
-	if self.Kolmasveli.Dead and self.Toinenveli.Dead then
-		return true
+		if self.Kolmasveli.Dead then
+			return true
+		end
 	end
 	return false
 end
@@ -254,40 +298,44 @@ end
 
 function KT:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		if not uDetails.player then
-			if self.Bosses[uDetails.name] then
-				local BossObj = self.Bosses[uDetails.name]
-				if not self.EncounterRunning then
-					self.EncounterRunning = true
-					self.StartTime = Inspect.Time.Real()
-					self.HeldTime = self.StartTime
-					self.TimeElapsed = 0
-					BossObj.Dead = false
-					BossObj.Casting = false
-					if BossObj.CastBar then
-						BossObj.CastBar:Create(unitID)
-					end
-					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase("1")
-					self.PhaseObj.Objectives:AddPercent(self.Kolmasveli, 50, 100)
-					self.PhaseObj.Objectives:AddPercent(self.Toinenveli, 50, 100)
-					self.Phase = 1
-					local DebuffTable = {
-							[1] = self.Lang.Debuff.KolIre[KBM.Lang],
-							[2] = self.Lang.Debuff.ToiIre[KBM.Lang],
-					}
-					KBM.TankSwap:Start(DebuffTable, unitID, 2)
-				else
-					BossObj.Dead = false
-					BossObj.Casting = false
-					if BossObj.CastBar then
+		if self.Bosses[uDetails.name] then
+			local BossObj = self.Bosses[uDetails.name]
+			if not self.EncounterRunning then
+				self.EncounterRunning = true
+				self.StartTime = Inspect.Time.Real()
+				self.HeldTime = self.StartTime
+				self.TimeElapsed = 0
+				BossObj.Dead = false
+				BossObj.Casting = false
+				if BossObj.CastBar then
+					BossObj.CastBar:Create(unitID)
+				end
+				self.PhaseObj:Start(self.StartTime)
+				self.PhaseObj:SetPhase("1")
+				self.PhaseObj.Objectives:AddPercent(self.Kolmasveli, 50, 100)
+				self.PhaseObj.Objectives:AddPercent(self.Toinenveli, 50, 100)
+				self.Phase = 1
+				local DebuffTable = {
+						[1] = self.Lang.Debuff.KolIre[KBM.Lang],
+						[2] = self.Lang.Debuff.ToiIre[KBM.Lang],
+				}
+				KBM.TankSwap:Start(DebuffTable, unitID, 2)
+			else
+				BossObj.Dead = false
+				BossObj.Casting = false
+				if BossObj.CastBar then
+					if BossObj.UnitID ~= unitID then
+						BossObj.CastBar:Remove()
 						BossObj.CastBar:Create(unitID)
 					end
 				end
-				BossObj.UnitID = unitID
-				BossObj.Available = true
-				return self.Kolmasveli
+				if BossObj == self.Kolmasveli or BossObj == self.Toinenveli then
+					KBM.TankSwap:AddBoss(unitID)
+				end
 			end
+			BossObj.UnitID = unitID
+			BossObj.Available = true
+			return BossObj
 		end
 	end
 end
@@ -319,30 +367,51 @@ function KT:Start()
 	
 	-- Create Alerts
 	self.Kolmasveli.AlertsRef.Glimpse = KBM.Alert:Create(self.Lang.Verbose.GlimpseKol[KBM.Lang], nil, true, true, "red")
-	self.Toinenveli.AlertsRef.Glimpse = KBM.Alert:Create(self.Lang.Verbose.GlimpseToi[KBM.Lang], nil, true, true, "orange")
+	self.Kolmasveli.AlertsRef.Eruption = KBM.Alert:Create(self.Lang.Debuff.Eruption[KBM.Lang], nil, true, true, "dark_green")
+	self.Kolmasveli.AlertsRef.Eruption:Important()
 	KBM.Defaults.AlertObj.Assign(self.Kolmasveli)
+	
+	self.Toinenveli.AlertsRef.Glimpse = KBM.Alert:Create(self.Lang.Verbose.GlimpseToi[KBM.Lang], nil, true, true, "orange")
 	KBM.Defaults.AlertObj.Assign(self.Toinenveli)
+
+	self.Vortex.AlertsRef.Flare = KBM.Alert:Create(self.Lang.Ability.Flare[KBM.Lang], nil, true, true, "cyan")
+	self.Vortex.AlertsRef.Flare:Important()
+	KBM.Defaults.AlertObj.Assign(self.Vortex)
+
+	-- Create Spies
+	self.Kolmasveli.MechRef.Eruption = KBM.MechSpy:Add(self.Lang.Debuff.Eruption[KBM.Lang], nil, "playerDebuff", self.Kolmasveli)
+	KBM.Defaults.MechObj.Assign(self.Kolmasveli)
 	
 	-- Assign Alerts and Timers to Triggers
 	self.Kolmasveli.Triggers.Glimpse = KBM.Trigger:Create(self.Lang.Ability.Glimpse[KBM.Lang], "channel", self.Kolmasveli)
 	self.Kolmasveli.Triggers.Glimpse:AddAlert(self.Kolmasveli.AlertsRef.Glimpse)
-	self.Toinenveli.Triggers.Glimpse = KBM.Trigger:Create(self.Lang.Ability.Glimpse[KBM.Lang], "channel", self.Toinenveli)
-	self.Toinenveli.Triggers.Glimpse:AddAlert(self.Toinenveli.AlertsRef.Glimpse)
+	self.Kolmasveli.Triggers.Eruption = KBM.Trigger:Create(KT.Lang.Debuff.Eruption[KBM.Lang], "playerBuff", self.Kolmasveli)
+	self.Kolmasveli.Triggers.Eruption:AddSpy(self.Kolmasveli.MechRef.Eruption)
+	self.Kolmasveli.Triggers.Eruption:AddAlert(self.Kolmasveli.AlertsRef.Eruption, true)
 	self.Kolmasveli.Triggers.PhaseTwo = KBM.Trigger:Create(50, "percent", self.Kolmasveli)
 	self.Kolmasveli.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
 	self.Kolmasveli.Triggers.PhaseThree = KBM.Trigger:Create(30, "percent", self.Kolmasveli)
 	self.Kolmasveli.Triggers.PhaseThree:AddPhase(self.PhaseThree)
 	self.Kolmasveli.Triggers.PhaseFinal = KBM.Trigger:Create(10, "percent", self.Kolmasveli)
 	self.Kolmasveli.Triggers.PhaseFinal:AddPhase(self.PhaseFinal)
+	
+	self.Toinenveli.Triggers.Glimpse = KBM.Trigger:Create(self.Lang.Ability.Glimpse[KBM.Lang], "channel", self.Toinenveli)
+	self.Toinenveli.Triggers.Glimpse:AddAlert(self.Toinenveli.AlertsRef.Glimpse)
 	self.Toinenveli.Triggers.PhaseTwo = KBM.Trigger:Create(50, "percent", self.Toinenveli)
 	self.Toinenveli.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
 	self.Toinenveli.Triggers.PhaseThree = KBM.Trigger:Create(30, "percent", self.Toinenveli)
 	self.Toinenveli.Triggers.PhaseThree:AddPhase(self.PhaseThree)
 	self.Toinenveli.Triggers.PhaseFinal = KBM.Trigger:Create(10, "percent", self.Toinenveli)
 	self.Toinenveli.Triggers.PhaseFinal:AddPhase(self.PhaseFinal)
+
+	self.Vortex.Triggers.Flare = KBM.Trigger:Create(self.Lang.Ability.Flare[KBM.Lang], "cast", self.Vortex)
+	self.Vortex.Triggers.Flare:AddAlert(self.Vortex.AlertsRef.Flare)
+	self.Vortex.Triggers.FlareInt = KBM.Trigger:Create(self.Lang.Ability.Flare[KBM.Lang], "interrupt", self.Vortex)
+	self.Vortex.Triggers.FlareInt:AddStop(self.Vortex.AlertsRef.Flare)
 	
 	self.Kolmasveli.CastBar = KBM.CastBar:Add(self, self.Kolmasveli)
 	self.Toinenveli.CastBar = KBM.CastBar:Add(self, self.Toinenveli)
+	self.Vortex.CastBar = KBM.CastBar:Add(self, self.Vortex)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()
 end
