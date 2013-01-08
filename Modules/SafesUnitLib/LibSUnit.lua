@@ -428,23 +428,25 @@ function _lsu.Unit.Name(uList)
 	local newList = {}
 	for UID, Name in pairs(uList) do
 		if Name then
-			local UnitObj = _cache[UID]
-			if UnitObj.Name ~= Name then
+			if Name ~= "" then
+				local UnitObj = _cache[UID]
+				if UnitObj.Name ~= Name then
+					if _lookup[UnitObj.Name] then
+						_lookup[UnitObj.Name][UID] = nil
+						if not next(_lookup[UnitObj.Name]) then
+							_lookup[UnitObj.Name] = nil
+						end
+					end				
+				end
+				UnitObj.Details.name = Name
+				UnitObj.Name = Name
 				if _lookup[UnitObj.Name] then
-					_lookup[UnitObj.Name][UID] = nil
-					if not next(_lookup[UnitObj.Name]) then
-						_lookup[UnitObj.Name] = nil
-					end
-				end				
+					_lookup[UnitObj.Name][UID] = UnitObj
+				else
+					_lookup[UnitObj.Name] = {[UID] = UnitObj}
+				end
+				newList[UID] = UnitObj
 			end
-			UnitObj.Details.name = Name
-			UnitObj.Name = Name
-			if _lookup[UnitObj.Name] then
-				_lookup[UnitObj.Name][UID] = UnitObj
-			else
-				_lookup[UnitObj.Name] = {[UID] = UnitObj}
-			end
-			newList[UID] = UnitObj
 		end
 	end
 	_lsu.Event.Unit.Detail.Name(newList)	
@@ -680,7 +682,9 @@ function _lsu.Unit.Details(UnitObj, uDetails)
 		end
 		if uDetails.name then
 			if UnitObj.Name ~= uDetails.name then
-				_lsu.Unit.Name({[UnitObj.UnitID] = uDetails.name})
+				if uDetails.name ~= "" then
+					_lsu.Unit.Name({[UnitObj.UnitID] = uDetails.name})
+				end
 			end
 		end
 		if UnitObj.Mark ~= uDetails.mark then

@@ -27,6 +27,9 @@ Endless Eclipse
 ** New: UTID udpated.
 * Rhu'Megar
 ** New: UTID updated.
+* Matriach of Pestilence
+** New: Added Personal Alert for Necrotic Spores
+** New: Added Personal Alert for Volatile Infection
 
 Frozen Tempest
 *  Artifex Zaviel

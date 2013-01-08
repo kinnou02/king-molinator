@@ -3730,6 +3730,7 @@ function KBM.CheckActiveBoss(UnitObj)
 													if PhaseObj then
 														KBM.BossID[UnitID].PhaseObj = PhaseObj
 														PhaseObj.BossObj = ModBossObj
+														PhaseObj.UnitObj = UnitObj
 														PhaseObj:UpdateID(UnitID)
 														PhaseObj:Update()
 													end

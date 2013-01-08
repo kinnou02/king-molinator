@@ -38,6 +38,11 @@ MOP.Lang.Unit.MatriarchShort:SetGerman("Matriarchin")
 -- Ability Dictionary
 MOP.Lang.Ability = {}
 
+-- Debuff Dictionary
+MOP.Lang.Debuff = {}
+MOP.Lang.Debuff.Spores = KBM.Language:Add("Necrotic Spores")
+MOP.Lang.Debuff.Infect = KBM.Language:Add("Volatile Infection")
+
 -- Description Dictionary
 MOP.Lang.Main = {}
 
@@ -58,7 +63,7 @@ MOP.Matriarch = {
 	TimeOut = 5,
 	Castbar = nil,
 	-- TimersRef = {},
-	-- AlertsRef = {},
+	AlertsRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -66,10 +71,11 @@ MOP.Matriarch = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
 		-- },
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
-		-- },
+		AlertsRef = {
+			Enabled = true,
+			Spores = KBM.Defaults.AlertObj.Create("dark_green"),
+			Infect = KBM.Defaults.AlertObj.Create("red"),
+		},
 	}
 }
 
@@ -87,9 +93,9 @@ function MOP:InitVars()
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		-- MechTimer = KBM.Defaults.MechTimer(),
-		-- Alerts = KBM.Defaults.Alerts(),
+		Alerts = KBM.Defaults.Alerts(),
 		-- TimersRef = self.Matriarch.Settings.TimersRef,
-		-- AlertsRef = self.Matriarch.Settings.AlertsRef,
+		AlertsRef = self.Matriarch.Settings.AlertsRef,
 	}
 	KBMSLRDEEMP_Settings = self.Settings
 	chKBMSLRDEEMP_Settings = self.Settings
@@ -164,23 +170,26 @@ function MOP:UnitHPCheck(uDetails, unitID)
 					self.TimeElapsed = 0
 					BossObj.Dead = false
 					BossObj.Casting = false
-					if BossObj.Name == self.Matriarch.Name then
+					if BossObj == self.Matriarch then
 						BossObj.CastBar:Create(unitID)
 					end
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase("1")
-					self.PhaseObj.Objectives:AddPercent(self.Matriarch.Name, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Matriarch, 0, 100)
 					self.Phase = 1
 				else
 					BossObj.Dead = false
 					BossObj.Casting = false
-					if BossObj.Name == self.Matriarch.Name then
+					if BossObj == self.Matriarch then
+						if BossObj.UnitID ~= unitID then
+							BossObj.CastBar:Remove()
+						end
 						BossObj.CastBar:Create(unitID)
 					end
 				end
 				BossObj.UnitID = unitID
 				BossObj.Available = true
-				return self.Matriarch
+				return BossObj
 			end
 		end
 	end
@@ -210,9 +219,15 @@ function MOP:Start()
 	-- KBM.Defaults.TimerObj.Assign(self.Matriarch)
 	
 	-- Create Alerts
-	-- KBM.Defaults.AlertObj.Assign(self.Matriarch)
+	self.Matriarch.AlertsRef.Spores = KBM.Alert:Create(self.Lang.Debuff.Spores[KBM.Lang], nil, true, true, "dark_green")
+	self.Matriarch.AlertsRef.Infect = KBM.Alert:Create(self.Lang.Debuff.Infect[KBM.Lang], nil, false, true, "red")
+	KBM.Defaults.AlertObj.Assign(self.Matriarch)
 	
 	-- Assign Alerts and Timers to Triggers
+	self.Matriarch.Triggers.Spores = KBM.Trigger:Create(self.Lang.Debuff.Spores[KBM.Lang], "playerDebuff", self.Matriarch)
+	self.Matriarch.Triggers.Spores:AddAlert(self.Matriarch.AlertsRef.Spores, true)
+	self.Matriarch.Triggers.Infect = KBM.Trigger:Create(self.Lang.Debuff.Infect[KBM.Lang], "playerDebuff", self.Matriarch)
+	self.Matriarch.Triggers.Infect:AddAlert(self.Matriarch.AlertsRef.Infect, true)
 	
 	self.Matriarch.CastBar = KBM.CastBar:Add(self, self.Matriarch)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
