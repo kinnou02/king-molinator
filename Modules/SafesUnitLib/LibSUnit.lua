@@ -1105,8 +1105,10 @@ function _lsu.Combat.stdHandler(UID, segPlus)
 				_lsu.Unit:UpdateSegment(UnitObj, segPlus + _lastSeg, _inspect(UID))
 			end
 		else
-			UnitObj = _lsu:Create(UID, _inspect(UID), "Idle")		
-			_lsu.Unit:UpdateSegment(UnitObj, segPlus + _lastSeg)
+			UnitObj = _lsu:Create(UID, _inspect(UID), "Idle")
+			if UnitObj then
+				_lsu.Unit:UpdateSegment(UnitObj, segPlus + _lastSeg)
+			end
 		end
 		return UnitObj
 	end
