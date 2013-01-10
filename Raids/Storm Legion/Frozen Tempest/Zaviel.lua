@@ -42,6 +42,7 @@ ZVL.Lang.Ability.Conduit = KBM.Language:Add("Energy Conduit")
 ZVL.Lang.Ability.Conduit:SetGerman("Energieleitung")
 ZVL.Lang.Ability.Jolt = KBM.Language:Add("Ensnaring Jolt")
 ZVL.Lang.Ability.Jolt:SetGerman("Verlangsamender Stromschlag")
+ZVL.Lang.Ability.Beam = KBM.Language:Add("Reconstructive Beam")
 
 -- Debuff Dictionary
 ZVL.Lang.Debuff = {}
@@ -95,6 +96,7 @@ ZVL.Zaviel = {
 			Conduit = KBM.Defaults.AlertObj.Create("orange"),
 			JoltWarn = KBM.Defaults.AlertObj.Create("red"),
 			Jolt = KBM.Defaults.AlertObj.Create("red"),
+			Beam = KBM.Defaults.AlertObj.Create("yellow"),
 		},
 		MechRef = {
 			Enabled = true,
@@ -261,6 +263,7 @@ function ZVL:Start()
 	self.Zaviel.AlertsRef.Conduit = KBM.Alert:Create(self.Lang.Verbose.Conduit[KBM.Lang], nil, false, true, "orange")
 	self.Zaviel.AlertsRef.JoltWarn = KBM.Alert:Create(self.Lang.Ability.Jolt[KBM.Lang], nil, false, true, "red")
 	self.Zaviel.AlertsRef.Jolt = KBM.Alert:Create(self.Lang.Verbose.Jolt[KBM.Lang], nil, true, true, "red")
+	self.Zaviel.AlertsRef.Beam = KBM.Alert:Create(self.Lang.Ability.Beam[KBM.Lang], nil, false, true, "yellow")
 	KBM.Defaults.AlertObj.Assign(self.Zaviel)
 	
 	-- Create Spies
@@ -284,6 +287,10 @@ function ZVL:Start()
 	self.Zaviel.Triggers.JoltWarn:AddAlert(self.Zaviel.AlertsRef.JoltWarn)
 	self.Zaviel.Triggers.Jolt = KBM.Trigger:Create(self.Lang.Ability.Jolt[KBM.Lang], "buff", self.Zaviel)
 	self.Zaviel.Triggers.Jolt:AddAlert(self.Zaviel.AlertsRef.Jolt)
+	self.Zaviel.Triggers.Beam = KBM.Trigger:Create(self.Lang.Ability.Beam[KBM.Lang], "cast", self.Zaviel)
+	self.Zaviel.Triggers.Beam:AddAlert(self.Zaviel.AlertsRef.Beam)
+	self.Zaviel.Triggers.BeamInt = KBM.Trigger:Create(self.Lang.Ability.Beam[KBM.Lang], "interrupt", self.Zaviel)
+	self.Zaviel.Triggers.BeamInt:AddStop(self.Zaviel.AlertsRef.Beam)
 	-- Phase
 	self.Zaviel.Triggers.PhaseTwo = KBM.Trigger:Create(50, "percent", self.Zaviel)
 	self.Zaviel.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)

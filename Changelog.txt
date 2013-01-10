@@ -34,6 +34,7 @@ Endless Eclipse
 Frozen Tempest
 *  Artifex Zaviel
 ** New: Enrage timer added for 7 minutes.
+** New: Added Alert and Stop trigger for Reconstructive Beam.
 * Kolmasveli and Toinenveli
 ** New: Enrage timer added for 7 minutes.
 ** New: Tank-Swap enabled for both Ire debuffs.

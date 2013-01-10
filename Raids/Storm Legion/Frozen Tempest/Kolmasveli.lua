@@ -83,16 +83,17 @@ KT.Kolmasveli = {
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
-	-- TimersRef = {},
+	TimersRef = {},
 	AlertsRef = {},
 	MechRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		-- TimersRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
-		-- },
+		TimersRef = {
+			Enabled = true,
+			Glimpse = KBM.Defaults.TimerObj.Create("red"),
+			GlimpseFirst = KBM.Defaults.TimerObj.Create("red"),
+		},
 		AlertsRef = {
 			Enabled = true,
 			Eruption = KBM.Defaults.AlertObj.Create("dark_green"),
@@ -118,15 +119,15 @@ KT.Toinenveli = {
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
-	-- TimersRef = {},
+	TimersRef = {},
 	AlertsRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		-- TimersRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
-		-- },
+		TimersRef = {
+			Enabled = true,
+			Glimpse = KBM.Defaults.TimerObj.Create("orange"),
+		},
 		AlertsRef = {
 			Enabled = true,
 			Glimpse = KBM.Defaults.AlertObj.Create("orange"),
@@ -185,15 +186,17 @@ function KT:InitVars()
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		Alerts = KBM.Defaults.Alerts(),
 		MechSpy = KBM.Defaults.MechSpy(),
-		-- MechTimer = KBM.Defaults.MechTimer(),
+		MechTimer = KBM.Defaults.MechTimer(),
 		Kolmasveli = {
 			CastBar = self.Kolmasveli.Settings.CastBar,
 			AlertsRef = self.Kolmasveli.Settings.AlertsRef,
+			TimersRef = self.Kolmasveli.Settings.TimersRef,
 			MechRef = self.Kolmasveli.Settings.MechRef,
 		},
 		Toinenveli = {
 			CastBar = self.Toinenveli.Settings.CastBar,
 			AlertsRef = self.Toinenveli.Settings.AlertsRef,
+			TimersRef = self.Toinenveli.Settings.TImersRef,
 			MechRef = self.Toinenveli.Settings.MechRef,
 		},
 		Vortex = {
@@ -293,6 +296,8 @@ function KT.PhaseFinal()
 		KT.PhaseObj.Objectives:AddPercent(KT.Kolmasveli, 0, 10)
 		KT.PhaseObj.Objectives:AddPercent(KT.Toinenveli, 0, 10)
 		KT.Phase = 4
+		KBM.MechTimer:AddRemove(KT.Kolmasveli.TimersRef.Glimpse)
+		KBM.MechTimer:AddRemove(KT.Toinenveli.TimersRef.Glimpse)
 	end
 end
 
@@ -320,6 +325,7 @@ function KT:UnitHPCheck(uDetails, unitID)
 						[2] = self.Lang.Debuff.ToiIre[KBM.Lang],
 				}
 				KBM.TankSwap:Start(DebuffTable, unitID, 2)
+				KBM.MechTimer:AddStart(self.Kolmasveli.TimersRef.GlimpseFirst)
 			else
 				BossObj.Dead = false
 				BossObj.Casting = false
@@ -363,7 +369,15 @@ end
 
 function KT:Start()
 	-- Create Timers
-	-- KBM.Defaults.TimerObj.Assign(self.Kolmasveli)
+	self.Kolmasveli.TimersRef.Glimpse = KBM.MechTimer:Add(self.Lang.Verbose.GlimpseKol[KBM.Lang], 60)
+	self.Kolmasveli.TimersRef.GlimpseFirst = KBM.MechTimer:Add(self.Lang.Verbose.GlimpseKol[KBM.Lang], 170)
+	self.Kolmasveli.TimersRef.GlimpseFirst:NoMenu()
+	KBM.Defaults.TimerObj.Assign(self.Kolmasveli)
+	
+	self.Kolmasveli.TimersRef.Glimpse:SetLink(self.Kolmasveli.TimersRef.GlimpseFirst)
+	
+	self.Toinenveli.TimersRef.Glimpse = KBM.MechTimer:Add(self.Lang.Verbose.GlimpseToi[KBM.Lang], 60)	
+	KBM.Defaults.TimerObj.Assign(self.Toinenveli)
 	
 	-- Create Alerts
 	self.Kolmasveli.AlertsRef.Glimpse = KBM.Alert:Create(self.Lang.Verbose.GlimpseKol[KBM.Lang], nil, true, true, "red")
@@ -385,6 +399,7 @@ function KT:Start()
 	-- Assign Alerts and Timers to Triggers
 	self.Kolmasveli.Triggers.Glimpse = KBM.Trigger:Create(self.Lang.Ability.Glimpse[KBM.Lang], "channel", self.Kolmasveli)
 	self.Kolmasveli.Triggers.Glimpse:AddAlert(self.Kolmasveli.AlertsRef.Glimpse)
+	self.Kolmasveli.Triggers.Glimpse:AddTimer(self.Toinenveli.TimersRef.Glimpse)
 	self.Kolmasveli.Triggers.Eruption = KBM.Trigger:Create(KT.Lang.Debuff.Eruption[KBM.Lang], "playerBuff", self.Kolmasveli)
 	self.Kolmasveli.Triggers.Eruption:AddSpy(self.Kolmasveli.MechRef.Eruption)
 	self.Kolmasveli.Triggers.Eruption:AddAlert(self.Kolmasveli.AlertsRef.Eruption, true)
@@ -397,6 +412,7 @@ function KT:Start()
 	
 	self.Toinenveli.Triggers.Glimpse = KBM.Trigger:Create(self.Lang.Ability.Glimpse[KBM.Lang], "channel", self.Toinenveli)
 	self.Toinenveli.Triggers.Glimpse:AddAlert(self.Toinenveli.AlertsRef.Glimpse)
+	self.Toinenveli.Triggers.Glimpse:AddTimer(self.Kolmasveli.TimersRef.Glimpse)
 	self.Toinenveli.Triggers.PhaseTwo = KBM.Trigger:Create(50, "percent", self.Toinenveli)
 	self.Toinenveli.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
 	self.Toinenveli.Triggers.PhaseThree = KBM.Trigger:Create(30, "percent", self.Toinenveli)
