@@ -233,14 +233,14 @@ function DF.PhaseForce()
 	DF.PhaseObj.Objectives:Remove()
 	DF.PhaseObj:SetPhase(DF.Lang.Phase.Force[KBM.Lang])
 	DF.Phase = 2
-	DF.PhaseObj.Objectives:AddPercent(DF.Force.Name, 0, 100)
+	DF.PhaseObj.Objectives:AddPercent(DF.Force, 0, 100)
 end
 
 function DF.PhaseFoci()
 	DF.PhaseObj.Objectives:Remove()
 	DF.PhaseObj:SetPhase(DF.Lang.Phase.Foci[KBM.Lang])
 	DF.Phase = 1
-	DF.PhaseObj.Objectives:AddPercent(DF.Foci.Name, 0, 100)
+	DF.PhaseObj.Objectives:AddPercent(DF.Foci, 0, 100)
 end
 
 function DF:Death(UnitID)
@@ -272,7 +272,7 @@ function DF:UnitHPCheck(uDetails, unitID)
 					self.Phase = 1
 					self.PhaseObj:SetPhase(self.Lang.Phase.Foci[KBM.Lang])
 					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj.Objectives:AddPercent(self.Foci.Name, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Foci, 0, 100)
 				end
 				self.Foci.UnitID = unitID
 				self.Foci.Available = true

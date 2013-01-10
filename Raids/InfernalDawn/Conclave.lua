@@ -294,13 +294,13 @@ end
 
 function EC.SetBossObj()
 	if EC.Ereetu.Dead == false then
-		EC.PhaseObj.Objectives:AddPercent(EC.Ereetu.Name, 0, 100)
+		EC.PhaseObj.Objectives:AddPercent(EC.Ereetu, 0, 100)
 	end
 	if EC.Szath.Dead == false then
-		EC.PhaseObj.Objectives:AddPercent(EC.Szath.Name, 0, 100)
+		EC.PhaseObj.Objectives:AddPercent(EC.Szath, 0, 100)
 	end
 	if EC.Nahoth.Dead == false then
-		EC.PhaseObj.Objectives:AddPercent(EC.Nahoth.Name, 0, 100)
+		EC.PhaseObj.Objectives:AddPercent(EC.Nahoth, 0, 100)
 	end
 end
 
@@ -394,9 +394,9 @@ function EC:UnitHPCheck(uDetails, unitID)
 					BossObj.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase("1 (HM)")
-					self.PhaseObj.Objectives:AddPercent(self.Szath.Name, 0, 100)
-					self.PhaseObj.Objectives:AddPercent(self.Nahoth.Name, 0, 100)
-					self.PhaseObj.Objectives:AddPercent(self.Ereetu.Name, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Szath, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Nahoth, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Ereetu, 0, 100)
 					self.Phase = 1
 				else
 					if not BossObj.CastBar.Active then

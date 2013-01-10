@@ -186,7 +186,7 @@ function MK:UnitHPCheck(uDetails, unitID)
 					end
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase("1")
-					self.PhaseObj.Objectives:AddPercent(self.Muglak.Name, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Muglak, 0, 100)
 					self.Phase = 1
 					KBM.MechTimer:AddStart(self.Muglak.TimersRef.BrillFirst)
 				else

@@ -69,7 +69,8 @@ MOD.ThroneL = {
 	Mod = MOD,
 	Level = "52",
 	Active = false,
-	Name = MOD.Lang.Unit.ThroneL[KBM.Lang],
+	Name = MOD.Lang.Unit.Throne[KBM.Lang],
+	DisplayName = MOD.Lang.Unit.ThroneL[KBM.Lang],
 	NameShort = "Throne",
 	Menu = {},
 	Castbar = nil,
@@ -88,7 +89,8 @@ MOD.ThroneR = {
 	Mod = MOD,
 	Level = "52",
 	Active = false,
-	Name = MOD.Lang.Unit.ThroneR[KBM.Lang],
+	Name = MOD.Lang.Unit.Throne[KBM.Lang],
+	DisplayName = MOD.Lang.Unit.ThroneR[KBM.Lang],
 	NameShort = "Throne",
 	Menu = {},
 	Castbar = nil,
@@ -107,8 +109,8 @@ function MOD:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Throne.Name] = self.Throne,
-		[self.ThroneL.Name] = self.ThroneL,
-		[self.ThroneR.Name] = self.ThroneR,
+		[self.ThroneL.DisplayName] = self.ThroneL,
+		[self.ThroneR.DisplayName] = self.ThroneR,
 	}
 	
 	for Boss, BossObj in pairs(self.Bosses) do
@@ -220,15 +222,17 @@ function MOD:UnitHPCheck(uDetails, unitID)
 				if BossObj.CastBar then
 					BossObj.CastBar:Create(unitID)
 				end
+				BossObj.UnitID = unitID
 				self.PhaseObj:Start(self.StartTime)
 				self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
 				self.PhaseObj.Objectives:AddPercent(self.Throne, 0, 100)
 				self.PhaseObj.Objectives:AddPercent(self.ThroneL, 0, 100)
 				self.PhaseObj.Objectives:AddPercent(self.ThroneR, 0, 100)
 				self.Phase = 1
+			else
+				BossObj.UnitID = unitID
+				BossObj.Available = true
 			end
-			BossObj.UnitID = unitID
-			BossObj.Available = true
 			return BossObj
 		end
 	end

@@ -212,7 +212,7 @@ function ES:UnitHPCheck(uDetails, unitID)
 					self.Estrode.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
-					self.PhaseObj.Objectives:AddPercent(self.Estrode.Name, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Estrode, 0, 100)
 					self.Phase = 1
 				end
 				self.Estrode.UnitID = unitID

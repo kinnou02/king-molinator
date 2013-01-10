@@ -315,7 +315,7 @@ end
 function RS.PhaseTwo()
 	if RS.Phase < 2 then
 		RS.PhaseObj.Objectives:Remove()
-		RS.PhaseObj.Objectives:AddPercent(RS.Rusila.Name, 0, 100)
+		RS.PhaseObj.Objectives:AddPercent(RS.Rusila, 0, 100)
 		RS.PhaseObj:SetPhase("Final")
 		RS.Phase = 2
 		KBM.EncTimer:Unpause()
@@ -361,7 +361,7 @@ function RS:UnitHPCheck(uDetails, unitID)
 						self.PhaseObj:Start(self.StartTime)
 						if BossObj == self.Dummy then
 							self.PhaseObj:SetPhase("Heart")
-							self.PhaseObj.Objectives:AddPercent(self.Lang.Unit.Heart[KBM.Lang], 0, 100)
+							self.PhaseObj.Objectives:AddPercent(self.Heart, 0, 100)
 							self.Phase = 1
 						end
 					elseif BossObj.Type == "multi" then

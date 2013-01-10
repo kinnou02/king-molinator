@@ -198,21 +198,21 @@ function MX.PhaseTwo()
 	MX.PhaseObj.Objectives:Remove()
 	MX.Phase = 2
 	MX.PhaseObj:SetPhase(2)
-	MX.PhaseObj.Objectives:AddPercent(MX.Murd.Name, 50, 75)	
+	MX.PhaseObj.Objectives:AddPercent(MX.Murd, 50, 75)	
 end
 
 function MX.PhaseThree()
 	MX.PhaseObj.Objectives:Remove()
 	MX.Phase = 3
 	MX.PhaseObj:SetPhase(3)
-	MX.PhaseObj.Objectives:AddPercent(MX.Murd.Name, 25, 50)	
+	MX.PhaseObj.Objectives:AddPercent(MX.Murd, 25, 50)	
 end
 
 function MX.PhaseFour()
 	MX.PhaseObj.Objectives:Remove()
 	MX.Phase = 4
 	MX.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
-	MX.PhaseObj.Objectives:AddPercent(MX.Murd.Name, 0, 25)	
+	MX.PhaseObj.Objectives:AddPercent(MX.Murd, 0, 25)	
 end
 
 function MX:UnitHPCheck(uDetails, unitID)	
@@ -228,7 +228,7 @@ function MX:UnitHPCheck(uDetails, unitID)
 					self.Murd.Dead = false
 					self.Murd.CastBar:Create(unitID)
 					KBM.TankSwap:Start(self.Lang.Debuff.Mangled[KBM.Lang], unitID)
-					self.PhaseObj.Objectives:AddPercent(self.Murd.Name, 75, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Murd, 75, 100)
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase(1)
 				end

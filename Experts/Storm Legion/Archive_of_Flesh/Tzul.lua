@@ -139,25 +139,25 @@ end
 
 function MOD:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		if not uDetails.player then
-			if uDetails.type == self.Tzul.UTID then
-				if not self.EncounterRunning then
-					self.EncounterRunning = true
-					self.StartTime = Inspect.Time.Real()
-					self.HeldTime = self.StartTime
-					self.TimeElapsed = 0
-					self.Tzul.Dead = false
-					self.Tzul.Casting = false
-					self.Tzul.CastBar:Create(unitID)
-					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
-					self.PhaseObj.Objectives:AddPercent(self.Tzul.Name, 0, 100)
-					self.Phase = 1
-				end
-				self.Tzul.UnitID = unitID
-				self.Tzul.Available = true
-				return self.Tzul
+		local BossObj = self.UTID[uDetails.type]
+		if BossObj then
+			if not self.EncounterRunning then
+				self.EncounterRunning = true
+				self.StartTime = Inspect.Time.Real()
+				self.HeldTime = self.StartTime
+				self.TimeElapsed = 0
+				BossObj.UnitID = unitID
+				BossObj.Dead = false
+				BossObj.CastBar:Create(unitID)
+				self.PhaseObj:Start(self.StartTime)
+				self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
+				self.PhaseObj.Objectives:AddPercent(self.Tzul, 0, 100)
+				self.Phase = 1
+			else
+				BossObj.UnitID = unitID
+				BossObj.Available = true
 			end
+			return BossObj
 		end
 	end
 end

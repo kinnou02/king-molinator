@@ -366,7 +366,7 @@ function AD.GroundPhase()
 	AD.Phase = 1
 	AD.PhaseObj.Objectives:Remove()
 	AD.PhaseObj:SetPhase(KBM.Language.Options.Ground[KBM.Lang])
-	AD.PhaseObj.Objectives:AddPercent(AD.Alsbeth.Name, 20, 100)
+	AD.PhaseObj.Objectives:AddPercent(AD.Alsbeth, 20, 100)
 	KBM.MechTimer:AddRemove(AD.Alsbeth.TimersRef.Meteor)
 	KBM.MechTimer:AddStart(AD.Alsbeth.TimersRef.Phase)
 end
@@ -375,7 +375,7 @@ function AD.FinalPhase()
 	AD.Phase = 3
 	AD.PhaseObj.Objectives:Remove()
 	AD.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
-	AD.PhaseObj.Objectives:AddPercent(AD.Alsbeth.Name, 0, 20)
+	AD.PhaseObj.Objectives:AddPercent(AD.Alsbeth, 0, 20)
 end
 
 function AD:Death(UnitID)
@@ -424,7 +424,7 @@ function AD:UnitHPCheck(uDetails, unitID)
 					self.Alsbeth.Casting = false
 					self.Alsbeth.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj.Objectives:AddPercent(self.Alsbeth.Name, 20, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Alsbeth, 20, 100)
 					self.PhaseObj:SetPhase(KBM.Language.Options.Ground[KBM.Lang])
 					self.GhostCount = 0
 					self.Phase = 1
@@ -464,7 +464,7 @@ function AD:UnitHPCheck(uDetails, unitID)
 						if self.Phase ~= 2 then
 							self.AirPhase()
 						end
-						self.PhaseObj.Objectives:AddPercent(uDetails.name, 0, 100)
+						self.PhaseObj.Objectives:AddPercent(self.Bosses[uDetails.name], 0, 100)
 					else
 						self.Bosses[uDetails.name].Available = true
 						self.Bosses[uDetails.name].UnitID = unitID

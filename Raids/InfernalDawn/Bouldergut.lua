@@ -182,7 +182,7 @@ function BG:UnitHPCheck(uDetails, unitID)
 					end
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase("1")
-					self.PhaseObj.Objectives:AddPercent(self.Bouldergut.Name, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Bouldergut, 0, 100)
 					self.Phase = 1
 				else
 					BossObj.Dead = false

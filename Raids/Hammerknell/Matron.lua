@@ -238,14 +238,14 @@ function MZ.PhaseTwo()
 	MZ.Phase = 2
 	MZ.PhaseObj.Objectives:Remove()
 	MZ.PhaseObj:SetPhase(2)
-	MZ.PhaseObj.Objectives:AddPercent(MZ.Matron.Name, 30, 40)	
+	MZ.PhaseObj.Objectives:AddPercent(MZ.Matron, 30, 40)	
 end
 
 function MZ.PhaseThree()
 	MZ.Phase = 3
 	MZ.PhaseObj.Objectives:Remove()
 	MZ.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
-	MZ.PhaseObj.Objectives:AddPercent(MZ.Matron.Name, 0, 30)	
+	MZ.PhaseObj.Objectives:AddPercent(MZ.Matron, 0, 30)	
 end
 
 function MZ:UnitHPCheck(uDetails, unitID)	
@@ -261,7 +261,7 @@ function MZ:UnitHPCheck(uDetails, unitID)
 					self.Matron.Casting = false
 					self.Matron.CastBar:Create(unitID)
 					KBM.TankSwap:Start(MZ.Lang.Debuff.Curse[KBM.Lang], unitID)
-					self.PhaseObj.Objectives:AddPercent(self.Matron.Name, 40, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Matron, 40, 100)
 					self.PhaseObj:Start(self.StartTime)
 				end
 				self.Matron.UnitID = unitID

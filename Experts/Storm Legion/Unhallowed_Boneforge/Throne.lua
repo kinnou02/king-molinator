@@ -132,8 +132,8 @@ function MOD:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Throne.Name] = self.Throne,
-		[self.ThroneL.Name] = self.ThroneL,
-		[self.ThroneR.Name] = self.ThroneR,
+		[self.ThroneL.DisplayName] = self.ThroneL,
+		[self.ThroneR.DisplayName] = self.ThroneR,
 		[self.Titan.Name] = self.Titan,
 	}
 	
@@ -240,8 +240,8 @@ function MOD:UnitHPCheck(uDetails, unitID)
 				self.StartTime = Inspect.Time.Real()
 				self.HeldTime = self.StartTime
 				self.TimeElapsed = 0
+				BossObj.UnitID = unitID
 				BossObj.Dead = false
-				BossObj.Casting = false
 				if BossObj.CastBar then
 					BossObj.CastBar:Create(unitID)
 				end
@@ -251,9 +251,10 @@ function MOD:UnitHPCheck(uDetails, unitID)
 				self.PhaseObj.Objectives:AddPercent(self.ThroneL, 0, 100)
 				self.PhaseObj.Objectives:AddPercent(self.ThroneR, 0, 100)
 				self.Phase = 1
+			else
+				BossObj.UnitID = unitID
+				BossObj.Available = true
 			end
-			BossObj.UnitID = unitID
-			BossObj.Available = true
 			return BossObj
 		end
 	end

@@ -459,8 +459,8 @@ function AK.PhaseThree()
 	KBM.MechTimer:AddRemove(AK.Jornaru.TimersRef.SummonTwo)
 	KBM.MechTimer:AddStart(AK.Akylios.TimersRef.EmergeFirst)
 	KBM.MechTimer:AddStart(AK.Akylios.TimersRef.BreathFirst)
-	AK.PhaseObj.Objectives:AddPercent(AK.Akylios.Name, 55, 100)
-	AK.PhaseObj.Objectives:AddPercent(AK.Jornaru.Name, 0, 50)
+	AK.PhaseObj.Objectives:AddPercent(AK.Akylios, 55, 100)
+	AK.PhaseObj.Objectives:AddPercent(AK.Jornaru, 0, 50)
 	AK.Jornaru.Triggers.AltPhaseFour.Enabled = true
 	print(AK.Lang.Phase.Three[KBM.Lang])
 end
@@ -475,8 +475,8 @@ function AK.PhaseFour()
 		if AK.Jornaru.UnitID then
 			AK.Jornaru.CastBar:Create(AK.Jornaru.UnitID)
 		end
-		AK.PhaseObj.Objectives:AddPercent(AK.Akylios.Name, 15, 55)
-		AK.PhaseObj.Objectives:AddPercent(AK.Jornaru.Name, 0, 50)
+		AK.PhaseObj.Objectives:AddPercent(AK.Akylios, 15, 55)
+		AK.PhaseObj.Objectives:AddPercent(AK.Jornaru, 0, 50)
 		print(AK.Lang.Phase.Four[KBM.Lang])
 	end
 end
@@ -488,8 +488,8 @@ function AK.PhaseFinal()
 		AK.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
 		KBM.MechTimer:AddRemove(AK.Akylios.TimersRef.Emerge)
 		KBM.MechTimer:AddRemove(AK.Akylios.TimersRef.Submerge)
-		AK.PhaseObj.Objectives:AddPercent(AK.Akylios.Name, 0, 15)
-		AK.PhaseObj.Objectives:AddPercent(AK.Jornaru.Name, 0, 15)
+		AK.PhaseObj.Objectives:AddPercent(AK.Akylios, 0, 15)
+		AK.PhaseObj.Objectives:AddPercent(AK.Jornaru, 0, 15)
 		print(AK.Lang.Phase.Final[KBM.Lang])
 	end
 end
@@ -549,7 +549,7 @@ function AK:UnitHPCheck(uDetails, unitID)
 						self.Phase = 1
 						self.Jornaru.CastBar:Create(unitID)
 						KBM.MechTimer:AddStart(self.Jornaru.TimersRef.WaveOne)
-						self.PhaseObj.Objectives:AddPercent(self.Jornaru.Name, 50, 100)
+						self.PhaseObj.Objectives:AddPercent(self.Jornaru, 50, 100)
 						self.PhaseObj:SetPhase(1)
 						self.PhaseObj:Start(self.StartTime)
 					end
@@ -565,7 +565,7 @@ function AK:UnitHPCheck(uDetails, unitID)
 						self.TimeElapsed = 0
 						self.Phase = 3
 						self.Akylios.CastBar:Create(unitID)
-						self.PhaseObj.Objectives:AddPercent(self.Jornaru.Name, 0, 50)
+						self.PhaseObj.Objectives:AddPercent(self.Jornaru, 0, 50)
 						self.PhaseObj:SetPhase(3)
 						self.PhaseObj:Start(self.StartTime)
 					end

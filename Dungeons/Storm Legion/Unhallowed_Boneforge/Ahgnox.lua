@@ -138,25 +138,26 @@ end
 
 function MOD:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		if not uDetails.player then
-			if uDetails.name == self.Ahgnox.Name then
-				if not self.EncounterRunning then
-					self.EncounterRunning = true
-					self.StartTime = Inspect.Time.Real()
-					self.HeldTime = self.StartTime
-					self.TimeElapsed = 0
-					self.Ahgnox.Dead = false
-					self.Ahgnox.Casting = false
-					self.Ahgnox.CastBar:Create(unitID)
-					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
-					self.PhaseObj.Objectives:AddPercent(self.Ahgnox.Name, 0, 100)
-					self.Phase = 1
-				end
-				self.Ahgnox.UnitID = unitID
-				self.Ahgnox.Available = true
-				return self.Ahgnox
+		local BossObj = self.UTID[uDetails.type]
+		if BossObj then
+			if not self.EncounterRunning then
+				self.EncounterRunning = true
+				self.StartTime = Inspect.Time.Real()
+				self.HeldTime = self.StartTime
+				self.TimeElapsed = 0
+				BossObj.Dead = false
+				BossObj.Casting = false
+				BossObj.CastBar:Create(unitID)
+				BossObj.UnitID = unitID
+				self.PhaseObj:Start(self.StartTime)
+				self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
+				self.PhaseObj.Objectives:AddPercent(self.Ahgnox, 0, 100)
+				self.Phase = 1
+			else
+				BossObj.UnitID = unitID
+				BossObj.Available = true
 			end
+			return BossObj
 		end
 	end
 end

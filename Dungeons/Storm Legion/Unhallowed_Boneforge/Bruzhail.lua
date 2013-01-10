@@ -148,13 +148,15 @@ function MOD:UnitHPCheck(uDetails, unitID)
 				BossObj.Dead = false
 				BossObj.Casting = false
 				BossObj.CastBar:Create(unitID)
+				BossObj.UnitID = unitID
 				self.PhaseObj:Start(self.StartTime)
 				self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
-				self.PhaseObj.Objectives:AddPercent(self.Bruzhail.Name, 0, 100)
+				self.PhaseObj.Objectives:AddPercent(self.Bruzhail, 0, 100)
 				self.Phase = 1
+			else
+				BossObj.UnitID = unitID
+				BossObj.Available = true
 			end
-			BossObj.UnitID = unitID
-			BossObj.Available = true
 			return BossObj
 		end
 	end

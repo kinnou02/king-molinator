@@ -138,23 +138,25 @@ end
 
 function MOD:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		if uDetails.type == self.Bruzhail.UTID then
+		local BossObj = self.UTID[uDetails.type]
+		if BossObj then
 			if not self.EncounterRunning then
 				self.EncounterRunning = true
 				self.StartTime = Inspect.Time.Real()
 				self.HeldTime = self.StartTime
 				self.TimeElapsed = 0
-				self.Bruzhail.Dead = false
-				self.Bruzhail.Casting = false
-				self.Bruzhail.CastBar:Create(unitID)
+				BossObj.UnitID = unitID
+				BossObj.Dead = false
+				BossObj.CastBar:Create(unitID)
 				self.PhaseObj:Start(self.StartTime)
 				self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
-				self.PhaseObj.Objectives:AddPercent(self.Bruzhail.Name, 0, 100)
+				self.PhaseObj.Objectives:AddPercent(self.Bruzhail, 0, 100)
 				self.Phase = 1
+			else
+				BossObj.UnitID = unitID
+				BossObj.Available = true
 			end
-			self.Bruzhail.UnitID = unitID
-			self.Bruzhail.Available = true
-			return self.Bruzhail
+			return BossObj
 		end
 	end
 end

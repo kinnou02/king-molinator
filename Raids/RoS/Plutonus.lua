@@ -161,7 +161,7 @@ function PI.PhaseTwo()
 	PI.PhaseObj.Objectives:Remove()
 	PI.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
 	PI.Phase = 2
-	PI.PhaseObj.Objectives:AddPercent(PI.Plutonus.Name, 0, 50)
+	PI.PhaseObj.Objectives:AddPercent(PI.Plutonus, 0, 50)
 end
 
 function PI:UnitHPCheck(uDetails, unitID)
@@ -179,7 +179,7 @@ function PI:UnitHPCheck(uDetails, unitID)
 					self.Phase = 1
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase(1)
-					self.PhaseObj.Objectives:AddPercent(self.Plutonus.Name, 50, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Plutonus, 50, 100)
 				end
 				self.Plutonus.Casting = false
 				self.Plutonus.UnitID = unitID

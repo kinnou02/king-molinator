@@ -234,7 +234,7 @@ function SN:UnitHPCheck(uDetails, unitID)
 					self.TimeElapsed = 0
 					self.Sicaron.Dead = false
 					self.Sicaron.CastBar:Create(unitID)
-					self.PhaseObj.Objectives:AddPercent(self.Sicaron.Name, 80, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Sicaron, 80, 100)
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase(1)
 				end
@@ -250,7 +250,7 @@ end
 function SN.PhaseTwo()
 	SN.Phase = 2
 	SN.PhaseObj.Objectives:Remove()
-	SN.PhaseObj.Objectives:AddPercent(SN.Sicaron.Name, 50, 80)
+	SN.PhaseObj.Objectives:AddPercent(SN.Sicaron, 50, 80)
 	SN.PhaseObj:SetPhase(SN.Phase)
 	print(KBM.Language.Options.Phase[KBM.Lang].." 2 starting, 20s purges.")
 end
@@ -258,7 +258,7 @@ end
 function SN.PhaseThree()
 	SN.Phase = 3
 	SN.PhaseObj.Objectives:Remove()
-	SN.PhaseObj.Objectives:AddPercent(SN.Sicaron.Name, 25, 50)
+	SN.PhaseObj.Objectives:AddPercent(SN.Sicaron, 25, 50)
 	SN.PhaseObj:SetPhase(SN.Phase)
 	print(KBM.Language.Options.Phase[KBM.Lang].." 3 starting, 16s purges.")
 end
@@ -266,7 +266,7 @@ end
 function SN.PhaseFour()
 	SN.Phase = 4
 	SN.PhaseObj.Objectives:Remove()
-	SN.PhaseObj.Objectives:AddPercent(SN.Sicaron.Name, 10, 25)
+	SN.PhaseObj.Objectives:AddPercent(SN.Sicaron, 10, 25)
 	SN.PhaseObj:SetPhase(SN.Phase)
 	print(KBM.Language.Options.Phase[KBM.Lang].." 4 starting, 12s purges.")
 end

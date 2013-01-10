@@ -210,26 +210,25 @@ end
 
 function OA:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		if not uDetails.player then
-			if self.Bosses[uDetails.name] then
-				if not self.EncounterRunning then
-					self.EncounterRunning = true
-					self.StartTime = Inspect.Time.Real()
-					self.HeldTime = self.StartTime
-					self.TimeElapsed = 0
-					self.Phase = 1
-					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase(1)
-					self.PhaseObj.Objectives:AddPercent(self.Primal, 0, 100)
-					self.PhaseObj.Objectives:AddPercent(self.Necrotic, 0, 100)
-				end
-				if not self.Bosses[uDetails.name].UnitID then
-					self.Bosses[uDetails.name].Dead = false
-				end
-				self.Bosses[uDetails.name].UnitID = unitID
-				self.Bosses[uDetails.name].Available = true
-				return self.Bosses[uDetails.name]
+		local BossObj = self.UTID[uDetails.type]
+		if BossObj then
+			if not self.EncounterRunning then
+				self.EncounterRunning = true
+				self.StartTime = Inspect.Time.Real()
+				self.HeldTime = self.StartTime
+				self.TimeElapsed = 0
+				self.Phase = 1
+				BossObj.UnitID = unitID
+				BossObj.Dead = false
+				self.PhaseObj:Start(self.StartTime)
+				self.PhaseObj:SetPhase(1)
+				self.PhaseObj.Objectives:AddPercent(self.Primal, 0, 100)
+				self.PhaseObj.Objectives:AddPercent(self.Necrotic, 0, 100)
+			else
+				BossObj.UnitID = unitID
+				BossObj.Available = true
 			end
+			return BossObj
 		end
 	end
 end

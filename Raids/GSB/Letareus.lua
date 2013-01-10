@@ -153,28 +153,28 @@ function DL:Death(UnitID)
 end
 
 function DL:UnitHPCheck(uDetails, unitID)
-	
 	if uDetails and unitID then
-		if uDetails.name == self.Letareus.Name then
-			if not self.Letareus.UnitID then
+		local BossObj = self.UTID[uDetails.type]
+		if BossObj then
+			if not self.EncounterRunning then
 				self.EncounterRunning = true
 				self.StartTime = Inspect.Time.Real()
 				self.HeldTime = self.StartTime
 				self.TimeElapsed = 0
 				self.Phase = 1
-				self.Letareus.CastBar:Create(unitID)
-				self.Letareus.UnitID = unitID
+				BossObj.Dead = false
+				BossObj.CastBar:Create(unitID)
+				BossObj.UnitID = unitID
 				self.PhaseObj:SetPhase(DL.Lang.Mechanic.Tank[KBM.Lang])
 				self.PhaseObj.Objectives:AddPercent(self.Letareus, 86, 100)
 				self.PhaseObj:Start(self.StartTime)
+			else
+				self.Letareus.UnitID = unitID
+				self.Letareus.Available = true
 			end
-			self.Letareus.Casting = false
-			self.Letareus.UnitID = unitID
-			self.Letareus.Available = true
-			return self.Letareus
+			return BossObj
 		end
 	end
-	
 end
 
 function DL:PhaseTwo()

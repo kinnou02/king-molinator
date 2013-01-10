@@ -258,7 +258,7 @@ function GR.PhaseThree()
 	GR.Phase = 3
 	GR.PhaseObj.Objectives:Remove()
 	GR.PhaseObj:SetPhase(GR.Phase)
-	GR.PhaseObj.Objectives:AddPercent(GR.Grugonim.Name, 10, 50)
+	GR.PhaseObj.Objectives:AddPercent(GR.Grugonim, 10, 50)
 	GR.PhaseObj.Objectives:AddMeta(GR.Lang.Ability.Breath[KBM.Lang], 3, 0)
 end
 
@@ -266,7 +266,7 @@ function GR.PhaseFive()
 	GR.Phase = 5
 	GR.PhaseObj.Objectives:Remove()
 	GR.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
-	GR.PhaseObj.Objectives:AddPercent(GR.Grugonim.Name, 0, 10)
+	GR.PhaseObj.Objectives:AddPercent(GR.Grugonim, 0, 10)
 	GR.PhaseObj.Objectives:AddMeta(GR.Lang.Ability.Breath[KBM.Lang], 3, 0)
 end
 
@@ -320,7 +320,7 @@ function GR:UnitHPCheck(uDetails, unitID)
 					self.Phase = 1
 					self.Counts.Breaths = 0
 					self.Counts.Towers = 0
-					self.PhaseObj.Objectives:AddPercent(self.Grugonim.Name, 50, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Grugonim, 50, 100)
 					self.PhaseObj.Objectives:AddMeta(self.Lang.Ability.Breath[KBM.Lang], 3, 0)
 					self.PhaseObj:Start(self.StartTime)
 					self.Grugonim.CastFilters[self.Lang.Ability.Breath[KBM.Lang]].Count = 3

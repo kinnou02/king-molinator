@@ -409,7 +409,7 @@ function WD.PhaseTwo()
 	if WD.Phase < 2 then
 		WD.PhaseObj.Objectives:Remove()
 		WD.PhaseObj:SetPhase("2")
-		WD.PhaseObj.Objectives:AddPercent(WD.Natung.Name, 0, 100)
+		WD.PhaseObj.Objectives:AddPercent(WD.Natung, 0, 100)
 		WD.Phase = 2
 	end
 end
@@ -418,7 +418,7 @@ function WD.PhaseFinal()
 	if WD.Phase < 3 then
 		WD.PhaseObj.Objectives:Remove()
 		WD.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
-		WD.PhaseObj.Objectives:AddPercent(WD.Drak.Name, 0, 100)
+		WD.PhaseObj.Objectives:AddPercent(WD.Drak, 0, 100)
 		WD.Phase = 3
 	end
 end
@@ -462,16 +462,16 @@ function WD:UnitHPCheck(uDetails, unitID)
 						self.PhaseObj:Start(self.StartTime)
 						if BossObj == self.Azul then
 							self.PhaseObj:SetPhase("1")
-							self.PhaseObj.Objectives:AddPercent(self.Azul.Name, 0, 100)
+							self.PhaseObj.Objectives:AddPercent(self.Azul, 0, 100)
 							self.Phase = 1
 							KBM.MechTimer:AddStart(self.Drak.TimersRef.BlazingFirst)
 						elseif BossObj == self.Drak then
 							self.PhaseObj:SetPhase("Final")
-							self.PhaseObj.Objectives:AddPercent(self.Drak.Name, 0, 100)
+							self.PhaseObj.Objectives:AddPercent(self.Drak, 0, 100)
 							self.Phase = 3
 						elseif BossObj == self.Natung then
 							self.PhaseObj:SetPhase("2")
-							self.PhaseObj.Objectives:AddPercent(self.Natung.Name, 0, 100)
+							self.PhaseObj.Objectives:AddPercent(self.Natung, 0, 100)
 							self.Phase = 2
 						end
 					elseif BossObj.Type == "multi" then

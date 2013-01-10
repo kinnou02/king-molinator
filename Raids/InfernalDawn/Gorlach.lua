@@ -202,7 +202,7 @@ function GL:UnitHPCheck(uDetails, unitID)
 					end
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase("1")
-					self.PhaseObj.Objectives:AddPercent(self.Gorlach.Name, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Gorlach, 0, 100)
 					KBM.TankSwap:Start(self.Lang.Debuff.Fire[KBM.Lang], unitID)
 					self.Phase = 1
 				else

@@ -264,7 +264,7 @@ end
 function MF.PhaseTwo()
 	if MF.Phase == 1 then
 		MF.PhaseObj.Objectives:Remove()
-		MF.PhaseObj.Objectives:AddPercent(MF.Maelforge.Name, 30, 65)
+		MF.PhaseObj.Objectives:AddPercent(MF.Maelforge, 30, 65)
 		MF.PhaseObj:SetPhase(2)
 		MF.Phase = 2
 	end
@@ -272,7 +272,7 @@ end
 
 function MF.PhaseCannons()
 	MF.PhaseObj.Objectives:Remove()
-	MF.PhaseObj.Objectives:AddPercent(MF.Maelforge.Name, 0, 30)
+	MF.PhaseObj.Objectives:AddPercent(MF.Maelforge, 0, 30)
 	MF.PhaseObj.Objectives:AddDeath(MF.Cannon.Name, 4)
 	MF.PhaseObj:SetPhase("3")
 	MF.Phase = 3
@@ -282,7 +282,7 @@ end
 
 function MF.PhaseFinal()
 	MF.PhaseObj.Objectives:Remove()
-	MF.PhaseObj.Objectives:AddPercent(MF.Maelforge.Name, 0, 30)
+	MF.PhaseObj.Objectives:AddPercent(MF.Maelforge, 0, 30)
 	MF.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
 	MF.Phase = 4
 	KBM.MechTimer:AddRemove(MF.Maelforge.TimersRef.Hell)
@@ -325,7 +325,7 @@ function MF:UnitHPCheck(uDetails, unitID)
 						self.PhaseTwo()
 					else
 						self.PhaseObj:SetPhase(1)
-						self.PhaseObj.Objectives:AddPercent(self.Maelforge.Name, 65, 100)
+						self.PhaseObj.Objectives:AddPercent(self.Maelforge, 65, 100)
 						KBM.TankSwap:Start(self.Lang.Debuff.Melt[KBM.Lang], unitID)
 						KBM.MechTimer:AddStart(self.Maelforge.TimersRef.Fissure)
 						self.Phase = 1

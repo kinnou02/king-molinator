@@ -68,6 +68,7 @@ IJ.Lang.Unit.JohlenShort:SetRussian("Джохлен")
 IJ.Lang.Unit.JohlenShort:SetKorean("졸렌")
 -- Addtional Unit Dictionary
 IJ.Lang.Unit.Bomb = KBM.Language:Add("Devastating Bomb")
+--IJ.Lang.Unit.Bomb = KBM.Language:Add("Concussion Bomb")
 IJ.Lang.Unit.Bomb:SetGerman("Vernichtende Bombe")
 IJ.Lang.Unit.Bomb:SetFrench("Bombe dévastatrice")
 IJ.Lang.Unit.Bomb:SetRussian("Разрушительная бомба")
@@ -104,10 +105,9 @@ IJ.Bomb = {
 	Mod = IJ,
 	Level = 52,
 	Name = IJ.Lang.Unit.Bomb[KBM.Lang],
-	UnitList = {},
 	Ignore = true,
-	Type = "multi",
 	UTID = "U3F7C52390EFF515F",
+	Dead = false,
 }
 
 function IJ:AddBosses(KBM_Boss)
@@ -179,11 +179,11 @@ function IJ:Death(UnitID)
 	if self.Johlen.UnitID == UnitID then
 		self.Johlen.Dead = true
 		return true
-	elseif self.Bomb.UnitList[UnitID] then
-		self.Bomb.UnitList[UnitID].Dead = true
-		if self.Bomb.PhaseObjective then
-			self.Bomb.PhaseObjective:Remove()
-			self.Bomb.PhaseObjective = nil
+	elseif self.Bomb then
+		self.Bomb.Dead = true
+		self.Bomb.UnitID = nil
+		if self.Bomb.PhaseObj then
+			self.Bomb.PhaseObj:Remove()
 			if self.Phase < 4 then
 				self.PhaseObj:SetPhase(self.Phase)
 			else
@@ -197,41 +197,37 @@ end
 
 function IJ:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		if not uDetails.player then
-			if uDetails.name == self.Johlen.Name then
-				if not self.Johlen.UnitID then
+		local BossObj = self.UTID[uDetails.type]
+		if not BossObj then
+			BossObj = self.Bosses[uDetails.name]
+		end
+		if BossObj then
+			if not self.EncounterRunning then
+				if BossObj == self.Johlen then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
 					self.TimeElapsed = 0
-					self.Johlen.Dead = false
-					self.Johlen.CastBar:Create(unitID)
+					BossObj.UnitID = unitID
+					BossObj.Dead = false
+					BossObj.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj.Objectives:AddPercent(self.Johlen.Name, 75, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Johlen, 75, 100)
 					self.PhaseObj:SetPhase(1)
-				end
-				self.Johlen.Casting = false
-				self.Johlen.UnitID = unitID
-				self.Johlen.Available = true
-				return self.Johlen
-			else
-				if not self.Bosses[uDetails.name].UnitList[unitID] then
-					local SubBossObj = {
-						Mod = IJ,
-						Level = "??",
-						Name = uDetails.name,
-						Dead = false,
-						Casting = false,
-						UnitID = unitID,
-						Available = true,
-					}
-					self.Bosses[uDetails.name].UnitList[unitID] = SubBossObj
 				else
-					self.Bosses[uDetails.name].UnitList[unitID].Available = true
-					self.Bosses[uDetails.name].UnitList[unitID].UnitID = UnitID
+					return
 				end
-				return self.Bosses[uDetails.name].UnitList[unitID]			
+			else
+				if BossObj.CastBar then
+					if BossObj.UnitID ~= unitID then
+						BossObj.CastBar:Remove()
+						BossObj.CastBar:Create(unitID)
+					end
+				end
+				BossObj.UnitID = unitID
+				BossObj.Available = true
 			end
+			return BossObj
 		end
 	end
 end
@@ -240,36 +236,38 @@ function IJ.PhaseTwo()
 	IJ.PhaseObj.Objectives:Remove()
 	IJ.Phase = 2
 	IJ.PhaseObj:SetPhase(IJ.Lang.Phase.Bomb[KBM.Lang].." 1/3")
-	IJ.PhaseObj.Objectives:AddPercent(IJ.Johlen.Name, 50, 75)
-	IJ.Bomb.PhaseObjective = IJ.PhaseObj.Objectives:AddPercent(IJ.Bomb.Name, 0, 100)	
+	IJ.PhaseObj.Objectives:AddPercent(IJ.Johlen, 50, 75)
+	IJ.PhaseObj.Objectives:AddPercent(IJ.Bomb, 0, 100)	
 end
 
 function IJ.PhaseThree()
 	IJ.PhaseObj.Objectives:Remove()
 	IJ.Phase = 3
 	IJ.PhaseObj:SetPhase(IJ.Lang.Phase.Bomb[KBM.Lang].." 2/3")
-	IJ.PhaseObj.Objectives:AddPercent(IJ.Johlen.Name, 25, 50)
-	IJ.Bomb.PhaseObjective = IJ.PhaseObj.Objectives:AddPercent(IJ.Bomb.Name, 0, 100)	
+	IJ.PhaseObj.Objectives:AddPercent(IJ.Johlen, 25, 50)
+	IJ.PhaseObj.Objectives:AddPercent(IJ.Bomb, 0, 100)	
 end
 
 function IJ.PhaseFour()
 	IJ.PhaseObj.Objectives:Remove()
 	IJ.Phase = 4
 	IJ.PhaseObj:SetPhase(IJ.Lang.Phase.Bomb[KBM.Lang].." 3/3")
-	IJ.PhaseObj.Objectives:AddPercent(IJ.Johlen.Name, 0, 25)
-	IJ.Bomb.PhaseObjective = IJ.PhaseObj.Objectives:AddPercent(IJ.Bomb.Name, 0, 100)		
+	IJ.PhaseObj.Objectives:AddPercent(IJ.Johlen, 0, 25)
+	IJ.PhaseObj.Objectives:AddPercent(IJ.Bomb, 0, 100)		
 end
 
 function IJ:Reset()
 	self.EncounterRunning = false
-	self.Johlen.Available = false
-	self.Johlen.UnitID = nil
-	self.Johlen.CastBar:Remove()
-	self.Johlen.Dead = false
-	self.Bomb.UnitList = {}
+	for Name, BossObj in pairs(self.Bosses) do
+		BossObj.Available = false
+		BossObj.UnitID = nil
+		if BossObj.CastBar then
+			BossObj.CastBar:Remove()
+		end
+		BossObj.Dead = false
+	end
 	self.Phase = 1
 	self.PhaseObj:End(Inspect.Time.Real())
-	self.Bomb.PhaseObjective = nil
 end
 
 function IJ:Timer()	

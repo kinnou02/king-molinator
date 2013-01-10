@@ -181,7 +181,7 @@ function MOD:UnitHPCheck(uDetails, unitID)
 	if uDetails and unitID then
 		local BossObj = self.UTID[uDetails.type]
 		if BossObj then
-			if uDetails.name ~= BossObj.Name then 
+			if uDetails.relation ~= "hostile" then 
 				return
 			end
 			if BossObj.UnitID ~= unitID then

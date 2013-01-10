@@ -214,7 +214,7 @@ function GU:UnitHPCheck(uDetails, unitID)
 					self.Phase = 1
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
-					self.PhaseObj.Objectives:AddPercent(self.Garau.Name, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Garau, 0, 100)
 				end
 				self.Garau.Casting = false
 				self.Garau.UnitID = unitID

@@ -473,8 +473,8 @@ function KM:UnitHPCheck(uDetails, unitID)
 						self.PhaseObj:Start(self.StartTime)
 						self.Phase = 1
 						self.PhaseObj:SetPhase(1)
-						self.PhaseObj.Objectives:AddPercent(self.King.Name, 90, 100)
-						self.PhaseObj.Objectives:AddPercent(self.Prince.Name, 90, 100)
+						self.PhaseObj.Objectives:AddPercent(self.King, 90, 100)
+						self.PhaseObj.Objectives:AddPercent(self.Prince, 90, 100)
 						self.King.Dead = false
 					end
 					self.King.Casting = false
@@ -499,8 +499,8 @@ function KM:UnitHPCheck(uDetails, unitID)
 						self.PhaseObj:Start(self.StartTime)
 						self.Phase = 1
 						self.PhaseObj:SetPhase(1)
-						self.PhaseObj.Objectives:AddPercent(self.King.Name, 90, 100)
-						self.PhaseObj.Objectives:AddPercent(self.Prince.Name, 90, 100)
+						self.PhaseObj.Objectives:AddPercent(self.King, 90, 100)
+						self.PhaseObj.Objectives:AddPercent(self.Prince, 90, 100)
 						self.Prince.Dead = false
 					end
 					self.PrinceLastHP = uDetails.healthMax
@@ -558,8 +558,8 @@ function KM.PhaseTwo()
 		KM.PhaseObj.Objectives:Remove()
 		KM.Phase = 2
 		KM.PhaseObj:SetPhase(2)
-		KM.PhaseObj.Objectives:AddPercent(KM.King.Name, 65, 90)
-		KM.PhaseObj.Objectives:AddPercent(KM.Prince.Name, 65, 90)
+		KM.PhaseObj.Objectives:AddPercent(KM.King, 65, 90)
+		KM.PhaseObj.Objectives:AddPercent(KM.Prince, 65, 90)
 	end
 end
 
@@ -568,8 +568,8 @@ function KM.PhaseThree()
 		KM.PhaseObj.Objectives:Remove()
 		KM.Phase = 3
 		KM.PhaseObj:SetPhase(3)
-		KM.PhaseObj.Objectives:AddPercent(KM.King.Name, 40, 65)
-		KM.PhaseObj.Objectives:AddPercent(KM.Prince.Name, 40, 65)
+		KM.PhaseObj.Objectives:AddPercent(KM.King, 40, 65)
+		KM.PhaseObj.Objectives:AddPercent(KM.Prince, 40, 65)
 	end	
 end
 
@@ -578,8 +578,8 @@ function KM.PhaseFour()
 		KM.PhaseObj.Objectives:Remove()
 		KM.Phase = 4
 		KM.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
-		KM.PhaseObj.Objectives:AddPercent(KM.King.Name, 0, 40)
-		KM.PhaseObj.Objectives:AddPercent(KM.Prince.Name, 0, 40)
+		KM.PhaseObj.Objectives:AddPercent(KM.King, 0, 40)
+		KM.PhaseObj.Objectives:AddPercent(KM.Prince, 0, 40)
 	end
 end
 

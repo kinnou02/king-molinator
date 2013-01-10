@@ -281,7 +281,7 @@ function CRC:UnitHPCheck(uDetails, unitID)
 					end
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase("1")
-					self.PhaseObj.Objectives:AddPercent(self.Crucia.Name, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Crucia, 0, 100)
 					self.Phase = 1
 				else
 					BossObj.Dead = false

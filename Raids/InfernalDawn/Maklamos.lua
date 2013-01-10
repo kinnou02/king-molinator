@@ -261,21 +261,21 @@ function ML.PhaseTwo()
 	ML.Phase = 2
 	ML.PhaseObj.Objectives:Remove()
 	ML.PhaseObj:SetPhase(2)
-	ML.PhaseObj.Objectives:AddPercent(ML.Maklamos.Name, 50, 80)	
+	ML.PhaseObj.Objectives:AddPercent(ML.Maklamos, 50, 80)	
 end
 
 function ML.PhaseThree()
 	ML.Phase = 3
 	ML.PhaseObj.Objectives:Remove()
 	ML.PhaseObj:SetPhase(3)
-	ML.PhaseObj.Objectives:AddPercent(ML.Maklamos.Name, 30, 50)
+	ML.PhaseObj.Objectives:AddPercent(ML.Maklamos, 30, 50)
 end
 
 function ML.PhaseFour()
 	ML.Phase = 4
 	ML.PhaseObj.Objectives:Remove()
 	ML.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
-	ML.PhaseObj.Objectives:AddPercent(ML.Maklamos.Name, 0, 30)	
+	ML.PhaseObj.Objectives:AddPercent(ML.Maklamos, 0, 30)	
 end
 
 function ML:Death(UnitID)
@@ -305,7 +305,7 @@ function ML:UnitHPCheck(uDetails, unitID)
 					KBM.TankSwap:Start(DebuffTable, unitID, 2)
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase("1")
-					self.PhaseObj.Objectives:AddPercent(self.Maklamos.Name, 80, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Maklamos, 80, 100)
 					self.Phase = 1
 				end
 				self.Maklamos.UnitID = unitID

@@ -61,6 +61,10 @@ Tower of the Shattered
 * Psychophage Primakov
 ** New: Enrage timer added for 8 mintues (Estimate)
 
+Unhallowed Boneforge
+* Necrotic Throne
+** Fixed: Phase Monitor should now correctly track at least the two active thrones correctly.
+
 ----
 v1.3.8
 

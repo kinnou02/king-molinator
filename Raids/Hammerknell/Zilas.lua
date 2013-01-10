@@ -272,7 +272,7 @@ function SZ:UnitHPCheck(uDetails, unitID)
 					self.HeldTime = self.StartTime
 					self.TimeElapsed = 0
 					self.Zilas.CastBar:Create(unitID)
-					self.PhaseObj.Objectives:AddPercent(self.Zilas.Name, 80, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Zilas, 80, 100)
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase(1)
 				end
@@ -316,7 +316,7 @@ function SZ.PhaseTwo()
 	SZ.Phase = 2
 	SZ.PhaseObj.Objectives:Remove()
 	SZ.PhaseObj:SetPhase(2)
-	SZ.PhaseObj.Objectives:AddPercent(SZ.Zilas.Name, 70, 80)
+	SZ.PhaseObj.Objectives:AddPercent(SZ.Zilas, 70, 80)
 	print("Phase 2 starting!")
 end
 
@@ -324,7 +324,7 @@ function SZ.PhaseThree()
 	SZ.Phase = 3
 	SZ.PhaseObj.Objectives:Remove()
 	SZ.PhaseObj:SetPhase(3)
-	SZ.PhaseObj.Objectives:AddPercent(SZ.Zilas.Name, 40, 70)
+	SZ.PhaseObj.Objectives:AddPercent(SZ.Zilas, 40, 70)
 	print("Phase 3 starting!")
 end
 
@@ -332,7 +332,7 @@ function SZ.PhaseFour()
 	SZ.Phase = 4
 	SZ.PhaseObj.Objectives:Remove()
 	SZ.PhaseObj:SetPhase(4)
-	SZ.PhaseObj.Objectives:AddPercent(SZ.Zilas.Name, 20, 40)
+	SZ.PhaseObj.Objectives:AddPercent(SZ.Zilas, 20, 40)
 	print("Phase 4 starting!")	
 end
 
@@ -340,7 +340,7 @@ function SZ.PhaseFive()
 	SZ.Phase = 5
 	SZ.PhaseObj.Objectives:Remove()
 	SZ.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
-	SZ.PhaseObj.Objectives:AddPercent(SZ.Zilas.Name, 0, 20)
+	SZ.PhaseObj.Objectives:AddPercent(SZ.Zilas, 0, 20)
 	print("Final Phase!")
 end
 

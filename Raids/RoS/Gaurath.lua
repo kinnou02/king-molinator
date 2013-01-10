@@ -259,7 +259,7 @@ function HG:UnitHPCheck(uDetails, unitID)
 					self.Gaurath.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase(KBM.Language.Options.Ground[KBM.Lang])
-					self.PhaseObj.Objectives:AddPercent(self.Gaurath.Name, 0, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Gaurath, 0, 100)
 					self.RaiseObj = self.PhaseObj.Objectives:AddMeta(self.Lang.Ability.Raise[KBM.Lang], 2, 0)
 					self.RaiseCounter = 0
 				end

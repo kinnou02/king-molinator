@@ -2988,6 +2988,7 @@ function KBM.PhaseMonitor:Init()
 			PercentObj.PercentFlat = math.ceil(Current)
 			PercentObj.Percent = PercentObj.PercentFlat
 			if type(Object) == "string" then
+				-- Backwards Compatibility, soon to be removed
 				PercentObj.Name = Object
 				if KBM.CurrentMod then
 					if KBM.CurrentMod.Bosses[PercentObj.Name] then
@@ -3006,7 +3007,7 @@ function KBM.PhaseMonitor:Init()
 				PercentObj.BossObj = Object
 				PercentObj.UnitObj = Object.UnitObj
 				PercentObj.UnitID = Object.UnitID
-				PercentObj.BossObj.PhaseObj = PercentObj
+				Object.PhaseObj = PercentObj
 				if PercentObj.UnitObj then
 					PercentObj.PercentRaw = Object.UnitObj.PercentRaw
 					PercentObj.Percent = Object.UnitObj.Percent
@@ -3063,6 +3064,9 @@ function KBM.PhaseMonitor:Init()
 			end
 			
 			function PercentObj:Remove()
+				if self.BossObj then
+					self.BossObj.PhaseObj = nil
+				end
 				KBM.PhaseMonitor.Objectives.Lists:Remove(self)
 			end
 			
@@ -3079,8 +3083,6 @@ function KBM.PhaseMonitor:Init()
 				if self.UnitID then
 					self.UnitObj = LibSUnit.Lookup.UID[UnitID]
 					KBM.PhaseMonitor.Objectives.Lists.Percent[self.UnitID] = self
-				else
-				
 				end
 			end
 			
@@ -3092,7 +3094,7 @@ function KBM.PhaseMonitor:Init()
 				end
 				table.insert(KBM.PhaseMonitor.Objectives.Lists.Percent[PercentObj.Name], PercentObj)
 			else
-				KBM.PhaseMonitor.Objectives.Lists.Percent[tostring(PercentObj.BossObj)] = true
+				KBM.PhaseMonitor.Objectives.Lists.Percent[tostring(PercentObj.BossObj)] = PhaseObj
 			end
 			KBM.PhaseMonitor.Objectives.Lists:Add(PercentObj)
 			
@@ -3117,6 +3119,13 @@ function KBM.PhaseMonitor:Init()
 				end
 				for ListName, List in pairs(KBM.PhaseMonitor.Objectives.Lists) do
 					if type(List) == "table" then
+						if ListName == "Percent" then
+							for ID, PercentObj in pairs(List) do
+								if PercentObj.BossObj then
+									PercentObj.BossObj.PhaseObj = nil
+								end
+							end
+						end
 						KBM.PhaseMonitor.Objectives.Lists[ListName] = {}
 					end
 				end
@@ -3718,15 +3727,12 @@ function KBM.CheckActiveBoss(UnitObj)
 													KBM.MechSpy:Begin()
 													KBM.Event.Encounter.Start({Type = "start", Mod = KBM.CurrentMod})
 												end
-												if KBM.PhaseMonitor.Objectives.Lists.Percent[tostring(ModBossObj)] then
-													local PhaseObj = ModBossObj.PhaseObj
-													if PhaseObj then
-														KBM.BossID[UnitID].PhaseObj = PhaseObj
-														PhaseObj:UpdateID(UnitID)
-														PhaseObj:Update()														
-													end
+												if ModBossObj.PhaseObj then
+													KBM.BossID[UnitID].PhaseObj = ModBossObj.PhaseObj
+													ModBossObj.PhaseObj:UpdateID(UnitID)
+													ModBossObj.PhaseObj:Update()
 												elseif KBM.PhaseMonitor.Objectives.Lists.Percent[UnitObj.Name] then
-													PhaseObj = table.remove(KBM.PhaseMonitor.Objectives.Lists.Percent[UnitObj.Name])
+													local PhaseObj = table.remove(KBM.PhaseMonitor.Objectives.Lists.Percent[UnitObj.Name])
 													if PhaseObj then
 														KBM.BossID[UnitID].PhaseObj = PhaseObj
 														PhaseObj.BossObj = ModBossObj
@@ -7485,6 +7491,7 @@ function KBM.InitMenus()
 				if BossObj.ChronicleID then
 					KBM.Boss.Chronicle[BossObj.ChronicleID] = BossObj
 					KBM.Boss.TypeList[BossObj.ChronicleID] = BossObj
+					Mod.UTID[BossObj.ChronicleID] = BossObj
 				end
 				if KBM_Boss[BossObj.Name] then
 					print("WARNING: Boss "..BossObj.Name.." assigning old style KBM_Boss table entry")

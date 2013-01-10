@@ -264,13 +264,13 @@ end
 
 function PH.PhaseOne()
 	if PH.Phase == 1 then
-		PH.PhaseObj.Objectives:AddPercent(PH.Lang.Unit.Duke[KBM.Lang], 0, 100)
+		PH.PhaseObj.Objectives:AddPercent(PH.Duke, 0, 100)
 	end
 end
 
 function PH.PhaseTwo()
 	if PH.Phase < 2 then
-		PH.PhaseObj.Objectives:AddPercent(PH.Lang.Unit.Johlen[KBM.Lang], 0, 100)
+		PH.PhaseObj.Objectives:AddPercent(PH.Johlen, 0, 100)
 		PH.PhaseObj:SetPhase(2)
 		PH.Phase = 2
 	end
@@ -278,7 +278,7 @@ end
 
 function PH.PhaseThree()
 	if PH.Phase < 3 then
-		PH.PhaseObj.Objectives:AddPercent(PH.Lang.Unit.Aleria[KBM.Lang], 0, 100)
+		PH.PhaseObj.Objectives:AddPercent(PH.Aleria, 0, 100)
 		PH.PhaseObj:SetPhase(3)
 		PH.Phase = 3
 	end
@@ -299,31 +299,38 @@ function PH.PhaseFive()
 	PH.PhaseObj.Objectives:Remove()
 	PH.Phase = 5
 	PH.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
-	PH.PhaseObj.Objectives:AddPercent(PH.Hylas.Name, 0, 50)
+	PH.PhaseObj.Objectives:AddPercent(PH.Hylas, 0, 50)
 end
 
 function PH:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		if not uDetails.player then
-			if uDetails.name == self.Hylas.Name then
-				if not self.EncounterRunning then
+		local BossObj = self.UTID[uDetails.type]
+		if not BossObj then
+			BossObj = self.Bosses[uDetails.name]
+		end
+		if BossObj then
+			if not self.EncounterRunning then
+				if BossObj == self.Hylas then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
 					self.TimeElapsed = 0
-					self.Hylas.Dead = false
-					self.Hylas.Casting = false
-					self.Hylas.CastBar:Create(unitID)
+					BossObj.UnitID = unitID
+					BossObj.Dead = false
+					BossObj.CastBar:Create(unitID)
 					self.Phase = 1
 					self.PhaseObj:SetPhase(1)
 					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj.Objectives:AddPercent(self.Hylas.Name, 11, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Hylas, 11, 100)
 					KBM.MechTimer:AddStart(self.Hylas.TimersRef.Duke)
+				else
+					return
 				end
-				self.Hylas.UnitID = unitID
-				self.Hylas.Available = true
-				return self.Hylas
+			else
+				BossObj.UnitID = unitID
+				BossObj.Available = true
 			end
+			return BossObj
 		end
 	end
 end

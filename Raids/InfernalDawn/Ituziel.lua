@@ -189,7 +189,7 @@ end
 function IZ.PhaseTwo()
 	if IZ.Phase == 1 then
 		IZ.PhaseObj.Objectives:Remove()
-		IZ.PhaseObj.Objectives:AddPercent(IZ.Ituziel.Name, 0, 33)
+		IZ.PhaseObj.Objectives:AddPercent(IZ.Ituziel, 0, 33)
 		IZ.Phase = 2
 		IZ.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
 	end
@@ -217,7 +217,7 @@ function IZ:UnitHPCheck(uDetails, unitID)
 					self.Ituziel.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase("1")
-					self.PhaseObj.Objectives:AddPercent(self.Ituziel.Name, 33, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Ituziel, 33, 100)
 					self.CurrentBrimstone = 12
 					KBM.MechTimer:AddStart(self.Ituziel.TimersRef.WaveFirst)
 					local DebuffTable = {

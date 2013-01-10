@@ -184,33 +184,31 @@ end
 
 function LG:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		if not uDetails.player then
-			if uDetails.name == self.Greenscale.Name then
-				if not self.EncounterRunning then
-					self.EncounterRunning = true
-					self.StartTime = Inspect.Time.Real()
-					self.HeldTime = self.StartTime
-					self.TimeElapsed = 0
-					self.Greenscale.Dead = false
-					self.Greenscale.CastBar:Create(unitID)
-					self.PhaseObj:Start(self.StartTime)
-					self.Phase = 1
-					self.LastPhase = 1
-					self.PhaseObj:SetPhase(1)
-					self.PhaseObj.Objectives:AddPercent(self.Greenscale.Name, 75, 100)
-				end
-				self.Greenscale.UnitID = unitID
-				self.Greenscale.Available = true
-				return self.Greenscale
-			elseif uDetails.name == self.Verdant.Name then
-				if self.Verdant.UnitID == nil then
-					self.Verdant.Casting = false
-					self.Verdant.Dead = false
-					self.Verdant.UnitID = unitID
-					self.Verdant.Available = true
-					return self.Verdant
-				end
+		local BossObj = self.UTID[uDetails.type]
+		if BossObj == self.Greenscale then
+			if not self.EncounterRunning then
+				self.EncounterRunning = true
+				self.StartTime = Inspect.Time.Real()
+				self.HeldTime = self.StartTime
+				self.TimeElapsed = 0
+				BossObj.UnitID = unitID
+				BossObj.Dead = false
+				BossObj.CastBar:Create(unitID)
+				self.PhaseObj:Start(self.StartTime)
+				self.Phase = 1
+				self.LastPhase = 1
+				self.PhaseObj:SetPhase(1)
+				self.PhaseObj.Objectives:AddPercent(self.Greenscale, 75, 100)
+			else
+				BossObj.UnitID = unitID
+				BossObj.Available = true
 			end
+			return BossObj
+		elseif BossObj == self.Verdant then
+			BossObj.Dead = false
+			BossObj.UnitID = unitID
+			BossObj.Available = true
+			return BossObj
 		end
 	end
 end
@@ -219,8 +217,8 @@ function LG.AirPhaseOne()
 	if LG.Phase == 1 then
 		LG.PhaseObj.Objectives:Remove()
 		LG.PhaseObj:SetPhase(KBM.Language.Options.Air[KBM.Lang])
-		LG.PhaseObj.Objectives:AddPercent(LG.Greenscale.Name, 50, 75)
-		LG.PhaseObj.Objectives:AddPercent(LG.Verdant.Name, 0, 100)
+		LG.PhaseObj.Objectives:AddPercent(LG.Greenscale, 50, 75)
+		LG.PhaseObj.Objectives:AddPercent(LG.Verdant, 0, 100)
 	end
 end
 
@@ -228,8 +226,8 @@ function LG.AirPhaseTwo()
 	if LG.Phase < 3 then
 		LG.PhaseObj.Objectives:Remove()
 		LG.PhaseObj:SetPhase(KBM.Language.Options.Air[KBM.Lang])
-		LG.PhaseObj.Objectives:AddPercent(LG.Greenscale.Name, 25, 50)
-		LG.PhaseObj.Objectives:AddPercent(LG.Verdant.Name, 0, 100)
+		LG.PhaseObj.Objectives:AddPercent(LG.Greenscale, 25, 50)
+		LG.PhaseObj.Objectives:AddPercent(LG.Verdant, 0, 100)
 	end
 end
 
@@ -237,8 +235,8 @@ function LG.AirPhaseThree()
 	if LG.Phase < 4 then
 		LG.PhaseObj.Objectives:Remove()
 		LG.PhaseObj:SetPhase(KBM.Language.Options.Air[KBM.Lang])
-		LG.PhaseObj.Objectives:AddPercent(LG.Greenscale.Name, 0, 25)
-		LG.PhaseObj.Objectives:AddPercent(LG.Verdant.Name, 0, 100)
+		LG.PhaseObj.Objectives:AddPercent(LG.Greenscale, 0, 25)
+		LG.PhaseObj.Objectives:AddPercent(LG.Verdant, 0, 100)
 	end
 end
 
@@ -246,21 +244,21 @@ function LG.PhaseTwo()
 	LG.PhaseObj.Objectives:Remove()
 	LG.Phase = 2
 	LG.PhaseObj:SetPhase(2)
-	LG.PhaseObj.Objectives:AddPercent(LG.Greenscale.Name, 50, 75)
+	LG.PhaseObj.Objectives:AddPercent(LG.Greenscale, 50, 75)
 end
 
 function LG.PhaseThree()
 	LG.PhaseObj.Objectives:Remove()
 	LG.Phase = 3
 	LG.PhaseObj:SetPhase(3)
-	LG.PhaseObj.Objectives:AddPercent(LG.Greenscale.Name, 25, 50)	
+	LG.PhaseObj.Objectives:AddPercent(LG.Greenscale, 25, 50)	
 end
 
 function LG.PhaseFour()
 	LG.PhaseObj.Objectives:Remove()
 	LG.Phase = 4
 	LG.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
-	LG.PhaseObj.Objectives:AddPercent(LG.Greenscale.Name, 0, 25)
+	LG.PhaseObj.Objectives:AddPercent(LG.Greenscale, 0, 25)
 end
 
 function LG:Death(UnitID)

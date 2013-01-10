@@ -162,6 +162,7 @@ LibSUnit._internal = {
 			Death = Utility.Event.Create(AddonIni.id, "Combat.Death"),
 			Damage = Utility.Event.Create(AddonIni.id, "Combat.Damage"),
 			Heal = Utility.Event.Create(AddonIni.id, "Combat.Heal"),
+			Immune = Utility.Event.Create(AddonIni.id, "Combat.Immune"),
 		},
 		Raid = {
 			Join = Utility.Event.Create(AddonIni.id, "Raid.Join"),
@@ -1105,35 +1106,20 @@ function _lsu.Combat.stdHandler(UID, segPlus)
 			end
 		else
 			UnitObj = _lsu:Create(UID, _inspect(UID), "Idle")		
+			_lsu.Unit:UpdateSegment(UnitObj, segPlus + _lastSeg)
 		end
 		return UnitObj
 	end
 end
 
 function _lsu.Combat.Damage(info)
-	--local startTime = Inspect.Time.Real()
 	local _stdHandler = _lsu.Combat.stdHandler
 	local targetObj, sourceObj
 	info.damage = info.damage or 0
 	targetObj = _stdHandler(info.target, _idleSeg)
-	-- if targetObj then
-		-- if targetObj.CurrentKey == "Idle" then		
-			-- if info.damage then
-				-- targetObj.Health = targetObj.Health - info.damage
-				-- _lsu.Unit:CalcPerc(targetObj)
-			-- end
-			-- _lsu.Unit:UpdateSegment(targetObj, _idleSeg + _lastSeg, _inspect(targetObj.UnitID))
-		--end
-	--end
 	sourceObj = _stdHandler(info.caster, _idleSeg)
-	-- if sourceObj then
-		-- if sourceObj.CurrentKey == "Idle" then
-			-- _lsu.Unit:UpdateSegment(UnitObj, _idleSeg + _lastSeg, _inspect(sourceObj.UnitID))			
-		-- end
-	-- end
 	info.targetObj = targetObj
 	info.sourceObj = sourceObj
-	--print(string.format("Time Taken: %0.5f", Inspect.Time.Real() - startTime))
 	_lsu.Event.Combat.Damage(info)
 end
 
@@ -1142,14 +1128,20 @@ function _lsu.Combat.Heal(info)
 	local targetObj, sourceObj
 	info.heal = info.heal or 0
 	targetObj = _stdHandler(info.target, _idleSeg)
-	-- if targetObj then
-	-- end
 	sourceObj = _stdHandler(info.caster, _idleSeg)
-	-- if sourceObj then
-	-- end
 	info.targetObj = targetObj
 	info.sourceObj = sourceObj
 	_lsu.Event.Combat.Heal(info)
+end
+
+function _lsu.Combat.Immune(info)
+	local _stdHandler = _lsu.Combat.stdHandler
+	local targetObj, sourceObj
+	targetObj = _stdHandler(info.target, _idleSeg)
+	sourceObj = _stdHandler(info.caster, _idleSeg)
+	info.targetObj = targetObj
+	info.sourceObj = sourceObj
+	_lsu.Event.Combat.Immune(info)
 end
 
 function _lsu.Combat.Death(info)
@@ -1257,6 +1249,7 @@ function _lsu.Wait(uList)
 		-- Unit Combat Events
 		table.insert(Event.Combat.Damage, {_lsu.Combat.Damage, AddonIni.id, "Unit Combat Damage"})
 		table.insert(Event.Combat.Heal, {_lsu.Combat.Heal, AddonIni.id, "Unit Combat Heal"})
+		table.insert(Event.Combat.Immune, {_lsu.Combat.Immune, AddonIni.id, "Unit Immune"})
 		table.insert(Event.Combat.Death, {_lsu.Combat.Death, AddonIni.id, "Unit Death"})
 	
 		-- Register Events with LibUnitChange

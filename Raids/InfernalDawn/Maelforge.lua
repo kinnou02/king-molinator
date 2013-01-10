@@ -295,7 +295,7 @@ function MF:UnitHPCheck(uDetails, unitID)
 						self.Maelforge.CastBar:Create(unitID)
 						self.PhaseObj:Start(self.StartTime)
 						self.PhaseObj:SetPhase("1")
-						self.PhaseObj.Objectives:AddPercent(self.Maelforge.Name, 50, 100)
+						self.PhaseObj.Objectives:AddPercent(self.Maelforge, 50, 100)
 						self.Phase = 1
 						KBM.TankSwap:Start(self.Lang.Debuff.Melt[KBM.Lang], unitID)
 					end
