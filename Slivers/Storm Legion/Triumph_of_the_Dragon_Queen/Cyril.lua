@@ -180,7 +180,7 @@ function CRL:UnitHPCheck(uDetails, unitID)
 				self.PhaseObj:SetPhase("1")
 				self.PhaseObj.Objectives:AddPercent(self.Cyril, 0, 100)
 				self.Phase = 1
-				KBM.TankSwap:Start(self.Lang.Debuff.Mental[KBM.Lang])
+				KBM.TankSwap:Start(self.Lang.Debuff.Mental[KBM.Lang], unitID)
 			else
 				BossObj.Dead = false
 				BossObj.Casting = false
