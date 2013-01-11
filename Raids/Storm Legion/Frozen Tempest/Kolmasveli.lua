@@ -277,29 +277,19 @@ function KT.PhaseTwo()
 	if KT.Phase < 2 then
 		KT.PhaseObj.Objectives:Remove()
 		KT.PhaseObj:SetPhase("2")
-		KT.PhaseObj.Objectives:AddPercent(KT.Kolmasveli, 30, 50)
-		KT.PhaseObj.Objectives:AddPercent(KT.Toinenveli, 30, 50)
+		KT.PhaseObj.Objectives:AddPercent(KT.Kolmasveli, 10, 40)
+		KT.PhaseObj.Objectives:AddPercent(KT.Toinenveli, 10, 40)
 		KT.Phase = 2
 	end
 end
 
-function KT.PhaseThree()
-	if KT.Phase < 3 then
-		KT.PhaseObj.Objectives:Remove()
-		KT.PhaseObj:SetPhase("3")
-		KT.PhaseObj.Objectives:AddPercent(KT.Kolmasveli, 10, 30)
-		KT.PhaseObj.Objectives:AddPercent(KT.Toinenveli, 10, 30)
-		KT.Phase = 3
-	end
-end
-
 function KT.PhaseFinal()
-	if KT.Phase < 4 then
+	if KT.Phase < 3 then
 		KT.PhaseObj.Objectives:Remove()
 		KT.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
 		KT.PhaseObj.Objectives:AddPercent(KT.Kolmasveli, 0, 10)
 		KT.PhaseObj.Objectives:AddPercent(KT.Toinenveli, 0, 10)
-		KT.Phase = 4
+		KT.Phase = 3
 		KBM.MechTimer:AddRemove(KT.Kolmasveli.TimersRef.Glimpse)
 		KBM.MechTimer:AddRemove(KT.Toinenveli.TimersRef.Glimpse)
 	end
@@ -321,8 +311,8 @@ function KT:UnitHPCheck(uDetails, unitID)
 				end
 				self.PhaseObj:Start(self.StartTime)
 				self.PhaseObj:SetPhase("1")
-				self.PhaseObj.Objectives:AddPercent(self.Kolmasveli, 50, 100)
-				self.PhaseObj.Objectives:AddPercent(self.Toinenveli, 50, 100)
+				self.PhaseObj.Objectives:AddPercent(self.Kolmasveli, 40, 100)
+				self.PhaseObj.Objectives:AddPercent(self.Toinenveli, 40, 100)
 				self.Phase = 1
 				local DebuffTable = {
 						[1] = self.Lang.Debuff.KolIre[KBM.Lang],
@@ -407,20 +397,16 @@ function KT:Start()
 	self.Kolmasveli.Triggers.Eruption = KBM.Trigger:Create(KT.Lang.Debuff.Eruption[KBM.Lang], "playerBuff", self.Kolmasveli)
 	self.Kolmasveli.Triggers.Eruption:AddSpy(self.Kolmasveli.MechRef.Eruption)
 	self.Kolmasveli.Triggers.Eruption:AddAlert(self.Kolmasveli.AlertsRef.Eruption, true)
-	self.Kolmasveli.Triggers.PhaseTwo = KBM.Trigger:Create(50, "percent", self.Kolmasveli)
+	self.Kolmasveli.Triggers.PhaseTwo = KBM.Trigger:Create(40, "percent", self.Kolmasveli)
 	self.Kolmasveli.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
-	self.Kolmasveli.Triggers.PhaseThree = KBM.Trigger:Create(30, "percent", self.Kolmasveli)
-	self.Kolmasveli.Triggers.PhaseThree:AddPhase(self.PhaseThree)
 	self.Kolmasveli.Triggers.PhaseFinal = KBM.Trigger:Create(10, "percent", self.Kolmasveli)
 	self.Kolmasveli.Triggers.PhaseFinal:AddPhase(self.PhaseFinal)
 	
 	self.Toinenveli.Triggers.Glimpse = KBM.Trigger:Create(self.Lang.Ability.Glimpse[KBM.Lang], "channel", self.Toinenveli)
 	self.Toinenveli.Triggers.Glimpse:AddAlert(self.Toinenveli.AlertsRef.Glimpse)
 	self.Toinenveli.Triggers.Glimpse:AddTimer(self.Kolmasveli.TimersRef.Glimpse)
-	self.Toinenveli.Triggers.PhaseTwo = KBM.Trigger:Create(50, "percent", self.Toinenveli)
+	self.Toinenveli.Triggers.PhaseTwo = KBM.Trigger:Create(40, "percent", self.Toinenveli)
 	self.Toinenveli.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
-	self.Toinenveli.Triggers.PhaseThree = KBM.Trigger:Create(30, "percent", self.Toinenveli)
-	self.Toinenveli.Triggers.PhaseThree:AddPhase(self.PhaseThree)
 	self.Toinenveli.Triggers.PhaseFinal = KBM.Trigger:Create(10, "percent", self.Toinenveli)
 	self.Toinenveli.Triggers.PhaseFinal:AddPhase(self.PhaseFinal)
 
