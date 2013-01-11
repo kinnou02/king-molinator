@@ -4287,6 +4287,7 @@ function KBM.TankSwap:Init()
 	self.DebuffID = {}
 	self.Debuffs = 0
 	self.DebuffName = {}
+	self.Boss = {}
 	self.LastTank = nil
 	self.Test = false
 	self.TankStore = {}
@@ -4442,7 +4443,11 @@ function KBM.TankSwap:Init()
 	end
 	
 	function self:AddBoss(UnitID)
-		self.Boss[UnitID] = false
+		if self.Active then
+			if self.Boss then
+				self.Boss[UnitID] = false
+			end
+		end
 	end
 	
 	function self:Start(DebuffName, BossID, Debuffs)
