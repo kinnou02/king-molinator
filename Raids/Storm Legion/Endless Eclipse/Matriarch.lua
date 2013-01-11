@@ -41,7 +41,9 @@ MOP.Lang.Ability = {}
 -- Debuff Dictionary
 MOP.Lang.Debuff = {}
 MOP.Lang.Debuff.Spores = KBM.Language:Add("Necrotic Spores")
+MOP.Lang.Debuff.Spores:SetGerman("Nekrotische Sporen")
 MOP.Lang.Debuff.Infect = KBM.Language:Add("Volatile Infection")
+MOP.Lang.Debuff.Infect:SetGerman("Flüchtige Infektion")
 
 -- Description Dictionary
 MOP.Lang.Main = {}

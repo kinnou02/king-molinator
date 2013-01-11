@@ -40,13 +40,16 @@ KT.Lang.Unit.Toinenveli:SetGerman()
 KT.Lang.Unit.ToinenveliShort = KBM.Language:Add("Toinenveli")
 KT.Lang.Unit.ToinenveliShort:SetGerman()
 KT.Lang.Unit.Vortex = KBM.Language:Add("Energy Vortex")
+KT.Lang.Unit.Vortex:SetGerman("Energiewirbel")
 KT.Lang.Unit.VortexShort = KBM.Language:Add("Vortex")
+KT.Lang.Unit.VortexShort:SetGerman("Wirbel")
 
 -- Ability Dictionary
 KT.Lang.Ability = {}
 KT.Lang.Ability.Glimpse = KBM.Language:Add("Glimpse of Infinity")
 KT.Lang.Ability.Glimpse:SetGerman("Blick in die Ewigkeit")
 KT.Lang.Ability.Flare = KBM.Language:Add("Tempest Flare")
+KT.Lang.Ability.Flare:SetGerman("Sturmherr-Fackel")
 
 -- Debuff Dictionary
 KT.Lang.Debuff = {}
@@ -55,6 +58,7 @@ KT.Lang.Debuff.KolIre:SetGerman("Kolmasvelis Grimm")
 KT.Lang.Debuff.ToiIre = KBM.Language:Add("Toinenveli's Ire")
 KT.Lang.Debuff.ToiIre:SetGerman("Toinenvelis Grimm")
 KT.Lang.Debuff.Eruption = KBM.Language:Add("Sparking Eruption")
+KT.Lang.Debuff.Eruption:SetGerman("Zündender Ausbruch")
 
 -- Verbose Dictionary
 KT.Lang.Verbose = {}
