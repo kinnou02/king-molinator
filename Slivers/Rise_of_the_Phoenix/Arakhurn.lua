@@ -384,7 +384,10 @@ function HA:UnitHPCheck(uDetails, unitID)
 				elseif self.Arakhurn.UnitID ~= unitID then
 					self.Arakhurn.Casting = false
 					self.Arakhurn.CastBar:Create(unitID)
-					KBM.TankSwap.Boss = KBM.Unit.List.UID[unitID]
+					if KBM.TankSwap.Active then
+						KBM.TankSwap:Remove()
+						KBM.TankSwap:Start(self.Lang.Debuff.Armor[KBM.Lang], unitID)
+					end
 					if self.Arakhurn.UTID[2] == uDetails.type then
 						self.PhaseThree()
 					end

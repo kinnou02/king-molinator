@@ -495,7 +495,7 @@ function ID:UnitHPCheck(uDetails, unitID)
 					BossObj.UnitList[unitID] = SubBossObj
 				else
 					BossObj.UnitList[unitID].Available = true
-					BosSObj.UnitList[unitID].UnitID = unitID
+					BossObj.UnitList[unitID].UnitID = unitID
 				end
 				return BossObj.UnitList[unitID]				
 			end

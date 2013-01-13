@@ -23,7 +23,7 @@ local MOD = {
 	Lang = {},
 	ID = "Ex_Primakov",
 	Object = "MOD",
-	Enarge = 8 * 60,
+	Enarge = 7 * 60,
 }
 
 MOD.Primakov = {

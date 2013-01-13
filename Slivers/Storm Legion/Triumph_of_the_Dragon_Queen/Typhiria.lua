@@ -20,7 +20,7 @@ local TPH = {
 	Instance = TDQ.Name,
 	InstanceObj = TDQ,
 	Lang = {},
-	Enrage = 7 * 60,
+	Enrage = 6 * 60,
 	ID = "STyphiria",
 	Object = "TPH",
 }

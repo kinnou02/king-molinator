@@ -1,4 +1,34 @@
-﻿v1.3.9
+﻿v1.4.0
+
+Rez Master
+* Options
+** Fixed: Added the method GatherRaidInfo again when enabling Rez Master via the options menu.
+
+Raids
+Hammerknell
+* Inwar Darktide
+** Fixed: Error with BossObj (Error 498)
+
+Slivers
+Triumph of the Dragon Queen
+* General Typhiria
+** Change: Adjusted enrage timer to 6 minutes.
+
+Rise of the Phoenix
+* High Priest Arakhurn
+** Fixed: Error with Tank-Swap Unit change in P2. (Error 387)
+
+Experts
+Empyrean Core
+* Baird Bringhurst
+** Change: Adjusted enrage timer to 7 minutes.
+
+Tower of the Shattered
+* Psychophage Primakov
+** Change: Adjusted enrage timer to 7 mintues.
+
+----
+v1.3.9
 
 New: Safe's Unit Library (LibSUnit)
 * Note: This is still classed as alpha and subject to change. (Although, I would say the event layout is pretty much final)
