@@ -160,6 +160,14 @@ PI.Constants = {
 						warrior = true,
 					},
 				},
+                ["r5E26E8C025B2C3BB"] = { -- Remarkable Oilstone
+                    Grade = "High",
+                    Level = 60,
+                    Callings = {
+                        rogue = true,
+                        warrior = true,
+                    },
+                },				
 				["r624A5FA52756B277"] = { -- Burning Powerstone
 					Grade = "High",
 					Level = 50,
@@ -274,6 +282,27 @@ PI.Constants = {
 				--//////////////--
 				-- SL Tank Food --
 				--//////////////--
+                ["BFD2D651A8E22EF55"] = { -- Kraken Hors D'oeuvres
+                    Grade = "High",
+                    Level = 60,
+                    Callings = {
+                        warrior = true,
+                        cleric = true,
+                    },
+                    Role = {
+                        tank = true,
+                    },
+                },				
+                ["BFA59044E4831FA78"] = { -- Stuffed Mushrooms
+                    Grade = "High",
+                    Level = 60,
+                    Callings = {
+                        rogue = true,
+                    },
+                    Role = {
+                        tank = true,
+                    },
+                },
 				--////////////////////--
 				-- SL High Grade Food --
 				--////////////////////--
@@ -293,6 +322,22 @@ PI.Constants = {
 						rogue = true,
 					},
 				},
+                ["BFEEAAD0F359C9FE3"] = { -- Sharpfin Chops
+                    Grade = "High",
+                    Level = 60,
+                    Callings = {
+                        mage = true,
+                        cleric = true,
+                    },
+                },
+                ["BFCA460CF2B03DDC8"] = { -- Prime Flycatcher
+                    Grade = "High",
+                    Level = 60,
+                    Callings = {
+                        warrior = true,
+                        rogue = true,
+                    },
+                },
 				--//////////////////////--
 				-- SL Medium Grade Food --
 				--//////////////////////--
@@ -304,6 +349,14 @@ PI.Constants = {
 						cleric = true,
 					},
 				},
+                ["BFF5021B4DB472F50"] = { -- Octopus Broth
+                    Grade = "Medium",
+                    Level = 60,
+                    Callings = {
+                        warrior = true,
+                        rogue = true,
+                    },
+                },
 				--///////////////////--
 				-- SL Low Grade Food --
 				--///////////////////--
@@ -455,6 +508,34 @@ PI.Constants = {
 						tank = true,
 					},
 				},
+                ["BFAE680B5BBA2DB8E"] = { -- Excellent Powersurge Vial
+                    Grade = "Medium",
+                    Level = 60,
+                    Callings = {
+                        warrior = true,
+                        rogue = true,
+                    },
+                },
+                ["BFA86D7A4886FCED5"] = { -- Excellent Brightsurge Vial
+                    Grade = "Medium",
+                    Level = 60,
+                    Callings = {
+                        cleric = true,
+                        mage = true,
+                    },
+                },
+                ["BFB84FF67D7824324"] = { -- Excellent Enduring Vial
+                    Grade = "Medium",
+                    Level = 60,
+                    Callings = {
+                        rogue = true,
+                        warrior = true,
+                        cleric = true,
+                    },
+                    Role = {
+                        tank = true,
+                    },
+                },
 				--/////////////////--
 				-- Classic Potions --
 				--/////////////////--				

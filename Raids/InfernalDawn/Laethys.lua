@@ -402,8 +402,8 @@ function LT.PhaseTwo()
 		KBM.MechTimer:AddRemove(LT.Laethys.TimersRef.Orb)
 		KBM.MechTimer:AddRemove(LT.Laethys.TimersRef.Flare)
 		KBM.MechTimer:AddRemove(LT.Laethys.TimersRef.Gold)
-		KBM.MechTimer:AddRemove(LT.Laethys.TimersRef.AddsFirst)
-		KBM.MechTimer:AddRemove(LT.Laethys.TimersRef.Adds)
+		KBM.MechTimer:AddRemove(LT.Laethys.TimersRef.AddsFirst, true)
+		KBM.MechTimer:AddRemove(LT.Laethys.TimersRef.Adds, true)
 	end
 end
 
@@ -425,7 +425,6 @@ function LT:Start()
  	self.Laethys.TimersRef.Gold = KBM.MechTimer:Add(self.Lang.Ability.Gold[KBM.Lang], 30)
  	self.Laethys.TimersRef.AddsFirst = KBM.MechTimer:Add(self.Lang.Menu.Adds[KBM.Lang], 34)
  	self.Laethys.TimersRef.Adds = KBM.MechTimer:Add(self.Lang.Mechanic.Adds[KBM.Lang], 90, true)
-	self.Laethys.TimersRef.Adds:SetPhase(1)
 	-- Phase Two
 	self.Laethys.TimersRef.PhaseTwoTrans = KBM.MechTimer:Add(self.Lang.Mechanic.PhaseTwoTrans[KBM.Lang], 40)
 	self.Laethys.TimersRef.LiqGoldFirst = KBM.MechTimer:Add(self.Lang.Menu.LiqGold[KBM.Lang], 70)

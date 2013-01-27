@@ -43,9 +43,24 @@ CRC.Lang.Unit.Storm = KBM.Language:Add("Stormcore Annihilator")
 CRC.Lang.Unit.Storm:SetGerman("Sturmkern-Auslöscher")
 CRC.Lang.Unit.StormShort = KBM.Language:Add("Stormcore")
 CRC.Lang.Unit.StormShort:SetGerman("Sturmkern")
+CRC.Lang.Unit.Construct = KBM.Language:Add("Refactored Construct")
+CRC.Lang.Unit.ConstructShort = KBM.Language:Add("Construct")
 
 -- Ability Dictionary
 CRC.Lang.Ability = {}
+CRC.Lang.Ability.LBreath = KBM.Language:Add("Lightning Breath")
+CRC.Lang.Ability.OStrike = KBM.Language:Add("Orbital Strike")
+CRC.Lang.Ability.Pulse = KBM.Language:Add("Shocking Pulse")
+CRC.Lang.Ability.Fury = KBM.Language:Add("Tempest Fury")
+
+-- Debuff Dictionary
+CRC.Lang.Debuff = {}
+CRC.Lang.Debuff.Rod = KBM.Language:Add("Lightning Rod")
+CRC.Lang.Debuff.Armor = KBM.Language:Add("Conductive Armor")
+
+-- Verbose Dictionary
+CRC.Lang.Verbose = {}
+CRC.Lang.Verbose.Fury = KBM.Language:Add("Look away!")
 
 -- Description Dictionary
 CRC.Lang.Main = {}
@@ -69,20 +84,21 @@ CRC.Crucia = {
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
-	-- TimersRef = {},
-	-- AlertsRef = {},
+	TimersRef = {},
+	AlertsRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		-- TimersRef = {
-			-- Enabled = true,
-			-- LBreath = KBM.Defaults.TimerObj.Create("red"),
-			-- OStrike = KBM.Defaults.TimerObj.Create("blue"),
-		-- },
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
-		-- },
+		TimersRef = {
+			Enabled = true,
+			LBreath = KBM.Defaults.TimerObj.Create("red"),
+			OStrike = KBM.Defaults.TimerObj.Create("blue"),
+		},
+		AlertsRef = {
+			Enabled = true,
+			Fury = KBM.Defaults.AlertObj.Create("orange"),
+			Rod = KBM.Defaults.AlertObj.Create("purple"),
+		},
 	}
 }
 
@@ -131,16 +147,45 @@ CRC.Storm = {
 	Multi = true,
 	UnitList = {},
 	-- TimersRef = {},
-	-- AlertsRef = {},
+	AlertsRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
 		-- TimersRef = {
 			-- Enabled = true,
 		-- },
+		AlertsRef = {
+			Enabled = true,
+			Pulse = KBM.Defaults.AlertObj.Create("yellow"),
+		},
+	}
+}
+
+CRC.Construct = {
+	Mod = CRC,
+	Level = "??",
+	Active = false,
+	Name = CRC.Lang.Unit.Construct[KBM.Lang],
+	NameShort = CRC.Lang.Unit.ConstructShort[KBM.Lang],
+	Dead = false,
+	Available = false,
+	Menu = {},
+	UTID = "none",
+	UnitID = nil,
+	TimeOut = 5,
+	Castbar = nil,
+	Multi = true,
+	UnitList = {},
+	-- TimersRef = {},
+	-- AlertsRef = {},
+	Triggers = {},
+	Settings = {
+		-- CastBar = KBM.Defaults.CastBar(),
+		-- TimersRef = {
+			-- Enabled = true,
+		-- },
 		-- AlertsRef = {
 			-- Enabled = true,
-			-- Pulse = KBM.Defaults.AlertObj.Create("yellow"),
 		-- },
 	}
 }
@@ -151,6 +196,7 @@ function CRC:AddBosses(KBM_Boss)
 		[self.Crucia.Name] = self.Crucia,
 		[self.Tempest.Name] = self.Tempest,
 		[self.Storm.Name] = self.Storm,
+		[self.Construct.Name] = self.Construct,
 	}
 
 	for BossName, BossObj in pairs(self.Bosses) do
@@ -289,7 +335,7 @@ function CRC:UnitHPCheck(uDetails, unitID)
 					if BossObj.Multi then
 						if not BossObj.UnitList[unitID] then
 							local SubBossObj = {
-								Mod = MOD,
+								Mod = self,
 								Level = "??",
 								Active = true,
 								Name = BossObj.Name,
@@ -314,6 +360,14 @@ function CRC:UnitHPCheck(uDetails, unitID)
 				end
 				BossObj.UnitID = unitID
 				BossObj.Available = true
+				if BossObj == self.Crucia then
+					if BossObj.UnitID ~= unitID then
+						if KBM.TankSwap.Active then
+							KBM.TankSwap:Remove()
+						end
+						KBM.TankSwap:Start(self.Lang.Debuff.Armor[KBM.Lang], unitID)
+					end
+				end
 				return BossObj
 			end
 		end
@@ -346,15 +400,33 @@ end
 
 function CRC:Start()
 	-- Create Timers
-	-- KBM.Defaults.TimerObj.Assign(self.Crucia)
+	self.Crucia.TimersRef.LBreath = KBM.MechTimer:Add(self.Lang.Ability.LBreath[KBM.Lang], 15)
+	self.Crucia.TimersRef.OStrike = KBM.MechTimer:Add(self.Lang.Ability.OStrike[KBM.Lang], 45)
+	KBM.Defaults.TimerObj.Assign(self.Crucia)
 	
 	-- Create Alerts
-	-- KBM.Defaults.AlertObj.Assign(self.Crucia)
-	-- KBM.Defaults.AlertObj.Assign(self.Storm)
+	self.Crucia.AlertsRef.Fury = KBM.Alert:Create(self.Lang.Verbose.Fury[KBM.Lang], nil, false, true, "orange")
+	self.Crucia.AlertsRef.Rod = KBM.Alert:Create(self.Lang.Debuff.Rod[KBM.Lang], nil, false, true, "purple")
+	KBM.Defaults.AlertObj.Assign(self.Crucia)
+	
+	self.Storm.AlertsRef.Pulse = KBM.Alert:Create(self.Lang.Ability.Pulse[KBM.Lang], nil, false, true, "yellow")
+	KBM.Defaults.AlertObj.Assign(self.Storm)
 	
 	-- Assign Alerts and Timers to Triggers
 	-- Crucia Triggers
+	self.Crucia.Triggers.OStrike = KBM.Trigger:Create(self.Lang.Ability.OStrike[KBM.Lang], "channel", self.Crucia)
+	self.Crucia.Triggers.OStrike:AddTimer(self.Crucia.TimersRef.OStrike)
+	self.Crucia.Triggers.LBreath = KBM.Trigger:Create(self.Lang.Ability.LBreath[KBM.Lang], "channel", self.Crucia)
+	self.Crucia.Triggers.LBreath:AddTimer(self.Crucia.TimersRef.LBreath)
+	self.Crucia.Triggers.Fury = KBM.Trigger:Create(self.Lang.Ability.Fury[KBM.Lang], "cast", self.Crucia)
+	self.Crucia.Triggers.Fury:AddAlert(self.Crucia.AlertsRef.Fury)
+	self.Crucia.Triggers.Rod = KBM.Trigger:Create(self.Lang.Debuff.Rod[KBM.Lang], "playerBuff", self.Crucia)
+	self.Crucia.Triggers.Rod:AddAlert(self.Crucia.AlertsRef.Rod, true)
 	-- Stormcore Triggers
+	self.Storm.Triggers.Pulse = KBM.Trigger:Create(self.Lang.Ability.Pulse[KBM.Lang], "personalCast", self.Storm)
+	self.Storm.Triggers.Pulse:AddAlert(self.Storm.AlertsRef.Pulse)
+	self.Storm.Triggers.PulseInt = KBM.Trigger:Create(self.Lang.Ability.Pulse[KBM.Lang], "personalInterrupt", self.Storm)
+	self.Storm.Triggers.PulseInt:AddStop(self.Storm.AlertsRef.Pulse)
 	
 	self.Crucia.CastBar = KBM.CastBar:Add(self, self.Crucia)
 	self.Storm.CastBar = KBM.CastBar:Add(self, self.Storm)

@@ -389,7 +389,7 @@ end
 
 function ID.PhaseFour()
 	ID.Phase = 4
-	KBM.MechTimer:AddRemove(ID.Inwar.TimersRef.Geyser)
+	KBM.MechTimer:AddRemove(ID.Inwar.TimersRef.Geyser, true)
 	ID.PhaseObj.Objectives:Remove()
 	ID.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
 	ID.PhaseObj.Objectives:AddPercent(ID.Inwar, 0, 100)
@@ -547,7 +547,6 @@ function ID:Start()
 	self.Inwar.TimersRef.GeyserFirst = KBM.MechTimer:Add(self.Lang.Mechanic.Geyser[KBM.Lang], 25)
 	self.Inwar.TimersRef.Geyser = KBM.MechTimer:Add(self.Lang.Mechanic.Geyser[KBM.Lang], 15, true)
 	self.Inwar.TimersRef.Geyser:NoMenu()
-	self.Inwar.TimersRef.Geyser:SetPhase(3)
 	self.Inwar.TimersRef.GeyserFirst:AddTimer(self.Inwar.TimersRef.Geyser, 0)
 	self.Inwar.TimersRef.Tide = KBM.MechTimer:Add(self.Lang.Ability.Tide[KBM.Lang], 60)
 	self.Inwar.TimersRef.Surge = KBM.MechTimer:Add(self.Lang.Ability.Surge[KBM.Lang], 60)

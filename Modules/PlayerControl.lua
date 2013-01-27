@@ -64,16 +64,16 @@ end
 
 function PC:GatherRaidInfo()
 	for UnitID, UnitObj in pairs(LibSUnit.Raid.UID) do
-		if uID then
-			if uID ~= LibSUnit.Player.UnitID then
-				if Unitobj then
+		if UnitID then
+			if UnitID ~= LibSUnit.Player.UnitID then
+				if UnitObj then
 					if UnitObj.Calling then
 						if self.RezBank[UnitObj.Calling] then
 							Command.Message.Broadcast("tell", UnitObj.Name, "KBMRezReq", "C", function(failed, message) PC.RezMReq(UnitObj.Name, failed, message) end)
 						end
 					else
 						--print("Adding player to queue (Unknown Calling): "..KBM.Unit.List.UID[uID].Name)
-						self.Queue[uID] = true
+						self.Queue[UnitID] = true
 					end
 				end
 			end

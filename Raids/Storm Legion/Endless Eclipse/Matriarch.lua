@@ -24,6 +24,7 @@ local MOP = {
 	Lang = {},
 	ID = "RMatriarch_of_Pestilence",
 	Object = "MOP",
+	Enrage = 7 * 60,
 }
 
 KBM.RegisterMod(MOP.ID, MOP)
@@ -37,6 +38,7 @@ MOP.Lang.Unit.MatriarchShort:SetGerman("Matriarchin")
 
 -- Ability Dictionary
 MOP.Lang.Ability = {}
+MOP.Lang.Ability.Way = KBM.Language:Add("Way of Decay")
 
 -- Debuff Dictionary
 MOP.Lang.Debuff = {}
@@ -77,6 +79,7 @@ MOP.Matriarch = {
 			Enabled = true,
 			Spores = KBM.Defaults.AlertObj.Create("dark_green"),
 			Infect = KBM.Defaults.AlertObj.Create("red"),
+			Way = KBM.Defaults.AlertObj.Create("yellow"),
 		},
 	}
 }
@@ -223,6 +226,7 @@ function MOP:Start()
 	-- Create Alerts
 	self.Matriarch.AlertsRef.Spores = KBM.Alert:Create(self.Lang.Debuff.Spores[KBM.Lang], nil, true, true, "dark_green")
 	self.Matriarch.AlertsRef.Infect = KBM.Alert:Create(self.Lang.Debuff.Infect[KBM.Lang], nil, false, true, "red")
+	self.Matriarch.AlertsRef.Way = KBM.Alert:Create(self.Lang.Ability.Way[KBM.Lang], nil, false, true, "yellow")
 	KBM.Defaults.AlertObj.Assign(self.Matriarch)
 	
 	-- Assign Alerts and Timers to Triggers
@@ -230,6 +234,10 @@ function MOP:Start()
 	self.Matriarch.Triggers.Spores:AddAlert(self.Matriarch.AlertsRef.Spores, true)
 	self.Matriarch.Triggers.Infect = KBM.Trigger:Create(self.Lang.Debuff.Infect[KBM.Lang], "playerDebuff", self.Matriarch)
 	self.Matriarch.Triggers.Infect:AddAlert(self.Matriarch.AlertsRef.Infect, true)
+	self.Matriarch.Triggers.Way = KBM.Trigger:Create(self.Lang.Ability.Way[KBM.Lang], "cast", self.Matriarch)
+	self.Matriarch.Triggers.Way:AddAlert(self.Matriarch.AlertsRef.Way)
+	self.Matriarch.Triggers.WayInt = KBM.Trigger:Create(self.Lang.Ability.Way[KBM.Lang], "interrupt", self.Matriarch)
+	self.Matriarch.Triggers.WayInt:AddStop(self.Matriarch.AlertsRef.Way)
 	
 	self.Matriarch.CastBar = KBM.CastBar:Add(self, self.Matriarch)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

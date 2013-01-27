@@ -349,7 +349,7 @@ function HA.PhaseThree()
 		HA.TimeoutOverride = false
 		HA.PhaseObj.Objectives:Remove()
 		HA.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
-		HA.PhaseObj.Objectives:AddPercent(HA.Arakhurn.Name, 0, 100)
+		HA.PhaseObj.Objectives:AddPercent(HA.Arakhurn, 0, 100)
 		KBM.MechTimer:AddStart(HA.Arakhurn.TimersRef.AddFirst)
 		KBM.MechTimer:AddStart(HA.Arakhurn.TimersRef.NovaPThree)
 		KBM.MechTimer:AddStart(HA.Arakhurn.TimersRef.FieryPThree)
@@ -358,8 +358,9 @@ end
 
 function HA:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		if not uDetails.player then
-			if uDetails.name == self.Arakhurn.Name then
+		local BossObj = self.UTID[uDetails.type]
+		if BossOBj then
+			if BossObj == self.Arakhurn then
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
@@ -375,7 +376,7 @@ function HA:UnitHPCheck(uDetails, unitID)
 					else
 						self.Phase = 1
 						self.PhaseObj:Start(self.StartTime)
-						self.PhaseObj.Objectives:AddPercent(self.Arakhurn.Name, 0, 100)
+						self.PhaseObj.Objectives:AddPercent(self.Arakhurn, 0, 100)
 						self.PhaseObj:SetPhase(1)
 						KBM.MechTimer:AddStart(self.Arakhurn.TimersRef.NovaFirst)
 						KBM.MechTimer:AddStart(self.Arakhurn.TimersRef.FieryFirst)
@@ -394,24 +395,26 @@ function HA:UnitHPCheck(uDetails, unitID)
 				end
 				self.Arakhurn.UnitID = unitID
 				self.Arakhurn.Available = true
-				return self.Arakhurn
+				return BossObj
 			else
-				if not self.Bosses[uDetails.name].UnitList[unitID] then
-					local SubBossObj = {
-						Mod = HA,
-						Level = "??",
-						Name = uDetails.name,
-						Dead = false,
-						Casting = false,
-						UnitID = unitID,
-						Available = true,
-					}
-					self.Bosses[uDetails.name].UnitList[unitID] = SubBossObj
-				else
-					self.Bosses[uDetails.name].UnitList[unitID].Available = true
-					self.Bosses[uDetails.name].UnitList[unitID].UnitID = UnitID
+				if BossObj.UnitList then
+					if not BossObj.UnitList[unitID] then
+						local SubBossObj = {
+							Mod = HA,
+							Level = "??",
+							Name = uDetails.name,
+							Dead = false,
+							Casting = false,
+							UnitID = unitID,
+							Available = true,
+						}
+						BossObj.UnitList[unitID] = SubBossObj
+					else
+						BossObj.UnitList[unitID].Available = true
+						BossObj.UnitList[unitID].UnitID = UnitID
+					end
+					return BossObj.UnitList[unitID]
 				end
-				return self.Bosses[uDetails.name].UnitList[unitID]
 			end
 		end
 	end

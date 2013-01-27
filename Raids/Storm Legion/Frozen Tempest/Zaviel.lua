@@ -25,6 +25,7 @@ local ZVL = {
 	ID = "Zaviel",
 	Object = "ZVL",
 	Enrage = 7 * 60,
+	PowerCount = 0,
 }
 
 KBM.RegisterMod(ZVL.ID, ZVL)
@@ -35,6 +36,8 @@ ZVL.Lang.Unit.Zaviel = KBM.Language:Add("Artifex Zaviel")
 ZVL.Lang.Unit.Zaviel:SetGerman("Artifex Zaviel")
 ZVL.Lang.Unit.ZavielShort = KBM.Language:Add("Zaviel")
 ZVL.Lang.Unit.ZavielShort:SetGerman("Zaviel")
+ZVL.Lang.Unit.Power = KBM.Language:Add("Power Conducer")
+ZVL.Lang.Unit.PowerShort = KBM.Language:Add("Conducer")
 
 -- Ability Dictionary
 ZVL.Lang.Ability = {}
@@ -51,6 +54,10 @@ ZVL.Lang.Debuff.Arc:SetGerman("Bogenverschweißung")
 ZVL.Lang.Debuff.Vitality = KBM.Language:Add("Dissonant Vitality")
 ZVL.Lang.Debuff.Vitality:SetGerman("Dissonante Vitalität")
 
+-- Chat Dictionary
+ZVL.Lang.Say = {}
+ZVL.Lang.Say.Power = KBM.Language:Add("Think you can handle this%? Hahaha!")
+
 -- Verbose Dictionary
 ZVL.Lang.Verbose = {}
 ZVL.Lang.Verbose.ConduitWarn = KBM.Language:Add("Casting: Energy Conduit")
@@ -59,6 +66,7 @@ ZVL.Lang.Verbose.Conduit = KBM.Language:Add("Cleanse Energy Conduit!")
 ZVL.Lang.Verbose.Conduit:SetGerman("Energieleitung dispellen!")
 ZVL.Lang.Verbose.Jolt = KBM.Language:Add("Run around!")
 ZVL.Lang.Verbose.Jolt:SetGerman("Laufen!")
+ZVL.Lang.Verbose.Power = KBM.Language:Add("Power Conducers")
 
 -- Description Dictionary
 ZVL.Lang.Main = {}
@@ -79,16 +87,16 @@ ZVL.Zaviel = {
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
-	-- TimersRef = {},
+	TimersRef = {},
 	MechRef = {},
 	AlertsRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		-- TimersRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
-		-- },
+		TimersRef = {
+			Enabled = true,
+			Power = KBM.Defaults.TimerObj.Create("dark_green"),
+		},
 		AlertsRef = {
 			Enabled = true,
 			Arc = KBM.Defaults.AlertObj.Create("purple"),
@@ -97,6 +105,7 @@ ZVL.Zaviel = {
 			JoltWarn = KBM.Defaults.AlertObj.Create("red"),
 			Jolt = KBM.Defaults.AlertObj.Create("red"),
 			Beam = KBM.Defaults.AlertObj.Create("yellow"),
+			Power = KBM.Defaults.AlertObj.Create("dark_green"),
 		},
 		MechRef = {
 			Enabled = true,
@@ -105,10 +114,45 @@ ZVL.Zaviel = {
 	}
 }
 
+ZVL.Power = {
+	Mod = ZVL,
+	Level = "??",
+	Active = false,
+	Name = ZVL.Lang.Unit.Power[KBM.Lang],
+	NameShort = ZVL.Lang.Unit.PowerShort[KBM.Lang],
+	Dead = false,
+	Available = false,
+	Menu = {},
+	UTID = "none",
+	UnitID = nil,
+	TimeOut = 5,
+	Castbar = nil,
+	-- TimersRef = {},
+	-- MechRef = {},
+	-- AlertsRef = {},
+	Triggers = {},
+	Multi = true,
+	UnitList = {},
+	Settings = {
+		-- CastBar = KBM.Defaults.CastBar(),
+		-- TimersRef = {
+			-- Enabled = true,
+			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
+		-- },
+		-- AlertsRef = {
+			-- Enabled = true,
+		-- },
+		-- MechRef = {
+			-- Enabled = true,
+		-- },
+	}
+}
+
 function ZVL:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Zaviel.Name] = self.Zaviel,
+		[self.Power.Name] = self.Power,
 	}
 end
 
@@ -118,10 +162,10 @@ function ZVL:InitVars()
 		CastBar = self.Zaviel.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
-		-- MechTimer = KBM.Defaults.MechTimer(),
+		MechTimer = KBM.Defaults.MechTimer(),
 		MechSpy = KBM.Defaults.MechSpy(),
 		Alerts = KBM.Defaults.Alerts(),
-		-- TimersRef = self.Zaviel.Settings.TimersRef,
+		TimersRef = self.Zaviel.Settings.TimersRef,
 		AlertsRef = self.Zaviel.Settings.AlertsRef,
 		MechRef = self.Zaviel.Settings.MechRef,
 	}
@@ -180,10 +224,25 @@ end
 
 function ZVL.PhaseTwo()
 	if ZVL.Phase == 1 then
-		ZVL.Phase = 1
+		ZVL.Phase = 2
 		ZVL.PhaseObj.Objectives:Remove()
 		ZVL.PhaseObj.Objectives:AddPercent(ZVL.Zaviel, 0, 50)
 		ZVL.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
+		ZVL.Power.CountObj = nil
+	end
+end
+
+function ZVL.PhaseConducer()
+	ZVL.Phase = ZVL.Power.NameShort
+	ZVL.Power.CountObj = ZVL.PhaseObj.Objectives:AddDeath(ZVL.Power.Name, 4)
+	ZVL.PowerCount = 0
+end
+
+function ZVL.PhaseConducerEnd()
+	ZVL.Phase = ZVL.Phase
+	if ZVL.Power.CountObj then
+		ZVL.Power.CountObj:Remove()
+		ZVL.Power.CountObj = nil
 	end
 end
 
@@ -191,15 +250,28 @@ function ZVL:Death(UnitID)
 	if self.Zaviel.UnitID == UnitID then
 		self.Zaviel.Dead = true
 		return true
+	elseif self.Power.UnitList[UnitID] then
+		if not self.Power.UnitList[UnitID].Dead then
+			self.Power.UnitList[UnitID].Dead = true
+			self.PowerCount = self.PowerCount + 1
+			if self.PowerCount == 4 then
+				self.PowerCount = 0
+				self.PhaseConducerEnd()
+				if self.Phase < 2 then
+					KBM.MechTimer:AddStart(self.Zaviel.TimersRef.Power)
+				end
+			end
+			return false
+		end
 	end
 	return false
 end
 
 function ZVL:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		if not uDetails.player then
-			if self.Bosses[uDetails.name] then
-				local BossObj = self.Bosses[uDetails.name]
+		if self.Bosses[uDetails.name] then
+			local BossObj = self.Bosses[uDetails.name]
+			if BossObj == self.Zaviel then
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
@@ -219,6 +291,7 @@ function ZVL:UnitHPCheck(uDetails, unitID)
 							[2] = self.Lang.Ability.Conduit[KBM.Lang],
 					}
 					KBM.TankSwap:Start(DebuffTable, unitID, 2)
+					KBM.MechTimer:AddStart(BossObj.TimersRef.Power)
 				else
 					BossObj.Dead = false
 					BossObj.Casting = false
@@ -229,6 +302,26 @@ function ZVL:UnitHPCheck(uDetails, unitID)
 				BossObj.UnitID = unitID
 				BossObj.Available = true
 				return BossObj
+			else
+				if not BossObj.UnitList[unitID] then
+					local SubBossObj = {
+						Mod = self,
+						Level = "??",
+						Active = true,
+						Name = BossObj.Name,
+						NameShort = BossObj.NameShort,
+						Menu = {},
+						Dead = false,
+						Available = true,
+						UnitID = unitID,
+						UTID = "none",
+					}
+					BossObj.UnitList[unitID] = SubBossObj
+					return SubBossObj
+				else
+					BossObj.UnitList[unitID].Dead = false
+					return BossObj.UnitList[unitID]
+				end
 			end
 		end
 	end
@@ -242,8 +335,10 @@ function ZVL:Reset()
 		BossObj.Dead = false
 		BossObj.Casting = false
 	end
+	self.Power.UnitList = {}
 	self.Zaviel.CastBar:Remove()	
 	self.PhaseObj:End(Inspect.Time.Real())
+	self.PowerCount = 0
 end
 
 function ZVL:Timer()	
@@ -255,7 +350,8 @@ end
 
 function ZVL:Start()
 	-- Create Timers
-	-- KBM.Defaults.TimerObj.Assign(self.Zaviel)
+	self.Zaviel.TimersRef.Power = KBM.MechTimer:Add(self.Lang.Verbose.Power[KBM.Lang], 60)
+	KBM.Defaults.TimerObj.Assign(self.Zaviel)
 	
 	-- Create Alerts
 	self.Zaviel.AlertsRef.Arc = KBM.Alert:Create(self.Lang.Debuff.Arc[KBM.Lang], nil, true, false, "purple")
@@ -264,6 +360,7 @@ function ZVL:Start()
 	self.Zaviel.AlertsRef.JoltWarn = KBM.Alert:Create(self.Lang.Ability.Jolt[KBM.Lang], nil, false, true, "red")
 	self.Zaviel.AlertsRef.Jolt = KBM.Alert:Create(self.Lang.Verbose.Jolt[KBM.Lang], nil, true, true, "red")
 	self.Zaviel.AlertsRef.Beam = KBM.Alert:Create(self.Lang.Ability.Beam[KBM.Lang], nil, false, true, "yellow")
+	self.Zaviel.AlertsRef.Power = KBM.Alert:Create(self.Lang.Verbose.Power[KBM.Lang], 2, true, false, "dark_green")
 	KBM.Defaults.AlertObj.Assign(self.Zaviel)
 	
 	-- Create Spies
@@ -294,6 +391,9 @@ function ZVL:Start()
 	-- Phase
 	self.Zaviel.Triggers.PhaseTwo = KBM.Trigger:Create(50, "percent", self.Zaviel)
 	self.Zaviel.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
+	self.Zaviel.Triggers.PhaseCon = KBM.Trigger:Create(self.Lang.Say.Power[KBM.Lang], "say", self.Zaviel)
+	self.Zaviel.Triggers.PhaseCon:AddPhase(self.PhaseConducer)
+	self.Zaviel.Triggers.PhaseCon:AddAlert(self.Zaviel.AlertsRef.Power)
 	
 	self.Zaviel.CastBar = KBM.CastBar:Add(self, self.Zaviel)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

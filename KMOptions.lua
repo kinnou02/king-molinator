@@ -1161,7 +1161,8 @@ function KBM.InitOptions()
 					self.Parent.Icon:SetHeight(LogoSize.h)
 					Current.Icon:SetAlpha(0.5)
 					Current.Icon:SetWidth(LogoSize_Idle.w)
-					Current.Icon:SetHeight(LogoSize_Idle.h)				
+					Current.Icon:SetHeight(LogoSize_Idle.h)
+					KBM.Options.MenuExpac = self.ID
 				else
 					self.Parent.Shadow:SetAlpha(1)
 					self.Parent.Shadow:SetFontSize(FontSize)
@@ -1744,6 +1745,9 @@ function KBM.InitOptions()
 		KBM.RezMaster.GUI:ApplySettings()
 		KBM.TankSwap.Anchor:SetVisible(false)
 		KBM.TankSwap.Anchor.Drag:SetVisible(false)
+		if not KBM.PercentageMon.Active then
+			KBM.PercentageMon.GUI.Cradle:SetVisible(false)
+		end
 		if KBM.PlugIn.Count > 0 then
 			for ID, PlugIn in pairs(KBM.PlugIn.List) do
 				if PlugIn.MenuClose then
@@ -1777,6 +1781,7 @@ function KBM.InitOptions()
 		KBM.EncTimer:ApplySettings()
 		KBM.MechSpy:ApplySettings()
 		KBM.RezMaster.GUI:ApplySettings()
+		KBM.PercentageMon.GUI.Cradle:SetVisible(KBM.PercentageMon.Settings.Enabled)
 		if KBM.Options.TankSwap.Visible then
 			KBM.TankSwap.Anchor:SetVisible(true)
 			KBM.TankSwap.Anchor.Drag:SetVisible(KBM.Options.TankSwap.Unlocked)

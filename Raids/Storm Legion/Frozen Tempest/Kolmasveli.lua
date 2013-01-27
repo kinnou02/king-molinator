@@ -153,6 +153,7 @@ KT.Vortex = {
 	Castbar = nil,
 	AlertsRef = {},
 	Triggers = {},
+	Ignore = true,
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
 		AlertsRef = {
@@ -415,6 +416,7 @@ function KT:Start()
 	self.Vortex.Triggers.FlareInt = KBM.Trigger:Create(self.Lang.Ability.Flare[KBM.Lang], "interrupt", self.Vortex)
 	self.Vortex.Triggers.FlareInt:AddStop(self.Vortex.AlertsRef.Flare)
 	
+	self.PercentageMon = KBM.PercentageMon:Create(self.Kolmasveli, self.Toinenveli, 5)
 	self.Kolmasveli.CastBar = KBM.CastBar:Add(self, self.Kolmasveli)
 	self.Toinenveli.CastBar = KBM.CastBar:Add(self, self.Toinenveli)
 	self.Vortex.CastBar = KBM.CastBar:Add(self, self.Vortex)

@@ -1,4 +1,76 @@
-﻿v1.4.0
+﻿v1.4.1
+
+Menu
+* New: The menu window will now remember which Rift tab you were last in (Base or Storm Legion).
+
+Mechanic Timers
+* New: Repeating and Wait timers can now be forced to stop by using KBM.MechTimer:AddRemove(Timer, true)
+* Change: Mechanic Timers can now trigger multiple timers at the same time, at any point in its duration.
+
+Slash Commands
+* Fixed: Typing /kbmbuffs USERNAME works again.
+
+Percentage Monitor
+* New: Completely redesigned and made to be an module available to any raid encounter.
+* New: The graphics have been overhauled.
+* New: Ability to freely scale the monitor via the mouse wheel, between 50%-150%.
+* New: Middle click [while unlocked] will reset the scale to default (100%)
+* New: Option to hide/display Boss names on the monitor.
+* New: Option to hide/display Boss percentages on the monitor (text form).
+* New: Option to hide/display Boss raid marks on the momitor (represented via internal Rift raid marks).
+
+Res Master
+* Change: Name changed to Res Master.
+* Change: Enabling [from disabled] Res Master in-game will now update current Raid Res status (rather than requiring a /reloadui)
+
+Ready Check
+* New: Remarkable Oilstone (Rogue, Warrior, 60, High)
+* New: Kraken Hors D'oeuvres (Cleric, Warrior, 60, Tank, High)
+* New: Stuffed Mushrooms (Rogue, 60, Tank, High)
+* New: Sharpfin Chops (Mage, Cleric, 60, High)
+* New: Prime Flycatcher (Warrior, Rogue, 60, High)
+* New: Octopus Broth (Warrior, Rogue, 60, Medium)
+* New: Excellent Powersurge Vial (Warrior, Rogue, 60, Medium)
+* New: Excellent Brightsurge Vial (Mage, Cleric, 60, Medium)
+* New: Excellent Enduring Vial (Rogue, Warrior, Cleric, 60, Medium, Tank)
+
+Raids
+Endless Eclipse
+* Matriarch of Pestilence
+** New: Added Enrage Timer of 7 minutes.
+** New: Added Interrupt Alert and Stop Trigger for Way of Decay.
+* Dread Lord Goloch
+** New: Enabled Tank-Swap for Dread Scythe
+Frozen Tempest
+* Kolmasveli
+** New: Added the new Percentage Monitor to this encounter.
+** Fixed: The Energy Vortex should no longer trigger outside of the encounter (Still need UTID for this Unit)
+* Artifex Zaviel
+** New: Added Phase Monitoring for Power Conducers
+** New: Added Timers for each Conducer phase.
+** New: Added an Alert for the start of each Conducer phase.
+* Crucia
+** New: Added Refactored Construct unit for future tracking.
+** New: Added an Alert for Tempest Fury (Look away mechanic).
+** New: Added Timer for Orbital Strike (Experimental)
+** New: Added Timer for Lightning Breath (Experimental)
+** New: Added Personal Alert and Stop trigger for Shocking Pulse interrupt.
+** New: Added Personal Alert for Lightning Rod.
+** New: Enabled Tank-Swap for Conductive Armor.
+
+Hammerknell Fortress
+* Rune King Molinar
+** New: Added the new Percentage Monitor to this encounter.
+** Removed: Original Percentage Monitor and related code.
+
+Slivers
+Rise of the Phoenix
+* High Priest Arakhurn
+** Changed: Converted completely over to a UTID checking system.
+** Fixed: Check added to ensure a BossObj has a valid UnitList. (Error 399)
+
+----
+v1.4.0
 
 Rez Master
 * Options

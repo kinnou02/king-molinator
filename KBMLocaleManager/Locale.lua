@@ -174,6 +174,16 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Version.AlphaInfo:SetFrench("Vous exécutez r%d, il y a le build r%d de KBM en circulation.")
 	KBM.Language.Version.AlphaInfo:SetKorean("현재 버전은 r%d, 버전 r%d 에 새로운 릴리즈가 있을겁니다.")
 	
+	-- Percentage Monitor
+	KBM.Language.PerMon = {}
+	KBM.Language.PerMon.Title = KBM.Language:Add("Percentage Monitor")
+	KBM.Language.PerMon.Enable = KBM.Language:Add("Enable Percentage Monitor")
+	KBM.Language.PerMon.Unlock = KBM.Language:Add("Unlocked for positioning")
+	KBM.Language.PerMon.Scale = KBM.Language:Add("Enable mouse wheel scaling")
+	KBM.Language.PerMon.Name = KBM.Language:Add("Display boss names")
+	KBM.Language.PerMon.Percent = KBM.Language:Add("Display boss percentages")
+	KBM.Language.PerMon.Mark = KBM.Language:Add("Display boss raid marks")
+	
 	-- Ready Check Dictionary
 	KBM.Language.ReadyCheck = {}
 	KBMLM.SetGroupObject(KBM.Language.ReadyCheck, "GroupObject", "Ready Check Dictionary")
@@ -199,21 +209,21 @@ function KBMLM.SetMain_Lang()
 	-- Rez Master Dictionary
 	KBM.Language.RezMaster = {}
 	KBMLM.SetGroupObject(KBM.Language.RezMaster, "GroupObject", "Rez Master dictionary")
-	KBM.Language.RezMaster.Name = KBM.Language:Add("Rez Master")
-	KBM.Language.RezMaster.Name:SetGerman("Rez Meister")
-	KBM.Language.RezMaster.Name:SetFrench("Suivi des Rez")
+	KBM.Language.RezMaster.Name = KBM.Language:Add("Res Master")
+	KBM.Language.RezMaster.Name:SetGerman("Res Meister")
+	KBM.Language.RezMaster.Name:SetFrench("Suivi des Res")
 	KBM.Language.RezMaster.Name:SetKorean("부활 마스터")
-	KBM.Language.RezMaster.Enabled = KBM.Language:Add("Enable Rez Master")
-	KBM.Language.RezMaster.Enabled:SetFrench("Activer Suivi des Rez")
-	KBM.Language.RezMaster.Enabled:SetGerman("Rez Meister anzeigen")
+	KBM.Language.RezMaster.Enabled = KBM.Language:Add("Enable Res Master")
+	KBM.Language.RezMaster.Enabled:SetFrench("Activer Suivi des Res")
+	KBM.Language.RezMaster.Enabled:SetGerman("Res Meister anzeigen")
 	KBM.Language.RezMaster.Enabled:SetKorean("부활 마스터 적용")
 	KBM.Language.RezMaster.Ready = KBM.Language:Add("Ready!")
 	KBM.Language.RezMaster.Ready:SetFrench("Prêt!")
 	KBM.Language.RezMaster.Ready:SetGerman("Bereit!")
 	KBM.Language.RezMaster.Ready:SetKorean("준비!")
-	KBM.Language.RezMaster.AnchorText = KBM.Language:Add("Rez Timer Anchor")
-	KBM.Language.RezMaster.AnchorText:SetFrench("Ancrage Minuterie Rez")
-	KBM.Language.RezMaster.AnchorText:SetGerman("Rez Meister Anker")
+	KBM.Language.RezMaster.AnchorText = KBM.Language:Add("Res Timer Anchor")
+	KBM.Language.RezMaster.AnchorText:SetFrench("Ancrage Minuterie Res")
+	KBM.Language.RezMaster.AnchorText:SetGerman("Res Meister Anker")
 	KBM.Language.RezMaster.AnchorText:SetKorean("부활 시간 앵커")
 	
 	-- Chat Objects

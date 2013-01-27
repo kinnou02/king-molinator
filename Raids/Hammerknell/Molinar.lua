@@ -30,58 +30,6 @@ local KM = {
 	Object = "KM",
 }
 
--- Addon Variables
--- Frames
-KM.FrameBase = nil -- Base Frame to attach fancy stuff to
-KM.DragFrame = nil -- Used for moving the monitor
-KM.KingText = nil -- King Molinar display name
-KM.PrinceText = nil -- Prince Dollin display name
-KM.PrincePBack = nil
-KM.PrincePText = nil
-KM.KingPBack = nil
-KM.KingPText = nil
-KM.StatusForecast = nil
-KM.StatusBar = nil
-KM.IconSize = nil
-
--- Frame Defaults
-KM.FBWidth = 600
-KM.SwingMulti = (KM.FBWidth * 0.5) * 0.1428571
-KM.FBHeight = 100
-KM.SafeWidth = KM.FBWidth * 0.5
-KM.DangerWidth = KM.FBWidth * 0.125
-KM.StopWidth = (KM.FBWidth - KM.SafeWidth - (KM.DangerWidth * 2)) * 0.5
-KM.FBDefX = LocX -- Centered
-KM.FBDefY = LocY -- Centered
-KM.BossHPWidth = nil -- To be filled in later, size of King and Prince individual HP bars
-
--- Unit Variables
--- King Molinar
-KM.KingHPP = "100" -- Visual percentage.
-KM.KingPerc = 1 -- Decimal percentage holder.
-KM.KingHPMax = 7100000 -- Dummy HP value for testing, will be overridden during encounter start
-KM.KingDPSTable = {}
-KM.KingLastHP = 0
-KM.KingSample = 0 -- Total damage done to King Molinar over {SampleDPS} seconds
-KM.KingSampleDPS = 0 -- Average DPS done to King Molinar over {SampleDPS} seconds.
--- Prince Dollin
-KM.PrinceHPP = "100" -- Visual percentage
-KM.PrincePerc = 1 -- Decimal percentage holder.
-KM.PrinceHPMax = 4200000 -- Dummy HP value for testing, will be overridden during encounter start
-KM.PrinceDPSTable = {}
-KM.PrinceLastHP = 0
-KM.PrinceSample = 0 -- Total damage done to Prince Dollin over {SampleDPS} seconds.
-KM.PrinceSampleDPS = 0 -- Average DPS done to Prince Dollin over {SampleDPS} seconds.
--- State Variables
-KM.EncounterRunning = false
-KM.StartTime = Inspect.Time.Real()
-KM.HeldTime = KM.StartTime
-KM.UpdateTime = KM.StartTime
-KM.TimeElapsed = 0
-KM.DisplayReady = false
-KM.CurrentSwing = 0
-KM.ForecastSwing = 0
-
 KM.Prince = {
 	Mod = KM,
 	Level = "??",
@@ -104,7 +52,6 @@ KM.Prince = {
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		PinMenu = KBM.Language.Options.Pinned[KBM.Lang].."Percentage Monitor",
 		Filters = {
 			Enabled = true,
 			Rend = KBM.Defaults.CastFilter.Create(),
@@ -158,7 +105,6 @@ KM.King = {
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		PinMenu = KBM.Language.Options.Pinned[KBM.Lang].."Percentage Monitor",
 		Filters = {
 			Enabled = true,
 			Shout = KBM.Defaults.CastFilter.Create(),
@@ -190,9 +136,6 @@ KM.King = {
 		-- }
 	},
 }
-KM.King.Settings.CastBar.Pinned = true
-KM.Prince.Settings.CastBar.Pinned = true
-
 KBM.RegisterMod(KM.ID, KM)
 
 -- Main Unit List
@@ -349,16 +292,6 @@ function KM:InitVars()
 			Multi = true,
 			Override = true,
 		},
-		PercentMonitor = {
-			x = false,
-			y = false,
-			Size = 1,
-			Visible = false,
-			Unlocked = false,
-			Compact = false,
-			Enabled = true,
-		},
-		SampleDPS = 4,
 		King = {
 			CastBar = KM.King.Settings.CastBar,
 			CastFilters = KM.King.Settings.Filters,
@@ -380,7 +313,6 @@ function KM:InitVars()
 end
 
 function KM:SwapSettings(bool)
-
 	if bool then
 		KM_Settings = self.Settings
 		self.Settings = chKM_Settings
@@ -388,7 +320,6 @@ function KM:SwapSettings(bool)
 		chKM_Settings = self.Settings
 		self.Settings = KM_Settings
 	end
-
 end
 
 function KM:LoadVars()
@@ -406,8 +337,10 @@ function KM:LoadVars()
 
 	self.King.Settings.CastBar.Override = true
 	self.King.Settings.CastBar.Multi = true
+	self.King.Settings.CastBar.Pinned = false
 	self.Prince.Settings.CastBar.Override = true
 	self.Prince.Settings.CastBar.Multi = true
+	self.Prince.Settings.CastBar.Pinned = false
 	
 	self.King.Settings.AlertsRef.Feedback.Enabled = true
 	self.Prince.Settings.AlertsRef.Feedback.Enabled = true
@@ -424,8 +357,7 @@ function KM:LoadVars()
 	KM.King.CastFilters[KM.Lang.Ability.Feedback[KBM.Lang]] = {ID = "Feedback"}
 	
 	KBM.Defaults.CastFilter.Assign(self.King)
-	KBM.Defaults.CastFilter.Assign(self.Prince)
-	
+	KBM.Defaults.CastFilter.Assign(self.Prince)	
 end
 
 function KM:SaveVars()	
@@ -478,12 +410,6 @@ function KM:UnitHPCheck(uDetails, unitID)
 						self.King.Dead = false
 					end
 					self.King.Casting = false
-					self.KingLastHP = uDetails.healthMax
-					self.KingHPMax = uDetails.healthMax
-					self.KingCurrentHP = self.KingLastHP
-					if self.Settings.PercentMonitor.Enabled then
-						self.FrameBase:SetVisible(true)
-					end
 					self.King.CastBar:Create(unitID)
 				end
 				self.King.UnitID = unitID
@@ -503,13 +429,7 @@ function KM:UnitHPCheck(uDetails, unitID)
 						self.PhaseObj.Objectives:AddPercent(self.Prince, 90, 100)
 						self.Prince.Dead = false
 					end
-					self.PrinceLastHP = uDetails.healthMax
-					self.PrinceHPMax = uDetails.healthMax
-					self.PrinceCurrentHP = self.PrinceLastHP
 					self.Prince.Casting = false
-					if self.Settings.PercentMonitor.Enabled then
-						self.FrameBase:SetVisible(true)
-					end
 					self.Prince.CastBar:Create(unitID)
 				end
 				self.Prince.UnitID = unitID
@@ -524,24 +444,6 @@ function KM:Reset()
 	self.EncounterRunning = false
 	self.Prince.UnitID = nil
 	self.King.UnitID = nil
-	self.KingDPSTable = {}
-	self.PrinceDPSTable = {}
-	self.KingSampleDPS = 0
-	self.KingSample = 0
-	self.PrinceSampleDPS = 0
-	self.PrinceSample = 0
-	self.KingHPBar:SetWidth(self.BossHPWidth)
-	self.PrinceHPBar:SetWidth(self.BossHPWidth)
-	self.StatusBar:SetPoint("CENTER", self.FrameBase, "CENTER")
-	self.StatusForecast:SetPoint("CENTER", self.FrameBase, "CENTER")
-	self.KingHPP = "100%"
-	self.PrinceHPP = "100%"
-	self.KingPText:SetText("100%")
-	self.PrincePText:SetText("100%")
-	self.CurrentSwing = 0
-	self.KingPerc = 1
-	self.PrincePerc = 1
-	self.FrameBase:SetVisible(false)
 	self.King.CastBar:Remove()
 	self.King.Dead = false
 	self.King.Available = false
@@ -550,7 +452,6 @@ function KM:Reset()
 	self.Prince.Available = false
 	self.Phase = 1
 	self.PhaseObj:End(Inspect.Time.Real())
-	print("Monitor reset.")	
 end
 
 function KM.PhaseTwo()
@@ -583,378 +484,7 @@ function KM.PhaseFour()
 	end
 end
 
-function KM:CheckTrends()
-	-- Adjust the Current and Trend bars accordingly.	
-	if self.King.UnitID ~= nil and self.Prince.UnitID ~= nil then
-		-- King Calc
-		local KingForecastHP = self.KingLastHP-(self.KingSampleDPS * 8)
-		local KingForecastP = KingForecastHP / self.KingHPMax
-		local KingMulti = self.KingPerc*100
-		self.KingHPP = tostring(math.ceil(KingMulti)).."%"
-		-- Prince Calc
-		local PrinceForecastHP = self.PrinceLastHP-(self.PrinceSampleDPS * 8)
-		local PrinceForecastP = PrinceForecastHP / self.PrinceHPMax
-		local PrinceMulti = self.PrincePerc*100
-		self.PrinceHPP = tostring(math.ceil(PrinceMulti)).."%"
-		self.CurrentSwing = self.KingPerc - self.PrincePerc
-		if self.CurrentSwing > 0.07 then
-			self.CurrentSwing = 0.07
-		elseif self.CurrentSwing < -0.07 then
-			self.CurrentSwing = -0.07
-		end
-		self.ForecastSwing = KingForecastP - PrinceForecastP
-		if self.ForecastSwing > 0.07 then
-			self.ForecastSwing = 0.07
-		elseif self.ForecastSwing < -0.07 then
-			self.ForecastSwing = -0.07
-		end
-		self.StatusBar:SetPoint("CENTER", self.FrameBase, "CENTER", (self.CurrentSwing * self.SwingMulti) * 100, 0)
-		self.StatusForecast:SetPoint("CENTER", self.FrameBase, "CENTER", (self.ForecastSwing * self.SwingMulti) * 100, 0)
-		self.KingPText:SetText(self.KingHPP)
-		self.KingHPBar:SetWidth(self.BossHPWidth * self.KingPerc)
-		self.PrincePText:SetText(self.PrinceHPP)
-		self.PrinceHPBar:SetWidth(self.BossHPWidth * self.PrincePerc)
-	end	
-end
-
-function KM:DPSUpdate()
-	if self.King.UnitID ~= nil and self.Prince.UnitID ~= nil then
-		local DumpDPS = 0
-		local KingDetails = Inspect.Unit.Detail(self.King.UnitID)
-		local PrinceDetails = Inspect.Unit.Detail(self.Prince.UnitID)
-		if KingDetails and PrinceDetails then
-			local KingCurrentHP = self.KingLastHP
-			local KingDPS = 0
-			if KingDetails then
-				if KingDetails.health then
-					KingCurrentHP = KingDetails.health
-					KingDPS = self.KingLastHP - KingCurrentHP
-					self.KingLastHP = KingCurrentHP
-				else
-					KingCurrentHP = 0
-				end
-			end
-			self.KingPerc = KingCurrentHP / self.KingHPMax
-			dpsheld = #self.KingDPSTable
-			if dpsheld >= self.Settings.SampleDPS then
-				DumpDPS = table.remove(self.KingDPSTable, 1)
-				table.insert(self.KingDPSTable, KingDPS)
-				if not DumpDPS then DumpDPS = 0 end
-				self.KingSample = self.KingSample - DumpDPS + KingDPS
-				self.KingSampleDPS = self.KingSample / self.Settings.SampleDPS
-			else
-				if dpsheld == 0 then dpsheld = 1 end
-				self.KingSampleDPS = self.KingSample / dpsheld
-				table.insert(self.KingDPSTable, KingDPS)
-			end
-			local PrinceCurrentHP = self.PrinceLastHP
-			local PrinceDPS = 0
-			if PrinceDetails then
-				if PrinceDetails.health then
-					PrinceCurrentHP = PrinceDetails.health
-					PrinceDPS = self.PrinceLastHP - PrinceCurrentHP
-					self.PrinceLastHP = PrinceCurrentHP
-				else
-					PrinceCurrentHP = 0
-				end
-			end
-			self.PrincePerc = PrinceCurrentHP / self.PrinceHPMax
-			dpsheld = #self.PrinceDPSTable
-			if dpsheld > self.Settings.SampleDPS then
-				DumpDPS = table.remove(self.PrinceDPSTable, 1)
-				table.insert(self.PrinceDPSTable, PrinceDPS)
-				if not DumpDPS then DumpDPS = 0 end
-				self.PrinceSample = self.PrinceSample - DumpDPS + PrinceDPS
-				self.PrinceSampleDPS = self.PrinceSample / self.Settings.SampleDPS
-			else
-				if dpsheld == 0 then dpsheld = 1 end
-				self.PrinceSampleDPS = self.PrinceSample / dpsheld
-				table.insert(self.PrinceDPSTable, PrinceDPS)
-			end
-		end
-		self:CheckTrends()
-	end	
-end
-
-function KM.HPChangeCheck(units)
-end
-
-function KM:SetNormal()
-	self.FrameBase:SetHeight(self.FBHeight)
-	self.FrameBase:SetWidth(self.FBWidth)	
-	self.IconSize = 36	
-	
-	self.KingPText:SetFontSize(16)
-	self.KingPBack:SetWidth(self.KingPText:GetWidth() + 6)
-	self.KingPBack:SetHeight(self.KingPText:GetHeight() + 4)
-
-	self.PrincePText:SetFontSize(16)
-	self.PrincePBack:SetWidth(self.PrincePText:GetWidth() + 6)
-	self.PrincePBack:SetHeight(self.PrincePText:GetHeight() + 4)
-
-	self.SafeZone:SetWidth(self.SafeWidth)
-	self.KingDanger:SetWidth(self.DangerWidth)
-	self.KingStop:SetWidth(self.StopWidth)
-
-	self.BossHPWidth = (self.FrameBase:GetWidth() * 0.5) - (self.KingPBack:GetWidth() * 0.5) - 2
-	self.KingHPBar:SetWidth(self.BossHPWidth)
-	self.KingHPBar:SetHeight(10)
-
-	self.PrinceStop:SetWidth(self.StopWidth)
-	self.PrinceDanger:SetWidth(self.DangerWidth)
-	self.PrinceHPBar:SetWidth(self.BossHPWidth)
-	self.PrinceHPBar:SetHeight(10)
-	
-	self.StatusBar:SetWidth(11)
-	self.StatusBar:SetHeight(self.PrinceStop:GetHeight() + 10)
-	self.StatusForecast:SetWidth(11)
-	self.StatusForecast:SetHeight(self.PrinceStop:GetHeight() + 10)
-	
-	self.SwingMulti = (self.FBWidth * 0.5) * 0.1428571
-end
-
-function KM:SetCompact()
-	self.FrameBase:SetHeight(self.FBHeight * 0.75)
-	self.FrameBase:SetWidth(self.FBWidth * 0.75)
-	
-	self.IconSize = 36 * 0.75	
-	
-	self.KingPText:SetFontSize(12)
-	self.KingPBack:SetWidth(self.KingPText:GetWidth() + 2)
-	self.KingPBack:SetHeight(self.KingPText:GetHeight() + 1)
-
-	self.PrincePText:SetFontSize(12)
-	self.PrincePBack:SetWidth(self.PrincePText:GetWidth())
-	self.PrincePBack:SetHeight(self.PrincePText:GetHeight())
-
-	self.SafeZone:SetWidth(self.SafeWidth*0.75)
-	self.SafeZone:SetHeight(35)
-	self.KingDanger:SetWidth(self.DangerWidth*0.75)
-	self.KingDanger:SetHeight(35)
-	self.KingStop:SetWidth(self.StopWidth*0.75)
-	self.KingStop:SetHeight(35)
-
-	self.BossHPWidth = (self.FrameBase:GetWidth() * 0.5) - (self.KingPBack:GetWidth() * 0.5) - 2
-	self.KingHPBar:SetWidth(self.BossHPWidth)
-	self.KingHPBar:SetHeight(7)
-
-	self.PrinceStop:SetWidth(self.StopWidth * 0.75)
-	self.PrinceStop:SetHeight(35)
-	self.PrinceDanger:SetWidth(self.DangerWidth * 0.75)
-	self.PrinceDanger:SetHeight(35)
-	self.PrinceHPBar:SetWidth(self.BossHPWidth)
-	self.PrinceHPBar:SetHeight(7)
-	
-	self.StatusBar:SetWidth(7)
-	self.StatusBar:SetHeight(self.PrinceStop:GetHeight() + 4)
-	self.StatusForecast:SetWidth(7)
-	self.StatusForecast:SetHeight(self.PrinceStop:GetHeight() + 4)
-	
-	self.SwingMulti = ((self.FBWidth * 0.75) * 0.5) * 0.1428571
-end
-
-function KM:BuildDisplay()
-	self.FrameBase = UI.CreateFrame("Frame", "FrameBase", KBM.Context)
-	self.FrameBase:SetVisible(false)
-	self.FrameBase:SetLayer(3)
-	if not self.Settings.PercentMonitor.x then
-		self.FrameBase:SetPoint("CENTER", UIParent, "CENTER")
-	else
-		self.FrameBase:SetPoint("TOPLEFT", UIParent, "TOPLEFT", self.Settings.PercentMonitor.x, self.Settings.PercentMonitor.y)
-	end
-	self.FrameBase:SetBackgroundColor(0,0,0,0.4)
-	self.FBLayer = self.FrameBase:GetLayer()
-
-	self.KingText = UI.CreateFrame("Text", "KingText", self.FrameBase)
-	self.KingText:SetText(self.King.Name)
-	self.KingText:SetPoint("TOPLEFT", self.FrameBase, "TOPLEFT", 1, 0)
-	
-	self.PrinceText = UI.CreateFrame("Text", "PrinceText", self.FrameBase)
-	self.PrinceText:SetText(self.Prince.Name)
-	self.PrinceText:SetPoint("BOTTOMRIGHT", self.FrameBase, "BOTTOMRIGHT", -1, 0)
-		
-	self.KingPBack = UI.CreateFrame("Frame", "KingPBack", self.FrameBase)
-	self.KingPText = UI.CreateFrame("Text", "KingPText", self.KingPBack)
-	self.KingPText:SetText("100%")
-	self.KingPBack:SetBackgroundColor(0,0,0,0.4)
-	self.KingPBack:SetPoint("TOPCENTER", self.FrameBase, "TOPCENTER")
-	self.KingPText:SetPoint("CENTER", self.KingPBack, "CENTER")
-	self.KingPBack:SetLayer(1)
-	self.KingPText:SetLayer(2)
-	
-	self.PrincePBack = UI.CreateFrame("Frame", "PrincePBack", self.FrameBase)
-	self.PrincePText = UI.CreateFrame("Text", "PrincePText", self.PrincePBack)
-	self.PrincePText:SetText("100%")
-	self.PrincePBack:SetBackgroundColor(0,0,0,0.4)
-	self.PrincePBack:SetPoint("BOTTOMCENTER", self.FrameBase, "BOTTOMCENTER")
-	self.PrincePText:SetPoint("CENTER", self.PrincePBack, "CENTER")
-	self.PrincePBack:SetLayer(1)
-	self.PrincePText:SetLayer(2)
-		
-	self.SafeZone = UI.CreateFrame("Frame", "SafeZone", self.FrameBase)
-	self.SafeZone:SetBackgroundColor(0,0.8,0,0.6)
-	self.SafeZone:SetPoint("CENTER", self.FrameBase, "CENTER")
-	
-	self.KingDanger = UI.CreateFrame("Frame", "KingDanger", self.FrameBase)
-	self.KingDanger:SetBackgroundColor(0.8,0.5,0,0.6)
-	self.KingDanger:SetPoint("TOPRIGHT", self.SafeZone, "TOPLEFT")
-	
-	self.PrinceDanger = UI.CreateFrame("Frame", "PrinceDanger", self.FrameBase)
-	self.PrinceDanger:SetBackgroundColor(0.8,0.5,0,0.6)
-	self.PrinceDanger:SetPoint("TOPLEFT", self.SafeZone, "TOPRIGHT")
-	
-	self.KingStop = UI.CreateFrame("Frame", "KingStop", self.FrameBase)
-	self.KingStop:SetBackgroundColor(0.8,0,0,0.6)
-	self.KingStop:SetPoint("TOPRIGHT", self.KingDanger, "TOPLEFT")
-
-	self.KingHPBar = UI.CreateFrame("Frame", "KingHPBar", self.FrameBase)
-	self.KingHPBar:SetPoint("BOTTOMLEFT", self.KingStop, "TOPLEFT", 0, -1)
-	self.KingHPBar:SetBackgroundColor(0,0.7,0,0.4)
-	
-	self.PrinceStop = UI.CreateFrame("Frame", "PrinceStop", self.FrameBase)
-	self.PrinceStop:SetBackgroundColor(0.8,0,0,0.6)
-	self.PrinceStop:SetPoint("TOPLEFT", self.PrinceDanger, "TOPRIGHT")
-
-	self.PrinceHPBar = UI.CreateFrame("Frame", "PrinceHPBar", self.FrameBase)
-	self.PrinceHPBar:SetPoint("TOPRIGHT", self.PrinceStop, "BOTTOMRIGHT", 0, 1)
-	self.PrinceHPBar:SetBackgroundColor(0,0.7,0,0.4)
-	
-	self.StatusBar = UI.CreateFrame("Frame", "StatusBar", self.FrameBase)
-	self.StatusBar:SetPoint("CENTER", self.FrameBase, "CENTER")
-	self.StatusBar:SetBackgroundColor(0.9,0.9,0.9,0.9)
-	self.StatusBar:SetLayer(3)
-
-	self.StatusForecast = UI.CreateFrame("Frame", "StatusForecast", self.FrameBase)
-	self.StatusForecast:SetPoint("CENTER", self.FrameBase, "CENTER")
-	self.StatusForecast:SetBackgroundColor(0.9,0.9,0.9,0.3)
-	self.StatusForecast:SetLayer(4)
-		
-	self.FrameBase:SetVisible(false)
-	self.DragFrame = KBM.AttachDragFrame(self.FrameBase, KM.UpdateBaseVars, "FrameBase", 4)
-	
-	if not self.Settings.PercentMonitor.Compact then
-		self:SetNormal()
-	else
-		self:SetCompact()
-	end		
-end
-
-function KM:CastBars(units)
-end
-
-function KM.UpdateBaseVars(callType)
-	if callType == "end" then
-		KM.Settings.PercentMonitor.x = KM.FrameBase:GetLeft()
-		KM.Settings.PercentMonitor.y = KM.FrameBase:GetTop()
-	end	
-end
-
-function KM.Prince:PinCastBar()
-	self.CastBar.GUI.Frame:ClearAll()
-	self.CastBar.GUI.Frame:SetPoint("TOPLEFT", KM.FrameBase, "BOTTOMLEFT")
-	self.CastBar.GUI.Frame:SetPoint("TOPRIGHT", KM.FrameBase, "BOTTOMRIGHT")
-	self.CastBar.GUI.Frame:SetHeight(KM.IconSize)
-	if KM.Settings.PercentMonitor.Compact then
-		self.CastBar.GUI.Text:SetFontSize(14)
-		self.CastBar.GUI.Shadow:SetFontSize(14)
-	else
-		self.CastBar.GUI.Text:SetFontSize(18)
-		self.CastBar.GUI.Shadow:SetFontSize(18)
-	end	
-end
-
-function KM.King:PinCastBar()
-	self.CastBar.GUI.Frame:ClearAll()
-	self.CastBar.GUI.Frame:SetPoint("BOTTOMLEFT", KM.FrameBase, "TOPLEFT")
-	self.CastBar.GUI.Frame:SetPoint("BOTTOMRIGHT", KM.FrameBase, "TOPRIGHT")
-	self.CastBar.GUI.Frame:SetHeight(KM.IconSize)
-	if KM.Settings.PercentMonitor.Compact then
-		self.CastBar.GUI.Text:SetFontSize(14)
-		self.CastBar.GUI.Shadow:SetFontSize(14)
-	else
-		self.CastBar.GUI.Text:SetFontSize(18)
-		self.CastBar.GUI.Shadow:SetFontSize(18)
-	end		
-end
-
 function KM:Timer(current, diff)
-	if self.EncounterRunning then
-		local udiff = current - self.UpdateTime
-		if diff >= 1 then
-			self:DPSUpdate()
-		elseif udiff > 0.05 then
-			self:CheckTrends()
-			self.UpdateTime = current
-		end
-	end
-end
-
-function KM:OptionsClose()
-end
-
-KM.Custom = {}
-KM.Custom.Encounter = {}
-function KM.Custom.Encounter.Menu(Menu)
-
-	local Callbacks = {}
-
-	function Callbacks:Enabled(bool)
-		KM.Settings.PercentMonitor.Enabled = bool
-	end
-	function Callbacks:Visible(bool)
-		KM.Settings.PercentMonitor.Visible = bool
-		KM.Settings.PercentMonitor.Unlocked = bool
-		KM.FrameBase:SetVisible(bool)
-		KM.DragFrame:SetVisible(bool)
-	end
-	function Callbacks:Compact(bool)
-		KM.Settings.PercentMonitor.Compact = bool
-		KM.King.CastBar:Hide()
-		KM.Prince.CastBar:Hide()
-		if bool then
-			KM:SetCompact()
-		else
-			KM:SetNormal()
-		end
-		KM.King.CastBar:Display()
-		KM.Prince.CastBar:Display()
-	end
-	function Callbacks:Chronicle(bool)
-		KM.Settings.Chronicle = bool
-	end
-
-	local Settings = KM.Settings.PercentMonitor
-	Header = Menu:CreateHeader(KBM.Language.Encounter.Chronicle[KBM.Lang], "check", "Encounter", "Main")
-	Header:SetChecked(KM.Settings.Chronicle)
-	Header:SetHook(Callbacks.Chronicle)
-	Header = Menu:CreateHeader(KM.Lang.Options.Enabled[KBM.Lang], "check", "Encounter", "Main")
-	Header:SetChecked(Settings.Enabled)
-	Header:SetHook(Callbacks.Enabled)
-	Child = Header:CreateOption(KM.Lang.Options.Visible[KBM.Lang], "check", Callbacks.Visible)
-	Child:SetChecked(Settings.Visible)
-	Child = Header:CreateOption(KM.Lang.Options.Compact[KBM.Lang], "check", Callbacks.Compact)
-	Child:SetChecked(Settings.Compact)
-	
-end
-
-function KM.Custom.SetPage()
-	if KM.Settings.PercentMonitor.Enabled then
-		if KM.Settings.PercentMonitor.Visible then
-			KM.FrameBase:SetVisible(true)
-		end
-	end
-end
-
-function KM.Custom.ClearPage()
-	if not KM.EncounterRunning then
-		KM.FrameBase:SetVisible(false)
-	end
-end
-
-function KM.Custom.Encounter.SetPage()
-end
-
-function KM.Custom.Encounter.ClearPage()
 end
 
 function KM:DefineMenu()
@@ -1075,12 +605,7 @@ function KM:Start()
 	self.King.CastBar = KBM.CastBar:Add(self, self.King)
 	self.Prince.CastBar = KBM.CastBar:Add(self, self.Prince)
 	
-	--self.KingMolinar:Options()
-	if not self.DisplayReady then
-		self.DisplayReady = true
-		self:BuildDisplay()
-	end
+	self.PercentageMon = KBM.PercentageMon:Create(self.King, self.Prince, 7)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()
-	
 end

@@ -72,7 +72,7 @@ KBM.ID = "KingMolinator"
 KBM.ModList = {}
 KBM.Testing = false
 KBM.ValidTime = false
-KBM.IsAlpha = false
+KBM.IsAlpha = true
 KBM.Debug = false
 KBM.Aux = {}
 KBM.TestFilters = {}
@@ -123,6 +123,7 @@ KBM.MenuOptions = {
 	MechSpy = {},
 	RezMaster = {},
 	Main = {},
+	PerMon = {},
 	ReadyCheck = {},
 	Enabled = true,
 	Handler = nil,
@@ -700,6 +701,7 @@ local function KBM_DefineVars(AddonID)
 			Enabled = true,
 			Debug = false,
 			Menu = {},
+			MenuExpac = "SL",
 			UnitCache = {
 				Raid = {},
 				Sliver = {},
@@ -768,6 +770,66 @@ local function KBM_DefineVars(AddonID)
 				Protect = false,
 			},
 		}
+		KBM.Marks = {
+			File = {
+				[1] = "vfx_ui_mob_tag_01_mini.png.dds",
+				[2] = "vfx_ui_mob_tag_02_mini.png.dds",
+				[3] = "vfx_ui_mob_tag_03_mini.png.dds",
+				[4] = "vfx_ui_mob_tag_04_mini.png.dds",
+				[5] = "vfx_ui_mob_tag_05_mini.png.dds",
+				[6] = "vfx_ui_mob_tag_06_mini.png.dds",
+				[7] = "vfx_ui_mob_tag_07_mini.png.dds",
+				[8] = "vfx_ui_mob_tag_08_mini.png.dds",
+				[9] = "vfx_ui_mob_tag_tank_mini.png.dds",
+				[10] = "vfx_ui_mob_tag_heal_mini.png.dds",
+				[11] = "vfx_ui_mob_tag_damage_mini.png.dds",
+				[12] = "vfx_ui_mob_tag_support_mini.png.dds",
+				[13] = "vfx_ui_mob_tag_arrow_mini.png.dds",
+				[14] = "vfx_ui_mob_tag_skull_mini.png.dds",
+				[15] = "vfx_ui_mob_tag_no_mini.png.dds",
+				[16] = "vfx_ui_mob_tag_smile_mini.png.dds",
+				[17] = "vfx_ui_mob_tag_squirrel_mini.png.dds",	
+			},
+			FileFull = {
+				[1] = "vfx_ui_mob_tag_01.png.dds",
+				[2] = "vfx_ui_mob_tag_02.png.dds",
+				[3] = "vfx_ui_mob_tag_03.png.dds",
+				[4] = "vfx_ui_mob_tag_04.png.dds",
+				[5] = "vfx_ui_mob_tag_05.png.dds",
+				[6] = "vfx_ui_mob_tag_06.png.dds",
+				[7] = "vfx_ui_mob_tag_07.png.dds",
+				[8] = "vfx_ui_mob_tag_08.png.dds",
+				[9] = "vfx_ui_mob_tag_tank.png.dds",
+				[10] = "vfx_ui_mob_tag_heal.png.dds",
+				[11] = "vfx_ui_mob_tag_damage.png.dds",
+				[12] = "vfx_ui_mob_tag_support.png.dds",
+				[13] = "vfx_ui_mob_tag_arrow.png.dds",
+				[14] = "vfx_ui_mob_tag_skull.png.dds",
+				[15] = "vfx_ui_mob_tag_no.png.dds",
+				[16] = "vfx_ui_mob_tag_smile.png.dds",
+				[17] = "vfx_ui_mob_tag_squirrel.png.dds",	
+			},			
+			Icon = {},
+			Name = {
+				[1] = "1",
+				[2] = "2",
+				[3] = "3",
+				[4] = "4",
+				[5] = "5",
+				[6] = "6",
+				[7] = "7",
+				[8] = "8",
+				[9] = KBM.Language.Marks.Tank[KBM.Lang],
+				[10] = KBM.Language.Marks.Heal[KBM.Lang],
+				[11] = KBM.Language.Marks.Damage[KBM.Lang],
+				[12] = KBM.Language.Marks.Support[KBM.Lang],
+				[13] = KBM.Language.Marks.Arrow[KBM.Lang],
+				[14] = KBM.Language.Marks.Skull[KBM.Lang],
+				[15] = KBM.Language.Marks.Avoid[KBM.Lang],
+				[16] = KBM.Language.Marks.Smile[KBM.Lang],
+				[17] = KBM.Language.Marks.Squirrel[KBM.Lang],
+			},
+		}
 		KBM_GlobalOptions = KBM.Options
 		chKBM_GlobalOptions = KBM.Options
 		KBM.Options.Player.CastBar.Enabled = false
@@ -787,6 +849,8 @@ local function KBM_DefineVars(AddonID)
 				print("Warning: "..Mod.ID.." has no description.")
 			end
 		end
+		KBM.PercentageMon:Init()
+		KBM.Options.PercentageMon = KBM.PercentageMon.Settings
 	elseif KBM.PlugIn.List[AddonID] then
 		KBM.PlugIn.List[AddonID]:InitVars()
 	end
@@ -844,6 +908,7 @@ local function KBM_LoadVars(AddonID)
 		
 		KBM.Debug = KBM.Options.Debug
 		KBM.InitVars()
+		KBM.PercentageMon:ApplySettings()
 	elseif KBM.PlugIn.List[AddonID] then
 		KBM.PlugIn.List[AddonID]:LoadVars()
 	end
@@ -1238,10 +1303,11 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 		error("Expecting String for Name, got "..type(Name))
 	end
 	
-	function self:AddRemove(Object)
+	function self:AddRemove(Object, Force)
 		if not Object.Removing then
 			if Object.Active then
 				Object.Removing = true
+				Object.ForceStop = true
 				table.insert(self.RemoveTimers, Object)
 				self.RemoveCount = self.RemoveCount + 1
 			end
@@ -1277,6 +1343,7 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 				return
 			end
 			local Anchor = KBM.MechTimer.Anchor
+			self.ForceStop = false
 			self.GUI = KBM.MechTimer:Pull()
 			self.GUI.Background:SetHeight(KBM.MechTimer.Anchor:GetHeight())
 			self.GUI.CastInfo:SetFontSize(KBM.MechTimer.Settings.TextSize * KBM.MechTimer.Settings.tScale)
@@ -1390,20 +1457,20 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 			self.Removing = false
 			self.Deleting = false
 			if KBM.Encounter then
-				if self.Repeat then
-					if self.Phase >= KBM.CurrentMod.Phase or self.Phase == 0 then
+				if not self.ForceStop then
+					if self.Repeat then
 						KBM.MechTimer:AddStart(self)
 					end
-				end
-				if self.TimerAfter then
-					for i, TimerObj in ipairs(self.TimerAfter) do
-						if TimerObj.Phase >= KBM.CurrentMod.Phase or TimerObj.Phase == 0 then
-							KBM.MechTimer:AddStart(TimerObj)
+					if self.TimerAfter then
+						for i, TimerObj in ipairs(self.TimerAfter) do
+							if TimerObj.Phase >= KBM.CurrentMod.Phase or TimerObj.Phase == 0 then
+								KBM.MechTimer:AddStart(TimerObj)
+							end
 						end
 					end
-				end
-				if self.AlertAfter then
-					KBM.Alert:Start(self.AlertAfter, Inspect.Time.Real())
+					if self.AlertAfter then
+						KBM.Alert:Start(self.AlertAfter, Inspect.Time.Real())
+					end
 				end
 			end
 		end
@@ -1438,7 +1505,9 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 					end
 					table.insert(self.TimerAfter, TimerObj)
 				else
-					self.Timers[Time] = {}
+					if not self.Timers[Time] then
+						self.Timers[Time] = {}
+					end
 					self.Timers[Time].Triggered = false
 					self.Timers[Time].TimerObj = TimerObj
 				end
@@ -1449,7 +1518,9 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 	end
 	
 	function Timer:AddTrigger(TriggerObj, Time)
-		self.Triggers[Time] = {}
+		if not self.Triggers[Time] then
+			self.Triggers[Time] = {}
+		end
 		self.Triggers[Time].Triggered = false
 		self.Triggers[Time].TriggerObj = TriggerObj
 	end
@@ -3278,10 +3349,9 @@ function KBM.EncTimer:Init()
 	self.Enrage.Shadow:SetPoint("CENTER", self.Enrage.Frame, "CENTER", 1, 1)
 	self.Enrage.Shadow:SetLayer(2)
 	self.Enrage.Shadow:SetFontColor(0,0,0,1)
-	self.Enrage.Text = UI.CreateFrame("Text", "Enrage Text", self.Enrage.Frame)
+	self.Enrage.Text = UI.CreateFrame("Text", "Enrage Text", self.Enrage.Shadow)
 	self.Enrage.Text:SetText(KBM.Language.Timers.Enrage[KBM.Lang].." 00:00")
 	self.Enrage.Text:SetPoint("CENTER", self.Enrage.Frame, "CENTER")
-	self.Enrage.Text:SetLayer(3)
 	self.Enrage.Progress = UI.CreateFrame("Texture", "Enrage Progress", self.Enrage.Frame)
 	KBM.LoadTexture(self.Enrage.Progress, "KingMolinator", "Media/BarTexture.png")
 	self.Enrage.Progress:SetPoint("TOPLEFT", self.Enrage.Frame, "TOPLEFT")
@@ -3726,6 +3796,11 @@ function KBM.CheckActiveBoss(UnitObj)
 													KBM.EncTimer:Start(KBM.StartTime)
 													KBM.MechSpy:Begin()
 													KBM.Event.Encounter.Start({Type = "start", Mod = KBM.CurrentMod})
+													KBM.PercentageMon:Start(KBM.CurrentMod.ID)
+												else
+													if KBM.PercentageMon.Active then
+														KBM.Unit.Mark(UnitObj)
+													end
 												end
 												if ModBossObj.PhaseObj then
 													KBM.BossID[UnitID].PhaseObj = ModBossObj.PhaseObj
@@ -4072,8 +4147,26 @@ end
 function KBM.Unit.Available(UnitObj)
 	if KBM.Encounter then
 		if UnitObj.Loaded then
-			if not UnitObj.Player then					
-				KBM.CheckActiveBoss(UnitObj)
+			if not UnitObj.Player then
+				if not KBM.BossID[UnitObj.UnitID] then
+					KBM.CheckActiveBoss(UnitObj)
+				else
+					KBM.BossID[UnitObj.UnitID].Boss.UnitObj = UnitObj
+				end
+			end
+		end
+	end
+end
+
+function KBM.Unit.Mark(UnitObj)
+	if KBM.PercentageMon.Active then
+		if KBM.PercentageMon.Settings.Marks then
+			if KBM.PercentageMon.Current then
+				if KBM.PercentageMon.Current.BossL.UnitObj == UnitObj then
+					KBM.PercentageMon:SetMarkL()
+				elseif KBM.PercentageMon.Current.BossR.UnitObj == UnitObj then	
+					KBM.PercentageMon:SetMarkR()
+				end
 			end
 		end
 	end
@@ -5224,6 +5317,7 @@ function KBM.CastBar:Init()
 		
 		function GUI:SetText(Text)
 			self.Shadow:SetText(Text)
+			self.Shadow:SetFontColor(0,0,0)
 			self.Text:SetText(Text)
 		end
 		
@@ -5976,6 +6070,7 @@ local function KBM_Reset(Forced)
 		KBM.Alert:ApplySettings()
 		KBM.Buffs.Active = {}
 		KBM.IgnoreList = {}
+		KBM.PercentageMon:End()
 	else
 		print("No encounter to reset.")
 	end
@@ -6092,6 +6187,7 @@ function KBM:Timer()
 			if KBM.Encounter then
 				if KBM.CurrentMod then
 					KBM.CurrentMod:Timer(current, diff)
+					KBM.PercentageMon:Update(current, diff)
 				end
 				if diff >= 1 then
 					self.LastElapsed = self.TimeElapsed
@@ -6548,8 +6644,8 @@ function KBM.SlashInspectBuffs(Name)
 			UnitID = KBM.Player.UnitID
 		end
 	else
-		if KBM.Unit.List.Name[Name] then
-			for lUnitID, Object in pairs(KBM.Unit.List.Name[Name]) do
+		if LibSUnit.Lookup.Name[Name] then
+			for lUnitID, Object in pairs(LibSUnit.Lookup.Name[Name]) do
 				UnitID = lUnitID
 			end
 		end
@@ -7235,6 +7331,52 @@ function KBM.MenuOptions.ReadyCheck:Options()
 	
 end
 
+function KBM.MenuOptions.PerMon:Options()
+	function self:Enabled(bool)
+		KBM.PercentageMon.Settings.Enabled = bool
+		KBM.PercentageMon.GUI.Cradle:SetVisible(bool)
+	end
+	function self:Unlock(bool)
+		KBM.PercentageMon.Settings.Unlocked = bool
+		if bool then
+			KBM.PercentageMon:SetEvents()
+		else
+			KBM.PercentageMon:ClearEvents()
+		end
+	end
+	function self:Scale(bool)
+		KBM.PercentageMon.Settings.Scalable = bool
+		if bool then
+			KBM.PercentageMon:UnlockScale()
+		else
+			KBM.PercentageMon:LockScale()
+		end
+	end
+	function self:Name(bool)
+		KBM.PercentageMon.Settings.Names = bool
+		KBM.PercentageMon:SetNames()
+	end
+	function self:Mark(bool)
+		KBM.PercentageMon.Settings.Marks = bool
+		KBM.PercentageMon:SetMarkL()
+		KBM.PercentageMon:SetMarkR()
+	end
+	function self:Percent(bool)
+		KBM.PercentageMon.Settings.Percent = bool
+		KBM.PercentageMon:SetPercentL()
+		KBM.PercentageMon:SetPercentR()
+	end
+	
+	local Options = self.MenuItem.Options
+	Options:SetTitle()
+	local PerMon = Options:AddHeader(KBM.Language.PerMon.Enable[KBM.Lang], self.Enabled, KBM.PercentageMon.Settings.Enabled)
+	PerMon:AddCheck(KBM.Language.PerMon.Unlock[KBM.Lang], self.Unlock, KBM.PercentageMon.Settings.Unlocked)
+	PerMon:AddCheck(KBM.Language.PerMon.Scale[KBM.Lang], self.Scale, KBM.PercentageMon.Settings.Scalable)
+	PerMon:AddCheck(KBM.Language.PerMon.Name[KBM.Lang], self.Name, KBM.PercentageMon.Settings.Names)
+	PerMon:AddCheck(KBM.Language.PerMon.Mark[KBM.Lang], self.Mark, KBM.PercentageMon.Settings.Marks)
+	PerMon:AddCheck(KBM.Language.PerMon.Percent[KBM.Lang], self.Percent, KBM.PercentageMon.Settings.Percent)
+end
+
 function KBM.ApplySettings()
 	KBM.TankSwap.Enabled = KBM.Options.TankSwap.Enabled
 end
@@ -7443,6 +7585,8 @@ function KBM.InitMenus()
 	local Header = KBM.MainWin.Menu:CreateHeader(KBM.Language.Menu.Mods[KBM.Lang], nil, nil, nil, "Main")
 	KBM.MenuOptions.TankSwap.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.TankSwap.Title[KBM.Lang], KBM.MenuOptions.TankSwap, true, Header)	
 	KBM.MenuOptions.TankSwap.MenuItem.Check:SetEnabled(false)
+	KBM.MenuOptions.PerMon.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.PerMon.Title[KBM.Lang], KBM.MenuOptions.PerMon, true, Header)
+	KBM.MenuOptions.PerMon.MenuItem.Check:SetEnabled(false)
 	KBM.MenuOptions.ReadyCheck.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.ReadyCheck.Name[KBM.Lang], KBM.MenuOptions.ReadyCheck, true, Header)
 	KBM.MenuOptions.ReadyCheck.MenuItem.Check:SetEnabled(false)
 	KBM.MenuOptions.RezMaster.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.RezMaster.Name[KBM.Lang], KBM.MenuOptions.RezMaster, true, Header)
@@ -7627,6 +7771,7 @@ function KBM.InitEvents()
 	table.insert(Event.SafesUnitLib.Combat.Damage, {KBM.Damage, "KingMolinator", "Unit Damage"})
 	table.insert(Event.SafesUnitLib.Combat.Heal, {KBM.Heal, "KingMolinator", "Unit Heal"})
 	table.insert(Event.SafesUnitLib.Combat.Death, {KBM.Unit.Death, "KingMolinator", "Unit Death"})
+	table.insert(Event.SafesUnitLib.Unit.Mark, {KBM.Unit.Mark, "KingMolinator", "Unit Mark Change"})
 	
 	-- Slash Commands
 	table.insert(Command.Slash.Register("kbmreset"), {function () KBM_Reset(true) end, "KingMolinator", "KBM Reset"})
@@ -7696,6 +7841,9 @@ function KBM.WaitReady()
 	KBM.Player.CastBar.Target.CastObj = KBM.CastBar:Add(KBM.Player.CastBar.Target, KBM.Player.CastBar.Target)
 	KBM.Player.CastBar.Focus.CastObj = KBM.CastBar:Add(KBM.Player.CastBar.Focus, KBM.Player.CastBar.Focus)
 	KBM.Player.CastBar.CastObj:Create(KBM.Player.UnitID)
+	if KBM.Options.MenuExpac == "SL" then
+		KBM.MainWin.Tabs.SL.Tab.Event.LeftClick(KBM.MainWin.Tabs.SL.Tab)
+	end
 end
 
 KBM.PlugIn = {}
@@ -7790,71 +7938,12 @@ function KBM.InitKBM(ModID)
 		print(KBM.Language.Welcome.Options[KBM.Lang])
 		KBM.RezMaster:Start()
 		KBM.PlayerControl:Start()	
-		KBM.Marks = {
-			File = {
-				[1] = "vfx_ui_mob_tag_01_mini.png.dds",
-				[2] = "vfx_ui_mob_tag_02_mini.png.dds",
-				[3] = "vfx_ui_mob_tag_03_mini.png.dds",
-				[4] = "vfx_ui_mob_tag_04_mini.png.dds",
-				[5] = "vfx_ui_mob_tag_05_mini.png.dds",
-				[6] = "vfx_ui_mob_tag_06_mini.png.dds",
-				[7] = "vfx_ui_mob_tag_07_mini.png.dds",
-				[8] = "vfx_ui_mob_tag_08_mini.png.dds",
-				[9] = "vfx_ui_mob_tag_tank_mini.png.dds",
-				[10] = "vfx_ui_mob_tag_heal_mini.png.dds",
-				[11] = "vfx_ui_mob_tag_damage_mini.png.dds",
-				[12] = "vfx_ui_mob_tag_support_mini.png.dds",
-				[13] = "vfx_ui_mob_tag_arrow_mini.png.dds",
-				[14] = "vfx_ui_mob_tag_skull_mini.png.dds",
-				[15] = "vfx_ui_mob_tag_no_mini.png.dds",
-				[16] = "vfx_ui_mob_tag_smile_mini.png.dds",
-				[17] = "vfx_ui_mob_tag_squirrel_mini.png.dds",	
-			},
-			FileFull = {
-				[1] = "vfx_ui_mob_tag_01.png.dds",
-				[2] = "vfx_ui_mob_tag_02.png.dds",
-				[3] = "vfx_ui_mob_tag_03.png.dds",
-				[4] = "vfx_ui_mob_tag_04.png.dds",
-				[5] = "vfx_ui_mob_tag_05.png.dds",
-				[6] = "vfx_ui_mob_tag_06.png.dds",
-				[7] = "vfx_ui_mob_tag_07.png.dds",
-				[8] = "vfx_ui_mob_tag_08.png.dds",
-				[9] = "vfx_ui_mob_tag_tank.png.dds",
-				[10] = "vfx_ui_mob_tag_heal.png.dds",
-				[11] = "vfx_ui_mob_tag_damage.png.dds",
-				[12] = "vfx_ui_mob_tag_support.png.dds",
-				[13] = "vfx_ui_mob_tag_arrow.png.dds",
-				[14] = "vfx_ui_mob_tag_skull.png.dds",
-				[15] = "vfx_ui_mob_tag_no.png.dds",
-				[16] = "vfx_ui_mob_tag_smile.png.dds",
-				[17] = "vfx_ui_mob_tag_squirrel.png.dds",	
-			},			
-			Icon = {},
-			Name = {
-				[1] = "1",
-				[2] = "2",
-				[3] = "3",
-				[4] = "4",
-				[5] = "5",
-				[6] = "6",
-				[7] = "7",
-				[8] = "8",
-				[9] = KBM.Language.Marks.Tank[KBM.Lang],
-				[10] = KBM.Language.Marks.Heal[KBM.Lang],
-				[11] = KBM.Language.Marks.Damage[KBM.Lang],
-				[12] = KBM.Language.Marks.Support[KBM.Lang],
-				[13] = KBM.Language.Marks.Arrow[KBM.Lang],
-				[14] = KBM.Language.Marks.Skull[KBM.Lang],
-				[15] = KBM.Language.Marks.Avoid[KBM.Lang],
-				[16] = KBM.Language.Marks.Smile[KBM.Lang],
-				[17] = KBM.Language.Marks.Squirrel[KBM.Lang],
-			},
-		}
 		for i, File in pairs(KBM.Marks.File) do
 			KBM.Marks.Icon[i] = UI.CreateFrame("Texture", File, KBM.Context)
 			KBM.Marks.Icon[i]:SetTexture("Rift", File)
 			KBM.Marks.Icon[i]:SetVisible(false)
 		end
+		--KBM.PercentageMon:Init()
 	else
 		if Inspect.Buff.Detail ~= IBDReserved then
 			print(tostring(ModID).." changed internal command: Restoring Inspect.Buff.Detail")
