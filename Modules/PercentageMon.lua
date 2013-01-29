@@ -174,7 +174,7 @@ function PM:SetMarkL()
 		if self.Current.BossL.UnitObj then
 			if self.Current.BossL.UnitObj.Mark then
 				self.GUI.BossL.Mark:SetVisible(self.Settings.Marks)
-				self.GUI.BossL.Mark:SetTexture("Rift", KBM.Marks.FileFull[self.Current.BossL.UnitObj.Mark])
+				self.GUI.BossL.Mark:SetTexture("Rift", KBM.Marks.FileFull[tonumber(self.Current.BossL.UnitObj.Mark)])
 			else
 				self.GUI.BossL.Mark:SetVisible(false)
 			end
@@ -192,7 +192,7 @@ function PM:SetMarkR()
 		if self.Current.BossR.UnitObj then
 			if self.Current.BossR.UnitObj.Mark then
 				self.GUI.BossR.Mark:SetVisible(self.Settings.Marks)
-				self.GUI.BossR.Mark:SetTexture("Rift", KBM.Marks.FileFull[self.Current.BossR.UnitObj.Mark])
+				self.GUI.BossR.Mark:SetTexture("Rift", KBM.Marks.FileFull[tonumber(self.Current.BossR.UnitObj.Mark)])
 			else
 				self.GUI.BossR.Mark:SetVisible(false)
 			end

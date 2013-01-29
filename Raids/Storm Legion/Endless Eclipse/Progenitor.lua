@@ -293,6 +293,10 @@ function PRO:UnitHPCheck(uDetails, unitID)
 				self.PhaseObj:Start(self.StartTime)
 				self.PhaseObj:SetPhase("1")
 				self.PhaseObj.Objectives:AddPercent(self.Progenitor, 0, 100)
+				self.PhaseObj.Objectives:AddPercent(self.Juntun, 0, 100)
+				self.PhaseObj.Objectives:AddPercent(self.Ebassi, 0, 100)
+				self.PhaseObj.Objectives:AddPercent(self.Arebus, 0, 100)
+				self.PhaseObj.Objectives:AddPercent(self.Rhu, 0, 100)
 				self.Phase = 1
 			else
 				BossObj.Dead = false

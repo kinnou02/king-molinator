@@ -3799,7 +3799,15 @@ function KBM.CheckActiveBoss(UnitObj)
 													KBM.PercentageMon:Start(KBM.CurrentMod.ID)
 												else
 													if KBM.PercentageMon.Active then
-														KBM.Unit.Mark(UnitObj)
+														if KBM.PercentageMon.Current then
+															if UnitObj == KBM.PercentageMon.Current.BossL.UnitObj then
+																KBM.PercentageMon:SetPercentL()
+																KBM.PercentageMon:SetMarkL()
+															elseif UnitObj == KBM.PercentageMon.Current.BossR.UnitObj then
+																KBM.PercentageMon:SetPercentR()
+																KBM.PercentageMon:SetMarkR()
+															end
+														end
 													end
 												end
 												if ModBossObj.PhaseObj then
@@ -4140,6 +4148,15 @@ function KBM.Unit.Percent(UnitObj)
 					KBM.PhaseMonitor.Objectives.Lists.Percent[UnitObj.UnitID]:Update()
 				end
 			end
+			if KBM.PercentageMon.Active then
+				if KBM.PercentageMon.Current then
+					if KBM.PercentageMon.Current.BossL.UnitObj == UnitObj then
+						KBM.PercentageMon:SetPercentL()
+					elseif KBM.PercentageMon.Current.BossR.UnitObj == UnitObj then	
+						KBM.PercentageMon:SetPercentR()
+					end
+				end
+			end
 		end
 	end
 end
@@ -4158,14 +4175,16 @@ function KBM.Unit.Available(UnitObj)
 	end
 end
 
-function KBM.Unit.Mark(UnitObj)
+function KBM.Unit.Mark(Units)
 	if KBM.PercentageMon.Active then
 		if KBM.PercentageMon.Settings.Marks then
 			if KBM.PercentageMon.Current then
-				if KBM.PercentageMon.Current.BossL.UnitObj == UnitObj then
-					KBM.PercentageMon:SetMarkL()
-				elseif KBM.PercentageMon.Current.BossR.UnitObj == UnitObj then	
-					KBM.PercentageMon:SetMarkR()
+				for UnitID, UnitObj in pairs(Units) do
+					if KBM.PercentageMon.Current.BossL.UnitObj == UnitObj then
+						KBM.PercentageMon:SetMarkL()
+					elseif KBM.PercentageMon.Current.BossR.UnitObj == UnitObj then	
+						KBM.PercentageMon:SetMarkR()
+					end
 				end
 			end
 		end
@@ -7768,10 +7787,10 @@ function KBM.InitEvents()
 	table.insert(Event.SafesUnitLib.Raid.Combat.Enter, {KBM.Raid.CombatEnter, "KingMolinator", "Raid Combat Enter"})
 	table.insert(Event.SafesUnitLib.Raid.Combat.Leave, {KBM.Raid.CombatLeave, "KingMolinator", "Raid Combat Leave"})
 	table.insert(Event.SafesUnitLib.Unit.Detail.Percent, {KBM.Unit.Percent, "KingMolinator", "Unit Percent Change"})
+	table.insert(Event.SafesUnitLib.Unit.Mark, {KBM.Unit.Mark, "KingMolinator", "Unit Mark Change"})
 	table.insert(Event.SafesUnitLib.Combat.Damage, {KBM.Damage, "KingMolinator", "Unit Damage"})
 	table.insert(Event.SafesUnitLib.Combat.Heal, {KBM.Heal, "KingMolinator", "Unit Heal"})
 	table.insert(Event.SafesUnitLib.Combat.Death, {KBM.Unit.Death, "KingMolinator", "Unit Death"})
-	table.insert(Event.SafesUnitLib.Unit.Mark, {KBM.Unit.Mark, "KingMolinator", "Unit Mark Change"})
 	
 	-- Slash Commands
 	table.insert(Command.Slash.Register("kbmreset"), {function () KBM_Reset(true) end, "KingMolinator", "KBM Reset"})
