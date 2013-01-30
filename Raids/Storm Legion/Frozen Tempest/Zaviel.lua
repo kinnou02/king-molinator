@@ -233,13 +233,13 @@ function ZVL.PhaseTwo()
 end
 
 function ZVL.PhaseConducer()
-	ZVL.Phase = ZVL.Power.NameShort
+	ZVL.PhaseObj:SetPhase(ZVL.Power.NameShort)
 	ZVL.Power.CountObj = ZVL.PhaseObj.Objectives:AddDeath(ZVL.Power.Name, 4)
 	ZVL.PowerCount = 0
 end
 
 function ZVL.PhaseConducerEnd()
-	ZVL.Phase = ZVL.Phase
+	ZVL.PhaseObj:SetPhase(ZVL.Phase)
 	if ZVL.Power.CountObj then
 		ZVL.Power.CountObj:Remove()
 		ZVL.Power.CountObj = nil
