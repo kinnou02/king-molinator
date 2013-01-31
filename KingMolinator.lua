@@ -936,7 +936,6 @@ function KBM.ToAbilityID(num)
 end
 
 KBM.MenuGroup = {}
-local KBM_Boss = {}
 KBM.Boss = {
 	Template = {},
 	Raid = {},
@@ -954,6 +953,7 @@ KBM.Boss = {
 	World = {},
 	Trash = {},
 	TypeList = {},
+	Name = {},
 }
 
 KBM.SubBoss = {}
@@ -3845,7 +3845,7 @@ function KBM.CheckActiveBoss(UnitObj)
 					else
 						if UnitObj.CurrentKey ~= "Partial" then
 							if UnitObj.Type then
-								if not KBM_Boss[UnitObj.Name] then
+								if not KBM.Boss.TypeList[UnitObj.Type] then
 									if KBM.Debug then
 										if not KBM.IgnoreList[UnitID] then
 											-- print("New Unit Added to Ignore:")
@@ -4172,6 +4172,12 @@ function KBM.Unit.Available(UnitObj)
 				end
 			end
 		end
+	end
+end
+
+function KBM.Unit.Removed(Units)
+	for UnitID, UnitObj in pairs(Units) do
+		KBM.IgnoreList[UnitID] = nil
 	end
 end
 
@@ -6035,11 +6041,13 @@ end
 
 local function KBM_Reset(Forced)
 	if KBM.Encounter then
-		if Forced then
+		if Forced == true then
 			KBM.Event.Encounter.End({Type = "reset", Mod = KBM.CurrentMod})
+			KBM.IgnoreList = {}
+		else
+			KBM.Idle.Wait = true
+			KBM.Idle.Until = Inspect.Time.Real() + KBM.Idle.Duration
 		end
-		KBM.Idle.Wait = true
-		KBM.Idle.Until = Inspect.Time.Real() + KBM.Idle.Duration
 		KBM.Idle.Combat.Wait = false
 		KBM.Encounter = false
 		if KBM.CurrentMod then
@@ -6048,7 +6056,6 @@ local function KBM_Reset(Forced)
 			KBM.CurrentBoss = ""
 			KBM_CurrentBossName = ""
 		end
-		KBM.BossID = {}
 		KBM.TimeElapsed = 0
 		KBM.TimeStart = 0
 		KBM.EnrageTime = 0
@@ -6088,10 +6095,19 @@ local function KBM_Reset(Forced)
 		KBM.Alert.Settings = KBM.Options.Alerts
 		KBM.Alert:ApplySettings()
 		KBM.Buffs.Active = {}
-		KBM.IgnoreList = {}
 		KBM.PercentageMon:End()
+		for UnitID, BossObj in pairs(KBM.BossID) do
+			if BossObj.Boss then
+				BossObj.Boss.UnitObj = nil
+				if Forced == "victory" then
+					KBM.IgnoreList[UnitID] = true
+				end
+			end
+		end
+		KBM.BossID = {}
 	else
 		print("No encounter to reset.")
+		KBM.IgnoreList = {}
 	end
 end
 
@@ -7621,7 +7637,7 @@ function KBM.InitMenus()
 	
 	-- Compile Boss Menus
 	for _, Mod in ipairs(KBM.ModList) do
-		Mod:AddBosses(KBM_Boss)
+		Mod:AddBosses(KBM.Boss.Name)
 		if Mod.InstanceObj then
 			if not KBM.Boss[Mod.InstanceObj.Type] then
 				print("WARNING: Encounter "..Mod.InstanceObj.Name.." has an incorrect Type value of "..tostring(Mod.InstanceObj.Type))
@@ -7661,11 +7677,7 @@ function KBM.InitMenus()
 					KBM.Boss.TypeList[BossObj.ChronicleID] = BossObj
 					Mod.UTID[BossObj.ChronicleID] = BossObj
 				end
-				if KBM_Boss[BossObj.Name] then
-					print("WARNING: Boss "..BossObj.Name.." assigning old style KBM_Boss table entry")
-					print("Instance: "..Mod.InstanceObj.Name.." ("..Mod.InstanceObj.Type..")")
-					print("Encounter: "..Mod.Descript)
-				elseif KBM.SubBoss[BossObj.Name] then
+				if KBM.SubBoss[BossObj.Name] then
 					print("WARNING: Boss "..BossObj.Name.." assigning old style KBM.SubBoss table entry")
 					print("Instance: "..Mod.InstanceObj.Name.." ("..Mod.InstanceObj.Type..")")				
 					print("Encounter: "..Mod.Descript)
@@ -7783,6 +7795,7 @@ function KBM.InitEvents()
 	-- Safe's Unit Library Events
 	table.insert(Event.SafesUnitLib.Unit.New.Full, {KBM.Unit.Available, "KingMolinator", "Unit Available"})
 	table.insert(Event.SafesUnitLib.Unit.Full, {KBM.Unit.Available, "KingMolinator", "Unit Available"})
+	table.insert(Event.SafesUnitLib.Unit.Removed, {KBM.Unit.Removed, "KingMolinator", "Unit Removed"})
 	table.insert(Event.SafesUnitLib.Unit.Detail.Combat, {KBM.CombatEnter, "KingMolinator", "Unit Combat Enter"})
 	table.insert(Event.SafesUnitLib.Raid.Combat.Enter, {KBM.Raid.CombatEnter, "KingMolinator", "Raid Combat Enter"})
 	table.insert(Event.SafesUnitLib.Raid.Combat.Leave, {KBM.Raid.CombatLeave, "KingMolinator", "Raid Combat Leave"})

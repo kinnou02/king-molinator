@@ -789,6 +789,9 @@ function _lsu:Partial(UnitObj, uDetails)
 	LibSUnit.Cache.Partial[UID] = UnitObj
 	self.Unit:UpdateSegment(UnitObj)
 	Total.Partial = Total.Partial + 1
+	if UnitObj.Combat then
+		_lsu.Unit.Combat({[UnitObj.UnitID] = false})
+	end
 	
 	self.Event.Unit.Partial(UnitObj)
 end
@@ -899,6 +902,9 @@ function _lsu.Raid.ManageDeath(UnitObj, Dead)
 					if not UnitObj.Dead then
 						LibSUnit.Raid.DeadTotal = LibSUnit.Raid.DeadTotal + 1
 						--print(">>> "..UnitObj.Name.." has died")
+						if UnitObj.Combat then
+							_lsu.Unit.Combat({[UnitObj.UnitID] = false})
+						end
 						if LibSUnit.Raid.DeadTotal == LibSUnit.Raid.Members then
 							if not LibSUnit.Raid.Wiped then
 								LibSUnit.Raid.Wiped = true

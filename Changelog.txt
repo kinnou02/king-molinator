@@ -3,6 +3,14 @@
 Menu
 * New: The menu window will now remember which Rift tab you were last in (Base or Storm Legion).
 
+Encounters
+* New: When an encounter triggers a victory, all tracked units are entered in to an Ignore List to prevent residual units re-trigger the same encounter.
+* Note: Using /kbmreset will force clear this list in the rare events of false positives.
+
+LibSUnit
+* Change: When units enter a Partial state, their Combat flag is forced to false.
+* Change: When units die, their Combat flag is forced to false.
+
 Mechanic Timers
 * New: Repeating and Wait timers can now be forced to stop by using KBM.MechTimer:AddRemove(Timer, true)
 * Change: Mechanic Timers can now trigger multiple timers at the same time, at any point in its duration.
