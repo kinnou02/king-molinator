@@ -30,6 +30,7 @@ Percentage Monitor
 Res Master
 * Change: Name changed to Res Master.
 * Change: Enabling [from disabled] Res Master in-game will now update current Raid Res status (rather than requiring a /reloadui)
+* Change: Attempted to solve the "Blue Bar" issue with players with missing callings.
 
 Ready Check
 * New: Remarkable Oilstone (Rogue, Warrior, 60, High)
@@ -46,15 +47,17 @@ Raids
 Endless Eclipse
 * Progenitor Saetos
 ** New: Added Phase Monitor Percentage tracking for all mini bosses.
+** New: Added Enrage Timer.
 * Matriarch of Pestilence
 ** New: Added Enrage Timer of 7 minutes.
-** New: Added Interrupt Alert and Stop Trigger for Way of Decay.
+** New: Added Interrupt Alert and Stop Trigger for Wave of Decay.
 * Dread Lord Goloch
 ** New: Enabled Tank-Swap for Dread Scythe
 Frozen Tempest
 * Kolmasveli
 ** New: Added the new Percentage Monitor to this encounter.
-** Fixed: The Energy Vortex should no longer trigger outside of the encounter (Still need UTID for this Unit)
+** New: Added UTID for Energy Vortex.
+** Fixed: The Energy Vortex should no longer trigger outside of the encounter.
 * Artifex Zaviel
 ** New: Added Phase Monitoring for Power Conducers
 ** New: Added Timers for each Conducer phase.

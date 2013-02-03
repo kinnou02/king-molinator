@@ -148,7 +148,7 @@ KT.Vortex = {
 	Dead = false,
 	Available = false,
 	Menu = {},
-	UTID = "none",
+	UTID = "UFF0BC16350D617CC",
 	UnitID = nil,
 	Castbar = nil,
 	AlertsRef = {},
@@ -298,45 +298,47 @@ end
 
 function KT:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		if self.Bosses[uDetails.name] then
-			local BossObj = self.Bosses[uDetails.name]
-			if not self.EncounterRunning then
-				self.EncounterRunning = true
-				self.StartTime = Inspect.Time.Real()
-				self.HeldTime = self.StartTime
-				self.TimeElapsed = 0
-				BossObj.Dead = false
-				BossObj.Casting = false
-				if BossObj.CastBar then
-					BossObj.CastBar:Create(unitID)
-				end
-				self.PhaseObj:Start(self.StartTime)
-				self.PhaseObj:SetPhase("1")
-				self.PhaseObj.Objectives:AddPercent(self.Kolmasveli, 40, 100)
-				self.PhaseObj.Objectives:AddPercent(self.Toinenveli, 40, 100)
-				self.Phase = 1
-				local DebuffTable = {
-						[1] = self.Lang.Debuff.KolIre[KBM.Lang],
-						[2] = self.Lang.Debuff.ToiIre[KBM.Lang],
-				}
-				KBM.TankSwap:Start(DebuffTable, unitID, 2)
-				KBM.MechTimer:AddStart(self.Kolmasveli.TimersRef.GlimpseFirst)
-			else
-				BossObj.Dead = false
-				BossObj.Casting = false
-				if BossObj.CastBar then
-					if BossObj.UnitID ~= unitID then
-						BossObj.CastBar:Remove()
+		if uDetails.type then
+			local BossObj = self.UTID[uDetails.type]
+			if BossObj then
+				if not self.EncounterRunning then
+					self.EncounterRunning = true
+					self.StartTime = Inspect.Time.Real()
+					self.HeldTime = self.StartTime
+					self.TimeElapsed = 0
+					BossObj.Dead = false
+					BossObj.Casting = false
+					if BossObj.CastBar then
 						BossObj.CastBar:Create(unitID)
 					end
+					self.PhaseObj:Start(self.StartTime)
+					self.PhaseObj:SetPhase("1")
+					self.PhaseObj.Objectives:AddPercent(self.Kolmasveli, 40, 100)
+					self.PhaseObj.Objectives:AddPercent(self.Toinenveli, 40, 100)
+					self.Phase = 1
+					local DebuffTable = {
+							[1] = self.Lang.Debuff.KolIre[KBM.Lang],
+							[2] = self.Lang.Debuff.ToiIre[KBM.Lang],
+					}
+					KBM.TankSwap:Start(DebuffTable, unitID, 2)
+					KBM.MechTimer:AddStart(self.Kolmasveli.TimersRef.GlimpseFirst)
+				else
+					BossObj.Dead = false
+					BossObj.Casting = false
+					if BossObj.CastBar then
+						if BossObj.UnitID ~= unitID then
+							BossObj.CastBar:Remove()
+							BossObj.CastBar:Create(unitID)
+						end
+					end
+					if BossObj == self.Kolmasveli or BossObj == self.Toinenveli then
+						KBM.TankSwap:AddBoss(unitID)
+					end
 				end
-				if BossObj == self.Kolmasveli or BossObj == self.Toinenveli then
-					KBM.TankSwap:AddBoss(unitID)
-				end
+				BossObj.UnitID = unitID
+				BossObj.Available = true
+				return BossObj
 			end
-			BossObj.UnitID = unitID
-			BossObj.Available = true
-			return BossObj
 		end
 	end
 end

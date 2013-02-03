@@ -258,31 +258,14 @@ function RM.Rezes:Init()
 					Timer.SetWidth = Timer.GUI.Background:GetWidth() - Timer.GUI.Background:GetHeight()
 					local UID = self.Tracked[Name].UnitID
 					Timer.Class = ""
-					if UID then
-						if LibSUnit.Lookup.UID[UID] then
-							Timer.Class = LibSUnit.Lookup.UID[UID].Calling or ""
-						end
-					else
-						if LibSUnit.Lookup.Name[Name] then
-							for lUID, Object in pairs(LibSUnit.Lookup.Name[Name]) do
-								Timer.Class = Object.Calling or ""
-								self.Tracked[Name].UnitID = lUID
-								UID = lUID
-								break
-							end
+					
+					for Calling, AbilityList in pairs(KBM.PlayerControl.RezBank) do
+						if AbilityList[aID] then
+							Timer.Class = Calling
+							break
 						end
 					end
-
-					if UID then 
-						if Timer.Class == "" or Timer.Class == nil then
-							for Calling, AbilityList in pairs(KBM.PlayerControl.RezBank) do
-								if AbilityList[aID] then
-									Timer.Class = Calling
-								end
-							end
-						end
-					end
-							
+					
 					Timer.Duration = math.floor(tonumber(aFull))
 					Timer.Remaining = (aCD or 0)
 					Timer.TimeStart = Inspect.Time.Real() - (Timer.Duration - Timer.Remaining)

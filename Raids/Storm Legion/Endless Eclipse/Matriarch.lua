@@ -38,7 +38,7 @@ MOP.Lang.Unit.MatriarchShort:SetGerman("Matriarchin")
 
 -- Ability Dictionary
 MOP.Lang.Ability = {}
-MOP.Lang.Ability.Way = KBM.Language:Add("Way of Decay")
+MOP.Lang.Ability.Way = KBM.Language:Add("Wave of Decay")
 
 -- Debuff Dictionary
 MOP.Lang.Debuff = {}
