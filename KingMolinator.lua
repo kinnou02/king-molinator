@@ -72,7 +72,7 @@ KBM.ID = "KingMolinator"
 KBM.ModList = {}
 KBM.Testing = false
 KBM.ValidTime = false
-KBM.IsAlpha = false
+KBM.IsAlpha = true
 KBM.Debug = false
 KBM.Aux = {}
 KBM.TestFilters = {}
@@ -7832,11 +7832,6 @@ function KBM.WaitReady()
 			Multi = true,
 		},
 	}
-	KBM.Player.Rezes = {
-		List = {},
-		Resume = {},
-		Count = 0,
-	}
 	KBM_Start()
 	KBM.InitEvents()
 	KBM.Event.System.Start(self)
@@ -7969,13 +7964,17 @@ function KBM.InitKBM(ModID)
 		print(KBM.Language.Welcome.Commands[KBM.Lang])
 		print(KBM.Language.Welcome.Options[KBM.Lang])
 		KBM.RezMaster:Start()
+		KBM.Player.Rezes = {
+			List = {},
+			Resume = {},
+			Count = 0,
+		}
 		KBM.PlayerControl:Start()	
 		for i, File in pairs(KBM.Marks.File) do
 			KBM.Marks.Icon[i] = UI.CreateFrame("Texture", File, KBM.Context)
 			KBM.Marks.Icon[i]:SetTexture("Rift", File)
 			KBM.Marks.Icon[i]:SetVisible(false)
 		end
-		--KBM.PercentageMon:Init()
 	else
 		if Inspect.Buff.Detail ~= IBDReserved then
 			print(tostring(ModID).." changed internal command: Restoring Inspect.Buff.Detail")

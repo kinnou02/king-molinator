@@ -55,8 +55,12 @@ KT.Lang.Ability.Flare:SetGerman("Sturmherr-Fackel")
 KT.Lang.Debuff = {}
 KT.Lang.Debuff.KolIre = KBM.Language:Add("Kolmasveli's Ire")
 KT.Lang.Debuff.KolIre:SetGerman("Kolmasvelis Grimm")
+KT.Lang.Debuff.KolIreID = "B2251D45CEBC75B22"
+KT.Lang.Debuff.KolIreID2 = "BFF1D1165EAA5E3F3"
 KT.Lang.Debuff.ToiIre = KBM.Language:Add("Toinenveli's Ire")
 KT.Lang.Debuff.ToiIre:SetGerman("Toinenvelis Grimm")
+KT.Lang.Debuff.ToiIreID = "B01CBADD02857982F"
+KT.Lang.Debuff.ToiIreID2 = "BFE566AB12246C0CB"
 KT.Lang.Debuff.Eruption = KBM.Language:Add("Sparking Eruption")
 KT.Lang.Debuff.Eruption:SetGerman("Zündender Ausbruch")
 
@@ -66,6 +70,7 @@ KT.Lang.Verbose.GlimpseKol = KBM.Language:Add("Hide from Kolmasveli!")
 KT.Lang.Verbose.GlimpseKol:SetGerman("Verstecken vor Kolmasveli!")
 KT.Lang.Verbose.GlimpseToi = KBM.Language:Add("Hide from Toinenveli!")
 KT.Lang.Verbose.GlimpseToi:SetGerman("Verstecken vor Toinenveli!")
+KT.Lang.Verbose.RunAway = KBM.Language:Add("Run away from raid!")
 
 -- Description Dictionary
 KT.Lang.Main = {}
@@ -100,12 +105,14 @@ KT.Kolmasveli = {
 		},
 		AlertsRef = {
 			Enabled = true,
+			Ire = KBM.Defaults.AlertObj.Create("blue"),
 			Eruption = KBM.Defaults.AlertObj.Create("dark_green"),
 			Glimpse = KBM.Defaults.AlertObj.Create("red"),
 		},
 		MechRef = {
 			Enabled = true,
 			Eruption = KBM.Defaults.MechObj.Create("dark_green"),
+			IreVuln = KBM.Defaults.MechObj.Create("red"),
 		},
 	}
 }
@@ -125,6 +132,7 @@ KT.Toinenveli = {
 	Castbar = nil,
 	TimersRef = {},
 	AlertsRef = {},
+	MechRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -134,7 +142,12 @@ KT.Toinenveli = {
 		},
 		AlertsRef = {
 			Enabled = true,
+			Ire = KBM.Defaults.AlertObj.Create("red"),
 			Glimpse = KBM.Defaults.AlertObj.Create("orange"),
+		},
+		MechRef = {
+			Enabled = true,
+			IreVuln = KBM.Defaults.MechObj.Create("red"),
 		},
 	}
 }
@@ -377,11 +390,13 @@ function KT:Start()
 	KBM.Defaults.TimerObj.Assign(self.Toinenveli)
 	
 	-- Create Alerts
+	self.Kolmasveli.AlertsRef.Ire = KBM.Alert:Create(self.Lang.Debuff.KolIre[KBM.Lang], 5, true, true, "blue")
 	self.Kolmasveli.AlertsRef.Glimpse = KBM.Alert:Create(self.Lang.Verbose.GlimpseKol[KBM.Lang], nil, true, true, "red")
 	self.Kolmasveli.AlertsRef.Eruption = KBM.Alert:Create(self.Lang.Debuff.Eruption[KBM.Lang], nil, true, true, "dark_green")
 	self.Kolmasveli.AlertsRef.Eruption:Important()
 	KBM.Defaults.AlertObj.Assign(self.Kolmasveli)
 	
+	self.Toinenveli.AlertsRef.Ire = KBM.Alert:Create(self.Lang.Debuff.ToiIre[KBM.Lang], 5, true, true, "red")	
 	self.Toinenveli.AlertsRef.Glimpse = KBM.Alert:Create(self.Lang.Verbose.GlimpseToi[KBM.Lang], nil, true, true, "orange")
 	KBM.Defaults.AlertObj.Assign(self.Toinenveli)
 
@@ -390,10 +405,18 @@ function KT:Start()
 	KBM.Defaults.AlertObj.Assign(self.Vortex)
 
 	-- Create Spies
+	self.Kolmasveli.MechRef.IreVuln = KBM.MechSpy:Add(self.Lang.Debuff.KolIre[KBM.Lang], nil, "playerDebuff", self.Kolmasveli)
 	self.Kolmasveli.MechRef.Eruption = KBM.MechSpy:Add(self.Lang.Debuff.Eruption[KBM.Lang], nil, "playerDebuff", self.Kolmasveli)
 	KBM.Defaults.MechObj.Assign(self.Kolmasveli)
+
+	self.Toinenveli.MechRef.IreVuln = KBM.MechSpy:Add(self.Lang.Debuff.ToiIre[KBM.Lang], nil, "playerDebuff", self.Toinenveli)
+	KBM.Defaults.MechObj.Assign(self.Toinenveli)
 	
 	-- Assign Alerts and Timers to Triggers
+	self.Kolmasveli.Triggers.Ire = KBM.Trigger:Create(KT.Lang.Debuff.KolIreID, "playerIDBuff", self.Kolmasveli)
+	self.Kolmasveli.Triggers.Ire:AddAlert(self.Kolmasveli.AlertsRef.Ire)
+	self.Kolmasveli.Triggers.IreVuln = KBM.Trigger:Create(KT.Lang.Debuff.KolIreID2, "playerIDBuff", self.Kolmasveli)
+	self.Kolmasveli.Triggers.IreVuln:AddSpy(self.Kolmasveli.MechRef.IreVuln)
 	self.Kolmasveli.Triggers.Glimpse = KBM.Trigger:Create(self.Lang.Ability.Glimpse[KBM.Lang], "channel", self.Kolmasveli)
 	self.Kolmasveli.Triggers.Glimpse:AddAlert(self.Kolmasveli.AlertsRef.Glimpse)
 	self.Kolmasveli.Triggers.Glimpse:AddTimer(self.Toinenveli.TimersRef.Glimpse)
@@ -405,6 +428,10 @@ function KT:Start()
 	self.Kolmasveli.Triggers.PhaseFinal = KBM.Trigger:Create(10, "percent", self.Kolmasveli)
 	self.Kolmasveli.Triggers.PhaseFinal:AddPhase(self.PhaseFinal)
 	
+	self.Toinenveli.Triggers.Ire = KBM.Trigger:Create(KT.Lang.Debuff.ToiIreID, "playerIDBuff", self.Toinenveli)
+	self.Toinenveli.Triggers.Ire:AddAlert(self.Toinenveli.AlertsRef.Ire)
+	self.Toinenveli.Triggers.IreVuln = KBM.Trigger:Create(KT.Lang.Debuff.ToiIreID2, "playerIDBuff", self.Toinenveli)
+	self.Toinenveli.Triggers.IreVuln:AddSpy(self.Toinenveli.MechRef.IreVuln)	
 	self.Toinenveli.Triggers.Glimpse = KBM.Trigger:Create(self.Lang.Ability.Glimpse[KBM.Lang], "channel", self.Toinenveli)
 	self.Toinenveli.Triggers.Glimpse:AddAlert(self.Toinenveli.AlertsRef.Glimpse)
 	self.Toinenveli.Triggers.Glimpse:AddTimer(self.Kolmasveli.TimersRef.Glimpse)

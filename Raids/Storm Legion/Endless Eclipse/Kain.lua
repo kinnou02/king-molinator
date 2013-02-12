@@ -34,9 +34,16 @@ KR.Lang.Unit.Kain = KBM.Language:Add("Kain the Reaper")
 KR.Lang.Unit.Kain:SetGerman("Kain der Schnitter")
 KR.Lang.Unit.KainShort = KBM.Language:Add("Kain")
 KR.Lang.Unit.KainShort:SetGerman("Kain")
+KR.Lang.Unit.Zathral = KBM.Language:Add("Zathral Ashtongue")
+KR.Lang.Unit.ZathralShort = KBM.Language:Add("Zathral")
+KR.Lang.Unit.Baziel = KBM.Language:Add("Baziel Rotflesh")
+KR.Lang.Unit.BazielShort = KBM.Language:Add("Baziel")
+KR.Lang.Unit.Thief = KBM.Language:Add("Deathbound Bloodthief")
 
 -- Ability Dictionary
 KR.Lang.Ability = {}
+KR.Lang.Ability.Vile = KBM.Language:Add("Vile Blood")
+KR.Lang.Ability.Foul = KBM.Language:Add("Foul Blood")
 
 -- Description Dictionary
 KR.Lang.Main = {}
@@ -53,43 +60,137 @@ KR.Kain = {
 	Dead = false,
 	Available = false,
 	Menu = {},
-	UTID = "none",
+	UTID = "UFED5D20F2D11A108",
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
-	-- TimersRef = {},
-	-- AlertsRef = {},
+	--TimersRef = {},
+	AlertsRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		-- TimersRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
-		-- },
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
-		-- },
+		--TimersRef = {
+		--	Enabled = true,
+		--	AddsSpawn = KBM.Defaults.TimerObj.Create("cyan"),
+		--},
+		AlertsRef = {
+			Enabled = true,
+			Foul = KBM.Defaults.AlertObj.Create("red"),
+		},
 	}
+}
+
+-- Add Unit Creation
+KR.Zathral = {
+	Mod = KR,
+	Level = "??",
+	Active = false,
+	Name = KR.Lang.Unit.Zathral[KBM.Lang],
+	NameShort = KR.Lang.Unit.ZathralShort[KBM.Lang],
+	Dead = false,
+	Available = false,
+	Menu = {},
+	UTID = "UFD0D0C831F686B02",
+	UnitID = nil,
+	TimeOut = 5,
+	Castbar = nil,
+	--TimersRef = {},
+	AlertsRef = {},
+	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+		--TimersRef = {
+		--	Enabled = true,
+		--	AddsSpawn = KBM.Defaults.TimerObj.Create("cyan")
+		--},
+		AlertsRef = {
+			Enabled = true,
+			Vile = KBM.Defaults.AlertObj.Create("red"),
+		},
+	}
+}
+
+KR.Baziel = {
+	Mod = KR,
+	Level = "??",
+	Active = false,
+	Name = KR.Lang.Unit.Baziel[KBM.Lang],
+	NameShort = KR.Lang.Unit.BazielShort[KBM.Lang],
+	Dead = false,
+	Available = false,
+	Menu = {},
+	UTID = "UFDF01DAF799F6BA9",
+	UnitID = nil,
+	TimeOut = 5,
+	Castbar = nil,
+	--TimersRef = {},
+	--AlertsRef = {},
+	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+		--TimersRef = {
+		--	Enabled = true,
+		--	AddsSpawn = KBM.Defaults.TimerObj.Create("cyan")
+		--},
+		--AlertsRef = {
+		--	Enabled = true,
+		--	Vile = KBM.Defaults.AlertObj.Create("red"),
+		--},
+	}
+}
+
+KR.Thief = {
+	Mod = KR,
+	Level = "??",
+	Name = "Deathbound Bloodthief",
+	UnitList = {},
+	Ignore = true,
+	Type = "multi",
+	UTID = "UFCC83EB55DCCE3D3",
 }
 
 function KR:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Kain.Name] = self.Kain,
+		[self.Zathral.Name] = self.Zathral,
+		[self.Baziel.Name] = self.Baziel,
+		[self.Thief.Name] = self.Thief,
 	}
+
+	for BossName, BossObj in pairs(self.Bosses) do
+		if BossObj.Settings then
+			if BossObj.Settings.CastBar then
+				BossObj.Settings.CastBar.Override = true
+				BossObj.Settings.CastBar.Multi = true
+			end
+		end
+	end
 end
 
 function KR:InitVars()
 	self.Settings = {
 		Enabled = true,
-		CastBar = self.Kain.Settings.CastBar,
+		CastBar = {
+			Override = true,
+			Multi = true,
+		},
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
-		-- MechTimer = KBM.Defaults.MechTimer(),
-		-- Alerts = KBM.Defaults.Alerts(),
-		-- TimersRef = self.Kain.Settings.TimersRef,
-		-- AlertsRef = self.Kain.Settings.AlertsRef,
+		Alerts = KBM.Defaults.Alerts(),
+		--MechTimer = KBM.Defaults.MechTimer(),
+		Kain = {
+			CastBar = self.Kain.Settings.CastBar,
+			AlertsRef = self.Kain.Settings.AlertsRef,
+		},
+		Zathral = {
+			CastBar = self.Zathral.Settings.CastBar,
+			AlertsRef = self.Zathral.Settings.AlertsRef,
+		},
+		Baziel = {
+			CastBar = self.Baziel.Settings.CastBar,
+			AlertsRef = self.Baziel.Settings.AlertsRef,
+		},
 	}
 	KBMSLRDEEKR_Settings = self.Settings
 	chKBMSLRDEEKR_Settings = self.Settings
@@ -148,6 +249,20 @@ function KR:Death(UnitID)
 	if self.Kain.UnitID == UnitID then
 		self.Kain.Dead = true
 		return true
+	elseif self.Zathral.UnitID == UnitID then
+		self.Zathral.Dead = true
+		self.PhaseObj.Objectives:Remove()
+		self.PhaseObj.Objectives:AddPercent(self.Baziel, 0, 100)
+		self.PhaseObj:SetPhase("2")
+		self.Phase = 2
+	elseif self.Baziel.UnitID == UnitID then
+		self.Baziel.Dead = true
+		self.PhaseObj.Objectives:Remove()
+		self.PhaseObj.Objectives:AddPercent(self.Kain, 0, 100)
+		self.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
+		self.Phase = 3
+	elseif self.Thief.UnitList[UnitID] then
+		self.Thief.UnitList[UnitID].Dead = true
 	end
 	return false
 end
@@ -164,23 +279,45 @@ function KR:UnitHPCheck(uDetails, unitID)
 					self.TimeElapsed = 0
 					BossObj.Dead = false
 					BossObj.Casting = false
-					if BossObj.Name == self.Kain.Name then
-						BossObj.CastBar:Create(unitID)
-					end
+					BossObj.CastBar:Create(unitID)
 					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase("1")
-					self.PhaseObj.Objectives:AddPercent(self.Kain, 0, 100)
-					self.Phase = 1
+					if BossObj.Name == self.Zathral.Name then
+						self.PhaseObj:SetPhase("1")
+						self.PhaseObj.Objectives:AddPercent(self.Zathral, 0, 100)
+						self.Phase = 1
+					elseif BossObj.Name == self.Baziel.Name then
+						self.PhaseObj:SetPhase("2")
+						self.PhaseObj.Objectives:AddPercent(self.Baziel, 0, 100)
+						self.Phase = 2
+					elseif BossObj.Name == self.Kain.Name then
+						self.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
+						self.PhaseObj.Objectives:AddPercent(self.Kain, 0, 100)
+						self.Phase = 3
+					end
+				elseif BossObj == self.Thief then
+					if not self.Thief.UnitList[unitID] then
+						local SubBossObj = {
+							Mod = KR,
+							Level = "??",
+							Name = uDetails.name,
+							Dead = false,
+							Casting = false,
+							UnitID = unitID,
+							Available = true,
+						}
+						self.Thief.UnitList[unitID] = SubBossObj
+					end
 				else
 					BossObj.Dead = false
 					BossObj.Casting = false
-					if BossObj.Name == self.Kain.Name then
+					if BossObj.UnitID ~= unitID then
+						BossObj.CastBar:Remove()
 						BossObj.CastBar:Create(unitID)
 					end
 				end
 				BossObj.UnitID = unitID
 				BossObj.Available = true
-				return self.Kain
+				return BossObj
 			end
 		end
 	end
@@ -193,8 +330,10 @@ function KR:Reset()
 		BossObj.UnitID = nil
 		BossObj.Dead = false
 		BossObj.Casting = false
+		if BossObj.CastBar and BossObj.CastBar.Active then
+			BossObj.CastBar:Remove()
+		end
 	end
-	self.Kain.CastBar:Remove()	
 	self.PhaseObj:End(Inspect.Time.Real())
 end
 
@@ -210,10 +349,21 @@ function KR:Start()
 	-- KBM.Defaults.TimerObj.Assign(self.Kain)
 	
 	-- Create Alerts
-	-- KBM.Defaults.AlertObj.Assign(self.Kain)
+	self.Zathral.AlertsRef.Vile = KBM.Alert:Create(KR.Lang.Ability.Vile[KBM.Lang], nil, true, true, "red")
+	KBM.Defaults.AlertObj.Assign(self.Zathral)
+
+	self.Kain.AlertsRef.Foul = KBM.Alert:Create(KR.Lang.Ability.Foul[KBM.Lang], nil, true, true, "red")
+	KBM.Defaults.AlertObj.Assign(self.Kain)
 	
 	-- Assign Alerts and Timers to Triggers
+	self.Zathral.Triggers.Vile = KBM.Trigger:Create(self.Lang.Ability.Vile[KBM.Lang], "cast", self.Zathral)
+	self.Zathral.Triggers.Vile:AddAlert(self.Zathral.AlertsRef.Vile)
+
+	self.Kain.Triggers.Foul = KBM.Trigger:Create(self.Lang.Ability.Foul[KBM.Lang], "cast", self.Kain)
+	self.Kain.Triggers.Foul:AddAlert(self.Kain.AlertsRef.Foul)
 	
+	self.Zathral.CastBar = KBM.CastBar:Add(self, self.Zathral)
+	self.Baziel.CastBar = KBM.CastBar:Add(self, self.Baziel)
 	self.Kain.CastBar = KBM.CastBar:Add(self, self.Kain)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()

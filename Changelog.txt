@@ -1,4 +1,18 @@
-﻿v1.4.1
+﻿v1.4.2
+
+General
+* Fixed: Issue with rare start-up error (137)
+
+Percentage Monitor
+* Fixed: Prevented Axis errors with Percentage Monitor free resize.
+
+Encounters
+* Merged with KBM Public Encounters (Details to be updated)
+
+Translations
+* German Updates.
+----
+v1.4.1
 
 Menu
 * New: The menu window will now remember which Rift tab you were last in (Base or Storm Legion).

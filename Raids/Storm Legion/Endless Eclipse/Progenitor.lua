@@ -24,6 +24,7 @@ local PRO = {
 	Lang = {},
 	ID = "RProgenitor",
 	Object = "PRO",
+	Enrage = (7 * 60) + 30,
 }
 
 KBM.RegisterMod(PRO.ID, PRO)
@@ -45,6 +46,14 @@ PRO.Lang.Unit.Juntun:SetGerman()
 
 -- Ability Dictionary
 PRO.Lang.Ability = {}
+PRO.Lang.Ability.Ebon = KBM.Language:Add("Ebon Eruption")
+PRO.Lang.Ability.Redesign = KBM.Language:Add("Twisted Redesign")
+PRO.Lang.Ability.Entropic = KBM.Language:Add("Entropic Abyss")
+
+-- Buff Dictionary
+PRO.Lang.Buff = {}
+PRO.Lang.Buff.Barrier = KBM.Language:Add("Ebon Barrier")
+PRO.Lang.Buff.Hand = KBM.Language:Add("Hand of the Master")
 
 -- Description Dictionary
 PRO.Lang.Main = {}
@@ -66,7 +75,7 @@ PRO.Progenitor = {
 	TimeOut = 5,
 	Castbar = nil,
 	-- TimersRef = {},
-	-- AlertsRef = {},
+	AlertsRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -74,10 +83,10 @@ PRO.Progenitor = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
 		-- },
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
-		-- },
+		AlertsRef = {
+			Enabled = true,
+			Redesign = KBM.Defaults.AlertObj.Create("purple"),
+		},
 	}
 }
 
@@ -93,19 +102,25 @@ PRO.Ebassi = {
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
-	-- TimersRef = {},
-	-- AlertsRef = {},
+	TimersRef = {},
+	AlertsRef = {},
 	Triggers = {},
+	MechRef = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		-- TimersRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
-		-- },
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
-		-- },
+		TimersRef = {
+			Enabled = true,
+			Ebon = KBM.Defaults.TimerObj.Create("purple"),
+		},
+		AlertsRef = {
+			Enabled = true,
+			Ebon = KBM.Defaults.AlertObj.Create("red"),
+			Barrier = KBM.Defaults.AlertObj.Create("cyan"),
+		},
+		MechRef = {
+			Enabled = true,
+			Entropic = KBM.Defaults.MechObj.Create("purple"),
+		},
 	}
 }
 
@@ -121,19 +136,25 @@ PRO.Arebus = {
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
-	-- TimersRef = {},
-	-- AlertsRef = {},
+	TimersRef = {},
+	AlertsRef = {},
 	Triggers = {},
+	MechRef = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		-- TimersRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
-		-- },
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
-		-- },
+		TimersRef = {
+			Enabled = true,
+			Ebon = KBM.Defaults.TimerObj.Create("purple"),
+		},
+		AlertsRef = {
+			Enabled = true,
+			Ebon = KBM.Defaults.AlertObj.Create("red"),
+			Barrier = KBM.Defaults.AlertObj.Create("cyan"),
+		},
+		MechRef = {
+			Enabled = true,
+			Entropic = KBM.Defaults.MechObj.Create("purple"),
+		},
 	}
 }
 
@@ -149,19 +170,25 @@ PRO.Rhu = {
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
-	-- TimersRef = {},
-	-- AlertsRef = {},
+	TimersRef = {},
+	AlertsRef = {},
 	Triggers = {},
+	MechRef = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		-- TimersRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
-		-- },
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
-		-- },
+		TimersRef = {
+			Enabled = true,
+			Ebon = KBM.Defaults.TimerObj.Create("purple"),
+		},
+		AlertsRef = {
+			Enabled = true,
+			Ebon = KBM.Defaults.AlertObj.Create("red"),
+			Barrier = KBM.Defaults.AlertObj.Create("cyan"),
+		},
+		MechRef = {
+			Enabled = true,
+			Entropic = KBM.Defaults.MechObj.Create("purple"),
+		},
 	}
 }
 
@@ -177,19 +204,25 @@ PRO.Juntun = {
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
-	-- TimersRef = {},
-	-- AlertsRef = {},
+	TimersRef = {},
+	AlertsRef = {},
 	Triggers = {},
+	MechRef = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		-- TimersRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
-		-- },
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
-		-- },
+		TimersRef = {
+			Enabled = true,
+			Ebon = KBM.Defaults.TimerObj.Create("purple"),
+		},
+		AlertsRef = {
+			Enabled = true,
+			Ebon = KBM.Defaults.AlertObj.Create("red"),
+			Barrier = KBM.Defaults.AlertObj.Create("cyan"),
+		},
+		MechRef = {
+			Enabled = true,
+			Entropic = KBM.Defaults.MechObj.Create("purple"),
+		},
 	}
 }
 
@@ -202,18 +235,58 @@ function PRO:AddBosses(KBM_Boss)
 		[self.Rhu.Name] = self.Rhu,
 		[self.Juntun.Name] = self.Juntun,
 	}
+
+	for BossName, BossObj in pairs(self.Bosses) do
+		if BossObj.Settings then
+			if BossObj.Settings.CastBar then
+				BossObj.Settings.CastBar.Override = true
+				BossObj.Settings.CastBar.Multi = true
+			end
+		end
+	end
 end
 
 function PRO:InitVars()
 	self.Settings = {
 		Enabled = true,
-		CastBar = self.Progenitor.Settings.CastBar,
+		CastBar = {
+			Override = true,
+			Multi = true,
+		},
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
-		-- MechTimer = KBM.Defaults.MechTimer(),
-		-- Alerts = KBM.Defaults.Alerts(),
-		-- TimersRef = self.Progenitor.Settings.TimersRef,
-		-- AlertsRef = self.Progenitor.Settings.AlertsRef,
+		Progenitor = {
+			CastBar = self.Progenitor.Settings.CastBar,
+			AlertsRef = self.Progenitor.Settings.AlertsRef,
+			MechRef = self.Progenitor.Settings.MechRef,
+		},
+		Juntun = {
+			CastBar = self.Juntun.Settings.CastBar,
+			TimersRef = self.Juntun.Settings.TimersRef,
+			AlertsRef = self.Juntun.Settings.AlertsRef,
+			MechRef = self.Juntun.Settings.MechRef,
+		},
+		Ebassi = {
+			CastBar = self.Ebassi.Settings.CastBar,
+			TimersRef = self.Ebassi.Settings.TimersRef,
+			AlertsRef = self.Ebassi.Settings.AlertsRef,
+			MechRef = self.Ebassi.Settings.MechRef,
+		},
+		Arebus = {
+			CastBar = self.Arebus.Settings.CastBar,
+			TimersRef = self.Arebus.Settings.TimersRef,
+			AlertsRef = self.Arebus.Settings.AlertsRef,
+			MechRef = self.Arebus.Settings.MechRef,
+		},
+		Rhu = {
+			CastBar = self.Rhu.Settings.CastBar,
+			TimersRef = self.Rhu.Settings.TimersRef,
+			AlertsRef = self.Rhu.Settings.AlertsRef,
+			MechRef = self.Rhu.Settings.MechRef,
+		},
+		MechTimer = KBM.Defaults.MechTimer(),
+		Alerts = KBM.Defaults.Alerts(),
+		MechSpy = KBM.Defaults.MechSpy(),
 	}
 	KBMSLRDEEPR_Settings = self.Settings
 	chKBMSLRDEEPR_Settings = self.Settings
@@ -301,13 +374,14 @@ function PRO:UnitHPCheck(uDetails, unitID)
 			else
 				BossObj.Dead = false
 				BossObj.Casting = false
-				if BossObj == self.Progenitor then
+				if BossObj.UnitID ~= unitID then
+					BossObj.CastBar:Remove()
 					BossObj.CastBar:Create(unitID)
 				end
 			end
 			BossObj.UnitID = unitID
 			BossObj.Available = true
-			return self.Progenitor
+			return BossObj
 		end
 	end
 end
@@ -319,8 +393,8 @@ function PRO:Reset()
 		BossObj.UnitID = nil
 		BossObj.Dead = false
 		BossObj.Casting = false
+		BossObj.CastBar:Remove()
 	end
-	self.Progenitor.CastBar:Remove()	
 	self.PhaseObj:End(Inspect.Time.Real())
 end
 
@@ -336,11 +410,36 @@ function PRO:Start()
 	-- KBM.Defaults.TimerObj.Assign(self.Progenitor)
 	
 	-- Create Alerts
-	-- KBM.Defaults.AlertObj.Assign(self.Progenitor)
+	self.Progenitor.AlertsRef.Redesign = KBM.Alert:Create(self.Lang.Ability.Redesign[KBM.Lang], -1, true, true, "purple")
+	self.Progenitor.AlertsRef.Redesign:Important()
+	KBM.Defaults.AlertObj.Assign(self.Progenitor)
 	
 	-- Assign Alerts and Timers to Triggers
-	
+
+	self.Progenitor.Triggers.Redesign = KBM.Trigger:Create(self.Lang.Ability.Redesign[KBM.Lang], "cast", self.Progenitor)
+	self.Progenitor.Triggers.Redesign:AddAlert(self.Progenitor.AlertsRef.Redesign)
+
 	self.Progenitor.CastBar = KBM.CastBar:Add(self, self.Progenitor)
+
+	-- Setup the 4 mini bosses identically
+
+	for k, BossObj in ipairs({[1] = self.Juntun, [2] = self.Ebassi, [3] = self.Arebus, [4] = self.Rhu, }) do
+		BossObj.TimersRef.Ebon = KBM.MechTimer:Add(self.Lang.Ability.Ebon[KBM.Lang], 23, false)
+		KBM.Defaults.TimerObj.Assign(BossObj)
+		BossObj.AlertsRef.Ebon = KBM.Alert:Create(self.Lang.Ability.Ebon[KBM.Lang], 10, true, true, "red")
+		KBM.Defaults.AlertObj.Assign(BossObj)
+		BossObj.MechRef.Entropic = KBM.MechSpy:Add(self.Lang.Ability.Entropic[KBM.Lang], 5, "cast", BossObj)
+		KBM.Defaults.MechObj.Assign(BossObj)
+		BossObj.Triggers.Ebon = KBM.Trigger:Create(self.Lang.Ability.Ebon[KBM.Lang], "channel", BossObj)
+		BossObj.Triggers.Ebon:AddTimer(BossObj.TimersRef.Ebon)
+		BossObj.Triggers.Ebon:AddAlert(BossObj.AlertsRef.Ebon)
+		BossObj.Triggers.EbonInt = KBM.Trigger:Create(self.Lang.Ability.Ebon[KBM.Lang], "interrupt", BossObj)
+		BossObj.Triggers.EbonInt:AddStop(BossObj.AlertsRef.Ebon)
+		BossObj.Triggers.Entropic = KBM.Trigger:Create(self.Lang.Ability.Entropic[KBM.Lang], "cast", BossObj)
+		BossObj.Triggers.Entropic:AddSpy(BossObj.MechRef.Entropic)
+		BossObj.CastBar = KBM.CastBar:Add(self, BossObj)
+	end
+	
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()
 end

@@ -37,7 +37,9 @@ ZVL.Lang.Unit.Zaviel:SetGerman("Artifex Zaviel")
 ZVL.Lang.Unit.ZavielShort = KBM.Language:Add("Zaviel")
 ZVL.Lang.Unit.ZavielShort:SetGerman("Zaviel")
 ZVL.Lang.Unit.Power = KBM.Language:Add("Power Conducer")
+ZVL.Lang.Unit.Power:SetGerman("Energiekatalysator")
 ZVL.Lang.Unit.PowerShort = KBM.Language:Add("Conducer")
+ZVL.Lang.Unit.PowerShort:SetGerman("Katalysator")
 
 -- Ability Dictionary
 ZVL.Lang.Ability = {}
@@ -46,6 +48,7 @@ ZVL.Lang.Ability.Conduit:SetGerman("Energieleitung")
 ZVL.Lang.Ability.Jolt = KBM.Language:Add("Ensnaring Jolt")
 ZVL.Lang.Ability.Jolt:SetGerman("Verlangsamender Stromschlag")
 ZVL.Lang.Ability.Beam = KBM.Language:Add("Reconstructive Beam")
+ZVL.Lang.Ability.Beam:SetGerman("Rekonstruktiver Strahl")
 
 -- Debuff Dictionary
 ZVL.Lang.Debuff = {}
@@ -57,6 +60,7 @@ ZVL.Lang.Debuff.Vitality:SetGerman("Dissonante Vitalität")
 -- Chat Dictionary
 ZVL.Lang.Say = {}
 ZVL.Lang.Say.Power = KBM.Language:Add("Think you can handle this%? Hahaha!")
+ZVL.Lang.Say.Power:SetGerman("Und, werdet Ihr damit fertig? Hahaha!")
 
 -- Verbose Dictionary
 ZVL.Lang.Verbose = {}
@@ -67,6 +71,7 @@ ZVL.Lang.Verbose.Conduit:SetGerman("Energieleitung dispellen!")
 ZVL.Lang.Verbose.Jolt = KBM.Language:Add("Run around!")
 ZVL.Lang.Verbose.Jolt:SetGerman("Laufen!")
 ZVL.Lang.Verbose.Power = KBM.Language:Add("Power Conducers")
+ZVL.Lang.Verbose.Power:SetGerman("Energiekatalysator")
 
 -- Description Dictionary
 ZVL.Lang.Main = {}

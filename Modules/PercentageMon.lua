@@ -31,6 +31,7 @@ end
 function PM:ApplySettings()
 	--self.GUI.Cradle:SetVisible(self.Visible)
 	-- UI Adjustments
+	self.GUI.Back:ClearPoint("CENTER")
 	self.GUI.Back:SetPoint("CENTER", UIParent, self.Settings.X, self.Settings.Y)
 	self.GUI.Back:SetWidth(math.ceil(self.Constant.W * self.Settings.Scale))
 	self.GUI.Back:SetHeight(math.ceil(self.Constant.H * self.Settings.Scale))
