@@ -345,6 +345,8 @@ function PRO:Death(UnitID)
 	if self.Progenitor.UnitID == UnitID then
 		self.Progenitor.Dead = true
 		return true
+	else
+		
 	end
 	return false
 end

@@ -6,8 +6,20 @@ General
 Percentage Monitor
 * Fixed: Prevented Axis errors with Percentage Monitor free resize.
 
+Triggers
+* New: Method added Trigger:AddAlertSeq(AlertObj, Player = true/false) - Adds an Alert Object to the Alert sequence list for a created Trigger.
+* New: Method added Trigger:AddTimerSeq(TimerObj) - Adds a Timer Object to the Timer sequence list for a created Trigger.
+* New: Method added Trigger:ResetAlertSeq() - Resets the counter for the Alert sequence position.
+* New: Method added Trigger:ResetTimerSeq() - Resets the counter for the Timer sequence position
+* New: Method added Trigger:ResetSeq() - Resets both Timer and Alert positions.
+* Fixed: Timers which trigger after another timer are working again. (ForceStop was flagged always on /rolleyes)
+
 Encounters
 * Merged with KBM Public Encounters (Details to be updated)
+
+Endless Eclipse
+* Progenitor Saetos
+** Fixed: Now returns correct Boss Objects for each boss. (Phase Monitor updates will be working)
 
 Translations
 * German Updates.

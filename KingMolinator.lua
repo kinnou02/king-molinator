@@ -1307,7 +1307,7 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 		if not Object.Removing then
 			if Object.Active then
 				Object.Removing = true
-				Object.ForceStop = true
+				Object.ForceStop = Force or false
 				table.insert(self.RemoveTimers, Object)
 				self.RemoveCount = self.RemoveCount + 1
 			end
@@ -1506,10 +1506,12 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 					table.insert(self.TimerAfter, TimerObj)
 				else
 					if not self.Timers[Time] then
-						self.Timers[Time] = {}
+						self.Timers[Time] = {
+							Triggered = false,
+							Timers = {},
+						}
 					end
-					self.Timers[Time].Triggered = false
-					self.Timers[Time].TimerObj = TimerObj
+					table.insert(self.Timers[Time].Timers, TimerObj)
 				end
 			end
 		else
@@ -1559,7 +1561,9 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 					TriggerTime = math.ceil(self.Remaining)
 					if self.Timers[TriggerTime] then
 						if not self.Timers[TriggerTime].Triggered then
-							KBM.MechTimer:AddStart(self.Timers[TriggerTime].TimerObj)
+							for i, TimerObj in pairs(self.Timers[TriggerTime]) do
+								KBM.MechTimer:AddStart(TimerObj)
+							end
 							self.Timers[TriggerTime].Triggered = true
 						end
 					end
@@ -1630,6 +1634,7 @@ function KBM.Trigger:Init()
 	self.NpcDamage = {}
 	self.EncStart = {}
 	self.CustomBuffRemove = {}
+	self.Seq = {}
 	self.Max = {
 		Timers = {},
 		Spies = {},
@@ -1700,6 +1705,15 @@ function KBM.Trigger:Init()
 		TriggerObj.LastTrigger = 0
 		TriggerObj.Enabled = true
 		TriggerObj.Extended = NonEncounter
+		TriggerObj.Seq = {
+			Alerts = {},
+			TotalAlerts = 0,
+			CurrentAlert = 1,
+			Timers = {},
+			TotalTimers = 0,
+			CurrentTimer = 1,
+			Stored = false,
+		}
 		
 		function TriggerObj:AddTimer(TimerObj)
 			if not TimerObj then
@@ -1718,6 +1732,34 @@ function KBM.Trigger:Init()
 			end
 			if KBM.Trigger.High.Timers < KBM.Trigger.Max.Timers[self.Unit.Mod.ID] then
 				KBM.Trigger.High.Timers = KBM.Trigger.Max.Timers[self.Unit.Mod.ID]
+			end
+		end
+		
+		function TriggerObj:AddTimerSeq(TimerObj, Player)
+			if not TimerObj then
+				error("Timer object does not exist!")
+			end
+			if type(TimerObj) ~= "table" then
+				error("TimerObj: Expecting Table, got "..tostring(type(TimerObj)))
+			elseif TimerObj.Type ~= "timer" then
+				error("TimerObj: Expecting timer, got "..tostring(TimerObj.Type))
+			end
+			table.insert(self.Seq.Timers, TimerObj)
+			self.Seq.TotalTimers = self.Seq.TotalTimers + 1
+			if not KBM.Trigger.Max.Timers[self.Unit.Mod.ID] then
+				KBM.Trigger.Max.Timers[self.Unit.Mod.ID] = 1
+			else
+				KBM.Trigger.Max.Timers[self.Unit.Mod.ID] = KBM.Trigger.Max.Timers[self.Unit.Mod.ID] + 1
+			end
+			if KBM.Trigger.High.Timers < KBM.Trigger.Max.Timers[self.Unit.Mod.ID] then
+				KBM.Trigger.High.Timers = KBM.Trigger.Max.Timers[self.Unit.Mod.ID]
+			end
+			if not KBM.Trigger.Seq[self.Unit.Mod.ID] then
+				KBM.Trigger.Seq[self.Unit.Mod.ID] = {}
+			end
+			if not self.Seq.Stored then
+				table.insert(KBM.Trigger.Seq[self.Unit.Mod.ID], self)
+				self.Seq.Stored = true
 			end
 		end
 		
@@ -1746,6 +1788,27 @@ function KBM.Trigger:Init()
 			table.insert(self.Alerts, AlertObj)
 		end
 		
+		function TriggerObj:AddAlertSeq(AlertObj, Player)
+			if not AlertObj then
+				error("Alert Object does not exist!")
+			end
+			if type(AlertObj) ~= "table" then
+				error("AlertObj: Expecting Table, got "..tostring(type(AlertObj)))
+			elseif AlertObj.Type ~= "alert" then
+				error("AlertObj: Expecting alert, got "..tostring(AlertObj.Type))
+			end
+			AlertObj.Player = Player
+			table.insert(self.Seq.Alerts, AlertObj)
+			self.Seq.TotalAlerts = self.Seq.TotalAlerts + 1
+			if not KBM.Trigger.Seq[self.Unit.Mod.ID] then
+				KBM.Trigger.Seq[self.Unit.Mod.ID] = {}
+			end
+			if not self.Seq.Stored then
+				table.insert(KBM.Trigger.Seq[self.Unit.Mod.ID], self)
+				self.Seq.Stored = true
+			end
+		end
+		
 		function TriggerObj:AddPhase(PhaseObj)
 			if not PhaseObj then
 				error("Phase Object does not exist!")
@@ -1759,6 +1822,19 @@ function KBM.Trigger:Init()
 		
 		function TriggerObj:SetVictory()
 			self.Victory = true
+		end
+		
+		function TriggerObj:ResetSeq()
+			self.Seq.CurrentTimer = 1
+			self.Seq.CurrentAlert = 1
+		end
+		
+		function TriggerObj:ResetAlertSeq()
+			self.Seq.CurrentAlert = 1
+		end
+		
+		function TriggerObj:ResetTimerSeq()
+			self.Seq.CurrentTimer = 1
 		end
 		
 		function TriggerObj:AddStop(Object, Player)
@@ -1789,10 +1865,50 @@ function KBM.Trigger:Init()
 						Triggered = true
 					end
 				end
+				if self.Seq.TotalTimers > 0 then
+					local Timer = self.Seq.Timers[self.Seq.CurrentTimer]
+					if Timer.Active then
+						if current - self.LastTrigger > KBM.Idle.Trigger.Duration then
+							Timer:Queue(Data)
+							Triggered = true
+							self.Seq.CurrentTimer = self.Seq.CurrentTimer + 1
+							if self.Seq.CurrentTimer > self.Seq.TotalTimers then
+								self.Seq.CurrentTimer = 1
+							end
+						end
+					else
+						Timer:Queue(Data)
+						Triggered = true
+						self.Seq.CurrentTimer = self.Seq.CurrentTimer + 1
+						if self.Seq.CurrentTimer > self.Seq.TotalTimers then
+							self.Seq.CurrentTimer = 1
+						end
+					end
+				end
 			else
 				for i, Timer in ipairs(self.Timers) do
 					Timer:Queue(Data)
 					Triggered = true
+				end
+				if self.Seq.TotalTimers > 0 then
+					local Timer = self.Seq.Timers[self.Seq.CurrentTimer]
+					if Timer.Active then
+						if current - self.LastTrigger > KBM.Idle.Trigger.Duration then
+							Timer:Queue(Data)
+							Triggered = true
+							self.Seq.CurrentTimer = self.Seq.CurrentTimer + 1
+							if self.Seq.CurrentTimer > self.Seq.TotalTimers then
+								self.Seq.CurrentTimer = 1
+							end
+						end
+					else
+						Timer:Queue(Data)
+						Triggered = true
+						self.Seq.CurrentTimer = self.Seq.CurrentTimer + 1
+						if self.Seq.CurrentTimer > self.Seq.TotalTimers then
+							self.Seq.CurrentTimer = 1
+						end
+					end
 				end
 			end
 			for i, SpyObj in ipairs(self.Spies) do
@@ -1802,6 +1918,7 @@ function KBM.Trigger:Init()
 					end
 				end
 			end
+			
 			for i, AlertObj in ipairs(self.Alerts) do
 				if AlertObj.Player then
 					if self.Target[LibSUnit.Player.UnitID] then
@@ -1813,6 +1930,24 @@ function KBM.Trigger:Init()
 					Triggered = true
 				end
 			end
+			
+			if self.Seq.TotalAlerts > 0 then
+				local AlertObj = self.Seq.Alerts[self.Seq.CurrentAlert]
+				if AlertObj.Player then
+					if self.Target[LibSUnit.Player.UnitID] then
+						KBM.Alert:Start(AlertObj, Inspect.Time.Real(), Data)
+						Triggered = true
+					end
+				else
+					KBM.Alert:Start(AlertObj, Inspect.Time.Real(), Data)
+					Triggered = true
+				end
+				self.Seq.CurrentAlert = self.Seq.CurrentAlert + 1
+				if self.Seq.CurrentAlert > self.Seq.TotalAlerts then
+					self.Seq.CurrentAlert = 1
+				end
+			end
+			
 			for i, Obj in ipairs(self.Stop) do
 				if Obj.Type == "timer" then
 					KBM.MechTimer:AddRemove(Obj)
@@ -1832,6 +1967,7 @@ function KBM.Trigger:Init()
 					end
 				end
 			end
+			
 			if self.Extended == "CustomBuffRemove" then
 				if self.Phase then
 					self.Phase(Data, Target)
@@ -1845,6 +1981,7 @@ function KBM.Trigger:Init()
 					end
 				end
 			end
+			
 			if Triggered then
 				self.LastTrigger = current
 				self.Target = {}
@@ -4569,6 +4706,9 @@ function KBM.TankSwap:Init()
 	end
 	
 	function self:Start(DebuffName, BossID, Debuffs)
+		if not BossID then 
+			return
+		end
 		if KBM.Options.TankSwap.Enabled then
 			if (LibSUnit.Player.Role == "tank" and KBM.Options.TankSwap.Tank == true) or KBM.Options.TankSwap.Tank == false then
 				local Spec = ""
@@ -6051,6 +6191,11 @@ local function KBM_Reset(Forced)
 		KBM.Idle.Combat.Wait = false
 		KBM.Encounter = false
 		if KBM.CurrentMod then
+			if KBM.Trigger.Seq[KBM.CurrentMod.ID] then
+				for i, Trigger in ipairs(KBM.Trigger.Seq[KBM.CurrentMod.ID]) do
+					Trigger:ResetSeq()
+				end
+			end
 			KBM.CurrentMod:Reset()
 			KBM.CurrentMod = nil
 			KBM.CurrentBoss = ""
