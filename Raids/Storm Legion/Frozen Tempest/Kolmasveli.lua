@@ -379,7 +379,7 @@ end
 
 function KT:Start()
 	-- Create Timers
-	self.Kolmasveli.TimersRef.Glimpse = KBM.MechTimer:Add(self.Lang.Verbose.GlimpseKol[KBM.Lang], 60)
+	self.Kolmasveli.TimersRef.Glimpse = KBM.MechTimer:Add(self.Lang.Verbose.GlimpseKol[KBM.Lang], 140)
 	self.Kolmasveli.TimersRef.GlimpseFirst = KBM.MechTimer:Add(self.Lang.Verbose.GlimpseKol[KBM.Lang], 170)
 	self.Kolmasveli.TimersRef.GlimpseFirst:NoMenu()
 	KBM.Defaults.TimerObj.Assign(self.Kolmasveli)
@@ -437,8 +437,8 @@ function KT:Start()
 	self.Toinenveli.Triggers.Glimpse:AddTimer(self.Kolmasveli.TimersRef.Glimpse)
 	self.Toinenveli.Triggers.PhaseTwo = KBM.Trigger:Create(40, "percent", self.Toinenveli)
 	self.Toinenveli.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
-	self.Toinenveli.Triggers.PhaseFinal = KBM.Trigger:Create(10, "percent", self.Toinenveli)
-	self.Toinenveli.Triggers.PhaseFinal:AddPhase(self.PhaseFinal)
+	--self.Toinenveli.Triggers.PhaseFinal = KBM.Trigger:Create(10, "percent", self.Toinenveli)
+	--self.Toinenveli.Triggers.PhaseFinal:AddPhase(self.PhaseFinal)
 
 	self.Vortex.Triggers.Flare = KBM.Trigger:Create(self.Lang.Ability.Flare[KBM.Lang], "cast", self.Vortex)
 	self.Vortex.Triggers.Flare:AddAlert(self.Vortex.AlertsRef.Flare)

@@ -40,6 +40,7 @@ MOP.Lang.Unit.MatriarchShort:SetGerman("Matriarchin")
 MOP.Lang.Ability = {}
 MOP.Lang.Ability.Wave = KBM.Language:Add("Wave of Decay")
 MOP.Lang.Ability.Wave:SetGerman("Welle der Verwesung") 
+MOP.Lang.Ability.Doom = KBM.Language:Add("Sudden Doom")
 
 -- Messages Dictionary
 MOP.Lang.Messages = {}
@@ -75,16 +76,17 @@ MOP.Matriarch = {
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
-	-- TimersRef = {},
+	TimersRef = {},
 	AlertsRef = {},
 	MechRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		-- TimersRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
-		-- },
+		TimersRef = {
+			Enabled = true,
+			Wave = KBM.Defaults.TimerObj.Create("yellow"),
+			Doom = KBM.Defaults.TimerObj.Create("purple"),
+		},
 		AlertsRef = {
 			Enabled = true,
 			Spores = KBM.Defaults.AlertObj.Create("dark_green"),
@@ -113,9 +115,9 @@ function MOP:InitVars()
 		CastBar = self.Matriarch.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
-		-- MechTimer = KBM.Defaults.MechTimer(),
+		MechTimer = KBM.Defaults.MechTimer(),
 		Alerts = KBM.Defaults.Alerts(),
-		-- TimersRef = self.Matriarch.Settings.TimersRef,
+		TimersRef = self.Matriarch.Settings.TimersRef,
 		AlertsRef = self.Matriarch.Settings.AlertsRef,
 		MechRef = self.Matriarch.Settings.MechRef,
 		MechSpy = KBM.Defaults.MechSpy(),
@@ -240,11 +242,14 @@ end
 
 function MOP:Start()
 	-- Create Timers
-	-- KBM.Defaults.TimerObj.Assign(self.Matriarch)
+	self.Matriarch.TimersRef.Wave = KBM.MechTimer:Add(MOP.Lang.Ability.Wave[KBM.Lang], 5, false)
+	self.Matriarch.TimersRef.Doom = KBM.MechTimer:Add(MOP.Lang.Ability.Doom[KBM.Lang], 30, false)
+	KBM.Defaults.TimerObj.Assign(self.Matriarch)
 	
 	-- Create Alerts
 	self.Matriarch.AlertsRef.Spores = KBM.Alert:Create(self.Lang.Debuff.Spores[KBM.Lang], nil, true, true, "dark_green")
 	self.Matriarch.AlertsRef.Infect = KBM.Alert:Create(self.Lang.Debuff.Infect[KBM.Lang], nil, false, true, "red")
+	self.Matriarch.AlertsRef.Infect:Important()
 	self.Matriarch.AlertsRef.Wave = KBM.Alert:Create(self.Lang.Ability.Wave[KBM.Lang], nil, true, true, "yellow")
 	KBM.Defaults.AlertObj.Assign(self.Matriarch)
 
@@ -261,6 +266,8 @@ function MOP:Start()
 	self.Matriarch.Triggers.SporesN = KBM.Trigger:Create(self.Lang.Messages.Spores[KBM.Lang], "notify", self.Matriarch)
 	self.Matriarch.Triggers.SporesN:AddAlert(self.Matriarch.AlertsRef.Spores, true)
 	self.Matriarch.Triggers.SporesN:AddSpy(self.Matriarch.MechRef.Spores)
+	self.Matriarch.Triggers.SporesRem = KBM.Trigger:Create(self.Lang.Debuff.Spores[KBM.Lang], "playerBuffRemove", self.Matriarch)
+	self.Matriarch.Triggers.SporesRem:AddStop(self.Matriarch.AlertsRef.Spores)
 	self.Matriarch.Triggers.Infect = KBM.Trigger:Create(self.Lang.Debuff.Infect[KBM.Lang], "playerDebuff", self.Matriarch)
 	self.Matriarch.Triggers.Infect:AddAlert(self.Matriarch.AlertsRef.Infect, true)
 	self.Matriarch.Triggers.Infect:AddSpy(self.Matriarch.MechRef.Infect)
@@ -268,11 +275,14 @@ function MOP:Start()
 	self.Matriarch.Triggers.InfectN:AddAlert(self.Matriarch.AlertsRef.Infect, true)
 	self.Matriarch.Triggers.InfectN:AddSpy(self.Matriarch.MechRef.Infect)
 	self.Matriarch.Triggers.Wave = KBM.Trigger:Create(self.Lang.Ability.Wave[KBM.Lang], "cast", self.Matriarch)
+	self.Matriarch.Triggers.Wave:AddTimer(self.Matriarch.TimersRef.Wave)
 	self.Matriarch.Triggers.Wave:AddAlert(self.Matriarch.AlertsRef.Wave)
 	self.Matriarch.Triggers.WaveInt = KBM.Trigger:Create(self.Lang.Ability.Wave[KBM.Lang], "interrupt", self.Matriarch)
 	self.Matriarch.Triggers.WaveInt:AddStop(self.Matriarch.AlertsRef.Wave)
 	self.Matriarch.Triggers.Torment = KBM.Trigger:Create(self.Lang.Debuff.Torment[KBM.Lang], "playerDebuff", self.Matriarch)
 	self.Matriarch.Triggers.Torment:AddSpy(self.Matriarch.MechRef.Torment)
+	self.Matriarch.Triggers.Doom = KBM.Trigger:Create(self.Lang.Ability.Doom[KBM.Lang], "cast", self.Matriarch)
+	self.Matriarch.Triggers.Doom:AddTimer(self.Matriarch.TimersRef.Doom)
 	
 	self.Matriarch.CastBar = KBM.CastBar:Add(self, self.Matriarch)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

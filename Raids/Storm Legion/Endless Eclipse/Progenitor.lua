@@ -345,16 +345,14 @@ function PRO:Death(UnitID)
 	if self.Progenitor.UnitID == UnitID then
 		self.Progenitor.Dead = true
 		return true
-	else
-		
 	end
 	return false
 end
 
 function PRO:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		if self.Bosses[uDetails.name] then
-			local BossObj = self.Bosses[uDetails.name]
+		local BossObj = self.UTID[uDetails.type]
+		if BossObj then
 			if not self.EncounterRunning then
 				self.EncounterRunning = true
 				self.StartTime = Inspect.Time.Real()
@@ -362,9 +360,7 @@ function PRO:UnitHPCheck(uDetails, unitID)
 				self.TimeElapsed = 0
 				BossObj.Dead = false
 				BossObj.Casting = false
-				if BossObj == self.Progenitor then
-					BossObj.CastBar:Create(unitID)
-				end
+				BossObj.CastBar:Create(unitID)
 				self.PhaseObj:Start(self.StartTime)
 				self.PhaseObj:SetPhase("1")
 				self.PhaseObj.Objectives:AddPercent(self.Progenitor, 0, 100)

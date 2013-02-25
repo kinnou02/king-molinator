@@ -24,6 +24,7 @@ local DLG = {
 	Lang = {},
 	ID = "Goloch",
 	Object = "DLG",
+	Enrage = 6 * 60 + 15,
 }
 
 DLG.Goloch = {
@@ -36,22 +37,35 @@ DLG.Goloch = {
 	Available = false,
 	Menu = {},
 	UnitID = nil,
-	UTID = "none",
+	UTID = "UFD8602DF11B09969",
 	TimeOut = 5,
 	Castbar = nil,
-	-- TimersRef = {},
-	-- AlertsRef = {},
+	TimersRef = {},
+	AlertsRef = {},
+	MechRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		-- TimersRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
-		-- },
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
-		-- },
+		TimersRef = {
+			Enabled = true,
+			FirstGlimpse = KBM.Defaults.TimerObj.Create("yellow"),
+			Glimpse = KBM.Defaults.TimerObj.Create("yellow"),
+			FirstBaleful = KBM.Defaults.TimerObj.Create("red"),
+			Baleful = KBM.Defaults.TimerObj.Create("red"),
+			FirstDays = KBM.Defaults.TimerObj.Create("orange"),
+			Days = KBM.Defaults.TimerObj.Create("orange"),
+		},
+		AlertsRef = {
+			Enabled = true,
+			Days = KBM.Defaults.AlertObj.Create("orange"),
+			DaysUp = KBM.Defaults.AlertObj.Create("orange"),
+		},
+		MechRef = {
+			Enabled = true,
+			Glimpse = KBM.Defaults.MechObj.Create("yellow"),
+			Curse = KBM.Defaults.MechObj.Create("red"),
+			Torment = KBM.Defaults.MechObj.Create("purple"),
+		},
 	}
 }
 
@@ -66,10 +80,21 @@ DLG.Lang.Unit.GolochShort:SetGerman("Goloch")
 
 -- Ability Dictionary
 DLG.Lang.Ability = {}
+DLG.Lang.Ability.Days = KBM.Language:Add("End of Days")
+DLG.Lang.Ability.Glimpse = KBM.Language:Add("Glimpse of Mortality")
+DLG.Lang.Ability.Baleful = KBM.Language:Add("Baleful Smash")
 
 -- Debuff Dictionary
 DLG.Lang.Debuff = {}
 DLG.Lang.Debuff.Dread = KBM.Language:Add("Dread Scythe")
+DLG.Lang.Debuff.Curse = KBM.Language:Add("Gatekeeper's Curse")
+DLG.Lang.Debuff.Torment = KBM.Language:Add("Lingering Torment")
+DLG.Lang.Debuff.Glimpse = KBM.Language:Add("Glimpse of Mortality")
+
+-- Buff Dictionary
+DLG.Lang.Buff = {}
+DLG.Lang.Buff.Days = KBM.Language:Add("End of Days")
+DLG.Lang.Buff.Quiet = KBM.Language:Add("Quiet Fears")
 
 -- Description Dictionary
 DLG.Lang.Main = {}
@@ -94,10 +119,12 @@ function DLG:InitVars()
 		CastBar = self.Goloch.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
-		-- MechTimer = KBM.Defaults.MechTimer(),
-		-- Alerts = KBM.Defaults.Alerts(),
-		-- TimersRef = self.Goloch.Settings.TimersRef,
-		-- AlertsRef = self.Goloch.Settings.AlertsRef,
+		MechTimer = KBM.Defaults.MechTimer(),
+		Alerts = KBM.Defaults.Alerts(),
+		TimersRef = self.Goloch.Settings.TimersRef,
+		AlertsRef = self.Goloch.Settings.AlertsRef,
+		MechRef = self.Goloch.Settings.MechRef,
+		MechSpy = KBM.Defaults.MechSpy(),
 	}
 	KBMSLRDEEDG_Settings = self.Settings
 	chKBMSLRDEEDG_Settings = self.Settings
@@ -179,6 +206,9 @@ function DLG:UnitHPCheck(uDetails, unitID)
 				self.PhaseObj:SetPhase("1")
 				self.PhaseObj.Objectives:AddPercent(self.Goloch, 0, 100)
 				self.Phase = 1
+				KBM.MechTimer:AddStart(self.Goloch.TimersRef.FirstGlimpse)
+				KBM.MechTimer:AddStart(self.Goloch.TimersRef.FirstDays)
+				KBM.MechTimer:AddStart(self.Goloch.TimersRef.FirstBaleful)
 			else
 				BossObj.Dead = false
 				BossObj.Casting = false
@@ -214,12 +244,58 @@ end
 
 function DLG:Start()
 	-- Create Timers
-	-- KBM.Defaults.TimerObj.Assign(self.Goloch)
-	
+	self.Goloch.TimersRef.FirstGlimpse = KBM.MechTimer:Add(DLG.Lang.Ability.Glimpse[KBM.Lang], 45, false)
+	self.Goloch.TimersRef.Glimpse = KBM.MechTimer:Add(DLG.Lang.Ability.Glimpse[KBM.Lang], 75, false)
+	self.Goloch.TimersRef.FirstDays = KBM.MechTimer:Add(DLG.Lang.Ability.Days[KBM.Lang], 30, false)
+	self.Goloch.TimersRef.Days = KBM.MechTimer:Add(DLG.Lang.Ability.Days[KBM.Lang], 45, false)
+	self.Goloch.TimersRef.FirstBaleful = KBM.MechTimer:Add(DLG.Lang.Ability.Baleful[KBM.Lang], 80, false)
+	self.Goloch.TimersRef.Baleful = KBM.MechTimer:Add(DLG.Lang.Ability.Baleful[KBM.Lang], 100, false)
+	KBM.Defaults.TimerObj.Assign(self.Goloch)
+
+	self.Goloch.TimersRef.FirstGlimpse:SetLink(self.Goloch.TimersRef.Glimpse)
+	self.Goloch.TimersRef.FirstDays:SetLink(self.Goloch.TimersRef.Days)
+	self.Goloch.TimersRef.FirstBaleful:SetLink(self.Goloch.TimersRef.Baleful)
+
 	-- Create Alerts
-	-- KBM.Defaults.AlertObj.Assign(self.Goloch)
+	self.Goloch.AlertsRef.Days = KBM.Alert:Create(self.Lang.Ability.Days[KBM.Lang], nil, false, true, "orange")
+	self.Goloch.AlertsRef.DaysUp = KBM.Alert:Create(self.Lang.Ability.Days[KBM.Lang], nil, true, true, "orange")
+	KBM.Defaults.AlertObj.Assign(self.Goloch)
+
+	--self.Goloch.AlertsRef.DaysUp:SetLink(self.Goloch.AlertsRef.Days)
+
+	-- Create Spies
+	self.Goloch.MechRef.Glimpse = KBM.MechSpy:Add(self.Lang.Debuff.Glimpse[KBM.Lang], nil, "playerDebuff", self.Goloch)
+	self.Goloch.MechRef.Curse = KBM.MechSpy:Add(self.Lang.Debuff.Curse[KBM.Lang], nil, "playerDebuff", self.Goloch)
+	self.Goloch.MechRef.Torment = KBM.MechSpy:Add(self.Lang.Debuff.Torment[KBM.Lang], nil, "playerDebuff", self.Goloch)
+	KBM.Defaults.MechObj.Assign(self.Goloch)
 	
 	-- Assign Alerts and Timers to Triggers
+	self.Goloch.Triggers.Glimpse = KBM.Trigger:Create(self.Lang.Ability.Glimpse[KBM.Lang], "channel", self.Goloch)
+	self.Goloch.Triggers.Glimpse:AddTimer(self.Goloch.TimersRef.Glimpse)
+	self.Goloch.Triggers.GlimpseDebuff = KBM.Trigger:Create(self.Lang.Debuff.Glimpse[KBM.Lang], "playerDebuff", self.Goloch)
+	self.Goloch.Triggers.GlimpseDebuff:AddSpy(self.Goloch.MechRef.Glimpse)
+
+	self.Goloch.Triggers.Days = KBM.Trigger:Create(self.Lang.Ability.Days[KBM.Lang], "channel", self.Goloch)
+	self.Goloch.Triggers.Days:AddTimer(self.Goloch.TimersRef.Days)
+	self.Goloch.Triggers.Days:AddAlert(self.Goloch.AlertsRef.Days)
+
+	self.Goloch.Triggers.DaysUp = KBM.Trigger:Create(self.Lang.Buff.Days[KBM.Lang], "buff", self.Goloch)
+	self.Goloch.Triggers.DaysUp:AddAlert(self.Goloch.AlertsRef.DaysUp)
+	self.Goloch.Triggers.DaysUpRem = KBM.Trigger:Create(self.Lang.Buff.Days[KBM.Lang], "buffRemove", self.Goloch)
+	self.Goloch.Triggers.DaysUpRem:AddStop(self.Goloch.AlertsRef.DaysUp)
+
+	self.Goloch.Triggers.Curse = KBM.Trigger:Create(self.Lang.Debuff.Curse[KBM.Lang], "playerBuff", self.Goloch)
+	self.Goloch.Triggers.Curse:AddSpy(self.Goloch.MechRef.Curse)
+	self.Goloch.Triggers.CurseRem = KBM.Trigger:Create(self.Lang.Debuff.Curse[KBM.Lang], "playerBuffRemove", self.Goloch)
+	self.Goloch.Triggers.CurseRem:AddStop(self.Goloch.MechRef.Curse)
+
+	self.Goloch.Triggers.Torment = KBM.Trigger:Create(self.Lang.Debuff.Torment[KBM.Lang], "playerBuff", self.Goloch)
+	self.Goloch.Triggers.Torment:AddSpy(self.Goloch.MechRef.Torment)
+	self.Goloch.Triggers.TormentRem = KBM.Trigger:Create(self.Lang.Debuff.Torment[KBM.Lang], "playerBuffRemove", self.Goloch)
+	self.Goloch.Triggers.TormentRem:AddStop(self.Goloch.MechRef.Torment)
+
+	self.Goloch.Triggers.Baleful = KBM.Trigger:Create(self.Lang.Ability.Baleful[KBM.Lang], "channel", self.Goloch)
+	self.Goloch.Triggers.Baleful:AddTimer(self.Goloch.TimersRef.Baleful)
 	
 	self.Goloch.CastBar = KBM.CastBar:Add(self, self.Goloch)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
