@@ -23,6 +23,7 @@ Endless Eclipse
 
 Translations
 * German Updates.
+* French Updates.
 ----
 v1.4.1
 

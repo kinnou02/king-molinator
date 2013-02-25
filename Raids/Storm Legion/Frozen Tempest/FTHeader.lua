@@ -29,6 +29,7 @@ FT.Lang = {}
 FT.Lang.Main = {}
 FT.Lang.Main.FT = KBM.Language:Add(FT.Name)
 FT.Lang.Main.FT:SetGerman("Froststurm")
+FT.Lang.Main.FT:SetFrench("Tempête de glace")
 FT.Name = FT.Lang.Main.FT[KBM.Lang]
 FT.Descript = FT.Name
 

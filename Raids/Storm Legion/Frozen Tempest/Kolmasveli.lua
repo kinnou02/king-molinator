@@ -33,49 +33,64 @@ KBM.RegisterMod(KT.ID, KT)
 KT.Lang.Unit = {}
 KT.Lang.Unit.Kolmasveli = KBM.Language:Add("Kolmasveli")
 KT.Lang.Unit.Kolmasveli:SetGerman()
+KT.Lang.Unit.Kolmasveli:SetFrench("Kolmasveli") 
 KT.Lang.Unit.KolmasveliShort = KBM.Language:Add("Kolmasveli")
 KT.Lang.Unit.KolmasveliShort:SetGerman()
+KT.Lang.Unit.KolmasveliShort:SetFrench("Kolmasveli") 
 KT.Lang.Unit.Toinenveli = KBM.Language:Add("Toinenveli")
 KT.Lang.Unit.Toinenveli:SetGerman()
+KT.Lang.Unit.Toinenveli:SetFrench("Toinenveli") 
 KT.Lang.Unit.ToinenveliShort = KBM.Language:Add("Toinenveli")
 KT.Lang.Unit.ToinenveliShort:SetGerman()
+KT.Lang.Unit.ToinenveliShort:SetFrench("Toinenveli") 
 KT.Lang.Unit.Vortex = KBM.Language:Add("Energy Vortex")
 KT.Lang.Unit.Vortex:SetGerman("Energiewirbel")
+KT.Lang.Unit.Vortex:SetFrench("Vortex d'énergie")
 KT.Lang.Unit.VortexShort = KBM.Language:Add("Vortex")
 KT.Lang.Unit.VortexShort:SetGerman("Wirbel")
+KT.Lang.Unit.VortexShort:SetFrench("Vortex")  
 
 -- Ability Dictionary
 KT.Lang.Ability = {}
 KT.Lang.Ability.Glimpse = KBM.Language:Add("Glimpse of Infinity")
 KT.Lang.Ability.Glimpse:SetGerman("Blick in die Ewigkeit")
+KT.Lang.Ability.Glimpse:SetFrench("Lueur de l'Infini")
 KT.Lang.Ability.Flare = KBM.Language:Add("Tempest Flare")
 KT.Lang.Ability.Flare:SetGerman("Sturmherr-Fackel")
+KT.Lang.Ability.Flare:SetFrench("Flamboiement tempêtueux")
 
 -- Debuff Dictionary
 KT.Lang.Debuff = {}
 KT.Lang.Debuff.KolIre = KBM.Language:Add("Kolmasveli's Ire")
 KT.Lang.Debuff.KolIre:SetGerman("Kolmasvelis Grimm")
+KT.Lang.Debuff.KolIre:SetFrench("Courroux de Kolmasveli")
 KT.Lang.Debuff.KolIreID = "B2251D45CEBC75B22"
 KT.Lang.Debuff.KolIreID2 = "BFF1D1165EAA5E3F3"
 KT.Lang.Debuff.ToiIre = KBM.Language:Add("Toinenveli's Ire")
 KT.Lang.Debuff.ToiIre:SetGerman("Toinenvelis Grimm")
+KT.Lang.Debuff.ToiIre:SetFrench("Courroux de Toinenveli")
 KT.Lang.Debuff.ToiIreID = "B01CBADD02857982F"
 KT.Lang.Debuff.ToiIreID2 = "BFE566AB12246C0CB"
 KT.Lang.Debuff.Eruption = KBM.Language:Add("Sparking Eruption")
 KT.Lang.Debuff.Eruption:SetGerman("Zündender Ausbruch")
+KT.Lang.Debuff.Eruption:SetFrench("Éruption d'étincelles")
 
 -- Verbose Dictionary
 KT.Lang.Verbose = {}
 KT.Lang.Verbose.GlimpseKol = KBM.Language:Add("Hide from Kolmasveli!")
 KT.Lang.Verbose.GlimpseKol:SetGerman("Verstecken vor Kolmasveli!")
+KT.Lang.Verbose.GlimpseKol:SetFrench("Se cacher de Kolmasveli!")
 KT.Lang.Verbose.GlimpseToi = KBM.Language:Add("Hide from Toinenveli!")
 KT.Lang.Verbose.GlimpseToi:SetGerman("Verstecken vor Toinenveli!")
+KT.Lang.Verbose.GlimpseToi:SetFrench("Se cacher de Toinenveli!")
 KT.Lang.Verbose.RunAway = KBM.Language:Add("Run away from raid!")
+KT.Lang.Verbose.RunAway:SetFrench("S'éloigner du raid!")
 
 -- Description Dictionary
 KT.Lang.Main = {}
 KT.Lang.Main.Descript = KBM.Language:Add("Kolmasveli and Toinenveli")
 KT.Lang.Main.Descript:SetGerman("Kolmasveli und Toinenveli")
+KT.Lang.Main.Descript:SetFrench("Kolmasveli et Toinenveli")
 KT.Descript = KT.Lang.Main.Descript[KBM.Lang]
 
 -- Assign Boss to Language Specific Dictionary

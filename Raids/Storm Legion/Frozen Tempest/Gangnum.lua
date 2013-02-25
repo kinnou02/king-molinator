@@ -32,23 +32,28 @@ KBM.RegisterMod(GGM.ID, GGM)
 GGM.Lang.Unit = {}
 GGM.Lang.Unit.Gangnum = KBM.Language:Add("Gangnum")
 GGM.Lang.Unit.Gangnum:SetGerman("Gangnum")
+GGM.Lang.Unit.Gangnum:SetFrench("Gangnum")  
 GGM.Lang.Unit.GangnumShort = KBM.Language:Add("Gangnum")
 GGM.Lang.Unit.GangnumShort:SetGerman("Gangnum")
+GGM.Lang.Unit.GangnumShort:SetFrench("Gangnum")
 
 -- Ability Dictionary
 GGM.Lang.Ability = {}
 GGM.Lang.Ability.Blind = KBM.Language:Add("Blinding Surge")
 GGM.Lang.Ability.Blind:SetGerman("Blendender Schub")
+GGM.Lang.Ability.Blind:SetFrench("Poussée aveuglante")
 
 -- Debuff Dictionary
 GGM.Lang.Debuff = {}
 GGM.Lang.Debuff.Wrath = KBM.Language:Add("Tempest Wrath")
 GGM.Lang.Debuff.Wrath:SetGerman("Sturmherr-Zorn")
+GGM.Lang.Debuff.Wrath:SetFrench("Courroux tempétueux")
 
 -- Verbose Dictionary
 GGM.Lang.Verbose = {}
 GGM.Lang.Verbose.Wrath = KBM.Language:Add("Move back!")
 GGM.Lang.Verbose.Wrath:SetGerman("Lauf raus!")
+GGM.Lang.Verbose.Wrath:SetFrench("Éloignez-vous!")
 
 -- Description Dictionary
 GGM.Lang.Main = {}
