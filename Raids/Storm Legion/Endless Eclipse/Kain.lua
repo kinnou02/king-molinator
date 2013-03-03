@@ -32,18 +32,27 @@ KBM.RegisterMod(KR.ID, KR)
 KR.Lang.Unit = {}
 KR.Lang.Unit.Kain = KBM.Language:Add("Kain the Reaper")
 KR.Lang.Unit.Kain:SetGerman("Kain der Schnitter")
+KR.Lang.Unit.Kain:SetFrench("Kain le Faucheur")
 KR.Lang.Unit.KainShort = KBM.Language:Add("Kain")
 KR.Lang.Unit.KainShort:SetGerman("Kain")
+KR.Lang.Unit.KainShort:SetFrench("Kain")
 KR.Lang.Unit.Zathral = KBM.Language:Add("Zathral Ashtongue")
+KR.Lang.Unit.Zathral:SetFrench("Zathral Langue-cendrée")
 KR.Lang.Unit.ZathralShort = KBM.Language:Add("Zathral")
+KR.Lang.Unit.ZathralShort:SetFrench("Zathral")
 KR.Lang.Unit.Baziel = KBM.Language:Add("Baziel Rotflesh")
+KR.Lang.Unit.Baziel:SetFrench("Baziel Chairpourrie")
 KR.Lang.Unit.BazielShort = KBM.Language:Add("Baziel")
+KR.Lang.Unit.BazielShort:SetFrench("Baziel")
 KR.Lang.Unit.Thief = KBM.Language:Add("Deathbound Bloodthief")
+KR.Lang.Unit.Thief:SetFrench("Voleur de sang maudit")
 
 -- Ability Dictionary
 KR.Lang.Ability = {}
 KR.Lang.Ability.Vile = KBM.Language:Add("Vile Blood")
+KR.Lang.Ability.Vile:SetFrench("Sang infâme")
 KR.Lang.Ability.Foul = KBM.Language:Add("Foul Blood")
+KR.Lang.Ability.Foul:SetFrench("Sang infect")
 
 -- Description Dictionary
 KR.Lang.Main = {}

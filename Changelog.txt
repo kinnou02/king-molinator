@@ -12,6 +12,9 @@ Percentage Monitor
 Ready Check
 * New: Added Stellar Prismatic Wellspring (All, 60, High)
 * New: Added Flaring Sigil (Mage, Cleric, 60, Medium)
+* New: Added Planar Edge (Warrior, 60, Medium)
+* New: Added Honed Edge (Rogue, 60, Medium)
+* New: Added Lightning Sigil (Rogue, 60, Medium)
 
 LibSBuff
 * Change: Now converted over to new Rift 2.2 API Event system.

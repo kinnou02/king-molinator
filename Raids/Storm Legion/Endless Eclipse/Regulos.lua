@@ -24,6 +24,7 @@ local REG = {
 	Lang = {},
 	ID = "Regulos",
 	Object = "REG",
+	Enrage = 11 * 60,
 }
 
 REG.Regulos = {
@@ -39,19 +40,27 @@ REG.Regulos = {
 	UTID = "UFF5EE9B9158B8C9E",
 	TimeOut = 5,
 	Castbar = nil,
-	-- TimersRef = {},
-	-- AlertsRef = {},
+	TimersRef = {},
+	AlertsRef = {},
+	MechRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		-- TimersRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
-		-- },
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
-		-- },
+		TimersRef = {
+			Enabled = true,
+			Apotheosis = KBM.Defaults.TimerObj.Create("red"),
+		},
+		AlertsRef = {
+			Enabled = true,
+			Eradicate = KBM.Defaults.AlertObj.Create("purple"),
+			Vanquish = KBM.Defaults.AlertObj.Create("red"),
+		},
+		MechRef = {
+			Enabled = true,
+			Doom = KBM.Defaults.MechObj.Create("cyan"),
+			Eradicate = KBM.Defaults.MechObj.Create("purple"),
+			Glimpse = KBM.Defaults.MechObj.Create("dark_green"),
+		},
 	}
 }
 
@@ -61,16 +70,44 @@ KBM.RegisterMod(REG.ID, REG)
 REG.Lang.Unit = {}
 REG.Lang.Unit.Regulos = KBM.Language:Add("Regulos")
 REG.Lang.Unit.Regulos:SetGerman("Regulos")
+REG.Lang.Unit.Regulos:SetFrench("Regulos")
 REG.Lang.Unit.RegulosShort = KBM.Language:Add("Regulos")
 REG.Lang.Unit.RegulosShort:SetGerman("Regulos")
+REG.Lang.Unit.RegulosShort:SetFrench("Regulos")
+REG.Lang.Unit.Shambler = KBM.Language:Add("Shambling Nightmare")
+REG.Lang.Unit.Molinar = KBM.Language:Add("Dark Thane Molinar")
 
 -- Ability Dictionary
 REG.Lang.Ability = {}
+REG.Lang.Ability.Tentacle = KBM.Language:Add("Tentacle Storm") -- 10s cast time
+REG.Lang.Ability.Apotheosis = KBM.Language:Add("Death's Apotheosis") -- 72.5s cast time
+REG.Lang.Ability.Calamity = KBM.Language:Add("Invoke Calamity") -- 3.5s cast time
+REG.Lang.Ability.Vanquish = KBM.Language:Add("Vanquish the Weak")
+
+-- Debuff Dictionary
+REG.Lang.Debuff = {}
+REG.Lang.Debuff.Mark = KBM.Language:Add("Mark of the Void") -- Tank debuff?
+REG.Lang.Debuff.Heart = KBM.Language:Add("Heart of Death") -- Tank debuff?
+REG.Lang.Debuff.Darkness = KBM.Language:Add("Seething Darkness") -- 50k Heal absorb
+REG.Lang.Debuff.Doom = KBM.Language:Add("Impending Doom")
+REG.Lang.Debuff.Glimpse = KBM.Language:Add("Glimpse the Abyss")
+
+-- Messages Dictionary
+REG.Lang.Messages = {}
+REG.Lang.Messages.Engulf = KBM.Language:Add("(%a*) is engulfed by seething darkness.")
+REG.Lang.Messages.Eradicate = KBM.Language:Add("Regulos prepares to eradicate (%a*).") -- 
+REG.Lang.Messages.Will = KBM.Language:Add("Regulos imposes his will upon (%a*).")
+
+-- Verbose Dictionary
+REG.Lang.Verbose = {}
+REG.Lang.Verbose.Eradicate = KBM.Language:Add("Eradicate")
+REG.Lang.Verbose.Stack = KBM.Language:Add("Stack! Meteor time!")
 
 -- Description Dictionary
 REG.Lang.Main = {}
 REG.Lang.Main.Descript = KBM.Language:Add("Regulos")
 REG.Lang.Main.Descript:SetGerman("Schreckensfürst Regulos")
+REG.Lang.Main.Descript:SetFrench("Regulos")
 REG.Descript = REG.Lang.Main.Descript[KBM.Lang]
 
 -- Assign Boss to Language Specific Dictionary
@@ -90,10 +127,12 @@ function REG:InitVars()
 		CastBar = self.Regulos.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
-		-- MechTimer = KBM.Defaults.MechTimer(),
-		-- Alerts = KBM.Defaults.Alerts(),
-		-- TimersRef = self.Regulos.Settings.TimersRef,
-		-- AlertsRef = self.Regulos.Settings.AlertsRef,
+		MechTimer = KBM.Defaults.MechTimer(),
+		Alerts = KBM.Defaults.Alerts(),
+		TimersRef = self.Regulos.Settings.TimersRef,
+		AlertsRef = self.Regulos.Settings.AlertsRef,
+		MechSpy = KBM.Defaults.MechSpy(),
+		MechRef = self.Regulos.Settings.MechRef,
 	}
 	KBMSLRDEERS_Settings = self.Settings
 	chKBMSLRDEERS_Settings = self.Settings
@@ -175,6 +214,7 @@ function REG:UnitHPCheck(uDetails, unitID)
 					self.PhaseObj:SetPhase("1")
 					self.PhaseObj.Objectives:AddPercent(self.Regulos, 0, 100)
 					self.Phase = 1
+					KBM.TankSwap:Start(self.Lang.Debuff.Mark[KBM.Lang], unitID)
 				else
 					BossObj.Dead = false
 					BossObj.Casting = false
@@ -184,7 +224,7 @@ function REG:UnitHPCheck(uDetails, unitID)
 				end
 				BossObj.UnitID = unitID
 				BossObj.Available = true
-				return self.Regulos
+				return BossObj
 			end
 		end
 	end
@@ -211,12 +251,40 @@ end
 
 function REG:Start()
 	-- Create Timers
-	-- KBM.Defaults.TimerObj.Assign(self.Regulos)
+	self.Regulos.TimersRef.Apotheosis = KBM.MechTimer:Add(self.Lang.Ability.Apotheosis[KBM.Lang], 72, false)
+	KBM.Defaults.TimerObj.Assign(self.Regulos)
 	
 	-- Create Alerts
-	-- KBM.Defaults.AlertObj.Assign(self.Regulos)
+	self.Regulos.AlertsRef.Eradicate = KBM.Alert:Create(self.Lang.Verbose.Stack[KBM.Lang], 8, true, true, "purple")
+	self.Regulos.AlertsRef.Vanquish = KBM.Alert:Create(self.Lang.Ability.Vanquish[KBM.Lang], nil, true, true, "red")
+	KBM.Defaults.AlertObj.Assign(self.Regulos)
+
+	-- Create Mechanic Spies
+	self.Regulos.MechRef.Doom = KBM.MechSpy:Add(self.Lang.Debuff.Doom[KBM.Lang], nil, "playerDebuff", self.Regulos)
+	self.Regulos.MechRef.Eradicate = KBM.MechSpy:Add(self.Lang.Verbose.Eradicate[KBM.Lang], 8, "notify", self.Regulos)
+	self.Regulos.MechRef.Glimpse = KBM.MechSpy:Add(self.Lang.Debuff.Glimpse[KBM.Lang], nil, "playerDebuff", self.Regulos)
+	KBM.Defaults.MechObj.Assign(self.Regulos)
 	
 	-- Assign Alerts and Timers to Triggers
+	self.Regulos.Triggers.Eradicate = KBM.Trigger:Create(self.Lang.Messages.Eradicate[KBM.Lang], "notify", self.Regulos)
+	self.Regulos.Triggers.Eradicate:AddAlert(self.Regulos.AlertsRef.Eradicate, true)
+	self.Regulos.Triggers.Eradicate:AddSpy(self.Regulos.MechRef.Eradicate)
+
+	self.Regulos.Triggers.Doom = KBM.Trigger:Create(self.Lang.Debuff.Doom[KBM.Lang], "playerBuff", self.Regulos)
+	self.Regulos.Triggers.Doom:AddSpy(self.Regulos.MechRef.Doom)
+	self.Regulos.Triggers.DoomRem = KBM.Trigger:Create(self.Lang.Debuff.Doom[KBM.Lang], "playerBuffRemove", self.Regulos)
+	self.Regulos.Triggers.DoomRem:AddStop(self.Regulos.MechRef.Doom)
+
+	self.Regulos.Triggers.Glimpse = KBM.Trigger:Create(self.Lang.Debuff.Glimpse[KBM.Lang], "playerBuff", self.Regulos)
+	self.Regulos.Triggers.Glimpse:AddSpy(self.Regulos.MechRef.Glimpse)
+	self.Regulos.Triggers.GlimpseRem = KBM.Trigger:Create(self.Lang.Debuff.Glimpse[KBM.Lang], "playerBuffRemove", self.Regulos)
+	self.Regulos.Triggers.GlimpseRem:AddStop(self.Regulos.MechRef.Glimpse)
+
+	self.Regulos.Triggers.Apotheosis = KBM.Trigger:Create(self.Lang.Ability.Apotheosis[KBM.Lang], "channel", self.Regulos)
+	self.Regulos.Triggers.Apotheosis:AddTimer(self.Regulos.TimersRef.Apotheosis)
+
+	self.Regulos.Triggers.Vanquish = KBM.Trigger:Create(self.Lang.Ability.Vanquish[KBM.Lang], "channel", self.Regulos)
+	self.Regulos.Triggers.Vanquish:AddAlert(self.Regulos.AlertsRef.Vanquish)
 	
 	self.Regulos.CastBar = KBM.CastBar:Add(self, self.Regulos)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

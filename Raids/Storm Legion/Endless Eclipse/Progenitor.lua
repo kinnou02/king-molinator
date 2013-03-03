@@ -33,27 +33,38 @@ KBM.RegisterMod(PRO.ID, PRO)
 PRO.Lang.Unit = {}
 PRO.Lang.Unit.Progenitor = KBM.Language:Add("Progenitor Saetos")
 PRO.Lang.Unit.Progenitor:SetGerman("Erzeuger Saetos")
+PRO.Lang.Unit.Progenitor:SetFrench("Progéniteur Saetos")
 PRO.Lang.Unit.ProgenitorShort = KBM.Language:Add("Saetos")
 PRO.Lang.Unit.ProgenitorShort:SetGerman("Saetos")
+PRO.Lang.Unit.ProgenitorShort:SetFrench("Saetos")
 PRO.Lang.Unit.Ebassi = KBM.Language:Add("Ebassi")
 PRO.Lang.Unit.Ebassi:SetGerman()
+PRO.Lang.Unit.Ebassi:SetFrench("Ebassi")
 PRO.Lang.Unit.Arebus = KBM.Language:Add("Arebus")
 PRO.Lang.Unit.Arebus:SetGerman() 
+PRO.Lang.Unit.Arebus:SetFrench("Arebus") 
 PRO.Lang.Unit.Rhu = KBM.Language:Add("Rhu'Megar")
 PRO.Lang.Unit.Rhu:SetGerman()
+PRO.Lang.Unit.Rhu:SetFrench("Rhu'Megar")
 PRO.Lang.Unit.Juntun = KBM.Language:Add("Juntun")
 PRO.Lang.Unit.Juntun:SetGerman()
+PRO.Lang.Unit.Juntun:SetFrench("Juntun")
 
 -- Ability Dictionary
 PRO.Lang.Ability = {}
 PRO.Lang.Ability.Ebon = KBM.Language:Add("Ebon Eruption")
+PRO.Lang.Ability.Ebon:SetFrench("Éruption d'ébène")
 PRO.Lang.Ability.Redesign = KBM.Language:Add("Twisted Redesign")
+PRO.Lang.Ability.Redesign:SetFrench("Refonte tordue")
 PRO.Lang.Ability.Entropic = KBM.Language:Add("Entropic Abyss")
+PRO.Lang.Ability.Entropic:SetFrench("Abysses entropiques")
 
 -- Buff Dictionary
 PRO.Lang.Buff = {}
 PRO.Lang.Buff.Barrier = KBM.Language:Add("Ebon Barrier")
+PRO.Lang.Buff.Barrier:SetFrench("Barrière d'ébène")
 PRO.Lang.Buff.Hand = KBM.Language:Add("Hand of the Master")
+PRO.Lang.Buff.Hand:SetFrench("Main du Maître")
 
 -- Description Dictionary
 PRO.Lang.Main = {}

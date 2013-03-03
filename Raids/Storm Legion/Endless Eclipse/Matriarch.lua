@@ -33,29 +33,40 @@ KBM.RegisterMod(MOP.ID, MOP)
 MOP.Lang.Unit = {}
 MOP.Lang.Unit.Matriarch = KBM.Language:Add("Matriarch of Pestilence")
 MOP.Lang.Unit.Matriarch:SetGerman("Matriarchin der Pestilenz")
+MOP.Lang.Unit.Matriarch:SetFrench("Matriarche pestilentielle")
 MOP.Lang.Unit.MatriarchShort = KBM.Language:Add("Matriarch")
 MOP.Lang.Unit.MatriarchShort:SetGerman("Matriarchin")
+MOP.Lang.Unit.MatriarchShort:SetFrench("Matriarche")
 
 -- Ability Dictionary
 MOP.Lang.Ability = {}
 MOP.Lang.Ability.Wave = KBM.Language:Add("Wave of Decay")
-MOP.Lang.Ability.Wave:SetGerman("Welle der Verwesung") 
+MOP.Lang.Ability.Wave:SetGerman("Welle der Verwesung")
+MOP.Lang.Ability.Wave:SetFrench("Vague de putréfaction")
 MOP.Lang.Ability.Doom = KBM.Language:Add("Sudden Doom")
+MOP.Lang.Ability.Doom:SetFrench("Condamnation soudaine")
 
 -- Messages Dictionary
 MOP.Lang.Messages = {}
 MOP.Lang.Messages.Spores = KBM.Language:Add("Matriarch of Pestilence covers (%a*) with Necrotic Spores!")
+MOP.Lang.Messages.Spores:SetFrench("Matriarche pestilentielle recouvre (%a*) de Spores nécrotiques !")
 MOP.Lang.Messages.Infect = KBM.Language:Add("Matriarch of Pestilence infects (%a*) with an unholy disease!")
+MOP.Lang.Messages.Infect:SetFrench("Matriarche pestilentielle infecte (%a*) en lui transmettant une maladie impie !")
 MOP.Lang.Messages.ChildeSpawn = KBM.Language:Add("You shall sate the hunger of my children!")
+MOP.Lang.Messages.ChildeSpawn:SetFrench("Vous assouvirez l'appétit de mes petits !")
 
 -- Debuff Dictionary
 MOP.Lang.Debuff = {}
 MOP.Lang.Debuff.Spores = KBM.Language:Add("Necrotic Spores")
 MOP.Lang.Debuff.Spores:SetGerman("Nekrotische Sporen")
+MOP.Lang.Debuff.Spores:SetFrench("Spores nécrotiques")
 MOP.Lang.Debuff.Infect = KBM.Language:Add("Volatile Infection")
 MOP.Lang.Debuff.Infect:SetGerman("Flüchtige Infektion")
+MOP.Lang.Debuff.Infect:SetFrench("Infection volatile")
 MOP.Lang.Debuff.Ichor = KBM.Language:Add("Dark Ichor")
+MOP.Lang.Debuff.Ichor:SetFrench("Pourriture noire")
 MOP.Lang.Debuff.Torment = KBM.Language:Add("Torment")
+MOP.Lang.Debuff.Torment:SetFrench("Tourmente")
 
 -- Description Dictionary
 MOP.Lang.Main = {}

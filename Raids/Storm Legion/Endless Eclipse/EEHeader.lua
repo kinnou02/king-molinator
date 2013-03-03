@@ -29,6 +29,7 @@ EE.Lang = {}
 EE.Lang.Main = {}
 EE.Lang.Main.EE = KBM.Language:Add(EE.Name)
 EE.Lang.Main.EE:SetGerman("Ewige Sonnenfinsternis")
+EE.Lang.Main.EE:SetFrench("Éclipse Éternelle")
 EE.Name = EE.Lang.Main.EE[KBM.Lang]
 EE.Descript = EE.Name
 

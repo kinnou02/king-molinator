@@ -188,6 +188,28 @@ PI.Constants = {
 						cleric = true,
 					},
 				},
+				["r0B48C387131E79A8"] = { -- Lightning Sigil
+					Grade = "Med",
+					Level = 60,
+					Callings = {
+						rogue = true,
+					},
+				},
+				["rFBF770FC7EEEB915"] = { -- Honed Edge
+					Grade = "Med",
+					Level = 60,
+					Callings = {
+						rogue = true,
+					},
+				},
+				
+				["r2FF8E88943EBC5AA"] = { -- Planar Edge
+					Grade = "Med",
+					Level = 60,
+					Callings = {
+						warrior = true,
+					},
+				},
 				["r624A5FA52756B277"] = { -- Burning Powerstone
 					Grade = "High",
 					Level = 50,
