@@ -1,10 +1,20 @@
 ﻿v1.4.2
 
+Rift
+* Change: Requires at least Rift 2.2
+
 General
 * Fixed: Issue with rare start-up error (137)
 
 Percentage Monitor
 * Fixed: Prevented Axis errors with Percentage Monitor free resize.
+
+Ready Check
+* New: Added Stellar Prismatic Wellspring (All, 60, High)
+* New: Added Flaring Sigil (Mage, Cleric, 60, Medium)
+
+LibSBuff
+* Change: Now converted over to new Rift 2.2 API Event system.
 
 Triggers
 * New: Method added Trigger:AddAlertSeq(AlertObj, Player = true/false) - Adds an Alert Object to the Alert sequence list for a created Trigger.

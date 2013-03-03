@@ -9,7 +9,7 @@ Author = "Paul Snart"
 Website = "http://twitter.com/#!/psnart"
 Email = "snarty@gmail.com"
 
-Version = "0.0.9"
+Version = "0.1.1"
 
 Environment = "1.10"
 
@@ -18,9 +18,9 @@ RunOnStartup = {
 }
 
 Embed = {
-	SafesTableLib = true,
+	["SafesTableLib"] = true,
 }
 
 Dependencies = {
-	SafesTableLib = {"required", "before"}
+	SafesTableLib = {"required", "before"},
 }

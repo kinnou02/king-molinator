@@ -1561,7 +1561,7 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 					TriggerTime = math.ceil(self.Remaining)
 					if self.Timers[TriggerTime] then
 						if not self.Timers[TriggerTime].Triggered then
-							for i, TimerObj in pairs(self.Timers[TriggerTime]) do
+							for i, TimerObj in pairs(self.Timers[TriggerTime].Timers) do
 								KBM.MechTimer:AddStart(TimerObj)
 							end
 							self.Timers[TriggerTime].Triggered = true

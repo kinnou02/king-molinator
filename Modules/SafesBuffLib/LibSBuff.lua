@@ -18,6 +18,7 @@ local AddonIni, LibSBuff = ...
 local LibSata = Inspect.Addon.Detail("SafesTableLib").data
 
 if not LibSata then
+	error("Failed to load LibSata: Stopping")
 	return
 end
 
@@ -347,7 +348,7 @@ function _int:UpdateCycle()
 	end
 end
 
-function _int:BuffAdd(UnitID, Buffs)
+function _int:BuffAdd(EHandle, UnitID, Buffs)
 	if not Inspect.System.Secure() then
 		Command.System.Watchdog.Quiet()
 	end
@@ -379,7 +380,7 @@ function _int:BuffAdd(UnitID, Buffs)
 	end
 end
 
-function _int:BuffRemove(UnitID, Buffs)
+function _int:BuffRemove(EHandle, UnitID, Buffs)
 	for BuffID, BuffType in pairs(Buffs) do
 		if not self.Queued.Remove[BuffID] then
 			-- if LibSBuff.Lookup[BuffID] then
@@ -409,7 +410,7 @@ function _int:DebugUnit(Message, UnitID)
 	end
 end
 
-function _int:BuffChange(UnitID, Buffs)
+function _int:BuffChange(EHandle, UnitID, Buffs)
 	local _startTime = Inspect.Time.Real()
 	local cache = true
 	--self:DebugUnit("BuffChange called for: ", UnitID)
@@ -434,11 +435,11 @@ function _int:BuffChange(UnitID, Buffs)
 	end
 end
 
-function _int:UnitAvailable(Units)
+function _int:UnitAvailable(EHandle, Units)
 	-- Used for Internal Caching.
 	-- If you require an active cache for a new Unit, use the commands: 
 	-- BuffTable = LibSBuff:GetBuffTable(UnitID)
-	for UnitID, _ in pairs(Units) do
+	for UnitID, UnitObj in pairs(Units) do
 		--self:DebugUnit("Renewing Buffs for: ", UnitID)
 		self:BuffUpdate(UnitID)
 		self.Monitor:ClearUnit(UnitID)
@@ -446,15 +447,13 @@ function _int:UnitAvailable(Units)
 	end
 end
 
-function _int:UnitRemoved(Units)
+function _int:UnitRemoved(EHandle, Units)
 	-- Used for Internal Caching and prevention of memory leaks.
 	-- No Remove events are given for this, to avoid false positives when dealing with your own Buff tracking.
-	if Units then
-		for UnitID, _ in pairs(Units) do
-			--self:DebugUnit("Clearing Buffs for: ", UnitID)
-			self:ClearBuffs(UnitID)
-			--print("----------------")
-		end
+	for UnitID, UnitObj in pairs(Units) do
+		--self:DebugUnit("Clearing Buffs for: ", UnitID)
+		self:ClearBuffs(UnitID)
+		--print("----------------")
 	end
 end
 
@@ -496,15 +495,15 @@ end
 
 -- Debug Commands
 table.insert(Command.Slash.Register("libsbuff"), {_int.DumpCache, "SafesBuffLib", "Dump current cache to Console"})
--- Unit Related Events
-table.insert(Event.Unit.Availability.Full, {function(...) _int:UnitAvailable(...) end, AddonIni.id, "Unit Available Handler"})
-table.insert(Event.Unit.Availability.Partial, {function(...) _int:UnitAvailable(...) end, AddonIni.id, "Unit Available Handler"})
-table.insert(Event.Unit.Availability.None, {function(...) _int:UnitRemoved(...) end, AddonIni.id, "Unit Removed Handler"})
+-- Unit Related Events (LibSUnit)
+Command.Event.Attach(Event.Unit.Availability.Full, function(...) _int:UnitAvailable(...) end, "Unit Available Handler", 1)
+Command.Event.Attach(Event.Unit.Availability.Partial, function(...) _int:UnitAvailable(...) end, "Unit Available Handler", 1)
+Command.Event.Attach(Event.Unit.Availability.None, function(...) _int:UnitRemoved(...) end, "Unit Removed Handler", 1)
 -- Buff Related Events
-table.insert(Event.Buff.Remove, {function(...) _int:BuffRemove(...) end, AddonIni.id, "Buff Remove Handler"})
-table.insert(Event.Buff.Add, {function(...) _int:BuffAdd(...) end, AddonIni.id, "Buff Add Handler"})
-table.insert(Event.Buff.Change, {function(...) _int:BuffChange(...) end, AddonIni.id, "Buff Change Handler"})
+Command.Event.Attach(Event.Buff.Remove, function(...) _int:BuffRemove(...) end, "Buff Remove Handler", 1)
+Command.Event.Attach(Event.Buff.Add, function(...) _int:BuffAdd(...) end, "Buff Add Handler", 1)
+Command.Event.Attach(Event.Buff.Change, function(...) _int:BuffChange(...) end, "Buff Change Handler", 1)
 -- System Related Events
-table.insert(Event.System.Update.Begin, {function() _int:UpdateCycle() end, AddonIni.id, "Buff Cycle Start"})
-table.insert(Event.System.Update.End, {function() _int:UpdateCycle() end, AddonIni.id, "Buff Cycle End"})
-table.insert(Event.Addon.Load.End, {function() _int:Start() end, AddonIni.id, "Buff Pre-cache"})
+Command.Event.Attach(Event.System.Update.Begin, function() _int:UpdateCycle() end, "Buff Cycle Start", 1)
+Command.Event.Attach(Event.System.Update.End, function() _int:UpdateCycle() end, "Buff Cycle End", 1)
+Command.Event.Attach(Event.Addon.Load.End, function() _int:Start() end, "Buff Pre-cache", 1)

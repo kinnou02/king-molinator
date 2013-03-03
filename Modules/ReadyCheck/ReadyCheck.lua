@@ -136,9 +136,21 @@ PI.Constants = {
 	Lookup = {
 		Full = {},
 	},
+	Callings = {
+		warrior = true,
+		mage = true,
+		rogue = true,
+		cleric = true,
+	},
+	Role = {
+		tank = true,
+		support = true,
+		heal = true,
+		dps = true,
+	},
 	Columns = {
 		Planar = {
-			w = 36,
+			w = 40,
 		},
 		Stone = {
 			w = 36,
@@ -167,7 +179,15 @@ PI.Constants = {
                         rogue = true,
                         warrior = true,
                     },
-                },				
+                },
+				["r61C14C434DDF615D"] = { -- Flaring Sigil
+					Grade = "Med",
+					Level = 60,
+					Callings = {
+						mage = true,
+						cleric = true,
+					},
+				},
 				["r624A5FA52756B277"] = { -- Burning Powerstone
 					Grade = "High",
 					Level = 50,
@@ -479,7 +499,14 @@ PI.Constants = {
 			List = {
 				--//////////////////////--
 				-- Storm Legion Potions --
-				--//////////////////////--		
+				--//////////////////////--
+				["B7BA3D5176EAB3544"] = { -- Stellar Prismatic Wellspring
+					Grade = "High",
+					Level = 60,
+					Callings = {
+						all = true,
+					},
+				},
 				["BFF3177D56B3A82D6"] = { -- Stellar Powersurge Vial
 					Grade = "High",
 					Level = 60,

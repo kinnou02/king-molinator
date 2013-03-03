@@ -192,7 +192,7 @@ LibSUnit._internal = {
 _lsu = LibSUnit._internal
 
 -- Settings
-function _lsu.Load(AddonId)
+function _lsu.Load(EHandle, AddonId)
 	if AddonId == AddonIni.id then
 		if next(SafesUnitLib_Settings) then
 			_lsu.Settings = SafesUnitLib_Settings
@@ -206,7 +206,7 @@ function _lsu.Load(AddonId)
 	end
 end
 
-function _lsu.Save(AddonId)
+function _lsu.Save(EHandle, AddonId)
 	if AddonId == AddonIni.id then
 		SafesUnitLib_Settings = _lsu.Settings
 	end
@@ -323,7 +323,7 @@ function _lsu:Create(UID, uDetails, Type)
 		Tier = uDetails.tier,
 		Level = uDetails.level,
 		Player = uDetails.player,
-		Mark = uDetails.mark,
+		Mark = tonumber(uDetails.mark),
 		Relation = uDetails.relation,
 		HealthMax = uDetails.healthMax or 1,
 		Health = uDetails.health or 0,
@@ -409,7 +409,7 @@ function _lsu:Create(UID, uDetails, Type)
 			_lsu.Event.Unit.New.Partial(UnitObj)
 		else
 			-- Fire Unit Idle Partial Event
-			_lsu.Event.Unit.New.Partial(UnitObj)
+			_lsu.Event.Unit.New.Idle(UnitObj)
 		end
 	end
 	if LibSUnit.Raid.Queue[UID] then
@@ -561,7 +561,7 @@ function _lsu.Unit.Mark(uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Mark in pairs(uList) do
-		_cache[UID].Mark = Mark
+		_cache[UID].Mark = tonumber(Mark)
 		newList[UID] = _cache[UID]
 	end
 	_lsu.Event.Unit.Detail.Mark(newList)
@@ -688,8 +688,9 @@ function _lsu.Unit.Details(UnitObj, uDetails)
 				end
 			end
 		end
-		if UnitObj.Mark ~= uDetails.mark then
-			UnitObj.Mark = uDetails.mark
+		local nMark = tonumber(uDetails.mark)
+		if UnitObj.Mark ~= nMark then
+			UnitObj.Mark = nMark
 			_lsu.Event.Unit.Detail.Mark({[UnitObj.UnitID] = UnitObj})
 		end
 		if uDetails.relation then
@@ -809,7 +810,7 @@ function _lsu:Idle(UnitObj)
 	self.Unit:UpdateSegment(UnitObj, _idleSeg + _lastSeg)
 	Total.Idle = Total.Idle + 1
 	if UnitObj.Mark then
-		UnitObj.Mark = false
+		UnitObj.Mark = nil
 		_lsu.Event.Unit.Detail.Mark{[UnitObj.UnitID] = UnitObj}
 	end
 	
@@ -817,7 +818,7 @@ function _lsu:Idle(UnitObj)
 end
 
 -- Unit Availability Handlers
-function _lsu.Avail.Full(uList)
+function _lsu.Avail.Full(EHandle, uList)
 	-- Main handler for new Units
 
 	-- Optimize
@@ -839,7 +840,7 @@ function _lsu.Avail.Full(uList)
 	end
 end
 
-function _lsu.Avail.Partial(uList)
+function _lsu.Avail.Partial(EHandle, uList)
 	-- Main handler for Partial Units
 
 	-- Optimize
@@ -860,7 +861,7 @@ function _lsu.Avail.Partial(uList)
 	end
 end
 
-function _lsu.Avail.None(uList)
+function _lsu.Avail.None(EHandle, uList)
 	-- Move to Idle
 
 	-- Optimize
@@ -878,7 +879,7 @@ function _lsu.Avail.None(uList)
 	
 	if _lsu.Settings.Debug then
 		_lsu.Debug:UpdateAll()
-	end	
+	end
 end
 
 function _lsu.Unit.Change(UnitID, Spec)
@@ -1215,23 +1216,23 @@ function _lsu.Tick()
 	_lastTick = _cTime
 end
 
-function _lsu.Wait(uList)
+function _lsu.Wait(EHandle, uList)
 	if uList[_lsu.PlayerID] then
 		-- Initialize Player Data
-		_lsu.Avail.Full({[_lsu.PlayerID] = "player"})
+		_lsu.Avail.Full(Event.Unit.Availability.Full, {[_lsu.PlayerID] = "player"})
 		LibSUnit.Player = LibSUnit.Lookup.UID[_lsu.PlayerID]
 		
 		_lsu.Event.System.Start()
 		
 		-- Check current availability list.
 		local uList = Inspect.Unit.List()
-		_lsu.Avail.Full(uList)
-		
-		_AvailFullTable[1] = _lsu.Avail.Full
+		_lsu.Avail.Full(Event.Unit.Availability.Full, uList)
+		Command.Event.Detach(Event.Unit.Availability.Full, _lsu.Wait, "System Wait Start")
 		
 		-- Unit Management Events
-		table.insert(Event.Unit.Availability.Partial, {_lsu.Avail.Partial, AddonIni.id, "Unit Availability Partial Handler"})
-		table.insert(Event.Unit.Availability.None, {_lsu.Avail.None, AddonIni.id, "Unit Availability None Handler"})
+		Command.Event.Attach(Event.Unit.Availability.Full, _lsu.Avail.Full, "Unit Availability Full Handler")
+		Command.Event.Attach(Event.Unit.Availability.Partial, _lsu.Avail.Partial, "Unit Availability Partial Handler")
+		Command.Event.Attach(Event.Unit.Availability.None, _lsu.Avail.None, "Unit Availability None Handler")
 
 		-- Unit Data Change
 		table.insert(Event.Unit.Detail.Health, {_lsu.Unit.Health, AddonIni.id, "Unit HP Change"})
@@ -1290,11 +1291,10 @@ function _lsu.Wait(uList)
 	end
 end
 
-function _lsu.Start(AddonId)
-	if AddonIni.id == AddonId then
+function _lsu.Start(EHandle, AddonId)
+	if AddonId == AddonIni.id then
 		_lsu.PlayerID = Inspect.Unit.Lookup("player")
-		_AvailFullTable[1] = _lsu.Wait
-		table.insert(Event.Unit.Availability.Full, _AvailFullTable)
+		Command.Event.Attach(Event.Unit.Availability.Full, _lsu.Wait, "System Wait Start")
 	end
 end
 
@@ -1319,12 +1319,12 @@ function _lsu.SlashHandler(cmd)
 end
 
 -- Addon Specific Events
-table.insert(Event.Addon.Load.End, {_lsu.Start, AddonIni.id, "Initialize all currently seen Units if any"})
-table.insert(Event.Addon.SavedVariables.Load.End, {_lsu.Load, AddonIni.id, "Load Vars"})
-table.insert(Event.Addon.SavedVariables.Save.Begin, {_lsu.Save, AddonIni.id, "Save Vars"})
+Command.Event.Attach(Event.Addon.Load.End, _lsu.Start, "Initialize all currently seen Units if any")
+Command.Event.Attach(Event.Addon.SavedVariables.Load.End, _lsu.Load, "Load Vars")
+Command.Event.Attach(Event.Addon.SavedVariables.Save.Begin, _lsu.Save, "Save Vars")
 
 -- System Specific Events
-table.insert(Event.System.Update.Begin, {_lsu.Tick, AddonIni.id, "Redraw start"})
+Command.Event.Attach(Event.System.Update.Begin, _lsu.Tick, "Redraw start")
 table.insert(Command.Slash.Register("libsunit"), {_lsu.SlashHandler, AddonIni.id, "LibSUnit Slash Command"})
 
 -- DEBUG STUFF
