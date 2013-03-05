@@ -127,6 +127,7 @@ ZVL.Zaviel = {
 		MechRef = {
 			Enabled = true,
 			Arc = KBM.Defaults.MechObj.Create("purple"),
+			Conduit = KBM.Defaults.MechObj.Create("orange"),
 		},
 	}
 }
@@ -382,6 +383,7 @@ function ZVL:Start()
 	
 	-- Create Spies
 	self.Zaviel.MechRef.Arc = KBM.MechSpy:Add(self.Lang.Debuff.Arc[KBM.Lang], nil, "playerBuff", self.Zaviel)
+	self.Zaviel.MechRef.Conduit = KBM.MechSpy:Add(self.Lang.Ability.Conduit[KBM.Lang], nil, "playerBuff", self.Zaviel)
 	KBM.Defaults.MechObj.Assign(self.Zaviel)
 	
 	-- Assign Alerts and Timers to Triggers
@@ -395,8 +397,10 @@ function ZVL:Start()
 	self.Zaviel.Triggers.ConduitWarn:AddAlert(self.Zaviel.AlertsRef.ConduitWarn)
 	self.Zaviel.Triggers.Conduit = KBM.Trigger:Create(self.Lang.Ability.Conduit[KBM.Lang], "playerBuff", self.Zaviel)
 	self.Zaviel.Triggers.Conduit:AddAlert(self.Zaviel.AlertsRef.Conduit)
+	self.Zaviel.Triggers.Conduit:AddSpy(self.Zaviel.MechRef.Conduit)
 	self.Zaviel.Triggers.ConduitRem = KBM.Trigger:Create(self.Lang.Ability.Conduit[KBM.Lang], "playerBuffRemove", self.Zaviel)
 	self.Zaviel.Triggers.ConduitRem:AddStop(self.Zaviel.AlertsRef.Conduit)
+	self.Zaviel.Triggers.ConduitRem:AddStop(self.Zaviel.MechRef.Conduit)
 	self.Zaviel.Triggers.JoltWarn = KBM.Trigger:Create(self.Lang.Ability.Jolt[KBM.Lang], "cast", self.Zaviel)
 	self.Zaviel.Triggers.JoltWarn:AddAlert(self.Zaviel.AlertsRef.JoltWarn)
 	self.Zaviel.Triggers.Jolt = KBM.Trigger:Create(self.Lang.Ability.Jolt[KBM.Lang], "buff", self.Zaviel)

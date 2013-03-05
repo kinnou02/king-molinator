@@ -25,6 +25,14 @@ Triggers
 * New: Method added Trigger:ResetAlertSeq() - Resets the counter for the Alert sequence position.
 * New: Method added Trigger:ResetTimerSeq() - Resets the counter for the Timer sequence position
 * New: Method added Trigger:ResetSeq() - Resets both Timer and Alert positions.
+* New: Added Trigger type "castID". Operates like "cast", but is expecting an ability id rather than an ability name (Locale independent)
+* New: Added Trigger type "channelID". Operates like "channel", but is expecting an ability id rather an ability name (Locale independent)
+* New: Added Trigger type "interruptID". Operates like "interrupt", but is expecting an ability id rather than an ability name (Locale independent)
+* New: Added Trigger type "personalInterruptID". Operates like "personalInterrupt", but is expecting an ability id rather than an ability name (Locale independent)
+* New: Added Trigger type "personalChannel". (Was missing from the Personal style trigger list)
+* New: Added Trigger type "personalChannelID". Operates like "personalChannel", but is expecting an ability id rather than an ability name (Locale independent)
+* New: Added Trigger type "personalCastID". Operates like "personalCast", but is expecting an ability id rather than an ability name (Locale independent)
+* NOTE: "Personal" style casts, channels and interrupts will only trigger if the players current target or focus is the unit in question.
 * Fixed: Timers which trigger after another timer are working again. (ForceStop was flagged always on /rolleyes)
 
 Encounters
@@ -33,6 +41,10 @@ Encounters
 Endless Eclipse
 * Progenitor Saetos
 ** Fixed: Now returns correct Boss Objects for each boss. (Phase Monitor updates will be working)
+
+Frozen Tempest
+* Artifex Zaviel
+** New: Added Mechanic Spy object for Engergy Conduit (if you prefer those over the alerts).
 
 Translations
 * German Updates.

@@ -1615,7 +1615,9 @@ function KBM.Trigger:Init()
 	self.Say = {}
 	self.Damage = {}
 	self.Cast = {}
+	self.CastID = {}
 	self.PersonalCast = {}
+	self.PersonalCastID = {}
 	self.Percent = {}
 	self.Combat = {}
 	self.Start = {}
@@ -1629,8 +1631,13 @@ function KBM.Trigger:Init()
 	self.PlayerIDBuffRemove = {}
 	self.Time = {}
 	self.Channel = {}
+	self.ChannelID = {}
+	self.PersonalChannel = {}
+	self.PersonalChannelID = {}
 	self.Interrupt = {}
+	self.InterruptID = {}
 	self.PersonalInterrupt = {}
+	self.PersonalInterruptID = {}
 	self.NpcDamage = {}
 	self.EncStart = {}
 	self.CustomBuffRemove = {}
@@ -2013,26 +2020,82 @@ function KBM.Trigger:Init()
 					self.Cast[Trigger] = {}
 				end
 				self.Cast[Trigger][Unit.Name] = TriggerObj
+			elseif Type == "castID" then
+				if not self.CastID[Unit.Mod.ID] then
+					self.CastID[Unit.Mod.ID] = {}
+				end
+				if not self.CastID[Unit.Mod.ID][Trigger] then
+					self.CastID[Unit.Mod.ID][Trigger] = {}
+				end
+				self.CastID[Unit.Mod.ID][Trigger][Unit.Name] = TriggerObj
 			elseif Type == "personalCast" then
 				if not self.PersonalCast[Trigger] then
 					self.PersonalCast[Trigger] = {}
 				end
 				self.PersonalCast[Trigger][Unit.Name] = TriggerObj
+			elseif Type == "personalCastID" then
+				if not self.PersonalCastID[Unit.Mod.ID] then
+					self.PersonalCastID[Unit.Mod.ID] = {}
+				end
+				if not self.PersonalCastID[Unit.Mod.ID][Trigger] then
+					self.PersonalCastID[Unit.Mod.ID][Trigger] = {}
+				end
+				self.PersonalCastID[Unit.Mod.ID][Trigger][Unit.Name] = TriggerObj
 			elseif Type == "channel" then
 				if not self.Channel[Trigger] then
 					self.Channel[Trigger] = {}
 				end
 				self.Channel[Trigger][Unit.Name] = TriggerObj
+			elseif Type == "channelID" then
+				if not self.ChannelID[Unit.Mod.ID] then
+					self.ChannelID[Unit.Mod.ID] = {}
+				end
+				if not self.ChannelID[Unit.Mod.ID][Trigger] then
+					self.ChannelID[Unit.Mod.ID][Trigger] = {}
+				end
+				self.ChannelID[Unit.Mod.ID][Trigger][Unit.Name] = TriggerObj
+			elseif Type == "personalChannel" then
+				if not self.PersonalChannel[Unit.Mod.ID] then
+					self.PersonalChannel[Unit.Mod.ID] = {}
+				end
+				if not self.PersonalChannel[Unit.Mod.ID][Trigger] then
+					self.PersonalChannel[Unit.Mod.ID][Trigger] = {}
+				end
+				self.PersonalChannel[Unit.Mod.ID][Trigger][Unit.Name] = TriggerObj
+			elseif Type == "personalChannelID" then
+				if not self.PersonalChannelID[Unit.Mod.ID] then
+					self.PersonalChannelID[Unit.Mod.ID] = {}
+				end
+				if not self.PersonalChannelID[Unit.Mod.ID][Trigger] then
+					self.PersonalChannelID[Unit.Mod.ID][Trigger] = {}
+				end
+				self.PersonalChannelID[Unit.Mod.ID][Trigger][Unit.Name] = TriggerObj			
 			elseif Type == "interrupt" then
 				if not self.Interrupt[Trigger] then
 					self.Interrupt[Trigger] = {}
 				end
 				self.Interrupt[Trigger][Unit.Name] = TriggerObj
+			elseif Type == "interruptID" then
+				if not self.InterruptID[Unit.Mod.ID] then
+					self.InterruptID[Unit.Mod.ID] = {}
+				end
+				if not self.InterruptID[Unit.Mod.ID][Trigger] then
+					self.InterruptID[Unit.Mod.ID] = {}
+				end
+				self.Interrupt[Unit.Mod.ID][Trigger][Unit.Name] = TriggerObj
 			elseif Type == "personalInterrupt" then
 				if not self.PersonalInterrupt[Trigger] then
 					self.PersonalInterrupt[Trigger] = {}
 				end
 				self.PersonalInterrupt[Trigger][Unit.Name] = TriggerObj
+			elseif Type == "personalInterruptID" then
+				if not self.PersonalInterruptID[Unit.Mod.ID] then
+					self.PersonalInterruptID[Unit.Mod.ID] = {}
+				end
+				if not self.PersonalInterruptID[Unit.Mod.ID][Trigger] then
+					self.PersonalInterruptID[Unit.Mod.ID][Trigger] = {}
+				end
+				self.PersonalInterruptID[Unit.Mod.ID][Trigger][Unit.Name] = TriggerObj
 			elseif Type == "percent" then
 				if not self.Percent[Unit.Mod.ID] then
 					self.Percent[Unit.Mod.ID] = {}
@@ -5922,7 +5985,39 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 					self.CastObject = bDetails
 					if self.LastStart ~= bDetails.begin then
 						self.LastStart = bDetails.begin
-						if not bDetails.channeled then	
+						if not bDetails.channeled then
+							if KBM.CurrentMod then
+								if KBM.Trigger.CastID[KBM.CurrentMod.ID] then
+									if bDetails.ability then
+										if KBM.Trigger.CastID[KBM.CurrentMod.ID][bDetails.ability] then
+											local TriggerObj = KBM.Trigger.CastID[KBM.CurrentMod.ID][bDetails.ability][self.Boss.Name]
+											if TriggerObj then
+												local TargetID = ""
+												if self.Boss.UnitID then
+													TargetID = Inspect.Unit.Lookup(self.Boss.UnitID..".target")
+												end
+												KBM.Trigger.Queue:Add(TriggerObj, self.Boss.UnitID or "", TargetID, bDetails.remaining)
+											end
+										end
+									end
+								end
+								if KBM.Trigger.PersonalCastID[KBM.CurrentMod.ID] then
+									if bDetails.ability then
+										if KBM.Trigger.PersonalCastID[KBM.CurrentMod.ID][bDetails.ability] then
+											if KBM.TriggerPersonalCastID[KBM.CurrentMod.ID][bDetails.ability][self.Boss.Name] then
+												local TriggerObj = KBM.Trigger.PersonalCastID[KBM.CurrentMod.ID][bDetails.ability][self.Boss.Name]
+												if self.UnitID then
+													local playerTarget = Inspect.Unit.Lookup("player.target")
+													local playerFocus = Inspect.Unit.Lookup("focus")
+													if self.UnitID == playerTarget or self.UnitID == playerFocus then
+														KBM.Trigger.Queue:Add(TriggerObj, self.UnitID, self.UnitID, bDetails.remaining)
+													end
+												end
+											end
+										end
+									end
+								end
+							end
 							if KBM.Trigger.Cast[bDetails.abilityName] then
 								if KBM.Trigger.Cast[bDetails.abilityName][self.Boss.Name] then
 									local TriggerObj = KBM.Trigger.Cast[bDetails.abilityName][self.Boss.Name]
@@ -5932,7 +6027,8 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 									end
 									KBM.Trigger.Queue:Add(TriggerObj, TargetID, TargetID, bDetails.remaining)
 								end
-							elseif KBM.Trigger.PersonalCast[bDetails.abilityName] then
+							end
+							if KBM.Trigger.PersonalCast[bDetails.abilityName] then
 								if KBM.Trigger.PersonalCast[bDetails.abilityName][self.Boss.Name] then
 									local TriggerObj = KBM.Trigger.PersonalCast[bDetails.abilityName][self.Boss.Name]
 									if self.UnitID then
@@ -5948,6 +6044,52 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 							if not self.Channeled then
 								self.Channeled = true
 								self.Casting = false
+								if KBM.CurrentMod then
+									if KBM.Trigger.ChannelID[KBM.CurrentMod.ID] then
+										if bDetails.ability then
+											if KBM.Trigger.ChannelID[KBM.CurrentMod.ID][bDetails.ability] then
+												if KBM.Trigger.ChannelID[KBM.CurrentMod.ID][bDetails.ability][self.Boss.Name] then
+													local TriggerObj = KBM.Trigger.ChannelID[KBM.CurrentMod.ID][bDetails.ability][self.Boss.Name]
+													local TargetID = ""
+													if self.Boss.UnitID then
+														TargetID = Inspect.Unit.Lookup(self.Boss.UnitID..".target")
+													end
+													KBM.Trigger.Queue:Add(TriggerObj, self.Boss.UnitID, TargetID, bDetails.remaining)
+												end
+											end
+										end
+									end
+									if KBM.Trigger.PersonalChannel[KBM.CurrentMod.ID] then
+										if KBM.Trigger.PersonalChannel[KBM.CurrentMod.ID][bDetails.abilityName] then
+											local TriggerObj = KBM.Trigger.PersonalChannel[KBM.CurrentMod.ID][bDetails.abilityName][self.Boss.Name]
+											if TriggerObj then
+												if self.UnitID then
+													local playerTarget = Inspect.Unit.Lookup("player.target")
+													local playerFocus = Inspect.Unit.Lookup("focus")
+													if self.UnitID == playerTarget or self.UnitID == playerFocus then
+														KBM.Trigger.Queue:Add(TriggerObj, self.UnitID, self.UnitID, bDetails.remaining)
+													end
+												end
+											end
+										end
+									end
+									if KBM.Trigger.PersonalChannelID[KBM.CurrentMod.ID] then
+										if bDetails.ability then
+											if KBM.Trigger.PersonalChannelID[KBM.CurrentMod.ID][bDetails.ability] then
+												local TriggerObj = KBM.Trigger.PersonalChannelID[KBM.CurrentMod.ID][bDetails.ability][self.Boss.Name]
+												if TriggerObj then
+													if self.UnitID then
+														local playerTarget = Inspect.Unit.Lookup("player.target")
+														local playerFocus = Inspect.Unit.Lookup("focus")
+														if self.UnitID == playerTarget or self.UnitID == playerFocus then
+															KBM.Trigger.Queue:Add(TriggerObj, self.UnitID, self.UnitID, bDetails.remaining)
+														end
+													end	
+												end	
+											end
+										end
+									end
+								end
 								if KBM.Trigger.Channel[bDetails.abilityName] then
 									if KBM.Trigger.Channel[bDetails.abilityName][self.Boss.Name] then
 										local TriggerObj = KBM.Trigger.Channel[bDetails.abilityName][self.Boss.Name]
@@ -5976,6 +6118,18 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 							end
 							if self.CastObject.remaining > Scope and not self.CastObject.uninterruptible then
 								--- Do Cast Interrupt Triggers (if any)
+								if KBM.CurrentMod then
+									if KBM.Trigger.InterruptID[KBM.CurrentMod.ID] then
+										if self.CastObject.ability then
+											if KBM.Trigger.InterruptID[KBM.CurrentMod.ID][self.CastObject.ability] then
+												local TriggerObj = KBM.Trigger.InterruptID[KBM.CurrentMod.ID][self.CastObject.ability][self.Boss.Name]
+												if TriggerObj then
+													KBM.Trigger.Queue:Add(TriggerObj, self.Boss.UnitID, "interruptTarget", self.CastObject.remaining)
+												end
+											end
+										end
+									end
+								end
 								if KBM.Trigger.Interrupt[self.CastObject.abilityName] then
 									if KBM.Trigger.Interrupt[self.CastObject.abilityName][self.Boss.Name] then
 										local TriggerObj = KBM.Trigger.Interrupt[self.CastObject.abilityName][self.Boss.Name]
