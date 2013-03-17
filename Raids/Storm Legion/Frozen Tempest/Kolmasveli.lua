@@ -74,6 +74,7 @@ KT.Lang.Debuff.ToiIreID2 = "BFE566AB12246C0CB"
 KT.Lang.Debuff.Eruption = KBM.Language:Add("Sparking Eruption")
 KT.Lang.Debuff.Eruption:SetGerman("Zündender Ausbruch")
 KT.Lang.Debuff.Eruption:SetFrench("Éruption d'étincelles")
+KT.Lang.Debuff.Shock = KBM.Language:Add("Devastating Shock")
 
 -- Verbose Dictionary
 KT.Lang.Verbose = {}
@@ -128,6 +129,7 @@ KT.Kolmasveli = {
 			Enabled = true,
 			Eruption = KBM.Defaults.MechObj.Create("dark_green"),
 			IreVuln = KBM.Defaults.MechObj.Create("red"),
+			Shock = KBM.Defaults.MechObj.Create("purple")
 		},
 	}
 }
@@ -163,6 +165,7 @@ KT.Toinenveli = {
 		MechRef = {
 			Enabled = true,
 			IreVuln = KBM.Defaults.MechObj.Create("red"),
+			Shock = KBM.Defaults.MechObj.Create("purple")
 		},
 	}
 }
@@ -422,6 +425,7 @@ function KT:Start()
 	-- Create Spies
 	self.Kolmasveli.MechRef.IreVuln = KBM.MechSpy:Add(self.Lang.Debuff.KolIre[KBM.Lang], nil, "playerDebuff", self.Kolmasveli)
 	self.Kolmasveli.MechRef.Eruption = KBM.MechSpy:Add(self.Lang.Debuff.Eruption[KBM.Lang], nil, "playerDebuff", self.Kolmasveli)
+	self.Kolmasveli.MechRef.Shock = KBM.MechSpy:Add(self.Lang.Debuff.Shock[KBM.Lang], nil, "playerDebuff", self.Kolmasveli)
 	KBM.Defaults.MechObj.Assign(self.Kolmasveli)
 
 	self.Toinenveli.MechRef.IreVuln = KBM.MechSpy:Add(self.Lang.Debuff.ToiIre[KBM.Lang], nil, "playerDebuff", self.Toinenveli)
@@ -442,6 +446,10 @@ function KT:Start()
 	self.Kolmasveli.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
 	self.Kolmasveli.Triggers.PhaseFinal = KBM.Trigger:Create(10, "percent", self.Kolmasveli)
 	self.Kolmasveli.Triggers.PhaseFinal:AddPhase(self.PhaseFinal)
+	self.Kolmasveli.Triggers.Shock = KBM.Trigger:Create(KT.Lang.Debuff.Shock[KBM.Lang], "playerBuff", self.Kolmasveli)
+	self.Kolmasveli.Triggers.Shock:AddSpy(self.Kolmasveli.MechRef.Shock)
+	self.Kolmasveli.Triggers.ShockRem = KBM.Trigger:Create(KT.Lang.Debuff.Shock[KBM.Lang], "playerBuffRemove", self.Kolmasveli)
+	self.Kolmasveli.Triggers.ShockRem:AddStop(self.Kolmasveli.MechRef.Shock)
 	
 	self.Toinenveli.Triggers.Ire = KBM.Trigger:Create(KT.Lang.Debuff.ToiIreID, "playerIDBuff", self.Toinenveli)
 	self.Toinenveli.Triggers.Ire:AddAlert(self.Toinenveli.AlertsRef.Ire)

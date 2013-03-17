@@ -19,6 +19,9 @@ Ready Check
 LibSBuff
 * Change: Now converted over to new Rift 2.2 API Event system.
 
+LibSUnit
+* Change: Now uses LibUnitChange v1.3
+
 Triggers
 * New: Method added Trigger:AddAlertSeq(AlertObj, Player = true/false) - Adds an Alert Object to the Alert sequence list for a created Trigger.
 * New: Method added Trigger:AddTimerSeq(TimerObj) - Adds a Timer Object to the Timer sequence list for a created Trigger.
@@ -36,7 +39,7 @@ Triggers
 * Fixed: Timers which trigger after another timer are working again. (ForceStop was flagged always on /rolleyes)
 
 Encounters
-* Merged with KBM Public Encounters (Details to be updated)
+* Merged with KBM Public Encounters (Details to be updated r15)
 
 Endless Eclipse
 * Progenitor Saetos
@@ -45,6 +48,8 @@ Endless Eclipse
 Frozen Tempest
 * Artifex Zaviel
 ** New: Added Mechanic Spy object for Engergy Conduit (if you prefer those over the alerts).
+* Kolmasveli and Toinenveli
+** New: Added Mechanic Spy object for tracking Devastating Shock
 
 Translations
 * German Updates.

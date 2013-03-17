@@ -15,7 +15,7 @@ local current = {}
 local registered = {}
 local lookups = {}
 
-local function process(changes)
+local function process(handle, changes)
   -- figure out what's different
   local refreshes = {}
   for change in pairs(changes) do
@@ -96,9 +96,9 @@ function Library.LibUnitChange.Register(identifier)
     registerWorker(acum)
   end
   
-  process({[false] = false}) -- It's a fake message, but it's one that will get us to poll *everything*, which is exactly what we need right now.
+  process({}, {[false] = false}) -- It's a fake message, but it's one that will get us to poll *everything*, which is exactly what we need right now.
   
   return lookups[identifier]
 end
 
-table.insert(Event.Unit.Remove, {process, "LibUnitChange", "Update"})
+Command.Event.Attach(Event.Unit.Remove, process, "Update")

@@ -54,6 +54,14 @@ KR.Lang.Ability.Vile:SetFrench("Sang infâme")
 KR.Lang.Ability.Foul = KBM.Language:Add("Foul Blood")
 KR.Lang.Ability.Foul:SetFrench("Sang infect")
 
+-- Debuff Dictionary
+KR.Lang.Debuff = {}
+KR.Lang.Debuff.Ravenous = KBM.Language:Add("Ravenous Hunger")
+KR.Lang.Debuff.Ravenous:SetGerman("Unbändiger Hunger")
+KR.Lang.Debuff.RavenousID = "BFF195769E88347C3"
+KR.Lang.Debuff.Voracious = KBM.Language:Add("Voracious Hunger")
+KR.Lang.Debuff.VoraciousID = "BFEB697D0228F51D9"
+
 -- Description Dictionary
 KR.Lang.Main = {}
 
@@ -75,6 +83,7 @@ KR.Kain = {
 	Castbar = nil,
 	--TimersRef = {},
 	AlertsRef = {},
+	MechRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -85,6 +94,10 @@ KR.Kain = {
 		AlertsRef = {
 			Enabled = true,
 			Foul = KBM.Defaults.AlertObj.Create("red"),
+		},
+		MechRef = {
+			Enabled = true,
+			Voracious = KBM.Defaults.MechObj.Create("purple"),
 		},
 	}
 }
@@ -134,6 +147,7 @@ KR.Baziel = {
 	Castbar = nil,
 	--TimersRef = {},
 	--AlertsRef = {},
+	MechRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
@@ -145,6 +159,10 @@ KR.Baziel = {
 		--	Enabled = true,
 		--	Vile = KBM.Defaults.AlertObj.Create("red"),
 		--},
+		MechRef = {
+			Enabled = true,
+			Ravenous = KBM.Defaults.MechObj.Create("purple"),
+		},
 	}
 }
 
@@ -188,9 +206,11 @@ function KR:InitVars()
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		Alerts = KBM.Defaults.Alerts(),
 		--MechTimer = KBM.Defaults.MechTimer(),
+		MechSpy = KBM.Defaults.MechSpy(),
 		Kain = {
 			CastBar = self.Kain.Settings.CastBar,
 			AlertsRef = self.Kain.Settings.AlertsRef,
+			MechRef = self.Kain.Settings.MechRef,
 		},
 		Zathral = {
 			CastBar = self.Zathral.Settings.CastBar,
@@ -198,7 +218,7 @@ function KR:InitVars()
 		},
 		Baziel = {
 			CastBar = self.Baziel.Settings.CastBar,
-			AlertsRef = self.Baziel.Settings.AlertsRef,
+			MechRef = self.Baziel.Settings.MechRef,
 		},
 	}
 	KBMSLRDEEKR_Settings = self.Settings
@@ -315,6 +335,7 @@ function KR:UnitHPCheck(uDetails, unitID)
 							Available = true,
 						}
 						self.Thief.UnitList[unitID] = SubBossObj
+						return SubBossObj
 					end
 				else
 					BossObj.Dead = false
@@ -363,13 +384,29 @@ function KR:Start()
 
 	self.Kain.AlertsRef.Foul = KBM.Alert:Create(KR.Lang.Ability.Foul[KBM.Lang], nil, true, true, "red")
 	KBM.Defaults.AlertObj.Assign(self.Kain)
+
+	-- Create Mechanic Spies
+	self.Baziel.MechRef.Ravenous = KBM.MechSpy:Add(self.Lang.Debuff.Ravenous[KBM.Lang], nil, "playerIDBuff", self.Baziel)
+	KBM.Defaults.MechObj.Assign(self.Baziel)
+
+	self.Kain.MechRef.Voracious = KBM.MechSpy:Add(self.Lang.Debuff.Voracious[KBM.Lang], nil, "playerIDBuff", self.Kain)
+	KBM.Defaults.MechObj.Assign(self.Kain)
 	
 	-- Assign Alerts and Timers to Triggers
 	self.Zathral.Triggers.Vile = KBM.Trigger:Create(self.Lang.Ability.Vile[KBM.Lang], "cast", self.Zathral)
 	self.Zathral.Triggers.Vile:AddAlert(self.Zathral.AlertsRef.Vile)
 
+	self.Baziel.Triggers.Ravenous = KBM.Trigger:Create(self.Lang.Debuff.RavenousID, "playerIDBuff", self.Baziel)
+	self.Baziel.Triggers.Ravenous:AddSpy(self.Baziel.MechRef.Ravenous)
+	self.Baziel.Triggers.RavenousRem = KBM.Trigger:Create(self.Lang.Debuff.RavenousID, "playerIDBuffRemove", self.Baziel)
+	self.Baziel.Triggers.RavenousRem:AddStop(self.Baziel.MechRef.Ravenous)
+
 	self.Kain.Triggers.Foul = KBM.Trigger:Create(self.Lang.Ability.Foul[KBM.Lang], "cast", self.Kain)
 	self.Kain.Triggers.Foul:AddAlert(self.Kain.AlertsRef.Foul)
+	self.Kain.Triggers.Voracious = KBM.Trigger:Create(self.Lang.Debuff.VoraciousID, "playerIDBuff", self.Kain)
+	self.Kain.Triggers.Voracious:AddSpy(self.Kain.MechRef.Voracious)
+	self.Kain.Triggers.VoraciousRem = KBM.Trigger:Create(self.Lang.Debuff.VoraciousID, "playerIDBuffRemove", self.Kain)
+	self.Kain.Triggers.VoraciousRem:AddStop(self.Kain.MechRef.Voracious)
 	
 	self.Zathral.CastBar = KBM.CastBar:Add(self, self.Zathral)
 	self.Baziel.CastBar = KBM.CastBar:Add(self, self.Baziel)

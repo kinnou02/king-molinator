@@ -20,9 +20,10 @@ local TPH = {
 	Instance = TDQ.Name,
 	InstanceObj = TDQ,
 	Lang = {},
-	Enrage = 6 * 60,
+	Enrage = 7 * 60,
 	ID = "STyphiria",
 	Object = "TPH",
+	BlastCount = 0,
 }
 
 KBM.RegisterMod(TPH.ID, TPH)
@@ -36,9 +37,15 @@ TPH.Lang.Unit.TyphiriaShort:SetGerman("Typhiria")
 
 -- Ability Dictionary
 TPH.Lang.Ability = {}
+TPH.Lang.Ability.Clouds = KBM.Language:Add("Dark Clouds")
+TPH.Lang.Ability.Tempest = KBM.Language:Add("Tempest of Agony")
+TPH.Lang.Ability.Blast = KBM.Language:Add("Storm Blast")
 
 -- Description Dictionary
 TPH.Lang.Main = {}
+
+TPH.Lang.Messages = {}
+TPH.Lang.Messages.TempestSoon = KBM.Language:Add("Tempest soon!")
 
 TPH.Descript = TPH.Lang.Unit.Typhiria[KBM.Lang]
 
@@ -51,8 +58,8 @@ TPH.Typhiria = {
 	NameShort = TPH.Lang.Unit.TyphiriaShort[KBM.Lang],
 	Menu = {},
 	Dead = false,
-	-- AlertsRef = {},
-	-- TimersRef = {},
+	AlertsRef = {},
+	TimersRef = {},
 	Available = false,
 	UTID = {
 		[1] = "UFF3F6A944C22C40E", -- P1
@@ -62,14 +69,19 @@ TPH.Typhiria = {
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		-- TimersRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
-		-- },
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
-		-- },
+		TimersRef = {
+			Enabled = true,
+			Clouds = KBM.Defaults.TimerObj.Create("dark_green"),
+			Tempest = KBM.Defaults.TimerObj.Create("purple"),
+			Blast = KBM.Defaults.TimerObj.Create("yellow"),
+		},
+		AlertsRef = {
+			Enabled = true,
+			Blast = KBM.Defaults.AlertObj.Create("yellow"),
+			Clouds = KBM.Defaults.AlertObj.Create("dark_green"),
+			Tempest = KBM.Defaults.AlertObj.Create("purple"),
+			TempestSoon = KBM.Defaults.AlertObj.Create("purple"),
+		},
 	}
 }
 
@@ -86,10 +98,10 @@ function TPH:InitVars()
 		CastBar = self.Typhiria.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
-		-- MechTimer = KBM.Defaults.MechTimer(),
-		-- Alerts = KBM.Defaults.Alerts(),
-		-- TimersRef = self.Typhiria.Settings.TimersRef,
-		-- AlertsRef = self.Typhiria.Settings.AlertsRef,
+		MechTimer = KBM.Defaults.MechTimer(),
+		Alerts = KBM.Defaults.Alerts(),
+		TimersRef = self.Typhiria.Settings.TimersRef,
+		AlertsRef = self.Typhiria.Settings.AlertsRef,
 	}
 	KBMSLSLTQGT_Settings = self.Settings
 	chKBMSLSLTQGT_Settings = self.Settings
@@ -151,6 +163,9 @@ function TPH.PhaseTwo()
 		TPH.Typhiria.UnitID = nil
 		TPH.PhaseObj.Objectives:AddPercent(TPH.Typhiria, 0, 100)
 		TPH.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
+		KBM.MechTimer:AddStop(TPH.Typhiria.TimersRef.Clouds)
+		KBM.MechTimer:AddStop(TPH.Typhiria.TimersRef.Tempest)
+		KBM.MechTimer:AddStart(TPH.Typhiria.TimersRef.Wrath)
 	end
 end
 
@@ -160,6 +175,20 @@ function TPH:Death(UnitID)
 		return true
 	end
 	return false
+end
+
+function TPH:PhaseClouds()
+	TPH.BlastCount = 0
+	KBM.MechTimer:AddStart(TPH.Typhiria.TimersRef.Blast, 3)
+	KBM.MechTimer:AddStart(TPH.Typhiria.TimersRef.Tempest, 30)
+end
+
+function TPH:PhaseBlast()
+	TPH.BlastCount = TPH.BlastCount + 1
+	print("Blast "..TPH.BlastCount.."/6")
+	if TPH.BlastCount >= 6 then
+		KBM.MechTimer:AddStart(TPH.Typhiria.TimersRef.Clouds, 60)
+	end
 end
 
 function TPH:UnitHPCheck(uDetails, unitID)	
@@ -179,7 +208,10 @@ function TPH:UnitHPCheck(uDetails, unitID)
 				self.PhaseObj:Start(self.StartTime)
 				self.PhaseObj:SetPhase("1")
 				self.PhaseObj.Objectives:AddPercent(self.Typhiria, 15, 100)
+				KBM.MechTimer:AddStart(self.Typhiria.TimersRef.Tempest)
+				KBM.MechTimer:AddStart(self.Typhiria.TimersRef.Clouds)
 				self.Phase = 1
+				self.BlastCount = 0
 			else
 				BossObj.Dead = false
 				BossObj.Casting = false
@@ -218,12 +250,35 @@ end
 
 function TPH:Start()
 	-- Create Timers
-	-- KBM.Defaults.TimerObj.Assign(self.Typhiria)
+	self.Typhiria.TimersRef.Clouds = KBM.MechTimer:Add(self.Lang.Ability.Clouds[KBM.Lang], 60, false)
+	self.Typhiria.TimersRef.Tempest = KBM.MechTimer:Add(self.Lang.Ability.Tempest[KBM.Lang], 27, false)
+	self.Typhiria.TimersRef.Blast = KBM.MechTimer:Add(self.Lang.Ability.Blast[KBM.Lang], 7, false)
+	--self.Typhiria.TimersRef.Wrath = KBM.MechTimer:Add(self.Lang.Ability.Wrath[KBM.Lang], 78, false)
+	KBM.Defaults.TimerObj.Assign(self.Typhiria)
 	
 	-- Create Alerts
-	-- KBM.Defaults.AlertObj.Assign(self.Typhiria)
+	self.Typhiria.AlertsRef.Clouds = KBM.Alert:Create(self.Lang.Ability.Clouds[KBM.Lang], 3, false, true, "dark_green")
+	self.Typhiria.AlertsRef.Tempest = KBM.Alert:Create(self.Lang.Ability.Tempest[KBM.Lang], 10, false, true, "purple")
+	self.Typhiria.AlertsRef.TempestSoon = KBM.Alert:Create(self.Lang.Messages.TempestSoon[KBM.Lang], 5, true, true, "purple")
+	self.Typhiria.TimersRef.Tempest:AddAlert(self.Typhiria.AlertsRef.TempestSoon, 5)
+	self.Typhiria.AlertsRef.Blast = KBM.Alert:Create(self.Lang.Ability.Blast[KBM.Lang], 2, true, true, "yellow")
+	KBM.Defaults.AlertObj.Assign(self.Typhiria)
 	
 	-- Assign Alerts and Timers to Triggers
+
+	self.Typhiria.Triggers.Clouds = KBM.Trigger:Create(self.Lang.Ability.Clouds[KBM.Lang], "cast", self.Typhiria)
+	self.Typhiria.Triggers.Clouds:AddAlert(self.Typhiria.AlertsRef.Clouds)
+	self.Typhiria.Triggers.Clouds:AddPhase(self.PhaseClouds)
+
+	self.Typhiria.Triggers.Tempest = KBM.Trigger:Create(self.Lang.Ability.Tempest[KBM.Lang], "channel", self.Typhiria)
+	self.Typhiria.Triggers.Tempest:AddAlert(self.Typhiria.AlertsRef.Tempest)
+	self.Typhiria.Triggers.Tempest:AddTimer(self.Typhiria.TimersRef.Tempest)
+
+	self.Typhiria.Triggers.Blast = KBM.Trigger:Create(self.Lang.Ability.Blast[KBM.Lang], "channel", self.Typhiria)
+	self.Typhiria.Triggers.Blast:AddPhase(self.PhaseBlast)
+	self.Typhiria.Triggers.Blast:AddAlert(self.Typhiria.AlertsRef.Blast)
+	self.Typhiria.Triggers.Blast:AddTimer(self.Typhiria.TimersRef.Blast)
+
 	self.Typhiria.Triggers.PhaseTwo = KBM.Trigger:Create(15, "percent", self.Typhiria)
 	self.Typhiria.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
 	
