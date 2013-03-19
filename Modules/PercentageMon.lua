@@ -455,17 +455,23 @@ function PM:Init()
 	end
 end
 
-function PM:Create(BossL, BossR, Diff)
+function PM:Create(BossL, BossR, Diff, Manual)
+	-- Manual is optional, if supplied as True, then the monitor has to be manually started during the encounter.
 	if type(BossL) ~= "table" or type(BossR) ~= "table" then
 		error("\nPercentage Monitor: Table expected for BossL and BossR\nUsage:\nPercentObj = KBM.PercentageMon:Create([table]BossObj, [table]BossObj, [number]Difference)")
 	elseif type(Diff) ~= "number" then
 		error("\nPercentage Monitor: Number expected for Diff\nUsage:\nPercentObj = KBM.PercentageMon:Create([table]BossObj, [table]BossObj, [number]Difference)")
 	else
+		if Manual ~= true then
+			-- Ensure Manual is either True or nil
+			Manual = nil
+		end
 		local newPM = {
 			["BossL"] = BossL,
 			["BossR"] = BossR,
 			["Diff"] = Diff,
 			Mod = BossL.Mod,
+			Manual = Manual,
 		}
 		if not self.Encounters[newPM.Mod.ID] then
 			self.Encounters[newPM.Mod.ID] = newPM
@@ -525,7 +531,57 @@ function PM:Update(current, diff)
 	end
 end
 
-function PM:Start(ID)
+function PM:SetBossLeft(BossObj)
+	-- Allows Left Boss Objects to be changed on the fly or while idle.
+	local ID
+	if BossObj.Mod then
+		if BossObj.Mod.ID then
+			ID = BossObj.Mod.ID
+		else
+			if KBM.Debug then
+				print("[SBL2] Warning: BossObj not valid for SetBossLeft")
+			end
+			return
+		end
+	else
+		if KBM.Debug then
+			print("[SBL1] Warning: BossObj not valid for SetBossLeft")
+		end
+		return
+	end
+	if self.Encounters[ID] then
+		self.Encounters[ID].BossL = BossObj
+	else
+		-- Silent error and Return
+	end
+end
+
+function PM:SetBossRight(ID, BossObj)
+	-- Allows Right Boss Objects to be changed on the fly or while idle.
+	local ID
+	if BossObj.Mod then
+		if BossObj.Mod.ID then
+			ID = BossObj.Mod.ID
+		else
+			if KBM.Debug then
+				print("[SBR2] Warning: BossObj not valid for SetBossRight")
+			end
+			return
+		end
+	else
+		if KBM.Debug then
+			print("[SBR1] Warning: BossObj not valid for SetBossRight")
+		end
+		return
+	end
+	if self.Encounters[ID] then
+		self.Encounters[ID].BossR = BossObj
+	else
+		-- Silent error and Return
+	end
+end
+
+function PM:Start(ID, Force)
 	if self.Active then
 		self:End()
 	end
@@ -533,10 +589,16 @@ function PM:Start(ID)
 	if self.Settings.Enabled then
 		self.Current = self.Encounters[ID]
 		if not self.Current then
-			-- If no valid monitor for this ID, return immediately (Hello typo's)
+			-- If no valid monitor for this ID, return immediately (Hello typos)
 			-- Silent Error.
 			return
 		else
+			if self.Current.Manual then
+				if not Force then
+					-- This is a manual start Monitor and requires Force to be supplied as true.
+					return
+				end
+			end
 			self.Visible = true
 			self:SetAll()
 		end

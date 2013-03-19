@@ -25,6 +25,7 @@ local PRO = {
 	ID = "RProgenitor",
 	Object = "PRO",
 	Enrage = (7 * 60) + 30,
+	DeathCount = 0,
 }
 
 KBM.RegisterMod(PRO.ID, PRO)
@@ -352,10 +353,64 @@ function PRO:RemoveUnits(UnitID)
 	return false
 end
 
+function PRO:PhaseTwo(RightBossObj)
+	self.Phase = 2
+	self.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
+	KBM.PercentageMon:SetBossRight(RightBossObj)
+	KBM.PercentageMon:Start(self.ID)
+end
+
+function PRO:UpdatePhaseMon()
+	local RightBossObj
+	self.PhaseObj.Objectives:Remove()
+	for BossName, BossObj in pairs(self.Bosses) do
+		if not BossObj.Dead then
+			self.PhaseObj.Objectives:AddPercent(BossObj, 0, 100)
+			if BossObj ~= self.Progenitor then
+				RightBossObj = BossObj
+			end
+		end
+	end
+	if self.DeathCount == 3 then
+		self:PhaseTwo(RightBossObj)
+	end
+end
+
 function PRO:Death(UnitID)
 	if self.Progenitor.UnitID == UnitID then
 		self.Progenitor.Dead = true
 		return true
+	else
+		if self.Phase == 1 then
+			if self.Juntun.UnitID == UnitID then
+				if not self.Juntun.Dead then
+					self.Juntun.Dead = true
+					self.DeathCount = self.DeathCount + 1
+					self:UpdatePhaseMon()
+				end
+			end
+			if self.Ebassi.UnitID == UnitID then
+				if not self.Ebassi.Dead then
+					self.Ebassi.Dead = true
+					self.DeathCount = self.DeathCount + 1
+					self:UpdatePhaseMon()
+				end
+			end
+			if self.Arebus.UnitID == UnitID then
+				if not self.Arebus.Dead then
+					self.Arebus.Dead = true
+					self.DeathCount = self.DeathCount + 1
+					self:UpdatePhaseMon()
+				end
+			end
+			if self.Rhu.UnitID == UnitID then
+				if not self.Rhu.Dead then
+					self.Rhu.Dead = true
+					self.DeathCount = self.DeathCount + 1
+					self:UpdatePhaseMon()
+				end
+			end
+		end
 	end
 	return false
 end
@@ -404,6 +459,8 @@ function PRO:Reset()
 		BossObj.Casting = false
 		BossObj.CastBar:Remove()
 	end
+	self.Phase = 1
+	self.DeathCount = 0
 	self.PhaseObj:End(Inspect.Time.Real())
 end
 
@@ -450,5 +507,6 @@ function PRO:Start()
 	end
 	
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
+	self.PercentageMon = KBM.PercentageMon:Create(self.Progenitor, self.Juntun, 5, true)
 	self:DefineMenu()
 end

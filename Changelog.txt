@@ -8,6 +8,8 @@ General
 
 Percentage Monitor
 * Fixed: Prevented Axis errors with Percentage Monitor free resize.
+* New: Added methods :SetBossLeft(BossObj) and :SetBossRight(BossObj) - Note: ID's for existing Monitors will be pulled from BossObj.Mod.ID
+* New: Added optional parameter to :Create method, Manual = nil[/True] if supplied then must be started manually. (:Create(BossL, BossR, Difference[, Manual])
 
 Ready Check
 * New: Added Stellar Prismatic Wellspring (All, 60, High)
@@ -39,11 +41,14 @@ Triggers
 * Fixed: Timers which trigger after another timer are working again. (ForceStop was flagged always on /rolleyes)
 
 Encounters
-* Merged with KBM Public Encounters (Details to be updated r15)
+* Merged with KBM Public Encounters r18 (Details to be updated)
 
 Endless Eclipse
 * Progenitor Saetos
 ** Fixed: Now returns correct Boss Objects for each boss. (Phase Monitor updates will be working)
+** Change: Bosses will now be removed from the Phase Monitor when they die.
+** New: Added Percentage Monitor tracking (5% diff) for the final mini and Progenitor.
+** New: Added Final phase tracking in the Monitor.
 
 Frozen Tempest
 * Artifex Zaviel
