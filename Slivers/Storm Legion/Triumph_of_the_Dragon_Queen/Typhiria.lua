@@ -169,8 +169,8 @@ function TPH.PhaseTwo()
 		TPH.Typhiria.UnitID = nil
 		TPH.PhaseObj.Objectives:AddPercent(TPH.Typhiria, 0, 100)
 		TPH.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
-		KBM.MechTimer:AddStop(TPH.Typhiria.TimersRef.Clouds)
-		KBM.MechTimer:AddStop(TPH.Typhiria.TimersRef.Tempest)
+		KBM.MechTimer:AddRemove(TPH.Typhiria.TimersRef.Clouds)
+		KBM.MechTimer:AddRemove(TPH.Typhiria.TimersRef.Tempest)
 		KBM.MechTimer:AddStart(TPH.Typhiria.TimersRef.Wrath)
 	end
 end
