@@ -32,20 +32,26 @@ KBM.RegisterMod(TPH.ID, TPH)
 TPH.Lang.Unit = {}
 TPH.Lang.Unit.Typhiria = KBM.Language:Add("General Typhiria")
 TPH.Lang.Unit.Typhiria:SetGerman("Generalin Typhiria")
+TPH.Lang.Unit.Typhiria:SetFrench("Général Typhiria")
 TPH.Lang.Unit.TyphiriaShort = KBM.Language:Add("Typhiria")
 TPH.Lang.Unit.TyphiriaShort:SetGerman("Typhiria")
+TPH.Lang.Unit.TyphiriaShort:SetFrench("Typhiria")
 
 -- Ability Dictionary
 TPH.Lang.Ability = {}
 TPH.Lang.Ability.Clouds = KBM.Language:Add("Dark Clouds")
+TPH.Lang.Ability.Clouds:SetFrench("Nuages ténébreux")
 TPH.Lang.Ability.Tempest = KBM.Language:Add("Tempest of Agony")
+TPH.Lang.Ability.Tempest:SetFrench("Tempête d'agonie")
 TPH.Lang.Ability.Blast = KBM.Language:Add("Storm Blast")
+TPH.Lang.Ability.Blast:SetFrench("Poussée foudroyante")
 
 -- Description Dictionary
 TPH.Lang.Main = {}
 
 TPH.Lang.Messages = {}
 TPH.Lang.Messages.TempestSoon = KBM.Language:Add("Tempest soon!")
+TPH.Lang.Messages.TempestSoon:SetFrench("Tempête bientôt!")
 
 TPH.Descript = TPH.Lang.Unit.Typhiria[KBM.Lang]
 

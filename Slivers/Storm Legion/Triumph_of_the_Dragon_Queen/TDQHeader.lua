@@ -31,6 +31,7 @@ TDQ.Lang = {}
 TDQ.Lang.Main = {}
 TDQ.Lang.Main.TDQ = KBM.Language:Add(TDQ.Name)
 TDQ.Lang.Main.TDQ:SetGerman("Triumph der Drachenkönigin")
+TDQ.Lang.Main.TDQ:SetFrench("Triomphe de la reine dragon")
 TDQ.Name = TDQ.Lang.Main.TDQ[KBM.Lang]
 TDQ.Descript = TDQ.Name
 

@@ -94,6 +94,7 @@ DLG.Lang.Debuff = {}
 DLG.Lang.Debuff.Dread = KBM.Language:Add("Dread Scythe")
 DLG.Lang.Debuff.Dread:SetFrench("Faux d'effroi")
 DLG.Lang.Debuff.Curse = KBM.Language:Add("Gatekeeper's Curse")
+DLG.Lang.Debuff.Curse:SetFrench("Malédiction du gardien")
 DLG.Lang.Debuff.Torment = KBM.Language:Add("Lingering Torment")
 DLG.Lang.Debuff.Torment:SetFrench("Tourment persistant")
 DLG.Lang.Debuff.Glimpse = KBM.Language:Add("Glimpse of Mortality")

@@ -31,23 +31,28 @@ KBM.RegisterMod(CRL.ID, CRL)
 CRL.Lang.Unit = {}
 CRL.Lang.Unit.Cyril = KBM.Language:Add("Cyril")
 CRL.Lang.Unit.Cyril:SetGerman("Cyril")
+CRL.Lang.Unit.Cyril:SetFrench("Cyril")
 CRL.Lang.Unit.CyrilShort = KBM.Language:Add("Cyril")
 CRL.Lang.Unit.CyrilShort:SetGerman("Cyril")
+CRL.Lang.Unit.CyrilShort:SetFrench("Cyril")
 
 -- Ability Dictionary
 CRL.Lang.Ability = {}
 CRL.Lang.Ability.Crushing = KBM.Language:Add("Crushing Burden")
 CRL.Lang.Ability.Crushing:SetGerman("Zermalmende Bürde")
+CRL.Lang.Ability.Crushing:SetFrench("Charge écrasante")
 
 -- Debuff Dictionary
 CRL.Lang.Debuff = {}
 CRL.Lang.Debuff.Mental = KBM.Language:Add("Mental Anguish")
 CRL.Lang.Debuff.Mental:SetGerman("Mentale Pein")
+CRL.Lang.Debuff.Mental:SetFrench("Supplice mental")
 
 -- Buff Dictionary
 CRL.Lang.Buff = {}
 CRL.Lang.Buff.Mien = KBM.Language:Add("Mien of Supremacy")
 CRL.Lang.Buff.Mien:SetGerman("Geste der Vormachtstellung")
+CRL.Lang.Buff.Mien:SetFrench("Mine de suprémacie")
 
 -- Description Dictionary
 CRL.Lang.Main = {}

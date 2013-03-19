@@ -31,13 +31,16 @@ KBM.RegisterMod(JUL.ID, JUL)
 JUL.Lang.Unit = {}
 JUL.Lang.Unit.Jultharin = KBM.Language:Add("Jultharin")
 JUL.Lang.Unit.Jultharin:SetGerman("Jultharin")
+JUL.Lang.Unit.Jultharin:SetFrench("Jultharin")
 JUL.Lang.Unit.JultharinShort = KBM.Language:Add("Jultharin")
 JUL.Lang.Unit.JultharinShort:SetGerman("Jultharin")
+JUL.Lang.Unit.JultharinShort:SetFrench("Jultharin")
 
 -- Ability Dictionary
 JUL.Lang.Ability = {}
 JUL.Lang.Ability.Tempest = KBM.Language:Add("Deranging Tempest")
 JUL.Lang.Ability.Tempest:SetGerman("Verwirrender Sturm")
+JUL.Lang.Ability.Tempest:SetFrench("Tempête dérangeante")
 
 -- Description Dictionary
 JUL.Lang.Main = {}

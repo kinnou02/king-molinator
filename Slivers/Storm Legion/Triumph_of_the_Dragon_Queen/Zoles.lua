@@ -31,26 +31,34 @@ KBM.RegisterMod(GFZ.ID, GFZ)
 GFZ.Lang.Unit = {}
 GFZ.Lang.Unit.Zoles = KBM.Language:Add("Grand Falconer Zoles")
 GFZ.Lang.Unit.Zoles:SetGerman("Großfalkner Zoles")
+GFZ.Lang.Unit.Zoles:SetFrench("Grand fauconnier Zoles")
 GFZ.Lang.Unit.ZolesShort = KBM.Language:Add("Zoles")
 GFZ.Lang.Unit.ZolesShort:SetGerman("Zoles")
+GFZ.Lang.Unit.ZolesShort:SetFrench("Zoles")
 GFZ.Lang.Unit.Sky = KBM.Language:Add("Skyscream")
 GFZ.Lang.Unit.Sky:SetGerman("Himmelsschrei") 
+GFZ.Lang.Unit.Sky:SetFrench("Hurleciel") 
 GFZ.Lang.Unit.SkyShort = KBM.Language:Add("Skyscream")
 GFZ.Lang.Unit.SkyShort:SetGerman("Himmelsschrei")
+GFZ.Lang.Unit.SkyShort:SetFrench("Hurleciel")
 
 -- Ability Dictionary
 GFZ.Lang.Ability = {}
 GFZ.Lang.Ability.Static = KBM.Language:Add("Static Empowerment")
 GFZ.Lang.Ability.Static:SetGerman("Statische Ermächtigung")
+GFZ.Lang.Ability.Static:SetFrench("Renforcement statique")
 
 -- Verbose Dictionary
 GFZ.Lang.Verbose = {}
 GFZ.Lang.Verbose.Void = KBM.Language:Add("Voids spawn soon!")
 GFZ.Lang.Verbose.Void:SetGerman("Void Spawn gleich!")
+GFZ.Lang.Verbose.Void:SetFrench("Éviter zones bientôt !")
 GFZ.Lang.Verbose.VoidFirst = KBM.Language:Add("First Voids spawn")
 GFZ.Lang.Verbose.VoidFirst:SetGerman("Erster Void Spawn")
+GFZ.Lang.Verbose.VoidFirst:SetFrench("Premières zones à éviter")
 GFZ.Lang.Verbose.VoidSpawn = KBM.Language:Add("Void spawns")
 GFZ.Lang.Verbose.VoidSpawn:SetGerman("Achtung Voids!")
+GFZ.Lang.Verbose.VoidSpawn:SetFrench("Zones à éviter!")
 
 -- Debuff Dictionary
 GFZ.Lang.Debuff = {}
