@@ -6889,6 +6889,8 @@ function KBM:BuffAdd(Units)
 							if KBM.TankSwap.Tanks[unitID] then
 								if KBM.TankSwap.DebuffName[bDetails.name] then
 									KBM.TankSwap.Tanks[unitID]:BuffUpdate(BuffID, bDetails.name)
+								elseif KBM.TankSwap.DebuffName[bDetails.LibSBuffType] then
+									KBM.TankSwap.Tanks[unitID]:BuffUpdate(BuffID, bDetails.LibSBuffType)
 								end
 							end
 						end

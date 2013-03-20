@@ -171,7 +171,7 @@ function TPH.PhaseTwo()
 		TPH.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
 		KBM.MechTimer:AddRemove(TPH.Typhiria.TimersRef.Clouds)
 		KBM.MechTimer:AddRemove(TPH.Typhiria.TimersRef.Tempest)
-		KBM.MechTimer:AddStart(TPH.Typhiria.TimersRef.Wrath)
+		--KBM.MechTimer:AddStart(TPH.Typhiria.TimersRef.Wrath)
 	end
 end
 

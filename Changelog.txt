@@ -18,6 +18,9 @@ Ready Check
 * New: Added Honed Edge (Rogue, 60, Medium)
 * New: Added Lightning Sigil (Rogue, 60, Medium)
 
+Tank-Swap
+* New: Now accepts both Buff Name (buffDetails.name) and BTID as valid buffs (buffDetails.LibSBuffType or buffDetails.type)
+
 LibSBuff
 * Change: Now converted over to new Rift 2.2 API Event system.
 
