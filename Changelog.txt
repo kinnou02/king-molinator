@@ -20,6 +20,7 @@ Ready Check
 
 Tank-Swap
 * New: Now accepts both Buff Name (buffDetails.name) and BTID as valid buffs (buffDetails.LibSBuffType or buffDetails.type)
+* New: You can now scale the Width/Height of the Tank-Swap monitor (Text will adjust to the smallest scale automatically when scaling only one dimension).
 
 LibSBuff
 * Change: Now converted over to new Rift 2.2 API Event system.
@@ -44,20 +45,57 @@ Triggers
 * Fixed: Timers which trigger after another timer are working again. (ForceStop was flagged always on /rolleyes)
 
 Encounters
-* Merged with KBM Public Encounters r18 (Details to be updated)
 
 Endless Eclipse
+* Matriarch of Pestilence
+** New: Added Mechanic Spy for Torment. [Ivn]
+** New: Added Timer for Sudden Doom. [Ivn]
+* Dread Lord Goloch
+** New: Added Tank-Swap monitor for Dread Scythe. [Ivn]
+** New: Added Timer and Mechanic Spy for Glimpse of Mortality. [Ivn]
+** New: Added Timer and Alert for End of Days. [Ivn]
+** New: Added Mechanic Spy for Gatekeeper's Curse. [Ivn]
+** New: Added Mechanic Spy for Lingering Torment. [Ivn]
+** New: Added Timer for Baleful Smash. [Ivn]
+* Kain the Reaper
+** New: Added Alert for Vile Blood. [Ivn]
+** New: Added Alert for Foul Blood. [Ivn]
+** New: Added Mechanic Spy for Ravenous Hunger. [Ivn]
+** New: Added Mechanic Spy for Voracious Hunger. [Ivn]
+** New: Added Unit tracking for Zathral Ashtongue, Baziel Rotflesh and Deathbound Bloodthief. [Ivn]
 * Progenitor Saetos
-** Fixed: Now returns correct Boss Objects for each boss. (Phase Monitor updates will be working)
-** Change: Bosses will now be removed from the Phase Monitor when they die.
-** New: Added Percentage Monitor tracking (5% diff) for the final mini and Progenitor.
-** New: Added Final phase tracking in the Monitor.
+** Fixed: Now returns correct Boss Objects for each boss. (Phase Monitor updates will be working) [Kek]
+** Change: Bosses will now be removed from the Phase Monitor when they die. [Kek]
+** New: Added Percentage Monitor tracking (5% diff) for the final mini and Progenitor. [Kek]
+** New: Added Final phase tracking in the Monitor. [Kek]
+* Regulos
+** New: Added UTID for Regulos. [Ivn]
+** New: Added Mechanic Spy and Alert for Eradicate. [Ivn]
+** New: Added Mechanic Spy for Impending Doom. [Ivn]
+** New: Added Mechanic Spy for Glimpse the Abyss. [Ivn]
+** New: Added Timer for Death's Apotheosis. [Ivn]
+** New: Added Alert for Vanquish the Weak. [Ivn]
 
 Frozen Tempest
 * Artifex Zaviel
-** New: Added Mechanic Spy object for Engergy Conduit (if you prefer those over the alerts).
+** New: Added Mechanic Spy object for Engergy Conduit (if you prefer those over the alerts). [Kek]
 * Kolmasveli and Toinenveli
-** New: Added Mechanic Spy object for tracking Devastating Shock
+** New: Added Mechanic Spy object for tracking Devastating Shock. [Kek]
+** Change: Adjusted timer for 3rd "Hide" mechanic. [Ivn]
+* Crucia
+** New: Various additional mechanic support. [Kek and Ivn]
+
+Triumph of the Dragon Queen
+* Jultharin
+** Change: Enrage Timer udpated. [Ivn]
+* General Typhiria
+** Change: Enrage Timer updated. [Ivn]
+** New: Added Phase Monitoring. [Ivn]
+** New: Added Timer and Alert for Dark Clouds. [Ivn]
+** New: Added Storm Blast count tracking. [Ivn]
+** New: Added Timer and Alert for Storm Blast. [Ivn]
+** New: Added Timer for Typhiria's Wrath. [Ivn]
+** New: Added Timer and Alerts for Tempest of Agony. [Ivn]
 
 Translations
 * German Updates.

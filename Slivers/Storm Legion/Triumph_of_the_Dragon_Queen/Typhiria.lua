@@ -45,6 +45,7 @@ TPH.Lang.Ability.Tempest = KBM.Language:Add("Tempest of Agony")
 TPH.Lang.Ability.Tempest:SetFrench("Tempête d'agonie")
 TPH.Lang.Ability.Blast = KBM.Language:Add("Storm Blast")
 TPH.Lang.Ability.Blast:SetFrench("Poussée foudroyante")
+TPH.Lang.Ability.Wrath = KBM.Language:Add("Typhiria's Wrath")
 
 -- Description Dictionary
 TPH.Lang.Main = {}
@@ -80,6 +81,7 @@ TPH.Typhiria = {
 			Clouds = KBM.Defaults.TimerObj.Create("dark_green"),
 			Tempest = KBM.Defaults.TimerObj.Create("purple"),
 			Blast = KBM.Defaults.TimerObj.Create("yellow"),
+			Wrath = KBM.Defaults.TimerObj.Create("red"),
 		},
 		AlertsRef = {
 			Enabled = true,
@@ -171,7 +173,7 @@ function TPH.PhaseTwo()
 		TPH.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
 		KBM.MechTimer:AddRemove(TPH.Typhiria.TimersRef.Clouds)
 		KBM.MechTimer:AddRemove(TPH.Typhiria.TimersRef.Tempest)
-		--KBM.MechTimer:AddStart(TPH.Typhiria.TimersRef.Wrath)
+		KBM.MechTimer:AddStart(TPH.Typhiria.TimersRef.Wrath)
 	end
 end
 
@@ -259,7 +261,7 @@ function TPH:Start()
 	self.Typhiria.TimersRef.Clouds = KBM.MechTimer:Add(self.Lang.Ability.Clouds[KBM.Lang], 60, false)
 	self.Typhiria.TimersRef.Tempest = KBM.MechTimer:Add(self.Lang.Ability.Tempest[KBM.Lang], 27, false)
 	self.Typhiria.TimersRef.Blast = KBM.MechTimer:Add(self.Lang.Ability.Blast[KBM.Lang], 7, false)
-	--self.Typhiria.TimersRef.Wrath = KBM.MechTimer:Add(self.Lang.Ability.Wrath[KBM.Lang], 78, false)
+	self.Typhiria.TimersRef.Wrath = KBM.MechTimer:Add(self.Lang.Ability.Wrath[KBM.Lang], 78, false)
 	KBM.Defaults.TimerObj.Assign(self.Typhiria)
 	
 	-- Create Alerts

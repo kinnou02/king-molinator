@@ -72,7 +72,7 @@ KBM.ID = "KingMolinator"
 KBM.ModList = {}
 KBM.Testing = false
 KBM.ValidTime = false
-KBM.IsAlpha = true
+KBM.IsAlpha = false
 KBM.Debug = false
 KBM.Aux = {}
 KBM.TestFilters = {}
@@ -585,6 +585,11 @@ function KBM.Constant:Init()
 	self.Button = {
 		s = 32,
 	}
+	self.TankSwap = {
+		w = 150,
+		h = 40,
+		TextSize = 14,
+	}
 end
 
 KBM.Constant:Init()
@@ -751,14 +756,13 @@ local function KBM_DefineVars(AddonID)
 			TankSwap = {
 				x = false,
 				y = false,
-				w = 150,
-				h = 40,
 				wScale = 1,
 				hScale = 1,
+				tScale = 1,
+				ScaleUnlocked = false,
 				ScaleWidth = false,
 				ScaleHeight = false,
 				TextScale = false,
-				TextSize = 14,
 				Enabled = true,
 				Visible = true,
 				Unlocked = true,
@@ -2439,7 +2443,7 @@ function KBM.MechSpy:Init()
 				if KBM.MechSpy.Settings.wScale > 1.5 then
 					KBM.MechSpy.Settings.wScale = 1.5
 				end
-				KBM.MechSpy.Anchor:SetWidth(math.floor(KBM.MechSpy.Settings.wScale * KBM.Constant.MechSpy.w))
+				KBM.MechSpy.Anchor:SetWidth(math.floor(KBM.MechSpy.Settings.wScale * KBM.Constant.TankSwap.w))
 			end
 		end
 		
@@ -4471,12 +4475,9 @@ function KBM.TankSwap:Pull()
 	else
 		GUI.Frame = UI.CreateFrame("Frame", "TankSwap_Frame", KBM.Context)
 		GUI.Frame:SetLayer(1)
-		GUI.Frame:SetHeight(KBM.Options.TankSwap.h)
 		GUI.Frame:SetBackgroundColor(0,0,0,0.33)
 		GUI.TankAggro = UI.CreateFrame("Frame", "TankSwap_Aggro_Frame", GUI.Frame)
 		GUI.TankAggro:SetPoint("TOPLEFT", GUI.Frame, "TOPLEFT")
-		GUI.TankAggro:SetHeight(math.floor(GUI.Frame:GetHeight() * 0.5))
-		GUI.TankAggro:SetWidth(GUI.TankAggro:GetHeight())
 		GUI.TankAggro:SetBackgroundColor(0,0,0,0)
 		GUI.TankAggro.Texture = UI.CreateFrame("Texture", "TankSwap_Aggro_Texture", GUI.TankAggro)
 		GUI.TankAggro.Texture:SetPoint("TOPLEFT", GUI.TankAggro, "TOPLEFT", 1, 1)
@@ -4501,14 +4502,11 @@ function KBM.TankSwap:Pull()
 		GUI.TankHP:SetPoint("TOP", GUI.TankFrame, "TOP")
 		GUI.TankHP:SetPoint("LEFT", GUI.TankFrame, "LEFT")
 		GUI.TankHP:SetPoint("BOTTOM", GUI.TankFrame, "BOTTOM")
-		GUI.TankHP:SetWidth(GUI.TankFrame:GetWidth())
 		GUI.TankShadow = UI.CreateFrame("Text", "TankSwap_Tank_Shadow", GUI.TankFrame)
-		GUI.TankShadow:SetFontSize(KBM.Options.TankSwap.TextSize)
 		GUI.TankShadow:SetLayer(2)
 		GUI.TankShadow:SetFontColor(0,0,0)
 		GUI.TankText = UI.CreateFrame("Text", "TankSwap_Tank_Text", GUI.TankFrame)
 		GUI.TankText:SetLayer(3)
-		GUI.TankText:SetFontSize(KBM.Options.TankSwap.TextSize)
 		GUI.TankShadow:SetPoint("TOPLEFT", GUI.TankText, "TOPLEFT", 1, 1)
 		GUI.TankText:SetPoint("CENTERLEFT", GUI.TankFrame, "CENTERLEFT", 2, 0)
 		GUI.DebuffFrame = {}
@@ -4528,11 +4526,11 @@ function KBM.TankSwap:Pull()
 			KBM.LoadTexture(GUI.DebuffFrame[i].Texture, "Rift", self.DefaultTexture)
 			GUI.DebuffFrame[i].Texture:SetVisible(false)
 			GUI.DebuffFrame[i].Shadow = UI.CreateFrame("Text", "TankSwap_Debuff_Shadow_"..i, GUI.DebuffFrame[i])
-			GUI.DebuffFrame[i].Shadow:SetFontSize(KBM.Options.TankSwap.TextSize)
+			GUI.DebuffFrame[i].Shadow:SetFontSize(KBM.Constant.TankSwap.TextSize * KBM.Options.TankSwap.tScale)
 			GUI.DebuffFrame[i].Shadow:SetFontColor(0,0,0)
 			GUI.DebuffFrame[i].Shadow:SetLayer(2)
 			GUI.DebuffFrame[i].Text = UI.CreateFrame("Text", "TankSwap_Debuff_Text_"..i, GUI.DebuffFrame[i])
-			GUI.DebuffFrame[i].Text:SetFontSize(KBM.Options.TankSwap.TextSize)
+			GUI.DebuffFrame[i].Text:SetFontSize(KBM.Constant.TankSwap.TextSize * KBM.Options.TankSwap.tScale)
 			GUI.DebuffFrame[i].Text:SetLayer(3)
 			GUI.DebuffFrame[i].Shadow:SetPoint("TOPLEFT", GUI.DebuffFrame[i].Text, "TOPLEFT", 1, 1)
 			GUI.DebuffFrame[i].Text:SetPoint("CENTER", GUI.DebuffFrame[i], "CENTER")
@@ -4548,11 +4546,11 @@ function KBM.TankSwap:Pull()
 			GUI.DeCool[i]:SetWidth(0)
 			GUI.DeCool[i]:SetBackgroundColor(0.5,0,8,0.33)
 			GUI.DeCool[i].Shadow = UI.CreateFrame("Text", "TankSwap_CD_Shadow_"..i, GUI.DeCoolFrame[i])
-			GUI.DeCool[i].Shadow:SetFontSize(KBM.Options.TankSwap.TextSize)
+			GUI.DeCool[i].Shadow:SetFontSize(KBM.Constant.TankSwap.TextSize * KBM.Options.TankSwap.tScale)
 			GUI.DeCool[i].Shadow:SetFontColor(0,0,0)
 			GUI.DeCool[i].Shadow:SetLayer(2)
 			GUI.DeCool[i].Text = UI.CreateFrame("Text", "TankSwap_CD_Text_"..i, GUI.DeCoolFrame[i])
-			GUI.DeCool[i].Text:SetFontSize(KBM.Options.TankSwap.TextSize)
+			GUI.DeCool[i].Text:SetFontSize(KBM.Constant.TankSwap.TextSize * KBM.Options.TankSwap.tScale)
 			GUI.DeCool[i].Shadow:SetPoint("TOPLEFT", GUI.DeCool[i].Text, "TOPLEFT", 1, 1)
 			GUI.DeCool[i].Text:SetPoint("CENTER", GUI.DeCoolFrame[i], "CENTER")
 			GUI.DeCool[i].Text:SetLayer(3)
@@ -4593,6 +4591,7 @@ function KBM.TankSwap:Pull()
 			end			
 		end
 	end
+	self:ApplySettings(GUI)
 	return GUI
 end
 
@@ -4609,39 +4608,120 @@ function KBM.TankSwap:Init()
 	self.LastTank = nil
 	self.Test = false
 	self.TankStore = {}
-	self.Enabled = KBM.Options.TankSwap.Enabled
 	self.Settings = KBM.Options.TankSwap
+	self.Enabled = self.Settings.Enabled
 	self.Anchor = UI.CreateFrame("Frame", "Tank-Swap_Anchor", KBM.Context)
-	self.Anchor:SetWidth(KBM.Options.TankSwap.w * KBM.Options.TankSwap.wScale)
-	self.Anchor:SetHeight(KBM.Options.TankSwap.h * KBM.Options.TankSwap.hScale)
+	self.Anchor:SetWidth(KBM.Constant.TankSwap.w * self.Settings.wScale)
+	self.Anchor:SetHeight(KBM.Constant.TankSwap.h * self.Settings.hScale)
 	self.Anchor:SetBackgroundColor(0,0,0,0.33)
 	self.Anchor:SetLayer(5)
 	
-	if KBM.Options.TankSwap.x then
-		self.Anchor:SetPoint("TOPLEFT", UIParent, "TOPLEFT", KBM.Options.TankSwap.x, KBM.Options.TankSwap.y)
+	if self.Settings.x then
+		self.Anchor:SetPoint("TOPLEFT", UIParent, "TOPLEFT", self.Settings.x, self.Settings.y)
 	else
 		self.Anchor:SetPoint("CENTER", UIParent, "CENTER")
 	end
 	
 	function self.Anchor:Update(uType)
 		if uType == "end" then
-			KBM.Options.TankSwap.x = self:GetLeft()
-			KBM.Options.TankSwap.y = self:GetTop()
+			KBM.TankSwap.Settings.x = self:GetLeft()
+			KBM.TankSwap.Settings.y = self:GetTop()
 		end
 	end
 	
 	self.Anchor.Text = UI.CreateFrame("Text", "TankSwap info", self.Anchor)
 	self.Anchor.Text:SetText(KBM.Language.Anchors.TankSwap[KBM.Lang])
-	self.Anchor.Text:SetFontSize(KBM.Options.TankSwap.TextSize)
+	self.Anchor.Text:SetFontSize(KBM.Constant.TankSwap.TextSize * self.Settings.tScale)
 	self.Anchor.Text:SetPoint("CENTER", self.Anchor, "CENTER")
 	self.Anchor.Drag = KBM.AttachDragFrame(self.Anchor, function(uType) self.Anchor:Update(uType) end, "TS Anchor Drag", 2)
 	
+	function self.Anchor.Drag:WheelForwardHandler()
+		if KBM.TankSwap.Settings.ScaleWidth then
+			if KBM.TankSwap.Settings.wScale < 1.5 then
+				KBM.TankSwap.Settings.wScale = KBM.TankSwap.Settings.wScale + 0.025
+				if KBM.TankSwap.Settings.wScale > 1.5 then
+					KBM.TankSwap.Settings.wScale = 1.5
+				end
+				KBM.TankSwap.Anchor:SetWidth(math.floor(KBM.TankSwap.Settings.wScale * KBM.Constant.TankSwap.w))
+				if KBM.TankSwap.Settings.hScale >= KBM.TankSwap.Settings.wScale then
+					KBM.TankSwap.Settings.tScale = KBM.TankSwap.Settings.wScale
+				end
+				KBM.TankSwap.Anchor.Text:SetFontSize(math.floor(KBM.Constant.TankSwap.TextSize * KBM.TankSwap.Settings.tScale))
+			end
+		end
+		
+		if KBM.TankSwap.Settings.ScaleHeight then
+			if KBM.TankSwap.Settings.hScale < 1.5 then
+				KBM.TankSwap.Settings.hScale = KBM.TankSwap.Settings.hScale + 0.025
+				if KBM.TankSwap.Settings.hScale > 1.5 then
+					KBM.TankSwap.Settings.hScale = 1.5
+				end
+				KBM.TankSwap.Anchor:SetHeight(math.floor(KBM.TankSwap.Settings.hScale * KBM.Constant.TankSwap.h))
+				if KBM.TankSwap.Settings.wScale >= KBM.TankSwap.Settings.hScale then
+					KBM.TankSwap.Settings.tScale = KBM.TankSwap.Settings.hScale
+				end
+				KBM.TankSwap.Anchor.Text:SetFontSize(math.floor(KBM.Constant.TankSwap.TextSize * KBM.TankSwap.Settings.tScale))
+			end
+		end
+	end
+
+	function self.Anchor.Drag:WheelBackHandler()
+		if KBM.TankSwap.Settings.ScaleWidth then
+			if KBM.TankSwap.Settings.wScale > 0.5 then
+				KBM.TankSwap.Settings.wScale = KBM.TankSwap.Settings.wScale - 0.025
+				if KBM.TankSwap.Settings.wScale < 0.5 then
+					KBM.TankSwap.Settings.wScale = 0.5
+				end
+				KBM.TankSwap.Anchor:SetWidth(math.floor(KBM.TankSwap.Settings.wScale * KBM.Constant.TankSwap.w))
+				if KBM.TankSwap.Settings.hScale >= KBM.TankSwap.Settings.wScale then
+					KBM.TankSwap.Settings.tScale = KBM.TankSwap.Settings.wScale
+				end
+				KBM.TankSwap.Anchor.Text:SetFontSize(math.floor(KBM.Constant.TankSwap.TextSize * KBM.TankSwap.Settings.tScale))
+			end
+		end
+		
+		if KBM.TankSwap.Settings.ScaleHeight then
+			if KBM.TankSwap.Settings.hScale > 0.5 then
+				KBM.TankSwap.Settings.hScale = KBM.TankSwap.Settings.hScale - 0.025
+				if KBM.TankSwap.Settings.hScale < 0.5 then
+					KBM.TankSwap.Settings.hScale = 0.5
+				end
+				KBM.TankSwap.Anchor:SetHeight(math.floor(KBM.TankSwap.Settings.hScale * KBM.Constant.TankSwap.h))
+				if KBM.TankSwap.Settings.wScale >= KBM.TankSwap.Settings.hScale then
+					KBM.TankSwap.Settings.tScale = KBM.TankSwap.Settings.hScale
+				end
+				KBM.TankSwap.Anchor.Text:SetFontSize(math.floor(KBM.Constant.TankSwap.TextSize * KBM.TankSwap.Settings.tScale))
+			end
+		end
+	end
+		
+	self.Anchor.Drag:EventAttach(Event.UI.Input.Mouse.Wheel.Back, self.Anchor.Drag.WheelBackHandler, "wheelback")
+	self.Anchor.Drag:EventAttach(Event.UI.Input.Mouse.Wheel.Forward, self.Anchor.Drag.WheelForwardHandler, "wheelforward")
+	
 	if KBM.MainWin:GetVisible() then
-		self.Anchor:SetVisible(KBM.Options.TankSwap.Visible)
-		self.Anchor.Drag:SetVisible(KBM.Options.TankSwap.Unlocked)
+		self.Anchor:SetVisible(self.Settings.Visible)
+		self.Anchor.Drag:SetVisible(self.Settings.Unlocked)
 	else
 		self.Anchor:SetVisible(false)
 		self.Anchor.Drag:SetVisible(false)
+	end
+	
+	function self:ApplySettings(GUI)
+		GUI.Frame:SetHeight(math.ceil(KBM.Constant.TankSwap.h * KBM.Options.TankSwap.hScale))
+		GUI.TankAggro:SetHeight(math.floor(GUI.Frame:GetHeight() * 0.5))
+		GUI.TankAggro:SetWidth(GUI.TankAggro:GetHeight())
+		GUI.TankHP:SetWidth(GUI.TankFrame:GetWidth())		
+		GUI.TankShadow:SetFontSize(KBM.Constant.TankSwap.TextSize * KBM.Options.TankSwap.tScale)
+		GUI.TankText:SetFontSize(KBM.Constant.TankSwap.TextSize * KBM.Options.TankSwap.tScale)
+		for i = 1, 2 do
+			GUI.DebuffFrame[i]:SetWidth(math.floor(GUI.Frame:GetHeight() * 0.5))
+			GUI.DebuffFrame[i]:SetHeight(GUI.DebuffFrame[i]:GetWidth())
+			GUI.DebuffFrame[i].Shadow:SetFontSize(KBM.Constant.TankSwap.TextSize * KBM.Options.TankSwap.tScale)
+			GUI.DebuffFrame[i].Shadow:SetFontColor(0,0,0)
+			GUI.DebuffFrame[i].Text:SetFontSize(KBM.Constant.TankSwap.TextSize * KBM.Options.TankSwap.tScale)
+			GUI.DeCool[i].Shadow:SetFontSize(KBM.Constant.TankSwap.TextSize * KBM.Options.TankSwap.tScale)
+			GUI.DeCool[i].Text:SetFontSize(KBM.Constant.TankSwap.TextSize * KBM.Options.TankSwap.tScale)
+		end
 	end
 			
 	function self:Add(UnitID, Test)		
@@ -4772,8 +4852,8 @@ function KBM.TankSwap:Init()
 		if not BossID then 
 			return
 		end
-		if KBM.Options.TankSwap.Enabled then
-			if (LibSUnit.Player.Role == "tank" and KBM.Options.TankSwap.Tank == true) or KBM.Options.TankSwap.Tank == false then
+		if self.Settings.Enabled then
+			if (LibSUnit.Player.Role == "tank" and self.Settings.Tank == true) or self.Settings.Tank == false then
 				local Spec = ""
 				local UnitID = ""
 				local uDetails = nil
@@ -7233,48 +7313,14 @@ function KBM.MenuOptions.TankSwap:Options()
 		KBM.TankSwap.Anchor.Drag:SetVisible(bool)
 	end
 	
-	function self:ScaleWidth(bool, Check)
+	function self:ScaleWidth(bool)
 		KBM.Options.TankSwap.ScaleWidth = bool
-		if not bool then
-			KBM.Options.TankSwap.wScale = 1
-			--Check.SliderObj.Bar.Frame:SetPosition(100)
-			KBM.TankSwap.Anchor:SetWidth(KBM.Options.TankSwap.w)
-		end
 	end
-	
-	function self:wScaleChange(value)
-		KBM.Options.TankSwap.wScale = value * 0.01
-		KBM.TankSwap.Anchor:SetWidth(KBM.Options.TankSwap.w * KBM.Options.TankSwap.wScale)
-	end
-	
-	function self:ScaleHeight(bool, Check)
+		
+	function self:ScaleHeight(bool)
 		KBM.Options.TankSwap.ScaleHeight = bool
-		if not bool then
-			KBM.Options.TankSwap.hScale = 1
-			--Check.SliderObj.Bar.Frame:SetPosition(100)
-			KBM.TankSwap.Anchor:SetHeight(KBM.Options.TankSwap.h)
-		end
 	end
-	
-	function self:hScaleChange(value)
-		KBM.Options.TankSwap.hScale = value * 0.01
-		KBM.TankSwap.Anchor:SetHeight(KBM.Options.TankSwap.h * KBM.Options.TankSwap.hScale)
-	end
-	
-	function self:TextSize(bool, Check)
-		KBM.Options.TankSwap.TextScale = bool
-		if not bool then
-			KBM.Options.TankSwap.TextSize = 16
-			--Check.Slider.Bar:SetPosition(KBM.Options.CastBar.TextSize)
-			KBM.TankSwap.Anchor.Text:SetFontSize(KBM.Options.TankSwap.TextSize)
-		end
-	end
-	
-	function self:TextChange(value)
-		KBM.Options.TankSwap.TextSize = value
-		KBM.CastBar.Anchor.Text:SetFontSize(KBM.Options.TankSwap.TextSize)
-	end
-	
+			
 	function self:Tank(bool)
 		KBM.Options.TankSwap.Tank = bool
 	end
@@ -7297,9 +7343,11 @@ function KBM.MenuOptions.TankSwap:Options()
 	-- Tank-Swap Options. 
 	local TankSwap = Options:AddHeader(KBM.Language.TankSwap.Enabled[KBM.Lang], self.Enabled, KBM.Options.TankSwap.Enabled)
 	TankSwap:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowAnchor, KBM.Options.TankSwap.Visible)
-	TankSwap:AddCheck(KBM.Language.Options.LockAnchor[KBM.Lang], self.LockAnchor, KBM.Options.TankSwap.Unlocked)
 	TankSwap:AddCheck(KBM.Language.TankSwap.Tank[KBM.Lang], self.Tank, KBM.Options.TankSwap.Tank)
 	self.TestCheck = TankSwap:AddCheck(KBM.Language.TankSwap.Test[KBM.Lang], self.ShowTest, false)
+	local Anchor = Options:AddHeader(KBM.Language.Options.LockAnchor[KBM.Lang], self.LockAnchor, KBM.Options.TankSwap.Unlocked)
+	Anchor:AddCheck(KBM.Language.Options.UnlockWidth[KBM.Lang], self.ScaleWidth, KBM.Options.TankSwap.ScaleWidth)
+	Anchor:AddCheck(KBM.Language.Options.UnlockHeight[KBM.Lang], self.ScaleHeight, KBM.Options.TankSwap.ScaleHeight)	
 end
 
 -- Castbar options

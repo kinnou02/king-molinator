@@ -534,24 +534,30 @@ end
 function PM:SetBossLeft(BossObj)
 	-- Allows Left Boss Objects to be changed on the fly or while idle.
 	local ID
-	if BossObj.Mod then
-		if BossObj.Mod.ID then
-			ID = BossObj.Mod.ID
+	if BossObj then
+		if BossObj.Mod then
+			if BossObj.Mod.ID then
+				ID = BossObj.Mod.ID
+			else
+				if KBM.Debug then
+					print("[SBL2] Warning: BossObj not valid for SetBossLeft")
+				end
+				return
+			end
 		else
 			if KBM.Debug then
-				print("[SBL2] Warning: BossObj not valid for SetBossLeft")
+				print("[SBL1] Warning: BossObj not valid for SetBossLeft")
 			end
 			return
 		end
-	else
-		if KBM.Debug then
-			print("[SBL1] Warning: BossObj not valid for SetBossLeft")
+		if ID then
+			if self.Encounters[ID] then
+				self.Encounters[ID].BossL = BossObj
+			end
 		end
-		return
-	end
-	if ID then
-		if self.Encounters[ID] then
-			self.Encounters[ID].BossL = BossObj
+	else
+		if KBM.Debug then 
+			print("[SBL3] Warning: A nill BossObj was sent.")
 		end
 	end
 end
@@ -559,24 +565,30 @@ end
 function PM:SetBossRight(BossObj)
 	-- Allows Right Boss Objects to be changed on the fly or while idle.
 	local ID
-	if BossObj.Mod then
-		if BossObj.Mod.ID then
-			ID = BossObj.Mod.ID
+	if BossObj then
+		if BossObj.Mod then
+			if BossObj.Mod.ID then
+				ID = BossObj.Mod.ID
+			else
+				if KBM.Debug then
+					print("[SBR2] Warning: BossObj not valid for SetBossRight")
+				end
+				return
+			end
 		else
 			if KBM.Debug then
-				print("[SBR2] Warning: BossObj not valid for SetBossRight")
+				print("[SBR1] Warning: BossObj not valid for SetBossRight")
 			end
 			return
 		end
-	else
-		if KBM.Debug then
-			print("[SBR1] Warning: BossObj not valid for SetBossRight")
+		if ID then
+			if self.Encounters[ID] then
+				self.Encounters[ID].BossR = BossObj
+			end
 		end
-		return
-	end
-	if ID then
-		if self.Encounters[ID] then
-			self.Encounters[ID].BossR = BossObj
+	else
+		if KBM.Debug then 
+			print("[SBR3] Warning: A nill BossObj was sent.")
 		end
 	end
 end

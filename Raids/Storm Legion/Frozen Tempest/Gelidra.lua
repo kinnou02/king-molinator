@@ -60,7 +60,7 @@ GLD.Lang.Main = {}
 GLD.Lang.Debuff = {}
 GLD.Lang.Debuff.Hoar = KBM.Language:Add("Hoarfrost")
 GLD.Lang.Debuff.Hoar:SetGerman("Raureif")
-GLD.Lang.Debuff.Hoar:SetFrench("Serres glacées")
+GLD.Lang.Debuff.Hoar:SetFrench("Givre")
 GLD.Lang.Debuff.Rime = KBM.Language:Add("Glacial Rime")
 GLD.Lang.Debuff.Rime:SetGerman("Gletscherreif")
 GLD.Lang.Debuff.Rime:SetFrench("Éclats de sang gelé")
