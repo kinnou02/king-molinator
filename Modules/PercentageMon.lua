@@ -549,14 +549,14 @@ function PM:SetBossLeft(BossObj)
 		end
 		return
 	end
-	if self.Encounters[ID] then
-		self.Encounters[ID].BossL = BossObj
-	else
-		-- Silent error and Return
+	if ID then
+		if self.Encounters[ID] then
+			self.Encounters[ID].BossL = BossObj
+		end
 	end
 end
 
-function PM:SetBossRight(ID, BossObj)
+function PM:SetBossRight(BossObj)
 	-- Allows Right Boss Objects to be changed on the fly or while idle.
 	local ID
 	if BossObj.Mod then
@@ -574,10 +574,10 @@ function PM:SetBossRight(ID, BossObj)
 		end
 		return
 	end
-	if self.Encounters[ID] then
-		self.Encounters[ID].BossR = BossObj
-	else
-		-- Silent error and Return
+	if ID then
+		if self.Encounters[ID] then
+			self.Encounters[ID].BossR = BossObj
+		end
 	end
 end
 
