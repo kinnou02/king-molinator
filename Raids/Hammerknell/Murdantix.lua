@@ -277,9 +277,12 @@ end
 function MX:Start()	
 	-- Create Timers
 	self.Murd.TimersRef.Crush = KBM.MechTimer:Add(self.Lang.Ability.Crush[KBM.Lang], 12)
+	self.Murd.TimersRef.Crush:Wait()
 	self.Murd.TimersRef.Pound = KBM.MechTimer:Add(self.Lang.Ability.Pound[KBM.Lang], 35)
 	self.Murd.TimersRef.Blast = KBM.MechTimer:Add(self.Lang.Ability.Blast[KBM.Lang], 16)
+	self.Murd.TimersRef.Blast:Wait()
 	self.Murd.TimersRef.Trauma = KBM.MechTimer:Add(self.Lang.Ability.Trauma[KBM.Lang], 9)
+	self.Murd.TimersRef.Trauma:Wait()
 	KBM.Defaults.TimerObj.Assign(self.Murd)
 	
 	-- Create Alerts

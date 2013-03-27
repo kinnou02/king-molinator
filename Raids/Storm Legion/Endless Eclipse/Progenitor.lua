@@ -357,7 +357,7 @@ function PRO:PhaseTwo(RightBossObj)
 	self.Phase = 2
 	self.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
 	KBM.PercentageMon:SetBossRight(RightBossObj)
-	KBM.PercentageMon:Start(self.ID)
+	KBM.PercentageMon:Start(self.ID, true)
 end
 
 function PRO:UpdatePhaseMon()

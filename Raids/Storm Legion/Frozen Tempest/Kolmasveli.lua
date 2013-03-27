@@ -323,8 +323,6 @@ function KT.PhaseFinal()
 		KT.PhaseObj.Objectives:AddPercent(KT.Kolmasveli, 0, 10)
 		KT.PhaseObj.Objectives:AddPercent(KT.Toinenveli, 0, 10)
 		KT.Phase = 3
-		KBM.MechTimer:AddRemove(KT.Kolmasveli.TimersRef.Glimpse)
-		KBM.MechTimer:AddRemove(KT.Toinenveli.TimersRef.Glimpse)
 	end
 end
 

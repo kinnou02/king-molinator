@@ -1,4 +1,19 @@
-﻿v1.4.2
+﻿v1.4.3
+
+Mechanic Timers
+* New: Added method Timer:Wait([Priority]) - Priority defaults to -1 (and is currently not calculated)
+* New: Setting a Wait timer will keep the timer in the list (with elapsed time) until the next trigger. 
+
+Endless Eclipse
+* Progenitor Saetos
+** Fixed: Enabled the Percentage Monitor to fire for the final two.
+
+Frozen Tempest
+* Kolmasveli & Toinenveli
+** Change: Removed the timer stops for Glimpse at 10% as they can technically be cast again.
+
+----
+v1.4.2
 
 Rift
 * Change: Requires at least Rift 2.2

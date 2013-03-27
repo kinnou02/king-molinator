@@ -72,7 +72,7 @@ KBM.ID = "KingMolinator"
 KBM.ModList = {}
 KBM.Testing = false
 KBM.ValidTime = false
-KBM.IsAlpha = false
+KBM.IsAlpha = true
 KBM.Debug = false
 KBM.Aux = {}
 KBM.TestFilters = {}
@@ -1300,6 +1300,9 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 	Timer.Phase = 0
 	Timer.PhaseMax = 0
 	Timer.Type = "timer"
+	Timer.Waiting = false
+	Timer.Wait = false
+	Timer.Priority = 0
 	Timer.Custom = false
 	Timer.Color = KBM.MechTimer.Settings.Color
 	Timer.HasMenu = true
@@ -1331,6 +1334,11 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 				self:AddRemove(Object)
 			end
 		end
+	end
+	
+	function Timer:Wait(Priority)
+		self.Wait = true
+		self.Priority = tonumber(Priority) or -1
 	end
 	
 	function Timer:Start(CurrentTime, DebugInfo)	
@@ -1451,6 +1459,7 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 			self.Active = false
 			self.Remaining = 0
 			self.TimeStart = 0
+			self.Waiting = false
 			for i, AlertObj in pairs(self.Alerts) do
 				self.Alerts[i].Triggered = false
 			end
@@ -1539,7 +1548,12 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 		local text = ""
 		if self.Active then
 			if self.Waiting then
-			
+				self.Remaining = math.floor(self.Time - (CurrentTime - self.TimeStart))
+				if self.Remaining ~= self.lastRemaining then
+					self.GUI.CastInfo:SetText(" "..self.Remaining.." : "..self.Name)
+					self.GUI.Shadow:SetText(self.GUI.CastInfo:GetText())
+					self.lastRemaining = self.Remaining
+				end
 			else
 				self.Remaining = self.Time - (CurrentTime - self.TimeStart)
 				if self.Remaining < 10 then
@@ -1559,7 +1573,14 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 				end
 				if self.Remaining <= 0 then
 					self.Remaining = 0
-					KBM.MechTimer:AddRemove(self)
+					if not self.Wait then
+						KBM.MechTimer:AddRemove(self)
+					else
+						self.Waiting = true
+						self.GUI.TimeBar:SetWidth(self.GUI.Background:GetWidth())
+						self.GUI.CastInfo:SetText(math.floor(self.Remaining).." : "..self.Name)
+						self.GUI.Shadow:SetText(self.GUI.CastInfo:GetText())
+					end
 				end
 				if KBM.Encounter then
 					TriggerTime = math.ceil(self.Remaining)
