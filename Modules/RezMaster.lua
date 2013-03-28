@@ -9,12 +9,16 @@ local KBM = KBMTable.data
 local LSUIni = Inspect.Addon.Detail("SafesUnitLib")
 local LibSUnit = LSUIni.data
 
+local LibSataIni = Inspect.Addon.Detail("SafesTableLib")
+local LibSata = LibSataIni.data
+
 local RM = {
 	Broadcast = {
 		LastSent = Inspect.Time.Real()
 	},
 	Rezes = {
-		ActiveTimers = {},
+		ActiveCount = 0,
+		ActiveTimers = LibSata:Create(),
 		Tracked = {},
 	},
 	GUI = {
@@ -109,6 +113,7 @@ function RM.GUI:Init()
 	self.Anchor.Drag = KBM.AttachDragFrame(self.Anchor, function(uType) self.Anchor:Update(uType) end, "Anchor_Drag", 5)
 	
 	function self.Anchor.Drag.Event:WheelForward()
+		local Changed = false
 		if RM.GUI.Settings.ScaleWidth then
 			if RM.GUI.Settings.wScale < 1.5 then
 				RM.GUI.Settings.wScale = RM.GUI.Settings.wScale + 0.025
@@ -116,16 +121,7 @@ function RM.GUI:Init()
 					RM.GUI.Settings.wScale = 1.5
 				end
 				RM.GUI.Anchor:SetWidth(math.ceil(RM.GUI.Settings.wScale * KBM.Constant.RezMaster.w))
-				if #RM.Rezes.ActiveTimers > 0 then
-					for _, Timer in ipairs(RM.Rezes.ActiveTimers) do
-						Timer.SetWidth = RM.GUI.Anchor:GetWidth() - RM.GUI.Anchor:GetHeight()
-						if Timer.Waiting then
-							Timer.GUI.TimeBar:SetWidth(Timer.SetWidth)
-						else
-							Timer:Update()
-						end
-					end
-				end
+				Changed = true
 			end
 		end
 		
@@ -136,16 +132,14 @@ function RM.GUI:Init()
 					RM.GUI.Settings.hScale = 1.5
 				end
 				RM.GUI.Anchor:SetHeight(math.ceil(RM.GUI.Settings.hScale * KBM.Constant.RezMaster.h))
-				if #RM.Rezes.ActiveTimers > 0 then
-					for _, Timer in ipairs(RM.Rezes.ActiveTimers) do
-						Timer.GUI.Background:SetHeight(RM.GUI.Anchor:GetHeight())
-						Timer.GUI.Icon:SetWidth(RM.GUI.Anchor:GetHeight())
-						Timer.SetWidth = RM.GUI.Anchor:GetWidth() - RM.GUI.Anchor:GetHeight()
-						if Timer.Waiting then
-							Timer.GUI.TimeBar:SetWidth(Timer.SetWidth)
-						else
-							Timer:Update()
-						end
+				for TimerObj, Timer in LibSata.EachIn(RM.Rezes.ActiveTimers) do
+					Timer.GUI.Background:SetHeight(RM.GUI.Anchor:GetHeight())
+					Timer.GUI.Icon:SetWidth(RM.GUI.Anchor:GetHeight())
+					Timer.SetWidth = RM.GUI.Anchor:GetWidth() - RM.GUI.Anchor:GetHeight()
+					if Timer.Waiting then
+						Timer.GUI.TimeBar:SetWidth(Timer.SetWidth)
+					else
+						Timer:Update()
 					end
 				end
 			end
@@ -158,11 +152,19 @@ function RM.GUI:Init()
 					RM.GUI.Settings.tScale = 1.5
 				end
 				RM.GUI.Anchor.Text:SetFontSize(math.ceil(RM.GUI.Settings.tScale * KBM.Constant.RezMaster.TextSize))
-				if #RM.Rezes.ActiveTimers > 0 then
-					for _, Timer in ipairs(RM.Rezes.ActiveTimers) do
-						Timer.GUI.CastInfo:SetFontSize(RM.GUI.Anchor.Text:GetFontSize())
-						Timer.GUI.Shadow:SetFontSize(RM.GUI.Anchor.Text:GetFontSize())
-					end
+			end
+		end
+		if Changed then
+			for TimerObj, Timer in LibSata.EachIn(RM.Rezes.ActiveTimers) do
+				Timer.GUI.Background:SetHeight(RM.GUI.Anchor:GetHeight())
+				Timer.GUI.Icon:SetWidth(RM.GUI.Anchor:GetHeight())
+				Timer.GUI.CastInfo:SetFontSize(RM.GUI.Anchor.Text:GetFontSize())
+				Timer.GUI.Shadow:SetFontSize(RM.GUI.Anchor.Text:GetFontSize())
+				Timer.SetWidth = RM.GUI.Anchor:GetWidth() - RM.GUI.Anchor:GetHeight()
+				if Timer.Waiting then
+					Timer.GUI.TimeBar:SetWidth(Timer.SetWidth)
+				else
+					Timer:Update()
 				end
 			end
 		end
@@ -176,16 +178,6 @@ function RM.GUI:Init()
 					RM.GUI.Settings.wScale = 0.5
 				end
 				RM.GUI.Anchor:SetWidth(math.ceil(RM.GUI.Settings.wScale * KBM.Constant.RezMaster.w))
-				if #RM.Rezes.ActiveTimers > 0 then
-					for _, Timer in ipairs(RM.Rezes.ActiveTimers) do
-						Timer.SetWidth = RM.GUI.Anchor:GetWidth() - RM.GUI.Anchor:GetHeight()
-						if Timer.Waiting then
-							Timer.GUI.TimeBar:SetWidth(Timer.SetWidth)
-						else
-							Timer:Update()
-						end
-					end
-				end
 			end
 		end
 		
@@ -196,18 +188,6 @@ function RM.GUI:Init()
 					RM.GUI.Settings.hScale = 0.5
 				end
 				RM.GUI.Anchor:SetHeight(math.ceil(RM.GUI.Settings.hScale * KBM.Constant.RezMaster.h))
-				if #RM.Rezes.ActiveTimers > 0 then
-					for _, Timer in ipairs(RM.Rezes.ActiveTimers) do
-						Timer.GUI.Background:SetHeight(RM.GUI.Anchor:GetHeight())
-						Timer.GUI.Icon:SetWidth(RM.GUI.Anchor:GetHeight())
-						Timer.SetWidth = RM.GUI.Anchor:GetWidth() - RM.GUI.Anchor:GetHeight()
-						if Timer.Waiting then
-							Timer.GUI.TimeBar:SetWidth(Timer.SetWidth)
-						else
-							Timer:Update()
-						end
-					end
-				end
 			end
 		end
 		
@@ -218,12 +198,20 @@ function RM.GUI:Init()
 					RM.GUI.Settings.tScale = 0.5
 				end
 				RM.GUI.Anchor.Text:SetFontSize(math.ceil(RM.GUI.Settings.tScale * KBM.Constant.RezMaster.TextSize))
-				if #RM.Rezes.ActiveTimers > 0 then
-					for _, Timer in ipairs(RM.Rezes.ActiveTimers) do
-						Timer.GUI.CastInfo:SetFontSize(RM.GUI.Anchor.Text:GetFontSize())
-						Timer.GUI.Shadow:SetFontSize(RM.GUI.Anchor.Text:GetFontSize())
-					end
-				end				
+			end
+		end
+		if Changed then
+			for TimerObj, Timer in LibSata.EachIn(RM.Rezes.ActiveTimers) do
+				Timer.GUI.Background:SetHeight(RM.GUI.Anchor:GetHeight())
+				Timer.GUI.Icon:SetWidth(RM.GUI.Anchor:GetHeight())
+				Timer.GUI.CastInfo:SetFontSize(RM.GUI.Anchor.Text:GetFontSize())
+				Timer.GUI.Shadow:SetFontSize(RM.GUI.Anchor.Text:GetFontSize())
+				Timer.SetWidth = RM.GUI.Anchor:GetWidth() - RM.GUI.Anchor:GetHeight()
+				if Timer.Waiting then
+					Timer.GUI.TimeBar:SetWidth(Timer.SetWidth)
+				else
+					Timer:Update()
+				end
 			end
 		end
 	end
@@ -297,8 +285,8 @@ function RM.Rezes:Init()
 						--self.GUI.TimeBar:SetBackgroundColor(KBM.Colors.List[KBM.MechTimer.Settings.Color].Red, KBM.Colors.List[KBM.MechTimer.Settings.Color].Green, KBM.Colors.List[KBM.MechTimer.Settings.Color].Blue, 0.33)
 					--end
 					
-					if #self.ActiveTimers > 0 then
-						for i, cTimer in ipairs(self.ActiveTimers) do
+					if self.ActiveTimers._count > 0 then
+						for TableObj, cTimer in LibSata.EachIn(self.ActiveTimers) do
 							local Insert = false
 							if Timer.Remaining < cTimer.Remaining then
 								Insert = true
@@ -319,28 +307,41 @@ function RM.Rezes:Init()
 							end
 							if Insert then
 								Timer.Active = true
-								if i == 1 then
+								if TableObj == self.ActiveTimers._first then
 									Timer.GUI.Background:SetPoint("TOPLEFT", Anchor, "TOPLEFT")
-									cTimer.GUI.Background:SetPoint("TOPLEFT", Timer.GUI.Background, "BOTTOMLEFT", 0, 1)
+									if RM.GUI.Settings.Cascade then
+										cTimer.GUI.Background:SetPoint("TOPLEFT", Timer.GUI.Background, "BOTTOMLEFT", 0, 1)
+									else
+										cTimer.GUI.Background:ClearPoint("TOPLEFT")
+										cTimer.GUI.Background:ClearPoint("BOTTOMLEFT")
+										cTimer.GUI.Background:SetPoint("BOTTOMLEFT", Timer.GUI.Background, "TOPLEFT", 0, -1)
+									end
 								else
-									Timer.GUI.Background:SetPoint("TOPLEFT", self.ActiveTimers[i-1].GUI.Background, "BOTTOMLEFT", 0, 1)
-									cTimer.GUI.Background:SetPoint("TOPLEFT", Timer.GUI.Background, "BOTTOMLEFT", 0, 1)
+									if RM.GUI.Settings.Cascade then
+										Timer.GUI.Background:SetPoint("TOPLEFT", TableObj._before._data.GUI.Background, "BOTTOMLEFT", 0, 1)
+										cTimer.GUI.Background:SetPoint("TOPLEFT", Timer.GUI.Background, "BOTTOMLEFT", 0, 1)
+									else
+										Timer.GUI.Background:SetPoint("BOTTOMLEFT", TableObj._before._data.GUI.Background, "TOPLEFT", 0, -1)
+										cTimer.GUI.Background:SetPoint("BOTTOMLEFT", Timer.GUI.Background, "TOPLEFT", 0, -1)
+									end
 								end
-								table.insert(self.ActiveTimers, i, Timer)
+								Timer.TableObj = self.ActiveTimers:InsertBefore(TableObj, Timer)
 								break
 							end
 						end
 						if not Timer.Active then
-							Timer.GUI.Background:SetPoint("TOPLEFT", self.LastTimer.GUI.Background, "BOTTOMLEFT", 0, 1)
-							table.insert(self.ActiveTimers, Timer)
-							self.LastTimer = Timer
+							if RM.GUI.Settings.Cascade then
+								Timer.GUI.Background:SetPoint("TOPLEFT", self.ActiveTimers._last._data.GUI.Background, "BOTTOMLEFT", 0, 1)
+							else
+								Timer.GUI.Background:SetPoint("BOTTOMLEFT", self.ActiveTimers._last._data.GUI.Background, "TOPLEFT", 0, -1)
+							end
+							Timer.TableObj = self.ActiveTimers:Add(Timer)
 							Timer.Active = true
 						end
 					else
 						Timer.GUI.Background:SetPoint("TOPLEFT", Anchor, "TOPLEFT")
-						table.insert(self.ActiveTimers, Timer)
+						Timer.TableObj = self.ActiveTimers:Add(Timer)
 						Timer.Active = true
-						self.LastTimer = Timer
 						if RM.GUI.Settings.Visible then
 							Anchor.Text:SetVisible(false)
 						end
@@ -388,27 +389,25 @@ function RM.Rezes:Init()
 								RM.Rezes.Tracked[LibSUnit.Lookup.UID[self.UnitID].Name].Timers[self.aID] = nil
 							end
 						end
-						for i, iTimer in ipairs(RM.Rezes.ActiveTimers) do
-							if iTimer == self then
-								if #RM.Rezes.ActiveTimers == 1 then
-									RM.RezesLastTimer = nil
-									if RM.GUI.Settings.Visible then
-										RM.GUI.Anchor.Text:SetVisible(true)
-									end
-								elseif i == 1 then
-									RM.Rezes.ActiveTimers[i+1].GUI.Background:SetPoint("TOPLEFT", RM.GUI.Anchor, "TOPLEFT")
-								elseif i == #RM.Rezes.ActiveTimers then
-									RM.Rezes.LastTimer = RM.Rezes.ActiveTimers[i-1]
-								else
-									RM.Rezes.ActiveTimers[i+1].GUI.Background:SetPoint("TOPLEFT", RM.Rezes.ActiveTimers[i-1].GUI.Background, "BOTTOMLEFT", 0, 1)
-								end
-								table.remove(RM.Rezes.ActiveTimers, i)
-								self.GUI.Background:SetVisible(false)
-								self.GUI.Shadow:SetText("")
-								table.insert(RM.GUI.Store, self.GUI)
-								break
+						if RM.Rezes.ActiveTimers._count == 1 then
+							if RM.GUI.Settings.Visible then
+								RM.GUI.Anchor.Text:SetVisible(true)
+							end
+						elseif self.TableObj == RM.Rezes.ActiveTimers._first then
+							self.TableObj._after._data.GUI.Background:ClearPoint("BOTTOMLEFT")
+							self.TableObj._after._data.GUI.Background:SetPoint("TOPLEFT", RM.GUI.Anchor, "TOPLEFT")
+						elseif self.TableObj ~= RM.Rezes.ActiveTimers._last then
+							if RM.GUI.Settings.Cascade then
+								self.TableObj._after._data.GUI.Background:SetPoint("TOPLEFT", self.TableObj._before._data.GUI.Background, "BOTTOMLEFT", 0, 1)
+							else
+								self.TableObj._after._data.GUI.Background:SetPoint("BOTTOMLEFT", self.TableObj._before._data.GUI.Background, "TOPLEFT", 0, -1)
 							end
 						end
+						RM.Rezes.ActiveTimers:Remove(self.TableObj)
+						self.GUI.Background:SetVisible(false)
+						self.GUI.Shadow:SetText("")
+						table.insert(RM.GUI.Store, self.GUI)
+						self.TableObj = nil
 					end				
 					
 					if Timer.Remaining == 0 then
@@ -523,7 +522,7 @@ function RM.RezMReq(name, failed, message)
 	end
 end
 
-function RM.MessageHandler(From, Type, Channel, Identifier, Data)
+function RM.MessageHandler(handle, From, Type, Channel, Identifier, Data)
 	-- print("Data received from: "..tostring(From))
 	-- print("Type: "..tostring(Type))
 	-- print("Channel: "..tostring(Channel))
@@ -531,38 +530,60 @@ function RM.MessageHandler(From, Type, Channel, Identifier, Data)
 	-- print("Data: "..tostring(Data))
 	-- print("--------------------------------")
 	if From ~= LibSUnit.Player.Name and Data ~= nil then
-		if Type then
-			if Type == "raid" or Type == "party" then
-				if Identifier == "KBMRezSet" then
-					local aID = string.sub(Data, 1, 17)
-					local st = string.find(Data, ",", 19)
-					local aCD = math.ceil(tonumber(string.sub(Data, 19, st - 1)) or 0)
-					local aDR = math.floor(tonumber(string.sub(Data, st + 1)))
-					RM.Rezes:Add(From, aID, aCD, aDR)
-				elseif Identifier == "KBMRezRem" then
-					if RM.Rezes.Tracked[From] then
-						if RM.Rezes.Tracked[From].Timers[Data] then
-							RM.Rezes.Tracked[From].Timers[Data]:Remove()
-						end
+		if Type == "raid" or Type == "party" then
+			if Identifier == "KBMRezSet" then
+				local aID = string.sub(Data, 1, 17)
+				local st = string.find(Data, ",", 19)
+				local aCD = math.ceil(tonumber(string.sub(Data, 19, st - 1)) or 0)
+				local aDR = math.floor(tonumber(string.sub(Data, st + 1)))
+				RM.Rezes:Add(From, aID, aCD, aDR)
+			elseif Identifier == "KBMRezRem" then
+				if RM.Rezes.Tracked[From] then
+					if RM.Rezes.Tracked[From].Timers[Data] then
+						RM.Rezes.Tracked[From].Timers[Data]:Remove()
 					end
-				elseif Identifier == "KBMRezClear" then
-					RM.Rezes:Clear(From)
 				end
-			elseif Type == "send" or Type == "tell" then
-				if Identifier == "KBMRezSet" then
-					local aID = string.sub(Data, 1, 17)
-					local st = string.find(Data, ",", 19)
-					local aCD = math.ceil(tonumber(string.sub(Data, 19, st - 1)) or 0)
-					local aDR = math.floor(tonumber(string.sub(Data, st + 1)))
-					RM.Rezes:Add(From, aID, aCD, aDR)
-				elseif Identifier == "KBMRezReq" then
-					RM.Broadcast.RezSet(From)
-					if Data == "C" then
-						Command.Message.Send(From, "KBMRezReq", "R", function(failed, message) RM.RezMReq(From, failed, message) end)
-					end
+			elseif Identifier == "KBMRezClear" then
+				RM.Rezes:Clear(From)
+			end
+		elseif Type == "send" or Type == "tell" then
+			if Identifier == "KBMRezSet" then
+				local aID = string.sub(Data, 1, 17)
+				local st = string.find(Data, ",", 19)
+				local aCD = math.ceil(tonumber(string.sub(Data, 19, st - 1)) or 0)
+				local aDR = math.floor(tonumber(string.sub(Data, st + 1)))
+				RM.Rezes:Add(From, aID, aCD, aDR)
+			elseif Identifier == "KBMRezReq" then
+				RM.Broadcast.RezSet(From)
+				if Data == "C" then
+					Command.Message.Send(From, "KBMRezReq", "R", function(failed, message) RM.RezMReq(From, failed, message) end)
 				end
 			end
 		end
+	end
+end
+
+function RM:ReOrder()
+	-- Used when switching Cascade modes.
+	for TimerObj, Timer in LibSata.EachIn(self.Rezes.ActiveTimers) do
+		Timer.GUI.Background:ClearPoint("TOPLEFT")
+		Timer.GUI.Background:ClearPoint("BOTTOMLEFT")
+		if TimerObj == self.Rezes.ActiveTimers._first then
+			Timer.GUI.Background:SetPoint("TOPLEFT", RM.GUI.Anchor, "TOPLEFT")	
+		else
+			if self.GUI.Settings.Cascade then
+				Timer.GUI.Background:SetPoint("TOPLEFT", TimerObj._before._data.GUI.Background, "BOTTOMLEFT", 0, 1)
+			else
+				Timer.GUI.Background:SetPoint("BOTTOMLEFT", TimerObj._before._data.GUI.Background, "TOPLEFT", 0, -1)
+			end
+		end
+	end
+end
+
+function RM:Update()
+	for TimerObj, Timer in LibSata.EachIn(self.Rezes.ActiveTimers) do
+		Timer:Update(Inspect.Time.Real())
+		-- print("Updating: "..Timer.Name)
 	end
 end
 
@@ -574,5 +595,5 @@ function RM:Start()
 	Command.Message.Accept(nil, "KBMRezRem")
 	Command.Message.Accept(nil, "KBMRezClear")
 	Command.Message.Accept(nil, "KBMRezReq")
-	table.insert(Event.Message.Receive, {RM.MessageHandler, "KingMolinator", "Message Parse"})
+	Command.Event.Attach(Event.Message.Receive, RM.MessageHandler, "Message Parse")
 end

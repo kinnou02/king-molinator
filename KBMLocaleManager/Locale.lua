@@ -233,6 +233,7 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.RezMaster.AnchorText:SetFrench("Ancrage Minuterie Res")
 	KBM.Language.RezMaster.AnchorText:SetGerman("Res Meister Anker")
 	KBM.Language.RezMaster.AnchorText:SetKorean("부활 시간 앵커")
+	KBM.Language.RezMaster.Cascade = KBM.Language:Add("Res frames Cascade below first frame")
 	
 	-- Chat Objects
 	KBM.Language.Chat = {}

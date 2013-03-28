@@ -113,32 +113,38 @@ function LibSata:Create()
 	
 	function lst:Remove(object)
 		-- Safely remove the object from the Table and link appropriate Table Objects together
-		if object._type == "LibSata_Object" then
-			if object == self._last then
-				self._last = object._before
-			end
-			if object == self._first then
-				self._first = object._after
-			end
-			if object._before then
-				if object._after then
-					object._before._after = object._after
-					object._after._before = object._before
+		if type(object) == "table" then
+			if object._type == "LibSata_Object" then
+				if object == self._last then
+					self._last = object._before
+				end
+				if object == self._first then
+					self._first = object._after
+				end
+				if object._before then
+					if object._after then
+						object._before._after = object._after
+						object._after._before = object._before
+					else
+						object._before._after = nil
+					end
 				else
-					object._before._after = nil
+					if object._after then
+						object._after._before = nil
+					end
 				end
+				-- Allows this Table Object to now be collected via the GC.
+				-- As noted with adding/inserting Table Objects. Outside refernces will need to be cleared if used.
+				self._list[object] = nil
+				-- Decrement the internal counter.
+				self._count = self._count - 1
+				return object._data
 			else
-				if object._after then
-					object._after._before = nil
-				end
+				-- print("Warning: Supplied Table Object is not of type LibSata_Object")
 			end
-			-- Allows this Table Object to now be collected via the GC.
-			-- As noted with adding/inserting Table Objects. Outside refernces will need to be cleared if used.
-			self._list[object] = nil
-			-- Decrement the internal counter.
-			self._count = self._count - 1
 		else
-			-- print("Warning: Supplied Table Object is not of type LibSata_Object")
+			-- no valid timer object supplied
+			error("Incorrect use of Table:Remove(): Expecting table [Lua:table] object got "..type(object))
 		end
 	end
 	
@@ -146,29 +152,25 @@ function LibSata:Create()
 		if object == self._last or self._count < 2 then
 			return
 		end
-		return object._after, object._after._data
+		return object._after
 	end
 	
 	function lst:Before(object)
 		if object == self._first or self._count < 2 then
 			return
 		end
-		return object._before, object._after._data
+		return object._before
 	end
 	
 	function lst:First()
 		if self._first then
 			return self._first, self._first._data
-		else
-			return self._first
 		end
 	end
 	
 	function lst:Last()
 		if self._last then
 			return self._last, self._last._data
-		else
-			return self._last
 		end
 	end
 	
@@ -184,42 +186,44 @@ function LibSata:Create()
 		-- Please note: If you reference any Base Table or Table Object outside of this system. They will not be collected by the GC,
 		-- and could cause memory leaks. Data held in the _data field of a Table Object can be static and are not related to these tables.
 	end
-	
-	function lst:EachIn(callback, startObject)
-		-- Traverse a table from start to finish, supplying each entries data object to the callback
-		-- Must receive at least a callback function to supply the object to.
-		-- Optionally you can supply a start Table Object and the EachIn will start from that point (if it exists).
-		if self._count == 0 then
-			return
-		end
-		if type(callback) == "function" then
-			if type(startObject) == "table" then
-				if startObject._type ~= "LibSata_Object" then
-					-- print("Warning: Supplied startObject is not of type LibSata_Object")
-					startObject = nil
-				end
-			else
-				startObject = nil
-			end
-			local currentObj = startObject or self._first
-			if currentObj then
-				local breakLoop
-				repeat
-					local nextObj = currentObj._after
-					breakLoop = callback(currentObj._data, currentObj)
-					if breakLoop then
-						break
-					end
-					currentObj = nextObj
-				until not currentObj
-			end
-		else
-			error("Expecting Callback function: Got type "..type(callback))
-		end
-	end
-	
+		
 	_store[lst] = true
 	return lst
+end
+
+function LibSata.EachIn(TableObj)
+	-- Traverse a table from start to finish, supplying each entries data object to the callback
+	-- Must receive at least a callback function to supply the object to.
+	-- Optionally you can supply a start Table Object and the EachIn will start from that point (if it exists).
+	-- print("[Constructor] Each in called")
+	if type(TableObj) == "table" then
+		if TableObj._type == "LibSata_Table" then
+			if TableObj._count == 0 then
+				return function() end, nil, nil
+			end
+			-- print("[Constructor] Returning new itterator, passing to internal handler")
+			local function _iEachIn(_, currentObj)
+				-- print("[Internal Handler] Each in called")
+				if currentObj._after then
+					-- print("[Internal Handler] Returning new itterator.")
+					return currentObj._after, currentObj._after._data
+				else
+					-- print("[Internal Handler] No more objects in table, exit.")
+					return
+				end
+			end
+			return _iEachIn, _, {_after = TableObj._first}
+		else
+			-- print("[Constructor] TableObj is not of type LibSata_Object: ")
+			-- for name, data in pairs(TableObj) do
+				-- print(tostring(name).." > "..tostring(data))
+			-- end
+			return function() end, nil, nil
+		end
+	else
+		-- print("[Constructor] No table object supplied, exit: "..type(TableObj))
+		return function() end, nil, nil
+	end
 end
 
 -- Create a Base Table
@@ -231,7 +235,9 @@ end
 -- end
 
 -- Print the Table items to the console
--- TestTable:EachIn(function(data) print(data) end)
+-- for TableObj, TableData in LibSata.EachIn(TestTable) do
+-- 		print(TableData)
+-- end
 
 -- Remove the table reference: The method returns nil, so this serves to both set the local reference to nil and clear internal references.
 -- Doing this allows for the GC to free the memory associated with the table.

@@ -4,6 +4,11 @@ Mechanic Timers
 * New: Added method Timer:Wait([Priority]) - Priority defaults to -1 (and is currently not calculated)
 * New: Setting a Wait timer will keep the timer in the list (with elapsed time) until the next trigger. 
 
+Rez Master
+* New: Res frames can now either Cascade (Original) or Climb (New)
+* Change: Converted to new Rift 2.2 API Event system.
+* Change: Now uses Safes Table Library (LibSata) for all sorting and updating.
+
 Endless Eclipse
 * Progenitor Saetos
 ** Fixed: Enabled the Percentage Monitor to fire for the final two.

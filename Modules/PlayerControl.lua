@@ -82,7 +82,7 @@ function PC:GatherRaidInfo()
 end
 
 
-function PC.AbilityRemove(aIDList)
+function PC.AbilityRemove(handle, aIDList)
 	if not Inspect.System.Secure() then
 		local self = PC
 		local Count = KBM.Player.Rezes.Count
@@ -104,7 +104,7 @@ function PC.AbilityRemove(aIDList)
 	end
 end
 
-function PC.AbilityAdd(aIDList)
+function PC.AbilityAdd(handle, aIDList)
 	local self = PC
 	local Count = 0
 	
@@ -132,7 +132,7 @@ function PC.SlashAbility()
 	end
 end
 
-function PC.AbilityCooldown(aIDList)
+function PC.AbilityCooldown(handle, aIDList)
 	local self = PC
 	for rID, rDetails in pairs(KBM.Player.Rezes.List) do
 		if aIDList[rID] then
@@ -169,7 +169,7 @@ function PC.PlayerJoin()
 	-- PC:GatherRaidInfo()
 end
 
-function PC.CallingChange(UnitObj)
+function PC.CallingChange(handle, UnitObj)
 	if KBM.RezMaster.Rezes.Tracked[UnitObj.Name] then
 		if KBM.RezMaster.Rezes.Tracked[UnitObj.Name].Class ~= UnitObj.Calling then
 			if UnitObj.Calling ~= "" and UnitObj.Calling ~= nil then
@@ -204,7 +204,7 @@ function PC.RezRReq(name, failed, message)
 
 end
 
-function PC.GroupJoin(UnitObj, Spec)
+function PC.GroupJoin(handle, UnitObj, Spec)
 	if LibSUnit.Raid.Grouped then
 		if UnitObj.Name ~= LibSUnit.Player.Name then
 			if not KBM.RezMaster.Rezes.Tracked[UnitObj.Name] then
@@ -230,13 +230,13 @@ function PC.GroupJoin(UnitObj, Spec)
 	end
 end
 
-function PC.GroupLeave(UnitObj, Spec)
+function PC.GroupLeave(handle, UnitObj, Spec)
 	if LibSUnit.Raid.Grouped then
 		KBM.RezMaster.Rezes:Clear(UnitObj.Name)
 	end
 end
 
-function PC.PlayerOffline(Units)
+function PC.PlayerOffline(handle, Units)
 	for UnitID, UnitObj in pairs(Units) do
 		if UnitObj.Offline then
 			if KBM.RezMaster.Rezes.Tracked[UnitObj.Name] then
@@ -252,15 +252,15 @@ end
 
 function PC:Start()
 	self.MSG = KBM.MSG
-	table.insert(Event.Ability.New.Remove, {PC.AbilityRemove, "KingMolinator", "Ability Removed"})
-	table.insert(Event.Ability.New.Add, {PC.AbilityAdd, "KingMolinator", "Ability Add"})
-	table.insert(Event.Ability.New.Cooldown.Begin, {PC.AbilityCooldown, "KingMolinator", "Ability Cooldown"})
-	table.insert(Event.Ability.New.Cooldown.End, {PC.AbilityCooldown, "KingMolinator", "Ability Cooldown"})
-	table.insert(Event.SafesUnitLib.Raid.Join, {PC.PlayerJoin, "KingMolinator", "Player Join"})
-	table.insert(Event.SafesUnitLib.Raid.Leave, {PC.PlayerLeave, "KingMolinator", "Player Leave"})
-	table.insert(Event.SafesUnitLib.Raid.Member.Join, {PC.GroupJoin, "KingMolinator", "Group Member Join"})
-	table.insert(Event.SafesUnitLib.Raid.Member.Leave, {PC.GroupLeave, "KingMolinator", "Group Member Leave"})
-	table.insert(Event.SafesUnitLib.Unit.Detail.Calling, {PC.CallingChange, "KingMolinator", "Group member calling change"})
-	table.insert(Event.SafesUnitLib.Unit.Detail.Offline, {PC.PlayerOffline, "KingMolinator", "Player Offline"})
-	table.insert(Command.Slash.Register("kbmability"), {PC.SlashAbility, "KingMolinator", "Player Ability List"})
+	Command.Event.Attach(Event.Ability.New.Remove, PC.AbilityRemove, "Ability Removed")
+	Command.Event.Attach(Event.Ability.New.Add, PC.AbilityAdd, "Ability Add")
+	Command.Event.Attach(Event.Ability.New.Cooldown.Begin, PC.AbilityCooldown, "Ability Cooldown")
+	Command.Event.Attach(Event.Ability.New.Cooldown.End, PC.AbilityCooldown, "Ability Cooldown")
+	Command.Event.Attach(Event.SafesUnitLib.Raid.Join, PC.PlayerJoin, "Player Join")
+	Command.Event.Attach(Event.SafesUnitLib.Raid.Leave, PC.PlayerLeave, "Player Leave")
+	Command.Event.Attach(Event.SafesUnitLib.Raid.Member.Join, PC.GroupJoin, "Group Member Join")
+	Command.Event.Attach(Event.SafesUnitLib.Raid.Member.Leave, PC.GroupLeave, "Group Member Leave")
+	Command.Event.Attach(Event.SafesUnitLib.Unit.Detail.Calling, PC.CallingChange, "Group member calling change")
+	Command.Event.Attach(Event.SafesUnitLib.Unit.Detail.Offline, PC.PlayerOffline, "Player Offline")
+	Command.Event.Attach(Command.Slash.Register("kbmability"), PC.SlashAbility, "Player Ability List")
 end

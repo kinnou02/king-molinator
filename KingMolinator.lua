@@ -752,6 +752,7 @@ local function KBM_DefineVars(AddonID)
 				wScale = 1,
 				hScale = 1,
 				tScale = 1,
+				Cascade = true,
 			},
 			TankSwap = {
 				x = false,
@@ -1301,7 +1302,7 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 	Timer.PhaseMax = 0
 	Timer.Type = "timer"
 	Timer.Waiting = false
-	Timer.Wait = false
+	Timer.WaitNext = false
 	Timer.Priority = 0
 	Timer.Custom = false
 	Timer.Color = KBM.MechTimer.Settings.Color
@@ -1337,7 +1338,7 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 	end
 	
 	function Timer:Wait(Priority)
-		self.Wait = true
+		self.WaitNext = true
 		self.Priority = tonumber(Priority) or -1
 	end
 	
@@ -1573,7 +1574,7 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 				end
 				if self.Remaining <= 0 then
 					self.Remaining = 0
-					if not self.Wait then
+					if not self.WaitNext then
 						KBM.MechTimer:AddRemove(self)
 					else
 						self.Waiting = true
@@ -6613,9 +6614,7 @@ function KBM:Timer()
 				if KBM.Options.CPU.Enabled then
 					KBM.CPU:UpdateAll()
 				end
-				for i, Timer in ipairs(self.RezMaster.Rezes.ActiveTimers) do
-					Timer:Update(current)
-				end
+				KBM.RezMaster:Update()
 				self.HeldTime = current								
 			end
 			
@@ -7676,10 +7675,15 @@ function KBM.MenuOptions.RezMaster:Options()
 	function self:Text(bool)
 		KBM.Options.RezMaster.ScaleText = bool
 	end
+	function self:Cascade(bool)
+		KBM.Options.RezMaster.Cascade = bool
+		KBM.RezMaster:ReOrder()
+	end
 	
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
 	local RezMaster = Options:AddHeader(KBM.Language.RezMaster.Enabled[KBM.Lang], self.Enabled, KBM.Options.RezMaster.Enabled)
+	RezMaster:AddCheck(KBM.Language.RezMaster.Cascade[KBM.Lang], self.Cascade, KBM.Options.RezMaster.Cascade)
 	RezMaster:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.Visible, KBM.Options.RezMaster.Visible)
 	RezMaster:AddCheck(KBM.Language.Options.UnlockWidth[KBM.Lang], self.Width, KBM.Options.RezMaster.ScaleWidth)
 	RezMaster:AddCheck(KBM.Language.Options.UnlockHeight[KBM.Lang], self.Height, KBM.Options.RezMaster.ScaleHeight)
