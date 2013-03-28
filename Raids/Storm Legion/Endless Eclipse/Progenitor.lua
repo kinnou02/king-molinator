@@ -67,6 +67,10 @@ PRO.Lang.Buff.Barrier:SetFrench("Barrière d'ébène")
 PRO.Lang.Buff.Hand = KBM.Language:Add("Hand of the Master")
 PRO.Lang.Buff.Hand:SetFrench("Main du Maître")
 
+-- Debuff Dictionary
+PRO.Lang.Debuff = {}
+PRO.Lang.Debuff.Soul = KBM.Language:Add("Soul Rupture")
+
 -- Description Dictionary
 PRO.Lang.Main = {}
 
@@ -89,6 +93,7 @@ PRO.Progenitor = {
 	-- TimersRef = {},
 	AlertsRef = {},
 	Triggers = {},
+	MechRef = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
 		-- TimersRef = {
@@ -97,7 +102,13 @@ PRO.Progenitor = {
 		-- },
 		AlertsRef = {
 			Enabled = true,
-			Redesign = KBM.Defaults.AlertObj.Create("purple"),
+			Redesign = KBM.Defaults.AlertObj.Create("orange"),
+			Soul = KBM.Defaults.AlertObj.Create("purple"),
+		},
+		MechRef = {
+			Enabled = true,
+			Barrier = KBM.Defaults.MechObj.Create("cyan"),
+			Soul = KBM.Defaults.MechObj.Create("purple"),
 		},
 	}
 }
@@ -122,16 +133,15 @@ PRO.Ebassi = {
 		CastBar = KBM.Defaults.CastBar(),
 		TimersRef = {
 			Enabled = true,
-			Ebon = KBM.Defaults.TimerObj.Create("purple"),
+			Ebon = KBM.Defaults.TimerObj.Create("red"),
 		},
 		AlertsRef = {
 			Enabled = true,
 			Ebon = KBM.Defaults.AlertObj.Create("red"),
-			Barrier = KBM.Defaults.AlertObj.Create("cyan"),
 		},
 		MechRef = {
 			Enabled = true,
-			Entropic = KBM.Defaults.MechObj.Create("purple"),
+			Entropic = KBM.Defaults.MechObj.Create("blue"),
 		},
 	}
 }
@@ -156,16 +166,15 @@ PRO.Arebus = {
 		CastBar = KBM.Defaults.CastBar(),
 		TimersRef = {
 			Enabled = true,
-			Ebon = KBM.Defaults.TimerObj.Create("purple"),
+			Ebon = KBM.Defaults.TimerObj.Create("red"),
 		},
 		AlertsRef = {
 			Enabled = true,
 			Ebon = KBM.Defaults.AlertObj.Create("red"),
-			Barrier = KBM.Defaults.AlertObj.Create("cyan"),
 		},
 		MechRef = {
 			Enabled = true,
-			Entropic = KBM.Defaults.MechObj.Create("purple"),
+			Entropic = KBM.Defaults.MechObj.Create("blue"),
 		},
 	}
 }
@@ -190,16 +199,15 @@ PRO.Rhu = {
 		CastBar = KBM.Defaults.CastBar(),
 		TimersRef = {
 			Enabled = true,
-			Ebon = KBM.Defaults.TimerObj.Create("purple"),
+			Ebon = KBM.Defaults.TimerObj.Create("red"),
 		},
 		AlertsRef = {
 			Enabled = true,
 			Ebon = KBM.Defaults.AlertObj.Create("red"),
-			Barrier = KBM.Defaults.AlertObj.Create("cyan"),
 		},
 		MechRef = {
 			Enabled = true,
-			Entropic = KBM.Defaults.MechObj.Create("purple"),
+			Entropic = KBM.Defaults.MechObj.Create("blue"),
 		},
 	}
 }
@@ -224,16 +232,15 @@ PRO.Juntun = {
 		CastBar = KBM.Defaults.CastBar(),
 		TimersRef = {
 			Enabled = true,
-			Ebon = KBM.Defaults.TimerObj.Create("purple"),
+			Ebon = KBM.Defaults.TimerObj.Create("red"),
 		},
 		AlertsRef = {
 			Enabled = true,
 			Ebon = KBM.Defaults.AlertObj.Create("red"),
-			Barrier = KBM.Defaults.AlertObj.Create("cyan"),
 		},
 		MechRef = {
 			Enabled = true,
-			Entropic = KBM.Defaults.MechObj.Create("purple"),
+			Entropic = KBM.Defaults.MechObj.Create("blue"),
 		},
 	}
 }
@@ -476,23 +483,34 @@ function PRO:Start()
 	-- KBM.Defaults.TimerObj.Assign(self.Progenitor)
 	
 	-- Create Alerts
-	self.Progenitor.AlertsRef.Redesign = KBM.Alert:Create(self.Lang.Ability.Redesign[KBM.Lang], -1, true, true, "purple")
+	self.Progenitor.AlertsRef.Redesign = KBM.Alert:Create(self.Lang.Ability.Redesign[KBM.Lang], nil, true, true, "orange")
 	self.Progenitor.AlertsRef.Redesign:Important()
+	self.Progenitor.AlertsRef.Soul = KBM.Alert:Create(self.Lang.Debuff.Soul[KBM.Lang], nil, false, true, "purple")
+	self.Progenitor.AlertsRef.Soul:Important()
 	KBM.Defaults.AlertObj.Assign(self.Progenitor)
 	
+	-- Create Spies
+	self.Progenitor.MechRef.Barrier = KBM.MechSpy:Add(self.Lang.Buff.Barrier[KBM.Lang], nil, "buff", self.Progenitor)
+	self.Progenitor.MechRef.Soul = KBM.MechSpy:Add(self.Lang.Debuff.Soul[KBM.Lang], nil, "playerDebuff", self.Progenitor)
+	KBM.Defaults.MechObj.Assign(self.Progenitor)
+	
 	-- Assign Alerts and Timers to Triggers
-
 	self.Progenitor.Triggers.Redesign = KBM.Trigger:Create(self.Lang.Ability.Redesign[KBM.Lang], "cast", self.Progenitor)
 	self.Progenitor.Triggers.Redesign:AddAlert(self.Progenitor.AlertsRef.Redesign)
+	self.Progenitor.Triggers.Soul = KBM.Trigger:Create(self.Lang.Debuff.Soul[KBM.Lang], "playerBuff", self.Progenitor)
+	self.Progenitor.Triggers.Soul:AddAlert(self.Progenitor.AlertsRef.Soul, true)
+	self.Progenitor.Triggers.Soul:AddSpy(self.Progenitor.MechRef.Soul)
+	self.Progenitor.Triggers.Barrier = KBM.Trigger:Create(self.Lang.Buff.Barrier[KBM.Lang], "buff", self.Progenitor)
+	self.Progenitor.Triggers.Barrier:AddSpy(self.Progenitor.MechRef.Barrier)
 
 	self.Progenitor.CastBar = KBM.CastBar:Add(self, self.Progenitor)
 
 	-- Setup the 4 mini bosses identically
 
 	for k, BossObj in ipairs({[1] = self.Juntun, [2] = self.Ebassi, [3] = self.Arebus, [4] = self.Rhu, }) do
-		BossObj.TimersRef.Ebon = KBM.MechTimer:Add(self.Lang.Ability.Ebon[KBM.Lang], 23, false)
+		BossObj.TimersRef.Ebon = KBM.MechTimer:Add(BossObj.Name.." "..self.Lang.Ability.Ebon[KBM.Lang], 23, false)
 		KBM.Defaults.TimerObj.Assign(BossObj)
-		BossObj.AlertsRef.Ebon = KBM.Alert:Create(self.Lang.Ability.Ebon[KBM.Lang], 10, true, true, "red")
+		BossObj.AlertsRef.Ebon = KBM.Alert:Create(BossObj.Name.." "..self.Lang.Ability.Ebon[KBM.Lang], nil, true, true, "red")
 		KBM.Defaults.AlertObj.Assign(BossObj)
 		BossObj.MechRef.Entropic = KBM.MechSpy:Add(self.Lang.Ability.Entropic[KBM.Lang], 5, "cast", BossObj)
 		KBM.Defaults.MechObj.Assign(BossObj)
@@ -504,6 +522,8 @@ function PRO:Start()
 		BossObj.Triggers.Entropic = KBM.Trigger:Create(self.Lang.Ability.Entropic[KBM.Lang], "cast", BossObj)
 		BossObj.Triggers.Entropic:AddSpy(BossObj.MechRef.Entropic)
 		BossObj.CastBar = KBM.CastBar:Add(self, BossObj)
+		BossObj.Triggers.Barrier = KBM.Trigger:Create(self.Lang.Buff.Barrier[KBM.Lang], "buff", BossObj)
+		BossObj.Triggers.Barrier:AddSpy(self.Progenitor.MechRef.Barrier)
 	end
 	
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

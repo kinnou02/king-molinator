@@ -696,7 +696,7 @@ function KBM.Defaults.Button()
 	return ButtonObj
 end
 
-local function KBM_DefineVars(AddonID)
+local function KBM_DefineVars(handle, AddonID)
 	if AddonID == "KingMolinator" then
 		KBM.Options = {
 			Player = {
@@ -881,7 +881,7 @@ function KBM.LoadTable(Source, Target)
 	end
 end
 
-local function KBM_LoadVars(AddonID)
+local function KBM_LoadVars(handle, AddonID)
 	local TargetLoad = nil
 	if AddonID == "KingMolinator" then		
 		if chKBM_GlobalOptions.Character then
@@ -919,7 +919,7 @@ local function KBM_LoadVars(AddonID)
 	end
 end
 
-local function KBM_SaveVars(AddonID)
+local function KBM_SaveVars(handle, AddonID)
 	if AddonID == "KingMolinator" then
 		KBM_GlobalOptions.UnitCache = KBM.Options.UnitCache
 		KBM_GlobalOptions.UnitTotal = KBM.Options.UnitTotal
@@ -2146,13 +2146,19 @@ function KBM.Trigger:Init()
 				if not self.Buff[Unit.Mod.ID] then
 					self.Buff[Unit.Mod.ID] = {}
 				end
-				self.Buff[Unit.Mod.ID][Trigger] = TriggerObj
+				if not self.Buff[Unit.Mod.ID][Trigger] then
+					self.Buff[Unit.Mod.ID][Trigger] = {}
+				end
+				self.Buff[Unit.Mod.ID][Trigger][Unit.Name] = TriggerObj
 			elseif Type == "buffRemove" then
 				if not self.BuffRemove[Unit.Mod.ID] then
 					self.BuffRemove[Unit.Mod.ID] = {}
 				end
-				self.BuffRemove[Unit.Mod.ID][Trigger] = TriggerObj
-			elseif Type == "playerBuff" then
+				if not self.BuffRemove[Unit.Mod.ID][Trigger] then
+					self.BuffRemove[Unit.Mod.ID][Trigger] = {}
+				end
+				self.BuffRemove[Unit.Mod.ID][Trigger][Unit.Name] = TriggerObj
+			elseif Type == "playerBuff" or Type == "playerDebuff" then
 				if not self.PlayerBuff[Unit.Mod.ID] then
 					self.PlayerBuff[Unit.Mod.ID] = {}
 				end
@@ -2162,11 +2168,11 @@ function KBM.Trigger:Init()
 					self.PlayerBuffRemove[Unit.Mod.ID] = {}
 				end
 				self.PlayerBuffRemove[Unit.Mod.ID][Trigger] = TriggerObj
-			elseif Type == "playerDebuff" then
-				if not self.PlayerDebuff[Unit.Mod.ID] then
-					self.PlayerDebuff[Unit.Mod.ID] = {}
-				end
-				self.PlayerDebuff[Unit.Mod.ID][Trigger] = TriggerObj
+			-- elseif Type == "playerDebuff" then
+				-- if not self.PlayerDebuff[Unit.Mod.ID] then
+					-- self.PlayerDebuff[Unit.Mod.ID] = {}
+				-- end
+				-- self.PlayerDebuff[Unit.Mod.ID][Trigger] = TriggerObj
 			elseif Type == "playerIDBuff" then
 				if not self.PlayerIDBuff[Unit.Mod.ID] then
 					self.PlayerIDBuff[Unit.Mod.ID] = {}
@@ -6591,7 +6597,7 @@ end
 
 KBM.ClearBuffers = 0
 
-function KBM:Timer()
+function KBM:Timer(handle)
 
 	local current = Inspect.Time.Real()
 	local diff = (current - self.HeldTime)
@@ -6714,7 +6720,7 @@ function KBM:Timer()
 	end	
 end
 
-function KBM:AuxTimer()
+function KBM:AuxTimer(handle)
 end
 
 local function KBM_CastBar(units)
@@ -6844,7 +6850,7 @@ local function KBM_Help()
 	print(KBM.Language.Command.Help[KBM.Lang])
 end
 
-function KBM.Notify(data)
+function KBM.Notify(handle, data)
 	if KBM.Debug then
 		print("Notify Capture;")
 		dump(data)
@@ -6880,7 +6886,7 @@ function KBM.Notify(data)
 	end	
 end
 
-function KBM.NPCChat(data)
+function KBM.NPCChat(handle, data)
 	if KBM.Debug then
 		print("Chat Capture;")
 		dump(data)
@@ -6907,7 +6913,7 @@ function KBM.NPCChat(data)
 	end
 end
 
-function KBM:BuffAdd(Units)
+function KBM:BuffAdd(handle, Units)
 	-- Used to manage Triggers and soon Tank-Swap managing.
 	-- local TimeStore = Inspect.Time.Real()
 	
@@ -6918,29 +6924,34 @@ function KBM:BuffAdd(Units)
 					if bDetails then
 						if KBM.Trigger.Buff[KBM.CurrentMod.ID] then
 							if KBM.Trigger.Buff[KBM.CurrentMod.ID][bDetails.name] then
-								local TriggerObj = KBM.Trigger.Buff[KBM.CurrentMod.ID][bDetails.name]
-								if TriggerObj.Unit.UnitID == unitID then
-									KBM.Trigger.Queue:Add(TriggerObj, unitID, unitID, bDetails.remaining)
-								end
-							end
-						end
-						if KBM.Trigger.PlayerDebuff[KBM.CurrentMod.ID] ~= nil and bDetails.debuff == true then
-							if KBM.Trigger.PlayerDebuff[KBM.CurrentMod.ID][bDetails.name] then
-								local TriggerObj = KBM.Trigger.PlayerDebuff[KBM.CurrentMod.ID][bDetails.name]
-								if LibSUnit.Raid.UID[unitID] ~= nil or unitID == LibSUnit.Player.UnitID then
-									if KBM.Debug then
-										print("Debuff Trigger matched: "..bDetails.name)
-										if LibSUnit.Raid.Grouped then
-											print("LibSUnit Match: "..tostring(LibSUnit.Raid.UID[unitID]))
+								local uDetails = LibSUnit.Lookup.UID[unitID]
+								if uDetails then
+									local TriggerObj = KBM.Trigger.Buff[KBM.CurrentMod.ID][bDetails.name][uDetails.Name]
+									if TriggerObj then
+										if TriggerObj.Unit.UnitID == unitID then
+											KBM.Trigger.Queue:Add(TriggerObj, unitID, unitID, bDetails.remaining)
 										end
-										print("Player Match: "..LibSUnit.Player.UnitID.." - "..unitID)
-										print("---------------")
-										dump(bDetails)
 									end
-									KBM.Trigger.Queue:Add(TriggerObj, unitID, unitID, bDetails.remaining)
 								end
 							end
 						end
+						-- if KBM.Trigger.PlayerDebuff[KBM.CurrentMod.ID] ~= nil and bDetails.debuff == true then
+							-- if KBM.Trigger.PlayerDebuff[KBM.CurrentMod.ID][bDetails.name] then
+								-- local TriggerObj = KBM.Trigger.PlayerDebuff[KBM.CurrentMod.ID][bDetails.name]
+								-- if LibSUnit.Raid.UID[unitID] ~= nil or unitID == LibSUnit.Player.UnitID then
+									-- if KBM.Debug then
+										-- print("Debuff Trigger matched: "..bDetails.name)
+										-- if LibSUnit.Raid.Grouped then
+											-- print("LibSUnit Match: "..tostring(LibSUnit.Raid.UID[unitID]))
+										-- end
+										-- print("Player Match: "..LibSUnit.Player.UnitID.." - "..unitID)
+										-- print("---------------")
+										-- dump(bDetails)
+									-- end
+									-- KBM.Trigger.Queue:Add(TriggerObj, unitID, unitID, bDetails.remaining)
+								-- end
+							-- end
+						-- end
 						if KBM.Trigger.PlayerIDBuff[KBM.CurrentMod.ID] then
 							if KBM.Trigger.PlayerIDBuff[KBM.CurrentMod.ID][bDetails.type] then
 								local TriggerObj = KBM.Trigger.PlayerIDBuff[KBM.CurrentMod.ID][bDetails.type]
@@ -7026,7 +7037,7 @@ function KBM:BuffAdd(Units)
 	end
 end
 
-function KBM:BuffRemove(Units)
+function KBM:BuffRemove(handle, Units)
 	if KBM.Options.Enabled then
 		if KBM.Encounter then
 			for unitID, BuffTable in pairs(Units) do
@@ -7034,9 +7045,14 @@ function KBM:BuffRemove(Units)
 					if bDetails then
 						if KBM.Trigger.BuffRemove[KBM.CurrentMod.ID] then
 							if KBM.Trigger.BuffRemove[KBM.CurrentMod.ID][bDetails.name] then
-								local TriggerObj = KBM.Trigger.BuffRemove[KBM.CurrentMod.ID][bDetails.name]
-								if TriggerObj.Unit.UnitID == unitID then
-									KBM.Trigger.Queue:Add(TriggerObj, nil, unitID, nil)
+								local uDetails = LibSUnit.Lookup.UID[unitID]
+								if uDetails then
+									local TriggerObj = KBM.Trigger.BuffRemove[KBM.CurrentMod.ID][bDetails.name][uDetails.Name]
+									if TriggerObj then
+										if TriggerObj.Unit.UnitID == unitID then
+											KBM.Trigger.Queue:Add(TriggerObj, nil, unitID, nil)
+										end
+									end
 								end
 							end
 						end
@@ -8152,19 +8168,19 @@ end
 function KBM.InitEvents()
 	-- Addon API Events
 	-- Chat
-	table.insert(Event.Chat.Notify, {KBM.Notify, "KingMolinator", "Notify Event"})
-	table.insert(Event.Chat.Npc, {KBM.NPCChat, "KingMolinator", "NPC Chat"})
+	Command.Event.Attach(Event.Chat.Notify, KBM.Notify, "Notify Event")
+	Command.Event.Attach(Event.Chat.Npc, KBM.NPCChat, "NPC Chat")
 	-- Units
-	table.insert(Event.Unit.Castbar, {KBM_CastBar, "KingMolinator", "Cast Bar Event"})
+	--table.insert(Event.Unit.Castbar, {KBM_CastBar, "KingMolinator", "Cast Bar Event"})
 	-- System
-	table.insert(Event.System.Update.Begin, {function () KBM:Timer() end, "KingMolinator", "System Update Begin"})
-	table.insert(Event.System.Update.End, {function () KBM:AuxTimer() end, "KingMolinator", "System Update End"})
-	table.insert(Event.System.Secure.Enter, {KBM.SecureEnter, "KingMolinator", "Secure Enter"})
-	table.insert(Event.System.Secure.Leave, {KBM.SecureLeave, "KingMolinator", "Secure Leave"})
+	Command.Event.Attach(Event.System.Update.Begin, function () KBM:Timer() end, "System Update Begin")
+	--Command.Event.Attach(Event.System.Update.End, function () KBM:AuxTimer() end, "System Update End")
+	Command.Event.Attach(Event.System.Secure.Enter, KBM.SecureEnter, "Secure Enter")
+	Command.Event.Attach(Event.System.Secure.Leave, KBM.SecureLeave, "Secure Leave")
 	
 	-- Safe's Buff Library Events
-	table.insert(Event.SafesBuffLib.Buff.Add, {function (...) KBM:BuffAdd(...) end, "KingMolinator", "Buff Monitor (Add)"})
-	table.insert(Event.SafesBuffLib.Buff.Remove, {function (...) KBM:BuffRemove(...) end, "KingMolinator", "Buff Monitor (Remove)"})
+	Command.Event.Attach(Event.SafesBuffLib.Buff.Add, function (...) KBM:BuffAdd(...) end, "Buff Monitor (Add)")
+	Command.Event.Attach(Event.SafesBuffLib.Buff.Remove, function (...) KBM:BuffRemove(...) end, "Buff Monitor (Remove)")
 	
 	-- Safe's Unit Library Events
 	table.insert(Event.SafesUnitLib.Unit.New.Full, {KBM.Unit.Available, "KingMolinator", "Unit Available"})
@@ -8286,7 +8302,7 @@ function KBM.RegisterMod(ModID, Mod)
 	end
 end
 
-function KBM.InitKBM(ModID)	
+function KBM.InitKBM(handle, ModID)	
 	if ModID == "KingMolinator" then
 		KBM.ApplySettings()
 		local TempGUIList = {}
@@ -8357,11 +8373,11 @@ function KBM.InitKBM(ModID)
 	end
 end
 
-table.insert(Event.Addon.SavedVariables.Load.Begin, {KBM_DefineVars, "KingMolinator", "Load Begin"})
-table.insert(Event.Addon.SavedVariables.Load.End, {KBM_LoadVars, "KingMolinator", "Load End"})
-table.insert(Event.Addon.SavedVariables.Save.Begin, {KBM_SaveVars, "KingMolinator", "Save Begin"})
-table.insert(Event.Addon.Load.End, {KBM.InitKBM, "KingMolinator", "Begin Init Sequence"})
-table.insert(Event.SafesUnitLib.System.Start, {KBM.WaitReady, "KingMolinator", "Sync Wait"})
+Command.Event.Attach(Event.Addon.SavedVariables.Load.Begin, KBM_DefineVars, "Load Begin")
+Command.Event.Attach(Event.Addon.SavedVariables.Load.End, KBM_LoadVars, "Load End")
+Command.Event.Attach(Event.Addon.SavedVariables.Save.Begin, KBM_SaveVars, "Save Begin")
+Command.Event.Attach(Event.Addon.Load.End, KBM.InitKBM, "Begin Init Sequence")
+Command.Event.Attach(Event.SafesUnitLib.System.Start, KBM.WaitReady, "Sync Wait")
 
 local AddonDetails = Inspect.Addon.Detail("KBMTextureHandler")
 KBM.LoadTexture = AddonDetails.data.LoadTexture

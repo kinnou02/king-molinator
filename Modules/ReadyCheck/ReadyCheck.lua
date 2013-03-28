@@ -868,7 +868,7 @@ function PI:SwapSettings(bool)
 
 end
 
-function PI.LoadVars(ModID)
+function PI.LoadVars(handle, ModID)
 	if ModID == AddonData.id then
 		if KBM.Options.Character then
 			if not chKBMRCM_Settings then
@@ -889,7 +889,7 @@ function PI.LoadVars(ModID)
 	end
 end
 
-function PI.SaveVars(ModID)
+function PI.SaveVars(handle, ModID)
 	if ModID == AddonData.id then
 		if KBM.Options.Character then
 			chKBMRCM_Settings = PI.Settings
@@ -1869,7 +1869,7 @@ function PI.ReadyState(Units)
 	end
 end
 
-function PI.Init(ModID)
+function PI.Init(handle, ModID)
 	if ModID == AddonData.id then
 		-- LibSUnit Events
 		table.insert(Event.SafesUnitLib.Raid.Join, {PI.PlayerJoin, "KBMReadyCheck", "Player Joins"})
@@ -1889,7 +1889,7 @@ function PI.Init(ModID)
 	end
 end
 
-table.insert(Event.Addon.Load.End, {PI.Init, "KBMReadyCheck", "Syncronized Start"})
-table.insert(Event.Addon.SavedVariables.Load.End, {PI.LoadVars, "KBMReadyCheck", "Load Settings"})
-table.insert(Event.Addon.SavedVariables.Save.Begin, {PI.SaveVars, "KBMReadyCheck", "Save Settings"})
-table.insert(Event.SafesUnitLib.System.Start, {PI.Start, "KBMReadyCheck", "Start-up"})
+Command.Event.Attach(Event.Addon.Load.End, PI.Init, "Syncronized Start")
+Command.Event.Attach(Event.Addon.SavedVariables.Load.End, PI.LoadVars, "Load Settings")
+Command.Event.Attach(Event.Addon.SavedVariables.Save.Begin, PI.SaveVars, "Save Settings")
+Command.Event.Attach(Event.SafesUnitLib.System.Start, PI.Start, "Start-up")

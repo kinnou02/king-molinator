@@ -1,5 +1,9 @@
 ﻿v1.4.3
 
+Triggers
+* Change: "buff" and "buffRemove" are now linked directly to a supplied BossObj.Name
+* Change: "playerDebuff" will now link directly to "playerBuff" and use a single check during combat. (Performance boost)
+
 Mechanic Timers
 * New: Added method Timer:Wait([Priority]) - Priority defaults to -1 (and is currently not calculated)
 * New: Setting a Wait timer will keep the timer in the list (with elapsed time) until the next trigger. 
@@ -11,6 +15,8 @@ Rez Master
 
 Endless Eclipse
 * Progenitor Saetos
+** New: Added Personal alert for Soul Rapture (need confirmation on Debuff name, Hard Mode purple bubble, or Buff ID).
+** Change: Ebon Eruption timers and alerts are now prefix with the corresponding mini.
 ** Fixed: Enabled the Percentage Monitor to fire for the final two.
 
 Frozen Tempest
