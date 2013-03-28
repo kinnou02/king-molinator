@@ -226,6 +226,18 @@ function LibSata.EachIn(TableObj)
 	end
 end
 
+function LibSata.DebugTable(TableObj)
+	for TableObj, TableData in LibSata.EachIn(TableObj) do
+		print(tostring(TableObj))
+		print(tostring(TableData))
+		if type(TableData) == "table" then
+			for k, v in pairs(TableData) do
+				print(tostring(k)..": "..tostring(v))
+			end
+		end
+	end
+end
+
 -- Create a Base Table
 -- local TestTable = LibSata:Create()
 

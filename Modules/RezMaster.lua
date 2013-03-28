@@ -384,9 +384,9 @@ function RM.Rezes:Init()
 					end
 					
 					function Timer:Remove()
-						if self.UnitID then
-							if RM.RezMaster.Rezes.Tracked[LibSUnit.Lookup.UID[self.UnitID].Name] then
-								RM.Rezes.Tracked[LibSUnit.Lookup.UID[self.UnitID].Name].Timers[self.aID] = nil
+						if self.Player then
+							if RM.Rezes.Tracked[self.Player] then
+								RM.Rezes.Tracked[self.Player].Timers[self.aID] = nil
 							end
 						end
 						if RM.Rezes.ActiveTimers._count == 1 then
@@ -586,6 +586,8 @@ function RM:Update()
 		-- print("Updating: "..Timer.Name)
 	end
 end
+
+Command.Event.Attach(Command.Slash.Register("libsatadebug"), function(handle) LibSata.DebugTable(RM.Rezes.ActiveTimers) end, "List Table Contents")
 
 function RM:Start()
 	self.MSG = KBM.MSG
