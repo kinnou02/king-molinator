@@ -38,21 +38,28 @@ KR.Lang.Unit.KainShort:SetGerman("Kain")
 KR.Lang.Unit.KainShort:SetFrench("Kain")
 KR.Lang.Unit.Zathral = KBM.Language:Add("Zathral Ashtongue")
 KR.Lang.Unit.Zathral:SetFrench("Zathral Langue-cendrée")
+KR.Lang.Unit.Zathral:SetGerman("Zathral Aschzunge")
 KR.Lang.Unit.ZathralShort = KBM.Language:Add("Zathral")
 KR.Lang.Unit.ZathralShort:SetFrench("Zathral")
+KR.Lang.Unit.ZathralShort:SetGerman("Zathral")
 KR.Lang.Unit.Baziel = KBM.Language:Add("Baziel Rotflesh")
 KR.Lang.Unit.Baziel:SetFrench("Baziel Chairpourrie")
+KR.Lang.Unit.Baziel:SetGerman("Baziel Faulfleisch")
 KR.Lang.Unit.BazielShort = KBM.Language:Add("Baziel")
 KR.Lang.Unit.BazielShort:SetFrench("Baziel")
+KR.Lang.Unit.BazielShort:SetGerman("Baziel")
 KR.Lang.Unit.Thief = KBM.Language:Add("Deathbound Bloodthief")
 KR.Lang.Unit.Thief:SetFrench("Voleur de sang maudit")
+KR.Lang.Unit.Thief:SetGerman("Todesgebundener Blutdieb")
 
 -- Ability Dictionary
 KR.Lang.Ability = {}
 KR.Lang.Ability.Vile = KBM.Language:Add("Vile Blood")
 KR.Lang.Ability.Vile:SetFrench("Sang infâme")
+KR.Lang.Ability.Vile:SetGerman("Übles Blut")
 KR.Lang.Ability.Foul = KBM.Language:Add("Foul Blood")
 KR.Lang.Ability.Foul:SetFrench("Sang infect")
+KR.Lang.Ability.Foul:SetGerman("Fauliges Blut")
 
 -- Debuff Dictionary
 KR.Lang.Debuff = {}

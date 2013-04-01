@@ -23,6 +23,9 @@ Frozen Tempest
 * Kolmasveli & Toinenveli
 ** Change: Removed the timer stops for Glimpse at 10% as they can technically be cast again.
 
+* German Updates.
+* French Updates.
+
 ----
 v1.4.2
 

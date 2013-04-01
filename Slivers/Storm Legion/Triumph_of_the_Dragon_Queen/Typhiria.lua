@@ -41,11 +41,15 @@ TPH.Lang.Unit.TyphiriaShort:SetFrench("Typhiria")
 TPH.Lang.Ability = {}
 TPH.Lang.Ability.Clouds = KBM.Language:Add("Dark Clouds")
 TPH.Lang.Ability.Clouds:SetFrench("Nuages ténébreux")
+TPH.Lang.Ability.Clouds:SetGerman("Dunkle Wolken")
 TPH.Lang.Ability.Tempest = KBM.Language:Add("Tempest of Agony")
 TPH.Lang.Ability.Tempest:SetFrench("Tempête d'agonie")
+TPH.Lang.Ability.Tempest:SetGerman("Sturm der Pein")
 TPH.Lang.Ability.Blast = KBM.Language:Add("Storm Blast")
 TPH.Lang.Ability.Blast:SetFrench("Poussée foudroyante")
+TPH.Lang.Ability.Blast:SetGerman("Sturmschlag")
 TPH.Lang.Ability.Wrath = KBM.Language:Add("Typhiria's Wrath")
+TPH.Lang.Ability.Wrath:SetGerman("Typhria's Zorn")
 
 -- Description Dictionary
 TPH.Lang.Main = {}

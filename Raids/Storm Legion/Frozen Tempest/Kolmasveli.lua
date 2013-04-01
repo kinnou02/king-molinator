@@ -87,6 +87,7 @@ KT.Lang.Verbose.GlimpseToi:SetGerman("Verstecken vor Toinenveli!")
 KT.Lang.Verbose.GlimpseToi:SetFrench("Se cacher de Toinenveli!")
 KT.Lang.Verbose.RunAway = KBM.Language:Add("Run away from raid!")
 KT.Lang.Verbose.RunAway:SetFrench("S'éloigner du raid!")
+KT.Lang.Verbose.RunAway:SetGerman("Lauf vom Raid weg!")
 
 -- Description Dictionary
 KT.Lang.Main = {}

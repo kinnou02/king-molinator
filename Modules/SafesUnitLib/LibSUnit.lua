@@ -453,7 +453,7 @@ function _lsu.Unit.Name(uList)
 	_lsu.Event.Unit.Detail.Name(newList)	
 end
 
-function _lsu.Unit.Health(uList)
+function _lsu.Unit.Health(handle, uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Health in pairs(uList) do
@@ -818,7 +818,7 @@ function _lsu:Idle(UnitObj)
 end
 
 -- Unit Availability Handlers
-function _lsu.Avail.Full(EHandle, uList)
+function _lsu.Avail.Full(handle, uList)
 	-- Main handler for new Units
 
 	-- Optimize
@@ -840,7 +840,7 @@ function _lsu.Avail.Full(EHandle, uList)
 	end
 end
 
-function _lsu.Avail.Partial(EHandle, uList)
+function _lsu.Avail.Partial(handle, uList)
 	-- Main handler for Partial Units
 
 	-- Optimize
@@ -861,7 +861,7 @@ function _lsu.Avail.Partial(EHandle, uList)
 	end
 end
 
-function _lsu.Avail.None(EHandle, uList)
+function _lsu.Avail.None(handle, uList)
 	-- Move to Idle
 
 	-- Optimize
@@ -1216,7 +1216,7 @@ function _lsu.Tick()
 	_lastTick = _cTime
 end
 
-function _lsu.Wait(EHandle, uList)
+function _lsu.Wait(handle, uList)
 	if uList[_lsu.PlayerID] then
 		-- Initialize Player Data
 		_lsu.Avail.Full(Event.Unit.Availability.Full, {[_lsu.PlayerID] = "player"})
@@ -1235,7 +1235,7 @@ function _lsu.Wait(EHandle, uList)
 		Command.Event.Attach(Event.Unit.Availability.None, _lsu.Avail.None, "Unit Availability None Handler")
 
 		-- Unit Data Change
-		table.insert(Event.Unit.Detail.Health, {_lsu.Unit.Health, AddonIni.id, "Unit HP Change"})
+		Command.Event.Attach(Event.Unit.Detail.Health, _lsu.Unit.Health, "Unit HP Change")
 		table.insert(Event.Unit.Detail.Name, {_lsu.Unit.Name, AddonIni.id, "Unit Name Change"})
 		table.insert(Event.Unit.Detail.Level, {_lsu.Unit.Level, AddonIni.id, "Unit Level Change"})
 		table.insert(Event.Unit.Detail.HealthMax, {_lsu.Unit.HealthMax, AddonIni.id, "Unit HP Max Change"})
@@ -1291,14 +1291,14 @@ function _lsu.Wait(EHandle, uList)
 	end
 end
 
-function _lsu.Start(EHandle, AddonId)
+function _lsu.Start(handle, AddonId)
 	if AddonId == AddonIni.id then
 		_lsu.PlayerID = Inspect.Unit.Lookup("player")
 		Command.Event.Attach(Event.Unit.Availability.Full, _lsu.Wait, "System Wait Start")
 	end
 end
 
-function _lsu.SlashHandler(cmd)
+function _lsu.SlashHandler(handle, cmd)
 	cmd = string.lower(cmd or "")
 	if cmd == "debug" then
 		if _lsu.Settings.Debug then
@@ -1325,7 +1325,7 @@ Command.Event.Attach(Event.Addon.SavedVariables.Save.Begin, _lsu.Save, "Save Var
 
 -- System Specific Events
 Command.Event.Attach(Event.System.Update.Begin, _lsu.Tick, "Redraw start")
-table.insert(Command.Slash.Register("libsunit"), {_lsu.SlashHandler, AddonIni.id, "LibSUnit Slash Command"})
+Command.Event.Attach(Command.Slash.Register("libsunit"), _lsu.SlashHandler, "LibSUnit Slash Command")
 
 -- DEBUG STUFF
 _lsu.Debug = {}

@@ -6,6 +6,38 @@
 local AddonDetails, LibSGui = ...
 local _int = LibSGui:_internal()
 
+function _int:pullWindow(_parent)
+	local window
+	local Count = self.base.window:Count()
+	if Count == 0 then
+		window = UI.CreateFrame("RiftWindow", "LibSGui_Window_"..Count, _parent)
+		return window
+	else
+		--print("Window available in cache of "..Count)
+		local windowObj, window = self.base.window:Last()
+		self.base.window:Remove(windowObj)
+		window:SetParent(_parent)
+		--print("New Window count is: "..self.base.window:Count())
+		return window
+	end
+end
+
+function _int:pushWindow(window)
+	if window then
+		window:ClearAll()
+		window:SetParent(self._context)
+		window:SetLayer(1)
+		for _eventID, _eventTable in pairs(window.Event) do
+			--print("Setting event: ".._eventID.." to nil")
+			window.Event[_eventID] = nil
+		end
+		self.base.window:Add(window)
+		--print("Window added to cache: Total available = "..self.base.window:Count())
+	else
+		error("No window supplied in: _int:pushWindow(window)")
+	end
+end
+
 function LibSGui:CreateWindow(title, _parent, pTable)
 	pTable = pTable or {}
 	

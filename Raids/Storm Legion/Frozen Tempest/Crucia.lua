@@ -69,8 +69,10 @@ CRC.Lang.Unit.ConstructShort:SetGerman("Konstrukt")
 CRC.Lang.Unit.ConstructShort:SetFrench("Technogolem")
 CRC.Lang.Unit.Elemental = KBM.Language:Add("Tempest Elemental")
 CRC.Lang.Unit.Elemental:SetFrench("Élémentaire tempétueux")
+CRC.Lang.Unit.Elemental:SetGerman("Sturmwindelementar")
 CRC.Lang.Unit.ElementalShort = KBM.Language:Add("Elemental")
 CRC.Lang.Unit.ElementalShort:SetFrench("Élémentaire")
+CRC.Lang.Unit.ElementalShort:SetGerman("Elementar")
 
 -- Ability Dictionary
 CRC.Lang.Ability = {}
@@ -90,8 +92,10 @@ CRC.Lang.Ability.Wrath = KBM.Language:Add("Tempest Wrath")
 CRC.Lang.Ability.Wrath:SetFrench("Courroux tempétueux")
 CRC.Lang.Ability.Blessing = KBM.Language:Add("Blessing of the Storm Queen")
 CRC.Lang.Ability.Blessing:SetFrench("Bénédiction de la Reine des Tempêtes")
+CRC.Lang.Ability.Blessing:SetGerman("Segen der Sturmkönigin")
 CRC.Lang.Ability.Armor = KBM.Language:Add("Conductive Armor")
 CRC.Lang.Ability.Armor:SetFrench("Armure conductrice")
+CRC.Lang.Ability.Armor:SetGerman("Leitende Rüstung")
 
 -- Debuff Dictionary
 CRC.Lang.Debuff = {}
@@ -105,19 +109,25 @@ CRC.Lang.Debuff.ArmorID1 = "BFE59811C6CBE34C4"
 CRC.Lang.Debuff.ArmorID2 = "BFCCCBAD1C6C69635"
 CRC.Lang.Debuff.Blessing = KBM.Language:Add("Blessing of the Storm Queen")
 CRC.Lang.Debuff.Blessing:SetFrench("Bénédiction de la Reine des Tempêtes")
+CRC.Lang.Debuff.Blessing:SetGerman("Segen der Sturmkönigin")
 CRC.Lang.Debuff.BlessingID1 = "BFD3474BD0B3B85A0"
 CRC.Lang.Debuff.BlessingID2 = "BFD3474BE4FFA4FC0"
 CRC.Lang.Debuff.Unstable = KBM.Language:Add("Unstable Coolant")
 CRC.Lang.Debuff.Unstable:SetFrench("Refroidissement instable")
+CRC.Lang.Debuff.Unstable:SetGerman("Instabiles Kühlmittel")
 CRC.Lang.Debuff.Stablized = KBM.Language:Add("Stablized Coolant")
 CRC.Lang.Debuff.Stablized:SetFrench("Refroidissement stabilisé")
+CRC.Lang.Debuff.Stablized:SetGerman("Stabilisiertes Kühlmittel")
 CRC.Lang.Debuff.Wrath = KBM.Language:Add("Tempest Wrath")
 CRC.Lang.Debuff.Wrath:SetFrench("Courroux tempétueux")
+CRC.Lang.Debuff.Wrath:SetGerman("Tempest Wrath")
 
+-- Buff Dictionary
 CRC.Lang.Buff = {}
 CRC.Lang.Buff.Ion = KBM.Language:Add("Ion Shield")
 CRC.Lang.Buff.Short = KBM.Language:Add("Short Circuit")
 CRC.Lang.Buff.Short:SetFrench("Court-circuit")
+CRC.Lang.Buff.Short:SetGerman("Kurzschluss")
 
 -- Verbose Dictionary
 CRC.Lang.Verbose = {}
@@ -126,6 +136,7 @@ CRC.Lang.Verbose.Fury:SetGerman("WEGSCHAUEN!")
 CRC.Lang.Verbose.Fury:SetFrench("Regarder Ailleurs!")
 CRC.Lang.Verbose.TankSwap = KBM.Language:Add("Tank Swap")
 CRC.Lang.Verbose.TankSwap:SetFrench("Changement Tank")
+CRC.Lang.Verbose.TankSwap:SetGerman("Tank-Wechsel")
 
 -- Description Dictionary
 CRC.Lang.Main = {}

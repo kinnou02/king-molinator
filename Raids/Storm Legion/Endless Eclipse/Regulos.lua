@@ -76,46 +76,60 @@ REG.Lang.Unit.RegulosShort:SetGerman("Regulos")
 REG.Lang.Unit.RegulosShort:SetFrench("Regulos")
 REG.Lang.Unit.Shambler = KBM.Language:Add("Shambling Nightmare")
 REG.Lang.Unit.Shambler:SetFrench("Cauchemar indolent")
+REG.Lang.Unit.Shambler:SetGerman("Torkelnder Albtraum")
 REG.Lang.Unit.Molinar = KBM.Language:Add("Dark Thane Molinar")
 REG.Lang.Unit.Molinar:SetFrench("Baron des ténèbres Molinar")
+REG.Lang.Unit.Molinar:SetGerman("Dunkler Vasall Molinar")
 
 -- Ability Dictionary
 REG.Lang.Ability = {}
 REG.Lang.Ability.Tentacle = KBM.Language:Add("Tentacle Storm") -- 10s cast time
 REG.Lang.Ability.Tentacle:SetFrench("Tempête tentaculaire") -- 10s cast time
+REG.Lang.Ability.Tentacle:SetGerman("Tentakelsturm")
 REG.Lang.Ability.Apotheosis = KBM.Language:Add("Death's Apotheosis") -- 72.5s cast time
 REG.Lang.Ability.Apotheosis:SetFrench("Apothéose de la Mort") -- 72.5s cast time
+REG.Lang.Ability.Apotheosis:SetGerman("Vergöttlichung des Todes")
 REG.Lang.Ability.Calamity = KBM.Language:Add("Invoke Calamity") -- 3.5s cast time
 REG.Lang.Ability.Calamity:SetFrench("Invocation de calamité") -- 3.5s cast time
 REG.Lang.Ability.Vanquish = KBM.Language:Add("Vanquish the Weak")
 REG.Lang.Ability.Vanquish:SetFrench("Victoire sur les faibles")
+REG.Lang.Ability.Vanquish:SetGerman("Überwindung der Schwachen")
 
 -- Debuff Dictionary
 REG.Lang.Debuff = {}
 REG.Lang.Debuff.Mark = KBM.Language:Add("Mark of the Void") -- Tank debuff?
 REG.Lang.Debuff.Mark:SetFrench("Marque du Néant") -- Tank debuff?
+REG.Lang.Debuff.Mark:SetGerman("Zeichen der Leere")
 REG.Lang.Debuff.Heart = KBM.Language:Add("Heart of Death") -- Tank debuff?
 REG.Lang.Debuff.Heart:SetFrench("Coeur de la mort") -- Tank debuff? Cœur
+REG.Lang.Debuff.Heart:SetGerman("Herz des Todes")
 REG.Lang.Debuff.Darkness = KBM.Language:Add("Seething Darkness") -- 50k Heal absorb
 REG.Lang.Debuff.Darkness:SetFrench("Ténèbres bouillonnantes") -- 50k Heal absorb
+REG.Lang.Debuff.Darkness:SetGerman("Brodelnde Dunkelheit")
 REG.Lang.Debuff.Doom = KBM.Language:Add("Impending Doom")
 REG.Lang.Debuff.Doom:SetFrench("Étreinte de la mort")
+REG.Lang.Debuff.Doom:SetGerman("Drohender Untergang")
 REG.Lang.Debuff.Glimpse = KBM.Language:Add("Glimpse the Abyss")
 REG.Lang.Debuff.Glimpse:SetFrench("Aperçu des abysses")
+REG.Lang.Debuff.Glimpse:SetGerman("Blick in den Abgrund")
 
 -- Messages Dictionary
 REG.Lang.Messages = {}
 REG.Lang.Messages.Engulf = KBM.Language:Add("(%a*) is engulfed by seething darkness.")
 REG.Lang.Messages.Engulf:SetFrench("(%a*) se retrouve englouti par les Ténèbres bouillonnantes.")
+REG.Lang.Messages.Engulf:SetGerman("(%a*) ist von brodelnder Dunkelheit umgeben.")
 REG.Lang.Messages.Eradicate = KBM.Language:Add("Regulos prepares to eradicate (%a*).") -- 
 REG.Lang.Messages.Eradicate:SetFrench("Regulos se prépare à éradiquer (%a*).") -- 
+REG.Lang.Messages.Eradicate:SetGerman("Regulos bereitet sich darauf vor, (%a*) auszulöschen.")
 REG.Lang.Messages.Will = KBM.Language:Add("Regulos imposes his will upon (%a*).")
 REG.Lang.Messages.Will:SetFrench("Regulos impose sa volonté à (%a*).")
+REG.Lang.Messages.Will:SetGerman("Regulos zwingt (%a*) seinen Willen auf.")
 
 -- Verbose Dictionary
 REG.Lang.Verbose = {}
 REG.Lang.Verbose.Eradicate = KBM.Language:Add("Eradicate")
 REG.Lang.Verbose.Eradicate:SetFrench("Éradication")
+REG.Lang.Verbose.Eradicate:SetGerman("Auslöschen")
 REG.Lang.Verbose.Stack = KBM.Language:Add("Stack! Meteor time!")
 REG.Lang.Verbose.Stack:SetFrench("Stack! Chûte de Météorite!")
 

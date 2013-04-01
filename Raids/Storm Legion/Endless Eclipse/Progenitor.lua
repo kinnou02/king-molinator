@@ -55,15 +55,19 @@ PRO.Lang.Unit.Juntun:SetFrench("Juntun")
 PRO.Lang.Ability = {}
 PRO.Lang.Ability.Ebon = KBM.Language:Add("Ebon Eruption")
 PRO.Lang.Ability.Ebon:SetFrench("Éruption d'ébène")
+PRO.Lang.Ability.Ebon:SetGerman("Schwärzeausbruch")
 PRO.Lang.Ability.Redesign = KBM.Language:Add("Twisted Redesign")
 PRO.Lang.Ability.Redesign:SetFrench("Refonte tordue")
+PRO.Lang.Ability.Redesign:SetGerman("Verdrehte Umwandlung")
 PRO.Lang.Ability.Entropic = KBM.Language:Add("Entropic Abyss")
 PRO.Lang.Ability.Entropic:SetFrench("Abysses entropiques")
+PRO.Lang.Ability.Entropic:SetGerman("Entropischer Abgrund")
 
 -- Buff Dictionary
 PRO.Lang.Buff = {}
 PRO.Lang.Buff.Barrier = KBM.Language:Add("Ebon Barrier")
 PRO.Lang.Buff.Barrier:SetFrench("Barrière d'ébène")
+PRO.Lang.Buff.Barrier:SetGerman("Schwärzebarriere")
 PRO.Lang.Buff.Hand = KBM.Language:Add("Hand of the Master")
 PRO.Lang.Buff.Hand:SetFrench("Main du Maître")
 

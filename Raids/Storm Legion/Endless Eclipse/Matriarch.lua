@@ -45,15 +45,19 @@ MOP.Lang.Ability.Wave:SetGerman("Welle der Verwesung")
 MOP.Lang.Ability.Wave:SetFrench("Vague de putréfaction")
 MOP.Lang.Ability.Doom = KBM.Language:Add("Sudden Doom")
 MOP.Lang.Ability.Doom:SetFrench("Condamnation soudaine")
+MOP.Lang.Ability.Doom:SetGerman("Plötzliche Verdammnis")
 
 -- Messages Dictionary
 MOP.Lang.Messages = {}
 MOP.Lang.Messages.Spores = KBM.Language:Add("Matriarch of Pestilence covers (%a*) with Necrotic Spores!")
 MOP.Lang.Messages.Spores:SetFrench("Matriarche pestilentielle recouvre (%a*) de Spores nécrotiques !")
+MOP.Lang.Messages.Spores:SetGerman("Matriarchin der Pestilenz bedeckt (%a*) mit Nekrotischen Sporen!")
 MOP.Lang.Messages.Infect = KBM.Language:Add("Matriarch of Pestilence infects (%a*) with an unholy disease!")
 MOP.Lang.Messages.Infect:SetFrench("Matriarche pestilentielle infecte (%a*) en lui transmettant une maladie impie !")
+MOP.Lang.Messages.Infect:SetGerman("Matriarchin der Pestilenz infiziert (%a*) mit einer unheiligen Krankheit!")
 MOP.Lang.Messages.ChildeSpawn = KBM.Language:Add("You shall sate the hunger of my children!")
 MOP.Lang.Messages.ChildeSpawn:SetFrench("Vous assouvirez l'appétit de mes petits !")
+MOP.Lang.Messages.ChildeSpawn:SetGerman("Matriarchin der Pestilenz: Kommt hervor, mein Kind!")
 
 -- Debuff Dictionary
 MOP.Lang.Debuff = {}
@@ -65,8 +69,10 @@ MOP.Lang.Debuff.Infect:SetGerman("Flüchtige Infektion")
 MOP.Lang.Debuff.Infect:SetFrench("Infection volatile")
 MOP.Lang.Debuff.Ichor = KBM.Language:Add("Dark Ichor")
 MOP.Lang.Debuff.Ichor:SetFrench("Pourriture noire")
+MOP.Lang.Debuff.Ichor:SetGerman("Dunkler Eiter")
 MOP.Lang.Debuff.Torment = KBM.Language:Add("Torment")
 MOP.Lang.Debuff.Torment:SetFrench("Tourmente")
+MOP.Lang.Debuff.Torment:SetGerman("Pein")
 
 -- Description Dictionary
 MOP.Lang.Main = {}

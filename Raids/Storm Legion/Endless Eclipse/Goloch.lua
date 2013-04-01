@@ -84,26 +84,34 @@ DLG.Lang.Unit.GolochShort:SetFrench("Goloch")
 DLG.Lang.Ability = {}
 DLG.Lang.Ability.Days = KBM.Language:Add("End of Days")
 DLG.Lang.Ability.Days:SetFrench("La fin des temps")
+DLG.Lang.Ability.Days:SetGerman("Das Ende aller Tage")
 DLG.Lang.Ability.Glimpse = KBM.Language:Add("Glimpse of Mortality")
 DLG.Lang.Ability.Glimpse:SetFrench("Lueur de mortalité")
+DLG.Lang.Ability.Glimpse:SetGerman("Momentaufnahme der Sterblichkeit")
 DLG.Lang.Ability.Baleful = KBM.Language:Add("Baleful Smash")
 DLG.Lang.Ability.Baleful:SetFrench("Coup funeste")
+DLG.Lang.Ability.Baleful:SetGerman("Unheilvoller Schmetterer")
 
 -- Debuff Dictionary
 DLG.Lang.Debuff = {}
 DLG.Lang.Debuff.Dread = KBM.Language:Add("Dread Scythe")
 DLG.Lang.Debuff.Dread:SetFrench("Faux d'effroi")
+DLG.Lang.Debuff.Dread:SetGerman("Grausige Sense")
 DLG.Lang.Debuff.Curse = KBM.Language:Add("Gatekeeper's Curse")
 DLG.Lang.Debuff.Curse:SetFrench("Malédiction du gardien")
+DLG.Lang.Debuff.Curse:SetGerman("Fluch des Torwächters")
 DLG.Lang.Debuff.Torment = KBM.Language:Add("Lingering Torment")
 DLG.Lang.Debuff.Torment:SetFrench("Tourment persistant")
+DLG.Lang.Debuff.Torment:SetGerman("Andauernde Qual")
 DLG.Lang.Debuff.Glimpse = KBM.Language:Add("Glimpse of Mortality")
 DLG.Lang.Debuff.Glimpse:SetFrench("Lueur de mortalité")
+DLG.Lang.Debuff.Glimpse:SetGerman("Momentaufnahme der Sterblichkeit")
 
 -- Buff Dictionary
 DLG.Lang.Buff = {}
 DLG.Lang.Buff.Days = KBM.Language:Add("End of Days")
 DLG.Lang.Buff.Days:SetFrench("La fin des temps")
+DLG.Lang.Buff.Days:SetGerman("Das Ende aller Tage")
 DLG.Lang.Buff.Quiet = KBM.Language:Add("Quiet Fears")
 
 -- Description Dictionary
