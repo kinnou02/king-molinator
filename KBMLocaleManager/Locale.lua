@@ -241,6 +241,7 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.RezMaster.AnchorText:SetGerman("Res Meister Anker")
 	KBM.Language.RezMaster.AnchorText:SetKorean("부활 시간 앵커")
 	KBM.Language.RezMaster.Cascade = KBM.Language:Add("Res frames Cascade below first frame")
+	KBM.Language.RezMaster.Cascade:SetFrench("Cadre Res Cascade dessous premier cadre")
 	
 	-- Chat Objects
 	KBM.Language.Chat = {}
@@ -250,8 +251,10 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Chat.Enabled:SetGerman("Aktiviere Chat Ausgabe")
 	KBM.Language.Chat.PlugVer = KBM.Language:Add('<font color="#ffff00">Plug-In <font color="#a0a0ff">%s <font color="#ffff00">version not supported. Please download at least Version %s')
 	KBM.Language.Chat.PlugVer:SetGerman('<font color="#ffff00">Plug-In <font color="#a0a0ff">%s <font color="#ffff00">Version wird nicht unterstützt. Ladet bitte mindestens Version %s')
+	KBM.Language.Chat.PlugVer:SetFrench('<font color="#ffff00">Plug-In <font color="#a0a0ff">%s <font color="#ffff00">version non supporté. SVP télécharger au moin la version %s')
 	KBM.Language.Chat.PlugInc = KBM.Language:Add('<font color="#ffff00">Plug-In <font color="#a0a0ff">%s <font color="#ffff00">is incompatible. Please check for a newer version.')
 	KBM.Language.Chat.PlugInc:SetGerman('<font color="#ffff00">Plug-In <font color="#a0a0ff">%s <font color="#ffff00">ist nicht kompatibel. Prüft bitte eine neuere Version.')
+	KBM.Language.Chat.PlugInc:SetFrench('<font color="#ffff00">Plug-In <font color="#a0a0ff">%s <font color="#ffff00">est incompatible. SVP vérifier pour une version plus récente.')
 	
 	-- Command Listings
 	KBM.Language.Command = {}

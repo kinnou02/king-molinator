@@ -3353,7 +3353,7 @@ function KBM.PhaseMonitor:Init()
 				else
 					if self.PercentFlat >= self.Target then
 						if self.Target == 0 then
-							if self.PercentFlat < 3 then
+							if self.PercentFlat <= 3 then
 								self.GUI:SetObjective(tostring(self.Percent).."%")
 							else
 								self.GUI:SetObjective(self.PercentFlat.."%")
@@ -8365,6 +8365,22 @@ function KBM.InitKBM(handle, ModID)
 			KBM.Marks.Icon[i]:SetTexture("Rift", File)
 			KBM.Marks.Icon[i]:SetVisible(false)
 		end
+		-- local TestWindow, TestWindowContent = LibSGui.Window:Create("New Options", KBM.Context, {Close = true, Visible = true, Width = 600, Height = 400})
+		-- local TestPanel, TestPanelContent = LibSGui.Panel:Create("Test Panel", TestWindowContent, {Visible = true, w = math.ceil(TestWindowContent:GetWidth() * 0.33)})
+		-- TestPanel_Scrollbar = TestPanel:AddScrollbar()
+		-- TestPanel:SetContentHeight(800)
+		-- local TestText = {}
+		-- local step = 800/30
+		-- for n = 0, 29 do
+			-- TestText[n] = UI.CreateFrame("Text", "Test Text "..n, TestPanelContent)
+			-- TestText[n]:SetText("Test Text "..n)
+			-- TestText[n]:SetVisible(true)
+			-- TestText[n]:SetPoint("TOPLEFT", TestPanelContent, "TOPLEFT", 4, n * step)
+			-- TestText[n]:SetLayer(5)
+		-- end
+		-- local TestTabber, TestTabberContent = LibSGui.Tabber:Create("Test Tabber", TestWindowContent, {Visible = true})
+		-- TestTabber:ClearPoint("LEFT")
+		-- TestTabber:SetPoint("LEFT", TestPanel._cradle, "RIGHT")
 	else
 		if Inspect.Buff.Detail ~= IBDReserved then
 			print(tostring(ModID).." changed internal command: Restoring Inspect.Buff.Detail")

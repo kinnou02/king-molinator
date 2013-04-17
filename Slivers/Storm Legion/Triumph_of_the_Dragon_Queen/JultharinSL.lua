@@ -20,7 +20,7 @@ local JUL = {
 	Instance = TDQ.Name,
 	InstanceObj = TDQ,
 	Lang = {},
-	Enrage = 5 * 60 + 15,
+	Enrage = 5 * 60 + 10,
 	ID = "SJultharinSL",
 	Object = "JUL",
 }

@@ -192,7 +192,7 @@ LibSUnit._internal = {
 _lsu = LibSUnit._internal
 
 -- Settings
-function _lsu.Load(EHandle, AddonId)
+function _lsu.Load(handle, AddonId)
 	if AddonId == AddonIni.id then
 		if next(SafesUnitLib_Settings) then
 			_lsu.Settings = SafesUnitLib_Settings
@@ -206,7 +206,7 @@ function _lsu.Load(EHandle, AddonId)
 	end
 end
 
-function _lsu.Save(EHandle, AddonId)
+function _lsu.Save(handle, AddonId)
 	if AddonId == AddonIni.id then
 		SafesUnitLib_Settings = _lsu.Settings
 	end
@@ -289,7 +289,7 @@ function _lsu.Unit:UpdateSegment(UnitObj, New, uDetails)
 			end
 			if uDetails.name then
 				if UnitObj.Name ~= uDetails.name then
-					_lsu.Unit.Name({[UnitObj.UnitID] = uDetails.name})
+					_lsu.Unit.Name(handle, {[UnitObj.UnitID] = uDetails.name})
 				end
 			end
 		end
@@ -423,7 +423,7 @@ function _lsu:Create(UID, uDetails, Type)
 end
 
 -- Details Updates
-function _lsu.Unit.Name(uList)
+function _lsu.Unit.Name(handle, uList)
 	local _lookup = LibSUnit.Lookup.Name
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
@@ -475,7 +475,7 @@ function _lsu.Unit.Health(handle, uList)
 	_lsu.Event.Unit.Detail.Health(newList)
 end
 
-function _lsu.Unit.HealthMax(uList)
+function _lsu.Unit.HealthMax(handle, uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, HealthMax in pairs(uList) do
@@ -491,7 +491,7 @@ function _lsu.Unit.HealthMax(uList)
 	_lsu.Event.Unit.Detail.HealthMax(newList)	
 end
 
-function _lsu.Unit.Power(uList, PowerMode)
+function _lsu.Unit.Power(handle, uList, PowerMode)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Power in pairs(uList) do
@@ -509,7 +509,7 @@ function _lsu.Unit.Power(uList, PowerMode)
 	_lsu.Event.Unit.Detail.Power(newList)	
 end
 
-function _lsu.Unit.PowerMax(uList, PowerMode)
+function _lsu.Unit.PowerMax(handle, uList, PowerMode)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, PowerMax in pairs(uList) do
@@ -527,7 +527,7 @@ function _lsu.Unit.PowerMax(uList, PowerMode)
 	_lsu.Event.Unit.Detail.PowerMax(newList)	
 end
 
-function _lsu.Unit.Offline(uList)
+function _lsu.Unit.Offline(handle, uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Offline in pairs(uList) do
@@ -537,7 +537,7 @@ function _lsu.Unit.Offline(uList)
 	_lsu.Event.Unit.Detail.Offline(newList)
 end
 
-function _lsu.Unit.Vitality(uList)
+function _lsu.Unit.Vitality(handle, uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Vitality in pairs(uList) do
@@ -547,7 +547,7 @@ function _lsu.Unit.Vitality(uList)
 	_lsu.Event.Unit.Detail.Vitality(newList)	
 end
 
-function _lsu.Unit.Ready(uList)
+function _lsu.Unit.Ready(handle, uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Ready in pairs(uList) do
@@ -557,7 +557,7 @@ function _lsu.Unit.Ready(uList)
 	_lsu.Event.Unit.Detail.Ready(newList)
 end
 
-function _lsu.Unit.Mark(uList)
+function _lsu.Unit.Mark(handle, uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Mark in pairs(uList) do
@@ -567,7 +567,7 @@ function _lsu.Unit.Mark(uList)
 	_lsu.Event.Unit.Detail.Mark(newList)
 end
 
-function _lsu.Unit.Planar(uList)
+function _lsu.Unit.Planar(handle, uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Planar in pairs(uList) do
@@ -577,7 +577,7 @@ function _lsu.Unit.Planar(uList)
 	_lsu.Event.Unit.Detail.Planar(newList)
 end
 
-function _lsu.Unit.Level(uList)
+function _lsu.Unit.Level(handle, uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Level in pairs(uList) do
@@ -587,7 +587,7 @@ function _lsu.Unit.Level(uList)
 	_lsu.Event.Unit.Detail.Level(newList)	
 end
 
-function _lsu.Unit.Zone(uList)
+function _lsu.Unit.Zone(handle, uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Zone in pairs(uList) do
@@ -597,7 +597,7 @@ function _lsu.Unit.Zone(uList)
 	_lsu.Event.Unit.Detail.Zone(newList)	
 end
 
-function _lsu.Unit.Location(uList)
+function _lsu.Unit.Location(handle, uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Location in pairs(uList) do
@@ -607,7 +607,7 @@ function _lsu.Unit.Location(uList)
 	_lsu.Event.Unit.Detail.Location(newList)
 end
 
-function _lsu.Unit.Role(uList)
+function _lsu.Unit.Role(handle, uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Role in pairs(uList) do
@@ -619,7 +619,7 @@ function _lsu.Unit.Role(uList)
 	_lsu.Event.Unit.Detail.Role(newList)
 end
 
-function _lsu.Unit.PlanarMax(uList)
+function _lsu.Unit.PlanarMax(handle, uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, PlanarMax in pairs(uList) do
@@ -629,7 +629,7 @@ function _lsu.Unit.PlanarMax(uList)
 	_lsu.Event.Unit.Detail.PlanarMax(newList)
 end
 
-function _lsu.Unit.Combat(uList, Silent)
+function _lsu.Unit.Combat(handle, uList, Silent)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Combat in pairs(uList) do
@@ -684,7 +684,7 @@ function _lsu.Unit.Details(UnitObj, uDetails)
 		if uDetails.name then
 			if UnitObj.Name ~= uDetails.name then
 				if uDetails.name ~= "" then
-					_lsu.Unit.Name({[UnitObj.UnitID] = uDetails.name})
+					_lsu.Unit.Name(Event.Unit.Detail.Name, {[UnitObj.UnitID] = uDetails.name})
 				end
 			end
 		end
@@ -744,7 +744,7 @@ function _lsu.Unit.Details(UnitObj, uDetails)
 		UnitObj.Ready = uDetails.ready
 		UnitObj.Vitality = uDetails.vitality
 		if UnitObj.Combat ~= uDetails.combat then
-			_lsu.Unit.Combat({[UnitObj.UnitID] = uDetails.combat})
+			_lsu.Unit.Combat(Event.Unit.Detail.Combat, {[UnitObj.UnitID] = uDetails.combat})
 		end
 		_lsu.Unit:CalcPerc(UnitObj)
 		UnitObj.Details = uDetails
@@ -791,7 +791,7 @@ function _lsu:Partial(UnitObj, uDetails)
 	self.Unit:UpdateSegment(UnitObj)
 	Total.Partial = Total.Partial + 1
 	if UnitObj.Combat then
-		_lsu.Unit.Combat({[UnitObj.UnitID] = false})
+		_lsu.Unit.Combat(Event.Unit.Detail.Combat, {[UnitObj.UnitID] = false})
 	end
 	
 	self.Event.Unit.Partial(UnitObj)
@@ -904,7 +904,7 @@ function _lsu.Raid.ManageDeath(UnitObj, Dead)
 						LibSUnit.Raid.DeadTotal = LibSUnit.Raid.DeadTotal + 1
 						--print(">>> "..UnitObj.Name.." has died")
 						if UnitObj.Combat then
-							_lsu.Unit.Combat({[UnitObj.UnitID] = false})
+							_lsu.Unit.Combat(Event.Unit.Detail.Combat, {[UnitObj.UnitID] = false})
 						end
 						if LibSUnit.Raid.DeadTotal == LibSUnit.Raid.Members then
 							if not LibSUnit.Raid.Wiped then
@@ -1121,7 +1121,7 @@ function _lsu.Combat.stdHandler(UID, segPlus)
 	end
 end
 
-function _lsu.Combat.Damage(info)
+function _lsu.Combat.Damage(handle, info)
 	local _stdHandler = _lsu.Combat.stdHandler
 	local targetObj, sourceObj
 	info.damage = info.damage or 0
@@ -1132,7 +1132,7 @@ function _lsu.Combat.Damage(info)
 	_lsu.Event.Combat.Damage(info)
 end
 
-function _lsu.Combat.Heal(info)
+function _lsu.Combat.Heal(handle, info)
 	local _stdHandler = _lsu.Combat.stdHandler
 	local targetObj, sourceObj
 	info.heal = info.heal or 0
@@ -1143,7 +1143,7 @@ function _lsu.Combat.Heal(info)
 	_lsu.Event.Combat.Heal(info)
 end
 
-function _lsu.Combat.Immune(info)
+function _lsu.Combat.Immune(handle, info)
 	local _stdHandler = _lsu.Combat.stdHandler
 	local targetObj, sourceObj
 	targetObj = _stdHandler(info.target, _idleSeg)
@@ -1153,7 +1153,7 @@ function _lsu.Combat.Immune(info)
 	_lsu.Event.Combat.Immune(info)
 end
 
-function _lsu.Combat.Death(info)
+function _lsu.Combat.Death(handle, info)
 	local _cache = LibSUnit.Lookup.UID
 	local targetObj, sourceObj
 	sourceObj = _lsu.Combat.stdHandler(info.caster, _idleSeg)
@@ -1236,39 +1236,39 @@ function _lsu.Wait(handle, uList)
 
 		-- Unit Data Change
 		Command.Event.Attach(Event.Unit.Detail.Health, _lsu.Unit.Health, "Unit HP Change")
-		table.insert(Event.Unit.Detail.Name, {_lsu.Unit.Name, AddonIni.id, "Unit Name Change"})
-		table.insert(Event.Unit.Detail.Level, {_lsu.Unit.Level, AddonIni.id, "Unit Level Change"})
-		table.insert(Event.Unit.Detail.HealthMax, {_lsu.Unit.HealthMax, AddonIni.id, "Unit HP Max Change"})
-		table.insert(Event.Unit.Detail.Power, {function (List) _lsu.Unit.Power(List, "power") end, AddonIni.id, "Power Change"})
-		table.insert(Event.Unit.Detail.Energy, {function (List) _lsu.Unit.Power(List, "energy") end, AddonIni.id, "Energy Change"})
-		table.insert(Event.Unit.Detail.Mana, {function (List) _lsu.Unit.Power(List, "mana") end, AddonIni.id, "Mana Change"})
-		table.insert(Event.Unit.Detail.EnergyMax, {function (List) _lsu.Unit.PowerMax(List, "energy") end, AddonIni.id, "Energy Max Change"})
-		table.insert(Event.Unit.Detail.ManaMax, {function (List) _lsu.Unit.PowerMax(List, "mana") end, AddonIni.id, "Mana Max Change"})
-		table.insert(Event.Unit.Detail.Offline, {_lsu.Unit.Offline, AddonIni.id, "Unit Offline state Change"})
-		table.insert(Event.Unit.Detail.Combat, {_lsu.Unit.Combat, AddonIni.id, "Unit Combat state Change"})
-		table.insert(Event.Unit.Detail.Planar, {_lsu.Unit.Planar, AddonIni.id, "Unit Planar Chanage"})
-		table.insert(Event.Unit.Detail.PlanarMax, {_lsu.Unit.PlanarMax, AddonIni.id, "Unit Planar Max Change"})
-		table.insert(Event.Unit.Detail.Ready, {_lsu.Unit.Ready, AddonIni.id, "Unit Ready State Change"})
-		table.insert(Event.Unit.Detail.Vitality, {_lsu.Unit.Vitality, AddonIni.id, "Unit Vitality Change"})
-		table.insert(Event.Unit.Detail.Mark, {_lsu.Unit.Mark, AddonIni.id, "Unit Mark Change"})
-		table.insert(Event.Unit.Detail.Zone, {_lsu.Unit.Zone, AddonIni.id, "Unit Zone Change"})
-		table.insert(Event.Unit.Detail.LocationName, {_lsu.Unit.Location, AddonIni.id, "Unit Location Change"})
-		table.insert(Event.Unit.Detail.Role, {_lsu.Unit.Role, AddonIni.id, "Unit Role Change"})
+		Command.Event.Attach(Event.Unit.Detail.Name, _lsu.Unit.Name, "Unit Name Change")
+		Command.Event.Attach(Event.Unit.Detail.Level, _lsu.Unit.Level, "Unit Level Change")
+		Command.Event.Attach(Event.Unit.Detail.HealthMax, _lsu.Unit.HealthMax, "Unit HP Max Change")
+		Command.Event.Attach(Event.Unit.Detail.Power, function (handle, List) _lsu.Unit.Power(handle, List, "power") end, "Power Change")
+		Command.Event.Attach(Event.Unit.Detail.Energy, function (handle, List) _lsu.Unit.Power(handle, List, "energy") end, "Energy Change")
+		Command.Event.Attach(Event.Unit.Detail.Mana, function (handle, List) _lsu.Unit.Power(handle, List, "mana") end, "Mana Change")
+		Command.Event.Attach(Event.Unit.Detail.EnergyMax, function (handle, List) _lsu.Unit.PowerMax(handle, List, "energy") end, "Energy Max Change")
+		Command.Event.Attach(Event.Unit.Detail.ManaMax, function (handle, List) _lsu.Unit.PowerMax(handle, List, "mana") end, "Mana Max Change")
+		Command.Event.Attach(Event.Unit.Detail.Offline, _lsu.Unit.Offline, "Unit Offline state Change")
+		Command.Event.Attach(Event.Unit.Detail.Combat, _lsu.Unit.Combat, "Unit Combat state Change")
+		Command.Event.Attach(Event.Unit.Detail.Planar, _lsu.Unit.Planar, "Unit Planar Chanage")
+		Command.Event.Attach(Event.Unit.Detail.PlanarMax, _lsu.Unit.PlanarMax, "Unit Planar Max Change")
+		Command.Event.Attach(Event.Unit.Detail.Ready, _lsu.Unit.Ready, "Unit Ready State Change")
+		Command.Event.Attach(Event.Unit.Detail.Vitality, _lsu.Unit.Vitality, "Unit Vitality Change")
+		Command.Event.Attach(Event.Unit.Detail.Mark, _lsu.Unit.Mark, "Unit Mark Change")
+		Command.Event.Attach(Event.Unit.Detail.Zone, _lsu.Unit.Zone, "Unit Zone Change")
+		Command.Event.Attach(Event.Unit.Detail.LocationName, _lsu.Unit.Location, "Unit Location Change")
+		Command.Event.Attach(Event.Unit.Detail.Role, _lsu.Unit.Role, "Unit Role Change")
 		
 		-- Unit Combat Events
-		table.insert(Event.Combat.Damage, {_lsu.Combat.Damage, AddonIni.id, "Unit Combat Damage"})
-		table.insert(Event.Combat.Heal, {_lsu.Combat.Heal, AddonIni.id, "Unit Combat Heal"})
-		table.insert(Event.Combat.Immune, {_lsu.Combat.Immune, AddonIni.id, "Unit Immune"})
-		table.insert(Event.Combat.Death, {_lsu.Combat.Death, AddonIni.id, "Unit Death"})
+		Command.Event.Attach(Event.Combat.Damage, _lsu.Combat.Damage, "Unit Combat Damage")
+		Command.Event.Attach(Event.Combat.Heal, _lsu.Combat.Heal, "Unit Combat Heal")
+		Command.Event.Attach(Event.Combat.Immune, _lsu.Combat.Immune, "Unit Immune")
+		Command.Event.Attach(Event.Combat.Death, _lsu.Combat.Death, "Unit Death")
 	
 		-- Register Events with LibUnitChange
 		local EventTable
 		for Index, Spec in pairs(_SpecList) do
 			if Spec ~= "player" then
 				EventTable = Library.LibUnitChange.Register(Spec)
-				table.insert(EventTable, {function (data) _lsu.Raid.Change(data, Spec) end, AddonIni.id, Spec.." changed"})
+				Command.Event.Attach(EventTable, function (handle, data) _lsu.Raid.Change(data, Spec) end, Spec.." changed")
 				EventTable = Library.LibUnitChange.Register(Spec..".pet")
-				table.insert(EventTable, {function (data) _lsu.Raid.PetChange(data, Spec) end, AddonIni.id, Spec.." pet changed"})
+				Command.Event.Attach(EventTable, function (handle, data) _lsu.Raid.PetChange(data, Spec) end, Spec.." pet changed")
 				LibSUnit.Raid.Lookup[Spec] = {
 					Group = math.ceil(Index / 5),
 					Specifier = Spec,
@@ -1280,13 +1280,13 @@ function _lsu.Wait(handle, uList)
 				_lsu.Raid.Change(Inspect.Unit.Lookup(Spec), Spec)
 			end
 			EventTable = Library.LibUnitChange.Register(Spec..".pet.target")
-			table.insert(EventTable, {function (data) _lsu.Unit.Change(data, Spec..".pet") end, AddonIni.id, Spec.." pet target changed"})
+			Command.Event.Attach(EventTable, function (handle, data) _lsu.Unit.Change(data, Spec..".pet") end, Spec.." pet target changed")
 			EventTable = Library.LibUnitChange.Register(Spec..".pet.target.target")
-			table.insert(EventTable, {function (data) _lsu.Unit.Change(data, Spec..".pet.target") end, AddonIni.id, Spec.." pet targets target changed"})
+			Command.Event.Attach(EventTable, function (handle, data) _lsu.Unit.Change(data, Spec..".pet.target") end, Spec.." pet targets target changed")
 			EventTable = Library.LibUnitChange.Register(Spec..".target")
-			table.insert(EventTable, {function (data) _lsu.Unit.Change(data, Spec) end, AddonIni.id, Spec.." target changed"})
+			Command.Event.Attach(EventTable, function (handle, data) _lsu.Unit.Change(data, Spec) end, Spec.." target changed")
 			EventTable = Library.LibUnitChange.Register(Spec..".target.target")
-			table.insert(EventTable, {function (data) _lsu.Unit.Change(data, Spec..".target") end, AddonIni.id, Spec.." targets target changed"})
+			Command.Event.Attach(EventTable, function (handle, data) _lsu.Unit.Change(data, Spec..".target") end, Spec.." targets target changed")
 		end
 	end
 end

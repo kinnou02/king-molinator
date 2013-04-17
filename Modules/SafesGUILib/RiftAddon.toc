@@ -9,19 +9,24 @@ Author = "Paul Snart"
 Website = "http://twitter.com/#!/psnart"
 Email = "snarty@gmail.com"
 
-Version = "0.0.2"
+Version = "0.0.5"
 
 Environment = "1.10"
 
 RunOnStartup = {
 	"LibSGui.lua",
 	"Objects/Window.lua",
+	"Objects/Panel.lua",
+	"Objects/Group.lua",
+	"Objects/Tabber.lua",
 }
 
 Embed = {
 	["SafesTableLib"] = true,
+	["TextureHandler"] = true,
 }
 
 Dependencies = {
 	SafesTableLib = {"required", "before"},
+	KBMTextureHandler = {"required", "before"},
 }

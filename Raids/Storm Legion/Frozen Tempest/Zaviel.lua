@@ -52,6 +52,7 @@ ZVL.Lang.Ability.Conduit:SetGerman("Energieleitung")
 ZVL.Lang.Ability.Conduit:SetFrench("Conduit d'énergie")
 ZVL.Lang.Ability.Jolt = KBM.Language:Add("Ensnaring Jolt")
 ZVL.Lang.Ability.Jolt:SetGerman("Verlangsamender Stromschlag")
+ZVL.Lang.Ability.Jolt:SetFrench("Secousse ralentissante")
 ZVL.Lang.Ability.Beam = KBM.Language:Add("Reconstructive Beam")
 ZVL.Lang.Ability.Beam:SetGerman("Rekonstruktiver Strahl")
 ZVL.Lang.Ability.Beam:SetFrench("Rayon réparateur")
@@ -69,6 +70,7 @@ ZVL.Lang.Debuff.Vitality:SetFrench("Vitalité dissonante")
 ZVL.Lang.Say = {}
 ZVL.Lang.Say.Power = KBM.Language:Add("Think you can handle this%? Hahaha!")
 ZVL.Lang.Say.Power:SetGerman("Und, werdet Ihr damit fertig? Hahaha!")
+ZVL.Lang.Say.Power:SetFrench("Que dites-vous de cà ? Ha ha ha !")
 
 -- Verbose Dictionary
 ZVL.Lang.Verbose = {}

@@ -1,5 +1,11 @@
 ﻿v1.4.3
 
+LibSUnit
+* Change: Converted all Events over to the new Rift Event API.
+
+Phase Monitor
+* Fixed: Sub 3% precision display wasn't triggering until sub 2%
+
 Triggers
 * Change: "buff" and "buffRemove" are now linked directly to a supplied BossObj.Name
 * Change: "playerDebuff" will now link directly to "playerBuff" and use a single check during combat. (Performance boost)
@@ -22,6 +28,12 @@ Endless Eclipse
 Frozen Tempest
 * Kolmasveli & Toinenveli
 ** Change: Removed the timer stops for Glimpse at 10% as they can technically be cast again.
+* Crucia
+** Fixed: Elemental Castbar was not remember settings after restarting Rift/KBM.
+
+Triumph of the Dragon Queen
+* Jultharin
+** Change: Reduced the Enrage timer to 5:10
 
 * German Updates.
 * French Updates.

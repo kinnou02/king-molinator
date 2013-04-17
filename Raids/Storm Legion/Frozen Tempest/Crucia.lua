@@ -54,7 +54,7 @@ CRC.Lang.Unit.RTempest:SetGerman("Rechts Sturmherr-Sturmrüstung")
 CRC.Lang.Unit.RTempest:SetFrench("Structure d'assaut tempétueuse Droite")
 CRC.Lang.Unit.RTempestShort = KBM.Language:Add("Right Tempest")
 CRC.Lang.Unit.RTempestShort:SetGerman("Rechts Sturmherr")
-CRC.Lang.Unit.RTempestShort:SetGerman("Structure Droite")
+CRC.Lang.Unit.RTempestShort:SetFrench("Structure Droite")
 CRC.Lang.Unit.Storm = KBM.Language:Add("Stormcore Annihilator")
 CRC.Lang.Unit.Storm:SetGerman("Sturmkern-Auslöscher")
 CRC.Lang.Unit.Storm:SetFrench("Annihilateur du Cœur de la Tempête")
@@ -125,6 +125,7 @@ CRC.Lang.Debuff.Wrath:SetGerman("Tempest Wrath")
 -- Buff Dictionary
 CRC.Lang.Buff = {}
 CRC.Lang.Buff.Ion = KBM.Language:Add("Ion Shield")
+CRC.Lang.Buff.Ion:SetFrench("Ion Shield")
 CRC.Lang.Buff.Short = KBM.Language:Add("Short Circuit")
 CRC.Lang.Buff.Short:SetFrench("Court-circuit")
 CRC.Lang.Buff.Short:SetGerman("Kurzschluss")
@@ -365,6 +366,9 @@ function CRC:InitVars()
 		Storm = {
 			CastBar = self.Storm.Settings.CastBar,
 			AlertsRef = self.Storm.Settings.AlertsRef,
+		},
+		Elemental = {
+			CastBar = self.Elemental.Settings.CastBar,
 		},
 	}
 	KBMSLRDFTCR_Settings = self.Settings

@@ -1705,14 +1705,14 @@ end
 function PI.SecureEnter()
 	if PI.Settings.Combat then
 		PI.Combat = true
-		PI.UpdateSMode()
+		PI.UpdateSMode(true)
 	end
 end
 
 function PI.SecureLeave()
 	if PI.Settings.Combat then
 		PI.Combat = false
-		PI.UpdateSMode()
+		PI.UpdateSMode(true)
 	end
 end
 
