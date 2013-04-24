@@ -148,15 +148,7 @@ function LibSGui.Window:Create(title, _parent, pTable)
 		window._cradle:SetHeight(_height)
 		self:_adjustHandle()
 	end
-	
-	function window:GetWidth()
-		return window._cradle:GetWidth()
-	end
-	
-	function window:GetHeight()
-		return window._cradle:GetHeight()
-	end
-	
+		
 	function window:GetHandle()
 		return self.Handle
 	end

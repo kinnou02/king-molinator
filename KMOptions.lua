@@ -264,13 +264,15 @@ function KBM.InitTabs()
 			end
 		end
 		
-		function Tab.Main.Event:WheelForward()
+		function Tab.Main:WheelForward()
 			self.Scroller:SetPosition(-20)
 		end
+		Tab.Main:EventAttach(Event.UI.Input.Mouse.Wheel.Forward, Tab.Main.WheelForward, "Wheel Forward Handler")
 		
-		function Tab.Main.Event:WheelBack()
+		function Tab.Main:WheelBack()
 			self.Scroller:SetPosition(20)
 		end
+		Tab.Main:EventAttach(Event.UI.Input.Mouse.Wheel.Back, Tab.Main.WheelBack, "Wheel Back Handler")
 		
 		if Tab.Type == "Single" then
 			Tab.Main.Scroller = KBM.Scroller:Create("V", Tab.MaxPageSize, Tab.Page, Tab.Main.Callback)

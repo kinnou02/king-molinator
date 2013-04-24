@@ -948,7 +948,7 @@ function KBMLM.Print(Text)
 	Command.Console.Display("general", true, Text, false)
 end
 
-function KBMLM.FindMissing(TempLang)
+function KBMLM.FindMissing(handle, TempLang)
 
 	KBMLM.Store = KBMLM.InitStore()
 	-- First check Main Translations KBM.Language.*.{LangObj}

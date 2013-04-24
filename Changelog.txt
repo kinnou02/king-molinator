@@ -1,5 +1,8 @@
 ﻿v1.4.3
 
+* Conversion of KBM Core events over to new Rift Event API.
+* Note: KBM Options Menu will be converted over soon, although it is also being rewritten from the ground up. (See LibSGui)
+
 LibSUnit
 * Change: Converted all Events over to the new Rift Event API.
 
@@ -26,6 +29,14 @@ Endless Eclipse
 ** Fixed: Enabled the Percentage Monitor to fire for the final two.
 
 Frozen Tempest
+* Galidra
+** Fixed: All Castbars now remember their settings correctly (Galidra, Vortex and Amrien)
+** New: Added Unit tracking for Hard Mode unit Amrien. (HM)
+** New: Added Persistent Castbar for Amrien. (HM)
+** New: Added Percentage tracking for Amrien on the Phase Monitor (Only during Hard Mode).
+** New: Added Percentage Monitor for tracking 10% difference (Only during Hard Mode).
+** New: Added Mechanic Spy and Personal Alert for Hypothermic Induction. (HM)
+** New: Added Alert for Razorwind Blizzard. (HM)
 * Kolmasveli & Toinenveli
 ** Change: Removed the timer stops for Glimpse at 10% as they can technically be cast again.
 * Crucia

@@ -25,6 +25,7 @@ local GLD = {
 	ID = "Gelidra",
 	Enrage = (6 * 60) + 20,
 	Object = "GLD",
+	HardMode = false,
 }
 
 KBM.RegisterMod(GLD.ID, GLD)
@@ -43,6 +44,7 @@ GLD.Lang.Unit.Vortex:SetFrench("Vortex enveloppant")
 GLD.Lang.Unit.VortexShort = KBM.Language:Add("Vortex")
 GLD.Lang.Unit.VortexShort:SetGerman("Wirbel")
 GLD.Lang.Unit.VortexShort:SetFrench("Vortex")
+GLD.Lang.Unit.Amrien = KBM.Language:Add("Amrien")
 
 -- Ability Dictionary
 GLD.Lang.Ability = {}
@@ -52,6 +54,7 @@ GLD.Lang.Ability.Cyclonic:SetFrench("Destruction cyclonique")
 GLD.Lang.Ability.Cascade = KBM.Language:Add("Lacerating Cascade")
 GLD.Lang.Ability.Cascade:SetGerman("Reißende Kaskade")
 GLD.Lang.Ability.Cascade:SetFrench("Cascade lacérante")
+GLD.Lang.Ability.Blizzard = KBM.Language:Add("Razorwind Blizzard")
 
 -- Description Dictionary
 GLD.Lang.Main = {}
@@ -67,6 +70,7 @@ GLD.Lang.Debuff.Rime:SetFrench("Éclats de sang gelé")
 GLD.Lang.Debuff.Spasm = KBM.Language:Add("Voltaic Spasms")
 GLD.Lang.Debuff.Spasm:SetGerman("Voltaische Krämpfe")
 GLD.Lang.Debuff.Spasm:SetFrench("Spasmes voltaïques")
+GLD.Lang.Debuff.Induction = KBM.Language:Add("Hypothermic Induction")
 
 GLD.Lang.Messages = {}
 GLD.Lang.Messages.Phase2 = KBM.Language:Add("Phase 2 starts")
@@ -115,6 +119,40 @@ GLD.Gelidra = {
 	}
 }
 
+GLD.Amrien = {
+	Mod = GLD,
+	Level = "??",
+	Active = false,
+	Name = GLD.Lang.Unit.Amrien[KBM.Lang],
+	Menu = {},
+	Dead = false,
+	AlertsRef = {},
+	-- TimersRef = {},
+	MechRef = {},
+	Available = false,
+	UTID = "none",
+	UnitID = nil,
+	Triggers = {},
+	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
+		-- TimersRef = {
+			-- Enabled = true,
+			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
+		-- },
+		AlertsRef = {
+			Enabled = true,
+			Induction = KBM.Defaults.AlertObj.Create("cyan"),
+			Blizzard = KBM.Defaults.AlertObj.Create("blue"),
+		},
+		MechRef = {
+			Enabled = true,
+			Induction = KBM.Defaults.MechObj.Create("cyan"),
+			Blizzard = KBM.Defaults.MechObj.Create("blue"),
+		},		
+	}
+}
+
+
 GLD.Vortex = {
 	Mod = GLD,
 	Level = "??",
@@ -130,6 +168,7 @@ GLD.Vortex = {
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -146,6 +185,7 @@ function GLD:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Gelidra.Name] = self.Gelidra,
 		[self.Vortex.Name] = self.Vortex,
+		[self.Amrien.Name] = self.Amrien,
 	}
 
 	for BossName, BossObj in pairs(self.Bosses) do
@@ -177,6 +217,10 @@ function GLD:InitVars()
 		Vortex = {
 			CastBar = self.Vortex.Settings.CastBar,
 			AlertsRef = self.Vortex.Settings.AlertsRef,
+		},
+		Amrien = {
+			CastBar = self.Amrien.Settings.CastBar,
+			AlertsRef = self.Amrien.Settings.AlertsRef,
 		},
 		MechTimer = KBM.Defaults.MechTimer(),
 		Alerts = KBM.Defaults.Alerts(),
@@ -244,6 +288,9 @@ function GLD:Death(UnitID)
 		self.Vortex.UnitID = nil
 		self.PhaseObj:SetPhase("1")
 		self.PhaseObj.Objectives:AddPercent(self.Gelidra, 0, 100)
+		if self.Amrien.UnitID then
+			self.PhaseObj.Objectives:AddPercent(self.Amrien, 0, 100)
+		end
 		KBM.MechTimer:AddStart(self.Gelidra.TimersRef.Phase2)
 	end
 	return false
@@ -252,6 +299,9 @@ end
 function GLD:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
 		local BossObj = self.UTID[uDetails.type]
+		if not BossObj then
+			BossObj = self.Bosses[uDetails.name]
+		end
 		if BossObj then
 			if not self.EncounterRunning then
 				self.EncounterRunning = true
@@ -260,7 +310,7 @@ function GLD:UnitHPCheck(uDetails, unitID)
 				self.TimeElapsed = 0
 				BossObj.Dead = false
 				BossObj.Casting = false
-				if BossObj == self.Gelidra then
+				if BossObj.CastBar then
 					BossObj.CastBar:Create(unitID)
 				end
 				self.PhaseObj:Start(self.StartTime)
@@ -273,6 +323,12 @@ function GLD:UnitHPCheck(uDetails, unitID)
 				}
 				KBM.TankSwap:Start(DebuffTable, unitID, 2)
 				KBM.MechTimer:AddStart(self.Gelidra.TimersRef.FirstP2)
+				if BossObj == self.Amrien then
+					if not self.HardMode then
+						KBM.PercentageMon:Start(self.ID, true)
+						self.HardMode = true
+					end
+				end
 			else
 				BossObj.Dead = false
 				BossObj.Casting = false
@@ -282,6 +338,12 @@ function GLD:UnitHPCheck(uDetails, unitID)
 					if BossObj == self.Vortex then
 						self.PhaseObj:SetPhase("2")
 						self.PhaseObj.Objectives:AddPercent(self.Vortex, 0, 100)
+					elseif BossObj == self.Amrien then
+						self.PhaseObj.Objectives:AddPercent(self.Amrien, 0, 100)
+						if not self.HardMode then
+							KBM.PercentageMon:Start(self.ID, true)
+							self.HardMode = true
+						end
 					end
 				end
 			end
@@ -299,10 +361,12 @@ function GLD:Reset()
 		BossObj.UnitID = nil
 		BossObj.Dead = false
 		BossObj.Casting = false
+		if BossObj.CastBar then
+			BossObj.CastBar:Remove()
+		end
 	end
-	self.Gelidra.CastBar:Remove()
-	self.Vortex.CastBar:Remove()	
 	self.PhaseObj:End(Inspect.Time.Real())
+	self.HardMode = false
 end
 
 function GLD:Timer()	
@@ -326,10 +390,22 @@ function GLD:Start()
 
 	self.Vortex.AlertsRef.Cyclonic = KBM.Alert:Create(self.Lang.Ability.Cyclonic[KBM.Lang], nil, true, true, "yellow")
 	KBM.Defaults.AlertObj.Assign(self.Vortex)
+	
+	self.Amrien.AlertsRef.Induction = KBM.Alert:Create(self.Lang.Debuff.Induction[KBM.Lang], nil, false, true, "cyan")
+	self.Amrien.AlertsRef.Induction.MenuName = self.Lang.Debuff.Induction[KBM.Lang].." (HM)"
+	self.Amrien.AlertsRef.Blizzard = KBM.Alert:Create(self.Lang.Ability.Blizzard[KBM.Lang], nil, false, true, "blue")
+	self.Amrien.AlertsRef.Blizzard.MenuName = self.Lang.Ability.Blizzard[KBM.Lang].." (HM)"
+	KBM.Defaults.AlertObj.Assign(self.Amrien)
 
 	-- Create Mechanic Spies (Gelidra)
 	self.Gelidra.MechRef.Rime = KBM.MechSpy:Add(self.Lang.Debuff.Rime[KBM.Lang], nil, "playerDebuff", self.Gelidra)
 	KBM.Defaults.MechObj.Assign(self.Gelidra)
+	
+	self.Amrien.MechRef.Induction = KBM.MechSpy:Add(self.Lang.Debuff.Induction[KBM.Lang], nil, "playerDebuff", self.Amrien)
+	self.Amrien.MechRef.Induction.MenuName = self.Lang.Debuff.Induction[KBM.Lang].." (HM)"
+	self.Amrien.MechRef.Blizzard = KBM.MechSpy:Add(self.Lang.Ability.Blizzard[KBM.Lang], 4, "cast", self.Amrien)
+	self.Amrien.MechRef.Blizzard.MenuName = self.Lang.Ability.Blizzard[KBM.Lang].." (HM)"
+	KBM.Defaults.MechObj.Assign(self.Amrien)
 	
 	-- Assign Alerts and Timers to Triggers
 
@@ -346,8 +422,16 @@ function GLD:Start()
 	self.Vortex.Triggers.CyclonicInt = KBM.Trigger:Create(self.Lang.Ability.Cyclonic[KBM.Lang], "interrupt", self.Vortex)
 	self.Vortex.Triggers.CyclonicInt:AddStop(self.Vortex.AlertsRef.Cyclonic)
 	
+	self.Amrien.Triggers.Blizzard = KBM.Trigger:Create(self.Lang.Ability.Blizzard[KBM.Lang], "cast", self.Amrien)
+	self.Amrien.Triggers.Blizzard:AddAlert(self.Amrien.AlertsRef.Blizzard)
+	self.Amrien.Triggers.Induction = KBM.Trigger:Create(self.Lang.Debuff.Induction[KBM.Lang], "playerDebuff", self.Amrien)
+	self.Amrien.Triggers.Induction:AddAlert(self.Amrien.AlertsRef.Induction, true)
+	self.Amrien.Triggers.Induction:AddSpy(self.Amrien.MechRef.Induction)
+	
+	self.PercentageMon = KBM.PercentageMon:Create(self.Gelidra, self.Amrien, 10, true)
 	self.Gelidra.CastBar = KBM.CastBar:Add(self, self.Gelidra)
 	self.Vortex.CastBar = KBM.CastBar:Add(self, self.Vortex)
+	self.Amrien.CastBar = KBM.CastBar:Add(self, self.Amrien)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()
 end

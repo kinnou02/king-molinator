@@ -237,20 +237,3 @@ function LibSata.DebugTable(TableObj)
 		end
 	end
 end
-
--- Create a Base Table
--- local TestTable = LibSata:Create()
-
--- Insert items in reverse order (Yes, I know could just count backwards, but would defeat the example)
--- for i = 1, 20 do
-	-- TestTable:InsertFirst("Entry "..i)
--- end
-
--- Print the Table items to the console
--- for TableObj, TableData in LibSata.EachIn(TestTable) do
--- 		print(TableData)
--- end
-
--- Remove the table reference: The method returns nil, so this serves to both set the local reference to nil and clear internal references.
--- Doing this allows for the GC to free the memory associated with the table.
--- TestTable = TestTable:Delete()

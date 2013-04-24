@@ -59,18 +59,8 @@ function LibSGui.Panel:Create(title, _parent, pTable)
 	panel._raisedBorder = _int:pullFrameRaised(panel._cradle, true)
 	
 	-- Create Base Sunken Border
-	panel._sunkenCradle = _int:pullFrame(panel._cradle, true)
-	panel._sunkenCradle:SetLayer(2)
-	panel._sunkenCradle:SetPoint("TOPLEFT", panel._raisedBorder.TopLeft, "BOTTOMRIGHT", -4, -4)
-	panel._sunkenCradle:SetPoint("BOTTOMRIGHT", panel._raisedBorder.BottomRight, "TOPLEFT", 4, 4)
-	panel._sunkenBorder = _int:pullFrameSunken(panel._sunkenCradle)
-	
-	-- Create Content Frame
-	panel._mask = _int:pullMask(panel._cradle, true)
-	panel._mask:SetLayer(3)
-	panel._mask:SetPoint("TOPLEFT", panel._sunkenCradle, "TOPLEFT", 3, 2)
-	panel._mask:SetPoint("BOTTOMRIGHT", panel._sunkenCradle, "BOTTOMRIGHT", -3, -2)
-	panel._mask._panel = panel
+	panel._sunkenBorder = _int:pullFrameSunken(panel._raisedBorder.Content)
+	panel._mask = panel._sunkenBorder._mask
 	
 	function panel:SizeChangeHandler()
 		if self._panel.Scrollbar then
@@ -80,14 +70,15 @@ function LibSGui.Panel:Create(title, _parent, pTable)
 		end
 	end
 	panel._mask:EventAttach(Event.UI.Layout.Size, panel.SizeChangeHandler, "Panel Mask Size Change")
+	panel._mask._panel = panel
 	
-	panel.Content = _int:pullFrame(panel._mask, true)
-	panel.Content:SetPoint("TOPLEFT", panel._mask, "TOPLEFT")
-	panel.Content:SetPoint("RIGHT", panel._mask, "RIGHT")
-	panel.Content:SetHeight(panel._mask:GetHeight())
+	panel.Content = panel._sunkenBorder.Content
 	panel.Content._panel = panel
 	panel.Content:EventAttach(Event.UI.Layout.Size, panel.SizeChangeHandler, "Panel Content Size Change")
 	
+	panel.SetBorderWidth = function(panel, w, Type) panel._raisedBorder:SetBorderWidth(w, Type) end
+	panel.ClearBorderWidth = function(panel, w, Type) panel._raisedBorder:ClearBorderWidth() end
+		
 	function panel:GetScrollbar()
 		return panel.Scrollbar
 	end
@@ -135,6 +126,7 @@ function LibSGui.Panel:Create(title, _parent, pTable)
 		if type(newHeight) == "number" then
 			--print("old height: "..self.Content:GetHeight())
 			if newHeight > 0 then
+				self.Content:ClearPoint("BOTTOM")
 				self.Content:SetHeight(newHeight)
 			else
 				if _int._debug then
@@ -162,10 +154,10 @@ function LibSGui.Panel:Create(title, _parent, pTable)
 					self.Scrollbar._panel = self
 					self.Scrollbar._hidden = pTable.Hide
 					self.Scrollbar._dynamic = pTable.Dynamic
-					self.Scrollbar:SetPoint("TOPRIGHT", self._raisedBorder.TopRight, "TOPRIGHT", -8, 8)
-					self.Scrollbar:SetPoint("BOTTOM", self._raisedBorder.BottomRight, "BOTTOM", nil, -8)
-					self._sunkenCradle:ClearPoint("RIGHT")
-					self._sunkenCradle:SetPoint("RIGHT", self.Scrollbar, "LEFT", -4, nil)
+					self.Scrollbar:SetPoint("TOPRIGHT", self._raisedBorder.Content, "TOPRIGHT")
+					self.Scrollbar:SetPoint("BOTTOM", self._raisedBorder.Content, "BOTTOM")
+					self._sunkenBorder:ClearPoint("RIGHT")
+					self._sunkenBorder:SetPoint("RIGHT", self.Scrollbar, "LEFT", -4, nil)
 					function self.Scrollbar:_checkBounds()
 						local newDiff = math.floor(self._panel.Content:GetHeight() - self._panel._mask:GetHeight()) * self._panel._div
 						if newDiff ~= self._panel._diff then
@@ -182,8 +174,8 @@ function LibSGui.Panel:Create(title, _parent, pTable)
 								if self._hidden then
 									self:SetVisible(false)
 									if self._dynamic then
-										self._panel._sunkenCradle:ClearPoint("RIGHT")
-										self._panel._sunkenCradle:SetPoint("RIGHT", self._panel._raisedBorder.BottomRight, "LEFT", 4, nil)
+										self._panel._sunkenBorder:ClearPoint("RIGHT")
+										self._panel._sunkenBorder:SetPoint("RIGHT", self._panel._raisedBorder_cradle, "RIGHT")
 									end
 								end
 								LibSGui.Event.Panel.Scrollbar.Active(self._panel, false)
@@ -216,5 +208,7 @@ function LibSGui.Panel:Create(title, _parent, pTable)
 		end
 	end
 	
+	panel:SetBorderWidth(6)
+	panel:SetBorderWidth(3, "RIGHT")
 	return panel, panel.Content
 end

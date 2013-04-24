@@ -4113,7 +4113,7 @@ function KBM.CheckActiveBoss(UnitObj)
 	end	
 end
 
-function KBM.CombatEnter(uList)
+function KBM.CombatEnter(handle, uList)
 	if KBM.Options.Enabled then
 		for UnitID, UnitObj in pairs(uList) do
 			if not UnitObj.Player then
@@ -4352,7 +4352,7 @@ function KBM.CPU:Toggle(Silent)
 	end
 end
 
-function KBM.Unit.Percent(UnitObj)
+function KBM.Unit.Percent(handle, UnitObj)
 	if KBM.Encounter then
 		local BossObj = KBM.BossID[UnitObj.UnitID]
 		if BossObj then
@@ -4393,7 +4393,7 @@ function KBM.Unit.Percent(UnitObj)
 	end
 end
 
-function KBM.Unit.Available(UnitObj)
+function KBM.Unit.Available(handle, UnitObj)
 	if KBM.Encounter then
 		if UnitObj.Loaded then
 			if not UnitObj.Player then
@@ -4407,13 +4407,13 @@ function KBM.Unit.Available(UnitObj)
 	end
 end
 
-function KBM.Unit.Removed(Units)
+function KBM.Unit.Removed(handle, Units)
 	for UnitID, UnitObj in pairs(Units) do
 		KBM.IgnoreList[UnitID] = nil
 	end
 end
 
-function KBM.Unit.Mark(Units)
+function KBM.Unit.Mark(handle, Units)
 	if KBM.PercentageMon.Active then
 		if KBM.PercentageMon.Settings.Marks then
 			if KBM.PercentageMon.Current then
@@ -6540,7 +6540,7 @@ function KBM.ConvertTime(Time)
 	return TimeString
 end
 
-function KBM.Raid.CombatEnter()
+function KBM.Raid.CombatEnter(handle)
 
 	if KBM.Debug then
 		print("Raid has entered combat: Number in combat = "..LibSUnit.Raid.CombatTotal)
@@ -6573,7 +6573,7 @@ function KBM.WipeIt(Force)
 	
 end
 
-function KBM.Raid.CombatLeave()
+function KBM.Raid.CombatLeave(handle)
 
 	if KBM.Debug then
 		print("Raid has left combat")
@@ -7079,7 +7079,7 @@ function KBM:BuffRemove(handle, Units)
 	end
 end
 
-function KBM.SlashInspectBuffs(Name)
+function KBM.SlashInspectBuffs(handle, Name)
 	local UnitID = ""
 	if Name == "" then
 		Name = KBM.Player.Name
@@ -7879,7 +7879,7 @@ function KBM.SetDefault.rcbutton()
 	KBM.Ready.Button:Defaults()
 end
 
-function KBM.SlashDefault(Args)
+function KBM.SlashDefault(handle, Args)
 	-- Will eventually have different options that will link to default buttons in UI
 	-- For now it'll reset the Options Menu Button to its default settings. (Central, Visible and Unlocked)
 	Args = string.lower(Args or "")
@@ -7901,7 +7901,7 @@ function KBM.SlashDefault(Args)
 	end
 end
 
-function KBM.SlashUnitCache(arg)
+function KBM.SlashUnitCache(handle, arg)
 	if type(arg) == "string" then
 		arg = string.upper(arg)
 	end
@@ -8171,7 +8171,6 @@ function KBM.InitEvents()
 	Command.Event.Attach(Event.Chat.Notify, KBM.Notify, "Notify Event")
 	Command.Event.Attach(Event.Chat.Npc, KBM.NPCChat, "NPC Chat")
 	-- Units
-	--table.insert(Event.Unit.Castbar, {KBM_CastBar, "KingMolinator", "Cast Bar Event"})
 	-- System
 	Command.Event.Attach(Event.System.Update.Begin, function () KBM:Timer() end, "System Update Begin")
 	--Command.Event.Attach(Event.System.Update.End, function () KBM:AuxTimer() end, "System Update End")
@@ -8183,32 +8182,32 @@ function KBM.InitEvents()
 	Command.Event.Attach(Event.SafesBuffLib.Buff.Remove, function (...) KBM:BuffRemove(...) end, "Buff Monitor (Remove)")
 	
 	-- Safe's Unit Library Events
-	table.insert(Event.SafesUnitLib.Unit.New.Full, {KBM.Unit.Available, "KingMolinator", "Unit Available"})
-	table.insert(Event.SafesUnitLib.Unit.Full, {KBM.Unit.Available, "KingMolinator", "Unit Available"})
-	table.insert(Event.SafesUnitLib.Unit.Removed, {KBM.Unit.Removed, "KingMolinator", "Unit Removed"})
-	table.insert(Event.SafesUnitLib.Unit.Detail.Combat, {KBM.CombatEnter, "KingMolinator", "Unit Combat Enter"})
-	table.insert(Event.SafesUnitLib.Raid.Combat.Enter, {KBM.Raid.CombatEnter, "KingMolinator", "Raid Combat Enter"})
-	table.insert(Event.SafesUnitLib.Raid.Combat.Leave, {KBM.Raid.CombatLeave, "KingMolinator", "Raid Combat Leave"})
-	table.insert(Event.SafesUnitLib.Unit.Detail.Percent, {KBM.Unit.Percent, "KingMolinator", "Unit Percent Change"})
-	table.insert(Event.SafesUnitLib.Unit.Mark, {KBM.Unit.Mark, "KingMolinator", "Unit Mark Change"})
-	table.insert(Event.SafesUnitLib.Combat.Damage, {KBM.Damage, "KingMolinator", "Unit Damage"})
-	table.insert(Event.SafesUnitLib.Combat.Heal, {KBM.Heal, "KingMolinator", "Unit Heal"})
-	table.insert(Event.SafesUnitLib.Combat.Death, {KBM.Unit.Death, "KingMolinator", "Unit Death"})
+	Command.Event.Attach(Event.SafesUnitLib.Unit.New.Full, KBM.Unit.Available, "Unit Available")
+	Command.Event.Attach(Event.SafesUnitLib.Unit.Full, KBM.Unit.Available, "Unit Available")
+	Command.Event.Attach(Event.SafesUnitLib.Unit.Removed, KBM.Unit.Removed, "Unit Removed")
+	Command.Event.Attach(Event.SafesUnitLib.Unit.Detail.Combat, KBM.CombatEnter, "Unit Combat Enter")
+	Command.Event.Attach(Event.SafesUnitLib.Raid.Combat.Enter, KBM.Raid.CombatEnter, "Raid Combat Enter")
+	Command.Event.Attach(Event.SafesUnitLib.Raid.Combat.Leave, KBM.Raid.CombatLeave, "Raid Combat Leave")
+	Command.Event.Attach(Event.SafesUnitLib.Unit.Detail.Percent, KBM.Unit.Percent, "Unit Percent Change")
+	Command.Event.Attach(Event.SafesUnitLib.Unit.Mark, KBM.Unit.Mark, "Unit Mark Change")
+	Command.Event.Attach(Event.SafesUnitLib.Combat.Damage, KBM.Damage, "Unit Damage")
+	Command.Event.Attach(Event.SafesUnitLib.Combat.Heal, KBM.Heal, "Unit Heal")
+	Command.Event.Attach(Event.SafesUnitLib.Combat.Death, KBM.Unit.Death, "Unit Death")
 	
 	-- Slash Commands
-	table.insert(Command.Slash.Register("kbmreset"), {function () KBM_Reset(true) end, "KingMolinator", "KBM Reset"})
-	table.insert(Command.Slash.Register("kbmhelp"), {KBM_Help, "KingMolinator", "KBM Help"})
-	table.insert(Command.Slash.Register("kbmversion"), {KBM_Version, "KingMolinator", "KBM Version Info"})
-	table.insert(Command.Slash.Register("kbmoptions"), {KBM_Options, "KingMolinator", "KBM Open Options"})
-	table.insert(Command.Slash.Register("kbmdebug"), {KBM_Debug, "KingMolinator", "KBM Debug on/off"})
-	table.insert(Command.Slash.Register("kbmlocale"), {KBMLM.FindMissing, "KBMLocaleManager", "KBM Locale Finder"})
-	table.insert(Command.Slash.Register("kbmcpu"), {function () KBM.CPU:Toggle() end, "KingMolinator", "KBM CPU Monitor"})
-	table.insert(Command.Slash.Register("kbmbuffs"), {KBM.SlashInspectBuffs, "KingMolinator", "Slash Command for Buff Listing"})
-	table.insert(Command.Slash.Register("kbmon"), {function() KBM.StateSwitch(true) end, "KingMolinator", "KBM On"})
-	table.insert(Command.Slash.Register("kbmoff"), {function() KBM.StateSwitch(false) end, "KingMolinator", "KBM Off"})
-	table.insert(Command.Slash.Register("kbmdefault"), {KBM.SlashDefault, "KingMolinator", "Default settings handler"})
-	table.insert(Command.Slash.Register("kbmunitcache"), {KBM.SlashUnitCache, "KingMolinator", "Unit Data mining output"})
-	table.insert(Command.Slash.Register("kbmzone"), {KBM.SlashZone, "KingMolinator", "KBM On"})
+	Command.Event.Attach(Command.Slash.Register("kbmreset"), function(handle) KBM_Reset(true) end, "KBM Reset")
+	Command.Event.Attach(Command.Slash.Register("kbmhelp"), KBM_Help, "KBM Help")
+	Command.Event.Attach(Command.Slash.Register("kbmversion"), function(handle, ...) KBM_Version(...) end, "KBM Version Info")
+	Command.Event.Attach(Command.Slash.Register("kbmoptions"), KBM_Options, "KBM Open Options")
+	Command.Event.Attach(Command.Slash.Register("kbmdebug"), KBM_Debug, "KBM Debug on/off")
+	Command.Event.Attach(Command.Slash.Register("kbmlocale"), KBMLM.FindMissing, "KBM Locale Finder")
+	Command.Event.Attach(Command.Slash.Register("kbmcpu"), function() KBM.CPU:Toggle() end, "KBM CPU Monitor")
+	Command.Event.Attach(Command.Slash.Register("kbmbuffs"), KBM.SlashInspectBuffs, "Slash Command for Buff Listing")
+	Command.Event.Attach(Command.Slash.Register("kbmon"), function(handle) KBM.StateSwitch(true) end, "KBM On")
+	Command.Event.Attach(Command.Slash.Register("kbmoff"), function(handle) KBM.StateSwitch(false) end, "KBM Off")
+	Command.Event.Attach(Command.Slash.Register("kbmdefault"), KBM.SlashDefault, "Default settings handler")
+	Command.Event.Attach(Command.Slash.Register("kbmunitcache"), KBM.SlashUnitCache, "Unit Data mining output")
+	Command.Event.Attach(Command.Slash.Register("kbmzone"), KBM.SlashZone, "KBM Zone Info")
 end
 
 function KBM.WaitReady()
@@ -8365,6 +8364,7 @@ function KBM.InitKBM(handle, ModID)
 			KBM.Marks.Icon[i]:SetTexture("Rift", File)
 			KBM.Marks.Icon[i]:SetVisible(false)
 		end
+		---------------------------------------------------
 		-- local TestWindow, TestWindowContent = LibSGui.Window:Create("New Options", KBM.Context, {Close = true, Visible = true, Width = 600, Height = 400})
 		-- local TestPanel, TestPanelContent = LibSGui.Panel:Create("Test Panel", TestWindowContent, {Visible = true, w = math.ceil(TestWindowContent:GetWidth() * 0.33)})
 		-- TestPanel_Scrollbar = TestPanel:AddScrollbar()
@@ -8381,6 +8381,7 @@ function KBM.InitKBM(handle, ModID)
 		-- local TestTabber, TestTabberContent = LibSGui.Tabber:Create("Test Tabber", TestWindowContent, {Visible = true})
 		-- TestTabber:ClearPoint("LEFT")
 		-- TestTabber:SetPoint("LEFT", TestPanel._cradle, "RIGHT")
+		----------------------------------------------------
 	else
 		if Inspect.Buff.Detail ~= IBDReserved then
 			print(tostring(ModID).." changed internal command: Restoring Inspect.Buff.Detail")
