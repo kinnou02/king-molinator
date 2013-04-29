@@ -14,6 +14,8 @@ if not KBM.BossMod then
 end
 local FT = KBM.BossMod["RFrozen_Tempest"]
 
+-- tank debuff "Deathly Chill" or "Deathly Hallows"
+
 local GLD = {
 	Enabled = true,
 	Directory = FT.Directory,
@@ -408,7 +410,6 @@ function GLD:Start()
 	KBM.Defaults.MechObj.Assign(self.Amrian)
 	
 	-- Assign Alerts and Timers to Triggers
-
 	self.Gelidra.Triggers.Cascade = KBM.Trigger:Create(self.Lang.Ability.Cascade[KBM.Lang], "cast", self.Gelidra)
 	self.Gelidra.Triggers.Cascade:AddAlert(self.Gelidra.AlertsRef.Cascade)
 	self.Gelidra.Triggers.Cascade:AddTimer(self.Gelidra.TimersRef.Cascade)
@@ -424,6 +425,7 @@ function GLD:Start()
 	
 	self.Amrian.Triggers.Blizzard = KBM.Trigger:Create(self.Lang.Ability.Blizzard[KBM.Lang], "cast", self.Amrian)
 	self.Amrian.Triggers.Blizzard:AddAlert(self.Amrian.AlertsRef.Blizzard)
+	self.Amrian.Triggers.Blizzard:AddSpy(self.Amrian.MechRef.Blizzard)
 	self.Amrian.Triggers.Induction = KBM.Trigger:Create(self.Lang.Debuff.Induction[KBM.Lang], "playerDebuff", self.Amrian)
 	self.Amrian.Triggers.Induction:AddAlert(self.Amrian.AlertsRef.Induction, true)
 	self.Amrian.Triggers.Induction:AddSpy(self.Amrian.MechRef.Induction)

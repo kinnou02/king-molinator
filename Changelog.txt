@@ -30,13 +30,14 @@ Endless Eclipse
 
 Frozen Tempest
 * Galidra
-** Fixed: All Castbars now remember their settings correctly (Galidra, Vortex and Amrien)
-** New: Added Unit tracking for Hard Mode unit Amrien. (HM)
-** New: Added Persistent Castbar for Amrien. (HM)
-** New: Added Percentage tracking for Amrien on the Phase Monitor (Only during Hard Mode).
+** Fixed: All Castbars now remember their settings correctly (Galidra, Vortex and Amrian)
+** New: Added Unit tracking for Hard Mode unit Amrian. (HM)
+** New: Added Persistent Castbar for Amrian. (HM)
+** New: Added Percentage tracking for Amrian on the Phase Monitor (Only during Hard Mode).
 ** New: Added Percentage Monitor for tracking 10% difference (Only during Hard Mode).
 ** New: Added Mechanic Spy and Personal Alert for Hypothermic Induction. (HM)
 ** New: Added Alert for Razorwind Blizzard. (HM)
+** New: Added Mechanic Spy for target of Razorwind Blizzard. (HM)
 * Kolmasveli & Toinenveli
 ** Change: Removed the timer stops for Glimpse at 10% as they can technically be cast again.
 * Crucia

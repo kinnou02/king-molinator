@@ -37,6 +37,7 @@ IJ.Johlen = {
 	UTID = "U11DFBF8C2A3FA156",
 	Menu = {},
 	AlertsRef = {},
+	MechRef = {},
 	Dead = false,
 	Available = false,
 	UnitID = nil,
@@ -48,6 +49,10 @@ IJ.Johlen = {
 			Enabled = true,
 			Blinding = KBM.Defaults.AlertObj.Create("yellow"),
 			Bomb = KBM.Defaults.AlertObj.Create("red"),
+		},
+		MechRef = {
+			Enabled = true,
+			Arm = KBM.Defaults.MechObj.Create("blue"),
 		},
 	},
 }
@@ -81,6 +86,7 @@ IJ.Lang.Ability.Blinding:SetGerman("Blendbombe")
 IJ.Lang.Ability.Blinding:SetFrench("Bombe aveuglante")
 IJ.Lang.Ability.Blinding:SetRussian("Ослепляющая бомба")
 IJ.Lang.Ability.Blinding:SetKorean("실명 폭탄")
+IJ.Lang.Ability.Arm = KBM.Language:Add("Arm Bomb")
 
 -- Verbose Dictionary 
 IJ.Lang.Verbose = {}
@@ -124,6 +130,7 @@ function IJ:InitVars()
 		Chronicle = true,
 		CastBar = self.Johlen.Settings.CastBar,
 		AlertsRef = self.Johlen.Settings.AlertsRef,
+		MechRef = self.Johlen.Settings.MechRef,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		Alerts = KBM.Defaults.Alerts(),
@@ -300,6 +307,10 @@ function IJ:Start()
 	self.Johlen.AlertsRef.Bomb.MenuName = self.Lang.Unit.Bomb[KBM.Lang]
 	KBM.Defaults.AlertObj.Assign(self.Johlen)
 	
+	-- Test Mech Spy
+	self.Johlen.MechRef.Arm = KBM.MechSpy:Add(self.Lang.Ability.Arm[KBM.Lang], 5, "castTarget", self.Johlen)
+	KBM.Defaults.MechObj.Assign(self.Johlen)
+	
 	-- Assign and Create Triggers
 	self.Johlen.Triggers.Bomb = KBM.Trigger:Create(self.Lang.Unit.Bomb[KBM.Lang], "notify", self.Johlen)
 	self.Johlen.Triggers.Bomb:AddAlert(self.Johlen.AlertsRef.Bomb)
@@ -311,6 +322,8 @@ function IJ:Start()
 	self.Johlen.Triggers.PhaseThree:AddPhase(self.PhaseThree)
 	self.Johlen.Triggers.PhaseFour = KBM.Trigger:Create(26, "percent", self.Johlen)
 	self.Johlen.Triggers.PhaseFour:AddPhase(self.PhaseFour)
+	self.Johlen.Triggers.Arm = KBM.Trigger:Create(self.Lang.Ability.Arm[KBM.Lang], "cast", self.Johlen)
+	self.Johlen.Triggers.Arm:AddSpy(self.Johlen.MechRef.Arm)
 	
 	self.Johlen.CastBar = KBM.CastBar:Add(self, self.Johlen)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
