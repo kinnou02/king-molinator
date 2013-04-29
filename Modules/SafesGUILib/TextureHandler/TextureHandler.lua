@@ -12,27 +12,34 @@ PI.Queue = {
 	List = {},
 }
 
-function PI.LoadTexture(Texture, Location, File, Force)
+function PI.LoadTexture(Texture, Location, File, Force, Callback)
 	if Force then
-		Texture:SetTexture(Location, File)
+		if Utility.Type(Texture) == "Texture" then
+			Texture:SetTexture(Location, File)
+		end
 	else
+		if type(Callback) ~= "function" then
+			Callback = nil
+		end
 		if not PI.Store[tostring(Texture)] then
 			--print("Pushing unqueued Texture: "..Location.." - "..File)
-			PI.Queue:Push(Texture, Location, File)
+			PI.Queue:Push(Texture, Location, File, Callback)
 		else
 			--print("Updating queued Texture: "..Location.." - "..File)
 			PI.Store[tostring(Texture)].File = File
 			PI.Store[tostring(Texture)].Location = Location
+			PI.Store[tostring(Texture)].Callback = Callback
 		end
 	end
 end
 
-function PI.Queue:Push(Texture, Location, File)
+function PI.Queue:Push(Texture, Location, File, Callback)
 	if self.Count == 0 then
 		local Entry = {
 			Texture = Texture,
 			Location = Location,
 			File = File,
+			Callback = Callback,
 		}
 		self.First = Entry
 		self.Last = Entry
@@ -44,6 +51,7 @@ function PI.Queue:Push(Texture, Location, File)
 			Location = Location,
 			File = File,
 			Before = self.Last,
+			Callback = Callback,
 		}
 		self.Last = Entry
 		Entry.Before.After = Entry
@@ -76,6 +84,9 @@ function PI.CycleLoad()
 		repeat
 			if PI.Queue.First.Texture.SetTexture then
 				PI.Queue.First.Texture:SetTexture(PI.Queue.First.Location, PI.Queue.First.File)
+				if PI.Queue.First.Callback then
+					PI.Queue.First.Callback()
+				end
 			end
 			PI.Queue:Pop(PI.Queue.First)
 			Count = Count + 1

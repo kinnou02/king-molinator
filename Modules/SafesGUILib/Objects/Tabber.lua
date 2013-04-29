@@ -48,12 +48,18 @@ function LibSGui.Tabber:Create(title, _parent, pTable)
 		HighlightSelected = Default.HighlightSelectedTextSize,
 	}
 	
-	function tabber:CreateTab(Name, Icon, Selected)
+	function tabber:CreateTab(Name, Icon, Selected, Location)
 		local Tab = {}
-		Name = tostring(Name) or ""
+		Location = Location or "Rift"
+		Name = Name or ""
 		self.Count = self.Count + 1
 		Tab.index = self.Count
 		self._aWidth = math.ceil(self._cradle:GetWidth() / self.Count)
+		Tab.HasIcon = false
+		
+		if type(Icon) == "string" and type(Location) == "string" then
+			Tab.HasIcon = true
+		end
 		
 		Selected = Selected or false
 		if self._ori ~= "BOTTOM" then
@@ -62,6 +68,7 @@ function LibSGui.Tabber:Create(title, _parent, pTable)
 			Tab._file = {[true] = "Media/Tabber_Bottom.png", [false] = "Media/Tabber_Bottom_Off.png"}
 		end
 		Tab.Texture = _int:pullTexture(self._cradle, true)
+		Tab.Label = Name
 		Tab.Texture:SetLayer(1)
 		Tab.Tabber = self
 		if self._ori == "TOP" then
@@ -77,8 +84,6 @@ function LibSGui.Tabber:Create(title, _parent, pTable)
 			if self.Count == 2 then
 				self._tabs[self.Count - 1].Texture:ClearPoint("LEFT")
 				self._tabs[1].Texture:SetPoint("LEFT", self._cradle, "LEFT")
-			else
-				--self._tabs[self.Count - 1].Texture:SetPoint("LEFT", self._tabs[self.Count - 2].Texture, "LEFT")
 			end
 			Tab.Texture:SetPoint("RIGHT", self._cradle, "RIGHT")
 			for n = 1, self.Count - 1 do
@@ -86,19 +91,58 @@ function LibSGui.Tabber:Create(title, _parent, pTable)
 			end
 		end
 		self._tabs[self.Count] = Tab
-		Tab.Text = _int:pullText(self._cradle, true)
-		Tab.Text:SetText(Name)
+		Tab.Icon = _int:pullTexture(self._cradle, false)
+		Tab.Icon:SetLayer(3)
+		Tab.Text = _int:pullText(self._cradle, false)
 		Tab.Text:SetLayer(3)
 		Tab.Text:SetFontColor(0.95, 0.95, 0.75)
+		Tab.Icon:SetPoint("CENTER", Tab.Texture, "CENTER")
+		Tab.Default = {
+			w = 0,
+			h = 0,
+		}
+		
+		function Tab:UpdateIcon()
+			if self.Default.w > 0 and self.Default.h > 0 then
+				local newHeight = self.Texture:GetHeight() - 6
+				local newRatio = newHeight / self.Default.h
+				self.Icon:SetHeight(newHeight)
+				self.Icon:SetWidth(self.Default.w * newRatio)
+			end
+		end
+		
+		function Tab:IconLoaded()
+			self.Default.w = self.Icon:GetTextureWidth()
+			self.Default.h = self.Icon:GetTextureHeight()
+			self:UpdateIcon()
+		end
+		
+		if Tab.HasIcon then
+			Tab.Text:SetVisible(false)
+			Tab.Icon:SetVisible(true)
+			TH.LoadTexture(Tab.Icon, Location, Icon, false, function() Tab:IconLoaded() end)
+		else
+			Tab.Text:SetVisible(true)
+			Tab.Icon:SetVisible(false)
+			Tab.Text:SetText(Tab.Label)
+		end
 		Tab.Enabled = true
 		Tab.Texture.Tab = Tab
-		
+			
 		function Tab:SetPoints()
 			if self.Selected then
-				self.Texture:SetPoint("TOP", self.Tabber._cradle, "TOP")
-				Tab.Text:SetPoint("CENTER", Tab.Texture, "CENTER", 0, 1)
-				Tab.Text:SetAlpha(1)
-				Tab.Text:SetFontSize(self.Tabber.TextSize.Selected)
+				if self.Tabber._ori == "TOP" then
+					self.Texture:SetPoint("TOP", self.Tabber._cradle, "TOP")
+				else
+					self.Texture:SetPoint("BOTTOM", self.Tabber._cradle, "BOTTOM")
+				end
+				self.Text:SetPoint("CENTER", self.Texture, "CENTER", 0, 1)
+				self.Text:SetAlpha(1)
+				self.Text:SetFontSize(self.Tabber.TextSize.Selected)
+				
+				self.Icon:SetAlpha(1)
+				
+				self:UpdateIcon()
 			else
 				if self.index ~= 1 then
 					self.Texture:SetPoint("LEFT", self.Tabber._tabs[self.index - 1].Texture, "RIGHT", 1, nil)
@@ -107,8 +151,9 @@ function LibSGui.Tabber:Create(title, _parent, pTable)
 					
 					end
 				end
-				Tab.Text:SetAlpha(0.5)
-				Tab.Text:SetFontSize(self.Tabber.TextSize.Normal)
+				self.Text:SetAlpha(0.5)
+				self.Text:SetFontSize(self.Tabber.TextSize.Normal)
+				self.Icon:SetAlpha(0.5)
 				if self.Tabber._ori == "TOP" then
 					self.Texture:SetPoint("TOP", self.Tabber._cradle, "TOP", nil, 6)
 					Tab.Text:SetPoint("CENTER", Tab.Texture, "CENTER", 0, 1)
@@ -116,6 +161,7 @@ function LibSGui.Tabber:Create(title, _parent, pTable)
 					self.Texture:SetPoint("BOTTOM", self.Tabber._cradle, "BOTTOM", nil, -6)
 					Tab.Text:SetPoint("CENTER", Tab.Texture, "CENTER", 0, -1)
 				end
+				self:UpdateIcon()
 			end
 		end
 		
@@ -137,6 +183,29 @@ function LibSGui.Tabber:Create(title, _parent, pTable)
 			Tab:SetPoints()
 		end
 		
+		function Tab:SetText(Text)
+			Text = tostring(Text)
+			if Tab.HasIcon then
+				self.Icon:SetVisible(false)
+			end
+			Tab.Text:SetText(Text)
+			Tab.Label = Text
+		end
+		
+		function Tab:SetIcon(Location, Icon)
+			if self.Label ~= "" then
+				self.Text:SetVisible(false)
+			end
+			TH.LoadTexture(self.Icon, Location, Icon)
+		end
+		
+		function Tab:ClearIcon()
+			if self.Label ~= "" then
+				self.Text:SetVisible(true)
+			end
+			self.Icon:SetVisible(false)
+		end
+		
 		function Tab:ClickHandler()
 			self = self.Tab
 			if not self.Selected then
@@ -147,32 +216,36 @@ function LibSGui.Tabber:Create(title, _parent, pTable)
 		
 		function Tab:MouseIn()
 			self = self.Tab
-			if self.Text:GetText() ~= "" then
-				if self.Selected then
-					self.Text:SetFontSize(self.Tabber.TextSize.HighlightSelected)
-				else
-					self.Text:SetFontSize(self.Tabber.TextSize.HighlightNormal)
-					self.Text:SetAlpha(1)
-				end
-				self.Text:SetFontColor(1,1,1)
+			if self.Selected then
+				--self.Text:SetFontSize(self.Tabber.TextSize.HighlightSelected)
+			else
+				self.Text:SetFontSize(self.Tabber.TextSize.HighlightNormal)
+				self.Text:SetAlpha(1)
+				self.Icon:SetAlpha(1)
+				self.Icon:SetWidth(self.Icon:GetWidth() + 2)
+				self.Icon:SetHeight(self.Icon:GetHeight() + 2)
 			end
+			self.Text:SetFontColor(1,1,1)
 		end
 		
 		function Tab:MouseOut()
 			self = self.Tab
-			if self.Text:GetText() ~= "" then
-				if self.Selected then
-					self.Text:SetFontSize(self.Tabber.TextSize.Selected)
-				else
-					self.Text:SetFontSize(self.Tabber.TextSize.Normal)
-					self.Text:SetAlpha(0.5)
-				end
-				self.Text:SetFontColor(0.95, 0.95, 0.75)
+			if self.Selected then
+				--self.Text:SetFontSize(self.Tabber.TextSize.Selected)
+			else
+				self.Text:SetFontSize(self.Tabber.TextSize.Normal)
+				self.Text:SetAlpha(0.5)
+				self.Icon:SetAlpha(0.5)
+				self.Icon:SetWidth(self.Icon:GetWidth() - 2)
+				self.Icon:SetHeight(self.Icon:GetHeight() - 2)
 			end
+			self.Text:SetFontColor(0.95, 0.95, 0.75)
 		end
 		Tab.Texture:EventAttach(Event.UI.Input.Mouse.Cursor.In, Tab.MouseIn, "Tab "..Tab.index..": Mouse In Handler")
 		Tab.Texture:EventAttach(Event.UI.Input.Mouse.Cursor.Out, Tab.MouseOut, "Tab "..Tab.index..": Mouse Out Handler")
 		Tab.Texture:EventAttach(Event.UI.Input.Mouse.Left.Click, Tab.ClickHandler, "Tab "..Tab.index..": Click Handler")
+		
+		return Tab
 	end
 	
 	function tabber:AlignWidth()
@@ -190,7 +263,7 @@ function LibSGui.Tabber:Create(title, _parent, pTable)
 		self._cradle:SetWidth(math.ceil(w))
 	end
 	
-	tabber:CreateTab(title, pTable.Icon, true)
+	local defaultTab = tabber:CreateTab(title, pTable.Icon, true, pTable.Location)
 		
-	return tabber
+	return tabber, defaultTab
 end

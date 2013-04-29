@@ -28,13 +28,13 @@ function LibSGui.Group:Create(title, _parent, pTable)
 	group._cradle:SetPoint("TOPLEFT", _parent, "TOPLEFT")
 	group._cradle:SetPoint("BOTTOMRIGHT", _parent, "BOTTOMRIGHT")
 	
-	group._multi = 5
-	group._div = 0.2 -- (1/group._multi)
+	group._multi = 10
+	group._div = 0.1 -- (1/group._multi)
 	group.Offset = {
 		x = 0,
 		y = 0,
 	}
-	
+		
 	if group._raised then
 		-- Create Base Raised Border
 		group._border = _int:pullFrameRaised(group._cradle, true)
@@ -42,21 +42,53 @@ function LibSGui.Group:Create(title, _parent, pTable)
 		-- Create Base Sunken Border
 		group._border = _int:pullFrameSunken(group._cradle, true)
 	end
+	function group:SizeChangeHandler()
+		if self._group.Scrollbar then
+			if self._group.Scrollbar._active then
+				self._group.Scrollbar:_checkBounds()
+			end
+		end
+	end	
+
 	group._mask = group._border._mask
-	
+	group._mask._group = group
+	group._mask:EventAttach(Event.UI.Layout.Size, group.SizeChangeHandler, "Group Mask Size Change")
+
+	group.SetBorderWidth = function(group, w, Type) group._border:SetBorderWidth(w, Type) end
+	group.ClearBorderWidth = function(group, w, Type) group._border:ClearBorderWidth() end
+
 	-- Create Content Frame	and Link to Mask
 	group.Content = group._border.Content
+	group.Content._group = group
+	group.Content:EventAttach(Event.UI.Layout.Size, group.SizeChangeHandler, "Group Content Size Change")
 		
 	function group:GetContent()
-		return group.Content()
+		return self.Content
 	end
 	
 	function group:GetContentWidth()
-		return group.Content:GetWidth()
+		return self.Content:GetWidth()
 	end
 	
 	function group:GetContentHeight()
-		return group.Content:GetHeight()
+		return self.Content:GetHeight()
+	end
+	
+	function group:SetContentHeight(newHeight)
+		if type(newHeight) == "number" then
+			if newHeight > 0 then
+				self.Content:ClearPoint("BOTTOM")
+				self.Content:SetHeight(newHeight)
+			else
+				if _int._debug then
+					error("[Group:SetContentHeight] Expecting a number greater than zero, got: "..tostring(newHeight))
+				end
+			end
+		else
+			if _int._debug then
+				error("[Group:SetContentHeight] Expecting number, got: "..type(newHeight))
+			end
+		end
 	end
 	
 	function group:AddScrollbar(pTable)
@@ -76,7 +108,7 @@ function LibSGui.Group:Create(title, _parent, pTable)
 					self.Scrollbar:SetPoint("TOPRIGHT", self._cradle, "TOPRIGHT")
 					self.Scrollbar:SetPoint("BOTTOM", self._cradle, "BOTTOM")
 					self._border:ClearPoint("RIGHT")
-					self._border:SetPoint("RIGHT", self.Scrollbar, "LEFT", -4, nil)
+					self._border:SetPoint("RIGHT", self.Scrollbar, "LEFT", -3, nil)
 					function self.Scrollbar:_checkBounds()
 						local newDiff = math.floor(self._group.Content:GetHeight() - self._group._mask:GetHeight()) * self._group._div
 						if newDiff ~= self._group._diff then
@@ -93,8 +125,8 @@ function LibSGui.Group:Create(title, _parent, pTable)
 								if self._hidden then
 									self:SetVisible(false)
 									if self._dynamic then
-										self._group._sunkenCradle:ClearPoint("RIGHT")
-										self._group._sunkenCradle:SetPoint("RIGHT", self._group._raisedBorder.BottomRight, "LEFT", 4, nil)
+										self._group._border:ClearPoint("RIGHT")
+										self._group._border:SetPoint("RIGHT", self._group._cradle, "RIGHT")
 									end
 								end
 								LibSGui.Event.Group.Scrollbar.Active(self._group, false)
@@ -103,7 +135,7 @@ function LibSGui.Group:Create(title, _parent, pTable)
 					end
 					function self.Scrollbar:ScrollChangeHandler(handle)
 						self._group.Content:ClearPoint("TOP")
-						self._group.Content:SetPoint("TOP", self._group._mask, "TOP", nil, -math.floor(self:GetPosition() * 5))
+						self._group.Content:SetPoint("TOP", self._group._mask, "TOP", nil, -math.floor(self:GetPosition() * self._group._multi))
 						LibSGui.Event.Group.Scrollbar.Change(self._group, self:GetPosition())
 					end
 					self.Scrollbar:EventAttach(Event.UI.Scrollbar.Change, self.Scrollbar.ScrollChangeHandler, "Group Scroller Change")

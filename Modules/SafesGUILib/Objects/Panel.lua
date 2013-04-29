@@ -48,8 +48,8 @@ function LibSGui.Panel:Create(title, _parent, pTable)
 	end
 	panel._parent = _parent
 	
-	panel._multi = 5
-	panel._div = 0.2 -- (1/panel._multi)
+	panel._multi = 10
+	panel._div = 0.1 -- (1/panel._multi)
 	panel.Offset = {
 		x = 0,
 		y = 0,
@@ -157,7 +157,7 @@ function LibSGui.Panel:Create(title, _parent, pTable)
 					self.Scrollbar:SetPoint("TOPRIGHT", self._raisedBorder.Content, "TOPRIGHT")
 					self.Scrollbar:SetPoint("BOTTOM", self._raisedBorder.Content, "BOTTOM")
 					self._sunkenBorder:ClearPoint("RIGHT")
-					self._sunkenBorder:SetPoint("RIGHT", self.Scrollbar, "LEFT", -4, nil)
+					self._sunkenBorder:SetPoint("RIGHT", self.Scrollbar, "LEFT", -3, nil)
 					function self.Scrollbar:_checkBounds()
 						local newDiff = math.floor(self._panel.Content:GetHeight() - self._panel._mask:GetHeight()) * self._panel._div
 						if newDiff ~= self._panel._diff then
@@ -184,7 +184,7 @@ function LibSGui.Panel:Create(title, _parent, pTable)
 					end
 					function self.Scrollbar:ScrollChangeHandler(handle)
 						self._panel.Content:ClearPoint("TOP")
-						self._panel.Content:SetPoint("TOP", self._panel._mask, "TOP", nil, -math.floor(self:GetPosition() * 5))
+						self._panel.Content:SetPoint("TOP", self._panel._mask, "TOP", nil, -math.floor(self:GetPosition() * self._panel._multi))
 						LibSGui.Event.Panel.Scrollbar.Change(self._panel, self:GetPosition())
 					end
 					self.Scrollbar:EventAttach(Event.UI.Scrollbar.Change, self.Scrollbar.ScrollChangeHandler, "Panel Scroller Change")
@@ -208,7 +208,6 @@ function LibSGui.Panel:Create(title, _parent, pTable)
 		end
 	end
 	
-	panel:SetBorderWidth(6)
-	panel:SetBorderWidth(3, "RIGHT")
+	panel:SetBorderWidth(4)
 	return panel, panel.Content
 end

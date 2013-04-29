@@ -308,6 +308,8 @@ function RM.Rezes:Init()
 							if Insert then
 								Timer.Active = true
 								if TableObj == self.ActiveTimers._first then
+									Timer.GUI.Background:ClearPoint("BOTTOMLEFT")
+									Timer.GUI.Background:ClearPoint("TOPLEFT")
 									Timer.GUI.Background:SetPoint("TOPLEFT", Anchor, "TOPLEFT")
 									if RM.GUI.Settings.Cascade then
 										cTimer.GUI.Background:SetPoint("TOPLEFT", Timer.GUI.Background, "BOTTOMLEFT", 0, 1)
@@ -317,6 +319,8 @@ function RM.Rezes:Init()
 										cTimer.GUI.Background:SetPoint("BOTTOMLEFT", Timer.GUI.Background, "TOPLEFT", 0, -1)
 									end
 								else
+									Timer.GUI.Background:ClearPoint("BOTTOMLEFT")
+									Timer.GUI.Background:ClearPoint("TOPLEFT")
 									if RM.GUI.Settings.Cascade then
 										Timer.GUI.Background:SetPoint("TOPLEFT", TableObj._before._data.GUI.Background, "BOTTOMLEFT", 0, 1)
 										cTimer.GUI.Background:SetPoint("TOPLEFT", Timer.GUI.Background, "BOTTOMLEFT", 0, 1)
@@ -330,6 +334,8 @@ function RM.Rezes:Init()
 							end
 						end
 						if not Timer.Active then
+							Timer.GUI.Background:ClearPoint("BOTTOMLEFT")
+							Timer.GUI.Background:ClearPoint("TOPLEFT")
 							if RM.GUI.Settings.Cascade then
 								Timer.GUI.Background:SetPoint("TOPLEFT", self.ActiveTimers._last._data.GUI.Background, "BOTTOMLEFT", 0, 1)
 							else
@@ -339,6 +345,8 @@ function RM.Rezes:Init()
 							Timer.Active = true
 						end
 					else
+						Timer.GUI.Background:ClearPoint("BOTTOMLEFT")
+						Timer.GUI.Background:ClearPoint("TOPLEFT")
 						Timer.GUI.Background:SetPoint("TOPLEFT", Anchor, "TOPLEFT")
 						Timer.TableObj = self.ActiveTimers:Add(Timer)
 						Timer.Active = true
@@ -394,9 +402,12 @@ function RM.Rezes:Init()
 								RM.GUI.Anchor.Text:SetVisible(true)
 							end
 						elseif self.TableObj == RM.Rezes.ActiveTimers._first then
+							self.TableObj._after._data.GUI.Background:ClearPoint("TOPLEFT")
 							self.TableObj._after._data.GUI.Background:ClearPoint("BOTTOMLEFT")
 							self.TableObj._after._data.GUI.Background:SetPoint("TOPLEFT", RM.GUI.Anchor, "TOPLEFT")
 						elseif self.TableObj ~= RM.Rezes.ActiveTimers._last then
+							self.TableObj._after._data.GUI.Background:ClearPoint("BOTTOMLEFT")
+							self.TableObj._after._data.GUI.Background:ClearPoint("TOPLEFT")
 							if RM.GUI.Settings.Cascade then
 								self.TableObj._after._data.GUI.Background:SetPoint("TOPLEFT", self.TableObj._before._data.GUI.Background, "BOTTOMLEFT", 0, 1)
 							else

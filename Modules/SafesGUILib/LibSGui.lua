@@ -21,6 +21,9 @@ local KBMTH_AddonDetails = Inspect.Addon.Detail("KBMTextureHandler")
 local TH = KBMTH_AddonDetails.data
 
 LibSGui.Event = {}
+LibSGui.Frame = {}
+LibSGui.Text = {}
+LibSGui.Texture = {}
 
 local _int = {
 	_context = UI.CreateContext("LibSGui_Parking_Context"),
@@ -38,11 +41,12 @@ local _int = {
 		frameSunken = LibSata:Create(),
 		mask = LibSata:Create(),
 		text = LibSata:Create(),
+		textfield = LibSata:Create(),
 	},
 	objects = {
 		window = LibSata:Create(),
-		check = LibSata:Create(),
-		scollbar = LibSata:Create(),
+		checkbox = LibSata:Create(),
+		scrollbar = LibSata:Create(),
 		group = LibSata:Create(),
 		panel = LibSata:Create(),
 		tabber = LibSata:Create(),
@@ -51,27 +55,43 @@ local _int = {
 		listview = LibSata:Create(),
 		sliderex = LibSata:Create(),
 	},
+	panelDefault = {
+		raised = {
+			x = 4,
+			y = 4,
+			alpha = 0.35,
+		},
+		sunken = {
+			x = 3,
+			y = 3,
+			alpha = 0.55,
+		},
+	},
 	textures = {
 		-- Raised
-		TLRPanel = "Media/Group_TL_raise.png",
-		TRRPanel = "Media/Group_TR_raise.png",
-		TRPanel = "Media/Group_T_raise.png",
-		LRPanel = "Media/Group_L_raise.png",
-		MRPanel = "Media/Group_M_raise.png",
-		RRPanel = "Media/Group_R_raise.png",
-		BLRPanel = "Media/Group_BL_raise.png",
-		BRPanel = "Media/Group_B_raise.png",
-		BRRPanel = "Media/Group_BR_raise.png",
+		raised = {
+			TOPLEFT = "Media/Group_TL_raise.png",
+			TOPRIGHT = "Media/Group_TR_raise.png",
+			TOP = "Media/Group_T_raise.png",
+			LEFT = "Media/Group_L_raise.png",
+			MIDDLE = "Media/Group_M_raise.png",
+			RIGHT = "Media/Group_R_raise.png",
+			BOTTOMLEFT = "Media/Group_BL_raise.png",
+			BOTTOM = "Media/Group_B_raise.png",
+			BOTTOMRIGHT= "Media/Group_BR_raise.png",
+		},
 		-- Sunken
-		TLSPanel = "Media/Group_TL_normal.png",
-		TRSPanel = "Media/Group_TR_normal.png",
-		TSPanel = "Media/Group_T_normal.png",
-		LSPanel = "Media/Group_L_normal.png",
-		MSPanel = "Media/Group_M_normal.png",
-		RSPanel = "Media/Group_R_normal.png",
-		BLSPanel = "Media/Group_BL_normal.png",
-		BSPanel = "Media/Group_B_normal.png",
-		BRSPanel = "Media/Group_BR_normal.png",
+		sunken = {
+			TOPLEFT = "Media/Group_TL_normal.png",
+			TOPRIGHT = "Media/Group_TR_normal.png",
+			TOP = "Media/Group_T_normal.png",
+			LEFT = "Media/Group_L_normal.png",
+			MIDDLE = "Media/Group_M_normal.png",
+			RIGHT = "Media/Group_R_normal.png",
+			BOTTOMLEFT = "Media/Group_BL_normal.png",
+			BOTTOM = "Media/Group_B_normal.png",
+			BOTTOMRIGHT = "Media/Group_BR_normal.png",
+		},
 	},
 	totals = {},
 }
@@ -97,7 +117,7 @@ local _typeList = {
 		w = 400,
 		h = 400,
 	},
-	["check"] = {
+	["checkbox"] = {
 	},
 	["scrollbar"] = {
 	},
@@ -109,7 +129,123 @@ local _typeList = {
 		w = 128,
 		h = 32,
 	},
+	["listview"] = {
+	},
+	["simpletreeview"] = {
+	},
+	["dropdown"] = {
+	},
+	["sliderex"] = {
+	},
 }
+
+function _int.renderPanel(panel, Type)
+	-- Initialize top section.
+	panel.TopLeft = _int:pullTexture(panel._cradle, true)
+	TH.LoadTexture(panel.TopLeft, AddonIni.id, _int.textures[Type].TOPLEFT)
+	panel.TopLeft:SetPoint("TOPLEFT", panel._cradle, "TOPLEFT")
+	panel.TopLeft:SetAlpha(_int.panelDefault[Type].alpha)
+	panel.TopRight = _int:pullTexture(panel._cradle, true)
+	TH.LoadTexture(panel.TopRight, AddonIni.id, _int.textures[Type].TOPRIGHT)
+	panel.TopRight:SetPoint("TOPRIGHT", panel._cradle, "TOPRIGHT")
+	panel.TopRight:SetAlpha(_int.panelDefault[Type].alpha)
+	panel.Top = _int:pullTexture(panel._cradle, true)
+	TH.LoadTexture(panel.Top, AddonIni.id, _int.textures[Type].TOP)
+	panel.Top:SetPoint("TOPLEFT", panel.TopLeft, "TOPRIGHT")
+	panel.Top:SetPoint("BOTTOMRIGHT", panel.TopRight, "BOTTOMLEFT")
+	panel.Top:SetAlpha(_int.panelDefault[Type].alpha)
+	
+	-- Initial bottom section.
+	panel.BottomLeft = _int:pullTexture(panel._cradle, true)
+	TH.LoadTexture(panel.BottomLeft, AddonIni.id, _int.textures[Type].BOTTOMLEFT)
+	panel.BottomLeft:SetPoint("BOTTOMLEFT", panel._cradle, "BOTTOMLEFT")
+	panel.BottomLeft:SetAlpha(_int.panelDefault[Type].alpha)
+	panel.BottomRight = _int:pullTexture(panel._cradle, true)
+	TH.LoadTexture(panel.BottomRight, AddonIni.id, _int.textures[Type].BOTTOMRIGHT)
+	panel.BottomRight:SetPoint("BOTTOMRIGHT", panel._cradle, "BOTTOMRIGHT")
+	panel.BottomRight:SetAlpha(_int.panelDefault[Type].alpha)
+	panel.Bottom = _int:pullTexture(panel._cradle, true)
+	TH.LoadTexture(panel.Bottom, AddonIni.id, _int.textures[Type].BOTTOM)
+	panel.Bottom:SetPoint("TOPLEFT", panel.BottomLeft, "TOPRIGHT")
+	panel.Bottom:SetPoint("BOTTOMRIGHT", panel.BottomRight, "BOTTOMLEFT", 0, 0.5)
+	panel.Bottom:SetAlpha(_int.panelDefault[Type].alpha)
+
+	-- Line up Left and Right, and fill middle section.
+	panel.Left = _int:pullTexture(panel._cradle, true)
+	TH.LoadTexture(panel.Left, AddonIni.id, _int.textures[Type].LEFT)
+	panel.Left:SetPoint("TOPLEFT", panel.TopLeft, "BOTTOMLEFT")
+	panel.Left:SetPoint("BOTTOMRIGHT", panel.BottomLeft, "TOPRIGHT", 0, 0.5)
+	panel.Left:SetAlpha(_int.panelDefault[Type].alpha)
+	panel.Right = _int:pullTexture(panel._cradle, true)
+	TH.LoadTexture(panel.Right, AddonIni.id, _int.textures[Type].RIGHT)
+	panel.Right:SetPoint("TOPLEFT", panel.TopRight, "BOTTOMLEFT")
+	panel.Right:SetPoint("BOTTOMRIGHT", panel.BottomRight, "TOPRIGHT", 0, 0.5)
+	panel.Right:SetAlpha(_int.panelDefault[Type].alpha)
+	panel.Middle = _int:pullTexture(panel._cradle, true)
+	TH.LoadTexture(panel.Middle, AddonIni.id, _int.textures[Type].MIDDLE)
+	panel.Middle:SetPoint("TOPLEFT", panel.Top, "BOTTOMLEFT")
+	panel.Middle:SetPoint("BOTTOMRIGHT", panel.Bottom, "TOPRIGHT", 0, 0.5)
+	panel.Middle:SetAlpha(_int.panelDefault[Type].alpha)
+	
+	-- Content Mask
+	panel._mask = _int:pullMask(panel._cradle, true)
+	panel._mask:SetLayer(3)
+	panel._mask:SetPoint("TOPLEFT", panel._cradle, "TOPLEFT", _int.panelDefault[Type].x, _int.panelDefault[Type].y)
+	panel._mask:SetPoint("BOTTOMRIGHT", panel._cradle, "BOTTOMRIGHT", -_int.panelDefault[Type].x, -_int.panelDefault[Type].y)
+	
+	-- Content Frame
+	panel.Content = _int:pullFrame(panel._mask, true)
+	panel.Content:SetAllPoints(panel._mask)
+
+	function panel:SetBorderWidth(w, borderType)
+		if type(w) == "number" then
+			w = math.abs(w)
+			wX = w + _int.panelDefault[Type].x
+			wY = w + _int.panelDefault[Type].y
+			if borderType == "TOP" or borderType == "BOTTOM" then
+				self._mask:ClearPoint(borderType)
+				if borderType == "TOP" then
+					self._mask:SetPoint("TOP", self._cradle, "TOP", nil, wY)
+				else
+					self._mask:SetPoint("BOTTOM", self._cradle, "BOTTOM", nil, -wY)				
+				end
+			elseif borderType == "LEFT" or borderType == "RIGHT" then
+				self._mask:ClearPoint(borderType)
+				if borderType == "LEFT" then
+					self._mask:SetPoint("LEFT", self._cradle, "LEFT", wX, nil)
+				else
+					self._mask:SetPoint("RIGHT", self._cradle, "RIGHT", -wX, nil)				
+				end
+			elseif borderType == "TOPBOTTOM" then
+				self._mask:ClearPoint("TOP")
+				self._mask:ClearPoint("BOTTOM")
+				self._mask:SetPoint("TOP", self._cradle, "TOP", nil, wY)
+				self._mask:SetPoint("BOTTOM", self._cradle, "BOTTOM", nil, -wY)
+			elseif borderType == "LEFTRIGHT" then
+				self._mask:ClearPoint("LEFT")
+				self._mask:ClearPoint("RIGHT")
+				self._mask:SetPoint("LEFT", self._cradle, "LEFT", wX, nil)
+				self._mask:SetPoint("RIGHT", self._cradle, "RIGHT", -wX, nil)
+			elseif borderType == "TOPLEFT" or borderType == "BOTTOMRIGHT" then
+				self._mask:ClearPoint(borderType)
+				if borderType == "TOPLEFT" then
+					self._mask:SetPoint("TOPLEFT", self._cradle, "TOPLEFT", wX, wY)
+				else
+					self._mask:SetPoint("BOTTOMRIGHT", self._cradle, "BOTTOMRIGHT", -wX, -wY)		
+				end
+			elseif not borderType then
+				self._mask:ClearAll()
+				self._mask:SetPoint("TOPLEFT", self._cradle, "TOPLEFT", wX, wY)
+				self._mask:SetPoint("BOTTOMRIGHT", self._cradle, "BOTTOMRIGHT", -wX, -wY)
+			end
+		end
+	end
+	function panel:ClearBorderWidth()
+		self._mask:ClearAll()
+		self._mask:SetPoint("TOPLEFT", self._cradle, "TOPLEFT", _int.panelDefault[Type].x, _int.panelDefault[Type].y)
+		self._mask:SetPoint("BOTTOMRIGHT", self._cradle, "BOTTOMRIGHT", -_int.panelDefault[Type].x, -_int.panelDefault[Type].y)
+	end
+end
 
 function _int:pullFrameRaised(_parent)
 	local frameRaised = {}
@@ -121,110 +257,7 @@ function _int:pullFrameRaised(_parent)
 		_int.attachDefault(frameRaised)
 		
 		-- Raised Section
-		-- Initialize top raised section of Panel Object.
-		frameRaised.TopLeft = _int:pullTexture(frameRaised._cradle, true)
-		TH.LoadTexture(frameRaised.TopLeft, AddonIni.id, _int.textures.TLRPanel)
-		frameRaised.TopLeft:SetPoint("TOPLEFT", frameRaised._cradle, "TOPLEFT")
-		frameRaised.TopLeft:SetAlpha(0.35)
-		frameRaised.TopRight = _int:pullTexture(frameRaised._cradle, true)
-		TH.LoadTexture(frameRaised.TopRight, AddonIni.id, _int.textures.TRRPanel)
-		frameRaised.TopRight:SetPoint("TOPRIGHT", frameRaised._cradle, "TOPRIGHT")
-		frameRaised.TopRight:SetAlpha(0.35)
-		frameRaised.Top = _int:pullTexture(frameRaised._cradle, true)
-		TH.LoadTexture(frameRaised.Top, AddonIni.id, _int.textures.TRPanel)
-		frameRaised.Top:SetPoint("TOPLEFT", frameRaised.TopLeft, "TOPRIGHT")
-		frameRaised.Top:SetPoint("BOTTOMRIGHT", frameRaised.TopRight, "BOTTOMLEFT")
-		frameRaised.Top:SetAlpha(0.35)
-		
-		-- Initial bottom raised section of Panel Object.
-		frameRaised.BottomLeft = _int:pullTexture(frameRaised._cradle, true)
-		TH.LoadTexture(frameRaised.BottomLeft, AddonIni.id, _int.textures.BLRPanel)
-		frameRaised.BottomLeft:SetPoint("BOTTOMLEFT", frameRaised._cradle, "BOTTOMLEFT")
-		frameRaised.BottomLeft:SetAlpha(0.35)
-		frameRaised.BottomRight = _int:pullTexture(frameRaised._cradle, true)
-		TH.LoadTexture(frameRaised.BottomRight, AddonIni.id, _int.textures.BRRPanel)
-		frameRaised.BottomRight:SetPoint("BOTTOMRIGHT", frameRaised._cradle, "BOTTOMRIGHT")
-		frameRaised.BottomRight:SetAlpha(0.35)
-		frameRaised.Bottom = _int:pullTexture(frameRaised._cradle, true)
-		TH.LoadTexture(frameRaised.Bottom, AddonIni.id, _int.textures.BRPanel)
-		frameRaised.Bottom:SetPoint("TOPLEFT", frameRaised.BottomLeft, "TOPRIGHT")
-		frameRaised.Bottom:SetPoint("BOTTOMRIGHT", frameRaised.BottomRight, "BOTTOMLEFT", 0, 0.5)
-		frameRaised.Bottom:SetAlpha(0.35)
-
-		-- Line up Left and Right, and fill middle section for raised Panel.
-		frameRaised.Left = _int:pullTexture(frameRaised._cradle, true)
-		TH.LoadTexture(frameRaised.Left, AddonIni.id, _int.textures.LRPanel)
-		frameRaised.Left:SetPoint("TOPLEFT", frameRaised.TopLeft, "BOTTOMLEFT")
-		frameRaised.Left:SetPoint("BOTTOMRIGHT", frameRaised.BottomLeft, "TOPRIGHT", 0, 0.5)
-		frameRaised.Left:SetAlpha(0.35)
-		frameRaised.Right = _int:pullTexture(frameRaised._cradle, true)
-		TH.LoadTexture(frameRaised.Right, AddonIni.id, _int.textures.RRPanel)
-		frameRaised.Right:SetPoint("TOPLEFT", frameRaised.TopRight, "BOTTOMLEFT")
-		frameRaised.Right:SetPoint("BOTTOMRIGHT", frameRaised.BottomRight, "TOPRIGHT", 0, 0.5)
-		frameRaised.Right:SetAlpha(0.35)
-		frameRaised.Middle = _int:pullTexture(frameRaised._cradle, true)
-		TH.LoadTexture(frameRaised.Middle, AddonIni.id, _int.textures.MRPanel)
-		frameRaised.Middle:SetPoint("TOPLEFT", frameRaised.Top, "BOTTOMLEFT")
-		frameRaised.Middle:SetPoint("BOTTOMRIGHT", frameRaised.Bottom, "TOPRIGHT", 0, 0.5)
-		frameRaised.Middle:SetAlpha(0.35)
-		
-		-- Content Mask
-		frameRaised._mask = _int:pullMask(frameRaised._cradle, true)
-		frameRaised._mask:SetLayer(3)
-		frameRaised._mask:SetPoint("TOPLEFT", frameRaised._cradle, "TOPLEFT", 6, 6)
-		frameRaised._mask:SetPoint("BOTTOMRIGHT", frameRaised._cradle, "BOTTOMRIGHT", -6, -6)
-		
-		-- Content Frame
-		frameRaised.Content = _int:pullFrame(frameRaised._mask, true)
-		frameRaised.Content:SetAllPoints(frameRaised._mask)
-		
-		function frameRaised:SetBorderWidth(w, Type)
-			if type(w) == "number" then
-				w = math.abs(w)
-				w = w + 6
-				if Type == "TOP" or Type == "BOTTOM" then
-					self._mask:ClearPoint(Type)
-					if Type == "TOP" then
-						self._mask:SetPoint("TOP", self._cradle, "TOP", nil, w)
-					else
-						self._mask:SetPoint("BOTTOM", self._cradle, "BOTTOM", nil, -w)				
-					end
-				elseif Type == "LEFT" or Type == "RIGHT" then
-					self._mask:ClearPoint(Type)
-					if Type == "LEFT" then
-						self._mask:SetPoint("LEFT", self._cradle, "LEFT", w, nil)
-					else
-						self._mask:SetPoint("RIGHT", self._cradle, "RIGHT", -w, nil)				
-					end
-				elseif Type == "TOPBOTTOM" then
-					self._mask:ClearPoint("TOP")
-					self._mask:ClearPoint("BOTTOM")
-					self._mask:SetPoint("TOP", self._cradle, "TOP", nil, w)
-					self._mask:SetPoint("BOTTOM", self._cradle, "BOTTOM", nil, -w)
-				elseif Type == "LEFTRIGHT" then
-					self._mask:ClearPoint("LEFT")
-					self._mask:ClearPoint("RIGHT")
-					self._mask:SetPoint("LEFT", self._cradle, "LEFT", w, nil)
-					self._mask:SetPoint("RIGHT", self._cradle, "RIGHT", -w, nil)
-				elseif Type == "TOPLEFT" or Type == "BOTTOMRIGHT" then
-					self._mask:ClearPoint(Type)
-					if Type == "TOPLEFT" then
-						self._mask:SetPoint("TOPLEFT", self._cradle, "TOPLEFT", w, w)
-					else
-						self._mask:SetPoint("BOTTOMRIGHT", self._cradle, "BOTTOMRIGHT", -w, -w)				
-					end
-				elseif not Type then
-					self._mask:ClearAll()
-					self._mask:SetPoint("TOPLEFT", self._cradle, "TOPLEFT", w, w)
-					self._mask:SetPoint("BOTTOMRIGHT", self._cradle, "BOTTOMRIGHT", -w, -w)
-				end
-			end
-		end
-		function frameRaised:ClearBorderWidth()
-			self._mask:ClearAll()
-			self._mask:SetPoint("TOPLEFT", self._cradle, "TOPLEFT", 6, 6)
-			self._mask:SetPoint("BOTTOMRIGHT", self._cradle, "BOTTOMRIGHT", -6, -6)
-		end		
+		_int.renderPanel(frameRaised, "raised")
 		return frameRaised
 	else
 		--print("Frame Raised available in cache of "..Count)
@@ -265,112 +298,9 @@ function _int:pullFrameSunken(_parent)
 		frameSunken._cradle:SetAllPoints(_parent)
 		_int.attachDefault(frameSunken)
 		
-		-- Raised Section
-		-- Initialize top raised section of Panel Object.
-		frameSunken.TopLeft = _int:pullTexture(frameSunken._cradle, true)
-		TH.LoadTexture(frameSunken.TopLeft, AddonIni.id, _int.textures.TLSPanel)
-		frameSunken.TopLeft:SetPoint("TOPLEFT", frameSunken._cradle, "TOPLEFT")
-		frameSunken.TopLeft:SetAlpha(0.55)
-		frameSunken.TopRight = _int:pullTexture(frameSunken._cradle, true)
-		TH.LoadTexture(frameSunken.TopRight, AddonIni.id, _int.textures.TRSPanel)
-		frameSunken.TopRight:SetPoint("TOPRIGHT", frameSunken._cradle, "TOPRIGHT")
-		frameSunken.TopRight:SetAlpha(0.55)
-		frameSunken.Top = _int:pullTexture(frameSunken._cradle, true)
-		TH.LoadTexture(frameSunken.Top, AddonIni.id, _int.textures.TSPanel)
-		frameSunken.Top:SetPoint("TOPLEFT", frameSunken.TopLeft, "TOPRIGHT")
-		frameSunken.Top:SetPoint("BOTTOMRIGHT", frameSunken.TopRight, "BOTTOMLEFT")
-		frameSunken.Top:SetAlpha(0.55)
-		
-		-- Initial bottom raised section of Panel Object.
-		frameSunken.BottomLeft = _int:pullTexture(frameSunken._cradle, true)
-		TH.LoadTexture(frameSunken.BottomLeft, AddonIni.id, _int.textures.BLSPanel)
-		frameSunken.BottomLeft:SetPoint("BOTTOMLEFT", frameSunken._cradle, "BOTTOMLEFT")
-		frameSunken.BottomLeft:SetAlpha(0.55)
-		frameSunken.BottomRight = _int:pullTexture(frameSunken._cradle, true)
-		TH.LoadTexture(frameSunken.BottomRight, AddonIni.id, _int.textures.BRSPanel)
-		frameSunken.BottomRight:SetPoint("BOTTOMRIGHT", frameSunken._cradle, "BOTTOMRIGHT")
-		frameSunken.BottomRight:SetAlpha(0.55)
-		frameSunken.Bottom = _int:pullTexture(frameSunken._cradle, true)
-		TH.LoadTexture(frameSunken.Bottom, AddonIni.id, _int.textures.BSPanel)
-		frameSunken.Bottom:SetPoint("TOPLEFT", frameSunken.BottomLeft, "TOPRIGHT")
-		frameSunken.Bottom:SetPoint("BOTTOMRIGHT", frameSunken.BottomRight, "BOTTOMLEFT", 0, 0.5)
-		frameSunken.Bottom:SetAlpha(0.55)
+		-- Sunken Panel
+		_int.renderPanel(frameSunken, "sunken")
 
-		-- Line up Left and Right, and fill middle section for raised Panel.
-		frameSunken.Left = _int:pullTexture(frameSunken._cradle, true)
-		TH.LoadTexture(frameSunken.Left, AddonIni.id, _int.textures.LSPanel)
-		frameSunken.Left:SetPoint("TOPLEFT", frameSunken.TopLeft, "BOTTOMLEFT")
-		frameSunken.Left:SetPoint("BOTTOMRIGHT", frameSunken.BottomLeft, "TOPRIGHT", 0, 0.5)
-		frameSunken.Left:SetAlpha(0.55)
-		frameSunken.Right = _int:pullTexture(frameSunken._cradle, true)
-		TH.LoadTexture(frameSunken.Right, AddonIni.id, _int.textures.RSPanel)
-		frameSunken.Right:SetPoint("TOPLEFT", frameSunken.TopRight, "BOTTOMLEFT")
-		frameSunken.Right:SetPoint("BOTTOMRIGHT", frameSunken.BottomRight, "TOPRIGHT", 0, 0.5)
-		frameSunken.Right:SetAlpha(0.55)
-		frameSunken.Middle = _int:pullTexture(frameSunken._cradle, true)
-		TH.LoadTexture(frameSunken.Middle, AddonIni.id, _int.textures.MSPanel)
-		frameSunken.Middle:SetPoint("TOPLEFT", frameSunken.Top, "BOTTOMLEFT")
-		frameSunken.Middle:SetPoint("BOTTOMRIGHT", frameSunken.Bottom, "TOPRIGHT", 0, 0.5)
-		frameSunken.Middle:SetAlpha(0.55)
-
-		-- Content Mask
-		frameSunken._mask = _int:pullMask(frameSunken._cradle, true)
-		frameSunken._mask:SetLayer(3)
-		frameSunken._mask:SetPoint("TOPLEFT", frameSunken._cradle, "TOPLEFT", 3, 2)
-		frameSunken._mask:SetPoint("BOTTOMRIGHT", frameSunken._cradle, "BOTTOMRIGHT", -3, -2)
-		
-		-- Content Frame
-		frameSunken.Content = _int:pullFrame(frameSunken._mask, true)
-		frameSunken.Content:SetAllPoints(frameSunken._mask)
-
-		function frameSunken:SetBorderWidth(w, Type)
-			if type(w) == "number" then
-				w = math.abs(w)
-				w = w + 6
-				if Type == "TOP" or Type == "BOTTOM" then
-					self._mask:ClearPoint(Type)
-					if Type == "TOP" then
-						self._mask:SetPoint("TOP", self._cradle, "TOP", nil, w)
-					else
-						self._mask:SetPoint("BOTTOM", self._cradle, "BOTTOM", nil, -w)				
-					end
-				elseif Type == "LEFT" or Type == "RIGHT" then
-					self._mask:ClearPoint(Type)
-					if Type == "LEFT" then
-						self._mask:SetPoint("LEFT", self._cradle, "LEFT", w, nil)
-					else
-						self._mask:SetPoint("RIGHT", self._cradle, "RIGHT", -w, nil)				
-					end
-				elseif Type == "TOPBOTTOM" then
-					self._mask:ClearPoint("TOP")
-					self._mask:ClearPoint("BOTTOM")
-					self._mask:SetPoint("TOP", self._cradle, "TOP", nil, w)
-					self._mask:SetPoint("BOTTOM", self._cradle, "BOTTOM", nil, -w)
-				elseif Type == "LEFTRIGHT" then
-					self._mask:ClearPoint("LEFT")
-					self._mask:ClearPoint("RIGHT")
-					self._mask:SetPoint("LEFT", self._cradle, "LEFT", w, nil)
-					self._mask:SetPoint("RIGHT", self._cradle, "RIGHT", -w, nil)
-				elseif Type == "TOPLEFT" or Type == "BOTTOMRIGHT" then
-					self._mask:ClearPoint(Type)
-					if Type == "TOPLEFT" then
-						self._mask:SetPoint("TOPLEFT", self._cradle, "TOPLEFT", w, w)
-					else
-						self._mask:SetPoint("BOTTOMRIGHT", self._cradle, "BOTTOMRIGHT", -w, -w)				
-					end
-				elseif not Type then
-					self._mask:ClearAll()
-					self._mask:SetPoint("TOPLEFT", self._cradle, "TOPLEFT", w, w)
-					self._mask:SetPoint("BOTTOMRIGHT", self._cradle, "BOTTOMRIGHT", -w, -w)
-				end
-			end
-		end
-		function frameSunken:ClearBorderWidth()
-			self._mask:ClearAll()
-			self._mask:SetPoint("TOPLEFT", self._cradle, "TOPLEFT", 6, 6)
-			self._mask:SetPoint("BOTTOMRIGHT", self._cradle, "BOTTOMRIGHT", -6, -6)
-		end
-		
 		return frameSunken
 	else
 		--print("Frame Raised available in cache of "..Count)
@@ -379,8 +309,7 @@ function _int:pullFrameSunken(_parent)
 		
 		frameSunken._cradle:ClearAll()
 		frameSunken._cradle:SetAllPoints(_parent)
-		
-		
+			
 		--print("New Frame Raised count is: "..self.base.frameSunken:Count())
 		return frameSunken
 	end
@@ -403,12 +332,16 @@ function _int:pushframeSunken(frameSunken)
 	end
 end
 
+function LibSGui.Frame:Create(_parent, _visible)
+	return _int:pullFrame(_parent, _visible)
+end
 
 function _int:pullFrame(_parent, _visible)
 	local frame
 	local Count = self.base.frame:Count()
 	if Count == 0 then
-		frame = UI.CreateFrame("Frame", "LibSGui_Frame_"..Count, _parent)
+		_int.totals.frame = _int.totals.frame + 1
+		frame = UI.CreateFrame("Frame", "LibSGui_Frame_".._int.totals.frame, _parent)
 		frame:SetVisible(_visible or false)
 		return frame
 	else
@@ -442,7 +375,8 @@ function _int:pullText(_parent, _visible)
 	local text
 	local Count = self.base.text:Count()
 	if Count == 0 then
-		text = UI.CreateFrame("Text", "LibSGui_Text_"..Count, _parent)
+		_int.totals.text = _int.totals.text + 1
+		text = UI.CreateFrame("Text", "LibSGui_Text_".._int.totals.text, _parent)
 		text:SetVisible(_visible or false)
 		return text
 	else
@@ -473,12 +407,16 @@ function _int:pushText(text)
 	end
 end
 
+function LibSGui.Text:Create(_parent, _visible)
+	return _int:pullText(_parent, _visible)
+end
 
 function _int:pullMask(_parent, _visible)
 	local mask
 	local Count = self.base.mask:Count()
 	if Count == 0 then
-		mask = UI.CreateFrame("Mask", "LibSGui_Frame_"..Count, _parent)
+		_int.totals.mask = _int.totals.mask + 1
+		mask = UI.CreateFrame("Mask", "LibSGui_Frame_".._int.totals.mask, _parent)
 		mask:SetVisible(_visible or false)
 		return mask
 	else
@@ -511,7 +449,8 @@ function _int:pullScrollbar(_parent, _visible)
 	local scrollbar
 	local Count = self.base.scrollbar:Count()
 	if Count == 0 then
-		scrollbar = UI.CreateFrame("RiftScrollbar", "LibSGui_Scrollbar_"..Count, _parent)
+		_int.totals.scrollbar = _int.totals.scrollbar + 1
+		scrollbar = UI.CreateFrame("RiftScrollbar", "LibSGui_Scrollbar_".._int.totals.scrollbar, _parent)
 		scrollbar:SetVisible(_visible or false)
 		return scrollbar
 	else
@@ -544,7 +483,8 @@ function _int:pullTexture(_parent, _visible)
 	local texture
 	local Count = self.base.texture:Count()
 	if Count == 0 then
-		texture = UI.CreateFrame("Texture", "LibSGui_Texture_"..Count, _parent)
+		_int.totals.texture = _int.totals.texture + 1
+		texture = UI.CreateFrame("Texture", "LibSGui_Texture_".._int.totals.texture, _parent)
 		texture:SetVisible(_visible or false)
 		return texture
 	else
@@ -574,11 +514,16 @@ function _int:pushTexture(texture)
 	end
 end
 
+function LibSGui.Texture:Create(_parent, _visible)
+	return _int:pullTexture(_parent, _visible)
+end
+
 function _int:pullButton(_parent)
 	local button
 	local Count = self.base.button:Count()
 	if Count == 0 then
-		button = UI.CreateFrame("RiftButton", "LibSGui_Button_"..Count, _parent)
+		_int.totals.button = _int.totals.button + 1
+		button = UI.CreateFrame("RiftButton", "LibSGui_Button_".._int.totals.button, _parent)
 		return button
 	else
 		--print("Button available in cache of "..Count)

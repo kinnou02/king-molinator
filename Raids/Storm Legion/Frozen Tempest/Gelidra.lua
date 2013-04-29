@@ -44,7 +44,7 @@ GLD.Lang.Unit.Vortex:SetFrench("Vortex enveloppant")
 GLD.Lang.Unit.VortexShort = KBM.Language:Add("Vortex")
 GLD.Lang.Unit.VortexShort:SetGerman("Wirbel")
 GLD.Lang.Unit.VortexShort:SetFrench("Vortex")
-GLD.Lang.Unit.Amrien = KBM.Language:Add("Amrien")
+GLD.Lang.Unit.Amrian = KBM.Language:Add("Amrian")
 
 -- Ability Dictionary
 GLD.Lang.Ability = {}
@@ -119,11 +119,11 @@ GLD.Gelidra = {
 	}
 }
 
-GLD.Amrien = {
+GLD.Amrian = {
 	Mod = GLD,
 	Level = "??",
 	Active = false,
-	Name = GLD.Lang.Unit.Amrien[KBM.Lang],
+	Name = GLD.Lang.Unit.Amrian[KBM.Lang],
 	Menu = {},
 	Dead = false,
 	AlertsRef = {},
@@ -185,7 +185,7 @@ function GLD:AddBosses(KBM_Boss)
 	self.Bosses = {
 		[self.Gelidra.Name] = self.Gelidra,
 		[self.Vortex.Name] = self.Vortex,
-		[self.Amrien.Name] = self.Amrien,
+		[self.Amrian.Name] = self.Amrian,
 	}
 
 	for BossName, BossObj in pairs(self.Bosses) do
@@ -218,9 +218,9 @@ function GLD:InitVars()
 			CastBar = self.Vortex.Settings.CastBar,
 			AlertsRef = self.Vortex.Settings.AlertsRef,
 		},
-		Amrien = {
-			CastBar = self.Amrien.Settings.CastBar,
-			AlertsRef = self.Amrien.Settings.AlertsRef,
+		Amrian = {
+			CastBar = self.Amrian.Settings.CastBar,
+			AlertsRef = self.Amrian.Settings.AlertsRef,
 		},
 		MechTimer = KBM.Defaults.MechTimer(),
 		Alerts = KBM.Defaults.Alerts(),
@@ -288,8 +288,8 @@ function GLD:Death(UnitID)
 		self.Vortex.UnitID = nil
 		self.PhaseObj:SetPhase("1")
 		self.PhaseObj.Objectives:AddPercent(self.Gelidra, 0, 100)
-		if self.Amrien.UnitID then
-			self.PhaseObj.Objectives:AddPercent(self.Amrien, 0, 100)
+		if self.Amrian.UnitID then
+			self.PhaseObj.Objectives:AddPercent(self.Amrian, 0, 100)
 		end
 		KBM.MechTimer:AddStart(self.Gelidra.TimersRef.Phase2)
 	end
@@ -323,7 +323,7 @@ function GLD:UnitHPCheck(uDetails, unitID)
 				}
 				KBM.TankSwap:Start(DebuffTable, unitID, 2)
 				KBM.MechTimer:AddStart(self.Gelidra.TimersRef.FirstP2)
-				if BossObj == self.Amrien then
+				if BossObj == self.Amrian then
 					if not self.HardMode then
 						KBM.PercentageMon:Start(self.ID, true)
 						self.HardMode = true
@@ -338,8 +338,8 @@ function GLD:UnitHPCheck(uDetails, unitID)
 					if BossObj == self.Vortex then
 						self.PhaseObj:SetPhase("2")
 						self.PhaseObj.Objectives:AddPercent(self.Vortex, 0, 100)
-					elseif BossObj == self.Amrien then
-						self.PhaseObj.Objectives:AddPercent(self.Amrien, 0, 100)
+					elseif BossObj == self.Amrian then
+						self.PhaseObj.Objectives:AddPercent(self.Amrian, 0, 100)
 						if not self.HardMode then
 							KBM.PercentageMon:Start(self.ID, true)
 							self.HardMode = true
@@ -391,21 +391,21 @@ function GLD:Start()
 	self.Vortex.AlertsRef.Cyclonic = KBM.Alert:Create(self.Lang.Ability.Cyclonic[KBM.Lang], nil, true, true, "yellow")
 	KBM.Defaults.AlertObj.Assign(self.Vortex)
 	
-	self.Amrien.AlertsRef.Induction = KBM.Alert:Create(self.Lang.Debuff.Induction[KBM.Lang], nil, false, true, "cyan")
-	self.Amrien.AlertsRef.Induction.MenuName = self.Lang.Debuff.Induction[KBM.Lang].." (HM)"
-	self.Amrien.AlertsRef.Blizzard = KBM.Alert:Create(self.Lang.Ability.Blizzard[KBM.Lang], nil, false, true, "blue")
-	self.Amrien.AlertsRef.Blizzard.MenuName = self.Lang.Ability.Blizzard[KBM.Lang].." (HM)"
-	KBM.Defaults.AlertObj.Assign(self.Amrien)
+	self.Amrian.AlertsRef.Induction = KBM.Alert:Create(self.Lang.Debuff.Induction[KBM.Lang], nil, false, true, "cyan")
+	self.Amrian.AlertsRef.Induction.MenuName = self.Lang.Debuff.Induction[KBM.Lang].." (HM)"
+	self.Amrian.AlertsRef.Blizzard = KBM.Alert:Create(self.Lang.Ability.Blizzard[KBM.Lang], nil, false, true, "blue")
+	self.Amrian.AlertsRef.Blizzard.MenuName = self.Lang.Ability.Blizzard[KBM.Lang].." (HM)"
+	KBM.Defaults.AlertObj.Assign(self.Amrian)
 
 	-- Create Mechanic Spies (Gelidra)
 	self.Gelidra.MechRef.Rime = KBM.MechSpy:Add(self.Lang.Debuff.Rime[KBM.Lang], nil, "playerDebuff", self.Gelidra)
 	KBM.Defaults.MechObj.Assign(self.Gelidra)
 	
-	self.Amrien.MechRef.Induction = KBM.MechSpy:Add(self.Lang.Debuff.Induction[KBM.Lang], nil, "playerDebuff", self.Amrien)
-	self.Amrien.MechRef.Induction.MenuName = self.Lang.Debuff.Induction[KBM.Lang].." (HM)"
-	self.Amrien.MechRef.Blizzard = KBM.MechSpy:Add(self.Lang.Ability.Blizzard[KBM.Lang], 4, "cast", self.Amrien)
-	self.Amrien.MechRef.Blizzard.MenuName = self.Lang.Ability.Blizzard[KBM.Lang].." (HM)"
-	KBM.Defaults.MechObj.Assign(self.Amrien)
+	self.Amrian.MechRef.Induction = KBM.MechSpy:Add(self.Lang.Debuff.Induction[KBM.Lang], nil, "playerDebuff", self.Amrian)
+	self.Amrian.MechRef.Induction.MenuName = self.Lang.Debuff.Induction[KBM.Lang].." (HM)"
+	self.Amrian.MechRef.Blizzard = KBM.MechSpy:Add(self.Lang.Ability.Blizzard[KBM.Lang], 4, "cast", self.Amrian)
+	self.Amrian.MechRef.Blizzard.MenuName = self.Lang.Ability.Blizzard[KBM.Lang].." (HM)"
+	KBM.Defaults.MechObj.Assign(self.Amrian)
 	
 	-- Assign Alerts and Timers to Triggers
 
@@ -422,16 +422,16 @@ function GLD:Start()
 	self.Vortex.Triggers.CyclonicInt = KBM.Trigger:Create(self.Lang.Ability.Cyclonic[KBM.Lang], "interrupt", self.Vortex)
 	self.Vortex.Triggers.CyclonicInt:AddStop(self.Vortex.AlertsRef.Cyclonic)
 	
-	self.Amrien.Triggers.Blizzard = KBM.Trigger:Create(self.Lang.Ability.Blizzard[KBM.Lang], "cast", self.Amrien)
-	self.Amrien.Triggers.Blizzard:AddAlert(self.Amrien.AlertsRef.Blizzard)
-	self.Amrien.Triggers.Induction = KBM.Trigger:Create(self.Lang.Debuff.Induction[KBM.Lang], "playerDebuff", self.Amrien)
-	self.Amrien.Triggers.Induction:AddAlert(self.Amrien.AlertsRef.Induction, true)
-	self.Amrien.Triggers.Induction:AddSpy(self.Amrien.MechRef.Induction)
+	self.Amrian.Triggers.Blizzard = KBM.Trigger:Create(self.Lang.Ability.Blizzard[KBM.Lang], "cast", self.Amrian)
+	self.Amrian.Triggers.Blizzard:AddAlert(self.Amrian.AlertsRef.Blizzard)
+	self.Amrian.Triggers.Induction = KBM.Trigger:Create(self.Lang.Debuff.Induction[KBM.Lang], "playerDebuff", self.Amrian)
+	self.Amrian.Triggers.Induction:AddAlert(self.Amrian.AlertsRef.Induction, true)
+	self.Amrian.Triggers.Induction:AddSpy(self.Amrian.MechRef.Induction)
 	
-	self.PercentageMon = KBM.PercentageMon:Create(self.Gelidra, self.Amrien, 10, true)
+	self.PercentageMon = KBM.PercentageMon:Create(self.Gelidra, self.Amrian, 10, true)
 	self.Gelidra.CastBar = KBM.CastBar:Add(self, self.Gelidra)
 	self.Vortex.CastBar = KBM.CastBar:Add(self, self.Vortex)
-	self.Amrien.CastBar = KBM.CastBar:Add(self, self.Amrien)
+	self.Amrian.CastBar = KBM.CastBar:Add(self, self.Amrian)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()
 end
