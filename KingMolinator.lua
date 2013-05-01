@@ -4782,7 +4782,7 @@ function KBM.TankSwap:Init()
 		else
 			TankObj.Unit = LibSUnit.Lookup.UID[UnitID]
 			if TankObj.Unit then
-				TankObj.Name = TankObj.Unit.Name
+				TankObj.Name = TankObj.Unit.Name or "<Unknown>"
 				if TankObj.Unit.Dead and TankObj.Unit.Health then
 					if TankObj.Unit.Health > 0 then
 						TankObj.Dead = false
@@ -6794,7 +6794,7 @@ function KBM.Victory()
 	KBM_Reset()
 end
 
-function KBM.Unit.Death(info)	
+function KBM.Unit.Death(handle, info)	
 	if KBM.Options.Enabled then	
 		if KBM.Encounter then
 			local UnitObj = info.targetObj
@@ -8179,6 +8179,7 @@ function KBM.InitEvents()
 	
 	-- Safe's Buff Library Events
 	Command.Event.Attach(Event.SafesBuffLib.Buff.Add, function (...) KBM:BuffAdd(...) end, "Buff Monitor (Add)")
+	Command.Event.Attach(Event.SafesBuffLib.Buff.Change, function (...) KBM:BuffAdd(...) end, "Buff Monitor (Change)")
 	Command.Event.Attach(Event.SafesBuffLib.Buff.Remove, function (...) KBM:BuffRemove(...) end, "Buff Monitor (Remove)")
 	
 	-- Safe's Unit Library Events
@@ -8364,24 +8365,6 @@ function KBM.InitKBM(handle, ModID)
 			KBM.Marks.Icon[i]:SetTexture("Rift", File)
 			KBM.Marks.Icon[i]:SetVisible(false)
 		end
-		---------------------------------------------------
-		-- local TestWindow, TestWindowContent = LibSGui.Window:Create("New Options", KBM.Context, {Close = true, Visible = true, Width = 600, Height = 400})
-		-- local TestPanel, TestPanelContent = LibSGui.Panel:Create("Test Panel", TestWindowContent, {Visible = true, w = math.ceil(TestWindowContent:GetWidth() * 0.33)})
-		-- TestPanel_Scrollbar = TestPanel:AddScrollbar()
-		-- TestPanel:SetContentHeight(800)
-		-- local TestText = {}
-		-- local step = 800/30
-		-- for n = 0, 29 do
-			-- TestText[n] = UI.CreateFrame("Text", "Test Text "..n, TestPanelContent)
-			-- TestText[n]:SetText("Test Text "..n)
-			-- TestText[n]:SetVisible(true)
-			-- TestText[n]:SetPoint("TOPLEFT", TestPanelContent, "TOPLEFT", 4, n * step)
-			-- TestText[n]:SetLayer(5)
-		-- end
-		-- local TestTabber, TestTabberContent = LibSGui.Tabber:Create("Test Tabber", TestWindowContent, {Visible = true})
-		-- TestTabber:ClearPoint("LEFT")
-		-- TestTabber:SetPoint("LEFT", TestPanel._cradle, "RIGHT")
-		----------------------------------------------------
 	else
 		if Inspect.Buff.Detail ~= IBDReserved then
 			print(tostring(ModID).." changed internal command: Restoring Inspect.Buff.Detail")

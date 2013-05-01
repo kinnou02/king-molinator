@@ -79,8 +79,6 @@ LibSUnit.Raid = {
 	Mode = "party",
 }
 
-local _AvailFullTable = {function() end, AddonIni.id, "Unit Availability Full Handler"}
-
 LibSUnit.Cache = {
 	Avail = {},
 	Partial = {},
@@ -289,7 +287,7 @@ function _lsu.Unit:UpdateSegment(UnitObj, New, uDetails)
 			end
 			if uDetails.name then
 				if UnitObj.Name ~= uDetails.name then
-					_lsu.Unit.Name(handle, {[UnitObj.UnitID] = uDetails.name})
+					_lsu.Unit.Name(Event.Unit.Detail.Name, {[UnitObj.UnitID] = uDetails.name})
 				end
 			end
 		end
@@ -341,7 +339,7 @@ function _lsu:Create(UID, uDetails, Type)
 		UnitID = UID,
 		OwnerID = uDetails.ownerID,
 		Dead = false,
-		Name = uDetails.name,
+		Name = uDetails.name or "",
 		TargetCount = 0,
 		Reserved = false,
 		TargetList = {},
@@ -376,7 +374,7 @@ function _lsu:Create(UID, uDetails, Type)
 		if UnitObj.Health == 0 then
 			UnitObj.Dead = true
 		end
-		if not UnitObj.Name or UnitObj.Name == "" then
+		if UnitObj.Name == "" then
 			UnitObj.Name = "<Unknown>"
 		end
 		if _name[UnitObj.Name] then
@@ -780,7 +778,7 @@ end
 
 function _lsu:Partial(UnitObj, uDetails)
 	-- Switches State for Units to Partial.
-	local UID = UnitObj.Details.id
+	local UID = UnitObj.UnitID
 	local Total = LibSUnit.Total
 	
 	Total[UnitObj.CurrentKey] = Total[UnitObj.CurrentKey] - 1
@@ -799,7 +797,7 @@ end
 
 function _lsu:Idle(UnitObj)
 	-- Switches State for Units to Unavailable.
-	local UID = UnitObj.Details.id
+	local UID = UnitObj.UnitID
 	local Total = LibSUnit.Total
 	
 	Total[UnitObj.CurrentKey] = Total[UnitObj.CurrentKey] - 1
@@ -1195,6 +1193,7 @@ function _lsu:UpdateSegment(_tSeg)
 				_lsu.Unit:UpdateSegment(UnitObj, _reserveSeg + _lastSeg)
 				UnitObj.Reserved = true
 				LibSUnit.Total.Reserved = LibSUnit.Total.Reserved + 1
+				_lsu.Unit:UpdateTarget(UnitObj)
 			end
 		end
 		self.Event.Unit.Removed(RemoveList)
@@ -1210,7 +1209,9 @@ function _lsu.Tick()
 	local _tSeg = math.floor(_cTime / _tSegThrottle)
 	
 	if _tSeg ~= _lastSeg then
-		_lsu:UpdateSegment(_tSeg)
+		for iSeg = _lastSeg + 1, _tSeg do
+			_lsu:UpdateSegment(iSeg)
+		end
 		_lastSeg = _tSeg
 	end
 	_lastTick = _cTime

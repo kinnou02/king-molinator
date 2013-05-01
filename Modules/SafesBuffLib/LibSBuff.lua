@@ -348,7 +348,7 @@ function _int:UpdateCycle()
 	end
 end
 
-function _int:BuffAdd(EHandle, UnitID, Buffs)
+function _int:BuffAdd(handle, UnitID, Buffs)
 	if not Inspect.System.Secure() then
 		Command.System.Watchdog.Quiet()
 	end
@@ -380,7 +380,7 @@ function _int:BuffAdd(EHandle, UnitID, Buffs)
 	end
 end
 
-function _int:BuffRemove(EHandle, UnitID, Buffs)
+function _int:BuffRemove(handle, UnitID, Buffs)
 	for BuffID, BuffType in pairs(Buffs) do
 		if not self.Queued.Remove[BuffID] then
 			-- if LibSBuff.Lookup[BuffID] then
@@ -410,7 +410,7 @@ function _int:DebugUnit(Message, UnitID)
 	end
 end
 
-function _int:BuffChange(EHandle, UnitID, Buffs)
+function _int:BuffChange(handle, UnitID, Buffs)
 	local _startTime = Inspect.Time.Real()
 	local cache = true
 	--self:DebugUnit("BuffChange called for: ", UnitID)
@@ -435,7 +435,7 @@ function _int:BuffChange(EHandle, UnitID, Buffs)
 	end
 end
 
-function _int:UnitAvailable(EHandle, Units)
+function _int:UnitAvailable(handle, Units)
 	-- Used for Internal Caching.
 	-- If you require an active cache for a new Unit, use the commands: 
 	-- BuffTable = LibSBuff:GetBuffTable(UnitID)
@@ -447,7 +447,7 @@ function _int:UnitAvailable(EHandle, Units)
 	end
 end
 
-function _int:UnitRemoved(EHandle, Units)
+function _int:UnitRemoved(handle, Units)
 	-- Used for Internal Caching and prevention of memory leaks.
 	-- No Remove events are given for this, to avoid false positives when dealing with your own Buff tracking.
 	for UnitID, UnitObj in pairs(Units) do
@@ -494,7 +494,7 @@ function _int:Start()
 end
 
 -- Debug Commands
-table.insert(Command.Slash.Register("libsbuff"), {_int.DumpCache, "SafesBuffLib", "Dump current cache to Console"})
+Command.Event.Attach(Command.Slash.Register("libsbuff"), _int.DumpCache, "Dump current cache to Console")
 -- Unit Related Events (LibSUnit)
 Command.Event.Attach(Event.Unit.Availability.Full, function(...) _int:UnitAvailable(...) end, "Unit Available Handler", 1)
 Command.Event.Attach(Event.Unit.Availability.Partial, function(...) _int:UnitAvailable(...) end, "Unit Available Handler", 1)

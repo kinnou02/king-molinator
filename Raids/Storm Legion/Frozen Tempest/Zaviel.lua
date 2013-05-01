@@ -86,6 +86,7 @@ ZVL.Lang.Verbose.Jolt:SetFrench("Courrir autour!")
 ZVL.Lang.Verbose.Power = KBM.Language:Add("Power Conducers")
 ZVL.Lang.Verbose.Power:SetGerman("Energiekatalysator")
 ZVL.Lang.Verbose.Power:SetFrench("Conducteur d'énergie")
+ZVL.Lang.Verbose.Wave = KBM.Language:Add("Energy Waves")
 
 -- Description Dictionary
 ZVL.Lang.Main = {}
@@ -249,6 +250,7 @@ function ZVL.PhaseTwo()
 		ZVL.PhaseObj.Objectives:AddPercent(ZVL.Zaviel, 0, 50)
 		ZVL.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
 		ZVL.Power.CountObj = nil
+		KBM.MechTimer:AddRemove(ZVL.Zaviel.TimersRef.Power)
 	end
 end
 
@@ -370,11 +372,12 @@ end
 
 function ZVL:Start()
 	-- Create Timers
-	self.Zaviel.TimersRef.Power = KBM.MechTimer:Add(self.Lang.Verbose.Power[KBM.Lang], 60)
+	self.Zaviel.TimersRef.Power = KBM.MechTimer:Add(self.Lang.Verbose.Power[KBM.Lang], 65)
 	KBM.Defaults.TimerObj.Assign(self.Zaviel)
 	
 	-- Create Alerts
 	self.Zaviel.AlertsRef.Arc = KBM.Alert:Create(self.Lang.Debuff.Arc[KBM.Lang], nil, true, false, "purple")
+	self.Zaviel.AlertsRef.Arc:Important()
 	self.Zaviel.AlertsRef.ConduitWarn = KBM.Alert:Create(self.Lang.Verbose.ConduitWarn[KBM.Lang], nil, true, true, "orange")
 	self.Zaviel.AlertsRef.Conduit = KBM.Alert:Create(self.Lang.Verbose.Conduit[KBM.Lang], nil, false, true, "orange")
 	self.Zaviel.AlertsRef.JoltWarn = KBM.Alert:Create(self.Lang.Ability.Jolt[KBM.Lang], nil, false, true, "red")

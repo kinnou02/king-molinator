@@ -3,6 +3,9 @@
 * Conversion of KBM Core events over to new Rift Event API.
 * Note: KBM Options Menu will be converted over soon, although it is also being rewritten from the ground up. (See LibSGui)
 
+Ready Check
+* Change: Convert over to new Event API
+
 LibSUnit
 * Change: Converted all Events over to the new Rift Event API.
 
@@ -38,6 +41,10 @@ Frozen Tempest
 ** New: Added Mechanic Spy and Personal Alert for Hypothermic Induction. (HM)
 ** New: Added Alert for Razorwind Blizzard. (HM)
 ** New: Added Mechanic Spy for target of Razorwind Blizzard. (HM)
+* Zaviel
+** Change: Arc Weld is now flagged as an important Personal Alert.
+** Change: Increased Power Conducer timer by 5 seconds.
+** New: Power Conducer timer will now stop at the start of Phase 2.
 * Kolmasveli & Toinenveli
 ** Change: Removed the timer stops for Glimpse at 10% as they can technically be cast again.
 * Crucia
@@ -46,6 +53,14 @@ Frozen Tempest
 Triumph of the Dragon Queen
 * Jultharin
 ** Change: Reduced the Enrage timer to 5:10
+
+Golem Foundry (Normal)
+* Locomotive Bulwark
+** New: Added UTID for this Unit.
+* Manslaughter
+** New: Added UTID for this Unit.
+* C10N3
+** Change: Now triggers and tracks via Boss UTID.
 
 * German Updates.
 * French Updates.
