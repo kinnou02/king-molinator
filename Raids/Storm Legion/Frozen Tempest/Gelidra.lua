@@ -14,8 +14,6 @@ if not KBM.BossMod then
 end
 local FT = KBM.BossMod["RFrozen_Tempest"]
 
--- tank debuff "Deathly Chill" or "Deathly Hallows"
-
 local GLD = {
 	Enabled = true,
 	Directory = FT.Directory,
@@ -73,6 +71,7 @@ GLD.Lang.Debuff.Spasm = KBM.Language:Add("Voltaic Spasms")
 GLD.Lang.Debuff.Spasm:SetGerman("Voltaische Krämpfe")
 GLD.Lang.Debuff.Spasm:SetFrench("Spasmes voltaïques")
 GLD.Lang.Debuff.Induction = KBM.Language:Add("Hypothermic Induction")
+GLD.Lang.Debuff.Chill = KBM.Language:Add("Deathly Chill")
 
 GLD.Lang.Messages = {}
 GLD.Lang.Messages.Phase2 = KBM.Language:Add("Phase 2 starts")
@@ -329,6 +328,12 @@ function GLD:UnitHPCheck(uDetails, unitID)
 					if not self.HardMode then
 						KBM.PercentageMon:Start(self.ID, true)
 						self.HardMode = true
+						local DebuffTable = {
+								[1] = self.Lang.Debuff.Hoar[KBM.Lang],
+								[2] = self.Lang.Debuff.Spasm[KBM.Lang],
+								[3] = self.Lang.Debuff.Chill[KBM.Lang],
+						}
+						KBM.TankSwap:Start(DebuffTable, unitID, 3)
 					end
 				end
 			else
@@ -345,6 +350,12 @@ function GLD:UnitHPCheck(uDetails, unitID)
 						if not self.HardMode then
 							KBM.PercentageMon:Start(self.ID, true)
 							self.HardMode = true
+							local DebuffTable = {
+									[1] = self.Lang.Debuff.Hoar[KBM.Lang],
+									[2] = self.Lang.Debuff.Spasm[KBM.Lang],
+									[3] = self.Lang.Debuff.Chill[KBM.Lang],
+							}
+							KBM.TankSwap:Start(DebuffTable, unitID, 3)
 						end
 					end
 				end
@@ -397,6 +408,7 @@ function GLD:Start()
 	self.Amrian.AlertsRef.Induction.MenuName = self.Lang.Debuff.Induction[KBM.Lang].." (HM)"
 	self.Amrian.AlertsRef.Blizzard = KBM.Alert:Create(self.Lang.Ability.Blizzard[KBM.Lang], nil, false, true, "blue")
 	self.Amrian.AlertsRef.Blizzard.MenuName = self.Lang.Ability.Blizzard[KBM.Lang].." (HM)"
+	self.Amrian.AlertsRef.Blizzard:Important()
 	KBM.Defaults.AlertObj.Assign(self.Amrian)
 
 	-- Create Mechanic Spies (Gelidra)

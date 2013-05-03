@@ -327,6 +327,7 @@ function _lsu:Create(UID, uDetails, Type)
 		Health = uDetails.health or 0,
 		Role = uDetails.role,
 		Calling = uDetails.calling,
+		GuaranteedLoot = uDetails.guaranteedLoot,
 		Offline = uDetails.offline,
 		Combat = uDetails.combat,
 		Ready = uDetails.ready,
@@ -676,6 +677,7 @@ function _lsu.Unit.Details(UnitObj, uDetails)
 		UnitObj.Player = uDetails.player
 		UnitObj.Zone = uDetails.zone
 		UnitObj.Location = uDetails.locationName
+		UnitObj.GuaranteedLoot = uDetails.guaranteedLoot
 		if uDetails.role then
 			UnitObj.Role = uDetails.role
 		end

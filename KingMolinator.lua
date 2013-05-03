@@ -4495,7 +4495,7 @@ function KBM.TankSwap:Pull()
 	if #self.TankStore > 0 then
 		GUI = table.remove(self.TankStore)
 		GUI.TankAggro.Texture:SetVisible(false)
-		for i = 1, 2 do
+		for i = 1, 4 do
 			GUI.DebuffFrame[i].Texture:SetVisible(false)
 			KBM.LoadTexture(GUI.DebuffFrame[i].Texture, "Rift", self.DefaultTexture)
 			GUI.DeCoolFrame[i]:SetVisible(false)
@@ -4540,9 +4540,14 @@ function KBM.TankSwap:Pull()
 		GUI.DebuffFrame = {}
 		GUI.DeCoolFrame = {}
 		GUI.DeCool = {}
-		for i = 1, 2 do
+		for i = 1, 4 do
 			GUI.DebuffFrame[i] = UI.CreateFrame("Frame", "TankSwap_Debuff_Frame_"..i, GUI.Frame)
-			GUI.DebuffFrame[i]:SetPoint("BOTTOMLEFT", GUI.Frame, "BOTTOMLEFT")
+			GUI.DebuffFrame[i]:SetPoint("LEFT", GUI.Frame, "LEFT")
+			if i > 2 then
+				GUI.DebuffFrame[i]:SetPoint("TOP", GUI.DebuffFrame[1], "BOTTOM")
+			else
+				GUI.DebuffFrame[i]:SetPoint("TOP", GUI.TankHP, "BOTTOM")
+			end
 			GUI.DebuffFrame[i]:SetWidth(math.floor(GUI.Frame:GetHeight() * 0.5))
 			GUI.DebuffFrame[i]:SetHeight(GUI.DebuffFrame[i]:GetWidth())
 			GUI.DebuffFrame[i]:SetBackgroundColor(0,0,0,0)
@@ -4598,7 +4603,7 @@ function KBM.TankSwap:Pull()
 		function GUI:SetDeath(bool)
 			if bool then
 				self.TankText:SetAlpha(0.5)
-				for i = 1, 2 do
+				for i = 1, 4 do
 					self.DebuffFrame[i].Shadow:SetVisible(false)
 					self.DebuffFrame[i].Text:SetVisible(false)
 					self.DebuffFrame[i].Texture:SetVisible(false)
@@ -4611,7 +4616,7 @@ function KBM.TankSwap:Pull()
 				self.TankText:SetAlpha(1)
 				self.Dead:SetVisible(false)
 				self.TankHP:SetVisible(true)
-				for i = 1, 2 do
+				for i = 1, 4 do
 					self.DebuffFrame[i].Shadow:SetVisible(true)
 					self.DebuffFrame[i].Text:SetVisible(true)
 					self.DeCoolFrame[i]:SetVisible(false)
@@ -4632,6 +4637,7 @@ function KBM.TankSwap:Init()
 	self.DebuffID = {}
 	self.Debuffs = 0
 	self.DebuffName = {}
+	self.DebuffList = {}
 	self.Boss = {}
 	self.LastTank = nil
 	self.Test = false
@@ -4741,7 +4747,7 @@ function KBM.TankSwap:Init()
 		GUI.TankHP:SetWidth(GUI.TankFrame:GetWidth())		
 		GUI.TankShadow:SetFontSize(KBM.Constant.TankSwap.TextSize * KBM.Options.TankSwap.tScale)
 		GUI.TankText:SetFontSize(KBM.Constant.TankSwap.TextSize * KBM.Options.TankSwap.tScale)
-		for i = 1, 2 do
+		for i = 1, 4 do
 			GUI.DebuffFrame[i]:SetWidth(math.floor(GUI.Frame:GetHeight() * 0.5))
 			GUI.DebuffFrame[i]:SetHeight(GUI.DebuffFrame[i]:GetWidth())
 			GUI.DebuffFrame[i].Shadow:SetFontSize(KBM.Constant.TankSwap.TextSize * KBM.Options.TankSwap.tScale)
@@ -4757,6 +4763,9 @@ function KBM.TankSwap:Init()
 			self:Remove()
 			self.Anchor:SetVisible(false)
 		end
+		if Test then
+			self.Debuffs = 4
+		end
 		local TankObj = {}
 		TankObj.UnitID = UnitID
 		TankObj.DebuffList = {}
@@ -4769,7 +4778,9 @@ function KBM.TankSwap:Init()
 				Stacks = 0,
 				Remaining = 0,
 			}
-			TankObj.DebuffName[self.DebuffList[i].Name] = TankObj.DebuffList[i]
+			if not Test then
+				TankObj.DebuffName[self.DebuffList[i].Name] = TankObj.DebuffList[i]
+			end
 		end
 		self.Active = true
 		TankObj.Dead = false
@@ -4836,30 +4847,57 @@ function KBM.TankSwap:Init()
 		end
 		
 		TankObj.GUI:SetDeath(TankObj.Dead)
+		if self.Debuffs > 2 then
+			TankObj.GUI.Frame:SetHeight(TankObj.GUI.DeCoolFrame[1]:GetHeight() * 3)
+		else
+			TankObj.GUI.Frame:SetHeight(TankObj.GUI.DeCoolFrame[1]:GetHeight() * 2)
+		end
 		if self.Test then
-			for i = 1, 2 do
+			for i = 1, 4 do
 				local Visible = true
-				if i > 1 then
+				if i > self.Debuffs then
 					Visible = false
 				end
 				TankObj.GUI:SetStack("2", i)
 				TankObj.GUI:SetDeCool("99.9", i)
 				TankObj.GUI.DeCoolFrame[i]:SetVisible(Visible)
-				TankObj.GUI.DeCool[i]:SetWidth(TankObj.GUI.DeCoolFrame[1]:GetWidth())
+				TankObj.GUI.DeCool[i]:SetWidth(TankObj.GUI.DeCoolFrame[i]:GetWidth())
 				TankObj.GUI.DebuffFrame[i].Texture:SetVisible(Visible)
 			end
 			TankObj.GUI.TankHP:SetWidth(TankObj.GUI.TankFrame:GetWidth())
+			if self.Debuffs > 1 then
+				TankObj.GUI.DeCoolFrame[1]:SetPoint("RIGHT", TankObj.GUI.Frame, "CENTERX")
+				TankObj.GUI.DebuffFrame[2]:SetPoint("LEFT", TankObj.GUI.Frame, "CENTERX")
+				TankObj.GUI.DeCool[1]:SetWidth(TankObj.GUI.DeCoolFrame[1]:GetWidth())
+				TankObj.GUI.DeCool[2]:SetWidth(TankObj.GUI.DeCoolFrame[2]:GetWidth())
+				if self.Debuffs > 3 then
+					TankObj.GUI.DeCoolFrame[3]:SetPoint("RIGHT", TankObj.GUI.Frame, "CENTERX")
+					TankObj.GUI.DebuffFrame[4]:SetPoint("LEFT", TankObj.GUI.Frame, "CENTERX")
+					TankObj.GUI.DeCool[3]:SetWidth(TankObj.GUI.DeCoolFrame[3]:GetWidth())
+					TankObj.GUI.DeCool[4]:SetWidth(TankObj.GUI.DeCoolFrame[4]:GetWidth())
+				else
+					TankObj.GUI.DeCoolFrame[3]:SetPoint("RIGHT", TankObj.GUI.Frame, "RIGHT")
+				end
+			else
+				TankObj.GUI.DeCoolFrame[1]:SetPoint("RIGHT", TankObj.GUI.Frame, "RIGHT")
+			end
 		else
-			for i = 1, 2 do
+			for i = 1, 4 do
 				TankObj.GUI:SetStack("", i)
 				TankObj.GUI:SetDeCool("", i)
 				TankObj.GUI.DeCoolFrame[i]:SetVisible(false)
-				TankObj.GUI.DeCool[i]:SetWidth(TankObj.GUI.DeCoolFrame[1]:GetWidth())
+				TankObj.GUI.DeCool[i]:SetWidth(TankObj.GUI.DeCoolFrame[i]:GetWidth())
 				TankObj.GUI.DebuffFrame[i].Texture:SetVisible(false)				
 			end
 			if self.Debuffs > 1 then
 				TankObj.GUI.DeCoolFrame[1]:SetPoint("RIGHT", TankObj.GUI.Frame, "CENTERX")
 				TankObj.GUI.DebuffFrame[2]:SetPoint("LEFT", TankObj.GUI.Frame, "CENTERX")
+				if self.Debuffs > 3 then
+					TankObj.GUI.DeCoolFrame[3]:SetPoint("RIGHT", TankObj.GUI.Frame, "CENTERX")
+					TankObj.GUI.DebuffFrame[4]:SetPoint("LEFT", TankObj.GUI.Frame, "CENTERX")
+				else
+					TankObj.GUI.DeCoolFrame[3]:SetPoint("RIGHT", TankObj.GUI.Frame, "RIGHT")
+				end
 			else
 				TankObj.GUI.DeCoolFrame[1]:SetPoint("RIGHT", TankObj.GUI.Frame, "RIGHT")
 			end
@@ -4882,6 +4920,10 @@ function KBM.TankSwap:Init()
 		end
 		if self.Settings.Enabled then
 			if (LibSUnit.Player.Role == "tank" and self.Settings.Tank == true) or self.Settings.Tank == false then
+				if self.Active then
+					self:Remove()
+				end
+				self.Active = true
 				local Spec = ""
 				local UnitID = ""
 				local uDetails = nil
