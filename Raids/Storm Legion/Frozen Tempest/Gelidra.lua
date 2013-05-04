@@ -128,7 +128,7 @@ GLD.Amrian = {
 	Menu = {},
 	Dead = false,
 	AlertsRef = {},
-	-- TimersRef = {},
+	TimersRef = {},
 	MechRef = {},
 	Available = false,
 	UTID = "none",
@@ -136,10 +136,11 @@ GLD.Amrian = {
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-		-- TimersRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
-		-- },
+		TimersRef = {
+			Enabled = true,
+			Induction = KBM.Defaults.TimerObj.Create("cyan"),
+			Blizzard = KBM.Defaults.TimerObj.Create("blue"),
+		},
 		AlertsRef = {
 			Enabled = true,
 			Induction = KBM.Defaults.AlertObj.Create("cyan"),
@@ -222,6 +223,8 @@ function GLD:InitVars()
 		Amrian = {
 			CastBar = self.Amrian.Settings.CastBar,
 			AlertsRef = self.Amrian.Settings.AlertsRef,
+			TimersRef = self.Amrian.Settings.TimersRef,
+			MechRef = self.Amrian.Settings.MechRef,
 		},
 		MechTimer = KBM.Defaults.MechTimer(),
 		Alerts = KBM.Defaults.Alerts(),
@@ -397,6 +400,12 @@ function GLD:Start()
 	self.Gelidra.TimersRef.Phase2 = KBM.MechTimer:Add(self.Lang.Messages.Phase2[KBM.Lang], 75, false)
 	KBM.Defaults.TimerObj.Assign(self.Gelidra)
 	
+	self.Amrian.TimersRef.Induction = KBM.MechTimer:Add(self.Lang.Debuff.Induction[KBM.Lang], 19, false)
+	self.Amrian.TimersRef.Induction.MenuName = self.Lang.Debuff.Induction[KBM.Lang].." (HM)"
+	self.Amrian.TimersRef.Blizzard = KBM.MechTimer:Add(self.Lang.Ability.Blizzard[KBM.Lang], 19, false)
+	self.Amrian.TimersRef.Blizzard.MenuName = self.Lang.Ability.Blizzard[KBM.Lang].." (HM)"
+	KBM.Defaults.TimerObj.Assign(self.Amrian)
+	
 	-- Create Alerts
 	self.Gelidra.AlertsRef.Cascade = KBM.Alert:Create(self.Lang.Ability.Cascade[KBM.Lang], nil, true, true, "red")
 	KBM.Defaults.AlertObj.Assign(self.Gelidra)
@@ -438,9 +447,12 @@ function GLD:Start()
 	self.Amrian.Triggers.Blizzard = KBM.Trigger:Create(self.Lang.Ability.Blizzard[KBM.Lang], "cast", self.Amrian)
 	self.Amrian.Triggers.Blizzard:AddAlert(self.Amrian.AlertsRef.Blizzard)
 	self.Amrian.Triggers.Blizzard:AddSpy(self.Amrian.MechRef.Blizzard)
+	self.Amrian.Triggers.Blizzard:AddTimer(self.Amrian.TimersRef.Blizzard)
 	self.Amrian.Triggers.Induction = KBM.Trigger:Create(self.Lang.Debuff.Induction[KBM.Lang], "playerDebuff", self.Amrian)
 	self.Amrian.Triggers.Induction:AddAlert(self.Amrian.AlertsRef.Induction, true)
 	self.Amrian.Triggers.Induction:AddSpy(self.Amrian.MechRef.Induction)
+	self.Amrian.Triggers.InductionCast = KBM.Trigger:Create(self.Lang.Debuff.Induction[KBM.Lang], "cast", self.Amrian)
+	self.Amrian.Triggers.InductionCast:AddTimer(self.Amrian.TimersRef.Induction)
 	
 	self.PercentageMon = KBM.PercentageMon:Create(self.Gelidra, self.Amrian, 10, true)
 	self.Gelidra.CastBar = KBM.CastBar:Add(self, self.Gelidra)

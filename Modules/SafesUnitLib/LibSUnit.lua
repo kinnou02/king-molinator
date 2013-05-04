@@ -152,6 +152,7 @@ LibSUnit._internal = {
 				Level = Utility.Event.Create(AddonIni.id, "Unit.Detail.Level"),
 				Zone = Utility.Event.Create(AddonIni.id, "Unit.Detail.Zone"),
 				Location = Utility.Event.Create(AddonIni.id, "Unit.Detail.Location"),
+				Warfront = Utility.Event.Create(AddonIni.id, "Unit.Detail.Warfront"),
 			},
 			Target = Utility.Event.Create(AddonIni.id, "Unit.Target"),
 			TargetCount = Utility.Event.Create(AddonIni.id, "Unit.TargetCount"),
@@ -343,6 +344,7 @@ function _lsu:Create(UID, uDetails, Type)
 		Name = uDetails.name or "",
 		TargetCount = 0,
 		Reserved = false,
+		Warfront = uDetails.warfront,
 		TargetList = {},
 		Position = {
 			X = uDetails.coordX or 0,
@@ -628,6 +630,16 @@ function _lsu.Unit.PlanarMax(handle, uList)
 	_lsu.Event.Unit.Detail.PlanarMax(newList)
 end
 
+function _lsu.Unit.Warfront(handle, uList)
+	local _cache = LibSUnit.Lookup.UID
+	local newList = {}
+	for UID, Warfront in pairs(uList) do
+		_cache[UID].Warfront = Warfront
+		newList[UID] = _cache[UID]
+	end
+	_lsu.Event.Unit.Detail.Warfront(newList)
+end
+
 function _lsu.Unit.Combat(handle, uList, Silent)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
@@ -675,7 +687,6 @@ function _lsu.Unit.Details(UnitObj, uDetails)
 		UnitObj.Type = uDetails.type
 		UnitObj.Tier = uDetails.tier
 		UnitObj.Player = uDetails.player
-		UnitObj.Zone = uDetails.zone
 		UnitObj.Location = uDetails.locationName
 		UnitObj.GuaranteedLoot = uDetails.guaranteedLoot
 		if uDetails.role then
@@ -692,6 +703,12 @@ function _lsu.Unit.Details(UnitObj, uDetails)
 		if UnitObj.Mark ~= nMark then
 			UnitObj.Mark = nMark
 			_lsu.Event.Unit.Detail.Mark({[UnitObj.UnitID] = UnitObj})
+		end
+		if uDetails.zone then
+			if uDetails.zone ~= UnitObj.Zone then
+				UnitObj.Zone = uDetails.zone
+				_lsu.Event.Unit.Detail.Zone({[UnitObj.UnitID] = UnitObj})
+			end
 		end
 		if uDetails.relation then
 			if UnitObj.Relation ~= uDetails.relation then
@@ -722,6 +739,9 @@ function _lsu.Unit.Details(UnitObj, uDetails)
 			if uDetails.level ~= UnitObj.Level then
 				UnitObj.Level = uDetails.level
 			end
+		end
+		if uDetails.warfront ~= UnitObj.Warfront then
+			_lsu.Unit.Warfront(handle, {[UnitObj.UnitID] = uDetails.warfront or false})
 		end
 		UnitObj.Health = uDetails.health or 0
 		if uDetails.health ~= UnitObj.Health then
@@ -1257,6 +1277,7 @@ function _lsu.Wait(handle, uList)
 		Command.Event.Attach(Event.Unit.Detail.Zone, _lsu.Unit.Zone, "Unit Zone Change")
 		Command.Event.Attach(Event.Unit.Detail.LocationName, _lsu.Unit.Location, "Unit Location Change")
 		Command.Event.Attach(Event.Unit.Detail.Role, _lsu.Unit.Role, "Unit Role Change")
+		Command.Event.Attach(Event.Unit.Detail.Warfront, _lsu.Unit.Warfront, "Unit Warfront Change")
 		
 		-- Unit Combat Events
 		Command.Event.Attach(Event.Combat.Damage, _lsu.Combat.Damage, "Unit Combat Damage")
