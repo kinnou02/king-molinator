@@ -1091,90 +1091,96 @@ function _lsu.Raid.newCheck(UnitID, Spec)
 			LibSUnit.Raid.Lookup[oldSpec].UID = false
 			LibSUnit.Raid.Group[LibSUnit.Raid.Lookup[oldSpec].Group] = LibSUnit.Raid.Group[LibSUnit.Raid.Lookup[oldSpec].Group] - 1
 		end
+		print(UnitObj.Name.." moved to "..newSpec.." from "..oldSpec)
 		_lsu.Event.Raid.Member.Move(UnitObj, oldSpec, newSpec)
 	end
 	
 	-- Handle Leaves
 	for UID, Spec in pairs(UIDChanged.Left) do
-		local UnitObj = LibSUnit.Lookup.UID[UID]
-		if UnitObj.Combat then
-			LibSUnit.Raid.CombatTotal = LibSUnit.Raid.CombatTotal - 1
-			if LibSUnit.Raid.CombatTotal == 0 then
-				LibSUnit.Raid.Combat = false
-				_lsu.Event.Raid.Combat.Leave()
+		if LibSUnit.Raid.UID[UID] then
+			local UnitObj = LibSUnit.Lookup.UID[UID]
+			if UnitObj.Combat then
+				LibSUnit.Raid.CombatTotal = LibSUnit.Raid.CombatTotal - 1
+				if LibSUnit.Raid.CombatTotal == 0 then
+					LibSUnit.Raid.Combat = false
+					_lsu.Event.Raid.Combat.Leave()
+				end
+			end
+			LibSUnit.Raid.Lookup[Spec].Unit = nil
+			LibSUnit.Raid.Lookup[Spec].UID = false
+			LibSUnit.Raid.Members = LibSUnit.Raid.Members - 1
+			LibSUnit.Raid.Group[LibSUnit.Raid.Lookup[Spec].Group] = LibSUnit.Raid.Group[LibSUnit.Raid.Lookup[Spec].Group] - 1
+			LibSUnit.Raid.UID[UnitObj.UnitID] = nil
+			UnitObj.RaidLoc = nil
+			print(UnitObj.Name.." left the Raid")
+			if UnitObj.Dead then
+				LibSUnit.Raid.DeadTotal = LibSUnit.Raid.DeadTotal - 1
+				--print(UnitObj.Name.." has left the Raid and removed death count")
+			end
+			_lsu.Event.Raid.Member.Leave(UnitObj, Spec)
+			if LibSUnit.Raid.Members == 0 then
+				LibSUnit.Raid.Grouped = false
+				LibSUnit.Raid.Wiped = false
+				_lsu.Event.Raid.Leave()
+			elseif LibSUnit.Raid.Members > 1 then
+				if LibSUnit.Raid.Members == LibSUnit.Raid.DeadTotal then
+					if not LibSUnit.Raid.Wiped then
+						LibSUnit.Raid.Wiped = true
+						_lsu.Event.Raid.Wipe()
+					end
+				else
+					LibSUnit.Raid.Wiped = false
+				end				
+			end
+			if _lsu.Settings.Debug then
+				_lsu.Debug:UpdateDeath()
+				_lsu.Debug:UpdateCombat()
 			end
 		end
-		LibSUnit.Raid.Lookup[Spec].Unit = nil
-		LibSUnit.Raid.Lookup[Spec].UID = false
-		LibSUnit.Raid.Members = LibSUnit.Raid.Members - 1
-		LibSUnit.Raid.Group[LibSUnit.Raid.Lookup[Spec].Group] = LibSUnit.Raid.Group[LibSUnit.Raid.Lookup[Spec].Group] - 1
-		LibSUnit.Raid.UID[UnitObj.UnitID] = nil
-		UnitObj.RaidLoc = nil
-		if UnitObj.Dead then
-			LibSUnit.Raid.DeadTotal = LibSUnit.Raid.DeadTotal - 1
-			--print(UnitObj.Name.." has left the Raid and removed death count")
-		end
-		_lsu.Event.Raid.Member.Leave(UnitObj, Spec)
-		if LibSUnit.Raid.Members == 0 then
-			LibSUnit.Raid.Grouped = false
-			LibSUnit.Raid.Wiped = false
-			_lsu.Event.Raid.Leave()
-		elseif LibSUnit.Raid.Members > 1 then
+	end
+	
+	-- Handle Joins
+	for UID, Spec in pairs(UIDChanged.Joined) do
+		if not LibSUnit.Raid.UID[UID] then
+			local UnitObj = LibSUnit.Lookup.UID[UID]
+			LibSUnit.Raid.Members = LibSUnit.Raid.Members + 1
+			LibSUnit.Raid.Lookup[Spec].Unit = UnitObj
+			LibSUnit.Raid.Lookup[Spec].UID = UID
+			LibSUnit.Raid.Group[LibSUnit.Raid.Lookup[Spec].Group] = LibSUnit.Raid.Group[LibSUnit.Raid.Lookup[Spec].Group] + 1
+			LibSUnit.Raid.UID[UID] = UnitObj
+			UnitObj.RaidLoc = Spec
+			if LibSUnit.Raid.Members == 1 then
+				-- print("You have joined a Raid or Group")
+				LibSUnit.Raid.Grouped = true
+				_lsu.Event.Raid.Join()
+			end
+			print("New Player Joined Raid: "..UnitObj.Name)
+			_lsu.Event.Raid.Member.Join(UnitObj, Spec)
+			if UnitObj.Combat then
+				LibSUnit.Raid.CombatTotal = LibSUnit.Raid.CombatTotal + 1
+				if LibSUnit.Raid.CombatTotal == 1 then
+					LibSUnit.Raid.Combat = true
+					_lsu.Event.Raid.Combat.Enter()
+				end
+			end
+			if UnitObj.Dead then
+				LibSUnit.Raid.DeadTotal = LibSUnit.Raid.DeadTotal + 1
+				-- print(UnitObj.Name.." joined and marked as Dead")
+			end
 			if LibSUnit.Raid.Members == LibSUnit.Raid.DeadTotal then
 				if not LibSUnit.Raid.Wiped then
 					LibSUnit.Raid.Wiped = true
 					_lsu.Event.Raid.Wipe()
 				end
 			else
-				LibSUnit.Raid.Wiped = false
-			end				
-		end
-		if _lsu.Settings.Debug then
-			_lsu.Debug:UpdateDeath()
-			_lsu.Debug:UpdateCombat()
-		end	
-	end
-	
-	-- Handle Joins
-	for UID, Spec in pairs(UIDChanged.Joined) do
-		local UnitObj = LibSUnit.Lookup.UID[UID]
-		LibSUnit.Raid.Members = LibSUnit.Raid.Members + 1
-		LibSUnit.Raid.Lookup[Spec].Unit = UnitObj
-		LibSUnit.Raid.Lookup[Spec].UID = UID
-		LibSUnit.Raid.Group[LibSUnit.Raid.Lookup[Spec].Group] = LibSUnit.Raid.Group[LibSUnit.Raid.Lookup[Spec].Group] + 1
-		LibSUnit.Raid.UID[UID] = UnitObj
-		UnitObj.RaidLoc = Spec
-		if LibSUnit.Raid.Members == 1 then
-			-- print("You have joined a Raid or Group")
-			LibSUnit.Raid.Grouped = true
-			_lsu.Event.Raid.Join()
-		end
-		-- print("New Player Joined Raid: "..UnitObj.Name)
-		_lsu.Event.Raid.Member.Join(UnitObj, Spec)
-		if UnitObj.Combat then
-			LibSUnit.Raid.CombatTotal = LibSUnit.Raid.CombatTotal + 1
-			if LibSUnit.Raid.CombatTotal == 1 then
-				LibSUnit.Raid.Combat = true
-				_lsu.Event.Raid.Combat.Enter()
+				if LibSUnit.Raid.Wiped then
+					LibSUnit.Raid.Wiped = false
+				end
 			end
-		end
-		if UnitObj.Dead then
-			LibSUnit.Raid.DeadTotal = LibSUnit.Raid.DeadTotal + 1
-			-- print(UnitObj.Name.." joined and marked as Dead")
-		end
-		if LibSUnit.Raid.Members == LibSUnit.Raid.DeadTotal then
-			if not LibSUnit.Raid.Wiped then
-				LibSUnit.Raid.Wiped = true
-				_lsu.Event.Raid.Wipe()
+			if _lsu.Settings.Debug then
+				_lsu.Debug:UpdateDeath()
+				_lsu.Debug:UpdateCombat()
 			end
-		else
-			if LibSUnit.Raid.Wiped then
-				LibSUnit.Raid.Wiped = false
-			end
-		end
-		if _lsu.Settings.Debug then
-			_lsu.Debug:UpdateDeath()
-			_lsu.Debug:UpdateCombat()
 		end
 	end
 	
@@ -1678,10 +1684,12 @@ function _lsu.Wait(handle, uList)
 				LibSUnit.Raid.Lookup[Spec] = {
 					Group = math.ceil(Index / 5),
 					Specifier = Spec,
+					UID = false,
 				}
 				LibSUnit.Raid.Pets[Spec] = {
 					Group = LibSUnit.Raid.Lookup[Spec].Group,
 					Specifier = Spec..".pet",
+					UID = false,
 				}
 				local UID = Inspect.Unit.Lookup(Spec)
 				if UID then
