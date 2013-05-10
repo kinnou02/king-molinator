@@ -1091,7 +1091,7 @@ function _lsu.Raid.newCheck(UnitID, Spec)
 			LibSUnit.Raid.Lookup[oldSpec].UID = false
 			LibSUnit.Raid.Group[LibSUnit.Raid.Lookup[oldSpec].Group] = LibSUnit.Raid.Group[LibSUnit.Raid.Lookup[oldSpec].Group] - 1
 		end
-		print(UnitObj.Name.." moved to "..newSpec.." from "..oldSpec)
+		-- print(UnitObj.Name.." moved to "..newSpec.." from "..oldSpec)
 		_lsu.Event.Raid.Member.Move(UnitObj, oldSpec, newSpec)
 	end
 	
@@ -1112,7 +1112,7 @@ function _lsu.Raid.newCheck(UnitID, Spec)
 			LibSUnit.Raid.Group[LibSUnit.Raid.Lookup[Spec].Group] = LibSUnit.Raid.Group[LibSUnit.Raid.Lookup[Spec].Group] - 1
 			LibSUnit.Raid.UID[UnitObj.UnitID] = nil
 			UnitObj.RaidLoc = nil
-			print(UnitObj.Name.." left the Raid")
+			-- print(UnitObj.Name.." left the Raid")
 			if UnitObj.Dead then
 				LibSUnit.Raid.DeadTotal = LibSUnit.Raid.DeadTotal - 1
 				--print(UnitObj.Name.." has left the Raid and removed death count")
@@ -1154,7 +1154,7 @@ function _lsu.Raid.newCheck(UnitID, Spec)
 				LibSUnit.Raid.Grouped = true
 				_lsu.Event.Raid.Join()
 			end
-			print("New Player Joined Raid: "..UnitObj.Name)
+			-- print("New Player Joined Raid: "..UnitObj.Name)
 			_lsu.Event.Raid.Member.Join(UnitObj, Spec)
 			if UnitObj.Combat then
 				LibSUnit.Raid.CombatTotal = LibSUnit.Raid.CombatTotal + 1
