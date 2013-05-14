@@ -414,7 +414,7 @@ function _lsu:Create(UID, uDetails, Type)
 		end
 	end
 	if LibSUnit.Raid.Queue[UID] then
-		_lsu.Raid.newChange(UID, LibSUnit.Raid.Queue[UID])
+		_lsu.Raid.newCheck(UID, LibSUnit.Raid.Queue[UID])
 		LibSUnit.Raid.Queue[UID] = nil
 	end
 	if UnitObj.Mark then
@@ -1006,50 +1006,48 @@ function _lsu.Raid.newCheck(UnitID, Spec)
 					-- print("Slot Unit Changed: "..Spec)
 					newUnitObj = LibSUnit.Lookup.UID[newUnitID]
 					currentUnitObj = LibSUnit.Lookup.UID[currentUnitID]
-					if newUnitObj then
-						if LibSUnit.Raid.UID[newUnitID] then
-							UIDChanged.Moved[newUnitID] = {New = Spec, Old = newUnitObj.RaidLoc}
-							movedCount = movedCount + 1
-							if UIDChanged.Left[newUnitID] then
-								leftCount = leftCount - 1
-								UIDChanged.Left[newUnitID] = nil
-							end
-						elseif not UIDChanged.Moved[newUnitID] then
-							UIDChanged.Joined[newUnitID] = Spec
-							newCount = newCount + 1
+					if not newUnitObj then
+						newUnitObj = _lsu:Create(newUnitID, _inspect(newUnitID), "Avail")
+					end
+					if LibSUnit.Raid.UID[newUnitID] then
+						UIDChanged.Moved[newUnitID] = {New = Spec, Old = newUnitObj.RaidLoc}
+						movedCount = movedCount + 1
+						if UIDChanged.Left[newUnitID] then
+							leftCount = leftCount - 1
+							UIDChanged.Left[newUnitID] = nil
 						end
+					elseif not UIDChanged.Moved[newUnitID] then
+						UIDChanged.Joined[newUnitID] = Spec
+						newCount = newCount + 1
+					end
+					if UIDChanged.Left[currentUnitID] then
+						UIDChanged.Moved[currentUnitID] = {New = Spec, Old = currentUnitObj.RaidLoc}
+						movedCount = movedCount + 1
 						if UIDChanged.Left[currentUnitID] then
-							UIDChanged.Moved[currentUnitID] = {New = Spec, Old = currentUnitObj.RaidLoc}
-							movedCount = movedCount + 1
-							if UIDChanged.Left[currentUnitID] then
-								leftCount = leftCount - 1
-								UID.Changed.Left[currentUnitID] = nil
-							end
-						elseif not UIDChanged.Moved[currentUnitID] then
-							UIDChanged.Left[currentUnitID] = Spec
-							leftCount = leftCount + 1
+							leftCount = leftCount - 1
+							UID.Changed.Left[currentUnitID] = nil
 						end
-					else
-						LibSUnit.Raid.Queue[newUnitID] = Spec
+					elseif not UIDChanged.Moved[currentUnitID] then
+						UIDChanged.Left[currentUnitID] = Spec
+						leftCount = leftCount + 1
 					end
 				elseif newUnitID then
 					-- Empty slot taken
 					-- print("Empty Slot Taken: "..Spec)
 					newUnitObj = LibSUnit.Lookup.UID[newUnitID]
-					if newUnitObj then
-						if LibSUnit.Raid.UID[newUnitID] then
-							UIDChanged.Moved[newUnitID] = {New = Spec, Old = newUnitObj.RaidLoc}
-							movedCount = movedCount + 1
-							if UIDChanged.Left[newUnitID] then
-								UIDChanged.Left[newUnitID] = nil
-								leftCount = leftCount - 1
-							end
-						elseif not UIDChanged.Moved[newUnitID] then
-							UIDChanged.Joined[newUnitID] = Spec
-							newCount = newCount + 1
+					if not newUnitObj then
+						newUnitObj = _lsu:Create(newUnitID, _inspect(newUnitID), "Avail")
+					end
+					if LibSUnit.Raid.UID[newUnitID] then
+						UIDChanged.Moved[newUnitID] = {New = Spec, Old = newUnitObj.RaidLoc}
+						movedCount = movedCount + 1
+						if UIDChanged.Left[newUnitID] then
+							UIDChanged.Left[newUnitID] = nil
+							leftCount = leftCount - 1
 						end
-					else
-						LibSUnit.Raid.Queue[UnitID] = Spec
+					elseif not UIDChanged.Moved[newUnitID] then
+						UIDChanged.Joined[newUnitID] = Spec
+						newCount = newCount + 1
 					end
 				elseif currentUnitID then
 					-- Slot no longer taken

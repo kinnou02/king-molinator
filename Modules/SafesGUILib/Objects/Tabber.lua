@@ -93,7 +93,7 @@ function LibSGui.Tabber:Create(title, _parent, pTable)
 		self._tabs[self.Count] = Tab
 		Tab.Icon = _int:pullTexture(self._cradle, false)
 		Tab.Icon:SetLayer(3)
-		Tab.Text = _int:pullText(self._cradle, false)
+		Tab.Text = LibSGui.ShadowText:Create(self._cradle, false)
 		Tab.Text:SetLayer(3)
 		Tab.Text:SetFontColor(0.95, 0.95, 0.75)
 		Tab.Icon:SetPoint("CENTER", Tab.Texture, "CENTER")
@@ -136,7 +136,7 @@ function LibSGui.Tabber:Create(title, _parent, pTable)
 				else
 					self.Texture:SetPoint("BOTTOM", self.Tabber._cradle, "BOTTOM")
 				end
-				self.Text:SetPoint("CENTER", self.Texture, "CENTER", 0, 1)
+				self.Text:SetPoint("CENTER", self.Texture, "CENTER", 0, 2)
 				self.Text:SetAlpha(1)
 				self.Text:SetFontSize(self.Tabber.TextSize.Selected)
 				
@@ -156,10 +156,10 @@ function LibSGui.Tabber:Create(title, _parent, pTable)
 				self.Icon:SetAlpha(0.5)
 				if self.Tabber._ori == "TOP" then
 					self.Texture:SetPoint("TOP", self.Tabber._cradle, "TOP", nil, 6)
-					Tab.Text:SetPoint("CENTER", Tab.Texture, "CENTER", 0, 1)
+					Tab.Text:SetPoint("CENTER", Tab.Texture, "CENTER", 0, 2)
 				else
 					self.Texture:SetPoint("BOTTOM", self.Tabber._cradle, "BOTTOM", nil, -6)
-					Tab.Text:SetPoint("CENTER", Tab.Texture, "CENTER", 0, -1)
+					Tab.Text:SetPoint("CENTER", Tab.Texture, "CENTER", 0, 2)
 				end
 				self:UpdateIcon()
 			end

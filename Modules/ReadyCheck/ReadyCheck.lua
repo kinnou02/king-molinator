@@ -557,7 +557,19 @@ PI.Constants = {
 						tank = true,
 					},
 				},
-                ["BFAE680B5BBA2DB8E"] = { -- Excellent Powersurge Vial
+				["BFE810316D26BAE95"] = { -- Stellar Fortified Vial
+					Grade = "High",
+					Level = 60,
+					Callings = {
+						rogue = true,
+						warrior = true,
+						cleric = true,
+					},
+					Role = {
+						tank = true,
+					},
+				},
+				["BFAE680B5BBA2DB8E"] = { -- Excellent Powersurge Vial
                     Grade = "Medium",
                     Level = 60,
                     Callings = {
@@ -585,6 +597,18 @@ PI.Constants = {
                         tank = true,
                     },
                 },
+				["BFDB9E8A2B27127FD"] = { -- Excellent Fortified Vial
+					Grade = "Medium",
+					Level = 60,
+					Callings = {
+						rogue = true,
+						warrior = true,
+						cleric = true,
+					},
+					Role = {
+						tank = true,
+					},
+				},
 				--/////////////////--
 				-- Classic Potions --
 				--/////////////////--				

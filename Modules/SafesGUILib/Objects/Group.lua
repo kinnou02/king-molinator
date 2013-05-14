@@ -109,6 +109,20 @@ function LibSGui.Group:Create(title, _parent, pTable)
 					self.Scrollbar:SetPoint("BOTTOM", self._cradle, "BOTTOM")
 					self._border:ClearPoint("RIGHT")
 					self._border:SetPoint("RIGHT", self.Scrollbar, "LEFT", -3, nil)
+					function self:MouseWheelBackHandler(handle)
+						self._group.Scrollbar:Nudge(5)
+					end
+					function self:MouseWheelForwardHandler(handle)
+						self._group.Scrollbar:Nudge(-5)
+					end
+					function self:_addWheelEvents()
+						self._mask:EventAttach(Event.UI.Input.Mouse.Wheel.Back, self.MouseWheelBackHandler, "Mouse Wheel Back Handler")
+						self._mask:EventAttach(Event.UI.Input.Mouse.Wheel.Forward, self.MouseWheelForwardHandler, "Mouse Wheel Forward Handler")
+					end
+					function self:_removeWheelEvents()
+						self._mask:EventDetach(Event.UI.Input.Mouse.Wheel.Back, self.MouseWheelBackHandler, "Mouse Wheel Back Handler")
+						self._mask:EventDetach(Event.UI.Input.Mouse.Wheel.Forward, self.MouseWheelForwardHandler, "Mouse Wheel Forward Handler")					
+					end
 					function self.Scrollbar:_checkBounds()
 						local newDiff = math.floor(self._group.Content:GetHeight() - self._group._mask:GetHeight()) * self._group._div
 						if newDiff ~= self._group._diff then
@@ -119,6 +133,7 @@ function LibSGui.Group:Create(title, _parent, pTable)
 								self._group.Content:ClearPoint("TOP")
 								self._group.Content:SetPoint("TOP", self._group._mask, "TOP", nil, -math.floor(self:GetPosition() * self._group._multi))
 								LibSGui.Event.Group.Scrollbar.Active(self._group, true)
+								self._group:_addWheelEvents()
 							else
 								self:SetRange(0,0)
 								self:SetEnabled(false)
@@ -130,6 +145,7 @@ function LibSGui.Group:Create(title, _parent, pTable)
 									end
 								end
 								LibSGui.Event.Group.Scrollbar.Active(self._group, false)
+								self._group:_removeWheelEvents()
 							end
 						end
 					end

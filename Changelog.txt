@@ -5,6 +5,8 @@
 
 Ready Check
 * Change: Convert over to new Event API
+* New: Added tracking for Stellar Fortified Vial.
+* New: Added tracking for Excellent Fortified Vial.
 
 LibSUnit
 * Change: Converted all Events over to the new Rift Event API.
@@ -33,6 +35,16 @@ Endless Eclipse
 ** New: Added Personal alert for Soul Rapture (need confirmation on Debuff name, Hard Mode purple bubble, or Buff ID).
 ** Change: Ebon Eruption timers and alerts are now prefix with the corresponding mini.
 ** Fixed: Enabled the Percentage Monitor to fire for the final two.
+* Reguloas
+** New: Added Phase tracking.
+** New: Added Timer for first Tentacle Storm (minimum).
+** New: Added Wait Timer for Crash of Souls. (Cooldown)
+** New: Added Wait Timer for Vanquish the Weak. (Cooldown)
+** New: Added Alert and Spy for Unholy Dominion.
+** New: Added Alert for Tentacle Storm duration.
+** New: Added Alert for "Look Away" mechanic for Molinar.
+** New: Added Alerts and Spies for Sicaron's bubbles.
+** New: Added Spy for Seething Darkness.
 
 Frozen Tempest
 * Galidra
