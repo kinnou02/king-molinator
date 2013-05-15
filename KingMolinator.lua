@@ -8130,14 +8130,14 @@ local function KBM_Start()
 		["KBMAddWatch"] = {
 			High = 0,
 			Mid = 2,
-			Low = 0,
-			Rev = 59,
+			Low = 4,
+			Rev = 66,
 		},
 		["KBMMarkIt"] = {
 			High = 0,
 			Mid = 1,
-			Low = 5,
-			Rev = 36,
+			Low = 6,
+			Rev = 38,
 		},
 	}
 
