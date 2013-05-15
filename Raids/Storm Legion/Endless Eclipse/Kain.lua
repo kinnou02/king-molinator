@@ -69,6 +69,7 @@ KR.Lang.Debuff.Ravenous:SetFrench("Fringale vorace")
 KR.Lang.Debuff.RavenousID = "BFF195769E88347C3"
 KR.Lang.Debuff.Voracious = KBM.Language:Add("Voracious Hunger")
 KR.Lang.Debuff.Voracious:SetFrench("Appétit vorace")
+KR.Lang.Debuff.Voracious:SetGerman("Unstillbarer Hunger")
 KR.Lang.Debuff.VoraciousID = "BFEB697D0228F51D9"
 
 -- Description Dictionary

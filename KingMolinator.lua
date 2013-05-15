@@ -8036,28 +8036,19 @@ function KBM.AllocateBoss(Mod, BossObj, UTID, tableIndex)
 end
 
 function KBM.InitMenus()
-	local Header = KBM.MainWin.Menu:CreateHeader(KBM.Language.Menu.Global[KBM.Lang], nil, nil, nil, "Main")
-	KBM.MenuOptions.Main.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.Settings[KBM.Lang], KBM.MenuOptions.Main, nil, Header)
-	KBM.MenuOptions.Main.MenuItem.Check:SetEnabled(false)
-	KBM.MenuOptions.Timers.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Menu.Timers[KBM.Lang], KBM.MenuOptions.Timers, true, Header)
-	KBM.MenuOptions.Timers.MenuItem.Check:SetEnabled(false)
-	KBM.MenuOptions.Phases.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.PhaseMonitor[KBM.Lang], KBM.MenuOptions.Phases, true, Header) 
-	KBM.MenuOptions.Phases.MenuItem.Check:SetEnabled(false)
-	KBM.MenuOptions.CastBars.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.Castbar[KBM.Lang], KBM.MenuOptions.CastBars, true, Header)
-	KBM.MenuOptions.CastBars.MenuItem.Check:SetEnabled(false)
-	KBM.MenuOptions.Alerts.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.Options.Alert[KBM.Lang], KBM.MenuOptions.Alerts, true, Header)
-	KBM.MenuOptions.Alerts.MenuItem.Check:SetEnabled(false)
-	KBM.MenuOptions.MechSpy.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.MechSpy.Name[KBM.Lang], KBM.MenuOptions.MechSpy, true, Header)
-	KBM.MenuOptions.MechSpy.MenuItem.Check:SetEnabled(false)
-	local Header = KBM.MainWin.Menu:CreateHeader(KBM.Language.Menu.Mods[KBM.Lang], nil, nil, nil, "Main")
-	KBM.MenuOptions.TankSwap.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.TankSwap.Title[KBM.Lang], KBM.MenuOptions.TankSwap, true, Header)	
-	KBM.MenuOptions.TankSwap.MenuItem.Check:SetEnabled(false)
-	KBM.MenuOptions.PerMon.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.PerMon.Title[KBM.Lang], KBM.MenuOptions.PerMon, true, Header)
-	KBM.MenuOptions.PerMon.MenuItem.Check:SetEnabled(false)
-	KBM.MenuOptions.ReadyCheck.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.ReadyCheck.Name[KBM.Lang], KBM.MenuOptions.ReadyCheck, true, Header)
-	KBM.MenuOptions.ReadyCheck.MenuItem.Check:SetEnabled(false)
-	KBM.MenuOptions.RezMaster.MenuItem = KBM.MainWin.Menu:CreateEncounter(KBM.Language.RezMaster.Name[KBM.Lang], KBM.MenuOptions.RezMaster, true, Header)
-	KBM.MenuOptions.RezMaster.MenuItem.Check:SetEnabled(false)
+	-- Main TreeView
+	local Header = KBM.MainWin.Menu:CreateHeader(KBM.Language.Menu.Global[KBM.Lang], "Main")
+	KBM.MenuOptions.Main.MenuItem = Header:CreatePage(KBM.Language.Options.Settings[KBM.Lang], KBM.MenuOptions.Main)
+	KBM.MenuOptions.Timers.MenuItem = Header:CreatePage(KBM.Language.Menu.Timers[KBM.Lang], KBM.MenuOptions.Timers)
+	KBM.MenuOptions.Phases.MenuItem = Header:CreatePage(KBM.Language.Options.PhaseMonitor[KBM.Lang], KBM.MenuOptions.Phases)
+	KBM.MenuOptions.CastBars.MenuItem = Header:CreatePage(KBM.Language.Options.Castbar[KBM.Lang], KBM.MenuOptions.CastBars)
+	KBM.MenuOptions.Alerts.MenuItem = Header:CreatePage(KBM.Language.Options.Alert[KBM.Lang], KBM.MenuOptions.Alerts)
+	KBM.MenuOptions.MechSpy.MenuItem = Header:CreatePage(KBM.Language.MechSpy.Name[KBM.Lang], KBM.MenuOptions.MechSpy)
+	local Header = KBM.MainWin.Menu:CreateHeader(KBM.Language.Menu.Mods[KBM.Lang], "Main")
+	KBM.MenuOptions.TankSwap.MenuItem = Header:CreatePage(KBM.Language.TankSwap.Title[KBM.Lang], KBM.MenuOptions.TankSwap)
+	KBM.MenuOptions.PerMon.MenuItem = Header:CreatePage(KBM.Language.PerMon.Title[KBM.Lang], KBM.MenuOptions.PerMon)
+	KBM.MenuOptions.ReadyCheck.MenuItem = Header:CreatePage(KBM.Language.ReadyCheck.Name[KBM.Lang], KBM.MenuOptions.ReadyCheck)
+	KBM.MenuOptions.RezMaster.MenuItem = Header:CreatePage(KBM.Language.RezMaster.Name[KBM.Lang], KBM.MenuOptions.RezMaster)
 
 	-- Reset References for missing UTIDs
 	-- These are compiled fresh each run.
@@ -8121,7 +8112,6 @@ function KBM.InitMenus()
 		Mod:Start(KBM_MainWin)
 	end
 	
-	KBM.MainWin.Scroller.Instance:SetPosition(0)
 	for MenuID, MenuObj in pairs(KBM.MenuIDList) do
 		if MenuObj.Settings then
 			if MenuObj.Settings.Collapse then

@@ -70,6 +70,7 @@ PRO.Lang.Buff.Barrier:SetFrench("Barrière d'ébène")
 PRO.Lang.Buff.Barrier:SetGerman("Schwärzebarriere")
 PRO.Lang.Buff.Hand = KBM.Language:Add("Hand of the Master")
 PRO.Lang.Buff.Hand:SetFrench("Main du Maître")
+PRO.Lang.Buff.Hand:SetGerman("Hand des Meisters")
 
 -- Debuff Dictionary
 PRO.Lang.Debuff = {}

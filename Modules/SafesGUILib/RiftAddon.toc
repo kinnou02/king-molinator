@@ -9,12 +9,13 @@ Author = "Paul Snart"
 Website = "http://twitter.com/#!/psnart"
 Email = "snarty@gmail.com"
 
-Version = "0.0.9"
+Version = "0.1.1"
 
 Environment = "2.2"
 
 RunOnStartup = {
 	"LibSGui.lua",
+	"Objects/Scrollbar.lua",
 	"Objects/Window.lua",
 	"Objects/Panel.lua",
 	"Objects/Group.lua",

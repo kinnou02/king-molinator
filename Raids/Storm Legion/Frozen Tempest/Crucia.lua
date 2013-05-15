@@ -90,6 +90,7 @@ CRC.Lang.Ability.Fury:SetGerman("Raserei des Sturmherren")
 CRC.Lang.Ability.Fury:SetFrench("Fureur tempétueuse")
 CRC.Lang.Ability.Wrath = KBM.Language:Add("Tempest Wrath")
 CRC.Lang.Ability.Wrath:SetFrench("Courroux tempétueux")
+CRC.Lang.Ability.Wrath:SetGerman("Sturmherr-Zorn")
 CRC.Lang.Ability.Blessing = KBM.Language:Add("Blessing of the Storm Queen")
 CRC.Lang.Ability.Blessing:SetFrench("Bénédiction de la Reine des Tempêtes")
 CRC.Lang.Ability.Blessing:SetGerman("Segen der Sturmkönigin")
@@ -120,7 +121,7 @@ CRC.Lang.Debuff.Stablized:SetFrench("Refroidissement stabilisé")
 CRC.Lang.Debuff.Stablized:SetGerman("Stabilisiertes Kühlmittel")
 CRC.Lang.Debuff.Wrath = KBM.Language:Add("Tempest Wrath")
 CRC.Lang.Debuff.Wrath:SetFrench("Courroux tempétueux")
-CRC.Lang.Debuff.Wrath:SetGerman("Tempest Wrath")
+CRC.Lang.Debuff.Wrath:SetGerman("Sturmherr-Zorn")
 
 -- Buff Dictionary
 CRC.Lang.Buff = {}

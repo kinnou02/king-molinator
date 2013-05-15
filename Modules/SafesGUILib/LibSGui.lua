@@ -619,6 +619,9 @@ function _int.attachDefault(base)
 			self._cradle:SetAllPoints()
 		end
 	end
+	function base:GetVisible()
+		return self._cradle:GetVisible()
+	end
 	function base:GetWidth()
 		return self._cradle:GetWidth()
 	end
@@ -695,10 +698,6 @@ function LibSGui:Debug()
 end
 
 function LibSGui:CreateCheck()
-
-end
-
-function LibSGui:CreateScrollbar()
 
 end
 

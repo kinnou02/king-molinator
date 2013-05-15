@@ -316,17 +316,17 @@ function LibSGui.TreeView:Create(_id, _parent, pTable)
 	treeview._mask = treeview._sunkenBorder._mask
 	
 	function treeview:SizeChangeHandler()
-		if self._treeview.Scrollbar then
-			if self._treeview.Scrollbar._active then
-				self._treeview.Scrollbar:_checkBounds()
+		if self._object.Scrollbar then
+			if self._object.Scrollbar._active then
+				self._object.Scrollbar:_checkBounds()
 			end
 		end
 	end
 	treeview._mask:EventAttach(Event.UI.Layout.Size, treeview.SizeChangeHandler, "TreeView Mask Size Change")
-	treeview._mask._treeview = treeview
+	treeview._mask._object = treeview
 	
 	treeview.Content = treeview._sunkenBorder.Content
-	treeview.Content._treeview = treeview
+	treeview.Content._object = treeview
 	treeview.Content:EventAttach(Event.UI.Layout.Size, treeview.SizeChangeHandler, "TreeView Content Size Change")
 	
 	treeview.SetBorderWidth = function(treeview, w, Type) treeview._raisedBorder:SetBorderWidth(w, Type) end
@@ -370,88 +370,15 @@ function LibSGui.TreeView:Create(_id, _parent, pTable)
 	
 	function treeview:_addScrollbar(pTable)
 		pTable = pTable or {}
-		pTable.Vertical = pTable.Vertical or true -- Defaults to Vertical (No current support for Horizontal)
-		pTable.Hide = pTable.Hide or false -- Hide the scrollbar if not required, False = Disable and visible when not required, else hidden.
-		pTable.Dynamic = pTable.Dynamic or false -- If Hide is enabled and Dynamic is enabled the TreeView will adjust the width of the Content to replace the scrollbar area.
-		
-		if type(self) == "table" then
-			if self._type == "treeview" then
-				if not self.Scrollbar then
-					self.Scrollbar = _int:pullScrollbar(self._cradle, true)
-					self.Scrollbar:SetLayer(2)
-					self.Scrollbar._treeview = self
-					self.Scrollbar._hidden = pTable.Hide
-					self.Scrollbar._dynamic = pTable.Dynamic
-					self.Scrollbar:SetPoint("TOPRIGHT", self._raisedBorder.Content, "TOPRIGHT")
-					self.Scrollbar:SetPoint("BOTTOM", self._raisedBorder.Content, "BOTTOM")
-					self._sunkenBorder:ClearPoint("RIGHT")
-					self._sunkenBorder:SetPoint("RIGHT", self.Scrollbar, "LEFT", -3, nil)
-					function self:MouseWheelBackHandler(handle)
-						self._treeview.Scrollbar:Nudge(5)
-					end
-					function self:MouseWheelForwardHandler(handle)
-						self._treeview.Scrollbar:Nudge(-5)
-					end
-					function self:_addWheelEvents()
-						self._mask:EventAttach(Event.UI.Input.Mouse.Wheel.Back, self.MouseWheelBackHandler, "Mouse Wheel Back Handler")
-						self._mask:EventAttach(Event.UI.Input.Mouse.Wheel.Forward, self.MouseWheelForwardHandler, "Mouse Wheel Forward Handler")
-					end
-					function self:_removeWheelEvents()
-						self._mask:EventDetach(Event.UI.Input.Mouse.Wheel.Back, self.MouseWheelBackHandler, "Mouse Wheel Back Handler")
-						self._mask:EventDetach(Event.UI.Input.Mouse.Wheel.Forward, self.MouseWheelForwardHandler, "Mouse Wheel Forward Handler")					
-					end
-					function self.Scrollbar:_checkBounds()
-						local newDiff = math.floor(self._treeview.Content:GetHeight() - self._treeview._mask:GetHeight()) * self._treeview._div
-						if newDiff ~= self._treeview._diff then
-							self._treeview._diff = newDiff
-							if self._treeview._diff > 0 then
-								self:SetRange(0, self._treeview._diff)
-								self:SetEnabled(true)
-								self._treeview.Content:ClearPoint("TOP")
-								self._treeview.Content:SetPoint("TOP", self._treeview._mask, "TOP", nil, -math.floor(self:GetPosition() * self._treeview._multi))
-								LibSGui.Event.TreeView.Scrollbar.Active(self._treeview, true)
-								self._treeview:_addWheelEvents()
-							else
-								self:SetRange(0,0)
-								self:SetEnabled(false)
-								if self._hidden then
-									self:SetVisible(false)
-									if self._dynamic then
-										self._treeview._sunkenBorder:ClearPoint("RIGHT")
-										self._treeview._sunkenBorder:SetPoint("RIGHT", self._treeview._raisedBorder_cradle, "RIGHT")
-									end
-								end
-								LibSGui.Event.TreeView.Scrollbar.Active(self._treeview, false)
-								self._treeview:_removeWheelEvents()
-							end
-						end
-					end
-					function self.Scrollbar:ScrollChangeHandler(handle)
-						self._treeview.Content:ClearPoint("TOP")
-						self._treeview.Content:SetPoint("TOP", self._treeview._mask, "TOP", nil, -math.floor(self:GetPosition() * self._treeview._multi))
-						LibSGui.Event.TreeView.Scrollbar.Change(self._treeview, self:GetPosition())
-					end
-					self.Scrollbar:EventAttach(Event.UI.Scrollbar.Change, self.Scrollbar.ScrollChangeHandler, "TreeView Scroller Change")
-					self.Scrollbar._active = true
-					self.Scrollbar:_checkBounds()
-					return self.Scrollbar
-				else
-					if _int._debug then
-						error("[TreeView:AddScrollbar] There is already a Scrollbar assigned to this TreeView")
-					end
-				end
-			else
-				if _int._debug then
-					error("[TreeView:AddScrollbar] Expecting TreeView Object, got: "..tostring(self._type))
-				end
-			end
-		else
-			if _int._debug then
-				error("[TreeView:AddScrollbar] Expecting Table, got: "..type(self))
-			end
-		end
+		pTable.Type = "treeview"
+		pTable.Event = LibSGui.Event.TreeView.Scrollbar
+		pTable.FrameA = self._raisedBorder.Content
+		pTable.FrameB = self._sunkenBorder
+		-- pTable.Dynamic = true
+		-- pTable.Hide = true
+		return _int._addScrollbar(self, pTable)
 	end
-	
+		
 	function treeview:_updateSize(value)
 		self._size = self._size + value
 		self.Content:SetHeight(self._size)

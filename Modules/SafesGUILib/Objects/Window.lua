@@ -172,7 +172,7 @@ function LibSGui.Window:Create(title, _parent, pTable)
 	function window:GetRelativeY()
 		return self.rely
 	end
-	
+		
 	function window:SetCallback(cbFunction)
 		if type(cbFunction) == "function" then
 			self._callback = cbFunction

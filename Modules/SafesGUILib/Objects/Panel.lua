@@ -63,17 +63,17 @@ function LibSGui.Panel:Create(title, _parent, pTable)
 	panel._mask = panel._sunkenBorder._mask
 	
 	function panel:SizeChangeHandler()
-		if self._panel.Scrollbar then
-			if self._panel.Scrollbar._active then
-				self._panel.Scrollbar:_checkBounds()
+		if self._object.Scrollbar then
+			if self._object.Scrollbar._active then
+				self._object.Scrollbar:_checkBounds()
 			end
 		end
 	end
 	panel._mask:EventAttach(Event.UI.Layout.Size, panel.SizeChangeHandler, "Panel Mask Size Change")
-	panel._mask._panel = panel
+	panel._mask._object = panel
 	
 	panel.Content = panel._sunkenBorder.Content
-	panel.Content._panel = panel
+	panel.Content._object = panel
 	panel.Content:EventAttach(Event.UI.Layout.Size, panel.SizeChangeHandler, "Panel Content Size Change")
 	
 	panel.SetBorderWidth = function(panel, w, Type) panel._raisedBorder:SetBorderWidth(w, Type) end
@@ -142,86 +142,11 @@ function LibSGui.Panel:Create(title, _parent, pTable)
 
 	function panel:AddScrollbar(pTable)
 		pTable = pTable or {}
-		pTable.Vertical = pTable.Vertical or true -- Defaults to Vertical (No current support for Horizontal)
-		pTable.Hide = pTable.Hide or false -- Hide the scrollbar if not required, False = Disable and visible when not required, else hidden.
-		pTable.Dynamic = pTable.Dynamic or false -- If Hide is enabled and Dynamic is enabled the Panel will adjust the width of the Content to replace the scrollbar area.
-		
-		if type(self) == "table" then
-			if self._type == "panel" then
-				if not self.Scrollbar then
-					self.Scrollbar = _int:pullScrollbar(self._cradle, true)
-					self.Scrollbar:SetLayer(2)
-					self.Scrollbar._panel = self
-					self.Scrollbar._hidden = pTable.Hide
-					self.Scrollbar._dynamic = pTable.Dynamic
-					self.Scrollbar:SetPoint("TOPRIGHT", self._raisedBorder.Content, "TOPRIGHT")
-					self.Scrollbar:SetPoint("BOTTOM", self._raisedBorder.Content, "BOTTOM")
-					self._sunkenBorder:ClearPoint("RIGHT")
-					self._sunkenBorder:SetPoint("RIGHT", self.Scrollbar, "LEFT", -3, nil)
-					function self:MouseWheelBackHandler(handle)
-						self._panel.Scrollbar:Nudge(5)
-					end
-					function self:MouseWheelForwardHandler(handle)
-						self._panel.Scrollbar:Nudge(-5)
-					end
-					function self:_addWheelEvents()
-						self._mask:EventAttach(Event.UI.Input.Mouse.Wheel.Back, self.MouseWheelBackHandler, "Mouse Wheel Back Handler")
-						self._mask:EventAttach(Event.UI.Input.Mouse.Wheel.Forward, self.MouseWheelForwardHandler, "Mouse Wheel Forward Handler")
-					end
-					function self:_removeWheelEvents()
-						self._mask:EventDetach(Event.UI.Input.Mouse.Wheel.Back, self.MouseWheelBackHandler, "Mouse Wheel Back Handler")
-						self._mask:EventDetach(Event.UI.Input.Mouse.Wheel.Forward, self.MouseWheelForwardHandler, "Mouse Wheel Forward Handler")					
-					end
-					function self.Scrollbar:_checkBounds()
-						local newDiff = math.floor(self._panel.Content:GetHeight() - self._panel._mask:GetHeight()) * self._panel._div
-						if newDiff ~= self._panel._diff then
-							self._panel._diff = newDiff
-							if self._panel._diff > 0 then
-								self:SetRange(0, self._panel._diff)
-								self:SetEnabled(true)
-								self._panel.Content:ClearPoint("TOP")
-								self._panel.Content:SetPoint("TOP", self._panel._mask, "TOP", nil, -math.floor(self:GetPosition() * self._panel._multi))
-								LibSGui.Event.Panel.Scrollbar.Active(self._panel, true)
-								self._panel:_addWheelEvents()
-							else
-								self:SetRange(0,0)
-								self:SetEnabled(false)
-								if self._hidden then
-									self:SetVisible(false)
-									if self._dynamic then
-										self._panel._sunkenBorder:ClearPoint("RIGHT")
-										self._panel._sunkenBorder:SetPoint("RIGHT", self._panel._raisedBorder_cradle, "RIGHT")
-									end
-								end
-								LibSGui.Event.Panel.Scrollbar.Active(self._panel, false)
-								self._panel:_removeWheelEvents()
-							end
-						end
-					end
-					function self.Scrollbar:ScrollChangeHandler(handle)
-						self._panel.Content:ClearPoint("TOP")
-						self._panel.Content:SetPoint("TOP", self._panel._mask, "TOP", nil, -math.floor(self:GetPosition() * self._panel._multi))
-						LibSGui.Event.Panel.Scrollbar.Change(self._panel, self:GetPosition())
-					end
-					self.Scrollbar:EventAttach(Event.UI.Scrollbar.Change, self.Scrollbar.ScrollChangeHandler, "Panel Scroller Change")
-					self.Scrollbar._active = true
-					self.Scrollbar:_checkBounds()
-					return self.Scrollbar
-				else
-					if _int._debug then
-						error("[Panel:AddScrollbar] There is already a Scrollbar assigned to this Panel")
-					end
-				end
-			else
-				if _int._debug then
-					error("[Panel:AddScrollbar] Expecting Panel Object, got: "..tostring(self._type))
-				end
-			end
-		else
-			if _int._debug then
-				error("[Panel:AddScrollbar] Expecting Table, got: "..type(self))
-			end
-		end
+		pTable.Type = "panel"
+		pTable.Event = LibSGui.Event.Panel.Scrollbar
+		pTable.FrameA = self._raisedBorder.Content
+		pTable.FrameB = self._sunkenBorder
+		return _int._addScrollbar(self, pTable)
 	end
 	
 	panel:SetBorderWidth(4)

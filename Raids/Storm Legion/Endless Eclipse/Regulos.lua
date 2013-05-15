@@ -92,42 +92,57 @@ REG.Lang.Unit.Molinar = KBM.Language:Add("Dark Thane Molinar")
 REG.Lang.Unit.Molinar:SetFrench("Baron des ténèbres Molinar")
 REG.Lang.Unit.Molinar:SetGerman("Dunkler Vasall Molinar")
 REG.Lang.Unit.MolinarShort = KBM.Language:Add("Molinar")
+REG.Lang.Unit.MolinarShort:SetGerman("Molinar")
+REG.Lang.Unit.MolinarShort:SetFrench("Molinar")
 REG.Lang.Unit.Sicaron = KBM.Language:Add("Sicaron")
+REG.Lang.Unit.Sicaron:SetGerman("Sicaron")
+REG.Lang.Unit.Sicaron:SetFrench("Sicaron")
 REG.Lang.Unit.Kosic = KBM.Language:Add("Hierarch Kosic")
+REG.Lang.Unit.Kosic:SetGerman("Hierarch Kosic")
+REG.Lang.Unit.Kosic:SetFrench("Hiérarque Kosic")
 
 -- Ability Dictionary
 REG.Lang.Ability = {}
 REG.Lang.Ability.Tentacle = KBM.Language:Add("Tentacle Storm") -- 10s cast time
-REG.Lang.Ability.Tentacle:SetFrench("Tempête tentaculaire") -- 10s cast time
+REG.Lang.Ability.Tentacle:SetFrench("Tempête tentaculaire") 
 REG.Lang.Ability.Tentacle:SetGerman("Tentakelsturm")
 REG.Lang.Ability.Apotheosis = KBM.Language:Add("Death's Apotheosis") -- 72.5s cast time
-REG.Lang.Ability.Apotheosis:SetFrench("Apothéose de la Mort") -- 72.5s cast time
+REG.Lang.Ability.Apotheosis:SetFrench("Apothéose de la Mort") 
 REG.Lang.Ability.Apotheosis:SetGerman("Vergöttlichung des Todes")
 REG.Lang.Ability.Calamity = KBM.Language:Add("Invoke Calamity") -- 3.5s cast time
-REG.Lang.Ability.Calamity:SetFrench("Invocation de calamité") -- 3.5s cast time
+REG.Lang.Ability.Calamity:SetFrench("Invocation de calamité")
+REG.Lang.Ability.Calamity:SetGerman("Unheil herbeirufen")
 REG.Lang.Ability.Vanquish = KBM.Language:Add("Vanquish the Weak")
 REG.Lang.Ability.Vanquish:SetFrench("Victoire sur les faibles")
 REG.Lang.Ability.Vanquish:SetGerman("Überwindung der Schwachen")
 REG.Lang.Ability.Crash = KBM.Language:Add("Crash of Souls")
+REG.Lang.Ability.Crash:SetGerman("Zusammenstoß der Seelen")
+REG.Lang.Ability.Crash:SetFrench("Écrasement d'âmes")
 REG.Lang.Ability.Vortex = KBM.Language:Add("Vortex of Agony")
+REG.Lang.Ability.Vortex:SetGerman("Wirbel der Qual")
+REG.Lang.Ability.Vortex:SetFrench("Vortex d'agonie")
 REG.Lang.Ability.Void = KBM.Language:Add("Void Assault")
+REG.Lang.Ability.Void:SetGerman("Leereangriff")
+REG.Lang.Ability.Void:SetFrench("Assaut du Néant")
 
 -- Debuff Dictionary
 REG.Lang.Debuff = {}
 REG.Lang.Debuff.Mark = KBM.Language:Add("Mark of the Void") -- Tank debuff
-REG.Lang.Debuff.Mark:SetFrench("Marque du Néant") -- Tank debuff
+REG.Lang.Debuff.Mark:SetFrench("Marque du Néant")
 REG.Lang.Debuff.Mark:SetGerman("Zeichen der Leere")
 REG.Lang.Debuff.MarkID = "BFC47C4459394DC79"
 REG.Lang.Debuff.Heart = KBM.Language:Add("Heart of Death") -- Middle of boss debuff
-REG.Lang.Debuff.Heart:SetFrench("Coeur de la mort") -- Middle of boss debuff
+REG.Lang.Debuff.Heart:SetFrench("Coeur de la mort")
 REG.Lang.Debuff.Heart:SetGerman("Herz des Todes")
 REG.Lang.Debuff.HeartID = "B61B61EC658F33554"
 REG.Lang.Debuff.Darkness = KBM.Language:Add("Seething Darkness") -- 50k Heal absorb
-REG.Lang.Debuff.Darkness:SetFrench("Ténèbres bouillonnantes") -- 50k Heal absorb
+REG.Lang.Debuff.Darkness:SetFrench("Ténèbres bouillonnantes")
 REG.Lang.Debuff.Darkness:SetGerman("Brodelnde Dunkelheit")
 REG.Lang.Debuff.DarknessID1 = "B102AB75ED903C096"
 REG.Lang.Debuff.DarknessID = "BFA88E73C5E9309E8"
 REG.Lang.Debuff.Dominion = KBM.Language:Add("Unholy Dominion") -- DoT that wipes raid if player dies.
+REG.Lang.Debuff.Dominion:SetGerman("Unheilige Herrschaft")
+REG.Lang.Debuff.Dominion:SetFrench("Domination impie")
 REG.Lang.Debuff.DominionID = "BFBFA067BB378ECD3"
 REG.Lang.Debuff.Doom = KBM.Language:Add("Impending Doom")
 REG.Lang.Debuff.Doom:SetFrench("Étreinte de la mort")
@@ -138,6 +153,8 @@ REG.Lang.Debuff.Glimpse:SetFrench("Aperçu des abysses")
 REG.Lang.Debuff.Glimpse:SetGerman("Blick in den Abgrund")
 REG.Lang.Debuff.GlimpseID = "B5900DBFDE7D6B55F"
 REG.Lang.Debuff.Contract = KBM.Language:Add("Unholy Contract")
+REG.Lang.Debuff.Contract:SetGerman("Unheiliger Vertrag")
+REG.Lang.Debuff.Contract:SetFrench("Contrat impie")
 
 -- Messages Dictionary
 REG.Lang.Messages = {}
@@ -151,7 +168,11 @@ REG.Lang.Messages.Will = KBM.Language:Add("Regulos imposes his will upon (%a*)."
 REG.Lang.Messages.Will:SetFrench("Regulos impose sa volonté à (%a*).")
 REG.Lang.Messages.Will:SetGerman("Regulos zwingt (%a*) seinen Willen auf.")
 REG.Lang.Messages.Runic = KBM.Language:Add("Dark Thane Molinar begins to conjure a runic curse.")
+REG.Lang.Messages.Runic:SetGerman("Dunkler Vasall Molinar beginnt, einen Runenfluch auszusprechen.")
+REG.Lang.Messages.Runic:SetFrench("Baron des ténèbres Molinar commence à évoquer une malédiction runique.")
 REG.Lang.Messages.Contract = KBM.Language:Add("Sicaron forces (%a*) into an unholy contract")
+REG.Lang.Messages.Contract:SetGerman("Sicaron zwingt (%a*) in einen unheiligen Pakt")
+REG.Lang.Messages.Contract:SetFrench("Sicaron force (%a*) à passer un contrat impie.")
 
 -- Verbose Dictionary
 REG.Lang.Verbose = {}
@@ -160,7 +181,10 @@ REG.Lang.Verbose.Eradicate:SetFrench("Éradication")
 REG.Lang.Verbose.Eradicate:SetGerman("Auslöschen")
 REG.Lang.Verbose.Stack = KBM.Language:Add("Stack! Meteor time!")
 REG.Lang.Verbose.Stack:SetFrench("Stack! Chûte de Météorite!")
+REG.Lang.Verbose.Stack:SetGerman("Zusammenstehen! Meteor!")
 REG.Lang.Verbose.LookAway = KBM.Language:Add("Look Away!")
+REG.Lang.Verbose.LookAway:SetGerman("Wegschauen!")
+REG.Lang.Verbose.LookAway:SetFrench("Retournez-vous!")
 
 -- Description Dictionary
 REG.Lang.Main = {}
@@ -172,7 +196,11 @@ REG.Descript = REG.Lang.Main.Descript[KBM.Lang]
 -- MechSpy Dictionary
 REG.Lang.MechSpy = {}
 REG.Lang.MechSpy.Buff = KBM.Language:Add("Buffed: Unholy Contract")
+REG.Lang.MechSpy.Buff:SetGerman("Buff: Unheiliger Vertrag")
+REG.Lang.MechSpy.Buff:SetFrench("Buffed: Contrat impie")
 REG.Lang.MechSpy.Debuff = KBM.Language:Add("Debuffed: Unholy Contract")
+REG.Lang.MechSpy.Debuff:SetGerman("Debuff: Unheiliger Vertrag")
+REG.Lang.MechSpy.Debuff:SetFrench("Debuffed: Contrat impie")
 
 -- Assign Boss to Language Specific Dictionary
 REG.Regulos.Name = REG.Lang.Unit.Regulos[KBM.Lang]
