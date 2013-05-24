@@ -20,6 +20,8 @@ Tank-Swap
 Triggers
 * Change: "buff" and "buffRemove" are now linked directly to a supplied BossObj.Name
 * Change: "playerDebuff" will now link directly to "playerBuff" and use a single check during combat. (Performance boost)
+* Change: Removed handling for CastID, PersonalCastID, ChannelID, PersonalChannelID, InterruptID and PersonalInterruptID. (Performance boost, removed due to not possible in API)
+* Change: "cast", "personalCast", "channel", "personalChannel", "interrupt", "personalInterrupt" changed to ModID-BossName-Trigger format to prevent overwrites.
 
 Mechanic Timers
 * New: Added method Timer:Wait([Priority]) - Priority defaults to -1 (and is currently not calculated)

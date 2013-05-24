@@ -124,6 +124,11 @@ REG.Lang.Ability.Vortex:SetFrench("Vortex d'agonie")
 REG.Lang.Ability.Void = KBM.Language:Add("Void Assault")
 REG.Lang.Ability.Void:SetGerman("Leereangriff")
 REG.Lang.Ability.Void:SetFrench("Assaut du Néant")
+REG.Lang.Ability.Hex = KBM.Language:Add("Excruciating Hex")
+REG.Lang.Ability.Hex:SetGerman("Quälende Verhexung")
+REG.Lang.Ability.Hex:SetRussian("Смертоностное проклятие")
+REG.Lang.Ability.Hex:SetFrench("Maléfice accablant")
+REG.Lang.Ability.Hex:SetKorean("고문 마법")
 
 -- Debuff Dictionary
 REG.Lang.Debuff = {}
@@ -220,10 +225,12 @@ REG.Sicaron = {
 	AlertsRef = {},
 	MechRef = {},
 	Settings = {
+		CastBar = KBM.Defaults.CastBar(),
 		AlertsRef = {
 			Enabled = true,
 			Contract = KBM.Defaults.AlertObj.Create("blue"),
 			ContractRed = KBM.Defaults.AlertObj.Create("red"),
+			Hex = KBM.Defaults.AlertObj.Create("purple"),
 		},
 		MechRef = {
 			Enabled = true,
@@ -487,8 +494,8 @@ end
 
 function REG:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		if self.Bosses[uDetails.name] then
-			local BossObj = self.Bosses[uDetails.name]
+		local BossObj = self.UTID[uDetails.type]
+		if BossObj then
 			if not self.EncounterRunning then
 				self.EncounterRunning = true
 				self.StartTime = Inspect.Time.Real()
@@ -496,7 +503,7 @@ function REG:UnitHPCheck(uDetails, unitID)
 				self.TimeElapsed = 0
 				BossObj.Dead = false
 				BossObj.Casting = false
-				if BossObj.Name == self.Regulos.Name then
+				if BossObj.CastBar then
 					BossObj.CastBar:Create(unitID)
 				end
 				self.PhaseObj:Start(self.StartTime)
@@ -514,7 +521,8 @@ function REG:UnitHPCheck(uDetails, unitID)
 			else
 				BossObj.Dead = false
 				BossObj.Casting = false
-				if BossObj.Name == self.Regulos.Name then
+				if BossObj.CastBar then
+					BossObj.CastBar:Remove()
 					BossObj.CastBar:Create(unitID)
 				end
 			end
@@ -532,8 +540,10 @@ function REG:Reset()
 		BossObj.UnitID = nil
 		BossObj.Dead = false
 		BossObj.Casting = false
+		if BossObj.CastBar then
+			BossObj.CastBar:Remove()
+		end
 	end
-	self.Regulos.CastBar:Remove()
 	self.PhaseObj:End(Inspect.Time.Real())
 	self.VoidCounter = 0
 	self.CounterObj = nil
@@ -574,6 +584,7 @@ function REG:Start()
 	self.Sicaron.AlertsRef.ContractRed:NoMenu()
 	self.Sicaron.AlertsRef.ContractRed:Important()
 	self.Sicaron.AlertsRef.Contract:AlertEnd(self.Sicaron.AlertsRef.ContractRed)
+	self.Sicaron.AlertsRef.Hex = KBM.Alert:Create(self.Lang.Ability.Hex[KBM.Lang], nil, false, true, "purple")
 	KBM.Defaults.AlertObj.Assign(self.Sicaron)
 
 	self.Molinar.AlertsRef.LookAway = KBM.Alert:Create(self.Lang.Verbose.LookAway[KBM.Lang], 4, true, true, "red")
@@ -597,6 +608,9 @@ function REG:Start()
 	self.Regulos.Triggers.Eradicate = KBM.Trigger:Create(self.Lang.Messages.Eradicate[KBM.Lang], "notify", self.Regulos)
 	self.Regulos.Triggers.Eradicate:AddAlert(self.Regulos.AlertsRef.Eradicate, true)
 	self.Regulos.Triggers.Eradicate:AddSpy(self.Regulos.MechRef.Eradicate)
+	
+	self.Sicaron.Triggers.Hex = KBM.Trigger:Create(self.Lang.Ability.Hex[KBM.Lang], "cast", self.Sicaron)
+	self.Sicaron.Triggers.Hex:AddAlert(self.Sicaron.AlertsRef.Hex)
 
 	self.Regulos.Triggers.Doom = KBM.Trigger:Create(self.Lang.Debuff.Doom[KBM.Lang], "playerBuff", self.Regulos)
 	self.Regulos.Triggers.Doom:AddSpy(self.Regulos.MechRef.Doom)
@@ -657,6 +671,7 @@ function REG:Start()
 	self.Molinar.Triggers.Runic:AddAlert(self.Molinar.AlertsRef.LookAway)
 	
 	self.Regulos.CastBar = KBM.CastBar:Add(self, self.Regulos)
+	self.Sicaron.CastBar = KBM.CastBar:Add(self, self.Sicaron)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self:DefineMenu()
 end
