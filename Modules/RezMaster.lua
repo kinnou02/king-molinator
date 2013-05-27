@@ -375,18 +375,18 @@ function RM.Rezes:Init()
 								if self.Remaining >= 60 then
 									text = " "..KBM.ConvertTime(self.Remaining).." : "..self.Player
 								else
-									text = " "..self.Remaining.." : "..self.Player
+									if self.Remaining <= 0 then
+										self.Remaining = 0
+										RM.Rezes:Add(self.Player, self.aID, 0, self.Duration)
+									else
+										text = " "..self.Remaining.." : "..self.Player
+									end
 								end
-								self.GUI.CastInfo:SetText(text)
-								self.GUI.Shadow:SetText(text)
+								if text ~= self.GUI.CastInfo:GetText() then
+									self.GUI.CastInfo:SetText(text)
+									self.GUI.Shadow:SetText(text)
+								end
 								self.GUI.TimeBar:SetWidth(self.SetWidth - (self.SetWidth * (self.Remaining/self.Duration)))
-								if self.Remaining <= 0 then
-									self.Remaining = 0
-									self.GUI.CastInfo:SetText(" "..self.Player.." "..KBM.Language.RezMaster.Ready[KBM.Lang])
-									self.GUI.Shadow:SetText(self.GUI.CastInfo:GetText())
-									self.GUI.TimeBar:SetWidth(self.SetWidth)
-									RM.Rezes:Add(self.Player, self.aID, 0, self.Duration)
-								end
 							end
 						end
 					end

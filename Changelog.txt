@@ -47,6 +47,7 @@ Endless Eclipse
 ** New: Added Alert for "Look Away" mechanic for Molinar.
 ** New: Added Alerts and Spies for Sicaron's bubbles.
 ** New: Added Spy for Seething Darkness.
+** New: Added Alert for Excruciating Hex for Sicaron.
 
 Frozen Tempest
 * Galidra

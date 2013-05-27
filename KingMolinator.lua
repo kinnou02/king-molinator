@@ -68,11 +68,11 @@ KBM.Player = {
 	Resume = {},
 }
 KBM.Raid = {}
-KBM.ID = "KingMolinator"
+KBM.ID = AddonData.id
 KBM.ModList = {}
 KBM.Testing = false
 KBM.ValidTime = false
-KBM.IsAlpha = true
+KBM.IsAlpha = false
 KBM.Debug = false
 KBM.Aux = {}
 KBM.TestFilters = {}

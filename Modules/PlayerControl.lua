@@ -9,6 +9,9 @@ local KBM = KBMTable.data
 local LSUIni = Inspect.Addon.Detail("SafesUnitLib")
 local LibSUnit = LSUIni.data
 
+local LibSataIni = Inspect.Addon.Detail("SafesTableLib")
+local LibSata = LibSataIni.data
+
 local PC = {
 	Queue = {},
 }
@@ -204,6 +207,33 @@ function PC.RezRReq(name, failed, message)
 
 end
 
+local MessageQueue = LibSata:Create()
+function PC.MessageQueueHandler(queue, addonID, func, ...)
+	if queue == "message" then
+		if addonID == KBM.ID then
+			MessageQueue:Add({funcCall = func, args = ...})
+		end
+	end
+end
+
+function PC.MessageQueueDispatch(handle, queue)
+	if queue == "message" then
+		local qState = Inspect.Queue.Status(queue)
+		if qState ~= false then
+			if type(qState) == "number" then
+				if MessageQueue._count > 0 then
+					local queueItem, data = MessageQueue:RemoveFirst()
+					repeat
+						data.funcCall(data.args)
+						queueItem, data = MessageQueue:RemoveFirst()
+					until not queueItem
+				end
+			end
+		end
+	end
+end
+
+
 function PC.GroupJoin(handle, UnitObj, Spec)
 	if LibSUnit.Raid.Grouped then
 		if UnitObj.Name ~= LibSUnit.Player.Name then
@@ -255,7 +285,6 @@ function PC:Start()
 	Command.Event.Attach(Event.Ability.New.Remove, PC.AbilityRemove, "Ability Removed")
 	Command.Event.Attach(Event.Ability.New.Add, PC.AbilityAdd, "Ability Add")
 	Command.Event.Attach(Event.Ability.New.Cooldown.Begin, PC.AbilityCooldown, "Ability Cooldown")
-	Command.Event.Attach(Event.Ability.New.Cooldown.End, PC.AbilityCooldown, "Ability Cooldown")
 	Command.Event.Attach(Event.SafesUnitLib.Raid.Join, PC.PlayerJoin, "Player Join")
 	Command.Event.Attach(Event.SafesUnitLib.Raid.Leave, PC.PlayerLeave, "Player Leave")
 	Command.Event.Attach(Event.SafesUnitLib.Raid.Member.Join, PC.GroupJoin, "Group Member Join")
@@ -263,4 +292,6 @@ function PC:Start()
 	Command.Event.Attach(Event.SafesUnitLib.Unit.Detail.Calling, PC.CallingChange, "Group member calling change")
 	Command.Event.Attach(Event.SafesUnitLib.Unit.Detail.Offline, PC.PlayerOffline, "Player Offline")
 	Command.Event.Attach(Command.Slash.Register("kbmability"), PC.SlashAbility, "Player Ability List")
+	Command.Event.Attach(Event.Queue.Status, PC.MessageQueueDispatch, "Queue Dispatch Handler")
+	Command.Queue.Handler(PC.MessageQueueHandler)
 end
