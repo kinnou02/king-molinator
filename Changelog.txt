@@ -1,4 +1,10 @@
-﻿v1.4.3
+﻿v1.4.4
+
+Castbar Triggers
+* Fixed: Error 1682 - nil TriggerObj
+
+----
+v1.4.3
 
 * Conversion of KBM Core events over to new Rift Event API.
 * Note: KBM Options Menu will be converted over soon, although it is also being rewritten from the ground up. (See LibSGui)

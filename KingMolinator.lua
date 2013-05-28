@@ -6311,11 +6311,13 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 									if KBM.Trigger.PersonalInterrupt[KBM.CurrentMod.ID] then
 										if KBM.Trigger.PersonalInterrupt[KBM.CurrentMod.ID][self.Boss.Name] then
 											local TriggerObj = KBM.Trigger.PersonalInterrupt[KBM.CurrentMod.ID][self.Boss.Name][self.CastObject.abilityName]
-											if self.UnitID then
-												local playerTarget = Inspect.Unit.Lookup("player.target")
-												local playerFocus = Inspect.Unit.Lookup("focus")
-												if self.UnitID == playerTarget or self.UnitID == playerFocus then
-													KBM.Trigger.Queue:Add(TriggerObj, self.UnitID, "interruptTarget", self.CastObject.remaining)
+											if TriggerObj then
+												if self.UnitID then
+													local playerTarget = Inspect.Unit.Lookup("player.target")
+													local playerFocus = Inspect.Unit.Lookup("focus")
+													if self.UnitID == playerTarget or self.UnitID == playerFocus then
+														KBM.Trigger.Queue:Add(TriggerObj, self.UnitID, "interruptTarget", self.CastObject.remaining)
+													end
 												end
 											end
 										end
