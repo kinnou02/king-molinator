@@ -164,6 +164,8 @@ function PC.PlayerJoin()
 	--print("PC -- You Join")
 	KBM.RezMaster.Rezes.Tracked[LibSUnit.Player.Name] = {
 		UnitID = LibSUnit.Player.UnitID,
+		UnitObj = LibSUnit.Player,
+		Class = LibSUnit.Player.Calling,
 		Timers = {},
 	}
 	if LibSUnit.Player.Calling then
@@ -186,6 +188,8 @@ function PC.CallingChange(handle, UnitObj)
 		if UnitObj.Calling == "mage" or UnitObj.Calling == "cleric" then
 			KBM.RezMaster.Rezes.Tracked[UnitObj.Name] = {
 				UnitID = UnitObj.UnitID,
+				UnitObj = UnitObj,
+				Class = UnitObj.Calling,
 				Timers = {},
 			}
 			Command.Message.Send(UnitObj.Name, "KBMRezReq", "C", function(failed, message) PC.RezMReq(UnitObj.Name, failed, message) end)
@@ -233,26 +237,41 @@ function PC.MessageQueueDispatch(handle, queue)
 	end
 end
 
+function PC.GroupDeath(handle, UnitObj)
+	if KBM.RezMaster.Rezes.Tracked[UnitObj.Name] then
+		for aID, Timer in pairs(KBM.RezMaster.Rezes.Tracked[UnitObj.Name].Timers) do
+			Timer:SetDeath(true)
+		end
+	end
+end	
+
+function PC.GroupRes(handle, UnitObj)
+	if KBM.RezMaster.Rezes.Tracked[UnitObj.Name] then
+		for aID, Timer in pairs(KBM.RezMaster.Rezes.Tracked[UnitObj.Name].Timers) do
+			Timer:SetDeath(false)
+		end
+	end
+end
 
 function PC.GroupJoin(handle, UnitObj, Spec)
-	if LibSUnit.Raid.Grouped then
-		if UnitObj.Name ~= LibSUnit.Player.Name then
-			if not KBM.RezMaster.Rezes.Tracked[UnitObj.Name] then
-				if not UnitObj.Offline then
-					if UnitObj.Calling == "mage" or UnitObj.Calling == "cleric" then
-						KBM.RezMaster.Rezes.Tracked[UnitObj.Name] = {
-							UnitID = UnitObj.UnitID,
-							Timers = {},
-						}
-						Command.Message.Send(UnitObj.Name, "KBMRezReq", "C", function(failed, message) PC.RezMReq(UnitObj.Name, failed, message) end)
-					end
+	if UnitObj.Name ~= LibSUnit.Player.Name then
+		if not KBM.RezMaster.Rezes.Tracked[UnitObj.Name] then
+			if not UnitObj.Offline then
+				if UnitObj.Calling == "mage" or UnitObj.Calling == "cleric" then
+					KBM.RezMaster.Rezes.Tracked[UnitObj.Name] = {
+						UnitID = UnitObj.UnitID,
+						UnitObj = UnitObj,
+						Class = UnitObj.Calling,
+						Timers = {},
+					}
+					Command.Message.Send(UnitObj.Name, "KBMRezReq", "C", function(failed, message) PC.RezMReq(UnitObj.Name, failed, message) end)
 				end
-			else
-				if UnitObj.Calling then
-					if KBM.RezMaster.Rezes.Tracked[UnitObj.Name].Class ~= UnitObj.Calling then
-						for aID, Timer in pairs(KBM.RezMaster.Rezes.Tracked[UnitObj.Name].Timers) do
-							KBM.RezMaster.Rezes:Add(UnitObj.Name, aID, Timer.Remaining, Timer.Duration)
-						end
+			end
+		else
+			if UnitObj.Calling then
+				if KBM.RezMaster.Rezes.Tracked[UnitObj.Name].Class ~= UnitObj.Calling then
+					for aID, Timer in pairs(KBM.RezMaster.Rezes.Tracked[UnitObj.Name].Timers) do
+						KBM.RezMaster.Rezes:Add(UnitObj.Name, aID, Timer.Remaining, Timer.Duration)
 					end
 				end
 			end
@@ -261,9 +280,7 @@ function PC.GroupJoin(handle, UnitObj, Spec)
 end
 
 function PC.GroupLeave(handle, UnitObj, Spec)
-	if LibSUnit.Raid.Grouped then
-		KBM.RezMaster.Rezes:Clear(UnitObj.Name)
-	end
+	KBM.RezMaster.Rezes:Clear(UnitObj.Name)
 end
 
 function PC.PlayerOffline(handle, Units)
@@ -289,6 +306,8 @@ function PC:Start()
 	Command.Event.Attach(Event.SafesUnitLib.Raid.Leave, PC.PlayerLeave, "Player Leave")
 	Command.Event.Attach(Event.SafesUnitLib.Raid.Member.Join, PC.GroupJoin, "Group Member Join")
 	Command.Event.Attach(Event.SafesUnitLib.Raid.Member.Leave, PC.GroupLeave, "Group Member Leave")
+	Command.Event.Attach(Event.SafesUnitLib.Raid.Death, PC.GroupDeath, "Group Member Died")
+	Command.Event.Attach(Event.SafesUnitLib.Raid.Res, PC.GroupRes, "Group Member Res")
 	Command.Event.Attach(Event.SafesUnitLib.Unit.Detail.Calling, PC.CallingChange, "Group member calling change")
 	Command.Event.Attach(Event.SafesUnitLib.Unit.Detail.Offline, PC.PlayerOffline, "Player Offline")
 	Command.Event.Attach(Command.Slash.Register("kbmability"), PC.SlashAbility, "Player Ability List")

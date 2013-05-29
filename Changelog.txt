@@ -1,4 +1,20 @@
-﻿v1.4.4
+﻿v1.4.5
+
+Res Master
+* Fixed: Issues with Res messages only being sent to group members, and never to raid members.
+* Fixed: Vanishing player names when coming off cooldown.
+* New: Dead Raid members with battle resses are now displayed with a gray bar.
+
+LibSUnit
+* Fixed: Once again tracks Party/Raid group modes correctly.
+* New: Added event - UnitObj = Event.SafesUnitLib.Raid.Death
+
+Endless Eclipse
+* Kain
+** New: Added Mechanic Spy for Foul Blood.
+
+----
+v1.4.4
 
 Castbar Triggers
 * Fixed: Error 1682 - nil TriggerObj

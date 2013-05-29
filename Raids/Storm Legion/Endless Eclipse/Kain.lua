@@ -108,6 +108,7 @@ KR.Kain = {
 		MechRef = {
 			Enabled = true,
 			Voracious = KBM.Defaults.MechObj.Create("purple"),
+			Foul = KBM.Defaults.MechObj.Create("red"),			
 		},
 	}
 }
@@ -400,6 +401,7 @@ function KR:Start()
 	KBM.Defaults.MechObj.Assign(self.Baziel)
 
 	self.Kain.MechRef.Voracious = KBM.MechSpy:Add(self.Lang.Debuff.Voracious[KBM.Lang], nil, "playerIDBuff", self.Kain)
+	self.Kain.MechRef.Foul = KBM.MechSpy:Add(self.Lang.Ability.Foul[KBM.Lang], nil, "playerBuff", self.Kain)
 	KBM.Defaults.MechObj.Assign(self.Kain)
 	
 	-- Assign Alerts and Timers to Triggers
@@ -413,6 +415,10 @@ function KR:Start()
 
 	self.Kain.Triggers.Foul = KBM.Trigger:Create(self.Lang.Ability.Foul[KBM.Lang], "cast", self.Kain)
 	self.Kain.Triggers.Foul:AddAlert(self.Kain.AlertsRef.Foul)
+	self.Kain.Triggers.FoulDebuff = KBM.Trigger:Create(self.Lang.Ability.Foul[KBM.Lang], "playerBuff", self.Kain)
+	self.Kain.Triggers.FoulDebuff:AddSpy(self.Kain.MechRef.Foul)
+	self.Kain.Triggers.FoulDebuffRem = KBM.Trigger:Create(self.Lang.Ability.Foul[KBM.Lang], "playerBuffRemove", self.Kain)
+	self.Kain.Triggers.FoulDebuffRem:AddStop(self.Kain.MechRef.Foul)
 	self.Kain.Triggers.Voracious = KBM.Trigger:Create(self.Lang.Debuff.VoraciousID, "playerIDBuff", self.Kain)
 	self.Kain.Triggers.Voracious:AddSpy(self.Kain.MechRef.Voracious)
 	self.Kain.Triggers.VoraciousRem = KBM.Trigger:Create(self.Lang.Debuff.VoraciousID, "playerIDBuffRemove", self.Kain)

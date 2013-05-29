@@ -216,7 +216,6 @@ function RM.GUI:Init()
 		end
 	end
 	self:ApplySettings()
-
 end
 
 function RM.Rezes:Init()
@@ -242,7 +241,8 @@ function RM.Rezes:Init()
 					Timer.GUI.Background:SetHeight(Anchor:GetHeight())
 					Timer.GUI.CastInfo:SetFontSize(KBM.Constant.RezMaster.TextSize * RM.GUI.Settings.tScale)
 					Timer.GUI.Shadow:SetFontSize(Timer.GUI.CastInfo:GetFontSize())
-					KBM.LoadTexture(Timer.GUI.Icon, "Rift", aDetails.icon)
+					--KBM.LoadTexture(Timer.GUI.Icon, "Rift", aDetails.icon)
+					Timer.GUI.Icon:SetTexture("Rift", aDetails.icon)
 					Timer.SetWidth = Timer.GUI.Background:GetWidth() - Timer.GUI.Background:GetHeight()
 					local UID = self.Tracked[Name].UnitID
 					Timer.Class = ""
@@ -259,6 +259,7 @@ function RM.Rezes:Init()
 					Timer.TimeStart = Inspect.Time.Real() - (Timer.Duration - Timer.Remaining)
 					Timer.Player = Name
 					Timer.Name = aDetails.name
+					Timer.UnitObj = self.Tracked[Name].UnitObj
 					self.Tracked[Name].Class = Timer.Class
 										
 					--if KBM.MechTimer.Settings.Shadow then
@@ -366,6 +367,16 @@ function RM.Rezes:Init()
 						end
 					end
 					
+					function Timer:SetDeath(bool)
+						if bool then
+							self.GUI.TimeBar:SetBackgroundColor(0.5, 0.5, 0.5, 0.22)
+							self.GUI.Icon:SetAlpha(0.33)
+						else
+							self:SetClass(self.Class)
+							self.GUI.Icon:SetAlpha(1)
+						end
+					end
+					
 					function Timer:Update(CurrentTime, Force)
 						local text = ""
 						CurrentTime = CurrentTime or Inspect.Time.Real()
@@ -378,6 +389,7 @@ function RM.Rezes:Init()
 									if self.Remaining <= 0 then
 										self.Remaining = 0
 										RM.Rezes:Add(self.Player, self.aID, 0, self.Duration)
+										return
 									else
 										text = " "..self.Remaining.." : "..self.Player
 									end
@@ -428,7 +440,11 @@ function RM.Rezes:Init()
 						Timer.Waiting = true
 					end
 					
-					Timer:SetClass(Timer.Class)
+					if Timer.UnitObj then
+						Timer:SetDeath(Timer.UnitObj.Dead)
+					else
+						Timer:SetClass(Timer.Class)
+					end
 					Timer:Update(Inspect.Time.Real())
 				end	
 			end

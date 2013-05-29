@@ -69,6 +69,7 @@ LibSUnit.Raid = {
 		[2] = 0,
 		[3] = 0,
 		[4] = 0,
+		Total = 0,
 	},
 	Grouped = false,
 	Combat = false,
@@ -181,6 +182,7 @@ LibSUnit._internal = {
 			},
 			Wipe = Utility.Event.Create(AddonIni.id, "Raid.Wipe"),
 			Res = Utility.Event.Create(AddonIni.id, "Raid.Res"),
+			Death = Utility.Event.Create(AddonIni.id, "Raid.Death"),
 			Mode = Utility.Event.Create(AddonIni.id, "Raid.Mode"),
 		},
 		System = {
@@ -923,7 +925,7 @@ end
 
 -- Raid Management
 _lsu.Raid = {}
-function _lsu.Raid.ManageDeath(UnitObj, Dead)
+function _lsu.Raid.ManageDeath(UnitObj, Dead, sourceObj)
 	--print("Checking Death State for: "..UnitObj.Name)
 	if UnitObj.Loaded then
 		if UnitObj.CurrentKey ~= "Partial" then
@@ -935,6 +937,7 @@ function _lsu.Raid.ManageDeath(UnitObj, Dead)
 						if UnitObj.Combat then
 							_lsu.Unit.Combat(Event.Unit.Detail.Combat, {[UnitObj.UnitID] = false})
 						end
+						_lsu.Event.Raid.Death(UnitObj)
 						if LibSUnit.Raid.DeadTotal == LibSUnit.Raid.Members then
 							if not LibSUnit.Raid.Wiped then
 								LibSUnit.Raid.Wiped = true
@@ -950,7 +953,7 @@ function _lsu.Raid.ManageDeath(UnitObj, Dead)
 					--	print("<<< "..UnitObj.Name.." has is now alive")
 						LibSUnit.Raid.DeadTotal = LibSUnit.Raid.DeadTotal - 1
 						LibSUnit.Raid.Wiped = false
-						_lsu.Event.Raid.Res(targetObj, sourceObj)
+						_lsu.Event.Raid.Res(UnitObj, sourceObj)
 						if _lsu.Settings.Debug then
 							_lsu.Debug:UpdateDeath()
 						end
@@ -959,6 +962,31 @@ function _lsu.Raid.ManageDeath(UnitObj, Dead)
 			end
 			UnitObj.Dead = Dead	
 		end
+	end
+end
+
+function _lsu.Raid.GroupCheck(newGroup, oldGroup)
+	if newGroup then
+		LibSUnit.Raid.Group[newGroup] = LibSUnit.Raid.Group[newGroup] + 1
+		if LibSUnit.Raid.Group[newGroup] == 1 then
+			LibSUnit.Raid.Group.Total = LibSUnit.Raid.Group.Total + 1
+		end
+	end
+	if oldGroup then
+		LibSUnit.Raid.Group[oldGroup] = LibSUnit.Raid.Group[oldGroup] - 1
+		if LibSUnit.Raid.Group[oldGroup] == 0 then
+			LibSUnit.Raid.Group.Total = LibSUnit.Raid.Group.Total - 1
+		end
+	end
+	if LibSUnit.Raid.Group.Total <= 1 and LibSUnit.Raid.Mode ~= "party" then
+		LibSUnit.Raid.Mode = "party"
+		_lsu.Event.Raid.Mode()
+	elseif LibSUnit.Raid.Group.Total > 1 and LibSUnit.Raid.Mode ~= "raid" then
+		LibSUnit.Raid.Mode = "raid"
+		_lsu.Event.Raid.Mode()
+	end
+	if _lsu.Settings.Debug then
+		_lsu.Debug:UpdateMode()
 	end
 end
 
@@ -1073,17 +1101,19 @@ function _lsu.Raid.Check(UnitID, Spec)
 		local UnitObj = LibSUnit.Lookup.UID[UID]
 		local newSpec = SpecChanges.New
 		local oldSpec = SpecChanges.Old
+		local newGroup = LibSUnit.Raid.Lookup[newSpec].Group
+		local oldGroup = nil
 		LibSUnit.Raid.Lookup[newSpec].Unit = UnitObj
 		LibSUnit.Raid.Lookup[newSpec].UID = UID
-		LibSUnit.Raid.Group[LibSUnit.Raid.Lookup[newSpec].Group] = LibSUnit.Raid.Group[LibSUnit.Raid.Lookup[newSpec].Group] + 1
 		LibSUnit.Raid.UID[UnitObj.UnitID] = UnitObj
 		UnitObj.RaidLoc = newSpec
 		if not SpecChanged[oldSpec] then
 			--print("Old Spec Cleared: "..oldSpec)
 			LibSUnit.Raid.Lookup[oldSpec].Unit = nil
 			LibSUnit.Raid.Lookup[oldSpec].UID = false
-			LibSUnit.Raid.Group[LibSUnit.Raid.Lookup[oldSpec].Group] = LibSUnit.Raid.Group[LibSUnit.Raid.Lookup[oldSpec].Group] - 1
+			oldGroup = LibSUnit.Raid.Lookup[oldSpec].Group
 		end
+		_lsu.Raid.GroupCheck(newGroup, oldGroup)
 		-- print(UnitObj.Name.." moved to "..newSpec.." from "..oldSpec)
 		_lsu.Event.Raid.Member.Move(UnitObj, oldSpec, newSpec)
 	end
@@ -1102,7 +1132,7 @@ function _lsu.Raid.Check(UnitID, Spec)
 			LibSUnit.Raid.Lookup[Spec].Unit = nil
 			LibSUnit.Raid.Lookup[Spec].UID = false
 			LibSUnit.Raid.Members = LibSUnit.Raid.Members - 1
-			LibSUnit.Raid.Group[LibSUnit.Raid.Lookup[Spec].Group] = LibSUnit.Raid.Group[LibSUnit.Raid.Lookup[Spec].Group] - 1
+			local oldGroup = LibSUnit.Raid.Lookup[Spec].Group
 			LibSUnit.Raid.UID[UnitObj.UnitID] = nil
 			UnitObj.RaidLoc = nil
 			-- print(UnitObj.Name.." left the Raid")
@@ -1110,6 +1140,7 @@ function _lsu.Raid.Check(UnitID, Spec)
 				LibSUnit.Raid.DeadTotal = LibSUnit.Raid.DeadTotal - 1
 				--print(UnitObj.Name.." has left the Raid and removed death count")
 			end
+			_lsu.Raid.GroupCheck(nil, oldGroup)
 			_lsu.Event.Raid.Member.Leave(UnitObj, Spec)
 			if LibSUnit.Raid.Members == 0 then
 				LibSUnit.Raid.Grouped = false
@@ -1136,10 +1167,10 @@ function _lsu.Raid.Check(UnitID, Spec)
 	for UID, Spec in pairs(UIDChanged.Joined) do
 		if not LibSUnit.Raid.UID[UID] then
 			local UnitObj = LibSUnit.Lookup.UID[UID]
+			local newGroup = LibSUnit.Raid.Lookup[Spec].Group
 			LibSUnit.Raid.Members = LibSUnit.Raid.Members + 1
 			LibSUnit.Raid.Lookup[Spec].Unit = UnitObj
 			LibSUnit.Raid.Lookup[Spec].UID = UID
-			LibSUnit.Raid.Group[LibSUnit.Raid.Lookup[Spec].Group] = LibSUnit.Raid.Group[LibSUnit.Raid.Lookup[Spec].Group] + 1
 			LibSUnit.Raid.UID[UID] = UnitObj
 			UnitObj.RaidLoc = Spec
 			if LibSUnit.Raid.Members == 1 then
@@ -1148,6 +1179,7 @@ function _lsu.Raid.Check(UnitID, Spec)
 				_lsu.Event.Raid.Join()
 			end
 			-- print("New Player Joined Raid: "..UnitObj.Name)
+			_lsu.Raid.GroupCheck(newGroup, nil)
 			_lsu.Event.Raid.Member.Join(UnitObj, Spec)
 			if UnitObj.Combat then
 				LibSUnit.Raid.CombatTotal = LibSUnit.Raid.CombatTotal + 1
@@ -1176,6 +1208,24 @@ function _lsu.Raid.Check(UnitID, Spec)
 			end
 		end
 	end
+	
+	-- local Groups = 0
+	-- for Group, Value in pairs(LibSUnit.Raid.Group) do
+		-- if Value > 0 then
+			-- Groups = Groups + 1
+		-- end
+	-- end
+	-- if Groups > 1 then
+		-- if LibSUnit.Raid.Mode ~= "raid" then
+			-- LibSUnit.Raid.Mode = "raid"
+			-- _lsu.Event.Raid.Mode()
+		-- end
+	-- else
+		-- if LibSUnit.Raid.Mode ~= "party" then
+			-- LibSUnit.Raid.Mode = "party"
+			-- _lsu.Event.Raid.Mode()
+		-- end
+	-- end
 	
 	-- print("Total Changes found: "..totalchanges)
 	-- print("Player Moved: "..movedCount)
@@ -1226,7 +1276,12 @@ function _lsu.Combat.Heal(handle, info)
 	sourceObj = _stdHandler(info.caster, _idleSeg)
 	info.targetObj = targetObj
 	info.sourceObj = sourceObj
-	_lsu.Event.Combat.Heal(info)
+	if targetObj then
+		if targetObj.Dead then
+			_lsu.Raid.ManageDeath(targetObj, false, sourceObj)
+		end
+		_lsu.Event.Combat.Heal(info)
+	end
 end
 
 function _lsu.Combat.Immune(handle, info)
@@ -1248,7 +1303,7 @@ function _lsu.Combat.Death(handle, info)
 	info.targetObj = targetObj
 	if targetObj then
 		if not targetObj.Dead then
-			_lsu.Raid.ManageDeath(targetObj, true)
+			_lsu.Raid.ManageDeath(targetObj, true, sourceObj)
 		end
 		_lsu.Event.Combat.Death(info)
 	end
@@ -1507,7 +1562,6 @@ function _lsu.Debug:Init()
 	self.GUI.Header:SetVisible(false)
 	self.GUI.Header:SetWidth(self.Constant.Width)
 	self.GUI.Header:SetHeight(self.Constant.Height)
-	--KBM.LoadTexture(self.GUI.Header, "KingMolinator", "Media/BarTexture.png")
 	self.GUI.Header:SetBackgroundColor(0.5, 0, 0, 0.75)
 	if not _lsu.Settings.Tracker.x then
 		self.GUI.Header:SetPoint("CENTER", UIParent, "CENTER")
@@ -1550,10 +1604,8 @@ function _lsu.Debug:Init()
 	self:CreateTrack("Available", 0, 0.9, 0)
 	self:CreateTrack("Total States", 1, 1, 1)
 	self:CreateTrack("Reserved", 1, 0.7, 0.7)
-	--self:CreateTrack("Players", 0.7, 1, 0.7)
-	--self:CreateTrack("NPCs", 0.7, 0.7, 1)
-	--self:CreateTrack("Total Groups", 1, 1, 1)
 	self:CreateTrack("Raid Size", 0, 0.9, 0)
+	self:CreateTrack("Raid Mode", 0, 0.9, 0)
 	self:CreateTrack("In Combat", 0, 0.9, 0)
 	self:CreateTrack("Dead", 0, 0.9, 0)
 	self:CreateTrack("Wiped", 0.9, 0.9, 0)
@@ -1563,10 +1615,8 @@ function _lsu.Debug:Init()
 		self.GUI.Trackers["Available"]:UpdateDisplay(LibSUnit.Total.Avail)		
 		self.GUI.Trackers["Total States"]:UpdateDisplay(LibSUnit.Total.Idle + LibSUnit.Total.Partial + LibSUnit.Total.Avail - LibSUnit.Total.Reserved)
 		self.GUI.Trackers["Reserved"]:UpdateDisplay(LibSUnit.Total.Reserved)
-		--self.GUI.Trackers["Players"]:UpdateDisplay(KBM.Unit.Player.Count)
-		--self.GUI.Trackers["NPCs"]:UpdateDisplay(KBM.Unit.NPC.Count)		
-		--self.GUI.Trackers["Total Groups"]:UpdateDisplay(KBM.Unit.Unknown.Count + KBM.Unit.Player.Count + KBM.Unit.NPC.Count)
 		self.GUI.Trackers["Raid Size"]:UpdateDisplay(tostring(LibSUnit.Raid.Members or 0))
+		self:UpdateMode()
 		self:UpdateCombat()
 		self:UpdateDeath()
 	end
@@ -1576,5 +1626,8 @@ function _lsu.Debug:Init()
 	function self:UpdateDeath()
 		self.GUI.Trackers["Dead"]:UpdateDisplay(tostring(LibSUnit.Raid.DeadTotal or 0))
 		self.GUI.Trackers["Wiped"]:UpdateDisplay(tostring(LibSUnit.Raid.Wiped))
+	end
+	function self:UpdateMode()
+		self.GUI.Trackers["Raid Mode"]:UpdateDisplay(LibSUnit.Raid.Mode)
 	end
 end
