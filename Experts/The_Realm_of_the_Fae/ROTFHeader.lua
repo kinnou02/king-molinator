@@ -15,7 +15,8 @@ local MOD = {
 	Name = "The Realm of the Fae",
 	Type = "Expert",
 	ID = "The_Realm_of_the_Fae",
-	Object = "MOD",	
+	Object = "MOD",
+	Rift = "Rift",
 }
 
 -- Link Mods

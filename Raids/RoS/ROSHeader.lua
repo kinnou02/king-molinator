@@ -22,6 +22,7 @@ local ROS = {
 	Type = "Raid",
 	ID = "ROS",
 	Object = "ROS",
+	Rift = "Rift",
 }
 
 KBM.RegisterMod("River of Souls", ROS)

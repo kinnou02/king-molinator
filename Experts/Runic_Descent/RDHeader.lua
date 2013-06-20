@@ -16,6 +16,7 @@ local MOD = {
 	Type = "Expert",
 	ID = "Runic_Descent",
 	Object = "MOD",
+	Rift = "Rift",
 }
 
 -- Link Mods

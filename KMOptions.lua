@@ -10,54 +10,6 @@ local LibSGui = Inspect.Addon.Detail("SafesGUILib").data
 
 KBM.MenuIDList = {}
 
-function KBM.SetBossTimers(Boss, bool)
-	if bool then
-		for TimerID, TimerObj in pairs(Boss.TimersRef) do
-			TimerObj.Enabled = TimerObj.Settings.Enabled
-		end
-	else
-		for TimerID, TimerObj in pairs(Boss.TimersRef) do
-			TimerObj.Enabled = false
-		end
-	end
-end
-
-function KBM.SetBossSpies(Boss, bool)
-	if bool then
-		for MechID, MechObj in pairs(Boss.MechRef) do
-			MechObj.Enabled = MechObj.Settings.Enabled
-		end
-	else
-		for MechID, MechObj in pairs(Boss.MechRef) do
-			MechObj.Enabled = false
-		end
-	end
-end
-
-function KBM.SetBossAlerts(Boss, bool)
-	if bool then
-		for AlertID, AlertObj in pairs(Boss.AlertsRef) do
-			AlertObj.Enabled = AlertObj.Settings.Enabled
-		end
-	else
-		for AlertID, AlertObj in pairs(Boss.AlertsRef) do
-			AlertObj.Enabled = false
-		end
-	end
-end
-
-function KBM.SetBossChat(Boss, bool)
-	if bool then
-		for ChatID, ChatObj in pairs(Boss.ChatRef) do
-			ChatObj.Enabled = ChatObj.Settings.Enabled
-		end
-	else
-		for ChatID, ChatObj in pairs(Boss.ChatRef) do
-			ChatObj.Enabled = false
-		end
-	end
-end
-
 function KBM.Scroller:Create(Type, Size, Parent, Callback)
 
 	local ScrollerObj = {}
@@ -767,61 +719,6 @@ function KBM.InitTabs()
 	end
 	
 	KBM.Tabs.GUI.Page:SetVisible(false)
-end
-
-function KBM.newInitOptions()
-	KBM.MainWin = {}
-	KBM.MainWin.Window, KBM.MainWin.Content = LibSGui.Window:Create(KBM.Language.Options.Title[KBM.Lang], KBM.Context)
-	KBM.MainWin.Menu = {}
-	
-	function KBM.MainWin:GetVisible()
-		return self.Window:GetVisible()
-	end
-	
-	function KBM.MainWin:SetVisible(bool)
-		self.Window:SetVisible(bool)
-	end
-	
-	function KBM.MainWin.Menu:CreateHeader(Title, TreeViewID, ID)
-		local Header = {
-			ID = ID,
-			Title = Title,
-		}
-		
-		function Header:CreatePage(Title, Callback, ID)
-			local Page = {
-				Parent = self,
-				Callback = Callback,
-				ID = ID,
-			}
-				
-			return Page
-		end
-		
-		return Header
-	end
-	
-	function KBM.MainWin.Menu:CreateInstance(Title, Enabled, Callback, ID)
-		local Instance = {
-			ID = ID,
-			Encounter = {},
-			Callback = Callback,
-		}
-		
-		function Instance:CreateEncounter(BossObj, Enabled)
-			local Encounter = {
-				ID = BossObj.ID,
-				Instance = self,
-				Tabs = {},
-			}
-		
-			return Encounter
-		end
-		
-		return Instance
-	end
-	
-	-- KBM.oldInitOptions()
 end
 
 function KBM.InitOptions()
@@ -1743,113 +1640,115 @@ function KBM.InitOptions()
 	end
 	
 	function KBM.MainWin.Options.Close()
-		KBM.MainWin:SetVisible(false)
-		if KBM.MainWin.CurrentPage then
-			if KBM.MainWin.CurrentPage.Type == "encounter" then
-				KBM.MainWin.CurrentPage:ClearPage()
-			else
-				if KBM.MainWin.CurrentPage.Link.Close then
-					KBM.MainWin.CurrentPage.Link:Close()
-				end
-			end
-		end	
-		KBM.CastBar.Anchor:Hide()
-		if KBM.Player.CastBar.Settings.CastBar.Visible then
-			KBM.Player.CastBar.CastObj:Hide()
-		end
-		if KBM.Encounter then
-			if KBM.CurrentMod.Settings.Alerts then
-				if KBM.CurrentMod.Settings.Alerts.Override then
-					KBM.Alert.Settings = KBM.CurrentMod.Settings.Alerts
-				else
-					KBM.Alert.Settings = KBM.Options.Alerts
-				end
-			end
-			if KBM.CurrentMod.Settings.MechTimer then
-				if KBM.CurrentMod.Settings.MechTimer.Override then
-					KBM.MechTimer.Settings = KBM.CurrentMod.Settings.MechTimer
-				else
-					KBM.MechTimer.Settings = KBM.Options.MechTimer
-				end
-			end
-			if KBM.CurrentMod.Settings.PhaseMon then
-				if KBM.CurrentMod.Settings.PhaseMon.Override then
-					KBM.PhaseMonitor.Settings = KBM.CurrentMod.Settings.PhaseMon
-				else
-					KBM.PhaseMonitor.Settings = KBM.Options.PhaseMon
-				end
-			end
-			if KBM.CurrentMod.Settings.EncTimer then
-				if KBM.CurrentMod.Settings.EncTimer.Override then
-					KBM.EncTimer.Settings = KBM.CurrentMod.Settings.EncTimer
-				else
-					KBM.EncTimer.Settings = KBM.Options.EncTimer
-				end
-			end
-			if KBM.CurrentMod.Settings.CastBar then
-				for BossName, BossObj in pairs(KBM.CurrentMod.Bosses) do
-					if BossObj.CastBar then
-						BossObj.CastBar:Hide()
-					end
-				end
-			end
-		end
-		KBM.Alert:ApplySettings()
-		KBM.MechTimer:ApplySettings()
-		KBM.PhaseMonitor:ApplySettings()
-		KBM.EncTimer:ApplySettings()
-		KBM.MechSpy:ApplySettings()
-		KBM.RezMaster.GUI:ApplySettings()
-		KBM.TankSwap.Anchor:SetVisible(false)
-		KBM.TankSwap.Anchor.Drag:SetVisible(false)
-		if not KBM.PercentageMon.Active then
-			KBM.PercentageMon.GUI.Cradle:SetVisible(false)
-		end
-		if KBM.PlugIn.Count > 0 then
-			for ID, PlugIn in pairs(KBM.PlugIn.List) do
-				if PlugIn.MenuClose then
-					PlugIn:MenuClose()
-				end
-			end
-		end
+		KBM.Menu:Close()
+		-- KBM.MainWin:SetVisible(false)
+		-- if KBM.MainWin.CurrentPage then
+			-- if KBM.MainWin.CurrentPage.Type == "encounter" then
+				-- KBM.MainWin.CurrentPage:ClearPage()
+			-- else
+				-- if KBM.MainWin.CurrentPage.Link.Close then
+					-- KBM.MainWin.CurrentPage.Link:Close()
+				-- end
+			-- end
+		-- end	
+		-- KBM.CastBar.Anchor:Hide()
+		-- if KBM.Player.CastBar.Settings.CastBar.Visible then
+			-- KBM.Player.CastBar.CastObj:Hide()
+		-- end
+		-- if KBM.Encounter then
+			-- if KBM.CurrentMod.Settings.Alerts then
+				-- if KBM.CurrentMod.Settings.Alerts.Override then
+					-- KBM.Alert.Settings = KBM.CurrentMod.Settings.Alerts
+				-- else
+					-- KBM.Alert.Settings = KBM.Options.Alerts
+				-- end
+			-- end
+			-- if KBM.CurrentMod.Settings.MechTimer then
+				-- if KBM.CurrentMod.Settings.MechTimer.Override then
+					-- KBM.MechTimer.Settings = KBM.CurrentMod.Settings.MechTimer
+				-- else
+					-- KBM.MechTimer.Settings = KBM.Options.MechTimer
+				-- end
+			-- end
+			-- if KBM.CurrentMod.Settings.PhaseMon then
+				-- if KBM.CurrentMod.Settings.PhaseMon.Override then
+					-- KBM.PhaseMonitor.Settings = KBM.CurrentMod.Settings.PhaseMon
+				-- else
+					-- KBM.PhaseMonitor.Settings = KBM.Options.PhaseMon
+				-- end
+			-- end
+			-- if KBM.CurrentMod.Settings.EncTimer then
+				-- if KBM.CurrentMod.Settings.EncTimer.Override then
+					-- KBM.EncTimer.Settings = KBM.CurrentMod.Settings.EncTimer
+				-- else
+					-- KBM.EncTimer.Settings = KBM.Options.EncTimer
+				-- end
+			-- end
+			-- if KBM.CurrentMod.Settings.CastBar then
+				-- for BossName, BossObj in pairs(KBM.CurrentMod.Bosses) do
+					-- if BossObj.CastBar then
+						-- BossObj.CastBar:Hide()
+					-- end
+				-- end
+			-- end
+		-- end
+		-- KBM.Alert:ApplySettings()
+		-- KBM.MechTimer:ApplySettings()
+		-- KBM.PhaseMonitor:ApplySettings()
+		-- KBM.EncTimer:ApplySettings()
+		-- KBM.MechSpy:ApplySettings()
+		-- KBM.ResMaster.GUI:ApplySettings()
+		-- KBM.TankSwap.Anchor:SetVisible(false)
+		-- KBM.TankSwap.Anchor.Drag:SetVisible(false)
+		-- if not KBM.PercentageMon.Active then
+			-- KBM.PercentageMon.GUI.Cradle:SetVisible(false)
+		-- end
+		-- if KBM.PlugIn.Count > 0 then
+			-- for ID, PlugIn in pairs(KBM.PlugIn.List) do
+				-- if PlugIn.MenuClose then
+					-- PlugIn:MenuClose()
+				-- end
+			-- end
+		-- end
 	end
 	
 	function KBM.MainWin.Options.Open()
-		KBM.MainWin:SetVisible(true)
-		KBM.MainWin:SetLayer(KBM.Layer.Menu)
-		if KBM.Options.CastBar.Visible then
-			KBM.CastBar.Anchor:Display()
-		end
-		if KBM.Player.CastBar.Settings.CastBar.Visible then
-			KBM.Player.CastBar.CastObj:Display()
-		end
-		if KBM.MainWin.CurrentPage then
-			if KBM.MainWin.CurrentPage.Type == "encounter" then
-				KBM.MainWin.CurrentPage:SetPage()
-			else
-				if KBM.MainWin.CurrentPage.Link.Open then
-					KBM.MainWin.CurrentPage.Link:Open()
-				end
-			end
-		end
-		KBM.Alert:ApplySettings()
-		KBM.MechTimer:ApplySettings()
-		KBM.PhaseMonitor:ApplySettings()
-		KBM.EncTimer:ApplySettings()
-		KBM.MechSpy:ApplySettings()
-		KBM.RezMaster.GUI:ApplySettings()
-		KBM.PercentageMon.GUI.Cradle:SetVisible(KBM.PercentageMon.Settings.Enabled)
-		if KBM.Options.TankSwap.Visible then
-			KBM.TankSwap.Anchor:SetVisible(true)
-			KBM.TankSwap.Anchor.Drag:SetVisible(KBM.Options.TankSwap.Unlocked)
-		end
-		if KBM.PlugIn.Count > 0 then
-			for ID, PlugIn in pairs(KBM.PlugIn.List) do
-				if PlugIn.MenuOpen then
-					PlugIn:MenuOpen()
-				end
-			end
-		end
+		KBM.Menu:Open()
+		-- KBM.MainWin:SetVisible(true)
+		-- KBM.MainWin:SetLayer(KBM.Layer.Menu)
+		-- if KBM.Options.CastBar.Visible then
+			-- KBM.CastBar.Anchor:Display()
+		-- end
+		-- if KBM.Player.CastBar.Settings.CastBar.Visible then
+			-- KBM.Player.CastBar.CastObj:Display()
+		-- end
+		-- if KBM.MainWin.CurrentPage then
+			-- if KBM.MainWin.CurrentPage.Type == "encounter" then
+				-- KBM.MainWin.CurrentPage:SetPage()
+			-- else
+				-- if KBM.MainWin.CurrentPage.Link.Open then
+					-- KBM.MainWin.CurrentPage.Link:Open()
+				-- end
+			-- end
+		-- end
+		-- KBM.Alert:ApplySettings()
+		-- KBM.MechTimer:ApplySettings()
+		-- KBM.PhaseMonitor:ApplySettings()
+		-- KBM.EncTimer:ApplySettings()
+		-- KBM.MechSpy:ApplySettings()
+		-- KBM.ResMaster.GUI:ApplySettings()
+		-- KBM.PercentageMon.GUI.Cradle:SetVisible(KBM.PercentageMon.Settings.Enabled)
+		-- if KBM.Options.TankSwap.Visible then
+			-- KBM.TankSwap.Anchor:SetVisible(true)
+			-- KBM.TankSwap.Anchor.Drag:SetVisible(KBM.Options.TankSwap.Unlocked)
+		-- end
+		-- if KBM.PlugIn.Count > 0 then
+			-- for ID, PlugIn in pairs(KBM.PlugIn.List) do
+				-- if PlugIn.MenuOpen then
+					-- PlugIn:MenuOpen()
+				-- end
+			-- end
+		-- end
 	end
 
 	function KBM.MainWin.Menu:CreateHeader(Text, Hook, Default, Static, Tab)

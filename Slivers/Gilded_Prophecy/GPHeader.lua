@@ -22,6 +22,7 @@ local GP = {
 	Type = "Sliver",
 	ID = "GP",
 	Object = "GP",
+	Rift = "Rift",
 }
 
 KBM.RegisterMod("Gilded Prophecy", GP)

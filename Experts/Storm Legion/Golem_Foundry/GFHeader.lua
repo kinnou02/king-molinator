@@ -16,6 +16,7 @@ local MOD = {
 	Type = "Expert",
 	ID = "EGolem_Foundry",
 	Object = "MOD",
+	Rift = "SL",
 }
 
 -- Link Mods

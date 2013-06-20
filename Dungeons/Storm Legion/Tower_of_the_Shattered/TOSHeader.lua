@@ -16,6 +16,7 @@ local MOD = {
 	Type = "Normal",
 	ID = "NTower_of_the_Shattered",
 	Object = "MOD",
+	Rift = "SL",
 }
 
 -- Link Mods

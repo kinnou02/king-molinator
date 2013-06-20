@@ -16,6 +16,7 @@ local MOD = {
 	Type = "Expert",
 	ID = "EArchive_of_Flesh",
 	Object = "MOD",
+	Rift = "SL",
 }
 
 -- Link Mods

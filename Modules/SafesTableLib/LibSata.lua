@@ -148,6 +148,25 @@ function LibSata:Create()
 		end
 	end
 	
+	function lst:Clear()
+		self._first = nil
+		self._last = nil
+		self._count = 0
+		self._list = {}	
+	end
+	
+	function lst:RemoveLast()
+		if self._last then
+			return self:Remove(self._last)
+		end
+	end
+	
+	function lst:RemoveFirst()
+		if self._first then
+			return self:Remove(self._first)
+		end
+	end
+	
 	function lst:After(object)
 		if object == self._last or self._count < 2 then
 			return

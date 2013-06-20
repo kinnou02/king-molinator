@@ -16,6 +16,7 @@ local MOD = {
 	Type = "Normal",
 	ID = "NExodus_of_the_Storm_Queen",
 	Object = "MOD",
+	Rift = "SL",
 }
 
 -- Link Mods

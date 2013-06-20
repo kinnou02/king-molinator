@@ -15,6 +15,7 @@ local ROTP = {
 	Type = "Sliver",
 	ID = "ROTP",
 	Object = "ROTP",
+	Rift = "Rift",
 }
 
 local AddonData = Inspect.Addon.Detail("KingMolinator")

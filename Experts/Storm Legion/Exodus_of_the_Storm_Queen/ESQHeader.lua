@@ -16,6 +16,7 @@ local MOD = {
 	Type = "Expert",
 	ID = "EExodus_of_the_Storm_Queen",
 	Object = "MOD",
+	Rift = "SL",
 }
 
 -- Link Mods

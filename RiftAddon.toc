@@ -10,14 +10,18 @@ Author = "Paul Snart"
 Website = "http://www.facebook.com/KingBossMods"
 Email = "kingbossmods@gmail.com"
 
-Version = "1.4.5.699"
+Version = "1.4.6.700"
 
 Environment = "2.2"
 
 RunOnStartup = {
 	"KingMolinator.lua",
 	"KMOptions.lua",
-	"Modules/RezMaster.lua",
+	"Modules/Menu/MainMenu.lua",
+	"Modules/Menu/Objects.lua",
+	"Modules/Menu/Page.lua",
+	"Modules/Menu/Instance.lua",
+	"Modules/ResMaster.lua",
 	"Modules/PlayerControl.lua",
 	"Modules/PercentageMon.lua",
 	"Raids/Storm Legion/Endless Eclipse/EEHeader.lua",

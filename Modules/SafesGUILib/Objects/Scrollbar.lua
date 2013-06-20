@@ -39,18 +39,28 @@ function _int._addScrollbar(self, pTable)
 				pTable.FrameB:ClearPoint("RIGHT")
 				pTable.FrameB:SetPoint("RIGHT", self.Scrollbar, "LEFT", -3, nil)
 				function self:MouseWheelBackHandler(handle)
-					self._object.Scrollbar:Nudge(5)
+					if self:GetVisible() then
+						self._object.Scrollbar:Nudge(8)
+					end
 				end
 				function self:MouseWheelForwardHandler(handle)
-					self._object.Scrollbar:Nudge(-5)
+					if self:GetVisible() then
+						self._object.Scrollbar:Nudge(-8)
+					end
 				end
 				function self:_addWheelEvents()
-					self._mask:EventAttach(Event.UI.Input.Mouse.Wheel.Back, self.MouseWheelBackHandler, "Mouse Wheel Back Handler")
-					self._mask:EventAttach(Event.UI.Input.Mouse.Wheel.Forward, self.MouseWheelForwardHandler, "Mouse Wheel Forward Handler")
+					if not self._eventsActive then
+						self._eventsActive = true
+						self._mask:EventAttach(Event.UI.Input.Mouse.Wheel.Back, self.MouseWheelBackHandler, "Mouse Wheel Back Handler")
+						self._mask:EventAttach(Event.UI.Input.Mouse.Wheel.Forward, self.MouseWheelForwardHandler, "Mouse Wheel Forward Handler")
+					end
 				end
 				function self:_removeWheelEvents()
-					self._mask:EventDetach(Event.UI.Input.Mouse.Wheel.Back, self.MouseWheelBackHandler, "Mouse Wheel Back Handler")
-					self._mask:EventDetach(Event.UI.Input.Mouse.Wheel.Forward, self.MouseWheelForwardHandler, "Mouse Wheel Forward Handler")					
+					if self._eventsActive then
+						self._mask:EventDetach(Event.UI.Input.Mouse.Wheel.Back, self.MouseWheelBackHandler, "Mouse Wheel Back Handler")
+						self._mask:EventDetach(Event.UI.Input.Mouse.Wheel.Forward, self.MouseWheelForwardHandler, "Mouse Wheel Forward Handler")					
+						self._eventsActive = false
+					end
 				end
 				function self.Scrollbar:_checkBounds()
 					local newDiff = math.floor(self._object.Content:GetHeight() - self._object._mask:GetHeight()) * self._object._div

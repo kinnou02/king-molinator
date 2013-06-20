@@ -16,6 +16,7 @@ local MOD = {
 	Type = "Expert",
 	ID = "EEmpyrean_Core",
 	Object = "MOD",
+	Rift = "SL",
 }
 
 -- Link Mods

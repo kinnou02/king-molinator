@@ -16,6 +16,7 @@ local MOD = {
 	Type = "Expert",
 	ID = "Deepstrike_Mines",
 	Object = "MOD",
+	Rift = "Rift",
 }
 
 -- Link Mods

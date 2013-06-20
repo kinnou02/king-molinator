@@ -16,6 +16,7 @@ local EE = {
 	Type = "Raid",
 	ID = "REndless_Eclipse",
 	Object = "EE",
+	Rift = "SL",
 }
 
 local AddonData = Inspect.Addon.Detail("KingMolinator")

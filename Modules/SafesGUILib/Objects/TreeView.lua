@@ -15,15 +15,15 @@ local TH = _int.TH
 -- Define Panel Events
 LibSGui.Event.TreeView = {}
 LibSGui.Event.TreeView.Scrollbar = {}
-LibSGui.Event.TreeView.Scrollbar.Change = Utility.Event.Create("SafesGUILib", "Event.TreeView.Scrollbar.Change")
-LibSGui.Event.TreeView.Scrollbar.Active = Utility.Event.Create("SafesGUILib", "Event.TreeView.Scrollbar.Active")
+LibSGui.Event.TreeView.Scrollbar.Change = Utility.Event.Create("SafesGUILib", "TreeView.Scrollbar.Change")
+LibSGui.Event.TreeView.Scrollbar.Active = Utility.Event.Create("SafesGUILib", "TreeView.Scrollbar.Active")
 LibSGui.Event.TreeView.Node = {}
-LibSGui.Event.TreeView.Node.Expand = Utility.Event.Create("SafesGUILib", "Event.TreeView.Node.Expand")
-LibSGui.Event.TreeView.Node.Collapse = Utility.Event.Create("SafesGUILib", "Event.TreeView.Node.Collapse")
-LibSGui.Event.TreeView.Node.Change = Utility.Event.Create("SafesGUILib", "Event.TreeView.Node.Change")
+LibSGui.Event.TreeView.Node.Expand = Utility.Event.Create("SafesGUILib", "TreeView.Node.Expand")
+LibSGui.Event.TreeView.Node.Collapse = Utility.Event.Create("SafesGUILib", "TreeView.Node.Collapse")
+LibSGui.Event.TreeView.Node.Change = Utility.Event.Create("SafesGUILib", "TreeView.Node.Change")
 LibSGui.Event.TreeView.Node.Mouse = {}
-LibSGui.Event.TreeView.Node.Mouse.In = Utility.Event.Create("SafesGUILib", "Event.TreeView.Node.Mouse.In")
-LibSGui.Event.TreeView.Node.Mouse.Out = Utility.Event.Create("SafesGUILib", "Event.TreeView.Node.Mouse.Out")
+LibSGui.Event.TreeView.Node.Mouse.In = Utility.Event.Create("SafesGUILib", "TreeView.Node.Mouse.In")
+LibSGui.Event.TreeView.Node.Mouse.Out = Utility.Event.Create("SafesGUILib", "TreeView.Node.Mouse.Out")
 
 -- Define Area
 LibSGui.TreeView = {}
@@ -74,7 +74,7 @@ function _int:pullNode(_parent, _id)
 		node._textBack:SetLayer(1)
 		TH.LoadTexture(node._textBack, "Rift", Default.textBack)
 		node._text = LibSGui.ShadowText:Create(node._cradle, true)
-		node._text:SetPoint("CENTERY", node._textBack, "CENTERY", nil, 1)
+		node._text:SetPoint("CENTERY", node._textBack, "CENTERY")
 		node._text:SetLayer(3)
 		node._iconA = _int:pullTexture(node._cradle, true)
 		node._iconA:SetLayer(3)
@@ -84,6 +84,7 @@ function _int:pullNode(_parent, _id)
 		--node._textBack:SetAlpha(0.75)
 		function node:_mouseIn()
 			self:SetBackgroundColor(0.2,0.2,0,0.25)
+			self._nodeObj._root._currentMouseOver = self
 			-- Default.MouseOver:SetParent(self)
 			-- Default.MouseOver:SetVisible(true)
 			-- Default.MouseOver:SetAllPoints(self)
@@ -92,6 +93,7 @@ function _int:pullNode(_parent, _id)
 		end
 		function node:_mouseOut()
 			self:SetBackgroundColor(0,0,0,0)
+			self._nodeObj._root._currentMouseOver = nil
 			-- Default.MouseOver:SetParent(_int._context)
 			-- Default.MouseOver:SetVisible(false)
 			-- Default.MouseOver:ClearAll()
@@ -110,6 +112,11 @@ function _int:pullNode(_parent, _id)
 					nodeObj._expanded = false
 					TH.LoadTexture(nodeUI._iconA, AddonIni.id, "Media/Treeview_Arrow_Left.png")
 					LibSGui.Event.TreeView.Node.Collapse(nodeObj)
+					if nodeObj._root._selected then
+						if nodeObj._root._selected._parentNode == nodeObj then
+							nodeObj._root._highlight:SetVisible(false)
+						end
+					end
 				else
 					nodeUI._childCradle:SetVisible(true)
 					nodeUI._childCradle:SetPoint("BOTTOM", lastChild._obj._cradle, "BOTTOM", nil, -1)
@@ -118,6 +125,16 @@ function _int:pullNode(_parent, _id)
 					nodeObj:_updateSize(nodeObj._childSize)
 					TH.LoadTexture(nodeUI._iconA, AddonIni.id, "Media/Treeview_Arrow_Down.png")
 					LibSGui.Event.TreeView.Node.Expand(nodeObj)
+					if nodeObj._root._selected then
+						if nodeObj._root._selected._parentNode == nodeObj then
+							nodeObj._root._highlight:SetVisible(true)
+						end
+					end
+				end
+			else
+				if nodeObj._root._selected ~= nodeObj then
+					nodeObj:_renderHighlight()
+					LibSGui.Event.TreeView.Node.Change(nodeObj._root, nodeObj)
 				end
 			end
 		end
@@ -151,20 +168,21 @@ function _tvNode:Create(pNode, Text, Select)
 	Node._parentNode = pNode
 	Node._root = pNode._root
 	Node._text = tostring(Text)
+	Node._visible = true
 	Node._expanded = true
+	Node.UserData = {}
 	if pNode._layer == 0 then
 		Node._obj = _int:pullNode(Node._root.Content)
 		Node._obj._iconA:SetPoint("CENTERLEFT", Node._obj._cradle, "CENTERLEFT", 6, 0)
 		Node._obj._childCradle:SetPoint("LEFT", Node._obj._iconA, "RIGHT")
 		Node._layer = 1
 		Node._obj._text:SetFontSize(Default.Header.fontSize)
-		Node._obj._text:SetText(Text)
 		Node._obj._textBack:SetPoint("TOP", Node._obj._cradle, "TOP", nil, -2)
 		Node._obj._textBack:SetPoint("BOTTOMRIGHT", Node._obj._cradle, "BOTTOMRIGHT", 0, 3)
 		if pNode._children._count > 0 then
 			local _, prevChild = pNode._children:Last()
 			Node._obj:SetPoint("TOP", prevChild._obj._childCradle, "BOTTOM")
-			Node._size = Default.Header.h
+			Node._size = Default.Header.h - 1
 		else
 			Node._obj:SetPoint("TOP", Node._root.Content, "TOP")
 			Node._size = Default.Header.h
@@ -173,16 +191,16 @@ function _tvNode:Create(pNode, Text, Select)
 		TH.LoadTexture(Node._obj._iconA, AddonIni.id, "Media/Treeview_Arrow_Down.png")
 		Node._obj._text:SetFontColor(Default.Header.r, Default.Header.g, Default.Header.b)
 		Node._obj._text:SetPoint("LEFT", Node._obj._childCradle, "LEFT", 2, nil)
-		Node._obj._text:SetPoint("RIGHT", Node._obj._cradle, "RIGHT")
 		Node._obj._textBack:SetPoint("LEFT", Node._obj._cradle, "LEFT", 0, nil)
+		Node._obj._maxWidth = Node._obj._textBack:GetRight() - Node._obj._childCradle:GetLeft() - 3
 	elseif pNode._layer == 1 then
 		Node._obj = _int:pullNode(pNode._obj._childCradle)
 		Node._obj._iconA:SetPoint("CENTERRIGHT", Node._obj._cradle, "CENTERLEFT")
 		Node._layer = pNode._layer + 1
 		Node._obj._text:SetFontSize(Default.Node.fontSize)
-		Node._obj._text:SetText(Text)
 		Node._obj._textBack:SetPoint("TOP", Node._obj._cradle, "TOP", nil, -2)
 		Node._obj._textBack:SetPoint("BOTTOMRIGHT", Node._obj._cradle, "BOTTOMRIGHT", 0, 2)
+		Node._obj._textBack:SetAlpha(0.6)
 		if pNode._children._count > 0 then
 			local _, lastNode = pNode._children:Last()
 			Node._obj:SetPoint("TOP", lastNode._obj._childCradle, "BOTTOM", nil, 1)
@@ -198,9 +216,9 @@ function _tvNode:Create(pNode, Text, Select)
 		pNode._obj._childCradle:SetPoint("BOTTOM", Node._obj._childCradle, "BOTTOM")
 		Node._obj._cradle:SetHeight(Default.Node.h)
 		Node._obj._text:SetFontColor(Default.Node.r, Default.Node.g, Default.Node.b)
-		Node._obj._text:SetPoint("LEFT", Node._obj._textBack, "LEFT", 7, nil)
-		Node._obj._text:SetPoint("RIGHT", Node._obj._cradle, "RIGHT")
+		Node._obj._text:SetPoint("LEFT", Node._obj._textBack, "LEFT", 6, nil)
 		Node._obj._textBack:SetPoint("LEFT", Node._obj._cradle, "LEFT", 0, nil)
+		Node._obj._maxWidth = Node._obj._textBack:GetRight() - Node._obj._textBack:GetLeft() - 5
 	else
 		error("Node Create: Child nodes do not currently support their own children.")
 	end
@@ -211,16 +229,44 @@ function _tvNode:Create(pNode, Text, Select)
 		return childNode
 	end
 	
-	function Node:SetText()
+	function Node:SetText(Text)
+		self._obj._text:SetText(Text)
+		if self._obj._text:GetWidth() > self._obj._maxWidth then
+			self._obj._text:SetText(self._obj._text:GetText().."...")
+			local start = Inspect.Time.Real()
+			repeat
+				local newText = string.sub(self._obj._text:GetText(), 1, -5)
+				if string.byte(newText, -1) == 32 then
+					newText = string.sub(newText, 1, -2)
+				end
+				self._obj._text:SetText(newText.."...")
+				if Inspect.Time.Real() - start > 1 then
+					break
+				end
+			until self._obj._text:GetWidth() < self._obj._maxWidth
+		end
+		self._text = Text
+	end
 	
+	function Node:GetText()
+		return self._text
 	end
 	
 	function Node:SetFontColor()
 	
 	end
 	
-	function Node:Select()
+	function Node:_renderHighlight()
+		self._root._selected = self
+		self._root._highlight:ClearAll()
+		self._root._highlight:SetPoint("TOPLEFT", self._obj._textBack, "TOPLEFT", 1, 1)
+		self._root._highlight:SetPoint("BOTTOMRIGHT", self._obj._textBack, "BOTTOMRIGHT", -2, 0)
+		self._root._highlight:SetVisible(true)
+	end
 	
+	function Node:Select()
+		self._root._selected = self
+		self:_renderHighlight()
 	end
 	
 	if Select then
@@ -259,6 +305,7 @@ function _tvNode:Create(pNode, Text, Select)
 	Node._childSize = 0
 	Node._currentSize = 0
 	Node:_addSize()
+	Node:SetText(Text)
 		
 	return Node
 end
@@ -297,7 +344,8 @@ function LibSGui.TreeView:Create(_id, _parent, pTable)
 	treeview._layer = 0
 	treeview._size = 1
 	treeview._id = _id
-	
+	treeview.UserData = {}
+		
 	treeview._multi = 5
 	treeview._div = 0.2 -- (1/treeview._multi)
 	treeview.Offset = {
@@ -327,6 +375,7 @@ function LibSGui.TreeView:Create(_id, _parent, pTable)
 	
 	treeview.Content = treeview._sunkenBorder.Content
 	treeview.Content._object = treeview
+	treeview.Content:ClearPoint("BOTTOM")
 	treeview.Content:EventAttach(Event.UI.Layout.Size, treeview.SizeChangeHandler, "TreeView Content Size Change")
 	
 	treeview.SetBorderWidth = function(treeview, w, Type) treeview._raisedBorder:SetBorderWidth(w, Type) end
@@ -388,10 +437,19 @@ function LibSGui.TreeView:Create(_id, _parent, pTable)
 		return _tvNode:Create(self, text)
 	end
 	
+	function treeview:ClearSelected()
+		self._selected = nil
+		self._highlight:SetVisible(false)
+	end
+	
+	-- Unique Highlight texture for selected Node
+	treeview._highlight = _int:pullTexture(treeview.Content)
+	treeview._highlight:SetTexture("Rift", "Results_downSelected.png.dds")
+	treeview._highlight:SetLayer(10)
+	
 	treeview:SetBorderWidth(4)
 	treeview._sunkenBorder:SetBorderWidth(-2)
 	treeview:_addScrollbar(pTable)
-	treeview.Content:ClearPoint("BOTTOM")
 	--treeview.Content:SetBackgroundColor(1,0,0,0.3)
 	return treeview
 end

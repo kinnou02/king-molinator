@@ -16,6 +16,7 @@ local MOD = {
 	Type = "Expert",
 	ID = "Charmers_Caldera",
 	Object = "MOD",
+	Rift = "Rift",
 }
 
 -- Link Mods

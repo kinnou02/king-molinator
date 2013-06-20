@@ -299,7 +299,10 @@ end
 function REG:InitVars()
 	self.Settings = {
 		Enabled = true,
-		CastBar = self.Regulos.Settings.CastBar,
+		CastBar = {
+			Override = true,
+			Multi = true,
+		},
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		MechTimer = KBM.Defaults.MechTimer(),
@@ -313,6 +316,7 @@ function REG:InitVars()
 			MechRef = self.Regulos.Settings.MechRef,
 		},
 		Sicaron = {
+			CastBar = self.Sicaron.Settings.CastBar,
 			AlertsRef = self.Sicaron.Settings.AlertsRef,
 			MechRef = self.Sicaron.Settings.MechRef,
 		},

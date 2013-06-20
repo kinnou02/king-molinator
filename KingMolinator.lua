@@ -72,7 +72,7 @@ KBM.ID = AddonData.id
 KBM.ModList = {}
 KBM.Testing = false
 KBM.ValidTime = false
-KBM.IsAlpha = false
+KBM.IsAlpha = true
 KBM.Debug = false
 KBM.Aux = {}
 KBM.TestFilters = {}
@@ -121,7 +121,7 @@ KBM.MenuOptions = {
 	Alerts = {},
 	Phases = {},
 	MechSpy = {},
-	RezMaster = {},
+	ResMaster = {},
 	Main = {},
 	PerMon = {},
 	ReadyCheck = {},
@@ -508,6 +508,7 @@ function KBM.Defaults.CastBar()
 		y = false,
 		Enabled = true,
 		Style = "rift",
+		RiftBar = true,
 		Shadow = true,
 		Unlocked = true,
 		Visible = true,
@@ -571,7 +572,7 @@ function KBM.Constant:Init()
 		w = 350,
 		h = 32,
 	}
-	self.RezMaster = {
+	self.ResMaster = {
 		w = 250,
 		h = 26,
 		TextSize = 12,
@@ -726,8 +727,8 @@ local function KBM_DefineVars(handle, AddonID)
 				y = false,
 			},
 			Frame = {
-				x = false,
-				y = false,
+				RelX = false,
+				RelY= false,
 			},
 			Button = KBM.Defaults.Button(),
 			Alerts = KBM.Defaults.Alerts(),
@@ -739,7 +740,7 @@ local function KBM_DefineVars(handle, AddonID)
 			Chat = {
 				Enabled = true,
 			},
-			RezMaster = {
+			ResMaster = {
 				Enabled = true,
 				x = false,
 				y = false,
@@ -883,7 +884,7 @@ end
 
 local function KBM_LoadVars(handle, AddonID)
 	local TargetLoad = nil
-	if AddonID == "KingMolinator" then		
+	if AddonID == "KingMolinator" then
 		if chKBM_GlobalOptions.Character then
 			KBM.LoadTable(chKBM_GlobalOptions, KBM.Options)
 		else
@@ -1110,7 +1111,7 @@ function KBM.MechTimer:ApplySettings()
 	self.Anchor:SetWidth(self.Settings.w * self.Settings.wScale)
 	self.Anchor:SetHeight(self.Settings.h * self.Settings.hScale)
 	self.Anchor.Text:SetFontSize(self.Settings.TextSize * self.Settings.tScale)
-	if KBM.MainWin:GetVisible() then
+	if KBM.Menu.Active then
 		self.Anchor:SetVisible(self.Settings.Visible)
 		self.Anchor.Drag:SetVisible(self.Settings.Unlocked)
 	else
@@ -2236,10 +2237,10 @@ function KBM.Trigger:Init()
 end
 
 local function KBM_Options()
-	if KBM.MainWin:GetVisible() then
-		KBM.MainWin.Options:Close()
+	if KBM.Menu.Active then
+		KBM.Menu:Close()
 	else
-		KBM.MainWin.Options:Open()
+		KBM.Menu:Open()
 	end	
 end
 
@@ -2431,7 +2432,7 @@ function KBM.MechSpy:ApplySettings()
 	self.Anchor:SetHeight(math.floor(KBM.Constant.MechSpy.h * self.Settings.hScale))
 	self.Anchor.Text:SetFontSize(math.floor(KBM.Constant.MechSpy.TextSize * self.Settings.tScale))
 	self.Anchor.Shadow:SetFontSize(self.Anchor.Text:GetFontSize())
-	if KBM.MainWin:GetVisible() then
+	if KBM.Menu.Active then
 		self.Anchor:SetVisible(self.Settings.Visible)
 		self.Anchor.Drag:SetVisible(self.Settings.Visible)
 	else
@@ -3090,7 +3091,7 @@ function KBM.PhaseMonitor:Init()
 		self.Anchor.Text:SetFontSize(self.Settings.TextSize * self.Settings.tScale)
 		self.Frame.Shadow:SetFontSize(self.Settings.TextSize * self.Settings.tScale)
 		self.Frame.Text:SetFontSize(self.Settings.TextSize * self.Settings.tScale)
-		if self.Settings.Enabled and KBM.MainWin:GetVisible() then
+		if self.Settings.Enabled and KBM.Menu.Active then
 			self.Anchor:SetVisible(self.Settings.Visible)
 			self.Anchor:SetBackgroundColor(0,0,0,0.33)
 			self.Anchor.Drag:SetVisible(self.Settings.Unlocked)
@@ -3621,7 +3622,7 @@ function KBM.EncTimer:Init()
 		self.Frame.Text:SetFontSize(self.Settings.TextSize * self.Settings.tScale)
 		self.Enrage.Shadow:SetFontSize(self.Settings.TextSize * self.Settings.tScale)
 		self.Enrage.Text:SetFontSize(self.Settings.TextSize * self.Settings.tScale)
-		if KBM.MainWin:GetVisible() then
+		if KBM.Menu.Active then
 			self.Frame:SetVisible(self.Settings.Visible)
 			self.Enrage.Frame:SetVisible(self.Settings.Visible)
 			self.Frame.Drag:SetVisible(self.Settings.Unlocked)
@@ -4747,7 +4748,7 @@ function KBM.TankSwap:Init()
 	self.Anchor.Drag:EventAttach(Event.UI.Input.Mouse.Wheel.Back, self.Anchor.Drag.WheelBackHandler, "wheelback")
 	self.Anchor.Drag:EventAttach(Event.UI.Input.Mouse.Wheel.Forward, self.Anchor.Drag.WheelForwardHandler, "wheelforward")
 	
-	if KBM.MainWin:GetVisible() then
+	if KBM.Menu.Active then
 		self.Anchor:SetVisible(self.Settings.Visible)
 		self.Anchor.Drag:SetVisible(self.Settings.Unlocked)
 	else
@@ -5089,7 +5090,7 @@ function KBM.Alert:Init()
 		self.AlertControl.Right:SetPoint("LEFT", UIParent, 1 - (0.2 * KBM.Alert.Settings.fScale), nil)
 		self.AlertControl.Top:SetPoint("BOTTOM", UIParent, nil, 0.2 * KBM.Alert.Settings.fScale)
 		self.AlertControl.Bottom:SetPoint("TOP", UIParent, nil, 1 - (0.2 * KBM.Alert.Settings.fScale))
-		if KBM.MainWin:GetVisible() then
+		if KBM.Menu.Active then
 			self.Anchor:SetVisible(self.Settings.Visible)
 			self.Anchor.Drag:SetVisible(self.Settings.Visible)
 			if self.Settings.Vertical then
@@ -5899,7 +5900,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 			self.GUI:SetText(self.Boss.Name)
 			
 			if self.Settings.Enabled then
-				if KBM.MainWin:GetVisible() then
+				if KBM.Menu.Active then
 					if not self.Dynamic then
 						if not self.Casting then
 							self.GUI.Frame:SetVisible(self.Settings.Visible)
@@ -5913,7 +5914,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 			end
 			
 			if not self.Settings.Pinned then
-				if KBM.MainWin:GetVisible() then
+				if KBM.Menu.Active then
 					if not self.Dynamic then
 						self.GUI.Drag:SetVisible(self.Settings.Unlocked)
 					end
@@ -5931,7 +5932,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 	
 	function CastBarObj:Display()	
 		self:ManageSettings()
-		if KBM.MainWin:GetVisible() then
+		if KBM.Menu.Active then
 			self.Visible = self.Settings.Visible
 			if self.Settings.Visible and self.Settings.Enabled then
 				if not self.GUI then
@@ -6345,7 +6346,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 				self.InterruptEnd = nil
 				if self.GUI then
 					self.GUI:SetText(self.Boss.Name)
-					if KBM.MainWin:GetVisible() then
+					if KBM.Menu.Active then
 						self.GUI.Frame:SetVisible(self.Settings.Visible)
 					else
 						self.GUI.Frame:SetVisible(false)
@@ -6376,7 +6377,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 				self.CompleteEnd = nil
 				self.CompleteFade = false
 				if self.GUI then
-					if KBM.MainWin:GetVisible() then
+					if KBM.Menu.Active then
 						self.GUI.Frame:SetVisible(self.Settings.Visible)
 					else
 						self.GUI.Frame:SetVisible(false)
@@ -6420,7 +6421,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 		self.LastCast = ""
 		if not self.Interrupted and not self.Complete then
 			if self.GUI then
-				if KBM.MainWin:GetVisible() then
+				if KBM.Menu.Active then
 					self.GUI.Frame:SetVisible(self.Settings.Visible)
 				else
 					self.GUI.Frame:SetVisible(false)
@@ -6492,7 +6493,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 				self.GUI = KBM.CastBar:Push(self.GUI)
 			end
 		else
-			if not self.Settings.Visible or not KBM.MainWin:GetVisible() then
+			if not self.Settings.Visible or not KBM.Menu.Active then
 				if self.GUI then
 					self.GUI = KBM.CastBar:Push(self.GUI)
 				end
@@ -6688,7 +6689,7 @@ function KBM:Timer(handle)
 				if KBM.Options.CPU.Enabled then
 					KBM.CPU:UpdateAll()
 				end
-				KBM.RezMaster:Update()
+				KBM.ResMaster:Update()
 				self.HeldTime = current								
 			end
 			
@@ -7735,43 +7736,43 @@ function KBM.MenuOptions.Main:Options()
 end
 
 -- Rez Master Options
-function KBM.MenuOptions.RezMaster:Options()
+function KBM.MenuOptions.ResMaster:Options()
 	function self:Enabled(bool)
-		KBM.Options.RezMaster.Enabled = bool
+		KBM.Options.ResMaster.Enabled = bool
 		if bool then
 			KBM.PlayerControl:GatherAbilities(true)
 			KBM.PlayerControl:GatherRaidInfo()
 		else
-			KBM.RezMaster.Rezes:Clear()
+			KBM.ResMaster.Rezes:Clear()
 		end
 	end
 	function self:Visible(bool)
-		KBM.Options.RezMaster.Visible = bool
-		KBM.Options.RezMaster.Unlocked = bool
-		KBM.RezMaster.GUI:ApplySettings()
+		KBM.Options.ResMaster.Visible = bool
+		KBM.Options.ResMaster.Unlocked = bool
+		KBM.ResMaster.GUI:ApplySettings()
 	end
 	function self:Width(bool)
-		KBM.Options.RezMaster.ScaleWidth = bool
+		KBM.Options.ResMaster.ScaleWidth = bool
 	end
 	function self:Height(bool)
-		KBM.Options.RezMaster.ScaleHeight = bool
+		KBM.Options.ResMaster.ScaleHeight = bool
 	end
 	function self:Text(bool)
-		KBM.Options.RezMaster.ScaleText = bool
+		KBM.Options.ResMaster.ScaleText = bool
 	end
 	function self:Cascade(bool)
-		KBM.Options.RezMaster.Cascade = bool
-		KBM.RezMaster:ReOrder()
+		KBM.Options.ResMaster.Cascade = bool
+		KBM.ResMaster:ReOrder()
 	end
 	
 	local Options = self.MenuItem.Options
 	Options:SetTitle()
-	local RezMaster = Options:AddHeader(KBM.Language.RezMaster.Enabled[KBM.Lang], self.Enabled, KBM.Options.RezMaster.Enabled)
-	RezMaster:AddCheck(KBM.Language.RezMaster.Cascade[KBM.Lang], self.Cascade, KBM.Options.RezMaster.Cascade)
-	RezMaster:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.Visible, KBM.Options.RezMaster.Visible)
-	RezMaster:AddCheck(KBM.Language.Options.UnlockWidth[KBM.Lang], self.Width, KBM.Options.RezMaster.ScaleWidth)
-	RezMaster:AddCheck(KBM.Language.Options.UnlockHeight[KBM.Lang], self.Height, KBM.Options.RezMaster.ScaleHeight)
-	RezMaster:AddCheck(KBM.Language.Options.UnlockText[KBM.Lang], self.Text, KBM.Options.RezMaster.ScaleText)
+	local ResMaster = Options:AddHeader(KBM.Language.ResMaster.Enabled[KBM.Lang], self.Enabled, KBM.Options.ResMaster.Enabled)
+	ResMaster:AddCheck(KBM.Language.ResMaster.Cascade[KBM.Lang], self.Cascade, KBM.Options.ResMaster.Cascade)
+	ResMaster:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.Visible, KBM.Options.ResMaster.Visible)
+	ResMaster:AddCheck(KBM.Language.Options.UnlockWidth[KBM.Lang], self.Width, KBM.Options.ResMaster.ScaleWidth)
+	ResMaster:AddCheck(KBM.Language.Options.UnlockHeight[KBM.Lang], self.Height, KBM.Options.ResMaster.ScaleHeight)
+	ResMaster:AddCheck(KBM.Language.Options.UnlockText[KBM.Lang], self.Text, KBM.Options.ResMaster.ScaleText)
 end
 
 -- KBM Ready Check Options
@@ -7927,7 +7928,6 @@ function KBM.InitVars()
 	KBM.PhaseMonitor:Init()
 	KBM.Trigger:Init()
 	KBM.MechSpy:Init()
-	KBM.InitMenus()
 	KBM.SheepProtection:Init()
 end
 
@@ -8061,6 +8061,663 @@ function KBM.AllocateBoss(Mod, BossObj, UTID, tableIndex)
 	end
 end
 
+-- Settings Menu
+local function BuildMenuSettings()
+	local Menu = {}
+	Menu.Callbacks = {}
+	
+	-- Settings
+	function Menu.Main(Header)
+		Menu.Callbacks.Main = {}
+		local self = Menu.Callbacks.Main
+		local Item = Header:CreateItem(KBM.Language.Options.Settings[KBM.Lang], "Main")
+		local MenuItem
+
+		function self:Character(bool)
+			KBM.Options.Character = bool
+			if bool then
+				KBM_GlobalOptions = KBM.Options
+				KBM.Options = chKBM_GlobalOptions
+			else
+				chKBM_GlobalOptions = KBM.Options
+				KBM.Options = KBM_GlobalOptions
+			end
+			KBM.Options.Character = bool
+			for _, Mod in ipairs(KBM.ModList) do
+				if Mod.SwapSettings then
+					Mod:SwapSettings(bool)
+				end
+			end
+			KBM.Ready:SwapSettings(bool)
+		end
+
+		function self:Enabled(bool)
+			KBM.StateSwitch(bool)
+		end
+
+		function self:Visible(bool)
+			KBM.Options.Button.Visible = bool
+			KBM.Button.Texture:SetVisible(bool)
+		end
+
+		function self:Unlocked(bool)
+			KBM.Options.Button.Unlocked = bool
+			KBM.Button.Drag:SetVisible(bool)
+		end
+		
+		function self:Protect(bool)
+			KBM.Options.Sheep.Protect = bool
+			if bool then
+				if KBM.Buffs.Active[KBM.Player.UnitID] then
+					for SheepID, bool in pairs(KBM.SheepProtection.SheepList) do
+						if KBM.Buffs.Active[KBM.Player.UnitID].Buff_Types[SheepID] then
+							KBM.SheepProtection.Remove(KBM.Buffs.Active[KBM.Player.UnitID].Buff_Types[SheepID].id, KBM.Buffs.Active[KBM.Player.UnitID].Buff_Types[SheepID].caster)
+						end
+					end
+				end
+			end
+		end
+
+		Item.UI.CreateHeader(KBM.Language.Options.Character[KBM.Lang], KBM.Options, "Character", self)
+		if KBM.IsAlpha then
+			MenuItem = Item.UI.CreateHeader(KBM.Language.Options.ModEnabled[KBM.Lang].." Alpha", KBM.Options, "Enabled", self)
+		else
+			MenuItem = Item.UI.CreateHeader(KBM.Language.Options.ModEnabled[KBM.Lang], KBM.Options, "Enabled", self)
+		end
+		MenuItem:CreateCheck(KBM.Language.Options.Sheep[KBM.Lang], KBM.Options.Sheep, "Protect", self)
+		MenuItem = Item.UI.CreateHeader(KBM.Language.Options.Button[KBM.Lang], KBM.Options.Button, "Visible", self)
+		MenuItem:CreateCheck(KBM.Language.Options.LockButton[KBM.Lang], KBM.Options.Button, "Unlocked", self)
+		
+		Item:Select()
+	end
+
+	-- Timers
+	function Menu.Timers(Header)	
+		Menu.Callbacks.Timers = {}
+		Menu.Callbacks.MechTimers = {}
+		local self = Menu.Callbacks.Timers
+		local Item = Header:CreateItem(KBM.Language.Menu.Timers[KBM.Lang], "Timers")
+		local MenuItem
+		
+		-- Encounter Timer Callbacks.
+		function self:Enabled(bool)
+			KBM.Options.EncTimer.Enabled = bool
+		end
+		function self:Visible(bool)
+			KBM.Options.EncTimer.Visible = bool
+			KBM.EncTimer.Frame:SetVisible(bool)
+			KBM.EncTimer.Enrage.Frame:SetVisible(bool)
+			KBM.Options.EncTimer.Unlocked = bool
+			KBM.EncTimer.Frame.Drag:SetVisible(bool)
+		end
+		function self:Duration(bool)
+			KBM.Options.EncTimer.Duration = bool
+		end
+		function self:Enrage(bool)
+			KBM.Options.EncTimer.Enrage = bool
+		end
+		function self:ScaleHeight(bool, Check)
+			KBM.Options.EncTimer.ScaleHeight = bool
+		end
+		function self:ScaleWidth(bool, Check)
+			KBM.Options.EncTimer.ScaleWidth = bool
+		end
+		function self:TextScale(bool, Check)
+			KBM.Options.EncTimer.TextScale = bool
+		end
+		
+		-- Encounter Timer Options
+		MenuItem = Item.UI.CreateHeader(KBM.Language.Options.EncTimers[KBM.Lang], KBM.Options.EncTimer, "Enabled", self)
+		MenuItem:CreateCheck(KBM.Language.Options.Timer[KBM.Lang], KBM.Options.EncTimer, "Duration", self)
+		MenuItem:CreateCheck(KBM.Language.Options.Enrage[KBM.Lang], KBM.Options.EncTimer, "Enrage", self)
+		MenuItem:CreateCheck(KBM.Language.Options.ShowTimer[KBM.Lang], KBM.Options.EncTimer, "Visible", self)
+		MenuItem:CreateCheck(KBM.Language.Options.UnlockWidth[KBM.Lang], KBM.Options.EncTimer, "ScaleWidth", self)
+		MenuItem:CreateCheck(KBM.Language.Options.UnlockHeight[KBM.Lang], KBM.Options.EncTimer, "ScaleHeight", self)
+		MenuItem:CreateCheck(KBM.Language.Options.UnlockText[KBM.Lang], KBM.Options.EncTimer, "TextScale", self)
+		
+		self = Menu.Callbacks.MechTimers
+		-- Timer Callbacks
+		function self:Enabled(bool)
+			KBM.Options.MechTimer.Enabled = bool
+		end
+		function self:Shadow(bool)
+			KBM.Options.MechTimer.Shadow = bool
+		end
+		function self:Texture(bool)
+			KBM.Options.MechTimer.Texture = bool
+		end
+		function self:Visible(bool)
+			KBM.Options.MechTimer.Visible = bool
+			KBM.MechTimer.Anchor:SetVisible(bool)
+			KBM.Options.MechTimer.Unlocked = bool
+			KBM.MechTimer.Anchor.Drag:SetVisible(bool)
+			if #KBM.MechTimer.ActiveTimers > 0 then
+				KBM.MechTimer.Anchor.Text:SetVisible(false)
+			else
+				if bool then
+					KBM.MechTimer.Anchor.Text:SetVisible(true)
+				end
+			end
+		end
+		function self:ScaleHeight(bool, Check)
+			KBM.Options.MechTimer.ScaleHeight = bool
+		end
+		function self:ScaleWidth(bool, Check)
+			KBM.Options.MechTimer.ScaleWidth = bool
+		end
+		function self:TextScale(bool, Check)
+			KBM.Options.MechTimer.TextScale = bool
+		end
+		
+		MenuItem = Item.UI.CreateHeader(KBM.Language.Options.MechanicTimers[KBM.Lang], KBM.Options.MechTimer, "Enabled", self)
+		-- MechTimers.GUI.Check:SetEnabled(false)
+		-- KBM.Options.MechTimer.Enabled = true
+		MenuItem:CreateCheck(KBM.Language.Options.Texture[KBM.Lang], KBM.Options.MechTimer, "Texture", self)
+		MenuItem:CreateCheck(KBM.Language.Options.Shadow[KBM.Lang], KBM.Options.MechTimer, "Shadow", self)
+		MenuItem:CreateCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], KBM.Options.MechTimer, "Visible", self)
+		MenuItem:CreateCheck(KBM.Language.Options.UnlockWidth[KBM.Lang], KBM.Options.MechTimer, "ScaleWidth", self)
+		MenuItem:CreateCheck(KBM.Language.Options.UnlockHeight[KBM.Lang], KBM.Options.MechTimer, "ScaleHeight", self)
+		MenuItem:CreateCheck(KBM.Language.Options.UnlockText[KBM.Lang], KBM.Options.MechTimer, "TextScale", self)
+	end
+
+	-- Phases
+	function Menu.Phases(Header)		
+		Menu.Callbacks.Phases = {}
+		local self = Menu.Callbacks.Phases
+		local Item = Header:CreateItem(KBM.Language.Options.PhaseMonitor[KBM.Lang], "Phases")
+		local MenuItem
+		
+		-- Phase Monitor Callbacks.
+		function self:Enabled(bool)
+			KBM.Options.PhaseMon.Enabled = bool
+			if KBM.Options.PhaseMon.Visible then
+				if bool then
+					KBM.PhaseMonitor.Anchor:SetVisible(true)
+				else
+					KBM.PhaseMonitor.Anchor:SetVisible(false)
+				end
+			end
+		end
+		function self:Visible(bool)
+			KBM.Options.PhaseMon.Visible = bool
+			KBM.PhaseMonitor.Anchor:SetVisible(bool)
+			KBM.Options.PhaseMon.Unlocked = bool
+			KBM.PhaseMonitor.Anchor.Drag:SetVisible(bool)
+		end
+		function self:PhaseDisplay(bool)
+			KBM.Options.PhaseMon.PhaseDisplay = bool
+		end
+		function self:Objectives(bool)
+			KBM.Options.PhaseMon.Objectives = bool
+		end
+		function self:ScaleWidth(bool)
+			KBM.Options.PhaseMon.ScaleWidth = bool
+		end
+		function self:ScaleHeight(bool)
+			KBM.Options.PhaseMon.ScaleHeight = bool
+		end
+		function self:TextScale(bool)
+			KBM.Options.PhaseMon.TextScale = bool
+		end
+				
+		-- Timer Options
+		MenuItem = Item.UI.CreateHeader(KBM.Language.Options.PhaseEnabled[KBM.Lang], KBM.Options.PhaseMon, "Enabled", self)
+		MenuItem:CreateCheck(KBM.Language.Options.Phases[KBM.Lang], KBM.Options.PhaseMon, "PhaseDisplay", self)
+		MenuItem:CreateCheck(KBM.Language.Options.Objectives[KBM.Lang], KBM.Options.PhaseMon, "Objectives", self)
+		MenuItem:CreateCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], KBM.Options.PhaseMon, "Visible", self)
+		MenuItem:CreateCheck(KBM.Language.Options.UnlockWidth[KBM.Lang], KBM.Options.PhaseMon, "ScaleWidth", self)
+		MenuItem:CreateCheck(KBM.Language.Options.UnlockHeight[KBM.Lang], KBM.Options.PhaseMon, "ScaleHeight", self)
+		MenuItem:CreateCheck(KBM.Language.Options.UnlockText[KBM.Lang], KBM.Options.PhaseMon, "TextScale", self)
+	end
+
+	-- Castbars
+	function Menu.CastBars(Header)
+		Menu.Callbacks.CastBar = {}
+		Menu.Callbacks.PlayerBar = {}
+		local self = Menu.Callbacks.CastBar
+		local Item = Header:CreateItem(KBM.Language.Options.Castbar[KBM.Lang], "CastBars")
+		local MenuItem
+
+		-- Castbar Callbacks
+		function self:Enabled(bool)
+			KBM.Options.CastBar.Enabled = bool
+		end
+		function self:Texture(bool)
+			KBM.Options.CastBar.Texture = bool
+			if KBM.CastBar.Anchor.GUI then
+				KBM.CastBar.Anchor.GUI.Texture:SetVisible(bool)
+			end
+		end
+		function self:Shadow(bool)
+			KBM.Options.CastBar.Shadow = bool
+			if KBM.CastBar.Anchor.GUI then
+				KBM.CastBar.Anchor.GUI.Shadow:SetVisible(bool)
+			end
+		end
+		function self:Visible(bool)
+			KBM.Options.CastBar.Visible = bool
+			KBM.Options.CastBar.Unlocked = bool
+			if bool then
+				KBM.CastBar.Anchor:Display()
+			else
+				KBM.CastBar.Anchor:Hide()
+			end
+		end
+		function self:Width(bool)
+			KBM.Options.CastBar.ScaleWidth = bool
+		end
+		function self:Height(bool)
+			KBM.Options.CastBar.ScaleHeight = bool
+		end
+		function self:Text(bool)
+			KBM.Options.CastBar.TextScale = bool
+		end
+		function self:RiftBar(bool)
+			KBM.CastBar.Anchor:Hide(true)
+			if bool then
+				KBM.Options.CastBar.Style = "rift"
+			else
+				KBM.Options.CastBar.Style = "kbm"
+			end
+			KBM.Options.CastBar.RiftBar = true
+			KBM.CastBar.Anchor:Display()
+		end
+
+		-- CastBar Options. 
+		MenuItem = Item.UI.CreateHeader(KBM.Language.Options.CastbarEnabled[KBM.Lang], KBM.Options.CastBar, "Enabled", self)
+		MenuItem:CreateCheck(KBM.Language.Options.CastbarStyle[KBM.Lang], KBM.Options.CastBar, "RiftBar", self)
+		MenuItem:CreateCheck(KBM.Language.Options.Texture[KBM.Lang], KBM.Options.CastBar, "Texture", self)
+		MenuItem:CreateCheck(KBM.Language.Options.Shadow[KBM.Lang], KBM.Options.CastBar, "Shadow", self)
+		MenuItem:CreateCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], KBM.Options.CastBar, "Visible", self)
+		MenuItem:CreateCheck(KBM.Language.Options.UnlockWidth[KBM.Lang], KBM.Options.CastBar, "ScaleWidth", self)
+		MenuItem:CreateCheck(KBM.Language.Options.UnlockHeight[KBM.Lang], KBM.Options.CastBar, "ScaleHeight", self)
+		MenuItem:CreateCheck(KBM.Language.Options.UnlockText[KBM.Lang], KBM.Options.CastBar, "TextScale", self)
+		
+		-- Player Castbar Callbacks
+		local self = Menu.Callbacks.PlayerBar
+		function self:Enabled(bool)
+			KBM.Player.CastBar.Settings.CastBar.Enabled = bool
+			if bool then
+				KBM.Player.CastBar.CastObj:Create(KBM.Player.UnitID)
+			else
+				KBM.Player.CastBar.CastObj:Remove()
+			end
+		end
+		function self:RiftBar(bool)
+			KBM.Player.CastBar.CastObj:Hide(true)
+			if bool then
+				KBM.Player.CastBar.Settings.CastBar.Style = "rift"
+			else
+				KBM.Player.CastBar.Settings.CastBar.Style = "kbm"
+			end
+			KBM.Player.CastBar.Settings.CastBar.RiftBar = bool
+			KBM.Player.CastBar.CastObj:Display()
+		end
+		function self:Pinned(bool)
+			KBM.Player.CastBar.Settings.CastBar.Pinned = bool
+			KBM.Player.CastBar.CastObj:ApplySettings()
+		end
+		function self:Texture(bool)
+			KBM.Player.CastBar.Settings.CastBar.Texture = bool
+			KBM.Player.CastBar.CastObj:ApplySettings()
+		end
+		function self:Shadow(bool)
+			KBM.Player.CastBar.Settings.CastBar.Shadow = bool
+			KBM.Player.CastBar.CastObj:ApplySettings()
+		end
+		function self:Visible(bool)
+			KBM.Player.CastBar.Settings.CastBar.Visible = bool
+			KBM.Player.CastBar.Settings.CastBar.Unlocked = bool
+			if bool then
+				KBM.Player.CastBar.CastObj:Display()
+			else
+				KBM.Player.CastBar.CastObj:Hide()
+			end
+		end
+		function self:ScaleWidth(bool)
+			KBM.Player.CastBar.Settings.CastBar.ScaleWidth = bool
+		end
+		function self:ScaleHeight(bool)
+			KBM.Player.CastBar.Settings.CastBar.ScaleHeight = bool
+		end
+		function self:TextScale(bool)
+			KBM.Player.CastBar.Settings.CastBar.TextScale = bool
+		end
+			
+		MenuItem = Item.UI.CreateHeader(KBM.Language.CastBar.Player[KBM.Lang], KBM.Options.Player.CastBar, "Enabled", self)
+		MenuItem:CreateCheck(KBM.Language.Options.CastbarStyle[KBM.Lang],KBM.Options.Player.CastBar, "RiftBar", self)
+		MenuItem:CreateCheck(KBM.Language.CastBar.Mimic[KBM.Lang], KBM.Options.Player.CastBar, "Pinned", self)
+		MenuItem:CreateCheck(KBM.Language.Options.Texture[KBM.Lang], KBM.Options.Player.CastBar, "Texture", self)
+		MenuItem:CreateCheck(KBM.Language.Options.Shadow[KBM.Lang], KBM.Options.Player.CastBar, "Shadow", self)
+		MenuItem:CreateCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], KBM.Options.Player.CastBar, "Visible", self)
+		MenuItem:CreateCheck(KBM.Language.Options.UnlockWidth[KBM.Lang], KBM.Options.Player.CastBar, "ScaleWidth", self)
+		MenuItem:CreateCheck(KBM.Language.Options.UnlockHeight[KBM.Lang], KBM.Options.Player.CastBar, "ScaleHeight", self)
+		MenuItem:CreateCheck(KBM.Language.Options.UnlockText[KBM.Lang], KBM.Options.Player.CastBar, "TextScale", self)
+	end
+
+	function Menu.Alerts(Header)
+		Menu.Callbacks.Alerts = {}
+		local self = Menu.Callbacks.Alerts
+		local Item = Header:CreateItem(KBM.Language.Options.Alert[KBM.Lang], "Alerts")
+		local MenuItem
+
+		function self:Enabled(bool)
+			KBM.Options.Alerts.Enabled = bool
+		end
+		function self:Visible(bool)
+			KBM.Options.Alerts.Visible = bool
+			if bool then
+				KBM.Alert.Anchor:SetAlpha(1)
+				KBM.Alert.Left.red:SetAlpha(1)
+				KBM.Alert.Right.red:SetAlpha(1)
+				KBM.Alert.Top.red:SetAlpha(1)
+				KBM.Alert.Bottom.red:SetAlpha(1)
+			end
+			KBM.Alert:ApplySettings()
+		end
+		function self:ScaleText(bool)
+			KBM.Options.Alerts.ScaleText = bool
+		end
+		function self:FlashUnlocked(bool)
+			KBM.Options.Alerts.FlashUnlocked = bool
+			-- if KBM.Options.Alerts.Visible then
+				-- KBM.Alert.AlertControl.Left:SetVisible(bool)
+				-- KBM.Alert.AlertControl.Right:SetVisible(bool)
+				-- KBM.Alert.AlertControl.Top:SetVisible(bool)
+				-- KBM.Alert.AlertControl.Bottom:SetVisible(bool)
+			-- end
+			KBM.Alert:ApplySettings()
+		end
+		function self:Flash(bool)
+			KBM.Options.Alerts.Flash = bool
+		end
+		function self:Vertical(bool)
+			KBM.Options.Alerts.Vertical = bool
+			KBM.Alert:ApplySettings()
+		end
+		function self:Horizontal(bool)
+			KBM.Options.Alerts.Horizontal = bool
+			KBM.Alert:ApplySettings()
+		end
+		function self:Notify(bool)
+			KBM.Options.Alerts.Notify = bool
+		end
+
+		MenuItem = Item.UI.CreateHeader(KBM.Language.Options.AlertsEnabled[KBM.Lang], KBM.Options.Alerts, "Enabled", self)
+		MenuItem:CreateCheck(KBM.Language.Options.AlertText[KBM.Lang], KBM.Options.Alerts, "Notify", self)
+		MenuItem:CreateCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], KBM.Options.Alerts, "Visible", self)
+		MenuItem:CreateCheck(KBM.Language.Options.UnlockText[KBM.Lang], KBM.Options.Alerts, "ScaleText", self)
+		MenuItem:CreateCheck(KBM.Language.Options.UnlockFlash[KBM.Lang], KBM.Options.Alerts, "FlashUnlocked", self)
+		MenuItem = MenuItem:CreateHeader(KBM.Language.Options.AlertFlash[KBM.Lang], KBM.Options.Alerts, "Flash", self)
+		MenuItem:CreateCheck(KBM.Language.Options.AlertVert[KBM.Lang], KBM.Options.Alerts, "Vertical", self)
+		MenuItem:CreateCheck(KBM.Language.Options.AlertHorz[KBM.Lang], KBM.Options.Alerts, "Horizontal", self)
+	end
+
+	-- Mechanic Spy
+	function Menu.MechSpy(Header)
+		Menu.Callbacks.MechSpy = {}
+		local self = Menu.Callbacks.MechSpy
+		local Item = 	Header:CreateItem(KBM.Language.MechSpy.Name[KBM.Lang], "MechSpy")
+		local MenuItem	
+		
+		function self:Enabled(bool)
+			KBM.Options.MechSpy.Enabled = bool
+			KBM.MechSpy:ApplySettings()
+		end
+		function self:Show(bool)
+			KBM.Options.MechSpy.Show = bool
+			KBM.MechSpy:ApplySettings()
+		end
+		function self:Visible(bool)
+			KBM.Options.MechSpy.Visible = bool
+			KBM.MechSpy:ApplySettings()		
+		end
+		function self:ScaleWidth(bool)
+			KBM.Options.MechSpy.ScaleWidth = bool
+		end
+		function self:ScaleHeight(bool)
+			KBM.Options.MechSpy.ScaleHeight = bool
+		end
+		function self:ScaleText(bool)
+			KBM.Options.MechSpy.ScaleText = bool
+		end
+				
+		MenuItem = Item.UI.CreateHeader(KBM.Language.MechSpy.Enabled[KBM.Lang], KBM.Options.MechSpy, "Enabled", self)
+		MenuItem:CreateCheck(KBM.Language.MechSpy.Show[KBM.Lang], KBM.Options.MechSpy, "Show", self)
+		MenuItem:CreateCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], KBM.Options.MechSpy, "Visible", self)
+		MenuItem:CreateCheck(KBM.Language.Options.UnlockWidth[KBM.Lang], KBM.Options.MechSpy, "ScaleWidth", self)
+		MenuItem:CreateCheck(KBM.Language.Options.UnlockHeight[KBM.Lang], KBM.Options.MechSpy, "ScaleHeight", self)
+		MenuItem:CreateCheck(KBM.Language.Options.UnlockText[KBM.Lang], KBM.Options.MechSpy, "ScaleText", self)
+	end
+
+	
+	local Header = KBM.Menu.Page:CreateHeader(KBM.Language.Menu.Global[KBM.Lang], "GLOP", "Main", "Main")
+	Menu.Main(Header)
+	Menu.Timers(Header)
+	Menu.Phases(Header)
+	Menu.CastBars(Header)
+	Menu.Alerts(Header)
+	Menu.MechSpy(Header)
+end
+
+local function BuildMenuModules()
+	local Menu = {}
+	Menu.Callbacks = {}
+
+	-- Tank Swap
+	function Menu.TankSwap(Header)
+		Menu.Callbacks.TankSwap = {}
+		local self = Menu.Callbacks.TankSwap
+		local Item = Header:CreateItem(KBM.Language.TankSwap.Title[KBM.Lang], "TankSwap")
+		local MenuItem
+		
+		function self:Enabled(bool)
+			KBM.Options.TankSwap.Enabled = bool
+			KBM.TankSwap.Enabled = bool
+		end
+		
+		function self:Visible(bool)
+			KBM.Options.TankSwap.Visible = bool
+			if not KBM.TankSwap.Active then
+				KBM.TankSwap.Anchor:SetVisible(bool)
+			end
+		end
+		
+		function self:Unlocked(bool)
+			KBM.Options.TankSwap.Unlocked = bool
+			KBM.TankSwap.Anchor.Drag:SetVisible(bool)
+		end
+		
+		function self:ScaleWidth(bool)
+			KBM.Options.TankSwap.ScaleWidth = bool
+		end
+			
+		function self:ScaleHeight(bool)
+			KBM.Options.TankSwap.ScaleHeight = bool
+		end
+				
+		function self:Tank(bool)
+			KBM.Options.TankSwap.Tank = bool
+		end
+		
+		function self:Test(bool)
+			if bool then
+				KBM.TankSwap:Add("Dummy", "Tank A")
+				KBM.TankSwap:Add("Dummy", "Tank B")
+				KBM.TankSwap:Add("Dummy", "Tank C")
+				KBM.TankSwap.Anchor:SetVisible(false)
+			else
+				KBM.TankSwap:Remove()
+				KBM.TankSwap.Anchor:SetVisible(KBM.Options.TankSwap.Visible)
+			end
+		end
+		
+		-- Tank-Swap Options. 
+		MenuItem = Item.UI.CreateHeader(KBM.Language.TankSwap.Enabled[KBM.Lang], KBM.Options.TankSwap, "Enabled", self)
+		MenuItem:CreateCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], KBM.Options.TankSwap, "Visible", self)
+		MenuItem:CreateCheck(KBM.Language.TankSwap.Tank[KBM.Lang], KBM.Options.TankSwap, "Tank", self)
+		MenuItem:CreateCheck(KBM.Language.TankSwap.Test[KBM.Lang], false, "Test", self)
+		MenuItem = MenuItem:CreateHeader(KBM.Language.Options.LockAnchor[KBM.Lang], KBM.Options.TankSwap, "Unlocked", self)
+		MenuItem:CreateCheck(KBM.Language.Options.UnlockWidth[KBM.Lang], KBM.Options.TankSwap, "ScaleWidth", self)
+		MenuItem:CreateCheck(KBM.Language.Options.UnlockHeight[KBM.Lang], KBM.Options.TankSwap, "ScaleHeight", self)
+	end
+
+	-- Percentage Monitor
+	function Menu.PerMon(Header)
+		Menu.Callbacks.PerMon = {}
+		local self = Menu.Callbacks.PerMon
+		local Item = Header:CreateItem(KBM.Language.PerMon.Title[KBM.Lang], "PerMon")
+		local MenuItem
+		
+		function self:Enabled(bool)
+			KBM.PercentageMon.Settings.Enabled = bool
+			KBM.PercentageMon.GUI.Cradle:SetVisible(bool)
+		end
+		function self:Unlocked(bool)
+			KBM.PercentageMon.Settings.Unlocked = bool
+			if bool then
+				KBM.PercentageMon:SetEvents()
+			else
+				KBM.PercentageMon:ClearEvents()
+			end
+		end
+		function self:Scalable(bool)
+			KBM.PercentageMon.Settings.Scalable = bool
+			if bool then
+				KBM.PercentageMon:UnlockScale()
+			else
+				KBM.PercentageMon:LockScale()
+			end
+		end
+		function self:Names(bool)
+			KBM.PercentageMon.Settings.Names = bool
+			KBM.PercentageMon:SetNames()
+		end
+		function self:Marks(bool)
+			KBM.PercentageMon.Settings.Marks = bool
+			KBM.PercentageMon:SetMarkL()
+			KBM.PercentageMon:SetMarkR()
+		end
+		function self:Percent(bool)
+			KBM.PercentageMon.Settings.Percent = bool
+			KBM.PercentageMon:SetPercentL()
+			KBM.PercentageMon:SetPercentR()
+		end
+		
+		MenuItem = Item.UI.CreateHeader(KBM.Language.PerMon.Enable[KBM.Lang], KBM.PercentageMon.Settings, "Enabled", self)
+		MenuItem:CreateCheck(KBM.Language.PerMon.Unlock[KBM.Lang], KBM.PercentageMon.Settings, "Unlocked", self)
+		MenuItem:CreateCheck(KBM.Language.PerMon.Scale[KBM.Lang], KBM.PercentageMon.Settings, "Scalable", self)
+		MenuItem:CreateCheck(KBM.Language.PerMon.Name[KBM.Lang], KBM.PercentageMon.Settings, "Names", self)
+		MenuItem:CreateCheck(KBM.Language.PerMon.Mark[KBM.Lang], KBM.PercentageMon.Settings, "Marks", self)
+		MenuItem:CreateCheck(KBM.Language.PerMon.Percent[KBM.Lang], KBM.PercentageMon.Settings, "Percent", self)
+	end	
+
+	-- Ready Check
+	function Menu.ReadyCheck(Header)
+		Menu.Callbacks.ReadyCheck = {}
+		Menu.Callbacks.ReadyButton = {}
+		local self = Menu.Callbacks.ReadyCheck
+		local Item = Header:CreateItem(KBM.Language.ReadyCheck.Name[KBM.Lang], "ReadyCheck")
+		local MenuItem
+	
+		function self:Enabled(bool)
+			KBM.Ready.Enabled = bool
+			KBM.Ready.Enable(bool)
+			KBM.Ready.Button:ApplySettings()
+		end
+		function self:Combat(bool)
+			KBM.Ready.Settings.Combat = bool
+			KBM.Ready.UpdateSMode()
+		end
+		function self:Solo(bool)
+			KBM.Ready.Settings.Solo = bool
+			KBM.Ready.UpdateSMode()
+		end
+		function self:Unlocked(bool)
+			KBM.Ready.Settings.Unlocked = bool
+			KBM.Ready.SetLock()
+		end
+		function self:Hidden(bool)
+			KBM.Ready.Settings.Hidden = bool
+			KBM.Ready.UpdateSMode()
+		end
+		function self:Scale(bool)
+			KBM.Ready.Settings.Scale = bool
+			KBM.Ready.GUI:ApplySettings()
+		end
+			
+		MenuItem = Item.UI.CreateHeader(KBM.Language.Options.Enabled[KBM.Lang], KBM.Ready.Settings, "Enabled", self)
+		MenuItem:CreateCheck(KBM.Language.ReadyCheck.Unlock[KBM.Lang], KBM.Ready.Settings, "Unlocked", self)
+		MenuItem:CreateCheck(KBM.Language.ReadyCheck.Size[KBM.Lang], KBM.Ready.Settings, "Scale", self)
+		MenuItem:CreateCheck(KBM.Language.ReadyCheck.Hidden[KBM.Lang], KBM.Ready.Settings, "Hidden", self)
+		MenuItem:CreateCheck(KBM.Language.ReadyCheck.Combat[KBM.Lang], KBM.Ready.Settings, "Combat", self)
+		MenuItem:CreateCheck(KBM.Language.ReadyCheck.Solo[KBM.Lang], KBM.Ready.Settings, "Solo", self)
+		
+		-- Button Settings
+		self = Menu.Callbacks.ReadyButton
+		function self:Visible(bool)
+			KBM.Ready.Settings.Button.Visible = bool
+			KBM.Ready.Button:ApplySettings()
+		end
+		function self:Unlocked(bool)
+			KBM.Ready.Settings.Button.Unlocked = bool
+			KBM.Ready.Button:ApplySettings()
+		end
+		
+		MenuItem = MenuItem:CreateHeader(KBM.Language.Options.Button[KBM.Lang], KBM.Ready.Settings.Button, "Visible", self)
+		MenuItem:CreateCheck(KBM.Language.Options.LockButton[KBM.Lang], KBM.Ready.Settings.Button, "Unlocked", self)
+	end
+
+	-- Res Master
+	function Menu.ResMaster(Header)
+		Menu.Callbacks.ResMaster = {}
+		local self = Menu.Callbacks.ResMaster
+		local Item = Header:CreateItem(KBM.Language.ResMaster.Name[KBM.Lang], "ResMaster")
+		local MenuItem
+		
+		function self:Enabled(bool)
+			KBM.Options.ResMaster.Enabled = bool
+			if bool then
+				KBM.PlayerControl:GatherAbilities(true)
+				KBM.PlayerControl:GatherRaidInfo()
+			else
+				KBM.ResMaster.Rezes:Clear()
+			end
+		end
+		function self:Visible(bool)
+			KBM.Options.ResMaster.Visible = bool
+			KBM.Options.ResMaster.Unlocked = bool
+			KBM.ResMaster.GUI:ApplySettings()
+		end
+		function self:ScaleWidth(bool)
+			KBM.Options.ResMaster.ScaleWidth = bool
+		end
+		function self:ScaleHeight(bool)
+			KBM.Options.ResMaster.ScaleHeight = bool
+		end
+		function self:ScaleText(bool)
+			KBM.Options.ResMaster.ScaleText = bool
+		end
+		function self:Cascade(bool)
+			KBM.Options.ResMaster.Cascade = bool
+			KBM.ResMaster:ReOrder()
+		end
+		
+		MenuItem = Item.UI.CreateHeader(KBM.Language.ResMaster.Enabled[KBM.Lang], KBM.Options.ResMaster, "Enabled", self)
+		MenuItem:CreateCheck(KBM.Language.ResMaster.Cascade[KBM.Lang], KBM.Options.ResMaster, "Cascade", self)
+		MenuItem:CreateCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], KBM.Options.ResMaster, "Visible", self)
+		MenuItem:CreateCheck(KBM.Language.Options.UnlockWidth[KBM.Lang], KBM.Options.ResMaster, "ScaleWidth", self)
+		MenuItem:CreateCheck(KBM.Language.Options.UnlockHeight[KBM.Lang], KBM.Options.ResMaster, "ScaleHeight", self)
+		MenuItem:CreateCheck(KBM.Language.Options.UnlockText[KBM.Lang], KBM.Options.ResMaster, "ScaleText", self)
+	end
+	
+	local Header = KBM.Menu.Page:CreateHeader(KBM.Language.Menu.Mods[KBM.Lang], "MODS", "Main", "Main")
+	Menu.TankSwap(Header)
+	Menu.PerMon(Header)
+	Menu.ReadyCheck(Header)
+	Menu.ResMaster(Header)	
+end
+
 function KBM.InitMenus()
 	-- Main TreeView
 	local Header = KBM.MainWin.Menu:CreateHeader(KBM.Language.Menu.Global[KBM.Lang], "Main")
@@ -8074,7 +8731,11 @@ function KBM.InitMenus()
 	KBM.MenuOptions.TankSwap.MenuItem = Header:CreatePage(KBM.Language.TankSwap.Title[KBM.Lang], KBM.MenuOptions.TankSwap)
 	KBM.MenuOptions.PerMon.MenuItem = Header:CreatePage(KBM.Language.PerMon.Title[KBM.Lang], KBM.MenuOptions.PerMon)
 	KBM.MenuOptions.ReadyCheck.MenuItem = Header:CreatePage(KBM.Language.ReadyCheck.Name[KBM.Lang], KBM.MenuOptions.ReadyCheck)
-	KBM.MenuOptions.RezMaster.MenuItem = Header:CreatePage(KBM.Language.RezMaster.Name[KBM.Lang], KBM.MenuOptions.RezMaster)
+	KBM.MenuOptions.ResMaster.MenuItem = Header:CreatePage(KBM.Language.ResMaster.Name[KBM.Lang], KBM.MenuOptions.ResMaster)
+	
+	-- New Style Menu
+	BuildMenuSettings()
+	BuildMenuModules()
 
 	-- Reset References for missing UTIDs
 	-- These are compiled fresh each run.
@@ -8132,8 +8793,12 @@ function KBM.InitMenus()
 					print("Encounter: "..Mod.Descript)
 				end
 			end
+			Mod.InstanceObj.MenuObj:CreateEncounter(Mod)
 		elseif not Mod.IsInstance then
 			error(tostring(Mod.ID).." is missing required field: InstanceObj")
+		else
+			-- Instance Header
+			KBM.Menu.Instance:Create(Mod)
 		end
 		Mod:Start(KBM_MainWin)
 	end
@@ -8362,7 +9027,7 @@ function KBM.RegisterMod(ModID, Mod)
 end
 
 function KBM.InitKBM(handle, ModID)	
-	if ModID == "KingMolinator" then
+	if ModID == "KBMReadyCheck" then
 		KBM.ApplySettings()
 		local TempGUIList = {}
 		for Cached = 1, KBM.Trigger.High.Timers do
@@ -8404,15 +9069,8 @@ function KBM.InitKBM(handle, ModID)
 		end
 		TempCastBarBoss = {}
 		KBM.CPU:Toggle(true)
-
-		if KBM.IsAlpha then
-			print(KBM.Language.Welcome.Welcome[KBM.Lang]..AddonData.toc.Version.." Alpha")
-		else
-			print(KBM.Language.Welcome.Welcome[KBM.Lang]..AddonData.toc.Version)
-		end
-		print(KBM.Language.Welcome.Commands[KBM.Lang])
-		print(KBM.Language.Welcome.Options[KBM.Lang])
-		KBM.RezMaster:Start()
+		
+		KBM.ResMaster:Start()
 		KBM.Player.Rezes = {
 			List = {},
 			Resume = {},
@@ -8424,6 +9082,17 @@ function KBM.InitKBM(handle, ModID)
 			KBM.Marks.Icon[i]:SetTexture("Rift", File)
 			KBM.Marks.Icon[i]:SetVisible(false)
 		end
+
+		KBM:InitMenus()
+		
+		-- Start
+		if KBM.IsAlpha then
+			print(KBM.Language.Welcome.Welcome[KBM.Lang]..AddonData.toc.Version.." Alpha")
+		else
+			print(KBM.Language.Welcome.Welcome[KBM.Lang]..AddonData.toc.Version)
+		end
+		print(KBM.Language.Welcome.Commands[KBM.Lang])
+		print(KBM.Language.Welcome.Options[KBM.Lang])
 	else
 		if Inspect.Buff.Detail ~= IBDReserved then
 			print(tostring(ModID).." changed internal command: Restoring Inspect.Buff.Detail")

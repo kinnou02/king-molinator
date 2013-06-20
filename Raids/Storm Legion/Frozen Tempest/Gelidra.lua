@@ -45,6 +45,7 @@ GLD.Lang.Unit.VortexShort = KBM.Language:Add("Vortex")
 GLD.Lang.Unit.VortexShort:SetGerman("Wirbel")
 GLD.Lang.Unit.VortexShort:SetFrench("Vortex")
 GLD.Lang.Unit.Amrian = KBM.Language:Add("Amrian")
+GLD.Lang.Unit.Amrian:SetFrench()
 
 -- Ability Dictionary
 GLD.Lang.Ability = {}
@@ -55,6 +56,7 @@ GLD.Lang.Ability.Cascade = KBM.Language:Add("Lacerating Cascade")
 GLD.Lang.Ability.Cascade:SetGerman("Reißende Kaskade")
 GLD.Lang.Ability.Cascade:SetFrench("Cascade lacérante")
 GLD.Lang.Ability.Blizzard = KBM.Language:Add("Razorwind Blizzard")
+GLD.Lang.Ability.Blizzard:SetFrench("Blizzard de vent tranchant")
 
 -- Description Dictionary
 GLD.Lang.Main = {}
@@ -71,6 +73,7 @@ GLD.Lang.Debuff.Spasm = KBM.Language:Add("Voltaic Spasms")
 GLD.Lang.Debuff.Spasm:SetGerman("Voltaische Krämpfe")
 GLD.Lang.Debuff.Spasm:SetFrench("Spasmes voltaïques")
 GLD.Lang.Debuff.Induction = KBM.Language:Add("Hypothermic Induction")
+GLD.Lang.Debuff.Induction:SetFrench("Induction hypothermique")
 GLD.Lang.Debuff.Chill = KBM.Language:Add("Deathly Chill")
 
 GLD.Lang.Messages = {}

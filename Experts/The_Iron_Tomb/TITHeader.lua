@@ -16,6 +16,7 @@ local MOD = {
 	Type = "Expert",
 	ID = "The_Iron_Tomb",
 	Object = "MOD",
+	Rift = "Rift",
 }
 
 -- Link Mods

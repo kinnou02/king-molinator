@@ -16,6 +16,7 @@ local MOD = {
 	Type = "Expert",
 	ID = "Upper_Caduceus_Rise",
 	Object = "MOD",
+	Rift = "Rift",
 }
 
 -- Link Mods

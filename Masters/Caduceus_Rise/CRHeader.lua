@@ -16,6 +16,7 @@ local MOD = {
 	Type = "Master",
 	ID = "Caduceus_Rise",
 	Object = "MOD",
+	Rift = "Rift",
 }
 
 -- Link Mods

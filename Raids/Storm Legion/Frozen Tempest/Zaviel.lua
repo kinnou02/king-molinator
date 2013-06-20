@@ -61,7 +61,7 @@ ZVL.Lang.Ability.Beam:SetFrench("Rayon réparateur")
 ZVL.Lang.Debuff = {}
 ZVL.Lang.Debuff.Arc = KBM.Language:Add("Arc Weld")
 ZVL.Lang.Debuff.Arc:SetGerman("Bogenverschweißung")
-ZVL.Lang.Debuff.Arc:SetFrench("Broche")
+ZVL.Lang.Debuff.Arc:SetFrench("Soudure arquée")
 ZVL.Lang.Debuff.Vitality = KBM.Language:Add("Dissonant Vitality")
 ZVL.Lang.Debuff.Vitality:SetGerman("Dissonante Vitalität")
 ZVL.Lang.Debuff.Vitality:SetFrench("Vitalité dissonante")

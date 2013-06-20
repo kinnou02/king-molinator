@@ -15,6 +15,7 @@ local PF = {
 	Type = "Sliver",
 	ID = "PF",
 	Object = "PF",
+	Rift = "Rift",
 }
 
 -- Link Mods

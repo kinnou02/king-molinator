@@ -3,7 +3,7 @@
 -- Copyright 2012
 --
 
-local AddonData = Inspect.Addon.Detail("KBMReadyCheck")
+local AddonData = ...
 local KBMRC = AddonData.data
 local LibSBuff = Inspect.Addon.Detail("SafesBuffLib").data
 
@@ -164,6 +164,18 @@ PI.Constants = {
 						mage = true,
 					},
 				},
+				["r36E23CF74112D284"] = { -- Vampiric Essence
+					Grade = "High",
+					Level = 60,
+					Callings = {
+						cleric = true,
+						warrior = true,
+						rogue = true,
+					},
+					Role = {
+						tank = true,
+					},
+				},
 				["r5812508956871CF3"] = { -- Remarkable Whetstone
 					Grade = "High",
 					Level = 60,
@@ -180,6 +192,13 @@ PI.Constants = {
                         warrior = true,
                     },
                 },
+				["r712EF6F7297AB9ED"] = { -- Storm Sigil
+					Grade = "Med",
+					Level = 60,
+					Callings = {
+						warrior = true,
+					},
+				},
 				["r61C14C434DDF615D"] = { -- Flaring Sigil
 					Grade = "Med",
 					Level = 60,
@@ -1895,6 +1914,7 @@ end
 
 function PI.Init(handle, ModID)
 	if ModID == AddonData.id then
+		
 		-- LibSUnit Events
 		Command.Event.Attach(Event.SafesUnitLib.Raid.Join, PI.PlayerJoin, "Player Joins")
 		Command.Event.Attach(Event.SafesUnitLib.Raid.Leave, PI.PlayerLeave, "Player Leaves")

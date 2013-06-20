@@ -16,6 +16,7 @@ local MOD = {
 	Type = "Expert",
 	ID = "Foul_Cascade",
 	Object = "MOD",
+	Rift = "Rift",
 }
 
 -- Link Mods

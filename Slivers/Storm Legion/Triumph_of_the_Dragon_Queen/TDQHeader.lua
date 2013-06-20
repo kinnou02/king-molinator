@@ -16,6 +16,7 @@ local TDQ = {
 	Type = "Sliver",
 	ID = "STriumph_of_the_Dragon_Queen",
 	Object = "TDQ",
+	Rift = "SL",
 }
 
 -- Link Mods

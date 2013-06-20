@@ -16,6 +16,7 @@ local MOD = {
 	Type = "Expert",
 	ID = "ETower_of_the_Shattered",
 	Object = "MOD",
+	Rift = "SL",
 }
 
 -- Link Mods

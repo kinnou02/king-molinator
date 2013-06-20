@@ -418,26 +418,27 @@ end
 function LibSGui.ShadowText:Create(_parent, _visible)
 	local st = {}
 	st._cradle = _int:pullText(_parent, _visible)
-	st._cradle:SetFontColor(0,0,0)
-	st.Text = _int:pullText(st._cradle, true)
-	st.Text:SetPoint("TOP", st._cradle, "TOP", nil, -1)
-	st.Text:SetPoint("LEFT", st._cradle, "LEFT", -1, nil)
-	st.Text:SetPoint("RIGHT", st._cradle, "RIGHT", -1, nil)
-	st.Text:SetPoint("BOTTOM", st._cradle, "BOTTOM", nil, -1)
+	st._cradle:SetEffectGlow({offsetX = 2, offsetY = 2, colorR = 0, colorG = 0, colorB = 0})
+	
 	_int.attachDefault(st)
 	function st:SetText(Text)
+		Text = Text or ""
 		self._cradle:SetText(Text)
-		self.Text:SetText(Text)
 	end
 	function st:SetFontColor(...)
-		self.Text:SetFontColor(...)
+		self._cradle:SetFontColor(...)
 	end
 	function st:SetFontSize(s)
 		self._cradle:SetFontSize(s)
-		self.Text:SetFontSize(s)
 	end
 	function st:GetText()
 		return self._cradle:GetText()
+	end
+	function st:SetWordwrap(bool)
+		self._cradle:SetWordwrap(bool)
+	end
+	function st:GetWordwrap()
+		return self.cradle:GetWordwrap()
 	end
 	return st
 end
@@ -608,16 +609,24 @@ function _int.attachDefault(base)
 	end
 	function base:SetAllPoints(frame)
 		if frame then
-			if type(frame) == "table" then
+			if Utility.Type(frame) == "frame" then
 				if frame._cradle then
 					self._cradle:SetAllPoints(frame._cradle)
 				else
 					self._cradle:SetAllPoints(frame)
 				end
+			else
+				error("Expecting frame got: "..tostring(Utility.Type(frame)))
 			end
 		else
 			self._cradle:SetAllPoints()
 		end
+	end
+	function base:ClearAllPoints()
+		self._cradle:ClearPoint("TOP")
+		self._cradle:ClearPoint("BOTTOM")
+		self._cradle:ClearPoint("LEFT")
+		self._cradle:ClearPoint("RIGHT")
 	end
 	function base:GetVisible()
 		return self._cradle:GetVisible()
@@ -645,6 +654,24 @@ function _int.attachDefault(base)
 	end
 	function base:SetLayer(layer)
 		self._cradle:SetLayer(layer)
+	end
+	function base:ClearAll()
+		self._cradle:ClearAll()
+	end
+	function base:SetParent(_frame)
+		self._cradle:SetParent(_frame)
+	end
+	function base:EventAttach(...)
+		return self._cradle:EventAttach(...)
+	end
+	function base:EventDetach(...)
+		return self._cradle:EventDetach(...)
+	end
+	function base:SetMouseMasking(...)
+		self._cradle:SetMouseMasking(...)
+	end
+	function base:GetMouseMasking()
+		return self._cradle:GetMouseMasking()
 	end
 end
 

@@ -22,6 +22,7 @@ local GSB = {
 	Type = "Raid",
 	ID = "GSB",
 	Object = "GSB",
+	Rift = "Rift",
 }
 
 KBM.RegisterMod("Greenscales Blight", GSB)

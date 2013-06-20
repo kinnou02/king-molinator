@@ -16,6 +16,7 @@ local MOD = {
 	Type = "Expert",
 	ID = "Abyssal_Precipice",
 	Object = "MOD",
+	Rift = "Rift",
 }
 
 -- Link Mods

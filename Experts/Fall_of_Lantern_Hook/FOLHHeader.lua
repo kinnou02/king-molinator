@@ -16,6 +16,7 @@ local MOD = {
 	Type = "Expert",
 	ID = "Fall_of_Lantern_Hook",
 	Object = "MOD",
+	Rift = "Rift",
 }
 
 -- Link Mods

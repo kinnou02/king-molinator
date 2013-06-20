@@ -16,6 +16,7 @@ local FT = {
 	Type = "Raid",
 	ID = "RFrozen_Tempest",
 	Object = "FT",
+	Rift = "SL",
 }
 
 local AddonData = Inspect.Addon.Detail("KingMolinator")

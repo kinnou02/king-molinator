@@ -11,8 +11,8 @@ local TH = _int.TH
 -- Define Panel Events
 LibSGui.Event.Panel = {}
 LibSGui.Event.Panel.Scrollbar = {}
-LibSGui.Event.Panel.Scrollbar.Change = Utility.Event.Create("SafesGUILib", "Event.Panel.Scrollbar.Change")
-LibSGui.Event.Panel.Scrollbar.Active = Utility.Event.Create("SafesGUILib", "Event.Panel.Scrollbar.Active")
+LibSGui.Event.Panel.Scrollbar.Change = Utility.Event.Create("SafesGUILib", "Panel.Scrollbar.Change")
+LibSGui.Event.Panel.Scrollbar.Active = Utility.Event.Create("SafesGUILib", "Panel.Scrollbar.Active")
 
 -- Define Area
 LibSGui.Panel = {}

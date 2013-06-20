@@ -17,6 +17,7 @@ local MOD = {
 	Type = "Master",
 	ID = "MM_Darkening_Deeps",
 	Object = "MOD",
+	Rift = "Rift",
 }
 
 -- Link Mods

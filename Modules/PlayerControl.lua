@@ -50,7 +50,7 @@ function PC:GatherAbilities()
 					crTable = Inspect.Ability.New.Detail(crID)
 					self.RezBank[LibSUnit.Player.Calling][crID] = crTable
 					KBM.Player.Rezes.List[crID] = self.RezBank[LibSUnit.Player.Calling][crID]
-					KBM.RezMaster.Rezes:Add(LibSUnit.Player.Name, crID, crTable.currentCooldownRemaining, crTable.cooldown)
+					KBM.ResMaster.Rezes:Add(LibSUnit.Player.Name, crID, crTable.currentCooldownRemaining, crTable.cooldown)
 					-- print(Count..": "..self.RezBank[LibSUnit.Player.Calling][crID].name)
 				end
 			end
@@ -95,13 +95,13 @@ function PC.AbilityRemove(handle, aIDList)
 					self.RezBank[LibSUnit.Player.Calling][crID] = Inspect.Ability.New.Detail(crID)
 					KBM.Player.Rezes.List[crID] = nil
 					-- print(Count..": "..self.RezBank[LibSUnit.Player.Calling][crID].name.." < Removed")
-					KBM.RezMaster.Broadcast.RezRem(crID)
+					KBM.ResMaster.Broadcast.RezRem(crID)
 					Count = Count - 1
 				end
 			end
 			KBM.Player.Rezes.Count = Count
 			if KBM.Player.Rezes.Count == 0 then
-				--KBM.RezMaster.Broadcast.RezClear()
+				--KBM.ResMaster.Broadcast.RezClear()
 			end
 		end
 	end
@@ -118,8 +118,8 @@ function PC.AbilityAdd(handle, aIDList)
 				local aDetails = Inspect.Ability.New.Detail(crID)
 				self.RezBank[LibSUnit.Player.Calling][crID] = aDetails
 				KBM.Player.Rezes.List[crID] = self.RezBank[LibSUnit.Player.Calling][crID]
-				KBM.RezMaster.Rezes:Add(LibSUnit.Player.Name, crID, aDetails.currentCooldownRemaining, aDetails.cooldown)
-				KBM.RezMaster.Broadcast.RezSet(nil, crID)
+				KBM.ResMaster.Rezes:Add(LibSUnit.Player.Name, crID, aDetails.currentCooldownRemaining, aDetails.cooldown)
+				KBM.ResMaster.Broadcast.RezSet(nil, crID)
 				-- print(Count..": "..self.RezBank[LibSUnit.Player.Calling][crID].name.." < Added")
 			end
 		end
@@ -151,8 +151,8 @@ function PC.AbilityCooldown(handle, aIDList)
 						--print("Rez Matched!")
 						KBM.Player.Rezes.List[rID] = aDetails
 						KBM.Player.Rezes.Resume[rID] = aDetails.currentCooldownBegin + aDetails.currentCooldownRemaining
-						KBM.RezMaster.Rezes:Add(LibSUnit.Player.Name, rID, aDetails.currentCooldownRemaining, aDetails.cooldown)
-						KBM.RezMaster.Broadcast.RezSet(nil, rID)
+						KBM.ResMaster.Rezes:Add(LibSUnit.Player.Name, rID, aDetails.currentCooldownRemaining, aDetails.cooldown)
+						KBM.ResMaster.Broadcast.RezSet(nil, rID)
 					end
 				end
 			end
@@ -162,7 +162,7 @@ end
 
 function PC.PlayerJoin()
 	--print("PC -- You Join")
-	KBM.RezMaster.Rezes.Tracked[LibSUnit.Player.Name] = {
+	KBM.ResMaster.Rezes.Tracked[LibSUnit.Player.Name] = {
 		UnitID = LibSUnit.Player.UnitID,
 		UnitObj = LibSUnit.Player,
 		Class = LibSUnit.Player.Calling,
@@ -175,18 +175,18 @@ function PC.PlayerJoin()
 end
 
 function PC.CallingChange(handle, UnitObj)
-	if KBM.RezMaster.Rezes.Tracked[UnitObj.Name] then
-		if KBM.RezMaster.Rezes.Tracked[UnitObj.Name].Class ~= UnitObj.Calling then
+	if KBM.ResMaster.Rezes.Tracked[UnitObj.Name] then
+		if KBM.ResMaster.Rezes.Tracked[UnitObj.Name].Class ~= UnitObj.Calling then
 			if UnitObj.Calling ~= "" and UnitObj.Calling ~= nil then
-				for aID, Timer in pairs(KBM.RezMaster.Rezes.Tracked[UnitObj.Name].Timers) do
-					KBM.RezMaster.Rezes:Add(UnitObj.Name, aID, Timer.Remaining, Timer.Duration)
+				for aID, Timer in pairs(KBM.ResMaster.Rezes.Tracked[UnitObj.Name].Timers) do
+					KBM.ResMaster.Rezes:Add(UnitObj.Name, aID, Timer.Remaining, Timer.Duration)
 				end
 			end
 		end
 	else
 		-- Request BR
 		if UnitObj.Calling == "mage" or UnitObj.Calling == "cleric" then
-			KBM.RezMaster.Rezes.Tracked[UnitObj.Name] = {
+			KBM.ResMaster.Rezes.Tracked[UnitObj.Name] = {
 				UnitID = UnitObj.UnitID,
 				UnitObj = UnitObj,
 				Class = UnitObj.Calling,
@@ -238,16 +238,16 @@ function PC.MessageQueueDispatch(handle, queue)
 end
 
 function PC.GroupDeath(handle, UnitObj)
-	if KBM.RezMaster.Rezes.Tracked[UnitObj.Name] then
-		for aID, Timer in pairs(KBM.RezMaster.Rezes.Tracked[UnitObj.Name].Timers) do
+	if KBM.ResMaster.Rezes.Tracked[UnitObj.Name] then
+		for aID, Timer in pairs(KBM.ResMaster.Rezes.Tracked[UnitObj.Name].Timers) do
 			Timer:SetDeath(true)
 		end
 	end
 end	
 
 function PC.GroupRes(handle, UnitObj)
-	if KBM.RezMaster.Rezes.Tracked[UnitObj.Name] then
-		for aID, Timer in pairs(KBM.RezMaster.Rezes.Tracked[UnitObj.Name].Timers) do
+	if KBM.ResMaster.Rezes.Tracked[UnitObj.Name] then
+		for aID, Timer in pairs(KBM.ResMaster.Rezes.Tracked[UnitObj.Name].Timers) do
 			Timer:SetDeath(false)
 		end
 	end
@@ -255,10 +255,10 @@ end
 
 function PC.GroupJoin(handle, UnitObj, Spec)
 	if UnitObj.Name ~= LibSUnit.Player.Name then
-		if not KBM.RezMaster.Rezes.Tracked[UnitObj.Name] then
+		if not KBM.ResMaster.Rezes.Tracked[UnitObj.Name] then
 			if not UnitObj.Offline then
 				if UnitObj.Calling == "mage" or UnitObj.Calling == "cleric" then
-					KBM.RezMaster.Rezes.Tracked[UnitObj.Name] = {
+					KBM.ResMaster.Rezes.Tracked[UnitObj.Name] = {
 						UnitID = UnitObj.UnitID,
 						UnitObj = UnitObj,
 						Class = UnitObj.Calling,
@@ -269,9 +269,9 @@ function PC.GroupJoin(handle, UnitObj, Spec)
 			end
 		else
 			if UnitObj.Calling then
-				if KBM.RezMaster.Rezes.Tracked[UnitObj.Name].Class ~= UnitObj.Calling then
-					for aID, Timer in pairs(KBM.RezMaster.Rezes.Tracked[UnitObj.Name].Timers) do
-						KBM.RezMaster.Rezes:Add(UnitObj.Name, aID, Timer.Remaining, Timer.Duration)
+				if KBM.ResMaster.Rezes.Tracked[UnitObj.Name].Class ~= UnitObj.Calling then
+					for aID, Timer in pairs(KBM.ResMaster.Rezes.Tracked[UnitObj.Name].Timers) do
+						KBM.ResMaster.Rezes:Add(UnitObj.Name, aID, Timer.Remaining, Timer.Duration)
 					end
 				end
 			end
@@ -280,21 +280,21 @@ function PC.GroupJoin(handle, UnitObj, Spec)
 end
 
 function PC.GroupLeave(handle, UnitObj, Spec)
-	KBM.RezMaster.Rezes:Clear(UnitObj.Name)
+	KBM.ResMaster.Rezes:Clear(UnitObj.Name)
 end
 
 function PC.PlayerOffline(handle, Units)
 	for UnitID, UnitObj in pairs(Units) do
 		if UnitObj.Offline then
-			if KBM.RezMaster.Rezes.Tracked[UnitObj.Name] then
-				KBM.RezMaster.Rezes:Clear(UnitObj.Name)
+			if KBM.ResMaster.Rezes.Tracked[UnitObj.Name] then
+				KBM.ResMaster.Rezes:Clear(UnitObj.Name)
 			end
 		end
 	end
 end
 
 function PC.PlayerLeave()
-	KBM.RezMaster.Rezes:Clear()
+	KBM.ResMaster.Rezes:Clear()
 end
 
 function PC:Start()

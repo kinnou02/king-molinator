@@ -15,6 +15,7 @@ local DH = {
 	Type = "Sliver",
 	ID = "DH",
 	Object = "DH",
+	Rift = "Rift",
 }
 
 -- Link Mods
@@ -49,5 +50,5 @@ function DH:SaveVars()
 end
 
 function DH:Start()
-	DH.Menu = KBM.MainWin.Menu:CreateInstance(self.Name, true, self.Handler, "Sliver")	
+	DH.Menu = KBM.MainWin.Menu:CreateInstance(self.Name, true, self.Handler, "Sliver")
 end

@@ -16,6 +16,7 @@ local MOD = {
 	Type = "Expert",
 	ID = "EStorm_Breaker_Protocol",
 	Object = "MOD",
+	Rift = "SL",
 }
 
 -- Link Mods

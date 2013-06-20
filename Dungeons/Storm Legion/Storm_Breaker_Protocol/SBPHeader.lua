@@ -16,6 +16,7 @@ local MOD = {
 	Type = "Normal",
 	ID = "NStorm_Breaker_Protocol",
 	Object = "MOD",
+	Rift = "SL",
 }
 
 -- Link Mods

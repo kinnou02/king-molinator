@@ -1,4 +1,21 @@
-﻿v1.4.5
+﻿v1.4.6
+
+Menu System
+* Stage 1: Complete
+* Complete rewrite of the underlying menu code in preparation for new functionality.
+* At the moment this is just reproducing old functionality.
+
+Ready Check
+* New: Added Vampiric Essence. (60: Warrior, Cleric, Rogue - Tank - High)
+* New: Added Storm Sigil. (60: Warrior - Medium)
+
+Regulos
+* Fixed: Issues with Castbar settings causing occasional settings resets.
+* Fixed: Castbars were not saving correctly.
+* Fixed: Sicaron's castbar was not showing.
+
+----
+v1.4.5
 
 Res Master
 * Fixed: Issues with Res messages only being sent to group members, and never to raid members.
@@ -895,7 +912,7 @@ LibSBuff
 Ready Check Available Tracking
 * New: Added Razor Edge.
 
-RezMaster
+ResMaster
 * Fixed: Scaling Rez Master with active timers should no longer throw errors.
 
 Tank-Swap
@@ -1315,7 +1332,7 @@ Mechanic Timers
 Phase Monitor
 * Fixed: Possible nil value with Type ID reliant deaths.
 
-RezMaster
+ResMaster
 * Fixed: Possible nil value with unassigned Unit cache.
 
 Infernal Dawn
@@ -1545,11 +1562,11 @@ Player Castbar
 * Change: This will now default to disabled. Enable it via KBM > Global Options > Cast-bars > Enable Player Castbar
 * Note: This will not effect existing settings.
 
-RezMaster
+ResMaster
 * Change: Messages are now handled for both .Send and .Broadcast to account for any issues with the API (such as this week).
 
 Version Messages
-* Change: See RezMaster.
+* Change: See ResMaster.
 
 Mechanic Timers
 * Change: Adjusted mechanic timers to only re-render their progress or text if it has changed.
@@ -1694,7 +1711,7 @@ System
 * New: On start-up the KBM event system now fires Player Join events if you're already in a group (for both /reloadui, and log-in).
 
 Rez Master
-* New: Enabling RezMaster (from a disabled state) will re-inspect your raid and retrieve fresh Rez data. Useful before a pull if anything seems amiss.
+* New: Enabling ResMaster (from a disabled state) will re-inspect your raid and retrieve fresh Rez data. Useful before a pull if anything seems amiss.
 * Fixed: Errors sometimes triggering on leaving a dungeon.
 * Fixed: Enable/Disable option now works.
 ----

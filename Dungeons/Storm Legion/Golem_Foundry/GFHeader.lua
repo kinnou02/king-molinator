@@ -16,6 +16,7 @@ local MOD = {
 	Type = "Normal",
 	ID = "NGolem_Foundry",
 	Object = "MOD",
+	Rift = "SL",
 }
 
 -- Link Mods

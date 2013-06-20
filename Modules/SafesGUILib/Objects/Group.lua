@@ -11,8 +11,8 @@ local TH = _int.TH
 -- Define Group Events
 LibSGui.Event.Group = {}
 LibSGui.Event.Group.Scrollbar = {}
-LibSGui.Event.Group.Scrollbar.Change = Utility.Event.Create("SafesGUILib", "Event.Group.Scrollbar.Change")
-LibSGui.Event.Group.Scrollbar.Active = Utility.Event.Create("SafesGUILib", "Event.Group.Scrollbar.Active")
+LibSGui.Event.Group.Scrollbar.Change = Utility.Event.Create("SafesGUILib", "Group.Scrollbar.Change")
+LibSGui.Event.Group.Scrollbar.Active = Utility.Event.Create("SafesGUILib", "Group.Scrollbar.Active")
 
 -- Define Area
 LibSGui.Group = {}
@@ -78,6 +78,8 @@ function LibSGui.Group:Create(title, _parent, pTable)
 		if type(newHeight) == "number" then
 			if newHeight > 0 then
 				self.Content:ClearPoint("BOTTOM")
+				self.Content:ClearPoint("TOP")
+				self.Content:SetPoint("TOP", self._mask, "TOP")
 				self.Content:SetHeight(newHeight)
 			else
 				if _int._debug then

@@ -16,6 +16,7 @@ local MOD = {
 	Type = "Normal",
 	ID = "NEmpyrean_Core",
 	Object = "MOD",
+	Rift = "SL",
 }
 
 -- Link Mods

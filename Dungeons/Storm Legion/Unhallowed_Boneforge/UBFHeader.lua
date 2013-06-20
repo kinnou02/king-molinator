@@ -16,6 +16,7 @@ local MOD = {
 	Type = "Normal",
 	ID = "NUnhallowed_Boneforge",
 	Object = "MOD",
+	Rift = "SL",
 }
 
 -- Link Mods

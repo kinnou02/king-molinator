@@ -331,7 +331,7 @@ function _lsu:Create(UID, uDetails, Type)
 		Percent = 0,
 		Type = uDetails.type,
 		Tier = uDetails.tier,
-		Level = uDetails.level,
+		Level = uDetails.level or 0,
 		Player = uDetails.player,
 		Mark = tonumber(uDetails.mark),
 		Relation = uDetails.relation,

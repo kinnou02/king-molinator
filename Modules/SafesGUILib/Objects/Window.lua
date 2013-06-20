@@ -8,9 +8,9 @@ local _int = LibSGui:_internal()
 
 -- Define Window Events
 LibSGui.Event.Window = {}
-LibSGui.Event.Window.Close = Utility.Event.Create("SafesGUILib", "Event.Window.Close")
-LibSGui.Event.Window.Move = Utility.Event.Create("SafesGUILib", "Event.Window.Move")
-LibSGui.Event.Window.Moved = Utility.Event.Create("SafesGUILib", "Event.Window.Moved")
+LibSGui.Event.Window.Close = Utility.Event.Create("SafesGUILib", "Window.Close")
+LibSGui.Event.Window.Move = Utility.Event.Create("SafesGUILib", "Window.Move")
+LibSGui.Event.Window.Moved = Utility.Event.Create("SafesGUILib", "Window.Moved")
 
 -- Define Area
 LibSGui.Window = {}
@@ -172,7 +172,7 @@ function LibSGui.Window:Create(title, _parent, pTable)
 	function window:GetRelativeY()
 		return self.rely
 	end
-		
+	
 	function window:SetCallback(cbFunction)
 		if type(cbFunction) == "function" then
 			self._callback = cbFunction

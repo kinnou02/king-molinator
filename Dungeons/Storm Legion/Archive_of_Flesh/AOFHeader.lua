@@ -16,6 +16,7 @@ local MOD = {
 	Type = "Normal",
 	ID = "NArchive_of_Flesh",
 	Object = "MOD",
+	Rift = "SL",
 }
 
 -- Link Mods

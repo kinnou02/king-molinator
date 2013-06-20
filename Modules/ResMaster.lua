@@ -26,7 +26,7 @@ local RM = {
 	},
 }
 
-KBM.RezMaster = RM
+KBM.ResMaster = RM
 
 function RM.GUI:ApplySettings()
 	self.Anchor:ClearAll()
@@ -35,9 +35,9 @@ function RM.GUI:ApplySettings()
 	else
 		self.Anchor:SetPoint("BOTTOMRIGHT", UIParent, 0.9, 0.5)
 	end
-	self.Anchor:SetWidth(math.ceil(KBM.Constant.RezMaster.w * self.Settings.wScale))
-	self.Anchor:SetHeight(math.ceil(KBM.Constant.RezMaster.h * self.Settings.hScale))
-	self.Anchor.Text:SetFontSize(math.ceil(KBM.Constant.RezMaster.TextSize * self.Settings.tScale))
+	self.Anchor:SetWidth(math.ceil(KBM.Constant.ResMaster.w * self.Settings.wScale))
+	self.Anchor:SetHeight(math.ceil(KBM.Constant.ResMaster.h * self.Settings.hScale))
+	self.Anchor.Text:SetFontSize(math.ceil(KBM.Constant.ResMaster.TextSize * self.Settings.tScale))
 	if KBM.MainWin:GetVisible() then
 		self.Anchor:SetVisible(self.Settings.Visible)
 		self.Anchor.Drag:SetVisible(self.Settings.Unlocked)
@@ -71,20 +71,20 @@ function RM.GUI:Pull()
 		GUI.TimeBar:SetBackgroundColor(0,0,1,0.33)
 		GUI.TimeBar:SetMouseMasking("limited")
 		GUI.CastInfo = UI.CreateFrame("Text", "Timer_Text_Frame", GUI.Background)
-		GUI.CastInfo:SetFontSize(math.ceil(KBM.Constant.RezMaster.TextSize * RM.GUI.Settings.tScale))
+		GUI.CastInfo:SetFontSize(math.ceil(KBM.Constant.ResMaster.TextSize * RM.GUI.Settings.tScale))
 		GUI.CastInfo:SetPoint("CENTERLEFT", GUI.Icon, "CENTERRIGHT")
 		GUI.CastInfo:SetLayer(3)
 		GUI.CastInfo:SetFontColor(1,1,1)
 		GUI.CastInfo:SetMouseMasking("limited")
 		GUI.Shadow = UI.CreateFrame("Text", "Timer_Text_Shadow", GUI.Background)
-		GUI.Shadow:SetFontSize(math.ceil(KBM.Constant.RezMaster.TextSize * RM.GUI.Settings.tScale))
+		GUI.Shadow:SetFontSize(math.ceil(KBM.Constant.ResMaster.TextSize * RM.GUI.Settings.tScale))
 		GUI.Shadow:SetPoint("CENTER", GUI.CastInfo, "CENTER", 2, 2)
 		GUI.Shadow:SetLayer(2)
 		GUI.Shadow:SetFontColor(0,0,0)
 		GUI.Shadow:SetMouseMasking("limited")
 		GUI.Texture = UI.CreateFrame("Texture", "Timer_Skin", GUI.Background)
 		KBM.LoadTexture(GUI.Texture, "KingMolinator", "Media/BarSkin.png")
-		GUI.Texture:SetAlpha(KBM.Constant.RezMaster.TextureAlpha)
+		GUI.Texture:SetAlpha(KBM.Constant.ResMaster.TextureAlpha)
 		GUI.Texture:SetPoint("TOPLEFT", GUI.Background, "TOPLEFT")
 		GUI.Texture:SetPoint("BOTTOMRIGHT", GUI.Background, "BOTTOMRIGHT")
 		GUI.Texture:SetLayer(4)
@@ -94,7 +94,7 @@ function RM.GUI:Pull()
 end
 
 function RM.GUI:Init()
-	self.Settings = KBM.Options.RezMaster
+	self.Settings = KBM.Options.ResMaster
 
 	self.Anchor = UI.CreateFrame("Frame", "Rez Timer", KBM.Context)
 	self.Anchor:SetLayer(5)
@@ -108,7 +108,7 @@ function RM.GUI:Init()
 	end
 	
 	self.Anchor.Text = UI.CreateFrame("Text", "Rez Master Anchor", self.Anchor)
-	self.Anchor.Text:SetText(" Ready! "..KBM.Language.RezMaster.AnchorText[KBM.Lang])
+	self.Anchor.Text:SetText(" Ready! "..KBM.Language.ResMaster.AnchorText[KBM.Lang])
 	self.Anchor.Text:SetPoint("CENTERLEFT", self.Anchor, "CENTERLEFT")
 	self.Anchor.Drag = KBM.AttachDragFrame(self.Anchor, function(uType) self.Anchor:Update(uType) end, "Anchor_Drag", 5)
 	
@@ -120,7 +120,7 @@ function RM.GUI:Init()
 				if RM.GUI.Settings.wScale > 1.5 then
 					RM.GUI.Settings.wScale = 1.5
 				end
-				RM.GUI.Anchor:SetWidth(math.ceil(RM.GUI.Settings.wScale * KBM.Constant.RezMaster.w))
+				RM.GUI.Anchor:SetWidth(math.ceil(RM.GUI.Settings.wScale * KBM.Constant.ResMaster.w))
 				Changed = true
 			end
 		end
@@ -131,7 +131,7 @@ function RM.GUI:Init()
 				if RM.GUI.Settings.hScale > 1.5 then
 					RM.GUI.Settings.hScale = 1.5
 				end
-				RM.GUI.Anchor:SetHeight(math.ceil(RM.GUI.Settings.hScale * KBM.Constant.RezMaster.h))
+				RM.GUI.Anchor:SetHeight(math.ceil(RM.GUI.Settings.hScale * KBM.Constant.ResMaster.h))
 				for TimerObj, Timer in LibSata.EachIn(RM.Rezes.ActiveTimers) do
 					Timer.GUI.Background:SetHeight(RM.GUI.Anchor:GetHeight())
 					Timer.GUI.Icon:SetWidth(RM.GUI.Anchor:GetHeight())
@@ -151,7 +151,7 @@ function RM.GUI:Init()
 				if RM.GUI.Settings.tScale > 1.5 then
 					RM.GUI.Settings.tScale = 1.5
 				end
-				RM.GUI.Anchor.Text:SetFontSize(math.ceil(RM.GUI.Settings.tScale * KBM.Constant.RezMaster.TextSize))
+				RM.GUI.Anchor.Text:SetFontSize(math.ceil(RM.GUI.Settings.tScale * KBM.Constant.ResMaster.TextSize))
 			end
 		end
 		if Changed then
@@ -177,7 +177,7 @@ function RM.GUI:Init()
 				if RM.GUI.Settings.wScale < 0.5 then
 					RM.GUI.Settings.wScale = 0.5
 				end
-				RM.GUI.Anchor:SetWidth(math.ceil(RM.GUI.Settings.wScale * KBM.Constant.RezMaster.w))
+				RM.GUI.Anchor:SetWidth(math.ceil(RM.GUI.Settings.wScale * KBM.Constant.ResMaster.w))
 			end
 		end
 		
@@ -187,7 +187,7 @@ function RM.GUI:Init()
 				if RM.GUI.Settings.hScale < 0.5 then
 					RM.GUI.Settings.hScale = 0.5
 				end
-				RM.GUI.Anchor:SetHeight(math.ceil(RM.GUI.Settings.hScale * KBM.Constant.RezMaster.h))
+				RM.GUI.Anchor:SetHeight(math.ceil(RM.GUI.Settings.hScale * KBM.Constant.ResMaster.h))
 			end
 		end
 		
@@ -197,7 +197,7 @@ function RM.GUI:Init()
 				if RM.GUI.Settings.tScale < 0.5 then
 					RM.GUI.Settings.tScale = 0.5
 				end
-				RM.GUI.Anchor.Text:SetFontSize(math.ceil(RM.GUI.Settings.tScale * KBM.Constant.RezMaster.TextSize))
+				RM.GUI.Anchor.Text:SetFontSize(math.ceil(RM.GUI.Settings.tScale * KBM.Constant.ResMaster.TextSize))
 			end
 		end
 		if Changed then
@@ -239,7 +239,7 @@ function RM.Rezes:Init()
 					Timer.aID = aID
 					Timer.GUI = RM.GUI:Pull()
 					Timer.GUI.Background:SetHeight(Anchor:GetHeight())
-					Timer.GUI.CastInfo:SetFontSize(KBM.Constant.RezMaster.TextSize * RM.GUI.Settings.tScale)
+					Timer.GUI.CastInfo:SetFontSize(KBM.Constant.ResMaster.TextSize * RM.GUI.Settings.tScale)
 					Timer.GUI.Shadow:SetFontSize(Timer.GUI.CastInfo:GetFontSize())
 					--KBM.LoadTexture(Timer.GUI.Icon, "Rift", aDetails.icon)
 					Timer.GUI.Icon:SetTexture("Rift", aDetails.icon)
@@ -434,7 +434,7 @@ function RM.Rezes:Init()
 					end				
 					
 					if Timer.Remaining == 0 then
-						Timer.GUI.CastInfo:SetText(" "..Timer.Player.." "..KBM.Language.RezMaster.Ready[KBM.Lang])
+						Timer.GUI.CastInfo:SetText(" "..Timer.Player.." "..KBM.Language.ResMaster.Ready[KBM.Lang])
 						Timer.GUI.Shadow:SetText(Timer.GUI.CastInfo:GetText())
 						Timer.GUI.TimeBar:SetWidth(Timer.SetWidth)
 						Timer.Waiting = true

@@ -15,6 +15,7 @@ local IND = {
 	Type = "Raid",
 	ID = "IND",
 	Object = "IND",
+	Rift = "Rift",
 }
 
 local AddonData = Inspect.Addon.Detail("KingMolinator")
