@@ -642,7 +642,6 @@ function Build:Timers()
 									
 									function SideCallbacks:Color(bool, Color)
 										if not Color then
-											print("Setting Custom to: "..tostring(bool))
 											TimerSettings.Custom = bool
 										elseif Color then
 											TimerSettings.Color = Color

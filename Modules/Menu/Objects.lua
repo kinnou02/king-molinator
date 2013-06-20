@@ -2,8 +2,6 @@
 -- Written by Paul Snart
 -- Copyright 2013
 --
-Command.System.Strict()
-
 local AddonIni, KBM = ...
 local LibSata = Inspect.Addon.Detail("SafesTableLib").data
 local LibSGui = Inspect.Addon.Detail("SafesGUILib").data
