@@ -493,5 +493,5 @@ function EC:Start()
 	self.Nahoth.CastBar = KBM.CastBar:Add(self, self.Nahoth)
 	self.Ereetu.CastBar = KBM.CastBar:Add(self, self.Ereetu)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

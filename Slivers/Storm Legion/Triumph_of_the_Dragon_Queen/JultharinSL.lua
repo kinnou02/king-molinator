@@ -227,5 +227,5 @@ function JUL:Start()
 	
 	self.Jultharin.CastBar = KBM.CastBar:Add(self, self.Jultharin)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

@@ -271,5 +271,5 @@ function HH:Start()
 	
 	self.Hydriss.CastBar = KBM.CastBar:Add(self, self.Hydriss, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

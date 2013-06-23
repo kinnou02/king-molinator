@@ -174,9 +174,8 @@ end
 function MOD:Timer()	
 end
 
-function MOD:DefineMenu()
-	self.Menu = Instance.Menu:CreateEncounter(self.Cowel, self.Enabled)
-end
+
+
 
 function MOD:Start()
 	-- Create Timers
@@ -189,5 +188,5 @@ function MOD:Start()
 	
 	self.Cowel.CastBar = KBM.CastBar:Add(self, self.Cowel)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

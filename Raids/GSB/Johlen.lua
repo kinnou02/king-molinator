@@ -327,5 +327,5 @@ function IJ:Start()
 	
 	self.Johlen.CastBar = KBM.CastBar:Add(self, self.Johlen)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

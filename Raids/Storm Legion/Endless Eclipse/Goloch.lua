@@ -97,6 +97,7 @@ DLG.Lang.Debuff = {}
 DLG.Lang.Debuff.Dread = KBM.Language:Add("Dread Scythe")
 DLG.Lang.Debuff.Dread:SetFrench("Faux d'effroi")
 DLG.Lang.Debuff.Dread:SetGerman("Grausige Sense")
+DLG.Lang.Debuff.DreadID = "BFA3489B47EE6F22B"
 DLG.Lang.Debuff.Curse = KBM.Language:Add("Gatekeeper's Curse")
 DLG.Lang.Debuff.Curse:SetFrench("Malédiction du gardien")
 DLG.Lang.Debuff.Curse:SetGerman("Fluch des Torwächters")
@@ -219,7 +220,7 @@ function DLG:UnitHPCheck(uDetails, unitID)
 				BossObj.Casting = false
 				if BossObj == self.Goloch then
 					BossObj.CastBar:Create(unitID)
-					KBM.TankSwap:Start(self.Lang.Debuff.Dread[KBM.Lang], unitID)
+					KBM.TankSwap:Start(self.Lang.Debuff.DreadID, unitID)
 				end
 				self.PhaseObj:Start(self.StartTime)
 				self.PhaseObj:SetPhase("1")
@@ -255,10 +256,6 @@ function DLG:Reset()
 end
 
 function DLG:Timer()	
-end
-
-function DLG:DefineMenu()
-	self.Menu = EE.Menu:CreateEncounter(self.Goloch, self.Enabled)
 end
 
 function DLG:Start()
@@ -318,5 +315,4 @@ function DLG:Start()
 	
 	self.Goloch.CastBar = KBM.CastBar:Add(self, self.Goloch)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
 end

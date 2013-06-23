@@ -211,9 +211,8 @@ function MOD.Hergen:SetAlerts(bool)
 	end
 end
 
-function MOD:DefineMenu()
-	self.Menu = Instance.Menu:CreateEncounter(self.Hergen, self.Enabled)
-end
+
+
 
 function MOD:Start()
 	-- Create Timers
@@ -226,5 +225,5 @@ function MOD:Start()
 	
 	self.Hergen.CastBar = KBM.CastBar:Add(self, self.Hergen)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

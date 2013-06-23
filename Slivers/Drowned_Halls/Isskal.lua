@@ -352,5 +352,5 @@ function IL:Start()
 		
 	self.Isskal.CastBar = KBM.CastBar:Add(self, self.Isskal, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

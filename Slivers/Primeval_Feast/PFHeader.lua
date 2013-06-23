@@ -49,5 +49,4 @@ function PF:SaveVars()
 end
 
 function PF:Start()
-	PF.Menu = KBM.MainWin.Menu:CreateInstance(self.Name, true, self.Handler, "Sliver")	
 end

@@ -66,12 +66,14 @@ GLD.Lang.Debuff = {}
 GLD.Lang.Debuff.Hoar = KBM.Language:Add("Hoarfrost")
 GLD.Lang.Debuff.Hoar:SetGerman("Raureif")
 GLD.Lang.Debuff.Hoar:SetFrench("Givre")
+GLD.Lang.Debuff.HoarID = "BFC116B79B35F114D"
 GLD.Lang.Debuff.Rime = KBM.Language:Add("Glacial Rime")
 GLD.Lang.Debuff.Rime:SetGerman("Gletscherreif")
 GLD.Lang.Debuff.Rime:SetFrench("Éclats de sang gelé")
 GLD.Lang.Debuff.Spasm = KBM.Language:Add("Voltaic Spasms")
 GLD.Lang.Debuff.Spasm:SetGerman("Voltaische Krämpfe")
 GLD.Lang.Debuff.Spasm:SetFrench("Spasmes voltaïques")
+GLD.Lang.Debuff.SpasmID = "BFF08536BF6417E05"
 GLD.Lang.Debuff.Induction = KBM.Language:Add("Hypothermic Induction")
 GLD.Lang.Debuff.Induction:SetFrench("Induction hypothermique")
 GLD.Lang.Debuff.Chill = KBM.Language:Add("Deathly Chill")
@@ -325,8 +327,8 @@ function GLD:UnitHPCheck(uDetails, unitID)
 				self.PhaseObj.Objectives:AddPercent(self.Gelidra, 0, 100)
 				self.Phase = 1
 				local DebuffTable = {
-						[1] = self.Lang.Debuff.Hoar[KBM.Lang],
-						[2] = self.Lang.Debuff.Spasm[KBM.Lang],
+						[1] = self.Lang.Debuff.HoarID,
+						[2] = self.Lang.Debuff.SpasmID,
 				}
 				KBM.TankSwap:Start(DebuffTable, unitID, 2)
 				KBM.MechTimer:AddStart(self.Gelidra.TimersRef.FirstP2)
@@ -462,5 +464,5 @@ function GLD:Start()
 	self.Vortex.CastBar = KBM.CastBar:Add(self, self.Vortex)
 	self.Amrian.CastBar = KBM.CastBar:Add(self, self.Amrian)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

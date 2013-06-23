@@ -345,5 +345,5 @@ function MZ:Start()
 	-- Assign Castbar object
 	self.Matron.CastBar = KBM.CastBar:Add(self, self.Matron, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()		
+			
 end

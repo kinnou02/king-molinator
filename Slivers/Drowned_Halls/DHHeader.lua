@@ -50,5 +50,4 @@ function DH:SaveVars()
 end
 
 function DH:Start()
-	DH.Menu = KBM.MainWin.Menu:CreateInstance(self.Name, true, self.Handler, "Sliver")
 end

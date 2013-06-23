@@ -533,5 +533,5 @@ function PRO:Start()
 	
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self.PercentageMon = KBM.PercentageMon:Create(self.Progenitor, self.Juntun, 5, true)
-	self:DefineMenu()
+	
 end

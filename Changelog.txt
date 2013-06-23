@@ -1,13 +1,20 @@
 ﻿v1.4.6
 
 Menu System
+* Change: Now uses far less memory (around 8-10Mb).
 * Stage 1: Complete
 * Complete rewrite of the underlying menu code in preparation for new functionality.
 * At the moment this is just reproducing old functionality.
 
+Plug-Ins
+* Mark-It and Add-Watch will require updating.
+
 Ready Check
 * New: Added Vampiric Essence. (60: Warrior, Cleric, Rogue - Tank - High)
 * New: Added Storm Sigil. (60: Warrior - Medium)
+
+Encounters
+* Change: Instance Headers and Encounter Files no longer create menu items within their files.
 
 Regulos
 * Fixed: Issues with Castbar settings causing occasional settings resets.

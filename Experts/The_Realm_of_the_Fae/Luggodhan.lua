@@ -205,9 +205,8 @@ function MOD.Loggodhan:SetAlerts(bool)
 	end
 end
 
-function MOD:DefineMenu()
-	self.Menu = Instance.Menu:CreateEncounter(self.Loggodhan, self.Enabled)
-end
+
+
 
 function MOD:Start()
 	-- Create Timers
@@ -220,5 +219,5 @@ function MOD:Start()
 	
 	self.Loggodhan.CastBar = KBM.CastBar:Add(self, self.Loggodhan)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

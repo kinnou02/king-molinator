@@ -211,9 +211,8 @@ function MOD.Tegenar:SetAlerts(bool)
 	end
 end
 
-function MOD:DefineMenu()
-	self.Menu = Instance.Menu:CreateEncounter(self.Tegenar, self.Enabled)
-end
+
+
 
 function MOD:Start()
 	-- Create Timers
@@ -226,5 +225,5 @@ function MOD:Start()
 	
 	self.Tegenar.CastBar = KBM.CastBar:Add(self, self.Tegenar)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

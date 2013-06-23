@@ -359,5 +359,5 @@ function HG:Start()
 	
 	self.Gaurath.CastBar = KBM.CastBar:Add(self, self.Gaurath)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

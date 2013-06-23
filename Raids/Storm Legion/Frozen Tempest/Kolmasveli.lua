@@ -74,9 +74,11 @@ KT.Lang.Debuff.ToiIreID2 = "BFE566AB12246C0CB"
 KT.Lang.Debuff.Eruption = KBM.Language:Add("Sparking Eruption")
 KT.Lang.Debuff.Eruption:SetGerman("Zündender Ausbruch")
 KT.Lang.Debuff.Eruption:SetFrench("Éruption d'étincelles")
+KT.Lang.Debuff.EruptionID = "B2430F1A236C09C1E"
 KT.Lang.Debuff.Shock = KBM.Language:Add("Devastating Shock")
 KT.Lang.Debuff.Shock:SetFrench("Choc dévastateur")
 KT.Lang.Debuff.Shock:SetGerman("Verwüstender Schock")
+KT.Lang.Debuff.ShockID = "BFF411F87183ACEE5"
 
 -- Verbose Dictionary
 KT.Lang.Verbose = {}
@@ -474,5 +476,5 @@ function KT:Start()
 	self.Toinenveli.CastBar = KBM.CastBar:Add(self, self.Toinenveli)
 	self.Vortex.CastBar = KBM.CastBar:Add(self, self.Vortex)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

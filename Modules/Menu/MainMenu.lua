@@ -79,23 +79,26 @@ function Menu:Open()
 		KBM.TankSwap.Anchor:SetVisible(true)
 		KBM.TankSwap.Anchor.Drag:SetVisible(KBM.Options.TankSwap.Unlocked)
 	end
-	if Menu.CurrentEncounter then
-		Menu.CurrentEncounter:SetCastbars()
+	if Menu.Current.Encounter then
+		Menu.Current.Encounter:SetCastbars()
 	end
-	-- if KBM.PlugIn.Count > 0 then
-		-- for ID, PlugIn in pairs(KBM.PlugIn.List) do
-			-- if PlugIn.MenuOpen then
-				-- PlugIn:MenuOpen()
-			-- end
-		-- end
-	-- end
+	if KBM.PlugIn.Count > 0 then
+		for ID, PlugIn in pairs(KBM.PlugIn.List) do
+			if PlugIn.MenuOpen then
+				PlugIn:MenuOpen()
+			end
+		end
+	end
 end
 
 function Menu:Close()
 	self.Active = false
 	self.Window:SetVisible(false)
-	if Menu.CurrentEncounter then
-		Menu.CurrentEncounter:ClearCastbars()
+	if self.Current.Encounter then
+		self.Current.Encounter:ClearCastbars()
+	end
+	if self.Current.Page.CloseLink then
+		self.Current.Page:CloseLink()
 	end
 	KBM.CastBar.Anchor:Hide()
 	if KBM.Player.CastBar.Settings.CastBar.Visible then
@@ -149,13 +152,13 @@ function Menu:Close()
 	if not KBM.PercentageMon.Active then
 		KBM.PercentageMon.GUI.Cradle:SetVisible(false)
 	end
-	-- if KBM.PlugIn.Count > 0 then
-		-- for ID, PlugIn in pairs(KBM.PlugIn.List) do
-			-- if PlugIn.MenuClose then
-				-- PlugIn:MenuClose()
-			-- end
-		-- end
-	-- end
+	if KBM.PlugIn.Count > 0 then
+		for ID, PlugIn in pairs(KBM.PlugIn.List) do
+			if PlugIn.MenuClose then
+				PlugIn:MenuClose()
+			end
+		end
+	end
 end
 
 function Menu.CloseHandler()

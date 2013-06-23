@@ -244,9 +244,8 @@ function MOD.Vallnara:SetAlerts(bool)
 	end
 end
 
-function MOD:DefineMenu()
-	self.Menu = Instance.Menu:CreateEncounter(self.Vallnara, self.Enabled)
-end
+
+
 
 function MOD:Start()
 	-- Create Timers
@@ -259,5 +258,5 @@ function MOD:Start()
 	
 	self.Vallnara.CastBar = KBM.CastBar:Add(self, self.Vallnara)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

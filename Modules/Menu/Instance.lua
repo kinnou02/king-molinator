@@ -170,7 +170,7 @@ function Instance:Create(Mod)
 				self.Selected.Tab:Select()
 				self.Selected:Open()
 			end
-			Menu.CurrentEncounter = self
+			Menu.Current.Encounter = self
 			
 			-- Set Page Specific Settings/Layout
 			if self.Mod.Settings.EncTimer then
@@ -219,7 +219,7 @@ function Instance:Create(Mod)
 		end
 		
 		function Encounter:Close()
-			Menu.CurrentEncounter = nil
+			Menu.Current.Encounter = nil
 			Menu.RenderHalt()
 			if self.Selected then
 				self.Selected:Close()

@@ -70,6 +70,7 @@ MOP.Lang.Debuff.Infect:SetFrench("Infection volatile")
 MOP.Lang.Debuff.Ichor = KBM.Language:Add("Dark Ichor")
 MOP.Lang.Debuff.Ichor:SetFrench("Pourriture noire")
 MOP.Lang.Debuff.Ichor:SetGerman("Dunkler Eiter")
+MOP.Lang.Debuff.IchorID = "BFAAA68238DE00653"
 MOP.Lang.Debuff.Torment = KBM.Language:Add("Torment")
 MOP.Lang.Debuff.Torment:SetFrench("Tourmente")
 MOP.Lang.Debuff.Torment:SetGerman("Pein")
@@ -301,5 +302,5 @@ function MOP:Start()
 	
 	self.Matriarch.CastBar = KBM.CastBar:Add(self, self.Matriarch)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

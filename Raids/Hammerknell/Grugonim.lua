@@ -410,5 +410,5 @@ function GR:Start()
 	
 	self.Grugonim.CastBar = KBM.CastBar:Add(self, self.Grugonim)	
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)		
-	self:DefineMenu()
+	
 end

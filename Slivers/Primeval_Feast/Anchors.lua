@@ -192,5 +192,5 @@ function LA:Start()
 	
 	self.Anchor.CastBar = KBM.CastBar:Add(self, self.Anchor, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

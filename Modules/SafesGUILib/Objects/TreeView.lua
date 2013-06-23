@@ -67,8 +67,8 @@ function _int:pullNode(_parent, _id)
 		node:SetPoint("LEFT", _parent, "LEFT")
 		node:SetPoint("RIGHT", _parent, "RIGHT")
 		node._childCradle = _int:pullFrame(node._cradle, true)
-		node._childCradle:SetPoint("TOP", node._cradle, "BOTTOM", nil, -1)
 		node._childCradle:SetPoint("BOTTOM", node._cradle, "BOTTOM", nil, -1)
+		node._childCradle:SetPoint("TOP", node._cradle, "BOTTOM", nil, -2)
 		node._childCradle:SetPoint("RIGHT", node._cradle, "RIGHT")
 		node._textBack = _int:pullTexture(node._cradle, true)
 		node._textBack:SetLayer(1)
@@ -83,58 +83,64 @@ function _int:pullNode(_parent, _id)
 		node._iconA:SetAlpha(0.75)
 		--node._textBack:SetAlpha(0.75)
 		function node:_mouseIn()
-			self:SetBackgroundColor(0.2,0.2,0,0.25)
-			self._nodeObj._root._currentMouseOver = self
-			-- Default.MouseOver:SetParent(self)
-			-- Default.MouseOver:SetVisible(true)
-			-- Default.MouseOver:SetAllPoints(self)
-			-- Default.MouseOver:SetLayer(2)
-			LibSGui.Event.TreeView.Node.Mouse.In(self._node)
+			if self._nodeObj._enabled then
+				self:SetBackgroundColor(0.2,0.2,0,0.25)
+				self._nodeObj._root._currentMouseOver = self
+				-- Default.MouseOver:SetParent(self)
+				-- Default.MouseOver:SetVisible(true)
+				-- Default.MouseOver:SetAllPoints(self)
+				-- Default.MouseOver:SetLayer(2)
+				LibSGui.Event.TreeView.Node.Mouse.In(self._node)
+			end
 		end
 		function node:_mouseOut()
-			self:SetBackgroundColor(0,0,0,0)
-			self._nodeObj._root._currentMouseOver = nil
-			-- Default.MouseOver:SetParent(_int._context)
-			-- Default.MouseOver:SetVisible(false)
-			-- Default.MouseOver:ClearAll()
-			LibSGui.Event.TreeView.Node.Mouse.Out(self._node)
+			if self._nodeObj._enabled then
+				self:SetBackgroundColor(0,0,0,0)
+				self._nodeObj._root._currentMouseOver = nil
+				-- Default.MouseOver:SetParent(_int._context)
+				-- Default.MouseOver:SetVisible(false)
+				-- Default.MouseOver:ClearAll()
+				LibSGui.Event.TreeView.Node.Mouse.Out(self._node)
+			end
 		end
 		function node:_mouseClick()
-			local nodeObj = self._nodeObj
-			local nodeUI = self._node
-			local _, lastChild = nodeObj._children:Last()
-			if lastChild then
-				if nodeObj._expanded then
-					nodeUI._childCradle:SetVisible(false)
-					nodeUI._childCradle:SetPoint("BOTTOM", self, "BOTTOM", nil, -1)
-					nodeUI._childCradle:SetPoint("TOP", self, "BOTTOM", nil, -1)
-					nodeObj:_updateSize(-nodeObj._childSize)
-					nodeObj._expanded = false
-					TH.LoadTexture(nodeUI._iconA, AddonIni.id, "Media/Treeview_Arrow_Left.png")
-					LibSGui.Event.TreeView.Node.Collapse(nodeObj)
-					if nodeObj._root._selected then
-						if nodeObj._root._selected._parentNode == nodeObj then
-							nodeObj._root._highlight:SetVisible(false)
+			if self._nodeObj._enabled then
+				local nodeObj = self._nodeObj
+				local nodeUI = self._node
+				local _, lastChild = nodeObj._children:Last()
+				if lastChild then
+					if nodeObj._expanded then
+						nodeUI._childCradle:SetVisible(false)
+						nodeUI._childCradle:SetPoint("BOTTOM", self, "BOTTOM", nil, -1)
+						nodeUI._childCradle:SetPoint("TOP", self, "BOTTOM", nil, -2)
+						nodeObj:_updateSize(-nodeObj._childSize)
+						nodeObj._expanded = false
+						TH.LoadTexture(nodeUI._iconA, AddonIni.id, "Media/Treeview_Arrow_Left.png")
+						LibSGui.Event.TreeView.Node.Collapse(nodeObj)
+						if nodeObj._root._selected then
+							if nodeObj._root._selected._parentNode == nodeObj then
+								nodeObj._root._highlight:SetVisible(false)
+							end
+						end
+					else
+						nodeUI._childCradle:SetVisible(true)
+						nodeUI._childCradle:SetPoint("BOTTOM", lastChild._obj._cradle, "BOTTOM", nil, -1)
+						nodeUI._childCradle:SetPoint("TOP", self, "BOTTOM", nil, 0)
+						nodeObj._expanded = true
+						nodeObj:_updateSize(nodeObj._childSize)
+						TH.LoadTexture(nodeUI._iconA, AddonIni.id, "Media/Treeview_Arrow_Down.png")
+						LibSGui.Event.TreeView.Node.Expand(nodeObj)
+						if nodeObj._root._selected then
+							if nodeObj._root._selected._parentNode == nodeObj then
+								nodeObj._root._highlight:SetVisible(true)
+							end
 						end
 					end
 				else
-					nodeUI._childCradle:SetVisible(true)
-					nodeUI._childCradle:SetPoint("BOTTOM", lastChild._obj._cradle, "BOTTOM", nil, -1)
-					nodeUI._childCradle:SetPoint("TOP", self, "BOTTOM", nil, 0)
-					nodeObj._expanded = true
-					nodeObj:_updateSize(nodeObj._childSize)
-					TH.LoadTexture(nodeUI._iconA, AddonIni.id, "Media/Treeview_Arrow_Down.png")
-					LibSGui.Event.TreeView.Node.Expand(nodeObj)
-					if nodeObj._root._selected then
-						if nodeObj._root._selected._parentNode == nodeObj then
-							nodeObj._root._highlight:SetVisible(true)
-						end
+					if nodeObj._root._selected ~= nodeObj then
+						nodeObj:_renderHighlight()
+						LibSGui.Event.TreeView.Node.Change(nodeObj._root, nodeObj)
 					end
-				end
-			else
-				if nodeObj._root._selected ~= nodeObj then
-					nodeObj:_renderHighlight()
-					LibSGui.Event.TreeView.Node.Change(nodeObj._root, nodeObj)
 				end
 			end
 		end
@@ -170,6 +176,7 @@ function _tvNode:Create(pNode, Text, Select)
 	Node._text = tostring(Text)
 	Node._visible = true
 	Node._expanded = true
+	Node._enabled = true
 	Node.UserData = {}
 	if pNode._layer == 0 then
 		Node._obj = _int:pullNode(Node._root.Content)
@@ -212,8 +219,8 @@ function _tvNode:Create(pNode, Text, Select)
 			Node._size = Default.Node.h
 			TH.LoadTexture(Node._obj._iconA, AddonIni.id, "Media/Node_Connect_Last.png")
 		end
-		pNode._obj._childCradle:SetPoint("TOP", pNode._obj._cradle, "BOTTOM")
 		pNode._obj._childCradle:SetPoint("BOTTOM", Node._obj._childCradle, "BOTTOM")
+		pNode._obj._childCradle:SetPoint("TOP", pNode._obj._cradle, "BOTTOM")
 		Node._obj._cradle:SetHeight(Default.Node.h)
 		Node._obj._text:SetFontColor(Default.Node.r, Default.Node.g, Default.Node.b)
 		Node._obj._text:SetPoint("LEFT", Node._obj._textBack, "LEFT", 6, nil)
@@ -269,6 +276,15 @@ function _tvNode:Create(pNode, Text, Select)
 		self:_renderHighlight()
 	end
 	
+	function Node:SetEnabled(bool)
+		self._enabled = bool
+		if bool then
+			self._obj:SetAlpha(1)
+		else
+			self._obj:SetAlpha(0.5)
+		end
+	end
+		
 	if Select then
 		Node:Select()
 	end

@@ -321,5 +321,5 @@ function AN:Start()
 	
 	self.Atrophinius.CastBar = KBM.CastBar:Add(self, self.Atrophinius, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

@@ -50,5 +50,4 @@ end
 function IND:Start()
 	function self:Handler(bool)
 	end
-	IND.Menu = KBM.MainWin.Menu:CreateInstance(self.Name, true, self.Handler)	
 end

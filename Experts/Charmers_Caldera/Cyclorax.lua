@@ -170,9 +170,8 @@ end
 function MOD:Timer()	
 end
 
-function MOD:DefineMenu()
-	self.Menu = Instance.Menu:CreateEncounter(self.Cyclorax, self.Enabled)
-end
+
+
 
 function MOD:Start()
 	-- Create Timers
@@ -185,5 +184,5 @@ function MOD:Start()
 	
 	self.Cyclorax.CastBar = KBM.CastBar:Add(self, self.Cyclorax)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

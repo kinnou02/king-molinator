@@ -565,5 +565,5 @@ function AD:Start()
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	self.Alsbeth.CastBar = KBM.CastBar:Add(self, self.Alsbeth)
 	self.Magus.CastBar = KBM.CastBar:Add(self, self.Magus)
-	self:DefineMenu()
+	
 end

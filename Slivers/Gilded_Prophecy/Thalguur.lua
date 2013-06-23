@@ -300,5 +300,5 @@ function TR:Start()
 	
 	self.Thalguur.CastBar = KBM.CastBar:Add(self, self.Thalguur)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

@@ -173,9 +173,8 @@ end
 function MOD:Timer()	
 end
 
-function MOD:DefineMenu()
-	self.Menu = Instance.Menu:CreateEncounter(self.Bulwark, self.Enabled)
-end
+
+
 
 function MOD:Start()
 	-- Create Timers
@@ -188,5 +187,5 @@ function MOD:Start()
 	
 	self.Bulwark.CastBar = KBM.CastBar:Add(self, self.Bulwark)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

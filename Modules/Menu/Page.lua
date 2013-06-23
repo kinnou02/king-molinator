@@ -39,10 +39,10 @@ function Page:CreateHeader(Title, ID, TVID, TABID, Settings, pTable)
 			error("Supplied TABID not valid: "..TABID)
 		end
 		local Header = {}
-		Header.Tab = Menu.Tab[TABID]
-		Header.TreeView = Header.Tab[TVID].TreeView
+		Header.Tab = Menu.Tab[TVID]
+		Header.TreeView = Header.Tab[TABID].TreeView
 		Header.Node = Header.TreeView:Create(Title)
-		Header.Tab[TVID].Headers[ID] = Header
+		Header.Tab[TABID].Headers[ID] = Header
 		Header.ID = ID
 		Header.TABID = TABID
 		Header.TVID = TVID
@@ -123,6 +123,10 @@ function Page:CreateHeader(Title, ID, TVID, TABID, Settings, pTable)
 				end
 			end
 			
+			function Item:SetEnabled(bool)
+				self.Node:SetEnabled(bool)
+			end
+			
 			function Item:Close()
 				self.Height = 10
 				self.Padding = 0
@@ -135,6 +139,16 @@ function Page:CreateHeader(Title, ID, TVID, TABID, Settings, pTable)
 				self.LastObject = nil
 				self.Active = false
 				Menu.PageUI.Main:SetContentHeight(10)
+				if self.CloseLink then
+					self:CloseLink()
+				end
+			end
+			
+			function Item:SetCloseLink(_function)
+				if type(_function) ~= "function" then
+					error(":SetCloseLink(Callback) - Expecting Callback = Function() got :"..type(_function))
+				end
+				self.CloseLink = _function
 			end
 			
 			if pTable.Selected then

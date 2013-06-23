@@ -185,17 +185,16 @@ function Menu.Object:CreateCheck(Name, Settings, ID, Callback, Page)
 		self.Page:LinkX(self.UI.Check)
 	
 		if self.Callback then
+			self.UI.Check:SetVisible(true)
 			if self.Settings then
-				self.UI.Check:SetVisible(true)
 				self.UI.Check:SetChecked(self.Settings[ID])
-				function self:Checkbox_Handler()
-					self._object.Callback[ID](self._object._root, self:GetChecked())
-				end
-				self.UI.Check:EventAttach(Event.UI.Checkbox.Change, self.Checkbox_Handler, self.ID..": checkbox callback handler")
 			else
-				self.UI.Check:SetVisible(false)
 				self.UI.Check:SetChecked(false)
 			end
+			function self:Checkbox_Handler()
+				self._object.Callback[ID](self._object._root, self:GetChecked())
+			end
+			self.UI.Check:EventAttach(Event.UI.Checkbox.Change, self.Checkbox_Handler, self.ID..": checkbox callback handler")
 			function self:MouseIn_Handler()
 				if self.Enabled then
 					self.UI.Cradle:SetBackgroundColor(0,0,0,0.4)
@@ -212,14 +211,10 @@ function Menu.Object:CreateCheck(Name, Settings, ID, Callback, Page)
 			end
 			function self:TextClick_Handler()
 				if self.Enabled then
-					if self.Settings then
-						if self.UI.Check:GetChecked() then
-							self.UI.Check:SetChecked(false)
-						else
-							self.UI.Check:SetChecked(true)
-						end
+					if self.UI.Check:GetChecked() then
+						self.UI.Check:SetChecked(false)
 					else
-						self.Callback[ID](self.Page)
+						self.UI.Check:SetChecked(true)
 					end
 				end
 			end
@@ -249,8 +244,6 @@ function Menu.Object:CreateCheck(Name, Settings, ID, Callback, Page)
 				self.UI.Text:EventAttach(Event.UI.Input.Mouse.Cursor.In, function() self:MouseIn_Handler() end, self.ID..": mouse in handler")
 				self.UI.Text:EventAttach(Event.UI.Input.Mouse.Cursor.Out, function () self:MouseOut_Handler() end, self.ID..": mouse out handler")
 				self.UI.Text:EventAttach(Event.UI.Input.Mouse.Left.Click, function() self:TextClick_Select() end, "text click handler")
-				-- self.UI.Cradle:EventAttach(Event.UI.Input.Mouse.Cursor.In, function() self:MouseIn_Handler() end, self.ID..": mouse in handler")
-				-- self.UI.Cradle:EventAttach(Event.UI.Input.Mouse.Cursor.Out, function() self:MouseOut_Handler() end, self.ID..": mouse out handler")
 			else
 				self.UI.Text:EventAttach(Event.UI.Input.Mouse.Left.Click, function() self:TextClick_Handler() end, "text click handler")
 			end
@@ -291,8 +284,6 @@ function Menu.Object:CreateCheck(Name, Settings, ID, Callback, Page)
 		self.UI.Text:EventDetach(Event.UI.Input.Mouse.Cursor.In, nil, self.ID..": mouse in handler")
 		self.UI.Text:EventDetach(Event.UI.Input.Mouse.Cursor.Out, nil, self.ID..": mouse out handler")
 		self.UI.Text:EventDetach(Event.UI.Input.Mouse.Left.Click, nil, "text click handler")
-		-- self.UI.Cradle:EventDetach(Event.UI.Input.Mouse.Cursor.In, nil, self.ID..": mouse in handler")
-		-- self.UI.Cradle:EventDetach(Event.UI.Input.Mouse.Cursor.Out, nil, self.ID..": mouse out handler")
 		self.UI.Text._object = nil
 		self.UI.Check._object = nil
 		self.ChildState = true
@@ -306,7 +297,6 @@ function Menu.Object:CreateCheck(Name, Settings, ID, Callback, Page)
 		self.UI.Cradle:ClearAll()
 		self.UI.Cradle:SetVisible(false)
 		self.UI.Cradle:SetParent(DumpParent)
-		--Menu.UI.Store.Check[self._root.Type]:Add(self.UI)
 		Menu.UI.Store.Check:Add(self.UI)
 		self.Rendered:Clear()
 		self.LastObject = nil
@@ -341,7 +331,6 @@ function Menu.Object:CreatePlainHeader(Name, Settings, ID, Callback, Page)
 	PlainHObj.Type = "Plain"
 	
 	function PlainHObj:Render()
-		--print("CH: Rendering: "..self.Name)
 		self.UI = Menu.UI.Store.PlainHeader:RemoveLast()
 		if not self.UI then
 			self.UI = {}
@@ -552,7 +541,6 @@ function Menu.Object:CreateHeader(Name, Settings, ID, Callback, Page)
 		self.UI.Cradle:ClearAll()
 		self.UI.Cradle:SetParent(DumpParent)
 		self.UI.Cradle:SetVisible(false)
-		--Menu.UI.Store.Header[self._root.Type]:Add(self.UI)
 		Menu.UI.Store.Header:Add(self.UI)
 		self.Rendered:Clear()
 		self.LastObject = nil

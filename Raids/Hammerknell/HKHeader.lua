@@ -55,7 +55,6 @@ function HK:Start()
 	
 	end
 	
-	HK.Menu = KBM.MainWin.Menu:CreateInstance(self.Name, true, self.Handler)
 	
 end
 

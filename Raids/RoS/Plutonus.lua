@@ -245,5 +245,5 @@ function PI:Start()
 	
 	self.Plutonus.CastBar = KBM.CastBar:Add(self, self.Plutonus)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

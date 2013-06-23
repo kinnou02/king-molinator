@@ -348,5 +348,5 @@ function DF:Start()
 	self.Foci.CastBar = KBM.CastBar:Add(self, self.Foci)
 	self.Force.CastBar = KBM.CastBar:Add(self, self.Force)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

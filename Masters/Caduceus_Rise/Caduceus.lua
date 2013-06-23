@@ -205,9 +205,8 @@ function MOD.Caduceus:SetAlerts(bool)
 	end
 end
 
-function MOD:DefineMenu()
-	self.Menu = Instance.Menu:CreateEncounter(self.Caduceus, self.Enabled)
-end
+
+
 
 function MOD:Start()
 	-- Create Timers
@@ -220,5 +219,5 @@ function MOD:Start()
 	
 	self.Caduceus.CastBar = KBM.CastBar:Add(self, self.Caduceus)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

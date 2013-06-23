@@ -261,5 +261,5 @@ function GL:Start()
 	
 	self.Gorlach.CastBar = KBM.CastBar:Add(self, self.Gorlach)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

@@ -231,5 +231,5 @@ function AJ:Start()
 	
 	self.Jorb.CastBar = KBM.CastBar:Add(self, self.Jorb, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

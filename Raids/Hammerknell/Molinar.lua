@@ -607,5 +607,5 @@ function KM:Start()
 	
 	self.PercentageMon = KBM.PercentageMon:Create(self.King, self.Prince, 7)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

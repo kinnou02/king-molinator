@@ -205,9 +205,8 @@ function MOD.Icetalon:SetAlerts(bool)
 	end
 end
 
-function MOD:DefineMenu()
-	self.Menu = Instance.Menu:CreateEncounter(self.Icetalon, self.Enabled)
-end
+
+
 
 function MOD:Start()
 	-- Create Timers
@@ -220,5 +219,5 @@ function MOD:Start()
 	
 	self.Icetalon.CastBar = KBM.CastBar:Add(self, self.Icetalon)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

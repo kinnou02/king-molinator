@@ -384,5 +384,5 @@ function ML:Start()
 	
 	self.Maklamos.CastBar = KBM.CastBar:Add(self, self.Maklamos)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

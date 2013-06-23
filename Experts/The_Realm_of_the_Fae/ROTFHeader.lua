@@ -52,5 +52,4 @@ function MOD:SaveVars()
 end
 
 function MOD:Start()
-	MOD.Menu = KBM.MainWin.Menu:CreateInstance(self.Name, true, self.Handler, "Expert")	
 end

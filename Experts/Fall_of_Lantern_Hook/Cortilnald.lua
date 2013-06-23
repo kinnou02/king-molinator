@@ -177,9 +177,8 @@ end
 function MOD:Timer()	
 end
 
-function MOD:DefineMenu()
-	self.Menu = Instance.Menu:CreateEncounter(self.Cortilnald, self.Enabled)
-end
+
+
 
 function MOD:Start()
 	-- Create Timers
@@ -192,5 +191,5 @@ function MOD:Start()
 	
 	self.Cortilnald.CastBar = KBM.CastBar:Add(self, self.Cortilnald)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

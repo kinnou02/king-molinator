@@ -275,5 +275,5 @@ function AF:Start()
 	
 	self.Anrak.CastBar = KBM.CastBar:Add(self, self.Anrak)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

@@ -463,5 +463,5 @@ function RS:Start()
 	
 	self.Rusila.CastBar = KBM.CastBar:Add(self, self.Rusila)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

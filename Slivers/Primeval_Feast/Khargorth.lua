@@ -358,5 +358,5 @@ function SK:Start()
 	
 	self.Khargroth.CastBar = KBM.CastBar:Add(self, self.Khargroth, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

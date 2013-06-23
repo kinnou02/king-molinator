@@ -273,5 +273,5 @@ function GU:Start()
 	
 	self.Garau.CastBar = KBM.CastBar:Add(self, self.Garau, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

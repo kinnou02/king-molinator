@@ -493,5 +493,5 @@ function HA:Start()
 	
 	self.Arakhurn.CastBar = KBM.CastBar:Add(self, self.Arakhurn)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

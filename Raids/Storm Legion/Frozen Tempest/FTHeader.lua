@@ -49,5 +49,4 @@ end
 function FT:Start()
 	function self:Handler(bool)
 	end
-	FT.Menu = KBM.MainWin.Menu:CreateInstance(self.Name, true, self.Handler, "SLRaid")	
 end

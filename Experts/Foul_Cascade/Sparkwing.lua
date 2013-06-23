@@ -171,9 +171,8 @@ end
 function MOD:Timer()	
 end
 
-function MOD:DefineMenu()
-	self.Menu = Instance.Menu:CreateEncounter(self.Sparkwing, self.Enabled)
-end
+
+
 
 function MOD:Start()
 	-- Create Timers
@@ -186,5 +185,5 @@ function MOD:Start()
 	
 	self.Sparkwing.CastBar = KBM.CastBar:Add(self, self.Sparkwing)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

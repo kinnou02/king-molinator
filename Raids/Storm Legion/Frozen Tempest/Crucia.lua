@@ -97,6 +97,7 @@ CRC.Lang.Ability.Blessing:SetGerman("Segen der Sturmkönigin")
 CRC.Lang.Ability.Armor = KBM.Language:Add("Conductive Armor")
 CRC.Lang.Ability.Armor:SetFrench("Armure conductrice")
 CRC.Lang.Ability.Armor:SetGerman("Leitende Rüstung")
+CRC.Lang.Ability.Spark = KBM.Language:Add("Shatter Spark")
 
 -- Debuff Dictionary
 CRC.Lang.Debuff = {}
@@ -106,8 +107,10 @@ CRC.Lang.Debuff.Rod:SetFrench("Paratonnerre")
 CRC.Lang.Debuff.Armor = KBM.Language:Add("Conductive Armor")
 CRC.Lang.Debuff.Armor:SetGerman("Leitende Rüstung")
 CRC.Lang.Debuff.Armor:SetFrench("Armure conductrice")
-CRC.Lang.Debuff.ArmorID1 = "BFE59811C6CBE34C4"
-CRC.Lang.Debuff.ArmorID2 = "BFCCCBAD1C6C69635"
+CRC.Lang.Debuff.ArmorIDConstruct1 = "BFC27D28E7076DEBA"
+CRC.Lang.Debuff.ArmorIDConstruct2 = "BFC27D28F689C8068"
+CRC.Lang.Debuff.ArmorIDCrucia1 = "BFE59811C6CBE34C4"
+CRC.Lang.Debuff.ArmorIDCrucia2 = "BFCCCBAD1C6C69635"
 CRC.Lang.Debuff.Blessing = KBM.Language:Add("Blessing of the Storm Queen")
 CRC.Lang.Debuff.Blessing:SetFrench("Bénédiction de la Reine des Tempêtes")
 CRC.Lang.Debuff.Blessing:SetGerman("Segen der Sturmkönigin")
@@ -116,9 +119,11 @@ CRC.Lang.Debuff.BlessingID2 = "BFD3474BE4FFA4FC0"
 CRC.Lang.Debuff.Unstable = KBM.Language:Add("Unstable Coolant")
 CRC.Lang.Debuff.Unstable:SetFrench("Refroidissement instable")
 CRC.Lang.Debuff.Unstable:SetGerman("Instabiles Kühlmittel")
+CRC.Lang.Debuff.UnstableID = "BFBB93FBD79C85DEF"
 CRC.Lang.Debuff.Stablized = KBM.Language:Add("Stablized Coolant")
 CRC.Lang.Debuff.Stablized:SetFrench("Refroidissement stabilisé")
 CRC.Lang.Debuff.Stablized:SetGerman("Stabilisiertes Kühlmittel")
+CRC.Lang.Debuff.StablizedID = "BFF82C871C5EDAD5D"
 CRC.Lang.Debuff.Wrath = KBM.Language:Add("Tempest Wrath")
 CRC.Lang.Debuff.Wrath:SetFrench("Courroux tempétueux")
 CRC.Lang.Debuff.Wrath:SetGerman("Sturmherr-Zorn")
@@ -265,6 +270,7 @@ CRC.Storm = {
 		AlertsRef = {
 			Enabled = true,
 			Pulse = KBM.Defaults.AlertObj.Create("yellow"),
+			Spark = KBM.Defaults.AlertObj.Create("red"),
 		},
 	}
 }
@@ -424,7 +430,11 @@ function CRC.PhaseTwo()
 			KBM.TankSwap:Remove()
 		end
 		if CRC.Storm.UnitID then
-			KBM.TankSwap:Start(CRC.Lang.Debuff.Armor[KBM.Lang], CRC.Storm.UnitID)
+			local DebuffTable = {
+				[1] = CRC.Lang.Debuff.ArmorIDConstruct1,
+				[2] = CRC.Lang.Debuff.ArmorIDConstruct2,
+			}
+			KBM.TankSwap:Start(DebuffTable, CRC.Storm.UnitID, 2)
 		end
 	end
 end
@@ -439,7 +449,11 @@ function CRC.PhaseThree()
 			KBM.TankSwap:Remove()
 		end
 		if CRC.Crucia.UnitID then
-			KBM.TankSwap:Start(CRC.Lang.Debuff.Armor[KBM.Lang], CRC.Crucia.UnitID)
+			local DebuffTable = {
+				[1] = CRC.Lang.Debuff.ArmorIDCrucia1,
+				[2] = CRC.Lang.Debuff.ArmorIDCrucia2,
+			}
+			KBM.TankSwap:Start(DebuffTable, CRC.Crucia.UnitID, 2)
 		end
 	end
 end
@@ -463,7 +477,11 @@ function CRC.PhaseFinal()
 			KBM.TankSwap:Remove()
 		end
 		if CRC.Crucia.UnitID then
-			KBM.TankSwap:Start(CRC.Lang.Debuff.Blessing[KBM.Lang], CRC.Crucia.UnitID)
+			local DebuffTable = {
+				[1] = CRC.Lang.Debuff.ArmorIDCrucia1,
+				[2] = CRC.Lang.Debuff.ArmorIDCrucia2,
+			}
+			KBM.TankSwap:Start(DebuffTable, CRC.Crucia.UnitID, 2)
 		end
 	end
 end
@@ -550,7 +568,11 @@ function CRC:UnitHPCheck(uDetails, unitID)
 									if KBM.TankSwap.Active then
 										KBM.TankSwap:Remove()
 									end
-									KBM.TankSwap:Start(CRC.Lang.Debuff.Armor[KBM.Lang], unitID)
+									local DebuffTable = {
+										[1] = self.Lang.Debuff.ArmorIDCrucia1,
+										[2] = self.Lang.Debuff.ArmorIDCrucia2,
+									}
+									KBM.TankSwap:Start(DebuffTable, unitID, 2)
 								end
 							elseif BossObj == self.Storm then
 								BossObj.UnitID = unitID
@@ -605,6 +627,7 @@ function CRC:Start()
 	KBM.Defaults.AlertObj.Assign(self.Crucia)
 	
 	self.Storm.AlertsRef.Pulse = KBM.Alert:Create(self.Lang.Ability.Pulse[KBM.Lang], nil, false, true, "yellow")
+	self.Storm.AlertsRef.Spark = KBM.Alert:Create(self.Lang.Ability.Spark[KBM.Lang], nil, true, true, "orange")
 	KBM.Defaults.AlertObj.Assign(self.Storm)
 
 	-- Create Spies
@@ -629,6 +652,8 @@ function CRC:Start()
 	self.Storm.Triggers.Pulse:AddAlert(self.Storm.AlertsRef.Pulse)
 	self.Storm.Triggers.PulseInt = KBM.Trigger:Create(self.Lang.Ability.Pulse[KBM.Lang], "interrupt", self.Storm)
 	self.Storm.Triggers.PulseInt:AddStop(self.Storm.AlertsRef.Pulse)
+	self.Storm.Triggers.Spark = KBM.Trigger:Create(self.Lang.Ability.Spark[KBM.Lang], "cast", self.Storm)
+	self.Storm.Triggers.Spark:AddAlert(self.Storm.AlertsRef.Spark, true)
 
 	self.Crucia.Triggers.Wrath = KBM.Trigger:Create(self.Lang.Debuff.Wrath[KBM.Lang], "playerBuff", self.Crucia)
 	self.Crucia.Triggers.Wrath:AddSpy(self.Crucia.MechRef.Wrath)
@@ -652,7 +677,7 @@ function CRC:Start()
 
 	self.Crucia.Triggers.Armor = KBM.Trigger:Create(self.Lang.Ability.Armor[KBM.Lang], "cast", self.Crucia)
 	self.Crucia.Triggers.Armor:AddTimer(self.Crucia.TimersRef.TankSwap)
-	self.Crucia.Triggers.ArmorWarn = KBM.Trigger:Create(self.Lang.Debuff.ArmorID1, "playerIDBuff", self.Crucia)
+	self.Crucia.Triggers.ArmorWarn = KBM.Trigger:Create(self.Lang.Debuff.ArmorIDCrucia1, "playerIDBuff", self.Crucia)
 	self.Crucia.Triggers.ArmorWarn:AddAlert(self.Crucia.AlertsRef.TankSwap)
 
 	self.Crucia.Triggers.PhaseFour = KBM.Trigger:Create(60, "percent", self.Crucia)
@@ -662,5 +687,5 @@ function CRC:Start()
 	self.Storm.CastBar = KBM.CastBar:Add(self, self.Storm)
 	self.Elemental.CastBar = KBM.CastBar:Add(self, self.Elemental)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

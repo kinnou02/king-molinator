@@ -381,10 +381,6 @@ end
 function KR:Timer()	
 end
 
-function KR:DefineMenu()
-	self.Menu = EE.Menu:CreateEncounter(self.Kain, self.Enabled)
-end
-
 function KR:Start()
 	-- Create Timers
 	-- KBM.Defaults.TimerObj.Assign(self.Kain)
@@ -428,5 +424,4 @@ function KR:Start()
 	self.Baziel.CastBar = KBM.CastBar:Add(self, self.Baziel)
 	self.Kain.CastBar = KBM.CastBar:Add(self, self.Kain)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
 end

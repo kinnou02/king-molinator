@@ -415,5 +415,5 @@ function PH:Start()
 	
 	self.Hylas.CastBar = KBM.CastBar:Add(self, self.Hylas)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

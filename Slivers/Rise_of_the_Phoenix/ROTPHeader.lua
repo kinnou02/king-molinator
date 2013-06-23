@@ -51,5 +51,4 @@ end
 function ROTP:Start()
 	function self:Handler(bool)
 	end
-	ROTP.Menu = KBM.MainWin.Menu:CreateInstance(self.Name, true, self.Handler, "Sliver")
 end

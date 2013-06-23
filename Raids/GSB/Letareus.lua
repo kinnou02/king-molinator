@@ -287,5 +287,5 @@ function DL:Start()
 	-- Initialize Castbar and Phase Object.
 	self.Letareus.CastBar = KBM.CastBar:Add(self, self.Letareus)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(DL.Lang.Mechanic.Tank[KBM.Lang])
-	self:DefineMenu()
+	
 end

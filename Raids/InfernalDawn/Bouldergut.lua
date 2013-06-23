@@ -229,5 +229,5 @@ function BG:Start()
 	
 	self.Bouldergut.CastBar = KBM.CastBar:Add(self, self.Bouldergut)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

@@ -187,9 +187,8 @@ end
 function MOD:Timer()	
 end
 
-function MOD:DefineMenu()
-	self.Menu = Instance.Menu:CreateEncounter(self.Andrenos, self.Enabled)
-end
+
+
 
 function MOD:Start()
 	-- Create Timers
@@ -202,5 +201,5 @@ function MOD:Start()
 	
 	self.Andrenos.CastBar = KBM.CastBar:Add(self, self.Andrenos)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

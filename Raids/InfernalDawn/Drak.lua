@@ -628,5 +628,5 @@ function WD:Start()
 	self.Natung.CastBar = KBM.CastBar:Add(self, self.Natung)
 	self.Azul.CastBar = KBM.CastBar:Add(self, self.Azul)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

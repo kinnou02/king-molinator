@@ -292,5 +292,5 @@ function IZ:Start()
 	
 	self.Ituziel.CastBar = KBM.CastBar:Add(self, self.Ituziel)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

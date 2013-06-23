@@ -174,9 +174,8 @@ end
 function MOD:Timer()	
 end
 
-function MOD:DefineMenu()
-	self.Menu = Instance.Menu:CreateEncounter(self.Avoxcia, self.Enabled)
-end
+
+
 
 function MOD:Start()
 	-- Create Timers
@@ -189,5 +188,5 @@ function MOD:Start()
 	
 	self.Avoxcia.CastBar = KBM.CastBar:Add(self, self.Avoxcia)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

@@ -49,5 +49,4 @@ end
 function EE:Start()
 	function self:Handler(bool)
 	end
-	EE.Menu = KBM.MainWin.Menu:CreateInstance(self.Name, true, self.Handler, "SLRaid")	
 end

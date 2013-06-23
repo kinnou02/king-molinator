@@ -298,5 +298,5 @@ function GFZ:Start()
 	
 	self.Zoles.CastBar = KBM.CastBar:Add(self, self.Zoles)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

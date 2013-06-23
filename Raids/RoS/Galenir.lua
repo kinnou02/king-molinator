@@ -206,5 +206,5 @@ function WG:Start()
 	self.Galenir.Triggers.Essence:AddSpy(self.Galenir.MechRef.Essence)
 	
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

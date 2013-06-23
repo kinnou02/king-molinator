@@ -426,5 +426,5 @@ function SZ:Start()
 	
 	-- Assing Phase Tracking.
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

@@ -311,5 +311,5 @@ function MX:Start()
 	-- Assign Castbar object.
 	self.Murd.CastBar = KBM.CastBar:Add(self, self.Murd)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

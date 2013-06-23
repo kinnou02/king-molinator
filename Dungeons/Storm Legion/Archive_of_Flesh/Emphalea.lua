@@ -173,10 +173,6 @@ end
 function MOD:Timer()	
 end
 
-function MOD:DefineMenu()
-	self.Menu = Instance.Menu:CreateEncounter(self.Emphalea, self.Enabled)
-end
-
 function MOD:Start()
 	-- Create Timers
 	--KBM.Defaults.TimerObj.Assign(self.Emphalea)
@@ -188,5 +184,4 @@ function MOD:Start()
 	
 	self.Emphalea.CastBar = KBM.CastBar:Add(self, self.Emphalea)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
 end

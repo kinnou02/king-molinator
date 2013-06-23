@@ -241,9 +241,8 @@ function MOD.Autoch:SetAlerts(bool)
 	end
 end
 
-function MOD:DefineMenu()
-	self.Menu = Instance.Menu:CreateEncounter(self.Autoch, self.Enabled)
-end
+
+
 
 function MOD:Start()
 	-- Create Timers
@@ -256,5 +255,5 @@ function MOD:Start()
 	
 	self.Autoch.CastBar = KBM.CastBar:Add(self, self.Autoch)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

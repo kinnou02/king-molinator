@@ -252,9 +252,8 @@ function MOD.Kulir:SetAlerts(bool)
 	end
 end
 
-function MOD:DefineMenu()
-	self.Menu = Instance.Menu:CreateEncounter(self.Kulir, self.Enabled)
-end
+
+
 
 function MOD:Start()
 	-- Create Timers
@@ -267,5 +266,5 @@ function MOD:Start()
 	
 	self.Kulir.CastBar = KBM.CastBar:Add(self, self.Kulir)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

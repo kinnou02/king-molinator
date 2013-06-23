@@ -256,5 +256,5 @@ function BT:Start()
 	
 	self.Beruhast.CastBar = KBM.CastBar:Add(self, self.Beruhast, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

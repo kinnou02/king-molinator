@@ -24,6 +24,7 @@ local TPH = {
 	ID = "STyphiria",
 	Object = "TPH",
 	BlastCount = 0,
+	BlastCountObj = nil,
 }
 
 KBM.RegisterMod(TPH.ID, TPH)
@@ -191,14 +192,25 @@ end
 
 function TPH:PhaseClouds()
 	TPH.BlastCount = 0
+	if TPH.BlastCountObj == nil then
+		TPH.BlastCountObj = TPH.PhaseObj.Objectives:AddMeta(TPH.Lang.Ability.Blast[KBM.Lang], 6, 0)
+	end	
 	KBM.MechTimer:AddStart(TPH.Typhiria.TimersRef.Blast, 3)
 	KBM.MechTimer:AddStart(TPH.Typhiria.TimersRef.Tempest, 30)
 end
 
 function TPH:PhaseBlast()
 	TPH.BlastCount = TPH.BlastCount + 1
-	print("Blast "..TPH.BlastCount.."/6")
+	if TPH.BlastCountObj == nil then
+		TPH.BlastCountObj = TPH.PhaseObj.Objectives:AddMeta(TPH.Lang.Ability.Blast[KBM.Lang], 6, TPH.BlastCount)
+	else
+		TPH.BlastCountObj:Update(TPH.BlastCount)
+	end
 	if TPH.BlastCount >= 6 then
+		if TPH.BlastCountObj ~= nil then
+			TPH.BlastCountObj:Remove()
+			TPH.BlastCountObj = nil
+		end
 		KBM.MechTimer:AddStart(TPH.Typhiria.TimersRef.Clouds, 60)
 	end
 end
@@ -251,6 +263,8 @@ function TPH:Reset()
 	end
 	self.Typhiria.CastBar:Remove()	
 	self.PhaseObj:End(Inspect.Time.Real())
+	self.BlastCount = 0
+	self.BlastCountObj = nil
 end
 
 function TPH:Timer()	
@@ -296,5 +310,5 @@ function TPH:Start()
 	
 	self.Typhiria.CastBar = KBM.CastBar:Add(self, self.Typhiria)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

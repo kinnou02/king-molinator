@@ -171,9 +171,8 @@ end
 function MOD:Timer()	
 end
 
-function MOD:DefineMenu()
-	self.Menu = Instance.Menu:CreateEncounter(self.Totek, self.Enabled)
-end
+
+
 
 function MOD:Start()
 	-- Create Timers
@@ -186,5 +185,5 @@ function MOD:Start()
 	
 	self.Totek.CastBar = KBM.CastBar:Add(self, self.Totek)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

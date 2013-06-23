@@ -204,9 +204,8 @@ function MOD.Smouldaron:SetAlerts(bool)
 	end
 end
 
-function MOD:DefineMenu()
-	self.Menu = Instance.Menu:CreateEncounter(self.Smouldaron, self.Enabled)
-end
+
+
 
 function MOD:Start()
 	-- Create Timers
@@ -219,5 +218,5 @@ function MOD:Start()
 	
 	self.Smouldaron.CastBar = KBM.CastBar:Add(self, self.Smouldaron)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

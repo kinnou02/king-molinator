@@ -49,5 +49,4 @@ function TDQ:SaveVars()
 end
 
 function TDQ:Start()
-	TDQ.Menu = KBM.MainWin.Menu:CreateInstance(self.Name, true, self.Handler, "SLSliver")	
 end

@@ -54,5 +54,4 @@ end
 function ROS:Start()
 	function self:Handler(bool)
 	end
-	ROS.Menu = KBM.MainWin.Menu:CreateInstance(self.Name, true, self.Handler)	
 end

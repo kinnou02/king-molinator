@@ -265,9 +265,8 @@ end
 function MOD:Timer()	
 end
 
-function MOD:DefineMenu()
-	self.Menu = Instance.Menu:CreateEncounter(self.Rorf, self.Enabled)
-end
+
+
 
 function MOD:Start()
 	-- Create Timers
@@ -280,5 +279,5 @@ function MOD:Start()
 	
 	self.Rorf.CastBar = KBM.CastBar:Add(self, self.Rorf)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

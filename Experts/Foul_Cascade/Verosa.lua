@@ -223,9 +223,8 @@ end
 function MOD:Timer()	
 end
 
-function MOD:DefineMenu()
-	self.Menu = Instance.Menu:CreateEncounter(self.Verosa, self.Enabled)
-end
+
+
 
 function MOD:Start()
 	-- Create Timers
@@ -238,5 +237,5 @@ function MOD:Start()
 	
 	self.Verosa.CastBar = KBM.CastBar:Add(self, self.Verosa)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

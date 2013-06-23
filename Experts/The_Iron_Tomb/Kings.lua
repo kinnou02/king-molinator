@@ -302,9 +302,8 @@ function MOD.Laric:SetAlerts(bool)
 	end
 end
 
-function MOD:DefineMenu()
-	self.Menu = Instance.Menu:CreateEncounter(self.Laric, self.Enabled)
-end
+
+
 
 function MOD:Start()
 	-- Create Timers
@@ -317,5 +316,5 @@ function MOD:Start()
 	
 	self.Laric.CastBar = KBM.CastBar:Add(self, self.Laric)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

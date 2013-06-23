@@ -310,5 +310,5 @@ function OA:Start()
 	self.Aleria.Triggers.Necrotic:AddSpy(self.Aleria.MechRef.Necrotic)
 	
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

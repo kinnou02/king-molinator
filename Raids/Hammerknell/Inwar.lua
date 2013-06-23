@@ -584,6 +584,6 @@ function ID:Start()
 	self.Rotjaw.CastBar = KBM.CastBar:Add(self, self.Rotjaw, true)
 	
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 
 end

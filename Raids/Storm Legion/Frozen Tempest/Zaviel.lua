@@ -65,6 +65,7 @@ ZVL.Lang.Debuff.Arc:SetFrench("Soudure arquée")
 ZVL.Lang.Debuff.Vitality = KBM.Language:Add("Dissonant Vitality")
 ZVL.Lang.Debuff.Vitality:SetGerman("Dissonante Vitalität")
 ZVL.Lang.Debuff.Vitality:SetFrench("Vitalité dissonante")
+ZVL.Lang.Debuff.VitalityID = "B197BC11C310205C8"
 
 -- Chat Dictionary
 ZVL.Lang.Say = {}
@@ -309,7 +310,7 @@ function ZVL:UnitHPCheck(uDetails, unitID)
 					self.PhaseObj.Objectives:AddPercent(self.Zaviel, 50, 100)
 					self.Phase = 1
 					local DebuffTable = {
-							[1] = self.Lang.Debuff.Vitality[KBM.Lang],
+							[1] = self.Lang.Debuff.VitalityID,
 							[2] = self.Lang.Ability.Conduit[KBM.Lang],
 					}
 					KBM.TankSwap:Start(DebuffTable, unitID, 2)
@@ -423,5 +424,5 @@ function ZVL:Start()
 	
 	self.Zaviel.CastBar = KBM.CastBar:Add(self, self.Zaviel)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

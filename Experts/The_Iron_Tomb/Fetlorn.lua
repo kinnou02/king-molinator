@@ -201,9 +201,8 @@ function MOD.Fetlorn:SetAlerts(bool)
 	end
 end
 
-function MOD:DefineMenu()
-	self.Menu = Instance.Menu:CreateEncounter(self.Fetlorn, self.Enabled)
-end
+
+
 
 function MOD:Start()
 	-- Create Timers
@@ -216,5 +215,5 @@ function MOD:Start()
 	
 	self.Fetlorn.CastBar = KBM.CastBar:Add(self, self.Fetlorn)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

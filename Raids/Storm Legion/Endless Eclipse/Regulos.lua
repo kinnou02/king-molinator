@@ -677,5 +677,5 @@ function REG:Start()
 	self.Regulos.CastBar = KBM.CastBar:Add(self, self.Regulos)
 	self.Sicaron.CastBar = KBM.CastBar:Add(self, self.Sicaron)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

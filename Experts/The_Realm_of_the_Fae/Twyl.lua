@@ -327,9 +327,8 @@ function MOD.Twyl:SetAlerts(bool)
 	end
 end
 
-function MOD:DefineMenu()
-	self.Menu = Instance.Menu:CreateEncounter(self.Twyl, self.Enabled)
-end
+
+
 
 function MOD:Start()
 	-- Create Timers
@@ -342,5 +341,5 @@ function MOD:Start()
 	
 	self.Twyl.CastBar = KBM.CastBar:Add(self, self.Twyl)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

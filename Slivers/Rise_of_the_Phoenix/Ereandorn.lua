@@ -265,5 +265,5 @@ function EN:Start()
 	
 	self.Ereandorn.CastBar = KBM.CastBar:Add(self, self.Ereandorn)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

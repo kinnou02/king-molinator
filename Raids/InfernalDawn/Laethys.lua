@@ -502,5 +502,5 @@ function LT:Start()
 	
 	self.Laethys.CastBar = KBM.CastBar:Add(self, self.Laethys)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

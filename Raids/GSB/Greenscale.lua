@@ -345,5 +345,5 @@ function LG:Start()
 	
 	self.Greenscale.CastBar = KBM.CastBar:Add(self, self.Greenscale)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

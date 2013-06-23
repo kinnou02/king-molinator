@@ -38,7 +38,7 @@ function RM.GUI:ApplySettings()
 	self.Anchor:SetWidth(math.ceil(KBM.Constant.ResMaster.w * self.Settings.wScale))
 	self.Anchor:SetHeight(math.ceil(KBM.Constant.ResMaster.h * self.Settings.hScale))
 	self.Anchor.Text:SetFontSize(math.ceil(KBM.Constant.ResMaster.TextSize * self.Settings.tScale))
-	if KBM.MainWin:GetVisible() then
+	if KBM.Menu.Active then
 		self.Anchor:SetVisible(self.Settings.Visible)
 		self.Anchor.Drag:SetVisible(self.Settings.Unlocked)
 	else

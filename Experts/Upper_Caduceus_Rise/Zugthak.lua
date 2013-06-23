@@ -204,9 +204,8 @@ function MOD.Zugthak:SetAlerts(bool)
 	end
 end
 
-function MOD:DefineMenu()
-	self.Menu = Instance.Menu:CreateEncounter(self.Zugthak, self.Enabled)
-end
+
+
 
 function MOD:Start()
 	-- Create Timers
@@ -219,5 +218,5 @@ function MOD:Start()
 	
 	self.Zugthak.CastBar = KBM.CastBar:Add(self, self.Zugthak)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

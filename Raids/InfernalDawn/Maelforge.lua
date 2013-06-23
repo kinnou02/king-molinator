@@ -405,5 +405,5 @@ function MF:Start()
 	
 	self.Maelforge.CastBar = KBM.CastBar:Add(self, self.Maelforge)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

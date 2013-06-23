@@ -354,5 +354,5 @@ function ML:Start()
 	
 	self.Arisae.CastBar = KBM.CastBar:Add(self, self.Arisae)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

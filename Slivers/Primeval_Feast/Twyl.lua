@@ -545,5 +545,5 @@ function LT:Start()
 	
 	self.Twyl.CastBar = KBM.CastBar:Add(self, self.Twyl, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

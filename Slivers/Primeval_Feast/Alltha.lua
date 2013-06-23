@@ -272,5 +272,5 @@ function AR:Start()
 	
 	self.Alltha.CastBar = KBM.CastBar:Add(self, self.Alltha, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

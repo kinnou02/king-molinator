@@ -10,13 +10,12 @@ Author = "Paul Snart"
 Website = "http://www.facebook.com/KingBossMods"
 Email = "kingbossmods@gmail.com"
 
-Version = "1.4.6.701"
+Version = "1.4.6.702"
 
 Environment = "2.2"
 
 RunOnStartup = {
 	"KingMolinator.lua",
-	"KMOptions.lua",
 	"Modules/Menu/MainMenu.lua",
 	"Modules/Menu/Objects.lua",
 	"Modules/Menu/Page.lua",
@@ -36,6 +35,11 @@ RunOnStartup = {
 	"Raids/Storm Legion/Frozen Tempest/Zaviel.lua",
 	"Raids/Storm Legion/Frozen Tempest/Kolmasveli.lua",
 	"Raids/Storm Legion/Frozen Tempest/Crucia.lua",
+	"Slivers/Storm Legion/Grim_Awakening/GAHeader.lua",
+	"Slivers/Storm Legion/Grim_Awakening/Kyzan.lua",
+	"Slivers/Storm Legion/Grim_Awakening/MLKaliban.lua",
+	"Slivers/Storm Legion/Grim_Awakening/Salvarola.lua",
+	"Slivers/Storm Legion/Grim_Awakening/Ultane.lua",
 	"Slivers/Storm Legion/Triumph_of_the_Dragon_Queen/TDQHeader.lua",
 	"Slivers/Storm Legion/Triumph_of_the_Dragon_Queen/Zoles.lua",
 	"Slivers/Storm Legion/Triumph_of_the_Dragon_Queen/Cyril.lua",
@@ -306,6 +310,11 @@ SavedVariables = {
 	KBMSLRDFTGA_Settings = "account",
 	KBMSLRDFTKT_Settings = "account",
 	KBMSLRDFTZL_Settings = "account",
+	KBMSLSLGA_Settings = "account",
+	KBMSLSLGAKZ_Settings = "account",
+	KBMSLSLGAMLK_Settings = "account",
+	KBMSLSLGASAL_Settings = "account",
+	KBMSLSLGAULT_Settings = "account",
 	KBMSLSLTQ_Settings = "account",
 	KBMSLSLTQCL_Settings = "account",
 	KBMSLSLTQJN_Settings = "account",
@@ -563,6 +572,11 @@ SavedVariables = {
 	chKBMSLRDFTGA_Settings = "character",
 	chKBMSLRDFTKT_Settings = "character",
 	chKBMSLRDFTZL_Settings = "character",
+	chKBMSLSLGA_Settings = "character",
+	chKBMSLSLGAKZ_Settings = "character",
+	chKBMSLSLGAMLK_Settings = "character",
+	chKBMSLSLGASAL_Settings = "character",
+	chKBMSLSLGAULT_Settings = "character",
 	chKBMSLSLTQ_Settings = "character",
 	chKBMSLSLTQCL_Settings = "character",
 	chKBMSLSLTQJN_Settings = "character",

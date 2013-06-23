@@ -236,9 +236,8 @@ end
 function MOD:Timer()	
 end
 
-function MOD:DefineMenu()
-	self.Menu = Instance.Menu:CreateEncounter(self.Strauz, self.Enabled)
-end
+
+
 
 function MOD:Start()
 	-- Create Timers
@@ -259,5 +258,5 @@ function MOD:Start()
 	self.Strauz.CastBar = KBM.CastBar:Add(self, self.Strauz)
 	self.Mercutial.CastBar = KBM.CastBar:Add(self, self.Mercutial)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

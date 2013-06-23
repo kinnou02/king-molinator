@@ -218,9 +218,8 @@ function MOD.Krasimir:SetAlerts(bool)
 	end
 end
 
-function MOD:DefineMenu()
-	self.Menu = Instance.Menu:CreateEncounter(self.Krasimir, self.Enabled)
-end
+
+
 
 function MOD:Start()
 	-- Create Timers
@@ -233,5 +232,5 @@ function MOD:Start()
 	
 	self.Krasimir.CastBar = KBM.CastBar:Add(self, self.Krasimir)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end

@@ -217,5 +217,5 @@ function VP:Start()
 	
 	self.Prime.CastBar = KBM.CastBar:Add(self, self.Prime, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self:DefineMenu()
+	
 end
