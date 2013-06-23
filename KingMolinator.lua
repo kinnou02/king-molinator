@@ -6674,15 +6674,6 @@ function KBM:Timer(handle)
 
 	if not KBM.Updating then
 		KBM.Updating = true
-		if KBM.QueuePage then
-			if KBM.MainWin.CurrentPage then
-				if KBM.MainWin.CurrentPage.Type == "encounter" then
-					KBM.MainWin.CurrentPage:ClearPage()
-				else
-					KBM.MainWin.CurrentPage:Remove()
-				end
-			end
-		end
 		
 		if KBM.Options.Enabled then			
 			if diff >= 1 then				
@@ -6777,14 +6768,6 @@ function KBM:Timer(handle)
 			end
 		end
 		
-		if KBM.QueuePage then
-			if KBM.QueuePage.Type == "encounter" then
-				KBM.QueuePage:SetPage()
-			else
-				KBM.QueuePage:Open()
-			end
-			KBM.QueuePage = nil
-		end		
 		KBM.Updating = false
 	end	
 end
