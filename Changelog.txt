@@ -1,7 +1,7 @@
 ﻿v1.4.6
 
 Menu System
-* Change: Now uses far less memory (around 8-10Mb).
+* Change: Now uses far less memory (around 10Mb+).
 * Stage 1: Complete
 * Complete rewrite of the underlying menu code in preparation for new functionality.
 * At the moment this is just reproducing old functionality.
@@ -15,6 +15,25 @@ Ready Check
 
 Encounters
 * Change: Instance Headers and Encounter Files no longer create menu items within their files.
+
+Grim Awakening
+* New: Kyzan.
+** New: Encounter Created.
+** New: Timer and Alert added for Delayed Annihilation.
+** New: Spy added for Soul Leech.
+** New: Spy added for Abhorrent Growth.
+** New: Spy added for Phase Rip.
+** New: Spy added for Bone Harvest.
+* New: Magma Lord Kaliban.
+** New: Encounter Created.
+** New: Timer, Alert and Spy added for Soul Shatter.
+** New: Timer, Alert and Spy added for Gaze.
+* New: Salvarola.
+** New: Encounter Created.
+** New: Timer and Alert added for Incineration.
+** New: Spy added for Mindsear.
+* New: Ultane.
+** New: Encounter Created.
 
 Regulos
 * Fixed: Issues with Castbar settings causing occasional settings resets.

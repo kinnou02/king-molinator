@@ -15,18 +15,21 @@ local TH = _int.TH
 -- Define Panel Events
 LibSGui.Event.TreeView = {}
 LibSGui.Event.TreeView.Scrollbar = {}
-LibSGui.Event.TreeView.Scrollbar.Change = Utility.Event.Create("SafesGUILib", "TreeView.Scrollbar.Change")
-LibSGui.Event.TreeView.Scrollbar.Active = Utility.Event.Create("SafesGUILib", "TreeView.Scrollbar.Active")
+LibSGui.Event.TreeView.Scrollbar.Change = Utility.Event.Create(AddonIni.id, "TreeView.Scrollbar.Change")
+LibSGui.Event.TreeView.Scrollbar.Active = Utility.Event.Create(AddonIni.id, "TreeView.Scrollbar.Active")
 LibSGui.Event.TreeView.Node = {}
-LibSGui.Event.TreeView.Node.Expand = Utility.Event.Create("SafesGUILib", "TreeView.Node.Expand")
-LibSGui.Event.TreeView.Node.Collapse = Utility.Event.Create("SafesGUILib", "TreeView.Node.Collapse")
-LibSGui.Event.TreeView.Node.Change = Utility.Event.Create("SafesGUILib", "TreeView.Node.Change")
+LibSGui.Event.TreeView.Node.Change = Utility.Event.Create(AddonIni.id, "TreeView.Node.Change")
 LibSGui.Event.TreeView.Node.Mouse = {}
-LibSGui.Event.TreeView.Node.Mouse.In = Utility.Event.Create("SafesGUILib", "TreeView.Node.Mouse.In")
-LibSGui.Event.TreeView.Node.Mouse.Out = Utility.Event.Create("SafesGUILib", "TreeView.Node.Mouse.Out")
+LibSGui.Event.TreeView.Node.Mouse.In = Utility.Event.Create(AddonIni.id, "TreeView.Node.Mouse.In")
+LibSGui.Event.TreeView.Node.Mouse.Out = Utility.Event.Create(AddonIni.id, "TreeView.Node.Mouse.Out")
 
 -- Define Area
 LibSGui.TreeView = {}
+
+local EventIDList = {
+	Collapse = true,
+	Expand = true,
+}
 
 -- Defaults
 local Default = {
@@ -63,6 +66,7 @@ function _int:pullNode(_parent, _id)
 		node._cradle = _int:pullFrame(_parent, true)
 		node._cradle._node = node
 		node._id = _id
+		node._index = _int.totals.node
 		_int.attachDefault(node)
 		node:SetPoint("LEFT", _parent, "LEFT")
 		node:SetPoint("RIGHT", _parent, "RIGHT")
@@ -81,6 +85,12 @@ function _int:pullNode(_parent, _id)
 		node._iconA:SetWidth(16)
 		node._iconA:SetHeight(16)
 		node._iconA:SetAlpha(0.75)
+		node._event = {}
+		local idCollapse = "TreeView.Node"..node._index..".Collapse"
+		local idExpand = "TreeView.Node"..node._index..".Expand"
+		node._event._collapse = Utility.Event.Create(AddonIni.id, idCollapse)
+		node._event._expand = Utility.Event.Create(AddonIni.id, idExpand)
+		
 		--node._textBack:SetAlpha(0.75)
 		function node:_mouseIn()
 			if self._nodeObj._enabled then
@@ -103,38 +113,48 @@ function _int:pullNode(_parent, _id)
 				LibSGui.Event.TreeView.Node.Mouse.Out(self._node)
 			end
 		end
+		function node:_collapse()
+			local nodeObj = self._nodeObj
+			local _, lastChild = nodeObj._children:Last()
+			self._childCradle:SetVisible(false)
+			self._childCradle:SetPoint("BOTTOM", self._cradle, "BOTTOM", nil, -1)
+			self._childCradle:SetPoint("TOP", self._cradle, "BOTTOM", nil, -2)
+			nodeObj:_updateSize(-nodeObj._childSize)
+			nodeObj._expanded = false
+			TH.LoadTexture(self._iconA, AddonIni.id, "Media/Treeview_Arrow_Left.png")
+			self._event._collapse()
+			if nodeObj._root._selected then
+				if nodeObj._root._selected._parentNode == nodeObj then
+					nodeObj._root._highlight:SetVisible(false)
+				end
+			end
+		end
+		function node:_expand()
+			local nodeObj = self._nodeObj
+			local _, lastChild = nodeObj._children:Last()
+			self._childCradle:SetVisible(true)
+			self._childCradle:SetPoint("BOTTOM", lastChild._obj._cradle, "BOTTOM", nil, -1)
+			self._childCradle:SetPoint("TOP", self._cradle, "BOTTOM", nil, 0)
+			nodeObj._expanded = true
+			nodeObj:_updateSize(nodeObj._childSize)
+			TH.LoadTexture(self._iconA, AddonIni.id, "Media/Treeview_Arrow_Down.png")
+			self._event._expand()
+			if nodeObj._root._selected then
+				if nodeObj._root._selected._parentNode == nodeObj then
+					nodeObj._root._highlight:SetVisible(true)
+				end
+			end
+		end
 		function node:_mouseClick()
+			local nodeObj = self._nodeObj
+			local nodeUI = self._node
+			local _, lastChild = nodeObj._children:Last()
 			if self._nodeObj._enabled then
-				local nodeObj = self._nodeObj
-				local nodeUI = self._node
-				local _, lastChild = nodeObj._children:Last()
 				if lastChild then
 					if nodeObj._expanded then
-						nodeUI._childCradle:SetVisible(false)
-						nodeUI._childCradle:SetPoint("BOTTOM", self, "BOTTOM", nil, -1)
-						nodeUI._childCradle:SetPoint("TOP", self, "BOTTOM", nil, -2)
-						nodeObj:_updateSize(-nodeObj._childSize)
-						nodeObj._expanded = false
-						TH.LoadTexture(nodeUI._iconA, AddonIni.id, "Media/Treeview_Arrow_Left.png")
-						LibSGui.Event.TreeView.Node.Collapse(nodeObj)
-						if nodeObj._root._selected then
-							if nodeObj._root._selected._parentNode == nodeObj then
-								nodeObj._root._highlight:SetVisible(false)
-							end
-						end
+						nodeUI:_collapse()
 					else
-						nodeUI._childCradle:SetVisible(true)
-						nodeUI._childCradle:SetPoint("BOTTOM", lastChild._obj._cradle, "BOTTOM", nil, -1)
-						nodeUI._childCradle:SetPoint("TOP", self, "BOTTOM", nil, 0)
-						nodeObj._expanded = true
-						nodeObj:_updateSize(nodeObj._childSize)
-						TH.LoadTexture(nodeUI._iconA, AddonIni.id, "Media/Treeview_Arrow_Down.png")
-						LibSGui.Event.TreeView.Node.Expand(nodeObj)
-						if nodeObj._root._selected then
-							if nodeObj._root._selected._parentNode == nodeObj then
-								nodeObj._root._highlight:SetVisible(true)
-							end
-						end
+						nodeUI:_expand()
 					end
 				else
 					if nodeObj._root._selected ~= nodeObj then
@@ -146,7 +166,7 @@ function _int:pullNode(_parent, _id)
 		end
 		node._cradle:EventAttach(Event.UI.Input.Mouse.Cursor.In, node._mouseIn, "Mouse In Handler")
 		node._cradle:EventAttach(Event.UI.Input.Mouse.Cursor.Out, node._mouseOut, "Mouse Out Handler")
-		node._cradle:EventAttach(Event.UI.Input.Mouse.Left.Click, node._mouseClick, "Mouse Click Handler")
+		node._cradle:EventAttach(Event.UI.Input.Mouse.Left.Click, node._mouseClick, "Mouse Click Handler")	
 		
 		return node
 	else
@@ -166,7 +186,8 @@ function _int:pushNode()
 
 end
 
-function _tvNode:Create(pNode, Text, Select)
+function _tvNode:Create(pNode, Text, Select, pTable)
+	pTable = pTable or {}
 	local Node = {}
 	Node._type = "node"
 	Node._children = LibSata:Create()
@@ -219,7 +240,9 @@ function _tvNode:Create(pNode, Text, Select)
 			Node._size = Default.Node.h
 			TH.LoadTexture(Node._obj._iconA, AddonIni.id, "Media/Node_Connect_Last.png")
 		end
-		pNode._obj._childCradle:SetPoint("BOTTOM", Node._obj._childCradle, "BOTTOM")
+		if pNode._expanded then
+			pNode._obj._childCradle:SetPoint("BOTTOM", Node._obj._childCradle, "BOTTOM")
+		end
 		pNode._obj._childCradle:SetPoint("TOP", pNode._obj._cradle, "BOTTOM")
 		Node._obj._cradle:SetHeight(Default.Node.h)
 		Node._obj._text:SetFontColor(Default.Node.r, Default.Node.g, Default.Node.b)
@@ -230,10 +253,35 @@ function _tvNode:Create(pNode, Text, Select)
 		error("Node Create: Child nodes do not currently support their own children.")
 	end
 	Node._obj._cradle._nodeObj = Node
+	Node._obj._nodeObj = Node
 	
 	function Node:Create(Text)
 		local childNode = _tvNode:Create(self, Text)
 		return childNode
+	end
+	
+	function Node:Collapse()
+		if self._expanded then
+			self._obj:_collapse()
+		end
+	end
+	
+	function Node:Expand()
+		if not self._expanded then
+			self._obj:_expand()
+		end
+	end
+	
+	function Node:SetCollapsed(bool)
+		if bool then
+			if self._expanded then
+				self._obj:_collapse()
+			end
+		else
+			if not self._expanded then
+				self._obj:_expand()
+			end
+		end
 	end
 	
 	function Node:SetText(Text)
@@ -255,6 +303,14 @@ function _tvNode:Create(pNode, Text, Select)
 		self._text = Text
 	end
 	
+	function Node:EventAttach(EventID, Callback, Label)
+		if EventIDList[EventID] then
+			Command.Event.Attach(Event[AddonIni.id].TreeView["Node"..self._obj._index][EventID], function() Callback(self) end, Label or "Node Event")
+		else
+			error("Unknown event ID for Node:EventAttach - "..tostring(EventID))
+		end
+	end
+	
 	function Node:GetText()
 		return self._text
 	end
@@ -268,7 +324,7 @@ function _tvNode:Create(pNode, Text, Select)
 		self._root._highlight:ClearAll()
 		self._root._highlight:SetPoint("TOPLEFT", self._obj._textBack, "TOPLEFT", 1, 1)
 		self._root._highlight:SetPoint("BOTTOMRIGHT", self._obj._textBack, "BOTTOMRIGHT", -2, 0)
-		self._root._highlight:SetVisible(true)
+		self._root._highlight:SetVisible(self._parentNode._expanded)
 	end
 	
 	function Node:Select()
@@ -294,9 +350,13 @@ function _tvNode:Create(pNode, Text, Select)
 	function Node:_updateSize(value)
 		self._currentSize = self._currentSize + value
 		if self._parentNode._layer ~= 0 then
-			self._parentNode._updateSize(value)
+			if self._expanded then
+				self._parentNode._updateSize(value)
+			end
 		else
-			self._root:_updateSize(value)
+			if self._expanded then
+				self._root:_updateSize(value)
+			end
 		end
 	end
 	
@@ -306,7 +366,9 @@ function _tvNode:Create(pNode, Text, Select)
 		if self._parentNode._layer ~= 0 then
 			self._parentNode:_addChildSize(value)
 		else
-			self._root:_updateSize(value)
+			if self._expanded then
+				self._root:_updateSize(value)
+			end
 		end
 	end
 	
@@ -314,7 +376,9 @@ function _tvNode:Create(pNode, Text, Select)
 		if self._parentNode._layer ~= 0 then
 			self._parentNode:_addChildSize(self._size)
 		else
-			self._root:_updateSize(self._size)
+			if self._expanded then
+				self._root:_updateSize(self._size)
+			end
 		end
 	end
 
@@ -322,6 +386,9 @@ function _tvNode:Create(pNode, Text, Select)
 	Node._currentSize = 0
 	Node:_addSize()
 	Node:SetText(Text)
+	if pTable.Collapse then
+		Node:Collapse()
+	end
 		
 	return Node
 end
@@ -449,8 +516,8 @@ function LibSGui.TreeView:Create(_id, _parent, pTable)
 		self.Content:SetHeight(self._size)
 	end
 	
-	function treeview:Create(text)
-		return _tvNode:Create(self, text)
+	function treeview:Create(text, pTable)
+		return _tvNode:Create(self, text, nil, pTable)
 	end
 	
 	function treeview:ClearSelected()

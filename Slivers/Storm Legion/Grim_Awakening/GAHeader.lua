@@ -31,6 +31,7 @@ KBM.RegisterMod(GA.ID, GA)
 GA.Lang = {}
 GA.Lang.Main = {}
 GA.Lang.Main.GA = KBM.Language:Add(GA.Name)
+GA.Lang.Main.GA:SetFrench("Éveil sinistre")
 GA.Name = GA.Lang.Main.GA[KBM.Lang]
 GA.Descript = GA.Name
 

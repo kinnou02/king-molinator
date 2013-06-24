@@ -320,6 +320,7 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Tabs.Plugins:SetGerman()
 	KBM.Language.Tabs.Plugins:SetFrench()
 	KBM.Language.Tabs.Plugins:SetKorean("플러그인")
+	KBM.Language.Tabs.Triggers = KBM.Language:Add("Triggers")
 	
 	-- Encounter related messages
 	KBM.Language.Encounter = {}

@@ -212,7 +212,7 @@ function Menu:Define(Addon)
 	
 	-- Define Main Tabber
 	table.insert(self.Default.TabList.Main, {ID = "Main", Name = "KBM", Icon = nil})
-	table.insert(self.Default.TabList.Main, {ID = "Plug", Name = "Plug-ins", Icon = nil})
+	table.insert(self.Default.TabList.Main, {ID = "Plug", Name = KBM.Language.Tabs.Plugins[KBM.Lang], Icon = nil})
 	self.Default.TabDim = {}
 	self.Default.TabDim.Main = {
 		wScale = 0.27,
@@ -232,12 +232,12 @@ function Menu:Define(Addon)
 	table.insert(self.Default.TabList.Enc, {ID = "Normal", Name = "Normal", Icon = "Media/Group_Icon.png", Location = AddonIni.id})
 	
 	-- Define Page Tabber
-	table.insert(self.Default.TabList.Page, {ID = "Encounter", Name = "Encounter", Style = "Single"})
-	table.insert(self.Default.TabList.Page, {ID = "Timers", Name = "Timers", Style = "Double"})
-	table.insert(self.Default.TabList.Page, {ID = "Alerts", Name = "Alerts", Style = "Double"})
-	table.insert(self.Default.TabList.Page, {ID = "Castbars", Name = "Castbars", Style = "Single"})
-	table.insert(self.Default.TabList.Page, {ID = "Records", Name = "Records", Style = "Single"})
-	table.insert(self.Default.TabList.Page, {ID = "Triggers", Name = "Triggers", Style = "Trigger"})
+	table.insert(self.Default.TabList.Page, {ID = "Encounter", Name = KBM.Language.Tabs.Encounter[KBM.Lang], Style = "Single"})
+	table.insert(self.Default.TabList.Page, {ID = "Timers", Name = KBM.Language.Tabs.Timers[KBM.Lang], Style = "Double"})
+	table.insert(self.Default.TabList.Page, {ID = "Alerts", Name = KBM.Language.Tabs.Alerts[KBM.Lang], Style = "Double"})
+	table.insert(self.Default.TabList.Page, {ID = "Castbars", Name = KBM.Language.Tabs.Castbars[KBM.Lang], Style = "Single"})
+	table.insert(self.Default.TabList.Page, {ID = "Records", Name = KBM.Language.Tabs.Records[KBM.Lang], Style = "Single"})
+	table.insert(self.Default.TabList.Page, {ID = "Triggers", Name = KBM.Language.Tabs.Triggers[KBM.Lang], Style = "Trigger"})
 	
 	-- Build Data Structure
 	self.Tab = {}
@@ -366,13 +366,14 @@ function Menu:Init(Addon)
 	end
 	self:_createEncTab("Rift")
 	self:_createEncTab("SL")
-	self.Tab.Rift.Rift.Tabber:SetVisible(true)
-	self.Tab.Rift.Rift.Raid.TreeView:SetVisible(true)
+	self.Tab.Rift[KBM.Options.MenuExpac].Tabber:SetVisible(true)
+	self.Tab.Rift[KBM.Options.MenuExpac].Raid.TreeView:SetVisible(true)
+	self.Tab.Rift.Current = self.Tab.Rift[KBM.Options.MenuExpac]
+	self.Tab.Rift[KBM.Options.MenuExpac].Tab:Select()
 
 	-- Set Current Tab for Rift type
 	self.Tab.Rift.Rift.Current = self.Tab.Rift.Rift.Raid.TreeView
 	self.Tab.Rift.SL.Current = self.Tab.Rift.SL.Raid.TreeView
-	self.Tab.Rift.Current = self.Tab.Rift.Rift
 	
 	-- Create global panel enclosure.
 	self.Panel = LibSGui.Group:Create("Main Panel", self.Window.Content, {Visible = true, Raised = false})
@@ -478,6 +479,7 @@ function Menu:_riftTab(Tabber, Tab)
 	Root.Current = Parent
 	Root.Current.Tabber:SetVisible(true)
 	Root.Current.Current:SetVisible(true)
+	KBM.Options.MenuExpac = Root.Current.ID
 end
 
 function Menu:_standardTab(Tabber, Tab)

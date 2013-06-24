@@ -8,6 +8,7 @@ local LibSGui = Inspect.Addon.Detail("SafesGUILib").data
 
 local Menu = KBM.Menu
 local RenderQueue = LibSata:Create()
+local MaxTime = 0.02
 
 Menu.UI = {
 	Store = {
@@ -340,6 +341,7 @@ function Menu.Object:CreatePlainHeader(Name, Settings, ID, Callback, Page)
 			self.UI.Text:SetWordwrap(true)
 			self.UI.Text:SetPoint("RIGHT", self._root.UI.Cradle, "RIGHT")
 		else
+			self.UI.Text:SetPoint("RIGHT", self._root.UI.Cradle, "RIGHT")
 			self.UI.Text:SetParent(self._root.UI.Content)
 			self.UI.Text:SetVisible(true)
 		end
@@ -686,7 +688,7 @@ function Menu.Object:CreateColorPicker(Name, Settings, ID, Callback, Page)
 		self.Page:LinkY(self.UI.Cradle)
 		self.Page:LinkX(self.UI.Cradle)
 		
-		self.UI.Text:SetText("Custom Color")
+		self.UI.Text:SetText(KBM.Language.Color.Custom[KBM.Lang])
 		
 		if self.Callback then
 			if self.Settings then
@@ -840,9 +842,8 @@ function Menu.RenderHalt()
 end
 
 function Menu.RenderUpdate()
-	local MaxTime = 0.02
 	local endTime = Inspect.Time.Real() + MaxTime
-	local x = 0
+	--local x = 0
 	repeat 
 		QueueObj = RenderQueue:RemoveFirst() 
 		if QueueObj then
@@ -851,9 +852,9 @@ function Menu.RenderUpdate()
 			else
 				QueueObj:Render()
 				if Inspect.Time.Real() >= endTime then
-					x = x + 1
+					-- x = x + 1
 					--print("CC: Yield: "..x)
-					--coroutine.yield()
+					coroutine.yield()
 					endTime = Inspect.Time.Real() + MaxTime
 				end
 			end
@@ -863,11 +864,10 @@ function Menu.RenderUpdate()
 end
 
 function Menu.UI.UpdateHandler()
-	if RenderQueue._count > 0 then
-		Menu.RenderUpdate()
-	end
+	-- if RenderQueue._count > 0 then
+		-- Menu.RenderUpdate()
+	-- end
 	
-	--[[
 	if Menu.Renderer then
 		if coroutine.status(Menu.Renderer) == "dead" then
 			Menu.Renderer = nil
@@ -885,7 +885,7 @@ function Menu.UI.UpdateHandler()
 			assert(coroutine.resume(Menu.Renderer))
 			--Menu.NextCall = Inspect.Time.Real() + 1 
 		end
-	end]]--
+	end
 end
 
 Command.Event.Attach(Event.System.Update.Begin, Menu.UI.UpdateHandler, "Render Handler")

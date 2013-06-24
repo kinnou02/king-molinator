@@ -31,14 +31,29 @@ function Instance:Create(Mod)
 	end
 	local Table = Menu.Tab.Rift[Mod.Rift][Mod.Type]
 	
+	InstanceObj.LongID = Mod.Rift.."_"..Mod.Type.."_"..Mod.ID
+	if not KBM.Options.MenuState[InstanceObj.LongID] then
+		KBM.Options.MenuState[InstanceObj.LongID] = KBM.Defaults.Menu()
+	end
+	InstanceObj.MenuState = KBM.Options.MenuState[InstanceObj.LongID]
 	InstanceObj.Instance = Mod
 	InstanceObj.TabObj = Table
-	InstanceObj.Node = Table.TreeView:Create(Mod.Name)
+	InstanceObj.Node = Table.TreeView:Create(Mod.Name, {Collapse = InstanceObj.MenuState.Collapse})
 	InstanceObj.Type = "Instance"
 	InstanceObj.ID = Mod.ID
 	InstanceObj.Name = Mod.Name
 	InstanceObj.Encounter = {}
 	InstanceObj.TabObj.Tab:Enable()
+	
+	function InstanceObj:CollapseHandler()
+		InstanceObj.MenuState.Collapse = true
+	end
+	InstanceObj.Node:EventAttach("Collapse", InstanceObj.CollapseHandler, "Node "..InstanceObj.ID.." Collapse")
+	
+	function InstanceObj:ExpandHandler()
+		InstanceObj.MenuState.Collapse = false
+	end
+	InstanceObj.Node:EventAttach("Expand", InstanceObj.ExpandHandler, "Node "..InstanceObj.ID.." Expand")
 	
 	function InstanceObj:CreateEncounter(Mod)
 		local Encounter = {}

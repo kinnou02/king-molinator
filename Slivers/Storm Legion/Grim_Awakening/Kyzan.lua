@@ -30,10 +30,12 @@ KBM.RegisterMod(KZ.ID, KZ)
 -- Main Unit Dictionary
 KZ.Lang.Unit = {}
 KZ.Lang.Unit.Kyzan = KBM.Language:Add("Kyzan")
+KZ.Lang.Unit.Kyzan:SetFrench("Kyzan")
 
 -- Ability Dictionary
 KZ.Lang.Ability = {}
 KZ.Lang.Ability.Annihilation = KBM.Language:Add("Delayed Annihilation")
+KZ.Lang.Ability.Annihilation:SetFrench("Annihilation retardée")
 
 -- Verbose Dictionary
 KZ.Lang.Verbose = {}
@@ -41,6 +43,7 @@ KZ.Lang.Verbose = {}
 -- Buff Dictionary
 KZ.Lang.Buff = {}
 KZ.Lang.Buff.Growth = KBM.Language:Add("Abhorrent Growth")
+KZ.Lang.Buff.Growth:SetFrench("Croissance odieuse")
 KZ.Lang.Buff.GrowthID = "B71EFD1E7E16B7029"
 
 -- Debuff Dictionary
@@ -50,10 +53,13 @@ KZ.Lang.Debuff.RendingID = "B222A8C2D75DD0233"
 KZ.Lang.Debuff.Leech = KBM.Language:Add("Soul Leech")
 KZ.Lang.Debuff.LeechID = "BFFF2E05144BCABF1"
 KZ.Lang.Debuff.Delayed = KBM.Language:Add("Delayed Annihilation")
+KZ.Lang.Debuff.Delayed:SetFrench("Annihilation retardée")
 KZ.Lang.Debuff.DelayedID = "BFFE5A18279825D02"
 KZ.Lang.Debuff.Harvest = KBM.Language:Add("Bone Harvest")
+KZ.Lang.Debuff.Harvest:SetFrench("Moisson d'os")
 KZ.Lang.Debuff.HarvestID = "B5B66DE15D863A53D"
 KZ.Lang.Debuff.Phase = KBM.Language:Add("Phase Rip")
+KZ.Lang.Debuff.Phase:SetFrench("Déchirure de phase")
 KZ.Lang.Debuff.PhaseID = "B66EB09DD08948BC5"
 
 -- Description Dictionary

@@ -39,9 +39,14 @@ function Page:CreateHeader(Title, ID, TVID, TABID, Settings, pTable)
 			error("Supplied TABID not valid: "..TABID)
 		end
 		local Header = {}
+		Header.LongID = TVID.."_"..TABID.."_"..ID
+		if not KBM.Options.MenuState[Header.LongID] then
+			KBM.Options.MenuState[Header.LongID] = KBM.Defaults.Menu()
+		end
+		Header.MenuState = KBM.Options.MenuState[Header.LongID]
 		Header.Tab = Menu.Tab[TVID]
 		Header.TreeView = Header.Tab[TABID].TreeView
-		Header.Node = Header.TreeView:Create(Title)
+		Header.Node = Header.TreeView:Create(Title, {Collapse = Header.MenuState.Collapse})
 		Header.Tab[TABID].Headers[ID] = Header
 		Header.ID = ID
 		Header.TABID = TABID
@@ -49,6 +54,17 @@ function Page:CreateHeader(Title, ID, TVID, TABID, Settings, pTable)
 		Header.Items = {}
 		Header.Name = Title
 		Header.Settings = Settings
+
+		function Header:CollapseHandler()
+			Header.MenuState.Collapse = true
+		end
+		Header.Node:EventAttach("Collapse", Header.CollapseHandler, "Node "..Header.ID.." Collapse")
+
+		function Header:ExpandHandler()
+			Header.MenuState.Collapse = false
+		end
+		Header.Node:EventAttach("Expand", Header.ExpandHandler, "Node "..Header.ID.." Expand")
+		
 		function Header:CreateItem(Title, ID, pTable)
 			local Item = {}
 			pTable = pTable or {}

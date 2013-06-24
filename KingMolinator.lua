@@ -72,7 +72,7 @@ KBM.ID = AddonData.id
 KBM.ModList = {}
 KBM.Testing = false
 KBM.ValidTime = false
-KBM.IsAlpha = true
+KBM.IsAlpha = false
 KBM.Debug = false
 KBM.Aux = {}
 KBM.TestFilters = {}
@@ -113,23 +113,6 @@ KBM.Idle = {
 	Trigger = {
 		Duration = 5, 
 	}
-}
-KBM.MenuOptions = {
-	Timers = {},
-	CastBars = {},
-	TankSwap = {},
-	Alerts = {},
-	Phases = {},
-	MechSpy = {},
-	ResMaster = {},
-	Main = {},
-	PerMon = {},
-	ReadyCheck = {},
-	Enabled = true,
-	Handler = nil,
-	Options = nil,
-	Name = "Options",
-	ID = "Options",
 }
 
 --KBM.DistanceCalc = math.sqrt((dx * dx) + (dy * dy) + (dz * dz))
@@ -677,11 +660,10 @@ function KBM.Defaults.Records()
 	
 end
 
-function KBM.Defaults.Menu(ID)
+function KBM.Defaults.Menu()
 	
 	local MenuObj = {
 		Collapse = false,
-		ID = ID,
 	}
 	return MenuObj
 
@@ -706,8 +688,8 @@ local function KBM_DefineVars(handle, AddonID)
 			Character = false,
 			Enabled = true,
 			Debug = false,
-			Menu = {},
-			MenuExpac = "SL",
+			MenuState = {},
+			MenuExpac = "Rift",
 			UnitCache = {
 				Raid = {},
 				Sliver = {},
@@ -897,13 +879,13 @@ local function KBM_LoadVars(handle, AddonID)
 		end
 		
 		if KBM.Options.Character then
-			if chKBM_GlobalOptions.Menu then
-				KBM.Options.Menu = chKBM_GlobalOptions.Menu
+			if chKBM_GlobalOptions.MenuState then
+				KBM.Options.MenuState = chKBM_GlobalOptions.MenuState
 			end
 			chKBM_GlobalOptions = KBM.Options
 		else
-			if KBM_GlobalOptions.Menu then
-				KBM.Options.Menu = KBM_GlobalOptions.Menu
+			if KBM_GlobalOptions.MenuState then
+				KBM.Options.MenuState = KBM_GlobalOptions.MenuState
 			end
 			KBM_GlobalOptions = KBM.Options		
 		end
@@ -1000,19 +982,6 @@ KBM.TimeVisual.String = "00"
 KBM.TimeVisual.Seconds = 0
 KBM.TimeVisual.Minutes = 0
 KBM.TimeVisual.Hours = 0
-
-KBM.FrameStore = {}
-KBM.FrameQueue = {}
-KBM.CheckStore = {}
-KBM.CheckQueue = {}
-KBM.SlideStore = {}
-KBM.SlideQueue = {}
-KBM.TextfStore = {}
-KBM.TextfQueue = {}
-KBM.TotalTexts = 0
-KBM.TotalChecks = 0
-KBM.TotalFrames = 0
-KBM.TotalSliders = 0
 
 KBM.MechTimer = {}
 KBM.MechTimer.testTimerList = {}
@@ -7235,200 +7204,6 @@ function KBM.StateSwitch(bool)
 	end
 end
 
----------------------------------------------
------          Menu Options            ------
----------------------------------------------
--- Phase Monitor options.
-function KBM.MenuOptions.Phases:Options()
-	
-	-- Phase Monitor Callbacks.
-	function self:Enabled(bool)
-		KBM.Options.PhaseMon.Enabled = bool
-		if KBM.Options.PhaseMon.Visible then
-			if bool then
-				KBM.PhaseMonitor.Anchor:SetVisible(true)
-			else
-				KBM.PhaseMonitor.Anchor:SetVisible(false)
-			end
-		end
-	end
-	function self:Visible(bool)
-		KBM.Options.PhaseMon.Visible = bool
-		KBM.PhaseMonitor.Anchor:SetVisible(bool)
-		KBM.Options.PhaseMon.Unlocked = bool
-		KBM.PhaseMonitor.Anchor.Drag:SetVisible(bool)
-	end
-	function self:PhaseDisplay(bool)
-		KBM.Options.PhaseMon.PhaseDisplay = bool
-	end
-	function self:Objectives(bool)
-		KBM.Options.PhaseMon.Objectives = bool
-	end
-	function self:ScaleWidth(bool)
-		KBM.Options.PhaseMon.ScaleWidth = bool
-	end
-	function self:ScaleHeight(bool)
-		KBM.Options.PhaseMon.ScaleHeight = bool
-	end
-	function self:TextScale(bool)
-		KBM.Options.PhaseMon.TextScale = bool
-	end
-	
-	local Options = self.MenuItem.Options
-	Options:SetTitle()
-	
-	-- Timer Options
-	local PhaseMon = Options:AddHeader(KBM.Language.Options.PhaseEnabled[KBM.Lang], self.Enabled, KBM.Options.PhaseMon.Enabled)
-	PhaseMon:AddCheck(KBM.Language.Options.Phases[KBM.Lang], self.PhaseDisplay, KBM.Options.PhaseMon.PhaseDisplay)
-	PhaseMon:AddCheck(KBM.Language.Options.Objectives[KBM.Lang], self.Objectives, KBM.Options.PhaseMon.Objectives)
-	PhaseMon:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.Visible, KBM.Options.PhaseMon.Visible)
-	PhaseMon:AddCheck(KBM.Language.Options.UnlockWidth[KBM.Lang], self.ScaleWidth, KBM.Options.PhaseMon.ScaleWidth)
-	PhaseMon:AddCheck(KBM.Language.Options.UnlockHeight[KBM.Lang], self.ScaleHeight, KBM.Options.PhaseMon.ScaleHeight)
-	PhaseMon:AddCheck(KBM.Language.Options.UnlockText[KBM.Lang], self.TextScale, KBM.Options.PhaseMon.TextScale)
-	
-end
-
--- Timer options.
-function KBM.MenuOptions.Timers:Options()
-	
-	-- Encounter Timer callbacks.
-	function self:EncTimersEnabled(bool)
-		KBM.Options.EncTimer.Enabled = bool
-	end
-	function self:ShowEncTimer(bool)
-		KBM.Options.EncTimer.Visible = bool
-		KBM.EncTimer.Frame:SetVisible(bool)
-		KBM.EncTimer.Enrage.Frame:SetVisible(bool)
-		KBM.Options.EncTimer.Unlocked = bool
-		KBM.EncTimer.Frame.Drag:SetVisible(bool)
-	end
-	function self:EncDuration(bool)
-		KBM.Options.EncTimer.Duration = bool
-	end
-	function self:EncEnrage(bool)
-		KBM.Options.EncTimer.Enrage = bool
-	end
-	function self:EncScaleHeight(bool, Check)
-		KBM.Options.EncTimer.ScaleHeight = bool
-	end
-	function self:EncScaleWidth(bool, Check)
-		KBM.Options.EncTimer.ScaleWidth = bool
-	end
-	function self:EncTextSize(bool, Check)
-		KBM.Options.EncTimer.TextScale = bool
-	end
-	
-	-- Timer Callbacks
-	function self:MechEnabled(bool)
-		KBM.Options.MechTimer.Enabled = bool
-	end
-	function self:MechShadow(bool)
-		KBM.Options.MechTimer.Shadow = bool
-	end
-	function self:MechTexture(bool)
-		KBM.Options.MechTimer.Texture = bool
-	end
-	function self:ShowMechAnchor(bool)
-		KBM.Options.MechTimer.Visible = bool
-		KBM.MechTimer.Anchor:SetVisible(bool)
-		KBM.Options.MechTimer.Unlocked = bool
-		KBM.MechTimer.Anchor.Drag:SetVisible(bool)
-		if #KBM.MechTimer.ActiveTimers > 0 then
-			KBM.MechTimer.Anchor.Text:SetVisible(false)
-		else
-			if bool then
-				KBM.MechTimer.Anchor.Text:SetVisible(true)
-			end
-		end
-	end
-	function self:MechScaleHeight(bool, Check)
-		KBM.Options.MechTimer.ScaleHeight = bool
-	end
-	function self:MechScaleWidth(bool, Check)
-		KBM.Options.MechTimer.ScaleWidth = bool
-	end
-	function self:MechTextSize(bool, Check)
-		KBM.Options.MechTimer.TextScale = bool
-	end
-	local Options = self.MenuItem.Options
-	Options:SetTitle()
-	
-	-- Timer Options
-	local Timers = Options:AddHeader(KBM.Language.Options.EncTimers[KBM.Lang], self.EncTimersEnabled, KBM.Options.EncTimer.Enabled)
-	Timers:AddCheck(KBM.Language.Options.Timer[KBM.Lang], self.EncDuration, KBM.Options.EncTimer.Duration)
-	Timers:AddCheck(KBM.Language.Options.Enrage[KBM.Lang], self.EncEnrage, KBM.Options.EncTimer.Enrage)
-	Timers:AddCheck(KBM.Language.Options.ShowTimer[KBM.Lang], self.ShowEncTimer, KBM.Options.EncTimer.Visible)
-	Timers:AddCheck(KBM.Language.Options.UnlockWidth[KBM.Lang], self.EncScaleWidth, KBM.Options.EncTimer.ScaleWidth)
-	Timers:AddCheck(KBM.Language.Options.UnlockHeight[KBM.Lang], self.EncScaleHeight, KBM.Options.EncTimer.ScaleHeight)
-	Timers:AddCheck(KBM.Language.Options.UnlockText[KBM.Lang], self.EncTextSize, KBM.Options.EncTimer.TextScale)
-	local MechTimers = Options:AddHeader(KBM.Language.Options.MechanicTimers[KBM.Lang], self.MechEnabled, true)
-	MechTimers.GUI.Check:SetEnabled(false)
-	KBM.Options.MechTimer.Enabled = true
-	MechTimers:AddCheck(KBM.Language.Options.Texture[KBM.Lang], self.MechTexture, KBM.Options.MechTimer.Texture)
-	MechTimers:AddCheck(KBM.Language.Options.Shadow[KBM.Lang], self.MechShadow, KBM.Options.MechTimer.Shadow)
-	MechTimers:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowMechAnchor, KBM.Options.MechTimer.Visible)
-	MechTimers:AddCheck(KBM.Language.Options.UnlockWidth[KBM.Lang], self.MechScaleWidth, KBM.Options.MechTimer.ScaleWidth)
-	MechTimers:AddCheck(KBM.Language.Options.UnlockHeight[KBM.Lang], self.MechScaleHeight, KBM.Options.MechTimer.ScaleHeight)
-	MechTimers:AddCheck(KBM.Language.Options.UnlockText[KBM.Lang], self.MechTextSize, KBM.Options.MechTimer.TextScale)
-	
-end
-
--- Tank Swap options.
-function KBM.MenuOptions.TankSwap:Options()
-	function self:Enabled(bool)
-		KBM.Options.TankSwap.Enabled = bool
-		KBM.TankSwap.Enabled = bool
-	end
-	
-	function self:ShowAnchor(bool)
-		KBM.Options.TankSwap.Visible = bool
-		if not KBM.TankSwap.Active then
-			KBM.TankSwap.Anchor:SetVisible(bool)
-		end
-	end
-	
-	function self:LockAnchor(bool)
-		KBM.Options.TankSwap.Unlocked = bool
-		KBM.TankSwap.Anchor.Drag:SetVisible(bool)
-	end
-	
-	function self:ScaleWidth(bool)
-		KBM.Options.TankSwap.ScaleWidth = bool
-	end
-		
-	function self:ScaleHeight(bool)
-		KBM.Options.TankSwap.ScaleHeight = bool
-	end
-			
-	function self:Tank(bool)
-		KBM.Options.TankSwap.Tank = bool
-	end
-	
-	function self:ShowTest(bool)
-		if bool then
-			KBM.TankSwap:Add("Dummy", "Tank A")
-			KBM.TankSwap:Add("Dummy", "Tank B")
-			KBM.TankSwap:Add("Dummy", "Tank C")
-			KBM.TankSwap.Anchor:SetVisible(false)
-		else
-			KBM.TankSwap:Remove()
-			KBM.TankSwap.Anchor:SetVisible(KBM.Options.TankSwap.Visible)
-		end
-	end
-	
-	local Options = self.MenuItem.Options
-	Options:SetTitle()
-
-	-- Tank-Swap Options. 
-	local TankSwap = Options:AddHeader(KBM.Language.TankSwap.Enabled[KBM.Lang], self.Enabled, KBM.Options.TankSwap.Enabled)
-	TankSwap:AddCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], self.ShowAnchor, KBM.Options.TankSwap.Visible)
-	TankSwap:AddCheck(KBM.Language.TankSwap.Tank[KBM.Lang], self.Tank, KBM.Options.TankSwap.Tank)
-	self.TestCheck = TankSwap:AddCheck(KBM.Language.TankSwap.Test[KBM.Lang], self.ShowTest, false)
-	local Anchor = Options:AddHeader(KBM.Language.Options.LockAnchor[KBM.Lang], self.LockAnchor, KBM.Options.TankSwap.Unlocked)
-	Anchor:AddCheck(KBM.Language.Options.UnlockWidth[KBM.Lang], self.ScaleWidth, KBM.Options.TankSwap.ScaleWidth)
-	Anchor:AddCheck(KBM.Language.Options.UnlockHeight[KBM.Lang], self.ScaleHeight, KBM.Options.TankSwap.ScaleHeight)	
-end
-
 function KBM.ApplySettings()
 	KBM.TankSwap.Enabled = KBM.Options.TankSwap.Enabled
 end
@@ -7512,10 +7287,8 @@ function KBM.SlashDefault(handle, Args)
 		for ID, _function in pairs(KBM.SetDefault) do
 			_function()
 		end
-		KBM.QueuePage = KBM.MenuOptions.Main.MenuItem
 	elseif KBM.SetDefault[Args] then
 		KBM.SetDefault[Args]()
-		KBM.QueuePage = KBM.MenuOptions.Main.MenuItem
 	else 
 		print("Bellow are a list of commands for: /kbmdefault")
 		print("All\t\t: Will reset all of the below.")
@@ -8363,19 +8136,7 @@ function KBM.InitMenus()
 			KBM.Menu.Instance:Create(Mod)
 		end
 		Mod:Start()
-	end
-	
-	-- for MenuID, MenuObj in pairs(KBM.MenuIDList) do
-		-- if MenuObj.Settings then
-			-- if MenuObj.Settings.Collapse then
-				-- if MenuObj.Type == "instance" then
-					-- MenuObj.GUI.Check:SetChecked(false)
-				-- else
-					-- MenuObj.Check:SetChecked(false)
-				-- end
-			-- end
-		-- end
-	-- end	
+	end	
 end
 
 local function KBM_Start()
@@ -8543,9 +8304,6 @@ function KBM.WaitReady()
 	KBM.Player.CastBar.Target.CastObj = KBM.CastBar:Add(KBM.Player.CastBar.Target, KBM.Player.CastBar.Target)
 	KBM.Player.CastBar.Focus.CastObj = KBM.CastBar:Add(KBM.Player.CastBar.Focus, KBM.Player.CastBar.Focus)
 	KBM.Player.CastBar.CastObj:Create(KBM.Player.UnitID)
-	-- if KBM.Options.MenuExpac == "SL" then
-		-- KBM.MainWin.Tabs.SL.Tab.Event.LeftClick(KBM.MainWin.Tabs.SL.Tab)
-	-- end
 end
 
 KBM.PlugIn = {}
@@ -8644,7 +8402,20 @@ function KBM.InitKBM(handle, ModID)
 			KBM.Marks.Icon[i]:SetVisible(false)
 		end
 		
+		-- Finalize Menu's
 		KBM:InitMenus()
+			
+		-- for MenuID, MenuObj in pairs(KBM.MenuIDList) do
+			-- if MenuObj.Settings then
+				-- if MenuObj.Settings.Collapse then
+					-- if MenuObj.Type == "instance" then
+						-- MenuObj.GUI.Check:SetChecked(false)
+					-- else
+						-- MenuObj.Check:SetChecked(false)
+					-- end
+				-- end
+			-- end
+		-- end	
 		
 		-- Start
 		if KBM.IsAlpha then
