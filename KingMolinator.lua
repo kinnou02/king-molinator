@@ -897,7 +897,6 @@ local function KBM_LoadVars(handle, AddonID)
 		KBM.Debug = KBM.Options.Debug
 		KBM.InitVars()
 		KBM.PercentageMon:ApplySettings()
-		KBM.Options.MenuExpac = nil
 	elseif KBM.PlugIn.List[AddonID] then
 		KBM.PlugIn.List[AddonID]:LoadVars()
 	end
