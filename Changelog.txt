@@ -1,4 +1,13 @@
-﻿v1.4.6
+﻿v1.4.7
+
+System
+* Fixed: Major crash with those who updated previous versions with the Rift tab selected (Errors 369 and 81)
+
+Translations
+* Updated French translations for Grim Awakening.
+
+----
+v1.4.6
 
 Menu System
 * Change: Now uses far less memory (around 10Mb+).

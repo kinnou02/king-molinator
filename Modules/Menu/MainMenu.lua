@@ -366,6 +366,9 @@ function Menu:Init(Addon)
 	end
 	self:_createEncTab("Rift")
 	self:_createEncTab("SL")
+	if not self.Tab.Rift[KBM.Options.MenuExpac] then
+		KBM.Options.MenuExpac = "Rift"
+	end
 	self.Tab.Rift[KBM.Options.MenuExpac].Tabber:SetVisible(true)
 	self.Tab.Rift[KBM.Options.MenuExpac].Raid.TreeView:SetVisible(true)
 	self.Tab.Rift.Current = self.Tab.Rift[KBM.Options.MenuExpac]

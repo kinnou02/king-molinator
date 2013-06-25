@@ -49,8 +49,10 @@ KZ.Lang.Buff.GrowthID = "B71EFD1E7E16B7029"
 -- Debuff Dictionary
 KZ.Lang.Debuff = {}
 KZ.Lang.Debuff.Rending = KBM.Language:Add("Rending Slice")
+KZ.Lang.Debuff.Rending:SetFrench("Lame déchirante")
 KZ.Lang.Debuff.RendingID = "B222A8C2D75DD0233"
 KZ.Lang.Debuff.Leech = KBM.Language:Add("Soul Leech")
+KZ.Lang.Debuff.Leech:SetFrench("Absorption d’âme")
 KZ.Lang.Debuff.LeechID = "BFFF2E05144BCABF1"
 KZ.Lang.Debuff.Delayed = KBM.Language:Add("Delayed Annihilation")
 KZ.Lang.Debuff.Delayed:SetFrench("Annihilation retardée")
