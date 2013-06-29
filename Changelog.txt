@@ -1,4 +1,17 @@
-﻿v1.4.7
+﻿v1.4.8
+
+Ready Check
+* Stones
+** New: Tracking for Coruscating Powerstone.
+** New: Tracking for Exceptional Whetstone.
+* Potions
+** New: Tracking for Prime Brightsurge Vial.
+** New: Tracking for Prime Powersurge Vial.
+** New: Tracking for Prime Enduring Vial.
+
+
+----
+v1.4.7
 
 System
 * Fixed: Major crash with those who updated previous versions with the Rift tab selected (Errors 369 and 81)

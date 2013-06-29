@@ -156,7 +156,10 @@ PI.Constants = {
 			w = 36,
 			Icons = true,
 			List = {
-				["r3A5D56170B3171F5"] = { -- Luminescent Powerstone
+				--//////////////////////--
+				-- SL High Grade Stones --
+				--//////////////////////--
+				["r7B43F61C22CFA573"] = { -- Coruscating Powerstone 
 					Grade = "High",
 					Level = 60,
 					Callings = {
@@ -164,8 +167,27 @@ PI.Constants = {
 						mage = true,
 					},
 				},
-				["r36E23CF74112D284"] = { -- Vampiric Essence
+				["r13849ADC07F98B60"] = { -- Exceptional Whetstone
 					Grade = "High",
+					Level = 60,
+					Callings = {
+						rogue = true,
+						warrior = true,
+					},
+				},
+				--////////////////////////--
+				-- SL Medium Grade Stones --
+				--////////////////////////--
+				["r3A5D56170B3171F5"] = { -- Luminescent Powerstone
+					Grade = "Medium",
+					Level = 60,
+					Callings = {
+						cleric = true,
+						mage = true,
+					},
+				},
+				["r36E23CF74112D284"] = { -- Vampiric Essence
+					Grade = "Medium",
 					Level = 60,
 					Callings = {
 						cleric = true,
@@ -177,7 +199,7 @@ PI.Constants = {
 					},
 				},
 				["r5812508956871CF3"] = { -- Remarkable Whetstone
-					Grade = "High",
+					Grade = "Medium",
 					Level = 60,
 					Callings = {
 						rogue = true,
@@ -185,22 +207,25 @@ PI.Constants = {
 					},
 				},
                 ["r5E26E8C025B2C3BB"] = { -- Remarkable Oilstone
-                    Grade = "High",
+                    Grade = "Medium",
                     Level = 60,
                     Callings = {
                         rogue = true,
                         warrior = true,
                     },
                 },
+				--/////////////////////--
+				-- SL Low Grade Stones --
+				--/////////////////////--
 				["r712EF6F7297AB9ED"] = { -- Storm Sigil
-					Grade = "Med",
+					Grade = "Low",
 					Level = 60,
 					Callings = {
 						warrior = true,
 					},
 				},
 				["r61C14C434DDF615D"] = { -- Flaring Sigil
-					Grade = "Med",
+					Grade = "Low",
 					Level = 60,
 					Callings = {
 						mage = true,
@@ -208,14 +233,14 @@ PI.Constants = {
 					},
 				},
 				["r0B48C387131E79A8"] = { -- Lightning Sigil
-					Grade = "Med",
+					Grade = "Low",
 					Level = 60,
 					Callings = {
 						rogue = true,
 					},
 				},
 				["rFBF770FC7EEEB915"] = { -- Honed Edge
-					Grade = "Med",
+					Grade = "Low",
 					Level = 60,
 					Callings = {
 						rogue = true,
@@ -223,12 +248,15 @@ PI.Constants = {
 				},
 				
 				["r2FF8E88943EBC5AA"] = { -- Planar Edge
-					Grade = "Med",
+					Grade = "Low",
 					Level = 60,
 					Callings = {
 						warrior = true,
 					},
 				},
+				--///////////////////////////--
+				-- Classic High Grade Stones --
+				--///////////////////////////--
 				["r624A5FA52756B277"] = { -- Burning Powerstone
 					Grade = "High",
 					Level = 50,
@@ -246,7 +274,7 @@ PI.Constants = {
 					},
 				},
 				["r70D23CD31E59DD77"] = { -- Flaring Glyph
-					Grade = "Med",
+					Grade = "Medium",
 					Level = 50,
 					Callings = {
 						cleric = true,
@@ -327,7 +355,7 @@ PI.Constants = {
 					},
 				},
 				["r7521BA00400F6038"] = { -- Fine Whetstone
-					Grade = "Med",
+					Grade = "Medium",
 					Level = 50,
 					Callings = {
 						warrior = true,
@@ -498,7 +526,7 @@ PI.Constants = {
 				-- Medium Grade Food --
 				--///////////////////--
 				["B3CD06443A7FD7C18"] = { -- Farclan Cherry Cake
-					Grade = "Med",
+					Grade = "Medium",
 					Level = 50,
 					Callings = {
 						cleric = true,
@@ -506,7 +534,7 @@ PI.Constants = {
 					},
 				},
 				["B2BEA306A6F0C0257"] = { -- Farclan Chocolate Cake
-					Grade = "Med",
+					Grade = "Medium",
 					Level = 50,
 					Callings = {
 						warrior = true,
@@ -514,7 +542,7 @@ PI.Constants = {
 					},
 				},
 				["B55D71860C42C1B75"] = { -- Kelari Expedition Chocolate Cake
-					Grade = "Med",
+					Grade = "Medium",
 					Level = 50,
 					Callings = {
 						warrior = true,
@@ -522,7 +550,7 @@ PI.Constants = {
 					},
 				},
 				["B358E4BC49852C7E6"] = { -- Kelari Expedition Cherry Cake
-					Grade = "Med",
+					Grade = "Medium",
 					Level = 50,
 					Callings = {
 						cleric = true,
@@ -541,14 +569,15 @@ PI.Constants = {
 				--//////////////////////--
 				-- Storm Legion Potions --
 				--//////////////////////--
-				["B7BA3D5176EAB3544"] = { -- Stellar Prismatic Wellspring
+				["B130F5F68F80B197B"] = { -- Prime Brightsurge Vial
 					Grade = "High",
 					Level = 60,
 					Callings = {
-						all = true,
+						mage = true,
+						cleric = true,
 					},
 				},
-				["BFF3177D56B3A82D6"] = { -- Stellar Powersurge Vial
+				["B1800F2A93F1BFFB4"] = { -- Prime Powersurge Vial
 					Grade = "High",
 					Level = 60,
 					Callings = {
@@ -556,8 +585,35 @@ PI.Constants = {
 						rogue = true,
 					},
 				},
-				["BFBD8A9BDCF3270E6"] = { -- Stellar Brightsurge Vial
+				["B79B52B426ED15E2B"] = { -- Prime Enduring Vial
 					Grade = "High",
+					Level = 60,
+					Callings = {
+						rogue = true,
+						warrior = true,
+						cleric = true,
+					},
+					Role = {
+						tank = true,
+					},
+				},
+				["B7BA3D5176EAB3544"] = { -- Stellar Prismatic Wellspring
+					Grade = "Medium",
+					Level = 60,
+					Callings = {
+						all = true,
+					},
+				},
+				["BFF3177D56B3A82D6"] = { -- Stellar Powersurge Vial
+					Grade = "Medium",
+					Level = 60,
+					Callings = {
+						warrior = true,
+						rogue = true,
+					},
+				},
+				["BFBD8A9BDCF3270E6"] = { -- Stellar Brightsurge Vial
+					Grade = "Medium",
 					Level = 60,
 					Callings = {
 						cleric = true,
@@ -565,7 +621,7 @@ PI.Constants = {
 					},
 				},
 				["BFAF68C1FC68ED75A"] = { -- Stellar Enduring Vial
-					Grade = "High",
+					Grade = "Medium",
 					Level = 60,
 					Callings = {
 						rogue = true,
@@ -577,7 +633,7 @@ PI.Constants = {
 					},
 				},
 				["BFE810316D26BAE95"] = { -- Stellar Fortified Vial
-					Grade = "High",
+					Grade = "Medium",
 					Level = 60,
 					Callings = {
 						rogue = true,
@@ -589,7 +645,7 @@ PI.Constants = {
 					},
 				},
 				["BFAE680B5BBA2DB8E"] = { -- Excellent Powersurge Vial
-                    Grade = "Medium",
+                    Grade = "Low",
                     Level = 60,
                     Callings = {
                         warrior = true,
@@ -597,7 +653,7 @@ PI.Constants = {
                     },
                 },
                 ["BFA86D7A4886FCED5"] = { -- Excellent Brightsurge Vial
-                    Grade = "Medium",
+                    Grade = "Low",
                     Level = 60,
                     Callings = {
                         cleric = true,
@@ -605,7 +661,7 @@ PI.Constants = {
                     },
                 },
                 ["BFB84FF67D7824324"] = { -- Excellent Enduring Vial
-                    Grade = "Medium",
+                    Grade = "Low",
                     Level = 60,
                     Callings = {
                         rogue = true,
@@ -617,7 +673,7 @@ PI.Constants = {
                     },
                 },
 				["BFDB9E8A2B27127FD"] = { -- Excellent Fortified Vial
-					Grade = "Medium",
+					Grade = "Low",
 					Level = 60,
 					Callings = {
 						rogue = true,
@@ -667,14 +723,14 @@ PI.Constants = {
 					},
 				},
 				["B72807CC529E275FD"] = { -- Mighty Enduring Vial
-					Grade = "Med",
+					Grade = "Medium",
 					Level = 50,
 					Callings = {
 						all = true,
 					},
 				},
 				["B26300F4BDE63286A"] = { -- Mighty Fortified Vial
-					Grade = "Med",
+					Grade = "Medium",
 					Level = 50,
 					Callings = {
 						warrior = true,
@@ -728,7 +784,7 @@ PI.Constants = {
 					},
 				},
 				["B0B2B52E09FA082DE"] = { -- Mighty Powersurge Vial
-					Grade = "Med",
+					Grade = "Medium",
 					Level = 50,
 					Callings = {
 						warrior = true,
@@ -736,7 +792,7 @@ PI.Constants = {
 					},
 				},
 				["B1EE0CFCC0280BE3A"] = { -- Mighty Brightsurge Vial
-					Grade = "Med",
+					Grade = "Medium",
 					Level = 50,
 					Callings = {
 						cleric = true,
@@ -749,7 +805,7 @@ PI.Constants = {
 			Icons = true,
 			List = {
 				["r3BD9C00A2128287F"] = { -- Comfortable Insoles
-					Grade = "High",
+					Grade = "Medium",
 					Level = 60,
 					Callings = {
 						all = true,
