@@ -9,6 +9,23 @@ Ready Check
 ** New: Tracking for Prime Powersurge Vial.
 ** New: Tracking for Prime Enduring Vial.
 
+Options
+* Fixed: Errors when selecting scaling Options with Castbars.
+
+Instances
+Expert Dungeons
+Exodus of the Storm Queen
+* General Grim
+** New: Added an alert for Flash Freeze.
+
+Normal Dungeons
+Exodus of the Storm Queen
+* Valthundra
+** New: Added an alert for Hide mechanic
+** New: Added an alert for Stack in mechanic (Frost Bound).
+* General Grim
+** New: Added an alert for Flash Freeze.
+
 
 ----
 v1.4.7

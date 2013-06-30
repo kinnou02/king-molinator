@@ -7633,13 +7633,13 @@ local function BuildMenuSettings()
 				KBM.CastBar.Anchor:Hide()
 			end
 		end
-		function self:Width(bool)
+		function self:ScaleWidth(bool)
 			KBM.Options.CastBar.ScaleWidth = bool
 		end
-		function self:Height(bool)
+		function self:ScaleHeight(bool)
 			KBM.Options.CastBar.ScaleHeight = bool
 		end
-		function self:Text(bool)
+		function self:TextScale(bool)
 			KBM.Options.CastBar.TextScale = bool
 		end
 		function self:RiftBar(bool)

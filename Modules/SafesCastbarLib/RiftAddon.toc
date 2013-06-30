@@ -1,0 +1,18 @@
+﻿Identifier = "SafesCastbarLib"
+
+Name = "Safe's Castbar Library"
+NameShort = "LibSCast"
+
+Description = "Castbar Object Library with caching system."
+
+Author = "Paul Snart"
+Website = "http://twitter.com/#!/psnart"
+Email = "snarty@gmail.com"
+
+Version = "0.0.1"
+
+Environment = "2.3"
+
+RunOnStartup = {
+	"LibSCast.lua",
+}

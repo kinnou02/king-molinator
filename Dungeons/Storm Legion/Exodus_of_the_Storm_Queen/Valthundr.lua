@@ -40,9 +40,16 @@ MOD.Valthundr = {
 	UTID = "UFCCB400D2E1904C9",
 	TimeOut = 5,
 	Triggers = {},
+	AlertsRef = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
-	}
+		AlertsRef = {
+			Enabled = true,
+			Frost = KBM.Defaults.AlertObj.Create("blue"),
+			Winter = KBM.Defaults.AlertObj.Create("red"),
+			WinterWarn = KBM.Defaults.AlertObj.Create("orange"),
+		},
+	},
 }
 
 KBM.RegisterMod(MOD.ID, MOD)
@@ -61,6 +68,17 @@ MOD.Valthundr.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}
+MOD.Lang.Ability.Frost = KBM.Language:Add("Frost Bound")
+MOD.Lang.Ability.Frost:SetGerman("Frostfessel")
+MOD.Lang.Ability.Winter = KBM.Language:Add("Winter's Fury")
+MOD.Lang.Ability.Winter:SetGerman("Raserei des Winters") 
+
+-- Verbose Dictionary
+MOD.Lang.Verbose = {}
+MOD.Lang.Verbose.WinterWarn = KBM.Language:Add("Find a pillar and hide!")
+MOD.Lang.Verbose.WinterWarn:SetGerman("Säule suchen und verstecken!")
+MOD.Lang.Verbose.Winter = KBM.Language:Add("Stay hidden!")
+MOD.Lang.Verbose.Winter:SetGerman("Bleib ausser Sicht!")
 
 function MOD:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
@@ -76,9 +94,9 @@ function MOD:InitVars()
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		-- MechTimer = KBM.Defaults.MechTimer(),
-		-- Alerts = KBM.Defaults.Alerts(),
+		Alerts = KBM.Defaults.Alerts(),
 		-- TimersRef = self.Valthundr.Settings.TimersRef,
-		-- AlertsRef = self.Valthundr.Settings.AlertsRef,
+		AlertsRef = self.Valthundr.Settings.AlertsRef,
 	}
 	KBMSLNMSQVR_Settings = self.Settings
 	chKBMSLNMSQVR_Settings = self.Settings
@@ -182,11 +200,19 @@ function MOD:Start()
 	--KBM.Defaults.TimerObj.Assign(self.Valthundr)
 	
 	-- Create Alerts
-	--KBM.Defaults.AlertObj.Assign(self.Valthundr)
+	self.Valthundr.AlertsRef.Frost = KBM.Alert:Create(self.Lang.Ability.Frost[KBM.Lang], nil, true, true, "blue")
+	self.Valthundr.AlertsRef.WinterWarn = KBM.Alert:Create(self.Lang.Verbose.WinterWarn[KBM.Lang], nil, false, false, "orange")
+	self.Valthundr.AlertsRef.Winter = KBM.Alert:Create(self.Lang.Verbose.Winter[KBM.Lang], nil, true, true, "red")
+	KBM.Defaults.AlertObj.Assign(self.Valthundr)
 	
 	-- Assign Alerts and Timers to Triggers
-	
+	self.Valthundr.Triggers.Frost = KBM.Trigger:Create(self.Lang.Ability.Frost[KBM.Lang], "cast", self.Valthundr)
+	self.Valthundr.Triggers.Frost:AddAlert(self.Valthundr.AlertsRef.Frost)
+	self.Valthundr.Triggers.WinterWarn = KBM.Trigger:Create(self.Lang.Ability.Winter[KBM.Lang], "cast", self.Valthundr)
+	self.Valthundr.Triggers.WinterWarn:AddAlert(self.Valthundr.AlertsRef.WinterWarn)
+	self.Valthundr.Triggers.Winter = KBM.Trigger:Create(self.Lang.Ability.Winter[KBM.Lang], "channel", self.Valthundr)
+	self.Valthundr.Triggers.Winter:AddAlert(self.Valthundr.AlertsRef.Winter)
+		
 	self.Valthundr.CastBar = KBM.CastBar:Add(self, self.Valthundr)
-	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	
+	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)	
 end

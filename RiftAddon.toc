@@ -10,7 +10,7 @@ Author = "Paul Snart"
 Website = "http://www.facebook.com/KingBossMods"
 Email = "kingbossmods@gmail.com"
 
-Version = "1.4.8.707"
+Version = "1.4.8.708"
 
 Environment = "2.2"
 
@@ -290,6 +290,7 @@ Embed = {
 	["Modules/SafesGUILib"] = true,
 	["Modules/SafesUnitLib"] = true,
 	["Modules/SafesBuffLib"] = true,
+	["Modules/SafesCastbarLib"] = true,
 	["KBMLocaleManager"] = true,
 	["Modules/Messenger"] = true,
 	["Modules/TextureHandler"] = true,
@@ -828,6 +829,7 @@ Dependencies = {
 	SafesGUILib = {"required", "before"},
 	SafesUnitLib = {"required", "before"},
 	SafesBuffLib = {"required", "before"},
+	SafesCastbarLib = {"required", "before"},
 	KBMLocaleManager = {"required", "before"},
 	KBMTextureHandler = {"required", "before"},
 	KBMMessenger = {"required", "after"},
