@@ -1915,9 +1915,17 @@ function KBM.Trigger:Init()
 				end
 			end
 			for i, SpyObj in ipairs(self.Spies) do
-				for UID, bool in pairs(self.Target) do
-					if LibSUnit.Lookup.UID[UID] then
-						SpyObj:Start(LibSUnit.Lookup.UID[UID].Name, Data)
+				if SpyObj.Source then
+					if self.Caster then
+						if LibSUnit.Lookup.UID[self.Caster] then
+							SpyObj:Start(LibSUnit.Lookup.UID[self.Caster].Name, Data)
+						end
+					end
+				else
+					for UID, bool in pairs(self.Target) do
+						if LibSUnit.Lookup.UID[UID] then
+							SpyObj:Start(LibSUnit.Lookup.UID[UID].Name, Data)
+						end
 					end
 				end
 			end
@@ -2628,6 +2636,7 @@ function KBM.MechSpy:Add(Name, Duration, Type, BossObj)
 	Mechanic.Phase = 0
 	Mechanic.PhaseMax = 0
 	Mechanic.Type = "spy"
+	Mechanic.Source = false
 	Mechanic.Custom = false
 	Mechanic.HasMenu = true
 	Mechanic.Color = KBM.MechSpy.Settings.Color
@@ -2653,6 +2662,10 @@ function KBM.MechSpy:Add(Name, Duration, Type, BossObj)
 			self.Visible = true
 		end
 		self.GUI.Background:SetVisible(true)
+	end
+	
+	function Mechanic:SetSource()
+		self.Source = true
 	end
 	
 	function Mechanic:Hide()
@@ -6160,7 +6173,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 											if self.Boss.UnitID then
 												TargetID = Inspect.Unit.Lookup(self.Boss.UnitID..".target")
 											end
-											KBM.Trigger.Queue:Add(TriggerObj, TargetID, TargetID, bDetails.remaining)
+											KBM.Trigger.Queue:Add(TriggerObj, self.Boss.UnitID, TargetID, bDetails.remaining)
 										end
 									end
 								end
@@ -6236,7 +6249,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 												if self.Boss.UnitID then
 													TargetID = Inspect.Unit.Lookup(self.Boss.UnitID..".target")
 												end
-												KBM.Trigger.Queue:Add(TriggerObj, TargetID, TargetID, bDetails.remaining)
+												KBM.Trigger.Queue:Add(TriggerObj, self.Boss.UnitID, TargetID, bDetails.remaining)
 											end
 										end
 									end

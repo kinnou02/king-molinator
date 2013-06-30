@@ -8,23 +8,34 @@ Ready Check
 ** New: Tracking for Prime Brightsurge Vial.
 ** New: Tracking for Prime Powersurge Vial.
 ** New: Tracking for Prime Enduring Vial.
+** New: Tracking for Prime Fortified Vial.
 
 Options
 * Fixed: Errors when selecting scaling Options with Castbars.
 
+Mechanic Spy
+* New: Added MechObj:SetSource() if you'd rather display the source of triggers rather than targets.
+
 Instances
+
+Raids
+* Endless Eclipse
+** Progenitor Saetos
+*** Change: Entropic Abyss will now only show 1 mechanic spy object.
+*** Change: Ebon Eruption spy will now display the channel duration.
+
 Expert Dungeons
-Exodus of the Storm Queen
-* General Grim
-** New: Added an alert for Flash Freeze.
+* Exodus of the Storm Queen
+** General Grim
+*** New: Added an alert for Flash Freeze.
 
 Normal Dungeons
-Exodus of the Storm Queen
-* Valthundra
-** New: Added an alert for Hide mechanic
-** New: Added an alert for Stack in mechanic (Frost Bound).
-* General Grim
-** New: Added an alert for Flash Freeze.
+* Exodus of the Storm Queen
+** Valthundra
+*** New: Added an alert for Hide mechanic
+*** New: Added an alert for Stack in mechanic (Frost Bound).
+** General Grim
+*** New: Added an alert for Flash Freeze.
 
 
 ----

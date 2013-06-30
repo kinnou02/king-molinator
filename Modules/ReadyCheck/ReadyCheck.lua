@@ -597,6 +597,18 @@ PI.Constants = {
 						tank = true,
 					},
 				},
+				["B4893968F2F9E67E8"] = { -- Prime Fortified Vial
+					Grade = "High",
+					Level = 60,
+					Callings = {
+						rogue = true,
+						warrior = true,
+						cleric = true,
+					},
+					Role = {
+						tank = true,
+					},
+				},
 				["B7BA3D5176EAB3544"] = { -- Stellar Prismatic Wellspring
 					Grade = "Medium",
 					Level = 60,

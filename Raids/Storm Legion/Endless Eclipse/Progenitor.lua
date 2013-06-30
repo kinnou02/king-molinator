@@ -112,8 +112,9 @@ PRO.Progenitor = {
 		},
 		MechRef = {
 			Enabled = true,
-			Barrier = KBM.Defaults.MechObj.Create("cyan"),
+			Ebon = KBM.Defaults.MechObj.Create("cyan"),
 			Soul = KBM.Defaults.MechObj.Create("purple"),
+			Entropic = KBM.Defaults.MechObj.Create("blue"),
 		},
 	}
 }
@@ -133,7 +134,6 @@ PRO.Ebassi = {
 	TimersRef = {},
 	AlertsRef = {},
 	Triggers = {},
-	MechRef = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
 		TimersRef = {
@@ -143,10 +143,6 @@ PRO.Ebassi = {
 		AlertsRef = {
 			Enabled = true,
 			Ebon = KBM.Defaults.AlertObj.Create("red"),
-		},
-		MechRef = {
-			Enabled = true,
-			Entropic = KBM.Defaults.MechObj.Create("blue"),
 		},
 	}
 }
@@ -166,7 +162,6 @@ PRO.Arebus = {
 	TimersRef = {},
 	AlertsRef = {},
 	Triggers = {},
-	MechRef = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
 		TimersRef = {
@@ -176,10 +171,6 @@ PRO.Arebus = {
 		AlertsRef = {
 			Enabled = true,
 			Ebon = KBM.Defaults.AlertObj.Create("red"),
-		},
-		MechRef = {
-			Enabled = true,
-			Entropic = KBM.Defaults.MechObj.Create("blue"),
 		},
 	}
 }
@@ -199,7 +190,6 @@ PRO.Rhu = {
 	TimersRef = {},
 	AlertsRef = {},
 	Triggers = {},
-	MechRef = {},
 	Settings = {
 		CastBar = KBM.Defaults.CastBar(),
 		TimersRef = {
@@ -209,10 +199,6 @@ PRO.Rhu = {
 		AlertsRef = {
 			Enabled = true,
 			Ebon = KBM.Defaults.AlertObj.Create("red"),
-		},
-		MechRef = {
-			Enabled = true,
-			Entropic = KBM.Defaults.MechObj.Create("blue"),
 		},
 	}
 }
@@ -242,10 +228,6 @@ PRO.Juntun = {
 		AlertsRef = {
 			Enabled = true,
 			Ebon = KBM.Defaults.AlertObj.Create("red"),
-		},
-		MechRef = {
-			Enabled = true,
-			Entropic = KBM.Defaults.MechObj.Create("blue"),
 		},
 	}
 }
@@ -288,25 +270,21 @@ function PRO:InitVars()
 			CastBar = self.Juntun.Settings.CastBar,
 			TimersRef = self.Juntun.Settings.TimersRef,
 			AlertsRef = self.Juntun.Settings.AlertsRef,
-			MechRef = self.Juntun.Settings.MechRef,
 		},
 		Ebassi = {
 			CastBar = self.Ebassi.Settings.CastBar,
 			TimersRef = self.Ebassi.Settings.TimersRef,
 			AlertsRef = self.Ebassi.Settings.AlertsRef,
-			MechRef = self.Ebassi.Settings.MechRef,
 		},
 		Arebus = {
 			CastBar = self.Arebus.Settings.CastBar,
 			TimersRef = self.Arebus.Settings.TimersRef,
 			AlertsRef = self.Arebus.Settings.AlertsRef,
-			MechRef = self.Arebus.Settings.MechRef,
 		},
 		Rhu = {
 			CastBar = self.Rhu.Settings.CastBar,
 			TimersRef = self.Rhu.Settings.TimersRef,
 			AlertsRef = self.Rhu.Settings.AlertsRef,
-			MechRef = self.Rhu.Settings.MechRef,
 		},
 		MechTimer = KBM.Defaults.MechTimer(),
 		Alerts = KBM.Defaults.Alerts(),
@@ -495,8 +473,11 @@ function PRO:Start()
 	KBM.Defaults.AlertObj.Assign(self.Progenitor)
 	
 	-- Create Spies
-	self.Progenitor.MechRef.Barrier = KBM.MechSpy:Add(self.Lang.Buff.Barrier[KBM.Lang], nil, "buff", self.Progenitor)
+	--self.Progenitor.MechRef.Barrier = KBM.MechSpy:Add(self.Lang.Buff.Barrier[KBM.Lang], nil, "buff", self.Progenitor)
+	self.Progenitor.MechRef.Ebon = KBM.MechSpy:Add(self.Lang.Ability.Ebon[KBM.Lang], nil, "channel", self.Progenitor)
+	self.Progenitor.MechRef.Ebon:SetSource()
 	self.Progenitor.MechRef.Soul = KBM.MechSpy:Add(self.Lang.Debuff.Soul[KBM.Lang], nil, "playerDebuff", self.Progenitor)
+	self.Progenitor.MechRef.Entropic = KBM.MechSpy:Add(self.Lang.Ability.Entropic[KBM.Lang], 5, "cast", self.Progenitor)
 	KBM.Defaults.MechObj.Assign(self.Progenitor)
 	
 	-- Assign Alerts and Timers to Triggers
@@ -505,8 +486,8 @@ function PRO:Start()
 	self.Progenitor.Triggers.Soul = KBM.Trigger:Create(self.Lang.Debuff.Soul[KBM.Lang], "playerBuff", self.Progenitor)
 	self.Progenitor.Triggers.Soul:AddAlert(self.Progenitor.AlertsRef.Soul, true)
 	self.Progenitor.Triggers.Soul:AddSpy(self.Progenitor.MechRef.Soul)
-	self.Progenitor.Triggers.Barrier = KBM.Trigger:Create(self.Lang.Buff.Barrier[KBM.Lang], "buff", self.Progenitor)
-	self.Progenitor.Triggers.Barrier:AddSpy(self.Progenitor.MechRef.Barrier)
+	-- self.Progenitor.Triggers.Barrier = KBM.Trigger:Create(self.Lang.Buff.Barrier[KBM.Lang], "buff", self.Progenitor)
+	-- self.Progenitor.Triggers.Barrier:AddSpy(self.Progenitor.MechRef.Barrier)
 
 	self.Progenitor.CastBar = KBM.CastBar:Add(self, self.Progenitor)
 
@@ -517,18 +498,18 @@ function PRO:Start()
 		KBM.Defaults.TimerObj.Assign(BossObj)
 		BossObj.AlertsRef.Ebon = KBM.Alert:Create(BossObj.Name.." "..self.Lang.Ability.Ebon[KBM.Lang], nil, true, true, "red")
 		KBM.Defaults.AlertObj.Assign(BossObj)
-		BossObj.MechRef.Entropic = KBM.MechSpy:Add(self.Lang.Ability.Entropic[KBM.Lang], 5, "cast", BossObj)
-		KBM.Defaults.MechObj.Assign(BossObj)
 		BossObj.Triggers.Ebon = KBM.Trigger:Create(self.Lang.Ability.Ebon[KBM.Lang], "channel", BossObj)
 		BossObj.Triggers.Ebon:AddTimer(BossObj.TimersRef.Ebon)
 		BossObj.Triggers.Ebon:AddAlert(BossObj.AlertsRef.Ebon)
+		BossObj.Triggers.Ebon:AddSpy(self.Progenitor.MechRef.Ebon)
 		BossObj.Triggers.EbonInt = KBM.Trigger:Create(self.Lang.Ability.Ebon[KBM.Lang], "interrupt", BossObj)
 		BossObj.Triggers.EbonInt:AddStop(BossObj.AlertsRef.Ebon)
+		BossObj.Triggers.EbonInt:AddStop(self.Progenitor.MechRef.Ebon)
 		BossObj.Triggers.Entropic = KBM.Trigger:Create(self.Lang.Ability.Entropic[KBM.Lang], "cast", BossObj)
-		BossObj.Triggers.Entropic:AddSpy(BossObj.MechRef.Entropic)
+		BossObj.Triggers.Entropic:AddSpy(self.Progenitor.MechRef.Entropic)
 		BossObj.CastBar = KBM.CastBar:Add(self, BossObj)
-		BossObj.Triggers.Barrier = KBM.Trigger:Create(self.Lang.Buff.Barrier[KBM.Lang], "buff", BossObj)
-		BossObj.Triggers.Barrier:AddSpy(self.Progenitor.MechRef.Barrier)
+		-- BossObj.Triggers.Barrier = KBM.Trigger:Create(self.Lang.Buff.Barrier[KBM.Lang], "buff", BossObj)
+		-- BossObj.Triggers.Barrier:AddSpy(self.Progenitor.MechRef.Barrier)
 	end
 	
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
