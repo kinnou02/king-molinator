@@ -72,7 +72,7 @@ KBM.ID = AddonData.id
 KBM.ModList = {}
 KBM.Testing = false
 KBM.ValidTime = false
-KBM.IsAlpha = true
+KBM.IsAlpha = false
 KBM.Debug = false
 KBM.Aux = {}
 KBM.TestFilters = {}
@@ -1970,9 +1970,15 @@ function KBM.Trigger:Init()
 					if self.Type == "death" then
 						Obj:Stop()
 					else
-						for UID, bool in pairs(self.Target) do
-							if LibSUnit.Lookup.UID[UID] then
-								Obj:Stop(LibSUnit.Lookup.UID[UID].Name)
+						if self.Source then
+							if LibSUnit.Lookup.UID[self.Caster] then
+								Obj:Stop(LibSUnit.Lookup.UID[self.Caster].Name)
+							end
+						else
+							for UID, bool in pairs(self.Target) do
+								if LibSUnit.Lookup.UID[UID] then
+									Obj:Stop(LibSUnit.Lookup.UID[UID].Name)
+								end
 							end
 						end
 					end
@@ -5699,30 +5705,30 @@ function KBM.CastBar:Init()
 		
 		function GUI.Drag.Event:WheelForward()	
 			if self.GUI.CastBarObj.Settings.ScaleWidth then
-				if self.GUI.CastBarObj.Settings.wScale < 1.5 then
+				if self.GUI.CastBarObj.Settings.wScale < 2 then
 					self.GUI.CastBarObj.Settings.wScale = self.GUI.CastBarObj.Settings.wScale + 0.025
-					if self.GUI.CastBarObj.Settings.wScale > 1.5 then
-						self.GUI.CastBarObj.Settings.wScale = 1.5
+					if self.GUI.CastBarObj.Settings.wScale > 2 then
+						self.GUI.CastBarObj.Settings.wScale = 2
 					end
 					self.GUI.Frame:SetWidth(math.ceil(self.GUI.CastBarObj.Settings.wScale * KBM.Constant.CastBar.w))
 				end
 			end
 			
 			if self.GUI.CastBarObj.Settings.ScaleHeight then
-				if self.GUI.CastBarObj.Settings.hScale < 1.5 then
+				if self.GUI.CastBarObj.Settings.hScale < 2 then
 					self.GUI.CastBarObj.Settings.hScale =self.GUI.CastBarObj.Settings.hScale + 0.025
-					if self.GUI.CastBarObj.Settings.hScale > 1.5 then
-						self.GUI.CastBarObj.Settings.hScale = 1.5
+					if self.GUI.CastBarObj.Settings.hScale > 2 then
+						self.GUI.CastBarObj.Settings.hScale = 2
 					end
 					self.GUI.Frame:SetHeight(math.ceil(self.GUI.CastBarObj.Settings.hScale * KBM.Constant.CastBar.h))
 				end
 			end
 			
 			if self.GUI.CastBarObj.Settings.TextScale then
-				if self.GUI.CastBarObj.Settings.tScale < 1.5 then
+				if self.GUI.CastBarObj.Settings.tScale < 2 then
 					self.GUI.CastBarObj.Settings.tScale = self.GUI.CastBarObj.Settings.tScale + 0.025
-					if self.GUI.CastBarObj.Settings.tScale > 1.5 then
-						self.GUI.CastBarObj.Settings.tScale = 1.5
+					if self.GUI.CastBarObj.Settings.tScale > 2 then
+						self.GUI.CastBarObj.Settings.tScale = 2
 					end
 					self.GUI.Text:SetFontSize(KBM.Constant.CastBar.TextSize * self.GUI.CastBarObj.Settings.tScale)
 					self.GUI.Shadow:SetFontSize(KBM.Constant.CastBar.TextSize * self.GUI.CastBarObj.Settings.tScale)
@@ -6825,7 +6831,7 @@ function KBM.Victory()
 		end
 	end
 	KBM.Event.Encounter.End({Type = "victory", KBM.CurrentMod})
-	KBM_Reset()
+	KBM_Reset("victory")
 end
 
 function KBM.Unit.Death(handle, info)	

@@ -4,6 +4,7 @@ Ready Check
 * Stones
 ** New: Tracking for Coruscating Powerstone.
 ** New: Tracking for Exceptional Whetstone.
+** New: Tracking for Exceptional Oilstone.
 * Potions
 ** New: Tracking for Prime Brightsurge Vial.
 ** New: Tracking for Prime Powersurge Vial.
@@ -16,7 +17,12 @@ Options
 Mechanic Spy
 * New: Added MechObj:SetSource() if you'd rather display the source of triggers rather than targets.
 
+LibSBuff
+* Change: Removed warning message for slow computers. I'll bring it back later as an option for those wanting to monitor performance.
+
 Instances
+* New: Encounter victory will now add defeated bosses to the ignore list to prevent re-fires of the encounter.
+* Note: If an encounter states a victory prematurely then type /kbmreset to clear the ignore list. Should be very, very rare, if ever.
 
 Raids
 * Endless Eclipse
@@ -31,7 +37,7 @@ Expert Dungeons
 
 Normal Dungeons
 * Exodus of the Storm Queen
-** Valthundra
+** Valthundr
 *** New: Added an alert for Hide mechanic
 *** New: Added an alert for Stack in mechanic (Frost Bound).
 ** General Grim

@@ -183,12 +183,12 @@ function _int:CacheAdd(UnitID, BuffID, bDetails)
 	local _startTime = Inspect.Time.Real()
 	bDetails = bDetails or Inspect.Buff.Detail(UnitID, BuffID)
 	local _duration = Inspect.Time.Real() - _startTime
-	if _duration > 0.045 then
-		print("Performance Warning: LibSBuff has noticed the Rift Client is running slow.")
-		print(string.format("Time taken to call internal Rift command Inspect.Buff.Detail - %0.03f", _duration))
+	-- if _duration > 0.06 then
+		-- print("Performance Warning: LibSBuff has noticed the Rift Client is running slow.")
+		-- print(string.format("Time taken to call internal Rift command Inspect.Buff.Detail - %0.03f", _duration))
 	--else
 		--print(string.format("Call safe: %0.06f", _duration))
-	end
+	-- end
 	if bDetails then
 		if not LibSBuff.Cache[UnitID] then
 			LibSBuff.Cache[UnitID] = {

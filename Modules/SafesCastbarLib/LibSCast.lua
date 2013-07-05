@@ -22,16 +22,16 @@ local _int = {
 	Packs = {},
 }
 local _tracking = {}
+local _active = {}
 
 function _int.Default:Settings()
 	local _set = {
-		pack = "default", -- Texture pack to use for rendering.
 		pinned = false, -- Is the castbar handled via a pin function. Usually castbars linked to other controlling frames.
 		visible = false, -- Should the castbar be currently be rendered.
 		relX = false, -- Percentage based screen positioning.
 		relY = false, --/
 		unlocked = false, -- Can be moved via left mouse button hold and drag. Pinned Castbars can never be unlocked.
-		alpha = 1.0, -- Global alpha of the entire castbar.
+		alpha = 1.0, -- Global alpha for the entire castbar.
 		text = {
 			enabled = true,
 			alpha = 1.0,
@@ -65,6 +65,12 @@ function _int.Default:Settings()
 				enabled = false, -- Displays a cast icon, and uses "icon" frame.
 				alpha = 1.0,
 			},
+			progbarI = {
+				alpha = 1.0,
+			},
+			progbarN = {
+				alpha = 1.0,
+			},
 			-- Add additional texture settings locally in your addon.
 		},
 		scale = {
@@ -76,274 +82,181 @@ function _int.Default:Settings()
 	return _set
 end
 
-function _int.Default:TexturePack()
+function _int.Default:SimplePack()
 	-- You can create your own and supply it to LibSCast:TPackAdd(tPack)
 	-- 
-	local _tPack = {
-		-- Default Castbar.
-		id = "default", -- ID of your texture pack. It's probably best to prefix with your addon. Used as a key.
-		display_name = "Default", -- Used for building settings pages.
-		size = {
-			w = 200,
-			h = 24,
-			t = 14,
-		},
-		layout = {
-			[1] = { -- Use numbers to ensure the creation order is correct, 1 should always be the Cradle Texture/Frame.
-				cradle = true, -- By setting a texture as the cradle, all other textures parent from it. Only 1 texture can be a cradle.
-				id = "background", -- Id's are used for reference when setting your layouts. A key will be created with this id.
-				file = "Media/background.png",
-				addon = "SafesCastbarLib",
-				points = {
-				},
-			},
-			[2] = {
-				id = "foreground", -- Overlay Texture, not always required.
-				file = "Media/foreground.png",
-				addon = "SafesCastbarLib",
-				layer = 5, -- Layer for this Texture relative to <cradle>
-				points = {
-					link = "cradle",
-					TOP = {
-						ps = "TOP", -- Point to link to on <link>, Use ps for key based points. Use pv = {x = 0.5, y = 0.5} for value pairs.
-						oy = 0.0, -- Y Offset for this point. (Ensure to use oy for TOP/BOTTOM)
-					},
-					BOTTOM = {
-						ps = "BOTTOM",
-						oy = 0.0,
-					},
-					LEFT = {
-						ps = "LEFT",
-						ox = 0.0, -- X Offset for this point. (Ensure to use ox for LEFT/RIGHT)
-					},
-					RIGHT = {
-						ps = "RIGHT",
-						ox = 0.0,
-					},
-				},
-			},
-			[3] = {
-				id = "progbarI", -- Interruptible progress bar.
-				file = false, -- Setting file or addon as false will mean this is a plain frame.
-				addon = false,
-				layer = 2,
-				color = { -- If you wish to add a background color, supply a color quad here.
-					r = 0.4,
-					g = 0.4,
-					b = 0.9,
-					a = 1,
-				},
-				points = {
-					link = "cradle",
-					attach = {
-						TOPLEFT = { -- You can also use pairing, ensure you supply both ox and oy as at least 0.
-							ps = "TOPLEFT", -- Ensure the point string is also a pair string, or a a pv pair table.
-							ox = 0.0,
-							oy = 0.0,
-						},
-						BOTTOM = {
-							ps = "BOTTOM",
-							oy = 0.0,
-						},
-					},
-					WIDTH = 0.0, -- Supply a width in percentage form, ensure you don't attempt to pin to right/left depending. (Float 0.0-1.0)
-					MAXWIDTH = 200, -- You may supply a width to override that of the castbars width if you wish to position via offsets.
-				},
-			},
-			[4] = {
-				id = "progbarN", -- Non-interruptible progress bar.
-				file = false,
-				addon = false,
-				layer = 2,
-				color = {
-					r = 0.6,
-					g = 0.2,
-					b = 0.3,
-					a = 1,
-				},
-				points = {
-					link = "cradle",
-					attach = {
-						TOPLEFT = {
-							ps = "TOPLEFT",
-							ox = 0.0,
-							oy = 0.0,
-						},
-					},
-					WIDTH = 0.0,
-				},
-			},
-		},
-	}
-	LibSCast:TPackAdd(_tPack)
-	_tPack = {
-		-- Create Rift Style Castbar
-		id = "rift",
-		display_name = "Rift Style",
-		size = {
-			w = 200,
-			h = 24,
-			t = 14,
-		},
-		layout = {
-			[1] = { 
-				cradle = true,
-				id = "background",
-				file = "Media/background.png",
-				addon = "SafesCastbarLib",
-				points = {
-				},
-			},
-			[2] = {
-				id = "foreground",
-				file = "Media/foreground.png",
-				addon = "SafesCastbarLib",
-				layer = 5, 
-				points = {
-					link = "cradle",
-					TOP = {
-						ps = "TOP",
-						oy = 0.0,
-					},
-					BOTTOM = {
-						ps = "BOTTOM",
-						oy = 0.0,
-					},
-					LEFT = {
-						ps = "LEFT",
-						ox = 0.0,
-					},
-					RIGHT = {
-						ps = "RIGHT",
-						ox = 0.0,
-					},
-				},
-			},
-			[3] = {
-				id = "progbarI",
-				file = false,
-				addon = false,
-				layer = 2,
-				color = {
-					r = 0.4,
-					g = 0.4,
-					b = 0.9,
-					a = 1,
-				},
-				points = {
-					link = "cradle",
-					attach = {
-						TOPLEFT = {
-							ps = "TOPLEFT",
-							ox = 0.0,
-							oy = 0.0,
-						},
-						BOTTOM = {
-							ps = "BOTTOM",
-							oy = 0.0,
-						},
-					},
-					WIDTH = 0.0,
-					MAXWIDTH = 200,
-				},
-			},
-			[4] = {
-				id = "progbarN",
-				file = false,
-				addon = false,
-				layer = 2,
-				color = {
-					r = 0.6,
-					g = 0.2,
-					b = 0.3,
-					a = 1,
-				},
-				points = {
-					link = "cradle",
-					attach = {
-						TOPLEFT = {
-							ps = "TOPLEFT",
-							ox = 0.0,
-							oy = 0.0,
-						},
-					},
-					WIDTH = 0.0,
-				},
-			},
-		},
-	}
-	LibSCast:TPackAdd(_tPack)
+	-- Required methods and variables.
+	local _tBar = {}
+	
+	function _tBar:Create()
+		-- Creates the UI elements
+		-- This will only be called by the library if none are available in storage.
+		
+	end
+	function _tBar:Update(progress, duration)
+		-- Updates the castbar progress state, use duration and progress to update texture and text where applicable.
+		
+	end
+	
+	return _tBar
 end
 
-function LibSCast:TPackAdd(tPack)
-	if type(tPack) == "table" then
-		if type(tPack.id) ~= "string" then
-			error("tPack.id : Expecting string got "..type(tPack.id))
-		else
-			if not _int.Packs[tPack.id] then
-				_int.Packs[tPack.id] = tPack
-				_store[tPack.id] = {} -- Used for caching UI elements.
+function _int.Default:RiftPack()
+		-- Create Rift Style Castbar
+	local _tBar = {
+		Duration = 1,
+	}
+	
+	return _tBar
+end
+
+function LibSCast:TPackAdd(PackID, Name, defBar)
+	local Command = "LibSCast:TPackAdd(string PackID, table defBar): "
+	if type(PackID) ~= "string" then
+		error(Command.."Expecting string for PackID, got - "..type(PackID))
+	else
+		local PackObj = {
+			id = PackID, -- Used for reference.
+			name = Name, -- Display name for end users. (Building options lists for example)
+			bars = {
+				default = defBar,
+				raid = defBar, -- Usually bosses and some raid trash/adds.
+				group = defBar, -- Most other elite units.
+				player = defBar, -- Standard player bars (all player units)
+				pvp = defBar, -- Standard player bars when they're flagged for PvP.
+			}, -- Where the set bars are kept: raid, group, player, pvp, default
+			Settings = _int.Default:Settings()
+		}
+		if not _int.Packs[PackID] then
+			if type(defBar) == "table" then
+				if type(defBar.id) ~= "string" then
+					error(Command.."defBar.id : Expecting string got "..type(defBar.id))
+				else
+					_int.Packs[tPack.id] = tPack
+					_store[tPack.id] = {} -- Used for caching UI elements.
+				end
 			else
-				error("tPack.id : ID already in use '"..tPack.id.."'")
+				error(Command.."Expecting table got "..type(tPack))
 			end
 		end
-	else
-		error("LibSCast:TPackAdd(tPack) : Expecting table got "..type(tPack))
 	end
 end
 
-function _int:Castbar_Processor()
+function _int:Castbar_Processor(UnitID)
 	-- Handles data updates and dispatches render queue.
-	local CastPro = {}
+	local CastPro = {
+		Castbars = {},
+		UnitID = UnitID,
+		Active = false,
+		Count = 0,
+	}
 	
 	function CastPro:Add(CastObj)
-		-- Adds a cast object for rendering.
-		
+		-- Adds a cast object for events and/or rendering.
+		if not self.Castbars[CastObj] then
+			self.Castbars[CastObj] = true
+			self.Count = self.Count + 1
+		end
 	end
 	
 	function CastPro:Remove(CastObj)
-		-- Removes a cast object from rendering.
-		
+		-- Removes a cast object from events and/or rendering.
+		if self.Castbars[CastObj] then
+			self.Castbars[CastObj] = nil
+			self.Count = self.Count - 1
+			if self.Count == 0 then
+				_tracking[self.UnitID] = nil
+			end
+		end
 	end
 	
 	function CastPro:Show()
 		-- Triggered when castbars become visible to the player.
-	
 	end
+	
 	function CastPro:Hide()
 		-- Triggered when castbars are no longer visible to the player.
-	
 	end
+	
 	function CastPro:Queue()
 		-- Queue UI cast object for rendering.
 		
 	end
 	
+	function CastPro:Update()
+	
+	end
+	
+	function CastPro:Visible(bool)
+		if bool then
+			CastPro:Show()
+			self.CastData = Inspect.Unit.Castbar[self.UnitID]
+			self.Active = true
+			_active[self.UnitID] = self
+		else
+			-- Calculate if the cast was interrupted.
+			self.Active = false
+			self.CastData = nil
+			_active[self.UnitID] = nil
+		end
+	end
+	_tracking[UnitID] = CastPro
+	
 	return CastPro
 end
 
-function LibSCast:Create(ID, Pack, Settings)
+function LibSCast:Create(ID, Pack, Settings, Style)
+	-- Create a castbar object, this is something which can have settings.
+	-- These have no UI until issued a CastObj:Start() or CastObj:StartType(UnitType)
+	-- If no Pack is supplied this is a passive Castbar object with no UI.
 	local CastObj = {
 		ID = ID,
 		Settings = Settings or _int.Default:Settings(),
 		Pack = Pack,
+		Style = Style,
 		Active = false,
 	}
+	if Pack then
+		CastObj.Passive = false
+	else
+		CastObj.Passive = true
+	end
 		
 	if not _int[Pack] then
 		error("LibSCast:Create(Pack, Settings) : Unknown Texture Pack '"..tostring(Pack).."'")
 	else
-		function CastObj:StartID(UnitID)
-			-- Start a castbar object tracking via ID
-			
+		function CastObj:Start(UnitID)
+			-- Start a castbar object tracking via UID only.
+			if _tracking[UnitID] then
+				self.Engine = _tracking[UnitID]
+			else
+				self.Engine = _int:Castbar_Processor(UnitID)
+			end
+			self.Engine:Add(self)
+			self.UnitID = UnitID
+			self.Active = true
 		end
-		function CastObj:Start(UnitType)
+		function CastObj:StartType(UnitType)
 			-- Start a castbar object tracking via type ie; "player", "player.target" etc...
-		
+			self.Type = UnitType
+			local currentUID = Inspect.Unit.Lookup(UnitType)
+			if currentUID then
+				self:Start(currentUID)
+			end
 		end
 		function CastObj:Stop()
-			-- Stop tracking, and remove UI and place it in cache for recycling.
-			
+			-- Stop tracking, and remove UI and place it in cache for recycling. (Used with CastObj:Start)
+			-- Use this for simple removal from the castbar engine.
+			self.UnitID = nil
+			if self.Engine then
+				self.Engine:Remove(self)
+			end
+			self.Active = false
+		end
+		function CastObj:Remove()
+			-- Advanced Feature: Removes the CastObj entirely. (Can be used with either CastObj:Start and CastObj:StartType)
+			-- ** Warning: This will remove all access to the object and will no longer be available. Usually best with Passive Cast Objects **
+			self:Stop()
 		end
 		function CastObj:Pin(_pinFunction)
 			-- When started, this castbar will call the _pinFunction to align itself.
@@ -375,17 +288,18 @@ function LibSCast:Create(ID, Pack, Settings)
 end
 
 function _int.Update_Handler(handle)
-
+	for UnitID, CastPro in pairs(_tracking) do
+		CastPro:Update()
+	end
 end
 
 function _int.Castbar_Handler(handle, units)
 	for UnitID, Visible in pairs(units) do
 		if _tracking[UnitID] then
-		
+			
 		end
 	end
 end
 
-_int.Default:TexturePack()
 Command.Event.Attach(Event.Unit.Castbar, _int.Castbar_Handler, "Castbar Visibility Handler")
 Command.Event.Attach(Event.System.Update.Begin, _int.Update_Handler, "Castbar Update Handler")

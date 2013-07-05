@@ -175,6 +175,13 @@ PI.Constants = {
 						warrior = true,
 					},
 				},
+				["r4C1AD372299AF58E"] = { -- Exceptional Oilstone
+					Grade = "High",
+					Level = 60,
+					Callings = {
+						warrior = true,
+					},
+				},
 				--////////////////////////--
 				-- SL Medium Grade Stones --
 				--////////////////////////--
