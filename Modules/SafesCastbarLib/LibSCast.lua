@@ -16,13 +16,21 @@
 
 local AddonIni, LibSCast = ...
 
+local LSUIni = Inspect.Addon.Detail("SafesUnitLib")
+local LibSUnit = LSUIni.data
+
+local LSTIni = Inspect.Addon.Detail("SafesTableLib")
+local LibSata = LSTIni.data
+
 local _store = {}
 local _int = {
 	Default = {},
 	Packs = {},
+	UpdateTime = 0,
 }
 local _tracking = {}
 local _active = {}
+local _typeHandlers = {}
 
 function _int.Default:Settings()
 	local _set = {
@@ -83,35 +91,126 @@ function _int.Default:Settings()
 end
 
 function _int.Default:SimplePack()
-	-- You can create your own and supply it to LibSCast:TPackAdd(tPack)
-	-- 
-	-- Required methods and variables.
-	local _tBar = {}
+	-- Required Structure for Castbar UI Objects
+	-- Includes base methods and settings.
+	--
+	local _tBar = {
+		id = "default", -- Must be unique local to a pack. An must always containt a "default" bar.
+		_store = {}, -- For recycling UI elements.
+	}
 	
 	function _tBar:Create()
-		-- Creates the UI elements
+		-- Creates the UI elements, all custom elements should parent .cradle.
 		-- This will only be called by the library if none are available in storage.
+		local bar = {
+			duration = 1, -- Default cast/channel duration in seconds.
+			id = "default",
+			ui = {},-- UI Element location.
+		}
+		function bar:Load()
+			-- Used for initializing UI Elements. Either pulling from storage or create a new UI group.
+			-- Best used when a CastObj:Start or CastObj:StartType is called to load all castbars in to memory.
+			--
+		end
 		
-	end
-	function _tBar:Update(progress, duration)
-		-- Updates the castbar progress state, use duration and progress to update texture and text where applicable.
+		function bar:Start()
+			-- Prepare the bar for visual display, setting any UI elements appropriately. 
+			--
+			self.Update = self.CastUpdate -- If you have animations for Interrupt or End events then ensure you set self.Update to the correct handler.
 		
+		end
+		
+		function bar:Interrupt()
+			-- Change state to start an Interrupt animation, or End animation (if the same), or simply remove the bar UI from display.
+			--
+			self.Update = self.InterruptAnim -- If you wish to animate interrupt events change self.Update to self.InterruptAnim
+			
+		end
+		
+		function bar:End()
+			-- Change state to start an End animation, or simply remove the bar UI from display.
+			--
+			self.Update = self.EndAnim -- If you wish to animate end of cast events change self.Update to self.EndAnim
+		
+		end
+			
+		function bar:Recycle()
+			-- Used for placing UI elements in local storage.
+			-- Best used when a CastObj:Stop is called.
+			--
+		end
+
+		function bar:CastUpdate(progress, duration)
+			-- Updates the castbar progress state, use duration and progress to update texture and text where applicable.
+			
+		end
+		
+		function bar:InterruptAnim()
+			-- Only required if you're going to animate interruptions in any way. (Such as fading)
+		
+		end
+		
+		function bar:EndAnim()
+			-- Only required if you're going to animate end of casts in any way. (Such as fading)
+		
+		end
+		bar.Update = bar.CastUpdate -- Set the default update handler.
+		
+		return bar
 	end
 	
-	return _tBar
+	LibSCast:TPackAdd("Simple", "Simple", _tBar)
 end
 
 function _int.Default:RiftPack()
-		-- Create Rift Style Castbar
+	-- Create Rift Style Castbar
+	-- Default Normal Bar.
+	--
 	local _tBar = {
-		Duration = 1,
+		id = "default",
+		_store = {},
 	}
 	
-	return _tBar
+	function _tBar:Create()
+		local bar = {
+			duration = 1,
+			id = "default",
+			ui = {},
+		}	
+		
+		function bar:Load()
+		end
+		
+		function bar:Start()
+		end
+		
+		function bar:Interrupt()		
+		end
+		
+		function bar:End()		
+		end
+			
+		function bar:Recycle()			
+		end
+		
+		function bar:CastUpdate(progress, duration)			
+		end
+		
+		function bar:InterruptAnim()		
+		end
+		
+		function bar:EndAnim()	
+		end
+		bar.Update = bar.CastUpdate -- Set the default update handler.
+		
+		return bar
+	end
+	
+	LibSCast:TPackAdd("Rift", "Rift", _tBar)
 end
 
 function LibSCast:TPackAdd(PackID, Name, defBar)
-	local Command = "LibSCast:TPackAdd(string PackID, table defBar): "
+	local Command = "LibSCast:TPackAdd(string PackID, string Name, table defBar): "
 	if type(PackID) ~= "string" then
 		error(Command.."Expecting string for PackID, got - "..type(PackID))
 	else
@@ -125,21 +224,44 @@ function LibSCast:TPackAdd(PackID, Name, defBar)
 				player = defBar, -- Standard player bars (all player units)
 				pvp = defBar, -- Standard player bars when they're flagged for PvP.
 			}, -- Where the set bars are kept: raid, group, player, pvp, default
-			Settings = _int.Default:Settings()
+			_store = {}, -- Store for Castbar objects which are created and recycled.
 		}
-		if not _int.Packs[PackID] then
-			if type(defBar) == "table" then
-				if type(defBar.id) ~= "string" then
-					error(Command.."defBar.id : Expecting string got "..type(defBar.id))
-				else
-					_int.Packs[tPack.id] = tPack
-					_store[tPack.id] = {} -- Used for caching UI elements.
-				end
-			else
-				error(Command.."Expecting table got "..type(tPack))
-			end
+		if not _int.Packs[PackObj.id] then
+			_int.Packs[PackObj.id] = PackObj
+		else
+			error(Command.." ID conflict for: "..PackObj.id)
 		end
+				
+		function PackObj:Create()
+			-- Creates an instance of a Pack Object or uses one from local storage.
+			-- Used when a Cast Object starts via :StartType or :Start
+			--
+			local PackIn = {
+				PackObj = self,
+				barObj = {},
+				bars = {},
+			}
+			for id, barObj in pairs(self.bars) do
+				if not PackIn.barObj[barObj.id] then
+					PackIn.barObj[barObj.id] = barObj:Create()
+				end
+				PackIn.bars[id] = PackIn.barObj[barObj.id]
+			end
+
+			function PackObj:Recycle()
+				-- Places created Bar Objects in a store for later use.
+				-- This instance is no longer usable.
+				--
+			end
+			
+			return PackIn
+		end		
 	end
+end
+
+function _int.Default:CreatePacks()
+	self:SimplePack()
+	self:RiftPack()
 end
 
 function _int:Castbar_Processor(UnitID)
@@ -154,7 +276,7 @@ function _int:Castbar_Processor(UnitID)
 	function CastPro:Add(CastObj)
 		-- Adds a cast object for events and/or rendering.
 		if not self.Castbars[CastObj] then
-			self.Castbars[CastObj] = true
+			self.Castbars[CastObj] = CastObj
 			self.Count = self.Count + 1
 		end
 	end
@@ -172,10 +294,20 @@ function _int:Castbar_Processor(UnitID)
 	
 	function CastPro:Show()
 		-- Triggered when castbars become visible to the player.
+		_active[self.UnitID] = self
+		self.CurrentTime = Inspect.Time.Frame()
+		self.CastData = Inspect.Unit.Castbar(self.UnitID)
+		for _, CastObj in pairs(self.Castbars) do
+			CastObj:Show(self.CastData)
+		end
 	end
 	
 	function CastPro:Hide()
 		-- Triggered when castbars are no longer visible to the player.
+		_active[self.UnitID] = nil
+		for _, CastObj in pairs(self.Castbars) do
+			CastObj:Hide()
+		end
 	end
 	
 	function CastPro:Queue()
@@ -184,20 +316,19 @@ function _int:Castbar_Processor(UnitID)
 	end
 	
 	function CastPro:Update()
-	
+		
 	end
 	
 	function CastPro:Visible(bool)
 		if bool then
 			CastPro:Show()
-			self.CastData = Inspect.Unit.Castbar[self.UnitID]
+			self.CastData = Inspect.Unit.Castbar(self.UnitID)
 			self.Active = true
-			_active[self.UnitID] = self
 		else
 			-- Calculate if the cast was interrupted.
+			CastPro:Hide()
 			self.Active = false
 			self.CastData = nil
-			_active[self.UnitID] = nil
 		end
 	end
 	_tracking[UnitID] = CastPro
@@ -209,24 +340,32 @@ function LibSCast:Create(ID, Pack, Settings, Style)
 	-- Create a castbar object, this is something which can have settings.
 	-- These have no UI until issued a CastObj:Start() or CastObj:StartType(UnitType)
 	-- If no Pack is supplied this is a passive Castbar object with no UI.
+	-- They can be interchangeable with any unit. Think of them as UI housing objects.
+	--
 	local CastObj = {
-		ID = ID,
+		id = ID,
 		Settings = Settings or _int.Default:Settings(),
 		Pack = Pack,
-		Style = Style,
+		Style = Style or "dynamic",
 		Active = false,
+		CurrentBar = nil, -- Current UI Object in use.
 	}
 	if Pack then
 		CastObj.Passive = false
+		CastObj.Pack = _int.Packs[Pack] or _int.Packs["Simple"]
+		CastObj.PackObj = CastObj.Pack:Create()
 	else
 		CastObj.Passive = true
 	end
 		
-	if not _int[Pack] then
+	if not _int.Packs[Pack] then
 		error("LibSCast:Create(Pack, Settings) : Unknown Texture Pack '"..tostring(Pack).."'")
 	else
 		function CastObj:Start(UnitID)
 			-- Start a castbar object tracking via UID only.
+			if self.Active then
+				self:Stop()
+			end
 			if _tracking[UnitID] then
 				self.Engine = _tracking[UnitID]
 			else
@@ -236,6 +375,7 @@ function LibSCast:Create(ID, Pack, Settings, Style)
 			self.UnitID = UnitID
 			self.Active = true
 		end
+		
 		function CastObj:StartType(UnitType)
 			-- Start a castbar object tracking via type ie; "player", "player.target" etc...
 			self.Type = UnitType
@@ -243,7 +383,19 @@ function LibSCast:Create(ID, Pack, Settings, Style)
 			if currentUID then
 				self:Start(currentUID)
 			end
+			if not _typeHandlers[UnitType] then
+				_typeHandlers[UnitType] = Library.LibUnitChange.Register(UnitType)
+			end
+			function self:Handler(NewID)
+				if NewID then
+					self:Start(NewID)
+				else
+					self:Stop()
+				end
+			end
+			Command.Event.Attach(_typeHandlers[UnitType], function(handle, newID) self:Handler(newID) end, "UnitID Change Handler for "..UnitType)
 		end
+		
 		function CastObj:Stop()
 			-- Stop tracking, and remove UI and place it in cache for recycling. (Used with CastObj:Start)
 			-- Use this for simple removal from the castbar engine.
@@ -253,26 +405,47 @@ function LibSCast:Create(ID, Pack, Settings, Style)
 			end
 			self.Active = false
 		end
+		
 		function CastObj:Remove()
 			-- Advanced Feature: Removes the CastObj entirely. (Can be used with either CastObj:Start and CastObj:StartType)
 			-- ** Warning: This will remove all access to the object and will no longer be available. Usually best with Passive Cast Objects **
 			self:Stop()
 		end
+		
+		function CastObj:Show()
+			if self.Style == "dynamic" then
+				local cDetails = LibSUnit.Lookup.UID[self.UnitID] -- Caster Unit Details
+			else
+				
+				self.PackObj.bars[self.Style]:Start()
+			end
+		end
+		
+		function CastObj:Hide()
+		
+		end
+		
+		function CastObj:Interrupt()
+		
+		end
+		
 		function CastObj:Pin(_pinFunction)
 			-- When started, this castbar will call the _pinFunction to align itself.
 			if type(_pinFunction) ~= "function" then
-				error(self.ID..":Pin(_pinFunction) expecting function got "..type(_pinFunction))
+				error(self.id..":Pin(_pinFunction) expecting function got "..type(_pinFunction))
 			end
 			self.pinFunction = _pinFunction
 			if self.Settings.Unlocked then
 				-- Hide drag frame.
 			end
 		end
+		
 		function CastObj:Unpin()
 			-- Returns a castbar to an unpinned state and will use relX,relY combo for positioning (defaults to center, top third of screen)
 		
 		end
-		function CastObj:UnLocked(bool)
+		
+		function CastObj:Unlocked(bool)
 			self.Settings.Unlocked = bool
 			if not bool then
 				-- Hide drag frame.
@@ -288,18 +461,24 @@ function LibSCast:Create(ID, Pack, Settings, Style)
 end
 
 function _int.Update_Handler(handle)
-	for UnitID, CastPro in pairs(_tracking) do
-		CastPro:Update()
+	local cTime = Inspect.Time.Real()
+	if cTime > _int.UpdateTime then
+		for UnitID, CastPro in pairs(_active) do
+			CastPro:Update()
+		end
+		_int.UpdateTime = cTime + 0.09
 	end
 end
 
 function _int.Castbar_Handler(handle, units)
 	for UnitID, Visible in pairs(units) do
 		if _tracking[UnitID] then
-			
+			_tracking[UnitID]:Visible(Visible)
 		end
 	end
 end
 
 Command.Event.Attach(Event.Unit.Castbar, _int.Castbar_Handler, "Castbar Visibility Handler")
 Command.Event.Attach(Event.System.Update.Begin, _int.Update_Handler, "Castbar Update Handler")
+
+_int.Default:CreatePacks()

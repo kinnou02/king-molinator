@@ -9,7 +9,7 @@ Author = "Paul Snart"
 Website = "http://twitter.com/#!/psnart"
 Email = "snarty@gmail.com"
 
-Version = "0.2.5"
+Version = "0.2.4"
 
 Environment = "2.2"
 

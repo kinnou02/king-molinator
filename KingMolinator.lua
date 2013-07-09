@@ -19,6 +19,9 @@ local LibSBuff = Inspect.Addon.Detail("SafesBuffLib").data
 local LSUIni = Inspect.Addon.Detail("SafesUnitLib")
 local LibSUnit = LSUIni.data
 
+local LSCIni = Inspect.Addon.Detail("SafesCastbarLib")
+local LibSCast = LSCIni.data
+
 KBMLM.Start(KBM)
 KBM.BossMod = {}
 KBM.Event = {
@@ -72,7 +75,7 @@ KBM.ID = AddonData.id
 KBM.ModList = {}
 KBM.Testing = false
 KBM.ValidTime = false
-KBM.IsAlpha = false
+KBM.IsAlpha = true
 KBM.Debug = false
 KBM.Aux = {}
 KBM.TestFilters = {}
@@ -837,8 +840,8 @@ local function KBM_DefineVars(handle, AddonID)
 				print("Warning: "..Mod.ID.." has no description.")
 			end
 		end
-		KBM.PercentageMon:Init()
-		KBM.Options.PercentageMon = KBM.PercentageMon.Settings
+		KBM.Options.PercentageMon = KBM.PercentageMon.Defaults()
+		KBM.PercentageMon.Settings = KBM.Options.PercentageMon
 	elseif KBM.PlugIn.List[AddonID] then
 		KBM.PlugIn.List[AddonID]:InitVars()
 	end
@@ -896,7 +899,7 @@ local function KBM_LoadVars(handle, AddonID)
 		
 		KBM.Debug = KBM.Options.Debug
 		KBM.InitVars()
-		KBM.PercentageMon:ApplySettings()
+		KBM.PercentageMon:Init()
 	elseif KBM.PlugIn.List[AddonID] then
 		KBM.PlugIn.List[AddonID]:LoadVars()
 	end
@@ -7284,9 +7287,9 @@ end
 
 KBM.SetDefault = {}
 function KBM.SetDefault.menu()
-	KBM.Options.Frame.x = false
-	KBM.Options.Frame.y = false
-	KBM.MainWin:ApplySettings()
+	KBM.Menu.Window:SetPoint("TOPLEFT", UIParent, 0.25, 0.2)
+	KBM.Options.Frame.RelX = false
+	KBM.Options.Frame.RelY = false
 end
 
 function KBM.SetDefault.button()
@@ -8312,6 +8315,7 @@ function KBM.WaitReady()
 			},
 		},
 	}
+		
 	function KBM.Player.CastBar.PinCastBar()
 		KBM.Player.CastBar.CastObj.GUI.Frame:ClearPoint("TOPLEFT")
 		KBM.Player.CastBar.CastObj.GUI.Frame:SetPoint("CENTER", UI.Native.Castbar, "CENTER")
@@ -8323,6 +8327,26 @@ function KBM.WaitReady()
 	KBM.Player.CastBar.Target.CastObj = KBM.CastBar:Add(KBM.Player.CastBar.Target, KBM.Player.CastBar.Target)
 	KBM.Player.CastBar.Focus.CastObj = KBM.CastBar:Add(KBM.Player.CastBar.Focus, KBM.Player.CastBar.Focus)
 	KBM.Player.CastBar.CastObj:Create(KBM.Player.UnitID)
+	
+	-- New Castbar Initialization
+	KBM.Player.Castbar = {
+		ID = "KBMCastSet",
+		Player = {
+			ID = "KBM_Player_Bar",
+			CastObj = LibSCast:Create("KBM_Player_Bar", "Rift", nil, "default"),
+		},
+		Target = {
+			ID = "KBM_Player_Target",
+			CastObj = LibSCast:Create("KBM_Player_Target", "Rift"),
+		},
+		Focus = {
+			ID = "KBM_Plyaer_Focus",
+			CastObj = LibSCast:Create("KBM_Player_Focus", "Rift"),
+		},
+	}
+	KBM.Player.Castbar.Player.CastObj:StartType("player")
+	KBM.Player.Castbar.Target.CastObj:StartType("player.target")
+	KBM.Player.Castbar.Focus.CastObj:StartType("focus")
 end
 
 KBM.PlugIn = {}

@@ -1,0 +1,20 @@
+
+-- Library to turn the Event.Unit.Change events into something a little more userfriendly.
+
+Identifier = "LibUnitChange"
+
+Name = "Lib Unit Change"
+
+Description = "Internal library developed to process unitchange events in a more convenient manner."
+
+Author = "ZorbaTHut / Ben Wilhelm / Trion Worlds"
+Website = "http://www.riftgame.com"
+Email = "bwilhelm@trionworlds.com"
+
+Version = "2.3"
+
+Environment = "2.2"
+
+RunOnStartup = {
+  "main.lua",
+}

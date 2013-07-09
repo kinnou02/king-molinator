@@ -9,6 +9,9 @@ local KBM = KBMTable.data
 local LSUIni = Inspect.Addon.Detail("SafesUnitLib")
 local LibSUnit = LSUIni.data
 
+local LSGIni = Inspect.Addon.Detail("SafesGUILib")
+local LibSGui = LSGIni.data
+
 local PM = {}
 KBM.PercentageMon = PM
 
@@ -41,20 +44,16 @@ function PM:ApplySettings()
 	self.GUI.Slider:SetWidth(math.ceil(self.Constant.SliderW * self.Settings.Scale))
 	self.GUI.Slider:SetHeight(math.ceil(self.Constant.SliderH * self.Settings.Scale))
 	-- Left Boss Adjustments
-	self.GUI.BossL.NameShadow:SetFontSize(math.ceil(self.Constant.Name.Size * self.Settings.Scale))
-	self.GUI.BossL.NameText:SetFontSize(self.GUI.BossL.NameShadow:GetFontSize())
-	self.GUI.BossL.PerShadow:SetFontSize(math.ceil(self.Constant.Percent.Size * self.Settings.Scale))
-	self.GUI.BossL.PerText:SetFontSize(self.GUI.BossL.PerShadow:GetFontSize())
+	self.GUI.BossL.Name:SetFontSize(math.ceil(self.Constant.Name.Size * self.Settings.Scale))
+	self.GUI.BossL.Per:SetFontSize(math.ceil(self.Constant.Percent.Size * self.Settings.Scale))
 	self.GUI.BossL.Mark:SetWidth(math.ceil(self.Constant.MarkW * self.Settings.Scale))
 	self.GUI.BossL.Mark:SetHeight(math.ceil(self.Constant.MarkH * self.Settings.Scale))
 	self.GUI.BossL.Health:SetWidth(math.ceil(self.Constant.HPBar.W * self.Settings.Scale))
 	self.GUI.BossL.Health:SetHeight(math.ceil(self.Constant.HPBar.H * self.Settings.Scale))
 	self.Constant.HPBar.Adjusted = self.GUI.BossL.Health:GetWidth()
 	-- Right Boss Adjustments
-	self.GUI.BossR.NameShadow:SetFontSize(math.ceil(self.Constant.Name.Size * self.Settings.Scale))
-	self.GUI.BossR.NameText:SetFontSize(self.GUI.BossR.NameShadow:GetFontSize())
-	self.GUI.BossR.PerShadow:SetFontSize(math.ceil(self.Constant.Percent.Size * self.Settings.Scale))
-	self.GUI.BossR.PerText:SetFontSize(self.GUI.BossR.PerShadow:GetFontSize())
+	self.GUI.BossR.Name:SetFontSize(math.ceil(self.Constant.Name.Size * self.Settings.Scale))
+	self.GUI.BossR.Per:SetFontSize(math.ceil(self.Constant.Percent.Size * self.Settings.Scale))
 	self.GUI.BossR.Mark:SetWidth(math.ceil(self.Constant.MarkW * self.Settings.Scale))
 	self.GUI.BossR.Mark:SetHeight(math.ceil(self.Constant.MarkH * self.Settings.Scale))
 	self.GUI.BossR.Health:SetWidth(math.ceil(self.Constant.HPBar.W * self.Settings.Scale))
@@ -69,101 +68,109 @@ function PM:SetAll()
 	self:SetPercentR()
 end
 
+-- Scaling Handlers
+function PM:WheelForwardHandler()
+	if PM.Settings.Scale < PM.Constant.Scale.Max then
+		PM.Settings.Scale = PM.Settings.Scale + PM.Constant.Scale.Step
+		if PM.Settings.Scale > PM.Constant.Scale.Max then
+			PM.Settings.Scale = PM.Constant.Scale.Max
+		end
+		PM:ApplySettings()
+	end
+end
+
+function PM:WheelBackHandler()
+	if PM.Settings.Scale > PM.Constant.Scale.Min then
+		PM.Settings.Scale = PM.Settings.Scale - PM.Constant.Scale.Step
+		if PM.Settings.Scale < PM.Constant.Scale.Min then
+			PM.Settings.Scale = PM.Constant.Scale.Min
+		end
+		PM:ApplySettings()
+	end	
+end
+
+function PM:MiddleClickHandler()
+	if PM.Settings.Scale ~= PM.Constant.Scale.Def then
+		PM.Settings.Scale = PM.Constant.Scale.Def
+		PM:ApplySettings()
+	end
+end
+
 function PM:UnlockScale()
-	function self.GUI.Back.Event:WheelForward()
-		if PM.Settings.Scale < PM.Constant.Scale.Max then
-			PM.Settings.Scale = PM.Settings.Scale + PM.Constant.Scale.Step
-			if PM.Settings.Scale > PM.Constant.Scale.Max then
-				PM.Settings.Scale = PM.Constant.Scale.Max
-			end
-			PM:ApplySettings()
-		end
-	end
-	function self.GUI.Back.Event:WheelBack()
-		if PM.Settings.Scale > PM.Constant.Scale.Min then
-			PM.Settings.Scale = PM.Settings.Scale - PM.Constant.Scale.Step
-			if PM.Settings.Scale < PM.Constant.Scale.Min then
-				PM.Settings.Scale = PM.Constant.Scale.Min
-			end
-			PM:ApplySettings()
-		end	
-	end
-	function self.GUI.Back.Event:MiddleClick()
-		if PM.Settings.Scale ~= PM.Constant.Scale.Def then
-			PM.Settings.Scale = PM.Constant.Scale.Def
-			PM:ApplySettings()
-		end
-	end
+	self.GUI.Back:EventAttach(Event.UI.Input.Mouse.Wheel.Forward, PM.WheelForwardHandler, "KBM_PM Wheel Forward Handler")
+	self.GUI.Back:EventAttach(Event.UI.Input.Mouse.Wheel.Back, PM.WheelBackHandler, "KBM_PM Wheel Back Handler")
+	self.GUI.Back:EventAttach(Event.UI.Input.Mouse.Middle.Click, PM.MiddleClickHandler, "KBM_PM Wheel Click Handler")
 end
 
 function PM:LockScale()
-	self.GUI.Back.Event.WheelForward = nil
-	self.GUI.Back.Event.WheelBack = nil
-	self.GUI.Back.Event.MiddleClick = nil
+	self.GUI.Back:EventDetach(Event.UI.Input.Mouse.Wheel.Forward, PM.WheelForwardHandler)
+	self.GUI.Back:EventDetach(Event.UI.Input.Mouse.Wheel.Back, PM.WheelBackHandler)
+	self.GUI.Back:EventDetach(Event.UI.Input.Mouse.Middle.Click, PM.MiddleClickHandler)
+end
+
+-- Positioning Handlers
+function PM:MouseMoveHandler()
+	local MouseData = Inspect.Mouse()
+	local OffSetX = self.FStartX - (self.MStartX - MouseData.x)
+	local OffSetY = self.FStartY - (self.MStartY - MouseData.y)
+	self:SetPoint("TOPLEFT", UIParent, "TOPLEFT", OffSetX, OffSetY)
+end
+
+function PM:MouseDownHandler()
+	self:SetBackgroundColor(0,0,0,0.5)
+	
+	-- Store initial positional data
+	local MouseData = Inspect.Mouse()
+	self.MStartX = MouseData.x
+	self.MStartY = MouseData.y
+	self.FStartX = self:GetLeft()
+	self.FStartY = self:GetTop()
+	self:ClearPoint("CENTER")
+	self:SetPoint("TOPLEFT", UIParent, "TOPLEFT", self.FStartX, self.FStartY)
+	
+	-- Initialize and handle mouse movement.
+	-- This is only required once the user holds down the left mouse button.
+	self:EventAttach(Event.UI.Input.Mouse.Cursor.Move, PM.MouseMoveHandler, "KBM_PM Mouse Move Handler")
+end
+
+function PM:MouseUpHandler()
+	self:SetBackgroundColor(0,0,0,0)
+	
+	-- Remove mouse movement handler
+	self:EventDetach(Event.UI.Input.Mouse.Cursor.Move, PM.MouseMoveHandler)
+	
+	-- Apply changes
+	local EndX = self:GetLeft() + (self:GetWidth() * 0.5)
+	local EndY = self:GetTop() + (self:GetHeight() * 0.5)
+	local EndRelX = EndX / (UIParent:GetWidth() or 1)
+	local EndRelY = EndY / (UIParent:GetHeight() or 1)
+	self:ClearPoint("TOPLEFT")
+	self:SetPoint("CENTER", UIParent, EndRelX, EndRelY)
+	PM.Settings.X = EndRelX
+	PM.Settings.Y = EndRelY
 end
 
 function PM:SetEvents()
-	function self.GUI.Back.Event:LeftDown()
-		self:SetBackgroundColor(0,0,0,0.5)
-		
-		-- Store initial positional data
-		local MouseData = Inspect.Mouse()
-		self.MStartX = MouseData.x
-		self.MStartY = MouseData.y
-		self.FStartX = self:GetLeft()
-		self.FStartY = self:GetTop()
-		self:ClearPoint("CENTER")
-		self:SetPoint("TOPLEFT", UIParent, "TOPLEFT", self.FStartX, self.FStartY)
-		
-		-- Initialize and handle mouse movement.
-		-- This is only required once the user holds down the left mouse button.
-		function self.Event:MouseMove()
-			local MouseData = Inspect.Mouse()
-			local OffSetX = self.FStartX - (self.MStartX - MouseData.x)
-			local OffSetY = self.FStartY - (self.MStartY - MouseData.y)
-			self:SetPoint("TOPLEFT", UIParent, "TOPLEFT", OffSetX, OffSetY)
-		end
-	end
-	
-	function self.GUI.Back.Event:LeftUp()
-		self:SetBackgroundColor(0,0,0,0)
-		
-		-- Remove mouse movement handler
-		self.Event.MouseMove = nil
-		
-		-- Apply changes
-		local EndX = self:GetLeft() + (self:GetWidth() * 0.5)
-		local EndY = self:GetTop() + (self:GetHeight() * 0.5)
-		local EndRelX = EndX / (UIParent:GetWidth() or 1)
-		local EndRelY = EndY / (UIParent:GetHeight() or 1)
-		self:ClearPoint("TOPLEFT")
-		self:SetPoint("CENTER", UIParent, EndRelX, EndRelY)
-		PM.Settings.X = EndRelX
-		PM.Settings.Y = EndRelY
-	end
+	self.GUI.Back:EventAttach(Event.UI.Input.Mouse.Left.Down, PM.MouseDownHandler, "KBM_PM Mouse Down Handler")
+	self.GUI.Back:EventAttach(Event.UI.Input.Mouse.Left.Up, PM.MouseUpHandler, "KBM_PM Mouse Up Handler")
 end
 
 function PM:ClearEvents()
-	self.GUI.Back.Event.LeftDown = nil
-	self.GUI.Back.Event.LeftUp = nil
-	self.GUI.Back.Event.MouseMove = nil
+	self.GUI.Back:EventDetach(Event.UI.Input.Mouse.Left.Down, PM.MouseDownHandler)
+	self.GUI.Back:EventDetach(Event.UI.Input.Mouse.Left.Up, PM.MouseUpHandler)
 end
 
 function PM:SetNames()
 	if not self.Current then
-		self.GUI.BossL.NameShadow:SetVisible(self.Settings.Names)
-		self.GUI.BossL.NameShadow:SetText("Boss Left")
-		self.GUI.BossL.NameText:SetText("Boss Left")
-		self.GUI.BossR.NameShadow:SetVisible(self.Settings.Names)
-		self.GUI.BossR.NameShadow:SetText("Boss Right")
-		self.GUI.BossR.NameText:SetText("Boss Right")
+		self.GUI.BossL.Name:SetVisible(self.Settings.Names)
+		self.GUI.BossL.Name:SetText("Boss Left")
+		self.GUI.BossR.Name:SetVisible(self.Settings.Names)
+		self.GUI.BossR.Name:SetText("Boss Right")
 	else
-		self.GUI.BossL.NameShadow:SetVisible(self.Settings.Names)
-		self.GUI.BossL.NameShadow:SetText(self.Current.BossL.Name)
-		self.GUI.BossL.NameText:SetText(self.Current.BossL.Name)
-		self.GUI.BossR.NameShadow:SetVisible(self.Settings.Names)
-		self.GUI.BossR.NameShadow:SetText(self.Current.BossR.Name)
-		self.GUI.BossR.NameText:SetText(self.Current.BossR.Name)
+		self.GUI.BossL.Name:SetVisible(self.Settings.Names)
+		self.GUI.BossL.Name:SetText(self.Current.BossL.Name)
+		self.GUI.BossR.Name:SetVisible(self.Settings.Names)
+		self.GUI.BossR.Name:SetText(self.Current.BossR.Name)
 	end
 end
 
@@ -205,34 +212,29 @@ end
 
 function PM:SetPercentL()
 	if not self.Current then
-		self.GUI.BossL.PerShadow:SetVisible(self.Settings.Percent)
-		self.GUI.BossL.PerShadow:SetText("100%")
-		self.GUI.BossL.PerText:SetText("100%")
+		self.GUI.BossL.Per:SetVisible(self.Settings.Percent)
+		self.GUI.BossL.Per:SetText("100%")
 	else
 		if self.Current.BossL.UnitObj then
-			self.GUI.BossL.PerShadow:SetVisible(self.Settings.Percent)
-			self.GUI.BossL.PerShadow:SetText(self.Current.BossL.UnitObj.PercentFlat.."%")
-			self.GUI.BossL.PerText:SetText(self.Current.BossL.UnitObj.PercentFlat.."%")
+			self.GUI.BossL.Per:SetVisible(self.Settings.Percent)
+			self.GUI.BossL.Per:SetText(self.Current.BossL.UnitObj.PercentFlat.."%")
 		end
 	end	
 end
 
 function PM:SetPercentR()
 	if not self.Current then
-		self.GUI.BossR.PerShadow:SetVisible(self.Settings.Percent)
-		self.GUI.BossR.PerShadow:SetText("100%")
-		self.GUI.BossR.PerText:SetText("100%")
+		self.GUI.BossR.Per:SetVisible(self.Settings.Percent)
+		self.GUI.BossR.Per:SetText("100%")
 	else
 		if self.Current.BossR.UnitObj then
-			self.GUI.BossR.PerShadow:SetVisible(self.Settings.Percent)
-			self.GUI.BossR.PerShadow:SetText(self.Current.BossR.UnitObj.PercentFlat.."%")
-			self.GUI.BossR.PerText:SetText(self.Current.BossR.UnitObj.PercentFlat.."%")
+			self.GUI.BossR.Per:SetVisible(self.Settings.Percent)
+			self.GUI.BossR.Per:SetText(self.Current.BossR.UnitObj.PercentFlat.."%")
 		end
 	end	
 end
 
 function PM:Init()
-	self.Settings = self.Defaults()
 	self.Constant = {
 		Scale = {
 			Def = 1,
@@ -282,7 +284,7 @@ function PM:Init()
 			Right = {
 				Source = "TOPRIGHT",
 				X = 0.925,
-				Y = 0.875,
+				Y = 0.85,
 			},
 			Layer = 3,
 			Alpha = 1,
@@ -365,16 +367,11 @@ function PM:Init()
 	-- Left Boss GUI Elements
 	-- Name
 	self.GUI.BossL = {}
-	self.GUI.BossL.NameShadow = UI.CreateFrame("Text", "PM Boss Left Shadow", self.GUI.Cradle)
-	self.GUI.BossL.NameShadow:SetLayer(self.Constant.Name.Layer)
-	self.GUI.BossL.NameShadow:SetText("Boss Left")
-	self.GUI.BossL.NameShadow:SetFontColor(0, 0, 0)
-	self.GUI.BossL.NameShadow:SetPoint(self.Constant.Name.Left.Source, self.GUI.Cradle, self.Constant.Name.Left.X, self.Constant.Name.Left.Y)
-	self.GUI.BossL.NameShadow:SetFontSize(self.Constant.Name.Size)
-	self.GUI.BossL.NameText = UI.CreateFrame("Text", "PM Boss Left Text", self.GUI.BossL.NameShadow)
-	self.GUI.BossL.NameText:SetText("Boss Left")
-	self.GUI.BossL.NameText:SetPoint("TOPLEFT", self.GUI.BossL.NameShadow, "TOPLEFT", -1, -1)
-	self.GUI.BossL.NameText:SetFontSize(self.Constant.Name.Size)
+	self.GUI.BossL.Name = LibSGui.ShadowText:Create(self.GUI.Cradle, self.Settings.Names)
+	self.GUI.BossL.Name:SetLayer(self.Constant.Name.Layer)
+	self.GUI.BossL.Name:SetText("Boss Left")
+	self.GUI.BossL.Name:SetPoint(self.Constant.Name.Left.Source, self.GUI.Cradle, self.Constant.Name.Left.X, self.Constant.Name.Left.Y)
+	self.GUI.BossL.Name:SetFontSize(self.Constant.Name.Size)
 	-- Raid Mark
 	self.GUI.BossL.Mark = UI.CreateFrame("Texture", "PM Boss Left Mark Texture", self.GUI.Cradle)
 	self.GUI.BossL.Mark:SetTexture("Rift", KBM.Marks.FileFull[1])
@@ -395,31 +392,20 @@ function PM:Init()
 	self.Constant.HPBar.Adjusted = self.Constant.HPBar.W
 	self.GUI.BossL.Health:SetBackgroundColor(0, 0.9, 0, 0.7)
 	-- Percentage text
-	self.GUI.BossL.PerShadow = UI.CreateFrame("Text", "PM Boss Left Percentage Shadow", self.GUI.Cradle)
-	self.GUI.BossL.PerShadow:SetPoint(self.Constant.Percent.Left.Source, self.GUI.BossL.Health, self.Constant.Percent.Left.X, self.Constant.Percent.Right.Y)
-	self.GUI.BossL.PerShadow:SetFontColor(0, 0, 0)
-	self.GUI.BossL.PerShadow:SetText("100%")
-	self.GUI.BossL.PerShadow:SetFontSize(self.Constant.Percent.Size)
-	self.GUI.BossL.PerShadow:SetLayer(self.Constant.Percent.Layer)
-	self.GUI.BossL.PerText = UI.CreateFrame("Text", "PM Boss Left Percentage Text", self.GUI.BossL.PerShadow)
-	self.GUI.BossL.PerText:SetPoint("TOPLEFT", self.GUI.BossL.PerShadow, "TOPLEFT", -1, -1)
-	self.GUI.BossL.PerText:SetFontColor(1, 1, 1)
-	self.GUI.BossL.PerText:SetText("100%")
-	self.GUI.BossL.PerText:SetFontSize(self.Constant.Percent.Size)
+	self.GUI.BossL.Per = LibSGui.ShadowText:Create(self.GUI.Cradle, self.Settings.Percent)
+	self.GUI.BossL.Per:SetPoint(self.Constant.Percent.Left.Source, self.GUI.BossL.Health, self.Constant.Percent.Left.X, self.Constant.Percent.Right.Y)
+	self.GUI.BossL.Per:SetText("100%")
+	self.GUI.BossL.Per:SetFontSize(self.Constant.Percent.Size)
+	self.GUI.BossL.Per:SetLayer(self.Constant.Percent.Layer)
 	
 	-- Right Boss GUI Elements
 	-- Name
 	self.GUI.BossR = {}
-	self.GUI.BossR.NameShadow = UI.CreateFrame("Text", "PM Boss Right Shadow", self.GUI.Cradle)
-	self.GUI.BossR.NameShadow:SetLayer(self.Constant.Name.Layer)
-	self.GUI.BossR.NameShadow:SetText("Boss Right")
-	self.GUI.BossR.NameShadow:SetFontColor(0, 0, 0)
-	self.GUI.BossR.NameShadow:SetPoint(self.Constant.Name.Right.Source, self.GUI.Cradle, self.Constant.Name.Right.X, self.Constant.Name.Right.Y)
-	self.GUI.BossR.NameShadow:SetFontSize(self.Constant.Name.Size)
-	self.GUI.BossR.NameText = UI.CreateFrame("Text", "PM Boss Right Text", self.GUI.BossR.NameShadow)
-	self.GUI.BossR.NameText:SetText("Boss Right")
-	self.GUI.BossR.NameText:SetPoint("TOPLEFT", self.GUI.BossR.NameShadow, "TOPLEFT", -1, -1)
-	self.GUI.BossR.NameText:SetFontSize(self.Constant.Name.Size)
+	self.GUI.BossR.Name = LibSGui.ShadowText:Create(self.GUI.Cradle, self.Settings.Names)
+	self.GUI.BossR.Name:SetLayer(self.Constant.Name.Layer)
+	self.GUI.BossR.Name:SetText("Boss Right")
+	self.GUI.BossR.Name:SetPoint(self.Constant.Name.Right.Source, self.GUI.Cradle, self.Constant.Name.Right.X, self.Constant.Name.Right.Y)
+	self.GUI.BossR.Name:SetFontSize(self.Constant.Name.Size)
 	-- Raid Mark
 	self.GUI.BossR.Mark = UI.CreateFrame("Texture", "PM Boss Right Mark Texture", self.GUI.Cradle)
 	self.GUI.BossR.Mark:SetTexture("Rift", KBM.Marks.FileFull[2])
@@ -435,17 +421,11 @@ function PM:Init()
 	self.GUI.BossR.Health:SetHeight(self.Constant.HPBar.H)
 	self.GUI.BossR.Health:SetBackgroundColor(0, 0.9, 0, 0.7)
 	-- Percentage text
-	self.GUI.BossR.PerShadow = UI.CreateFrame("Text", "PM Boss Right Percentage Shadow", self.GUI.Cradle)
-	self.GUI.BossR.PerShadow:SetPoint(self.Constant.Percent.Right.Source, self.GUI.BossR.Health, self.Constant.Percent.Right.X, self.Constant.Percent.Right.Y)
-	self.GUI.BossR.PerShadow:SetFontColor(0, 0, 0)
-	self.GUI.BossR.PerShadow:SetText("100%")
-	self.GUI.BossR.PerShadow:SetFontSize(self.Constant.Percent.Size)
-	self.GUI.BossR.PerShadow:SetLayer(self.Constant.Percent.Layer)
-	self.GUI.BossR.PerText = UI.CreateFrame("Text", "PM Boss Right Percentage Text", self.GUI.BossR.PerShadow)
-	self.GUI.BossR.PerText:SetPoint("TOPLEFT", self.GUI.BossR.PerShadow, "TOPLEFT", -1, -1)
-	self.GUI.BossR.PerText:SetFontColor(1, 1, 1)
-	self.GUI.BossR.PerText:SetText("100%")
-	self.GUI.BossR.PerText:SetFontSize(self.Constant.Percent.Size)
+	self.GUI.BossR.Per = LibSGui.ShadowText:Create(self.GUI.Cradle, self.Settings.Percent)
+	self.GUI.BossR.Per:SetPoint(self.Constant.Percent.Right.Source, self.GUI.BossR.Health, self.Constant.Percent.Right.X, self.Constant.Percent.Right.Y)
+	self.GUI.BossR.Per:SetText("100%")
+	self.GUI.BossR.Per:SetFontSize(self.Constant.Percent.Size)
+	self.GUI.BossR.Per:SetLayer(self.Constant.Percent.Layer)
 	
 	if self.Settings.Unlocked then
 		self:SetEvents()
@@ -453,6 +433,7 @@ function PM:Init()
 	if self.Settings.Scalable then
 		self:UnlockScale()
 	end
+	self:ApplySettings()
 end
 
 function PM:Create(BossL, BossR, Diff, Manual)
@@ -496,7 +477,7 @@ function PM:Update(current, diff)
 		if self.Current.BossL.UnitObj then
 			if self.Current.BossL.UnitObj.LastPercent ~= self.Current.BossL.UnitObj.Percent then
 				if self.Current.BossL.UnitObj.LastPercentFlat ~= self.Current.BossL.UnitObj.PercentFlat then
-					self:SetPercentL()
+					self.GUI.BossL.Per:SetText(self.Current.BossL.UnitObj.PercentFlat.."%")
 				end
 				self.GUI.BossL.Health:SetWidth(self.Constant.HPBar.Adjusted * self.Current.BossL.UnitObj.PercentRaw)
 			end
@@ -506,7 +487,7 @@ function PM:Update(current, diff)
 		if self.Current.BossR.UnitObj then
 			if self.Current.BossR.UnitObj.LastPercent ~= self.Current.BossR.UnitObj.Percent then
 				if self.Current.BossR.UnitObj.LastPercentFlat ~= self.Current.BossR.UnitObj.PercentFlat then
-					self:SetPercentR()
+					self.GUI.BossR.Per:SetText(self.Current.BossR.UnitObj.PercentFlat.."%")
 				end
 				self.GUI.BossR.Health:SetWidth(self.Constant.HPBar.Adjusted * self.Current.BossR.UnitObj.PercentRaw)
 			end

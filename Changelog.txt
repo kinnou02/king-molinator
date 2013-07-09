@@ -1,4 +1,32 @@
-﻿v1.4.8
+﻿v1.4.9
+
+LibSUnit
+* Fixed: Rare Error 1112. Possibly due to lag.
+* Fixed: Minor memory leak during some target changes. Unknown Side effects, which could possibly cause the above over long periods.
+* Fixed: Accuracy of tracking when units are created via target changes.
+* Changed: Optimized some Raid management code.
+* Note: The above fixes and change should see an improvement on memory management and performance.
+
+Slash Command "/kbmdefault menu"
+* Fixed: Updated to point to new menu system.
+
+Percentage Monitor
+* Fixed: Settings are applied more reliably upon start-up.
+* Change: Updated to new Event Model.
+* Change: Optimized performance slightly.
+* Change: Converted to new Rift text renderer for all shadow effects. (Reduced memory footprint)
+
+Chronicles
+* Queens Gambit
+** New: Och and Krock
+*** New: Added Encounter tracking.
+*** New: Added HP Tracking. (Percentage Monitor)
+
+Translations
+* French Updates
+
+----
+v1.4.8
 
 Ready Check
 * Stones
