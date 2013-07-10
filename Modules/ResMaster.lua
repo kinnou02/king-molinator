@@ -132,16 +132,7 @@ function RM.GUI:Init()
 					RM.GUI.Settings.hScale = 1.5
 				end
 				RM.GUI.Anchor:SetHeight(math.ceil(RM.GUI.Settings.hScale * KBM.Constant.ResMaster.h))
-				for TimerObj, Timer in LibSata.EachIn(RM.Rezes.ActiveTimers) do
-					Timer.GUI.Background:SetHeight(RM.GUI.Anchor:GetHeight())
-					Timer.GUI.Icon:SetWidth(RM.GUI.Anchor:GetHeight())
-					Timer.SetWidth = RM.GUI.Anchor:GetWidth() - RM.GUI.Anchor:GetHeight()
-					if Timer.Waiting then
-						Timer.GUI.TimeBar:SetWidth(Timer.SetWidth)
-					else
-						Timer:Update()
-					end
-				end
+				Change = true
 			end
 		end
 		
@@ -152,8 +143,10 @@ function RM.GUI:Init()
 					RM.GUI.Settings.tScale = 1.5
 				end
 				RM.GUI.Anchor.Text:SetFontSize(math.ceil(RM.GUI.Settings.tScale * KBM.Constant.ResMaster.TextSize))
+				Changed = true
 			end
 		end
+		
 		if Changed then
 			for TimerObj, Timer in LibSata.EachIn(RM.Rezes.ActiveTimers) do
 				Timer.GUI.Background:SetHeight(RM.GUI.Anchor:GetHeight())
@@ -178,6 +171,7 @@ function RM.GUI:Init()
 					RM.GUI.Settings.wScale = 0.5
 				end
 				RM.GUI.Anchor:SetWidth(math.ceil(RM.GUI.Settings.wScale * KBM.Constant.ResMaster.w))
+				Changed = true
 			end
 		end
 		
@@ -188,6 +182,7 @@ function RM.GUI:Init()
 					RM.GUI.Settings.hScale = 0.5
 				end
 				RM.GUI.Anchor:SetHeight(math.ceil(RM.GUI.Settings.hScale * KBM.Constant.ResMaster.h))
+				Changed = true
 			end
 		end
 		
@@ -198,6 +193,7 @@ function RM.GUI:Init()
 					RM.GUI.Settings.tScale = 0.5
 				end
 				RM.GUI.Anchor.Text:SetFontSize(math.ceil(RM.GUI.Settings.tScale * KBM.Constant.ResMaster.TextSize))
+				Changed = true
 			end
 		end
 		if Changed then

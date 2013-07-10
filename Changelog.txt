@@ -1,5 +1,24 @@
 ﻿v1.4.9
 
+Note: 
+* The Event model isn't working as intended. It'll not break, however event removal blocks pass-through to the game world. I'm converting all Frame events to work as it was intended. As soon as Trion fix their end, KBM will work as planned.
+
+System
+* Drag Frames
+** Change: Updated to new event model.
+* KBM Button
+** Change: Updated to new event model.
+** Fixed: Restored functionality to move the button.
+
+Ready Check
+* Change: Converted Button systems over to new event model.
+* Change: Prevented errors with corrupt or incorrect settings.
+* Change: Optimized performance.
+* Change: Converted to new Rift text renderer for all shadow effects. (Reduced memory footprint)
+
+Res Master
+* Fixed: Issues with resizing while Res Frames where active.
+
 LibSUnit
 * Fixed: Rare Error 1112. Possibly due to lag.
 * Fixed: Minor memory leak during some target changes. Unknown Side effects, which could possibly cause the above over long periods.
@@ -12,7 +31,7 @@ Slash Command "/kbmdefault menu"
 
 Percentage Monitor
 * Fixed: Settings are applied more reliably upon start-up.
-* Change: Updated to new Event Model.
+* Change: Updated to new event model.
 * Change: Optimized performance slightly.
 * Change: Converted to new Rift text renderer for all shadow effects. (Reduced memory footprint)
 

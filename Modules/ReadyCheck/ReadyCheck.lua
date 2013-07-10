@@ -6,6 +6,7 @@
 local AddonData = ...
 local KBMRC = AddonData.data
 local LibSBuff = Inspect.Addon.Detail("SafesBuffLib").data
+local LibSGui = Inspect.Addon.Detail("SafesGUILib").data
 
 local PI = KBMRC
 
@@ -76,6 +77,10 @@ PI.Icons = {
 		Type = "KingMolinator",
 		File = "Media/RC_FoodIcon.png",
 	},
+	-- Armor = {
+		-- Type = "KingMolinator",
+		-- File = "Media/RC_ArmorIcon.png",
+	-- },
 }
 
 PI.Settings = {
@@ -304,7 +309,7 @@ PI.Constants = {
 						rogue = true,
 					},
 				},
-				["r57585B8C3DB1BEF1"] = { -- Ancient Equisite Whetstone
+				["r57585B8C3DB1BEF1"] = { -- Ancient Exquisite Whetstone
 					Grade = "High",
 					Level = 50,
 					Callings = {
@@ -914,7 +919,10 @@ function PI.Button:Init()
 	function self:Defaults()
 		PI.Settings.Button.x = false
 		PI.Settings.Button.y = false
-		PI.Settings.Button.Unlocked = true
+		if not PI.Settings.Button.Unlocked then
+			PI.Settings.Button.Unlocked = true
+			PI.Button:SetUnlocked(true)
+		end
 		PI.Settings.Button.Visible = true
 		self:ApplySettings()
 	end
@@ -929,7 +937,6 @@ function PI.Button:Init()
 		end
 		self.Texture:SetLayer(5)
 		self.Highlight:SetLayer(6)
-		self.Drag:SetVisible(PI.Settings.Button.Unlocked)
 		if PI.Enabled then
 			self.Texture:SetVisible(PI.Settings.Button.Visible)
 		else
@@ -939,37 +946,58 @@ function PI.Button:Init()
 	
 	function self:UpdateMove(uType)
 		if uType == "end" then
+			if not PI.Settings.Button then
+				PI.Settings.Button = {}
+			end
 			PI.Settings.Button.x = self.Texture:GetLeft()
 			PI.Settings.Button.y = self.Texture:GetTop()
 		end	
 	end
-	function self.Texture.Event.MouseIn()
+	
+	function self:MouseInHandler()
 		PI.Button.Highlight:SetVisible(true)
 	end
-	function self.Texture.Event.MouseOut()
+	
+	function self:MouseOutHandler()
 		KBM.LoadTexture(PI.Button.Texture, "KingMolinator", "Media/Check_Button.png")
 		PI.Button.Highlight:SetVisible(false)
 	end
-	function self.Texture.Event.LeftDown()
+	
+	function self:LeftDownHandler()
 		KBM.LoadTexture(PI.Button.Texture, "KingMolinator", "Media/Check_Button_Down.png")
 		PI.Button.Highlight:SetVisible(false)
 	end
-	function self.Texture.Event.LeftUp()
+	
+	function self:LeftUpHandler()
 		KBM.LoadTexture(PI.Button.Texture, "KingMolinator", "Media/Check_Button.png")
 		PI.Button.Highlight:SetVisible(true)
 	end
-	function self.Texture.Event.LeftClick()
+	
+	function self:LeftClickHandler()
 		PI.SlashEnable()
 	end
 	
+	function self:SetUnlocked(bool)
+		if bool then
+			self.Drag:EventAttach(Event.UI.Input.Mouse.Right.Down, self.Drag.FrameEvents.LeftDownHandler, "Ready Check Right Down Handler")
+			self.Drag:EventAttach(Event.UI.Input.Mouse.Right.Up, self.Drag.FrameEvents.LeftUpHandler, "Ready Check Right Up Handler")
+		else
+			self.Drag:EventDetach(Event.UI.Input.Mouse.Right.Down, self.Drag.FrameEvents.LeftDownHandler)
+			self.Drag:EventDetach(Event.UI.Input.Mouse.Right.Up, self.Drag.FrameEvents.LeftUpHandler)		
+		end
+	end
+	
 	self.Drag = KBM.AttachDragFrame(self.Texture, function (uType) self:UpdateMove(uType) end, "Button Drag", 7)
-	self.Drag.Event.RightDown = self.Drag.Event.LeftDown
-	self.Drag.Event.RightUp = self.Drag.Event.LeftUp
-	self.Drag.Event.LeftDown = nil
-	self.Drag.Event.LeftUp = nil
-	self.Drag.Event.MouseIn = self.Texture.Event.MouseIn
-	self.Drag.Event.MouseOut = self.Texture.Event.MouseOut
+	self.Drag:EventDetach(Event.UI.Input.Mouse.Left.Down, self.Drag.FrameEvents.LeftDownHandler)
+	self.Drag:EventDetach(Event.UI.Input.Mouse.Left.Up, self.Drag.FrameEvents.LeftUpHandler)
+	self.Drag:EventAttach(Event.UI.Input.Mouse.Cursor.In, self.MouseInHandler, "Ready Check Mouse In Handler")
+	self.Drag:EventAttach(Event.UI.Input.Mouse.Cursor.Out, self.MouseOutHandler, "Ready Check Mouse Out Handler")
+	self.Drag:EventAttach(Event.UI.Input.Mouse.Left.Down, self.LeftDownHandler, "Ready Check Left Down Handler")
+	self.Drag:EventAttach(Event.UI.Input.Mouse.Left.Up, self.LeftUpHandler, "Ready Check Left Up Handler")
+	self.Drag:EventAttach(Event.UI.Input.Mouse.Left.Click, self.LeftClickHandler, "Ready Check Left Click Handler")
 	self.Drag:SetMouseMasking("limited")
+	
+	self:SetUnlocked(PI.Settings.Button.Unlocked)
 	
 	self:ApplySettings()	
 end
@@ -1019,13 +1047,6 @@ end
 
 function PI.GUI:ApplySettings()
 	if PI.Enabled then
-		if PI.Settings.Scale then
-			self.Cradle.Event.WheelForward = self.WheelForward
-			self.Cradle.Event.WheelBack = self.WheelBack
-		else
-			self.Cradle.Event.WheelForward = nil
-			self.Cradle.Event.WheelBack = nil
-		end
 		self.Header:ClearAll()
 		self.Cradle:SetVisible(PI.Displayed)
 		if not PI.Settings.x then
@@ -1041,7 +1062,6 @@ function PI.GUI:ApplySettings()
 		end
 		self.Header:SetHeight(math.ceil(PI.Constants.h * PI.Settings.hScale))
 		self.HeaderText:SetFontSize(math.ceil(PI.Constants.FontSize * PI.Settings.fScale))
-		self.HeaderTextS:SetFontSize(self.HeaderText:GetFontSize())
 		for ID, Object in pairs(self.Columns.List) do
 			local Offset = 0
 			if ID ~= "KBM" then
@@ -1056,27 +1076,24 @@ function PI.GUI:ApplySettings()
 				Object.Cradle:SetHeight(math.ceil(PI.Constants.Rows.h * PI.Settings.Rows.hScale))
 				Object.Ready.Cradle:SetWidth(Object.Ready.Cradle:GetHeight())
 				Object.HPBar:SetHeight(math.ceil(Object.Cradle:GetHeight() * 0.7))
-				Object.Shadow:SetFontSize(math.ceil(PI.Constants.Rows.FontSize * PI.Settings.fScale))
 				Object.Text:SetFontSize(math.ceil(PI.Constants.Rows.FontSize * PI.Settings.fScale))
 				for ID, CObject in pairs(Object.Columns) do
-					CObject.Shadow:SetFontSize(math.ceil(PI.Constants.Rows.FontSize * PI.Settings.fScale))
 					CObject.Text:SetFontSize(math.ceil(PI.Constants.Rows.FontSize * PI.Settings.fScale))
 					CObject.Icon:SetHeight(math.ceil(PI.Constants.Rows.h * PI.Settings.hScale) - 4)
 					CObject.Icon:SetWidth(CObject.Icon:GetHeight())
 				end
 				if PI.Ready.State then
-					Object.Shadow:ClearPoint("LEFT")
-					Object.Shadow:SetPoint("LEFT", Object.Ready.Cradle, "RIGHT", -4, nil)
+					Object.Text:ClearPoint("LEFT")
+					Object.Text:SetPoint("LEFT", Object.Ready.Cradle, "RIGHT", -4, nil)
 					Object.Ready.Cradle:SetVisible(true)
 				else
-					Object.Shadow:ClearPoint("LEFT")
-					Object.Shadow:SetPoint("LEFT", Object.Cradle, "LEFT", 5, nil)
+					Object.Text:ClearPoint("LEFT")
+					Object.Text:SetPoint("LEFT", Object.Cradle, "LEFT", 4, nil)
 					Object.Ready.Cradle:SetVisible(false)
 				end
 				self.Rows:Update(Index)
 			end
 		end
-		self.Drag:SetVisible(PI.Settings.Unlocked)
 	else
 		self.Cradle:SetVisible(false)
 	end
@@ -1085,6 +1102,7 @@ end
 function PI.GUI:Init()
 	self.Cradle = UI.CreateFrame("Frame", "ReadyCheck Cradle", PI.Context)
 	self.Cradle:SetLayer(KBM.Layer.ReadyCheck)
+	self.Cradle:SetMouseMasking("limited")
 	self.Header = UI.CreateFrame("Frame", "ReadyCheck Header", self.Cradle)
 	self.Header:SetLayer(1)
 	self.Texture = UI.CreateFrame("Texture", "ReadyCheck Texture", self.Header)
@@ -1093,20 +1111,16 @@ function PI.GUI:Init()
 	self.Texture:SetPoint("TOPLEFT", self.Header, "TOPLEFT")
 	self.Texture:SetPoint("BOTTOM", self.Header, "BOTTOM")
 	self.Texture:SetLayer(1)
-	self.HeaderTextS = UI.CreateFrame("Text", "ReadyCheck Text Shadow", self.Header)
-	self.HeaderTextS:SetPoint("LEFTCENTER", self.Header, "LEFTCENTER", 6, 2)
-	self.HeaderTextS:SetText(KBM.Language.ReadyCheck.Name[KBM.Lang])
-	self.HeaderTextS:SetFontColor(0,0,0)
-	self.HeaderTextS:SetLayer(4)
-	self.HeaderText = UI.CreateFrame("Text", "ReadyCheck Text", self.HeaderTextS)
+	self.HeaderText = LibSGui.ShadowText:Create(self.Header, true)
+	self.HeaderText:SetPoint("LEFTCENTER", self.Header, "LEFTCENTER", 5, 1)
 	self.HeaderText:SetText(KBM.Language.ReadyCheck.Name[KBM.Lang])
-	self.HeaderText:SetPoint("TOPLEFT", self.HeaderTextS, "TOPLEFT", -2, -2)
+	self.HeaderText:SetLayer(4)
 	self.Cradle:SetPoint("TOP", self.Header, "TOP")
 	self.Cradle:SetPoint("BOTTOM", self.Header, "BOTTOM")
 	self.Cradle:SetPoint("LEFT", self.Header, "LEFT")
 	self.Cradle:SetPoint("RIGHT", self.Header, "RIGHT")
 
-	function self.WheelForward()
+	function self:WheelForward()
 		PI.Settings.wScale = PI.Settings.wScale + 0.025
 		if PI.Settings.wScale > 1.5 then
 			PI.Settings.wScale = 1.5
@@ -1117,7 +1131,7 @@ function PI.GUI:Init()
 		PI.GUI:ApplySettings()
 	end
 	
-	function self.WheelBack()
+	function self:WheelBack()
 		PI.Settings.wScale = PI.Settings.wScale - 0.025
 		if PI.Settings.wScale < 0.5 then
 			PI.Settings.wScale = 0.5
@@ -1126,6 +1140,16 @@ function PI.GUI:Init()
 		PI.Settings.fScale = PI.Settings.wScale
 		PI.Settings.Rows.hScale = PI.Settings.wScale
 		PI.GUI:ApplySettings()
+	end
+	
+	function self:SetScaling(bool)
+		if bool then
+			PI.GUI.Cradle:EventAttach(Event.UI.Input.Mouse.Wheel.Forward, PI.GUI.WheelForward, "Ready Check Header Wheel Forward")
+			PI.GUI.Cradle:EventAttach(Event.UI.Input.Mouse.Wheel.Back, PI.GUI.WheelBack, "Ready Check Header Wheel Back")
+		else
+			PI.GUI.Cradle:EventDetach(Event.UI.Input.Mouse.Wheel.Forward, PI.GUI.WheelForward)
+			PI.GUI.Cradle:EventDetach(Event.UI.Input.Mouse.Wheel.Back, PI.GUI.WheelBack)
+		end
 	end
 	
 	self.Columns = {
@@ -1222,7 +1246,7 @@ function PI.GUI:Init()
 							self[Index].Text:SetFontColor(1,1,1,1)
 						end
 					end
-					self[Index]:SetData(self[Index].Unit.Name)
+					self[Index].Text:SetText(tostring(self[Index].Unit.Name))
 				end
 			end
 		end
@@ -1237,7 +1261,7 @@ function PI.GUI:Init()
 				if self[Index].Unit then
 					local Planar = self[Index].Unit.Planar or "-"
 					local PlanarMax = self[Index].Unit.PlanarMax or "-"
-					self[Index].Columns.Planar:SetData(Planar.."/"..PlanarMax)
+					self[Index].Columns.Planar.Text:SetText(Planar.."/"..PlanarMax)
 				end
 			else
 				self[Index].Columns.Planar:SetData("n/a")
@@ -1256,24 +1280,24 @@ function PI.GUI:Init()
 					if Object.icon then
 						self[Index].Columns.Stone.Icon:SetTexture("Rift", Object.icon)
 						self[Index].Columns.Stone.Icon:SetVisible(true)
-						self[Index].Columns.Stone.Shadow:SetVisible(false)
+						self[Index].Columns.Stone.Text:SetVisible(false)
 					else
 						self[Index].Columns.Stone.Text:SetFontColor(0.15, 0.9, 0.15)
-						self[Index].Columns.Stone:SetData("?")
+						self[Index].Columns.Stone.Text:SetText("?")
 						self[Index].Columns.Stone.Icon:SetVisible(false)
-						self[Index].Columns.Stone.Shadow:SetVisible(true)
+						self[Index].Columns.Stone.Text:SetVisible(true)
 					end
 				else
 					self[Index].Columns.Stone.Text:SetFontColor(0.9, 0.15, 0.15)
-					self[Index].Columns.Stone:SetData("x")
+					self[Index].Columns.Stone.Text:SetText("x")
 					self[Index].Columns.Stone.Icon:SetVisible(false)
-					self[Index].Columns.Stone.Shadow:SetVisible(true)
+					self[Index].Columns.Stone.Text:SetVisible(true)
 				end
 			else
 				self[Index].Columns.Stone.Text:SetFontColor(0.9, 0.15, 0.15)
-				self[Index].Columns.Stone:SetData("x")
+				self[Index].Columns.Stone.Text:SetText("x")
 				self[Index].Columns.Stone.Icon:SetVisible(false)
-				self[Index].Columns.Stone.Shadow:SetVisible(true)
+				self[Index].Columns.Stone.Text:SetVisible(true)
 			end
 		end
 	end
@@ -1290,24 +1314,24 @@ function PI.GUI:Init()
 					if Object.icon then
 						self[Index].Columns.Food.Icon:SetTexture("Rift", Object.icon)
 						self[Index].Columns.Food.Icon:SetVisible(true)
-						self[Index].Columns.Food.Shadow:SetVisible(false)
+						self[Index].Columns.Food.Text:SetVisible(false)
 					else
 						self[Index].Columns.Food.Text:SetFontColor(0.15, 0.9, 0.15)
-						self[Index].Columns.Food:SetData("?")
+						self[Index].Columns.Food.Text:SetText("?")
 						self[Index].Columns.Food.Icon:SetVisible(false)
-						self[Index].Columns.Food.Shadow:SetVisible(true)
+						self[Index].Columns.Food.Text:SetVisible(true)
 					end
 				else
 					self[Index].Columns.Food.Text:SetFontColor(0.9, 0.15, 0.15)
-					self[Index].Columns.Food:SetData("x")
+					self[Index].Columns.Food.Text:SetText("x")
 					self[Index].Columns.Food.Icon:SetVisible(false)
-					self[Index].Columns.Food.Shadow:SetVisible(true)
+					self[Index].Columns.Food.Text:SetVisible(true)
 				end
 			else
 				self[Index].Columns.Food.Text:SetFontColor(0.9, 0.15, 0.15)
-				self[Index].Columns.Food:SetData("x")
+				self[Index].Columns.Food.Text:SetText("x")
 				self[Index].Columns.Food.Icon:SetVisible(false)
-				self[Index].Columns.Food.Shadow:SetVisible(true)
+				self[Index].Columns.Food.Text:SetVisible(true)
 			end
 		end
 	end
@@ -1324,24 +1348,24 @@ function PI.GUI:Init()
 					if Object.icon then
 						self[Index].Columns.Potion.Icon:SetTexture("Rift", Object.icon)
 						self[Index].Columns.Potion.Icon:SetVisible(true)
-						self[Index].Columns.Potion.Shadow:SetVisible(false)
+						self[Index].Columns.Potion.Text:SetVisible(false)
 					else
 						self[Index].Columns.Potion.Text:SetFontColor(0.15, 0.9, 0.15)
-						self[Index].Columns.Potion:SetData("?")
+						self[Index].Columns.Potion.Text:SetText("?")
 						self[Index].Columns.Potion.Icon:SetVisible(false)
-						self[Index].Columns.Potion.Shadow:SetVisible(true)
+						self[Index].Columns.Potion.Text:SetVisible(true)
 					end
 				else
 					self[Index].Columns.Potion.Text:SetFontColor(0.9, 0.15, 0.15)
-					self[Index].Columns.Potion:SetData("x")
+					self[Index].Columns.Potion.Text:SetText("x")
 					self[Index].Columns.Potion.Icon:SetVisible(false)
-					self[Index].Columns.Potion.Shadow:SetVisible(true)
+					self[Index].Columns.Potion.Text:SetVisible(true)
 				end
 			else
 				self[Index].Columns.Potion.Text:SetFontColor(0.9, 0.15, 0.15)
-				self[Index].Columns.Potion:SetData("x")
+				self[Index].Columns.Potion.Text:SetText("x")
 				self[Index].Columns.Potion.Icon:SetVisible(false)
-				self[Index].Columns.Potion.Shadow:SetVisible(true)
+				self[Index].Columns.Potion.Text:SetVisible(true)
 			end
 		end
 	end
@@ -1367,13 +1391,13 @@ function PI.GUI:Init()
 						else
 							self[Index].Columns.Vitality.Text:SetFontColor(0.9, 0.1, 0.1)
 						end
-						self[Index].Columns.Vitality:SetData(tostring(Vitality).."%")
+						self[Index].Columns.Vitality.Text:SetText(tostring(Vitality).."%")
 					else
-						self[Index].Columns.Vitality:SetData("-")
+						self[Index].Columns.Vitality.Text:SetText("-")
 					end
 				end
 			else
-				self[Index].Columns.Vitality:SetData("n/a")
+				self[Index].Columns.Vitality.Text:SetText("n/a")
 			end
 		end
 	end
@@ -1407,10 +1431,10 @@ function PI.GUI:Init()
 							end
 						end
 					end
-					self[Index].Columns.KBM:SetData(v)						
+					self[Index].Columns.KBM.Text:SetText(v)						
 				else
 					self[Index].Columns.KBM.Text:SetFontColor(0.9, 0.5, 0.1)
-					self[Index].Columns.KBM:SetData("..*..")
+					self[Index].Columns.KBM.Text:SetText("..*..")
 					if not KBM.MSG.History.Queue[self[Index].Unit.Name] then
 						KBM.MSG.History:SetSent(self[Index].Unit.Name, false)
 						KBM.MSG.History.Queue[self[Index].Unit.Name] = true
@@ -1418,7 +1442,7 @@ function PI.GUI:Init()
 				end
 			else
 				self[Index].Columns.KBM.Text:SetFontColor(0.9, 0.5, 0.1)
-				self[Index].Columns.KBM:SetData("*.*.*")				
+				self[Index].Columns.KBM.Text:SetText("*.*.*")				
 			end
 		end
 	end
@@ -1596,19 +1620,10 @@ function PI.GUI:Init()
 			self.Rows[Row].Ready.Question:SetPoint("TOPLEFT", self.Rows[Row].Ready.Cradle, "TOPLEFT")
 			self.Rows[Row].Ready.Question:SetPoint("BOTTOMRIGHT", self.Rows[Row].Ready.Cradle, "BOTTOMRIGHT")
 			self.Rows[Row].Ready.Question:SetTexture("KingMolinator", "Media/RC_Question.png")
-			self.Rows[Row].Shadow = UI.CreateFrame("Text", "Row "..Row.." Name Shadow", self.Rows[Row].Cradle)
-			self.Rows[Row].Shadow:SetLayer(3)
-			self.Rows[Row].Shadow:SetFontColor(0,0,0)
-			self.Rows[Row].Shadow:SetPoint("CENTERLEFT", self.Rows[Row].Cradle, "CENTERLEFT", 5, -1)
-			self.Rows[Row].Text = UI.CreateFrame("Text", "Row "..Row.." Name", self.Rows[Row].Shadow)
-			self.Rows[Row].Text:SetPoint("TOPLEFT", self.Rows[Row].Shadow, "TOPLEFT", -1, -2)
+			self.Rows[Row].Text = LibSGui.ShadowText:Create(self.Rows[Row].Cradle, true)
+			self.Rows[Row].Text:SetLayer(3)
+			self.Rows[Row].Text:SetPoint("CENTERLEFT", self.Rows[Row].Cradle, "CENTERLEFT", 4, -2)
 			local DataObject = self.Rows[Row]
-			function DataObject:SetData(Text)
-				Text = tostring(Text)
-				self.Shadow:SetText(Text)
-				self.Text:SetText(Text)
-			end
-			self.Rows[Row]:SetData("")
 			self.Rows[Row].Cradle:SetVisible(false)
 		end
 		self.Rows[Row].Columns = {}
@@ -1620,23 +1635,15 @@ function PI.GUI:Init()
 				self.Rows[Row].Columns[ID].Cradle:SetPoint("LEFT", Object.Header, "LEFT")
 				self.Rows[Row].Columns[ID].Cradle:SetPoint("RIGHT", Object.Header, "RIGHT")
 				self.Rows[Row].Columns[ID].Cradle:SetPoint("BOTTOM", self.Rows[Row].Cradle, "BOTTOM")
-				self.Rows[Row].Columns[ID].Shadow = UI.CreateFrame("Text", "Row "..Row.." Shadow for "..ID, self.Rows[Row].Columns[ID].Cradle)
-				self.Rows[Row].Columns[ID].Shadow:SetFontColor(0,0,0)
-				self.Rows[Row].Columns[ID].Shadow:SetPoint("CENTER", self.Rows[Row].Columns[ID].Cradle, "CENTER", 1, 1)
-				self.Rows[Row].Columns[ID].Shadow:SetLayer(2)
-				self.Rows[Row].Columns[ID].Text = UI.CreateFrame("Text", "Row "..Row.." Text for "..ID, self.Rows[Row].Columns[ID].Shadow)
-				self.Rows[Row].Columns[ID].Text:SetPoint("TOPLEFT", self.Rows[Row].Columns[ID].Shadow, "TOPLEFT", -1, -1)
+				self.Rows[Row].Columns[ID].Text = LibSGui.ShadowText:Create(self.Rows[Row].Columns[ID].Cradle, true)
+				self.Rows[Row].Columns[ID].Text:SetPoint("CENTER", self.Rows[Row].Columns[ID].Cradle, "CENTER")
+				self.Rows[Row].Columns[ID].Text:SetLayer(2)
 				self.Rows[Row].Columns[ID].Icon = UI.CreateFrame("Texture", "Row "..Row.." Icon for "..ID, self.Rows[Row].Columns[ID].Cradle)
 				self.Rows[Row].Columns[ID].Icon:SetLayer(1)
 				self.Rows[Row].Columns[ID].Icon:SetPoint("CENTER", self.Rows[Row].Columns[ID].Cradle, "CENTER")
 				self.Rows[Row].Columns[ID].Icon:SetVisible(false)
 				local DataObject = self.Rows[Row].Columns[ID]
-				function DataObject:SetData(Text)
-					Text = tostring(Text)
-					self.Shadow:SetText(Text)
-					self.Text:SetText(Text)
-				end
-				self.Rows[Row].Columns[ID]:SetData("n/a")
+				self.Rows[Row].Columns[ID].Text:SetText("n/a")
 			end
 		end
 	end
@@ -1649,6 +1656,10 @@ function PI.GUI:Init()
 	end
 	
 	self.Drag = KBM.AttachDragFrame(self.Header, function(uType) self:UpdateDrag(uType) end, "ReadyCheck_Drag_Bar")
+	if PI.Settings.Scale then
+		self:SetScaling(true)
+	end
+	PI.SetLock()
 end
 
 function PI.SetLock()
@@ -1666,6 +1677,9 @@ function PI.UnitRemove(UnitID)
 end
 
 function PI.Update()
+	if not PI.GUI.Rows then 
+		return
+	end
 	for _, qObject in pairs(PI.Queue.List) do
 		local UnitID = qObject.UnitID
 		if qObject.Type == "Add" then
@@ -1991,24 +2005,24 @@ function PI.Init(handle, ModID)
 	if ModID == AddonData.id then
 		
 		-- LibSUnit Events
-		Command.Event.Attach(Event.SafesUnitLib.Raid.Join, PI.PlayerJoin, "Player Joins")
-		Command.Event.Attach(Event.SafesUnitLib.Raid.Leave, PI.PlayerLeave, "Player Leaves")
-		Command.Event.Attach(Event.SafesUnitLib.Raid.Member.Join, PI.GroupJoin, "Group Member joins")
-		Command.Event.Attach(Event.SafesUnitLib.Raid.Member.Leave, PI.GroupLeave, "Group Member leaves")
-		Command.Event.Attach(Event.SafesUnitLib.Unit.Detail.Planar, PI.DetailUpdates.Planar, "Update Planar Charges")
+		Command.Event.Attach(Event.SafesUnitLib.Raid.Join, PI.PlayerJoin, "Ready Check Player Joins")
+		Command.Event.Attach(Event.SafesUnitLib.Raid.Leave, PI.PlayerLeave, "Ready Check Player Leaves")
+		Command.Event.Attach(Event.SafesUnitLib.Raid.Member.Join, PI.GroupJoin, "Ready Check Group Member joins")
+		Command.Event.Attach(Event.SafesUnitLib.Raid.Member.Leave, PI.GroupLeave, "Ready Check Group Member leaves")
+		Command.Event.Attach(Event.SafesUnitLib.Unit.Detail.Planar, PI.DetailUpdates.Planar, "Ready Check Update Planar Charges")
 		Command.Event.Attach(Event.SafesUnitLib.Unit.Detail.PlanarMax, PI.DetailUpdates.PlanarMax, "Update Planar Max")
 		Command.Event.Attach(Event.SafesUnitLib.Unit.Detail.Vitality, PI.DetailUpdates.Vitality, "Update Vitality")
 		Command.Event.Attach(Event.SafesUnitLib.Unit.Detail.Percent, PI.DetailUpdates.HPChange, "Update HP")
-		Command.Event.Attach(Event.SafesUnitLib.Unit.Detail.Ready, PI.ReadyState, "Update HP")
-		Command.Event.Attach(Event.SafesUnitLib.Unit.Detail.Offline, PI.DetailUpdates.Offline, "Offline Toggle")
-		Command.Event.Attach(Event.KBMMessenger.Version, PI.DetailUpdates.Version, "Update Version")
+		Command.Event.Attach(Event.SafesUnitLib.Unit.Detail.Ready, PI.ReadyState, "Ready Check Update HP")
+		Command.Event.Attach(Event.SafesUnitLib.Unit.Detail.Offline, PI.DetailUpdates.Offline, "Ready Check Offline Toggle")
+		Command.Event.Attach(Event.KBMMessenger.Version, PI.DetailUpdates.Version, "Ready Check Update Version")
 		-- Slash Commands
-		Command.Event.Attach(Command.Slash.Register("kbmreadycheck"), PI.SlashEnable, "Toggle Visible")
+		Command.Event.Attach(Command.Slash.Register("kbmreadycheck"), PI.SlashEnable, "Ready Check Toggle Visible")
 		PI.UpdateSMode()
 	end
 end
 
-Command.Event.Attach(Event.Addon.Load.End, PI.Init, "Syncronized Start")
-Command.Event.Attach(Event.Addon.SavedVariables.Load.End, PI.LoadVars, "Load Settings")
-Command.Event.Attach(Event.Addon.SavedVariables.Save.Begin, PI.SaveVars, "Save Settings")
-Command.Event.Attach(Event.SafesUnitLib.System.Start, PI.Start, "Start-up")
+Command.Event.Attach(Event.Addon.Load.End, PI.Init, "KBM Ready Check Synchronized Start")
+Command.Event.Attach(Event.Addon.SavedVariables.Load.End, PI.LoadVars, "KBM Ready Check Load Settings")
+Command.Event.Attach(Event.Addon.SavedVariables.Save.Begin, PI.SaveVars, "KBM Ready Check Save Settings")
+Command.Event.Attach(Event.SafesUnitLib.System.Start, PI.Start, "KBM Ready Check Start-up")

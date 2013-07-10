@@ -1,6 +1,6 @@
 ﻿Identifier = "KBMReadyCheck"
 
-Name = "King Boss Mods Ready Check"
+Name = "KBM: Ready Check"
 NameShort = "KBM Ready Check"
 
 Description = "King Boss Mods Ready Check module for Raiding."
@@ -9,9 +9,9 @@ Author = "Paul Snart"
 Website = "http://twitter.com/#!/psnart"
 Email = "kingbossmods@gmail.com"
 
-Version = "0.3.2"
+Version = "0.3.3"
 
-Environment = "2.2"
+Environment = "2.3"
 
 RunOnStartup = {
 	"ReadyCheck.lua",

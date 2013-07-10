@@ -2251,7 +2251,6 @@ function KBM.Button:Init()
 		end
 		self.Texture:SetLayer(5)
 		self.Highlight:SetLayer(6)
-		self.Drag:SetVisible(KBM.Options.Button.Unlocked)
 		self.Texture:SetVisible(KBM.Options.Button.Visible)
 	end
 	
@@ -2261,36 +2260,49 @@ function KBM.Button:Init()
 			KBM.Options.Button.y = self.Texture:GetTop()
 		end	
 	end
-	function self.Texture.Event.MouseIn()
-		--KBM.LoadTexture(KBM.Button.Texture, "KingMolinator", "Media/Options_Button_Over.png")
+	function self:MouseInHandler()
 		KBM.Button.Highlight:SetVisible(true)
 	end
-	function self.Texture.Event.MouseOut()
+	function self:MouseOutHandler()
 		KBM.LoadTexture(KBM.Button.Texture, "KingMolinator", "Media/New_Options_Button.png")
 		KBM.Button.Highlight:SetVisible(false)
 	end
-	function self.Texture.Event.LeftDown()
+	function self:LeftDownHandler()
 		KBM.LoadTexture(KBM.Button.Texture, "KingMolinator", "Media/New_Options_Button_Down.png")
 		KBM.Button.Highlight:SetVisible(false)
 	end
-	function self.Texture.Event.LeftUp()
-		--KBM.LoadTexture(KBM.Button.Texture, "KingMolinator", "Media/Options_Button_Over.png")
+	function self:LeftUpHandler()
 		KBM.LoadTexture(KBM.Button.Texture, "KingMolinator", "Media/New_Options_Button.png")
 		KBM.Button.Highlight:SetVisible(true)
 	end
-	function self.Texture.Event.LeftClick()
+	function self:LeftClickHandler()
 		KBM_Options()
 	end
-			
+
+	function self:SetUnlocked(bool)
+		if bool then
+			self.Drag:EventAttach(Event.UI.Input.Mouse.Right.Down, self.Drag.FrameEvents.LeftDownHandler, "KBM Main Button Right Down")
+			self.Drag:EventAttach(Event.UI.Input.Mouse.Right.Up, self.Drag.FrameEvents.LeftUpHandler, "KBM Main Button Right Up")
+		else
+			self.Drag:EventDetach(Event.UI.Input.Mouse.Right.Down, self.Drag.FrameEvents.LeftDownHandler)
+			self.Drag:EventDetach(Event.UI.Input.Mouse.Right.Up, self.Drag.FrameEvents.LeftUpHandler)		
+		end
+	end
+	
 	self.Drag = KBM.AttachDragFrame(self.Texture, function (uType) self:UpdateMove(uType) end, "Button Drag", 6)
-	self.Drag.Event.RightDown = self.Drag.Event.LeftDown
-	self.Drag.Event.RightUp = self.Drag.Event.LeftUp
-	self.Drag.Event.LeftDown = nil
-	self.Drag.Event.LeftUp = nil
-	self.Drag.Event.MouseIn = self.Texture.Event.MouseIn
-	self.Drag.Event.MouseOut = self.Texture.Event.MouseOut
+	self.Drag:EventDetach(Event.UI.Input.Mouse.Left.Down, self.Drag.FrameEvents.LeftDownHandler)
+	self.Drag:EventDetach(Event.UI.Input.Mouse.Left.Up, self.Drag.FrameEvents.LeftUpHandler)
+	self.Drag:EventAttach(Event.UI.Input.Mouse.Cursor.In, self.MouseInHandler, "KBM Main Button Mouse In")
+	self.Drag:EventAttach(Event.UI.Input.Mouse.Cursor.Out, self.MouseOutHandler, "KBM Main Button Mouse Out")
+	self.Drag:EventAttach(Event.UI.Input.Mouse.Left.Down, self.LeftDownHandler, "KBM Main Button Left Down")
+	self.Drag:EventAttach(Event.UI.Input.Mouse.Left.Up, self.LeftUpHandler, "KBM Main Button Left Up")
+	self.Drag:EventAttach(Event.UI.Input.Mouse.Left.Click, self.LeftClickHandler, "KBM Main Button Left Click")
 	self.Drag:SetMouseMasking("limited")
 	
+	if KBM.Options.Button.Unlocked then
+		self:SetUnlocked(true)
+	end
+		
 	self:ApplySettings()
 	
 end
@@ -4450,8 +4462,10 @@ function KBM.AttachDragFrame(parent, hook, name, layer)
 	Drag.hook = hook
 	Drag.Layer = parent:GetLayer()
 	Drag.Parent = parent
+	Drag.FrameEvents = {}
+	Drag.Frame.FrameEvents = Drag.FrameEvents
 	
-	function Drag.Frame.Event:LeftDown()
+	function Drag.FrameEvents:LeftDownHandler()
 		self.MouseDown = true
 		mouseData = Inspect.Mouse()
 		self.MyStartX = self.parent:GetLeft()
@@ -4471,13 +4485,13 @@ function KBM.AttachDragFrame(parent, hook, name, layer)
 		Drag.Parent:SetLayer(KBM.Layer.DragActive)
 	end
 	
-	function Drag.Frame.Event:MouseMove(mouseX, mouseY)
+	function Drag.FrameEvents:MouseMoveHandler(handle, mouseX, mouseY)
 		if self.MouseDown then
 			self.parent:SetPoint("TOPLEFT", UIParent, "TOPLEFT", (mouseX - self.StartX), (mouseY - self.StartY))
 		end
 	end
 	
-	function Drag.Frame.Event:LeftUp()
+	function Drag.FrameEvents:LeftUpHandler()
 		if self.MouseDown then
 			self.MouseDown = false
 			self:SetBackgroundColor(0,0,0,0)
@@ -4487,13 +4501,17 @@ function KBM.AttachDragFrame(parent, hook, name, layer)
 	end
 	
 	function Drag.Frame:Remove()	
-		self.Event.LeftDown = nil
-		self.Event.MouseMove = nil
-		self.Event.LeftUp = nil
+		Drag.Frame:EventDettach(Event.UI.Input.Mouse.Left.Down, Drag.FrameEvents.LeftDownHandler)
+		Drag.Frame:EventDettach(Event.UI.Input.Mouse.Cursor.Move, Drag.FrameEvents.MouseMoveHandler)
+		Drag.Frame:EventDettach(Event.UI.Input.Mouse.Left.Up, Drag.FrameEvents.LeftUpHandler)
 		Drag.hook = nil
 		self:sRemove()
 		self.Remove = nil		
-	end	
+	end
+	
+	Drag.Frame:EventAttach(Event.UI.Input.Mouse.Left.Down, Drag.FrameEvents.LeftDownHandler, "Drag Frame Left Down Handler: "..Drag.Parent:GetName())
+	Drag.Frame:EventAttach(Event.UI.Input.Mouse.Cursor.Move, Drag.FrameEvents.MouseMoveHandler, "Drag Frame Mouse Move Handler: "..Drag.Parent:GetName())
+	Drag.Frame:EventAttach(Event.UI.Input.Mouse.Left.Up, Drag.FrameEvents.LeftUpHandler, "Drag Frame Left Up Handler: "..Drag.Parent:GetName())
 	return Drag.Frame
 end
 
@@ -7454,7 +7472,7 @@ local function BuildMenuSettings()
 
 		function self:Unlocked(bool)
 			KBM.Options.Button.Unlocked = bool
-			KBM.Button.Drag:SetVisible(bool)
+			KBM.Button:SetUnlocked(bool)
 		end
 		
 		function self:Protect(bool)
@@ -8014,7 +8032,7 @@ local function BuildMenuModules()
 		end
 		function self:Scale(bool)
 			KBM.Ready.Settings.Scale = bool
-			KBM.Ready.GUI:ApplySettings()
+			KBM.Ready.GUI:SetScaling(bool)
 		end
 			
 		MenuItem = Item.UI.CreateHeader(KBM.Language.Options.Enabled[KBM.Lang], KBM.Ready.Settings, "Enabled", self)
@@ -8032,7 +8050,7 @@ local function BuildMenuModules()
 		end
 		function self:Unlocked(bool)
 			KBM.Ready.Settings.Button.Unlocked = bool
-			KBM.Ready.Button:ApplySettings()
+			KBM.Ready.Button:SetUnlocked(bool)
 		end
 		
 		MenuItem = MenuItem:CreateHeader(KBM.Language.Options.Button[KBM.Lang], KBM.Ready.Settings.Button, "Visible", self)
@@ -8446,20 +8464,8 @@ function KBM.InitKBM(handle, ModID)
 		end
 		
 		-- Finalize Menu's
-		KBM:InitMenus()
+		KBM.InitMenus()
 			
-		-- for MenuID, MenuObj in pairs(KBM.MenuIDList) do
-			-- if MenuObj.Settings then
-				-- if MenuObj.Settings.Collapse then
-					-- if MenuObj.Type == "instance" then
-						-- MenuObj.GUI.Check:SetChecked(false)
-					-- else
-						-- MenuObj.Check:SetChecked(false)
-					-- end
-				-- end
-			-- end
-		-- end	
-		
 		-- Start
 		if KBM.IsAlpha then
 			print(KBM.Language.Welcome.Welcome[KBM.Lang]..AddonData.toc.Version.." Alpha")
@@ -8476,11 +8482,11 @@ function KBM.InitKBM(handle, ModID)
 	end
 end
 
-Command.Event.Attach(Event.Addon.SavedVariables.Load.Begin, KBM_DefineVars, "Load Begin")
-Command.Event.Attach(Event.Addon.SavedVariables.Load.End, KBM_LoadVars, "Load End")
-Command.Event.Attach(Event.Addon.SavedVariables.Save.Begin, KBM_SaveVars, "Save Begin")
-Command.Event.Attach(Event.Addon.Load.End, KBM.InitKBM, "Begin Init Sequence")
-Command.Event.Attach(Event.SafesUnitLib.System.Start, KBM.WaitReady, "Sync Wait")
+Command.Event.Attach(Event.Addon.SavedVariables.Load.Begin, KBM_DefineVars, "KBM_Main_Load_Begin")
+Command.Event.Attach(Event.Addon.SavedVariables.Load.End, KBM_LoadVars, "KBM_Main_Load_End")
+Command.Event.Attach(Event.Addon.SavedVariables.Save.Begin, KBM_SaveVars, "KBM_Main_Save_Begin")
+Command.Event.Attach(Event.Addon.Load.End, KBM.InitKBM, "KBM Begin Init Sequence")
+Command.Event.Attach(Event.SafesUnitLib.System.Start, KBM.WaitReady, "KBM Sync Wait")
 
 local AddonDetails = Inspect.Addon.Detail("KBMTextureHandler")
 KBM.LoadTexture = AddonDetails.data.LoadTexture
