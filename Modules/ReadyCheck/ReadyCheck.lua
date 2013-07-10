@@ -1264,7 +1264,7 @@ function PI.GUI:Init()
 					self[Index].Columns.Planar.Text:SetText(Planar.."/"..PlanarMax)
 				end
 			else
-				self[Index].Columns.Planar:SetData("n/a")
+				self[Index].Columns.Planar.Text:SetText("n/a")
 			end
 		end
 	end
@@ -1459,9 +1459,9 @@ function PI.GUI:Init()
 						self:Update_KBM(Index)
 						self[Index].HPBar:SetVisible(false)
 						self[Index].MPBar:SetVisible(false)
-						self[Index].Columns.Planar:SetData("-/-")
-						self[Index].Columns.Vitality:SetData("-")
-						self[Index].Columns.Stone:SetData("-")
+						self[Index].Columns.Planar.Text:SetText("-/-")
+						self[Index].Columns.Vitality.Text:SetText("-")
+						self[Index].Columns.Stone.Text:SetText("-")
 					else
 						self[Index].HPBar:SetVisible(true)
 						self[Index].MPBar:SetVisible(true)
