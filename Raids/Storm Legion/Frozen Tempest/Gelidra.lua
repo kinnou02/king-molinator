@@ -341,8 +341,8 @@ function GLD:UnitHPCheck(uDetails, unitID)
 						KBM.PercentageMon:Start(self.ID, true)
 						self.HardMode = true
 						local DebuffTable = {
-								[1] = self.Lang.Debuff.Hoar[KBM.Lang],
-								[2] = self.Lang.Debuff.Spasm[KBM.Lang],
+								[1] = self.Lang.Debuff.HoarID,
+								[2] = self.Lang.Debuff.SpasmID,
 								[3] = self.Lang.Debuff.Chill[KBM.Lang],
 						}
 						KBM.TankSwap:Start(DebuffTable, unitID, 3)
@@ -363,8 +363,8 @@ function GLD:UnitHPCheck(uDetails, unitID)
 							KBM.PercentageMon:Start(self.ID, true)
 							self.HardMode = true
 							local DebuffTable = {
-									[1] = self.Lang.Debuff.Hoar[KBM.Lang],
-									[2] = self.Lang.Debuff.Spasm[KBM.Lang],
+									[1] = self.Lang.Debuff.HoarID,
+									[2] = self.Lang.Debuff.SpasmID,
 									[3] = self.Lang.Debuff.Chill[KBM.Lang],
 							}
 							KBM.TankSwap:Start(DebuffTable, unitID, 3)

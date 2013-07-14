@@ -632,6 +632,7 @@ function Build:Timers()
 						
 						function Callbacks:Enabled(bool)
 							Settings.Enabled = bool
+							KBM.SetBossTimers(BossObj, bool)
 						end
 						
 						if BossObj.NameShort then
@@ -646,6 +647,7 @@ function Build:Timers()
 								
 								function Callbacks:Enabled(bool)
 									TimerSettings.Enabled = bool
+									TimerObj.Enabled = bool
 								end
 								
 								function Callbacks:Select()
@@ -653,6 +655,7 @@ function Build:Timers()
 									
 									function SideCallbacks:Enabled(bool)
 										TimerSettings.Enabled = bool
+										TimerObj.Enabled = bool
 									end
 									
 									function SideCallbacks:Color(bool, Color)
@@ -731,6 +734,7 @@ function Build:Timers()
 						
 						function Callbacks:Enabled(bool)
 							Settings.Enabled = bool
+							KBM.SetBossSpies(BossObj, bool)
 						end
 						
 						BossName = BossObj.NameShort or BossName
@@ -743,6 +747,7 @@ function Build:Timers()
 								
 								function Callbacks:Enabled(bool)
 									SpySettings.Enabled = bool
+									SpyObj.Enabled = bool
 								end
 								
 								function Callbacks:Select()
@@ -857,6 +862,7 @@ function Build:Alerts()
 						
 						function Callbacks:Enabled(bool)
 							Settings.Enabled = bool
+							KBM.SetBossAlerts(BossObj, bool)
 						end
 						
 						BossName = BossObj.NameShort or BossName
@@ -869,6 +875,7 @@ function Build:Alerts()
 								
 								function Callbacks:Enabled(bool)
 									AlertSettings.Enabled = bool
+									AlertObj.Enabled = bool
 								end
 								
 								function Callbacks:Select()
@@ -876,6 +883,7 @@ function Build:Alerts()
 									
 									function SideCallbacks:Enabled(bool)
 										AlertSettings.Enabled = bool
+										AlertObj.Enabled = bool
 									end
 									
 									function SideCallbacks:Border(bool)
@@ -929,6 +937,7 @@ function Build:Alerts()
 					
 					function Callbacks:Enabled(bool)
 						Settings.Enabled = bool
+						KBM.SetBossChat(BossObj, bool)
 					end
 					
 					BossName = BossObj.NameShort or BossName
@@ -948,6 +957,7 @@ function Build:Alerts()
 								
 								function SideCallbacks:Enabled(bool)
 									ChatSettings.Enabled = bool
+									ChatObj.Enabled = bool
 								end
 								
 								local SubHeader = self.Side.UI.CreatePlainHeader(ChatObj.MenuName or ChatObj.Text, nil, "SubTitle", nil)
@@ -1011,6 +1021,7 @@ function Build:Castbars()
 							
 							function Callbacks:Enabled(bool)
 								Settings.Enabled = bool
+								CastBar.Enabled = bool
 								if bool then
 									CastBar:Display()
 								else

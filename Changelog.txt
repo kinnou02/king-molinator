@@ -5,6 +5,8 @@ Note:
 
 System
 * Change: Renamed some event labels to avoid issues with other addons.
+* Menu
+** Fixed: All Timer, Alert and Spy options should once again be adjustable without needing to /reloadui or log out/in.
 * Drag Frames
 ** Change: Updated to new event model.
 * KBM Button
