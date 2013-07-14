@@ -32,6 +32,7 @@ GA.Lang = {}
 GA.Lang.Main = {}
 GA.Lang.Main.GA = KBM.Language:Add(GA.Name)
 GA.Lang.Main.GA:SetFrench("Éveil sinistre")
+GA.Lang.Main.GA:SetGerman("Böses Erwachen")
 GA.Name = GA.Lang.Main.GA[KBM.Lang]
 GA.Descript = GA.Name
 

@@ -31,15 +31,19 @@ KBM.RegisterMod(SAL.ID, SAL)
 SAL.Lang.Unit = {}
 SAL.Lang.Unit.Salvarola = KBM.Language:Add("Salvarola")
 SAL.Lang.Unit.Salvarola:SetFrench("Salvarola")
+SAL.Lang.Unit.Salvarola:SetGerman("Salvarola")
 SAL.Lang.Unit.Spark = KBM.Language:Add("Spark of Thought")
 SAL.Lang.Unit.Spark:SetFrench("Étincelle de pensée")
+SAL.Lang.Unit.Spark:SetGerman("Gedankenblitz")
 SAL.Lang.Unit.SparkShort = KBM.Language:Add("Spark")
 SAL.Lang.Unit.SparkShort:SetFrench("Étincelle")
+SAL.Lang.Unit.SparkShort:SetGerman("Gedankenblitz")
 
 -- Ability Dictionary
 SAL.Lang.Ability = {}
 SAL.Lang.Ability.Incineration = KBM.Language:Add("Soul Incineration")
 SAL.Lang.Ability.Incineration:SetFrench("Incinération d'âme")
+SAL.Lang.Ability.Incineration:SetGerman("Seelenverbrennung")
 
 -- Verbose Dictionary
 SAL.Lang.Verbose = {}
@@ -51,9 +55,11 @@ SAL.Lang.Buff = {}
 SAL.Lang.Debuff = {}
 SAL.Lang.Debuff.Bloodboil = KBM.Language:Add("Bloodboil")
 SAL.Lang.Debuff.Bloodboil:SetFrench("Ébullation sanglante")
+SAL.Lang.Debuff.Bloodboil:SetGerman("Blutgeschwür")
 SAL.Lang.Debuff.BloodboilID = "B6D7DCF642AF39C2C"
 SAL.Lang.Debuff.Mindsear = KBM.Language:Add("Mindsear")
 SAL.Lang.Debuff.Mindsear:SetFrench("Incandesprit")
+SAL.Lang.Debuff.Mindsear:SetGerman("Geistesohr")
 SAL.Lang.Debuff.MindsearID = "B4C023E009A6B6FF8"
 
 -- Description Dictionary

@@ -31,14 +31,17 @@ KBM.RegisterMod(MLK.ID, MLK)
 MLK.Lang.Unit = {}
 MLK.Lang.Unit.Kaliban = KBM.Language:Add("Magma Lord Kaliban")
 MLK.Lang.Unit.Kaliban:SetFrench("le Seigneur du magma Kaliban")
+MLK.Lang.Unit.Kaliban:SetGerman("Magmafürst Kaliban")
 
 MLK.Lang.Unit.KalibanShort = KBM.Language:Add("Kaliban")
 MLK.Lang.Unit.KalibanShort:SetFrench("Kaliban")
+MLK.Lang.Unit.KalibanShort:SetGerman("Kaliban")
 
 -- Ability Dictionary
 MLK.Lang.Ability = {}
 MLK.Lang.Ability.Incantation = KBM.Language:Add("Sanguine Incantation")
 MLK.Lang.Ability.Incantation:SetFrench("Incantation sanguine")
+MLK.Lang.Ability.Incantation:SetGerman("Blutbeschwörung")
 
 -- Verbose Dictionary
 MLK.Lang.Verbose = {}
@@ -47,18 +50,23 @@ MLK.Lang.Verbose = {}
 MLK.Lang.Debuff = {}
 MLK.Lang.Debuff.Crushed = KBM.Language:Add("Crushed Armor")
 MLK.Lang.Debuff.Crushed:SetFrench("Armure broyée")
+MLK.Lang.Debuff.Crushed:SetGerman("Zerschmetterte Rüstung")
 MLK.Lang.Debuff.CrushedID = "B5972BA5D4FC57573"
 MLK.Lang.Debuff.Gaze = KBM.Language:Add("Gaze")
 MLK.Lang.Debuff.Gaze:SetFrench("Regard")
+MLK.Lang.Debuff.Gaze:SetGerman("Blick")
 MLK.Lang.Debuff.GazeID = "B5EBCEDB6E9F1DE58"
 MLK.Lang.Debuff.Shatter = KBM.Language:Add("Soul Shatter")
 MLK.Lang.Debuff.Shatter:SetFrench("Brisement d'âme")
+MLK.Lang.Debuff.Shatter:SetGerman("Seelenzerschmetterer")
 MLK.Lang.Debuff.ShatterID = "B14ACAFFACA5B427A"
 MLK.Lang.Debuff.Shattered = KBM.Language:Add("Soul Shatter")
 MLK.Lang.Debuff.Shattered:SetFrench("Brisement d'âme")
+MLK.Lang.Debuff.Shattered:SetGerman("Seelenzerschmetterer")
 MLK.Lang.Debuff.ShatteredID = "B3BEFCBF84F96F023"
 MLK.Lang.Debuff.Silenced = KBM.Language:Add("Crushing Silence")
 MLK.Lang.Debuff.Silenced:SetFrench("Silence écrasant")
+MLK.Lang.Debuff.Silenced:SetGerman("Zerschmetternde Stille")
 MLK.Lang.Debuff.SilencedID = "B5283B687DD0CBD4D"
 
 -- Description Dictionary

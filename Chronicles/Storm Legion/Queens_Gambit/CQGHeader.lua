@@ -3,8 +3,8 @@
 -- Copyright 2013
 --
 
-KBMSLNMAOF_Settings = nil
-chKBMSLNMAOF_Settings = nil
+KBMCRONSLQG_Settings = nil
+chKBMCRONSLQG_Settings = nil
 
 local MOD = {
 	Directory = "Chronicles/Storm Legion/Queens_Gambit/",

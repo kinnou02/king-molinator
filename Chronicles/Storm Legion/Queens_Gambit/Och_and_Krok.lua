@@ -17,14 +17,14 @@ local QG = KBM.BossMod["CRONQueens_Gambit"]
 local OK = {
 	Enabled = true,
 	Directory = QG.Directory,
-	File = "Och.lua",
+	File = "Och_and_Krok.lua",
 	Instance = QG.Name,
 	InstanceObj = QG,
 	HasPhases = true,
 	Lang = {},
 	ID = "CRONOch_Krok",
 	Object = "OK",
-	Enrage = 7 * 60,
+	--Enrage = 7 * 60,
 }
 
 KBM.RegisterMod(OK.ID, OK)
@@ -255,7 +255,7 @@ function OK:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.PercentageMon = KBM.PercentageMon:Create(self.Och, self.Krok, 5)
+	self.PercentageMon = KBM.PercentageMon:Create(self.Och, self.Krok, 7)
 	self.Och.CastBar = KBM.CastBar:Add(self, self.Och)
 	self.Krok.CastBar = KBM.CastBar:Add(self, self.Krok)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)	

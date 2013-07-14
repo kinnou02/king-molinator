@@ -75,6 +75,7 @@ PRO.Lang.Buff.Hand:SetGerman("Hand des Meisters")
 -- Debuff Dictionary
 PRO.Lang.Debuff = {}
 PRO.Lang.Debuff.Soul = KBM.Language:Add("Soul Rupture")
+PRO.Lang.Debuff.Soul:SetGerman("Seelenbruch")
 
 -- Description Dictionary
 PRO.Lang.Main = {}

@@ -10,7 +10,7 @@ Author = "Paul Snart"
 Website = "http://www.facebook.com/KingBossMods"
 Email = "kingbossmods@gmail.com"
 
-Version = "1.4.9.713"
+Version = "1.4.9.714"
 
 Environment = "2.3"
 
@@ -129,6 +129,7 @@ RunOnStartup = {
 	"Dungeons/Storm Legion/Unhallowed_Boneforge/Avoxcia.lua",
 	"Chronicles/Storm Legion/Queens_Gambit/CQGHeader.lua",
 	"Chronicles/Storm Legion/Queens_Gambit/Och_and_Krok.lua",
+	"Chronicles/Storm Legion/Queens_Gambit/Kyo.lua",
 	"Raids/InfernalDawn/INDHeader.lua",
 	"Raids/InfernalDawn/Drak.lua",
 	"Raids/InfernalDawn/Gorlach.lua",
@@ -405,7 +406,9 @@ SavedVariables = {
 	KBMSLNMUBFAHG_Settings = "account",
 	KBMSLNMUBFFLH_Settings = "account",
 	KBMSLNMUBFAVX_Settings = "account",
+	KBMCRONSLQG_Settings = "account",
 	KBMCRONSLQGOK_Settings = "account",
+	KBMCRONSLQGAK_Settings = "account",
 	KBMIND_Settings = "account",
 	KBMINDWD_Settings = "account",
 	KBMINDGL_Settings = "account",
@@ -668,7 +671,9 @@ SavedVariables = {
 	chKBMSLNMUBFAHG_Settings = "character",
 	chKBMSLNMUBFFLH_Settings = "character",
 	chKBMSLNMUBFAVX_Settings = "character",
+	chKBMCRONSLQG_Settings = "character",
 	chKBMCRONSLQGOK_Settings = "character",
+	chKBMCRONSLQGAK_Settings = "character",
 	chKBMIND_Settings = "character",
 	chKBMINDWD_Settings = "character",
 	chKBMINDGL_Settings = "character",

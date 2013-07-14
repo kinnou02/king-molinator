@@ -4,6 +4,7 @@ Note:
 * The Event model isn't working as intended. It'll not break, however event removal blocks pass-through to the game world. I'm converting all Frame events to work as it was intended. As soon as Trion fix their end, KBM will work as planned.
 
 System
+* Change: Renamed some event labels to avoid issues with other addons.
 * Drag Frames
 ** Change: Updated to new event model.
 * KBM Button
@@ -37,12 +38,17 @@ Percentage Monitor
 
 Chronicles
 * Queens Gambit
+** New: Abido Kyo
+*** New: Added Encounter tracking.
+*** New: Added Timer and Alert for Steel Whirl.
+*** New: Added Alert for Shock Blast.
 ** New: Och and Krock
 *** New: Added Encounter tracking.
-*** New: Added HP Tracking. (Percentage Monitor)
+*** New: Added HP Tracking. (Percentage Monitor - 7%)
 
 Translations
 * French Updates
+* German Updates
 
 ----
 v1.4.8
