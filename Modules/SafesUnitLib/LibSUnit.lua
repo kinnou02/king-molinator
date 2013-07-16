@@ -1277,7 +1277,9 @@ function _lsu.Combat.Heal(handle, info)
 	info.sourceObj = sourceObj
 	if targetObj then
 		if targetObj.Dead then
-			_lsu.Raid.ManageDeath(targetObj, false, sourceObj)
+			if info.heal > 1 then
+				_lsu.Raid.ManageDeath(targetObj, false, sourceObj)
+			end
 		end
 		_lsu.Event.Combat.Heal(info)
 	end

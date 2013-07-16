@@ -152,14 +152,7 @@ end
 function AK:Death(UnitID)
 	if self.Kyo.UnitID == UnitID then
 		self.Kyo.Dead = true
-		if self.Krok.Dead then
-			return true
-		end
-	elseif self.Krok.UnitID == UnitID then
-		self.Krok.Dead = true
-		if self.Kyo.Dead then
-			return true
-		end
+		return true
 	end
 	return false
 end

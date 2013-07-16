@@ -1,4 +1,13 @@
-﻿v1.4.9
+﻿v1.5.0
+
+LibSUnit
+* Change: Res States will only be checked if a heal of more than 1 is encountered. This should eradicate false res events.
+
+Chronicle
+* Fixed: Error 155 in Kyo encounter.
+
+----
+v1.4.9
 
 Note: 
 * The Event model isn't working as intended. It'll not break, however event removal blocks pass-through to the game world. I'm converting all Frame events to work as it was intended. As soon as Trion fix their end, KBM will work as planned.
