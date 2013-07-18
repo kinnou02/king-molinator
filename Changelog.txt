@@ -1,4 +1,12 @@
-﻿v1.5.0
+﻿v1.5.1
+
+Slivers
+* Grim Awakening
+** Salvarola
+*** New: Added Mechanic Spy for Curse of Magma.
+
+----
+v1.5.0
 
 LibSUnit
 * Change: Res States will only be checked if a heal of more than 1 is encountered. This should eradicate false res events.

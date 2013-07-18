@@ -11,7 +11,7 @@ Email = "snarty@gmail.com"
 
 Version = "0.0.8"
 
-Environment = "1.10"
+Environment = "2.3"
 
 RunOnStartup = {
 	"LibSata.lua",

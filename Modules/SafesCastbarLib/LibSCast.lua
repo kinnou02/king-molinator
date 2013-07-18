@@ -466,7 +466,7 @@ function _int.Update_Handler(handle)
 		for UnitID, CastPro in pairs(_active) do
 			CastPro:Update()
 		end
-		_int.UpdateTime = cTime + 0.09
+		_int.UpdateTime = cTime + 0.07
 	end
 end
 
