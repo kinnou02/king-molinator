@@ -569,7 +569,7 @@ function LibSCast:Create(ID, Parent, Pack, Settings, Style)
 		
 		function CastObj:Begin()
 			if self.Style == "dynamic" then
-				local cDetails = LibSUnit:RequestDetails[self.UnitID] -- Caster Unit Details
+				local cDetails = LibSUnit:RequestDetails(self.UnitID) -- Caster Unit Details
 				local tier = cDetails.tier or "default"
 				if cDetails.pvp then
 					tier = "pvp"
