@@ -407,7 +407,7 @@ function _lsu:Create(UID, uDetails, Type)
 		UnitObj.PercentLast = UnitObj.Percent -- Ensure the last recorded percentage is initialized.
 		UnitObj.PercentFlat = math.ceil(UnitObj.Percent)
 		UnitObj.PercentFlatLast = UnitObj.PercentFlat -- Ensure the last recorded flat percentage is initialized.
-		_lsu.Unit:UpdateTarget(UnitObj, Inspect.Unit.Lookup(UID..".target"))
+		_lsu.Unit:UpdateTarget(UnitObj, Inspect.Unit.Detail(UID..".target"))
 		if Type == "Avail" then
 			-- Fire Unit New Full Event
 			_lsu.Event.Unit.New.Full(UnitObj)
@@ -871,6 +871,17 @@ function _lsu.Avail.Full(handle, uList)
 	end
 end
 
+function LibSUnit:RequestDetails(UnitID)
+	local _lookup = LibSUnit.Lookup.UID
+	local _create = _lsu.Create
+	
+	if not _lookup[UnitID] then
+		return _create(_lsu, UnitID, _inspect(UnitID), "Avail")
+	else
+		return _lookup[UnitID]
+	end
+end
+
 function _lsu.Avail.Partial(handle, uList)
 	-- Main handler for Partial Units
 
@@ -1013,20 +1024,22 @@ function _lsu.Raid.Check(UnitID, Spec)
 	}
 	for Index, Spec in pairs(_SpecList) do
 		if Index > 0 then
-			local newUnitID = Inspect.Unit.Lookup(Spec)
-			local currentUnitObj = LibSUnit.Raid.Lookup[Spec].Unit
-			local currentUnitID = nil
+			newUnitID = Inspect.Unit.Lookup(Spec)
+			currentUnitObj = LibSUnit.Raid.Lookup[Spec].Unit
 			if currentUnitObj then
 				currentUnitID = currentUnitObj.UnitID
+			else
+				currentUnitID = nil
 			end
 			if newUnitID ~= currentUnitID then
 				-- totalchanges = totalchanges + 1
-				SpecChanged[Spec] = newUnitID or nil
+				SpecChanged[Spec] = newUnitID or false
 				-- First Check if Pending
 				if newUnitID and currentUnitID then
 					-- Slot changed Unit
 					-- print("Slot Unit Changed: "..Spec)
-					local newUnitObj = LibSUnit.Lookup.UID[newUnitID]
+					newUnitObj = LibSUnit.Lookup.UID[newUnitID]
+					currentUnitObj = LibSUnit.Lookup.UID[currentUnitID]
 					if not newUnitObj then
 						newUnitObj = _lsu:Create(newUnitID, _inspect(newUnitID), "Avail")
 					end
@@ -1073,6 +1086,7 @@ function _lsu.Raid.Check(UnitID, Spec)
 				elseif currentUnitID then
 					-- Slot no longer taken
 					-- print("Slot now empty: "..Spec)
+					currentUnitObj = LibSUnit.Lookup.UID[currentUnitID]
 					if UIDChanged.Left[currentUnitID] then
 						UIDChanged.Moved[currentUnitID] = {New = Spec, Old = currentUnitObj.RaidLoc}
 						--movedCount = movedCount + 1
@@ -1105,12 +1119,10 @@ function _lsu.Raid.Check(UnitID, Spec)
 		LibSUnit.Raid.UID[UnitObj.UnitID] = UnitObj
 		UnitObj.RaidLoc = newSpec
 		if not SpecChanged[oldSpec] then
-			if LibSUnit.Raid.Lookup[oldSpec] then
-				--print("Old Spec Cleared: "..oldSpec)
-				LibSUnit.Raid.Lookup[oldSpec].Unit = nil
-				LibSUnit.Raid.Lookup[oldSpec].UID = nil
-				oldGroup = LibSUnit.Raid.Lookup[oldSpec].Group
-			end
+			--print("Old Spec Cleared: "..oldSpec)
+			LibSUnit.Raid.Lookup[oldSpec].Unit = nil
+			LibSUnit.Raid.Lookup[oldSpec].UID = false
+			oldGroup = LibSUnit.Raid.Lookup[oldSpec].Group
 		end
 		_lsu.Raid.GroupCheck(newGroup, oldGroup)
 		-- print(UnitObj.Name.." moved to "..newSpec.." from "..oldSpec)
@@ -1129,7 +1141,7 @@ function _lsu.Raid.Check(UnitID, Spec)
 				end
 			end
 			LibSUnit.Raid.Lookup[Spec].Unit = nil
-			LibSUnit.Raid.Lookup[Spec].UID = nil
+			LibSUnit.Raid.Lookup[Spec].UID = false
 			LibSUnit.Raid.Members = LibSUnit.Raid.Members - 1
 			local oldGroup = LibSUnit.Raid.Lookup[Spec].Group
 			LibSUnit.Raid.UID[UnitObj.UnitID] = nil
@@ -1277,9 +1289,7 @@ function _lsu.Combat.Heal(handle, info)
 	info.sourceObj = sourceObj
 	if targetObj then
 		if targetObj.Dead then
-			if info.heal > 1 then
-				_lsu.Raid.ManageDeath(targetObj, false, sourceObj)
-			end
+			_lsu.Raid.ManageDeath(targetObj, false, sourceObj)
 		end
 		_lsu.Event.Combat.Heal(info)
 	end
@@ -1465,22 +1475,11 @@ function _lsu.SlashHandler(handle, cmd)
 			_lsu.Debug:UpdateAll()
 		end
 	elseif cmd == "listidle" then
-		local Total = 0
 		for UnitID, UnitObj in pairs(LibSUnit.Cache.Idle) do
-			print("["..UnitObj.IdleSegment.."] "..UnitID..": "..UnitObj.Name)
-			Total = Total + 1
+			print(UnitID..": "..UnitObj.Name.." - Seg: "..UnitObj.IdleSegment)
 		end
+		print("----")
 		print("Current Segment: ".._lastSeg)
-		print("Total Units: "..Total)
-		print("-----")
-	elseif cmd == "listavail" then
-		local Total = 0
-		for UnitID, UnitObj in pairs(LibSUnit.Cache.Avail) do
-			print(tostring(UnitID)..": "..UnitObj.Name)
-			Total = Total + 1
-		end
-		print("Total Units: "..Total)
-		print("-----")
 	end
 end
 

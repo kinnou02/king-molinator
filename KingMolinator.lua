@@ -124,6 +124,31 @@ KBM.Constant = {}
 KBM.Buffs = {}
 KBM.Buffs.Active = {}
 KBM.Buffs.WatchID = {}
+KBM.Castbar = {
+	Player = {
+		Self = {
+			ID = "KBM_Player_Bar",
+			Type = "player",
+			Style = "default",
+			Pack = "Rift",
+		},
+		Target = {
+			ID = "KBM_Player_Target",
+			Type = "player.target",
+			Pack = "Rift",
+		},
+		Focus = {
+			ID = "KBM_Player_Focus",
+			Type = "focus",
+			Pack = "Rift",
+		},
+	},
+	Global = {
+		ID = "KBM_Global_Bar",
+		Style = "boss",
+		Pack = "Rift",
+	},
+}
 
 function KBM.AlphaComp(Comp, With)
 	if type(Comp) == "string" and type(With) == "string" then
@@ -688,6 +713,10 @@ local function KBM_DefineVars(handle, AddonID)
 			Player = {
 				CastBar = KBM.Defaults.CastBar(),
 			},
+			Castbar = {
+				Player = {},
+				Global = LibSCast.Default.BarSettings(),
+			},
 			Character = false,
 			Enabled = true,
 			Debug = false,
@@ -824,6 +853,10 @@ local function KBM_DefineVars(handle, AddonID)
 		KBM_GlobalOptions = KBM.Options
 		chKBM_GlobalOptions = KBM.Options
 		KBM.Options.Player.CastBar.Enabled = false
+		for ID, Castbar in pairs(KBM.Castbar.Player) do
+			KBM.Options.Castbar.Player[ID] = LibSCast.Default.BarSettings()
+			Castbar.Settings = KBM.Options.Castbar.Player[ID]
+		end
 		for _, Mod in ipairs(KBM.ModList) do
 			Mod:InitVars()
 			if not Mod.IsInstance then
@@ -974,12 +1007,6 @@ KBM.Context:SetMouseMasking("limited")
 local KM_Name = "King Boss Mods"
 
 -- Addon KBM Primary Frames
-KBM.MainWin = {
-	Handle = {},
-	Border = {},
-	Content = {},
-}
-
 KBM.TimeVisual = {}
 KBM.TimeVisual.String = "00"
 KBM.TimeVisual.Seconds = 0
@@ -8347,24 +8374,10 @@ function KBM.WaitReady()
 	KBM.Player.CastBar.CastObj:Create(KBM.Player.UnitID)
 	
 	-- New Castbar Initialization
-	KBM.Player.Castbar = {
-		ID = "KBMCastSet",
-		Player = {
-			ID = "KBM_Player_Bar",
-			CastObj = LibSCast:Create("KBM_Player_Bar", "Rift", nil, "default"),
-		},
-		Target = {
-			ID = "KBM_Player_Target",
-			CastObj = LibSCast:Create("KBM_Player_Target", "Rift"),
-		},
-		Focus = {
-			ID = "KBM_Plyaer_Focus",
-			CastObj = LibSCast:Create("KBM_Player_Focus", "Rift"),
-		},
-	}
-	KBM.Player.Castbar.Player.CastObj:StartType("player")
-	KBM.Player.Castbar.Target.CastObj:StartType("player.target")
-	KBM.Player.Castbar.Focus.CastObj:StartType("focus")
+	for ID, Castbar in pairs(KBM.Castbar.Player) do
+		Castbar.CastObj = LibSCast:Create(Castbar.ID, KBM.Context, Castbar.Pack, Castbar.Settings, Castbar.Style)
+		Castbar.CastObj:StartType(Castbar.Type)
+	end
 end
 
 KBM.PlugIn = {}

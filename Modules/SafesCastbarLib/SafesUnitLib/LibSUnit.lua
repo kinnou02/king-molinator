@@ -871,6 +871,17 @@ function _lsu.Avail.Full(handle, uList)
 	end
 end
 
+function LibSUnit:RequestDetails(UnitID)
+	local _lookup = LibSUnit.Lookup.UID
+	local _create = _lsu.Create
+	
+	if not _lookup[UnitID] then
+		return _create(_lsu, UnitID, _inspect(UnitID), "Avail")
+	else
+		return _lookup[UnitID]
+	end
+end
+
 function _lsu.Avail.Partial(handle, uList)
 	-- Main handler for Partial Units
 

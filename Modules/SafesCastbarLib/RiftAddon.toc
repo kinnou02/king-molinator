@@ -9,7 +9,7 @@ Author = "Paul Snart"
 Website = "http://twitter.com/#!/psnart"
 Email = "snarty@gmail.com"
 
-Version = "0.0.3"
+Version = "0.0.5"
 
 Environment = "2.3"
 
@@ -20,9 +20,11 @@ RunOnStartup = {
 Embed = {
 	["SafesTableLib"] = true,
 	["SafesUnitLib"] = true,
+	["TextureHandler"] = true,
 }
 
 Dependencies = {
 	SafesTableLib = {"required", "before"},
 	SafesUnitLib = {"required", "before"},
+	KBMTextureHandler = {"required", "before"},
 }

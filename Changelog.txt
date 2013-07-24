@@ -1,9 +1,26 @@
 ﻿v1.5.1
 
+LibSUnit
+* New: Added a clean method for retrieving Unit objects. UnitObj = LibSUnit:RequestDetails(UnitID)
+* Note: Using this method will create the Unit if available, or return an existing unit object.
+
+Castbar System (During Alpha)
+* Note: Currently under testing. Main engine runs in the background for bug finding.
+* New: Engine Tracking only for Player castbar.
+* New: Engine Tracking only for Player Target castbar.
+* New: Engine Tracking only for Player Focus castbar.
+
 Slivers
 * Grim Awakening
+** Magma Lord Kaliban
+*** New: Added Alert for Sanguine Incantation. (Standard Yellow interrupt)
+*** Change: Alert color changed for soul shatter. Now Orange by default.
 ** Salvarola
 *** New: Added Mechanic Spy for Curse of Magma.
+*** Change: Incineration timer changed from a Wait style to standard.
+** Ultane
+*** New: Added Alert and Spy for Spirit Shackle
+*** New: Added Alert and Spy for Infernal Radiance.
 
 ----
 v1.5.0

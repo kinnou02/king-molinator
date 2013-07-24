@@ -68,6 +68,7 @@ MLK.Lang.Debuff.Silenced = KBM.Language:Add("Crushing Silence")
 MLK.Lang.Debuff.Silenced:SetFrench("Silence écrasant")
 MLK.Lang.Debuff.Silenced:SetGerman("Zerschmetternde Stille")
 MLK.Lang.Debuff.SilencedID = "B5283B687DD0CBD4D"
+MLK.Lang.Debuff.Flames = KBM.Language:Add("Swirling Flames")
 
 -- Description Dictionary
 MLK.Lang.Main = {}
@@ -95,17 +96,19 @@ MLK.Kaliban = {
 		TimersRef = {
 			Enabled = true,
 			Gaze = KBM.Defaults.TimerObj.Create("red"),
-			Shatter = KBM.Defaults.TimerObj.Create("yellow"),
+			Shatter = KBM.Defaults.TimerObj.Create("orange"),
 		},
 		AlertsRef = {
 			Enabled = true,
 			Gaze = KBM.Defaults.AlertObj.Create("red"),
-			Shatter = KBM.Defaults.AlertObj.Create("yellow"),
+			Shatter = KBM.Defaults.AlertObj.Create("orange"),
+			Incantation = KBM.Defaults.AlertObj.Create("yellow"),
 		},
 		MechRef = {
 			Enabled = true,
 			Gaze = KBM.Defaults.MechObj.Create("red"),
-			Shatter = KBM.Defaults.MechObj.Create("yellow"),
+			Shatter = KBM.Defaults.MechObj.Create("orange"),
+			Flames = KBM.Defaults.MechObj.Create("yellow"),
 		},
 	}
 }
@@ -267,8 +270,9 @@ function MLK:Start()
 	-- Create Alerts
 	self.Kaliban.AlertsRef.Gaze = KBM.Alert:Create(self.Lang.Debuff.Gaze[KBM.Lang], nil, false, true, "red")
 	self.Kaliban.AlertsRef.Gaze:Important()
-	self.Kaliban.AlertsRef.Shatter = KBM.Alert:Create(self.Lang.Debuff.Shatter[KBM.Lang], nil, false, true, "yellow")
+	self.Kaliban.AlertsRef.Shatter = KBM.Alert:Create(self.Lang.Debuff.Shatter[KBM.Lang], nil, false, true, "orange")
 	self.Kaliban.AlertsRef.Shatter:Important()
+	self.Kaliban.AlertsRef.Incantation = KBM.Alert:Create(self.Lang.Ability.Incantation[KBM.Lang], nil, false, true, "yellow")
 	KBM.Defaults.AlertObj.Assign(self.Kaliban)
 
 	-- Create Spies
@@ -286,6 +290,11 @@ function MLK:Start()
 	self.Kaliban.Triggers.Shatter:AddTimer(self.Kaliban.TimersRef.Shatter)
 	self.Kaliban.Triggers.Shatter:AddAlert(self.Kaliban.AlertsRef.Shatter, true)
 	self.Kaliban.Triggers.Shatter:AddSpy(self.Kaliban.MechRef.Shatter)
+	
+	self.Kaliban.Triggers.Incantation = KBM.Trigger:Create(self.Lang.Ability.Incantation[KBM.Lang], "cast", self.Kaliban)
+	self.Kaliban.Triggers.Incantation:AddAlert(self.Kaliban.AlertsRef.Incantation)
+	self.Kaliban.Triggers.IncantationInt = KBM.Trigger:Create(self.Lang.Ability.Incantation[KBM.Lang], "interrupt", self.Kaliban)
+	self.Kaliban.Triggers.IncantationInt:AddStop(self.Kaliban.AlertsRef.Incantation)
 	
 	self.Kaliban.CastBar = KBM.CastBar:Add(self, self.Kaliban)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

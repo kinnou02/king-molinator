@@ -43,6 +43,9 @@ ULT.Lang.Buff = {}
 
 -- Debuff Dictionary
 ULT.Lang.Debuff = {}
+ULT.Lang.Debuff.Devil = KBM.Language:Add("Devil's Pact") -- Tank Monitor
+ULT.Lang.Debuff.Shackle = KBM.Language:Add("Spirit Shackle")
+ULT.Lang.Debuff.Infernal = KBM.Language:Add("Infernal Radiance")
 
 -- Description Dictionary
 ULT.Lang.Main = {}
@@ -57,9 +60,9 @@ ULT.Ultane = {
 	Name = ULT.Lang.Unit.Ultane[KBM.Lang],
 	Menu = {},
 	Dead = false,
-	--AlertsRef = {},
+	AlertsRef = {},
 	--TimersRef = {},
-	--MechRef = {},
+	MechRef = {},
 	Available = false,
 	UTID = "U2337F28E37A03F9A",
 	UnitID = nil,
@@ -69,12 +72,16 @@ ULT.Ultane = {
 		--TimersRef = {
 		--	Enabled = true,
 		--},
-		--AlertsRef = {
-		--	Enabled = true,
-		--},
-		--MechRef = {
-		--	Enabled = true,
-		--},
+		AlertsRef = {
+			Enabled = true,
+			Shackle = KBM.Defaults.AlertObj.Create("dark_green"),
+			Infernal = KBM.Defaults.AlertObj.Create("cyan"),
+		},
+		MechRef = {
+			Enabled = true,
+			Shackle = KBM.Defaults.MechObj.Create("dark_green"),
+			Infernal = KBM.Defaults.AlertObj.Create("cyan"),
+		},
 	}
 }
 
@@ -92,11 +99,11 @@ function ULT:InitVars()
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		--MechTimer = KBM.Defaults.MechTimer(),
-		--Alerts = KBM.Defaults.Alerts(),
-		--MechSpy = KBM.Defaults.MechSpy(),
+		Alerts = KBM.Defaults.Alerts(),
+		MechSpy = KBM.Defaults.MechSpy(),
 		--TimersRef = self.Ultane.Settings.TimersRef,
-		--AlertsRef = self.Ultane.Settings.AlertsRef,
-		--MechRef = self.Ultane.Settings.MechRef,
+		AlertsRef = self.Ultane.Settings.AlertsRef,
+		MechRef = self.Ultane.Settings.MechRef,
 	}
 	KBMSLSLGAULT_Settings = self.Settings
 	chKBMSLSLGAULT_Settings = self.Settings
@@ -180,14 +187,14 @@ function ULT:UnitHPCheck(uDetails, unitID)
 				self.PhaseObj:SetPhase("1")
 				self.PhaseObj.Objectives:AddPercent(self.Ultane, 0, 100)
 				self.Phase = 1
-				--if BossObj == self.Ultane then
-				--	KBM.TankSwap:Start(TankSwapAbility, unitID)
-				--end
+				if BossObj == self.Ultane then
+					KBM.TankSwap:Start(self.Ultane.Debuff.Devil[KBM.Lang], BossObj)
+				end
 			else
 				if BossObj == self.Ultane then
-					--if not KBM.TankSwap.Active then
-					--	KBM.TankSwap:Start(TankSwapAbility, unitID)
-					--end
+					if not KBM.TankSwap.Active then
+						KBM.TankSwap:Start(self.Ultane.Debuff.Devil[KBM.Lang], BossObj)
+					end
 				end
 				BossObj.Dead = false
 				BossObj.Casting = false
@@ -220,24 +227,30 @@ end
 function ULT:Timer()	
 end
 
-function ULT:DefineMenu()
-	self.Menu = GA.Menu:CreateEncounter(self.Ultane, self.Enabled)
-end
-
 function ULT:Start()
 
 	-- Create Timers
 	--KBM.Defaults.TimerObj.Assign(self.Ultane)
 	
 	-- Create Alerts
-	--KBM.Defaults.AlertObj.Assign(self.Ultane)
+	self.Ultane.AlertsRef.Shackle = KBM.Alert:Create(self.Lang.Debuff.Shackle[KBM.Lang], nil, false, true, "dark_green")
+	self.Ultane.AlertsRef.Shackle:Important()
+	self.Ultane.AlertsRef.Infernal = KBM.Alert:Create(self.Lang.Debuff.Infernal[KBM.Lang], nil, false, true, "cyan")
+	KBM.Defaults.AlertObj.Assign(self.Ultane)
 
 	-- Create Spies
-	--KBM.Defaults.MechObj.Assign(self.Ultane)
+	self.Ultane.MechRef.Shackle = KBM.MechSpy:Add(self.Lang.Debuff.Shackle[KBM.Lang], nil, "playerDebuff", self.Ultane)
+	self.Ultane.MechRef.Infernal = KBM.MechSpy:Add(self.Lang.Debuff.Infernal[KBM.Lang], nil, "playerDebuff", self.Ultane)
+	KBM.Defaults.MechObj.Assign(self.Ultane)
 
 	-- Assign Alerts and Timers to Triggers
+	self.Ultane.Triggers.Shackle = KBM.Trigger:Create(self.Lang.Debuff.Shackle[KBM.Lang], "playerDebuff", self.Ultane)
+	self.Ultane.Triggers.Shackle:AddAlert(self.Ultane.AlertsRef.Shackle, true)
+	self.Ultane.Triggers.Shackle:AddSpy(self.Ultane.MechRef.Shackle)
+	self.Ultane.Triggers.Infernal = KBM.Trigger:Create(self.Lang.Debuff.Infernal[KBM.Lang], "playerDebuff", self.Ultane)
+	self.Ultane.Triggers.Infernal:AddAlert(self.Ultane.AlertsRef.Infernal, true)
+	self.Ultane.Triggers.Infernal:AddSpy(self.Ultane.MechRef.Infernal)
 	
 	self.Ultane.CastBar = KBM.CastBar:Add(self, self.Ultane)
-	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	
+	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)	
 end

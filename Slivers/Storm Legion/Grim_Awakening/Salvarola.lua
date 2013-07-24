@@ -38,6 +38,12 @@ SAL.Lang.Unit.Spark:SetGerman("Gedankenblitz")
 SAL.Lang.Unit.SparkShort = KBM.Language:Add("Spark")
 SAL.Lang.Unit.SparkShort:SetFrench("Étincelle")
 SAL.Lang.Unit.SparkShort:SetGerman("Gedankenblitz")
+SAL.Lang.Unit.Blood = KBM.Language:Add("Lord of Blood")
+SAL.Lang.Unit.Blood:SetFrench("Seigneur des Flammes")
+SAL.Lang.Unit.Flames = KBM.Language:Add("Lord of Flames")
+SAL.Lang.Unit.Flames:SetFrench("Seigneur du Sang")
+SAL.Lang.Unit.Fanatic = KBM.Language:Add("Warped Fanatic")
+SAL.Lang.Unit.Fanatic:SetFrench("Fanatique perverti")
 
 -- Ability Dictionary
 SAL.Lang.Ability = {}
@@ -50,6 +56,8 @@ SAL.Lang.Verbose = {}
 
 -- Buff Dictionary
 SAL.Lang.Buff = {}
+SAL.Lang.Buff.Power = KBM.Language:Add("Overwhelming Power")
+SAL.Lang.Buff.Power:SetFrench("Puissance submergeante")
 
 -- Debuff Dictionary
 SAL.Lang.Debuff = {}
@@ -96,9 +104,25 @@ SAL.Salvarola = {
 		MechRef = {
 			Enabled = true,
 			Mindsear = KBM.Defaults.MechObj.Create("dark_green"),
-			Magma = KBM.Defaults.MechObj.Create("red"),
+			Magma = KBM.Defaults.MechObj.Create("purple"),
 		},
 	}
+}
+
+SAL.Blood = {
+	Mod = SAL,
+	Level = "??",
+	Name = SAL.Lang.Unit.Blood[KBM.Lang],
+	Ignore = true,
+	UTID = "none",
+}
+
+SAL.Flames = {
+	Mod = SAL,
+	Level = "??",
+	Name = SAL.Lang.Unit.Flames[KBM.Lang],
+	Ignore = true,
+	UTID = "none",
 }
 
 --SAL.Spark = {
@@ -259,7 +283,6 @@ function SAL:Start()
 
 	-- Create Timers
 	self.Salvarola.TimersRef.Incineration = KBM.MechTimer:Add(self.Lang.Ability.Incineration[KBM.Lang], 37, false)
-	self.Salvarola.TimersRef.Incineration:Wait()
 	KBM.Defaults.TimerObj.Assign(self.Salvarola)
 	
 	-- Create Alerts
