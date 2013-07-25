@@ -80,7 +80,7 @@ ULT.Ultane = {
 		MechRef = {
 			Enabled = true,
 			Shackle = KBM.Defaults.MechObj.Create("dark_green"),
-			Infernal = KBM.Defaults.AlertObj.Create("cyan"),
+			Infernal = KBM.Defaults.MechObj.Create("cyan"),
 		},
 	}
 }
