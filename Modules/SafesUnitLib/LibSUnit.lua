@@ -1392,7 +1392,7 @@ function _lsu.Wait(handle, uList)
 		-- Check current availability list.
 		local uList = Inspect.Unit.List()
 		_lsu.Avail.Full(Event.Unit.Availability.Full, uList)
-		Command.Event.Detach(Event.Unit.Availability.Full, _lsu.Wait, "LibSunit System Wait Start")
+		Command.Event.Detach(Event.Unit.Availability.Full, _lsu.Wait, "LibSUnit System Wait Start")
 		
 		-- Unit Management Events
 		Command.Event.Attach(Event.Unit.Availability.Full, _lsu.Avail.Full, "LibSUnit Availability Full Handler")
