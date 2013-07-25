@@ -291,7 +291,7 @@ function MLK:Start()
 	self.Kaliban.Triggers.Shatter:AddAlert(self.Kaliban.AlertsRef.Shatter, true)
 	self.Kaliban.Triggers.Shatter:AddSpy(self.Kaliban.MechRef.Shatter)
 	
-	self.Kaliban.Triggers.Incantation = KBM.Trigger:Create(self.Lang.Ability.Incantation[KBM.Lang], "cast", self.Kaliban)
+	self.Kaliban.Triggers.Incantation = KBM.Trigger:Create(self.Lang.Ability.Incantation[KBM.Lang], "channel", self.Kaliban)
 	self.Kaliban.Triggers.Incantation:AddAlert(self.Kaliban.AlertsRef.Incantation)
 	self.Kaliban.Triggers.IncantationInt = KBM.Trigger:Create(self.Lang.Ability.Incantation[KBM.Lang], "interrupt", self.Kaliban)
 	self.Kaliban.Triggers.IncantationInt:AddStop(self.Kaliban.AlertsRef.Incantation)

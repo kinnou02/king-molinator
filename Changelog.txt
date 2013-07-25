@@ -1,8 +1,11 @@
 ﻿v1.5.1
 
 LibSUnit
+* New: Added event Event.SafesUnitLib.Unit.Detail.Position (X or Y or Z position has changed) table{[UnitID] = UnitObj}
 * New: Added a clean method for retrieving Unit objects. UnitObj = LibSUnit:RequestDetails(UnitID)
 * Note: Using this method will create the Unit if available, or return an existing unit object.
+* Fixed: Prevented UnitObj.Health sometimes being nil.
+* Removed: Redundant raid queue code. Slight performance increase.
 
 Castbar System (During Alpha)
 * Note: Currently under testing. Main engine runs in the background for bug finding.
@@ -19,6 +22,7 @@ Slivers
 *** New: Added Mechanic Spy for Curse of Magma.
 *** Change: Incineration timer changed from a Wait style to standard.
 ** Ultane
+*** New: Added Tank-Swap monitoring for Devil's Pact.
 *** New: Added Alert and Spy for Spirit Shackle
 *** New: Added Alert and Spy for Infernal Radiance.
 

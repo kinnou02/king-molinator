@@ -154,6 +154,7 @@ LibSUnit._internal = {
 				Zone = Utility.Event.Create(AddonIni.id, "Unit.Detail.Zone"),
 				Location = Utility.Event.Create(AddonIni.id, "Unit.Detail.Location"),
 				Warfront = Utility.Event.Create(AddonIni.id, "Unit.Detail.Warfront"),
+				Position = Utility.Event.Create(AddonIni.id, "Unit.Detail.Position"),
 			},
 			Target = Utility.Event.Create(AddonIni.id, "Unit.Target"),
 			TargetCount = Utility.Event.Create(AddonIni.id, "Unit.TargetCount"),
@@ -261,7 +262,7 @@ function _lsu.Unit:CalcPerc(UnitObj)
 	UnitObj.Percent = tonumber(string.format("%0.2f", UnitObj.Percent))
 	
 	if UnitObj.PercentLast ~= UnitObj.Percent then
-		-- Fire Percent (2 decimal place) change.
+		-- Fire Percent (2 decimal places) change.
 		_lsu.Event.Unit.Detail.Percent(UnitObj)
 		
 		if UnitObj.PercentFlat ~= UnitObj.PercentFlatLast then
@@ -409,10 +410,10 @@ function _lsu:Create(UID, uDetails, Type)
 		UnitObj.PercentFlatLast = UnitObj.PercentFlat -- Ensure the last recorded flat percentage is initialized.
 		_lsu.Unit:UpdateTarget(UnitObj, Inspect.Unit.Detail(UID..".target"))
 		if Type == "Avail" then
-			-- Fire Unit New Full Event
+			-- Fire Unit New Full Event, usually when the unit scope is a valid seen target.
 			_lsu.Event.Unit.New.Full(UnitObj)
 		else
-			-- Fire Unit Idle Full Event
+			-- Fire Unit Idle Full Event, usually when the unit scope if from a combat event.
 			_lsu.Event.Unit.New.Idle(UnitObj)
 		end
 	else
@@ -423,10 +424,6 @@ function _lsu:Create(UID, uDetails, Type)
 			-- Fire Unit Idle Partial Event
 			_lsu.Event.Unit.New.Idle(UnitObj)
 		end
-	end
-	if LibSUnit.Raid.Queue[UID] then
-		_lsu.Raid.newCheck(UID, LibSUnit.Raid.Queue[UID])
-		LibSUnit.Raid.Queue[UID] = nil
 	end
 	if UnitObj.Mark then
 		_lsu.Event.Unit.Detail.Mark({[UID] = UnitObj})
@@ -651,6 +648,10 @@ function _lsu.Unit.Warfront(handle, uList)
 	_lsu.Event.Unit.Detail.Warfront(newList)
 end
 
+function _lsu.Unit.Position(handle, uList)
+
+end
+
 function _lsu.Unit.Combat(handle, uList, Silent)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
@@ -754,9 +755,18 @@ function _lsu.Unit.Details(UnitObj, uDetails)
 		if uDetails.warfront ~= UnitObj.Warfront then
 			_lsu.Unit.Warfront(handle, {[UnitObj.UnitID] = uDetails.warfront or false})
 		end
-		UnitObj.Health = uDetails.health or 0
 		if uDetails.health ~= UnitObj.Health then
-			UnitObj.Health = uDetails.health
+			UnitObj.Health = uDetails.health or 0
+		end
+		if uDetails.coordX then
+			local change = false
+			if UnitObj.Position.X ~= uDetails.coordX or UnitObj.Position.Y ~= uDetails.coordY or UnitObj.Position.Z ~= uDetails.coordZ then
+				change = true
+			end
+			UnitObj.Position.X = uDetails.coordX
+			UnitObj.Position.Y = uDetails.coordY
+			UnitObj.Position.Z = uDetails.coordZ
+			_lsu.Event.Unit.Detail.Position(UnitObj)
 		end
 		if UnitObj.PowerMode then
 			if UnitObj.PowerMode == "mana" then
@@ -1382,40 +1392,41 @@ function _lsu.Wait(handle, uList)
 		-- Check current availability list.
 		local uList = Inspect.Unit.List()
 		_lsu.Avail.Full(Event.Unit.Availability.Full, uList)
-		Command.Event.Detach(Event.Unit.Availability.Full, _lsu.Wait, "System Wait Start")
+		Command.Event.Detach(Event.Unit.Availability.Full, _lsu.Wait, "LibSunit System Wait Start")
 		
 		-- Unit Management Events
-		Command.Event.Attach(Event.Unit.Availability.Full, _lsu.Avail.Full, "Unit Availability Full Handler")
-		Command.Event.Attach(Event.Unit.Availability.Partial, _lsu.Avail.Partial, "Unit Availability Partial Handler")
-		Command.Event.Attach(Event.Unit.Availability.None, _lsu.Avail.None, "Unit Availability None Handler")
+		Command.Event.Attach(Event.Unit.Availability.Full, _lsu.Avail.Full, "LibSUnit Availability Full Handler")
+		Command.Event.Attach(Event.Unit.Availability.Partial, _lsu.Avail.Partial, "LibSUnit Availability Partial Handler")
+		Command.Event.Attach(Event.Unit.Availability.None, _lsu.Avail.None, "LibSUnit Availability None Handler")
 
 		-- Unit Data Change
-		Command.Event.Attach(Event.Unit.Detail.Health, _lsu.Unit.Health, "Unit HP Change")
-		Command.Event.Attach(Event.Unit.Detail.Name, _lsu.Unit.Name, "Unit Name Change")
-		Command.Event.Attach(Event.Unit.Detail.Level, _lsu.Unit.Level, "Unit Level Change")
-		Command.Event.Attach(Event.Unit.Detail.HealthMax, _lsu.Unit.HealthMax, "Unit HP Max Change")
-		Command.Event.Attach(Event.Unit.Detail.Power, function (handle, List) _lsu.Unit.Power(handle, List, "power") end, "Power Change")
-		Command.Event.Attach(Event.Unit.Detail.Energy, function (handle, List) _lsu.Unit.Power(handle, List, "energy") end, "Energy Change")
-		Command.Event.Attach(Event.Unit.Detail.Mana, function (handle, List) _lsu.Unit.Power(handle, List, "mana") end, "Mana Change")
-		Command.Event.Attach(Event.Unit.Detail.EnergyMax, function (handle, List) _lsu.Unit.PowerMax(handle, List, "energy") end, "Energy Max Change")
-		Command.Event.Attach(Event.Unit.Detail.ManaMax, function (handle, List) _lsu.Unit.PowerMax(handle, List, "mana") end, "Mana Max Change")
-		Command.Event.Attach(Event.Unit.Detail.Offline, _lsu.Unit.Offline, "Unit Offline state Change")
-		Command.Event.Attach(Event.Unit.Detail.Combat, _lsu.Unit.Combat, "Unit Combat state Change")
-		Command.Event.Attach(Event.Unit.Detail.Planar, _lsu.Unit.Planar, "Unit Planar Chanage")
-		Command.Event.Attach(Event.Unit.Detail.PlanarMax, _lsu.Unit.PlanarMax, "Unit Planar Max Change")
-		Command.Event.Attach(Event.Unit.Detail.Ready, _lsu.Unit.Ready, "Unit Ready State Change")
-		Command.Event.Attach(Event.Unit.Detail.Vitality, _lsu.Unit.Vitality, "Unit Vitality Change")
-		Command.Event.Attach(Event.Unit.Detail.Mark, _lsu.Unit.Mark, "Unit Mark Change")
-		Command.Event.Attach(Event.Unit.Detail.Zone, _lsu.Unit.Zone, "Unit Zone Change")
-		Command.Event.Attach(Event.Unit.Detail.LocationName, _lsu.Unit.Location, "Unit Location Change")
-		Command.Event.Attach(Event.Unit.Detail.Role, _lsu.Unit.Role, "Unit Role Change")
-		Command.Event.Attach(Event.Unit.Detail.Warfront, _lsu.Unit.Warfront, "Unit Warfront Change")
+		Command.Event.Attach(Event.Unit.Detail.Health, _lsu.Unit.Health, "LibSUnit HP Change")
+		Command.Event.Attach(Event.Unit.Detail.Name, _lsu.Unit.Name, "LibSUnit Name Change")
+		Command.Event.Attach(Event.Unit.Detail.Level, _lsu.Unit.Level, "LibSUnit Level Change")
+		Command.Event.Attach(Event.Unit.Detail.HealthMax, _lsu.Unit.HealthMax, "LibSUnit HP Max Change")
+		Command.Event.Attach(Event.Unit.Detail.Power, function (handle, List) _lsu.Unit.Power(handle, List, "power") end, "LibSUnit Power Change")
+		Command.Event.Attach(Event.Unit.Detail.Energy, function (handle, List) _lsu.Unit.Power(handle, List, "energy") end, "LibSUnit Energy Change")
+		Command.Event.Attach(Event.Unit.Detail.Mana, function (handle, List) _lsu.Unit.Power(handle, List, "mana") end, "LibSUnit Mana Change")
+		Command.Event.Attach(Event.Unit.Detail.EnergyMax, function (handle, List) _lsu.Unit.PowerMax(handle, List, "energy") end, "LibSUnit Energy Max Change")
+		Command.Event.Attach(Event.Unit.Detail.ManaMax, function (handle, List) _lsu.Unit.PowerMax(handle, List, "mana") end, "LibSUnit Mana Max Change")
+		Command.Event.Attach(Event.Unit.Detail.Offline, _lsu.Unit.Offline, "LibSUnit Offline state Change")
+		Command.Event.Attach(Event.Unit.Detail.Combat, _lsu.Unit.Combat, "LibSUnit Combat state Change")
+		Command.Event.Attach(Event.Unit.Detail.Planar, _lsu.Unit.Planar, "LibSUnit Planar Chanage")
+		Command.Event.Attach(Event.Unit.Detail.PlanarMax, _lsu.Unit.PlanarMax, "LibSUnit Planar Max Change")
+		Command.Event.Attach(Event.Unit.Detail.Ready, _lsu.Unit.Ready, "LibSUnit Ready State Change")
+		Command.Event.Attach(Event.Unit.Detail.Vitality, _lsu.Unit.Vitality, "LibSUnit Vitality Change")
+		Command.Event.Attach(Event.Unit.Detail.Mark, _lsu.Unit.Mark, "LibSUnit Mark Change")
+		Command.Event.Attach(Event.Unit.Detail.Zone, _lsu.Unit.Zone, "LibSUnit Zone Change")
+		Command.Event.Attach(Event.Unit.Detail.LocationName, _lsu.Unit.Location, "LibSUnit Location Change")
+		Command.Event.Attach(Event.Unit.Detail.Role, _lsu.Unit.Role, "LibSUnit Role Change")
+		Command.Event.Attach(Event.Unit.Detail.Warfront, _lsu.Unit.Warfront, "LibSUnit Warfront Change")
+		Command.Event.Attach(Event.Unit.Detail.Coord, _lsu.Unit.Position, "LibSUnit Coord Change")
 		
 		-- Unit Combat Events
-		Command.Event.Attach(Event.Combat.Damage, _lsu.Combat.Damage, "Unit Combat Damage")
-		Command.Event.Attach(Event.Combat.Heal, _lsu.Combat.Heal, "Unit Combat Heal")
-		Command.Event.Attach(Event.Combat.Immune, _lsu.Combat.Immune, "Unit Immune")
-		Command.Event.Attach(Event.Combat.Death, _lsu.Combat.Death, "Unit Death")
+		Command.Event.Attach(Event.Combat.Damage, _lsu.Combat.Damage, "LibSUnit Combat Damage")
+		Command.Event.Attach(Event.Combat.Heal, _lsu.Combat.Heal, "LibSUnit Combat Heal")
+		Command.Event.Attach(Event.Combat.Immune, _lsu.Combat.Immune, "LibSUnit Immune")
+		Command.Event.Attach(Event.Combat.Death, _lsu.Combat.Death, "LibSUnit Death")
 	
 		-- Register Events with LibUnitChange
 		local EventTable
@@ -1423,9 +1434,9 @@ function _lsu.Wait(handle, uList)
 		for Index, Spec in pairs(_SpecList) do
 			if Spec ~= "player" then
 				EventTable = Library.LibUnitChange.Register(Spec)
-				Command.Event.Attach(EventTable, function (handle, data) _lsu.Raid.Check(data, Spec) end, Spec.." changed")
+				Command.Event.Attach(EventTable, function (handle, data) _lsu.Raid.Check(data, Spec) end, "LibSUnit "..Spec.." changed")
 				EventTable = Library.LibUnitChange.Register(Spec..".pet")
-				Command.Event.Attach(EventTable, function (handle, data) _lsu.Raid.PetChange(data, Spec) end, Spec.." pet changed")
+				Command.Event.Attach(EventTable, function (handle, data) _lsu.Raid.PetChange(data, Spec) end, "LibSUnit "..Spec.." pet changed")
 				LibSUnit.Raid.Lookup[Spec] = {
 					Group = math.ceil(Index / 5),
 					Specifier = Spec,
@@ -1442,13 +1453,13 @@ function _lsu.Wait(handle, uList)
 				end
 			end
 			EventTable = Library.LibUnitChange.Register(Spec..".pet.target")
-			Command.Event.Attach(EventTable, function (handle, data) _lsu.Unit.Change(data, Spec..".pet") end, Spec.." pet target changed")
+			Command.Event.Attach(EventTable, function (handle, data) _lsu.Unit.Change(data, Spec..".pet") end, "LibSUnit "..Spec.." pet target changed")
 			EventTable = Library.LibUnitChange.Register(Spec..".pet.target.target")
-			Command.Event.Attach(EventTable, function (handle, data) _lsu.Unit.Change(data, Spec..".pet.target") end, Spec.." pet targets target changed")
+			Command.Event.Attach(EventTable, function (handle, data) _lsu.Unit.Change(data, Spec..".pet.target") end, "LibSUnit "..Spec.." pet targets target changed")
 			EventTable = Library.LibUnitChange.Register(Spec..".target")
-			Command.Event.Attach(EventTable, function (handle, data) _lsu.Unit.Change(data, Spec) end, Spec.." target changed")
+			Command.Event.Attach(EventTable, function (handle, data) _lsu.Unit.Change(data, Spec) end, "LibSUnit "..Spec.." target changed")
 			EventTable = Library.LibUnitChange.Register(Spec..".target.target")
-			Command.Event.Attach(EventTable, function (handle, data) _lsu.Unit.Change(data, Spec..".target") end, Spec.." targets target changed")
+			Command.Event.Attach(EventTable, function (handle, data) _lsu.Unit.Change(data, Spec..".target") end, "LibSUnit "..Spec.." targets target changed")
 		end
 		for Spec, UID in pairs(raidBuild) do
 			_lsu.Raid.Check(UID, Spec)
@@ -1459,7 +1470,7 @@ end
 function _lsu.Start(handle, AddonId)
 	if AddonId == AddonIni.id then
 		_lsu.PlayerID = Inspect.Unit.Lookup("player")
-		Command.Event.Attach(Event.Unit.Availability.Full, _lsu.Wait, "System Wait Start")
+		Command.Event.Attach(Event.Unit.Availability.Full, _lsu.Wait, "LibSUnit System Wait Start")
 	end
 end
 
@@ -1484,12 +1495,12 @@ function _lsu.SlashHandler(handle, cmd)
 end
 
 -- Addon Specific Events
-Command.Event.Attach(Event.Addon.Load.End, _lsu.Start, "Initialize all currently seen Units if any")
-Command.Event.Attach(Event.Addon.SavedVariables.Load.End, _lsu.Load, "Load Vars")
-Command.Event.Attach(Event.Addon.SavedVariables.Save.Begin, _lsu.Save, "Save Vars")
+Command.Event.Attach(Event.Addon.Load.End, _lsu.Start, "LibSUnit Initialize all currently seen Units if any")
+Command.Event.Attach(Event.Addon.SavedVariables.Load.End, _lsu.Load, "LibSUnit Load Vars")
+Command.Event.Attach(Event.Addon.SavedVariables.Save.Begin, _lsu.Save, "LibSUnit Save Vars")
 
 -- System Specific Events
-Command.Event.Attach(Event.System.Update.Begin, _lsu.Tick, "Redraw start")
+Command.Event.Attach(Event.System.Update.Begin, _lsu.Tick, "LibSUnit Redraw start")
 Command.Event.Attach(Command.Slash.Register("libsunit"), _lsu.SlashHandler, "LibSUnit Slash Command")
 
 -- DEBUG STUFF
