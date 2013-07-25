@@ -188,12 +188,12 @@ function ULT:UnitHPCheck(uDetails, unitID)
 				self.PhaseObj.Objectives:AddPercent(self.Ultane, 0, 100)
 				self.Phase = 1
 				if BossObj == self.Ultane then
-					KBM.TankSwap:Start(self.Ultane.Debuff.Devil[KBM.Lang], BossObj)
+					KBM.TankSwap:Start(self.Lang.Debuff.Devil[KBM.Lang], unitID)
 				end
 			else
 				if BossObj == self.Ultane then
 					if not KBM.TankSwap.Active then
-						KBM.TankSwap:Start(self.Ultane.Debuff.Devil[KBM.Lang], BossObj)
+						KBM.TankSwap:Start(self.Lang.Debuff.Devil[KBM.Lang], unitID)
 					end
 				end
 				BossObj.Dead = false

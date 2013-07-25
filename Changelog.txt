@@ -7,6 +7,11 @@ LibSUnit
 * Fixed: Prevented UnitObj.Health sometimes being nil.
 * Removed: Redundant raid queue code. Slight performance increase.
 
+Notify and Chat Events
+* Fixed: Removed global references.
+* Change: Prevented capture method sending nil for Target.
+* Change: Now sends Boss.Name as the Caster field.
+
 Castbar System (During Alpha)
 * Note: Currently under testing. Main engine runs in the background for bug finding.
 * New: Engine Tracking only for Player castbar.
@@ -20,6 +25,7 @@ Slivers
 *** Change: Alert color changed for soul shatter. Now Orange by default.
 ** Salvarola
 *** New: Added Mechanic Spy for Curse of Magma.
+*** New: Added Enrage Timer for 5:30.
 *** Change: Incineration timer changed from a Wait style to standard.
 ** Ultane
 *** New: Added Tank-Swap monitoring for Devil's Pact.

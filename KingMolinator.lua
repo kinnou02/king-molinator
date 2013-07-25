@@ -1678,7 +1678,7 @@ function KBM.Trigger:Init()
 	}
 
 	function self.Queue:Add(TriggerObj, Caster, Target, Duration)	
-		if KBM.Encounter or KBM.Testing then
+		if KBM.Encounter then
 			if TriggerObj.Queued then
 				TriggerObj.Target[Target] = true
 				return
@@ -1700,7 +1700,7 @@ function KBM.Trigger:Init()
 	
 	function self.Queue:Activate()	
 		if self.Queued then
-			if KBM.Encounter or KBM.Testing then
+			if KBM.Encounter then
 				if self.Removing then
 					return
 				end
@@ -6950,6 +6950,7 @@ function KBM.Notify(handle, data)
 				if KBM.CurrentMod then
 					if KBM.Trigger.Notify[KBM.CurrentMod.ID] then
 						for i, TriggerObj in ipairs(KBM.Trigger.Notify[KBM.CurrentMod.ID]) do
+							local sStart, sEnd, Target
 							sStart, sEnd, Target = string.find(data.message, TriggerObj.Phrase)
 							if sStart then
 								local unitID = nil
@@ -6962,8 +6963,10 @@ function KBM.Notify(handle, data)
 											end
 										end
 									end
+								else
+									unitID = "uNone"
 								end
-								KBM.Trigger.Queue:Add(TriggerObj, nil, unitID)
+								KBM.Trigger.Queue:Add(TriggerObj, TriggObj.Unit.Name, unitID)
 								break
 							end
 						end
@@ -6987,9 +6990,13 @@ function KBM.NPCChat(handle, data)
 					if KBM.Trigger.Say[KBM.CurrentMod.ID] then
 						for i, TriggerObj in ipairs(KBM.Trigger.Say[KBM.CurrentMod.ID]) do
 							if TriggerObj.Unit.Name == data.fromName then
+								local sStart, sEnd, Target
 								sStart, sEnd, Target = string.find(data.message, TriggerObj.Phrase)
 								if sStart then
-									KBM.Trigger.Queue:Add(TriggerObj, nil, "NotifyObject")
+									if not Target then
+										Target = "NotifyObject"
+									end
+									KBM.Trigger.Queue:Add(TriggerObj, data.fromName, Target)
 									break
 								end
 							end

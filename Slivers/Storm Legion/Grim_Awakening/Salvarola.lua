@@ -20,7 +20,7 @@ local SAL = {
 	Instance = GA.Name,
 	InstanceObj = GA,
 	Lang = {},
-	--Enrage = 6 * 60,
+	Enrage = (5 * 60) + 30,
 	ID = "SSalvarola",
 	Object = "SAL",
 }
