@@ -6966,7 +6966,7 @@ function KBM.Notify(handle, data)
 								else
 									unitID = "uNone"
 								end
-								KBM.Trigger.Queue:Add(TriggerObj, TriggObj.Unit.Name, unitID)
+								KBM.Trigger.Queue:Add(TriggerObj, TriggerObj.Unit.Name, unitID)
 								break
 							end
 						end
