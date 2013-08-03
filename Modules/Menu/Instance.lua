@@ -661,13 +661,18 @@ function Build:Timers()
 									function SideCallbacks:Color(bool, Color)
 										if not Color then
 											TimerSettings.Custom = bool
+											if bool then
+												TimerObj.Color = TimerSettings.Color
+											else
+												TimerObj.Color = TimerObj.Default_Color
+											end
 										elseif Color then
 											TimerSettings.Color = Color
 										end																										
 									end
 									
 									local SubHeader = self.Side.UI.CreatePlainHeader(TimerObj.MenuName or TimerObj.Name, nil, "SubTitle", nil)
-									SubHeader:CreateColorPicker("Color", TimerSettings, "Color", SideCallbacks)
+									SubHeader:CreateColorPicker("Color", TimerObj, "Color", SideCallbacks)
 								end
 							
 								local Child = Header:CreateCheck(TimerObj.MenuName or TimerObj.Name, TimerSettings, "Enabled", Callbacks)
@@ -760,13 +765,18 @@ function Build:Timers()
 									function SideCallbacks:Color(bool, Color)
 										if not Color then
 											SpySettings.Custom = bool
+											if bool then
+												SpyObj.Color = SpySettings.Color
+											else
+												SpyObj.Color = SpyObj.Default_Color
+											end
 										elseif Color then
 											SpySettings.Color = Color
 										end																	
 									end
 									
 									local SubHeader = self.Side.UI.CreatePlainHeader(SpyObj.MenuName or SpyObj.Name, nil, "SubTitle", nil)
-									SubHeader:CreateColorPicker("Color", SpySettings, "Color", SideCallbacks)
+									SubHeader:CreateColorPicker("Color", SpyObj, "Color", SideCallbacks)
 								end
 							
 								local Child = Header:CreateCheck(SpyObj.MenuName or SpyObj.Name, SpySettings, "Enabled", Callbacks)
@@ -901,6 +911,11 @@ function Build:Alerts()
 									function SideCallbacks:Color(bool, Color)							
 										if not Color then
 											AlertSettings.Custom = bool
+											if bool then
+												AlertObj.Color = AlertSettings.Color
+											else
+												AlertObj.Color = AlertObj.Default_Color
+											end
 										elseif Color then
 											AlertSettings.Color = Color
 										end								
@@ -911,7 +926,7 @@ function Build:Alerts()
 									SubHeader:CreateCheck(KBM.Language.Options.Notify[KBM.Lang], AlertSettings, "Notify", Callbacks)
 									local Sound = SubHeader:CreateCheck(KBM.Language.Options.Sound[KBM.Lang], AlertSettings, "Sound", Callbacks)
 									Sound.Enabled = false
-									SubHeader:CreateColorPicker("Color", AlertSettings, "Color", SideCallbacks)
+									SubHeader:CreateColorPicker("Color", AlertObj, "Color", SideCallbacks)
 								end
 							
 								local Child = Header:CreateCheck(AlertObj.MenuName or AlertObj.Text, AlertSettings, "Enabled", Callbacks)

@@ -565,10 +565,11 @@ function Menu.Object:CreateHeader(Name, Settings, ID, Callback, Page)
 	return HeaderObj
 end
 
-function Menu.Object:CreateColorPicker(Name, Settings, ID, Callback, Page)
+function Menu.Object:CreateColorPicker(Name, Object, ID, Callback, Page)
 	ColorObj = {}
-	Menu.UI.SetDefaults(ColorObj, Name, Settings, ID, Callback, Page)
+	Menu.UI.SetDefaults(ColorObj, Name, Object.Settings, ID, Callback, Page)
 	ColorObj.Type = "Color"
+	ColorObj.KBMObject = Object
 	
 	function ColorObj:SetEnabled(bool)
 		for ColorID, ColorObj in pairs(self.UI.ColorObj) do
@@ -589,7 +590,7 @@ function Menu.Object:CreateColorPicker(Name, Settings, ID, Callback, Page)
 	
 	function ColorObj:Render()
 		self.UI = Menu.UI.Store.Color:RemoveLast()
-		self.Color = self.Settings.Color
+		self.Color = self.KBMObject.Color
 		if not self.UI then
 			self.UI = {}
 			self.UI.Cradle = UI.CreateFrame("Frame", "Options_Page_Child_Color", self._root.UI.Content)
@@ -698,6 +699,7 @@ function Menu.Object:CreateColorPicker(Name, Settings, ID, Callback, Page)
 					if self._object.Active then
 						local state = self:GetChecked()
 						self._object.Callback[ID](self._object._root, state)
+						self._object:SetColor(self._object.KBMObject.Color)
 						if not state then
 							self._object:Disable(true)
 						else
@@ -706,7 +708,7 @@ function Menu.Object:CreateColorPicker(Name, Settings, ID, Callback, Page)
 					end
 				end
 				self.UI.Check:EventAttach(Event.UI.Checkbox.Change, self.Checkbox_Handler, self.ID..": checkbox callback handler")
-				self.ChildState = self.Settings[ID]			
+				self.ChildState = self.KBMObject.Color			
 			else
 				self.UI.Check:SetVisible(false)
 				self.UI.Check:SetChecked(false)
@@ -719,7 +721,6 @@ function Menu.Object:CreateColorPicker(Name, Settings, ID, Callback, Page)
 				self:Disable(true)
 				self:Enable(false)
 			else
-				
 				self:SetEnabled(self.Settings.Custom)
 			end
 			

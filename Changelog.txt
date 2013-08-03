@@ -4,19 +4,40 @@ LibSUnit
 * New: Added event Event.SafesUnitLib.Unit.Detail.Position (X or Y or Z position has changed) table{[UnitID] = UnitObj}
 * New: Added a clean method for retrieving Unit objects. UnitObj = LibSUnit:RequestDetails(UnitID)
 * Note: Using this method will create the Unit if available, or return an existing unit object.
+* New: Now checks for .relation member during the standard damage/heal handler. If changed, this will trigger Event.SafesUnitLib.Unit.Detail.Relation(table{Key = UID, Value = UnitObject})
+* Note: The Rift Addon API still doesn't support native Event.Unit.Detail.Relation, so until it does, the above will remain in the standard damage/heal handler.
 * Fixed: Prevented UnitObj.Health sometimes being nil.
 * Removed: Redundant raid queue code. Slight performance increase.
+
+Menu
+* Fixed: All custom color settings will now work as intended. It'll remember default colors, and last color chosen when switching to/from custom.
+* Change: Custom colors for objects are applied immediately.
 
 Notify and Chat Events
 * Fixed: Removed global references.
 * Change: Prevented capture method sending nil for Target.
 * Change: Now sends Boss.Name as the Caster field.
 
-Castbar System (During Alpha)
-* Note: Currently under testing. Main engine runs in the background for bug finding.
-* New: Engine Tracking only for Player castbar.
-* New: Engine Tracking only for Player Target castbar.
-* New: Engine Tracking only for Player Focus castbar.
+New Castbar System (During Alpha)
+* Note: The system is now almost complete. Actual bars are created but forced to disabled for this build.
+* Note: Next build should see them implemented in to KBM as configurable castbars (see below).
+* New: Engine and Bar for Player castbar. (Disabled)
+* New: Engine and Bar for Target castbar. (Disabled)
+* New: Engine and Bar Player Focus castbar. (Disabled)
+
+Raids
+* Endless Eclipse
+** Dreadlord Goloch
+*** New: Added Alert for Baneful Smash.
+* Frozen Tempest
+** Kolmasveli and Toinenveli
+*** New: Timer for 60% DPS gate breach for first hide. (1:30)
+*** Change: Kolmasveli's Hide mechanic is now cyan (light blue) to match his Ire mechanic.
+*** Change: Kolmasveli's Ire debuff mechanic spy is now blue.
+*** Change: Tempest Flare now defaults to yellow, as it's an interrupt mechanic.
+** Artifex Zaviel
+*** New: Updated UTID for Zaviel. (Recording will now start)
+*** New: Updated UTID for Power Conducer.
 
 Slivers
 * Grim Awakening
@@ -31,6 +52,7 @@ Slivers
 *** New: Added Tank-Swap monitoring for Devil's Pact.
 *** New: Added Alert and Spy for Spirit Shackle
 *** New: Added Alert and Spy for Infernal Radiance.
+*** New: Enrage Timer added.
 
 ----
 v1.5.0

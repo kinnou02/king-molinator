@@ -9,12 +9,16 @@ Author = "Paul Snart"
 Website = "http://twitter.com/#!/psnart"
 Email = "snarty@gmail.com"
 
-Version = "0.0.6"
+Version = "0.0.8"
 
 Environment = "2.3"
 
 RunOnStartup = {
 	"LibSCast.lua",
+	"Locale/English.lua",
+	"Locale/French.lua",
+	"Locale/German.lua",
+	"Locale/Russian.lua",
 }
 
 Embed = {

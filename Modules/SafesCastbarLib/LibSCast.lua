@@ -22,6 +22,9 @@ local LibSUnit = LSUIni.data
 local LSTIni = Inspect.Addon.Detail("SafesTableLib")
 local LibSata = LSTIni.data
 
+local KTHIni = Inspect.Addon.Detail("KBMTextureHandler")
+local LibTexture = KTHIni.data
+
 local _store = {}
 local _int = {
 	Default = {},
@@ -31,21 +34,32 @@ local _int = {
 local _tracking = {}
 local _active = {}
 local _typeHandlers = {}
+local _queue = LibSata:Create()
+
+-- Language Settings
+LibSCast.Lang = {}
+LibSCast.Language = Inspect.System.Language()
+
+local _event = {
+	CastBar = {
+		Cast = {}
+	},
+}
 
 function _int.Default.Settings()
 	local _set = {
+		enabled = true, -- Should the castbar start.
 		pinned = false, -- Is the castbar handled via a pin function. Usually castbars linked to other controlling frames.
-		visible = false, -- Should the castbar be currently be rendered.
+		visible = false, -- Should the castbar currently be rendered.
 		relX = 0.5, -- Percentage based screen positioning. Default is central, top 3rd.
 		relY = 0.25, --/
 		unlocked = false, -- Can be moved via left mouse button hold and drag. Pinned Castbars can never be unlocked.
 		alpha = 1.0, -- Global alpha for the entire castbar.
-		name = true, -- Display casters name.
 		text = {
 			enabled = true,
 			alpha = 1.0,
-			shadow = true, -- Enable text shadow
-			glow = false, -- Enable text glow
+			shadow = false, -- Enable text shadow
+			border = true, -- Enable text border
 			color = {
 				font = {
 					r = 1,
@@ -54,9 +68,9 @@ function _int.Default.Settings()
 					a = 1,
 				},
 				shadow = {
-					r = 1,
-					g = 1,
-					b = 1,
+					r = 0,
+					g = 0,
+					b = 0,
 					a = 1,
 				},
 			},
@@ -123,7 +137,8 @@ function _int.Default.SimplePack()
 			if not self.ui then
 				-- Create new UI elements.
 				self.ui = {}
-				self.ui.crwwadle = UI.CreateFrame("Frame", self.packObj.."_"..self.id.."_"..self._total, self._packObj.Parent)
+				self.ui.cradle = UI.CreateFrame("Frame", self.packObj.."_"..self.id.."_"..self._total, self._packObj.Parent)
+				self.ui.cradle:SetBackgroundColor(0,0,0,0.5)
 			end
 			self.loaded = true
 		end
@@ -184,16 +199,7 @@ function _int.Default.SimplePack()
 	LibSCast:TPackAdd("Simple", "Simple", barPack)
 end
 
-function _int.Default:RiftPack()
-	-- Create Rift Style Castbar
-	-- Default Normal Bar.
-	--
-	local _tBar = {
-		id = "default",
-		total = 0,
-		store = LibSata:Create(),
-	}
-	
+function _int.Default:CreateBar(_tBar)
 	function _tBar:Create(PackInstance)
 		local bar = {
 			duration = 1, -- Default cast/channel duration in seconds.
@@ -204,68 +210,321 @@ function _int.Default:RiftPack()
 			packInstance = PackInstance, -- The bar which is requesting this ui element. Used for various settings.
 			packObj = PackInstance.PackObj,
 			loaded = false,
+			anim = {},
+			texture = self.texture,
 		}
-		--print("---------")
-		--print("Rift "..self.id.." Bar Created: "..PackInstance.CastObj.id)
 		function bar:Load()
 			if self.loaded then
 				return
 			end
+			if not self.LoadObj then
+				self.LoadObj = _queue:Add(self)
+				self.Update = self.Load
+				return
+			end
+			self.LoadObj = nil
 			self.ui = self.store:RemoveLast()
 			--print("Rift "..self.id.." Bar Loaded")
 			if not self.ui then
-				self.barObj.total = self.barObj.total + 1
+				local barObj = self.barObj
+				barObj.total = barObj.total + 1
 				self.ui = {}
-				self.ui.cradle = UI.CreateFrame("Frame", self.packObj.id.."_"..self.id.."_"..self.barObj.total, self.packInstance.parent)
+				self.ui.cradle = UI.CreateFrame("Frame", self.packObj.id.."_"..self.id.."_"..barObj.total, self.packInstance.parent)
 				self.ui.cradle:SetVisible(false)
-				--print("Rift "..self.id.." Bar Created new")
+				self.ui.foreground = UI.CreateFrame("Texture", self.packObj.id.."_"..self.id.."_"..barObj.total..": Foreground", self.ui.cradle)
+				self.ui.foreground:SetLayer(3)
+				self.ui.foreground:SetPoint("TOPLEFT", self.ui.cradle, "TOPLEFT")
+				self.ui.foreground:SetPoint("BOTTOMRIGHT", self.ui.cradle, "BOTTOMRIGHT")
+				LibTexture.LoadTexture(self.ui.foreground, self.texture.foreground.location, self.texture.foreground.file)
+				self.ui.text = UI.CreateFrame("Text", self.packObj.id.."_"..self.id.."_"..barObj.total..": Text", self.ui.cradle)
+				self.ui.text:SetPoint("CENTER", self.ui.cradle, "CENTER")
+				self.ui.text:SetLayer(4)
+				self.ui.text:SetEffectGlow({offsetX = 0, offsetY = 0, colorR = 0, colorG = 0, colorB = 0, strength = 2, blurX = 3, blurY = 3})
+				self.ui.mask = UI.CreateFrame("Mask", self.packObj.id..".."..self.id.."_"..barObj.total..": Progress Bar Mask", self.ui.cradle)
+				self.ui.mask:SetWidth(0)
+				self.ui.mask:SetLayer(2)
+				self.ui.mask:SetPoint("TOPLEFT", self.ui.cradle, barObj.default.progBar.tx, barObj.default.progBar.ty) 
+				self.ui.mask:SetPoint("BOTTOM", self.ui.cradle, nil, barObj.default.progBar.by)
+				-- Interruptible Progress Bar
+				self.ui.progI = UI.CreateFrame("Texture", self.packObj.id.."_"..self.id.."_"..barObj.total..": Progress Bar Int", self.ui.mask)
+				self.ui.progI:SetVisible(false)
+				self.ui.progI:SetAlpha(0.8)
+				LibTexture.LoadTexture(self.ui.progI, self.texture.progBarI.location, self.texture.progBarI.file)
+				self.ui.progI:SetPoint("TOPLEFT", self.ui.mask, "TOPLEFT")
+				self.ui.progI:SetPoint("BOTTOMRIGHT", self.ui.cradle, barObj.default.progBar.bx, barObj.default.progBar.by)
+				-- Uninterruptible Progress Bar
+				self.ui.progN = UI.CreateFrame("Texture", self.packObj.id.."_"..self.id.."_"..barObj.total..": Progress Bar No Int", self.ui.mask)
+				LibTexture.LoadTexture(self.ui.progN, self.texture.progBarN.location, self.texture.progBarN.file)
+				self.ui.progN:SetVisible(false)
+				self.ui.progN:SetPoint("TOPLEFT", self.ui.mask, "TOPLEFT")
+				self.ui.progN:SetPoint("BOTTOMRIGHT", self.ui.cradle, barObj.default.progBar.bx, barObj.default.progBar.by)
+				self.ui.intBar = UI.CreateFrame("Texture", self.packObj.id.."_"..self.id.."_"..barObj.total..": Interrupt Bar", self.ui.mask)
+				LibTexture.LoadTexture(self.ui.intBar, self.texture.intBar.location, self.texture.intBar.file)
+				self.ui.intBar:SetVisible(false)
+				self.ui.intBar:SetPoint("TOPLEFT", self.ui.mask, "TOPLEFT")
+				self.ui.intBar:SetPoint("BOTTOMRIGHT", self.ui.cradle, barObj.default.progBar.bx, barObj.default.progBar.by)		
+				self.ui.glow = UI.CreateFrame("Texture", self.packObj.id.."_"..self.id.."_"..barObj.total..": Glow", self.ui.cradle)
+				LibTexture.LoadTexture(self.ui.glow, self.texture.glow.location, self.texture.glow.file)
+				self.ui.glow:SetAlpha(0)
+				self.ui.glow:SetLayer(5)
+				self.ui.glow:SetPoint("TOPLEFT", self.ui.cradle, barObj.default.glow.tx, barObj.default.glow.ty)
+				self.ui.glow:SetPoint("BOTTOMRIGHT", self.ui.cradle, barObj.default.glow.bx, barObj.default.glow.by)
+				self.currentGlow = "file"
 			else
-				--print("Rift "..self.id.." Bar Pulled from Store")
+				self.cradle:SetParent(self.packInstance.parent)
 			end
 			self.loaded = true
+			self.Settings = self.packInstance.CastObj.Settings
+			self.barObj.default.glow.duration = 1 - self.barObj.default.glow.start
+			if not self.Settings.relX then
+				self.Settings.relX = 0.5
+				self.Settings.relY = 0.2
+			end
+			self:ApplySettings()
+			if self.WaitStart then
+				self.Update = self.Start
+				self.WaitStart = false
+			end
 		end
 		
-		function bar:Begin()
-			--print("Rift "..self.id.." Bar cast started: "..self.packInstance.CastObj.Type)
+		function bar:ApplySettings()
+			if self.Settings.pinned then
+				self.CastObj.pinFunction(self)
+			else
+				self.ui.cradle:SetPoint("CENTER", UIParent, self.Settings.relX, self.Settings.relY)
+				self.ui.cradle:SetWidth(math.ceil(self.barObj.default.w * self.Settings.scale.w))
+				self.ui.cradle:SetHeight(math.ceil(self.barObj.default.h * self.Settings.scale.h))
+				self.ui.text:SetFontSize(math.ceil(self.barObj.default.textSize * self.Settings.scale.t))
+			end
+			self.progWidth = math.ceil(self.ui.cradle:GetWidth() * self.barObj.barScale)
+		end
+		
+		function bar:Begin(CastData)
+			self.CastData = CastData
+			self.StartObj = _queue:Add(self)
+			if not self.loaded then
+				self.WaitStart = true
+			else
+				self.Update = self.Start
+			end
+		end
+		
+		function bar:Start()
+			local CastData = self.CastData
+			self.Name = CastData.abilityName
+			self.Duration = CastData.duration or 1
+			self.Remaining = CastData.remaining or 1
+			self.Progress = self.Duration/self.Remaining
+			self.ui.text:SetText(string.format("%0.01f", self.Remaining).." - "..self.Name)
+			self.ui.cradle:SetAlpha(1)
+			self.ui.intBar:SetVisible(false)
+			if CastData.uninterruptible then
+				self.progBar = self.ui.progN
+				self.ui.progI:SetVisible(false)
+				if self.currentGlow ~= "fileN" then
+					if self.barObj.texture.glow.fileN then
+						LibTexture.LoadTexture(self.ui.glow, self.barObj.texture.glow.location, self.barObj.texture.glow.fileN)
+						self.currentGlow = "fileN"
+					end
+				end
+			else
+				self.progBar = self.ui.progI
+				self.ui.progN:SetVisible(false)
+				if self.currentGlow ~= "file" then
+					if self.barObj.texture.glow.file then
+						LibTexture.LoadTexture(self.ui.glow, self.barObj.texture.glow.location, self.barObj.texture.glow.file)
+						self.currentGlow = "file"
+					end
+				end
+			end
+			self.ui.glow:SetAlpha(0)
+			self.ui.mask:SetWidth(0)
+			self.progBar:SetVisible(true)
 			self.ui.cradle:SetVisible(true)
+			if CastData.channeled then
+				self.Update = self.ChannelUpdate
+			else
+				self.Update = self.CastUpdate
+			end
+			self.StartObj = nil
+			self.Active = true
 		end
 		
 		function bar:Interrupt()
-			--print("Rift "..self.id.." Bar cast Interrupt: "..self.packInstance.CastObj.Type)
-			self:Stop()
+			self.anim.endTime = Inspect.Time.Real() + self.barObj.default.anim.duration
+			if self.CastData.uninterruptible then
+				self.ui.text:SetText(LibSCast.Lang.Stopped)
+			else
+				self.ui.text:SetText(LibSCast.Lang.Interrupted)
+			end
+			self.progBar:SetVisible(false)
+			self.ui.intBar:SetVisible(true)
+			self.ui.mask:SetWidth(self.progWidth)
+			self.Update = self.InterruptAnim
+			if not self.UpdateObj then
+				self.UpdateObj = _queue:Add(self)
+			end
 		end
 		
 		function bar:End()
-			--print("Rift "..self.id.." Bar cast end: "..self.packInstance.CastObj.Type)
-			self:Stop()
+			self.anim.endTime = Inspect.Time.Real() + self.barObj.default.anim.duration
+			self.Update = self.EndAnim
+			self.ui.text:SetText(self.Name)
+			self.ui.mask:SetWidth(self.progWidth)
+			if not self.UpdateObj then
+				self.UpdateObj = _queue:Add(self)
+			end
 		end
 		
 		function bar:Stop()
-			--print("Rift "..self.id.." Bar stopped: "..self.packInstance.CastObj.Type)
-			self.ui.cradle:SetVisible(false)		
+			self.ui.cradle:SetVisible(false)
+			self.ui.text:SetText(self.id)
+			if self.UpdateObj then
+				_queue:Remove(self.UpdateObj)
+			end
+			self.UpdateObj = nil
+			self.Active = false
 		end
 			
 		function bar:Recycle()
 		end
-		
-		function bar:CastUpdate(progress, duration)			
+				
+		function bar:Queue(Remaining)
+			self.Remaining = Remaining				
+			if not self.UpdateObj then
+				self.UpdateObj = _queue:Add(self)
+			end
 		end
 		
-		function bar:InterruptAnim()		
+		function bar:CastUpdate()
+			self.Progress = 1 - self.Remaining/self.Duration
+			local default = self.barObj.default
+			local newWidth = math.floor(self.progWidth * self.Progress)
+			if newWidth ~= self.ui.mask:GetWidth() then
+				self.ui.mask:SetWidth(newWidth)
+			end
+			local newText = string.format("%0.01f", self.Remaining).." - "..self.Name
+			if newText ~= self.ui.text:GetText() then
+				self.ui.text:SetText(newText)
+			end
+			if self.Progress > default.glow.start then
+				self.ui.glow:SetAlpha(1 * ((self.Progress - default.glow.start)/default.glow.duration))
+			end
+			self.UpdateObj = nil
 		end
 		
-		function bar:EndAnim()	
+		function bar:ChannelUpdate()
+			self.Progress = 1 - self.Remaining/self.Duration		
+			local default = self.barObj.default
+			local newWidth = math.ceil(self.progWidth * (1 - self.Progress))
+			if newWidth ~= self.ui.mask:GetWidth() then
+				self.ui.mask:SetWidth(newWidth)
+			end
+			local newText = string.format("%0.01f", self.Remaining).." - "..self.Name
+			if newText ~= self.ui.text:GetText() then
+				self.ui.text:SetText(newText)
+			end		
+			if self.Progress > default.glow.start then
+				self.ui.glow:SetAlpha(1 * ((self.Progress - default.glow.start)/default.glow.duration))
+			end
+			self.UpdateObj = nil
+		end
+		
+		function bar:InterruptAnim()
+			self.anim.remaining = self.anim.endTime - Inspect.Time.Real()
+			local default = self.barObj.default
+			self.anim.progress = self.anim.remaining * default.anim.duration
+			if self.anim.remaining <= 0.01 then
+				self.UpdateObj = nil
+				self.anim.endTime = 0
+				self:Stop()
+				return
+			else
+				self.ui.cradle:SetAlpha(self.anim.progress)
+			end
+			self.UpdateObj = _queue:Add(self)
+		end
+		
+		function bar:EndAnim()
+			self.anim.remaining = self.anim.endTime - Inspect.Time.Real()
+			local default = self.barObj.default
+			self.anim.progress = self.anim.remaining * default.anim.duration
+			if self.anim.remaining <= 0.01 then
+				self.UpdateObj = nil
+				self.anim.endTime = 0
+				self:Stop()
+				return
+			else
+				self.ui.cradle:SetAlpha(self.anim.progress)
+			end
+			self.UpdateObj = _queue:Add(self)
 		end
 
 		function bar:SetEditMode(bool)
 		end
-		bar.Update = bar.CastUpdate -- Set the default update handler.
 		
 		return bar
 	end
+end
+
+function _int.Default:RiftPack()
+	-- Create Rift Style Castbar
+	-- Default Normal Bar.
+	--
+	local _defaultBar = {
+		id = "default",
+		total = 0,
+		store = LibSata:Create(),
+		default = {
+			w = 275,
+			h = 35,
+			textSize = 14,
+			progBar = {
+				tx = 0.03,
+				ty = 0.1,
+				bx = 0.97,
+				by = 0.9,
+			},
+			glow = {
+				tx = 0.01,
+				ty = 0,
+				bx = 0.99,
+				by = 1,
+				start = 0.75, -- Percentage Glow will start to fade in.
+			},
+			anim = {
+				duration = 0.8, -- In Seconds of entire animation
+			},
+		},
+		texture = {
+			foreground = {
+				location = AddonIni.id,
+				file = "Media/Castbar_Outline.png",
+			},
+			progBarI = {
+				location = AddonIni.id,
+				file = "Media/Castbar_Cyan.png",
+			},
+			progBarN = {
+				location = AddonIni.id,
+				file = "Media/Castbar_Yellow.png",
+			},
+			intBar = {
+				location = AddonIni.id,
+				file = "Media/Castbar_Red.png",
+			},
+			glow = {
+				location = AddonIni.id,
+				file = "Media/Castbar_Complete.png",
+				fileN = "Media/Castbar_CompleteN.png",
+			},
+		},
+	}
+	_defaultBar.barScale = _defaultBar.default.progBar.bx - _defaultBar.default.progBar.tx 
+	_int.Default:CreateBar(_defaultBar)
 	
 	local barPack = {
-		default = _tBar, -- Required when sending bar packs.
+		default = _defaultBar, -- Required when sending bar packs.
 	}	
 	LibSCast:TPackAdd("Rift", "Rift", barPack)
 end
@@ -382,14 +641,14 @@ function _int:Castbar_Processor(UnitID)
 				if self.Cast.Start == CastData.begin then
 					return
 				else
-					self:Visible(false)
+					self:Stop()
 				end
 			end
 			_active[self.UnitID] = self
 			self.Cast.Start = CastData.begin
 			for _, CastObj in pairs(self.Castbars) do
 				if not CastObj.Passive then
-					CastObj:Begin(self.Cast)
+					CastObj:Begin(self.Cast.Data)
 				end
 			end
 			self.Active = true
@@ -404,6 +663,7 @@ function _int:Castbar_Processor(UnitID)
 				CastObj:Interrupt()
 			end
 		end
+		self.Active = false
 	end
 	
 	function CastPro:End()
@@ -414,22 +674,36 @@ function _int:Castbar_Processor(UnitID)
 				CastObj:End()
 			end
 		end
+		self.Active = false
 	end
 	
-	function CastPro:Queue()
-		-- Queue UI cast object for rendering.
+	function CastPro:Stop()
+		-- Triggered when a unit is no longer available and when a new cast starts with an existing cast in progress.
+		_active[self.UnitID] = nil
+		for _, CastObj in pairs(self.Castbars) do
+			if not CastObj.Passive then
+				CastObj:EndNoAnim()
+			end
+		end
+		self.Active = false
+	end
 		
-	end
-	
 	function CastPro:Update()
 		local CastData = Inspect.Unit.Castbar(self.UnitID)
 		if CastData then
 			if CastData.begin == self.Cast.Start then
 				self.Cast.Data = CastData
+				for _, CastObj in pairs(self.Castbars) do
+					if not CastObj.Passive then
+						CastObj:Update(CastData.remaining)
+					end
+				end
 			else
+				self.Cast.Data.remaining = Inspect.Time.Real() - self.Cast.Start
 				self:Begin()
 			end
 		else
+			self.Cast.Data.remaining = Inspect.Time.Real() - self.Cast.Start
 			self:Visible(false)
 		end
 	end
@@ -438,7 +712,7 @@ function _int:Castbar_Processor(UnitID)
 		--print("------")
 		--print("Cast State Changed: "..tostring(bool))
 		if bool then
-			CastPro:Begin()
+			self:Begin()
 			--print("Cast started for: "..self.UnitObj.Name)
 		else
 			if self.Active then
@@ -448,10 +722,10 @@ function _int:Castbar_Processor(UnitID)
 					local Time = Inspect.Time.Real()
 					local Expected = self.Cast.Start + self.Cast.Data.duration
 					local Difference = Time - Expected
-					if self.Cast.Data.remaining < 0.05 or self.Cast.Data.expired ~= nil or Difference > 0 then
-						CastPro:End()
+					if self.Cast.Data.remaining < 0 or self.Cast.Data.expired ~= nil or Difference > 0 then
+						self:End()
 					else
-						CastPro:Interrupt()
+						self:Interrupt()
 					end
 					-- print("Time Started: "..tostring(self.Cast.Data.begin))
 					-- print("Duration: "..tostring(self.Cast.Data.duration))
@@ -459,7 +733,7 @@ function _int:Castbar_Processor(UnitID)
 					-- print("Remaining: "..tostring(self.Cast.Data.remaining))
 					-- print("Adjusted Difference: "..tostring(Difference))
 				else
-					CastPro:End()
+					self:Stop()
 				end
 			end
 			self.Active = false
@@ -483,6 +757,7 @@ function LibSCast:Create(ID, Parent, Pack, Settings, Style)
 		Style = Style or "dynamic", -- Uses a set Bar type from the Pack if supplied, or Unit type if dynamic.
 		Parent = Parent, -- Parent Frame to link to.
 		Active = false,
+		Name = ID,
 		CurrentBar = nil, -- Current UI Object in use.
 	}
 	if Pack then
@@ -498,25 +773,27 @@ function LibSCast:Create(ID, Parent, Pack, Settings, Style)
 	else
 		function CastObj:Start(UnitID)
 			-- Start a castbar object tracking via UID only.
-			if self.Active then
-				self:Stop()
-			end
-			if not self.Type then
-				self.Type = UnitID
-			end
-			self.UnitID = UnitID
-			self.Active = true
-			if _tracking[UnitID] then
-				self.Engine = _tracking[UnitID]
-				self.Engine:Add(self)
-				if self.Engine.Active then
-					self:Begin()
+			if self.Settings.enabled then
+				if self.Active then
+					self:Stop()
 				end
-			else
-				self.Engine = _int:Castbar_Processor(UnitID)
-				self.Engine:Add(self)
-				self.Engine:Begin()
-			end	
+				if not self.Type then
+					self.Type = UnitID
+				end
+				self.UnitID = UnitID
+				self.Active = true
+				if _tracking[UnitID] then
+					self.Engine = _tracking[UnitID]
+					self.Engine:Add(self)
+					if self.Engine.Active then
+						self:Begin(self.Engine.Cast.Data)
+					end
+				else
+					self.Engine = _int:Castbar_Processor(UnitID)
+					self.Engine:Add(self)
+					self.Engine:Begin()
+				end	
+			end
 		end
 		
 		function CastObj:StartType(UnitType)
@@ -542,7 +819,7 @@ function LibSCast:Create(ID, Parent, Pack, Settings, Style)
 					self:Stop()
 				end
 			end
-			Command.Event.Attach(_typeHandlers[UnitType], self.Handler, "UnitID Change Handler for "..UnitType)
+			Command.Event.Attach(_typeHandlers[UnitType], self.Handler, "LibSUnit - UnitID Change Handler for "..UnitType, -1)
 		end
 		
 		function CastObj:Stop()
@@ -567,7 +844,7 @@ function LibSCast:Create(ID, Parent, Pack, Settings, Style)
 			end
 		end
 		
-		function CastObj:Begin()
+		function CastObj:Begin(CastData)
 			if self.Style == "dynamic" then
 				local cDetails = LibSUnit:RequestDetails(self.UnitID) -- Caster Unit Details
 				local tier = cDetails.tier or "default"
@@ -580,7 +857,7 @@ function LibSCast:Create(ID, Parent, Pack, Settings, Style)
 			else			
 				self.CurrentBar = self.PackInstance.bars[self.Style]
 			end
-			self.CurrentBar:Begin()
+			self.CurrentBar:Begin(CastData)
 		end
 		
 		function CastObj:End()
@@ -591,6 +868,15 @@ function LibSCast:Create(ID, Parent, Pack, Settings, Style)
 		function CastObj:Interrupt()
 			self.CurrentBar:Interrupt()
 			self.CurrentBar = nil
+		end
+		
+		function CastObj:EndNoAnim()
+			self.CurrentBar:Stop()
+			self.CurrentBar = nil
+		end
+		
+		function CastObj:Update(remaining)
+			self.CurrentBar:Queue(remaining)
 		end
 		
 		function CastObj:Pin(_pinFunction)
@@ -606,7 +892,7 @@ function LibSCast:Create(ID, Parent, Pack, Settings, Style)
 		end
 		
 		function CastObj:Unpin()
-			-- Returns a castbar to an unpinned state and will use relX,relY combo for positioning (defaults to center, top third of screen)
+			-- Returns a castbar to an unpinned state and will use relX,relY combo for positioning (defaults to center, top quarter of screen)
 			self.Settings.Pinned = false
 			self.pinFunction = nil
 			if self.Settings.Unlocked then
@@ -630,13 +916,25 @@ function LibSCast:Create(ID, Parent, Pack, Settings, Style)
 end
 
 function _int.Update_Handler(handle)
-	--local cTime = Inspect.Time.Real()
-	--if cTime > _int.UpdateTime then
-		for UnitID, CastPro in pairs(_active) do
-			CastPro:Update()
-		end
-		--_int.UpdateTime = cTime + 0.02
-	--end
+	if _queue._count > 0 then
+		local cTime = Inspect.Time.Real()
+		local renderBreak = cTime + 0.02
+		local breakObj = _queue:Add("break")
+		repeat
+			local bar = _queue:RemoveFirst()
+			if type(bar) == "table" then
+				bar:Update()
+			else
+				if bar ~= "break" then
+					_queue:Remove(breakObj)
+				end
+				break
+			end
+		until Inspect.Time.Real() > renderBreak
+	end
+	for UnitID, CastPro in pairs(_active) do
+		CastPro:Update()
+	end
 end
 
 function _int.Castbar_Handler(handle, units)
@@ -649,7 +947,7 @@ function _int.Castbar_Handler(handle, units)
 	end
 end
 
-Command.Event.Attach(Event.Unit.Castbar, _int.Castbar_Handler, "Castbar Visibility Handler")
-Command.Event.Attach(Event.System.Update.Begin, _int.Update_Handler, "Castbar Update Handler")
+Command.Event.Attach(Event.Unit.Castbar, _int.Castbar_Handler, "Castbar Visibility Handler", -1)
+Command.Event.Attach(Event.System.Update.Begin, _int.Update_Handler, "Castbar Update Handler", -1)
 
 _int.Default:CreatePacks()

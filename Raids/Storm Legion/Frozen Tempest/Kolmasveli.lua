@@ -85,6 +85,9 @@ KT.Lang.Verbose = {}
 KT.Lang.Verbose.GlimpseKol = KBM.Language:Add("Hide from Kolmasveli!")
 KT.Lang.Verbose.GlimpseKol:SetGerman("Verstecken vor Kolmasveli!")
 KT.Lang.Verbose.GlimpseKol:SetFrench("Se cacher de Kolmasveli!")
+KT.Lang.Verbose.GlimpseKolFast = KBM.Language:Add("Hide from Kolmasveli! (High DPS)")
+--KT.Lang.Verbose.GlimpseKolFast:SetGerman("Verstecken vor Kolmasveli!")
+--KT.Lang.Verbose.GlimpseKolFast:SetFrench("Se cacher de Kolmasveli!")
 KT.Lang.Verbose.GlimpseToi = KBM.Language:Add("Hide from Toinenveli!")
 KT.Lang.Verbose.GlimpseToi:SetGerman("Verstecken vor Toinenveli!")
 KT.Lang.Verbose.GlimpseToi:SetFrench("Se cacher de Toinenveli!")
@@ -121,19 +124,20 @@ KT.Kolmasveli = {
 		CastBar = KBM.Defaults.CastBar(),
 		TimersRef = {
 			Enabled = true,
-			Glimpse = KBM.Defaults.TimerObj.Create("red"),
-			GlimpseFirst = KBM.Defaults.TimerObj.Create("red"),
+			Glimpse = KBM.Defaults.TimerObj.Create("cyan"),
+			GlimpseFirst = KBM.Defaults.TimerObj.Create("cyan"),
+			GlimpseFirstFast = KBM.Defaults.TimerObj.Create("cyan"),
 		},
 		AlertsRef = {
 			Enabled = true,
 			Ire = KBM.Defaults.AlertObj.Create("blue"),
 			Eruption = KBM.Defaults.AlertObj.Create("dark_green"),
-			Glimpse = KBM.Defaults.AlertObj.Create("red"),
+			Glimpse = KBM.Defaults.AlertObj.Create("cyan"),
 		},
 		MechRef = {
 			Enabled = true,
 			Eruption = KBM.Defaults.MechObj.Create("dark_green"),
-			IreVuln = KBM.Defaults.MechObj.Create("red"),
+			IreVuln = KBM.Defaults.MechObj.Create("blue"),
 			Shock = KBM.Defaults.MechObj.Create("purple")
 		},
 	}
@@ -194,7 +198,7 @@ KT.Vortex = {
 		CastBar = KBM.Defaults.CastBar(),
 		AlertsRef = {
 			Enabled = true,
-			Flare = KBM.Defaults.AlertObj.Create("cyan"),
+			Flare = KBM.Defaults.AlertObj.Create("yellow"),
 		},
 	},
 }
@@ -355,6 +359,7 @@ function KT:UnitHPCheck(uDetails, unitID)
 							[2] = self.Lang.Debuff.ToiIre[KBM.Lang],
 					}
 					KBM.TankSwap:Start(DebuffTable, unitID, 2)
+					KBM.MechTimer:AddStart(self.Kolmasveli.TimersRef.GlimpseFirstFast)
 					KBM.MechTimer:AddStart(self.Kolmasveli.TimersRef.GlimpseFirst)
 				else
 					BossObj.Dead = false
@@ -403,16 +408,16 @@ function KT:Start()
 	self.Kolmasveli.TimersRef.Glimpse = KBM.MechTimer:Add(self.Lang.Verbose.GlimpseKol[KBM.Lang], 140)
 	self.Kolmasveli.TimersRef.GlimpseFirst = KBM.MechTimer:Add(self.Lang.Verbose.GlimpseKol[KBM.Lang], 170)
 	self.Kolmasveli.TimersRef.GlimpseFirst:NoMenu()
+	self.Kolmasveli.TimersRef.GlimpseFirstFast = KBM.MechTimer:Add(self.Lang.Verbose.GlimpseKolFast[KBM.Lang], 90)	
 	KBM.Defaults.TimerObj.Assign(self.Kolmasveli)
 	
 	self.Kolmasveli.TimersRef.Glimpse:SetLink(self.Kolmasveli.TimersRef.GlimpseFirst)
-	
 	self.Toinenveli.TimersRef.Glimpse = KBM.MechTimer:Add(self.Lang.Verbose.GlimpseToi[KBM.Lang], 60)	
 	KBM.Defaults.TimerObj.Assign(self.Toinenveli)
 	
 	-- Create Alerts
 	self.Kolmasveli.AlertsRef.Ire = KBM.Alert:Create(self.Lang.Debuff.KolIre[KBM.Lang], 5, true, true, "blue")
-	self.Kolmasveli.AlertsRef.Glimpse = KBM.Alert:Create(self.Lang.Verbose.GlimpseKol[KBM.Lang], nil, true, true, "red")
+	self.Kolmasveli.AlertsRef.Glimpse = KBM.Alert:Create(self.Lang.Verbose.GlimpseKol[KBM.Lang], nil, true, true, "cyan")
 	self.Kolmasveli.AlertsRef.Eruption = KBM.Alert:Create(self.Lang.Debuff.Eruption[KBM.Lang], nil, true, true, "dark_green")
 	self.Kolmasveli.AlertsRef.Eruption:Important()
 	KBM.Defaults.AlertObj.Assign(self.Kolmasveli)
@@ -421,7 +426,7 @@ function KT:Start()
 	self.Toinenveli.AlertsRef.Glimpse = KBM.Alert:Create(self.Lang.Verbose.GlimpseToi[KBM.Lang], nil, true, true, "orange")
 	KBM.Defaults.AlertObj.Assign(self.Toinenveli)
 
-	self.Vortex.AlertsRef.Flare = KBM.Alert:Create(self.Lang.Ability.Flare[KBM.Lang], nil, true, true, "cyan")
+	self.Vortex.AlertsRef.Flare = KBM.Alert:Create(self.Lang.Ability.Flare[KBM.Lang], nil, true, true, "yellow")
 	self.Vortex.AlertsRef.Flare:Important()
 	KBM.Defaults.AlertObj.Assign(self.Vortex)
 
@@ -442,6 +447,8 @@ function KT:Start()
 	self.Kolmasveli.Triggers.Glimpse = KBM.Trigger:Create(self.Lang.Ability.Glimpse[KBM.Lang], "channel", self.Kolmasveli)
 	self.Kolmasveli.Triggers.Glimpse:AddAlert(self.Kolmasveli.AlertsRef.Glimpse)
 	self.Kolmasveli.Triggers.Glimpse:AddTimer(self.Toinenveli.TimersRef.Glimpse)
+	self.Kolmasveli.Triggers.Glimpse:AddStop(self.Kolmasveli.TimersRef.GlimpseFirst)
+	self.Kolmasveli.Triggers.Glimpse:AddStop(self.Kolmasveli.TimersRef.GlimpseFirstFast)
 	self.Kolmasveli.Triggers.Eruption = KBM.Trigger:Create(KT.Lang.Debuff.Eruption[KBM.Lang], "playerBuff", self.Kolmasveli)
 	self.Kolmasveli.Triggers.Eruption:AddSpy(self.Kolmasveli.MechRef.Eruption)
 	self.Kolmasveli.Triggers.Eruption:AddAlert(self.Kolmasveli.AlertsRef.Eruption, true)

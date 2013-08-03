@@ -59,6 +59,7 @@ DLG.Goloch = {
 			Enabled = true,
 			Days = KBM.Defaults.AlertObj.Create("orange"),
 			DaysUp = KBM.Defaults.AlertObj.Create("orange"),
+			Baleful = KBM.Defaults.AlertObj.Create("red"),
 		},
 		MechRef = {
 			Enabled = true,
@@ -275,6 +276,7 @@ function DLG:Start()
 	-- Create Alerts
 	self.Goloch.AlertsRef.Days = KBM.Alert:Create(self.Lang.Ability.Days[KBM.Lang], nil, false, true, "orange")
 	self.Goloch.AlertsRef.DaysUp = KBM.Alert:Create(self.Lang.Ability.Days[KBM.Lang], nil, true, true, "orange")
+	self.Goloch.AlertsRef.Baleful = KBM.Alert:Create(self.Lang.Ability.Baleful[KBM.Lang], nil, false, true, "red")
 	KBM.Defaults.AlertObj.Assign(self.Goloch)
 
 	--self.Goloch.AlertsRef.DaysUp:SetLink(self.Goloch.AlertsRef.Days)
@@ -311,6 +313,7 @@ function DLG:Start()
 	self.Goloch.Triggers.TormentRem:AddStop(self.Goloch.MechRef.Torment)
 
 	self.Goloch.Triggers.Baleful = KBM.Trigger:Create(self.Lang.Ability.Baleful[KBM.Lang], "channel", self.Goloch)
+	self.Goloch.Triggers.Baleful:AddAlert(self.Goloch.AlertsRef.Baleful)
 	self.Goloch.Triggers.Baleful:AddTimer(self.Goloch.TimersRef.Baleful)
 	
 	self.Goloch.CastBar = KBM.CastBar:Add(self, self.Goloch)

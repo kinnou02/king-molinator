@@ -21,7 +21,7 @@ local ULT = {
 	Instance = GA.Name,
 	InstanceObj = GA,
 	Lang = {},
-	--Enrage = 6 * 60,
+	Enrage = 8 * 60,
 	ID = "SUltane",
 	Object = "ULT",
 }

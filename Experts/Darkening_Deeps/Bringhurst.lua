@@ -177,9 +177,6 @@ end
 function MOD:Timer()	
 end
 
-
-
-
 function MOD:Start()
 	-- Create Timers
 	--KBM.Defaults.TimerObj.Assign(self.Bringhurst)

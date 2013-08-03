@@ -272,6 +272,7 @@ function KBM.Defaults.CastFilter.Create(Color)
 		ID = nil,
 		Enabled = true,
 		Color = Color,
+		Default_Color = Color,
 		Custom = false,
 	}
 	return FilterObj
@@ -292,6 +293,8 @@ function KBM.Defaults.CastFilter.Assign(BossObj)
 				else
 					Data.Enabled = false
 				end
+				Data.Default_Color = Data.Settings.Default_Color
+				Data.Settings.Default_Color = nil
 				Data.Color = Data.Settings.Color
 				Data.Custom = Data.Settings.Custom
 			end
@@ -332,14 +335,19 @@ function KBM.Defaults.MechObj.Assign(BossObj)
 					Data.Enabled = true
 					Data.Settings.Enabled = true
 				end
+				Data.Default_Color = Data.Settings.Default_Color
+				Data.Settings.Default_Color = nil
 				if not KBM.Colors.List[Data.Settings.Color] then
 					print("TimerObj Assign Error: "..Data.ID)
 					print("Color Index ("..Data.Settings.Color..") does not exist, ignoring settings.")
 					print("For: "..BossObj.Name)
-					Data.Settings.Color = Data.Settings.Default_Color
+					Data.Color = Data.Default_Color
 				end
-				Data.Color = Data.Settings.Default_Color
-				Data.Settings.Default_Color = nil
+				if Data.Settings.Custom then
+					Data.Color = Data.Settings.Color
+				else
+					Data.Color = Data.Default_Color
+				end
 			end
 		else
 			print("Warning: "..ID.." is undefined in MechRef")
@@ -382,14 +390,20 @@ function KBM.Defaults.TimerObj.Assign(BossObj)
 					Data.Enabled = true
 					Data.Settings.Enabled = true
 				end
+				Data.Default_Color = Data.Settings.Default_Color
+				Data.Settings.Default_Color = nil
 				if not KBM.Colors.List[Data.Settings.Color] then
 					print("TimerObj Assign Error: "..Data.ID)
 					print("Color Index ("..Data.Settings.Color..") does not exist, ignoring settings.")
 					print("For: "..BossObj.Name)
-					Data.Settings.Color = Data.Settings.Default_Color
+					Data.Settings.Color = Data.Default_Color
 				end
-				Data.Color = Data.Settings.Default_Color
-				Data.Settings.Default_Color = nil
+				if Data.Custom then
+					Data.Color = Data.Settings.Color
+				else
+					Data.Color = Data.Default_Color
+				end
+				--Data.Settings.Default_Color = nil
 			end
 		else
 			print("Warning: "..ID.." is undefined in TimersRef")
@@ -416,6 +430,7 @@ function KBM.Defaults.AlertObj.Create(Color, OldData)
 		ID = nil,
 		Enabled = true,
 		Color = Color,
+		Default_Color = Color,
 		Custom = false,
 		Border = true,
 		Notify = true,
@@ -438,15 +453,19 @@ function KBM.Defaults.AlertObj.Assign(BossObj)
 					Data.Enabled = true
 					Data.Settings.Enabled = true
 				end
-				if KBM.Colors.List[Data.Settings.Color] then
-					if Data.Settings.Custom then
-						Data.Color = Data.Settings.Color
-					end
-				else
+				Data.Default_Color = Data.Settings.Default_Color
+				Data.Settings.Default_Color = nil
+				if not KBM.Colors.List[Data.Settings.Color] then
 					error(	"AlertObj Assign Error: "..Data.ID..
 							"/nColor Index ("..Data.Settings.Color..") does not exist, ignoring settings."..
 							"/nFor: "..BossObj.Name)
-					Data.Settings.Color = Data.Color
+					Data.Settings.Color = Data.Default_Color
+				else
+					if Data.Settings.Custom then
+						Data.Color = Data.Settings.Color
+					else
+						Data.Color = Data.Default_Color
+					end
 				end
 				BossObj.Settings.AlertsRef[ID].ID = ID
 			end
@@ -474,6 +493,7 @@ function KBM.Defaults.ChatObj.Create(Color)
 		ID = nil,
 		Enabled = true,
 		Color = Color,
+		Default_Color = Color,
 		Custom = false,
 	}
 	return ChatObj
@@ -493,9 +513,13 @@ function KBM.Defaults.ChatObj.Assign(BossObj)
 					Data.Enabled = true
 					Data.Settings.Enabled = true
 				end
+				Data.Default_Color = Data.Settings.Default_Color
+				Data.Settings.Default_Color = nil
 				if KBM.Colors.List[Data.Settings.Color] then
 					if Data.Settings.Custom then
 						Data.Color = Data.Settings.Color
+					else
+						Data.Color = Data.Default_Color
 					end
 				else
 					error(	"ChatObj Assign Error: "..Data.ID..
@@ -4121,17 +4145,19 @@ function KBM.CheckActiveBoss(UnitObj)
 							end
 						end
 					else
-						if UnitObj.CurrentKey ~= "Partial" then
+						if UnitObj.CurrentKey == "Avail" then
 							if UnitObj.Type then
 								if not KBM.Boss.TypeList[UnitObj.Type] then
-									if KBM.Debug then
-										if not KBM.IgnoreList[UnitID] then
-											-- print("New Unit Added to Ignore:")
-											-- dump(uDetails)
-											-- print("----------")
+									if UnitObj.Relation == "hostile" then
+										if KBM.Debug then
+											if not KBM.IgnoreList[UnitID] then
+												-- print("New Unit Added to Ignore:")
+												-- dump(uDetails)
+												-- print("----------")
+											end
 										end
+										KBM.IgnoreList[UnitID] = true
 									end
-									KBM.IgnoreList[UnitID] = true
 								end
 							end
 						end
@@ -6180,7 +6206,7 @@ function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
 							end
 							local newText = string.format("%0.01f", self.Progress).." - "..bDetails.abilityName
 							if newText ~= self.GUI.Text:GetText() then
-								self.GUI:SetText(string.format("%0.01f", self.Progress).." - "..bDetails.abilityName)
+								self.GUI:SetText(newText)
 							end
 						end
 					end
@@ -8382,6 +8408,16 @@ function KBM.WaitReady()
 	
 	-- New Castbar Initialization
 	for ID, Castbar in pairs(KBM.Castbar.Player) do
+		Castbar.Settings.enabled = false
+		if Castbar.ID == "KBM_Player_Bar" then
+			-- Temporary manual enable/disable during Dev.
+		elseif Castbar.ID == "KBM_Player_Target" then
+			Castbar.Settings.relX = 0.688
+			Castbar.Settings.relY = 0.45
+		elseif Castbar.ID == "KBM_Player_Focus" then
+			Castbar.Settings.relX = 0.25
+			Castbar.Settings.relY = 0.61
+		end
 		Castbar.CastObj = LibSCast:Create(Castbar.ID, KBM.Context, Castbar.Pack, Castbar.Settings, Castbar.Style)
 		Castbar.CastObj:StartType(Castbar.Type)
 	end

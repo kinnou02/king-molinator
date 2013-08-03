@@ -76,7 +76,7 @@ MOD.VellionEV = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = "none",
+	UTID = "UFB2A278A6008E641",
 	TimeOut = 5,
 	Triggers = {},
 }
@@ -92,7 +92,7 @@ MOD.VellionPS = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = "none",
+	UTID = "UFB632AC82EF40F16",
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
@@ -111,7 +111,7 @@ MOD.VellionLT = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = "none",
+	UTID = "UFF89D435334670F9",
 	TimeOut = 5,
 	Triggers = {},
 }
@@ -127,7 +127,7 @@ MOD.VellionRT = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = "none",
+	UTID = "UFC33CCE241CE7F63",
 	TimeOut = 5,
 	Triggers = {},
 }
@@ -216,7 +216,7 @@ end
 
 function MOD:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		local BossObj = self.Bosses[uDetails.name]
+		local BossObj = self.UTID[uDetails.type]
 		if BossObj then
 			if not self.EncounterRunning then
 				self.EncounterRunning = true
@@ -227,10 +227,10 @@ function MOD:UnitHPCheck(uDetails, unitID)
 				BossObj.Casting = false
 				self.PhaseObj:Start(self.StartTime)
 				self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
-				self.PhaseObj.Objectives:AddPercent(self.VellionEV.Name, 0, 100)
-				self.PhaseObj.Objectives:AddPercent(self.VellionLT.Name, 0, 100)
-				self.PhaseObj.Objectives:AddPercent(self.VellionRT.Name, 0, 100)
-				self.PhaseObj.Objectives:AddPercent(self.VellionPS.Name, 0, 100)
+				self.PhaseObj.Objectives:AddPercent(self.VellionEV, 0, 100)
+				self.PhaseObj.Objectives:AddPercent(self.VellionLT, 0, 100)
+				self.PhaseObj.Objectives:AddPercent(self.VellionRT, 0, 100)
+				self.PhaseObj.Objectives:AddPercent(self.VellionPS, 0, 100)
 				self.Phase = 1
 			end
 			if BossObj == self.VellionPS then

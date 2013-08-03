@@ -649,7 +649,12 @@ function _lsu.Unit.Warfront(handle, uList)
 end
 
 function _lsu.Unit.Position(handle, uList)
-
+	local _cache = LibSUnit.Lookup.UID
+	local newList = {}
+	for UID, Position in pairs(uList) do
+		newList[UID] = _cache[UID]
+		
+	end
 end
 
 function _lsu.Unit.Combat(handle, uList, Silent)
@@ -1265,8 +1270,15 @@ function _lsu.Combat.stdHandler(UID, segPlus)
 		local _cache = LibSUnit.Lookup.UID
 		local UnitObj = _cache[UID]
 		if UnitObj then
+			local uDetails = _inspect(UID)
 			if UnitObj.CurrentKey == "Idle" then
-				_lsu.Unit:UpdateSegment(UnitObj, segPlus + _lastSeg, _inspect(UID))
+				_lsu.Unit:UpdateSegment(UnitObj, segPlus + _lastSeg, uDetails)
+			end
+			if uDetails then
+				if uDetails.relation ~= UnitObj.Relation then
+					uDetails.Relation = uDetails.relation
+					_lsu.Event.Unit.Detail.Relation(UnitObj)
+				end
 			end
 		else
 			UnitObj = _lsu:Create(UID, _inspect(UID), "Idle")
