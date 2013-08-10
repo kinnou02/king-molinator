@@ -360,14 +360,14 @@ function CRC:InitVars()
 			Override = true,
 		},
 		EncTimer = KBM.Defaults.EncTimer(),
+		Alerts = KBM.Defaults.Alerts(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		MechTimer = KBM.Defaults.MechTimer(),
 		MechSpy = KBM.Defaults.MechSpy(),
 		Crucia = {
 			CastBar = self.Crucia.Settings.CastBar,
-			-- Alerts = KBM.Defaults.Alerts(),
 			TimersRef = self.Crucia.Settings.TimersRef,
-			-- AlertsRef = self.Crucia.Settings.AlertsRef,
+			AlertsRef = self.Crucia.Settings.AlertsRef,
 			MechRef = self.Crucia.Settings.MechRef,
 		},
 		Storm = {

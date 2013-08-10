@@ -315,6 +315,10 @@ function _lsu:Create(UID, uDetails, Type)
 		return
 	end
 	
+	if type(UID) ~= "string" then
+		error("Expect UID string, got: "..type(UID))
+	end
+	
 	local _type = LibSUnit.Cache[Type]
 	local _total = LibSUnit.Total
 	local _UID = LibSUnit.Lookup.UID
@@ -408,7 +412,7 @@ function _lsu:Create(UID, uDetails, Type)
 		UnitObj.PercentLast = UnitObj.Percent -- Ensure the last recorded percentage is initialized.
 		UnitObj.PercentFlat = math.ceil(UnitObj.Percent)
 		UnitObj.PercentFlatLast = UnitObj.PercentFlat -- Ensure the last recorded flat percentage is initialized.
-		_lsu.Unit:UpdateTarget(UnitObj, Inspect.Unit.Detail(UID..".target"))
+		_lsu.Unit:UpdateTarget(UnitObj, Inspect.Unit.Lookup(UID..".target"))
 		if Type == "Avail" then
 			-- Fire Unit New Full Event, usually when the unit scope is a valid seen target.
 			_lsu.Event.Unit.New.Full(UnitObj)
@@ -699,7 +703,7 @@ end
 
 function _lsu.Unit.Details(UnitObj, uDetails)
 	if UnitObj.CurrentKey == "Partial" then
-		
+	
 	else
 		UnitObj.Type = uDetails.type
 		UnitObj.Tier = uDetails.tier
@@ -908,7 +912,7 @@ function _lsu.Avail.Partial(handle, uList)
 	-- Manage Units.
 	for UID, Spec in pairs(uList) do
 		if not _lookup[UID] then
-			_create(_lsu, UID, _inspect(UID), "Partial")
+			_create(_lsu, UID, _inspect(UID), "Avail")
 		else
 			_part(_lsu, _lookup[UID], _inspect(UID))
 		end
@@ -928,9 +932,9 @@ function _lsu.Avail.None(handle, uList)
 	
 	-- Manage Units.
 	for UID, Spec in pairs(uList) do
-		if not _lookup[UID] then
-		else
-			_idle(_lsu, _lookup[UID])
+		local UnitObj = _lookup[UID]
+		if UnitObj then
+			_idle(_lsu, UnitObj)
 		end
 	end
 	
@@ -1047,75 +1051,48 @@ function _lsu.Raid.Check(UnitID, Spec)
 				currentUnitID = nil
 			end
 			if newUnitID ~= currentUnitID then
-				-- totalchanges = totalchanges + 1
 				SpecChanged[Spec] = newUnitID or false
 				-- First Check if Pending
 				if newUnitID and currentUnitID then
 					-- Slot changed Unit
-					-- print("Slot Unit Changed: "..Spec)
 					newUnitObj = LibSUnit.Lookup.UID[newUnitID]
-					currentUnitObj = LibSUnit.Lookup.UID[currentUnitID]
 					if not newUnitObj then
 						newUnitObj = _lsu:Create(newUnitID, _inspect(newUnitID), "Avail")
 					end
 					if LibSUnit.Raid.UID[newUnitID] then
+						-- New Unit already exists [Move]
 						UIDChanged.Moved[newUnitID] = {New = Spec, Old = newUnitObj.RaidLoc}
-						-- movedCount = movedCount + 1
-						if UIDChanged.Left[newUnitID] then
-							-- leftCount = leftCount - 1
-							UIDChanged.Left[newUnitID] = nil
-						end
+						UIDChanged.Left[newUnitID] = nil
 					elseif not UIDChanged.Moved[newUnitID] then
+						-- New Unit isn't currently moving, must be a join.
 						UIDChanged.Joined[newUnitID] = Spec
-						-- newCount = newCount + 1
 					end
-					if UIDChanged.Left[currentUnitID] then
-						UIDChanged.Moved[currentUnitID] = {New = Spec, Old = currentUnitObj.RaidLoc}
-						-- movedCount = movedCount + 1
-						if UIDChanged.Left[currentUnitID] then
-							-- leftCount = leftCount - 1
-							UID.Changed.Left[currentUnitID] = nil
-						end
-					elseif not UIDChanged.Moved[currentUnitID] then
+					if not UIDChanged.Moved[currentUnitID] then
+						-- Old Unit isn't moving, flag initially as leaving.
 						UIDChanged.Left[currentUnitID] = Spec
-						-- leftCount = leftCount + 1
 					end
 				elseif newUnitID then
-					-- Empty slot taken
-					-- print("Empty Slot Taken: "..Spec)
+					-- Empty slot occupied
 					newUnitObj = LibSUnit.Lookup.UID[newUnitID]
 					if not newUnitObj then
 						newUnitObj = _lsu:Create(newUnitID, _inspect(newUnitID), "Avail")
 					end
 					if LibSUnit.Raid.UID[newUnitID] then
+						-- New Unit already exists [Move]
 						UIDChanged.Moved[newUnitID] = {New = Spec, Old = newUnitObj.RaidLoc}
-						-- movedCount = movedCount + 1
-						if UIDChanged.Left[newUnitID] then
-							UIDChanged.Left[newUnitID] = nil
-							-- leftCount = leftCount - 1
-						end
+						UIDChanged.Left[newUnitID] = nil
 					elseif not UIDChanged.Moved[newUnitID] then
+						-- New Unit isn't moving, must be joining.
 						UIDChanged.Joined[newUnitID] = Spec
-						--newCount = newCount + 1
 					end
 				elseif currentUnitID then
-					-- Slot no longer taken
-					-- print("Slot now empty: "..Spec)
-					currentUnitObj = LibSUnit.Lookup.UID[currentUnitID]
-					if UIDChanged.Left[currentUnitID] then
-						UIDChanged.Moved[currentUnitID] = {New = Spec, Old = currentUnitObj.RaidLoc}
-						--movedCount = movedCount + 1
-						if UIDChanged.Left[currentUnitID] then
-							--leftCount = leftCount - 1
-							UIDChanged.Left[currentUnitID] = nil
-						end
-					elseif not UIDChanged.Moved[currentUnitID] then
+					-- Slot no longer occupied
+					if not UIDChanged.Moved[currentUnitID] then
+						-- Old Unit isn't moving, flag initially as leaving.
 						UIDChanged.Left[currentUnitID] = Spec
-						--leftCount = leftCount + 1
 					end
 				else
-					-- no action required
-				
+					-- no action required				
 				end
 			else
 				-- no action required
@@ -1503,6 +1480,10 @@ function _lsu.SlashHandler(handle, cmd)
 		end
 		print("----")
 		print("Current Segment: ".._lastSeg)
+	elseif cmd == "listavail" then
+		for UnitID, UnitObj in pairs(LibSUnit.Cache.Avail) do
+			print(tostring(UnitID)..": "..tostring(UnitObj.Name).." - Seg: "..tostring(UnitObj.IdleSegment))
+		end
 	end
 end
 

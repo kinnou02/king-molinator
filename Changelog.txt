@@ -7,6 +7,8 @@ LibSUnit
 * New: Now checks for .relation member during the standard damage/heal handler. If changed, this will trigger Event.SafesUnitLib.Unit.Detail.Relation(table{Key = UID, Value = UnitObject})
 * Note: The Rift Addon API still doesn't support native Event.Unit.Detail.Relation, so until it does, the above will remain in the standard damage/heal handler.
 * Fixed: Prevented UnitObj.Health sometimes being nil.
+* Fixed: Table entry errors for new units created via Unit.Target.
+* Fixed: Some odd behaviour with cross-shard raid messages.
 * Removed: Redundant raid queue code. Slight performance increase.
 
 Menu
@@ -29,6 +31,7 @@ Raids
 * Endless Eclipse
 ** Dreadlord Goloch
 *** New: Added Alert for Baneful Smash.
+*** Removed: Cast alert for End of Days. Only Buff purge remains as an alert.
 * Frozen Tempest
 ** Kolmasveli and Toinenveli
 *** New: Timer for 60% DPS gate breach for first hide. (1:30)
@@ -38,6 +41,8 @@ Raids
 ** Artifex Zaviel
 *** New: Updated UTID for Zaviel. (Recording will now start)
 *** New: Updated UTID for Power Conducer.
+** Crucia
+*** Fixed: Alert Tab not showing.
 
 Slivers
 * Grim Awakening
