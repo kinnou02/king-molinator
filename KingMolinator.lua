@@ -6899,7 +6899,13 @@ local function BuildMenuSettings()
 			function self:enabled(bool)
 				Castbar.Settings.enabled = bool
 				Castbar.CastObj:Enable(bool)
-				Castbar.CastObj:SetVisible(bool)
+				if bool then
+					Castbar.CastObj:SetVisible(Castbar.Settings.visible)
+					Castbar.CastObj:Unlocked(Castbar.Settings.unlocked)
+				else
+					Castbar.CastObj:SetVisible(false)
+					Castbar.CastObj:Unlocked(false)
+				end
 			end
 			
 			function self:riftBar(bool)
@@ -6911,6 +6917,7 @@ local function BuildMenuSettings()
 				Castbar.Settings.riftBar = bool
 				Castbar.CastObj:SetPack(Castbar.Settings.pack)
 			end
+			
 			function self:pinned(bool)
 				Castbar.Settings.pinned = bool
 				if bool then
@@ -6925,25 +6932,30 @@ local function BuildMenuSettings()
 					UI.Native.Castbar:EventDetach(Event.UI.Layout.Size, KBM.Castbar.HandlePinScale, "KBMCastbar-Mimic-PinScale-Handler")
 				end
 			end
+			
 			function self.texture:enabled(bool)
 				Castbar.Settings.texture.foreground.enabled = bool
 				Castbar.CastObj:SetTexture("foreground", bool)
 			end
+			
 			-- function self:Shadow(bool)
 				-- KBM.Player.CastBar.Settings.CastBar.Shadow = bool
 				-- KBM.Player.CastBar.CastObj:ApplySettings()
 			-- end
+			
 			function self:visible(bool)
 				Castbar.Settings.visible = bool
+				Castbar.CastObj:SetVisible(bool)
 				if not Castbar.Settings.pinned then
 					Castbar.Settings.unlocked = bool
 					Castbar.CastObj:Unlocked(bool)
 				end
-				Castbar.CastObj:SetVisible(bool)
 			end
+			
 			function self:widthUnlocked(bool)
 				Castbar.Settings.scale.widthUnlocked = bool
 			end
+			
 			function self:heightUnlocked(bool)
 				Castbar.Settings.scale.heightUnlocked = bool
 				Castbar.Settings.scale.textUnlocked = bool

@@ -65,9 +65,11 @@ function Menu:Open()
 	KBM.Castbar.Anchor:SetVisible(KBM.Options.Castbar.Global.visible)
 	KBM.Castbar.Global.CastObj:SetVisible(KBM.Options.Castbar.Global.visible)
 	for ID, Castbar in pairs(KBM.Castbar.Player) do
-		if Castbar.Settings.visible then
-			Castbar.CastObj:SetVisible(Castbar.Settings.visible)
-			Castbar.CastObj:Unlocked(Castbar.Settings.unlocked)
+		if Castbar.Settings.enabled then
+			if Castbar.Settings.visible then
+				Castbar.CastObj:SetVisible(Castbar.Settings.visible)
+				Castbar.CastObj:Unlocked(Castbar.Settings.unlocked)
+			end
 		end
 	end
 	KBM.Alert:ApplySettings()
