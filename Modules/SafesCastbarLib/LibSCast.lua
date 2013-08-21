@@ -542,21 +542,23 @@ function _int.Default:CreateBar(_tBar)
 		
 		function bar:RenderSettings()
 			-- print("<-- [RENDER SETTINGS]")
-			if self.castObj.pinFunction then
-				-- print("[EXTERNAL] Calling Pin function")
-				self.castObj.pinFunction(self)
-			else
-				self.ui.cradle:ClearAll()
-				-- print("[INTERNAL] Setting Layout")
-				self.ui.cradle:SetPoint("CENTER", UIParent, self.Settings.relX, self.Settings.relY)
-				self.ui.cradle:SetWidth(math.ceil(self.barObj.default.w * self.Settings.scale.w))
-				self.ui.cradle:SetHeight(math.ceil(self.barObj.default.h * self.Settings.scale.h))
-				self.ui.text:SetFontSize(math.ceil(self.barObj.default.textSize * self.Settings.scale.t))
-			end
-			self.progWidth = math.ceil(self.ui.cradle:GetWidth() * self.barObj.barScale)
-			if self.ui.foreground then
-				self.ui.foreground:SetVisible(self.Settings.texture.foreground.enabled)
-				self.ui.foreground:SetAlpha(self.Settings.texture.foreground.alpha)
+			if self.loaded then
+				if self.castObj.pinFunction then
+					-- print("[EXTERNAL] Calling Pin function")
+					self.castObj.pinFunction(self)
+				else
+					self.ui.cradle:ClearAll()
+					-- print("[INTERNAL] Setting Layout")
+					self.ui.cradle:SetPoint("CENTER", UIParent, self.Settings.relX, self.Settings.relY)
+					self.ui.cradle:SetWidth(math.ceil(self.barObj.default.w * self.Settings.scale.w))
+					self.ui.cradle:SetHeight(math.ceil(self.barObj.default.h * self.Settings.scale.h))
+					self.ui.text:SetFontSize(math.ceil(self.barObj.default.textSize * self.Settings.scale.t))
+				end
+				self.progWidth = math.ceil(self.ui.cradle:GetWidth() * self.barObj.barScale)
+				if self.ui.foreground then
+					self.ui.foreground:SetVisible(self.Settings.texture.foreground.enabled)
+					self.ui.foreground:SetAlpha(self.Settings.texture.foreground.alpha)
+				end
 			end
 			-- print("--> [RENDER SETTINGS]")
 		end
@@ -662,19 +664,21 @@ function _int.Default:CreateBar(_tBar)
 		end
 		
 		function bar:Stop()
-			self.ui.cradle:SetVisible(self.showing)
-			if self.showing then
-				self.ui.cradle:SetAlpha(1)
-				self.ui.mask:SetWidth(0)
-				if self.glow then
-					self.ui.glow:SetVisible(false)
+			if self.loaded then
+				self.ui.cradle:SetVisible(self.showing)
+				if self.showing then
+					self.ui.cradle:SetAlpha(1)
+					self.ui.mask:SetWidth(0)
+					if self.glow then
+						self.ui.glow:SetVisible(false)
+					end
 				end
-			end
-			self.ui.text:SetText(self.castObj.Name)
-			if not self.showing then
-				if self.Active then
-					_event.Castbar.Hide(self, self.castObj)
-					self.Visible = false
+				self.ui.text:SetText(self.castObj.Name)
+				if not self.showing then
+					if self.Active then
+						_event.Castbar.Hide(self, self.castObj)
+						self.Visible = false
+					end
 				end
 			end
 			if self.UpdateObj then
@@ -1435,6 +1439,12 @@ function LibSCast:Create(ID, Parent, Pack, Settings, Style)
 					self:Unload()
 				end
 			end
+		end
+		
+		function CastObj:Recycle()
+			self:Remove()
+			self.PackInstance:Recycle()
+			self.PackInstance = nil
 		end
 		
 		function CastObj:Begin(CastData)
