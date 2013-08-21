@@ -6838,9 +6838,20 @@ local function BuildMenuSettings()
 			KBM.Castbar.Global.CastObj:Enable(bool)
 			for UnitID, Castbar in pairs(KBM.Castbar.ActiveCastbars) do
 				Castbar.CastObj:Enable(bool)
+				if bool then
+					Castbar.CastObj:SetVisible(KBM.Options.Castbar.Global.visible)
+				else
+					Castbar.CastObj:SetVisible(false)
+				end
 			end
-			KBM.Castbar.Anchor.cradle:SetVisible(bool)
+			KBM.Castbar.Anchor:SetVisible(bool)
+			if bool then
+				KBM.Castbar.Global.CastObj:SetVisible(KBM.Options.Castbar.Global.visible)
+			else
+				KBM.Castbar.Global.CastObj:SetVisible(false)
+			end
 		end
+		
 		function self.texture:enabled(bool)
 			KBM.Options.Castbar.Global.texture.foreground.enabled = bool
 			KBM.Castbar.Global.CastObj:SetTexture("foreground", bool)
@@ -6848,26 +6859,33 @@ local function BuildMenuSettings()
 				Castbar.CastObj:SetTexture("foreground", bool)
 			end
 		end
+		
 		-- function self:Shadow(bool)
 			-- KBM.Options.CastBar.Shadow = bool
 			-- if KBM.CastBar.Anchor.GUI then
 				-- KBM.CastBar.Anchor.GUI.Shadow:SetVisible(bool)
 			-- end
 		-- end
+		
 		function self:visible(bool)
 			KBM.Options.Castbar.Global.visible = bool
 			KBM.Options.Castbar.Global.unlocked = bool
-			KBM.Castbar.Anchor.cradle:SetVisible(bool)
+			KBM.Castbar.Anchor:SetVisible(bool)
+			KBM.Castbar.Global.CastObj:SetVisible(bool)
 		end
+		
 		function self:widthUnlocked(bool)
 			KBM.Options.Castbar.Global.scale.widthUnlocked = bool
 		end
+		
 		function self:heightUnlocked(bool)
 			KBM.Options.Castbar.Global.scale.heightUnlocked = bool
 		end
+		
 		-- function self:TextScale(bool)
 			-- KBM.Options.CastBar.TextScale = bool
 		-- end
+		
 		function self:riftBar(bool)
 			if bool then
 				KBM.Options.Castbar.Global.pack = "Rift"
