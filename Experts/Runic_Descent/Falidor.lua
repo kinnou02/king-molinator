@@ -42,7 +42,7 @@ MOD.Falidor = {
 	UTID = "U76E6B91B7D0F7456",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -223,7 +223,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Falidor.CastBar = KBM.CastBar:Add(self, self.Falidor)
+	self.Falidor.CastBar = KBM.Castbar:Add(self, self.Falidor)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

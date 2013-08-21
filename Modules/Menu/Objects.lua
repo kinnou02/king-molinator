@@ -192,15 +192,25 @@ function Menu.Object:CreateCheck(Name, Settings, ID, Callback, Page)
 			else
 				self.UI.Check:SetChecked(false)
 			end
+			
 			function self:Checkbox_Handler()
-				self._object.Callback[ID](self._object._root, self:GetChecked())
+				local state = self:GetChecked()
+				self._object.Callback[ID](self._object._root, state)
+				if not state then
+					self._object:Disable(true)
+				else
+					self._object:Enable(true)
+				end
 			end
 			self.UI.Check:EventAttach(Event.UI.Checkbox.Change, self.Checkbox_Handler, self.ID..": checkbox callback handler")
+			self.ChildState = self.Settings[ID]			
+			
 			function self:MouseIn_Handler()
 				if self.Enabled then
 					self.UI.Cradle:SetBackgroundColor(0,0,0,0.4)
 				end
 			end
+			
 			function self:MouseOut_Handler()
 				if self.Enabled then
 					if self._root.Selected == self then
@@ -210,6 +220,7 @@ function Menu.Object:CreateCheck(Name, Settings, ID, Callback, Page)
 					end
 				end
 			end
+			
 			function self:TextClick_Handler()
 				if self.Enabled then
 					if self.UI.Check:GetChecked() then
@@ -219,6 +230,7 @@ function Menu.Object:CreateCheck(Name, Settings, ID, Callback, Page)
 					end
 				end
 			end
+			
 			function self:TextClick_Select()
 				if self.Enabled then
 					if self._root.Selected ~= self then
@@ -263,6 +275,14 @@ function Menu.Object:CreateCheck(Name, Settings, ID, Callback, Page)
 				self:Disable()
 			end
 		end
+		-- if not self.Page.ChildState then
+			-- self:Disable()
+		-- elseif not self.ChildState then
+			-- self:Disable(true)
+			-- self:Enable(false)
+		-- else
+			-- self:Enable()
+		-- end
 		
 		self.UI.Text:SetText(self.Name)
 		self.Page.LastObject = self

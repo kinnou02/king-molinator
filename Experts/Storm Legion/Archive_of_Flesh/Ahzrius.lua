@@ -41,7 +41,7 @@ MOD.Ahzrius = {
 	Triggers = {},
 	AlertsRef = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -199,7 +199,7 @@ function MOD:Start()
 	self.Ahzrius.Triggers.Drastic = KBM.Trigger:Create(self.Lang.Ability.Drastic[KBM.Lang], "cast", self.Ahzrius)
 	self.Ahzrius.Triggers.Drastic:AddAlert(self.Ahzrius.AlertsRef.Drastic)
 	
-	self.Ahzrius.CastBar = KBM.CastBar:Add(self, self.Ahzrius)
+	self.Ahzrius.CastBar = KBM.Castbar:Add(self, self.Ahzrius)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

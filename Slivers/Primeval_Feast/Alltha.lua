@@ -41,7 +41,7 @@ AR.Alltha = {
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		MechRef = {
 			Enabled = true,
 			Spore = KBM.Defaults.MechObj.Create("purple"),
@@ -270,7 +270,7 @@ function AR:Start()
 	self.Alltha.Triggers.Fae:AddTimer(self.Alltha.TimersRef.Fae)
 	self.Alltha.Triggers.Fae:AddAlert(self.Alltha.AlertsRef.Fae)
 	
-	self.Alltha.CastBar = KBM.CastBar:Add(self, self.Alltha, true)
+	self.Alltha.CastBar = KBM.Castbar:Add(self, self.Alltha, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

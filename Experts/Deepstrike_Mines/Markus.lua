@@ -42,7 +42,7 @@ MOD.Markus = {
 	UTID = "U0626E0FA0708DB14",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -223,7 +223,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Markus.CastBar = KBM.CastBar:Add(self, self.Markus)
+	self.Markus.CastBar = KBM.Castbar:Add(self, self.Markus)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

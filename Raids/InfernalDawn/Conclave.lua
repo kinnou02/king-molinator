@@ -45,7 +45,7 @@ EC.Szath = {
 	MechRef = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Blood = KBM.Defaults.TimerObj.Create("purple"),
@@ -114,7 +114,7 @@ EC.Nahoth = {
 	AlertsRef = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Wounds = KBM.Defaults.TimerObj.Create("dark_green"),
@@ -143,7 +143,7 @@ EC.Ereetu = {
 	AlertsRef = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Dark = KBM.Defaults.TimerObj.Create("yellow"),
@@ -489,9 +489,9 @@ function EC:Start()
 	self.Nahoth.Triggers.WoundsRem = KBM.Trigger:Create(self.Lang.Debuff.Wounds[KBM.Lang], "playerBuffRemove", self.Nahoth)
 	self.Nahoth.Triggers.WoundsRem:AddStop(self.Nahoth.AlertsRef.Wounds)
 	
-	self.Szath.CastBar = KBM.CastBar:Add(self, self.Szath)
-	self.Nahoth.CastBar = KBM.CastBar:Add(self, self.Nahoth)
-	self.Ereetu.CastBar = KBM.CastBar:Add(self, self.Ereetu)
+	self.Szath.CastBar = KBM.Castbar:Add(self, self.Szath)
+	self.Nahoth.CastBar = KBM.Castbar:Add(self, self.Nahoth)
+	self.Ereetu.CastBar = KBM.Castbar:Add(self, self.Ereetu)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

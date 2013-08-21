@@ -43,7 +43,7 @@ DF.Foci = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		AlertsRef = {
 			Enabled = true,
 			Ground = KBM.Defaults.AlertObj.Create("red"),
@@ -131,7 +131,7 @@ DF.Force = {
 	Ignore = true,
 	Menu = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		AlertsRef = {
 			Enabled = true,
 			Blast = KBM.Defaults.AlertObj.Create("orange"),
@@ -345,8 +345,8 @@ function DF:Start()
 	self.Foci.Triggers.Soul:AddAlert(self.Foci.AlertsRef.Soul, true)
 	self.Foci.Triggers.Soul:AddSpy(self.Foci.MechRef.Soul)
 	
-	self.Foci.CastBar = KBM.CastBar:Add(self, self.Foci)
-	self.Force.CastBar = KBM.CastBar:Add(self, self.Force)
+	self.Foci.CastBar = KBM.Castbar:Add(self, self.Foci)
+	self.Force.CastBar = KBM.Castbar:Add(self, self.Force)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

@@ -121,7 +121,7 @@ KT.Kolmasveli = {
 	MechRef = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Glimpse = KBM.Defaults.TimerObj.Create("cyan"),
@@ -161,7 +161,7 @@ KT.Toinenveli = {
 	MechRef = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Glimpse = KBM.Defaults.TimerObj.Create("orange"),
@@ -195,7 +195,7 @@ KT.Vortex = {
 	Triggers = {},
 	Ignore = true,
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		AlertsRef = {
 			Enabled = true,
 			Flare = KBM.Defaults.AlertObj.Create("yellow"),
@@ -479,9 +479,9 @@ function KT:Start()
 	self.Vortex.Triggers.FlareInt:AddStop(self.Vortex.AlertsRef.Flare)
 	
 	self.PercentageMon = KBM.PercentageMon:Create(self.Kolmasveli, self.Toinenveli, 5)
-	self.Kolmasveli.CastBar = KBM.CastBar:Add(self, self.Kolmasveli)
-	self.Toinenveli.CastBar = KBM.CastBar:Add(self, self.Toinenveli)
-	self.Vortex.CastBar = KBM.CastBar:Add(self, self.Vortex)
+	self.Kolmasveli.CastBar = KBM.Castbar:Add(self, self.Kolmasveli)
+	self.Toinenveli.CastBar = KBM.Castbar:Add(self, self.Toinenveli)
+	self.Vortex.CastBar = KBM.Castbar:Add(self, self.Vortex)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

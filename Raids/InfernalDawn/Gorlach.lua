@@ -44,7 +44,7 @@ GL.Gorlach = {
 	MechRef = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Fire = KBM.Defaults.TimerObj.Create("red"),
@@ -259,7 +259,7 @@ function GL:Start()
 	self.Gorlach.Triggers.Fire = KBM.Trigger:Create(self.Lang.Debuff.Fire[KBM.Lang], "playerBuff", self.Gorlach)
 	self.Gorlach.Triggers.Fire:AddTimer(self.Gorlach.TimersRef.Fire)
 	
-	self.Gorlach.CastBar = KBM.CastBar:Add(self, self.Gorlach)
+	self.Gorlach.CastBar = KBM.Castbar:Add(self, self.Gorlach)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

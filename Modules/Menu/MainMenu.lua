@@ -62,11 +62,13 @@ local Menu = KBM.Menu
 function Menu:Open()
 	self.Active = true
 	self.Window:SetVisible(true)
-	if KBM.Options.CastBar.Visible then
-		KBM.CastBar.Anchor:Display()
-	end
-	if KBM.Player.CastBar.Settings.CastBar.Visible then
-		KBM.Player.CastBar.CastObj:Display()
+	KBM.Castbar.Anchor:SetVisible(KBM.Options.Castbar.Global.visible)
+	KBM.Castbar.Global.CastObj:SetVisible(KBM.Options.Castbar.Global.visible)
+	for ID, Castbar in pairs(KBM.Castbar.Player) do
+		if Castbar.Settings.visible then
+			Castbar.CastObj:SetVisible(Castbar.Settings.visible)
+			Castbar.CastObj:Unlocked(Castbar.Settings.unlocked)
+		end
 	end
 	KBM.Alert:ApplySettings()
 	KBM.MechTimer:ApplySettings()
@@ -100,9 +102,13 @@ function Menu:Close()
 	if self.Current.Page.CloseLink then
 		self.Current.Page:CloseLink()
 	end
-	KBM.CastBar.Anchor:Hide()
-	if KBM.Player.CastBar.Settings.CastBar.Visible then
-		KBM.Player.CastBar.CastObj:Hide()
+	KBM.Castbar.Global.CastObj:SetVisible(false)
+	KBM.Castbar.Anchor:SetVisible(false)
+	for ID, Castbar in pairs(KBM.Castbar.Player) do
+		if Castbar.Settings.visible then
+			Castbar.CastObj:SetVisible(false)
+			Castbar.CastObj:Unlocked(false)
+		end
 	end
 	if KBM.Encounter then
 		if KBM.CurrentMod.Settings.Alerts then

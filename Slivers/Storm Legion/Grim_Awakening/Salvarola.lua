@@ -92,7 +92,7 @@ SAL.Salvarola = {
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Incineration = KBM.Defaults.TimerObj.Create("orange"),
@@ -306,7 +306,7 @@ function SAL:Start()
 	self.Salvarola.Triggers.Mindsear = KBM.Trigger:Create(self.Lang.Debuff.MindsearID, "playerIDBuff", self.Salvarola)
 	self.Salvarola.Triggers.Mindsear:AddSpy(self.Salvarola.MechRef.Mindsear)
 	
-	self.Salvarola.CastBar = KBM.CastBar:Add(self, self.Salvarola)
+	self.Salvarola.CastBar = KBM.Castbar:Add(self, self.Salvarola)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

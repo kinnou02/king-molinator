@@ -79,7 +79,7 @@ GGM.Gangnum = {
 	MechRef = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -253,7 +253,7 @@ function GGM:Start()
 	self.Gangnum.Triggers.Blind = KBM.Trigger:Create(self.Lang.Ability.Blind[KBM.Lang], "channel", self.Gangnum)
 	self.Gangnum.Triggers.Blind:AddAlert(self.Gangnum.AlertsRef.Blind)
 	
-	self.Gangnum.CastBar = KBM.CastBar:Add(self, self.Gangnum)
+	self.Gangnum.CastBar = KBM.Castbar:Add(self, self.Gangnum)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

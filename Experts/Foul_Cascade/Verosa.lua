@@ -40,7 +40,7 @@ MOD.Verosa = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	}
 }
 
@@ -235,7 +235,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Verosa.CastBar = KBM.CastBar:Add(self, self.Verosa)
+	self.Verosa.CastBar = KBM.Castbar:Add(self, self.Verosa)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

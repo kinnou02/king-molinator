@@ -41,7 +41,7 @@ ML.Arisae = {
 	MechRef = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Desolation = KBM.Defaults.TimerObj.Create("cyan"),
@@ -352,7 +352,7 @@ function ML:Start()
 	self.Arisae.Triggers.Desolation = KBM.Trigger:Create(self.Lang.Ability.Crystal[KBM.Lang], "cast", self.Arisae)
 	self.Arisae.Triggers.Desolation:AddTimer(self.Arisae.TimersRef.Desolation)
 	
-	self.Arisae.CastBar = KBM.CastBar:Add(self, self.Arisae)
+	self.Arisae.CastBar = KBM.Castbar:Add(self, self.Arisae)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

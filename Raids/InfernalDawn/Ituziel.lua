@@ -44,7 +44,7 @@ IZ.Ituziel = {
 	AlertsRef = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Word = KBM.Defaults.TimerObj.Create("red"),
@@ -290,7 +290,7 @@ function IZ:Start()
 	self.Ituziel.Triggers.BrimRemove = KBM.Trigger:Create(self.Lang.Buff.Brimstone[KBM.Lang], "buffRemove", self.Ituziel)
 	self.Ituziel.Triggers.BrimRemove:AddStop(self.Ituziel.AlertsRef.Brimstone)
 	
-	self.Ituziel.CastBar = KBM.CastBar:Add(self, self.Ituziel)
+	self.Ituziel.CastBar = KBM.Castbar:Add(self, self.Ituziel)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

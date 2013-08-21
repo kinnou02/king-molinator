@@ -41,7 +41,7 @@ SK.Khargroth = {
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Spray = KBM.Defaults.TimerObj.Create("dark_green"),
@@ -356,7 +356,7 @@ function SK:Start()
 	self.Khargroth.Triggers.PhaseFinal = KBM.Trigger:Create(30, "percent", self.Khargroth)
 	self.Khargroth.Triggers.PhaseFinal:AddPhase(self.PhaseFinal)
 	
-	self.Khargroth.CastBar = KBM.CastBar:Add(self, self.Khargroth, true)
+	self.Khargroth.CastBar = KBM.Castbar:Add(self, self.Khargroth, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

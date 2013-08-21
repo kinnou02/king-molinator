@@ -42,7 +42,7 @@ MOD.Glubmuk = {
 	UTID = "none",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -217,7 +217,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Glubmuk.CastBar = KBM.CastBar:Add(self, self.Glubmuk)
+	self.Glubmuk.CastBar = KBM.Castbar:Add(self, self.Glubmuk)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

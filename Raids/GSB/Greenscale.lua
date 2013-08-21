@@ -46,7 +46,7 @@ LG.Greenscale = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Blight = KBM.Defaults.TimerObj.Create("red"),
@@ -343,7 +343,7 @@ function LG:Start()
 	self.Greenscale.Triggers.PhaseFour = KBM.Trigger:Create(25, "percent", self.Greenscale)
 	self.Greenscale.Triggers.PhaseFour:AddPhase(self.AirPhaseThree)
 	
-	self.Greenscale.CastBar = KBM.CastBar:Add(self, self.Greenscale)
+	self.Greenscale.CastBar = KBM.Castbar:Add(self, self.Greenscale)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

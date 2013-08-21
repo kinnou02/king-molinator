@@ -63,7 +63,7 @@ JUL.Jultharin = {
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Tempest = KBM.Defaults.TimerObj.Create("yellow"),
@@ -225,7 +225,7 @@ function JUL:Start()
 	self.Jultharin.Triggers.TempestInt = KBM.Trigger:Create(self.Lang.Ability.Tempest[KBM.Lang], "interrupt", self.Jultharin)
 	self.Jultharin.Triggers.TempestInt:AddStop(self.Jultharin.AlertsRef.Tempest)
 	
-	self.Jultharin.CastBar = KBM.CastBar:Add(self, self.Jultharin)
+	self.Jultharin.CastBar = KBM.Castbar:Add(self, self.Jultharin)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

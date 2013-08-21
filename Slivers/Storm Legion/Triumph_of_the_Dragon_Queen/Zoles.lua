@@ -86,7 +86,7 @@ GFZ.Zoles = {
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			VoidFirst = KBM.Defaults.TimerObj.Create("red"),
@@ -296,7 +296,7 @@ function GFZ:Start()
 	self.Zoles.Triggers.StaticInt = KBM.Trigger:Create(self.Lang.Ability.Static[KBM.Lang], "interrupt", self.Zoles)
 	self.Zoles.Triggers.StaticInt:AddStop(self.Zoles.AlertsRef.Static)
 	
-	self.Zoles.CastBar = KBM.CastBar:Add(self, self.Zoles)
+	self.Zoles.CastBar = KBM.Castbar:Add(self, self.Zoles)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

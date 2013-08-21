@@ -99,7 +99,7 @@ MOP.Matriarch = {
 	MechRef = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Wave = KBM.Defaults.TimerObj.Create("yellow"),
@@ -300,7 +300,7 @@ function MOP:Start()
 	self.Matriarch.Triggers.Doom = KBM.Trigger:Create(self.Lang.Ability.Doom[KBM.Lang], "cast", self.Matriarch)
 	self.Matriarch.Triggers.Doom:AddTimer(self.Matriarch.TimersRef.Doom)
 	
-	self.Matriarch.CastBar = KBM.CastBar:Add(self, self.Matriarch)
+	self.Matriarch.CastBar = KBM.Castbar:Add(self, self.Matriarch)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

@@ -43,7 +43,7 @@ MOD.Zael = {
 	},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	}
 }
 
@@ -196,7 +196,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Zael.CastBar = KBM.CastBar:Add(self, self.Zael)
+	self.Zael.CastBar = KBM.Castbar:Add(self, self.Zael)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

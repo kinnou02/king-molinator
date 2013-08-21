@@ -42,7 +42,7 @@ MOD.Caduceus = {
 	UTID = "none",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -217,7 +217,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Caduceus.CastBar = KBM.CastBar:Add(self, self.Caduceus)
+	self.Caduceus.CastBar = KBM.Castbar:Add(self, self.Caduceus)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

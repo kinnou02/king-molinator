@@ -42,7 +42,7 @@ MOD.Grim = {
 	Triggers = {},
 	AlertsRef = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		AlertsRef = {
 			Enabled = true,
 			Flash = KBM.Defaults.AlertObj.Create("yellow"),
@@ -196,7 +196,7 @@ function MOD:Start()
 	-- Assign Alerts and Timers to Triggers
 	self.Grim.Triggers.Flash = KBM.Trigger:Create(self.Lang.Ability.Flash[KBM.Lang], "channel", self.Grim)
 	
-	self.Grim.CastBar = KBM.CastBar:Add(self, self.Grim)
+	self.Grim.CastBar = KBM.Castbar:Add(self, self.Grim)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

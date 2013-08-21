@@ -40,7 +40,7 @@ UK.Uruluuk = {
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		AlertsRef = {
 			Enabled = true,
 			Fist = KBM.Defaults.AlertObj.Create("yellow"),
@@ -250,7 +250,7 @@ function UK:Start()
 	self.Uruluuk.Triggers.Crystal:AddAlert(self.Uruluuk.AlertsRef.Crystal, true)
 	self.Uruluuk.Triggers.Crystal:AddSpy(self.Uruluuk.MechRef.Crystal)
 	
-	self.Uruluuk.CastBar = KBM.CastBar:Add(self, self.Uruluuk)
+	self.Uruluuk.CastBar = KBM.Castbar:Add(self, self.Uruluuk)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

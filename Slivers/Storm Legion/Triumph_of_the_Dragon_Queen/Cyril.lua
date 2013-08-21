@@ -75,7 +75,7 @@ CRL.Cyril = {
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Crushing = KBM.Defaults.TimerObj.Create("red"),
@@ -239,7 +239,7 @@ function CRL:Start()
 	self.Cyril.Triggers.MienRem = KBM.Trigger:Create(self.Lang.Buff.Mien[KBM.Lang], "buffRemove", self.Cyril)
 	self.Cyril.Triggers.MienRem:AddStop(self.Cyril.AlertsRef.Mien)
 	
-	self.Cyril.CastBar = KBM.CastBar:Add(self, self.Cyril)
+	self.Cyril.CastBar = KBM.Castbar:Add(self, self.Cyril)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

@@ -42,7 +42,7 @@ MOD.Core = {
 	UnitList = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	}
 }
 
@@ -210,7 +210,7 @@ function MOD:Start()
 	self.Core.Triggers.Victory = KBM.Trigger:Create(self.Lang.Say.Victory[KBM.Lang], "say", self.Core)
 	self.Core.Triggers.Victory:SetVictory()
 	
-	self.Core.CastBar = KBM.CastBar:Add(self, self.Core)
+	self.Core.CastBar = KBM.Castbar:Add(self, self.Core)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

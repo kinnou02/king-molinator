@@ -42,7 +42,7 @@ MOD.Suleng = {
 	UTID = "U42D35C2922BE1C1B",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -223,7 +223,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Suleng.CastBar = KBM.CastBar:Add(self, self.Suleng)
+	self.Suleng.CastBar = KBM.Castbar:Add(self, self.Suleng)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

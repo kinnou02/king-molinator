@@ -51,7 +51,7 @@ HA.Arakhurn = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			NovaFirst = KBM.Defaults.TimerObj.Create("red"),
@@ -491,7 +491,7 @@ function HA:Start()
 	self.Arakhurn.Triggers.IgnitedRemoved = KBM.Trigger:Create(self.Lang.Debuff.Ignited[KBM.Lang], "playerBuffRemove", self.Arakhurn)
 	self.Arakhurn.Triggers.IgnitedRemoved:AddStop(self.Arakhurn.MechRef.Ignited)
 	
-	self.Arakhurn.CastBar = KBM.CastBar:Add(self, self.Arakhurn)
+	self.Arakhurn.CastBar = KBM.Castbar:Add(self, self.Arakhurn)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

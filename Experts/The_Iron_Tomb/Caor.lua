@@ -40,7 +40,7 @@ MOD.Caor = {
 	UTID = "U7ECF03C84DCEB01A",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	}
 }
 
@@ -189,7 +189,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Caor.CastBar = KBM.CastBar:Add(self, self.Caor)
+	self.Caor.CastBar = KBM.Castbar:Add(self, self.Caor)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

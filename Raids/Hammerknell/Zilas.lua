@@ -41,7 +41,7 @@ SZ.Zilas = {
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Grasp = KBM.Defaults.TimerObj.Create("red"),
@@ -295,10 +295,10 @@ function SZ:UnitHPCheck(uDetails, unitID)
 						}
 						self.Bosses[uDetails.name].UnitList[unitID] = SubBossObj
 						if uDetails.name == self.Imp.Name then
-							SubBossObj.CastBar = KBM.CastBar:Add(self, self.Imp, false, true)
+							SubBossObj.CastBar = KBM.Castbar:Add(self, self.Imp, false, true)
 							SubBossObj.CastBar:Create(unitID)
 						elseif uDetails.name == self.Spirit.Name then
-							SubBossObj.CastBar = KBM.CastBar:Add(self, self.Spirit, false, true)
+							SubBossObj.CastBar = KBM.Castbar:Add(self, self.Spirit, false, true)
 							SubBossObj.CastBar:Create(unitID)
 						end
 					else
@@ -422,7 +422,7 @@ function SZ:Start()
 	self.Spirit.Triggers.VolleyInt:AddStop(self.Spirit.AlertsRef.Volley)
 	
 	-- Assign Castbar object.
-	self.Zilas.CastBar = KBM.CastBar:Add(self, self.Zilas, true)
+	self.Zilas.CastBar = KBM.Castbar:Add(self, self.Zilas, true)
 	
 	-- Assing Phase Tracking.
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

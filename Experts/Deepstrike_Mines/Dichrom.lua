@@ -42,7 +42,7 @@ MOD.Dichrom = {
 	UTID = "U641AE08F44B7FFE3",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -217,7 +217,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Dichrom.CastBar = KBM.CastBar:Add(self, self.Dichrom)
+	self.Dichrom.CastBar = KBM.Castbar:Add(self, self.Dichrom)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

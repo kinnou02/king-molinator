@@ -40,7 +40,7 @@ MOD.Liaz = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	}
 }
 
@@ -185,7 +185,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Liaz.CastBar = KBM.CastBar:Add(self, self.Liaz)
+	self.Liaz.CastBar = KBM.Castbar:Add(self, self.Liaz)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

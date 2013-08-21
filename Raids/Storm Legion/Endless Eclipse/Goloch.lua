@@ -45,7 +45,7 @@ DLG.Goloch = {
 	MechRef = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			FirstGlimpse = KBM.Defaults.TimerObj.Create("yellow"),
@@ -314,6 +314,6 @@ function DLG:Start()
 	self.Goloch.Triggers.Baleful:AddAlert(self.Goloch.AlertsRef.Baleful)
 	self.Goloch.Triggers.Baleful:AddTimer(self.Goloch.TimersRef.Baleful)
 	
-	self.Goloch.CastBar = KBM.CastBar:Add(self, self.Goloch)
+	self.Goloch.CastBar = KBM.Castbar:Add(self, self.Goloch)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 end

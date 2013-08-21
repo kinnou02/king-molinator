@@ -42,7 +42,7 @@ MOD.Loggodhan = {
 	UTID = "U7A9F3EC2663A6774",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -217,7 +217,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Loggodhan.CastBar = KBM.CastBar:Add(self, self.Loggodhan)
+	self.Loggodhan.CastBar = KBM.Castbar:Add(self, self.Loggodhan)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

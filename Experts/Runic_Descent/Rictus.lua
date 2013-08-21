@@ -42,7 +42,7 @@ MOD.Rictus = {
 	UTID = "U06CF214A071F281B",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -217,7 +217,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Rictus.CastBar = KBM.CastBar:Add(self, self.Rictus)
+	self.Rictus.CastBar = KBM.Castbar:Add(self, self.Rictus)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

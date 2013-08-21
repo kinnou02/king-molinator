@@ -131,45 +131,26 @@ function Instance:Create(Mod)
 		end
 		
 		function Encounter:SetCastbars()
-			if self.Mod.Settings.CastBar then
-				if self.Mod.Settings.CastBar.Multi then
-					KBM.CastBar.Anchor:Hide()
-					for BossName, BossObj in pairs(self.Mod.Bosses) do
-						if BossObj.CastBar then
-							BossObj.CastBar:Display()
-						end
-					end
-				elseif self.Mod.Settings.CastBar.Override then
-					KBM.CastBar.Anchor:Hide()
-					for BossName, BossObj in pairs(self.Mod.Bosses) do
-						if BossObj.CastBar then
-							BossObj.CastBar:Display()
-							break
-						end
+			KBM.Castbar.Global.CastObj:SetVisible(false)
+			if self.Mod.HasCastbars then
+				for BossName, BossObj in pairs(self.Mod.Bosses) do
+					if BossObj.CastBar then
+						BossObj.CastBar:Display()
+						--print(BossName.." Enabled: "..tostring(BossObj.CastBar.CastObj.Enabled))
 					end
 				end
 			end		
 		end
 		
 		function Encounter:ClearCastbars()
-			if self.Mod.Settings.CastBar then
-				if self.Mod.Settings.CastBar.Multi then
-					for BossName, BossObj in pairs(self.Mod.Bosses) do
-						if BossObj.CastBar then
-							BossObj.CastBar:Hide()
-						end
+			if self.Mod.HasCastbars then
+				for BossName, BossObj in pairs(self.Mod.Bosses) do
+					if BossObj.CastBar then
+						BossObj.CastBar:Hide()
 					end
-					KBM.CastBar.Anchor:Display()
-				elseif self.Mod.Settings.CastBar.Override then
-					for BossName, BossObj in pairs(self.Mod.Bosses) do
-						if BossObj.CastBar then
-							BossObj.CastBar:Hide()
-							break
-						end
-					end
-					KBM.CastBar.Anchor:Display()
 				end
 			end
+			KBM.Castbar.Global.CastObj:SetVisible(KBM.Options.Castbar.Global.visible)
 		end
 		
 		function Encounter:Open()
@@ -416,6 +397,7 @@ function Instance:BuildTabs()
 			end
 			self.Active = false
 		end
+		
 		function Page.Side:Remove()
 			self.Complete = false
 			self.Height = 10
@@ -1023,143 +1005,117 @@ function Build:Castbars()
 	Page.Layout = {}
 	
 	function Page.Layout:CastBar()
-		if self.Mod.Settings.CastBar then
-			self.Tab:Enable()
-			if self.Mod.Settings.CastBar.Multi then				
-				-- Multi Style Castbar Settings
-				for BossName, BossObj in pairs(self.Mod.Bosses) do
-					if BossObj.CastBar then
-						local Settings = BossObj.CastBar.Settings
-						if Settings then
-							local CastBar = BossObj.CastBar							
-							local Callbacks = {}
-							
-							function Callbacks:Enabled(bool)
-								Settings.Enabled = bool
-								CastBar.Enabled = bool
-								if bool then
-									CastBar:Display()
+		if self.Mod.HasCastbars then
+			for BossName, Boss in pairs(self.Mod.Bosses) do
+				if Boss.CastBar then
+					local Settings = Boss.CastBar.Settings
+					local BossSettings = Boss.CastBar.BossSettings
+					local GlobalSettings = KBM.Options.Castbar.Global
+					if Settings then
+						local Callbacks = {}
+						function Callbacks:override(bool)
+							-- print("<< MENU >> "..Boss.Name.." Override")
+							BossSettings.override = bool
+							if bool then
+								if BossSettings.custom then
+									-- print("<< MENU >> Local Settings")
+									Boss.CastBar.Settings = BossSettings
+									-- print("<< MENU >> calling :Hide()")
+									-- Boss.CastBar:Hide()
+									-- print("<< MENU >> Removing from Anchor")									
+									Boss.CastBar.CastObj:SettingsTable(Boss.CastBar.Settings)
+									KBM.Castbar.Anchor:RemoveBar(Boss.CastBar.CastObj)
 								else
-									CastBar:Hide()
+									--print("<< MENU >> Global Settings")
+									Boss.CastBar.Settings = GlobalSettings
+									Boss.CastBar.CastObj:SettingsTable(Boss.CastBar.Settings)
 								end
-							end
-							function Callbacks:Pinned(bool)
-								Settings.Pinned = bool
-								CastBar:Hide()
-								CastBar:Display()
-							end
-							function Callbacks:Visible(bool)
-								Settings.Visible = bool
-								Settings.Unlocked = bool
-								if bool then
-									CastBar:Display()
-								else
-									CastBar:Hide()
+								--print("<< MENU >> calling :Enabled()")
+								Boss.CastBar.CastObj:Enable(BossSettings.enabled)
+							else
+							--	print("<< MENU >> Global Settings")
+								Boss.CastBar.Settings = GlobalSettings
+								if BossSettings.custom then
+									-- print("<< MENU >> calling :Hide()")
+									-- Boss.CastBar:Hide()
+									-- print("<< MENU >> Adding to Anchor")									
+									Boss.CastBar.CastObj:SettingsTable(Boss.CastBar.Settings)
+									KBM.Castbar.Anchor:AddBar(Boss.CastBar.CastObj)
 								end
-							end
-							function Callbacks:ScaleWidth(bool)
-								Settings.ScaleWidth = bool
-							end
-							function Callbacks:ScaleHeight(bool)
-								Settings.ScaleHeight = bool
-							end
-							function Callbacks:TextScale(bool)
-								Settings.TextScale = bool
+								-- print("<< MENU >> calling :Enabled()")
+								Boss.CastBar.CastObj:Enable(GlobalSettings.enabled)
 							end
 							
-							BossName = BossObj.NameShort or BossName
-							
-							local Header = self.UI.CreateHeader(KBM.Language.Menu.Enable[KBM.Lang].." "..BossName.."'s "..KBM.Language.Menu.Castbars[KBM.Lang]..".", Settings, "Enabled", Callbacks)
-							if BossObj.PinCastBar then
-								Header:CreateCheck(BossObj.Settings.PinMenu, Settings, "Pinned", Callbacks)
+							Settings = Boss.CastBar.Settings
+						--	print("<< MENU >> calling :Display()")
+							Boss.CastBar:Display()
+						end
+						
+						function Callbacks:enabled(bool)
+							BossSettings.enabled = bool
+							Boss.CastBar.CastObj:Enable(bool)
+							Boss.CastBar:Display()
+						end
+						
+						function Callbacks:custom(bool)
+							BossSettings.custom = bool
+							if bool then
+								Boss.CastBar.Settings = BossSettings
+								Boss.CastBar.CastObj:SettingsTable(Boss.CastBar.Settings)
+								KBM.Castbar.Anchor:RemoveBar(Boss.CastBar.CastObj)
+							else
+								Boss.CastBar.Settings = GlobalSettings
+								Boss.CastBar.CastObj:SettingsTable(Boss.CastBar.Settings)
+								KBM.Castbar.Anchor:AddBar(Boss.CastBar.CastObj)
 							end
-							Header:CreateCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], Settings, "Visible", Callbacks)
-							Header:CreateCheck(KBM.Language.Options.UnlockWidth[KBM.Lang], Settings,  "ScaleWidth", Callbacks)
-							Header:CreateCheck(KBM.Language.Options.UnlockHeight[KBM.Lang], Settings, "ScaleHeight", Callbacks)
-							Header:CreateCheck(KBM.Language.Options.UnlockText[KBM.Lang], Settings, "TextScale", Callbacks)
-							-- Child:SetChecked(Settings.TextScale)					
-							-- for ChatID, ChatObj in pairs(BossObj.ChatRef) do
-								-- if ChatObj.HasMenu then
-									-- local Callbacks = {}
-									-- local ChatSettings = Settings[ChatID]
-									
-									-- function Callbacks:Enabled(bool)
-										-- ChatSettings.Enabled = bool
-									-- end
-								-- end
-							-- end
-						end					
+							Settings = Boss.CastBar.Settings
+							Boss.CastBar:Display()
+						end
+						
+						-- function Callbacks:Pinned(bool)
+							-- self.Mod.Settings.CastBar.Pinned = bool
+							-- Boss.CastBar:Hide()
+							-- Boss.CastBar:Display()
+						-- end
+						
+						function Callbacks:visible(bool)
+							Boss.CastBar:Hide()
+							BossSettings.visible = bool
+							BossSettings.unlocked = bool
+							Boss.CastBar.CastObj:Unlocked(bool)
+							Boss.CastBar:Display()
+						end
+						
+						function Callbacks:widthUnlocked(bool)
+							BossSettings.scale.widthUnlocked = bool
+						end
+						
+						function Callbacks:heightUnlocked(bool)
+							BossSettings.scale.heightUnlocked = bool
+						end
+						
+						-- function Callbacks:TextScale(bool)
+							-- self.Mod.Settings.CastBar.TextScale = bool
+						-- end
+						
+						--local Header = self.UI.CreateHeader(KBM.Language.Options.CastbarOverride[KBM.Lang], Settings, "pinned", Callbacks)
+						local Header = self.UI.CreateHeader(string.format(KBM.Language.Options.CastbarOverride[KBM.Lang], BossName), BossSettings, "override", Callbacks)
+						local SubHeader = Header:CreateCheck(KBM.Language.Options.Enabled[KBM.Lang], BossSettings, "enabled", Callbacks)
+						local Custom = SubHeader:CreateCheck(KBM.Language.CastBar.Custom[KBM.Lang], BossSettings, "custom", Callbacks)
+						-- if Boss.PinCastBar then
+							-- Header:CreateOption(BossObj.Settings.PinMenu, Settings, "Pinned", Callbacks)
+						-- end
+						Custom:CreateCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], BossSettings, "visible", Callbacks)
+						Custom:CreateCheck(KBM.Language.Options.UnlockWidth[KBM.Lang], BossSettings.scale, "widthUnlocked", Callbacks)
+						Custom:CreateCheck(KBM.Language.Options.UnlockHeight[KBM.Lang], BossSettings.scale, "heightUnlocked", Callbacks)
+						-- Header:CreateCheck(KBM.Language.Options.UnlockText[KBM.Lang], Settings, "TextScale", Callbacks)
 					end
-				end			
+				end
+			end
+			if self.Mod.HasCastbars then
+				self.Tab:Enable()
 			else
-				local Callbacks = {}
-				local Boss
-				for BossName, BossObj in pairs(self.Mod.Bosses) do
-					if BossObj.CastBar then
-						Boss = BossObj
-						break
-					end
-				end
-				
-				if Boss then
-					-- Single Style Castbar Settings
-					function Callbacks:Override(bool)
-						self.Mod.Settings.CastBar.Override = bool
-						if bool then
-							Boss.CastBar.Settings = self.Mod.Settings.CastBar
-							KBM.CastBar.Anchor:Hide()
-							Boss.CastBar:Display()
-						else
-							Boss.CastBar.Settings = KBM.CastBar.Settings
-							Boss.CastBar:Hide()
-							KBM.CastBar.Anchor:Display()
-						end
-					end
-					function Callbacks:Enabled(bool)
-						self.Mod.Settings.CastBar.Enabled = bool
-						if bool then
-							Boss.CastBar:Display()
-						else
-							Boss.CastBar:Hide()
-						end
-					end
-					function Callbacks:Pinned(bool)
-						self.Mod.Settings.CastBar.Pinned = bool
-						Boss.CastBar:Hide()
-						Boss.CastBar:Display()
-					end
-					function Callbacks:Visible(bool)
-						self.Mod.Settings.CastBar.Visible = bool
-						self.Mod.Settings.CastBar.Unlocked = bool
-						if bool then
-							Boss.CastBar:Display()
-						else
-							Boss.CastBar:Hide()
-						end
-					end
-					function Callbacks:ScaleWidth(bool)
-						self.Mod.Settings.CastBar.ScaleWidth = bool
-					end
-					function Callbacks:ScaleHeight(bool)
-						self.Mod.Settings.CastBar.ScaleHeight = bool
-					end
-					function Callbacks:TextScale(bool)
-						self.Mod.Settings.CastBar.TextScale = bool
-					end
-					
-					local Settings = self.Mod.Settings.CastBar
-					local Header = self.UI.CreateHeader(KBM.Language.Options.CastbarOverride[KBM.Lang], Settings, "Override", Callbacks)
-					Header:CreateCheck(KBM.Language.Options.Enabled[KBM.Lang], Settings, "Enabled", Callbacks)
-					if Boss.PinCastBar then
-						Header:CreateOption(BossObj.Settings.PinMenu, Settings, "Pinned", Callbacks)
-					end
-					Header:CreateCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], Settings, "Visible", Callbacks)
-					Header:CreateCheck(KBM.Language.Options.UnlockWidth[KBM.Lang], Settings, "ScaleWidth", Callbacks)
-					Header:CreateCheck(KBM.Language.Options.UnlockHeight[KBM.Lang], Settings, "ScaleHeight", Callbacks)
-					Header:CreateCheck(KBM.Language.Options.UnlockText[KBM.Lang], Settings, "TextScale", Callbacks)
-				else
-					self.Tab:Disable()
-				end
+				self.Tab:Disable()
 			end
 		end
 	end

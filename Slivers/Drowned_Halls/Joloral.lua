@@ -40,7 +40,7 @@ JR.Joloral = {
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		AlertsRef = {
 			Enabled = true,
 			Panic = KBM.Defaults.AlertObj.Create("purple"),
@@ -251,7 +251,7 @@ function JR:Start()
 	self.Joloral.Triggers.PanicRemove = KBM.Trigger:Create(self.Lang.Ability.Panic[KBM.Lang], "playerBuffRemove", self.Joloral)
 	self.Joloral.Triggers.PanicRemove:AddStop(self.Joloral.MechRef.Panic)
 	
-	self.Joloral.CastBar = KBM.CastBar:Add(self, self.Joloral, true)
+	self.Joloral.CastBar = KBM.Castbar:Add(self, self.Joloral, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

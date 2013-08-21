@@ -45,7 +45,7 @@ MOD.Bonehew = {
 	UTID = "U71B4AEF5562A56AE",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -273,7 +273,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Bonehew.CastBar = KBM.CastBar:Add(self, self.Bonehew)
+	self.Bonehew.CastBar = KBM.Castbar:Add(self, self.Bonehew)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

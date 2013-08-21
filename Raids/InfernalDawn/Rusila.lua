@@ -47,7 +47,7 @@ RS.Rusila = {
 	ChatRef = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			LeftLongshot = KBM.Defaults.TimerObj.Create("pink"),
@@ -461,7 +461,7 @@ function RS:Start()
 	self.Rusila.Triggers.Fists = KBM.Trigger:Create(self.Lang.Notify.Fist[KBM.Lang], "notify", self.Rusila)
 	self.Rusila.Triggers.Fists:AddTimer(self.Rusila.TimersRef.Fists)
 	
-	self.Rusila.CastBar = KBM.CastBar:Add(self, self.Rusila)
+	self.Rusila.CastBar = KBM.Castbar:Add(self, self.Rusila)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

@@ -47,7 +47,7 @@ ID.Inwar = {
 	Required = 1,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Geyser = KBM.Defaults.TimerObj.Create("blue"),
@@ -81,7 +81,7 @@ ID.Denizar = {
 	Required = 1,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Freeze = KBM.Defaults.TimerObj.Create("cyan"),
@@ -106,7 +106,7 @@ ID.Aqualix = {
 	Required = 1,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	}
 }
 
@@ -123,7 +123,7 @@ ID.Undertow = {
 	Required = 1,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	},
 }
 
@@ -141,7 +141,7 @@ ID.Rotjaw = {
 	Required = 1,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	},
 }
 
@@ -577,11 +577,11 @@ function ID:Start()
 	self.Inwar.Triggers.Storm:AddAlert(self.Inwar.AlertsRef.Storm)
 	self.Inwar.Triggers.Storm:AddTimer(self.Inwar.TimersRef.Storm)
 
-	self.Inwar.CastBar = KBM.CastBar:Add(self, self.Inwar, true)
-	self.Aqualix.CastBar = KBM.CastBar:Add(self, self.Aqualix, true)
-	self.Denizar.CastBar = KBM.CastBar:Add(self, self.Denizar, true)
-	self.Undertow.CastBar = KBM.CastBar:Add(self, self.Undertow, true)
-	self.Rotjaw.CastBar = KBM.CastBar:Add(self, self.Rotjaw, true)
+	self.Inwar.CastBar = KBM.Castbar:Add(self, self.Inwar, true)
+	self.Aqualix.CastBar = KBM.Castbar:Add(self, self.Aqualix, true)
+	self.Denizar.CastBar = KBM.Castbar:Add(self, self.Denizar, true)
+	self.Undertow.CastBar = KBM.Castbar:Add(self, self.Undertow, true)
+	self.Rotjaw.CastBar = KBM.Castbar:Add(self, self.Rotjaw, true)
 	
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	

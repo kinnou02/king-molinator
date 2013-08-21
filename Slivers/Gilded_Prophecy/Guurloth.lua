@@ -41,7 +41,7 @@ GH.Guurloth = {
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			OrbFirst = KBM.Defaults.TimerObj.Create("orange"),
@@ -368,7 +368,7 @@ function GH:Start()
 	self.Guurloth.Triggers.Geyser:AddAlert(self.Guurloth.AlertsRef.Geyser)
 	self.Guurloth.Triggers.Geyser:AddTimer(self.Guurloth.TimersRef.Geyser)
 	
-	self.Guurloth.CastBar = KBM.CastBar:Add(self, self.Guurloth)
+	self.Guurloth.CastBar = KBM.Castbar:Add(self, self.Guurloth)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

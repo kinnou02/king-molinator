@@ -46,7 +46,7 @@ SN.Sicaron = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		Filters = {
 			Enabled = true,
 			Hex = KBM.Defaults.CastFilter.Create("purple"),
@@ -349,7 +349,7 @@ function SN:Start()
 	self.Sicaron.Triggers.Soul:AddTimer(self.Sicaron.TimersRef.Soul)
 	
 	-- Assign Castbar object.
-	self.Sicaron.CastBar = KBM.CastBar:Add(self, self.Sicaron)
+	self.Sicaron.CastBar = KBM.Castbar:Add(self, self.Sicaron)
 	
 	-- Assign Phase Monitor.
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

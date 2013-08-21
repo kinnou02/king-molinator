@@ -42,7 +42,7 @@ DL.Letareus = {
 	TimeOut = 3,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		AlertsRef = {
 			Enabled = true,
 			Wrath = KBM.Defaults.AlertObj.Create("red"),
@@ -285,7 +285,7 @@ function DL:Start()
 	self.Letareus.Triggers.PhaseEight:AddPhase(self.PhaseEight)
 		
 	-- Initialize Castbar and Phase Object.
-	self.Letareus.CastBar = KBM.CastBar:Add(self, self.Letareus)
+	self.Letareus.CastBar = KBM.Castbar:Add(self, self.Letareus)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(DL.Lang.Mechanic.Tank[KBM.Lang])
 	
 end

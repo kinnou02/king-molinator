@@ -169,7 +169,7 @@ CRC.Crucia = {
 	MechRef = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			LBreath = KBM.Defaults.TimerObj.Create("red"),
@@ -263,7 +263,7 @@ CRC.Storm = {
 	AlertsRef = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 		-- },
@@ -292,7 +292,7 @@ CRC.Elemental = {
 	-- AlertsRef = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 		-- },
@@ -321,7 +321,7 @@ CRC.Construct = {
 	-- AlertsRef = {},
 	Triggers = {},
 	Settings = {
-		-- CastBar = KBM.Defaults.CastBar(),
+		-- CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 		-- },
@@ -683,9 +683,9 @@ function CRC:Start()
 	self.Crucia.Triggers.PhaseFour = KBM.Trigger:Create(60, "percent", self.Crucia)
 	self.Crucia.Triggers.PhaseFour:AddPhase(self.PhaseFour)
 	
-	self.Crucia.CastBar = KBM.CastBar:Add(self, self.Crucia)
-	self.Storm.CastBar = KBM.CastBar:Add(self, self.Storm)
-	self.Elemental.CastBar = KBM.CastBar:Add(self, self.Elemental)
+	self.Crucia.CastBar = KBM.Castbar:Add(self, self.Crucia)
+	self.Storm.CastBar = KBM.Castbar:Add(self, self.Storm)
+	self.Elemental.CastBar = KBM.Castbar:Add(self, self.Elemental)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

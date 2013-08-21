@@ -47,7 +47,7 @@ PH.Hylas = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Duke = KBM.Defaults.TimerObj.Create("dark_green"),
@@ -413,7 +413,7 @@ function PH:Start()
 	self.Hylas.Triggers.Cotton:AddTimer(self.Hylas.TimersRef.Cotton)
 	self.Hylas.Triggers.Cotton:AddAlert(self.Hylas.AlertsRef.Cotton)
 	
-	self.Hylas.CastBar = KBM.CastBar:Add(self, self.Hylas)
+	self.Hylas.CastBar = KBM.Castbar:Add(self, self.Hylas)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

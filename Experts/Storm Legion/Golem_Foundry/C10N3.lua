@@ -43,7 +43,7 @@ MOD.C10N3 = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	}
 }
 
@@ -260,7 +260,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.C10N3.CastBar = KBM.CastBar:Add(self, self.C10N3)
+	self.C10N3.CastBar = KBM.Castbar:Add(self, self.C10N3)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

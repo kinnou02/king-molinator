@@ -96,7 +96,7 @@ MOD.VellionPS = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	}
 }
 
@@ -275,7 +275,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.VellionPS.CastBar = KBM.CastBar:Add(self, self.VellionPS)
+	self.VellionPS.CastBar = KBM.Castbar:Add(self, self.VellionPS)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

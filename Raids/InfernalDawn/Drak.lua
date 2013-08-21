@@ -45,7 +45,7 @@ WD.Drak = {
 	MechRef = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			BlazingFirst = KBM.Defaults.TimerObj.Create("dark_green"),
@@ -194,7 +194,7 @@ WD.Azul = {
 	AlertsRef = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Molten = KBM.Defaults.TimerObj.Create("orange"),
@@ -224,7 +224,7 @@ WD.Natung = {
 	AlertsRef = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -488,7 +488,7 @@ function WD:UnitHPCheck(uDetails, unitID)
 								}
 								BossObj.UnitList[unitID] = SubBossObj
 								if uDetails.name == self.Stalwart.Name then
-									SubBossObj.CastBar = KBM.CastBar:Add(self, self.Stalwart, false, true)
+									SubBossObj.CastBar = KBM.Castbar:Add(self, self.Stalwart, false, true)
 									SubBossObj.CastBar:Create(unitID)
 								end
 							else
@@ -624,9 +624,9 @@ function WD:Start()
 	self.Stalwart.Triggers.BlowInt = KBM.Trigger:Create(self.Lang.Ability.Blow[KBM.Lang], "personalInterrupt", self.Stalwart)
 	self.Stalwart.Triggers.BlowInt:AddStop(self.Stalwart.AlertsRef.Blow)
 	
-	self.Drak.CastBar = KBM.CastBar:Add(self, self.Drak)
-	self.Natung.CastBar = KBM.CastBar:Add(self, self.Natung)
-	self.Azul.CastBar = KBM.CastBar:Add(self, self.Azul)
+	self.Drak.CastBar = KBM.Castbar:Add(self, self.Drak)
+	self.Natung.CastBar = KBM.Castbar:Add(self, self.Natung)
+	self.Azul.CastBar = KBM.Castbar:Add(self, self.Azul)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

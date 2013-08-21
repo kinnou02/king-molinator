@@ -40,7 +40,7 @@ MOD.Cahail = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	}
 }
 
@@ -181,6 +181,6 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Cahail.CastBar = KBM.CastBar:Add(self, self.Cahail)
+	self.Cahail.CastBar = KBM.Castbar:Add(self, self.Cahail)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 end

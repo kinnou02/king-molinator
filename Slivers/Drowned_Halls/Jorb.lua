@@ -40,7 +40,7 @@ AJ.Jorb = {
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Impact = KBM.Defaults.TimerObj.Create("purple"),
@@ -229,7 +229,7 @@ function AJ:Start()
 	self.Jorb.Triggers.Grasp = KBM.Trigger:Create(self.Lang.Debuff.Grasp[KBM.Lang], "playerBuff", self.Jorb)
 	self.Jorb.Triggers.Grasp:AddAlert(self.Jorb.AlertsRef.Grasp)
 	
-	self.Jorb.CastBar = KBM.CastBar:Add(self, self.Jorb, true)
+	self.Jorb.CastBar = KBM.Castbar:Add(self, self.Jorb, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

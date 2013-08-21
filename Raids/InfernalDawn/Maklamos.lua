@@ -45,7 +45,7 @@ ML.Maklamos = {
 	MechRef = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Desolation = KBM.Defaults.TimerObj.Create("cyan"),
@@ -382,7 +382,7 @@ function ML:Start()
 	self.Maklamos.Triggers.Desolation = KBM.Trigger:Create(self.Lang.Ability.Crystal[KBM.Lang], "cast", self.Maklamos)
 	self.Maklamos.Triggers.Desolation:AddTimer(self.Maklamos.TimersRef.Desolation)
 	
-	self.Maklamos.CastBar = KBM.CastBar:Add(self, self.Maklamos)
+	self.Maklamos.CastBar = KBM.Castbar:Add(self, self.Maklamos)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

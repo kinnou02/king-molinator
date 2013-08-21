@@ -42,7 +42,7 @@ MOD.Valthundr = {
 	Triggers = {},
 	AlertsRef = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		AlertsRef = {
 			Enabled = true,
 			Frost = KBM.Defaults.AlertObj.Create("blue"),
@@ -213,6 +213,6 @@ function MOD:Start()
 	self.Valthundr.Triggers.Winter = KBM.Trigger:Create(self.Lang.Ability.Winter[KBM.Lang], "channel", self.Valthundr)
 	self.Valthundr.Triggers.Winter:AddAlert(self.Valthundr.AlertsRef.Winter)
 		
-	self.Valthundr.CastBar = KBM.CastBar:Add(self, self.Valthundr)
+	self.Valthundr.CastBar = KBM.Castbar:Add(self, self.Valthundr)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)	
 end

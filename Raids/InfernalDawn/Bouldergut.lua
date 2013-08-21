@@ -43,7 +43,7 @@ BG.Bouldergut = {
 	-- AlertsRef = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -227,7 +227,7 @@ function BG:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Bouldergut.CastBar = KBM.CastBar:Add(self, self.Bouldergut)
+	self.Bouldergut.CastBar = KBM.Castbar:Add(self, self.Bouldergut)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

@@ -43,7 +43,7 @@ ES.Estrode = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Soul = KBM.Defaults.TimerObj.Create("red"),
@@ -281,7 +281,7 @@ function ES:Start()
 	self.Estrode.Triggers.Grasp = KBM.Trigger:Create(self.Lang.Debuff.Grasp[KBM.Lang], "playerBuffRemove", self.Estrode)
 	self.Estrode.Triggers.Grasp:AddStop(self.Estrode.AlertsRef.Grasp)
 	
-	self.Estrode.CastBar = KBM.CastBar:Add(self, self.Estrode, true)
+	self.Estrode.CastBar = KBM.Castbar:Add(self, self.Estrode, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 		
 end

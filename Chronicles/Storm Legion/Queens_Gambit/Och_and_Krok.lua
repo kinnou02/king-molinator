@@ -66,7 +66,7 @@ OK.Och = {
 	--MechRef = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	}
 }
 
@@ -87,7 +87,7 @@ OK.Krok = {
 	--MechRef = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	}
 }
 
@@ -256,7 +256,7 @@ function OK:Start()
 	-- Assign Alerts and Timers to Triggers
 	
 	self.PercentageMon = KBM.PercentageMon:Create(self.Och, self.Krok, 7)
-	self.Och.CastBar = KBM.CastBar:Add(self, self.Och)
-	self.Krok.CastBar = KBM.CastBar:Add(self, self.Krok)
+	self.Och.CastBar = KBM.Castbar:Add(self, self.Och)
+	self.Krok.CastBar = KBM.Castbar:Add(self, self.Krok)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)	
 end

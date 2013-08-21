@@ -42,7 +42,7 @@ AF.Anrak = {
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		AlertsRef = {
 			Enabled = true,
 			SpinesWarn = KBM.Defaults.AlertObj.Create("yellow"),
@@ -273,7 +273,7 @@ function AF:Start()
 	self.Anrak.Triggers.VenomRemove = KBM.Trigger:Create(self.Lang.Debuff.Venom[KBM.Lang], "playerBuffRemove", self.Anrak)
 	self.Anrak.Triggers.VenomRemove:AddStop(self.Anrak.MechRef.Venom)
 	
-	self.Anrak.CastBar = KBM.CastBar:Add(self, self.Anrak)
+	self.Anrak.CastBar = KBM.Castbar:Add(self, self.Anrak)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

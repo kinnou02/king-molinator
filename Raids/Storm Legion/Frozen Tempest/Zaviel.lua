@@ -113,7 +113,7 @@ ZVL.Zaviel = {
 	AlertsRef = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Power = KBM.Defaults.TimerObj.Create("dark_green"),
@@ -156,7 +156,7 @@ ZVL.Power = {
 	Multi = true,
 	UnitList = {},
 	Settings = {
-		-- CastBar = KBM.Defaults.CastBar(),
+		-- CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -422,7 +422,7 @@ function ZVL:Start()
 	self.Zaviel.Triggers.PhaseCon:AddPhase(self.PhaseConducer)
 	self.Zaviel.Triggers.PhaseCon:AddAlert(self.Zaviel.AlertsRef.Power)
 	
-	self.Zaviel.CastBar = KBM.CastBar:Add(self, self.Zaviel)
+	self.Zaviel.CastBar = KBM.Castbar:Add(self, self.Zaviel)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

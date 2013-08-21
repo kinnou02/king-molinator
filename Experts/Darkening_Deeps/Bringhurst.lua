@@ -40,7 +40,7 @@ MOD.Bringhurst = {
 	Triggers = {},
 	UTID = "U1697B68901F9EB8C",
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	}
 }
 
@@ -186,7 +186,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Bringhurst.CastBar = KBM.CastBar:Add(self, self.Bringhurst)
+	self.Bringhurst.CastBar = KBM.Castbar:Add(self, self.Bringhurst)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

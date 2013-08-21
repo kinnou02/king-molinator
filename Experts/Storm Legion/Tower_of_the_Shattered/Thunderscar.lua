@@ -40,7 +40,7 @@ MOD.Thunderscar = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	}
 }
 
@@ -183,7 +183,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Thunderscar.CastBar = KBM.CastBar:Add(self, self.Thunderscar)
+	self.Thunderscar.CastBar = KBM.Castbar:Add(self, self.Thunderscar)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

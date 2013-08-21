@@ -41,7 +41,7 @@ MOD.Smouldaron = {
 	UTID = "U0CF6D91C2CFA0570",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -216,7 +216,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Smouldaron.CastBar = KBM.CastBar:Add(self, self.Smouldaron)
+	self.Smouldaron.CastBar = KBM.Castbar:Add(self, self.Smouldaron)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

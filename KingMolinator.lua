@@ -124,31 +124,6 @@ KBM.Constant = {}
 KBM.Buffs = {}
 KBM.Buffs.Active = {}
 KBM.Buffs.WatchID = {}
-KBM.Castbar = {
-	Player = {
-		Self = {
-			ID = "KBM_Player_Bar",
-			Type = "player",
-			Style = "default",
-			Pack = "Rift",
-		},
-		Target = {
-			ID = "KBM_Player_Target",
-			Type = "player.target",
-			Pack = "Rift",
-		},
-		Focus = {
-			ID = "KBM_Player_Focus",
-			Type = "focus",
-			Pack = "Rift",
-		},
-	},
-	Global = {
-		ID = "KBM_Global_Bar",
-		Style = "boss",
-		Pack = "Rift",
-	},
-}
 
 function KBM.AlphaComp(Comp, With)
 	if type(Comp) == "string" and type(With) == "string" then
@@ -536,32 +511,38 @@ function KBM.Defaults.ChatObj.Assign(BossObj)
 	end
 end
 
-function KBM.Defaults.CastBar()
-	local CastBar = {
-		Override = false,
-		x = false,
-		y = false,
-		Enabled = true,
-		Style = "rift",
-		RiftBar = true,
-		Shadow = true,
-		Unlocked = true,
-		Visible = true,
-		ScaleWidth = false,
-		wScale = 1,
-		hScale = 1,
-		tScale = 1,
-		Shadow = true,
-		Texture = true,
-		TextureAlpha = 0.75,
-		ScaleHeight = false,
-		TextScale = false,
-		Pinned = false,
-		Color = "red",
-		Custom = false,
-		Type = "CastBar",
-	}
-	return CastBar
+function KBM.Defaults.Castbar()
+	-- local CastBar = {
+		-- Override = false,
+		-- x = false,
+		-- y = false,
+		-- Enabled = true,
+		-- Style = "rift",
+		-- RiftBar = true,
+		-- Shadow = true,
+		-- Unlocked = true,
+		-- Visible = true,
+		-- ScaleWidth = false,
+		-- wScale = 1,
+		-- hScale = 1,
+		-- tScale = 1,
+		-- Shadow = true,
+		-- Texture = true,
+		-- TextureAlpha = 0.75,
+		-- ScaleHeight = false,
+		-- TextScale = false,
+		-- Pinned = false,
+		-- Color = "red",
+		-- Custom = false,
+		-- Type = "CastBar",
+	-- }
+	local Castbar = LibSCast.Default.BarSettings()
+	Castbar.override = false
+	Castbar.riftBar = true
+	Castbar.pinned = false
+	Castbar.pack = "Rift"
+	Castbar.custom = false
+	return Castbar
 end
 
 function KBM.Defaults.PhaseMon()
@@ -734,12 +715,9 @@ end
 local function KBM_DefineVars(handle, AddonID)
 	if AddonID == "KingMolinator" then
 		KBM.Options = {
-			Player = {
-				CastBar = KBM.Defaults.CastBar(),
-			},
 			Castbar = {
 				Player = {},
-				Global = LibSCast.Default.BarSettings(),
+				Global = KBM.Defaults.Castbar(),
 			},
 			Character = false,
 			Enabled = true,
@@ -772,7 +750,6 @@ local function KBM_DefineVars(handle, AddonID)
 			Alerts = KBM.Defaults.Alerts(),
 			EncTimer = KBM.Defaults.EncTimer(),
 			PhaseMon = KBM.Defaults.PhaseMon(),
-			CastBar = KBM.Defaults.CastBar(),
 			MechTimer = KBM.Defaults.MechTimer(),
 			MechSpy = KBM.Defaults.MechSpy(),
 			Chat = {
@@ -876,10 +853,11 @@ local function KBM_DefineVars(handle, AddonID)
 		}
 		KBM_GlobalOptions = KBM.Options
 		chKBM_GlobalOptions = KBM.Options
-		KBM.Options.Player.CastBar.Enabled = false
 		for ID, Castbar in pairs(KBM.Castbar.Player) do
-			KBM.Options.Castbar.Player[ID] = LibSCast.Default.BarSettings()
+			KBM.Options.Castbar.Player[ID] = KBM.Defaults.Castbar()
 			Castbar.Settings = KBM.Options.Castbar.Player[ID]
+			Castbar.Settings.relX = Castbar.relX
+			Castbar.Settings.relY = Castbar.relY
 		end
 		for _, Mod in ipairs(KBM.ModList) do
 			Mod:InitVars()
@@ -4501,6 +4479,67 @@ function KBM.Unit.Mark(handle, Units)
 	end
 end
 
+function KBM.CreateEditFrame(parent, hook, layer)
+	local df = UI.CreateFrame("Frame", parent:GetName().."_DragFrame", parent)	
+	df:SetLayer(layer or 10)
+	df:SetAllPoints(parent)
+	df:SetVisible(false)
+	df._hook = hook
+	
+	local EventFunc = {}
+	function EventFunc:HandleMouseDown()
+		local Mouse = Inspect.Mouse()
+		
+		self:SetBackgroundColor(0,0,0,0.5)
+		self._offset = {
+			x = Mouse.x - (self:GetLeft() + (self:GetWidth() * 0.5)),
+			y = Mouse.y - (self:GetTop() + (self:GetHeight() * 0.5)),
+		}
+		if self._hook then
+			self._hook("start")
+		end
+		
+		self:EventAttach(Event.UI.Input.Mouse.Cursor.Move, EventFunc.HandleMouseMove, "KBM-EditFrame-MouseMoveHandler_"..parent:GetName())
+	end
+	
+	function EventFunc:HandleMouseMove(handle, x, y)
+		self:GetParent():SetPoint("CENTER", UIParent, "TOPLEFT", x - self._offset.x, y - self._offset.y)
+	end
+	
+	function EventFunc:HandleMouseUp()
+		local Mouse = Inspect.Mouse()
+		
+		self:SetBackgroundColor(0,0,0,0)
+		self:EventDetach(Event.UI.Input.Mouse.Cursor.Move, EventFunc.HandleMouseMove)
+		local relX = (Mouse.x - self._offset.x) / UIParent:GetWidth()
+		local relY = (Mouse.y - self._offset.y) / UIParent:GetHeight()
+		self._offset = nil
+		
+		if self._hook then
+			self._hook("end", relX, relY)
+		end
+		self:GetParent():SetPoint("CENTER", UIParent, relX, relY)
+	end
+		
+	-- function BarObj:unlockSize(bool)
+		-- if bool then
+			-- ui.editFrame:EventAttach(Event.UI.Input.Mouse.Wheel.Forward, EventFunc.HandleMouseWheelForward, "LibSCast-EditFrame-MouseWheelForwardHandler_"..ui.cradle:GetName())
+			-- ui.editFrame:EventAttach(Event.UI.Input.Mouse.Wheel.Back, EventFunc.HandleMouseWheelBack, "LibSCast-EditFrame-MouseWheelBackHandler_"..ui.cradle:GetName())
+			-- ui.editFrame:EventAttach(Event.UI.Input.Mouse.Middle.Click, EventFunc.HandleMouseWheelClick, "LibSCast-EditFrame-MouseMiddleClickHandler_"..ui.cradle:GetName())
+		-- else
+			-- ui.editFrame:EventDetach(Event.UI.Input.Mouse.Wheel.Forward, EventFunc.HandleMouseWheelForward)
+			-- ui.editFrame:EventDetach(Event.UI.Input.Mouse.Wheel.Back, EventFunc.HandleMouseWheelBack)
+			-- ui.editFrame:EventDetach(Event.UI.Input.Mouse.Middle.Click, EventFunc.HandleMouseWheelClick)		
+		-- end
+	-- end
+	
+	df:EventAttach(Event.UI.Input.Mouse.Left.Down, EventFunc.HandleMouseDown, "KBM-EditFrame-MouseDownHandler_"..parent:GetName())
+	df:EventAttach(Event.UI.Input.Mouse.Left.Up, EventFunc.HandleMouseUp, "KBM-EditFrame-MouseUpHandler_"..parent:GetName())
+	df:EventAttach(Event.UI.Input.Mouse.Left.Upoutside, EventFunc.HandleMouseUp, "KBM-EditFrame-MouseUpoutsideHandler_"..parent:GetName())
+	
+	return df
+end
+
 function KBM.AttachDragFrame(parent, hook, name, layer)
 	if not name then name = "" end
 	if not layer then layer = 0 end
@@ -5657,921 +5696,6 @@ function KBM.Alert:Init()
 	self:ApplySettings()	
 end
 
-function KBM.CastBar:Init()
-	self.Settings = KBM.Options.CastBar
-	self.CastBarList = {}
-	self.ActiveCastBars = {}
-	self.RemoveCastBars = {}
-	self.WaitCastBars = {}
-	self.StartCastBars = {}
-	self.Stores = {
-		Rift = {},
-		Boss = {},
-		KBM = {},
-	}	
-	self.ActiveCount = 0
-
-	function self:Pull(Style, IsBoss)
-		-- First try and pull existing Castbar Objects from GUI Stores
-		if Style == "rift" then
-			if IsBoss then
-				GUI = table.remove(self.Stores.Boss)
-			else
-				GUI = table.remove(self.Stores.Rift)
-			end
-		else
-			GUI = table.remove(self.Stores.KBM)
-		end
-		-- Return existing Castbar Object if successful
-		if GUI then
-			return GUI
-		end
-		
-		-- Otherwise create a new Castbar Object
-		local GUI = {}
-		GUI.Style = Style
-		GUI.IsBoss = IsBoss
-		
-		-- Create Base frame for this Castbar Object
-		GUI.Frame = UI.CreateFrame("Frame", "CastBar Frame", KBM.Context)
-		GUI.Frame:SetWidth(math.ceil(KBM.Constant.CastBar.w * self.Settings.wScale))
-		GUI.Frame:SetHeight(math.ceil(KBM.Constant.CastBar.h * self.Settings.hScale))
-		GUI.Frame:SetLayer(KBM.Layer.Castbars)
-		
-		-- Handle Style types to account for API Texture issues	for the Progress Mask
-		GUI.Mask = UI.CreateFrame("Mask", "CastBar_Mask", GUI.Frame)
-		if Style == "rift" then
-			GUI.Mask:SetPoint("TOPLEFT", GUI.Frame, 0.03, 0.2)
-			GUI.Mask:SetPoint("BOTTOM", GUI.Frame, nil, 0.8)
-		else
-			GUI.Mask:SetPoint("TOPLEFT", GUI.Frame, "TOPLEFT")
-			GUI.Mask:SetPoint("BOTTOM", GUI.Frame, "BOTTOM")
-		end
-		
-		-- Handle Style types to account for API Texture issues	for the Progress Texture/Frame	
-		if Style == "rift" then
-			GUI.Progress = UI.CreateFrame("Texture", "CastBar_Progress_Texture", GUI.Mask)
-			KBM.LoadTexture(GUI.Progress, "KingMolinator", "Media/Castbar_Cyan.png")
-			GUI.Progress:SetPoint("TOPLEFT", GUI.Frame, 0.03, 0.2)
-			GUI.Progress:SetPoint("BOTTOMRIGHT", GUI.Frame, 0.97, 0.8)
-		else
-			GUI.Progress = UI.CreateFrame("Frame", "Castbar_Progress_Frame", GUI.Mask)
-			GUI.Progress:SetPoint("TOPLEFT", GUI.Frame, "TOPLEFT")
-			GUI.Progress:SetPoint("BOTTOMRIGHT", GUI.Frame, "BOTTOMRIGHT")
-			GUI.Progress:SetBackgroundColor(1,0,0,0.33)
-		end
-		GUI.Progress:SetLayer(1)
-		
-		GUI.Shadow = UI.CreateFrame("Text", "Timer_Text_Shadow", GUI.Frame)
-		GUI.Shadow:SetFontSize(math.ceil(KBM.Constant.CastBar.TextSize * self.Settings.tScale))
-		GUI.Shadow:SetPoint("CENTER", GUI.Frame, "CENTER", 2, 2)
-		GUI.Shadow:SetLayer(2)
-		GUI.Shadow:SetFontColor(0,0,0)
-		GUI.Shadow:SetMouseMasking("limited")
-		GUI.Text = UI.CreateFrame("Text", "Castbar Text", GUI.Frame)
-		GUI.Text:SetFontSize(GUI.Shadow:GetFontSize())
-		GUI.Text:SetPoint("CENTER", GUI.Frame, "CENTER")
-		GUI.Text:SetLayer(3)
-		GUI.Mask:SetWidth(0)
-		GUI.Mask:SetLayer(1)
-		GUI.Frame:SetBackgroundColor(0,0,0,0)
-		GUI.Frame:SetVisible(false)
-		GUI.Texture = UI.CreateFrame("Texture", "Timer_Skin", GUI.Frame)
-		-- Handle Style types to account for API Texture issues
-		if Style == "rift" then
-			if IsBoss then
-				KBM.LoadTexture(GUI.Texture, "KingMolinator", "Media/Castbar_Boss.png")
-				GUI.Texture:SetPoint("TOPLEFT", GUI.Frame, -0.075, -0.5)
-				GUI.Texture:SetPoint("BOTTOMRIGHT", GUI.Frame, 1.075, 1.5)
-			else
-				KBM.LoadTexture(GUI.Texture, "KingMolinator", "Media/Castbar_Outline.png")
-				GUI.Texture:SetPoint("TOPLEFT", GUI.Frame, "TOPLEFT")
-				GUI.Texture:SetPoint("BOTTOMRIGHT", GUI.Frame, "BOTTOMRIGHT")
-			end
-			GUI.Highlight = UI.CreateFrame("Texture", "Completion_Highlight", GUI.Texture)
-			KBM.LoadTexture(GUI.Highlight, "KingMolinator", "Media/Castbar_Complete.png")
-			GUI.Highlight:SetPoint("TOPLEFT", GUI.Frame, "TOPLEFT")
-			GUI.Highlight:SetPoint("BOTTOMRIGHT", GUI.Frame, "BOTTOMRIGHT")
-			GUI.Highlight:SetAlpha(0)
-		else
-			KBM.LoadTexture(GUI.Texture, "KingMolinator", "Media/BarSkin.png")
-			GUI.Texture:SetPoint("TOPLEFT", GUI.Frame, "TOPLEFT")
-			GUI.Texture:SetPoint("BOTTOMRIGHT", GUI.Frame, "BOTTOMRIGHT")
-		end
-		
-		GUI.Texture:SetLayer(4)
-		GUI.Texture:SetMouseMasking("limited")
-		
-		function GUI:Update(uType)
-			if uType == "end" then
-				self.CastBarObj.Settings.x = self.Drag:GetLeft()
-				self.CastBarObj.Settings.y = self.Drag:GetTop()
-			end
-		end			
-		GUI.Drag = KBM.AttachDragFrame(GUI.Frame, function(uType) GUI:Update(uType) end , "CB Live Drag", 2)
-		GUI.Drag.GUI = GUI
-		
-		function GUI:SetText(Text)
-			self.Shadow:SetText(Text)
-			self.Shadow:SetFontColor(0,0,0)
-			self.Text:SetText(Text)
-		end
-		
-		function GUI.Drag.Event:WheelForward()	
-			if self.GUI.CastBarObj.Settings.ScaleWidth then
-				if self.GUI.CastBarObj.Settings.wScale < 2 then
-					self.GUI.CastBarObj.Settings.wScale = self.GUI.CastBarObj.Settings.wScale + 0.025
-					if self.GUI.CastBarObj.Settings.wScale > 2 then
-						self.GUI.CastBarObj.Settings.wScale = 2
-					end
-					self.GUI.Frame:SetWidth(math.ceil(self.GUI.CastBarObj.Settings.wScale * KBM.Constant.CastBar.w))
-				end
-			end
-			
-			if self.GUI.CastBarObj.Settings.ScaleHeight then
-				if self.GUI.CastBarObj.Settings.hScale < 2 then
-					self.GUI.CastBarObj.Settings.hScale =self.GUI.CastBarObj.Settings.hScale + 0.025
-					if self.GUI.CastBarObj.Settings.hScale > 2 then
-						self.GUI.CastBarObj.Settings.hScale = 2
-					end
-					self.GUI.Frame:SetHeight(math.ceil(self.GUI.CastBarObj.Settings.hScale * KBM.Constant.CastBar.h))
-				end
-			end
-			
-			if self.GUI.CastBarObj.Settings.TextScale then
-				if self.GUI.CastBarObj.Settings.tScale < 2 then
-					self.GUI.CastBarObj.Settings.tScale = self.GUI.CastBarObj.Settings.tScale + 0.025
-					if self.GUI.CastBarObj.Settings.tScale > 2 then
-						self.GUI.CastBarObj.Settings.tScale = 2
-					end
-					self.GUI.Text:SetFontSize(KBM.Constant.CastBar.TextSize * self.GUI.CastBarObj.Settings.tScale)
-					self.GUI.Shadow:SetFontSize(KBM.Constant.CastBar.TextSize * self.GUI.CastBarObj.Settings.tScale)
-				end
-			end				
-		end
-		
-		function GUI.Drag.Event:WheelBack()				
-			if self.GUI.CastBarObj.Settings.ScaleWidth then
-				if self.GUI.CastBarObj.Settings.wScale > 0.5 then
-					self.GUI.CastBarObj.Settings.wScale = self.GUI.CastBarObj.Settings.wScale - 0.025
-					if self.GUI.CastBarObj.Settings.wScale < 0.5 then
-						self.GUI.CastBarObj.Settings.wScale = 0.5
-					end
-					self.GUI.Frame:SetWidth(math.ceil(self.GUI.CastBarObj.Settings.wScale * KBM.Constant.CastBar.w))
-				end
-			end
-			
-			if self.GUI.CastBarObj.Settings.ScaleHeight then
-				if self.GUI.CastBarObj.Settings.hScale > 0.5 then
-					self.GUI.CastBarObj.Settings.hScale = self.GUI.CastBarObj.Settings.hScale - 0.025
-					if self.GUI.CastBarObj.Settings.hScale < 0.5 then
-						self.GUI.CastBarObj.Settings.hScale = 0.5
-					end
-					self.GUI.Frame:SetHeight(math.ceil(self.GUI.CastBarObj.Settings.hScale * KBM.Constant.CastBar.h))
-				end
-			end
-			
-			if self.GUI.CastBarObj.Settings.TextScale then
-				if self.GUI.CastBarObj.Settings.tScale > 0.5 then
-					self.GUI.CastBarObj.Settings.tScale = self.GUI.CastBarObj.Settings.tScale - 0.025
-					if self.GUI.CastBarObj.Settings.tScale < 0.5 then
-						self.GUI.CastBarObj.Settings.tScale = 0.5
-					end
-					self.GUI.Text:SetFontSize(self.GUI.CastBarObj.Settings.tScale * KBM.Constant.CastBar.TextSize)
-					self.GUI.Shadow:SetFontSize(self.GUI.CastBarObj.Settings.tScale * KBM.Constant.CastBar.TextSize)
-				end
-			end
-		end
-		return GUI
-	end
-	
-	function self:Push(GUI)
-		if GUI then
-			GUI.CastBarObj = nil
-			GUI.Frame:SetVisible(false)
-			GUI.Drag:SetVisible(false)
-			if GUI.Style == "rift" then
-				if GUI.IsBoss then
-					table.insert(self.Stores.Boss, GUI)
-				else
-					table.insert(self.Stores.Rift, GUI)
-				end
-			else
-				table.insert(self.Stores.KBM, GUI)
-			end
-		end
-	end
-	
-	self.Anchor = self:Add(KBM, {Name = KBM.Language.Anchors.Castbars[KBM.Lang]}, true)
-	self.Anchor.Anchor = true	
-end
-
-function KBM.CastBar:Add(Mod, Boss, Enabled, Dynamic)
-	local CastBarObj = {}
-	CastBarObj.UnitID = nil
-	CastBarObj.Boss = Boss
-	CastBarObj.Dynamic = Dynamic
-	CastBarObj.Name = Boss.Name
-	CastBarObj.ID = Boss.Name
-	CastBarObj.Filters = Boss.CastFilters
-	CastBarObj.HasFilters = Boss.HasCastFilters
-	CastBarObj.IsBoss = true
-	if Dynamic then
-		CastBarObj.Settings = KBM.Defaults.CastBar()
-	else
-		if Boss.Settings then
-			CastBarObj.Settings = Boss.Settings.CastBar
-		end
-	end
-	
-	if not CastBarObj.Settings then
-		if Mod.Settings then
-			if Mod.Settings.CastBar then
-				if Mod.Settings.CastBar.Override then
-					CastBarObj.Settings = Mod.Settings.CastBar
-				else
-					CastBarObj.Settings = self.Settings
-				end
-			else
-				CastBarObj.Settings = self.Settings
-			end
-		else
-			CastBarObj.Settings = self.Settings
-		end
-	end
-	
-	CastBarObj.Casting = false
-	CastBarObj.LastCast = ""
-	if not Dynamic then
-		CastBarObj.Enabled = CastBarObj.Settings.Enabled
-	else
-		CastBarObj.Enabled = false
-	end
-	CastBarObj.Mod = Mod
-	CastBarObj.Active = false
-	CastBarObj.Anchor = false
-	
-	function CastBarObj:SetBoss(bool)
-		self.IsBoss = bool
-	end
-	
-	function CastBarObj:ManageSettings()
-		if not self.Anchor then
-			if not self.Dynamic then
-				if self.Boss.Settings then
-					if self.Boss.Settings.CastBar then
-						if self.Boss.Settings.CastBar.Override then
-							self.Settings = self.Boss.Settings.CastBar
-							if self.Boss.Mod then
-								if self.Boss.Mod.Instance then
-									self.Settings.Style = KBM.Options.CastBar.Style
-								end
-							end
-						else
-							self.Settings = KBM.Options.CastBar
-						end
-					else
-						self.Settings = KBM.Options.CastBar
-					end
-				else
-					self.Settings = KBM.Options.CastBar
-				end
-			end
-		else
-			self.Settings = KBM.Options.CastBar
-		end
-	end
-	
-	function CastBarObj:ApplySettings()
-		if self.GUI then
-			self:ManageSettings()
-			self.GUI.Frame:ClearAll()
-			if not self.Settings.x then
-				self.GUI.Frame:SetPoint("CENTER", UIParent, 0.5, 0.7)
-			else
-				self.GUI.Frame:SetPoint("TOPLEFT", UIParent, "TOPLEFT", self.Settings.x, self.Settings.y)
-			end
-			
-			self.GUI.Frame:SetWidth(math.ceil(KBM.Constant.CastBar.w * self.Settings.wScale))
-			self.GUI.Frame:SetHeight(math.ceil(KBM.Constant.CastBar.h * self.Settings.hScale))
-			self.GUI.Text:SetFontSize(KBM.Constant.CastBar.TextSize * self.Settings.tScale)
-			self.GUI.Shadow:SetFontSize(KBM.Constant.CastBar.TextSize * self.Settings.tScale)
-			self.GUI.Shadow:SetVisible(self.Settings.Shadow)
-			self.GUI.Texture:SetVisible(self.Settings.Texture)
-			self.GUI.Mask:SetWidth(0)
-			self.GUI:SetText(self.Boss.Name)
-			
-			if self.Settings.Enabled then
-				if KBM.Menu.Active then
-					if not self.Dynamic then
-						if not self.Casting then
-							self.GUI.Frame:SetVisible(self.Settings.Visible)
-						end
-					end
-				else
-					if not self.Casting then
-						self.GUI.Frame:SetVisible(false)
-					end
-				end
-			end
-			
-			if not self.Settings.Pinned then
-				if KBM.Menu.Active then
-					if not self.Dynamic then
-						self.GUI.Drag:SetVisible(self.Settings.Unlocked)
-					end
-				else
-					self.GUI.Drag:SetVisible(false)
-				end
-			else
-				self.GUI.Drag:SetVisible(false)
-				if self.Boss.PinCastBar then
-					self.Boss:PinCastBar()
-				end
-			end
-		end
-	end
-	
-	function CastBarObj:Display()	
-		self:ManageSettings()
-		if KBM.Menu.Active then
-			self.Visible = self.Settings.Visible
-			if self.Settings.Visible and self.Settings.Enabled then
-				if not self.GUI then
-					self.GUI = KBM.CastBar:Pull(self.Settings.Style, self.IsBoss)
-					self.GUI.CastBarObj = self
-					self:ApplySettings()
-					self.GUI.Frame:SetVisible(true)
-				else
-					self:ApplySettings()
-					self.GUI.Frame:SetVisible(true)
-				end
-				self.GUI.Shadow:SetAlpha(1)
-				self.GUI.Text:SetAlpha(1)
-				self.GUI.Texture:SetAlpha(1)
-				if self.Settings.Style == "rift" then
-					self.GUI.Highlight:SetAlpha(0)
-				end
-			end
-		end
-	end
-	
-	function CastBarObj:Create(UnitID)	
-		self:ManageSettings()
-		self.UnitID = UnitID
-		self.LastCast = ""
-		self.Interrupted = false
-		self.LastStart = nil
-		self.InterruptEnd = nil
-		if not self.GUI then
-			self.GUI = KBM.CastBar:Pull(self.Settings.Style, self.IsBoss)
-			self.GUI.CastBarObj = self
-			self:ApplySettings()
-		end
-		
-		if not KBM.CastBar.ActiveCastBars[UnitID] then
-			KBM.CastBar.ActiveCastBars[UnitID] = {
-				List = {},
-				Count = 0,
-			}
-		end
-		KBM.CastBar.ActiveCastBars[UnitID].List[self.ID] = self
-		KBM.CastBar.ActiveCastBars[UnitID].Count = KBM.CastBar.ActiveCastBars[UnitID].Count + 1
-		self.Active = true		
-	end
-	
-	function CastBarObj:Start()
-		self.Casting = true
-		self.CastMod = 1
-		self.Interrupted = false
-		self.InterruptEnd = nil
-		self.Complete = false
-		self.CompleteEnd = nil
-		self.CompleteFade = false
-		if self.Enabled then
-			if self.Settings.Style == "rift" then
-				if self.Uninterruptible then
-					KBM.LoadTexture(self.GUI.Progress, "KingMolinator", "Media/Castbar_Yellow.png")
-				else
-					KBM.LoadTexture(self.GUI.Progress, "KingMolinator", "Media/Castbar_Cyan.png")
-				end
-				self.GUI.Progress:SetAlpha(0.75)
-				self.GUI.Highlight:SetAlpha(0)
-			else
-				self.GUI.Progress:SetAlpha(1)
-			end
-			self.GUI.Shadow:SetAlpha(1)
-			self.GUI.Text:SetAlpha(1)
-			self.GUI.Texture:SetAlpha(1)
-			self.GUI.Frame:SetVisible(true)
-			self.GUI.Progress:SetVisible(true)
-		end
-		KBM.Event.Unit.Cast.Start(self.UnitID)
-	end
-	
-	function CastBarObj:Update(Trigger)	
-		if self.UnitID then
-			bDetails = Inspect.Unit.Castbar(self.UnitID)
-			if bDetails then
-				if bDetails.abilityName then
-					if self.Settings.Enabled then
-						if self.HasFilters then
-							if self.Filters[bDetails.abilityName] then
-								FilterObj = self.Filters[bDetails.abilityName]
-								if FilterObj.Enabled then
-									if not self.Casting then
-										self.Uninterruptible = bDetails.uninterruptible
-										self:Start()
-										if self.Settings.Style == "kbm" then
-											if FilterObj.Custom then
-												self.GUI.Progress:SetBackgroundColor(KBM.Colors.List[FilterObj.Color].Red, KBM.Colors.List[FilterObj.Color].Green, KBM.Colors.List[FilterObj.Color].Blue, 0.33)
-											else
-												if self.Settings.Custom then
-													self.GUI.Progress:SetBackgroundColor(KBM.Colors.List[self.Settings.Color].Red, KBM.Colors.List[self.Settings.Color].Green, KBM.Colors.List[self.Settings.Color].Blue, 0.33)
-												else
-													self.GUI.Progress:SetBackgroundColor(1, 0, 0, 0.33)
-												end
-											end
-										end
-										if FilterObj.Count then
-											FilterObj.Prefix = KBM.Numbers.GetPlace(FilterObj.Current).." "
-											if not bDetails.channeled then
-												if FilterObj.Current < FilterObj.Count then
-													FilterObj.Current = FilterObj.Current + 1
-												else
-													FilterObj.Current = 1
-												end
-											end
-										else
-											FilterObj.Prefix = ""
-										end
-										self.CastTime = bDetails.duration
-										self.Progress = bDetails.remaining
-										if self.Settings.Style == "rift" then
-											if bDetails.remaining <= 0.5 then
-												self.CompleteAlpha = 0.5 - bDetails.remaining
-												self.GUI.Highlight:SetAlpha(self.CompleteAlpha)
-											end
-										end
-										if bDetails.channeled then
-											local newWidth = math.ceil(self.GUI.Progress:GetWidth() * (self.Progress/self.CastTime))
-											if newWidth ~= self.GUI.Mask:GetWidth() then
-												self.GUI.Mask:SetWidth(newWidth)
-											end
-										else
-											local newWidth = math.floor(self.GUI.Progress:GetWidth() * (1-(self.Progress/self.CastTime)))
-											if newWidth ~= self.GUI.Mask:GetWidth() then
-												self.GUI.Mask:SetWidth(newWidth)
-											end
-										end
-										self.GUI:SetText(string.format("%0.01f", self.Progress).." - "..FilterObj.Prefix..bDetails.abilityName)
-									else
-										self.CastTime = bDetails.duration
-										self.Progress = bDetails.remaining
-										if bDetails.channeled then										
-											self.GUI.Mask:SetWidth(math.ceil(self.GUI.Progress:GetWidth() * (self.Progress/self.CastTime)))
-										else
-											self.GUI.Mask:SetWidth(math.floor(self.GUI.Progress:GetWidth() * (1-(self.Progress/self.CastTime))))
-										end
-										self.GUI:SetText(string.format("%0.01f", self.Progress).." - "..FilterObj.Prefix..bDetails.abilityName)	
-									end
-								elseif self.Casting then
-									if not self.Interrupted and not self.Complete then
-										self:Stop()
-									end
-								end
-							else
-								if not self.Casting then
-									self.Uninterruptible = bDetails.uninterruptible
-									self:Start()
-									if self.Settings.Style == "kbm" then
-										if self.Custom then
-											self.GUI.Progress:SetBackgroundColor(KBM.Colors.List[self.Settings.Color].Red, KBM.Colors.List[self.Settings.Color].Green, KBM.Colors.List[self.Settings.Color].Blue, 0.33)
-										else
-											self.GUI.Progress:SetBackgroundColor(1, 0, 0, 0.33)
-										end
-									end
-								end
-								self.CastTime = bDetails.duration
-								self.Progress = bDetails.remaining
-								if self.Settings.Style == "rift" then
-									if bDetails.remaining <= 0.5 then
-										self.CompleteAlpha = 0.5 - bDetails.remaining
-										self.GUI.Highlight:SetAlpha(self.CompleteAlpha)
-									end
-								end
-								if bDetails.channeled then
-									local newWidth = math.ceil(self.GUI.Progress:GetWidth() * (self.Progress/self.CastTime))
-									if newWidth ~= self.GUI.Mask:GetWidth() then
-										self.GUI.Mask:SetWidth(newWidth)
-									end
-								else
-									local newWidth = math.floor(self.GUI.Progress:GetWidth() * (1-(self.Progress/self.CastTime)))
-									if newWidth ~= self.GUI.Mask:GetWidth() then
-										self.GUI.Mask:SetWidth(newWidth)
-									end
-								end
-								self.GUI:SetText(string.format("%0.01f", self.Progress).." - "..bDetails.abilityName)
-							end
-						else
-							if not self.Casting then
-								self.Uninterruptible = bDetails.uninterruptible
-								self:Start()
-								if self.Settings.Style == "kbm" then
-									if self.Custom then
-										self.GUI.Progress:SetBackgroundColor(KBM.Colors.List[self.Settings.Color].Red, KBM.Colors.List[self.Settings.Color].Green, KBM.Colors.List[self.Settings.Color].Blue, 0.33)
-									else
-										self.GUI.Progress:SetBackgroundColor(1, 0, 0, 0.33)
-									end
-								end
-							end
-							self.CastTime = bDetails.duration
-							self.Progress = bDetails.remaining
-							if self.Settings.Style == "rift" then
-								if bDetails.remaining <= 0.5 then
-									self.CompleteAlpha = 0.5 - bDetails.remaining
-									self.GUI.Highlight:SetAlpha(self.CompleteAlpha)
-								end
-							end
-							if bDetails.channeled then
-								local newWidth = math.ceil(self.GUI.Progress:GetWidth() * (self.Progress/self.CastTime))
-								if newWidth ~= self.GUI.Mask:GetWidth() then
-									self.GUI.Mask:SetWidth(newWidth)
-								end
-							else
-								local newWidth = math.floor(self.GUI.Progress:GetWidth() * (1-(self.Progress/self.CastTime)))
-								if newWidth ~= self.GUI.Mask:GetWidth() then
-									self.GUI.Mask:SetWidth(newWidth)
-								end
-							end
-							local newText = string.format("%0.01f", self.Progress).." - "..bDetails.abilityName
-							if newText ~= self.GUI.Text:GetText() then
-								self.GUI:SetText(newText)
-							end
-						end
-					end
-					self.CastObject = bDetails
-					if self.LastStart ~= bDetails.begin then
-						self.LastStart = bDetails.begin
-						if not bDetails.channeled then
-							if KBM.CurrentMod then
-								-- if KBM.Trigger.CastID[KBM.CurrentMod.ID] then
-									-- if bDetails.ability then
-										-- if KBM.Trigger.CastID[KBM.CurrentMod.ID][bDetails.ability] then
-											-- local TriggerObj = KBM.Trigger.CastID[KBM.CurrentMod.ID][bDetails.ability][self.Boss.Name]
-											-- if TriggerObj then
-												-- local TargetID = ""
-												-- if self.Boss.UnitID then
-													-- TargetID = Inspect.Unit.Lookup(self.Boss.UnitID..".target")
-												-- end
-												-- KBM.Trigger.Queue:Add(TriggerObj, self.Boss.UnitID or "", TargetID, bDetails.remaining)
-											-- end
-										-- end
-									-- end
-								-- end
-								-- if KBM.Trigger.PersonalCastID[KBM.CurrentMod.ID] then
-									-- if bDetails.ability then
-										-- if KBM.Trigger.PersonalCastID[KBM.CurrentMod.ID][bDetails.ability] then
-											-- if KBM.TriggerPersonalCastID[KBM.CurrentMod.ID][bDetails.ability][self.Boss.Name] then
-												-- local TriggerObj = KBM.Trigger.PersonalCastID[KBM.CurrentMod.ID][bDetails.ability][self.Boss.Name]
-												-- if self.UnitID then
-													-- local playerTarget = Inspect.Unit.Lookup("player.target")
-													-- local playerFocus = Inspect.Unit.Lookup("focus")
-													-- if self.UnitID == playerTarget or self.UnitID == playerFocus then
-														-- KBM.Trigger.Queue:Add(TriggerObj, self.UnitID, self.UnitID, bDetails.remaining)
-													-- end
-												-- end
-											-- end
-										-- end
-									-- end
-								-- end
-								if KBM.Trigger.Cast[KBM.CurrentMod.ID] then
-									if KBM.Trigger.Cast[KBM.CurrentMod.ID][self.Boss.Name] then
-										local TriggerObj = KBM.Trigger.Cast[KBM.CurrentMod.ID][self.Boss.Name][bDetails.abilityName]
-										if TriggerObj then
-											local TargetID = ""
-											if self.Boss.UnitID then
-												TargetID = Inspect.Unit.Lookup(self.Boss.UnitID..".target")
-											end
-											KBM.Trigger.Queue:Add(TriggerObj, self.Boss.UnitID, TargetID, bDetails.remaining)
-										end
-									end
-								end
-								if KBM.Trigger.PersonalCast[KBM.CurrentMod.ID] then
-									if KBM.Trigger.PersonalCast[KBM.CurrentMod.ID][self.Boss.Name] then
-										local TriggerObj = KBM.Trigger.PersonalCast[KBM.CurrentMod.ID][self.Boss.Name][bDetails.abilityName]
-										if TriggerObj then
-											if self.UnitID then
-												local playerTarget = Inspect.Unit.Lookup("player.target")
-												local playerFocus = Inspect.Unit.Lookup("focus")
-												if self.UnitID == playerTarget or self.UnitID == playerFocus then
-													KBM.Trigger.Queue:Add(TriggerObj, self.UnitID, self.UnitID, bDetails.remaining)
-												end
-											end
-										end
-									end
-								end
-							end
-						else
-							if not self.Channeled then
-								self.Channeled = true
-								self.Casting = false
-								if KBM.CurrentMod then
-									-- if KBM.Trigger.ChannelID[KBM.CurrentMod.ID] then
-										-- if bDetails.ability then
-											-- if KBM.Trigger.ChannelID[KBM.CurrentMod.ID][bDetails.ability] then
-												-- if KBM.Trigger.ChannelID[KBM.CurrentMod.ID][bDetails.ability][self.Boss.Name] then
-													-- local TriggerObj = KBM.Trigger.ChannelID[KBM.CurrentMod.ID][bDetails.ability][self.Boss.Name]
-													-- local TargetID = ""
-													-- if self.Boss.UnitID then
-														-- TargetID = Inspect.Unit.Lookup(self.Boss.UnitID..".target")
-													-- end
-													-- KBM.Trigger.Queue:Add(TriggerObj, self.Boss.UnitID, TargetID, bDetails.remaining)
-												-- end
-											-- end
-										-- end
-									-- end
-									if KBM.Trigger.PersonalChannel[KBM.CurrentMod.ID] then
-										if KBM.Trigger.PersonalChannel[KBM.CurrentMod.ID][self.Boss.Name] then
-											local TriggerObj = KBM.Trigger.PersonalChannel[KBM.CurrentMod.ID][self.Boss.Name][bDetails.abilityName]
-											if TriggerObj then
-												if self.UnitID then
-													local playerTarget = Inspect.Unit.Lookup("player.target")
-													local playerFocus = Inspect.Unit.Lookup("focus")
-													if self.UnitID == playerTarget or self.UnitID == playerFocus then
-														KBM.Trigger.Queue:Add(TriggerObj, self.UnitID, self.UnitID, bDetails.remaining)
-													end
-												end
-											end
-										end
-									end
-									-- if KBM.Trigger.PersonalChannelID[KBM.CurrentMod.ID] then
-										-- if bDetails.ability then
-											-- if KBM.Trigger.PersonalChannelID[KBM.CurrentMod.ID][bDetails.ability] then
-												-- local TriggerObj = KBM.Trigger.PersonalChannelID[KBM.CurrentMod.ID][bDetails.ability][self.Boss.Name]
-												-- if TriggerObj then
-													-- if self.UnitID then
-														-- local playerTarget = Inspect.Unit.Lookup("player.target")
-														-- local playerFocus = Inspect.Unit.Lookup("focus")
-														-- if self.UnitID == playerTarget or self.UnitID == playerFocus then
-															-- KBM.Trigger.Queue:Add(TriggerObj, self.UnitID, self.UnitID, bDetails.remaining)
-														-- end
-													-- end	
-												-- end	
-											-- end
-										-- end
-									-- end
-									if KBM.Trigger.Channel[KBM.CurrentMod.ID] then
-										if KBM.Trigger.Channel[KBM.CurrentMod.ID][self.Boss.Name] then
-											local TriggerObj = KBM.Trigger.Channel[KBM.CurrentMod.ID][self.Boss.Name][bDetails.abilityName]
-											if TriggerObj then
-												local TargetID = ""
-												if self.Boss.UnitID then
-													TargetID = Inspect.Unit.Lookup(self.Boss.UnitID..".target")
-												end
-												KBM.Trigger.Queue:Add(TriggerObj, self.Boss.UnitID, TargetID, bDetails.remaining)
-											end
-										end
-									end
-								end
-							end
-						end
-					end
-				else
-					if self.Casting then
-						self:Stop()
-					end
-				end
-			else
-				if self.LastStart then
-					if Inspect.Unit.Lookup(self.UnitID) then
-						if self.CastObject then
-							local Scope = 0.05
-							if self.Channeled then
-								Scope = 0.1
-							end
-							if self.CastObject.remaining > Scope and not self.CastObject.uninterruptible then
-								--- Do Cast Interrupt Triggers (if any)
-								if KBM.CurrentMod then
-									-- if KBM.Trigger.InterruptID[KBM.CurrentMod.ID] then
-										-- if self.CastObject.ability then
-											-- if KBM.Trigger.InterruptID[KBM.CurrentMod.ID][self.CastObject.ability] then
-												-- local TriggerObj = KBM.Trigger.InterruptID[KBM.CurrentMod.ID][self.CastObject.ability][self.Boss.Name]
-												-- if TriggerObj then
-													-- KBM.Trigger.Queue:Add(TriggerObj, self.Boss.UnitID, "interruptTarget", self.CastObject.remaining)
-												-- end
-											-- end
-										-- end
-									-- end
-									if KBM.Trigger.Interrupt[KBM.CurrentMod.ID] then
-										if KBM.Trigger.Interrupt[KBM.CurrentMod.ID][self.Boss.Name] then
-											local TriggerObj = KBM.Trigger.Interrupt[KBM.CurrentMod.ID][self.Boss.Name][self.CastObject.abilityName]
-											if TriggerObj then
-												KBM.Trigger.Queue:Add(TriggerObj, self.Boss.UnitID, "interruptTarget", self.CastObject.remaining)
-											end
-										end
-									end
-									if KBM.Trigger.PersonalInterrupt[KBM.CurrentMod.ID] then
-										if KBM.Trigger.PersonalInterrupt[KBM.CurrentMod.ID][self.Boss.Name] then
-											local TriggerObj = KBM.Trigger.PersonalInterrupt[KBM.CurrentMod.ID][self.Boss.Name][self.CastObject.abilityName]
-											if TriggerObj then
-												if self.UnitID then
-													local playerTarget = Inspect.Unit.Lookup("player.target")
-													local playerFocus = Inspect.Unit.Lookup("focus")
-													if self.UnitID == playerTarget or self.UnitID == playerFocus then
-														KBM.Trigger.Queue:Add(TriggerObj, self.UnitID, "interruptTarget", self.CastObject.remaining)
-													end
-												end
-											end
-										end
-									end
-								end
-								self.Interrupted = true
-							else
-								--- Do Cast End Triggers (if any)
-								if self.Settings.Style == "rift" then
-									self.Complete = true
-									self.GUI:SetText(self.CastObject.abilityName)
-								end
-							end
-							self.CastObject = nil
-						end
-						self.LastStart = nil
-					end
-					self:Stop()
-				end
-			end
-		end
-		if self.Interrupted then
-			if self.InterruptEnd < Inspect.Time.Real() then
-				self.Interrupted = false
-				self.InterruptEnd = nil
-				if self.GUI then
-					self.GUI:SetText(self.Boss.Name)
-					if KBM.Menu.Active then
-						self.GUI.Frame:SetVisible(self.Settings.Visible)
-					else
-						self.GUI.Frame:SetVisible(false)
-					end
-					self.GUI.Shadow:SetAlpha(1)
-					self.GUI.Text:SetAlpha(1)
-					self.GUI.Texture:SetAlpha(1)
-					self.GUI.Mask:SetWidth(0)
-					if self.Settings.Style == "rift" then
-						self.GUI.Highlight:SetAlpha(0)
-					end
-				end
-				KBM.Event.Unit.Cast.End(self.UnitID)
-			else
-				local AlphaVal = self.InterruptEnd - Inspect.Time.Real()
-				if self.GUI then
-					self.GUI.Progress:SetAlpha(AlphaVal)
-					self.GUI.Shadow:SetAlpha(AlphaVal)
-					self.GUI.Text:SetAlpha(AlphaVal)
-					if AlphaVal < 0.25 then
-						self.GUI.Texture:SetAlpha(AlphaVal * 4)
-					end
-				end
-			end
-		elseif self.Complete then
-			if self.CompleteEnd < Inspect.Time.Real() and self.CompleteFade == true then
-				self.Complete = false
-				self.CompleteEnd = nil
-				self.CompleteFade = false
-				if self.GUI then
-					if KBM.Menu.Active then
-						self.GUI.Frame:SetVisible(self.Settings.Visible)
-					else
-						self.GUI.Frame:SetVisible(false)
-					end
-					self.GUI:SetText(self.Boss.Name)
-					self.GUI.Shadow:SetAlpha(1)
-					self.GUI.Text:SetAlpha(1)
-					self.GUI.Texture:SetAlpha(1)
-					self.GUI.Mask:SetWidth(0)
-					if self.Settings.Style == "rift" then
-						self.GUI.Highlight:SetAlpha(0)
-					end
-				end
-				KBM.Event.Unit.Cast.End(self.UnitID)
-			else
-				if not self.CompleteFade then
-					self.CompleteAlpha = 1 - (self.CompleteEnd - Inspect.Time.Real())
-					if self.CompleteAlpha < 1 then
-						if self.GUI then
-							self.GUI.Highlight:SetAlpha(self.CompleteAlpha * 4)
-						end
-					else
-						self.CompleteFade = true
-						self.CompleteEnd = Inspect.Time.Real() + 0.5
-					end
-				else
-					self.CompleteAlpha = (self.CompleteEnd - Inspect.Time.Real()) * 2
-					if self.GUI then
-						self.GUI.Texture:SetAlpha(self.CompleteAlpha)
-						self.GUI.Progress:SetAlpha(self.CompleteAlpha)
-						self.GUI.Shadow:SetAlpha(self.CompleteAlpha)
-						self.GUI.Text:SetAlpha(self.CompleteAlpha)
-					end
-				end
-			end
-		end			
-	end
-	
-	function CastBarObj:Stop()
-		self.Casting = false
-		self.LastCast = ""
-		if not self.Interrupted and not self.Complete then
-			if self.GUI then
-				if KBM.Menu.Active then
-					self.GUI.Frame:SetVisible(self.Settings.Visible)
-				else
-					self.GUI.Frame:SetVisible(false)
-				end
-				self.GUI:SetText(self.Boss.Name)
-				self.GUI.Shadow:SetAlpha(1)
-				self.GUI.Text:SetAlpha(1)
-				self.GUI.Texture:SetAlpha(1)
-				self.GUI.Mask:SetWidth(0)
-				if self.Settings.Style == "rift" then
-					self.GUI.Highlight:SetAlpha(0)
-				end
-			end
-			KBM.Event.Unit.Cast.End(self.UnitID)
-		else
-			if not self.InterruptEnd and self.Interrupted then
-				if self.GUI then
-					self.GUI:SetText(KBM.Language.CastBar.Interrupt[KBM.Lang])
-					self.InterruptEnd = Inspect.Time.Real() + 1
-					if self.Settings.Style == "kbm" then
-						self.GUI.Progress:SetBackgroundColor(0,7,7,0.33)
-					else
-						KBM.LoadTexture(self.GUI.Progress, "KingMolinator", "Media/Castbar_Red.png")
-					end
-					self.GUI.Mask:SetWidth(self.GUI.Progress:GetWidth())
-				end
-			elseif not self.CompleteEnd and self.Complete then
-				self.CompleteEnd = Inspect.Time.Real() + 0.5
-				self.CompleteFade = false
-			end
-		end
-		self.Duration = 0
-		self.CastTime = 0
-		self.CastStart = 0
-		self.Channeled = false	
-	end
-	
-	function CastBarObj:Hide(Force)	
-		if self.Visible then
-			self.Visible = false
-			if not self.Active or Force then
-				if self.GUI then
-					self.GUI = KBM.CastBar:Push(self.GUI)
-				end
-			elseif not self.Casting then
-				if self.GUI then
-					self.GUI.Frame:SetVisible(false)
-					self.GUI.Drag:SetVisible(false)
-				end
-			end
-		end	
-	end
-	
-	function CastBarObj:Remove()
-		self.InterruptEnd = nil
-		self.Interrupted = false
-		self:Stop()
-		if self.UnitID then
-			KBM.CastBar.ActiveCastBars[self.UnitID].List[self.ID] = nil
-			KBM.CastBar.ActiveCastBars[self.UnitID].Count = KBM.CastBar.ActiveCastBars[self.UnitID].Count - 1
-			if KBM.CastBar.ActiveCastBars[self.UnitID].Count == 0 then
-				KBM.CastBar.ActiveCastBars[self.UnitID] = nil
-			end
-		end
-		self.UnitID = nil
-		self.Active = false
-		if self.Dynamic then
-			if self.GUI then
-				self.GUI = KBM.CastBar:Push(self.GUI)
-			end
-		else
-			if not self.Settings.Visible or not KBM.Menu.Active then
-				if self.GUI then
-					self.GUI = KBM.CastBar:Push(self.GUI)
-				end
-			end
-		end
-	end
-		
-	if not self.Dynamic then
-		if not self.CastBarList[Mod.ID] then
-			self.CastBarList[Mod.ID] = {}
-		end
-		table.insert(self.CastBarList[Mod.ID], CastBarObj)
-	end
-	return CastBarObj
-end
-
 local function KBM_Reset(Forced)
 	if KBM.Encounter then
 		if Forced == true then
@@ -6773,13 +5897,13 @@ function KBM:Timer(handle)
 				for ID, PlugIn in pairs(self.PlugIn.List) do
 					PlugIn:Timer(current)
 				end	
-				for UnitID, CastCheck in pairs(KBM.CastBar.ActiveCastBars) do
-					local Trigger = true
-					for ID, CastBarObj in pairs(CastCheck.List) do
-						CastBarObj:Update(Trigger)
-						Trigger = false
-					end
-				end
+				-- for UnitID, CastCheck in pairs(KBM.CastBar.ActiveCastBars) do
+					-- local Trigger = true
+					-- for ID, CastBarObj in pairs(CastCheck.List) do
+						-- CastBarObj:Update(Trigger)
+						-- Trigger = false
+					-- end
+				-- end
 				if udiff >= 0.075 then
 					for i, Timer in ipairs(self.MechTimer.ActiveTimers) do
 						Timer:Update(current)
@@ -6820,13 +5944,13 @@ function KBM:Timer(handle)
 					PlugIn:Timer(current)
 				end
 				
-				for UnitID, CastCheck in pairs(KBM.CastBar.ActiveCastBars) do
-					local Trigger = true
-					for ID, CastBarObj in pairs(CastCheck.List) do
-						CastBarObj:Update(Trigger)
-						Trigger = false
-					end
-				end
+				-- for UnitID, CastCheck in pairs(KBM.CastBar.ActiveCastBars) do
+					-- local Trigger = true
+					-- for ID, CastBarObj in pairs(CastCheck.List) do
+						-- CastBarObj:Update(Trigger)
+						-- Trigger = false
+					-- end
+				-- end
 			end
 		end
 		
@@ -7355,7 +6479,7 @@ function KBM.InitVars()
 	KBM.TankSwap:Init()
 	KBM.Alert:Init()
 	KBM.MechTimer:Init()
-	KBM.CastBar:Init()
+	KBM.Castbar:Init()
 	KBM.EncTimer:Init()
 	KBM.PhaseMonitor:Init()
 	KBM.Trigger:Init()
@@ -7703,126 +6827,142 @@ local function BuildMenuSettings()
 	-- Castbars
 	function Menu.CastBars(Header)
 		Menu.Callbacks.CastBar = {}
-		Menu.Callbacks.PlayerBar = {}
 		local self = Menu.Callbacks.CastBar
 		local Item = Header:CreateItem(KBM.Language.Options.Castbar[KBM.Lang], "CastBars")
 		local MenuItem
+		self.texture = {}
 
 		-- Castbar Callbacks
-		function self:Enabled(bool)
-			KBM.Options.CastBar.Enabled = bool
+		function self:enabled(bool)
+			KBM.Options.Castbar.Global.enabled = bool
+			KBM.Castbar.Global.CastObj:Enable(bool)
+			for UnitID, Castbar in pairs(KBM.Castbar.ActiveCastbars) do
+				Castbar.CastObj:Enable(bool)
+			end
+			KBM.Castbar.Anchor.cradle:SetVisible(bool)
 		end
-		function self:Texture(bool)
-			KBM.Options.CastBar.Texture = bool
-			if KBM.CastBar.Anchor.GUI then
-				KBM.CastBar.Anchor.GUI.Texture:SetVisible(bool)
+		function self.texture:enabled(bool)
+			KBM.Options.Castbar.Global.texture.foreground.enabled = bool
+			KBM.Castbar.Global.CastObj:SetTexture("foreground", bool)
+			for UnitID, Castbar in pairs(KBM.Castbar.ActiveCastbars) do
+				Castbar.CastObj:SetTexture("foreground", bool)
 			end
 		end
-		function self:Shadow(bool)
-			KBM.Options.CastBar.Shadow = bool
-			if KBM.CastBar.Anchor.GUI then
-				KBM.CastBar.Anchor.GUI.Shadow:SetVisible(bool)
-			end
+		-- function self:Shadow(bool)
+			-- KBM.Options.CastBar.Shadow = bool
+			-- if KBM.CastBar.Anchor.GUI then
+				-- KBM.CastBar.Anchor.GUI.Shadow:SetVisible(bool)
+			-- end
+		-- end
+		function self:visible(bool)
+			KBM.Options.Castbar.Global.visible = bool
+			KBM.Options.Castbar.Global.unlocked = bool
+			KBM.Castbar.Anchor.cradle:SetVisible(bool)
 		end
-		function self:Visible(bool)
-			KBM.Options.CastBar.Visible = bool
-			KBM.Options.CastBar.Unlocked = bool
+		function self:widthUnlocked(bool)
+			KBM.Options.Castbar.Global.scale.widthUnlocked = bool
+		end
+		function self:heightUnlocked(bool)
+			KBM.Options.Castbar.Global.scale.heightUnlocked = bool
+		end
+		-- function self:TextScale(bool)
+			-- KBM.Options.CastBar.TextScale = bool
+		-- end
+		function self:riftBar(bool)
 			if bool then
-				KBM.CastBar.Anchor:Display()
+				KBM.Options.Castbar.Global.pack = "Rift"
 			else
-				KBM.CastBar.Anchor:Hide()
+				KBM.Options.Castbar.Global.pack = "Simple"
 			end
-		end
-		function self:ScaleWidth(bool)
-			KBM.Options.CastBar.ScaleWidth = bool
-		end
-		function self:ScaleHeight(bool)
-			KBM.Options.CastBar.ScaleHeight = bool
-		end
-		function self:TextScale(bool)
-			KBM.Options.CastBar.TextScale = bool
-		end
-		function self:RiftBar(bool)
-			KBM.CastBar.Anchor:Hide(true)
-			if bool then
-				KBM.Options.CastBar.Style = "rift"
-			else
-				KBM.Options.CastBar.Style = "kbm"
+			KBM.Options.Castbar.Global.riftBar = bool
+			KBM.Castbar.Global.CastObj:SetPack(KBM.Options.Castbar.Global.pack)
+			for UnitID, Castbar in pairs(KBM.Castbar.ActiveCastbars) do
+				Castbar.CastObj:SetPack(KBM.Options.Castbar.Global.pack)
 			end
-			KBM.Options.CastBar.RiftBar = true
-			KBM.CastBar.Anchor:Display()
 		end
 
 		-- CastBar Options. 
-		MenuItem = Item.UI.CreateHeader(KBM.Language.Options.CastbarEnabled[KBM.Lang], KBM.Options.CastBar, "Enabled", self)
-		MenuItem:CreateCheck(KBM.Language.Options.CastbarStyle[KBM.Lang], KBM.Options.CastBar, "RiftBar", self)
-		MenuItem:CreateCheck(KBM.Language.Options.Texture[KBM.Lang], KBM.Options.CastBar, "Texture", self)
-		MenuItem:CreateCheck(KBM.Language.Options.Shadow[KBM.Lang], KBM.Options.CastBar, "Shadow", self)
-		MenuItem:CreateCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], KBM.Options.CastBar, "Visible", self)
-		MenuItem:CreateCheck(KBM.Language.Options.UnlockWidth[KBM.Lang], KBM.Options.CastBar, "ScaleWidth", self)
-		MenuItem:CreateCheck(KBM.Language.Options.UnlockHeight[KBM.Lang], KBM.Options.CastBar, "ScaleHeight", self)
-		MenuItem:CreateCheck(KBM.Language.Options.UnlockText[KBM.Lang], KBM.Options.CastBar, "TextScale", self)
+		MenuItem = Item.UI.CreateHeader(KBM.Language.Options.CastbarEnabled[KBM.Lang], KBM.Options.Castbar.Global, "enabled", self)
+		MenuItem:CreateCheck(KBM.Language.Options.CastbarStyle[KBM.Lang], KBM.Options.Castbar.Global, "riftBar", self)
+		MenuItem:CreateCheck(KBM.Language.Options.Texture[KBM.Lang], KBM.Options.Castbar.Global.texture.foreground, "enabled", self.texture)
+		--MenuItem:CreateCheck(KBM.Language.Options.Shadow[KBM.Lang], KBM.Options.CastBar, "shadow", self)
+		local SubMenu = MenuItem:CreateCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], KBM.Options.Castbar.Global, "visible", self)
+		SubMenu:CreateCheck(KBM.Language.Options.UnlockWidth[KBM.Lang], KBM.Options.Castbar.Global.scale, "widthUnlocked", self)
+		SubMenu:CreateCheck(KBM.Language.Options.UnlockHeight[KBM.Lang], KBM.Options.Castbar.Global.scale, "heightUnlocked", self)
+		--MenuItem:CreateCheck(KBM.Language.Options.UnlockText[KBM.Lang], KBM.Options.CastBar, "TextScale", self)
 		
 		-- Player Castbar Callbacks
-		local self = Menu.Callbacks.PlayerBar
-		function self:Enabled(bool)
-			KBM.Player.CastBar.Settings.CastBar.Enabled = bool
-			if bool then
-				KBM.Player.CastBar.CastObj:Create(KBM.Player.UnitID)
-			else
-				KBM.Player.CastBar.CastObj:Remove()
-			end
-		end
-		function self:RiftBar(bool)
-			KBM.Player.CastBar.CastObj:Hide(true)
-			if bool then
-				KBM.Player.CastBar.Settings.CastBar.Style = "rift"
-			else
-				KBM.Player.CastBar.Settings.CastBar.Style = "kbm"
-			end
-			KBM.Player.CastBar.Settings.CastBar.RiftBar = bool
-			KBM.Player.CastBar.CastObj:Display()
-		end
-		function self:Pinned(bool)
-			KBM.Player.CastBar.Settings.CastBar.Pinned = bool
-			KBM.Player.CastBar.CastObj:ApplySettings()
-		end
-		function self:Texture(bool)
-			KBM.Player.CastBar.Settings.CastBar.Texture = bool
-			KBM.Player.CastBar.CastObj:ApplySettings()
-		end
-		function self:Shadow(bool)
-			KBM.Player.CastBar.Settings.CastBar.Shadow = bool
-			KBM.Player.CastBar.CastObj:ApplySettings()
-		end
-		function self:Visible(bool)
-			KBM.Player.CastBar.Settings.CastBar.Visible = bool
-			KBM.Player.CastBar.Settings.CastBar.Unlocked = bool
-			if bool then
-				KBM.Player.CastBar.CastObj:Display()
-			else
-				KBM.Player.CastBar.CastObj:Hide()
-			end
-		end
-		function self:ScaleWidth(bool)
-			KBM.Player.CastBar.Settings.CastBar.ScaleWidth = bool
-		end
-		function self:ScaleHeight(bool)
-			KBM.Player.CastBar.Settings.CastBar.ScaleHeight = bool
-		end
-		function self:TextScale(bool)
-			KBM.Player.CastBar.Settings.CastBar.TextScale = bool
-		end
+		for _, Castbar in ipairs(KBM.Castbar.MenuOrder) do
+			local self = {}
+			self.texture = {}
 			
-		MenuItem = Item.UI.CreateHeader(KBM.Language.CastBar.Player[KBM.Lang], KBM.Options.Player.CastBar, "Enabled", self)
-		MenuItem:CreateCheck(KBM.Language.Options.CastbarStyle[KBM.Lang],KBM.Options.Player.CastBar, "RiftBar", self)
-		MenuItem:CreateCheck(KBM.Language.CastBar.Mimic[KBM.Lang], KBM.Options.Player.CastBar, "Pinned", self)
-		MenuItem:CreateCheck(KBM.Language.Options.Texture[KBM.Lang], KBM.Options.Player.CastBar, "Texture", self)
-		MenuItem:CreateCheck(KBM.Language.Options.Shadow[KBM.Lang], KBM.Options.Player.CastBar, "Shadow", self)
-		MenuItem:CreateCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], KBM.Options.Player.CastBar, "Visible", self)
-		MenuItem:CreateCheck(KBM.Language.Options.UnlockWidth[KBM.Lang], KBM.Options.Player.CastBar, "ScaleWidth", self)
-		MenuItem:CreateCheck(KBM.Language.Options.UnlockHeight[KBM.Lang], KBM.Options.Player.CastBar, "ScaleHeight", self)
-		MenuItem:CreateCheck(KBM.Language.Options.UnlockText[KBM.Lang], KBM.Options.Player.CastBar, "TextScale", self)
+			function self:enabled(bool)
+				Castbar.Settings.enabled = bool
+				Castbar.CastObj:Enable(bool)
+			end
+			
+			function self:riftBar(bool)
+				if bool then
+					Castbar.Settings.pack = "Rift"
+				else
+					Castbar.Settings.pack = "Simple"
+				end
+				Castbar.Settings.riftBar = bool
+				Castbar.CastObj:SetPack(Castbar.Settings.pack)
+			end
+			function self:pinned(bool)
+				Castbar.Settings.pinned = bool
+				if bool then
+					Castbar.Settings.unlocked = false
+					Castbar.CastObj:Unlocked(false)
+					Castbar.CastObj:Pin(KBM.Castbar.PlayerPin)
+					UI.Native.Castbar:EventAttach(Event.UI.Layout.Size, KBM.Castbar.HandlePinScale, "KBMCastbar-Mimic-PinScale-Handler")
+				else
+					Castbar.CastObj:Unpin()
+					Castbar.CastObj:Unlocked(Castbar.Settings.visible)
+					Castbar.Settings.unlocked = Castbar.Settings.visible
+					UI.Native.Castbar:EventDetach(Event.UI.Layout.Size, KBM.Castbar.HandlePinScale, "KBMCastbar-Mimic-PinScale-Handler")
+				end
+			end
+			function self.texture:enabled(bool)
+				Castbar.Settings.texture.foreground.enabled = bool
+				Castbar.CastObj:SetTexture("foreground", bool)
+			end
+			-- function self:Shadow(bool)
+				-- KBM.Player.CastBar.Settings.CastBar.Shadow = bool
+				-- KBM.Player.CastBar.CastObj:ApplySettings()
+			-- end
+			function self:visible(bool)
+				Castbar.Settings.visible = bool
+				if not Castbar.Settings.pinned then
+					Castbar.Settings.unlocked = bool
+					Castbar.CastObj:Unlocked(bool)
+				end
+				Castbar.CastObj:SetVisible(bool)
+			end
+			function self:widthUnlocked(bool)
+				Castbar.Settings.scale.widthUnlocked = bool
+			end
+			function self:heightUnlocked(bool)
+				Castbar.Settings.scale.heightUnlocked = bool
+				Castbar.Settings.scale.textUnlocked = bool
+			end
+			-- function self:TextScale(bool)
+				-- KBM.Player.CastBar.Settings.CastBar.TextScale = bool
+			-- end
+				
+			MenuItem = Item.UI.CreateHeader(Castbar.MenuName, Castbar.Settings, "enabled", self)
+			MenuItem:CreateCheck(KBM.Language.Options.CastbarStyle[KBM.Lang], Castbar.Settings, "riftBar", self)
+			if Castbar.ID == "KBM_Player_Bar" then
+				MenuItem:CreateCheck(KBM.Language.CastBar.Mimic[KBM.Lang], Castbar.Settings, "pinned", self)
+			end
+			MenuItem:CreateCheck(KBM.Language.Options.Texture[KBM.Lang], Castbar.Settings.texture.foreground, "enabled", self.texture)
+			--MenuItem:CreateCheck(KBM.Language.Options.Shadow[KBM.Lang], KBM.Options.Player.CastBar, "Shadow", self)
+			local SubMenu = MenuItem:CreateCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], Castbar.Settings, "visible", self)
+			SubMenu:CreateCheck(KBM.Language.Options.UnlockWidth[KBM.Lang], Castbar.Settings.scale, "widthUnlocked", self)
+			SubMenu:CreateCheck(KBM.Language.Options.UnlockHeight[KBM.Lang], Castbar.Settings.scale, "heightUnlocked", self)
+			--SubMenu:CreateCheck(KBM.Language.Options.UnlockText[KBM.Lang], Castbar.Settings.scale, "textUnlocked", self)
+		end
 	end
 
 	function Menu.Alerts(Header)
@@ -8244,14 +7384,14 @@ local function KBM_Start()
 		["KBMAddWatch"] = {
 			High = 0,
 			Mid = 2,
-			Low = 5,
-			Rev = 68,
+			Low = 6,
+			Rev = 70,
 		},
 		["KBMMarkIt"] = {
 			High = 0,
 			Mid = 1,
-			Low = 7,
-			Rev = 39,
+			Low = 9,
+			Rev = 41,
 		},
 	}
 
@@ -8362,65 +7502,11 @@ function KBM.WaitReady()
 	KBM.Player.ID = "KBM_Player"
 	KBM.Player.Name = LibSUnit.Player.Name
 	KBM.Player.UnitID = LibSUnit.Player.UnitID
-	KBM.Player.Settings = {
-		CastBar = {
-			Override = true,
-			Multi = true,
-		},
-	}
 	KBM_Start()
 	KBM.InitEvents()
 	KBM.Event.System.Start(self)
-	KBM.Player.CastBar = {
-		Mod = KBM.Player,
-		ID = "KBM_Player",
-		Name = "Your Castbar",
-		Settings = {
-			CastBar = KBM.Options.Player.CastBar,
-		},
-		Target = {
-			ID = "KBM_Player_Target",
-			Name = "Target Castbar",
-			Settings = {
-				CastBar = KBM.Defaults.CastBar(),
-			},
-		},
-		Focus = {
-			ID = "KBM_Player_Focus",
-			Name = "Focus Castbar",
-			Settings = {
-				CastBar = KBM.Defaults.CastBar(),
-			},
-		},
-	}
-		
-	function KBM.Player.CastBar.PinCastBar()
-		KBM.Player.CastBar.CastObj.GUI.Frame:ClearPoint("TOPLEFT")
-		KBM.Player.CastBar.CastObj.GUI.Frame:SetPoint("CENTER", UI.Native.Castbar, "CENTER")
-	end
-	KBM.Player.CastBar.Settings.CastBar.Override = true
-	KBM.Player.CastBar.Settings.CastBar.Multi = true
-	KBM.Player.CastBar.CastObj = KBM.CastBar:Add(KBM.Player, KBM.Player.CastBar)
-	KBM.Player.CastBar.CastObj:SetBoss(false)
-	KBM.Player.CastBar.Target.CastObj = KBM.CastBar:Add(KBM.Player.CastBar.Target, KBM.Player.CastBar.Target)
-	KBM.Player.CastBar.Focus.CastObj = KBM.CastBar:Add(KBM.Player.CastBar.Focus, KBM.Player.CastBar.Focus)
-	KBM.Player.CastBar.CastObj:Create(KBM.Player.UnitID)
 	
-	-- New Castbar Initialization
-	for ID, Castbar in pairs(KBM.Castbar.Player) do
-		Castbar.Settings.enabled = false
-		if Castbar.ID == "KBM_Player_Bar" then
-			-- Temporary manual enable/disable during Dev.
-		elseif Castbar.ID == "KBM_Player_Target" then
-			Castbar.Settings.relX = 0.688
-			Castbar.Settings.relY = 0.45
-		elseif Castbar.ID == "KBM_Player_Focus" then
-			Castbar.Settings.relX = 0.25
-			Castbar.Settings.relY = 0.61
-		end
-		Castbar.CastObj = LibSCast:Create(Castbar.ID, KBM.Context, Castbar.Pack, Castbar.Settings, Castbar.Style)
-		Castbar.CastObj:StartType(Castbar.Type)
-	end
+	KBM.Castbar:LoadPlayerBars()
 end
 
 KBM.PlugIn = {}
@@ -8474,36 +7560,36 @@ function KBM.InitKBM(handle, ModID)
 		for n, GUIObj in ipairs(TempGUIList) do
 			table.insert(KBM.MechTimer.Store, GUIObj)
 		end
-		TempGUIList = {}
-		TempCastBarList = {}
-		TempCastBarBoss = {}
-		for Cached = 1, 20 do
-			local TempGUI = KBM.CastBar:Pull("kbm")
-			TempGUI.Frame:SetVisible(false)
-			table.insert(TempGUIList, TempGUI)
-		end
-		for n, GUIObj in ipairs(TempGUIList) do
-			table.insert(KBM.CastBar.Stores.KBM, GUIObj)
-		end
-		TempGUIList = {}
-		for Cached = 1, 20 do
-			local TempGUICB = KBM.CastBar:Pull("rift")
-			TempGUICB.Frame:SetVisible(false)
-			table.insert(TempCastBarList, TempGUICB)		
-		end
-		for n, GUIObj in ipairs(TempCastBarList) do
-			table.insert(KBM.CastBar.Stores.Rift, GUIObj)
-		end
-		TempCastBarList = {}
-		for Cached = 1, 20 do
-			local TempGUICBB = KBM.CastBar:Pull("rift", true)
-			TempGUICBB.Frame:SetVisible(false)
-			table.insert(TempCastBarBoss, TempGUICBB)		
-		end
-		for n, GUIObj in ipairs(TempCastBarBoss) do
-			table.insert(KBM.CastBar.Stores.Boss, GUIObj)
-		end
-		TempCastBarBoss = {}
+		-- TempGUIList = {}
+		-- TempCastBarList = {}
+		-- TempCastBarBoss = {}
+		-- for Cached = 1, 20 do
+			-- local TempGUI = KBM.CastBar:Pull("kbm")
+			-- TempGUI.Frame:SetVisible(false)
+			-- table.insert(TempGUIList, TempGUI)
+		-- end
+		-- for n, GUIObj in ipairs(TempGUIList) do
+			-- table.insert(KBM.CastBar.Stores.KBM, GUIObj)
+		-- end
+		-- TempGUIList = {}
+		-- for Cached = 1, 20 do
+			-- local TempGUICB = KBM.CastBar:Pull("rift")
+			-- TempGUICB.Frame:SetVisible(false)
+			-- table.insert(TempCastBarList, TempGUICB)		
+		-- end
+		-- for n, GUIObj in ipairs(TempCastBarList) do
+			-- table.insert(KBM.CastBar.Stores.Rift, GUIObj)
+		-- end
+		-- TempCastBarList = {}
+		-- for Cached = 1, 20 do
+			-- local TempGUICBB = KBM.CastBar:Pull("rift", true)
+			-- TempGUICBB.Frame:SetVisible(false)
+			-- table.insert(TempCastBarBoss, TempGUICBB)		
+		-- end
+		-- for n, GUIObj in ipairs(TempCastBarBoss) do
+			-- table.insert(KBM.CastBar.Stores.Boss, GUIObj)
+		-- end
+		-- TempCastBarBoss = {}
 		KBM.CPU:Toggle(true)
 		
 		KBM.ResMaster:Start()

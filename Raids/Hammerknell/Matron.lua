@@ -46,7 +46,7 @@ MZ.Matron = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Concussion = KBM.Defaults.TimerObj.Create("red"),
@@ -343,7 +343,7 @@ function MZ:Start()
 	self.Matron.Triggers.Spiritual:AddTimer(self.Matron.TimersRef.Spiritual)
 	
 	-- Assign Castbar object
-	self.Matron.CastBar = KBM.CastBar:Add(self, self.Matron, true)
+	self.Matron.CastBar = KBM.Castbar:Add(self, self.Matron, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 			
 end

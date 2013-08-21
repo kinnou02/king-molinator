@@ -44,7 +44,7 @@ VP.Prime = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Flames = KBM.Defaults.TimerObj.Create("orange"),
@@ -215,7 +215,7 @@ function VP:Start()
 	self.Prime.Triggers.FlamesDebuff = KBM.Trigger:Create(self.Lang.Ability.Flames[KBM.Lang], "playerBuff", self.Prime)
 	self.Prime.Triggers.FlamesDebuff:AddAlert(self.Prime.AlertsRef.Flames, true)
 	
-	self.Prime.CastBar = KBM.CastBar:Add(self, self.Prime, true)
+	self.Prime.CastBar = KBM.Castbar:Add(self, self.Prime, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

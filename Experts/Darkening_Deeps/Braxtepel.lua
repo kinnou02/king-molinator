@@ -40,7 +40,7 @@ MOD.Braxtepel = {
 	UTID = "U1F82C28820544B22",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	}
 }
 
@@ -259,7 +259,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Braxtepel.CastBar = KBM.CastBar:Add(self, self.Braxtepel)
+	self.Braxtepel.CastBar = KBM.Castbar:Add(self, self.Braxtepel)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

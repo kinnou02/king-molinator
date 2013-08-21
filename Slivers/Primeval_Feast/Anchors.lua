@@ -40,7 +40,7 @@ LA.Anchor = {
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	},
 }
 
@@ -190,7 +190,7 @@ function LA:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Anchor.CastBar = KBM.CastBar:Add(self, self.Anchor, true)
+	self.Anchor.CastBar = KBM.Castbar:Add(self, self.Anchor, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

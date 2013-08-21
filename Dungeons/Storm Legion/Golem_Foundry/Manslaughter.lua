@@ -40,7 +40,7 @@ MOD.Manslaughter = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	}
 }
 
@@ -185,7 +185,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Manslaughter.CastBar = KBM.CastBar:Add(self, self.Manslaughter)
+	self.Manslaughter.CastBar = KBM.Castbar:Add(self, self.Manslaughter)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

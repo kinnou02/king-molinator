@@ -42,7 +42,7 @@ MOD.Plutonus = {
 	UTID = "U3EA4CAE94A4A0D48",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -217,7 +217,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Plutonus.CastBar = KBM.CastBar:Add(self, self.Plutonus)
+	self.Plutonus.CastBar = KBM.Castbar:Add(self, self.Plutonus)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

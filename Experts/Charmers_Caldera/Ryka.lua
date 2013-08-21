@@ -42,7 +42,7 @@ MOD.Ryka = {
 	UTID = "U33BFA2635B9791ED",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -223,7 +223,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Ryka.CastBar = KBM.CastBar:Add(self, self.Ryka)
+	self.Ryka.CastBar = KBM.Castbar:Add(self, self.Ryka)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

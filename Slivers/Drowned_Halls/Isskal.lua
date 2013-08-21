@@ -38,7 +38,7 @@ IL.Isskal = {
 	UTID = "U69C09B877E075E64",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		AlertsRef = {
 			Enabled = true,
 			Shard = KBM.Defaults.AlertObj.Create("yellow"),
@@ -350,7 +350,7 @@ function IL:Start()
 	self.Isskal.Triggers.WhirlpoolEnd = KBM.Trigger:Create(self.Lang.Notify.Reverse[KBM.Lang], "notify", self.Isskal)
 	self.Isskal.Triggers.WhirlpoolEnd:AddTimer(self.Isskal.TimersRef.WhirlpoolEnd)
 		
-	self.Isskal.CastBar = KBM.CastBar:Add(self, self.Isskal, true)
+	self.Isskal.CastBar = KBM.Castbar:Add(self, self.Isskal, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

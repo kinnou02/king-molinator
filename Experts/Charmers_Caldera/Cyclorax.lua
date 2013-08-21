@@ -39,7 +39,7 @@ MOD.Cyclorax = {
 	UTID = "U40AF94B15D2606D7",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	}
 }
 
@@ -182,7 +182,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Cyclorax.CastBar = KBM.CastBar:Add(self, self.Cyclorax)
+	self.Cyclorax.CastBar = KBM.Castbar:Add(self, self.Cyclorax)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

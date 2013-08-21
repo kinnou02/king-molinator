@@ -40,7 +40,7 @@ MOD.Sparkwing = {
 	UTID = "U00CDD198543C9E9E",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	}
 }
 
@@ -183,7 +183,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Sparkwing.CastBar = KBM.CastBar:Add(self, self.Sparkwing)
+	self.Sparkwing.CastBar = KBM.Castbar:Add(self, self.Sparkwing)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

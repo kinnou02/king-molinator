@@ -46,7 +46,7 @@ AD.Alsbeth = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Phase = KBM.Defaults.TimerObj.Create(),
@@ -233,7 +233,7 @@ AD.Magus = {
 	Ignore = true,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Soul = KBM.Defaults.TimerObj.Create("yellow"),
@@ -563,7 +563,7 @@ function AD:Start()
 	self.Magus.Triggers.SoulInt:AddStop(self.Magus.AlertsRef.Soul)
 	
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	self.Alsbeth.CastBar = KBM.CastBar:Add(self, self.Alsbeth)
-	self.Magus.CastBar = KBM.CastBar:Add(self, self.Magus)
+	self.Alsbeth.CastBar = KBM.Castbar:Add(self, self.Alsbeth)
+	self.Magus.CastBar = KBM.Castbar:Add(self, self.Magus)
 	
 end

@@ -42,7 +42,7 @@ MOD.Andrenos = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -199,7 +199,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Andrenos.CastBar = KBM.CastBar:Add(self, self.Andrenos)
+	self.Andrenos.CastBar = KBM.Castbar:Add(self, self.Andrenos)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

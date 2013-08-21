@@ -93,7 +93,7 @@ KZ.Kyzan = {
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Annihilation = KBM.Defaults.TimerObj.Create("cyan"),
@@ -309,7 +309,7 @@ function KZ:Start()
 	self.Kyzan.Triggers.Annihilation:AddTimer(self.Kyzan.TimersRef.Annihilation)
 	self.Kyzan.Triggers.Annihilation:AddAlert(self.Kyzan.AlertsRef.Annihilation)
 	
-	self.Kyzan.CastBar = KBM.CastBar:Add(self, self.Kyzan)
+	self.Kyzan.CastBar = KBM.Castbar:Add(self, self.Kyzan)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

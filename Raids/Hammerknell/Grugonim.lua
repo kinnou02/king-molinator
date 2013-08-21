@@ -47,7 +47,7 @@ GR.Grugonim = {
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		Filters = {
 			Enabled = true,
 			Decay = KBM.Defaults.CastFilter.Create("dark_green"),
@@ -408,7 +408,7 @@ function GR:Start()
 	self.Grugonim.Triggers.PhaseFour:AddPhase(self.TowerPhase)
 	self.Grugonim.Triggers.PhaseFour:AddStop(self.Grugonim.TimersRef.Breath)
 	
-	self.Grugonim.CastBar = KBM.CastBar:Add(self, self.Grugonim)	
+	self.Grugonim.CastBar = KBM.Castbar:Add(self, self.Grugonim)	
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)		
 	
 end

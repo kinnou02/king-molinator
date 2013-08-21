@@ -42,7 +42,7 @@ MOD.Shadehorror = {
 	UTID = "U3BC9C0480EDED0FC",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -217,7 +217,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Shadehorror.CastBar = KBM.CastBar:Add(self, self.Shadehorror)
+	self.Shadehorror.CastBar = KBM.Castbar:Add(self, self.Shadehorror)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

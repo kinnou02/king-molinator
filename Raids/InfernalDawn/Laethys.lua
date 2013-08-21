@@ -49,7 +49,7 @@ LT.Laethys = {
 	AlertsRef = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		 TimersRef = {
 			Enabled = true,
 			PhaseTwoTrans = KBM.Defaults.TimerObj.Create("dark_green"),
@@ -363,7 +363,7 @@ function LT:UnitHPCheck(uDetails, unitID)
 					}
 					self.Bosses[uDetails.name].UnitList[unitID] = SubBossObj
 					if uDetails.name == self.Seer.Name then
-						SubBossObj.CastBar = KBM.CastBar:Add(self, self.Seer, false, true)
+						SubBossObj.CastBar = KBM.Castbar:Add(self, self.Seer, false, true)
 						SubBossObj.CastBar:Create(unitID)
 					end
 				else
@@ -500,7 +500,7 @@ function LT:Start()
 	self.Laethys.Triggers.Flare:AddAlert(self.Laethys.AlertsRef.Flare)
 	self.Laethys.Triggers.Flare:AddTimer(self.Laethys.TimersRef.Flare)
 	
-	self.Laethys.CastBar = KBM.CastBar:Add(self, self.Laethys)
+	self.Laethys.CastBar = KBM.Castbar:Add(self, self.Laethys)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

@@ -44,7 +44,7 @@ HG.Gaurath = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Breath = KBM.Defaults.TimerObj.Create("purple"),
@@ -281,7 +281,7 @@ function HG:UnitHPCheck(uDetails, unitID)
 						}
 						self.Bosses[uDetails.name].UnitList[unitID] = SubBossObj
 						if uDetails.name == self.Defiler.Name then
-							SubBossObj.CastBar = KBM.CastBar:Add(self, self.Defiler, false, true)
+							SubBossObj.CastBar = KBM.Castbar:Add(self, self.Defiler, false, true)
 							SubBossObj.CastBar:Create(unitID)
 						end
 					else
@@ -357,7 +357,7 @@ function HG:Start()
 	self.Defiler.Triggers.StormInt = KBM.Trigger:Create(self.Lang.Ability.Storm[KBM.Lang], "personalInterrupt", self.Defiler)
 	self.Defiler.Triggers.StormInt:AddStop(self.Defiler.AlertsRef.Storm)
 	
-	self.Gaurath.CastBar = KBM.CastBar:Add(self, self.Gaurath)
+	self.Gaurath.CastBar = KBM.Castbar:Add(self, self.Gaurath)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

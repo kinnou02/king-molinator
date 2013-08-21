@@ -42,7 +42,7 @@ HH.Hydriss = {
 	UTID = "U01904C0A16F7CCB8",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			AirFirst = KBM.Defaults.TimerObj.Create("dark_green"),
@@ -269,7 +269,7 @@ function HH:Start()
 	self.Hydriss.Triggers.Tsunami = KBM.Trigger:Create(self.Lang.Ability.Tsunami[KBM.Lang], "cast", self.Hydriss)
 	self.Hydriss.Triggers.Tsunami:AddTimer(self.Hydriss.TimersRef.Tsunami)
 	
-	self.Hydriss.CastBar = KBM.CastBar:Add(self, self.Hydriss, true)
+	self.Hydriss.CastBar = KBM.Castbar:Add(self, self.Hydriss, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

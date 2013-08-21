@@ -40,7 +40,7 @@ MOD.Glubmuk = {
 	UTID = "U0CFEAAB42ECC5CD1",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	}
 }
 
@@ -183,7 +183,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Glubmuk.CastBar = KBM.CastBar:Add(self, self.Glubmuk)
+	self.Glubmuk.CastBar = KBM.Castbar:Add(self, self.Glubmuk)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

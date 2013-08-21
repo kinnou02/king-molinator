@@ -40,7 +40,7 @@ MOD.Fetlorn = {
 	UTID = "U2FB196D076D553D2",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	}
 }
 
@@ -213,7 +213,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Fetlorn.CastBar = KBM.CastBar:Add(self, self.Fetlorn)
+	self.Fetlorn.CastBar = KBM.Castbar:Add(self, self.Fetlorn)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

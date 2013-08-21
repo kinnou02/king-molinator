@@ -42,7 +42,7 @@ MOD.Caelia = {
 	UTID = "U5B97621F4BE1D0E2",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -223,7 +223,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Caelia.CastBar = KBM.CastBar:Add(self, self.Caelia)
+	self.Caelia.CastBar = KBM.Castbar:Add(self, self.Caelia)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

@@ -44,7 +44,7 @@ BT.Beruhast = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			FlameStart = KBM.Defaults.TimerObj.Create("orange"),
@@ -254,7 +254,7 @@ function BT:Start()
 	self.Beruhast.Triggers.Summon:AddTimer(self.Beruhast.TimersRef.Summon)
 	self.Beruhast.Triggers.Summon:AddAlert(self.Beruhast.AlertsRef.Summon)
 	
-	self.Beruhast.CastBar = KBM.CastBar:Add(self, self.Beruhast, true)
+	self.Beruhast.CastBar = KBM.Castbar:Add(self, self.Beruhast, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

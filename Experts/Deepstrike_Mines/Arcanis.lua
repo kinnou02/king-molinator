@@ -42,7 +42,7 @@ MOD.Arcanis = {
 	UTID = "U0EE6E9E1203FB8A2",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -223,7 +223,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Arcanis.CastBar = KBM.CastBar:Add(self, self.Arcanis)
+	self.Arcanis.CastBar = KBM.Castbar:Add(self, self.Arcanis)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

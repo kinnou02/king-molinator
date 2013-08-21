@@ -40,7 +40,7 @@ MOD.Cortilnald = {
 	UTID = "U13FCEF1C0F07CF09",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	}
 }
 
@@ -189,7 +189,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Cortilnald.CastBar = KBM.CastBar:Add(self, self.Cortilnald)
+	self.Cortilnald.CastBar = KBM.Castbar:Add(self, self.Cortilnald)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

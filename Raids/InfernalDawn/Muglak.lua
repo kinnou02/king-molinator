@@ -43,7 +43,7 @@ MK.Muglak = {
 	AlertsRef = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			BrillFirst = KBM.Defaults.TimerObj.Create("red"),
@@ -239,7 +239,7 @@ function MK:Start()
 	self.Muglak.Triggers.Brill:AddAlert(self.Muglak.AlertsRef.Brill)
 	self.Muglak.Triggers.Brill:AddTimer(self.Muglak.TimersRef.Brill)
 	
-	self.Muglak.CastBar = KBM.CastBar:Add(self, self.Muglak)
+	self.Muglak.CastBar = KBM.Castbar:Add(self, self.Muglak)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

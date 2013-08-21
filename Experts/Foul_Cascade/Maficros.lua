@@ -42,7 +42,7 @@ MOD.Maficros = {
 	UTID = "U438906C70E91EC3A",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -217,7 +217,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Maficros.CastBar = KBM.CastBar:Add(self, self.Maficros)
+	self.Maficros.CastBar = KBM.Castbar:Add(self, self.Maficros)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

@@ -40,7 +40,7 @@ MOD.Nuggo = {
 	Triggers = {},
 	UTID = "U43E685D74CAA6694",
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	}
 }
 
@@ -282,7 +282,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Nuggo.CastBar = KBM.CastBar:Add(self, self.Nuggo)
+	self.Nuggo.CastBar = KBM.Castbar:Add(self, self.Nuggo)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

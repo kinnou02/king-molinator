@@ -42,7 +42,7 @@ MOD.Palos = {
 	UTID = "U63F0D8CA408E75A9",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -223,7 +223,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Palos.CastBar = KBM.CastBar:Add(self, self.Palos)
+	self.Palos.CastBar = KBM.Castbar:Add(self, self.Palos)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

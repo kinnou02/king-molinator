@@ -68,7 +68,7 @@ ULT.Ultane = {
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		--TimersRef = {
 		--	Enabled = true,
 		--},
@@ -251,6 +251,6 @@ function ULT:Start()
 	self.Ultane.Triggers.Infernal:AddAlert(self.Ultane.AlertsRef.Infernal, true)
 	self.Ultane.Triggers.Infernal:AddSpy(self.Ultane.MechRef.Infernal)
 	
-	self.Ultane.CastBar = KBM.CastBar:Add(self, self.Ultane)
+	self.Ultane.CastBar = KBM.Castbar:Add(self, self.Ultane)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)	
 end

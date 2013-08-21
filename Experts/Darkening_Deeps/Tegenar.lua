@@ -40,7 +40,7 @@ MOD.Tegenar = {
 	UTID = "U089394436FFDC210",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	}
 }
 
@@ -189,7 +189,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Tegenar.CastBar = KBM.CastBar:Add(self, self.Tegenar)
+	self.Tegenar.CastBar = KBM.Castbar:Add(self, self.Tegenar)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

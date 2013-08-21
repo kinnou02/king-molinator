@@ -43,7 +43,7 @@ PI.Plutonus = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Sleep = KBM.Defaults.TimerObj.Create("purple"),
@@ -243,7 +243,7 @@ function PI:Start()
 	self.Plutonus.Triggers.Ten = KBM.Trigger:Create(10, "percent", self.Plutonus)
 	self.Plutonus.Triggers.Ten:AddAlert(self.Plutonus.AlertsRef.Ten)
 	
-	self.Plutonus.CastBar = KBM.CastBar:Add(self, self.Plutonus)
+	self.Plutonus.CastBar = KBM.Castbar:Add(self, self.Plutonus)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

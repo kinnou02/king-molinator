@@ -41,7 +41,7 @@ MOD.Gronik = {
 	UTID = "U4AAB6A5512038E1D",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -192,7 +192,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Gronik.CastBar = KBM.CastBar:Add(self, self.Gronik)
+	self.Gronik.CastBar = KBM.Castbar:Add(self, self.Gronik)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

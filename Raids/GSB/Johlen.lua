@@ -44,7 +44,7 @@ IJ.Johlen = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		AlertsRef = {
 			Enabled = true,
 			Blinding = KBM.Defaults.AlertObj.Create("yellow"),
@@ -325,7 +325,7 @@ function IJ:Start()
 	self.Johlen.Triggers.Arm = KBM.Trigger:Create(self.Lang.Ability.Arm[KBM.Lang], "cast", self.Johlen)
 	self.Johlen.Triggers.Arm:AddSpy(self.Johlen.MechRef.Arm)
 	
-	self.Johlen.CastBar = KBM.CastBar:Add(self, self.Johlen)
+	self.Johlen.CastBar = KBM.Castbar:Add(self, self.Johlen)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

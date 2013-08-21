@@ -21,11 +21,23 @@ Notify and Chat Events
 * Change: Now sends Boss.Name as the Caster field.
 
 New Castbar System (During Alpha)
+* IMPORTANT: ALL Castbar settings have be reset to default due to how the new system works.
 * Note: The system is now almost complete. Actual bars are created but forced to disabled for this build.
-* Note: Next build should see them implemented in to KBM as configurable castbars (see below).
-* New: Engine and Bar for Player castbar. (Disabled)
-* New: Engine and Bar for Target castbar. (Disabled)
-* New: Engine and Bar Player Focus castbar. (Disabled)
+* Note: Bars are in for all areas. Please report any glitches or issues.
+* New: Engine and Bar for Player castbar.
+* New: Engine and Bar for Target castbar.
+* New: Engine and Bar Player Focus castbar.
+* New: Engine and Bars for all Encounters.
+* New: Global Encounter Castbar settings are just that, regardless of Multi-boss fights. 
+* New: Castbar placement is now based on relative screen coordinates rather than absolute.
+* New: Encounter castbars automatically dock to the global anchor and expand outward should more than 1 be casting at a time.
+* Change: Overriding Global Encounter Castbar settings will allow you to disable/enable, pin/unpin and/or scale on a per castbar basis.
+* Change: All cast, channel and interrupt triggers are now handled via the new engines event system.
+* Change: Maximum castbar size has been increased to 200%.
+* Change: Pinned castbars inherit the Global Encounter Castbar settings.
+* Change: Custom castbars retain Style and Texture settings from global settings. These cannot be changed individually.
+* Change: Simple style castbars now follow the same 
+* Removed: Old KBM Castbar system has been completely removed freeing up CPU cycles for KBM's main loop.
 
 Raids
 * Endless Eclipse
@@ -1767,7 +1779,7 @@ System
 * Change: Each Boss Mod will now catch any errors if KBM doesn't fully start for any reason. This will prevent it running and spamming errors.
 
 Player Castbar
-* Change: This will now default to disabled. Enable it via KBM > Global Options > Cast-bars > Enable Player Castbar
+* Change: This will now default to disabled. Enable it via KBM > Global Options > Castbars > Enable Player Castbar
 * Note: This will not effect existing settings.
 
 ResMaster

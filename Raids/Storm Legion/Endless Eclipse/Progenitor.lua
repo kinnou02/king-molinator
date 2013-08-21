@@ -101,7 +101,7 @@ PRO.Progenitor = {
 	Triggers = {},
 	MechRef = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -136,7 +136,7 @@ PRO.Ebassi = {
 	AlertsRef = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Ebon = KBM.Defaults.TimerObj.Create("red"),
@@ -164,7 +164,7 @@ PRO.Arebus = {
 	AlertsRef = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Ebon = KBM.Defaults.TimerObj.Create("red"),
@@ -192,7 +192,7 @@ PRO.Rhu = {
 	AlertsRef = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Ebon = KBM.Defaults.TimerObj.Create("red"),
@@ -221,7 +221,7 @@ PRO.Juntun = {
 	Triggers = {},
 	MechRef = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Ebon = KBM.Defaults.TimerObj.Create("red"),
@@ -490,7 +490,7 @@ function PRO:Start()
 	-- self.Progenitor.Triggers.Barrier = KBM.Trigger:Create(self.Lang.Buff.Barrier[KBM.Lang], "buff", self.Progenitor)
 	-- self.Progenitor.Triggers.Barrier:AddSpy(self.Progenitor.MechRef.Barrier)
 
-	self.Progenitor.CastBar = KBM.CastBar:Add(self, self.Progenitor)
+	self.Progenitor.CastBar = KBM.Castbar:Add(self, self.Progenitor)
 
 	-- Setup the 4 mini bosses identically
 
@@ -508,7 +508,7 @@ function PRO:Start()
 		BossObj.Triggers.EbonInt:AddStop(self.Progenitor.MechRef.Ebon)
 		BossObj.Triggers.Entropic = KBM.Trigger:Create(self.Lang.Ability.Entropic[KBM.Lang], "cast", BossObj)
 		BossObj.Triggers.Entropic:AddSpy(self.Progenitor.MechRef.Entropic)
-		BossObj.CastBar = KBM.CastBar:Add(self, BossObj)
+		BossObj.CastBar = KBM.Castbar:Add(self, BossObj)
 		-- BossObj.Triggers.Barrier = KBM.Trigger:Create(self.Lang.Buff.Barrier[KBM.Lang], "buff", BossObj)
 		-- BossObj.Triggers.Barrier:AddSpy(self.Progenitor.MechRef.Barrier)
 	end

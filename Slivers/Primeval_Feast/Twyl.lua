@@ -42,7 +42,7 @@ LT.Twyl = {
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		AlertsRef = {
 			Enabled = true,
 			Quake = KBM.Defaults.AlertObj.Create("yellow"),
@@ -543,7 +543,7 @@ function LT:Start()
 	self.Spider.Triggers.CritterRem = KBM.Trigger:Create(self.Lang.Debuff.Critter[KBM.Lang], "playerBuffRemove", self.Spider)
 	self.Spider.Triggers.CritterRem:AddStop(self.Twyl.MechRef.Critter)
 	
-	self.Twyl.CastBar = KBM.CastBar:Add(self, self.Twyl, true)
+	self.Twyl.CastBar = KBM.Castbar:Add(self, self.Twyl, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

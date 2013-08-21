@@ -42,7 +42,7 @@ MOD.Alraj = {
 	UTID = "U2D401BA071054D42",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -223,7 +223,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Alraj.CastBar = KBM.CastBar:Add(self, self.Alraj)
+	self.Alraj.CastBar = KBM.Castbar:Add(self, self.Alraj)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

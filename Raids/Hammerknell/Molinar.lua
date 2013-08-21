@@ -51,7 +51,7 @@ KM.Prince = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		Filters = {
 			Enabled = true,
 			Rend = KBM.Defaults.CastFilter.Create(),
@@ -104,7 +104,7 @@ KM.King = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		Filters = {
 			Enabled = true,
 			Shout = KBM.Defaults.CastFilter.Create(),
@@ -602,8 +602,8 @@ function KM:Start()
 	self.Prince.Triggers.PhaseFour = KBM.Trigger:Create(40, "percent", self.Prince)
 	self.Prince.Triggers.PhaseFour:AddPhase(self.PhaseFour)
 	
-	self.King.CastBar = KBM.CastBar:Add(self, self.King)
-	self.Prince.CastBar = KBM.CastBar:Add(self, self.Prince)
+	self.King.CastBar = KBM.Castbar:Add(self, self.King)
+	self.Prince.CastBar = KBM.Castbar:Add(self, self.Prince)
 	
 	self.PercentageMon = KBM.PercentageMon:Create(self.King, self.Prince, 7)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

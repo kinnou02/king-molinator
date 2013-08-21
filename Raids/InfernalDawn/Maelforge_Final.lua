@@ -49,7 +49,7 @@ MF.Maelforge = {
 	MechRef = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Hell = KBM.Defaults.TimerObj.Create("purple"),
@@ -354,7 +354,7 @@ function MF:UnitHPCheck(uDetails, unitID)
 					}
 					BossObj.UnitList[unitID] = SubBossObj
 					if BossObj == self.Cannon then
-						SubBossObj.CastBar = KBM.CastBar:Add(self, self.Cannon, false, true)
+						SubBossObj.CastBar = KBM.Castbar:Add(self, self.Cannon, false, true)
 						SubBossObj.CastBar:Create(unitID)
 					end
 				else
@@ -447,7 +447,7 @@ function MF:Start()
 	self.Cannon.Triggers.BlastInt = KBM.Trigger:Create(self.Lang.Ability.Blast[KBM.Lang], "personalInterrupt", self.Cannon)
 	self.Cannon.Triggers.BlastInt:AddStop(self.Cannon.AlertsRef.Blast)
 		
-	self.Maelforge.CastBar = KBM.CastBar:Add(self, self.Maelforge)
+	self.Maelforge.CastBar = KBM.Castbar:Add(self, self.Maelforge)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

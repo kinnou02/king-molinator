@@ -58,7 +58,7 @@ MOD.Strauz = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		AlertsRef = {
 			Enabled = true,
 			Vortex = KBM.Defaults.AlertObj.Create("yellow")
@@ -81,7 +81,7 @@ MOD.Mercutial = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	}
 }
 
@@ -255,8 +255,8 @@ function MOD:Start()
 	self.Strauz.Triggers.VortexInt = KBM.Trigger:Create(self.Lang.Ability.Vortex[KBM.Lang], "interrupt", self.Strauz)
 	self.Strauz.Triggers.VortexInt:AddStop(self.Strauz.AlertsRef.Vortex)
 	
-	self.Strauz.CastBar = KBM.CastBar:Add(self, self.Strauz)
-	self.Mercutial.CastBar = KBM.CastBar:Add(self, self.Mercutial)
+	self.Strauz.CastBar = KBM.Castbar:Add(self, self.Strauz)
+	self.Mercutial.CastBar = KBM.Castbar:Add(self, self.Mercutial)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

@@ -42,7 +42,7 @@ MOD.Venoxa = {
 	UTID = "U36E0A0F273270898",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -217,7 +217,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Venoxa.CastBar = KBM.CastBar:Add(self, self.Venoxa)
+	self.Venoxa.CastBar = KBM.Castbar:Add(self, self.Venoxa)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

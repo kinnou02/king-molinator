@@ -45,7 +45,7 @@ MF.Maelforge = {
 	AlertsRef = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		AlertsRef = {
 			Enabled = true,
 			Hellfire = KBM.Defaults.AlertObj.Create("purple"),
@@ -318,7 +318,7 @@ function MF:UnitHPCheck(uDetails, unitID)
 							if self.Phase == 1 then
 								self.PhaseTwo()
 							end
-							SubBossObj.CastBar = KBM.CastBar:Add(self, self.Cannon, false, true)
+							SubBossObj.CastBar = KBM.Castbar:Add(self, self.Cannon, false, true)
 							SubBossObj.CastBar:Create(unitID)
 						end
 					else
@@ -403,7 +403,7 @@ function MF:Start()
 	self.Cannon.Triggers.BlastInt = KBM.Trigger:Create(self.Lang.Ability.Blast[KBM.Lang], "personalInterrupt", self.Cannon)
 	self.Cannon.Triggers.BlastInt:AddStop(self.Cannon.AlertsRef.Blast)
 	
-	self.Maelforge.CastBar = KBM.CastBar:Add(self, self.Maelforge)
+	self.Maelforge.CastBar = KBM.Castbar:Add(self, self.Maelforge)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

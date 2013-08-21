@@ -41,7 +41,7 @@ MOD.Zugthak = {
 	UTID = "U4E148FF15BE6106E",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -216,7 +216,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Zugthak.CastBar = KBM.CastBar:Add(self, self.Zugthak)
+	self.Zugthak.CastBar = KBM.Castbar:Add(self, self.Zugthak)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

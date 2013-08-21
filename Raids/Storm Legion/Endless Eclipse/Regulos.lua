@@ -47,7 +47,7 @@ REG.Regulos = {
 	MechRef = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Apotheosis = KBM.Defaults.TimerObj.Create("red"),
@@ -225,7 +225,7 @@ REG.Sicaron = {
 	AlertsRef = {},
 	MechRef = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		AlertsRef = {
 			Enabled = true,
 			Contract = KBM.Defaults.AlertObj.Create("blue"),
@@ -674,8 +674,8 @@ function REG:Start()
 	self.Molinar.Triggers.Runic = KBM.Trigger:Create(self.Lang.Messages.Runic[KBM.Lang], "notify", self.Molinar)
 	self.Molinar.Triggers.Runic:AddAlert(self.Molinar.AlertsRef.LookAway)
 	
-	self.Regulos.CastBar = KBM.CastBar:Add(self, self.Regulos)
-	self.Sicaron.CastBar = KBM.CastBar:Add(self, self.Sicaron)
+	self.Regulos.CastBar = KBM.Castbar:Add(self, self.Regulos)
+	self.Sicaron.CastBar = KBM.Castbar:Add(self, self.Sicaron)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

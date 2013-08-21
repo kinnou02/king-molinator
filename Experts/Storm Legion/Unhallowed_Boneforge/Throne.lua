@@ -40,7 +40,7 @@ MOD.Throne = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	}
 }
 
@@ -85,7 +85,7 @@ MOD.ThroneL = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	}
 }
 
@@ -105,7 +105,7 @@ MOD.ThroneR = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	}
 }
 
@@ -290,9 +290,9 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Throne.CastBar = KBM.CastBar:Add(self, self.Throne)
-	self.ThroneL.CastBar = KBM.CastBar:Add(self, self.ThroneL)
-	self.ThroneR.CastBar = KBM.CastBar:Add(self, self.ThroneR)
+	self.Throne.CastBar = KBM.Castbar:Add(self, self.Throne)
+	self.ThroneL.CastBar = KBM.Castbar:Add(self, self.ThroneL)
+	self.ThroneR.CastBar = KBM.Castbar:Add(self, self.ThroneR)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

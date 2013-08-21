@@ -40,7 +40,7 @@ MOD.Doctor = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	}
 }
 
@@ -183,7 +183,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Doctor.CastBar = KBM.CastBar:Add(self, self.Doctor)
+	self.Doctor.CastBar = KBM.Castbar:Add(self, self.Doctor)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

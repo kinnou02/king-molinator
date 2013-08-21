@@ -43,7 +43,7 @@ GS.Silgen = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -245,7 +245,7 @@ function GS:Start()
 	self.Silgen.Triggers.Incinerate:AddTimer(self.Silgen.TimersRef.Incinerate)
 	self.Silgen.Triggers.Incinerate:AddAlert(self.Silgen.AlertsRef.Incinerate)
 	
-	self.Silgen.CastBar = KBM.CastBar:Add(self, self.Silgen)
+	self.Silgen.CastBar = KBM.Castbar:Add(self, self.Silgen)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

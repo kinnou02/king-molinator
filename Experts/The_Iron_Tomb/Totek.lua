@@ -40,7 +40,7 @@ MOD.Totek = {
 	UTID = "U4282FD9E79CF7348",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	}
 }
 
@@ -183,7 +183,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Totek.CastBar = KBM.CastBar:Add(self, self.Totek)
+	self.Totek.CastBar = KBM.Castbar:Add(self, self.Totek)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

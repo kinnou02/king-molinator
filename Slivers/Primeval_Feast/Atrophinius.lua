@@ -41,7 +41,7 @@ AN.Atrophinius = {
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		AlertsRef = {
 			Enabled = true,
 			Rampage = KBM.Defaults.AlertObj.Create("red"),
@@ -106,7 +106,7 @@ AN.Cask = {
 	UnitList = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	},
 }
 
@@ -319,7 +319,7 @@ function AN:Start()
 	self.Atrophinius.Triggers.AnguishRem = KBM.Trigger:Create(self.Lang.Ability.Anguish[KBM.Lang], "playerBuffRemove", self.Atrophinius)
 	self.Atrophinius.Triggers.AnguishRem:AddStop(self.Atrophinius.MechRef.Anguish)
 	
-	self.Atrophinius.CastBar = KBM.CastBar:Add(self, self.Atrophinius, true)
+	self.Atrophinius.CastBar = KBM.Castbar:Add(self, self.Atrophinius, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

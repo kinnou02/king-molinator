@@ -40,7 +40,7 @@ MOD.Kaleida = {
 	UTID = "U297E91983BFD895B",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	}
 }
 
@@ -213,7 +213,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Kaleida.CastBar = KBM.CastBar:Add(self, self.Kaleida)
+	self.Kaleida.CastBar = KBM.Castbar:Add(self, self.Kaleida)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

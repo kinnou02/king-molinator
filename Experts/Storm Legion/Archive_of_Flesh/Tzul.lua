@@ -40,7 +40,7 @@ MOD.Tzul = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	}
 }
 
@@ -185,7 +185,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Tzul.CastBar = KBM.CastBar:Add(self, self.Tzul)
+	self.Tzul.CastBar = KBM.Castbar:Add(self, self.Tzul)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

@@ -42,7 +42,7 @@ MOD.Laric = {
 	Triggers = {},
 	UTID = "U3067AFE412397B1E",
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	}
 }
 
@@ -314,7 +314,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Laric.CastBar = KBM.CastBar:Add(self, self.Laric)
+	self.Laric.CastBar = KBM.Castbar:Add(self, self.Laric)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

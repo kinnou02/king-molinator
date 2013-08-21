@@ -96,7 +96,7 @@ KR.Kain = {
 	MechRef = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		--TimersRef = {
 		--	Enabled = true,
 		--	AddsSpawn = KBM.Defaults.TimerObj.Create("cyan"),
@@ -131,7 +131,7 @@ KR.Zathral = {
 	AlertsRef = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		--TimersRef = {
 		--	Enabled = true,
 		--	AddsSpawn = KBM.Defaults.TimerObj.Create("cyan")
@@ -161,7 +161,7 @@ KR.Baziel = {
 	MechRef = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		--TimersRef = {
 		--	Enabled = true,
 		--	AddsSpawn = KBM.Defaults.TimerObj.Create("cyan")
@@ -420,8 +420,8 @@ function KR:Start()
 	self.Kain.Triggers.VoraciousRem = KBM.Trigger:Create(self.Lang.Debuff.VoraciousID, "playerIDBuffRemove", self.Kain)
 	self.Kain.Triggers.VoraciousRem:AddStop(self.Kain.MechRef.Voracious)
 	
-	self.Zathral.CastBar = KBM.CastBar:Add(self, self.Zathral)
-	self.Baziel.CastBar = KBM.CastBar:Add(self, self.Baziel)
-	self.Kain.CastBar = KBM.CastBar:Add(self, self.Kain)
+	self.Zathral.CastBar = KBM.Castbar:Add(self, self.Zathral)
+	self.Baziel.CastBar = KBM.Castbar:Add(self, self.Baziel)
+	self.Kain.CastBar = KBM.Castbar:Add(self, self.Kain)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 end

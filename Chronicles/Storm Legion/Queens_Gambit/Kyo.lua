@@ -67,7 +67,7 @@ AK.Kyo = {
 	--MechRef = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		AlertsRef = {
 			Enabled = true,
 			Whirl = KBM.Defaults.AlertObj.Create("red"),
@@ -231,6 +231,6 @@ function AK:Start()
 	self.Kyo.Triggers.Blast = KBM.Trigger:Create(self.Lang.Ability.Blast[KBM.Lang], "channel", self.Kyo)
 	self.Kyo.Triggers.Blast:AddAlert(self.Kyo.AlertsRef.Blast)
 	
-	self.Kyo.CastBar = KBM.CastBar:Add(self, self.Kyo)
+	self.Kyo.CastBar = KBM.Castbar:Add(self, self.Kyo)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)	
 end

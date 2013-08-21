@@ -40,7 +40,7 @@ MOD.Vorka = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -192,7 +192,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Vorka.CastBar = KBM.CastBar:Add(self, self.Vorka)
+	self.Vorka.CastBar = KBM.Castbar:Add(self, self.Vorka)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

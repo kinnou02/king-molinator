@@ -42,7 +42,7 @@ MOD.Krezlav = {
 	UTID = "U6C237E5B7A00B2C3",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -223,7 +223,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Krezlav.CastBar = KBM.CastBar:Add(self, self.Krezlav)
+	self.Krezlav.CastBar = KBM.Castbar:Add(self, self.Krezlav)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

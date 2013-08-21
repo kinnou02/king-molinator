@@ -41,7 +41,7 @@ MOD.Jultharin = {
 	UTID = "U53E69E6170491F0A",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -192,7 +192,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Jultharin.CastBar = KBM.CastBar:Add(self, self.Jultharin)
+	self.Jultharin.CastBar = KBM.Castbar:Add(self, self.Jultharin)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

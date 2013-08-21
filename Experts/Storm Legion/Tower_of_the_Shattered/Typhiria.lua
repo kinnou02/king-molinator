@@ -40,7 +40,7 @@ MOD.Typhiria = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	}
 }
 
@@ -184,7 +184,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Typhiria.CastBar = KBM.CastBar:Add(self, self.Typhiria)
+	self.Typhiria.CastBar = KBM.Castbar:Add(self, self.Typhiria)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

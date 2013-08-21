@@ -44,7 +44,7 @@ MOD.Twyl = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -339,7 +339,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Twyl.CastBar = KBM.CastBar:Add(self, self.Twyl)
+	self.Twyl.CastBar = KBM.Castbar:Add(self, self.Twyl)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

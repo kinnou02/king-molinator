@@ -46,7 +46,7 @@ AK.Jornaru = {
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			WaveOne = KBM.Defaults.TimerObj.Create("blue"),
@@ -89,7 +89,7 @@ AK.Akylios = {
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Breath = KBM.Defaults.TimerObj.Create("red"),
@@ -589,7 +589,7 @@ function AK:UnitHPCheck(uDetails, unitID)
 						}
 						self.Bosses[uDetails.name].UnitList[unitID] = SubBossObj
 						if uDetails.name == self.Apostle.Name then
-							SubBossObj.CastBar = KBM.CastBar:Add(self, self.Apostle, false, true)
+							SubBossObj.CastBar = KBM.Castbar:Add(self, self.Apostle, false, true)
 							SubBossObj.CastBar:Create(unitID)
 						end
 					else
@@ -753,8 +753,8 @@ function AK:Start()
 	self.Apostle.Triggers.StormInt = KBM.Trigger:Create(self.Lang.Ability.Storm[KBM.Lang], "personalInterrupt", self.Apostle)
 	self.Apostle.Triggers.StormInt:AddStop(self.Apostle.AlertsRef.Storm)
 	
-	self.Jornaru.CastBar = KBM.CastBar:Add(self, self.Jornaru)
-	self.Akylios.CastBar = KBM.CastBar:Add(self, self.Akylios)
+	self.Jornaru.CastBar = KBM.Castbar:Add(self, self.Jornaru)
+	self.Akylios.CastBar = KBM.Castbar:Add(self, self.Akylios)
 
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	

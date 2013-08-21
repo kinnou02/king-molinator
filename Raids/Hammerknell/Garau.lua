@@ -41,7 +41,7 @@ GU.Garau = {
 	TimeOut = 3,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Blood = KBM.Defaults.TimerObj.Create("red"),
@@ -271,7 +271,7 @@ function GU:Start()
 	self.Garau.Triggers.Shield = KBM.Trigger:Create(GU.Lang.Buff.Shield[KBM.Lang], "buffRemove", self.Garau)
 	self.Garau.Triggers.Shield:AddStop(self.Garau.AlertsRef.Shield)
 	
-	self.Garau.CastBar = KBM.CastBar:Add(self, self.Garau, true)
+	self.Garau.CastBar = KBM.Castbar:Add(self, self.Garau, true)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

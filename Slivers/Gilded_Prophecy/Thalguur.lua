@@ -41,7 +41,7 @@ TR.Thalguur = {
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Power = KBM.Defaults.TimerObj.Create("dark_green"),
@@ -298,7 +298,7 @@ function TR:Start()
 	self.Thalguur.Triggers.PhaseSix = KBM.Trigger:Create(10, "percent", self.Thalguur)
 	self.Thalguur.Triggers.PhaseSix:AddPhase(self.PhaseSix)
 	
-	self.Thalguur.CastBar = KBM.CastBar:Add(self, self.Thalguur)
+	self.Thalguur.CastBar = KBM.Castbar:Add(self, self.Thalguur)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

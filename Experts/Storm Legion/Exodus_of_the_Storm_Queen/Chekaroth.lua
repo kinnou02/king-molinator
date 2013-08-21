@@ -41,7 +41,7 @@ MOD.Chekaroth = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	}
 }
 
@@ -186,7 +186,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Chekaroth.CastBar = KBM.CastBar:Add(self, self.Chekaroth)
+	self.Chekaroth.CastBar = KBM.Castbar:Add(self, self.Chekaroth)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

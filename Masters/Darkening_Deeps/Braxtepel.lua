@@ -42,7 +42,7 @@ MOD.Braxtepel = {
 	UTID = "U18465FF4097245D2",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -292,7 +292,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Braxtepel.CastBar = KBM.CastBar:Add(self, self.Braxtepel)
+	self.Braxtepel.CastBar = KBM.Castbar:Add(self, self.Braxtepel)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

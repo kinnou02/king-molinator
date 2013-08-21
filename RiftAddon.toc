@@ -10,7 +10,7 @@ Author = "Paul Snart"
 Website = "http://www.facebook.com/KingBossMods"
 Email = "kingbossmods@gmail.com"
 
-Version = "1.5.1.727"
+Version = "1.5.1.728"
 
 Environment = "2.3"
 
@@ -23,6 +23,7 @@ RunOnStartup = {
 	"Modules/ResMaster.lua",
 	"Modules/PlayerControl.lua",
 	"Modules/PercentageMon.lua",
+	"Modules/Castbar.lua",
 	"Raids/Storm Legion/Endless Eclipse/EEHeader.lua",
 	"Raids/Storm Legion/Endless Eclipse/Goloch.lua",
 	"Raids/Storm Legion/Endless Eclipse/Matriarch.lua",

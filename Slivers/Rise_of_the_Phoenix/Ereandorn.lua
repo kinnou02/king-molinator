@@ -44,7 +44,7 @@ EN.Ereandorn = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		AlertsRef = {
 			Enabled = true,
 			Combustion = KBM.Defaults.AlertObj.Create("red"),
@@ -263,7 +263,7 @@ function EN:Start()
 	self.Ereandorn.Triggers.Eruption = KBM.Trigger:Create(self.Lang.Notify.Eruption[KBM.Lang], "notify", self.Ereandorn)
 	self.Ereandorn.Triggers.Eruption:AddAlert(self.Ereandorn.AlertsRef.Eruption)
 	
-	self.Ereandorn.CastBar = KBM.CastBar:Add(self, self.Ereandorn)
+	self.Ereandorn.CastBar = KBM.Castbar:Add(self, self.Ereandorn)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

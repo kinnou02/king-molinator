@@ -80,7 +80,7 @@ TPH.Typhiria = {
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Clouds = KBM.Defaults.TimerObj.Create("dark_green"),
@@ -308,7 +308,7 @@ function TPH:Start()
 	self.Typhiria.Triggers.PhaseTwo = KBM.Trigger:Create(15, "percent", self.Typhiria)
 	self.Typhiria.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
 	
-	self.Typhiria.CastBar = KBM.CastBar:Add(self, self.Typhiria)
+	self.Typhiria.CastBar = KBM.Castbar:Add(self, self.Typhiria)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

@@ -42,7 +42,7 @@ MOD.Konstantin = {
 	UTID = "U5454BF1F1A43E2CD",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -217,7 +217,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Konstantin.CastBar = KBM.CastBar:Add(self, self.Konstantin)
+	self.Konstantin.CastBar = KBM.Castbar:Add(self, self.Konstantin)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

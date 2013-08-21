@@ -111,7 +111,7 @@ GLD.Gelidra = {
 	MechRef = {},
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			FirstP2 = KBM.Defaults.TimerObj.Create("dark_green"),
@@ -144,7 +144,7 @@ GLD.Amrian = {
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Induction = KBM.Defaults.TimerObj.Create("cyan"),
@@ -179,7 +179,7 @@ GLD.Vortex = {
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -464,9 +464,9 @@ function GLD:Start()
 	self.Amrian.Triggers.InductionCast:AddTimer(self.Amrian.TimersRef.Induction)
 	
 	self.PercentageMon = KBM.PercentageMon:Create(self.Gelidra, self.Amrian, 10, true)
-	self.Gelidra.CastBar = KBM.CastBar:Add(self, self.Gelidra)
-	self.Vortex.CastBar = KBM.CastBar:Add(self, self.Vortex)
-	self.Amrian.CastBar = KBM.CastBar:Add(self, self.Amrian)
+	self.Gelidra.CastBar = KBM.Castbar:Add(self, self.Gelidra)
+	self.Vortex.CastBar = KBM.Castbar:Add(self, self.Vortex)
+	self.Amrian.CastBar = KBM.Castbar:Add(self, self.Amrian)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

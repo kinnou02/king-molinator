@@ -92,7 +92,7 @@ MLK.Kaliban = {
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Gaze = KBM.Defaults.TimerObj.Create("red"),
@@ -296,7 +296,7 @@ function MLK:Start()
 	self.Kaliban.Triggers.IncantationInt = KBM.Trigger:Create(self.Lang.Ability.Incantation[KBM.Lang], "interrupt", self.Kaliban)
 	self.Kaliban.Triggers.IncantationInt:AddStop(self.Kaliban.AlertsRef.Incantation)
 	
-	self.Kaliban.CastBar = KBM.CastBar:Add(self, self.Kaliban)
+	self.Kaliban.CastBar = KBM.Castbar:Add(self, self.Kaliban)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

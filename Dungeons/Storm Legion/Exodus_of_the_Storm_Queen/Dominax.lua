@@ -47,7 +47,7 @@ MOD.Dominax = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
 			Decimate = KBM.Defaults.TimerObj.Create("yellow"),
@@ -255,7 +255,7 @@ function MOD:Start()
 	self.Dominax.Triggers.Victory = KBM.Trigger:Create(self.Lang.Notify.Victory[KBM.Lang], "notify", self.Dominax)
 	self.Dominax.Triggers.Victory:SetVictory()
 	
-	self.Dominax.CastBar = KBM.CastBar:Add(self, self.Dominax)
+	self.Dominax.CastBar = KBM.Castbar:Add(self, self.Dominax)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

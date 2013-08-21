@@ -42,7 +42,7 @@ MOD.Druhl = {
 	UTID = "U74BD8CD2731575AF",
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
@@ -199,7 +199,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Druhl.CastBar = KBM.CastBar:Add(self, self.Druhl)
+	self.Druhl.CastBar = KBM.Castbar:Add(self, self.Druhl)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

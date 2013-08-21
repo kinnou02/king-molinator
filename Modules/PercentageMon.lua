@@ -110,10 +110,12 @@ end
 
 -- Positioning Handlers
 function PM:MouseMoveHandler()
-	local MouseData = Inspect.Mouse()
-	local OffSetX = self.FStartX - (self.MStartX - MouseData.x)
-	local OffSetY = self.FStartY - (self.MStartY - MouseData.y)
-	self:SetPoint("TOPLEFT", UIParent, "TOPLEFT", OffSetX, OffSetY)
+	if self.active then
+		local MouseData = Inspect.Mouse()
+		local OffSetX = self.FStartX - (self.MStartX - MouseData.x)
+		local OffSetY = self.FStartY - (self.MStartY - MouseData.y)
+		self:SetPoint("TOPLEFT", UIParent, "TOPLEFT", OffSetX, OffSetY)
+	end
 end
 
 function PM:MouseDownHandler()
@@ -131,10 +133,12 @@ function PM:MouseDownHandler()
 	-- Initialize and handle mouse movement.
 	-- This is only required once the user holds down the left mouse button.
 	self:EventAttach(Event.UI.Input.Mouse.Cursor.Move, PM.MouseMoveHandler, "KBM_PM Mouse Move Handler")
+	self.active = true
 end
 
 function PM:MouseUpHandler()
 	self:SetBackgroundColor(0,0,0,0)
+	self.active = false
 	
 	-- Remove mouse movement handler
 	self:EventDetach(Event.UI.Input.Mouse.Cursor.Move, PM.MouseMoveHandler)

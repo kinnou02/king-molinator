@@ -51,7 +51,7 @@ MX.Murd = {
 	UnitID = nil,
 	TimeOut = 5,
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 		Filters = {
 			Enabled = true,
 			Trauma = KBM.Defaults.CastFilter.Create("yellow"),
@@ -309,7 +309,7 @@ function MX:Start()
 	self.Murd.Triggers.PhaseFour:AddPhase(self.PhaseFour)
 	
 	-- Assign Castbar object.
-	self.Murd.CastBar = KBM.CastBar:Add(self, self.Murd)
+	self.Murd.CastBar = KBM.Castbar:Add(self, self.Murd)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end

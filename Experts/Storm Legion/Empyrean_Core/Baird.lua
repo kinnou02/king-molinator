@@ -41,7 +41,7 @@ MOD.Baird = {
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
-		CastBar = KBM.Defaults.CastBar(),
+		CastBar = KBM.Defaults.Castbar(),
 	}
 }
 
@@ -183,7 +183,7 @@ function MOD:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	
-	self.Baird.CastBar = KBM.CastBar:Add(self, self.Baird)
+	self.Baird.CastBar = KBM.Castbar:Add(self, self.Baird)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	
 end
