@@ -6899,6 +6899,7 @@ local function BuildMenuSettings()
 			function self:enabled(bool)
 				Castbar.Settings.enabled = bool
 				Castbar.CastObj:Enable(bool)
+				Castbar.CastObj:SetVisible(bool)
 			end
 			
 			function self:riftBar(bool)
