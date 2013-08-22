@@ -489,6 +489,7 @@ function _int.Default:CreateBar(_tBar)
 				end
 			else
 				--print(self.packInstance.id.." Recycled from Store "..self.id..": "..self.store:Count())
+				self.ui.cradle:ClearAll()
 				self.ui.cradle:SetParent(self.packInstance.parent)
 				self.glow = false
 				if self.texture.glow then
