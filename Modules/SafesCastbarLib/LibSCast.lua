@@ -1130,7 +1130,7 @@ function _int:Castbar_Processor(UnitID)
 			end
 			self.Active = true
 			if not _countinue then
-				if CastData.channelled then
+				if CastData.channeled then
 					_event.Channel.Start(self.UnitID, CastData)
 				else
 					_event.Cast.Start(self.UnitID, CastData)

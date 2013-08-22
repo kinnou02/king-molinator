@@ -504,7 +504,7 @@ function KBM.Castbar.Event.Interrupt(handle, UnitID, bDetails)
 	end
 end
 
-function KBM.Castbar.Event.CastEnd(UnitID, bDetails)
+function KBM.Castbar.Event.CastEnd(handle, UnitID, bDetails)
 	if KBM.CurrentMod then
 		local self = KBM.Castbar.ActiveBars[UnitID]
 		if self then
