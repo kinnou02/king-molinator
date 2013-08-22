@@ -122,11 +122,9 @@ function KBM.Castbar:Init()
 				local _, lastBar = self.VisibleBars:Last()
 				barObj.visibleObj = self.VisibleBars:Add(barObj)
 				if lastBar then
-					barObj.ui.cralde:ClearAll()
 					barObj.ui.cradle:SetPoint("TOPCENTER", lastBar.ui.cradle, "BOTTOMCENTER")
 					self.cradle:SetHeight(self.cradle:GetHeight() + barObj.ui.cradle:GetHeight())
 				else
-					barObj.ui.cradle:ClearAll()
 					barObj.ui.cradle:SetPoint("TOPCENTER", self.cradle, "TOPCENTER")
 					self.cradle:SetWidth(barObj:GetWidth())
 					self.cradle:SetHeight(barObj:GetHeight())
@@ -162,7 +160,7 @@ function KBM.Castbar:Init()
 	end
 	
 	function self.Anchor:PinManager()	
-		self.ui.cradle:ClearPoint("CENTER")
+		self.ui.cradle:ClearAll()
 		self.ui.cradle:SetWidth(math.ceil(self.barObj.default.w * KBM.Options.Castbar.Global.scale.w))
 		self.ui.cradle:SetHeight(math.ceil(self.barObj.default.h * KBM.Options.Castbar.Global.scale.h))
 		self.ui.text:SetFontSize(math.ceil(self.barObj.default.textSize * KBM.Options.Castbar.Global.scale.t))
