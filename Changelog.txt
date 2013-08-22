@@ -9,6 +9,7 @@ LibSUnit
 * Fixed: Prevented UnitObj.Health sometimes being nil.
 * Fixed: Table entry errors for new units created via Unit.Target.
 * Fixed: Some odd behaviour with cross-shard raid messages.
+* Fixed: Forced removal of targets which have become idle/removed. (Disposable pet fix for Add-Watch)
 * Removed: Redundant raid queue code. Slight performance increase.
 
 Encounters

@@ -852,6 +852,7 @@ function _lsu:Idle(UnitObj)
 	local UID = UnitObj.UnitID
 	local Total = LibSUnit.Total
 	
+	_lsu.Unit:UpdateTarget(UnitObj, nil)
 	Total[UnitObj.CurrentKey] = Total[UnitObj.CurrentKey] - 1
 	UnitObj.CurrentTable[UID] = nil
 	UnitObj.CurrentTable = LibSUnit.Cache.Idle

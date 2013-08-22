@@ -127,7 +127,33 @@ LibSCast.Default = {}
 LibSCast.Default.BarSettings = _int.Default.Settings
 
 function _int.Default.BarColors()
+	-- local barCols = {
+		-- cradle = {
+			-- a = 0.2,
+		-- },
+		-- progI = {
+			-- r = 0.05,
+			-- g = 0.6,
+			-- b = 0.5,
+			-- a = 0.8,
+		-- },
+		-- progN = {
+			-- r = 0.58,
+			-- g = 0.48,
+			-- b = 0.05,
+			-- a = 0.8,
+		-- },
+		-- intBar = {
+			-- r = 0.7,
+			-- g = 0,
+			-- b = 0,
+			-- a = 0.8,
+		-- },
+	-- }
 	local barCols = {
+		cradle = {
+			a = 0.2,
+		},
 		progI = {
 			r = 0.05,
 			g = 0.6,
@@ -135,23 +161,26 @@ function _int.Default.BarColors()
 			a = 0.8,
 		},
 		progN = {
-			r = 0.75,
-			g = 0.65,
-			b = 0.1,
-			a = 0.8,
-		},
-		intBar = {
-			r = 0.75,
+			r = 0.6,
 			g = 0,
 			b = 0,
 			a = 0.8,
 		},
-	}
+		intBar = {
+			r = 0.7,
+			g = 0,
+			b = 0,
+			a = 0.8,
+		},
+	}	
 	return barCols
 end
 
 function _int.Default.TextureColors()
 	local textureCols = {
+		cradle = {
+			a = 0,
+		},
 		progI = {
 			r = 0,
 			g = 0,
@@ -500,6 +529,7 @@ function _int.Default:CreateBar(_tBar)
 				end
 				self.ui.editFrame.BarObj = self
 			end
+			self.ui.cradle:SetBackgroundColor(0,0,0,self.color.cradle.a)
 			self.progBar = self.ui.progI
 			self.progColor = self.color.progI
 			self.progBar:SetBackgroundColor(self.progColor.r, self.progColor.g, self.progColor.b, self.progColor.a)
