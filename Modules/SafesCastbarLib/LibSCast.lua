@@ -733,6 +733,9 @@ function _int.Default:CreateBar(_tBar)
 			local default = self.barObj.default
 			local newWidth = math.floor(self.progWidth * self.Progress)
 			if newWidth ~= self.ui.mask:GetWidth() then
+				if newWidth < 0 then 
+					newWidth = 0
+				end
 				self.ui.mask:SetWidth(newWidth)
 			end
 			local newText = string.format("%0.01f", self.Remaining).." - "..self.Name
@@ -752,6 +755,9 @@ function _int.Default:CreateBar(_tBar)
 			local default = self.barObj.default
 			local newWidth = math.ceil(self.progWidth * (1 - self.Progress))
 			if newWidth ~= self.ui.mask:GetWidth() then
+				if newWidth < 0 then 
+					newWidth = 0
+				end
 				self.ui.mask:SetWidth(newWidth)
 			end
 			local newText = string.format("%0.01f", self.Remaining).." - "..self.Name

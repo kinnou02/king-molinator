@@ -11,6 +11,11 @@ LibSUnit
 * Fixed: Some odd behaviour with cross-shard raid messages.
 * Removed: Redundant raid queue code. Slight performance increase.
 
+Encounters
+* Fixed: Moved Combat state checking higher in the condition stage to prevent false encounter starts, and Mods locking themselves from starting correctly.
+* Note: Recently I've noticed Mobs and Players having no combat state both in-game and via the Addon API, this was messing with KBM's Encounter validity states.
+* Change: Should a Mod incorrectly attempt a start due to unusual client states, KBM will hard reset the mod preventing it from locking up entirely.
+
 Menu
 * Fixed: All custom color settings will now work as intended. It'll remember default colors, and last color chosen when switching to/from custom.
 * Change: Custom colors for objects are applied immediately.
@@ -38,6 +43,9 @@ New Castbar System (During Alpha)
 * Change: Custom castbars retain Style and Texture settings from global settings. These cannot be changed individually.
 * Change: Simple style castbars now follow the same 
 * Removed: Old KBM Castbar system has been completely removed freeing up CPU cycles for KBM's main loop.
+
+Phase Monitor
+* Change: Added a catch for cases when the monitor incorrectly starts and remains visible.
 
 Raids
 * Endless Eclipse
