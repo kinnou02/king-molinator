@@ -782,22 +782,24 @@ function _int.Default:CreateBar(_tBar)
 		end
 		
 		function bar:ChannelUpdate()
-			self.Progress = 1 - self.Remaining/self.Duration		
-			local default = self.barObj.default
-			local newWidth = math.ceil(self.progWidth * (1 - self.Progress))
-			if newWidth ~= self.ui.mask:GetWidth() then
-				if newWidth < 0 then 
-					newWidth = 0
+			self.Progress = 1 - self.Remaining/self.Duration
+			if self.Progress > 0 then
+				local default = self.barObj.default
+				local newWidth = math.ceil(self.progWidth * (1 - self.Progress))
+				if newWidth ~= self.ui.mask:GetWidth() then
+					if newWidth < 0 then 
+						newWidth = 0
+					end
+					self.ui.mask:SetWidth(newWidth)
 				end
-				self.ui.mask:SetWidth(newWidth)
-			end
-			local newText = string.format("%0.01f", self.Remaining).." - "..self.Name
-			if newText ~= self.ui.text:GetText() then
-				self.ui.text:SetText(newText)
-			end
-			if self.glow then
-				if self.Progress > default.glow.start then
-					self.ui.glow:SetAlpha(1 * ((self.Progress - default.glow.start)/default.glow.duration))
+				local newText = string.format("%0.01f", self.Remaining).." - "..self.Name
+				if newText ~= self.ui.text:GetText() then
+					self.ui.text:SetText(newText)
+				end
+				if self.glow then
+					if self.Progress > default.glow.start then
+						self.ui.glow:SetAlpha(1 * ((self.Progress - default.glow.start)/default.glow.duration))
+					end
 				end
 			end
 			self.UpdateObj = nil
