@@ -50,7 +50,7 @@ function PC:GatherAbilities()
 					crTable = Inspect.Ability.New.Detail(crID)
 					self.RezBank[LibSUnit.Player.Calling][crID] = crTable
 					KBM.Player.Rezes.List[crID] = self.RezBank[LibSUnit.Player.Calling][crID]
-					KBM.ResMaster.Rezes:Add(LibSUnit.Player.Name, crID, crTable.currentCooldownRemaining, crTable.cooldown)
+					KBM.ResMaster.Rezes:Add(LibSUnit.Player, crID, crTable.currentCooldownRemaining, crTable.cooldown)
 					-- print(Count..": "..self.RezBank[LibSUnit.Player.Calling][crID].name)
 				end
 			end
@@ -118,7 +118,7 @@ function PC.AbilityAdd(handle, aIDList)
 				local aDetails = Inspect.Ability.New.Detail(crID)
 				self.RezBank[LibSUnit.Player.Calling][crID] = aDetails
 				KBM.Player.Rezes.List[crID] = self.RezBank[LibSUnit.Player.Calling][crID]
-				KBM.ResMaster.Rezes:Add(LibSUnit.Player.Name, crID, aDetails.currentCooldownRemaining, aDetails.cooldown)
+				KBM.ResMaster.Rezes:Add(LibSUnit.Player, crID, aDetails.currentCooldownRemaining, aDetails.cooldown)
 				KBM.ResMaster.Broadcast.RezSet(nil, crID)
 				-- print(Count..": "..self.RezBank[LibSUnit.Player.Calling][crID].name.." < Added")
 			end
@@ -151,7 +151,7 @@ function PC.AbilityCooldown(handle, aIDList)
 						--print("Rez Matched!")
 						KBM.Player.Rezes.List[rID] = aDetails
 						KBM.Player.Rezes.Resume[rID] = aDetails.currentCooldownBegin + aDetails.currentCooldownRemaining
-						KBM.ResMaster.Rezes:Add(LibSUnit.Player.Name, rID, aDetails.currentCooldownRemaining, aDetails.cooldown)
+						KBM.ResMaster.Rezes:Add(LibSUnit.Player, rID, aDetails.currentCooldownRemaining, aDetails.cooldown)
 						KBM.ResMaster.Broadcast.RezSet(nil, rID)
 					end
 				end
@@ -179,7 +179,7 @@ function PC.CallingChange(handle, UnitObj)
 		if KBM.ResMaster.Rezes.Tracked[UnitObj.Name].Class ~= UnitObj.Calling then
 			if UnitObj.Calling ~= "" and UnitObj.Calling ~= nil then
 				for aID, Timer in pairs(KBM.ResMaster.Rezes.Tracked[UnitObj.Name].Timers) do
-					KBM.ResMaster.Rezes:Add(UnitObj.Name, aID, Timer.Remaining, Timer.Duration)
+					KBM.ResMaster.Rezes:Add(UnitObj, aID, Timer.Remaining, Timer.Duration)
 				end
 			end
 		end
@@ -269,9 +269,10 @@ function PC.GroupJoin(handle, UnitObj, Spec)
 			end
 		else
 			if UnitObj.Calling then
-				if KBM.ResMaster.Rezes.Tracked[UnitObj.Name].Class ~= UnitObj.Calling then
-					for aID, Timer in pairs(KBM.ResMaster.Rezes.Tracked[UnitObj.Name].Timers) do
-						KBM.ResMaster.Rezes:Add(UnitObj.Name, aID, Timer.Remaining, Timer.Duration)
+				local TrackObj = KBM.ResMaster.Rezes.Tracked[UnitObj.Name]
+				if (TrackObj.Class ~= UnitObj.Calling) or (UnitObj ~= TrackObj.UnitObj) then
+					for aID, Timer in pairs(TrackObj.Timers) do
+						KBM.ResMaster.Rezes:Add(UnitObj, aID, Timer.Remaining, Timer.Duration)
 					end
 				end
 			end

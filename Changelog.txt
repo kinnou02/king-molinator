@@ -12,6 +12,9 @@ LibSUnit
 * Fixed: Forced removal of targets which have become idle/removed. (Disposable pet fix for Add-Watch)
 * Removed: Redundant raid queue code. Slight performance increase.
 
+Res Master
+* Fixed: Graphical glitch with some death states. This should now be more reliable.
+
 Encounters
 * Fixed: Moved Combat state checking higher in the condition stage to prevent false encounter starts, and Mods locking themselves from starting correctly.
 * Note: Recently I've noticed Mobs and Players having no combat state both in-game and via the Addon API, this was messing with KBM's Encounter validity states.

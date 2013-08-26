@@ -16,6 +16,7 @@ local RM = {
 	Broadcast = {
 		LastSent = Inspect.Time.Real()
 	},
+	Queue = {},
 	Rezes = {
 		ActiveCount = 0,
 		ActiveTimers = LibSata:Create(),
@@ -215,23 +216,33 @@ function RM.GUI:Init()
 end
 
 function RM.Rezes:Init()
-	function self:Add(Name, aID, aCD, aFull)
+	function self:Add(UnitObj, aID, aCD, aFull, Name)
 		if LibSUnit.Raid.Grouped then
 			if RM.GUI.Settings.Enabled then
+				if not UnitObj then
+					UnitObj = {
+						Name = Name,
+						_RMwaiting = true,
+					}
+				end
 				local aDetails = Inspect.Ability.New.Detail(aID)
 				if aDetails then
 					local Anchor = RM.GUI.Anchor
 					local Timer = {}
-					if self.Tracked[Name] then
-						if self.Tracked[Name].Timers[aID] then
-							self.Tracked[Name].Timers[aID]:Remove()
+					Timer.UnitObj = UnitObj
+					if self.Tracked[UnitObj.Name] then
+						if self.Tracked[UnitObj.Name].Timers[aID] then
+							self.Tracked[UnitObj.Name].Timers[aID]:Remove()
 						end
 					else
-						self.Tracked[Name] = {
+						self.Tracked[UnitObj.Name] = {
+							UnitObj = UnitObj,
+							UnitID = UnitObj.UnitID,
+							Class = UnitObj.Calling,
 							Timers = {},
 						}
 					end
-					self.Tracked[Name].Timers[aID] = Timer
+					self.Tracked[UnitObj.Name].Timers[aID] = Timer
 					Timer.aID = aID
 					Timer.GUI = RM.GUI:Pull()
 					Timer.GUI.Background:SetHeight(Anchor:GetHeight())
@@ -240,47 +251,31 @@ function RM.Rezes:Init()
 					--KBM.LoadTexture(Timer.GUI.Icon, "Rift", aDetails.icon)
 					Timer.GUI.Icon:SetTexture("Rift", aDetails.icon)
 					Timer.SetWidth = Timer.GUI.Background:GetWidth() - Timer.GUI.Background:GetHeight()
-					local UID = self.Tracked[Name].UnitID
+					local UID = self.Tracked[UnitObj.Name].UnitID
 					Timer.Class = ""
 					
-					for Calling, AbilityList in pairs(KBM.PlayerControl.RezBank) do
-						if AbilityList[aID] then
-							Timer.Class = Calling
-							break
+					if UnitObj.Calling == "mage" or UnitObj.Calling == "cleric" then
+						Timer.Class = UnitObj.Calling
+					else
+						for Calling, AbilityList in pairs(KBM.PlayerControl.RezBank) do
+							if AbilityList[aID] then
+								Timer.Class = Calling
+								break
+							end
 						end
 					end
 					
 					Timer.Duration = math.floor(tonumber(aFull))
 					Timer.Remaining = (aCD or 0)
 					Timer.TimeStart = Inspect.Time.Real() - (Timer.Duration - Timer.Remaining)
-					Timer.Player = Name
+					Timer.Player = UnitObj.Name
+					Timer.Dead = UnitObj.Dead
 					Timer.Name = aDetails.name
-					Timer.UnitObj = self.Tracked[Name].UnitObj
-					self.Tracked[Name].Class = Timer.Class
+					Timer.UnitObj = self.Tracked[UnitObj.Name].UnitObj
+					self.Tracked[UnitObj.Name].Class = Timer.Class
 										
-					--if KBM.MechTimer.Settings.Shadow then
-						Timer.GUI.Shadow:SetText(Timer.GUI.CastInfo:GetText())
-						Timer.GUI.Shadow:SetVisible(true)
-					--else
-						--self.GUI.Shadow:SetVisible(false)
-					--end
-					
-					--if KBM.MechTimer.Settings.Texture then
-						--Timer.GUI.Texture:SetVisible(true)
-					--else
-						--self.GUI.Texture:SetVisible(false)
-					--end
-					
-					
-					-- if self.Settings then
-						-- if self.Settings.Custom then
-							-- self.GUI.TimeBar:SetBackgroundColor(KBM.Colors.List[self.Settings.Color].Red, KBM.Colors.List[self.Settings.Color].Green, KBM.Colors.List[self.Settings.Color].Blue, 0.33)
-						-- else
-							-- self.GUI.TimeBar:SetBackgroundColor(KBM.Colors.List[self.Color].Red, KBM.Colors.List[self.Color].Green, KBM.Colors.List[self.Color].Blue, 0.33)
-						-- end
-					-- else
-						--self.GUI.TimeBar:SetBackgroundColor(KBM.Colors.List[KBM.MechTimer.Settings.Color].Red, KBM.Colors.List[KBM.MechTimer.Settings.Color].Green, KBM.Colors.List[KBM.MechTimer.Settings.Color].Blue, 0.33)
-					--end
+					Timer.GUI.Shadow:SetText(Timer.GUI.CastInfo:GetText())
+					Timer.GUI.Shadow:SetVisible(true)
 					
 					if self.ActiveTimers._count > 0 then
 						for TableObj, cTimer in LibSata.EachIn(self.ActiveTimers) do
@@ -356,14 +351,17 @@ function RM.Rezes:Init()
 					
 					function Timer:SetClass(Class)
 						self.Class = Class
-						if self.Class == "mage" then
-							self.GUI.TimeBar:SetBackgroundColor(0.8, 0.55, 1, 0.33)
-						elseif self.Class == "cleric" then
-							self.GUI.TimeBar:SetBackgroundColor(0.55, 1, 0.55, 0.33)
+						if not self.Dead then
+							if self.Class == "mage" then
+								self.GUI.TimeBar:SetBackgroundColor(0.8, 0.55, 1, 0.33)
+							elseif self.Class == "cleric" then
+								self.GUI.TimeBar:SetBackgroundColor(0.55, 1, 0.55, 0.33)
+							end
 						end
 					end
 					
 					function Timer:SetDeath(bool)
+						self.Dead = bool
 						if bool then
 							self.GUI.TimeBar:SetBackgroundColor(0.5, 0.5, 0.5, 0.22)
 							self.GUI.Icon:SetAlpha(0.33)
@@ -384,7 +382,7 @@ function RM.Rezes:Init()
 								else
 									if self.Remaining <= 0 then
 										self.Remaining = 0
-										RM.Rezes:Add(self.Player, self.aID, 0, self.Duration)
+										RM.Rezes:Add(self.UnitObj, self.aID, 0, self.Duration)
 										return
 									else
 										text = " "..self.Remaining.." : "..self.Player
@@ -436,7 +434,7 @@ function RM.Rezes:Init()
 						Timer.Waiting = true
 					end
 					
-					if Timer.UnitObj then
+					if Timer.UnitObj.Dead then
 						Timer:SetDeath(Timer.UnitObj.Dead)
 					else
 						Timer:SetClass(Timer.Class)
@@ -559,7 +557,15 @@ function RM.MessageHandler(handle, From, Type, Channel, Identifier, Data)
 				local st = string.find(Data, ",", 19)
 				local aCD = math.ceil(tonumber(string.sub(Data, 19, st - 1)) or 0)
 				local aDR = math.floor(tonumber(string.sub(Data, st + 1)))
-				RM.Rezes:Add(From, aID, aCD, aDR)
+				local UnitList = LibSUnit.Lookup.Name[From]
+				if UnitList then
+					for UID, UnitObj in pairs(UnitList) do
+						if UnitObj then
+							RM.Rezes:Add(UnitObj, aID, aCD, aDR)
+							break
+						end
+					end
+				end
 			elseif Identifier == "KBMRezRem" then
 				if RM.Rezes.Tracked[From] then
 					if RM.Rezes.Tracked[From].Timers[Data] then
@@ -575,7 +581,15 @@ function RM.MessageHandler(handle, From, Type, Channel, Identifier, Data)
 				local st = string.find(Data, ",", 19)
 				local aCD = math.ceil(tonumber(string.sub(Data, 19, st - 1)) or 0)
 				local aDR = math.floor(tonumber(string.sub(Data, st + 1)))
-				RM.Rezes:Add(From, aID, aCD, aDR)
+				local UnitList = LibSUnit.Lookup.Name[From]
+				if UnitList then
+					for UID, UnitObj in pairs(UnitList) do
+						if UnitObj then
+							RM.Rezes:Add(UnitObj, aID, aCD, aDR)
+							break
+						end
+					end
+				end
 			elseif Identifier == "KBMRezReq" then
 				RM.Broadcast.RezSet(From)
 				if Data == "C" then
@@ -604,9 +618,9 @@ function RM:ReOrder()
 end
 
 function RM:Update()
+	local _cTime = Inspect.Time.Real()
 	for TimerObj, Timer in LibSata.EachIn(self.Rezes.ActiveTimers) do
-		Timer:Update(Inspect.Time.Real())
-		-- print("Updating: "..Timer.Name)
+		Timer:Update(cTime)
 	end
 end
 
