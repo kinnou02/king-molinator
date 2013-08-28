@@ -1780,7 +1780,7 @@ function PI.Start()
 	Command.Event.Attach(Event.System.Secure.Leave, PI.SecureLeave, "Combat Leave")
 	Command.Event.Attach(Event.SafesUnitLib.Unit.New.Full, PI.DetailUpdates.Availability, "Update Full")
 	Command.Event.Attach(Event.SafesUnitLib.Unit.Full, PI.DetailUpdates.Availability, "Update Full")
-	Command.Event.Attach(Event.SafesUnitLib.Unit.New.Partial, PI.DetailUpdates.Availability, "Update Full")
+	--Command.Event.Attach(Event.SafesUnitLib.Unit.New.Partial, PI.DetailUpdates.Availability, "Update Full")
 	Command.Event.Attach(Event.SafesBuffLib.Buff.Add, PI.BuffAdd, "Buff Add")
 	Command.Event.Attach(Event.SafesBuffLib.Buff.Remove, PI.BuffRemove, "Buff Remove")
 	Command.Event.Attach(Event.SafesBuffLib.Buff.Change, PI.BuffAdd, "Buff Change/Add")
@@ -1913,7 +1913,9 @@ function PI.DetailUpdates.Offline(handle, Units)
 	for UnitID, UnitObj in pairs(Units) do
 		if PI.GUI.Rows.Units[UnitID] then
 			if PI.GUI.Rows.Units[UnitID].Unit then
-				PI.GUI.Rows:Set_Offline(PI.GUI.Rows.Units[UnitID].Index)
+				if UnitObj.Offline then
+					PI.GUI.Rows:Set_Offline(PI.GUI.Rows.Units[UnitID].Index)
+				end
 			end
 		end
 	end

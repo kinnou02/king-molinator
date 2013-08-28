@@ -10,7 +10,7 @@ Author = "Paul Snart"
 Website = "http://www.facebook.com/KingBossMods"
 Email = "kingbossmods@gmail.com"
 
-Version = "1.5.1.740"
+Version = "1.5.1.741"
 
 Environment = "2.3"
 
@@ -848,3 +848,7 @@ Dependencies = {
 	KBMAddWatch = {"optional", "after"},
 	BuffInfo = {"optional", "after"},
 }
+-- X-Curse-Packaged-Version: r739
+-- X-Curse-Project-Name: King Boss Mods
+-- X-Curse-Project-ID: king-molinator
+-- X-Curse-Repository-ID: rift/king-molinator/mainline

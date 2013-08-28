@@ -12,6 +12,9 @@ LibSUnit
 * Fixed: Forced removal of targets which have become idle/removed. (Disposable pet fix for Add-Watch)
 * Removed: Redundant raid queue code. Slight performance increase.
 
+LibSBuff
+* Optimized: Removed training wheels from the system. Performance boost.
+
 Res Master
 * Fixed: Graphical glitch with some death states. This should now be more reliable.
 
@@ -31,8 +34,6 @@ Notify and Chat Events
 
 New Castbar System (During Alpha)
 * IMPORTANT: ALL Castbar settings have be reset to default due to how the new system works.
-* Note: The system is now almost complete. Actual bars are created but forced to disabled for this build.
-* Note: Bars are in for all areas. Please report any glitches or issues.
 * New: Engine and Bar for Player castbar.
 * New: Engine and Bar for Target castbar.
 * New: Engine and Bar Player Focus castbar.

@@ -128,6 +128,7 @@ function KBM.Castbar:Init()
 					barObj.ui.cradle:SetPoint("TOPCENTER", self.cradle, "TOPCENTER")
 					self.cradle:SetWidth(barObj:GetWidth())
 					self.cradle:SetHeight(barObj:GetHeight())
+					self.cradle:SetVisible(true)
 				end
 			end
 		end
@@ -152,6 +153,9 @@ function KBM.Castbar:Init()
 					end
 				end
 				self.VisibleBars:Remove(barObj.visibleObj)
+				if self.VisibleBars:Count() == 0 then
+					self.cradle:SetVisible(false)
+				end
 				barObj.ui.cradle:ClearPoint("TOPCENTER")
 				self.cradle:SetHeight(self.cradle:GetHeight() - barObj:GetHeight())
 				barObj.visibleObj = nil
@@ -322,8 +326,9 @@ function KBM.Castbar:LoadPlayerBars()
 	
 	self.Anchor.cradle:SetPoint("CENTER", UIParent, KBM.Options.Castbar.Global.relX, KBM.Options.Castbar.Global.relY)
 	self.Anchor:AddBar(self.Global.CastObj)
+	self.Anchor.cradle:SetVisible(false)
 	self.Anchor.dragFrame = KBM.CreateEditFrame(self.Anchor.cradle, self.Anchor.ManageEdit, 2)
-	self.Anchor.dragFrame:SetVisible(true)
+	self.Anchor.dragFrame:SetVisible(false)
 	self.Anchor.dragFrame:EventAttach(Event.UI.Input.Mouse.Wheel.Forward, self.Anchor.EventFunc.HandleMouseWheelForward, 
 		"KBMCastbarAnchor-EditFrame-MouseWheelForwardHandler_"..self.Anchor.cradle:GetName())
 	self.Anchor.dragFrame:EventAttach(Event.UI.Input.Mouse.Wheel.Back, self.Anchor.EventFunc.HandleMouseWheelBack, 

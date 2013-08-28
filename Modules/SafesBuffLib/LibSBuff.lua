@@ -127,30 +127,30 @@ function _int:BuffUpdate(UnitID)
 					-- First check for missed Buff Remove events.
 					for BuffID, bDetails in pairs(LibSBuff.Cache[UnitID].BuffID) do
 						if not Buffs[BuffID] then
-							if not self.Queued.Remove[BuffID] then
+						--	if not self.Queued.Remove[BuffID] then
 								-- A cached Buff is no longer on this Unit - Queue for Removal with Event.
 								--self:DebugUnit("[BuffUpdate] Removing: "..bDetails.name.." ("..BuffID..") | ", UnitID)
 								self.Queue:Add({Unit = UnitID, Buff = BuffID, Remove = true})
-								self.Queued.Remove[BuffID] = true
+							--	self.Queued.Remove[BuffID] = true
 							--else
 								--self:DebugUnit("[BuffUpdate] Skipping Remove: "..bDetails.name.." ("..BuffID..") | ", UnitID)
-							end
+						--	end
 						end
 					end
 					for BuffID, BuffType in pairs(Buffs) do
 						if not LibSBuff.Cache[UnitID].BuffID[BuffID] then
-							if not self.Queued.Add[BuffID] then
+						--	if not self.Queued.Add[BuffID] then
 								--self:DebugUnit("[BuffUpdate] Queuing: "..bDetails.name.."("..BuffID..") | ", UnitID)
 								self.Queue:Add({Unit = UnitID, Buff = BuffID, Add = true})
-								self.Queued.Add[BuffID] = true
-							end
+							--	self.Queued.Add[BuffID] = true
+						--	end
 						end
 					end
 				else
 					-- Place all the new buffs in the Queue to be added for this Unit
 					--self:DebugUnit("Creating full Buff List for: ", UnitID)
 					for BuffID, BuffType in pairs(Buffs) do
-						if not self.Queued.Add[BuffID] then
+					--	if not self.Queued.Add[BuffID] then
 							if self.Monitor.Buffs[BuffID] then
 								-- Cache silently as this buff has already been seen.
 								--print("[Monitor] Adding: "..self.Monitor.Units[UnitID][BuffID].name)
@@ -160,9 +160,9 @@ function _int:BuffUpdate(UnitID)
 								-- More than likely a new Buff, create an event and cache trigger.
 								--print("[Queue] Adding: "..BuffID)
 								self.Queue:Add({Unit = UnitID, Buff = BuffID, Add = true})
-								self.Queued.Add[BuffID] = true
+								--self.Queued.Add[BuffID] = true
 							end
-						end
+					--	end
 					end
 				end
 				return true
@@ -264,7 +264,7 @@ function _int:UpdateCycle()
 					_buffs.Add[BuffObj.Unit] = {}
 				end
 				_buffs.Add[BuffObj.Unit][BuffObj.Buff] = LibSBuff.Lookup[BuffObj.Buff]
-				_int.Queued.Add[BuffObj.Buff] = nil
+				--_int.Queued.Add[BuffObj.Buff] = nil
 			elseif BuffObj.Change then
 				if _last then
 					if _last ~= "Change" then
@@ -283,7 +283,7 @@ function _int:UpdateCycle()
 					_buffs.Change[BuffObj.Unit] = {}
 				end
 				_buffs.Change[BuffObj.Unit][BuffObj.Buff] = LibSBuff.Lookup[BuffObj.Buff]
-				_int.Queued.Change[BuffObj.Buff] = nil
+				--_int.Queued.Change[BuffObj.Buff] = nil
 				--self.Event.Buff.Change(BuffObj.Unit, BuffObj.Buff, LibSBuff.Lookup[BuffObj.Buff])
 			elseif BuffObj.Remove then
 				if LibSBuff.Cache[BuffObj.Unit] then
@@ -316,7 +316,7 @@ function _int:UpdateCycle()
 						--self.Event.Buff.Remove(BuffObj.Unit, BuffObj.Buff, bDetails)
 					end
 				end
-				_int.Queued.Remove[BuffObj.Buff] = nil
+				--_int.Queued.Remove[BuffObj.Buff] = nil
 			end
 			-- If none of the above match, Item is removed regardless to prevent Queue polution.
 			self.Queue:Remove(QueueObj)
@@ -357,7 +357,7 @@ function _int:BuffAdd(handle, UnitID, Buffs)
 	for BuffID, BuffType in pairs(Buffs) do
 		if BuffID then
 			if not LibSBuff.Lookup[BuffID] then
-				if not self.Queued.Add[BuffID] then
+				--if not self.Queued.Add[BuffID] then
 					if cache then
 						-- Load up Details for the buff and assign Cache Data.
 						-- print("BuffAdd: Caching Buff and Adding to Queue")
@@ -368,10 +368,10 @@ function _int:BuffAdd(handle, UnitID, Buffs)
 						-- print("BuffAdd: Buff added to Queue [Not Cached]")
 						self.Queue:Add({Unit = UnitID, Buff = BuffID, Add = true})
 					end
-					self.Queued.Add[BuffID] = true
+					--self.Queued.Add[BuffID] = true
 				-- else
 					-- self:DebugUnit("[BuffAdd] Skipping, already Queued: "..BuffID.." | ", UnitID)
-				end
+				--end
 			end
 		end
 		if Inspect.Time.Real() - _startTime > 0.045 then
@@ -382,17 +382,17 @@ end
 
 function _int:BuffRemove(handle, UnitID, Buffs)
 	for BuffID, BuffType in pairs(Buffs) do
-		if not self.Queued.Remove[BuffID] then
+		--if not self.Queued.Remove[BuffID] then
 			-- if LibSBuff.Lookup[BuffID] then
 				-- self:DebugUnit("[BuffRemove] Called for: "..LibSBuff.Lookup[BuffID].name.." | ", UnitID)
 			-- else
 				-- self:DebugUnit("[BuffRemove] (Untracked) Called for: "..BuffID.." | ", UnitID)
 			-- end
 			self.Queue:Add({Unit = UnitID, Buff = BuffID, Remove = true})
-			self.Queued.Remove[BuffID] = true
+			--self.Queued.Remove[BuffID] = true
 		-- else
 			-- self:DebugUnit("[BuffRemove] Skipping call for: "..LibSBuff.Lookup[BuffID].name.." | ", UnitID)
-		end
+		--end
 	end
 end
 
@@ -415,7 +415,7 @@ function _int:BuffChange(handle, UnitID, Buffs)
 	local cache = true
 	--self:DebugUnit("BuffChange called for: ", UnitID)
 	for BuffID, BuffType in pairs(Buffs) do
-		if not self.Queued.Change[BuffID] then
+		--if not self.Queued.Change[BuffID] then
 			if BuffID then
 				if cache then
 					-- Load up Details for the buff and assign Cache Data.
@@ -428,7 +428,7 @@ function _int:BuffChange(handle, UnitID, Buffs)
 					self.Queue:Add({Unit = UnitID, Buff = BuffID, Change = true})
 				end
 			end
-		end
+		--end
 		if Inspect.Time.Real() - _startTime > 0.045 then
 			cache = false
 		end
@@ -496,14 +496,14 @@ end
 -- Debug Commands
 Command.Event.Attach(Command.Slash.Register("libsbuff"), _int.DumpCache, "Dump current cache to Console")
 -- Unit Related Events (LibSUnit)
-Command.Event.Attach(Event.Unit.Availability.Full, function(...) _int:UnitAvailable(...) end, "Unit Available Handler", 1)
-Command.Event.Attach(Event.Unit.Availability.Partial, function(...) _int:UnitAvailable(...) end, "Unit Available Handler", 1)
-Command.Event.Attach(Event.Unit.Availability.None, function(...) _int:UnitRemoved(...) end, "Unit Removed Handler", 1)
+Command.Event.Attach(Event.Unit.Availability.Full, function(...) _int:UnitAvailable(...) end, "Unit Available Handler", -1)
+Command.Event.Attach(Event.Unit.Availability.Partial, function(...) _int:UnitAvailable(...) end, "Unit Available Handler", -1)
+Command.Event.Attach(Event.Unit.Availability.None, function(...) _int:UnitRemoved(...) end, "Unit Removed Handler", -1)
 -- Buff Related Events
-Command.Event.Attach(Event.Buff.Remove, function(...) _int:BuffRemove(...) end, "Buff Remove Handler", 1)
-Command.Event.Attach(Event.Buff.Add, function(...) _int:BuffAdd(...) end, "Buff Add Handler", 1)
-Command.Event.Attach(Event.Buff.Change, function(...) _int:BuffChange(...) end, "Buff Change Handler", 1)
+Command.Event.Attach(Event.Buff.Remove, function(...) _int:BuffRemove(...) end, "Buff Remove Handler", -1)
+Command.Event.Attach(Event.Buff.Add, function(...) _int:BuffAdd(...) end, "Buff Add Handler", -1)
+Command.Event.Attach(Event.Buff.Change, function(...) _int:BuffChange(...) end, "Buff Change Handler", -1)
 -- System Related Events
-Command.Event.Attach(Event.System.Update.Begin, function() _int:UpdateCycle() end, "Buff Cycle Start", 1)
-Command.Event.Attach(Event.System.Update.End, function() _int:UpdateCycle() end, "Buff Cycle End", 1)
-Command.Event.Attach(Event.Addon.Load.End, function() _int:Start() end, "Buff Pre-cache", 1)
+Command.Event.Attach(Event.System.Update.Begin, function() _int:UpdateCycle() end, "Buff Cycle Start", -1)
+Command.Event.Attach(Event.System.Update.End, function() _int:UpdateCycle() end, "Buff Cycle End", -1)
+Command.Event.Attach(Event.Addon.Load.End, function() _int:Start() end, "Buff Pre-cache", -1)
