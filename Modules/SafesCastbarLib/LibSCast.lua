@@ -614,7 +614,7 @@ function _int.Default:CreateBar(_tBar)
 		
 		function bar:Start()
 			local CastData = self.CastData
-			self.Name = CastData.abilityName
+			self.Name = CastData.abilityName or ""
 			self.Duration = CastData.duration or 1
 			self.Remaining = CastData.remaining or 1
 			self.Progress = self.Duration/self.Remaining
@@ -706,7 +706,7 @@ function _int.Default:CreateBar(_tBar)
 				end
 				self.ui.text:SetText(self.castObj.Name)
 				if not self.showing then
-					if self.Active then
+					if self.Visible then
 						_event.Castbar.Hide(self, self.castObj)
 						self.Visible = false
 					end
@@ -714,8 +714,13 @@ function _int.Default:CreateBar(_tBar)
 			end
 			if self.UpdateObj then
 				_queue:Remove(self.UpdateObj)
+				self.UpdateObj = nil
 			end
-			self.UpdateObj = nil
+			if self.StartObj then
+				_queue:Remove(self.StartObj)
+				self.WaitStart = false
+				self.StartObj = nil
+			end
 			self.Active = false
 		end
 			
@@ -728,10 +733,6 @@ function _int.Default:CreateBar(_tBar)
 				if self.LoadObj then
 					_queue:Remove(self.LoadObj)
 					self.LoadObj = nil
-				end
-				if self.StartObj then
-					_queue:Remove(self.StartObj)
-					self.StartObj = nil
 				end
 				if not self.showing then
 					-- print(self.castObj.Name.." removing UI elements")
@@ -1300,7 +1301,7 @@ function LibSCast:Create(ID, Parent, Pack, Settings, Style)
 	end
 	CastObj.Enabled = CastObj.Settings.enabled
 		
-	if not _int.Packs[Pack] then
+	if not _int.Packs[Pack] and not CastObj.Passive then
 		error("LibSCast:Create(ID, Parent, Pack, Settings, Style) : Unknown Texture Pack '"..tostring(Pack).."'")
 	else
 		function CastObj:SetPack(Pack)

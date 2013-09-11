@@ -78,7 +78,7 @@ KBM.ID = AddonData.id
 KBM.ModList = {}
 KBM.Testing = false
 KBM.ValidTime = false
-KBM.IsAlpha = false
+KBM.IsAlpha = true
 KBM.Debug = false
 KBM.Aux = {}
 KBM.TestFilters = {}
@@ -3903,6 +3903,7 @@ function KBM.CheckActiveBoss(UnitObj)
 							if KBM.Encounter then
 								if BossObj.Mod.ID == KBM.CurrentMod.ID then
 									ModBossObj = KBM.CurrentMod:UnitHPCheck(uDetails, UnitID)
+									ModAttempt = BossObj.Mod
 								end
 							else
 								if not BossObj.Ignore then
@@ -4131,11 +4132,13 @@ function KBM.CheckActiveBoss(UnitObj)
 									end
 								end
 							elseif not KBM.Encounter then
-								if ModAttempt.EncounterRunning then
-									ModAttempt:Reset()
-								else
-									if KBM.PhaseMonitor.ActiveObjects._count > 0 then
-										KBM.PhaseMonitor:Remove()
+								if ModAttempt then
+									if ModAttempt.EncounterRunning then
+										ModAttempt:Reset()
+									else
+										if KBM.PhaseMonitor.ActiveObjects._count > 0 then
+											KBM.PhaseMonitor:Remove()
+										end
 									end
 								end
 							end

@@ -148,18 +148,51 @@ function LibSata:Create()
 		end
 	end
 	
+	function lst:Clear()
+		self._first = nil
+		self._last = nil
+		self._count = 0
+		self._list = {}	
+	end
+	
+	function lst:RemoveLast()
+		if self._last then
+			return self:Remove(self._last)
+		end
+	end
+	
+	function lst:RemoveFirst()
+		if self._first then
+			return self:Remove(self._first)
+		end
+	end
+	
 	function lst:After(object)
-		if object == self._last or self._count < 2 then
+		if not object._after then
 			return
 		end
 		return object._after
 	end
 	
+	function lst:DataAfter(object)
+		if not object._after then
+			return
+		end	
+		return object._after._data
+	end
+	
 	function lst:Before(object)
-		if object == self._first or self._count < 2 then
+		if not object._before then
 			return
 		end
 		return object._before
+	end
+	
+	function lst:DataBefore(object)
+		if not object._before then
+			return
+		end
+		return object._before._data
 	end
 	
 	function lst:First()
@@ -237,20 +270,3 @@ function LibSata.DebugTable(TableObj)
 		end
 	end
 end
-
--- Create a Base Table
--- local TestTable = LibSata:Create()
-
--- Insert items in reverse order (Yes, I know could just count backwards, but would defeat the example)
--- for i = 1, 20 do
-	-- TestTable:InsertFirst("Entry "..i)
--- end
-
--- Print the Table items to the console
--- for TableObj, TableData in LibSata.EachIn(TestTable) do
--- 		print(TableData)
--- end
-
--- Remove the table reference: The method returns nil, so this serves to both set the local reference to nil and clear internal references.
--- Doing this allows for the GC to free the memory associated with the table.
--- TestTable = TestTable:Delete()

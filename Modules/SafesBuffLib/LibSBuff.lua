@@ -180,9 +180,9 @@ function _int:BuffUpdate(UnitID)
 end
 
 function _int:CacheAdd(UnitID, BuffID, bDetails)
-	local _startTime = Inspect.Time.Real()
+	--local _startTime = Inspect.Time.Real()
 	bDetails = bDetails or Inspect.Buff.Detail(UnitID, BuffID)
-	local _duration = Inspect.Time.Real() - _startTime
+	--local _duration = Inspect.Time.Real() - _startTime
 	-- if _duration > 0.06 then
 		-- print("Performance Warning: LibSBuff has noticed the Rift Client is running slow.")
 		-- print(string.format("Time taken to call internal Rift command Inspect.Buff.Detail - %0.03f", _duration))
@@ -233,6 +233,7 @@ function _int:UpdateCycle()
 		Remove = {},
 	}
 	local _startTime = Inspect.Time.Real()
+	local _endTime = Inspect.Time.Real() + 0.03
 	local _last
 	local _currentTime = math.floor(_startTime)
 	local _callDiff = _currentTime - self._lastCall
@@ -320,7 +321,7 @@ function _int:UpdateCycle()
 			end
 			-- If none of the above match, Item is removed regardless to prevent Queue polution.
 			self.Queue:Remove(QueueObj)
-		until (Inspect.Time.Real() - _startTime) > 0.045
+		until Inspect.Time.Real() > _endTime
 		if _last then
 			if next(_buffs[_last]) then
 				self.Event.Buff[_last](_buffs[_last])
@@ -330,7 +331,7 @@ function _int:UpdateCycle()
 		-- print("Queue update completed")
 	end
 	if _callDiff > 0 then
-		for checkTime = self._lastCall+1, _currentTime do
+		for checkTime = self._lastCall, _currentTime do
 			if next(self.Monitor.Times) then
 				if self.Monitor.Times[checkTime] then
 					-- print("Buffs found for removal @ "..checkTime)
@@ -441,8 +442,8 @@ function _int:UnitAvailable(handle, Units)
 	-- BuffTable = LibSBuff:GetBuffTable(UnitID)
 	for UnitID, UnitObj in pairs(Units) do
 		--self:DebugUnit("Renewing Buffs for: ", UnitID)
-		self:BuffUpdate(UnitID)
 		self.Monitor:ClearUnit(UnitID)
+		self:BuffUpdate(UnitID)
 		--print("----------------")
 	end
 end

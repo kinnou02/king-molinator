@@ -302,6 +302,10 @@ function _lsu.Unit:UpdateSegment(UnitObj, New, uDetails)
 				if UnitObj.Name ~= uDetails.name then
 					_lsu.Unit.Name(Event.Unit.Detail.Name, {[UnitObj.UnitID] = uDetails.name})
 				end
+				if uDetails.relation ~= UnitObj.Relation then
+					uDetails.Relation = uDetails.relation
+					_lsu.Event.Unit.Detail.Relation(UnitObj)
+				end
 			end
 		end
 	else
@@ -412,9 +416,9 @@ function _lsu:Create(UID, uDetails, Type)
 		UnitObj.PercentLast = UnitObj.Percent -- Ensure the last recorded percentage is initialized.
 		UnitObj.PercentFlat = math.ceil(UnitObj.Percent)
 		UnitObj.PercentFlatLast = UnitObj.PercentFlat -- Ensure the last recorded flat percentage is initialized.
-		_lsu.Unit:UpdateTarget(UnitObj, Inspect.Unit.Lookup(UID..".target"))
 		if Type == "Avail" then
 			-- Fire Unit New Full Event, usually when the unit scope is a valid seen target.
+			_lsu.Unit:UpdateTarget(UnitObj, Inspect.Unit.Lookup(UID..".target"))
 			_lsu.Event.Unit.New.Full(UnitObj)
 		else
 			-- Fire Unit Idle Full Event, usually when the unit scope if from a combat event.
@@ -1251,12 +1255,6 @@ function _lsu.Combat.stdHandler(UID, segPlus)
 			local uDetails = _inspect(UID)
 			if UnitObj.CurrentKey == "Idle" then
 				_lsu.Unit:UpdateSegment(UnitObj, segPlus + _lastSeg, uDetails)
-			end
-			if uDetails then
-				if uDetails.relation ~= UnitObj.Relation then
-					uDetails.Relation = uDetails.relation
-					_lsu.Event.Unit.Detail.Relation(UnitObj)
-				end
 			end
 		else
 			UnitObj = _lsu:Create(UID, _inspect(UID), "Idle")

@@ -1,4 +1,25 @@
-﻿v1.5.1
+﻿v1.5.2
+
+Castbars
+* Fixed: Error 1304 - Passive castbar creation.
+* Fixed: Error 70 - Player castbar pin scaling.
+* Fixed: Error 621 - For either missing Name or missing object creation.
+
+LibSUnit
+* Change: Prevented Units visible via damage [Idle] from being listed in Target List.
+
+Menu
+* Fixed: Error 906 - Menu items without settings tables.
+
+Encounters
+* Fixed: Error 4134 - Failed boss mod start attempt (forced reset).
+
+Endless Eclipse
+* Kain the Reaper
+** New: Added Foul Blood debuff duration (Hard Mode usually)
+
+----
+v1.5.1
 
 LibSUnit
 * New: Added event Event.SafesUnitLib.Unit.Detail.Position (X or Y or Z position has changed) table{[UnitID] = UnitObj}

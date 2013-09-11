@@ -168,17 +168,31 @@ function LibSata:Create()
 	end
 	
 	function lst:After(object)
-		if object == self._last or self._count < 2 then
+		if not object._after then
 			return
 		end
 		return object._after
 	end
 	
+	function lst:DataAfter(object)
+		if not object._after then
+			return
+		end	
+		return object._after._data
+	end
+	
 	function lst:Before(object)
-		if object == self._first or self._count < 2 then
+		if not object._before then
 			return
 		end
 		return object._before
+	end
+	
+	function lst:DataBefore(object)
+		if not object._before then
+			return
+		end
+		return object._before._data
 	end
 	
 	function lst:First()

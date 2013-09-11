@@ -71,6 +71,7 @@ KR.Lang.Debuff.Voracious = KBM.Language:Add("Voracious Hunger")
 KR.Lang.Debuff.Voracious:SetFrench("Appétit vorace")
 KR.Lang.Debuff.Voracious:SetGerman("Unstillbarer Hunger")
 KR.Lang.Debuff.VoraciousID = "BFEB697D0228F51D9"
+KR.Lang.Debuff.Foul = KBM.Language:Add("Foul Blood (Debuff)")
 
 -- Description Dictionary
 KR.Lang.Main = {}
@@ -104,6 +105,7 @@ KR.Kain = {
 		AlertsRef = {
 			Enabled = true,
 			Foul = KBM.Defaults.AlertObj.Create("red"),
+			FoulDebuff = KBM.Defaults.AlertObj.Create("dark_green"),
 		},
 		MechRef = {
 			Enabled = true,
@@ -390,6 +392,7 @@ function KR:Start()
 	KBM.Defaults.AlertObj.Assign(self.Zathral)
 
 	self.Kain.AlertsRef.Foul = KBM.Alert:Create(KR.Lang.Ability.Foul[KBM.Lang], nil, true, true, "red")
+	self.Kain.AlertsRef.FoulDebuff = KBM.Alert:Create(KR.Lang.Debuff.Foul[KBM.Lang], nil, false, true, "dark_green")
 	KBM.Defaults.AlertObj.Assign(self.Kain)
 
 	-- Create Mechanic Spies
@@ -413,8 +416,10 @@ function KR:Start()
 	self.Kain.Triggers.Foul:AddAlert(self.Kain.AlertsRef.Foul)
 	self.Kain.Triggers.FoulDebuff = KBM.Trigger:Create(self.Lang.Ability.Foul[KBM.Lang], "playerBuff", self.Kain)
 	self.Kain.Triggers.FoulDebuff:AddSpy(self.Kain.MechRef.Foul)
+	self.Kain.Triggers.FoulDebuff:AddAlert(self.Kain.AlertsRef.FoulDebuff, true)
 	self.Kain.Triggers.FoulDebuffRem = KBM.Trigger:Create(self.Lang.Ability.Foul[KBM.Lang], "playerBuffRemove", self.Kain)
 	self.Kain.Triggers.FoulDebuffRem:AddStop(self.Kain.MechRef.Foul)
+	self.Kain.Triggers.FoulDebuffRem:AddStop(self.Kain.AlertsRef.FoulDebuff)
 	self.Kain.Triggers.Voracious = KBM.Trigger:Create(self.Lang.Debuff.VoraciousID, "playerIDBuff", self.Kain)
 	self.Kain.Triggers.Voracious:AddSpy(self.Kain.MechRef.Voracious)
 	self.Kain.Triggers.VoraciousRem = KBM.Trigger:Create(self.Lang.Debuff.VoraciousID, "playerIDBuffRemove", self.Kain)

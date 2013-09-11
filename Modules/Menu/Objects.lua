@@ -203,7 +203,9 @@ function Menu.Object:CreateCheck(Name, Settings, ID, Callback, Page)
 				end
 			end
 			self.UI.Check:EventAttach(Event.UI.Checkbox.Change, self.Checkbox_Handler, self.ID..": checkbox callback handler")
-			self.ChildState = self.Settings[ID]			
+			if self.Settings then
+				self.ChildState = self.Settings[ID]
+			end
 			
 			function self:MouseIn_Handler()
 				if self.Enabled then

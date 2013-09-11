@@ -67,8 +67,10 @@ table.insert(KBM.Castbar.MenuOrder, KBM.Castbar.Player.Focus)
 function KBM.Castbar.HandlePinScale()
 	local self = KBM.Castbar.Player.Self.CastObj.CurrentBar
 	if self then
-		local diff = self.ui.cradle:GetHeight() / self:GetDefaultHeight()
-		self.ui.text:SetFontSize((self.barObj.default.textSize * diff) - 1)
+		if self.ui then
+			local diff = self.ui.cradle:GetHeight() / self:GetDefaultHeight()
+			self.ui.text:SetFontSize((self.barObj.default.textSize * diff) - 1)
+		end
 	end
 end
 
