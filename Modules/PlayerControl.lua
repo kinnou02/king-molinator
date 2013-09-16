@@ -270,10 +270,11 @@ function PC.GroupJoin(handle, UnitObj, Spec)
 		else
 			if UnitObj.Calling then
 				local TrackObj = KBM.ResMaster.Rezes.Tracked[UnitObj.Name]
-				if (TrackObj.Class ~= UnitObj.Calling) or (UnitObj ~= TrackObj.UnitObj) then
-					for aID, Timer in pairs(TrackObj.Timers) do
-						KBM.ResMaster.Rezes:Add(UnitObj, aID, Timer.Remaining, Timer.Duration)
-					end
+				TrackObj.UnitObj = UnitObj
+				TrackObj.UnitID = UnitObj.UnitID
+				TrackObj.Class = UnitObj.Calling
+				for aID, Timer in pairs(TrackObj.Timers) do
+					KBM.ResMaster.Rezes:Add(UnitObj, aID, Timer.Remaining, Timer.Duration)
 				end
 			end
 		end

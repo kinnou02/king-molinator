@@ -561,8 +561,10 @@ function RM.MessageHandler(handle, From, Type, Channel, Identifier, Data)
 				if UnitList then
 					for UID, UnitObj in pairs(UnitList) do
 						if UnitObj then
-							RM.Rezes:Add(UnitObj, aID, aCD, aDR)
-							break
+							if LibSUnit.Raid.UID[UID] then
+								RM.Rezes:Add(UnitObj, aID, aCD, aDR)
+								break
+							end
 						end
 					end
 				end
@@ -585,8 +587,10 @@ function RM.MessageHandler(handle, From, Type, Channel, Identifier, Data)
 				if UnitList then
 					for UID, UnitObj in pairs(UnitList) do
 						if UnitObj then
-							RM.Rezes:Add(UnitObj, aID, aCD, aDR)
-							break
+							if LibSUnit.Raid.UID[UID] then
+								RM.Rezes:Add(UnitObj, aID, aCD, aDR)
+								break
+							end
 						end
 					end
 				end

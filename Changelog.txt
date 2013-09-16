@@ -4,6 +4,10 @@ Castbars
 * Fixed: Error 1304 - Passive castbar creation.
 * Fixed: Error 70 - Player castbar pin scaling.
 * Fixed: Error 621 - For either missing Name or missing object creation.
+* Fixed: Error 1236 - Cast data access error.
+
+Res Master
+* Alpha: Attempt to provide better accuracy on BR tracking.
 
 LibSUnit
 * Change: Prevented Units visible via damage [Idle] from being listed in Target List.

@@ -1149,8 +1149,8 @@ function _int:Castbar_Processor(UnitID)
 	function CastPro:Begin()
 		-- Triggered when castbars become visible to the player.
 		local CastData = Inspect.Unit.Castbar(self.UnitID)
-		self.Cast.Data = CastData
 		if CastData then
+			self.Cast.Data = CastData
 			local _continue = false
 			if self.Active then
 				if self.Cast.Start == CastData.begin then
@@ -1233,7 +1233,6 @@ function _int:Castbar_Processor(UnitID)
 				self:Begin()
 			end
 		else
-			self.Cast.Data.remaining = Inspect.Time.Real() - self.Cast.Start
 			self:Visible(false)
 		end
 	end
@@ -1247,7 +1246,7 @@ function _int:Castbar_Processor(UnitID)
 			if self.Active then
 				--print("Cast ended for: "..self.UnitObj.Name)
 				-- Calculate if the cast was interrupted.
-				if self.UnitObj.CurrentKey ~= "Idle" then
+				if self.UnitObj.CurrentKey ~= "Idle" and self.Cast.Data ~= nil then
 					local Time = Inspect.Time.Real()
 					local Expected = self.Cast.Start + self.Cast.Data.duration
 					local Difference = Time - Expected
