@@ -58,7 +58,9 @@ local _SpecList = {
 }
 
 LibSUnit.Raid = {
-	Lookup = {},
+	Lookup = {
+		SpecList = _SpecList,
+	},
 	UID = {},
 	Queue = {},
 	Move = {},
@@ -393,17 +395,17 @@ function _lsu:Create(UID, uDetails, Type)
 	
 	_type[UID] = UnitObj
 	_total[Type] = _total[Type] + 1
+	if UnitObj.Name == "" then
+		UnitObj.Name = "<Unknown>"
+	end
+	if _name[UnitObj.Name] then
+		_name[UnitObj.Name][UID] = UnitObj
+	else
+		_name[UnitObj.Name] = {[UID] = UnitObj}
+	end
 	if uDetails.availability == "full" then
 		if UnitObj.Health == 0 then
 			UnitObj.Dead = true
-		end
-		if UnitObj.Name == "" then
-			UnitObj.Name = "<Unknown>"
-		end
-		if _name[UnitObj.Name] then
-			_name[UnitObj.Name][UID] = UnitObj
-		else
-			_name[UnitObj.Name] = {[UID] = UnitObj}
 		end
 		-- Unit has been fully loaded at some point. Flag this here to ensure safe Detail reading of all fields.
 		UnitObj.Loaded = true
@@ -707,7 +709,6 @@ end
 
 function _lsu.Unit.Details(UnitObj, uDetails)
 	if UnitObj.CurrentKey == "Partial" then
-	
 	else
 		UnitObj.Type = uDetails.type
 		UnitObj.Tier = uDetails.tier
@@ -1482,6 +1483,13 @@ function _lsu.SlashHandler(handle, cmd)
 	elseif cmd == "listavail" then
 		for UnitID, UnitObj in pairs(LibSUnit.Cache.Avail) do
 			print(tostring(UnitID)..": "..tostring(UnitObj.Name).." - Seg: "..tostring(UnitObj.IdleSegment))
+		end
+	elseif cmd == "listname" then
+		for Name, UnitList in pairs(LibSUnit.Lookup.Name) do
+			print("List for "..tostring(Name))
+			for UID, UnitObj in pairs(UnitList) do
+				print("--"..UID..": "..UnitObj.Name)
+			end
 		end
 	end
 end

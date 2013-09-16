@@ -224,6 +224,8 @@ function RM.Rezes:Init()
 						Name = Name,
 						_RMwaiting = true,
 					}
+				else
+					Name = UnitObj.Name
 				end
 				local aDetails = Inspect.Ability.New.Detail(aID)
 				if aDetails then
@@ -567,6 +569,8 @@ function RM.MessageHandler(handle, From, Type, Channel, Identifier, Data)
 							end
 						end
 					end
+				else
+					RM.Rezes:Add(nil, aID, aCD, aDR, From)
 				end
 			elseif Identifier == "KBMRezRem" then
 				if RM.Rezes.Tracked[From] then
@@ -593,6 +597,8 @@ function RM.MessageHandler(handle, From, Type, Channel, Identifier, Data)
 							end
 						end
 					end
+				else
+					RM.Rezes:Add(nil, aID, aCD, aDR, From)
 				end
 			elseif Identifier == "KBMRezReq" then
 				RM.Broadcast.RezSet(From)

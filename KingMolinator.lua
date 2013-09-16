@@ -5081,13 +5081,24 @@ function KBM.TankSwap:Init()
 				end
 				self.Debuffs = Debuffs or 1
 				if LibSUnit.Raid.Grouped then
-					for UnitID, UnitObj in pairs(LibSUnit.Raid.UID) do
-						if UnitID then
-							if UnitObj.Role == "tank" then
-								self:Add(UnitID)
+					local _specList = LibSUnit.Lookup.SpecList
+					for i = 1, 20 do
+						UnitObj = LibSUnit.Raid.Lookup[_specList[i]]
+						if UnitObj then
+							if UnitObj.UnitID then
+								if UnitObj.Role == "tank" then
+									self:Add(UnitID)
+								end
 							end
 						end
 					end
+					-- for UnitID, UnitObj in pairs(LibSUnit.Raid.UID) do
+						-- if UnitID then
+							-- if UnitObj.Role == "tank" then
+								-- self:Add(UnitID)
+							-- end
+						-- end
+					-- end
 				end
 			end
 			local EventData = {

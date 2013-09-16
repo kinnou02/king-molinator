@@ -7,10 +7,14 @@ Castbars
 * Fixed: Error 1236 - Cast data access error.
 
 Res Master
-* Alpha: Attempt to provide better accuracy on BR tracking.
+* Fixed: Issues with Raid/Group members being only partially available when first encountered, and being locked out from updating.
 
 LibSUnit
 * Change: Prevented Units visible via damage [Idle] from being listed in Target List.
+* Fixed: Partially available units were never registering themselves in the Name Lookup list, and never doing so from that point forward.
+
+Tank-Swap
+* Change: Tanks are now listed in order of Group/Raid position.
 
 Menu
 * Fixed: Error 906 - Menu items without settings tables.
