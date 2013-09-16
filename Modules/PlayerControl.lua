@@ -175,7 +175,6 @@ function PC.PlayerJoin()
 end
 
 function PC.CallingChange(handle, UnitObj)
-	print(UnitObj.Name.."'s calling has changed to: "..tostring(UnitObj.Calling))
 	if KBM.ResMaster.Rezes.Tracked[UnitObj.Name] then
 		if KBM.ResMaster.Rezes.Tracked[UnitObj.Name].Class ~= UnitObj.Calling then
 			if UnitObj.Calling ~= "" and UnitObj.Calling ~= nil then
@@ -186,7 +185,6 @@ function PC.CallingChange(handle, UnitObj)
 		end
 	else
 		-- Request BR
-		print("Requesting BR Details")
 		if UnitObj.Calling == "mage" or UnitObj.Calling == "cleric" then
 			KBM.ResMaster.Rezes.Tracked[UnitObj.Name] = {
 				UnitID = UnitObj.UnitID,
@@ -194,7 +192,6 @@ function PC.CallingChange(handle, UnitObj)
 				Class = UnitObj.Calling,
 				Timers = {},
 			}
-			print("Message Sent")
 			Command.Message.Send(UnitObj.Name, "KBMRezReq", "C", function(failed, message) PC.RezMReq(UnitObj.Name, failed, message) end)
 		end
 	end
@@ -205,7 +202,6 @@ end
 
 function PC.RezMReq(name, failed, message)
 	if failed then
-		print("Message Failed for "..tostring(name)..": "..tostring(message))
 		Command.Message.Broadcast("tell", name, "KBMRezReq", "C", PC.MessageSent)
 	end
 end
