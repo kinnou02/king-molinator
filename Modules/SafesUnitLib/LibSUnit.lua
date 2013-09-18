@@ -58,9 +58,7 @@ local _SpecList = {
 }
 
 LibSUnit.Raid = {
-	Lookup = {
-		SpecList = _SpecList,
-	},
+	Lookup = {},
 	UID = {},
 	Queue = {},
 	Move = {},
@@ -92,6 +90,7 @@ LibSUnit.Lookup = {
 	UID = {},
 	UTID = {},
 	Name = {},
+	SpecList = _SpecList,	
 }
 
 LibSUnit.Total = {
