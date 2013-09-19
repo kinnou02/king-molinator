@@ -6,6 +6,10 @@ Castbars
 * Fixed: Error 621 - For either missing Name or missing object creation.
 * Fixed: Error 1236 - Cast data access error.
 
+KBM Messenger
+* Change: Now uses new API event system.
+* Change: Decreased the time it takes to gather KBM version info by 50% (This will be most noticeable in Ready Check) 
+
 Res Master
 * Fixed: Issues with Raid/Group members being only partially available when first encountered, and being locked out from updating.
 

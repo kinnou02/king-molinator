@@ -78,7 +78,7 @@ KBM.ID = AddonData.id
 KBM.ModList = {}
 KBM.Testing = false
 KBM.ValidTime = false
-KBM.IsAlpha = true
+KBM.IsAlpha = false
 KBM.Debug = false
 KBM.Aux = {}
 KBM.TestFilters = {}
@@ -5083,11 +5083,13 @@ function KBM.TankSwap:Init()
 				if LibSUnit.Raid.Grouped then
 					local _specList = LibSUnit.Lookup.SpecList
 					for i = 1, 20 do
-						UnitObj = LibSUnit.Raid.Lookup[_specList[i]]
-						if UnitObj then
-							if UnitObj.UnitID then
-								if UnitObj.Role == "tank" then
-									self:Add(UnitID)
+						if LibSUnit.Raid.Lookup[_specList[i]] then
+							UnitObj = LibSUnit.Raid.Lookup[_specList[i]].Unit
+							if UnitObj then
+								if UnitObj.UnitID then
+									if UnitObj.Role == "tank" then
+										self:Add(UnitObj.UnitID)
+									end
 								end
 							end
 						end

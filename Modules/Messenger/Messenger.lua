@@ -169,7 +169,7 @@ function PI.ReplyVersion(From, rType)
 	end
 end
 
-function PI.MessageHandler(From, Type, Channel, Identifier, Data)
+function PI.MessageHandler(handle, From, Type, Channel, Identifier, Data)
 	if From ~= LibSUnit.Player.Name and Data ~= nil then
 		if Type then
 			if Type == "guild" then
@@ -254,7 +254,7 @@ function PI.PlayerJoin()
 	PI:SendVersion(true)
 end
 
-function PI.GroupJoin(UnitObj, Specificer)
+function PI.GroupJoin(handle, UnitObj, Specificer)
 	if UnitObj.Name then
 		if not PI.History.NameStore[UnitObj.Name] then
 			if KBM.Debug then
@@ -267,9 +267,7 @@ function PI.GroupJoin(UnitObj, Specificer)
 end
 
 function PI.GroupMode()
-	if Mode then
-		PI.Mode = LibSUnit.Raid.Mode
-	end
+	PI.Mode = LibSUnit.Raid.Mode
 end
 
 function PI.VersionReqCheck(name, failed, message)
@@ -295,7 +293,7 @@ function PI.ManageQueues()
 				if KBM.Debug then
 					print("Current set to: "..PI.History.Current)
 				end
-				PI.History.LastQuery = current + 10
+				PI.History.LastQuery = current + 5
 				PI.History:SetSent(PI.History.Current, true)
 				Command.Message.Send(PI.History.Current, "KBMVerReq", "V", function (failed, message) PI.VersionReqCheck(PI.History.Current, failed, message) end)
 			end
@@ -307,11 +305,11 @@ function PI.Start()
 	Command.Message.Accept(nil, "KBMVersion")
 	Command.Message.Accept(nil, "KBMVerReq")
 	Command.Message.Accept(nil, "KBMVerInfo")
-	table.insert(Event.SafesUnitLib.Raid.Join, {PI.PlayerJoin, "KBMMessenger", "Player Join"})
-	table.insert(Event.SafesUnitLib.Raid.Mode, {PI.GroupMode, "KBMMessenger", "Group Mode Changed"})
-	table.insert(Event.SafesUnitLib.Raid.Member.Join, {PI.GroupJoin, "KBMMessenger", "Group Member Joins"})
-	table.insert(Event.Message.Receive, {PI.MessageHandler, "KBMMessenger", "Messenger Handler"})
-	table.insert(Event.System.Update.End, {PI.ManageQueues, "KBMMessenger", "Cycle Version Queue"})
+	Command.Event.Attach(Event.SafesUnitLib.Raid.Join, PI.PlayerJoin, "KBM Messenger Player Join")
+	Command.Event.Attach(Event.SafesUnitLib.Raid.Mode, PI.GroupMode, "KBM Messenger Group Mode Changed")
+	Command.Event.Attach(Event.SafesUnitLib.Raid.Member.Join, PI.GroupJoin, "KBM Messenger Group Member Joins")
+	Command.Event.Attach(Event.Message.Receive, PI.MessageHandler, "KBM Messenger Messenger Handler")
+	Command.Event.Attach(Event.System.Update.End, PI.ManageQueues, "KBM Messenger Cycle Version Queue")
 	PI.History:SetFull(LibSUnit.Player.Name, "P"..KBMAddonData.toc.Version)
 	PI.History:SetReceived(LibSUnit.Player.Name)
 	PI:SendVersion()
@@ -319,4 +317,4 @@ end
 
 PI.SendSilent = false
 PI.Events.Version, PI.Events.Version.EventTable = Utility.Event.Create("KBMMessenger", "Version")
-table.insert(Event.KingMolinator.System.Start, {PI.Start, "KBMMessenger", "Syncronized Start"})
+Command.Event.Attach(Event.KingMolinator.System.Start, PI.Start, "KBM Messenger Syncronized Start")
