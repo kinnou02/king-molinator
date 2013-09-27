@@ -9,9 +9,9 @@ Author = "Paul Snart"
 Website = "http://twitter.com/#!/psnart"
 Email = "snarty@gmail.com"
 
-Version = "0.1.4"
+Version = "0.1.5"
 
-Environment = "2.3"
+Environment = "2.4"
 
 RunOnStartup = {
 	"LibSBuff.lua",

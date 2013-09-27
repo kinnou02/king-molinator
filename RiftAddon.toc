@@ -10,9 +10,9 @@ Author = "Paul Snart"
 Website = "http://www.facebook.com/KingBossMods"
 Email = "kingbossmods@gmail.com"
 
-Version = "1.5.2.748"
+Version = "1.5.3.749"
 
-Environment = "2.3"
+Environment = "2.4"
 
 RunOnStartup = {
 	"KingMolinator.lua",
@@ -24,6 +24,10 @@ RunOnStartup = {
 	"Modules/PlayerControl.lua",
 	"Modules/PercentageMon.lua",
 	"Modules/Castbar.lua",
+	"Raids/Storm Legion/The Infinity Gate/IGHeader.lua",
+	"Raids/Storm Legion/The Infinity Gate/BreakerX1.lua",
+	"Raids/Storm Legion/The Infinity Gate/Twins.lua",
+	"Raids/Storm Legion/The Infinity Gate/Volan.lua",
 	"Raids/Storm Legion/Endless Eclipse/EEHeader.lua",
 	"Raids/Storm Legion/Endless Eclipse/Goloch.lua",
 	"Raids/Storm Legion/Endless Eclipse/Matriarch.lua",
@@ -303,6 +307,10 @@ Embed = {
 
 SavedVariables = {
 	KM_Settings = "account",
+	KBMSLRDIG_Settings = "account",
+	KBMSLRDIGBX_Settings = "account",
+	KBMSLRDIGVM_Settings = "account",
+	KBMSLRDIGVN_Settings = "account",
 	KBMSLRDEE_Settings = "account",
 	KBMSLRDEEDG_Settings = "account",
 	KBMSLRDEEKR_Settings = "account",
@@ -566,8 +574,12 @@ SavedVariables = {
 	KBMEXUCRCM_Settings = "account",
 	KBMEXUCRKV_Settings = "account",
 	KBMEXUCRCS_Settings = "account",
-	KBM_GlobalOptions = "account",
+	KBM_GlobalOptions = "account",	
 	chKM_Settings = "character",
+	chKBMSLRDIG_Settings = "character",
+	chKBMSLRDIGBX_Settings = "character",
+	chKBMSLRDIGVM_Settings = "character",	
+	chKBMSLRDIGVN_Settings = "character",	
 	chKBMSLRDEE_Settings = "character",
 	chKBMSLRDEEMP_Settings = "character",
 	chKBMSLRDEEDG_Settings = "character",

@@ -53,9 +53,13 @@ _int.Event.Buff.Remove = Utility.Event.Create("SafesBuffLib", "Buff.Remove")
 function _int.Monitor:RemoveBuff(BuffID)
 	local endTime = self.Buffs[BuffID].Time
 	local UnitID = self.Buffs[BuffID].Unit
-	self.Times[endTime][BuffID] = nil
 	self.Units[UnitID][BuffID] = nil
-	self.Buffs[BuffID] = nil
+	if endTime then
+		if self.Times[endTime] then
+			self.Times[endTime][BuffID] = nil
+			self.Buffs[BuffID] = nil
+		end
+	end
 end
 
 function _int.Monitor:ClearUnit(UnitID)
@@ -78,13 +82,13 @@ function _int.Monitor:AddBuffs(UnitID)
 				local endTime = math.ceil(bDetails.duration + bDetails.begin)
 				if self.Buffs[BuffID] then
 					if endTime ~= self.Buffs[BuffID].Time then
-						self.Times[endTime][BuffID] = nil
+						self:RemoveBuff(BuffID)
 					end
 				end
-				self.Buffs[BuffID] = {Unit = UnitID, Time = endTime}
 				if not self.Times[endTime] then
 					self.Times[endTime] = {}
 				end
+				self.Buffs[BuffID] = {Unit = UnitID, Time = endTime}
 				self.Times[endTime][BuffID] = UnitID
 				--print("Buff: "..bDetails.name.." added for removal @ "..endTime)
 			end
@@ -240,8 +244,8 @@ function _int:UpdateCycle()
 	if self.Queue:Count() > 0 then
 		repeat
 			-- print("----------")
-			local QueueObj, BuffObj = self.Queue:First()
-			if not QueueObj or not BuffObj then
+			local BuffObj = self.Queue:RemoveFirst()
+			if not BuffObj then
 				-- print("Queue Empty: Breaking Loop")
 				break
 			end
@@ -320,7 +324,6 @@ function _int:UpdateCycle()
 				--_int.Queued.Remove[BuffObj.Buff] = nil
 			end
 			-- If none of the above match, Item is removed regardless to prevent Queue polution.
-			self.Queue:Remove(QueueObj)
 		until Inspect.Time.Real() > _endTime
 		if _last then
 			if next(_buffs[_last]) then

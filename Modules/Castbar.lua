@@ -564,52 +564,58 @@ function KBM.Castbar:Add(Mod, Boss, Enabled, Dynamic)
 		end
 		Mod.HasCastbars = true
 	else
-		CastbarObj.CastObj = LibSCast:Create(Mod.ID.."_"..CastbarObj.ID, KBM.Context, nil, nil, nil)
+		CastbarObj.CastObj = LibSCast:Create(Mod.ID.."_"..CastbarObj.ID, KBM.Context, nil, nil, nil)		
 	end
 					
-	function CastbarObj:Display()	
-		if KBM.Menu.Active then
-			if self.CastObj.Pack.id ~= KBM.Options.Castbar.Global.pack then
-				self.CastObj:SetPack(KBM.Options.Castbar.Global.pack)
-			end
-			if self.BossSettings.override then
-				if self.BossSettings.custom then
-					if self.BossSettings.visible and self.BossSettings.enabled then
-						self.CastObj:SetVisible(true)
-						if self.BossSettings.unlocked then
-							self.CastObj:Unlocked(true)
+	function CastbarObj:Display()
+		if not self.Dynamic then
+			if KBM.Menu.Active then
+				if self.CastObj.Pack.id ~= KBM.Options.Castbar.Global.pack then
+					self.CastObj:SetPack(KBM.Options.Castbar.Global.pack)
+				end
+				if self.BossSettings.override then
+					if self.BossSettings.custom then
+						if self.BossSettings.visible and self.BossSettings.enabled then
+							self.CastObj:SetVisible(true)
+							if self.BossSettings.unlocked then
+								self.CastObj:Unlocked(true)
+							else
+								self.CastObj:Unlocked(false)
+							end
 						else
+							self.CastObj:SetVisible(false)
 							self.CastObj:Unlocked(false)
 						end
 					else
-						self.CastObj:SetVisible(false)
+						if KBM.Options.Castbar.Global.visible and self.BossSettings.enabled then
+							self.CastObj:SetVisible(true)
+						else
+							self.CastObj:SetVisible(false)
+						end
 						self.CastObj:Unlocked(false)
 					end
 				else
-					if KBM.Options.Castbar.Global.visible and self.BossSettings.enabled then
+					if KBM.Options.Castbar.Global.visible and KBM.Options.Castbar.Global.enabled then
 						self.CastObj:SetVisible(true)
 					else
 						self.CastObj:SetVisible(false)
 					end
 					self.CastObj:Unlocked(false)
 				end
-			else
-				if KBM.Options.Castbar.Global.visible and KBM.Options.Castbar.Global.enabled then
-					self.CastObj:SetVisible(true)
-				else
-					self.CastObj:SetVisible(false)
-				end
-				self.CastObj:Unlocked(false)
 			end
 		end
 	end
 	
 	function CastbarObj:Create(UnitID)	
 		self.UnitID = UnitID
-		if self.BossSettings.override then
-			self.CastObj:Start(UnitID, self.BossSettings.enabled)
+		if self.Dynamic then
+			self.CastObj:Start(UnitID, true)
 		else
-			self.CastObj:Start(UnitID, KBM.Options.Castbar.Global.enabled)
+			if self.BossSettings.override then
+				self.CastObj:Start(UnitID, self.BossSettings.enabled)
+			else
+				self.CastObj:Start(UnitID, KBM.Options.Castbar.Global.enabled)
+			end
 		end
 		
 		KBM.Castbar.ActiveCastbars[UnitID] = self
@@ -620,7 +626,9 @@ function KBM.Castbar:Add(Mod, Boss, Enabled, Dynamic)
 	end
 	
 	function CastbarObj:Hide(Force)
-		self.CastObj:SetVisible(false)
+		if not self.Dynamic then
+			self.CastObj:SetVisible(false)
+		end
 	end
 	
 	function CastbarObj:Remove()
@@ -632,11 +640,5 @@ function KBM.Castbar:Add(Mod, Boss, Enabled, Dynamic)
 		self.CastObj:Remove()
 	end
 		
-	-- if not self.Dynamic then
-		-- if not self.CastbarList[Mod.ID] then
-			-- self.CastbarList[Mod.ID] = {}
-		-- end
-		-- table.insert(self.CastbarList[Mod.ID], CastbarObj)
-	-- end
 	return CastbarObj
 end

@@ -77,36 +77,44 @@ function LibSata:Create()
 	
 	function lst:InsertBefore(object, value)
 		-- Inserts a new Table Object before the supplied Table Object.
-		if object._type == "LibSata_Object" then
-			local newObj = self:_createObject(value)
-			if object == self._first then
-				self._first = newObj
+		if type(object) == "table" then
+			if object._type == "LibSata_Object" then
+				local newObj = self:_createObject(value)
+				if object == self._first then
+					self._first = newObj
+				end
+				newObj._before = object._before
+				if newObj._before then
+					newObj._before._after = newObj
+				end
+				newObj._after = object
+				object._before = newObj
+				return newObj
 			end
-			newObj._before = object._before
-			if newObj._before then
-				newObj._before._after = newObj
-			end
-			newObj._after = object
-			object._before = newObj
-			return newObj
+		else
+			error("Incorrect use of Table:InsertBefore(TableObj, Data): Expecting table [Lua:table] object got "..type(object))				
 		end
 		-- print("Warning: Supplied Table Object is not of type LibSata_Object")
 	end
 	
 	function lst:InsertAfter(object, value)
 		-- Inserts a new Table Object after the supplied Table Object.
-		if object._type == "LibSata_Object" then
-			local newObj = self:_createObject(value)
-			if object == self._last then
-				self._last = newObj
+		if type(object) == "table" then
+			if object._type == "LibSata_Object" then
+				local newObj = self:_createObject(value)
+				if object == self._last then
+					self._last = newObj
+				end
+				newObj._after = object._after
+				if newObj._after then
+					newObj._after._before = newObj
+				end
+				newObj._before = object
+				object._after = newObj
+				return newObj
 			end
-			newObj._after = object._after
-			if newObj._after then
-				newObj._after._before = newObj
-			end
-			newObj._before = object
-			object._after = newObj
-			return newObj
+		else
+			error("Incorrect use of Table:InsertAfter(TableObj, Data): Expecting table [Lua:table] object got "..type(object))		
 		end
 		-- print("Warning: Supplied Table Object is not of type LibSata_Object")
 	end
@@ -115,30 +123,39 @@ function LibSata:Create()
 		-- Safely remove the object from the Table and link appropriate Table Objects together
 		if type(object) == "table" then
 			if object._type == "LibSata_Object" then
-				if object == self._last then
-					self._last = object._before
-				end
-				if object == self._first then
-					self._first = object._after
-				end
-				if object._before then
-					if object._after then
-						object._before._after = object._after
-						object._after._before = object._before
-					else
-						object._before._after = nil
-					end
+				local returnData = object._data
+				if self._count == 1 then
+					self._last = nil
+					self._first = nil
 				else
-					if object._after then
-						object._after._before = nil
+					if object == self._last then
+						self._last = object._before
+					elseif object == self._first then
+						self._first = object._after
+					end
+					if object._before then
+						if object._after then
+							object._before._after = object._after
+							object._after._before = object._before
+						else
+							object._before._after = nil
+						end
+					else
+						if object._after then
+							object._after._before = nil
+						end
 					end
 				end
 				-- Allows this Table Object to now be collected via the GC.
 				-- As noted with adding/inserting Table Objects. Outside refernces will need to be cleared if used.
 				self._list[object] = nil
+				object._before = nil
+				object._after = nil
+				object._data = nil
+				object._type = nil
 				-- Decrement the internal counter.
 				self._count = self._count - 1
-				return object._data
+				return returnData
 			else
 				-- print("Warning: Supplied Table Object is not of type LibSata_Object")
 			end
@@ -212,6 +229,7 @@ function LibSata:Create()
 	end
 	
 	function lst:Delete()
+		self:Clear()
 		-- Remove from holding list (To allow GC, if you have locale/global active references you'll need to clear those too)
 		_store[self] = nil
 		-- Remove actual table reference as a fail-safe.
