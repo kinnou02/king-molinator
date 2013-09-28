@@ -2,6 +2,7 @@
 
 Castbars
 * Fixed: Error 609 related to Dynamic unit castbar handling.
+* Fixed: A few lag issues with texture loading. (any "ui" based errors)
 
 LibSBuff
 * Fixed: Error 81 for buff monitoring.
