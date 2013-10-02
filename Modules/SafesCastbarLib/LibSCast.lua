@@ -668,29 +668,37 @@ function _int.Default:CreateBar(_tBar)
 		end
 		
 		function bar:Interrupt()
-			self.anim.endTime = Inspect.Time.Real() + self.barObj.default.anim.duration
-			if self.CastData.uninterruptible then
-				self.ui.text:SetText(LibSCast.Lang.Stopped)
+			if self.Loaded then
+				self.anim.endTime = Inspect.Time.Real() + self.barObj.default.anim.duration
+				if self.CastData.uninterruptible then
+					self.ui.text:SetText(LibSCast.Lang.Stopped)
+				else
+					self.ui.text:SetText(LibSCast.Lang.Interrupted)
+				end
+				self.progBar:SetVisible(false)
+				self.ui.intBar:SetBackgroundColor(self.color.intBar.r, self.color.intBar.g, self.color.intBar.b, self.color.intBar.a)
+				self.ui.intBar:SetVisible(true)
+				self.ui.mask:SetWidth(self.progWidth)
+				self.Update = self.InterruptAnim
+				if not self.UpdateObj then
+					self.UpdateObj = _queue:Add(self)
+				end
 			else
-				self.ui.text:SetText(LibSCast.Lang.Interrupted)
-			end
-			self.progBar:SetVisible(false)
-			self.ui.intBar:SetBackgroundColor(self.color.intBar.r, self.color.intBar.g, self.color.intBar.b, self.color.intBar.a)
-			self.ui.intBar:SetVisible(true)
-			self.ui.mask:SetWidth(self.progWidth)
-			self.Update = self.InterruptAnim
-			if not self.UpdateObj then
-				self.UpdateObj = _queue:Add(self)
+				self:Stop()
 			end
 		end
 		
 		function bar:End()
-			self.anim.endTime = Inspect.Time.Real() + self.barObj.default.anim.duration
-			self.Update = self.EndAnim
-			self.ui.text:SetText(self.Name)
-			self.ui.mask:SetWidth(self.progWidth)
-			if not self.UpdateObj then
-				self.UpdateObj = _queue:Add(self)
+			if self.loaded then
+				self.anim.endTime = Inspect.Time.Real() + self.barObj.default.anim.duration
+				self.Update = self.EndAnim
+				self.ui.text:SetText(self.Name)
+				self.ui.mask:SetWidth(self.progWidth)
+				if not self.UpdateObj then
+					self.UpdateObj = _queue:Add(self)
+				end
+			else
+				self:Stop()
 			end
 		end
 		
