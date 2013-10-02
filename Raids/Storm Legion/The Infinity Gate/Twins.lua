@@ -37,6 +37,9 @@ VAM.Lang.Unit.Mordan = KBM.Language:Add("Mordan") --
 
 -- Ability Dictionary
 VAM.Lang.Ability = {}
+VAM.Lang.Ability.Sibling = KBM.Language:Add("Sibling Rivalry")
+VAM.Lang.Ability.Ravenous = KBM.Language:Add("Ravenous Legion")
+VAM.Lang.Ability.Creeper = KBM.Language:Add("Ensnaring Creepers")
 
 -- Description Dictionary
 VAM.Lang.Main = {}
@@ -63,9 +66,26 @@ VAM.Viktus = {
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
+	TimersRef = {},
+	AlertsRef = {},
+	MechRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.Castbar(),
+		TimersRef = {
+			Enabled = true,
+			Creeper = KBM.Defaults.TimerObj.Create("dark_green"),
+			Sibling = KBM.Defaults.TimerObj.Create("yellow"),			
+		},
+		AlertsRef = {
+			Enabled = true,
+			Sibling = KBM.Defaults.AlertObj.Create("yellow"),
+			Creeper = KBM.Defaults.AlertObj.Create("dark_green"),
+		},
+		MechRef = {
+			Enabled = true,
+			Creeper = KBM.Defaults.MechObj.Create("dark_green"),
+		},
 	}
 }
 
@@ -81,9 +101,26 @@ VAM.Mordan = {
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
+	TimersRef = {},
+	AlertsRef = {},
+	MechRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.Castbar(),
+		TimersRef = {
+			Enabled = true,
+			Ravenous = KBM.Defaults.TimerObj.Create("purple"),
+			Sibling = KBM.Defaults.TimerObj.Create("yellow"),
+		},
+		AlertsRef = {
+			Enabled = true,
+			Ravenous = KBM.Defaults.AlertObj.Create("purple"),
+			Sibling = KBM.Defaults.AlertObj.Create("yellow"),
+		},
+		MechRef = {
+			Enabled = true,
+			Ravenous = KBM.Defaults.MechObj.Create("purple"),
+		},
 	}
 }
 
@@ -108,6 +145,10 @@ end
 function VAM:InitVars()
 	self.Settings = {
 		Enabled = true,
+		CastBar = {
+			Override = true,
+			Multi = true,
+		},
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		MechSpy = KBM.Defaults.MechSpy(),
@@ -115,9 +156,15 @@ function VAM:InitVars()
 		Alerts = KBM.Defaults.Alerts(),
 		Viktus = {
 			CastBar = self.Viktus.Settings.CastBar,
+			AlertsRef = self.Viktus.Settings.AlertsRef,
+			TimersRef = self.Viktus.Settings.TimersRef,
+			MechRef = self.Viktus.Settings.MechRef,
 		},
 		Mordan = {
 			CastBar = self.Mordan.Settings.CastBar,
+			AlertsRef = self.Mordan.Settings.AlertsRef,
+			TimersRef = self.Mordan.Settings.TimersRef,
+			MechRef = self.Mordan.Settings.MechRef,
 		},
 	}
 	KBMSLRDIGVM_Settings = self.Settings
@@ -244,13 +291,52 @@ end
 
 function VAM:Start()
 	-- Create Timers
+	self.Viktus.TimersRef.Creeper = KBM.MechTimer:Add(self.Lang.Ability.Creeper[KBM.Lang], 25, false)
+	self.Viktus.TimersRef.Sibling = KBM.MechTimer:Add(self.Lang.Ability.Sibling[KBM.Lang], 40, false)
+	KBM.Defaults.TimerObj.Assign(self.Viktus)
+
+	self.Mordan.TimersRef.Sibling = KBM.MechTimer:Add(self.Lang.Ability.Sibling[KBM.Lang], 40, false)
+	self.Mordan.TimersRef.Ravenous = KBM.MechTimer:Add(self.Lang.Ability.Ravenous[KBM.Lang], 25, false)
+	KBM.Defaults.TimerObj.Assign(self.Mordan)
 	
 	-- Create Alerts
+	self.Viktus.AlertsRef.Sibling = KBM.Alert:Create(self.Lang.Ability.Sibling[KBM.Lang], nil, false, true, "yellow")	
+	self.Viktus.AlertsRef.Creeper = KBM.Alert:Create(self.Lang.Ability.Creeper[KBM.Lang], nil, false, true, "dark_green")
+	KBM.Defaults.AlertObj.Assign(self.Viktus)
+
+	self.Mordan.AlertsRef.Sibling = KBM.Alert:Create(self.Lang.Ability.Sibling[KBM.Lang], nil, false, true, "yellow")	
+	self.Mordan.AlertsRef.Ravenous = KBM.Alert:Create(self.Lang.Ability.Ravenous[KBM.Lang], nil, false, true, "purple")
+	KBM.Defaults.AlertObj.Assign(self.Mordan)
 
 	-- Create Mechanic Spies
+	self.Viktus.MechRef.Creeper = KBM.MechSpy:Add(self.Lang.Ability.Creeper[KBM.Lang], nil, "playerDebuff", self.Viktus)
+	KBM.Defaults.MechObj.Assign(self.Viktus)
+	
+	self.Mordan.MechRef.Ravenous = KBM.MechSpy:Add(self.Lang.Ability.Ravenous[KBM.Lang], nil, "playerDebuff", self.Mordan)
+	KBM.Defaults.MechObj.Assign(self.Mordan)
 	
 	-- Assign Alerts and Timers to Triggers
 	-- Viktus
+	self.Viktus.Triggers.Sibling = KBM.Trigger:Create(self.Lang.Ability.Sibling[KBM.Lang], "channel", self.Viktus)
+	self.Viktus.Triggers.Sibling:AddAlert(self.Viktus.AlertsRef.Sibling)
+	self.Viktus.Triggers.Sibling:AddTimer(self.Viktus.TimersRef.Sibling)
+	self.Viktus.Triggers.SiblingInt = KBM.Trigger:Create(self.Lang.Ability.Sibling[KBM.Lang], "interrupt", self.Viktus)
+	self.Viktus.Triggers.SiblingInt:AddStop(self.Viktus.AlertsRef.Sibling)
+	--
+	self.Viktus.Triggers.Creeper = KBM.Trigger:Create(self.Lang.Ability.Creeper[KBM.Lang], "cast", self.Viktus)
+	self.Viktus.Triggers.Creeper:AddTimer(self.Viktus.TimersRef.Creeper)
+	self.Viktus.Triggers.Creeper:AddAlert(self.Viktus.AlertsRef.Creeper)
+
+	-- Mordan
+	self.Mordan.Triggers.Sibling = KBM.Trigger:Create(self.Lang.Ability.Sibling[KBM.Lang], "channel", self.Mordan)
+	self.Mordan.Triggers.Sibling:AddAlert(self.Mordan.AlertsRef.Sibling)
+	self.Mordan.Triggers.Sibling:AddTimer(self.Mordan.TimersRef.Sibling)
+	self.Mordan.Triggers.SiblingInt = KBM.Trigger:Create(self.Lang.Ability.Sibling[KBM.Lang], "interrupt", self.Mordan)
+	self.Mordan.Triggers.SiblingInt:AddStop(self.Mordan.AlertsRef.Sibling)
+	--
+	self.Mordan.Triggers.Ravenous = KBM.Trigger:Create(self.Lang.Ability.Ravenous[KBM.Lang], "cast", self.Mordan)
+	self.Mordan.Triggers.Ravenous:AddTimer(self.Mordan.TimersRef.Ravenous)
+	self.Mordan.Triggers.Ravenous:AddAlert(self.Mordan.AlertsRef.Ravenous)
 	
 	self.Viktus.CastBar = KBM.Castbar:Add(self, self.Viktus)
 	self.Mordan.CastBar = KBM.Castbar:Add(self, self.Mordan)

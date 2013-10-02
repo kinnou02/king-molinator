@@ -309,5 +309,7 @@ function VOL:Start()
 	-- Assign Alerts and Timers to Triggers
 	
 	self.Volan.CastBar = KBM.Castbar:Add(self, self.Volan)
+	self.VolanLL.CastBar = KBM.Castbar:Add(self, self.VolanLL)
+	self.VolanRL.CastBar = KBM.Castbar:Add(self, self.VolanRL)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)	
 end

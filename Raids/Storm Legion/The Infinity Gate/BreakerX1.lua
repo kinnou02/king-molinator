@@ -38,12 +38,19 @@ BXO.Lang.Unit.Colossus = KBM.Language:Add("Irradiated Colossus") -- U44B144E14DC
 
 -- Ability Dictionary
 BXO.Lang.Ability = {}
+BXO.Lang.Ability.Disruptor = KBM.Language:Add("Quantum Disruptor")
 
 -- Description Dictionary
 BXO.Lang.Main = {}
 
 -- Debuff Dictionary
 BXO.Lang.Debuff = {}
+BXO.Lang.Debuff.Fission = KBM.Language:Add("Fission Burst")
+BXO.Lang.Debuff.FissionID = "B515B723DE6ADCB47"
+BXO.Lang.Debuff.Decay = KBM.Language:Add("Ionic Decay")
+BXO.Lang.Debuff.DecayID = "B4BD63B7F078EA6FB"
+BXO.Lang.Debuff.Distortion = KBM.Language:Add("Kinetic Distortion")
+BXO.Lang.Debuff.DistortionID = "B5B9A68A148310AA5"
 
 -- Messages Dictionary
 BXO.Lang.Messages = {}
@@ -63,9 +70,25 @@ BXO.BreakerX1 = {
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
+	TimersRef = {},
+	AlertsRef = {},
+	MechRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.Castbar(),
+		TimersRef = {
+			Enabled = true,
+		},
+		AlertsRef = {
+			Enabled = true,
+			Disruptor = KBM.Defaults.AlertObj.Create("yellow"),
+			Distortion = KBM.Defaults.AlertObj.Create("purple"),
+		},
+		MechRef = {
+			Enabled = true,
+			Decay = KBM.Defaults.MechObj.Create("cyan"),
+			Distortion = KBM.Defaults.MechObj.Create("purple"),
+		},
 	}
 }
 
@@ -97,6 +120,9 @@ function BXO:InitVars()
 		MechSpy = KBM.Defaults.MechSpy(),
 		BreakerX1 = {
 			CastBar = self.BreakerX1.Settings.CastBar,
+			AlertsRef = self.BreakerX1.Settings.AlertsRef,
+			TimersRef = self.BreakerX1.Settings.TimersRef,
+			MechRef = self.BreakerX1.Settings.MechRef,
 		},
 		MechTimer = KBM.Defaults.MechTimer(),
 		Alerts = KBM.Defaults.Alerts(),
@@ -183,6 +209,7 @@ function BXO:UnitHPCheck(uDetails, unitID)
 				self.PhaseObj:SetPhase("1")
 				self.PhaseObj.Objectives:AddPercent(self.BreakerX1, 0, 100)
 				self.Phase = 1
+				KBM.TankSwap:Start(self.Lang.Debuff.FissionID, unitID)
 			else
 				BossObj.Dead = false
 				BossObj.Casting = false
@@ -221,12 +248,31 @@ end
 
 function BXO:Start()
 	-- Create Timers
+	KBM.Defaults.TimerObj.Assign(self.BreakerX1)
 	
 	-- Create Alerts
+	self.BreakerX1.AlertsRef.Disruptor = KBM.Alert:Create(self.Lang.Ability.Disruptor[KBM.Lang], nil, true, true, "yellow")
+	self.BreakerX1.AlertsRef.Distortion = KBM.Alert:Create(self.Lang.Debuff.Distortion[KBM.Lang], nil, true, true, "red")
+	KBM.Defaults.AlertObj.Assign(self.BreakerX1)
 
 	-- Create Mechanic Spies (BreakerX1)
+	self.BreakerX1.MechRef.Decay = KBM.MechSpy:Add(self.Lang.Debuff.Decay[KBM.Lang], nil, "playerDebuff", self.BreakerX1)
+	self.BreakerX1.MechRef.Distortion = KBM.MechSpy:Add(self.Lang.Debuff.Distortion[KBM.Lang], nil, "playerDebuff", self.BreakerX1)
+	KBM.Defaults.MechObj.Assign(self.BreakerX1)
 
 	-- Assign Alerts and Timers to Triggers
+	self.BreakerX1.Triggers.Decay = KBM.Trigger:Create(self.Lang.Debuff.DecayID, "playerIDBuff", self.BreakerX1)
+	self.BreakerX1.Triggers.Decay:AddAlert(self.BreakerX1.AlertsRef.Distortion, true)
+	self.BreakerX1.Triggers.Decay:AddSpy(self.BreakerX1.MechRef.Decay)
+	self.BreakerX1.Triggers.DecayRem = KBM.Trigger:Create(self.Lang.Debuff.DecayID, "playerIDBuffRemove", self.BreakerX1)
+	self.BreakerX1.Triggers.DecayRem:AddStop(self.BreakerX1.MechRef.Decay)
+	self.BreakerX1.Triggers.Distortion = KBM.Trigger:Create(self.Lang.Debuff.DistortionID, "playerIDBuff", self.BreakerX1)
+	self.BreakerX1.Triggers.Distortion:AddAlert(self.BreakerX1.AlertsRef.Distortion, true)
+
+	self.BreakerX1.Triggers.Disruptor = KBM.Trigger:Create(self.Lang.Ability.Disruptor[KBM.Lang], "cast", self.BreakerX1)
+	self.BreakerX1.Triggers.Disruptor:AddAlert(self.BreakerX1.AlertsRef.Disruptor)
+	self.BreakerX1.Triggers.DisruptorInt = KBM.Trigger:Create(self.Lang.Ability.Disruptor[KBM.Lang], "interrupt", self.BreakerX1)
+	self.BreakerX1.Triggers.DisruptorInt:AddStop(self.BreakerX1.AlertsRef.Disruptor)
 	
 	self.BreakerX1.CastBar = KBM.Castbar:Add(self, self.BreakerX1)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
