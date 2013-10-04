@@ -32,13 +32,14 @@ KBM.RegisterMod(BXO.ID, BXO)
 -- Main Unit Dictionary
 BXO.Lang.Unit = {}
 BXO.Lang.Unit.BreakerX1 = KBM.Language:Add("Breaker X-1 \"Onyx\"") -- U4EA7C88766C1B6B9
+BXO.Lang.Unit.BreakerX1:SetGerman("Brecher X-1 \"Onyx\"")
 BXO.Lang.Unit.CoreAlpha = KBM.Language:Add("Core Systems Routine Alpha") -- U01D9CC8C1FF2D603
 BXO.Lang.Unit.Colossus = KBM.Language:Add("Irradiated Colossus") -- U44B144E14DCEBE34
-
 
 -- Ability Dictionary
 BXO.Lang.Ability = {}
 BXO.Lang.Ability.Disruptor = KBM.Language:Add("Quantum Disruptor")
+BXO.Lang.Ability.Disruptor:SetGerman("Quantum Störer")
 
 -- Description Dictionary
 BXO.Lang.Main = {}
@@ -46,10 +47,13 @@ BXO.Lang.Main = {}
 -- Debuff Dictionary
 BXO.Lang.Debuff = {}
 BXO.Lang.Debuff.Fission = KBM.Language:Add("Fission Burst")
+BXO.Lang.Debuff.Fission:SetGerman("Kernexplosion")
 BXO.Lang.Debuff.FissionID = "B515B723DE6ADCB47"
 BXO.Lang.Debuff.Decay = KBM.Language:Add("Ionic Decay")
+BXO.Lang.Debuff.Decay:SetGerman("Ionische Verwesung")
 BXO.Lang.Debuff.DecayID = "B4BD63B7F078EA6FB"
 BXO.Lang.Debuff.Distortion = KBM.Language:Add("Kinetic Distortion")
+BXO.Lang.Debuff.Distortion:SetGerman("Kinetische Verzerrung")
 BXO.Lang.Debuff.DistortionID = "B5B9A68A148310AA5"
 
 -- Messages Dictionary
@@ -81,6 +85,7 @@ BXO.BreakerX1 = {
 		},
 		AlertsRef = {
 			Enabled = true,
+			Decay = KBM.Defaults.AlertObj.Create("cyan"),
 			Disruptor = KBM.Defaults.AlertObj.Create("yellow"),
 			Distortion = KBM.Defaults.AlertObj.Create("purple"),
 		},
@@ -248,11 +253,12 @@ end
 
 function BXO:Start()
 	-- Create Timers
-	KBM.Defaults.TimerObj.Assign(self.BreakerX1)
+	--KBM.Defaults.TimerObj.Assign(self.BreakerX1)
 	
 	-- Create Alerts
 	self.BreakerX1.AlertsRef.Disruptor = KBM.Alert:Create(self.Lang.Ability.Disruptor[KBM.Lang], nil, true, true, "yellow")
 	self.BreakerX1.AlertsRef.Distortion = KBM.Alert:Create(self.Lang.Debuff.Distortion[KBM.Lang], nil, true, true, "red")
+	self.BreakerX1.AlertsRef.Decay = KBM.Alert:Create(self.Lang.Debuff.Decay[KBM.Lang], nil, false, true, "cyan")
 	KBM.Defaults.AlertObj.Assign(self.BreakerX1)
 
 	-- Create Mechanic Spies (BreakerX1)
@@ -262,7 +268,7 @@ function BXO:Start()
 
 	-- Assign Alerts and Timers to Triggers
 	self.BreakerX1.Triggers.Decay = KBM.Trigger:Create(self.Lang.Debuff.DecayID, "playerIDBuff", self.BreakerX1)
-	self.BreakerX1.Triggers.Decay:AddAlert(self.BreakerX1.AlertsRef.Distortion, true)
+	self.BreakerX1.Triggers.Decay:AddAlert(self.BreakerX1.AlertsRef.Decay, true)
 	self.BreakerX1.Triggers.Decay:AddSpy(self.BreakerX1.MechRef.Decay)
 	self.BreakerX1.Triggers.DecayRem = KBM.Trigger:Create(self.Lang.Debuff.DecayID, "playerIDBuffRemove", self.BreakerX1)
 	self.BreakerX1.Triggers.DecayRem:AddStop(self.BreakerX1.MechRef.Decay)

@@ -719,6 +719,12 @@ function _int.Default:CreateBar(_tBar)
 						self.Visible = false
 					end
 				end
+			else
+				if self.LoadObj then
+					_queue:Remove(self.LoadObj)
+					self.LoadObj = nil
+					self.standardLoad = false
+				end
 			end
 			if self.UpdateObj then
 				_queue:Remove(self.UpdateObj)
@@ -738,10 +744,6 @@ function _int.Default:CreateBar(_tBar)
 				if self.Active then
 					self:Stop()
 				end
-				if self.LoadObj then
-					_queue:Remove(self.LoadObj)
-					self.LoadObj = nil
-				end
 				if not self.showing then
 					-- print(self.castObj.Name.." removing UI elements")
 					self.ui.cradle:SetVisible(false)
@@ -758,6 +760,13 @@ function _int.Default:CreateBar(_tBar)
 				end
 				-- print("--> [RECYCLE]")
 				-- print(self.packInstance.id.." Recycled to "..self.id..": "..self.store:Count())
+			else
+				if self.LoadObj then
+					_queue:Remove(self.LoadObj)
+					self.LoadObj = nil
+				end
+				self.WaitStart = false
+				self.standardLoad = false
 			end
 		end
 				
