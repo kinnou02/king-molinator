@@ -166,15 +166,15 @@ function VOL:InitVars()
 		Enabled = true,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
-		MechSpy = KBM.Defaults.MechSpy(),
+		--MechSpy = KBM.Defaults.MechSpy(),
 		Volan = {
 			CastBar = self.Volan.Settings.CastBar,
 			-- AlertsRef = self.Volan.Settings.AlertsRef,
 			-- TimersRef = self.Volan.Settings.TimersRef,
 			-- MechRef = self.Volan.Settings.MechRef,
 		},
-		MechTimer = KBM.Defaults.MechTimer(),
-		Alerts = KBM.Defaults.Alerts(),
+		--MechTimer = KBM.Defaults.MechTimer(),
+		--Alerts = KBM.Defaults.Alerts(),
 	}
 	KBMSLRDIGVN_Settings = self.Settings
 	chKBMSLRDIGVN_Settings = self.Settings

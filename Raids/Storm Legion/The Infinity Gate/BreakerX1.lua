@@ -33,13 +33,17 @@ KBM.RegisterMod(BXO.ID, BXO)
 BXO.Lang.Unit = {}
 BXO.Lang.Unit.BreakerX1 = KBM.Language:Add("Breaker X-1 \"Onyx\"") -- U4EA7C88766C1B6B9
 BXO.Lang.Unit.BreakerX1:SetGerman("Brecher X-1 \"Onyx\"")
+BXO.Lang.Unit.BreakerX1:SetFrench("Briseur X-1 \"Onyx\"")
 BXO.Lang.Unit.CoreAlpha = KBM.Language:Add("Core Systems Routine Alpha") -- U01D9CC8C1FF2D603
+BXO.Lang.Unit.CoreAlpha:SetFrench("Système central de routine alpha") 
 BXO.Lang.Unit.Colossus = KBM.Language:Add("Irradiated Colossus") -- U44B144E14DCEBE34
+BXO.Lang.Unit.Colossus:SetFrench("Colosse irradié") 
 
 -- Ability Dictionary
 BXO.Lang.Ability = {}
 BXO.Lang.Ability.Disruptor = KBM.Language:Add("Quantum Disruptor")
 BXO.Lang.Ability.Disruptor:SetGerman("Quantum Störer")
+BXO.Lang.Ability.Disruptor:SetFrench("Perturbateur quantique")
 
 -- Description Dictionary
 BXO.Lang.Main = {}
@@ -48,12 +52,15 @@ BXO.Lang.Main = {}
 BXO.Lang.Debuff = {}
 BXO.Lang.Debuff.Fission = KBM.Language:Add("Fission Burst")
 BXO.Lang.Debuff.Fission:SetGerman("Kernexplosion")
+BXO.Lang.Debuff.Fission:SetFrench("Explosion de fission")
 BXO.Lang.Debuff.FissionID = "B515B723DE6ADCB47"
 BXO.Lang.Debuff.Decay = KBM.Language:Add("Ionic Decay")
 BXO.Lang.Debuff.Decay:SetGerman("Ionische Verwesung")
+BXO.Lang.Debuff.Decay:SetFrench("Putréfaction ionique")
 BXO.Lang.Debuff.DecayID = "B4BD63B7F078EA6FB"
 BXO.Lang.Debuff.Distortion = KBM.Language:Add("Kinetic Distortion")
 BXO.Lang.Debuff.Distortion:SetGerman("Kinetische Verzerrung")
+BXO.Lang.Debuff.Distortion:SetFrench("Distorsion cinétique")
 BXO.Lang.Debuff.DistortionID = "B5B9A68A148310AA5"
 
 -- Messages Dictionary
@@ -74,15 +81,15 @@ BXO.BreakerX1 = {
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
-	TimersRef = {},
+	-- TimersRef = {},
 	AlertsRef = {},
 	MechRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.Castbar(),
-		TimersRef = {
-			Enabled = true,
-		},
+		-- TimersRef = {
+			-- Enabled = true,
+		-- },
 		AlertsRef = {
 			Enabled = true,
 			Decay = KBM.Defaults.AlertObj.Create("cyan"),
@@ -126,10 +133,10 @@ function BXO:InitVars()
 		BreakerX1 = {
 			CastBar = self.BreakerX1.Settings.CastBar,
 			AlertsRef = self.BreakerX1.Settings.AlertsRef,
-			TimersRef = self.BreakerX1.Settings.TimersRef,
+			--TimersRef = self.BreakerX1.Settings.TimersRef,
 			MechRef = self.BreakerX1.Settings.MechRef,
 		},
-		MechTimer = KBM.Defaults.MechTimer(),
+		--MechTimer = KBM.Defaults.MechTimer(),
 		Alerts = KBM.Defaults.Alerts(),
 	}
 	KBMSLRDIGBX_Settings = self.Settings

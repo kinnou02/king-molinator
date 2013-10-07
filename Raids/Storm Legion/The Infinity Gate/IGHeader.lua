@@ -29,6 +29,7 @@ KBM.RegisterMod(IG.ID, IG)
 IG.Lang = {}
 IG.Lang.Main = {}
 IG.Lang.Main.IG = KBM.Language:Add(IG.Name)
+IG.Lang.Main.IG:SetFrench("Porte de l'Infini")
 IG.Name = IG.Lang.Main.IG[KBM.Lang]
 IG.Descript = IG.Name
 

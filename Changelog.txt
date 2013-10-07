@@ -9,11 +9,22 @@ LibSBuff
 
 Encounters
 * Infinity Gate
-** New: Added Template for Breaker X-1 "Onyx"
+** New: Added Breaker X-1 "Onyx"
 *** New: Added Enrage timer of 9 minutes.
-** New: Added Template for Viktus and Mordan
+*** New: Added Tank-Swap for Fission Burst.
+*** New: Added Alert and Spy for Ionic Decay.
+*** New: Added Alert and Spy for Kinetic Distortion.
+*** New: Added Alert for Quantum Disruptor.
+** New: Added Viktus and Mordan
 *** New: Added Enrage timer of 6 minutes 30 seconds.
+*** New: Added Timer and Alert for Sibling Rivalry casts.
+*** New: Added Timer and Alert for Ensnaring Creepers.
+*** New: Added Timer and Alert for Ravenous Legion.
 ** New: Added Template for Volan.
+
+Translations
+* French updates
+* German updates
 
 ----
 v1.5.2

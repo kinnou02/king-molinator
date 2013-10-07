@@ -32,14 +32,19 @@ KBM.RegisterMod(VAM.ID, VAM)
 -- Main Unit Dictionary
 VAM.Lang.Unit = {}
 VAM.Lang.Unit.Viktus = KBM.Language:Add("Viktus") -- 
+VAM.Lang.Unit.Viktus:SetFrench("Viktus")  
 VAM.Lang.Unit.Mordan = KBM.Language:Add("Mordan") -- 
+VAM.Lang.Unit.Mordan:SetFrench("Mordan")  
 
 
 -- Ability Dictionary
 VAM.Lang.Ability = {}
 VAM.Lang.Ability.Sibling = KBM.Language:Add("Sibling Rivalry")
+VAM.Lang.Ability.Sibling:SetFrench("Rivalité fraternelle")
 VAM.Lang.Ability.Ravenous = KBM.Language:Add("Ravenous Legion")
+VAM.Lang.Ability.Ravenous:SetFrench("Légion vorace")
 VAM.Lang.Ability.Creeper = KBM.Language:Add("Ensnaring Creepers")
+VAM.Lang.Ability.Creeper:SetFrench("Lierres captivants")
 
 -- Description Dictionary
 VAM.Lang.Main = {}
@@ -51,6 +56,7 @@ VAM.Lang.Debuff = {}
 VAM.Lang.Messages = {}
 
 VAM.Lang.Descript = KBM.Language:Add("Viktus and Mordan")
+VAM.Lang.Descript:SetFrench("Viktus et Mordan")
 VAM.Descript = VAM.Lang.Descript[KBM.Lang]
 
 -- Assign Boss to Language Specific Dictionary
@@ -326,6 +332,7 @@ function VAM:Start()
 	self.Viktus.Triggers.Creeper = KBM.Trigger:Create(self.Lang.Ability.Creeper[KBM.Lang], "cast", self.Viktus)
 	self.Viktus.Triggers.Creeper:AddTimer(self.Viktus.TimersRef.Creeper)
 	self.Viktus.Triggers.Creeper:AddAlert(self.Viktus.AlertsRef.Creeper)
+	self.Viktus.Triggers.Creeper:AddSpy(self.Viktus.MechRef.Creeper)
 
 	-- Mordan
 	self.Mordan.Triggers.Sibling = KBM.Trigger:Create(self.Lang.Ability.Sibling[KBM.Lang], "channel", self.Mordan)
@@ -337,6 +344,7 @@ function VAM:Start()
 	self.Mordan.Triggers.Ravenous = KBM.Trigger:Create(self.Lang.Ability.Ravenous[KBM.Lang], "cast", self.Mordan)
 	self.Mordan.Triggers.Ravenous:AddTimer(self.Mordan.TimersRef.Ravenous)
 	self.Mordan.Triggers.Ravenous:AddAlert(self.Mordan.AlertsRef.Ravenous)
+	self.Mordan.Triggers.Ravenous:AddSpy(self.Mordan.MechRef.Ravenous)
 	
 	self.Viktus.CastBar = KBM.Castbar:Add(self, self.Viktus)
 	self.Mordan.CastBar = KBM.Castbar:Add(self, self.Mordan)
