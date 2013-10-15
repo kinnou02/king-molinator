@@ -39,11 +39,14 @@ SAL.Lang.Unit.SparkShort = KBM.Language:Add("Spark")
 SAL.Lang.Unit.SparkShort:SetFrench("Étincelle")
 SAL.Lang.Unit.SparkShort:SetGerman("Gedankenblitz")
 SAL.Lang.Unit.Blood = KBM.Language:Add("Lord of Blood")
-SAL.Lang.Unit.Blood:SetFrench("Seigneur des Flammes")
+SAL.Lang.Unit.Blood:SetFrench("Seigneur du Sang")
+SAL.Lang.Unit.Blood:SetGerman("Fürst des Blutes")
 SAL.Lang.Unit.Flames = KBM.Language:Add("Lord of Flames")
-SAL.Lang.Unit.Flames:SetFrench("Seigneur du Sang")
+SAL.Lang.Unit.Flames:SetFrench("Seigneur des Flammes")
+SAL.Lang.Unit.Flames:SetGerman("Fürst der Flammen")
 SAL.Lang.Unit.Fanatic = KBM.Language:Add("Warped Fanatic")
 SAL.Lang.Unit.Fanatic:SetFrench("Fanatique perverti")
+SAL.Lang.Unit.Fanatic:SetGerman("Verdrehter Fanatiker")
 
 -- Ability Dictionary
 SAL.Lang.Ability = {}
@@ -115,6 +118,8 @@ SAL.Blood = {
 	Name = SAL.Lang.Unit.Blood[KBM.Lang],
 	Ignore = true,
 	UTID = "none",
+	Menu = {},
+	Dead = false,
 }
 
 SAL.Flames = {
@@ -123,6 +128,8 @@ SAL.Flames = {
 	Name = SAL.Lang.Unit.Flames[KBM.Lang],
 	Ignore = true,
 	UTID = "none",
+	Menu = {},
+	Dead = false,
 }
 
 --SAL.Spark = {
@@ -140,7 +147,8 @@ function SAL:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Salvarola.Name] = self.Salvarola,
-		--[self.Spark.Name] = self.Spark,
+		[self.Blood.Name] = self.Blood,
+		[self.Flames.Name] = self.Flames,
 	}
 end
 
@@ -202,6 +210,23 @@ end
 function SAL:Castbar(units)
 end
 
+function SAL:PhaseTwo()
+	self.Phase = 2
+	self.PhaseObj.Objectives:Remove()
+	self.PhaseObj.Objectives:AddPercent(self.Salvarola, 10, 50)
+	self.PhaseObj.Objectives:AddPercent(self.Blood, 0, 100)
+	self.PhaseObj.Objectives:AddPercent(self.Flames, 0, 100)
+	self.PhaseObj:SetPhase("2")
+	KBM.PercentageMon:Start(self.ID, true)
+end
+
+function SAL:PhaseFinal()
+	self.Phase = 3
+	self.PhaseObj.Objectives:Remove()
+	self.PhaseObj.Objectives:AddPercent(self.Salvarola, 0, 10)
+	self.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
+end
+
 function SAL:RemoveUnits(UnitID)
 	if self.Salvarola.UnitID == UnitID then
 		self.Salvarola.Available = false
@@ -214,6 +239,15 @@ function SAL:Death(UnitID)
 	if self.Salvarola.UnitID == UnitID then
 		self.Salvarola.Dead = true
 		return true
+	else
+		if self.Flames.UnitID == UnitID then
+			self.Flames.Dead = true
+		elseif self.Blood.UnitID == UnitID then
+			self.Blood.Dead = true
+		end
+		if self.Flames.Dead and self.Blood.Dead then
+			self:PhaseFinal()
+		end
 	end
 	return false
 end
@@ -237,7 +271,7 @@ function SAL:UnitHPCheck(uDetails, unitID)
 				end
 				self.PhaseObj:Start(self.StartTime)
 				self.PhaseObj:SetPhase("1")
-				self.PhaseObj.Objectives:AddPercent(self.Salvarola, 0, 100)
+				self.PhaseObj.Objectives:AddPercent(self.Salvarola, 50, 100)
 				self.Phase = 1
 				if BossObj == self.Salvarola then
 					KBM.TankSwap:Start(self.Lang.Debuff.BloodboilID, unitID)
@@ -247,6 +281,8 @@ function SAL:UnitHPCheck(uDetails, unitID)
 					if not KBM.TankSwap.Active then
 						KBM.TankSwap:Start(self.Lang.Debuff.BloodboilID, unitID)
 					end
+				elseif BossObj == self.Blood or BossObj == self.Flames then
+					self:PhaseTwo()
 				end
 				BossObj.Dead = false
 				BossObj.Casting = false
@@ -308,5 +344,6 @@ function SAL:Start()
 	
 	self.Salvarola.CastBar = KBM.Castbar:Add(self, self.Salvarola)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-	
+	self.PercentageMon = KBM.PercentageMon:Create(self.Blood, self.Flames, 10, true)
+
 end

@@ -21,6 +21,10 @@ Encounters
 *** New: Added Timer and Alert for Ensnaring Creepers.
 *** New: Added Timer and Alert for Ravenous Legion.
 ** New: Added Template for Volan.
+* Grim Awakening
+** Salvarola
+*** New: Added Percentage Monitor for Flames and Blood
+*** New: Added Phase Tracking in Phase Monitor to account for Flames and Blood.
 
 Translations
 * French updates
