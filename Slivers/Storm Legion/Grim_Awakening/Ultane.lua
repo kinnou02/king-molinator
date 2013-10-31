@@ -44,8 +44,11 @@ ULT.Lang.Buff = {}
 -- Debuff Dictionary
 ULT.Lang.Debuff = {}
 ULT.Lang.Debuff.Devil = KBM.Language:Add("Devil's Pact") -- Tank Monitor
+ULT.Lang.Debuff.Devil:SetGerman("Pakt des Teufels")
 ULT.Lang.Debuff.Shackle = KBM.Language:Add("Spirit Shackle")
+ULT.Lang.Debuff.Shackle:SetGerman("Geistesfessel")
 ULT.Lang.Debuff.Infernal = KBM.Language:Add("Infernal Radiance")
+ULT.Lang.Debuff.Infernal:SetGerman("Höllische Strahlung")
 
 -- Description Dictionary
 ULT.Lang.Main = {}

@@ -73,6 +73,7 @@ SAL.Lang.Debuff.Mindsear:SetFrench("Incandesprit")
 SAL.Lang.Debuff.Mindsear:SetGerman("Geistesohr")
 SAL.Lang.Debuff.MindsearID = "B4C023E009A6B6FF8"
 SAL.Lang.Debuff.Magma = KBM.Language:Add("Curse of Magma")
+SAL.Lang.Debuff.Magma:SetGerman("Fluch des Magmas")
 
 -- Description Dictionary
 SAL.Lang.Main = {}
@@ -225,6 +226,7 @@ function SAL:PhaseFinal()
 	self.PhaseObj.Objectives:Remove()
 	self.PhaseObj.Objectives:AddPercent(self.Salvarola, 0, 10)
 	self.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
+	KBM.PercentageMon:End()
 end
 
 function SAL:RemoveUnits(UnitID)

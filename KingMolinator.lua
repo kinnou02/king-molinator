@@ -78,7 +78,7 @@ KBM.ID = AddonData.id
 KBM.ModList = {}
 KBM.Testing = false
 KBM.ValidTime = false
-KBM.IsAlpha = true
+KBM.IsAlpha = false
 KBM.Debug = false
 KBM.Aux = {}
 KBM.TestFilters = {}
@@ -4513,33 +4513,39 @@ function KBM.CreateEditFrame(parent, hook, layer)
 		
 		self:SetBackgroundColor(0,0,0,0.5)
 		self._offset = {
-			x = Mouse.x - (self:GetLeft() + (self:GetWidth() * 0.5)),
-			y = Mouse.y - (self:GetTop() + (self:GetHeight() * 0.5)),
+			x = (Mouse.x - (self:GetLeft() + (self:GetWidth() * 0.5))) or 0,
+			y = (Mouse.y - (self:GetTop() + (self:GetHeight() * 0.5))) or 0,
 		}
 		if self._hook then
 			self._hook("start")
 		end
 		
 		self:EventAttach(Event.UI.Input.Mouse.Cursor.Move, EventFunc.HandleMouseMove, "KBM-EditFrame-MouseMoveHandler_"..parent:GetName())
+		self._moving = true
 	end
 	
 	function EventFunc:HandleMouseMove(handle, x, y)
-		self:GetParent():SetPoint("CENTER", UIParent, "TOPLEFT", x - self._offset.x, y - self._offset.y)
+		if self._moving then
+			self:GetParent():SetPoint("CENTER", UIParent, "TOPLEFT", x - self._offset.x, y - self._offset.y)
+		end
 	end
 	
 	function EventFunc:HandleMouseUp()
-		local Mouse = Inspect.Mouse()
-		
-		self:SetBackgroundColor(0,0,0,0)
-		self:EventDetach(Event.UI.Input.Mouse.Cursor.Move, EventFunc.HandleMouseMove)
-		local relX = (Mouse.x - self._offset.x) / UIParent:GetWidth()
-		local relY = (Mouse.y - self._offset.y) / UIParent:GetHeight()
-		self._offset = nil
-		
-		if self._hook then
-			self._hook("end", relX, relY)
+		if self._moving then
+			local Mouse = Inspect.Mouse()
+			
+			self:SetBackgroundColor(0,0,0,0)
+			self:EventDetach(Event.UI.Input.Mouse.Cursor.Move, EventFunc.HandleMouseMove)
+			local relX = (Mouse.x - self._offset.x) / UIParent:GetWidth()
+			local relY = (Mouse.y - self._offset.y) / UIParent:GetHeight()
+			self._offset = nil
+			
+			if self._hook then
+				self._hook("end", relX, relY)
+			end
+			self:GetParent():SetPoint("CENTER", UIParent, relX, relY)
+			self._moving = false
 		end
-		self:GetParent():SetPoint("CENTER", UIParent, relX, relY)
 	end
 		
 	-- function BarObj:unlockSize(bool)
