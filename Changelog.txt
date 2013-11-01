@@ -1,4 +1,10 @@
-﻿v1.5.3
+﻿v1.5.4
+
+Castbars
+* Fixed: Error 111 when unpinning castbars via the encounter castbar tab while global bars are not visible.
+
+----
+v1.5.3
 
 Castbars
 * Fixed: Error 609 related to Dynamic unit castbar handling.

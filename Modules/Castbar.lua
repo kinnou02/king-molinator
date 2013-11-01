@@ -108,8 +108,10 @@ function KBM.Castbar:Init()
 	
 	function self.Anchor:RemoveBar(castObj)
 		if castObj.AnchorObj then
-			if castObj.CurrentBar.visibleObj then
-				self:HideBar(castObj, castObj.CurrentBar)
+			if castObj.CurrentBar then
+				if castObj.CurrentBar.visibleObj then
+					self:HideBar(castObj, castObj.CurrentBar)
+				end
 			end
 			castObj:Unpin()
 			self.Bars:Remove(castObj.AnchorObj)
