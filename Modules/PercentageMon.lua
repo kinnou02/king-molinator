@@ -306,8 +306,8 @@ function PM:Init()
 				Y = 0.48,
 			},
 			Layer = 4,
-			Alpha = 0.5,
-			Scale = 0.135,
+			Alpha = 0.8,
+			Scale = 0.4,
 		},
 		Percent = {
 			Left = {

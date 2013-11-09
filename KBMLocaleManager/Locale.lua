@@ -149,6 +149,20 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Marks.Squirrel = KBM.Language:Add("Squirrel")
 	KBM.Language.Marks.Squirrel:SetFrench("Écureuil")
 	KBM.Language.Marks.Squirrel:SetGerman("Eichhörnchen")
+	KBM.Language.Marks.Crown = KBM.Language:Add("Crown")
+	KBM.Language.Marks.HealTwo = KBM.Language:Add("Heal Two")
+	KBM.Language.Marks.HealThree = KBM.Language:Add("Heal Three")
+	KBM.Language.Marks.HealFour = KBM.Language:Add("Heal Four")
+	KBM.Language.Marks.Heart = KBM.Language:Add("Heart")
+	KBM.Language.Marks.HeartLeft = KBM.Language:Add("Heart Left Side")
+	KBM.Language.Marks.HeartRight = KBM.Language:Add("Heart Right Side")
+	KBM.Language.Marks.HeartLeft = KBM.Language:Add("Radioactive")
+	KBM.Language.Marks.Sad = KBM.Language:Add("Sad")
+	KBM.Language.Marks.TankTwo = KBM.Language:Add("Tank Two")
+	KBM.Language.Marks.TankThree = KBM.Language:Add("Tank Three")
+	KBM.Language.Marks.TankFour = KBM.Language:Add("Tank Four")
+	KBM.Language.Marks.Luck = KBM.Language:Add("Luck")
+
 	
 	-- Version Info
 	KBM.Language.Version = {}

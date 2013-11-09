@@ -1,4 +1,16 @@
-﻿v1.5.4
+﻿v1.5.5
+
+Rift Version
+* Change: Now supports Rift 2.5
+
+Marks
+* New: Added all new marks available with Rift 2.5.
+
+Percentage Monitor
+* Fixed: Issues with Mark sizes and transparency.
+
+----
+v1.5.4
 
 Castbars
 * Fixed: Error 111 when unpinning castbars via the encounter castbar tab while global bars are not visible.

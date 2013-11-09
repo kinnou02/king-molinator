@@ -9,6 +9,7 @@ chKBM_GlobalOptions = nil
 
 local KingMol_Main = {}
 local AddonData = Inspect.Addon.Detail("KingMolinator")
+local KBMIni = AddonData
 local KBM = AddonData.data
 local LocaleManager = Inspect.Addon.Detail("KBMLocaleManager")
 local KBMLM = LocaleManager.data
@@ -795,6 +796,16 @@ local function KBM_DefineVars(handle, AddonID)
 			},
 		}
 		KBM.Marks = {
+			Location = {
+				[19] = KBMIni.id,
+				[20] = KBMIni.id,
+				[21] = KBMIni.id,
+				[27] = KBMIni.id,
+				[28] = KBMIni.id,
+				[29] = KBMIni.id,
+			},
+			LocationFull = {
+			},
 			File = {
 				[1] = "vfx_ui_mob_tag_01_mini.png.dds",
 				[2] = "vfx_ui_mob_tag_02_mini.png.dds",
@@ -812,7 +823,20 @@ local function KBM_DefineVars(handle, AddonID)
 				[14] = "vfx_ui_mob_tag_skull_mini.png.dds",
 				[15] = "vfx_ui_mob_tag_no_mini.png.dds",
 				[16] = "vfx_ui_mob_tag_smile_mini.png.dds",
-				[17] = "vfx_ui_mob_tag_squirrel_mini.png.dds",	
+				[17] = "vfx_ui_mob_tag_squirrel_mini.png.dds",
+				[18] = "vfx_ui_mob_tag_crown_mini.png.dds",
+				[19] = "media/heal_two_small.png",
+				[20] = "media/heal_three_small.png",
+				[21] = "media/heal_four_small.png",
+				[22] = "vfx_ui_mob_tag_heart_mini.png.dds",
+				[23] = "vfx_ui_mob_tag_heart_leftside_mini.png.dds",
+				[24] = "vfx_ui_mob_tag_heart_rightside_mini.png.dds",
+				[25] = "vfx_ui_mob_tag_radioactive_mini.png.dds",
+				[26] = "vfx_ui_mob_tag_sad_mini.png.dds",
+				[27] = "media/tank_two_small.png",
+				[28] = "media/tank_three_small.png",
+				[29] = "media/tank_four_small.png",
+				[30] = "vfx_ui_mob_tag_clover_mini.png.dds",
 			},
 			FileFull = {
 				[1] = "vfx_ui_mob_tag_01.png.dds",
@@ -831,7 +855,20 @@ local function KBM_DefineVars(handle, AddonID)
 				[14] = "vfx_ui_mob_tag_skull.png.dds",
 				[15] = "vfx_ui_mob_tag_no.png.dds",
 				[16] = "vfx_ui_mob_tag_smile.png.dds",
-				[17] = "vfx_ui_mob_tag_squirrel.png.dds",	
+				[17] = "vfx_ui_mob_tag_squirrel.png.dds",
+				[18] = "vfx_ui_mob_tag_crown.png.dds",
+				[19] = "vfx_ui_mob_tag_heal2.png.dds",
+				[20] = "vfx_ui_mob_tag_heal3.png.dds",
+				[21] = "vfx_ui_mob_tag_heal4.png.dds",
+				[22] = "vfx_ui_mob_tag_heart.png.dds",
+				[23] = "vfx_ui_mob_tag_heart_leftside.png.dds",
+				[24] = "vfx_ui_mob_tag_heart_rightside.png.dds",
+				[25] = "vfx_ui_mob_tag_radioactive.png.dds",
+				[26] = "vfx_ui_mob_tag_sad.png.dds",
+				[27] = "vfx_ui_mob_tag_tank2.png.dds",
+				[28] = "vfx_ui_mob_tag_tank3.png.dds",
+				[29] = "vfx_ui_mob_tag_tank4.png.dds",
+				[30] = "vfx_ui_mob_tag_clover.png.dds",
 			},			
 			Icon = {},
 			Name = {
@@ -852,6 +889,19 @@ local function KBM_DefineVars(handle, AddonID)
 				[15] = KBM.Language.Marks.Avoid[KBM.Lang],
 				[16] = KBM.Language.Marks.Smile[KBM.Lang],
 				[17] = KBM.Language.Marks.Squirrel[KBM.Lang],
+				[18] = KBM.Language.Marks.Crown[KBM.Lang],
+				[19] = KBM.Language.Marks.HealTwo[KBM.Lang],
+				[20] = KBM.Language.Marks.HealThree[KBM.Lang],
+				[21] = KBM.Language.Marks.HealFour[KBM.Lang],
+				[22] = KBM.Language.Marks.Heart[KBM.Lang],
+				[23] = KBM.Language.Marks.HeartLeft[KBM.Lang],
+				[24] = KBM.Language.Marks.HeartRight[KBM.Lang],
+				[25] = KBM.Language.Marks.HeartLeft[KBM.Lang],
+				[26] = KBM.Language.Marks.Sad[KBM.Lang],
+				[27] = KBM.Language.Marks.TankTwo[KBM.Lang],
+				[28] = KBM.Language.Marks.TankThree[KBM.Lang],
+				[29] = KBM.Language.Marks.TankFour[KBM.Lang],
+				[30] = KBM.Language.Marks.Luck[KBM.Lang],
 			},
 		}
 		KBM_GlobalOptions = KBM.Options
@@ -7458,14 +7508,14 @@ local function KBM_Start()
 		["KBMAddWatch"] = {
 			High = 0,
 			Mid = 2,
-			Low = 6,
-			Rev = 70,
+			Low = 8,
+			Rev = 73,
 		},
 		["KBMMarkIt"] = {
 			High = 0,
-			Mid = 1,
-			Low = 9,
-			Rev = 41,
+			Mid = 2,
+			Low = 0,
+			Rev = 43,
 		},
 	}
 
