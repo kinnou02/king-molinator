@@ -192,7 +192,7 @@ LibSUnit._internal = {
 		},
 	},
 }
-_lsu = LibSUnit._internal
+local _lsu = LibSUnit._internal
 
 _lsu.TargetQueue = {}
 

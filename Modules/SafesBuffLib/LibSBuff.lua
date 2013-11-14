@@ -53,7 +53,11 @@ _int.Event.Buff.Remove = Utility.Event.Create("SafesBuffLib", "Buff.Remove")
 function _int.Monitor:RemoveBuff(BuffID)
 	local endTime = self.Buffs[BuffID].Time
 	local UnitID = self.Buffs[BuffID].Unit
-	self.Units[UnitID][BuffID] = nil
+	if UnitID then
+		if self.Units[UnitID] then
+			self.Units[UnitID][BuffID] = nil
+		end
+	end
 	if endTime then
 		if self.Times[endTime] then
 			self.Times[endTime][BuffID] = nil
@@ -509,5 +513,5 @@ Command.Event.Attach(Event.Buff.Add, function(...) _int:BuffAdd(...) end, "Buff 
 Command.Event.Attach(Event.Buff.Change, function(...) _int:BuffChange(...) end, "Buff Change Handler", -1)
 -- System Related Events
 Command.Event.Attach(Event.System.Update.Begin, function() _int:UpdateCycle() end, "Buff Cycle Start", -1)
-Command.Event.Attach(Event.System.Update.End, function() _int:UpdateCycle() end, "Buff Cycle End", -1)
+--Command.Event.Attach(Event.System.Update.End, function() _int:UpdateCycle() end, "Buff Cycle End", -1)
 Command.Event.Attach(Event.Addon.Load.End, function() _int:Start() end, "Buff Pre-cache", -1)

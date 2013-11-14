@@ -143,7 +143,7 @@ function Menu.UI.SetDefaults(Object, Name, Settings, ID, Callback, Page)
 end
 
 function Menu.Object:CreateCheck(Name, Settings, ID, Callback, Page)
-	CheckObj = {}
+	local CheckObj = {}
 	Menu.UI.SetDefaults(CheckObj, Name, Settings, ID, Callback, Page)
 	CheckObj.Type = "Check"
 	
@@ -349,7 +349,7 @@ function Menu.Object:CreateCheck(Name, Settings, ID, Callback, Page)
 end
 
 function Menu.Object:CreatePlainHeader(Name, Settings, ID, Callback, Page)
-	PlainHObj = {}
+	local PlainHObj = {}
 	Menu.UI.SetDefaults(PlainHObj, Name, Settings, ID, Callback, Page)
 	PlainHObj.Type = "Plain"
 	
@@ -456,7 +456,7 @@ function Menu.Object:CreatePlainHeader(Name, Settings, ID, Callback, Page)
 end
 
 function Menu.Object:CreateHeader(Name, Settings, ID, Callback, Page)
-	HeaderObj = {}
+	local HeaderObj = {}
 	Menu.UI.SetDefaults(HeaderObj, Name, Settings, ID, Callback, Page)
 	HeaderObj.Type = "Header"
 	
@@ -588,7 +588,7 @@ function Menu.Object:CreateHeader(Name, Settings, ID, Callback, Page)
 end
 
 function Menu.Object:CreateColorPicker(Name, Object, ID, Callback, Page)
-	ColorObj = {}
+	local ColorObj = {}
 	Menu.UI.SetDefaults(ColorObj, Name, Object.Settings, ID, Callback, Page)
 	ColorObj.Type = "Color"
 	ColorObj.KBMObject = Object
@@ -840,7 +840,7 @@ function Menu.Object:CreateSpacer()
 end
 
 function Menu.Object:CreateGroup(Name, Settings, ID, Callback, Page)
-	GroupObj = {}
+	local GroupObj = {}
 	Menu.UI.SetDefaults(GroupObj, Name, Settings, ID, Callback, Page)
 	
 	function GroupObj:Render()	

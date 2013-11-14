@@ -79,7 +79,7 @@ KBM.ID = AddonData.id
 KBM.ModList = {}
 KBM.Testing = false
 KBM.ValidTime = false
-KBM.IsAlpha = false
+KBM.IsAlpha = true
 KBM.Debug = false
 KBM.Aux = {}
 KBM.TestFilters = {}
@@ -1777,7 +1777,7 @@ function KBM.Trigger:Init()
 	end
 	
 	function self:Create(Trigger, Type, Unit, Hook, NonEncounter)	
-		TriggerObj = {}
+		local TriggerObj = {}
 		TriggerObj.Timers = {}
 		TriggerObj.Alerts = {}
 		TriggerObj.Spies = {}
@@ -5504,7 +5504,7 @@ function KBM.Alert:Init()
 	end
 	
 	function self:Create(Text, Duration, Flash, Countdown, Color)
-		AlertObj = {}
+		local AlertObj = {}
 		AlertObj.DefDuration = Duration
 		AlertObj.Duration = Duration
 		AlertObj.Flash = Flash
@@ -6522,7 +6522,7 @@ function KBM.ApplySettings()
 	KBM.TankSwap.Enabled = KBM.Options.TankSwap.Enabled
 end
 
-function KBM_Debug()
+local function KBM_Debug()
 	if KBM.Debug then
 		print("Debugging disabled")
 		KBM.Debug = false

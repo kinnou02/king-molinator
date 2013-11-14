@@ -1,4 +1,19 @@
-﻿v1.5.5
+﻿v1.5.6
+
+Fixed: Removed KBM table from Global Namespace.
+Fixed: Removed KBM_Debug function from Global Namespace.
+Fixed: Removed TriggerObj from Global Namespace.
+Fixed: Removed AlertObj from Global Namespace.
+Fixed: Removed _lsu from Global Namespace (LibSUnit)
+Fixed: Removed AlertObj from Global Namespace.
+Fixed: Removed a bunch of Globals from (Objects.Lua)
+
+LibSBuff
+* Changed: Halved call time for buff handling.
+* Fixed: Added capture for unhandled .Unit fields.
+
+----
+v1.5.5
 
 Rift Version
 * Change: Now supports Rift 2.5

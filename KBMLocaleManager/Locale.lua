@@ -101,7 +101,7 @@ end
 -- Set Main Options Page Translations and In-Game messages/UI Headings
 function KBMLM.SetMain_Lang()
 
-	KBM = KBMLM.KBM
+	local KBM = KBMLM.KBM
 	-- Main Addon Dictionary
 	-- Welcome Messages
 	KBM.Language.Welcome = {}
@@ -972,6 +972,8 @@ function KBMLM.FindMissing(handle, TempLang)
 	-- First check Main Translations KBM.Language.*.{LangObj}
 	local MSID = "Main Dictionary"
 	local FileID = "Locale.lua"
+	local KBM = KBMLM.KBM
+	
 	for ID, LangObj in pairs(KBMLM.Language) do
 		if type(LangObj) == "table" then
 			if LangObj.Type == "GroupObject" then

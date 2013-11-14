@@ -9,9 +9,9 @@ Author = "Paul Snart"
 Website = "http://twitter.com/#!/psnart"
 Email = "snarty@gmail.com"
 
-Version = "0.3.4"
+Version = "0.3.5"
 
-Environment = "2.3"
+Environment = "2.5"
 
 RunOnStartup = {
 	"LibSUnit.lua",
