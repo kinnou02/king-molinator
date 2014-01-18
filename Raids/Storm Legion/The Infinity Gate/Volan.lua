@@ -1,5 +1,5 @@
 ﻿-- Volan Boss Mod for King Boss Mods
--- Written by Paul Snart
+-- Written by Noshei
 -- Copyright 2013
 --
 
@@ -24,28 +24,54 @@ local VOL = {
 	Lang = {},
 	ID = "SLIGVolan",
 	Object = "VOL",
-	--Enrage = 6 * 60 + 30,
+	Enrage = 10 * 60 + 30,
+	FirstSpine = false,
+	SpineCount = 0,
+	OutbreakCount = 0,
+	ExtinctionCount = 0,
+	OblivionCount = 0,
 }
 
 KBM.RegisterMod(VOL.ID, VOL)
 
 -- Main Unit Dictionary
 VOL.Lang.Unit = {}
-VOL.Lang.Unit.Volan = KBM.Language:Add("Volan") -- 
+VOL.Lang.Unit.Volan = KBM.Language:Add("Volan")
 VOL.Lang.Unit.VolanLL = KBM.Language:Add("Volan's Left Leg")
 VOL.Lang.Unit.VolanRL = KBM.Language:Add("Volan's Right Leg")
 
 -- Ability Dictionary
 VOL.Lang.Ability = {}
+VOL.Lang.Ability.Energy = KBM.Language:Add("Energy Beam")
+VOL.Lang.Ability.Spine = KBM.Language:Add("Spine Shatter")
+VOL.Lang.Ability.Outbreak = KBM.Language:Add("Outbreak")
+VOL.Lang.Ability.Extinction = KBM.Language:Add("Extinction")
+VOL.Lang.Ability.Oblivion = KBM.Language:Add("Eve of Oblivion")
 
 -- Description Dictionary
 VOL.Lang.Main = {}
 
 -- Debuff Dictionary
 VOL.Lang.Debuff = {}
+VOL.Lang.Debuff.Outbreak = KBM.Language:Add("Outbreak")
+
+-- Notify Dictionary
+VOL.Lang.Notify = {}
+VOL.Lang.Notify.Crystal = KBM.Language:Add("Volan propels a burst of energy towards (%a*).")
+VOL.Lang.Notify.Spine = KBM.Language:Add("Your cities will fall.")
+VOL.Lang.Notify.Outbreak = KBM.Language:Add("Your lands will burn.")
+VOL.Lang.Notify.Extinction = KBM.Language:Add("Extinction awaits you.")
+VOL.Lang.Notify.Oblivion = KBM.Language:Add("Witness true power.")
+VOL.Lang.Notify.Exhausted = KBM.Language:Add('Volan shouts, "Resistance only delays the inevitable."')
+VOL.Lang.Notify.PhaseTwo = KBM.Language:Add('Volan bellows, "My soul burns with hatred. I will only be free from my torment when no life remains on this accursed world."')
 
 -- Messages Dictionary
 VOL.Lang.Messages = {}
+VOL.Lang.Messages.CrystalRun = KBM.Language:Add("Run to Crystal!")
+VOL.Lang.Messages.Extinction = KBM.Language:Add("Spread Out!")
+VOL.Lang.Messages.OblivionDamage = KBM.Language:Add("Eve of Oblivion Hits Raid!")
+VOL.Lang.Messages.ExhaustedStart = KBM.Language:Add("Start DPS Burn!")
+VOL.Lang.Messages.ExhaustedEnd = KBM.Language:Add("End of Exhausted!")
 
 VOL.Descript = VOL.Lang.Unit.Volan[KBM.Lang]
 
@@ -58,29 +84,46 @@ VOL.Volan = {
 	Dead = false,
 	Available = false,
 	Menu = {},
-	UTID = "none",
+	UTID = "U676084BA1D5160F3",
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
-	-- TimersRef = {},
-	-- AlertsRef = {},
-	-- MechRef = {},
+	TimersRef = {},
+	AlertsRef = {},
+	MechRef = {},
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.Castbar(),
-		-- TimersRef = {
-			-- Enabled = true,
-		-- },
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Disruptor = KBM.Defaults.AlertObj.Create("yellow"),
-			-- Distortion = KBM.Defaults.AlertObj.Create("red"),
-		-- },
-		-- MechRef = {
-			-- Enabled = true,
-			-- Decay = KBM.Defaults.MechObj.Create("cyan"),
-			-- Distortion = KBM.Defaults.MechObj.Create("red"),
-		-- },
+		TimersRef = {
+			Enabled = true,
+			Energy = KBM.Defaults.TimerObj.Create("blue"),
+			Extinction1 = KBM.Defaults.TimerObj.Create("red"),
+			Extinction2 = KBM.Defaults.TimerObj.Create("red"),
+			Outbreak1 = KBM.Defaults.TimerObj.Create("dark_green"),
+			Outbreak2 = KBM.Defaults.TimerObj.Create("dark_green"),
+			Outbreak3 = KBM.Defaults.TimerObj.Create("dark_green"),
+			Outbreak4 = KBM.Defaults.TimerObj.Create("dark_green"),
+			Outbreak5 = KBM.Defaults.TimerObj.Create("dark_green"),
+			Spine1 = KBM.Defaults.TimerObj.Create("yellow"),
+			Spine2 = KBM.Defaults.TimerObj.Create("yellow"),
+			Spine3 = KBM.Defaults.TimerObj.Create("yellow"),
+			Oblivion1 = KBM.Defaults.TimerObj.Create("cyan"),
+			Oblivion2 = KBM.Defaults.TimerObj.Create("cyan"),
+			OblivionDamage = KBM.Defaults.TimerObj.Create("red"),
+			ExhaustedStart = KBM.Defaults.TimerObj.Create("purple"),
+			ExhaustedEnd = KBM.Defaults.TimerObj.Create("purple"),
+		},
+		AlertsRef = {
+			Enabled = true,
+			Outbreak = KBM.Defaults.AlertObj.Create("dark_green"),
+			Crystal = KBM.Defaults.AlertObj.Create("blue"),
+			Extinction = KBM.Defaults.AlertObj.Create("red"),
+		},
+		MechRef = {
+			Enabled = true,
+			Outbreak = KBM.Defaults.MechObj.Create("dark_green"),
+			Crystal = KBM.Defaults.MechObj.Create("blue"),
+		},
 	}
 }
 
@@ -92,7 +135,7 @@ VOL.VolanLL = {
 	Dead = false,
 	Available = false,
 	Menu = {},
-	UTID = "none",
+	UTID = "U47623A846423F2F7",
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
@@ -126,7 +169,7 @@ VOL.VolanRL = {
 	Dead = false,
 	Available = false,
 	Menu = {},
-	UTID = "none",
+	UTID = "U17B096BE7903E180",
 	UnitID = nil,
 	TimeOut = 5,
 	Castbar = nil,
@@ -166,15 +209,15 @@ function VOL:InitVars()
 		Enabled = true,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
-		--MechSpy = KBM.Defaults.MechSpy(),
+		MechSpy = KBM.Defaults.MechSpy(),
 		Volan = {
 			CastBar = self.Volan.Settings.CastBar,
-			-- AlertsRef = self.Volan.Settings.AlertsRef,
-			-- TimersRef = self.Volan.Settings.TimersRef,
-			-- MechRef = self.Volan.Settings.MechRef,
+			AlertsRef = self.Volan.Settings.AlertsRef,
+			TimersRef = self.Volan.Settings.TimersRef,
+			MechRef = self.Volan.Settings.MechRef,
 		},
-		--MechTimer = KBM.Defaults.MechTimer(),
-		--Alerts = KBM.Defaults.Alerts(),
+		MechTimer = KBM.Defaults.MechTimer(),
+		Alerts = KBM.Defaults.Alerts(),
 	}
 	KBMSLRDIGVN_Settings = self.Settings
 	chKBMSLRDIGVN_Settings = self.Settings
@@ -218,6 +261,20 @@ function VOL:SaveVars()
 	end	
 end
 
+function VOL.PhaseTwo()
+	if VOL.Phase == 1 then
+		VOL.Phase = 2
+		VOL.PhaseObj.Objectives:Remove()
+		VOL.PhaseObj.Objectives:AddPercent(VOL.Volan, 0, 100)
+		VOL.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
+		VOL.FirstSpine = false
+		VOL.SpineCount = 0
+		VOL.OutbreakCount = 0
+		VOL.ExtinctionCount = 0
+		VOL.OblivionCount = 0
+	end
+end
+
 function VOL:Castbar(units)
 end
 
@@ -256,10 +313,15 @@ function VOL:UnitHPCheck(uDetails, unitID)
 				end
 				self.PhaseObj:Start(self.StartTime)
 				self.PhaseObj:SetPhase("1")
-				self.PhaseObj.Objectives:AddPercent(self.Volan, 0, 100)
+				--self.PhaseObj.Objectives:AddPercent(self.Volan, 0, 100)
 				self.PhaseObj.Objectives:AddPercent(self.VolanLL, 0, 100)
 				self.PhaseObj.Objectives:AddPercent(self.VolanRL, 0, 100)
 				self.Phase = 1
+				self.FirstSpine = false
+				self.SpineCount = 0
+				self.OutbreakCount = 0
+				self.ExtinctionCount = 0
+				self.OblivionCount = 0
 			else
 				BossObj.Dead = false
 				BossObj.Casting = false
@@ -289,6 +351,56 @@ function VOL:Reset()
 	self.PhaseObj:End(Inspect.Time.Real())
 end
 
+function VOL.ExtinctionTrigger()
+	if VOL.Phase == 1 then
+		if VOL.OutbreakCount == 1 then
+			KBM.MechTimer:AddStart(VOL.Volan.TimersRef.Outbreak2)
+		else
+			KBM.MechTimer:AddStart(VOL.Volan.TimersRef.Outbreak3)
+		end
+		VOL.OutbreakCount = VOL.OutbreakCount + 1
+	elseif VOL.Phase == 2 then
+		if VOL.OutbreakCount == 0 then
+			KBM.MechTimer:AddStart(VOL.Volan.TimersRef.Outbreak4)
+			VOL.OutbreakCount = VOL.OutbreakCount + 1
+		else
+			KBM.MechTimer:AddStart(VOL.Volan.TimersRef.Oblivion2)
+		end
+	end
+end
+
+function VOL.OutbreakTrigger()
+	if VOL.Phase == 1 then
+		if VOL.SpineCount == 0 then
+			KBM.MechTimer:AddStart(VOL.Volan.TimersRef.Spine1)
+		elseif VOL.SpineCount == 1 then
+			KBM.MechTimer:AddStart(VOL.Volan.TimersRef.Spine2)
+		else
+			KBM.MechTimer:AddStart(VOL.Volan.TimersRef.Spine3)
+		end
+		VOL.SpineCount = VOL.SpineCount + 1
+	elseif VOL.Phase == 2 then
+		if VOL.OblivionCount == 0 then
+			KBM.MechTimer:AddStart(VOL.Volan.TimersRef.Oblivion1)
+			VOL.OblivionCount = VOL.OblivionCount + 1
+		else
+			KBM.MechTimer:AddStart(VOL.Volan.TimersRef.Extinction2)
+		end
+	end
+end
+
+function VOL.SpineTrigger()
+	if VOL.Phase == 1 then
+		if VOL.FirstSpine then
+			KBM.MechTimer:AddStart(VOL.Volan.TimersRef.Extinction1)
+		else
+			KBM.MechTimer:AddStart(VOL.Volan.TimersRef.Outbreak1)
+			VOL.OutbreakCount = VOL.OutbreakCount + 1
+			VOL.FirstSpine = true
+		end
+	end
+end
+
 function VOL:Timer()	
 end
 
@@ -298,16 +410,67 @@ end
 
 function VOL:Start()
 	-- Create Timers
-	--KBM.Defaults.TimerObj.Assign(self.Volan)
+	self.Volan.TimersRef.Energy = KBM.MechTimer:Add(self.Lang.Ability.Energy[KBM.Lang], 25, false)
+	self.Volan.TimersRef.Extinction1 = KBM.MechTimer:Add(self.Lang.Ability.Extinction[KBM.Lang], 28, false)
+	self.Volan.TimersRef.Extinction2 = KBM.MechTimer:Add(self.Lang.Ability.Extinction[KBM.Lang], 44, false)
+	self.Volan.TimersRef.Outbreak1 = KBM.MechTimer:Add(self.Lang.Ability.Outbreak[KBM.Lang], 25, false)
+	self.Volan.TimersRef.Outbreak2 = KBM.MechTimer:Add(self.Lang.Ability.Outbreak[KBM.Lang], 28, false)
+	self.Volan.TimersRef.Outbreak3 = KBM.MechTimer:Add(self.Lang.Ability.Outbreak[KBM.Lang], 34, false)
+	self.Volan.TimersRef.Outbreak4 = KBM.MechTimer:Add(self.Lang.Ability.Outbreak[KBM.Lang], 24, false)
+	self.Volan.TimersRef.Outbreak5 = KBM.MechTimer:Add(self.Lang.Ability.Outbreak[KBM.Lang], 23, false)
+	self.Volan.TimersRef.Spine1 = KBM.MechTimer:Add(self.Lang.Ability.Spine[KBM.Lang], 36, false)
+	self.Volan.TimersRef.Spine2 = KBM.MechTimer:Add(self.Lang.Ability.Spine[KBM.Lang], 10, false)
+	self.Volan.TimersRef.Spine3 = KBM.MechTimer:Add(self.Lang.Ability.Spine[KBM.Lang], 12, false)
+	self.Volan.TimersRef.Oblivion1 = KBM.MechTimer:Add(self.Lang.Ability.Oblivion[KBM.Lang], 31, false)
+	self.Volan.TimersRef.Oblivion2 = KBM.MechTimer:Add(self.Lang.Ability.Oblivion[KBM.Lang], 13, false)
+	self.Volan.TimersRef.OblivionDamage = KBM.MechTimer:Add(self.Lang.Messages.OblivionDamage[KBM.Lang], 14, false)
+	self.Volan.TimersRef.ExhaustedStart = KBM.MechTimer:Add(self.Lang.Messages.ExhaustedStart[KBM.Lang], 19, false)
+	self.Volan.TimersRef.ExhaustedEnd = KBM.MechTimer:Add(self.Lang.Messages.ExhaustedEnd[KBM.Lang], 20, false)
+	KBM.Defaults.TimerObj.Assign(self.Volan)
 	
 	-- Create Alerts
-	--KBM.Defaults.AlertObj.Assign(self.Volan)
+	self.Volan.AlertsRef.Outbreak = KBM.Alert:Create(self.Lang.Debuff.Outbreak[KBM.Lang], nil, true, true, "dark_green")
+	self.Volan.AlertsRef.Crystal = KBM.Alert:Create(self.Lang.Messages.CrystalRun[KBM.Lang], 6, false, true, "blue")
+	self.Volan.AlertsRef.Extinction = KBM.Alert:Create(self.Lang.Messages.Extinction[KBM.Lang], 14, false, true, "red")
+	KBM.Defaults.AlertObj.Assign(self.Volan)
 
-	-- Create Mechanic Spies (Volan)
-	--KBM.Defaults.MechObj.Assign(self.Volan)
+	-- Create Mechanic Spies
+	self.Volan.MechRef.Outbreak = KBM.MechSpy:Add(self.Lang.Debuff.Outbreak[KBM.Lang], nil, "playerDebuff", self.Volan)
+	self.Volan.MechRef.Crystal = KBM.MechSpy:Add(self.Lang.Messages.CrystalRun[KBM.Lang], 6, "mechanic", self.Volan)
+	KBM.Defaults.MechObj.Assign(self.Volan)
 
-	-- Assign Alerts and Timers to Triggers
+	-- Assign Alerts and Timers for Triggers
+	self.Volan.Triggers.Crystal = KBM.Trigger:Create(self.Lang.Notify.Crystal[KBM.Lang], "notify", self.Volan)
+	self.Volan.Triggers.Crystal:AddTimer(self.Volan.TimersRef.Energy)
+	self.Volan.Triggers.Crystal:AddSpy(self.Volan.MechRef.Crystal)
+	self.Volan.Triggers.Crystal:AddAlert(self.Volan.AlertsRef.Crystal, true)
 	
+	self.Volan.Triggers.OutbreakBuff = KBM.Trigger:Create(self.Lang.Debuff.Outbreak[KBM.Lang], "playerDebuff", self.Volan)
+	self.Volan.Triggers.OutbreakBuff:AddSpy(self.Volan.MechRef.Outbreak)
+	self.Volan.Triggers.OutbreakRem = KBM.Trigger:Create(self.Lang.Debuff.Outbreak[KBM.Lang], "playerBuffRemove", self.Volan)
+	self.Volan.Triggers.OutbreakRem:AddStop(self.Volan.MechRef.Outbreak)
+	
+	self.Volan.Triggers.Extinction = KBM.Trigger:Create(self.Lang.Notify.Extinction[KBM.Lang], "notify", self.Volan)
+	self.Volan.Triggers.Extinction:AddAlert(self.Volan.AlertsRef.Extinction, false)
+	self.Volan.Triggers.Extinction:AddPhase(self.ExtinctionTrigger)
+	
+	self.Volan.Triggers.Outbreak = KBM.Trigger:Create(self.Lang.Notify.Outbreak[KBM.Lang], "notify", self.Volan)
+	self.Volan.Triggers.Outbreak:AddPhase(self.OutbreakTrigger)
+	
+	self.Volan.Triggers.Spine = KBM.Trigger:Create(self.Lang.Notify.Spine[KBM.Lang], "notify", self.Volan)
+	self.Volan.Triggers.Spine:AddPhase(self.SpineTrigger)
+	
+	self.Volan.Triggers.Oblivion = KBM.Trigger:Create(self.Lang.Notify.Oblivion[KBM.Lang], "notify", self.Volan)
+	self.Volan.Triggers.Oblivion:AddTimer(self.Volan.TimersRef.OblivionDamage)
+	self.Volan.Triggers.Oblivion:AddTimer(self.Volan.TimersRef.ExhaustedStart)
+	
+	self.Volan.Triggers.Exhausted = KBM.Trigger:Create(self.Lang.Notify.Exhausted[KBM.Lang], "notify", self.Volan)
+	self.Volan.Triggers.Exhausted:AddTimer(self.Volan.TimersRef.ExhaustedEnd)
+	self.Volan.Triggers.Exhausted:AddTimer(self.Volan.TimersRef.Outbreak5)
+	
+	self.Volan.Triggers.PhaseTwo = KBM.Trigger:Create(self.Lang.Notify.PhaseTwo[KBM.Lang], "notify", self.Volan)
+	self.Volan.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
+		
 	self.Volan.CastBar = KBM.Castbar:Add(self, self.Volan)
 	self.VolanLL.CastBar = KBM.Castbar:Add(self, self.VolanLL)
 	self.VolanRL.CastBar = KBM.Castbar:Add(self, self.VolanRL)

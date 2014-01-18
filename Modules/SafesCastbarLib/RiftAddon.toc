@@ -9,9 +9,9 @@ Author = "Paul Snart"
 Website = "http://twitter.com/#!/psnart"
 Email = "snarty@gmail.com"
 
-Version = "0.1.8"
+Version = "0.1.9"
 
-Environment = "2.4"
+Environment = "2.5"
 
 RunOnStartup = {
 	"LibSCast.lua",

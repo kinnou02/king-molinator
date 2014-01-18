@@ -1,16 +1,50 @@
 ﻿v1.5.6
 
-Fixed: Removed KBM table from Global Namespace.
-Fixed: Removed KBM_Debug function from Global Namespace.
-Fixed: Removed TriggerObj from Global Namespace.
-Fixed: Removed AlertObj from Global Namespace.
-Fixed: Removed _lsu from Global Namespace (LibSUnit)
-Fixed: Removed AlertObj from Global Namespace.
-Fixed: Removed a bunch of Globals from (Objects.Lua)
+Defaults
+* New: Added the follow to /kbmdefault
+** PlayerCastbar : Resets the position of the Player Castbar.
+** TargetCastbar : Resets the position of the Target Castbar.
+** FocusCastbar  : Resets the position of the Focus Castbar.
+** BossCastbar	 : Resets the position of the global Boss Castbars.
+** Castbars		 : Resets all of the above.
+
+System
+* Fixed: Removed KBM table from Global Namespace.
+* Fixed: Removed KBM_Debug function from Global Namespace.
+* Fixed: Removed TriggerObj from Global Namespace.
+* Fixed: Removed AlertObj from Global Namespace.
+* Fixed: Removed _lsu from Global Namespace (LibSUnit)
+* Fixed: Removed AlertObj from Global Namespace.
+* Fixed: Removed a bunch of Globals from (Objects.Lua)
 
 LibSBuff
 * Changed: Halved call time for buff handling.
 * Fixed: Added capture for unhandled .Unit fields.
+
+Raids
+* New: Planebreaker Bastion
+** New: Eggtenders
+*** New: Timers added for Bile Faucet
+*** New: Mechanic Spy and Screen Alert added for Pool of Bile
+*** New: Castbars added for all Eggtenders.
+** New: Warden Thrax
+*** New: Alerts and Timers added for Greater Tectonic Transference.
+*** New: Alerts and Timers added for Chain Gang.
+*** New: Alert added for Knockback (Seismic Disturbance)
+*** New: Alert added for Execution.
+*** New: Alert added for Rockslide.
+*** New: Castbar added.
+** New: Proteus
+*** New: Added Mechanic Spy and Screen Alert for Unstoppable Rampage.
+*** New: Glacial Lure and Screen Alert for Glacial Lure.
+
+* The Infinity Gate
+** Volan (Work in Progress)
+*** New: Timer added for Energy Beam.
+*** New: Timer added for Spine Shatter.
+*** New: Timers added for Exitinciton.
+*** New: Timers, Mechanic Spy and Alert added for Outbreak.
+*** New: Eve of Oblivion.
 
 ----
 v1.5.5

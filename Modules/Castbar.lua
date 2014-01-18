@@ -17,47 +17,67 @@ end
 local LSA = Inspect.Addon.Detail("SafesTableLib")
 local LibSata = LSA.data
 
-KBM.Castbar = {
-	Player = {
-		Self = {
-			ID = "KBM_Player_Bar",
-			Type = "player",
-			Style = "default",
-			Pack = "Rift",
-			Name = "Your Castbar",
-			MenuName = KBM.Language.CastBar.Player[KBM.Lang],
-			relX = 0.5, 
-			relY = 0.25,
-		},
-		Target = {
-			ID = "KBM_Player_Target",
-			Type = "player.target",
-			Pack = "Rift",
-			Name = "Target Castbar",
-			MenuName = KBM.Language.CastBar.Target[KBM.Lang],
-			relX = 0.688,
-			relY = 0.45,
-		},
-		Focus = {
-			ID = "KBM_Player_Focus",
-			Type = "focus",
-			Pack = "Rift",
-			Name = "Focus Castbar",
-			MenuName = KBM.Language.CastBar.Focus[KBM.Lang],
-			relX = 0.25,
-			relY = 0.61,
-		},
-	},
-	Global = {
+KBM.Castbar = {}
+
+function KBM.Castbar:DefaultSelf()
+	local CastObj = {
+		ID = "KBM_Player_Bar",
+		Type = "player",
+		Style = "default",
+		Pack = "Rift",
+		Name = "Your Castbar",
+		MenuName = KBM.Language.CastBar.Player[KBM.Lang],
+		relX = 0.5, 
+		relY = 0.25,
+	}
+	return CastObj
+end
+
+function KBM.Castbar:DefaultTarget()
+	local CastObj = {
+		ID = "KBM_Player_Target",
+		Type = "player.target",
+		Pack = "Rift",
+		Name = "Target Castbar",
+		MenuName = KBM.Language.CastBar.Target[KBM.Lang],
+		relX = 0.688,
+		relY = 0.45,
+	}
+	return CastObj
+end
+
+function KBM.Castbar:DefaultFocus()
+	local CastObj = {
+		ID = "KBM_Player_Focus",
+		Type = "focus",
+		Pack = "Rift",
+		Name = "Focus Castbar",
+		MenuName = KBM.Language.CastBar.Focus[KBM.Lang],
+		relX = 0.25,
+		relY = 0.61,
+	}
+	return CastObj
+end
+
+function KBM.Castbar:DefaultGlobal()
+	local CastObj = {
 		ID = "KBM_Global_Bar",
 		Style = "raid",
 		Pack = "Rift",
 		Name = "Global Boss Castbar",
 		relX = 0.5,
 		relY = 0.7,
-	},
-	Event = {},
+	}
+	return CastObj
+end
+
+KBM.Castbar.Player = {
+	Self = KBM.Castbar:DefaultSelf(),
+	Target = KBM.Castbar:DefaultTarget(),
+	Focus = KBM.Castbar:DefaultFocus(),
 }
+KBM.Castbar.Global = KBM.Castbar:DefaultGlobal()
+KBM.Castbar.Event = {}
 
 KBM.Castbar.MenuOrder = {}
 table.insert(KBM.Castbar.MenuOrder, KBM.Castbar.Player.Self)
@@ -327,6 +347,7 @@ function KBM.Castbar:LoadPlayerBars()
 		KBM.Castbar.Global.Style)
 		
 	self.Global.CastObj.Name = "Boss Castbars"
+	self.Global.Settings = self.Global.CastObj.Settings
 	
 	self.Anchor.cradle:SetPoint("CENTER", UIParent, KBM.Options.Castbar.Global.relX, KBM.Options.Castbar.Global.relY)
 	self.Anchor:AddBar(self.Global.CastObj)

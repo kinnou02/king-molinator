@@ -6593,6 +6593,51 @@ function KBM.SetDefault.rcbutton()
 	KBM.Ready.Button:Defaults()
 end
 
+function KBM.SetDefault.playercastbar()
+	local tempCastObj = KBM.Castbar:DefaultSelf()
+	local Castbar = KBM.Castbar.Player.Self
+	Castbar.Settings.relX = tempCastObj.relX
+	Castbar.Settings.relY = tempCastObj.relY
+	if Castbar.Settings.pinned then
+		Castbar.Settings.pinned = false
+		Castbar.CastObj:Unpin()
+		Castbar.CastObj:Unlocked(Castbar.Settings.visible)
+		Castbar.Settings.unlocked = Castbar.Settings.visible
+		UI.Native.Castbar:EventDetach(Event.UI.Layout.Size, KBM.Castbar.HandlePinScale, "KBMCastbar-Mimic-PinScale-Handler")
+	end
+	Castbar.CastObj:UpdateSettings()
+end
+
+function KBM.SetDefault.targetcastbar()
+	local tempCastObj = KBM.Castbar:DefaultTarget()
+	local Castbar = KBM.Castbar.Player.Target
+	Castbar.Settings.relX = tempCastObj.relX
+	Castbar.Settings.relY = tempCastObj.relY
+	Castbar.CastObj:UpdateSettings()
+end
+
+function KBM.SetDefault.focuscastbar()
+	local tempCastObj = KBM.Castbar:DefaultFocus()
+	local Castbar = KBM.Castbar.Player.Focus
+	Castbar.Settings.relX = tempCastObj.relX
+	Castbar.Settings.relY = tempCastObj.relY
+	Castbar.CastObj:UpdateSettings()
+end
+
+function KBM.SetDefault.bosscastbar()
+	local tempCastObj = KBM.Castbar:DefaultGlobal()
+	KBM.Options.Castbar.Global.relX = tempCastObj.relX
+	KBM.Options.Castbar.Global.relY = tempCastObj.relY
+	KBM.Castbar.Anchor.cradle:SetPoint("CENTER", UIParent, KBM.Options.Castbar.Global.relX, KBM.Options.Castbar.Global.relY)
+end
+
+function KBM.SetDefault.castbars()
+	KBM.SetDefault.playercastbar()
+	KBM.SetDefault.targetcastbar()
+	KBM.SetDefault.focuscastbar()
+	KBM.SetDefault.bosscastbar()
+end
+
 function KBM.SlashDefault(handle, Args)
 	-- Will eventually have different options that will link to default buttons in UI
 	-- For now it'll reset the Options Menu Button to its default settings. (Central, Visible and Unlocked)
@@ -6609,6 +6654,11 @@ function KBM.SlashDefault(handle, Args)
 		print("Button\t: Resets KBM's Mini-map button.")
 		print("RCButton\t: Resets Ready Check's mini-map button.")
 		print("Menu\t: Resets KBM's Menu Option window.")
+		print("PlayerCastbar\t: Resets the Player's Castbar position.")
+		print("TargetCastbar\t: Resets the Player's Target Castbar position.")
+		print("FocusCastbar\t: Resets the Player's Focus Castbar position.")
+		print("BossCastbar\t: Resets the Global Boss Castbar position.")
+		print("Castbars\t: Resets all Global and Player castbar positions.")
 		print("For exmaple: /kbmdefault button")
 	end
 end

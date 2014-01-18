@@ -1080,6 +1080,14 @@ function LibSCast:TPackAdd(PackID, Name, barPack)
 				self.bars[id]:Load()
 			end
 			
+			function PackInstance:UpdateSettings()
+				for id, bar in pairs(self.barObj) do
+					if bar.loaded then
+						bar:RenderSettings()
+					end
+				end
+			end
+			
 			function PackInstance:SettingsTable(NewSettings)
 				for id, bar in pairs(self.barObj) do
 					bar.Settings = NewSettings
@@ -1357,6 +1365,10 @@ function LibSCast:Create(ID, Parent, Pack, Settings, Style)
 		
 		function CastObj:SetTexture(Texture, Enabled)
 			self.PackInstance:SetTexture(Texture, Enabled)
+		end
+		
+		function CastObj:UpdateSettings()
+			self.PackInstance:UpdateSettings()
 		end
 	
 		function CastObj:Start(UnitID, Enabled)

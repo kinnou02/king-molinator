@@ -10,7 +10,7 @@ Author = "Paul Snart"
 Website = "http://www.facebook.com/KingBossMods"
 Email = "kingbossmods@gmail.com"
 
-Version = "1.5.6.759"
+Version = "1.5.6.760"
 
 Environment = "2.5"
 
@@ -24,6 +24,10 @@ RunOnStartup = {
 	"Modules/PlayerControl.lua",
 	"Modules/PercentageMon.lua",
 	"Modules/Castbar.lua",
+	"Raids/Storm Legion/Planebreaker Bastion/PBHeader.lua",
+	"Raids/Storm Legion/Planebreaker Bastion/Eggtenders.lua",
+	"Raids/Storm Legion/Planebreaker Bastion/Thrax.lua",
+	"Raids/Storm Legion/Planebreaker Bastion/Proteus.lua",
 	"Raids/Storm Legion/The Infinity Gate/IGHeader.lua",
 	"Raids/Storm Legion/The Infinity Gate/BreakerX1.lua",
 	"Raids/Storm Legion/The Infinity Gate/Twins.lua",
@@ -307,6 +311,10 @@ Embed = {
 
 SavedVariables = {
 	KM_Settings = "account",
+	KBMSLRDPB_Settings = "account", 
+	KBMSLRDPBET_Settings = "account",
+	KBMSLRDPBWT_Settings = "account",
+	KBMSLRDPBPS_Settings = "account",
 	KBMSLRDIG_Settings = "account",
 	KBMSLRDIGBX_Settings = "account",
 	KBMSLRDIGVM_Settings = "account",
@@ -576,6 +584,10 @@ SavedVariables = {
 	KBMEXUCRCS_Settings = "account",
 	KBM_GlobalOptions = "account",	
 	chKM_Settings = "character",
+	chKBMSLRDPB_Settings = "character", 
+	chKBMSLRDPBET_Settings = "character",
+	chKBMSLRDPBWT_Settings = "character",
+	chKBMSLRDPBPS_Settings = "character",
 	chKBMSLRDIG_Settings = "character",
 	chKBMSLRDIGBX_Settings = "character",
 	chKBMSLRDIGVM_Settings = "character",	
