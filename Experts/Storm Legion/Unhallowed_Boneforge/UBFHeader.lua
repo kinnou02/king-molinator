@@ -31,7 +31,8 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang = {}
 MOD.Lang.Main = {}
 MOD.Lang.Main.Name = KBM.Language:Add(MOD.Name)
-MOD.Lang.Main.Name:SetGerman("Unheilige Knochenschmiede") 
+MOD.Lang.Main.Name:SetGerman("Unheilige Knochenschmiede")
+MOD.Lang.Main.Name:SetFrench("Osserie impie")
 
 MOD.Name = MOD.Lang.Main.Name[KBM.Lang]
 MOD.Descript = MOD.Name

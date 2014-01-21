@@ -51,6 +51,7 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Baird = KBM.Language:Add(MOD.Baird.Name)
 MOD.Lang.Unit.Baird:SetGerman("Baird Bringhurst")
+MOD.Lang.Unit.Baird:SetFrench("Baird Lèvecolline")
 MOD.Baird.Name = MOD.Lang.Unit.Baird[KBM.Lang]
 MOD.Descript = MOD.Baird.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Baird")

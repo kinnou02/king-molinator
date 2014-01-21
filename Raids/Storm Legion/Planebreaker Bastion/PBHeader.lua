@@ -29,6 +29,7 @@ KBM.RegisterMod(PB.ID, PB)
 PB.Lang = {}
 PB.Lang.Main = {}
 PB.Lang.Main.PB = KBM.Language:Add(PB.Name)
+PB.Lang.Main.PB:SetFrench("Bastion des Planicides")
 PB.Name = PB.Lang.Main.PB[KBM.Lang]
 PB.Descript = PB.Name
 

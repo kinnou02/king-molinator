@@ -37,8 +37,11 @@ KBM.RegisterMod(VOL.ID, VOL)
 -- Main Unit Dictionary
 VOL.Lang.Unit = {}
 VOL.Lang.Unit.Volan = KBM.Language:Add("Volan")
+VOL.Lang.Unit.Volan:SetFrench()
 VOL.Lang.Unit.VolanLL = KBM.Language:Add("Volan's Left Leg")
+VOL.Lang.Unit.VolanLL:SetFrench("Jambe gauche de Volan")
 VOL.Lang.Unit.VolanRL = KBM.Language:Add("Volan's Right Leg")
+VOL.Lang.Unit.VolanRL:SetFrench("Jambe droite de Volan")
 
 -- Ability Dictionary
 VOL.Lang.Ability = {}
@@ -58,17 +61,24 @@ VOL.Lang.Debuff.Outbreak = KBM.Language:Add("Outbreak")
 -- Notify Dictionary
 VOL.Lang.Notify = {}
 VOL.Lang.Notify.Crystal = KBM.Language:Add("Volan propels a burst of energy towards (%a*).")
+VOL.Lang.Notify.Crystal:SetFrench("Volan expédie une explosion d'énergie vers (%a*).")
 VOL.Lang.Notify.Spine = KBM.Language:Add("Your cities will fall.")
+VOL.Lang.Notify.Spine:SetFrench("Vos cités s'écrouleront.")
 VOL.Lang.Notify.Outbreak = KBM.Language:Add("Your lands will burn.")
+VOL.Lang.Notify.Outbreak:SetFrench("Vos terres brûleront.")
 VOL.Lang.Notify.Extinction = KBM.Language:Add("Extinction awaits you.")
+VOL.Lang.Notify.Extinction:SetFrench("L'Extinction vous attend.")
 VOL.Lang.Notify.Oblivion = KBM.Language:Add("Witness true power.")
+VOL.Lang.Notify.Oblivion:SetFrench("Admirez le vrai pouvoir.")
 VOL.Lang.Notify.Exhausted = KBM.Language:Add('Volan shouts, "Resistance only delays the inevitable."')
 VOL.Lang.Notify.PhaseTwo = KBM.Language:Add('Volan bellows, "My soul burns with hatred. I will only be free from my torment when no life remains on this accursed world."')
 
 -- Messages Dictionary
 VOL.Lang.Messages = {}
 VOL.Lang.Messages.CrystalRun = KBM.Language:Add("Run to Crystal!")
+VOL.Lang.Messages.CrystalRun:SetFrench("Cours vers la Cellule d'énergie!")
 VOL.Lang.Messages.Extinction = KBM.Language:Add("Spread Out!")
+VOL.Lang.Messages.Extinction:SetFrench("Disperser vous!")
 VOL.Lang.Messages.OblivionDamage = KBM.Language:Add("Eve of Oblivion Hits Raid!")
 VOL.Lang.Messages.ExhaustedStart = KBM.Language:Add("Start DPS Burn!")
 VOL.Lang.Messages.ExhaustedEnd = KBM.Language:Add("End of Exhausted!")
@@ -427,6 +437,16 @@ function VOL:Start()
 	self.Volan.TimersRef.ExhaustedStart = KBM.MechTimer:Add(self.Lang.Messages.ExhaustedStart[KBM.Lang], 19, false)
 	self.Volan.TimersRef.ExhaustedEnd = KBM.MechTimer:Add(self.Lang.Messages.ExhaustedEnd[KBM.Lang], 20, false)
 	KBM.Defaults.TimerObj.Assign(self.Volan)
+
+	-- Link All Timers
+	self.Volan.TimersRef.Extinction2:SetLink(self.Volan.TimersRef.Extinction1)
+	self.Volan.TimersRef.Outbreak5:SetLink(self.Volan.TimersRef.Outbreak1)
+	self.Volan.TimersRef.Outbreak4:SetLink(self.Volan.TimersRef.Outbreak1)
+	self.Volan.TimersRef.Outbreak3:SetLink(self.Volan.TimersRef.Outbreak1)
+	self.Volan.TimersRef.Outbreak2:SetLink(self.Volan.TimersRef.Outbreak1)
+	self.Volan.TimersRef.Spine3:SetLink(self.Volan.TimersRef.Spine1)
+	self.Volan.TimersRef.Spine2:SetLink(self.Volan.TimersRef.Spine1)
+	self.Volan.TimersRef.Oblivion2:SetLink(self.Volan.TimersRef.Oblivion1)
 	
 	-- Create Alerts
 	self.Volan.AlertsRef.Outbreak = KBM.Alert:Create(self.Lang.Debuff.Outbreak[KBM.Lang], nil, true, true, "dark_green")

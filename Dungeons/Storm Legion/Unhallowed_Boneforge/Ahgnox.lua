@@ -50,6 +50,7 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Ahgnox = KBM.Language:Add(MOD.Ahgnox.Name)
 MOD.Lang.Unit.Ahgnox:SetGerman("Ahgnox der Leichenhüter")
+MOD.Lang.Unit.Ahgnox:SetFrench("Ahgnox le Gardien des morts")
 MOD.Ahgnox.Name = MOD.Lang.Unit.Ahgnox[KBM.Lang]
 MOD.Descript = MOD.Ahgnox.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Ahgnox")

@@ -32,7 +32,9 @@ KBM.RegisterMod(OK.ID, OK)
 -- Main Unit Dictionary
 OK.Lang.Unit = {}
 OK.Lang.Unit.Och = KBM.Language:Add("Och")
+OK.Lang.Unit.Och:SetFrench()
 OK.Lang.Unit.Krok = KBM.Language:Add("Krok")
+OK.Lang.Unit.Krok:SetFrench()
 
 -- Ability Dictionary
 OK.Lang.Ability = {}
@@ -46,6 +48,7 @@ OK.Lang.Verbose = {}
 -- Description Dictionary
 OK.Lang.Main = {}
 OK.Lang.Main.Descript = KBM.Language:Add("Och and Krok")
+OK.Lang.Main.Descript:SetFrench("Och et Krok")
 OK.Descript = OK.Lang.Main.Descript[KBM.Lang]
 
 -- Assign Boss to Language Specific Dictionary

@@ -1351,6 +1351,7 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 	end
 	Timer.Delay = iStart
 	Timer.Enabled = true
+	Timer.Linked = nil
 	Timer.Repeat = Repeat
 	Timer.Name = Name
 	Timer.Phase = 0
@@ -1670,12 +1671,16 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 				error("Supplied Object is not a Timer, got: "..tostring(Timer.Type))
 			else
 				self.Link = Timer
-				self.Link:NoMenu()
+				self:NoMenu()
 				for SettingID, Value in pairs(self.Settings) do
 					if SettingID ~= "ID" then
 						self.Link.Settings[SettingID] = Value
 					end
 				end
+				if not Timer.Linked then
+					Timer.Linked = {}
+				end
+				table.insert(Timer.Linked, self)
 			end
 		else
 			error("Expecting at least a table got: "..type(Timer))
@@ -3032,6 +3037,28 @@ function KBM.MechSpy:Add(Name, Duration, Type, BossObj)
 		self.Enabled = true
 		self.NoMenu = true
 		self.HasMenu = false
+	end
+	
+	function Mechanic:SetLink(Spy)
+		if type(Spy) == "table" then
+			if Spy.Type ~= "spy" then
+				error("Supplied Object is not a Mechanic Spy, got: "..tostring(Spy.Type))
+			else
+				self.Link = Spy
+				self:NoMenu()
+				for SettingID, Value in pairs(self.Settings) do
+					if SettingID ~= "ID" then
+						self.Link.Settings[SettingID] = Value
+					end
+				end
+				if not Spy.Linked then
+					Spy.Linked = {}
+				end
+				table.insert(Spy.Linked, self)
+			end
+		else
+			error("Expecting at least a table got: "..type(Spy))
+		end		
 	end
 			
 	function Mechanic:SetPhase(Phase)
@@ -5516,6 +5543,7 @@ function KBM.Alert:Init()
 		AlertObj.Text = Text
 		AlertObj.Countdown = Countdown
 		AlertObj.Enabled = true
+		AlertObj.Linked = nil
 		AlertObj.AlertAfter = nil
 		AlertObj.isImportant = false
 		AlertObj.HasMenu = true
@@ -5558,6 +5586,28 @@ function KBM.Alert:Init()
 		function AlertObj:NoMenu()
 			self.HasMenu = false
 			self.Enabled = true
+		end
+
+		function AlertObj:SetLink(Alert)
+			if type(Alert) == "table" then
+				if Alert.Type ~= "alert" then
+					error("Supplied Object is not an Alert, got: "..tostring(Alert.Type))
+				else
+					self.Link = Alert
+					self:NoMenu()
+					for SettingID, Value in pairs(self.Settings) do
+						if SettingID ~= "ID" then
+							self.Link.Settings[SettingID] = Value
+						end
+					end
+					if not Alert.Linked then
+						Alert.Linked = {}
+					end
+					table.insert(Alert.Linked, self)
+				end
+			else
+				error("Expecting at least a table got: "..type(Alert))
+			end		
 		end
 		
 		self.Count = self.Count + 1
@@ -7558,8 +7608,8 @@ local function KBM_Start()
 		["KBMAddWatch"] = {
 			High = 0,
 			Mid = 2,
-			Low = 8,
-			Rev = 73,
+			Low = 9,
+			Rev = 74,
 		},
 		["KBMMarkIt"] = {
 			High = 0,

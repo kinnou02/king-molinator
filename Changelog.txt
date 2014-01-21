@@ -8,6 +8,11 @@ Defaults
 ** BossCastbar	 : Resets the position of the global Boss Castbars.
 ** Castbars		 : Resets all of the above.
 
+Development
+* Timers
+** Change: :SetLink(TimerObj) method will now Attach to a Master Timer. This allows for multiple Timers to link to a single Timer.
+** Fixed: Master Timers now apply their settings to all slave timers when they are changed in the menu. This includes enabled and color settings.
+
 System
 * Fixed: Removed KBM table from Global Namespace.
 * Fixed: Removed KBM_Debug function from Global Namespace.
@@ -16,6 +21,21 @@ System
 * Fixed: Removed _lsu from Global Namespace (LibSUnit)
 * Fixed: Removed AlertObj from Global Namespace.
 * Fixed: Removed a bunch of Globals from (Objects.Lua)
+
+Add-Watch
+* Change: Requires you to have at least Add-Watch 0.2.9 (Including Alpha)
+
+Mechanic Timers
+* Fixed: Issues where color changes were not implemented immediately via the menu.
+
+Alerts
+* Fixed: Issues where color changes were not implemented immediately via the menu.
+* Fixed: (Error 193) Changing the Border/Notify option in the side panel for individual Alerts would throw an error. (And not change it)
+* New: Added :SetLink(AlertObject) method. (Works the same way as the new Timer:SetLink(TimerObj) method)
+
+Mechanic Spies
+* Fixed: Issues where color changes were not implemented immediately via the menu.
+* New: Added :SetLink(SpyObject) method. (Works the same way as the new Timer:SetLink(TimerObj) method)
 
 LibSBuff
 * Changed: Halved call time for buff handling.
@@ -45,6 +65,12 @@ Raids
 *** New: Timers added for Exitinciton.
 *** New: Timers, Mechanic Spy and Alert added for Outbreak.
 *** New: Eve of Oblivion.
+
+Slivers
+* Grim Awakening
+** Salvarola
+*** New: Added Alert and Spy for Infernal Burn.
+*** New: Added Personal Alert for Infernal Burn.
 
 ----
 v1.5.5

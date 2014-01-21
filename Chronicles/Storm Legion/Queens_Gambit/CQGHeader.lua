@@ -31,6 +31,7 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang = {}
 MOD.Lang.Main = {}
 MOD.Lang.Main.Name = KBM.Language:Add(MOD.Name)
+MOD.Lang.Main.Name:SetFrench("Gambit de la Reine")
 
 MOD.Name = MOD.Lang.Main.Name[KBM.Lang]
 MOD.Descript = MOD.Name

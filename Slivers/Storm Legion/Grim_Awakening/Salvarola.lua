@@ -53,9 +53,15 @@ SAL.Lang.Ability = {}
 SAL.Lang.Ability.Incineration = KBM.Language:Add("Soul Incineration")
 SAL.Lang.Ability.Incineration:SetFrench("Incinération d'âme")
 SAL.Lang.Ability.Incineration:SetGerman("Seelenverbrennung")
+SAL.Lang.Ability.Burn = KBM.Language:Add("Infernal Burn")
 
 -- Verbose Dictionary
 SAL.Lang.Verbose = {}
+SAL.Lang.Verbose.Burn = KBM.Language:Add("Infernal Burn on YOU!")
+
+-- Notify
+SAL.Lang.Notify = {}
+SAL.Lang.Notify.Burn = KBM.Language:Add("Salvarola focuses upon (%a*)!")
 
 -- Buff Dictionary
 SAL.Lang.Buff = {}
@@ -74,6 +80,7 @@ SAL.Lang.Debuff.Mindsear:SetGerman("Geistesohr")
 SAL.Lang.Debuff.MindsearID = "B4C023E009A6B6FF8"
 SAL.Lang.Debuff.Magma = KBM.Language:Add("Curse of Magma")
 SAL.Lang.Debuff.Magma:SetGerman("Fluch des Magmas")
+SAL.Lang.Debuff.Magma:SetFrench("Malédiction du magma")
 
 -- Description Dictionary
 SAL.Lang.Main = {}
@@ -104,11 +111,14 @@ SAL.Salvarola = {
 		AlertsRef = {
 			Enabled = true,
 			Incineration = KBM.Defaults.AlertObj.Create("orange"),
+			Burn = KBM.Defaults.AlertObj.Create("pink"),
+			BurnTar = KBM.Defaults.AlertObj.Create("red"),
 		},
 		MechRef = {
 			Enabled = true,
 			Mindsear = KBM.Defaults.MechObj.Create("dark_green"),
 			Magma = KBM.Defaults.MechObj.Create("purple"),
+			Burn = KBM.Defaults.MechObj.Create("red"),
 		},
 	}
 }
@@ -325,11 +335,15 @@ function SAL:Start()
 	
 	-- Create Alerts
 	self.Salvarola.AlertsRef.Incineration = KBM.Alert:Create(self.Lang.Ability.Incineration[KBM.Lang], nil, true, true, "orange")
+	self.Salvarola.AlertsRef.BurnTar = KBM.Alert:Create(self.Lang.Verbose.Burn[KBM.Lang], nil, false, true, "red")
+	self.Salvarola.AlertsRef.BurnTar:Important()
+	self.Salvarola.AlertsRef.Burn = KBM.Alert:Create(self.Lang.Ability.Burn[KBM.Lang], nil, false, true, "pink")
 	KBM.Defaults.AlertObj.Assign(self.Salvarola)
 
 	-- Create Spies
 	self.Salvarola.MechRef.Mindsear = KBM.MechSpy:Add(self.Lang.Debuff.Mindsear[KBM.Lang], nil, "playerDebuff", self.Salvarola)
 	self.Salvarola.MechRef.Magma = KBM.MechSpy:Add(self.Lang.Debuff.Magma[KBM.Lang], nil, "playerDebuff", self.Salvarola)
+	self.Salvarola.MechRef.Burn = KBM.MechSpy:Add(self.Lang.Ability.Burn[KBM.Lang], nil, "cast", self.Salvarola)
 	KBM.Defaults.MechObj.Assign(self.Salvarola)
 
 	-- Assign Alerts and Timers to Triggers
@@ -340,6 +354,15 @@ function SAL:Start()
 	self.Salvarola.Triggers.Magma:AddSpy(self.Salvarola.MechRef.Magma)
 	self.Salvarola.Triggers.MagmaRem = KBM.Trigger:Create(self.Lang.Debuff.Magma[KBM.Lang], "playerBuffRemove", self.Salvarola)
 	self.Salvarola.Triggers.MagmaRem:AddStop(self.Salvarola.MechRef.Magma)
+	
+	self.Salvarola.Triggers.BurnWarn = KBM.Trigger:Create(self.Lang.Ability.Burn[KBM.Lang], "cast", self.Salvarola)
+	self.Salvarola.Triggers.BurnWarn:AddAlert(self.Salvarola.AlertsRef.Burn)
+	self.Salvarola.Triggers.BurnWarn:AddAlert(self.Salvarola.AlertsRef.BurnTar, true)
+	self.Salvarola.Triggers.BurnWarn:AddSpy(self.Salvarola.MechRef.Burn)
+	self.Salvarola.Triggers.Burn = KBM.Trigger:Create(self.Lang.Ability.Burn[KBM.Lang], "channel", self.Salvarola)
+	self.Salvarola.Triggers.Burn:AddAlert(self.Salvarola.AlertsRef.Burn)
+	self.Salvarola.Triggers.Burn:AddAlert(self.Salvarola.AlertsRef.BurnTar, true)
+	self.Salvarola.Triggers.Burn:AddSpy(self.Salvarola.MechRef.Burn)
 
 	self.Salvarola.Triggers.Mindsear = KBM.Trigger:Create(self.Lang.Debuff.MindsearID, "playerIDBuff", self.Salvarola)
 	self.Salvarola.Triggers.Mindsear:AddSpy(self.Salvarola.MechRef.Mindsear)

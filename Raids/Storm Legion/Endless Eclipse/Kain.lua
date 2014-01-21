@@ -72,6 +72,7 @@ KR.Lang.Debuff.Voracious:SetFrench("Appétit vorace")
 KR.Lang.Debuff.Voracious:SetGerman("Unstillbarer Hunger")
 KR.Lang.Debuff.VoraciousID = "BFEB697D0228F51D9"
 KR.Lang.Debuff.Foul = KBM.Language:Add("Foul Blood (Debuff)")
+KR.Lang.Debuff.Foul:SetFrench("Sang infect (Débuff)")
 
 -- Description Dictionary
 KR.Lang.Main = {}

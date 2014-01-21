@@ -34,30 +34,42 @@ KBM.RegisterMod(WTX.ID, WTX)
 -- Main Unit Dictionary
 WTX.Lang.Unit = {}
 WTX.Lang.Unit.Thrax = KBM.Language:Add("Warden Thrax") -- ???
+WTX.Lang.Unit.Thrax:SetFrench("Garde Thrax")
 
 -- Ability Dictionary
 WTX.Lang.Ability = {}
 WTX.Lang.Ability.Disturbance = KBM.Language:Add("Seismic Disturbance")
+WTX.Lang.Ability.Disturbance:SetFrench("Perturbation sismique")
 WTX.Lang.Ability.Suppression = KBM.Language:Add("Suppression")
+WTX.Lang.Ability.Suppression:SetFrench()
 WTX.Lang.Ability.Rockslide = KBM.Language:Add("Rockslide")
+WTX.Lang.Ability.Rockslide:SetFrench("Éboulement de pierres")
 WTX.Lang.Ability.Transference = KBM.Language:Add("Tectonic Transference")
+WTX.Lang.Ability.Transference:SetFrench("Transfert tectonique")
 WTX.Lang.Ability.GTransference = KBM.Language:Add("Greater Tectonic Transference")
+WTX.Lang.Ability.GTransference:SetFrench("Transfert tectonique majeur")
 WTX.Lang.Ability.Execution = KBM.Language:Add("Execution")
+WTX.Lang.Ability.Execution:SetFrench("Exécution")
 
 -- Description Dictionary
 WTX.Lang.Main = {}
 WTX.Lang.Main.Encounter = KBM.Language:Add("Warden Thrax")
+WTX.Lang.Main.Encounter:SetFrench("Garde Thrax")
 
 -- Debuff Dictionary
 WTX.Lang.Debuff = {}
 WTX.Lang.Debuff.Fracture = KBM.Language:Add("Fracture")
 WTX.Lang.Debuff.Chain = KBM.Language:Add("Chain Gang")
+WTX.Lang.Debuff.Chain:SetFrench("Esclavage")
 
 -- Messages Dictionary
 WTX.Lang.Messages = {}
 WTX.Lang.Messages.MoveSoon = KBM.Language:Add("Move Soon")
+WTX.Lang.Messages.MoveSoon:SetFrench("Déplacement Bientôt")
 WTX.Lang.Messages.MoveNow = KBM.Language:Add("Move Now!")
+WTX.Lang.Messages.MoveNow:SetFrench("Déplacement Maintenant!")
 WTX.Lang.Messages.Knockback = KBM.Language:Add("Knockback Soon!")
+WTX.Lang.Messages.Knockback:SetFrench("Repoussement Bientôt!")
 
 WTX.Lang.Debuff.FractureID = "B4E7B63EC5C35EA56"
 
@@ -274,7 +286,7 @@ function WTX:Start()
 	self.Thrax.AlertsRef.Disturbance = KBM.Alert:Create(self.Lang.Messages.Knockback[KBM.Lang], nil, true, true, "blue")
 	KBM.Defaults.AlertObj.Assign(self.Thrax)
 
-	self.Thrax.TimersRef.MoveSoon:AddAlert(self.Thrax.AlertsRef.MoveSoon, 0)
+	--self.Thrax.TimersRef.MoveSoon:AddAlert(self.Thrax.AlertsRef.MoveNow, 0)
 
 	-- Create Mechanic Spies
 	self.Thrax.MechRef.Chain = KBM.MechSpy:Add(self.Lang.Debuff.Chain[KBM.Lang], nil, "playerDebuff", self.Thrax)

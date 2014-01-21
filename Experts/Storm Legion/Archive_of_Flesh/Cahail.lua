@@ -50,6 +50,7 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Cahail = KBM.Language:Add(MOD.Cahail.Name)
 MOD.Lang.Unit.Cahail:SetGerman()
+MOD.Lang.Unit.Cahail:SetFrench("Animateur Cahail")
 MOD.Cahail.Name = MOD.Lang.Unit.Cahail[KBM.Lang]
 MOD.Descript = MOD.Cahail.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Cahail")

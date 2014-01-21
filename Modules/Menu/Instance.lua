@@ -630,6 +630,12 @@ function Build:Timers()
 								function Callbacks:Enabled(bool)
 									TimerSettings.Enabled = bool
 									TimerObj.Enabled = bool
+									if TimerObj.Linked then
+										for _, SlaveTimer in pairs(TimerObj.Linked) do
+											SlaveTimer.Enabled = bool
+											SlaveTimer.Settings.Enabled = bool
+										end
+									end
 								end
 								
 								function Callbacks:Select()
@@ -638,18 +644,36 @@ function Build:Timers()
 									function SideCallbacks:Enabled(bool)
 										TimerSettings.Enabled = bool
 										TimerObj.Enabled = bool
+										if TimerObj.Linked then
+											for _, SlaveTimer in pairs(TimerObj.Linked) do
+												SlaveTimer.Enabled = bool
+												SlaveTimer.Settings.Enabled = bool
+											end
+										end
 									end
 									
 									function SideCallbacks:Color(bool, Color)
 										if not Color then
 											TimerSettings.Custom = bool
+											local setColor = TimerObj.Default_Color
 											if bool then
-												TimerObj.Color = TimerSettings.Color
-											else
-												TimerObj.Color = TimerObj.Default_Color
+												setColor = TimerSettings.Color
+											end
+											TimerObj.Color = setColor
+											if TimerObj.Linked then
+												for _, SlaveTimer in pairs(TimerObj.Linked) do
+													SlaveTimer.Color = setColor
+												end
 											end
 										elseif Color then
 											TimerSettings.Color = Color
+											TimerObj.Color = Color
+											if TimerObj.Linked then
+												for _, SlaveTimer in pairs(TimerObj.Linked) do
+													SlaveTimer.Color = Color
+													SlaveTimer.Settings.Color = Color
+												end
+											end
 										end																										
 									end
 									
@@ -735,6 +759,12 @@ function Build:Timers()
 								function Callbacks:Enabled(bool)
 									SpySettings.Enabled = bool
 									SpyObj.Enabled = bool
+									if SpyObj.Linked then
+										for _, SlaveSpy in pairs(SpyObj.Linked) do
+											SlaveSpy.Enabled = bool
+											SlaveSpy.Settings.Enabled = bool
+										end
+									end
 								end
 								
 								function Callbacks:Select()
@@ -742,19 +772,38 @@ function Build:Timers()
 									
 									function SideCallbacks:Enabled(bool)
 										SpySettings.Enabled = bool
+										SpyObj.Enabled = bool
+										if SpyObj.Linked then
+											for _, SlaveSpy in pairs(SpyObj.Linked) do
+												SlaveSpy.Enabled = bool
+												SlaveSpy.Settings.Enabled = bool
+											end
+										end
 									end
 									
 									function SideCallbacks:Color(bool, Color)
 										if not Color then
 											SpySettings.Custom = bool
+											local setColor = SpyObj.Default_Color
 											if bool then
-												SpyObj.Color = SpySettings.Color
-											else
-												SpyObj.Color = SpyObj.Default_Color
+												setColor = SpySettings.Color
+											end
+											SpyObj.Color = setColor
+											if SpyObj.Linked then
+												for _, SlaveSpy in pairs(SpyObj.Linked) do
+													SlaveSpy.Color = setColor
+												end
 											end
 										elseif Color then
 											SpySettings.Color = Color
-										end																	
+											SpyObj.Color = Color
+											if SpyObj.Linked then
+												for _, SlaveSpy in pairs(SpyObj.Linked) do
+													SlaveSpy.Color = Color
+													SlaveSpy.Settings.Color = Color
+												end
+											end
+										end																										
 									end
 									
 									local SubHeader = self.Side.UI.CreatePlainHeader(SpyObj.MenuName or SpyObj.Name, nil, "SubTitle", nil)
@@ -868,6 +917,12 @@ function Build:Alerts()
 								function Callbacks:Enabled(bool)
 									AlertSettings.Enabled = bool
 									AlertObj.Enabled = bool
+									if AlertObj.Linked then
+										for _, SlaveAlert in pairs(AlertObj.Linked) do
+											SlaveAlert.Enabled = bool
+											SlaveAlert.Settings.Enabled = bool
+										end
+									end
 								end
 								
 								function Callbacks:Select()
@@ -876,37 +931,70 @@ function Build:Alerts()
 									function SideCallbacks:Enabled(bool)
 										AlertSettings.Enabled = bool
 										AlertObj.Enabled = bool
+										if AlertObj.Linked then
+											for _, SlaveAlert in pairs(AlertObj.Linked) do
+												SlaveAlert.Enabled = bool
+												SlaveAlert.Settings.Enabled = bool
+											end
+										end
 									end
 									
 									function SideCallbacks:Border(bool)
 										AlertSettings.Border = bool
+										if AlertObj.Linked then
+											for _, SlaveAlert in pairs(AlertObj.Linked) do
+												SlaveAlert.Settings.Border = bool
+											end
+										end
 									end
 																	
 									function SideCallbacks:Notify(bool)
 										AlertSettings.Notify = bool
+										if AlertObj.Linked then
+											for _, SlaveAlert in pairs(AlertObj.Linked) do
+												SlaveAlert.Settings.Notify = bool
+											end
+										end
 									end
 									
 									function SideCallbacks:Sound(bool)
 										AlertSettings.Sound = bool
+										if AlertObj.Linked then
+											for _, SlaveAlert in pairs(AlertObj.Linked) do
+												SlaveAlert.Settings.Sound = bool
+											end
+										end
 									end
 									
 									function SideCallbacks:Color(bool, Color)							
 										if not Color then
 											AlertSettings.Custom = bool
+											local setColor = AlertObj.Default_Color
 											if bool then
-												AlertObj.Color = AlertSettings.Color
-											else
-												AlertObj.Color = AlertObj.Default_Color
+												setColor = AlertSettings.Color
+											end
+											AlertObj.Color = setColor
+											if AlertObj.Linked then
+												for _, SlaveAlert in pairs(AlertObj.Linked) do
+													SlaveAlert.Color = setColor
+												end
 											end
 										elseif Color then
 											AlertSettings.Color = Color
-										end								
+											AlertObj.Color = Color
+											if AlertObj.Linked then
+												for _, SlaveAlert in pairs(AlertObj.Linked) do
+													SlaveAlert.Color = Color
+													SlaveAlert.Settings.Color = Color
+												end
+											end
+										end																										
 									end
 								
 									local SubHeader = self.Side.UI.CreatePlainHeader(AlertObj.MenuName or AlertObj.Text, nil, "SubTitle", nil)
-									SubHeader:CreateCheck(KBM.Language.Options.Border[KBM.Lang], AlertSettings, "Border", Callbacks)
-									SubHeader:CreateCheck(KBM.Language.Options.Notify[KBM.Lang], AlertSettings, "Notify", Callbacks)
-									local Sound = SubHeader:CreateCheck(KBM.Language.Options.Sound[KBM.Lang], AlertSettings, "Sound", Callbacks)
+									SubHeader:CreateCheck(KBM.Language.Options.Border[KBM.Lang], AlertSettings, "Border", SideCallbacks)
+									SubHeader:CreateCheck(KBM.Language.Options.Notify[KBM.Lang], AlertSettings, "Notify", SideCallbacks)
+									local Sound = SubHeader:CreateCheck(KBM.Language.Options.Sound[KBM.Lang], AlertSettings, "Sound", SideCallbacks)
 									Sound.Enabled = false
 									SubHeader:CreateColorPicker("Color", AlertObj, "Color", SideCallbacks)
 								end

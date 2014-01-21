@@ -32,6 +32,7 @@ KBM.RegisterMod(AK.ID, AK)
 -- Main Unit Dictionary
 AK.Lang.Unit = {}
 AK.Lang.Unit.Kyo = KBM.Language:Add("Abido Kyo")
+AK.Lang.Unit.Kyo:SetFrench()
 
 -- Ability Dictionary
 AK.Lang.Ability = {}
@@ -47,6 +48,7 @@ AK.Lang.Verbose = {}
 -- Description Dictionary
 AK.Lang.Main = {}
 AK.Lang.Main.Descript = KBM.Language:Add("Abido Kyo")
+AK.Lang.Main.Descript:SetFrench()
 AK.Descript = AK.Lang.Main.Descript[KBM.Lang]
 
 -- Assign Boss to Language Specific Dictionary

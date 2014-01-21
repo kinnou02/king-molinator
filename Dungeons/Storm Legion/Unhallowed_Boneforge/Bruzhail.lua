@@ -50,6 +50,7 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Bruzhail = KBM.Language:Add(MOD.Bruzhail.Name)
 MOD.Lang.Unit.Bruzhail:SetGerman("Bruzhail der Schwarze Streitwagen")
+MOD.Lang.Unit.Bruzhail:SetFrench("Bruzhail le Chariot noir")
 MOD.Bruzhail.Name = MOD.Lang.Unit.Bruzhail[KBM.Lang]
 MOD.Descript = MOD.Bruzhail.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Bruzhail")

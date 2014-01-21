@@ -53,8 +53,10 @@ MOD.Lang.Unit.Throne:SetGerman("Nekrotischer Thron")
 MOD.Lang.Unit.Throne:SetFrench("Trône nécrotique")
 MOD.Lang.Unit.ThroneL = KBM.Language:Add("Left Throne")
 MOD.Lang.Unit.ThroneL:SetGerman("Linker Thron")
+MOD.Lang.Unit.ThroneL:SetFrench("Trône gauche")
 MOD.Lang.Unit.ThroneR = KBM.Language:Add("Right Throne")
 MOD.Lang.Unit.ThroneR:SetGerman("Rechter Thron")
+MOD.Lang.Unit.ThroneR:SetFrench("Trône droit")
 MOD.Throne.Name = MOD.Lang.Unit.Throne[KBM.Lang]
 MOD.Descript = MOD.Throne.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Throne")

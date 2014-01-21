@@ -34,30 +34,38 @@ KBM.RegisterMod(PRT.ID, PRT)
 -- Main Unit Dictionary
 PRT.Lang.Unit = {}
 PRT.Lang.Unit.Proteus = KBM.Language:Add("Proteus") -- ???
+PRT.Lang.Unit.Proteus:SetFrench()
 
 -- Ability Dictionary
 PRT.Lang.Ability = {}
 PRT.Lang.Ability.Rampage = KBM.Language:Add("Unstoppable Rampage")
+PRT.Lang.Ability.Rampage:SetFrench("Déchainement imparable")
 
 -- Description Dictionary
 PRT.Lang.Main = {}
 PRT.Lang.Main.Encounter = KBM.Language:Add("Proteus")
+PRT.Lang.Main.Encounter:SetFrench()
 
 -- Debuff Dictionary
 PRT.Lang.Debuff = {}
 PRT.Lang.Debuff.Rampage = KBM.Language:Add("Unstoppable Rampage")
+PRT.Lang.Debuff.Rampage:SetFrench("Déchainement imparable")
 PRT.Lang.Debuff.RampageID = "B3563AA8E7A088296"
 PRT.Lang.Debuff.Glacial = KBM.Language:Add("Glacial Lure")
+PRT.Lang.Debuff.Glacial:SetFrench("Appât glacial")
 PRT.Lang.Debuff.GlacialID = "BFC35441E164B5B5E"
 
 -- Notify Dictionary
 PRT.Lang.Notify = {}
 PRT.Lang.Notify.Rampage = KBM.Language:Add("Proteus fixates on (%a*). Run!")
+PRT.Lang.Notify.Rampage:SetFrench("Proteus se concentre sur (%a*). Fuyez!")
 
 -- Messages Dictionary
 PRT.Lang.Messages = {}
-PRT.Lang.Messages.Glacial = KBM.Language:Add("Rampage on YOU!")
+PRT.Lang.Messages.Rampage = KBM.Language:Add("Rampage on YOU!")
+PRT.Lang.Messages.Rampage:SetFrench("Déchainement sur TOI!")
 PRT.Lang.Messages.Glacial = KBM.Language:Add("Glacial Lure on YOU!")
+PRT.Lang.Messages.Glacial:SetFrench("Appât Glacial sur TOI!")
 
 PRT.Descript = PRT.Lang.Main.Encounter[KBM.Lang]
 

@@ -31,6 +31,7 @@ KBM.RegisterMod(ULT.ID, ULT)
 -- Main Unit Dictionary
 ULT.Lang.Unit = {}
 ULT.Lang.Unit.Ultane = KBM.Language:Add("Ultane")
+ULT.Lang.Unit.Ultane:SetFrench()
 
 -- Ability Dictionary
 ULT.Lang.Ability = {}
@@ -45,10 +46,13 @@ ULT.Lang.Buff = {}
 ULT.Lang.Debuff = {}
 ULT.Lang.Debuff.Devil = KBM.Language:Add("Devil's Pact") -- Tank Monitor
 ULT.Lang.Debuff.Devil:SetGerman("Pakt des Teufels")
+ULT.Lang.Debuff.Devil:SetFrench("Pacte du Diable")
 ULT.Lang.Debuff.Shackle = KBM.Language:Add("Spirit Shackle")
 ULT.Lang.Debuff.Shackle:SetGerman("Geistesfessel")
+ULT.Lang.Debuff.Shackle:SetFrench("Entrave spirituelle")
 ULT.Lang.Debuff.Infernal = KBM.Language:Add("Infernal Radiance")
 ULT.Lang.Debuff.Infernal:SetGerman("Höllische Strahlung")
+ULT.Lang.Debuff.Infernal:SetFrench("Rayonnement infernal")
 
 -- Description Dictionary
 ULT.Lang.Main = {}
