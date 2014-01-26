@@ -3,15 +3,15 @@
 -- Copyright 2011
 --
 
-KBMDHRT_Settings = nil
-chKBMDHRT_Settings = nil
+KBMSLSLIDHRT_Settings = nil
+chKBMSLSLIDHRT_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 if not KBM.BossMod then
 	return
 end
-local DH = KBM.BossMod["Drowned Halls"]
+local DH = KBM.BossMod["Intrepid Drowned Halls"]
 
 local JR = {
 	Directory = DH.Directory,
@@ -20,7 +20,7 @@ local JR = {
 	Instance = DH.Name,
 	InstanceObj = DH,
 	Lang = {},
-	ID = "Joloral",
+	ID = "IDHJoloral",
 	Object = "JR",
 }
 
@@ -36,7 +36,7 @@ JR.Joloral = {
 	MechRef = {},
 	Dead = false,
 	Available = false,
-	UTID = "U4EEBB06F655086B5",
+	UTID = "none",
 	UnitID = nil,
 	Triggers = {},
 	Settings = {

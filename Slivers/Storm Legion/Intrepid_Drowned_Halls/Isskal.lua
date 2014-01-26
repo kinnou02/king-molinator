@@ -3,15 +3,15 @@
 -- Copyright 2011
 --
 
-KBMDHIL_Settings = nil
-chKBMDHIL_Settings = nil
+KBMSLSLIDHIL_Settings = nil
+chKBMSLSLIDHIL_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 if not KBM.BossMod then
 	return
 end
-local DH = KBM.BossMod["Drowned Halls"]
+local DH = KBM.BossMod["Intrepid Drowned Halls"]
 
 local IL = {
 	Directory = DH.Directory,
@@ -20,7 +20,7 @@ local IL = {
 	Instance = DH.Name,
 	InstanceObj = DH,
 	Lang = {},
-	ID = "Isskal",
+	ID = "IDHIsskal",
 	Object = "IL",
 }
 
@@ -35,7 +35,7 @@ IL.Isskal = {
 	AlertsRef = {},
 	TimersRef = {},
 	UnitID = nil,
-	UTID = "U69C09B877E075E64",
+	UTID = "none",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.Castbar(),
@@ -182,41 +182,41 @@ function IL:InitVars()
 		AlertsRef = self.Isskal.Settings.AlertsRef,
 		TimersRef = self.Isskal.Settings.TimersRef,
 	}
-	KBMDHIL_Settings = self.Settings
-	chKBMDHIL_Settings = self.Settings
+	KBMSLSLIDHIL_Settings = self.Settings
+	chKBMSLSLIDHIL_Settings = self.Settings
 end
 
 function IL:SwapSettings(bool)
 
 	if bool then
-		KBMDHIL_Settings = self.Settings
-		self.Settings = chKBMDHIL_Settings
+		KBMSLSLIDHIL_Settings = self.Settings
+		self.Settings = chKBMSLSLIDHIL_Settings
 	else
-		chKBMDHIL_Settings = self.Settings
-		self.Settings = KBMDHIL_Settings
+		chKBMSLSLIDHIL_Settings = self.Settings
+		self.Settings = KBMSLSLIDHIL_Settings
 	end
 
 end
 
 function IL:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMDHIL_Settings, self.Settings)
+		KBM.LoadTable(chKBMSLSLIDHIL_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMDHIL_Settings, self.Settings)
+		KBM.LoadTable(KBMSLSLIDHIL_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMDHIL_Settings = self.Settings
+		chKBMSLSLIDHIL_Settings = self.Settings
 	else
-		KBMDHIL_Settings = self.Settings
+		KBMSLSLIDHIL_Settings = self.Settings
 	end	
 end
 
 function IL:SaveVars()	
 	if KBM.Options.Character then
-		chKBMDHIL_Settings = self.Settings
+		chKBMSLSLIDHIL_Settings = self.Settings
 	else
-		KBMDHIL_Settings = self.Settings
+		KBMSLSLIDHIL_Settings = self.Settings
 	end	
 end
 

@@ -3,15 +3,15 @@
 -- Copyright 2011
 --
 
-KBMDHAJ_Settings = nil
-chKBMDHAJ_Settings = nil
+KBMSLSLIDHAJ_Settings = nil
+chKBMSLSLIDHAJ_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 if not KBM.BossMod then
 	return
 end
-local DH = KBM.BossMod["Drowned Halls"]
+local DH = KBM.BossMod["Intrepid Drowned Halls"]
 
 local AJ = {
 	Directory = DH.Directory,
@@ -21,7 +21,7 @@ local AJ = {
 	InstanceObj = DH,
 	Lang = {},
 	Enrage = 5 * 60,
-	ID = "Jorb",
+	ID = "IDHJorb",
 	Object = "AJ",
 }
 
@@ -109,46 +109,46 @@ function AJ:InitVars()
 		CastBar = self.Jorb.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
-		Alerts = KBM.Defaults.Alerts(),
 		MechTimer = KBM.Defaults.MechTimer(),
+		Alerts = KBM.Defaults.Alerts(),
 		AlertsRef = self.Jorb.Settings.AlertsRef,
 		TimersRef = self.Jorb.Settings.TimersRef,
 	}
-	KBMDHAJ_Settings = self.Settings
-	chKBMDHAJ_Settings = self.Settings
+	KBMSLSLIDHAJ_Settings = self.Settings
+	chKBMSLSLIDHAJ_Settings = self.Settings
 end
 
 function AJ:SwapSettings(bool)
 
 	if bool then
-		KBMDHAJ_Settings = self.Settings
-		self.Settings = chKBMDHAJ_Settings
+		KBMSLSLIDHAJ_Settings = self.Settings
+		self.Settings = chKBMSLSLIDHAJ_Settings
 	else
-		chKBMDHAJ_Settings = self.Settings
-		self.Settings = KBMDHAJ_Settings
+		chKBMSLSLIDHAJ_Settings = self.Settings
+		self.Settings = KBMSLSLIDHAJ_Settings
 	end
 
 end
 
 function AJ:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMDHAJ_Settings, self.Settings)
+		KBM.LoadTable(chKBMSLSLIDHAJ_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMDHAJ_Settings, self.Settings)
+		KBM.LoadTable(KBMSLSLIDHAJ_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMDHAJ_Settings = self.Settings
+		chKBMSLSLIDHAJ_Settings = self.Settings
 	else
-		KBMDHAJ_Settings = self.Settings
+		KBMSLSLIDHAJ_Settings = self.Settings
 	end	
 end
 
 function AJ:SaveVars()	
 	if KBM.Options.Character then
-		chKBMDHAJ_Settings = self.Settings
+		chKBMSLSLIDHAJ_Settings = self.Settings
 	else
-		KBMDHAJ_Settings = self.Settings
+		KBMSLSLIDHAJ_Settings = self.Settings
 	end	
 end
 

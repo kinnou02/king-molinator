@@ -3,15 +3,15 @@
 -- Copyright 2011
 --
 
-KBMDHHH_Settings = nil
-chKBMDHHH_Settings = nil
+KBMSLSLIDHHH_Settings = nil
+chKBMSLSLIDHHH_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 if not KBM.BossMod then
 	return
 end
-local DH = KBM.BossMod["Drowned Halls"]
+local DH = KBM.BossMod["Intrepid Drowned Halls"]
 
 local HH = {
 	Directory = DH.Directory,
@@ -20,7 +20,7 @@ local HH = {
 	Instance = DH.Name,
 	InstanceObj = DH,
 	Lang = {},
-	ID = "Hydriss",
+	ID = "IDHHydriss",
 	PhaseObjects = {},
 	Phase = 1,
 	Enrage = 60 * 12,
@@ -39,7 +39,7 @@ HH.Hydriss = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = "U01904C0A16F7CCB8",
+	UTID = "none",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.Castbar(),
@@ -140,41 +140,41 @@ function HH:InitVars()
 		--AlertsRef = self.Hydriss.Settings.AlertsRef,
 		PhaseMon = KBM.Defaults.PhaseMon(),
 	}
-	KBMDHHH_Settings = self.Settings
-	chKBMDHHH_Settings = self.Settings
+	KBMSLSLIDHHH_Settings = self.Settings
+	chKBMSLSLIDHHH_Settings = self.Settings
 end
 
 function HH:SwapSettings(bool)
 
 	if bool then
-		KBMDHHH_Settings = self.Settings
-		self.Settings = chKBMDHHH_Settings
+		KBMSLSLIDHHH_Settings = self.Settings
+		self.Settings = chKBMSLSLIDHHH_Settings
 	else
-		chKBMDHHH_Settings = self.Settings
-		self.Settings = KBMDHHH_Settings
+		chKBMSLSLIDHHH_Settings = self.Settings
+		self.Settings = KBMSLSLIDHHH_Settings
 	end
 
 end
 
 function HH:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMDHHH_Settings, self.Settings)
+		KBM.LoadTable(chKBMSLSLIDHHH_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMDHHH_Settings, self.Settings)
+		KBM.LoadTable(KBMSLSLIDHHH_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMDHHH_Settings = self.Settings
+		chKBMSLSLIDHHH_Settings = self.Settings
 	else
-		KBMDHHH_Settings = self.Settings
+		KBMSLSLIDHHH_Settings = self.Settings
 	end	
 end
 
 function HH:SaveVars()	
 	if KBM.Options.Character then
-		chKBMDHHH_Settings = self.Settings
+		chKBMSLSLIDHHH_Settings = self.Settings
 	else
-		KBMDHHH_Settings = self.Settings
+		KBMSLSLIDHHH_Settings = self.Settings
 	end	
 end
 

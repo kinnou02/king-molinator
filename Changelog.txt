@@ -71,6 +71,10 @@ Slivers
 ** Salvarola
 *** New: Added Alert and Spy for Infernal Burn.
 *** New: Added Personal Alert for Infernal Burn.
+* New: Intrepid Drowned Halls
+** New: All bosses and mechanics have been duplicated in Template mode. (UTID's required)
+** Note: There seems to be some confusion to the new Dance pattern for Isskal. Some are saying there are 2 now, and possibly shorter.
+* Fixed: Drowned Halls Menu Options.
 
 ----
 v1.5.5

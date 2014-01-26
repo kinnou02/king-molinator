@@ -10,7 +10,7 @@ Author = "Paul Snart"
 Website = "http://www.facebook.com/KingBossMods"
 Email = "kingbossmods@gmail.com"
 
-Version = "1.5.6.761"
+Version = "1.5.6.762"
 
 Environment = "2.5"
 
@@ -44,6 +44,11 @@ RunOnStartup = {
 	"Raids/Storm Legion/Frozen Tempest/Zaviel.lua",
 	"Raids/Storm Legion/Frozen Tempest/Kolmasveli.lua",
 	"Raids/Storm Legion/Frozen Tempest/Crucia.lua",
+	"Slivers/Storm Legion/Intrepid_Drowned_Halls/IDHHeader.lua",
+	"Slivers/Storm Legion/Intrepid_Drowned_Halls/Jorb.lua",
+	"Slivers/Storm Legion/Intrepid_Drowned_Halls/Joloral.lua",
+	"Slivers/Storm Legion/Intrepid_Drowned_Halls/Isskal.lua",
+	"Slivers/Storm Legion/Intrepid_Drowned_Halls/Hydriss.lua",
 	"Slivers/Storm Legion/Grim_Awakening/GAHeader.lua",
 	"Slivers/Storm Legion/Grim_Awakening/Kyzan.lua",
 	"Slivers/Storm Legion/Grim_Awakening/MLKaliban.lua",
@@ -331,6 +336,11 @@ SavedVariables = {
 	KBMSLRDFTGA_Settings = "account",
 	KBMSLRDFTKT_Settings = "account",
 	KBMSLRDFTZL_Settings = "account",
+	KBMSLSLIDH_Settings = "account",
+	KBMSLSLIDHHH_Settings = "account",
+	KBMSLSLIDHIL_Settings = "account",
+	KBMSLSLIDHRT_Settings = "account",
+	KBMSLSLIDHAJ_Settings = "account",
 	KBMSLSLGA_Settings = "account",
 	KBMSLSLGAKZ_Settings = "account",
 	KBMSLSLGAMLK_Settings = "account",
@@ -604,6 +614,11 @@ SavedVariables = {
 	chKBMSLRDFTGA_Settings = "character",
 	chKBMSLRDFTKT_Settings = "character",
 	chKBMSLRDFTZL_Settings = "character",
+	chKBMSLSLIDH_Settings = "character",
+	chKBMSLSLIDHHH_Settings = "character",
+	chKBMSLSLIDHIL_Settings = "character",
+	chKBMSLSLIDHRT_Settings = "character",
+	chKBMSLSLIDHAJ_Settings = "character",
 	chKBMSLSLGA_Settings = "character",
 	chKBMSLSLGAKZ_Settings = "character",
 	chKBMSLSLGAMLK_Settings = "character",
