@@ -708,6 +708,34 @@ PI.Constants = {
 						tank = true,
 					},
 				},
+				["BFC4556DD58E5F85C"] = { -- Excellent Strength Serum
+					Grade = "Very Low",
+					Level = 60,
+					Callings = {
+						warrior = true,
+					},
+				},
+				["BFCCE75C1F3417572"] = { -- Excellent Dexterity Serum
+					Grade = "Very Low",
+					Level = 60,
+					Callings = {
+						rogue = true,
+					},
+				},
+				["BFD380B720A80A6D6"] = { -- Excellent Wisdom Serum
+					Grade = "Very Low",
+					Level = 60,
+					Callings = {
+						cleric = true,
+					},
+				},
+                ["BFE567F1435D0CC73"] = { -- Excellent Intelligence Serum
+					Grade = "Very Low",
+					Level = 60,
+					Callings = {
+						mage = true,
+					},
+				},
 				--/////////////////--
 				-- Classic Potions --
 				--/////////////////--				

@@ -261,13 +261,13 @@ function PRT:Start()
 	-- KBM.Defaults.TimerObj.Assign(self.Proteus)
 
 	-- Create Alerts
-	self.Proteus.AlertsRef.Rampage = KBM.Alert:Create(self.Lang.Debuff.Rampage[KBM.Lang], 10, true, true, "red")
+	self.Proteus.AlertsRef.Rampage = KBM.Alert:Create(self.Lang.Debuff.Rampage[KBM.Lang], nil, true, true, "red")
 	self.Proteus.AlertsRef.Glacial = KBM.Alert:Create(self.Lang.Debuff.Glacial[KBM.Lang], 10, true, true, "blue")
 	KBM.Defaults.AlertObj.Assign(self.Proteus)
 
 	-- Create Mechanic Spies
 	self.Proteus.MechRef.Rampage = KBM.MechSpy:Add(self.Lang.Debuff.Rampage[KBM.Lang], nil, "playerDebuff", self.Proteus)
-	self.Proteus.MechRef.Glacial = KBM.MechSpy:Add(self.Lang.Debuff.Glacial[KBM.Lang], nil, "playerDebuff", self.Proteus)
+	self.Proteus.MechRef.Glacial = KBM.MechSpy:Add(self.Lang.Debuff.Glacial[KBM.Lang], 10, "playerDebuff", self.Proteus)
 	KBM.Defaults.MechObj.Assign(self.Proteus)
 
 	-- Assign Alerts and Timers for Triggers

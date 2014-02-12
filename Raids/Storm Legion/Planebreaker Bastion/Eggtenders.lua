@@ -309,7 +309,7 @@ function ETS:Death(UnitID)
 	local e = self.EggtenderUnits[UnitID]
 	if e ~= nil then
 		e.Dead = true
-		e.TimersRef.Faucet:Stop()
+		KBM.MechTimer:AddRemove(e.TimersRef.Faucet, true)
 		for n = 1,5 do
 			if self["Eggtender"..n].Dead == false then
 				return false

@@ -10,7 +10,7 @@ Author = "Paul Snart"
 Website = "http://www.facebook.com/KingBossMods"
 Email = "kingbossmods@gmail.com"
 
-Version = "1.5.6.762"
+Version = "1.5.6.763"
 
 Environment = "2.5"
 
@@ -316,6 +316,12 @@ Embed = {
 
 SavedVariables = {
 	KM_Settings = "account",
+	KBMRaid_Settings = "account",
+	KBMSliver_Settings = "account",
+	KBMExpert_Settings = "account",
+	KBMDungeon_Settings = "account",
+	KBMChronicle_Settings = "account",
+	KBMOpenWorld_Settings = "account",
 	KBMSLRDPB_Settings = "account", 
 	KBMSLRDPBET_Settings = "account",
 	KBMSLRDPBWT_Settings = "account",

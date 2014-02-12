@@ -1490,56 +1490,58 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 	end
 	
 	function Timer:Stop()
-		if not self.Deleting then
-			self.Deleting = true
-			for i, Timer in ipairs(KBM.MechTimer.ActiveTimers) do
-				if Timer == self then
-					if #KBM.MechTimer.ActiveTimers == 1 then
-						KBM.MechTimer.LastTimer = nil
-						if KBM.MechTimer.Settings.Visible then
-							KBM.MechTimer.Anchor.Text:SetVisible(true)
+		if self.Active then
+			if not self.Deleting then
+				self.Deleting = true
+				for i, Timer in ipairs(KBM.MechTimer.ActiveTimers) do
+					if Timer == self then
+						if #KBM.MechTimer.ActiveTimers == 1 then
+							KBM.MechTimer.LastTimer = nil
+							if KBM.MechTimer.Settings.Visible then
+								KBM.MechTimer.Anchor.Text:SetVisible(true)
+							end
+						elseif i == 1 then
+							KBM.MechTimer.ActiveTimers[i+1].GUI.Background:SetPoint("TOPLEFT", KBM.MechTimer.Anchor, "TOPLEFT")
+						elseif i == #KBM.MechTimer.ActiveTimers then
+							KBM.MechTimer.LastTimer = KBM.MechTimer.ActiveTimers[i-1]
+						else
+							KBM.MechTimer.ActiveTimers[i+1].GUI.Background:SetPoint("TOPLEFT", KBM.MechTimer.ActiveTimers[i-1].GUI.Background, "BOTTOMLEFT", 0, 1)
 						end
-					elseif i == 1 then
-						KBM.MechTimer.ActiveTimers[i+1].GUI.Background:SetPoint("TOPLEFT", KBM.MechTimer.Anchor, "TOPLEFT")
-					elseif i == #KBM.MechTimer.ActiveTimers then
-						KBM.MechTimer.LastTimer = KBM.MechTimer.ActiveTimers[i-1]
-					else
-						KBM.MechTimer.ActiveTimers[i+1].GUI.Background:SetPoint("TOPLEFT", KBM.MechTimer.ActiveTimers[i-1].GUI.Background, "BOTTOMLEFT", 0, 1)
+						table.remove(KBM.MechTimer.ActiveTimers, i)
+						break
 					end
-					table.remove(KBM.MechTimer.ActiveTimers, i)
-					break
 				end
-			end
-			self.GUI.Background:SetVisible(false)
-			self.GUI.Shadow:SetText("")
-			table.insert(KBM.MechTimer.Store, self.GUI)
-			self.Active = false
-			self.Remaining = 0
-			self.TimeStart = 0
-			self.Waiting = false
-			for i, AlertObj in pairs(self.Alerts) do
-				self.Alerts[i].Triggered = false
-			end
-			for i, TimerObj in pairs(self.Timers) do
-				self.Timers[i].Triggered = false
-			end
-			self.GUI = nil
-			self.Removing = false
-			self.Deleting = false
-			if KBM.Encounter then
-				if not self.ForceStop then
-					if self.Repeat then
-						KBM.MechTimer:AddStart(self)
-					end
-					if self.TimerAfter then
-						for i, TimerObj in ipairs(self.TimerAfter) do
-							if TimerObj.Phase >= KBM.CurrentMod.Phase or TimerObj.Phase == 0 then
-								KBM.MechTimer:AddStart(TimerObj)
+				self.GUI.Background:SetVisible(false)
+				self.GUI.Shadow:SetText("")
+				table.insert(KBM.MechTimer.Store, self.GUI)
+				self.Active = false
+				self.Remaining = 0
+				self.TimeStart = 0
+				self.Waiting = false
+				for i, AlertObj in pairs(self.Alerts) do
+					self.Alerts[i].Triggered = false
+				end
+				for i, TimerObj in pairs(self.Timers) do
+					self.Timers[i].Triggered = false
+				end
+				self.GUI = nil
+				self.Removing = false
+				self.Deleting = false
+				if KBM.Encounter then
+					if not self.ForceStop then
+						if self.Repeat then
+							KBM.MechTimer:AddStart(self)
+						end
+						if self.TimerAfter then
+							for i, TimerObj in ipairs(self.TimerAfter) do
+								if TimerObj.Phase >= KBM.CurrentMod.Phase or TimerObj.Phase == 0 then
+									KBM.MechTimer:AddStart(TimerObj)
+								end
 							end
 						end
-					end
-					if self.AlertAfter then
-						KBM.Alert:Start(self.AlertAfter, Inspect.Time.Real())
+						if self.AlertAfter then
+							KBM.Alert:Start(self.AlertAfter, Inspect.Time.Real())
+						end
 					end
 				end
 			end
