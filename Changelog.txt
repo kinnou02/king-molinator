@@ -1,4 +1,20 @@
-﻿v1.5.6
+﻿v1.5.7
+
+Raids
+* Planebreaker Bastion
+** Thrax
+*** Fixed: File Encoding to UTF-8
+
+Slivers
+* Intrepid Drowned Halls
+** Isskal
+*** Change: Changed dance notification to simple say "Change"
+
+Translations
+* German Updates
+
+----
+v1.5.6
 
 Defaults
 * New: Added the follow to /kbmdefault

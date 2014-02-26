@@ -38,22 +38,30 @@ KBM.RegisterMod(VOL.ID, VOL)
 VOL.Lang.Unit = {}
 VOL.Lang.Unit.Volan = KBM.Language:Add("Volan")
 VOL.Lang.Unit.Volan:SetFrench("Volan")
+VOL.Lang.Unit.Volan:SetGerman("Volan")
 VOL.Lang.Unit.VolanLL = KBM.Language:Add("Volan's Left Leg")
 VOL.Lang.Unit.VolanLL:SetFrench("Jambe gauche de Volan")
+VOL.Lang.Unit.VolanLL:SetGerman("Volans linkes Bein")
 VOL.Lang.Unit.VolanRL = KBM.Language:Add("Volan's Right Leg")
 VOL.Lang.Unit.VolanRL:SetFrench("Jambe droite de Volan")
- 
+VOL.Lang.Unit.VolanRL:SetGerman("Volans rechtes Bein")
+
 -- Ability Dictionary
 VOL.Lang.Ability = {}
 VOL.Lang.Ability.Energy = KBM.Language:Add("Energy Beam")
 VOL.Lang.Ability.Energy:SetFrench("Orbe entropique")
+VOL.Lang.Ability.Energy:SetGerman("Energiestrahl")
 VOL.Lang.Ability.Spine = KBM.Language:Add("Spine Shatter")
 VOL.Lang.Ability.Spine:SetFrench("Destruction vertébrale")
+VOL.Lang.Ability.Spine:SetGerman("Rückgratbrecher")
 VOL.Lang.Ability.Outbreak = KBM.Language:Add("Outbreak")
 VOL.Lang.Ability.Outbreak:SetFrench("Déclenchement")
+VOL.Lang.Ability.Outbreak:SetGerman("Ausbruch")
 VOL.Lang.Ability.Extinction = KBM.Language:Add("Extinction")
 VOL.Lang.Ability.Extinction:SetFrench("Extinction")
+VOL.Lang.Ability.Extinction:SetGerman("Untergang")
 VOL.Lang.Ability.Oblivion = KBM.Language:Add("Eve of Oblivion")
+VOL.Lang.Ability.Oblivion:SetGerman("Vorabend des Vergessens")--TODO
  
 -- Description Dictionary
 VOL.Lang.Main = {}
@@ -62,34 +70,46 @@ VOL.Lang.Main = {}
 VOL.Lang.Debuff = {}
 VOL.Lang.Debuff.Outbreak = KBM.Language:Add("Outbreak")
 VOL.Lang.Debuff.Outbreak:SetFrench("Déclenchement")
+VOL.Lang.Debuff.Outbreak:SetGerman("Ausbruch")
  
 -- Notify Dictionary
 VOL.Lang.Notify = {}
 VOL.Lang.Notify.Crystal = KBM.Language:Add("Volan propels a burst of energy towards (%a*).")
 VOL.Lang.Notify.Crystal:SetFrench("Volan expédie une explosion d'énergie vers (%a*).")
+VOL.Lang.Notify.Crystal:SetGerman("Volan schleudert eine Energieexplosion in Richtung (%a*).")
 VOL.Lang.Notify.Spine = KBM.Language:Add("Your cities will fall.")
 VOL.Lang.Notify.Spine:SetFrench("Vos cités s'écrouleront.")
+VOL.Lang.Notify.Spine:SetGerman("Eure Städte werden fallen.")
 VOL.Lang.Notify.Outbreak = KBM.Language:Add("Your lands will burn.")
 VOL.Lang.Notify.Outbreak:SetFrench("Vos terres brûleront.")
+VOL.Lang.Notify.Outbreak:SetGerman("Eure Lande werden brennen.")
 VOL.Lang.Notify.Extinction = KBM.Language:Add("Extinction awaits you.")
 VOL.Lang.Notify.Extinction:SetFrench("L'extinction vous attend.")
+VOL.Lang.Notify.Extinction:SetGerman("Euer Untergang naht.")
 VOL.Lang.Notify.Oblivion = KBM.Language:Add("Witness true power.")
+VOL.Lang.Notify.Oblivion:SetGerman("Erlebt wahre Kraft.")--TODO
 VOL.Lang.Notify.Exhausted = KBM.Language:Add('Volan shouts, "Resistance only delays the inevitable."')
 VOL.Lang.Notify.Exhausted:SetFrench('Volan s\'écrie: "Votre résistance ne fait que ******er l\'inévitable."')
+VOL.Lang.Notify.Exhausted:SetGerman('Volan schreit, "Widerstand verzögert nur das Unvermeidliche."')--TODO
 VOL.Lang.Notify.PhaseTwo = KBM.Language:Add('Volan bellows, "My soul burns with hatred. I will only be free from my torment when no life remains on this accursed world."')
 VOL.Lang.Notify.PhaseTwo:SetFrench('Volan hurle: "La haine consume mon âme. Je ne serai libre de mes tourments que lorsqu\'aucune vie ne restera en ce monde maudit."')
+VOL.Lang.Notify.PhaseTwo:SetGerman("")--TODO
  
 -- Messages Dictionary
 VOL.Lang.Messages = {}
 VOL.Lang.Messages.CrystalRun = KBM.Language:Add("Run to Crystal!")
 VOL.Lang.Messages.CrystalRun:SetFrench("Courez sur le Cristal!")
+VOL.Lang.Messages.CrystalRun:SetGerman("Zum Kristall laufen!")
 VOL.Lang.Messages.Extinction = KBM.Language:Add("Spread Out!")
 VOL.Lang.Messages.Extinction:SetFrench("Dispersez vous!")
+VOL.Lang.Messages.Extinction:SetGerman("Verteilen!")
 VOL.Lang.Messages.OblivionDamage = KBM.Language:Add("Eve of Oblivion Hits Raid!")
+VOL.Lang.Messages.OblivionDamage:SetGerman("Vorabend des Vergessens trifft den Schlachtzug!")--TODO
 VOL.Lang.Messages.ExhaustedStart = KBM.Language:Add("Start DPS Burn!")
 VOL.Lang.Messages.ExhaustedStart:SetFrench("Burst DPS!")
+VOL.Lang.Messages.ExhaustedStart:SetGerman("Burst DPS Start!")
 VOL.Lang.Messages.ExhaustedEnd = KBM.Language:Add("End of Exhausted!")
- 
+VOL.Lang.Messages.ExhaustedEnd:SetGerman("Ende der Erschöpfung!")--TODO 
 VOL.Descript = VOL.Lang.Unit.Volan[KBM.Lang]
 
 -- Assign Boss to Language Specific Dictionary

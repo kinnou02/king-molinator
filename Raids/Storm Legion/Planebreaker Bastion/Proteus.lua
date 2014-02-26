@@ -34,38 +34,60 @@ KBM.RegisterMod(PRT.ID, PRT)
 -- Main Unit Dictionary
 PRT.Lang.Unit = {}
 PRT.Lang.Unit.Proteus = KBM.Language:Add("Proteus") -- ???
-PRT.Lang.Unit.Proteus:SetFrench()
+PRT.Lang.Unit.Proteus:SetFrench("Proteus")
+PRT.Lang.Unit.Proteus:SetGerman("Proteus")
+PRT.Lang.Unit.Construct = KBM.Language:Add("Quicksilver Construct")
+PRT.Lang.Unit.Construct:SetGerman("Quecksilber-Konstrukt")
+PRT.Lang.Unit.Hunter = KBM.Language:Add("Planar Hunter")
+PRT.Lang.Unit.Hunter:SetGerman("Ebenenjäger")
+PRT.Lang.Unit.Excreter = KBM.Language:Add("Toxin Excreter")
+PRT.Lang.Unit.Excreter:SetGerman("Giftausscheider")
+PRT.Lang.Unit.Stalk = KBM.Language:Add("Trasher Stalk")
+PRT.Lang.Unit.Stalk:SetGerman("Zerstörerischer Pirscher")
 
 -- Ability Dictionary
 PRT.Lang.Ability = {}
 PRT.Lang.Ability.Rampage = KBM.Language:Add("Unstoppable Rampage")
 PRT.Lang.Ability.Rampage:SetFrench("Déchainement imparable")
-
--- Description Dictionary
-PRT.Lang.Main = {}
-PRT.Lang.Main.Encounter = KBM.Language:Add("Proteus")
-PRT.Lang.Main.Encounter:SetFrench()
+PRT.Lang.Ability.Rampage:SetGerman("Unaufhaltsamer Amoklauf")
 
 -- Debuff Dictionary
 PRT.Lang.Debuff = {}
 PRT.Lang.Debuff.Rampage = KBM.Language:Add("Unstoppable Rampage")
 PRT.Lang.Debuff.Rampage:SetFrench("Déchainement imparable")
+PRT.Lang.Debuff.Rampage:SetGerman("Unaufhaltsamer Amoklauf")
 PRT.Lang.Debuff.RampageID = "B3563AA8E7A088296"
 PRT.Lang.Debuff.Glacial = KBM.Language:Add("Glacial Lure")
 PRT.Lang.Debuff.Glacial:SetFrench("Appât glacial")
+PRT.Lang.Debuff.Glacial:SetGerman("Gletscherköder")
 PRT.Lang.Debuff.GlacialID = "BFC35441E164B5B5E"
+
+-- Buff Dictionary
+PRT.Lang.Buff = {}
+PRT.Lang.Buff.Chains = KBM.Language:Add("Web of Chains")  -- boss stun&dmg buff
+PRT.Lang.Buff.Chains:SetGerman("Netz von Ketten")
+--PRT.Lang.Buff.ChainsID = ???
 
 -- Notify Dictionary
 PRT.Lang.Notify = {}
 PRT.Lang.Notify.Rampage = KBM.Language:Add("Proteus fixates on (%a*). Run!")
 PRT.Lang.Notify.Rampage:SetFrench("Proteus se concentre sur (%a*). Fuyez!")
+PRT.Lang.Notify.Rampage:SetGerman("Proteus fixiert sich auf (%a*). Rennt!")
 
 -- Messages Dictionary
 PRT.Lang.Messages = {}
 PRT.Lang.Messages.Rampage = KBM.Language:Add("Rampage on YOU!")
 PRT.Lang.Messages.Rampage:SetFrench("Déchainement sur TOI!")
+PRT.Lang.Messages.Rampage:SetGerman("Amoklauf auf DIR!")
 PRT.Lang.Messages.Glacial = KBM.Language:Add("Glacial Lure on YOU!")
 PRT.Lang.Messages.Glacial:SetFrench("Appât Glacial sur TOI!")
+PRT.Lang.Messages.Glacial:SetGerman("Gletscherköder auf DIR!")
+
+-- Description Dictionary
+PRT.Lang.Main = {}
+PRT.Lang.Main.Encounter = KBM.Language:Add("Proteus")
+PRT.Lang.Main.Encounter:SetFrench()
+PRT.Lang.Main.Encounter:SetGerman()
 
 PRT.Descript = PRT.Lang.Main.Encounter[KBM.Lang]
 
@@ -279,10 +301,10 @@ function PRT:Start()
 	
 	self.Proteus.Triggers.Glacial = KBM.Trigger:Create(self.Lang.Debuff.Glacial[KBM.Lang], "playerDebuff", self.Proteus)
 	self.Proteus.Triggers.Glacial:AddSpy(self.Proteus.MechRef.Glacial)
+	self.Proteus.Triggers.Glacial:AddAlert(self.Proteus.AlertsRef.Glacial, true)
 	self.Proteus.Triggers.GlacialRem = KBM.Trigger:Create(self.Lang.Debuff.Glacial[KBM.Lang], "playerBuffRemove", self.Proteus)
 	self.Proteus.Triggers.GlacialRem:AddStop(self.Proteus.MechRef.Glacial)
-	
-
+	self.Proteus.Triggers.GlacialRem:AddStop(self.Proteus.AlertsRef.Glacial)
 
 	self.Proteus.CastBar = KBM.Castbar:Add(self, self.Proteus)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

@@ -1,4 +1,4 @@
-﻿-- The Infinity Gate Header for King Boss Mods
+﻿-- Planebreaker Bastion Header for King Boss Mods
 -- Written by Ivnedar
 -- Copyright 2013
 --
@@ -30,6 +30,7 @@ PB.Lang = {}
 PB.Lang.Main = {}
 PB.Lang.Main.PB = KBM.Language:Add(PB.Name)
 PB.Lang.Main.PB:SetFrench("Bastion des Planicides")
+PB.Lang.Main.PB:SetGerman("Ebenenbrecher Bastion")
 PB.Name = PB.Lang.Main.PB[KBM.Lang]
 PB.Descript = PB.Name
 

@@ -54,19 +54,23 @@ SAL.Lang.Ability.Incineration = KBM.Language:Add("Soul Incineration")
 SAL.Lang.Ability.Incineration:SetFrench("Incinération d'âme")
 SAL.Lang.Ability.Incineration:SetGerman("Seelenverbrennung")
 SAL.Lang.Ability.Burn = KBM.Language:Add("Infernal Burn")
+SAL.Lang.Ability.Burn:SetGerman("Höllisches Brennen")
 
 -- Verbose Dictionary
 SAL.Lang.Verbose = {}
 SAL.Lang.Verbose.Burn = KBM.Language:Add("Infernal Burn on YOU!")
+SAL.Lang.Verbose.Burn:SetGerman("Höllisches Brennen auf DIR!")
 
 -- Notify
 SAL.Lang.Notify = {}
 SAL.Lang.Notify.Burn = KBM.Language:Add("Salvarola focuses upon (%a*)!")
+SAL.Lang.Notify.Burn:SetGerman("Salvarola fokussiert sich auf (%a*)!")
 
 -- Buff Dictionary
 SAL.Lang.Buff = {}
 SAL.Lang.Buff.Power = KBM.Language:Add("Overwhelming Power")
 SAL.Lang.Buff.Power:SetFrench("Puissance submergeante")
+SAL.Lang.Buff.Power:SetGerman("Überwältigende Kraft")
 
 -- Debuff Dictionary
 SAL.Lang.Debuff = {}

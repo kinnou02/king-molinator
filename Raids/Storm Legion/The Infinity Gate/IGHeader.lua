@@ -30,6 +30,7 @@ IG.Lang = {}
 IG.Lang.Main = {}
 IG.Lang.Main.IG = KBM.Language:Add(IG.Name)
 IG.Lang.Main.IG:SetFrench("Porte de l'Infini")
+IG.Lang.Main.IG:SetGerman("Tor der Unendlichkeit")
 IG.Name = IG.Lang.Main.IG[KBM.Lang]
 IG.Descript = IG.Name
 

@@ -31,20 +31,30 @@ KBM.RegisterMod(VAM.ID, VAM)
 
 -- Main Unit Dictionary
 VAM.Lang.Unit = {}
-VAM.Lang.Unit.Viktus = KBM.Language:Add("Viktus") -- 
-VAM.Lang.Unit.Viktus:SetFrench("Viktus")  
-VAM.Lang.Unit.Mordan = KBM.Language:Add("Mordan") -- 
-VAM.Lang.Unit.Mordan:SetFrench("Mordan")  
-
+VAM.Lang.Unit.Viktus = KBM.Language:Add("Viktus") --
+VAM.Lang.Unit.Viktus:SetFrench("Viktus")
+VAM.Lang.Unit.Viktus:SetGerman("Viktus") 
+VAM.Lang.Unit.Mordan = KBM.Language:Add("Mordan") --
+VAM.Lang.Unit.Mordan:SetFrench("Mordan")
+VAM.Lang.Unit.Mordan:SetGerman("Mordan")  
 
 -- Ability Dictionary
 VAM.Lang.Ability = {}
 VAM.Lang.Ability.Sibling = KBM.Language:Add("Sibling Rivalry")
 VAM.Lang.Ability.Sibling:SetFrench("Rivalité fraternelle")
+VAM.Lang.Ability.Sibling:SetGerman("Geschwisterrivalität")
 VAM.Lang.Ability.Ravenous = KBM.Language:Add("Ravenous Legion")
 VAM.Lang.Ability.Ravenous:SetFrench("Légion vorace")
+VAM.Lang.Ability.Ravenous:SetGerman("Legion der Gefräßigen")
 VAM.Lang.Ability.Creeper = KBM.Language:Add("Ensnaring Creepers")
 VAM.Lang.Ability.Creeper:SetFrench("Lierres captivants")
+VAM.Lang.Ability.Creeper:SetGerman("Umgarnender Kriecher")
+VAM.Lang.Ability.Darkness = KBM.Language:Add("Expunge Darkness")
+--VAM.Lang.Ability.Darkness:SetFrench("")
+VAM.Lang.Ability.Darkness:SetGerman("Ausmerzende Dunkelheit")
+VAM.Lang.Ability.Radiance = KBM.Language:Add("Gathering Radiance")
+--VAM.Lang.Ability.Radiance:SetFrench("")
+VAM.Lang.Ability.Radiance:SetGerman("Aufziehende Strahlung")
 
 -- Description Dictionary
 VAM.Lang.Main = {}
@@ -57,6 +67,7 @@ VAM.Lang.Messages = {}
 
 VAM.Lang.Descript = KBM.Language:Add("Viktus and Mordan")
 VAM.Lang.Descript:SetFrench("Viktus et Mordan")
+VAM.Lang.Descript:SetGerman("Viktus und Mordan")
 VAM.Descript = VAM.Lang.Descript[KBM.Lang]
 
 -- Assign Boss to Language Specific Dictionary

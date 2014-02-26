@@ -36,14 +36,18 @@ BXO.Lang.Unit.BreakerX1:SetGerman("Brecher X-1 \"Onyx\"")
 BXO.Lang.Unit.BreakerX1:SetFrench("Briseur X-1 \"Onyx\"")
 BXO.Lang.Unit.CoreAlpha = KBM.Language:Add("Core Systems Routine Alpha") -- U01D9CC8C1FF2D603
 BXO.Lang.Unit.CoreAlpha:SetFrench("Système central de routine alpha") 
+BXO.Lang.Unit.CoreAlpha:SetGerman("Kern-System Alpharoutine")
 BXO.Lang.Unit.Colossus = KBM.Language:Add("Irradiated Colossus") -- U44B144E14DCEBE34
 BXO.Lang.Unit.Colossus:SetFrench("Colosse irradié") 
+BXO.Lang.Unit.Colossus:SetGerman("Verstrahlter Koloss")
 
 -- Ability Dictionary
 BXO.Lang.Ability = {}
 BXO.Lang.Ability.Disruptor = KBM.Language:Add("Quantum Disruptor")
 BXO.Lang.Ability.Disruptor:SetGerman("Quantum Störer")
 BXO.Lang.Ability.Disruptor:SetFrench("Perturbateur quantique")
+BXO.Lang.Ability.Splash = KBM.Language:Add("Meltdown Splash")
+BXO.Lang.Ability.Splash:SetGerman("Kernschmelzfontäne")
 
 -- Description Dictionary
 BXO.Lang.Main = {}
@@ -95,6 +99,7 @@ BXO.BreakerX1 = {
 			Decay = KBM.Defaults.AlertObj.Create("cyan"),
 			Disruptor = KBM.Defaults.AlertObj.Create("yellow"),
 			Distortion = KBM.Defaults.AlertObj.Create("purple"),
+			Splash = KBM.Defaults.AlertObj.Create("red"),
 		},
 		MechRef = {
 			Enabled = true,
@@ -264,8 +269,9 @@ function BXO:Start()
 	
 	-- Create Alerts
 	self.BreakerX1.AlertsRef.Disruptor = KBM.Alert:Create(self.Lang.Ability.Disruptor[KBM.Lang], nil, true, true, "yellow")
-	self.BreakerX1.AlertsRef.Distortion = KBM.Alert:Create(self.Lang.Debuff.Distortion[KBM.Lang], nil, true, true, "red")
+	self.BreakerX1.AlertsRef.Distortion = KBM.Alert:Create(self.Lang.Debuff.Distortion[KBM.Lang], nil, true, true, "purple")
 	self.BreakerX1.AlertsRef.Decay = KBM.Alert:Create(self.Lang.Debuff.Decay[KBM.Lang], nil, false, true, "cyan")
+	self.BreakerX1.AlertsRef.Splash = KBM.Alert:Create(self.Lang.Ability.Splash[KBM.Lang], 4, true, true, "red")
 	KBM.Defaults.AlertObj.Assign(self.BreakerX1)
 
 	-- Create Mechanic Spies (BreakerX1)

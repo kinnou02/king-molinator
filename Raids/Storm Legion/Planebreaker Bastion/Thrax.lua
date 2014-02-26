@@ -1,4 +1,4 @@
--- Warden Thrax Boss Mod for King Boss Mods
+﻿-- Warden Thrax Boss Mod for King Boss Mods
 -- Written by Ivnedar
 -- Copyright 2013
 --
@@ -35,42 +35,56 @@ KBM.RegisterMod(WTX.ID, WTX)
 WTX.Lang.Unit = {}
 WTX.Lang.Unit.Thrax = KBM.Language:Add("Warden Thrax") -- ???
 WTX.Lang.Unit.Thrax:SetFrench("Garde Thrax")
+WTX.Lang.Unit.Thrax:SetGerman("Bewahrer Thrax")
 
 -- Ability Dictionary
 WTX.Lang.Ability = {}
 WTX.Lang.Ability.Disturbance = KBM.Language:Add("Seismic Disturbance")
 WTX.Lang.Ability.Disturbance:SetFrench("Perturbation sismique")
+WTX.Lang.Ability.Disturbance:SetGerman("Seismische Störung")
 WTX.Lang.Ability.Suppression = KBM.Language:Add("Suppression")
 WTX.Lang.Ability.Suppression:SetFrench()
+WTX.Lang.Ability.Suppression:SetGerman("Unterdrückung")
 WTX.Lang.Ability.Rockslide = KBM.Language:Add("Rockslide")
-WTX.Lang.Ability.Rockslide:SetFrench("�boulement de pierres")
+WTX.Lang.Ability.Rockslide:SetFrench("Éboulement de pierres")
+WTX.Lang.Ability.Rockslide:SetGerman("Bergsturz")
 WTX.Lang.Ability.Transference = KBM.Language:Add("Tectonic Transference")
 WTX.Lang.Ability.Transference:SetFrench("Transfert tectonique")
+WTX.Lang.Ability.Transference:SetGerman("Tektonische Üertragung")
 WTX.Lang.Ability.GTransference = KBM.Language:Add("Greater Tectonic Transference")
 WTX.Lang.Ability.GTransference:SetFrench("Transfert tectonique majeur")
+WTX.Lang.Ability.GTransference:SetGerman("Große Tektonische Üertragung")
 WTX.Lang.Ability.Execution = KBM.Language:Add("Execution")
-WTX.Lang.Ability.Execution:SetFrench("Ex�cution")
+WTX.Lang.Ability.Execution:SetFrench("Exécution")
+WTX.Lang.Ability.Execution:SetGerman("Hinrichtung")
 
 -- Description Dictionary
 WTX.Lang.Main = {}
 WTX.Lang.Main.Encounter = KBM.Language:Add("Warden Thrax")
 WTX.Lang.Main.Encounter:SetFrench("Garde Thrax")
+WTX.Lang.Main.Encounter:SetGerman("Bewahrer Thrax")
 
 -- Debuff Dictionary
 WTX.Lang.Debuff = {}
 WTX.Lang.Debuff.Fracture = KBM.Language:Add("Fracture")
+WTX.Lang.Debuff.Fracture:SetGerman("Fraktur") -- Todo
+WTX.Lang.Debuff.FractureID = "B4E7B63EC5C35EA56"
 WTX.Lang.Debuff.Chain = KBM.Language:Add("Chain Gang")
 WTX.Lang.Debuff.Chain:SetFrench("Esclavage")
-
+WTX.Lang.Debuff.Chain:SetGerman("Sträflingskolonne")
+WTX.Lang.Debuff.ChainID = "B0A2FB1C08CAD24B2"
+ 
 -- Messages Dictionary
 WTX.Lang.Messages = {}
 WTX.Lang.Messages.MoveSoon = KBM.Language:Add("Move Soon")
-WTX.Lang.Messages.MoveSoon:SetFrench("D�placement Bient�t")
+WTX.Lang.Messages.MoveSoon:SetFrench("Déplacement Bientôt")
+WTX.Lang.Messages.MoveSoon:SetGerman("Bald laufen")
 WTX.Lang.Messages.MoveNow = KBM.Language:Add("Move Now!")
-WTX.Lang.Messages.MoveNow:SetFrench("D�placement Maintenant!")
+WTX.Lang.Messages.MoveNow:SetFrench("Déplacement Maintenant!")
+WTX.Lang.Messages.MoveNow:SetGerman("Laufen jetzt!")
 WTX.Lang.Messages.Knockback = KBM.Language:Add("Knockback Soon!")
-WTX.Lang.Messages.Knockback:SetFrench("Repoussement Bient�t!")
-
+WTX.Lang.Messages.Knockback:SetFrench("Repoussement Bientôt!")
+WTX.Lang.Messages.Knockback:SetGerman("Rückstoß kommt!")
 WTX.Lang.Debuff.FractureID = "B4E7B63EC5C35EA56"
 
 WTX.Descript = WTX.Lang.Main.Encounter[KBM.Lang]

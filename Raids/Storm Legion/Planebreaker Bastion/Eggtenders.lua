@@ -37,20 +37,29 @@ KBM.RegisterMod(ETS.ID, ETS)
 ETS.Lang.Unit = {}
 ETS.Lang.Unit.Eggtender = KBM.Language:Add("Eggtender") -- U54A900670238C4D6
 ETS.Lang.Unit.Eggtender:SetFrench("Garde-œufs")
+ETS.Lang.Unit.Eggtender:SetGerman("Gelegehüter")
 ETS.Lang.Unit.Egg = KBM.Language:Add("Massive Architect Egg") -- U47651D39698CC267 (642.54998563789,884,97998021916,1218.159972772)
 ETS.Lang.Unit.Egg:SetFrench("Œuf d'Architecte massif")
+ETS.Lang.Unit.Egg:SetGerman("Massives Architekten-Ei")
 
 -- Ability Dictionary
 ETS.Lang.Ability = {}
 ETS.Lang.Ability.Faucet = KBM.Language:Add("Bile Faucet")
 ETS.Lang.Ability.Faucet:SetFrench("Robinet de bile")
+ETS.Lang.Ability.Faucet:SetGerman("Gallenventil")
+ETS.Lang.Ability.Bile = KBM.Language:Add("Frenetic Bile")
+ETS.Lang.Ability.Bile:SetGerman("Frenetische Galle")
 ETS.Lang.Ability.Pool = KBM.Language:Add("Pool of Bile")
 ETS.Lang.Ability.Pool:SetFrench("Flaque de bile")
+ETS.Lang.Ability.Pool:SetGerman("Gallenteich")
+ETS.Lang.Ability.Slam = KBM.Language:Add("Slam")
+ETS.Lang.Ability.Slam:SetGerman("Rempler")
 
 -- Description Dictionary
 ETS.Lang.Main = {}
 ETS.Lang.Main.Encounter = KBM.Language:Add("Eggtenders")
 ETS.Lang.Main.Encounter:SetFrench("Garde-œufs")
+ETS.Lang.Main.Encounter:SetGerman("Eierhüter")
 
 -- Debuff Dictionary
 ETS.Lang.Debuff = {}
