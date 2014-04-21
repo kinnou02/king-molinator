@@ -1,4 +1,18 @@
-﻿v1.5.7
+﻿v.1.5.8
+
+LibSUnit (Safe's Unit Lib) 
+* Fixed: Error 1120, which could possibly cause raid tracking issues.
+* Optimized: Reworked raid tracking code to be more streamlined.
+
+Menu
+* Changed: Reworked menu code to be better separated from the main code.
+* New: Started work on new Drop Down menu items.
+
+LibSGui (Safe's GUI Lib)
+* New: Added new Drop Down graphics and initial code base.
+
+----
+v1.5.7
 
 Raids
 * Planebreaker Bastion

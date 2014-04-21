@@ -831,7 +831,7 @@ function _int.Default:CreateBar(_tBar)
 			self.anim.remaining = self.anim.endTime - Inspect.Time.Real()
 			local default = self.barObj.default
 			self.anim.progress = self.anim.remaining * default.anim.duration
-			if self.anim.remaining <= 0.01 then
+			if self.anim.remaining <= 0.01 or self.ui == nil then
 				self.UpdateObj = nil
 				self.anim.endTime = 0
 				self:Stop()
@@ -846,7 +846,7 @@ function _int.Default:CreateBar(_tBar)
 			self.anim.remaining = self.anim.endTime - Inspect.Time.Real()
 			local default = self.barObj.default
 			self.anim.progress = self.anim.remaining * default.anim.duration
-			if self.anim.remaining <= 0.01 then
+			if self.anim.remaining <= 0.01 or self.ui == nil then
 				self.UpdateObj = nil
 				self.anim.endTime = 0
 				self:Stop()

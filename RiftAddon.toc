@@ -10,14 +10,21 @@ Author = "Paul Snart"
 Website = "http://www.facebook.com/KingBossMods"
 Email = "kingbossmods@gmail.com"
 
-Version = "1.5.7.765"
+Version = "1.5.8.766"
 
 Environment = "2.5"
 
 RunOnStartup = {
 	"KingMolinator.lua",
 	"Modules/Menu/MainMenu.lua",
-	"Modules/Menu/Objects.lua",
+	"Modules/Menu/Build.lua",
+	"Modules/Menu/Objects/Objects.lua",
+	"Modules/Menu/Objects/Check.lua",
+	"Modules/Menu/Objects/PlainHeader.lua",
+	"Modules/Menu/Objects/Header.lua",
+	"Modules/Menu/Objects/ColorPicker.lua",
+	"Modules/Menu/Objects/Group.lua",
+	"Modules/Menu/Objects/DropDown.lua",
 	"Modules/Menu/Page.lua",
 	"Modules/Menu/Instance.lua",
 	"Modules/ResMaster.lua",

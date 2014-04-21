@@ -45,6 +45,7 @@ local _int = {
 		textfield = LibSata:Create(),
 		node = LibSata:Create(),
 		shadowtext = LibSata:Create(),
+		dropDown = LibSata:Create(),
 	},
 	objects = {
 		window = LibSata:Create(),
@@ -708,13 +709,13 @@ function _int:buildBase(_type, _parent)
 				for _id, _table in pairs(_typeList) do
 					print(_id)
 				end
-				error("Expeting a valid GUI string:\nGot: "..tostring(_type))
+				error("Expecting a valid GUI string:\nGot: "..tostring(_type))
 			end
 		end
 	else
 		if _int._debug then
 			print("Error: _int:buildBase(string _type)")
-			error("Expeting _type to be of type 'string'\nGot :"..type(_type))
+			error("Expecting _type to be of type 'string'\nGot :"..type(_type))
 		end
 	end
 end
