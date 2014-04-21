@@ -1095,7 +1095,7 @@ function _lsu.Raid.Check(UnitID, Spec)
 		LibSUnit.Raid.Lookup[newSpec].UID = UID
 		LibSUnit.Raid.UID[UnitObj.UnitID] = UnitObj
 		UnitObj.RaidLoc = newSpec
-		if not SpecChanged[oldSpec] then
+		if not specChanged[oldSpec] then
 			--print("Old Spec Cleared: "..oldSpec)
 			LibSUnit.Raid.Lookup[oldSpec].Unit = nil
 			LibSUnit.Raid.Lookup[oldSpec].UID = false
