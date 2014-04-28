@@ -39,8 +39,14 @@ MOD.Emphalea = {
 	UTID = "UFBED7D2C1778E164",
 	TimeOut = 5,
 	Triggers = {},
+	AlertsRef = {},
 	Settings = {
 		CastBar = KBM.Defaults.Castbar(),
+		AlertsRef = {
+			Enabled = true,
+			Flood = KBM.Defaults.AlertObj.Create("blue"),
+			FloodChannel = KBM.Defaults.AlertObj.Create("cyan"),
+		},
 	}
 }
 
@@ -60,6 +66,11 @@ MOD.Emphalea.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary
 MOD.Lang.Ability = {}
+MOD.Lang.Ability.Flood = KBM.Language:Add("Flood the Halls")
+
+-- Verbose Dictionary
+MOD.Lang.Verbose = {}
+MOD.Lang.Verbose.Flood = KBM.Language:Add("Flood the Halls (Duration)")
 
 function MOD:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
@@ -75,9 +86,9 @@ function MOD:InitVars()
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		-- MechTimer = KBM.Defaults.MechTimer(),
-		-- Alerts = KBM.Defaults.Alerts(),
+		Alerts = KBM.Defaults.Alerts(),
 		-- TimersRef = self.Emphalea.Settings.TimersRef,
-		-- AlertsRef = self.Emphalea.Settings.AlertsRef,
+		AlertsRef = self.Emphalea.Settings.AlertsRef,
 	}
 	KBMSLEXAOFEMP_Settings = self.Settings
 	chKBMSLEXAOFEMP_Settings = self.Settings
@@ -181,9 +192,16 @@ function MOD:Start()
 	--KBM.Defaults.TimerObj.Assign(self.Emphalea)
 	
 	-- Create Alerts
-	--KBM.Defaults.AlertObj.Assign(self.Emphalea)
+	self.Emphalea.AlertsRef.Flood = KBM.Alert:Create(self.Lang.Ability.Flood[KBM.Lang], nil, false, true, "blue")
+	self.Emphalea.AlertsRef.FloodChannel = KBM.Alert:Create(self.Lang.Ability.Flood[KBM.Lang], nil, false, true, "cyan")
+	self.Emphalea.AlertsRef.FloodChannel.MenuName = self.Lang.Verbose.Flood[KBM.Lang]
+	KBM.Defaults.AlertObj.Assign(self.Emphalea)
 	
 	-- Assign Alerts and Timers to Triggers
+	self.Emphalea.Triggers.Flood = KBM.Trigger:Create(self.Lang.Ability.Flood[KBM.Lang], "cast", self.Emphalea)
+	self.Emphalea.Triggers.Flood:AddAlert(self.Emphalea.AlertsRef.Flood)
+	self.Emphalea.Triggers.FloodChannel = KBM.Trigger:Create(self.Lang.Ability.Flood[KBM.Lang], "channel", self.Emphalea)
+	self.Emphalea.Triggers.FloodChannel:AddAlert(self.Emphalea.AlertsRef.FloodChannel)
 	
 	self.Emphalea.CastBar = KBM.Castbar:Add(self, self.Emphalea)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

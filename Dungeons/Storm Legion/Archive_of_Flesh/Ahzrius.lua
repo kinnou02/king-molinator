@@ -39,16 +39,17 @@ MOD.Ahzrius = {
 	UTID = "UFABA25291969FB5C",
 	TimeOut = 5,
 	Triggers = {},
+	AlertsRef = {},
 	Settings = {
 		CastBar = KBM.Defaults.Castbar(),
 		-- TimersRef = {
 			-- Enabled = true,
 			-- Funnel = KBM.Defaults.TimerObj.Create("red"),
 		-- },
-		-- AlertsRef = {
-			-- Enabled = true,
-			-- Funnel = KBM.Defaults.AlertObj.Create("red"),
-		-- },
+		AlertsRef = {
+			Enabled = true,
+			Drastic = KBM.Defaults.AlertObj.Create("purple"),
+		},
 	}
 }
 
@@ -85,9 +86,9 @@ function MOD:InitVars()
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		-- MechTimer = KBM.Defaults.MechTimer(),
-		-- Alerts = KBM.Defaults.Alerts(),
+		Alerts = KBM.Defaults.Alerts(),
 		-- TimersRef = self.Ahzrius.Settings.TimersRef,
-		-- AlertsRef = self.Ahzrius.Settings.AlertsRef,
+		AlertsRef = self.Ahzrius.Settings.AlertsRef,
 	}
 	KBMSLNMAOFAHZ_Settings = self.Settings
 	chKBMSLNMAOFAHZ_Settings = self.Settings
@@ -188,9 +189,12 @@ function MOD:Start()
 	--KBM.Defaults.TimerObj.Assign(self.Ahzrius)
 	
 	-- Create Alerts
-	--KBM.Defaults.AlertObj.Assign(self.Ahzrius)
+	self.Ahzrius.AlertsRef.Drastic = KBM.Alert:Create(self.Lang.Ability.Drastic[KBM.Lang], nil, true, true, "purple")
+	KBM.Defaults.AlertObj.Assign(self.Ahzrius)
 	
 	-- Assign Alerts and Timers to Triggers
+	self.Ahzrius.Triggers.Drastic = KBM.Trigger:Create(self.Lang.Ability.Drastic[KBM.Lang], "cast", self.Ahzrius)
+	self.Ahzrius.Triggers.Drastic:AddAlert(self.Ahzrius.AlertsRef.Drastic)
 	
 	self.Ahzrius.CastBar = KBM.Castbar:Add(self, self.Ahzrius)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

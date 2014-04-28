@@ -11,6 +11,25 @@ Menu
 LibSGui (Safe's GUI Lib)
 * New: Added new Drop Down graphics and initial code base.
 
+Raids
+* Planebreaker Bastion
+** New: Encounter support for Inyr'Kta (By Noshei)
+** New: Encounter support for Abominus (By Noshei)
+
+Experts
+* Archive of Flesh
+** Emphareal
+*** Added: Alert for Flood the Halls (Warning)
+*** Added: Alert for Flood the Halls (Duration)
+
+Dungeons
+* Archive of Flesh
+** Emphareal
+*** Added: Alert for Flood the Halls (Warning)
+*** Added: Alert for Flood the Halls (Duration)
+** Ahzrius
+*** Added: Alert for Drastic Renovations.
+
 ----
 v1.5.7
 

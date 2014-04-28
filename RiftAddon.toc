@@ -4,13 +4,13 @@ Name = "King Boss Mods"
 
 NameShort = "KBM"
 
-Description = "Development of a fully fledged Raid and Dungeon encounter alert system."
+Description = "Development of a fully fledged Raid and Dungeon encounter alert system.\n\nType /kbmhelp for details on in-game slash commands."
 
-Author = "Paul Snart"
+Author = "Safe@Deepwood"
 Website = "http://www.facebook.com/KingBossMods"
 Email = "kingbossmods@gmail.com"
 
-Version = "1.5.8.767"
+Version = "1.5.8.768"
 
 Environment = "2.5"
 
@@ -35,6 +35,8 @@ RunOnStartup = {
 	"Raids/Storm Legion/Planebreaker Bastion/Eggtenders.lua",
 	"Raids/Storm Legion/Planebreaker Bastion/Thrax.lua",
 	"Raids/Storm Legion/Planebreaker Bastion/Proteus.lua",
+	"Raids/Storm Legion/Planebreaker Bastion/InyrKta.lua",
+	"Raids/Storm Legion/Planebreaker Bastion/Abominus.lua",
 	"Raids/Storm Legion/The Infinity Gate/IGHeader.lua",
 	"Raids/Storm Legion/The Infinity Gate/BreakerX1.lua",
 	"Raids/Storm Legion/The Infinity Gate/Twins.lua",
@@ -333,6 +335,8 @@ SavedVariables = {
 	KBMSLRDPBET_Settings = "account",
 	KBMSLRDPBWT_Settings = "account",
 	KBMSLRDPBPS_Settings = "account",
+	KBMSLRDPBIK_Settings = "account",
+	KBMSLRDPBAB_Settings = "account",
 	KBMSLRDIG_Settings = "account",
 	KBMSLRDIGBX_Settings = "account",
 	KBMSLRDIGVM_Settings = "account",
@@ -611,6 +615,8 @@ SavedVariables = {
 	chKBMSLRDPBET_Settings = "character",
 	chKBMSLRDPBWT_Settings = "character",
 	chKBMSLRDPBPS_Settings = "character",
+	chKBMSLRDPBIK_Settings = "character",
+	chKBMSLRDPBAB_Settings = "character",
 	chKBMSLRDIG_Settings = "character",
 	chKBMSLRDIGBX_Settings = "character",
 	chKBMSLRDIGVM_Settings = "character",	
