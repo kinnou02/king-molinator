@@ -293,7 +293,8 @@ function RM.Rezes:Init()
 									if KBM.AlphaComp(Timer.Player, cTimer.Player) then
 										Insert = true
 									end
-								elseif Timer.Class == "cleric" and cTimer.Class == "cleric" then
+								--elseif Timer.Class == "cleric" and cTimer.Class == "cleric" then
+								else
 									if KBM.AlphaComp(Timer.Player, cTimer.Player) then
 										Insert = true
 									end
@@ -358,6 +359,10 @@ function RM.Rezes:Init()
 								self.GUI.TimeBar:SetBackgroundColor(0.8, 0.55, 1, 0.33)
 							elseif self.Class == "cleric" then
 								self.GUI.TimeBar:SetBackgroundColor(0.55, 1, 0.55, 0.33)
+							elseif self.Class == "warrior" then
+								self.GUI.TimeBar:SetBackgroundColor(1, 0.55, 0.55, 0.33)
+							elseif self.Class == "rogue" then
+								self.GUI.TimeBar:SetBackgroundColor(1, 1, 0.55, 0.33)
 							end
 						end
 					end

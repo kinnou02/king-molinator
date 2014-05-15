@@ -229,6 +229,13 @@ PI.Constants = {
 				--/////////////////////--
 				-- SL Low Grade Stones --
 				--/////////////////////--
+				["r3C3161FA59C6ECF3"] = { -- Wind Sigil
+					Grade = "Low",
+					Level = 60,
+					Callings = {
+						cleric = true,
+					},
+				},				
 				["r712EF6F7297AB9ED"] = { -- Storm Sigil
 					Grade = "Low",
 					Level = 60,
@@ -241,7 +248,6 @@ PI.Constants = {
 					Level = 60,
 					Callings = {
 						mage = true,
-						cleric = true,
 					},
 				},
 				["r0B48C387131E79A8"] = { -- Lightning Sigil

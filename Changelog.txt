@@ -11,6 +11,13 @@ Menu
 LibSGui (Safe's GUI Lib)
 * New: Added new Drop Down graphics and initial code base.
 
+Res Master (Thanks to RePyH1 on Curse for the Ids)
+* New: Added Warrior combat res: Soul Redemption
+* New: Added Rogue combat res: Kiss of life
+
+Ready Check
+* New: Added Wind Sigil for Clerics. (Sorry it took so long, I feel bad)
+
 Raids
 * Planebreaker Bastion
 ** New: Encounter support for Inyr'Kta (By Noshei)

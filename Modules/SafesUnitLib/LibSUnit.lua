@@ -1053,8 +1053,11 @@ function _lsu.Raid.Check(UnitID, Spec)
 		else
 			currentUnitID = nil
 		end
+		
+		specChanged[spec] = false
+		
 		if newUnitID ~= currentUnitID then
-			
+						
 			if newUnitID then
 				newUnitObj = LibSUnit.Lookup.UID[newUnitID]
 				if not newUnitObj then
@@ -1069,15 +1072,20 @@ function _lsu.Raid.Check(UnitID, Spec)
 					-- Unit has not been processed in to the raid.
 					unitStore.Joined[newUnitID] = {New = spec, Unit = newUnitObj}
 					unitStore.Left[newUnitID] = nil
+					if currentUnitID then
+						if not unitStore.Moved[currentUnitID] and not unitStore.Joined[currentUnitID] then
+							unitStore.Left[currentUnitID] = {Old = spec, Unit = currentUnitObj}
+						end
+					end
 				end
 				specChanged[spec] = true
 			else
 				if currentUnitID then
 					if not unitStore.Moved[currentUnitID] and not unitStore.Joined[currentUnitID] then
 						unitStore.Left[currentUnitID] = {Old = spec, Unit = currentUnitObj}
+						specChanged[spec] = true	
 					end
 				end
-				specChanged[spec] = false
 			end
 		else
 			-- Do nothing.
@@ -1196,225 +1204,6 @@ function _lsu.Raid.Check(UnitID, Spec)
 			_lsu.Debug:UpdateCombat()
 		end
 	end	
-end
-
-function _lsu.Raid.CheckOld(UnitID, Spec)
-	if UnitID == LibSUnit.Raid.Lookup[Spec].UID then
-		-- Already Handled Raid Change
-		-- print("No action required for "..Spec)
-		-- print("--------------")
-		return
-	end
-	
-	local newUnitID
-	local newUnitObj
-	local currentUnitID
-	local currentUnitObj
-	local totalchanges = 0
-	local movedCount = 0
-	local leftCount = 0
-	local newCount = 0
-	local SpecChanged = {}
-	local UIDChanged = {
-		Moved = {},
-		Joined = {},
-		Left = {},
-		Store = {},
-	}
-	for Index, Spec in pairs(_SpecList) do
-		if Index > 0 then
-			newUnitID = Inspect.Unit.Lookup(Spec)
-			currentUnitObj = LibSUnit.Raid.Lookup[Spec].Unit
-			if currentUnitObj then
-				currentUnitID = currentUnitObj.UnitID
-			else
-				currentUnitID = nil
-			end
-			if newUnitID ~= currentUnitID then
-				SpecChanged[Spec] = newUnitID or false
-				-- First Check if Pending
-				if newUnitID and currentUnitID then
-					-- Slot changed Unit
-					newUnitObj = LibSUnit.Lookup.UID[newUnitID]
-					if not newUnitObj then
-						newUnitObj = _lsu:Create(newUnitID, _inspect(newUnitID), "Avail")
-					end
-					if LibSUnit.Raid.UID[newUnitID] then
-						-- New Unit already exists [Move]
-						UIDChanged.Moved[newUnitID] = {New = Spec, Old = newUnitObj.RaidLoc}
-						UIDChanged.Left[newUnitID] = nil
-					elseif not UIDChanged.Moved[newUnitID] then
-						-- New Unit isn't currently moving, must be a join.
-						UIDChanged.Joined[newUnitID] = Spec
-					end
-					if not UIDChanged.Moved[currentUnitID] then
-						-- Old Unit isn't moving, flag initially as leaving.
-						UIDChanged.Left[currentUnitID] = Spec
-					end
-				elseif newUnitID then
-					-- Empty slot occupied
-					newUnitObj = LibSUnit.Lookup.UID[newUnitID]
-					if not newUnitObj then
-						newUnitObj = _lsu:Create(newUnitID, _inspect(newUnitID), "Avail")
-					end
-					if LibSUnit.Raid.UID[newUnitID] then
-						-- New Unit already exists [Move]
-						UIDChanged.Moved[newUnitID] = {New = Spec, Old = newUnitObj.RaidLoc}
-						UIDChanged.Left[newUnitID] = nil
-					elseif not UIDChanged.Moved[newUnitID] then
-						-- New Unit isn't moving, must be joining.
-						UIDChanged.Joined[newUnitID] = Spec
-					end
-				elseif currentUnitID then
-					-- Slot no longer occupied
-					if not UIDChanged.Moved[currentUnitID] then
-						-- Old Unit isn't moving, flag initially as leaving.
-						UIDChanged.Left[currentUnitID] = Spec
-					end
-				else
-					-- no action required				
-				end
-			else
-				-- no action required
-			end
-		end
-	end
-	-- Handle Moves
-	for UID, SpecChanges in pairs(UIDChanged.Moved) do
-		local UnitObj = LibSUnit.Lookup.UID[UID]
-		local newSpec = SpecChanges.New
-		local oldSpec = SpecChanges.Old
-		local newGroup = LibSUnit.Raid.Lookup[newSpec].Group
-		local oldGroup = nil
-		LibSUnit.Raid.Lookup[newSpec].Unit = UnitObj
-		LibSUnit.Raid.Lookup[newSpec].UID = UID
-		LibSUnit.Raid.UID[UnitObj.UnitID] = UnitObj
-		UnitObj.RaidLoc = newSpec
-		if not SpecChanged[oldSpec] then
-			--print("Old Spec Cleared: "..oldSpec)
-			LibSUnit.Raid.Lookup[oldSpec].Unit = nil
-			LibSUnit.Raid.Lookup[oldSpec].UID = false
-			oldGroup = LibSUnit.Raid.Lookup[oldSpec].Group
-		end
-		_lsu.Raid.GroupCheck(newGroup, oldGroup)
-		--print(UnitObj.Name.." moved to "..newSpec.." from "..oldSpec)
-		_lsu.Event.Raid.Member.Move(UnitObj, oldSpec, newSpec)
-	end
-	
-	-- Handle Leaves
-	for UID, Spec in pairs(UIDChanged.Left) do
-		if LibSUnit.Raid.UID[UID] then
-			local UnitObj = LibSUnit.Lookup.UID[UID]
-			if UnitObj.Combat then
-				LibSUnit.Raid.CombatTotal = LibSUnit.Raid.CombatTotal - 1
-				if LibSUnit.Raid.CombatTotal == 0 then
-					LibSUnit.Raid.Combat = false
-					_lsu.Event.Raid.Combat.Leave()
-				end
-			end
-			LibSUnit.Raid.Lookup[Spec].Unit = nil
-			LibSUnit.Raid.Lookup[Spec].UID = false
-			LibSUnit.Raid.Members = LibSUnit.Raid.Members - 1
-			local oldGroup = LibSUnit.Raid.Lookup[Spec].Group
-			LibSUnit.Raid.UID[UnitObj.UnitID] = nil
-			UnitObj.RaidLoc = nil
-			--print(UnitObj.Name.." left the Raid")
-			if UnitObj.Dead then
-				LibSUnit.Raid.DeadTotal = LibSUnit.Raid.DeadTotal - 1
-				--print(UnitObj.Name.." has left the Raid and removed death count")
-			end
-			_lsu.Raid.GroupCheck(nil, oldGroup)
-			_lsu.Event.Raid.Member.Leave(UnitObj, Spec)
-			if LibSUnit.Raid.Members == 0 then
-				LibSUnit.Raid.Grouped = false
-				LibSUnit.Raid.Wiped = false
-				_lsu.Event.Raid.Leave()
-			elseif LibSUnit.Raid.Members > 1 then
-				if LibSUnit.Raid.Members == LibSUnit.Raid.DeadTotal then
-					if not LibSUnit.Raid.Wiped then
-						LibSUnit.Raid.Wiped = true
-						_lsu.Event.Raid.Wipe()
-					end
-				else
-					LibSUnit.Raid.Wiped = false
-				end				
-			end
-			if _lsu.Settings.Debug then
-				_lsu.Debug:UpdateDeath()
-				_lsu.Debug:UpdateCombat()
-			end
-		end
-	end
-	
-	-- Handle Joins
-	for UID, Spec in pairs(UIDChanged.Joined) do
-		if not LibSUnit.Raid.UID[UID] then
-			local UnitObj = LibSUnit.Lookup.UID[UID]
-			local newGroup = LibSUnit.Raid.Lookup[Spec].Group
-			LibSUnit.Raid.Members = LibSUnit.Raid.Members + 1
-			LibSUnit.Raid.Lookup[Spec].Unit = UnitObj
-			LibSUnit.Raid.Lookup[Spec].UID = UID
-			LibSUnit.Raid.UID[UID] = UnitObj
-			UnitObj.RaidLoc = Spec
-			if LibSUnit.Raid.Members == 1 then
-				--print("You have joined a Raid or Group")
-				LibSUnit.Raid.Grouped = true
-				_lsu.Event.Raid.Join()
-			end
-			--print("New Player Joined Raid: "..UnitObj.Name)
-			_lsu.Raid.GroupCheck(newGroup, nil)
-			_lsu.Event.Raid.Member.Join(UnitObj, Spec)
-			if UnitObj.Combat then
-				LibSUnit.Raid.CombatTotal = LibSUnit.Raid.CombatTotal + 1
-				if LibSUnit.Raid.CombatTotal == 1 then
-					LibSUnit.Raid.Combat = true
-					_lsu.Event.Raid.Combat.Enter()
-				end
-			end
-			if UnitObj.Dead then
-				LibSUnit.Raid.DeadTotal = LibSUnit.Raid.DeadTotal + 1
-				--print(UnitObj.Name.." joined and marked as Dead")
-			end
-			if LibSUnit.Raid.Members == LibSUnit.Raid.DeadTotal then
-				if not LibSUnit.Raid.Wiped then
-					LibSUnit.Raid.Wiped = true
-					_lsu.Event.Raid.Wipe()
-				end
-			else
-				if LibSUnit.Raid.Wiped then
-					LibSUnit.Raid.Wiped = false
-				end
-			end
-			if _lsu.Settings.Debug then
-				_lsu.Debug:UpdateDeath()
-				_lsu.Debug:UpdateCombat()
-			end
-		end
-	end
-	
-	-- local Groups = 0
-	-- for Group, Value in pairs(LibSUnit.Raid.Group) do
-		-- if Value > 0 then
-			-- Groups = Groups + 1
-		-- end
-	-- end
-	-- if Groups > 1 then
-		-- if LibSUnit.Raid.Mode ~= "raid" then
-			-- LibSUnit.Raid.Mode = "raid"
-			-- _lsu.Event.Raid.Mode()
-		-- end
-	-- else
-		-- if LibSUnit.Raid.Mode ~= "party" then
-			-- LibSUnit.Raid.Mode = "party"
-			-- _lsu.Event.Raid.Mode()
-		-- end
-	-- end
-	
-	-- print("Total Changes found: "..totalchanges)
-	-- print("Player Moved: "..movedCount)
-	-- print("New Players: "..newCount)
-	-- print("Players left: "..leftCount)
-	-- print("--------------")
 end
 
 function _lsu.Raid.PetChange(UnitID, Spec)

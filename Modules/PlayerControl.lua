@@ -34,6 +34,12 @@ PC.RezBank = {
 		["A2D3F2123EE93DE48"] = {}, -- Spark of Life
 		["A4AE33670A72C0F45"] = {}, -- Soul Tether
 	},
+	["warrior"] = {
+		["A5F5BA8A108A5111A"] = {}, -- Soul Redemption
+	},
+	["rogue"] = {
+		["A72E5E73166B95DD1"] = {}, -- Kiss Of Life
+	},
 }
 
 KBM.PlayerControl = PC
