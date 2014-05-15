@@ -191,7 +191,7 @@ function PC.CallingChange(handle, UnitObj)
 		end
 	else
 		-- Request BR
-		if UnitObj.Calling == "mage" or UnitObj.Calling == "cleric" then
+		if UnitObj.Calling then
 			KBM.ResMaster.Rezes.Tracked[UnitObj.Name] = {
 				UnitID = UnitObj.UnitID,
 				UnitObj = UnitObj,
@@ -262,7 +262,7 @@ function PC.GroupJoin(handle, UnitObj, Spec)
 	if UnitObj.Name ~= LibSUnit.Player.Name then
 		if not KBM.ResMaster.Rezes.Tracked[UnitObj.Name] then
 			if not UnitObj.Offline then
-				if UnitObj.Calling == "mage" or UnitObj.Calling == "cleric" then
+				if UnitObj.Calling then
 					KBM.ResMaster.Rezes.Tracked[UnitObj.Name] = {
 						UnitID = UnitObj.UnitID,
 						UnitObj = UnitObj,
