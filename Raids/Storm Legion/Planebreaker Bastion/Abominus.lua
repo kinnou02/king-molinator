@@ -35,11 +35,11 @@ KBM.RegisterMod(PBA.ID, PBA)
 PBA.Lang.Unit = {}
 PBA.Lang.Unit.Abominus = KBM.Language:Add("Planebreaker Abominus") -- ???
 PBA.Lang.Unit.Abominus:SetFrench("Planicide Abominus")
-PBA.Lang.Unit.Zorzyx = KBM.Language:Add("Zor'zyx")
+PBA.Lang.Unit.Zorzyx = KBM.Language:Add("Zor’zyx")
 PBA.Lang.Unit.Zorzyx:SetFrench("Zor’zyx")
-PBA.Lang.Unit.Torkrik = KBM.Language:Add("Tor'krik")
+PBA.Lang.Unit.Torkrik = KBM.Language:Add("Tor’krik")
 PBA.Lang.Unit.Torkrik:SetFrench("Tor’krik")
-PBA.Lang.Unit.Ixior = KBM.Language:Add("Ix'ior")
+PBA.Lang.Unit.Ixior = KBM.Language:Add("Ix’ior")
 PBA.Lang.Unit.Ixior:SetFrench("Ix’ior")
  
 -- Ability Dictionary
@@ -56,16 +56,20 @@ PBA.Lang.Debuff.Petrification = KBM.Language:Add("Petrification")
 PBA.Lang.Debuff.Petrification:SetFrench("Pétrification")
 PBA.Lang.Debuff.PetrificationID = "B4F2B766BAC029D3B"
 PBA.Lang.Debuff.Sandstorm = KBM.Language:Add("Sandstorm Target")
+PBA.Lang.Debuff.Sandstorm:SetFrench("Cible de Tempête de sable")
 PBA.Lang.Debuff.SandstormID = "B14A5C9A23557342C"
  
 -- Notify Dictionary
 PBA.Lang.Notify = {}
 PBA.Lang.Notify.Reflect = KBM.Language:Add("Ix'ior prepares to hurl a blast of magical energy at (%a*).")
+PBA.Lang.Notify.Reflect:SetFrench("Ix'ior se prépare à lancer une explosion d'énergie magique à (%a*).")
  
 -- Messages Dictionary
 PBA.Lang.Messages = {}
 PBA.Lang.Messages.Sandstorm = KBM.Language:Add("Sandstorm on YOU!")
+PBA.Lang.Messages.Sandstorm:SetFrench("SOUFFLE!!!")
 PBA.Lang.Messages.Reflect = KBM.Language:Add("Reflect needed on:")
+PBA.Lang.Messages.Reflect:SetFrench("Reflect sur:")
  
  
 PBA.Descript = PBA.Lang.Main.Encounter[KBM.Lang]
@@ -89,16 +93,16 @@ PBA.Abominus = {
 	Settings = {
 		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
-				Enabled = false,
+			Enabled = false,
 		},
 		AlertsRef = {
-				Enabled = true,
-				Sandstorm = KBM.Defaults.AlertObj.Create("yellow"),
+			Enabled = true,
+			Sandstorm = KBM.Defaults.AlertObj.Create("yellow"),
 		},
 		MechRef = {
-				Enabled = true,
-				Sandstorm = KBM.Defaults.MechObj.Create("yellow"),
-				Reflect = KBM.Defaults.MechObj.Create("blue"),
+			Enabled = true,
+			Sandstorm = KBM.Defaults.MechObj.Create("yellow"),
+			Reflect = KBM.Defaults.MechObj.Create("blue"),
 		},
 	}
 }
@@ -178,7 +182,7 @@ PBA.Ixior = {
 	--TimersRef = {},
 	--AlertsRef = {},
 	--MechRef = {},
-	--Triggers = {},
+	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.Castbar(),
 		--TimersRef = {
@@ -232,7 +236,7 @@ function PBA:InitVars()
 		Alerts = KBM.Defaults.Alerts(),
 	}
 	KBMSLRDPBAB_Settings = self.Settings
-	chKBMSLRDPBAB_Settings = self.Settings
+	chKBMSLRDPBAB_Settings = self.Settings 
 end
  
 function PBA:SwapSettings(bool)
@@ -374,18 +378,17 @@ end
 function PBA:Start()
 	-- Create Timers
 	-- KBM.Defaults.TimerObj.Assign(self.Abominus)
-
+ 
 	-- Create Alerts
 	self.Abominus.AlertsRef.Sandstorm = KBM.Alert:Create(self.Lang.Debuff.Sandstorm[KBM.Lang], 10, true, true, "yellow")
 	KBM.Defaults.AlertObj.Assign(self.Abominus)
-
+ 
 	-- Create Mechanic Spies
 	self.Abominus.MechRef.Sandstorm = KBM.MechSpy:Add(self.Lang.Debuff.Sandstorm[KBM.Lang], nil, "playerDebuff", self.Abominus)
 	self.Abominus.MechRef.Reflect = KBM.MechSpy:Add(self.Lang.Messages.Reflect[KBM.Lang], 5, "mechanic", self.Abominus)
 	KBM.Defaults.MechObj.Assign(self.Abominus)
-
+ 
 	-- Assign Alerts and Timers for Triggers
-
 	self.Abominus.Triggers.Sandstorm = KBM.Trigger:Create(self.Lang.Debuff.Sandstorm[KBM.Lang], "playerDebuff", self.Abominus)
 	self.Abominus.Triggers.Sandstorm:AddSpy(self.Abominus.MechRef.Sandstorm)
 	self.Abominus.Triggers.Sandstorm:AddAlert(self.Abominus.AlertsRef.Sandstorm, true)
@@ -395,8 +398,8 @@ function PBA:Start()
 	self.Abominus.Triggers.Reflect = KBM.Trigger:Create(self.Lang.Notify.Reflect[KBM.Lang], "notify", self.Abominus)
 	self.Abominus.Triggers.Reflect:AddSpy(self.Abominus.MechRef.Reflect)
    
-	self.Abominus.Triggers.PhaseTwo = KBM.Trigger:Create(70, "percent", self.Ixior)
-	self.Abominus.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
+	self.Ixior.Triggers.PhaseTwo = KBM.Trigger:Create(70, "percent", self.Ixior) 
+	self.Ixior.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
 
 	self.Abominus.CastBar = KBM.Castbar:Add(self, self.Abominus)
 	self.Zorzyx.CastBar = KBM.Castbar:Add(self, self.Zorzyx)

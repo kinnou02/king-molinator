@@ -69,7 +69,7 @@ local function BuildMenuSettings()
 		MenuItem:CreateCheck(KBM.Language.Options.Sheep[KBM.Lang], KBM.Options.Sheep, "Protect", self)
 		MenuItem = Item.UI.CreateHeader(KBM.Language.Options.Button[KBM.Lang], KBM.Options.Button, "Visible", self)
 		MenuItem:CreateCheck(KBM.Language.Options.LockButton[KBM.Lang], KBM.Options.Button, "Unlocked", self)
-		MenuItem:CreateDropDown("Test Drop Down", KBM.Options, "Test", self)
+		--MenuItem:CreateDropDown("Test Drop Down", KBM.Options, "Test", self)
 		
 		Item:Select()
 	end
