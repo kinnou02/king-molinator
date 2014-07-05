@@ -26,7 +26,7 @@ local PBA = {
 	Object = "PBA",
 	TimeoutOverride = true,
 	Timeout = 20,
-	Enrage = 12 * 60,
+	Enrage = 13 * 60,
 }
  
 KBM.RegisterMod(PBA.ID, PBA)

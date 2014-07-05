@@ -22,7 +22,7 @@ local CRC = {
 	InstanceObj = FT,
 	HasPhases = true,
 	Lang = {},
-	Enrage = 12 * 60,
+	Enrage = 14 * 60,
 	ID = "Crucia",
 	Object = "CRC",
 }

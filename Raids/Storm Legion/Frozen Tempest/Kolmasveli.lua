@@ -24,7 +24,7 @@ local KT = {
 	Lang = {},
 	ID = "RKolmasveli",
 	Object = "KT",
-	Enrage = 7 * 60,
+	Enrage = 9 * 60,
 }
 
 KBM.RegisterMod(KT.ID, KT)

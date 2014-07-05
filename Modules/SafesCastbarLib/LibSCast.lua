@@ -1277,20 +1277,27 @@ function _int:Castbar_Processor(UnitID)
 			if self.Active then
 				--print("Cast ended for: "..self.UnitObj.Name)
 				-- Calculate if the cast was interrupted.
-				if self.UnitObj.CurrentKey ~= "Idle" and self.Cast.Data ~= nil then
-					local Time = Inspect.Time.Real()
-					local Expected = self.Cast.Start + self.Cast.Data.duration
-					local Difference = Time - Expected
-					if self.Cast.Data.remaining < 0 or self.Cast.Data.expired ~= nil or Difference > 0 then
-						self:End()
+				if not self.UnitObj then
+					self.UnitObj = LibSUnit:RequestDetails(self.UnitID)
+				end
+				if self.UnitObj then
+					if self.UnitObj.CurrentKey ~= "Idle" and self.Cast.Data ~= nil then
+						local Time = Inspect.Time.Real()
+						local Expected = self.Cast.Start + self.Cast.Data.duration
+						local Difference = Time - Expected
+						if self.Cast.Data.remaining < 0 or self.Cast.Data.expired ~= nil or Difference > 0 then
+							self:End()
+						else
+							self:Interrupt()
+						end
+						-- print("Time Started: "..tostring(self.Cast.Data.begin))
+						-- print("Duration: "..tostring(self.Cast.Data.duration))
+						-- print("Expired: "..tostring(self.Cast.Data.expired))
+						-- print("Remaining: "..tostring(self.Cast.Data.remaining))
+						-- print("Adjusted Difference: "..tostring(Difference))
 					else
-						self:Interrupt()
+						self:Stop()
 					end
-					-- print("Time Started: "..tostring(self.Cast.Data.begin))
-					-- print("Duration: "..tostring(self.Cast.Data.duration))
-					-- print("Expired: "..tostring(self.Cast.Data.expired))
-					-- print("Remaining: "..tostring(self.Cast.Data.remaining))
-					-- print("Adjusted Difference: "..tostring(Difference))
 				else
 					self:Stop()
 				end

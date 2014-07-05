@@ -24,7 +24,7 @@ local REG = {
 	Lang = {},
 	ID = "Regulos",
 	Object = "REG",
-	Enrage = 11 * 60,
+	Enrage = 13 * 60,
 	VoidCounter = 0,
 	CounterObj = nil,
 }

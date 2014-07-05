@@ -23,7 +23,7 @@ local GLD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "Gelidra",
-	Enrage = (6 * 60) + 20,
+	Enrage = (8 * 60) + 20,
 	Object = "GLD",
 	HardMode = false,
 }

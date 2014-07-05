@@ -24,7 +24,7 @@ local DLG = {
 	Lang = {},
 	ID = "Goloch",
 	Object = "DLG",
-	Enrage = 6 * 60 + 15,
+	Enrage = 8 * 60 + 15,
 }
 
 DLG.Goloch = {

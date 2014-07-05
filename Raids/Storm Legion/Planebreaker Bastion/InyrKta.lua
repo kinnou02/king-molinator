@@ -26,7 +26,7 @@ local INY = {
         Object = "INY",
         TimeoutOverride = true,
         Timeout = 5,
-        Enrage = 9 * 60,
+        Enrage = 10 * 60,
 }
  
 KBM.RegisterMod(INY.ID, INY)

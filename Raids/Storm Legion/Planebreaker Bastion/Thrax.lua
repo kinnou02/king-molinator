@@ -26,7 +26,7 @@ local WTX = {
 	Object = "WTX",
 	TimeoutOverride = true,
 	Timeout = 20,
-	Enrage = 6 * 60,
+	Enrage = 7 * 60,
 }
 
 KBM.RegisterMod(WTX.ID, WTX)

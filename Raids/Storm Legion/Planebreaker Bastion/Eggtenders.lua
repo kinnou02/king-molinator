@@ -28,7 +28,7 @@ local ETS = {
 	Timeout = 20,
 	EggtenderUnits = {},
 	Nextboss = 1,
-	Enrage = 6 * 60,
+	Enrage = 7 * 60,
 }
 
 KBM.RegisterMod(ETS.ID, ETS)

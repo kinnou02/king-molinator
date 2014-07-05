@@ -24,7 +24,7 @@ local VAM = {
 	Lang = {},
 	ID = "SLIGTwins",
 	Object = "VAM",
-	Enrage = 6 * 60 + 30,
+	Enrage = 7 * 60 + 30,
 }
 
 KBM.RegisterMod(VAM.ID, VAM)

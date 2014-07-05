@@ -1,4 +1,16 @@
-﻿v.1.5.8
+﻿v1.5.9
+
+LibSCast
+* Fixed: Error 1280 (nil UnitObj). Now has checking to ensure Object exists.
+
+Tier 1 Raids
+* Increased all enrage timers by 2 minutes.
+
+Tier 2 Raids
+* Increased all enrage timers by 1 minute.
+
+----
+v1.5.8
 
 LibSUnit (Safe's Unit Lib) 
 * Fixed: Error 1120, which could possibly cause raid tracking issues.

@@ -26,7 +26,7 @@ local PRT = {
 	Object = "PRT",
 	TimeoutOverride = true,
 	Timeout = 20,
-	Enrage = 8 * 60,
+	Enrage = 9 * 60,
 }
 
 KBM.RegisterMod(PRT.ID, PRT)

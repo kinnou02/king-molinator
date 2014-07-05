@@ -24,7 +24,7 @@ local BXO = {
 	Lang = {},
 	ID = "BreakerX1",
 	Object = "BXO",
-	Enrage = 9 * 60,
+	Enrage = 10 * 60,
 }
 
 KBM.RegisterMod(BXO.ID, BXO)

@@ -24,7 +24,7 @@ local MOP = {
 	Lang = {},
 	ID = "RMatriarch_of_Pestilence",
 	Object = "MOP",
-	Enrage = 7 * 60,
+	Enrage = 9 * 60,
 }
 
 KBM.RegisterMod(MOP.ID, MOP)

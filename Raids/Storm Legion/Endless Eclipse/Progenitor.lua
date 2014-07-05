@@ -24,7 +24,7 @@ local PRO = {
 	Lang = {},
 	ID = "RProgenitor",
 	Object = "PRO",
-	Enrage = (7 * 60) + 30,
+	Enrage = (9 * 60) + 30,
 	DeathCount = 0,
 }
 

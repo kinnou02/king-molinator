@@ -256,7 +256,7 @@ function RM.Rezes:Init()
 					local UID = self.Tracked[UnitObj.Name].UnitID
 					Timer.Class = ""
 					
-					if UnitObj.Calling == "mage" or UnitObj.Calling == "cleric" then
+					if UnitObj.Calling ~= "" and UnitObj.Calling ~= nil then
 						Timer.Class = UnitObj.Calling
 					else
 						for Calling, AbilityList in pairs(KBM.PlayerControl.RezBank) do
@@ -287,7 +287,7 @@ function RM.Rezes:Init()
 							elseif Timer.Remaining == cTimer.Remaining and cTimer.Remaining == 0 then
 								if Timer.Duration < cTimer.Duration then
 									Insert = true
-								elseif Timer.Class == "mage" and cTimer.Class == "cleric" then
+								elseif Timer.Class == "mage" and cTimer.Class ~= "mage" then
 									Insert = true
 								elseif Timer.Class == "mage" then
 									if KBM.AlphaComp(Timer.Player, cTimer.Player) then

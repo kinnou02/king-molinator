@@ -24,7 +24,7 @@ local ZVL = {
 	Lang = {},
 	ID = "Zaviel",
 	Object = "ZVL",
-	Enrage = 7 * 60,
+	Enrage = 9 * 60,
 	PowerCount = 0,
 }
 
