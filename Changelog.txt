@@ -1,5 +1,14 @@
 ﻿v1.5.9
 
+Tier 3
+* New: Bindings of Blood: Maelforge (By Apuch@Zaviel & Lifeismystery@Galidra)
+* New: Bindings of Blood: Laethys (By Apuch@Zaviel)
+* New: Bindings of Blood: Greenscale (By Lupercal@Brisesol)
+* New: Bindings of Blood: Akylios (By Lupercal@Brisesol)
+
+LibSUnit
+* Change: Reworked some of the Raid/Group handling code and also optimized it a little.
+
 LibSCast
 * Fixed: Error 1280 (nil UnitObj). Now has checking to ensure Object exists.
 

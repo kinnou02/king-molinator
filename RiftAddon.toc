@@ -10,7 +10,7 @@ Author = "Safe@Deepwood"
 Website = "http://www.facebook.com/KingBossMods"
 Email = "kingbossmods@gmail.com"
 
-Version = "1.5.9.774"
+Version = "1.5.9.775"
 
 Environment = "2.5"
 
@@ -31,6 +31,17 @@ RunOnStartup = {
 	"Modules/PlayerControl.lua",
 	"Modules/PercentageMon.lua",
 	"Modules/Castbar.lua",
+	"Raids/Storm Legion/Binding Maelforge/BMHeader.lua",
+	"Raids/Storm Legion/Binding Maelforge/BMaelforge.lua",
+	"Raids/Storm Legion/Binding Akylios/BAHeader.lua",
+	"Raids/Storm Legion/Binding Akylios/BAkylios.lua",
+	"Raids/Storm Legion/Binding Akylios/BIrauga.lua",	
+	"Raids/Storm Legion/Binding Greenscale/BGHeader.lua",
+	"Raids/Storm Legion/Binding Greenscale/BGreenscale.lua",
+	"Raids/Storm Legion/Binding Greenscale/BToxilua.lua",
+	"Raids/Storm Legion/Binding Laethys/BLHeader.lua",
+	"Raids/Storm Legion/Binding Laethys/BLaethys.lua",
+	"Raids/Storm Legion/Binding Laethys/BMallaven.lua",	
 	"Raids/Storm Legion/Planebreaker Bastion/PBHeader.lua",
 	"Raids/Storm Legion/Planebreaker Bastion/Eggtenders.lua",
 	"Raids/Storm Legion/Planebreaker Bastion/Thrax.lua",
@@ -52,7 +63,7 @@ RunOnStartup = {
 	"Raids/Storm Legion/Frozen Tempest/Gangnum.lua",
 	"Raids/Storm Legion/Frozen Tempest/Zaviel.lua",
 	"Raids/Storm Legion/Frozen Tempest/Kolmasveli.lua",
-	"Raids/Storm Legion/Frozen Tempest/Crucia.lua",
+	"Raids/Storm Legion/Frozen Tempest/Crucia.lua",	
 	"Slivers/Storm Legion/Intrepid_Drowned_Halls/IDHHeader.lua",
 	"Slivers/Storm Legion/Intrepid_Drowned_Halls/Jorb.lua",
 	"Slivers/Storm Legion/Intrepid_Drowned_Halls/Joloral.lua",
@@ -907,6 +918,10 @@ Dependencies = {
 	BuffInfo = {"optional", "after"},
 }
 -- X-Curse-Packaged-Version: r739
+-- X-Curse-Project-Name: King Boss Mods
+-- X-Curse-Project-ID: king-molinator
+-- X-Curse-Repository-ID: rift/king-molinator/mainline
+-- X-Curse-Packaged-Version: r774
 -- X-Curse-Project-Name: King Boss Mods
 -- X-Curse-Project-ID: king-molinator
 -- X-Curse-Repository-ID: rift/king-molinator/mainline

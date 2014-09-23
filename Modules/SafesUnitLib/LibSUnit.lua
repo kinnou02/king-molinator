@@ -20,6 +20,7 @@ local AddonIni, LibSUnit = ...
 
 -- Timer Locals
 local _inspect = Inspect.Unit.Detail
+local _inspectLookup = Inspect.Unit.Lookup
 local _timeReal = Inspect.Time.Real
 local _lastTick = _timeReal()
 
@@ -1033,6 +1034,7 @@ function _lsu.Raid.Check(UnitID, Spec)
 	end
 	
 	-- Define common locals
+	local spec = nil
 	local newUnitID = nil
 	local newUnitObj = nil
 	local currentUnitID = nil
@@ -1045,17 +1047,15 @@ function _lsu.Raid.Check(UnitID, Spec)
 	}
 	
 	for index = 1, 20 do
-		local spec = _SpecList[index]
-		newUnitID = Inspect.Unit.Lookup(spec)
+		spec = _SpecList[index]
+		newUnitID = _inspectLookup(spec)
 		currentUnitObj = LibSUnit.Raid.Lookup[spec].Unit
 		if currentUnitObj then
 			currentUnitID = currentUnitObj.UnitID
 		else
 			currentUnitID = nil
 		end
-		
-		specChanged[spec] = false
-		
+				
 		if newUnitID ~= currentUnitID then
 						
 			if newUnitID then
@@ -1073,17 +1073,21 @@ function _lsu.Raid.Check(UnitID, Spec)
 					unitStore.Joined[newUnitID] = {New = spec, Unit = newUnitObj}
 					unitStore.Left[newUnitID] = nil
 					if currentUnitID then
-						if not unitStore.Moved[currentUnitID] and not unitStore.Joined[currentUnitID] then
-							unitStore.Left[currentUnitID] = {Old = spec, Unit = currentUnitObj}
+						if LibSUnit.Raid.UID[currentUnitID] then
+							if not unitStore.Moved[currentUnitID] then
+								unitStore.Left[currentUnitID] = {Old = spec, Unit = currentUnitObj}
+							end
 						end
 					end
 				end
 				specChanged[spec] = true
 			else
 				if currentUnitID then
-					if not unitStore.Moved[currentUnitID] and not unitStore.Joined[currentUnitID] then
-						unitStore.Left[currentUnitID] = {Old = spec, Unit = currentUnitObj}
-						specChanged[spec] = true	
+					if LibSUnit.Raid.UID[currentUnitID] then
+						if not unitStore.Moved[currentUnitID] then
+							unitStore.Left[currentUnitID] = {Old = spec, Unit = currentUnitObj}
+							specChanged[spec] = true
+						end
 					end
 				end
 			end
@@ -1101,7 +1105,7 @@ function _lsu.Raid.Check(UnitID, Spec)
 		local oldGroup = nil
 		LibSUnit.Raid.Lookup[newSpec].Unit = UnitObj
 		LibSUnit.Raid.Lookup[newSpec].UID = UID
-		LibSUnit.Raid.UID[UnitObj.UnitID] = UnitObj
+		LibSUnit.Raid.UID[UID] = UnitObj
 		UnitObj.RaidLoc = newSpec
 		if not specChanged[oldSpec] then
 			--print("Old Spec Cleared: "..oldSpec)
@@ -1109,6 +1113,7 @@ function _lsu.Raid.Check(UnitID, Spec)
 			LibSUnit.Raid.Lookup[oldSpec].UID = false
 			oldGroup = LibSUnit.Raid.Lookup[oldSpec].Group
 		end
+		specChanged[newSpec] = nil
 		_lsu.Raid.GroupCheck(newGroup, oldGroup)
 		--print(UnitObj.Name.." moved to "..newSpec.." from "..oldSpec)
 		_lsu.Event.Raid.Member.Move(UnitObj, oldSpec, newSpec)
@@ -1130,33 +1135,16 @@ function _lsu.Raid.Check(UnitID, Spec)
 			LibSUnit.Raid.Lookup[Spec].UID = false
 			LibSUnit.Raid.Members = LibSUnit.Raid.Members - 1
 			local oldGroup = LibSUnit.Raid.Lookup[Spec].Group
-			LibSUnit.Raid.UID[UnitObj.UnitID] = nil
+			LibSUnit.Raid.UID[UID] = nil
 			UnitObj.RaidLoc = nil
 			--print(UnitObj.Name.." left the Raid")
 			if UnitObj.Dead then
 				LibSUnit.Raid.DeadTotal = LibSUnit.Raid.DeadTotal - 1
 				--print(UnitObj.Name.." has left the Raid and removed death count")
 			end
+			specChanged[Spec] = nil
 			_lsu.Raid.GroupCheck(nil, oldGroup)
 			_lsu.Event.Raid.Member.Leave(UnitObj, Spec)
-			if LibSUnit.Raid.Members == 0 then
-				LibSUnit.Raid.Grouped = false
-				LibSUnit.Raid.Wiped = false
-				_lsu.Event.Raid.Leave()
-			elseif LibSUnit.Raid.Members > 1 then
-				if LibSUnit.Raid.Members == LibSUnit.Raid.DeadTotal then
-					if not LibSUnit.Raid.Wiped then
-						LibSUnit.Raid.Wiped = true
-						_lsu.Event.Raid.Wipe()
-					end
-				else
-					LibSUnit.Raid.Wiped = false
-				end				
-			end
-			if _lsu.Settings.Debug then
-				_lsu.Debug:UpdateDeath()
-				_lsu.Debug:UpdateCombat()
-			end
 		end
 	end
 	
@@ -1185,25 +1173,52 @@ function _lsu.Raid.Check(UnitID, Spec)
 				_lsu.Event.Raid.Combat.Enter()
 			end
 		end
+		specChanged[Spec] = nil
 		if UnitObj.Dead then
 			LibSUnit.Raid.DeadTotal = LibSUnit.Raid.DeadTotal + 1
 			--print(UnitObj.Name.." joined and marked as Dead")
 		end
+		-- if LibSUnit.Raid.Members == LibSUnit.Raid.DeadTotal then
+			-- if not LibSUnit.Raid.Wiped then
+				-- LibSUnit.Raid.Wiped = true
+				-- _lsu.Event.Raid.Wipe()
+			-- end
+		-- else
+			-- if LibSUnit.Raid.Wiped then
+				-- LibSUnit.Raid.Wiped = false
+			-- end
+		-- end
+	end
+	
+	-- Tidy Spec Changes
+	for Spec, Val in pairs(specChanged) do
+		LibSUnit.Raid.Lookup[Spec].Unit = nil
+		LibSUnit.Raid.Lookup[Spec].UID = false		
+	end
+	
+	if LibSUnit.Raid.Members == 0 then
+		LibSUnit.Raid.Grouped = false
+		LibSUnit.Raid.Wiped = false
+		_lsu.Event.Raid.Leave()
+	elseif LibSUnit.Raid.Members > 1 then
 		if LibSUnit.Raid.Members == LibSUnit.Raid.DeadTotal then
 			if not LibSUnit.Raid.Wiped then
 				LibSUnit.Raid.Wiped = true
 				_lsu.Event.Raid.Wipe()
 			end
 		else
-			if LibSUnit.Raid.Wiped then
-				LibSUnit.Raid.Wiped = false
-			end
-		end
-		if _lsu.Settings.Debug then
-			_lsu.Debug:UpdateDeath()
-			_lsu.Debug:UpdateCombat()
-		end
-	end	
+			LibSUnit.Raid.Wiped = false
+		end				
+	end
+	if _lsu.Settings.Debug then
+		_lsu.Debug:UpdateDeath()
+		_lsu.Debug:UpdateCombat()
+	end
+	if _lsu.Settings.Debug then
+		_lsu.Debug:UpdateDeath()
+		_lsu.Debug:UpdateCombat()
+	end
+	
 end
 
 function _lsu.Raid.PetChange(UnitID, Spec)
