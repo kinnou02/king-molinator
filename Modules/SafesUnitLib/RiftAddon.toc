@@ -3,13 +3,13 @@
 Name = "Safe's Unit Library"
 NameShort = "LibSUnit"
 
-Description = "Dynamic safe removal Table library."
+Description = "Unit management library with Raid API."
 
 Author = "Paul Snart"
 Website = "http://twitter.com/#!/psnart"
 Email = "snarty@gmail.com"
 
-Version = "0.4.2"
+Version = "0.4.3"
 
 Environment = "2.5"
 

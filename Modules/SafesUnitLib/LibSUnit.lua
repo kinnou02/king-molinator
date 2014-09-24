@@ -1002,6 +1002,9 @@ function _lsu.Raid.ManageDeath(UnitObj, Dead, sourceObj)
 end
 
 function _lsu.Raid.GroupCheck(newGroup, oldGroup)
+	if newGroup == oldGroup then
+		return
+	end
 	if newGroup then
 		LibSUnit.Raid.Group[newGroup] = LibSUnit.Raid.Group[newGroup] + 1
 		if LibSUnit.Raid.Group[newGroup] == 1 then
@@ -1029,15 +1032,9 @@ end
 function _lsu.Raid.Check(UnitID, Spec)
 
 	UnitID = UnitID or nil
-	if UnitID then
-		if LibSUnit.Raid.UID[UnitID] then
-			if UnitID == LibSUnit.Raid.Lookup[Spec].UID then
-				-- Already handled raid position.
-				-- No Action required.
-				return
-			end
-		end
-	elseif UnitID == LibSUnit.Raid.Lookup[Spec].UID then
+	if UnitID == LibSUnit.Raid.Lookup[Spec].UID then
+		-- Already handled raid position.
+		-- No Action required.
 		return
 	end
 	
@@ -1064,7 +1061,7 @@ function _lsu.Raid.Check(UnitID, Spec)
 	
 	for index = 1, 20 do
 		spec = _SpecList[index]
-		newUnitID = _inspectLookup(spec)
+		newUnitID = _inspectLookup(spec) or nil
 		currentUnitObj = LibSUnit.Raid.Lookup[spec].Unit
 		if currentUnitObj then
 			currentUnitID = currentUnitObj.UnitID
@@ -1161,6 +1158,12 @@ function _lsu.Raid.Check(UnitID, Spec)
 			end
 			_lsu.Raid.GroupCheck(nil, oldGroup)
 			_lsu.Event.Raid.Member.Leave(UnitObj, Spec)
+			if LibSUnit.Raid.Members == 0 then
+				LibSUnit.Raid.Grouped = false
+				LibSUnit.Raid.Wiped = false
+				_lsu.Event.Raid.Leave()
+				--print("You have left a Raid or Group.")
+			end
 		end
 	end
 	
@@ -1216,12 +1219,7 @@ function _lsu.Raid.Check(UnitID, Spec)
 	
 	--print("Total Changes: "..totalChanged)
 	if totalChanged > 0 then
-		if LibSUnit.Raid.Members == 0 then
-			LibSUnit.Raid.Grouped = false
-			LibSUnit.Raid.Wiped = false
-			_lsu.Event.Raid.Leave()
-			--print("You have left a Raid or Group.")
-		elseif LibSUnit.Raid.Members > 1 then
+		if LibSUnit.Raid.Members > 1 then
 			if LibSUnit.Raid.Members == LibSUnit.Raid.DeadTotal then
 				if not LibSUnit.Raid.Wiped then
 					LibSUnit.Raid.Wiped = true
