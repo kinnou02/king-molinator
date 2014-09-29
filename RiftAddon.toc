@@ -10,7 +10,7 @@ Author = "Safe@Deepwood"
 Website = "http://www.facebook.com/KingBossMods"
 Email = "kingbossmods@gmail.com"
 
-Version = "1.5.9.778"
+Version = "1.5.9.779"
 
 Environment = "2.8"
 
@@ -33,6 +33,7 @@ RunOnStartup = {
 	"Modules/Castbar.lua",
 	"Raids/Storm Legion/Binding Maelforge/BMHeader.lua",
 	"Raids/Storm Legion/Binding Maelforge/BMaelforge.lua",
+	"Raids/Storm Legion/Binding Maelforge/BMagcilian.lua",
 	"Raids/Storm Legion/Binding Akylios/BAHeader.lua",
 	"Raids/Storm Legion/Binding Akylios/BAkylios.lua",
 	"Raids/Storm Legion/Binding Akylios/BIrauga.lua",	
@@ -342,7 +343,19 @@ SavedVariables = {
 	KBMDungeon_Settings = "account",
 	KBMChronicle_Settings = "account",
 	KBMOpenWorld_Settings = "account",
-	KBMSLRDPB_Settings = "account", 
+	KBMSLRDBA_Settings = "account",
+	KBMSLRDBAAK_Settings = "account",
+	KBMSLRDBAIR_Settings = "account",
+	KBMSLRDBG_Settings = "account",
+	KBMSLRDBGGS_Settings = "account",
+	KBMSLRDBGTX_Settings = "account",
+	KBMSLRDBL_Settings = "account",
+	KBMSLRDBLLAE_Settings = "account",
+	KBMSLRDBLMAL_Settings = "account",
+	KBMSLRDBM_Settings = "account",
+	KBMSLRDBMMLF_Settings = "account",
+	KBMSLRDBMMAG_Settings = "account",
+	KBMSLRDPB_Settings = "account",
 	KBMSLRDPBET_Settings = "account",
 	KBMSLRDPBWT_Settings = "account",
 	KBMSLRDPBPS_Settings = "account",
@@ -622,6 +635,18 @@ SavedVariables = {
 	KBMEXUCRCS_Settings = "account",
 	KBM_GlobalOptions = "account",	
 	chKM_Settings = "character",
+	chKBMSLRDBA_Settings = "character",
+	chKBMSLRDBAAK_Settings = "character",
+	chKBMSLRDBAIR_Settings = "character",
+	chKBMSLRDBG_Settings = "character",
+	chKBMSLRDBGGS_Settings = "character",
+	chKBMSLRDBGTX_Settings = "character",
+	chKBMSLRDBL_Settings = "character",
+	chKBMSLRDBLLAE_Settings = "character",
+	chKBMSLRDBLMAL_Settings = "character",
+	chKBMSLRDBM_Settings = "character",
+	chKBMSLRDBMMLF_Settings = "character",
+	chKBMSLRDBMMAG_Settings = "character",
 	chKBMSLRDPB_Settings = "character", 
 	chKBMSLRDPBET_Settings = "character",
 	chKBMSLRDPBWT_Settings = "character",

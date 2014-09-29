@@ -1032,7 +1032,7 @@ end
 function _lsu.Raid.Check(UnitID, Spec)
 
 	UnitID = UnitID or nil
-	if LibSUnit.Raid.Lookup[Spec] == _inspectLookup(Spec) then
+	if LibSUnit.Raid.Lookup[Spec].UID == _inspectLookup(Spec) then
 		-- Already handled raid position.
 		-- No Action required.
 		return

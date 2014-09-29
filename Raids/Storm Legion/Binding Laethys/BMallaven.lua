@@ -3,8 +3,8 @@
 -- Copyright 2011
 --
 
-KBMSLRDBAMAL_Settings = nil
-chKBMSLRDBAMAL_Settings = nil
+KBMSLRDBLMAL_Settings = nil
+chKBMSLRDBLMAL_Settings = nil
 
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
@@ -131,9 +131,9 @@ end
 
 function MAL:SaveVars()	
 	if KBM.Options.Character then
-		chKBMSLRDBAMAL_Settings = self.Settings
+		chKBMSLRDBLMAL_Settings = self.Settings
 	else
-		KBMSLRDBAMAL_Settings = self.Settings
+		KBMSLRDBLMAL_Settings = self.Settings
 	end	
 end
 

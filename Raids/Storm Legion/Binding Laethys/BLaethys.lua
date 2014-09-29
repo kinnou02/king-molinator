@@ -3,8 +3,8 @@
 -- Copyright 2014
 --
 
-KBMSLRDBALAE_Settings = nil
-chKBMSLRDBALAE_Settings = nil
+KBMSLRDBLLAE_Settings = nil
+chKBMSLRDBLLAE_Settings = nil
 
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
@@ -142,42 +142,42 @@ function LAE:InitVars()
 			AlertsRef = self.Laethys.Settings.AlertsRef,
 		},
 	}
-	KBMSLRDBALAE_Settings = self.Settings
-	chKBMSLRDBALAE_Settings = self.Settings
+	KBMSLRDBLLAE_Settings = self.Settings
+	chKBMSLRDBLLAE_Settings = self.Settings
 	
 end
 
 function LAE:SwapSettings(bool)
 
 	if bool then
-		KBMSLRDBALAE_Settings = self.Settings
-		self.Settings = chKBMSLRDBALAE_Settings
+		KBMSLRDBLLAE_Settings = self.Settings
+		self.Settings = chKBMSLRDBLLAE_Settings
 	else
-		chKBMSLRDBALAE_Settings = self.Settings
-		self.Settings = KBMSLRDBALAE_Settings
+		chKBMSLRDBLLAE_Settings = self.Settings
+		self.Settings = KBMSLRDBLLAE_Settings
 	end
 
 end
 
 function LAE:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMSLRDBALAE_Settings, self.Settings)
+		KBM.LoadTable(chKBMSLRDBLLAE_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMSLRDBALAE_Settings, self.Settings)
+		KBM.LoadTable(KBMSLRDBLLAE_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMSLRDBALAE_Settings = self.Settings
+		chKBMSLRDBLLAE_Settings = self.Settings
 	else
-		KBMSLRDBALAE_Settings = self.Settings
+		KBMSLRDBLLAE_Settings = self.Settings
 	end	
 end
 
 function LAE:SaveVars()	
 	if KBM.Options.Character then
-		chKBMSLRDBALAE_Settings = self.Settings
+		chKBMSLRDBLLAE_Settings = self.Settings
 	else
-		KBMSLRDBALAE_Settings = self.Settings
+		KBMSLRDBLLAE_Settings = self.Settings
 	end	
 end
 

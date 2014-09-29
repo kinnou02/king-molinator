@@ -3,8 +3,8 @@
 -- Copyright 2011
 --
 
-KBMSLRDBAMAL_Settings = nil
-chKBMSLRDBAMAL_Settings = nil
+KBMSLRDBMMAG_Settings = nil
+chKBMSLRDBMMAG_Settings = nil
 
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
@@ -12,23 +12,23 @@ local KBM = AddonData.data
 if not KBM.BossMod then
 	return
 end
-local BL = KBM.BossMod["RBinding_Laethys"]
+local BM = KBM.BossMod["RBinding_Maelforge"]
 
-local MAL = {
+local MAG = {
 	Enabled = true,
-	Directory = BL.Directory,
+	Directory = BM.Directory,
 	File = "BMagcilian.lua",
-	Instance = BL.Name,
-	InstanceObj = BL,
+	Instance = BM.Name,
+	InstanceObj = BM,
 	HasPhases = true,
 	Lang = {},
 	Enrage = 60 * 5,	
-	ID = "BMallaven",
-	Object = "MAL",
+	ID = "BMagcilian",
+	Object = "MAG",
 }
 
-MAL.Magcilian = {
-	Mod = MAL,
+MAG.Magcilian = {
+	Mod = MAG,
 	Level = "??",
 	Active = false,
 	Name = "Magcilian",
@@ -36,31 +36,31 @@ MAL.Magcilian = {
 	Menu = {},
 	Castbar = nil,
 	Dead = false,
-	AlertsRef = {},
-	TimersRef = {},
+	-- AlertsRef = {},
+	-- TimersRef = {},
 	Available = false,
-	UTID = "U098EC98C590A0147",
+	UTID = "none",
 	UnitID = nil,
 	TimeOut = 5,
-	Triggers = {},
+	-- Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.Castbar(),
-		TimersRef = {
-			--Enabled = true,
+		-- TimersRef = {
+			Enabled = true,
 
-		},
-		AlertsRef = {
+		-- },
+		-- AlertsRef = {
 
-		},
+		-- },
 	}
 }
 
-KBM.RegisterMod(MAL.ID, MAL)
+KBM.RegisterMod(MAG.ID, MAG)
 
 -- Main Unit Dictionary
-MAL.Lang.Unit = {}
-MAL.Lang.Unit.Magcilian = KBM.Language:Add(MAL.Magcilian.Name)
-MAL.Lang.Unit.Magcilian:SetFrench("Magcilian")
+MAG.Lang.Unit = {}
+MAG.Lang.Unit.Magcilian = KBM.Language:Add(MAG.Magcilian.Name)
+MAG.Lang.Unit.Magcilian:SetFrench("Magcilian")
 
 
 -- Unit Dictionary
@@ -72,10 +72,10 @@ MAL.Lang.Unit.Magcilian:SetFrench("Magcilian")
 --Mechanic Dictionary (Verbose)
 
 
-MAL.Magcilian.Name = MAL.Lang.Unit.Magcilian[KBM.Lang]
-MAL.Descript = MAL.Magcilian.Name
+MAG.Magcilian.Name = MAG.Lang.Unit.Magcilian[KBM.Lang]
+MAG.Descript = MAG.Magcilian.Name
 
-function MAL:AddBosses(KBM_Boss)
+function MAG:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Magcilian.Name] = self.Magcilian
@@ -90,7 +90,7 @@ function MAL:AddBosses(KBM_Boss)
 	end    
 end
 
-function MAL:InitVars()
+function MAG:InitVars()
 	self.Settings = {
 		Enabled = true,
 		CastBar = self.Magcilian.Settings.CastBar,
@@ -101,46 +101,46 @@ function MAL:InitVars()
 		--TimersRef = self.Magcilian.Settings.TimersRef,
 		--AlertsRef = self.Magcilian.Settings.AlertsRef,
 	}
-	KBMSLRDBLMAL_Settings = self.Settings
-	chKBMSLRDBLMAL_Settings = self.Settings	
+	KBMSLRDBMMAG_Settings = self.Settings
+	chKBMSLRDBMMAG_Settings = self.Settings	
 end
 
-function MAL:SwapSettings(bool)
+function MAG:SwapSettings(bool)
 	if bool then
-		KBMSLRDBLMAL_Settings = self.Settings
-		self.Settings = chKBMSLRDBLMAL_Settings
+		KBMSLRDBMMAG_Settings = self.Settings
+		self.Settings = chKBMSLRDBMMAG_Settings
 	else
-		chKBMSLRDBLMAL_Settings = self.Settings
-		self.Settings = KBMSLRDBLMAL_Settings
+		chKBMSLRDBMMAG_Settings = self.Settings
+		self.Settings = KBMSLRDBMMAG_Settings
 	end
 end
 
-function MAL:LoadVars()	
+function MAG:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMSLRDBLMAL_Settings, self.Settings)
+		KBM.LoadTable(chKBMSLRDBMMAG_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMSLRDBLMAL_Settings, self.Settings)
+		KBM.LoadTable(KBMSLRDBMMAG_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMSLRDBLMAL_Settings = self.Settings
+		chKBMSLRDBMMAG_Settings = self.Settings
 	else
-		KBMSLRDBLMAL_Settings = self.Settings
+		KBMSLRDBMMAG_Settings = self.Settings
 	end	
 end
 
-function MAL:SaveVars()	
+function MAG:SaveVars()	
 	if KBM.Options.Character then
-		chKBMSLRDBAMAL_Settings = self.Settings
+		chKBMSLRDBMMAG_Settings = self.Settings
 	else
-		KBMSLRDBAMAL_Settings = self.Settings
+		KBMSLRDBMMAG_Settings = self.Settings
 	end	
 end
 
-function MAL:Castbar(units)
+function MAG:Castbar(units)
 end
 
-function MAL:RemoveUnits(UnitID)
+function MAG:RemoveUnits(UnitID)
 	if self.Magcilian.UnitID == UnitID then
 		self.Magcilian.Available = false
 		return true
@@ -148,10 +148,10 @@ function MAL:RemoveUnits(UnitID)
 	return false
 end
 
-function MAL:UnitHPCheck(uDetails, unitID)	
+function MAG:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
-		local BossObj = self.UTID[uDetails.type]
-		--local BossObj = self.Bosses[uDetails.name]
+		--local BossObj = self.UTID[uDetails.type]
+		local BossObj = self.Bosses[uDetails.name]
 		if BossObj == self.Magcilian then
 			if not self.EncounterRunning then
 				self.EncounterRunning = true
@@ -165,7 +165,7 @@ function MAL:UnitHPCheck(uDetails, unitID)
 				self.Phase = 1
 				self.LastPhase = 2
 				self.PhaseObj:SetPhase(1)
-				--self.PhaseObj.Objectives:AddPercent(self.Magcilian, 75, 100)
+				self.PhaseObj.Objectives:AddPercent(self.Magcilian, 0, 100)
 			else
 				BossObj.UnitID = unitID
 				BossObj.Available = true
@@ -175,7 +175,7 @@ function MAL:UnitHPCheck(uDetails, unitID)
 	end
 end
 
-function MAL:Death(UnitID)
+function MAG:Death(UnitID)
 	if self.Magcilian.UnitID == UnitID then
 		self.Magcilian.Dead = true
 		return true
@@ -183,7 +183,7 @@ function MAL:Death(UnitID)
 	return false
 end
 
-function MAL:Reset()
+function MAG:Reset()
 	self.EncounterRunning = false
 	self.Magcilian.Available = false
 	self.Magcilian.UnitID = nil
@@ -192,21 +192,21 @@ function MAL:Reset()
 	self.PhaseObj:End(Inspect.Time.Real())
 end
 
-function MAL:Timer()	
+function MAG:Timer()	
 end
 
-function MAL:DefineMenu()
-	self.Menu = MAL.Menu:CreateEncounter(self.Magcilian, self.Enabled)
+function MAG:DefineMenu()
+	self.Menu = MAG.Menu:CreateEncounter(self.Magcilian, self.Enabled)
 end
 
-function MAL:Start()
+function MAG:Start()
 	-- Create Timers
 
-	KBM.Defaults.TimerObj.Assign(self.Magcilian)
+	--KBM.Defaults.TimerObj.Assign(self.Magcilian)
 
 	-- Create Alerts
 	
-	 KBM.Defaults.AlertObj.Assign(self.Magcilian)
+	--KBM.Defaults.AlertObj.Assign(self.Magcilian)
 	
 	-- Assign Timers and Alerts to Triggers
 	
