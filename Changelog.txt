@@ -1,4 +1,11 @@
-﻿v1.5.9
+﻿v1.6.0
+
+* New: Created Nightmare Tide base directory structure.
+* New: Added Nightmare Tide tab to the Instance selector.
+* New: Created Nightmare Tide menu infrastructure (id = NT) for instances.
+
+----
+v1.5.9
 
 Tier 3
 * New: Bindings of Blood: Maelforge (By Apuch@Zaviel & Lifeismystery@Galidra)
