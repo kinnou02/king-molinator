@@ -1032,11 +1032,11 @@ end
 function _lsu.Raid.Check(UnitID, Spec)
 
 	UnitID = UnitID or nil
-	if LibSUnit.Raid.Lookup[Spec].UID == _inspectLookup(Spec) then
+	--if LibSUnit.Raid.Lookup[Spec].UID == _inspectLookup(Spec) then
 		-- Already handled raid position.
 		-- No Action required.
-		return
-	end
+	--	return
+	--end
 	
 	-- print("Change Event for: "..Spec)
 	-- print("Change UID: "..tostring(UnitID))
@@ -1063,11 +1063,7 @@ function _lsu.Raid.Check(UnitID, Spec)
 		spec = _SpecList[index]
 		newUnitID = _inspectLookup(spec) or nil
 		currentUnitObj = LibSUnit.Raid.Lookup[spec].Unit
-		if currentUnitObj then
-			currentUnitID = currentUnitObj.UnitID
-		else
-			currentUnitID = nil
-		end
+		currentUnitID = LibSUnit.Raid.Lookup[spec].UID
 				
 		if newUnitID ~= currentUnitID then
 						
@@ -1162,7 +1158,7 @@ function _lsu.Raid.Check(UnitID, Spec)
 				LibSUnit.Raid.Grouped = false
 				LibSUnit.Raid.Wiped = false
 				_lsu.Event.Raid.Leave()
-				--print("You have left a Raid or Group.")
+			--	print("You have left a Raid or Group.")
 			end
 		end
 	end
@@ -1195,7 +1191,7 @@ function _lsu.Raid.Check(UnitID, Spec)
 		end
 		if UnitObj.Dead then
 			LibSUnit.Raid.DeadTotal = LibSUnit.Raid.DeadTotal + 1
-			--print(UnitObj.Name.." joined and marked as Dead")
+		--	print(UnitObj.Name.." joined and marked as Dead")
 		end
 		-- if LibSUnit.Raid.Members == LibSUnit.Raid.DeadTotal then
 			-- if not LibSUnit.Raid.Wiped then
@@ -1211,7 +1207,7 @@ function _lsu.Raid.Check(UnitID, Spec)
 	
 	-- Tidy Spec Changes
 	for Spec, Val in pairs(specChanged) do
-		--print("["..Spec.."] Unhandled Change! Clearing")
+		--print("["..Spec.."] Clearing")
 		LibSUnit.Raid.Lookup[Spec].Unit = nil
 		LibSUnit.Raid.Lookup[Spec].UID = nil
 		totalChanged = totalChanged - 1
@@ -1233,10 +1229,7 @@ function _lsu.Raid.Check(UnitID, Spec)
 	if _lsu.Settings.Debug then
 		_lsu.Debug:UpdateDeath()
 		_lsu.Debug:UpdateCombat()
-	end
-	if _lsu.Settings.Debug then
-		_lsu.Debug:UpdateDeath()
-		_lsu.Debug:UpdateCombat()
+		_lsu.Debug:UpdateSize()
 	end
 	--print("-----------------------")
 	
@@ -1428,12 +1421,10 @@ function _lsu.Wait(handle, uList)
 				LibSUnit.Raid.Lookup[Spec] = {
 					Group = math.ceil(Index / 5),
 					Specifier = Spec,
-					UID = false,
 				}
 				LibSUnit.Raid.Pets[Spec] = {
 					Group = LibSUnit.Raid.Lookup[Spec].Group,
 					Specifier = Spec..".pet",
-					UID = false,
 				}
 				local UID = Inspect.Unit.Lookup(Spec)
 				if UID then
@@ -1649,6 +1640,13 @@ function _lsu.Debug:Init()
 		self.GUI.Trackers["Wiped"]:UpdateDisplay(tostring(LibSUnit.Raid.Wiped))
 	end
 	function self:UpdateMode()
-		self.GUI.Trackers["Raid Mode"]:UpdateDisplay(LibSUnit.Raid.Mode)
+		if LibSUnit.Raid.Members == 0 then
+			self.GUI.Trackers["Raid Mode"]:UpdateDisplay("solo")
+		else
+			self.GUI.Trackers["Raid Mode"]:UpdateDisplay(LibSUnit.Raid.Mode)
+		end
+	end
+	function self:UpdateSize()
+		self.GUI.Trackers["Raid Size"]:UpdateDisplay(tostring(LibSUnit.Raid.Members or "solo"))
 	end
 end
