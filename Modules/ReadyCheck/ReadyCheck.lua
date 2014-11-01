@@ -162,6 +162,25 @@ PI.Constants = {
 			Icons = true,
 			List = {
 				--//////////////////////--
+				-- NT High Grade Stones --
+				--//////////////////////--
+				["r0C2445386997ECE6"] = { -- Coral Whetstone
+					Grade = "High",
+					Level = 65,
+					Callings = {
+						rogue = true,
+						warrior = true,
+					},
+				},
+				["r54A72A7D7486A939"] = { -- Pelagic Powerstone
+					Grade = "High",
+					Level = 65,
+					Callings = {
+						cleric = true,
+						mage = true,
+					},
+				},
+				--//////////////////////--
 				-- SL High Grade Stones --
 				--//////////////////////--
 				["r7B43F61C22CFA573"] = { -- Coruscating Powerstone 
@@ -386,6 +405,48 @@ PI.Constants = {
 			w = 36,
 			Icons = true,
 			List = {
+				--////////////////////--
+				-- NT High Grade Food --
+				--////////////////////--
+				["B206F8F2F21AE709B"] = { -- Feast of the Ghar (AP)
+					Grade = "High",
+					Level = 65,
+					Callings = {
+						warrior = true,
+						rogue = true,
+					},
+				},
+				["B206F8F2D48B2721B"] = { -- Feast of the Ghar (SP)
+					Grade = "High",
+					Level = 65,
+					Callings = {
+						mage = true,
+						cleric = true,
+					},
+				},
+				--//////////////--
+				-- NT Tank Food --
+				--//////////////--
+				["B2610A5816845B475"] = { -- Atragarian Remora
+					Grade = "High",
+					Level = 65,
+					Callings = {
+						mage = true,
+						cleric = true,
+						warrior = true,
+						rogue = true,
+					},
+				},
+				["B552052821F956B42"] = { -- Sea Pea Porridge
+					Grade = "High",
+					Level = 65,
+					Callings = {
+						mage = true,
+						cleric = true,
+						warrior = true,
+						rogue = true,
+					},
+				},
 				--//////////////--
 				-- SL Tank Food --
 				--//////////////--
@@ -584,6 +645,51 @@ PI.Constants = {
 			w = 36,
 			Icons = true,
 			List = {
+				--//////////////////////--
+				-- Nightmare Tide Potions --
+				--//////////////////////--
+				["B4E57169B18162520"] = { -- Phenomenal Powersurge Vial
+					Grade = "High",
+					Level = 65,
+					Callings = {
+						warrior = true,
+						rogue = true,
+					},
+				},
+				["B2A1357781A34EE07"] = { -- Phenomenal Brightsurge Vial
+					Grade = "High",
+					Level = 65,
+					Callings = {
+						mage = true,
+						cleric = true,
+					},
+				},
+				["B00FB053AEBE90DDB"] = { -- Phenomenal Enduring Vial
+					Grade = "High",
+					Level = 65,
+					Callings = {
+						mage = true,
+						cleric = true,
+						warrior = true,
+						rogue = true,
+					},
+					Role = {
+						tank = true,
+					},
+				},
+				["B406B67171AED5182"] = { -- Phenomenal Fortified Vial
+					Grade = "High",
+					Level = 65,
+					Callings = {
+						mage = true,
+						cleric = true,
+						warrior = true,
+						rogue = true,
+					},
+					Role = {
+						tank = true,
+					},
+				},
 				--//////////////////////--
 				-- Storm Legion Potions --
 				--//////////////////////--

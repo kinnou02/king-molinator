@@ -9,9 +9,9 @@ Author = "Paul Snart"
 Website = "http://twitter.com/#!/psnart"
 Email = "kingbossmods@gmail.com"
 
-Version = "0.3.6"
+Version = "0.3.7"
 
-Environment = "2.3"
+Environment = "3.0"
 
 RunOnStartup = {
 	"ReadyCheck.lua",

@@ -4,6 +4,17 @@
 * New: Added Nightmare Tide tab to the Instance selector.
 * New: Created Nightmare Tide menu infrastructure (id = NT) for instances.
 
+* Ready Check Update by Kapnia (Rift Forums)
+** New: Feast of the Ghar
+** New: Atragarian Remora
+** New: Sea Pea Porridge
+** New: Coral Whetstone
+** New: Pelagic Powerstone
+** New: Phenomenal Powersurge Vial
+** New: Phenomenal Brightsurge Vial
+** New: Phenomenal Enduring Vial
+** New: Phenomenal Fortified Vial 
+
 ----
 v1.5.9
 
