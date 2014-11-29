@@ -638,6 +638,7 @@ function KBM.Defaults.MechTimer()
 		Custom = false,
 		Color = "blue",
 		Type = "MechTimer",
+		Renderer = 1,
 	}
 	return MechTimer
 end
@@ -1926,6 +1927,10 @@ function KBM.Trigger:Init()
 		
 		function TriggerObj:ResetAlertSeq()
 			self.Seq.CurrentAlert = 1
+		end
+		
+		function TriggerObj:SetMinStack(stacks)
+			self.MinStack = stacks
 		end
 		
 		function TriggerObj:ResetTimerSeq()
@@ -6316,6 +6321,11 @@ function KBM:BuffAdd(handle, Units)
 									local TriggerObj = KBM.Trigger.Buff[KBM.CurrentMod.ID][bDetails.name][uDetails.Name]
 									if TriggerObj then
 										if TriggerObj.Unit.UnitID == unitID then
+											if TriggerObj.MinStack then
+												if bDetails.stack < TriggerObj.MinStack then
+													return
+												end
+											end
 											KBM.Trigger.Queue:Add(TriggerObj, unitID, unitID, bDetails.remaining)
 										end
 									end
@@ -6352,6 +6362,11 @@ function KBM:BuffAdd(handle, Units)
 										print("---------------")
 										dump(bDetails)
 									end
+									if TriggerObj.MinStack then
+										if bDetails.stack < TriggerObj.MinStack then
+											return
+										end
+									end
 									KBM.Trigger.Queue:Add(TriggerObj, unitID, unitID, bDetails.remaining)
 								end
 							end
@@ -6368,6 +6383,11 @@ function KBM:BuffAdd(handle, Units)
 										print("Player Match: "..LibSUnit.Player.UnitID.." - "..unitID)
 										print("---------------")
 										dump(bDetails)
+									end
+									if TriggerObj.MinStack then
+										if bDetails.stack < TriggerObj.MinStack then
+											return
+										end
 									end
 									KBM.Trigger.Queue:Add(TriggerObj, unitID, unitID, bDetails.remaining)
 								end

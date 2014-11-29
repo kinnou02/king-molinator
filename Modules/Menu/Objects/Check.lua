@@ -61,6 +61,7 @@ function Menu.Object:CreateCheck(Name, Settings, ID, Callback, Page)
 			
 			function self:Checkbox_Handler()
 				local state = self:GetChecked()
+				LibSGui:ClearFocus()
 				self._object.Callback[ID](self._object._root, state)
 				if not state then
 					self._object:Disable(true)

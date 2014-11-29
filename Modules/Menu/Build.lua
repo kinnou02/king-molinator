@@ -69,7 +69,6 @@ local function BuildMenuSettings()
 		MenuItem:CreateCheck(KBM.Language.Options.Sheep[KBM.Lang], KBM.Options.Sheep, "Protect", self)
 		MenuItem = Item.UI.CreateHeader(KBM.Language.Options.Button[KBM.Lang], KBM.Options.Button, "Visible", self)
 		MenuItem:CreateCheck(KBM.Language.Options.LockButton[KBM.Lang], KBM.Options.Button, "Unlocked", self)
-		--MenuItem:CreateDropDown("Test Drop Down", KBM.Options, "Test", self)
 		
 		Item:Select()
 	end
@@ -151,10 +150,16 @@ local function BuildMenuSettings()
 		function self:TextScale(bool, Check)
 			KBM.Options.MechTimer.TextScale = bool
 		end
+		function self:Renderer(item)
+			KBM.Options.MechTimer.Renderer = item
+		end
 		
 		MenuItem = Item.UI.CreateHeader(KBM.Language.Options.MechanicTimers[KBM.Lang], KBM.Options.MechTimer, "Enabled", self)
 		-- MechTimers.GUI.Check:SetEnabled(false)
 		-- KBM.Options.MechTimer.Enabled = true
+		local renderDD = MenuItem:CreateDropDown("Render pack:", KBM.Options.MechTimer, "Renderer", self)
+		table.insert(renderDD.ItemList, "KBM")
+		table.insert(renderDD.ItemList, "LifeIsMystery")
 		MenuItem:CreateCheck(KBM.Language.Options.Texture[KBM.Lang], KBM.Options.MechTimer, "Texture", self)
 		MenuItem:CreateCheck(KBM.Language.Options.Shadow[KBM.Lang], KBM.Options.MechTimer, "Shadow", self)
 		MenuItem:CreateCheck(KBM.Language.Options.ShowAnchor[KBM.Lang], KBM.Options.MechTimer, "Visible", self)

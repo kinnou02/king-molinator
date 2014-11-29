@@ -40,6 +40,7 @@ local _int = {
 		window = LibSata:Create(),
 		frameRaised = LibSata:Create(),
 		frameSunken = LibSata:Create(),
+		frameDropDown = LibSata:Create(),
 		mask = LibSata:Create(),
 		text = LibSata:Create(),
 		textfield = LibSata:Create(),
@@ -70,6 +71,11 @@ local _int = {
 			y = 3,
 			alpha = 0.55,
 		},
+		dropDown = {
+			x = 0,
+			y = 0,
+			alpha = 0.9,
+		},
 	},
 	textures = {
 		-- Raised
@@ -95,6 +101,18 @@ local _int = {
 			BOTTOMLEFT = "Media/Group_BL_normal.png",
 			BOTTOM = "Media/Group_B_normal.png",
 			BOTTOMRIGHT = "Media/Group_BR_normal.png",
+		},
+		-- Drop Down
+		dropDown = {
+			TOPLEFT = "Media/DD_Text_BorderTL.png",
+			TOPRIGHT = "Media/DD_Text_BorderTR.png",
+			TOP = "Media/DD_Text_BorderT.png",
+			LEFT = "Media/DD_Text_BorderL.png",
+			MIDDLE = "Media/DD_Text_Middle.png",
+			RIGHT = "Media/DD_Text_BorderR.png",
+			BOTTOMLEFT = "Media/DD_Text_BorderBL.png",
+			BOTTOM = "Media/DD_Text_BorderB.png",
+			BOTTOMRIGHT = "Media/DD_Text_BorderBR.png",
 		},
 	},
 	totals = {},
@@ -139,6 +157,8 @@ local _typeList = {
 	["treeview"] = {
 	},
 	["dropdown"] = {
+		w = 128,
+		h = 21,
 	},
 	["sliderex"] = {
 	},
@@ -249,6 +269,45 @@ function _int.renderPanel(panel, Type)
 		self._mask:ClearAll()
 		self._mask:SetPoint("TOPLEFT", self._cradle, "TOPLEFT", _int.panelDefault[Type].x, _int.panelDefault[Type].y)
 		self._mask:SetPoint("BOTTOMRIGHT", self._cradle, "BOTTOMRIGHT", -_int.panelDefault[Type].x, -_int.panelDefault[Type].y)
+	end
+end
+
+function _int:pullFrameDropDown(_parent)
+	local frameDropDown = {}
+	local Count = self.base.frameDropDown:Count()
+	if Count == 0 then
+		-- Create Cradle
+		frameDropDown._cradle = _int:pullFrame(_parent, true)
+		frameDropDown._cradle:SetAllPoints(_parent)
+		_int.attachDefault(frameDropDown)
+		
+		-- Drop Down Section
+		_int.renderPanel(frameDropDown, "dropDown")
+		return frameDropDown
+	else
+		local frameObj, frameDropDown = self.base.frameDropDown:Last()
+		self.base.frame:Remove(frameObj)
+		
+		frameDropDown._cradle:ClearAll()
+		frameDropDown._cradle:SetAllPoints(_parent)
+				
+		return frameDropDown
+	end
+end
+
+function _int:pushFrameDropDown(frameDropDown)
+	if type(frameDropDown) == "table" then
+		for frameName, Frame in pairs(frameDropDown) do
+			frame:SetVisible(false)
+			frame:ClearAll()
+			frame:SetParent(self._context)
+			frame:SetLayer(1)
+		end
+		self.base.frame:Add(frameDropDown)
+	else
+		if _int._debug then
+			error("No Frame Drop Down Group supplied in: _int:pushFrameDropDown(frameDropDown)")
+		end
 	end
 end
 
@@ -731,6 +790,30 @@ end
 
 function LibSGui:CreateGroup()
 
+end
+
+function LibSGui:SetFocus(Object)
+	if self.currentFocus ~= Object then
+		if self.currentFocus then
+			self.currentFocus:Close()
+		end
+	end
+	self.currentFocus = Object
+	Object._focus = true
+end
+
+function LibSGui:ClearFocus(Object)
+	if Object == nil then
+		if self.currentFocus then
+			self.currentFocus:Close()
+			self:ClearFocus(self.currentFocus)
+		end
+	else
+		if self.currentFocus == Object then
+			self.currentFocus = nil
+			Object._focus = false
+		end
+	end
 end
 
 function LibSGui:_internal()

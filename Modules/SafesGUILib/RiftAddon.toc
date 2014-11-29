@@ -9,9 +9,9 @@ Author = "Paul Snart"
 Website = "http://twitter.com/#!/psnart"
 Email = "snarty@gmail.com"
 
-Version = "0.1.5"
+Version = "0.1.6"
 
-Environment = "2.6"
+Environment = "3.0"
 
 RunOnStartup = {
 	"LibSGui.lua",

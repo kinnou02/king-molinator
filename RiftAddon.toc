@@ -10,7 +10,7 @@ Author = "Safe@Deepwood"
 Website = "http://www.facebook.com/KingBossMods"
 Email = "kingbossmods@gmail.com"
 
-Version = "1.6.0.782"
+Version = "1.6.0.783"
 
 Environment = "3.0"
 

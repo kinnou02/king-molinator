@@ -1110,24 +1110,6 @@ function _lsu.Raid.Check(UnitID, Spec)
 		end
 	end
 
-	-- Handle Moves
-	for UID, details in pairs(unitStore.Moved) do
-		local UnitObj = details.Unit
-		local newSpec = details.New
-		local oldSpec = details.Old
-		local newGroup = LibSUnit.Raid.Lookup[newSpec].Group
-		local oldGroup = nil
-		LibSUnit.Raid.Lookup[newSpec].Unit = UnitObj
-		LibSUnit.Raid.Lookup[newSpec].UID = UID
-		LibSUnit.Raid.UID[UID] = UnitObj
-		UnitObj.RaidLoc = newSpec
-		specChanged[newSpec] = nil
-		oldGroup = LibSUnit.Raid.Lookup[oldSpec].Group
-		_lsu.Raid.GroupCheck(newGroup, oldGroup)
-		--print(UnitObj.Name.." moved to "..newSpec.." from "..oldSpec)
-		_lsu.Event.Raid.Member.Move(UnitObj, oldSpec, newSpec)
-	end
-	
 	-- Handle Leaves
 	for UID, details in pairs(unitStore.Left) do
 		if LibSUnit.Raid.UID[UID] then
@@ -1162,7 +1144,25 @@ function _lsu.Raid.Check(UnitID, Spec)
 			end
 		end
 	end
-	
+
+	-- Handle Moves
+	for UID, details in pairs(unitStore.Moved) do
+		local UnitObj = details.Unit
+		local newSpec = details.New
+		local oldSpec = details.Old
+		local newGroup = LibSUnit.Raid.Lookup[newSpec].Group
+		local oldGroup = nil
+		LibSUnit.Raid.Lookup[newSpec].Unit = UnitObj
+		LibSUnit.Raid.Lookup[newSpec].UID = UID
+		LibSUnit.Raid.UID[UID] = UnitObj
+		UnitObj.RaidLoc = newSpec
+		specChanged[newSpec] = nil
+		oldGroup = LibSUnit.Raid.Lookup[oldSpec].Group
+		_lsu.Raid.GroupCheck(newGroup, oldGroup)
+		--print(UnitObj.Name.." moved to "..newSpec.." from "..oldSpec)
+		_lsu.Event.Raid.Member.Move(UnitObj, oldSpec, newSpec)
+	end
+		
 	-- Handle Joins
 	for UID, details in pairs(unitStore.Joined) do
 		local UnitObj = details.Unit

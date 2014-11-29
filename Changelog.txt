@@ -1,9 +1,17 @@
 ﻿v1.6.0
 
+System
 * New: Created Nightmare Tide base directory structure.
 * New: Added Nightmare Tide tab to the Instance selector.
 * New: Created Nightmare Tide menu infrastructure (id = NT) for instances.
 
+Menu
+* New: Added Drop Down objects.
+
+Triggers
+* New: Added :SetMinStack(Min_Stacks) command to trigger objects. Buffs/Debuffs with stacks will only trigger with (Min_Stacks) or more.
+
+Ready Check
 * Ready Check Update by Kapnia (Rift Forums)
 ** New: Feast of the Ghar
 ** New: Atragarian Remora

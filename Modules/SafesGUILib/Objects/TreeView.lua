@@ -9,9 +9,6 @@ local LibSata = _int.LibSata
 
 local TH = _int.TH
 
--- "TextBkgnd.png.dds"
--- "raid_slot_filled.png.dds"
-
 -- Define Panel Events
 LibSGui.Event.TreeView = {}
 LibSGui.Event.TreeView.Scrollbar = {}
@@ -34,7 +31,6 @@ local EventIDList = {
 -- Defaults
 local Default = {
 	textBack = "artifactgroup_bg.png.dds",
-	--textBack = "SortButton_Header_(Up).png.dds",
 	Header = {
 		fontSize = 14,
 		h = 27,
@@ -91,28 +87,22 @@ function _int:pullNode(_parent, _id)
 		node._event._collapse = Utility.Event.Create(AddonIni.id, idCollapse)
 		node._event._expand = Utility.Event.Create(AddonIni.id, idExpand)
 		
-		--node._textBack:SetAlpha(0.75)
 		function node:_mouseIn()
 			if self._nodeObj._enabled then
 				self:SetBackgroundColor(0.2,0.2,0,0.25)
 				self._nodeObj._root._currentMouseOver = self
-				-- Default.MouseOver:SetParent(self)
-				-- Default.MouseOver:SetVisible(true)
-				-- Default.MouseOver:SetAllPoints(self)
-				-- Default.MouseOver:SetLayer(2)
 				LibSGui.Event.TreeView.Node.Mouse.In(self._node)
 			end
 		end
+		
 		function node:_mouseOut()
 			if self._nodeObj._enabled then
 				self:SetBackgroundColor(0,0,0,0)
 				self._nodeObj._root._currentMouseOver = nil
-				-- Default.MouseOver:SetParent(_int._context)
-				-- Default.MouseOver:SetVisible(false)
-				-- Default.MouseOver:ClearAll()
 				LibSGui.Event.TreeView.Node.Mouse.Out(self._node)
 			end
 		end
+		
 		function node:_collapse()
 			local nodeObj = self._nodeObj
 			local _, lastChild = nodeObj._children:Last()
@@ -129,6 +119,7 @@ function _int:pullNode(_parent, _id)
 				end
 			end
 		end
+		
 		function node:_expand()
 			local nodeObj = self._nodeObj
 			local _, lastChild = nodeObj._children:Last()
@@ -145,6 +136,7 @@ function _int:pullNode(_parent, _id)
 				end
 			end
 		end
+		
 		function node:_mouseClick()
 			local nodeObj = self._nodeObj
 			local nodeUI = self._node
@@ -164,20 +156,18 @@ function _int:pullNode(_parent, _id)
 				end
 			end
 		end
+		
 		node._cradle:EventAttach(Event.UI.Input.Mouse.Cursor.In, node._mouseIn, "Mouse In Handler")
 		node._cradle:EventAttach(Event.UI.Input.Mouse.Cursor.Out, node._mouseOut, "Mouse Out Handler")
 		node._cradle:EventAttach(Event.UI.Input.Mouse.Left.Click, node._mouseClick, "Mouse Click Handler")	
-		
 		return node
 	else
-		--print("Node available in cache of "..Count)
 		local nodeObj, node = self.base.node:Last()
 		self.base.node:Remove(nodeObj)
 		node:SetVisible(true)
 		node:SetParent(_parent)
 		node._id = _id
 		node._cradle._node = node
-		--print("New Node count is: "..self.base.node:Count())
 		return node
 	end	
 end
@@ -199,6 +189,7 @@ function _tvNode:Create(pNode, Text, Select, pTable)
 	Node._expanded = true
 	Node._enabled = true
 	Node.UserData = {}
+	
 	if pNode._layer == 0 then
 		Node._obj = _int:pullNode(Node._root.Content)
 		Node._obj._iconA:SetPoint("CENTERLEFT", Node._obj._cradle, "CENTERLEFT", 6, 0)
@@ -252,6 +243,7 @@ function _tvNode:Create(pNode, Text, Select, pTable)
 	else
 		error("Node Create: Child nodes do not currently support their own children.")
 	end
+	
 	Node._obj._cradle._nodeObj = Node
 	Node._obj._nodeObj = Node
 	
@@ -506,8 +498,6 @@ function LibSGui.TreeView:Create(_id, _parent, pTable)
 		pTable.Event = LibSGui.Event.TreeView.Scrollbar
 		pTable.FrameA = self._raisedBorder.Content
 		pTable.FrameB = self._sunkenBorder
-		-- pTable.Dynamic = true
-		-- pTable.Hide = true
 		return _int._addScrollbar(self, pTable)
 	end
 		
