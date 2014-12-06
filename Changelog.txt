@@ -10,6 +10,7 @@ Menu
 
 Triggers
 * New: Added :SetMinStack(Min_Stacks) command to trigger objects. Buffs/Debuffs with stacks will only trigger with (Min_Stacks) or more.
+* New: If there is a MinStack set for a trigger and a buff returns .stack = nil then the trigger will not fire.
 
 Ready Check
 * Ready Check Update by Kapnia (Rift Forums)

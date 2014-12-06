@@ -6326,6 +6326,8 @@ function KBM:BuffAdd(handle, Units)
 													if bDetails.stack < TriggerObj.MinStack then
 														return
 													end
+												else 
+													return
 												end
 											end
 											KBM.Trigger.Queue:Add(TriggerObj, unitID, unitID, bDetails.remaining)
@@ -6369,6 +6371,8 @@ function KBM:BuffAdd(handle, Units)
 											if bDetails.stack < TriggerObj.MinStack then
 												return
 											end
+										else
+											return
 										end
 									end
 									KBM.Trigger.Queue:Add(TriggerObj, unitID, unitID, bDetails.remaining)
@@ -6393,6 +6397,8 @@ function KBM:BuffAdd(handle, Units)
 											if bDetails.stack < TriggerObj.MinStack then
 												return
 											end
+										else
+											return
 										end
 									end
 									KBM.Trigger.Queue:Add(TriggerObj, unitID, unitID, bDetails.remaining)
