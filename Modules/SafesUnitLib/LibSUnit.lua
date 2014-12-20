@@ -1110,6 +1110,23 @@ function _lsu.Raid.Check(UnitID, Spec)
 		end
 	end
 
+	-- Handle Moves
+	for UID, details in pairs(unitStore.Moved) do
+		local UnitObj = details.Unit
+		local newSpec = details.New
+		local oldSpec = details.Old
+		local newGroup = LibSUnit.Raid.Lookup[newSpec].Group
+		local oldGroup = LibSUnit.Raid.Lookup[oldSpec].Group
+		LibSUnit.Raid.Lookup[newSpec].Unit = UnitObj
+		LibSUnit.Raid.Lookup[newSpec].UID = UID
+		LibSUnit.Raid.UID[UID] = UnitObj
+		UnitObj.RaidLoc = newSpec
+		specChanged[newSpec] = nil
+		_lsu.Raid.GroupCheck(newGroup, oldGroup)
+		--print(UnitObj.Name.." moved to "..newSpec.." from "..oldSpec)
+		_lsu.Event.Raid.Member.Move(UnitObj, oldSpec, newSpec)
+	end
+
 	-- Handle Leaves
 	for UID, details in pairs(unitStore.Left) do
 		if LibSUnit.Raid.UID[UID] then
@@ -1122,8 +1139,10 @@ function _lsu.Raid.Check(UnitID, Spec)
 					_lsu.Event.Raid.Combat.Leave()
 				end
 			end
-			LibSUnit.Raid.Lookup[Spec].Unit = nil
-			LibSUnit.Raid.Lookup[Spec].UID = nil
+			if LibSUnit.Raid.Lookup[Spec].UID == UID then
+				LibSUnit.Raid.Lookup[Spec].Unit = nil
+				LibSUnit.Raid.Lookup[Spec].UID = nil
+			end
 			LibSUnit.Raid.Members = LibSUnit.Raid.Members - 1
 			local oldGroup = LibSUnit.Raid.Lookup[Spec].Group
 			LibSUnit.Raid.UID[UID] = nil
@@ -1143,24 +1162,6 @@ function _lsu.Raid.Check(UnitID, Spec)
 			--	print("You have left a Raid or Group.")
 			end
 		end
-	end
-
-	-- Handle Moves
-	for UID, details in pairs(unitStore.Moved) do
-		local UnitObj = details.Unit
-		local newSpec = details.New
-		local oldSpec = details.Old
-		local newGroup = LibSUnit.Raid.Lookup[newSpec].Group
-		local oldGroup = nil
-		LibSUnit.Raid.Lookup[newSpec].Unit = UnitObj
-		LibSUnit.Raid.Lookup[newSpec].UID = UID
-		LibSUnit.Raid.UID[UID] = UnitObj
-		UnitObj.RaidLoc = newSpec
-		specChanged[newSpec] = nil
-		oldGroup = LibSUnit.Raid.Lookup[oldSpec].Group
-		_lsu.Raid.GroupCheck(newGroup, oldGroup)
-		--print(UnitObj.Name.." moved to "..newSpec.." from "..oldSpec)
-		_lsu.Event.Raid.Member.Move(UnitObj, oldSpec, newSpec)
 	end
 		
 	-- Handle Joins
