@@ -1032,11 +1032,11 @@ end
 function _lsu.Raid.Check(UnitID, Spec)
 
 	UnitID = UnitID or nil
-	--if LibSUnit.Raid.Lookup[Spec].UID == _inspectLookup(Spec) then
+	if LibSUnit.Raid.Lookup[Spec].UID == _inspectLookup(Spec) then
 		-- Already handled raid position.
 		-- No Action required.
-	--	return
-	--end
+		return
+	end
 	
 	-- print("Change Event for: "..Spec)
 	-- print("Change UID: "..tostring(UnitID))
@@ -1078,6 +1078,14 @@ function _lsu.Raid.Check(UnitID, Spec)
 					unitStore.Moved[newUnitID] = {New = spec, Old = newUnitObj.RaidLoc, Unit = newUnitObj}
 					unitStore.Left[newUnitID] = nil
 					--print("[Move]["..spec.."] Stored Move for: "..tostring(newUnitObj.Name))
+					if currentUnitID then
+						if LibSUnit.Raid.UID[currentUnitID] then
+							if not unitStore.Moved[currentUnitID] then
+								unitStore.Left[currentUnitID] = {Old = spec, Unit = currentUnitObj}
+								--print("[Move]["..spec.."] Stored Leave for: "..tostring(currentUnitObj.Name))
+							end
+						end
+					end
 				else
 					-- Unit has not been processed in to the raid.
 					unitStore.Joined[newUnitID] = {New = spec, Unit = newUnitObj}
