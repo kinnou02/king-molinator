@@ -10,7 +10,7 @@ Author = "Safe@Deepwood"
 Website = "http://www.facebook.com/KingBossMods"
 Email = "kingbossmods@gmail.com"
 
-Version = "1.6.0.787"
+Version = "1.6.0.788"
 
 Environment = "3.0"
 
@@ -64,7 +64,12 @@ RunOnStartup = {
 	"Raids/Storm Legion/Frozen Tempest/Gangnum.lua",
 	"Raids/Storm Legion/Frozen Tempest/Zaviel.lua",
 	"Raids/Storm Legion/Frozen Tempest/Kolmasveli.lua",
-	"Raids/Storm Legion/Frozen Tempest/Crucia.lua",	
+	"Raids/Storm Legion/Frozen Tempest/Crucia.lua",
+	"Slivers/Nightmare Tide/The_Rhen_of_Fate/ROFHeader.lua",
+	"Slivers/Nightmare Tide/The_Rhen_of_Fate/Drekanoth.lua",
+	"Slivers/Nightmare Tide/The_Rhen_of_Fate/Finric.lua",
+	"Slivers/Nightmare Tide/The_Rhen_of_Fate/Hidrac.lua",
+	"Slivers/Nightmare Tide/The_Rhen_of_Fate/Ungolok.lua",
 	"Slivers/Storm Legion/Intrepid_Drowned_Halls/IDHHeader.lua",
 	"Slivers/Storm Legion/Intrepid_Drowned_Halls/Jorb.lua",
 	"Slivers/Storm Legion/Intrepid_Drowned_Halls/Joloral.lua",
@@ -343,6 +348,11 @@ SavedVariables = {
 	KBMDungeon_Settings = "account",
 	KBMChronicle_Settings = "account",
 	KBMOpenWorld_Settings = "account",
+	KBMNTSLROF_Settings = "account",
+	KBMNTSLROFDRE_Settings = "account",
+	KBMNTSLROFFIN_Settings = "account",
+	KBMNTSLROFHOW_Settings = "account",
+	KBMNTSLROFUNG_Settings = "account",
 	KBMSLRDBA_Settings = "account",
 	KBMSLRDBAAK_Settings = "account",
 	KBMSLRDBAIR_Settings = "account",
@@ -635,6 +645,11 @@ SavedVariables = {
 	KBMEXUCRCS_Settings = "account",
 	KBM_GlobalOptions = "account",	
 	chKM_Settings = "character",
+	chKBMNTSLROF_Settings = "character",
+	chKBMNTSLROFDRE_Settings = "character",
+	chKBMNTSLROFFIN_Settings = "character",
+	chKBMNTSLROFHOW_Settings = "character",
+	chKBMNTSLROFUNG_Settings = "character",
 	chKBMSLRDBA_Settings = "character",
 	chKBMSLRDBAAK_Settings = "character",
 	chKBMSLRDBAIR_Settings = "character",

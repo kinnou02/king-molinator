@@ -24,6 +24,9 @@ Ready Check
 ** New: Phenomenal Enduring Vial
 ** New: Phenomenal Fortified Vial 
 
+Encounters
+* New: Templates added by Noshei for The Rhen of Fate
+
 ----
 v1.5.9
 
