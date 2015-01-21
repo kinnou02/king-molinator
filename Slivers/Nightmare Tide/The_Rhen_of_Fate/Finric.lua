@@ -184,12 +184,12 @@ function FIN:UnitHPCheck(uDetails, unitID)
 				self.PhaseObj.Objectives:AddPercent(self.Finric, 0, 100)
 				self.Phase = 1
 				if BossObj == self.Finric then
-					KBM.TankSwap:Start(self.Lang.Debuff.Devil[KBM.Lang], unitID)
+					--KBM.TankSwap:Start(self.Lang.Debuff.Devil[KBM.Lang], unitID)
 				end
 			else
 				if BossObj == self.Finric then
 					if not KBM.TankSwap.Active then
-						KBM.TankSwap:Start(self.Lang.Debuff.Devil[KBM.Lang], unitID)
+						--KBM.TankSwap:Start(self.Lang.Debuff.Devil[KBM.Lang], unitID)
 					end
 				end
 				BossObj.Dead = false

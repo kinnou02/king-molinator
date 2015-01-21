@@ -185,12 +185,12 @@ function UNG:UnitHPCheck(uDetails, unitID)
 				self.PhaseObj.Objectives:AddPercent(self.Ungolok, 0, 100)
 				self.Phase = 1
 				if BossObj == self.Ungolok then
-					KBM.TankSwap:Start(self.Lang.Debuff.Devil[KBM.Lang], unitID)
+					--KBM.TankSwap:Start(self.Lang.Debuff.Devil[KBM.Lang], unitID)
 				end
 			else
 				if BossObj == self.Ungolok then
 					if not KBM.TankSwap.Active then
-						KBM.TankSwap:Start(self.Lang.Debuff.Devil[KBM.Lang], unitID)
+						--KBM.TankSwap:Start(self.Lang.Debuff.Devil[KBM.Lang], unitID)
 					end
 				end
 				BossObj.Dead = false
