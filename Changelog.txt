@@ -13,19 +13,33 @@ Triggers
 * New: If there is a MinStack set for a trigger and a buff returns .stack = nil then the trigger will not fire.
 
 Ready Check
-* Ready Check Update by Kapnia (Rift Forums)
-** New: Feast of the Ghar
-** New: Atragarian Remora
-** New: Sea Pea Porridge
-** New: Coral Whetstone
-** New: Pelagic Powerstone
-** New: Phenomenal Powersurge Vial
-** New: Phenomenal Brightsurge Vial
-** New: Phenomenal Enduring Vial
-** New: Phenomenal Fortified Vial 
+* New: Added additions to Ready Check created by Ivnadar.
+* Ready Check Update by Kapnia (Rift Forums).
+** New: Feast of the Ghar.
+** New: Atragarian Remora.
+** New: Sea Pea Porridge.
+** New: Coral Whetstone.
+** New: Pelagic Powerstone.
+** New: Phenomenal Powersurge Vial.
+** New: Phenomenal Brightsurge Vial.
+** New: Phenomenal Enduring Vial.
+** New: Phenomenal Fortified Vial.
+** New: Flaring Emblem.
+** New: Wind Emblem.
+** New: Flaring Emblem.
+** New: Thunder Emblem.
+** New: Lightning Emblem.
+** New: Serrated Edge.
+** New: Storm Emblem.
+** New: Primal Edge.
 
 Encounters
-* New: Templates added by Noshei for The Rhen of Fate
+* New: Templates added by Noshei for The Rhen of Fate.
+* New: Added some bosses supplied by Kapnia for Mount Sharax.
+* New: Added Jinoscoth.
+* New: Added Threngar.
+* New: Added Yrlwalach.
+* New: Added Menu point for Mount Sharax.
 
 ----
 v1.5.9

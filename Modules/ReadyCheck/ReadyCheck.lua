@@ -72,10 +72,17 @@ PI.Icons = {
 		Type = "KingMolinator",
 		File = "Media/RC_PotionIcon.png",
 	},
-
+	PP = {
+		Type = "Rift",
+		File = "Data/\\UI\\ability_icons\\resolve1.dds",
+	},
 	Food = {
 		Type = "KingMolinator",
 		File = "Media/RC_FoodIcon.png",
+	},
+	Insoles = {
+		Type = "Rift",
+		File = "Data/\\UI\\item_icons\\insoles_04_b.dds",
 	},
 	-- Armor = {
 		-- Type = "KingMolinator",
@@ -89,6 +96,7 @@ PI.Settings = {
 	Combat = true,
 	Hidden = true,
 	Solo = true,
+	Flash = true,
 	x = false,
 	y = false,
 	wScale = 1,
@@ -110,18 +118,31 @@ PI.Settings = {
 		},
 		Stone = {
 			Enabled = true,
+			Flash = 600,
 			wScale = 1,
 		},
 		Food = {
 			Enabled = true,
+			Flash = 600,
 			wScale = 1,
 		},
 		Potion = {
 			Enabled = true,
+			Flash = 600,
 			wScale = 1,
 		},
 		Vitality = {
 			Enabled = true,
+			wScale = 1,
+		},
+		PP = {
+			Enabled = true,
+			Flash = 900,
+			wScale = 1,
+		},
+		Insoles = {
+			Enabled = true,
+			Flash = 900,
 			wScale = 1,
 		},
 		KBM = {
@@ -172,8 +193,69 @@ PI.Constants = {
 						warrior = true,
 					},
 				},
+				["r762BD1423747FA3F"] = { -- Coral Oilstone
+					Grade = "High",
+					Level = 65,
+					Callings = {
+						warrior = true,
+					},
+				},
 				["r54A72A7D7486A939"] = { -- Pelagic Powerstone
 					Grade = "High",
+					Level = 65,
+					Callings = {
+						cleric = true,
+						mage = true,
+					},
+				},
+				--//////////////////////--
+				-- NT PA Stones --
+				--//////////////////////--
+				["r6F97576F54C8E782"] = { -- Storm Emblem
+					Grade = "Medium",
+					Level = 65,
+					Callings = {
+						warrior = true,
+					},
+				},
+				["r6B788FB70D2FEA29"] = { -- Primal Edge
+					Grade = "Medium",
+					Level = 65,
+					Callings = {
+						warrior = true,
+					},
+				},
+				["r082D24455D03DDD8"] = { -- Lightning Emblem
+					Grade = "Medium",
+					Level = 65,
+					Callings = {
+						rogue = true,
+					},
+				},
+				["r1B3A3BDB5E50AAC7"] = { -- Serrated Edge
+					Grade = "Medium",
+					Level = 65,
+					Callings = {
+						rogue = true,
+						warrior = true,
+					},
+				},
+				["r7273BFB75132FBD6"] = { -- Wind Emblem
+					Grade = "Medium",
+					Level = 65,
+					Callings = {
+						cleric = true,
+					},
+				},
+				["r12FE7D95752512F0"] = { -- Thunder Emblem
+					Grade = "Medium",
+					Level = 65,
+					Callings = {
+						mage = true,
+					},
+				},
+				["r3BDE026769180CFF"] = { -- Flaring Emblem
+					Grade = "Medium",
 					Level = 65,
 					Callings = {
 						cleric = true,
@@ -254,7 +336,7 @@ PI.Constants = {
 					Callings = {
 						cleric = true,
 					},
-				},				
+				},	
 				["r712EF6F7297AB9ED"] = { -- Storm Sigil
 					Grade = "Low",
 					Level = 60,
@@ -267,6 +349,7 @@ PI.Constants = {
 					Level = 60,
 					Callings = {
 						mage = true,
+						cleric = true,
 					},
 				},
 				["r0B48C387131E79A8"] = { -- Lightning Sigil
@@ -965,9 +1048,47 @@ PI.Constants = {
 				},
 			},
 		},
-		Other = {
+		Insoles = {
+			w = 30,
 			Icons = true,
 			List = {
+				--////////////////////////--
+				-- Nightmare Tide Insoles --
+				--////////////////////////--
+				["r12AC495C6CA32B19"] = { -- Spongy Insoles
+					Grade = "High",
+					Level = 65,
+					Callings = {
+						all = true,
+					},
+				},
+				["r15E7054C3C42C368"] = { -- Warlord's Insoles
+					Grade = "High",
+					Level = 65,
+					Callings = {
+						all = true,
+					},
+				},
+				["rFA1390E570C6AFDD"] = { -- Mercenary's Insoles
+					Grade = "High",
+					Level = 65,
+					Callings = {
+						all = true,
+					},
+				},
+				--///////////////////////--
+				-- SL High Grade Insoles --
+				--///////////////////////--
+				["r72B2559A7E58CA1B"] = { -- Exceptional Insoles
+					Grade = "High",
+					Level = 60,
+					Callings = {
+						all = true,
+					},
+				},
+				--////////////////////////--
+				-- SL Medium Grade Insoles --
+				--////////////////////////--
 				["r3BD9C00A2128287F"] = { -- Comfortable Insoles
 					Grade = "Medium",
 					Level = 60,
@@ -989,6 +1110,12 @@ PI.Constants = {
 						all = true,
 					},
 				},
+			},
+		},
+		PP = {
+			w = 30,
+			Icons = true,
+			List = {
 				["B724E352BBAA3E897"] = { -- Planar Protection
 					Grade = "High",
 					Level = 50,
@@ -996,6 +1123,11 @@ PI.Constants = {
 						all = true,
 					},
 				},
+			},
+		},
+		Other = {
+			Icons = true,
+			List = {
 				["r4057380E26CC6760"] = { -- Thick Armor Plating
 					Grade = "High",
 					Level = 50,
@@ -1022,7 +1154,7 @@ PI.Constants = {
 			w = 38,
 		},
 		KBM = {
-			w = 72,
+			w = 102,
 		},
 	},
 	Rows = {
@@ -1299,6 +1431,8 @@ function PI.GUI:Init()
 			Stone = {},
 			Food = {},
 			Potion = {},
+			PP = {},
+			Insoles = {},
 			KBM = {},
 		},
 		First = nil,
@@ -1310,6 +1444,8 @@ function PI.GUI:Init()
 	table.insert(self.Columns.Order, "Food")
 	table.insert(self.Columns.Order, "Vitality")
 	table.insert(self.Columns.Order, "Potion")
+	table.insert(self.Columns.Order, "PP")
+	table.insert(self.Columns.Order, "Insoles")
 	table.insert(self.Columns.Order, "KBM")
 	
 	function self.Columns:Create(ID)
@@ -1420,6 +1556,7 @@ function PI.GUI:Init()
 					if Object.icon then
 						self[Index].Columns.Stone.Icon:SetTexture("Rift", Object.icon)
 						self[Index].Columns.Stone.Icon:SetVisible(true)
+						self[Index].Columns.Stone.Icon:SetAlpha(1.0)
 						self[Index].Columns.Stone.Text:SetVisible(false)
 					else
 						self[Index].Columns.Stone.Text:SetFontColor(0.15, 0.9, 0.15)
@@ -1454,6 +1591,7 @@ function PI.GUI:Init()
 					if Object.icon then
 						self[Index].Columns.Food.Icon:SetTexture("Rift", Object.icon)
 						self[Index].Columns.Food.Icon:SetVisible(true)
+						self[Index].Columns.Food.Icon:SetAlpha(1.0)
 						self[Index].Columns.Food.Text:SetVisible(false)
 					else
 						self[Index].Columns.Food.Text:SetFontColor(0.15, 0.9, 0.15)
@@ -1488,6 +1626,7 @@ function PI.GUI:Init()
 					if Object.icon then
 						self[Index].Columns.Potion.Icon:SetTexture("Rift", Object.icon)
 						self[Index].Columns.Potion.Icon:SetVisible(true)
+						self[Index].Columns.Potion.Icon:SetAlpha(1.0)
 						self[Index].Columns.Potion.Text:SetVisible(false)
 					else
 						self[Index].Columns.Potion.Text:SetFontColor(0.15, 0.9, 0.15)
@@ -1510,7 +1649,77 @@ function PI.GUI:Init()
 		end
 	end
 	PI.Constants.Columns.Potion.Hook = function(...) self.Rows:Update_Potion(...) end
-		
+
+	function self.Rows:Update_PP(Index, Force)
+		if Index > 20 then 
+			return
+		end
+		if PI.Enabled or Force then
+			if self[Index].Enabled then
+				local Object = self[Index].Columns.PP.Object
+				if Object then
+					if Object.icon then
+						self[Index].Columns.PP.Icon:SetTexture("Rift", Object.icon)
+						self[Index].Columns.PP.Icon:SetVisible(true)
+						self[Index].Columns.PP.Icon:SetAlpha(1.0)
+						self[Index].Columns.PP.Text:SetVisible(false)
+					else
+						self[Index].Columns.PP.Text:SetFontColor(0.15, 0.9, 0.15)
+						self[Index].Columns.PP.Text:SetText("?")
+						self[Index].Columns.PP.Icon:SetVisible(false)
+						self[Index].Columns.PP.Text:SetVisible(true)
+					end
+				else
+					self[Index].Columns.PP.Text:SetFontColor(0.9, 0.15, 0.15)
+					self[Index].Columns.PP.Text:SetText("x")
+					self[Index].Columns.PP.Icon:SetVisible(false)
+					self[Index].Columns.PP.Text:SetVisible(true)
+				end
+			else
+				self[Index].Columns.PP.Text:SetFontColor(0.9, 0.15, 0.15)
+				self[Index].Columns.PP.Text:SetText("x")
+				self[Index].Columns.PP.Icon:SetVisible(false)
+				self[Index].Columns.PP.Text:SetVisible(true)
+			end
+		end
+	end
+	PI.Constants.Columns.PP.Hook = function(...) self.Rows:Update_PP(...) end
+
+	function self.Rows:Update_Insoles(Index, Force)
+		if Index > 20 then 
+			return
+		end
+		if PI.Enabled or Force then
+			if self[Index].Enabled then
+				local Object = self[Index].Columns.Insoles.Object
+				if Object then
+					if Object.icon then
+						self[Index].Columns.Insoles.Icon:SetTexture("Rift", Object.icon)
+						self[Index].Columns.Insoles.Icon:SetVisible(true)
+						self[Index].Columns.Insoles.Icon:SetAlpha(1.0)
+						self[Index].Columns.Insoles.Text:SetVisible(false)
+					else
+						self[Index].Columns.Insoles.Text:SetFontColor(0.15, 0.9, 0.15)
+						self[Index].Columns.Insoles.Text:SetText("?")
+						self[Index].Columns.Insoles.Icon:SetVisible(false)
+						self[Index].Columns.Insoles.Text:SetVisible(true)
+					end
+				else
+					self[Index].Columns.Insoles.Text:SetFontColor(0.9, 0.15, 0.15)
+					self[Index].Columns.Insoles.Text:SetText("x")
+					self[Index].Columns.Insoles.Icon:SetVisible(false)
+					self[Index].Columns.Insoles.Text:SetVisible(true)
+				end
+			else
+				self[Index].Columns.Insoles.Text:SetFontColor(0.9, 0.15, 0.15)
+				self[Index].Columns.Insoles.Text:SetText("x")
+				self[Index].Columns.Insoles.Icon:SetVisible(false)
+				self[Index].Columns.Insoles.Text:SetVisible(true)
+			end
+		end
+	end
+	PI.Constants.Columns.Insoles.Hook = function(...) self.Rows:Update_Insoles(...) end
+
 	function self.Rows:Update_Soul(Index, Force)
 		if Index > 20 then
 			return
@@ -1624,7 +1833,50 @@ function PI.GUI:Init()
 			self:Update_KBM(Index, Force)
 			self:Update_Stone(Index, Force)
 			self:Update_Potion(Index, Force)
+			self:Update_PP(Index, Force)
+			self:Update_Insoles(Index, Force)
 			self:Update_Food(Index, Force)
+		end
+	end
+
+	function self.Rows:Update_Buffs(Index)
+		if PI.Enabled and PI.Displayed then
+			local CurrentTime = Inspect.Time.Real()
+
+			for ID, Object in pairs(PI.GUI.Columns.List) do
+				local Object = PI.GUI.Rows[Index].Columns[ID].Object
+				if Object and PI.Settings.Columns[ID].Flash then
+					if Object.begin and Object.duration then
+						if (Object.duration - (CurrentTime - Object.begin)) < (60 * 7) then
+							local cell = self[Index].Columns[ID]
+							local TimeDiff = CurrentTime
+							if cell.FadeStart then
+								 TimeDiff = TimeDiff - cell.FadeStart
+							end
+							if cell.Direction then
+								if TimeDiff > 0.5 then
+									cell.Alpha = 1.0
+									cell.Direction = false
+									cell.FadeStart = CurrentTime
+								else
+									cell.Alpha = TimeDiff * 2
+								end
+							else
+								if TimeDiff > 0.5 then
+									cell.Alpha = 0.0
+									cell.Direction = true
+									cell.FadeStart = CurrentTime
+								else
+									cell.Alpha = 1.0 - (TimeDiff * 2)
+								end
+							end
+							cell.Icon:SetAlpha(cell.Alpha)
+						else
+							self[Index].Columns[ID].Icon:SetAlpha(1.0)
+						end
+					end
+				end
+			end
 		end
 	end
 	
@@ -1652,6 +1904,8 @@ function PI.GUI:Init()
 					self[i].Unit = self[i - 1].Unit
 					self[i].Columns.Stone.Object = self[i - 1].Columns.Stone.Object
 					self[i].Columns.Potion.Object = self[i - 1].Columns.Potion.Object
+					self[i].Columns.PP.Object = self[i - 1].Columns.PP.Object
+					self[i].Columns.Insoles.Object = self[i - 1].Columns.Insoles.Object
 					self[i].Columns.Food.Object = self[i - 1].Columns.Food.Object
 					if self[i].Unit then
 						self.Units[self[i].Unit.UnitID] = self[i]
@@ -1668,6 +1922,8 @@ function PI.GUI:Init()
 		self[Index].Unit = LibSUnit.Lookup.UID[UnitID]
 		self[Index].Columns.Food.Object = nil
 		self[Index].Columns.Potion.Object = nil
+		self[Index].Columns.PP.Object = nil
+		self[Index].Columns.Insoles.Object = nil
 		self[Index].Columns.Stone.Object = nil
 		self.Units[UnitID] = self[Index]
 		self.Names[self[Index].Unit.Name] = self[Index]
@@ -1688,6 +1944,8 @@ function PI.GUI:Init()
 				self[i].Columns.Stone.Object = self[i + 1].Columns.Stone.Object
 				self[i].Columns.Food.Object = self[i + 1].Columns.Food.Object
 				self[i].Columns.Potion.Object = self[i + 1].Columns.Potion.Object
+				self[i].Columns.PP.Object = self[i + 1].Columns.PP.Object
+				self[i].Columns.Insoles.Object = self[i + 1].Columns.Insoles.Object
 				if self[i].Unit then
 					self.Units[self[i].Unit.UnitID] = self[i]
 					self.Names[self[i].Unit.Name] = self[i]
@@ -1703,6 +1961,8 @@ function PI.GUI:Init()
 		self[self.Populated].Columns.Stone.Object = nil
 		self[self.Populated].Columns.Food.Object = nil
 		self[self.Populated].Columns.Potion.Object = nil
+		self[self.Populated].Columns.PP.Object = nil
+		self[self.Populated].Columns.Insoles.Object = nil
 		if self.Populated < 21 then
 			self[self.Populated].Cradle:SetVisible(false)		
 		end
@@ -1845,6 +2105,16 @@ function PI.Update()
 		end
 	end
 	PI.Queue.List = {}
+
+	if PI.Displayed and PI.Settings.Flash then
+		for i = 1, 20 do
+			if PI.GUI.Rows[i].Enabled then
+				PI.GUI.Rows:Update_Buffs(i)
+			else
+				break
+			end
+		end
+	end
 end
 
 function PI.Update_End()

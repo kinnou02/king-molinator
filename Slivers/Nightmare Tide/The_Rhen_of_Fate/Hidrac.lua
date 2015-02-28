@@ -60,9 +60,9 @@ HOW.Hidrac = {
 	Name = HOW.Lang.Unit.Hidrac[KBM.Lang],
 	Menu = {},
 	Dead = false,
-	AlertsRef = {},
-	--TimersRef = {},
-	MechRef = {},
+	-- AlertsRef = {},
+	-- TimersRef = {},
+	-- MechRef = {},
 	Available = false,
 	UTID = "U65CA7B7E10053629",
 	UnitID = nil,
@@ -72,14 +72,14 @@ HOW.Hidrac = {
 		--TimersRef = {
 		--	Enabled = true,
 		--},
-		AlertsRef = {
-			Enabled = true,
+		-- AlertsRef = {
+			-- Enabled = true,
 			
-		},
-		MechRef = {
-			Enabled = true,
+		-- },
+		-- MechRef = {
+			-- Enabled = true,
 			
-		},
+		-- },
 	}
 }
 
@@ -90,9 +90,9 @@ HOW.Oonta = {
 	Name = HOW.Lang.Unit.Oonta[KBM.Lang],
 	Menu = {},
 	Dead = false,
-	AlertsRef = {},
-	--TimersRef = {},
-	MechRef = {},
+	-- AlertsRef = {},
+	-- TimersRef = {},
+	-- MechRef = {},
 	Available = false,
 	UTID = "U4890ACC15662A8CE",
 	UnitID = nil,
@@ -102,14 +102,14 @@ HOW.Oonta = {
 		--TimersRef = {
 		--	Enabled = true,
 		--},
-		AlertsRef = {
-			Enabled = true,
+		-- AlertsRef = {
+			-- Enabled = true,
 			
-		},
-		MechRef = {
-			Enabled = true,
+		-- },
+		-- MechRef = {
+			-- Enabled = true,
 			
-		},
+		-- },
 	}
 }
 
@@ -120,9 +120,9 @@ HOW.Weyloz = {
 	Name = HOW.Lang.Unit.Weyloz[KBM.Lang],
 	Menu = {},
 	Dead = false,
-	AlertsRef = {},
-	--TimersRef = {},
-	MechRef = {},
+	-- AlertsRef = {},
+	-- TimersRef = {},
+	-- MechRef = {},
 	Available = false,
 	UTID = "U7A627F8E543829F2",
 	UnitID = nil,
@@ -132,14 +132,14 @@ HOW.Weyloz = {
 		--TimersRef = {
 		--	Enabled = true,
 		--},
-		AlertsRef = {
-			Enabled = true,
+		-- AlertsRef = {
+			-- Enabled = true,
 			
-		},
-		MechRef = {
-			Enabled = true,
+		-- },
+		-- MechRef = {
+			-- Enabled = true,
 			
-		},
+		-- },
 	}
 }
 
@@ -169,26 +169,26 @@ function HOW:InitVars()
 		},
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
-		MechTimer = KBM.Defaults.MechTimer(),
-		Alerts = KBM.Defaults.Alerts(),
-		MechSpy = KBM.Defaults.MechSpy(),
+		-- MechTimer = KBM.Defaults.MechTimer(),
+		-- Alerts = KBM.Defaults.Alerts(),
+		-- MechSpy = KBM.Defaults.MechSpy(),
 		Hidrac = {
-			--CastBar = self.Hidrac.Settings.CastBar,
-			TimersRef = self.Hidrac.Settings.TimersRef,
-			AlertsRef = self.Hidrac.Settings.AlertsRef,
-			MechRef = self.Hidrac.Settings.MechRef,
+			CastBar = self.Hidrac.Settings.CastBar,
+			-- TimersRef = self.Hidrac.Settings.TimersRef,
+			-- AlertsRef = self.Hidrac.Settings.AlertsRef,
+			-- MechRef = self.Hidrac.Settings.MechRef,
 		},
 		Oonta = {
-			--CastBar = self.Oonta.Settings.CastBar,
-			TimersRef = self.Oonta.Settings.TimersRef,
-			AlertsRef = self.Oonta.Settings.AlertsRef,
-			MechRef = self.Oonta.Settings.MechRef,
+			CastBar = self.Oonta.Settings.CastBar,
+			-- TimersRef = self.Oonta.Settings.TimersRef,
+			-- AlertsRef = self.Oonta.Settings.AlertsRef,
+			-- MechRef = self.Oonta.Settings.MechRef,
 		},
 		Weyloz = {
-			--CastBar = self.Weyloz.Settings.CastBar,
-			TimersRef = self.Weyloz.Settings.TimersRef,
-			AlertsRef = self.Weyloz.Settings.AlertsRef,
-			MechRef = self.Weyloz.Settings.MechRef,
+			CastBar = self.Weyloz.Settings.CastBar,
+			-- TimersRef = self.Weyloz.Settings.TimersRef,
+			-- AlertsRef = self.Weyloz.Settings.AlertsRef,
+			-- MechRef = self.Weyloz.Settings.MechRef,
 		},
 	}
 	KBMNTSLROFHOW_Settings = self.Settings
@@ -278,16 +278,19 @@ function HOW:UnitHPCheck(uDetails, unitID)
 				self.TimeElapsed = 0
 				BossObj.Dead = false
 				BossObj.Casting = false
-
 				self.PhaseObj:Start(self.StartTime)
 				self.PhaseObj:SetPhase("1")
 				self.PhaseObj.Objectives:AddPercent(self.Hidrac, 0, 100)
 				self.PhaseObj.Objectives:AddPercent(self.Oonta, 0, 100)
 				self.PhaseObj.Objectives:AddPercent(self.Weyloz, 0, 100)
 				self.Phase = 1
-			else
+			else				
 				BossObj.Dead = false
 				BossObj.Casting = false
+			end
+			if BossObj.UnitID ~= unitID then
+				BossObj.CastBar:Remove()
+				BossObj.CastBar:Create(unitID)
 			end
 			BossObj.UnitID = unitID
 			BossObj.Available = true
@@ -303,6 +306,7 @@ function HOW:Reset()
 		BossObj.UnitID = nil
 		BossObj.Dead = false
 		BossObj.Casting = false
+		BossObj.CastBar:Remove()
 	end
 	self.PhaseObj:End(Inspect.Time.Real())
 end
@@ -325,5 +329,7 @@ function HOW:Start()
 	
 	
 	self.Hidrac.CastBar = KBM.Castbar:Add(self, self.Hidrac)
+	self.Oonta.CastBar = KBM.Castbar:Add(self, self.Oonta)
+	self.Weyloz.CastBar = KBM.Castbar:Add(self, self.Weyloz)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)	
 end

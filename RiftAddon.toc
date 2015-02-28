@@ -10,7 +10,7 @@ Author = "Safe@Deepwood"
 Website = "http://www.facebook.com/KingBossMods"
 Email = "kingbossmods@gmail.com"
 
-Version = "1.6.0.789"
+Version = "1.6.0.790"
 
 Environment = "3.0"
 
@@ -31,6 +31,10 @@ RunOnStartup = {
 	"Modules/PlayerControl.lua",
 	"Modules/PercentageMon.lua",
 	"Modules/Castbar.lua",
+	"Raids/Nightmare Tide/Mount_Sharax/MSHeader.lua",
+	"Raids/Nightmare Tide/Mount_Sharax/Jinoscoth.lua",
+	"Raids/Nightmare Tide/Mount_Sharax/Yrlwalach.lua",
+	"Raids/Nightmare Tide/Mount_Sharax/Threngar.lua",
 	"Raids/Storm Legion/Binding Maelforge/BMHeader.lua",
 	"Raids/Storm Legion/Binding Maelforge/BMaelforge.lua",
 	"Raids/Storm Legion/Binding Maelforge/BMagcilian.lua",
@@ -348,6 +352,10 @@ SavedVariables = {
 	KBMDungeon_Settings = "account",
 	KBMChronicle_Settings = "account",
 	KBMOpenWorld_Settings = "account",
+	KBMNTRDMS_Settings = "account",
+	KBMNTRDMSJIN_Settings = "account",
+	KBMNTRDMSYRL_Settings = "account",
+	KBMNTRDMSTGR_Settings = "account",
 	KBMNTSLROF_Settings = "account",
 	KBMNTSLROFDRE_Settings = "account",
 	KBMNTSLROFFIN_Settings = "account",

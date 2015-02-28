@@ -1,6 +1,6 @@
 ﻿-- Finric Boss Mod for King Boss Mods
--- Written by Noshei
--- Copyright 2012
+-- Template by Noshei
+-- Written by Kapnia
 --
 
 KBMNTSLROFFIN_Settings = nil
@@ -34,6 +34,8 @@ FIN.Lang.Unit.Finric = KBM.Language:Add("Finric")
 
 -- Ability Dictionary
 FIN.Lang.Ability = {}
+FIN.Lang.Ability.BrutalSwell = KBM.Language:Add("Brutal Swell")
+FIN.Lang.Ability.RoS = KBM.Language:Add("Rage of Storms")
 
 -- Verbose Dictionary
 FIN.Lang.Verbose = {}
@@ -43,7 +45,10 @@ FIN.Lang.Buff = {}
 
 -- Debuff Dictionary
 FIN.Lang.Debuff = {}
-
+FIN.Lang.Debuff.Waterlogged = KBM.Language:Add("Waterlogged")
+FIN.Lang.Debuff.WaterloggedID = "BFA19EC4C71EAC966"
+FIN.Lang.Debuff.Toxin = KBM.Language:Add("Toxin")
+FIN.Lang.Debuff.ToxinID = "B52BE0CACC92241F4"
 
 -- Description Dictionary
 FIN.Lang.Main = {}
@@ -60,7 +65,7 @@ FIN.Finric = {
 	Dead = false,
 	AlertsRef = {},
 	--TimersRef = {},
-	MechRef = {},
+	--MechRef = {},
 	Available = false,
 	UTID = "U5E16C7A90C01DE2D",
 	UnitID = nil,
@@ -72,12 +77,14 @@ FIN.Finric = {
 		--},
 		AlertsRef = {
 			Enabled = true,
-			
+			BrutalSwell = KBM.Defaults.AlertObj.Create("blue"),
+			RoS = KBM.Defaults.AlertObj.Create("cyan"),
+			Toxin = KBM.Defaults.AlertObj.Create("dark_green"),
 		},
-		MechRef = {
-			Enabled = true,
+		-- MechRef = {
+			-- Enabled = true,
 			
-		},
+		-- },
 	}
 }
 
@@ -96,7 +103,7 @@ function FIN:InitVars()
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		--MechTimer = KBM.Defaults.MechTimer(),
 		Alerts = KBM.Defaults.Alerts(),
-		MechSpy = KBM.Defaults.MechSpy(),
+		--MechSpy = KBM.Defaults.MechSpy(),
 		--TimersRef = self.Finric.Settings.TimersRef,
 		AlertsRef = self.Finric.Settings.AlertsRef,
 		MechRef = self.Finric.Settings.MechRef,
@@ -184,12 +191,12 @@ function FIN:UnitHPCheck(uDetails, unitID)
 				self.PhaseObj.Objectives:AddPercent(self.Finric, 0, 100)
 				self.Phase = 1
 				if BossObj == self.Finric then
-					--KBM.TankSwap:Start(self.Lang.Debuff.Devil[KBM.Lang], unitID)
+					KBM.TankSwap:Start(self.Lang.Debuff.WaterloggedID, unitID)
 				end
 			else
 				if BossObj == self.Finric then
 					if not KBM.TankSwap.Active then
-						--KBM.TankSwap:Start(self.Lang.Debuff.Devil[KBM.Lang], unitID)
+						KBM.TankSwap:Start(self.Lang.Debuff.WaterloggedID, unitID)
 					end
 				end
 				BossObj.Dead = false
@@ -229,13 +236,23 @@ function FIN:Start()
 	
 	
 	-- Create Alerts
-	
+	self.Finric.AlertsRef.BrutalSwell = KBM.Alert:Create(self.Lang.Ability.BrutalSwell[KBM.Lang], nil, false, true, "blue")
+	self.Finric.AlertsRef.RoS = KBM.Alert:Create(self.Lang.Ability.RoS[KBM.Lang], nil, false, true, "cyan")
+	self.Finric.AlertsRef.Toxin = KBM.Alert:Create(self.Lang.Debuff.Toxin[KBM.Lang], nil, true, true, "dark_green")
+	KBM.Defaults.AlertObj.Assign(self.Finric)
 
 	-- Create Spies
 	
 
 	-- Assign Alerts and Timers to Triggers
+	self.Finric.Triggers.BrutalSwell = KBM.Trigger:Create(self.Lang.Ability.BrutalSwell[KBM.Lang], "cast", self.Finric)
+	self.Finric.Triggers.BrutalSwell:AddAlert(self.Finric.AlertsRef.BrutalSwell)
 	
+	self.Finric.Triggers.RoS = KBM.Trigger:Create(self.Lang.Ability.RoS[KBM.Lang], "channel", self.Finric)
+	self.Finric.Triggers.RoS:AddAlert(self.Finric.AlertsRef.RoS)
+	
+	self.Finric.Triggers.Toxin = KBM.Trigger:Create(self.Lang.Debuff.Toxin[KBM.Lang], "playerDebuff", self.Finric)
+	self.Finric.Triggers.Toxin:AddAlert(self.Finric.AlertsRef.Toxin, true)
 	
 	self.Finric.CastBar = KBM.Castbar:Add(self, self.Finric)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)	

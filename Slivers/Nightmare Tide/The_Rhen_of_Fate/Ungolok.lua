@@ -59,9 +59,9 @@ UNG.Ungolok = {
 	Name = UNG.Lang.Unit.Ungolok[KBM.Lang],
 	Menu = {},
 	Dead = false,
-	AlertsRef = {},
-	--TimersRef = {},
-	MechRef = {},
+	-- AlertsRef = {},
+	-- TimersRef = {},
+	-- MechRef = {},
 	Available = false,
 	UTID = "U298B6CC31F0BCB3C",
 	UnitID = nil,
@@ -71,14 +71,14 @@ UNG.Ungolok = {
 		--TimersRef = {
 		--	Enabled = true,
 		--},
-		AlertsRef = {
-			Enabled = true,
+		-- AlertsRef = {
+			-- Enabled = true,
 			
-		},
-		MechRef = {
-			Enabled = true,
+		-- },
+		-- MechRef = {
+			-- Enabled = true,
 			
-		},
+		-- },
 	}
 }
 
@@ -95,12 +95,12 @@ function UNG:InitVars()
 		CastBar = self.Ungolok.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
-		--MechTimer = KBM.Defaults.MechTimer(),
-		Alerts = KBM.Defaults.Alerts(),
-		MechSpy = KBM.Defaults.MechSpy(),
-		--TimersRef = self.Ungolok.Settings.TimersRef,
-		AlertsRef = self.Ungolok.Settings.AlertsRef,
-		MechRef = self.Ungolok.Settings.MechRef,
+		-- MechTimer = KBM.Defaults.MechTimer(),
+		-- Alerts = KBM.Defaults.Alerts(),
+		-- MechSpy = KBM.Defaults.MechSpy(),
+		-- TimersRef = self.Ungolok.Settings.TimersRef,
+		-- AlertsRef = self.Ungolok.Settings.AlertsRef,
+		-- MechRef = self.Ungolok.Settings.MechRef,
 	}
 	KBMNTSLROFUNG_Settings = self.Settings
 	chKBMNTSLROFUNG_Settings = self.Settings

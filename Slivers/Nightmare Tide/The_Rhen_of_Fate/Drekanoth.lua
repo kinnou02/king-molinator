@@ -61,9 +61,9 @@ DRE.Drekanoth = {
 	Name = DRE.Lang.Unit.Drekanoth[KBM.Lang],
 	Menu = {},
 	Dead = false,
-	AlertsRef = {},
+	--AlertsRef = {},
 	--TimersRef = {},
-	MechRef = {},
+	--MechRef = {},
 	Available = false,
 	UTID = "UFF30772C5A1997A3",
 	UnitID = nil,
@@ -73,14 +73,14 @@ DRE.Drekanoth = {
 		--TimersRef = {
 		--	Enabled = true,
 		--},
-		AlertsRef = {
-			Enabled = true,
+		-- AlertsRef = {
+			-- Enabled = true,
 			
-		},
-		MechRef = {
-			Enabled = true,
+		-- },
+		-- MechRef = {
+			-- Enabled = true,
 			
-		},
+		-- },
 	}
 }
 
@@ -98,8 +98,8 @@ function DRE:InitVars()
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
 		--MechTimer = KBM.Defaults.MechTimer(),
-		Alerts = KBM.Defaults.Alerts(),
-		MechSpy = KBM.Defaults.MechSpy(),
+		--Alerts = KBM.Defaults.Alerts(),
+		--MechSpy = KBM.Defaults.MechSpy(),
 		--TimersRef = self.Drekanoth.Settings.TimersRef,
 		AlertsRef = self.Drekanoth.Settings.AlertsRef,
 		MechRef = self.Drekanoth.Settings.MechRef,
