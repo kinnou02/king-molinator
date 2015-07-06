@@ -30,6 +30,7 @@ KBM.RegisterMod(YRL.ID, YRL)
 -- Main Unit Dictionary
 YRL.Lang.Unit = {}
 YRL.Lang.Unit.Yrlwalach = KBM.Language:Add("Yrlwalach")
+YRL.Lang.Unit.Yrlwalach:SetFrench("L'Yrlwalach")
 
 -- Ability Dictionary
 YRL.Lang.Ability = {}
@@ -43,10 +44,13 @@ YRL.Lang.Buff = {}
 -- Debuff Dictionary
 YRL.Lang.Debuff = {}
 YRL.Lang.Debuff.ContainedDepths = KBM.Language:Add("The Contained Depths") --Zone ablegen
+YRL.Lang.Debuff.ContainedDepths:SetFrench("Contrainte des Profondeurs")
 YRL.Lang.Debuff.ContainedDepthsID = "B0796521D436835BB"
 YRL.Lang.Debuff.CommunalSuffering = KBM.Language:Add("Communal Suffering") --Dispell
+YRL.Lang.Debuff.CommunalSuffering:SetFrench("Souffrance communale")
 YRL.Lang.Debuff.CommunalSufferingID = "B18991A7DEFCD3CCD "
-YRL.Lang.Debuff.WISB = KBM.Language:Add("When Infinity Stares Back") --Stacks
+YRL.Lang.Debuff.WISB = KBM.Language:Add("When Infinity Stares Back")
+YRL.Lang.Debuff.WISB:SetFrench("Quand les regards se croisent") --Stacks
 YRL.Lang.Debuff.WISBID = "B5183088E34D0A16E "
 
 -- Description Dictionary

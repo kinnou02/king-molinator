@@ -31,6 +31,7 @@ KBM.RegisterMod(DRE.ID, DRE)
 -- Main Unit Dictionary
 DRE.Lang.Unit = {}
 DRE.Lang.Unit.Drekanoth = KBM.Language:Add("Drekanoth of Fate")
+DRE.Lang.Unit.Drekanoth:SetFrench("Drekanoth du destin")
 
 -- Ability Dictionary
 DRE.Lang.Ability = {}
@@ -41,11 +42,13 @@ DRE.Lang.Verbose = {}
 -- Buff Dictionary
 DRE.Lang.Buff = {}
 DRE.Lang.Buff.Power = KBM.Language:Add("Arcane Power")
+DRE.Lang.Buff.Power:SetFrench("Énergie arcanique")
 DRE.Lang.Buff.PowerID = "B24F5B8D42568AB56"
 
 -- Debuff Dictionary
 DRE.Lang.Debuff = {}
 DRE.Lang.Debuff.Vulnerability = KBM.Language:Add("Arcane Vulnerability")
+DRE.Lang.Debuff.Vulnerability:SetFrench("Vulnérabilité d'arcane")
 DRE.Lang.Debuff.VulnerabilityID = "B7610E896163D0166"
 
 -- Description Dictionary

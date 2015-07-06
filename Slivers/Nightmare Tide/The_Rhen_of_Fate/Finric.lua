@@ -35,7 +35,9 @@ FIN.Lang.Unit.Finric = KBM.Language:Add("Finric")
 -- Ability Dictionary
 FIN.Lang.Ability = {}
 FIN.Lang.Ability.BrutalSwell = KBM.Language:Add("Brutal Swell")
+FIN.Lang.Ability.BrutalSwell:SetFrench("Houle brutale")
 FIN.Lang.Ability.RoS = KBM.Language:Add("Rage of Storms")
+FIN.Lang.Ability.RoS:SetFrench("Rage des Tempêtes")
 
 -- Verbose Dictionary
 FIN.Lang.Verbose = {}
@@ -46,8 +48,10 @@ FIN.Lang.Buff = {}
 -- Debuff Dictionary
 FIN.Lang.Debuff = {}
 FIN.Lang.Debuff.Waterlogged = KBM.Language:Add("Waterlogged")
+FIN.Lang.Debuff.Waterlogged:SetFrench("Détrempé")
 FIN.Lang.Debuff.WaterloggedID = "BFA19EC4C71EAC966"
 FIN.Lang.Debuff.Toxin = KBM.Language:Add("Toxin")
+FIN.Lang.Debuff.Toxin:SetFrench("Toxine")
 FIN.Lang.Debuff.ToxinID = "B52BE0CACC92241F4"
 
 -- Description Dictionary
@@ -253,6 +257,8 @@ function FIN:Start()
 	
 	self.Finric.Triggers.Toxin = KBM.Trigger:Create(self.Lang.Debuff.Toxin[KBM.Lang], "playerDebuff", self.Finric)
 	self.Finric.Triggers.Toxin:AddAlert(self.Finric.AlertsRef.Toxin, true)
+	self.Finric.Triggers.ToxinRem = KBM.Trigger:Create(self.Lang.Debuff.Toxin[KBM.Lang], "playerBuffRemove", self.Finric)
+	self.Finric.Triggers.ToxinRem:AddStop(self.Finric.AlertsRef.Toxin)
 	
 	self.Finric.CastBar = KBM.Castbar:Add(self, self.Finric)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)	

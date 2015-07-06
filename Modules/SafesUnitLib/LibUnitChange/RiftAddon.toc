@@ -18,3 +18,7 @@ Environment = "2.2"
 RunOnStartup = {
   "main.lua",
 }
+-- X-Curse-Packaged-Version: r790
+-- X-Curse-Project-Name: King Boss Mods
+-- X-Curse-Project-ID: king-molinator
+-- X-Curse-Repository-ID: rift/king-molinator/mainline

@@ -30,6 +30,7 @@ KBM.RegisterMod(MS.ID, MS)
 MS.Lang = {}
 MS.Lang.Main = {}
 MS.Lang.Main.MS = KBM.Language:Add(MS.Name)
+MS.Lang.Main.MS:SetFrench("Mont Sharax")
 MS.Name = MS.Lang.Main.MS[KBM.Lang]
 MS.Descript = MS.Name
 

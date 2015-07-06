@@ -530,6 +530,16 @@ PI.Constants = {
 						rogue = true,
 					},
 				},
+				["B7A9114A93DA9099D"] = { -- Zirthan Curry
+					Grade = "High",
+					Level = 65,
+					Callings = {
+						mage = true,
+						cleric = true,
+						warrior = true,
+						rogue = true,
+					},
+				},
 				--//////////////--
 				-- SL Tank Food --
 				--//////////////--

@@ -31,7 +31,7 @@ KBM.RegisterMod(ROF.ID, ROF)
 ROF.Lang = {}
 ROF.Lang.Main = {}
 ROF.Lang.Main.ROF = KBM.Language:Add(ROF.Name)
---ROF.Lang.Main.ROF:SetFrench("Éveil sinistre")
+ROF.Lang.Main.ROF:SetFrench("Le Rhen du Destin")
 --ROF.Lang.Main.ROF:SetGerman("Böses Erwachen")
 ROF.Name = ROF.Lang.Main.ROF[KBM.Lang]
 ROF.Descript = ROF.Name

@@ -30,9 +30,14 @@ KBM.RegisterMod(JIN.ID, JIN)
 -- Main Unit Dictionary
 JIN.Lang.Unit = {}
 JIN.Lang.Unit.Jinoscoth = KBM.Language:Add("Jinoscoth")
+JIN.Lang.Unit.Jinoscoth:SetFrench("Jinoscoth")
 
 -- Ability Dictionary
 JIN.Lang.Ability = {}
+JIN.Lang.Ability.Iced = KBM.Language:Add("Iced")
+JIN.Lang.Ability.Iced:SetFrench("Glacé")
+JIN.Lang.Ability.Bulwark = KBM.Language:Add("Frost Bulwark")
+JIN.Lang.Ability.Bulwark:SetFrench("Rempart de givre")
 
 -- Verbose Dictionary
 JIN.Lang.Verbose = {}
@@ -43,8 +48,10 @@ JIN.Lang.Buff = {}
 -- Debuff Dictionary
 JIN.Lang.Debuff = {}
 JIN.Lang.Debuff.SappingCold = KBM.Language:Add("Sapping Cold")
+JIN.Lang.Debuff.SappingCold:SetFrench("Froid affaiblissant")
 JIN.Lang.Debuff.SappingColdID = "B41589C3B824AAA3D"
 JIN.Lang.Debuff.LivingIce = KBM.Language:Add("Living Ice")
+JIN.Lang.Debuff.LivingIce:SetFrench("Glace vivante")
 JIN.Lang.Debuff.LivingIceID = "B7EEC49241458804E"
 
 -- Description Dictionary
@@ -75,6 +82,8 @@ JIN.Jinoscoth = {
 		AlertsRef = {
 			Enabled = true,
 			LivingIce = KBM.Defaults.AlertObj.Create("blue"),
+			Iced = KBM.Defaults.AlertObj.Create("red"),
+			Bulwark = KBM.Defaults.AlertObj.Create("orange"),
 		},
 		MechRef = {
 			Enabled = true,
@@ -232,6 +241,8 @@ function JIN:Start()
 	
 	-- Create Alerts
 	self.Jinoscoth.AlertsRef.LivingIce = KBM.Alert:Create(self.Lang.Debuff.LivingIce[KBM.Lang], nil, true, true, "blue")
+	self.Jinoscoth.AlertsRef.Iced = KBM.Alert:Create(self.Lang.Ability.Iced[KBM.Lang], nil, true, true, "red")	
+	self.Jinoscoth.AlertsRef.Bulwark = KBM.Alert:Create(self.Lang.Ability.Bulwark[KBM.Lang], nil, true, true, "orange")
 	KBM.Defaults.AlertObj.Assign(self.Jinoscoth)
 	
 	-- Create Spies
@@ -241,7 +252,11 @@ function JIN:Start()
 	-- Assign Alerts and Timers to Triggers
 	self.Jinoscoth.Triggers.LivingIce = KBM.Trigger:Create(self.Lang.Debuff.LivingIce[KBM.Lang], "playerDebuff", self.Jinoscoth)
 	self.Jinoscoth.Triggers.LivingIce:AddAlert(self.Jinoscoth.AlertsRef.LivingIce, true)
-	self.Jinoscoth.Triggers.LivingIce:AddSpy(self.Jinoscoth.MechRef.LivingIce)	
+	self.Jinoscoth.Triggers.LivingIce:AddSpy(self.Jinoscoth.MechRef.LivingIce)
+	self.Jinoscoth.Triggers.Iced = KBM.Trigger:Create(self.Lang.Ability.Iced[KBM.Lang], "cast", self.Jinoscoth)
+	self.Jinoscoth.Triggers.Iced:AddAlert(self.Jinoscoth.AlertsRef.Iced, true)
+	self.Jinoscoth.Triggers.Bulwark = KBM.Trigger:Create(self.Lang.Ability.Bulwark[KBM.Lang], "cast", self.Jinoscoth)
+	self.Jinoscoth.Triggers.Bulwark:AddAlert(self.Jinoscoth.AlertsRef.Bulwark, true)	
 	
 	self.Jinoscoth.CastBar = KBM.Castbar:Add(self, self.Jinoscoth)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)	
