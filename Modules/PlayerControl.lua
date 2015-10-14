@@ -1,21 +1,22 @@
 ﻿-- King Boss Mods Player Control System
 -- Written By Paul Snart
+-- Edited to include CoTA reset by Leitsha
 -- Copyright 2012
 --
-
+ 
 local KBMTable = Inspect.Addon.Detail("KingMolinator")
 local KBM = KBMTable.data
-
+ 
 local LSUIni = Inspect.Addon.Detail("SafesUnitLib")
 local LibSUnit = LSUIni.data
-
+ 
 local LibSataIni = Inspect.Addon.Detail("SafesTableLib")
 local LibSata = LibSataIni.data
-
+ 
 local PC = {
 	Queue = {},
 }
-
+ 
 PC.RezBank = {
 	["cleric"] = {
 		--["a0000000026862464"] = {},
@@ -41,9 +42,9 @@ PC.RezBank = {
 		["A72E5E73166B95DD1"] = {}, -- Kiss Of Life
 	},
 }
-
+ 
 KBM.PlayerControl = PC
-
+ 
 function PC:GatherAbilities()
 	KBM.Player.AbilityTable = Inspect.Ability.New.List()
 	local Count = 0
@@ -66,11 +67,11 @@ function PC:GatherAbilities()
 		end
 	end
 end
-
+ 
 function PC.MessageSent(failed, message)
 	--print(tostring(failed).." "..tostring(message))
 end
-
+ 
 function PC:GatherRaidInfo()
 	for UnitID, UnitObj in pairs(LibSUnit.Raid.UID) do
 		if UnitID then
@@ -89,8 +90,8 @@ function PC:GatherRaidInfo()
 		end
 	end
 end
-
-
+ 
+ 
 function PC.AbilityRemove(handle, aIDList)
 	if not Inspect.System.Secure() then
 		local self = PC
@@ -112,7 +113,7 @@ function PC.AbilityRemove(handle, aIDList)
 		end
 	end
 end
-
+ 
 function PC.AbilityAdd(handle, aIDList)
 	local self = PC
 	local Count = 0
@@ -132,7 +133,7 @@ function PC.AbilityAdd(handle, aIDList)
 		KBM.Player.Rezes.Count = Count
 	end
 end
-
+ 
 function PC.SlashAbility()
 	local aIDList = Inspect.Ability.New.List()
 	for crID, bool in pairs(aIDList) do
@@ -140,7 +141,7 @@ function PC.SlashAbility()
 		print(aDetails.name.." = "..crID)
 	end
 end
-
+ 
 function PC.AbilityCooldown(handle, aIDList)
 	local self = PC
 	for rID, rDetails in pairs(KBM.Player.Rezes.List) do
@@ -153,7 +154,7 @@ function PC.AbilityCooldown(handle, aIDList)
 						KBM.Player.Rezes.Resume[rID] = 0
 					end
 					if KBM.Player.Rezes.Resume[rID] <= Inspect.Time.Real() then
-						--print("aDetails.currentCooldownDuration")
+						--print(aDetails.currentCooldownDuration)
 						--print("Rez Matched!")
 						KBM.Player.Rezes.List[rID] = aDetails
 						KBM.Player.Rezes.Resume[rID] = aDetails.currentCooldownBegin + aDetails.currentCooldownRemaining
@@ -165,7 +166,20 @@ function PC.AbilityCooldown(handle, aIDList)
 		end
 	end
 end
-
+ 
+function PC.AbilityCooldownEnd(handle, aIDList)
+	local self = PC
+	for rID, rDetails in pairs(KBM.Player.Rezes.List) do
+		if aIDList[rID] and KBM.Player.Rezes.List[rID].currentCooldownRemaining then
+			local aDetails = Inspect.Ability.New.Detail(rID)
+			KBM.Player.Rezes.List[rID] = aDetails
+			KBM.Player.Rezes.Resume[rID] = 0
+			KBM.ResMaster.Rezes:Add(LibSUnit.Player, rID,0, aDetails.cooldown)
+			KBM.ResMaster.Broadcast.RezSet(nil, rID)
+		end
+	end
+end
+ 
 function PC.PlayerJoin()
 	--print("PC -- You Join")
 	KBM.ResMaster.Rezes.Tracked[LibSUnit.Player.Name] = {
@@ -179,7 +193,7 @@ function PC.PlayerJoin()
 	end
 	-- PC:GatherRaidInfo()
 end
-
+ 
 function PC.CallingChange(handle, UnitObj)
 	if KBM.ResMaster.Rezes.Tracked[UnitObj.Name] then
 		if KBM.ResMaster.Rezes.Tracked[UnitObj.Name].Class ~= UnitObj.Calling then
@@ -205,17 +219,17 @@ function PC.CallingChange(handle, UnitObj)
 		PC.Queue[uID] = nil
 	end
 end
-
+ 
 function PC.RezMReq(name, failed, message)
 	if failed then
 		Command.Message.Broadcast("tell", name, "KBMRezReq", "C", PC.MessageSent)
 	end
 end
-
+ 
 function PC.RezRReq(name, failed, message)
-
+ 
 end
-
+ 
 local MessageQueue = LibSata:Create()
 function PC.MessageQueueHandler(queue, addonID, func, ...)
 	if queue == "message" then
@@ -224,7 +238,7 @@ function PC.MessageQueueHandler(queue, addonID, func, ...)
 		end
 	end
 end
-
+ 
 function PC.MessageQueueDispatch(handle, queue)
 	if queue == "message" then
 		local qState = Inspect.Queue.Status(queue)
@@ -241,7 +255,7 @@ function PC.MessageQueueDispatch(handle, queue)
 		end
 	end
 end
-
+ 
 function PC.GroupDeath(handle, UnitObj)
 	if KBM.ResMaster.Rezes.Tracked[UnitObj.Name] then
 		for aID, Timer in pairs(KBM.ResMaster.Rezes.Tracked[UnitObj.Name].Timers) do
@@ -249,7 +263,7 @@ function PC.GroupDeath(handle, UnitObj)
 		end
 	end
 end	
-
+ 
 function PC.GroupRes(handle, UnitObj)
 	if KBM.ResMaster.Rezes.Tracked[UnitObj.Name] then
 		for aID, Timer in pairs(KBM.ResMaster.Rezes.Tracked[UnitObj.Name].Timers) do
@@ -257,7 +271,7 @@ function PC.GroupRes(handle, UnitObj)
 		end
 	end
 end
-
+ 
 function PC.GroupJoin(handle, UnitObj, Spec)
 	if UnitObj.Name ~= LibSUnit.Player.Name then
 		if not KBM.ResMaster.Rezes.Tracked[UnitObj.Name] then
@@ -285,11 +299,11 @@ function PC.GroupJoin(handle, UnitObj, Spec)
 		end
 	end
 end
-
+ 
 function PC.GroupLeave(handle, UnitObj, Spec)
 	KBM.ResMaster.Rezes:Clear(UnitObj.Name)
 end
-
+ 
 function PC.PlayerOffline(handle, Units)
 	for UnitID, UnitObj in pairs(Units) do
 		if UnitObj.Offline then
@@ -299,16 +313,17 @@ function PC.PlayerOffline(handle, Units)
 		end
 	end
 end
-
+ 
 function PC.PlayerLeave()
 	KBM.ResMaster.Rezes:Clear()
 end
-
+ 
 function PC:Start()
 	self.MSG = KBM.MSG
 	Command.Event.Attach(Event.Ability.New.Remove, PC.AbilityRemove, "Ability Removed")
 	Command.Event.Attach(Event.Ability.New.Add, PC.AbilityAdd, "Ability Add")
 	Command.Event.Attach(Event.Ability.New.Cooldown.Begin, PC.AbilityCooldown, "Ability Cooldown")
+	Command.Event.Attach(Event.Ability.New.Cooldown.End, PC.AbilityCooldownEnd, "Ability Cooldown End")
 	Command.Event.Attach(Event.SafesUnitLib.Raid.Join, PC.PlayerJoin, "Player Join")
 	Command.Event.Attach(Event.SafesUnitLib.Raid.Leave, PC.PlayerLeave, "Player Leave")
 	Command.Event.Attach(Event.SafesUnitLib.Raid.Member.Join, PC.GroupJoin, "Group Member Join")

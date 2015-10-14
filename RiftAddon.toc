@@ -10,9 +10,9 @@ Author = "Safe@Deepwood"
 Website = "http://www.facebook.com/KingBossMods"
 Email = "kingbossmods@gmail.com"
 
-Version = "1.6.0.791"
+Version = "1.7.2.792"
 
-Environment = "3.2"
+Environment = "3.4"
 
 RunOnStartup = {
 	"KingMolinator.lua",
@@ -33,7 +33,7 @@ RunOnStartup = {
 	"Modules/Castbar.lua",
 	"Modules/Reflect.lua",
 	
-	-- NT Raids 20
+	-- NT Raids/Rift 20
 		-- Mount Sharax
 			"Raids/Nightmare Tide/Mount_Sharax/MSHeader.lua",
 			"Raids/Nightmare Tide/Mount_Sharax/Jinoscoth.lua",
@@ -61,7 +61,7 @@ RunOnStartup = {
 			"Raids/Nightmare Tide/Hammerknell/Inwar.lua",
 			"Raids/Nightmare Tide/Hammerknell/Akylios.lua",
 	
-	--Storm Legion Raids 20
+	--Storm Legion Raids/Rift 20
 		--Binding of Blood
 			"Raids/Storm Legion/Binding Maelforge/BMHeader.lua",
 			"Raids/Storm Legion/Binding Maelforge/BMaelforge.lua",
@@ -106,15 +106,22 @@ RunOnStartup = {
 			"Raids/Storm Legion/Frozen Tempest/Kolmasveli.lua",
 			"Raids/Storm Legion/Frozen Tempest/Crucia.lua",
 	
-	-- NT Slivers
+	-- NT Slivers/Rift
 		-- Rhen of Fate
 			"Slivers/Nightmare Tide/The_Rhen_of_Fate/ROFHeader.lua",
 			"Slivers/Nightmare Tide/The_Rhen_of_Fate/Ungolok.lua",
 			"Slivers/Nightmare Tide/The_Rhen_of_Fate/Hidrac.lua",
 			"Slivers/Nightmare Tide/The_Rhen_of_Fate/Drekanoth.lua",
 			"Slivers/Nightmare Tide/The_Rhen_of_Fate/Finric.lua",
+			
+		-- Intrepid Gilded Prophecy
+			"Slivers/Nightmare Tide/Intrepid_Gilded_Prophecy/GPHeader.lua",
+			"Slivers/Nightmare Tide/Intrepid_Gilded_Prophecy/Anrak.lua",
+			"Slivers/Nightmare Tide/Intrepid_Gilded_Prophecy/Guurloth.lua",
+			"Slivers/Nightmare Tide/Intrepid_Gilded_Prophecy/Thalguur.lua",
+			"Slivers/Nightmare Tide/Intrepid_Gilded_Prophecy/Uruluuk.lua",
 	
-	-- Storm Legion Slivers
+	-- Storm Legion Slivers/Rift
 		-- Drowned Halls Intrepid
 			"Slivers/Storm Legion/Intrepid_Drowned_Halls/IDHHeader.lua",
 			"Slivers/Storm Legion/Intrepid_Drowned_Halls/Jorb.lua",
@@ -136,7 +143,55 @@ RunOnStartup = {
 			"Slivers/Storm Legion/Triumph_of_the_Dragon_Queen/JultharinSL.lua",	
 			"Slivers/Storm Legion/Triumph_of_the_Dragon_Queen/Typhiria.lua",
 	
-	-- Storm Legion Experts
+	-- Nightmare Tide Experts
+		--Citadel of Insanity
+			"Experts/Nightmare Tide/Citadel_of_Insanity/COI_Header.lua",
+			"Experts/Nightmare Tide/Citadel_of_Insanity/Glacieus.lua",
+			"Experts/Nightmare Tide/Citadel_of_Insanity/Cresaphin.lua",
+			"Experts/Nightmare Tide/Citadel_of_Insanity/Skylla.lua",
+			"Experts/Nightmare Tide/Citadel_of_Insanity/Kondraum.lua",
+		
+		-- Glacial Maw
+			"Experts/Nightmare Tide/Glacial_Maw/GM_Header.lua",
+			"Experts/Nightmare Tide/Glacial_Maw/Shigoroth.lua",
+			"Experts/Nightmare Tide/Glacial_Maw/Apotheon.lua",
+			"Experts/Nightmare Tide/Glacial_Maw/Toknoth.lua",
+			"Experts/Nightmare Tide/Glacial_Maw/Mann.lua",
+			
+		-- Gyel Fortress
+			"Experts/Nightmare Tide/Gyel_Fortress/GF_Header.lua",
+			"Experts/Nightmare Tide/Gyel_Fortress/Seathe.lua",
+			"Experts/Nightmare Tide/Gyel_Fortress/Kytus.lua",
+			"Experts/Nightmare Tide/Gyel_Fortress/Nezavar.lua",
+			"Experts/Nightmare Tide/Gyel_Fortress/Glasya.lua",
+			
+		-- Nightmare Coast
+			"Experts/Nightmare Tide/Nightmare_Coast/NC_Header.lua",
+			--"Experts/Nightmare Tide/Nightmare_Coast/Hydal.lua",
+			"Experts/Nightmare Tide/Nightmare_Coast/Akylios.lua",
+			"Experts/Nightmare Tide/Nightmare_Coast/Dalraak.lua",
+			--"Experts/Nightmare Tide/Nightmare_Coast/Arak.lua",
+		
+		-- Return to Empyrean Core
+			"Experts/Nightmare Tide/Return_to_Empyrean_Core/RTEC_Header.lua",
+			"Experts/Nightmare Tide/Return_to_Empyrean_Core/Baird.lua",
+			"Experts/Nightmare Tide/Return_to_Empyrean_Core/Strauz.lua",
+			"Experts/Nightmare Tide/Return_to_Empyrean_Core/Doctor.lua",
+			"Experts/Nightmare Tide/Return_to_Empyrean_Core/Cor.lua",
+			"Experts/Nightmare Tide/Return_to_Empyrean_Core/Kaliban.lua",
+			
+		-- Return to Iron Tomb
+			"Experts/Nightmare Tide/Return_to_Iron_Tomb/RTIT_Header.lua",
+			"Experts/Nightmare Tide/Return_to_Iron_Tomb/Kings.lua",
+			"Experts/Nightmare Tide/Return_to_Iron_Tomb/Fetlorn.lua",
+			"Experts/Nightmare Tide/Return_to_Iron_Tomb/Ragnoth.lua",
+			"Experts/Nightmare Tide/Return_to_Iron_Tomb/Totek.lua",
+			
+		-- Rhaza'de Canyons
+			"Experts/Nightmare Tide/Rhaza'de_Canyons/RC_Header.lua",
+			"Experts/Nightmare Tide/Rhaza'de_Canyons/Placeholder.lua",
+			
+	-- Storm Legion Experts/Rift
 		-- Archives of Flesh
 			"Experts/Storm Legion/Archive_of_Flesh/AOFHeader.lua",
 			"Experts/Storm Legion/Archive_of_Flesh/Tzul.lua",
@@ -256,78 +311,78 @@ RunOnStartup = {
 			
 	-- Rift Raid 20	
 		-- Infernal Dawn
-			"Raids/InfernalDawn/INDHeader.lua",
-			"Raids/InfernalDawn/Drak.lua",
-			"Raids/InfernalDawn/Gorlach.lua",
-			"Raids/InfernalDawn/Bouldergut.lua",
-			"Raids/InfernalDawn/Muglak.lua",
-			"Raids/InfernalDawn/Ituziel.lua",
-			"Raids/InfernalDawn/Conclave.lua",
-			"Raids/InfernalDawn/Maklamos.lua",
-			"Raids/InfernalDawn/Rusila.lua",
-			"Raids/InfernalDawn/Laethys.lua",
-			"Raids/InfernalDawn/Maelforge.lua",
-			"Raids/InfernalDawn/Maelforge_Final.lua",
+			"Raids/Rift/InfernalDawn/INDHeader.lua",
+			"Raids/Rift/InfernalDawn/Drak.lua",
+			"Raids/Rift/InfernalDawn/Gorlach.lua",
+			"Raids/Rift/InfernalDawn/Bouldergut.lua",
+			"Raids/Rift/InfernalDawn/Muglak.lua",
+			"Raids/Rift/InfernalDawn/Ituziel.lua",
+			"Raids/Rift/InfernalDawn/Conclave.lua",
+			"Raids/Rift/InfernalDawn/Maklamos.lua",
+			"Raids/Rift/InfernalDawn/Rusila.lua",
+			"Raids/Rift/InfernalDawn/Laethys.lua",
+			"Raids/Rift/InfernalDawn/Maelforge.lua",
+			"Raids/Rift/InfernalDawn/Maelforge_Final.lua",
 			
 		--Hammerknell (legacy, disabled)
-			-- "Raids/Hammerknell/HKHeader.lua",
-			-- "Raids/Hammerknell/Murdantix.lua",
-			-- "Raids/Hammerknell/Matron.lua",
-			-- "Raids/Hammerknell/Zilas.lua",
-			-- "Raids/Hammerknell/Molinar.lua",
-			-- "Raids/Hammerknell/Sicaron.lua",
-			-- "Raids/Hammerknell/Estrode.lua",
-			-- "Raids/Hammerknell/Prime.lua",
-			-- "Raids/Hammerknell/Grugonim.lua",
-			-- "Raids/Hammerknell/Garau.lua",
-			-- "Raids/Hammerknell/Inwar.lua",
-			-- "Raids/Hammerknell/Akylios.lua",
+			-- "Raids/Rift/Hammerknell/HKHeader.lua",
+			-- "Raids/Rift/Hammerknell/Murdantix.lua",
+			-- "Raids/Rift/Hammerknell/Matron.lua",
+			-- "Raids/Rift/Hammerknell/Zilas.lua",
+			-- "Raids/Rift/Hammerknell/Molinar.lua",
+			-- "Raids/Rift/Hammerknell/Sicaron.lua",
+			-- "Raids/Rift/Hammerknell/Estrode.lua",
+			-- "Raids/Rift/Hammerknell/Prime.lua",
+			-- "Raids/Rift/Hammerknell/Grugonim.lua",
+			-- "Raids/Rift/Hammerknell/Garau.lua",
+			-- "Raids/Rift/Hammerknell/Inwar.lua",
+			-- "Raids/Rift/Hammerknell/Akylios.lua",
 			
 		-- River of Souls
-			"Raids/ROS/ROSHeader.lua",
-			"Raids/ROS/DarkFoci.lua",
-			"Raids/ROS/Galenir.lua",
-			"Raids/ROS/Gaurath.lua",
-			"Raids/ROS/Plutonus.lua",
-			"Raids/ROS/Alsbeth.lua",
+			"Raids/Rift/ROS/ROSHeader.lua",
+			"Raids/Rift/ROS/DarkFoci.lua",
+			"Raids/Rift/ROS/Galenir.lua",
+			"Raids/Rift/ROS/Gaurath.lua",
+			"Raids/Rift/ROS/Plutonus.lua",
+			"Raids/Rift/ROS/Alsbeth.lua",
 			
 		-- Greenscale Blight
-			"Raids/GSB/GSBHeader.lua",
-			"Raids/GSB/Letareus.lua",
-			"Raids/GSB/Johlen.lua",
-			"Raids/GSB/Aleria.lua",
-			"Raids/GSB/Hylas.lua",
-			"Raids/GSB/Greenscale.lua",
+			"Raids/Rift/GSB/GSBHeader.lua",
+			"Raids/Rift/GSB/Letareus.lua",
+			"Raids/Rift/GSB/Johlen.lua",
+			"Raids/Rift/GSB/Aleria.lua",
+			"Raids/Rift/GSB/Hylas.lua",
+			"Raids/Rift/GSB/Greenscale.lua",
 	
-	-- Rift Slivers
+	-- Rift Slivers/Rift
 		--Primeval Feast
-			"Slivers/Primeval_Feast/PFHeader.lua",
-			"Slivers/Primeval_Feast/Anchors.lua",
-			"Slivers/Primeval_Feast/Atrophinius.lua",
-			"Slivers/Primeval_Feast/Khargorth.lua",
-			"Slivers/Primeval_Feast/Alltha.lua",
-			"Slivers/Primeval_Feast/Twyl.lua",
+			"Slivers/Rift/Primeval_Feast/PFHeader.lua",
+			"Slivers/Rift/Primeval_Feast/Anchors.lua",
+			"Slivers/Rift/Primeval_Feast/Atrophinius.lua",
+			"Slivers/Rift/Primeval_Feast/Khargorth.lua",
+			"Slivers/Rift/Primeval_Feast/Alltha.lua",
+			"Slivers/Rift/Primeval_Feast/Twyl.lua",
 			
 		-- Rise of the Phoenix
-			"Slivers/Rise_of_the_Phoenix/ROTPHeader.lua",
-			"Slivers/Rise_of_the_Phoenix/Ereandorn.lua",
-			"Slivers/Rise_of_the_Phoenix/Beruhast.lua",
-			"Slivers/Rise_of_the_Phoenix/Silgen.lua",
-			"Slivers/Rise_of_the_Phoenix/Arakhurn.lua",
+			"Slivers/Rift/Rise_of_the_Phoenix/ROTPHeader.lua",
+			"Slivers/Rift/Rise_of_the_Phoenix/Ereandorn.lua",
+			"Slivers/Rift/Rise_of_the_Phoenix/Beruhast.lua",
+			"Slivers/Rift/Rise_of_the_Phoenix/Silgen.lua",
+			"Slivers/Rift/Rise_of_the_Phoenix/Arakhurn.lua",
 			
 		-- Glided Prophecy
-			"Slivers/Gilded_Prophecy/GPHeader.lua",
-			"Slivers/Gilded_Prophecy/Anrak.lua",
-			"Slivers/Gilded_Prophecy/Guurloth.lua",
-			"Slivers/Gilded_Prophecy/Thalguur.lua",
-			"Slivers/Gilded_Prophecy/Uruluuk.lua",
+			"Slivers/Rift/Gilded_Prophecy/GPHeader.lua",
+			"Slivers/Rift/Gilded_Prophecy/Anrak.lua",
+			"Slivers/Rift/Gilded_Prophecy/Guurloth.lua",
+			"Slivers/Rift/Gilded_Prophecy/Thalguur.lua",
+			"Slivers/Rift/Gilded_Prophecy/Uruluuk.lua",
 			
 		-- Drowned Halls
-			"Slivers/Drowned_Halls/DHHeader.lua",
-			"Slivers/Drowned_Halls/Jorb.lua",
-			"Slivers/Drowned_Halls/Joloral.lua",
-			"Slivers/Drowned_Halls/Isskal.lua",
-			"Slivers/Drowned_Halls/Hydriss.lua",
+			"Slivers/Rift/Drowned_Halls/DHHeader.lua",
+			"Slivers/Rift/Drowned_Halls/Jorb.lua",
+			"Slivers/Rift/Drowned_Halls/Joloral.lua",
+			"Slivers/Rift/Drowned_Halls/Isskal.lua",
+			"Slivers/Rift/Drowned_Halls/Hydriss.lua",
 			
 	-- Rift Master Dungeons
 		-- Caduceus Rise
@@ -355,108 +410,108 @@ RunOnStartup = {
 			
 	--Rift Expert Dungeons
 		-- Abyssal Precipice
-			"Experts/Abyssal_Precipice/APHeader.lua",
-			"Experts/Abyssal_Precipice/Andrenos.lua",
-			"Experts/Abyssal_Precipice/Icetalon.lua",
-			"Experts/Abyssal_Precipice/Majolic.lua",
-			"Experts/Abyssal_Precipice/Renthar.lua",
-			"Experts/Abyssal_Precipice/Calyx.lua",
+			"Experts/Rift/Abyssal_Precipice/APHeader.lua",
+			"Experts/Rift/Abyssal_Precipice/Andrenos.lua",
+			"Experts/Rift/Abyssal_Precipice/Icetalon.lua",
+			"Experts/Rift/Abyssal_Precipice/Majolic.lua",
+			"Experts/Rift/Abyssal_Precipice/Renthar.lua",
+			"Experts/Rift/Abyssal_Precipice/Calyx.lua",
 			
 		-- Charmer's Caldera
-			"Experts/Charmers_Caldera/CCHeader.lua",
-			"Experts/Charmers_Caldera/Smouldaron.lua",
-			"Experts/Charmers_Caldera/Cyclorax.lua",
-			"Experts/Charmers_Caldera/Ryka.lua",
-			"Experts/Charmers_Caldera/Gronik.lua",
-			"Experts/Charmers_Caldera/Jultharin.lua",
-			"Experts/Charmers_Caldera/Caelia.lua",
+			"Experts/Rift/Charmers_Caldera/CCHeader.lua",
+			"Experts/Rift/Charmers_Caldera/Smouldaron.lua",
+			"Experts/Rift/Charmers_Caldera/Cyclorax.lua",
+			"Experts/Rift/Charmers_Caldera/Ryka.lua",
+			"Experts/Rift/Charmers_Caldera/Gronik.lua",
+			"Experts/Rift/Charmers_Caldera/Jultharin.lua",
+			"Experts/Rift/Charmers_Caldera/Caelia.lua",
 		
 		-- Darkening Deeps
-			"Experts/Darkening_Deeps/DDHeader.lua",
-			"Experts/Darkening_Deeps/Braxtepel.lua",
-			"Experts/Darkening_Deeps/Bringhurst.lua",
-			"Experts/Darkening_Deeps/Tegenar.lua",
-			"Experts/Darkening_Deeps/Glubmuk.lua",
-			"Experts/Darkening_Deeps/Council.lua",
-			"Experts/Darkening_Deeps/Scarn.lua",
+			"Experts/Rift/Darkening_Deeps/DDHeader.lua",
+			"Experts/Rift/Darkening_Deeps/Braxtepel.lua",
+			"Experts/Rift/Darkening_Deeps/Bringhurst.lua",
+			"Experts/Rift/Darkening_Deeps/Tegenar.lua",
+			"Experts/Rift/Darkening_Deeps/Glubmuk.lua",
+			"Experts/Rift/Darkening_Deeps/Council.lua",
+			"Experts/Rift/Darkening_Deeps/Scarn.lua",
 			
 		-- Deepstrike Mines
-			"Experts/Deepstrike_Mines/DMHeader.lua",
-			"Experts/Deepstrike_Mines/Markus.lua",
-			"Experts/Deepstrike_Mines/Krezlav.lua",
-			"Experts/Deepstrike_Mines/Bonehew.lua",
-			"Experts/Deepstrike_Mines/Kaleida.lua",
-			"Experts/Deepstrike_Mines/Dichrom.lua",
-			"Experts/Deepstrike_Mines/Arcanis.lua",
-			"Experts/Deepstrike_Mines/Plutonus.lua",
+			"Experts/Rift/Deepstrike_Mines/DMHeader.lua",
+			"Experts/Rift/Deepstrike_Mines/Markus.lua",
+			"Experts/Rift/Deepstrike_Mines/Krezlav.lua",
+			"Experts/Rift/Deepstrike_Mines/Bonehew.lua",
+			"Experts/Rift/Deepstrike_Mines/Kaleida.lua",
+			"Experts/Rift/Deepstrike_Mines/Dichrom.lua",
+			"Experts/Rift/Deepstrike_Mines/Arcanis.lua",
+			"Experts/Rift/Deepstrike_Mines/Plutonus.lua",
 			
 		-- Fall of Lantern Hook
-			"Experts/Fall_of_Lantern_Hook/FOLHHeader.lua",
-			"Experts/Fall_of_Lantern_Hook/Rorf.lua",
-			"Experts/Fall_of_Lantern_Hook/Cortilnald.lua",
-			"Experts/Fall_of_Lantern_Hook/Druhl.lua",
-			"Experts/Fall_of_Lantern_Hook/Ereetu.lua",
-			"Experts/Fall_of_Lantern_Hook/Oludare.lua",
+			"Experts/Rift/Fall_of_Lantern_Hook/FOLHHeader.lua",
+			"Experts/Rift/Fall_of_Lantern_Hook/Rorf.lua",
+			"Experts/Rift/Fall_of_Lantern_Hook/Cortilnald.lua",
+			"Experts/Rift/Fall_of_Lantern_Hook/Druhl.lua",
+			"Experts/Rift/Fall_of_Lantern_Hook/Ereetu.lua",
+			"Experts/Rift/Fall_of_Lantern_Hook/Oludare.lua",
 			
 		-- Fool Cascade
-			"Experts/Foul_Cascade/FCHeader.lua",
-			"Experts/Foul_Cascade/Verosa.lua",
-			"Experts/Foul_Cascade/Surin.lua",
-			"Experts/Foul_Cascade/Krasimir.lua",
-			"Experts/Foul_Cascade/Sparkwing.lua",
-			"Experts/Foul_Cascade/Maficros.lua",
-			"Experts/Foul_Cascade/Vallnara.lua",
+			"Experts/Rift/Foul_Cascade/FCHeader.lua",
+			"Experts/Rift/Foul_Cascade/Verosa.lua",
+			"Experts/Rift/Foul_Cascade/Surin.lua",
+			"Experts/Rift/Foul_Cascade/Krasimir.lua",
+			"Experts/Rift/Foul_Cascade/Sparkwing.lua",
+			"Experts/Rift/Foul_Cascade/Maficros.lua",
+			"Experts/Rift/Foul_Cascade/Vallnara.lua",
 			
 		-- King's Breach
-			"Experts/Kings_Breach/KBHeader.lua",
-			"Experts/Kings_Breach/Suleng.lua",
-			"Experts/Kings_Breach/Ravalos.lua",
-			"Experts/Kings_Breach/Autoch.lua",
-			"Experts/Kings_Breach/Shadehorror.lua",
-			"Experts/Kings_Breach/Konstantin.lua",
+			"Experts/Rift/Kings_Breach/KBHeader.lua",
+			"Experts/Rift/Kings_Breach/Suleng.lua",
+			"Experts/Rift/Kings_Breach/Ravalos.lua",
+			"Experts/Rift/Kings_Breach/Autoch.lua",
+			"Experts/Rift/Kings_Breach/Shadehorror.lua",
+			"Experts/Rift/Kings_Breach/Konstantin.lua",
 			
 		-- Lower Caduceus Rise
-			"Experts/Lower_Caduceus_Rise/LCRHeader.lua",
-			"Experts/Lower_Caduceus_Rise/Hergen.lua",
-			"Experts/Lower_Caduceus_Rise/Alraj.lua",
-			"Experts/Lower_Caduceus_Rise/Palos.lua",
-			"Experts/Lower_Caduceus_Rise/Zael.lua",
-			"Experts/Lower_Caduceus_Rise/Coalgut.lua",
+			"Experts/Rift/Lower_Caduceus_Rise/LCRHeader.lua",
+			"Experts/Rift/Lower_Caduceus_Rise/Hergen.lua",
+			"Experts/Rift/Lower_Caduceus_Rise/Alraj.lua",
+			"Experts/Rift/Lower_Caduceus_Rise/Palos.lua",
+			"Experts/Rift/Lower_Caduceus_Rise/Zael.lua",
+			"Experts/Rift/Lower_Caduceus_Rise/Coalgut.lua",
 			
 		-- Runic Descent
-			"Experts/Runic_Descent/RDHeader.lua",
-			"Experts/Runic_Descent/Rictus.lua",
-			"Experts/Runic_Descent/Wormwood.lua",
-			"Experts/Runic_Descent/Falidor.lua",
-			"Experts/Runic_Descent/Atrophinius.lua",
-			"Experts/Runic_Descent/Eliam.lua",
+			"Experts/Rift/Runic_Descent/RDHeader.lua",
+			"Experts/Rift/Runic_Descent/Rictus.lua",
+			"Experts/Rift/Runic_Descent/Wormwood.lua",
+			"Experts/Rift/Runic_Descent/Falidor.lua",
+			"Experts/Rift/Runic_Descent/Atrophinius.lua",
+			"Experts/Rift/Runic_Descent/Eliam.lua",
 			
 		-- Iron Tomb
-			"Experts/The_Iron_Tomb/TITHeader.lua",
-			"Experts/The_Iron_Tomb/Caor.lua",
-			"Experts/The_Iron_Tomb/Venoxa.lua",
-			"Experts/The_Iron_Tomb/Kings.lua",
-			"Experts/The_Iron_Tomb/Fetlorn.lua",
-			"Experts/The_Iron_Tomb/Ragnoth.lua",
-			"Experts/The_Iron_Tomb/Totek.lua",
+			"Experts/Rift/The_Iron_Tomb/TITHeader.lua",
+			"Experts/Rift/The_Iron_Tomb/Caor.lua",
+			"Experts/Rift/The_Iron_Tomb/Venoxa.lua",
+			"Experts/Rift/The_Iron_Tomb/Kings.lua",
+			"Experts/Rift/The_Iron_Tomb/Fetlorn.lua",
+			"Experts/Rift/The_Iron_Tomb/Ragnoth.lua",
+			"Experts/Rift/The_Iron_Tomb/Totek.lua",
 			
 		-- The Realm of the Fae
-			"Experts/The_Realm_of_the_Fae/ROTFHeader.lua",
-			"Experts/The_Realm_of_the_Fae/Maelow.lua",
-			"Experts/The_Realm_of_the_Fae/Luggodhan.lua",
-			"Experts/The_Realm_of_the_Fae/Orban.lua",
-			"Experts/The_Realm_of_the_Fae/Atrophinius.lua",
-			"Experts/The_Realm_of_the_Fae/Winterfrost.lua",
-			"Experts/The_Realm_of_the_Fae/Twyl.lua",
+			"Experts/Rift/The_Realm_of_the_Fae/ROTFHeader.lua",
+			"Experts/Rift/The_Realm_of_the_Fae/Maelow.lua",
+			"Experts/Rift/The_Realm_of_the_Fae/Luggodhan.lua",
+			"Experts/Rift/The_Realm_of_the_Fae/Orban.lua",
+			"Experts/Rift/The_Realm_of_the_Fae/Atrophinius.lua",
+			"Experts/Rift/The_Realm_of_the_Fae/Winterfrost.lua",
+			"Experts/Rift/The_Realm_of_the_Fae/Twyl.lua",
 			
 		-- Upper Caduceus Rise
-			"Experts/Upper_Caduceus_Rise/UCRHeader.lua",
-			"Experts/Upper_Caduceus_Rise/Zugthak.lua",
-			"Experts/Upper_Caduceus_Rise/Rodiafel.lua",
-			"Experts/Upper_Caduceus_Rise/Black.lua",
-			"Experts/Upper_Caduceus_Rise/Cinderstorm.lua",
-			"Experts/Upper_Caduceus_Rise/Kulir.lua",
-			"Experts/Upper_Caduceus_Rise/Caduceus.lua",
+			"Experts/Rift/Upper_Caduceus_Rise/UCRHeader.lua",
+			"Experts/Rift/Upper_Caduceus_Rise/Zugthak.lua",
+			"Experts/Rift/Upper_Caduceus_Rise/Rodiafel.lua",
+			"Experts/Rift/Upper_Caduceus_Rise/Black.lua",
+			"Experts/Rift/Upper_Caduceus_Rise/Cinderstorm.lua",
+			"Experts/Rift/Upper_Caduceus_Rise/Kulir.lua",
+			"Experts/Rift/Upper_Caduceus_Rise/Caduceus.lua",
 }
 
 Embed = {
@@ -481,7 +536,7 @@ SavedVariables = {
 	KBMOpenWorld_Settings = "account",
 	
 	
-	-- NT Raids 20
+	-- NT Raids/Rift 20
 		-- Mount Sharax
 			KBMNTRDMS_Settings = "account",
 			KBMNTRDMSJIN_Settings = "account",
@@ -530,7 +585,7 @@ SavedVariables = {
 			chKBMNTGR_Settings = "character",
 			chKBMNTID_Settings = "character",
 		
-	--NT Slivers
+	--NT Slivers/Rift
 		-- Rhen of Fate
 			KBMNTSLROF_Settings = "account",
 			KBMNTSLROFDRE_Settings = "account",
@@ -542,6 +597,18 @@ SavedVariables = {
 			chKBMNTSLROFFIN_Settings = "character",
 			chKBMNTSLROFHOW_Settings = "character",
 			chKBMNTSLROFUNG_Settings = "character",
+			
+		-- Intrepid Glided Prophecy
+			KBMNTIGP_Settings = "account",
+			KBMNTIGPAF_Settings = "account",
+			KBMNTIGPGH_Settings = "account",
+			KBMNTIGPTR_Settings = "account",
+			KBMNTIGPUK_Settings = "account",
+			chKBMNTIGP_Settings = "character",
+			chKBMNTIGPAF_Settings = "character",
+			chKBMNTIGPGH_Settings = "character",
+			chKBMNTIGPTR_Settings = "character",
+			chKBMNTIGPUK_Settings = "character",
 			
 	-- Storm Legion Raid 20
 		-- Binding of blood
@@ -622,7 +689,7 @@ SavedVariables = {
 			chKBMSLRDFTKT_Settings = "character",
 			chKBMSLRDFTZL_Settings = "character",
 		
-	-- Storm Legion Slivers
+	-- Storm Legion Slivers/Rift
 		-- Drowned Halls
 			KBMSLSLIDH_Settings = "account",
 			KBMSLSLIDHHH_Settings = "account",
@@ -659,6 +726,74 @@ SavedVariables = {
 			chKBMSLSLTQGT_Settings = "character",
 			chKBMSLSLTQGZ_Settings = "character",
 			
+			
+	-- Nightmare Tide Experts
+		--Citadel of Insanity
+			KBMNTCOIGLA_Settings = "account",
+			KBMNTCOICRE_Settings = "account",
+			KBMNTCOISKY_Settings = "account",
+			KBMNTCOIKON_Settings = "account",
+			chKBMNTCOIGLA_Settings = "character",
+			chKBMNTCOICRE_Settings = "character",
+			chKBMNTCOISKY_Settings = "character",
+			chKBMNTCOIKON_Settings = "character",
+			
+		-- Glacial Maw
+			KBMNTGMSHI_Settings = "account",
+			KBMNTGMAPO_Settings = "account",
+			KBMNTGMTOK_Settings = "account",
+			KBMNTGMMAN_Settings = "account",
+			chKBMNTGMSHI_Settings = "character",
+			chKBMNTGMAPO_Settings = "character",
+			chKBMNTGMTOK_Settings = "character",
+			chKBMNTGMMAN_Settings = "character",
+
+		-- Gyel Fortress
+			KBMNTGFSEA_Settings = "account",
+			KBMNTGFKYT_Settings = "account",
+			KBMNTGFNEZ_Settings = "account",
+			KBMNTGFGLA_Settings = "account",
+			chKBMNTGFSEA_Settings = "character",
+			chKBMNTGFKYT_Settings = "character",
+			chKBMNTGFNEZ_Settings = "character",
+			chKBMNTGFGLA_Settings = "character",
+			
+		-- Nightmare Coast
+			KBMNTNCHYD_Settings = "account",
+			KBMNTNCAKY_Settings = "account",
+			KBMNTNCDTS_Settings = "account",
+			KBMNTNCARK_Settings = "account",
+			chKBMNTNCHYD_Settings = "character",
+			chKBMNTNCAKY_Settings = "character",
+			chKBMNTNCDTS_Settings = "character",
+			chKBMNTNCARK_Settings = "character",
+			
+		-- Return to Empyrean Core
+			KBMNTRTECBAI_Settings = "account",
+			KBMNTRTECSM_Settings = "account",
+			KBMNTRTECDOC_Settings = "account",
+			KBMNTRTECCOR_Settings = "account",
+			KBMNTRTECKAL_Settings = "account",
+			chKBMNTRTECBAI_Settings = "character",
+			chKBMNTRTECSM_Settings = "character",
+			chKBMNTRTECDOC_Settings = "character",
+			chKBMNTRTECCOR_Settings = "character",
+			chKBMNTRTECKAL_Settings = "character",
+			
+		-- Return to Iron Tomb
+			KBMNTRTITK_Settings = "account",
+			KBMNTRTITBF_Settings = "account",
+			KBMNTRTITRD_Settings = "account",
+			KBMNTRTITTA_Settings = "account",
+			chKBMNTRTITK_Settings = "character",
+			chKBMNTRTITBF_Settings = "character",
+			chKBMNTRTITRD_Settings = "character",
+			chKBMNTRTITTA_Settings = "character",
+			
+		-- Rhaza'de Canyons
+			KBMNTRCPLA_Settings = "account",
+			chKBMNTRCPLA_Settings = "character",
+	
 	-- Storm Legion Expert Dungeons
 		-- Archives of Flesh
 			KBMSLEXAOF_Settings = "account",
@@ -943,7 +1078,7 @@ SavedVariables = {
 			chKBMGSBPH_Settings = "character",
 			chKBMGSBLG_Settings = "character",
 	
-	-- Rift Slivers
+	-- Rift Slivers/Rift
 		-- Primeval Feast
 			KBMPF_Settings = "account",
 			KBMPFLA_Settings = "account",
@@ -1037,7 +1172,7 @@ SavedVariables = {
 			chKBMMMDDTC_Settings = "character",
 			chKBMMMDDSN_Settings = "character",
 				
-	-- Rift Experts Dungeons
+	-- Rift Experts/Rift Dungeons
 		-- Abyssal Precipice
 			KBMEXAP_Settings = "account",
 			KBMEXAPKA_Settings = "account",
@@ -1242,15 +1377,3 @@ Dependencies = {
 	KBMAddWatch = {"optional", "after"},
 	BuffInfo = {"optional", "after"},
 }
--- X-Curse-Packaged-Version: r739
--- X-Curse-Project-Name: King Boss Mods
--- X-Curse-Project-ID: king-molinator
--- X-Curse-Repository-ID: rift/king-molinator/mainline
--- X-Curse-Packaged-Version: r774
--- X-Curse-Project-Name: King Boss Mods
--- X-Curse-Project-ID: king-molinator
--- X-Curse-Repository-ID: rift/king-molinator/mainline
--- X-Curse-Packaged-Version: r790
--- X-Curse-Project-Name: King Boss Mods
--- X-Curse-Project-ID: king-molinator
--- X-Curse-Repository-ID: rift/king-molinator/mainline

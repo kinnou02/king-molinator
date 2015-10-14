@@ -58,7 +58,7 @@ MOD.Lang.Unit.Grim = KBM.Language:Add(MOD.Grim.Name)
 MOD.Lang.Unit.Grim:SetFrench("Général Grim")
 MOD.Lang.Unit.Grim:SetGerman("General Grim")
 MOD.Lang.Unit.GrimShort = KBM.Language:Add("Grim")
-MOD.Lang.Unit.GrimShort:SetFrench()
+MOD.Lang.Unit.GrimShort:SetFrench("Grim")
 MOD.Lang.Unit.GrimShort:SetGerman("Grim")
 
 MOD.Grim.Name = MOD.Lang.Unit.Grim[KBM.Lang]

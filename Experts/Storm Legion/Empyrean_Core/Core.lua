@@ -52,9 +52,11 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Core = KBM.Language:Add(MOD.Core.Name)
 MOD.Lang.Unit.Core:SetGerman("Verstrahltes Monster")
+MOD.Lang.Unit.Core:SetFrench("Monstre irradié")
 MOD.Core.Name = MOD.Lang.Unit.Core[KBM.Lang]
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Monster")
 MOD.Lang.Unit.AndShort:SetGerman("Monster")
+MOD.Lang.Unit.AndShort:SetFrench("Monstre")
 MOD.Core.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 
 -- Ability Dictionary
@@ -64,6 +66,7 @@ MOD.Lang.Ability = {}
 MOD.Lang.Say = {}
 MOD.Lang.Say.Victory = KBM.Language:Add("Core instability within acceptable limits... Aborting lockdown sequences.")
 MOD.Lang.Say.Victory:SetGerman("Kerninstabilität im akzeptablen Bereich. Sperrsequenz wird abgebrochen.")
+MOD.Lang.Say.Victory:SetFrench("Niveau d'instabilité du noyau acceptable... Annulation de la séquence de verrouillage.")
 
 -- Main Dictionary
 MOD.Lang.Main = {}

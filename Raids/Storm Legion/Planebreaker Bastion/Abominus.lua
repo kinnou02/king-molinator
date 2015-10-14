@@ -288,7 +288,7 @@ end
  
 function PBA.PhaseTwo()
 	PBA.PhaseObj.Objectives:Remove()
-	PBA.PhaseObj:SetPhase("2")
+	PBA.PhaseObj:SetPhase(2)
 	PBA.PhaseObj.Objectives:AddPercent(PBA.Zorzyx, 0, 70)
 	PBA.PhaseObj.Objectives:AddPercent(PBA.Torkrik, 0, 70)
 	PBA.PhaseObj.Objectives:AddPercent(PBA.Ixior, 0, 70)

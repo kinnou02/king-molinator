@@ -31,7 +31,7 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Vellion = KBM.Language:Add("Vellion the Pestilent")
 MOD.Lang.Unit.Vellion:SetGerman("Vellion der Pestilente")
-MOD.Lang.Unit.Vellion:SetFrench("Vellion la Pestilente")
+MOD.Lang.Unit.Vellion:SetFrench("Vellion le Pestilent")
 MOD.Lang.Unit.VellionLT = KBM.Language:Add("Vellion's Left Trunk")
 MOD.Lang.Unit.VellionLT:SetGerman("Vellions linker Rumpfschutz")
 MOD.Lang.Unit.VellionLT:SetFrench("Tronc gauche de Vellion")

@@ -31,10 +31,22 @@ KBM.RegisterMod(DRE.ID, DRE)
 -- Main Unit Dictionary
 DRE.Lang.Unit = {}
 DRE.Lang.Unit.Drekanoth = KBM.Language:Add("Drekanoth of Fate")
-DRE.Lang.Unit.Drekanoth:SetFrench("Drekanoth du destin")
+DRE.Lang.Unit.Drekanoth:SetFrench("Drekanoth du Destin")
+DRE.Lang.Unit.World = KBM.Language:Add("World Destroyer")
+DRE.Lang.Unit.World:SetFrench("Anéantisseur de mondes")
 
 -- Ability Dictionary
 DRE.Lang.Ability = {}
+DRE.Lang.Ability.Death = KBM.Language:Add("Death Zone")
+DRE.Lang.Ability.Death:SetFrench("Zone de la Mort")
+DRE.Lang.Ability.Life = KBM.Language:Add("Life Zone")
+DRE.Lang.Ability.Life:SetFrench("Zone de la Vie")
+DRE.Lang.Ability.Particles = KBM.Language:Add("")
+DRE.Lang.Ability.Particles:SetFrench("Impulsion de particules")
+DRE.Lang.Ability.Light = KBM.Language:Add("Burning Light")
+DRE.Lang.Ability.Light:SetFrench("Lumière ardente")
+DRE.Lang.Ability.World = KBM.Language:Add("Destroyed Worlds")
+DRE.Lang.Ability.World:SetFrench("Mondes anéantis")
 
 -- Verbose Dictionary
 DRE.Lang.Verbose = {}
@@ -64,33 +76,47 @@ DRE.Drekanoth = {
 	Name = DRE.Lang.Unit.Drekanoth[KBM.Lang],
 	Menu = {},
 	Dead = false,
-	--AlertsRef = {},
-	--TimersRef = {},
-	--MechRef = {},
+	AlertsRef = {},
+	TimersRef = {},
+	MechRef = {},
 	Available = false,
 	UTID = "UFF30772C5A1997A3",
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.Castbar(),
-		--TimersRef = {
-		--	Enabled = true,
-		--},
-		-- AlertsRef = {
-			-- Enabled = true,
+		TimersRef = {
+			Enabled = true,
+		},
+		AlertsRef = {
+			Enabled = true,
+			Life = KBM.Defaults.AlertObj.Create("dark_green"),
+			Death = KBM.Defaults.AlertObj.Create("red"),
+			Particles = KBM.Defaults.AlertObj.Create("purple"),
+			World = KBM.Defaults.AlertObj.Create("cyan"),
 			
-		-- },
-		-- MechRef = {
-			-- Enabled = true,
-			
-		-- },
+		},
+		MechRef = {
+			Enabled = true,	
+		},
 	}
+}
+
+DRE.World = {
+	Mod = DRE,
+	Level = "??",
+	Name = DRE.Lang.Unit.World[KBM.Lang],
+	UnitList = {},
+	Ignore = true,
+	Type = "multi",
+	UTID = "U49FBAF80263BCC10",
 }
 
 function DRE:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.Drekanoth.Name] = self.Drekanoth,
+		--[self.World.Name] = self.World,
 	}
 end
 
@@ -100,10 +126,10 @@ function DRE:InitVars()
 		CastBar = self.Drekanoth.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
-		--MechTimer = KBM.Defaults.MechTimer(),
-		--Alerts = KBM.Defaults.Alerts(),
-		--MechSpy = KBM.Defaults.MechSpy(),
-		--TimersRef = self.Drekanoth.Settings.TimersRef,
+		MechTimer = KBM.Defaults.MechTimer(),
+		Alerts = KBM.Defaults.Alerts(),
+		MechSpy = KBM.Defaults.MechSpy(),
+		TimersRef = self.Drekanoth.Settings.TimersRef,
 		AlertsRef = self.Drekanoth.Settings.AlertsRef,
 		MechRef = self.Drekanoth.Settings.MechRef,
 	}

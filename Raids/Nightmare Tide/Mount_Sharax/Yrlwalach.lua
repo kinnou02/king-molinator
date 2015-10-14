@@ -52,6 +52,8 @@ YRL.Lang.Debuff.CommunalSufferingID = "B18991A7DEFCD3CCD "
 YRL.Lang.Debuff.WISB = KBM.Language:Add("When Infinity Stares Back")
 YRL.Lang.Debuff.WISB:SetFrench("Quand les regards se croisent") --Stacks
 YRL.Lang.Debuff.WISBID = "B5183088E34D0A16E "
+YRL.Lang.Debuff.Corrupted = KBM.Language:Add("Grip of Reality")
+YRL.Lang.Debuff.Corrupted:SetFrench("Conscience libérée")
 
 -- Description Dictionary
 YRL.Lang.Main = {}
@@ -82,12 +84,14 @@ YRL.Yrlwalach = {
 			Enabled = true,
 			ContainedDepths = KBM.Defaults.AlertObj.Create("yellow"),
 			WISB = KBM.Defaults.AlertObj.Create("purple"),
+			Corrupted =KBM.Defaults.AlertObj.Create("cyan"),
 		},
 		MechRef = {
 			Enabled = true,
 			ContainedDepths = KBM.Defaults.MechObj.Create("yellow"),
 			CommunalSuffering = KBM.Defaults.MechObj.Create("red"),
 			WISB = KBM.Defaults.MechObj.Create("purple"),
+			Corrupted = KBM.Defaults.MechObj.Create("cyan"),
 		},
 	}
 }
@@ -242,12 +246,14 @@ function YRL:Start()
 	-- Create Alerts
 	self.Yrlwalach.AlertsRef.ContainedDepths = KBM.Alert:Create(self.Lang.Debuff.ContainedDepths[KBM.Lang], nil, true, true, "yellow")
 	self.Yrlwalach.AlertsRef.WISB = KBM.Alert:Create(self.Lang.Debuff.WISB[KBM.Lang], nil, true, true, "purple")
+	self.Yrlwalach.AlertsRef.Corrupted = KBM.Alert:Create(self.Lang.Debuff.Corrupted[KBM.Lang], nil, true, true, "cyan")
 	KBM.Defaults.AlertObj.Assign(self.Yrlwalach)
 
 	-- Create Spies
 	self.Yrlwalach.MechRef.ContainedDepths = KBM.MechSpy:Add(self.Lang.Debuff.ContainedDepths[KBM.Lang], nil, "playerDebuff", self.Yrlwalach)
 	self.Yrlwalach.MechRef.CommunalSuffering = KBM.MechSpy:Add(self.Lang.Debuff.CommunalSuffering[KBM.Lang], nil, "playerDebuff", self.Yrlwalach)
 	self.Yrlwalach.MechRef.WISB = KBM.MechSpy:Add(self.Lang.Debuff.WISB[KBM.Lang], nil, "playerDebuff", self.Yrlwalach)
+	self.Yrlwalach.MechRef.Corrupted = KBM.MechSpy:Add(self.Lang.Debuff.Corrupted[KBM.Lang], nil, "playerDebuff", self.Yrlwalach)
 	KBM.Defaults.MechObj.Assign(self.Yrlwalach)
 
 	-- Assign Alerts and Timers to Triggers
@@ -259,6 +265,13 @@ function YRL:Start()
 	self.Yrlwalach.Triggers.WISB:SetMinStack(8)
 	self.Yrlwalach.Triggers.WISB:AddAlert(self.Yrlwalach.AlertsRef.WISB, true)
 	self.Yrlwalach.Triggers.WISB:AddSpy(self.Yrlwalach.MechRef.WISB)
+	
+	self.Yrlwalach.Triggers.Corrupted = KBM.Trigger:Create(self.Lang.Debuff.Corrupted[KBM.Lang], "playerDebuff", self.Yrlwalach)
+	self.Yrlwalach.Triggers.Corrupted:AddAlert(self.Yrlwalach.AlertsRef.Corrupted, true)
+	self.Yrlwalach.Triggers.Corrupted:AddSpy(self.Yrlwalach.MechRef.Corrupted)
+	self.Yrlwalach.Triggers.CorruptedRem = KBM.Trigger:Create(self.Lang.Debuff.Corrupted[KBM.Lang], "playerBuffRemove", self.Yrlwalach)
+	self.Yrlwalach.Triggers.CorruptedRem:AddStop(self.Yrlwalach.AlertsRef.Corrupted, true)
+	self.Yrlwalach.Triggers.CorruptedRem:AddStop(self.Yrlwalach.MechRef.Corrupted)
 	
 	self.Yrlwalach.Triggers.CommunalSuffering = KBM.Trigger:Create(self.Lang.Debuff.CommunalSuffering[KBM.Lang], "playerDebuff", self.Yrlwalach)
 	self.Yrlwalach.Triggers.CommunalSuffering:AddSpy(self.Yrlwalach.MechRef.CommunalSuffering)

@@ -53,6 +53,9 @@ FIN.Lang.Debuff.WaterloggedID = "BFA19EC4C71EAC966"
 FIN.Lang.Debuff.Toxin = KBM.Language:Add("Toxin")
 FIN.Lang.Debuff.Toxin:SetFrench("Toxine")
 FIN.Lang.Debuff.ToxinID = "B52BE0CACC92241F4"
+FIN.Lang.Debuff.Contagion = KBM.Language:Add("Contagion")
+FIN.Lang.Debuff.Contagion:SetFrench("Contagion")
+FIN.Lang.Debuff.ContagionID = "B546F0E37E28BDE95"
 
 -- Description Dictionary
 FIN.Lang.Main = {}
@@ -68,27 +71,29 @@ FIN.Finric = {
 	Menu = {},
 	Dead = false,
 	AlertsRef = {},
-	--TimersRef = {},
-	--MechRef = {},
+	TimersRef = {},
+	MechRef = {},
 	Available = false,
 	UTID = "U5E16C7A90C01DE2D",
 	UnitID = nil,
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.Castbar(),
-		--TimersRef = {
-		--	Enabled = true,
-		--},
+		TimersRef = {
+			Enabled = true,
+			Contagion = KBM.Defaults.TimerObj.Create("red"),
+		},
 		AlertsRef = {
 			Enabled = true,
 			BrutalSwell = KBM.Defaults.AlertObj.Create("blue"),
 			RoS = KBM.Defaults.AlertObj.Create("cyan"),
 			Toxin = KBM.Defaults.AlertObj.Create("dark_green"),
+			Contagion = KBM.Defaults.AlertObj.Create("red")
 		},
-		-- MechRef = {
-			-- Enabled = true,
-			
-		-- },
+		MechRef = {
+			Enabled = true,
+			Contagion = KBM.Defaults.MechObj.Create("red"),
+		},
 	}
 }
 
@@ -105,10 +110,10 @@ function FIN:InitVars()
 		CastBar = self.Finric.Settings.CastBar,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
-		--MechTimer = KBM.Defaults.MechTimer(),
+		MechTimer = KBM.Defaults.MechTimer(),
 		Alerts = KBM.Defaults.Alerts(),
-		--MechSpy = KBM.Defaults.MechSpy(),
-		--TimersRef = self.Finric.Settings.TimersRef,
+		MechSpy = KBM.Defaults.MechSpy(),
+		TimersRef = self.Finric.Settings.TimersRef,
 		AlertsRef = self.Finric.Settings.AlertsRef,
 		MechRef = self.Finric.Settings.MechRef,
 	}
@@ -243,11 +248,14 @@ function FIN:Start()
 	self.Finric.AlertsRef.BrutalSwell = KBM.Alert:Create(self.Lang.Ability.BrutalSwell[KBM.Lang], nil, false, true, "blue")
 	self.Finric.AlertsRef.RoS = KBM.Alert:Create(self.Lang.Ability.RoS[KBM.Lang], nil, false, true, "cyan")
 	self.Finric.AlertsRef.Toxin = KBM.Alert:Create(self.Lang.Debuff.Toxin[KBM.Lang], nil, true, true, "dark_green")
+	self.Finric.AlertsRef.Contagion = KBM.Alert:Create(self.Lang.Debuff.Contagion[KBM.Lang], nil, false, true, "red")
 	KBM.Defaults.AlertObj.Assign(self.Finric)
 
 	-- Create Spies
 	
-
+	self.Finric.MechRef.Contagion = KBM.MechSpy:Add(self.Lang.Debuff.Contagion[KBM.Lang], nil, "playerDebuff", self.Finric)
+	KBM.Defaults.MechObj.Assign(self.Finric)
+	
 	-- Assign Alerts and Timers to Triggers
 	self.Finric.Triggers.BrutalSwell = KBM.Trigger:Create(self.Lang.Ability.BrutalSwell[KBM.Lang], "cast", self.Finric)
 	self.Finric.Triggers.BrutalSwell:AddAlert(self.Finric.AlertsRef.BrutalSwell)
@@ -259,6 +267,14 @@ function FIN:Start()
 	self.Finric.Triggers.Toxin:AddAlert(self.Finric.AlertsRef.Toxin, true)
 	self.Finric.Triggers.ToxinRem = KBM.Trigger:Create(self.Lang.Debuff.Toxin[KBM.Lang], "playerBuffRemove", self.Finric)
 	self.Finric.Triggers.ToxinRem:AddStop(self.Finric.AlertsRef.Toxin)
+	
+	self.Finric.Triggers.Contagion = KBM.Trigger:Create(self.Lang.Debuff.ContagionID, "playerDebuff", self.Finric)
+	self.Finric.Triggers.Contagion:AddAlert(self.Finric.AlertsRef.Contagion,true)
+	--self.Finric.Triggers.Contagion:AddTimer(self.Finric.TimersRef.Contagion)
+	self.Finric.Triggers.Contagion:AddSpy(self.Finric.MechRef.Contagion)
+	self.Finric.Triggers.ContagionRem = KBM.Trigger:Create(self.Lang.Debuff.ContagionID, "playerBuffRemove", self.Finric)
+	self.Finric.Triggers.ContagionRem:AddStop(self.Finric.AlertsRef.Contagion)
+	self.Finric.Triggers.ContagionRem:AddStop(self.Finric.MechRef.Contagion)
 	
 	self.Finric.CastBar = KBM.Castbar:Add(self, self.Finric)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)	

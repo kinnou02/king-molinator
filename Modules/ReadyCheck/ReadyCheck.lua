@@ -167,6 +167,7 @@ PI.Constants = {
 		mage = true,
 		rogue = true,
 		cleric = true,
+		primalist = true,
 	},
 	Role = {
 		tank = true,
@@ -198,6 +199,7 @@ PI.Constants = {
 					Level = 65,
 					Callings = {
 						warrior = true,
+						primalist = true,
 					},
 				},
 				["r54A72A7D7486A939"] = { -- Pelagic Powerstone
@@ -216,6 +218,7 @@ PI.Constants = {
 					Level = 65,
 					Callings = {
 						warrior = true,
+						primalist = true,
 					},
 				},
 				["r6B788FB70D2FEA29"] = { -- Primal Edge
@@ -223,6 +226,7 @@ PI.Constants = {
 					Level = 65,
 					Callings = {
 						warrior = true,
+						primalist = true,
 					},
 				},
 				["r082D24455D03DDD8"] = { -- Lightning Emblem
@@ -230,6 +234,7 @@ PI.Constants = {
 					Level = 65,
 					Callings = {
 						rogue = true,
+						primalist = true,
 					},
 				},
 				["r1B3A3BDB5E50AAC7"] = { -- Serrated Edge
@@ -238,6 +243,7 @@ PI.Constants = {
 					Callings = {
 						rogue = true,
 						warrior = true,
+						primalist = true,
 					},
 				},
 				["r7273BFB75132FBD6"] = { -- Wind Emblem
@@ -279,6 +285,7 @@ PI.Constants = {
 					Callings = {
 						rogue = true,
 						warrior = true,
+						primalist = true,
 					},
 				},
 				["r4C1AD372299AF58E"] = { -- Exceptional Oilstone
@@ -286,6 +293,7 @@ PI.Constants = {
 					Level = 60,
 					Callings = {
 						warrior = true,
+						primalist = true,
 					},
 				},
 				--////////////////////////--
@@ -306,6 +314,7 @@ PI.Constants = {
 						cleric = true,
 						warrior = true,
 						rogue = true,
+						primalist = true,
 					},
 					Role = {
 						tank = true,
@@ -317,6 +326,7 @@ PI.Constants = {
 					Callings = {
 						rogue = true,
 						warrior = true,
+						primalist = true,
 					},
 				},
                 ["r5E26E8C025B2C3BB"] = { -- Remarkable Oilstone
@@ -325,6 +335,7 @@ PI.Constants = {
                     Callings = {
                         rogue = true,
                         warrior = true,
+						primalist = true,
                     },
                 },
 				--/////////////////////--
@@ -342,6 +353,7 @@ PI.Constants = {
 					Level = 60,
 					Callings = {
 						warrior = true,
+						primalist = true,
 					},
 				},
 				["r61C14C434DDF615D"] = { -- Flaring Sigil
@@ -357,6 +369,7 @@ PI.Constants = {
 					Level = 60,
 					Callings = {
 						rogue = true,
+						primalist = true,
 					},
 				},
 				["rFBF770FC7EEEB915"] = { -- Honed Edge
@@ -364,6 +377,7 @@ PI.Constants = {
 					Level = 60,
 					Callings = {
 						rogue = true,
+						primalist = true,
 					},
 				},
 				
@@ -372,6 +386,7 @@ PI.Constants = {
 					Level = 60,
 					Callings = {
 						warrior = true,
+						primalist = true,
 					},
 				},
 				--///////////////////////////--
@@ -491,6 +506,26 @@ PI.Constants = {
 				--////////////////////--
 				-- NT High Grade Food --
 				--////////////////////--
+				["B3CA755E06191712E"] = { -- Feast of the Rhenke (AP)
+					Grade = "High",
+					Level = 65,
+					Callings = {
+						warrior = true,
+						rogue = true,
+						primalist = true,
+					},
+				},
+				["B3CA755DE889572AE"] = { -- Feast of the Rhenke (SP)
+					Grade = "High",
+					Level = 65,
+					Callings = {
+						mage = true,
+						cleric = true,
+					},
+				},
+				--////////////////////--
+				-- NT Medium Grade Food --
+				--////////////////////--
 				["B206F8F2F21AE709B"] = { -- Feast of the Ghar (AP)
 					Grade = "High",
 					Level = 65,
@@ -507,11 +542,54 @@ PI.Constants = {
 						cleric = true,
 					},
 				},
+				["B48C551A2ECED7590"] = { -- Feast of Vengeance
+					Grade = "High",
+					Level = 57,
+					Callings = {
+						mage = true,
+						cleric = true,
+						warrior = true,
+						rogue = true,
+					},
+				},
 				--//////////////--
 				-- NT Tank Food --
 				--//////////////--
-				["B2610A5816845B475"] = { -- Atragarian Remora
+				["BFA92259849A70D12"] = { -- Sea Lover's Plate
 					Grade = "High",
+					Level = 65,
+					Callings = {
+						mage = true,
+						cleric = true,
+						warrior = true,
+						rogue = true,
+						primalist = true,
+					},
+				},
+				["B784710B0CBDBC984"] = { -- Grilled Fish Medley
+					Grade = "High",
+					Level = 65,
+					Callings = {
+						mage = true,
+						cleric = true,
+						warrior = true,
+						rogue = true,
+						primalist = true,
+					},
+				},
+				["B6354CFD531F7FF39"] = { -- Beast Belly
+					Grade = "High",
+					Level = 65,
+					Callings = {
+						mage = true,
+						cleric = true,
+						warrior = true,
+						rogue = true,
+						primalist = true,
+					},
+				},
+				["B2610A5816845B475"] = { -- Atragarian Remora
+					Grade = "Medium",
 					Level = 65,
 					Callings = {
 						mage = true,
@@ -521,7 +599,7 @@ PI.Constants = {
 					},
 				},
 				["B552052821F956B42"] = { -- Sea Pea Porridge
-					Grade = "High",
+					Grade = "Medium",
 					Level = 65,
 					Callings = {
 						mage = true,
@@ -531,7 +609,7 @@ PI.Constants = {
 					},
 				},
 				["B7A9114A93DA9099D"] = { -- Zirthan Curry
-					Grade = "High",
+					Grade = "Medium",
 					Level = 65,
 					Callings = {
 						mage = true,
@@ -739,18 +817,67 @@ PI.Constants = {
 			Icons = true,
 			List = {
 				--//////////////////////--
-				-- Nightmare Tide Potions --
+				-- Nightmare Tide High Potions --
 				--//////////////////////--
-				["B4E57169B18162520"] = { -- Phenomenal Powersurge Vial
+				["B45441A66942B2875"] = { -- Illustrious Powersurge Vial
 					Grade = "High",
 					Level = 65,
 					Callings = {
 						warrior = true,
 						rogue = true,
+						primalist = true,
+					},
+				},
+				["B5FB47C7B1CE019F8"] = { -- Illustrious Brightsurge Vial
+					Grade = "High",
+					Level = 65,
+					Callings = {
+						mage = true,
+						cleric = true,
+					},
+				},
+				["B57196D010E66419C"] = { -- Illustrious Enduring Vial
+					Grade = "High",
+					Level = 65,
+					Callings = {
+						mage = true,
+						cleric = true,
+						warrior = true,
+						rogue = true,
+						primalist = true,
+					},
+					Role = {
+						tank = true,
+					},
+				},
+				["B391D5227E51E03F4"] = { -- Illustrious Fortified Vial
+					Grade = "High",
+					Level = 65,
+					Callings = {
+						mage = true,
+						cleric = true,
+						warrior = true,
+						rogue = true,
+						primalist = true,
+					},
+					Role = {
+						tank = true,
+					},
+				},
+				--//////////////////////--
+				-- Nightmare Tide Low Potions --
+				--//////////////////////--
+				["B4E57169B18162520"] = { -- Phenomenal Powersurge Vial
+					Grade = "Medium",
+					Level = 65,
+					Callings = {
+						warrior = true,
+						rogue = true,
+						primalist = true,
 					},
 				},
 				["B2A1357781A34EE07"] = { -- Phenomenal Brightsurge Vial
-					Grade = "High",
+					Grade = "Medium",
 					Level = 65,
 					Callings = {
 						mage = true,
@@ -758,26 +885,28 @@ PI.Constants = {
 					},
 				},
 				["B00FB053AEBE90DDB"] = { -- Phenomenal Enduring Vial
-					Grade = "High",
+					Grade = "Medium",
 					Level = 65,
 					Callings = {
 						mage = true,
 						cleric = true,
 						warrior = true,
 						rogue = true,
+						primalist = true,
 					},
 					Role = {
 						tank = true,
 					},
 				},
 				["B406B67171AED5182"] = { -- Phenomenal Fortified Vial
-					Grade = "High",
+					Grade = "Medium",
 					Level = 65,
 					Callings = {
 						mage = true,
 						cleric = true,
 						warrior = true,
 						rogue = true,
+						primalist = true,
 					},
 					Role = {
 						tank = true,
@@ -1528,6 +1657,8 @@ function PI.GUI:Init()
 							self[Index].Text:SetFontColor(1, 0.55, 0.55, 1)
 						elseif Class == "rogue" then
 							self[Index].Text:SetFontColor(1, 1, 0.55, 1)
+						elseif Class == "primalist" then
+							self[Index].Text:SetFontColor(0.23, 0.84, 1, 1)
 						else
 							self[Index].Text:SetFontColor(1,1,1,1)
 						end

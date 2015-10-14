@@ -50,7 +50,7 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Sandswarm = KBM.Language:Add(MOD.Sandswarm.Name)
 MOD.Lang.Unit.Sandswarm:SetGerman("Sandschwarm-Ansturm")
-MOD.Lang.Unit.Sandswarm:SetFrench("assaut des Sablenuées")
+MOD.Lang.Unit.Sandswarm:SetFrench("Assaut des Sablenuées")
 MOD.Sandswarm.Name = MOD.Lang.Unit.Sandswarm[KBM.Lang]
 MOD.Descript = MOD.Sandswarm.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Sandswarm")

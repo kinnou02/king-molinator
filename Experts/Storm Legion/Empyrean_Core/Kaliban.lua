@@ -50,7 +50,7 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Kaliban = KBM.Language:Add(MOD.Kaliban.Name)
 MOD.Lang.Unit.Kaliban:SetGerman("Prinz Kaliban")
-MOD.Lang.Unit.Kaliban:SetFrench("prince Kaliban")
+MOD.Lang.Unit.Kaliban:SetFrench("Prince Kaliban")
 MOD.Kaliban.Name = MOD.Lang.Unit.Kaliban[KBM.Lang]
 MOD.Descript = MOD.Kaliban.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Kaliban")

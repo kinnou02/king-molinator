@@ -53,7 +53,7 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Cowel = KBM.Language:Add(MOD.Cowel.Name)
 MOD.Lang.Unit.Cowel:SetGerman("Aufseher Cowel")
-MOD.Lang.Unit.Cowel:SetFrench("superviseur Cowel")
+MOD.Lang.Unit.Cowel:SetFrench("Superviseur Cowel")
 MOD.Cowel.Name = MOD.Lang.Unit.Cowel[KBM.Lang]
 MOD.Descript = MOD.Cowel.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Cowel")

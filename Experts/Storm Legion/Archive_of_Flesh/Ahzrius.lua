@@ -71,6 +71,7 @@ MOD.Ahzrius.NameShort = MOD.Lang.Unit.AndShort[KBM.Lang]
 MOD.Lang.Ability = {}
 MOD.Lang.Ability.Drastic = KBM.Language:Add("Drastic Renovations")
 MOD.Lang.Ability.Drastic:SetGerman("Drastische Sanierung")
+MOD.Lang.Ability.Drastic:SetFrench("Rénovations drastiques")
 
 function MOD:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript

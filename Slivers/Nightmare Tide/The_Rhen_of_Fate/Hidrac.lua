@@ -49,7 +49,7 @@ HOW.Lang.Debuff = {}
 
 -- Description Dictionary
 HOW.Lang.Main = {}
-HOW.Lang.Main.Descript = KBM.Language:Add("Hidrac, Oonta and Weyloz")
+HOW.Lang.Main.Descript = KBM.Language:Add("Hidrac, Oonta & Weyloz")
 HOW.Descript = HOW.Lang.Main.Descript[KBM.Lang]
 
 -- Assign Boss to Language Specific Dictionary

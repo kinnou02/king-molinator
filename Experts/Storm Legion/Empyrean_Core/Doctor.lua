@@ -50,7 +50,7 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Doctor = KBM.Language:Add(MOD.Doctor.Name)
 MOD.Lang.Unit.Doctor:SetGerman("Doktor Perfidus")
-MOD.Lang.Unit.Doctor:SetFrench("Docteur fou")
+MOD.Lang.Unit.Doctor:SetFrench("Docteur Perfidus")
 MOD.Doctor.Name = MOD.Lang.Unit.Doctor[KBM.Lang]
 MOD.Descript = MOD.Doctor.Name
 MOD.Lang.Unit.AndShort = KBM.Language:Add("Doctor")

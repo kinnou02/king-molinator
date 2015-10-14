@@ -40,7 +40,7 @@ MOD.Lang.Unit.Mercutial:SetGerman()
 MOD.Lang.Unit.Mercutial:SetFrench()
 MOD.Lang.Unit.MerShort = KBM.Language:Add("Mercutial")
 MOD.Lang.Unit.MerShort:SetGerman()
-MOD.Lang.Unit.MerShort:SetFrench()
+MOD.Lang.Unit.MerShort:SetFrench("Mercutiale")
 
 MOD.Strauz = {
 	Mod = MOD,
