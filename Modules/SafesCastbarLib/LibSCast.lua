@@ -1494,9 +1494,11 @@ function LibSCast:Create(ID, Parent, Pack, Settings, Style)
 		function CastObj:Stop()
 			-- Stop tracking, and remove UI and place it in cache for recycling. (Used with CastObj:Start)
 			-- Use this for simple removal from the castbar engine.
-			if self.Enabled then
-				if self.CurrentBar then
-					self.CurrentBar:Stop()
+			if not self.Passive then
+				if self.Enabled then
+					if self.CurrentBar then
+						self.CurrentBar:Stop()
+					end
 				end
 			end
 			self.UnitID = nil
@@ -1530,32 +1532,42 @@ function LibSCast:Create(ID, Parent, Pack, Settings, Style)
 		
 		function CastObj:Begin(CastData)
 			self.CastData = CastData
-			if self.Enabled then
-				self.CurrentBar:Begin(CastData)
+			if not self.Passive then
+				if self.Enabled then
+					self.CurrentBar:Begin(CastData)
+				end
 			end
 		end
 		
 		function CastObj:End()
-			if self.Enabled then
-				self.CurrentBar:End()
+			if not self.Passive then
+				if self.Enabled then
+					self.CurrentBar:End()
+				end
 			end
 		end
 		
 		function CastObj:Interrupt()
-			if self.Enabled then
-				self.CurrentBar:Interrupt()
+			if not self.Passive then
+				if self.Enabled then
+					self.CurrentBar:Interrupt()
+				end
 			end
 		end
 		
 		function CastObj:EndNoAnim()
-			if self.Enabled then
-				self.CurrentBar:Stop()
+			if not self.Passive then
+				if self.Enabled then
+					self.CurrentBar:Stop()
+				end
 			end
 		end
 		
 		function CastObj:Update(remaining)
-			if self.Enabled then
-				self.CurrentBar:Queue(remaining)
+			if not self.Passive then
+				if self.Enabled then
+					self.CurrentBar:Queue(remaining)
+				end
 			end
 		end
 		
