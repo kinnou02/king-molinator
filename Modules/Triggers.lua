@@ -1,5 +1,8 @@
 ﻿local AddonIni, KBM = ...
 
+local LSUIni = Inspect.Addon.Detail("SafesUnitLib")
+local LibSUnit = LSUIni.data
+
 function KBM.Trigger:Init()
 	self.Queue = {}
 	self.Queue.Locked = false
