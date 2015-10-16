@@ -1,9 +1,13 @@
-﻿* Known Bugs
+﻿
+* Known Bugs
 ** Ungolok: warning for Ink Blast ability doesn't work.
 ** Threngar: warning for the Untold Horror (Akvan Monstrosity ability) doesn't work.
 ** Pumpkin: Sovereign Fervor timer doesn't reset on P1->P2 transition.
 ** Possible crash on Glacieus (Citadel of Insanity) on frost strike cast
 ** Zilas' adds are their castbar disabled due to crash
+
+1.7.3.794 (Alpha)
+* Fixed: Error with Phase Monitor code. (Missing LibSUnit)
 
 1.7.3.793 (Alpha)
 * Code Structure (Moved from KingMolinator.lua)

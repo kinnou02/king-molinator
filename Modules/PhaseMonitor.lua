@@ -3,6 +3,9 @@
 local LibSataIni = Inspect.Addon.Detail("SafesTableLib")
 local LibSata = LibSataIni.data
 
+local LSUIni = Inspect.Addon.Detail("SafesUnitLib")
+local LibSUnit = LSUIni.data
+
 function KBM.PhaseMonitor:PullObjective()
 	local GUI  = {}
 	if #self.ObjectiveStore > 0 then
