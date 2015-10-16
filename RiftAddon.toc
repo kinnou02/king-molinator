@@ -10,12 +10,19 @@ Author = "Safe@Deepwood"
 Website = "http://www.facebook.com/KingBossMods"
 Email = "kingbossmods@gmail.com"
 
-Version = "1.7.2.792"
+Version = "1.7.3.793"
 
 Environment = "3.4"
 
 RunOnStartup = {
 	"KingMolinator.lua",
+	"Modules/Triggers.lua",
+	"Modules/Alerts.lua",
+	"Modules/MechTimer.lua",
+	"Modules/MechSpy.lua",
+	"Modules/PhaseMonitor.lua",
+	"Modules/EncounterTimer.lua",
+	"Modules/TankSwap.lua",
 	"Modules/Menu/MainMenu.lua",
 	"Modules/Menu/Build.lua",
 	"Modules/Menu/Objects/Objects.lua",

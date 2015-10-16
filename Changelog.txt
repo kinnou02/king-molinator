@@ -1,138 +1,145 @@
-﻿Known Bugs
-Ungolok: warning for Ink Blast ability doesn't work.
-Threngar: warning for the Untold Horror (Akvan Monstrosity ability) doesn't work.
-Pumpkin: Sovereign Fervor timer doesn't reset on P1->P2 transition.
-Possible crash on Glacieus (Citadel of Insanity) on frost strike cast
-Zilas' adds are their castbar disabled due to crash
+﻿* Known Bugs
+** Ungolok: warning for Ink Blast ability doesn't work.
+** Threngar: warning for the Untold Horror (Akvan Monstrosity ability) doesn't work.
+** Pumpkin: Sovereign Fervor timer doesn't reset on P1->P2 transition.
+** Possible crash on Glacieus (Citadel of Insanity) on frost strike cast
+** Zilas' adds are their castbar disabled due to crash
+
+1.7.3.793 (Alpha)
+* Code Structure (Moved from KingMolinator.lua)
+** Moved: Alert code to /Modules/Alerts.lua
+** Moved: Encounter Timer code to /Modules/EncounterTimer.lua
+** Moved: Machanic Spy code to /Modules/MechSpy.lua
+** Moved: Mechanic Timer code to /Modules/MechTimer.lua
+** Moved: Phase Monitor code to /Modules/PhaseMonitor.lua
+** Moved: Tank Swap code to /Modules/TankSwap.lua
+** Moved: Trigger code to /Modules/Triggers.lua
 
 1.7.0
-
-General
-	Adding new vials/feast/food. thanks to Kapnia for the IDs
-	
-Uruluuk
-	Adding Crashing Boulders Alert
-	Change the phase trigger from 30% to 20%
-	thanks to Maatang for the adding
-	
-Sicaron
-	Adding tank swap mechanic
-	
-Issues
-	Possible crash on Glacieus (Citadel of Insanity) on frost strike cast
-	Zilas' adds are their castbar disabled due to crash
+* General
+** Adding new vials/feast/food. thanks to Kapnia for the IDs
+* Uruluuk
+** Adding Crashing Boulders Alert
+** Change the phase trigger from 30% to 20%
+** thanks to Maatang for the adding
+* Sicaron
+** Adding tank swap mechanic
+* Issues
+** Possible crash on Glacieus (Citadel of Insanity) on frost strike cast
+** Zilas' adds are their castbar disabled due to crash
 
 1.6.0.791.1
-
-Threngar
-	Adding Condemn Alert
-Intrepid Golden Prophecy
-	Update of All UTIDs
-	Anrak:
-		Adding SandStorm Alert
-		Correct Earth Spines translation for french client
-Expert Dungeons: 
-	Adding all 6 NT Experts with french client translation
-	2 Boss disabled: Hydal Ithral and Arak from Nightmare Coast
+* Threngar
+** Adding Condemn Alert
+* Intrepid Golden Prophecy
+** Update of All UTIDs
+** Anrak:
+*** Adding SandStorm Alert
+*** Correct Earth Spines translation for french client
+* Expert Dungeons: 
+** Adding all 6 NT Experts with french client translation
+** 2 Boss disabled: Hydal Ithral and Arak from Nightmare Coast
 
 1.6.0.790.10 
-Threngar
-	Fixed tank swap module, stacks and duration of Shadow Glaive should be correctly displayed.
-	Removed warning and mechanic spy for Shadow Glaive.
-Finric
-	Fixed tank swap module, stacks and duration of Waterlogged should be correctly displayed.
-	Added Timer and warning for Contagion.
-Ungolok
-	Added a warning for Building Pressure.
-	Added a warning for Fatal Current.
-General
-	Resmaster: Corrected to include reset after accepting resurrection from Call of the Ascended. Courtesy of Leitsha from official Rift forum. The Players must have KBM updated in order to do it working
-	Added Feast of vengeance to ready check.
-	Experimental: Added files for Intrepid: Gilded Prophecy
-	File rearrangement: Rift 1.0 - 1.9 expert dungeons and raids have been grouped in a subdirectory.
+* Threngar
+** Fixed tank swap module, stacks and duration of Shadow Glaive should be correctly displayed.
+** Removed warning and mechanic spy for Shadow Glaive.
+* Finric
+** Fixed tank swap module, stacks and duration of Waterlogged should be correctly displayed.
+** Added Timer and warning for Contagion.
+* Ungolok
+** Added a warning for Building Pressure.
+** Added a warning for Fatal Current.
+* General
+** Resmaster: Corrected to include reset after accepting resurrection from Call of the Ascended. Courtesy of Leitsha from official Rift forum. The Players must have KBM updated in order to do it working
+** Added Feast of vengeance to ready check.
+** Experimental: Added files for Intrepid: Gilded Prophecy
+** File rearrangement: Rift 1.0 - 1.9 expert dungeons and raids have been grouped in a subdirectory.
 
 1.6.0.790.9
-Hammerknell
-	Sicaron: Change of UTID to mirror the change in game.
-	Murdantix: Added a timer for Demonic Leash cast.
-	Pumpkin: Added timers for Sovereign Fervor and Scrapyard Rumble.
-General
-	Added a particular module for Reflects. Courtesy of Tekt who developed the original macro. This module is triggered automatically, only on following fights:
-		Laethys - Infernal Dawn
-		Laethys - Bindings of Blood: Laethys
-		Planebreaker Abominus
-	It works to modify the raid frame of person who needs to be reflected.
-	Doesn't work with Gadgets Raid Frames or ClickBox Healer.
+* Hammerknell
+** Sicaron: Change of UTID to mirror the change in game.
+** Murdantix: Added a timer for Demonic Leash cast.
+** Pumpkin: Added timers for Sovereign Fervor and Scrapyard Rumble.
+* General
+** Added a particular module for Reflects. Courtesy of Tekt who developed the original macro. This module is triggered automatically, only on following fights:
+*** Laethys - Infernal Dawn
+*** Laethys - Bindings of Blood: Laethys
+*** Planebreaker Abominus
+* It works to modify the raid frame of person who needs to be reflected.
+* Doesn't work with Gadgets Raid Frames or ClickBox Healer.
 
 1.6.0.790.8
-Jinoscoth
-	Display correction for Iced interrupt warning.
-Threngar
-	Correction of P3 to P4 transition.
-Murdantix
-	Added a timer for Demonic Leash.
-Molinar
-	Modified the maximum percentage difference allowed between King and Prince (7%->4%)
+* Jinoscoth
+** Display correction for Iced interrupt warning.
+* Threngar
+** Correction of P3 to P4 transition.
+* Murdantix
+** Added a timer for Demonic Leash.
+* Molinar
+** Modified the maximum percentage difference allowed between King and Prince (7%->4%)
 
 1.6.0.790.7
-Threngar
-	Fixed a miscoded debuff causing a crash on clients other than French.
-Hammerknell
-	Fixed an error in raid header causing crashes on all bosses in the instance. (?)
+* Threngar
+** Fixed a miscoded debuff causing a crash on clients other than French.
+* Hammerknell
+** Fixed an error in raid header causing crashes on all bosses in the instance. (?)
 
 1.6.0.790.6
-Ready Check: Added buff Zirthan Curry (Tank food)
-Mount Sharax
-	Jinoscoth
-		Added interrupt warning for Frost Bulwark.
-		Added interrupt warning for Iced.
-	Threngar
-		Threngar
-			Added mechanic Conduit of Martrodraum (Dispell)
-			Added Mechanic Dark Binding (Meteor)
-			Added mechanic Sacrificial Offering (Interrupt)
-		Akvan Monstrosity
-			Added mechanic Untold Horror (Interrupt)
-			Added Mechanic Seed of Madness (Dispell)
-Hammerknell
-	Moved the instance from Rift part to Nightmare Tide part.
-	Reset of records for bosses.
-	Murdantix
-		Added mechanic Demonic Leash (player stacks on boss)
-Reorganization of RiftAddon.toc file
-Grouped boss variables and added comments.
-Hierarchization of loaded files and variables.
+* Ready Check
+** Added buff Zirthan Curry (Tank food)
+* Mount Sharax
+** Jinoscoth
+*** Added interrupt warning for Frost Bulwark.
+*** Added interrupt warning for Iced.
+* Threngar
+** Threngar
+*** Added mechanic Conduit of Martrodraum (Dispell)
+*** Added Mechanic Dark Binding (Meteor)
+*** Added mechanic Sacrificial Offering (Interrupt)
+** Akvan Monstrosity
+*** Added mechanic Untold Horror (Interrupt)
+*** Added Mechanic Seed of Madness (Dispell)
+* Hammerknell
+** Moved the instance from Rift part to Nightmare Tide part.
+** Reset of records for bosses.
+** Murdantix
+*** Added mechanic Demonic Leash (player stacks on boss)
+* Reorganization of RiftAddon.toc file
+* Grouped boss variables and added comments.
+* Hierarchization of loaded files and variables.
 
 1.6.0.790.5
-Threngar
-	Fixed a bug causing addon crash on death of the boss.
-Johan
-	Fixed a bug causing addon crash on death of the boss.
-Pumpkin
-	Corrected the name of the boss.
-	Added translations for french client:
-		Scrapyard Rumble
-		Sovereign Fervor
-	Added tank swap debuff and its translation for french client.
+* Threngar
+** Fixed a bug causing addon crash on death of the boss.
+* Johan
+** Fixed a bug causing addon crash on death of the boss.
+* Pumpkin
+** Corrected the name of the boss.
+** Added translations for french client:
+*** Scrapyard Rumble
+*** Sovereign Fervor
+** Added tank swap debuff and its translation for french client.
 
 1.6.0.790.4
-Finric
-	Corrected translation of Rage of Storms in french client
-Threngar
-	Added a template for Akvan Monstrosity
-	Added interrupt mechanic.
-Johan
-	Added warning for Tactical anchor cast.
+* Finric
+** Corrected translation of Rage of Storms in french client
+* Threngar
+** Added a template for Akvan Monstrosity
+** Added interrupt mechanic.
+* Johan
+** Added warning for Tactical anchor cast.
 
 1.6.0.790.3
-Johan
-	correction of translation
-	Added Overload ability.
+* Johan
+** Correction of translation
+** Added Overload ability.
 
 1.6.0.790.2
-Partially added Mount Sharax raid, missing first and third boss. Translated for French client.
-Added full Tyrant Forge raid Johan translation is Ready, (and then something about getting Pumpkin/Crucia translation from French vid?)
-Translation of R10 for French clients
+* Partially added Mount Sharax raid, missing first and third boss.
+* Translated for French client.
+* Added full Tyrant Forge raid Johan translation is Ready, (and then something about getting Pumpkin/Crucia translation from French vid?)
+* Translation of R10 for French clients
 
 v1.6.0
 
