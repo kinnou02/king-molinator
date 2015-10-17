@@ -1,5 +1,8 @@
 ﻿local AddonIni, KBM = ...
 
+local LSUIni = Inspect.Addon.Detail("SafesUnitLib")
+local LibSUnit = LSUIni.data
+
 function KBM.TankSwap:Pull()
 	local GUI = {}
 	if #self.TankStore > 0 then

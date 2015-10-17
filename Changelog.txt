@@ -6,6 +6,9 @@
 ** Possible crash on Glacieus (Citadel of Insanity) on frost strike cast
 ** Zilas' adds are their castbar disabled due to crash
 
+1.7.3.797
+* Fixed: Error with TankSwap code. (Missing LibSUnit)
+
 1.7.3.796
 * Changed: LibSCast 2.1. Attempt to fix Passive style castbars (Akylios & Zilas adds)
 
