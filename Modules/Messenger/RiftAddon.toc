@@ -9,9 +9,9 @@ Author = "Paul Snart"
 Website = "http://twitter.com/#!/psnart"
 Email = "snarty@gmail.com"
 
-Version = "0.1.0"
+Version = "0.1.1"
 
-Environment = "1.10", "1.11", "2.0"
+Environment = "3.4"
 
 RunOnStartup = {
 	"Messenger.lua",
@@ -24,7 +24,3 @@ SavedVariables = {
 Dependencies = {
 	KingMolinator = {"required", "before"},
 }
--- X-Curse-Packaged-Version: r790
--- X-Curse-Project-Name: King Boss Mods
--- X-Curse-Project-ID: king-molinator
--- X-Curse-Repository-ID: rift/king-molinator/mainline

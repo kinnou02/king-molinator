@@ -6,6 +6,9 @@
 ** Possible crash on Glacieus (Citadel of Insanity) on frost strike cast
 ** Zilas' adds are their castbar disabled due to crash
 
+1.7.3.801
+* Fixed: Updated and corrected version checking in Messenger.lua
+
 1.7.3.800
 * Fixed: Incorrect checking flow for version number.
 
