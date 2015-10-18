@@ -222,10 +222,10 @@ function KBM.Version:Check(High, Mid, Low, Revision)
 					if Mid < self.Mid then
 						return true
 					else
-						if Low <= self.Low then
+						if Low < self.Low then
 							return true
 						else
-							if Revision <= self.Revision then
+							if Revision < self.Revision then
 								return true
 							else
 								return false
@@ -233,7 +233,7 @@ function KBM.Version:Check(High, Mid, Low, Revision)
 						end
 					end
 				else
-					return
+					return false
 				end
 			end
 		else
