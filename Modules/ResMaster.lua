@@ -213,6 +213,15 @@ function RM.GUI:Init()
 		end
 	end
 	self:ApplySettings()
+	
+	function self:SetDefault()
+		self.Settings.x = nil
+		self.Settings.y = nil
+		self.Settings.wScale = 1
+		self.Settings.hScale = 1
+		self.Settings.tScale = 1
+		self:ApplySettings()
+	end
 end
 
 function RM.Rezes:Init()

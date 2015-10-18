@@ -6,6 +6,10 @@
 ** Possible crash on Glacieus (Citadel of Insanity) on frost strike cast
 ** Zilas' adds are their castbar disabled due to crash
 
+1.7.3.799
+* New: Added "/kbmdefault RezMaster" slash command to reset the size and position.
+* Note: Use /kbmdefault to get a list of available default options.
+
 1.7.3.798
 * Fixed: Error with TankSwap code. (Missing LibSUnit)
 * Inlcudes curse packager push.

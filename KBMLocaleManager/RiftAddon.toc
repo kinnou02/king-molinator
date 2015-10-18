@@ -9,9 +9,9 @@ Author = "Paul Snart"
 Website = "http://twitter.com/#!/psnart"
 Email = "kingbossmods@gmail.com"
 
-Version = "0.1.5"
+Version = "0.1.6"
 
-Environment = "2.4"
+Environment = "3.4"
 
 RunOnStartup = {
 	"Locale.lua",

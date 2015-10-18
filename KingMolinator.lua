@@ -2748,6 +2748,10 @@ function KBM.SetDefault.bosscastbar()
 	KBM.Castbar.Anchor.cradle:SetPoint("CENTER", UIParent, KBM.Options.Castbar.Global.relX, KBM.Options.Castbar.Global.relY)
 end
 
+function KBM.SetDefault.resmaster()
+	KBM.ResMaster.GUI:SetDefault()
+end
+
 function KBM.SetDefault.castbars()
 	KBM.SetDefault.playercastbar()
 	KBM.SetDefault.targetcastbar()
@@ -2776,7 +2780,8 @@ function KBM.SlashDefault(handle, Args)
 		print("FocusCastbar\t: Resets the Player's Focus Castbar position.")
 		print("BossCastbar\t: Resets the Global Boss Castbar position.")
 		print("Castbars\t: Resets all Global and Player castbar positions.")
-		print("For exmaple: /kbmdefault button")
+		print("ResMaster\t: Resets the size and position for ResMaster.")
+		print("For exmaple: /kbmdefault button.")
 	end
 end
 
