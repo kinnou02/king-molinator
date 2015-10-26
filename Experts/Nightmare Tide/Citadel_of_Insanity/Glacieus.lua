@@ -220,11 +220,11 @@ function MOD:Start()
 	--KBM.Defaults.TimerObj.Assign(self.Baird)
 	
 	-- Create Alerts
-	self.Glacieus.AlertsRef.Spike = KBM.Alert:Create(self.Lang.Notify.Spike[KBM.Lang],nil, false, true, "red")
+	self.Glacieus.AlertsRef.Spike = KBM.Alert:Create(self.Lang.Ability.Strike[KBM.Lang],nil, false, true, "red")
 	KBM.Defaults.AlertObj.Assign(self.Glacieus)
 	
 	-- Assign Alerts and Timers to Triggers
-	self.Glacieus.Triggers.Spike = KBM.Trigger:Create(self.Lang.Notify.Spike[KBM.Lang], "notify", self.Glacieus)
+	self.Glacieus.Triggers.Spike = KBM.Trigger:Create(self.Lang.Ability.Strike[KBM.Lang], "cast", self.Glacieus)
 	self.Glacieus.Triggers.Spike:AddAlert(self.Glacieus.AlertsRef.Spike, true)
 	
 	self.Glacieus.CastBar = KBM.Castbar:Add(self, self.Glacieus)
