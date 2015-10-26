@@ -10,7 +10,7 @@ Author = "Safe@Deepwood"
 Website = "http://www.facebook.com/KingBossMods"
 Email = "kingbossmods@gmail.com"
 
-Version = "1.7.3.801"
+Version = "1.7.3.802"
 
 Environment = "3.4"
 
@@ -174,7 +174,7 @@ RunOnStartup = {
 			
 		-- Nightmare Coast
 			"Experts/Nightmare Tide/Nightmare_Coast/NC_Header.lua",
-			--"Experts/Nightmare Tide/Nightmare_Coast/Hydal.lua",
+			"Experts/Nightmare Tide/Nightmare_Coast/Hydal.lua",
 			"Experts/Nightmare Tide/Nightmare_Coast/Akylios.lua",
 			"Experts/Nightmare Tide/Nightmare_Coast/Dalraak.lua",
 			--"Experts/Nightmare Tide/Nightmare_Coast/Arak.lua",
