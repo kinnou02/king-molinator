@@ -98,7 +98,7 @@ SZ.Lang.Unit.SpiritShort:SetKorean("영혼")
 SZ.Lang.Ability = {}
 SZ.Lang.Ability.Grasp = KBM.Language:Add("Soulrender's Grasp")
 SZ.Lang.Ability.Grasp:SetGerman("Seelenreißer-Griff")
-SZ.Lang.Ability.Grasp:SetFrench("Poigne d'Étripeur d'âmes")
+SZ.Lang.Ability.Grasp:SetFrench("Poigne d'Étripeur d'âme")
 SZ.Lang.Ability.Grasp:SetRussian("Хватка душедера")
 SZ.Lang.Ability.Grasp:SetKorean("영혼분열자의 손아귀")
 SZ.Lang.Ability.Cede = KBM.Language:Add("Cede Spirit")
@@ -181,9 +181,11 @@ function SZ:InitVars()
 			AlertsRef = self.Zilas.Settings.AlertsRef,
 		},
 		Imp = {
+			CastBar = self.Imp.Settings.CastBar,
 			AlertsRef = self.Imp.Settings.AlertsRef,
 		},
 		Spirit = {
+			CastBar = self.Spirit.Settings.CastBar,
 			AlertsRef = self.Spirit.Settings.AlertsRef,
 		},
 	}
@@ -295,13 +297,13 @@ function SZ:UnitHPCheck(uDetails, unitID)
 							Available = true,
 						}
 						self.Bosses[uDetails.name].UnitList[unitID] = SubBossObj
-						-- if uDetails.name == self.Imp.Name then
-							-- SubBossObj.CastBar = KBM.Castbar:Add(self, self.Imp, false, true)
-							-- SubBossObj.CastBar:Create(unitID)
-						-- elseif uDetails.name == self.Spirit.Name then
-							-- SubBossObj.CastBar = KBM.Castbar:Add(self, self.Spirit, false, true)
-							-- SubBossObj.CastBar:Create(unitID)
-						-- end
+						if uDetails.name == self.Imp.Name then
+							SubBossObj.CastBar = KBM.Castbar:Add(self, self.Imp, false, true)
+							SubBossObj.CastBar:Create(unitID)
+						elseif uDetails.name == self.Spirit.Name then
+							SubBossObj.CastBar = KBM.Castbar:Add(self, self.Spirit, false, true)
+							SubBossObj.CastBar:Create(unitID)
+						end
 					else
 						self.Bosses[uDetails.name].UnitList[unitID].Available = true
 						self.Bosses[uDetails.name].UnitList[unitID].UnitID = unitID
