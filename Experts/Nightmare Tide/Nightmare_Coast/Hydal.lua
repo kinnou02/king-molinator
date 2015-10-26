@@ -43,6 +43,7 @@ MOD.Lang.Verbose = {}
 -- Buff Dictionary
 MOD.Lang.Buff = {}
 MOD.Lang.Buff.Devour = KBM.Language:Add("Devour Fear")
+MOD.Lang.Buff.Devour:SetFrench("Peur vampirisée")
 
 -- Debuff Dictionary
 MOD.Lang.Debuff = {}
