@@ -62,6 +62,7 @@ DRE.Lang.Debuff = {}
 DRE.Lang.Debuff.Vulnerability = KBM.Language:Add("Arcane Vulnerability")
 DRE.Lang.Debuff.Vulnerability:SetFrench("Vulnérabilité d'arcane")
 DRE.Lang.Debuff.VulnerabilityID = "B7610E896163D0166"
+DRE.Lang.Debuff.Erase = KBM.Language:Add("Erase")
 
 -- Description Dictionary
 DRE.Lang.Main = {}
@@ -215,6 +216,7 @@ function DRE:UnitHPCheck(uDetails, unitID)
 				self.PhaseObj:SetPhase("1")
 				self.PhaseObj.Objectives:AddPercent(self.Drekanoth, 0, 100)
 				self.Phase = 1
+				KBM.TankSwap:Start(self.Lang.Debuff.Erase[KBM.Lang], unitID)
 			else
 				BossObj.Dead = false
 				BossObj.Casting = false

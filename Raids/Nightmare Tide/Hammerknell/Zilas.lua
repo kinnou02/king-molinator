@@ -24,6 +24,7 @@ local SZ = {
 	Lang = {},
 	ID = "Zilas",
 	Object = "SZ",
+	Enrage = 15 * 60,
 }
 
 SZ.Zilas = {
@@ -384,7 +385,7 @@ function SZ:Start()
 	-- Create Alerts
 	-- Zilas
 	self.Zilas.AlertsRef.GraspWarn = KBM.Alert:Create(self.Lang.Ability.Grasp[KBM.Lang], 5, true, true)
-	self.Zilas.AlertsRef.Grasp = KBM.Alert:Create(self.Lang.Ability.Grasp[KBM.Lang], 9, false, true)
+	self.Zilas.AlertsRef.Grasp = KBM.Alert:Create(self.Lang.Ability.Grasp[KBM.Lang], nil, false, true)
 	self.Zilas.AlertsRef.Grasp:NoMenu()
 	-- Escaped Imp
 	self.Imp.AlertsRef.Cede = KBM.Alert:Create(self.Lang.Ability.Cede[KBM.Lang], nil, false, true, "yellow")
@@ -398,10 +399,12 @@ function SZ:Start()
 	
 	-- Assign Mechanics to Triggers.
 	-- Zilas
-	self.Zilas.Triggers.Grasp = KBM.Trigger:Create(self.Lang.Ability.Grasp[KBM.Lang], "cast", self.Zilas)
-	self.Zilas.Triggers.Grasp:AddTimer(self.Zilas.TimersRef.Grasp)
-	self.Zilas.Triggers.Grasp:AddAlert(self.Zilas.AlertsRef.GraspWarn)
-	self.Zilas.AlertsRef.GraspWarn:AlertEnd(self.Zilas.AlertsRef.Grasp)
+	self.Zilas.Triggers.GraspWarn = KBM.Trigger:Create(self.Lang.Ability.Grasp[KBM.Lang], "cast", self.Zilas)
+	self.Zilas.Triggers.GraspWarn:AddTimer(self.Zilas.TimersRef.Grasp)
+	self.Zilas.Triggers.GraspWarn:AddAlert(self.Zilas.AlertsRef.GraspWarn)
+	--self.Zilas.Alerts.GraspWarn:AlertEnd(self.Zilas.AlertsRef.Grasp)
+	self.Zilas.Triggers.Grasp = KBM.Trigger:Create(self.Lang.Ability.Grasp[KBM.Lang], "channel", self.Zilas)
+	self.Zilas.Triggers.Grasp:AddAlert(self.Zilas.AlertsRef.Grasp)
 	self.Zilas.Triggers.PhaseTwo = KBM.Trigger:Create(90, "percent", self.Zilas)
 	self.Zilas.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
 	self.Zilas.Triggers.PhaseThree = KBM.Trigger:Create(70, "percent", self.Zilas)

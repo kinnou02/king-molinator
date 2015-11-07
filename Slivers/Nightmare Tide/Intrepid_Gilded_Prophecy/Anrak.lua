@@ -59,6 +59,7 @@ AF.Anrak = {
 		MechRef = {
 			Enabled = true,
 			Venom = KBM.Defaults.MechObj.Create("dark_green"),
+			Beam = KBM.Defaults.MechObj.Create("red"),
 		},
 	},
 }
@@ -99,6 +100,7 @@ AF.Lang.Ability.Bond:SetRussian("Земляное усиление")
 AF.Lang.Ability.Bond:SetKorean("대지의 결속")
 AF.Lang.Ability.Storm = KBM.Language:Add("Sandstorm")
 AF.Lang.Ability.Storm:SetFrench("Tempête de sable")
+AF.Lang.Ability.Beam = KBM.Language:Add("Eye Beam")
 
 -- Debuff Dictionary
 AF.Lang.Debuff = {}
@@ -248,6 +250,7 @@ function AF:Start()
 	
 	-- Create Mechanic Spies
 	self.Anrak.MechRef.Venom = KBM.MechSpy:Add(self.Lang.Debuff.Venom[KBM.Lang], nil, "playerDebuff", self.Anrak)
+	self.Anrak.MechRef.Beam = KBM.MechSpy:Add(self.Lang.Ability.Beam[KBM.Lang], nil, "channel", self.Anrak)
 	KBM.Defaults.MechObj.Assign(self.Anrak)
 	
 	-- Create Alerts
@@ -279,6 +282,8 @@ function AF:Start()
 	self.Anrak.Triggers.VenomRemove:AddStop(self.Anrak.MechRef.Venom)
 	self.Anrak.Triggers.Storm = KBM.Trigger:Create(self.Lang.Ability.Storm[KBM.Lang], "channel", self.Anrak)
 	self.Anrak.Triggers.Storm:AddAlert(self.Anrak.AlertsRef.Storm)
+	self.Anrak.Triggers.Beam = KBM.Trigger:Create(self.Lang.Ability.Beam[KBM.Lang], "channel", self.Anrak)
+	self.Anrak.Triggers.Beam:AddSpy(self.Anrak.MechRef.Beam)
 	
 	self.Anrak.CastBar = KBM.Castbar:Add(self, self.Anrak)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

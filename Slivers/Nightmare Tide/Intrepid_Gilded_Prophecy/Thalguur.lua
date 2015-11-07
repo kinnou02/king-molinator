@@ -47,6 +47,7 @@ TR.Thalguur = {
 			Enabled = true,
 			Power = KBM.Defaults.TimerObj.Create("dark_green"),
 			Crystalline = KBM.Defaults.TimerObj.Create("cyan"),
+			CrystallineFirst = KBM.Defaults.TimerObj.Create("cyan"),
 		},
 		AlertsRef = {
 			Enabled = true,
@@ -60,6 +61,7 @@ TR.Thalguur = {
 			Enabled = true,
 			Gold = KBM.Defaults.MechObj.Create("yellow"),
 			Touch = KBM.Defaults.MechObj.Create("red"),
+			Curse = KBM.Defaults.MechObj.Create("purple"),
 		},
 	},
 }
@@ -102,6 +104,10 @@ TR.Lang.Debuff.Curse:SetGerman("Fluch der Gier")
 TR.Lang.Debuff.Curse:SetFrench("Malédiction d'avidité")
 TR.Lang.Debuff.Curse:SetRussian("Проклятие жадности")
 TR.Lang.Debuff.Curse:SetKorean("탐욕의 저주")
+
+-- Verbose Dictionary
+TR.Lang.Verbose = {}
+TR.Lang.Verbose.Crystalline = KBM.Language:Add("First Crystalline Volley")
 
 TR.Descript = TR.Thalguur.Name
 
@@ -234,7 +240,7 @@ function TR:UnitHPCheck(uDetails, unitID)
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj.Objectives:AddPercent(self.Thalguur.Name, 90, 100)
 					self.PhaseObj:SetPhase(1)
-					KBM.MechTimer:AddStart(self.Thalguur.TimersRef.Crystalline)
+					KBM.MechTimer:AddStart(self.Thalguur.TimersRef.CrystallineFirst)
 				end
 				self.Thalguur.UnitID = unitID
 				self.Thalguur.Available = true
@@ -265,6 +271,8 @@ function TR:Start()
 	-- Create Timers
 	self.Thalguur.TimersRef.Power = KBM.MechTimer:Add(self.Lang.Ability.Power[KBM.Lang], nil)
 	self.Thalguur.TimersRef.Crystalline = KBM.MechTimer:Add(self.Lang.Ability.Crystalline[KBM.Lang], 44)
+	self.Thalguur.TimersRef.CrystallineFirst = KBM.MechTimer:Add(self.Lang.Ability.Crystalline[KBM.Lang], 34)
+	self.Thalguur.TimersRef.CrystallineFirst.MenuName = self.Lang.Verbose.Crystalline[KBM.Lang]
 	self.Thalguur.TimersRef.Power = KBM.MechTimer:Add(self.Lang.Ability.Power[KBM.Lang], nil)
 	KBM.Defaults.TimerObj.Assign(self.Thalguur)
 	
@@ -278,7 +286,8 @@ function TR:Start()
 	
 	-- Create Mechanic Spies
 	self.Thalguur.MechRef.Gold = KBM.MechSpy:Add(self.Lang.Debuff.Gold[KBM.Lang], nil, "playerDebuff", self.Thalguur)
-	self.Thalguur.MechRef.Touch = KBM.MechSpy:Add(self.Lang.Ability.Touch[KBM.Lang], nil, "channel", self.Thalguur)	
+	self.Thalguur.MechRef.Touch = KBM.MechSpy:Add(self.Lang.Ability.Touch[KBM.Lang], nil, "channel", self.Thalguur)
+	self.Thalguur.MechRef.Curse = KBM.MechSpy:Add(self.Lang.Debuff.Curse[KBM.Lang], nil, "playerDebuff", self.Thalguur)
 	KBM.Defaults.MechObj.Assign(self.Thalguur)
 	
 	-- Assign Timers and Alerts to Triggers
@@ -300,9 +309,9 @@ function TR:Start()
 	self.Thalguur.Triggers.GoldRemove:AddStop(self.Thalguur.MechRef.Gold)
 	self.Thalguur.Triggers.Curse = KBM.Trigger:Create(self.Lang.Debuff.Curse[KBM.Lang], "playerBuff", self.Thalguur)
 	self.Thalguur.Triggers.Curse:AddAlert(self.Thalguur.AlertsRef.Curse, true)
+	self.Thalguur.Triggers.Curse:AddSpy(self.Thalguur.MechRef.Curse)
 	self.Thalguur.Triggers.Crystalline = KBM.Trigger:Create(self.Lang.Ability.Crystalline[KBM.Lang], "channel", self.Thalguur)
 	self.Thalguur.Triggers.Crystalline:AddAlert(self.Thalguur.AlertsRef.Crystalline)
-	self.Thalguur.Triggers.Crystalline:AddTimer(self.Thalguur.TimersRef.Crystalline)
 	self.Thalguur.Triggers.CrystallineRem = KBM.Trigger:Create(self.Lang.Ability.Crystalline[KBM.Lang], "interrupt", self.Thalguur)
 	self.Thalguur.Triggers.CrystallineRem:AddStop(self.Thalguur.AlertsRef.Crystalline)
 	self.Thalguur.Triggers.PhaseTwo = KBM.Trigger:Create(90, "percent", self.Thalguur)
