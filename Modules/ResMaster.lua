@@ -372,6 +372,8 @@ function RM.Rezes:Init()
 								self.GUI.TimeBar:SetBackgroundColor(1, 0.55, 0.55, 0.33)
 							elseif self.Class == "rogue" then
 								self.GUI.TimeBar:SetBackgroundColor(1, 1, 0.55, 0.33)
+							elseif self.Class == "primalist" then
+								self.GUI.TimeBar:SetBackgroundColor(0.23, 0.84, 1, 1)
 							end
 						end
 					end

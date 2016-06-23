@@ -41,6 +41,9 @@ PC.RezBank = {
 	["rogue"] = {
 		["A72E5E73166B95DD1"] = {}, -- Kiss Of Life
 	},
+	["primalist"] = {
+		["A0ED6AED476EEE994"] = {}, -- Emanate Life
+	}
 }
  
 KBM.PlayerControl = PC
@@ -49,6 +52,7 @@ function PC:GatherAbilities()
 	KBM.Player.AbilityTable = Inspect.Ability.New.List()
 	local Count = 0
 	if KBM.Player.AbilityTable then
+		-- print (LibSUnit.Player.Calling)
 		if self.RezBank[LibSUnit.Player.Calling] then
 			-- print("You are a calling with possible Combat Rezes... Checking.")
 			for crID, crTable in pairs (self.RezBank[LibSUnit.Player.Calling]) do

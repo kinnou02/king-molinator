@@ -10,9 +10,9 @@ Author = "Safe@Deepwood"
 Website = "http://www.facebook.com/KingBossMods"
 Email = "kingbossmods@gmail.com"
 
-Version = "1.7.3.807"
+Version = "1.7.3.810"
 
-Environment = "3.4"
+Environment = "3.5"
 
 RunOnStartup = {
 	"KingMolinator.lua",
@@ -43,8 +43,9 @@ RunOnStartup = {
 	-- NT Raids/Rift 20
 		-- Mount Sharax
 			"Raids/Nightmare Tide/Mount_Sharax/MSHeader.lua",
+			"Raids/Nightmare Tide/Mount_Sharax/Bulf.lua",
 			"Raids/Nightmare Tide/Mount_Sharax/Jinoscoth.lua",
-			-- "Raids/Nightmare Tide/Mount_Sharax/Izkinra.lua",
+			"Raids/Nightmare Tide/Mount_Sharax/Izkinra.lua",
 			"Raids/Nightmare Tide/Mount_Sharax/Yrlwalach.lua",
 			"Raids/Nightmare Tide/Mount_Sharax/Threngar.lua",
 		
@@ -67,6 +68,16 @@ RunOnStartup = {
 			"Raids/Nightmare Tide/Hammerknell/Garau.lua",
 			"Raids/Nightmare Tide/Hammerknell/Inwar.lua",
 			"Raids/Nightmare Tide/Hammerknell/Akylios.lua",
+			
+		-- Mind of Madness
+			"Raids/Nightmare Tide/Mind_of_Madness/MoMHeader.lua",
+			"Raids/Nightmare Tide/Mind_of_Madness/Pagura.lua",
+			
+		-- Comet of Ahnket
+			"Raids/Nightmare Tide/CometOfAhnket/CoAHeader.lua",
+			"Raids/Nightmare Tide/CometOfAhnket/Azaphrentus.lua",
+			"Raids/Nightmare Tide/CometOfAhnket/Eblius.lua",
+			"Raids/Nightmare Tide/CometOfAhnket/Fyragnos.lua",
 	
 	--Storm Legion Raids/Rift 20
 		--Binding of Blood
@@ -177,7 +188,7 @@ RunOnStartup = {
 			"Experts/Nightmare Tide/Nightmare_Coast/Hydal.lua",
 			"Experts/Nightmare Tide/Nightmare_Coast/Akylios.lua",
 			"Experts/Nightmare Tide/Nightmare_Coast/Dalraak.lua",
-			--"Experts/Nightmare Tide/Nightmare_Coast/Arak.lua",
+			"Experts/Nightmare Tide/Nightmare_Coast/Arak.lua",
 		
 		-- Return to Empyrean Core
 			"Experts/Nightmare Tide/Return_to_Empyrean_Core/RTEC_Header.lua",
@@ -196,7 +207,11 @@ RunOnStartup = {
 			
 		-- Rhaza'de Canyons
 			"Experts/Nightmare Tide/Rhaza'de_Canyons/RC_Header.lua",
-			"Experts/Nightmare Tide/Rhaza'de_Canyons/Placeholder.lua",
+			"Experts/Nightmare Tide/Rhaza'de_Canyons/Krilladu.lua",
+			"Experts/Nightmare Tide/Rhaza'de_Canyons/Shatterhorn.lua",
+			"Experts/Nightmare Tide/Rhaza'de_Canyons/Mithe.lua",
+			"Experts/Nightmare Tide/Rhaza'de_Canyons/Khadluu.lua",
+			"Experts/Nightmare Tide/Rhaza'de_Canyons/Teth.lua",
 			
 	-- Storm Legion Experts/Rift
 		-- Archives of Flesh
@@ -546,13 +561,15 @@ SavedVariables = {
 	-- NT Raids/Rift 20
 		-- Mount Sharax
 			KBMNTRDMS_Settings = "account",
+			KBMNTRDMSBLF_Settings = "account",
 			KBMNTRDMSJIN_Settings = "account",
-			KBMNTRDMSIZ_Settings = "account",
+			KBMNTRDMSIZK_Settings = "account",
 			KBMNTRDMSYRL_Settings = "account",
 			KBMNTRDMSTGR_Settings = "account",
 			chKBMNTRDMS_Settings = "character",
+			chKBMNTRDMSBLF_Settings = "character",
 			chKBMNTRDMSJIN_Settings = "character",
-			chKBMNTRDMSIZ_Settings = "character",
+			chKBMNTRDMSIZK_Settings = "character",
 			chKBMNTRDMSYRL_Settings = "character",
 			chKBMNTRDMSTGR_Settings = "character",
 			
@@ -591,6 +608,22 @@ SavedVariables = {
 			chKBMNTES_Settings = "character",
 			chKBMNTGR_Settings = "character",
 			chKBMNTID_Settings = "character",
+			
+		-- Mind of Madness
+			KBMNTRD_Settings = "account",
+			KBMNTRDPAG_Settings = "account",
+			chKBMNTRD_Settings = "character",
+			chKBMNTRDPAG_Settings = "character",
+			
+		-- Comet of Ahnket
+			KBMNTRDCOA_Settings = "account",
+			KBMNTRDAZA_Settings = "account",
+			KBMNTRDEBL_Settings = "account",
+			KBMNTRDFYR_Settings = "account",
+			chKBMNTRDCOA_Settings = "character",
+			chKBMNTRDAZA_Settings = "character",
+			chKBMNTRDEBL_Settings = "character",
+			chKBMNTRDFYR_Settings = "character",
 		
 	--NT Slivers/Rift
 		-- Rhen of Fate
@@ -798,7 +831,15 @@ SavedVariables = {
 			chKBMNTRTITTA_Settings = "character",
 			
 		-- Rhaza'de Canyons
+			KBMNTRCKRI_Settings = "account",
+			KBMNTRCSHA_Settings = "account",
 			KBMNTRCPLA_Settings = "account",
+			KBMNTRCKHA_Settings = "account",
+			KBMNTRCPLA_Settings = "account",
+			chKBMNTRCKRI_Settings = "character",
+			chKBMNTRCSHA_Settings = "character",
+			chKBMNTRCPLA_Settings = "character",
+			chKBMNTRCKHA_Settings = "character",
 			chKBMNTRCPLA_Settings = "character",
 	
 	-- Storm Legion Expert Dungeons
@@ -1384,3 +1425,7 @@ Dependencies = {
 	KBMAddWatch = {"optional", "after"},
 	BuffInfo = {"optional", "after"},
 }
+-- X-Curse-Packaged-Version: r801
+-- X-Curse-Project-Name: King Boss Mods
+-- X-Curse-Project-ID: king-molinator
+-- X-Curse-Repository-ID: rift/king-molinator/mainline

@@ -108,6 +108,7 @@ TR.Lang.Debuff.Curse:SetKorean("탐욕의 저주")
 -- Verbose Dictionary
 TR.Lang.Verbose = {}
 TR.Lang.Verbose.Crystalline = KBM.Language:Add("First Crystalline Volley")
+TR.Lang.Verbose.Crystalline:SetFrench("Première Volée Cristalline")
 
 TR.Descript = TR.Thalguur.Name
 
@@ -288,6 +289,7 @@ function TR:Start()
 	self.Thalguur.MechRef.Gold = KBM.MechSpy:Add(self.Lang.Debuff.Gold[KBM.Lang], nil, "playerDebuff", self.Thalguur)
 	self.Thalguur.MechRef.Touch = KBM.MechSpy:Add(self.Lang.Ability.Touch[KBM.Lang], nil, "channel", self.Thalguur)
 	self.Thalguur.MechRef.Curse = KBM.MechSpy:Add(self.Lang.Debuff.Curse[KBM.Lang], nil, "playerDebuff", self.Thalguur)
+
 	KBM.Defaults.MechObj.Assign(self.Thalguur)
 	
 	-- Assign Timers and Alerts to Triggers
@@ -312,6 +314,7 @@ function TR:Start()
 	self.Thalguur.Triggers.Curse:AddSpy(self.Thalguur.MechRef.Curse)
 	self.Thalguur.Triggers.Crystalline = KBM.Trigger:Create(self.Lang.Ability.Crystalline[KBM.Lang], "channel", self.Thalguur)
 	self.Thalguur.Triggers.Crystalline:AddAlert(self.Thalguur.AlertsRef.Crystalline)
+
 	self.Thalguur.Triggers.CrystallineRem = KBM.Trigger:Create(self.Lang.Ability.Crystalline[KBM.Lang], "interrupt", self.Thalguur)
 	self.Thalguur.Triggers.CrystallineRem:AddStop(self.Thalguur.AlertsRef.Crystalline)
 	self.Thalguur.Triggers.PhaseTwo = KBM.Trigger:Create(90, "percent", self.Thalguur)

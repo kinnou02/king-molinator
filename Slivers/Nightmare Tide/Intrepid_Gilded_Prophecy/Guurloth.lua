@@ -51,6 +51,8 @@ GH.Guurloth = {
 			Call = KBM.Defaults.TimerObj.Create("purple"),
 			Punish = KBM.Defaults.TimerObj.Create("red"),
 			Geyser = KBM.Defaults.TimerObj.Create("purple"),
+			Dance = KBM.Defaults.TimerObj.Create("cyan"),
+			Point = KBM.Defaults.TimerObj.Create("pink"),
 		},
 		AlertsRef = {
 			Enabled = true,
@@ -64,6 +66,10 @@ GH.Guurloth = {
 			ToilWarn = KBM.Defaults.AlertObj.Create("dark_green"),
 			Punish = KBM.Defaults.AlertObj.Create("red"),
 			Geyser = KBM.Defaults.AlertObj.Create("purple"),
+			Dance = KBM.Defaults.AlertObj.Create("cyan"),
+			DanceWarn = KBM.Defaults.AlertObj.Create("cyan"),
+			Point = KBM.Defaults.AlertObj.Create("pink"),
+			PointWarn = KBM.Defaults.AlertObj.Create("pink"),
 		},
 		MechRef = {
 			Enabled = true,
@@ -115,6 +121,16 @@ GH.Lang.Ability.Geyser:SetGerman("Erdengeysir")
 GH.Lang.Ability.Geyser:SetFrench("Geyser de Terre")
 GH.Lang.Ability.Geyser:SetRussian("Грязевой гейзер")
 GH.Lang.Ability.Geyser:SetKorean("대지의 간헐천")
+GH.Lang.Ability.Dance = KBM.Language:Add("Dance with Death")
+GH.Lang.Ability.Dance:SetGerman("Dance with Death")
+GH.Lang.Ability.Dance:SetFrench("Danse macabre")
+GH.Lang.Ability.Dance:SetRussian("Dance with Death")
+GH.Lang.Ability.Dance:SetKorean("Dance with Death")
+GH.Lang.Ability.Point = KBM.Language:Add("The Point")
+GH.Lang.Ability.Point:SetGerman("The Point")
+GH.Lang.Ability.Point:SetFrench("Le Point")
+GH.Lang.Ability.Point:SetRussian("The Point")
+GH.Lang.Ability.Point:SetKorean("The Point")
 
 -- Debuff Dictionary
 GH.Lang.Debuff = {}
@@ -152,6 +168,16 @@ GH.Lang.Verbose.Punish:SetGerman("NICHTS MACHEN")
 GH.Lang.Verbose.Punish:SetFrench("Arrêter!")
 GH.Lang.Verbose.Punish:SetRussian("Ничего не делайте!")
 GH.Lang.Verbose.Punish:SetKorean("아무것도 하지 마!")
+GH.Lang.Verbose.Dance = KBM.Language:Add("Dance!")
+GH.Lang.Verbose.Dance:SetGerman("Dance!")
+GH.Lang.Verbose.Dance:SetFrench("Dansez!")
+GH.Lang.Verbose.Dance:SetRussian("Dance!")
+GH.Lang.Verbose.Dance:SetKorean("Dance!")
+GH.Lang.Verbose.Point = KBM.Language:Add("Point!")
+GH.Lang.Verbose.Point:SetGerman("Point!")
+GH.Lang.Verbose.Point:SetFrench("Montrez!")
+GH.Lang.Verbose.Point:SetRussian("Point!")
+GH.Lang.Verbose.Point:SetKorean("Point!")
 
 -- Menu Dictionary
 GH.Lang.Menu = {}
@@ -180,6 +206,16 @@ GH.Lang.Menu.Toil:SetGerman(GH.Lang.Ability.Toil[KBM.Lang].." Dauer")
 GH.Lang.Menu.Toil:SetFrench("Travail de la terre durée")
 GH.Lang.Menu.Toil:SetRussian("Длительность "..GH.Lang.Ability.Toil[KBM.Lang])
 GH.Lang.Menu.Toil:SetKorean("대지의 토양 지속시간")
+GH.Lang.Menu.Dance = KBM.Language:Add(GH.Lang.Ability.Dance[KBM.Lang].." duration")
+GH.Lang.Menu.Dance:SetGerman(GH.Lang.Ability.Dance[KBM.Lang].." Dauer")
+GH.Lang.Menu.Dance:SetFrench("Dance macabre durée")
+GH.Lang.Menu.Dance:SetRussian("Длительность "..GH.Lang.Ability.Dance[KBM.Lang])
+GH.Lang.Menu.Dance:SetKorean(GH.Lang.Ability.Dance[KBM.Lang].." duration")
+GH.Lang.Menu.Point = KBM.Language:Add(GH.Lang.Ability.Point[KBM.Lang].." duration")
+GH.Lang.Menu.Point:SetGerman(GH.Lang.Ability.Point[KBM.Lang].." Dauer")
+GH.Lang.Menu.Point:SetFrench("Le point durée")
+GH.Lang.Menu.Point:SetRussian("Длительность "..GH.Lang.Ability.Point[KBM.Lang])
+GH.Lang.Menu.Point:SetKorean(GH.Lang.Ability.Point[KBM.Lang].." duration")
 
 GH.Descript = GH.Guurloth.Name
 
@@ -337,6 +373,15 @@ function GH:Start()
 	self.Guurloth.AlertsRef.Punish.MenuName = self.Lang.Debuff.Punish[KBM.Lang]
 	self.Guurloth.AlertsRef.Punish:Important()
 	self.Guurloth.AlertsRef.Geyser = KBM.Alert:Create(self.Lang.Ability.Geyser[KBM.Lang], nil, false, true, "purple")
+	
+	self.Guurloth.AlertsRef.DanceWarn = KBM.Alert:Create(self.Lang.Verbose.Dance[KBM.Lang], nil, false, true, "cyan")
+	self.Guurloth.AlertsRef.DanceWarn.MenuName = self.Lang.Ability.Dance[KBM.Lang]
+	self.Guurloth.AlertsRef.Dance = KBM.Alert:Create(self.Lang.Verbose.Dance[KBM.Lang], nil, true, true, "cyan")
+	self.Guurloth.AlertsRef.Dance.MenuName = self.Lang.Menu.Dance[KBM.Lang]
+	self.Guurloth.AlertsRef.PointWarn = KBM.Alert:Create(self.Lang.Verbose.Point[KBM.Lang], nil, false, true, "pink")
+	self.Guurloth.AlertsRef.PointWarn.MenuName = self.Lang.Ability.Point[KBM.Lang]
+	self.Guurloth.AlertsRef.Point = KBM.Alert:Create(self.Lang.Verbose.Point[KBM.Lang], nil, true, true, "pink")
+	self.Guurloth.AlertsRef.Point.MenuName = self.Lang.Menu.Point[KBM.Lang]
 	KBM.Defaults.AlertObj.Assign(self.Guurloth)
 	
 	-- Create Mechanic Spies
@@ -369,6 +414,16 @@ function GH:Start()
 	self.Guurloth.Triggers.Geyser = KBM.Trigger:Create(self.Lang.Ability.Geyser[KBM.Lang], "cast", self.Guurloth)
 	self.Guurloth.Triggers.Geyser:AddAlert(self.Guurloth.AlertsRef.Geyser)
 	self.Guurloth.Triggers.Geyser:AddTimer(self.Guurloth.TimersRef.Geyser)
+	
+	
+	self.Guurloth.Triggers.DanceWarn = KBM.Trigger:Create(self.Lang.Ability.Dance[KBM.Lang], "cast", self.Guurloth)
+	self.Guurloth.Triggers.DanceWarn:AddAlert(self.Guurloth.AlertsRef.DanceWarn)
+	self.Guurloth.Triggers.Dance = KBM.Trigger:Create(self.Lang.Ability.Dance[KBM.Lang], "channel", self.Guurloth)
+	self.Guurloth.Triggers.Dance:AddAlert(self.Guurloth.AlertsRef.Dance)
+	self.Guurloth.Triggers.PointWarn = KBM.Trigger:Create(self.Lang.Ability.Point[KBM.Lang], "cast", self.Guurloth)
+	self.Guurloth.Triggers.PointWarn:AddAlert(self.Guurloth.AlertsRef.PointWarn)
+	self.Guurloth.Triggers.Point = KBM.Trigger:Create(self.Lang.Ability.Point[KBM.Lang], "channel", self.Guurloth)
+	self.Guurloth.Triggers.Point:AddAlert(self.Guurloth.AlertsRef.Point)
 	
 	self.Guurloth.CastBar = KBM.Castbar:Add(self, self.Guurloth)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

@@ -74,12 +74,13 @@ MOD.Arak = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = "U55DF84DE3433468C",
+	UTID = "UFFFD53764B52B851",
 	TimeOut = 5,
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.Castbar(),
 		AlertsRef = {
+			Enabled = true,
 			Energy = KBM.Defaults.AlertObj.Create("red"),
 		},
 	},
@@ -92,7 +93,7 @@ MOD.Terror1 = {
 	Name = MOD.Lang.Unit.Terror[KBM.Lang],
 	--NameShort = "Terror",
 	Menu = {},
-	Type = "multi",
+	-- Type = "multi",
 	Castbar = nil,
 	Dead = false,
 	Available = false,
@@ -112,6 +113,7 @@ MOD.Terror2 = {
 	Name = MOD.Lang.Unit.Terror[KBM.Lang],
 	--NameShort = "Terror",
 	Menu = {},
+	-- Type = "multi",
 	Castbar = nil,
 	Dead = false,
 	Available = false,
@@ -131,6 +133,7 @@ MOD.Terror3 = {
 	Name = MOD.Lang.Unit.Terror[KBM.Lang],
 	--NameShort = "Terror",
 	Menu = {},
+	-- Type = "multi",
 	Castbar = nil,
 	Dead = false,
 	Available = false,
@@ -150,6 +153,7 @@ MOD.Terror4 = {
 	Name = MOD.Lang.Unit.Terror[KBM.Lang],
 	--NameShort = "Terror",
 	Menu = {},
+	-- Type = "multi",
 	Castbar = nil,
 	Dead = false,
 	Available = false,
@@ -247,7 +251,7 @@ end
 function MOD:Castbar(units)
 end
 
- function MOD.SetObjectives(uDetails, unitID)
+function MOD.SetObjectives(uDetails, unitID)
 	if uDetails.Type == MOD.Terror1.UTID then
 		MOD.PhaseObj.Objectives:AddPercent(MOD.Terror1.Name, 0, 100)
 	elseif uDetails.Type == MOD.Terror2.UTID then
@@ -308,11 +312,14 @@ function MOD:Death(UnitID)
 	return false
 end
 
-function MOD:UnitHPCheck(uDetails, unitID)	
+function MOD:UnitHPCheck(uDetails, unitID)
+	print("arak ok")
 	if uDetails and unitID then
 		if not uDetails.player then
 			if uDetails.name == self.Terror1.Name then
-				--local BossObj = self.Bosses[uDetails.name]
+			-- print (uDetails)
+			--if uDetails.type == MOD.Terror1.UTID or uDetails.type == MOD.Terror2.UTID or uDetails.type == MOD.Terror3.UTID or uDetails.type == MOD.Terror4.UTID then
+				local BossObj = self.Bosses[uDetails.name]
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
@@ -322,7 +329,7 @@ function MOD:UnitHPCheck(uDetails, unitID)
 					BossObj.Casting = false
 					self.PhaseObj:Start(self.StartTime)
 					self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
-					self.SetObjectives()
+					self.SetObjectives(uDetails, unitID)
 					self.Phase = 1
 				else
 					BossObj.Dead = false

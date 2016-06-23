@@ -39,6 +39,7 @@ ID.Inwar = {
 	Dead = false,
 	Available = false,
 	TimersRef = {},
+	MechRef = {},
 	AlertsRef = {},
 	Menu = {},
 	UnitID = nil,
@@ -62,7 +63,12 @@ ID.Inwar = {
 			Surge = KBM.Defaults.AlertObj.Create("red"),
 			SurgeWarn = KBM.Defaults.AlertObj.Create("orange"),
 			Storm = KBM.Defaults.AlertObj.Create("cyan"),
-		}
+			Lightning = KBM.Defaults.AlertObj.Create("dark_green"),
+		},
+		MechRef = {
+			Enabled = true,
+			Lightning = KBM.Defaults.MechObj.Create("dark_green"),
+		},
 	}
 }
 
@@ -239,6 +245,10 @@ ID.Lang.Mechanic.Geyser:SetGerman("Geysir")
 ID.Lang.Mechanic.Geyser:SetFrench("Zone au sol")
 ID.Lang.Mechanic.Geyser:SetRussian("Гейзер")
 
+ID.Lang.Debuff = {}
+ID.Lang.Debuff.Lightning = KBM.Language:Add("")
+ID.Lang.Debuff.Lightning:SetFrench("Paratonnerre")
+
 -- Menu Dictionary
 ID.Lang.Menu = {}
 ID.Lang.Menu.Surge = KBM.Language:Add("Surge (Duration)")
@@ -288,6 +298,9 @@ function ID:InitVars()
 		Enabled = true,
 		EncTimer = KBM.Defaults.EncTimer(),
 		PhaseMon = KBM.Defaults.PhaseMon(),
+		Alerts = KBM.Defaults.Alerts(),
+		MechTimer = KBM.Defaults.MechTimer(),
+		MechSpy = KBM.Defaults.MechSpy(),
 		CastBar = {
 			Override = true,
 			Multi = true,
@@ -296,6 +309,7 @@ function ID:InitVars()
 			CastBar = self.Inwar.Settings.CastBar,
 			TimersRef = self.Inwar.Settings.TimersRef,
 			AlertsRef = self.Inwar.Settings.AlertsRef,
+			MechRef = self.Inwar.Settings.MechRef,
 		},
 		Rotjaw = {
 			CastBar = self.Rotjaw.Settings.CastBar,
@@ -535,6 +549,11 @@ end
 
 function ID:Start()
 
+	-- mech spy
+	
+	self.Inwar.MechRef.Lightning = KBM.MechSpy:Add(self.Lang.Debuff.Lightning[KBM.Lang], nil, "playerDebuff", self.Inwar)
+	KBM.Defaults.MechObj.Assign(self.Inwar)
+
 	-- Create Denizar's Timers
 	self.Denizar.TimersRef.Freeze = KBM.MechTimer:Add(self.Lang.Ability.Freeze[KBM.Lang], 70)
 	KBM.Defaults.TimerObj.Assign(self.Denizar)
@@ -559,6 +578,7 @@ function ID:Start()
 	self.Inwar.AlertsRef.Surge.MenuName = self.Lang.Menu.Surge[KBM.Lang]
 	self.Inwar.AlertsRef.SurgeWarn = KBM.Alert:Create(self.Lang.Ability.Surge[KBM.Lang], nil, true, true, "orange")
 	self.Inwar.AlertsRef.Storm = KBM.Alert:Create(self.Lang.Ability.Storm[KBM.Lang], nil, true, true, "cyan")
+	self.Inwar.AlertsRef.Lightning = KBM.Alert:Create(self.Lang.Debuff.Lightning[KBM.Lang], nil, false, true, "dark_green")
 	KBM.Defaults.AlertObj.Assign(self.Inwar)
 	
 	-- Create Triggers
@@ -576,6 +596,9 @@ function ID:Start()
 	self.Inwar.Triggers.Storm = KBM.Trigger:Create(self.Lang.Ability.Storm[KBM.Lang], "cast", self.Inwar)
 	self.Inwar.Triggers.Storm:AddAlert(self.Inwar.AlertsRef.Storm)
 	self.Inwar.Triggers.Storm:AddTimer(self.Inwar.TimersRef.Storm)
+	self.Inwar.Triggers.Lightning = KBM.Trigger:Create(self.Lang.Debuff.Lightning[KBM.Lang], "playerDebuff", self.Inwar)
+	self.Inwar.Triggers.Lightning:AddAlert(self.Inwar.AlertsRef.Lightning,true)
+	self.Inwar.Triggers.Lightning:AddSpy(self.Inwar.MechRef.Lightning)
 
 	self.Inwar.CastBar = KBM.Castbar:Add(self, self.Inwar, true)
 	self.Aqualix.CastBar = KBM.Castbar:Add(self, self.Aqualix, true)

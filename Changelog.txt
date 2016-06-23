@@ -6,13 +6,15 @@
 ** Possible crash on Glacieus (Citadel of Insanity) on frost strike cast
 ** Zilas' adds are their castbar disabled due to crash
 
-1.7.3.807
-* Soulrender Zilas: Added 15 minute enrage timer.
-* Anrak the Foul: Added Mechanic Spy for Eye Beam.
-* Thalguur
-** New: Added first timer for Cystalline.
-** Changed: Timer for Crystalline starts on cast of Touch of Power.
-* Drekanoth: Added Tank swap monitoring for Hard Mode.
+*** NEW VERSION ***
+
+* Previous version added in SVN (Pagura,Rhaza'de_Canyons etc.)
+** Adding IGP (HM) - Guurloth : "Dance with Death" and "The Point" alerts
+** Adding CoA (NM) - Duke Eblius : "Sulphurous Blight", "Call to arms" and "Blazing Ruin" alerts
+** Adding CoA (NM) - Azaphrentus : "Manifest Scorn" and "Rage of Azaphrentus" alerts
+** Adding CoA (NM) - Fyragnos : "Summon Flamestrom", "Call of the Drake", "Withering Blaze", "Magma Blast" and "Flame of Despair" alerts
+
+
 
 1.7.3.801
 * Fixed: Updated and corrected version checking in Messenger.lua

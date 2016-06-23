@@ -63,6 +63,9 @@ DRE.Lang.Debuff.Vulnerability = KBM.Language:Add("Arcane Vulnerability")
 DRE.Lang.Debuff.Vulnerability:SetFrench("Vulnérabilité d'arcane")
 DRE.Lang.Debuff.VulnerabilityID = "B7610E896163D0166"
 DRE.Lang.Debuff.Erase = KBM.Language:Add("Erase")
+DRE.Lang.Debuff.Erase:SetFrench("Effacement de la mémoire")
+DRE.Lang.Debuff.Chains = KBM.Language:Add("")
+DRE.Lang.Debuff.Chains:SetFrench("Chaînes du destin")
 
 -- Description Dictionary
 DRE.Lang.Main = {}
@@ -95,7 +98,7 @@ DRE.Drekanoth = {
 			Death = KBM.Defaults.AlertObj.Create("red"),
 			Particles = KBM.Defaults.AlertObj.Create("purple"),
 			World = KBM.Defaults.AlertObj.Create("cyan"),
-			
+			Chains = KBM.Defaults.AlertObj.Create("yellow")
 		},
 		MechRef = {
 			Enabled = true,	
@@ -216,7 +219,10 @@ function DRE:UnitHPCheck(uDetails, unitID)
 				self.PhaseObj:SetPhase("1")
 				self.PhaseObj.Objectives:AddPercent(self.Drekanoth, 0, 100)
 				self.Phase = 1
-				KBM.TankSwap:Start(self.Lang.Debuff.Erase[KBM.Lang], unitID)
+				local DebuffTable = {
+					[1] = self.Lang.Debuff.Erase[KBM.Lang],
+				}
+				KBM.TankSwap:Start(DebuffTable, unitID)
 			else
 				BossObj.Dead = false
 				BossObj.Casting = false

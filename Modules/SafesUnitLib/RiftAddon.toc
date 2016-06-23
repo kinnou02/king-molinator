@@ -32,3 +32,7 @@ Dependencies = {
 -- X-Curse-Project-Name: King Boss Mods
 -- X-Curse-Project-ID: king-molinator
 -- X-Curse-Repository-ID: rift/king-molinator/mainline
+-- X-Curse-Packaged-Version: r801
+-- X-Curse-Project-Name: King Boss Mods
+-- X-Curse-Project-ID: king-molinator
+-- X-Curse-Repository-ID: rift/king-molinator/mainline

@@ -50,6 +50,7 @@ UK.Uruluuk = {
 		AlertsRef = {
 			Enabled = true,
 			Boulder = KBM.Defaults.AlertObj.Create("orange"),
+			Impact = KBM.Defaults.AlertObj.Create("purple"),
 			Fist = KBM.Defaults.AlertObj.Create("yellow"),
 			Storm = KBM.Defaults.AlertObj.Create("red"),
 			Crystal = KBM.Defaults.AlertObj.Create("cyan"),	
@@ -75,7 +76,9 @@ UK.Uruluuk.Name = UK.Lang.Unit.Uruluuk[KBM.Lang]
 -- Ability Dictionary
 UK.Lang.Ability = {}
 UK.Lang.Ability.Boulder = KBM.Language:Add("Crashing Boulders")
-UK.Lang.Ability.Boulder:SetFrench("Impact cristallin")
+UK.Lang.Ability.Boulder:SetFrench("Éboulement")
+UK.Lang.Ability.Impact = KBM.Language:Add("Crystalline Impact")
+UK.Lang.Ability.Impact:SetFrench("Impact cristallin")
 UK.Lang.Ability.Fist = KBM.Language:Add("Fist of Laethys")
 UK.Lang.Ability.Fist:SetGerman("Faust von Laethys")
 UK.Lang.Ability.Fist:SetFrench("Poing de Laethys")
@@ -248,6 +251,7 @@ function UK:Start()
 	
 	-- Create Alerts
 	self.Uruluuk.AlertsRef.Boulder = KBM.Alert:Create(self.Lang.Ability.Boulder[KBM.Lang], nil, false, true, "orange")
+	self.Uruluuk.AlertsRef.Impact = KBM.Alert:Create(self.Lang.Ability.Impact[KBM.Lang], nil, false, true, "purple")
 	self.Uruluuk.AlertsRef.Fist = KBM.Alert:Create(self.Lang.Ability.Fist[KBM.Lang], nil, false, true, "yellow")
 	self.Uruluuk.AlertsRef.Storm = KBM.Alert:Create(self.Lang.Ability.Storm[KBM.Lang], nil, true, true, "red")
 	self.Uruluuk.AlertsRef.Crystal = KBM.Alert:Create(self.Lang.Verbose.Crystal[KBM.Lang], 3, true, false, "blue")
@@ -255,7 +259,12 @@ function UK:Start()
 	
 	-- Assign Timers and Alerts to Triggers
 	self.Uruluuk.Triggers.Boulder = KBM.Trigger:Create(self.Lang.Ability.Boulder[KBM.Lang], "cast", self.Uruluuk)
-	self.Uruluuk.Triggers.Boulder:AddAlert(self.Uruluuk.AlertsRef.Boulder,true)
+	self.Uruluuk.Triggers.Boulder:AddAlert(self.Uruluuk.AlertsRef.Boulder)
+	self.Uruluuk.Triggers.BoulderStop = KBM.Trigger:Create(self.Lang.Ability.Boulder[KBM.Lang], "interrupt", self.Uruluuk)
+	self.Uruluuk.Triggers.BoulderStop:AddStop(self.Uruluuk.AlertsRef.Boulder)
+	
+	self.Uruluuk.Triggers.Impact = KBM.Trigger:Create(self.Lang.Ability.Impact[KBM.Lang], "cast", self.Uruluuk)
+	self.Uruluuk.Triggers.Impact:AddAlert(self.Uruluuk.AlertsRef.Impact,true)
 	
 	self.Uruluuk.Triggers.BoulderStop = KBM.Trigger:Create(self.Lang.Ability.Boulder[KBM.Lang], "interrupt", self.Uruluuk)
 	self.Uruluuk.Triggers.BoulderStop:AddStop(self.Uruluuk.AlertsRef.Boulder)

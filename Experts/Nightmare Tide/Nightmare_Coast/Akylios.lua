@@ -211,6 +211,8 @@ function MOD:Start()
 	-- Assign Alerts and Timers to Triggers
 	self.Akylios.Triggers.Madness = KBM.Trigger:Create(self.Lang.Debuff.Madness[KBM.Lang], "playerDebuff", self.Akylios)
 	self.Akylios.Triggers.Madness:AddAlert(self.Akylios.AlertsRef.Madness, true)
+	self.Akylios.Triggers.MadnessRemove = KBM.Trigger:Create(self.Lang.Debuff.Madness[KBM.Lang], "playerBuffRemove", self.Akylios)
+	self.Akylios.Triggers.MadnessRemove:AddStop(self.Akylios.AlertsRef.Madness, true)
 	
 	self.Akylios.Triggers.Tide = KBM.Trigger:Create(self.Lang.Ability.Tide[KBM.Lang], "cast", self.Akylios)
 	self.Akylios.Triggers.Tide:AddAlert(self.Akylios.AlertsRef.TideWarn)

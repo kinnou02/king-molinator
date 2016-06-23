@@ -57,7 +57,7 @@ MOD.Hydal = {
 	Mod = MOD,
 	Level = "67",
 	Active = false,
-	Name = "Hydal Ithral",
+	Name = MOD.Lang.Unit.Hydal[KBM.Lang],
 	-- NameShort = "Hydal",
 	Menu = {},
 	AlertsRef = {},
@@ -162,10 +162,11 @@ function MOD:Death(UnitID)
 	return false
 end
 
-function MOD:UnitHPCheck(uDetails, unitID)	
+function MOD:UnitHPCheck(uDetails, unitID)
+	print("hydal OK")
 	if uDetails and unitID then
 		if not uDetails.player then
-			if uDetails.type == self.Hydal.Name then
+			if uDetails.name == self.Hydal.Name then
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()

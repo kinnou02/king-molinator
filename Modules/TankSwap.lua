@@ -271,7 +271,7 @@ function KBM.TankSwap:Init()
 		end
 	end
 			
-	function self:Add(UnitID, Test)		
+	function self:Add(UnitID, Test)
 		if self.Test and not Test then
 			self:Remove()
 			self.Anchor:SetVisible(false)

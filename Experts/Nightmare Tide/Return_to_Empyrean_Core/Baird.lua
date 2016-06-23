@@ -275,8 +275,8 @@ function MOD:Start()
 	
 	self.Baird.Triggers.Manic = KBM.Trigger:Create(self.Lang.Ability.Manic[KBM.Lang], "channel", self.Baird)
 	self.Baird.Triggers.Manic:AddAlert(self.Baird.AlertsRef.Manic)
-	
-	
+	self.Baird.Triggers.ManicStop = KBM.Trigger:Create(self.Lang.Ability.Manic[KBM.Lang], "interrupt", self.Baird)
+	self.Baird.Triggers.ManicStop:AddStop(self.Baird.AlertsRef.Manic)
 	
 	self.Baird.CastBar = KBM.Castbar:Add(self, self.Baird)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

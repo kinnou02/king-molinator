@@ -31,6 +31,7 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang = {}
 MOD.Lang.Main = {}
 MOD.Lang.Main.Name = KBM.Language:Add(MOD.Name)
+MOD.Lang.Main.Name:SetFrench("Canyons de Rhaza'de")
 
 
 MOD.Name = MOD.Lang.Main.Name[KBM.Lang]

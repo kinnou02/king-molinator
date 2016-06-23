@@ -101,6 +101,7 @@ AF.Lang.Ability.Bond:SetKorean("대지의 결속")
 AF.Lang.Ability.Storm = KBM.Language:Add("Sandstorm")
 AF.Lang.Ability.Storm:SetFrench("Tempête de sable")
 AF.Lang.Ability.Beam = KBM.Language:Add("Eye Beam")
+AF.Lang.Ability.Beam:SetFrench("Rayon oculaire")
 
 -- Debuff Dictionary
 AF.Lang.Debuff = {}
