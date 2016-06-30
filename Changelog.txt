@@ -6,7 +6,16 @@
 ** Possible crash on Glacieus (Citadel of Insanity) on frost strike cast
 ** Zilas' adds are their castbar disabled due to crash
 
-*** NEW VERSION ***
+
+1.7.3.813
+
+* Adding Boss (CoA)
+** Adding CoA (NM) - Hericius : Mushrooms phase "Caustic Spores", "Incendiary Spores" and "Acidic Spores" alerts
+** Adding CoA (NM) - Hericius : Interupts "Cleansing Siphon" and "Chlorolance" alerts
+** Adding CoA (NM) - Hericius : Timers for mushrooms phase, burst heal and adds pop
+** Correcting CoA (NM) - Fyragnos : Enrage is now 8.30min and correction of colors
+
+1.7.3.812
 
 * Previous version added in SVN (Pagura,Rhaza'de_Canyons etc.)
 ** Adding IGP (HM) - Guurloth : "Dance with Death" and "The Point" alerts

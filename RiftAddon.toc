@@ -78,6 +78,7 @@ RunOnStartup = {
 			"Raids/Nightmare Tide/CometOfAhnket/Azaphrentus.lua",
 			"Raids/Nightmare Tide/CometOfAhnket/Eblius.lua",
 			"Raids/Nightmare Tide/CometOfAhnket/Fyragnos.lua",
+			"Raids/Nightmare Tide/CometOfAhnket/Ericius.lua",
 	
 	--Storm Legion Raids/Rift 20
 		--Binding of Blood
@@ -620,10 +621,12 @@ SavedVariables = {
 			KBMNTRDAZA_Settings = "account",
 			KBMNTRDEBL_Settings = "account",
 			KBMNTRDFYR_Settings = "account",
+			KBMNTRDHER_Settings = "account",
 			chKBMNTRDCOA_Settings = "character",
 			chKBMNTRDAZA_Settings = "character",
 			chKBMNTRDEBL_Settings = "character",
 			chKBMNTRDFYR_Settings = "character",
+			chKBMNTRDHER_Settings = "character",
 		
 	--NT Slivers/Rift
 		-- Rhen of Fate

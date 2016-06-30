@@ -19,12 +19,10 @@ local FYR = {
 	File = "Fyragnos.lua",
 	Enabled = true,
 	HasPhases = true,
-	-- Phase = 1,
-	-- TankSwap = true,
 	Instance = COA.Name,
 	InstanceObj = COA,
 	Lang = {},
-	Enrage = 60 * 7,
+	Enrage = 510,
 	ID = "Fyragnos",
 	Object = "FYR",
 }
@@ -52,8 +50,8 @@ FYR.Fyr = {
 		CastBar = KBM.Defaults.Castbar(),
 		Filters = {
 			Enabled = true,
-			Flammestrom = KBM.Defaults.CastFilter.Create("purle"),
-			AppelDrake = KBM.Defaults.CastFilter.Create("red"),
+			Flammestrom = KBM.Defaults.CastFilter.Create("red"),
+			AppelDrake = KBM.Defaults.CastFilter.Create("purple"),
 			Embrasement = KBM.Defaults.CastFilter.Create("yellow"),
 			Explosion = KBM.Defaults.CastFilter.Create("pink"),
 			FlammeDeDesespoir = KBM.Defaults.CastFilter.Create("dark_green"),
@@ -63,8 +61,8 @@ FYR.Fyr = {
 		},
 		AlertsRef = {
 			Enabled = true,
-			Flammestrom = KBM.Defaults.AlertObj.Create("purle"),
-			AppelDrake = KBM.Defaults.AlertObj.Create("red"),
+			Flammestrom = KBM.Defaults.AlertObj.Create("red"),
+			AppelDrake = KBM.Defaults.AlertObj.Create("purple"),
 			Embrasement = KBM.Defaults.AlertObj.Create("yellow"),
 			Explosion = KBM.Defaults.AlertObj.Create("pink"),
 			FlammeDeDesespoir = KBM.Defaults.AlertObj.Create("dark_green"),
@@ -137,11 +135,6 @@ FYR.Lang.Verbose.FlammeDeDesespoir:SetKorean("Dispel!")
 
 -- Debuff Dictionary
 FYR.Lang.Debuff = {}
--- FYR.Lang.Debuff.Mangled = KBM.Language:Add("Mangled")
--- FYR.Lang.Debuff.Mangled:SetGerman("Üble Blessur")
--- FYR.Lang.Debuff.Mangled:SetFrench("Estropié")
--- FYR.Lang.Debuff.Mangled:SetRussian("?????????")
--- FYR.Lang.Debuff.Mangled:SetKorean("??")
 
 function FYR:AddBosses(KBM_Boss)
 	self.MenuName = self.Fyr.Name
@@ -227,27 +220,6 @@ function FYR:Death(UnitID)
 	return false	
 end
 
--- function FYR.PhaseTwo()
-	-- FYR.PhaseObj.Objectives:Remove()
-	-- FYR.Phase = 3
-	-- FYR.PhaseObj:SetPhase(3)
-	-- FYR.PhaseObj.Objectives:AddPercent(FYR.Fyr, 65, 85)
--- end
-
--- function FYR.PhaseThree()
-	-- FYR.PhaseObj.Objectives:Remove()
-	-- FYR.Phase = 3
-	-- FYR.PhaseObj:SetPhase(3)
-	-- FYR.PhaseObj.Objectives:AddPercent(FYR.Fyr, 30, 65)
--- end
-
--- function FYR.PhaseFour()
-	-- FYR.PhaseObj.Objectives:Remove()
-	-- FYR.Phase = 4
-	-- FYR.PhaseObj:SetPhase(4)
-	-- FYR.PhaseObj.Objectives:AddPercent(FYR.Fyr, 0, 30)	
--- end
-
 function FYR:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
 		if not uDetails.player then
@@ -289,16 +261,14 @@ end
 
 function FYR:Start()	
 	-- Create Timers
-	-- self.Fyr.TimersRef.PopAdd = KBM.MechTimer:Add(self.Lang.Ability.PopAdd[KBM.Lang], 9)
-	-- self.Fyr.TimersRef.PopAdd:Wait()
 	KBM.Defaults.TimerObj.Assign(self.Fyr)
 	
 	-- Create Alerts
-	self.Fyr.AlertsRef.AppelDrake = KBM.Alert:Create(self.Lang.Ability.AppelDrake[KBM.Lang], nil, false, true, "red")
+	self.Fyr.AlertsRef.Flammestrom = KBM.Alert:Create(self.Lang.Ability.Flammestrom[KBM.Lang], nil, false, true, "red")
+	self.Fyr.AlertsRef.AppelDrake = KBM.Alert:Create(self.Lang.Ability.AppelDrake[KBM.Lang], nil, false, true, "purple")
 	self.Fyr.AlertsRef.Embrasement = KBM.Alert:Create(self.Lang.Ability.Embrasement[KBM.Lang], nil, false, true, "yellow")
-	self.Fyr.AlertsRef.Flammestrom = KBM.Alert:Create(self.Lang.Ability.Flammestrom[KBM.Lang], nil, false, true, "yellow")
-	self.Fyr.AlertsRef.Explosion = KBM.Alert:Create(self.Lang.Ability.Explosion[KBM.Lang], nil, false, true, "yellow")
-	self.Fyr.AlertsRef.FlammeDeDesespoir = KBM.Alert:Create(self.Lang.Ability.FlammeDeDesespoir[KBM.Lang], nil, false, true, "yellow")
+	self.Fyr.AlertsRef.Explosion = KBM.Alert:Create(self.Lang.Ability.Explosion[KBM.Lang], nil, false, true, "pink")
+	self.Fyr.AlertsRef.FlammeDeDesespoir = KBM.Alert:Create(self.Lang.Ability.FlammeDeDesespoir[KBM.Lang], nil, false, true, "dark_green")
 	KBM.Defaults.AlertObj.Assign(self.Fyr)
 	
 	-- Create Spy
@@ -306,7 +276,6 @@ function FYR:Start()
 	KBM.Defaults.MechObj.Assign(self.Fyr)
 	
 	self.Fyr.Triggers.Flammestrom = KBM.Trigger:Create(self.Lang.Ability.Flammestrom[KBM.Lang], "cast", self.Fyr)
-	-- self.Fyr.AlertsRef.Flammestrom = KBM.Alert:Create(self.Lang.Verbose.Flammestrom[KBM.Lang], nil, true, true, "purple")
 	self.Fyr.Triggers.Flammestrom:AddAlert(self.Fyr.AlertsRef.Flammestrom)
 	
 	self.Fyr.Triggers.AppelDrake = KBM.Trigger:Create(self.Lang.Ability.AppelDrake[KBM.Lang], "cast", self.Fyr)
@@ -316,21 +285,12 @@ function FYR:Start()
 	self.Fyr.Triggers.Embrasement:AddAlert(self.Fyr.AlertsRef.Embrasement)
 	
 	self.Fyr.Triggers.Explosion = KBM.Trigger:Create(self.Lang.Ability.Explosion[KBM.Lang], "cast", self.Fyr)
-	-- self.Fyr.AlertsRef.Explosion = KBM.Alert:Create(self.Lang.Verbose.Explosion[KBM.Lang], nil, true, true, "pink")
 	self.Fyr.Triggers.Explosion:AddAlert(self.Fyr.AlertsRef.Explosion)
 	
 	self.Fyr.Triggers.FlammeDeDesespoir = KBM.Trigger:Create(self.Lang.Ability.FlammeDeDesespoir[KBM.Lang], "cast", self.Fyr)
-	-- self.Fyr.AlertsRef.FlammeDeDesespoir = KBM.Alert:Create(self.Lang.Verbose.FlammeDeDesespoir[KBM.Lang], nil, true, true, "dark_green")
 	self.Fyr.Triggers.FlammeDeDesespoir:AddAlert(self.Fyr.AlertsRef.FlammeDeDesespoir)
 	
 	
-	
-	-- self.Fyr.Triggers.PhaseTwo = KBM.Trigger:Create(85, "percent", self.Fyr)
-	-- self.Fyr.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
-	-- self.Fyr.Triggers.PhaseThree = KBM.Trigger:Create(65, "percent", self.Fyr)
-	-- self.Fyr.Triggers.PhaseThree:AddPhase(self.PhaseThree)
-	-- self.Fyr.Triggers.PhaseFour = KBM.Trigger:Create(30, "percent", self.Fyr)
-	-- self.Fyr.Triggers.PhaseFour:AddPhase(self.PhaseFour)
 	
 	-- Assign Castbar object.
 	self.Fyr.CastBar = KBM.Castbar:Add(self, self.Fyr)
