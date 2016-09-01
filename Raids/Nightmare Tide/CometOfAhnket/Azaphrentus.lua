@@ -75,8 +75,8 @@ AZA.Lang.Unit = {}
 AZA.Lang.Unit.Azaphrentus = KBM.Language:Add(AZA.Aza.Name)
 AZA.Lang.Unit.Azaphrentus:SetGerman("Azaphrentus")
 AZA.Lang.Unit.Azaphrentus:SetFrench("Azaphrentus")
-AZA.Lang.Unit.Azaphrentus:SetRussian("??????????")
-AZA.Lang.Unit.Azaphrentus:SetKorean("????")
+AZA.Lang.Unit.Azaphrentus:SetRussian("Azaphrentus")
+AZA.Lang.Unit.Azaphrentus:SetKorean("Azaphrentus")
 AZA.Aza.Name = AZA.Lang.Unit.Azaphrentus[KBM.Lang]
 AZA.Descript = AZA.Lang.Unit.Azaphrentus[KBM.Lang]
 
@@ -84,7 +84,7 @@ AZA.Descript = AZA.Lang.Unit.Azaphrentus[KBM.Lang]
 AZA.Lang.Ability = {}
 AZA.Lang.Ability.PopAdd = KBM.Language:Add("​Manifest Scorn")
 AZA.Lang.Ability.PopAdd:SetFrench("Manifestation de mépris")
-AZA.Lang.Ability.PopAdd:SetGerman("Manifestation de mépris")
+AZA.Lang.Ability.PopAdd:SetGerman("Manifestierte Verachtung")
 AZA.Lang.Ability.PopAdd:SetRussian("????????? ????")
 AZA.Lang.Ability.PopAdd:SetKorean("?? ??")
 
@@ -92,7 +92,7 @@ AZA.Lang.Ability.PopAdd:SetKorean("?? ??")
 AZA.Lang.Debuff = {}
 AZA.Lang.Debuff.Rage = KBM.Language:Add("Rage of Azaphrentus")
 AZA.Lang.Debuff.Rage:SetFrench("Rage d'Azaphrentus")
-AZA.Lang.Debuff.Rage:SetGerman("Azaphrentus Rage")
+AZA.Lang.Debuff.Rage:SetGerman("Wut des Azaphrentus")
 AZA.Lang.Debuff.Rage:SetRussian("Azaphrentus Rage")
 AZA.Lang.Debuff.Rage:SetKorean("Azaphrentus Rage")
 

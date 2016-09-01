@@ -55,21 +55,15 @@ EBL.Ebl = {
 			Fleau = KBM.Defaults.CastFilter.Create("purle"),
 			CallToArms = KBM.Defaults.CastFilter.Create("red"),
 			BlazingRuin = KBM.Defaults.CastFilter.Create("yellow"),
-			-- SoulSear = KBM.Defaults.CastFilter.Create("purle"),
-			-- Blast = KBM.Defaults.CastFilter.Create("red"),
 		},
 		TimersRef = {
 			Enabled = true,
-			-- Crush = KBM.Defaults.TimerObj.Create("purple"),
-			-- Pound = KBM.Defaults.TimerObj.Create("blue"),
-			-- Demonic = KBM.Defaults.TimerObj.Create("cyan"),
 		},
 		AlertsRef = {
 			Enabled = true,
 			Fleau = KBM.Defaults.AlertObj.Create("purle"),
 			CallToArms = KBM.Defaults.AlertObj.Create("red"),
 			BlazingRuin = KBM.Defaults.AlertObj.Create("yellow"),
-			-- SoulSear = KBM.Defaults.AlertObj.Create("purle"),
 		},
 		MechRef = {
 			Enabled = true,
@@ -82,7 +76,7 @@ KBM.RegisterMod("Eblius", EBL)
 -- Main Unit Dictionary
 EBL.Lang.Unit = {}
 EBL.Lang.Unit.Eblius = KBM.Language:Add(EBL.Ebl.Name)
-EBL.Lang.Unit.Eblius:SetGerman("Eblius")
+EBL.Lang.Unit.Eblius:SetGerman("Duke Eblius")
 EBL.Lang.Unit.Eblius:SetFrench("Duc Eblius")
 EBL.Lang.Unit.Eblius:SetRussian("??????????")
 EBL.Lang.Unit.Eblius:SetKorean("????")
@@ -93,32 +87,22 @@ EBL.Descript = EBL.Lang.Unit.Eblius[KBM.Lang]
 EBL.Lang.Ability = {}
 EBL.Lang.Ability.Fleau = KBM.Language:Add("Sulphurous Blight")
 EBL.Lang.Ability.Fleau:SetFrench("Fléau sulfureux")
-EBL.Lang.Ability.Fleau:SetGerman("Sulphurous Blight")
+EBL.Lang.Ability.Fleau:SetGerman("Schweflige Pest")
 EBL.Lang.Ability.Fleau:SetRussian("????????? ????")
 EBL.Lang.Ability.Fleau:SetKorean("?? ??")
 EBL.Lang.Ability.CallToArms = KBM.Language:Add("Call to arms")
 EBL.Lang.Ability.CallToArms:SetFrench("Appel aux armes")
-EBL.Lang.Ability.CallToArms:SetGerman("Call to arms")
+EBL.Lang.Ability.CallToArms:SetGerman("Waffenruf")
 EBL.Lang.Ability.CallToArms:SetRussian("???????? ????")
 EBL.Lang.Ability.CallToArms:SetKorean("??? ??")
 EBL.Lang.Ability.BlazingRuin = KBM.Language:Add("Blazing Ruin")
 EBL.Lang.Ability.BlazingRuin:SetFrench("Ruine flamboyante")
-EBL.Lang.Ability.BlazingRuin:SetGerman("Blazing Ruin")
+EBL.Lang.Ability.BlazingRuin:SetGerman("Flammender Ruin")
 EBL.Lang.Ability.BlazingRuin:SetRussian("???????? ????")
 EBL.Lang.Ability.BlazingRuin:SetKorean("??? ??")
--- EBL.Lang.Ability.SoulSear = KBM.Language:Add("Soul Sear")
--- EBL.Lang.Ability.SoulSear:SetFrench("Soul Sear")
--- EBL.Lang.Ability.SoulSear:SetGerman("Soul Sear")
--- EBL.Lang.Ability.SoulSear:SetRussian("???????? ????")
--- EBL.Lang.Ability.SoulSear:SetKorean("??? ??")
 
 -- Debuff Dictionary
 EBL.Lang.Debuff = {}
--- EBL.Lang.Debuff.Mangled = KBM.Language:Add("Mangled")
--- EBL.Lang.Debuff.Mangled:SetGerman("Üble Blessur")
--- EBL.Lang.Debuff.Mangled:SetFrench("Estropié")
--- EBL.Lang.Debuff.Mangled:SetRussian("?????????")
--- EBL.Lang.Debuff.Mangled:SetKorean("??")
 
 function EBL:AddBosses(KBM_Boss)
 	self.MenuName = self.Ebl.Name

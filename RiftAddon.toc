@@ -78,7 +78,7 @@ RunOnStartup = {
 			"Raids/Nightmare Tide/CometOfAhnket/Azaphrentus.lua",
 			"Raids/Nightmare Tide/CometOfAhnket/Eblius.lua",
 			"Raids/Nightmare Tide/CometOfAhnket/Fyragnos.lua",
-			"Raids/Nightmare Tide/CometOfAhnket/Ericius.lua",
+			"Raids/Nightmare Tide/CometOfAhnket/Hericius.lua",
 	
 	--Storm Legion Raids/Rift 20
 		--Binding of Blood
