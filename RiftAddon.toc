@@ -49,6 +49,13 @@ RunOnStartup = {
 --			"Experts/Prophecy of Ahnket/Darkening_Deeps/Glubmuk.lua",
 --			"Experts/Prophecy of Ahnket/Darkening_Deeps/Council.lua",
 --			"Experts/Prophecy of Ahnket/Darkening_Deeps/Scarn.lua",
+
+		-- Gyel Fortress
+			"Experts/Prophecy of Ahnket/Gyel_Fortress/GF_Header.lua",
+			"Experts/Prophecy of Ahnket/Gyel_Fortress/Seathe.lua",
+			"Experts/Prophecy of Ahnket/Gyel_Fortress/Kytus.lua",
+			"Experts/Prophecy of Ahnket/Gyel_Fortress/Nezavar.lua",
+			"Experts/Prophecy of Ahnket/Gyel_Fortress/Glasya.lua",
 	
 	-- NT Raids/Rift 20
 		-- Mount Sharax
@@ -583,6 +590,16 @@ SavedVariables = {
 			chKBMEXIDDGK_Settings = "character",
 			chKBMEXIDDTC_Settings = "character",
 			chKBMEXIDDSN_Settings = "character",
+
+		-- Gyel Fortress
+			KBMPOAIGFSEA_Settings = "account",
+			KBMPOAIGFKYT_Settings = "account",
+			KBMPOAIGFNEZ_Settings = "account",
+			KBMPOAIGFGLA_Settings = "account",
+			chKBMPOAIGFSEA_Settings = "character",
+			chKBMPOAIGFKYT_Settings = "character",
+			chKBMPOAIGFNEZ_Settings = "character",
+			chKBMPOAIGFGLA_Settings = "character",
 	
 	
 	-- NT Raids/Rift 20
