@@ -38,7 +38,7 @@ MOD.Bringhurst = {
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
-	UTID = "TODO",
+	UTID = "U472E02BC4D21415D",
 	Settings = {
 		CastBar = KBM.Defaults.Castbar(),
 	}

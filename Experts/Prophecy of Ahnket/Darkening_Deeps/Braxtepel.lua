@@ -37,7 +37,7 @@ MOD.Braxtepel = {
 	Available = false,
 	UnitID = nil,
 	TimeOut = 5,
-	UTID = "TODO",
+	UTID = "U6F8961630B87B930",
 	Triggers = {},
 	Settings = {
 		CastBar = KBM.Defaults.Castbar(),
@@ -84,7 +84,7 @@ MOD.Mursh = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = "TODO",
+	UTID = "U58A80BDF3CA25A6B",
 	TimeOut = 5,
 }
 
@@ -97,7 +97,7 @@ MOD.Squersh = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
-	UTID = "TODO",
+	UTID = "U556867FD1BC67A54",
 	TimeOut = 5,
 }
 
