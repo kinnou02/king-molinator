@@ -18,7 +18,7 @@ local MOD = {
 	Type = "Expert",
 	ID = "Intrepid Darkening_Deeps",
 	Object = "MOD",
-	Rift = "Prophecy of Ahnket",
+	Rift = "PoA",
 }
 
 -- Link Mods

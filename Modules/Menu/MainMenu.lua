@@ -232,6 +232,7 @@ function Menu:Define(Addon)
 	table.insert(self.Default.TabList.Rift, {ID = "Rift", Name = "Rift", Icon = "Media/RiftLogo.png", Location = AddonIni.id})
 	table.insert(self.Default.TabList.Rift, {ID = "SL", Name = "Storm Legion", Icon = "Media/StormLegionLogo.png", Location = AddonIni.id})
 	table.insert(self.Default.TabList.Rift, {ID = "NT", Name = "Nightmare Tide", Icon = "Media/NightmareTideLogo.png", Location = AddonIni.id})
+	table.insert(self.Default.TabList.Rift, {ID = "PoA", Name = "Prophecy of Ahnket", Icon = "Media/NightmareTideLogo.png", Location = AddonIni.id})
 	
 	-- Define Encounter Tabber
 	table.insert(self.Default.TabList.Enc, {ID = "Raid", Name = "Raid", Icon = "Media/Raid_Icon.png", Location = AddonIni.id})
@@ -330,6 +331,7 @@ function Menu:Init(Addon)
 	})
 	self.Tab.Rift.SL.Tab = self.Tab.Rift.Tabber:CreateTab(self.Tab.Rift.SL.Name, self.Tab.Rift.SL.Icon, false, self.Tab.Rift.SL.Location)
 	self.Tab.Rift.NT.Tab = self.Tab.Rift.Tabber:CreateTab(self.Tab.Rift.NT.Name, self.Tab.Rift.NT.Icon, false, self.Tab.Rift.NT.Location)
+	self.Tab.Rift.PoA.Tab = self.Tab.Rift.Tabber:CreateTab(self.Tab.Rift.PoA.Name, self.Tab.Rift.PoA.Icon, false, self.Tab.Rift.PoA.Location)
 	self.Tab.Enc.Cradle = LibSGui.Frame:Create(self.Window.Content, true)
 	self.Tab.Enc.Cradle:ClearPoint("TOP")
 	self.Tab.Enc.Cradle:SetPoint("TOP", self.Window.Content, "BOTTOM", nil, -math.ceil(self.Window.Content:GetHeight() * 0.64) + 28)
@@ -350,6 +352,11 @@ function Menu:Init(Addon)
 	}
 	self.Tab.Rift.NT.Tab.UserData = {
 		_parent = self.Tab.Rift.NT,
+		_function = self._riftTab,
+	}
+	
+	self.Tab.Rift.PoA.Tab.UserData = {
+		_parent = self.Tab.Rift.PoA,
 		_function = self._riftTab,
 	}
 		
@@ -381,6 +388,7 @@ function Menu:Init(Addon)
 	self:_createEncTab("Rift")
 	self:_createEncTab("SL")
 	self:_createEncTab("NT")
+	self:_createEncTab("PoA")
 	if not self.Tab.Rift[KBM.Options.MenuExpac] then
 		KBM.Options.MenuExpac = "Rift"
 	end
@@ -393,6 +401,7 @@ function Menu:Init(Addon)
 	self.Tab.Rift.Rift.Current = self.Tab.Rift.Rift.Raid.TreeView
 	self.Tab.Rift.SL.Current = self.Tab.Rift.SL.Raid.TreeView
 	self.Tab.Rift.NT.Current = self.Tab.Rift.NT.Raid.TreeView
+	self.Tab.Rift.PoA.Current = self.Tab.Rift.PoA.Raid.TreeView
 	
 	-- Create global panel enclosure.
 	self.Panel = LibSGui.Group:Create("Main Panel", self.Window.Content, {Visible = true, Raised = false})

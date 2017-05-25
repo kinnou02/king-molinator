@@ -15,7 +15,7 @@ local MOD = {
 	Type = "Expert",
 	ID = "Intrepid_Gyel_Fortress",
 	Object = "MOD",
-	Rift = "Prophecy of Ahnket",
+	Rift = "PoA",
 }
 
 -- Link Mods
