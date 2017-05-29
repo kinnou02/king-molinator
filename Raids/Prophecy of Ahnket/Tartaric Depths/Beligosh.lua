@@ -195,33 +195,33 @@ end
 
 
 function BEL.PhaseTwo()
-    MLF.PhaseObj.Objectives:Remove()
-    if MLF.Phase == 2 then
-        MLF.Phase = 3
-        MLF.PhaseObj:SetPhase(3)
-        MLF.PhaseObj.Objectives:AddPercent(BEL.Beligosh, 40, 70)
+    BEL.PhaseObj.Objectives:Remove()
+    if BEL.Phase == 2 then
+        BEL.Phase = 3
+        BEL.PhaseObj:SetPhase(3)
+        BEL.PhaseObj.Objectives:AddPercent(BEL.Beligosh, 40, 70)
     else
-        MLF.Phase = 5
-        MLF.PhaseObj:SetPhase(5)
-        MLF.PhaseObj.Objectives:AddPercent(BEL.Beligosh, 0, 40)
+        BEL.Phase = 5
+        BEL.PhaseObj:SetPhase(5)
+        BEL.PhaseObj.Objectives:AddPercent(BEL.Beligosh, 0, 40)
     end
 end
 
 function BEL.PhaseFive()
-    MLF.PhaseObj.Objectives:Remove()
+    BEL.PhaseObj.Objectives:Remove()
 end
 
 function BEL.AddPhase()
-    MLF.PhaseObj.Objectives:Remove()
-    if MLF.Phase == 1 then
-        MLF.Phase = 2
-        MLF.PhaseObj:SetPhase(2)
+    BEL.PhaseObj.Objectives:Remove()
+    if BEL.Phase == 1 then
+        BEL.Phase = 2
+        BEL.PhaseObj:SetPhase(2)
     else
-        MLF.Phase = 4
-        MLF.PhaseObj:SetPhase(4)
+        BEL.Phase = 4
+        BEL.PhaseObj:SetPhase(4)
     end
 
-    MLF.PhaseObj.Objectives:AddDeath(BEL.Golem.name, 3)
+    BEL.PhaseObj.Objectives:AddDeath(BEL.Golem.name, 3)
 end
 
 
