@@ -4,7 +4,7 @@
 KBMPOATD_Settings = nil
 chKBMPOATD_Settings = nil
 
-local MOD = {
+local TD = {
 	Directory = "Raids/Prophecy of Ahnket/Tartaric Depths/",
 	File = "TD_Header.lua",
 	Header = nil,
@@ -13,8 +13,8 @@ local MOD = {
 	Name = "Tartaric Depths",
 	Type = "Raid",
 	ID = "Tartaric_Depths",
-	Object = "MOD",
-	Rift = "Prophecy of Ahnket",
+	Object = "TD",
+	Rift = "PoA",
 }
 
 -- Link Mods
@@ -24,29 +24,29 @@ if not KBM.BossMod then
 	return
 end
 
-KBM.RegisterMod(MOD.ID, MOD)
+KBM.RegisterMod(TD.ID, TD)
 
 -- Header Dictionary
-MOD.Lang = {}
-MOD.Lang.Main = {}
-MOD.Lang.Main.Name = KBM.Language:Add(MOD.Name)
-MOD.Lang.Main.Name:SetFrench("Profondeur Tartare")
+TD.Lang = {}
+TD.Lang.Main = {}
+TD.Lang.Main.Name = KBM.Language:Add(TD.Name)
+TD.Lang.Main.Name:SetFrench("Profondeur Tartare")
 
 
-MOD.Name = MOD.Lang.Main.Name[KBM.Lang]
-MOD.Descript = MOD.Name
+TD.Name = TD.Lang.Main.Name[KBM.Lang]
+TD.Descript = TD.Name
 
-function MOD:AddBosses(KBM_Boss)
+function TD:AddBosses(KBM_Boss)
 end
 
-function MOD:InitVars()
+function TD:InitVars()
 end
 
-function MOD:LoadVars()
+function TD:LoadVars()
 end
 
-function MOD:SaveVars()
+function TD:SaveVars()
 end
 
-function MOD:Start()
+function TD:Start()
 end

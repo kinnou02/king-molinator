@@ -236,11 +236,11 @@ function BEL:Start()
     self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 
 
-    self.Beligosh.Triggers.AddPhase1 = KBM.Trigger:Create(70, "percent", self.Beligosh)
-    self.Beligosh.Triggers.PhaseTwo:AddPhase(self.AddPhase)
+    self.Beligosh.Triggers.AddPhase = KBM.Trigger:Create(70, "percent", self.Beligosh)
+    self.Beligosh.Triggers.AddPhase:AddPhase(self.AddPhase)
 
---    self.Maelforge.Triggers.PhaseFinal = KBM.Trigger:Create(self.Lang.Notify.PhaseFinal[KBM.Lang], "notify", self.Maelforge)
-    self.Maelforge.Triggers.PhaseTwo = KBM.Trigger:Create("Beligosh: Feel the wrath of Beligosh!", "notify", self.Beligosh)
+--    self.Beligosh.Triggers.PhaseFinal = KBM.Trigger:Create(self.Lang.Notify.PhaseFinal[KBM.Lang], "notify", self.Maelforge)
+    self.Beligosh.Triggers.PhaseTwo = KBM.Trigger:Create("Beligosh: Feel the wrath of Beligosh!", "notify", self.Beligosh)
     self.Beligosh.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
 
     self.Beligosh.Triggers.AddPhase2 = KBM.Trigger:Create(40, "percent", self.Beligosh)

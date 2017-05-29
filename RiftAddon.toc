@@ -40,6 +40,10 @@ RunOnStartup = {
 	"Modules/Castbar.lua",
 	"Modules/Reflect.lua",
 
+	-- PoA raid
+		-- TD
+			"Raids/Prophecy of Ahnket/Tartaric Depths/TD_Header.lua",
+			"Raids/Prophecy of Ahnket/Tartaric Depths/Beligosh.lua",
     -- PoA expert
 		-- Intrepid Darkening Deeps
 			"Experts/Prophecy of Ahnket/Darkening_Deeps/DDHeader.lua",
