@@ -221,7 +221,7 @@ function BEL.AddPhase()
         BEL.PhaseObj:SetPhase(4)
     end
 
-    BEL.PhaseObj.Objectives:AddDeath(BEL.Golem.name, 3)
+    BEL.PhaseObj.Objectives:AddDeath(BEL.Golem.Name, 3)
 end
 
 
