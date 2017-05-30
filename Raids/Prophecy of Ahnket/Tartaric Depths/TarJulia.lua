@@ -14,7 +14,7 @@ end
 
 local Instance = KBM.BossMod["Tartaric_Depths"]
 
-local MOD = {
+local TAR = {
 	Directory = Instance.Directory,
 	File = "TarJulia.lua",
 	Enabled = true,
@@ -23,11 +23,11 @@ local MOD = {
 	HasPhases = true,
 	Lang = {},
 	ID = "TarJulia",
-	Object = "MOD",
+	Object = "TAR",
 }
 
-MOD.TarJulia = {
-	Mod = MOD,
+TAR.TarJulia = {
+	Mod = TAR,
 	Level = "??",
 	Active = false,
 	Name = "TarJulia",
@@ -48,36 +48,54 @@ MOD.TarJulia = {
 	},
 }
 
-KBM.RegisterMod(MOD.ID, MOD)
+TAR.Soul = {
+    Mod = TAR,
+    Level = "72",
+    Name = "Infernal Soul",
+    NameShort = "Infernal Soul",
+    UnitList = {},
+    Menu = {},
+    UTID = "TODO",
+    Ignore = true,
+    Type = "multi",
+}
+
+KBM.RegisterMod(TAR.ID, TAR)
 
 -- Main Unit Dictionary
-MOD.Lang.Unit = {}
-MOD.Lang.Unit.TarJulia = KBM.Language:Add(MOD.TarJulia.Name)
+TAR.Lang.Unit = {}
+TAR.Lang.Unit.TarJulia = KBM.Language:Add(TAR.TarJulia.Name)
+
+TAR.Lang.Unit.Soul = KBM.Language:Add(TAR.Soul.Name)
 
 -- Ability Dictionary
-MOD.Lang.Ability = {}
+TAR.Lang.Ability = {}
 
 -- Verbose Dictionary
-MOD.Lang.Verbose = {}
+TAR.Lang.Verbose = {}
+TAR.Lang.Verbose.MoltenLava = KBM.Language:Add("Gi to a pillar!")
 
 -- Buff Dictionary
-MOD.Lang.Buff = {}
+TAR.Lang.Buff = {}
 
 -- Debuff Dictionary
-MOD.Lang.Debuff = {}
+TAR.Lang.Debuff = {}
+
+TAR.Lang.Notify = {}
+TAR.Lang.Notify.Wrath = KBM.Language:Add("TarJulia targets (%a+) with molten lava!")
 
 -- Description Dictionary
-MOD.Lang.Main = {}
-MOD.Descript = MOD.Lang.Unit.TarJulia[KBM.Lang]
+TAR.Lang.Main = {}
+TAR.Descript = TAR.Lang.Unit.TarJulia[KBM.Lang]
 
-function MOD:AddBosses(KBM_Boss)
+function TAR:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.TarJulia.Name] = self.TarJulia,
 	}
 end
 
-function MOD:InitVars()
+function TAR:InitVars()
 	self.Settings = {
 		Enabled = true,
 		CastBar = self.TarJulia.Settings.CastBar,
@@ -93,7 +111,7 @@ function MOD:InitVars()
 	
 end
 
-function MOD:SwapSettings(bool)
+function TAR:SwapSettings(bool)
 
 	if bool then
 		KBMPOATDTAR_Settings = self.Settings
@@ -105,7 +123,7 @@ function MOD:SwapSettings(bool)
 
 end
 
-function MOD:LoadVars()	
+function TAR:LoadVars()	
 	if KBM.Options.Character then
 		KBM.LoadTable(chKBMPOATDTAR_Settings, self.Settings)
 	else
@@ -119,7 +137,7 @@ function MOD:LoadVars()
 	end	
 end
 
-function MOD:SaveVars()	
+function TAR:SaveVars()	
 	if KBM.Options.Character then
 		chKBMPOATDTAR_Settings = self.Settings
 	else
@@ -127,10 +145,10 @@ function MOD:SaveVars()
 	end	
 end
 
-function MOD:Castbar(units)
+function TAR:Castbar(units)
 end
 
-function MOD:RemoveUnits(UnitID)
+function TAR:RemoveUnits(UnitID)
 	if self.TarJulia.UnitID == UnitID then
 		self.TarJulia.Available = false
 		return true
@@ -138,7 +156,7 @@ function MOD:RemoveUnits(UnitID)
 	return false
 end
 
-function MOD:Death(UnitID)
+function TAR:Death(UnitID)
 	if self.TarJulia.UnitID == UnitID then
 		self.TarJulia.Dead = true
 		return true
@@ -146,7 +164,7 @@ function MOD:Death(UnitID)
 	return false
 end
 
-function MOD:UnitHPCheck(uDetails, unitID)
+function TAR:UnitHPCheck(uDetails, unitID)
 	if uDetails and unitID then
 		if uDetails.type == self.TarJulia.UTID then
 			if not self.EncounterRunning then
@@ -160,6 +178,7 @@ function MOD:UnitHPCheck(uDetails, unitID)
 				self.PhaseObj:Start(self.StartTime)
 				self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
 				self.PhaseObj.Objectives:AddPercent(self.TarJulia, 0, 100)
+				self.PhaseObj.Objectives:AddDeath(TAR.Lang.Unit.Soul[KBM.Lang], 9)
 				self.Phase = 1
 			end
 			self.TarJulia.UnitID = unitID
@@ -169,7 +188,7 @@ function MOD:UnitHPCheck(uDetails, unitID)
 	end
 end
 
-function MOD:Reset()
+function TAR:Reset()
 	self.EncounterRunning = false
 	self.TarJulia.Available = false
 	self.TarJulia.UnitID = nil
@@ -178,18 +197,23 @@ function MOD:Reset()
 	self.PhaseObj:End(Inspect.Time.Real())
 end
 
-function MOD:Timer()	
+function TAR:Timer()	
 end
 
 
 
 
-function MOD:Start()
+function TAR:Start()
 	-- Create Timers
 	
 	-- Create Alerts
+	self.TarJulia.AlertsRef.MoltenLava = KBM.Alert:Create(self.Lang.Verbose.MoltenLava[KBM.Lang], nil, true, true, "red")
+	KBM.Defaults.AlertObj.Assign(self.TarJulia)
 	
 	-- Assign Alerts and Timers to Triggers
+	self.TarJulia.Triggers.MoltenLava = KBM.Trigger:Create(self.Lang.Notify.MoltenLava[KBM.Lang], "notify", self.TarJulia)
+    self.TarJulia.Triggers.MoltenLava:AddAlert(self.Nezavar.AlertsRef.MoltenLava, true)
+
 	self.TarJulia.CastBar = KBM.Castbar:Add(self, self.TarJulia)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 	

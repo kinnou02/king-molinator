@@ -65,6 +65,10 @@ KBM.RegisterMod(BEL.ID, BEL)
 -- Main Unit Dictionary
 BEL.Lang.Unit = {}
 BEL.Lang.Unit.Beligosh = KBM.Language:Add(BEL.Beligosh.Name)
+BEL.Lang.Unit.Beligosh:SetFrench("Beligosh")
+
+BEL.Lang.Unit.Golem = KBM.Language:Add(BEL.Golem.Name)
+BEL.Lang.Unit.Golem:SetFrench("Alavaxian Golem")
 
 -- Ability Dictionary
 BEL.Lang.Ability = {}
@@ -77,6 +81,10 @@ BEL.Lang.Buff = {}
 
 -- Debuff Dictionary
 BEL.Lang.Debuff = {}
+
+
+BEL.Lang.Notify = {}
+BEL.Lang.Notify.Wrath = KBM.Language:Add("Beligosh: Feel the wrath of Beligosh!")
 
 -- Description Dictionary
 BEL.Lang.Main = {}
@@ -170,7 +178,7 @@ function BEL:UnitHPCheck(uDetails, unitID)
                 self.Beligosh.Casting = false
                 self.Beligosh.CastBar:Create(unitID)
                 self.PhaseObj:Start(self.StartTime)
-                self.PhaseObj:SetPhase(KBM.Language.Options.Single[KBM.Lang])
+                self.PhaseObj:SetPhase(self.Beligosh.Name)
                 self.PhaseObj.Objectives:AddPercent(self.Beligosh, 70, 100)
                 self.Phase = 1
             end
@@ -190,7 +198,7 @@ function BEL:Reset()
     self.PhaseObj:End(Inspect.Time.Real())
 end
 
-function BEL:Timer()    
+function BEL:Timer()
 end
 
 
@@ -221,7 +229,7 @@ function BEL.AddPhase()
         BEL.PhaseObj:SetPhase(4)
     end
 
-    BEL.PhaseObj.Objectives:AddDeath(BEL.Golem.Name, 3)
+    BEL.PhaseObj.Objectives:AddDeath(BEL.Lang.Unit.Golem[KBM.Lang], 3)
 end
 
 
@@ -240,7 +248,7 @@ function BEL:Start()
     self.Beligosh.Triggers.AddPhase:AddPhase(self.AddPhase)
 
 --    self.Beligosh.Triggers.PhaseFinal = KBM.Trigger:Create(self.Lang.Notify.PhaseFinal[KBM.Lang], "notify", self.Maelforge)
-    self.Beligosh.Triggers.PhaseTwo = KBM.Trigger:Create("Beligosh: Feel the wrath of Beligosh!", "notify", self.Beligosh)
+    self.Beligosh.Triggers.PhaseTwo = KBM.Trigger:Create(self.Lang.Notify.Wrath[KBM.Lang], "notify", self.Beligosh)
     self.Beligosh.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
 
     self.Beligosh.Triggers.AddPhase2 = KBM.Trigger:Create(40, "percent", self.Beligosh)
