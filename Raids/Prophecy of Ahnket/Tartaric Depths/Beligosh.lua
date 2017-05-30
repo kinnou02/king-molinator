@@ -55,7 +55,7 @@ BEL.Golem = {
     NameShort = "Alavaxian Golem",
     UnitList = {},
     Menu = {},
-    UTID = "TODO",
+    UTID = "U0C52392E243A6ACD",
     Ignore = true,
     Type = "multi",
 }
@@ -229,7 +229,7 @@ function BEL.AddPhase()
         BEL.PhaseObj:SetPhase(4)
     end
 
-    BEL.PhaseObj.Objectives:AddDeath(BEL.Lang.Unit.Golem[KBM.Lang], 3)
+    BEL.PhaseObj.Objectives:AddDeath(BEL.Golem.Name, 3)
 end
 
 

@@ -44,6 +44,7 @@ TAR.TarJulia = {
 		CastBar = KBM.Defaults.Castbar(),
 		AlertsRef = {
 		  Enabled = true,
+		  MoltenLava = KBM.Defaults.AlertObj.Create("red"),
 		},
 	},
 }
@@ -55,7 +56,7 @@ TAR.Soul = {
     NameShort = "Infernal Soul",
     UnitList = {},
     Menu = {},
-    UTID = "TODO",
+    UTID = "U60B1A0B31BAFAC42",
     Ignore = true,
     Type = "multi",
 }
@@ -82,7 +83,7 @@ TAR.Lang.Buff = {}
 TAR.Lang.Debuff = {}
 
 TAR.Lang.Notify = {}
-TAR.Lang.Notify.Wrath = KBM.Language:Add("TarJulia targets (%a+) with molten lava!")
+TAR.Lang.Notify.MoltenLava = KBM.Language:Add("TarJulia targets (%a+) with molten lava!")
 
 -- Description Dictionary
 TAR.Lang.Main = {}
@@ -212,7 +213,7 @@ function TAR:Start()
 	
 	-- Assign Alerts and Timers to Triggers
 	self.TarJulia.Triggers.MoltenLava = KBM.Trigger:Create(self.Lang.Notify.MoltenLava[KBM.Lang], "notify", self.TarJulia)
-    self.TarJulia.Triggers.MoltenLava:AddAlert(self.Nezavar.AlertsRef.MoltenLava, true)
+    self.TarJulia.Triggers.MoltenLava:AddAlert(self.TarJulia.AlertsRef.MoltenLava, true)
 
 	self.TarJulia.CastBar = KBM.Castbar:Add(self, self.TarJulia)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
