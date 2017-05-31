@@ -94,6 +94,7 @@ function BEL:AddBosses(KBM_Boss)
     self.MenuName = self.Descript
     self.Bosses = {
         [self.Beligosh.Name] = self.Beligosh,
+        [self.Golem.Name] = self.Golem,
     }
 end
 

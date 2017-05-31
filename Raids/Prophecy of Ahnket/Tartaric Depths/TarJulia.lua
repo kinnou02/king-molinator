@@ -93,6 +93,7 @@ function TAR:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
 		[self.TarJulia.Name] = self.TarJulia,
+		[self.Soul.Name] = self.Soul,
 	}
 end
 
