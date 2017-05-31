@@ -5,23 +5,23 @@ KBMPOATD_Settings = nil
 chKBMPOATD_Settings = nil
 
 local TD = {
-	Directory = "Raids/Prophecy of Ahnket/Tartaric Depths/",
-	File = "TD_Header.lua",
-	Header = nil,
-	Enabled = true,
-	IsInstance = true,
-	Name = "Tartaric Depths",
-	Type = "Raid",
-	ID = "Tartaric_Depths",
-	Object = "TD",
-	Rift = "PoA",
+    Directory = "Raids/Prophecy of Ahnket/Tartaric Depths/",
+    File = "TD_Header.lua",
+    Header = nil,
+    Enabled = true,
+    IsInstance = true,
+    Name = "Tartaric Depths",
+    Type = "Raid",
+    ID = "Tartaric_Depths",
+    Object = "TD",
+    Rift = "PoA",
 }
 
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 if not KBM.BossMod then
-	return
+    return
 end
 
 KBM.RegisterMod(TD.ID, TD)

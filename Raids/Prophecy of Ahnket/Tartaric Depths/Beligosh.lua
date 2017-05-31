@@ -111,7 +111,7 @@ function BEL:InitVars()
     }
     KBMPOATDBEL_Settings = self.Settings
     chKBMPOATDBEL_Settings = self.Settings
-    
+
 end
 
 function BEL:SwapSettings(bool)
@@ -126,13 +126,13 @@ function BEL:SwapSettings(bool)
 
 end
 
-function BEL:LoadVars() 
+function BEL:LoadVars()
     if KBM.Options.Character then
         KBM.LoadTable(chKBMPOATDBEL_Settings, self.Settings)
     else
         KBM.LoadTable(KBMPOATDBEL_Settings, self.Settings)
     end
-    
+
     if KBM.Options.Character then
         chKBMPOATDBEL_Settings = self.Settings
     else
@@ -140,12 +140,12 @@ function BEL:LoadVars()
     end 
 end
 
-function BEL:SaveVars() 
+function BEL:SaveVars()
     if KBM.Options.Character then
         chKBMPOATDBEL_Settings = self.Settings
     else
         KBMPOATDBEL_Settings = self.Settings
-    end 
+    end
 end
 
 function BEL:Castbar(units)
@@ -195,7 +195,7 @@ function BEL:Reset()
     self.Beligosh.Available = false
     self.Beligosh.UnitID = nil
     self.Beligosh.CastBar:Remove()
-        
+
     self.PhaseObj:End(Inspect.Time.Real())
 end
 

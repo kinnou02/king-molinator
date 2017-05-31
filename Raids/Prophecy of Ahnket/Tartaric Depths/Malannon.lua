@@ -94,7 +94,7 @@ function MAL:InitVars()
     }
     KBMPOATDMAL_Settings = self.Settings
     chKBMPOATDMAL_Settings = self.Settings
-    
+
 end
 
 function MAL:SwapSettings(bool)
@@ -115,12 +115,12 @@ function MAL:LoadVars()
     else
         KBM.LoadTable(KBMPOATDMAL_Settings, self.Settings)
     end
-    
+
     if KBM.Options.Character then
         chKBMPOATDMAL_Settings = self.Settings
     else
         KBMPOATDMAL_Settings = self.Settings
-    end 
+    end
 end
 
 function MAL:SaveVars() 
@@ -178,7 +178,7 @@ function MAL:Reset()
     self.Malannon.Available = false
     self.Malannon.UnitID = nil
     self.Malannon.CastBar:Remove()
-        
+
     self.PhaseObj:End(Inspect.Time.Real())
 end
 
