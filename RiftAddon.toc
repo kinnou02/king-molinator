@@ -41,6 +41,12 @@ RunOnStartup = {
 	"Modules/Reflect.lua",
 
 	-- PoA raid
+	-- Intrepid Rise of the phoenix
+			"Slivers/Prophecy of Ahnket/Rise_of_the_Phoenix/ROTPHeader.lua",
+			"Slivers/Prophecy of Ahnket/Rise_of_the_Phoenix/Ereandorn.lua",
+			"Slivers/Prophecy of Ahnket/Rise_of_the_Phoenix/Beruhast.lua",
+			"Slivers/Prophecy of Ahnket/Rise_of_the_Phoenix/Silgen.lua",
+			"Slivers/Prophecy of Ahnket/Rise_of_the_Phoenix/Arakhurn.lua",
 		-- TD
 			"Raids/Prophecy of Ahnket/Tartaric Depths/TD_Header.lua",
 			"Raids/Prophecy of Ahnket/Tartaric Depths/Beligosh.lua",
@@ -581,6 +587,17 @@ SavedVariables = {
 	KBMChronicle_Settings = "account",
 	KBMOpenWorld_Settings = "account",
     -- PoA raids
+		-- Intrepid Rise of the phoenix
+			KBMIROTP_Settings = "account",
+			KBMIROTPEN_Settings = "account",
+			KBMIROTPHA_Settings = "account",
+			KBMIROTPBT_Settings = "account",
+			KBMIROTPGS_Settings = "account",
+			chKBMIROTP_Settings = "character",
+			chKBMIROTPEN_Settings = "character",
+			chKBMIROTPHA_Settings = "character",
+			chKBMIROTPBT_Settings = "character",
+			chKBMIROTPGS_Settings = "character",
         -- Tartaric Depths
             KBMPOATD_Settings = "account",
             KBMPOATDBEL_Settings = "account",
