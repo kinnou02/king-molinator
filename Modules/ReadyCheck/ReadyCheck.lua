@@ -184,6 +184,33 @@ PI.Constants = {
 			Icons = true,
 			List = {
 				--//////////////////////--
+				-- PoA High Grade Stones --
+				--//////////////////////--
+				["rFA65F5184E42C822"] = { -- Atramentium Whetstone
+					Grade = "High",
+					Level = 70,
+					Callings = {
+						rogue = true,
+						warrior = true,
+					},
+				},
+				[""] = { -- Coral Oilstone
+					Grade = "High",
+					Level = 70,
+					Callings = {
+						warrior = true,
+						primalist = true,
+					},
+				},
+				["r143A1D7A79A201D6"] = { -- Faetouched Powerstone
+					Grade = "High",
+					Level = 70,
+					Callings = {
+						cleric = true,
+						mage = true,
+					},
+				},
+				--//////////////////////--
 				-- NT High Grade Stones --
 				--//////////////////////--
 				["r0C2445386997ECE6"] = { -- Coral Whetstone
@@ -503,6 +530,26 @@ PI.Constants = {
 			w = 36,
 			Icons = true,
 			List = {
+				--////////////////////--
+				-- PoA High Grade Food --
+				--////////////////////--
+				[""] = { -- Gedlo Curry Pot (AP)
+					Grade = "High",
+					Level = 70,
+					Callings = {
+						warrior = true,
+						rogue = true,
+						primalist = true,
+					},
+				},
+				["B40C3D8E2646C6DD1"] = { -- Gedlo Curry Pot (SP)
+					Grade = "High",
+					Level = 70,
+					Callings = {
+						mage = true,
+						cleric = true,
+					},
+				},
 				--////////////////////--
 				-- NT High Grade Food --
 				--////////////////////--
@@ -1191,6 +1238,16 @@ PI.Constants = {
 			w = 30,
 			Icons = true,
 			List = {
+				--////////////////////////--
+				-- PoA Insoles --
+				--////////////////////////--
+				["r4DEE42255D06816A"] = { -- Tuath'de Insoles
+					Grade = "High",
+					Level = 65,
+					Callings = {
+						all = true,
+					},
+				},
 				--////////////////////////--
 				-- Nightmare Tide Insoles --
 				--////////////////////////--
