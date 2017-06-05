@@ -232,7 +232,7 @@ function Menu:Define(Addon)
 	table.insert(self.Default.TabList.Rift, {ID = "Rift", Name = "Rift", Icon = "Media/RiftLogo.png", Location = AddonIni.id})
 	table.insert(self.Default.TabList.Rift, {ID = "SL", Name = "Storm Legion", Icon = "Media/StormLegionLogo.png", Location = AddonIni.id})
 	table.insert(self.Default.TabList.Rift, {ID = "NT", Name = "Nightmare Tide", Icon = "Media/NightmareTideLogo.png", Location = AddonIni.id})
-	table.insert(self.Default.TabList.Rift, {ID = "PoA", Name = "Prophecy of Ahnket", Icon = "Media/NightmareTideLogo.png", Location = AddonIni.id})
+	table.insert(self.Default.TabList.Rift, {ID = "PoA", Name = "Prophecy of Ahnket", Icon = "Media/poa.png", Location = AddonIni.id})
 	
 	-- Define Encounter Tabber
 	table.insert(self.Default.TabList.Enc, {ID = "Raid", Name = "Raid", Icon = "Media/Raid_Icon.png", Location = AddonIni.id})
