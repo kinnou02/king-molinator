@@ -194,7 +194,7 @@ PI.Constants = {
 						warrior = true,
 					},
 				},
-				[""] = { -- Coral Oilstone
+				["r70B0A3843EC153B8"] = { -- Atramentium Oilstone
 					Grade = "High",
 					Level = 70,
 					Callings = {
@@ -533,7 +533,7 @@ PI.Constants = {
 				--////////////////////--
 				-- PoA High Grade Food --
 				--////////////////////--
-				[""] = { -- Gedlo Curry Pot (AP)
+				["B40C3D8E43D686C51"] = { -- Gedlo Curry Pot (AP)
 					Grade = "High",
 					Level = 70,
 					Callings = {
@@ -548,6 +548,15 @@ PI.Constants = {
 					Callings = {
 						mage = true,
 						cleric = true,
+					},
+				},
+				["B5FEC893CB961B888"] = { -- Blackthorn Burger
+					Grade = "Medium",
+					Level = 70,
+					Callings = {
+						warrior = true,
+						rogue = true,
+						primalist = true,
 					},
 				},
 				--////////////////////--
@@ -570,6 +579,7 @@ PI.Constants = {
 						cleric = true,
 					},
 				},
+				
 				--////////////////////--
 				-- NT Medium Grade Food --
 				--////////////////////--
@@ -863,6 +873,54 @@ PI.Constants = {
 			w = 36,
 			Icons = true,
 			List = {
+			--//////////////////////--
+				-- PoA High Potions --
+				--//////////////////////--
+				["B6A8C5F8110D4EFBB"] = { -- Visionary Powersurge Vial
+					Grade = "High",
+					Level = 70,
+					Callings = {
+						warrior = true,
+						rogue = true,
+						primalist = true,
+					},
+				},
+				["B76F46FAB030D4A53"] = { -- Visionary Brightsurge Vial
+					Grade = "High",
+					Level = 70,
+					Callings = {
+						mage = true,
+						cleric = true,
+					},
+				},
+				["B57196D010E66419C"] = { -- Illustrious Enduring Vial
+					Grade = "High",
+					Level = 70,
+					Callings = {
+						mage = true,
+						cleric = true,
+						warrior = true,
+						rogue = true,
+						primalist = true,
+					},
+					Role = {
+						tank = true,
+					},
+				},
+				["B391D5227E51E03F4"] = { -- Illustrious Fortified Vial
+					Grade = "High",
+					Level = 70,
+					Callings = {
+						mage = true,
+						cleric = true,
+						warrior = true,
+						rogue = true,
+						primalist = true,
+					},
+					Role = {
+						tank = true,
+					},
+				},
 				--//////////////////////--
 				-- Nightmare Tide High Potions --
 				--//////////////////////--
