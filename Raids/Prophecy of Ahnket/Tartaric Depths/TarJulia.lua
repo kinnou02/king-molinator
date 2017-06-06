@@ -163,8 +163,16 @@ function TAR:Death(UnitID)
         self.TarJulia.Dead = true
         return true
     end
+    if self.Soul.UnitList[UnitID] then
+        if self.Soul.UnitList[UnitID].Dead == false then
+            self.Soul.UnitList[UnitID].CastBar:Remove()
+            self.Soul.UnitList[UnitID].CastBar = nil
+            self.Soul.UnitList[UnitID].Dead = true
+        end
+    end
     return false
 end
+
 
 function TAR:UnitHPCheck(uDetails, unitID)
     if uDetails and unitID then
