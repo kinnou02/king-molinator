@@ -203,7 +203,7 @@ function TAR:Reset()
     self.TarJulia.Available = false
     self.TarJulia.UnitID = nil
     self.TarJulia.CastBar:Remove()
-
+	self.Soul.UnitList = {}
     self.PhaseObj:End(Inspect.Time.Real())
 end
 

@@ -193,6 +193,25 @@ function BEL:UnitHPCheck(uDetails, unitID)
             self.Beligosh.Available = true
             return self.Beligosh
         end
+		if uDetails.type == self.Golem.UTID then
+           if not self.Bosses[uDetails.name].UnitList[unitID] then
+				local SubBossObj = {
+					Mod = MOD,
+					Level = 72,
+					Name = uDetails.name,
+					Dead = false,
+					Casting = false,
+					UnitID = unitID,
+					Available = true,
+				}
+				self.Bosses[uDetails.name].UnitList[unitID] = SubBossObj
+			else
+				self.Bosses[uDetails.name].UnitList[unitID].Available = true
+				self.Bosses[uDetails.name].UnitList[unitID].UnitID = UnitID
+			end
+			return self.Bosses[uDetails.name].UnitList[unitID]
+
+        end
     end
 end
 
@@ -261,6 +280,12 @@ function BEL:Start()
     self.Beligosh.Triggers.PhaseTwo = KBM.Trigger:Create(self.Lang.Notify.Wrath[KBM.Lang], "notify", self.Beligosh)
     self.Beligosh.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
     self.Beligosh.Triggers.PhaseTwo:AddAlert(self.Beligosh.AlertsRef.Wrath)
+	
+	self.Beligosh.Triggers.lava1 = KBM.Trigger:Create(self.Lang.Notify.Lava1[KBM.Lang], "say", self.Beligosh)
+	self.Beligosh.Triggers.lava1:AddAlert(self.Beligosh.AlertsRef.Lava)
+	
+	self.Beligosh.Triggers.lava2 = KBM.Trigger:Create(self.Lang.Notify.Lava2[KBM.Lang], "notify", self.Beligosh)
+	self.Beligosh.Triggers.lava2:AddAlert(self.Beligosh.AlertsRef.Lava)
 
     self.Beligosh.Triggers.AddPhase2 = KBM.Trigger:Create(40, "percent", self.Beligosh)
     self.Beligosh.Triggers.AddPhase2:AddPhase(self.AddPhase)
