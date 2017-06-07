@@ -1,5 +1,6 @@
 ﻿-- Michael Bringhurst Boss Mod for King Boss Mods
--- Written by Paul Snart
+-- Originaly Written by Paul Snart
+-- updated for Prophecy of Aknket by wicendawen
 -- Copyright 2011
 --
 
