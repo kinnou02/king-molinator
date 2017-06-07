@@ -44,6 +44,8 @@ BEL.Beligosh = {
         CastBar = KBM.Defaults.Castbar(),
         AlertsRef = {
           Enabled = true,
+          Wrath = KBM.Defaults.AlertObj.Create("red"),
+          Lava = KBM.Defaults.AlertObj.Create("blue"),
         },
     },
 }
@@ -75,6 +77,8 @@ BEL.Lang.Ability = {}
 
 -- Verbose Dictionary
 BEL.Lang.Verbose = {}
+BEL.Lang.Verbose.Wrath = KBM.Language:Add("Go to the edge!")
+BEL.Lang.Verbose.Lava = KBM.Language:Add("Lava field")
 
 -- Buff Dictionary
 BEL.Lang.Buff = {}
@@ -85,6 +89,8 @@ BEL.Lang.Debuff = {}
 
 BEL.Lang.Notify = {}
 BEL.Lang.Notify.Wrath = KBM.Language:Add("Beligosh: Feel the wrath of Beligosh!")
+BEL.Lang.Notify.Lava1 = KBM.Language:Add("Beligosh: Your Weakness is your compassion.")
+BEL.Lang.Notify.Lava2 = KBM.Language:Add("Beligosh: Choose who lives, who dies.")
 
 -- Description Dictionary
 BEL.Lang.Main = {}
@@ -239,6 +245,9 @@ function BEL:Start()
     -- Create Timers
 
     -- Create Alerts
+	self.Beligosh.AlertsRef.Wrath = KBM.Alert:Create(self.Lang.Verbose.Wrath[KBM.Lang], nil, true, true, "red")
+	self.Beligosh.AlertsRef.Lava = KBM.Alert:Create(self.Lang.Verbose.Lava[KBM.Lang], 2, true, true, "blue")
+	KBM.Defaults.AlertObj.Assign(self.Beligosh)
 
     -- Assign Alerts and Timers to Triggers
     self.Beligosh.CastBar = KBM.Castbar:Add(self, self.Beligosh)
@@ -251,6 +260,7 @@ function BEL:Start()
 --    self.Beligosh.Triggers.PhaseFinal = KBM.Trigger:Create(self.Lang.Notify.PhaseFinal[KBM.Lang], "notify", self.Maelforge)
     self.Beligosh.Triggers.PhaseTwo = KBM.Trigger:Create(self.Lang.Notify.Wrath[KBM.Lang], "notify", self.Beligosh)
     self.Beligosh.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
+    self.Beligosh.Triggers.PhaseTwo:AddAlert(self.Beligosh.AlertsRef.Wrath)
 
     self.Beligosh.Triggers.AddPhase2 = KBM.Trigger:Create(40, "percent", self.Beligosh)
     self.Beligosh.Triggers.AddPhase2:AddPhase(self.AddPhase)

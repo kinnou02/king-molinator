@@ -83,7 +83,7 @@ TAR.Lang.Buff = {}
 TAR.Lang.Debuff = {}
 
 TAR.Lang.Notify = {}
-TAR.Lang.Notify.MoltenLava = KBM.Language:Add("TarJulia targets (%a+) with molten lava!")
+TAR.Lang.Notify.MoltenLava = KBM.Language:Add("TarJulia targets (%a*) with molten lava!")
 
 -- Description Dictionary
 TAR.Lang.Main = {}
