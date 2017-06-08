@@ -71,6 +71,7 @@ TAR.Lang.Unit.Soul = KBM.Language:Add(TAR.Soul.Name)
 
 -- Ability Dictionary
 TAR.Lang.Ability = {}
+TAR.Lang.Ability.MoltenLava = KBM.Language:Add("Molten Blast")
 
 -- Verbose Dictionary
 TAR.Lang.Verbose = {}
@@ -83,7 +84,6 @@ TAR.Lang.Buff = {}
 TAR.Lang.Debuff = {}
 
 TAR.Lang.Notify = {}
-TAR.Lang.Notify.MoltenLava = KBM.Language:Add("TarJulia targets (%a*) with molten lava!")
 
 -- Description Dictionary
 TAR.Lang.Main = {}
@@ -195,6 +195,24 @@ function TAR:UnitHPCheck(uDetails, unitID)
             self.TarJulia.Available = true
             return self.TarJulia
         end
+        if uDetails.type == self.Soul.UTID then
+           if not self.Bosses[uDetails.name].UnitList[unitID] then
+                local SubBossObj = {
+                    Mod = MOD,
+                    Level = 72,
+                    Name = uDetails.name,
+                    Dead = false,
+                    Casting = false,
+                    UnitID = unitID,
+                    Available = true,
+                }
+                self.Bosses[uDetails.name].UnitList[unitID] = SubBossObj
+            else
+                self.Bosses[uDetails.name].UnitList[unitID].Available = true
+                self.Bosses[uDetails.name].UnitList[unitID].UnitID = UnitID
+            end
+            return self.Bosses[uDetails.name].UnitList[unitID]
+        end
     end
 end
 
@@ -203,7 +221,7 @@ function TAR:Reset()
     self.TarJulia.Available = false
     self.TarJulia.UnitID = nil
     self.TarJulia.CastBar:Remove()
-	self.Soul.UnitList = {}
+    self.Soul.UnitList = {}
     self.PhaseObj:End(Inspect.Time.Real())
 end
 
@@ -217,11 +235,11 @@ function TAR:Start()
     -- Create Timers
 
     -- Create Alerts
-    self.TarJulia.AlertsRef.MoltenLava = KBM.Alert:Create(self.Lang.Verbose.MoltenLava[KBM.Lang], nil, true, true, "red")
+    self.TarJulia.AlertsRef.MoltenLava = KBM.Alert:Create(self.Lang.Verbose.MoltenLava[KBM.Lang], 10, true, true, "red")
     KBM.Defaults.AlertObj.Assign(self.TarJulia)
 
     -- Assign Alerts and Timers to Triggers
-    self.TarJulia.Triggers.MoltenLava = KBM.Trigger:Create(self.Lang.Notify.MoltenLava[KBM.Lang], "notify", self.TarJulia)
+    self.TarJulia.Triggers.MoltenLava = KBM.Trigger:Create(self.Lang.Ability.MoltenLava[KBM.Lang], "cast", self.TarJulia)
     self.TarJulia.Triggers.MoltenLava:AddAlert(self.TarJulia.AlertsRef.MoltenLava, true)
 
     self.TarJulia.CastBar = KBM.Castbar:Add(self, self.TarJulia)
