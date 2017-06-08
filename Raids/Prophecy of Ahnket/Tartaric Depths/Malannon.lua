@@ -44,6 +44,8 @@ MAL.Malannon = {
         CastBar = KBM.Defaults.Castbar(),
         AlertsRef = {
           Enabled = true,
+          Meteor = KBM.Defaults.AlertObj.Create("red"),
+          Spread = KBM.Defaults.AlertObj.Create("blue"),
         },
     },
 }
@@ -57,9 +59,12 @@ MAL.Lang.Unit.Malannon:SetFrench("Malannon")
 
 -- Ability Dictionary
 MAL.Lang.Ability = {}
+MAL.Lang.Ability.Meteor = KBM.Language:Add("Meteor")
 
 -- Verbose Dictionary
 MAL.Lang.Verbose = {}
+MAL.Lang.Verbose.Meteor = KBM.Language:Add("Pack!")
+MAL.Lang.Verbose.Spread = KBM.Language:Add("Spread out!")
 
 -- Buff Dictionary
 MAL.Lang.Buff = {}
@@ -207,11 +212,18 @@ function MAL:Start()
     -- Create Timers
 
     -- Create Alerts
+    self.Malannon.AlertsRef.Meteor = KBM.Alert:Create(self.Lang.Verbose.Meteor[KBM.Lang], 5, true, true, "red")
+    self.Malannon.AlertsRef.Spread = KBM.Alert:Create(self.Lang.Verbose.Spread[KBM.Lang], 5, true, true, "blue")
+    KBM.Defaults.AlertObj.Assign(self.Malannon)
 
     -- Assign Alerts and Timers to Triggers
     self.Malannon.CastBar = KBM.Castbar:Add(self, self.Malannon)
     self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 
+    self.Malannon.Triggers.Meteor = KBM.Trigger:Create(self.Lang.Ability.Meteor[KBM.Lang], "cast", self.Malannon)
+    self.Malannon.Triggers.Meteor:AddAlert(self.Malannon.AlertsRef.Meteor)
+
+    -- add spread alert on player debuff
 
     self.Malannon.Triggers.PḧaseTwo = KBM.Trigger:Create(60, "percent", self.Malannon)
     self.Malannon.Triggers.PḧaseTwo:AddPhase(self.PhaseTwo)
