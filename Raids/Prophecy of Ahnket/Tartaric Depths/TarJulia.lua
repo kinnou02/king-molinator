@@ -165,8 +165,6 @@ function TAR:Death(UnitID)
     end
     if self.Soul.UnitList[UnitID] then
         if self.Soul.UnitList[UnitID].Dead == false then
-            self.Soul.UnitList[UnitID].CastBar:Remove()
-            self.Soul.UnitList[UnitID].CastBar = nil
             self.Soul.UnitList[UnitID].Dead = true
         end
     end
