@@ -579,6 +579,7 @@ PI.Constants = {
 						cleric = true,
 					},
 				},
+				
 				--////////////////////--
 				-- NT Medium Grade Food --
 				--////////////////////--
