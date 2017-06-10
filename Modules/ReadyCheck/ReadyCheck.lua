@@ -184,6 +184,33 @@ PI.Constants = {
 			Icons = true,
 			List = {
 				--//////////////////////--
+				-- PoA High Grade Stones --
+				--//////////////////////--
+				["rFA65F5184E42C822"] = { -- Atramentium Whetstone
+					Grade = "High",
+					Level = 70,
+					Callings = {
+						rogue = true,
+						warrior = true,
+					},
+				},
+				["r70B0A3843EC153B8"] = { -- Atramentium Oilstone
+					Grade = "High",
+					Level = 70,
+					Callings = {
+						warrior = true,
+						primalist = true,
+					},
+				},
+				["r143A1D7A79A201D6"] = { -- Faetouched Powerstone
+					Grade = "High",
+					Level = 70,
+					Callings = {
+						cleric = true,
+						mage = true,
+					},
+				},
+				--//////////////////////--
 				-- NT High Grade Stones --
 				--//////////////////////--
 				["r0C2445386997ECE6"] = { -- Coral Whetstone
@@ -504,6 +531,35 @@ PI.Constants = {
 			Icons = true,
 			List = {
 				--////////////////////--
+				-- PoA High Grade Food --
+				--////////////////////--
+				["B40C3D8E43D686C51"] = { -- Gedlo Curry Pot (AP)
+					Grade = "High",
+					Level = 70,
+					Callings = {
+						warrior = true,
+						rogue = true,
+						primalist = true,
+					},
+				},
+				["B40C3D8E2646C6DD1"] = { -- Gedlo Curry Pot (SP)
+					Grade = "High",
+					Level = 70,
+					Callings = {
+						mage = true,
+						cleric = true,
+					},
+				},
+				["B5FEC893CB961B888"] = { -- Blackthorn Burger
+					Grade = "Medium",
+					Level = 70,
+					Callings = {
+						warrior = true,
+						rogue = true,
+						primalist = true,
+					},
+				},
+				--////////////////////--
 				-- NT High Grade Food --
 				--////////////////////--
 				["B3CA755E06191712E"] = { -- Feast of the Rhenke (AP)
@@ -816,6 +872,40 @@ PI.Constants = {
 			w = 36,
 			Icons = true,
 			List = {
+			--//////////////////////--
+				-- PoA High Potions --
+				--//////////////////////--
+				["B6A8C5F8110D4EFBB"] = { -- Visionary Powersurge Vial
+					Grade = "High",
+					Level = 70,
+					Callings = {
+						warrior = true,
+						rogue = true,
+						primalist = true,
+					},
+				},
+				["B76F46FAB030D4A53"] = { -- Visionary Brightsurge Vial
+					Grade = "High",
+					Level = 70,
+					Callings = {
+						mage = true,
+						cleric = true,
+					},
+				},
+				["B4E2589107D7E8E0F"] = { -- Visionary Enduring Vial
+					Grade = "High",
+					Level = 70,
+					Callings = {
+						mage = true,
+						cleric = true,
+						warrior = true,
+						rogue = true,
+						primalist = true,
+					},
+					Role = {
+						tank = true,
+					},
+				},
 				--//////////////////////--
 				-- Nightmare Tide High Potions --
 				--//////////////////////--
@@ -1191,6 +1281,16 @@ PI.Constants = {
 			w = 30,
 			Icons = true,
 			List = {
+				--////////////////////////--
+				-- PoA Insoles --
+				--////////////////////////--
+				["r4DEE42255D06816A"] = { -- Tuath'de Insoles
+					Grade = "High",
+					Level = 65,
+					Callings = {
+						all = true,
+					},
+				},
 				--////////////////////////--
 				-- Nightmare Tide Insoles --
 				--////////////////////////--
