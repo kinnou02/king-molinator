@@ -39,6 +39,35 @@ RunOnStartup = {
 	"Modules/PercentageMon.lua",
 	"Modules/Castbar.lua",
 	"Modules/Reflect.lua",
+
+	-- PoA raid
+	-- Intrepid Rise of the phoenix
+			"Slivers/Prophecy of Ahnket/Rise_of_the_Phoenix/ROTPHeader.lua",
+			"Slivers/Prophecy of Ahnket/Rise_of_the_Phoenix/Ereandorn.lua",
+			"Slivers/Prophecy of Ahnket/Rise_of_the_Phoenix/Beruhast.lua",
+			"Slivers/Prophecy of Ahnket/Rise_of_the_Phoenix/Silgen.lua",
+			"Slivers/Prophecy of Ahnket/Rise_of_the_Phoenix/Arakhurn.lua",
+		-- TD
+			"Raids/Prophecy of Ahnket/Tartaric Depths/TD_Header.lua",
+			"Raids/Prophecy of Ahnket/Tartaric Depths/Beligosh.lua",
+			"Raids/Prophecy of Ahnket/Tartaric Depths/TarJulia.lua",
+			"Raids/Prophecy of Ahnket/Tartaric Depths/Malannon.lua",
+    -- PoA expert
+		-- Intrepid Darkening Deeps
+			"Experts/Prophecy of Ahnket/Darkening_Deeps/DDHeader.lua",
+			"Experts/Prophecy of Ahnket/Darkening_Deeps/Braxtepel.lua",
+			"Experts/Prophecy of Ahnket/Darkening_Deeps/Bringhurst.lua",
+			"Experts/Prophecy of Ahnket/Darkening_Deeps/Tegenar.lua",
+			"Experts/Prophecy of Ahnket/Darkening_Deeps/Glubmuk.lua",
+			"Experts/Prophecy of Ahnket/Darkening_Deeps/Council.lua",
+			"Experts/Prophecy of Ahnket/Darkening_Deeps/Scarn.lua",
+
+		-- Gyel Fortress
+			"Experts/Prophecy of Ahnket/Gyel_Fortress/GF_Header.lua",
+			"Experts/Prophecy of Ahnket/Gyel_Fortress/Seathe.lua",
+			"Experts/Prophecy of Ahnket/Gyel_Fortress/Kytus.lua",
+			"Experts/Prophecy of Ahnket/Gyel_Fortress/Nezavar.lua",
+			"Experts/Prophecy of Ahnket/Gyel_Fortress/Glasya.lua",
 	
 	-- NT Raids/Rift 20
 		-- Mount Sharax
@@ -557,6 +586,54 @@ SavedVariables = {
 	KBMDungeon_Settings = "account",
 	KBMChronicle_Settings = "account",
 	KBMOpenWorld_Settings = "account",
+    -- PoA raids
+		-- Intrepid Rise of the phoenix
+			KBMIROTP_Settings = "account",
+			KBMIROTPEN_Settings = "account",
+			KBMIROTPHA_Settings = "account",
+			KBMIROTPBT_Settings = "account",
+			KBMIROTPGS_Settings = "account",
+			chKBMIROTP_Settings = "character",
+			chKBMIROTPEN_Settings = "character",
+			chKBMIROTPHA_Settings = "character",
+			chKBMIROTPBT_Settings = "character",
+			chKBMIROTPGS_Settings = "character",
+        -- Tartaric Depths
+            KBMPOATD_Settings = "account",
+            KBMPOATDBEL_Settings = "account",
+            KBMPOATDTAR_Settings = "account",
+            KBMPOATDMAL_Settings = "account",
+            chKBMPOATD_Settings = "character",
+            chKBMPOATDBEL_Settings ="character",
+            chKBMPOATDTAR_Settings = "character",
+            chKBMPOATDMAL_Settings = "character",
+
+    -- PoA Experts
+		-- Darkening Deeps
+			KBMEXIDD_Settings = "account",
+			KBMEXIDDAB_Settings = "account",
+			KBMEXIDDMB_Settings = "account",
+			KBMEXIDDTD_Settings = "account",
+			KBMEXIDDGK_Settings = "account",
+			KBMEXIDDTC_Settings = "account",
+			KBMEXIDDSN_Settings = "account",
+			chKBMEXIDD_Settings = "character",
+			chKBMEXIDDAB_Settings = "character",
+			chKBMEXIDDMB_Settings = "character",
+			chKBMEXIDDTD_Settings = "character",
+			chKBMEXIDDGK_Settings = "character",
+			chKBMEXIDDTC_Settings = "character",
+			chKBMEXIDDSN_Settings = "character",
+
+		-- Gyel Fortress
+			KBMPOAIGFSEA_Settings = "account",
+			KBMPOAIGFKYT_Settings = "account",
+			KBMPOAIGFNEZ_Settings = "account",
+			KBMPOAIGFGLA_Settings = "account",
+			chKBMPOAIGFSEA_Settings = "character",
+			chKBMPOAIGFKYT_Settings = "character",
+			chKBMPOAIGFNEZ_Settings = "character",
+			chKBMPOAIGFGLA_Settings = "character",
 	
 	
 	-- NT Raids/Rift 20
