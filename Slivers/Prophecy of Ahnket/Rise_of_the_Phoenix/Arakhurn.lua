@@ -3,8 +3,8 @@
 -- Copyright 2011
 --
 
-KBMROTPHA_Settings = nil
-chKBMROTPHA_Settings = nil
+KBMIROTPHA_Settings = nil
+chKBMIROTPHA_Settings = nil
 
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
@@ -37,8 +37,8 @@ HA.Arakhurn = {
 	Name = "High Priest Arakhurn",
 	NameShort = "Arakhurn",
 	UTID = {
-		[1] = "U43EF6C163A601193",
-		[2] = "U31F97C9762B01F83",
+		[1] = "UFE3404FE6864F1B8",
+		[2] = "U2D48EA697C2E12B2",
 	},
 	Menu = {},
 	Castbar = nil,
@@ -224,7 +224,7 @@ HA.Enraged = {
 	Level = "??",
 	Name = HA.Lang.Unit.Enraged[KBM.Lang],
 	NameShort = "Enraged Spawn",
-	UTID = "U6286E17E700FDAF7",
+	UTID = "U340ED24C23AF60CF",
 	UnitList = {},
 	Ignore = true,
 	Type = "multi",
@@ -235,7 +235,7 @@ HA.Spawn = {
 	Level = "??",
 	Name = HA.Lang.Unit.Spawn[KBM.Lang],
 	NameShort = "Spawn",
-	UTID = "U3D550A6E6D24491D",
+	UTID = "U43B6C2A358051AD9",
 	UnitList = {},
 	Ignore = true,
 	Type = "multi",
@@ -263,40 +263,40 @@ function HA:InitVars()
 		TimersRef = self.Arakhurn.Settings.TimersRef,
 		MechRef = self.Arakhurn.Settings.Ignited,
 	}
-	KBMROTPHA_Settings = self.Settings
-	chKBMROTPHA_Settings = self.Settings
+	KBMIROTPHA_Settings = self.Settings
+	chKBMIROTPHA_Settings = self.Settings
 	
 end
 
 function HA:SwapSettings(bool)
 	if bool then
-		KBMROTPHA_Settings = self.Settings
-		self.Settings = chKBMROTPHA_Settings
+		KBMIROTPHA_Settings = self.Settings
+		self.Settings = chKBMIROTPHA_Settings
 	else
 		chKBMROTPGS_Settings = self.Settings
-		self.Settings = KBMROTPHA_Settings
+		self.Settings = KBMIROTPHA_Settings
 	end
 end
 
 function HA:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMROTPHA_Settings, self.Settings)
+		KBM.LoadTable(chKBMIROTPHA_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMROTPHA_Settings, self.Settings)
+		KBM.LoadTable(KBMIROTPHA_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMROTPHA_Settings = self.Settings
+		chKBMIROTPHA_Settings = self.Settings
 	else
-		KBMROTPHA_Settings = self.Settings
+		KBMIROTPHA_Settings = self.Settings
 	end	
 end
 
 function HA:SaveVars()	
 	if KBM.Options.Character then
-		chKBMROTPHA_Settings = self.Settings
+		chKBMIROTPHA_Settings = self.Settings
 	else
-		KBMROTPHA_Settings = self.Settings
+		KBMIROTPHA_Settings = self.Settings
 	end	
 end
 
