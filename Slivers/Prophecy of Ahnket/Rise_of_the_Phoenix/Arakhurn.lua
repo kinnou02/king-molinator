@@ -416,6 +416,44 @@ function HA:UnitHPCheck(uDetails, unitID)
 					return BossObj.UnitList[unitID]
 				end
 			end
+		else 
+			if uDetails.type == self.Arakhurn.UTID[1] or uDetails.type == self.Arakhurn.UTID[2] then
+			if not self.EncounterRunning then
+					self.EncounterRunning = true
+					self.StartTime = Inspect.Time.Real()
+					self.HeldTime = self.StartTime
+					self.TimeElapsed = 0
+					self.Arakhurn.Dead = false
+					self.Arakhurn.Casting = false
+					self.Arakhurn.CastBar:Create(unitID)
+					if self.Arakhurn.UTID[2] == uDetails.type then
+						self.PhaseObj:Start(self.StartTime)
+						KBM.ValidTime = false
+						self.PhaseThree()
+					else
+						self.Phase = 1
+						self.PhaseObj:Start(self.StartTime)
+						self.PhaseObj.Objectives:AddPercent(self.Arakhurn, 0, 100)
+						self.PhaseObj:SetPhase(1)
+						KBM.MechTimer:AddStart(self.Arakhurn.TimersRef.NovaFirst)
+						KBM.MechTimer:AddStart(self.Arakhurn.TimersRef.FieryFirst)
+					end
+					KBM.TankSwap:Start(self.Lang.Debuff.Armor[KBM.Lang], unitID)
+				elseif self.Arakhurn.UnitID ~= unitID then
+					self.Arakhurn.Casting = false
+					self.Arakhurn.CastBar:Create(unitID)
+					if KBM.TankSwap.Active then
+						KBM.TankSwap:Remove()
+						KBM.TankSwap:Start(self.Lang.Debuff.Armor[KBM.Lang], unitID)
+					end
+					if self.Arakhurn.UTID[2] == uDetails.type then
+						self.PhaseThree()
+					end
+				end
+				self.Arakhurn.UnitID = unitID
+				self.Arakhurn.Available = true
+				return BossObj
+			end
 		end
 	end
 end
