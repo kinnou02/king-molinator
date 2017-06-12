@@ -91,6 +91,7 @@ BEL.Lang.Notify = {}
 BEL.Lang.Notify.Wrath = KBM.Language:Add("Beligosh: Feel the wrath of Beligosh!")
 BEL.Lang.Notify.Lava1 = KBM.Language:Add("Your Weakness is your compassion.")
 BEL.Lang.Notify.Lava2 = KBM.Language:Add("Choose who lives, who dies.")
+BEL.Lang.Notify.Lava3 = KBM.Language:Add("Abandon your friend! Abandon your hope!")
 
 -- Description Dictionary
 BEL.Lang.Main = {}
@@ -261,7 +262,7 @@ function BEL:Start()
 
     -- Create Alerts
     self.Beligosh.AlertsRef.Wrath = KBM.Alert:Create(self.Lang.Verbose.Wrath[KBM.Lang], 10, true, true, "red")
-    self.Beligosh.AlertsRef.Lava = KBM.Alert:Create(self.Lang.Verbose.Lava[KBM.Lang], 2, true, true, "blue")
+    self.Beligosh.AlertsRef.Lava = KBM.Alert:Create(self.Lang.Verbose.Lava[KBM.Lang], 3, true, true, "blue")
     KBM.Defaults.AlertObj.Assign(self.Beligosh)
 
     -- Assign Alerts and Timers to Triggers
@@ -281,6 +282,9 @@ function BEL:Start()
 
     self.Beligosh.Triggers.lava2 = KBM.Trigger:Create(self.Lang.Notify.Lava2[KBM.Lang], "say", self.Beligosh)
     self.Beligosh.Triggers.lava2:AddAlert(self.Beligosh.AlertsRef.Lava)
+
+    self.Beligosh.Triggers.lava3 = KBM.Trigger:Create(self.Lang.Notify.Lava3[KBM.Lang], "say", self.Beligosh)
+    self.Beligosh.Triggers.lava3:AddAlert(self.Beligosh.AlertsRef.Lava)
 
     self.Beligosh.Triggers.AddPhase2 = KBM.Trigger:Create(40, "percent", self.Beligosh)
     self.Beligosh.Triggers.AddPhase2:AddPhase(self.AddPhase)
