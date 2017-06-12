@@ -33,6 +33,7 @@ TAR.TarJulia = {
     Name = "TarJulia",
     Menu = {},
     AlertsRef = {},
+	TimersRef = {},
     Castbar = nil,
     Dead = false,
     Available = false,

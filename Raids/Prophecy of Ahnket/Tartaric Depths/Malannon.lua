@@ -45,7 +45,7 @@ MAL.Malannon = {
         AlertsRef = {
           Enabled = true,
           Meteor = KBM.Defaults.AlertObj.Create("red"),
-          Spread = KBM.Defaults.AlertObj.Create("blue"),
+          Blastback = KBM.Defaults.AlertObj.Create("blue"),
         },
     },
 }
@@ -71,7 +71,7 @@ MAL.Lang.Buff = {}
 
 -- Debuff Dictionary
 MAL.Lang.Debuff = {}
-MAL.Lang.Verbose.Blastback = KBM.Language:Add("Blastback")
+MAL.Lang.Debuff.Blastback = KBM.Language:Add("Blastback")
 
 
 MAL.Lang.Notify = {}
@@ -214,7 +214,7 @@ function MAL:Start()
 
     -- Create Alerts
     self.Malannon.AlertsRef.Meteor = KBM.Alert:Create(self.Lang.Verbose.Meteor[KBM.Lang], 5, true, true, "red")
-    self.Malannon.AlertsRef.Spread = KBM.Alert:Create(self.Lang.Verbose.Blastback[KBM.Lang], 5, true, true, "blue")
+    self.Malannon.AlertsRef.Blastback = KBM.Alert:Create(self.Lang.Verbose.Blastback[KBM.Lang], 5, true, true, "blue")
     KBM.Defaults.AlertObj.Assign(self.Malannon)
 
     -- Assign Alerts and Timers to Triggers
