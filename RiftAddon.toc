@@ -10,9 +10,9 @@ Author = "Safe@Deepwood"
 Website = "http://www.facebook.com/KingBossMods"
 Email = "kingbossmods@gmail.com"
 
-Version = "1.7.3.810"
+Version = "2.0.0.0"
 
-Environment = "3.5"
+Environment = "4.0"
 
 RunOnStartup = {
 	"KingMolinator.lua",

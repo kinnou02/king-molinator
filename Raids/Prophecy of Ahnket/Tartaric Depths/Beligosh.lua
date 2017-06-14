@@ -70,7 +70,7 @@ BEL.Lang.Unit.Beligosh = KBM.Language:Add(BEL.Beligosh.Name)
 BEL.Lang.Unit.Beligosh:SetFrench("Beligosh")
 
 BEL.Lang.Unit.Golem = KBM.Language:Add(BEL.Golem.Name)
-BEL.Lang.Unit.Golem:SetFrench("Alavaxian Golem")
+BEL.Lang.Unit.Golem:SetFrench("Golem Alaviax")
 
 -- Ability Dictionary
 BEL.Lang.Ability = {}
@@ -89,8 +89,15 @@ BEL.Lang.Debuff = {}
 
 BEL.Lang.Notify = {}
 BEL.Lang.Notify.Wrath = KBM.Language:Add("Beligosh: Feel the wrath of Beligosh!")
+BEL.Lang.Notify.Wrath:SetFrench("Sentez le courroux de Beligosh !") 
+
 BEL.Lang.Notify.Lava1 = KBM.Language:Add("Your Weakness is your compassion.")
+
 BEL.Lang.Notify.Lava2 = KBM.Language:Add("Choose who lives, who dies.")
+BEL.Lang.Notify.Lava2:SetFrench("Choisissez qui vivra et qui mourra !")
+
+BEL.Lang.Notify.Lava3 = KBM.Language:Add("Abandon your friend! Abandon your hope!")
+BEL.Lang.Notify.Lava3:SetFrench("Abandonnez vos amis ! Abandonnez l'espoir !")
 
 -- Description Dictionary
 BEL.Lang.Main = {}
@@ -260,7 +267,7 @@ function BEL:Start()
 
     -- Create Alerts
     self.Beligosh.AlertsRef.Wrath = KBM.Alert:Create(self.Lang.Verbose.Wrath[KBM.Lang], 10, true, true, "red")
-    self.Beligosh.AlertsRef.Lava = KBM.Alert:Create(self.Lang.Verbose.Lava[KBM.Lang], 2, true, true, "blue")
+    self.Beligosh.AlertsRef.Lava = KBM.Alert:Create(self.Lang.Verbose.Lava[KBM.Lang], 3, true, true, "blue")
     KBM.Defaults.AlertObj.Assign(self.Beligosh)
 
     -- Assign Alerts and Timers to Triggers
@@ -280,6 +287,9 @@ function BEL:Start()
 
     self.Beligosh.Triggers.lava2 = KBM.Trigger:Create(self.Lang.Notify.Lava2[KBM.Lang], "say", self.Beligosh)
     self.Beligosh.Triggers.lava2:AddAlert(self.Beligosh.AlertsRef.Lava)
+
+    self.Beligosh.Triggers.lava3 = KBM.Trigger:Create(self.Lang.Notify.Lava3[KBM.Lang], "say", self.Beligosh)
+    self.Beligosh.Triggers.lava3:AddAlert(self.Beligosh.AlertsRef.Lava)
 
     self.Beligosh.Triggers.AddPhase2 = KBM.Trigger:Create(40, "percent", self.Beligosh)
     self.Beligosh.Triggers.AddPhase2:AddPhase(self.AddPhase)

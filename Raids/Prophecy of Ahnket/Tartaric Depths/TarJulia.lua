@@ -33,6 +33,7 @@ TAR.TarJulia = {
     Name = "TarJulia",
     Menu = {},
     AlertsRef = {},
+	TimersRef = {},
     Castbar = nil,
     Dead = false,
     Available = false,
@@ -45,6 +46,9 @@ TAR.TarJulia = {
         AlertsRef = {
           Enabled = true,
           MoltenLava = KBM.Defaults.AlertObj.Create("red"),
+        },
+        TimersRef = {
+            MoltenLava = KBM.Defaults.TimerObj.Create("red"),
         },
     },
 }
@@ -231,6 +235,8 @@ end
 
 function TAR:Start()
     -- Create Timers
+    self.TarJulia.TimersRef.MoltenLava = KBM.MechTimer:Add(self.Lang.Ability.MoltenLava[KBM.Lang], 40)
+    KBM.Defaults.TimerObj.Assign(self.TarJulia)
 
     -- Create Alerts
     self.TarJulia.AlertsRef.MoltenLava = KBM.Alert:Create(self.Lang.Verbose.MoltenLava[KBM.Lang], 10, true, true, "red")
@@ -239,6 +245,7 @@ function TAR:Start()
     -- Assign Alerts and Timers to Triggers
     self.TarJulia.Triggers.MoltenLava = KBM.Trigger:Create(self.Lang.Ability.MoltenLava[KBM.Lang], "cast", self.TarJulia)
     self.TarJulia.Triggers.MoltenLava:AddAlert(self.TarJulia.AlertsRef.MoltenLava, true)
+    self.TarJulia.Triggers.MoltenLava:AddTimer(self.TarJulia.TimersRef.MoltenLava)
 
     self.TarJulia.CastBar = KBM.Castbar:Add(self, self.TarJulia)
     self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
