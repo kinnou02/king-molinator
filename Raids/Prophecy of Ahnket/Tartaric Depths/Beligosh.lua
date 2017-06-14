@@ -258,7 +258,7 @@ function BEL.AddPhase()
         BEL.PhaseObj:SetPhase(4)
     end
 
-    BEL.PhaseObj.Objectives:AddDeath(BEL.Lang.Unit.Golem[KDM.Lang], 3)
+    BEL.PhaseObj.Objectives:AddDeath(BEL.Lang.Unit.Golem[KBM.Lang], 3)
 end
 
 
