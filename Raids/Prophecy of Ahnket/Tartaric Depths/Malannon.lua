@@ -60,11 +60,15 @@ MAL.Lang.Unit.Malannon:SetFrench("Malannon")
 -- Ability Dictionary
 MAL.Lang.Ability = {}
 MAL.Lang.Ability.Meteor = KBM.Language:Add("Meteor")
+MAL.Lang.Ability.Meteor:SetFrench("Météore")
 
 -- Verbose Dictionary
 MAL.Lang.Verbose = {}
 MAL.Lang.Verbose.Meteor = KBM.Language:Add("Pack!")
+MAL.Lang.Verbose.Meteor:SetFrench("Pack!")
+
 MAL.Lang.Verbose.Blastback = KBM.Language:Add("Spread out!")
+MAL.Lang.Verbose.Blastback:SetFrench("Spread out!")
 
 -- Buff Dictionary
 MAL.Lang.Buff = {}
@@ -213,7 +217,7 @@ function MAL:Start()
     -- Create Timers
 
     -- Create Alerts
-    self.Malannon.AlertsRef.Meteor = KBM.Alert:Create(self.Lang.Verbose.Meteor[KBM.Lang], 5, true, true, "red")
+    self.Malannon.AlertsRef.Meteor = KBM.Alert:Create(self.Lang.Verbose.Meteor[KBM.Lang], 9, true, true, "red")
     self.Malannon.AlertsRef.Blastback = KBM.Alert:Create(self.Lang.Verbose.Blastback[KBM.Lang], 5, true, true, "blue")
     KBM.Defaults.AlertObj.Assign(self.Malannon)
 

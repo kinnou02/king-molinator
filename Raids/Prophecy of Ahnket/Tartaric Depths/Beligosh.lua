@@ -89,7 +89,8 @@ BEL.Lang.Debuff = {}
 
 BEL.Lang.Notify = {}
 BEL.Lang.Notify.Wrath = KBM.Language:Add("Beligosh: Feel the wrath of Beligosh!")
-BEL.Lang.Notify.Wrath:SetFrench("Sentez le courroux de Beligosh !") 
+BEL.Lang.Notify.Wrath:SetFrench("Sentez le courroux de Beligosh !")
+
 
 BEL.Lang.Notify.Lava1 = KBM.Language:Add("Your Weakness is your compassion.")
 
