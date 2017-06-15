@@ -52,6 +52,9 @@ RunOnStartup = {
 			"Raids/Prophecy of Ahnket/Tartaric Depths/Beligosh.lua",
 			"Raids/Prophecy of Ahnket/Tartaric Depths/TarJulia.lua",
 			"Raids/Prophecy of Ahnket/Tartaric Depths/Malannon.lua",
+        -- QF
+            "Raids/Prophecy of Ahnket/Qeen foci/QF_Header.lua",
+            "Raids/Prophecy of Ahnket/Qeen foci/Hexatel.lua",
     -- PoA expert
 		-- Intrepid Darkening Deeps
 			"Experts/Prophecy of Ahnket/Darkening_Deeps/DDHeader.lua",
@@ -607,6 +610,12 @@ SavedVariables = {
             chKBMPOATDBEL_Settings ="character",
             chKBMPOATDTAR_Settings = "character",
             chKBMPOATDMAL_Settings = "character",
+
+        -- QF
+            KBMPOAQF_Settings = "account",
+            KBMPOAQFHEX_Settings = "account",
+            chKBMPOAQF_Settings = "character",
+            chKBMPOAQFHEX_Settings ="character",
 
     -- PoA Experts
 		-- Darkening Deeps
