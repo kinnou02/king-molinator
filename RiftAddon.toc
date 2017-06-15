@@ -51,6 +51,7 @@ RunOnStartup = {
 			"Raids/Prophecy of Ahnket/Tartaric Depths/TD_Header.lua",
 			"Raids/Prophecy of Ahnket/Tartaric Depths/Beligosh.lua",
 			"Raids/Prophecy of Ahnket/Tartaric Depths/TarJulia.lua",
+			"Raids/Prophecy of Ahnket/Tartaric Depths/Council.lua",
 			"Raids/Prophecy of Ahnket/Tartaric Depths/Malannon.lua",
     -- PoA expert
 		-- Intrepid Darkening Deeps
