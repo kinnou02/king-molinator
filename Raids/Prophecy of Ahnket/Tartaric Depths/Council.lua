@@ -44,6 +44,7 @@ COF.Danazhal = {
         CastBar = KBM.Defaults.Castbar(),
         AlertsRef = {
           Enabled = true,
+		  Flamescape = KBM.Defaults.AlertObj.Create("red"),
         },
     },
 }
@@ -62,12 +63,6 @@ COF.Boldoch = {
     UTID = "U71F642FE4F016DEA",
     TimeOut = 5,
     Triggers = {},
-    Settings = {
-        CastBar = KBM.Defaults.Castbar(),
-        AlertsRef = {
-          Enabled = true,
-        },
-    },
 }
 
 COF.Pleuzhal = {
@@ -84,12 +79,6 @@ COF.Pleuzhal = {
     UTID = "U56368121432B6952",
     TimeOut = 5,
     Triggers = {},
-    Settings = {
-        CastBar = KBM.Defaults.Castbar(),
-        AlertsRef = {
-          Enabled = true,
-        },
-    },
 }
 
 COF.DanazhalSoul = {
@@ -106,12 +95,6 @@ COF.DanazhalSoul = {
     UTID = "U585E5F376A56877C",
     TimeOut = 5,
     Triggers = {},
-    Settings = {
-        CastBar = KBM.Defaults.Castbar(),
-        AlertsRef = {
-          Enabled = true,
-        },
-    },
 }
 
 COF.BoldochSoul = {
@@ -128,12 +111,6 @@ COF.BoldochSoul = {
     UTID = "U46F19E3B49A30FA8",
     TimeOut = 5,
     Triggers = {},
-    Settings = {
-        CastBar = KBM.Defaults.Castbar(),
-        AlertsRef = {
-          Enabled = true,
-        },
-    },
 }
 
 COF.PleuzhalSoul = {
@@ -150,12 +127,6 @@ COF.PleuzhalSoul = {
     UTID = "U0E00E54B0D012A6C",
     TimeOut = 5,
     Triggers = {},
-    Settings = {
-        CastBar = KBM.Defaults.Castbar(),
-        AlertsRef = {
-          Enabled = true,
-        },
-    },
 }
 
 
@@ -169,6 +140,7 @@ COF.Lang.Ability = {}
 
 -- Verbose Dictionary
 COF.Lang.Verbose = {}
+COF.Lang.Verbose.Flamescape = KBM.Language:Add("Go into the circle")
 
 -- Buff Dictionary
 COF.Lang.Buff = {}
@@ -178,6 +150,7 @@ COF.Lang.Debuff = {}
 
 
 COF.Lang.Notify = {}
+COF.Lang.Notify.Flamescape = KBM.Language:Add("The Flamescape begins.")
 
 -- Description Dictionary
 COF.Lang.Main = {}
@@ -333,8 +306,13 @@ function COF:Start()
     -- Create Timers
 
     -- Create Alerts
+    self.Danazhal.AlertsRef.Flamescape = KBM.Alert:Create(self.Lang.Verbose.Flamescape[KBM.Lang], 3, true, true, "red")
+    KBM.Defaults.AlertObj.Assign(self.Danazhal)
 
     -- Assign Alerts and Timers to Triggers
+    self.Danazhal.Triggers.Flamescape = KBM.Trigger:Create(self.Lang.Notify.Flamescape[KBM.Lang], "notify", self.Danazhal)
+    self.Danazhal.Triggers.Flamescape:AddAlert(self.Danazhal.AlertsRef.Flamescape)
+
     self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 
 end
