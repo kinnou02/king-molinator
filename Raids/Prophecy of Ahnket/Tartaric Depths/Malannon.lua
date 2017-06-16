@@ -46,6 +46,7 @@ MAL.Malannon = {
           Enabled = true,
           Meteor = KBM.Defaults.AlertObj.Create("red"),
           Blastback = KBM.Defaults.AlertObj.Create("blue"),
+          MarkOfAcrimony = KBM.Defaults.AlertObj.Create("purple"),
         },
     },
 }
@@ -70,12 +71,17 @@ MAL.Lang.Verbose.Meteor:SetFrench("Pack!")
 MAL.Lang.Verbose.Blastback = KBM.Language:Add("Spread out!")
 MAL.Lang.Verbose.Blastback:SetFrench("Spread out!")
 
+MAL.Lang.Verbose.MarkOfAcrimony = KBM.Language:Add("Go to Purple circle!")
+MAL.Lang.Verbose.MarkOfAcrimony:SetFrench("Allez dans le cercle violet!")
+
 -- Buff Dictionary
 MAL.Lang.Buff = {}
 
 -- Debuff Dictionary
 MAL.Lang.Debuff = {}
 MAL.Lang.Debuff.Blastback = KBM.Language:Add("Blastback")
+
+MAL.Lang.Debuff.MarkOfAcrimony = KBM.Language:Add("Mark of Acrimony")
 
 
 MAL.Lang.Notify = {}
@@ -219,6 +225,7 @@ function MAL:Start()
     -- Create Alerts
     self.Malannon.AlertsRef.Meteor = KBM.Alert:Create(self.Lang.Verbose.Meteor[KBM.Lang], 9, true, true, "red")
     self.Malannon.AlertsRef.Blastback = KBM.Alert:Create(self.Lang.Verbose.Blastback[KBM.Lang], 5, true, true, "blue")
+    self.Malannon.AlertsRef.MarkOfAcrimony = KBM.Alert:Create(self.Lang.Verbose.MarkOfAcrimony[KBM.Lang], 5, true, true, "purple")
     KBM.Defaults.AlertObj.Assign(self.Malannon)
 
     -- Assign Alerts and Timers to Triggers
@@ -230,6 +237,9 @@ function MAL:Start()
 
     self.Malannon.Triggers.Blastback = KBM.Trigger:Create(self.Lang.Debuff.Blastback[KBM.Lang], "playerDebuff", self.Malannon)
     self.Malannon.Triggers.Blastback:AddAlert(self.Malannon.AlertsRef.Blastback)
+
+    self.Malannon.Triggers.MarkOfAcrimony = KBM.Trigger:Create(self.Lang.Debuff.MarkOfAcrimony[KBM.Lang], "playerDebuff", self.Malannon)
+    self.Malannon.Triggers.MarkOfAcrimony:AddAlert(self.Malannon.AlertsRef.MarkOfAcrimony, true)
 
     self.Malannon.Triggers.PḧaseTwo = KBM.Trigger:Create(60, "percent", self.Malannon)
     self.Malannon.Triggers.PḧaseTwo:AddPhase(self.PhaseTwo)

@@ -50,7 +50,7 @@ TAR.TarJulia = {
         TimersRef = {
             Enabled = true,
             MoltenLava = KBM.Defaults.TimerObj.Create("red"),
-			FirstMoltenLava = KBM.Defaults.TimerObj.Create("red"),
+            FirstMoltenLava = KBM.Defaults.TimerObj.Create("red"),
         },
     },
 }
@@ -75,7 +75,7 @@ TAR.Lang.Unit.TarJulia = KBM.Language:Add(TAR.TarJulia.Name)
 TAR.Lang.Unit.TarJulia:SetFrench(TAR.TarJulia.Name)
 
 TAR.Lang.Unit.Soul = KBM.Language:Add(TAR.Soul.Name)
-TAR.Lang.Unit.Soul:SetFrench("Infernal Soul")
+TAR.Lang.Unit.Soul:SetFrench("Âme infernale")
 
 -- Ability Dictionary
 TAR.Lang.Ability = {}
