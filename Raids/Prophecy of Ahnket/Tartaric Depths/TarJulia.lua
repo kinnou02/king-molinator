@@ -50,6 +50,7 @@ TAR.TarJulia = {
         TimersRef = {
             Enabled = true,
             MoltenLava = KBM.Defaults.TimerObj.Create("red"),
+			FirstMoltenLava = KBM.Defaults.TimerObj.Create("red"),
         },
     },
 }
@@ -242,7 +243,7 @@ end
 function TAR:Start()
     -- Create Timers
     self.TarJulia.TimersRef.FirstMoltenLava = KBM.MechTimer:Add(self.Lang.Ability.MoltenLava[KBM.Lang], 20)
-    -- todo: set attribute MenuName
+    self.TarJulia.TimersRef.FirstMoltenLava.MenuName = "first molten lava"
     self.TarJulia.TimersRef.MoltenLava = KBM.MechTimer:Add(self.Lang.Ability.MoltenLava[KBM.Lang], 40)
     KBM.Defaults.TimerObj.Assign(self.TarJulia)
 
