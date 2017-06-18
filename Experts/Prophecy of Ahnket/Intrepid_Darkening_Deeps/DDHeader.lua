@@ -1,25 +1,23 @@
 ﻿-- Darkening Deeps Header for King Boss Mods
--- Originaly Written by Paul Snart
--- updated for Prophecy of Aknket by wicendawen
+-- Written by Paul Snart
 -- Copyright 2011
 --
 
--- @TODO add to toc file
-KBMEXIDD_Settings = nil
-chKBMEXIDD_Settings = nil
+KBMEXDD_Settings = nil
+chKBMEXDD_Settings = nil
 
 local MOD = {
-	Directory = "Experts/Prophecy of Ahnket/Darkening_Deeps/",
+	Directory = "Experts/Prophecy of Ahnket/Intrepid_Darkening_Deeps/",
 	File = "DDHeader.lua",
 	Header = nil,
 	Enabled = true,
 	IsInstance = true,
-	HasMaster = false,
-	Name = "Intrepid Darkening Deeps",
+	HasMaster = true,
+	Name = "Intrepid: Darkening Deeps",
 	Type = "Expert",
-	ID = "Intrepid Darkening_Deeps",
+	ID = "Intrepid_Darkening_Deeps",
 	Object = "MOD",
-	Rift = "PoA",
+	Rift = "PA",
 }
 
 -- Link Mods

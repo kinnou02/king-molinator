@@ -3,15 +3,15 @@
 -- Copyright 2011
 --
 
-KBMIROTPBT_Settings = nil
-chKBMIROTPBT_Settings = nil
+KBMSPEIROTPBT_Settings = nil
+chKBMSPEIROTPBT_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 if not KBM.BossMod then
 	return
 end
-local ROTP = KBM.BossMod["Intrepid Rise of the Phoenix"]
+local ROTP = KBM.BossMod["Intrepid: Rise of the Phoenix"]
 
 local BT = {
 	Directory = ROTP.Directory,
@@ -21,7 +21,7 @@ local BT = {
 	InstanceObj = ROTP,
 	HasPhases = false,
 	Lang = {},
-	ID = "Intrepid Beruhast",
+	ID = "IROTPBeruhast",
 	Menu = {},
 	Enrage = 60 * 7,
 	Object = "BT",
@@ -133,39 +133,39 @@ function BT:InitVars()
 		TimersRef = self.Beruhast.Settings.TimersRef,
 		Alerts = KBM.Defaults.Alerts(),
 	}
-	KBMIROTPBT_Settings = self.Settings
-	chKBMIROTPBT_Settings = self.Settings
+	KBMSPEIROTPBT_Settings = self.Settings
+	chKBMSPEIROTPBT_Settings = self.Settings
 end
 
 function BT:SwapSettings(bool)
 	if bool then
-		KBMIROTPBT_Settings = self.Settings
-		self.Settings = chKBMIROTPBT_Settings
+		KBMSPEIROTPBT_Settings = self.Settings
+		self.Settings = chKBMSPEIROTPBT_Settings
 	else
-		chKBMIROTPBT_Settings = self.Settings
-		self.Settings = KBMIROTPBT_Settings
+		chKBMSPEIROTPBT_Settings = self.Settings
+		self.Settings = KBMSPEIROTPBT_Settings
 	end
 end
 
 function BT:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMIROTPBT_Settings, self.Settings)
+		KBM.LoadTable(chKBMSPEIROTPBT_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMIROTPBT_Settings, self.Settings)
+		KBM.LoadTable(KBMSPEIROTPBT_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMIROTPBT_Settings = self.Settings
+		chKBMSPEIROTPBT_Settings = self.Settings
 	else
-		KBMIROTPBT_Settings = self.Settings
+		KBMSPEIROTPBT_Settings = self.Settings
 	end
 end
 
 function BT:SaveVars()
 	if KBM.Options.Character then
-		chKBMIROTPBT_Settings = self.Settings
+		chKBMSPEIROTPBT_Settings = self.Settings
 	else
-		KBMIROTPBT_Settings = self.Settings
+		KBMSPEIROTPBT_Settings = self.Settings
 	end
 end
 

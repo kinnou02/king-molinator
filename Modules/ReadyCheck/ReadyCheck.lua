@@ -183,33 +183,32 @@ PI.Constants = {
 			w = 36,
 			Icons = true,
 			List = {
-				--//////////////////////--
-				-- PoA High Grade Stones --
-				--//////////////////////--
-				["rFA65F5184E42C822"] = { -- Atramentium Whetstone
-					Grade = "High",
-					Level = 70,
-					Callings = {
-						rogue = true,
+        -- PoA --
+        ["rFA65F5184E42C822"] = { -- Atramentium Whetstone
+          Grade = "High",
+          Level = 70,
+          Callings = {
+            rogue = true,
 						warrior = true,
-					},
-				},
-				["r70B0A3843EC153B8"] = { -- Atramentium Oilstone
-					Grade = "High",
-					Level = 70,
-					Callings = {
-						warrior = true,
-						primalist = true,
-					},
-				},
-				["r143A1D7A79A201D6"] = { -- Faetouched Powerstone
-					Grade = "High",
-					Level = 70,
-					Callings = {
-						cleric = true,
+          },
+        },
+        ["r143A1D7A79A201D6"] = { -- Faetouched Whetstone
+          Grade = "High",
+          Level = 70,
+          Callings = {
+            cleric = true,
 						mage = true,
-					},
-				},
+          },
+        },
+        ["r70B0A3843EC153B8"] = { -- Atramentium Oilstone
+          Grade = "High",
+          Level = 70,
+          Callings = {
+            warrior = true,
+						primalist = true,
+          },
+        },
+
 				--//////////////////////--
 				-- NT High Grade Stones --
 				--//////////////////////--
@@ -530,10 +529,8 @@ PI.Constants = {
 			w = 36,
 			Icons = true,
 			List = {
-				--////////////////////--
-				-- PoA High Grade Food --
-				--////////////////////--
-				["B40C3D8E43D686C51"] = { -- Gedlo Curry Pot (AP)
+        -- PoA --
+        ["B40C3D8E43D686C51"] = { -- Gedlo Curry Pot (AP)
 					Grade = "High",
 					Level = 70,
 					Callings = {
@@ -542,21 +539,12 @@ PI.Constants = {
 						primalist = true,
 					},
 				},
-				["B40C3D8E2646C6DD1"] = { -- Gedlo Curry Pot (SP)
+        ["B40C3D8E2646C6DD1"] = { -- Gedlo Curry Pot (SP)
 					Grade = "High",
 					Level = 70,
 					Callings = {
-						mage = true,
+            mage = true,
 						cleric = true,
-					},
-				},
-				["B5FEC893CB961B888"] = { -- Blackthorn Burger
-					Grade = "Medium",
-					Level = 70,
-					Callings = {
-						warrior = true,
-						rogue = true,
-						primalist = true,
 					},
 				},
 				--////////////////////--
@@ -579,7 +567,6 @@ PI.Constants = {
 						cleric = true,
 					},
 				},
-				
 				--////////////////////--
 				-- NT Medium Grade Food --
 				--////////////////////--
@@ -873,10 +860,8 @@ PI.Constants = {
 			w = 36,
 			Icons = true,
 			List = {
-			--//////////////////////--
-				-- PoA High Potions --
-				--//////////////////////--
-				["B6A8C5F8110D4EFBB"] = { -- Visionary Powersurge Vial
+        -- PoA --
+        ["B03ABEAB575CC9A8E"] = { -- Prophetic Powersurge Vial
 					Grade = "High",
 					Level = 70,
 					Callings = {
@@ -885,7 +870,16 @@ PI.Constants = {
 						primalist = true,
 					},
 				},
-				["B76F46FAB030D4A53"] = { -- Visionary Brightsurge Vial
+        ["B6A8C5F8110D4EFBB"] = { -- Visionary Powersurge Vial
+					Grade = "High",
+					Level = 70,
+					Callings = {
+						warrior = true,
+						rogue = true,
+						primalist = true,
+					},
+				},
+        ["B599B39134D958B4F"] = { -- Prophetic Brightsurge Vial
 					Grade = "High",
 					Level = 70,
 					Callings = {
@@ -893,7 +887,29 @@ PI.Constants = {
 						cleric = true,
 					},
 				},
-				["B4E2589107D7E8E0F"] = { -- Visionary Enduring Vial
+        ["B76F46FAB030D4A53"] = { -- Visionary Brightsurge Vial
+					Grade = "High",
+					Level = 70,
+					Callings = {
+						mage = true,
+						cleric = true,
+					},
+				},
+        ["B3B22BC4C30D87AC2"] = { -- Prophetic Enduring Vial
+					Grade = "High",
+					Level = 70,
+					Callings = {
+						mage = true,
+						cleric = true,
+						warrior = true,
+						rogue = true,
+						primalist = true,
+					},
+					Role = {
+						tank = true,
+					},
+				},
+        ["B4E2589107D7E8E0F"] = { -- Visionary Enduring Vial
 					Grade = "High",
 					Level = 70,
 					Callings = {
@@ -1282,12 +1298,10 @@ PI.Constants = {
 			w = 30,
 			Icons = true,
 			List = {
-				--////////////////////////--
-				-- PoA Insoles --
-				--////////////////////////--
-				["r4DEE42255D06816A"] = { -- Tuath'de Insoles
+        -- PoA --
+        ["r4DEE42255D06816A"] = { -- Tuath'de Insoles
 					Grade = "High",
-					Level = 65,
+					Level = 70,
 					Callings = {
 						all = true,
 					},

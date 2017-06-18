@@ -1,18 +1,17 @@
 ﻿-- Tegenar Deepfang Boss Mod for King Boss Mods
--- Originaly Written by Paul Snart
--- updated for Prophecy of Aknket by wicendawen
+-- Written by Paul Snart
 -- Copyright 2011
 --
 
-KBMEXIDDTD_Settings = nil
-chKBMEXIDDTD_Settings = nil
+KBMSPEIDDTD_Settings = nil
+chKBMSPEIDDTD_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 if not KBM.BossMod then
 	return
 end
-local Instance = KBM.BossMod["Intrepid Darkening Deeps"]
+local Instance = KBM.BossMod["Intrepid: Darkening Deeps"]
 
 local MOD = {
 	Directory = Instance.Directory,
@@ -22,7 +21,7 @@ local MOD = {
 	InstanceObj = Instance,
 	HasPhases = true,
 	Lang = {},
-	ID = "intrepid_Tegenar",
+	ID = "ITegenar",
 	Object = "MOD",
 }
 
@@ -84,42 +83,42 @@ function MOD:InitVars()
 		-- TimersRef = self.Tegenar.Settings.TimersRef,
 		-- AlertsRef = self.Tegenar.Settings.AlertsRef,
 	}
-	KBMEXIDDTD_Settings = self.Settings
-	chKBMEXIDDTD_Settings = self.Settings
+	KBMSPEIDDTD_Settings = self.Settings
+	chKBMSPEIDDTD_Settings = self.Settings
 	
 end
 
 function MOD:SwapSettings(bool)
 
 	if bool then
-		KBMEXIDDTD_Settings = self.Settings
-		self.Settings = chKBMEXIDDTD_Settings
+		KBMSPEIDDTD_Settings = self.Settings
+		self.Settings = chKBMSPEIDDTD_Settings
 	else
-		chKBMEXIDDTD_Settings = self.Settings
-		self.Settings = KBMEXIDDTD_Settings
+		chKBMSPEIDDTD_Settings = self.Settings
+		self.Settings = KBMSPEIDDTD_Settings
 	end
 
 end
 
 function MOD:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMEXIDDTD_Settings, self.Settings)
+		KBM.LoadTable(chKBMSPEIDDTD_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMEXIDDTD_Settings, self.Settings)
+		KBM.LoadTable(KBMSPEIDDTD_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMEXIDDTD_Settings = self.Settings
+		chKBMSPEIDDTD_Settings = self.Settings
 	else
-		KBMEXIDDTD_Settings = self.Settings
+		KBMSPEIDDTD_Settings = self.Settings
 	end	
 end
 
 function MOD:SaveVars()	
 	if KBM.Options.Character then
-		chKBMEXIDDTD_Settings = self.Settings
+		chKBMSPEIDDTD_Settings = self.Settings
 	else
-		KBMEXIDDTD_Settings = self.Settings
+		KBMSPEIDDTD_Settings = self.Settings
 	end	
 end
 

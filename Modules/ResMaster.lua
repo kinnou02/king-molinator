@@ -226,6 +226,7 @@ end
 
 function RM.Rezes:Init()
 	function self:Add(UnitObj, aID, aCD, aFull, Name)
+    --print (UnitObj, aID, aCD, aFull, Name)
 		if LibSUnit.Raid.Grouped then
 			if RM.GUI.Settings.Enabled then
 				if not UnitObj then
@@ -237,7 +238,8 @@ function RM.Rezes:Init()
 					Name = UnitObj.Name
 				end
 				local aDetails = Inspect.Ability.New.Detail(aID)
-				if aDetails then
+        -- Ugly Hack to get around problems with Legendaries.
+				if aDetails or aID == "A497B3454505E51B5" then 
 					local Anchor = RM.GUI.Anchor
 					local Timer = {}
 					Timer.UnitObj = UnitObj
@@ -260,7 +262,9 @@ function RM.Rezes:Init()
 					Timer.GUI.CastInfo:SetFontSize(KBM.Constant.ResMaster.TextSize * RM.GUI.Settings.tScale)
 					Timer.GUI.Shadow:SetFontSize(Timer.GUI.CastInfo:GetFontSize())
 					--KBM.LoadTexture(Timer.GUI.Icon, "Rift", aDetails.icon)
-					Timer.GUI.Icon:SetTexture("Rift", aDetails.icon)
+					if(aDetails) then -- Ugly Hack to get around problems with Legendaries.
+            Timer.GUI.Icon:SetTexture("Rift", aDetails.icon)
+          end
 					Timer.SetWidth = Timer.GUI.Background:GetWidth() - Timer.GUI.Background:GetHeight()
 					local UID = self.Tracked[UnitObj.Name].UnitID
 					Timer.Class = ""
@@ -276,12 +280,16 @@ function RM.Rezes:Init()
 						end
 					end
 					
-					Timer.Duration = math.floor(tonumber(aFull))
+					Timer.Duration = math.floor(tonumber(aFull) or 300)
 					Timer.Remaining = (aCD or 0)
 					Timer.TimeStart = Inspect.Time.Real() - (Timer.Duration - Timer.Remaining)
 					Timer.Player = UnitObj.Name
 					Timer.Dead = UnitObj.Dead
-					Timer.Name = aDetails.name
+          if(aDetails) then -- Ugly Hack to get around problems with Legendaries.
+            Timer.Name = aDetails.name
+          else
+            Timer.Name = "Flash of the Phoenix"
+          end
 					Timer.UnitObj = self.Tracked[UnitObj.Name].UnitObj
 					self.Tracked[UnitObj.Name].Class = Timer.Class
 										
@@ -562,19 +570,19 @@ function RM.RezMReq(name, failed, message)
 end
 
 function RM.MessageHandler(handle, From, Type, Channel, Identifier, Data)
-	-- print("Data received from: "..tostring(From))
-	-- print("Type: "..tostring(Type))
-	-- print("Channel: "..tostring(Channel))
-	-- print("ID: "..tostring(Identifier))
-	-- print("Data: "..tostring(Data))
-	-- print("--------------------------------")
+	 --print("Data received from: "..tostring(From))
+	 --print("Type: "..tostring(Type))
+	 --print("Channel: "..tostring(Channel))
+	 --print("ID: "..tostring(Identifier))
+	 --print("Data: "..tostring(Data))
+	 --print("--------------------------------")
 	if From ~= LibSUnit.Player.Name and Data ~= nil then
 		if Type == "raid" or Type == "party" then
 			if Identifier == "KBMRezSet" then
 				local aID = string.sub(Data, 1, 17)
 				local st = string.find(Data, ",", 19)
 				local aCD = math.ceil(tonumber(string.sub(Data, 19, st - 1)) or 0)
-				local aDR = math.floor(tonumber(string.sub(Data, st + 1)))
+				local aDR = math.floor(tonumber(string.sub(Data, st + 1)) or 300)
 				local UnitList = LibSUnit.Lookup.Name[From]
 				if UnitList then
 					for UID, UnitObj in pairs(UnitList) do
@@ -602,7 +610,7 @@ function RM.MessageHandler(handle, From, Type, Channel, Identifier, Data)
 				local aID = string.sub(Data, 1, 17)
 				local st = string.find(Data, ",", 19)
 				local aCD = math.ceil(tonumber(string.sub(Data, 19, st - 1)) or 0)
-				local aDR = math.floor(tonumber(string.sub(Data, st + 1)))
+				local aDR = math.floor(tonumber(string.sub(Data, st + 1)) or 300)
 				local UnitList = LibSUnit.Lookup.Name[From]
 				if UnitList then
 					for UID, UnitObj in pairs(UnitList) do

@@ -109,6 +109,7 @@ HA.Lang.Unit.Enraged:SetKorean("격분한 아라쿠른 혈족")
 
 -- Ability Dictionary
 HA.Lang.Ability = {}
+HA.Lang.Ability.Lava = KBM.Language:Add("Lava Spout")
 HA.Lang.Ability.Nova = KBM.Language:Add("Fire Nova")
 HA.Lang.Ability.Nova:SetGerman("Feuernova")
 HA.Lang.Ability.Nova:SetRussian("Огненная сверхновая")
@@ -167,6 +168,7 @@ HA.Lang.Debuff.Ignited:SetKorean("점화")
 
 -- Verbose Dictionary
 HA.Lang.Verbose = {}
+HA.Lang.Verbose.Lava = KBM.Language:Add("until "..HA.Lang.Ability.Lava[KBM.Lang])
 HA.Lang.Verbose.Nova = KBM.Language:Add("until "..HA.Lang.Ability.Nova[KBM.Lang])
 HA.Lang.Verbose.Nova:SetGerman("bis "..HA.Lang.Ability.Nova[KBM.Lang])
 HA.Lang.Verbose.Nova:SetFrench("jusqu'à Nova de flammes")
@@ -198,6 +200,7 @@ HA.Lang.Menu.FieryPThree:SetGerman("Erste "..HA.Lang.Buff.Fiery[KBM.Lang].." (Ph
 HA.Lang.Menu.FieryPThree:SetFrench("Première Métamorphose ardente (Phase 3)")
 HA.Lang.Menu.FieryPThree:SetRussian("Первое "..HA.Lang.Buff.Fiery[KBM.Lang].." (Фаза 3)")
 HA.Lang.Menu.FieryPThree:SetKorean("첫번째 화염 변형 (Phase 3)")
+HA.Lang.Menu.LavaFirst = KBM.Language:Add("First "..HA.Lang.Ability.Lava[KBM.Lang])
 HA.Lang.Menu.NovaFirst = KBM.Language:Add("First "..HA.Lang.Ability.Nova[KBM.Lang])
 HA.Lang.Menu.NovaFirst:SetGerman("Erste "..HA.Lang.Ability.Nova[KBM.Lang])
 HA.Lang.Menu.NovaFirst:SetFrench("Premier Nova de flammes")
@@ -359,7 +362,7 @@ end
 function HA:UnitHPCheck(uDetails, unitID)	
 	if uDetails and unitID then
 		local BossObj = self.UTID[uDetails.type]
-		if BossOBj then
+		if BossObj then
 			if BossObj == self.Arakhurn then
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
@@ -379,6 +382,7 @@ function HA:UnitHPCheck(uDetails, unitID)
 						self.PhaseObj.Objectives:AddPercent(self.Arakhurn, 0, 100)
 						self.PhaseObj:SetPhase(1)
 						KBM.MechTimer:AddStart(self.Arakhurn.TimersRef.NovaFirst)
+						KBM.MechTimer:AddStart(self.Arakhurn.TimersRef.LavaFirst)
 						KBM.MechTimer:AddStart(self.Arakhurn.TimersRef.FieryFirst)
 					end
 					KBM.TankSwap:Start(self.Lang.Debuff.Armor[KBM.Lang], unitID)
@@ -440,6 +444,10 @@ end
 
 function HA:Start()
 	-- Create Timers
+  self.Arakhurn.TimersRef.LavaFirst = KBM.MechTimer:Add(self.Lang.Ability.Lava[KBM.Lang], 40)
+	self.Arakhurn.TimersRef.LavaFirst.MenuName = self.Lang.Menu.LavaFirst[KBM.Lang]
+	self.Arakhurn.TimersRef.Lava = KBM.MechTimer:Add(self.Lang.Ability.Lava[KBM.Lang], 54)
+  
 	self.Arakhurn.TimersRef.NovaFirst = KBM.MechTimer:Add(self.Lang.Ability.Nova[KBM.Lang], 46)
 	self.Arakhurn.TimersRef.NovaFirst.MenuName = self.Lang.Menu.NovaFirst[KBM.Lang]
 	self.Arakhurn.TimersRef.Nova = KBM.MechTimer:Add(self.Lang.Ability.Nova[KBM.Lang], 60)
@@ -476,6 +484,7 @@ function HA:Start()
 	self.Arakhurn.Triggers.Stall:AddPhase(self.Stall)
 	self.Arakhurn.Triggers.Nova = KBM.Trigger:Create(self.Lang.Ability.Nova[KBM.Lang], "channel", self.Arakhurn)
 	self.Arakhurn.Triggers.Nova:AddTimer(self.Arakhurn.TimersRef.Nova)
+	self.Arakhurn.Triggers.Nova:AddTimer(self.Arakhurn.TimersRef.Lava)
 	self.Arakhurn.Triggers.Nova:AddAlert(self.Arakhurn.AlertsRef.Nova)
 	self.Arakhurn.Triggers.Fiery = KBM.Trigger:Create(self.Lang.Buff.Fiery[KBM.Lang], "playerBuff", self.Arakhurn)
 	self.Arakhurn.Triggers.Fiery:AddTimer(self.Arakhurn.TimersRef.Fiery)

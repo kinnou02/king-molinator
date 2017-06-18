@@ -3,8 +3,8 @@
 -- July 2015
 --
 
-KBMPOAIGFGLA_Settings = nil
-chKBMPOAIGFGLA_Settings = nil
+KBMSPEIGFGLA_Settings = nil
+chKBMSPEIGFGLA_Settings = nil
 
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
@@ -102,42 +102,42 @@ function MOD:InitVars()
 		-- TimersRef = self.Baird.Settings.TimersRef,
 		AlertsRef = self.Glasya.Settings.AlertsRef,
 	}
-	KBMPOAIGFGLA_Settings = self.Settings
-	chKBMPOAIGFGLA_Settings = self.Settings
+	KBMSPEIGFGLA_Settings = self.Settings
+	chKBMSPEIGFGLA_Settings = self.Settings
 	
 end
 
 function MOD:SwapSettings(bool)
 
 	if bool then
-		KBMPOAIGFGLA_Settings = self.Settings
-		self.Settings = chKBMPOAIGFGLA_Settings
+		KBMSPEIGFGLA_Settings = self.Settings
+		self.Settings = chKBMSPEIGFGLA_Settings
 	else
-		chKBMPOAIGFGLA_Settings = self.Settings
-		self.Settings = KBMPOAIGFGLA_Settings
+		chKBMSPEIGFGLA_Settings = self.Settings
+		self.Settings = KBMSPEIGFGLA_Settings
 	end
 
 end
 
 function MOD:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMPOAIGFGLA_Settings, self.Settings)
+		KBM.LoadTable(chKBMSPEIGFGLA_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMPOAIGFGLA_Settings, self.Settings)
+		KBM.LoadTable(KBMSPEIGFGLA_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMPOAIGFGLA_Settings = self.Settings
+		chKBMSPEIGFGLA_Settings = self.Settings
 	else
-		KBMPOAIGFGLA_Settings = self.Settings
+		KBMSPEIGFGLA_Settings = self.Settings
 	end	
 end
 
 function MOD:SaveVars()	
 	if KBM.Options.Character then
-		chKBMPOAIGFGLA_Settings = self.Settings
+		chKBMSPEIGFGLA_Settings = self.Settings
 	else
-		KBMPOAIGFGLA_Settings = self.Settings
+		KBMSPEIGFGLA_Settings = self.Settings
 	end	
 end
 

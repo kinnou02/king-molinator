@@ -1,29 +1,39 @@
-﻿
+﻿1.9.9.906
+* Renamed Everything to Prophecy of Ahnket from old expansion name.
+
+1.9.9.905
+* New: Timer for the First Funnel on Silgen.
+* New: Timer for the First Lava Spout in Phase 3 on Arakhrn.
+* Removed: Incorrect alert timers on screen on the Ereandorn fight.
+
+1.9.9.904
+* Fixed: Combat Res Flash of the Phoenix.
+
+1.9.9.903
+* New: Combat Res monitor with combat reses from new souls.
+
+1.9.9.902
+* New: Lava Spout timer to High Priest Arakhurn fight. There can be additional Lava Spouts throughout the fight that are not tracked.
+* Changed: Enrage timers with the new timers after patch.
+
+1.9.9.901
+* Fixed: The Trigger to Start fight of High Priest Arakhurn.
+* Changed: The timeout of the High Priest Arakhurn fight, so it doesn't time out between Phase 2 and Phase 3.
+* New: "Ready Check" updated with the level 70 versions of vials/stones/feast.
+
+1.9.9.900
+* New: Added GUI support for Prophecy of Ahnket
+* New: Added all bosses in I:RotP.
+* New: Added the boss of Queen's Foci. 
+
+
+
 * Known Bugs
 ** Ungolok: warning for Ink Blast ability doesn't work.
 ** Threngar: warning for the Untold Horror (Akvan Monstrosity ability) doesn't work.
 ** Pumpkin: Sovereign Fervor timer doesn't reset on P1->P2 transition.
 ** Possible crash on Glacieus (Citadel of Insanity) on frost strike cast
 ** Zilas' adds are their castbar disabled due to crash
-
-
-1.7.3.813
-
-* Adding Boss (CoA)
-** Adding CoA (NM) - Hericius : Mushrooms phase "Caustic Spores", "Incendiary Spores" and "Acidic Spores" alerts
-** Adding CoA (NM) - Hericius : Interupts "Cleansing Siphon" and "Chlorolance" alerts
-** Adding CoA (NM) - Hericius : Timers for mushrooms phase, burst heal and adds pop
-** Correcting CoA (NM) - Fyragnos : Enrage is now 8.30min and correction of colors
-
-1.7.3.812
-
-* Previous version added in SVN (Pagura,Rhaza'de_Canyons etc.)
-** Adding IGP (HM) - Guurloth : "Dance with Death" and "The Point" alerts
-** Adding CoA (NM) - Duke Eblius : "Sulphurous Blight", "Call to arms" and "Blazing Ruin" alerts
-** Adding CoA (NM) - Azaphrentus : "Manifest Scorn" and "Rage of Azaphrentus" alerts
-** Adding CoA (NM) - Fyragnos : "Summon Flamestrom", "Call of the Drake", "Withering Blaze", "Magma Blast" and "Flame of Despair" alerts
-
-
 
 1.7.3.801
 * Fixed: Updated and corrected version checking in Messenger.lua

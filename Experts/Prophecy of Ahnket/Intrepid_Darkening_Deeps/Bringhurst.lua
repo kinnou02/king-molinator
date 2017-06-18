@@ -1,18 +1,17 @@
 ﻿-- Michael Bringhurst Boss Mod for King Boss Mods
--- Originaly Written by Paul Snart
--- updated for Prophecy of Aknket by wicendawen
+-- Written by Paul Snart
 -- Copyright 2011
 --
 
-KBMEXIDDMB_Settings = nil
-chKBMEXIDDMB_Settings = nil
+KBMSPEIDDMB_Settings = nil
+chKBMSPEIDDMB_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 if not KBM.BossMod then
 	return
 end
-local Instance = KBM.BossMod["Intrepid Darkening Deeps"]
+local Instance = KBM.BossMod["Intrepid: Darkening Deeps"]
 
 local MOD = {
 	Directory = Instance.Directory,
@@ -22,7 +21,7 @@ local MOD = {
 	InstanceObj = Instance,
 	HasPhases = true,
 	Lang = {},
-	ID = "intrepid_Bringhurst",
+	ID = "IBringhurst",
 	Object = "MOD",
 }
 
@@ -84,42 +83,42 @@ function MOD:InitVars()
 		-- TimersRef = self.Bringhurst.Settings.TimersRef,
 		-- AlertsRef = self.Bringhurst.Settings.AlertsRef,
 	}
-	KBMEXIDDMB_Settings = self.Settings
-	chKBMEXIDDMB_Settings = self.Settings
+	KBMSPEIDDMB_Settings = self.Settings
+	chKBMSPEIDDMB_Settings = self.Settings
 	
 end
 
 function MOD:SwapSettings(bool)
 
 	if bool then
-		KBMEXIDDMB_Settings = self.Settings
-		self.Settings = chKBMEXIDDMB_Settings
+		KBMSPEIDDMB_Settings = self.Settings
+		self.Settings = chKBMSPEIDDMB_Settings
 	else
-		chKBMEXIDDMB_Settings = self.Settings
-		self.Settings = KBMEXIDDMB_Settings
+		chKBMSPEIDDMB_Settings = self.Settings
+		self.Settings = KBMSPEIDDMB_Settings
 	end
 
 end
 
 function MOD:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMEXIDDMB_Settings, self.Settings)
+		KBM.LoadTable(chKBMSPEIDDMB_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMEXIDDMB_Settings, self.Settings)
+		KBM.LoadTable(KBMSPEIDDMB_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMEXIDDMB_Settings = self.Settings
+		chKBMSPEIDDMB_Settings = self.Settings
 	else
-		KBMEXIDDMB_Settings = self.Settings
+		KBMSPEIDDMB_Settings = self.Settings
 	end	
 end
 
 function MOD:SaveVars()	
 	if KBM.Options.Character then
-		chKBMEXIDDMB_Settings = self.Settings
+		chKBMSPEIDDMB_Settings = self.Settings
 	else
-		KBMEXIDDMB_Settings = self.Settings
+		KBMSPEIDDMB_Settings = self.Settings
 	end	
 end
 

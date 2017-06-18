@@ -1,22 +1,10 @@
--- Gyel Fortress Header for King Boss Mods
--- Written by Maatang
--- July 2015
+﻿-- The Queen's Foci Header for King Boss Mods
+-- Written by Rikard Blixt
+-- Copyright 2017
+--
 
-KBMPOAIGF_Settings = nil
-chKBMPOAIGF_Settings = nil
-
-local MOD = {
-	Directory = "Experts/Prophecy of Ahnket/Gyel_Fortress/",
-	File = "GF_Header.lua",
-	Header = nil,
-	Enabled = true,
-	IsInstance = true,
-	Name = "Intrepid Gyel Fortress",
-	Type = "Expert",
-	ID = "Intrepid_Gyel_Fortress",
-	Object = "MOD",
-	Rift = "PoA",
-}
+KBMSPEQF_Settings = nil
+chKBMSPEQF_Settings = nil
 
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
@@ -25,14 +13,25 @@ if not KBM.BossMod then
 	return
 end
 
+local MOD = {
+	Directory = "Raids/Prophecy of Ahnket/LFR/The_Queens_Foci/",
+	File = "QFHeader",
+	Header = nil,
+	Enabled = true,
+	IsInstance = true,
+	Name = "The Queen's Foci",
+	Type = "Sliver",
+	ID = "The_Queens_Foci",
+	Object = "MOD",
+	Rift = "PA",
+}
+
 KBM.RegisterMod(MOD.ID, MOD)
 
 -- Header Dictionary
 MOD.Lang = {}
 MOD.Lang.Main = {}
 MOD.Lang.Main.Name = KBM.Language:Add(MOD.Name)
-MOD.Lang.Main.Name:SetFrench("Forteresse Gyel")
-
 
 MOD.Name = MOD.Lang.Main.Name[KBM.Lang]
 MOD.Descript = MOD.Name
@@ -50,4 +49,6 @@ function MOD:SaveVars()
 end
 
 function MOD:Start()
+	function self:Handler(bool)
+	end
 end

@@ -1,18 +1,17 @@
 ﻿-- Alchemist Braxtepel Boss Mod for King Boss Mods
--- Originaly Written by Paul Snart
--- updated for Prophecy of Aknket by wicendawen
+-- Written by Paul Snart
 -- Copyright 2011
 --
 
-KBMEXIDDAB_Settings = nil
-chKBMEXIDDAB_Settings = nil
+KBMSPEIDDAB_Settings = nil
+chKBMSPEIDDAB_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 if not KBM.BossMod then
 	return
 end
-local Instance = KBM.BossMod["Intrepid Darkening Deeps"]
+local Instance = KBM.BossMod["Intrepid: Darkening Deeps"]
 
 local MOD = {
 	Directory = Instance.Directory,
@@ -22,7 +21,7 @@ local MOD = {
 	InstanceObj = Instance,
 	HasPhases = true,
 	Lang = {},
-	ID = "intrepid_Braxtepel",
+	ID = "IBraxtepel",
 	Object = "MOD",
 }
 
@@ -122,42 +121,42 @@ function MOD:InitVars()
 		-- TimersRef = self.Braxtepel.Settings.TimersRef,
 		-- AlertsRef = self.Braxtepel.Settings.AlertsRef,
 	}
-	KBMEXIDDAB_Settings = self.Settings
-	chKBMEXIDDAB_Settings = self.Settings
+	KBMSPEIDDAB_Settings = self.Settings
+	chKBMSPEIDDAB_Settings = self.Settings
 	
 end
 
 function MOD:SwapSettings(bool)
 
 	if bool then
-		KBMEXIDDAB_Settings = self.Settings
-		self.Settings = chKBMEXIDDAB_Settings
+		KBMSPEIDDAB_Settings = self.Settings
+		self.Settings = chKBMSPEIDDAB_Settings
 	else
-		chKBMEXIDDAB_Settings = self.Settings
-		self.Settings = KBMEXIDDAB_Settings
+		chKBMSPEIDDAB_Settings = self.Settings
+		self.Settings = KBMSPEIDDAB_Settings
 	end
 
 end
 
 function MOD:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMEXIDDAB_Settings, self.Settings)
+		KBM.LoadTable(chKBMSPEIDDAB_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMEXIDDAB_Settings, self.Settings)
+		KBM.LoadTable(KBMSPEIDDAB_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMEXIDDAB_Settings = self.Settings
+		chKBMSPEIDDAB_Settings = self.Settings
 	else
-		KBMEXIDDAB_Settings = self.Settings
+		KBMSPEIDDAB_Settings = self.Settings
 	end	
 end
 
 function MOD:SaveVars()	
 	if KBM.Options.Character then
-		chKBMEXIDDAB_Settings = self.Settings
+		chKBMSPEIDDAB_Settings = self.Settings
 	else
-		KBMEXIDDAB_Settings = self.Settings
+		KBMSPEIDDAB_Settings = self.Settings
 	end	
 end
 

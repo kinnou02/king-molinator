@@ -3,14 +3,14 @@
 -- Copyright 2011
 --
 
-KBMIROTPEN_Settings = nil
+KBMSPEIROTPEN_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 if not KBM.BossMod then
 	return
 end
-local ROTP = KBM.BossMod["Intrepid Rise of the Phoenix"]
+local ROTP = KBM.BossMod["Intrepid: Rise of the Phoenix"]
 
 local EN = {
 	Directory = ROTP.Directory,
@@ -21,8 +21,8 @@ local EN = {
 	HasPhases = false,
 	Lang = {},
 	TankSwap = false,
-	ID = "Intrepid Ereandorn",
-	Enrage = 60 * 7,
+	ID = "IROTPEreandorn",
+  Enrage = 60 * 7,
 	Menu = {},
 	Object = "EN",
 }
@@ -124,40 +124,40 @@ function EN:InitVars()
 		Alerts = KBM.Defaults.Alerts(),
 		MechSpy = KBM.Defaults.MechSpy(),
 	}
-	KBMIROTPEN_Settings = self.Settings
-	chKBMIROTPEN_Settings = self.Settings
+	KBMSPEIROTPEN_Settings = self.Settings
+	chKBMSPEIROTPEN_Settings = self.Settings
 	
 end
 
 function EN:SwapSettings(bool)
 	if bool then
-		KBMIROTPEN_Settings = self.Settings
-		self.Settings = chKBMIROTPEN_Settings
+		KBMSPEIROTPEN_Settings = self.Settings
+		self.Settings = chKBMSPEIROTPEN_Settings
 	else
-		chKBMIROTPEN_Settings = self.Settings
-		self.Settings = KBMIROTPEN_Settings
+		chKBMSPEIROTPEN_Settings = self.Settings
+		self.Settings = KBMSPEIROTPEN_Settings
 	end
 end
 
 function EN:LoadVars()
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMIROTPEN_Settings, self.Settings)
+		KBM.LoadTable(chKBMSPEIROTPEN_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMIROTPEN_Settings, self.Settings)
+		KBM.LoadTable(KBMSPEIROTPEN_Settings, self.Settings)
 	end
 		
 	if KBM.Options.Character then
-		chKBMIROTPEN_Settings = self.Settings
+		chKBMSPEIROTPEN_Settings = self.Settings
 	else
-		KBMIROTPEN_Settings = self.Settings
+		KBMSPEIROTPEN_Settings = self.Settings
 	end	
 end
 
 function EN:SaveVars()	
 	if KBM.Options.Character then
-		chKBMIROTPEN_Settings = self.Settings
+		chKBMSPEIROTPEN_Settings = self.Settings
 	else
-		KBMIROTPEN_Settings = self.Settings
+		KBMSPEIROTPEN_Settings = self.Settings
 	end	
 end
 
@@ -247,8 +247,8 @@ end
 function EN:Start()
 	-- Alerts
 	self.Ereandorn.AlertsRef.Combustion = KBM.Alert:Create(self.Lang.Ability.Combustion[KBM.Lang], nil, true, false, "red")
-	self.Ereandorn.AlertsRef.Growth = KBM.Alert:Create(self.Lang.Ability.Growth[KBM.Lang], 8, true, true, "red")
-	self.Ereandorn.AlertsRef.Eruption = KBM.Alert:Create(self.Lang.Ability.Eruption[KBM.Lang], 5, true, false, "orange")
+	self.Ereandorn.AlertsRef.Growth = KBM.Alert:Create(self.Lang.Ability.Growth[KBM.Lang], nil, true, true, "red")
+	self.Ereandorn.AlertsRef.Eruption = KBM.Alert:Create(self.Lang.Ability.Eruption[KBM.Lang], nil, true, false, "orange")
 	KBM.Defaults.AlertObj.Assign(self.Ereandorn)
 	
 	-- Create Mechanic Spies

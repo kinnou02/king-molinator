@@ -1,18 +1,17 @@
 ﻿-- Scarn Boss Mod for King Boss Mods
--- Originaly Written by Paul Snart
--- updated for Prophecy of Aknket by wicendawen
+-- Written by Paul Snart
 -- Copyright 2011
 --
 
-KBMEXIDDSN_Settings = nil
-chKBMEXIDDSN_Settings = nil
+KBMSPEIDDSN_Settings = nil
+chKBMSPEIDDSN_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 if not KBM.BossMod then
 	return
 end
-local Instance = KBM.BossMod["Intrepid Darkening Deeps"]
+local Instance = KBM.BossMod["Intrepid: Darkening Deeps"]
 
 local MOD = {
 	Directory = Instance.Directory,
@@ -22,7 +21,7 @@ local MOD = {
 	InstanceObj = Instance,
 	HasPhases = true,
 	Lang = {},
-	ID = "intrepid Scarn",
+	ID = "IScarn",
 	Object = "MOD",
 }
 
@@ -88,42 +87,42 @@ function MOD:InitVars()
 		-- TimersRef = self.Scarn.Settings.TimersRef,
 		-- AlertsRef = self.Scarn.Settings.AlertsRef,
 	}
-	KBMEXIDDSN_Settings = self.Settings
-	chKBMEXIDDSN_Settings = self.Settings
+	KBMSPEIDDSN_Settings = self.Settings
+	chKBMSPEIDDSN_Settings = self.Settings
 	
 end
 
 function MOD:SwapSettings(bool)
 
 	if bool then
-		KBMEXIDDSN_Settings = self.Settings
-		self.Settings = chKBMEXIDDSN_Settings
+		KBMSPEIDDSN_Settings = self.Settings
+		self.Settings = chKBMSPEIDDSN_Settings
 	else
-		chKBMEXIDDSN_Settings = self.Settings
-		self.Settings = KBMEXIDDSN_Settings
+		chKBMSPEIDDSN_Settings = self.Settings
+		self.Settings = KBMSPEIDDSN_Settings
 	end
 
 end
 
 function MOD:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMEXIDDSN_Settings, self.Settings)
+		KBM.LoadTable(chKBMSPEIDDSN_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMEXIDDSN_Settings, self.Settings)
+		KBM.LoadTable(KBMSPEIDDSN_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMEXIDDSN_Settings = self.Settings
+		chKBMSPEIDDSN_Settings = self.Settings
 	else
-		KBMEXIDDSN_Settings = self.Settings
+		KBMSPEIDDSN_Settings = self.Settings
 	end	
 end
 
 function MOD:SaveVars()	
 	if KBM.Options.Character then
-		chKBMEXIDDSN_Settings = self.Settings
+		chKBMSPEIDDSN_Settings = self.Settings
 	else
-		KBMEXIDDSN_Settings = self.Settings
+		KBMSPEIDDSN_Settings = self.Settings
 	end	
 end
 

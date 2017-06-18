@@ -19,27 +19,24 @@ local PC = {
  
 PC.RezBank = {
 	["cleric"] = {
-		--["a0000000026862464"] = {},
-		--["a000000004D4EFA27"] = {},
-		--["a000000002942FF34"] = {},
-		--["a0000000074C19819"] = {},
 		["A2942FF34A490A22D"] = {}, -- River of Life
 		["A74C19819577CEA4D"] = {}, -- Flash of the Phoenix
+		["A497B3454505E51B5"] = {}, -- Flash of the Phoenix (legendary? new?)
 		["A4D4EFA27574FDC9A"] = {}, -- Absolution
 		["A26862464D9EECBE7"] = {}, -- Life's Return
 		["AFDD327BDD0828E57"] = {}, -- Death's Embrace
 	},
 	["mage"] = {
-		--["a000000004AE33670"] = {},
-		--["a000000002D3F2123"] = {},
 		["A2D3F2123EE93DE48"] = {}, -- Spark of Life
 		["A4AE33670A72C0F45"] = {}, -- Soul Tether
 	},
 	["warrior"] = {
 		["A5F5BA8A108A5111A"] = {}, -- Soul Redemption
+		["A6193442A30DFFE7A"] = {}, -- Stand and Fight!
 	},
 	["rogue"] = {
 		["A72E5E73166B95DD1"] = {}, -- Kiss Of Life
+		["A65315291D2D2B2C5"] = {}, -- Reanimation Battery
 	},
 	["primalist"] = {
 		["A0ED6AED476EEE994"] = {}, -- Emanate Life

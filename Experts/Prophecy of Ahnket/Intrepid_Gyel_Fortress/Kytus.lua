@@ -3,8 +3,8 @@
 -- July 2015
 --
 
-KBMPOAIGFKYT_Settings = nil
-chKBMPOAIGFKYT_Settings = nil
+KBMSPEIGFKYT_Settings = nil
+chKBMSPEIGFKYT_Settings = nil
 
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
@@ -86,7 +86,7 @@ MOD.Rex = {
   NameShort = "Rex",
   Castbar = nil,
   AlertsRef = {},
-  UTID = "U486E2F487A729E18",
+  UTID = "U0C5FC32F3F1F5F2B",
   UnitID = nil,
   Triggers = {},
   Settings = {
@@ -121,42 +121,42 @@ function MOD:InitVars()
 		-- TimersRef = self.Baird.Settings.TimersRef,
 		AlertsRef = self.Rex.Settings.AlertsRef,
 	}
-	KBMPOAIGFKYT_Settings = self.Settings
-	chKBMPOAIGFKYT_Settings = self.Settings
+	KBMSPEIGFKYT_Settings = self.Settings
+	chKBMSPEIGFKYT_Settings = self.Settings
 	
 end
 
 function MOD:SwapSettings(bool)
 
 	if bool then
-		KBMPOAIGFKYT_Settings = self.Settings
-		self.Settings = chKBMPOAIGFKYT_Settings
+		KBMSPEIGFKYT_Settings = self.Settings
+		self.Settings = chKBMSPEIGFKYT_Settings
 	else
-		chKBMPOAIGFKYT_Settings = self.Settings
-		self.Settings = KBMPOAIGFKYT_Settings
+		chKBMSPEIGFKYT_Settings = self.Settings
+		self.Settings = KBMSPEIGFKYT_Settings
 	end
 
 end
 
 function MOD:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMPOAIGFKYT_Settings, self.Settings)
+		KBM.LoadTable(chKBMSPEIGFKYT_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMPOAIGFKYT_Settings, self.Settings)
+		KBM.LoadTable(KBMSPEIGFKYT_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMPOAIGFKYT_Settings = self.Settings
+		chKBMSPEIGFKYT_Settings = self.Settings
 	else
-		KBMPOAIGFKYT_Settings = self.Settings
+		KBMSPEIGFKYT_Settings = self.Settings
 	end	
 end
 
 function MOD:SaveVars()	
 	if KBM.Options.Character then
-		chKBMPOAIGFKYT_Settings = self.Settings
+		chKBMSPEIGFKYT_Settings = self.Settings
 	else
-		KBMPOAIGFKYT_Settings = self.Settings
+		KBMSPEIGFKYT_Settings = self.Settings
 	end	
 end
 

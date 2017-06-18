@@ -1,18 +1,17 @@
 ﻿-- The Gedlo Council Boss Mod for King Boss Mods
--- Originaly Written by Paul Snart
--- updated for Prophecy of Aknket by wicendawen
+-- Written by Paul Snart
 -- Copyright 2011
 --
 
-KBMEXIDDTC_Settings = nil
-chKBMEXIDDTC_Settings = nil
+KBMSPEIDDTC_Settings = nil
+chKBMSPEIDDTC_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 if not KBM.BossMod then
 	return
 end
-local Instance = KBM.BossMod["Intrepid Darkening Deeps"]
+local Instance = KBM.BossMod["Intrepid: Darkening Deeps"]
 
 local MOD = {
 	Directory = Instance.Directory,
@@ -22,7 +21,7 @@ local MOD = {
 	InstanceObj = Instance,
 	HasPhases = true,
 	Lang = {},
-	ID = "intrepid Council",
+	ID = "ICouncil",
 	Object = "MOD",
 }
 
@@ -141,42 +140,42 @@ function MOD:InitVars()
 		-- TimersRef = self.Nuggo.Settings.TimersRef,
 		-- AlertsRef = self.Nuggo.Settings.AlertsRef,
 	}
-	KBMEXIDDTC_Settings = self.Settings
-	chKBMEXIDDTC_Settings = self.Settings
+	KBMSPEIDDTC_Settings = self.Settings
+	chKBMSPEIDDTC_Settings = self.Settings
 	
 end
 
 function MOD:SwapSettings(bool)
 
 	if bool then
-		KBMEXIDDTC_Settings = self.Settings
-		self.Settings = chKBMEXIDDTC_Settings
+		KBMSPEIDDTC_Settings = self.Settings
+		self.Settings = chKBMSPEIDDTC_Settings
 	else
-		chKBMEXIDDTC_Settings = self.Settings
-		self.Settings = KBMEXIDDTC_Settings
+		chKBMSPEIDDTC_Settings = self.Settings
+		self.Settings = KBMSPEIDDTC_Settings
 	end
 
 end
 
 function MOD:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMEXIDDTC_Settings, self.Settings)
+		KBM.LoadTable(chKBMSPEIDDTC_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMEXIDDTC_Settings, self.Settings)
+		KBM.LoadTable(KBMSPEIDDTC_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMEXIDDTC_Settings = self.Settings
+		chKBMSPEIDDTC_Settings = self.Settings
 	else
-		KBMEXIDDTC_Settings = self.Settings
+		KBMSPEIDDTC_Settings = self.Settings
 	end	
 end
 
 function MOD:SaveVars()	
 	if KBM.Options.Character then
-		chKBMEXIDDTC_Settings = self.Settings
+		chKBMSPEIDDTC_Settings = self.Settings
 	else
-		KBMEXIDDTC_Settings = self.Settings
+		KBMSPEIDDTC_Settings = self.Settings
 	end	
 end
 

@@ -1,18 +1,17 @@
 ﻿-- Glubmuk Boss Mod for King Boss Mods
--- Originaly Written by Paul Snart
--- updated for Prophecy of Aknket by wicendawen
+-- Written by Paul Snart
 -- Copyright 2011
 --
 
-KBMEXIDDGK_Settings = nil
-chKBMEXIDDGK_Settings = nil
+KBMSPEIDDGK_Settings = nil
+chKBMSPEIDDGK_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 if not KBM.BossMod then
 	return
 end
-local Instance = KBM.BossMod["Intrepid Darkening Deeps"]
+local Instance = KBM.BossMod["Intrepid: Darkening Deeps"]
 
 local MOD = {
 	Directory = Instance.Directory,
@@ -22,7 +21,7 @@ local MOD = {
 	InstanceObj = Instance,
 	HasPhases = true,
 	Lang = {},
-	ID = "Intrepid Glubmuk",
+	ID = "IGlubmuk",
 	Object = "MOD",
 }
 
@@ -78,42 +77,42 @@ function MOD:InitVars()
 		-- TimersRef = self.Glubmuk.Settings.TimersRef,
 		-- AlertsRef = self.Glubmuk.Settings.AlertsRef,
 	}
-	KBMEXIDDGK_Settings = self.Settings
-	chKBMEXIDDGK_Settings = self.Settings
+	KBMSPEIDDGK_Settings = self.Settings
+	chKBMSPEIDDGK_Settings = self.Settings
 	
 end
 
 function MOD:SwapSettings(bool)
 
 	if bool then
-		KBMEXIDDGK_Settings = self.Settings
-		self.Settings = chKBMEXIDDGK_Settings
+		KBMSPEIDDGK_Settings = self.Settings
+		self.Settings = chKBMSPEIDDGK_Settings
 	else
-		chKBMEXIDDGK_Settings = self.Settings
-		self.Settings = KBMEXIDDGK_Settings
+		chKBMSPEIDDGK_Settings = self.Settings
+		self.Settings = KBMSPEIDDGK_Settings
 	end
 
 end
 
 function MOD:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMEXIDDGK_Settings, self.Settings)
+		KBM.LoadTable(chKBMSPEIDDGK_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMEXIDDGK_Settings, self.Settings)
+		KBM.LoadTable(KBMSPEIDDGK_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMEXIDDGK_Settings = self.Settings
+		chKBMSPEIDDGK_Settings = self.Settings
 	else
-		KBMEXIDDGK_Settings = self.Settings
+		KBMSPEIDDGK_Settings = self.Settings
 	end	
 end
 
 function MOD:SaveVars()	
 	if KBM.Options.Character then
-		chKBMEXIDDGK_Settings = self.Settings
+		chKBMSPEIDDGK_Settings = self.Settings
 	else
-		KBMEXIDDGK_Settings = self.Settings
+		KBMSPEIDDGK_Settings = self.Settings
 	end	
 end
 

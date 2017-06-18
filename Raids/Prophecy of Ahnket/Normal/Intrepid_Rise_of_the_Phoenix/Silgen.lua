@@ -3,14 +3,14 @@
 -- Copyright 2011
 --
 
-KBMIROTPGS_Settings = nil
+KBMSPEIROTPGS_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
 if not KBM.BossMod then
 	return
 end
-local ROTP = KBM.BossMod["Intrepid Rise of the Phoenix"]
+local ROTP = KBM.BossMod["Intrepid: Rise of the Phoenix"]
 
 local GS = {
 	Directory = ROTP.Directory,
@@ -20,7 +20,7 @@ local GS = {
 	InstanceObj = ROTP,
 	HasPhases = true,
 	Lang = {},
-	ID = "Intrepid Silgen",
+	ID = "IROTPSilgen",
 	Enrage = 60 * 7,
 	Object = "GS",
 }
@@ -47,6 +47,7 @@ GS.Silgen = {
 		TimersRef = {
 			Enabled = true,
 			Funnel = KBM.Defaults.TimerObj.Create("red"),
+			FunnelFirst = KBM.Defaults.TimerObj.Create("red"),
 			Incinerate = KBM.Defaults.TimerObj.Create("yellow"),
 		},
 		AlertsRef = {
@@ -95,6 +96,12 @@ GS.Lang.Debuff.Anchor:SetRussian("Защита огня")
 GS.Lang.Debuff.Anchor:SetFrench("Ancrage de flammes")
 GS.Lang.Debuff.Anchor:SetKorean("불꽃 고정")
 
+GS.Lang.Menu = {}
+GS.Lang.Menu.FunnelFirst = KBM.Language:Add("First "..GS.Lang.Ability.Funnel[KBM.Lang])
+GS.Lang.Menu.FunnelFirst:SetGerman("Erste "..GS.Lang.Ability.Funnel[KBM.Lang])
+GS.Lang.Menu.FunnelFirst:SetFrench("Premier "..GS.Lang.Ability.Funnel[KBM.Lang])
+GS.Lang.Menu.FunnelFirst:SetRussian("Первая "..GS.Lang.Ability.Funnel[KBM.Lang])
+
 function GS:AddBosses(KBM_Boss)
 	self.MenuName = self.Descript
 	self.Bosses = {
@@ -115,42 +122,42 @@ function GS:InitVars()
 		AlertsRef = self.Silgen.Settings.AlertsRef,
 		MechRef = self.Silgen.Settings.MechRef,
 	}
-	KBMIROTPGS_Settings = self.Settings
-	chKBMIROTPGS_Settings = self.Settings
+	KBMSPEIROTPGS_Settings = self.Settings
+	chKBMSPEIROTPGS_Settings = self.Settings
 	
 end
 
 function GS:SwapSettings(bool)
 
 	if bool then
-		KBMIROTPGS_Settings = self.Settings
-		self.Settings = chKBMIROTPGS_Settings
+		KBMSPEIROTPGS_Settings = self.Settings
+		self.Settings = chKBMSPEIROTPGS_Settings
 	else
-		chKBMIROTPGS_Settings = self.Settings
-		self.Settings = KBMIROTPGS_Settings
+		chKBMSPEIROTPGS_Settings = self.Settings
+		self.Settings = KBMSPEIROTPGS_Settings
 	end
 
 end
 
 function GS:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMIROTPGS_Settings, self.Settings)
+		KBM.LoadTable(chKBMSPEIROTPGS_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMIROTPGS_Settings, self.Settings)
+		KBM.LoadTable(KBMSPEIROTPGS_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMIROTPGS_Settings = self.Settings
+		chKBMSPEIROTPGS_Settings = self.Settings
 	else
-		KBMIROTPGS_Settings = self.Settings
+		KBMSPEIROTPGS_Settings = self.Settings
 	end	
 end
 
 function GS:SaveVars()	
 	if KBM.Options.Character then
-		chKBMIROTPGS_Settings = self.Settings
+		chKBMSPEIROTPGS_Settings = self.Settings
 	else
-		KBMIROTPGS_Settings = self.Settings
+		KBMSPEIROTPGS_Settings = self.Settings
 	end	
 end
 
@@ -190,6 +197,7 @@ function GS:UnitHPCheck(uDetails, unitID)
 					self.PhaseObj.Objectives:AddPercent(self.Silgen.Name, 0, 100)
 					self.Phase = 1
 					KBM.MechTimer:AddStart(self.Silgen.TimersRef.Incinerate)
+					KBM.MechTimer:AddStart(self.Silgen.TimersRef.FunnelFirst)
 				end
 				self.Silgen.UnitID = unitID
 				self.Silgen.Available = true
@@ -217,7 +225,11 @@ end
 function GS:Start()
 	-- Create Timers
 	self.Silgen.TimersRef.Funnel = KBM.MechTimer:Add(self.Lang.Ability.Funnel[KBM.Lang], 15)
+  self.Silgen.TimersRef.FunnelFirst = KBM.MechTimer:Add(self.Lang.Ability.Funnel[KBM.Lang], 10)
+	self.Silgen.TimersRef.FunnelFirst.MenuName = self.Lang.Menu.FunnelFirst[KBM.Lang]
+
 	self.Silgen.TimersRef.Incinerate = KBM.MechTimer:Add(self.Lang.Ability.Incinerate[KBM.Lang], 60)
+  
 	KBM.Defaults.TimerObj.Assign(self.Silgen)
 	
 	-- Create Alerts

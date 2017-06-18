@@ -3,19 +3,19 @@
 -- Copyright 2011
 --
 
-KBMIROTP_Settings = {}
+KBMROTP_Settings = {}
 
 local ROTP = {
-	Directory = "Slivers/Prophecy of Ahnket/Rise_of_the_Phoenix/",
+	Directory = "Raids/Prophecy of Ahnket/Normal/Intrepid_Rise_of_the_Phoenix/",
 	File = "ROTPHeader.lua",
 	Header = nil,
 	Enabled = true,
 	IsInstance = true,
-	Name = "Intrepid Rise of the Phoenix",
-	Type = "Sliver",
+	Name = "Intrepid: Rise of the Phoenix",
+	Type = "Raid",
 	ID = "IROTP",
-	Object = "ROTP",
-	Rift = "PoA",
+	Object = "IROTP",
+	Rift = "PA",
 }
 
 local AddonData = Inspect.Addon.Detail("KingMolinator")
@@ -23,14 +23,14 @@ local KBM = AddonData.data
 if not KBM.BossMod then
 	return
 end
-KBM.RegisterMod("Intrepid Rise of the Phoenix", ROTP)
+KBM.RegisterMod("Intrepid: Rise of the Phoenix", ROTP)
 
 -- Header Dictionary
 ROTP.Lang = {}
 ROTP.Lang.Main = {}
 ROTP.Lang.Main.ROTP = KBM.Language:Add(ROTP.Name)
 ROTP.Lang.Main.ROTP:SetGerman("Aufstieg des Phönix")
-ROTP.Lang.Main.ROTP:SetFrench("Intrépide : Envol du Ph\195\169nix")
+ROTP.Lang.Main.ROTP:SetFrench("Envol du Ph\195\169nix")
 ROTP.Lang.Main.ROTP:SetRussian("Возрождение Феникса")
 ROTP.Lang.Main.ROTP:SetKorean("불사조 오르막")
 ROTP.Name = ROTP.Lang.Main.ROTP[KBM.Lang]
