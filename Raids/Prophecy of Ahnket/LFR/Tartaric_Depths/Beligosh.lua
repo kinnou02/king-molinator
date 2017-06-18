@@ -26,11 +26,18 @@ local BEL = {
     Object = "BEL",
 }
 
+BEL.Lang.Unit = {}
+BEL.Lang.Unit.Beligosh = KBM.Language:Add("Beligosh")
+BEL.Lang.Unit.Beligosh:SetFrench("Beligosh")
+
+BEL.Lang.Unit.Golem = KBM.Language:Add("Alavaxian Golem")
+BEL.Lang.Unit.Golem:SetFrench("Golem alaviax")
+
 BEL.Beligosh = {
     Mod = BEL,
     Level = "72",
     Active = false,
-    Name = "Beligosh",
+    Name = BEL.Lang.Unit.Beligosh[KBM.Lang],
     Menu = {},
     AlertsRef = {},
     Castbar = nil,
@@ -53,7 +60,7 @@ BEL.Beligosh = {
 BEL.Golem = {
     Mod = BEL,
     Level = "72",
-    Name = "Alavaxian Golem",
+    Name = BEL.Lang.Unit.Golem[KBM.Lang],
     NameShort = "Alavaxian Golem",
     UnitList = {},
     Menu = {},
@@ -194,7 +201,7 @@ function BEL:UnitHPCheck(uDetails, unitID)
                 self.Beligosh.CastBar:Create(unitID)
                 self.PhaseObj:Start(self.StartTime)
                 self.PhaseObj:SetPhase(self.Beligosh.Name)
-                self.PhaseObj.Objectives:AddPercent(self.Beligosh, 70, 100)
+                self.PhaseObj.Objectives:AddPercent(self.Beligosh, 75, 100)
                 self.Phase = 1
             end
             self.Beligosh.UnitID = unitID
@@ -241,7 +248,7 @@ function BEL.PhaseTwo()
     if BEL.Phase == 2 then
         BEL.Phase = 3
         BEL.PhaseObj:SetPhase(3)
-        BEL.PhaseObj.Objectives:AddPercent(BEL.Beligosh, 40, 70)
+        BEL.PhaseObj.Objectives:AddPercent(BEL.Beligosh, 40, 75)
     else
         BEL.Phase = 5
         BEL.PhaseObj:SetPhase(5)
@@ -276,7 +283,7 @@ function BEL:Start()
     self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 
 
-    self.Beligosh.Triggers.AddPhase = KBM.Trigger:Create(70, "percent", self.Beligosh)
+    self.Beligosh.Triggers.AddPhase = KBM.Trigger:Create(75, "percent", self.Beligosh)
     self.Beligosh.Triggers.AddPhase:AddPhase(self.AddPhase)
 
     self.Beligosh.Triggers.PhaseTwo = KBM.Trigger:Create(self.Lang.Notify.Wrath[KBM.Lang], "notify", self.Beligosh)

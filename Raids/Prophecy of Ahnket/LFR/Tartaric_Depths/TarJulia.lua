@@ -26,11 +26,19 @@ local TAR = {
     Object = "TAR",
 }
 
+-- Main Unit Dictionary
+TAR.Lang.Unit = {}
+TAR.Lang.Unit.TarJulia = KBM.Language:Add("TarJulia")
+TAR.Lang.Unit.TarJulia:SetFrench("TarJulia")
+
+TAR.Lang.Unit.Soul = KBM.Language:Add("Infernal Soul")
+TAR.Lang.Unit.Soul:SetFrench("Âme infernale")
+
 TAR.TarJulia = {
     Mod = TAR,
     Level = "??",
     Active = false,
-    Name = "TarJulia",
+    Name = TAR.Lang.Unit.TarJulia[KBM.Lang],
     Menu = {},
     AlertsRef = {},
     TimersRef = {},
@@ -58,7 +66,7 @@ TAR.TarJulia = {
 TAR.Soul = {
     Mod = TAR,
     Level = "72",
-    Name = "Infernal Soul",
+    Name = TAR.Lang.Unit.Soul[KBM.Lang],
     NameShort = "Infernal Soul",
     UnitList = {},
     Menu = {},
