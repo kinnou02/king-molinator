@@ -52,7 +52,7 @@ EBL.Ebl = {
 		CastBar = KBM.Defaults.Castbar(),
 		Filters = {
 			Enabled = true,
-			Fleau = KBM.Defaults.CastFilter.Create("purle"),
+			Fleau = KBM.Defaults.CastFilter.Create("purple"),
 			CallToArms = KBM.Defaults.CastFilter.Create("red"),
 			BlazingRuin = KBM.Defaults.CastFilter.Create("yellow"),
 		},
@@ -61,7 +61,7 @@ EBL.Ebl = {
 		},
 		AlertsRef = {
 			Enabled = true,
-			Fleau = KBM.Defaults.AlertObj.Create("purle"),
+			Fleau = KBM.Defaults.AlertObj.Create("purple"),
 			CallToArms = KBM.Defaults.AlertObj.Create("red"),
 			BlazingRuin = KBM.Defaults.AlertObj.Create("yellow"),
 		},

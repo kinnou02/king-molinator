@@ -39,8 +39,7 @@ MOD.Nuggo = {
 	UnitID = nil,
 	TimeOut = 5,
 	Triggers = {},
---	UTID = "U43E685D74CAA6694",
-	UTID = "TODO",
+	UTID = "U6C3F8BEC5F5E029A",
 	Settings = {
 		CastBar = KBM.Defaults.Castbar(),
 	}
@@ -104,8 +103,7 @@ MOD.Swedge = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
---	UTID = "U39767336691AE0E1",
-	UTID = "TODO",
+	UTID = "U431F59A11C69514D",
 	TimeOut = 5,
 }
 
@@ -119,8 +117,7 @@ MOD.Gerbik = {
 	Dead = false,
 	Available = false,
 	UnitID = nil,
---	UTID = "U12D2BFD12F5E8AE4",
-	UTID = "TODO",
+	UTID = "U7F94FCED6720B8CB",
 	TimeOut = 5,
 }
 
