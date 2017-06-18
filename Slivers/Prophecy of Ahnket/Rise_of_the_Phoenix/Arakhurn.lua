@@ -62,6 +62,7 @@ HA.Arakhurn = {
 			AddFirst = KBM.Defaults.TimerObj.Create("dark_green"),
 			Add = KBM.Defaults.TimerObj.Create("dark_green"),
 			Rise = KBM.Defaults.TimerObj.Create("orange"),
+            Enrage = KBM.Defaults.TimerObj.Create("blue"),
 		},
 		AlertsRef = {
 			Enabled = true,
@@ -218,6 +219,9 @@ HA.Lang.Menu.NovaWarn:SetFrench("5 secondes avertissement pour Nova de flammes")
 HA.Lang.Menu.NovaWarn:SetRussian("5 Секунд до "..HA.Lang.Ability.Nova[KBM.Lang])
 HA.Lang.Menu.NovaWarn:SetKorean("화염 신성까지 5초전")
 
+HA.Lang.Menu.Enrage = KBM.Language:Add("Enrage")
+HA.Lang.Menu.Enrage:SetFrench("Enrage")
+
 HA.Enraged = {
 	Mod = HA,
 	Level = "??",
@@ -352,6 +356,7 @@ function HA.PhaseThree()
 		KBM.MechTimer:AddStart(HA.Arakhurn.TimersRef.AddFirst)
 		KBM.MechTimer:AddStart(HA.Arakhurn.TimersRef.NovaPThree)
 		KBM.MechTimer:AddStart(HA.Arakhurn.TimersRef.FieryPThree)
+        KBM.MechTimer:AddStart(self.Arakhurn.TimersRef.Enrage)
 	end
 end
 
@@ -491,7 +496,11 @@ function HA:Start()
 	self.Arakhurn.TimersRef.AddFirst.MenuName = self.Lang.Menu.AddFirst[KBM.Lang]
 	self.Arakhurn.TimersRef.Add = KBM.MechTimer:Add(self.Lang.Unit.Enraged[KBM.Lang], 60)
 	self.Arakhurn.TimersRef.Rise = KBM.MechTimer:Add(self.Lang.Verbose.Rise[KBM.Lang], 48)
+    self.Arakhurn.TimersRef.Enrage = KBM.MechTimer:Add(self.Lang.Menu.Enrage[KBM.Lang], 7*60)
+    
 	KBM.Defaults.TimerObj.Assign(self.Arakhurn)
+    
+    
 	
 	-- Create Alerts
 	self.Arakhurn.AlertsRef.Nova = KBM.Alert:Create(self.Lang.Ability.Nova[KBM.Lang], nil, false, true, "red")
