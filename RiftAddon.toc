@@ -58,7 +58,7 @@ RunOnStartup = {
 			"Raids/Prophecy of Ahnket/LFR/Tartaric_Depths/Malannon.lua",
       
     -- Queen's Foci
-      "Raids/Prophecy of Ahnket/LFR/The_Queens_Foci/QFHeader.lua",
+            "Raids/Prophecy of Ahnket/LFR/The_Queens_Foci/QFHeader.lua",
 			"Raids/Prophecy of Ahnket/LFR/The_Queens_Foci/Hexathel.lua",
       
    -- PoA Experts
@@ -596,9 +596,9 @@ SavedVariables = {
 	KBMChronicle_Settings = "account",
 	KBMOpenWorld_Settings = "account",
 	
-  -- SPE Raids
-    -- Intrepid Rise of the Phoenix
-  		KBMSPEIROTP_Settings = "account",
+    -- PoA Raids
+        -- Intrepid Rise of the Phoenix
+            KBMSPEIROTP_Settings = "account",
 			KBMSPEIROTPEN_Settings = "account",
 			KBMSPEIROTPHA_Settings = "account",
 			KBMSPEIROTPBT_Settings = "account",
@@ -609,7 +609,7 @@ SavedVariables = {
 			chKBMSPEIROTPBT_Settings = "character",
 			chKBMSPEIROTPGS_Settings = "character",
 			
-	 -- LFR Tartaric Depths
+        -- LFR Tartaric Depths
             KBMPOATD_Settings = "account",
             KBMPOATDBEL_Settings = "account",
             KBMPOATDTAR_Settings = "account",
@@ -619,8 +619,8 @@ SavedVariables = {
             chKBMPOATDTAR_Settings = "character",
 			chKBMPOATDMAL_Settings = "character",
 	
-  -- SPE Experts
-    -- Intrepid Darkening Deeps
+    -- PoA Experts
+        -- Intrepid Darkening Deeps
 			KBMSPEIDD_Settings = "account",
 			KBMSPEIDDAB_Settings = "account",
 			KBMSPEIDDMB_Settings = "account",

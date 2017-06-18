@@ -30,10 +30,10 @@ local HX = {
 HX.Hexathel = {
 	Mod = HX,
 	Level = "??",
-  Menu = {},
+    Menu = {},
 	Active = false,
 	Name = "Hexathel",
-  Castbar = nil,
+    Castbar = nil,
 	CastFilters = {},
 	TimersRef = {},
 	AlertsRef = {},
@@ -256,7 +256,7 @@ function HX:Start()
 	self.Hexathel.Triggers.Grid = KBM.Trigger:Create(self.Lang.Notify.Grid[KBM.Lang], "notify", self.Hexathel)
 	self.Hexathel.Triggers.Grid:AddTimer(self.Hexathel.TimersRef.Corner)
 	self.Hexathel.Triggers.Grid:AddTimer(self.Hexathel.TimersRef.Corner2)
-  self.Hexathel.Triggers.Grid:AddTimer(self.Hexathel.TimersRef.Grid)
+    self.Hexathel.Triggers.Grid:AddTimer(self.Hexathel.TimersRef.Grid)
 	self.Hexathel.Triggers.Silken = KBM.Trigger:Create(self.Lang.Ability.Silken[KBM.Lang], "cast", self.Hexathel)
 	self.Hexathel.Triggers.Silken:AddTimer(self.Hexathel.TimersRef.Silken)
 	self.Hexathel.Triggers.Silken:AddAlert(self.Hexathel.AlertsRef.Silken)

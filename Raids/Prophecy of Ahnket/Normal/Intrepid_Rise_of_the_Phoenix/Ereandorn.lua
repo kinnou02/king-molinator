@@ -22,7 +22,7 @@ local EN = {
 	Lang = {},
 	TankSwap = false,
 	ID = "IROTPEreandorn",
-  Enrage = 60 * 7,
+    Enrage = 60 * 7,
 	Menu = {},
 	Object = "EN",
 }

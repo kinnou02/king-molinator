@@ -225,7 +225,7 @@ end
 function GS:Start()
 	-- Create Timers
 	self.Silgen.TimersRef.Funnel = KBM.MechTimer:Add(self.Lang.Ability.Funnel[KBM.Lang], 15)
-  self.Silgen.TimersRef.FunnelFirst = KBM.MechTimer:Add(self.Lang.Ability.Funnel[KBM.Lang], 10)
+    self.Silgen.TimersRef.FunnelFirst = KBM.MechTimer:Add(self.Lang.Ability.Funnel[KBM.Lang], 10)
 	self.Silgen.TimersRef.FunnelFirst.MenuName = self.Lang.Menu.FunnelFirst[KBM.Lang]
 
 	self.Silgen.TimersRef.Incinerate = KBM.MechTimer:Add(self.Lang.Ability.Incinerate[KBM.Lang], 60)
