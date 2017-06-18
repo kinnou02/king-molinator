@@ -3,8 +3,8 @@
 -- Copyright 2011
 --
 
-KBMSPEIDDTC_Settings = nil
-chKBMSPEIDDTC_Settings = nil
+KBMPOAIDDTC_Settings = nil
+chKBMPOAIDDTC_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
@@ -140,42 +140,42 @@ function MOD:InitVars()
 		-- TimersRef = self.Nuggo.Settings.TimersRef,
 		-- AlertsRef = self.Nuggo.Settings.AlertsRef,
 	}
-	KBMSPEIDDTC_Settings = self.Settings
-	chKBMSPEIDDTC_Settings = self.Settings
+	KBMPOAIDDTC_Settings = self.Settings
+	chKBMPOAIDDTC_Settings = self.Settings
 	
 end
 
 function MOD:SwapSettings(bool)
 
 	if bool then
-		KBMSPEIDDTC_Settings = self.Settings
-		self.Settings = chKBMSPEIDDTC_Settings
+		KBMPOAIDDTC_Settings = self.Settings
+		self.Settings = chKBMPOAIDDTC_Settings
 	else
-		chKBMSPEIDDTC_Settings = self.Settings
-		self.Settings = KBMSPEIDDTC_Settings
+		chKBMPOAIDDTC_Settings = self.Settings
+		self.Settings = KBMPOAIDDTC_Settings
 	end
 
 end
 
 function MOD:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMSPEIDDTC_Settings, self.Settings)
+		KBM.LoadTable(chKBMPOAIDDTC_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMSPEIDDTC_Settings, self.Settings)
+		KBM.LoadTable(KBMPOAIDDTC_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMSPEIDDTC_Settings = self.Settings
+		chKBMPOAIDDTC_Settings = self.Settings
 	else
-		KBMSPEIDDTC_Settings = self.Settings
+		KBMPOAIDDTC_Settings = self.Settings
 	end	
 end
 
 function MOD:SaveVars()	
 	if KBM.Options.Character then
-		chKBMSPEIDDTC_Settings = self.Settings
+		chKBMPOAIDDTC_Settings = self.Settings
 	else
-		KBMSPEIDDTC_Settings = self.Settings
+		KBMPOAIDDTC_Settings = self.Settings
 	end	
 end
 

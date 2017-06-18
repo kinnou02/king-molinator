@@ -3,8 +3,8 @@
 -- Copyright 2011
 --
 
-KBMSPEIROTPBT_Settings = nil
-chKBMSPEIROTPBT_Settings = nil
+KBMPOAIROTPBT_Settings = nil
+chKBMPOAIROTPBT_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
@@ -133,39 +133,39 @@ function BT:InitVars()
 		TimersRef = self.Beruhast.Settings.TimersRef,
 		Alerts = KBM.Defaults.Alerts(),
 	}
-	KBMSPEIROTPBT_Settings = self.Settings
-	chKBMSPEIROTPBT_Settings = self.Settings
+	KBMPOAIROTPBT_Settings = self.Settings
+	chKBMPOAIROTPBT_Settings = self.Settings
 end
 
 function BT:SwapSettings(bool)
 	if bool then
-		KBMSPEIROTPBT_Settings = self.Settings
-		self.Settings = chKBMSPEIROTPBT_Settings
+		KBMPOAIROTPBT_Settings = self.Settings
+		self.Settings = chKBMPOAIROTPBT_Settings
 	else
-		chKBMSPEIROTPBT_Settings = self.Settings
-		self.Settings = KBMSPEIROTPBT_Settings
+		chKBMPOAIROTPBT_Settings = self.Settings
+		self.Settings = KBMPOAIROTPBT_Settings
 	end
 end
 
 function BT:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMSPEIROTPBT_Settings, self.Settings)
+		KBM.LoadTable(chKBMPOAIROTPBT_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMSPEIROTPBT_Settings, self.Settings)
+		KBM.LoadTable(KBMPOAIROTPBT_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMSPEIROTPBT_Settings = self.Settings
+		chKBMPOAIROTPBT_Settings = self.Settings
 	else
-		KBMSPEIROTPBT_Settings = self.Settings
+		KBMPOAIROTPBT_Settings = self.Settings
 	end
 end
 
 function BT:SaveVars()
 	if KBM.Options.Character then
-		chKBMSPEIROTPBT_Settings = self.Settings
+		chKBMPOAIROTPBT_Settings = self.Settings
 	else
-		KBMSPEIROTPBT_Settings = self.Settings
+		KBMPOAIROTPBT_Settings = self.Settings
 	end
 end
 

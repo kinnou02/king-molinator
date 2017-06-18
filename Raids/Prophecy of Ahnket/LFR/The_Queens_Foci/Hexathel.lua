@@ -3,8 +3,8 @@
 -- Copyright 2017
 --
 
-KBMSPEQFHE_Settings = nil
-chKBMSPEQFHE_Settings = nil
+KBMPOAQFHE_Settings = nil
+chKBMPOAQFHE_Settings = nil
 
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
@@ -136,39 +136,39 @@ function HX:InitVars()
 		TimersRef = self.Hexathel.Settings.TimersRef,
 		Alerts = KBM.Defaults.Alerts(),
 	}
-	KBMSPEQFHE_Settings = self.Settings
-	chKBMSPEQFHE_Settings = self.Settings
+	KBMPOAQFHE_Settings = self.Settings
+	chKBMPOAQFHE_Settings = self.Settings
 end
 
 function HX:SwapSettings(bool)
 	if bool then
-		KBMSPEQFHE_Settings = self.Settings
-		self.Settings = chKBMSPEQFHE_Settings
+		KBMPOAQFHE_Settings = self.Settings
+		self.Settings = chKBMPOAQFHE_Settings
 	else
-		chKBMSPEQFHE_Settings = self.Settings
-		self.Settings = KBMSPEQFHE_Settings
+		chKBMPOAQFHE_Settings = self.Settings
+		self.Settings = KBMPOAQFHE_Settings
 	end
 end
 
 function HX:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMSPEQFHE_Settings, self.Settings)
+		KBM.LoadTable(chKBMPOAQFHE_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMSPEQFHE_Settings, self.Settings)
+		KBM.LoadTable(KBMPOAQFHE_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMSPEQFHE_Settings = self.Settings
+		chKBMPOAQFHE_Settings = self.Settings
 	else
-		KBMSPEQFHE_Settings = self.Settings
+		KBMPOAQFHE_Settings = self.Settings
 	end
 end
 
 function HX:SaveVars()
 	if KBM.Options.Character then
-		chKBMSPEQFHE_Settings = self.Settings
+		chKBMPOAQFHE_Settings = self.Settings
 	else
-		KBMSPEQFHE_Settings = self.Settings
+		KBMPOAQFHE_Settings = self.Settings
 	end
 end
 

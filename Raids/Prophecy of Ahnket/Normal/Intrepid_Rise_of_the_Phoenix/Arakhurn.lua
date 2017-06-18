@@ -3,8 +3,8 @@
 -- Copyright 2011
 --
 
-KBMSPEIROTPHA_Settings = nil
-chKBMSPEIROTPHA_Settings = nil
+KBMPOAIROTPHA_Settings = nil
+chKBMPOAIROTPHA_Settings = nil
 
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
@@ -280,40 +280,40 @@ function HA:InitVars()
 		TimersRef = self.Arakhurn.Settings.TimersRef,
 		MechRef = self.Arakhurn.Settings.Ignited,
 	}
-	KBMSPEIROTPHA_Settings = self.Settings
-	chKBMSPEIROTPHA_Settings = self.Settings
+	KBMPOAIROTPHA_Settings = self.Settings
+	chKBMPOAIROTPHA_Settings = self.Settings
 	
 end
 
 function HA:SwapSettings(bool)
 	if bool then
-		KBMSPEIROTPHA_Settings = self.Settings
-		self.Settings = chKBMSPEIROTPHA_Settings
+		KBMPOAIROTPHA_Settings = self.Settings
+		self.Settings = chKBMPOAIROTPHA_Settings
 	else
-		chKBMSPEIROTPGS_Settings = self.Settings
-		self.Settings = KBMSPEIROTPHA_Settings
+		chKBMPOAIROTPGS_Settings = self.Settings
+		self.Settings = KBMPOAIROTPHA_Settings
 	end
 end
 
 function HA:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMSPEIROTPHA_Settings, self.Settings)
+		KBM.LoadTable(chKBMPOAIROTPHA_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMSPEIROTPHA_Settings, self.Settings)
+		KBM.LoadTable(KBMPOAIROTPHA_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMSPEIROTPHA_Settings = self.Settings
+		chKBMPOAIROTPHA_Settings = self.Settings
 	else
-		KBMSPEIROTPHA_Settings = self.Settings
+		KBMPOAIROTPHA_Settings = self.Settings
 	end	
 end
 
 function HA:SaveVars()	
 	if KBM.Options.Character then
-		chKBMSPEIROTPHA_Settings = self.Settings
+		chKBMPOAIROTPHA_Settings = self.Settings
 	else
-		KBMSPEIROTPHA_Settings = self.Settings
+		KBMPOAIROTPHA_Settings = self.Settings
 	end	
 end
 
