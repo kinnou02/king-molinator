@@ -33,7 +33,7 @@ TAR.TarJulia = {
     Name = "TarJulia",
     Menu = {},
     AlertsRef = {},
-	TimersRef = {},
+    TimersRef = {},
     Castbar = nil,
     Dead = false,
     Available = false,
@@ -48,7 +48,9 @@ TAR.TarJulia = {
           MoltenLava = KBM.Defaults.AlertObj.Create("red"),
         },
         TimersRef = {
+            Enabled = true,
             MoltenLava = KBM.Defaults.TimerObj.Create("red"),
+            FirstMoltenLava = KBM.Defaults.TimerObj.Create("red"),
         },
     },
 }
@@ -70,16 +72,20 @@ KBM.RegisterMod(TAR.ID, TAR)
 -- Main Unit Dictionary
 TAR.Lang.Unit = {}
 TAR.Lang.Unit.TarJulia = KBM.Language:Add(TAR.TarJulia.Name)
+TAR.Lang.Unit.TarJulia:SetFrench(TAR.TarJulia.Name)
 
 TAR.Lang.Unit.Soul = KBM.Language:Add(TAR.Soul.Name)
+TAR.Lang.Unit.Soul:SetFrench("Âme infernale")
 
 -- Ability Dictionary
 TAR.Lang.Ability = {}
 TAR.Lang.Ability.MoltenLava = KBM.Language:Add("Molten Blast")
+TAR.Lang.Ability.MoltenLava:SetFrench("Explosion de magma")
 
 -- Verbose Dictionary
 TAR.Lang.Verbose = {}
 TAR.Lang.Verbose.MoltenLava = KBM.Language:Add("Go to a pillar!")
+TAR.Lang.Verbose.MoltenLava:SetFrench("Allez au pillier!")
 
 -- Buff Dictionary
 TAR.Lang.Buff = {}
@@ -107,7 +113,7 @@ function TAR:InitVars()
         CastBar = self.TarJulia.Settings.CastBar,
         EncTimer = KBM.Defaults.EncTimer(),
         PhaseMon = KBM.Defaults.PhaseMon(),
-        -- MechTimer = KBM.Defaults.MechTimer(),
+        MechTimer = KBM.Defaults.MechTimer(),
         Alerts = KBM.Defaults.Alerts(),
         -- TimersRef = self.Baird.Settings.TimersRef,
         AlertsRef = self.TarJulia.Settings.AlertsRef,
@@ -192,6 +198,7 @@ function TAR:UnitHPCheck(uDetails, unitID)
                 self.PhaseObj.Objectives:AddPercent(self.TarJulia, 0, 100)
                 self.PhaseObj.Objectives:AddDeath(TAR.Lang.Unit.Soul[KBM.Lang], 9)
                 self.Phase = 1
+                KBM.MechTimer:AddStart(self.TarJulia.TimersRef.FirstMoltenLava)
             end
             self.TarJulia.UnitID = unitID
             self.TarJulia.Available = true
@@ -235,6 +242,8 @@ end
 
 function TAR:Start()
     -- Create Timers
+    self.TarJulia.TimersRef.FirstMoltenLava = KBM.MechTimer:Add(self.Lang.Ability.MoltenLava[KBM.Lang], 20)
+    self.TarJulia.TimersRef.FirstMoltenLava.MenuName = "first molten lava"
     self.TarJulia.TimersRef.MoltenLava = KBM.MechTimer:Add(self.Lang.Ability.MoltenLava[KBM.Lang], 40)
     KBM.Defaults.TimerObj.Assign(self.TarJulia)
 

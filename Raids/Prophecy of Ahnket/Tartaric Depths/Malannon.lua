@@ -43,9 +43,11 @@ MAL.Malannon = {
     Settings = {
         CastBar = KBM.Defaults.Castbar(),
         AlertsRef = {
-          Enabled = true,
-          Meteor = KBM.Defaults.AlertObj.Create("red"),
-          Blastback = KBM.Defaults.AlertObj.Create("blue"),
+            Enabled = true,
+            Meteor = KBM.Defaults.AlertObj.Create("red"),
+            Blastback = KBM.Defaults.AlertObj.Create("blue"),
+            MarkOfAcrimony = KBM.Defaults.AlertObj.Create("purple"),
+            MarkOfSupremacy = KBM.Defaults.AlertObj.Create("yellow"),
         },
     },
 }
@@ -60,11 +62,22 @@ MAL.Lang.Unit.Malannon:SetFrench("Malannon")
 -- Ability Dictionary
 MAL.Lang.Ability = {}
 MAL.Lang.Ability.Meteor = KBM.Language:Add("Meteor")
+MAL.Lang.Ability.Meteor:SetFrench("Météore")
 
 -- Verbose Dictionary
 MAL.Lang.Verbose = {}
 MAL.Lang.Verbose.Meteor = KBM.Language:Add("Pack!")
+MAL.Lang.Verbose.Meteor:SetFrench("Pack!")
+
 MAL.Lang.Verbose.Blastback = KBM.Language:Add("Spread out!")
+MAL.Lang.Verbose.Blastback:SetFrench("Spread out!")
+
+MAL.Lang.Verbose.MarkOfAcrimony = KBM.Language:Add("Go to purple circle!")
+MAL.Lang.Verbose.MarkOfAcrimony:SetFrench("Allez dans le cercle violet!")
+
+MAL.Lang.Verbose.MarkOfSupremacy = KBM.Language:Add("Go to yellow circle!")
+MAL.Lang.Verbose.MarkOfSupremacy:SetFrench("Allez dans le cercle jaune!")
+
 
 -- Buff Dictionary
 MAL.Lang.Buff = {}
@@ -73,6 +86,9 @@ MAL.Lang.Buff = {}
 MAL.Lang.Debuff = {}
 MAL.Lang.Debuff.Blastback = KBM.Language:Add("Blastback")
 
+MAL.Lang.Debuff.MarkOfAcrimony = KBM.Language:Add("Mark of Acrimony")
+
+MAL.Lang.Debuff.MarkOfSupremacy = KBM.Language:Add("Mark of Supremacy")
 
 MAL.Lang.Notify = {}
 
@@ -213,8 +229,10 @@ function MAL:Start()
     -- Create Timers
 
     -- Create Alerts
-    self.Malannon.AlertsRef.Meteor = KBM.Alert:Create(self.Lang.Verbose.Meteor[KBM.Lang], 5, true, true, "red")
+    self.Malannon.AlertsRef.Meteor = KBM.Alert:Create(self.Lang.Verbose.Meteor[KBM.Lang], 9, true, true, "red")
     self.Malannon.AlertsRef.Blastback = KBM.Alert:Create(self.Lang.Verbose.Blastback[KBM.Lang], 5, true, true, "blue")
+    self.Malannon.AlertsRef.MarkOfAcrimony = KBM.Alert:Create(self.Lang.Verbose.MarkOfAcrimony[KBM.Lang], 5, true, true, "purple")
+    self.Malannon.AlertsRef.MarkOfSupremacy = KBM.Alert:Create(self.Lang.Verbose.MarkOfSupremacy[KBM.Lang], 5, true, true, "yellow")
     KBM.Defaults.AlertObj.Assign(self.Malannon)
 
     -- Assign Alerts and Timers to Triggers
@@ -227,8 +245,14 @@ function MAL:Start()
     self.Malannon.Triggers.Blastback = KBM.Trigger:Create(self.Lang.Debuff.Blastback[KBM.Lang], "playerDebuff", self.Malannon)
     self.Malannon.Triggers.Blastback:AddAlert(self.Malannon.AlertsRef.Blastback)
 
-    self.Malannon.Triggers.PḧaseTwo = KBM.Trigger:Create(60, "percent", self.Malannon)
-    self.Malannon.Triggers.PḧaseTwo:AddPhase(self.PhaseTwo)
+    self.Malannon.Triggers.MarkOfAcrimony = KBM.Trigger:Create(self.Lang.Debuff.MarkOfAcrimony[KBM.Lang], "playerDebuff", self.Malannon)
+    self.Malannon.Triggers.MarkOfAcrimony:AddAlert(self.Malannon.AlertsRef.MarkOfAcrimony, true)
+	
+    self.Malannon.Triggers.MarkOfSupremacy = KBM.Trigger:Create(self.Lang.Debuff.MarkOfSupremacy[KBM.Lang], "playerDebuff", self.Malannon)
+    self.Malannon.Triggers.MarkOfSupremacy:AddAlert(self.Malannon.AlertsRef.MarkOfSupremacy, true)
+
+    self.Malannon.Triggers.PhaseTwo = KBM.Trigger:Create(60, "percent", self.Malannon)
+    self.Malannon.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
 
     self.Malannon.Triggers.PhaseThree = KBM.Trigger:Create(40, "percent", self.Malannon)
     self.Malannon.Triggers.PhaseThree:AddPhase(self.PhaseThree)

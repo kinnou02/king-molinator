@@ -70,7 +70,7 @@ BEL.Lang.Unit.Beligosh = KBM.Language:Add(BEL.Beligosh.Name)
 BEL.Lang.Unit.Beligosh:SetFrench("Beligosh")
 
 BEL.Lang.Unit.Golem = KBM.Language:Add(BEL.Golem.Name)
-BEL.Lang.Unit.Golem:SetFrench("Golem Alaviax")
+BEL.Lang.Unit.Golem:SetFrench("Golem alaviax")
 
 -- Ability Dictionary
 BEL.Lang.Ability = {}
@@ -89,12 +89,13 @@ BEL.Lang.Debuff = {}
 
 BEL.Lang.Notify = {}
 BEL.Lang.Notify.Wrath = KBM.Language:Add("Beligosh: Feel the wrath of Beligosh!")
-BEL.Lang.Notify.Wrath:SetFrench("Sentez le courroux de Beligosh !") 
+BEL.Lang.Notify.Wrath:SetFrench("Sentez le courroux de Beligosh !")
 
-BEL.Lang.Notify.Lava1 = KBM.Language:Add("Your Weakness is your compassion.")
+
+BEL.Lang.Notify.Lava1 = KBM.Language:Add("Your Weakness is your compassion")
 
 BEL.Lang.Notify.Lava2 = KBM.Language:Add("Choose who lives, who dies.")
-BEL.Lang.Notify.Lava2:SetFrench("Choisissez qui vivra et qui mourra !")
+BEL.Lang.Notify.Lava2:SetFrench("Choisissez qui vivra et qui mourra")
 
 BEL.Lang.Notify.Lava3 = KBM.Language:Add("Abandon your friend! Abandon your hope!")
 BEL.Lang.Notify.Lava3:SetFrench("Abandonnez vos amis ! Abandonnez l'espoir !")
