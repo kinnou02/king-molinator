@@ -3,8 +3,8 @@
 -- Copyright 2011
 --
 
-KBMSPEIROTPHA_Settings = nil
-chKBMSPEIROTPHA_Settings = nil
+KBMPOAIROTPHA_Settings = nil
+chKBMPOAIROTPHA_Settings = nil
 
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
@@ -280,40 +280,40 @@ function HA:InitVars()
 		TimersRef = self.Arakhurn.Settings.TimersRef,
 		MechRef = self.Arakhurn.Settings.Ignited,
 	}
-	KBMSPEIROTPHA_Settings = self.Settings
-	chKBMSPEIROTPHA_Settings = self.Settings
+	KBMPOAIROTPHA_Settings = self.Settings
+	chKBMPOAIROTPHA_Settings = self.Settings
 	
 end
 
 function HA:SwapSettings(bool)
 	if bool then
-		KBMSPEIROTPHA_Settings = self.Settings
-		self.Settings = chKBMSPEIROTPHA_Settings
+		KBMPOAIROTPHA_Settings = self.Settings
+		self.Settings = chKBMPOAIROTPHA_Settings
 	else
-		chKBMSPEIROTPGS_Settings = self.Settings
-		self.Settings = KBMSPEIROTPHA_Settings
+		chKBMPOAIROTPGS_Settings = self.Settings
+		self.Settings = KBMPOAIROTPHA_Settings
 	end
 end
 
 function HA:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMSPEIROTPHA_Settings, self.Settings)
+		KBM.LoadTable(chKBMPOAIROTPHA_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMSPEIROTPHA_Settings, self.Settings)
+		KBM.LoadTable(KBMPOAIROTPHA_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMSPEIROTPHA_Settings = self.Settings
+		chKBMPOAIROTPHA_Settings = self.Settings
 	else
-		KBMSPEIROTPHA_Settings = self.Settings
+		KBMPOAIROTPHA_Settings = self.Settings
 	end	
 end
 
 function HA:SaveVars()	
 	if KBM.Options.Character then
-		chKBMSPEIROTPHA_Settings = self.Settings
+		chKBMPOAIROTPHA_Settings = self.Settings
 	else
-		KBMSPEIROTPHA_Settings = self.Settings
+		KBMPOAIROTPHA_Settings = self.Settings
 	end	
 end
 
@@ -367,7 +367,7 @@ function HA.PhaseThree()
 		HA.PhaseObj.Objectives:Remove()
 		HA.PhaseObj:SetPhase(KBM.Language.Options.Final[KBM.Lang])
 		HA.PhaseObj.Objectives:AddPercent(HA.Arakhurn, 0, 100)
-    KBM.EncTimer:Unpause()
+        KBM.EncTimer:Unpause()
 		KBM.MechTimer:AddStart(HA.Arakhurn.TimersRef.AddFirst)
 		KBM.MechTimer:AddStart(HA.Arakhurn.TimersRef.NovaPThree)
 		KBM.MechTimer:AddStart(HA.Arakhurn.TimersRef.FieryPThree)
@@ -398,7 +398,7 @@ function HA:UnitHPCheck(uDetails, unitID)
 						self.PhaseObj.Objectives:AddPercent(self.Arakhurn, 0, 100)
 						self.PhaseObj:SetPhase(1)
 						KBM.MechTimer:AddStart(self.Arakhurn.TimersRef.NovaFirst)
-            KBM.MechTimer:AddStart(self.Arakhurn.TimersRef.LavaFirst)
+                        KBM.MechTimer:AddStart(self.Arakhurn.TimersRef.LavaFirst)
 						KBM.MechTimer:AddStart(self.Arakhurn.TimersRef.FieryFirst)
 					end
 					KBM.TankSwap:Start(self.Lang.Debuff.Armor[KBM.Lang], unitID)
@@ -460,10 +460,10 @@ end
 
 function HA:Start()
 	-- Create Timers
-  self.Arakhurn.TimersRef.LavaFirst = KBM.MechTimer:Add(self.Lang.Ability.Lava[KBM.Lang], 40)
+    self.Arakhurn.TimersRef.LavaFirst = KBM.MechTimer:Add(self.Lang.Ability.Lava[KBM.Lang], 40)
 	self.Arakhurn.TimersRef.LavaFirst.MenuName = self.Lang.Menu.LavaFirst[KBM.Lang]
 	self.Arakhurn.TimersRef.Lava = KBM.MechTimer:Add(self.Lang.Ability.Lava[KBM.Lang], 54)
-  self.Arakhurn.TimersRef.LavaPThree = KBM.MechTimer:Add(self.Lang.Ability.Lava[KBM.Lang], 45)
+    self.Arakhurn.TimersRef.LavaPThree = KBM.MechTimer:Add(self.Lang.Ability.Lava[KBM.Lang], 45)
 	self.Arakhurn.TimersRef.LavaPThree.MenuName = self.Lang.Menu.LavaPThree[KBM.Lang]
 
   
@@ -503,7 +503,7 @@ function HA:Start()
 	self.Arakhurn.Triggers.Stall:AddPhase(self.Stall)
 	self.Arakhurn.Triggers.Nova = KBM.Trigger:Create(self.Lang.Ability.Nova[KBM.Lang], "channel", self.Arakhurn)
 	self.Arakhurn.Triggers.Nova:AddTimer(self.Arakhurn.TimersRef.Nova)
-  self.Arakhurn.Triggers.Nova:AddTimer(self.Arakhurn.TimersRef.Lava)
+    self.Arakhurn.Triggers.Nova:AddTimer(self.Arakhurn.TimersRef.Lava)
 	self.Arakhurn.Triggers.Nova:AddAlert(self.Arakhurn.AlertsRef.Nova)
 	self.Arakhurn.Triggers.Fiery = KBM.Trigger:Create(self.Lang.Buff.Fiery[KBM.Lang], "playerBuff", self.Arakhurn)
 	self.Arakhurn.Triggers.Fiery:AddTimer(self.Arakhurn.TimersRef.Fiery)

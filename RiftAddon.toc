@@ -58,7 +58,7 @@ RunOnStartup = {
 			"Raids/Prophecy of Ahnket/LFR/Tartaric_Depths/Malannon.lua",
       
     -- Queen's Foci
-      "Raids/Prophecy of Ahnket/LFR/The_Queens_Foci/QFHeader.lua",
+            "Raids/Prophecy of Ahnket/LFR/The_Queens_Foci/QFHeader.lua",
 			"Raids/Prophecy of Ahnket/LFR/The_Queens_Foci/Hexathel.lua",
       
    -- PoA Experts
@@ -596,20 +596,20 @@ SavedVariables = {
 	KBMChronicle_Settings = "account",
 	KBMOpenWorld_Settings = "account",
 	
-  -- SPE Raids
-    -- Intrepid Rise of the Phoenix
-  		KBMSPEIROTP_Settings = "account",
-			KBMSPEIROTPEN_Settings = "account",
-			KBMSPEIROTPHA_Settings = "account",
-			KBMSPEIROTPBT_Settings = "account",
-			KBMSPEIROTPGS_Settings = "account",
-			chKBMSPEIROTP_Settings = "character",
-			chKBMSPEIROTPEN_Settings = "character",
-			chKBMSPEIROTPHA_Settings = "character",
-			chKBMSPEIROTPBT_Settings = "character",
-			chKBMSPEIROTPGS_Settings = "character",
+    -- PoA Raids
+        -- Intrepid Rise of the Phoenix
+            KBMPOAIROTP_Settings = "account",
+			KBMPOAIROTPEN_Settings = "account",
+			KBMPOAIROTPHA_Settings = "account",
+			KBMPOAIROTPBT_Settings = "account",
+			KBMPOAIROTPGS_Settings = "account",
+			chKBMPOAIROTP_Settings = "character",
+			chKBMPOAIROTPEN_Settings = "character",
+			chKBMPOAIROTPHA_Settings = "character",
+			chKBMPOAIROTPBT_Settings = "character",
+			chKBMPOAIROTPGS_Settings = "character",
 			
-	 -- LFR Tartaric Depths
+        -- LFR Tartaric Depths
             KBMPOATD_Settings = "account",
             KBMPOATDBEL_Settings = "account",
             KBMPOATDTAR_Settings = "account",
@@ -619,32 +619,32 @@ SavedVariables = {
             chKBMPOATDTAR_Settings = "character",
 			chKBMPOATDMAL_Settings = "character",
 	
-  -- SPE Experts
-    -- Intrepid Darkening Deeps
-			KBMSPEIDD_Settings = "account",
-			KBMSPEIDDAB_Settings = "account",
-			KBMSPEIDDMB_Settings = "account",
-			KBMSPEIDDTD_Settings = "account",
-			KBMSPEIDDGK_Settings = "account",
-			KBMSPEIDDTC_Settings = "account",
-			KBMSPEIDDSN_Settings = "account",
-			chKBMSPEIDD_Settings = "character",
-			chKBMSPEIDDAB_Settings = "character",
-			chKBMSPEIDDMB_Settings = "character",
-			chKBMSPEIDDTD_Settings = "character",
-			chKBMSPEIDDGK_Settings = "character",
-			chKBMSPEIDDTC_Settings = "character",
-			chKBMSPEIDDSN_Settings = "character",
+    -- PoA Experts
+        -- Intrepid Darkening Deeps
+			KBMPOAIDD_Settings = "account",
+			KBMPOAIDDAB_Settings = "account",
+			KBMPOAIDDMB_Settings = "account",
+			KBMPOAIDDTD_Settings = "account",
+			KBMPOAIDDGK_Settings = "account",
+			KBMPOAIDDTC_Settings = "account",
+			KBMPOAIDDSN_Settings = "account",
+			chKBMPOAIDD_Settings = "character",
+			chKBMPOAIDDAB_Settings = "character",
+			chKBMPOAIDDMB_Settings = "character",
+			chKBMPOAIDDTD_Settings = "character",
+			chKBMPOAIDDGK_Settings = "character",
+			chKBMPOAIDDTC_Settings = "character",
+			chKBMPOAIDDSN_Settings = "character",
   
     -- Intrepid Gyel Fortress
-			KBMSPEIGFSEA_Settings = "account",
-			KBMSPEIGFKYT_Settings = "account",
-			KBMSPEIGFNEZ_Settings = "account",
-			KBMSPEIGFGLA_Settings = "account",
-			chKBMSPEIGFSEA_Settings = "character",
-			chKBMSPEIGFKYT_Settings = "character",
-			chKBMSPEIGFNEZ_Settings = "character",
-			chKBMSPEIGFGLA_Settings = "character",
+			KBMPOAIGFSEA_Settings = "account",
+			KBMPOAIGFKYT_Settings = "account",
+			KBMPOAIGFNEZ_Settings = "account",
+			KBMPOAIGFGLA_Settings = "account",
+			chKBMPOAIGFSEA_Settings = "character",
+			chKBMPOAIGFKYT_Settings = "character",
+			chKBMPOAIGFNEZ_Settings = "character",
+			chKBMPOAIGFGLA_Settings = "character",
 
   
 	-- NT Raids/Rift 20

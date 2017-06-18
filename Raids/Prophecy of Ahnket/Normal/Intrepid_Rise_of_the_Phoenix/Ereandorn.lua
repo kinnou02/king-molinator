@@ -3,7 +3,7 @@
 -- Copyright 2011
 --
 
-KBMSPEIROTPEN_Settings = nil
+KBMPOAIROTPEN_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
@@ -22,7 +22,7 @@ local EN = {
 	Lang = {},
 	TankSwap = false,
 	ID = "IROTPEreandorn",
-  Enrage = 60 * 7,
+    Enrage = 60 * 7,
 	Menu = {},
 	Object = "EN",
 }
@@ -124,40 +124,40 @@ function EN:InitVars()
 		Alerts = KBM.Defaults.Alerts(),
 		MechSpy = KBM.Defaults.MechSpy(),
 	}
-	KBMSPEIROTPEN_Settings = self.Settings
-	chKBMSPEIROTPEN_Settings = self.Settings
+	KBMPOAIROTPEN_Settings = self.Settings
+	chKBMPOAIROTPEN_Settings = self.Settings
 	
 end
 
 function EN:SwapSettings(bool)
 	if bool then
-		KBMSPEIROTPEN_Settings = self.Settings
-		self.Settings = chKBMSPEIROTPEN_Settings
+		KBMPOAIROTPEN_Settings = self.Settings
+		self.Settings = chKBMPOAIROTPEN_Settings
 	else
-		chKBMSPEIROTPEN_Settings = self.Settings
-		self.Settings = KBMSPEIROTPEN_Settings
+		chKBMPOAIROTPEN_Settings = self.Settings
+		self.Settings = KBMPOAIROTPEN_Settings
 	end
 end
 
 function EN:LoadVars()
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMSPEIROTPEN_Settings, self.Settings)
+		KBM.LoadTable(chKBMPOAIROTPEN_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMSPEIROTPEN_Settings, self.Settings)
+		KBM.LoadTable(KBMPOAIROTPEN_Settings, self.Settings)
 	end
 		
 	if KBM.Options.Character then
-		chKBMSPEIROTPEN_Settings = self.Settings
+		chKBMPOAIROTPEN_Settings = self.Settings
 	else
-		KBMSPEIROTPEN_Settings = self.Settings
+		KBMPOAIROTPEN_Settings = self.Settings
 	end	
 end
 
 function EN:SaveVars()	
 	if KBM.Options.Character then
-		chKBMSPEIROTPEN_Settings = self.Settings
+		chKBMPOAIROTPEN_Settings = self.Settings
 	else
-		KBMSPEIROTPEN_Settings = self.Settings
+		KBMPOAIROTPEN_Settings = self.Settings
 	end	
 end
 

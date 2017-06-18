@@ -3,8 +3,8 @@
 -- Copyright 2017
 --
 
-KBMSPEQF_Settings = nil
-chKBMSPEQF_Settings = nil
+KBMPOAQF_Settings = nil
+chKBMPOAQF_Settings = nil
 
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")

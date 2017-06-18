@@ -3,7 +3,7 @@
 -- Copyright 2011
 --
 
-KBMSPEIROTPGS_Settings = nil
+KBMPOAIROTPGS_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
@@ -122,42 +122,42 @@ function GS:InitVars()
 		AlertsRef = self.Silgen.Settings.AlertsRef,
 		MechRef = self.Silgen.Settings.MechRef,
 	}
-	KBMSPEIROTPGS_Settings = self.Settings
-	chKBMSPEIROTPGS_Settings = self.Settings
+	KBMPOAIROTPGS_Settings = self.Settings
+	chKBMPOAIROTPGS_Settings = self.Settings
 	
 end
 
 function GS:SwapSettings(bool)
 
 	if bool then
-		KBMSPEIROTPGS_Settings = self.Settings
-		self.Settings = chKBMSPEIROTPGS_Settings
+		KBMPOAIROTPGS_Settings = self.Settings
+		self.Settings = chKBMPOAIROTPGS_Settings
 	else
-		chKBMSPEIROTPGS_Settings = self.Settings
-		self.Settings = KBMSPEIROTPGS_Settings
+		chKBMPOAIROTPGS_Settings = self.Settings
+		self.Settings = KBMPOAIROTPGS_Settings
 	end
 
 end
 
 function GS:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMSPEIROTPGS_Settings, self.Settings)
+		KBM.LoadTable(chKBMPOAIROTPGS_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMSPEIROTPGS_Settings, self.Settings)
+		KBM.LoadTable(KBMPOAIROTPGS_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMSPEIROTPGS_Settings = self.Settings
+		chKBMPOAIROTPGS_Settings = self.Settings
 	else
-		KBMSPEIROTPGS_Settings = self.Settings
+		KBMPOAIROTPGS_Settings = self.Settings
 	end	
 end
 
 function GS:SaveVars()	
 	if KBM.Options.Character then
-		chKBMSPEIROTPGS_Settings = self.Settings
+		chKBMPOAIROTPGS_Settings = self.Settings
 	else
-		KBMSPEIROTPGS_Settings = self.Settings
+		KBMPOAIROTPGS_Settings = self.Settings
 	end	
 end
 
@@ -225,7 +225,7 @@ end
 function GS:Start()
 	-- Create Timers
 	self.Silgen.TimersRef.Funnel = KBM.MechTimer:Add(self.Lang.Ability.Funnel[KBM.Lang], 15)
-  self.Silgen.TimersRef.FunnelFirst = KBM.MechTimer:Add(self.Lang.Ability.Funnel[KBM.Lang], 10)
+    self.Silgen.TimersRef.FunnelFirst = KBM.MechTimer:Add(self.Lang.Ability.Funnel[KBM.Lang], 10)
 	self.Silgen.TimersRef.FunnelFirst.MenuName = self.Lang.Menu.FunnelFirst[KBM.Lang]
 
 	self.Silgen.TimersRef.Incinerate = KBM.MechTimer:Add(self.Lang.Ability.Incinerate[KBM.Lang], 60)

@@ -3,8 +3,8 @@
 -- Copyright 2011
 --
 
-KBMSPEIDDAB_Settings = nil
-chKBMSPEIDDAB_Settings = nil
+KBMPOAIDDAB_Settings = nil
+chKBMPOAIDDAB_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
@@ -121,42 +121,42 @@ function MOD:InitVars()
 		-- TimersRef = self.Braxtepel.Settings.TimersRef,
 		-- AlertsRef = self.Braxtepel.Settings.AlertsRef,
 	}
-	KBMSPEIDDAB_Settings = self.Settings
-	chKBMSPEIDDAB_Settings = self.Settings
+	KBMPOAIDDAB_Settings = self.Settings
+	chKBMPOAIDDAB_Settings = self.Settings
 	
 end
 
 function MOD:SwapSettings(bool)
 
 	if bool then
-		KBMSPEIDDAB_Settings = self.Settings
-		self.Settings = chKBMSPEIDDAB_Settings
+		KBMPOAIDDAB_Settings = self.Settings
+		self.Settings = chKBMPOAIDDAB_Settings
 	else
-		chKBMSPEIDDAB_Settings = self.Settings
-		self.Settings = KBMSPEIDDAB_Settings
+		chKBMPOAIDDAB_Settings = self.Settings
+		self.Settings = KBMPOAIDDAB_Settings
 	end
 
 end
 
 function MOD:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMSPEIDDAB_Settings, self.Settings)
+		KBM.LoadTable(chKBMPOAIDDAB_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMSPEIDDAB_Settings, self.Settings)
+		KBM.LoadTable(KBMPOAIDDAB_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMSPEIDDAB_Settings = self.Settings
+		chKBMPOAIDDAB_Settings = self.Settings
 	else
-		KBMSPEIDDAB_Settings = self.Settings
+		KBMPOAIDDAB_Settings = self.Settings
 	end	
 end
 
 function MOD:SaveVars()	
 	if KBM.Options.Character then
-		chKBMSPEIDDAB_Settings = self.Settings
+		chKBMPOAIDDAB_Settings = self.Settings
 	else
-		KBMSPEIDDAB_Settings = self.Settings
+		KBMPOAIDDAB_Settings = self.Settings
 	end	
 end
 

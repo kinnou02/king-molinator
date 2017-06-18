@@ -3,8 +3,8 @@
 -- Copyright 2011
 --
 
-KBMSPEIDDMB_Settings = nil
-chKBMSPEIDDMB_Settings = nil
+KBMPOAIDDMB_Settings = nil
+chKBMPOAIDDMB_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
@@ -83,42 +83,42 @@ function MOD:InitVars()
 		-- TimersRef = self.Bringhurst.Settings.TimersRef,
 		-- AlertsRef = self.Bringhurst.Settings.AlertsRef,
 	}
-	KBMSPEIDDMB_Settings = self.Settings
-	chKBMSPEIDDMB_Settings = self.Settings
+	KBMPOAIDDMB_Settings = self.Settings
+	chKBMPOAIDDMB_Settings = self.Settings
 	
 end
 
 function MOD:SwapSettings(bool)
 
 	if bool then
-		KBMSPEIDDMB_Settings = self.Settings
-		self.Settings = chKBMSPEIDDMB_Settings
+		KBMPOAIDDMB_Settings = self.Settings
+		self.Settings = chKBMPOAIDDMB_Settings
 	else
-		chKBMSPEIDDMB_Settings = self.Settings
-		self.Settings = KBMSPEIDDMB_Settings
+		chKBMPOAIDDMB_Settings = self.Settings
+		self.Settings = KBMPOAIDDMB_Settings
 	end
 
 end
 
 function MOD:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMSPEIDDMB_Settings, self.Settings)
+		KBM.LoadTable(chKBMPOAIDDMB_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMSPEIDDMB_Settings, self.Settings)
+		KBM.LoadTable(KBMPOAIDDMB_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMSPEIDDMB_Settings = self.Settings
+		chKBMPOAIDDMB_Settings = self.Settings
 	else
-		KBMSPEIDDMB_Settings = self.Settings
+		KBMPOAIDDMB_Settings = self.Settings
 	end	
 end
 
 function MOD:SaveVars()	
 	if KBM.Options.Character then
-		chKBMSPEIDDMB_Settings = self.Settings
+		chKBMPOAIDDMB_Settings = self.Settings
 	else
-		KBMSPEIDDMB_Settings = self.Settings
+		KBMPOAIDDMB_Settings = self.Settings
 	end	
 end
 

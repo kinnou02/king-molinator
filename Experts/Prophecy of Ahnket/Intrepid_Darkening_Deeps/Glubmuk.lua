@@ -3,8 +3,8 @@
 -- Copyright 2011
 --
 
-KBMSPEIDDGK_Settings = nil
-chKBMSPEIDDGK_Settings = nil
+KBMPOAIDDGK_Settings = nil
+chKBMPOAIDDGK_Settings = nil
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
 local KBM = AddonData.data
@@ -77,42 +77,42 @@ function MOD:InitVars()
 		-- TimersRef = self.Glubmuk.Settings.TimersRef,
 		-- AlertsRef = self.Glubmuk.Settings.AlertsRef,
 	}
-	KBMSPEIDDGK_Settings = self.Settings
-	chKBMSPEIDDGK_Settings = self.Settings
+	KBMPOAIDDGK_Settings = self.Settings
+	chKBMPOAIDDGK_Settings = self.Settings
 	
 end
 
 function MOD:SwapSettings(bool)
 
 	if bool then
-		KBMSPEIDDGK_Settings = self.Settings
-		self.Settings = chKBMSPEIDDGK_Settings
+		KBMPOAIDDGK_Settings = self.Settings
+		self.Settings = chKBMPOAIDDGK_Settings
 	else
-		chKBMSPEIDDGK_Settings = self.Settings
-		self.Settings = KBMSPEIDDGK_Settings
+		chKBMPOAIDDGK_Settings = self.Settings
+		self.Settings = KBMPOAIDDGK_Settings
 	end
 
 end
 
 function MOD:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMSPEIDDGK_Settings, self.Settings)
+		KBM.LoadTable(chKBMPOAIDDGK_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMSPEIDDGK_Settings, self.Settings)
+		KBM.LoadTable(KBMPOAIDDGK_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMSPEIDDGK_Settings = self.Settings
+		chKBMPOAIDDGK_Settings = self.Settings
 	else
-		KBMSPEIDDGK_Settings = self.Settings
+		KBMPOAIDDGK_Settings = self.Settings
 	end	
 end
 
 function MOD:SaveVars()	
 	if KBM.Options.Character then
-		chKBMSPEIDDGK_Settings = self.Settings
+		chKBMPOAIDDGK_Settings = self.Settings
 	else
-		KBMSPEIDDGK_Settings = self.Settings
+		KBMPOAIDDGK_Settings = self.Settings
 	end	
 end
 

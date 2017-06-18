@@ -3,8 +3,8 @@
 -- July 2015
 --
 
-KBMSPEIGFNEZ_Settings = nil
-chKBMSPEIGFNEZ_Settings = nil
+KBMPOAIGFNEZ_Settings = nil
+chKBMPOAIGFNEZ_Settings = nil
 
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
@@ -101,42 +101,42 @@ function MOD:InitVars()
 		-- TimersRef = self.Baird.Settings.TimersRef,
 		AlertsRef = self.Nezavar.Settings.AlertsRef,
 	}
-	KBMSPEIGFNEZ_Settings = self.Settings
-	chKBMSPEIGFNEZ_Settings = self.Settings
+	KBMPOAIGFNEZ_Settings = self.Settings
+	chKBMPOAIGFNEZ_Settings = self.Settings
 	
 end
 
 function MOD:SwapSettings(bool)
 
 	if bool then
-		KBMSPEIGFNEZ_Settings = self.Settings
-		self.Settings = chKBMSPEIGFNEZ_Settings
+		KBMPOAIGFNEZ_Settings = self.Settings
+		self.Settings = chKBMPOAIGFNEZ_Settings
 	else
-		chKBMSPEIGFNEZ_Settings = self.Settings
-		self.Settings = KBMSPEIGFNEZ_Settings
+		chKBMPOAIGFNEZ_Settings = self.Settings
+		self.Settings = KBMPOAIGFNEZ_Settings
 	end
 
 end
 
 function MOD:LoadVars()	
 	if KBM.Options.Character then
-		KBM.LoadTable(chKBMSPEIGFNEZ_Settings, self.Settings)
+		KBM.LoadTable(chKBMPOAIGFNEZ_Settings, self.Settings)
 	else
-		KBM.LoadTable(KBMSPEIGFNEZ_Settings, self.Settings)
+		KBM.LoadTable(KBMPOAIGFNEZ_Settings, self.Settings)
 	end
 	
 	if KBM.Options.Character then
-		chKBMSPEIGFNEZ_Settings = self.Settings
+		chKBMPOAIGFNEZ_Settings = self.Settings
 	else
-		KBMSPEIGFNEZ_Settings = self.Settings
+		KBMPOAIGFNEZ_Settings = self.Settings
 	end	
 end
 
 function MOD:SaveVars()	
 	if KBM.Options.Character then
-		chKBMSPEIGFNEZ_Settings = self.Settings
+		chKBMPOAIGFNEZ_Settings = self.Settings
 	else
-		KBMSPEIGFNEZ_Settings = self.Settings
+		KBMPOAIGFNEZ_Settings = self.Settings
 	end	
 end
 
