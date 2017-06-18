@@ -49,6 +49,13 @@ RunOnStartup = {
 			"Raids/Prophecy of Ahnket/Normal/Intrepid_Rise_of_the_Phoenix/Beruhast.lua",
 			"Raids/Prophecy of Ahnket/Normal/Intrepid_Rise_of_the_Phoenix/Silgen.lua",
 			"Raids/Prophecy of Ahnket/Normal/Intrepid_Rise_of_the_Phoenix/Arakhurn.lua",
+			
+		-- LFR Tartaric Depths
+			"Raids/Prophecy of Ahnket/LFR/Tartaric_Depths/TD_Header.lua",
+			"Raids/Prophecy of Ahnket/LFR/Tartaric_Depths/Beligosh.lua",
+			"Raids/Prophecy of Ahnket/LFR/Tartaric_Depths/TarJulia.lua",
+			"Raids/Prophecy of Ahnket/LFR/Tartaric_Depths/Council.lua",
+			"Raids/Prophecy of Ahnket/LFR/Tartaric_Depths/Malannon.lua",
       
     -- Queen's Foci
       "Raids/Prophecy of Ahnket/LFR/The_Queens_Foci/QFHeader.lua",
@@ -601,6 +608,16 @@ SavedVariables = {
 			chKBMSPEIROTPHA_Settings = "character",
 			chKBMSPEIROTPBT_Settings = "character",
 			chKBMSPEIROTPGS_Settings = "character",
+			
+	 -- LFR Tartaric Depths
+            KBMPOATD_Settings = "account",
+            KBMPOATDBEL_Settings = "account",
+            KBMPOATDTAR_Settings = "account",
+            KBMPOATDMAL_Settings = "account",
+            chKBMPOATD_Settings = "character",
+            chKBMPOATDBEL_Settings ="character",
+            chKBMPOATDTAR_Settings = "character",
+			chKBMPOATDMAL_Settings = "character",
 	
   -- SPE Experts
     -- Intrepid Darkening Deeps

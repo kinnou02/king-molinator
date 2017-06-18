@@ -443,11 +443,7 @@ function HA:DefineMenu()
 end
 
 function HA:Start()
-	-- Create Timers
-  self.Arakhurn.TimersRef.LavaFirst = KBM.MechTimer:Add(self.Lang.Ability.Lava[KBM.Lang], 40)
-	self.Arakhurn.TimersRef.LavaFirst.MenuName = self.Lang.Menu.LavaFirst[KBM.Lang]
-	self.Arakhurn.TimersRef.Lava = KBM.MechTimer:Add(self.Lang.Ability.Lava[KBM.Lang], 54)
-  
+	-- Create Timers  
 	self.Arakhurn.TimersRef.NovaFirst = KBM.MechTimer:Add(self.Lang.Ability.Nova[KBM.Lang], 46)
 	self.Arakhurn.TimersRef.NovaFirst.MenuName = self.Lang.Menu.NovaFirst[KBM.Lang]
 	self.Arakhurn.TimersRef.Nova = KBM.MechTimer:Add(self.Lang.Ability.Nova[KBM.Lang], 60)
@@ -484,7 +480,6 @@ function HA:Start()
 	self.Arakhurn.Triggers.Stall:AddPhase(self.Stall)
 	self.Arakhurn.Triggers.Nova = KBM.Trigger:Create(self.Lang.Ability.Nova[KBM.Lang], "channel", self.Arakhurn)
 	self.Arakhurn.Triggers.Nova:AddTimer(self.Arakhurn.TimersRef.Nova)
-	self.Arakhurn.Triggers.Nova:AddTimer(self.Arakhurn.TimersRef.Lava)
 	self.Arakhurn.Triggers.Nova:AddAlert(self.Arakhurn.AlertsRef.Nova)
 	self.Arakhurn.Triggers.Fiery = KBM.Trigger:Create(self.Lang.Buff.Fiery[KBM.Lang], "playerBuff", self.Arakhurn)
 	self.Arakhurn.Triggers.Fiery:AddTimer(self.Arakhurn.TimersRef.Fiery)

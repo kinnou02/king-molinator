@@ -5,7 +5,7 @@ KBMPOATD_Settings = nil
 chKBMPOATD_Settings = nil
 
 local TD = {
-    Directory = "Raids/Prophecy of Ahnket/Tartaric Depths/",
+    Directory = "Raids/Prophecy of Ahnket/LFR/Tartaric_Depths/",
     File = "TD_Header.lua",
     Header = nil,
     Enabled = true,
@@ -14,7 +14,7 @@ local TD = {
     Type = "Raid",
     ID = "Tartaric_Depths",
     Object = "TD",
-    Rift = "PoA",
+    Rift = "PA",
 }
 
 -- Link Mods
