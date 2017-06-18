@@ -25,7 +25,6 @@ local HA = {
 	TimeoutOverride = false,
 	Timeout = 60,
 	Phase = 1,
-	Enrage = 14.5 * 60,
 	ID = "Intrepid Arakhurn",
 	Object = "HA",
 }
@@ -38,7 +37,7 @@ HA.Arakhurn = {
 	NameShort = "Arakhurn",
 	UTID = {
 		[1] = "UFE3404FE6864F1B8",
-		[2] = "U2D48EA697C2E12B2",
+		[2] = "U340ED24C23AF60CF",
 	},
 	Menu = {},
 	Castbar = nil,

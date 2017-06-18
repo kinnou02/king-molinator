@@ -290,9 +290,9 @@ function COF:Reset()
     self.Danazhal.UnitID = nil
     self.Boldoch.UnitID = nil
     self.Pleuzhal.UnitID = nil
-    self.Danazhal.CastBar:Remove()
-    self.Boldoch.CastBar:Remove()
-    self.Pleuzhal.CastBar:Remove()
+    --self.Danazhal.CastBar:Remove()
+    --self.Boldoch.CastBar:Remove()
+    --self.Pleuzhal.CastBar:Remove()
 
     self.PhaseObj:End(Inspect.Time.Real())
 end
@@ -306,7 +306,7 @@ function COF:Start()
     -- Create Timers
 
     -- Create Alerts
-    self.Danazhal.AlertsRef.Flamescape = KBM.Alert:Create(self.Lang.Verbose.Flamescape[KBM.Lang], 3, true, true, "red")
+    self.Danazhal.AlertsRef.Flamescape = KBM.Alert:Create(self.Lang.Verbose.Flamescape[KBM.Lang], 5, true, true, "red")
     KBM.Defaults.AlertObj.Assign(self.Danazhal)
 
     -- Assign Alerts and Timers to Triggers
