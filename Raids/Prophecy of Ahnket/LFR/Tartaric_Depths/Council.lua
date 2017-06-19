@@ -26,6 +26,9 @@ local COF = {
     Object = "COF",
 }
 
+-- Main Unit Dictionary
+COF.Lang.Unit = {}
+
 COF.Danazhal = {
     Mod = COF,
     Level = "??",
@@ -33,6 +36,7 @@ COF.Danazhal = {
     Name = "Countessa Danazhal",
     Menu = {},
     AlertsRef = {},
+    TimersRef = {},
     Castbar = nil,
     Dead = false,
     Available = false,
@@ -43,8 +47,12 @@ COF.Danazhal = {
     Settings = {
         CastBar = KBM.Defaults.Castbar(),
         AlertsRef = {
-          Enabled = true,
-		  Flamescape = KBM.Defaults.AlertObj.Create("red"),
+            Enabled = true,
+            Flamescape = KBM.Defaults.AlertObj.Create("red"),
+        },
+        TimersRef = {
+            Enabled = true,
+            FirstFlamescape = KBM.Defaults.TimerObj.Create("red"),
         },
     },
 }
@@ -132,11 +140,10 @@ COF.PleuzhalSoul = {
 
 KBM.RegisterMod(COF.ID, COF)
 
--- Main Unit Dictionary
-COF.Lang.Unit = {}
 
 -- Ability Dictionary
 COF.Lang.Ability = {}
+COF.Lang.Ability.Flamescape = KBM.Language:Add("Flamescape")
 
 -- Verbose Dictionary
 COF.Lang.Verbose = {}
@@ -152,6 +159,13 @@ COF.Lang.Debuff = {}
 COF.Lang.Notify = {}
 COF.Lang.Notify.Flamescape = KBM.Language:Add("The Flamescape begins.")
 
+COF.Lang.Notify.DanazhalPop = KBM.Language:Add("Did you release me? Wonderful!")
+
+-- Menu Dictionary
+COF.Lang.Menu = {}
+COF.Lang.Menu.FirstFlamescape = KBM.Language:Add("First " .. COF.Lang.Ability.Flamescape[KBM.Lang])
+COF.Lang.Menu.FirstFlamescape:SetFrench("Première " .. COF.Lang.Ability.Flamescape[KBM.Lang])
+
 -- Description Dictionary
 COF.Lang.Main = {}
 COF.Lang.Main.Descript = KBM.Language:Add("The Council of Fate")
@@ -160,9 +174,9 @@ COF.Descript = COF.Lang.Main.Descript[KBM.Lang]
 function COF:AddBosses(KBM_Boss)
     self.MenuName = self.Descript
     self.Bosses = {
+        [self.Danazhal.Name] = self.Danazhal,
         [self.Pleuzhal.Name] = self.Pleuzhal,
         [self.Boldoch.Name] = self.Boldoch,
-        [self.Danazhal.Name] = self.Danazhal,
         [self.PleuzhalSoul.Name] = self.PleuzhalSoul,
         [self.BoldochSoul.Name] = self.BoldochSoul,
         [self.DanazhalSoul.Name] = self.DanazhalSoul,
@@ -175,9 +189,9 @@ function COF:InitVars()
         CastBar = self.Danazhal.Settings.CastBar,
         EncTimer = KBM.Defaults.EncTimer(),
         PhaseMon = KBM.Defaults.PhaseMon(),
-        -- MechTimer = KBM.Defaults.MechTimer(),
+        MechTimer = KBM.Defaults.MechTimer(),
         Alerts = KBM.Defaults.Alerts(),
-        -- TimersRef = self.Baird.Settings.TimersRef,
+        TimersRef = self.Danazhal.Settings.TimersRef,
         AlertsRef = self.Danazhal.Settings.AlertsRef,
     }
     KBMPOATDCOF_Settings = self.Settings
@@ -239,18 +253,27 @@ function COF:SetObjectives()
     end
 end
 
+function COF:ResetTimers()
+    if not self.Danazhal.Dead then
+        KBM.MechTimer:AddStart(self.Danazhal.TimersRef.FirstFlamescape)
+    end
+end
+
 function COF:Death(UnitID)
     if self.Danazhal.UnitID == UnitID then
         self.Danazhal.Dead = true
         self.SetObjectives()
+        self:ResetTimers()
     end
     if self.Boldoch.UnitID == UnitID then
         self.Boldoch.Dead = true
         self.SetObjectives()
+        self:ResetTimers()
     end
     if self.Pleuzhal.UnitID == UnitID then
         self.Pleuzhal.Dead = true
         self.SetObjectives()
+        self:ResetTimers()
     end
     if self.Danazhal.Dead and self.Boldoch.Dead and self.Pleuzhal.Dead then
         return true
@@ -271,10 +294,10 @@ function COF:UnitHPCheck(uDetails, unitID)
                 self.PhaseObj:SetPhase("1")
                 self.Phase = 1
                 self.SetObjectives()
+                KBM.MechTimer:AddStart(self.Danazhal.TimersRef.FirstFlamescape)
             end
             BossObj.Dead = false
             BossObj.Casting = false
-            --BossObj.CastBar:Create(unitID)
             BossObj.UnitID = unitID
             BossObj.Available = true
             return BossObj
@@ -290,9 +313,6 @@ function COF:Reset()
     self.Danazhal.UnitID = nil
     self.Boldoch.UnitID = nil
     self.Pleuzhal.UnitID = nil
-    --self.Danazhal.CastBar:Remove()
-    --self.Boldoch.CastBar:Remove()
-    --self.Pleuzhal.CastBar:Remove()
 
     self.PhaseObj:End(Inspect.Time.Real())
 end
@@ -304,6 +324,9 @@ end
 
 function COF:Start()
     -- Create Timers
+    self.Danazhal.TimersRef.FirstFlamescape = KBM.MechTimer:Add(self.Lang.Ability.Flamescape[KBM.Lang], 22)
+    self.Danazhal.TimersRef.FirstFlamescape.MenuName = self.Lang.Menu.FirstFlamescape[KBM.Lang]
+    KBM.Defaults.TimerObj.Assign(self.Danazhal)
 
     -- Create Alerts
     self.Danazhal.AlertsRef.Flamescape = KBM.Alert:Create(self.Lang.Verbose.Flamescape[KBM.Lang], 5, true, true, "red")
@@ -312,6 +335,9 @@ function COF:Start()
     -- Assign Alerts and Timers to Triggers
     self.Danazhal.Triggers.Flamescape = KBM.Trigger:Create(self.Lang.Notify.Flamescape[KBM.Lang], "notify", self.Danazhal)
     self.Danazhal.Triggers.Flamescape:AddAlert(self.Danazhal.AlertsRef.Flamescape)
+
+    self.Danazhal.Triggers.Flamescape = KBM.Trigger:Create(self.Lang.Notify.DanazhalPop[KBM.Lang], "notify", self.Danazhal)
+    self.Danazhal.Triggers.Flamescape:AddTimer(self.Danazhal.TimersRef.FirstFlamescape)
 
     self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 
