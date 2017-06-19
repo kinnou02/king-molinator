@@ -614,10 +614,12 @@ SavedVariables = {
             KBMPOATDBEL_Settings = "account",
             KBMPOATDTAR_Settings = "account",
             KBMPOATDMAL_Settings = "account",
+			KBMPOATDCOF_Settings = "account",
             chKBMPOATD_Settings = "character",
             chKBMPOATDBEL_Settings ="character",
             chKBMPOATDTAR_Settings = "character",
 			chKBMPOATDMAL_Settings = "character",
+			chKBMPOATDCOF_Settings = "character",
 	
     -- PoA Experts
         -- Intrepid Darkening Deeps

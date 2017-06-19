@@ -92,6 +92,9 @@ BEL.Lang.Buff = {}
 
 -- Debuff Dictionary
 BEL.Lang.Debuff = {}
+BEL.Lang.Debuff.Vengeance = KBM.Language:Add("Vengeance of Beligosh")--tank debuff
+BEL.Lang.Debuff.Seed = KBM.Language:Add("Seed of Immolation")--raid debuff
+
 
 
 BEL.Lang.Notify = {}
