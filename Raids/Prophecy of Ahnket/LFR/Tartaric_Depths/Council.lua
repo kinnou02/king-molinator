@@ -53,6 +53,7 @@ COF.Danazhal = {
         TimersRef = {
             Enabled = true,
             FirstFlamescape = KBM.Defaults.TimerObj.Create("red"),
+            Flamescape = KBM.Defaults.TimerObj.Create("red"),
         },
     },
 }
@@ -159,7 +160,7 @@ COF.Lang.Debuff = {}
 COF.Lang.Notify = {}
 COF.Lang.Notify.Flamescape = KBM.Language:Add("The Flamescape begins.")
 
-COF.Lang.Notify.DanazhalPop = KBM.Language:Add("Did you release me? Wonderful!")
+COF.Lang.Notify.DanazhalPop = KBM.Language:Add("Did you release me? Wonderful! I shall escape after I fest on your souls!")
 
 -- Menu Dictionary
 COF.Lang.Menu = {}
@@ -254,6 +255,7 @@ function COF:SetObjectives()
 end
 
 function COF:ResetTimers()
+    KBM.MechTimer:AddRemove(self.Danazhal.TimersRef.Flamescape)
     if not self.Danazhal.Dead then
         KBM.MechTimer:AddStart(self.Danazhal.TimersRef.FirstFlamescape)
     end
@@ -326,6 +328,7 @@ function COF:Start()
     -- Create Timers
     self.Danazhal.TimersRef.FirstFlamescape = KBM.MechTimer:Add(self.Lang.Ability.Flamescape[KBM.Lang], 22)
     self.Danazhal.TimersRef.FirstFlamescape.MenuName = self.Lang.Menu.FirstFlamescape[KBM.Lang]
+    self.Danazhal.TimersRef.Flamescape = KBM.MechTimer:Add(self.Lang.Ability.Flamescape[KBM.Lang], 40)
     KBM.Defaults.TimerObj.Assign(self.Danazhal)
 
     -- Create Alerts
@@ -335,6 +338,7 @@ function COF:Start()
     -- Assign Alerts and Timers to Triggers
     self.Danazhal.Triggers.Flamescape = KBM.Trigger:Create(self.Lang.Notify.Flamescape[KBM.Lang], "notify", self.Danazhal)
     self.Danazhal.Triggers.Flamescape:AddAlert(self.Danazhal.AlertsRef.Flamescape)
+    self.Danazhal.Triggers.Flamescape:AddTimer(self.Danazhal.TimersRef.Flamescape)
 
     self.Danazhal.Triggers.Flamescape = KBM.Trigger:Create(self.Lang.Notify.DanazhalPop[KBM.Lang], "notify", self.Danazhal)
     self.Danazhal.Triggers.Flamescape:AddTimer(self.Danazhal.TimersRef.FirstFlamescape)
