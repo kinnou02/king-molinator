@@ -160,7 +160,7 @@ COF.Lang.Debuff = {}
 COF.Lang.Notify = {}
 COF.Lang.Notify.Flamescape = KBM.Language:Add("The Flamescape begins.")
 
-COF.Lang.Notify.DanazhalPop = KBM.Language:Add("Did you release me? Wonderful! I shall escape after I fest on your souls!")
+COF.Lang.Notify.DanazhalPop = KBM.Language:Add('Contessa Danazhal, "Did you release me? Wonderful! I shall escape after I fest on your souls!"')
 
 -- Menu Dictionary
 COF.Lang.Menu = {}
