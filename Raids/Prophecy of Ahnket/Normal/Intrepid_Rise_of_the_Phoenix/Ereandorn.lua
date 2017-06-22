@@ -53,8 +53,9 @@ EN.Ereandorn = {
 			Eruption = KBM.Defaults.AlertObj.Create("orange"),
 		},
 		MechRef = {
-			Enabled = true,
-			Combustion = KBM.Defaults.MechObj.Create("red"),
+            Enabled = true,
+            Combustion = KBM.Defaults.MechObj.Create("red"),
+            Growth = KBM.Defaults.MechObj.Create("red"),
 		},
 	},
 }
@@ -253,6 +254,7 @@ function EN:Start()
 	
 	-- Create Mechanic Spies
 	self.Ereandorn.MechRef.Combustion = KBM.MechSpy:Add(self.Lang.Ability.Combustion[KBM.Lang], nil, "playerDebuff", self.Ereandorn)
+    self.Ereandorn.MechRef.Growth = KBM.MechSpy:Add(self.Lang.Ability.Growth[KBM.Lang], nil, "playerDebuff", self.Ereandorn)
 	KBM.Defaults.MechObj.Assign(self.Ereandorn)
 		
 	-- Assign mechanics to Triggers
