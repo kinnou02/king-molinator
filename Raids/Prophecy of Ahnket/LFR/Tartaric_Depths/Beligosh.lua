@@ -214,7 +214,7 @@ function BEL:UnitHPCheck(uDetails, unitID)
         if uDetails.type == self.Golem.UTID then
            if not self.Bosses[uDetails.name].UnitList[unitID] then
                 local SubBossObj = {
-                    Mod = MOD,
+                    Mod = BEL,
                     Level = 72,
                     Name = uDetails.name,
                     Dead = false,
@@ -225,7 +225,7 @@ function BEL:UnitHPCheck(uDetails, unitID)
                 self.Bosses[uDetails.name].UnitList[unitID] = SubBossObj
             else
                 self.Bosses[uDetails.name].UnitList[unitID].Available = true
-                self.Bosses[uDetails.name].UnitList[unitID].UnitID = UnitID
+                self.Bosses[uDetails.name].UnitList[unitID].UnitID = unitID
             end
             return self.Bosses[uDetails.name].UnitList[unitID]
         end
