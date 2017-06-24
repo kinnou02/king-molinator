@@ -58,25 +58,31 @@ KBM.RegisterMod(MAL.ID, MAL)
 MAL.Lang.Unit = {}
 MAL.Lang.Unit.Malannon = KBM.Language:Add(MAL.Malannon.Name)
 MAL.Lang.Unit.Malannon:SetFrench("Malannon")
+MAL.Lang.Unit.Malannon:SetGerman("Malannon")
 
 -- Ability Dictionary
 MAL.Lang.Ability = {}
 MAL.Lang.Ability.Meteor = KBM.Language:Add("Meteor")
 MAL.Lang.Ability.Meteor:SetFrench("Météore")
+MAL.Lang.Ability.Meteor:SetGerman("Meteor")
 
 -- Verbose Dictionary
 MAL.Lang.Verbose = {}
 MAL.Lang.Verbose.Meteor = KBM.Language:Add("Pack!")
 MAL.Lang.Verbose.Meteor:SetFrench("Pack!")
+MAL.Lang.Verbose.Meteor:SetGerman("Sammeln!")
 
 MAL.Lang.Verbose.Blastback = KBM.Language:Add("Spread out!")
 MAL.Lang.Verbose.Blastback:SetFrench("Spread out!")
+MAL.Lang.Verbose.Blastback:SetGerman("Verteilen!")
 
 MAL.Lang.Verbose.MarkOfAcrimony = KBM.Language:Add("Go to purple circle!")
 MAL.Lang.Verbose.MarkOfAcrimony:SetFrench("Allez dans le cercle violet!")
+MAL.Lang.Verbose.MarkOfAcrimony:SetGerman("Geh in den lilanen Kreis!")
 
 MAL.Lang.Verbose.MarkOfSupremacy = KBM.Language:Add("Go to yellow circle!")
 MAL.Lang.Verbose.MarkOfSupremacy:SetFrench("Allez dans le cercle jaune!")
+MAL.Lang.Verbose.MarkOfSupremacy:SetGerman("Geh in den gelben Kreis!")
 
 
 -- Buff Dictionary
@@ -85,10 +91,13 @@ MAL.Lang.Buff = {}
 -- Debuff Dictionary
 MAL.Lang.Debuff = {}
 MAL.Lang.Debuff.Blastback = KBM.Language:Add("Blastback")
+MAL.Lang.Debuff.Blastback:SetGerman("Rückdruckwelle")
 
 MAL.Lang.Debuff.MarkOfAcrimony = KBM.Language:Add("Mark of Acrimony")
+MAL.Lang.Debuff.MarkOfAcrimony:SetGerman("Signum der Verbitterung")
 
 MAL.Lang.Debuff.MarkOfSupremacy = KBM.Language:Add("Mark of Supremacy")
+MAL.Lang.Debuff.MarkOfSupremacy:SetGerman("Signum der Vormachtstellung")
 
 MAL.Lang.Notify = {}
 
