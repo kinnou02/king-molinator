@@ -254,7 +254,7 @@ function EN:Start()
 	
 	-- Create Mechanic Spies
 	self.Ereandorn.MechRef.Combustion = KBM.MechSpy:Add(self.Lang.Ability.Combustion[KBM.Lang], nil, "playerDebuff", self.Ereandorn)
-    self.Ereandorn.MechRef.Growth = KBM.MechSpy:Add(self.Lang.Ability.Growth[KBM.Lang], nil, "playerDebuff", self.Ereandorn)
+    self.Ereandorn.MechRef.Growth = KBM.MechSpy:Add(self.Lang.Ability.Growth[KBM.Lang], 13, "playerDebuff", self.Ereandorn)
 	KBM.Defaults.MechObj.Assign(self.Ereandorn)
 		
 	-- Assign mechanics to Triggers
@@ -263,6 +263,7 @@ function EN:Start()
 	self.Ereandorn.Triggers.Combustion:AddSpy(self.Ereandorn.MechRef.Combustion)
 	self.Ereandorn.Triggers.Growth = KBM.Trigger:Create(self.Lang.Notify.Growth[KBM.Lang], "notify", self.Ereandorn)
 	self.Ereandorn.Triggers.Growth:AddAlert(self.Ereandorn.AlertsRef.Growth)
+    self.Ereandorn.Triggers.Growth:AddSpy(self.Ereandorn.MechRef.Growth)
 	self.Ereandorn.Triggers.Eruption = KBM.Trigger:Create(self.Lang.Notify.Eruption[KBM.Lang], "notify", self.Ereandorn)
 	self.Ereandorn.Triggers.Eruption:AddAlert(self.Ereandorn.AlertsRef.Eruption)
 	
