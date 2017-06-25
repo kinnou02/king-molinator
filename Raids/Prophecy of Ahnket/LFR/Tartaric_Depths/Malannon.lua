@@ -99,7 +99,7 @@ MAL.Lang.Debuff.MarkOfAcrimony:SetFrench("Marque d'amertume")
 
 MAL.Lang.Debuff.MarkOfSupremacy = KBM.Language:Add("Mark of Supremacy")
 MAL.Lang.Debuff.MarkOfSupremacy:SetGerman("Signum der Vormachtstellung")
-MAL.Lang.Debuff.MarkOfAcrimony:SetFrench("Marque d'amertume")
+-- MAL.Lang.Debuff.MarkOfAcrimony:SetFrench("Marque d'amertume") -- Seems to be the wrong Mark which is triggered in French
 
 
 MAL.Lang.Notify = {}
