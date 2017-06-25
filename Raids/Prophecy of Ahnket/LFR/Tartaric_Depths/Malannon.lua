@@ -95,9 +95,12 @@ MAL.Lang.Debuff.Blastback:SetGerman("Rückdruckwelle")
 
 MAL.Lang.Debuff.MarkOfAcrimony = KBM.Language:Add("Mark of Acrimony")
 MAL.Lang.Debuff.MarkOfAcrimony:SetGerman("Signum der Verbitterung")
+MAL.Lang.Debuff.MarkOfAcrimony:SetFrench("Marque d'amertume")
 
 MAL.Lang.Debuff.MarkOfSupremacy = KBM.Language:Add("Mark of Supremacy")
 MAL.Lang.Debuff.MarkOfSupremacy:SetGerman("Signum der Vormachtstellung")
+MAL.Lang.Debuff.MarkOfAcrimony:SetFrench("Marque d'amertume")
+
 
 MAL.Lang.Notify = {}
 

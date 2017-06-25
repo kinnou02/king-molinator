@@ -29,9 +29,12 @@ local BEL = {
 BEL.Lang.Unit = {}
 BEL.Lang.Unit.Beligosh = KBM.Language:Add("Beligosh")
 BEL.Lang.Unit.Beligosh:SetFrench("Beligosh")
+BEL.Lang.Unit.Beligosh:SetGerman("Beligosh")
 
 BEL.Lang.Unit.Golem = KBM.Language:Add("Alavaxian Golem")
 BEL.Lang.Unit.Golem:SetFrench("Golem alaviax")
+BEL.Lang.Unit.Golem:SetGerman("Alavaxianischer Golem")
+
 
 BEL.Beligosh = {
     Mod = BEL,
@@ -75,9 +78,13 @@ KBM.RegisterMod(BEL.ID, BEL)
 BEL.Lang.Unit = {}
 BEL.Lang.Unit.Beligosh = KBM.Language:Add(BEL.Beligosh.Name)
 BEL.Lang.Unit.Beligosh:SetFrench("Beligosh")
+BEL.Lang.Unit.Beligosh:SetGerman("Beligosh")
 
 BEL.Lang.Unit.Golem = KBM.Language:Add(BEL.Golem.Name)
 BEL.Lang.Unit.Golem:SetFrench("Golem alaviax")
+
+BEL.Lang.Unit.Golem:SetGerman("Alavaxianischer Golem")
+
 
 -- Ability Dictionary
 BEL.Lang.Ability = {}
@@ -85,18 +92,30 @@ BEL.Lang.Ability = {}
 -- Verbose Dictionary
 BEL.Lang.Verbose = {}
 BEL.Lang.Verbose.Wrath = KBM.Language:Add("Go to the edge!")
+BEL.Lang.Verbose.Wrath:SetGerman("An den Rand!")
+
 BEL.Lang.Verbose.Lava = KBM.Language:Add("Lava field")
+BEL.Lang.Verbose.Lava:SetGerman("Lavafeld")
 
 -- Buff Dictionary
 BEL.Lang.Buff = {}
 
 -- Debuff Dictionary
 BEL.Lang.Debuff = {}
+BEL.Lang.Debuff.Vengeance = KBM.Language:Add("Vengeance of Beligosh")--tank debuff
+BEL.Lang.Debuff.Vengeance:SetGerman("Rache von Beligosh")
+
+
+BEL.Lang.Debuff.Seed = KBM.Language:Add("Seed of Immolation")--raid debuff
+BEL.Lang.Debuff.Seed:SetGerman("Saat der Opferung")
+
 
 
 BEL.Lang.Notify = {}
 BEL.Lang.Notify.Wrath = KBM.Language:Add("Beligosh: Feel the wrath of Beligosh!")
 BEL.Lang.Notify.Wrath:SetFrench("Sentez le courroux de Beligosh !")
+BEL.Lang.Notify.Wrath:SetGerman("Beligosh: Spürt den Zorn von Beligosh!")
+
 
 
 BEL.Lang.Notify.Lava1 = KBM.Language:Add("Your Weakness is your compassion")
@@ -211,7 +230,7 @@ function BEL:UnitHPCheck(uDetails, unitID)
         if uDetails.type == self.Golem.UTID then
            if not self.Bosses[uDetails.name].UnitList[unitID] then
                 local SubBossObj = {
-                    Mod = MOD,
+                    Mod = BEL,
                     Level = 72,
                     Name = uDetails.name,
                     Dead = false,
@@ -222,7 +241,7 @@ function BEL:UnitHPCheck(uDetails, unitID)
                 self.Bosses[uDetails.name].UnitList[unitID] = SubBossObj
             else
                 self.Bosses[uDetails.name].UnitList[unitID].Available = true
-                self.Bosses[uDetails.name].UnitList[unitID].UnitID = UnitID
+                self.Bosses[uDetails.name].UnitList[unitID].UnitID = unitID
             end
             return self.Bosses[uDetails.name].UnitList[unitID]
         end

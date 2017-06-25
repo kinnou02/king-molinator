@@ -30,9 +30,11 @@ local TAR = {
 TAR.Lang.Unit = {}
 TAR.Lang.Unit.TarJulia = KBM.Language:Add("TarJulia")
 TAR.Lang.Unit.TarJulia:SetFrench("TarJulia")
+TAR.Lang.Unit.TarJulia:SetGerman("Tarjulia")
 
 TAR.Lang.Unit.Soul = KBM.Language:Add("Infernal Soul")
 TAR.Lang.Unit.Soul:SetFrench("Âme infernale")
+TAR.Lang.Unit.Soul:SetGerman("Infernalische Seele")
 
 TAR.TarJulia = {
     Mod = TAR,
@@ -81,19 +83,24 @@ KBM.RegisterMod(TAR.ID, TAR)
 TAR.Lang.Unit = {}
 TAR.Lang.Unit.TarJulia = KBM.Language:Add(TAR.TarJulia.Name)
 TAR.Lang.Unit.TarJulia:SetFrench(TAR.TarJulia.Name)
+TAR.Lang.Unit.TarJulia:SetGerman("Tarjulia")
+
 
 TAR.Lang.Unit.Soul = KBM.Language:Add(TAR.Soul.Name)
 TAR.Lang.Unit.Soul:SetFrench("Âme infernale")
+TAR.Lang.Unit.Soul:SetGerman("Infernalische Seele")
 
 -- Ability Dictionary
 TAR.Lang.Ability = {}
 TAR.Lang.Ability.MoltenLava = KBM.Language:Add("Molten Blast")
 TAR.Lang.Ability.MoltenLava:SetFrench("Explosion de magma")
+TAR.Lang.Ability.MoltenLava:SetGerman("Geschmolzene Explosion")
 
 -- Verbose Dictionary
 TAR.Lang.Verbose = {}
 TAR.Lang.Verbose.MoltenLava = KBM.Language:Add("Go to a pillar!")
 TAR.Lang.Verbose.MoltenLava:SetFrench("Allez au pillier!")
+TAR.Lang.Verbose.MoltenLava:SetGerman("Geh zur Säule!")
 
 -- Buff Dictionary
 TAR.Lang.Buff = {}
@@ -215,7 +222,7 @@ function TAR:UnitHPCheck(uDetails, unitID)
         if uDetails.type == self.Soul.UTID then
            if not self.Bosses[uDetails.name].UnitList[unitID] then
                 local SubBossObj = {
-                    Mod = MOD,
+                    Mod = TAR,
                     Level = 72,
                     Name = uDetails.name,
                     Dead = false,
@@ -226,7 +233,7 @@ function TAR:UnitHPCheck(uDetails, unitID)
                 self.Bosses[uDetails.name].UnitList[unitID] = SubBossObj
             else
                 self.Bosses[uDetails.name].UnitList[unitID].Available = true
-                self.Bosses[uDetails.name].UnitList[unitID].UnitID = UnitID
+                self.Bosses[uDetails.name].UnitList[unitID].UnitID = unitID
             end
             return self.Bosses[uDetails.name].UnitList[unitID]
         end
