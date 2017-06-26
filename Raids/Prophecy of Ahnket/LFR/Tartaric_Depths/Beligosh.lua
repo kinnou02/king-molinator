@@ -56,7 +56,7 @@ BEL.Beligosh = {
         AlertsRef = {
           Enabled = true,
           Wrath = KBM.Defaults.AlertObj.Create("red"),
-          Lava = KBM.Defaults.AlertObj.Create("blue"),
+          BurningGround = KBM.Defaults.AlertObj.Create("blue"),
         },
     },
 }
@@ -84,8 +84,8 @@ BEL.Lang.Verbose = {}
 BEL.Lang.Verbose.Wrath = KBM.Language:Add("Go to the edge!")
 BEL.Lang.Verbose.Wrath:SetGerman("An den Rand!")
 
-BEL.Lang.Verbose.Lava = KBM.Language:Add("Lava field")
-BEL.Lang.Verbose.Lava:SetGerman("Lavafeld")
+BEL.Lang.Verbose.BurningGround = KBM.Language:Add("Burning Ground")
+BEL.Lang.Verbose.BurningGround:SetGerman("Lavafeld")
 
 -- Buff Dictionary
 BEL.Lang.Buff = {}
@@ -104,13 +104,13 @@ BEL.Lang.Notify.Wrath = KBM.Language:Add("Beligosh: Feel the wrath of Beligosh!"
 BEL.Lang.Notify.Wrath:SetFrench("Sentez le courroux de Beligosh !")
 BEL.Lang.Notify.Wrath:SetGerman("Beligosh: Spürt den Zorn von Beligosh!")
 
-BEL.Lang.Notify.Lava1 = KBM.Language:Add("Your Weakness is your compassion")
+BEL.Lang.Notify.BurningGround1 = KBM.Language:Add("Your Weakness is your compassion")
 
-BEL.Lang.Notify.Lava2 = KBM.Language:Add("Choose who lives, who dies.")
-BEL.Lang.Notify.Lava2:SetFrench("Choisissez qui vivra et qui mourra")
+BEL.Lang.Notify.BurningGround2 = KBM.Language:Add("Choose who lives, who dies.")
+BEL.Lang.Notify.BurningGround2:SetFrench("Choisissez qui vivra et qui mourra")
 
-BEL.Lang.Notify.Lava3 = KBM.Language:Add("Abandon your friend! Abandon your hope!")
-BEL.Lang.Notify.Lava3:SetFrench("Abandonnez vos amis ! Abandonnez l'espoir !")
+BEL.Lang.Notify.BurningGround3 = KBM.Language:Add("Abandon your friend! Abandon your hope!")
+BEL.Lang.Notify.BurningGround3:SetFrench("Abandonnez vos amis ! Abandonnez l'espoir !")
 
 -- Description Dictionary
 BEL.Lang.Main = {}
@@ -280,7 +280,7 @@ function BEL:Start()
 
     -- Create Alerts
     self.Beligosh.AlertsRef.Wrath = KBM.Alert:Create(self.Lang.Verbose.Wrath[KBM.Lang], 10, true, true, "red")
-    self.Beligosh.AlertsRef.Lava = KBM.Alert:Create(self.Lang.Verbose.Lava[KBM.Lang], 3, true, true, "blue")
+    self.Beligosh.AlertsRef.BurningGround = KBM.Alert:Create(self.Lang.Verbose.BurningGround[KBM.Lang], 3, true, true, "blue")
     KBM.Defaults.AlertObj.Assign(self.Beligosh)
 
     -- Assign Alerts and Timers to Triggers
@@ -295,14 +295,14 @@ function BEL:Start()
     self.Beligosh.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
     self.Beligosh.Triggers.PhaseTwo:AddAlert(self.Beligosh.AlertsRef.Wrath)
 
-    self.Beligosh.Triggers.lava1 = KBM.Trigger:Create(self.Lang.Notify.Lava1[KBM.Lang], "say", self.Beligosh)
-    self.Beligosh.Triggers.lava1:AddAlert(self.Beligosh.AlertsRef.Lava)
+    self.Beligosh.Triggers.BurningGround1 = KBM.Trigger:Create(self.Lang.Notify.BurningGround1[KBM.Lang], "say", self.Beligosh)
+    self.Beligosh.Triggers.BurningGround1:AddAlert(self.Beligosh.AlertsRef.BurningGround)
 
-    self.Beligosh.Triggers.lava2 = KBM.Trigger:Create(self.Lang.Notify.Lava2[KBM.Lang], "say", self.Beligosh)
-    self.Beligosh.Triggers.lava2:AddAlert(self.Beligosh.AlertsRef.Lava)
+    self.Beligosh.Triggers.BurningGround2 = KBM.Trigger:Create(self.Lang.Notify.BurningGround2[KBM.Lang], "say", self.Beligosh)
+    self.Beligosh.Triggers.BurningGround2:AddAlert(self.Beligosh.AlertsRef.BurningGround)
 
-    self.Beligosh.Triggers.lava3 = KBM.Trigger:Create(self.Lang.Notify.Lava3[KBM.Lang], "say", self.Beligosh)
-    self.Beligosh.Triggers.lava3:AddAlert(self.Beligosh.AlertsRef.Lava)
+    self.Beligosh.Triggers.BurningGround3 = KBM.Trigger:Create(self.Lang.Notify.BurningGround3[KBM.Lang], "say", self.Beligosh)
+    self.Beligosh.Triggers.BurningGround3:AddAlert(self.Beligosh.AlertsRef.BurningGround)
 
     self.Beligosh.Triggers.AddPhase2 = KBM.Trigger:Create(40, "percent", self.Beligosh)
     self.Beligosh.Triggers.AddPhase2:AddPhase(self.AddPhase)
