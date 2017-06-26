@@ -191,6 +191,13 @@ COF.Lang.Menu.FirstFlamescape = KBM.Language:Add("First " .. COF.Lang.Ability.Fl
 COF.Lang.Menu.FirstFlamescape:SetFrench("Première " .. COF.Lang.Ability.Flamescape[KBM.Lang])
 COF.Lang.Main.FirstFlamescape:SetGerman("Erstes ".. COF.Lang.Ability.Flamescape[KBM.Lang])
 
+COF.Lang.Notify.DanazhalPop = KBM.Language:Add('Contessa Danazhal, "Did you release me? Wonderful! I shall escape after I fest on your souls!"')
+
+-- Menu Dictionary
+COF.Lang.Menu = {}
+COF.Lang.Menu.FirstFlamescape = KBM.Language:Add("First " .. COF.Lang.Ability.Flamescape[KBM.Lang])
+COF.Lang.Menu.FirstFlamescape:SetFrench("Première " .. COF.Lang.Ability.Flamescape[KBM.Lang])
+
 -- Description Dictionary
 COF.Lang.Main = {}
 COF.Lang.Main.Descript = KBM.Language:Add("The Council of Fate")

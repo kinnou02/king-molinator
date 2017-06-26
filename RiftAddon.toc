@@ -614,10 +614,17 @@ SavedVariables = {
             KBMPOATDBEL_Settings = "account",
             KBMPOATDTAR_Settings = "account",
             KBMPOATDMAL_Settings = "account",
+			KBMPOATDCOF_Settings = "account",
             chKBMPOATD_Settings = "character",
             chKBMPOATDBEL_Settings ="character",
             chKBMPOATDTAR_Settings = "character",
 			chKBMPOATDMAL_Settings = "character",
+			chKBMPOATDCOF_Settings = "character",
+        -- LFR queen's focci
+            KBMPOAQF_Settings = "account",
+            KBMPOAQFHE_Settings = "account",
+            chKBMPOAQF_Settings = "character",
+            chKBMPOAQFHE_Settings = "character",
 	
     -- PoA Experts
         -- Intrepid Darkening Deeps

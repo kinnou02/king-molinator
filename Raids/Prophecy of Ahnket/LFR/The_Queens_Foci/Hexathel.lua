@@ -67,19 +67,19 @@ KBM.RegisterMod(HX.ID, HX)
 HX.Lang.Unit = {}
 HX.Lang.Unit.Hexathel = KBM.Language:Add(HX.Hexathel.Name)
 --HX.Lang.Unit.Hexathel:SetGerman("Hexathel")
---HX.Lang.Unit.Hexathel:SetFrench("Hexathel")
+HX.Lang.Unit.Hexathel:SetFrench("Hexathel")
 --HX.Lang.Unit.Hexathel:SetRussian("Беругаст")
 --HX.Lang.Unit.Hexathel:SetKorean("베루하스트")
 HX.Hexathel.Name = HX.Lang.Unit.Hexathel[KBM.Lang]
 HX.Descript = HX.Hexathel.Name
 -- Additional Unit Dictionary
 HX.Lang.Unit.Grid = KBM.Language:Add("Grid Phase")
---HX.Lang.Unit.Grid:SetFrench("Flamme bondissante")
+HX.Lang.Unit.Grid:SetFrench("Quadrillage")
 --HX.Lang.Unit.Grid:SetGerman("Springende Flamme")
 --HX.Lang.Unit.Grid:SetRussian("Мечущееся пламя")
 --HX.Lang.Unit.Grid:SetKorean("도약하는 불꽃")
 HX.Lang.Unit.Corner = KBM.Language:Add("Run to Corner")
---HX.Lang.Unit.Grid:SetFrench("Flamme bondissante")
+HX.Lang.Unit.Grid:SetFrench("Courrez jusqu'au coin")
 --HX.Lang.Unit.Grid:SetGerman("Springende Flamme")
 --HX.Lang.Unit.Grid:SetRussian("Мечущееся пламя")
 --HX.Lang.Unit.Grid:SetKorean("도약하는 불꽃")
@@ -93,14 +93,14 @@ HX.Lang.Ability.Webtoss = KBM.Language:Add("Webtoss")
 HX.Lang.Ability.Silken = KBM.Language:Add("Silken Friends")
 --HX.Lang.Ability.Silken:SetGerman("Beschworene Flamme")
 --HX.Lang.Ability.Silken:SetRussian("Призванный огонь")
---HX.Lang.Ability.Silken:SetFrench("Flamme invoquée")
+HX.Lang.Ability.Silken:SetFrench("Amis soyeux")
 --HX.Lang.Ability.Silken:SetKorean("소환된 불꽃")
 -- Notify Dictionary
 HX.Lang.Notify = {}
 HX.Lang.Notify.Grid = KBM.Language:Add('You cannot hope to survive Ascended. I pull the strings. Soon you will be my new puppets.')
 --HX.Lang.Notify.Grid:SetGerman('Hexathel sagt: "Ein Begleiter von Flammenmaul sollte Euch warmhalten."')
 --HX.Lang.Notify.Grid:SetRussian('Беругаст говорит: "питомец Маэлфорджа вас согреет."')
---HX.Lang.Notify.Grid:SetFrench('Hexathel dit : "Un familier de Maelforge devrait vous tenir au chaud."')
+HX.Lang.Notify.Grid:SetFrench('Hexathel dit : "N\'espérez pas survivre, Élus. Je tire les ficelles. Vous serez bientôt mes nouvelles marionnettes."')
 --HX.Lang.Notify.Grid:SetKorean('마엘포지의 소환수가 널 따뜻하게 데워줄 것이다."라고 말합니다."')
 
 -- Menu Dictionary
@@ -108,13 +108,13 @@ HX.Lang.Menu = {}
 HX.Lang.Menu.Grid = KBM.Language:Add("First "..HX.Lang.Unit.Grid[KBM.Lang])
 --HX.Lang.Menu.Grid:SetGerman("Erste "..HX.Lang.Unit.Grid[KBM.Lang])
 --HX.Lang.Menu.Grid:SetRussian("Первый "..HX.Lang.Unit.Grid[KBM.Lang])
---HX.Lang.Menu.Grid:SetFrench("Première "..HX.Lang.Unit.Grid[KBM.Lang])
+HX.Lang.Menu.Grid:SetFrench("Première "..HX.Lang.Unit.Grid[KBM.Lang])
 --HX.Lang.Menu.Grid:SetKorean("첫번째 불길 전이")
 -- Verbose Dictionary
 HX.Lang.Verbose = {}
 HX.Lang.Verbose.Until = KBM.Language:Add(" (Until first)")
 --HX.Lang.Verbose.Until:SetRussian(" (первое)")
---HX.Lang.Verbose.Until:SetFrench(" (jusqu'à la première)")
+HX.Lang.Verbose.Until:SetFrench(" (jusqu'à la première)")
 --HX.Lang.Verbose.Until:SetGerman(" (bis zum ersten)")
 --HX.Lang.Verbose.Until:SetKorean(" (첫번째 까지)")
 

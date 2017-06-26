@@ -30,7 +30,7 @@ ROTP.Lang = {}
 ROTP.Lang.Main = {}
 ROTP.Lang.Main.ROTP = KBM.Language:Add(ROTP.Name)
 ROTP.Lang.Main.ROTP:SetGerman("Aufstieg des Phönix")
-ROTP.Lang.Main.ROTP:SetFrench("Envol du Ph\195\169nix")
+ROTP.Lang.Main.ROTP:SetFrench("Intrépide: Envol du Ph\195\169nix")
 ROTP.Lang.Main.ROTP:SetRussian("Возрождение Феникса")
 ROTP.Lang.Main.ROTP:SetKorean("불사조 오르막")
 ROTP.Name = ROTP.Lang.Main.ROTP[KBM.Lang]
