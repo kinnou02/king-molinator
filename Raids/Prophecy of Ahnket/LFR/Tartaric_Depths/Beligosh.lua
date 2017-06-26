@@ -26,6 +26,7 @@ local BEL = {
     Object = "BEL",
 }
 
+-- Main Unit Dictionary
 BEL.Lang.Unit = {}
 BEL.Lang.Unit.Beligosh = KBM.Language:Add("Beligosh")
 BEL.Lang.Unit.Beligosh:SetFrench("Beligosh")
@@ -74,15 +75,6 @@ BEL.Golem = {
 
 KBM.RegisterMod(BEL.ID, BEL)
 
--- Main Unit Dictionary
-BEL.Lang.Unit = {}
-BEL.Lang.Unit.Beligosh = KBM.Language:Add(BEL.Beligosh.Name)
-BEL.Lang.Unit.Beligosh:SetFrench("Beligosh")
-BEL.Lang.Unit.Beligosh:SetGerman("Beligosh")
-
-BEL.Lang.Unit.Golem = KBM.Language:Add(BEL.Golem.Name)
-BEL.Lang.Unit.Golem:SetFrench("Golem alaviax")
-BEL.Lang.Unit.Golem:SetGerman("Alavaxianischer Golem")
 
 -- Ability Dictionary
 BEL.Lang.Ability = {}
