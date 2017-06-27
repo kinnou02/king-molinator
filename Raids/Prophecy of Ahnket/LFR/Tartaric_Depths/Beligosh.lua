@@ -85,7 +85,7 @@ BEL.Lang.Verbose.Wrath = KBM.Language:Add("Go to the edge!")
 BEL.Lang.Verbose.Wrath:SetGerman("An den Rand!")
 
 BEL.Lang.Verbose.BurningGround = KBM.Language:Add("Burning Ground")
-BEL.Lang.Verbose.BurningGround:SetGerman("Lavafeld")
+BEL.Lang.Verbose.BurningGround:SetGerman("Brennende Erde")
 
 -- Buff Dictionary
 BEL.Lang.Buff = {}
