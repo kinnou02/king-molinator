@@ -189,14 +189,14 @@ COF.Lang.Notify.DanazhalPop:SetGerman('Gräfin Danazhal: "Ihr wart es, der mich 
 COF.Lang.Menu = {}
 COF.Lang.Menu.FirstFlamescape = KBM.Language:Add("First " .. COF.Lang.Ability.Flamescape[KBM.Lang])
 COF.Lang.Menu.FirstFlamescape:SetFrench("Première " .. COF.Lang.Ability.Flamescape[KBM.Lang])
---COF.Lang.Main.FirstFlamescape:SetGerman("Erstes ".. COF.Lang.Ability.Flamescape[KBM.Lang])
+COF.Lang.Menu.FirstFlamescape:SetGerman("Erstes ".. COF.Lang.Ability.Flamescape[KBM.Lang])
 
 
 
 -- Description Dictionary
 COF.Lang.Main = {}
 COF.Lang.Main.Descript = KBM.Language:Add("The Council of Fate")
-COF.Lang.Main.Descript:SetGerman ("Rat des Schicksals")
+COF.Lang.Main.Descript:SetGerman("Rat des Schicksals")
 COF.Descript = COF.Lang.Main.Descript[KBM.Lang]
 
 function COF:AddBosses(KBM_Boss)
