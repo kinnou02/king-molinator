@@ -82,10 +82,12 @@ BEL.Lang.Ability = {}
 -- Verbose Dictionary
 BEL.Lang.Verbose = {}
 BEL.Lang.Verbose.Wrath = KBM.Language:Add("Go to the edge!")
+BEL.Lang.Verbose.Wrath:SetFrench("Aller au bord!")
 BEL.Lang.Verbose.Wrath:SetGerman("An den Rand!")
 
 BEL.Lang.Verbose.BurningGround = KBM.Language:Add("Burning Ground")
 BEL.Lang.Verbose.BurningGround:SetGerman("Brennende Erde")
+BEL.Lang.Verbose.BurningGround:SetFrench("Terrain enflammé")
 
 -- Buff Dictionary
 BEL.Lang.Buff = {}
@@ -94,14 +96,16 @@ BEL.Lang.Buff = {}
 BEL.Lang.Debuff = {}
 BEL.Lang.Debuff.Vengeance = KBM.Language:Add("Vengeance of Beligosh")--tank debuff
 BEL.Lang.Debuff.Vengeance:SetGerman("Rache von Beligosh")
+BEL.Lang.Debuff.Vengeance:SetFrench("Vengeance de Beligosh")
 
 BEL.Lang.Debuff.Seed = KBM.Language:Add("Seed of Immolation")--raid debuff
 BEL.Lang.Debuff.Seed:SetGerman("Saat der Opferung")
+BEL.Lang.Debuff.Seed:SetFrench("Graine d'immolation")
 
 -- Notify Dictionary
 BEL.Lang.Notify = {}
 BEL.Lang.Notify.Wrath = KBM.Language:Add("Beligosh: Feel the wrath of Beligosh!")
-BEL.Lang.Notify.Wrath:SetFrench("Sentez le courroux de Beligosh !")
+BEL.Lang.Notify.Wrath:SetFrench("Beligosh : Sentez le courroux de Beligosh !")
 BEL.Lang.Notify.Wrath:SetGerman("Beligosh: Spürt den Zorn von Beligosh!")
 
 BEL.Lang.Notify.BurningGround1 = KBM.Language:Add("Your Weakness is your compassion")
