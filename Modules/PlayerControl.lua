@@ -29,6 +29,7 @@ PC.RezBank = {
 	["mage"] = {
 		["A2D3F2123EE93DE48"] = {}, -- Spark of Life
 		["A4AE33670A72C0F45"] = {}, -- Soul Tether
+        ["A54DDD52299FB6DAB"] = {}, -- Frostkeeper (Suspended Reanimation)
 	},
 	["warrior"] = {
 		["A5F5BA8A108A5111A"] = {}, -- Soul Redemption
