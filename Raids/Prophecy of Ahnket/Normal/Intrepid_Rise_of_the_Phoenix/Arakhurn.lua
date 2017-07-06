@@ -461,10 +461,10 @@ end
 function HA:Start()
 	-- Create Timers
     self.Arakhurn.TimersRef.LavaFirst = KBM.MechTimer:Add(self.Lang.Ability.Lava[KBM.Lang], 40)
-	self.Arakhurn.TimersRef.LavaFirst.MenuName = self.Lang.Menu.LavaFirst[KBM.Lang]
-	self.Arakhurn.TimersRef.Lava = KBM.MechTimer:Add(self.Lang.Ability.Lava[KBM.Lang], 54)
-    self.Arakhurn.TimersRef.LavaPThree = KBM.MechTimer:Add(self.Lang.Ability.Lava[KBM.Lang], 45)
-	self.Arakhurn.TimersRef.LavaPThree.MenuName = self.Lang.Menu.LavaPThree[KBM.Lang]
+    self.Arakhurn.TimersRef.LavaFirst.MenuName = self.Lang.Menu.LavaFirst[KBM.Lang]
+    self.Arakhurn.TimersRef.Lava = KBM.MechTimer:Add(self.Lang.Ability.Lava[KBM.Lang], 54)
+    self.Arakhurn.TimersRef.LavaPThree = KBM.MechTimer:Add(self.Lang.Ability.Lava[KBM.Lang], 44)
+    self.Arakhurn.TimersRef.LavaPThree.MenuName = self.Lang.Menu.LavaPThree[KBM.Lang]
 
   
 	self.Arakhurn.TimersRef.NovaFirst = KBM.MechTimer:Add(self.Lang.Ability.Nova[KBM.Lang], 46)
