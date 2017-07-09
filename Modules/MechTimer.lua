@@ -1,10 +1,13 @@
 ﻿local AddonIni, KBM = ...
 
 KBM.Defaults.TimerObj = {}
-function KBM.Defaults.TimerObj.Create(Color)
+function KBM.Defaults.TimerObj.Create(Color, Role)
 	if not Color then
 		Color = "blue"
 	end
+    if not Role then
+        Role = "all"
+    end
 	if not KBM.Colors.List[Color] then
 		error("Color error for TimerObj.Create ("..tostring(Color)..")\nColor Index does not exist.")
 	end
@@ -13,7 +16,10 @@ function KBM.Defaults.TimerObj.Create(Color)
 		Enabled = true,
 		Color = Color,
 		Default_Color = Color,
+        Role = Role,
+        Default_Role = Role,
 		Custom = false,
+		CustomRole = false,
 	}
 	return TimerObj
 end
@@ -47,7 +53,27 @@ function KBM.Defaults.TimerObj.Assign(BossObj)
 				else
 					Data.Color = Data.Default_Color
 				end
-				--Data.Settings.Default_Color = nil
+                --Data.Settings.Default_Color = nil
+                
+                Data.Default_Role = Data.Settings.Default_Role
+				Data.Settings.Default_Role = nil
+				if not KBM.Roles.List[Data.Settings.Role] then
+                    if(KBM.debug) then
+                        print("TimerObj Assign Error: "..Data.ID)
+                        print("Role Index ("..Data.Settings.Role..") does not exist, ignoring settings.")
+                        print("For: "..BossObj.Name)
+                    end
+					Data.Settings.Role = "all"
+				end
+				if Data.CustomRole then
+					Data.Role = Data.Settings.Role
+				else
+					Data.Role = Data.Default_Role
+				end
+                --if not KBM.Roles.List[KBM.Role][Data.Role] then
+                 --   print("TimerObj Assign: "..Data.ID.." ("..Data.Role.."). Role ".. KBM.Role .." has this Timer Disabled.")
+                 --   Data.Enabled = false
+               -- end
 			end
 		else
 			print("Warning: "..ID.." is undefined in TimersRef")
@@ -264,10 +290,21 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 	Timer.Priority = 0
 	Timer.Custom = false
 	Timer.Color = KBM.MechTimer.Settings.Color
+	Timer.Role = "all"
 	Timer.HasMenu = true
 	if type(Name) ~= "string" then
 		error("Expecting String for Name, got "..type(Name))
 	end
+    
+    function Timer:IsEnabled()
+        print(self.Enabled)
+        print(KBM.Role)
+        print(self.Role)
+        if(not self.Enabled or not KBM.Roles.List[KBM.Role][self.Role]) then
+            return false
+        end
+        return true
+    end
 	
 	function self:AddRemove(Object, Force)
 		if not Object.Removing then
@@ -301,7 +338,8 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 	end
 	
 	function Timer:Start(CurrentTime, DebugInfo)	
-		if self.Enabled then
+		--if self.Enabled then
+        if self:IsEnabled() then
 			if self.Phase > 0 then
 				if KBM.CurrentMod then
 					if self.Phase < KBM.CurrentMod.Phase then
@@ -386,7 +424,8 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 	end
 	
 	function Timer:Queue(Duration)
-		if self.Enabled then
+		--if self.Enabled then
+        if self:IsEnabled() then
 			KBM.MechTimer:AddStart(self, Duration)
 		end
 	end
@@ -566,7 +605,7 @@ function KBM.MechTimer:Add(Name, Duration, Repeat)
 	
 	function Timer:NoMenu()
 		self.HasMenu = false
-		self.Enabled = true
+		self.Enabled = true -- TODO: does this need updating with the new roles?
 	end
 	
 	function Timer:SetLink(Timer)

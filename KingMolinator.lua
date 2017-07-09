@@ -925,6 +925,42 @@ function KBM.Numbers.GetPlace(Number)
 	return Number..KBM.Numbers.Place[Check]
 end
 
+-- Role List
+KBM.Role = 1
+KBM.Roles = {
+	List = {
+		[1] = {
+			Name = "All",
+            all = true,
+			tank = true,
+			healer = true,
+			damage = true,
+		},
+		[2] = {
+			Name = "Tank",
+            all = true,
+			tank = true,
+			healer = false,
+			damage = false,
+		},
+		[3] = {
+			Name = "Healer",
+            all = true,
+			tank = false,
+			healer = true,
+			damage = false,
+		},
+		[4] = {
+			Name = "DPS",
+            all = true,
+			tank = false,
+			healer = false,
+			damage = true,
+		},
+	}
+}
+
+
 -- Main Color Library.
 -- Colors will remain preset based to avoid ugly videos :)
 KBM.Colors = {

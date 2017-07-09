@@ -32,6 +32,16 @@ local function BuildMenuSettings()
 			end
 			KBM.Ready:SwapSettings(bool)
 		end
+        
+        function self:Role(item)
+			KBM.Role = item
+            KBM.Options.Role = item
+            print("Role is now ".. item .." (".. KBM.Roles.List[item].Name ..")")
+		end
+        
+        function self:Enabled(bool)
+			KBM.StateSwitch(bool)
+		end
 
 		function self:Enabled(bool)
 			KBM.StateSwitch(bool)
@@ -69,7 +79,11 @@ local function BuildMenuSettings()
 		MenuItem:CreateCheck(KBM.Language.Options.Sheep[KBM.Lang], KBM.Options.Sheep, "Protect", self)
 		MenuItem = Item.UI.CreateHeader(KBM.Language.Options.Button[KBM.Lang], KBM.Options.Button, "Visible", self)
 		MenuItem:CreateCheck(KBM.Language.Options.LockButton[KBM.Lang], KBM.Options.Button, "Unlocked", self)
-		
+        
+        MenuItem = Item.UI.CreateDropDown("Role:", KBM.Options, "Role", self)
+        for _,v in ipairs(KBM.Roles.List) do
+            table.insert(MenuItem.ItemList, v.Name)
+        end        
 		Item:Select()
 	end
 
