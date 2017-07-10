@@ -28,12 +28,38 @@ local COF = {
 
 -- Main Unit Dictionary
 COF.Lang.Unit = {}
+COF.Lang.Unit.Boldoch = KBM.Language:Add("Marchioness Boldoch")
+COF.Lang.Unit.Boldoch:SetGerman("Markgräfin Boldoch")
+COF.Lang.Unit.Boldoch:SetFrench("Marquise Boldoch")
+
+COF.Lang.Unit.Danazhal = KBM.Language:Add("Countessa Danazhal")
+COF.Lang.Unit.Danazhal:SetGerman("Gräfin Danazhal")
+COF.Lang.Unit.Danazhal:SetFrench("Countessa Danazhal")
+
+COF.Lang.Unit.Pleuzhal = KBM.Language:Add("Count Pleuzhal")
+COF.Lang.Unit.Pleuzhal:SetGerman("Graf Pleuzhal")
+COF.Lang.Unit.Pleuzhal:SetFrench("Comte Pluezhal")
+
+COF.Lang.Unit.BoldochSoul = KBM.Language:Add("Boldoch's Soul")
+COF.Lang.Unit.BoldochSoul:SetGerman("Boldochs Seele")
+COF.Lang.Unit.BoldochSoul:SetFrench("Âme de Boldoch")
+
+COF.Lang.Unit.DanazhalSoul = KBM.Language:Add("Danazhal's Soul")
+COF.Lang.Unit.DanazhalSoul:SetGerman("Danazhals Seele")
+COF.Lang.Unit.DanazhalSoul:SetFrench("Âme de Danazhal")
+
+COF.Lang.Unit.PleuzhalSoul = KBM.Language:Add("Pleuzhal's Soul")
+COF.Lang.Unit.PleuzhalSoul:SetGerman("Pleuzhals Seele")
+COF.Lang.Unit.PleuzhalSoul:SetFrench("Âme de Pluezhal")
+
+-- Main Unit Dictionary
+COF.Lang.Unit = {}
 
 COF.Danazhal = {
     Mod = COF,
     Level = "??",
     Active = false,
-    Name = "Countessa Danazhal",
+    Name = COF.Lang.Unit.Danazhal[KBM.Lang],
     Menu = {},
     AlertsRef = {},
     TimersRef = {},
@@ -62,7 +88,7 @@ COF.Boldoch = {
     Mod = COF,
     Level = "??",
     Active = false,
-    Name = "Marchioness Boldoch",
+    Name = COF.Lang.Unit.Boldoch[KBM.Lang],
     Menu = {},
     AlertsRef = {},
     Castbar = nil,
@@ -78,7 +104,7 @@ COF.Pleuzhal = {
     Mod = COF,
     Level = "??",
     Active = false,
-    Name = "Count Pleuzhal",
+    Name = COF.Lang.Unit.Pleuzhal[KBM.Lang],
     Menu = {},
     AlertsRef = {},
     Castbar = nil,
@@ -94,7 +120,7 @@ COF.DanazhalSoul = {
     Mod = COF,
     Level = "??",
     Active = false,
-    Name = "Danazhal's Soul",
+    Name = COF.Lang.Unit.DanazhalSoul[KBM.Lang],
     Menu = {},
     AlertsRef = {},
     Castbar = nil,
@@ -110,7 +136,7 @@ COF.BoldochSoul = {
     Mod = COF,
     Level = "??",
     Active = false,
-    Name = "Boldoch's Soul",
+    Name = COF.Lang.Unit.BoldochSoul[KBM.Lang],
     Menu = {},
     AlertsRef = {},
     Castbar = nil,
@@ -126,7 +152,7 @@ COF.PleuzhalSoul = {
     Mod = COF,
     Level = "??",
     Active = false,
-    Name = "Pleuzhal's Soul",
+    Name = COF.Lang.Unit.PleuzhalSoul[KBM.Lang],
     Menu = {},
     AlertsRef = {},
     Castbar = nil,
@@ -141,31 +167,6 @@ COF.PleuzhalSoul = {
 
 KBM.RegisterMod(COF.ID, COF)
 
--- Main Unit Dictionary
-COF.Lang.Unit = {}
-COF.Lang.Unit.Boldoch = KBM.Language:Add("Marchioness Boldoch")
-COF.Lang.Unit.Boldoch:SetGerman("Markgräfin Boldoch")
-COF.Lang.Unit.Boldoch:SetFrench("Marquise Boldoch")
-
-COF.Lang.Unit.Danazhal = KBM.Language:Add("Countessa Danazhal")
-COF.Lang.Unit.Danazhal:SetGerman("Gräfin Danazhal")
-COF.Lang.Unit.Danazhal:SetFrench("Countessa Danazhal")
-
-COF.Lang.Unit.Pleuzhal = KBM.Language:Add("Count Pleuzhal")
-COF.Lang.Unit.Pleuzhal:SetGerman("Graf Pleuzhal")
-COF.Lang.Unit.Pleuzhal:SetFrench("Comte Pluezhal")
-
-COF.Lang.Unit.BoldochSoul = KBM.Language:Add("Boldoch's Soul")
-COF.Lang.Unit.BoldochSoul:SetGerman("Boldochs Seele")
-COF.Lang.Unit.BoldochSoul:SetFrench("Âme de Boldoch")
-
-COF.Lang.Unit.DanazhalSoul = KBM.Language:Add("Danazhal's Soul")
-COF.Lang.Unit.DanazhalSoul:SetGerman("Danazhals Seele")
-COF.Lang.Unit.DanazhalSoul:SetFrench("Âme de Danazhal")
-
-COF.Lang.Unit.PleuzhalSoul = KBM.Language:Add("Pleuzhal's Soul")
-COF.Lang.Unit.PleuzhalSoul:SetGerman("Pleuzhals Seele")
-COF.Lang.Unit.PleuzhalSoul:SetFrench("Âme de Pluezhal")
 
 -- Ability Dictionary
 COF.Lang.Ability = {}
