@@ -52,6 +52,10 @@ COF.Lang.Unit.PleuzhalSoul = KBM.Language:Add("Pleuzhal's Soul")
 COF.Lang.Unit.PleuzhalSoul:SetGerman("Pleuzhals Seele")
 COF.Lang.Unit.PleuzhalSoul:SetFrench("Âme de Pluezhal")
 
+COF.Lang.Unit.Void = KBM.Language:Add("VOID")
+COF.Lang.Unit.Void:SetGerman("LEERE")
+COF.Lang.Unit.Void:SetFrench("NÉANT")
+
 -- Main Unit Dictionary
 COF.Lang.Unit = {}
 
@@ -75,6 +79,7 @@ COF.Danazhal = {
         AlertsRef = {
             Enabled = true,
             Flamescape = KBM.Defaults.AlertObj.Create("red"),
+            Void = KBM.Defaults.AlertObj.Create("blue"),
         },
         TimersRef = {
             Enabled = true,
@@ -164,6 +169,16 @@ COF.PleuzhalSoul = {
     Triggers = {},
 }
 
+COF.Void = {
+    Mod = COF,
+    Level = "72",
+    Name = COF.Lang.Unit.Void[KBM.Lang],
+    UnitList = {},
+    UTID = "U16EAD450095AF958",
+    TimeOut = 15,
+    Ignore = true,
+    Type = "multi",
+}
 
 KBM.RegisterMod(COF.ID, COF)
 
@@ -372,6 +387,7 @@ function COF:Start()
 
     -- Create Alerts
     self.Danazhal.AlertsRef.Flamescape = KBM.Alert:Create(self.Lang.Verbose.Flamescape[KBM.Lang], 5, true, true, "red")
+    self.Danazhal.AlertsRef.Void = KBM.Alert:Create(self.Lang.Unit.Void[KBM.Lang], nil, true, true, "blue")
     KBM.Defaults.AlertObj.Assign(self.Danazhal)
 
     -- Assign Alerts and Timers to Triggers
@@ -381,6 +397,9 @@ function COF:Start()
 
     self.Danazhal.Triggers.Flamescape = KBM.Trigger:Create(self.Lang.Notify.DanazhalPop[KBM.Lang], "notify", self.Danazhal)
     self.Danazhal.Triggers.Flamescape:AddTimer(self.Danazhal.TimersRef.FirstFlamescape)
+
+    self.Danazhal.Triggers.Void = KBM.Trigger:Create("", "npcDamage", self.Void)
+    self.Danazhal.Triggers.Void:AddAlert(self.Danazhal.AlertsRef.Void)
 
     self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 
