@@ -42,7 +42,7 @@ COF.Danazhal = {
     Available = false,
     UnitID = nil,
     UTID = "U6551B8383D9BAB5C",
-    TimeOut = 5,
+    TimeOut = 15,
     Triggers = {},
     Settings = {
         CastBar = KBM.Defaults.Castbar(),
@@ -70,7 +70,7 @@ COF.Boldoch = {
     Available = false,
     UnitID = nil,
     UTID = "U71F642FE4F016DEA",
-    TimeOut = 5,
+    TimeOut = 15,
     Triggers = {},
 }
 
@@ -86,7 +86,7 @@ COF.Pleuzhal = {
     Available = false,
     UnitID = nil,
     UTID = "U56368121432B6952",
-    TimeOut = 5,
+    TimeOut = 15,
     Triggers = {},
 }
 
@@ -102,7 +102,7 @@ COF.DanazhalSoul = {
     Available = false,
     UnitID = nil,
     UTID = "U585E5F376A56877C",
-    TimeOut = 5,
+    TimeOut = 15,
     Triggers = {},
 }
 
@@ -118,7 +118,7 @@ COF.BoldochSoul = {
     Available = false,
     UnitID = nil,
     UTID = "U46F19E3B49A30FA8",
-    TimeOut = 5,
+    TimeOut = 15,
     Triggers = {},
 }
 
@@ -134,7 +134,7 @@ COF.PleuzhalSoul = {
     Available = false,
     UnitID = nil,
     UTID = "U0E00E54B0D012A6C",
-    TimeOut = 5,
+    TimeOut = 15,
     Triggers = {},
 }
 
