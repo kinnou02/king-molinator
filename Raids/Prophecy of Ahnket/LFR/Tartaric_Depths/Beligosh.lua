@@ -44,6 +44,7 @@ BEL.Beligosh = {
     Name = BEL.Lang.Unit.Beligosh[KBM.Lang],
     Menu = {},
     AlertsRef = {},
+    TimersRef = {},
     Castbar = nil,
     Dead = false,
     Available = false,
@@ -57,6 +58,12 @@ BEL.Beligosh = {
           Enabled = true,
           Wrath = KBM.Defaults.AlertObj.Create("red"),
           BurningGround = KBM.Defaults.AlertObj.Create("blue"),
+        },
+        TimersRef = {
+            Enabled = true,
+            SeedOfImmolation = KBM.Defaults.TimerObj.Create("purple"),
+            VengeanceOfBeligosh = KBM.Defaults.TimerObj.Create("blue"),
+            MagmaBreath = KBM.Defaults.TimerObj.Create("red"),
         },
     },
 }
@@ -78,6 +85,7 @@ KBM.RegisterMod(BEL.ID, BEL)
 
 -- Ability Dictionary
 BEL.Lang.Ability = {}
+BEL.Lang.Ability.MagmaBreath = KBM.Language:Add("Magma Breath")
 
 -- Verbose Dictionary
 BEL.Lang.Verbose = {}
@@ -212,6 +220,9 @@ function BEL:UnitHPCheck(uDetails, unitID)
                 self.PhaseObj:SetPhase(self.Beligosh.Name)
                 self.PhaseObj.Objectives:AddPercent(self.Beligosh, 75, 100)
                 self.Phase = 1
+                KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.SeedOfImmolation)
+                KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.VengeanceOfBeligosh)
+                KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.MagmaBreath)
             end
             self.Beligosh.UnitID = unitID
             self.Beligosh.Available = true
@@ -263,9 +274,15 @@ function BEL.PhaseTwo()
         BEL.PhaseObj:SetPhase(5)
         BEL.PhaseObj.Objectives:AddPercent(BEL.Beligosh, 0, 40)
     end
+    KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.SeedOfImmolation)
+    KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.VengeanceOfBeligosh)
+    KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.MagmaBreath)
 end
 
 function BEL.AddPhase()
+    KBM.MechTimer:AddRemove(BEL.Beligosh.TimersRef.SeedOfImmolation)
+    KBM.MechTimer:AddRemove(BEL.Beligosh.TimersRef.VengeanceOfBeligosh)
+    KBM.MechTimer:AddRemove(BEL.Beligosh.TimersRef.MagmaBreath)
     BEL.PhaseObj.Objectives:Remove()
     if BEL.Phase == 1 then
         BEL.Phase = 2
@@ -281,6 +298,10 @@ end
 
 function BEL:Start()
     -- Create Timers
+    self.Beligosh.TimersRef.SeedOfImmolation = KBM.MechTimer:Add(self.Lang.Debuff.SeedOfImmolation[KBM.Lang], 24)
+    self.Beligosh.TimersRef.VengeanceOfBeligosh = KBM.MechTimer:Add(self.Lang.Debuff.VengeanceOfBeligosh[KBM.Lang], 15)
+    self.Beligosh.TimersRef.MagmaBreath = KBM.MechTimer:Add(self.Lang.Ability.MagmaBreath[KBM.Lang], 30)
+    KBM.Defaults.TimerObj.Assign(self.Beligosh)
 
     -- Create Alerts
     self.Beligosh.AlertsRef.Wrath = KBM.Alert:Create(self.Lang.Verbose.Wrath[KBM.Lang], 10, true, true, "red")
@@ -310,4 +331,13 @@ function BEL:Start()
 
     self.Beligosh.Triggers.AddPhase2 = KBM.Trigger:Create(40, "percent", self.Beligosh)
     self.Beligosh.Triggers.AddPhase2:AddPhase(self.AddPhase)
+
+    self.Beligosh.Triggers.SeedOfImmolation = KBM.Trigger:Create(self.Lang.Debuff.SeedOfImmolation[KBM.Lang], "playerDebuff", self.Beligosh)
+    self.Beligosh.Triggers.SeedOfImmolation:AddTimer(self.Beligosh.TimersRef.SeedOfImmolation)
+
+    self.Beligosh.Triggers.VengeanceOfBeligosh = KBM.Trigger:Create(self.Lang.Debuff.VengeanceOfBeligosh[KBM.Lang], "playerDebuff", self.Beligosh)
+    self.Beligosh.Triggers.VengeanceOfBeligosh:AddTimer(self.Beligosh.TimersRef.VengeanceOfBeligosh)
+
+    self.Beligosh.Triggers.MagmaBreath = KBM.Trigger:Create(self.Lang.Ability.MagmaBreath[KBM.Lang], "channel", self.Beligosh)
+    self.Beligosh.Triggers.MagmaBreath:AddTimer(self.Beligosh.TimersRef.MagmaBreath)
 end
