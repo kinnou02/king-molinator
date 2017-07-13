@@ -184,12 +184,28 @@ PI.Constants = {
 			Icons = true,
 			List = {
         -- PoA --
+        ["r4FF9D622653C3AB5"] = { -- Xarthian Witchstone
+            Grade = "High",
+            Level = 70,
+            Callings = {
+                cleric = true,
+                mage = true,
+            },
+        },
+        ["r61E2FFAD62EC73A6"] = { -- Bolidium Weaponstone
+            Grade = "High",
+            Level = 70,
+            Callings = {
+                warrior = true,
+                primalist = true,
+            },
+        },
         ["rFA65F5184E42C822"] = { -- Atramentium Whetstone
           Grade = "High",
           Level = 70,
           Callings = {
             rogue = true,
-						warrior = true,
+            warrior = true,
           },
         },
         ["r143A1D7A79A201D6"] = { -- Faetouched Whetstone
@@ -197,7 +213,7 @@ PI.Constants = {
           Level = 70,
           Callings = {
             cleric = true,
-						mage = true,
+            mage = true,
           },
         },
         ["r70B0A3843EC153B8"] = { -- Atramentium Oilstone
@@ -205,7 +221,7 @@ PI.Constants = {
           Level = 70,
           Callings = {
             warrior = true,
-						primalist = true,
+            primalist = true,
           },
         },
 
@@ -861,6 +877,35 @@ PI.Constants = {
 			Icons = true,
 			List = {
         -- PoA --
+        ["B4D6232986538AB4E"] = { -- Prophetic Fortified Vial
+            Grade = "High",
+            Level = 70,
+            Callings = {
+                mage = true,
+                cleric = true,
+                warrior = true,
+                rogue = true,
+                primalist = true,
+            },
+            Role = {
+                tank = true,
+            },
+        },
+        ["B4182E55276C4F486"] = { -- Visionary Fortified Vial
+            Grade = "Medium",
+            Level = 70,
+            Callings = {
+                mage = true,
+                cleric = true,
+                warrior = true,
+                rogue = true,
+                primalist = true,
+
+            },
+            Role = {
+                tank = true,
+            },
+        },
         ["B03ABEAB575CC9A8E"] = { -- Prophetic Powersurge Vial
 					Grade = "High",
 					Level = 70,

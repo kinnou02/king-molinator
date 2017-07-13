@@ -145,31 +145,39 @@ KBM.RegisterMod(COF.ID, COF)
 COF.Lang.Unit = {}
 COF.Lang.Unit.Boldoch = KBM.Language:Add("Marchioness Boldoch")
 COF.Lang.Unit.Boldoch:SetGerman("Markgräfin Boldoch")
+COF.Lang.Unit.Boldoch:SetFrench("Marquise Boldoch")
 
 COF.Lang.Unit.Danazhal = KBM.Language:Add("Countessa Danazhal")
 COF.Lang.Unit.Danazhal:SetGerman("Gräfin Danazhal")
+COF.Lang.Unit.Danazhal:SetFrench("Countessa Danazhal")
 
 COF.Lang.Unit.Pleuzhal = KBM.Language:Add("Count Pleuzhal")
 COF.Lang.Unit.Pleuzhal:SetGerman("Graf Pleuzhal")
+COF.Lang.Unit.Pleuzhal:SetFrench("Comte Pluezhal")
 
 COF.Lang.Unit.BoldochSoul = KBM.Language:Add("Boldoch's Soul")
 COF.Lang.Unit.BoldochSoul:SetGerman("Boldochs Seele")
+COF.Lang.Unit.BoldochSoul:SetFrench("Âme de Boldoch")
 
 COF.Lang.Unit.DanazhalSoul = KBM.Language:Add("Danazhal's Soul")
 COF.Lang.Unit.DanazhalSoul:SetGerman("Danazhals Seele")
+COF.Lang.Unit.DanazhalSoul:SetFrench("Âme de Danazhal")
 
 COF.Lang.Unit.PleuzhalSoul = KBM.Language:Add("Pleuzhal's Soul")
 COF.Lang.Unit.PleuzhalSoul:SetGerman("Pleuzhals Seele")
+COF.Lang.Unit.PleuzhalSoul:SetFrench("Âme de Pluezhal")
 
 -- Ability Dictionary
 COF.Lang.Ability = {}
 COF.Lang.Ability.Flamescape = KBM.Language:Add("Flamescape")
 COF.Lang.Ability.Flamescape:SetGerman("Flammenformen")
+COF.Lang.Ability.Flamescape:SetFrench("Pyroformation")
 
 -- Verbose Dictionary
 COF.Lang.Verbose = {}
 COF.Lang.Verbose.Flamescape = KBM.Language:Add("Go into the circle")
 COF.Lang.Verbose.Flamescape:SetGerman("In den weissen Kreis")
+COF.Lang.Verbose.Flamescape:SetFrench("Aller dans le cercle")
 
 -- Buff Dictionary
 COF.Lang.Buff = {}
@@ -181,9 +189,11 @@ COF.Lang.Debuff = {}
 COF.Lang.Notify = {}
 COF.Lang.Notify.Flamescape = KBM.Language:Add("The Flamescape begins.")
 COF.Lang.Notify.Flamescape:SetGerman("Das Flammenformen beginnt.")
+ COF.Lang.Notify.Flamescape:SetFrench("La Pyroformation commence.")
 
 COF.Lang.Notify.DanazhalPop = KBM.Language:Add('Contessa Danazhal, "Did you release me? Wonderful! I shall escape after I fest on your souls!"')
 COF.Lang.Notify.DanazhalPop:SetGerman('Gräfin Danazhal: "Ihr wart es, der mich befreite? Wunderbar! Nachdem ich mich an Euren Seelen gelabt habe, werde ich das Weite suchen!"')
+COF.Lang.Notify.DanazhalPop:SetFrench('Countessa Danazhal : "Vous m\'avez libérée ? Magnifique ! Je m\'enfuirai dès que j\'aurai dévoré vos âmes !"')
 
 -- Menu Dictionary
 COF.Lang.Menu = {}
@@ -197,6 +207,7 @@ COF.Lang.Menu.FirstFlamescape:SetGerman("Erstes ".. COF.Lang.Ability.Flamescape[
 COF.Lang.Main = {}
 COF.Lang.Main.Descript = KBM.Language:Add("The Council of Fate")
 COF.Lang.Main.Descript:SetGerman("Rat des Schicksals")
+COF.Lang.Main.Descript:SetFrench("Council du destin")
 COF.Descript = COF.Lang.Main.Descript[KBM.Lang]
 
 function COF:AddBosses(KBM_Boss)

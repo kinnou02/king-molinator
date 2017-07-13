@@ -727,7 +727,7 @@ local function KBM_DefineVars(handle, AddonID)
 				[22] = KBM.Language.Marks.Heart[KBM.Lang],
 				[23] = KBM.Language.Marks.HeartLeft[KBM.Lang],
 				[24] = KBM.Language.Marks.HeartRight[KBM.Lang],
-				[25] = KBM.Language.Marks.HeartLeft[KBM.Lang],
+				[25] = KBM.Language.Marks.Radioactive[KBM.Lang],
 				[26] = KBM.Language.Marks.Sad[KBM.Lang],
 				[27] = KBM.Language.Marks.TankTwo[KBM.Lang],
 				[28] = KBM.Language.Marks.TankThree[KBM.Lang],
