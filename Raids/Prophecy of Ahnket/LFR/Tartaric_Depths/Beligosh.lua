@@ -343,7 +343,7 @@ function BEL:Start()
     self.Beligosh.Triggers.MagmaBreath = KBM.Trigger:Create(self.Lang.Ability.MagmaBreath[KBM.Lang], "channel", self.Beligosh)
     self.Beligosh.Triggers.MagmaBreath:AddTimer(self.Beligosh.TimersRef.MagmaBreath)
 
-    self.Beligosh.TimersRef.Landing.AddTimer(BEL.Beligosh.TimersRef.SeedOfImmolation)
-    self.Beligosh.TimersRef.Landing.AddTimer(BEL.Beligosh.TimersRef.VengeanceOfBeligosh)
-    self.Beligosh.TimersRef.Landing.AddTimer(BEL.Beligosh.TimersRef.MagmaBreath)
+    self.Beligosh.TimersRef.Landing:AddTimer(self.Beligosh.TimersRef.SeedOfImmolation, 0)
+    self.Beligosh.TimersRef.Landing:AddTimer(self.Beligosh.TimersRef.VengeanceOfBeligosh, 0)
+    self.Beligosh.TimersRef.Landing:AddTimer(self.Beligosh.TimersRef.MagmaBreath, 0)
 end
