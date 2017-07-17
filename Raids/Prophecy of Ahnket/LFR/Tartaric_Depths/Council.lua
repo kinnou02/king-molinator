@@ -28,121 +28,6 @@ local COF = {
 
 -- Main Unit Dictionary
 COF.Lang.Unit = {}
-
-COF.Danazhal = {
-    Mod = COF,
-    Level = "??",
-    Active = false,
-    Name = "Countessa Danazhal",
-    Menu = {},
-    AlertsRef = {},
-    TimersRef = {},
-    Castbar = nil,
-    Dead = false,
-    Available = false,
-    UnitID = nil,
-    UTID = "U6551B8383D9BAB5C",
-    TimeOut = 5,
-    Triggers = {},
-    Settings = {
-        CastBar = KBM.Defaults.Castbar(),
-        AlertsRef = {
-            Enabled = true,
-            Flamescape = KBM.Defaults.AlertObj.Create("red"),
-        },
-        TimersRef = {
-            Enabled = true,
-            FirstFlamescape = KBM.Defaults.TimerObj.Create("red"),
-            Flamescape = KBM.Defaults.TimerObj.Create("red"),
-        },
-    },
-}
-
-COF.Boldoch = {
-    Mod = COF,
-    Level = "??",
-    Active = false,
-    Name = "Marchioness Boldoch",
-    Menu = {},
-    AlertsRef = {},
-    Castbar = nil,
-    Dead = false,
-    Available = false,
-    UnitID = nil,
-    UTID = "U71F642FE4F016DEA",
-    TimeOut = 5,
-    Triggers = {},
-}
-
-COF.Pleuzhal = {
-    Mod = COF,
-    Level = "??",
-    Active = false,
-    Name = "Count Pleuzhal",
-    Menu = {},
-    AlertsRef = {},
-    Castbar = nil,
-    Dead = false,
-    Available = false,
-    UnitID = nil,
-    UTID = "U56368121432B6952",
-    TimeOut = 5,
-    Triggers = {},
-}
-
-COF.DanazhalSoul = {
-    Mod = COF,
-    Level = "??",
-    Active = false,
-    Name = "Danazhal's Soul",
-    Menu = {},
-    AlertsRef = {},
-    Castbar = nil,
-    Dead = false,
-    Available = false,
-    UnitID = nil,
-    UTID = "U585E5F376A56877C",
-    TimeOut = 5,
-    Triggers = {},
-}
-
-COF.BoldochSoul = {
-    Mod = COF,
-    Level = "??",
-    Active = false,
-    Name = "Boldoch's Soul",
-    Menu = {},
-    AlertsRef = {},
-    Castbar = nil,
-    Dead = false,
-    Available = false,
-    UnitID = nil,
-    UTID = "U46F19E3B49A30FA8",
-    TimeOut = 5,
-    Triggers = {},
-}
-
-COF.PleuzhalSoul = {
-    Mod = COF,
-    Level = "??",
-    Active = false,
-    Name = "Pleuzhal's Soul",
-    Menu = {},
-    AlertsRef = {},
-    Castbar = nil,
-    Dead = false,
-    Available = false,
-    UnitID = nil,
-    UTID = "U0E00E54B0D012A6C",
-    TimeOut = 5,
-    Triggers = {},
-}
-
-
-KBM.RegisterMod(COF.ID, COF)
-
--- Main Unit Dictionary
-COF.Lang.Unit = {}
 COF.Lang.Unit.Boldoch = KBM.Language:Add("Marchioness Boldoch")
 COF.Lang.Unit.Boldoch:SetGerman("Markgräfin Boldoch")
 COF.Lang.Unit.Boldoch:SetFrench("Marquise Boldoch")
@@ -167,11 +52,142 @@ COF.Lang.Unit.PleuzhalSoul = KBM.Language:Add("Pleuzhal's Soul")
 COF.Lang.Unit.PleuzhalSoul:SetGerman("Pleuzhals Seele")
 COF.Lang.Unit.PleuzhalSoul:SetFrench("Âme de Pluezhal")
 
+COF.Lang.Unit.Void = KBM.Language:Add("VOID")
+COF.Lang.Unit.Void:SetGerman("LEERE")
+COF.Lang.Unit.Void:SetFrench("NÉANT")
+
+COF.Danazhal = {
+    Mod = COF,
+    Level = "??",
+    Active = false,
+    Name = COF.Lang.Unit.Danazhal[KBM.Lang],
+    Menu = {},
+    AlertsRef = {},
+    TimersRef = {},
+    Castbar = nil,
+    Dead = false,
+    Available = false,
+    UnitID = nil,
+    UTID = "U6551B8383D9BAB5C",
+    TimeOut = 60,
+    Triggers = {},
+    Settings = {
+        CastBar = KBM.Defaults.Castbar(),
+        AlertsRef = {
+            Enabled = true,
+            Flamescape = KBM.Defaults.AlertObj.Create("red"),
+            Void = KBM.Defaults.AlertObj.Create("blue"),
+        },
+        TimersRef = {
+            Enabled = true,
+            FirstFlamescape = KBM.Defaults.TimerObj.Create("red"),
+            Flamescape = KBM.Defaults.TimerObj.Create("red"),
+        },
+    },
+}
+
+COF.Boldoch = {
+    Mod = COF,
+    Level = "??",
+    Active = false,
+    Name = COF.Lang.Unit.Boldoch[KBM.Lang],
+    Menu = {},
+    AlertsRef = {},
+    Castbar = nil,
+    Dead = false,
+    Available = false,
+    UnitID = nil,
+    UTID = "U71F642FE4F016DEA",
+    TimeOut = 15,
+    Triggers = {},
+}
+
+COF.Pleuzhal = {
+    Mod = COF,
+    Level = "??",
+    Active = false,
+    Name = COF.Lang.Unit.Pleuzhal[KBM.Lang],
+    Menu = {},
+    AlertsRef = {},
+    Castbar = nil,
+    Dead = false,
+    Available = false,
+    UnitID = nil,
+    UTID = "U56368121432B6952",
+    TimeOut = 15,
+    Triggers = {},
+}
+
+COF.DanazhalSoul = {
+    Mod = COF,
+    Level = "??",
+    Active = false,
+    Name = COF.Lang.Unit.DanazhalSoul[KBM.Lang],
+    Menu = {},
+    AlertsRef = {},
+    Castbar = nil,
+    Dead = false,
+    Available = false,
+    UnitID = nil,
+    UTID = "U585E5F376A56877C",
+    TimeOut = 15,
+    Triggers = {},
+}
+
+COF.BoldochSoul = {
+    Mod = COF,
+    Level = "??",
+    Active = false,
+    Name = COF.Lang.Unit.BoldochSoul[KBM.Lang],
+    Menu = {},
+    AlertsRef = {},
+    Castbar = nil,
+    Dead = false,
+    Available = false,
+    UnitID = nil,
+    UTID = "U46F19E3B49A30FA8",
+    TimeOut = 15,
+    Triggers = {},
+}
+
+COF.PleuzhalSoul = {
+    Mod = COF,
+    Level = "??",
+    Active = false,
+    Name = COF.Lang.Unit.PleuzhalSoul[KBM.Lang],
+    Menu = {},
+    AlertsRef = {},
+    Castbar = nil,
+    Dead = false,
+    Available = false,
+    UnitID = nil,
+    UTID = "U0E00E54B0D012A6C",
+    TimeOut = 15,
+    Triggers = {},
+}
+
+COF.Void = {
+    Mod = COF,
+    Level = "72",
+    Name = COF.Lang.Unit.Void[KBM.Lang],
+    UnitList = {},
+    UTID = "U16EAD450095AF958",
+    TimeOut = 15,
+    Ignore = true,
+    Type = "multi",
+}
+
+KBM.RegisterMod(COF.ID, COF)
+
+
 -- Ability Dictionary
 COF.Lang.Ability = {}
 COF.Lang.Ability.Flamescape = KBM.Language:Add("Flamescape")
 COF.Lang.Ability.Flamescape:SetGerman("Flammenformen")
 COF.Lang.Ability.Flamescape:SetFrench("Pyroformation")
+
+COF.Lang.Ability.Void = KBM.Language:Add("Void")
+
 
 -- Verbose Dictionary
 COF.Lang.Verbose = {}
@@ -219,6 +235,7 @@ function COF:AddBosses(KBM_Boss)
         [self.PleuzhalSoul.Name] = self.PleuzhalSoul,
         [self.BoldochSoul.Name] = self.BoldochSoul,
         [self.DanazhalSoul.Name] = self.DanazhalSoul,
+        [self.Void.Name] = self.Void,
     }
 end
 
@@ -294,9 +311,6 @@ end
 
 function COF:ResetTimers()
     KBM.MechTimer:AddRemove(self.Danazhal.TimersRef.Flamescape)
-    if not self.Danazhal.Dead then
-        KBM.MechTimer:AddStart(self.Danazhal.TimersRef.FirstFlamescape)
-    end
 end
 
 function COF:Death(UnitID)
@@ -308,11 +322,12 @@ function COF:Death(UnitID)
     if self.Boldoch.UnitID == UnitID then
         self.Boldoch.Dead = true
         self.SetObjectives()
-        self:ResetTimers()
     end
     if self.Pleuzhal.UnitID == UnitID then
         self.Pleuzhal.Dead = true
         self.SetObjectives()
+    end
+    if self.DanazhalSoul.UnitID == UnitID then
         self:ResetTimers()
     end
     if self.Danazhal.Dead and self.Boldoch.Dead and self.Pleuzhal.Dead then
@@ -334,6 +349,8 @@ function COF:UnitHPCheck(uDetails, unitID)
                 self.PhaseObj:SetPhase("1")
                 self.Phase = 1
                 self.SetObjectives()
+            end
+            if BossObj == self.Danazhal or BossObj == self.DanazhalSoul then
                 KBM.MechTimer:AddStart(self.Danazhal.TimersRef.FirstFlamescape)
             end
             BossObj.Dead = false
@@ -371,6 +388,7 @@ function COF:Start()
 
     -- Create Alerts
     self.Danazhal.AlertsRef.Flamescape = KBM.Alert:Create(self.Lang.Verbose.Flamescape[KBM.Lang], 5, true, true, "red")
+    self.Danazhal.AlertsRef.Void = KBM.Alert:Create(self.Lang.Unit.Void[KBM.Lang], nil, true, true, "blue")
     KBM.Defaults.AlertObj.Assign(self.Danazhal)
 
     -- Assign Alerts and Timers to Triggers
@@ -380,6 +398,9 @@ function COF:Start()
 
     self.Danazhal.Triggers.Flamescape = KBM.Trigger:Create(self.Lang.Notify.DanazhalPop[KBM.Lang], "notify", self.Danazhal)
     self.Danazhal.Triggers.Flamescape:AddTimer(self.Danazhal.TimersRef.FirstFlamescape)
+
+    self.Danazhal.Triggers.Void = KBM.Trigger:Create(self.Lang.Ability.Void, "damage", self.Void)
+    self.Danazhal.Triggers.Void:AddAlert(self.Danazhal.AlertsRef.Void)
 
     self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 

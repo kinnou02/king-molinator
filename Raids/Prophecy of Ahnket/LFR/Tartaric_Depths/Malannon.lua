@@ -98,6 +98,7 @@ MAL.Lang.Debuff.MarkOfAcrimony:SetGerman("Signum der Verbitterung")
 MAL.Lang.Debuff.MarkOfAcrimony:SetFrench("Marque d'amertume")
 
 MAL.Lang.Debuff.MarkOfSupremacy = KBM.Language:Add("Mark of Supremacy")
+MAL.Lang.Debuff.MarkOfSupremacy:SetFrench("Marque de suprématie")
 MAL.Lang.Debuff.MarkOfSupremacy:SetGerman("Signum der Vormachtstellung")
 
 MAL.Lang.Notify = {}
