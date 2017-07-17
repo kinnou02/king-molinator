@@ -309,9 +309,6 @@ end
 
 function COF:ResetTimers()
     KBM.MechTimer:AddRemove(self.Danazhal.TimersRef.Flamescape)
-    if not self.Danazhal.Dead then
-        KBM.MechTimer:AddStart(self.Danazhal.TimersRef.FirstFlamescape)
-    end
 end
 
 function COF:Death(UnitID)
@@ -323,11 +320,12 @@ function COF:Death(UnitID)
     if self.Boldoch.UnitID == UnitID then
         self.Boldoch.Dead = true
         self.SetObjectives()
-        self:ResetTimers()
     end
     if self.Pleuzhal.UnitID == UnitID then
         self.Pleuzhal.Dead = true
         self.SetObjectives()
+    end
+    if self.DanazhalSoul.UnitID == UnitID then
         self:ResetTimers()
     end
     if self.Danazhal.Dead and self.Boldoch.Dead and self.Pleuzhal.Dead then
