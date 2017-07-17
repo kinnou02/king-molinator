@@ -234,6 +234,7 @@ function COF:AddBosses(KBM_Boss)
         [self.PleuzhalSoul.Name] = self.PleuzhalSoul,
         [self.BoldochSoul.Name] = self.BoldochSoul,
         [self.DanazhalSoul.Name] = self.DanazhalSoul,
+        [self.Void.Name] = self.Void,
     }
 end
 
