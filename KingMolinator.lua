@@ -1436,22 +1436,6 @@ function KBM.CombatEnter(handle, uList)
 	end	
 end
 
-function KBM.dumpInfo(o,i)
-    if i == nil then
-        i = 5
-    end
-   if type(o) == 'table' and i > 0 then
-      local s = '{ '
-      for k,v in pairs(o) do
-         if type(k) ~= 'number' then k = '"'..k..'"' end
-         s = s .. '['..k..'] = ' .. KBM.dumpInfo(v, i-1) .. ','
-      end
-      return s .. '} '
-   else
-      return tostring(o)
-   end
-end
-
 function KBM.Damage(handle, info)
 	-- Damage done by a Non Raid Member to Anything.
 	if KBM.Options.Enabled then
