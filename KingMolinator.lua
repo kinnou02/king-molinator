@@ -1533,7 +1533,7 @@ function KBM.Damage(handle, info)
 	end
 end
 
-function KBM.Heal(info)
+function KBM.Heal(handle, info)
 end
 
 function KBM.CPU:Init()
