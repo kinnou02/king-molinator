@@ -399,7 +399,7 @@ function COF:Start()
     self.Danazhal.Triggers.Flamescape = KBM.Trigger:Create(self.Lang.Notify.DanazhalPop[KBM.Lang], "notify", self.Danazhal)
     self.Danazhal.Triggers.Flamescape:AddTimer(self.Danazhal.TimersRef.FirstFlamescape)
 
-    self.Danazhal.Triggers.Void = KBM.Trigger:Create(self.Lang.Ability.Void, "damage", self.Void)
+    self.Danazhal.Triggers.Void = KBM.Trigger:Create(self.Lang.Ability.Void[KBM.Lang], "damage", self.Void)
     self.Danazhal.Triggers.Void:AddAlert(self.Danazhal.AlertsRef.Void)
 
     self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

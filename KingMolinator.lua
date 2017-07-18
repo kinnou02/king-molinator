@@ -1454,7 +1454,6 @@ end
 
 function KBM.Damage(handle, info)
 	-- Damage done by a Non Raid Member to Anything.
-   -- print ("KBM Info ".. KBM.dumpInfo(info))
 	if KBM.Options.Enabled then
 		if info.targetObj and info.sourceObj then
 			local tarObj = info.targetObj
@@ -1466,9 +1465,7 @@ function KBM.Damage(handle, info)
 					local BossObj = KBM.BossID[srcObj.UnitID]
 					if KBM.CurrentMod then
 						if BossObj then
-                            print ("1 "..info.abilityName)
 							if info.abilityName then
-                                print ("2 "..KBM.Trigger.Damage[info.abilityName])
 								if KBM.Trigger.Damage[info.abilityName] then
 									TriggerObj = KBM.Trigger.Damage[info.abilityName]
 									KBM.Trigger.Queue:Add(TriggerObj, srcObj.UnitID, PlayerObj.UnitID)
