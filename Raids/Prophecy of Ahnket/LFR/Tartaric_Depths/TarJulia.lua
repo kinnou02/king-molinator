@@ -44,6 +44,7 @@ TAR.TarJulia = {
     Menu = {},
     AlertsRef = {},
     TimersRef = {},
+    MechRef = {},
     Castbar = nil,
     Dead = false,
     Available = false,
@@ -54,14 +55,27 @@ TAR.TarJulia = {
     Settings = {
         CastBar = KBM.Defaults.Castbar(),
         AlertsRef = {
-          Enabled = true,
-          MoltenLava = KBM.Defaults.AlertObj.Create("red"),
+            Enabled = true,
+            MoltenBlast = KBM.Defaults.AlertObj.Create("red"),
+            CallForHelp = KBM.Defaults.AlertObj.Create("blue"),
+            Fury = KBM.Defaults.AlertObj.Create("orange"),
+            SpiderWeave = KBM.Defaults.AlertObj.Create("purple"),
         },
         TimersRef = {
             Enabled = true,
-            MoltenLava = KBM.Defaults.TimerObj.Create("red"),
-            FirstMoltenLava = KBM.Defaults.TimerObj.Create("red"),
-        },
+            MoltenBlast = KBM.Defaults.TimerObj.Create("red"),
+            FirstMoltenBlast = KBM.Defaults.TimerObj.Create("red"),
+            CallForHelp = KBM.Defaults.TimerObj.Create("blue"),
+            FirstCallForHelp = KBM.Defaults.TimerObj.Create("blue"),
+            SpiderWeave = KBM.Defaults.TimerObj.Create("purple"),
+            FirstSpiderWeave = KBM.Defaults.TimerObj.Create("purple"),
+            Fury = KBM.Defaults.TimerObj.Create("orange"),
+            FirstFury = KBM.Defaults.TimerObj.Create("orange"),
+        },		
+        MechRef = {
+			Enabled = true,
+			SpiderWeave = KBM.Defaults.MechObj.Create("red"),
+		}
     },
 }
 
@@ -79,35 +93,40 @@ TAR.Soul = {
 
 KBM.RegisterMod(TAR.ID, TAR)
 
--- Main Unit Dictionary
-TAR.Lang.Unit = {}
-TAR.Lang.Unit.TarJulia = KBM.Language:Add(TAR.TarJulia.Name)
-TAR.Lang.Unit.TarJulia:SetFrench(TAR.TarJulia.Name)
-TAR.Lang.Unit.TarJulia:SetGerman("Tarjulia")
-
-TAR.Lang.Unit.Soul = KBM.Language:Add(TAR.Soul.Name)
-TAR.Lang.Unit.Soul:SetFrench("Âme infernale")
-TAR.Lang.Unit.Soul:SetGerman("Infernalische Seele")
-
 -- Ability Dictionary
 TAR.Lang.Ability = {}
-TAR.Lang.Ability.MoltenLava = KBM.Language:Add("Molten Blast")
-TAR.Lang.Ability.MoltenLava:SetFrench("Explosion de magma")
-TAR.Lang.Ability.MoltenLava:SetGerman("Geschmolzene Explosion")
+TAR.Lang.Ability.MoltenBlast = KBM.Language:Add("Molten Blast")
+TAR.Lang.Ability.MoltenBlast:SetFrench("Explosion de magma")
+TAR.Lang.Ability.MoltenBlast:SetGerman("Geschmolzene Explosion")
+
+TAR.Lang.Ability.CallForHelp = KBM.Language:Add("Call for Help")
 
 -- Verbose Dictionary
 TAR.Lang.Verbose = {}
-TAR.Lang.Verbose.MoltenLava = KBM.Language:Add("Go to a pillar!")
-TAR.Lang.Verbose.MoltenLava:SetFrench("Allez au pillier!")
-TAR.Lang.Verbose.MoltenLava:SetGerman("Geh zur Säule!")
+TAR.Lang.Verbose.MoltenBlast = KBM.Language:Add("Go to a pillar!")
+TAR.Lang.Verbose.MoltenBlast:SetFrench("Allez au pillier!")
+TAR.Lang.Verbose.MoltenBlast:SetGerman("Geh zur Säule!")
 
 -- Buff Dictionary
 TAR.Lang.Buff = {}
+TAR.Lang.Buff.Fury = KBM.Language:Add("Fury")
 
 -- Debuff Dictionary
 TAR.Lang.Debuff = {}
+TAR.Lang.Debuff.SpiderWeave = KBM.Language:Add("Spider's Weave")
 
 TAR.Lang.Notify = {}
+
+-- Menu Dictionary
+TAR.Lang.Menu = {}
+TAR.Lang.Menu.FirstMoltenBlast = KBM.Language:Add("First " .. TAR.Lang.Ability.MoltenBlast[KBM.Lang])
+TAR.Lang.Menu.FirstMoltenBlast:SetFrench("Première " .. TAR.Lang.Ability.MoltenBlast[KBM.Lang])
+TAR.Lang.Menu.FirstCallForHelp = KBM.Language:Add("First " .. TAR.Lang.Ability.CallForHelp[KBM.Lang])
+TAR.Lang.Menu.FirstCallForHelp:SetFrench("Première " .. TAR.Lang.Ability.CallForHelp[KBM.Lang])
+TAR.Lang.Menu.FirstFury = KBM.Language:Add("First " .. TAR.Lang.Buff.Fury[KBM.Lang])
+TAR.Lang.Menu.FirstFury:SetFrench("Première " .. TAR.Lang.Buff.Fury[KBM.Lang])
+TAR.Lang.Menu.FirstSpiderWeave = KBM.Language:Add("First " .. TAR.Lang.Debuff.SpiderWeave[KBM.Lang])
+TAR.Lang.Menu.FirstSpiderWeave:SetFrench("Première " .. TAR.Lang.Debuff.SpiderWeave[KBM.Lang])
 
 -- Description Dictionary
 TAR.Lang.Main = {}
@@ -131,6 +150,7 @@ function TAR:InitVars()
         Alerts = KBM.Defaults.Alerts(),
         -- TimersRef = self.Baird.Settings.TimersRef,
         AlertsRef = self.TarJulia.Settings.AlertsRef,
+        MechSpy = KBM.Defaults.MechSpy(),
     }
     KBMPOATDTAR_Settings = self.Settings
     chKBMPOATDTAR_Settings = self.Settings
@@ -212,7 +232,10 @@ function TAR:UnitHPCheck(uDetails, unitID)
                 self.PhaseObj.Objectives:AddPercent(self.TarJulia, 0, 100)
                 self.PhaseObj.Objectives:AddDeath(TAR.Lang.Unit.Soul[KBM.Lang], 9)
                 self.Phase = 1
-                KBM.MechTimer:AddStart(self.TarJulia.TimersRef.FirstMoltenLava)
+                KBM.MechTimer:AddStart(self.TarJulia.TimersRef.FirstMoltenBlast)
+                KBM.MechTimer:AddStart(self.TarJulia.TimersRef.FirstFury)
+                KBM.MechTimer:AddStart(self.TarJulia.TimersRef.FirstSpiderWeave)
+                KBM.MechTimer:AddStart(self.TarJulia.TimersRef.FirstCallForHelp)
             end
             self.TarJulia.UnitID = unitID
             self.TarJulia.Available = true
@@ -252,23 +275,53 @@ function TAR:Timer()
 end
 
 
-
-
 function TAR:Start()
     -- Create Timers
-    self.TarJulia.TimersRef.FirstMoltenLava = KBM.MechTimer:Add(self.Lang.Ability.MoltenLava[KBM.Lang], 20)
-    self.TarJulia.TimersRef.FirstMoltenLava.MenuName = "first molten lava"
-    self.TarJulia.TimersRef.MoltenLava = KBM.MechTimer:Add(self.Lang.Ability.MoltenLava[KBM.Lang], 40)
+    self.TarJulia.TimersRef.FirstMoltenBlast = KBM.MechTimer:Add(self.Lang.Ability.MoltenBlast[KBM.Lang], 20)
+    self.TarJulia.TimersRef.FirstMoltenBlast.MenuName = self.Lang.Menu.FirstMoltenBlast[KBM.Lang]
+    self.TarJulia.TimersRef.MoltenBlast = KBM.MechTimer:Add(self.Lang.Ability.MoltenBlast[KBM.Lang], 40)
+
+    self.TarJulia.TimersRef.FirstCallForHelp = KBM.MechTimer:Add(self.Lang.Ability.CallForHelp[KBM.Lang], 35)
+    self.TarJulia.TimersRef.FirstCallForHelp.MenuName = self.Lang.Menu.FirstCallForHelp[KBM.Lang]
+    self.TarJulia.TimersRef.CallForHelp = KBM.MechTimer:Add(self.Lang.Ability.CallForHelp[KBM.Lang], 40)
+
+    self.TarJulia.TimersRef.FirstSpiderWeave = KBM.MechTimer:Add(self.Lang.Debuff.SpiderWeave[KBM.Lang], 15)
+    self.TarJulia.TimersRef.FirstSpiderWeave.MenuName = self.Lang.Menu.FirstSpiderWeave[KBM.Lang]
+    self.TarJulia.TimersRef.SpiderWeave = KBM.MechTimer:Add(self.Lang.Debuff.SpiderWeave[KBM.Lang], 30)
+
+    self.TarJulia.TimersRef.FirstFury = KBM.MechTimer:Add(self.Lang.Buff.Fury[KBM.Lang], 20)
+    self.TarJulia.TimersRef.FirstFury.MenuName = self.Lang.Menu.FirstFury[KBM.Lang]
+    self.TarJulia.TimersRef.Fury = KBM.MechTimer:Add(self.Lang.Buff.Fury[KBM.Lang], 25)
+
     KBM.Defaults.TimerObj.Assign(self.TarJulia)
 
+    self.TarJulia.MechRef.SpiderWeave = KBM.MechSpy:Add(self.Lang.Debuff.SpiderWeave[KBM.Lang], 5, "playerDebuff", self.TarJulia)
+    KBM.Defaults.MechObj.Assign(self.TarJulia)
+
     -- Create Alerts
-    self.TarJulia.AlertsRef.MoltenLava = KBM.Alert:Create(self.Lang.Verbose.MoltenLava[KBM.Lang], 10, true, true, "red")
+    self.TarJulia.AlertsRef.MoltenBlast = KBM.Alert:Create(self.Lang.Verbose.MoltenBlast[KBM.Lang], 10, true, true, "red")
+    self.TarJulia.AlertsRef.CallForHelp = KBM.Alert:Create(self.Lang.Ability.CallForHelp[KBM.Lang], 1, true, true, "blue")
+    self.TarJulia.AlertsRef.Fury = KBM.Alert:Create(self.Lang.Buff.Fury[KBM.Lang], 1, true, true, "orange")
+    self.TarJulia.AlertsRef.SpiderWeave = KBM.Alert:Create(self.Lang.Debuff.SpiderWeave[KBM.Lang], 1, true, true, "purple")
     KBM.Defaults.AlertObj.Assign(self.TarJulia)
 
     -- Assign Alerts and Timers to Triggers
-    self.TarJulia.Triggers.MoltenLava = KBM.Trigger:Create(self.Lang.Ability.MoltenLava[KBM.Lang], "cast", self.TarJulia)
-    self.TarJulia.Triggers.MoltenLava:AddAlert(self.TarJulia.AlertsRef.MoltenLava, true)
-    self.TarJulia.Triggers.MoltenLava:AddTimer(self.TarJulia.TimersRef.MoltenLava)
+    self.TarJulia.Triggers.MoltenBlast = KBM.Trigger:Create(self.Lang.Ability.MoltenBlast[KBM.Lang], "cast", self.TarJulia)
+    self.TarJulia.Triggers.MoltenBlast:AddAlert(self.TarJulia.AlertsRef.MoltenBlast, true)
+    self.TarJulia.Triggers.MoltenBlast:AddTimer(self.TarJulia.TimersRef.MoltenBlast)
+
+    self.TarJulia.Triggers.CallForHelp = KBM.Trigger:Create(self.Lang.Ability.CallForHelp[KBM.Lang], "cast", self.TarJulia)
+    self.TarJulia.Triggers.CallForHelp:AddAlert(self.TarJulia.AlertsRef.CallForHelp)
+    self.TarJulia.Triggers.CallForHelp:AddTimer(self.TarJulia.TimersRef.CallForHelp)
+
+    self.TarJulia.Triggers.SpiderWeave = KBM.Trigger:Create(self.Lang.Debuff.SpiderWeave[KBM.Lang], "playerDebuff", self.TarJulia)
+    self.TarJulia.Triggers.SpiderWeave:AddAlert(self.TarJulia.AlertsRef.SpiderWeave)
+    self.TarJulia.Triggers.SpiderWeave:AddTimer(self.TarJulia.TimersRef.SpiderWeave)
+    self.TarJulia.Triggers.SpiderWeave:AddSpy(self.TarJulia.MechRef.SpiderWeave)
+
+    self.TarJulia.Triggers.Fury = KBM.Trigger:Create(self.Lang.Buff.Fury[KBM.Lang], "buff", self.TarJulia)
+    self.TarJulia.Triggers.Fury:AddAlert(self.TarJulia.AlertsRef.Fury)
+    self.TarJulia.Triggers.Fury:AddTimer(self.TarJulia.TimersRef.Fury)
 
     self.TarJulia.CastBar = KBM.Castbar:Add(self, self.TarJulia)
     self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
