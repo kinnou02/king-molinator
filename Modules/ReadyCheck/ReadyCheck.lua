@@ -877,7 +877,7 @@ PI.Constants = {
 			Icons = true,
 			List = {
                 -- PoA --
-                ["B4D6232986538AB4E"] = { -- Prophetic Fortified Vial
+                ["B4D6232976538AB4E"] = { -- Prophetic Fortified Vial
                     Grade = "High",
                     Level = 70,
                     Callings = {
@@ -891,7 +891,7 @@ PI.Constants = {
                         tank = true,
                     },
                 },
-                ["B4182E55276C4F486"] = { -- Visionary Fortified Vial
+                ["B4182E55176C4F486"] = { -- Visionary Fortified Vial
                     Grade = "Medium",
                     Level = 70,
                     Callings = {
@@ -914,7 +914,7 @@ PI.Constants = {
 						primalist = true,
 					},
 				},
-                ["B6A8C5F8110D4EFBB"] = { -- Visionary Powersurge Vial
+                ["B6A8C5F8010D4EFBB"] = { -- Visionary Powersurge Vial
 					Grade = "High",
 					Level = 70,
 					Callings = {
@@ -931,7 +931,7 @@ PI.Constants = {
 						cleric = true,
 					},
 				},
-                ["B76F46FAB030D4A53"] = { -- Visionary Brightsurge Vial
+                ["B76F46FAA030D4A53"] = { -- Visionary Brightsurge Vial
 					Grade = "High",
 					Level = 70,
 					Callings = {
