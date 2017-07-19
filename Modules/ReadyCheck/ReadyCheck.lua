@@ -183,47 +183,47 @@ PI.Constants = {
 			w = 36,
 			Icons = true,
 			List = {
-        -- PoA --
-        ["r4FF9D622653C3AB5"] = { -- Xarthian Witchstone
-            Grade = "High",
-            Level = 70,
-            Callings = {
-                cleric = true,
-                mage = true,
-            },
-        },
-        ["r61E2FFAD62EC73A6"] = { -- Bolidium Weaponstone
-            Grade = "High",
-            Level = 70,
-            Callings = {
-                warrior = true,
-                primalist = true,
-            },
-        },
-        ["rFA65F5184E42C822"] = { -- Atramentium Whetstone
-          Grade = "High",
-          Level = 70,
-          Callings = {
-            rogue = true,
-            warrior = true,
-          },
-        },
-        ["r143A1D7A79A201D6"] = { -- Faetouched Whetstone
-          Grade = "High",
-          Level = 70,
-          Callings = {
-            cleric = true,
-            mage = true,
-          },
-        },
-        ["r70B0A3843EC153B8"] = { -- Atramentium Oilstone
-          Grade = "High",
-          Level = 70,
-          Callings = {
-            warrior = true,
-            primalist = true,
-          },
-        },
+                -- PoA --
+                ["r4FF9D622653C3AB5"] = { -- Xarthian Witchstone
+                    Grade = "High",
+                    Level = 70,
+                    Callings = {
+                        cleric = true,
+                        mage = true,
+                    },
+                },
+                ["r61E2FFAD62EC73A6"] = { -- Bolidium Weaponstone
+                    Grade = "High",
+                    Level = 70,
+                    Callings = {
+                        warrior = true,
+                        primalist = true,
+                    },
+                },
+                ["rFA65F5184E42C822"] = { -- Atramentium Whetstone
+                    Grade = "High",
+                    Level = 70,
+                    Callings = {
+                        warrior = true,
+                        rogue = true,
+                    },
+                },
+                ["r143A1D7A79A201D6"] = { -- Faetouched Whetstone
+                    Grade = "High",
+                    Level = 70,
+                    Callings = {
+                        cleric = true,
+                        mage = true,
+                    },
+                },
+                ["r70B0A3843EC153B8"] = { -- Atramentium Oilstone
+                    Grade = "High",
+                    Level = 70,
+                    Callings = {
+                        warrior = true,
+                        primalist = true,
+                    },
+                },
 
 				--//////////////////////--
 				-- NT High Grade Stones --
@@ -545,8 +545,8 @@ PI.Constants = {
 			w = 36,
 			Icons = true,
 			List = {
-        -- PoA --
-        ["B40C3D8E43D686C51"] = { -- Gedlo Curry Pot (AP)
+				-- PoA --
+				["B40C3D8E33D686C51"] = { -- Gedlo Curry Pot (AP)
 					Grade = "High",
 					Level = 70,
 					Callings = {
@@ -555,11 +555,11 @@ PI.Constants = {
 						primalist = true,
 					},
 				},
-        ["B40C3D8E2646C6DD1"] = { -- Gedlo Curry Pot (SP)
+				["B40C3D8E1646C6DD1"] = { -- Gedlo Curry Pot (SP)
 					Grade = "High",
 					Level = 70,
 					Callings = {
-            mage = true,
+						mage = true,
 						cleric = true,
 					},
 				},
@@ -876,37 +876,36 @@ PI.Constants = {
 			w = 36,
 			Icons = true,
 			List = {
-        -- PoA --
-        ["B4D6232986538AB4E"] = { -- Prophetic Fortified Vial
-            Grade = "High",
-            Level = 70,
-            Callings = {
-                mage = true,
-                cleric = true,
-                warrior = true,
-                rogue = true,
-                primalist = true,
-            },
-            Role = {
-                tank = true,
-            },
-        },
-        ["B4182E55276C4F486"] = { -- Visionary Fortified Vial
-            Grade = "Medium",
-            Level = 70,
-            Callings = {
-                mage = true,
-                cleric = true,
-                warrior = true,
-                rogue = true,
-                primalist = true,
-
-            },
-            Role = {
-                tank = true,
-            },
-        },
-        ["B03ABEAB575CC9A8E"] = { -- Prophetic Powersurge Vial
+                -- PoA --
+                ["B4D6232986538AB4E"] = { -- Prophetic Fortified Vial
+                    Grade = "High",
+                    Level = 70,
+                    Callings = {
+                        mage = true,
+                        cleric = true,
+                        warrior = true,
+                        rogue = true,
+                        primalist = true,
+                    },
+                    Role = {
+                        tank = true,
+                    },
+                },
+                ["B4182E55276C4F486"] = { -- Visionary Fortified Vial
+                    Grade = "Medium",
+                    Level = 70,
+                    Callings = {
+                        mage = true,
+                        cleric = true,
+                        warrior = true,
+                        rogue = true,
+                        primalist = true,
+                    },
+                    Role = {
+                        tank = true,
+                    },
+                },
+                ["B03ABEAB575CC9A8E"] = { -- Prophetic Powersurge Vial
 					Grade = "High",
 					Level = 70,
 					Callings = {
@@ -915,7 +914,7 @@ PI.Constants = {
 						primalist = true,
 					},
 				},
-        ["B6A8C5F8110D4EFBB"] = { -- Visionary Powersurge Vial
+                ["B6A8C5F8110D4EFBB"] = { -- Visionary Powersurge Vial
 					Grade = "High",
 					Level = 70,
 					Callings = {
@@ -924,7 +923,7 @@ PI.Constants = {
 						primalist = true,
 					},
 				},
-        ["B599B39134D958B4F"] = { -- Prophetic Brightsurge Vial
+                ["B599B39124D958B4F"] = { -- Prophetic Brightsurge Vial
 					Grade = "High",
 					Level = 70,
 					Callings = {
@@ -932,7 +931,7 @@ PI.Constants = {
 						cleric = true,
 					},
 				},
-        ["B76F46FAB030D4A53"] = { -- Visionary Brightsurge Vial
+                ["B76F46FAB030D4A53"] = { -- Visionary Brightsurge Vial
 					Grade = "High",
 					Level = 70,
 					Callings = {
@@ -940,7 +939,7 @@ PI.Constants = {
 						cleric = true,
 					},
 				},
-        ["B3B22BC4C30D87AC2"] = { -- Prophetic Enduring Vial
+                ["B3B22BC4B30D87AC2"] = { -- Prophetic Enduring Vial
 					Grade = "High",
 					Level = 70,
 					Callings = {
@@ -954,7 +953,7 @@ PI.Constants = {
 						tank = true,
 					},
 				},
-        ["B4E2589107D7E8E0F"] = { -- Visionary Enduring Vial
+                ["B4E2589107D7E8E0F"] = { -- Visionary Enduring Vial
 					Grade = "High",
 					Level = 70,
 					Callings = {
