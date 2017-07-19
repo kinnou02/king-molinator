@@ -31,7 +31,7 @@ TD.Lang = {}
 TD.Lang.Main = {}
 TD.Lang.Main.Name = KBM.Language:Add(TD.Name)
 TD.Lang.Main.Name:SetFrench("Profondeur Tartare")
-TD.Lang.Main.Name:SetGerman("Tartarische Tiefen")
+TD.Lang.Main.Name:SetGerman("LFR: Tartarische Tiefen")
 
 TD.Name = TD.Lang.Main.Name[KBM.Lang]
 TD.Descript = TD.Name
