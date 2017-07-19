@@ -10,8 +10,8 @@ local TD = {
     Header = nil,
     Enabled = true,
     IsInstance = true,
-    Name = "Tartaric Depths",
-    Type = "Raid",
+    Name = "LFR: Tartaric Depths",
+    Type = "Sliver",
     ID = "Tartaric_Depths",
     Object = "TD",
     Rift = "PA",
@@ -30,8 +30,8 @@ KBM.RegisterMod(TD.ID, TD)
 TD.Lang = {}
 TD.Lang.Main = {}
 TD.Lang.Main.Name = KBM.Language:Add(TD.Name)
-TD.Lang.Main.Name:SetFrench("Profondeur Tartare")
-TD.Lang.Main.Name:SetGerman("Tartarische Tiefen")
+TD.Lang.Main.Name:SetFrench("LFR: Profondeur Tartare")
+TD.Lang.Main.Name:SetGerman("LFR: Tartarische Tiefen")
 
 TD.Name = TD.Lang.Main.Name[KBM.Lang]
 TD.Descript = TD.Name
