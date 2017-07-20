@@ -68,11 +68,11 @@ MAL.Lang.Ability.Meteor:SetGerman("Meteor")
 
 -- Verbose Dictionary
 MAL.Lang.Verbose = {}
-MAL.Lang.Verbose.Meteor = KBM.Language:Add("Pack!")
+MAL.Lang.Verbose.Meteor = KBM.Language:Add("Stack!")
 MAL.Lang.Verbose.Meteor:SetFrench("Pack!")
 MAL.Lang.Verbose.Meteor:SetGerman("Sammeln!")
 
-MAL.Lang.Verbose.Blastback = KBM.Language:Add("Spread out!")
+MAL.Lang.Verbose.Blastback = KBM.Language:Add("Spread!")
 MAL.Lang.Verbose.Blastback:SetFrench("Spread out!")
 MAL.Lang.Verbose.Blastback:SetGerman("Verteilen!")
 

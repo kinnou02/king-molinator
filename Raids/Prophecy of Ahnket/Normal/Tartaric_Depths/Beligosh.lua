@@ -64,6 +64,7 @@ BEL.Beligosh = {
             SeedOfImmolation = KBM.Defaults.TimerObj.Create("purple"),
             VengeanceOfBeligosh = KBM.Defaults.TimerObj.Create("blue"),
             MagmaBreath = KBM.Defaults.TimerObj.Create("red"),
+            Landing = KBM.Defaults.TimerObj.Create("red"),
         },
     },
 }
@@ -97,11 +98,15 @@ BEL.Lang.Verbose.BurningGround = KBM.Language:Add("Burning Ground")
 BEL.Lang.Verbose.BurningGround:SetGerman("Brennende Erde")
 BEL.Lang.Verbose.BurningGround:SetFrench("Terrain enflammé")
 
+BEL.Lang.Verbose.Landing = KBM.Language:Add("Landing")
+
+
 -- Buff Dictionary
 BEL.Lang.Buff = {}
 
 -- Debuff Dictionary
 BEL.Lang.Debuff = {}
+
 BEL.Lang.Debuff.VengeanceOfBeligosh = KBM.Language:Add("Vengeance of Beligosh")--tank debuff
 BEL.Lang.Debuff.VengeanceOfBeligosh:SetGerman("Rache von Beligosh")
 BEL.Lang.Debuff.VengeanceOfBeligosh:SetFrench("Vengeance de Beligosh")
@@ -109,6 +114,7 @@ BEL.Lang.Debuff.VengeanceOfBeligosh:SetFrench("Vengeance de Beligosh")
 BEL.Lang.Debuff.SeedOfImmolation = KBM.Language:Add("Seed of Immolation")--raid debuff
 BEL.Lang.Debuff.SeedOfImmolation:SetGerman("Saat der Opferung")
 BEL.Lang.Debuff.SeedOfImmolation:SetFrench("Graine d'immolation")
+
 
 -- Notify Dictionary
 BEL.Lang.Notify = {}
@@ -274,14 +280,15 @@ function BEL.PhaseTwo()
         BEL.PhaseObj:SetPhase(5)
         BEL.PhaseObj.Objectives:AddPercent(BEL.Beligosh, 0, 40)
     end
-    KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.SeedOfImmolation)
-    KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.VengeanceOfBeligosh)
+    --KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.SeedOfImmolation)
+    --KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.VengeanceOfBeligosh)
     KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.MagmaBreath)
+    KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.Landing)
 end
 
 function BEL.AddPhase()
-    KBM.MechTimer:AddRemove(BEL.Beligosh.TimersRef.SeedOfImmolation)
-    KBM.MechTimer:AddRemove(BEL.Beligosh.TimersRef.VengeanceOfBeligosh)
+    --KBM.MechTimer:AddRemove(BEL.Beligosh.TimersRef.SeedOfImmolation)
+    --KBM.MechTimer:AddRemove(BEL.Beligosh.TimersRef.VengeanceOfBeligosh)
     KBM.MechTimer:AddRemove(BEL.Beligosh.TimersRef.MagmaBreath)
     BEL.PhaseObj.Objectives:Remove()
     if BEL.Phase == 1 then
@@ -301,6 +308,7 @@ function BEL:Start()
     self.Beligosh.TimersRef.SeedOfImmolation = KBM.MechTimer:Add(self.Lang.Debuff.SeedOfImmolation[KBM.Lang], 24)
     self.Beligosh.TimersRef.VengeanceOfBeligosh = KBM.MechTimer:Add(self.Lang.Debuff.VengeanceOfBeligosh[KBM.Lang], 15)
     self.Beligosh.TimersRef.MagmaBreath = KBM.MechTimer:Add(self.Lang.Ability.MagmaBreath[KBM.Lang], 30)
+    self.Beligosh.TimersRef.Landing = KBM.MechTimer:Add(self.Lang.Verbose.Landing[KBM.Lang], 10)
     KBM.Defaults.TimerObj.Assign(self.Beligosh)
 
     -- Create Alerts
