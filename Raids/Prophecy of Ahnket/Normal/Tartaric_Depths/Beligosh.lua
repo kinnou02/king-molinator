@@ -76,7 +76,7 @@ BEL.Golem = {
     NameShort = "Alavaxian Golem",
     UnitList = {},
     Menu = {},
-    UTID = "U0C52392E243A6ACD", --TODO
+    UTID = "U110556F3514C5C3F",
     Ignore = true,
     Type = "multi",
 }
