@@ -1436,7 +1436,7 @@ function KBM.CombatEnter(handle, uList)
 	end	
 end
 
-function KBM.Damage(info)
+function KBM.Damage(handle, info)
 	-- Damage done by a Non Raid Member to Anything.
 	if KBM.Options.Enabled then
 		if info.targetObj and info.sourceObj then
@@ -1533,7 +1533,7 @@ function KBM.Damage(info)
 	end
 end
 
-function KBM.Heal(info)
+function KBM.Heal(handle, info)
 end
 
 function KBM.CPU:Init()
