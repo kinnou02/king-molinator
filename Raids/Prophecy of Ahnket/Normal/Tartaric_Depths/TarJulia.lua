@@ -57,9 +57,6 @@ TAR.TarJulia = {
         AlertsRef = {
             Enabled = true,
             MoltenBlast = KBM.Defaults.AlertObj.Create("red"),
-            CallForHelp = KBM.Defaults.AlertObj.Create("blue"),
-            Fury = KBM.Defaults.AlertObj.Create("orange"),
-            SpiderWeave = KBM.Defaults.AlertObj.Create("purple"),
         },
         TimersRef = {
             Enabled = true,
@@ -303,14 +300,11 @@ function TAR:Start()
 
     KBM.Defaults.TimerObj.Assign(self.TarJulia)
 
-    self.TarJulia.MechRef.SpiderWeave = KBM.MechSpy:Add(self.Lang.Debuff.SpiderWeave[KBM.Lang], 5, "playerDebuff", self.TarJulia)
+    self.TarJulia.MechRef.SpiderWeave = KBM.MechSpy:Add(self.Lang.Debuff.SpiderWeave[KBM.Lang], nil, "playerDebuff", self.TarJulia)
     KBM.Defaults.MechObj.Assign(self.TarJulia)
 
     -- Create Alerts
-    self.TarJulia.AlertsRef.MoltenBlast = KBM.Alert:Create(self.Lang.Verbose.MoltenBlast[KBM.Lang], 10, true, true, "red")
-    self.TarJulia.AlertsRef.CallForHelp = KBM.Alert:Create(self.Lang.Ability.CallForHelp[KBM.Lang], 1, true, true, "blue")
-    self.TarJulia.AlertsRef.Fury = KBM.Alert:Create(self.Lang.Buff.Fury[KBM.Lang], 1, true, true, "orange")
-    self.TarJulia.AlertsRef.SpiderWeave = KBM.Alert:Create(self.Lang.Debuff.SpiderWeave[KBM.Lang], 1, true, true, "purple")
+    self.TarJulia.AlertsRef.MoltenBlast = KBM.Alert:Create(self.Lang.Verbose.MoltenBlast[KBM.Lang], 3, true, true, "red")
     KBM.Defaults.AlertObj.Assign(self.TarJulia)
 
     -- Assign Alerts and Timers to Triggers
@@ -319,16 +313,13 @@ function TAR:Start()
     self.TarJulia.Triggers.MoltenBlast:AddTimer(self.TarJulia.TimersRef.MoltenBlast)
 
     self.TarJulia.Triggers.CallForHelp = KBM.Trigger:Create(self.Lang.Ability.CallForHelp[KBM.Lang], "cast", self.TarJulia)
-    self.TarJulia.Triggers.CallForHelp:AddAlert(self.TarJulia.AlertsRef.CallForHelp)
     self.TarJulia.Triggers.CallForHelp:AddTimer(self.TarJulia.TimersRef.CallForHelp)
 
     self.TarJulia.Triggers.SpiderWeave = KBM.Trigger:Create(self.Lang.Debuff.SpiderWeave[KBM.Lang], "playerDebuff", self.TarJulia)
-    self.TarJulia.Triggers.SpiderWeave:AddAlert(self.TarJulia.AlertsRef.SpiderWeave)
     self.TarJulia.Triggers.SpiderWeave:AddTimer(self.TarJulia.TimersRef.SpiderWeave)
     self.TarJulia.Triggers.SpiderWeave:AddSpy(self.TarJulia.MechRef.SpiderWeave)
 
     self.TarJulia.Triggers.Fury = KBM.Trigger:Create(self.Lang.Buff.Fury[KBM.Lang], "buff", self.TarJulia)
-    self.TarJulia.Triggers.Fury:AddAlert(self.TarJulia.AlertsRef.Fury)
     self.TarJulia.Triggers.Fury:AddTimer(self.TarJulia.TimersRef.Fury)
 
     self.TarJulia.CastBar = KBM.Castbar:Add(self, self.TarJulia)
