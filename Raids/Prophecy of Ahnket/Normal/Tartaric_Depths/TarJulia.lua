@@ -57,6 +57,7 @@ TAR.TarJulia = {
         AlertsRef = {
             Enabled = true,
             MoltenBlast = KBM.Defaults.AlertObj.Create("red"),
+            Fury = KBM.Defaults.AlertObj.Create("orange"),
         },
         TimersRef = {
             Enabled = true,
@@ -305,6 +306,7 @@ function TAR:Start()
 
     -- Create Alerts
     self.TarJulia.AlertsRef.MoltenBlast = KBM.Alert:Create(self.Lang.Verbose.MoltenBlast[KBM.Lang], 3, true, true, "red")
+    self.TarJulia.AlertsRef.Fury = KBM.Alert:Create(self.Lang.Buff.Fury[KBM.Lang], 1, true, true, "orange")
     KBM.Defaults.AlertObj.Assign(self.TarJulia)
 
     -- Assign Alerts and Timers to Triggers
@@ -321,6 +323,7 @@ function TAR:Start()
 
     self.TarJulia.Triggers.Fury = KBM.Trigger:Create(self.Lang.Buff.Fury[KBM.Lang], "buff", self.TarJulia)
     self.TarJulia.Triggers.Fury:AddTimer(self.TarJulia.TimersRef.Fury)
+    self.TarJulia.Triggers.Fury:AddAlert(self.TarJulia.AlertsRef.Fury)
 
     self.TarJulia.CastBar = KBM.Castbar:Add(self, self.TarJulia)
     self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
