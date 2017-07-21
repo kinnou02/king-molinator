@@ -56,6 +56,9 @@ COF.Lang.Unit.Void = KBM.Language:Add("VOID")
 COF.Lang.Unit.Void:SetGerman("LEERE")
 COF.Lang.Unit.Void:SetFrench("NÉANT")
 
+-- Main Unit Dictionary
+COF.Lang.Unit = {}
+
 COF.Danazhal = {
     Mod = COF,
     Level = "??",

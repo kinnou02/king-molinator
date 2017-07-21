@@ -102,13 +102,13 @@ BEL.Lang.Buff = {}
 
 -- Debuff Dictionary
 BEL.Lang.Debuff = {}
-BEL.Lang.Debuff.VengeanceOfBeligosh = KBM.Language:Add("Vengeance of Beligosh")--tank debuff
-BEL.Lang.Debuff.VengeanceOfBeligosh:SetGerman("Rache von Beligosh")
-BEL.Lang.Debuff.VengeanceOfBeligosh:SetFrench("Vengeance de Beligosh")
+BEL.Lang.Debuff.Vengeance = KBM.Language:Add("Vengeance of Beligosh")--tank debuff
+BEL.Lang.Debuff.Vengeance:SetGerman("Rache von Beligosh")
+BEL.Lang.Debuff.Vengeance:SetFrench("Vengeance de Beligosh")
 
-BEL.Lang.Debuff.SeedOfImmolation = KBM.Language:Add("Seed of Immolation")--raid debuff
-BEL.Lang.Debuff.SeedOfImmolation:SetGerman("Saat der Opferung")
-BEL.Lang.Debuff.SeedOfImmolation:SetFrench("Graine d'immolation")
+BEL.Lang.Debuff.Seed = KBM.Language:Add("Seed of Immolation")--raid debuff
+BEL.Lang.Debuff.Seed:SetGerman("Saat der Opferung")
+BEL.Lang.Debuff.Seed:SetFrench("Graine d'immolation")
 
 -- Notify Dictionary
 BEL.Lang.Notify = {}
@@ -142,7 +142,7 @@ function BEL:InitVars()
         CastBar = self.Beligosh.Settings.CastBar,
         EncTimer = KBM.Defaults.EncTimer(),
         PhaseMon = KBM.Defaults.PhaseMon(),
-        MechTimer = KBM.Defaults.MechTimer(),
+        -- MechTimer = KBM.Defaults.MechTimer(),
         Alerts = KBM.Defaults.Alerts(),
         -- TimersRef = self.Baird.Settings.TimersRef,
         AlertsRef = self.Beligosh.Settings.AlertsRef,
