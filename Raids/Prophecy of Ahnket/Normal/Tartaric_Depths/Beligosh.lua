@@ -24,6 +24,7 @@ local BEL = {
     Lang = {},
     ID = "NMbeligosh",
     Object = "BEL",
+    Enrage = 565,
 }
 
 -- Main Unit Dictionary
@@ -61,6 +62,8 @@ BEL.Beligosh = {
         },
         TimersRef = {
             Enabled = true,
+            SoftEnrageTimer = KBM.Defaults.TimerObj.Create("dark_grey"),
+            Enrage = KBM.Defaults.TimerObj.Create("dark_grey"),
             SeedOfImmolation = KBM.Defaults.TimerObj.Create("purple"),
             VengeanceOfBeligosh = KBM.Defaults.TimerObj.Create("blue"),
             MagmaBreath = KBM.Defaults.TimerObj.Create("red"),
@@ -99,6 +102,11 @@ BEL.Lang.Verbose.BurningGround:SetGerman("Brennende Erde")
 BEL.Lang.Verbose.BurningGround:SetFrench("Terrain enflammé")
 
 BEL.Lang.Verbose.Landing = KBM.Language:Add("Landing")
+
+BEL.Lang.Verbose.SoftEnrageTimer = KBM.Language:Add("Soft Enrage")
+
+
+BEL.Lang.Verbose.Enrage = KBM.Language:Add("Enrage")
 
 
 -- Buff Dictionary
@@ -278,7 +286,7 @@ function BEL.PhaseTwo()
     else
         BEL.Phase = 5
         BEL.PhaseObj:SetPhase(5)
-        BEL.PhaseObj.Objectives:AddPercent(BEL.Beligosh, 0, 40)
+        BEL.PhaseObj.Objectives:AddPercent(BEL.Beligosh, 12, 40)
     end
     KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.SeedOfImmolation)
     KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.VengeanceOfBeligosh)
@@ -301,10 +309,45 @@ function BEL.AddPhase()
     BEL.PhaseObj.Objectives:AddDeath(BEL.Lang.Unit.Golem[KBM.Lang], 3)
 end
 
+function BEL.FinalPhase()
+    BEL.PhaseObj.Objectives:Remove()
+    
+    BEL.Phase = 6
+    BEL.PhaseObj:SetPhase(6)
+    BEL.PhaseObj.Objectives:AddPercent(BEL.Beligosh, 0, 12)
+    
+    KBM.MechTimer:AddRemove(BEL.Beligosh.TimersRef.SeedOfImmolation)
+    KBM.MechTimer:AddRemove(BEL.Beligosh.TimersRef.VengeanceOfBeligosh)
+    KBM.MechTimer:AddRemove(BEL.Beligosh.TimersRef.MagmaBreath)
+    KBM.MechTimer:AddRemove(BEL.Beligosh.TimersRef.SoftEnrageTimer)
+    
+    KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.VengeanceOfBeligosh)
+    KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.Enrage)
+end
+
+function BEL.FinalPhaseTimer()
+    if(BEL.Phase ~= 6) then
+        BEL.PhaseObj.Objectives:Remove()
+        
+        BEL.Phase = 6
+        BEL.PhaseObj:SetPhase(6)
+        BEL.PhaseObj.Objectives:AddPercent(BEL.Beligosh, 0, 100)
+        
+        KBM.MechTimer:AddRemove(BEL.Beligosh.TimersRef.SeedOfImmolation)
+        KBM.MechTimer:AddRemove(BEL.Beligosh.TimersRef.VengeanceOfBeligosh)
+        KBM.MechTimer:AddRemove(BEL.Beligosh.TimersRef.MagmaBreath)
+        KBM.MechTimer:AddRemove(BEL.Beligosh.TimersRef.SoftEnrageTimer)
+        
+        KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.VengeanceOfBeligosh)
+        KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.Enrage)
+    end
+end
 
 
 function BEL:Start()
     -- Create Timers
+    self.Beligosh.TimersRef.SoftEnrageTimer = KBM.MechTimer:Add(self.Lang.Verbose.SoftEnrageTimer[KBM.Lang], 540)
+    self.Beligosh.TimersRef.Enrage = KBM.MechTimer:Add(self.Lang.Verbose.Enrage[KBM.Lang], 25)
     self.Beligosh.TimersRef.SeedOfImmolation = KBM.MechTimer:Add(self.Lang.Debuff.SeedOfImmolation[KBM.Lang], 24)
     self.Beligosh.TimersRef.VengeanceOfBeligosh = KBM.MechTimer:Add(self.Lang.Debuff.VengeanceOfBeligosh[KBM.Lang], 15)
     self.Beligosh.TimersRef.MagmaBreath = KBM.MechTimer:Add(self.Lang.Ability.MagmaBreath[KBM.Lang], 30)
@@ -348,4 +391,10 @@ function BEL:Start()
 
     self.Beligosh.Triggers.MagmaBreath = KBM.Trigger:Create(self.Lang.Ability.MagmaBreath[KBM.Lang], "channel", self.Beligosh)
     self.Beligosh.Triggers.MagmaBreath:AddTimer(self.Beligosh.TimersRef.MagmaBreath)
+    
+    self.Beligosh.Triggers.FinalPhase = KBM.Trigger:Create(12, "percent", self.Beligosh)
+    self.Beligosh.Triggers.FinalPhase:AddPhase(self.FinalPhase)
+
+    self.Beligosh.Triggers.FinalPhaseTimer = KBM.Trigger:Create(540, "time", self.Beligosh)
+    self.Beligosh.Triggers.FinalPhaseTimer:AddPhase(self.FinalPhaseTimer)
 end
