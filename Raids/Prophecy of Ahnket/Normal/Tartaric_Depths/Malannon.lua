@@ -292,7 +292,7 @@ function MAL:Start()
     self.Malannon.Triggers.PhaseTwo = KBM.Trigger:Create(60, "percent", self.Malannon)
     self.Malannon.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
 
-    self.Malannon.Triggers.PhaseThree = KBM.Trigger:Create(40, "percent", self.Malannon)
+    self.Malannon.Triggers.PhaseThree = KBM.Trigger:Create(30, "percent", self.Malannon)
     self.Malannon.Triggers.PhaseThree:AddPhase(self.PhaseThree)
     
     self.Malannon.Triggers.SiphonEnergyFirst = KBM.Trigger:Create(95, "percent", self.Malannon)
