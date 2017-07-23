@@ -280,15 +280,15 @@ function BEL.PhaseTwo()
         BEL.PhaseObj:SetPhase(5)
         BEL.PhaseObj.Objectives:AddPercent(BEL.Beligosh, 0, 40)
     end
-    --KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.SeedOfImmolation)
-    --KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.VengeanceOfBeligosh)
+    KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.SeedOfImmolation)
+    KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.VengeanceOfBeligosh)
     KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.MagmaBreath)
     KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.Landing)
 end
 
 function BEL.AddPhase()
-    --KBM.MechTimer:AddRemove(BEL.Beligosh.TimersRef.SeedOfImmolation)
-    --KBM.MechTimer:AddRemove(BEL.Beligosh.TimersRef.VengeanceOfBeligosh)
+    KBM.MechTimer:AddRemove(BEL.Beligosh.TimersRef.SeedOfImmolation)
+    KBM.MechTimer:AddRemove(BEL.Beligosh.TimersRef.VengeanceOfBeligosh)
     KBM.MechTimer:AddRemove(BEL.Beligosh.TimersRef.MagmaBreath)
     BEL.PhaseObj.Objectives:Remove()
     if BEL.Phase == 1 then
