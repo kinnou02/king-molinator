@@ -55,6 +55,7 @@ MAL.Malannon = {
             Blastback = KBM.Defaults.AlertObj.Create("blue"),
             MarkOfAcrimony = KBM.Defaults.AlertObj.Create("purple"),
             MarkOfSupremacy = KBM.Defaults.AlertObj.Create("yellow"),
+            Obliteration = KBM.Defaults.AlertObj.Create("red"),
         },
     },
 }
@@ -72,6 +73,8 @@ MAL.Lang.Ability = {}
 MAL.Lang.Ability.Meteor = KBM.Language:Add("Meteor")
 MAL.Lang.Ability.Meteor:SetFrench("Météore")
 MAL.Lang.Ability.Meteor:SetGerman("Meteor")
+
+MAL.Lang.Ability.Obliteration = KBM.Language:Add("Obliteration")
 
 MAL.Lang.Ability.SiphonEnergy = KBM.Language:Add("Siphon Energy")
 MAL.Lang.Ability.SiphonEnergy:SetGerman("Energie entziehen")
@@ -271,6 +274,7 @@ function MAL:Start()
     self.Malannon.AlertsRef.Blastback = KBM.Alert:Create(self.Lang.Verbose.Blastback[KBM.Lang], 5, true, true, "blue")
     self.Malannon.AlertsRef.MarkOfAcrimony = KBM.Alert:Create(self.Lang.Verbose.MarkOfAcrimony[KBM.Lang], 5, true, true, "purple")
     self.Malannon.AlertsRef.MarkOfSupremacy = KBM.Alert:Create(self.Lang.Verbose.MarkOfSupremacy[KBM.Lang], 5, true, true, "yellow")
+    self.Malannon.AlertsRef.Obliteration = KBM.Alert:Create(self.Lang.Ability.Obliteration[KBM.Lang], 2, true, true, "yellow")
     KBM.Defaults.AlertObj.Assign(self.Malannon)
 
     -- Assign Alerts and Timers to Triggers
@@ -285,9 +289,12 @@ function MAL:Start()
 
     self.Malannon.Triggers.MarkOfAcrimony = KBM.Trigger:Create(self.Lang.Debuff.MarkOfAcrimony[KBM.Lang], "playerDebuff", self.Malannon)
     self.Malannon.Triggers.MarkOfAcrimony:AddAlert(self.Malannon.AlertsRef.MarkOfAcrimony, true)
-	
+
     self.Malannon.Triggers.MarkOfSupremacy = KBM.Trigger:Create(self.Lang.Debuff.MarkOfSupremacy[KBM.Lang], "playerDebuff", self.Malannon)
     self.Malannon.Triggers.MarkOfSupremacy:AddAlert(self.Malannon.AlertsRef.MarkOfSupremacy, true)
+
+    self.Malannon.Triggers.Obliteration = KBM.Trigger:Create(self.Lang.Ability.Obliteration[KBM.Lang], "cast", self.Malannon)
+    self.Malannon.Triggers.Obliteration:AddAlert(self.Malannon.AlertsRef.Obliteration)
 
     self.Malannon.Triggers.PhaseTwo = KBM.Trigger:Create(60, "percent", self.Malannon)
     self.Malannon.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
