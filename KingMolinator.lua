@@ -2923,8 +2923,14 @@ end
 KBM.SheepProtection = {}
 function KBM.SheepProtection:Init()
 	self.SheepList = {
-		["B2C7F2ABFDAD20E1D"] = "Shambler",
-		["B69270855B9A593AC"] = "Sheep",
+        ["B2C7F2ABFDAD20E1D"] = "Shambler",
+        ["B69270855B9A593AC"] = "Sheep",
+        ["B3F04AB1FD601EC35"] = "Love Bug",
+        ["B7E9514D567B0BCE4"] = "Wand of Mechanization",
+        ["B1E7569A887D9C5C9"] = "Wand of Mechanization",
+        ["B0E4E7143CE686BDB"] = "Wand of Mechanization",
+        ["B5B2A6080D48E8E9E"] = "Wand of Mechanization",
+        ["B5E8A366FF335ECC3"] = "Summerfest Shambler",
 	}
 	function self.Remove(BuffID, CasterID)
 		if KBM.Options.Sheep.Protect then
