@@ -1,4 +1,13 @@
-﻿1.9.9.906
+﻿1.9.9.907
+* New: added LFR Tartaric depths raid
+* New: German translation for Hexatel
+* New: MechSpy for Molten Growth on Ereandorn
+* Changed: SleepList with new transformations
+* Changed: LFR raid are now in slivers tab
+* Fixed: OnHeal and OnDamage trigger
+
+
+1.9.9.906
 * Renamed Everything to Prophecy of Ahnket from old expansion name.
 
 1.9.9.905
