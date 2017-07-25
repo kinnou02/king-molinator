@@ -107,6 +107,7 @@ COF.Boldoch = {
             Enabled = true,
             NoRez = KBM.Defaults.AlertObj.Create("cyan"),
         },
+    }
 }
 
 COF.Pleuzhal = {
