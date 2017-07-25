@@ -120,6 +120,7 @@ TAR.Lang.Buff.Fury:SetGerman("Raserei")
 TAR.Lang.Debuff = {}
 TAR.Lang.Debuff.SpiderWeave = KBM.Language:Add("Spider's Weave")
 -- TODO: transF: Spider's Weave
+TAR.Lang.Debuff.SpiderWeave:SetGerman("Netz der Spinne")
 
 TAR.Lang.Notify = {}
 

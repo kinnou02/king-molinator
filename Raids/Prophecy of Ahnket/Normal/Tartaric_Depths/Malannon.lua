@@ -24,6 +24,7 @@ local MAL = {
     Lang = {},
     ID = "NMmalannon",
     Object = "MAL",
+    Enrage = 495,
 }
 
 MAL.Malannon = {
@@ -33,6 +34,7 @@ MAL.Malannon = {
     Name = "Malannon",
     Menu = {},
     AlertsRef = {},
+    TimersRef = {},
     Castbar = nil,
     Dead = false,
     Available = false,
@@ -42,12 +44,19 @@ MAL.Malannon = {
     Triggers = {},
     Settings = {
         CastBar = KBM.Defaults.Castbar(),
+        TimersRef = {
+            Enabled = true,
+            SiphonEnergyFirst = KBM.Defaults.TimerObj.Create("dark_green"),
+            SiphonEnergy = KBM.Defaults.TimerObj.Create("dark_green"),
+            Runes = KBM.Defaults.TimerObj.Create("cyan"),
+        },
         AlertsRef = {
             Enabled = true,
             Meteor = KBM.Defaults.AlertObj.Create("red"),
             Blastback = KBM.Defaults.AlertObj.Create("blue"),
             MarkOfAcrimony = KBM.Defaults.AlertObj.Create("purple"),
             MarkOfSupremacy = KBM.Defaults.AlertObj.Create("yellow"),
+            Obliteration = KBM.Defaults.AlertObj.Create("red"),
         },
     },
 }
@@ -66,6 +75,18 @@ MAL.Lang.Ability.Meteor = KBM.Language:Add("Meteor")
 MAL.Lang.Ability.Meteor:SetFrench("Météore")
 MAL.Lang.Ability.Meteor:SetGerman("Meteor")
 
+MAL.Lang.Ability.Obliteration = KBM.Language:Add("Obliteration")
+-- TODO: transF: Obliteration
+-- TODO: transG: Obliteration
+
+MAL.Lang.Ability.SiphonEnergy = KBM.Language:Add("Siphon Energy")
+-- TODO: transF: Siphon Energy
+MAL.Lang.Ability.SiphonEnergy:SetGerman("Energie entziehen")
+
+MAL.Lang.Ability.Runes = KBM.Language:Add("Runes of Power")
+-- TODO: transF: Runes of Power
+-- TODO: transG: Runes of Power
+
 -- Verbose Dictionary
 MAL.Lang.Verbose = {}
 MAL.Lang.Verbose.Meteor = KBM.Language:Add("Meteor")
@@ -73,7 +94,7 @@ MAL.Lang.Verbose.Meteor = KBM.Language:Add("Meteor")
 MAL.Lang.Verbose.Meteor:SetFrench("Météore")
 MAL.Lang.Verbose.Meteor:SetGerman("Meteor")
 
-MAL.Lang.Verbose.Blastback = KBM.Language:Add("Spread out!")
+MAL.Lang.Verbose.Blastback = KBM.Language:Add("Spread!")
 -- TODO: transF: check translation
 MAL.Lang.Verbose.Blastback:SetFrench("Spread out!")
 MAL.Lang.Verbose.Blastback:SetGerman("Verteilen!")
@@ -90,14 +111,19 @@ MAL.Lang.Verbose.MarkOfSupremacy:SetFrench("Allez dans le cercle jaune!")
 -- TODO: transG: Supremacy (yellow)
 MAL.Lang.Verbose.MarkOfSupremacy:SetGerman("Geh in den gelben Kreis!")
 
+MAL.Lang.Verbose.SiphonEnergy = KBM.Language:Add("Adds Spawn")
+
+MAL.Lang.Verbose.Runes = KBM.Language:Add("Runes of Power")
+
+>>>>>>> refs/remotes/kinnou02/master
 -- Buff Dictionary
 MAL.Lang.Buff = {}
 
 -- Debuff Dictionary
 MAL.Lang.Debuff = {}
 MAL.Lang.Debuff.Blastback = KBM.Language:Add("Blastback")
-MAL.Lang.Debuff.Blastback:SetGerman("Rückdruckwelle")
 -- TODO: transF: Blastback
+MAL.Lang.Debuff.Blastback:SetGerman("Rückdruckwelle")
 
 MAL.Lang.Debuff.MarkOfAcrimony = KBM.Language:Add("Mark of Acrimony")
 MAL.Lang.Debuff.MarkOfAcrimony:SetGerman("Signum der Verbitterung")
@@ -126,9 +152,9 @@ function MAL:InitVars()
         CastBar = self.Malannon.Settings.CastBar,
         EncTimer = KBM.Defaults.EncTimer(),
         PhaseMon = KBM.Defaults.PhaseMon(),
-        -- MechTimer = KBM.Defaults.MechTimer(),
+        MechTimer = KBM.Defaults.MechTimer(),
         Alerts = KBM.Defaults.Alerts(),
-        -- TimersRef = self.Baird.Settings.TimersRef,
+        TimersRef = self.Malannon.Settings.TimersRef,
         AlertsRef = self.Malannon.Settings.AlertsRef,
     }
     KBMPOANMTDMAL_Settings = self.Settings
@@ -224,7 +250,15 @@ end
 function MAL:Timer()
 end
 
+function MAL.RemoveTimers()
+    KBM.MechTimer:AddRemove(MAL.Malannon.TimersRef.SiphonEnergyFirst)
+    KBM.MechTimer:AddRemove(MAL.Malannon.TimersRef.SiphonEnergy)
+    KBM.MechTimer:AddRemove(MAL.Malannon.TimersRef.Runes)
+end
+
 function MAL.PhaseTwo()
+    KBM.MechTimer:AddRemove(MAL.Malannon.TimersRef.SiphonEnergyFirst)
+    KBM.MechTimer:AddRemove(MAL.Malannon.TimersRef.SiphonEnergy)
     MAL.PhaseObj.Objectives:Remove()
     MAL.Phase = 2
     MAL.PhaseObj:SetPhase(2)
@@ -232,6 +266,7 @@ function MAL.PhaseTwo()
 end
 
 function MAL.PhaseThree()
+    KBM.MechTimer:AddRemove(MAL.Malannon.TimersRef.Runes)
     MAL.PhaseObj.Objectives:Remove()
     MAL.Phase = 3
     MAL.PhaseObj:SetPhase(3)
@@ -240,12 +275,17 @@ end
 
 function MAL:Start()
     -- Create Timers
+    self.Malannon.TimersRef.SiphonEnergy = KBM.MechTimer:Add(self.Lang.Verbose.SiphonEnergy[KBM.Lang], 60)
+    self.Malannon.TimersRef.Runes = KBM.MechTimer:Add(self.Lang.Verbose.Runes[KBM.Lang], 60)
+    self.Malannon.TimersRef.SiphonEnergyFirst = KBM.MechTimer:Add(self.Lang.Verbose.SiphonEnergy[KBM.Lang], 30)
+    KBM.Defaults.TimerObj.Assign(self.Malannon)
 
     -- Create Alerts
     self.Malannon.AlertsRef.Meteor = KBM.Alert:Create(self.Lang.Verbose.Meteor[KBM.Lang], 9, true, true, "red")
     self.Malannon.AlertsRef.Blastback = KBM.Alert:Create(self.Lang.Verbose.Blastback[KBM.Lang], 5, true, true, "blue")
     self.Malannon.AlertsRef.MarkOfAcrimony = KBM.Alert:Create(self.Lang.Verbose.MarkOfAcrimony[KBM.Lang], 5, true, true, "purple")
     self.Malannon.AlertsRef.MarkOfSupremacy = KBM.Alert:Create(self.Lang.Verbose.MarkOfSupremacy[KBM.Lang], 5, true, true, "yellow")
+    self.Malannon.AlertsRef.Obliteration = KBM.Alert:Create(self.Lang.Ability.Obliteration[KBM.Lang], 2, true, true, "yellow")
     KBM.Defaults.AlertObj.Assign(self.Malannon)
 
     -- Assign Alerts and Timers to Triggers
@@ -260,13 +300,33 @@ function MAL:Start()
 
     self.Malannon.Triggers.MarkOfAcrimony = KBM.Trigger:Create(self.Lang.Debuff.MarkOfAcrimony[KBM.Lang], "playerDebuff", self.Malannon)
     self.Malannon.Triggers.MarkOfAcrimony:AddAlert(self.Malannon.AlertsRef.MarkOfAcrimony, true)
-	
+
     self.Malannon.Triggers.MarkOfSupremacy = KBM.Trigger:Create(self.Lang.Debuff.MarkOfSupremacy[KBM.Lang], "playerDebuff", self.Malannon)
     self.Malannon.Triggers.MarkOfSupremacy:AddAlert(self.Malannon.AlertsRef.MarkOfSupremacy, true)
+
+    self.Malannon.Triggers.Obliteration = KBM.Trigger:Create(self.Lang.Ability.Obliteration[KBM.Lang], "cast", self.Malannon)
+    self.Malannon.Triggers.Obliteration:AddAlert(self.Malannon.AlertsRef.Obliteration)
 
     self.Malannon.Triggers.PhaseTwo = KBM.Trigger:Create(60, "percent", self.Malannon)
     self.Malannon.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
 
-    self.Malannon.Triggers.PhaseThree = KBM.Trigger:Create(40, "percent", self.Malannon)
+    self.Malannon.Triggers.PhaseThree = KBM.Trigger:Create(30, "percent", self.Malannon)
     self.Malannon.Triggers.PhaseThree:AddPhase(self.PhaseThree)
+    
+    self.Malannon.Triggers.SiphonEnergyFirst = KBM.Trigger:Create(95, "percent", self.Malannon)
+    self.Malannon.Triggers.SiphonEnergyFirst:AddTimer(self.Malannon.TimersRef.SiphonEnergyFirst)
+    
+    self.Malannon.Triggers.SiphonEnergy = KBM.Trigger:Create(self.Lang.Ability.SiphonEnergy[KBM.Lang], "cast", self.Malannon)
+    self.Malannon.Triggers.SiphonEnergy:AddTimer(self.Malannon.TimersRef.SiphonEnergy)
+    
+    self.Malannon.Triggers.SiphonEnergyRemoved = KBM.Trigger:Create(65, "percent", self.Malannon)
+    self.Malannon.Triggers.SiphonEnergyRemoved:AddPhase(self.RemoveTimers)
+      
+    
+    self.Malannon.Triggers.Runes = KBM.Trigger:Create(self.Lang.Ability.Runes[KBM.Lang], "cast", self.Malannon)
+    self.Malannon.Triggers.Runes:AddTimer(self.Malannon.TimersRef.Runes)
+    
+    self.Malannon.Triggers.RunesRemoved = KBM.Trigger:Create(35, "percent", self.Malannon)
+    self.Malannon.Triggers.RunesRemoved:AddPhase(self.RemoveTimers)
+
 end

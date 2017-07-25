@@ -10,8 +10,8 @@ Author = "Safe@Deepwood"
 Website = "http://www.facebook.com/KingBossMods"
 Email = "kingbossmods@gmail.com"
 
--- PoA Updated by Rikard Blixt
-Version = "1.9.9.906"
+-- PoA Updated by Rathoz and kinou
+Version = "1.9.9.907"
 
 Environment = "4.1"
 

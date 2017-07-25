@@ -1,4 +1,16 @@
-﻿1.9.9.906
+﻿1.9.9.907
+* New: Added all bosses from LFR Tartaric Depths Raid
+    - Including German and French translation
+* New: German translation for Hexatel
+* New: French translation for Hexatel
+* New: MechSpy for Molten Growth on Ereandorn
+* Changed: SheepList with new transformations - Thanks aileen
+* Changed: LFR raid are now in slivers tab
+* Fixed: OnHeal and OnDamage triggers
+* Fixed: Trion changed IDs of Vials, Ready Check has been updated with the new IDs
+* Fixed: Radioactive Mark now works correctly - Thanks Tsukimie
+
+1.9.9.906
 * Renamed Everything to Prophecy of Ahnket from old expansion name.
 
 1.9.9.905

@@ -73,7 +73,7 @@ MAL.Lang.Verbose.Meteor = KBM.Language:Add("Meteor")
 MAL.Lang.Verbose.Meteor:SetFrench("Météore")
 MAL.Lang.Verbose.Meteor:SetGerman("Meteor")
 
-MAL.Lang.Verbose.Blastback = KBM.Language:Add("Spread out!")
+MAL.Lang.Verbose.Blastback = KBM.Language:Add("Spread!")
 MAL.Lang.Verbose.Blastback:SetFrench("Spread out!")
 MAL.Lang.Verbose.Blastback:SetGerman("Verteilen!")
 

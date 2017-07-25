@@ -77,6 +77,7 @@ COF.Danazhal = {
             Enabled = true,
             Flamescape = KBM.Defaults.AlertObj.Create("red"),
             Void = KBM.Defaults.AlertObj.Create("blue"),
+            DeathBall = KBM.Defaults.AlertObj.Create("orange")
         },
         TimersRef = {
             Enabled = true,
@@ -100,6 +101,13 @@ COF.Boldoch = {
     UTID = "U1758766E2477C75B",
     TimeOut = 15,
     Triggers = {},
+    Settings = {
+        CastBar = KBM.Defaults.Castbar(),
+        AlertsRef = {
+            Enabled = true,
+            NoRez = KBM.Defaults.AlertObj.Create("cyan"),
+        },
+    }
 }
 
 COF.Pleuzhal = {
@@ -171,7 +179,7 @@ COF.Void = {
     Level = "72",
     Name = COF.Lang.Unit.Void[KBM.Lang],
     UnitList = {},
-    UTID = "U16EAD450095AF958",
+    UTID = "U3A9CCDFB5785366A",
     TimeOut = 15,
     Ignore = true,
     Type = "multi",
@@ -179,19 +187,25 @@ COF.Void = {
 
 KBM.RegisterMod(COF.ID, COF)
 
-
 -- Ability Dictionary
 COF.Lang.Ability = {}
 COF.Lang.Ability.Flamescape = KBM.Language:Add("Flamescape")
 COF.Lang.Ability.Flamescape:SetGerman("Flammenformen")
 COF.Lang.Ability.Flamescape:SetFrench("Pyroformation")
 
+COF.Lang.Ability.Void = KBM.Language:Add("Void")
+
+COF.Lang.Ability.NoRez = KBM.Language:Add("No Permission to Ressurect")
+
+COF.Lang.Ability.DeathBall = KBM.Language:Add("Mega Death Ball")
+
 -- Verbose Dictionary
 COF.Lang.Verbose = {}
 COF.Lang.Verbose.Flamescape = KBM.Language:Add("Flamescape")
--- TODO: transF, transG (check themm, got it from above)
+-- TODO: transF, transG: Flamescape (check translation got it from above)
 COF.Lang.Verbose.Flamescape:SetGerman("Flammenformen")
 COF.Lang.Verbose.Flamescape:SetFrench("Pyroformation")
+>>>>>>> refs/remotes/kinnou02/master
 
 -- Buff Dictionary
 COF.Lang.Buff = {}
@@ -203,7 +217,8 @@ COF.Lang.Debuff = {}
 COF.Lang.Notify = {}
 COF.Lang.Notify.Flamescape = KBM.Language:Add("The Flamescape begins.")
 COF.Lang.Notify.Flamescape:SetGerman("Das Flammenformen beginnt.")
- COF.Lang.Notify.Flamescape:SetFrench("La Pyroformation commence.")
+COF.Lang.Notify.Flamescape:SetFrench("La Pyroformation commence.")
+
 
 COF.Lang.Notify.DanazhalPop = KBM.Language:Add('Contessa Danazhal, "Did you release me? Wonderful! I shall escape after I fest on your souls!"')
 COF.Lang.Notify.DanazhalPop:SetGerman('Gräfin Danazhal: "Ihr wart es, der mich befreite? Wunderbar! Nachdem ich mich an Euren Seelen gelabt habe, werde ich das Weite suchen!"')
@@ -232,6 +247,7 @@ function COF:AddBosses(KBM_Boss)
         [self.PleuzhalSoul.Name] = self.PleuzhalSoul,
         [self.BoldochSoul.Name] = self.BoldochSoul,
         [self.DanazhalSoul.Name] = self.DanazhalSoul,
+        [self.Void.Name] = self.Void,
     }
 end
 
@@ -326,6 +342,8 @@ function COF:Death(UnitID)
     if self.Pleuzhal.UnitID == UnitID then
         self.Pleuzhal.Dead = true
         self.SetObjectives()
+    end
+    if self.DanazhalSoul.UnitID == UnitID then
         self:ResetTimers()
     end
     if self.Danazhal.Dead and self.Boldoch.Dead and self.Pleuzhal.Dead then
@@ -347,6 +365,8 @@ function COF:UnitHPCheck(uDetails, unitID)
                 self.PhaseObj:SetPhase("1")
                 self.Phase = 1
                 self.SetObjectives()
+            end
+            if BossObj == self.Danazhal or BossObj == self.DanazhalSoul then
                 KBM.MechTimer:AddStart(self.Danazhal.TimersRef.FirstFlamescape)
             end
             BossObj.Dead = false
@@ -383,7 +403,10 @@ function COF:Start()
     -- Create Alerts
     self.Danazhal.AlertsRef.Flamescape = KBM.Alert:Create(self.Lang.Verbose.Flamescape[KBM.Lang], 5, true, true, "red")
     self.Danazhal.AlertsRef.Void = KBM.Alert:Create(self.Lang.Unit.Void[KBM.Lang], nil, true, true, "blue")
+    self.Danazhal.AlertsRef.DeathBall = KBM.Alert:Create(self.Lang.Ability.DeathBall[KBM.Lang], nil, true, true, "orange")
     KBM.Defaults.AlertObj.Assign(self.Danazhal)
+    self.Boldoch.AlertsRef.NoRez = KBM.Alert:Create(self.Lang.Ability.NoRez[KBM.Lang], nil, true, true, "cyan")
+    KBM.Defaults.AlertObj.Assign(self.Boldoch)
 
     -- Assign Alerts and Timers to Triggers
     self.Danazhal.Triggers.Flamescape = KBM.Trigger:Create(self.Lang.Notify.Flamescape[KBM.Lang], "notify", self.Danazhal)
@@ -393,7 +416,16 @@ function COF:Start()
     self.Danazhal.Triggers.Flamescape = KBM.Trigger:Create(self.Lang.Notify.DanazhalPop[KBM.Lang], "notify", self.Danazhal)
     self.Danazhal.Triggers.Flamescape:AddTimer(self.Danazhal.TimersRef.FirstFlamescape)
 
-    self.Danazhal.Triggers.Void = KBM.Trigger:Create("", "npcDamage", self.Void)
+    self.Danazhal.Triggers.DeathBall = KBM.Trigger:Create(self.Lang.Ability.DeathBall[KBM.Lang], "cast", self.Danazhal)
+    self.Danazhal.Triggers.DeathBall:AddAlert(self.Danazhal.AlertsRef.DeathBall)
+
+    self.Boldoch.Triggers.NoRez = KBM.Trigger:Create(self.Lang.Ability.NoRez[KBM.Lang], "cast", self.Boldoch)
+    self.Boldoch.Triggers.NoRez:AddAlert(self.Boldoch.AlertsRef.NoRez)
+
+    self.Boldoch.Triggers.NoRez = KBM.Trigger:Create(self.Lang.Ability.NoRez[KBM.Lang], "interrupt", self.Boldoch)
+    self.Boldoch.Triggers.NoRez:AddStop(self.Boldoch.AlertsRef.NoRez)
+
+    self.Danazhal.Triggers.Void = KBM.Trigger:Create(self.Lang.Ability.Void[KBM.Lang], "damage", self.Void)
     self.Danazhal.Triggers.Void:AddAlert(self.Danazhal.AlertsRef.Void)
 
     self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

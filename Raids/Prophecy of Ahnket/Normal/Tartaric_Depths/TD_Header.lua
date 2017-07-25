@@ -10,7 +10,7 @@ local TD = {
     Header = nil,
     Enabled = true,
     IsInstance = true,
-    Name = "Tartaric Depths Normal Mode",
+    Name = "Tartaric Depths Normal",
     Type = "Raid",
     ID = "NMTD",
     Object = "TD",
@@ -30,8 +30,8 @@ KBM.RegisterMod(TD.ID, TD)
 TD.Lang = {}
 TD.Lang.Main = {}
 TD.Lang.Main.Name = KBM.Language:Add(TD.Name)
-TD.Lang.Main.Name:SetFrench("Profondeur Tartare Mode Normal")
-TD.Lang.Main.Name:SetGerman("Tartarische Tiefen")
+TD.Lang.Main.Name:SetFrench("Profondeur Tartare Normal")
+TD.Lang.Main.Name:SetGerman("Tartarische Tiefen Normal")
 
 TD.Name = TD.Lang.Main.Name[KBM.Lang]
 TD.Descript = TD.Name
