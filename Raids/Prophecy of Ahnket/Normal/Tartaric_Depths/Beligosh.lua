@@ -86,11 +86,15 @@ KBM.RegisterMod(BEL.ID, BEL)
 -- Ability Dictionary
 BEL.Lang.Ability = {}
 BEL.Lang.Ability.MagmaBreath = KBM.Language:Add("Magma Breath")
+-- TODO: transF: Magma Breath
+-- TODO: transG: Magma Breath
 
 -- Verbose Dictionary
 BEL.Lang.Verbose = {}
-BEL.Lang.Verbose.Wrath = KBM.Language:Add("Go to the edge!")
+BEL.Lang.Verbose.Wrath = KBM.Language:Add("Wrath of Beligosh")
+-- TODO: transF: Wrath of Beligosh
 BEL.Lang.Verbose.Wrath:SetFrench("Aller au bord!")
+-- TODO: transG: Wrath of Beligosh
 BEL.Lang.Verbose.Wrath:SetGerman("An den Rand!")
 
 BEL.Lang.Verbose.BurningGround = KBM.Language:Add("Burning Ground")
@@ -116,13 +120,18 @@ BEL.Lang.Notify.Wrath = KBM.Language:Add("Beligosh: Feel the wrath of Beligosh!"
 BEL.Lang.Notify.Wrath:SetFrench("Beligosh : Sentez le courroux de Beligosh !")
 BEL.Lang.Notify.Wrath:SetGerman("Beligosh: Spürt den Zorn von Beligosh!")
 
+-- TODO: Translations German and one Frence are missing
 BEL.Lang.Notify.BurningGround1 = KBM.Language:Add("Your Weakness is your compassion")
+-- TODO: transF: Your Weakness is your compassion
+-- TODO: transG: Your Weakness is your compassion
 
 BEL.Lang.Notify.BurningGround2 = KBM.Language:Add("Choose who lives, who dies.")
 BEL.Lang.Notify.BurningGround2:SetFrench("Choisissez qui vivra et qui mourra")
+-- TODO: transG: Abandon your friend! Abandon your hope!
 
 BEL.Lang.Notify.BurningGround3 = KBM.Language:Add("Abandon your friend! Abandon your hope!")
 BEL.Lang.Notify.BurningGround3:SetFrench("Abandonnez vos amis ! Abandonnez l'espoir !")
+-- TODO: transG: Abandon your friend! Abandon your hope!
 
 -- Description Dictionary
 BEL.Lang.Main = {}
@@ -262,7 +271,6 @@ end
 function BEL:Timer()
 end
 
-
 function BEL.PhaseTwo()
     BEL.PhaseObj.Objectives:Remove()
     if BEL.Phase == 2 then
@@ -293,8 +301,6 @@ function BEL.AddPhase()
     end
     BEL.PhaseObj.Objectives:AddDeath(BEL.Lang.Unit.Golem[KBM.Lang], 3)
 end
-
-
 
 function BEL:Start()
     -- Create Timers

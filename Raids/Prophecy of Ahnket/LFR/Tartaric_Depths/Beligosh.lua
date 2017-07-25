@@ -83,15 +83,18 @@ BEL.Golem = {
 
 KBM.RegisterMod(BEL.ID, BEL)
 
-
 -- Ability Dictionary
 BEL.Lang.Ability = {}
 BEL.Lang.Ability.MagmaBreath = KBM.Language:Add("Magma Breath")
+-- TODO: transF: Maga Breath
+-- TODO: transG: Maga Breath
 
 -- Verbose Dictionary
 BEL.Lang.Verbose = {}
-BEL.Lang.Verbose.Wrath = KBM.Language:Add("Go to the edge!")
+BEL.Lang.Verbose.Wrath = KBM.Language:Add("Wrath of Beligosh")
+-- TODO: TransF: Wrath of Beligosh
 BEL.Lang.Verbose.Wrath:SetFrench("Aller au bord!")
+-- TODO: TransG: Wrath of Beligosh
 BEL.Lang.Verbose.Wrath:SetGerman("An den Rand!")
 
 BEL.Lang.Verbose.BurningGround = KBM.Language:Add("Burning Ground")
@@ -107,14 +110,13 @@ BEL.Lang.Buff = {}
 -- Debuff Dictionary
 BEL.Lang.Debuff = {}
 
-BEL.Lang.Debuff.VengeanceOfBeligosh = KBM.Language:Add("Vengeance of Beligosh")--tank debuff
-BEL.Lang.Debuff.VengeanceOfBeligosh:SetGerman("Rache von Beligosh")
-BEL.Lang.Debuff.VengeanceOfBeligosh:SetFrench("Vengeance de Beligosh")
+BEL.Lang.Debuff.Vengeance = KBM.Language:Add("Vengeance of Beligosh")--tank debuff
+BEL.Lang.Debuff.Vengeance:SetGerman("Rache von Beligosh")
+BEL.Lang.Debuff.Vengeance:SetFrench("Vengeance de Beligosh")
 
-BEL.Lang.Debuff.SeedOfImmolation = KBM.Language:Add("Seed of Immolation")--raid debuff
-BEL.Lang.Debuff.SeedOfImmolation:SetGerman("Saat der Opferung")
-BEL.Lang.Debuff.SeedOfImmolation:SetFrench("Graine d'immolation")
-
+BEL.Lang.Debuff.Seed = KBM.Language:Add("Seed of Immolation")--raid debuff
+BEL.Lang.Debuff.Seed:SetGerman("Saat der Opferung")
+BEL.Lang.Debuff.Seed:SetFrench("Graine d'immolation")
 
 -- Notify Dictionary
 BEL.Lang.Notify = {}
@@ -123,12 +125,16 @@ BEL.Lang.Notify.Wrath:SetFrench("Beligosh : Sentez le courroux de Beligosh !")
 BEL.Lang.Notify.Wrath:SetGerman("Beligosh: Spürt den Zorn von Beligosh!")
 
 BEL.Lang.Notify.BurningGround1 = KBM.Language:Add("Your Weakness is your compassion")
+-- TODO: TransF: Your Weakness is your compassion
+-- TODO: TransG: Your Weakness is your compassion
 
 BEL.Lang.Notify.BurningGround2 = KBM.Language:Add("Choose who lives, who dies.")
 BEL.Lang.Notify.BurningGround2:SetFrench("Choisissez qui vivra et qui mourra")
+-- TODO: TransG: Choose who lives, who dies.
 
 BEL.Lang.Notify.BurningGround3 = KBM.Language:Add("Abandon your friend! Abandon your hope!")
 BEL.Lang.Notify.BurningGround3:SetFrench("Abandonnez vos amis ! Abandonnez l'espoir !")
+-- TODO: TransG: Abandon your friend! Abandon your hope!
 
 -- Description Dictionary
 BEL.Lang.Main = {}
@@ -148,7 +154,7 @@ function BEL:InitVars()
         CastBar = self.Beligosh.Settings.CastBar,
         EncTimer = KBM.Defaults.EncTimer(),
         PhaseMon = KBM.Defaults.PhaseMon(),
-        MechTimer = KBM.Defaults.MechTimer(),
+        -- MechTimer = KBM.Defaults.MechTimer(),
         Alerts = KBM.Defaults.Alerts(),
         -- TimersRef = self.Baird.Settings.TimersRef,
         AlertsRef = self.Beligosh.Settings.AlertsRef,
@@ -268,7 +274,6 @@ end
 function BEL:Timer()
 end
 
-
 function BEL.PhaseTwo()
     BEL.PhaseObj.Objectives:Remove()
     if BEL.Phase == 2 then
@@ -297,8 +302,6 @@ function BEL.AddPhase()
     end
     BEL.PhaseObj.Objectives:AddDeath(BEL.Lang.Unit.Golem[KBM.Lang], 3)
 end
-
-
 
 function BEL:Start()
     -- Create Timers

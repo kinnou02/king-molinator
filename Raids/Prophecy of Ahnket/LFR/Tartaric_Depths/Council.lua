@@ -56,6 +56,9 @@ COF.Lang.Unit.Void = KBM.Language:Add("VOID")
 COF.Lang.Unit.Void:SetGerman("LEERE")
 COF.Lang.Unit.Void:SetFrench("NÉANT")
 
+-- Main Unit Dictionary
+COF.Lang.Unit = {}
+
 COF.Danazhal = {
     Mod = COF,
     Level = "??",
@@ -191,9 +194,10 @@ COF.Lang.Ability.Void = KBM.Language:Add("Void")
 
 -- Verbose Dictionary
 COF.Lang.Verbose = {}
-COF.Lang.Verbose.Flamescape = KBM.Language:Add("Go into the circle")
-COF.Lang.Verbose.Flamescape:SetGerman("In den weissen Kreis")
-COF.Lang.Verbose.Flamescape:SetFrench("Aller dans le cercle")
+COF.Lang.Verbose.Flamescape = KBM.Language:Add("Flamescape")
+-- TODO: transF, transG: Flamescape (check them got it from above)
+COF.Lang.Verbose.Flamescape:SetGerman("Flammenformen")
+COF.Lang.Verbose.Flamescape:SetFrench("Pyroformation")
 
 -- Buff Dictionary
 COF.Lang.Buff = {}
@@ -205,7 +209,7 @@ COF.Lang.Debuff = {}
 COF.Lang.Notify = {}
 COF.Lang.Notify.Flamescape = KBM.Language:Add("The Flamescape begins.")
 COF.Lang.Notify.Flamescape:SetGerman("Das Flammenformen beginnt.")
- COF.Lang.Notify.Flamescape:SetFrench("La Pyroformation commence.")
+COF.Lang.Notify.Flamescape:SetFrench("La Pyroformation commence.")
 
 COF.Lang.Notify.DanazhalPop = KBM.Language:Add('Contessa Danazhal, "Did you release me? Wonderful! I shall escape after I fest on your souls!"')
 COF.Lang.Notify.DanazhalPop:SetGerman('Gräfin Danazhal: "Ihr wart es, der mich befreite? Wunderbar! Nachdem ich mich an Euren Seelen gelabt habe, werde ich das Weite suchen!"')
@@ -216,8 +220,6 @@ COF.Lang.Menu = {}
 COF.Lang.Menu.FirstFlamescape = KBM.Language:Add("First " .. COF.Lang.Ability.Flamescape[KBM.Lang])
 COF.Lang.Menu.FirstFlamescape:SetFrench("Première " .. COF.Lang.Ability.Flamescape[KBM.Lang])
 COF.Lang.Menu.FirstFlamescape:SetGerman("Erstes ".. COF.Lang.Ability.Flamescape[KBM.Lang])
-
-
 
 -- Description Dictionary
 COF.Lang.Main = {}
@@ -376,8 +378,6 @@ end
 
 function COF:Timer()
 end
-
-
 
 function COF:Start()
     -- Create Timers

@@ -100,23 +100,26 @@ TAR.Lang.Ability.MoltenBlast:SetFrench("Explosion de magma")
 TAR.Lang.Ability.MoltenBlast:SetGerman("Geschmolzene Explosion")
 
 TAR.Lang.Ability.CallForHelp = KBM.Language:Add("Call for Help")
+-- TODO: transF: Call for Help
 TAR.Lang.Ability.CallForHelp:SetGerman("Hilferuf")
 
 -- Verbose Dictionary
 TAR.Lang.Verbose = {}
-TAR.Lang.Verbose.MoltenBlast = KBM.Language:Add("Go to a pillar!")
-TAR.Lang.Verbose.MoltenBlast:SetFrench("Allez au pillier!")
-TAR.Lang.Verbose.MoltenBlast:SetGerman("Geh zur Säule!")
+TAR.Lang.Verbose.MoltenBlast = KBM.Language:Add("Molten Blast")
+-- TODO: transF, transG: Molten Blast (check them got it from above)
+TAR.Lang.Verbose.MoltenBlast:SetFrench("Explosion de magma")
+TAR.Lang.Verbose.MoltenBlast:SetGerman("Geschmolzene Explosion")
 
 -- Buff Dictionary
 TAR.Lang.Buff = {}
 TAR.Lang.Buff.Fury = KBM.Language:Add("Fury")
+-- TODO: transF: Fury
 TAR.Lang.Buff.Fury:SetGerman("Raserei")
 
 -- Debuff Dictionary
 TAR.Lang.Debuff = {}
 TAR.Lang.Debuff.SpiderWeave = KBM.Language:Add("Spider's Weave")
-TAR.Lang.Debuff.SpiderWeave:SetGerman("Netz der Spinne")
+-- TODO: transF: Spider's Weave
 
 TAR.Lang.Notify = {}
 
@@ -222,7 +225,6 @@ function TAR:Death(UnitID)
     return false
 end
 
-
 function TAR:UnitHPCheck(uDetails, unitID)
     if uDetails and unitID then
         if uDetails.type == self.TarJulia.UTID then
@@ -280,7 +282,6 @@ end
 
 function TAR:Timer()
 end
-
 
 function TAR:Start()
     -- Create Timers
