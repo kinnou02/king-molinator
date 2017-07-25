@@ -68,22 +68,26 @@ MAL.Lang.Ability.Meteor:SetGerman("Meteor")
 
 -- Verbose Dictionary
 MAL.Lang.Verbose = {}
-MAL.Lang.Verbose.Meteor = KBM.Language:Add("Pack!")
-MAL.Lang.Verbose.Meteor:SetFrench("Pack!")
-MAL.Lang.Verbose.Meteor:SetGerman("Sammeln!")
+MAL.Lang.Verbose.Meteor = KBM.Language:Add("Meteor")
+-- TODO: transF, transG: Meteor (Check, got them from above)
+MAL.Lang.Verbose.Meteor:SetFrench("Météore")
+MAL.Lang.Verbose.Meteor:SetGerman("Meteor")
 
 MAL.Lang.Verbose.Blastback = KBM.Language:Add("Spread out!")
 MAL.Lang.Verbose.Blastback:SetFrench("Spread out!")
 MAL.Lang.Verbose.Blastback:SetGerman("Verteilen!")
 
-MAL.Lang.Verbose.MarkOfAcrimony = KBM.Language:Add("Go to purple circle!")
+MAL.Lang.Verbose.MarkOfAcrimony = KBM.Language:Add("Acrimony (purple)")
+-- TODO: transF: Acrimony (purple)
 MAL.Lang.Verbose.MarkOfAcrimony:SetFrench("Allez dans le cercle violet!")
+-- TODO: transG: Acrimony (purple)
 MAL.Lang.Verbose.MarkOfAcrimony:SetGerman("Geh in den lilanen Kreis!")
 
-MAL.Lang.Verbose.MarkOfSupremacy = KBM.Language:Add("Go to yellow circle!")
+MAL.Lang.Verbose.MarkOfSupremacy = KBM.Language:Add("Supremacy (yellow)")
+-- TODO: transF: Supremacy (yellow)
 MAL.Lang.Verbose.MarkOfSupremacy:SetFrench("Allez dans le cercle jaune!")
+-- TODO: transG: Supremacy (yellow)
 MAL.Lang.Verbose.MarkOfSupremacy:SetGerman("Geh in den gelben Kreis!")
-
 
 -- Buff Dictionary
 MAL.Lang.Buff = {}
@@ -91,6 +95,7 @@ MAL.Lang.Buff = {}
 -- Debuff Dictionary
 MAL.Lang.Debuff = {}
 MAL.Lang.Debuff.Blastback = KBM.Language:Add("Blastback")
+-- TODO: transF: Blastback
 MAL.Lang.Debuff.Blastback:SetGerman("Rückdruckwelle")
 
 MAL.Lang.Debuff.MarkOfAcrimony = KBM.Language:Add("Mark of Acrimony")
@@ -127,7 +132,6 @@ function MAL:InitVars()
     }
     KBMPOATDMAL_Settings = self.Settings
     chKBMPOATDMAL_Settings = self.Settings
-
 end
 
 function MAL:SwapSettings(bool)
@@ -139,7 +143,6 @@ function MAL:SwapSettings(bool)
         chKBMPOATDMAL_Settings = self.Settings
         self.Settings = KBMPOATDMAL_Settings
     end
-
 end
 
 function MAL:LoadVars() 
@@ -218,7 +221,6 @@ end
 function MAL:Timer()
 end
 
-
 function MAL.PhaseTwo()
     MAL.PhaseObj.Objectives:Remove()
     MAL.Phase = 2
@@ -232,9 +234,6 @@ function MAL.PhaseThree()
     MAL.PhaseObj:SetPhase(3)
     MAL.PhaseObj.Objectives:AddPercent(MAL.Malannon, 0, 30)
 end
-
-
-
 
 function MAL:Start()
     -- Create Timers

@@ -188,9 +188,10 @@ COF.Lang.Ability.Flamescape:SetFrench("Pyroformation")
 
 -- Verbose Dictionary
 COF.Lang.Verbose = {}
-COF.Lang.Verbose.Flamescape = KBM.Language:Add("Go into the circle")
-COF.Lang.Verbose.Flamescape:SetGerman("In den weissen Kreis")
-COF.Lang.Verbose.Flamescape:SetFrench("Aller dans le cercle")
+COF.Lang.Verbose.Flamescape = KBM.Language:Add("Flamescape")
+-- TODO: transF, transG (check themm, got it from above)
+COF.Lang.Verbose.Flamescape:SetGerman("Flammenformen")
+COF.Lang.Verbose.Flamescape:SetFrench("Pyroformation")
 
 -- Buff Dictionary
 COF.Lang.Buff = {}
@@ -214,13 +215,12 @@ COF.Lang.Menu.FirstFlamescape = KBM.Language:Add("First " .. COF.Lang.Ability.Fl
 COF.Lang.Menu.FirstFlamescape:SetFrench("Première " .. COF.Lang.Ability.Flamescape[KBM.Lang])
 COF.Lang.Menu.FirstFlamescape:SetGerman("Erstes ".. COF.Lang.Ability.Flamescape[KBM.Lang])
 
-
-
 -- Description Dictionary
 COF.Lang.Main = {}
 COF.Lang.Main.Descript = KBM.Language:Add("The Council of Fate")
 COF.Lang.Main.Descript:SetGerman("Rat des Schicksals")
 COF.Lang.Main.Descript:SetFrench("Council du destin")
+
 COF.Descript = COF.Lang.Main.Descript[KBM.Lang]
 
 function COF:AddBosses(KBM_Boss)
@@ -372,8 +372,6 @@ end
 
 function COF:Timer()
 end
-
-
 
 function COF:Start()
     -- Create Timers
