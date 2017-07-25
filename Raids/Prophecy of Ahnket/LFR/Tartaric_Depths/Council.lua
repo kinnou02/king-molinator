@@ -72,7 +72,7 @@ COF.Danazhal = {
     Available = false,
     UnitID = nil,
     UTID = "U6551B8383D9BAB5C",
-    TimeOut = 15,
+    TimeOut = 60,
     Triggers = {},
     Settings = {
         CastBar = KBM.Defaults.Castbar(),
@@ -189,6 +189,9 @@ COF.Lang.Ability.Flamescape = KBM.Language:Add("Flamescape")
 COF.Lang.Ability.Flamescape:SetGerman("Flammenformen")
 COF.Lang.Ability.Flamescape:SetFrench("Pyroformation")
 
+COF.Lang.Ability.Void = KBM.Language:Add("Void")
+
+
 -- Verbose Dictionary
 COF.Lang.Verbose = {}
 COF.Lang.Verbose.Flamescape = KBM.Language:Add("Go into the circle")
@@ -235,6 +238,7 @@ function COF:AddBosses(KBM_Boss)
         [self.PleuzhalSoul.Name] = self.PleuzhalSoul,
         [self.BoldochSoul.Name] = self.BoldochSoul,
         [self.DanazhalSoul.Name] = self.DanazhalSoul,
+        [self.Void.Name] = self.Void,
     }
 end
 
@@ -310,9 +314,6 @@ end
 
 function COF:ResetTimers()
     KBM.MechTimer:AddRemove(self.Danazhal.TimersRef.Flamescape)
-    if not self.Danazhal.Dead then
-        KBM.MechTimer:AddStart(self.Danazhal.TimersRef.FirstFlamescape)
-    end
 end
 
 function COF:Death(UnitID)
@@ -324,11 +325,12 @@ function COF:Death(UnitID)
     if self.Boldoch.UnitID == UnitID then
         self.Boldoch.Dead = true
         self.SetObjectives()
-        self:ResetTimers()
     end
     if self.Pleuzhal.UnitID == UnitID then
         self.Pleuzhal.Dead = true
         self.SetObjectives()
+    end
+    if self.DanazhalSoul.UnitID == UnitID then
         self:ResetTimers()
     end
     if self.Danazhal.Dead and self.Boldoch.Dead and self.Pleuzhal.Dead then
@@ -350,6 +352,8 @@ function COF:UnitHPCheck(uDetails, unitID)
                 self.PhaseObj:SetPhase("1")
                 self.Phase = 1
                 self.SetObjectives()
+            end
+            if BossObj == self.Danazhal or BossObj == self.DanazhalSoul then
                 KBM.MechTimer:AddStart(self.Danazhal.TimersRef.FirstFlamescape)
             end
             BossObj.Dead = false
@@ -398,7 +402,7 @@ function COF:Start()
     self.Danazhal.Triggers.Flamescape = KBM.Trigger:Create(self.Lang.Notify.DanazhalPop[KBM.Lang], "notify", self.Danazhal)
     self.Danazhal.Triggers.Flamescape:AddTimer(self.Danazhal.TimersRef.FirstFlamescape)
 
-    self.Danazhal.Triggers.Void = KBM.Trigger:Create("", "npcDamage", self.Void)
+    self.Danazhal.Triggers.Void = KBM.Trigger:Create(self.Lang.Ability.Void[KBM.Lang], "damage", self.Void)
     self.Danazhal.Triggers.Void:AddAlert(self.Danazhal.AlertsRef.Void)
 
     self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

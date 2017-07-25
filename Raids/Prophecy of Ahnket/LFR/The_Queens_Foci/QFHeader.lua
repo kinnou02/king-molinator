@@ -32,6 +32,7 @@ KBM.RegisterMod(MOD.ID, MOD)
 MOD.Lang = {}
 MOD.Lang.Main = {}
 MOD.Lang.Main.Name = KBM.Language:Add(MOD.Name)
+MOD.Lang.Main.Name:SetGerman("Die Foki der Königin")
 
 MOD.Name = MOD.Lang.Main.Name[KBM.Lang]
 MOD.Descript = MOD.Name

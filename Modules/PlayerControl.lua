@@ -19,28 +19,29 @@ local PC = {
  
 PC.RezBank = {
 	["cleric"] = {
-		["A2942FF34A490A22D"] = {}, -- River of Life
-		["A74C19819577CEA4D"] = {}, -- Flash of the Phoenix
-		["A497B3454505E51B5"] = {}, -- Flash of the Phoenix (legendary? new?)
-		["A4D4EFA27574FDC9A"] = {}, -- Absolution
-		["A26862464D9EECBE7"] = {}, -- Life's Return
-		["AFDD327BDD0828E57"] = {}, -- Death's Embrace
+		["A2942FF34A490A22D"] = {}, -- River of Life (Warden)
+		--["A74C19819577CEA4D"] = {}, -- Flash of the Phoenix (not necessary anymore both have same ID and will show)
+		["A497B3454505E51B5"] = {}, -- Flash of the Phoenix (Purifier)
+		["A4D4EFA27574FDC9A"] = {}, -- Absolution (Justicar)
+		["A26862464D9EECBE7"] = {}, -- Life's Return (Sentinel)
+		--["AFDD327BDD0828E57"] = {}, -- Death's Embrace (Defiler old ability)
 	},
 	["mage"] = {
-		["A2D3F2123EE93DE48"] = {}, -- Spark of Life
-		["A4AE33670A72C0F45"] = {}, -- Soul Tether
-        ["A54DDD52299FB6DAB"] = {}, -- Frostkeeper (Suspended Reanimation)
+		-- ["A2D3F2123EE93DE48"] = {}, -- Spark of Life (not found, maybe old ability)
+		["A4AE33670A72C0F45"] = {}, -- Soul Tether (Chloromancer)
+        ["A54DDD52299FB6DAB"] = {}, -- Suspended Reanimation (Frostkeeper)
 	},
 	["warrior"] = {
-		["A5F5BA8A108A5111A"] = {}, -- Soul Redemption
-		["A6193442A30DFFE7A"] = {}, -- Stand and Fight!
+		["A5F5BA8A174BE660E"] = {}, -- Soul Redemption (Liberator)
+		["A6193442A30DFFE7A"] = {}, -- Stand and Fight! (Warchanter)
 	},
 	["rogue"] = {
-		["A72E5E73166B95DD1"] = {}, -- Kiss Of Life
-		["A65315291D2D2B2C5"] = {}, -- Reanimation Battery
+		["A72E5E731D2D2F46C"] = {}, -- Kiss Of Life (Physician)
+		["A65315291D2D2B2C5"] = {}, -- Reanimation Battery (Tactician)
 	},
 	["primalist"] = {
-		["A0ED6AED476EEE994"] = {}, -- Emanate Life
+		["A0ED6AED476EEE994"] = {}, -- Emanate Life (Preserver)
+		["A0D3F8408D8A936C0"] = {}, -- Seelenmaterialisierung (Farseer)
 	}
 }
  

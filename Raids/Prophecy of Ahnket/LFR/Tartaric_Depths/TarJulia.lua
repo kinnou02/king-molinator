@@ -100,6 +100,7 @@ TAR.Lang.Ability.MoltenBlast:SetFrench("Explosion de magma")
 TAR.Lang.Ability.MoltenBlast:SetGerman("Geschmolzene Explosion")
 
 TAR.Lang.Ability.CallForHelp = KBM.Language:Add("Call for Help")
+TAR.Lang.Ability.CallForHelp:SetGerman("Hilferuf")
 
 -- Verbose Dictionary
 TAR.Lang.Verbose = {}
@@ -110,10 +111,12 @@ TAR.Lang.Verbose.MoltenBlast:SetGerman("Geh zur Säule!")
 -- Buff Dictionary
 TAR.Lang.Buff = {}
 TAR.Lang.Buff.Fury = KBM.Language:Add("Fury")
+TAR.Lang.Buff.Fury:SetGerman("Raserei")
 
 -- Debuff Dictionary
 TAR.Lang.Debuff = {}
 TAR.Lang.Debuff.SpiderWeave = KBM.Language:Add("Spider's Weave")
+TAR.Lang.Debuff.SpiderWeave:SetGerman("Netz der Spinne")
 
 TAR.Lang.Notify = {}
 
@@ -121,12 +124,16 @@ TAR.Lang.Notify = {}
 TAR.Lang.Menu = {}
 TAR.Lang.Menu.FirstMoltenBlast = KBM.Language:Add("First " .. TAR.Lang.Ability.MoltenBlast[KBM.Lang])
 TAR.Lang.Menu.FirstMoltenBlast:SetFrench("Première " .. TAR.Lang.Ability.MoltenBlast[KBM.Lang])
+TAR.Lang.Menu.FirstMoltenBlast:SetGerman("Erste " .. TAR.Lang.Ability.MoltenBlast[KBM.Lang])
 TAR.Lang.Menu.FirstCallForHelp = KBM.Language:Add("First " .. TAR.Lang.Ability.CallForHelp[KBM.Lang])
 TAR.Lang.Menu.FirstCallForHelp:SetFrench("Première " .. TAR.Lang.Ability.CallForHelp[KBM.Lang])
+TAR.Lang.Menu.FirstCallForHelp:SetGerman("Erster " .. TAR.Lang.Ability.CallForHelp[KBM.Lang])
 TAR.Lang.Menu.FirstFury = KBM.Language:Add("First " .. TAR.Lang.Buff.Fury[KBM.Lang])
 TAR.Lang.Menu.FirstFury:SetFrench("Première " .. TAR.Lang.Buff.Fury[KBM.Lang])
+TAR.Lang.Menu.FirstFury:SetGerman("Erste " .. TAR.Lang.Buff.Fury[KBM.Lang])
 TAR.Lang.Menu.FirstSpiderWeave = KBM.Language:Add("First " .. TAR.Lang.Debuff.SpiderWeave[KBM.Lang])
 TAR.Lang.Menu.FirstSpiderWeave:SetFrench("Première " .. TAR.Lang.Debuff.SpiderWeave[KBM.Lang])
+TAR.Lang.Menu.FirstSpiderWeave:SetGerman("Erstes " .. TAR.Lang.Debuff.SpiderWeave[KBM.Lang])
 
 -- Description Dictionary
 TAR.Lang.Main = {}
@@ -150,6 +157,7 @@ function TAR:InitVars()
         Alerts = KBM.Defaults.Alerts(),
         -- TimersRef = self.Baird.Settings.TimersRef,
         AlertsRef = self.TarJulia.Settings.AlertsRef,
+        MechSpy = KBM.Defaults.MechSpy(),
     }
     KBMPOATDTAR_Settings = self.Settings
     chKBMPOATDTAR_Settings = self.Settings
@@ -274,8 +282,6 @@ function TAR:Timer()
 end
 
 
-
-
 function TAR:Start()
     -- Create Timers
     self.TarJulia.TimersRef.FirstMoltenBlast = KBM.MechTimer:Add(self.Lang.Ability.MoltenBlast[KBM.Lang], 20)
@@ -301,9 +307,9 @@ function TAR:Start()
 
     -- Create Alerts
     self.TarJulia.AlertsRef.MoltenBlast = KBM.Alert:Create(self.Lang.Verbose.MoltenBlast[KBM.Lang], 10, true, true, "red")
-    self.TarJulia.AlertsRef.CallForHelp = KBM.Alert:Create(self.Lang.Ability.CallForHelp[KBM.Lang], nil, true, true, "blue")
-    self.TarJulia.AlertsRef.Fury = KBM.Alert:Create(self.Lang.Buff.Fury[KBM.Lang], nil, true, true, "orange")
-    self.TarJulia.AlertsRef.SpiderWeave = KBM.Alert:Create(self.Lang.Debuff.SpiderWeave[KBM.Lang], nil, true, true, "purple")
+    self.TarJulia.AlertsRef.CallForHelp = KBM.Alert:Create(self.Lang.Ability.CallForHelp[KBM.Lang], 1, true, true, "blue")
+    self.TarJulia.AlertsRef.Fury = KBM.Alert:Create(self.Lang.Buff.Fury[KBM.Lang], 1, true, true, "orange")
+    self.TarJulia.AlertsRef.SpiderWeave = KBM.Alert:Create(self.Lang.Debuff.SpiderWeave[KBM.Lang], 1, true, true, "purple")
     KBM.Defaults.AlertObj.Assign(self.TarJulia)
 
     -- Assign Alerts and Timers to Triggers
