@@ -205,7 +205,7 @@ COF.Lang.Debuff = {}
 COF.Lang.Notify = {}
 COF.Lang.Notify.Flamescape = KBM.Language:Add("The Flamescape begins.")
 COF.Lang.Notify.Flamescape:SetGerman("Das Flammenformen beginnt.")
- COF.Lang.Notify.Flamescape:SetFrench("La Pyroformation commence.")
+COF.Lang.Notify.Flamescape:SetFrench("La Pyroformation commence.")
 
 COF.Lang.Notify.DanazhalPop = KBM.Language:Add('Contessa Danazhal, "Did you release me? Wonderful! I shall escape after I fest on your souls!"')
 COF.Lang.Notify.DanazhalPop:SetGerman('Gräfin Danazhal: "Ihr wart es, der mich befreite? Wunderbar! Nachdem ich mich an Euren Seelen gelabt habe, werde ich das Weite suchen!"')
