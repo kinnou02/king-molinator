@@ -57,7 +57,6 @@ TAR.TarJulia = {
         AlertsRef = {
             Enabled = true,
             MoltenBlast = KBM.Defaults.AlertObj.Create("red"),
-            CallForHelp = KBM.Defaults.AlertObj.Create("blue"),
             Fury = KBM.Defaults.AlertObj.Create("orange"),
         },
         TimersRef = {
