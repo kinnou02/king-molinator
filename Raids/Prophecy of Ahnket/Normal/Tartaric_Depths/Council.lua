@@ -201,11 +201,10 @@ COF.Lang.Ability.DeathBall = KBM.Language:Add("Mega Death Ball")
 
 -- Verbose Dictionary
 COF.Lang.Verbose = {}
-COF.Lang.Verbose.Flamescape = KBM.Language:Add("Flamescape")
+COF.Lang.Verbose.Flamescape = KBM.Language:Add(COF.Lang.Ability.Flamescape[KBM.Lang])
 -- TODO: transF, transG: Flamescape (check translation got it from above)
-COF.Lang.Verbose.Flamescape:SetGerman("Flammenformen")
-COF.Lang.Verbose.Flamescape:SetFrench("Pyroformation")
->>>>>>> refs/remotes/kinnou02/master
+COF.Lang.Verbose.Flamescape:SetGerman(COF.Lang.Ability.Flamescape[KBM.Lang])
+COF.Lang.Verbose.Flamescape:SetFrench(COF.Lang.Ability.Flamescape[KBM.Lang])
 
 -- Buff Dictionary
 COF.Lang.Buff = {}
@@ -218,7 +217,6 @@ COF.Lang.Notify = {}
 COF.Lang.Notify.Flamescape = KBM.Language:Add("The Flamescape begins.")
 COF.Lang.Notify.Flamescape:SetGerman("Das Flammenformen beginnt.")
 COF.Lang.Notify.Flamescape:SetFrench("La Pyroformation commence.")
-
 
 COF.Lang.Notify.DanazhalPop = KBM.Language:Add('Contessa Danazhal, "Did you release me? Wonderful! I shall escape after I fest on your souls!"')
 COF.Lang.Notify.DanazhalPop:SetGerman('Gräfin Danazhal: "Ihr wart es, der mich befreite? Wunderbar! Nachdem ich mich an Euren Seelen gelabt habe, werde ich das Weite suchen!"')
@@ -323,9 +321,6 @@ end
 
 function COF:ResetTimers()
     KBM.MechTimer:AddRemove(self.Danazhal.TimersRef.Flamescape)
-    if not self.Danazhal.Dead then
-        KBM.MechTimer:AddStart(self.Danazhal.TimersRef.FirstFlamescape)
-    end
 end
 
 function COF:Death(UnitID)
@@ -337,7 +332,6 @@ function COF:Death(UnitID)
     if self.Boldoch.UnitID == UnitID then
         self.Boldoch.Dead = true
         self.SetObjectives()
-        self:ResetTimers()
     end
     if self.Pleuzhal.UnitID == UnitID then
         self.Pleuzhal.Dead = true

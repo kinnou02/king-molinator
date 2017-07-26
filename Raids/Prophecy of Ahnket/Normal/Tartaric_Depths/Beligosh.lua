@@ -64,12 +64,9 @@ BEL.Beligosh = {
             SeedOfImmolation = KBM.Defaults.TimerObj.Create("purple"),
             VengeanceOfBeligosh = KBM.Defaults.TimerObj.Create("blue"),
             MagmaBreath = KBM.Defaults.TimerObj.Create("red"),
+			Landing = KBM.Defaults.TimerObj.Create("red"),
             SoftEnrageTimer = KBM.Defaults.TimerObj.Create("dark_grey"),
             Enrage = KBM.Defaults.TimerObj.Create("dark_grey"),
-            SeedOfImmolation = KBM.Defaults.TimerObj.Create("purple"),
-            VengeanceOfBeligosh = KBM.Defaults.TimerObj.Create("blue"),
-            MagmaBreath = KBM.Defaults.TimerObj.Create("red"),
-            Landing = KBM.Defaults.TimerObj.Create("red"),
         },
     },
 }
@@ -88,11 +85,9 @@ BEL.Golem = {
 
 KBM.RegisterMod(BEL.ID, BEL)
 
-
 -- Ability Dictionary
 BEL.Lang.Ability = {}
 BEL.Lang.Ability.MagmaBreath = KBM.Language:Add("Magma Breath")
-<<<<<<< HEAD
 -- TODO: transF: Magma Breath
 -- TODO: transG: Magma Breath
 
@@ -104,9 +99,9 @@ BEL.Lang.Verbose.Wrath:SetFrench("Aller au bord!")
 -- TODO: transG: Wrath of Beligosh
 BEL.Lang.Verbose.Wrath:SetGerman("An den Rand!")
 
-BEL.Lang.Verbose.BurningGround = KBM.Language:Add("Burning Ground")
-BEL.Lang.Verbose.BurningGround:SetGerman("Brennende Erde")
-BEL.Lang.Verbose.BurningGround:SetFrench("Terrain enflammé")
+BEL.Lang.Verbose.BurningGround = KBM.Language:Add(BEL.Lang.Ability.BurningGround[KBM.Lang])
+BEL.Lang.Verbose.BurningGround:SetGerman(BEL.Lang.Ability.BurningGround[KBM.Lang])
+BEL.Lang.Verbose.BurningGround:SetFrench(BEL.Lang.Ability.BurningGround[KBM.Lang])
 
 BEL.Lang.Verbose.Landing = KBM.Language:Add("Landing")
 
@@ -118,6 +113,7 @@ BEL.Lang.Verbose.Enrage = KBM.Language:Add("Enrage")
 BEL.Lang.Buff = {}
 
 -- Debuff Dictionary
+BEL.Lang.Debuff = {}
 BEL.Lang.Debuff.VengeanceOfBeligosh = KBM.Language:Add("Vengeance of Beligosh")--tank debuff
 BEL.Lang.Debuff.VengeanceOfBeligosh:SetGerman("Rache von Beligosh")
 BEL.Lang.Debuff.VengeanceOfBeligosh:SetFrench("Vengeance de Beligosh")

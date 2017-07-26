@@ -32,7 +32,6 @@ BEL.Lang.Unit.Beligosh = KBM.Language:Add("Beligosh")
 BEL.Lang.Unit.Beligosh:SetFrench("Beligosh")
 BEL.Lang.Unit.Beligosh:SetGerman("Beligosh")
 
-
 BEL.Lang.Unit.Golem = KBM.Language:Add("Alavaxian Golem")
 BEL.Lang.Unit.Golem:SetFrench("Golem alaviax")
 BEL.Lang.Unit.Golem:SetGerman("Alavaxianischer Golem")
@@ -103,20 +102,19 @@ BEL.Lang.Verbose.BurningGround:SetFrench("Terrain enflammé")
 
 BEL.Lang.Verbose.Landing = KBM.Language:Add("Landing")
 
-
 -- Buff Dictionary
 BEL.Lang.Buff = {}
 
 -- Debuff Dictionary
 BEL.Lang.Debuff = {}
 
-BEL.Lang.Debuff.Vengeance = KBM.Language:Add("Vengeance of Beligosh")--tank debuff
-BEL.Lang.Debuff.Vengeance:SetGerman("Rache von Beligosh")
-BEL.Lang.Debuff.Vengeance:SetFrench("Vengeance de Beligosh")
+BEL.Lang.Debuff.VenganceOfBligosh = KBM.Language:Add("Vengeance of Beligosh")--tank debuff
+BEL.Lang.Debuff.VenganceOfBligosh:SetGerman("Rache von Beligosh")
+BEL.Lang.Debuff.VenganceOfBligosh:SetFrench("Vengeance de Beligosh")
 
-BEL.Lang.Debuff.Seed = KBM.Language:Add("Seed of Immolation")--raid debuff
-BEL.Lang.Debuff.Seed:SetGerman("Saat der Opferung")
-BEL.Lang.Debuff.Seed:SetFrench("Graine d'immolation")
+BEL.Lang.Debuff.SeedOfImmolation = KBM.Language:Add("Seed of Immolation")--raid debuff
+BEL.Lang.Debuff.SeedOfImmolation:SetGerman("Saat der Opferung")
+BEL.Lang.Debuff.SeedOfImmolation:SetFrench("Graine d'immolation")
 
 -- Notify Dictionary
 BEL.Lang.Notify = {}
@@ -154,7 +152,7 @@ function BEL:InitVars()
         CastBar = self.Beligosh.Settings.CastBar,
         EncTimer = KBM.Defaults.EncTimer(),
         PhaseMon = KBM.Defaults.PhaseMon(),
-        -- MechTimer = KBM.Defaults.MechTimer(),
+        MechTimer = KBM.Defaults.MechTimer(),
         Alerts = KBM.Defaults.Alerts(),
         -- TimersRef = self.Baird.Settings.TimersRef,
         AlertsRef = self.Beligosh.Settings.AlertsRef,

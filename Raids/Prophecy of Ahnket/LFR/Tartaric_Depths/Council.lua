@@ -56,9 +56,6 @@ COF.Lang.Unit.Void = KBM.Language:Add("VOID")
 COF.Lang.Unit.Void:SetGerman("LEERE")
 COF.Lang.Unit.Void:SetFrench("NÉANT")
 
--- Main Unit Dictionary
-COF.Lang.Unit = {}
-
 COF.Danazhal = {
     Mod = COF,
     Level = "??",
@@ -190,14 +187,14 @@ COF.Lang.Ability.Flamescape:SetGerman("Flammenformen")
 COF.Lang.Ability.Flamescape:SetFrench("Pyroformation")
 
 COF.Lang.Ability.Void = KBM.Language:Add("Void")
-
+-- TODO: transF: Void
+-- TODO: transG: Void
 
 -- Verbose Dictionary
 COF.Lang.Verbose = {}
-COF.Lang.Verbose.Flamescape = KBM.Language:Add("Flamescape")
--- TODO: transF, transG: Flamescape (check them got it from above)
-COF.Lang.Verbose.Flamescape:SetGerman("Flammenformen")
-COF.Lang.Verbose.Flamescape:SetFrench("Pyroformation")
+COF.Lang.Verbose.Flamescape = KBM.Language:Add(COF.Lang.Ability.Flamescape[KBM.Lang])
+COF.Lang.Verbose.Flamescape:SetGerman(COF.Lang.Ability.Flamescape[KBM.Lang])
+COF.Lang.Verbose.Flamescape:SetFrench(COF.Lang.Ability.Flamescape[KBM.Lang])
 
 -- Buff Dictionary
 COF.Lang.Buff = {}

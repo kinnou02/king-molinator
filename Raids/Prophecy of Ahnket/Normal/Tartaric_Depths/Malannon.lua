@@ -115,7 +115,6 @@ MAL.Lang.Verbose.SiphonEnergy = KBM.Language:Add("Adds Spawn")
 
 MAL.Lang.Verbose.Runes = KBM.Language:Add("Runes of Power")
 
->>>>>>> refs/remotes/kinnou02/master
 -- Buff Dictionary
 MAL.Lang.Buff = {}
 
