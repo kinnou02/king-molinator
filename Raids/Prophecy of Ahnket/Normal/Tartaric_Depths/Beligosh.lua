@@ -99,9 +99,9 @@ BEL.Lang.Verbose.Wrath:SetFrench("Aller au bord!")
 -- TODO: transG: Wrath of Beligosh
 BEL.Lang.Verbose.Wrath:SetGerman("An den Rand!")
 
-BEL.Lang.Verbose.BurningGround = KBM.Language:Add(BEL.Lang.Ability.BurningGround[KBM.Lang])
-BEL.Lang.Verbose.BurningGround:SetGerman(BEL.Lang.Ability.BurningGround[KBM.Lang])
-BEL.Lang.Verbose.BurningGround:SetFrench(BEL.Lang.Ability.BurningGround[KBM.Lang])
+BEL.Lang.Verbose.BurningGround = KBM.Language:Add("Burning Ground")
+BEL.Lang.Verbose.BurningGround:SetGerman("Brennende Erde")
+BEL.Lang.Verbose.BurningGround:SetFrench("Terrain enflammé") 
 
 BEL.Lang.Verbose.Landing = KBM.Language:Add("Landing")
 
