@@ -90,8 +90,7 @@ MAL.Lang.Ability.Runes:SetFrench("Runes de pouvoir")
 -- Verbose Dictionary
 MAL.Lang.Verbose = {}
 MAL.Lang.Verbose.Blastback = KBM.Language:Add("Spread!")
--- TODO: transF: check translation
-MAL.Lang.Verbose.Blastback:SetFrench("Spread out!")
+MAL.Lang.Verbose.Blastback:SetFrench("Dispersez vous!")
 MAL.Lang.Verbose.Blastback:SetGerman("Verteilen!")
 
 MAL.Lang.Verbose.MarkOfAcrimony = KBM.Language:Add("Acrimony (purple)")
