@@ -187,7 +187,6 @@ COF.Void = {
 
 KBM.RegisterMod(COF.ID, COF)
 
-
 -- Ability Dictionary
 COF.Lang.Ability = {}
 COF.Lang.Ability.Flamescape = KBM.Language:Add("Flamescape")
@@ -200,12 +199,12 @@ COF.Lang.Ability.NoRez = KBM.Language:Add("No Permission to Ressurect")
 
 COF.Lang.Ability.DeathBall = KBM.Language:Add("Mega Death Ball")
 
-
 -- Verbose Dictionary
 COF.Lang.Verbose = {}
-COF.Lang.Verbose.Flamescape = KBM.Language:Add("Go into the circle")
-COF.Lang.Verbose.Flamescape:SetGerman("In den weissen Kreis")
-COF.Lang.Verbose.Flamescape:SetFrench("Aller dans le cercle")
+COF.Lang.Verbose.Flamescape = KBM.Language:Add(COF.Lang.Ability.Flamescape[KBM.Lang])
+-- TODO: transF, transG: Flamescape (check translation got it from above)
+COF.Lang.Verbose.Flamescape:SetGerman(COF.Lang.Ability.Flamescape[KBM.Lang])
+COF.Lang.Verbose.Flamescape:SetFrench(COF.Lang.Ability.Flamescape[KBM.Lang])
 
 -- Buff Dictionary
 COF.Lang.Buff = {}
@@ -229,13 +228,12 @@ COF.Lang.Menu.FirstFlamescape = KBM.Language:Add("First " .. COF.Lang.Ability.Fl
 COF.Lang.Menu.FirstFlamescape:SetFrench("Première " .. COF.Lang.Ability.Flamescape[KBM.Lang])
 COF.Lang.Menu.FirstFlamescape:SetGerman("Erstes ".. COF.Lang.Ability.Flamescape[KBM.Lang])
 
-
-
 -- Description Dictionary
 COF.Lang.Main = {}
 COF.Lang.Main.Descript = KBM.Language:Add("The Council of Fate")
 COF.Lang.Main.Descript:SetGerman("Rat des Schicksals")
 COF.Lang.Main.Descript:SetFrench("Council du destin")
+
 COF.Descript = COF.Lang.Main.Descript[KBM.Lang]
 
 function COF:AddBosses(KBM_Boss)
@@ -389,8 +387,6 @@ end
 function COF:Timer()
 end
 
-
-
 function COF:Start()
     -- Create Timers
     self.Danazhal.TimersRef.FirstFlamescape = KBM.MechTimer:Add(self.Lang.Ability.Flamescape[KBM.Lang], 22)
@@ -427,6 +423,5 @@ function COF:Start()
     self.Danazhal.Triggers.Void:AddAlert(self.Danazhal.AlertsRef.Void)
 
     self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-
 
 end

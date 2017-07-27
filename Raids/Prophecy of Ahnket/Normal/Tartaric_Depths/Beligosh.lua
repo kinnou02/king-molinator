@@ -33,7 +33,6 @@ BEL.Lang.Unit.Beligosh = KBM.Language:Add("Beligosh")
 BEL.Lang.Unit.Beligosh:SetFrench("Beligosh")
 BEL.Lang.Unit.Beligosh:SetGerman("Beligosh")
 
-
 BEL.Lang.Unit.Golem = KBM.Language:Add("Alavaxian Golem")
 BEL.Lang.Unit.Golem:SetFrench("Golem alaviax")
 BEL.Lang.Unit.Golem:SetGerman("Alavaxianischer Golem")
@@ -62,12 +61,12 @@ BEL.Beligosh = {
         },
         TimersRef = {
             Enabled = true,
-            SoftEnrageTimer = KBM.Defaults.TimerObj.Create("dark_grey"),
-            Enrage = KBM.Defaults.TimerObj.Create("dark_grey"),
             SeedOfImmolation = KBM.Defaults.TimerObj.Create("purple"),
             VengeanceOfBeligosh = KBM.Defaults.TimerObj.Create("blue"),
             MagmaBreath = KBM.Defaults.TimerObj.Create("red"),
-            Landing = KBM.Defaults.TimerObj.Create("red"),
+			Landing = KBM.Defaults.TimerObj.Create("red"),
+            SoftEnrageTimer = KBM.Defaults.TimerObj.Create("dark_grey"),
+            Enrage = KBM.Defaults.TimerObj.Create("dark_grey"),
         },
     },
 }
@@ -86,35 +85,35 @@ BEL.Golem = {
 
 KBM.RegisterMod(BEL.ID, BEL)
 
-
 -- Ability Dictionary
 BEL.Lang.Ability = {}
 BEL.Lang.Ability.MagmaBreath = KBM.Language:Add("Magma Breath")
+-- TODO: transF: Magma Breath
+-- TODO: transG: Magma Breath
 
 -- Verbose Dictionary
 BEL.Lang.Verbose = {}
-BEL.Lang.Verbose.Wrath = KBM.Language:Add("Go to the edge!")
+BEL.Lang.Verbose.Wrath = KBM.Language:Add("Wrath of Beligosh")
+-- TODO: transF: Wrath of Beligosh
 BEL.Lang.Verbose.Wrath:SetFrench("Aller au bord!")
+-- TODO: transG: Wrath of Beligosh
 BEL.Lang.Verbose.Wrath:SetGerman("An den Rand!")
 
-BEL.Lang.Verbose.BurningGround = KBM.Language:Add("Burning Ground")
-BEL.Lang.Verbose.BurningGround:SetGerman("Brennende Erde")
-BEL.Lang.Verbose.BurningGround:SetFrench("Terrain enflammé")
+BEL.Lang.Verbose.BurningGround = KBM.Language:Add(BEL.Lang.Ability.BurningGround[KBM.Lang])
+BEL.Lang.Verbose.BurningGround:SetGerman(BEL.Lang.Ability.BurningGround[KBM.Lang])
+BEL.Lang.Verbose.BurningGround:SetFrench(BEL.Lang.Ability.BurningGround[KBM.Lang])
 
 BEL.Lang.Verbose.Landing = KBM.Language:Add("Landing")
 
 BEL.Lang.Verbose.SoftEnrageTimer = KBM.Language:Add("Soft Enrage")
 
-
 BEL.Lang.Verbose.Enrage = KBM.Language:Add("Enrage")
-
 
 -- Buff Dictionary
 BEL.Lang.Buff = {}
 
 -- Debuff Dictionary
 BEL.Lang.Debuff = {}
-
 BEL.Lang.Debuff.VengeanceOfBeligosh = KBM.Language:Add("Vengeance of Beligosh")--tank debuff
 BEL.Lang.Debuff.VengeanceOfBeligosh:SetGerman("Rache von Beligosh")
 BEL.Lang.Debuff.VengeanceOfBeligosh:SetFrench("Vengeance de Beligosh")
@@ -123,7 +122,6 @@ BEL.Lang.Debuff.SeedOfImmolation = KBM.Language:Add("Seed of Immolation")--raid 
 BEL.Lang.Debuff.SeedOfImmolation:SetGerman("Saat der Opferung")
 BEL.Lang.Debuff.SeedOfImmolation:SetFrench("Graine d'immolation")
 
-
 -- Notify Dictionary
 BEL.Lang.Notify = {}
 BEL.Lang.Notify.Wrath = KBM.Language:Add("Beligosh: Feel the wrath of Beligosh!")
@@ -131,12 +129,16 @@ BEL.Lang.Notify.Wrath:SetFrench("Beligosh : Sentez le courroux de Beligosh !")
 BEL.Lang.Notify.Wrath:SetGerman("Beligosh: Spürt den Zorn von Beligosh!")
 
 BEL.Lang.Notify.BurningGround1 = KBM.Language:Add("Your Weakness is your compassion")
+-- TODO: transF: Your Weakness is your compassion
+-- TODO: transG: Your Weakness is your compassion
 
 BEL.Lang.Notify.BurningGround2 = KBM.Language:Add("Choose who lives, who dies.")
 BEL.Lang.Notify.BurningGround2:SetFrench("Choisissez qui vivra et qui mourra")
+-- TODO: transG: Choose who lives, who dies.
 
 BEL.Lang.Notify.BurningGround3 = KBM.Language:Add("Abandon your friend! Abandon your hope!")
 BEL.Lang.Notify.BurningGround3:SetFrench("Abandonnez vos amis ! Abandonnez l'espoir !")
+-- TODO: transG: Abandon your friend! Abandon your hope!
 
 -- Description Dictionary
 BEL.Lang.Main = {}
@@ -276,7 +278,6 @@ end
 function BEL:Timer()
 end
 
-
 function BEL.PhaseTwo()
     BEL.PhaseObj.Objectives:Remove()
     if BEL.Phase == 2 then
@@ -363,7 +364,6 @@ function BEL:Start()
     self.Beligosh.CastBar = KBM.Castbar:Add(self, self.Beligosh)
     self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 
-
     self.Beligosh.Triggers.AddPhase = KBM.Trigger:Create(75, "percent", self.Beligosh)
     self.Beligosh.Triggers.AddPhase:AddPhase(self.AddPhase)
 
@@ -397,4 +397,5 @@ function BEL:Start()
 
     self.Beligosh.Triggers.FinalPhaseTimer = KBM.Trigger:Create(540, "time", self.Beligosh)
     self.Beligosh.Triggers.FinalPhaseTimer:AddPhase(self.FinalPhaseTimer)
+
 end

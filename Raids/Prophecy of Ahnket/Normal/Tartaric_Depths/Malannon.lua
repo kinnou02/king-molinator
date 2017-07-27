@@ -76,28 +76,39 @@ MAL.Lang.Ability.Meteor:SetFrench("Météore")
 MAL.Lang.Ability.Meteor:SetGerman("Meteor")
 
 MAL.Lang.Ability.Obliteration = KBM.Language:Add("Obliteration")
+-- TODO: transF: Obliteration
+-- TODO: transG: Obliteration
 
 MAL.Lang.Ability.SiphonEnergy = KBM.Language:Add("Siphon Energy")
+-- TODO: transF: Siphon Energy
 MAL.Lang.Ability.SiphonEnergy:SetGerman("Energie entziehen")
 
 MAL.Lang.Ability.Runes = KBM.Language:Add("Runes of Power")
+-- TODO: transF: Runes of Power
+-- TODO: transG: Runes of Power
 
 -- Verbose Dictionary
 MAL.Lang.Verbose = {}
-MAL.Lang.Verbose.Meteor = KBM.Language:Add("Stack!")
-MAL.Lang.Verbose.Meteor:SetFrench("Pack!")
-MAL.Lang.Verbose.Meteor:SetGerman("Sammeln!")
+MAL.Lang.Verbose.Meteor = KBM.Language:Add("Meteor")
+-- TODO: transF, transG: Meteor (check translation got it from above)
+MAL.Lang.Verbose.Meteor:SetFrench("Météore")
+MAL.Lang.Verbose.Meteor:SetGerman("Meteor")
 
 MAL.Lang.Verbose.Blastback = KBM.Language:Add("Spread!")
+-- TODO: transF: check translation
 MAL.Lang.Verbose.Blastback:SetFrench("Spread out!")
 MAL.Lang.Verbose.Blastback:SetGerman("Verteilen!")
 
-MAL.Lang.Verbose.MarkOfAcrimony = KBM.Language:Add("Go to purple circle!")
+MAL.Lang.Verbose.MarkOfAcrimony = KBM.Language:Add("Acrimony (purple)")
+-- TODO: transF: Acrimony (purple)
 MAL.Lang.Verbose.MarkOfAcrimony:SetFrench("Allez dans le cercle violet!")
+-- TODO: transG: Acrimony (purple)
 MAL.Lang.Verbose.MarkOfAcrimony:SetGerman("Geh in den lilanen Kreis!")
 
-MAL.Lang.Verbose.MarkOfSupremacy = KBM.Language:Add("Go to yellow circle!")
+MAL.Lang.Verbose.MarkOfSupremacy = KBM.Language:Add("Supremacy (yellow)")
+-- TODO: transF: Supremacy (yellow)
 MAL.Lang.Verbose.MarkOfSupremacy:SetFrench("Allez dans le cercle jaune!")
+-- TODO: transG: Supremacy (yellow)
 MAL.Lang.Verbose.MarkOfSupremacy:SetGerman("Geh in den gelben Kreis!")
 
 MAL.Lang.Verbose.SiphonEnergy = KBM.Language:Add("Adds Spawn")
@@ -110,6 +121,7 @@ MAL.Lang.Buff = {}
 -- Debuff Dictionary
 MAL.Lang.Debuff = {}
 MAL.Lang.Debuff.Blastback = KBM.Language:Add("Blastback")
+-- TODO: transF: Blastback
 MAL.Lang.Debuff.Blastback:SetGerman("Rückdruckwelle")
 
 MAL.Lang.Debuff.MarkOfAcrimony = KBM.Language:Add("Mark of Acrimony")
@@ -260,16 +272,13 @@ function MAL.PhaseThree()
     MAL.PhaseObj.Objectives:AddPercent(MAL.Malannon, 0, 30)
 end
 
-
-
-
 function MAL:Start()
     -- Create Timers
     self.Malannon.TimersRef.SiphonEnergy = KBM.MechTimer:Add(self.Lang.Verbose.SiphonEnergy[KBM.Lang], 60)
     self.Malannon.TimersRef.Runes = KBM.MechTimer:Add(self.Lang.Verbose.Runes[KBM.Lang], 60)
     self.Malannon.TimersRef.SiphonEnergyFirst = KBM.MechTimer:Add(self.Lang.Verbose.SiphonEnergy[KBM.Lang], 30)
     KBM.Defaults.TimerObj.Assign(self.Malannon)
-    
+
     -- Create Alerts
     self.Malannon.AlertsRef.Meteor = KBM.Alert:Create(self.Lang.Verbose.Meteor[KBM.Lang], 9, true, true, "red")
     self.Malannon.AlertsRef.Blastback = KBM.Alert:Create(self.Lang.Verbose.Blastback[KBM.Lang], 5, true, true, "blue")
@@ -318,6 +327,5 @@ function MAL:Start()
     
     self.Malannon.Triggers.RunesRemoved = KBM.Trigger:Create(35, "percent", self.Malannon)
     self.Malannon.Triggers.RunesRemoved:AddPhase(self.RemoveTimers)
-    
 
 end

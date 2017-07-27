@@ -66,31 +66,13 @@ MAL.Lang.Ability.Meteor = KBM.Language:Add("Meteor")
 MAL.Lang.Ability.Meteor:SetFrench("Météore")
 MAL.Lang.Ability.Meteor:SetGerman("Meteor")
 
--- Verbose Dictionary
-MAL.Lang.Verbose = {}
-MAL.Lang.Verbose.Meteor = KBM.Language:Add("Stack!")
-MAL.Lang.Verbose.Meteor:SetFrench("Pack!")
-MAL.Lang.Verbose.Meteor:SetGerman("Sammeln!")
-
-MAL.Lang.Verbose.Blastback = KBM.Language:Add("Spread!")
-MAL.Lang.Verbose.Blastback:SetFrench("Spread out!")
-MAL.Lang.Verbose.Blastback:SetGerman("Verteilen!")
-
-MAL.Lang.Verbose.MarkOfAcrimony = KBM.Language:Add("Go to purple circle!")
-MAL.Lang.Verbose.MarkOfAcrimony:SetFrench("Allez dans le cercle violet!")
-MAL.Lang.Verbose.MarkOfAcrimony:SetGerman("Geh in den lilanen Kreis!")
-
-MAL.Lang.Verbose.MarkOfSupremacy = KBM.Language:Add("Go to yellow circle!")
-MAL.Lang.Verbose.MarkOfSupremacy:SetFrench("Allez dans le cercle jaune!")
-MAL.Lang.Verbose.MarkOfSupremacy:SetGerman("Geh in den gelben Kreis!")
-
-
 -- Buff Dictionary
 MAL.Lang.Buff = {}
 
 -- Debuff Dictionary
 MAL.Lang.Debuff = {}
 MAL.Lang.Debuff.Blastback = KBM.Language:Add("Blastback")
+-- TODO: transF: Blastback
 MAL.Lang.Debuff.Blastback:SetGerman("Rückdruckwelle")
 
 MAL.Lang.Debuff.MarkOfAcrimony = KBM.Language:Add("Mark of Acrimony")
@@ -100,6 +82,28 @@ MAL.Lang.Debuff.MarkOfAcrimony:SetFrench("Marque d'amertume")
 MAL.Lang.Debuff.MarkOfSupremacy = KBM.Language:Add("Mark of Supremacy")
 MAL.Lang.Debuff.MarkOfSupremacy:SetFrench("Marque de suprématie")
 MAL.Lang.Debuff.MarkOfSupremacy:SetGerman("Signum der Vormachtstellung")
+
+-- Verbose Dictionary
+MAL.Lang.Verbose = {}
+MAL.Lang.Verbose.Meteor = KBM.Language:Add(MAL.Lang.Ability.Meteor[KBM.Lang])
+MAL.Lang.Verbose.Meteor:SetFrench(MAL.Lang.Ability.Meteor[KBM.Lang])
+MAL.Lang.Verbose.Meteor:SetGerman(MAL.Lang.Ability.Meteor[KBM.Lang])
+
+MAL.Lang.Verbose.Blastback = KBM.Language:Add(MAL.Lang.Debuff.Blastback[KBM.Lang])
+MAL.Lang.Verbose.Blastback:SetFrench(MAL.Lang.Debuff.Blastback[KBM.Lang])
+MAL.Lang.Verbose.Blastback:SetGerman(MAL.Lang.Debuff.Blastback[KBM.Lang])
+
+MAL.Lang.Verbose.MarkOfAcrimony = KBM.Language:Add(MAL.Lang.Debuff.MarkOfAcrimony[KBM.Lang] .. " (purple)")
+-- TODO: transF: purple, (used an online translator)
+MAL.Lang.Verbose.MarkOfAcrimony:SetFrench(MAL.Lang.Debuff.MarkOfAcrimony[KBM.Lang] .. " (violet)")
+-- TODO: transG: purple, (used an online translator)
+MAL.Lang.Verbose.MarkOfAcrimony:SetGerman(MAL.Lang.Debuff.MarkOfAcrimony[KBM.Lang] .. " (violett)")
+
+MAL.Lang.Verbose.MarkOfSupremacy = KBM.Language:Add(MAL.Lang.Debuff.MarkOfSupremacy[KBM.Lang] .. " (yellow)")
+-- TODO: transF: yellow
+MAL.Lang.Verbose.MarkOfSupremacy:SetFrench(MAL.Lang.Debuff.MarkOfSupremacy[KBM.Lang] .. " (yellow)")
+-- TODO: transG: yellow (used an online translator)
+MAL.Lang.Verbose.MarkOfSupremacy:SetGerman(MAL.Lang.Debuff.MarkOfSupremacy[KBM.Lang] .. " (gelb)")
 
 MAL.Lang.Notify = {}
 
@@ -127,7 +131,6 @@ function MAL:InitVars()
     }
     KBMPOATDMAL_Settings = self.Settings
     chKBMPOATDMAL_Settings = self.Settings
-
 end
 
 function MAL:SwapSettings(bool)
@@ -139,7 +142,6 @@ function MAL:SwapSettings(bool)
         chKBMPOATDMAL_Settings = self.Settings
         self.Settings = KBMPOATDMAL_Settings
     end
-
 end
 
 function MAL:LoadVars() 
@@ -218,7 +220,6 @@ end
 function MAL:Timer()
 end
 
-
 function MAL.PhaseTwo()
     MAL.PhaseObj.Objectives:Remove()
     MAL.Phase = 2
@@ -232,9 +233,6 @@ function MAL.PhaseThree()
     MAL.PhaseObj:SetPhase(3)
     MAL.PhaseObj.Objectives:AddPercent(MAL.Malannon, 0, 30)
 end
-
-
-
 
 function MAL:Start()
     -- Create Timers

@@ -65,7 +65,6 @@ TAR.TarJulia = {
             FirstMoltenBlast = KBM.Defaults.TimerObj.Create("red"),
             CallForHelp = KBM.Defaults.TimerObj.Create("blue"),
             FirstCallForHelp = KBM.Defaults.TimerObj.Create("blue"),
-            SpiderWeave = KBM.Defaults.TimerObj.Create("purple"),
             FirstSpiderWeave = KBM.Defaults.TimerObj.Create("purple"),
             Fury = KBM.Defaults.TimerObj.Create("orange"),
             FirstFury = KBM.Defaults.TimerObj.Create("orange"),
@@ -98,22 +97,26 @@ TAR.Lang.Ability.MoltenBlast:SetFrench("Explosion de magma")
 TAR.Lang.Ability.MoltenBlast:SetGerman("Geschmolzene Explosion")
 
 TAR.Lang.Ability.CallForHelp = KBM.Language:Add("Call for Help")
+-- TODO: transF: Call for Help
 TAR.Lang.Ability.CallForHelp:SetGerman("Hilferuf")
 
 -- Verbose Dictionary
 TAR.Lang.Verbose = {}
-TAR.Lang.Verbose.MoltenBlast = KBM.Language:Add("Go to a pillar!")
-TAR.Lang.Verbose.MoltenBlast:SetFrench("Allez au pillier!")
-TAR.Lang.Verbose.MoltenBlast:SetGerman("Geh zur Säule!")
+TAR.Lang.Verbose.MoltenBlast = KBM.Language:Add("Molten Lava")
+-- TODO: transF, transG: Molten Lava (Check got them from above)
+TAR.Lang.Verbose.MoltenBlast:SetFrench("Explosion de magma")
+TAR.Lang.Verbose.MoltenBlast:SetGerman("Geschmolzene Explosion")
 
 -- Buff Dictionary
 TAR.Lang.Buff = {}
 TAR.Lang.Buff.Fury = KBM.Language:Add("Fury")
+-- TODO: transF: Furry
 TAR.Lang.Buff.Fury:SetGerman("Raserei")
 
 -- Debuff Dictionary
 TAR.Lang.Debuff = {}
 TAR.Lang.Debuff.SpiderWeave = KBM.Language:Add("Spider's Weave")
+-- TODO: transF: Spider's Weave
 TAR.Lang.Debuff.SpiderWeave:SetGerman("Netz der Spinne")
 
 TAR.Lang.Notify = {}
@@ -123,12 +126,15 @@ TAR.Lang.Menu = {}
 TAR.Lang.Menu.FirstMoltenBlast = KBM.Language:Add("First " .. TAR.Lang.Ability.MoltenBlast[KBM.Lang])
 TAR.Lang.Menu.FirstMoltenBlast:SetFrench("Première " .. TAR.Lang.Ability.MoltenBlast[KBM.Lang])
 TAR.Lang.Menu.FirstMoltenBlast:SetGerman("Erste " .. TAR.Lang.Ability.MoltenBlast[KBM.Lang])
+
 TAR.Lang.Menu.FirstCallForHelp = KBM.Language:Add("First " .. TAR.Lang.Ability.CallForHelp[KBM.Lang])
 TAR.Lang.Menu.FirstCallForHelp:SetFrench("Première " .. TAR.Lang.Ability.CallForHelp[KBM.Lang])
 TAR.Lang.Menu.FirstCallForHelp:SetGerman("Erster " .. TAR.Lang.Ability.CallForHelp[KBM.Lang])
+
 TAR.Lang.Menu.FirstFury = KBM.Language:Add("First " .. TAR.Lang.Buff.Fury[KBM.Lang])
 TAR.Lang.Menu.FirstFury:SetFrench("Première " .. TAR.Lang.Buff.Fury[KBM.Lang])
 TAR.Lang.Menu.FirstFury:SetGerman("Erste " .. TAR.Lang.Buff.Fury[KBM.Lang])
+
 TAR.Lang.Menu.FirstSpiderWeave = KBM.Language:Add("First " .. TAR.Lang.Debuff.SpiderWeave[KBM.Lang])
 TAR.Lang.Menu.FirstSpiderWeave:SetFrench("Première " .. TAR.Lang.Debuff.SpiderWeave[KBM.Lang])
 TAR.Lang.Menu.FirstSpiderWeave:SetGerman("Erstes " .. TAR.Lang.Debuff.SpiderWeave[KBM.Lang])
@@ -219,7 +225,6 @@ function TAR:Death(UnitID)
     return false
 end
 
-
 function TAR:UnitHPCheck(uDetails, unitID)
     if uDetails and unitID then
         if uDetails.type == self.TarJulia.UTID then
@@ -278,9 +283,6 @@ end
 function TAR:Timer()
 end
 
-
-
-
 function TAR:Start()
     -- Create Timers
     self.TarJulia.TimersRef.FirstMoltenBlast = KBM.MechTimer:Add(self.Lang.Ability.MoltenBlast[KBM.Lang], 20)
@@ -300,13 +302,15 @@ function TAR:Start()
     self.TarJulia.TimersRef.Fury = KBM.MechTimer:Add(self.Lang.Buff.Fury[KBM.Lang], 25)
 
     KBM.Defaults.TimerObj.Assign(self.TarJulia)
-
-    self.TarJulia.MechRef.SpiderWeave = KBM.MechSpy:Add(self.Lang.Debuff.SpiderWeave[KBM.Lang], nil, "playerDebuff", self.TarJulia)
-    KBM.Defaults.MechObj.Assign(self.TarJulia)
+	
+	-- Create MechSpy
+	self.TarJulia.MechRef.SpiderWeave = KBM.MechSpy:Add(self.Lang.Debuff.SpiderWeave[KBM.Lang], nil, "playerDebuff", self.TarJulia)
+	KBM.Defaults.MechObj.Assign(self.TarJulia)
 
     -- Create Alerts
     self.TarJulia.AlertsRef.MoltenBlast = KBM.Alert:Create(self.Lang.Verbose.MoltenBlast[KBM.Lang], 3, true, true, "red")
     self.TarJulia.AlertsRef.Fury = KBM.Alert:Create(self.Lang.Buff.Fury[KBM.Lang], 1, true, true, "orange")
+
     KBM.Defaults.AlertObj.Assign(self.TarJulia)
 
     -- Assign Alerts and Timers to Triggers

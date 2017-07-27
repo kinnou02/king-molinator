@@ -187,13 +187,14 @@ COF.Lang.Ability.Flamescape:SetGerman("Flammenformen")
 COF.Lang.Ability.Flamescape:SetFrench("Pyroformation")
 
 COF.Lang.Ability.Void = KBM.Language:Add("Void")
-
+-- TODO: transF: Void
+-- TODO: transG: Void
 
 -- Verbose Dictionary
 COF.Lang.Verbose = {}
-COF.Lang.Verbose.Flamescape = KBM.Language:Add("Go into the circle")
-COF.Lang.Verbose.Flamescape:SetGerman("In den weissen Kreis")
-COF.Lang.Verbose.Flamescape:SetFrench("Aller dans le cercle")
+COF.Lang.Verbose.Flamescape = KBM.Language:Add(COF.Lang.Ability.Flamescape[KBM.Lang])
+COF.Lang.Verbose.Flamescape:SetGerman(COF.Lang.Ability.Flamescape[KBM.Lang])
+COF.Lang.Verbose.Flamescape:SetFrench(COF.Lang.Ability.Flamescape[KBM.Lang])
 
 -- Buff Dictionary
 COF.Lang.Buff = {}
@@ -216,8 +217,6 @@ COF.Lang.Menu = {}
 COF.Lang.Menu.FirstFlamescape = KBM.Language:Add("First " .. COF.Lang.Ability.Flamescape[KBM.Lang])
 COF.Lang.Menu.FirstFlamescape:SetFrench("Première " .. COF.Lang.Ability.Flamescape[KBM.Lang])
 COF.Lang.Menu.FirstFlamescape:SetGerman("Erstes ".. COF.Lang.Ability.Flamescape[KBM.Lang])
-
-
 
 -- Description Dictionary
 COF.Lang.Main = {}
@@ -376,8 +375,6 @@ end
 
 function COF:Timer()
 end
-
-
 
 function COF:Start()
     -- Create Timers
