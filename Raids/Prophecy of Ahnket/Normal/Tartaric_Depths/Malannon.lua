@@ -87,24 +87,6 @@ MAL.Lang.Ability.Runes = KBM.Language:Add("Runes of Power")
 MAL.Lang.Ability.Runes:SetFrench("Runes de pouvoir")
 -- TODO: transG: Runes of Power
 
--- Verbose Dictionary
-MAL.Lang.Verbose = {}
-MAL.Lang.Verbose.Blastback = KBM.Language:Add("Spread!")
-MAL.Lang.Verbose.Blastback:SetFrench("Dispersez vous!")
-MAL.Lang.Verbose.Blastback:SetGerman("Verteilen!")
-
-MAL.Lang.Verbose.MarkOfAcrimony = KBM.Language:Add("Acrimony (purple)")
-MAL.Lang.Verbose.MarkOfAcrimony:SetFrench("Amertume (violet)")
--- TODO: transG: Acrimony (purple)
-MAL.Lang.Verbose.MarkOfAcrimony:SetGerman("Geh in den lilanen Kreis!")
-
-MAL.Lang.Verbose.MarkOfSupremacy = KBM.Language:Add("Supremacy (yellow)")
-MAL.Lang.Verbose.MarkOfSupremacy:SetFrench("Suprématie (jaune)")
--- TODO: transG: Supremacy (yellow)
-MAL.Lang.Verbose.MarkOfSupremacy:SetGerman("Geh in den gelben Kreis!")
-
-MAL.Lang.Verbose.SiphonEnergy = KBM.Language:Add("Adds Spawn")
-
 -- Buff Dictionary
 MAL.Lang.Buff = {}
 
@@ -121,6 +103,26 @@ MAL.Lang.Debuff.MarkOfAcrimony:SetFrench("Marque d'amertume")
 MAL.Lang.Debuff.MarkOfSupremacy = KBM.Language:Add("Mark of Supremacy")
 MAL.Lang.Debuff.MarkOfSupremacy:SetFrench("Marque de suprématie")
 MAL.Lang.Debuff.MarkOfSupremacy:SetGerman("Signum der Vormachtstellung")
+
+-- Verbose Dictionary
+MAL.Lang.Verbose = {}
+MAL.Lang.Verbose.Blastback = KBM.Language:Add(MAL.Lang.Debuff.Blastback[KBM.Lang])
+MAL.Lang.Verbose.Blastback:SetFrench(MAL.Lang.Debuff.Blastback[KBM.Lang])
+MAL.Lang.Verbose.Blastback:SetGerman(MAL.Lang.Debuff.Blastback[KBM.Lang])
+
+MAL.Lang.Verbose.MarkOfAcrimony = KBM.Language:Add("Acrimony (purple)")
+MAL.Lang.Verbose.MarkOfAcrimony:SetFrench("Amertume (violet)")
+-- TODO: transG: Acrimony (purple)
+MAL.Lang.Verbose.MarkOfAcrimony:SetGerman("Geh in den lilanen Kreis!")
+
+MAL.Lang.Verbose.MarkOfSupremacy = KBM.Language:Add("Supremacy (yellow)")
+MAL.Lang.Verbose.MarkOfSupremacy:SetFrench("Suprématie (jaune)")
+-- TODO: transG: Supremacy (yellow)
+MAL.Lang.Verbose.MarkOfSupremacy:SetGerman("Geh in den gelben Kreis!")
+
+MAL.Lang.Verbose.SiphonEnergy = KBM.Language:Add(MAL.Lang.Ability.SiphonEnergy[KBM.Lang])
+MAL.Lang.Verbose.SiphonEnergy:SetFrench(MAL.Lang.Ability.SiphonEnergy[KBM.Lang])
+MAL.Lang.Verbose.SiphonEnergy:SetGerman(MAL.Lang.Ability.SiphonEnergy[KBM.Lang])
 
 MAL.Lang.Notify = {}
 
