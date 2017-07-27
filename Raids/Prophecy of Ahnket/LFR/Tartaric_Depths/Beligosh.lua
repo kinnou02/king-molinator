@@ -108,9 +108,9 @@ BEL.Lang.Buff = {}
 -- Debuff Dictionary
 BEL.Lang.Debuff = {}
 
-BEL.Lang.Debuff.VenganceOfBligosh = KBM.Language:Add("Vengeance of Beligosh")--tank debuff
-BEL.Lang.Debuff.VenganceOfBligosh:SetGerman("Rache von Beligosh")
-BEL.Lang.Debuff.VenganceOfBligosh:SetFrench("Vengeance de Beligosh")
+BEL.Lang.Debuff.VengeanceOfBeligosh = KBM.Language:Add("Vengeance of Beligosh")--tank debuff
+BEL.Lang.Debuff.VengeanceOfBeligosh:SetGerman("Rache von Beligosh")
+BEL.Lang.Debuff.VengeanceOfBeligosh:SetFrench("Vengeance de Beligosh")
 
 BEL.Lang.Debuff.SeedOfImmolation = KBM.Language:Add("Seed of Immolation")--raid debuff
 BEL.Lang.Debuff.SeedOfImmolation:SetGerman("Saat der Opferung")
