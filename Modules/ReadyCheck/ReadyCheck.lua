@@ -84,6 +84,26 @@ PI.Icons = {
 		Type = "Rift",
 		File = "Data/\\UI\\item_icons\\insoles_04_b.dds",
 	},
+    EternalBuffRogue = {
+		Type = "Rift",
+		File = "Data/\\UI\\item_icons\\1h_sword_406_melee_death.dds",
+	},
+    EternalBuffPrimalist = {
+		Type = "Rift",
+		File = "Data/\\UI\\item_icons\\2h_axe_406_melee.dds",
+	},
+    EternalBuffMage = {
+		Type = "Rift",
+		File = "Data/\\UI\\item_icons\\2h_staff_406_caster.dds",
+	},
+    EternalBuffWarrior = {
+		Type = "Rift",
+		File = "Data/\\UI\\item_icons\\2h_sword_406.dds",
+	},
+    EternalBuffCleric = {
+		Type = "Rift",
+		File = "Data/\\UI\\item_icons\\2h_mace_406_melee.dds",
+	},
 	-- Armor = {
 		-- Type = "KingMolinator",
 		-- File = "Media/RC_ArmorIcon.png",
@@ -145,6 +165,31 @@ PI.Settings = {
 			Flash = 900,
 			wScale = 1,
 		},
+        EternalBuffRogue = {
+			Enabled = true,
+			Flash = 900,
+			wScale = 1,
+		},
+        EternalBuffPrimalist = {
+			Enabled = true,
+			Flash = 900,
+			wScale = 1,
+		},
+        EternalBuffMage = {
+			Enabled = true,
+			Flash = 900,
+			wScale = 1,
+		},
+        EternalBuffWarrior = {
+			Enabled = true,
+			Flash = 900,
+			wScale = 1,
+		},
+        EternalBuffCleric = {
+			Enabled = true,
+			Flash = 900,
+			wScale = 1,
+		},
 		KBM = {
 			Enabled = true,
 			wScale = 1,
@@ -179,6 +224,96 @@ PI.Constants = {
 		Planar = {
 			w = 40,
 		},
+        EternalBuffRogue = {
+            w = 36,
+            Icons = true,
+            List = {
+                -- PoA --
+                ["B5E5E107B687FEDAA"] = { -- Spirit of the Shadows 
+                    Grade = "High",
+                    Level = 70,
+                    Callings = {
+                        cleric = true,
+                        mage = true,
+                        warrior = true,
+                        primalist = true,
+                        rogue = true,
+                    },
+                },
+            },
+        },
+        EternalBuffPrimalist = {
+            w = 36,
+            Icons = true,
+            List = {
+                -- PoA --
+                ["B1CD787B134A73183"] = { -- Spirit of the Wilds
+                    Grade = "High",
+                    Level = 70,
+                    Callings = {
+                        cleric = true,
+                        mage = true,
+                        warrior = true,
+                        primalist = true,
+                        rogue = true,
+                    },
+                },
+            },
+        },
+        EternalBuffMage = {
+            w = 36,
+            Icons = true,
+            List = {
+                -- PoA --
+                ["B5161AA0023BAEFD1"] = { -- Spirit of the Arcane 
+                    Grade = "High",
+                    Level = 70,
+                    Callings = {
+                        cleric = true,
+                        mage = true,
+                        warrior = true,
+                        primalist = true,
+                        rogue = true,
+                    },
+                },
+            },
+        },
+        EternalBuffWarrior = {
+            w = 36,
+            Icons = true,
+            List = {
+                -- PoA --
+                ["B0EF28442078DA6CD"] = { -- Spirit of Arms
+                    Grade = "High",
+                    Level = 70,
+                    Callings = {
+                        cleric = true,
+                        mage = true,
+                        warrior = true,
+                        primalist = true,
+                        rogue = true,
+                    },
+                },
+            },
+        },
+        EternalBuffCleric = {
+            w = 36,
+            Icons = true,
+            List = {
+                -- PoA --
+                ["B1A7C914C6A849564"] = { -- Spirit of Divinity
+                    Grade = "High",
+                    Level = 70,
+                    Callings = {
+                        cleric = true,
+                        mage = true,
+                        warrior = true,
+                        primalist = true,
+                        rogue = true,
+                    },
+                },
+            },
+        },
 		Stone = {
 			w = 36,
 			Icons = true,
@@ -1731,6 +1866,11 @@ function PI.GUI:Init()
 			Potion = {},
 			PP = {},
 			Insoles = {},
+			EternalBuffRogue = {},
+			EternalBuffPrimalist = {},
+			EternalBuffMage = {},
+			EternalBuffWarrior = {},
+			EternalBuffCleric = {},
 			KBM = {},
 		},
 		First = nil,
@@ -1744,8 +1884,13 @@ function PI.GUI:Init()
 	table.insert(self.Columns.Order, "Potion")
 	table.insert(self.Columns.Order, "PP")
 	table.insert(self.Columns.Order, "Insoles")
+	table.insert(self.Columns.Order, "EternalBuffRogue")
+	table.insert(self.Columns.Order, "EternalBuffPrimalist")
+	table.insert(self.Columns.Order, "EternalBuffMage")
+	table.insert(self.Columns.Order, "EternalBuffWarrior")
+	table.insert(self.Columns.Order, "EternalBuffCleric")
 	table.insert(self.Columns.Order, "KBM")
-	
+
 	function self.Columns:Create(ID)
 		self.List[ID].Header = UI.CreateFrame("Frame", ID.." Header", PI.GUI.Cradle)
 		self.List[ID].Header:SetBackgroundColor(0,0,0,0.5)
@@ -2019,6 +2164,45 @@ function PI.GUI:Init()
 		end
 	end
 	PI.Constants.Columns.Insoles.Hook = function(...) self.Rows:Update_Insoles(...) end
+    
+    function self.Rows:Update_Eternal(ColName, Index, Force)
+		if Index > 20 then 
+			return
+		end
+		if PI.Enabled or Force then
+			if self[Index].Enabled then
+				local Object = self[Index].Columns[ColName].Object
+				if Object then
+					if Object.icon then
+						self[Index].Columns[ColName].Icon:SetTexture("Rift", Object.icon)
+						self[Index].Columns[ColName].Icon:SetVisible(true)
+						self[Index].Columns[ColName].Icon:SetAlpha(1.0)
+						self[Index].Columns[ColName].Text:SetVisible(false)
+					else
+						self[Index].Columns[ColName].Text:SetFontColor(0.15, 0.9, 0.15)
+						self[Index].Columns[ColName].Text:SetText("?")
+						self[Index].Columns[ColName].Icon:SetVisible(false)
+						self[Index].Columns[ColName].Text:SetVisible(true)
+					end
+				else
+					self[Index].Columns[ColName].Text:SetFontColor(0.9, 0.15, 0.15)
+					self[Index].Columns[ColName].Text:SetText("x")
+					self[Index].Columns[ColName].Icon:SetVisible(false)
+					self[Index].Columns[ColName].Text:SetVisible(true)
+				end
+			else
+				self[Index].Columns[ColName].Text:SetFontColor(0.9, 0.15, 0.15)
+				self[Index].Columns[ColName].Text:SetText("x")
+				self[Index].Columns[ColName].Icon:SetVisible(false)
+				self[Index].Columns[ColName].Text:SetVisible(true)
+			end
+		end
+	end
+	PI.Constants.Columns.EternalBuffRogue.Hook = function(...) self.Rows:Update_Eternal("EternalBuffRogue", ...) end
+	PI.Constants.Columns.EternalBuffPrimalist.Hook = function(...) self.Rows:Update_Eternal("EternalBuffPrimalist", ...) end
+	PI.Constants.Columns.EternalBuffMage.Hook = function(...) self.Rows:Update_Eternal("EternalBuffMage", ...) end
+	PI.Constants.Columns.EternalBuffWarrior.Hook = function(...) self.Rows:Update_Eternal("EternalBuffWarrior", ...) end
+	PI.Constants.Columns.EternalBuffCleric.Hook = function(...) self.Rows:Update_Eternal("EternalBuffCleric", ...) end
 
 	function self.Rows:Update_Soul(Index, Force)
 		if Index > 20 then
@@ -2135,7 +2319,12 @@ function PI.GUI:Init()
 			self:Update_Potion(Index, Force)
 			self:Update_PP(Index, Force)
 			self:Update_Insoles(Index, Force)
-			self:Update_Food(Index, Force)
+			self:Update_Eternal("EternalBuffRogue",Index, Force)
+			self:Update_Eternal("EternalBuffPrimalist",Index, Force)
+			self:Update_Eternal("EternalBuffMage",Index, Force)
+			self:Update_Eternal("EternalBuffWarrior",Index, Force)
+			self:Update_Eternal("EternalBuffCleric",Index, Force)
+			self:Update_Food(Index, Force)            
 		end
 	end
 
@@ -2207,6 +2396,11 @@ function PI.GUI:Init()
 					self[i].Columns.PP.Object = self[i - 1].Columns.PP.Object
 					self[i].Columns.Insoles.Object = self[i - 1].Columns.Insoles.Object
 					self[i].Columns.Food.Object = self[i - 1].Columns.Food.Object
+					self[i].Columns.EternalBuffRogue.Object = self[i - 1].Columns.EternalBuffRogue.Object
+					self[i].Columns.EternalBuffPrimalist.Object = self[i - 1].Columns.EternalBuffPrimalist.Object
+					self[i].Columns.EternalBuffMage.Object = self[i - 1].Columns.EternalBuffMage.Object
+					self[i].Columns.EternalBuffWarrior.Object = self[i - 1].Columns.EternalBuffWarrior.Object
+					self[i].Columns.EternalBuffCleric.Object = self[i - 1].Columns.EternalBuffCleric.Object
 					if self[i].Unit then
 						self.Units[self[i].Unit.UnitID] = self[i]
 						self.Names[self[i].Unit.Name] = self[i]
@@ -2225,6 +2419,11 @@ function PI.GUI:Init()
 		self[Index].Columns.PP.Object = nil
 		self[Index].Columns.Insoles.Object = nil
 		self[Index].Columns.Stone.Object = nil
+        self[Index].Columns.EternalBuffRogue.Object = nil
+        self[Index].Columns.EternalBuffPrimalist.Object = nil
+        self[Index].Columns.EternalBuffMage.Object = nil
+        self[Index].Columns.EternalBuffWarrior.Object = nil
+        self[Index].Columns.EternalBuffCleric.Object = nil
 		self.Units[UnitID] = self[Index]
 		self.Names[self[Index].Unit.Name] = self[Index]
 		if Index < 21 then
@@ -2246,6 +2445,11 @@ function PI.GUI:Init()
 				self[i].Columns.Potion.Object = self[i + 1].Columns.Potion.Object
 				self[i].Columns.PP.Object = self[i + 1].Columns.PP.Object
 				self[i].Columns.Insoles.Object = self[i + 1].Columns.Insoles.Object
+                self[i].Columns.EternalBuffRogue.Object = self[i + 1].Columns.EternalBuffRogue.Object
+                self[i].Columns.EternalBuffPrimalist.Object = self[i + 1].Columns.EternalBuffPrimalist.Object
+                self[i].Columns.EternalBuffMage.Object = self[i + 1].Columns.EternalBuffMage.Object
+                self[i].Columns.EternalBuffWarrior.Object = self[i + 1].Columns.EternalBuffWarrior.Object
+                self[i].Columns.EternalBuffCleric.Object = self[i + 1].Columns.EternalBuffCleric.Object
 				if self[i].Unit then
 					self.Units[self[i].Unit.UnitID] = self[i]
 					self.Names[self[i].Unit.Name] = self[i]
@@ -2263,6 +2467,11 @@ function PI.GUI:Init()
 		self[self.Populated].Columns.Potion.Object = nil
 		self[self.Populated].Columns.PP.Object = nil
 		self[self.Populated].Columns.Insoles.Object = nil
+        self[self.Populated].Columns.EternalBuffRogue.Object = nil
+        self[self.Populated].Columns.EternalBuffPrimalist.Object = nil
+        self[self.Populated].Columns.EternalBuffMage.Object = nil
+        self[self.Populated].Columns.EternalBuffWarrior.Object = nil
+        self[self.Populated].Columns.EternalBuffCleric.Object = nil
 		if self.Populated < 21 then
 			self[self.Populated].Cradle:SetVisible(false)		
 		end

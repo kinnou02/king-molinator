@@ -24,7 +24,7 @@ local MAL = {
     Lang = {},
     ID = "NMmalannon",
     Object = "MAL",
-    Enrage = 495,
+    Enrage = 490,
 }
 
 MAL.Malannon = {
