@@ -111,7 +111,7 @@ MAL.Lang.Buff = {}
 -- Debuff Dictionary
 MAL.Lang.Debuff = {}
 MAL.Lang.Debuff.Blastback = KBM.Language:Add("Blastback")
--- TODO: transF: Blastback
+MAL.Lang.Debuff.Blastback:SetFrench("Reflux explosif")
 MAL.Lang.Debuff.Blastback:SetGerman("Rückdruckwelle")
 
 MAL.Lang.Debuff.MarkOfAcrimony = KBM.Language:Add("Mark of Acrimony")
