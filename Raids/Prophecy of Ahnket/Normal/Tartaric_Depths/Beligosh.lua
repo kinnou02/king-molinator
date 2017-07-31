@@ -291,10 +291,6 @@ function BEL.PhaseTwo()
         BEL.PhaseObj:SetPhase(5)
         BEL.PhaseObj.Objectives:AddPercent(BEL.Beligosh, 12, 40)
     end
-    KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.SeedOfImmolation)
-    KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.VengeanceOfBeligosh)
-    KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.MagmaBreath)
-    KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.BurningGround)
     KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.Landing)
 end
 
@@ -311,7 +307,7 @@ function BEL.AddPhase()
         BEL.Phase = 4
         BEL.PhaseObj:SetPhase(4)
     end
-    BEL.PhaseObj.Objectives:AddDeath(BEL.Lang.Unit.Golem[KBM.Lang], 3)
+    BEL.PhaseObj.Objectives:AddDeath(BEL.Lang.Unit.Golem[KBM.Lang], 6)
 end
 
 function BEL.FinalPhase()
@@ -350,7 +346,6 @@ function BEL.FinalPhaseTimer()
     end
 end
 
-
 function BEL:Start()
     -- Create Timers
     self.Beligosh.TimersRef.SoftEnrageTimer = KBM.MechTimer:Add(self.Lang.Verbose.SoftEnrageTimer[KBM.Lang], 540)
@@ -372,6 +367,10 @@ function BEL:Start()
     self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
 
     self.Beligosh.TimersRef.BurningGround:AddAlert(self.Beligosh.AlertsRef.BurningGround, 2)
+    self.Beligosh.TimersRef.Landing:AddTimer(self.Beligosh.TimersRef.SeedOfImmolation, 0)
+    self.Beligosh.TimersRef.Landing:AddTimer(self.Beligosh.TimersRef.VengeanceOfBeligosh, 0)
+    self.Beligosh.TimersRef.Landing:AddTimer(self.Beligosh.TimersRef.MagmaBreath, 0)
+    self.Beligosh.TimersRef.Landing:AddTimer(self.Beligosh.TimersRef.BurningGround, 0)
 
     self.Beligosh.Triggers.AddPhase = KBM.Trigger:Create(75, "percent", self.Beligosh)
     self.Beligosh.Triggers.AddPhase:AddPhase(self.AddPhase)
@@ -398,5 +397,4 @@ function BEL:Start()
 
     self.Beligosh.Triggers.FinalPhaseTimer = KBM.Trigger:Create(540, "time", self.Beligosh)
     self.Beligosh.Triggers.FinalPhaseTimer:AddPhase(self.FinalPhaseTimer)
-
 end
