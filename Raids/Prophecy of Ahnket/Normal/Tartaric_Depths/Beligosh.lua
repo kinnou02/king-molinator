@@ -64,7 +64,8 @@ BEL.Beligosh = {
             SeedOfImmolation = KBM.Defaults.TimerObj.Create("purple"),
             VengeanceOfBeligosh = KBM.Defaults.TimerObj.Create("blue"),
             MagmaBreath = KBM.Defaults.TimerObj.Create("red"),
-			Landing = KBM.Defaults.TimerObj.Create("red"),
+            BurningGround = KBM.Defaults.TimerObj.Create("blue"),
+            Landing = KBM.Defaults.TimerObj.Create("red"),
             SoftEnrageTimer = KBM.Defaults.TimerObj.Create("dark_grey"),
             Enrage = KBM.Defaults.TimerObj.Create("dark_grey"),
         },
@@ -239,6 +240,7 @@ function BEL:UnitHPCheck(uDetails, unitID)
                 KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.SeedOfImmolation)
                 KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.VengeanceOfBeligosh)
                 KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.MagmaBreath)
+                KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.BurningGround)
             end
             self.Beligosh.UnitID = unitID
             self.Beligosh.Available = true
@@ -292,6 +294,7 @@ function BEL.PhaseTwo()
     KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.SeedOfImmolation)
     KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.VengeanceOfBeligosh)
     KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.MagmaBreath)
+    KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.BurningGround)
     KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.Landing)
 end
 
@@ -299,6 +302,7 @@ function BEL.AddPhase()
     KBM.MechTimer:AddRemove(BEL.Beligosh.TimersRef.SeedOfImmolation)
     KBM.MechTimer:AddRemove(BEL.Beligosh.TimersRef.VengeanceOfBeligosh)
     KBM.MechTimer:AddRemove(BEL.Beligosh.TimersRef.MagmaBreath)
+    KBM.MechTimer:AddRemove(BEL.Beligosh.TimersRef.BurningGround)
     BEL.PhaseObj.Objectives:Remove()
     if BEL.Phase == 1 then
         BEL.Phase = 2
@@ -321,6 +325,7 @@ function BEL.FinalPhase()
     KBM.MechTimer:AddRemove(BEL.Beligosh.TimersRef.VengeanceOfBeligosh)
     KBM.MechTimer:AddRemove(BEL.Beligosh.TimersRef.MagmaBreath)
     KBM.MechTimer:AddRemove(BEL.Beligosh.TimersRef.SoftEnrageTimer)
+    KBM.MechTimer:AddRemove(BEL.Beligosh.TimersRef.BurningGround)
     
     KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.VengeanceOfBeligosh)
     KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.Enrage)
@@ -337,6 +342,7 @@ function BEL.FinalPhaseTimer()
         KBM.MechTimer:AddRemove(BEL.Beligosh.TimersRef.SeedOfImmolation)
         KBM.MechTimer:AddRemove(BEL.Beligosh.TimersRef.VengeanceOfBeligosh)
         KBM.MechTimer:AddRemove(BEL.Beligosh.TimersRef.MagmaBreath)
+        KBM.MechTimer:AddRemove(BEL.Beligosh.TimersRef.BurningGround)
         KBM.MechTimer:AddRemove(BEL.Beligosh.TimersRef.SoftEnrageTimer)
         
         KBM.MechTimer:AddStart(BEL.Beligosh.TimersRef.VengeanceOfBeligosh)
@@ -351,18 +357,21 @@ function BEL:Start()
     self.Beligosh.TimersRef.Enrage = KBM.MechTimer:Add(self.Lang.Verbose.Enrage[KBM.Lang], 25)
     self.Beligosh.TimersRef.SeedOfImmolation = KBM.MechTimer:Add(self.Lang.Debuff.SeedOfImmolation[KBM.Lang], 24)
     self.Beligosh.TimersRef.VengeanceOfBeligosh = KBM.MechTimer:Add(self.Lang.Debuff.VengeanceOfBeligosh[KBM.Lang], 15)
-    self.Beligosh.TimersRef.MagmaBreath = KBM.MechTimer:Add(self.Lang.Ability.MagmaBreath[KBM.Lang], 30)
+    self.Beligosh.TimersRef.MagmaBreath = KBM.MechTimer:Add(self.Lang.Ability.MagmaBreath[KBM.Lang], 32)
+    self.Beligosh.TimersRef.BurningGround = KBM.MechTimer:Add(self.Lang.Verbose.BurningGround[KBM.Lang], 17)
     self.Beligosh.TimersRef.Landing = KBM.MechTimer:Add(self.Lang.Verbose.Landing[KBM.Lang], 10)
     KBM.Defaults.TimerObj.Assign(self.Beligosh)
 
     -- Create Alerts
     self.Beligosh.AlertsRef.Wrath = KBM.Alert:Create(self.Lang.Verbose.Wrath[KBM.Lang], 10, true, true, "red")
-    self.Beligosh.AlertsRef.BurningGround = KBM.Alert:Create(self.Lang.Verbose.BurningGround[KBM.Lang], 3, true, true, "blue")
+    self.Beligosh.AlertsRef.BurningGround = KBM.Alert:Create(self.Lang.Verbose.BurningGround[KBM.Lang], 2, true, true, "blue")
     KBM.Defaults.AlertObj.Assign(self.Beligosh)
 
     -- Assign Alerts and Timers to Triggers
     self.Beligosh.CastBar = KBM.Castbar:Add(self, self.Beligosh)
     self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
+
+    self.Beligosh.TimersRef.BurningGround:AddAlert(self.Beligosh.AlertsRef.BurningGround, 2)
 
     self.Beligosh.Triggers.AddPhase = KBM.Trigger:Create(75, "percent", self.Beligosh)
     self.Beligosh.Triggers.AddPhase:AddPhase(self.AddPhase)
@@ -370,15 +379,6 @@ function BEL:Start()
     self.Beligosh.Triggers.PhaseTwo = KBM.Trigger:Create(self.Lang.Notify.Wrath[KBM.Lang], "notify", self.Beligosh)
     self.Beligosh.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
     self.Beligosh.Triggers.PhaseTwo:AddAlert(self.Beligosh.AlertsRef.Wrath)
-
-    self.Beligosh.Triggers.BurningGround1 = KBM.Trigger:Create(self.Lang.Notify.BurningGround1[KBM.Lang], "say", self.Beligosh)
-    self.Beligosh.Triggers.BurningGround1:AddAlert(self.Beligosh.AlertsRef.BurningGround)
-
-    self.Beligosh.Triggers.BurningGround2 = KBM.Trigger:Create(self.Lang.Notify.BurningGround2[KBM.Lang], "say", self.Beligosh)
-    self.Beligosh.Triggers.BurningGround2:AddAlert(self.Beligosh.AlertsRef.BurningGround)
-
-    self.Beligosh.Triggers.BurningGround3 = KBM.Trigger:Create(self.Lang.Notify.BurningGround3[KBM.Lang], "say", self.Beligosh)
-    self.Beligosh.Triggers.BurningGround3:AddAlert(self.Beligosh.AlertsRef.BurningGround)
 
     self.Beligosh.Triggers.AddPhase2 = KBM.Trigger:Create(40, "percent", self.Beligosh)
     self.Beligosh.Triggers.AddPhase2:AddPhase(self.AddPhase)
@@ -391,7 +391,8 @@ function BEL:Start()
 
     self.Beligosh.Triggers.MagmaBreath = KBM.Trigger:Create(self.Lang.Ability.MagmaBreath[KBM.Lang], "channel", self.Beligosh)
     self.Beligosh.Triggers.MagmaBreath:AddTimer(self.Beligosh.TimersRef.MagmaBreath)
-    
+    self.Beligosh.Triggers.MagmaBreath:AddTimer(self.Beligosh.TimersRef.BurningGround)
+
     self.Beligosh.Triggers.FinalPhase = KBM.Trigger:Create(12, "percent", self.Beligosh)
     self.Beligosh.Triggers.FinalPhase:AddPhase(self.FinalPhase)
 
