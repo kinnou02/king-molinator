@@ -64,6 +64,7 @@ COF.Danazhal = {
     Menu = {},
     AlertsRef = {},
     TimersRef = {},
+    MechRef = {},
     Castbar = nil,
     Dead = false,
     Available = false,
@@ -84,6 +85,10 @@ COF.Danazhal = {
             FirstFlamescape = KBM.Defaults.TimerObj.Create("red"),
             Flamescape = KBM.Defaults.TimerObj.Create("red"),
         },
+        MechRef = {
+            Enabled = true,
+            DeathBall = KBM.Defaults.MechObj.Create("red"),
+        }
     },
 }
 
@@ -218,9 +223,10 @@ COF.Lang.Notify.Flamescape = KBM.Language:Add("The Flamescape begins.")
 COF.Lang.Notify.Flamescape:SetGerman("Das Flammenformen beginnt.")
 COF.Lang.Notify.Flamescape:SetFrench("La Pyroformation commence.")
 
-COF.Lang.Notify.DanazhalPop = KBM.Language:Add('Contessa Danazhal, "Did you release me? Wonderful! I shall escape after I fest on your souls!"')
-COF.Lang.Notify.DanazhalPop:SetGerman('Gräfin Danazhal: "Ihr wart es, der mich befreite? Wunderbar! Nachdem ich mich an Euren Seelen gelabt habe, werde ich das Weite suchen!"')
-COF.Lang.Notify.DanazhalPop:SetFrench('Countessa Danazhal : "Vous m\'avez libérée ? Magnifique ! Je m\'enfuirai dès que j\'aurai dévoré vos âmes !"')
+COF.Lang.Notify.DeathBall = KBM.Language:Add("Danazhal targets (%a*) with concentrated energy, intercept!")
+-- TODO: transF, transG
+--COF.Lang.Notify.DeathBall:SetGerman("")
+--COF.Lang.Notify.DeathBall:SetFrench("")
 
 -- Menu Dictionary
 COF.Lang.Menu = {}
@@ -394,6 +400,10 @@ function COF:Start()
     self.Danazhal.TimersRef.Flamescape = KBM.MechTimer:Add(self.Lang.Ability.Flamescape[KBM.Lang], 40)
     KBM.Defaults.TimerObj.Assign(self.Danazhal)
 
+    -- MechSpy
+    self.Danazhal.MechRef.DeathBall = KBM.MechSpy:Add(self.Lang.Ability.DeathBall[KBM.Lang], 3, "notify", self.Danazhal)
+    KBM.Defaults.MechObj.Assign(self.Danazhal)
+
     -- Create Alerts
     self.Danazhal.AlertsRef.Flamescape = KBM.Alert:Create(self.Lang.Verbose.Flamescape[KBM.Lang], 5, true, true, "red")
     self.Danazhal.AlertsRef.Void = KBM.Alert:Create(self.Lang.Unit.Void[KBM.Lang], nil, true, true, "blue")
@@ -407,17 +417,15 @@ function COF:Start()
     self.Danazhal.Triggers.Flamescape:AddAlert(self.Danazhal.AlertsRef.Flamescape)
     self.Danazhal.Triggers.Flamescape:AddTimer(self.Danazhal.TimersRef.Flamescape)
 
-    self.Danazhal.Triggers.Flamescape = KBM.Trigger:Create(self.Lang.Notify.DanazhalPop[KBM.Lang], "notify", self.Danazhal)
-    self.Danazhal.Triggers.Flamescape:AddTimer(self.Danazhal.TimersRef.FirstFlamescape)
-
-    self.Danazhal.Triggers.DeathBall = KBM.Trigger:Create(self.Lang.Ability.DeathBall[KBM.Lang], "cast", self.Danazhal)
+    self.Danazhal.Triggers.DeathBall = KBM.Trigger:Create(self.Lang.Notify.DeathBall[KBM.Lang], "notify", self.Danazhal)
     self.Danazhal.Triggers.DeathBall:AddAlert(self.Danazhal.AlertsRef.DeathBall)
+    self.Danazhal.Triggers.DeathBall:AddSpy(self.Danazhal.MechRef.DeathBall)
 
     self.Boldoch.Triggers.NoRez = KBM.Trigger:Create(self.Lang.Ability.NoRez[KBM.Lang], "cast", self.Boldoch)
     self.Boldoch.Triggers.NoRez:AddAlert(self.Boldoch.AlertsRef.NoRez)
 
-    self.Boldoch.Triggers.NoRez = KBM.Trigger:Create(self.Lang.Ability.NoRez[KBM.Lang], "interrupt", self.Boldoch)
-    self.Boldoch.Triggers.NoRez:AddStop(self.Boldoch.AlertsRef.NoRez)
+    self.Boldoch.Triggers.NoRezInt = KBM.Trigger:Create(self.Lang.Ability.NoRez[KBM.Lang], "interrupt", self.Boldoch)
+    self.Boldoch.Triggers.NoRezInt:AddStop(self.Boldoch.AlertsRef.NoRez)
 
     self.Danazhal.Triggers.Void = KBM.Trigger:Create(self.Lang.Ability.Void[KBM.Lang], "damage", self.Void)
     self.Danazhal.Triggers.Void:AddAlert(self.Danazhal.AlertsRef.Void)
