@@ -161,6 +161,7 @@ function TAR:InitVars()
         Alerts = KBM.Defaults.Alerts(),
         -- TimersRef = self.Baird.Settings.TimersRef,
         AlertsRef = self.TarJulia.Settings.AlertsRef,
+        MechSpy = KBM.Defaults.MechSpy(),
     }
     KBMPOANMTDTAR_Settings = self.Settings
     chKBMPOANMTDTAR_Settings = self.Settings

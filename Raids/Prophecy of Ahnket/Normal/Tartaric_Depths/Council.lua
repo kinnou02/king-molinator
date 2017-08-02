@@ -265,6 +265,7 @@ function COF:InitVars()
         Alerts = KBM.Defaults.Alerts(),
         TimersRef = self.Danazhal.Settings.TimersRef,
         AlertsRef = self.Danazhal.Settings.AlertsRef,
+        MechSpy = KBM.Defaults.MechSpy(),
     }
     KBMPOANMTDCOF_Settings = self.Settings
     chKBMPOANMTDCOF_Settings = self.Settings
