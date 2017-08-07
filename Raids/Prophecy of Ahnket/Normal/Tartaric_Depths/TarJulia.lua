@@ -24,6 +24,7 @@ local TAR = {
     Lang = {},
     ID = "NMTarJulia",
     Object = "TAR",
+    Enrage = 420,
 }
 
 -- Main Unit Dictionary
