@@ -24,6 +24,7 @@ local COF = {
     Lang = {},
     ID = "NMCouncilOfFate",
     Object = "COF",
+    Enrage = 430,
 }
 
 -- Main Unit Dictionary
