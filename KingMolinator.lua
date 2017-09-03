@@ -2931,7 +2931,14 @@ function KBM.SheepProtection:Init()
         ["B0E4E7143CE686BDB"] = "Wand of Mechanization",
         ["B5B2A6080D48E8E9E"] = "Wand of Mechanization",
         ["B5E8A366FF335ECC3"] = "Summerfest Shambler",
-	["B797392B39EBC5AD3"] = "Squirrelexplosion",
+        ["B797392B39EBC5AD3"] = "Squirrelexplosion",
+        ["B33D22E2E8B7DFF5A"] = "Squirrelexplosion",
+        ["B1A82BCFA150C5A56"] = "Corgi Confusion",
+        ["B797392B49EBCDE22"] = "Squirrelexplosion", 
+        ["B4D5CDC2B645241A1"] = "Squirrelexplosion", 
+        ["B797392B19EBB5435"] = "Squirrelexplosion", 
+        ["B797392B29EBBD784"] = "Squirrelexplosion", 
+        ["B674C1E97D4251F8F"] = "Squirrelexplosion",
 	}
 	function self.Remove(BuffID, CasterID)
 		if KBM.Options.Sheep.Protect then
