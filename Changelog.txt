@@ -2,6 +2,7 @@
 * New: Added all bosses from Normal Mode Tartaric Depths
     - Including German and French translation
 * New: Ready Check now shows Eternal Buffs
+* New: add more antisheep from dev's abilities
 
 1.9.9.907
 * New: Added all bosses from LFR Tartaric Depths Raid
