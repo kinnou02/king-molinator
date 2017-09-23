@@ -66,9 +66,10 @@ TAR.TarJulia = {
             FirstMoltenBlast = KBM.Defaults.TimerObj.Create("red"),
             CallForHelp = KBM.Defaults.TimerObj.Create("blue"),
             FirstCallForHelp = KBM.Defaults.TimerObj.Create("blue"),
-            FirstSpiderWeave = KBM.Defaults.TimerObj.Create("purple"),
             Fury = KBM.Defaults.TimerObj.Create("orange"),
             FirstFury = KBM.Defaults.TimerObj.Create("orange"),
+            FirstSpiderWeave = KBM.Defaults.TimerObj.Create("purple"),
+            SpiderWeave = KBM.Defaults.TimerObj.Create("purple"),
         },
         MechRef = {
             Enabled = true,
