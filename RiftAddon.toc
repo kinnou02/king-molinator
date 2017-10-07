@@ -604,6 +604,11 @@ SavedVariables = {
 	
     -- PoA Raids
         -- Normal Tartaric Depths
+            KBMPOABOS_Settings = "account",
+            KBMPOABOSAZR_Settings = "account",
+            chKBMPOABOS_Settings = "character",
+            chKBMPOABOSAZR_Settings = "character",
+        -- Normal Tartaric Depths
             KBMPOANMTD_Settings = "account",
             KBMPOANMTDBEL_Settings = "account",
             KBMPOANMTDTAR_Settings = "account",
