@@ -43,6 +43,9 @@ RunOnStartup = {
 	
   
   -- PoA Raids
+		-- Bastion of steel
+			"Raids/Prophecy of Ahnket/Normal/Bastion_of_Steel/BOS_Header.lua",
+			"Raids/Prophecy of Ahnket/Normal/Bastion_of_Steel/Azranel.lua",
 		-- Normal Tartaric Depths
 			"Raids/Prophecy of Ahnket/Normal/Tartaric_Depths/TD_Header.lua",
 			"Raids/Prophecy of Ahnket/Normal/Tartaric_Depths/Beligosh.lua",
