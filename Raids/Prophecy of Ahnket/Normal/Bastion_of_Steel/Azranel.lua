@@ -12,7 +12,7 @@ if not KBM.BossMod then
     return
 end
 
-local Instance = KBM.BossMod["BOS"]
+local Instance = KBM.BossMod["BoS"]
 
 local AZR = {
     Directory = Instance.Directory,
@@ -29,7 +29,7 @@ local AZR = {
 -- Main Unit Dictionary
 AZR.Lang.Unit = {}
 AZR.Lang.Unit.Azranel = KBM.Language:Add("Azranel")
---AZR.Lang.Unit.Azranel:SetFrench("Azranel") todo transF
+--AZR.Lang.Unit.Azranel:SetFrench("Azranel") TODO transF
 --AZR.Lang.Unit.Azranel:SetGerman("Azranel") TODO transG
 
 
@@ -45,16 +45,22 @@ AZR.Azranel = {
     Dead = false,
     Available = false,
     UnitID = nil,
-    UTID = "TODO",
+    UTID = "U463D232719096CF0",
     TimeOut = 5,
     Triggers = {},
     Settings = {
         CastBar = KBM.Defaults.Castbar(),
         AlertsRef = {
           Enabled = true,
+          MissileStorm = KBM.Defaults.AlertObj.Create("red"),
+          CometShot = KBM.Defaults.AlertObj.Create("blue"),
         },
         TimersRef = {
             Enabled = true,
+            FirstMissileStorm = KBM.Defaults.TimerObj.Create("red"),
+            MissileStorm = KBM.Defaults.TimerObj.Create("red"),
+            FirstCometShot = KBM.Defaults.TimerObj.Create("blue"),
+            CometShot = KBM.Defaults.TimerObj.Create("blue"),
         },
     },
 }
@@ -64,6 +70,8 @@ KBM.RegisterMod(AZR.ID, AZR)
 
 -- Ability Dictionary
 AZR.Lang.Ability = {}
+AZR.Lang.Ability.MissileStorm = KBM.Language:Add("Missile Storm") --TODO transF transG
+AZR.Lang.Ability.CometShot = KBM.Language:Add("Comet Shot") --TODO transF transG
 
 -- Verbose Dictionary
 AZR.Lang.Verbose = {}
@@ -80,6 +88,17 @@ AZR.Lang.Notify = {}
 -- Description Dictionary
 AZR.Lang.Main = {}
 AZR.Descript = AZR.Lang.Unit.Azranel[KBM.Lang]
+
+-- Menu Dictionary
+AZR.Lang.Menu = {}
+AZR.Lang.Menu.FirstCometShot = KBM.Language:Add("First " .. AZR.Lang.Ability.CometShot[KBM.Lang])
+AZR.Lang.Menu.FirstCometShot:SetFrench("Premier " .. AZR.Lang.Ability.CometShot[KBM.Lang])
+AZR.Lang.Menu.FirstCometShot:SetGerman("Erste " .. AZR.Lang.Ability.CometShot[KBM.Lang])
+
+AZR.Lang.Menu.FirstMissileStorm = KBM.Language:Add("First " .. AZR.Lang.Ability.MissileStorm[KBM.Lang])
+AZR.Lang.Menu.FirstMissileStorm:SetFrench("Premier " .. AZR.Lang.Ability.MissileStorm[KBM.Lang])
+AZR.Lang.Menu.FirstMissileStorm:SetGerman("Erste " .. AZR.Lang.Ability.MissileStorm[KBM.Lang])
+
 
 function AZR:AddBosses(KBM_Boss)
     self.MenuName = self.Descript
@@ -172,6 +191,8 @@ function AZR:UnitHPCheck(uDetails, unitID)
                 self.PhaseObj:SetPhase(self.Azranel.Name)
                 self.PhaseObj.Objectives:AddPercent(self.Azranel, 0, 100)
                 self.Phase = 1
+                KBM.MechTimer:AddStart(AZR.Azranel.TimersRef.FirstCometShot)
+                KBM.MechTimer:AddStart(AZR.Azranel.TimersRef.FirstMissileStorm)
             end
             self.Azranel.UnitID = unitID
             self.Azranel.Available = true
@@ -195,12 +216,30 @@ end
 
 function AZR:Start()
     -- Create Timers
-    --KBM.Defaults.TimerObj.Assign(self.Azranel)
+    self.Azranel.TimersRef.FirstCometShot = KBM.MechTimer:Add(self.Lang.Ability.CometShot[KBM.Lang], 90)
+    self.Azranel.TimersRef.FirstCometShot.MenuName = self.Lang.Menu.FirstCometShot[KBM.Lang]
+    self.Azranel.TimersRef.CometShot = KBM.MechTimer:Add(self.Lang.Ability.CometShot[KBM.Lang], 115)
+    
+    self.Azranel.TimersRef.FirstMissileStorm = KBM.MechTimer:Add(self.Lang.Ability.MissileStorm[KBM.Lang], 20)
+    self.Azranel.TimersRef.FirstMissileStorm.MenuName = self.Lang.Menu.FirstMissileStorm[KBM.Lang]
+    self.Azranel.TimersRef.MissileStorm = KBM.MechTimer:Add(self.Lang.Ability.MissileStorm[KBM.Lang], 25)
+    KBM.Defaults.TimerObj.Assign(self.Azranel)
 
     -- Create Alerts
-    --KBM.Defaults.AlertObj.Assign(self.Azranel)
+    self.Azranel.AlertsRef.MissileStorm = KBM.Alert:Create(self.Lang.Ability.MissileStorm[KBM.Lang], 2, true, true, "red")
+    self.Azranel.AlertsRef.CometShot = KBM.Alert:Create(self.Lang.Ability.CometShot[KBM.Lang], 2, true, true, "blue")
+    KBM.Defaults.AlertObj.Assign(self.Azranel)
 
     -- Assign Alerts and Timers to Triggers
     self.Azranel.CastBar = KBM.Castbar:Add(self, self.Azranel)
     self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
+    
+    self.Azranel.Triggers.MissileStorm = KBM.Trigger:Create(self.Lang.Ability.MissileStorm[KBM.Lang], "playerDebuff", self.Azranel)
+    self.Azranel.Triggers.MissileStorm:AddAlert(self.Azranel.AlertsRef.MissileStorm)
+    self.Azranel.Triggers.MissileStorm:AddTimer(self.Azranel.TimersRef.MissileStorm)
+    
+    
+    self.Azranel.Triggers.CometShot = KBM.Trigger:Create(self.Lang.Ability.CometShot[KBM.Lang], "playerDebuff", self.Azranel)
+    self.Azranel.Triggers.CometShot:AddAlert(self.Azranel.AlertsRef.CometShot)
+    self.Azranel.Triggers.CometShot:AddTimer(self.Azranel.TimersRef.CometShot)
 end
