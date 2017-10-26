@@ -78,7 +78,7 @@ AZR.Lang.Ability.MissileStorm:SetFrench("Tempête de missiles")
 AZR.Lang.Ability.CometShot = KBM.Language:Add("Comet Shot") --TODO transG
 AZR.Lang.Ability.MissileStorm:SetFrench("Tir de comète")
 
-AZR.Lang.Ability.DefensiveSpin = KBM.Language:Add("Defensive Spin") --TODO transG
+AZR.Lang.Ability.DefensiveSpin = KBM.Language:Add("Defensive Spin") --TODO transF transG
 
 -- Verbose Dictionary
 AZR.Lang.Verbose = {}

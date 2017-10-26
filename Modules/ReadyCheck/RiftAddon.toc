@@ -9,7 +9,7 @@ Author = "Paul Snart"
 Website = "http://twitter.com/#!/psnart"
 Email = "kingbossmods@gmail.com"
 
-Version = "0.3.7"
+Version = "0.4.0"
 
 Environment = "3.0"
 
