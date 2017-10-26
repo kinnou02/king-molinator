@@ -52,15 +52,17 @@ AZR.Azranel = {
         CastBar = KBM.Defaults.Castbar(),
         AlertsRef = {
           Enabled = true,
-          MissileStorm = KBM.Defaults.AlertObj.Create("red"),
-          CometShot = KBM.Defaults.AlertObj.Create("blue"),
+          MissileStorm = KBM.Defaults.AlertObj.Create("yellow"),
+          CometShot = KBM.Defaults.AlertObj.Create("red"),
+          DefensiveSpin = KBM.Defaults.AlertObj.Create("purple"),
         },
         TimersRef = {
             Enabled = true,
-            FirstMissileStorm = KBM.Defaults.TimerObj.Create("red"),
-            MissileStorm = KBM.Defaults.TimerObj.Create("red"),
-            FirstCometShot = KBM.Defaults.TimerObj.Create("blue"),
-            CometShot = KBM.Defaults.TimerObj.Create("blue"),
+            FirstMissileStorm = KBM.Defaults.TimerObj.Create("yellow"),
+            MissileStorm = KBM.Defaults.TimerObj.Create("yellow"),
+            FirstCometShot = KBM.Defaults.TimerObj.Create("red"),
+            CometShot = KBM.Defaults.TimerObj.Create("red"),
+            DefensiveSpin = KBM.Defaults.TimerObj.Create("purple"),
         },
     },
 }
@@ -70,8 +72,13 @@ KBM.RegisterMod(AZR.ID, AZR)
 
 -- Ability Dictionary
 AZR.Lang.Ability = {}
-AZR.Lang.Ability.MissileStorm = KBM.Language:Add("Missile Storm") --TODO transF transG
-AZR.Lang.Ability.CometShot = KBM.Language:Add("Comet Shot") --TODO transF transG
+AZR.Lang.Ability.MissileStorm = KBM.Language:Add("Missile Storm") --TODO transG
+AZR.Lang.Ability.MissileStorm:SetFrench("Tempête de missiles")
+
+AZR.Lang.Ability.CometShot = KBM.Language:Add("Comet Shot") --TODO transG
+AZR.Lang.Ability.MissileStorm:SetFrench("Tir de comète")
+
+AZR.Lang.Ability.DefensiveSpin = KBM.Language:Add("Defensive Spin") --TODO transG
 
 -- Verbose Dictionary
 AZR.Lang.Verbose = {}
@@ -223,11 +230,15 @@ function AZR:Start()
     self.Azranel.TimersRef.FirstMissileStorm = KBM.MechTimer:Add(self.Lang.Ability.MissileStorm[KBM.Lang], 20)
     self.Azranel.TimersRef.FirstMissileStorm.MenuName = self.Lang.Menu.FirstMissileStorm[KBM.Lang]
     self.Azranel.TimersRef.MissileStorm = KBM.MechTimer:Add(self.Lang.Ability.MissileStorm[KBM.Lang], 25)
+
+    self.Azranel.TimersRef.DefensiveSpin = KBM.MechTimer:Add(self.Lang.Ability.DefensiveSpin[KBM.Lang], 46)
     KBM.Defaults.TimerObj.Assign(self.Azranel)
 
     -- Create Alerts
-    self.Azranel.AlertsRef.MissileStorm = KBM.Alert:Create(self.Lang.Ability.MissileStorm[KBM.Lang], 2, true, true, "red")
-    self.Azranel.AlertsRef.CometShot = KBM.Alert:Create(self.Lang.Ability.CometShot[KBM.Lang], 2, true, true, "blue")
+    self.Azranel.AlertsRef.MissileStorm = KBM.Alert:Create(self.Lang.Ability.MissileStorm[KBM.Lang], 2, true, true, "yellow")
+    self.Azranel.AlertsRef.CometShot = KBM.Alert:Create(self.Lang.Ability.CometShot[KBM.Lang], 2, true, true, "red")
+
+    self.Azranel.AlertsRef.DefensiveSpin = KBM.Alert:Create(self.Lang.Ability.DefensiveSpin[KBM.Lang], 2, true, true, "purple")
     KBM.Defaults.AlertObj.Assign(self.Azranel)
 
     -- Assign Alerts and Timers to Triggers
@@ -242,4 +253,8 @@ function AZR:Start()
     self.Azranel.Triggers.CometShot = KBM.Trigger:Create(self.Lang.Ability.CometShot[KBM.Lang], "playerDebuff", self.Azranel)
     self.Azranel.Triggers.CometShot:AddAlert(self.Azranel.AlertsRef.CometShot)
     self.Azranel.Triggers.CometShot:AddTimer(self.Azranel.TimersRef.CometShot)
+
+    self.Azranel.Triggers.DefensiveSpin = KBM.Trigger:Create(self.Lang.Ability.DefensiveSpin[KBM.Lang], "cast", self.Azranel)
+    self.Azranel.Triggers.DefensiveSpin:AddTimer(self.Azranel.TimersRef.DefensiveSpin)
+    self.Azranel.Triggers.DefensiveSpin:AddAlert(self.Azranel.AlertsRef.DefensiveSpin)
 end
