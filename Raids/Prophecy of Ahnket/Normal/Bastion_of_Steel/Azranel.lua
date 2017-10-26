@@ -254,7 +254,7 @@ function AZR:Start()
     self.Azranel.Triggers.CometShot:AddAlert(self.Azranel.AlertsRef.CometShot)
     self.Azranel.Triggers.CometShot:AddTimer(self.Azranel.TimersRef.CometShot)
 
-    self.Azranel.Triggers.DefensiveSpin = KBM.Trigger:Create(self.Lang.Ability.DefensiveSpin[KBM.Lang], "cast", self.Azranel)
+    self.Azranel.Triggers.DefensiveSpin = KBM.Trigger:Create(self.Lang.Ability.DefensiveSpin[KBM.Lang], "channel", self.Azranel)
     self.Azranel.Triggers.DefensiveSpin:AddTimer(self.Azranel.TimersRef.DefensiveSpin)
     self.Azranel.Triggers.DefensiveSpin:AddAlert(self.Azranel.AlertsRef.DefensiveSpin)
 end
