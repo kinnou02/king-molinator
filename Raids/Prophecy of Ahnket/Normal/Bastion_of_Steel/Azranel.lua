@@ -205,7 +205,7 @@ function AZR:UnitHPCheck(uDetails, unitID)
                 self.Azranel.CastBar:Create(unitID)
                 self.PhaseObj:Start(self.StartTime)
                 self.PhaseObj:SetPhase(self.Azranel.Name)
-                self.PhaseObj.Objectives:AddPercent(self.Azranel, 0, 100)
+                self.PhaseObj.Objectives:AddPercent(self.Azranel, 0, 75)
                 self.Phase = 1
                 KBM.MechTimer:AddStart(AZR.Azranel.TimersRef.FirstCometShot)
                 KBM.MechTimer:AddStart(AZR.Azranel.TimersRef.FirstMissileStorm)
@@ -228,6 +228,21 @@ function AZR:Reset()
 end
 
 function AZR:Timer()
+end
+
+
+function AZR.PhaseTwo()
+    AZR.PhaseObj.Objectives:Remove()
+    AZR.Phase = 2
+    AZR.PhaseObj:SetPhase(2)
+    AZR.PhaseObj.Objectives:AddPercent(AZR.Azranel, 50, 75)
+end
+
+function AZR.PhaseThree()
+    AZR.PhaseObj.Objectives:Remove()
+    AZR.Phase = 3
+    AZR.PhaseObj:SetPhase(3)
+    AZR.PhaseObj.Objectives:AddPercent(AZR.Azranel, 0, 50)
 end
 
 
@@ -272,4 +287,10 @@ function AZR:Start()
     self.Azranel.Triggers.DefensiveSpin = KBM.Trigger:Create(self.Lang.Ability.DefensiveSpin[KBM.Lang], "channel", self.Azranel)
     self.Azranel.Triggers.DefensiveSpin:AddTimer(self.Azranel.TimersRef.DefensiveSpin)
     self.Azranel.Triggers.DefensiveSpin:AddAlert(self.Azranel.AlertsRef.DefensiveSpin)
+    
+    self.Azranel.Triggers.PhaseTwo = KBM.Trigger:Create(75, "percent", self.Azranel)
+    self.Azranel.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
+    
+    self.Azranel.Triggers.PhaseThree = KBM.Trigger:Create(50, "percent", self.Azranel)
+    self.Azranel.Triggers.PhaseThree:AddPhase(self.PhaseThree)
 end
