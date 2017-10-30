@@ -32,7 +32,7 @@ TD.Lang.Main = {}
 TD.Lang.Main.Name = KBM.Language:Add(TD.Name)
 -- TODO: translation german & french
 TD.Lang.Main.Name:SetFrench("Le Bastion d'Acier")
---TD.Lang.Main.Name:SetGerman("Tartarische Tiefen Normal")
+TD.Lang.Main.Name:SetGerman("Die stählerne Festung")
 
 TD.Name = TD.Lang.Main.Name[KBM.Lang]
 TD.Descript = TD.Name
