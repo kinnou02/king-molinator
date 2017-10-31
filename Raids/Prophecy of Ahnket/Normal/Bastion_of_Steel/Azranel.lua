@@ -78,10 +78,12 @@ KBM.RegisterMod(AZR.ID, AZR)
 
 -- Ability Dictionary
 AZR.Lang.Ability = {}
-AZR.Lang.Ability.MissileStorm = KBM.Language:Add("Missile Storm") --TODO transG
+AZR.Lang.Ability.MissileStorm = KBM.Language:Add("Missile Storm")
+AZR.Lang.Ability.MissileStorm:SetGerman("Projektilsturm")
 AZR.Lang.Ability.MissileStorm:SetFrench("Tempête de missiles")
 
-AZR.Lang.Ability.CometShot = KBM.Language:Add("Comet Shot") --TODO transG
+AZR.Lang.Ability.CometShot = KBM.Language:Add("Comet Shot")
+AZR.Lang.Ability.MissileStorm:SetGerman("Kometenschuss")
 AZR.Lang.Ability.MissileStorm:SetFrench("Tir de comète")
 
 AZR.Lang.Ability.DefensiveSpin = KBM.Language:Add("Defensive Spin") --TODO transG
@@ -95,7 +97,8 @@ AZR.Lang.Buff = {}
 
 -- Debuff Dictionary
 AZR.Lang.Debuff = {}
-AZR.Lang.Debuff.LaserCutter = KBM.Language:Add("Laser Cutter")--TODO transG
+AZR.Lang.Debuff.LaserCutter = KBM.Language:Add("Laser Cutter")
+AZR.Lang.Debuff.LaserCutter:SetGerman("Laserschneider")
 AZR.Lang.Debuff.LaserCutter:SetFrench("Coupeur Laser")
 
 -- Notify Dictionary
