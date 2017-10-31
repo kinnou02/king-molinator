@@ -112,11 +112,11 @@ AZR.Descript = AZR.Lang.Unit.Azranel[KBM.Lang]
 AZR.Lang.Menu = {}
 AZR.Lang.Menu.FirstCometShot = KBM.Language:Add("First " .. AZR.Lang.Ability.CometShot[KBM.Lang])
 AZR.Lang.Menu.FirstCometShot:SetFrench("Premier " .. AZR.Lang.Ability.CometShot[KBM.Lang])
-AZR.Lang.Menu.FirstCometShot:SetGerman("Erste " .. AZR.Lang.Ability.CometShot[KBM.Lang])
+AZR.Lang.Menu.FirstCometShot:SetGerman("Erster " .. AZR.Lang.Ability.CometShot[KBM.Lang])
 
 AZR.Lang.Menu.FirstMissileStorm = KBM.Language:Add("First " .. AZR.Lang.Ability.MissileStorm[KBM.Lang])
 AZR.Lang.Menu.FirstMissileStorm:SetFrench("Premier " .. AZR.Lang.Ability.MissileStorm[KBM.Lang])
-AZR.Lang.Menu.FirstMissileStorm:SetGerman("Erste " .. AZR.Lang.Ability.MissileStorm[KBM.Lang])
+AZR.Lang.Menu.FirstMissileStorm:SetGerman("Erster " .. AZR.Lang.Ability.MissileStorm[KBM.Lang])
 
 
 function AZR:AddBosses(KBM_Boss)
