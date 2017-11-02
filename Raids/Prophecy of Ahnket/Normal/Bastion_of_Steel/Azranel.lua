@@ -60,6 +60,7 @@ AZR.Azranel = {
           DefensiveSpin = KBM.Defaults.AlertObj.Create("purple"),
 		  LaserCutter = KBM.Defaults.AlertObj.Create("blue"),
 		  StickyBomb = KBM.Defaults.AlertObj.Create("dark_green"),
+		  Magnetized = KBM.Defaults.AlertObj.Create("yellow"),
         },
         TimersRef = {
             Enabled = true,
@@ -72,6 +73,7 @@ AZR.Azranel = {
             Enabled = true,
 			LaserCutter= KBM.Defaults.MechObj.Create("blue"),
 			StickyBomb = KBM.Defaults.MechObj.Create("dark_green"),
+			Magnetized = KBM.Defaults.AlertObj.Create("yellow"),
             MissileStorm = KBM.Defaults.MechObj.Create("red"),
         },
     },
@@ -106,6 +108,7 @@ AZR.Lang.Debuff.LaserCutter = KBM.Language:Add("Laser Cutter")
 AZR.Lang.Debuff.LaserCutter:SetGerman("Laserschneider")
 AZR.Lang.Debuff.LaserCutter:SetFrench("Coupeur Laser")
 AZR.Lang.Debuff.StickyBomb = KBM.Language:Add("Sticky Bomb") --TODO transF transG
+AZR.Lang.Debuff.Magnetized = KBM.Language:Add("Magnetized") --TODO transF transG
 
 -- Notify Dictionary
 AZR.Lang.Notify = {}
@@ -281,6 +284,7 @@ function AZR:Start()
     -- MechSpy
 	self.Azranel.MechRef.LaserCutter = KBM.MechSpy:Add(self.Lang.Debuff.LaserCutter[KBM.Lang], nil, "playerDebuff", self.Azranel)
 	self.Azranel.MechRef.StickyBomb = KBM.MechSpy:Add(self.Lang.Debuff.StickyBomb[KBM.Lang], nil, "playerDebuff", self.Azranel)
+	self.Azranel.MechRef.Magnetized = KBM.MechSpy:Add(self.Lang.Debuff.Magnetized[KBM.Lang], nil, "playerDebuff", self.Azranel)
 	 self.Azranel.MechRef.MissileStorm = KBM.MechSpy:Add(self.Lang.Ability.MissileStorm[KBM.Lang], nil, "playerDebuff", self.Azranel)
 	KBM.Defaults.MechObj.Assign(self.Azranel)
 
@@ -302,6 +306,12 @@ function AZR:Start()
 	self.Azranel.Triggers.LaserCutter = KBM.Trigger:Create(self.Lang.Debuff.LaserCutter[KBM.Lang], "playerDebuff", self.Azranel)
     self.Azranel.Triggers.LaserCutter:AddSpy(self.Azranel.MechRef.LaserCutter)
 
+	self.Azranel.Triggers.Magnetized = KBM.Trigger:Create(self.Lang.Debuff.Magnetized[KBM.Lang], "playerDebuff", self.Azranel)
+	self.Azranel.Triggers.Magnetized:AddSpy(self.Azranel.MechRef.Magnetized)
+	
+	self.Azranel.Triggers.MagnetizedRemoved = KBM.Trigger:Create(self.Lang.Debuff.Magnetized[KBM.Lang], "playerBuffRemove", self.Azranel)
+	self.Azranel.Triggers.MagnetizedRemoved:AddStop(self.Azranel.MechRef.Magnetized)
+	
 	self.Azranel.Triggers.StickyBomb = KBM.Trigger:Create(self.Lang.Debuff.StickyBomb[KBM.Lang], "playerDebuff", self.Azranel)
 	self.Azranel.Triggers.StickyBomb:AddSpy(self.Azranel.MechRef.StickyBomb)
 	
