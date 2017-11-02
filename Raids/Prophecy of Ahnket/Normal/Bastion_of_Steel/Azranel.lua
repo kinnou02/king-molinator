@@ -218,7 +218,7 @@ function AZR:UnitHPCheck(uDetails, unitID)
                 self.Azranel.CastBar:Create(unitID)
                 self.PhaseObj:Start(self.StartTime)
                 self.PhaseObj:SetPhase(self.Azranel.Name)
-                self.PhaseObj.Objectives:AddPercent(self.Azranel, 0, 75)
+                self.PhaseObj.Objectives:AddPercent(self.Azranel, 75, 100)
                 self.Phase = 1
                 KBM.MechTimer:AddStart(AZR.Azranel.TimersRef.FirstMissileStorm)
                 KBM.TankSwap:Start(self.Lang.Debuff.LaserCutter[KBM.Lang], unitID)
