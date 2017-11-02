@@ -72,7 +72,7 @@ AZR.Azranel = {
             Enabled = true,
 			LaserCutter= KBM.Defaults.MechObj.Create("blue"),
 			StickyBomb = KBM.Defaults.MechObj.Create("dark_green"),
-            MissileStorm = KBM.Defaults.MechObj.Create("red,
+            MissileStorm = KBM.Defaults.MechObj.Create("red"),
         },
     },
 }
