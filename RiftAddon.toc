@@ -4,7 +4,11 @@ Name = "King Boss Mods"
 
 NameShort = "KBM"
 
-Description = "Development of a fully fledged Raid and Dungeon encounter alert system.\n\nType /kbmhelp for details on in-game slash commands."
+Description = {
+    English = "Development of a fully fledged Raid and Dungeon encounter alert system.\n\nType /kbmhelp for details on in-game slash commands.",
+    French = "Développement d'un système d'alerte en Raid et Donjon.\n\nType /kbmhelp pour plus de détails sur les commandes en jeu.",
+    German = "Development of a fully fledged Raid and Dungeon encounter alert system.\n\nType /kbmhelp for details on in-game slash commands.",
+}
 
 Author = "Safe@Deepwood"
 Website = "http://www.facebook.com/KingBossMods"
