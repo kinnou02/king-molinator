@@ -254,14 +254,14 @@ function AZR.PhaseThree()
     AZR.PhaseObj.Objectives:Remove()
     AZR.Phase = 3
     AZR.PhaseObj:SetPhase(3)
-    AZR.PhaseObj.Objectives:AddPercent(AZR.Azranel, 40, 50)
+    AZR.PhaseObj.Objectives:AddPercent(AZR.Azranel, 45, 50)
 end
 
 function AZR.PhaseFour()
     AZR.PhaseObj.Objectives:Remove()
     AZR.Phase = 4
     AZR.PhaseObj:SetPhase(4)
-    AZR.PhaseObj.Objectives:AddPercent(AZR.Azranel, 30, 40)
+    AZR.PhaseObj.Objectives:AddPercent(AZR.Azranel, 30, 45)
 end
 
 function AZR.PhaseFive()
@@ -332,7 +332,7 @@ function AZR:Start()
     self.Azranel.Triggers.PhaseThree = KBM.Trigger:Create(50, "percent", self.Azranel)
     self.Azranel.Triggers.PhaseThree:AddPhase(self.PhaseThree)
 	
-	self.Azranel.Triggers.PhaseThree = KBM.Trigger:Create(40, "percent", self.Azranel)
+	self.Azranel.Triggers.PhaseThree = KBM.Trigger:Create(45, "percent", self.Azranel)
     self.Azranel.Triggers.PhaseThree:AddPhase(self.PhaseFour)
 	
 	self.Azranel.Triggers.PhaseThree = KBM.Trigger:Create(30, "percent", self.Azranel)
