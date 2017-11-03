@@ -21,7 +21,7 @@ local AZR = {
     Instance = Instance.Name,
     InstanceObj = Instance,
     HasPhases = true,
-	TankSwap = true,
+    TankSwap = true,
     Lang = {},
     ID = "Azranel",
     Object = "AZR",
@@ -58,9 +58,9 @@ AZR.Azranel = {
           MissileStorm = KBM.Defaults.AlertObj.Create("red"),
           CometShot = KBM.Defaults.AlertObj.Create("yellow"),
           DefensiveSpin = KBM.Defaults.AlertObj.Create("purple"),
-		  LaserCutter = KBM.Defaults.AlertObj.Create("blue"),
-		  StickyBomb = KBM.Defaults.AlertObj.Create("dark_green"),
-		  Magnetized = KBM.Defaults.AlertObj.Create("yellow"),
+          LaserCutter = KBM.Defaults.AlertObj.Create("blue"),
+          StickyBomb = KBM.Defaults.AlertObj.Create("dark_green"),
+          Magnetized = KBM.Defaults.AlertObj.Create("yellow"),
         },
         TimersRef = {
             Enabled = true,
@@ -71,9 +71,9 @@ AZR.Azranel = {
         },
         MechRef = {
             Enabled = true,
-			LaserCutter= KBM.Defaults.MechObj.Create("blue"),
-			StickyBomb = KBM.Defaults.MechObj.Create("dark_green"),
-			Magnetized = KBM.Defaults.AlertObj.Create("yellow"),
+            LaserCutter= KBM.Defaults.MechObj.Create("blue"),
+            StickyBomb = KBM.Defaults.MechObj.Create("dark_green"),
+            Magnetized = KBM.Defaults.AlertObj.Create("yellow"),
             MissileStorm = KBM.Defaults.MechObj.Create("red"),
         },
     },
@@ -85,7 +85,7 @@ KBM.RegisterMod(AZR.ID, AZR)
 -- Ability Dictionary
 AZR.Lang.Ability = {}
 AZR.Lang.Ability.MissileStorm = KBM.Language:Add("Missile Storm")
-AZR.Lang.Ability.MissileStorm:SetGerman("Projektilsturm")														
+AZR.Lang.Ability.MissileStorm:SetGerman("Projektilsturm")
 AZR.Lang.Ability.MissileStorm:SetFrench("Tempête de missiles")
 
 AZR.Lang.Ability.CometShot = KBM.Language:Add("Comet Shot")
@@ -93,8 +93,8 @@ AZR.Lang.Ability.CometShot:SetGerman("Kometenschuss")
 AZR.Lang.Ability.CometShot:SetFrench("Tir de comète")
 
 AZR.Lang.Ability.DefensiveSpin = KBM.Language:Add("Defensive Spin")
-AZR.Lang.Ability.DefensiveSpin:SetFrench("Defensive Spin")
-AZR.Lang.Ability.DefensiveSpin:SetGerman("Defensive Spin")					 
+AZR.Lang.Ability.DefensiveSpin:SetFrench("Tourbillon défensif")
+AZR.Lang.Ability.DefensiveSpin:SetGerman("Defensive Spin")
 
 -- Verbose Dictionary
 AZR.Lang.Verbose = {}
@@ -106,7 +106,7 @@ AZR.Lang.Buff = {}
 AZR.Lang.Debuff = {}
 AZR.Lang.Debuff.LaserCutter = KBM.Language:Add("Laser Cutter")
 AZR.Lang.Debuff.LaserCutter:SetGerman("Laserschneider")
-AZR.Lang.Debuff.LaserCutter:SetFrench("Coupeur Laser")
+AZR.Lang.Debuff.LaserCutter:SetFrench("Coupeur laser")
 AZR.Lang.Debuff.StickyBomb = KBM.Language:Add("Sticky Bomb") --TODO transF transG
 AZR.Lang.Debuff.Magnetized = KBM.Language:Add("Magnetized") --TODO transF transG
 
@@ -124,7 +124,7 @@ AZR.Lang.Menu.FirstCometShot:SetFrench("Premier " .. AZR.Lang.Ability.CometShot[
 AZR.Lang.Menu.FirstCometShot:SetGerman("Erster " .. AZR.Lang.Ability.CometShot[KBM.Lang])
 
 AZR.Lang.Menu.FirstMissileStorm = KBM.Language:Add("First " .. AZR.Lang.Ability.MissileStorm[KBM.Lang])
-AZR.Lang.Menu.FirstMissileStorm:SetFrench("Premier " .. AZR.Lang.Ability.MissileStorm[KBM.Lang])
+AZR.Lang.Menu.FirstMissileStorm:SetFrench("Premiere " .. AZR.Lang.Ability.MissileStorm[KBM.Lang])
 AZR.Lang.Menu.FirstMissileStorm:SetGerman("Erster " .. AZR.Lang.Ability.MissileStorm[KBM.Lang])
 
 
@@ -145,7 +145,8 @@ function AZR:InitVars()
         Alerts = KBM.Defaults.Alerts(),
         TimersRef = self.Azranel.Settings.TimersRef,
         AlertsRef = self.Azranel.Settings.AlertsRef,
-		MechRef = self.Azranel.Settings.MechRef,
+        MechRef = self.Azranel.Settings.MechRef,
+        MechSpy = KBM.Defaults.MechSpy(),
     }
     KBMPOABOSAZR_Settings = self.Settings
     chKBMPOABOSAZR_Settings = self.Settings
@@ -280,16 +281,16 @@ function AZR:Start()
 
     self.Azranel.TimersRef.DefensiveSpin = KBM.MechTimer:Add(self.Lang.Ability.DefensiveSpin[KBM.Lang], 46)
     KBM.Defaults.TimerObj.Assign(self.Azranel)
-	
+
     -- MechSpy
-	self.Azranel.MechRef.LaserCutter = KBM.MechSpy:Add(self.Lang.Debuff.LaserCutter[KBM.Lang], nil, "playerDebuff", self.Azranel)
-	self.Azranel.MechRef.StickyBomb = KBM.MechSpy:Add(self.Lang.Debuff.StickyBomb[KBM.Lang], nil, "playerDebuff", self.Azranel)
-	self.Azranel.MechRef.Magnetized = KBM.MechSpy:Add(self.Lang.Debuff.Magnetized[KBM.Lang], nil, "playerDebuff", self.Azranel)
-	 self.Azranel.MechRef.MissileStorm = KBM.MechSpy:Add(self.Lang.Ability.MissileStorm[KBM.Lang], nil, "playerDebuff", self.Azranel)
-	KBM.Defaults.MechObj.Assign(self.Azranel)
+    self.Azranel.MechRef.LaserCutter = KBM.MechSpy:Add(self.Lang.Debuff.LaserCutter[KBM.Lang], nil, "playerDebuff", self.Azranel)
+    self.Azranel.MechRef.StickyBomb = KBM.MechSpy:Add(self.Lang.Debuff.StickyBomb[KBM.Lang], nil, "playerDebuff", self.Azranel)
+    self.Azranel.MechRef.Magnetized = KBM.MechSpy:Add(self.Lang.Debuff.Magnetized[KBM.Lang], nil, "playerDebuff", self.Azranel)
+    self.Azranel.MechRef.MissileStorm = KBM.MechSpy:Add(self.Lang.Ability.MissileStorm[KBM.Lang], nil, "playerDebuff", self.Azranel)
+    KBM.Defaults.MechObj.Assign(self.Azranel)
 
     -- Create Alerts
-    self.Azranel.AlertsRef.MissileStorm = KBM.Alert:Create(self.Lang.Ability.MissileStorm[KBM.Lang], 2, true, true, "red")
+    self.Azranel.AlertsRef.MissileStorm = KBM.Alert:Create(self.Lang.Ability.MissileStorm[KBM.Lang], nil, true, true, "red")
     self.Azranel.AlertsRef.CometShot = KBM.Alert:Create(self.Lang.Ability.CometShot[KBM.Lang], 2, true, true, "yellow")
     self.Azranel.AlertsRef.DefensiveSpin = KBM.Alert:Create(self.Lang.Ability.DefensiveSpin[KBM.Lang], 2, true, true, "red")
     KBM.Defaults.AlertObj.Assign(self.Azranel)
@@ -297,44 +298,44 @@ function AZR:Start()
     -- Assign Alerts and Timers to Triggers
     self.Azranel.CastBar = KBM.Castbar:Add(self, self.Azranel)
     self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
-    
+
     self.Azranel.Triggers.MissileStorm = KBM.Trigger:Create(self.Lang.Ability.MissileStorm[KBM.Lang], "playerDebuff", self.Azranel)
     self.Azranel.Triggers.MissileStorm:AddAlert(self.Azranel.AlertsRef.MissileStorm, true)
     self.Azranel.Triggers.MissileStorm:AddTimer(self.Azranel.TimersRef.MissileStorm)
     self.Azranel.Triggers.MissileStorm:AddSpy(self.Azranel.MechRef.MissileStorm)
-	
-	self.Azranel.Triggers.LaserCutter = KBM.Trigger:Create(self.Lang.Debuff.LaserCutter[KBM.Lang], "playerDebuff", self.Azranel)
+
+    self.Azranel.Triggers.LaserCutter = KBM.Trigger:Create(self.Lang.Debuff.LaserCutter[KBM.Lang], "playerDebuff", self.Azranel)
     self.Azranel.Triggers.LaserCutter:AddSpy(self.Azranel.MechRef.LaserCutter)
 
-	self.Azranel.Triggers.Magnetized = KBM.Trigger:Create(self.Lang.Debuff.Magnetized[KBM.Lang], "playerDebuff", self.Azranel)
-	self.Azranel.Triggers.Magnetized:AddSpy(self.Azranel.MechRef.Magnetized)
-	
-	self.Azranel.Triggers.MagnetizedRemoved = KBM.Trigger:Create(self.Lang.Debuff.Magnetized[KBM.Lang], "playerBuffRemove", self.Azranel)
-	self.Azranel.Triggers.MagnetizedRemoved:AddStop(self.Azranel.MechRef.Magnetized)
-	
-	self.Azranel.Triggers.StickyBomb = KBM.Trigger:Create(self.Lang.Debuff.StickyBomb[KBM.Lang], "playerDebuff", self.Azranel)
-	self.Azranel.Triggers.StickyBomb:AddSpy(self.Azranel.MechRef.StickyBomb)
-	
-	self.Azranel.Triggers.StickyBombRemoved = KBM.Trigger:Create(self.Lang.Debuff.StickyBomb[KBM.Lang], "playerBuffRemove", self.Azranel)
-	self.Azranel.Triggers.StickyBombRemoved:AddStop(self.Azranel.MechRef.StickyBomb)
-	
-    
+    self.Azranel.Triggers.Magnetized = KBM.Trigger:Create(self.Lang.Debuff.Magnetized[KBM.Lang], "playerDebuff", self.Azranel)
+    self.Azranel.Triggers.Magnetized:AddSpy(self.Azranel.MechRef.Magnetized)
+
+    self.Azranel.Triggers.MagnetizedRemoved = KBM.Trigger:Create(self.Lang.Debuff.Magnetized[KBM.Lang], "playerBuffRemove", self.Azranel)
+    self.Azranel.Triggers.MagnetizedRemoved:AddStop(self.Azranel.MechRef.Magnetized)
+
+    self.Azranel.Triggers.StickyBomb = KBM.Trigger:Create(self.Lang.Debuff.StickyBomb[KBM.Lang], "playerDebuff", self.Azranel)
+    self.Azranel.Triggers.StickyBomb:AddSpy(self.Azranel.MechRef.StickyBomb)
+
+    self.Azranel.Triggers.StickyBombRemoved = KBM.Trigger:Create(self.Lang.Debuff.StickyBomb[KBM.Lang], "playerBuffRemove", self.Azranel)
+    self.Azranel.Triggers.StickyBombRemoved:AddStop(self.Azranel.MechRef.StickyBomb)
+
+
     self.Azranel.Triggers.CometShot = KBM.Trigger:Create(self.Lang.Ability.CometShot[KBM.Lang], "playerDebuff", self.Azranel)
     self.Azranel.Triggers.CometShot:AddAlert(self.Azranel.AlertsRef.CometShot)
 
     self.Azranel.Triggers.DefensiveSpin = KBM.Trigger:Create(self.Lang.Ability.DefensiveSpin[KBM.Lang], "channel", self.Azranel)
     self.Azranel.Triggers.DefensiveSpin:AddTimer(self.Azranel.TimersRef.DefensiveSpin)
     self.Azranel.Triggers.DefensiveSpin:AddAlert(self.Azranel.AlertsRef.DefensiveSpin)
-	
-	self.Azranel.Triggers.PhaseTwo = KBM.Trigger:Create(75, "percent", self.Azranel)
+
+    self.Azranel.Triggers.PhaseTwo = KBM.Trigger:Create(75, "percent", self.Azranel)
     self.Azranel.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
-    
+
     self.Azranel.Triggers.PhaseThree = KBM.Trigger:Create(50, "percent", self.Azranel)
     self.Azranel.Triggers.PhaseThree:AddPhase(self.PhaseThree)
-	
-	self.Azranel.Triggers.PhaseThree = KBM.Trigger:Create(45, "percent", self.Azranel)
+
+    self.Azranel.Triggers.PhaseThree = KBM.Trigger:Create(45, "percent", self.Azranel)
     self.Azranel.Triggers.PhaseThree:AddPhase(self.PhaseFour)
-	
-	self.Azranel.Triggers.PhaseThree = KBM.Trigger:Create(30, "percent", self.Azranel)
+
+    self.Azranel.Triggers.PhaseThree = KBM.Trigger:Create(30, "percent", self.Azranel)
     self.Azranel.Triggers.PhaseThree:AddPhase(self.PhaseFive)
 end
