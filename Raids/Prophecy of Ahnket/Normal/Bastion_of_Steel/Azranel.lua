@@ -71,7 +71,7 @@ AZR.Azranel = {
         },
         MechRef = {
             Enabled = true,
-            LaserCutter= KBM.Defaults.MechObj.Create("blue"),
+            LaserCutter = KBM.Defaults.MechObj.Create("blue"),
             StickyBomb = KBM.Defaults.MechObj.Create("dark_green"),
             Magnetized = KBM.Defaults.AlertObj.Create("yellow"),
             MissileStorm = KBM.Defaults.MechObj.Create("red"),
@@ -248,28 +248,14 @@ function AZR.PhaseTwo()
     AZR.PhaseObj.Objectives:Remove()
     AZR.Phase = 2
     AZR.PhaseObj:SetPhase(2)
-    AZR.PhaseObj.Objectives:AddPercent(AZR.Azranel, 50, 75)
+    AZR.PhaseObj.Objectives:AddPercent(AZR.Azranel, 40, 75)
 end
 
 function AZR.PhaseThree()
     AZR.PhaseObj.Objectives:Remove()
     AZR.Phase = 3
     AZR.PhaseObj:SetPhase(3)
-    AZR.PhaseObj.Objectives:AddPercent(AZR.Azranel, 45, 50)
-end
-
-function AZR.PhaseFour()
-    AZR.PhaseObj.Objectives:Remove()
-    AZR.Phase = 4
-    AZR.PhaseObj:SetPhase(4)
-    AZR.PhaseObj.Objectives:AddPercent(AZR.Azranel, 30, 45)
-end
-
-function AZR.PhaseFive()
-    AZR.PhaseObj.Objectives:Remove()
-    AZR.Phase = 5
-    AZR.PhaseObj:SetPhase(5)
-    AZR.PhaseObj.Objectives:AddPercent(AZR.Azranel, 0, 30)
+    AZR.PhaseObj.Objectives:AddPercent(AZR.Azranel, 0, 40)
 end
 
 
@@ -330,12 +316,7 @@ function AZR:Start()
     self.Azranel.Triggers.PhaseTwo = KBM.Trigger:Create(75, "percent", self.Azranel)
     self.Azranel.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
 
-    self.Azranel.Triggers.PhaseThree = KBM.Trigger:Create(50, "percent", self.Azranel)
+    self.Azranel.Triggers.PhaseThree = KBM.Trigger:Create(40, "percent", self.Azranel)
     self.Azranel.Triggers.PhaseThree:AddPhase(self.PhaseThree)
 
-    self.Azranel.Triggers.PhaseThree = KBM.Trigger:Create(45, "percent", self.Azranel)
-    self.Azranel.Triggers.PhaseThree:AddPhase(self.PhaseFour)
-
-    self.Azranel.Triggers.PhaseThree = KBM.Trigger:Create(30, "percent", self.Azranel)
-    self.Azranel.Triggers.PhaseThree:AddPhase(self.PhaseFive)
 end
