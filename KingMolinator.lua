@@ -2942,6 +2942,7 @@ function KBM.SheepProtection:Init()
         ["B1A82BCF41509467C"] = "Corgi Confusion",
         ["B1A82BCF51509C9CB"] = "Corgi Confusion",
         ["B1A82BCF6150A4D1A"] = "Corgi Confusion",
+        ["B7870725BB53856A1"] = "Schafizierung", -- from RR
 	}
 	function self.Remove(BuffID, CasterID)
 		if KBM.Options.Sheep.Protect then
