@@ -1,4 +1,10 @@
-﻿1.9.9.910
+﻿1.9.9.912
+* New: Add phase for Azranel
+* New: Add MechSpy on Azranel for Laser Cuter, Magentized and StickyBomb
+* New: Support for most of the mechanics in german
+* Fix: French Translation
+
+1.9.9.910
 * New: Add TankSwap for Azranel
 * New: Add MechSpy on Missile Storm
 * New: Add enrage timer for Azranel

@@ -30,7 +30,6 @@ KBM.RegisterMod(TD.ID, TD)
 TD.Lang = {}
 TD.Lang.Main = {}
 TD.Lang.Main.Name = KBM.Language:Add(TD.Name)
--- TODO: translation german & french
 TD.Lang.Main.Name:SetFrench("Le Bastion d'Acier")
 TD.Lang.Main.Name:SetGerman("Die stählerne Festung")
 
