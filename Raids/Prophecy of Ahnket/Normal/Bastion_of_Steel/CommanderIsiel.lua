@@ -40,9 +40,9 @@ CIS.Lang.Unit.CommanderIsiel = KBM.Language:Add("Commander Isiel")
 CIS.Lang.Unit.CommanderIsiel:SetFrench("Commander Isiel")
 CIS.Lang.Unit.CommanderIsiel:SetGerman("Commander Isiel")
 
-CIS.Lang.Unit.VinidicatorMKI = KBM.Language:Add("Vinidicator MK 1")
-CIS.Lang.Unit.VinidicatorMKI:SetFrench("Vinidicator MK 1")
-CIS.Lang.Unit.VinidicatorMKI:SetGerman("Vinidicator MK 1")
+CIS.Lang.Unit.VindicatorMKI = KBM.Language:Add("Vindicator MK 1")
+CIS.Lang.Unit.VindicatorMKI:SetFrench("Vindicator MK 1")
+CIS.Lang.Unit.VindicatorMKI:SetGerman("Vindicator MK 1")
 
 
 CIS.CommanderIsiel = {
@@ -63,26 +63,19 @@ CIS.CommanderIsiel = {
     Triggers = {},
     Settings = {
         CastBar = KBM.Defaults.Castbar(),
-        AlertsRef = {
-          Enabled = true,
-		  TimedCharge = KBM.Defaults.AlertObj.Create("red"),
-        },
-        TimersRef = {
-            Enabled = true,
-        },
         MechRef = {
             Enabled = true,
-			TimedCharge= KBM.Defaults.MechObj.Create("red"),
-			LightningBurst = KBM.Defaults.MechObj.Create("blue"),
+			HeartStrike= KBM.Defaults.MechObj.Create("red"),
+			LightningWhirl = KBM.Defaults.MechObj.Create("blue"),
         },
     },
 }
 
-CIS.VinidicatorMKI = {
+CIS.VindicatorMKI = {
     Mod = CIS,
     Level = "72",
     Active = false,
-    Name = CIS.Lang.Unit.VinidicatorMKI[KBM.Lang],
+    Name = CIS.Lang.Unit.VindicatorMKI[KBM.Lang],
     Menu = {},
     AlertsRef = {},
     TimersRef = {},
@@ -96,11 +89,6 @@ CIS.VinidicatorMKI = {
     Triggers = {},
     Settings = {
         CastBar = KBM.Defaults.Castbar(),
-        AlertsRef = {
-          Enabled = true,
-		  TimedCharge = KBM.Defaults.AlertObj.Create("red"),
-		  LightningBurst = KBM.Defaults.AlertObj.Create("blue"),
-        },
         TimersRef = {
             Enabled = true,
         },
@@ -117,7 +105,8 @@ KBM.RegisterMod(CIS.ID, CIS)
 
 -- Ability Dictionary
 CIS.Lang.Ability = {}
-CIS.Lang.Ability.LightningBurst = KBM.Language:Add("Lightning Burst") --TODO transF transG 
+CIS.Lang.Ability.LightningBurst = KBM.Language:Add("Lightning Burst") --TODO transG 
+CIS.Lang.Ability.LightningBurst:SetFrench("Balle foreuse")
 
 -- Verbose Dictionary
 CIS.Lang.Verbose = {}
@@ -141,14 +130,13 @@ CIS.Descript = CIS.Lang.Unit.CommanderIsiel[KBM.Lang]
 -- Menu Dictionary
 CIS.Lang.Menu = {}
 CIS.Lang.Menu.FirstTimedCharge = KBM.Language:Add("First " .. CIS.Lang.Ability.TimedCharge[KBM.Lang]) --TODO transF transG
-
 CIS.Lang.Menu.FirstLightningBurst = KBM.Language:Add("First " .. CIS.Lang.Ability.LightningBurst[KBM.Lang]) --TODO transF transG
 
 
 function CIS:AddBosses(KBM_Boss)
     self.MenuName = self.Descript
     self.Bosses = {
-        [self.VinidicatorMKI.Name] = self.VinidicatorMKI,
+        [self.VindicatorMKI.Name] = self.VindicatorMKI,
 		[self.CommanderIsiel.Name] = self.CommanderIsiel,
     }
 end
@@ -211,6 +199,9 @@ function CIS:RemoveUnits(UnitID)
     if self.CommanderIsiel.UnitID == UnitID then
         self.CommanderIsiel.Available = false
         return true
+    elseif self.VindicatorMKI.UnitID == UnitID then
+        self.VindicatorMKI.Available = false
+        return true
     end
     return false
 end
@@ -219,42 +210,58 @@ function CIS:Death(UnitID)
     if self.CommanderIsiel.UnitID == UnitID then
         self.CommanderIsiel.Dead = true
         return true
+    elseif self.VindicatorMKI.UnitID == UnitID then
+        self.VindicatorMKI.Dead = true
+        return true
     end
     return false
 end
 
 function CIS:UnitHPCheck(uDetails, unitID)
     if uDetails and unitID then
-        if uDetails.type == self.CommanderIsiel.UTID then
+        if uDetails.type == self.VindicatorMKI.UTID then
             if not self.EncounterRunning then
                 self.EncounterRunning = true
                 self.StartTime = Inspect.Time.Real()
                 self.HeldTime = self.StartTime
                 self.TimeElapsed = 0
+                self.VindicatorMKI.Dead = false
+                self.VindicatorMKI.Casting = false
+                self.VindicatorMKI.CastBar:Create(unitID)
+                self.PhaseObj:Start(self.StartTime)
+                self.PhaseObj:SetPhase(self.VindicatorMKI.Name)
+                self.PhaseObj.Objectives:AddPercent(self.VindicatorMKI, 60, 100)
+                self.Phase = 1
+                KBM.MechTimer:AddStart(CIS.VindicatorMKI.TimersRef.FirstTimedCharge)
+                KBM.TankSwap:Start(self.Lang.Debuff.DrillerRound[KBM.Lang], unitID)
+            end
+            self.VindicatorMKI.UnitID = unitID
+            self.VindicatorMKI.Available = true
+            return self.VindicatorMKI
+        elseif uDetails.type == self.CommanderIsiel.UTID then
+            if not self.EncounterRunning then
                 self.CommanderIsiel.Dead = false
                 self.CommanderIsiel.Casting = false
                 self.CommanderIsiel.CastBar:Create(unitID)
-				self.VinidicatorMKI.CastBar:Create(unitID)
-                self.PhaseObj:Start(self.StartTime)
-                self.PhaseObj:SetPhase(self.VinidicatorMKI.Name)
-                self.PhaseObj.Objectives:AddPercent(self.VinidicatorMKI, 60, 100)
-                self.Phase = 1
-                KBM.MechTimer:AddStart(CIS.VinidicatorMKI.TimersRef.FirstTimedCharge)
-                KBM.TankSwap:Start(self.Lang.Debuff.DrillerRound[KBM.Lang], unitID)
+                self.PhaseObj:SetPhase(self.CommanderIsiel.Name)
+                self.Phase = 2
+				KBM.TankSwap:Stop(self.Lang.Debuff.DrillerRound[KBM.Lang], self.VindicatorMKI.UnitID)
             end
             self.CommanderIsiel.UnitID = unitID
             self.CommanderIsiel.Available = true
             return self.CommanderIsiel
-        end
+		end
     end
 end
 
 function CIS:Reset()
     self.EncounterRunning = false
-    self.CommanderIsiel.Available = false
-    self.CommanderIsiel.UnitID = nil
-    self.CommanderIsiel.CastBar:Remove()
-
+    self.VindicatorMKI.Available = false
+	self.CommanderIsiel.Available = false
+    self.VindicatorMKI.UnitID = nil
+	self.CommanderIsiel.UnitID = nil
+    self.VindicatorMKI.CastBar:Remove()
+	self.CommanderIsiel.CastBar:Remove()
     self.PhaseObj:End(Inspect.Time.Real())
 end
 
@@ -279,35 +286,37 @@ end
 
 function CIS:Start()
     -- Create Timers
-    self.CommanderIsiel.TimersRef.FirstTimedCharge = KBM.MechTimer:Add(self.Lang.Ability.TimedCharge[KBM.Lang], 10)
-    self.CommanderIsiel.TimersRef.FirstTimedCharge.MenuName = self.Lang.Menu.FirstTimedCharge[KBM.Lang]
-    self.CommanderIsiel.TimersRef.TimedCharge = KBM.MechTimer:Add(self.Lang.Ability.TimedCharge[KBM.Lang], 27)
+    self.VindicatorMKI.TimersRef.FirstTimedCharge = KBM.MechTimer:Add(self.Lang.Ability.TimedCharge[KBM.Lang], 10)
+    self.VindicatorMKI.TimersRef.FirstTimedCharge.MenuName = self.Lang.Menu.FirstTimedCharge[KBM.Lang]
+    self.VindicatorMKI.TimersRef.TimedCharge = KBM.MechTimer:Add(self.Lang.Ability.TimedCharge[KBM.Lang], 27)
 
-    self.CommanderIsiel.TimersRef.LightningBurst = KBM.MechTimer:Add(self.Lang.Ability.LightningBurst[KBM.Lang], 27)
-    KBM.Defaults.TimerObj.Assign(self.CommanderIsiel)
+    self.VindicatorMKI.TimersRef.LightningBurst = KBM.MechTimer:Add(self.Lang.Ability.LightningBurst[KBM.Lang], 27)
+    KBM.Defaults.TimerObj.Assign(self.VindicatorMKI)
 	
     -- MechSpy
-	self.CommanderIsiel.MechRef.DrillerRound = KBM.MechSpy:Add(self.Lang.Debuff.DrillerRound[KBM.Lang], nil, "playerDebuff", self.CommanderIsiel)
+	self.VindicatorMKI.MechRef.DrillerRound = KBM.MechSpy:Add(self.Lang.Debuff.DrillerRound[KBM.Lang], nil, "playerDebuff", self.VindicatorMKI)
+	
 	self.CommanderIsiel.MechRef.HeartStrike = KBM.MechSpy:Add(self.Lang.Debuff.HeartStrike[KBM.Lang], nil, "playerDebuff", self.CommanderIsiel)
 
+	KBM.Defaults.MechObj.Assign(self.VindicatorMKI)
 	KBM.Defaults.MechObj.Assign(self.CommanderIsiel)
 
     -- Create Alerts
-    self.CommanderIsiel.AlertsRef.LightningBurst = KBM.Alert:Create(self.Lang.Ability.LightningBurst[KBM.Lang], 2, true, true, "blue")
-    self.CommanderIsiel.AlertsRef.TimedCharge = KBM.Alert:Create(self.Lang.Ability.TimedCharge[KBM.Lang], 2, true, true, "red")
-    KBM.Defaults.AlertObj.Assign(self.CommanderIsiel)
+    self.VindicatorMKI.AlertsRef.LightningBurst = KBM.Alert:Create(self.Lang.Ability.LightningBurst[KBM.Lang], 2, true, true, "blue")
+    self.VindicatorMKI.AlertsRef.TimedCharge = KBM.Alert:Create(self.Lang.Ability.TimedCharge[KBM.Lang], 2, true, true, "red")
+    KBM.Defaults.AlertObj.Assign(self.VindicatorMKI)
 
     -- Assign Alerts and Timers to Triggers
-    self.CommanderIsiel.CastBar = KBM.Castbar:Add(self, self.CommanderIsiel)
+    self.VindicatorMKI.CastBar = KBM.Castbar:Add(self, self.VindicatorMKI)
     self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
     
-    self.CommanderIsiel.Triggers.TimedCharge = KBM.Trigger:Create(self.Lang.Ability.TimedCharge[KBM.Lang], "playerDebuff", self.CommanderIsiel)
-    self.CommanderIsiel.Triggers.TimedCharge:AddAlert(self.CommanderIsiel.AlertsRef.TimedCharge, true)
-    self.CommanderIsiel.Triggers.TimedCharge:AddTimer(self.CommanderIsiel.TimersRef.TimedCharge)
-    self.CommanderIsiel.Triggers.TimedCharge:AddSpy(self.CommanderIsiel.MechRef.TimedCharge)
+    self.VindicatorMKI.Triggers.TimedCharge = KBM.Trigger:Create(self.Lang.Ability.TimedCharge[KBM.Lang], "playerDebuff", self.VindicatorMKI)
+    self.VindicatorMKI.Triggers.TimedCharge:AddAlert(self.VindicatorMKI.AlertsRef.TimedCharge, true)
+    self.VindicatorMKI.Triggers.TimedCharge:AddTimer(self.VindicatorMKI.TimersRef.TimedCharge)
+    self.VindicatorMKI.Triggers.TimedCharge:AddSpy(self.VindicatorMKI.MechRef.TimedCharge)
 	
-	self.CommanderIsiel.Triggers.DrillerRound = KBM.Trigger:Create(self.Lang.Debuff.DrillerRound[KBM.Lang], "playerDebuff", self.CommanderIsiel)
-    self.CommanderIsiel.Triggers.DrillerRound:AddSpy(self.CommanderIsiel.MechRef.DrillerRound)
+	self.VindicatorMKI.Triggers.DrillerRound = KBM.Trigger:Create(self.Lang.Debuff.DrillerRound[KBM.Lang], "playerDebuff", self.VindicatorMKI)
+    self.VindicatorMKI.Triggers.DrillerRound:AddSpy(self.VindicatorMKI.MechRef.DrillerRound)
 
 	self.CommanderIsiel.Triggers.HeartStrike = KBM.Trigger:Create(self.Lang.Debuff.HeartStrike[KBM.Lang], "playerDebuff", self.CommanderIsiel)
 	self.CommanderIsiel.Triggers.HeartStrike:AddSpy(self.CommanderIsiel.MechRef.HeartStrike)
@@ -315,15 +324,16 @@ function CIS:Start()
 	self.CommanderIsiel.Triggers.HeartStrikeRemoved = KBM.Trigger:Create(self.Lang.Debuff.HeartStrike[KBM.Lang], "playerBuffRemove", self.CommanderIsiel)
 	self.CommanderIsiel.Triggers.HeartStrikeRemoved:AddStop(self.CommanderIsiel.MechRef.HeartStrike)
 	
-	--self.CommanderIsiel.Triggers.ExplosiveSomething = KBM.Trigger:Create(self.Lang.Debuff.ExplosiveSomething[KBM.Lang], "playerDebuff", self.CommanderIsiel)
-	--self.CommanderIsiel.Triggers.ExplosiveSomething:AddSpy(self.CommanderIsiel.MechRef.ExplosiveSomething)
+	--ExplosiveRound = B2A466E1E35306E82
+	self.CommanderIsiel.Triggers.ExplosiveRound = KBM.Trigger:Create(self.Lang.Debuff.ExplosiveSomething[KBM.Lang], "playerDebuff", self.CommanderIsiel)
+	self.CommanderIsiel.Triggers.ExplosiveRound:AddSpy(self.CommanderIsiel.MechRef.ExplosiveSomething)
 	
-	--self.CommanderIsiel.Triggers.ExplosiveSomethingRemoved = KBM.Trigger:Create(self.Lang.Debuff.ExplosiveSomething[KBM.Lang], "playerBuffRemove", self.CommanderIsiel)
-	--self.CommanderIsiel.Triggers.ExplosiveSomethingRemoved:AddStop(self.CommanderIsiel.MechRef.ExplosiveSomething)
+	self.CommanderIsiel.Triggers.ExplosiveRoundRemoved = KBM.Trigger:Create(self.Lang.Debuff.ExplosiveSomething[KBM.Lang], "playerBuffRemove", self.CommanderIsiel)
+	self.CommanderIsiel.Triggers.ExplosiveRoundRemoved:AddStop(self.CommanderIsiel.MechRef.ExplosiveSomething)
 	
-    self.CommanderIsiel.Triggers.LightningBurst = KBM.Trigger:Create(self.Lang.Ability.LightningBurst[KBM.Lang], "channel", self.CommanderIsiel)
-    self.CommanderIsiel.Triggers.LightningBurst:AddTimer(self.CommanderIsiel.TimersRef.LightningBurst)
-    self.CommanderIsiel.Triggers.LightningBurst:AddAlert(self.CommanderIsiel.AlertsRef.LightningBurst)
+    self.VindicatorMKI.Triggers.LightningBurst = KBM.Trigger:Create(self.Lang.Ability.LightningBurst[KBM.Lang], "channel", self.VindicatorMKI)
+    self.VindicatorMKI.Triggers.LightningBurst:AddTimer(self.VindicatorMKI.TimersRef.LightningBurst)
+    self.VindicatorMKI.Triggers.LightningBurst:AddAlert(self.VindicatorMKI.AlertsRef.LightningBurst)
 	
 	self.CommanderIsiel.Triggers.PhaseTwo = KBM.Trigger:Create(100, "percent", self.CommanderIsiel)
     self.CommanderIsiel.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
