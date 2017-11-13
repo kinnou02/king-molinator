@@ -47,7 +47,7 @@ CIS.Lang.Unit.VindicatorMKI:SetGerman("Vindicator MK 1")
 
 CIS.CommanderIsiel = {
     Mod = CIS,
-    Level = "72",
+    Level = "??",
     Active = false,
     Name = CIS.Lang.Unit.CommanderIsiel[KBM.Lang],
     Menu = {},
@@ -73,13 +73,25 @@ CIS.CommanderIsiel = {
 
 CIS.VindicatorMKI = {
     Mod = CIS,
-    Level = "72",
+    Level = "??",
     Active = false,
     Name = CIS.Lang.Unit.VindicatorMKI[KBM.Lang],
     Menu = {},
-    AlertsRef = {},
-    TimersRef = {},
-    MechRef = {},
+    AlertsRef = {
+		Enabled = true,
+		TimedCharge = KBM.Defaults.AlertObj.Create("red"),
+		LightningBurst = KBM.Defaults.AlertObj.Create("blue"),
+	},
+    TimersRef = {
+		Enabled = true,
+		TimedCharge = KBM.Defaults.TimerObj.Create("red"),
+		FirstTimedCharge = KBM.Defaults.TimerObj.Create("red"),
+		LightningBurst = KBM.Defaults.TimerObj.Create("blue"),
+	},
+    MechRef = {
+		Enabled = true,
+		DrillerRound = KBM.Defaults.MechObj.Create("purple"),
+	},
     Castbar = nil,
     Dead = false,
     Available = false,
@@ -129,7 +141,7 @@ CIS.Descript = CIS.Lang.Unit.CommanderIsiel[KBM.Lang]
 
 -- Menu Dictionary
 CIS.Lang.Menu = {}
-CIS.Lang.Menu.FirstTimedCharge = KBM.Language:Add("First " .. CIS.Lang.Ability.TimedCharge[KBM.Lang]) --TODO transF transG
+CIS.Lang.Menu.FirstTimedCharge = KBM.Language:Add("First " .. CIS.Lang.Debuff.TimedCharge[KBM.Lang]) --TODO transF transG
 CIS.Lang.Menu.FirstLightningBurst = KBM.Language:Add("First " .. CIS.Lang.Ability.LightningBurst[KBM.Lang]) --TODO transF transG
 
 
@@ -286,9 +298,9 @@ end
 
 function CIS:Start()
     -- Create Timers
-    self.VindicatorMKI.TimersRef.FirstTimedCharge = KBM.MechTimer:Add(self.Lang.Ability.TimedCharge[KBM.Lang], 10)
+    self.VindicatorMKI.TimersRef.FirstTimedCharge = KBM.MechTimer:Add(self.Lang.Debuff.TimedCharge[KBM.Lang], 10)
     self.VindicatorMKI.TimersRef.FirstTimedCharge.MenuName = self.Lang.Menu.FirstTimedCharge[KBM.Lang]
-    self.VindicatorMKI.TimersRef.TimedCharge = KBM.MechTimer:Add(self.Lang.Ability.TimedCharge[KBM.Lang], 27)
+    self.VindicatorMKI.TimersRef.TimedCharge = KBM.MechTimer:Add(self.Lang.Debuff.TimedCharge[KBM.Lang], 27)
 
     self.VindicatorMKI.TimersRef.LightningBurst = KBM.MechTimer:Add(self.Lang.Ability.LightningBurst[KBM.Lang], 27)
     KBM.Defaults.TimerObj.Assign(self.VindicatorMKI)
@@ -303,14 +315,14 @@ function CIS:Start()
 
     -- Create Alerts
     self.VindicatorMKI.AlertsRef.LightningBurst = KBM.Alert:Create(self.Lang.Ability.LightningBurst[KBM.Lang], 2, true, true, "blue")
-    self.VindicatorMKI.AlertsRef.TimedCharge = KBM.Alert:Create(self.Lang.Ability.TimedCharge[KBM.Lang], 2, true, true, "red")
-    KBM.Defaults.AlertObj.Assign(self.VindicatorMKI)
+    self.VindicatorMKI.AlertsRef.TimedCharge = KBM.Alert:Create(self.Lang.Debuff.TimedCharge[KBM.Lang], 2, true, true, "red")
+    KBM.Defaults.AlertObj.Assign(self.VindicatorMKI) 
 
     -- Assign Alerts and Timers to Triggers
     self.VindicatorMKI.CastBar = KBM.Castbar:Add(self, self.VindicatorMKI)
     self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
     
-    self.VindicatorMKI.Triggers.TimedCharge = KBM.Trigger:Create(self.Lang.Ability.TimedCharge[KBM.Lang], "playerDebuff", self.VindicatorMKI)
+    self.VindicatorMKI.Triggers.TimedCharge = KBM.Trigger:Create(self.Lang.Debuff.TimedCharge[KBM.Lang], "playerDebuff", self.VindicatorMKI)
     self.VindicatorMKI.Triggers.TimedCharge:AddAlert(self.VindicatorMKI.AlertsRef.TimedCharge, true)
     self.VindicatorMKI.Triggers.TimedCharge:AddTimer(self.VindicatorMKI.TimersRef.TimedCharge)
     self.VindicatorMKI.Triggers.TimedCharge:AddSpy(self.VindicatorMKI.MechRef.TimedCharge)
