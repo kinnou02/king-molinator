@@ -251,7 +251,7 @@ function CIS:UnitHPCheck(uDetails, unitID)
             self.VindicatorMKI.Available = true
             return self.VindicatorMKI
         elseif uDetails.type == self.CommanderIsiel.UTID then
-            if not self.EncounterRunning then
+            if not self.CommanderIsiel.Available then
                 self.CommanderIsiel.Dead = false
                 self.CommanderIsiel.Casting = false
                 self.CommanderIsiel.CastBar:Create(unitID)
@@ -321,6 +321,7 @@ function CIS:Start()
 
     -- Assign Alerts and Timers to Triggers
     self.VindicatorMKI.CastBar = KBM.Castbar:Add(self, self.VindicatorMKI)
+	self.CommanderIsiel.CastBar = KBM.Castbar:Add(self, self.CommanderIsiel)
     self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
     
     self.VindicatorMKI.Triggers.TimedCharge = KBM.Trigger:Create(self.Lang.Debuff.TimedCharge[KBM.Lang], "playerDebuff", self.VindicatorMKI)
