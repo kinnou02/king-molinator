@@ -77,21 +77,9 @@ CIS.VindicatorMKI = {
     Active = false,
     Name = CIS.Lang.Unit.VindicatorMKI[KBM.Lang],
     Menu = {},
-    AlertsRef = {
-		Enabled = true,
-		TimedCharge = KBM.Defaults.AlertObj.Create("red"),
-		LightningBurst = KBM.Defaults.AlertObj.Create("blue"),
-	},
-    TimersRef = {
-		Enabled = true,
-		TimedCharge = KBM.Defaults.TimerObj.Create("red"),
-		FirstTimedCharge = KBM.Defaults.TimerObj.Create("red"),
-		LightningBurst = KBM.Defaults.TimerObj.Create("blue"),
-	},
-    MechRef = {
-		Enabled = true,
-		DrillerRound = KBM.Defaults.MechObj.Create("purple"),
-	},
+    AlertsRef = {},
+    TimersRef = {},
+    MechRef = {},
     Castbar = nil,
     Dead = false,
     Available = false,
@@ -101,13 +89,24 @@ CIS.VindicatorMKI = {
     Triggers = {},
     Settings = {
         CastBar = KBM.Defaults.Castbar(),
+		AlertsRef = {
+			Enabled = true,
+			TimedCharge = KBM.Defaults.AlertObj.Create("red"),
+			LightningBurst = KBM.Defaults.AlertObj.Create("blue"),
+			ExplosiveRound = KBM.Defaults.AlertObj.Create("dark_green"),
+		},
         TimersRef = {
-            Enabled = true,
+			Enabled = true,
+			TimedCharge = KBM.Defaults.TimerObj.Create("red"),
+			FirstTimedCharge = KBM.Defaults.TimerObj.Create("red"),
+			LightningBurst = KBM.Defaults.TimerObj.Create("blue"),
         },
         MechRef = {
             Enabled = true,
 			TimedCharge= KBM.Defaults.MechObj.Create("red"),
 			LightningBurst = KBM.Defaults.MechObj.Create("blue"),
+			DrillerRound = KBM.Defaults.MechObj.Create("purple"),
+
         },
     },
 }
@@ -131,6 +130,7 @@ CIS.Lang.Debuff = {}
 CIS.Lang.Debuff.TimedCharge = KBM.Language:Add("Timed Charge") --TODO transF transG 
 CIS.Lang.Debuff.DrillerRound = KBM.Language:Add("Driller Round") --TODO transF transG
 CIS.Lang.Debuff.HeartStrike = KBM.Language:Add("Heart Strike") --TODO transF transG
+CIS.Lang.Debuff.ExplosiveRound = KBM.Language:Add("Explosive Round") --TODO transF transG
  
 -- Notify Dictionary
 CIS.Lang.Notify = {}
@@ -316,6 +316,7 @@ function CIS:Start()
     -- Create Alerts
     self.VindicatorMKI.AlertsRef.LightningBurst = KBM.Alert:Create(self.Lang.Ability.LightningBurst[KBM.Lang], 2, true, true, "blue")
     self.VindicatorMKI.AlertsRef.TimedCharge = KBM.Alert:Create(self.Lang.Debuff.TimedCharge[KBM.Lang], 2, true, true, "red")
+	self.VindicatorMKI.AlertsRef.ExplosiveRound = KBM.Alert:Create(self.Lang.Debuff.ExplosiveRound[KBM.Lang], 2, true, true, "dark_green")
     KBM.Defaults.AlertObj.Assign(self.VindicatorMKI) 
 
     -- Assign Alerts and Timers to Triggers
@@ -325,7 +326,6 @@ function CIS:Start()
     self.VindicatorMKI.Triggers.TimedCharge = KBM.Trigger:Create(self.Lang.Debuff.TimedCharge[KBM.Lang], "playerDebuff", self.VindicatorMKI)
     self.VindicatorMKI.Triggers.TimedCharge:AddAlert(self.VindicatorMKI.AlertsRef.TimedCharge, true)
     self.VindicatorMKI.Triggers.TimedCharge:AddTimer(self.VindicatorMKI.TimersRef.TimedCharge)
-    self.VindicatorMKI.Triggers.TimedCharge:AddSpy(self.VindicatorMKI.MechRef.TimedCharge)
 	
 	self.VindicatorMKI.Triggers.DrillerRound = KBM.Trigger:Create(self.Lang.Debuff.DrillerRound[KBM.Lang], "playerDebuff", self.VindicatorMKI)
     self.VindicatorMKI.Triggers.DrillerRound:AddSpy(self.VindicatorMKI.MechRef.DrillerRound)
@@ -337,11 +337,11 @@ function CIS:Start()
 	self.CommanderIsiel.Triggers.HeartStrikeRemoved:AddStop(self.CommanderIsiel.MechRef.HeartStrike)
 	
 	--ExplosiveRound = B2A466E1E35306E82
-	self.CommanderIsiel.Triggers.ExplosiveRound = KBM.Trigger:Create(self.Lang.Debuff.ExplosiveSomething[KBM.Lang], "playerDebuff", self.CommanderIsiel)
-	self.CommanderIsiel.Triggers.ExplosiveRound:AddSpy(self.CommanderIsiel.MechRef.ExplosiveSomething)
+	self.VindicatorMKI.Triggers.ExplosiveRound = KBM.Trigger:Create(self.Lang.Debuff.ExplosiveRound[KBM.Lang], "playerDebuff", self.VindicatorMKI)
+	self.VindicatorMKI.Triggers.ExplosiveRound:AddAlert(self.VindicatorMKI.AlertsRef.ExplosiveRound, true)
 	
-	self.CommanderIsiel.Triggers.ExplosiveRoundRemoved = KBM.Trigger:Create(self.Lang.Debuff.ExplosiveSomething[KBM.Lang], "playerBuffRemove", self.CommanderIsiel)
-	self.CommanderIsiel.Triggers.ExplosiveRoundRemoved:AddStop(self.CommanderIsiel.MechRef.ExplosiveSomething)
+	self.CommanderIsiel.Triggers.ExplosiveRoundRemoved = KBM.Trigger:Create(self.Lang.Debuff.ExplosiveRound[KBM.Lang], "playerBuffRemove", self.VindicatorMKI)
+	self.CommanderIsiel.Triggers.ExplosiveRoundRemoved:AddStop(self.VindicatorMKI.AlertsRef.ExplosiveRound)
 	
     self.VindicatorMKI.Triggers.LightningBurst = KBM.Trigger:Create(self.Lang.Ability.LightningBurst[KBM.Lang], "channel", self.VindicatorMKI)
     self.VindicatorMKI.Triggers.LightningBurst:AddTimer(self.VindicatorMKI.TimersRef.LightningBurst)
