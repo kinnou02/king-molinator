@@ -257,7 +257,7 @@ function CIS:UnitHPCheck(uDetails, unitID)
                 self.CommanderIsiel.CastBar:Create(unitID)
                 self.PhaseObj:SetPhase(self.CommanderIsiel.Name)
                 self.Phase = 2
-				KBM.TankSwap:Stop(self.Lang.Debuff.DrillerRound[KBM.Lang], self.VindicatorMKI.UnitID)
+				KBM.TankSwap:Remove(self.Lang.Debuff.DrillerRound[KBM.Lang], self.VindicatorMKI.UnitID)
             end
             self.CommanderIsiel.UnitID = unitID
             self.CommanderIsiel.Available = true
