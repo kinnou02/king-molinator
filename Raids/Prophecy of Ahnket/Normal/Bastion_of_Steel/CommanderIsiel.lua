@@ -81,6 +81,8 @@ CIS.VindicatorMKI = {
     TimersRef = {},
     MechRef = {},
     Castbar = nil,
+	CastFilters = {},
+	HasCastFilters = true,
     Dead = false,
     Available = false,
     UnitID = nil,
@@ -89,6 +91,11 @@ CIS.VindicatorMKI = {
     Triggers = {},
     Settings = {
         CastBar = KBM.Defaults.Castbar(),
+		Filters = {
+			Enabled = true,
+			VoltaicThrust = KBM.Defaults.CastFilter.Create(),
+			LightningBurst = KBM.Defaults.CastFilter.Create(),
+		},
 		AlertsRef = {
 			Enabled = true,
 			TimedCharge = KBM.Defaults.AlertObj.Create("red"),
@@ -118,6 +125,7 @@ KBM.RegisterMod(CIS.ID, CIS)
 CIS.Lang.Ability = {}
 CIS.Lang.Ability.LightningBurst = KBM.Language:Add("Lightning Burst") --TODO transG 
 CIS.Lang.Ability.LightningBurst:SetFrench("Balle foreuse")
+CIS.Lang.Ability.VoltaicThrust = KBM.Language:Add("Voltaic Thrust") --TODO transG transF
 
 -- Verbose Dictionary
 CIS.Lang.Verbose = {}
@@ -157,6 +165,7 @@ function CIS:InitVars()
     self.Settings = {
         Enabled = true,
         CastBar = self.CommanderIsiel.Settings.CastBar,
+		CastFilters = self.CommanderIsiel.Settings.Filters,
         EncTimer = KBM.Defaults.EncTimer(),
         PhaseMon = KBM.Defaults.PhaseMon(),
         MechTimer = KBM.Defaults.MechTimer(),
@@ -322,6 +331,9 @@ function CIS:Start()
     KBM.Defaults.AlertObj.Assign(self.VindicatorMKI) 
 
     -- Assign Alerts and Timers to Triggers
+	CIS.VindicatorMKI.CastFilters[CIS.Lang.Ability.VoltaicThrust[KBM.Lang]] = {ID = "VoltaicThrust"}
+	CIS.VindicatorMKI.CastFilters[CIS.Lang.Ability.LightningBurst[KBM.Lang]] = {ID = "LightningBurst"}
+	KBM.Defaults.CastFilter.Assign(self.VindicatorMKI)
     self.VindicatorMKI.CastBar = KBM.Castbar:Add(self, self.VindicatorMKI)
 	self.CommanderIsiel.CastBar = KBM.Castbar:Add(self, self.CommanderIsiel)
     self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)
