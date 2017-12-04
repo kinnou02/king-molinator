@@ -296,14 +296,21 @@ function CIS.PhaseTwo()
     CIS.PhaseObj.Objectives:Remove()
     CIS.Phase = 2
     CIS.PhaseObj:SetPhase(2)
-    CIS.PhaseObj.Objectives:AddPercent(CIS.CommanderIsiel, 30, 100)
+    CIS.PhaseObj.Objectives:AddPercent(CIS.CommanderIsiel, 85, 100)
 end
 
 function CIS.PhaseThree()
     CIS.PhaseObj.Objectives:Remove()
     CIS.Phase = 3
     CIS.PhaseObj:SetPhase(3)
-    CIS.PhaseObj.Objectives:AddPercent(CIS.CommanderIsiel, 0, 30)
+    CIS.PhaseObj.Objectives:AddPercent(CIS.CommanderIsiel, 50, 85)
+end
+
+function CIS.PhaseFour()
+    CIS.PhaseObj.Objectives:Remove()
+    CIS.Phase = 4
+    CIS.PhaseObj:SetPhase(4)
+    CIS.PhaseObj.Objectives:AddPercent(CIS.CommanderIsiel, 0, 50)
 end
 
 
@@ -343,7 +350,7 @@ function CIS:Start()
     self.VindicatorMKI.Triggers.TimedCharge:AddTimer(self.VindicatorMKI.TimersRef.TimedCharge)
 	
 	self.VindicatorMKI.Triggers.DrillerRound = KBM.Trigger:Create(self.Lang.Debuff.DrillerRound[KBM.Lang], "playerDebuff", self.VindicatorMKI)
-    self.VindicatorMKI.Triggers.DrillerRound:AddSpy(self.VindicatorMKI.MechRef.DrillerRound)
+    --self.VindicatorMKI.Triggers.DrillerRound:AddSpy(self.VindicatorMKI.MechRef.DrillerRound)
 
 	self.CommanderIsiel.Triggers.HeartStrike = KBM.Trigger:Create(self.Lang.Debuff.HeartStrike[KBM.Lang], "playerDebuff", self.CommanderIsiel)
 	self.CommanderIsiel.Triggers.HeartStrike:AddSpy(self.CommanderIsiel.MechRef.HeartStrike)
@@ -365,6 +372,9 @@ function CIS:Start()
 	self.CommanderIsiel.Triggers.PhaseTwo = KBM.Trigger:Create(100, "percent", self.CommanderIsiel)
     self.CommanderIsiel.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
     
-    self.CommanderIsiel.Triggers.PhaseThree = KBM.Trigger:Create(30, "percent", self.CommanderIsiel)
+    self.CommanderIsiel.Triggers.PhaseThree = KBM.Trigger:Create(85, "percent", self.CommanderIsiel)
     self.CommanderIsiel.Triggers.PhaseThree:AddPhase(self.PhaseThree)
+	
+	self.CommanderIsiel.Triggers.PhaseThree = KBM.Trigger:Create(50, "percent", self.CommanderIsiel)
+    self.CommanderIsiel.Triggers.PhaseThree:AddPhase(self.PhaseFour)
 end
