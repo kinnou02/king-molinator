@@ -94,7 +94,7 @@ AZR.Lang.Ability.CometShot:SetFrench("Tir de comète")
 
 AZR.Lang.Ability.DefensiveSpin = KBM.Language:Add("Defensive Spin")
 AZR.Lang.Ability.DefensiveSpin:SetFrench("Tourbillon défensif")
-AZR.Lang.Ability.DefensiveSpin:SetGerman("Defensive Spin")
+AZR.Lang.Ability.DefensiveSpin:SetGerman("Defensivdrall")
 
 -- Verbose Dictionary
 AZR.Lang.Verbose = {}
@@ -107,8 +107,10 @@ AZR.Lang.Debuff = {}
 AZR.Lang.Debuff.LaserCutter = KBM.Language:Add("Laser Cutter")
 AZR.Lang.Debuff.LaserCutter:SetGerman("Laserschneider")
 AZR.Lang.Debuff.LaserCutter:SetFrench("Coupeur laser")
-AZR.Lang.Debuff.StickyBomb = KBM.Language:Add("Sticky Bomb") --TODO transF transG
-AZR.Lang.Debuff.Magnetized = KBM.Language:Add("Magnetized") --TODO transF transG
+AZR.Lang.Debuff.StickyBomb = KBM.Language:Add("Sticky Bomb") --TODO transF
+AZR.Lang.Debuff.StickyBomb:SetGerman("Haftbombe")
+AZR.Lang.Debuff.Magnetized = KBM.Language:Add("Magnetized") --TODO transF
+AZR.Lang.Debuff.Magnetized:SetGerman("Magnetisierung")
 
 -- Notify Dictionary
 AZR.Lang.Notify = {}
