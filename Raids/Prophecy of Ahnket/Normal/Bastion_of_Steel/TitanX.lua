@@ -34,6 +34,10 @@ TX.Lang.Unit.TitanX = KBM.Language:Add("Titan X")
 TX.Lang.Unit.TitanX:SetFrench("Titan X")
 TX.Lang.Unit.TitanX:SetGerman("Titan X")
 
+TX.Lang.Unit.EClassSoldier = KBM.Language:Add("E. Class Soldier")
+TX.Lang.Unit.EClassSoldier:SetFrench("E. Class Soldier")
+TX.Lang.Unit.EClassSoldier:SetGerman("E. Class Soldier")
+
 
 TX.TitanX = {
     Mod = TX,
@@ -72,6 +76,24 @@ TX.TitanX = {
     },
 }
 
+TX.EClassSoldier = {
+    Mod = TX,
+    Level = "72",
+    Active = false,
+    Name = TX.Lang.Unit.EClassSoldier[KBM.Lang],
+    Menu = {},
+    AlertsRef = {},
+    TimersRef = {},
+    MechRef = {},
+    Castbar = nil,
+    Dead = false,
+    Available = false,
+    UnitID = nil,
+    UTID = "U16C3B6FE6D522DF5",
+    TimeOut = 5,
+    Triggers = {},
+    Settings = {},
+}
 
 KBM.RegisterMod(TX.ID, TX)
 
@@ -111,6 +133,7 @@ function TX:AddBosses(KBM_Boss)
     self.MenuName = self.Descript
     self.Bosses = {
         [self.TitanX.Name] = self.TitanX,
+		[self.EClassSoldier.Name] = self.EClassSoldier,
     }
 end
 
@@ -199,7 +222,7 @@ function TX:UnitHPCheck(uDetails, unitID)
             self.TitanX.Available = true
             return self.TitanX
 		else 
-			if uDetails.type == "U16C3B6FE6D522DF5" then
+			if uDetails.type == self.EClassSoldier.UTID then
 				if not self.EncounterRunning then
 					self.EncounterRunning = true
 					self.StartTime = Inspect.Time.Real()
