@@ -188,16 +188,9 @@ end
 function TX:UnitHPCheck(uDetails, unitID)
     if uDetails and unitID then
         if uDetails.type == self.TitanX.UTID then
-            if not self.EncounterRunning then
-                self.EncounterRunning = true
-                self.StartTime = Inspect.Time.Real()
-                self.HeldTime = self.StartTime
-                self.TimeElapsed = 0
-                self.TitanX.Dead = false
+            if not self.TitanX.Available then
                 self.TitanX.Casting = false
                 self.TitanX.CastBar:Create(unitID)
-                self.PhaseObj:Start(self.StartTime)
-                self.PhaseObj:SetPhase(self.TitanX.Name)
                 self.PhaseObj.Objectives:AddPercent(self.TitanX, 70, 100)
                 self.Phase = 1
                 KBM.MechTimer:AddStart(TX.TitanX.TimersRef.FirstStaticBlast)
@@ -205,7 +198,21 @@ function TX:UnitHPCheck(uDetails, unitID)
             self.TitanX.UnitID = unitID
             self.TitanX.Available = true
             return self.TitanX
-        end
+		else 
+			if uDetails.type == "U16C3B6FE6D522DF5" then
+				if not self.EncounterRunning then
+					self.EncounterRunning = true
+					self.StartTime = Inspect.Time.Real()
+					self.HeldTime = self.StartTime
+					self.TimeElapsed = 0
+					self.TitanX.Dead = false
+					self.PhaseObj:Start(self.StartTime)
+					self.PhaseObj:SetPhase(self.TitanX.Name)
+					self.Phase = 1
+					return self.TitanX
+				end
+			end
+		end
     end
 end
 
