@@ -1,4 +1,10 @@
-﻿1.9.9.912
+﻿1.9.9.913
+* New: Add Commander Isiel thanks to Yarrellii
+    - German translation for Isiel thanks to Albandito
+* New: German translation for Azranel thanks to Zysa
+
+
+1.9.9.912
 * New: Add phase for Azranel
 * New: Add MechSpy on Azranel for Laser Cuter, Magentized and StickyBomb
 * New: Support for most of the mechanics in german
