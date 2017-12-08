@@ -1,12 +1,6 @@
 -- Commander Isiel Boss Mod for King Boss Mods
 -- Written by Yarrellii
 
--- script print(Inspect.Unit.Detail('player.target').name)
--- script print(Inspect.Unit.Detail('player.target').type)
--- E. Class Soldier  U16C3B6FE6D522DF5
--- R.D.U.  U362FC592688DF7AC
--- Titan X U80000001B50004A8
-
 KBMPOABOSCIS_Settings = nil
 chKBMPOABOSCIS_Settings = nil
 
@@ -38,11 +32,11 @@ local CIS = {
 CIS.Lang.Unit = {}
 CIS.Lang.Unit.CommanderIsiel = KBM.Language:Add("Commander Isiel")
 CIS.Lang.Unit.CommanderIsiel:SetFrench("Commander Isiel")
-CIS.Lang.Unit.CommanderIsiel:SetGerman("Commander Isiel")
+CIS.Lang.Unit.CommanderIsiel:SetGerman("Kommandant Isiel")
 
 CIS.Lang.Unit.VindicatorMKI = KBM.Language:Add("Vindicator MK 1")
 CIS.Lang.Unit.VindicatorMKI:SetFrench("Vindicator MK 1")
-CIS.Lang.Unit.VindicatorMKI:SetGerman("Vindicator MK 1")
+CIS.Lang.Unit.VindicatorMKI:SetGerman("Vergelter Ausf. 1")
 
 
 CIS.CommanderIsiel = {
@@ -122,9 +116,11 @@ KBM.RegisterMod(CIS.ID, CIS)
 
 -- Ability Dictionary
 CIS.Lang.Ability = {}
-CIS.Lang.Ability.LightningBurst = KBM.Language:Add("Lightning Burst") --TODO transG 
+CIS.Lang.Ability.LightningBurst = KBM.Language:Add("Lightning Burst")
 CIS.Lang.Ability.LightningBurst:SetFrench("Balle foreuse")
-CIS.Lang.Ability.VoltaicThrust = KBM.Language:Add("Voltaic Thrust") --TODO transG transF
+CIS.Lang.Ability.LightningBurst:SetGerman("Blitzwirbel")
+CIS.Lang.Ability.VoltaicThrust = KBM.Language:Add("Voltaic Thrust") --TODO transF
+CIS.Lang.Ability.VoltaicThrust:SetGerman("Voltaischer Schub")															 
 
 -- Verbose Dictionary
 CIS.Lang.Verbose = {}
@@ -134,10 +130,14 @@ CIS.Lang.Buff = {}
 
 -- Debuff Dictionary
 CIS.Lang.Debuff = {}
-CIS.Lang.Debuff.TimedCharge = KBM.Language:Add("Timed Charge") --TODO transF transG 
-CIS.Lang.Debuff.DrillerRound = KBM.Language:Add("Driller Round") --TODO transF transG
-CIS.Lang.Debuff.HeartStrike = KBM.Language:Add("Heart Strike") --TODO transF transG
-CIS.Lang.Debuff.ExplosiveRound = KBM.Language:Add("Explosive Round") --TODO transF transG
+CIS.Lang.Debuff.TimedCharge = KBM.Language:Add("Timed Charge") --TODO transF
+CIS.Lang.Debuff.TimedCharge:SetGerman("Zeitladung")
+CIS.Lang.Debuff.DrillerRound = KBM.Language:Add("Driller Round") --TODO transF
+CIS.Lang.Debuff.DrillerRound:SetGerman("Bohrgeschoss")
+CIS.Lang.Debuff.HeartStrike = KBM.Language:Add("Heart Strike") --TODO transF
+CIS.Lang.Debuff.HeartStrike:SetGerman("Herztreffer")
+CIS.Lang.Debuff.ExplosiveRound = KBM.Language:Add("Explosive Round") --TODO transF
+CIS.Lang.Debuff.ExplosiveRound:SetGerman("Sprenggranate")
  
 -- Notify Dictionary
 CIS.Lang.Notify = {}
@@ -148,8 +148,11 @@ CIS.Descript = CIS.Lang.Unit.CommanderIsiel[KBM.Lang]
 
 -- Menu Dictionary
 CIS.Lang.Menu = {}
-CIS.Lang.Menu.FirstTimedCharge = KBM.Language:Add("First " .. CIS.Lang.Debuff.TimedCharge[KBM.Lang]) --TODO transF transG
-CIS.Lang.Menu.FirstLightningBurst = KBM.Language:Add("First " .. CIS.Lang.Ability.LightningBurst[KBM.Lang]) --TODO transF transG
+CIS.Lang.Menu.FirstTimedCharge = KBM.Language:Add("First " .. CIS.Lang.Debuff.TimedCharge[KBM.Lang]) --TODO transF
+CIS.Lang.Menu.FirstTimedCharge:SetGerman("Erster " .. CIS.Lang.Debuff.TimedCharge[KBM.Lang])
+
+CIS.Lang.Menu.FirstLightningBurst = KBM.Language:Add("First " .. CIS.Lang.Ability.LightningBurst[KBM.Lang]) --TODO transF
+CIS.Lang.Menu.FirstLightningBurst:SetGerman("Erster " .. CIS.Lang.Ability.LightningBurst[KBM.Lang])
 
 
 function CIS:AddBosses(KBM_Boss)

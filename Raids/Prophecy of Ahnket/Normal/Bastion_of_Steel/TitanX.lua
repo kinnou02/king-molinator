@@ -1,6 +1,13 @@
 -- TitanX Boss Mod for King Boss Mods
 -- Written by Yarrellii
 
+-- script print(Inspect.Unit.Detail('player.target').name)
+-- script print(Inspect.Unit.Detail('player.target').type)
+-- E. Class Soldier  U16C3B6FE6D522DF5
+-- R.D.U.  U362FC592688DF7AC
+-- Titan X U80000001B50004A8
+
+
 KBMPOABOSTX_Settings = nil
 chKBMPOABOSTX_Settings = nil
 
