@@ -51,6 +51,7 @@ RunOnStartup = {
 			"Raids/Prophecy of Ahnket/Normal/Bastion_of_Steel/BOS_Header.lua",
 			"Raids/Prophecy of Ahnket/Normal/Bastion_of_Steel/Azranel.lua",
 			"Raids/Prophecy of Ahnket/Normal/Bastion_of_Steel/CommanderIsiel.lua",
+			"Raids/Prophecy of Ahnket/Normal/Bastion_of_Steel/TitanX.lua",
 		-- Normal Tartaric Depths
 			"Raids/Prophecy of Ahnket/Normal/Tartaric_Depths/TD_Header.lua",
 			"Raids/Prophecy of Ahnket/Normal/Tartaric_Depths/Beligosh.lua",
@@ -611,13 +612,15 @@ SavedVariables = {
 	KBMOpenWorld_Settings = "account",
 	
     -- PoA Raids
-        -- Normal Tartaric Depths
+        -- Bastion of Steel
             KBMPOABOS_Settings = "account",
             KBMPOABOSAZR_Settings = "account",
 			KBMPOABOSCIS_Settings = "account",
+			KBMPOABOSTX_Settings = "account",
             chKBMPOABOS_Settings = "character",
             chKBMPOABOSAZR_Settings = "character",
 			chKBMPOABOSCIS_Settings = "character",
+			chKBMPOABOSTX_Settings = "character",
         -- Normal Tartaric Depths
             KBMPOANMTD_Settings = "account",
             KBMPOANMTDBEL_Settings = "account",
