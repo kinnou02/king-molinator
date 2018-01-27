@@ -15,7 +15,7 @@ Website = "http://www.facebook.com/KingBossMods"
 Email = "kingbossmods@gmail.com"
 
 -- PoA Updated by Rathoz and kinou
-Version = "1.9.9.913"
+Version = "1.9.9.914"
 
 Environment = "4.1"
 

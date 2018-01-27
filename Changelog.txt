@@ -1,4 +1,9 @@
-﻿1.9.9.913
+﻿1.9.9.914
+* New: Add Titan X thanks to Yarrellii
+    - German translation for Isiel thanks to Albandito
+* New: add a few timers and alerts on Commander Isiel
+
+1.9.9.913
 * New: Add Commander Isiel thanks to Yarrellii
     - German translation for Isiel thanks to Albandito
 * New: German translation for Azranel thanks to Zysa
