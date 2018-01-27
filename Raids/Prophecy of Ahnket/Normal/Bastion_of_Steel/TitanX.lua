@@ -1,12 +1,8 @@
 -- TitanX Boss Mod for King Boss Mods
 -- Written by Yarrellii
 
--- legion pull
-														  
-									  
-							
-							
-
+-- TODO: Infection move to Infector so this can be monitored, need a unit id
+-- TODO: rocket volley from  R.D.U. U362FC592688DF7AC
 
 KBMPOABOSTX_Settings = nil
 chKBMPOABOSTX_Settings = nil
@@ -66,18 +62,17 @@ TX.TitanX = {
         CastBar = KBM.Defaults.Castbar(),
         AlertsRef = {
           Enabled = true,
-          StaticBlast = KBM.Defaults.AlertObj.Create("red"),
+          LegionPull = KBM.Defaults.AlertObj.Create("red"),
 		  Infection = KBM.Defaults.AlertObj.Create("purple"),
         },
         TimersRef = {
             Enabled = true,
-			StaticBlast = KBM.Defaults.TimerObj.Create("red"),
-			FirstStaticBlast = KBM.Defaults.TimerObj.Create("red"),
+			LegionPull = KBM.Defaults.TimerObj.Create("red"),
 		},
         MechRef = {
             Enabled = true,
             RangeModule = KBM.Defaults.MechObj.Create("purple"),
-			StaticBlast = KBM.Defaults.MechObj.Create("red"),
+			LegionPull = KBM.Defaults.MechObj.Create("red"),
 			Infection = KBM.Defaults.MechObj.Create("red"),
         },
     },
@@ -106,7 +101,6 @@ KBM.RegisterMod(TX.ID, TX)
 
 -- Ability Dictionary
 TX.Lang.Ability = {}
-TX.Lang.Ability.StaticBlast = KBM.Language:Add("Static Blast") --TODO transF transG
 TX.Lang.Ability.LegionPull = KBM.Language:Add("Legion Pull") --TODO transF transG
 
 -- Verbose Dictionary
@@ -269,7 +263,7 @@ function TX.PhaseTwo()
     TX.PhaseObj.Objectives:Remove()
     TX.Phase = 2
     TX.PhaseObj:SetPhase(2)
-    TX.PhaseObj.Objectives:AddPercent(TX.TitanX, 75, 100)
+    TX.PhaseObj.Objectives:AddPercent(TX.TitanX, 70, 100)
 end
 
 function TX.PhaseThree()
@@ -291,17 +285,16 @@ function TX:Start()
     -- Create Timers
 																										   
 																							   
-    self.TitanX.TimersRef.StaticBlast = KBM.MechTimer:Add(self.Lang.Ability.StaticBlast[KBM.Lang], 25)
+    self.TitanX.TimersRef.LegionPull = KBM.MechTimer:Add(self.Lang.Ability.LegionPull[KBM.Lang], 40)
     KBM.Defaults.TimerObj.Assign(self.TitanX)
 
     -- MechSpy
     self.TitanX.MechRef.Infection = KBM.MechSpy:Add(self.Lang.Debuff.Infection[KBM.Lang], nil, "playerDebuff", self.TitanX)
 	self.TitanX.MechRef.RangeModule = KBM.MechSpy:Add(self.Lang.Debuff.RangeModule[KBM.Lang], nil, "playerDebuff", self.TitanX)
-    self.TitanX.MechRef.StaticBlast = KBM.MechSpy:Add(self.Lang.Ability.StaticBlast[KBM.Lang], nil, "playerDebuff", self.TitanX)
     KBM.Defaults.MechObj.Assign(self.TitanX)
 
     -- Create Alerts
-    self.TitanX.AlertsRef.StaticBlast = KBM.Alert:Create(self.Lang.Ability.StaticBlast[KBM.Lang], nil, true, true, "red")
+    self.TitanX.AlertsRef.LegionPull = KBM.Alert:Create(self.Lang.Ability.LegionPull[KBM.Lang], 2, true, true, "red")
     self.TitanX.AlertsRef.Infection = KBM.Alert:Create(self.Lang.Debuff.Infection[KBM.Lang], 2, true, true, "yellow")
     KBM.Defaults.AlertObj.Assign(self.TitanX)
 
@@ -312,12 +305,11 @@ function TX:Start()
 	self.TitanX.Triggers.Infection = KBM.Trigger:Create(self.Lang.Debuff.Infection[KBM.Lang], "playerDebuff", self.TitanX)
     self.TitanX.Triggers.Infection:AddAlert(self.TitanX.AlertsRef.Infection, true)
 
-    self.TitanX.Triggers.StaticBlast = KBM.Trigger:Create(self.Lang.Ability.StaticBlast[KBM.Lang], "playerDebuff", self.TitanX)
-    self.TitanX.Triggers.StaticBlast:AddAlert(self.TitanX.AlertsRef.StaticBlast, true)
-    self.TitanX.Triggers.StaticBlast:AddTimer(self.TitanX.TimersRef.StaticBlast)
-    self.TitanX.Triggers.StaticBlast:AddSpy(self.TitanX.MechRef.StaticBlast)
+    self.TitanX.Triggers.LegionPull = KBM.Trigger:Create(self.Lang.Ability.LegionPull[KBM.Lang], "channel", self.TitanX)
+    self.TitanX.Triggers.LegionPull:AddAlert(self.TitanX.AlertsRef.LegionPull, true)
+    self.TitanX.Triggers.LegionPull:AddTimer(self.TitanX.TimersRef.LegionPull)
 
-    self.TitanX.Triggers.PhaseTwo = KBM.Trigger:Create(75, "percent", self.TitanX)
+    self.TitanX.Triggers.PhaseTwo = KBM.Trigger:Create(70, "percent", self.TitanX)
     self.TitanX.Triggers.PhaseTwo:AddPhase(self.PhaseThree)
 
     self.TitanX.Triggers.PhaseThree = KBM.Trigger:Create(35, "percent", self.TitanX)
