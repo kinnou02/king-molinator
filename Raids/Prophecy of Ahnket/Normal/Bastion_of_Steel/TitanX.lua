@@ -1,11 +1,11 @@
 -- TitanX Boss Mod for King Boss Mods
 -- Written by Yarrellii
 
--- script print(Inspect.Unit.Detail('player.target').name)
--- script print(Inspect.Unit.Detail('player.target').type)
--- E. Class Soldier  U16C3B6FE6D522DF5
--- R.D.U.  U362FC592688DF7AC
--- Titan X U80000001B50004A8
+-- legion pull
+														  
+									  
+							
+							
 
 
 KBMPOABOSTX_Settings = nil
@@ -59,7 +59,7 @@ TX.TitanX = {
     Dead = false,
     Available = false,
     UnitID = nil,
-    UTID = "U80000001B50004A8",
+    UTID = "U563E713033B0D82B", --"U80000001B50004A8",
     TimeOut = 5,
     Triggers = {},
     Settings = {
@@ -107,6 +107,7 @@ KBM.RegisterMod(TX.ID, TX)
 -- Ability Dictionary
 TX.Lang.Ability = {}
 TX.Lang.Ability.StaticBlast = KBM.Language:Add("Static Blast") --TODO transF transG
+TX.Lang.Ability.LegionPull = KBM.Language:Add("Legion Pull") --TODO transF transG
 
 -- Verbose Dictionary
 TX.Lang.Verbose = {}
@@ -131,16 +132,16 @@ TX.Descript = TX.Lang.Unit.TitanX[KBM.Lang]
 
 -- Menu Dictionary
 TX.Lang.Menu = {}
-TX.Lang.Menu.FirstStaticBlast = KBM.Language:Add("First " .. TX.Lang.Ability.StaticBlast[KBM.Lang])
-TX.Lang.Menu.FirstStaticBlast:SetFrench("Premiere " .. TX.Lang.Ability.StaticBlast[KBM.Lang])
-TX.Lang.Menu.FirstStaticBlast:SetGerman("Erster " .. TX.Lang.Ability.StaticBlast[KBM.Lang])
+																								   
+																							 
+																						   
 
 
 function TX:AddBosses(KBM_Boss)
     self.MenuName = self.Descript
     self.Bosses = {
-        [self.TitanX.Name] = self.TitanX,
-		[self.EClassSoldier.Name] = self.EClassSoldier,
+        [self.EClassSoldier.Name] = self.EClassSoldier,
+		[self.TitanX.Name] = self.TitanX,
     }
 end
 
@@ -219,11 +220,14 @@ function TX:UnitHPCheck(uDetails, unitID)
     if uDetails and unitID then
         if uDetails.type == self.TitanX.UTID then
             if not self.TitanX.Available then
+				self.TitanX.Dead = false
                 self.TitanX.Casting = false
                 self.TitanX.CastBar:Create(unitID)
+				TX.PhaseObj.Objectives:Remove()
+				self.PhaseObj:SetPhase(self.TitanX.Name)
                 self.PhaseObj.Objectives:AddPercent(self.TitanX, 70, 100)
-                self.Phase = 1
-                KBM.MechTimer:AddStart(TX.TitanX.TimersRef.FirstStaticBlast)
+                self.Phase = 2
+																			
             end
             self.TitanX.UnitID = unitID
             self.TitanX.Available = true
@@ -235,11 +239,14 @@ function TX:UnitHPCheck(uDetails, unitID)
 					self.StartTime = Inspect.Time.Real()
 					self.HeldTime = self.StartTime
 					self.TimeElapsed = 0
-					self.TitanX.Dead = false
+					self.EClassSoldier.Dead = false
+					self.EClassSoldier.Casting = false
 					self.PhaseObj:Start(self.StartTime)
-					self.PhaseObj:SetPhase(self.TitanX.Name)
+					self.PhaseObj:SetPhase("1")
 					self.Phase = 1
-					return self.TitanX
+					self.EClassSoldier.UnitID = unitID
+					self.EClassSoldier.Available = true
+					return self.EClassSoldier
 				end
 			end
 		end
@@ -262,21 +269,28 @@ function TX.PhaseTwo()
     TX.PhaseObj.Objectives:Remove()
     TX.Phase = 2
     TX.PhaseObj:SetPhase(2)
-    TX.PhaseObj.Objectives:AddPercent(TX.TitanX, 35, 70)
+    TX.PhaseObj.Objectives:AddPercent(TX.TitanX, 75, 100)
 end
 
 function TX.PhaseThree()
     TX.PhaseObj.Objectives:Remove()
     TX.Phase = 3
     TX.PhaseObj:SetPhase(3)
+    TX.PhaseObj.Objectives:AddPercent(TX.TitanX, 35, 70)
+end
+
+function TX.PhaseFour()
+    TX.PhaseObj.Objectives:Remove()
+    TX.Phase = 4
+    TX.PhaseObj:SetPhase(4)
     TX.PhaseObj.Objectives:AddPercent(TX.TitanX, 0, 35)
 end
 
 
 function TX:Start()
     -- Create Timers
-    self.TitanX.TimersRef.FirstStaticBlast = KBM.MechTimer:Add(self.Lang.Ability.StaticBlast[KBM.Lang], 20)
-    self.TitanX.TimersRef.FirstStaticBlast.MenuName = self.Lang.Menu.FirstStaticBlast[KBM.Lang]
+																										   
+																							   
     self.TitanX.TimersRef.StaticBlast = KBM.MechTimer:Add(self.Lang.Ability.StaticBlast[KBM.Lang], 25)
     KBM.Defaults.TimerObj.Assign(self.TitanX)
 
@@ -303,10 +317,10 @@ function TX:Start()
     self.TitanX.Triggers.StaticBlast:AddTimer(self.TitanX.TimersRef.StaticBlast)
     self.TitanX.Triggers.StaticBlast:AddSpy(self.TitanX.MechRef.StaticBlast)
 
-    self.TitanX.Triggers.PhaseTwo = KBM.Trigger:Create(70, "percent", self.TitanX)
-    self.TitanX.Triggers.PhaseTwo:AddPhase(self.PhaseTwo)
+    self.TitanX.Triggers.PhaseTwo = KBM.Trigger:Create(75, "percent", self.TitanX)
+    self.TitanX.Triggers.PhaseTwo:AddPhase(self.PhaseThree)
 
     self.TitanX.Triggers.PhaseThree = KBM.Trigger:Create(35, "percent", self.TitanX)
-    self.TitanX.Triggers.PhaseThree:AddPhase(self.PhaseThree)
+    self.TitanX.Triggers.PhaseThree:AddPhase(self.PhaseFour)
 
 end
