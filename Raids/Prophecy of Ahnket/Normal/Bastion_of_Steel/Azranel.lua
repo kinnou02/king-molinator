@@ -64,7 +64,7 @@ AZR.Azranel = {
         },
         TimersRef = {
             Enabled = true,
-            FirstMissileStorm = KBM.Defaults.TimerObj.Create("yellow"),
+            FirstMissileStorm = KBM.Defaults.TimerObj.Create("red"),
             MissileStorm = KBM.Defaults.TimerObj.Create("red"),
             CometShot = KBM.Defaults.TimerObj.Create("yellow"),
             DefensiveSpin = KBM.Defaults.TimerObj.Create("purple"),
