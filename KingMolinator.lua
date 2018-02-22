@@ -2943,6 +2943,11 @@ function KBM.SheepProtection:Init()
         ["B1A82BCF51509C9CB"] = "Corgi Confusion",
         ["B1A82BCF6150A4D1A"] = "Corgi Confusion",
         ["B7870725BB53856A1"] = "Schafizierung", -- from RR
+		["B72D63A680FFFB3E4"] = "Dwarf Party", -- from Brasse
+		["B72D63A6C1001C120"] = "Dwarf Party", -- from Brasse
+		["B72D63A6A1000BA82"] = "Dwarf Party", -- from Brasse
+		["B72D63A6910003733"] = "Dwarf Party", -- from Brasse
+		["B72D63A6D1002446F"] = "Dwarf Party", -- from Brasse
 	}
 	function self.Remove(BuffID, CasterID)
 		if KBM.Options.Sheep.Protect then
