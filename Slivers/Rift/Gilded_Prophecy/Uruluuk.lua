@@ -21,6 +21,7 @@ local UK = {
 	Instance = GP.Name,
 	InstanceObj = GP,
 	Lang = {},
+	Enrage = 60 * 10,
 	ID = "Uruluuk",
 	Object = "UK",
 }
