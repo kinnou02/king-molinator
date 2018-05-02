@@ -60,6 +60,7 @@ CIS.CommanderIsiel = {
         MechRef = {
             Enabled = true,
             HeartStrike= KBM.Defaults.MechObj.Create("red"),
+			CripplingShock = KBM.Defaults.MechObj.Create("purple"),
             LightningWhirl = KBM.Defaults.MechObj.Create("blue"),
         },
         TimersRef = {
@@ -146,10 +147,11 @@ CIS.Lang.Debuff.TimedCharge = KBM.Language:Add("Timed Charge") --TODO transF
 CIS.Lang.Debuff.TimedCharge:SetGerman("Zeitladung")
 CIS.Lang.Debuff.DrillerRound = KBM.Language:Add("Driller Round") --TODO transF
 CIS.Lang.Debuff.DrillerRound:SetGerman("Bohrgeschoss")
-CIS.Lang.Debuff.HeartStrike = KBM.Language:Add("Heart Strike") --TODO transF
-CIS.Lang.Debuff.HeartStrike:SetGerman("Herztreffer")
+CIS.Lang.Ability.HeartStrike = KBM.Language:Add("Heart Strike") --TODO transF
+CIS.Lang.Ability.HeartStrike:SetGerman("Herztreffer")
 CIS.Lang.Debuff.ExplosiveRound = KBM.Language:Add("Explosive Round") --TODO transF
 CIS.Lang.Debuff.ExplosiveRound:SetGerman("Sprenggranate")
+CIS.Lang.Debuff.CripplingShock = KBM.Language:Add("Crippling Shock") --TODO transF trans G
 
 -- Notify Dictionary
 CIS.Lang.Notify = {}
@@ -283,6 +285,7 @@ function CIS:UnitHPCheck(uDetails, unitID)
                 self.Phase = 2
                 if KBM.TankSwap.Active then
                     KBM.TankSwap:Remove()
+					KBM.TankSwap:Start(self.Lang.Debuff.CripplingShock[KBM.Lang], unitID)
                 end
             end
             self.CommanderIsiel.UnitID = unitID
@@ -337,7 +340,7 @@ function CIS:Start()
 
     self.VindicatorMKI.TimersRef.LightningBurst = KBM.MechTimer:Add(self.Lang.Ability.LightningBurst[KBM.Lang], 27)
 
-    self.CommanderIsiel.TimersRef.HeartStrike = KBM.MechTimer:Add(self.Lang.Debuff.HeartStrike[KBM.Lang], 14)
+    self.CommanderIsiel.TimersRef.HeartStrike = KBM.MechTimer:Add(self.Lang.Ability.HeartStrike[KBM.Lang], 14)
     self.CommanderIsiel.TimersRef.AegisOfStorm = KBM.MechTimer:Add(self.Lang.Ability.AegisOfStorm[KBM.Lang], 23)
     KBM.Defaults.TimerObj.Assign(self.VindicatorMKI)
     KBM.Defaults.TimerObj.Assign(self.CommanderIsiel)
@@ -345,7 +348,8 @@ function CIS:Start()
     -- MechSpy
     self.VindicatorMKI.MechRef.DrillerRound = KBM.MechSpy:Add(self.Lang.Debuff.DrillerRound[KBM.Lang], nil, "playerDebuff", self.VindicatorMKI)
     self.VindicatorMKI.MechRef.ExplosiveRound =  KBM.MechSpy:Add(self.Lang.Debuff.ExplosiveRound[KBM.Lang], nil, "playerDebuff", self.CommanderIsiel)
-    self.CommanderIsiel.MechRef.HeartStrike = KBM.MechSpy:Add(self.Lang.Debuff.HeartStrike[KBM.Lang], nil, "playerDebuff", self.CommanderIsiel)
+    self.CommanderIsiel.MechRef.HeartStrike = KBM.MechSpy:Add(self.Lang.Ability.HeartStrike[KBM.Lang], nil, "playerDebuff", self.CommanderIsiel)
+	self.CommanderIsiel.MechRef.CripplingShock = KBM.MechSpy:Add(self.Lang.Debuff.CripplingShock[KBM.Lang], nil, "playerDebuff", self.CommanderIsiel)
 
 
     KBM.Defaults.MechObj.Assign(self.VindicatorMKI)
@@ -372,20 +376,17 @@ function CIS:Start()
     self.VindicatorMKI.Triggers.TimedCharge:AddTimer(self.VindicatorMKI.TimersRef.TimedCharge)
 
     self.VindicatorMKI.Triggers.DrillerRound = KBM.Trigger:Create(self.Lang.Debuff.DrillerRound[KBM.Lang], "playerDebuff", self.VindicatorMKI)
-    --self.VindicatorMKI.Triggers.DrillerRound:AddSpy(self.VindicatorMKI.MechRef.DrillerRound)
 
-    self.CommanderIsiel.Triggers.HeartStrike = KBM.Trigger:Create(self.Lang.Debuff.HeartStrike[KBM.Lang], "playerDebuff", self.CommanderIsiel)
-    self.CommanderIsiel.Triggers.HeartStrike:AddSpy(self.CommanderIsiel.MechRef.HeartStrike)
+    self.CommanderIsiel.Triggers.CripplingShock = KBM.Trigger:Create(self.Lang.Debuff.CripplingShock[KBM.Lang], "playerDebuff", self.CommanderIsiel)
+    self.CommanderIsiel.Triggers.CripplingShockRemoved = KBM.Trigger:Create(self.Lang.Debuff.CripplingShock[KBM.Lang], "playerBuffRemove", self.CommanderIsiel)
 
-    self.CommanderIsiel.Triggers.HeartStrikeRemoved = KBM.Trigger:Create(self.Lang.Debuff.HeartStrike[KBM.Lang], "playerBuffRemove", self.CommanderIsiel)
-    self.CommanderIsiel.Triggers.HeartStrikeRemoved:AddStop(self.CommanderIsiel.MechRef.HeartStrike)
-
-    --ExplosiveRound = B2A466E1E35306E82
     self.VindicatorMKI.Triggers.ExplosiveRound = KBM.Trigger:Create(self.Lang.Debuff.ExplosiveRound[KBM.Lang], "playerDebuff", self.VindicatorMKI)
     self.VindicatorMKI.Triggers.ExplosiveRound:AddSpy(self.VindicatorMKI.MechRef.ExplosiveRound)
 
     self.CommanderIsiel.Triggers.ExplosiveRoundRemoved = KBM.Trigger:Create(self.Lang.Debuff.ExplosiveRound[KBM.Lang], "playerBuffRemove", self.VindicatorMKI)
     self.CommanderIsiel.Triggers.ExplosiveRoundRemoved:AddStop(self.VindicatorMKI.MechRef.ExplosiveRound)
+	
+	 self.VindicatorMKI.Triggers.CripplingShock = KBM.Trigger:Create(self.Lang.Debuff.CripplingShock[KBM.Lang], "playerDebuff", self.CommanderIsiel)
 
     self.VindicatorMKI.Triggers.LightningBurst = KBM.Trigger:Create(self.Lang.Ability.LightningBurst[KBM.Lang], "cast", self.VindicatorMKI)
     self.VindicatorMKI.Triggers.LightningBurst:AddTimer(self.VindicatorMKI.TimersRef.LightningBurst)
@@ -403,7 +404,7 @@ function CIS:Start()
     self.CommanderIsiel.Triggers.AegisOfStorm = KBM.Trigger:Create(self.Lang.Ability.AegisOfStorm[KBM.Lang], "cast", self.CommanderIsiel)
     self.CommanderIsiel.Triggers.AegisOfStorm:AddTimer(self.CommanderIsiel.TimersRef.AegisOfStorm)
 
-    self.CommanderIsiel.Triggers.HeartStrike = KBM.Trigger:Create(self.Lang.Debuff.HeartStrike[KBM.Lang], "cast", self.CommanderIsiel)
+    self.CommanderIsiel.Triggers.HeartStrike = KBM.Trigger:Create(self.Lang.Ability.HeartStrike[KBM.Lang], "cast", self.CommanderIsiel)
     self.CommanderIsiel.Triggers.HeartStrike:AddTimer(self.CommanderIsiel.TimersRef.HeartStrike)
 
     self.CommanderIsiel.Triggers.VoltaicThrust = KBM.Trigger:Create(self.Lang.Ability.VoltaicThrust[KBM.Lang], "cast", self.CommanderIsiel)
