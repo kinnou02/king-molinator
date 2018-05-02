@@ -21,6 +21,7 @@ local TR = {
 	Instance = GP.Name,
 	InstanceObj = GP,
 	Lang = {},
+	Enrage = 60 * 8,
 	ID = "Thalguur",
 	Object = "TR",
 }

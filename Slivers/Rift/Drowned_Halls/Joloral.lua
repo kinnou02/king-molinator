@@ -20,6 +20,7 @@ local JR = {
 	Instance = DH.Name,
 	InstanceObj = DH,
 	Lang = {},
+	Enrage = 60 * 8,
 	ID = "Joloral",
 	Object = "JR",
 }

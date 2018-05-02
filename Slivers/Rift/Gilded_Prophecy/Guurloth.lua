@@ -21,6 +21,7 @@ local GH = {
 	Instance = GP.Name,
 	InstanceObj = GP,
 	Lang = {},
+	Enrage = (60 * 9)+9,
 	ID = "Guurloth",
 	Object = "GH",
 }

@@ -23,7 +23,7 @@ local HH = {
 	ID = "Hydriss",
 	PhaseObjects = {},
 	Phase = 1,
-	Enrage = 60 * 12,
+	Enrage = 60 * 10,
 	Object = "HH",
 }
 
