@@ -22,6 +22,7 @@ local DL = {
 	InstanceObj = GSB,
 	HasPhases = true,
 	Lang = {},
+	Enrage = (8 * 60),
 	ID = "Letareus",
 	HasChronicle = true,
 	Object = "DL",
