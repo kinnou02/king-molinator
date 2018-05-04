@@ -24,6 +24,7 @@ local PH = {
 	InstanceObj = GSB,
 	HasPhases = true,
 	Lang = {},
+	Enrage = (10 * 60),
 	ID = "Hylas",
 	HasChronicle = true,
 	Object = "PH",

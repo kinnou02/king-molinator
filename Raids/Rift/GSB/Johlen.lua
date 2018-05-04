@@ -22,6 +22,7 @@ local IJ = {
 	InstanceObj = GSB,
 	HasPhases = true,
 	Lang = {},
+	Enrage = (7 * 60),
 	ID = "Johlen",
 	HasChronicle = true,
 	Object = "IJ",

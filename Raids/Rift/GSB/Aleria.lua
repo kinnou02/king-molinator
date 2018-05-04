@@ -22,6 +22,7 @@ local OA = {
 	InstanceObj = GSB,
 	HasPhases = true,
 	Lang = {},
+	Enrage = (7 * 60),
 	ID = "Aleria",
 	HasChronicle = true,
 	Object = "OA",
