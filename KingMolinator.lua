@@ -998,8 +998,8 @@ end
 function KBM.Button:Init()
 	KBM.Button.Texture = UI.CreateFrame("Texture", "Button Texture", KBM.Context)
 	KBM.LoadTexture(KBM.Button.Texture, "KingMolinator", "Media/New_Options_Button.png")
-	KBM.Button.Texture:SetWidth(KBM.Constant.Button.s)
-	KBM.Button.Texture:SetHeight(KBM.Button.Texture:GetWidth())
+	KBM.Button.Texture:SetWidth(24) -- previously KBM.Constant.Button.s
+	KBM.Button.Texture:SetHeight(24) -- previously KBM.Button.Texture:GetWidth()
 	KBM.Button.Highlight = UI.CreateFrame("Texture", "Button Texture Highlight", KBM.Context)
 	KBM.LoadTexture(KBM.Button.Highlight, "KingMolinator", "Media/New_Options_Button_Over.png")
 	KBM.Button.Highlight:SetPoint("TOPLEFT", KBM.Button.Texture, "TOPLEFT")

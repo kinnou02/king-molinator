@@ -4,6 +4,7 @@
 --
 
 local AddonData = ...
+local AddonIni = ...
 local KBMRC = AddonData.data
 local LibSBuff = Inspect.Addon.Detail("SafesBuffLib").data
 local LibSGui = Inspect.Addon.Detail("SafesGUILib").data
@@ -1613,8 +1614,8 @@ end
 function PI.Button:Init()
 	self.Texture = UI.CreateFrame("Texture", "Ready Check Button Texture", KBM.Context)
 	KBM.LoadTexture(self.Texture, "KingMolinator", "Media/Check_Button.png")
-	self.Texture:SetWidth(KBM.Constant.Button.s)
-	self.Texture:SetHeight(KBM.Button.Texture:GetWidth())
+	self.Texture:SetWidth(24)
+	self.Texture:SetHeight(24)
 	self.Highlight = UI.CreateFrame("Texture", "Ready Check Button Highlight", KBM.Context)
 	KBM.LoadTexture(self.Highlight, "KingMolinator", "Media/New_Options_Button_Over.png")
 	self.Highlight:SetPoint("TOPLEFT", self.Texture, "TOPLEFT")
@@ -1819,6 +1820,7 @@ function PI.GUI:Init()
 	self.HeaderText = LibSGui.ShadowText:Create(self.Header, true)
 	self.HeaderText:SetPoint("LEFTCENTER", self.Header, "LEFTCENTER", 5, 1)
 	self.HeaderText:SetText(KBM.Language.ReadyCheck.Name[KBM.Lang])
+	self.HeaderText:SetFont(AddonIni.identifier, "font\\Montserrat-Bold.otf")
 	self.HeaderText:SetLayer(4)
 	self.Cradle:SetPoint("TOP", self.Header, "TOP")
 	self.Cradle:SetPoint("BOTTOM", self.Header, "BOTTOM")
@@ -2531,6 +2533,7 @@ function PI.GUI:Init()
 			self.Rows[Row].Ready.Question:SetTexture("KingMolinator", "Media/RC_Question.png")
 			self.Rows[Row].Text = LibSGui.ShadowText:Create(self.Rows[Row].Cradle, true)
 			self.Rows[Row].Text:SetLayer(3)
+			self.Rows[Row].Text:SetFont(AddonIni.identifier, "font\\Montserrat-Bold.otf")
 			self.Rows[Row].Text:SetPoint("CENTERLEFT", self.Rows[Row].Cradle, "CENTERLEFT", 4, -2)
 			local DataObject = self.Rows[Row]
 			self.Rows[Row].Cradle:SetVisible(false)
@@ -2545,6 +2548,7 @@ function PI.GUI:Init()
 				self.Rows[Row].Columns[ID].Cradle:SetPoint("RIGHT", Object.Header, "RIGHT")
 				self.Rows[Row].Columns[ID].Cradle:SetPoint("BOTTOM", self.Rows[Row].Cradle, "BOTTOM")
 				self.Rows[Row].Columns[ID].Text = LibSGui.ShadowText:Create(self.Rows[Row].Columns[ID].Cradle, true)
+				self.Rows[Row].Columns[ID].Text:SetFont(AddonIni.identifier, "font\\Montserrat-Bold.otf")
 				self.Rows[Row].Columns[ID].Text:SetPoint("CENTER", self.Rows[Row].Columns[ID].Cradle, "CENTER")
 				self.Rows[Row].Columns[ID].Text:SetLayer(2)
 				self.Rows[Row].Columns[ID].Icon = UI.CreateFrame("Texture", "Row "..Row.." Icon for "..ID, self.Rows[Row].Columns[ID].Cradle)

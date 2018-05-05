@@ -442,7 +442,7 @@ function _lsu:Create(UID, uDetails, Type)
 end
 
 -- Details Updates
-function _lsu.Unit.Name(handle, uList)
+local function UnitNameWorker(uList)
 	local _lookup = LibSUnit.Lookup.Name
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
@@ -471,8 +471,11 @@ function _lsu.Unit.Name(handle, uList)
 	end
 	_lsu.Event.Unit.Detail.Name(newList)	
 end
-
-function _lsu.Unit.Health(handle, uList)
+function _lsu.Unit.Name(handle, uList)
+	local job = coroutine.create(UnitNameWorker)
+	coroutine.resume(job,uList)
+end
+local function UnitHealthWorker(uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Health in pairs(uList) do
@@ -493,8 +496,11 @@ function _lsu.Unit.Health(handle, uList)
 	end
 	_lsu.Event.Unit.Detail.Health(newList)
 end
-
-function _lsu.Unit.HealthMax(handle, uList)
+function _lsu.Unit.Health(handle, uList)
+	local job = coroutine.create(UnitHealthWorker)
+	coroutine.resume(job,uList)
+end
+local function UnitHealthMaxWorker(uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, HealthMax in pairs(uList) do
@@ -509,8 +515,11 @@ function _lsu.Unit.HealthMax(handle, uList)
 	end
 	_lsu.Event.Unit.Detail.HealthMax(newList)	
 end
-
-function _lsu.Unit.Power(handle, uList, PowerMode)
+function _lsu.Unit.HealthMax(handle, uList)
+	local job = coroutine.create(UnitHealthMaxWorker)
+	coroutine.resume(job,uList)
+end
+local function UnitPowerWorker(uList, PowerMode)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Power in pairs(uList) do
@@ -527,8 +536,11 @@ function _lsu.Unit.Power(handle, uList, PowerMode)
 	end
 	_lsu.Event.Unit.Detail.Power(newList)	
 end
-
-function _lsu.Unit.PowerMax(handle, uList, PowerMode)
+function _lsu.Unit.Power(handle, uList, PowerMode)
+	local job = coroutine.create(UnitPowerWorker)
+	coroutine.resume(job, uList, PowerMode)
+end
+local function UnitPowerMaxWorker(uList, PowerMode)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, PowerMax in pairs(uList) do
@@ -545,8 +557,11 @@ function _lsu.Unit.PowerMax(handle, uList, PowerMode)
 	end
 	_lsu.Event.Unit.Detail.PowerMax(newList)	
 end
-
-function _lsu.Unit.Offline(handle, uList)
+function _lsu.Unit.PowerMax(handle, uList, PowerMode)
+	local job = coroutine.create(UnitPowerMaxWorker)
+	coroutine.resume(job, uList, PowerMode)
+end
+local function UnitOfflineWorker(uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Offline in pairs(uList) do
@@ -555,8 +570,11 @@ function _lsu.Unit.Offline(handle, uList)
 	end
 	_lsu.Event.Unit.Detail.Offline(newList)
 end
-
-function _lsu.Unit.Vitality(handle, uList)
+function _lsu.Unit.Offline(handle, uList)
+	local job = coroutine.create(UnitOfflineWorker)
+	coroutine.resume(job,uList)
+end
+local function UnitVitalityWorker(uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Vitality in pairs(uList) do
@@ -565,8 +583,11 @@ function _lsu.Unit.Vitality(handle, uList)
 	end
 	_lsu.Event.Unit.Detail.Vitality(newList)	
 end
-
-function _lsu.Unit.Ready(handle, uList)
+function _lsu.Unit.Vitality(handle, uList)
+	local job = coroutine.create(UnitVitalityWorker)
+	coroutine.resume(job,uList)
+end
+local function UnitReadyWorker(uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Ready in pairs(uList) do
@@ -575,8 +596,11 @@ function _lsu.Unit.Ready(handle, uList)
 	end
 	_lsu.Event.Unit.Detail.Ready(newList)
 end
-
-function _lsu.Unit.Mark(handle, uList)
+function _lsu.Unit.Ready(handle, uList)
+	local job = coroutine.create(UnitReadyWorker)
+	coroutine.resume(job,uList)
+end
+local function UnitMarkWorker(uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Mark in pairs(uList) do
@@ -585,8 +609,11 @@ function _lsu.Unit.Mark(handle, uList)
 	end
 	_lsu.Event.Unit.Detail.Mark(newList)
 end
-
-function _lsu.Unit.Planar(handle, uList)
+function _lsu.Unit.Mark(handle, uList)
+	local job = coroutine.create(UnitMarkWorker)
+	coroutine.resume(job,uList)
+end
+function UnitPlanarWorker(uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Planar in pairs(uList) do
@@ -595,8 +622,11 @@ function _lsu.Unit.Planar(handle, uList)
 	end
 	_lsu.Event.Unit.Detail.Planar(newList)
 end
-
-function _lsu.Unit.Level(handle, uList)
+function _lsu.Unit.Planar(handle, uList)
+	local job = coroutine.create(UnitPlanarWorker)
+	coroutine.resume(job,uList)
+end
+local function UnitLevelWorker(uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Level in pairs(uList) do
@@ -605,8 +635,11 @@ function _lsu.Unit.Level(handle, uList)
 	end
 	_lsu.Event.Unit.Detail.Level(newList)	
 end
-
-function _lsu.Unit.Zone(handle, uList)
+function _lsu.Unit.Level(handle, uList)
+	local job = coroutine.create(UnitLevelWorker)
+	coroutine.resume(job,uList)
+end
+function UnitZoneWorker(uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Zone in pairs(uList) do
@@ -615,8 +648,11 @@ function _lsu.Unit.Zone(handle, uList)
 	end
 	_lsu.Event.Unit.Detail.Zone(newList)	
 end
-
-function _lsu.Unit.Location(handle, uList)
+function _lsu.Unit.Zone(handle, uList)
+	local job = coroutine.create(UnitZoneWorker)
+	coroutine.resume(job,uList)
+end
+local function UnitLocationWorker(uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Location in pairs(uList) do
@@ -625,8 +661,11 @@ function _lsu.Unit.Location(handle, uList)
 	end
 	_lsu.Event.Unit.Detail.Location(newList)
 end
-
-function _lsu.Unit.Role(handle, uList)
+function _lsu.Unit.Location(handle, uList)
+	local job = coroutine.create(UnitLocationWorker)
+	coroutine.resume(job,uList)
+end
+function UnitRoleWorker(uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Role in pairs(uList) do
@@ -637,8 +676,11 @@ function _lsu.Unit.Role(handle, uList)
 	end
 	_lsu.Event.Unit.Detail.Role(newList)
 end
-
-function _lsu.Unit.PlanarMax(handle, uList)
+function _lsu.Unit.Role(handle, uList)
+	local job = coroutine.create(UnitRoleWorker)
+	coroutine.resume(job,uList)
+end
+local function UnitPlanarMaxWorker(uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, PlanarMax in pairs(uList) do
@@ -647,8 +689,11 @@ function _lsu.Unit.PlanarMax(handle, uList)
 	end
 	_lsu.Event.Unit.Detail.PlanarMax(newList)
 end
-
-function _lsu.Unit.Warfront(handle, uList)
+function _lsu.Unit.PlanarMax(handle, uList)
+	local job = coroutine.create(UnitPlanarMaxWorker)
+	coroutine.resume(job,uList)
+end
+local function UnitWarfrontWorker(uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Warfront in pairs(uList) do
@@ -657,8 +702,11 @@ function _lsu.Unit.Warfront(handle, uList)
 	end
 	_lsu.Event.Unit.Detail.Warfront(newList)
 end
-
-function _lsu.Unit.Position(handle, uList)
+function _lsu.Unit.Warfront(handle, uList)
+	local job = coroutine.create(UnitWarfrontWorker)
+	coroutine.resume(job,uList)
+end
+local function UnitPositionWorker(uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Position in pairs(uList) do
@@ -666,8 +714,11 @@ function _lsu.Unit.Position(handle, uList)
 		
 	end
 end
-
-function _lsu.Unit.Combat(handle, uList, Silent)
+function _lsu.Unit.Position(handle, uList)
+	local job = coroutine.create(UnitPositionWorker)
+	coroutine.resume(job,uList)
+end
+local function UnitCombatWorker(uList, Silent)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Combat in pairs(uList) do
@@ -706,7 +757,10 @@ function _lsu.Unit.Combat(handle, uList, Silent)
 		_lsu.Event.Unit.Detail.Combat(newList)
 	end
 end
-
+function _lsu.Unit.Combat(handle, uList, Silent)
+	local job = coroutine.create(UnitCombatWorker)
+	coroutine.resume(job,uList,Silent)
+end
 function _lsu.Unit.Details(UnitObj, uDetails)
 	if UnitObj.CurrentKey == "Partial" then
 	else
@@ -874,7 +928,7 @@ function _lsu:Idle(UnitObj)
 end
 
 -- Unit Availability Handlers
-function _lsu.Avail.Full(handle, uList)
+local function UnitAvailFullWorker(uList)
 	-- Main handler for new Units
 
 	-- Optimize
@@ -895,7 +949,10 @@ function _lsu.Avail.Full(handle, uList)
 		_lsu.Debug:UpdateAll()
 	end
 end
-
+function _lsu.Avail.Full(handle, uList)
+	local job = coroutine.create(UnitAvailFullWorker)
+	coroutine.resume(job,uList)
+end
 function LibSUnit:RequestDetails(UnitID)
 	local _lookup = LibSUnit.Lookup.UID
 	local _create = _lsu.Create
@@ -907,7 +964,7 @@ function LibSUnit:RequestDetails(UnitID)
 	end
 end
 
-function _lsu.Avail.Partial(handle, uList)
+local function UnitAvailPartialWorker(uList)
 	-- Main handler for Partial Units
 
 	-- Optimize
@@ -927,8 +984,11 @@ function _lsu.Avail.Partial(handle, uList)
 		_lsu.Debug:UpdateAll()
 	end
 end
-
-function _lsu.Avail.None(handle, uList)
+function _lsu.Avail.Partial(handle, uList)
+	local job = coroutine.create(UnitAvailPartialWorker)
+	coroutine.resume(job,uList)
+end
+local function UnitAvailNoneWorker(uList)
 	-- Move to Idle
 
 	-- Optimize
@@ -948,7 +1008,10 @@ function _lsu.Avail.None(handle, uList)
 		_lsu.Debug:UpdateAll()
 	end
 end
-
+function _lsu.Avail.None(handle, uList)
+	local job = coroutine.create(UnitAvailNoneWorker)
+	coroutine.resume(job,uList)
+end
 function _lsu.Unit.Change(UnitID, Spec)
 	local sourceUID = Inspect.Unit.Lookup(Spec)
 	if sourceUID then
@@ -1268,7 +1331,7 @@ function _lsu.Combat.stdHandler(UID, segPlus)
 	end
 end
 
-function _lsu.Combat.Damage(handle, info)
+local function UnitCombatDamageWorker(info)
 	local _stdHandler = _lsu.Combat.stdHandler
 	local targetObj, sourceObj
 	info.damage = info.damage or 0
@@ -1278,8 +1341,11 @@ function _lsu.Combat.Damage(handle, info)
 	info.sourceObj = sourceObj
 	_lsu.Event.Combat.Damage(info)
 end
-
-function _lsu.Combat.Heal(handle, info)
+function _lsu.Combat.Damage(handle, info)
+	local job = coroutine.create(UnitCombatDamageWorker)
+	coroutine.resume(job,uList)
+end
+local function UnitCombatHealWorker(info)
 	local _stdHandler = _lsu.Combat.stdHandler
 	local targetObj, sourceObj
 	info.heal = info.heal or 0
@@ -1294,8 +1360,11 @@ function _lsu.Combat.Heal(handle, info)
 		_lsu.Event.Combat.Heal(info)
 	end
 end
-
-function _lsu.Combat.Immune(handle, info)
+function _lsu.Combat.Heal(handle, info)
+	local job = coroutine.create(UnitCombatHealWorker)
+	coroutine.resume(job,uList)
+end
+local function UnitCombatImmuneWorker(info)
 	local _stdHandler = _lsu.Combat.stdHandler
 	local targetObj, sourceObj
 	targetObj = _stdHandler(info.target, _idleSeg)
@@ -1304,8 +1373,11 @@ function _lsu.Combat.Immune(handle, info)
 	info.sourceObj = sourceObj
 	_lsu.Event.Combat.Immune(info)
 end
-
-function _lsu.Combat.Death(handle, info)
+function _lsu.Combat.Immune(handle, info)
+	local job = coroutine.create(UnitCombatImmuneWorker)
+	coroutine.resume(job,uList)
+end
+local function UnitCombatDeathWorker(info)
 	local _cache = LibSUnit.Lookup.UID
 	local targetObj, sourceObj
 	sourceObj = _lsu.Combat.stdHandler(info.caster, _idleSeg)
@@ -1319,7 +1391,10 @@ function _lsu.Combat.Death(handle, info)
 		_lsu.Event.Combat.Death(info)
 	end
 end
-
+function _lsu.Combat.Death(handle, info)
+	local job = coroutine.create(UnitCombatDeathWorker)
+	coroutine.resume(job,uList)
+end
 -- Base Functions
 function _lsu:UpdateSegment(_tSeg)
 	local _lookup = LibSUnit.Lookup
@@ -1357,8 +1432,7 @@ function _lsu:UpdateSegment(_tSeg)
 		self.Debug:UpdateAll()
 	end
 end
-
-function _lsu.Tick()
+local function UnitDetailUpdater()
 	local _cTime = _timeReal()
 	local _tSeg = math.floor(_cTime / _tSegThrottle)
 		
@@ -1369,6 +1443,10 @@ function _lsu.Tick()
 		_lastSeg = _tSeg
 	end
 	_lastTick = _cTime	
+end
+function _lsu.Tick()
+	local job = coroutine.create(UnitDetailUpdater)
+	coroutine.resume(job)
 end
 
 function _lsu.Wait(handle, uList)

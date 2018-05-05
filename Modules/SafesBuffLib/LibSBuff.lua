@@ -356,7 +356,7 @@ function _int:UpdateCycle()
 	end
 end
 
-function _int:BuffAdd(handle, UnitID, Buffs)
+local function BuffAddWorker(UnitID, Buffs)
 	if not Inspect.System.Secure() then
 		Command.System.Watchdog.Quiet()
 	end
@@ -387,8 +387,11 @@ function _int:BuffAdd(handle, UnitID, Buffs)
 		end
 	end
 end
-
-function _int:BuffRemove(handle, UnitID, Buffs)
+function _int:BuffAdd(handle, UnitID, Buffs)
+	local job = coroutine.create(BuffAddWorker)
+	coroutine.resume(job, UnitID, Buffs)
+end
+local function BuffRemoveWorker(handle, UnitID, Buffs)
 	for BuffID, BuffType in pairs(Buffs) do
 		--if not self.Queued.Remove[BuffID] then
 			-- if LibSBuff.Lookup[BuffID] then
@@ -403,7 +406,10 @@ function _int:BuffRemove(handle, UnitID, Buffs)
 		--end
 	end
 end
-
+function _int:BuffRemove(handle, UnitID, Buffs)
+	local job = coroutine.create(BuffRemoveWorker)
+	coroutine.resume(job, UnitID, Buffs)
+end
 function _int:DebugUnit(Message, UnitID)
 	local uDetails
 	if not UnitID then
@@ -418,7 +424,7 @@ function _int:DebugUnit(Message, UnitID)
 	end
 end
 
-function _int:BuffChange(handle, UnitID, Buffs)
+local function BuffChangeWorker(UnitID, Buffs)
 	local _startTime = Inspect.Time.Real()
 	local cache = true
 	--self:DebugUnit("BuffChange called for: ", UnitID)
@@ -442,8 +448,11 @@ function _int:BuffChange(handle, UnitID, Buffs)
 		end
 	end
 end
-
-function _int:UnitAvailable(handle, Units)
+function _int:BuffChange(handle, UnitID, Buffs)
+	local job = coroutine.create(BuffChangeWorker)
+	coroutine.resume(job, UnitID, Buffs)
+end
+local function UnitAvailableWorker(Units)
 	-- Used for Internal Caching.
 	-- If you require an active cache for a new Unit, use the commands: 
 	-- BuffTable = LibSBuff:GetBuffTable(UnitID)
@@ -454,8 +463,11 @@ function _int:UnitAvailable(handle, Units)
 		--print("----------------")
 	end
 end
-
-function _int:UnitRemoved(handle, Units)
+function _int:UnitAvailable(handle, Units)
+	local job = coroutine.create(UnitAvailableWorker)
+	coroutine.resume(job,Units)
+end
+local function UnitRemovedWorker(Units)
 	-- Used for Internal Caching and prevention of memory leaks.
 	-- No Remove events are given for this, to avoid false positives when dealing with your own Buff tracking.
 	for UnitID, UnitObj in pairs(Units) do
@@ -464,7 +476,10 @@ function _int:UnitRemoved(handle, Units)
 		--print("----------------")
 	end
 end
-
+function _int:UnitRemoved(handle, Units)
+	local job = coroutine.create(UnitRemovedWorker)
+	coroutine.resume(job,Units)
+end
 function _int.DumpCache(params)
 	local Count = 0
 	local uCount = 0

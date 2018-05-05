@@ -488,6 +488,9 @@ function LibSGui.ShadowText:Create(_parent, _visible)
 	function st:SetFontColor(...)
 		self._cradle:SetFontColor(...)
 	end
+	function st:SetFont(...)
+		self._cradle:SetFont(...)
+	end
 	function st:SetFontSize(s)
 		self._cradle:SetFontSize(s)
 	end
