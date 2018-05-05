@@ -369,12 +369,12 @@ local function BuffAddWorker(UnitID, Buffs)
 					if cache then
 						-- Load up Details for the buff and assign Cache Data.
 						-- print("BuffAdd: Caching Buff and Adding to Queue")
-						self:CacheAdd(UnitID, BuffID)
-						self.Queue:Add({Unit = UnitID, Buff = BuffID, Add = true, IgnoreLoad = true})
+						_int:CacheAdd(UnitID, BuffID)
+						_int.Queue:Add({Unit = UnitID, Buff = BuffID, Add = true, IgnoreLoad = true})
 					else
 						-- Ignore Buff Load and instead Queue for future caching.
 						-- print("BuffAdd: Buff added to Queue [Not Cached]")
-						self.Queue:Add({Unit = UnitID, Buff = BuffID, Add = true})
+						_int.Queue:Add({Unit = UnitID, Buff = BuffID, Add = true})
 					end
 					--self.Queued.Add[BuffID] = true
 				-- else
@@ -391,7 +391,7 @@ function _int:BuffAdd(handle, UnitID, Buffs)
 	local job = coroutine.create(BuffAddWorker)
 	coroutine.resume(job, UnitID, Buffs)
 end
-local function BuffRemoveWorker(handle, UnitID, Buffs)
+local function BuffRemoveWorker(UnitID, Buffs)
 	for BuffID, BuffType in pairs(Buffs) do
 		--if not self.Queued.Remove[BuffID] then
 			-- if LibSBuff.Lookup[BuffID] then
@@ -399,7 +399,7 @@ local function BuffRemoveWorker(handle, UnitID, Buffs)
 			-- else
 				-- self:DebugUnit("[BuffRemove] (Untracked) Called for: "..BuffID.." | ", UnitID)
 			-- end
-			self.Queue:Add({Unit = UnitID, Buff = BuffID, Remove = true})
+			_int.Queue:Add({Unit = UnitID, Buff = BuffID, Remove = true})
 			--self.Queued.Remove[BuffID] = true
 		-- else
 			-- self:DebugUnit("[BuffRemove] Skipping call for: "..LibSBuff.Lookup[BuffID].name.." | ", UnitID)
@@ -434,12 +434,12 @@ local function BuffChangeWorker(UnitID, Buffs)
 				if cache then
 					-- Load up Details for the buff and assign Cache Data.
 					-- print("BuffChange: Caching Buff and Adding to Queue")
-					self:CacheAdd(UnitID, BuffID)
-					self.Queue:Add({Unit = UnitID, Buff = BuffID, Change = true, IgnoreLoad = true})
+					_int:CacheAdd(UnitID, BuffID)
+					_int.Queue:Add({Unit = UnitID, Buff = BuffID, Change = true, IgnoreLoad = true})
 				else
 					-- Ignore Buff Load and instead Queue for future caching.
 					-- print("BuffChange: Buff added to Queue [Not Cached]")
-					self.Queue:Add({Unit = UnitID, Buff = BuffID, Change = true})
+					_int.Queue:Add({Unit = UnitID, Buff = BuffID, Change = true})
 				end
 			end
 		--end
@@ -458,8 +458,8 @@ local function UnitAvailableWorker(Units)
 	-- BuffTable = LibSBuff:GetBuffTable(UnitID)
 	for UnitID, UnitObj in pairs(Units) do
 		--self:DebugUnit("Renewing Buffs for: ", UnitID)
-		self.Monitor:ClearUnit(UnitID)
-		self:BuffUpdate(UnitID)
+		_int.Monitor:ClearUnit(UnitID)
+		_int:BuffUpdate(UnitID)
 		--print("----------------")
 	end
 end
@@ -472,7 +472,7 @@ local function UnitRemovedWorker(Units)
 	-- No Remove events are given for this, to avoid false positives when dealing with your own Buff tracking.
 	for UnitID, UnitObj in pairs(Units) do
 		--self:DebugUnit("Clearing Buffs for: ", UnitID)
-		self:ClearBuffs(UnitID)
+		_int:ClearBuffs(UnitID)
 		--print("----------------")
 	end
 end

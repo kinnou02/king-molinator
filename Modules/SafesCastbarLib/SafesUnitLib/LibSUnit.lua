@@ -20,6 +20,7 @@ local AddonIni, LibSUnit = ...
 
 -- Timer Locals
 local _inspect = Inspect.Unit.Detail
+local _inspectLookup = Inspect.Unit.Lookup
 local _timeReal = Inspect.Time.Real
 local _lastTick = _timeReal()
 
@@ -90,6 +91,7 @@ LibSUnit.Lookup = {
 	UID = {},
 	UTID = {},
 	Name = {},
+	SpecList = _SpecList,	
 }
 
 LibSUnit.Total = {
@@ -191,7 +193,7 @@ LibSUnit._internal = {
 		},
 	},
 }
-_lsu = LibSUnit._internal
+local _lsu = LibSUnit._internal
 
 _lsu.TargetQueue = {}
 
@@ -393,17 +395,17 @@ function _lsu:Create(UID, uDetails, Type)
 	
 	_type[UID] = UnitObj
 	_total[Type] = _total[Type] + 1
+	if UnitObj.Name == "" then
+		UnitObj.Name = "<Unknown>"
+	end
+	if _name[UnitObj.Name] then
+		_name[UnitObj.Name][UID] = UnitObj
+	else
+		_name[UnitObj.Name] = {[UID] = UnitObj}
+	end
 	if uDetails.availability == "full" then
 		if UnitObj.Health == 0 then
 			UnitObj.Dead = true
-		end
-		if UnitObj.Name == "" then
-			UnitObj.Name = "<Unknown>"
-		end
-		if _name[UnitObj.Name] then
-			_name[UnitObj.Name][UID] = UnitObj
-		else
-			_name[UnitObj.Name] = {[UID] = UnitObj}
 		end
 		-- Unit has been fully loaded at some point. Flag this here to ensure safe Detail reading of all fields.
 		UnitObj.Loaded = true
@@ -440,7 +442,7 @@ function _lsu:Create(UID, uDetails, Type)
 end
 
 -- Details Updates
-function _lsu.Unit.Name(handle, uList)
+local function UnitNameWorker(uList)
 	local _lookup = LibSUnit.Lookup.Name
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
@@ -469,8 +471,11 @@ function _lsu.Unit.Name(handle, uList)
 	end
 	_lsu.Event.Unit.Detail.Name(newList)	
 end
-
-function _lsu.Unit.Health(handle, uList)
+function _lsu.Unit.Name(handle, uList)
+	local job = coroutine.create(UnitNameWorker)
+	coroutine.resume(job,uList)
+end
+local function UnitHealthWorker(uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Health in pairs(uList) do
@@ -491,8 +496,11 @@ function _lsu.Unit.Health(handle, uList)
 	end
 	_lsu.Event.Unit.Detail.Health(newList)
 end
-
-function _lsu.Unit.HealthMax(handle, uList)
+function _lsu.Unit.Health(handle, uList)
+	local job = coroutine.create(UnitHealthWorker)
+	coroutine.resume(job,uList)
+end
+local function UnitHealthMaxWorker(uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, HealthMax in pairs(uList) do
@@ -507,8 +515,11 @@ function _lsu.Unit.HealthMax(handle, uList)
 	end
 	_lsu.Event.Unit.Detail.HealthMax(newList)	
 end
-
-function _lsu.Unit.Power(handle, uList, PowerMode)
+function _lsu.Unit.HealthMax(handle, uList)
+	local job = coroutine.create(UnitHealthMaxWorker)
+	coroutine.resume(job,uList)
+end
+local function UnitPowerWorker(uList, PowerMode)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Power in pairs(uList) do
@@ -525,8 +536,11 @@ function _lsu.Unit.Power(handle, uList, PowerMode)
 	end
 	_lsu.Event.Unit.Detail.Power(newList)	
 end
-
-function _lsu.Unit.PowerMax(handle, uList, PowerMode)
+function _lsu.Unit.Power(handle, uList, PowerMode)
+	local job = coroutine.create(UnitPowerWorker)
+	coroutine.resume(job, uList, PowerMode)
+end
+local function UnitPowerMaxWorker(uList, PowerMode)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, PowerMax in pairs(uList) do
@@ -543,8 +557,11 @@ function _lsu.Unit.PowerMax(handle, uList, PowerMode)
 	end
 	_lsu.Event.Unit.Detail.PowerMax(newList)	
 end
-
-function _lsu.Unit.Offline(handle, uList)
+function _lsu.Unit.PowerMax(handle, uList, PowerMode)
+	local job = coroutine.create(UnitPowerMaxWorker)
+	coroutine.resume(job, uList, PowerMode)
+end
+local function UnitOfflineWorker(uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Offline in pairs(uList) do
@@ -553,8 +570,11 @@ function _lsu.Unit.Offline(handle, uList)
 	end
 	_lsu.Event.Unit.Detail.Offline(newList)
 end
-
-function _lsu.Unit.Vitality(handle, uList)
+function _lsu.Unit.Offline(handle, uList)
+	local job = coroutine.create(UnitOfflineWorker)
+	coroutine.resume(job,uList)
+end
+local function UnitVitalityWorker(uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Vitality in pairs(uList) do
@@ -563,8 +583,11 @@ function _lsu.Unit.Vitality(handle, uList)
 	end
 	_lsu.Event.Unit.Detail.Vitality(newList)	
 end
-
-function _lsu.Unit.Ready(handle, uList)
+function _lsu.Unit.Vitality(handle, uList)
+	local job = coroutine.create(UnitVitalityWorker)
+	coroutine.resume(job,uList)
+end
+local function UnitReadyWorker(uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Ready in pairs(uList) do
@@ -573,8 +596,11 @@ function _lsu.Unit.Ready(handle, uList)
 	end
 	_lsu.Event.Unit.Detail.Ready(newList)
 end
-
-function _lsu.Unit.Mark(handle, uList)
+function _lsu.Unit.Ready(handle, uList)
+	local job = coroutine.create(UnitReadyWorker)
+	coroutine.resume(job,uList)
+end
+local function UnitMarkWorker(uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Mark in pairs(uList) do
@@ -583,8 +609,11 @@ function _lsu.Unit.Mark(handle, uList)
 	end
 	_lsu.Event.Unit.Detail.Mark(newList)
 end
-
-function _lsu.Unit.Planar(handle, uList)
+function _lsu.Unit.Mark(handle, uList)
+	local job = coroutine.create(UnitMarkWorker)
+	coroutine.resume(job,uList)
+end
+function UnitPlanarWorker(uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Planar in pairs(uList) do
@@ -593,8 +622,11 @@ function _lsu.Unit.Planar(handle, uList)
 	end
 	_lsu.Event.Unit.Detail.Planar(newList)
 end
-
-function _lsu.Unit.Level(handle, uList)
+function _lsu.Unit.Planar(handle, uList)
+	local job = coroutine.create(UnitPlanarWorker)
+	coroutine.resume(job,uList)
+end
+local function UnitLevelWorker(uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Level in pairs(uList) do
@@ -603,8 +635,11 @@ function _lsu.Unit.Level(handle, uList)
 	end
 	_lsu.Event.Unit.Detail.Level(newList)	
 end
-
-function _lsu.Unit.Zone(handle, uList)
+function _lsu.Unit.Level(handle, uList)
+	local job = coroutine.create(UnitLevelWorker)
+	coroutine.resume(job,uList)
+end
+function UnitZoneWorker(uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Zone in pairs(uList) do
@@ -613,8 +648,11 @@ function _lsu.Unit.Zone(handle, uList)
 	end
 	_lsu.Event.Unit.Detail.Zone(newList)	
 end
-
-function _lsu.Unit.Location(handle, uList)
+function _lsu.Unit.Zone(handle, uList)
+	local job = coroutine.create(UnitZoneWorker)
+	coroutine.resume(job,uList)
+end
+local function UnitLocationWorker(uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Location in pairs(uList) do
@@ -623,8 +661,11 @@ function _lsu.Unit.Location(handle, uList)
 	end
 	_lsu.Event.Unit.Detail.Location(newList)
 end
-
-function _lsu.Unit.Role(handle, uList)
+function _lsu.Unit.Location(handle, uList)
+	local job = coroutine.create(UnitLocationWorker)
+	coroutine.resume(job,uList)
+end
+function UnitRoleWorker(uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Role in pairs(uList) do
@@ -635,8 +676,11 @@ function _lsu.Unit.Role(handle, uList)
 	end
 	_lsu.Event.Unit.Detail.Role(newList)
 end
-
-function _lsu.Unit.PlanarMax(handle, uList)
+function _lsu.Unit.Role(handle, uList)
+	local job = coroutine.create(UnitRoleWorker)
+	coroutine.resume(job,uList)
+end
+local function UnitPlanarMaxWorker(uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, PlanarMax in pairs(uList) do
@@ -645,8 +689,11 @@ function _lsu.Unit.PlanarMax(handle, uList)
 	end
 	_lsu.Event.Unit.Detail.PlanarMax(newList)
 end
-
-function _lsu.Unit.Warfront(handle, uList)
+function _lsu.Unit.PlanarMax(handle, uList)
+	local job = coroutine.create(UnitPlanarMaxWorker)
+	coroutine.resume(job,uList)
+end
+local function UnitWarfrontWorker(uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Warfront in pairs(uList) do
@@ -655,8 +702,11 @@ function _lsu.Unit.Warfront(handle, uList)
 	end
 	_lsu.Event.Unit.Detail.Warfront(newList)
 end
-
-function _lsu.Unit.Position(handle, uList)
+function _lsu.Unit.Warfront(handle, uList)
+	local job = coroutine.create(UnitWarfrontWorker)
+	coroutine.resume(job,uList)
+end
+local function UnitPositionWorker(uList)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Position in pairs(uList) do
@@ -664,8 +714,11 @@ function _lsu.Unit.Position(handle, uList)
 		
 	end
 end
-
-function _lsu.Unit.Combat(handle, uList, Silent)
+function _lsu.Unit.Position(handle, uList)
+	local job = coroutine.create(UnitPositionWorker)
+	coroutine.resume(job,uList)
+end
+local function UnitCombatWorker(uList, Silent)
 	local _cache = LibSUnit.Lookup.UID
 	local newList = {}
 	for UID, Combat in pairs(uList) do
@@ -704,10 +757,12 @@ function _lsu.Unit.Combat(handle, uList, Silent)
 		_lsu.Event.Unit.Detail.Combat(newList)
 	end
 end
-
+function _lsu.Unit.Combat(handle, uList, Silent)
+	local job = coroutine.create(UnitCombatWorker)
+	coroutine.resume(job,uList,Silent)
+end
 function _lsu.Unit.Details(UnitObj, uDetails)
 	if UnitObj.CurrentKey == "Partial" then
-	
 	else
 		UnitObj.Type = uDetails.type
 		UnitObj.Tier = uDetails.tier
@@ -873,7 +928,7 @@ function _lsu:Idle(UnitObj)
 end
 
 -- Unit Availability Handlers
-function _lsu.Avail.Full(handle, uList)
+local function UnitAvailFullWorker(uList)
 	-- Main handler for new Units
 
 	-- Optimize
@@ -894,7 +949,10 @@ function _lsu.Avail.Full(handle, uList)
 		_lsu.Debug:UpdateAll()
 	end
 end
-
+function _lsu.Avail.Full(handle, uList)
+	local job = coroutine.create(UnitAvailFullWorker)
+	coroutine.resume(job,uList)
+end
 function LibSUnit:RequestDetails(UnitID)
 	local _lookup = LibSUnit.Lookup.UID
 	local _create = _lsu.Create
@@ -906,7 +964,7 @@ function LibSUnit:RequestDetails(UnitID)
 	end
 end
 
-function _lsu.Avail.Partial(handle, uList)
+local function UnitAvailPartialWorker(uList)
 	-- Main handler for Partial Units
 
 	-- Optimize
@@ -926,8 +984,11 @@ function _lsu.Avail.Partial(handle, uList)
 		_lsu.Debug:UpdateAll()
 	end
 end
-
-function _lsu.Avail.None(handle, uList)
+function _lsu.Avail.Partial(handle, uList)
+	local job = coroutine.create(UnitAvailPartialWorker)
+	coroutine.resume(job,uList)
+end
+local function UnitAvailNoneWorker(uList)
 	-- Move to Idle
 
 	-- Optimize
@@ -947,7 +1008,10 @@ function _lsu.Avail.None(handle, uList)
 		_lsu.Debug:UpdateAll()
 	end
 end
-
+function _lsu.Avail.None(handle, uList)
+	local job = coroutine.create(UnitAvailNoneWorker)
+	coroutine.resume(job,uList)
+end
 function _lsu.Unit.Change(UnitID, Spec)
 	local sourceUID = Inspect.Unit.Lookup(Spec)
 	if sourceUID then
@@ -1001,6 +1065,9 @@ function _lsu.Raid.ManageDeath(UnitObj, Dead, sourceObj)
 end
 
 function _lsu.Raid.GroupCheck(newGroup, oldGroup)
+	if newGroup == oldGroup then
+		return
+	end
 	if newGroup then
 		LibSUnit.Raid.Group[newGroup] = LibSUnit.Raid.Group[newGroup] + 1
 		if LibSUnit.Raid.Group[newGroup] == 1 then
@@ -1026,110 +1093,116 @@ function _lsu.Raid.GroupCheck(newGroup, oldGroup)
 end
 
 function _lsu.Raid.Check(UnitID, Spec)
-	if UnitID == LibSUnit.Raid.Lookup[Spec].UID then
-		-- Already Handled Raid Change
-		-- print("No action required for "..Spec)
-		-- print("--------------")
+
+	UnitID = UnitID or nil
+	if LibSUnit.Raid.Lookup[Spec].UID == _inspectLookup(Spec) then
+		-- Already handled raid position.
+		-- No Action required.
 		return
 	end
-	local newUnitID
-	local newUnitObj
-	local currentUnitID
-	local currentUnitObj
-	local totalchanges = 0
-	local movedCount = 0
-	local leftCount = 0
-	local newCount = 0
-	local SpecChanged = {}
-	local UIDChanged = {
+	
+	-- print("Change Event for: "..Spec)
+	-- print("Change UID: "..tostring(UnitID))
+	-- print("Current UID: "..tostring(LibSUnit.Raid.Lookup[Spec].UID))
+	-- if UnitID then
+		-- print("Unit Name: "..LibSUnit.Lookup.UID[UnitID].Name)
+	-- end
+	
+	-- Define common locals
+	local spec = nil
+	local newUnitID = nil
+	local newUnitObj = nil
+	local currentUnitID = nil
+	local currnerUnitObj = nil
+	local specChanged = {}
+	local totalChanged = 0
+	local unitStore = {
 		Moved = {},
 		Joined = {},
 		Left = {},
 	}
-	for Index, Spec in pairs(_SpecList) do
-		if Index > 0 then
-			newUnitID = Inspect.Unit.Lookup(Spec)
-			currentUnitObj = LibSUnit.Raid.Lookup[Spec].Unit
-			if currentUnitObj then
-				currentUnitID = currentUnitObj.UnitID
-			else
-				currentUnitID = nil
-			end
-			if newUnitID ~= currentUnitID then
-				SpecChanged[Spec] = newUnitID or false
-				-- First Check if Pending
-				if newUnitID and currentUnitID then
-					-- Slot changed Unit
-					newUnitObj = LibSUnit.Lookup.UID[newUnitID]
-					if not newUnitObj then
-						newUnitObj = _lsu:Create(newUnitID, _inspect(newUnitID), "Avail")
-					end
-					if LibSUnit.Raid.UID[newUnitID] then
-						-- New Unit already exists [Move]
-						UIDChanged.Moved[newUnitID] = {New = Spec, Old = newUnitObj.RaidLoc}
-						UIDChanged.Left[newUnitID] = nil
-					elseif not UIDChanged.Moved[newUnitID] then
-						-- New Unit isn't currently moving, must be a join.
-						UIDChanged.Joined[newUnitID] = Spec
-					end
-					if not UIDChanged.Moved[currentUnitID] then
-						-- Old Unit isn't moving, flag initially as leaving.
-						UIDChanged.Left[currentUnitID] = Spec
-					end
-				elseif newUnitID then
-					-- Empty slot occupied
-					newUnitObj = LibSUnit.Lookup.UID[newUnitID]
-					if not newUnitObj then
-						newUnitObj = _lsu:Create(newUnitID, _inspect(newUnitID), "Avail")
-					end
-					if LibSUnit.Raid.UID[newUnitID] then
-						-- New Unit already exists [Move]
-						UIDChanged.Moved[newUnitID] = {New = Spec, Old = newUnitObj.RaidLoc}
-						UIDChanged.Left[newUnitID] = nil
-					elseif not UIDChanged.Moved[newUnitID] then
-						-- New Unit isn't moving, must be joining.
-						UIDChanged.Joined[newUnitID] = Spec
-					end
-				elseif currentUnitID then
-					-- Slot no longer occupied
-					if not UIDChanged.Moved[currentUnitID] then
-						-- Old Unit isn't moving, flag initially as leaving.
-						UIDChanged.Left[currentUnitID] = Spec
+	
+	for index = 1, 20 do
+		spec = _SpecList[index]
+		newUnitID = _inspectLookup(spec) or nil
+		currentUnitObj = LibSUnit.Raid.Lookup[spec].Unit
+		currentUnitID = LibSUnit.Raid.Lookup[spec].UID
+				
+		if newUnitID ~= currentUnitID then
+						
+			if newUnitID then
+				newUnitObj = LibSUnit.Lookup.UID[newUnitID]
+				if not newUnitObj then
+					newUnitObj = _lsu:Create(newUnitID, _inspect(newUnitID), "Avail")
+				end
+				-- This spec now contains a unit. Populate.
+				if LibSUnit.Raid.UID[newUnitID] then
+					-- Unit was already in raid. Must be a move.
+					unitStore.Moved[newUnitID] = {New = spec, Old = newUnitObj.RaidLoc, Unit = newUnitObj}
+					unitStore.Left[newUnitID] = nil
+					--print("[Move]["..spec.."] Stored Move for: "..tostring(newUnitObj.Name))
+					if currentUnitID then
+						if LibSUnit.Raid.UID[currentUnitID] then
+							if not unitStore.Moved[currentUnitID] then
+								unitStore.Left[currentUnitID] = {Old = spec, Unit = currentUnitObj}
+								--print("[Move]["..spec.."] Stored Leave for: "..tostring(currentUnitObj.Name))
+							end
+						end
 					end
 				else
-					-- no action required				
+					-- Unit has not been processed in to the raid.
+					unitStore.Joined[newUnitID] = {New = spec, Unit = newUnitObj}
+					unitStore.Left[newUnitID] = nil
+					--print("[Join]["..spec.."] Stored Join for: "..tostring(newUnitObj.Name))
+					if currentUnitID then
+						if LibSUnit.Raid.UID[currentUnitID] then
+							if not unitStore.Moved[currentUnitID] then
+								unitStore.Left[currentUnitID] = {Old = spec, Unit = currentUnitObj}
+								--print("[Join]["..spec.."] Stored Leave for: "..tostring(currentUnitObj.Name))
+							end
+						end
+					end
 				end
 			else
-				-- no action required
+				if currentUnitID then
+					if LibSUnit.Raid.UID[currentUnitID] then
+						if not unitStore.Moved[currentUnitID] then
+							unitStore.Left[currentUnitID] = {Old = spec, Unit = currentUnitObj}
+							--print("[Leave]["..spec.."] Stored Leave for: "..tostring(currentUnitObj.Name))
+						end
+					end
+				end
 			end
+			specChanged[spec] = true
+			totalChanged = totalChanged + 1
+			--print("specChanged["..spec.."] set to "..tostring(specChanged[spec]))
+		else
+			-- Do nothing.
 		end
 	end
+
 	-- Handle Moves
-	for UID, SpecChanges in pairs(UIDChanged.Moved) do
-		local UnitObj = LibSUnit.Lookup.UID[UID]
-		local newSpec = SpecChanges.New
-		local oldSpec = SpecChanges.Old
+	for UID, details in pairs(unitStore.Moved) do
+		local UnitObj = details.Unit
+		local newSpec = details.New
+		local oldSpec = details.Old
 		local newGroup = LibSUnit.Raid.Lookup[newSpec].Group
-		local oldGroup = nil
+		local oldGroup = LibSUnit.Raid.Lookup[oldSpec].Group
 		LibSUnit.Raid.Lookup[newSpec].Unit = UnitObj
 		LibSUnit.Raid.Lookup[newSpec].UID = UID
-		LibSUnit.Raid.UID[UnitObj.UnitID] = UnitObj
+		LibSUnit.Raid.UID[UID] = UnitObj
 		UnitObj.RaidLoc = newSpec
-		if not SpecChanged[oldSpec] then
-			--print("Old Spec Cleared: "..oldSpec)
-			LibSUnit.Raid.Lookup[oldSpec].Unit = nil
-			LibSUnit.Raid.Lookup[oldSpec].UID = false
-			oldGroup = LibSUnit.Raid.Lookup[oldSpec].Group
-		end
+		specChanged[newSpec] = nil
 		_lsu.Raid.GroupCheck(newGroup, oldGroup)
-		-- print(UnitObj.Name.." moved to "..newSpec.." from "..oldSpec)
+		--print(UnitObj.Name.." moved to "..newSpec.." from "..oldSpec)
 		_lsu.Event.Raid.Member.Move(UnitObj, oldSpec, newSpec)
 	end
-	
+
 	-- Handle Leaves
-	for UID, Spec in pairs(UIDChanged.Left) do
+	for UID, details in pairs(unitStore.Left) do
 		if LibSUnit.Raid.UID[UID] then
-			local UnitObj = LibSUnit.Lookup.UID[UID]
+			local UnitObj = details.Unit
+			local Spec = details.Old
 			if UnitObj.Combat then
 				LibSUnit.Raid.CombatTotal = LibSUnit.Raid.CombatTotal - 1
 				if LibSUnit.Raid.CombatTotal == 0 then
@@ -1137,13 +1210,16 @@ function _lsu.Raid.Check(UnitID, Spec)
 					_lsu.Event.Raid.Combat.Leave()
 				end
 			end
-			LibSUnit.Raid.Lookup[Spec].Unit = nil
-			LibSUnit.Raid.Lookup[Spec].UID = false
+			if LibSUnit.Raid.Lookup[Spec].UID == UID then
+				LibSUnit.Raid.Lookup[Spec].Unit = nil
+				LibSUnit.Raid.Lookup[Spec].UID = nil
+			end
 			LibSUnit.Raid.Members = LibSUnit.Raid.Members - 1
 			local oldGroup = LibSUnit.Raid.Lookup[Spec].Group
-			LibSUnit.Raid.UID[UnitObj.UnitID] = nil
+			LibSUnit.Raid.UID[UID] = nil
 			UnitObj.RaidLoc = nil
-			-- print(UnitObj.Name.." left the Raid")
+			specChanged[Spec] = nil
+			--print("["..Spec.."] "..UnitObj.Name.." left the Raid")
 			if UnitObj.Dead then
 				LibSUnit.Raid.DeadTotal = LibSUnit.Raid.DeadTotal - 1
 				--print(UnitObj.Name.." has left the Raid and removed death count")
@@ -1154,92 +1230,81 @@ function _lsu.Raid.Check(UnitID, Spec)
 				LibSUnit.Raid.Grouped = false
 				LibSUnit.Raid.Wiped = false
 				_lsu.Event.Raid.Leave()
-			elseif LibSUnit.Raid.Members > 1 then
-				if LibSUnit.Raid.Members == LibSUnit.Raid.DeadTotal then
-					if not LibSUnit.Raid.Wiped then
-						LibSUnit.Raid.Wiped = true
-						_lsu.Event.Raid.Wipe()
-					end
-				else
-					LibSUnit.Raid.Wiped = false
-				end				
-			end
-			if _lsu.Settings.Debug then
-				_lsu.Debug:UpdateDeath()
-				_lsu.Debug:UpdateCombat()
+			--	print("You have left a Raid or Group.")
 			end
 		end
 	end
-	
+		
 	-- Handle Joins
-	for UID, Spec in pairs(UIDChanged.Joined) do
-		if not LibSUnit.Raid.UID[UID] then
-			local UnitObj = LibSUnit.Lookup.UID[UID]
-			local newGroup = LibSUnit.Raid.Lookup[Spec].Group
-			LibSUnit.Raid.Members = LibSUnit.Raid.Members + 1
-			LibSUnit.Raid.Lookup[Spec].Unit = UnitObj
-			LibSUnit.Raid.Lookup[Spec].UID = UID
-			LibSUnit.Raid.UID[UID] = UnitObj
-			UnitObj.RaidLoc = Spec
-			if LibSUnit.Raid.Members == 1 then
-				-- print("You have joined a Raid or Group")
-				LibSUnit.Raid.Grouped = true
-				_lsu.Event.Raid.Join()
+	for UID, details in pairs(unitStore.Joined) do
+		local UnitObj = details.Unit
+		local Spec = details.New
+		local newGroup = LibSUnit.Raid.Lookup[Spec].Group
+		LibSUnit.Raid.Members = LibSUnit.Raid.Members + 1
+		LibSUnit.Raid.Lookup[Spec].Unit = UnitObj
+		LibSUnit.Raid.Lookup[Spec].UID = UID
+		LibSUnit.Raid.UID[UID] = UnitObj
+		UnitObj.RaidLoc = Spec
+		specChanged[Spec] = nil
+		if LibSUnit.Raid.Members == 1 then
+			--print("You have joined a Raid or Group.")
+			LibSUnit.Raid.Grouped = true
+			_lsu.Event.Raid.Join()
+		end
+		--print("["..Spec.."] New Player Joined Raid: "..UnitObj.Name)
+		_lsu.Raid.GroupCheck(newGroup, nil)
+		_lsu.Event.Raid.Member.Join(UnitObj, Spec)
+		if UnitObj.Combat then
+			LibSUnit.Raid.CombatTotal = LibSUnit.Raid.CombatTotal + 1
+			if LibSUnit.Raid.CombatTotal == 1 then
+				LibSUnit.Raid.Combat = true
+				_lsu.Event.Raid.Combat.Enter()
 			end
-			-- print("New Player Joined Raid: "..UnitObj.Name)
-			_lsu.Raid.GroupCheck(newGroup, nil)
-			_lsu.Event.Raid.Member.Join(UnitObj, Spec)
-			if UnitObj.Combat then
-				LibSUnit.Raid.CombatTotal = LibSUnit.Raid.CombatTotal + 1
-				if LibSUnit.Raid.CombatTotal == 1 then
-					LibSUnit.Raid.Combat = true
-					_lsu.Event.Raid.Combat.Enter()
-				end
-			end
-			if UnitObj.Dead then
-				LibSUnit.Raid.DeadTotal = LibSUnit.Raid.DeadTotal + 1
-				-- print(UnitObj.Name.." joined and marked as Dead")
-			end
+		end
+		if UnitObj.Dead then
+			LibSUnit.Raid.DeadTotal = LibSUnit.Raid.DeadTotal + 1
+		--	print(UnitObj.Name.." joined and marked as Dead")
+		end
+		-- if LibSUnit.Raid.Members == LibSUnit.Raid.DeadTotal then
+			-- if not LibSUnit.Raid.Wiped then
+				-- LibSUnit.Raid.Wiped = true
+				-- _lsu.Event.Raid.Wipe()
+			-- end
+		-- else
+			-- if LibSUnit.Raid.Wiped then
+				-- LibSUnit.Raid.Wiped = false
+			-- end
+		-- end
+	end
+	
+	-- Tidy Spec Changes
+	for Spec, Val in pairs(specChanged) do
+		--print("["..Spec.."] Clearing")
+		LibSUnit.Raid.Lookup[Spec].Unit = nil
+		LibSUnit.Raid.Lookup[Spec].UID = nil
+		totalChanged = totalChanged - 1
+	end
+	
+	--print("Total Changes: "..totalChanged)
+	if totalChanged > 0 then
+		if LibSUnit.Raid.Members > 1 then
 			if LibSUnit.Raid.Members == LibSUnit.Raid.DeadTotal then
 				if not LibSUnit.Raid.Wiped then
 					LibSUnit.Raid.Wiped = true
 					_lsu.Event.Raid.Wipe()
 				end
 			else
-				if LibSUnit.Raid.Wiped then
-					LibSUnit.Raid.Wiped = false
-				end
-			end
-			if _lsu.Settings.Debug then
-				_lsu.Debug:UpdateDeath()
-				_lsu.Debug:UpdateCombat()
-			end
+				LibSUnit.Raid.Wiped = false
+			end				
 		end
 	end
+	if _lsu.Settings.Debug then
+		_lsu.Debug:UpdateDeath()
+		_lsu.Debug:UpdateCombat()
+		_lsu.Debug:UpdateSize()
+	end
+	--print("-----------------------")
 	
-	-- local Groups = 0
-	-- for Group, Value in pairs(LibSUnit.Raid.Group) do
-		-- if Value > 0 then
-			-- Groups = Groups + 1
-		-- end
-	-- end
-	-- if Groups > 1 then
-		-- if LibSUnit.Raid.Mode ~= "raid" then
-			-- LibSUnit.Raid.Mode = "raid"
-			-- _lsu.Event.Raid.Mode()
-		-- end
-	-- else
-		-- if LibSUnit.Raid.Mode ~= "party" then
-			-- LibSUnit.Raid.Mode = "party"
-			-- _lsu.Event.Raid.Mode()
-		-- end
-	-- end
-	
-	-- print("Total Changes found: "..totalchanges)
-	-- print("Player Moved: "..movedCount)
-	-- print("New Players: "..newCount)
-	-- print("Players left: "..leftCount)
-	-- print("--------------")
 end
 
 function _lsu.Raid.PetChange(UnitID, Spec)
@@ -1266,7 +1331,7 @@ function _lsu.Combat.stdHandler(UID, segPlus)
 	end
 end
 
-function _lsu.Combat.Damage(handle, info)
+local function UnitCombatDamageWorker(info)
 	local _stdHandler = _lsu.Combat.stdHandler
 	local targetObj, sourceObj
 	info.damage = info.damage or 0
@@ -1276,8 +1341,11 @@ function _lsu.Combat.Damage(handle, info)
 	info.sourceObj = sourceObj
 	_lsu.Event.Combat.Damage(info)
 end
-
-function _lsu.Combat.Heal(handle, info)
+function _lsu.Combat.Damage(handle, info)
+	local job = coroutine.create(UnitCombatDamageWorker)
+	coroutine.resume(job,uList)
+end
+local function UnitCombatHealWorker(info)
 	local _stdHandler = _lsu.Combat.stdHandler
 	local targetObj, sourceObj
 	info.heal = info.heal or 0
@@ -1292,8 +1360,11 @@ function _lsu.Combat.Heal(handle, info)
 		_lsu.Event.Combat.Heal(info)
 	end
 end
-
-function _lsu.Combat.Immune(handle, info)
+function _lsu.Combat.Heal(handle, info)
+	local job = coroutine.create(UnitCombatHealWorker)
+	coroutine.resume(job,uList)
+end
+local function UnitCombatImmuneWorker(info)
 	local _stdHandler = _lsu.Combat.stdHandler
 	local targetObj, sourceObj
 	targetObj = _stdHandler(info.target, _idleSeg)
@@ -1302,8 +1373,11 @@ function _lsu.Combat.Immune(handle, info)
 	info.sourceObj = sourceObj
 	_lsu.Event.Combat.Immune(info)
 end
-
-function _lsu.Combat.Death(handle, info)
+function _lsu.Combat.Immune(handle, info)
+	local job = coroutine.create(UnitCombatImmuneWorker)
+	coroutine.resume(job,uList)
+end
+local function UnitCombatDeathWorker(info)
 	local _cache = LibSUnit.Lookup.UID
 	local targetObj, sourceObj
 	sourceObj = _lsu.Combat.stdHandler(info.caster, _idleSeg)
@@ -1317,7 +1391,10 @@ function _lsu.Combat.Death(handle, info)
 		_lsu.Event.Combat.Death(info)
 	end
 end
-
+function _lsu.Combat.Death(handle, info)
+	local job = coroutine.create(UnitCombatDeathWorker)
+	coroutine.resume(job,uList)
+end
 -- Base Functions
 function _lsu:UpdateSegment(_tSeg)
 	local _lookup = LibSUnit.Lookup
@@ -1355,8 +1432,7 @@ function _lsu:UpdateSegment(_tSeg)
 		self.Debug:UpdateAll()
 	end
 end
-
-function _lsu.Tick()
+local function UnitDetailUpdater()
 	local _cTime = _timeReal()
 	local _tSeg = math.floor(_cTime / _tSegThrottle)
 		
@@ -1367,6 +1443,10 @@ function _lsu.Tick()
 		_lastSeg = _tSeg
 	end
 	_lastTick = _cTime	
+end
+function _lsu.Tick()
+	local job = coroutine.create(UnitDetailUpdater)
+	coroutine.resume(job)
 end
 
 function _lsu.Wait(handle, uList)
@@ -1428,12 +1508,10 @@ function _lsu.Wait(handle, uList)
 				LibSUnit.Raid.Lookup[Spec] = {
 					Group = math.ceil(Index / 5),
 					Specifier = Spec,
-					UID = false,
 				}
 				LibSUnit.Raid.Pets[Spec] = {
 					Group = LibSUnit.Raid.Lookup[Spec].Group,
 					Specifier = Spec..".pet",
-					UID = false,
 				}
 				local UID = Inspect.Unit.Lookup(Spec)
 				if UID then
@@ -1482,6 +1560,13 @@ function _lsu.SlashHandler(handle, cmd)
 	elseif cmd == "listavail" then
 		for UnitID, UnitObj in pairs(LibSUnit.Cache.Avail) do
 			print(tostring(UnitID)..": "..tostring(UnitObj.Name).." - Seg: "..tostring(UnitObj.IdleSegment))
+		end
+	elseif cmd == "listname" then
+		for Name, UnitList in pairs(LibSUnit.Lookup.Name) do
+			print("List for "..tostring(Name))
+			for UID, UnitObj in pairs(UnitList) do
+				print("--"..UID..": "..UnitObj.Name)
+			end
 		end
 	end
 end
@@ -1642,6 +1727,13 @@ function _lsu.Debug:Init()
 		self.GUI.Trackers["Wiped"]:UpdateDisplay(tostring(LibSUnit.Raid.Wiped))
 	end
 	function self:UpdateMode()
-		self.GUI.Trackers["Raid Mode"]:UpdateDisplay(LibSUnit.Raid.Mode)
+		if LibSUnit.Raid.Members == 0 then
+			self.GUI.Trackers["Raid Mode"]:UpdateDisplay("solo")
+		else
+			self.GUI.Trackers["Raid Mode"]:UpdateDisplay(LibSUnit.Raid.Mode)
+		end
+	end
+	function self:UpdateSize()
+		self.GUI.Trackers["Raid Size"]:UpdateDisplay(tostring(LibSUnit.Raid.Members or "solo"))
 	end
 end
