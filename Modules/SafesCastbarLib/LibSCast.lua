@@ -1656,7 +1656,7 @@ function LibSCast:Create(ID, Parent, Pack, Settings, Style)
 	return CastObj
 end
 
-function _int.Update_Handler(handle)
+function UpdateHandlerWorker()
 	if _queue._count > 0 then
 		local cTime = Inspect.Time.Real()
 		local renderBreak = cTime + 0.02
@@ -1677,8 +1677,11 @@ function _int.Update_Handler(handle)
 		CastPro:Update()
 	end
 end
-
-function _int.Castbar_Handler(handle, units)
+function _int.Update_Handler(handle)
+	local job = coroutine.create(UpdateHandlerWorker)
+	coroutine.resume(job)
+end
+local function CastbarHandlerWorker(units)
 	for UnitID, Visible in pairs(units) do
 		if _tracking[UnitID] then
 			if Visible then
@@ -1687,7 +1690,10 @@ function _int.Castbar_Handler(handle, units)
 		end
 	end
 end
-
+function _int.Castbar_Handler(handle, units)
+	local job = coroutine.create(CastbarHandlerWorker)
+	coroutine.resume(job,units)
+end
 _int.Default:CreatePacks()
 
 Command.Event.Attach(Event.Unit.Castbar, _int.Castbar_Handler, "Castbar Visibility Handler", -1)
