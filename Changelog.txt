@@ -1,4 +1,8 @@
-﻿2.0.0.0
+﻿2.0.0.1
+
+* Fixed: Version checker believed the same version to be new.
+
+2.0.0.0
 
 * We're growing old, thanks to all the authors contributors and testers,
 * with your help we're still going strong and able to commit to future 
