@@ -207,13 +207,13 @@ function KBM.VersionToNumber(High, Mid, Low, Rev)
 end
 
 function KBM.Version:Check(High, Mid, Low, Revision)
-	-- if Revision then
-		-- if Revision > self.Revision then
-			-- return false
-		-- else
-			-- return true
-		-- end
-	-- else
+	if Revision then
+		if Revision > self.Revision then
+			return false
+		else
+			return true
+		end
+	 else
 		if High <= self.High then
 			if High < self.High then
 				return true
@@ -239,7 +239,7 @@ function KBM.Version:Check(High, Mid, Low, Revision)
 		else
 			return false
 		end
-	-- end
+	end
 end
 
 KBM.Defaults.CastFilter = {}
