@@ -1,4 +1,30 @@
-﻿1.9.9.914
+﻿2.0.0.0
+
+* We're growing old, thanks to all the authors contributors and testers,
+* with your help we're still going strong and able to commit to future 
+* updates continuing in Rift: Prophecy of Ahnket and Rift Prime!
+*
+* Looking forward to many more updates to come, official releases:
+*		https://github.com/kinnou02/king-molinator/releases
+*
+* Please check there or our rift forum thread for updates!
+
+
+2.0.0.0
+* Add: Alert for Titan Legion Pull
+* Add: Isiel 2nd Phase Tank Stacks
+* Changed: SheepList with new transformations - Brasse Dwarf Debuffs, thanks to Doran
+* Changed: Gilded Prophecy, Drowned Hall and Greenscale's Blight Enrage Timers, thanks to Doran, Aileen and Soulghost91
+* Changed: Some fonts and lib changes thanks to Aileen
+* Fixed: Titan Phase Percentages
+* Fixed: Timer for spin on Isiel
+* Fixed: Inconsistent colors for phases on Isiel, thanks to Doran
+
+1.9.9.915 & 1.9.9.916
+* Anyone who is working on adding and improving functionality of KBM, collaborate with us on https://github.com/kinnou02/king-molinator/ 
+  so that we can cohesively test and release versions together without losing or repeating changes.
+
+1.9.9.914
 * New: Add Titan X thanks to Yarrellii
     - German translation for Isiel thanks to Albandito
 * New: add a few timers and alerts on Commander Isiel
