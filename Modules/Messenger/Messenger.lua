@@ -121,22 +121,20 @@ function PI.VersionCheck(Data)
 		Checked = true	
 	end
 	if not Checked then
-		if Revision >= PI.History.Revision or PI.History.Checked == false then
-			if Inspect.Time.Real() - PI.History.Time > 900 or PI.History.Checked == false then
-				if KBM.Version.Revision < Revision then
-					print(KBM.Language.Version.Old[KBM.Lang])
-					print(KBM.Language.Version.OldInfo[KBM.Lang]..High.."."..Mid.."."..Low.."."..Revision)
-					Checked = true
-					PI.History.Checked = true
-					PI.History.Time = Inspect.Time.Real()
-					PI.History.High = High
-					PI.History.Mid = Mid
-					PI.History.Low = Low
-					PI.History.Revision = Revision
-					PI.History.Type = vType
-				end
-			end
-		end
+        if Inspect.Time.Real() - PI.History.Time > 900 or PI.History.Checked == false then
+            if not KBM.Version:Check(High, Mid, Low, Revision) then
+                print(KBM.Language.Version.Old[KBM.Lang])
+                print(KBM.Language.Version.OldInfo[KBM.Lang]..High.."."..Mid.."."..Low.."."..Revision)
+                Checked = true
+                PI.History.Checked = true
+                PI.History.Time = Inspect.Time.Real()
+                PI.History.High = High
+                PI.History.Mid = Mid
+                PI.History.Low = Low
+                PI.History.Revision = Revision
+                PI.History.Type = vType
+            end
+        end
 		Checked = true
 	end
 end
