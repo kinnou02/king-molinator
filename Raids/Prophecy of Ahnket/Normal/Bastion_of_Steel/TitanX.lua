@@ -2,7 +2,7 @@
 -- Written by Yarrellii
 
 -- TODO: Infection move to Infector so this can be monitored, need a unit id
--- TODO: rocket volley from  R.D.U. U362FC592688DF7AC
+-- TODO: rocket volley from  R.D.U.
 
 KBMPOABOSTX_Settings = nil
 chKBMPOABOSTX_Settings = nil
@@ -40,6 +40,10 @@ TX.Lang.Unit.TitanX:SetGerman("Titan X")
 TX.Lang.Unit.EClassSoldier = KBM.Language:Add("E. Class Soldier")
 TX.Lang.Unit.EClassSoldier:SetFrench("E. Class Soldier")
 TX.Lang.Unit.EClassSoldier:SetGerman("E. Class Soldier")
+
+TX.Lang.Unit.RDU = KBM.Language:Add("R.D.U.")
+TX.Lang.Unit.RDU:SetFrench("R.D.U.")
+TX.Lang.Unit.RDU:SetGerman("R.D.U.")
 
 
 TX.TitanX = {
@@ -97,11 +101,36 @@ TX.EClassSoldier = {
     Settings = {},
 }
 
+TX.RDU = {
+    Mod = TX,
+    Level = "72",
+    Active = false,
+    Name = TX.Lang.Unit.RDU[KBM.Lang],
+    Menu = {},
+    AlertsRef = {},
+    TimersRef = {},
+    MechRef = {},
+    Castbar = nil,
+    Dead = false,
+    Available = false,
+    UnitID = nil,
+    UTID = "U362FC592688DF7AC",
+    TimeOut = 5,
+    Triggers = {},
+    Settings = {
+		AlertsRef = {
+			Enabled = true,
+			RocketVolley = KBM.Defaults.AlertObj.Create("red"),
+		},
+	},
+}
+
 KBM.RegisterMod(TX.ID, TX)
 
 -- Ability Dictionary
 TX.Lang.Ability = {}
 TX.Lang.Ability.LegionPull = KBM.Language:Add("Legion Pull") --TODO transF transG
+TX.Lang.Ability.RocketVolley = KBM.Language:Add("Rocket Volley") --TODO transF transG
 
 -- Verbose Dictionary
 TX.Lang.Verbose = {}
@@ -135,6 +164,7 @@ function TX:AddBosses(KBM_Boss)
     self.MenuName = self.Descript
     self.Bosses = {
         [self.EClassSoldier.Name] = self.EClassSoldier,
+		[self.RDU.Name] = self.RDU,
 		[self.TitanX.Name] = self.TitanX,
     }
 end
@@ -242,6 +272,12 @@ function TX:UnitHPCheck(uDetails, unitID)
 					self.EClassSoldier.Available = true
 					return self.EClassSoldier
 				end
+			elseif uDetails.type == self.RDU.UTID then
+				self.RDU.Dead = false
+				self.RDU.Casting = false
+				self.RDU.UnitID = unitID
+				self.RDU.Available = true
+				return self.RDU
 			end
 		end
     end
@@ -295,8 +331,10 @@ function TX:Start()
 
     -- Create Alerts
     self.TitanX.AlertsRef.LegionPull = KBM.Alert:Create(self.Lang.Ability.LegionPull[KBM.Lang], 2, true, true, "red")
+	self.RDU.AlertsRef.RocketVolley = KBM.Alert:Create(self.Lang.Ability.RocketVolley[KBM.Lang], 2, true, true, "red")
     self.TitanX.AlertsRef.Infection = KBM.Alert:Create(self.Lang.Debuff.Infection[KBM.Lang], 2, true, true, "yellow")
     KBM.Defaults.AlertObj.Assign(self.TitanX)
+	KBM.Defaults.AlertObj.Assign(self.RDU)
 
     -- Assign Alerts and Timers to Triggers
     self.TitanX.CastBar = KBM.Castbar:Add(self, self.TitanX)
@@ -304,7 +342,11 @@ function TX:Start()
 	
 	self.TitanX.Triggers.Infection = KBM.Trigger:Create(self.Lang.Debuff.Infection[KBM.Lang], "playerDebuff", self.TitanX)
     self.TitanX.Triggers.Infection:AddAlert(self.TitanX.AlertsRef.Infection, true)
+	self.TitanX.Triggers.Infection:AddSpy(self.TitanX.MechRef.Infection)
 
+    self.RDU.Triggers.RocketVolley = KBM.Trigger:Create(self.Lang.Ability.RocketVolley[KBM.Lang], "channel", self.RDU)
+    self.RDU.Triggers.RocketVolley:AddAlert(self.RDU.AlertsRef.RocketVolley, true)
+	
     self.TitanX.Triggers.LegionPull = KBM.Trigger:Create(self.Lang.Ability.LegionPull[KBM.Lang], "channel", self.TitanX)
     self.TitanX.Triggers.LegionPull:AddAlert(self.TitanX.AlertsRef.LegionPull, true)
     self.TitanX.Triggers.LegionPull:AddTimer(self.TitanX.TimersRef.LegionPull)
