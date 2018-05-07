@@ -95,9 +95,7 @@ BEL.Lang.Ability.MagmaBreath = KBM.Language:Add("Magma Breath")
 -- Verbose Dictionary
 BEL.Lang.Verbose = {}
 BEL.Lang.Verbose.Wrath = KBM.Language:Add("Wrath of Beligosh")
--- TODO: transF: Wrath of Beligosh
 BEL.Lang.Verbose.Wrath:SetFrench("Aller au bord!")
--- TODO: transG: Wrath of Beligosh
 BEL.Lang.Verbose.Wrath:SetGerman("An den Rand!")
 
 BEL.Lang.Verbose.BurningGround = KBM.Language:Add("Burning Ground")

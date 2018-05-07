@@ -200,6 +200,8 @@ COF.Lang.Ability.Flamescape:SetGerman("Flammenformen")
 COF.Lang.Ability.Flamescape:SetFrench("Pyroformation")
 
 COF.Lang.Ability.Void = KBM.Language:Add("Void")
+COF.Lang.Ability.Void:SetGerman("Leere")
+COF.Lang.Ability.Void:SetFrench("Néant")
 
 COF.Lang.Ability.NoRez = KBM.Language:Add("No Permission to Ressurect")
 
