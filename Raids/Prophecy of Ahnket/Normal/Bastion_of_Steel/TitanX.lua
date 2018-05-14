@@ -129,8 +129,12 @@ KBM.RegisterMod(TX.ID, TX)
 
 -- Ability Dictionary
 TX.Lang.Ability = {}
-TX.Lang.Ability.LegionPull = KBM.Language:Add("Legion Pull") --TODO transF transG
-TX.Lang.Ability.RocketVolley = KBM.Language:Add("Rocket Volley") --TODO transF transG
+TX.Lang.Ability.LegionPull = KBM.Language:Add("Legion's Pull")
+TX.Lang.Ability.LegionPull:SetGerman("Legionssog")
+TX.Lang.Ability.LegionPull:SetFrench("Traction de la Légion")
+TX.Lang.Ability.RocketVolley = KBM.Language:Add("Rocket Volley")
+TX.Lang.Ability.RocketVolley:SetGerman("Raketensalve")
+TX.Lang.Ability.RocketVolley:SetFrench("Volée de fusées")
 
 -- Verbose Dictionary
 TX.Lang.Verbose = {}
@@ -140,10 +144,12 @@ TX.Lang.Buff = {}
 
 -- Debuff Dictionary
 TX.Lang.Debuff = {}
-TX.Lang.Debuff.RangeModule = KBM.Language:Add("Range Module") --TODO transF
+TX.Lang.Debuff.RangeModule = KBM.Language:Add("Range Module")
 TX.Lang.Debuff.RangeModule:SetGerman("Weitenmodul")
-TX.Lang.Debuff.Infection = KBM.Language:Add("Infection") --TODO transF
+TX.Lang.Debuff.RangeModule:SetFrench("Module de portée")
+TX.Lang.Debuff.Infection = KBM.Language:Add("Infection")
 TX.Lang.Debuff.Infection:SetGerman("Infektion")
+TX.Lang.Debuff.Infection:SetFrench("Infection")
 
 
 -- Notify Dictionary

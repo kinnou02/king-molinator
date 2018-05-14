@@ -107,10 +107,12 @@ AZR.Lang.Debuff = {}
 AZR.Lang.Debuff.LaserCutter = KBM.Language:Add("Laser Cutter")
 AZR.Lang.Debuff.LaserCutter:SetGerman("Laserschneider")
 AZR.Lang.Debuff.LaserCutter:SetFrench("Coupeur laser")
-AZR.Lang.Debuff.StickyBomb = KBM.Language:Add("Sticky Bomb") --TODO transF
+AZR.Lang.Debuff.StickyBomb = KBM.Language:Add("Sticky Bomb")
 AZR.Lang.Debuff.StickyBomb:SetGerman("Haftbombe")
-AZR.Lang.Debuff.Magnetized = KBM.Language:Add("Magnetized") --TODO transF
+AZR.Lang.Debuff.StickyBomb:SetFrench("Bombe collante")
+AZR.Lang.Debuff.Magnetized = KBM.Language:Add("Magnetized")
 AZR.Lang.Debuff.Magnetized:SetGerman("Magnetisierung")
+AZR.Lang.Debuff.Magnetized:SetFrench("Magnétisme")
 
 -- Notify Dictionary
 AZR.Lang.Notify = {}

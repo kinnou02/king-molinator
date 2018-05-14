@@ -130,10 +130,13 @@ CIS.Lang.Ability.LightningBurst = KBM.Language:Add("Lightning Burst")
 CIS.Lang.Ability.LightningBurst:SetFrench("Balle foreuse")
 CIS.Lang.Ability.LightningBurst:SetGerman("Blitzwirbel")
 
-CIS.Lang.Ability.VoltaicThrust = KBM.Language:Add("Voltaic Thrust") --TODO transF
+CIS.Lang.Ability.VoltaicThrust = KBM.Language:Add("Voltaic Thrust")
 CIS.Lang.Ability.VoltaicThrust:SetGerman("Voltaischer Schub")
+CIS.Lang.Ability.VoltaicThrust:SetFrench("Estoc voltaïque")
 
-CIS.Lang.Ability.AegisOfStorm = KBM.Language:Add("Aegis of Storms") -- TODO transF transG
+CIS.Lang.Ability.AegisOfStorm = KBM.Language:Add("Aegis of Storms")
+CIS.Lang.Ability.AegisOfStorm:SetGerman("Aigis der Stürme")
+CIS.Lang.Ability.AegisOfStorm:SetFrench("Égide des Tempêtes")
 
 -- Verbose Dictionary
 CIS.Lang.Verbose = {}
@@ -143,15 +146,21 @@ CIS.Lang.Buff = {}
 
 -- Debuff Dictionary
 CIS.Lang.Debuff = {}
-CIS.Lang.Debuff.TimedCharge = KBM.Language:Add("Timed Charge") --TODO transF
+CIS.Lang.Debuff.TimedCharge = KBM.Language:Add("Timed Charge")
 CIS.Lang.Debuff.TimedCharge:SetGerman("Zeitladung")
-CIS.Lang.Debuff.DrillerRound = KBM.Language:Add("Driller Round") --TODO transF
+CIS.Lang.Debuff.TimedCharge:SetFrench("Charge à rebours")
+CIS.Lang.Debuff.DrillerRound = KBM.Language:Add("Driller Round")
 CIS.Lang.Debuff.DrillerRound:SetGerman("Bohrgeschoss")
-CIS.Lang.Ability.HeartStrike = KBM.Language:Add("Heart Strike") --TODO transF
+CIS.Lang.Debuff.DrillerRound:SetFrench("Balle foreuse")
+CIS.Lang.Ability.HeartStrike = KBM.Language:Add("Heart Strike")
 CIS.Lang.Ability.HeartStrike:SetGerman("Herztreffer")
-CIS.Lang.Debuff.ExplosiveRound = KBM.Language:Add("Explosive Round") --TODO transF
+CIS.Lang.Ability.HeartStrike:SetFrench("Frappe à cœur")
+CIS.Lang.Debuff.ExplosiveRound = KBM.Language:Add("Explosive Round")
 CIS.Lang.Debuff.ExplosiveRound:SetGerman("Sprenggranate")
-CIS.Lang.Debuff.CripplingShock = KBM.Language:Add("Crippling Shock") --TODO transF trans G
+CIS.Lang.Debuff.ExplosiveRound:SetFrench("Balle explosive")
+CIS.Lang.Debuff.CripplingShock = KBM.Language:Add("Crippling Shock")
+CIS.Lang.Debuff.CripplingShock:SetGerman("Lähmender Schock")
+CIS.Lang.Debuff.CripplingShock:SetFrench("Choc prostrant")
 
 -- Notify Dictionary
 CIS.Lang.Notify = {}
@@ -162,11 +171,13 @@ CIS.Descript = CIS.Lang.Unit.CommanderIsiel[KBM.Lang]
 
 -- Menu Dictionary
 CIS.Lang.Menu = {}
-CIS.Lang.Menu.FirstTimedCharge = KBM.Language:Add("First " .. CIS.Lang.Debuff.TimedCharge[KBM.Lang]) --TODO transF
+CIS.Lang.Menu.FirstTimedCharge = KBM.Language:Add("First " .. CIS.Lang.Debuff.TimedCharge[KBM.Lang])
 CIS.Lang.Menu.FirstTimedCharge:SetGerman("Erster " .. CIS.Lang.Debuff.TimedCharge[KBM.Lang])
+CIS.Lang.Menu.FirstTimedCharge:SetFrench("Premier " .. CIS.Lang.Debuff.TimedCharge[KBM.Lang])
 
-CIS.Lang.Menu.FirstLightningBurst = KBM.Language:Add("First " .. CIS.Lang.Ability.LightningBurst[KBM.Lang]) --TODO transF
+CIS.Lang.Menu.FirstLightningBurst = KBM.Language:Add("First " .. CIS.Lang.Ability.LightningBurst[KBM.Lang])
 CIS.Lang.Menu.FirstLightningBurst:SetGerman("Erster " .. CIS.Lang.Ability.LightningBurst[KBM.Lang])
+CIS.Lang.Menu.FirstLightningBurst:SetFrench("Premier " .. CIS.Lang.Ability.LightningBurst[KBM.Lang])
 
 
 function CIS:AddBosses(KBM_Boss)
