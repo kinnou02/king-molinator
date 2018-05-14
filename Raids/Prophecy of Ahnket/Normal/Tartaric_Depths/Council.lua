@@ -200,15 +200,20 @@ COF.Lang.Ability.Flamescape:SetGerman("Flammenformen")
 COF.Lang.Ability.Flamescape:SetFrench("Pyroformation")
 
 COF.Lang.Ability.Void = KBM.Language:Add("Void")
+COF.Lang.Ability.Void:SetGerman("Leere")
+COF.Lang.Ability.Void:SetFrench("Néant")
 
 COF.Lang.Ability.NoRez = KBM.Language:Add("No Permission to Ressurect")
+COF.Lang.Ability.NoRez:SetGerman("Keine Erlaubnis zur Wiederbelebung")
+COF.Lang.Ability.NoRez:SetFrench("Interdiction de ressusciter")
 
 COF.Lang.Ability.DeathBall = KBM.Language:Add("Mega Death Ball")
+COF.Lang.Ability.DeathBall:SetGerman("Mega-Todeskugel")
+COF.Lang.Ability.DeathBall:SetFrench("Méga-boule de la Mort")
 
 -- Verbose Dictionary
 COF.Lang.Verbose = {}
 COF.Lang.Verbose.Flamescape = KBM.Language:Add(COF.Lang.Ability.Flamescape[KBM.Lang])
--- TODO: transF, transG: Flamescape (check translation got it from above)
 COF.Lang.Verbose.Flamescape:SetGerman(COF.Lang.Ability.Flamescape[KBM.Lang])
 COF.Lang.Verbose.Flamescape:SetFrench(COF.Lang.Ability.Flamescape[KBM.Lang])
 
@@ -225,9 +230,8 @@ COF.Lang.Notify.Flamescape:SetGerman("Das Flammenformen beginnt.")
 COF.Lang.Notify.Flamescape:SetFrench("La Pyroformation commence.")
 
 COF.Lang.Notify.DeathBall = KBM.Language:Add("Danazhal targets (%a*) with concentrated energy, intercept!")
--- TODO: transF, transG
---COF.Lang.Notify.DeathBall:SetGerman("")
---COF.Lang.Notify.DeathBall:SetFrench("")
+COF.Lang.Notify.DeathBall:SetGerman("Danazhal greift (%a*) mit konzentrierter Energie an! Greift ein!")
+COF.Lang.Notify.DeathBall:SetFrench("Danazhal cible (%a*) avec de l'énergie concentrée, interposez-vous !")
 
 -- Menu Dictionary
 COF.Lang.Menu = {}

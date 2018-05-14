@@ -187,8 +187,8 @@ COF.Lang.Ability.Flamescape:SetGerman("Flammenformen")
 COF.Lang.Ability.Flamescape:SetFrench("Pyroformation")
 
 COF.Lang.Ability.Void = KBM.Language:Add("Void")
--- TODO: transF: Void
--- TODO: transG: Void
+COF.Lang.Ability.Void:SetGerman("Leere")
+COF.Lang.Ability.Void:SetFrench("Néant")
 
 -- Verbose Dictionary
 COF.Lang.Verbose = {}
