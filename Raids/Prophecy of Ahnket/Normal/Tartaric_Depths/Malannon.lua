@@ -77,7 +77,7 @@ MAL.Lang.Ability.Meteor:SetGerman("Meteor")
 
 MAL.Lang.Ability.Obliteration = KBM.Language:Add("Obliteration")
 MAL.Lang.Ability.Obliteration:SetFrench("Oblitération")
--- TODO: transG: Obliteration
+MAL.Lang.Ability.Obliteration:SetGerman("Auslöschung")
 
 MAL.Lang.Ability.SiphonEnergy = KBM.Language:Add("Siphon Energy")
 MAL.Lang.Ability.SiphonEnergy:SetFrench("Siphon d'énergie")
@@ -85,7 +85,7 @@ MAL.Lang.Ability.SiphonEnergy:SetGerman("Energie entziehen")
 
 MAL.Lang.Ability.Runes = KBM.Language:Add("Runes of Power")
 MAL.Lang.Ability.Runes:SetFrench("Runes de pouvoir")
--- TODO: transG: Runes of Power
+MAL.Lang.Ability.Runes:SetGerman("Runen der Macht")
 
 -- Buff Dictionary
 MAL.Lang.Buff = {}
@@ -112,13 +112,11 @@ MAL.Lang.Verbose.Blastback:SetGerman(MAL.Lang.Debuff.Blastback[KBM.Lang])
 
 MAL.Lang.Verbose.MarkOfAcrimony = KBM.Language:Add("Acrimony (purple)")
 MAL.Lang.Verbose.MarkOfAcrimony:SetFrench("Amertume (violet)")
--- TODO: transG: Acrimony (purple)
-MAL.Lang.Verbose.MarkOfAcrimony:SetGerman("Geh in den lilanen Kreis!")
+MAL.Lang.Verbose.MarkOfAcrimony:SetGerman("Verbitterung (violett)")
 
 MAL.Lang.Verbose.MarkOfSupremacy = KBM.Language:Add("Supremacy (yellow)")
 MAL.Lang.Verbose.MarkOfSupremacy:SetFrench("Suprématie (jaune)")
--- TODO: transG: Supremacy (yellow)
-MAL.Lang.Verbose.MarkOfSupremacy:SetGerman("Geh in den gelben Kreis!")
+MAL.Lang.Verbose.MarkOfSupremacy:SetGerman("Vormachtstellung (gelb)")
 
 MAL.Lang.Verbose.SiphonEnergy = KBM.Language:Add(MAL.Lang.Ability.SiphonEnergy[KBM.Lang])
 MAL.Lang.Verbose.SiphonEnergy:SetFrench(MAL.Lang.Ability.SiphonEnergy[KBM.Lang])

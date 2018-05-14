@@ -85,16 +85,14 @@ KBM.RegisterMod(BEL.ID, BEL)
 -- Ability Dictionary
 BEL.Lang.Ability = {}
 BEL.Lang.Ability.MagmaBreath = KBM.Language:Add("Magma Breath")
--- TODO: transF: Maga Breath
--- TODO: transG: Maga Breath
+BEL.Lang.Ability.MagmaBreath:SetFrench("Souffle de magma")
+BEL.Lang.Ability.MagmaBreath:SetGerman("Magmaatem")
 
 -- Verbose Dictionary
 BEL.Lang.Verbose = {}
 BEL.Lang.Verbose.Wrath = KBM.Language:Add("Wrath of Beligosh")
--- TODO: TransF: Wrath of Beligosh
-BEL.Lang.Verbose.Wrath:SetFrench("Aller au bord!")
--- TODO: TransG: Wrath of Beligosh
-BEL.Lang.Verbose.Wrath:SetGerman("An den Rand!")
+BEL.Lang.Verbose.Wrath:SetFrench("Courroux de Beligosh")
+BEL.Lang.Verbose.Wrath:SetGerman("Zorn von Beligosh")
 
 BEL.Lang.Verbose.BurningGround = KBM.Language:Add("Burning Ground")
 BEL.Lang.Verbose.BurningGround:SetGerman("Brennende Erde")

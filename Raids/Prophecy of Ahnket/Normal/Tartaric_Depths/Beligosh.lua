@@ -89,14 +89,14 @@ KBM.RegisterMod(BEL.ID, BEL)
 -- Ability Dictionary
 BEL.Lang.Ability = {}
 BEL.Lang.Ability.MagmaBreath = KBM.Language:Add("Magma Breath")
--- TODO: transF: Magma Breath
--- TODO: transG: Magma Breath
+BEL.Lang.Ability.MagmaBreath:SetFrench("Souffle de magma")
+BEL.Lang.Ability.MagmaBreath:SetGerman("Magmaatem")
 
 -- Verbose Dictionary
 BEL.Lang.Verbose = {}
 BEL.Lang.Verbose.Wrath = KBM.Language:Add("Wrath of Beligosh")
-BEL.Lang.Verbose.Wrath:SetFrench("Aller au bord!")
-BEL.Lang.Verbose.Wrath:SetGerman("An den Rand!")
+BEL.Lang.Verbose.Wrath:SetFrench("Courroux de Beligosh")
+BEL.Lang.Verbose.Wrath:SetGerman("Zorn von Beligosh")
 
 BEL.Lang.Verbose.BurningGround = KBM.Language:Add("Burning Ground")
 BEL.Lang.Verbose.BurningGround:SetGerman("Brennende Erde")
@@ -105,8 +105,12 @@ BEL.Lang.Verbose.BurningGround:SetFrench("Terrain enflammé")
 BEL.Lang.Verbose.Landing = KBM.Language:Add("Landing")
 
 BEL.Lang.Verbose.SoftEnrageTimer = KBM.Language:Add("Soft Enrage")
+BEL.Lang.Verbose.SoftEnrageTimer:SetGerman("Weich Wütend")
+BEL.Lang.Verbose.SoftEnrageTimer:SetFrench("Doux Enragé") 
 
 BEL.Lang.Verbose.Enrage = KBM.Language:Add("Enrage")
+BEL.Lang.Verbose.Enrage:SetGerman("Wütend")
+BEL.Lang.Verbose.Enrage:SetFrench("Enragé") 
 
 -- Buff Dictionary
 BEL.Lang.Buff = {}

@@ -94,16 +94,12 @@ MAL.Lang.Verbose.Blastback:SetFrench(MAL.Lang.Debuff.Blastback[KBM.Lang])
 MAL.Lang.Verbose.Blastback:SetGerman(MAL.Lang.Debuff.Blastback[KBM.Lang])
 
 MAL.Lang.Verbose.MarkOfAcrimony = KBM.Language:Add(MAL.Lang.Debuff.MarkOfAcrimony[KBM.Lang] .. " (purple)")
--- TODO: transF: purple, (used an online translator)
-MAL.Lang.Verbose.MarkOfAcrimony:SetFrench(MAL.Lang.Debuff.MarkOfAcrimony[KBM.Lang] .. " (violet)")
--- TODO: transG: purple, (used an online translator)
-MAL.Lang.Verbose.MarkOfAcrimony:SetGerman(MAL.Lang.Debuff.MarkOfAcrimony[KBM.Lang] .. " (violett)")
+MAL.Lang.Verbose.MarkOfAcrimony:SetFrench("Marque d'amertume (violet)")
+MAL.Lang.Verbose.MarkOfAcrimony:SetGerman("Signum der Verbitterung (violett)")
 
 MAL.Lang.Verbose.MarkOfSupremacy = KBM.Language:Add(MAL.Lang.Debuff.MarkOfSupremacy[KBM.Lang] .. " (yellow)")
--- TODO: transF: yellow
-MAL.Lang.Verbose.MarkOfSupremacy:SetFrench(MAL.Lang.Debuff.MarkOfSupremacy[KBM.Lang] .. " (yellow)")
--- TODO: transG: yellow (used an online translator)
-MAL.Lang.Verbose.MarkOfSupremacy:SetGerman(MAL.Lang.Debuff.MarkOfSupremacy[KBM.Lang] .. " (gelb)")
+MAL.Lang.Verbose.MarkOfSupremacy:SetFrench("Marque de suprématie (jaune)")
+MAL.Lang.Verbose.MarkOfSupremacy:SetGerman("Signum der Vormachtstellung (gelb)")
 
 MAL.Lang.Notify = {}
 
