@@ -90,7 +90,7 @@ function KBM.Castbar.HandlePinScale()
 		if self.ui then
 			local diff = self.ui.cradle:GetHeight() / self:GetDefaultHeight()
 			self.ui.text:SetFontSize((self.barObj.default.textSize * diff) - 1)
-			self.ui.text:SetFont(AddonIni.identifier, "font\\Montserrat-Bold.otf")
+			self.ui.text:SetFont(AddonIni.identifier, "font/Montserrat-Bold.otf")
 		end
 	end
 end
@@ -100,7 +100,7 @@ function KBM.Castbar:PlayerPin()
 	self.ui.cradle:SetAllPoints(UI.Native.Castbar)
 	local diff = self.ui.cradle:GetHeight() / self:GetDefaultHeight()
 	self.ui.text:SetFontSize((self.barObj.default.textSize * diff) - 1)
-	self.ui.text:SetFont(AddonIni.identifier, "font\\Montserrat-Bold.otf")
+	self.ui.text:SetFont(AddonIni.identifier, "font/Montserrat-Bold.otf")
 end
 
 function KBM.Castbar:Init()
@@ -194,7 +194,7 @@ function KBM.Castbar:Init()
 		self.ui.cradle:SetWidth(math.ceil(self.barObj.default.w * KBM.Options.Castbar.Global.scale.w))
 		self.ui.cradle:SetHeight(math.ceil(self.barObj.default.h * KBM.Options.Castbar.Global.scale.h))
 		self.ui.text:SetFontSize(math.ceil(self.barObj.default.textSize * KBM.Options.Castbar.Global.scale.t))
-		self.ui.text:SetFont(AddonIni.identifier, "font\\Montserrat-Bold.otf")
+		self.ui.text:SetFont(AddonIni.identifier, "font/Montserrat-Bold.otf")
 	end
 	
 	function self.Anchor.ManageEdit(cmd, relX, relY)
