@@ -433,6 +433,10 @@ function KBM.Constant:Init()
 		h = 40,
 		TextSize = 14,
 	}
+	self.Font = { -- FONTSETTINGS - Legacy, always the first font, will result in no font being applied.
+		{"None",""},
+		{"Montserrat Bold","font/Montserrat-Bold.otf"},
+	}
 end
 
 KBM.Constant:Init()
@@ -618,7 +622,7 @@ local function KBM_DefineVars(handle, AddonID)
 				Protect = false,
 			},
 			Font = {
-				Custom = "font/Montserrat-Bold.otf",
+				Custom = 2,
 			},
 		}
 		KBM.Marks = {
