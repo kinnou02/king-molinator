@@ -617,6 +617,9 @@ local function KBM_DefineVars(handle, AddonID)
 			Sheep = {
 				Protect = false,
 			},
+			Font = {
+				Custom = "font/Montserrat-Bold.otf",
+			},
 		}
 		KBM.Marks = {
 			Location = {

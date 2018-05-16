@@ -25,6 +25,9 @@ local LibSata = LSTIni.data
 local KTHIni = Inspect.Addon.Detail("KBMTextureHandler")
 local LibTexture = KTHIni.data
 
+local KBMAddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = KBMAddonData.data
+
 local _store = {}
 local _int = {
 	Default = {},
@@ -455,7 +458,7 @@ function _int.Default:CreateBar(_tBar)
 					LibTexture.LoadTexture(self.ui.foreground, self.texture.foreground.location, self.texture.foreground.file)
 				end
 				self.ui.text = UI.CreateFrame("Text", self.packObj.id.."_"..self.id.."_"..barObj.total..": Text", self.ui.cradle)
-				self.ui.text:SetFont(AddonIni.identifier, "font\\Montserrat-Bold.otf")
+				self.ui.text:SetFont(AddonIni.identifier, KBM.Options.Font.Custom)
 				self.ui.text:SetPoint("CENTER", self.ui.cradle, "CENTER")
 				self.ui.text:SetLayer(4)
 				self.ui.text:SetEffectGlow({offsetX = 0, offsetY = 0, colorR = 0, colorG = 0, colorB = 0, strength = 4, blurX = 2, blurY = 1})
@@ -568,7 +571,7 @@ function _int.Default:CreateBar(_tBar)
 				self.ui.cradle:SetWidth(math.ceil(self.barObj.default.w * self.Settings.scale.w))
 				self.ui.cradle:SetHeight(math.ceil(self.barObj.default.h * self.Settings.scale.h))
 				self.ui.text:SetFontSize(math.ceil(self.barObj.default.textSize * self.Settings.scale.t))
-				self.ui.text:SetFont(AddonIni.identifier, "font\\Montserrat-Bold.otf")
+				self.ui.text:SetFont(AddonIni.identifier, KBM.Options.Font.Custom)
 				self.progWidth = math.ceil(self.ui.cradle:GetWidth() * self.barObj.barScale)
 			end
 		end
@@ -586,7 +589,7 @@ function _int.Default:CreateBar(_tBar)
 					self.ui.cradle:SetWidth(math.ceil(self.barObj.default.w * self.Settings.scale.w))
 					self.ui.cradle:SetHeight(math.ceil(self.barObj.default.h * self.Settings.scale.h))
 					self.ui.text:SetFontSize(math.ceil(self.barObj.default.textSize * self.Settings.scale.t))
-					self.ui.text:SetFont(AddonIni.identifier, "font\\Montserrat-Bold.otf")
+					self.ui.text:SetFont(AddonIni.identifier, KBM.Options.Font.Custom)
 				end
 				self.progWidth = math.ceil(self.ui.cradle:GetWidth() * self.barObj.barScale)
 				if self.ui.foreground then
@@ -621,7 +624,7 @@ function _int.Default:CreateBar(_tBar)
 			self.Duration = CastData.duration or 1
 			self.Remaining = CastData.remaining or 1
 			self.Progress = self.Duration/self.Remaining
-			self.ui.text:SetFont(AddonIni.identifier, "font\\Montserrat-Bold.otf")
+			self.ui.text:SetFont(AddonIni.identifier, KBM.Options.Font.Custom)
 			self.ui.text:SetText(string.format("%0.01f", self.Remaining).." - "..self.Name)
 			self.ui.cradle:SetAlpha(1)
 			self.ui.intBar:SetVisible(false)
