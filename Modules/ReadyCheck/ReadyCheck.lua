@@ -2266,7 +2266,7 @@ function PI.GUI:Init()
 							end
 						end
 					end
-					self[Index].Columns.KBM.Text:SetText(v:gsub('%a',''))						
+					self[Index].Columns.KBM.Text:SetText(v:gsub('[%,%?%!%:%;%@%[%]%_%{%}%~%$%a]',''))						
 				else
 					self[Index].Columns.KBM.Text:SetFontColor(0.9, 0.5, 0.1)
 					self[Index].Columns.KBM.Text:SetText("..*..")
