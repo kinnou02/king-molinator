@@ -68,9 +68,9 @@ function KBM.Alert:Init()
 	function self:ApplySettings()
 		self.Anchor:ClearAll()
 		self.Text:SetFontSize(KBM.Constant.Alerts.TextSize * self.Settings.tScale)
-		self.Text:SetFont(AddonIni.identifier, KBM.Options.Font.Custom)
+		if (KBM.Options.Font.Custom > 1) then self.Text:SetFont(AddonIni.identifier, KBM.Constant.Font[KBM.Options.Font.Custom][2]) end
 		self.Shadow:SetFontSize(self.Text:GetFontSize())
-		self.Shadow:SetFont(AddonIni.identifier, KBM.Options.Font.Custom)
+		if (KBM.Options.Font.Custom > 1) then self.Shadow:SetFont(AddonIni.identifier, KBM.Constant.Font[KBM.Options.Font.Custom][2]) end
 		if self.Settings.x then
 			self.Anchor:SetPoint("TOPLEFT", UIParent, "TOPLEFT", self.Settings.x, self.Settings.y)
 		else
@@ -137,10 +137,10 @@ function KBM.Alert:Init()
 	self.Shadow:SetPoint("CENTER", self.Text, "CENTER", 2, 2)
 	self.Text:SetText(KBM.Language.Anchors.AlertText[KBM.Lang])
 	self.Shadow:SetText(self.Text:GetText())
-	self.Shadow:SetFont(AddonIni.identifier, KBM.Options.Font.Custom)
+	if (KBM.Options.Font.Custom > 1) then self.Shadow:SetFont(AddonIni.identifier, KBM.Constant.Font[KBM.Options.Font.Custom][2]) end
 	self.Shadow:SetFontSize(self.Text:GetFontSize())
 	self.Text:SetFontColor(1,1,1)
-	self.Text:SetFont(AddonIni.identifier, KBM.Options.Font.Custom)
+	if (KBM.Options.Font.Custom > 1) then self.Text:SetFont(AddonIni.identifier, KBM.Constant.Font[KBM.Options.Font.Custom][2]) end
 	self.Text:SetPoint("CENTER", self.Anchor, "CENTER")
 	self.Text:SetLayer(2)
 	self.Anchor:SetVisible(self.Settings.Visible)

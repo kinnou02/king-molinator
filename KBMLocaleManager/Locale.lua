@@ -744,6 +744,23 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Options.LockButton:SetGerman("Schalter ist verschiebbar (Rechts-Klick zum verschieben)")
 	KBM.Language.Options.LockButton:SetRussian("Разблокировать кнопку (правый клик для перемещения)")
 	KBM.Language.Options.LockButton:SetKorean("버튼 잠금해제 (우클릭으로 이동가능)")
+	
+	-- Font Options
+	KBM.Language.Options.Font = KBM.Language:Add("Font (requires /reloadui to see effect)")
+	KBM.Language.Options.Font:SetFrench("Police (requiert /reloadui pour prendre effet)")
+	KBM.Language.Options.Font:SetGerman("Font (benötigt /reloudui um den Effekt zu sehen)")
+	KBM.Language.Options.Font:SetRussian("Шрифт (требует /reloadui для просмотра эффекта)")
+	KBM.Language.Options.Font:SetKorean("글꼴 (효과 확인을 위해 /reloadui 필요)")
+	KBM.Language.Options.FontCustom = KBM.Language:Add("Custom:")
+	KBM.Language.Options.FontCustom:SetFrench("Douane:")
+	KBM.Language.Options.FontCustom:SetGerman("Brauch:")
+	KBM.Language.Options.FontCustom:SetRussian("обычай:")
+	KBM.Language.Options.FontCustom:SetKorean("관습:")
+	KBM.Language.Options.FontLegacy = KBM.Language:Add("Legacy")
+	KBM.Language.Options.FontLegacy:SetFrench("Héritage")
+	KBM.Language.Options.FontLegacy:SetGerman("Erbe")
+	KBM.Language.Options.FontLegacy:SetRussian("наследие")
+	KBM.Language.Options.FontLegacy:SetKorean("유산")
 
 	-- Tank Swap related
 	KBM.Language.TankSwap = {}

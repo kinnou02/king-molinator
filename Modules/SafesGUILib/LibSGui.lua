@@ -20,6 +20,9 @@ local LibSata = Inspect.Addon.Detail("SafesTableLib").data
 local KBMTH_AddonDetails = Inspect.Addon.Detail("KBMTextureHandler")
 local TH = KBMTH_AddonDetails.data
 
+local KBMAddonData = Inspect.Addon.Detail("KingMolinator")
+local KBM = KBMAddonData.data
+
 LibSGui.Event = {}
 LibSGui.Frame = {}
 LibSGui.Text = {}

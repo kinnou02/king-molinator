@@ -59,6 +59,10 @@ local function BuildMenuSettings()
 				end
 			end
 		end
+		
+		function self:Custom(item)
+			KBM.Options.Font.Custom = item
+		end
 
 		Item.UI.CreateHeader(KBM.Language.Options.Character[KBM.Lang], KBM.Options, "Character", self)
 		if KBM.IsAlpha then
@@ -67,8 +71,21 @@ local function BuildMenuSettings()
 			MenuItem = Item.UI.CreateHeader(KBM.Language.Options.ModEnabled[KBM.Lang], KBM.Options, "Enabled", self)
 		end
 		MenuItem:CreateCheck(KBM.Language.Options.Sheep[KBM.Lang], KBM.Options.Sheep, "Protect", self)
+		--TODO: Font Language Translations give indexing a nil field
+		MenuItem = Item.UI.CreateHeader(KBM.Language.Options.Font[KBM.Lang], nil, "Font", nil)
+		local fontDD = MenuItem:CreateDropDown(KBM.Language.Options.FontCustom[KBM.Lang], KBM.Options.Font, "Custom", self)
+		for fontnum, FontSource in ipairs(KBM.Constant.Font) do
+			if(fontnum==1) then
+				table.insert(fontDD.ItemList, KBM.Language.Options.FontLegacy[KBM.Lang])
+			else
+				table.insert(fontDD.ItemList, FontSource[1])
+			end
+		end
+		
 		MenuItem = Item.UI.CreateHeader(KBM.Language.Options.Button[KBM.Lang], KBM.Options.Button, "Visible", self)
 		MenuItem:CreateCheck(KBM.Language.Options.LockButton[KBM.Lang], KBM.Options.Button, "Unlocked", self)
+		
+		
 		
 		Item:Select()
 	end
