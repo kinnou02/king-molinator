@@ -72,11 +72,11 @@ local function BuildMenuSettings()
 		end
 		MenuItem:CreateCheck(KBM.Language.Options.Sheep[KBM.Lang], KBM.Options.Sheep, "Protect", self)
 		--TODO: Font Language Translations give indexing a nil field
-		MenuItem = Item.UI.CreateHeader("Font (requires /reloadui to see effect)", nil, "Font", nil) --KBM.Language.Options.Font[KBM.Lang]
-		local fontDD = MenuItem:CreateDropDown("Custom:", KBM.Options.Font, "Custom", self) --KBM.Language.Options.FontCustom[KBM.Lang]
+		MenuItem = Item.UI.CreateHeader(KBM.Language.Options.Font[KBM.Lang], nil, "Font", nil)
+		local fontDD = MenuItem:CreateDropDown(KBM.Language.Options.FontCustom[KBM.Lang], KBM.Options.Font, "Custom", self)
 		for fontnum, FontSource in ipairs(KBM.Constant.Font) do
 			if(fontnum==1) then
-				table.insert(fontDD.ItemList, "Legacy") --KBM.Language.Options.FontLegacy[KBM.Lang]
+				table.insert(fontDD.ItemList, KBM.Language.Options.FontLegacy[KBM.Lang])
 			else
 				table.insert(fontDD.ItemList, FontSource[1])
 			end
