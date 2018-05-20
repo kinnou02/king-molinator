@@ -1,4 +1,16 @@
-﻿2.0.0.1
+﻿2.0.0.2
+
+* Add: Font can now be selected from the options screen.
+			Additionally, you can add new fonts to your own KBM by adding a OTF font to the font directory,
+			and searching for FONTSETTINGS in KingMolinator.lua where you can add fonts using the syntax:
+			{"Human Readable Name","font/Your-Font-File.otf"},
+			
+* Fix: All of the raids from Prophecy of Ahnket are now fully translated! Thanks to Clowd for help data mining the original translations!
+
+* Fix: Removed multiple versions of the font files
+* Fix: Minor modificaiton to the readycheck system.
+
+2.0.0.1
 
 * Fixed: Version checker believed the same version to be new.
 
