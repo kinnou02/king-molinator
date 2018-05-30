@@ -1343,7 +1343,7 @@ local function UnitCombatDamageWorker(info)
 end
 function _lsu.Combat.Damage(handle, info)
 	local job = coroutine.create(UnitCombatDamageWorker)
-	coroutine.resume(job,uList)
+	coroutine.resume(job,info)
 end
 local function UnitCombatHealWorker(info)
 	local _stdHandler = _lsu.Combat.stdHandler
@@ -1362,7 +1362,7 @@ local function UnitCombatHealWorker(info)
 end
 function _lsu.Combat.Heal(handle, info)
 	local job = coroutine.create(UnitCombatHealWorker)
-	coroutine.resume(job,uList)
+	coroutine.resume(job,info)
 end
 local function UnitCombatImmuneWorker(info)
 	local _stdHandler = _lsu.Combat.stdHandler
@@ -1375,7 +1375,7 @@ local function UnitCombatImmuneWorker(info)
 end
 function _lsu.Combat.Immune(handle, info)
 	local job = coroutine.create(UnitCombatImmuneWorker)
-	coroutine.resume(job,uList)
+	coroutine.resume(job,info)
 end
 local function UnitCombatDeathWorker(info)
 	local _cache = LibSUnit.Lookup.UID
@@ -1393,7 +1393,7 @@ local function UnitCombatDeathWorker(info)
 end
 function _lsu.Combat.Death(handle, info)
 	local job = coroutine.create(UnitCombatDeathWorker)
-	coroutine.resume(job,uList)
+	coroutine.resume(job,info)
 end
 -- Base Functions
 function _lsu:UpdateSegment(_tSeg)
