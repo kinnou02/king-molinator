@@ -1,4 +1,8 @@
-﻿2.0.0.2
+﻿2.0.0.3
+
+* Fix: Death / Enrage timers did not always reset on bosses death!
+
+2.0.0.2
 
 * Add: Font can now be selected from the options screen.
 			Additionally, you can add new fonts to your own KBM by adding a OTF font to the font directory,
