@@ -54,6 +54,7 @@ HA.Arakhurn = {
 		CastBar = KBM.Defaults.Castbar(),
 		TimersRef = {
 			Enabled = true,
+			LavaFirst = KBM.Defaults.TimerObj.Create("red"),
 			NovaFirst = KBM.Defaults.TimerObj.Create("red"),
 			Nova = KBM.Defaults.TimerObj.Create("red"),
 			NovaPThree = KBM.Defaults.TimerObj.Create("red"),
