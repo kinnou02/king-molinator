@@ -313,7 +313,6 @@ function MOD:Death(UnitID)
 end
 
 function MOD:UnitHPCheck(uDetails, unitID)
-	print("arak ok")
 	if uDetails and unitID then
 		if not uDetails.player then
 			if uDetails.name == self.Terror1.Name then
