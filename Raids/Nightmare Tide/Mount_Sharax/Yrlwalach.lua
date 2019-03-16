@@ -54,6 +54,8 @@ YRL.Lang.Debuff.WISB:SetFrench("Quand les regards se croisent") --Stacks
 YRL.Lang.Debuff.WISBID = "B5183088E34D0A16E "
 YRL.Lang.Debuff.Corrupted = KBM.Language:Add("Grip of Reality")
 YRL.Lang.Debuff.Corrupted:SetFrench("Conscience libérée")
+YRL.Lang.Debuff.Unbounded = KBM.Language:Add("Unbounded Consciousness")
+YRL.Lang.Debuff.UnboundedID = "B1D2D09760CBD6B56"
 
 -- Description Dictionary
 YRL.Lang.Main = {}
@@ -85,6 +87,7 @@ YRL.Yrlwalach = {
 			ContainedDepths = KBM.Defaults.AlertObj.Create("yellow"),
 			WISB = KBM.Defaults.AlertObj.Create("purple"),
 			Corrupted =KBM.Defaults.AlertObj.Create("cyan"),
+			Unbounded =KBM.Defaults.AlertObj.Create("cyan"),
 		},
 		MechRef = {
 			Enabled = true,
@@ -92,6 +95,7 @@ YRL.Yrlwalach = {
 			CommunalSuffering = KBM.Defaults.MechObj.Create("red"),
 			WISB = KBM.Defaults.MechObj.Create("purple"),
 			Corrupted = KBM.Defaults.MechObj.Create("cyan"),
+			Unbounded =KBM.Defaults.MechObj.Create("cyan"),
 		},
 	}
 }
@@ -247,6 +251,7 @@ function YRL:Start()
 	self.Yrlwalach.AlertsRef.ContainedDepths = KBM.Alert:Create(self.Lang.Debuff.ContainedDepths[KBM.Lang], nil, true, true, "yellow")
 	self.Yrlwalach.AlertsRef.WISB = KBM.Alert:Create(self.Lang.Debuff.WISB[KBM.Lang], nil, true, true, "purple")
 	self.Yrlwalach.AlertsRef.Corrupted = KBM.Alert:Create(self.Lang.Debuff.Corrupted[KBM.Lang], nil, true, true, "cyan")
+	self.Yrlwalach.AlertsRef.Unbounded = KBM.Alert:Create(self.Lang.Debuff.Unbounded[KBM.Lang], nil, true, true, "cyan")
 	KBM.Defaults.AlertObj.Assign(self.Yrlwalach)
 
 	-- Create Spies
@@ -254,6 +259,7 @@ function YRL:Start()
 	self.Yrlwalach.MechRef.CommunalSuffering = KBM.MechSpy:Add(self.Lang.Debuff.CommunalSuffering[KBM.Lang], nil, "playerDebuff", self.Yrlwalach)
 	self.Yrlwalach.MechRef.WISB = KBM.MechSpy:Add(self.Lang.Debuff.WISB[KBM.Lang], nil, "playerDebuff", self.Yrlwalach)
 	self.Yrlwalach.MechRef.Corrupted = KBM.MechSpy:Add(self.Lang.Debuff.Corrupted[KBM.Lang], nil, "playerDebuff", self.Yrlwalach)
+	self.Yrlwalach.MechRef.Unbounded = KBM.MechSpy:Add(self.Lang.Debuff.Unbounded[KBM.Lang], nil, "playerDebuff", self.Yrlwalach)
 	KBM.Defaults.MechObj.Assign(self.Yrlwalach)
 
 	-- Assign Alerts and Timers to Triggers
@@ -272,6 +278,13 @@ function YRL:Start()
 	self.Yrlwalach.Triggers.CorruptedRem = KBM.Trigger:Create(self.Lang.Debuff.Corrupted[KBM.Lang], "playerBuffRemove", self.Yrlwalach)
 	self.Yrlwalach.Triggers.CorruptedRem:AddStop(self.Yrlwalach.AlertsRef.Corrupted, true)
 	self.Yrlwalach.Triggers.CorruptedRem:AddStop(self.Yrlwalach.MechRef.Corrupted)
+	
+	self.Yrlwalach.Triggers.Unbounded = KBM.Trigger:Create(self.Lang.Debuff.Unbounded[KBM.Lang], "playerDebuff", self.Yrlwalach)
+	self.Yrlwalach.Triggers.Unbounded:AddAlert(self.Yrlwalach.AlertsRef.Unbounded, true)
+	self.Yrlwalach.Triggers.Unbounded:AddSpy(self.Yrlwalach.MechRef.Unbounded)
+	self.Yrlwalach.Triggers.UnboundedRem = KBM.Trigger:Create(self.Lang.Debuff.Unbounded[KBM.Lang], "playerBuffRemove", self.Yrlwalach)
+	self.Yrlwalach.Triggers.UnboundedRem:AddStop(self.Yrlwalach.AlertsRef.Unbounded, true)
+	self.Yrlwalach.Triggers.UnboundedRem:AddStop(self.Yrlwalach.MechRef.Unbounded)
 	
 	self.Yrlwalach.Triggers.CommunalSuffering = KBM.Trigger:Create(self.Lang.Debuff.CommunalSuffering[KBM.Lang], "playerDebuff", self.Yrlwalach)
 	self.Yrlwalach.Triggers.CommunalSuffering:AddSpy(self.Yrlwalach.MechRef.CommunalSuffering)
