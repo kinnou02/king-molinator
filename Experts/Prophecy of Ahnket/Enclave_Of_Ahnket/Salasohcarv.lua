@@ -5,7 +5,7 @@
 KBMPOAEASAL_Settings = nil
 chKBMPOAEASAL_Settings = nil
 -- First boss Salasohcarv : 
--- Barrier of Earth
+-- Barrier of Earth  -- TODO: Test if this repeats itself , also see if barrier mechref can be removed safely
 -- wisps do Dust Bomb	 at 20% HP
 -- 1 wisp   80 60 
 -- 2 wisps	40
@@ -241,24 +241,26 @@ function MOD:Start()
 	-- Create Timers
 	--KBM.Defaults.TimerObj.Assign(self.Salasohcarv)
 	
-	self.Salasohcarv.MechRef.Tomb = KBM.MechSpy:Add(self.Lang.Debuff.Tomb[KBM.Lang], nil, "playerDebuff", self.Salasohcarv)
-	self.Salasohcarv.MechRef.Barrier = KBM.MechSpy:Add(self.Lang.Buff.Barrier[KBM.Lang], nil, "buff", self.Salasohcarv)
+	self.Salasohcarv.MechRef.Tomb = KBM.MechSpy:Add(self.Lang.Debuff.Tomb[KBM.Lang], nil, "playerBuff", self.Salasohcarv)
+	--self.Salasohcarv.MechRef.Barrier = KBM.MechSpy:Add(self.Lang.Buff.Barrier[KBM.Lang], nil, "buff", self.Salasohcarv) -- TODO: Test if this can be removed
 	KBM.Defaults.MechObj.Assign(self.Salasohcarv)
 	
-	-- Create Alerts
+	-- Create Alerts (Text, Duration, Flash, Countdown, Color)
 	self.Salasohcarv.AlertsRef.Tomb = KBM.Alert:Create(self.Lang.Verbose.Tomb[KBM.Lang], nil, true, true, "red")
-	self.Salasohcarv.AlertsRef.KillWisp = KBM.Alert:Create(self.Lang.Verbose.KillWisp[KBM.Lang], nil, true, true, "blue")
-	self.Salasohcarv.AlertsRef.KillBoss = KBM.Alert:Create(self.Lang.Verbose.KillBoss[KBM.Lang], nil, true, true, "blue")
+	self.Salasohcarv.AlertsRef.KillWisp = KBM.Alert:Create(self.Lang.Verbose.KillWisp[KBM.Lang], nil, true, false, "blue")
+	self.Salasohcarv.AlertsRef.KillBoss = KBM.Alert:Create(self.Lang.Verbose.KillBoss[KBM.Lang], nil, true, false, "blue")
 	KBM.Defaults.AlertObj.Assign(self.Salasohcarv)
 	
 	-- Assign Alerts and Timers to Triggers
 	self.Salasohcarv.Triggers.BurnPhase = KBM.Trigger:Create(self.Lang.Buff.Barrier[KBM.Lang], "buffRemove", self.Salasohcarv)
 	self.Salasohcarv.Triggers.BurnPhase:AddPhase(self.BurnPhase)
 	self.Salasohcarv.Triggers.BurnPhase:AddAlert(self.Salasohcarv.AlertsRef.KillBoss)
+	self.Salasohcarv.Triggers.BurnPhase:AddStop(self.Salasohcarv.AlertsRef.KillWisp)
 	
 	self.Salasohcarv.Triggers.WispPhase = KBM.Trigger:Create(self.Lang.Buff.Barrier[KBM.Lang], "buff", self.Salasohcarv)
 	self.Salasohcarv.Triggers.WispPhase:AddPhase(self.WispPhase)
 	self.Salasohcarv.Triggers.WispPhase:AddAlert(self.Salasohcarv.AlertsRef.KillWisp)
+	self.Salasohcarv.Triggers.WispPhase:AddStop(self.Salasohcarv.AlertsRef.KillBoss)
 	
 	self.Salasohcarv.Triggers.PhaseTwo = KBM.Trigger:Create(20, "percent", self.Salasohcarv)
 	self.Salasohcarv.Triggers.PhaseTwo:AddPhase(self.FinalPhase)	
@@ -266,9 +268,13 @@ function MOD:Start()
 	self.Salasohcarv.Triggers.Victory = KBM.Trigger:Create(0, "percent", self.Salasohcarv)
 	self.Salasohcarv.Triggers.Victory:SetVictory()
 
-	self.Salasohcarv.Triggers.Tomb = KBM.Trigger:Create(self.Lang.Debuff.Tomb[KBM.Lang], "playerDebuff", self.Salasohcarv)
+	self.Salasohcarv.Triggers.Tomb = KBM.Trigger:Create(self.Lang.Debuff.Tomb[KBM.Lang], "playerBuff", self.Salasohcarv)
     self.Salasohcarv.Triggers.Tomb:AddAlert(self.Salasohcarv.AlertsRef.Tomb, true)
     self.Salasohcarv.Triggers.Tomb:AddSpy(self.Salasohcarv.MechRef.Tomb)
+	
+	self.Salasohcarv.Triggers.TombRemove = KBM.Trigger:Create(self.Lang.Debuff.Tomb[KBM.Lang], "playerBuffRemove", self.Salasohcarv)
+	self.Salasohcarv.Triggers.TombRemove:AddStop(self.Salasohcarv.AlertsRef.Tomb)
+	self.Salasohcarv.Triggers.TombRemove:AddStop(self.Salasohcarv.MechRef.Tomb)
 		
 	self.Salasohcarv.CastBar = KBM.Castbar:Add(self, self.Salasohcarv)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

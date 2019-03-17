@@ -9,7 +9,8 @@ chKBMPOAEAFRZ_Settings = nil
 -- 75% 50% 35% 15%
 -- Corrupted Waters : B764E58549960B748
 -- Water Shields : B7C082A3A788CB971
--- Impure protection : B5CD06F854D63D83F
+-- Impure protection : B5CD06F854D63D83F    -- TODO: Did not work at all
+
 
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
@@ -236,8 +237,8 @@ function MOD:Start()
 	
 	--KBM.Defaults.MechObj.Assign(self.Frezhak)
 	
-	-- Create Alerts
-	self.Frezhak.AlertsRef.Impure = KBM.Alert:Create(self.Lang.Verbose.Impure[KBM.Lang], nil, true, true, "red")
+	-- Create Alerts (Text, Duration, Flash, Countdown, Color)
+	self.Frezhak.AlertsRef.Impure = KBM.Alert:Create(self.Lang.Verbose.Impure[KBM.Lang], nil, false, false, "red")
 	KBM.Defaults.AlertObj.Assign(self.Frezhak)
 	
 	-- Assign Alerts and Timers to Triggers
@@ -254,6 +255,9 @@ function MOD:Start()
 		
 	self.Frezhak.Triggers.Impure = KBM.Trigger:Create(self.Lang.Buff.Impure[KBM.Lang], "buff", self.Frezhak)
     self.Frezhak.Triggers.Impure:AddAlert(self.Frezhak.AlertsRef.Impure, true)
+	
+	self.Frezhak.Triggers.ImpureRemove = KBM.Trigger:Create(self.Lang.Buff.Impure[KBM.Lang], "buffRemove", self.Frezhak)
+	self.Frezhak.Triggers.ImpureRemove:AddStop(self.Frezhak.AlertsRef.Impure)
 		
 	self.Frezhak.CastBar = KBM.Castbar:Add(self, self.Frezhak)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

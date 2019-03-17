@@ -13,7 +13,7 @@ chKBMPOAEAALU_Settings = nil
 -- CHANNEL Tower Rend (inny outty)
 -- CAST Disruption blast - blue bubbles spawns on boss - Watery Morass then lasts 20s and prevents spawning of adds
 -- BUFF incorrect name, Increases the bosses outgoing damage Ahnket's Aid : B3557A70266F2DAFA
--- PERCENT 50% portals
+-- PERCENT 50% portals -- TODO: DIDNT WORK
 
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
@@ -225,8 +225,8 @@ function MOD:Start()
 	--KBM.Defaults.TimerObj.Assign(self.Alumar)
 	--KBM.Defaults.MechObj.Assign(self.Alumar)
 	
-	-- Create Alerts
-	self.Alumar.AlertsRef.Aid = KBM.Alert:Create(self.Lang.Verbose.Aid[KBM.Lang], nil, true, true, "red")
+	-- Create Alerts (Text, Duration, Flash, Countdown, Color)
+	self.Alumar.AlertsRef.Aid = KBM.Alert:Create(self.Lang.Verbose.Aid[KBM.Lang], nil, false, false, "red")
 	KBM.Defaults.AlertObj.Assign(self.Alumar)
 
 	
@@ -236,6 +236,9 @@ function MOD:Start()
 		
 	self.Alumar.Triggers.Aid = KBM.Trigger:Create(self.Lang.Buff.Aid[KBM.Lang], "buff", self.Alumar)
     self.Alumar.Triggers.Aid:AddAlert(self.Alumar.AlertsRef.Aid, true)
+	
+	self.Alumar.Triggers.AidRemove = KBM.Trigger:Create(self.Lang.Buff.Aid[KBM.Lang], "buffRemove", self.Alumar)
+	self.Alumar.Triggers.AidRemove:AddStop(self.Alumar.AlertsRef.Aid)
 		
 	self.Alumar.CastBar = KBM.Castbar:Add(self, self.Alumar)
 	self.PhaseObj = KBM.PhaseMonitor.Phase:Create(1)

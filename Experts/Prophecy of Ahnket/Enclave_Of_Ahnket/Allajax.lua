@@ -12,7 +12,7 @@ chKBMPOAEAALLA_Settings = nil
 -- Lingering Touch : B5DE7C143926A4D01
 -- purge or aoe damage around boss
 
--- Ahnket Parasite : B094125D7A428EDB7
+-- Ahnket Parasite : B094125D7A428EDB7  --TODO: Test mechspy
 -- "(%a*) has been infected with an Ahnket Parasite!"
 
 -- Link Mods
@@ -65,6 +65,10 @@ MOD.Allajax = {
 		  Parasite = KBM.Defaults.AlertObj.Create("orange"),
 		  Touch = KBM.Defaults.AlertObj.Create("red"),
 		},
+		MechRef = {
+		  Enabled = true,
+		  Parasite = KBM.Defaults.AlertObj.Create("orange"),
+		}
 	},
 }
 
@@ -214,11 +218,12 @@ function MOD:Start()
 	-- Create Timers
 	--KBM.Defaults.TimerObj.Assign(self.Allajax)
 	
-	--KBM.Defaults.MechObj.Assign(self.Allajax)
+	self.Allajax.MechRef.Parasite = KBM.MechSpy:Add(self.Lang.Debuff.Parasite[KBM.Lang], nil, "playerBuff", self.Allajax)
+	KBM.Defaults.MechObj.Assign(self.Allajax)
 	
-	-- Create Alerts
+	-- Create Alerts (Text, Duration, Flash, Countdown, Color)
 	self.Allajax.AlertsRef.Parasite = KBM.Alert:Create(self.Lang.Verbose.Parasite[KBM.Lang], nil, true, true, "red")
-	self.Allajax.AlertsRef.Touch = KBM.Alert:Create(self.Lang.Verbose.Touch[KBM.Lang], nil, true, true, "red")
+	self.Allajax.AlertsRef.Touch = KBM.Alert:Create(self.Lang.Verbose.Touch[KBM.Lang], nil, false, false, "red")
 	
 	
 	-- Assign Alerts and Timers to Triggers
@@ -228,8 +233,16 @@ function MOD:Start()
 	self.Allajax.Triggers.Touch = KBM.Trigger:Create(self.Lang.Buff.Touch[KBM.Lang], "buff", self.Allajax)
 	self.Allajax.Triggers.Touch:AddAlert(self.Allajax.AlertsRef.Touch)
 	
-	self.Allajax.Triggers.Parasite = KBM.Trigger:Create(self.Lang.Debuff.Parasite[KBM.Lang], "playerDebuff", self.Allajax)
+	self.Allajax.Triggers.TouchRemove = KBM.Trigger:Create(self.Lang.Buff.Touch[KBM.Lang], "buffRemove", self.Allajax)
+	self.Allajax.Triggers.TouchRemove:AddStop(self.Allajax.AlertsRef.Touch)
+	
+	self.Allajax.Triggers.Parasite = KBM.Trigger:Create(self.Lang.Debuff.Parasite[KBM.Lang], "playerBuff", self.Allajax)
     self.Allajax.Triggers.Parasite:AddAlert(self.Allajax.AlertsRef.Parasite, true)
+	self.Allajax.Triggers.Parasite:AddSpy(self.Allajax.MechRef.Parasite)
+	
+	self.Allajax.Triggers.ParasiteRemove = KBM.Trigger:Create(self.Lang.Debuff.Parasite[KBM.Lang], "playerBuffRemove", self.Allajax)
+	self.Allajax.Triggers.ParasiteRemove:AddStop(self.Allajax.AlertsRef.Parasite)
+	self.Allajax.Triggers.ParasiteRemove:AddStop(self.Allajax.MechRef.Parasite)
 	
 	KBM.Defaults.AlertObj.Assign(self.Allajax)
 			
