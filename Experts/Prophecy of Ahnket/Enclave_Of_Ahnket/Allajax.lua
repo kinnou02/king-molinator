@@ -12,7 +12,7 @@ chKBMPOAEAALLA_Settings = nil
 -- Lingering Touch : B5DE7C143926A4D01
 -- purge or aoe damage around boss
 
--- Ahnket Parasite : B094125D7A428EDB7  --TODO: Test mechspy
+-- Ahnket Parasite : B094125D7A428EDB7
 -- "(%a*) has been infected with an Ahnket Parasite!"
 
 -- Link Mods

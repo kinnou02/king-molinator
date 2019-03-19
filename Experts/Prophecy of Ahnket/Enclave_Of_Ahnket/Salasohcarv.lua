@@ -5,7 +5,7 @@
 KBMPOAEASAL_Settings = nil
 chKBMPOAEASAL_Settings = nil
 -- First boss Salasohcarv : 
--- Barrier of Earth  -- TODO: Test if this repeats itself , also see if barrier mechref can be removed safely
+-- Barrier of Earth  -- TODO: still repeats itself
 -- wisps do Dust Bomb	 at 20% HP
 -- 1 wisp   80 60 
 -- 2 wisps	40
@@ -242,7 +242,6 @@ function MOD:Start()
 	--KBM.Defaults.TimerObj.Assign(self.Salasohcarv)
 	
 	self.Salasohcarv.MechRef.Tomb = KBM.MechSpy:Add(self.Lang.Debuff.Tomb[KBM.Lang], nil, "playerBuff", self.Salasohcarv)
-	--self.Salasohcarv.MechRef.Barrier = KBM.MechSpy:Add(self.Lang.Buff.Barrier[KBM.Lang], nil, "buff", self.Salasohcarv) -- TODO: Test if this can be removed
 	KBM.Defaults.MechObj.Assign(self.Salasohcarv)
 	
 	-- Create Alerts (Text, Duration, Flash, Countdown, Color)
