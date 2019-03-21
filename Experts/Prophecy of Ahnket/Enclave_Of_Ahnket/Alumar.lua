@@ -11,7 +11,7 @@ chKBMPOAEAALU_Settings = nil
 
 -- Fourth boss Alu'Mar :
 -- CHANNEL Tower Rend (inny outty)
--- CAST Disruption blast - blue bubbles spawns on boss - Watery Morass then lasts 20s and prevents spawning of adds
+-- CAST Disruption blast - blue bubbles spawns on boss - Disruption Aura then lasts 20s and prevents spawning of adds
 -- BUFF incorrect name, Increases the bosses outgoing damage Ahnket's Aid : B3557A70266F2DAFA
 
 -- Link Mods
