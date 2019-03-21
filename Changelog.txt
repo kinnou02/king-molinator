@@ -2,8 +2,7 @@
 
 * Add: Added the Yrlwalach Presence sight buff to KBM
 * Add: Added the Enclave of Ahnket dungeon from Prophecy of Ahnket
-	Big thanks to Holyroller, Madarablackgetsuga, Caduto 
-	LoveMuffin and Vargue for spending time helping test!
+	Big thanks to those who spent time helping test the new dungeon!
 
 2.0.0.3
 
