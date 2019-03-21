@@ -5,18 +5,9 @@
 KBMPOAEASAL_Settings = nil
 chKBMPOAEASAL_Settings = nil
 -- First boss Salasohcarv : 
--- Barrier of Earth  -- TODO: still repeats itself
--- wisps do Dust Bomb	 at 20% HP
--- 1 wisp   80 60 
--- 2 wisps	40
--- 3 wisps  20
 
--- sub 50%
---[KBM] Tomb of Rock and Sand : B3AD7B534E111A613
-
---{availability = "full", combat = true, coordX = 4011.2399902344, coordY = 764.78997802734, coordZ = 5833.2998046875, health = 6911028, healthMax = 10701679, id = "u800000004E06CA5E", level = 70, name = "Tomb of Rock and Sand", radius = 0.5, relation = "hostile", tag = "elemental", tagName = "Elemental", tagged = true, tier = "group", type = "U1D7FEBF95ABFA006"}
---{availability = "full", combat = true, coordX = 4009.419921875, coordY = 764.95001220703, coordZ = 5836.1196289063, health = 23793336, healthMax = 25000311, id = "u8000000033005662", level = 70, name = "Dust Wisp", radius = 0, relation = "hostile", tag = "planar", tagName = "Planar", tagged = true, tier = "group", type = "U056E9FD9112DDCED"}
-
+-- "Tomb of Rock and Sand" U1D7FEBF95ABFA006  healthMax = 10701679
+-- "Dust Wisp" U056E9FD9112DDCED healthMax = 25000311
 
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
@@ -72,7 +63,6 @@ MOD.Salasohcarv = {
 		MechRef = {
 		  Enabled = true,
 		  Tomb = KBM.Defaults.MechObj.Create("red"),
-		  Barrier = KBM.Defaults.MechObj.Create("blue"),
 		},
 	},
 }
@@ -268,7 +258,7 @@ function MOD:Start()
 	self.Salasohcarv.Triggers.Victory:SetVictory()
 
 	self.Salasohcarv.Triggers.Tomb = KBM.Trigger:Create(self.Lang.Debuff.Tomb[KBM.Lang], "playerBuff", self.Salasohcarv)
-    self.Salasohcarv.Triggers.Tomb:AddAlert(self.Salasohcarv.AlertsRef.Tomb, true)
+    self.Salasohcarv.Triggers.Tomb:AddAlert(self.Salasohcarv.AlertsRef.Tomb)
     self.Salasohcarv.Triggers.Tomb:AddSpy(self.Salasohcarv.MechRef.Tomb)
 	
 	self.Salasohcarv.Triggers.TombRemove = KBM.Trigger:Create(self.Lang.Debuff.Tomb[KBM.Lang], "playerBuffRemove", self.Salasohcarv)

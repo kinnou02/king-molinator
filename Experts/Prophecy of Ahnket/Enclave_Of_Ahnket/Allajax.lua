@@ -4,16 +4,7 @@
 
 KBMPOAEAALLA_Settings = nil
 chKBMPOAEAALLA_Settings = nil
-
 -- Second boss Allajax :
--- cleaves
--- cast smash (bigs heals / spread out mechanic)
-
--- Lingering Touch : B5DE7C143926A4D01
--- purge or aoe damage around boss
-
--- Ahnket Parasite : B094125D7A428EDB7
--- "(%a*) has been infected with an Ahnket Parasite!"
 
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")

@@ -5,12 +5,8 @@
 KBMPOAEAFRZ_Settings = nil
 chKBMPOAEAFRZ_Settings = nil
 -- Third boss Frezhak :
--- Becomes immune
--- 75% 50% 35% 15%
--- Corrupted Waters : B764E58549960B748
--- Water Shields : B7C082A3A788CB971
--- Impure protection : B5CD06F854D63D83F    -- TODO: Did not work at all
-
+-- Damage from the waters, Corrupted Waters : B764E58549960B748
+-- Shield for Aquajet, Water Shields : B7C082A3A788CB971
 
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
@@ -238,7 +234,7 @@ function MOD:Start()
 	--KBM.Defaults.MechObj.Assign(self.Frezhak)
 	
 	-- Create Alerts (Text, Duration, Flash, Countdown, Color)
-	self.Frezhak.AlertsRef.Impure = KBM.Alert:Create(self.Lang.Verbose.Impure[KBM.Lang], nil, false, false, "red")
+	self.Frezhak.AlertsRef.Impure = KBM.Alert:Create(self.Lang.Verbose.Impure[KBM.Lang], nil, true, false, "red")
 	KBM.Defaults.AlertObj.Assign(self.Frezhak)
 	
 	-- Assign Alerts and Timers to Triggers
@@ -254,7 +250,7 @@ function MOD:Start()
 	self.Frezhak.Triggers.Victory:SetVictory()
 		
 	self.Frezhak.Triggers.Impure = KBM.Trigger:Create(self.Lang.Buff.Impure[KBM.Lang], "buff", self.Frezhak)
-    self.Frezhak.Triggers.Impure:AddAlert(self.Frezhak.AlertsRef.Impure, true)
+    self.Frezhak.Triggers.Impure:AddAlert(self.Frezhak.AlertsRef.Impure)
 	
 	self.Frezhak.Triggers.ImpureRemove = KBM.Trigger:Create(self.Lang.Buff.Impure[KBM.Lang], "buffRemove", self.Frezhak)
 	self.Frezhak.Triggers.ImpureRemove:AddStop(self.Frezhak.AlertsRef.Impure)

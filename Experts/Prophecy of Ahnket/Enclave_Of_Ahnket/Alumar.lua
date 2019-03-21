@@ -13,7 +13,6 @@ chKBMPOAEAALU_Settings = nil
 -- CHANNEL Tower Rend (inny outty)
 -- CAST Disruption blast - blue bubbles spawns on boss - Watery Morass then lasts 20s and prevents spawning of adds
 -- BUFF incorrect name, Increases the bosses outgoing damage Ahnket's Aid : B3557A70266F2DAFA
--- PERCENT 50% portals -- TODO: DIDNT WORK
 
 -- Link Mods
 local AddonData = Inspect.Addon.Detail("KingMolinator")
@@ -235,7 +234,7 @@ function MOD:Start()
 	self.Alumar.Triggers.Victory:SetVictory()
 		
 	self.Alumar.Triggers.Aid = KBM.Trigger:Create(self.Lang.Buff.Aid[KBM.Lang], "buff", self.Alumar)
-    self.Alumar.Triggers.Aid:AddAlert(self.Alumar.AlertsRef.Aid, true)
+    self.Alumar.Triggers.Aid:AddAlert(self.Alumar.AlertsRef.Aid)
 	
 	self.Alumar.Triggers.AidRemove = KBM.Trigger:Create(self.Lang.Buff.Aid[KBM.Lang], "buffRemove", self.Alumar)
 	self.Alumar.Triggers.AidRemove:AddStop(self.Alumar.AlertsRef.Aid)
