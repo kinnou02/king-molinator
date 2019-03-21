@@ -15,7 +15,7 @@ Website = "http://www.facebook.com/KingBossMods"
 Email = "kingbossmods@gmail.com"
 
 -- PoA Updated by Rathoz and kinou
-Version = "2.0.0.3"
+Version = "2.0.0.4"
 
 Environment = "4.1"
 
@@ -92,6 +92,13 @@ RunOnStartup = {
 			"Experts/Prophecy of Ahnket/Intrepid_Gyel_Fortress/Kytus.lua",
 			"Experts/Prophecy of Ahnket/Intrepid_Gyel_Fortress/Nezavar.lua",
 			"Experts/Prophecy of Ahnket/Intrepid_Gyel_Fortress/Glasya.lua",
+			
+	-- Enclave of Ahnket
+			"Experts/Prophecy of Ahnket/Enclave_Of_Ahnket/EA_Header.lua",
+			"Experts/Prophecy of Ahnket/Enclave_Of_Ahnket/Salasohcarv.lua",
+			"Experts/Prophecy of Ahnket/Enclave_Of_Ahnket/Allajax.lua",
+			"Experts/Prophecy of Ahnket/Enclave_Of_Ahnket/Frezhak.lua",
+			"Experts/Prophecy of Ahnket/Enclave_Of_Ahnket/Alumar.lua",
   
 	-- NT Raids/Rift 20
 		-- Mount Sharax
@@ -687,7 +694,18 @@ SavedVariables = {
 			chKBMPOAIGFKYT_Settings = "character",
 			chKBMPOAIGFNEZ_Settings = "character",
 			chKBMPOAIGFGLA_Settings = "character",
-
+			
+	-- Enclave Of Ahnket
+			KBMPOAEA_Settings = "account",
+			KBMPOAEASAL_Settings = "account",
+			KBMPOAEAALLA_Settings = "account",
+			KBMPOAEAFRZ_Settings = "account",
+			KBMPOAEAALU_Settings = "account",
+			chKBMPOAEA_Settings = "character",
+			chKBMPOAEASAL_Settings = "character",
+			chKBMPOAEAALLA_Settings = "character",
+			chKBMPOAEAFRZ_Settings = "character",
+			chKBMPOAEAALU_Settings = "character",
   
 	-- NT Raids/Rift 20
 		-- Mount Sharax
