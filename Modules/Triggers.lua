@@ -21,10 +21,12 @@ function KBM.Trigger:Init()
 	self.Start = {}
 	self.Death = {}
 	self.Buff = {}
+	self.BuffID = {}
 	self.PlayerBuff = {}
 	self.PlayerDebuff = {}
 	self.PlayerIDBuff = {}
 	self.BuffRemove = {}
+	self.BuffIDRemove = {}
 	self.PlayerBuffRemove = {}
 	self.PlayerIDBuffRemove = {}
 	self.Time = {}
@@ -555,6 +557,14 @@ function KBM.Trigger:Init()
 					self.Buff[Unit.Mod.ID][Trigger] = {}
 				end
 				self.Buff[Unit.Mod.ID][Trigger][Unit.Name] = TriggerObj
+			elseif Type == "buffID" then
+				if not self.BuffID[Unit.Mod.ID] then
+					self.BuffID[Unit.Mod.ID] = {}
+				end
+				if not self.BuffID[Unit.Mod.ID][Trigger] then
+					self.BuffID[Unit.Mod.ID][Trigger] = {}
+				end
+				self.BuffID[Unit.Mod.ID][Trigger][Unit.Name] = TriggerObj
 			elseif Type == "buffRemove" then
 				if not self.BuffRemove[Unit.Mod.ID] then
 					self.BuffRemove[Unit.Mod.ID] = {}
@@ -563,6 +573,14 @@ function KBM.Trigger:Init()
 					self.BuffRemove[Unit.Mod.ID][Trigger] = {}
 				end
 				self.BuffRemove[Unit.Mod.ID][Trigger][Unit.Name] = TriggerObj
+			elseif Type == "buffIDRemove" then
+				if not self.BuffIDRemove[Unit.Mod.ID] then
+					self.BuffIDRemove[Unit.Mod.ID] = {}
+				end
+				if not self.BuffIDRemove[Unit.Mod.ID][Trigger] then
+					self.BuffIDRemove[Unit.Mod.ID][Trigger] = {}
+				end
+				self.BuffIDRemove[Unit.Mod.ID][Trigger][Unit.Name] = TriggerObj
 			elseif Type == "playerBuff" or Type == "playerDebuff" then
 				if not self.PlayerBuff[Unit.Mod.ID] then
 					self.PlayerBuff[Unit.Mod.ID] = {}
