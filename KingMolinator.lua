@@ -2390,7 +2390,7 @@ function KBM:BuffAdd(handle, Units)
 								local TriggerObj = KBM.Trigger.PlayerIDBuff[KBM.CurrentMod.ID][bDetails.type]
 								if LibSUnit.Raid.UID[unitID] ~= nil or unitID == LibSUnit.Player.UnitID then
 									if KBM.Debug then
-										print("Debuff Trigger matched: "..bDetails.name)
+										print("Debuff Trigger matched by id: "..bDetails.name)
 										if LibSUnit.Raid.Grouped then
 											print("LibSUnit Match: "..tostring(LibSUnit.Raid.UID[unitID]))
 										end

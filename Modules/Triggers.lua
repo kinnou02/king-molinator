@@ -578,7 +578,7 @@ function KBM.Trigger:Init()
 					-- self.PlayerDebuff[Unit.Mod.ID] = {}
 				-- end
 				-- self.PlayerDebuff[Unit.Mod.ID][Trigger] = TriggerObj
-			elseif Type == "playerIDBuff" then
+			elseif Type == "playerIDBuff" or Type == "playerIDDebuff" then
 				if not self.PlayerIDBuff[Unit.Mod.ID] then
 					self.PlayerIDBuff[Unit.Mod.ID] = {}
 				end
