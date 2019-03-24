@@ -2353,6 +2353,36 @@ function KBM:BuffAdd(handle, Units)
 									local TriggerObj = KBM.Trigger.Buff[KBM.CurrentMod.ID][bDetails.name][uDetails.Name]
 									if TriggerObj then
 										if TriggerObj.Unit.UnitID == unitID then
+											if KBM.Debug then
+												print("Bossbuff Trigger matched: "..bDetails.name)
+												dump(bDetails)
+											end
+											if TriggerObj.MinStack then
+												if bDetails.stack then
+													if bDetails.stack < TriggerObj.MinStack then
+														return
+													end
+												else 
+													return
+												end
+											end
+											KBM.Trigger.Queue:Add(TriggerObj, unitID, unitID, bDetails.remaining)
+										end
+									end
+								end
+							end
+						end
+						if KBM.Trigger.BuffID[KBM.CurrentMod.ID] then
+							if KBM.Trigger.BuffID[KBM.CurrentMod.ID][bDetails.type] then
+								local uDetails = LibSUnit.Lookup.UID[unitID]
+								if uDetails then
+									local TriggerObj = KBM.Trigger.BuffID[KBM.CurrentMod.ID][bDetails.type][uDetails.Name]
+									if TriggerObj then
+										if TriggerObj.Unit.UnitID == unitID then
+											if KBM.Debug then
+												print("Bossbuff Trigger matched by id: "..bDetails.name)
+												dump(bDetails)
+											end
 											if TriggerObj.MinStack then
 												if bDetails.stack then
 													if bDetails.stack < TriggerObj.MinStack then
@@ -2501,6 +2531,27 @@ function KBM:BuffRemove(handle, Units)
 									local TriggerObj = KBM.Trigger.BuffRemove[KBM.CurrentMod.ID][bDetails.name][uDetails.Name]
 									if TriggerObj then
 										if TriggerObj.Unit.UnitID == unitID then
+											if KBM.Debug then
+												print("BossbuffRemove Trigger matched: "..bDetails.name)
+												dump(bDetails)
+											end
+											KBM.Trigger.Queue:Add(TriggerObj, nil, unitID, nil)
+										end
+									end
+								end
+							end
+						end
+						if KBM.Trigger.BuffIDRemove[KBM.CurrentMod.ID] then
+							if KBM.Trigger.BuffIDRemove[KBM.CurrentMod.ID][bDetails.type] then
+								local uDetails = LibSUnit.Lookup.UID[unitID]
+								if uDetails then
+									local TriggerObj = KBM.Trigger.BuffIDRemove[KBM.CurrentMod.ID][bDetails.type][uDetails.Name]
+									if TriggerObj then
+										if TriggerObj.Unit.UnitID == unitID then
+											if KBM.Debug then
+												print("BossbuffRemove Trigger matched by id: "..bDetails.name)
+												dump(bDetails)
+											end
 											KBM.Trigger.Queue:Add(TriggerObj, nil, unitID, nil)
 										end
 									end
