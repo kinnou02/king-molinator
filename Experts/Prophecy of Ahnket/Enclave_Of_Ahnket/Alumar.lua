@@ -233,10 +233,10 @@ function MOD:Start()
 	self.Alumar.Triggers.Victory = KBM.Trigger:Create(0, "percent", self.Alumar)
 	self.Alumar.Triggers.Victory:SetVictory()
 		
-	self.Alumar.Triggers.Aid = KBM.Trigger:Create(self.Lang.Buff.Aid[KBM.Lang], "buff", self.Alumar)
+	self.Alumar.Triggers.Aid = KBM.Trigger:Create("B0A1AAAB1CB1F7161", "buffID", self.Alumar)
     self.Alumar.Triggers.Aid:AddAlert(self.Alumar.AlertsRef.Aid)
 	
-	self.Alumar.Triggers.AidRemove = KBM.Trigger:Create(self.Lang.Buff.Aid[KBM.Lang], "buffRemove", self.Alumar)
+	self.Alumar.Triggers.AidRem6666ove = KBM.Trigger:Create("B0A1AAAB1CB1F7161", "buffIDRemove", self.Alumar)
 	self.Alumar.Triggers.AidRemove:AddStop(self.Alumar.AlertsRef.Aid)
 		
 	self.Alumar.CastBar = KBM.Castbar:Add(self, self.Alumar)
