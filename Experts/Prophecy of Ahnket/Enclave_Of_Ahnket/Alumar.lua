@@ -40,6 +40,8 @@ local MOD = {
 -- Main Unit Dictionary
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Alumar = KBM.Language:Add("Alu'Mar")
+MOD.Lang.Unit.Alumar:SetGerman("Alu'Mar")
+MOD.Lang.Unit.Alumar:SetFrench("Alu'Mar")
 
 MOD.Alumar = {
 	Mod = MOD,
@@ -74,10 +76,14 @@ MOD.Lang.Ability = {}
 -- Verbose Dictionary
 MOD.Lang.Verbose = {}
 MOD.Lang.Verbose.Aid = KBM.Language:Add("Boss immune until the portals are dead!") 
+MOD.Lang.Verbose.Aid:SetFrench("Boss immunisé jusqu'à ce que les portails sont morts!")
+MOD.Lang.Verbose.Aid:SetGerman("Boss ist immun bis die Türme tot sind")
 
 -- Buff Dictionary
 MOD.Lang.Buff = {}
 MOD.Lang.Buff.Aid = KBM.Language:Add("Ahnket's Aid") --Ahnket's Aid : B0A1AAAB1CB1F7161
+MOD.Lang.Buff.Aid:SetFrench("Ahnkets Aide") -- TODO: Check this is correct
+MOD.Lang.Buff.Aid:SetGerman("Ahnkets Hilfe")
 
 -- Debuff Dictionary
 MOD.Lang.Debuff = {}

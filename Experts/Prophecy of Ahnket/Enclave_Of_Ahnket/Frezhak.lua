@@ -34,6 +34,8 @@ local MOD = {
 -- Main Unit Dictionary
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Frezhak = KBM.Language:Add("Frezhak")
+MOD.Lang.Unit.Frezhak:SetGerman("Frezhak")
+MOD.Lang.Unit.Frezhak:SetFrench("Frezhak")
 
 MOD.Frezhak = {
 	Mod = MOD,
@@ -68,10 +70,14 @@ MOD.Lang.Ability = {}
 -- Verbose Dictionary
 MOD.Lang.Verbose = {}
 MOD.Lang.Verbose.Impure = KBM.Language:Add("Boss is immune until you take him to the spout!")
+MOD.Lang.Verbose.Impure:SetGerman("Boss ist immun - Zieh ihn in die weisse Bubble")
+-- TODO: MOD.Lang.Verbose.Impure:SetFrench("")
 
 -- Buff Dictionary
 MOD.Lang.Buff = {}
 MOD.Lang.Buff.Impure = KBM.Language:Add("Impure protection") --Impure protection : B5CD06F854D63D83F
+MOD.Lang.Buff.Impure:SetGerman("Makelhafer Schutz")
+-- TODO: MOD.Lang.Buff.Impure:SetFrench("Protection impure")
 
 -- Debuff Dictionary
 MOD.Lang.Debuff = {}

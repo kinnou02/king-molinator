@@ -32,6 +32,8 @@ local MOD = {
 -- Main Unit Dictionary
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Allajax = KBM.Language:Add("Allajax")
+MOD.Lang.Unit.Allajax:SetGerman("Allajax")
+MOD.Lang.Unit.Allajax:SetFrench("Allajax")
 
 MOD.Allajax = {
 	Mod = MOD,
@@ -71,19 +73,29 @@ MOD.Lang.Ability = {}
 -- Verbose Dictionary
 MOD.Lang.Verbose = {}
 MOD.Lang.Verbose.Touch = KBM.Language:Add("Purge!")
+MOD.Lang.Verbose.Touch:SetGerman("Purge!")
+MOD.Lang.Verbose.Touch:SetFrench("Purge!")
 MOD.Lang.Verbose.Parasite = KBM.Language:Add("Find the portal before you die!")
+MOD.Lang.Verbose.Parasite:SetGerman("Finde das Portal!")
+MOD.Lang.Verbose.Parasite:SetFrench("Trouver le portail!")
 
 -- Buff Dictionary
 MOD.Lang.Buff = {}
 MOD.Lang.Buff.Touch = KBM.Language:Add("Lingering Touch") --Lingering Touch : B5DE7C143926A4D01
+MOD.Lang.Buff.Touch:SetGerman("Verweilende Berührung")
+-- TODO: MOD.Lang.Buff.Touch:SetFrench("")
 
 -- Debuff Dictionary
 MOD.Lang.Debuff = {}
 MOD.Lang.Debuff.Parasite = KBM.Language:Add("Ahnket Parasite") --Ahnket Parasite : B094125D7A428EDB7
+MOD.Lang.Debuff.Parasite:SetGerman("Ahnkets Parasit")
+-- TODO: MOD.Lang.Debuff.Parasite:SetFrench("")
 
 -- Notify Dictionary
 MOD.Lang.Notify = {}
 MOD.Lang.Notify.Parasite = KBM.Language:Add("(%a*) has been infected with an Ahnket Parasite!")
+MOD.Lang.Notify.Parasite:SetGerman("Mit Ahnkets Parasit infiziert!")
+-- TODO: MOD.Lang.Notify.Parasite:SetFrench("")
 
 -- Description Dictionary
 MOD.Lang.Main = {}
