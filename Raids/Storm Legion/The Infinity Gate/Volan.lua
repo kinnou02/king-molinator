@@ -61,8 +61,9 @@ VOL.Lang.Ability.Extinction = KBM.Language:Add("Extinction")
 VOL.Lang.Ability.Extinction:SetFrench("Extinction")
 VOL.Lang.Ability.Extinction:SetGerman("Untergang")
 VOL.Lang.Ability.Oblivion = KBM.Language:Add("Eve of Oblivion")
-VOL.Lang.Ability.Oblivion:SetGerman("Vorabend des Vergessens")--TODO
- 
+VOL.Lang.Ability.Oblivion:SetGerman("Vorabend der Vergessenheit")
+VOL.Lang.Ability.Oblivion:SetFrench("Veille de l'oubli")
+
 -- Description Dictionary
 VOL.Lang.Main = {}
  
