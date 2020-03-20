@@ -2654,6 +2654,9 @@ function PI.Update_End()
 end
 
 function PI.BuffAdd(handle, Units)
+	if not PI.GUI.Rows then 
+		return
+	end
 	for UnitID, BuffTable in pairs(Units) do
 		if PI.GUI.Rows.Units[UnitID] then
 			for BuffID, bDetails in pairs(BuffTable) do

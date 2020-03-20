@@ -953,6 +953,9 @@ function KBMLM.SetMain_Lang()
 	KBM.Language.Options.Sheep = KBM.Language:Add("Auto remove Sheep/Shambler effects.")
 	KBM.Language.Options.Sheep:SetFrench("Enlever effets Auto Mouton/Traînard.")
 	KBM.Language.Options.Sheep:SetGerman("automatisches Entfernen von Schaf/Watschler-Effekten.")
+	KBM.Language.Options.Planar = KBM.Language:Add("Auto remove Planar effects.")
+	KBM.Language.Options.Planar:SetFrench("Enlever effets Auto Planar.")
+	KBM.Language.Options.Planar:SetGerman("automatisches Entfernen von Planar-Effekten.")
 	
 	-- Timer Dictionary
 	KBM.Language.Timers = {}

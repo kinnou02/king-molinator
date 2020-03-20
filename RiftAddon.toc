@@ -10,12 +10,14 @@ Description = {
     German = "Development of a fully fledged Raid and Dungeon encounter alert system.\n\nType /kbmhelp for details on in-game slash commands.",
 }
 
-Author = "Safe@Deepwood"
-Website = "http://www.facebook.com/KingBossMods"
-Email = "kingbossmods@gmail.com"
+Author = "Yarrellii@Greybriar"
+Website = "https://www.curseforge.com/rift/addons/king-boss-mods-2-0"
+Email = "kbm@nodster.co.uk"
+
+-- Originally authored by Safe@deepwood kingbossmods@gmail.com
 
 -- PoA Updated by Rathoz and kinou
-Version = "2.0.0.4"
+Version = "2.0.0.5"
 
 Environment = "4.1"
 

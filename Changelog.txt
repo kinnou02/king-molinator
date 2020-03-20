@@ -1,4 +1,11 @@
-﻿2.0.0.4
+﻿2.0.0.5
+	Fixed some bugs with the ReadyCheck UI "Rows" Crashing
+	Added Prismatic Eyes to a new Planar Effect remover list similar to the Sheep/Shambler.
+	
+	Added some translations for Enclave of Ahnket	
+	Added a missing French Translation for Volan in Infinity Gate
+
+2.0.0.4
 
 * Add: Added the Yrlwalach Presence sight buff to KBM
 * Add: Added the Enclave of Ahnket dungeon from Prophecy of Ahnket

@@ -35,6 +35,8 @@ local MOD = {
 -- Main Unit Dictionary
 MOD.Lang.Unit = {}
 MOD.Lang.Unit.Salasohcarv = KBM.Language:Add("Salasohcarv")
+MOD.Lang.Unit.Salasohcarv:SetGerman("Salasohcarv")
+MOD.Lang.Unit.Salasohcarv:SetFrench("Salasohcarv")
 
 MOD.Salasohcarv = {
 	Mod = MOD,
@@ -75,20 +77,32 @@ MOD.Lang.Ability = {}
 -- Verbose Dictionary
 MOD.Lang.Verbose = {}
 MOD.Lang.Verbose.Tomb = KBM.Language:Add("Kill the Tomb before it explodes!")
+MOD.Lang.Verbose.Tomb:SetGerman("Befreit den Spieler aus dem Grab!")
+MOD.Lang.Verbose.Tomb:SetFrench("Tuez la tombe avant qu'elle n'explose!")
 MOD.Lang.Verbose.KillWisp = KBM.Language:Add("Boss is immune, Explode a wisp on the boss")
+MOD.Lang.Verbose.KillWisp:SetGerman("Boss ist immun - Lasst ein Irrlicht beim Boss bei <20% explodieren")
+MOD.Lang.Verbose.KillWisp:SetFrench("Le boss est immunisé - Laissez la volonté exploser chez le patron à <20%")
 MOD.Lang.Verbose.KillBoss = KBM.Language:Add("Boss is no longer immune")
+MOD.Lang.Verbose.KillBoss:SetGerman("Boss ist nich mehr immun")
+MOD.Lang.Verbose.KillBoss:SetFrench("Boss n'est plus immunisé")
 
 -- Buff Dictionary
 MOD.Lang.Buff = {}
 MOD.Lang.Buff.Barrier = KBM.Language:Add("Barrier of Earth") -- Barrier of Earth : B6C17DC1590FC185D
+MOD.Lang.Buff.Barrier:SetGerman("Erdbarriere")
+MOD.Lang.Buff.Barrier:SetFrench("Barrière de Terre")
 
 -- Debuff Dictionary
 MOD.Lang.Debuff = {}
 MOD.Lang.Debuff.Tomb = KBM.Language:Add("Tomb of Rock and Sand") --Tomb of Rock and Sand : B3AD7B534E111A613
+MOD.Lang.Debuff.Tomb:SetGerman("Grab aus Stein und Sand")
+MOD.Lang.Debuff.Tomb:SetFrench("Vous êtes emprisonné dans une tombe de pierre et de sable")
 
 -- Notify Dictionary
 MOD.Lang.Notify = {}
 MOD.Lang.Notify.Tomb = KBM.Language:Add("(%a*) will be imprisoned in the rock and sand!")
+MOD.Lang.Notify.Tomb:SetGerman("(%a*) wird bald in Stein und Sand gefangen!")
+MOD.Lang.Notify.Tomb:SetFrench("(%a*) sera emprisonné dans la pierre et le sable !")
 
 -- Description Dictionary
 MOD.Lang.Main = {}
