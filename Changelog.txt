@@ -1,7 +1,9 @@
 ﻿2.0.0.5
-	Added Prismatic Eyes to a new Planar Effect remover list similar to the Sheep/Shambler.
 	Fixed some bugs with the ReadyCheck UI "Rows" Crashing
+	Added Prismatic Eyes to a new Planar Effect remover list similar to the Sheep/Shambler.
+	
 	Added some translations for Enclave of Ahnket	
+	Added a missing French Translation for Volan in Infinity Gate
 
 2.0.0.4
 
