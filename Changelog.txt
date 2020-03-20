@@ -1,6 +1,7 @@
 ﻿2.0.0.5
 	Added Prismatic Eyes to a new Planar Effect remover list similar to the Sheep/Shambler.
-	
+	Fixed some bugs with the ReadyCheck UI "Rows" Crashing
+	Added some translations for Enclave of Ahnket	
 
 2.0.0.4
 
