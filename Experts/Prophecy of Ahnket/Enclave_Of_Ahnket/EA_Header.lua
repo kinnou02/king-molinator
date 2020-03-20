@@ -32,7 +32,7 @@ MOD.Lang = {}
 MOD.Lang.Main = {}
 MOD.Lang.Main.Name = KBM.Language:Add(MOD.Name)
 MOD.Lang.Main.Name:SetGerman("Ahnkets Enklave")	   
---TODO : MOD.Lang.Main.Name:SetFrench("")
+MOD.Lang.Main.Name:SetFrench("Enclave d'Ahnket")
 
 
 MOD.Name = MOD.Lang.Main.Name[KBM.Lang]

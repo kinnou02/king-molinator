@@ -82,7 +82,7 @@ MOD.Lang.Verbose.Aid:SetGerman("Boss ist immun bis die Türme tot sind")
 -- Buff Dictionary
 MOD.Lang.Buff = {}
 MOD.Lang.Buff.Aid = KBM.Language:Add("Ahnket's Aid") --Ahnket's Aid : B0A1AAAB1CB1F7161
-MOD.Lang.Buff.Aid:SetFrench("Ahnkets Aide") -- TODO: Check this is correct
+MOD.Lang.Buff.Aid:SetFrench("Assistance d’Ahnket")
 MOD.Lang.Buff.Aid:SetGerman("Ahnkets Hilfe")
 
 -- Debuff Dictionary

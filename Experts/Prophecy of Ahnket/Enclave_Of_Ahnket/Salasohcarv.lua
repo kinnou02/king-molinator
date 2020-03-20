@@ -90,19 +90,19 @@ MOD.Lang.Verbose.KillBoss:SetFrench("Boss n'est plus immunisé")
 MOD.Lang.Buff = {}
 MOD.Lang.Buff.Barrier = KBM.Language:Add("Barrier of Earth") -- Barrier of Earth : B6C17DC1590FC185D
 MOD.Lang.Buff.Barrier:SetGerman("Erdbarriere")
--- TODO: MOD.Lang.Buff.Barrier:SetFrench("Barrière de la terre")
+MOD.Lang.Buff.Barrier:SetFrench("Barrière de Terre")
 
 -- Debuff Dictionary
 MOD.Lang.Debuff = {}
 MOD.Lang.Debuff.Tomb = KBM.Language:Add("Tomb of Rock and Sand") --Tomb of Rock and Sand : B3AD7B534E111A613
 MOD.Lang.Debuff.Tomb:SetGerman("Grab aus Stein und Sand")
-MOD.Lang.Debuff.Tomb:SetFrench("Tombeau de roche et sable") -- TODO: Check this!
+MOD.Lang.Debuff.Tomb:SetFrench("Vous êtes emprisonné dans une tombe de pierre et de sable")
 
 -- Notify Dictionary
 MOD.Lang.Notify = {}
 MOD.Lang.Notify.Tomb = KBM.Language:Add("(%a*) will be imprisoned in the rock and sand!")
-MOD.Lang.Notify.Tomb:SetGerman("In Fels und Sand eingesperrt!") -- TODO: Check this!
--- TODO: MOD.Lang.Notify.Tomb:SetFrench("")
+MOD.Lang.Notify.Tomb:SetGerman("(%a*) wird bald in Stein und Sand gefangen!")
+MOD.Lang.Notify.Tomb:SetFrench("(%a*) sera emprisonné dans la pierre et le sable !")
 
 -- Description Dictionary
 MOD.Lang.Main = {}
