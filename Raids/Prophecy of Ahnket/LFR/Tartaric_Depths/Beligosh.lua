@@ -125,12 +125,12 @@ BEL.Lang.Notify.BurningGround1 = KBM.Language:Add("Your Weakness is your compass
 -- TODO: TransG: Your Weakness is your compassion
 
 BEL.Lang.Notify.BurningGround2 = KBM.Language:Add("Choose who lives, who dies.")
-BEL.Lang.Notify.BurningGround2:SetFrench("Choisissez qui vivra et qui mourra")
--- TODO: TransG: Choose who lives, who dies.
+BEL.Lang.Notify.BurningGround2:SetFrench("Choisissez qui vivra et qui mourra !")
+BEL.Lang.Notify.BurningGround2:SetGerman("Entscheidet, wer lebt und wer stirbt!")
 
 BEL.Lang.Notify.BurningGround3 = KBM.Language:Add("Abandon your friend! Abandon your hope!")
 BEL.Lang.Notify.BurningGround3:SetFrench("Abandonnez vos amis ! Abandonnez l'espoir !")
--- TODO: TransG: Abandon your friend! Abandon your hope!
+BEL.Lang.Notify.BurningGround3:SetGerman("Lasst Euren Freund im Stich! Gebt Eure Hoffnung auf!")
 
 -- Description Dictionary
 BEL.Lang.Main = {}
