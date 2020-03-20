@@ -1,4 +1,8 @@
-﻿2.0.0.4
+﻿2.0.0.5
+	Added Prismatic Eyes to a new Planar Effect remover list similar to the Sheep/Shambler.
+	
+
+2.0.0.4
 
 * Add: Added the Yrlwalach Presence sight buff to KBM
 * Add: Added the Enclave of Ahnket dungeon from Prophecy of Ahnket

@@ -621,6 +621,9 @@ local function KBM_DefineVars(handle, AddonID)
 			Sheep = {
 				Protect = false,
 			},
+			Planar = {
+				PlanarProtect = false,
+			},
 			Font = {
 				Custom = 2,
 			},
@@ -2999,6 +3002,12 @@ function KBM.SheepProtection:Init()
 		["B72D63A6910003733"] = "Dwarf Party", -- from Brasse
 		["B72D63A6D1002446F"] = "Dwarf Party", -- from Brasse
 	}
+	self.PlanarList = {
+		["B7A3E8D86DEF1F32F"] = "Prismatic Eyes", -- from Carnival Earring
+		["B15F2FB0F4AAC5DD5"] = "Prismatic Eyes", -- from Carnival Earring
+		["B19C595C332C5A56F"] = "Prismatic Eyes", -- from Carnival Earring
+		["BFBC9A23D1576EB52"] = "Prismatic Eyes", -- from Carnival Earring
+	}
 	function self.Remove(BuffID, CasterID)
 		if KBM.Options.Sheep.Protect then
 			local Name
@@ -3015,9 +3024,28 @@ function KBM.SheepProtection:Init()
 			Command.Buff.Cancel(BuffID)
 		end
 	end
+	
+	function self.RemovePlanar(BuffID, CasterID)
+		if KBM.Options.Planar.PlanarProtect then
+			local Name
+			if CasterID then
+				if LibSUnit.Lookup.UID[CasterID] then
+					Name = LibSUnit.Lookup.UID[CasterID].Name
+				end
+			end
+			print("Auto removing Planar effects!")
+			Command.Buff.Cancel(BuffID)
+		end
+	end
+	
 	for ID, bool in pairs(self.SheepList) do
 		local Trigger = KBM.Trigger:Create(ID, "playerBuffID", nil, nil, "CustomBuffRemove")
 		Trigger:AddPhase(self.Remove)
+	end
+	
+	for ID, bool in pairs(self.PlanarList) do
+		local Trigger = KBM.Trigger:Create(ID, "playerBuffID", nil, nil, "CustomBuffRemove")
+		Trigger:AddPhase(self.RemovePlanar)
 	end
 end
 

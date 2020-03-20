@@ -60,6 +60,19 @@ local function BuildMenuSettings()
 			end
 		end
 		
+		function self:PlanarProtect(bool)
+			KBM.Options.Planar.PlanarProtect = bool
+			if bool then
+				if KBM.Buffs.Active[KBM.Player.UnitID] then
+					for PlanarID, bool in pairs(KBM.SheepProtection.PlanarList) do
+						if KBM.Buffs.Active[KBM.Player.UnitID].Buff_Types[PlanarID] then
+							KBM.SheepProtection.RemovePlanar(KBM.Buffs.Active[KBM.Player.UnitID].Buff_Types[PlanarID].id, KBM.Buffs.Active[KBM.Player.UnitID].Buff_Types[PlanarID].caster)
+						end
+					end
+				end
+			end
+		end
+		
 		function self:Custom(item)
 			KBM.Options.Font.Custom = item
 		end
@@ -71,6 +84,7 @@ local function BuildMenuSettings()
 			MenuItem = Item.UI.CreateHeader(KBM.Language.Options.ModEnabled[KBM.Lang], KBM.Options, "Enabled", self)
 		end
 		MenuItem:CreateCheck(KBM.Language.Options.Sheep[KBM.Lang], KBM.Options.Sheep, "Protect", self)
+		MenuItem:CreateCheck(KBM.Language.Options.Planar[KBM.Lang], KBM.Options.Planar, "PlanarProtect", self)
 		--TODO: Font Language Translations give indexing a nil field
 		MenuItem = Item.UI.CreateHeader(KBM.Language.Options.Font[KBM.Lang], nil, "Font", nil)
 		local fontDD = MenuItem:CreateDropDown(KBM.Language.Options.FontCustom[KBM.Lang], KBM.Options.Font, "Custom", self)
