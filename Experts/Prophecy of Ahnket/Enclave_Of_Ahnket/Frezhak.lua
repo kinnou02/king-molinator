@@ -71,7 +71,7 @@ MOD.Lang.Ability = {}
 MOD.Lang.Verbose = {}
 MOD.Lang.Verbose.Impure = KBM.Language:Add("Boss is immune until you take him to the spout!")
 MOD.Lang.Verbose.Impure:SetGerman("Boss ist immun - Zieh ihn in die weisse Bubble")
-MOD.Lang.Verbose.Impure:SetFrench("Le patron est immunisé - faites-le glisser dans la bulle blanche")
+MOD.Lang.Verbose.Impure:SetFrench("Le boss est immunisé - faites-le glisser dans la bulle blanche")
 
 -- Buff Dictionary
 MOD.Lang.Buff = {}
